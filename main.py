@@ -143,7 +143,8 @@ class Plugin:
                 method="POST",
             )
             try:
-                with urllib.request.urlopen(req, timeout=30) as resp:
+                # Cold model load + first token can exceed tens of seconds over LAN; match generous curl -m 180.
+                with urllib.request.urlopen(req, timeout=180) as resp:
                     data = json.loads(resp.read().decode("utf-8"))
                     return {
                         "success": True,

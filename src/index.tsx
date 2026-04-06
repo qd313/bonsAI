@@ -338,6 +338,23 @@ type SteamUrlApi = {
 
 const SEARCH_QUERY_STORAGE_KEY = "bonsai:last-query";
 
+function formatDeckyRpcError(e: unknown): string {
+  if (e instanceof Error) {
+    const traceback = (e as Error & { traceback?: string }).traceback;
+    const base = e.message || String(e);
+    return traceback ? `${base}\n\n${traceback}` : base;
+  }
+  if (e && typeof e === "object") {
+    const o = e as Record<string, unknown>;
+    const msg = [o.message, o.error].find((x) => typeof x === "string");
+    const tb = typeof o.traceback === "string" ? o.traceback : "";
+    if (typeof msg === "string") {
+      return tb ? `${msg}\n\n${tb}` : msg;
+    }
+  }
+  return String(e);
+}
+
 function loadSavedSearchQuery(): string {
   if (typeof window === "undefined") return "";
   try {
@@ -470,14 +487,14 @@ const Content: React.FC = () => {
       console.log(`Asking Ollama from Steam Deck (${HostIp}) to PC (${ollamaIp}) via plugin backend`);
 
       const data = await call<
-        [string, string],
+        [{ question: string; PcIp: string }],
         {
           success: boolean;
           response: string;
           app_id: string;
-          app_context: "active" | "none";
+          app_context: string;
         }
-      >("ask_game_ai", ollamaQuestion, ollamaIp);
+      >("ask_game_ai", { question: ollamaQuestion, PcIp: ollamaIp });
 
       setOllamaResponse(data.response ?? "No response text.");
       setOllamaContext({
@@ -485,7 +502,7 @@ const Content: React.FC = () => {
         app_context: data.app_context === "active" ? "active" : "none",
       });
     } catch (e: unknown) {
-      setOllamaResponse(`Error: ${e instanceof Error ? e.message : String(e)}`);
+      setOllamaResponse(`Error: ${formatDeckyRpcError(e)}`);
       setOllamaContext(null);
     } finally {
       setIsAsking(false);

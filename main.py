@@ -10,6 +10,11 @@ from typing import Any, Optional
 import decky
 
 class Plugin:
+    @staticmethod
+    def _coerce_instance(self_or_cls: Any) -> "Plugin":
+        """api_version 1 uses an instance; older loaders may pass the class as self."""
+        return self_or_cls() if isinstance(self_or_cls, type) else self_or_cls
+
     async def _main(self):
         logging.info("bonsAI plugin loaded!")
 
@@ -68,16 +73,17 @@ class Plugin:
         return True
 
     async def ask_game_ai(self, question: Any = "", PcIp: str = ""):
+        plugin = Plugin._coerce_instance(self)
         app_id = None
         app_context = "none"
         try:
             if isinstance(question, dict):
                 payload = question
                 question = payload.get("question", "")
-                PcIp = payload.get("PcIp", payload.get("pcIp", PcIp))
+                PcIp = payload.get("PcIp", payload.get("pcIp", payload.get("pc_ip", PcIp)))
 
             question = (question or "").strip()
-            PcIp = (PcIp or "").strip()
+            pc_ip = (PcIp or "").strip()
             if not question:
                 return {
                     "success": False,
@@ -85,7 +91,7 @@ class Plugin:
                     "app_id": "",
                     "app_context": "none",
                 }
-            if not PcIp:
+            if not pc_ip:
                 return {
                     "success": False,
                     "response": "PC IP Address is required.",
@@ -93,24 +99,24 @@ class Plugin:
                     "app_context": "none",
                 }
 
-            app_id = await self._resolve_active_app_id()
+            app_id = await plugin._resolve_active_app_id()
             app_context = "active" if app_id else "none"
             ollama_app_id = app_id if app_id else "unknown"
 
-            ollama_result = await self.ask_ollama(question, PcIp, ollama_app_id)
+            ollama_result = await plugin.ask_ollama(question, pc_ip, ollama_app_id)
             return {
                 "success": bool(ollama_result.get("success", False)),
-                "response": ollama_result.get("response", "No response text."),
-                "app_id": app_id or "",
-                "app_context": app_context,
+                "response": str(ollama_result.get("response", "") or "No response text."),
+                "app_id": str(app_id or ""),
+                "app_context": str(app_context),
             }
         except Exception as exc:
             logging.exception("ask_game_ai failed")
             return {
                 "success": False,
                 "response": f"Backend error: {exc}",
-                "app_id": app_id or "",
-                "app_context": app_context,
+                "app_id": str(app_id or ""),
+                "app_context": str(app_context),
             }
 
     async def ask_ollama(self, question: str, PcIp: str, app_id: str):
@@ -122,7 +128,7 @@ class Plugin:
             else "Game AppID: unknown (no active game context available)"
         )
         prompt_text = f"{app_context_line}\nUser Question: {question}"
-        models_to_try = ["gemma4", "llama3"]
+        models_to_try = ["gemma4:latest", "gemma4", "llama3:latest", "llama3"]
 
         def _do_request(model_name: str):
             payload = json.dumps({
@@ -159,7 +165,7 @@ class Plugin:
                 }
 
         try:
-            loop = asyncio.get_event_loop()
+            loop = asyncio.get_running_loop()
             last_failure = {"success": False, "response": "No model attempts executed."}
 
             for model_name in models_to_try:

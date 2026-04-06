@@ -1,8 +1,9 @@
 {
-  "name": "decky-plugin-template",
+  "name": "bonsai",
   "version": "0.0.1",
-  "description": "A template to quickly create decky plugins from scratch, based on TypeScript and webpack",
+  "description": "bonsAI Steam Deck plugin: local AI assistance and Ollama integration.",
   "type": "module",
+  "main": "dist/index.js",
   "scripts": {
     "build": "rollup -c",
     "watch": "rollup -c -w",
@@ -27,11 +28,12 @@
   "homepage": "https://github.com/SteamDeckHomebrew/decky-plugin-template#readme",
   "devDependencies": {
     "@decky/rollup": "^1.0.2",
-    "@decky/ui": "^4.11.0",
+    "@decky/ui": "^4.11.3",
     "@rollup/rollup-linux-x64-musl": "^4.53.3",
     "@types/react": "19.1.1",
     "@types/react-dom": "19.1.1",
     "@types/webpack": "^5.28.5",
+    "decky-frontend-lib": "^3.25.0",
     "rollup": "^4.53.3",
     "typescript": "^5.6.2"
   },

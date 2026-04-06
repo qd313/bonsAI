@@ -1,57 +1,193 @@
-import os
-
-# The decky plugin module is located at decky-loader/plugin
-# For easy intellisense checkout the decky-loader code repo
-# and add the `decky-loader/plugin/imports` path to `python.analysis.extraPaths` in `.vscode/settings.json`
-import decky
 import asyncio
+import json
+import logging
+import os
+import urllib.request
+import urllib.error
+from urllib.parse import urlparse
+from typing import Any, Optional
+
+import decky
 
 class Plugin:
-    # A normal method. It can be called from the TypeScript side using @decky/api.
-    async def add(self, left: int, right: int) -> int:
-        return left + right
-
-    async def long_running(self):
-        await asyncio.sleep(15)
-        # Passing through a bunch of random data, just as an example
-        await decky.emit("timer_event", "Hello from the backend!", True, 2)
-
-    # Asyncio-compatible long-running code, executed in a task when the plugin is loaded
     async def _main(self):
-        self.loop = asyncio.get_event_loop()
-        decky.logger.info("Hello World!")
+        logging.info("bonsAI plugin loaded!")
 
-    # Function called first during the unload process, utilize this to handle your plugin being stopped, but not
-    # completely removed
     async def _unload(self):
-        decky.logger.info("Goodnight World!")
-        pass
+        logging.info("bonsAI plugin unloaded!")
 
-    # Function called after `_unload` during uninstall, utilize this to clean up processes and other remnants of your
-    # plugin that may remain on the system
-    async def _uninstall(self):
-        decky.logger.info("Goodbye World!")
-        pass
+    async def _resolve_active_app_id(self) -> Optional[str]:
+        # Best-effort resolver. Decky runtime APIs differ across versions, so we check
+        # common attributes/method names and known environment variables.
+        for attr_name in ("current_app_id", "active_app_id", "app_id"):
+            value = getattr(self, attr_name, None)
+            normalized = self._normalize_app_id(value)
+            if normalized:
+                return normalized
 
-    async def start_timer(self):
-        self.loop.create_task(self.long_running())
+        for method_name in (
+            "get_current_app_id",
+            "get_active_app_id",
+            "get_current_game_app_id",
+            "get_app_id",
+        ):
+            method = getattr(self, method_name, None)
+            if not callable(method):
+                continue
+            try:
+                result = method()
+                if hasattr(result, "__await__"):
+                    result = await result
+                normalized = self._normalize_app_id(result)
+                if normalized:
+                    return normalized
+            except Exception as exc:
+                logging.debug(f"Active AppID resolver '{method_name}' failed: {exc}")
 
-    # Migrations that should be performed before entering `_main()`.
-    async def _migration(self):
-        decky.logger.info("Migrating")
-        # Here's a migration example for logs:
-        # - `~/.config/decky-template/template.log` will be migrated to `decky.decky_LOG_DIR/template.log`
-        decky.migrate_logs(os.path.join(decky.DECKY_USER_HOME,
-                                               ".config", "decky-template", "template.log"))
-        # Here's a migration example for settings:
-        # - `~/homebrew/settings/template.json` is migrated to `decky.decky_SETTINGS_DIR/template.json`
-        # - `~/.config/decky-template/` all files and directories under this root are migrated to `decky.decky_SETTINGS_DIR/`
-        decky.migrate_settings(
-            os.path.join(decky.DECKY_HOME, "settings", "template.json"),
-            os.path.join(decky.DECKY_USER_HOME, ".config", "decky-template"))
-        # Here's a migration example for runtime data:
-        # - `~/homebrew/template/` all files and directories under this root are migrated to `decky.decky_RUNTIME_DIR/`
-        # - `~/.local/share/decky-template/` all files and directories under this root are migrated to `decky.decky_RUNTIME_DIR/`
-        decky.migrate_runtime(
-            os.path.join(decky.DECKY_HOME, "template"),
-            os.path.join(decky.DECKY_USER_HOME, ".local", "share", "decky-template"))
+        env_app_id = self._normalize_app_id(
+            os.environ.get("STEAM_GAME_ID") or os.environ.get("SteamGameId")
+        )
+        if env_app_id:
+            return env_app_id
+
+        return None
+
+    def _normalize_app_id(self, candidate: Any) -> Optional[str]:
+        if candidate is None:
+            return None
+        candidate_str = str(candidate).strip()
+        if not candidate_str or candidate_str == "0" or not candidate_str.isdigit():
+            return None
+        return candidate_str
+
+    # This method can be called directly from your React frontend
+    async def log_navigation(self, setting_path: str):
+        logging.info(f"User navigated to: {setting_path}")
+        # In the future, you could put os.system() or subprocess calls here
+        # to apply hidden system settings that the normal UI can't reach.
+        return True
+
+    async def ask_game_ai(self, question: Any = "", PcIp: str = ""):
+        app_id = None
+        app_context = "none"
+        try:
+            if isinstance(question, dict):
+                payload = question
+                question = payload.get("question", "")
+                PcIp = payload.get("PcIp", payload.get("pcIp", PcIp))
+
+            question = (question or "").strip()
+            PcIp = (PcIp or "").strip()
+            if not question:
+                return {
+                    "success": False,
+                    "response": "Question is required.",
+                    "app_id": "",
+                    "app_context": "none",
+                }
+            if not PcIp:
+                return {
+                    "success": False,
+                    "response": "PC IP Address is required.",
+                    "app_id": "",
+                    "app_context": "none",
+                }
+
+            app_id = await self._resolve_active_app_id()
+            app_context = "active" if app_id else "none"
+            ollama_app_id = app_id if app_id else "unknown"
+
+            ollama_result = await self.ask_ollama(question, PcIp, ollama_app_id)
+            return {
+                "success": bool(ollama_result.get("success", False)),
+                "response": ollama_result.get("response", "No response text."),
+                "app_id": app_id or "",
+                "app_context": app_context,
+            }
+        except Exception as exc:
+            logging.exception("ask_game_ai failed")
+            return {
+                "success": False,
+                "response": f"Backend error: {exc}",
+                "app_id": app_id or "",
+                "app_context": app_context,
+            }
+
+    async def ask_ollama(self, question: str, PcIp: str, app_id: str):
+        logging.info(f"Asking Ollama at {PcIp}: {question} for AppID: {app_id}")
+        url = self._build_ollama_generate_url(PcIp)
+        app_context_line = (
+            f"Game AppID: {app_id}"
+            if app_id and app_id != "unknown"
+            else "Game AppID: unknown (no active game context available)"
+        )
+        prompt_text = f"{app_context_line}\nUser Question: {question}"
+        models_to_try = ["gemma4", "llama3"]
+
+        def _do_request(model_name: str):
+            payload = json.dumps({
+                "model": model_name,
+                "prompt": prompt_text,
+                "stream": False,
+            }).encode("utf-8")
+            req = urllib.request.Request(
+                url,
+                data=payload,
+                headers={"Content-Type": "application/json"},
+                method="POST",
+            )
+            try:
+                with urllib.request.urlopen(req, timeout=30) as resp:
+                    data = json.loads(resp.read().decode("utf-8"))
+                    return {
+                        "success": True,
+                        "response": data.get("response", "No response text."),
+                        "model": model_name,
+                    }
+            except urllib.error.HTTPError as e:
+                body = e.read().decode("utf-8", errors="replace")
+                return {
+                    "success": False,
+                    "response": f"HTTP {e.code} from {url} using model '{model_name}': {body}",
+                    "status": e.code,
+                    "body": body,
+                }
+            except Exception as e:
+                return {
+                    "success": False,
+                    "response": f"Failed to reach {url} using model '{model_name}': {e}",
+                }
+
+        try:
+            loop = asyncio.get_event_loop()
+            last_failure = {"success": False, "response": "No model attempts executed."}
+
+            for model_name in models_to_try:
+                result = await loop.run_in_executor(None, _do_request, model_name)
+                if result.get("success"):
+                    return result
+
+                last_failure = result
+                body = (result.get("body") or "").lower()
+                is_model_not_found = "not found" in body and "model" in body
+                if is_model_not_found:
+                    continue
+                return result
+
+            return last_failure
+        except Exception as e:
+            logging.error(f"Ollama request failed: {e}")
+            return {"success": False, "response": str(e)}
+
+    def _build_ollama_generate_url(self, pc_ip: str) -> str:
+        raw = (pc_ip or "").strip()
+        if not raw:
+            return "http://127.0.0.1:11434/api/generate"
+
+        if "//" not in raw:
+            raw = f"http://{raw}"
+
+        parsed = urlparse(raw)
+        host = parsed.hostname or "127.0.0.1"
+        port = parsed.port or 11434
+        return f"http://{host}:{port}/api/generate"

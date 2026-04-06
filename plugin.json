@@ -1,11 +1,10 @@
 {
-  "name": "Example Plugin",
-  "author": "John Doe",
-  "flags": ["debug", "_root"],
+  "name": "bonsAI",
+  "author": "qwert",
+  "description": "bonsAI: local AI assistance for your Steam Deck.",
+  "version": "1.0.0",
   "api_version": 1,
-  "publish": {
-    "tags": ["template", "root"],
-    "description": "Decky example plugin.",
-    "image": "https://opengraph.githubassets.com/1/SteamDeckHomebrew/PluginLoader"
-  }
+  "main": "main.py",
+  "icon": "fas fa-search",
+  "flags": []
 }

@@ -1,4 +1,4 @@
-# Decky Plugin bonsAI - Roadmap
+# Decky Plugin bonsAI (Backend Ollama Node for Steam (A.I.)) - Roadmap
 
 ## Current Priority
 - [ ] Fix the `TypeError: Failed to fetch` cross-origin/network error between the Steam Deck UI and the local Windows PC Ollama server.

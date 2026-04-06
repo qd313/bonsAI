@@ -1,11 +1,9 @@
 {
-  "name": "Example Plugin",
-  "author": "John Doe",
-  "flags": ["debug", "_root"],
-  "api_version": 1,
-  "publish": {
-    "tags": ["template", "root"],
-    "description": "Decky example plugin.",
-    "image": "https://opengraph.githubassets.com/1/SteamDeckHomebrew/PluginLoader"
-  }
+  "name": "decky-settings-search",
+  "author": "qwert",
+  "description": "A search bar for Steam Deck settings.",
+  "version": "1.0.0",
+  "main": "main.py",
+  "icon": "fas fa-search",
+  "flags": []
 }

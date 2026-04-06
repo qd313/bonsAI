@@ -21,7 +21,7 @@
             "type": "shell",
             "group": "none",
             "detail": "Setup pnpm",
-            "command": "which pnpm && pnpm i",
+            "command": "pnpm i",
             "problemMatcher": []
         },
         //Preliminary "All-in-one" setup task

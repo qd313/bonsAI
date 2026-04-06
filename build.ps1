@@ -1,17 +1,22 @@
 # Set the connection details for your Steam Deck
-$HostIp="192.168.86.52"
+$HostIp="192.168.86.52" # <-- Ensure this matches your Steam Deck's current Wi-Fi IP
+$PcIp="192.168.86.35"   # <-- Ensure this is your PC's IP address for Ollama
 $User="deck"
-$Pass="0088qd"
-$PluginName="DeckySettingsSearch"
+$Pass="0088qd"          # <-- Ensure this is your Steam Deck's sudo password
+$PluginName="bonsAI"
 
 # Install dependencies (only needed once or when adding new packages)
 pnpm install
 
 # Force update Decky's modular libraries to their newest versions
-pnpm update @decky/api @decky/ui --latest
+# pnpm update @decky/api @decky/ui --latest # (Commented out to speed up rapid deployment testing)
 
 # Create the dist folder if it doesn't exist
 if (!(Test-Path "dist")) { New-Item -ItemType Directory -Path "dist" | Out-Null }
+
+# Inject the IPs into the frontend so they can be read natively by React
+Write-Host "Generating src/config.ts..."
+Set-Content -Path "src\config.ts" -Value "export const HostIp = '$HostIp';`nexport const PcIp = '$PcIp';"
 
 # Build the plugin frontend using the package.json script
 pnpm run build

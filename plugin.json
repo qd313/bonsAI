@@ -1,8 +1,9 @@
 {
-  "name": "decky-settings-search",
+  "name": "bonsAI",
   "author": "qwert",
-  "description": "A search bar for Steam Deck settings.",
+  "description": "bonsAI: local AI assistance for your Steam Deck.",
   "version": "1.0.0",
+  "api_version": 1,
   "main": "main.py",
   "icon": "fas fa-search",
   "flags": []

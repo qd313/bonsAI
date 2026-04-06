@@ -1,7 +1,7 @@
 {
-  "name": "deckysettingssearch",
+  "name": "bonsai",
   "version": "0.0.1",
-  "description": "A template to quickly create decky plugins from scratch, based on TypeScript and webpack",
+  "description": "bonsAI Steam Deck plugin: local AI assistance and Ollama integration.",
   "type": "module",
   "main": "dist/index.js",
   "scripts": {

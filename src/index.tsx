@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { definePlugin, toaster } from "@decky/api";
+import { definePlugin, toaster, call } from "@decky/api";
 import { PanelSection, PanelSectionRow, TextField, ButtonItem, Button, Navigation, QuickAccessTab, Focusable } from "@decky/ui";
+import { PcIp, HostIp } from "./config";
 
 const SearchIcon: React.FC = () => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -316,7 +317,7 @@ const ErrorCaptureUI: React.FC = () => {
 
   return (
     <div style={{ padding: 16, color: "white" }}>
-      <div style={{ fontWeight: 700, marginBottom: 6 }}>Settings Search — Debug</div>
+      <div style={{ fontWeight: 700, marginBottom: 6 }}>bonsAI — Debug</div>
       <div style={{ marginBottom: 8 }}>Plugin loaded. Captured runtime errors appear below.</div>
       {errors.length === 0 ? (
         <div style={{ color: "gray" }}>No errors captured yet.</div>
@@ -335,7 +336,7 @@ type SteamUrlApi = {
   ExecuteSteamURL(url: string): void;
 };
 
-const SEARCH_QUERY_STORAGE_KEY = "deckysettingssearch:last-query";
+const SEARCH_QUERY_STORAGE_KEY = "bonsai:last-query";
 
 function loadSavedSearchQuery(): string {
   if (typeof window === "undefined") return "";
@@ -419,6 +420,12 @@ const Content: React.FC = () => {
     persistSearchQuery(searchQuery);
   }, [searchQuery]);
 
+  const [ollamaIp, setOllamaIp] = useState(PcIp);
+  const [ollamaQuestion, setOllamaQuestion] = useState("");
+  const [ollamaResponse, setOllamaResponse] = useState("");
+  const [ollamaContext, setOllamaContext] = useState<{ app_id: string; app_context: "active" | "none" } | null>(null);
+  const [isAsking, setIsAsking] = useState(false);
+
   const filteredSettings = useMemo(() => {
     if (!searchQuery.trim()) return [];
     return SETTINGS_DATABASE.filter((setting) =>
@@ -455,7 +462,38 @@ const Content: React.FC = () => {
     }
   };
 
+  const onAskOllama = async () => {
+    if (!ollamaQuestion.trim() || !ollamaIp.trim()) return;
+    setIsAsking(true);
+    setOllamaResponse("Thinking...");
+    try {
+      console.log(`Asking Ollama from Steam Deck (${HostIp}) to PC (${ollamaIp}) via plugin backend`);
+
+      const data = await call<
+        [string, string],
+        {
+          success: boolean;
+          response: string;
+          app_id: string;
+          app_context: "active" | "none";
+        }
+      >("ask_game_ai", ollamaQuestion, ollamaIp);
+
+      setOllamaResponse(data.response ?? "No response text.");
+      setOllamaContext({
+        app_id: data.app_id ?? "",
+        app_context: data.app_context === "active" ? "active" : "none",
+      });
+    } catch (e: unknown) {
+      setOllamaResponse(`Error: ${e instanceof Error ? e.message : String(e)}`);
+      setOllamaContext(null);
+    } finally {
+      setIsAsking(false);
+    }
+  };
+
   return (
+    <>
     <PanelSection title="Search">
       <PanelSectionRow>
         <Focusable
@@ -550,21 +588,67 @@ const Content: React.FC = () => {
         </PanelSectionRow>
       )}
     </PanelSection>
+
+    <PanelSection title="Ask Ollama (AI)">
+      <PanelSectionRow>
+        <TextField
+          label="PC IP Address"
+          value={ollamaIp}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setOllamaIp(e.target.value)}
+        />
+      </PanelSectionRow>
+      <PanelSectionRow>
+        <TextField
+          label="Question"
+          value={ollamaQuestion}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setOllamaQuestion(e.target.value)}
+          onKeyDown={(ev: React.KeyboardEvent<HTMLInputElement>) => {
+            if (ev.key === "Enter" && !isAsking && ollamaQuestion.trim() && ollamaIp.trim()) {
+              ev.preventDefault();
+              onAskOllama();
+            }
+          }}
+        />
+      </PanelSectionRow>
+      <PanelSectionRow>
+        <ButtonItem layout="below" onClick={onAskOllama} disabled={isAsking || !ollamaQuestion.trim() || !ollamaIp.trim()}>
+          {isAsking ? "Asking..." : "Ask"}
+        </ButtonItem>
+      </PanelSectionRow>
+      {ollamaResponse && (
+        <PanelSectionRow>
+          <div style={{ color: "white", padding: "8px", background: "rgba(0,0,0,0.5)", borderRadius: 4, whiteSpace: "pre-wrap" }}>
+            {ollamaResponse}
+          </div>
+        </PanelSectionRow>
+      )}
+      {ollamaContext && (
+        <PanelSectionRow>
+          <div style={{ color: "#9fb7d5", fontSize: 13 }}>
+            {ollamaContext.app_context === "active" && ollamaContext.app_id
+              ? `Context: active game AppID ${ollamaContext.app_id}`
+              : "Context: no active game detected"}
+          </div>
+        </PanelSectionRow>
+      )}
+    </PanelSection>
+    </>
   );
 };
 
+const Root: React.FC = () => (
+  <ErrorBoundary>
+    <ErrorCaptureUI />
+    <Content />
+  </ErrorBoundary>
+);
+
 export default definePlugin(() => {
   return {
-    name: "DeckySettingsSearch",
-    title: "Settings Search",
-    content: (
-      <ErrorBoundary>
-        <ErrorCaptureUI />
-        <Content />
-      </ErrorBoundary>
-    ),
+    name: "bonsAI",
+    title: "Decky Settings Search",
+    content: <Root />,
     icon: <SearchIcon />,
     onDismount() {},
   };
 });
-

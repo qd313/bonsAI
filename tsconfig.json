@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
     "outDir": "dist",
+    "rootDir": "src",
     "module": "ESNext",
     "target": "ES2020",
     "jsx": "react-jsx",
     "declaration": false,
     "moduleResolution": "node",
+    "ignoreDeprecations": "6.0",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "esModuleInterop": true,

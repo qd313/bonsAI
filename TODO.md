@@ -14,3 +14,4 @@
 - [ ] Advanced Thermal & Fan Curve Tuning.
 - [ ] Deep Mod & Port Configuration Manager.
 - [ ] Suggested AI prompts like "Optimize for battery life or fan speed 50%, but maintian 45 fps"
+- [ ] Remind me to get a ever-present-preset-prompt that toggles 3W TDP when input inactive for some drop down of seconds or minutes

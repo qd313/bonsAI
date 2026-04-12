@@ -126,3 +126,34 @@ If Windows still falls back to CPU after FIX A:
 - Verify QAM reflection with per-game profile enabled and disabled.
 - Verify after closing/reopening QAM Performance tab.
 - Verify after Steam restart and full reboot.
+
+## 5. bonsai shortcut setup
+## 🚀 Pro-Tip: Create a Global Quick-Launch Shortcut for BonsAI
+
+Because Decky Loader acts as a secure container for plugins, we cannot force a custom button onto the main Steam interface. However, whether you are on standard SteamOS or running a Bazzite Gamescope session, you can use a native **Steam Input Macro** to instantly open BonsAI from *anywhere* (in-game or on the Home Screen) with a single button combination.
+
+We recommend binding this to a **Guide Button Chord** (e.g., holding the `Steam` or `Guide` button + `R4`). This ensures the shortcut works globally without interfering with your standard in-game controls.
+
+### How to set up the BonsAI Quick-Launch Macro:
+
+1. **Access Chord Settings:**
+   * Press the `Steam` button and go to **Settings** > **Controller**.
+   * Scroll down to **Guide Button Chord Layout** and click **Edit**.
+   * Click **Edit Layout**.
+
+2. **Pick Your Trigger Button:**
+   * Navigate to the **Buttons** tab (or wherever you want to map this, such as the Back Grips).
+   * Find an available button, like `R4`, and select it.
+
+3. **Build the Macro Sequence:**
+   You will need to stack commands and add slight delays so the Steam UI has time to catch up to the inputs. 
+
+   * **Command 1 (Open Menu):** Select `System` > `Quick Access Menu`.
+   * **Command 2 (Navigate to Decky):** Press the Gear icon next to your new command -> `Add Extra Command`. Set this command to `D-Pad Down`. 
+     * *Important:* Click the Gear icon next to Command 2, select `Settings`, and increase the **Fire Start Delay** to `100` or `150` (to give the QAM time to open).
+   * **Command 3, 4, etc. (Scroll down):** Repeat the `Add Extra Command` process for `D-Pad Down` as many times as needed to reach the Decky plug icon in your specific left-rail list. (Increase the Fire Start Delay slightly for each new command, e.g., `200`, `250`).
+   * **Command 5 (Open Decky):** Add one final Extra Command mapped to the `A Button` to enter the Decky menu. (Set Fire Start Delay to roughly `50` higher than the last command).
+   * **Command 6 (Scroll to BonsAI):** Depending on where BonsAI lives in your specific plugin list, add subsequent `D-Pad Down` and `A Button` extra commands with increasing delays to finalize the sequence.
+
+**Testing Your Macro:**
+Once built, hold the `Steam` button and press your assigned button (e.g., `R4`). You should see the QAM fly open and automatically navigate straight into the BonsAI panel! If it misses a step, go back into the chord settings and slightly increase the **Fire Start Delay** for the step that failed.

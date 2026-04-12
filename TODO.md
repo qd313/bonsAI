@@ -48,7 +48,7 @@
 - [ ] ★★★★ **Idle Safety Preset Automation:** Optionally apply a low-power preset (e.g., 3W) after configurable inactivity duration.
 - [ ] ★★★★ **Steam Input Layout Analysis:** Parse VDF controller configs and expose actionable control summaries to AI.
 - [ ] ★★★★ **Advanced Thermal and Fan Curve Tuning:** Add manual fan-profile controls with safety guardrails and failsafes.
-- [ ] ★★★★★ **Dedicated QAM Left-Rail BonsAI Shortcut (Research Spike):** Investigate whether Steam/Decky supports a stable plugin icon entry in the QAM left rail. Proceed only if there is a supported API path; otherwise no-go and keep this as non-implementation research.
+- [ ] ★★★★★ **Global BonsAI Quick-Launch via Steam Input Macro (Documentation Spike)**: Document the Guide Button Chord macro sequence to allow users to open the plugin from anywhere (in-game or home screen). This provides a native, stable shortcut without relying on brittle UI hacks or unsupported API paths.
 - [ ] ★★★★★ **Global Screenshots and Vision:** Capture gamescope screenshots and send multimodal context to supported models, including strategy guidance from screenshot + game context and optional inline visual aids.
 - [ ] ★★★★★ **Strategy Checklist Workflow (Chat-Scoped):** Let Strategy Guide responses include interactive action checklists, allow check/uncheck in current chat, and keep checklist progress synchronized across follow-up prompts (including inferred progress updates).
 - [ ] ★★★★★ **Voice Command Input:** Capture mic audio and transcribe prompts through a local Whisper service.

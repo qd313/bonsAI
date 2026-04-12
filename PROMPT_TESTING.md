@@ -106,6 +106,59 @@ Track what prompts have been tested, what model responded, and whether the resul
 
 ---
 
+## Strategy Guide Prompt Testing
+
+### Core Strategy Preset and Mode UX
+- [ ] "How do I beat this level" preset appears as beta strategy preset.
+- [ ] Tapping strategy preset switches mode from `Thinking` replacement lane to `Strategy Guide`.
+- [ ] Strategy mode placeholder changes from generic ask text to strategy copy (e.g. "Describe the level or problem").
+- [ ] Follow-up prompts after strategy questions continue to include strategy-relevant suggestions.
+
+### Vision and Inline Visuals
+- [ ] Strategy prompt with no screenshot: gives useful fallback guidance and clearly notes limited visual context.
+- [ ] Strategy prompt with screenshot attached: response references visible scene/problem details.
+- [ ] If inline visual aid is returned (map/dungeon hint), it renders inline correctly in response.
+- [ ] If inline visual cannot render, response degrades gracefully (text-only fallback, no broken UI).
+
+### Spoiler Policy and Consent
+- [ ] First strategy answer includes best-effort "no spoilers by default" disclosure.
+- [ ] Without explicit permission, response avoids direct puzzle/boss/story spoilers.
+- [ ] With explicit user permission ("spoilers are okay"), unrestricted guidance is allowed.
+- [ ] Spoiler segments render as tap-to-reveal blocks by default.
+- [ ] Settings toggle for spoiler masking changes behavior as expected (masked vs directly visible after consent).
+
+### Steam Input-Tailored Coaching
+- [ ] User issue like "I can't hit headshots" triggers control-specific advice (gyro/trackpad/layout/sensitivity).
+- [ ] Recommendations remain actionable for Steam Deck (not generic desktop-only control tips).
+- [ ] If Steam Input context is missing, response explicitly gives best-effort generic control advice.
+
+### Checklist Workflow (Chat-Scoped)
+- [ ] Strategy response can include checklist summary with actionable steps.
+- [ ] User can check/uncheck checklist items in chat.
+- [ ] Follow-up question updates checklist progress based on previous checked items.
+- [ ] Follow-up can infer progress from user text even when boxes were not manually checked.
+- [ ] Checklist state is chat-scoped only (does not leak to unrelated/new chat context).
+
+### Cheat / Fast Pass Gating
+- [ ] No cheat section appears for normal coaching requests.
+- [ ] "Give me fastest way / I just want to pass quickly" explicitly enables `Cheat / Fast Pass` section.
+- [ ] Cheat section stays clearly separated from normal coaching guidance.
+
+### PASS / PARTIAL / FAIL Examples (Strategy)
+- **PASS:** Correctly follows spoiler policy, provides practical strategy, and updates checklist state consistently.
+- **PARTIAL:** Good tactical advice but misses one policy/format rule (e.g. spoiler disclosure missing, checklist not updated).
+- **FAIL:** Gives unconsented spoilers, ignores explicit consent handling, provides irrelevant control advice, or breaks checklist/visual rendering expectations.
+
+### Strategy Regression Subset (Run after prompt/system updates)
+- [ ] "How do I beat this level" (no screenshot, no spoiler permission).
+- [ ] "How do I beat this level" + screenshot attachment (scene-aware guidance expected).
+- [ ] "Spoilers are okay, give me exact steps" (unrestricted but spoiler formatting/toggle behavior correct).
+- [ ] "I can't hit headshots in this game" (Steam Input-focused coaching expected).
+- [ ] "Give me a checklist and keep it updated while we iterate" (checklist lifecycle sanity check).
+- [ ] "I don't care, just the fastest cheese" (Cheat/Fast Pass gating expected).
+
+---
+
 ## Games to Test With
 - [ ] Left 4 Dead 2 (confirmed working — lightweight Source engine)
 - [ ] Elden Ring (demanding, Proton-dependent)

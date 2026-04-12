@@ -21,8 +21,9 @@ Ranked by effort and risk using the GTA star system:
 ## Candidate Features (Easiest → Hardest)
 
 ### ★★★ Mode Selector Dropdown (Main Screen)
-- **Goal:** Add model mode selector (`Fast`, `Thinking`, `Mega/Ultra/Deep`) on main screen.
+- **Goal:** Add model mode selector (`Fast`, `Strategy Guide`, `Mega/Ultra/Deep`) on main screen.
 - **Primary work:** UI selector + backend mode-to-model mapping + installed-model fallback.
+- **Behavior note:** `Strategy Guide` replaces the previous `Thinking` lane (rename/repurpose, not an added mode lane).
 - **Files:** `src/index.tsx`, `main.py`.
 - **Depends on:** none.
 - **Not in scope:** automatic model pulls from plugin UI.
@@ -56,6 +57,28 @@ Ranked by effort and risk using the GTA star system:
 - **Not in scope:** enabling Proton logging automatically.
 - **Risk note:** value may be limited unless users already run with `PROTON_LOG=1`.
 
+### ★★★★ Strategy Guide Prompt Path (Beta)
+- **Goal:** Define a strategy-focused response path for `How do I beat this level` and related prompts.
+- **Primary work:** strategy intent routing, coaching-first response format, and prompt scaffolding for tactical help.
+- **Expected UX:** tapping strategy preset switches to `Strategy Guide` mode and uses placeholder text like `Describe the level or problem`.
+- **Includes:** Steam Input-aware recommendations when control friction is relevant (gyro/trackpad/layout tuning).
+- **Policy:** optional `Cheat / Fast Pass` section appears only when user explicitly asks for speedrun/shortcut guidance.
+- **Files:** `src/index.tsx`, `main.py`, `PROMPT_TESTING.md`.
+- **Depends on:** **Mode Selector Dropdown (Main Screen)**.
+- **Not in scope:** guaranteed game-perfect walkthroughs for every title.
+
+### ★★★★ Strategy Guide Safety and Spoilers
+- **Goal:** Keep strategy help useful without unwanted story or puzzle spoilers.
+- **Primary work:** spoiler-safe response policy and explicit-consent flow for unrestricted spoiler answers.
+- **Required behavior:**
+  - default response states best-effort spoiler avoidance
+  - unrestricted spoilers require explicit user permission
+  - spoiler details are emitted/rendered in tap-to-reveal blocks by default
+- **Settings note:** allow an optional setting to disable spoiler masking after consent (show spoilers directly).
+- **Files:** `src/index.tsx`, `main.py`, `PROMPT_TESTING.md`.
+- **Depends on:** **Strategy Guide Prompt Path (Beta)**.
+- **Not in scope:** hard guarantees that all model outputs are spoiler-free in every edge case.
+
 ### ★★★★ Linux Ollama Compatibility
 - **Goal:** Support Linux-hosted Ollama setups as first-class path.
 - **Primary work:** endpoint assumptions, connection diagnostics, and docs/test matrix.
@@ -86,10 +109,21 @@ Ranked by effort and risk using the GTA star system:
 
 ### ★★★★★ Global Screenshots and Vision
 - **Goal:** Capture gamescope screenshots and send multimodal prompts.
-- **Primary work:** capture pipeline, image resize/encoding, multimodal model routing.
+- **Primary work:** capture pipeline, image resize/encoding, multimodal model routing, and strategy-context attachment (`appId`, game state hints).
+- **Strategy extension:** support strategy guidance from screenshot + game context and allow inline visual aids (for example map/dungeon references) in responses when available.
 - **Files:** `main.py`, `src/index.tsx`, install/troubleshooting docs.
 - **Depends on:** vision-capable models installed on host PC.
 - **Not in scope:** continuous video streaming.
+
+### ★★★★★ Strategy Checklist Workflow (Chat-Scoped)
+- **Goal:** Let Strategy Guide responses provide actionable checklists users can complete during the current chat.
+- **Primary work:** checklist generation format, interactive check/uncheck behavior, and follow-up synchronization logic.
+- **Required behavior:**
+  - checklist items are interactive and scoped to the current chat only
+  - follow-up questions can update progress even when user reports progress in text without manually ticking boxes
+- **Files:** `src/index.tsx`, `main.py`, `PROMPT_TESTING.md`.
+- **Depends on:** **Strategy Guide Prompt Path (Beta)**.
+- **Not in scope:** long-term checklist persistence across restarts/sessions.
 
 ### ★★★★★ Dedicated QAM Left-Rail BonsAI Shortcut (Research Spike)
 - **Goal:** Determine whether BonsAI can have a dedicated quick-launch icon in the QAM left rail (outside normal plugin list flow) to reduce navigation time.
@@ -128,14 +162,21 @@ Ranked by effort and risk using the GTA star system:
 
 ## Cross-Feature Dependency Summary
 
-- **Mode Selector Dropdown (Main Screen)** → required by **Per-Mode Latency/Timeout Profiles**.
+- **Mode Selector Dropdown (Main Screen)** (`Strategy Guide` replaces `Thinking`) → required by **Per-Mode Latency/Timeout Profiles** and **Strategy Guide Prompt Path (Beta)**.
+- **Strategy Guide Prompt Path (Beta)** → required by **Strategy Guide Safety and Spoilers** and **Strategy Checklist Workflow (Chat-Scoped)**.
+- **Global Screenshots and Vision** → enables richer strategy responses with screenshot-aware context and inline visual aids.
 - **Bundled VDF parsing support** → needed for **Steam Input Layout Analysis** (and optional deeper language/config parsing extensions).
 - **Stable settings persistence** → reused by mode profiles, language override, and background completion metadata.
 
 ```mermaid
 flowchart TD
   modeSelector[ModeSelectorDropdownMainScreen] --> perModeProfiles[PerModeLatencyTimeoutProfiles]
+  modeSelector --> strategyPath[StrategyGuidePromptPathBeta]
+  strategyPath --> strategySafety[StrategyGuideSafetyAndSpoilers]
+  strategyPath --> strategyChecklist[StrategyChecklistWorkflowChatScoped]
+  visionFeature[GlobalScreenshotsAndVision] --> strategyPath
   settingsBase[SettingsPersistenceBase] --> perModeProfiles
+  settingsBase --> strategySafety
   settingsBase --> multiLanguage[MultiLanguageResponses]
   settingsBase --> backgroundCompletion[BackgroundPromptCompletion]
   vdfSupport[BundledVdfParsingSupport] --> steamInput[SteamInputLayoutAnalysis]

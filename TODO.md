@@ -36,7 +36,10 @@
 ## Future Features (DO NOT IMPLEMENT YET)
 **[Full detailed breakdown →](FUTURE_FEATURES.md)**
 
-- [ ] ★★★ **Mode Selector Dropdown (Main Screen):** Add mode selection (`Fast`, `Thinking`, `Mega/Ultra/Deep`) with safe installed-model fallback behavior.
+- [ ] ★★★ **Mode Selector Dropdown (Main Screen):** Add mode selection (`Fast`, `Strategy Guide`, `Mega/Ultra/Deep`) with safe installed-model fallback behavior.
+  - Note: **Strategy Guide** replaces the previous `Thinking` mode label/behavior (repurpose, not extra mode count).
+- [ ] ★★★★ **Strategy Guide Prompt Path (Beta):** Add strategy preset-driven UX (`How do I beat this level`), coaching-first guidance, Steam Input-aware recommendations, and optional `Cheat / Fast Pass` output only when explicitly requested.
+- [ ] ★★★★ **Strategy Guide Safety and Spoilers:** Default to best-effort spoiler avoidance, require explicit user permission for unrestricted spoilers, and support tap-to-reveal spoiler formatting with optional Settings toggle behavior.
 - [ ] ★★★ **Per-Mode Latency/Timeout Profiles:** Configure separate warning/timeout values per mode. Depends on **Mode Selector Dropdown (Main Screen)**.
 - [ ] ★★★ **Multi-Language Responses:** Detect Steam language and localize AI response language (with optional override).
 - [ ] ★★★ **Background Prompt Completion:** Allow requests to complete while QAM is closed and restore results when reopened.
@@ -46,7 +49,8 @@
 - [ ] ★★★★ **Steam Input Layout Analysis:** Parse VDF controller configs and expose actionable control summaries to AI.
 - [ ] ★★★★ **Advanced Thermal and Fan Curve Tuning:** Add manual fan-profile controls with safety guardrails and failsafes.
 - [ ] ★★★★★ **Dedicated QAM Left-Rail BonsAI Shortcut (Research Spike):** Investigate whether Steam/Decky supports a stable plugin icon entry in the QAM left rail. Proceed only if there is a supported API path; otherwise no-go and keep this as non-implementation research.
-- [ ] ★★★★★ **Global Screenshots and Vision:** Capture gamescope screenshots and send multimodal context to supported models.
+- [ ] ★★★★★ **Global Screenshots and Vision:** Capture gamescope screenshots and send multimodal context to supported models, including strategy guidance from screenshot + game context and optional inline visual aids.
+- [ ] ★★★★★ **Strategy Checklist Workflow (Chat-Scoped):** Let Strategy Guide responses include interactive action checklists, allow check/uncheck in current chat, and keep checklist progress synchronized across follow-up prompts (including inferred progress updates).
 - [ ] ★★★★★ **Voice Command Input:** Capture mic audio and transcribe prompts through a local Whisper service.
 - [ ] ★★★★★ **VAC Opponent Check (Phased):** Start with manual-assisted SteamID parsing and VAC lookup, then expand to automated lobby/opponent detection where reliable identity signals exist.
 - [ ] ★★★★★★ **Deep Mod and Port Configuration Manager:** Provide broad game-specific mod/port detection and advisory workflows.

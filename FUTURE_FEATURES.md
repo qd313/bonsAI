@@ -125,14 +125,14 @@ Ranked by effort and risk using the GTA star system:
 - **Depends on:** **Strategy Guide Prompt Path (Beta)**.
 - **Not in scope:** long-term checklist persistence across restarts/sessions.
 
-### ★★★★★ Dedicated QAM Left-Rail BonsAI Shortcut (Research Spike)
-- **Goal:** Determine whether BonsAI can have a dedicated quick-launch icon in the QAM left rail (outside normal plugin list flow) to reduce navigation time.
-- **Primary work:** validate Decky/Steam API support for left-rail icon registration, prototype non-invasive wiring if available, and document fallback behavior if unsupported.
-- **Files:** `src/index.tsx`, Decky plugin API integration points, implementation notes/docs.
-- **Depends on:** a stable and supported host API surface (not private Steam UI internals).
-- **Worth-it assessment:** only worth implementing if support is native/stable; not worth brittle patching that can break on Steam updates.
-- **Go/No-Go gate:** go only with supported API access; no-go if it requires internal module patching or signature scraping.
-- **Not in scope:** reverse-engineering private Steam UI bundles for production use.
+### ★★★★★ Global BonsAI Quick-Launch via Steam Input Macro (Documentation Spike)
+Goal: Provide users with a near-instant way to summon BonsAI from anywhere—whether in-game or on the SteamOS Home Screen—using native system tools, completely bypassing the need for brittle UI hacks.
+Primary work: Document and test the optimal Guide Button Chord macro sequence required to open the QAM, navigate to the Decky tab, and launch BonsAI automatically.
+Files: README.md, docs/setup.md.
+Depends on: Native Steam Input functionality (Guide Button Chord Layout) and the user's specific QAM tab order.
+Worth-it assessment: Extremely high. It requires zero code maintenance, carries no performance overhead, is completely immune to Steam client updates, and safely leverages official Valve tools.
+Go/No-Go gate: GO. Requires no code implementation or internal module patching.
+Not in scope: Programmatic background input sniffing (evdev), WebSockets, or React DOM manipulation
 
 ### ★★★★★ Voice Command Input
 - **Goal:** Record voice on Deck and transcribe to prompt text using local Whisper service.

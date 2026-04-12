@@ -9,7 +9,7 @@ import time
 import urllib.request
 import urllib.error
 from urllib.parse import urlparse
-from typing import Any, Optional
+from typing import Any, Optional, Tuple
 
 import decky
 
@@ -29,6 +29,12 @@ class Plugin:
     MIN_REQUEST_TIMEOUT_SECONDS = 10
     MAX_REQUEST_TIMEOUT_SECONDS = 600
     SETTINGS_FILENAME = "settings.json"
+
+    def __init__(self):
+        self._background_lock = asyncio.Lock()
+        self._background_task: Optional[asyncio.Task] = None
+        self._background_state: dict = self._new_background_state()
+        self._background_request_seq = 0
 
     @staticmethod
     def _coerce_instance(self_or_cls: Any) -> "Plugin":
@@ -75,10 +81,62 @@ class Plugin:
         return Plugin.DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE
 
     async def _main(self):
+        self._ensure_background_state()
         logger.info("bonsAI plugin loaded!")
 
     async def _unload(self):
         logger.info("bonsAI plugin unloaded!")
+
+    def _new_background_state(self) -> dict:
+        return {
+            "status": "idle",
+            "request_id": None,
+            "question": "",
+            "app_id": "",
+            "app_context": "none",
+            "success": None,
+            "response": "",
+            "applied": None,
+            "elapsed_seconds": 0,
+            "error": None,
+            "started_at": None,
+            "completed_at": None,
+        }
+
+    def _ensure_background_state(self) -> None:
+        if not hasattr(self, "_background_lock"):
+            self._background_lock = asyncio.Lock()
+        if not hasattr(self, "_background_task"):
+            self._background_task = None
+        if not hasattr(self, "_background_state") or not isinstance(self._background_state, dict):
+            self._background_state = self._new_background_state()
+        if not hasattr(self, "_background_request_seq"):
+            self._background_request_seq = 0
+
+    @staticmethod
+    def _parse_ask_payload(question: Any, PcIp: str) -> Tuple[str, str, str, str]:
+        app_id = ""
+        app_name = ""
+        if isinstance(question, dict):
+            payload = question
+            question = payload.get("question", "")
+            PcIp = payload.get("PcIp", payload.get("pcIp", payload.get("pc_ip", PcIp)))
+            app_id = str(payload.get("appId", "") or "").strip()
+            app_name = str(payload.get("appName", "") or "").strip()
+        normalized_question = str(question or "").strip()
+        normalized_pc_ip = str(PcIp or "").strip()
+        return normalized_question, normalized_pc_ip, app_id, app_name
+
+    @staticmethod
+    def _reject_ask_request(response_text: str, app_id: str = "") -> dict:
+        return {
+            "success": False,
+            "response": response_text,
+            "app_id": app_id,
+            "app_context": "active" if app_id else "none",
+            "applied": None,
+            "elapsed_seconds": 0,
+        }
 
     async def load_settings(self):
         """Load persisted plugin settings from Decky's settings directory."""
@@ -304,44 +362,19 @@ class Plugin:
         except Exception as e:
             return {"reachable": False, "error": str(e)}
 
-    async def ask_game_ai(self, question: Any = "", PcIp: str = ""):
-        app_id = ""
-        app_name = ""
+    async def _execute_game_ai_request(
+        self,
+        question: str,
+        pc_ip: str,
+        app_id: str = "",
+        app_name: str = "",
+    ) -> dict:
         start = time.time()
+        app_context = "active" if app_id else "none"
         try:
-            logger.info("ask_game_ai: RPC entry (arg type=%s)", type(question).__name__)
             plugin = Plugin._coerce_instance(self)
-            if isinstance(question, dict):
-                payload = question
-                question = payload.get("question", "")
-                PcIp = payload.get("PcIp", payload.get("pcIp", payload.get("pc_ip", PcIp)))
-                app_id = str(payload.get("appId", "") or "").strip()
-                app_name = str(payload.get("appName", "") or "").strip()
-
-            question = (question or "").strip()
-            pc_ip = (PcIp or "").strip()
-            if not question:
-                logger.info("ask_game_ai: rejected (empty question)")
-                return {
-                    "success": False,
-                    "response": "Question is required.",
-                    "app_id": app_id,
-                    "app_context": "none",
-                    "elapsed_seconds": 0,
-                }
-            if not pc_ip:
-                logger.info("ask_game_ai: rejected (empty pc_ip)")
-                return {
-                    "success": False,
-                    "response": "PC IP Address is required.",
-                    "app_id": app_id,
-                    "app_context": "none",
-                    "elapsed_seconds": 0,
-                }
-
-            app_context = "active" if app_id else "none"
             logger.info(
-                "ask_game_ai: host=%s game=%r appid=%s question=%r (len=%d)",
+                "_execute_game_ai_request: host=%s game=%r appid=%s question=%r (len=%d)",
                 pc_ip, app_name, app_id, question, len(question),
             )
 
@@ -370,7 +403,7 @@ class Plugin:
                 else:
                     logger.info("ask_game_ai: no TDP recommendation found in response")
 
-            logger.info("ask_game_ai: completed in %.1fs", elapsed)
+            logger.info("_execute_game_ai_request: completed in %.1fs", elapsed)
             return {
                 "success": bool(ollama_result.get("success", False)),
                 "response": response_text,
@@ -381,14 +414,133 @@ class Plugin:
             }
         except Exception as exc:
             elapsed = round(time.time() - start, 1)
-            logger.exception("ask_game_ai failed (%.1fs)", elapsed)
+            logger.exception("_execute_game_ai_request failed (%.1fs)", elapsed)
             return {
                 "success": False,
                 "response": f"Backend error: {exc}",
                 "app_id": app_id,
-                "app_context": "none",
+                "app_context": app_context,
+                "applied": None,
                 "elapsed_seconds": elapsed,
             }
+
+    async def ask_game_ai(self, question: Any = "", PcIp: str = ""):
+        logger.info("ask_game_ai: RPC entry (arg type=%s)", type(question).__name__)
+        parsed_question, pc_ip, app_id, app_name = Plugin._parse_ask_payload(question, PcIp)
+        if not parsed_question:
+            logger.info("ask_game_ai: rejected (empty question)")
+            return Plugin._reject_ask_request("Question is required.", app_id=app_id)
+        if not pc_ip:
+            logger.info("ask_game_ai: rejected (empty pc_ip)")
+            return Plugin._reject_ask_request("PC IP Address is required.", app_id=app_id)
+        return await self._execute_game_ai_request(parsed_question, pc_ip, app_id, app_name)
+
+    async def _run_background_request(
+        self,
+        request_id: int,
+        question: str,
+        pc_ip: str,
+        app_id: str,
+        app_name: str,
+    ) -> None:
+        result = await self._execute_game_ai_request(question, pc_ip, app_id, app_name)
+        self._ensure_background_state()
+        async with self._background_lock:
+            active_request_id = self._background_state.get("request_id")
+            if active_request_id != request_id:
+                return
+            success = bool(result.get("success", False))
+            response_text = str(result.get("response", "") or "No response text.")
+            self._background_state = {
+                **self._background_state,
+                "status": "completed" if success else "failed",
+                "success": success,
+                "response": response_text,
+                "applied": result.get("applied"),
+                "elapsed_seconds": result.get("elapsed_seconds", 0),
+                "error": None if success else response_text,
+                "completed_at": time.time(),
+            }
+
+    async def start_background_game_ai(self, question: Any = "", PcIp: str = ""):
+        plugin = Plugin._coerce_instance(self)
+        plugin._ensure_background_state()
+
+        logger.info("start_background_game_ai: RPC entry (arg type=%s)", type(question).__name__)
+        parsed_question, pc_ip, app_id, app_name = Plugin._parse_ask_payload(question, PcIp)
+        app_context = "active" if app_id else "none"
+        if not parsed_question:
+            return {
+                "accepted": False,
+                "status": "invalid",
+                **Plugin._reject_ask_request("Question is required.", app_id=app_id),
+            }
+        if not pc_ip:
+            return {
+                "accepted": False,
+                "status": "invalid",
+                **Plugin._reject_ask_request("PC IP Address is required.", app_id=app_id),
+            }
+
+        async with plugin._background_lock:
+            if plugin._background_task and not plugin._background_task.done():
+                state = dict(plugin._background_state)
+                return {
+                    "accepted": False,
+                    "status": "busy",
+                    "request_id": state.get("request_id"),
+                    "app_id": state.get("app_id", ""),
+                    "app_context": state.get("app_context", "none"),
+                    "response": "A request is already in progress.",
+                }
+
+            plugin._background_request_seq += 1
+            request_id = plugin._background_request_seq
+            plugin._background_state = {
+                "status": "pending",
+                "request_id": request_id,
+                "question": parsed_question,
+                "app_id": app_id,
+                "app_context": app_context,
+                "success": None,
+                "response": "Thinking...",
+                "applied": None,
+                "elapsed_seconds": 0,
+                "error": None,
+                "started_at": time.time(),
+                "completed_at": None,
+            }
+            plugin._background_task = asyncio.create_task(
+                plugin._run_background_request(request_id, parsed_question, pc_ip, app_id, app_name)
+            )
+
+        return {
+            "accepted": True,
+            "status": "pending",
+            "request_id": request_id,
+            "app_id": app_id,
+            "app_context": app_context,
+            "response": "Thinking...",
+        }
+
+    async def get_background_game_ai_status(self):
+        plugin = Plugin._coerce_instance(self)
+        plugin._ensure_background_state()
+        async with plugin._background_lock:
+            if plugin._background_task and plugin._background_task.done():
+                try:
+                    plugin._background_task.result()
+                except Exception as exc:
+                    logger.exception("get_background_game_ai_status: background task failed: %s", exc)
+                    plugin._background_state = {
+                        **plugin._background_state,
+                        "status": "failed",
+                        "success": False,
+                        "response": f"Backend error: {exc}",
+                        "error": f"Backend error: {exc}",
+                        "completed_at": time.time(),
+                    }
+            return dict(plugin._background_state)
 
     async def ask_ollama(
         self,

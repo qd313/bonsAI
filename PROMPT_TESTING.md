@@ -83,6 +83,47 @@ Track what prompts have been tested, what model responded, and whether the resul
 
 ---
 
+## Background Prompt Completion (V1)
+
+### Lifecycle and Restore
+- [ ] Start prompt, close QAM/plugin UI while request is pending, reopen before completion -> pending status restores with "Thinking...".
+- [ ] Start prompt, close QAM/plugin UI while request is pending, reopen after completion -> final response restores automatically.
+- [ ] Start prompt, keep QAM open -> behavior matches normal foreground request flow (no regressions).
+- [ ] Reopen plugin multiple times during one pending request -> no duplicate/stacked results; single final result shown.
+
+### Busy Guardrails (Single In-Flight)
+- [ ] While one request is pending, second Ask attempt is blocked with clear "request in progress" feedback.
+- [ ] While one request is pending, Enter submit path is also blocked from starting a second request.
+- [ ] After pending request completes, next Ask request can start normally.
+
+### Timeout, Error, and Cancel Semantics
+- [ ] Timeout path: exceeds configured request timeout and restores failed state + timeout message on reopen.
+- [ ] Backend/network error path: failed state restores with meaningful error text on reopen.
+- [ ] Local Stop/Cancel interaction does not create a second backend request and does not leave UI stuck in loading state.
+- [ ] Local Clear interaction while pending does not break eventual restore behavior when status is polled again.
+
+### Apply/Action Parity
+- [ ] Response with valid TDP JSON still applies once and displays `[Applied: ...]` summary after completion/reopen.
+- [ ] Apply errors (if any) continue to render in `[Errors: ...]` suffix without breaking restore flow.
+
+### Session-Only Limitation (Expected)
+- [ ] Verify/reconfirm V1 boundary: Steam crash/plugin restart/reboot does NOT restore pending/completed background status.
+
+### Regression Subset (Run after any prompt/system update)
+- [ ] Slow warning still appears after configured latency threshold while pending.
+- [ ] Elapsed-time warning still appears for responses slower than configured threshold.
+- [ ] Suggested follow-up presets still refresh after successful completion.
+- [ ] Unified input persistence mode behavior is unchanged (`persist_all`, `persist_search_only`, `no_persist`).
+- [ ] Saved PC IP behavior is unchanged after successful ask/connection test.
+
+### Verification Runbook (Record PASS/FAIL)
+- [ ] Build validation (`npm run build`) -> PASS when build completes with no TypeScript errors that block output.
+- [ ] Backend syntax validation (`python -m py_compile main.py`) -> PASS when command exits cleanly.
+- [ ] Deck manual lifecycle matrix -> PASS when all Lifecycle, Busy Guardrails, Timeout/Error/Cancel, and Apply/Action checks above are marked complete.
+- [ ] Session-only boundary check -> PASS when restart/crash scenarios correctly do **not** restore state (expected V1 limitation).
+
+---
+
 ## Preset and Follow-Up UX
 - [ ] Initial load shows exactly 3 random presets
 - [ ] Tapping a preset with a game running appends " for [game name]" to input

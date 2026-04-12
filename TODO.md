@@ -42,9 +42,9 @@
 - [ ] ★★★★ **Strategy Guide Safety and Spoilers:** Default to best-effort spoiler avoidance, require explicit user permission for unrestricted spoilers, and support tap-to-reveal spoiler formatting with optional Settings toggle behavior.
 - [ ] ★★★ **Per-Mode Latency/Timeout Profiles:** Configure separate warning/timeout values per mode. Depends on **Mode Selector Dropdown (Main Screen)**.
 - [ ] ★★★ **Multi-Language Responses:** Detect Steam language and localize AI response language (with optional override).
-- [ ] ★★★ **Background Prompt Completion:** Allow requests to complete while QAM is closed and restore results when reopened.
+- [x] ★★★ **Background Prompt Completion:** Allow requests to complete while QAM is closed and restore results when reopened.
 - [ ] ★★★ **Debugging and Proton Log Analysis:** Attach relevant Proton/game log excerpts to troubleshooting prompts.
-- [ ] ★★★★ **Linux Ollama Compatibility:** Add support and validation for Linux-hosted Ollama setups.
+- [x] ★★★★ **Linux Ollama Compatibility:** Add support and validation for Linux-hosted Ollama setups.
 - [ ] ★★★★ **Idle Safety Preset Automation:** Optionally apply a low-power preset (e.g., 3W) after configurable inactivity duration.
 - [ ] ★★★★ **Steam Input Layout Analysis:** Parse VDF controller configs and expose actionable control summaries to AI.
 - [ ] ★★★★ **Advanced Thermal and Fan Curve Tuning:** Add manual fan-profile controls with safety guardrails and failsafes.

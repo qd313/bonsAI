@@ -590,6 +590,33 @@ type AppliedResult = {
   errors: string[];
 };
 
+type BackgroundStartResponse = {
+  accepted: boolean;
+  status: "pending" | "busy" | "invalid";
+  request_id?: number | null;
+  response?: string;
+  app_id?: string;
+  app_context?: string;
+  success?: boolean;
+  applied?: AppliedResult | null;
+  elapsed_seconds?: number;
+};
+
+type BackgroundRequestStatus = {
+  status: "idle" | "pending" | "completed" | "failed";
+  request_id: number | null;
+  question: string;
+  app_id: string;
+  app_context: "active" | "none";
+  success: boolean | null;
+  response: string;
+  applied: AppliedResult | null;
+  elapsed_seconds: number;
+  error: string | null;
+  started_at: number | null;
+  completed_at: number | null;
+};
+
 type ConnectionStatus = {
   reachable: boolean;
   version?: string;
@@ -605,6 +632,7 @@ type BonsaiSettings = {
 
 type UnifiedInputPersistenceMode = "persist_all" | "persist_search_only" | "no_persist";
 const DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE: UnifiedInputPersistenceMode = "persist_all";
+const BACKGROUND_STATUS_POLL_MS = 1200;
 
 function clampNumber(value: unknown, fallback: number, minimum: number, maximum: number): number {
   const parsed = Number(value);
@@ -687,6 +715,17 @@ function formatDeckyRpcError(e: unknown): string {
     }
   }
   return String(e);
+}
+
+function buildResponseText(responseText: string, applied?: AppliedResult | null): string {
+  let text = responseText || "No response text.";
+  if (!applied) return text;
+  const parts: string[] = [];
+  if (applied.tdp_watts != null) parts.push(`TDP: ${applied.tdp_watts}W`);
+  if (applied.gpu_clock_mhz != null) parts.push(`GPU: ${applied.gpu_clock_mhz} MHz`);
+  if (parts.length > 0) text += `\n\n[Applied: ${parts.join(", ")}]`;
+  if (applied.errors?.length) text += `\n[Errors: ${applied.errors.join("; ")}]`;
+  return text;
 }
 
 function loadSavedSearchQuery(): string {
@@ -807,6 +846,8 @@ const Content: React.FC = () => {
   const [ollamaContext, setOllamaContext] = useState<{ app_id: string; app_context: "active" | "none" } | null>(null);
   const [isAsking, setIsAsking] = useState(false);
   const askRequestSeqRef = useRef(0);
+  const isMountedRef = useRef(true);
+  const backgroundPollTimerRef = useRef<number | null>(null);
   const [lastApplied, setLastApplied] = useState<AppliedResult | null>(null);
   const [suggestedPrompts, setSuggestedPrompts] = useState<PresetPrompt[]>(() => getRandomPresets(3));
   const [showSlowWarning, setShowSlowWarning] = useState(false);
@@ -971,9 +1012,103 @@ const Content: React.FC = () => {
     }
   }, [unifiedInputPersistenceMode]);
 
+  const clearBackgroundPollTimer = () => {
+    if (backgroundPollTimerRef.current != null) {
+      window.clearTimeout(backgroundPollTimerRef.current);
+      backgroundPollTimerRef.current = null;
+    }
+  };
+
+  const applyBackgroundStatusToUi = (status: BackgroundRequestStatus, fallbackQuestion: string = "") => {
+    const appId = status.app_id ?? "";
+    const appContext = status.app_context === "active" ? "active" : "none";
+
+    if (status.status === "pending") {
+      setOllamaContext({ app_id: appId, app_context: appContext });
+      setIsAsking(true);
+      setOllamaResponse(status.response?.trim() ? status.response : "Thinking...");
+      setLastApplied(null);
+      setElapsedSeconds(null);
+      return;
+    }
+
+    if (status.status === "completed" || status.status === "failed") {
+      const applied = status.applied ?? null;
+      setOllamaContext({ app_id: appId, app_context: appContext });
+      setIsAsking(false);
+      setOllamaResponse(buildResponseText(status.response ?? "No response text.", applied));
+      setLastApplied(applied);
+      setElapsedSeconds(Number.isFinite(status.elapsed_seconds) ? status.elapsed_seconds : null);
+
+      if (status.status === "completed" && status.success) {
+        const questionForCategory = (status.question || fallbackQuestion || "").trim();
+        if (questionForCategory) {
+          const category = detectPromptCategory(questionForCategory);
+          setSuggestedPrompts(getContextualPresets(category, 3));
+        }
+      }
+      return;
+    }
+
+    setOllamaContext(null);
+    setIsAsking(false);
+  };
+
+  const startBackgroundStatusPolling = (seq: number, fallbackQuestion: string = "") => {
+    clearBackgroundPollTimer();
+
+    const pollOnce = async () => {
+      if (!isMountedRef.current || seq !== askRequestSeqRef.current) return;
+      try {
+        const status = await call<[], BackgroundRequestStatus>("get_background_game_ai_status");
+        if (!isMountedRef.current || seq !== askRequestSeqRef.current) return;
+        applyBackgroundStatusToUi(status, fallbackQuestion);
+
+        if (status.status === "pending") {
+          backgroundPollTimerRef.current = window.setTimeout(() => {
+            void pollOnce();
+          }, BACKGROUND_STATUS_POLL_MS);
+        }
+      } catch (e: unknown) {
+        if (!isMountedRef.current || seq !== askRequestSeqRef.current) return;
+        setIsAsking(false);
+        setOllamaResponse(`Error: ${formatDeckyRpcError(e)}`);
+        setLastApplied(null);
+        setOllamaContext(null);
+      }
+    };
+
+    void pollOnce();
+  };
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    const seq = askRequestSeqRef.current + 1;
+    askRequestSeqRef.current = seq;
+
+    call<[], BackgroundRequestStatus>("get_background_game_ai_status")
+      .then((status) => {
+        if (!isMountedRef.current || seq !== askRequestSeqRef.current) return;
+        applyBackgroundStatusToUi(status);
+        if (status.status === "pending") {
+          startBackgroundStatusPolling(seq, status.question ?? "");
+        }
+      })
+      .catch(() => {
+        // Best-effort restore only; keep startup quiet if backend status isn't available.
+      });
+
+    return () => {
+      isMountedRef.current = false;
+      askRequestSeqRef.current += 1;
+      clearBackgroundPollTimer();
+    };
+  }, []);
+
   const clearUnifiedInput = () => {
     if (isAsking) {
       askRequestSeqRef.current += 1;
+      clearBackgroundPollTimer();
       setIsAsking(false);
     }
     setUnifiedInput("");
@@ -1011,6 +1146,7 @@ const Content: React.FC = () => {
 
   const onCancelAsk = () => {
     askRequestSeqRef.current += 1;
+    clearBackgroundPollTimer();
     setIsAsking(false);
     setOllamaResponse("Request cancelled.");
     setOllamaContext(null);
@@ -1040,54 +1176,45 @@ const Content: React.FC = () => {
     setOllamaResponse("Thinking...");
     setLastApplied(null);
     setElapsedSeconds(null);
+    setOllamaContext({
+      app_id: appId,
+      app_context: appId ? "active" : "none",
+    });
     try {
       console.log(`[bonsAI] deck -> pc=${ip} game=${JSON.stringify(appName)}(${appId}) question=${JSON.stringify(q)}`);
 
       const data = await call<
         [{ question: string; PcIp: string; appId: string; appName: string }],
-        {
-          success: boolean;
-          response: string;
-          app_id: string;
-          app_context: string;
-          applied?: AppliedResult | null;
-          elapsed_seconds?: number;
-        }
-      >("ask_game_ai", { question: q, PcIp: ip, appId, appName });
+        BackgroundStartResponse
+      >("start_background_game_ai", { question: q, PcIp: ip, appId, appName });
 
       if (seq !== askRequestSeqRef.current) return;
 
-      let responseText = data.response ?? "No response text.";
-      if (data.applied) {
-        const parts: string[] = [];
-        if (data.applied.tdp_watts != null) parts.push(`TDP: ${data.applied.tdp_watts}W`);
-        if (data.applied.gpu_clock_mhz != null) parts.push(`GPU: ${data.applied.gpu_clock_mhz} MHz`);
-        if (parts.length > 0) responseText += `\n\n[Applied: ${parts.join(", ")}]`;
-        if (data.applied.errors?.length) responseText += `\n[Errors: ${data.applied.errors.join("; ")}]`;
+      if (data.status === "invalid") {
+        setIsAsking(false);
+        setOllamaResponse(data.response ?? "Request is invalid.");
+        setLastApplied(null);
+        setElapsedSeconds(null);
+        return;
       }
-      setOllamaResponse(responseText);
-      setLastApplied(data.applied ?? null);
-      setElapsedSeconds(data.elapsed_seconds ?? null);
-      setOllamaContext({
-        app_id: data.app_id ?? "",
-        app_context: data.app_context === "active" ? "active" : "none",
-      });
 
-      const category = detectPromptCategory(q);
-      setSuggestedPrompts(getContextualPresets(category, 3));
+      if (data.status === "busy") {
+        setIsAsking(true);
+        setOllamaResponse(data.response ?? "A request is already in progress.");
+      }
+
       saveIp(ip);
       if (unifiedInputPersistenceMode === "persist_search_only") {
         persistSearchQuery("");
       }
+      startBackgroundStatusPolling(seq, q);
     } catch (e: unknown) {
       if (seq !== askRequestSeqRef.current) return;
+      clearBackgroundPollTimer();
+      setIsAsking(false);
       setOllamaResponse(`Error: ${formatDeckyRpcError(e)}`);
       setLastApplied(null);
       setOllamaContext(null);
-    } finally {
-      if (seq === askRequestSeqRef.current) {
-        setIsAsking(false);
-      }
     }
   };
 

@@ -1,51 +1,52 @@
 # Decky Plugin bonsAI (Backend Ollama Node for Steam (A.I.)) - Roadmap
 
 ## Completed
-- [x] Fix the `TypeError: Failed to fetch` cross-origin/network error between the Steam Deck UI and the local Windows PC Ollama server.
-  - Root cause: frontend used `fetchNoCors` directly to Ollama; fixed by routing through Decky's Python backend via `call("ask_game_ai", ...)`.
-  - Also removed stale `DeckySettingsSearch` plugin directory that shadowed `bonsAI` with `api_version: 0`.
-- [x] TDP & Performance Optimization: Text-prompted API calls to adjust system power settings.
-  - Ollama `/api/chat` endpoint with structured system prompt (game context, TDP/GPU ranges, JSON output format).
-  - Backend parses AI response for `{"tdp_watts": N}` (fenced JSON, bare JSON, or natural language fallback).
-  - Writes TDP to sysfs via `steamos-priv-write` with clean env (strips Decky's `LD_` overrides).
-  - Frontend passes game context via `Router.MainRunningApp` and displays applied changes.
-- [x] Suggested AI prompts: Preset `ButtonItem`s under the question field (`PRESET_PROMPTS` with categories). Three random presets on first load; after a response, three contextual follow-ups from `getContextualPresets`. Game name appended via `Router.MainRunningApp` when a game is running. Question input is a multi-line textarea; compact preset styling and prominent Ask button.
-- [x] Pop-up disclaimer: One-time beta notice modal (`ConfirmModal` via `showModal`) on first plugin open. Warns that bonsAI is beta, AI recommendations should be verified, and hardware settings are modified at user's own risk. Includes GitHub issues link for bug reports/feature requests. Acceptance persisted in `localStorage`.
+- [x] ★ **Beta Disclaimer Modal:** Show one-time experimental-software warning with risk acknowledgment and bug-report link.
+- [x] ★ **Suggested AI Prompts:** Show curated prompt presets, randomize initial suggestions, and generate contextual follow-ups after responses.
+- [x] ★★ **Ollama Network Routing Fix:** Route frontend requests through Decky backend (`call("ask_game_ai", ...)`) to resolve cross-origin failures.
+- [x] ★★ **Deck and PC Connection Settings:** Add connection-focused settings including visible Deck IP and PC IP management.
+- [x] ★★ **Diagnostic, Latency, and Timeout Warnings:** Return `elapsed_seconds`, show slow-response warnings, and enforce backend timeout messaging.
+- [x] ★★ **Configurable Latency and Timeout Controls:** Add persisted warning/timeout settings with side increment controls (`-` / `+`) in Settings.
+- [x] ★★ **Iconography Pass (Tabs + Plugin + Ask Button):** Add icons to all tabs (bonsAI bonsai-tree icon, Settings gear, Debug bug, About unchanged), switch plugin icon to bonsai SVG, and show the stock diamond beside `Ask` text.
+- [x] ★★ **Persist Last Question and Answer:** Restore prior session state when reopening QAM via Decky settings storage.
+- [x] ★★ **Unified Search + Ask Input:** Merge settings search and AI question entry into one shared input flow.
+- [x] ★★★ **TDP Automation via AI Output:** Parse AI recommendations and apply constrained TDP values through safe sysfs write paths.
+- [x] ★★★ **D-pad Response Scrolling:** Split long responses into focusable chunks for controller-first navigation.
 
-## Active Priorities
-- [x] D-pad AI Response Scrolling: Long AI answers are split into focusable paragraph chunks so D-pad/arrow controls scroll through them. Works on Steam Deck D-pad, wireless controllers, and touchscreen.
-- [ ] QAMP Reflection (Phase 1 - safe default): After prompt execution, show clear applied-state confirmation and a QAM reflection check/warning path when Steam's slider does not immediately mirror the applied hardware value.
-  - Requirement: any BonsAI TDP/performance action must be verifiable by the user after execution.
-  - Initial behavior: keep sysfs write path as source of truth and add explicit UI guidance for QAM re-open verification.
+## In Progress
+- [ ] ★★★ **QAMP Reflection (Phase 1 - Safe Default):** Show applied-state confirmation and explicit verification guidance when QAM sliders do not immediately mirror hardware writes.
+  - Requirement: every BonsAI performance action must be user-verifiable after execution.
+  - Initial behavior: keep sysfs write path as source of truth and guide users to re-open QAM Performance to verify reflected values.
 
 ## Known Bugs
-- [ ] Question text box overlay alignment: The 3-line question display overlay is slightly misaligned (extra left padding, touches right edge). Root cause: the overlay is a plain `<div>` sibling of the `TextField`, but Decky/Steam applies framework-specific margins to `TextField` internals that a plain div doesn't inherit. The keyboard and text wrapping work correctly; this is a cosmetic issue only.
-- [ ] D-pad scroll doesn't fully reach the bottom of long AI responses. The last paragraph/chunk is partially cut off when navigating with D-pad, though touchscreen scrolling can reach it. Likely a QAM scroll viewport calculation issue where the panel doesn't scroll far enough to fully reveal the last focused element.
+- [ ] ★ **Question Overlay Alignment Drift:** The 3-line question overlay has minor horizontal spacing mismatch vs native `TextField` internals.
+- [ ] ★★ **D-pad Scroll Bottom Cutoff:** Controller navigation can stop before the final response chunk is fully visible even when touch scroll can reach it.
 
-## Current Priorities Needing Work
-- [ ] QAMP Reflection (Phase 2 - experimental opt-in): Attempt Steam profile sync only behind an explicit warning toggle.
-  - Risks: undocumented internals, Steam update breakage, possible restart/reboot requirements, and profile corruption risk.
-  - Candidate path: investigate fragile `config.vdf` / protobuf edits only as experimental and disabled by default.
-- [ ] QAMP Verification Checklist:
+## Up Next
+- [ ] ★★ **Prompt Testing and Tuning:** Systematically validate prompt quality across games and scenarios (see `PROMPT_TESTING.md`).
+- [ ] ★★★ **QAMP Verification Checklist:** Verify behavior across per-game profile modes, QAM reopen, Steam restart/reboot, and GPU-related recommendations.
   - [ ] Verify behavior with per-game profile on/off.
   - [ ] Verify behavior after closing and reopening the QAM Performance tab.
   - [ ] Verify behavior after Steam restart and full reboot.
   - [ ] Verify behavior when prompt includes GPU clock recommendations.
-- [ ] Prompt testing & tuning: Systematically test AI prompts across different games and scenarios (see `PROMPT_TESTING.md`).
+- [ ] ★★★★★ **QAMP Reflection (Phase 2 - Experimental Opt-In):** Attempt Steam profile sync only behind explicit warning toggles. *Blocked on Phase 1.*
+  - Risks: undocumented internals, Steam update breakage, restart/reboot requirements, and profile corruption risk.
+  - Candidate path: fragile `config.vdf` / protobuf edits gated behind experimental mode only.
 
 ## Future Features (DO NOT IMPLEMENT YET)
 **[Full detailed breakdown →](FUTURE_FEATURES.md)**
 
-- [x] ★★ **Diagnostic & Latency Warnings:** Backend timer on `ask_game_ai` returns `elapsed_seconds`. Live warning appears after 20s of waiting; persistent warning shown post-response if >20s. `urlopen` timeout reduced to 120s with clear error message.
-- [ ] ★★ **Configurable Latency Threshold:** Let the user adjust the 20-second latency warning threshold via a settings UI. Depends on Persist Settings feature.
-- [ ] ★★ Persist last question and answer. If the user closes the QAM, when they reopen it'll be back where they left off. Save/restore via Decky settings API.
-- [ ] ★★ Show the deck's current IP address in a separate tab, along with PC IP Address and other possible settings.
-- [ ] ★★ Combine decky settings search box with the question box.
-- [ ] ★★★ Multi-Language support. System prompt currently hardcodes English — should read the device's language settings and respond in the user's language.
-- [ ] ★★★ Background prompt completion. If the user closes the QAM while it's still thinking, the prompt still finishes and the answer is ready when the user reopens the QAM.
-- [ ] ★★★ Debugging & Log Analysis (Steam Proton logs). Find, parse, and feed Proton/game logs to AI for troubleshooting.
-- [ ] ★★★★ Steam Input Analysis (Parsing .vdf configuration files). Parse Valve's VDF format, extract meaningful controller config data, feed to AI.
-- [ ] ★★★★ Advanced Thermal & Fan Curve Tuning. Direct hardware fan curve control via sysfs, with safety guardrails.
-- [ ] ★★★★★ Global Screenshots & Vision (Gamescope frame buffer). Capture screenshots from gamescope, send to multimodal AI for visual game analysis.
-- [ ] ★★★★★ Voice Command Input (PipeWire to local PC Whisper server). Audio capture pipeline from PipeWire, stream to Whisper for speech-to-text prompts.
-- [ ] ★★★★★★ Deep Mod & Port Configuration Manager. Game-specific mod detection, installation, and configuration — massive scope with per-game logic.
+- [ ] ★★★ **Mode Selector Dropdown (Main Screen):** Add mode selection (`Fast`, `Thinking`, `Mega/Ultra/Deep`) with safe installed-model fallback behavior.
+- [ ] ★★★ **Per-Mode Latency/Timeout Profiles:** Configure separate warning/timeout values per mode. Depends on **Mode Selector Dropdown (Main Screen)**.
+- [ ] ★★★ **Multi-Language Responses:** Detect Steam language and localize AI response language (with optional override).
+- [ ] ★★★ **Background Prompt Completion:** Allow requests to complete while QAM is closed and restore results when reopened.
+- [ ] ★★★ **Debugging and Proton Log Analysis:** Attach relevant Proton/game log excerpts to troubleshooting prompts.
+- [ ] ★★★★ **Linux Ollama Compatibility:** Add support and validation for Linux-hosted Ollama setups.
+- [ ] ★★★★ **Idle Safety Preset Automation:** Optionally apply a low-power preset (e.g., 3W) after configurable inactivity duration.
+- [ ] ★★★★ **Steam Input Layout Analysis:** Parse VDF controller configs and expose actionable control summaries to AI.
+- [ ] ★★★★ **Advanced Thermal and Fan Curve Tuning:** Add manual fan-profile controls with safety guardrails and failsafes.
+- [ ] ★★★★★ **Dedicated QAM Left-Rail BonsAI Shortcut (Research Spike):** Investigate whether Steam/Decky supports a stable plugin icon entry in the QAM left rail. Proceed only if there is a supported API path; otherwise no-go and keep this as non-implementation research.
+- [ ] ★★★★★ **Global Screenshots and Vision:** Capture gamescope screenshots and send multimodal context to supported models.
+- [ ] ★★★★★ **Voice Command Input:** Capture mic audio and transcribe prompts through a local Whisper service.
+- [ ] ★★★★★ **VAC Opponent Check (Phased):** Start with manual-assisted SteamID parsing and VAC lookup, then expand to automated lobby/opponent detection where reliable identity signals exist.
+- [ ] ★★★★★★ **Deep Mod and Port Configuration Manager:** Provide broad game-specific mod/port detection and advisory workflows.

@@ -16,16 +16,102 @@ import decky
 logger = decky.logger
 
 class Plugin:
+    DEFAULT_LATENCY_WARNING_SECONDS = 15
+    DEFAULT_REQUEST_TIMEOUT_SECONDS = 120
+    DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE = "persist_all"
+    VALID_UNIFIED_INPUT_PERSISTENCE_MODES = {
+        "persist_all",
+        "persist_search_only",
+        "no_persist",
+    }
+    MIN_LATENCY_WARNING_SECONDS = 5
+    MAX_LATENCY_WARNING_SECONDS = 300
+    MIN_REQUEST_TIMEOUT_SECONDS = 10
+    MAX_REQUEST_TIMEOUT_SECONDS = 600
+    SETTINGS_FILENAME = "settings.json"
+
     @staticmethod
     def _coerce_instance(self_or_cls: Any) -> "Plugin":
         """api_version 1 uses an instance; older loaders may pass the class as self."""
         return self_or_cls() if isinstance(self_or_cls, type) else self_or_cls
+
+    @staticmethod
+    def _settings_path() -> str:
+        return os.path.join(decky.DECKY_PLUGIN_SETTINGS_DIR, Plugin.SETTINGS_FILENAME)
+
+    @staticmethod
+    def _clamp_int(value: Any, default: int, minimum: int, maximum: int) -> int:
+        try:
+            parsed = int(value)
+        except (TypeError, ValueError):
+            parsed = default
+        return max(minimum, min(maximum, parsed))
+
+    @staticmethod
+    def _sanitize_settings(data: Any) -> dict:
+        raw = data if isinstance(data, dict) else {}
+        return {
+            "latency_warning_seconds": Plugin._clamp_int(
+                raw.get("latency_warning_seconds"),
+                Plugin.DEFAULT_LATENCY_WARNING_SECONDS,
+                Plugin.MIN_LATENCY_WARNING_SECONDS,
+                Plugin.MAX_LATENCY_WARNING_SECONDS,
+            ),
+            "request_timeout_seconds": Plugin._clamp_int(
+                raw.get("request_timeout_seconds"),
+                Plugin.DEFAULT_REQUEST_TIMEOUT_SECONDS,
+                Plugin.MIN_REQUEST_TIMEOUT_SECONDS,
+                Plugin.MAX_REQUEST_TIMEOUT_SECONDS,
+            ),
+            "unified_input_persistence_mode": Plugin._sanitize_unified_input_persistence_mode(
+                raw.get("unified_input_persistence_mode")
+            ),
+        }
+
+    @staticmethod
+    def _sanitize_unified_input_persistence_mode(value: Any) -> str:
+        if isinstance(value, str) and value in Plugin.VALID_UNIFIED_INPUT_PERSISTENCE_MODES:
+            return value
+        return Plugin.DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE
 
     async def _main(self):
         logger.info("bonsAI plugin loaded!")
 
     async def _unload(self):
         logger.info("bonsAI plugin unloaded!")
+
+    async def load_settings(self):
+        """Load persisted plugin settings from Decky's settings directory."""
+        path = Plugin._settings_path()
+        try:
+            with open(path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            if not isinstance(data, dict):
+                logger.warning("load_settings: expected object in %s, got %s", path, type(data).__name__)
+                return Plugin._sanitize_settings({})
+            return Plugin._sanitize_settings(data)
+        except FileNotFoundError:
+            return Plugin._sanitize_settings({})
+        except Exception as exc:
+            logger.warning("load_settings: failed to read %s: %s", path, exc)
+            return Plugin._sanitize_settings({})
+
+    async def save_settings(self, data: Any = None):
+        """Persist plugin settings to Decky's settings directory."""
+        incoming = data if isinstance(data, dict) else {}
+        current = await self.load_settings()
+        merged = {**current, **incoming}
+        sanitized = Plugin._sanitize_settings(merged)
+        path = Plugin._settings_path()
+
+        try:
+            os.makedirs(decky.DECKY_PLUGIN_SETTINGS_DIR, exist_ok=True)
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(sanitized, f, indent=2, sort_keys=True)
+            return sanitized
+        except Exception as exc:
+            logger.exception("save_settings: failed to write %s", path)
+            raise RuntimeError(f"Failed to save settings: {exc}") from exc
 
     TDP_MIN_W = 3
     TDP_MAX_W = 15
@@ -259,7 +345,17 @@ class Plugin:
                 pc_ip, app_name, app_id, question, len(question),
             )
 
-            ollama_result = await plugin.ask_ollama(question, pc_ip, app_id, app_name)
+            settings = await plugin.load_settings()
+            request_timeout_seconds = int(
+                settings.get("request_timeout_seconds", Plugin.DEFAULT_REQUEST_TIMEOUT_SECONDS)
+            )
+            ollama_result = await plugin.ask_ollama(
+                question,
+                pc_ip,
+                app_id,
+                app_name,
+                request_timeout_seconds=request_timeout_seconds,
+            )
             elapsed = round(time.time() - start, 1)
             response_text = str(ollama_result.get("response", "") or "No response text.")
             applied = None
@@ -294,7 +390,14 @@ class Plugin:
                 "elapsed_seconds": elapsed,
             }
 
-    async def ask_ollama(self, question: str, PcIp: str, app_id: str, app_name: str):
+    async def ask_ollama(
+        self,
+        question: str,
+        PcIp: str,
+        app_id: str,
+        app_name: str,
+        request_timeout_seconds: int = 120,
+    ):
         url = self._build_ollama_chat_url(PcIp)
 
         if app_name:
@@ -349,7 +452,7 @@ class Plugin:
                 method="POST",
             )
             try:
-                with urllib.request.urlopen(req, timeout=120) as resp:
+                with urllib.request.urlopen(req, timeout=request_timeout_seconds) as resp:
                     raw = resp.read().decode("utf-8")
                     data = json.loads(raw)
                     text = data.get("message", {}).get("content", "No response text.")
@@ -371,10 +474,13 @@ class Plugin:
                     "body": body,
                 }
             except urllib.error.URLError as e:
-                if isinstance(e.reason, TimeoutError):
+                if isinstance(e.reason, (TimeoutError, socket.timeout)):
                     return {
                         "success": False,
-                        "response": "Ollama did not respond within 120 seconds. Check that Ollama is running and your PC IP is correct.",
+                        "response": (
+                            f"Ollama did not respond within {request_timeout_seconds} seconds. "
+                            "Check that Ollama is running and your PC IP is correct."
+                        ),
                     }
                 return {
                     "success": False,

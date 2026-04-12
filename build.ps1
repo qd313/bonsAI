@@ -1,19 +1,24 @@
-# Set the connection details for your Steam Deck
-$HostIp="192.168.86.52"
-$PcIp="192.168.86.35"
-$User="deck"
-$Pass="0088qd"
-$PluginName="bonsAI"
+# Load connection details from .env (credentials are never stored in this script)
+if (Test-Path "$PSScriptRoot\.env") {
+    Get-Content "$PSScriptRoot\.env" | ForEach-Object {
+        if ($_ -match '^\s*([^#]\S+?)\s*=\s*(.+)$') {
+            Set-Variable -Name $matches[1] -Value $matches[2].Trim()
+        }
+    }
+} else {
+    Write-Error ".env file not found. Copy .env.example to .env and fill in your values."
+    exit 1
+}
+
+$HostIp     = $DECK_IP
+$User       = $DECK_USER
+$PluginName = "bonsAI"
 
 # Install dependencies (only needed once or when adding new packages)
 pnpm install
 
 # Create the dist folder if it doesn't exist
 if (!(Test-Path "dist")) { New-Item -ItemType Directory -Path "dist" | Out-Null }
-
-# Inject the IPs into the frontend so they can be read natively by React
-Write-Host "Generating src/config.ts..."
-Set-Content -Path "src\config.ts" -Value "export const HostIp = '$HostIp';`nexport const PcIp = '$PcIp';"
 
 # Build the plugin frontend
 pnpm run build
@@ -29,12 +34,14 @@ scp dist/index.js "${User}@${HostIp}:~/decky_temp_$PluginName/dist/"
 
 Write-Host "Overwriting system files and restarting Decky Loader..."
 
-# 3. Auto-inject the password silently and restart the service
-$RemoteCommand = "echo '$Pass' | sudo -S systemctl stop plugin_loader.service 2>/dev/null && " +
-                 "echo '$Pass' | sudo -S mkdir -p ~/homebrew/plugins/$PluginName/dist 2>/dev/null && " +
-                 "echo '$Pass' | sudo -S cp -rf ~/decky_temp_$PluginName/* ~/homebrew/plugins/$PluginName/ 2>/dev/null && " +
-                 "echo '$Pass' | sudo -S systemctl start plugin_loader.service 2>/dev/null && " +
-                 "rm -rf ~/decky_temp_$PluginName"
+# 3. Stop Decky, ensure plugin dir is writable (Decky often resets it to root-owned), copy files, restart
+$PluginHomePath = "/home/$User/homebrew/plugins/$PluginName"
+$RemoteCommand = "sudo -n /usr/bin/systemctl stop plugin_loader.service && " +
+                 "sudo -n /usr/bin/mkdir -p $PluginHomePath/dist && " +
+                 "sudo -n /usr/bin/chown -R ${User}:${User} $PluginHomePath && " +
+                 "cp -rf ~/decky_temp_$PluginName/* ~/homebrew/plugins/$PluginName/ && " +
+                 "rm -rf ~/decky_temp_$PluginName && " +
+                 "sudo -n /usr/bin/systemctl start plugin_loader.service"
 
 ssh "$User@$HostIp" $RemoteCommand
 

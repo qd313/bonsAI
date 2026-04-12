@@ -1,6 +1,17 @@
-# revert-dev.ps1
-$HostIp="192.168.86.52"
-$User="deck"
+# revert-dev.ps1 — Load connection details from .env
+if (Test-Path "$PSScriptRoot\.env") {
+    Get-Content "$PSScriptRoot\.env" | ForEach-Object {
+        if ($_ -match '^\s*([^#]\S+?)\s*=\s*(.+)$') {
+            Set-Variable -Name $matches[1] -Value $matches[2].Trim()
+        }
+    }
+} else {
+    Write-Error ".env file not found. Copy .env.example to .env and fill in your values."
+    exit 1
+}
+
+$HostIp = $DECK_IP
+$User   = $DECK_USER
 
 Write-Host "=== Starting Steam Deck Dev Reversal ==="
 

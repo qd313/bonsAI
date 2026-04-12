@@ -10,24 +10,54 @@ This document tracks all resolved issues, hardware-specific overrides, and archi
 **Symptom:** Text generation takes 15-60 seconds. Task Manager on the PC shows high CPU usage but 0% GPU 3D/Compute usage.
 **Cause:** Ollama is failing to hook into the GPU and falling back to system RAM.
 
-#### FIX A: AMD RDNA 4 (RX 9070 XT) Override
-Newer AMD cards often require a manual shader version override on Windows to trigger ROCm acceleration.
-1. Open **System Environment Variables**.
-2. Add a new User Variable:
-   - **Name:** `HSA_OVERRIDE_GFX_VERSION`
-   - **Value:** `12.0.1` (Targeting RDNA 4 architecture).
-3. **Hard Restart Ollama:** Quit the app from the System Tray, kill any `ollama.exe` in Task Manager, and relaunch.
+#### FIX A: Platform Decision Flow (Windows First, Bazzite Second)
+Pick one path based on your host machine:
+
+1. **Windows (recommended first):**
+   - Set `HSA_OVERRIDE_GFX_VERSION` if needed for your GPU (for RX 9070 XT, `12.0.1` is a known-good example).
+   - Hard restart Ollama (quit tray app, end `ollama.exe`, relaunch).
+   - Verify:
+     ```bash
+     curl -sS -m 5 http://127.0.0.1:11434/api/tags
+     ```
+
+2. **Bazzite (containerized ROCm path):**
+   - Run:
+     ```bash
+     podman run -d \
+       --restart always \
+       --device /dev/kfd \
+       --device /dev/dri \
+       --security-opt label=disable \
+       --group-add keep-groups \
+       -e HSA_OVERRIDE_GFX_VERSION="12.0.1" \
+       -e GPU_MAX_HW_QUEUES=1 \
+       -v ollama:/root/.ollama \
+       -p 11434:11434 \
+       --name ollama \
+       docker.io/ollama/ollama:rocm
+     ```
+   - Verify container and API:
+     ```bash
+     podman ps
+     curl -sS -m 5 http://127.0.0.1:11434/api/tags
+     ```
+
+Quick notes:
+- `HSA_OVERRIDE_GFX_VERSION` is hardware/driver-specific (`12.0.1` is an RX 9070 XT example, not universal).
+- `GPU_MAX_HW_QUEUES=1` is optional stability tuning.
+- `/dev/kfd` and `/dev/dri` are required for AMD ROCm GPU passthrough.
 
 #### FIX B: VRAM Management
-If the PC's VRAM is full (e.g., a game is running in 4K), Ollama will offload to CPU.
-- **Fix:** Use a smaller model for testing (e.g., `ollama run phi3:latest`) to verify the GPU pipeline works before scaling up to Llama 3 8B or larger.
+If setup is correct but responses are still slow, VRAM pressure can force CPU fallback (for example while gaming).
+- **Fix:** First test a smaller model (for example `ollama run phi3:latest`), then scale up.
 
-#### FIX C: The Vulkan Override (The Silver Bullet for RDNA 4)
-If ROCm overrides fail and the PC still uses CPU inference, bypass ROCm entirely using Vulkan:
+#### FIX C: Windows Vulkan Fallback (if ROCm path still fails)
+If Windows still falls back to CPU after FIX A:
 1. Open Windows **Environment Variables**.
-2. Create a new User Variable: `OLLAMA_VULKAN` set to `1`.
-3. Remove any `HSA_OVERRIDE_GFX_VERSION` variables.
-4. Hard restart the Ollama service.
+2. Create a new User Variable: `OLLAMA_VULKAN=1`.
+3. Remove stale/conflicting ROCm override values.
+4. Hard restart Ollama and re-test.
 ---
 
 ## 2. Network & Communication (The Bridge)

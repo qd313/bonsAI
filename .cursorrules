@@ -1,0 +1,17 @@
+# BonsAI Decky Plugin - Global Rules
+
+## Scripts & Automation
+- ALWAYS capture and inspect the full stdout and stderr of the actual failing command before forming hypotheses; NEVER rely solely on exit codes or indirect diagnostics from surrounding code.
+- NEVER hardcode credentials, secrets, IP addresses, hostnames, or any developer-local configuration in version-controlled files; ALWAYS externalize them to a gitignored `.env` (loaded at runtime) with a committed `.env.example` template documenting every required variable.
+
+## Frontend UI (src/)
+- ALWAYS use Decky-Frontend-lib components for UI elements to maintain a native SteamOS look and feel.
+NEVER write CSS overrides targeting third-party component internals based on assumed DOM structure; ALWAYS instrument the runtime DOM first (computed styles, class names, and nesting) to identify the exact element and property causing the layout issue before writing any selector.
+
+## Architecture Constraints
+- ALWAYS treat Decky/QAM UI as a platform with strict focus and keyboard contracts: keep native primitives (TextField, Focusable, ButtonItem) intact and make the smallest possible style-only changes first.
+- NEVER mix architectural swaps (e.g., TextField ↔ textarea, overlay hacks, broad container CSS overrides) with visual tweaks in the same iteration, because that repeatedly caused regressions in focus, wrapping, and visibility.
+
+## Documentation
+- ALWAYS rank any newly added future features using the star system
+- ALWAYS re-sort the list when adding so that the list maintains the sort order of least effort/risk (1 star) to most effort/risk (6 stars)

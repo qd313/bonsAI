@@ -50,7 +50,9 @@
 - [ ] ★★★★ **Strategy Guide Safety and Spoilers:** Default to best-effort spoiler avoidance, require explicit user permission for unrestricted spoilers, and support tap-to-reveal spoiler formatting with optional Settings toggle behavior.
 - [ ] ★★★★ **Capability Permission Center (User-Controlled Access):** Add a dedicated `Permissions` tab listing per-capability toggles, all OFF by default on first install, plus runtime consent prompts so users can allow/deny filesystem writes (screenshots/notes), sudo tasks, system hardware controls, web/search access, and future privileged actions.
   - UX note: use an OFF-position toggle switch as the tab icon (exact visual style TBD, preferably a native-looking Decky/SteamOS glyph).
-- [ ] ★★★★ **FOSS-Only Model Lock + Disclosure UX:** Force FOSS-only models by default, allow unlocking non-FOSS models only through a `Permissions` toggle, show a FOSS/model-used label on responses, and include `Read more` links on both the response label and toggle setting.
+- [ ] ★★★★ **Model Classification and Transparency Labels:** Distinguish each selectable model by `Open Source`/`Source-Available`/`Proprietary`, `Open Weight`/`Closed Weight`, and `Glass-Box`/`Non-Glass-Box` interpretability class; show these labels in Settings and on responses with `Read more` details, and enforce policy tiers using these tags.
+  - Clarification: `Open Source` and `Open Weight` are different dimensions, and most LLMs are **not** true glass-box models even when weights are open.
+  - Safety default: unknown or unverified model metadata is treated as restricted until the user explicitly allows broader tiers.
 - [x] ★★★★ **Linux Ollama Compatibility:** Add support and validation for Linux-hosted Ollama setups.
 - [ ] ★★★★ **Llama.cpp Compatibility Evaluation (Research Spike):** Evaluate endpoint/runtime compatibility requirements and migration effort for llama.cpp support.
 - [ ] ★★★★ **Idle Safety Preset Automation:** Optionally apply a low-power preset (e.g., 3W) after configurable inactivity duration.

@@ -151,14 +151,15 @@ Ranked by effort and risk using the GTA star system:
 - **Depends on:** stable settings persistence and action routing through capability checks.
 - **Not in scope:** silent privilege escalation, one blanket permission for all capabilities, or bypassing denied scopes.
 
-### ★★★★ FOSS-Only Model Lock + Disclosure UX
-- **Goal:** Keep model usage FOSS-first by default while allowing explicit user override for non-FOSS models.
+### ★★★★ Model Policy Tiers + Disclosure UX
+- **Goal:** Separate open-source and open-weight access while preserving explicit higher-permission unlock for non-FOSS models.
 - **Required behavior:**
-  - default to FOSS-only model routing
-  - unlocking non-FOSS requires explicit toggle in `Permissions`
-  - every response shows a FOSS/model-used disclosure label
-  - include `Read more` links in both the response disclosure and permission toggle row
-- **Primary work:** model metadata classification, route guard in model selector/execution path, disclosure UI component, and outbound link wiring for educational docs.
+  - Tier 1 (default): `Open-Source only`
+  - Tier 2: `Open-Source + Open-Weight`
+  - Tier 3: `Non-FOSS` via explicit higher-permission unlock
+  - every response shows a model-class disclosure label for the active tier/model
+  - include `Read more` links in both the response disclosure and permission-toggle rows
+- **Primary work:** model-source metadata classification, tiered permission/toggle policy in Settings, route guard in model selector/execution path, disclosure UI component, and outbound link wiring for educational docs.
 - **Files:** `src/index.tsx`, `main.py`, docs/about/permissions references.
 - **Depends on:** **Capability Permission Center (User-Controlled Access)** and stable model-routing layer.
 - **Not in scope:** legal/compliance guarantees for third-party model licenses beyond documented metadata.
@@ -256,7 +257,7 @@ Not in scope: Programmatic background input sniffing (evdev), WebSockets, or Rea
 - **Strategy Guide Prompt Path (Beta)** → required by **Strategy Guide Safety and Spoilers** and **Strategy Checklist Workflow (Chat-Scoped)**.
 - **Global Screenshots and Vision** → enables richer strategy responses with screenshot-aware context and inline visual aids.
 - **Capability Permission Center (User-Controlled Access)** → gates filesystem writes, sudo/elevated tasks, hardware-control actions, and web/search calls behind explicit user consent with revocation support.
-- **FOSS-Only Model Lock + Disclosure UX** → depends on **Capability Permission Center (User-Controlled Access)** and enforces FOSS-first routing with explicit non-FOSS unlock.
+- **Model Policy Tiers + Disclosure UX** → depends on **Capability Permission Center (User-Controlled Access)** and enforces tiered routing (`Open-Source only` default, `Open-Source + Open-Weight`, and explicit `Non-FOSS` unlock).
 - **Llama.cpp Compatibility Evaluation (Research Spike)** → informs feasibility and architecture for **Local Runtime Mode (Default) + Beta Risk Warning**.
 - **Local Runtime Mode (Default) + Beta Risk Warning** → shifts provider priority to local execution while preserving remote fallback.
 - **Restricted Kids Account Master Lock** → sits above permission toggles and hard-blocks all privileged capabilities while restricted account status is active.
@@ -282,11 +283,16 @@ flowchart TD
   settingsBase --> multiLanguage[MultiLanguageResponses]
   settingsBase --> backgroundCompletion[BackgroundPromptCompletion]
   settingsBase --> capabilityPermission[CapabilityPermissionCenter]
-  capabilityPermission --> fossLock[FossOnlyModelLockAndDisclosure]
+  capabilityPermission --> modelPolicyTiers[ModelPolicyTiersAndDisclosure]
+  modelPolicyTiers --> tierOpenSource[OpenSourceOnly]
+  modelPolicyTiers --> tierOpenWeight[OpenSourcePlusOpenWeight]
+  modelPolicyTiers --> tierNonFoss[NonFossUnlock]
   kidsLock[RestrictedKidsAccountMasterLock] --> capabilityPermission
   llamaEval[LlamaCppCompatibilityEvaluation] --> localRuntime[LocalRuntimeModeDefault]
   localRuntime --> modelRouting[ModelProviderRoutingLayer]
-  fossLock --> modelRouting
+  tierOpenSource --> modelRouting
+  tierOpenWeight --> modelRouting
+  tierNonFoss --> modelRouting
   builtOnOllama[BuiltOnOllamaAboutLink] --> aboutTab[AboutTab]
   vdfSupport[BundledVdfParsingSupport] --> steamInput[SteamInputLayoutAnalysis]
 ```

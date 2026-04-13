@@ -1,0 +1,112 @@
+# bonsAI Development Guide
+
+This guide is for contributors building and deploying bonsAI from source.
+
+## Stack and layout
+
+- Frontend: `src/` (React + TypeScript, Decky UI components)
+- Backend: `main.py` (Decky Python backend)
+- Plugin metadata: `plugin.json`
+- Frontend package/build config: `package.json`
+- Build output: `dist/index.js`
+
+## Toolchain
+
+- Node.js (modern LTS; Decky template baseline is Node 16.14+)
+- `pnpm` (v9 recommended for compatibility with template workflow)
+- SSH/SCP client (for remote deploy to Deck)
+
+Core commands:
+
+```bash
+pnpm install
+pnpm run build
+pnpm run watch
+```
+
+If Decky UI packages drift:
+
+```bash
+pnpm update @decky/ui --latest
+```
+
+## Environment setup
+
+Use local env files for host/device config.
+
+1. Copy `.env.example` to `.env`.
+2. Fill required values (`DECK_IP`, `DECK_USER`, `PC_IP`, and related fields).
+3. Keep secrets/local values out of git.
+
+## Windows workflow
+
+### First-time setup
+
+Run from repo root:
+
+```powershell
+.\setup-dev.ps1
+```
+
+What it does at a high level:
+- Loads `.env` values
+- Sets up SSH key auth to Deck
+- Installs dev-mode sudoers override on Deck
+- Prepares plugin ownership/path for deploy
+
+### Build and deploy
+
+```powershell
+.\build.ps1
+```
+
+High-level behavior:
+- `pnpm install`
+- `pnpm run build`
+- Upload `package.json`, `plugin.json`, `main.py`, `dist/index.js`
+- Restart Decky plugin loader service
+
+## Bazzite / Linux workflow
+
+### First-time setup
+
+Run from repo root:
+
+```bash
+./setup-dev.sh
+```
+
+What it does at a high level:
+- Validates/loads `.env`
+- Ensures `pnpm` is available
+- Installs Decky CLI binary to `cli/decky` when needed
+- Sets up SSH key auth
+- Runs `pnpm install`
+
+### Build and deploy modes
+
+```bash
+./build.sh
+```
+
+Available modes:
+- `./build.sh` (default `dev`): build + deploy to remote Deck
+- `./build.sh local`: build + deploy locally on this Linux/Bazzite machine
+- `./build.sh release`: build distributable zip via Decky CLI
+- `./build.sh deploy`: deploy last build without rebuilding
+
+## Ollama for development testing
+
+If you need a local/LAN Ollama test host:
+
+- Windows helper: `src/setup_ollama.ps1`
+- Linux helper: `setup-ollama.sh`
+
+Then point bonsAI settings to the matching Ollama host/base URL.
+
+## Docs and references
+
+- Prompt tests and quality tracking: `PROMPT_TESTING.md`
+- Power-user troubleshooting: `INSTALL_STEPS_TROUBLESHOOTING.md`
+- Decky frontend library: [https://github.com/SteamDeckHomebrew/decky-frontend-lib](https://github.com/SteamDeckHomebrew/decky-frontend-lib)
+- Decky docs/wiki: [https://wiki.deckbrew.xyz/](https://wiki.deckbrew.xyz/)

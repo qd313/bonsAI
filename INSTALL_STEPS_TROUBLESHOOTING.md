@@ -1,6 +1,11 @@
 # bonsAI Troubleshooting & Knowledge Base
 
-This document tracks all resolved issues, hardware-specific overrides, and architectural constraints for the bonsAI (Backend Ollama Node for Steam A.I.) project.
+This document is the advanced/power-user guide for bonsAI.
+
+For first-time setup, use `README.md` first (simple self-hosted install flow, Ollama setup, and starter model pulls).
+For contributor workflows, use `DEVELOPMENT.md` (Windows/Bazzite build and deploy paths).
+
+This file tracks resolved issues, hardware-specific overrides, and architectural constraints for the bonsAI (Backend Ollama Node for Steam A.I.) project.
 
 ---
 

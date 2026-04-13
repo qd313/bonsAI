@@ -7,11 +7,19 @@
 ## Frontend UI (src/)
 - ALWAYS use Decky-Frontend-lib components for UI elements to maintain a native SteamOS look and feel.
 NEVER write CSS overrides targeting third-party component internals based on assumed DOM structure; ALWAYS instrument the runtime DOM first (computed styles, class names, and nesting) to identify the exact element and property causing the layout issue before writing any selector.
+- NEVER iterate on styling or prompt wording as a primary fix until the underlying focus path and context payload are proven correct end-to-end.
 
 ## Architecture Constraints
+- ALWAYS debug controller-navigation and AI-context issues at the architecture level first: verify focus-graph/event ownership and metadata pipeline integrity before making UX or prompt tweaks.
 - ALWAYS treat Decky/QAM UI as a platform with strict focus and keyboard contracts: keep native primitives (TextField, Focusable, ButtonItem) intact and make the smallest possible style-only changes first.
 - NEVER mix architectural swaps (e.g., TextField ↔ textarea, overlay hacks, broad container CSS overrides) with visual tweaks in the same iteration, because that repeatedly caused regressions in focus, wrapping, and visibility.
+
+## Permission and Safety Model
+- ALWAYS require explicit, capability-scoped user permission before any privileged action (filesystem writes such as screenshots/notes, sudo/elevated commands, hardware controls, or web/search calls), default to deny until granted, and surface a clear consent prompt at the moment of use.
+- NEVER execute, queue, or retry privileged actions after permission is denied or revoked; ALWAYS provide granular opt-out toggles and immediate revoke controls so users retain continuous authority over every high-impact capability.
 
 ## Documentation
 - ALWAYS rank any newly added future features using the star system
 - ALWAYS re-sort the list when adding so that the list maintains the sort order of least effort/risk (1 star) to most effort/risk (6 stars)
+- ALWAYS, when a feature is marked complete, update all affected project docs in the same change set (`TODO.md`, `FUTURE_FEATURES.md`, testing/install docs) and set status/checklists to reflect completion.
+- ALWAYS include a concise changelog-style implementation note for each completed feature (what shipped, where it was implemented, and user-visible behavior), so release notes can be generated directly from documentation history.

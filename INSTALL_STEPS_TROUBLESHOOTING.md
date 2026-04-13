@@ -82,6 +82,33 @@ If Windows still falls back to CPU after FIX A:
 
 ---
 
+## 2.5 Screenshot Vision Setup (V1)
+
+### Required model capability
+- Screenshot attachments only work with Ollama models that support image input (vision/multimodal models).
+- If a non-vision model is active, asks still run but image context may be ignored or return an attachment/model error.
+
+### Configure screenshot size clamp
+- Open bonsAI `Settings` tab.
+- Set **Screenshot max dimension** to one of:
+  - `1280` (smallest payload, best for speed)
+  - `1920` (balanced)
+  - `3160` (largest detail, highest payload cost)
+- This clamp is applied to the image long edge before upload when preprocessing is available.
+
+### Screenshot sources in V1
+- `Attach` opens a fullscreen screenshot browser with thumbnail previews.
+- Browser content is populated from recent Steam screenshot files discovered on-device.
+- Ordering behavior: best-effort active-game-first when AppID is available, then fallback to global recent screenshots.
+- Current boundary: there is no supported Steam screenshot selection API in this project yet, so filesystem discovery remains the active path.
+
+### Common failures and fixes
+- **Attachment too large:** lower screenshot max dimension to `1280` in Settings.
+- **Image preprocessing fallback warning:** install Pillow in plugin runtime if you need guaranteed resize/compression behavior on very large captures.
+- **Model rejects image input:** switch to an Ollama vision-capable model.
+
+---
+
 ## 3. Build & Deploy (`build.ps1` / `setup-dev.ps1`)
 
 ### ERROR: `sudo: a password is required` or build hangs at "Overwriting system files"

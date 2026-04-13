@@ -15,10 +15,18 @@ Ranked by effort and risk using the GTA star system:
 - Persist last question and answer
 - Unified Search + Ask input
 - Iconography Pass (Tabs + Plugin + Ask Button)
+- Global Screenshots and Vision (V1)
 
 ---
 
 ## Candidate Features (Easiest → Hardest)
+
+### ★ Built on Ollama Link (About Tab)
+- **Goal:** Add a clear attribution/action button in About that links users to the upstream Ollama repository.
+- **Primary work:** add About button copy, external-link behavior, and lightweight validation for link open behavior in Game Mode/Desktop Mode.
+- **Files:** `src/index.tsx`, docs/about copy references.
+- **Depends on:** none.
+- **Not in scope:** bundling Ollama binaries or changing model-runtime behavior.
 
 ### ★★★ Mode Selector Dropdown (Main Screen)
 - **Goal:** Add model mode selector (`Fast`, `Strategy Guide`, `Mega/Ultra/Deep`) on main screen.
@@ -49,6 +57,24 @@ Ranked by effort and risk using the GTA star system:
 - **Depends on:** settings/pending state plumbing.
 - **Not in scope:** queueing multiple concurrent background requests.
 
+### ★★★ Reset Cache Action (App State)
+- **Goal:** Provide a user-facing reset action that clears cached unified search text and current AI response output in one step.
+- **Primary work:** add reset control in UI, clear local storage + in-memory response state, and keep behavior explicit/confirmable.
+- **Files:** `src/index.tsx`, optional settings/docs references.
+- **Depends on:** existing unified input persistence + response state handling.
+- **Not in scope:** clearing host-side Ollama history or deleting screenshot files.
+
+### ★★★ Desktop Mode Debug Note Save (Steam Deck)
+- **Goal:** Save emulator/debug notes during Game Mode to Desktop Mode files so users can review settings while troubleshooting later.
+- **Save target:** `~/Desktop/BonsAI_notes/<user-note-name>.md`.
+- **Filename behavior:** user provides the note name in an initial or follow-up prompt before saving.
+- **Safety gate:** explicit user permission is required before any filesystem write.
+- **Write mode:** append timestamped entries to preserve prior notes and change history.
+- **Primary work:** define note-save intent flow, safe path normalization under Desktop, confirmation UX copy, and deterministic append formatting.
+- **Files:** `main.py`, `src/index.tsx`, docs/troubleshooting notes.
+- **Depends on:** existing prompt/response flow and settings persistence baseline.
+- **Not in scope:** arbitrary file writes outside `~/Desktop/BonsAI_notes/`, silent/background writes without permission, or replacing existing note content by default.
+
 ### ★★★ Debugging and Proton Log Analysis
 - **Goal:** Attach relevant Proton/game logs to troubleshooting prompts.
 - **Primary work:** log discovery, truncation/filtering, and context injection.
@@ -56,6 +82,14 @@ Ranked by effort and risk using the GTA star system:
 - **Depends on:** active-game context.
 - **Not in scope:** enabling Proton logging automatically.
 - **Risk note:** value may be limited unless users already run with `PROTON_LOG=1`.
+
+### ★★★★ Preset Carousel and Transition UX
+- **Goal:** Improve random prompt preset browsing with animated fade transitions and carousel navigation controls.
+- **Expected UX:** preset chips fade in/out during rotation and provide lower-right arrow controls for manual next/previous browsing.
+- **Primary work:** preset display container refactor, transition timing rules, and controller-friendly arrow focus behavior.
+- **Files:** `src/index.tsx`, `PROMPT_TESTING.md`.
+- **Depends on:** existing preset randomization/category logic.
+- **Not in scope:** changing core preset taxonomy/model routing semantics.
 
 ### ★★★★ Strategy Guide Prompt Path (Beta)
 - **Goal:** Define a strategy-focused response path for `How do I beat this level` and related prompts.
@@ -107,7 +141,54 @@ Ranked by effort and risk using the GTA star system:
 - **Depends on:** strict safety validation.
 - **Not in scope:** custom graph editor for fan curves.
 
-### ★★★★★ Global Screenshots and Vision
+### ★★★★ Capability Permission Center (User-Controlled Access)
+- **Goal:** Give users direct control over high-impact capabilities and require explicit consent before privileged actions run.
+- **Permissions tab UX:** add a dedicated `Permissions` tab that lists every capability toggle in one place and uses an OFF-position toggle switch as the tab icon (exact style TBD).
+- **Permission scopes:** filesystem writes (screenshots/notes/log exports), sudo/elevated tasks, hardware control paths (TDP/thermal/fan), web/search actions, and future privileged tools.
+- **Primary work:** capability registry, first-use consent prompts, persistent allow/deny toggles, revocation UX, and blocked-action messaging with clear retry flow.
+- **Default behavior:** on first install all permission toggles are OFF, request permission first per capability, deny when not granted, and allow opt-out/revoke at any time in Settings.
+- **Files:** `src/index.tsx`, `main.py`, settings/troubleshooting docs.
+- **Depends on:** stable settings persistence and action routing through capability checks.
+- **Not in scope:** silent privilege escalation, one blanket permission for all capabilities, or bypassing denied scopes.
+
+### ★★★★ FOSS-Only Model Lock + Disclosure UX
+- **Goal:** Keep model usage FOSS-first by default while allowing explicit user override for non-FOSS models.
+- **Required behavior:**
+  - default to FOSS-only model routing
+  - unlocking non-FOSS requires explicit toggle in `Permissions`
+  - every response shows a FOSS/model-used disclosure label
+  - include `Read more` links in both the response disclosure and permission toggle row
+- **Primary work:** model metadata classification, route guard in model selector/execution path, disclosure UI component, and outbound link wiring for educational docs.
+- **Files:** `src/index.tsx`, `main.py`, docs/about/permissions references.
+- **Depends on:** **Capability Permission Center (User-Controlled Access)** and stable model-routing layer.
+- **Not in scope:** legal/compliance guarantees for third-party model licenses beyond documented metadata.
+
+### ★★★★ Llama.cpp Compatibility Evaluation (Research Spike)
+- **Goal:** Evaluate what it would take to support llama.cpp as a first-class runtime/provider path.
+- **Primary work:** compare API/request formats, streaming compatibility, model-management assumptions, tokenizer/context-window differences, and operational constraints on Steam Deck.
+- **Expected output:** go/no-go recommendation with a phased implementation path and risk matrix.
+- **Files:** `main.py`, runtime/provider abstraction docs, troubleshooting/install docs.
+- **Depends on:** none.
+- **Not in scope:** shipping full llama.cpp production support in this spike.
+
+### ★★★★★ Local Runtime Mode (Default) + Beta Risk Warning
+- **Goal:** Prefer on-device inference by default instead of sending requests to a separate PC, while retaining remote fallback.
+- **Primary work:** runtime-provider priority policy (`local first`), fallback heuristics, health checks, and an explicit beta warning modal for in-game performance risk.
+- **Warning policy:** clearly state that some in-game local queries may cause lag, instability, or crashes in the game or plugin and should be used with discretion.
+- **Files:** `main.py`, `src/index.tsx`, install/troubleshooting docs.
+- **Depends on:** robust provider routing and **Llama.cpp Compatibility Evaluation (Research Spike)** outcomes.
+- **Not in scope:** guarantees of zero performance impact during heavy in-game workloads.
+
+### ★★★★★ Restricted Kids Account Master Lock
+- **Goal:** Disable plugin capability access when Steam reports a restricted kids account, then restore normal access when reopened under a full account.
+- **Primary work:** Steam parental-restriction detection wiring, global lock-state enforcement above capability checks, and clear lock banner/messaging lifecycle.
+- **Required behavior:** master lock forces all permission toggles/capabilities off/blocked while restricted; message auto-clears once a full account is detected.
+- **Files:** `main.py`, `src/index.tsx`, settings/help docs.
+- **Depends on:** **Capability Permission Center (User-Controlled Access)** and detectable Steam parental restriction signal.
+- **Not in scope:** bypassing platform account restrictions or implementing separate account-auth systems.
+
+### ★★★★★ Global Screenshots and Vision (Implemented V1)
+- **Status:** Completed and shipped in current baseline.
 - **Goal:** Capture gamescope screenshots and send multimodal prompts.
 - **Primary work:** capture pipeline, image resize/encoding, multimodal model routing, and strategy-context attachment (`appId`, game state hints).
 - **Strategy extension:** support strategy guidance from screenshot + game context and allow inline visual aids (for example map/dungeon references) in responses when available.
@@ -151,6 +232,15 @@ Not in scope: Programmatic background input sniffing (evdev), WebSockets, or Rea
 - **Impediments/Risks:** private or unavailable profiles, games that do not expose opponent SteamIDs, API quota constraints, anti-cheat/privacy boundaries, and false-confidence UX if data is incomplete.
 - **Not in scope:** automated reporting, punitive automation, or bypassing Steam/game protections to collect hidden player data.
 
+### ★★★★★★ SteamOS Media Screenshot Share Button (Research Spike)
+- **Goal:** Add a bonsAI share button in SteamOS Media screenshot browsing so users can send the selected screenshot directly to a bonsAI chat.
+- **UX target:** place bonsAI action adjacent to Steam's existing screenshot share action (the same area used for sharing to Steam friend chat).
+- **Primary work:** validate whether Steam/Decky exposes a supported extension point for Media screenshot action buttons, map selected screenshot metadata/path into bonsAI chat attach flow, and document no-go fallback if UI injection is unsupported.
+- **Files:** `src/index.tsx`, Decky plugin API integration points, implementation notes/docs.
+- **Depends on:** stable and supported host API for SteamOS Media UI actions.
+- **Risk note:** likely blocked if it requires patching private Steam UI internals; treat as research-first and no-go when unsupported.
+- **Not in scope:** brittle runtime patching/signature scanning of private Steam client bundles.
+
 ### ★★★★★★ Deep Mod and Port Configuration Manager
 - **Goal:** Detect mod frameworks/files and provide mod-aware AI guidance.
 - **Primary work:** per-game path discovery, mod signal detection, context injection UX.
@@ -165,6 +255,15 @@ Not in scope: Programmatic background input sniffing (evdev), WebSockets, or Rea
 - **Mode Selector Dropdown (Main Screen)** (`Strategy Guide` replaces `Thinking`) → required by **Per-Mode Latency/Timeout Profiles** and **Strategy Guide Prompt Path (Beta)**.
 - **Strategy Guide Prompt Path (Beta)** → required by **Strategy Guide Safety and Spoilers** and **Strategy Checklist Workflow (Chat-Scoped)**.
 - **Global Screenshots and Vision** → enables richer strategy responses with screenshot-aware context and inline visual aids.
+- **Capability Permission Center (User-Controlled Access)** → gates filesystem writes, sudo/elevated tasks, hardware-control actions, and web/search calls behind explicit user consent with revocation support.
+- **FOSS-Only Model Lock + Disclosure UX** → depends on **Capability Permission Center (User-Controlled Access)** and enforces FOSS-first routing with explicit non-FOSS unlock.
+- **Llama.cpp Compatibility Evaluation (Research Spike)** → informs feasibility and architecture for **Local Runtime Mode (Default) + Beta Risk Warning**.
+- **Local Runtime Mode (Default) + Beta Risk Warning** → shifts provider priority to local execution while preserving remote fallback.
+- **Restricted Kids Account Master Lock** → sits above permission toggles and hard-blocks all privileged capabilities while restricted account status is active.
+- **Built on Ollama Link (About Tab)** → adds transparent attribution and educational navigation without changing runtime execution.
+- **SteamOS Media Screenshot Share Button (Research Spike)** → candidate fast entry point into **Global Screenshots and Vision** attach flow if supported by host APIs.
+- **Reset Cache Action (App State)** → relies on existing unified-input persistence and response-state boundaries.
+- **Preset Carousel and Transition UX** → extends current random preset presentation without changing prompt category routing.
 - **Bundled VDF parsing support** → needed for **Steam Input Layout Analysis** (and optional deeper language/config parsing extensions).
 - **Stable settings persistence** → reused by mode profiles, language override, and background completion metadata.
 
@@ -175,10 +274,20 @@ flowchart TD
   strategyPath --> strategySafety[StrategyGuideSafetyAndSpoilers]
   strategyPath --> strategyChecklist[StrategyChecklistWorkflowChatScoped]
   visionFeature[GlobalScreenshotsAndVision] --> strategyPath
+  mediaShareButton[SteamOSMediaScreenshotShareButtonResearchSpike] --> visionFeature
+  resetCacheAction[ResetCacheActionAppState] --> settingsBase
+  presetCarousel[PresetCarouselAndTransitionUx] --> strategyPath
   settingsBase[SettingsPersistenceBase] --> perModeProfiles
   settingsBase --> strategySafety
   settingsBase --> multiLanguage[MultiLanguageResponses]
   settingsBase --> backgroundCompletion[BackgroundPromptCompletion]
+  settingsBase --> capabilityPermission[CapabilityPermissionCenter]
+  capabilityPermission --> fossLock[FossOnlyModelLockAndDisclosure]
+  kidsLock[RestrictedKidsAccountMasterLock] --> capabilityPermission
+  llamaEval[LlamaCppCompatibilityEvaluation] --> localRuntime[LocalRuntimeModeDefault]
+  localRuntime --> modelRouting[ModelProviderRoutingLayer]
+  fossLock --> modelRouting
+  builtOnOllama[BuiltOnOllamaAboutLink] --> aboutTab[AboutTab]
   vdfSupport[BundledVdfParsingSupport] --> steamInput[SteamInputLayoutAnalysis]
 ```
 

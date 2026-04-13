@@ -74,36 +74,6 @@ const BugIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
   </IconShell>
 );
 
-const AskSendIcon: React.FC<{ size?: number; loading?: boolean }> = ({ size = 18, loading = false }) => (
-  <IconShell size={size}>
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <circle cx="12" cy="12" r="9.25" fill="rgba(236, 240, 245, 0.96)" stroke="rgba(15, 22, 32, 0.14)" strokeWidth="0.85" />
-      {loading ? (
-        <circle
-          cx="12"
-          cy="12"
-          r="5.25"
-          fill="none"
-          stroke="#1a2633"
-          strokeWidth="1.65"
-          strokeLinecap="round"
-          strokeDasharray="9 25"
-        >
-          <animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="0.75s" repeatCount="indefinite" />
-        </circle>
-      ) : (
-        <path
-          d="M12 15.4V10.1M9.1 12.35L12 9.25l2.9 3.1"
-          stroke="#1a2633"
-          strokeWidth="1.2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      )}
-    </svg>
-  </IconShell>
-);
-
 /** Placeholder for future voice input — no badge fill; scales with `size`. */
 const AskMicIcon: React.FC<{ size?: number }> = ({ size = 30 }) => (
   <IconShell size={size}>
@@ -123,6 +93,23 @@ const AskStopIcon: React.FC<{ size?: number }> = ({ size = 18 }) => (
   </IconShell>
 );
 
+const BackChevronIcon: React.FC<{ size?: number }> = ({ size = 18 }) => (
+  <IconShell size={size}>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M14.5 6.5 9 12l5.5 5.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  </IconShell>
+);
+
+const RefreshArrowIcon: React.FC<{ size?: number }> = ({ size = 18 }) => (
+  <IconShell size={size}>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M18.5 9.3A6.5 6.5 0 1 0 19 13.6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="m15.8 6.2 3.1 2.9-3.9 1.4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  </IconShell>
+);
+
 /** Clear: bold X only (button chrome provides the tile; avoids nested-box look). */
 const ClearIcon: React.FC<{ size?: number }> = ({ size = 30 }) => (
   <IconShell size={size}>
@@ -133,6 +120,24 @@ const ClearIcon: React.FC<{ size?: number }> = ({ size = 30 }) => (
         strokeWidth="1.55"
         strokeLinecap="round"
       />
+    </svg>
+  </IconShell>
+);
+
+const AttachMediaIcon: React.FC<{ size?: number }> = ({ size = 22 }) => (
+  <IconShell size={size}>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M8.2 12.2 13.7 6.7a3 3 0 1 1 4.3 4.3l-7.2 7.2a4.7 4.7 0 0 1-6.6-6.6l7.1-7.2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  </IconShell>
+);
+
+const ImageAttachmentIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
+  <IconShell size={size}>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect x="4.5" y="5.5" width="15" height="13" rx="1.8" stroke="currentColor" strokeWidth="1.25" />
+      <circle cx="9" cy="10" r="1.6" fill="currentColor" />
+      <path d="M6.5 16.5 10.5 12.8 13.4 15.6 15.7 13.5 18 16.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   </IconShell>
 );
@@ -590,6 +595,25 @@ type AppliedResult = {
   errors: string[];
 };
 
+type AskAttachment = {
+  path: string;
+  name: string;
+  source: "capture" | "recent" | "picker";
+  preview_data_uri?: string;
+  size_bytes?: number;
+  app_id?: string;
+};
+
+type ScreenshotItem = {
+  path: string;
+  name: string;
+  mtime: number;
+  size_bytes?: number;
+  source: string;
+  app_id?: string;
+  preview_data_uri?: string;
+};
+
 type BackgroundStartResponse = {
   accepted: boolean;
   status: "pending" | "busy" | "invalid";
@@ -624,14 +648,24 @@ type ConnectionStatus = {
   error?: string;
 };
 
+type RecentScreenshotsResponse = {
+  success: boolean;
+  items: ScreenshotItem[];
+  error?: string;
+};
+
 type BonsaiSettings = {
   latency_warning_seconds: number;
   request_timeout_seconds: number;
   unified_input_persistence_mode: UnifiedInputPersistenceMode;
+  screenshot_max_dimension: ScreenshotMaxDimension;
 };
 
 type UnifiedInputPersistenceMode = "persist_all" | "persist_search_only" | "no_persist";
 const DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE: UnifiedInputPersistenceMode = "persist_all";
+type ScreenshotMaxDimension = 1280 | 1920 | 3160;
+const SCREENSHOT_DIMENSION_OPTIONS: ScreenshotMaxDimension[] = [1280, 1920, 3160];
+const DEFAULT_SCREENSHOT_MAX_DIMENSION: ScreenshotMaxDimension = 1280;
 const BACKGROUND_STATUS_POLL_MS = 1200;
 
 function clampNumber(value: unknown, fallback: number, minimum: number, maximum: number): number {
@@ -690,6 +724,7 @@ function normalizeSettings(data: unknown): BonsaiSettings {
       DEFAULT_REQUEST_TIMEOUT_SECONDS
     ),
     unified_input_persistence_mode: normalizeUnifiedInputPersistenceMode(raw.unified_input_persistence_mode),
+    screenshot_max_dimension: normalizeScreenshotMaxDimension(raw.screenshot_max_dimension),
   };
 }
 
@@ -698,6 +733,13 @@ function normalizeUnifiedInputPersistenceMode(value: unknown): UnifiedInputPersi
     return value;
   }
   return DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE;
+}
+
+function normalizeScreenshotMaxDimension(value: unknown): ScreenshotMaxDimension {
+  if (value === 1920 || value === 3160) {
+    return value;
+  }
+  return DEFAULT_SCREENSHOT_MAX_DIMENSION;
 }
 
 function formatDeckyRpcError(e: unknown): string {
@@ -761,6 +803,62 @@ function loadSavedIp(): string {
 function saveIp(ip: string): void {
   if (typeof window === "undefined") return;
   try { window.localStorage.setItem(IP_STORAGE_KEY, ip); } catch {}
+}
+
+function toFileUri(path: string): string {
+  const normalized = path.replace(/\\/g, "/");
+  const prefixed = normalized.startsWith("/") ? normalized : `/${normalized}`;
+  return `file://${encodeURI(prefixed)}`;
+}
+
+function formatScreenshotTimestamp(epochSeconds: number): string {
+  if (!Number.isFinite(epochSeconds) || epochSeconds <= 0) return "Unknown time";
+  try {
+    return new Date(epochSeconds * 1000).toLocaleString();
+  } catch {
+    return "Unknown time";
+  }
+}
+
+function formatBytes(bytes: number): string {
+  if (!Number.isFinite(bytes) || bytes <= 0) return "Unknown size";
+  const units = ["B", "KB", "MB", "GB"];
+  let value = bytes;
+  let idx = 0;
+  while (value >= 1024 && idx < units.length - 1) {
+    value /= 1024;
+    idx += 1;
+  }
+  return `${value >= 10 || idx === 0 ? value.toFixed(0) : value.toFixed(1)} ${units[idx]}`;
+}
+
+function isRightNavigationKey(key: string): boolean {
+  return key === "ArrowRight" || key === "Right" || key === "DPadRight" || key === "GamepadDPadRight";
+}
+
+function isLeftNavigationKey(key: string): boolean {
+  return key === "ArrowLeft" || key === "Left" || key === "DPadLeft" || key === "GamepadDPadLeft";
+}
+
+function getFocusableWithin(selector: string): HTMLElement | null {
+  const root = document.querySelector(selector) as HTMLElement | null;
+  if (!root) return null;
+  const candidate = root.matches("[tabindex],button,a,input,select,textarea")
+    ? root
+    : (root.querySelector("[tabindex],button,a,input,select,textarea") as HTMLElement | null);
+  return candidate;
+}
+
+function dedupeScreenshotItems(items: ScreenshotItem[]): ScreenshotItem[] {
+  const seen = new Set<string>();
+  const deduped: ScreenshotItem[] = [];
+  for (const item of items) {
+    const key = `${item.path}|${item.mtime}|${item.size_bytes ?? 0}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    deduped.push(item);
+  }
+  return deduped;
 }
 
 const DISCLAIMER_STORAGE_KEY = "bonsai:disclaimer-accepted";
@@ -861,7 +959,17 @@ const Content: React.FC = () => {
   const [unifiedInputPersistenceMode, setUnifiedInputPersistenceMode] = useState<UnifiedInputPersistenceMode>(
     DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE
   );
+  const [screenshotMaxDimension, setScreenshotMaxDimension] = useState<ScreenshotMaxDimension>(
+    DEFAULT_SCREENSHOT_MAX_DIMENSION
+  );
   const [settingsLoaded, setSettingsLoaded] = useState(false);
+  const [isScreenshotBrowserOpen, setIsScreenshotBrowserOpen] = useState(false);
+  const [mediaError, setMediaError] = useState<string>("");
+  const [recentScreenshots, setRecentScreenshots] = useState<ScreenshotItem[]>([]);
+  const [isLoadingRecentScreenshots, setIsLoadingRecentScreenshots] = useState(false);
+  const [selectedAttachment, setSelectedAttachment] = useState<AskAttachment | null>(null);
+  const screenshotBrowserHostRef = useRef<HTMLDivElement>(null);
+  const attachActionHostRef = useRef<HTMLDivElement>(null);
 
   // --- Debug state (lifted from former ErrorCaptureUI) ---
   const [capturedErrors, setCapturedErrors] = useState<string[]>([]);
@@ -917,12 +1025,14 @@ const Content: React.FC = () => {
         setLatencyWarningSeconds(normalized.latency_warning_seconds);
         setRequestTimeoutSeconds(normalized.request_timeout_seconds);
         setUnifiedInputPersistenceMode(normalized.unified_input_persistence_mode);
+        setScreenshotMaxDimension(normalized.screenshot_max_dimension);
       })
       .catch(() => {
         if (cancelled) return;
         setLatencyWarningSeconds(DEFAULT_LATENCY_WARNING_SECONDS);
         setRequestTimeoutSeconds(DEFAULT_REQUEST_TIMEOUT_SECONDS);
         setUnifiedInputPersistenceMode(DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE);
+        setScreenshotMaxDimension(DEFAULT_SCREENSHOT_MAX_DIMENSION);
       })
       .finally(() => {
         if (!cancelled) setSettingsLoaded(true);
@@ -940,12 +1050,19 @@ const Content: React.FC = () => {
         latency_warning_seconds: latencyWarningSeconds,
         request_timeout_seconds: requestTimeoutSeconds,
         unified_input_persistence_mode: unifiedInputPersistenceMode,
+        screenshot_max_dimension: screenshotMaxDimension,
       }).catch((err) => {
         console.error("save_settings failed", err);
       });
     }, 400);
     return () => clearTimeout(timer);
-  }, [latencyWarningSeconds, requestTimeoutSeconds, unifiedInputPersistenceMode, settingsLoaded]);
+  }, [
+    latencyWarningSeconds,
+    requestTimeoutSeconds,
+    unifiedInputPersistenceMode,
+    screenshotMaxDimension,
+    settingsLoaded,
+  ]);
 
   // --- Slow-response warning timer ---
   useEffect(() => {
@@ -1117,6 +1234,7 @@ const Content: React.FC = () => {
     setOllamaResponse("");
     setOllamaContext(null);
     setLastApplied(null);
+    setSelectedAttachment(null);
     setElapsedSeconds(null);
     setShowSlowWarning(false);
   };
@@ -1155,6 +1273,65 @@ const Content: React.FC = () => {
     setShowSlowWarning(false);
   };
 
+  const onMicInput = () => {
+    toaster.toast({ title: "Voice input", body: "Voice capture is not implemented yet.", duration: 1800 });
+  };
+
+  const loadRecentScreenshots = async (limit: number = 24) => {
+    const runningApp = Router.MainRunningApp;
+    const appId = runningApp?.appid?.toString() ?? "";
+    setIsLoadingRecentScreenshots(true);
+    setMediaError("");
+    try {
+      const response = await call<[string, number], RecentScreenshotsResponse>(
+        "list_recent_screenshots",
+        appId,
+        limit
+      );
+      if (response.success) {
+        const rawItems = response.items ?? [];
+        const dedupedItems = dedupeScreenshotItems(rawItems);
+        setRecentScreenshots(dedupedItems);
+      } else {
+        setRecentScreenshots([]);
+        setMediaError(response.error ?? "Failed to list recent screenshots.");
+      }
+    } catch (e: unknown) {
+      setRecentScreenshots([]);
+      setMediaError(formatDeckyRpcError(e));
+    } finally {
+      setIsLoadingRecentScreenshots(false);
+    }
+  };
+
+  const onOpenScreenshotBrowser = async () => {
+    if (isAsking) return;
+    setIsScreenshotBrowserOpen(true);
+    setMediaError("");
+    if (recentScreenshots.length === 0) {
+      await loadRecentScreenshots(24);
+    }
+  };
+
+  const onCloseScreenshotBrowser = () => {
+    setIsScreenshotBrowserOpen(false);
+    setMediaError("");
+  };
+
+  const onSelectRecentScreenshot = (item: ScreenshotItem) => {
+    setSelectedAttachment({
+      path: item.path,
+      name: item.name,
+      source: "recent",
+      preview_data_uri: item.preview_data_uri,
+      size_bytes: item.size_bytes,
+      app_id: item.app_id,
+    });
+    setIsScreenshotBrowserOpen(false);
+    setMediaError("");
+    toaster.toast({ title: "Media attached", body: "Recent screenshot attached.", duration: 1800 });
+  };
+
   const onAskOllama = async () => {
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
@@ -1164,6 +1341,14 @@ const Content: React.FC = () => {
     const q = unifiedInput.trim();
     const ip = ollamaIp.trim();
     if (!q || !ip) return;
+    const attachments = selectedAttachment
+      ? [{
+          path: selectedAttachment.path,
+          name: selectedAttachment.name,
+          source: selectedAttachment.source,
+          app_id: selectedAttachment.app_id,
+        }]
+      : [];
 
     const seq = askRequestSeqRef.current + 1;
     askRequestSeqRef.current = seq;
@@ -1184,9 +1369,9 @@ const Content: React.FC = () => {
       console.log(`[bonsAI] deck -> pc=${ip} game=${JSON.stringify(appName)}(${appId}) question=${JSON.stringify(q)}`);
 
       const data = await call<
-        [{ question: string; PcIp: string; appId: string; appName: string }],
+        [{ question: string; PcIp: string; appId: string; appName: string; attachments: AskAttachment[] }],
         BackgroundStartResponse
-      >("start_background_game_ai", { question: q, PcIp: ip, appId, appName });
+      >("start_background_game_ai", { question: q, PcIp: ip, appId, appName, attachments });
 
       if (seq !== askRequestSeqRef.current) return;
 
@@ -1273,6 +1458,11 @@ const Content: React.FC = () => {
     `Search-only — ${persistenceModeDescription.persist_search_only}`,
     `None — ${persistenceModeDescription.no_persist}`,
   ].join(" ");
+  const screenshotDimensionLabel: Record<ScreenshotMaxDimension, string> = {
+    1280: "1280",
+    1920: "1920",
+    3160: "3160",
+  };
   const fullBleedRowStyle: React.CSSProperties = {
     width: "calc(100% + 24px)",
     marginLeft: -12,
@@ -1292,31 +1482,12 @@ const Content: React.FC = () => {
     border: "1px solid rgba(118, 139, 166, 0.6)",
     boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)",
   };
-  const askButtonStyleReady: React.CSSProperties = {
-    flex: 1,
-    minHeight: 42,
-    opacity: 1,
-    background: "linear-gradient(180deg, #f4f6f8 0%, #e2e7ee 100%)",
-    color: "#141a22",
-    border: "1px solid rgba(255,255,255,0.55)",
-    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.65), 0 1px 4px rgba(0,0,0,0.35)",
-  };
   const presetButtonSurface: React.CSSProperties = {
     border: "1px solid rgba(255,255,255,0.1)",
     background: "rgba(255,255,255,0.03)",
     color: "#93a3b0",
   };
-  const askButtonStyleIdle: React.CSSProperties = {
-    flex: 1,
-    minHeight: 42,
-    opacity: 1,
-    ...presetButtonSurface,
-    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
-  };
-  const askReady = Boolean(unifiedInput.trim() && ollamaIp.trim());
   const showSearchClearButton = Boolean(unifiedInput.trim());
-  /** Left/right rails keep the “Ask” label visually centered while the icon sits in the trailing rail. */
-  const ASK_BUTTON_ICON_RAIL_PX = 42;
 
   // =====================================================================
   // TAB CONTENT
@@ -1359,7 +1530,7 @@ const Content: React.FC = () => {
                 label=""
                 value={unifiedInput}
                 spellCheck={false}
-                style={{ width: "100%", minHeight: 72, fontSize: 13, color: "transparent", caretColor: "white" }}
+                style={{ width: "100%", minHeight: 94, fontSize: 14, color: "transparent", caretColor: "white" }}
                 onFocus={() => { setIsUnifiedInputFocused(true); }}
                 onBlur={() => { setIsUnifiedInputFocused(false); }}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1402,12 +1573,12 @@ const Content: React.FC = () => {
                   left: 12,
                   right: 12,
                   top: 10,
-                  bottom: 10,
+                  bottom: 12,
                   color: isUnifiedInputFocused ? "#1d2a38" : "#c4d3e2",
                   whiteSpace: "pre-wrap",
                   overflowWrap: "anywhere",
                   lineHeight: "1.25",
-                  fontSize: 12,
+                  fontSize: 13,
                 }}
               >
                 {unifiedInput}
@@ -1416,125 +1587,379 @@ const Content: React.FC = () => {
           </div>
         </PanelSectionRow>
         <PanelSectionRow>
-          <Focusable
-            flow-children="horizontal"
-            style={{ ...fullBleedRowStyle, display: "flex", gap: 8, alignItems: "center" }}
+          <div
+            onKeyDownCapture={(ev: React.KeyboardEvent<HTMLDivElement>) => {
+              const activeEl = document.activeElement as HTMLElement | null;
+              const previewActive = Boolean(activeEl?.closest(".bonsai-attachment-preview-target"));
+              const removeActive = Boolean(activeEl?.closest(".bonsai-attachment-remove-target"));
+              if (isRightNavigationKey(ev.key) && previewActive) {
+                const removeTarget = getFocusableWithin(".bonsai-attachment-remove-target");
+                if (removeTarget) {
+                  ev.preventDefault();
+                  ev.stopPropagation();
+                  removeTarget.focus();
+                }
+                return;
+              }
+              if (isLeftNavigationKey(ev.key) && removeActive) {
+                const previewTarget = getFocusableWithin(".bonsai-attachment-preview-target");
+                if (previewTarget) {
+                  ev.preventDefault();
+                  ev.stopPropagation();
+                  previewTarget.focus();
+                }
+                return;
+              }
+            }}
+            style={{ ...fullBleedRowStyle, display: "flex", flexDirection: "column", gap: 6 }}
           >
-            {!isAsking ? (
-              <>
+            {selectedAttachment ? (
+              <Focusable
+                flow-children="horizontal"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  minHeight: 38,
+                  borderRadius: 8,
+                  border: "1px solid rgba(150, 187, 223, 0.62)",
+                  background: "linear-gradient(180deg, rgba(64, 93, 124, 0.42) 0%, rgba(48, 71, 95, 0.42) 100%)",
+                  color: "#e3edf7",
+                  padding: "5px 8px",
+                }}
+              >
                 <Button
-                  onClick={onAskOllama}
-                  style={askReady ? askButtonStyleReady : askButtonStyleIdle}
-                >
-                  <span
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      width: "100%",
-                      boxSizing: "border-box",
-                    }}
-                  >
-                    <span style={{ width: ASK_BUTTON_ICON_RAIL_PX, flexShrink: 0 }} aria-hidden />
-                    <span style={{ flex: 1, textAlign: "center" }}>Ask</span>
-                    <span
-                      style={{
-                        width: ASK_BUTTON_ICON_RAIL_PX,
-                        flexShrink: 0,
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      {unifiedInput.trim() ? <AskSendIcon size={30} /> : <AskMicIcon size={36} />}
-                    </span>
-                  </span>
-                </Button>
-                {showSearchClearButton && (
-                  <Button
-                    onClick={clearUnifiedInput}
-                    aria-label="Clear"
-                    style={{
-                      minWidth: 50,
-                      width: 50,
-                      minHeight: 42,
-                      padding: 0,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      ...presetButtonSurface,
-                      color: "#dfe8ef",
-                      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
-                    }}
-                  >
-                    <ClearIcon size={34} />
-                  </Button>
-                )}
-              </>
-            ) : (
-              <>
-                <Button disabled style={{ flex: 1, minHeight: 42, opacity: 1 }}>
-                  <span
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      width: "100%",
-                      boxSizing: "border-box",
-                    }}
-                  >
-                    <span style={{ width: ASK_BUTTON_ICON_RAIL_PX, flexShrink: 0 }} aria-hidden />
-                    <span style={{ flex: 1, textAlign: "center" }}>Ask</span>
-                    <span
-                      style={{
-                        width: ASK_BUTTON_ICON_RAIL_PX,
-                        flexShrink: 0,
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <AskSendIcon size={30} loading />
-                    </span>
-                  </span>
-                </Button>
-                <Button
-                  onClick={onCancelAsk}
-                  aria-label="Stop generation"
+                  className="bonsai-attachment-preview-target"
+                  aria-label={`Attached screenshot ${selectedAttachment.name}`}
+                  onClick={onOpenScreenshotBrowser}
                   style={{
-                    minWidth: 52,
-                    width: 52,
-                    minHeight: 40,
+                    flex: 1,
+                    minWidth: 0,
+                    minHeight: 30,
+                    padding: 0,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    gap: 8,
+                    border: "none",
+                    background: "transparent",
+                    color: "#e3edf7",
+                    boxShadow: "none",
+                  }}
+                >
+                  <ImageAttachmentIcon size={17} />
+                  <img
+                    src={selectedAttachment.preview_data_uri || toFileUri(selectedAttachment.path)}
+                    alt={selectedAttachment.name}
+                    style={{
+                      width: 58,
+                      height: 34,
+                      borderRadius: 4,
+                      objectFit: "cover",
+                      background: "rgba(255,255,255,0.06)",
+                      flexShrink: 0,
+                    }}
+                  />
+                  <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                    <span
+                      style={{
+                        display: "block",
+                        fontSize: 11,
+                        color: "#dbe7f3",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {selectedAttachment.name}
+                    </span>
+                    <span style={{ display: "block", fontSize: 8, color: "#cfdeed", fontWeight: 600, marginTop: 2 }}>
+                      {formatBytes(selectedAttachment.size_bytes ?? 0)}
+                    </span>
+                  </div>
+                </Button>
+                <Button
+                  className="bonsai-attachment-remove-target"
+                  onClick={() => setSelectedAttachment(null)}
+                  aria-label="Remove attachment"
+                  style={{
+                    minWidth: 36,
+                    width: 36,
+                    minHeight: 34,
                     padding: 0,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
+                    border: "none",
+                    background: "transparent",
+                    color: "#dce8f4",
+                    boxShadow: "none",
+                    outline: "none",
+                  }}
+                >
+                  <ClearIcon size={18} />
+                </Button>
+              </Focusable>
+            ) : (
+              <div style={{ fontSize: 11, color: "#8ea2b8", paddingLeft: 2 }}>
+                No screenshot attached.
+              </div>
+            )}
+          </div>
+        </PanelSectionRow>
+        <PanelSectionRow>
+          <Focusable
+            flow-children="horizontal"
+            style={{ ...fullBleedRowStyle, display: "flex", gap: 4, alignItems: "center" }}
+          >
+            <div
+              className="bonsai-askbar-merged"
+              style={{
+                flex: 1,
+                minHeight: 44,
+                display: "flex",
+                borderRadius: 8,
+                overflow: "hidden",
+                border: "1px solid rgba(255,255,255,0.16)",
+                background: "rgba(24, 35, 46, 0.9)",
+              }}
+            >
+              <div ref={attachActionHostRef} style={{ display: "flex" }}>
+                <Button
+                  className="bonsai-askbar-target"
+                  onClick={onOpenScreenshotBrowser}
+                  disabled={isAsking}
+                  aria-label="Attach screenshot"
+                  style={{
+                    minWidth: 42,
+                    width: 42,
+                    minHeight: 44,
+                    padding: 0,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: 0,
+                    border: "none",
+                    background: "transparent",
+                    color: "#dbe6f3",
+                  }}
+                >
+                  <span style={{ position: "relative", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+                    <AttachMediaIcon size={18} />
+                    {selectedAttachment && (
+                      <span
+                        style={{
+                          position: "absolute",
+                          right: -8,
+                          top: -8,
+                          minWidth: 14,
+                          height: 14,
+                          borderRadius: 999,
+                          background: "#dfeaf6",
+                          color: "#1d2a38",
+                          fontSize: 9,
+                          lineHeight: "14px",
+                          fontWeight: 700,
+                          textAlign: "center",
+                        }}
+                      >
+                        1
+                      </span>
+                    )}
+                  </span>
+                </Button>
+              </div>
+              <Button
+                className="bonsai-askbar-target"
+                onClick={onAskOllama}
+                disabled={isAsking}
+                style={{
+                  flex: 1,
+                  minHeight: 44,
+                  borderRadius: 0,
+                  border: "none",
+                  background: "rgba(255,255,255,0.04)",
+                  color: "#eef4fb",
+                }}
+              >
+                <span style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%" }}>
+                  <span style={{ fontWeight: 600 }}>Ask</span>
+                </span>
+              </Button>
+              {isAsking ? (
+                <Button
+                  className="bonsai-askbar-target"
+                  onClick={onCancelAsk}
+                  aria-label="Stop generation"
+                  style={{
+                    minWidth: 42,
+                    width: 42,
+                    minHeight: 44,
+                    padding: 0,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: 0,
+                    border: "none",
+                    background: "transparent",
                   }}
                 >
                   <AskStopIcon size={30} />
                 </Button>
-                {showSearchClearButton && (
-                  <Button
-                    onClick={clearUnifiedInput}
-                    aria-label="Clear"
-                    style={{
-                      minWidth: 50,
-                      width: 50,
-                      minHeight: 42,
-                      padding: 0,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      ...presetButtonSurface,
-                      color: "#dfe8ef",
-                      boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
-                    }}
-                  >
-                    <ClearIcon size={34} />
-                  </Button>
-                )}
-              </>
+              ) : (
+                <Button
+                  className="bonsai-askbar-target"
+                  onClick={onMicInput}
+                  aria-label="Voice input"
+                  style={{
+                    minWidth: 42,
+                    width: 42,
+                    minHeight: 44,
+                    padding: 0,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: 0,
+                    border: "none",
+                    background: "transparent",
+                    color: "#dbe6f3",
+                  }}
+                >
+                  <AskMicIcon size={20} />
+                </Button>
+              )}
+            </div>
+            {showSearchClearButton && (
+              <Button
+                onClick={clearUnifiedInput}
+                aria-label="Clear"
+                style={{
+                  minWidth: 42,
+                  width: 42,
+                  minHeight: 44,
+                  padding: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  ...presetButtonSurface,
+                  color: "#dfe8ef",
+                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
+                }}
+              >
+                <ClearIcon size={28} />
+              </Button>
             )}
           </Focusable>
         </PanelSectionRow>
+        {isScreenshotBrowserOpen && (
+          <PanelSectionRow>
+            <Focusable
+              flow-children="vertical"
+              ref={screenshotBrowserHostRef}
+              onKeyDown={(ev: React.KeyboardEvent<HTMLDivElement>) => {
+                if (ev.key === "Escape" || ev.key === "Backspace") {
+                  onCloseScreenshotBrowser();
+                  ev.preventDefault();
+                }
+              }}
+              style={{
+                ...fullBleedRowStyle,
+                border: "1px solid rgba(255,255,255,0.14)",
+                borderRadius: 8,
+                background: "rgba(12, 18, 25, 0.96)",
+                padding: 10,
+                display: "grid",
+                gap: 8,
+                minHeight: 320,
+                position: "relative",
+              }}
+            >
+              <Focusable flow-children="horizontal" style={{ display: "flex", gap: 8 }}>
+                <Button
+                  onClick={onCloseScreenshotBrowser}
+                  aria-label="Back"
+                  style={{ minWidth: 52, width: 52, minHeight: 34, padding: 0, ...presetButtonSurface }}
+                >
+                  <BackChevronIcon size={20} />
+                </Button>
+                <Button
+                  onClick={() => {
+                    void loadRecentScreenshots(24);
+                  }}
+                  disabled={isLoadingRecentScreenshots}
+                  aria-label="Refresh screenshots"
+                  style={{ minWidth: 52, width: 52, minHeight: 34, padding: 0, ...presetButtonSurface }}
+                >
+                  <RefreshArrowIcon size={20} />
+                </Button>
+              </Focusable>
+
+              {mediaError && (
+                <div style={{ color: "#f09a8d", fontSize: 11, lineHeight: 1.35 }}>
+                  {mediaError}
+                </div>
+              )}
+
+              {recentScreenshots.length === 0 && !isLoadingRecentScreenshots ? (
+                <div style={{ color: "#9cb0c6", fontSize: 12, lineHeight: 1.4 }}>
+                  No recent screenshots found. Open Steam Media and take a screenshot, then refresh.
+                </div>
+              ) : (
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+                    gap: 8,
+                    alignContent: "start",
+                    width: "100%",
+                    maxWidth: "100%",
+                    overflow: "hidden",
+                  }}
+                >
+                  {recentScreenshots.map((item) => (
+                    <Button
+                      key={item.path}
+                      onClick={() => onSelectRecentScreenshot(item)}
+                      style={{
+                        minHeight: 144,
+                        ...presetButtonSurface,
+                        padding: 6,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "stretch",
+                        justifyContent: "flex-start",
+                        gap: 4,
+                        textAlign: "left",
+                      }}
+                    >
+                      <img
+                        src={item.preview_data_uri || toFileUri(item.path)}
+                        alt={item.name}
+                        style={{
+                          width: "100%",
+                          height: 94,
+                          objectFit: "cover",
+                          borderRadius: 4,
+                          background: "rgba(255,255,255,0.04)",
+                        }}
+                      />
+                      <span style={{ fontSize: 10, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        {item.name}
+                      </span>
+                      <span style={{ fontSize: 9, color: "#8ea2b8", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        {formatScreenshotTimestamp(item.mtime)}
+                      </span>
+                      <span style={{ fontSize: 10, color: "#d9e6f4", fontWeight: 700 }}>
+                        Size: {formatBytes(item.size_bytes ?? 0)}
+                      </span>
+                    </Button>
+                  ))}
+                </div>
+              )}
+
+            </Focusable>
+          </PanelSectionRow>
+        )}
 
         {navigationMessage && (
           <PanelSectionRow>
@@ -1601,13 +2026,6 @@ const Content: React.FC = () => {
           </>
         )}
 
-        {unifiedInput && filteredSettings.length === 0 && (
-          <PanelSectionRow>
-            <div style={{ color: "gray", padding: "8px 0", fontSize: 14 }}>
-              No matching settings found. Press Enter to ask AI.
-            </div>
-          </PanelSectionRow>
-        )}
         {isAsking && showSlowWarning && (
           <PanelSectionRow>
             <div style={{ color: "#f2cf84", fontSize: 12, padding: "6px 0" }}>
@@ -1798,6 +2216,47 @@ const Content: React.FC = () => {
           Soft warning: UI hint if a request takes longer than the warning threshold.
           <br />
           Hard timeout: backend cancels the Ollama request at this limit.
+        </div>
+      </PanelSectionRow>
+      <PanelSectionRow>
+        <div style={{ width: "100%" }}>
+          <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 4 }}>
+            Screenshot max dimension
+          </div>
+          <div style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
+            Long-edge clamp applied before sending image attachments to vision-capable models.
+          </div>
+          <Focusable
+            flow-children="horizontal"
+            style={{ display: "flex", gap: 6, width: "100%", alignItems: "stretch" }}
+          >
+            {SCREENSHOT_DIMENSION_OPTIONS.map((option) => {
+              const active = option === screenshotMaxDimension;
+              return (
+                <Button
+                  key={`dim-${option}`}
+                  onClick={() => setScreenshotMaxDimension(option)}
+                  style={{
+                    flex: 1,
+                    minHeight: 36,
+                    fontSize: 12,
+                    fontWeight: 600,
+                    padding: "4px 4px",
+                    borderRadius: 4,
+                    border: active ? "1px solid rgba(255,255,255,0.45)" : "1px solid rgba(255,255,255,0.12)",
+                    background: active
+                      ? "linear-gradient(180deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.1) 100%)"
+                      : "rgba(255,255,255,0.04)",
+                    color: active ? "#f0f4f8" : "#9fb0c0",
+                    boxShadow: active ? "inset 0 1px 0 rgba(255,255,255,0.15)" : "none",
+                  }}
+                  aria-label={`Set screenshot max dimension to ${option}`}
+                >
+                  {screenshotDimensionLabel[option]}
+                </Button>
+              );
+            })}
+          </Focusable>
         </div>
       </PanelSectionRow>
       <PanelSectionRow>
@@ -2027,6 +2486,41 @@ const Content: React.FC = () => {
         .bonsai-scope .bonsai-unified-input-host input {
           color: transparent !important;
           -webkit-text-fill-color: transparent !important;
+        }
+        .bonsai-scope .bonsai-askbar-merged {
+          transition: box-shadow 120ms ease, border-color 120ms ease;
+        }
+        .bonsai-scope .bonsai-askbar-merged:focus-within {
+          border-color: rgba(171, 199, 232, 0.85) !important;
+          box-shadow: 0 0 0 1px rgba(171, 199, 232, 0.55);
+        }
+        .bonsai-scope .bonsai-askbar-target {
+          transition: background-color 120ms ease, box-shadow 120ms ease;
+          background: transparent !important;
+          background-color: transparent !important;
+          background-image: none !important;
+          box-shadow: none !important;
+          border: none !important;
+        }
+        .bonsai-scope .bonsai-askbar-target > div,
+        .bonsai-scope .bonsai-askbar-target > span {
+          background: transparent !important;
+          background-image: none !important;
+        }
+        .bonsai-scope .bonsai-askbar-target:focus-visible {
+          background: rgba(160, 189, 220, 0.16) !important;
+          box-shadow: inset 0 0 0 1px rgba(200, 223, 245, 0.8);
+        }
+        .bonsai-scope .bonsai-attachment-preview-target:focus-visible,
+        .bonsai-scope .bonsai-attachment-preview-target :focus-visible {
+          background: rgba(176, 205, 235, 0.14) !important;
+          box-shadow: inset 0 0 0 1px rgba(206, 229, 249, 0.9);
+        }
+        .bonsai-scope .bonsai-attachment-remove-target:focus-visible,
+        .bonsai-scope .bonsai-attachment-remove-target :focus-visible {
+          background: rgba(176, 205, 235, 0.22) !important;
+          box-shadow: inset 0 0 0 1px rgba(206, 229, 249, 0.95);
+          border-radius: 6px;
         }
         .bonsai-scope [class*="SliderControlPanelGroup"] {
           width: 100% !important;

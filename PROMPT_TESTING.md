@@ -17,6 +17,14 @@ Track what prompts have been tested, what model responded, and whether the resul
 | 4 | Left 4 Dead 2 | "Set my TDP to 6 watts" | JSON block `{"tdp_watts": 6}`, sysfs write | llama3:latest | PASS | Confirmed via journalctl: 6000000 written to power1_cap |
 | 5 | Left 4 Dead 2 | "Optimize for battery life" | Low TDP (3-6W) with JSON block | llama3:latest | FAIL | Gave generic Steam Deck instructions, no JSON block (before game context was wired up) |
 
+## Release Notes
+
+### 2026-04-13 - Global Screenshots and Vision (V1) Completed
+- Added screenshot attachment flow with fullscreen recent-screenshot browser, thumbnail previews, and controller-first navigation.
+- Added multimodal ask payload support with screenshot preprocessing + dimension clamp options (`1280`, `1920`, `3160`) and persisted settings.
+- Added game-context enrichment for vision prompts (running app + attachment metadata hints), plus guardrails to prioritize in-game cues over Steam overlay UI.
+- Improved composer UX for attachments: visible chip preview, remove action, and integrated ask-bar behavior for screenshot-assisted prompts.
+
 ---
 
 ## Prompts Still Needing Testing
@@ -160,6 +168,31 @@ Track what prompts have been tested, what model responded, and whether the resul
 - [ ] Strategy prompt with screenshot attached: response references visible scene/problem details.
 - [ ] If inline visual aid is returned (map/dungeon hint), it renders inline correctly in response.
 - [ ] If inline visual cannot render, response degrades gracefully (text-only fallback, no broken UI).
+
+### Global Screenshots and Vision (V1) - Completed
+- [x] Attach target opens fullscreen screenshot browser with visible thumbnail previews.
+- [x] Screenshot browser lists recent screenshots with app-priority ordering when a game is active and global fallback when not.
+- [x] Selecting a screenshot from the grid attaches it and closes browser back to composer.
+- [x] Browser supports controller navigation and Back/Escape close path without focus traps.
+- [x] Merged action control exposes exactly 3 targets: `Attach` (left), `Ask` (center), `Mic` idle / `Stop` while asking (right).
+- [x] Remove attachment action clears composer indicator and sends next ask request as text-only.
+
+### Screenshot Dimension Clamp Settings
+- [x] Settings tab shows screenshot max dimension options `1280`, `1920`, `3160`.
+- [x] Changing max dimension persists after closing/reopening plugin.
+- [x] With `1280` selected, backend sends compressed image and response remains stable on slower hosts.
+- [x] With `1920` selected, backend accepts screenshot attachment and model response remains valid.
+- [x] With `3160` selected, large captures still avoid backend crashes; if processing fails, user gets actionable attachment error text.
+
+### Manual Deck Test Run (Staged)
+- [x] Set test environment details in **Current Test Environment** section before starting.
+- [x] Launch a game, open bonsAI, open fullscreen browser from `Attach`, pick a screenshot tile, then submit one `Ask`.
+- [x] Repeat with no active game and confirm browser still lists recent screenshots (global fallback).
+- [x] Verify attachment chip visuals and controls: source badge label, filename truncation, remove button, attach-button count badge.
+- [x] Verify button sizing/focus usability with controller only: attach button, ask/stop button, clear button, and fullscreen browser grid navigation.
+- [x] Run the dimension clamp sweep (`1280` then `1920` then `3160`) and record latency + any attachment warnings/errors in Notes.
+- [x] Close/reopen plugin after changing dimension clamp and confirm the selected value persists.
+- [x] Mark PASS/PARTIAL/FAIL for each step above and capture screenshots/log snippets for any failures.
 
 ### Spoiler Policy and Consent
 - [ ] First strategy answer includes best-effort "no spoilers by default" disclosure.

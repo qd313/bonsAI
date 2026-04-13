@@ -10,24 +10,54 @@ This document tracks all resolved issues, hardware-specific overrides, and archi
 **Symptom:** Text generation takes 15-60 seconds. Task Manager on the PC shows high CPU usage but 0% GPU 3D/Compute usage.
 **Cause:** Ollama is failing to hook into the GPU and falling back to system RAM.
 
-#### FIX A: AMD RDNA 4 (RX 9070 XT) Override
-Newer AMD cards often require a manual shader version override on Windows to trigger ROCm acceleration.
-1. Open **System Environment Variables**.
-2. Add a new User Variable:
-   - **Name:** `HSA_OVERRIDE_GFX_VERSION`
-   - **Value:** `12.0.1` (Targeting RDNA 4 architecture).
-3. **Hard Restart Ollama:** Quit the app from the System Tray, kill any `ollama.exe` in Task Manager, and relaunch.
+#### FIX A: Platform Decision Flow (Windows First, Bazzite Second)
+Pick one path based on your host machine:
+
+1. **Windows (recommended first):**
+   - Set `HSA_OVERRIDE_GFX_VERSION` if needed for your GPU (for RX 9070 XT, `12.0.1` is a known-good example).
+   - Hard restart Ollama (quit tray app, end `ollama.exe`, relaunch).
+   - Verify:
+     ```bash
+     curl -sS -m 5 http://127.0.0.1:11434/api/tags
+     ```
+
+2. **Bazzite (containerized ROCm path):**
+   - Run:
+     ```bash
+     podman run -d \
+       --restart always \
+       --device /dev/kfd \
+       --device /dev/dri \
+       --security-opt label=disable \
+       --group-add keep-groups \
+       -e HSA_OVERRIDE_GFX_VERSION="12.0.1" \
+       -e GPU_MAX_HW_QUEUES=1 \
+       -v ollama:/root/.ollama \
+       -p 11434:11434 \
+       --name ollama \
+       docker.io/ollama/ollama:rocm
+     ```
+   - Verify container and API:
+     ```bash
+     podman ps
+     curl -sS -m 5 http://127.0.0.1:11434/api/tags
+     ```
+
+Quick notes:
+- `HSA_OVERRIDE_GFX_VERSION` is hardware/driver-specific (`12.0.1` is an RX 9070 XT example, not universal).
+- `GPU_MAX_HW_QUEUES=1` is optional stability tuning.
+- `/dev/kfd` and `/dev/dri` are required for AMD ROCm GPU passthrough.
 
 #### FIX B: VRAM Management
-If the PC's VRAM is full (e.g., a game is running in 4K), Ollama will offload to CPU.
-- **Fix:** Use a smaller model for testing (e.g., `ollama run phi3:latest`) to verify the GPU pipeline works before scaling up to Llama 3 8B or larger.
+If setup is correct but responses are still slow, VRAM pressure can force CPU fallback (for example while gaming).
+- **Fix:** First test a smaller model (for example `ollama run phi3:latest`), then scale up.
 
-#### FIX C: The Vulkan Override (The Silver Bullet for RDNA 4)
-If ROCm overrides fail and the PC still uses CPU inference, bypass ROCm entirely using Vulkan:
+#### FIX C: Windows Vulkan Fallback (if ROCm path still fails)
+If Windows still falls back to CPU after FIX A:
 1. Open Windows **Environment Variables**.
-2. Create a new User Variable: `OLLAMA_VULKAN` set to `1`.
-3. Remove any `HSA_OVERRIDE_GFX_VERSION` variables.
-4. Hard restart the Ollama service.
+2. Create a new User Variable: `OLLAMA_VULKAN=1`.
+3. Remove stale/conflicting ROCm override values.
+4. Hard restart Ollama and re-test.
 ---
 
 ## 2. Network & Communication (The Bridge)
@@ -49,6 +79,33 @@ If ROCm overrides fail and the PC still uses CPU inference, bypass ROCm entirely
 
 - TODO: toggle switch in Ollama "Expose Ollama to the network"
 - TODO: make sure the user installs the appropriate AI models
+
+---
+
+## 2.5 Screenshot Vision Setup (V1)
+
+### Required model capability
+- Screenshot attachments only work with Ollama models that support image input (vision/multimodal models).
+- If a non-vision model is active, asks still run but image context may be ignored or return an attachment/model error.
+
+### Configure screenshot size clamp
+- Open bonsAI `Settings` tab.
+- Set **Screenshot max dimension** to one of:
+  - `1280` (smallest payload, best for speed)
+  - `1920` (balanced)
+  - `3160` (largest detail, highest payload cost)
+- This clamp is applied to the image long edge before upload when preprocessing is available.
+
+### Screenshot sources in V1
+- `Attach` opens a fullscreen screenshot browser with thumbnail previews.
+- Browser content is populated from recent Steam screenshot files discovered on-device.
+- Ordering behavior: best-effort active-game-first when AppID is available, then fallback to global recent screenshots.
+- Current boundary: there is no supported Steam screenshot selection API in this project yet, so filesystem discovery remains the active path.
+
+### Common failures and fixes
+- **Attachment too large:** lower screenshot max dimension to `1280` in Settings.
+- **Image preprocessing fallback warning:** install Pillow in plugin runtime if you need guaranteed resize/compression behavior on very large captures.
+- **Model rejects image input:** switch to an Ollama vision-capable model.
 
 ---
 
@@ -96,3 +153,34 @@ If ROCm overrides fail and the PC still uses CPU inference, bypass ROCm entirely
 - Verify QAM reflection with per-game profile enabled and disabled.
 - Verify after closing/reopening QAM Performance tab.
 - Verify after Steam restart and full reboot.
+
+## 5. bonsai shortcut setup
+## 🚀 Pro-Tip: Create a Global Quick-Launch Shortcut for BonsAI
+
+Because Decky Loader acts as a secure container for plugins, we cannot force a custom button onto the main Steam interface. However, whether you are on standard SteamOS or running a Bazzite Gamescope session, you can use a native **Steam Input Macro** to instantly open BonsAI from *anywhere* (in-game or on the Home Screen) with a single button combination.
+
+We recommend binding this to a **Guide Button Chord** (e.g., holding the `Steam` or `Guide` button + `R4`). This ensures the shortcut works globally without interfering with your standard in-game controls.
+
+### How to set up the BonsAI Quick-Launch Macro:
+
+1. **Access Chord Settings:**
+   * Press the `Steam` button and go to **Settings** > **Controller**.
+   * Scroll down to **Guide Button Chord Layout** and click **Edit**.
+   * Click **Edit Layout**.
+
+2. **Pick Your Trigger Button:**
+   * Navigate to the **Buttons** tab (or wherever you want to map this, such as the Back Grips).
+   * Find an available button, like `R4`, and select it.
+
+3. **Build the Macro Sequence:**
+   You will need to stack commands and add slight delays so the Steam UI has time to catch up to the inputs. 
+
+   * **Command 1 (Open Menu):** Select `System` > `Quick Access Menu`.
+   * **Command 2 (Navigate to Decky):** Press the Gear icon next to your new command -> `Add Extra Command`. Set this command to `D-Pad Down`. 
+     * *Important:* Click the Gear icon next to Command 2, select `Settings`, and increase the **Fire Start Delay** to `100` or `150` (to give the QAM time to open).
+   * **Command 3, 4, etc. (Scroll down):** Repeat the `Add Extra Command` process for `D-Pad Down` as many times as needed to reach the Decky plug icon in your specific left-rail list. (Increase the Fire Start Delay slightly for each new command, e.g., `200`, `250`).
+   * **Command 5 (Open Decky):** Add one final Extra Command mapped to the `A Button` to enter the Decky menu. (Set Fire Start Delay to roughly `50` higher than the last command).
+   * **Command 6 (Scroll to BonsAI):** Depending on where BonsAI lives in your specific plugin list, add subsequent `D-Pad Down` and `A Button` extra commands with increasing delays to finalize the sequence.
+
+**Testing Your Macro:**
+Once built, hold the `Steam` button and press your assigned button (e.g., `R4`). You should see the QAM fly open and automatically navigate straight into the BonsAI panel! If it misses a step, go back into the chord settings and slightly increase the **Fire Start Delay** for the step that failed.

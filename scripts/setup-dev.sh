@@ -2,7 +2,8 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+cd "$REPO_ROOT"
 
 # ---------- colors ----------
 red()   { printf '\033[1;31m%s\033[0m\n' "$*"; }
@@ -61,11 +62,11 @@ echo
 # ========== 3. Decky CLI ==========
 bold "[3/5] Checking Decky CLI..."
 
-CLI_BIN="$SCRIPT_DIR/cli/decky"
+CLI_BIN="$REPO_ROOT/cli/decky"
 if [[ -x "$CLI_BIN" ]]; then
     green "  Decky CLI already installed at $CLI_BIN"
 else
-    mkdir -p "$SCRIPT_DIR/cli"
+    mkdir -p "$REPO_ROOT/cli"
     ARCH="$(uname -m)"
     OS="$(uname -s)"
     DL_URL=""
@@ -134,7 +135,7 @@ echo
 
 cyan "========================================"
 green "  Setup complete! You can now run:"
-echo "    ./build.sh          # build + deploy to Steam Deck"
-echo "    ./build.sh local    # build + deploy locally"
-echo "    ./build.sh release  # build distributable zip"
+echo "    ./scripts/build.sh          # build + deploy to Steam Deck"
+echo "    ./scripts/build.sh local    # build + deploy locally"
+echo "    ./scripts/build.sh release  # build distributable zip"
 cyan "========================================"

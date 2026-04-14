@@ -1,6 +1,7 @@
 # setup-dev.ps1 — Load connection details from .env
-if (Test-Path "$PSScriptRoot\.env") {
-    Get-Content "$PSScriptRoot\.env" | ForEach-Object {
+$RepoRoot = Split-Path -Parent $PSScriptRoot
+if (Test-Path "$RepoRoot\.env") {
+    Get-Content "$RepoRoot\.env" | ForEach-Object {
         if ($_ -match '^\s*([^#]\S+?)\s*=\s*(.+)$') {
             Set-Variable -Name $matches[1] -Value $matches[2].Trim()
         }
@@ -44,4 +45,4 @@ ssh -t "$User@$HostIp" "printf '%s' '$b64' | base64 -d | tr -d '\r' > /tmp/decky
 Write-Host "Taking ownership of the plugin folder..."
 ssh -t "$User@$HostIp" "sudo mkdir -p ~/homebrew/plugins/$PluginName && sudo chown -R ${User}:${User} ~/homebrew/plugins/$PluginName"
 
-Write-Host "=== Setup Complete! Your build.ps1 will now run fully automatically. ==="
+Write-Host "=== Setup Complete! Run .\scripts\build.ps1 from the repo root to build and deploy. ==="

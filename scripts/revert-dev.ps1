@@ -1,6 +1,7 @@
 # revert-dev.ps1 — Load connection details from .env
-if (Test-Path "$PSScriptRoot\.env") {
-    Get-Content "$PSScriptRoot\.env" | ForEach-Object {
+$RepoRoot = Split-Path -Parent $PSScriptRoot
+if (Test-Path "$RepoRoot\.env") {
+    Get-Content "$RepoRoot\.env" | ForEach-Object {
         if ($_ -match '^\s*([^#]\S+?)\s*=\s*(.+)$') {
             Set-Variable -Name $matches[1] -Value $matches[2].Trim()
         }

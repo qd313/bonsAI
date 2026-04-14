@@ -4,7 +4,7 @@
 - ALWAYS capture and inspect the full stdout and stderr of the actual failing command before forming hypotheses; NEVER rely solely on exit codes or indirect diagnostics from surrounding code.
 - NEVER hardcode credentials, secrets, IP addresses, hostnames, or any developer-local configuration in version-controlled files; ALWAYS externalize them to a gitignored `.env` (loaded at runtime) with a committed `.env.example` template documenting every required variable.
 - ALWAYS validate runtime/deployment parity before debugging behavior: after refactors, prove all moved modules import and load on target (plugin startup logs plus a smoke RPC) before changing feature logic or UI.
-- ALWAYS run `./build.ps1` after any Deck-facing code change during debugging and confirm `plugin_loader.service` startup is clean before starting the next hypothesis loop.
+- ALWAYS run `./scripts/build.ps1` (Windows) or `./scripts/build.sh` (Linux) after any Deck-facing code change during debugging and confirm `plugin_loader.service` startup is clean before starting the next hypothesis loop.
 
 ## Frontend UI (src/)
 - ALWAYS use Decky-Frontend-lib components for UI elements to maintain a native SteamOS look and feel.
@@ -23,5 +23,5 @@ NEVER write CSS overrides targeting third-party component internals based on ass
 ## Documentation
 - ALWAYS rank any newly added future features using the star system
 - ALWAYS re-sort the list when adding so that the list maintains the sort order of least effort/risk (1 star) to most effort/risk (6 stars)
-- ALWAYS, when a feature is marked complete, update all affected project docs in the same change set (`TODO.md`, `FUTURE_FEATURES.md`, testing/install docs) and set status/checklists to reflect completion.
+- ALWAYS, when a feature is marked complete, update all affected project docs in the same change set (`docs/roadmap.md`, `docs/prompt-testing.md`, `docs/troubleshooting.md` as applicable) and set status/checklists to reflect completion.
 - ALWAYS include a concise changelog-style implementation note for each completed feature (what shipped, where it was implemented, and user-visible behavior), so release notes can be generated directly from documentation history.

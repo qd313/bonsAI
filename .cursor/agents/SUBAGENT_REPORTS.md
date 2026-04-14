@@ -6,7 +6,7 @@ Structured findings from Cursor subagents in this folder (for example `foss-advo
 
 - Add a new dated section under **Report log** after each review (newest first).
 - Copy the matching **Template** block and fill in only confirmed items; if the agent outputs exactly `No issues found`, record that instead of inventing findings.
-- Optional: one section can cover multiple files or scopes if you label them (e.g. `codebase`, `TODO.md`).
+- Optional: one section can cover multiple files or scopes if you label them (e.g. `codebase`, `docs/roadmap.md`).
 
 ---
 
@@ -136,6 +136,6 @@ Specific refactor: Extract DebugTab/AboutTab components and preset/category data
 ```text
 Changes made: backend service extraction (settings_service, tdp_service, ollama_service), frontend tab/data extraction (DebugTab, AboutTab, presets.ts), and expanded parity tests.
 Regression risk checks: python -m unittest discover -s tests -p "test_*.py"; pnpm test; pnpm run build (pass, with existing TS5103 warning from plugin-typescript).
-Tests and docs status: Added tests for new service/data modules and updated DEVELOPMENT.md + CHANGELOG.md architecture traceability notes.
+Tests and docs status: Added tests for new service/data modules and updated docs/development.md + CHANGELOG.md architecture traceability notes.
 Trade-offs: Prioritized safe seam extraction and modularity over deep behavior changes (model fallback policy remains unchanged in this milestone).
 ```

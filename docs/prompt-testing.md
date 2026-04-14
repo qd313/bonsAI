@@ -94,7 +94,7 @@ Track what prompts have been tested, what model responded, and whether the resul
 ## Background Prompt Completion (V1) - Feature Shipped, Verification Matrix In Progress
 
 Status note:
-- Feature is implemented and marked complete in `TODO.md`.
+- Feature is implemented and marked complete in [roadmap.md](roadmap.md).
 - The checklist below is the ongoing regression/verification matrix for post-ship hardening.
 
 ### Lifecycle and Restore

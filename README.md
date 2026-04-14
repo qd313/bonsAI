@@ -38,7 +38,7 @@ bonsAI is a Decky Loader plugin for running AI help on hardware you control.
 Run from repo root:
 
 ```powershell
-.\src\setup_ollama.ps1
+.\scripts\setup_ollama.ps1
 ```
 
 ### Manual one-click commands
@@ -52,7 +52,7 @@ ollama pull llama3
 ollama run llama3 "Hello from bonsAI"
 ```
 
-If the Deck cannot connect, see firewall and `OLLAMA_HOST` guidance in `INSTALL_STEPS_TROUBLESHOOTING.md`.
+If the Deck cannot connect, see firewall and `OLLAMA_HOST` guidance in [docs/troubleshooting.md](docs/troubleshooting.md).
 
 ## Set up Ollama (Linux / shell)
 
@@ -61,7 +61,7 @@ If the Deck cannot connect, see firewall and `OLLAMA_HOST` guidance in `INSTALL_
 Run from repo root:
 
 ```bash
-./setup-ollama.sh
+./scripts/setup-ollama.sh
 ```
 
 ### Manual one-click commands
@@ -79,7 +79,7 @@ ollama run llama3 "Hello from bonsAI"
 - Alternate local text model: `gemma4`
 - Screenshot/vision workflows: use a multimodal Ollama model that supports image input.
 
-See `INSTALL_STEPS_TROUBLESHOOTING.md` for advanced tuning and vision troubleshooting details.
+See [docs/troubleshooting.md](docs/troubleshooting.md) for advanced tuning and vision troubleshooting details.
 
 ## Configure bonsAI to your Ollama host
 
@@ -89,10 +89,12 @@ See `INSTALL_STEPS_TROUBLESHOOTING.md` for advanced tuning and vision troublesho
 - Test with a simple prompt.
 
 If connection fails, start with:
-- `INSTALL_STEPS_TROUBLESHOOTING.md` (network/firewall/GPU notes)
+- [docs/troubleshooting.md](docs/troubleshooting.md) (network/firewall/GPU notes)
 
 ## Developer and advanced docs
 
-- Developers: `DEVELOPMENT.md`
-- Power users and troubleshooting: `INSTALL_STEPS_TROUBLESHOOTING.md`
-- Release history: `CHANGELOG.md`
+- Developers: [docs/development.md](docs/development.md)
+- Power users and troubleshooting: [docs/troubleshooting.md](docs/troubleshooting.md)
+- Roadmap and future planning: [docs/roadmap.md](docs/roadmap.md)
+- Prompt testing tracker: [docs/prompt-testing.md](docs/prompt-testing.md)
+- Release history: [CHANGELOG.md](CHANGELOG.md)

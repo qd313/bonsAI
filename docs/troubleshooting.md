@@ -3,7 +3,7 @@
 This document is the advanced/power-user guide for bonsAI.
 
 For first-time setup, use `README.md` first (simple self-hosted install flow, Ollama setup, and starter model pulls).
-For contributor workflows, use `DEVELOPMENT.md` (Windows/Bazzite build and deploy paths).
+For contributor workflows, use [development.md](development.md) (Windows/Bazzite build and deploy paths).
 
 This file tracks resolved issues, hardware-specific overrides, and architectural constraints for the bonsAI (Backend Ollama Node for Steam A.I.) project.
 
@@ -114,10 +114,10 @@ If Windows still falls back to CPU after FIX A:
 
 ---
 
-## 3. Build & Deploy (`build.ps1` / `setup-dev.ps1`)
+## 3. Build & Deploy (`scripts/build.ps1` / `scripts/setup-dev.ps1`)
 
 ### ERROR: `sudo: a password is required` or build hangs at "Overwriting system files"
-**Symptom:** `build.ps1` fails or hangs indefinitely at the `ssh` deploy step. Running `setup-dev.ps1` then `build.ps1` doesn't help, or only works once.
+**Symptom:** `scripts/build.ps1` fails or hangs indefinitely at the `ssh` deploy step. Running `scripts/setup-dev.ps1` then `scripts/build.ps1` doesn't help, or only works once.
 
 **Root causes (three separate bugs, all required fixing):**
 
@@ -125,7 +125,7 @@ If Windows still falls back to CPU after FIX A:
    - **Fix:** Use `sudo install -o root -g root -m 0440` to write the file, never plain `mv` or `tee` without explicit ownership.
 
 2. **Command-specific NOPASSWD unreliable over non-interactive SSH on SteamOS:** Even with correct ownership, comma-separated `Cmnd_Spec` entries (e.g. `NOPASSWD: /usr/bin/systemctl stop ..., /usr/bin/systemctl start ...`) were not honored by SteamOS sudo when invoked over non-interactive SSH (no TTY). `sudo -l` showed them, but `sudo -n <cmd>` still demanded a password.
-   - **Fix:** Use a broad dev-mode override (`Defaults:<user> !authenticate` + `NOPASSWD: ALL`) during development, removed by `revert-dev.ps1`.
+   - **Fix:** Use a broad dev-mode override (`Defaults:<user> !authenticate` + `NOPASSWD: ALL`) during development, removed by `scripts/revert-dev.ps1`.
 
 3. **`chown` syntax:** `chown -R deck deck /path` passes two positional file arguments instead of `user:group`. Correct form is `chown -R deck:deck /path`.
 

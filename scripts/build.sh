@@ -2,7 +2,8 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+cd "$REPO_ROOT"
 
 # ---------- colors ----------
 red()   { printf '\033[1;31m%s\033[0m\n' "$*"; }
@@ -13,7 +14,7 @@ bold()  { printf '\033[1m%s\033[0m\n' "$*"; }
 # ---------- usage ----------
 usage() {
     cat <<'EOF'
-Usage: ./build.sh [command] [options]
+Usage: ./scripts/build.sh [command] [options]
 
 Commands:
   dev           Build + deploy to remote Steam Deck (default)
@@ -47,7 +48,7 @@ done
 
 # ---------- load .env ----------
 if [[ ! -f .env ]]; then
-    red ".env not found. Run ./setup-dev.sh first."
+    red ".env not found. Run ./scripts/setup-dev.sh first."
     exit 1
 fi
 
@@ -136,7 +137,7 @@ ensure_pnpm() {
 
     if [[ -z "$pnpm_bin" ]]; then
         red "pnpm is not available in this shell."
-        echo "Run ./setup-dev.sh again, then open a new terminal and retry."
+        echo "Run ./scripts/setup-dev.sh again, then open a new terminal and retry."
         exit 1
     fi
 }
@@ -170,7 +171,7 @@ ensure_node() {
         red "node is not available in this shell."
         echo "Install Node.js (LTS) and retry, or run:"
         echo "  pnpm env use --global lts"
-        echo "Then open a new terminal and run ./build.sh again."
+        echo "Then open a new terminal and run ./scripts/build.sh again."
         exit 1
     fi
 }
@@ -221,15 +222,15 @@ deploy_local() {
 
 # ---------- release: Decky CLI zip ----------
 do_release() {
-    CLI_BIN="$SCRIPT_DIR/cli/decky"
+    CLI_BIN="$REPO_ROOT/cli/decky"
     if [[ ! -x "$CLI_BIN" ]]; then
         red "Decky CLI not found at $CLI_BIN"
-        echo "Run ./setup-dev.sh to install it."
+        echo "Run ./scripts/setup-dev.sh to install it."
         exit 1
     fi
 
     bold "Building plugin zip with Decky CLI..."
-    sudo "$CLI_BIN" plugin build "$SCRIPT_DIR"
+    sudo "$CLI_BIN" plugin build "$REPO_ROOT"
 
     if ls out/*.zip 1>/dev/null 2>&1; then
         green "Release build complete!"

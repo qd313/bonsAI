@@ -1,4 +1,48 @@
-# Future Features -- Clean Roadmap
+# bonsAI Roadmap
+
+This file merges the active roadmap with detailed future planning. For the refactor sweep notes, see [refactor-specialist-sweep.md](refactor-specialist-sweep.md).
+
+## Active roadmap (from former TODO.md)
+
+## Completed
+- [x] ★ **Beta Disclaimer Modal:** Show one-time experimental-software warning with risk acknowledgment and bug-report link.
+- [x] ★ **Suggested AI Prompts:** Show curated prompt presets, randomize initial suggestions, and generate contextual follow-ups after responses.
+- [x] ★★ **Ollama Network Routing Fix:** Route frontend requests through Decky backend (`call("ask_game_ai", ...)`) to resolve cross-origin failures.
+- [x] ★★ **Deck and PC Connection Settings:** Add connection-focused settings including visible Deck IP and PC IP management.
+- [x] ★★ **Diagnostic, Latency, and Timeout Warnings:** Return `elapsed_seconds`, show slow-response warnings, and enforce backend timeout messaging.
+- [x] ★★ **Configurable Latency and Timeout Controls:** Add persisted warning/timeout settings with side increment controls (`-` / `+`) in Settings.
+- [x] ★★ **Iconography Pass (Tabs + Plugin + Ask Button):** Add icons to all tabs (bonsAI bonsai-tree icon, Settings gear, Debug bug, About unchanged), switch plugin icon to bonsai SVG, and show the stock diamond beside `Ask` text.
+- [x] ★★ **Persist Last Question and Answer:** Restore prior session state when reopening QAM via Decky settings storage.
+- [x] ★★ **Unified Search + Ask Input:** Merge settings search and AI question entry into one shared input flow.
+- [x] ★★★ **TDP Automation via AI Output:** Parse AI recommendations and apply constrained TDP values through safe sysfs write paths.
+- [x] ★★★ **D-pad Response Scrolling:** Split long responses into focusable chunks for controller-first navigation.
+
+## In Progress
+- [ ] ★★★ **QAMP Reflection (Phase 1 - Safe Default):** Show applied-state confirmation and explicit verification guidance when QAM sliders do not immediately mirror hardware writes.
+  - Requirement: every BonsAI performance action must be user-verifiable after execution.
+  - Initial behavior: keep sysfs write path as source of truth and guide users to re-open QAM Performance to verify reflected values.
+
+## Known Bugs
+- [x] ★ **Question Overlay Alignment Drift:** The 3-line question overlay has minor horizontal spacing mismatch vs native `TextField` internals.
+- [ ] ★★ **D-pad Scroll Bottom Cutoff:** Controller navigation can stop before the final response chunk is fully visible even when touch scroll can reach it.
+
+## Up Next
+- [ ] ★★ **Prompt Testing and Tuning:** Systematically validate prompt quality across games and scenarios (see [prompt-testing.md](prompt-testing.md)).
+- [ ] ★★★ **Desktop Mode Debug Note Save (Steam Deck):** Let BonsAI save emulator/debug notes from Game Mode to `~/Desktop/BonsAI_notes/<user-note-name>.md` for later Desktop Mode troubleshooting.
+  - Behavior: user names the note in an initial or follow-up prompt, BonsAI requests explicit permission before writing, and writes are appended with timestamps.
+- [ ] ★★★ **QAMP Verification Checklist:** Verify behavior across per-game profile modes, QAM reopen, Steam restart/reboot, and GPU-related recommendations.
+  - [ ] Verify behavior with per-game profile on/off.
+  - [ ] Verify behavior after closing and reopening the QAM Performance tab.
+  - [ ] Verify behavior after Steam restart and full reboot.
+  - [ ] Verify behavior when prompt includes GPU clock recommendations.
+- [ ] ★★★★★ **QAMP Reflection (Phase 2 - Experimental Opt-In):** Attempt Steam profile sync only behind explicit warning toggles. *Blocked on Phase 1.*
+  - Risks: undocumented internals, Steam update breakage, restart/reboot requirements, and profile corruption risk.
+  - Candidate path: fragile `config.vdf` / protobuf edits gated behind experimental mode only.
+
+
+---
+
+## Detailed future reference (do not implement yet)
 
 Ranked by effort and risk using the GTA star system:
 - `★` easiest
@@ -82,7 +126,7 @@ Ranked by effort and risk using the GTA star system:
 - **Goal:** Improve random prompt preset browsing with animated fade transitions and carousel navigation controls.
 - **Expected UX:** preset chips fade in/out during rotation and provide lower-right arrow controls for manual next/previous browsing.
 - **Primary work:** preset display container refactor, transition timing rules, and controller-friendly arrow focus behavior.
-- **Files:** `src/index.tsx`, `PROMPT_TESTING.md`.
+- **Files:** `src/index.tsx`, `prompt-testing.md`.
 - **Depends on:** existing preset randomization/category logic.
 - **Not in scope:** changing core preset taxonomy/model routing semantics.
 
@@ -92,7 +136,7 @@ Ranked by effort and risk using the GTA star system:
 - **Expected UX:** tapping strategy preset switches to `Strategy Guide` mode and uses placeholder text like `Describe the level or problem`.
 - **Includes:** Steam Input-aware recommendations when control friction is relevant (gyro/trackpad/layout tuning).
 - **Policy:** optional `Cheat / Fast Pass` section appears only when user explicitly asks for speedrun/shortcut guidance.
-- **Files:** `src/index.tsx`, `main.py`, `PROMPT_TESTING.md`.
+- **Files:** `src/index.tsx`, `main.py`, `prompt-testing.md`.
 - **Depends on:** **Mode Selector Dropdown (Main Screen)**.
 - **Not in scope:** guaranteed game-perfect walkthroughs for every title.
 
@@ -104,7 +148,7 @@ Ranked by effort and risk using the GTA star system:
   - unrestricted spoilers require explicit user permission
   - spoiler details are emitted/rendered in tap-to-reveal blocks by default
 - **Settings note:** allow an optional setting to disable spoiler masking after consent (show spoilers directly).
-- **Files:** `src/index.tsx`, `main.py`, `PROMPT_TESTING.md`.
+- **Files:** `src/index.tsx`, `main.py`, `prompt-testing.md`.
 - **Depends on:** **Strategy Guide Prompt Path (Beta)**.
 - **Not in scope:** hard guarantees that all model outputs are spoiler-free in every edge case.
 
@@ -191,14 +235,14 @@ Ranked by effort and risk using the GTA star system:
 - **Required behavior:**
   - checklist items are interactive and scoped to the current chat only
   - follow-up questions can update progress even when user reports progress in text without manually ticking boxes
-- **Files:** `src/index.tsx`, `main.py`, `PROMPT_TESTING.md`.
+- **Files:** `src/index.tsx`, `main.py`, `prompt-testing.md`.
 - **Depends on:** **Strategy Guide Prompt Path (Beta)**.
 - **Not in scope:** long-term checklist persistence across restarts/sessions.
 
 ### ★★★★★ Global BonsAI Quick-Launch via Steam Input Macro (Documentation Spike)
 Goal: Provide users with a near-instant way to summon BonsAI from anywhere—whether in-game or on the SteamOS Home Screen—using native system tools, completely bypassing the need for brittle UI hacks.
 Primary work: Document and test the optimal Guide Button Chord macro sequence required to open the QAM, navigate to the Decky tab, and launch BonsAI automatically.
-Files: README.md, docs/setup.md.
+Files: README.md, docs/development.md.
 Depends on: Native Steam Input functionality (Guide Button Chord Layout) and the user's specific QAM tab order.
 Worth-it assessment: Extremely high. It requires zero code maintenance, carries no performance overhead, is completely immune to Steam client updates, and safely leverages official Valve tools.
 Go/No-Go gate: GO. Requires no code implementation or internal module patching.

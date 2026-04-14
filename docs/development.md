@@ -45,7 +45,7 @@ Use local env files for host/device config.
 Run from repo root:
 
 ```powershell
-.\setup-dev.ps1
+.\scripts\setup-dev.ps1
 ```
 
 What it does at a high level:
@@ -57,7 +57,7 @@ What it does at a high level:
 ### Build and deploy
 
 ```powershell
-.\build.ps1
+.\scripts\build.ps1
 ```
 
 High-level behavior:
@@ -73,7 +73,7 @@ High-level behavior:
 Run from repo root:
 
 ```bash
-./setup-dev.sh
+./scripts/setup-dev.sh
 ```
 
 What it does at a high level:
@@ -86,28 +86,28 @@ What it does at a high level:
 ### Build and deploy modes
 
 ```bash
-./build.sh
+./scripts/build.sh
 ```
 
 Available modes:
-- `./build.sh` (default `dev`): build + deploy to remote Deck
-- `./build.sh local`: build + deploy locally on this Linux/Bazzite machine
-- `./build.sh release`: build distributable zip via Decky CLI
-- `./build.sh deploy`: deploy last build without rebuilding
+- `./scripts/build.sh` (default `dev`): build + deploy to remote Deck
+- `./scripts/build.sh local`: build + deploy locally on this Linux/Bazzite machine
+- `./scripts/build.sh release`: build distributable zip via Decky CLI
+- `./scripts/build.sh deploy`: deploy last build without rebuilding
 
 ## Ollama for development testing
 
 If you need a local/LAN Ollama test host:
 
-- Windows helper: `src/setup_ollama.ps1`
-- Linux helper: `setup-ollama.sh`
+- Windows helper: `scripts/setup_ollama.ps1`
+- Linux helper: `scripts/setup-ollama.sh`
 
 Then point bonsAI settings to the matching Ollama host/base URL.
 
 ## Docs and references
 
-- Prompt tests and quality tracking: `PROMPT_TESTING.md`
-- Power-user troubleshooting: `INSTALL_STEPS_TROUBLESHOOTING.md`
+- Prompt tests and quality tracking: [prompt-testing.md](prompt-testing.md)
+- Power-user troubleshooting: [troubleshooting.md](troubleshooting.md)
 - Decky frontend library: [https://github.com/SteamDeckHomebrew/decky-frontend-lib](https://github.com/SteamDeckHomebrew/decky-frontend-lib)
 - Decky docs/wiki: [https://wiki.deckbrew.xyz/](https://wiki.deckbrew.xyz/)
 

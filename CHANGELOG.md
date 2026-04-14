@@ -12,6 +12,7 @@ All notable changes to this project are documented in this file.
 - Added baseline service/data tests: `tests/test_settings_service.py`, `tests/test_ollama_service.py`, and `src/data/presets.test.ts`.
 
 ### Changed
+- Reorganized documentation under `docs/` (`development.md`, `troubleshooting.md`, `prompt-testing.md`, `roadmap.md`, `refactor-specialist-sweep.md`) and moved dev automation scripts under `scripts/` with repository-root resolution for `.env`, builds, and Decky CLI paths.
 - Refined frontend request state handling and response UX behavior in `src/index.tsx`.
 - Updated backend request lifecycle and orchestration paths in `main.py` for more resilient local AI interactions.
 - Updated roadmap and prioritization details in `TODO.md` and `FUTURE_FEATURES.md`, including moving completed items into `Implemented Baseline` where applicable.

@@ -110,3 +110,19 @@ Then point bonsAI settings to the matching Ollama host/base URL.
 - Power-user troubleshooting: `INSTALL_STEPS_TROUBLESHOOTING.md`
 - Decky frontend library: [https://github.com/SteamDeckHomebrew/decky-frontend-lib](https://github.com/SteamDeckHomebrew/decky-frontend-lib)
 - Decky docs/wiki: [https://wiki.deckbrew.xyz/](https://wiki.deckbrew.xyz/)
+
+## Refactor architecture notes
+
+Milestone 2 splits heavy orchestration paths while preserving runtime behavior:
+
+- Backend services: `backend/services/`
+  - `settings_service.py` for settings load/save/sanitization helpers
+  - `tdp_service.py` for TDP/sysfs write helpers
+  - `ollama_service.py` for prompt assembly and Ollama transport formatting
+- Frontend components/data:
+  - `src/components/DebugTab.tsx`
+  - `src/components/AboutTab.tsx`
+  - `src/data/presets.ts`
+  - `src/utils/settingsAndResponse.ts`
+
+`main.py` and `src/index.tsx` remain the integration shells for Decky RPC/UI wiring and should continue to be treated as composition entrypoints.

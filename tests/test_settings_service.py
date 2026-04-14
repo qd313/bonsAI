@@ -1,0 +1,98 @@
+import json
+import tempfile
+import unittest
+from pathlib import Path
+
+from backend.services.settings_service import (
+    load_settings,
+    sanitize_settings,
+    save_settings,
+)
+
+
+class _Logger:
+    """Minimal logger stub for service tests that do not assert log payloads."""
+
+    def warning(self, *_args, **_kwargs):
+        return None
+
+    def exception(self, *_args, **_kwargs):
+        return None
+
+
+class SettingsServiceTests(unittest.TestCase):
+    """Service-level tests for settings normalization and persistence round-trip behavior."""
+
+    def test_sanitize_settings_clamps_and_defaults(self):
+        """Verify sanitization clamps numbers and falls back for invalid enum-like values."""
+        sanitized = sanitize_settings(
+            data={
+                "latency_warning_seconds": 500,
+                "request_timeout_seconds": "5",
+                "unified_input_persistence_mode": "invalid",
+                "screenshot_max_dimension": "1920",
+            },
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=600,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="persist_all",
+            valid_screenshot_dimensions={1280, 1920, 3160},
+            default_screenshot_dimension=1280,
+        )
+        self.assertEqual(sanitized["latency_warning_seconds"], 300)
+        self.assertEqual(sanitized["request_timeout_seconds"], 10)
+        self.assertEqual(sanitized["unified_input_persistence_mode"], "persist_all")
+        self.assertEqual(sanitized["screenshot_max_dimension"], 1920)
+
+    def test_load_save_settings_round_trip(self):
+        """Ensure load/save helpers persist sanitized values and reload them consistently."""
+        logger = _Logger()
+
+        def sanitize_fn(data):
+            return sanitize_settings(
+                data=data,
+                default_latency_warning_seconds=15,
+                default_request_timeout_seconds=120,
+                min_latency_warning_seconds=5,
+                max_latency_warning_seconds=300,
+                min_request_timeout_seconds=10,
+                max_request_timeout_seconds=600,
+                valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+                default_persistence_mode="persist_all",
+                valid_screenshot_dimensions={1280, 1920, 3160},
+                default_screenshot_dimension=1280,
+            )
+
+        with tempfile.TemporaryDirectory() as tmp:
+            settings_dir = Path(tmp)
+            settings_path = settings_dir / "settings.json"
+
+            baseline = load_settings(str(settings_path), sanitize_fn, logger)
+            self.assertEqual(baseline["latency_warning_seconds"], 15)
+
+            persisted = save_settings(
+                path=str(settings_path),
+                settings_dir=str(settings_dir),
+                incoming={"latency_warning_seconds": 60, "unified_input_persistence_mode": "no_persist"},
+                current=baseline,
+                sanitize_func=sanitize_fn,
+                logger=logger,
+            )
+            self.assertEqual(persisted["latency_warning_seconds"], 60)
+            self.assertEqual(persisted["unified_input_persistence_mode"], "no_persist")
+
+            with settings_path.open("r", encoding="utf-8") as f:
+                on_disk = json.load(f)
+            self.assertEqual(on_disk["latency_warning_seconds"], 60)
+
+            loaded = load_settings(str(settings_path), sanitize_fn, logger)
+            self.assertEqual(loaded["latency_warning_seconds"], 60)
+            self.assertEqual(loaded["unified_input_persistence_mode"], "no_persist")
+
+
+if __name__ == "__main__":
+    unittest.main()

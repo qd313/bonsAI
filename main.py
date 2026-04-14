@@ -1,25 +1,63 @@
 import asyncio
 import base64
+import fcntl
 import glob
 import io
+import ipaddress
 import json
 import mimetypes
 import os
 import re
 import shutil
 import socket
+import struct
 import subprocess
+import sys
 import time
 import urllib.request
 import urllib.error
-from urllib.parse import urlparse
 from typing import Any, Optional, Tuple
 
 import decky
 
+PLUGIN_ROOT = os.path.dirname(os.path.abspath(__file__))
+if PLUGIN_ROOT not in sys.path:
+    sys.path.insert(0, PLUGIN_ROOT)
+
+from backend.services.ollama_service import (
+    build_system_prompt,
+    format_ai_response,
+    post_ollama_chat,
+)
+from backend.services.settings_service import (
+    clamp_int,
+    load_settings as load_settings_from_disk,
+    sanitize_screenshot_max_dimension,
+    sanitize_settings,
+    sanitize_unified_input_persistence_mode,
+    save_settings as save_settings_to_disk,
+)
+from backend.services.tdp_service import (
+    apply_tdp as apply_tdp_service,
+    clean_env,
+    find_amdgpu_hwmon,
+    write_sysfs,
+)
+from refactor_helpers import (
+    build_ollama_chat_url,
+    normalize_ollama_base,
+    parse_tdp_recommendation,
+    select_ollama_models,
+)
+
 logger = decky.logger
 
 class Plugin:
+    """Primary Decky backend orchestrator that preserves RPC contracts and lifecycle state.
+
+    The class coordinates request flow, background task state, and service delegation so behavior stays
+    stable while heavy logic is extracted into focused helper and service modules.
+    """
     DEFAULT_LATENCY_WARNING_SECONDS = 15
     DEFAULT_REQUEST_TIMEOUT_SECONDS = 120
     DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE = "persist_all"
@@ -40,6 +78,7 @@ class Plugin:
     SETTINGS_FILENAME = "settings.json"
 
     def __init__(self):
+        """Initialize plugin runtime state used for background-request coordination."""
         self._background_lock = asyncio.Lock()
         self._background_task: Optional[asyncio.Task] = None
         self._background_state: dict = self._new_background_state()
@@ -56,60 +95,51 @@ class Plugin:
 
     @staticmethod
     def _clamp_int(value: Any, default: int, minimum: int, maximum: int) -> int:
-        try:
-            parsed = int(value)
-        except (TypeError, ValueError):
-            parsed = default
-        return max(minimum, min(maximum, parsed))
+        return clamp_int(value, default, minimum, maximum)
 
     @staticmethod
     def _sanitize_settings(data: Any) -> dict:
-        raw = data if isinstance(data, dict) else {}
-        return {
-            "latency_warning_seconds": Plugin._clamp_int(
-                raw.get("latency_warning_seconds"),
-                Plugin.DEFAULT_LATENCY_WARNING_SECONDS,
-                Plugin.MIN_LATENCY_WARNING_SECONDS,
-                Plugin.MAX_LATENCY_WARNING_SECONDS,
-            ),
-            "request_timeout_seconds": Plugin._clamp_int(
-                raw.get("request_timeout_seconds"),
-                Plugin.DEFAULT_REQUEST_TIMEOUT_SECONDS,
-                Plugin.MIN_REQUEST_TIMEOUT_SECONDS,
-                Plugin.MAX_REQUEST_TIMEOUT_SECONDS,
-            ),
-            "unified_input_persistence_mode": Plugin._sanitize_unified_input_persistence_mode(
-                raw.get("unified_input_persistence_mode")
-            ),
-            "screenshot_max_dimension": Plugin._sanitize_screenshot_max_dimension(
-                raw.get("screenshot_max_dimension")
-            ),
-        }
+        return sanitize_settings(
+            data=data,
+            default_latency_warning_seconds=Plugin.DEFAULT_LATENCY_WARNING_SECONDS,
+            default_request_timeout_seconds=Plugin.DEFAULT_REQUEST_TIMEOUT_SECONDS,
+            min_latency_warning_seconds=Plugin.MIN_LATENCY_WARNING_SECONDS,
+            max_latency_warning_seconds=Plugin.MAX_LATENCY_WARNING_SECONDS,
+            min_request_timeout_seconds=Plugin.MIN_REQUEST_TIMEOUT_SECONDS,
+            max_request_timeout_seconds=Plugin.MAX_REQUEST_TIMEOUT_SECONDS,
+            valid_persistence_modes=Plugin.VALID_UNIFIED_INPUT_PERSISTENCE_MODES,
+            default_persistence_mode=Plugin.DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
+            valid_screenshot_dimensions=Plugin.VALID_SCREENSHOT_MAX_DIMENSIONS,
+            default_screenshot_dimension=Plugin.DEFAULT_SCREENSHOT_MAX_DIMENSION,
+        )
 
     @staticmethod
     def _sanitize_unified_input_persistence_mode(value: Any) -> str:
-        if isinstance(value, str) and value in Plugin.VALID_UNIFIED_INPUT_PERSISTENCE_MODES:
-            return value
-        return Plugin.DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE
+        return sanitize_unified_input_persistence_mode(
+            value,
+            Plugin.VALID_UNIFIED_INPUT_PERSISTENCE_MODES,
+            Plugin.DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
+        )
 
     @staticmethod
     def _sanitize_screenshot_max_dimension(value: Any) -> int:
-        try:
-            parsed = int(value)
-        except (TypeError, ValueError):
-            parsed = Plugin.DEFAULT_SCREENSHOT_MAX_DIMENSION
-        if parsed in Plugin.VALID_SCREENSHOT_MAX_DIMENSIONS:
-            return parsed
-        return Plugin.DEFAULT_SCREENSHOT_MAX_DIMENSION
+        return sanitize_screenshot_max_dimension(
+            value,
+            Plugin.VALID_SCREENSHOT_MAX_DIMENSIONS,
+            Plugin.DEFAULT_SCREENSHOT_MAX_DIMENSION,
+        )
 
     async def _main(self):
+        """Run plugin startup hooks and ensure background state exists before serving RPCs."""
         self._ensure_background_state()
         logger.info("bonsAI plugin loaded!")
 
     async def _unload(self):
+        """Run plugin shutdown logging for Decky unload events."""
         logger.info("bonsAI plugin unloaded!")
 
     def _new_background_state(self) -> dict:
+        """Build a default background request state payload used by status polling paths."""
         return {
             "status": "idle",
             "request_id": None,
@@ -126,6 +156,7 @@ class Plugin:
         }
 
     def _ensure_background_state(self) -> None:
+        """Backfill runtime attributes for compatibility with loaders that skip __init__."""
         if not hasattr(self, "_background_lock"):
             self._background_lock = asyncio.Lock()
         if not hasattr(self, "_background_task"):
@@ -137,6 +168,7 @@ class Plugin:
 
     @staticmethod
     def _parse_ask_payload(question: Any, PcIp: str) -> Tuple[str, str, str, str, list]:
+        """Normalize ask payload variants into canonical question/ip/context values."""
         app_id = ""
         app_name = ""
         attachments: list = []
@@ -153,6 +185,7 @@ class Plugin:
 
     @staticmethod
     def _sanitize_attachments(raw_attachments: Any) -> list:
+        """Keep only valid attachment fields and discard malformed entries."""
         if not isinstance(raw_attachments, list):
             return []
         sanitized: list = []
@@ -177,6 +210,7 @@ class Plugin:
 
     @staticmethod
     def _reject_ask_request(response_text: str, app_id: str = "") -> dict:
+        """Return a consistent rejected-request response payload for frontend consumers."""
         return {
             "success": False,
             "response": response_text,
@@ -189,35 +223,20 @@ class Plugin:
     async def load_settings(self):
         """Load persisted plugin settings from Decky's settings directory."""
         path = Plugin._settings_path()
-        try:
-            with open(path, "r", encoding="utf-8") as f:
-                data = json.load(f)
-            if not isinstance(data, dict):
-                logger.warning("load_settings: expected object in %s, got %s", path, type(data).__name__)
-                return Plugin._sanitize_settings({})
-            return Plugin._sanitize_settings(data)
-        except FileNotFoundError:
-            return Plugin._sanitize_settings({})
-        except Exception as exc:
-            logger.warning("load_settings: failed to read %s: %s", path, exc)
-            return Plugin._sanitize_settings({})
+        return load_settings_from_disk(path, Plugin._sanitize_settings, logger)
 
     async def save_settings(self, data: Any = None):
         """Persist plugin settings to Decky's settings directory."""
-        incoming = data if isinstance(data, dict) else {}
         current = await self.load_settings()
-        merged = {**current, **incoming}
-        sanitized = Plugin._sanitize_settings(merged)
         path = Plugin._settings_path()
-
-        try:
-            os.makedirs(decky.DECKY_PLUGIN_SETTINGS_DIR, exist_ok=True)
-            with open(path, "w", encoding="utf-8") as f:
-                json.dump(sanitized, f, indent=2, sort_keys=True)
-            return sanitized
-        except Exception as exc:
-            logger.exception("save_settings: failed to write %s", path)
-            raise RuntimeError(f"Failed to save settings: {exc}") from exc
+        return save_settings_to_disk(
+            path=path,
+            settings_dir=decky.DECKY_PLUGIN_SETTINGS_DIR,
+            incoming=data,
+            current=current,
+            sanitize_func=Plugin._sanitize_settings,
+            logger=logger,
+        )
 
     TDP_MIN_W = 3
     TDP_MAX_W = 15
@@ -228,183 +247,197 @@ class Plugin:
     def _parse_tdp_recommendation(text: str) -> Optional[dict]:
         """Extract a TDP recommendation from the AI response.
         Tries: fenced JSON, bare JSON, then natural-language patterns."""
-        rec = None
-
-        # 1) Fenced ```json ... ```
-        m = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", text, re.DOTALL)
-        if not m:
-            # 2) Bare {"tdp_watts": N ...}
-            m = re.search(r'(\{\s*"tdp_watts"\s*:\s*\d+[^}]*\})', text, re.DOTALL)
-        if m:
-            try:
-                rec = json.loads(m.group(1))
-            except json.JSONDecodeError as exc:
-                logger.info("_parse_tdp_recommendation: JSON decode failed: %s / raw=%r", exc, m.group(1))
-
-        # 3) Natural-language fallback: "TDP to 8 watts" / "TDP of 8W" / "TDP: 8 watts"
-        if rec is None:
-            nl = re.search(r"(?:tdp|TDP)\s*(?:to|of|at|:)?\s*(\d+)\s*(?:w|W|watts?)", text)
-            if nl:
-                rec = {"tdp_watts": int(nl.group(1))}
-                logger.info("_parse_tdp_recommendation: extracted from natural language: %s", rec)
-
+        rec = parse_tdp_recommendation(
+            text,
+            tdp_min=Plugin.TDP_MIN_W,
+            tdp_max=Plugin.TDP_MAX_W,
+            gpu_min_mhz=Plugin.GPU_CLK_MIN_MHZ,
+            gpu_max_mhz=Plugin.GPU_CLK_MAX_MHZ,
+        )
         if rec is None:
             logger.info("_parse_tdp_recommendation: no TDP value found in response")
             return None
-
-        tdp = rec.get("tdp_watts")
-        gpu = rec.get("gpu_clock_mhz")
-        if not isinstance(tdp, (int, float)):
-            return None
-        result: dict = {"tdp_watts": max(Plugin.TDP_MIN_W, min(Plugin.TDP_MAX_W, int(tdp)))}
-        if isinstance(gpu, (int, float)):
-            result["gpu_clock_mhz"] = max(Plugin.GPU_CLK_MIN_MHZ, min(Plugin.GPU_CLK_MAX_MHZ, int(gpu)))
-        else:
-            result["gpu_clock_mhz"] = None
-        return result
+        return rec
 
     @staticmethod
     def _find_amdgpu_hwmon() -> Optional[str]:
-        """Return the hwmon directory whose 'name' file contains 'amdgpu'."""
-        for name_path in sorted(glob.glob("/sys/class/hwmon/hwmon*/name")):
-            try:
-                with open(name_path) as f:
-                    if "amdgpu" in f.read().strip().lower():
-                        return name_path.rsplit("/", 1)[0]
-            except OSError:
-                continue
-        return None
+        """Proxy hwmon discovery through the service layer for compatibility and reuse."""
+        return find_amdgpu_hwmon()
 
     PRIV_WRITE = "/usr/bin/steamos-polkit-helpers/steamos-priv-write"
 
     @staticmethod
     def _clean_env() -> dict:
-        """Return a copy of os.environ without Decky's LD_ overrides that break system binaries."""
-        env = dict(os.environ)
-        for key in ("LD_LIBRARY_PATH", "LD_PRELOAD"):
-            env.pop(key, None)
-        return env
+        """Proxy sanitized subprocess environment generation through the service layer."""
+        return clean_env()
 
     @staticmethod
     def _write_sysfs(path: str, value: str) -> None:
-        """Write a value to a sysfs file, escalating privileges as needed."""
-        clean = Plugin._clean_env()
-
-        # 1) Direct write (works if plugin_loader runs as root)
-        try:
-            with open(path, "w") as f:
-                f.write(value)
-            logger.info("_write_sysfs: direct write OK -> %s", path)
-            return
-        except PermissionError:
-            logger.info("_write_sysfs: direct write denied for %s", path)
-        except OSError as exc:
-            logger.info("_write_sysfs: direct write failed for %s: %s", path, exc)
-
-        # 2) steamos-priv-write (the official SteamOS sysfs helper, no password needed)
-        if os.path.isfile(Plugin.PRIV_WRITE):
-            result = subprocess.run(
-                [Plugin.PRIV_WRITE, path, value],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                env=clean,
-                timeout=5,
-            )
-            if result.returncode == 0:
-                logger.info("_write_sysfs: steamos-priv-write OK -> %s", path)
-                return
-            stderr = result.stderr.decode("utf-8", errors="replace").strip()
-            logger.info("_write_sysfs: steamos-priv-write failed (rc=%d): %s", result.returncode, stderr)
-        else:
-            logger.info("_write_sysfs: steamos-priv-write not found at %s", Plugin.PRIV_WRITE)
-
-        # 3) Last resort: sudo -n tee (non-interactive)
-        result = subprocess.run(
-            ["sudo", "-n", "tee", path],
-            input=value.encode(),
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.PIPE,
-            env=clean,
-            timeout=5,
-        )
-        if result.returncode == 0:
-            logger.info("_write_sysfs: sudo -n tee OK -> %s", path)
-            return
-        stderr = result.stderr.decode("utf-8", errors="replace").strip()
-        raise OSError(f"All write methods failed for {path}: {stderr}")
+        """Write sysfs values via service-managed privilege fallbacks."""
+        write_sysfs(path, value, Plugin.PRIV_WRITE, logger)
 
     @staticmethod
     def _apply_tdp(rec: dict) -> dict:
-        """Write TDP (and optionally GPU clock) to sysfs. Returns a status dict."""
-        applied: dict = {"tdp_watts": None, "gpu_clock_mhz": None, "errors": []}
-
-        hwmon = Plugin._find_amdgpu_hwmon()
-        if not hwmon:
-            applied["errors"].append("Could not find amdgpu hwmon path in sysfs.")
-            logger.error("_apply_tdp: amdgpu hwmon not found")
-            return applied
-
-        tdp_w = rec.get("tdp_watts")
-        if tdp_w is not None:
-            cap_path = f"{hwmon}/power1_cap"
-            microwatts = str(int(tdp_w) * 1_000_000)
-            try:
-                Plugin._write_sysfs(cap_path, microwatts)
-                applied["tdp_watts"] = int(tdp_w)
-                logger.info("_apply_tdp: wrote %s to %s (%dW)", microwatts, cap_path, tdp_w)
-            except Exception as exc:
-                msg = f"Failed to write TDP to {cap_path}: {exc}"
-                applied["errors"].append(msg)
-                logger.error("_apply_tdp: %s", msg)
-
-        gpu_mhz = rec.get("gpu_clock_mhz")
-        if gpu_mhz is not None:
-            applied["gpu_clock_mhz"] = int(gpu_mhz)
-            logger.info("_apply_tdp: GPU clock %d MHz noted (sysfs write not yet implemented)", gpu_mhz)
-
-        return applied
+        """Apply TDP recommendations through the service layer and return result metadata."""
+        return apply_tdp_service(rec, Plugin.PRIV_WRITE, logger)
 
     async def log_navigation(self, setting_path: str):
+        """Log settings-navigation actions from the frontend for diagnostics."""
         logger.info(f"User navigated to: {setting_path}")
         return True
 
     async def get_deck_ip(self):
         """Return the Steam Deck's LAN IP address."""
         try:
-            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            s.connect(("8.8.8.8", 80))
-            ip = s.getsockname()[0]
-            s.close()
-            return ip
-        except Exception:
-            try:
-                return socket.gethostbyname(socket.gethostname())
-            except Exception:
+            def _resolve_ip() -> str:
+
+                def _valid_ipv4(candidate: str) -> bool:
+                    try:
+                        parsed = ipaddress.ip_address(candidate)
+                    except Exception:
+                        return False
+                    if parsed.version != 4:
+                        return False
+                    return not (parsed.is_loopback or parsed.is_unspecified or parsed.is_link_local)
+
+                def _interface_ipv4_candidates() -> list:
+                    results: list = []
+                    try:
+                        iface_names = [name for name in os.listdir("/sys/class/net") if name and name != "lo"]
+                    except Exception:
+                        return results
+
+                    sock: Optional[socket.socket] = None
+                    try:
+                        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+                        for iface in iface_names:
+                            if iface.startswith(("docker", "veth", "br-", "virbr", "zt", "tailscale", "tun", "tap")):
+                                continue
+                            try:
+                                request = struct.pack("256s", iface[:15].encode("utf-8"))
+                                response = fcntl.ioctl(sock.fileno(), 0x8915, request)
+                                ip = socket.inet_ntoa(response[20:24]).strip()
+                                results.append({"iface": iface, "ip": ip})
+                            except Exception:
+                                continue
+                    except Exception:
+                        return results
+                    finally:
+                        if sock is not None:
+                            try:
+                                sock.close()
+                            except Exception:
+                                pass
+                    return results
+
+                s: Optional[socket.socket] = None
+                try:
+                    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+                    s.settimeout(2.0)
+                    s.connect(("1.1.1.1", 80))
+                    ip = str(s.getsockname()[0] or "").strip()
+                    if _valid_ipv4(ip):
+                        return ip
+                except Exception:
+                    pass
+                finally:
+                    if s is not None:
+                        try:
+                            s.close()
+                        except Exception:
+                            pass
+
+                try:
+                    iface_candidates = _interface_ipv4_candidates()
+                    valid_iface = next(
+                        (
+                            candidate
+                            for candidate in iface_candidates
+                            if _valid_ipv4(str(candidate.get("ip", "")))
+                        ),
+                        None,
+                    )
+                    if valid_iface:
+                        return str(valid_iface.get("ip", ""))
+                except Exception:
+                    pass
+
+                try:
+                    route = subprocess.run(
+                        ["ip", "-4", "route", "get", "1.1.1.1"],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                        timeout=1.5,
+                        text=True,
+                    )
+                    route_text = (route.stdout or "").strip()
+                    match = re.search(r"\bsrc\s+(\d+\.\d+\.\d+\.\d+)\b", route_text)
+                    ip = match.group(1).strip() if match else ""
+                    if _valid_ipv4(ip):
+                        return ip
+                except Exception:
+                    pass
+
+                try:
+                    host_ip = str(socket.gethostbyname(socket.gethostname()) or "").strip()
+                    if _valid_ipv4(host_ip):
+                        return host_ip
+                except Exception:
+                    pass
+
+                try:
+                    host_i = subprocess.run(
+                        ["hostname", "-I"],
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                        timeout=1.5,
+                        text=True,
+                    )
+                    host_tokens = [token.strip() for token in (host_i.stdout or "").split() if token.strip()]
+                    ip = next((token for token in host_tokens if _valid_ipv4(token)), "")
+                    if _valid_ipv4(ip):
+                        return ip
+                except Exception:
+                    pass
+
                 return "unknown"
 
-    async def test_ollama_connection(self, pc_ip: str = ""):
+            ip = await asyncio.wait_for(asyncio.to_thread(_resolve_ip), timeout=4.0)
+            return ip
+        except Exception:
+            return "unknown"
+
+    async def test_ollama_connection(self, pc_ip: str = "", timeout_seconds: int = 10):
         """Ping Ollama's /api/version and /api/tags to verify reachability."""
+        started_at = time.time()
+        safe_timeout_seconds = max(1, min(120, int(timeout_seconds or 5)))
         raw = (pc_ip or "").strip()
         if not raw:
             return {"reachable": False, "error": "No PC IP provided."}
-
-        if "//" not in raw:
-            raw = f"http://{raw}"
-        parsed = urlparse(raw)
-        host = parsed.hostname or "127.0.0.1"
-        port = parsed.port or 11434
-        base = f"http://{host}:{port}"
+        _, _, base = normalize_ollama_base(raw)
 
         try:
-            ver_req = urllib.request.Request(f"{base}/api/version", method="GET")
-            ver_resp = urllib.request.urlopen(ver_req, timeout=5)
-            ver_data = json.loads(ver_resp.read().decode("utf-8"))
-            version = ver_data.get("version", "unknown")
+            def _test_connection_sync() -> dict:
+                deadline = started_at + safe_timeout_seconds
+                ver_timeout = max(0.25, deadline - time.time())
+                ver_req = urllib.request.Request(f"{base}/api/version", method="GET")
+                ver_resp = urllib.request.urlopen(ver_req, timeout=ver_timeout)
+                ver_data = json.loads(ver_resp.read().decode("utf-8"))
+                version_local = ver_data.get("version", "unknown")
 
-            tags_req = urllib.request.Request(f"{base}/api/tags", method="GET")
-            tags_resp = urllib.request.urlopen(tags_req, timeout=5)
-            tags_data = json.loads(tags_resp.read().decode("utf-8"))
-            models = [m.get("name", "?") for m in tags_data.get("models", [])]
+                tags_timeout = max(0.25, deadline - time.time())
+                tags_req = urllib.request.Request(f"{base}/api/tags", method="GET")
+                tags_resp = urllib.request.urlopen(tags_req, timeout=tags_timeout)
+                tags_data = json.loads(tags_resp.read().decode("utf-8"))
+                models_local = [m.get("name", "?") for m in tags_data.get("models", [])]
+                return {"version": version_local, "models": models_local}
+
+            tested = await asyncio.wait_for(
+                asyncio.to_thread(_test_connection_sync),
+                timeout=float(safe_timeout_seconds) + 1.0,
+            )
+            version = str(tested.get("version", "unknown"))
+            models = list(tested.get("models", []))
 
             return {"reachable": True, "version": version, "models": models}
         except Exception as e:
@@ -412,6 +445,7 @@ class Plugin:
 
     @staticmethod
     def _resolve_recent_screenshot_paths(app_id: str = "", limit: int = 5) -> list:
+        """Resolve recent screenshot paths across common Steam userdata roots."""
         app_filter = str(app_id or "").strip()
         safe_limit = max(1, min(48, int(limit)))
         home = os.path.expanduser("~")
@@ -472,6 +506,7 @@ class Plugin:
 
     @staticmethod
     def _lookup_steam_app_name(app_id: str) -> str:
+        """Resolve app names from local Steam appmanifest metadata."""
         candidate = str(app_id or "").strip()
         if not candidate.isdigit():
             return ""
@@ -495,6 +530,7 @@ class Plugin:
 
     @staticmethod
     def _lookup_screenshot_vdf_metadata(screenshot_path: str) -> dict:
+        """Extract caption and shortcut hints from screenshots.vdf near a screenshot filename."""
         marker = f"{os.sep}760{os.sep}remote{os.sep}"
         if marker not in screenshot_path:
             return {"caption": "", "shortcut_name": ""}
@@ -521,6 +557,7 @@ class Plugin:
 
     @staticmethod
     def _extract_app_id_from_screenshot_path(path: str) -> str:
+        """Extract the app id segment from Steam screenshot path patterns."""
         marker = f"{os.sep}760{os.sep}remote{os.sep}"
         if marker not in path:
             return ""
@@ -529,6 +566,7 @@ class Plugin:
 
     @staticmethod
     def _build_screenshot_preview_data_uri(path: str, max_dimension: int = 220) -> Optional[str]:
+        """Generate a compact preview data URI from screenshot files for UI thumbnails."""
         ext = os.path.splitext(path)[1].lower()
         if ext not in Plugin.SUPPORTED_IMAGE_EXTENSIONS:
             return None
@@ -566,6 +604,7 @@ class Plugin:
                 return None
 
     async def list_recent_screenshots(self, app_id: str = "", limit: int = 5):
+        """List recent screenshots with preview and app metadata for attachment browsing."""
         try:
             items = []
             for path in Plugin._resolve_recent_screenshot_paths(app_id, limit):
@@ -591,6 +630,7 @@ class Plugin:
 
     @staticmethod
     def _build_capture_command_candidates(output_path: str, include_overlay: bool) -> list:
+        """Build candidate screenshot commands to maximize compatibility across SteamOS variants."""
         candidates = [
             ["gamescope-screenshot", "--file", output_path],
             ["gamescope-screenshot", "-o", output_path],
@@ -604,6 +644,7 @@ class Plugin:
         return candidates
 
     async def capture_screenshot(self, include_overlay: bool = True):
+        """Capture a screenshot using available gamescope commands and return attachment metadata."""
         runtime_dir = os.path.join(decky.DECKY_PLUGIN_RUNTIME_DIR, "captures")
         os.makedirs(runtime_dir, exist_ok=True)
         timestamp = time.strftime("%Y%m%d-%H%M%S")
@@ -648,6 +689,7 @@ class Plugin:
 
     @staticmethod
     def _encode_image_with_pillow(path: str, max_dimension: int) -> tuple[Optional[str], Optional[str], list]:
+        """Resize and encode images with Pillow to keep attachment payload sizes predictable."""
         warnings: list = []
         try:
             from PIL import Image  # type: ignore
@@ -675,6 +717,7 @@ class Plugin:
 
     @staticmethod
     def _prepare_image_attachment(attachment: dict, max_dimension: int) -> dict:
+        """Validate, transform, and encode one image attachment for Ollama multimodal requests."""
         path = str(attachment.get("path", "") or "").strip()
         if not path:
             return {"ok": False, "error": "Attachment path is empty."}
@@ -713,6 +756,7 @@ class Plugin:
 
     @staticmethod
     def _prepare_attachment_images(attachments: list, max_dimension: int) -> tuple[list, list, list]:
+        """Prepare a batch of attachments and return successful images, warnings, and errors."""
         prepared_images: list = []
         warnings: list = []
         errors: list = []
@@ -733,6 +777,7 @@ class Plugin:
         app_name: str = "",
         attachments: Optional[list] = None,
     ) -> dict:
+        """Run one full ask lifecycle, including Ollama call timing and optional TDP application."""
         start = time.time()
         app_context = "active" if app_id else "none"
         try:
@@ -758,6 +803,7 @@ class Plugin:
             response_text = str(ollama_result.get("response", "") or "No response text.")
             applied = None
 
+            # TDP application remains conditional so non-performance prompts stay read-only.
             if ollama_result.get("success"):
                 rec = Plugin._parse_tdp_recommendation(response_text)
                 if rec:
@@ -790,6 +836,7 @@ class Plugin:
             }
 
     async def ask_game_ai(self, question: Any = "", PcIp: str = ""):
+        """Handle foreground ask RPCs and validate required inputs before execution."""
         logger.info("ask_game_ai: RPC entry (arg type=%s)", type(question).__name__)
         parsed_question, pc_ip, app_id, app_name, attachments = Plugin._parse_ask_payload(question, PcIp)
         if not parsed_question:
@@ -809,6 +856,7 @@ class Plugin:
         app_name: str,
         attachments: Optional[list] = None,
     ) -> None:
+        """Execute a queued background request and publish terminal status for polling clients."""
         result = await self._execute_game_ai_request(
             question,
             pc_ip,
@@ -835,6 +883,7 @@ class Plugin:
             }
 
     async def start_background_game_ai(self, question: Any = "", PcIp: str = ""):
+        """Start a background ask request unless one is already active or payload is invalid."""
         plugin = Plugin._coerce_instance(self)
         plugin._ensure_background_state()
 
@@ -903,6 +952,7 @@ class Plugin:
         }
 
     async def get_background_game_ai_status(self):
+        """Return current background request status and reconcile completed task failures."""
         plugin = Plugin._coerce_instance(self)
         plugin._ensure_background_state()
         async with plugin._background_lock:
@@ -921,6 +971,64 @@ class Plugin:
                     }
             return dict(plugin._background_state)
 
+    def _build_system_prompt(
+        self,
+        question: str,
+        app_id: str,
+        app_name: str,
+        normalized_attachments: list,
+        prepared_images: list,
+    ) -> str:
+        """Build the system prompt using plugin-local metadata lookups and attachment context."""
+        return build_system_prompt(
+            question=question,
+            app_id=app_id,
+            app_name=app_name,
+            normalized_attachments=normalized_attachments,
+            prepared_images=prepared_images,
+            lookup_app_name=Plugin._lookup_steam_app_name,
+            lookup_screenshot_vdf_metadata=Plugin._lookup_screenshot_vdf_metadata,
+        )
+
+    @staticmethod
+    def _select_models(requires_vision: bool) -> list:
+        """Select ordered model fallbacks based on whether vision inputs are present."""
+        return select_ollama_models(requires_vision)
+
+    @staticmethod
+    def _format_ai_response(
+        text: str,
+        normalized_attachments: list,
+        prepared_images: list,
+        attachment_errors: list,
+    ) -> str:
+        """Format response text with attachment diagnostics that frontend rendering expects."""
+        return format_ai_response(text, normalized_attachments, prepared_images, attachment_errors)
+
+    def _post_ollama_chat(
+        self,
+        url: str,
+        model_name: str,
+        messages: list,
+        request_timeout_seconds: int,
+        normalized_attachments: list,
+        prepared_images: list,
+        attachment_warnings: list,
+        attachment_errors: list,
+    ) -> dict:
+        """Execute one Ollama request attempt through the shared service transport helper."""
+        return post_ollama_chat(
+            url=url,
+            model_name=model_name,
+            messages=messages,
+            request_timeout_seconds=request_timeout_seconds,
+            normalized_attachments=normalized_attachments,
+            prepared_images=prepared_images,
+            attachment_warnings=attachment_warnings,
+            attachment_errors=attachment_errors,
+            logger=logger,
+        )
+
     async def ask_ollama(
         self,
         question: str,
@@ -930,6 +1038,7 @@ class Plugin:
         request_timeout_seconds: int = 120,
         attachments: Optional[list] = None,
     ):
+        """Orchestrate attachment prep, prompt assembly, and model fallback request execution."""
         url = self._build_ollama_chat_url(PcIp)
         normalized_attachments = Plugin._sanitize_attachments(attachments or [])
         settings = await self.load_settings()
@@ -940,91 +1049,12 @@ class Plugin:
             normalized_attachments,
             screenshot_max_dimension,
         )
-        attachment_app_ids = sorted(
-            {
-                str(att.get("app_id", "") or "").strip()
-                for att in normalized_attachments
-                if str(att.get("app_id", "") or "").strip()
-            }
-        )
-
-        if app_name:
-            game_line = f"The currently running game is: {app_name} (AppID: {app_id})."
-        elif app_id:
-            game_line = f"The currently running game has AppID: {app_id} (name unknown)."
-        else:
-            game_line = "No game is currently running."
-        attachment_name_pairs = []
-        vdf_caption_hints = []
-        vdf_shortcut_hints = []
-        for candidate_app_id in attachment_app_ids:
-            resolved_name = Plugin._lookup_steam_app_name(candidate_app_id)
-            if resolved_name:
-                attachment_name_pairs.append(f"{candidate_app_id}={resolved_name}")
-        attachment_game_context_line = (
-            f"Resolved game-title hints from attachment AppIDs: {', '.join(attachment_name_pairs)}."
-            if attachment_name_pairs
-            else (
-                "Attachment metadata contains numeric Steam AppIDs, but no reliable title mapping was resolved. "
-                "Do NOT treat numeric AppIDs as game titles."
-                if attachment_app_ids
-                else "No attachment AppID metadata is available."
-            )
-        )
-        for attachment in normalized_attachments:
-            hint = Plugin._lookup_screenshot_vdf_metadata(str(attachment.get("path", "") or ""))
-            caption = str(hint.get("caption", "") or "").strip()
-            shortcut_name = str(hint.get("shortcut_name", "") or "").strip()
-            if caption:
-                vdf_caption_hints.append(caption)
-            if shortcut_name:
-                vdf_shortcut_hints.append(shortcut_name)
-        attachment_name_context_line = (
-            f"Attachment AppID title hints from Steam manifests: {', '.join(attachment_name_pairs)}."
-            if attachment_name_pairs
-            else "No local Steam manifest title hints were resolved for attachment AppIDs."
-        )
-        vdf_context_line = (
-            f"Attachment metadata hints from screenshots.vdf: shortcut names={', '.join(vdf_shortcut_hints)}; captions={', '.join(vdf_caption_hints)}."
-            if (vdf_caption_hints or vdf_shortcut_hints)
-            else "No useful screenshot-level hints were found in screenshots.vdf."
-        )
-        vision_line = (
-            f"Visual context attachments provided: {len(prepared_images)}."
-            if prepared_images
-            else "No visual context attachments provided."
-        )
-        vision_priority_line = (
-            "When images are provided, prioritize identifying gameplay/world content over Steam overlay or menu chrome. "
-            "Treat Steam UI elements as secondary context unless the user asks specifically about the UI. "
-            "Do not confidently name a specific game title unless visual evidence is strong and unambiguous. "
-            "Require at least two distinct game-specific cues before naming a title. "
-            "If those cues are not present, explicitly say uncertainty and describe only concrete visible elements. "
-            "Never claim that a numeric AppID value is the game title."
-        )
-        genre_franchise_cue_line = (
-            "Use recognizable in-game HUD motifs to improve game hypotheses. "
-            "Examples: hearts + rupees + item C-button layout + temple-area labels strongly suggest Zelda Ocarina-style UI. "
-            "When these cues are present, explicitly state the likely franchise/title hypothesis with confidence level. "
-            "If the title hint says Ship of Harkinian, treat it as an Ocarina of Time remake/reimplementation context."
-        )
-        user_game_intent = bool(re.search(r"\b(game|title|level|boss|area)\b", question or "", flags=re.IGNORECASE))
-        game_intent_line = (
-            "The user is asking about the game itself. Focus first on in-game UI, world art style, HUD motifs, character design, "
-            "and objective text. Minimize Steam overlay/plugin UI mentions unless absolutely necessary."
-            if user_game_intent
-            else "If the user asks about gameplay context, prioritize game-specific visual cues over Steam UI."
-        )
-
-        system_content = (
-            "You are bonsAI, an expert system assistant embedded on a Steam Deck handheld. "
-            "Always answer directly, concisely, and in English. "
-            "The Steam Deck APU supports a TDP range of 3-15 watts and GPU clock of 200-1600 MHz. "
-            "Never suggest power values outside these hardware limits. "
-            f"{game_line} {attachment_game_context_line} {attachment_name_context_line} {vdf_context_line} {vision_line} {vision_priority_line} {genre_franchise_cue_line} {game_intent_line}\n\n"
-            "IMPORTANT: When you recommend or apply a TDP or GPU clock change, you MUST include this exact JSON block in your response:\n"
-            '```json\n{"tdp_watts": <int 3-15>, "gpu_clock_mhz": <int 200-1600 or null>}\n```\n'
-            "Without this JSON block, the change will NOT be applied. Only include it when actively recommending a change."
+        system_content = self._build_system_prompt(
+            question,
+            app_id,
+            app_name,
+            normalized_attachments,
+            prepared_images,
         )
         user_message: dict = {"role": "user", "content": question}
         if prepared_images:
@@ -1036,100 +1066,26 @@ class Plugin:
             url, app_name, app_id, len(prepared_images), question, len(question),
         )
 
-        text_models_to_try = ["llama3:latest", "llama3", "gemma4:latest", "gemma4", "gemma3:latest"]
-        vision_models_to_try = [
-            "llava:latest",
-            "llava",
-            "bakllava:latest",
-            "bakllava",
-            "qwen2.5vl:latest",
-            "qwen2.5vl",
-            "moondream:latest",
-            "moondream",
-        ]
         requires_vision = len(prepared_images) > 0
-        models_to_try = vision_models_to_try if requires_vision else text_models_to_try
-
-        def _do_request(model_name: str):
-            body_dict = {
-                "model": model_name,
-                "messages": messages,
-                "stream": False,
-                "keep_alive": -1,
-                "options": {
-                    "num_predict": 300,
-                    "temperature": 0.2
-                }
-            }
-            payload = json.dumps(body_dict).encode("utf-8")
-            logger.info(
-                "ask_ollama: POST %s model=%s payload_bytes=%d",
-                url, model_name, len(payload),
-            )
-            req = urllib.request.Request(
-                url,
-                data=payload,
-                headers={"Content-Type": "application/json"},
-                method="POST",
-            )
-            try:
-                with urllib.request.urlopen(req, timeout=request_timeout_seconds) as resp:
-                    raw = resp.read().decode("utf-8")
-                    data = json.loads(raw)
-                    text = data.get("message", {}).get("content", "No response text.")
-                    if normalized_attachments:
-                        text += (
-                            "\n\n[AttachDebug: "
-                            f"requested={len(normalized_attachments)}, "
-                            f"prepared={len(prepared_images)}, "
-                            f"errors={len(attachment_errors)}]"
-                        )
-                    if attachment_errors:
-                        text += "\n\n[Attachment errors: " + "; ".join(attachment_errors) + "]"
-                    if attachment_warnings:
-                        logger.info("ask_ollama: attachment warnings: %s", "; ".join(attachment_warnings))
-                    logger.info(
-                        "ask_ollama: OK model=%s response_len=%d first_200=%r",
-                        model_name, len(text), text[:200],
-                    )
-                    return {
-                        "success": True,
-                        "response": text,
-                        "model": model_name,
-                    }
-            except urllib.error.HTTPError as e:
-                body = e.read().decode("utf-8", errors="replace")
-                return {
-                    "success": False,
-                    "response": f"HTTP {e.code} from {url} using model '{model_name}': {body}",
-                    "status": e.code,
-                    "body": body,
-                }
-            except urllib.error.URLError as e:
-                if isinstance(e.reason, (TimeoutError, socket.timeout)):
-                    return {
-                        "success": False,
-                        "response": (
-                            f"Ollama did not respond within {request_timeout_seconds} seconds. "
-                            "Check that Ollama is running and your PC IP is correct."
-                        ),
-                    }
-                return {
-                    "success": False,
-                    "response": f"Failed to reach {url} using model '{model_name}': {e}",
-                }
-            except Exception as e:
-                return {
-                    "success": False,
-                    "response": f"Failed to reach {url} using model '{model_name}': {e}",
-                }
+        models_to_try = self._select_models(requires_vision)
 
         try:
             loop = asyncio.get_running_loop()
             last_failure = {"success": False, "response": "No model attempts executed."}
 
             for model_name in models_to_try:
-                result = await loop.run_in_executor(None, _do_request, model_name)
+                result = await loop.run_in_executor(
+                    None,
+                    self._post_ollama_chat,
+                    url,
+                    model_name,
+                    messages,
+                    request_timeout_seconds,
+                    normalized_attachments,
+                    prepared_images,
+                    attachment_warnings,
+                    attachment_errors,
+                )
                 if result.get("success"):
                     return result
 
@@ -1156,14 +1112,5 @@ class Plugin:
             return {"success": False, "response": str(e)}
 
     def _build_ollama_chat_url(self, pc_ip: str) -> str:
-        raw = (pc_ip or "").strip()
-        if not raw:
-            return "http://127.0.0.1:11434/api/chat"
-
-        if "//" not in raw:
-            raw = f"http://{raw}"
-
-        parsed = urlparse(raw)
-        host = parsed.hostname or "127.0.0.1"
-        port = parsed.port or 11434
-        return f"http://{host}:{port}/api/chat"
+        """Build the Ollama chat endpoint URL from current connection input."""
+        return build_ollama_chat_url(pc_ip)

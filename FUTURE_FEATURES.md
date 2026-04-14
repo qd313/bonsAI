@@ -15,6 +15,8 @@ Ranked by effort and risk using the GTA star system:
 - Persist last question and answer
 - Unified Search + Ask input
 - Iconography Pass (Tabs + Plugin + Ask Button)
+- Background Prompt Completion (V1)
+- Linux Ollama Compatibility
 - Global Screenshots and Vision (V1)
 
 ---
@@ -49,13 +51,6 @@ Ranked by effort and risk using the GTA star system:
 - **Files:** `main.py`, `src/index.tsx`.
 - **Depends on:** settings persistence already present.
 - **Not in scope:** full UI localization of plugin labels.
-
-### ★★★ Background Prompt Completion
-- **Goal:** Complete in-flight prompts while QAM is closed and restore results on reopen.
-- **Primary work:** backend pending-result state + frontend polling/restore flow.
-- **Files:** `main.py`, `src/index.tsx`.
-- **Depends on:** settings/pending state plumbing.
-- **Not in scope:** queueing multiple concurrent background requests.
 
 ### ★★★ Reset Cache Action (App State)
 - **Goal:** Provide a user-facing reset action that clears cached unified search text and current AI response output in one step.
@@ -112,13 +107,6 @@ Ranked by effort and risk using the GTA star system:
 - **Files:** `src/index.tsx`, `main.py`, `PROMPT_TESTING.md`.
 - **Depends on:** **Strategy Guide Prompt Path (Beta)**.
 - **Not in scope:** hard guarantees that all model outputs are spoiler-free in every edge case.
-
-### ★★★★ Linux Ollama Compatibility
-- **Goal:** Support Linux-hosted Ollama setups as first-class path.
-- **Primary work:** endpoint assumptions, connection diagnostics, and docs/test matrix.
-- **Files:** `main.py`, `src/index.tsx`, troubleshooting docs.
-- **Depends on:** none.
-- **Not in scope:** container orchestration or distro-specific installers.
 
 ### ★★★★ Idle Safety Preset Automation
 - **Goal:** Optionally apply a low-power preset (e.g., 3W) after configurable inactivity.

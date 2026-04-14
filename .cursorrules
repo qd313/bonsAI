@@ -3,6 +3,8 @@
 ## Scripts & Automation
 - ALWAYS capture and inspect the full stdout and stderr of the actual failing command before forming hypotheses; NEVER rely solely on exit codes or indirect diagnostics from surrounding code.
 - NEVER hardcode credentials, secrets, IP addresses, hostnames, or any developer-local configuration in version-controlled files; ALWAYS externalize them to a gitignored `.env` (loaded at runtime) with a committed `.env.example` template documenting every required variable.
+- ALWAYS validate runtime/deployment parity before debugging behavior: after refactors, prove all moved modules import and load on target (plugin startup logs plus a smoke RPC) before changing feature logic or UI.
+- ALWAYS run `./build.ps1` after any Deck-facing code change during debugging and confirm `plugin_loader.service` startup is clean before starting the next hypothesis loop.
 
 ## Frontend UI (src/)
 - ALWAYS use Decky-Frontend-lib components for UI elements to maintain a native SteamOS look and feel.

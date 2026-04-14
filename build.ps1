@@ -30,6 +30,8 @@ ssh "$User@$HostIp" "mkdir -p ~/decky_temp_$PluginName/dist"
 
 # 2. Upload everything into the temporary directory
 scp package.json plugin.json main.py "${User}@${HostIp}:~/decky_temp_$PluginName/"
+scp refactor_helpers.py "${User}@${HostIp}:~/decky_temp_$PluginName/"
+scp -r backend "${User}@${HostIp}:~/decky_temp_$PluginName/"
 scp dist/index.js "${User}@${HostIp}:~/decky_temp_$PluginName/dist/"
 
 Write-Host "Overwriting system files and restarting Decky Loader..."

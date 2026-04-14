@@ -4,13 +4,31 @@ import { ButtonItem, Focusable, PanelSection, PanelSectionRow } from "@decky/ui"
 type Props = {
   capturedErrors: string[];
   onClearErrors: () => void;
+  /** Phase 1: experimental jump to per-game Steam Input (steam:// + CloseSideMenus); optional for tests. */
+  onSteamInputPhase1Jump?: () => void;
 };
 
 /**
  * This tab surfaces captured runtime errors so users can self-diagnose without leaving Decky.
  * It keeps diagnostic rendering concerns isolated from normal chat and settings interactions.
  */
-export const DebugTab: React.FC<Props> = ({ capturedErrors, onClearErrors }) => (
+export const DebugTab: React.FC<Props> = ({ capturedErrors, onClearErrors, onSteamInputPhase1Jump }) => (
+  <>
+    {onSteamInputPhase1Jump && (
+      <PanelSection title="Steam Input (Phase 1)">
+        <PanelSectionRow>
+          <div style={{ fontSize: 12, color: "#9fb7d5", marginBottom: 6 }}>
+            Experimental: opens per-game controller configuration for the running game via steam:// (see
+            docs/steam-input-research.md). Requires a focused/running title.
+          </div>
+        </PanelSectionRow>
+        <PanelSectionRow>
+          <ButtonItem layout="below" onClick={onSteamInputPhase1Jump}>
+            Jump to Steam Input (running game)
+          </ButtonItem>
+        </PanelSectionRow>
+      </PanelSection>
+    )}
   <PanelSection title="Debug Log">
     <PanelSectionRow>
       <div style={{ fontSize: 13, color: "gray", marginBottom: 4 }}>
@@ -52,4 +70,5 @@ export const DebugTab: React.FC<Props> = ({ capturedErrors, onClearErrors }) => 
       ))
     )}
   </PanelSection>
+  </>
 );

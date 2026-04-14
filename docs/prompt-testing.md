@@ -2,6 +2,11 @@
 
 Track what prompts have been tested, what model responded, and whether the result was correct.
 
+Related planning (not yet implemented): future prompt policy, search UX, and Steam Input work are ranked in [roadmap.md](roadmap.md). When those ship, use the research and catalog notes below to extend test matrices.
+
+- [steam-input-research.md](steam-input-research.md) — Steam Input search/jump feasibility, fallback UX, validation checklist.
+- [voice-character-catalog.md](voice-character-catalog.md) — opt-in character voice/accent preset catalog (planning-only).
+
 ## Status Legend
 - **PASS** - AI responded correctly and action (if any) was applied
 - **FAIL** - Wrong answer, hallucination, or action not applied
@@ -206,6 +211,12 @@ Status note:
 - [ ] Settings toggle for spoiler masking changes behavior as expected (masked vs directly visible after consent).
 
 ### Steam Input-Tailored Coaching
+**Phase 1 (navigation plumbing)** is **complete** (Debug tab jump + lexicon); broader search+jump is **deferred** per [roadmap.md](roadmap.md).
+
+When full **Steam Input Settings Search + Jump** ships (if revived), add matrix rows against [steam-input-research.md](steam-input-research.md) validation checklist (exact vs near vs manual-only routes).
+
+**Regression smoke (optional):** After Steam client updates that may affect Input, run the Debug tab **Jump to Steam Input (running game)** with a focused title and record PASS/PARTIAL/FAIL against the smoke-test bullets in [steam-input-research.md](steam-input-research.md).
+
 - [ ] User issue like "I can't hit headshots" triggers control-specific advice (gyro/trackpad/layout/sensitivity).
 - [ ] Recommendations remain actionable for Steam Deck (not generic desktop-only control tips).
 - [ ] If Steam Input context is missing, response explicitly gives best-effort generic control advice.

@@ -5,6 +5,8 @@ This document is the advanced/power-user guide for bonsAI.
 For first-time setup, use `README.md` first (simple self-hosted install flow, Ollama setup, and starter model pulls).
 For contributor workflows, use [development.md](development.md) (Windows/Bazzite build and deploy paths).
 
+Roadmap and future features: [roadmap.md](roadmap.md). Steam Input search/jump and deep-link feasibility notes: [steam-input-research.md](steam-input-research.md). Opt-in character voice preset planning: [voice-character-catalog.md](voice-character-catalog.md).
+
 This file tracks resolved issues, hardware-specific overrides, and architectural constraints for the bonsAI (Backend Ollama Node for Steam A.I.) project.
 
 ---
@@ -189,3 +191,18 @@ We recommend binding this to a **Guide Button Chord** (e.g., holding the `Steam`
 
 **Testing Your Macro:**
 Once built, hold the `Steam` button and press your assigned button (e.g., `R4`). You should see the QAM fly open and automatically navigate straight into the BonsAI panel! If it misses a step, go back into the chord settings and slightly increase the **Fire Start Delay** for the step that failed.
+
+---
+
+## Steam Input jump (Phase 1, Debug tab)
+
+Phase 1 is the **completed** scope for this feature; full search + catalog (Phase 2+) is deferred per [roadmap.md](roadmap.md).
+
+**Symptom:** Toast says there is no running game, or the wrong Steam surface opens.
+
+**Checks:**
+
+1. **MainRunningApp:** The jump uses `Router.MainRunningApp` from Decky. A title should be running or focused in a way Steam reports to the client. If you are only on the Steam shell with no game, start or focus a game and retry.
+2. **steam:// behavior:** Phase 1 uses `steam://controllerconfig/<appId>` via `SteamClient.URL.ExecuteSteamURL` (same family as Settings search `steam://open/settings/...`). If nothing happens, confirm Steam handled other `steam://` links from bonsAI recently; restart Steam if the client URL dispatcher is stuck.
+3. **After a Steam update:** Big Picture routes and `steam://` targets can change. Follow the smoke-test and changelog discipline in [steam-input-research.md](steam-input-research.md) and update `src/data/steam-input-lexicon.ts` if needed.
+4. **Wrong tab inside controller UI:** Sub-tabs may be local React state without distinct URLs. Use breadcrumb hints in the lexicon entry and optional `primaryPathTemplate` once you have verified paths from CEF sniffing.

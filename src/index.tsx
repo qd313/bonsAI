@@ -36,6 +36,8 @@ import {
 } from "./utils/settingsAndResponse";
 import { AboutTab } from "./components/AboutTab";
 import { DebugTab } from "./components/DebugTab";
+import { getSteamInputLexiconEntry } from "./data/steam-input-lexicon";
+import { jumpToSteamInputEntry } from "./utils/steamInputJump";
 import { detectPromptCategory, getContextualPresets, getRandomPresets, type PresetPrompt } from "./data/presets";
 import {
   AskMicIcon,
@@ -322,6 +324,7 @@ function dedupeScreenshotItems(items: ScreenshotItem[]): ScreenshotItem[] {
 const DISCLAIMER_STORAGE_KEY = "bonsai:disclaimer-accepted";
 const GITHUB_ISSUES_URL = "https://github.com/cantcurecancer/bonsAI/issues";
 const GITHUB_REPO_URL = GITHUB_ISSUES_URL.replace(/\/issues$/, "");
+const OLLAMA_UPSTREAM_REPO_URL = "https://github.com/ollama/ollama";
 
 // Check whether the one-time safety disclaimer has already been acknowledged.
 function hasAcceptedDisclaimer(): boolean {
@@ -1880,8 +1883,39 @@ const Content: React.FC = () => {
     </PanelSection>
   );
 
-  const debugTab = <DebugTab capturedErrors={capturedErrors} onClearErrors={() => setCapturedErrors([])} />;
-  const aboutTab = <AboutTab githubRepoUrl={GITHUB_REPO_URL} githubIssuesUrl={GITHUB_ISSUES_URL} />;
+  const onSteamInputPhase1Jump = () => {
+    const entry = getSteamInputLexiconEntry("phase1_per_game_controller_config");
+    if (!entry) {
+      toaster.toast({ title: "Steam Input", body: "Lexicon entry missing.", duration: 3500 });
+      return;
+    }
+    const result = jumpToSteamInputEntry(entry);
+    if (result.ok) {
+      toaster.toast({
+        title: "Steam Input jump",
+        body: `${result.confidenceLabel}: ${result.method} → ${result.detail}`,
+        duration: 4000,
+      });
+    } else {
+      const hint = entry.breadcrumb.length ? ` ${entry.breadcrumb[0]}` : "";
+      toaster.toast({ title: "Steam Input jump", body: `${result.reason}${hint}`, duration: 6000 });
+    }
+  };
+
+  const debugTab = (
+    <DebugTab
+      capturedErrors={capturedErrors}
+      onClearErrors={() => setCapturedErrors([])}
+      onSteamInputPhase1Jump={onSteamInputPhase1Jump}
+    />
+  );
+  const aboutTab = (
+    <AboutTab
+      githubRepoUrl={GITHUB_REPO_URL}
+      ollamaRepoUrl={OLLAMA_UPSTREAM_REPO_URL}
+      githubIssuesUrl={GITHUB_ISSUES_URL}
+    />
+  );
 
   return (
     <div className="bonsai-scope">

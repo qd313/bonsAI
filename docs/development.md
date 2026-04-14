@@ -123,6 +123,8 @@ Milestone 2 splits heavy orchestration paths while preserving runtime behavior:
   - `src/components/DebugTab.tsx`
   - `src/components/AboutTab.tsx`
   - `src/data/presets.ts`
+  - `src/data/steam-input-lexicon.ts` (versioned Steam Input jump targets; see `docs/steam-input-research.md`)
   - `src/utils/settingsAndResponse.ts`
+  - `src/utils/steamInputJump.ts` (Decky `Navigation` / `SteamClient.URL` jump helper)
 
 `main.py` and `src/index.tsx` remain the integration shells for Decky RPC/UI wiring and should continue to be treated as composition entrypoints.

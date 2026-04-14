@@ -4,6 +4,7 @@ import { toaster } from "@decky/api";
 
 type Props = {
   githubRepoUrl: string;
+  ollamaRepoUrl: string;
   githubIssuesUrl: string;
 };
 
@@ -11,7 +12,7 @@ type Props = {
  * This tab explains plugin purpose/safety context and provides contributor support links.
  * It keeps project metadata and external navigation actions out of the main screen component.
  */
-export const AboutTab: React.FC<Props> = ({ githubRepoUrl, githubIssuesUrl }) => (
+export const AboutTab: React.FC<Props> = ({ githubRepoUrl, ollamaRepoUrl, githubIssuesUrl }) => (
   <PanelSection title="About bonsAI">
     <PanelSectionRow>
       <div style={{ fontSize: 14, fontWeight: 700, color: "white" }}>
@@ -47,6 +48,20 @@ export const AboutTab: React.FC<Props> = ({ githubRepoUrl, githubIssuesUrl }) =>
         }}
       >
         <span style={{ fontSize: 13 }}>GitHub Repository</span>
+      </ButtonItem>
+    </PanelSectionRow>
+    <PanelSectionRow>
+      <ButtonItem
+        layout="below"
+        onClick={() => {
+          try {
+            Navigation.NavigateToExternalWeb(ollamaRepoUrl);
+          } catch {
+            toaster.toast({ title: "Ollama", body: ollamaRepoUrl, duration: 4000 });
+          }
+        }}
+      >
+        <span style={{ fontSize: 13 }}>Built on Ollama</span>
       </ButtonItem>
     </PanelSectionRow>
     <PanelSectionRow>

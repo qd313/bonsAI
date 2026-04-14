@@ -16,6 +16,8 @@ This file merges the active roadmap with detailed future planning. For the refac
 - [x] ★★ **Unified Search + Ask Input:** Merge settings search and AI question entry into one shared input flow.
 - [x] ★★★ **TDP Automation via AI Output:** Parse AI recommendations and apply constrained TDP values through safe sysfs write paths.
 - [x] ★★★ **D-pad Response Scrolling:** Split long responses into focusable chunks for controller-first navigation.
+- [x] ★★★★★ **Steam Input Jump (Phase 1):** Debug tab jump to per-game controller config via `steam://controllerconfig/{appId}` (`SteamClient.URL.ExecuteSteamURL`), versioned lexicon in `src/data/steam-input-lexicon.ts`, helper in `src/utils/steamInputJump.ts`. Documented in [steam-input-research.md](steam-input-research.md). **Phase 2+** (indexed search, full catalog, ranked results) is **not** planned to continue.
+- [x] ★ **Built on Ollama Link (About Tab):** “Built on Ollama” button in About opens `https://github.com/ollama/ollama` via `Navigation.NavigateToExternalWeb` (toast fallback), wired from `OLLAMA_UPSTREAM_REPO_URL` in `src/index.tsx` and `src/components/AboutTab.tsx`.
 
 ## In Progress
 - [ ] ★★★ **QAMP Reflection (Phase 1 - Safe Default):** Show applied-state confirmation and explicit verification guidance when QAM sliders do not immediately mirror hardware writes.
@@ -62,17 +64,26 @@ Ranked by effort and risk using the GTA star system:
 - Background Prompt Completion (V1)
 - Linux Ollama Compatibility
 - Global Screenshots and Vision (V1)
+- Steam Input Jump (Phase 1)
+- Built on Ollama Link (About Tab)
 
 ---
 
 ## Candidate Features (Easiest → Hardest)
 
-### ★ Built on Ollama Link (About Tab)
-- **Goal:** Add a clear attribution/action button in About that links users to the upstream Ollama repository.
-- **Primary work:** add About button copy, external-link behavior, and lightweight validation for link open behavior in Game Mode/Desktop Mode.
-- **Files:** `src/index.tsx`, docs/about copy references.
-- **Depends on:** none.
-- **Not in scope:** bundling Ollama binaries or changing model-runtime behavior.
+### ★★ Search Surface Glass Pass (Unified Input)
+- **Goal:** Give the unified search area a transparent/glass style with faint outline and integrated corner controls at reduced opacity while preserving controller focus clarity.
+- **Primary work:** style-system pass for search container, integrated button placement, and readability checks in QAM themes.
+- **Files:** `src/index.tsx`, UI styling notes in docs.
+- **Depends on:** existing Unified Search + Ask input baseline.
+- **Not in scope:** replacing Decky native input primitives or introducing custom DOM hacks.
+
+### ★★ Character Accent Intensity Levels (Doom-Style Copy)
+- **Goal:** Add an accent intensity setting for character-roleplay responses with thematic level descriptions inspired by Doom Eternal tone.
+- **Primary work:** intensity-level spec, user-facing copy guidance, and prompt-routing notes for safe/optional stylistic modulation.
+- **Files:** `src/index.tsx`, `main.py`, docs copy references.
+- **Depends on:** **Character Voice Roleplay Mode (Opt-In)**.
+- **Not in scope:** changing factual response policy or forcing roleplay language by default.
 
 ### ★★★ Mode Selector Dropdown (Main Screen)
 - **Goal:** Add model mode selector (`Fast`, `Strategy Guide`, `Mega/Ultra/Deep`) on main screen.
@@ -95,6 +106,34 @@ Ranked by effort and risk using the GTA star system:
 - **Files:** `main.py`, `src/index.tsx`.
 - **Depends on:** settings persistence already present.
 - **Not in scope:** full UI localization of plugin labels.
+
+### ★★★ Input Sanitizer Lane (Hybrid + User Override)
+- **Goal:** Pre-process low-quality input (junk/gibberish) using a hybrid sanitizer path while preserving user control and intent.
+- **Primary work:** deterministic cleanup baseline, optional small-model rewrite path, harmful-input block path, and explicit `Use original input` bypass.
+- **Files:** `main.py`, `src/index.tsx`, prompt-policy docs.
+- **Depends on:** settings persistence and transparent input handling controls.
+- **Not in scope:** hidden prompt rewriting with no user visibility or override.
+
+### ★★★ Character Voice Roleplay Mode (Opt-In)
+- **Goal:** Add a default-off setting that enables optional game-character voice/accent response style using a curated list plus user-defined entries.
+- **Primary work:** toggle behavior spec, full-screen character picker flow, and data model backed by [voice-character-catalog.md](voice-character-catalog.md).
+- **Files:** `src/index.tsx`, `main.py`, `docs/voice-character-catalog.md`.
+- **Depends on:** permission/safety copy alignment and prompt-routing controls.
+- **Not in scope:** impersonation claims of official voice actors or non-consensual always-on roleplay.
+
+### ★★★ Search Results Density + Live Match Emphasis
+- **Goal:** Make search results tighter and more scannable with single-spacing, wider text lines, instant update behavior, and highlighted match tokens.
+- **Primary work:** result row spacing policy, incremental filtering behavior, and match token styling (bold/underline/highlight) with controller readability checks.
+- **Files:** `src/index.tsx`, prompt/search UX test notes.
+- **Depends on:** existing unified search indexing and response-state handling.
+- **Not in scope:** changing ranking semantics for unrelated search domains.
+
+### ★★★ Input Handling Transparency Panel
+- **Goal:** Let users inspect exactly how input was transformed before model execution and quickly re-run with original text.
+- **Primary work:** per-request transformation log, before/after view, one-tap `Run Original` action, and exportable local JSON audit trail.
+- **Files:** `src/index.tsx`, `main.py`, troubleshooting/privacy docs.
+- **Depends on:** **Input Sanitizer Lane (Hybrid + User Override)**.
+- **Not in scope:** telemetry upload of prompt transformation history.
 
 ### ★★★ Reset Cache Action (App State)
 - **Goal:** Provide a user-facing reset action that clears cached unified search text and current AI response output in one step.
@@ -166,6 +205,13 @@ Ranked by effort and risk using the GTA star system:
 - **Depends on:** bundled VDF parser support.
 - **Not in scope:** editing/writing controller configs.
 
+### ★★★★ Offline Intent Pack Exchange (Local JSON)
+- **Goal:** Support import/export of user-created offline search intent packs (aliases, synonyms, setting-name expansions) without cloud dependence.
+- **Primary work:** local JSON schema, add/edit/export/import flow, and conflict-handling rules for merged intent dictionaries.
+- **Files:** `src/index.tsx`, `main.py`, docs/usage references.
+- **Depends on:** stable search indexing and local storage schema versioning.
+- **Not in scope:** remote-hosted pack catalogs or mandatory online sync.
+
 ### ★★★★ Advanced Thermal and Fan Curve Tuning
 - **Goal:** Add manual fan profile control with thermal failsafes.
 - **Primary work:** hwmon discovery, fan control lifecycle, safety limits, restore-on-unload.
@@ -211,6 +257,14 @@ Ranked by effort and risk using the GTA star system:
 - **Files:** `main.py`, `src/index.tsx`, install/troubleshooting docs.
 - **Depends on:** robust provider routing and **Llama.cpp Compatibility Evaluation (Research Spike)** outcomes.
 - **Not in scope:** guarantees of zero performance impact during heavy in-game workloads.
+
+### ★★★★★ Steam Input Settings Search + Jump (Research-First)
+- **Status:** **Phase 1 complete** (see **Completed** above). **Phase 2+ deferred:** indexed setting-term catalog, unified search integration, ranked results, and Edit Layout enumeration are **not** in active development unless this item is explicitly revived.
+- **Goal (full feature, unscheduled):** Let users search Steam Input setting names and navigate to the closest relevant settings surface, with exact deep-link behavior treated as feasibility-gated.
+- **Primary work (if resumed):** indexed setting-term catalog, result selection flow, jump-path feasibility tests, and fallback guided navigation documented in [steam-input-research.md](steam-input-research.md).
+- **Files:** `src/index.tsx`, `main.py`, `docs/steam-input-research.md`.
+- **Depends on:** Steam Input route-discovery research and resilient fallback UX when exact route targeting is unsupported.
+- **Not in scope:** undocumented private-UI patching or brittle route injection that breaks on Steam updates.
 
 ### ★★★★★ Restricted Kids Account Master Lock
 - **Goal:** Disable plugin capability access when Steam reports a restricted kids account, then restore normal access when reopened under a full account.
@@ -286,6 +340,8 @@ Not in scope: Programmatic background input sniffing (evdev), WebSockets, or Rea
 ## Cross-Feature Dependency Summary
 
 - **Mode Selector Dropdown (Main Screen)** (`Strategy Guide` replaces `Thinking`) → required by **Per-Mode Latency/Timeout Profiles** and **Strategy Guide Prompt Path (Beta)**.
+- **Character Voice Roleplay Mode (Opt-In)** → required by **Character Accent Intensity Levels (Doom-Style Copy)** and sources curated defaults from [voice-character-catalog.md](voice-character-catalog.md).
+- **Input Sanitizer Lane (Hybrid + User Override)** → required by **Input Handling Transparency Panel** to preserve user-visible transformation auditability.
 - **Strategy Guide Prompt Path (Beta)** → required by **Strategy Guide Safety and Spoilers** and **Strategy Checklist Workflow (Chat-Scoped)**.
 - **Global Screenshots and Vision** → enables richer strategy responses with screenshot-aware context and inline visual aids.
 - **Capability Permission Center (User-Controlled Access)** → gates filesystem writes, sudo/elevated tasks, hardware-control actions, and web/search calls behind explicit user consent with revocation support.
@@ -293,11 +349,13 @@ Not in scope: Programmatic background input sniffing (evdev), WebSockets, or Rea
 - **Llama.cpp Compatibility Evaluation (Research Spike)** → informs feasibility and architecture for **Local Runtime Mode (Default) + Beta Risk Warning**.
 - **Local Runtime Mode (Default) + Beta Risk Warning** → shifts provider priority to local execution while preserving remote fallback.
 - **Restricted Kids Account Master Lock** → sits above permission toggles and hard-blocks all privileged capabilities while restricted account status is active.
-- **Built on Ollama Link (About Tab)** → adds transparent attribution and educational navigation without changing runtime execution.
+- **Built on Ollama Link (About Tab)** → shipped in About (`Navigation.NavigateToExternalWeb` to upstream Ollama GitHub); see **Implemented Baseline**.
 - **SteamOS Media Screenshot Share Button (Research Spike)** → candidate fast entry point into **Global Screenshots and Vision** attach flow if supported by host APIs.
 - **Reset Cache Action (App State)** → relies on existing unified-input persistence and response-state boundaries.
 - **Preset Carousel and Transition UX** → extends current random preset presentation without changing prompt category routing.
 - **Bundled VDF parsing support** → needed for **Steam Input Layout Analysis** (and optional deeper language/config parsing extensions).
+- **Steam Input Settings Search + Jump** → Phase 1 shipped (lexicon + Debug jump); broader search/catalog remains deferred per roadmap.
+- **Offline Intent Pack Exchange (Local JSON)** → extends search quality via local import/export packs while keeping offline-first operation.
 - **Stable settings persistence** → reused by mode profiles, language override, and background completion metadata.
 
 ```mermaid

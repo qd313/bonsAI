@@ -58,7 +58,9 @@ Fix or alternative: <concrete change or replacement>
 Cost: <low|medium|high and short effort note>
 
 Output rules:
-- Return findings only.
+- **Mandatory deliverable:** Always write the complete report to `docs/foss-advocate-report.md`. Create the file if it does not exist; otherwise replace the file body with this review. Use the same finding block structure as in “For each confirmed finding” (blank line between findings). If there are no confirmed findings, the file must contain exactly: `No issues found` (and nothing else). You may add a single `# FOSS advocate report` title line plus one optional subtitle line before findings when issues exist; keep the file readable and aligned with `docs/security-audit-report.md` (concise finding blocks, no filler).
+- In chat, you may give a short pointer to the file; the authoritative artifact is `docs/foss-advocate-report.md`.
+- Return findings only (in the markdown file and, if you reply in chat, findings there too).
 - No theoretical risks.
 - No generic best-practice lists.
 - Every finding must be directly supported by repository evidence.

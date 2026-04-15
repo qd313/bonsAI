@@ -18,6 +18,7 @@ This file merges the active roadmap with detailed future planning. For the refac
 - [x] ★★★ **D-pad Response Scrolling:** Split long responses into focusable chunks for controller-first navigation.
 - [x] ★★★★★ **Steam Input Jump (Phase 1):** Debug tab jump to per-game controller config via `steam://controllerconfig/{appId}` (`SteamClient.URL.ExecuteSteamURL`), versioned lexicon in `src/data/steam-input-lexicon.ts`, helper in `src/utils/steamInputJump.ts`. Documented in [steam-input-research.md](steam-input-research.md). **Phase 2+** (indexed search, full catalog, ranked results) is **not** planned to continue.
 - [x] ★ **Built on Ollama Link (About Tab):** “Built on Ollama” button in About opens `https://github.com/ollama/ollama` via `Navigation.NavigateToExternalWeb` (toast fallback), wired from `OLLAMA_UPSTREAM_REPO_URL` in `src/index.tsx` and `src/components/AboutTab.tsx`.
+- [x] ★★ **Search Surface Glass Pass (Unified Input):** Glass-style unified search field and ask bar (~25% fill, blur, light edge), 50% opacity on corner action icons, dynamic height for the input shell from wrapped text, AI answer chunks use matching glass instead of near-black panels.
 
 ## In Progress
 - [ ] ★★★ **QAMP Reflection (Phase 1 - Safe Default):** Show applied-state confirmation and explicit verification guidance when QAM sliders do not immediately mirror hardware writes.
@@ -66,17 +67,11 @@ Ranked by effort and risk using the GTA star system:
 - Global Screenshots and Vision (V1)
 - Steam Input Jump (Phase 1)
 - Built on Ollama Link (About Tab)
+- Search Surface Glass Pass (Unified Input)
 
 ---
 
 ## Candidate Features (Easiest → Hardest)
-
-### ★★ Search Surface Glass Pass (Unified Input)
-- **Goal:** Give the unified search area a transparent/glass style with faint outline and integrated corner controls at reduced opacity while preserving controller focus clarity.
-- **Primary work:** style-system pass for search container, integrated button placement, and readability checks in QAM themes.
-- **Files:** `src/index.tsx`, UI styling notes in docs.
-- **Depends on:** existing Unified Search + Ask input baseline.
-- **Not in scope:** replacing Decky native input primitives or introducing custom DOM hacks.
 
 ### ★★ Character Accent Intensity Levels (Doom-Style Copy)
 - **Goal:** Add an accent intensity setting for character-roleplay responses with thematic level descriptions inspired by Doom Eternal tone.

@@ -36,45 +36,21 @@ import {
 } from "./utils/settingsAndResponse";
 import { AboutTab } from "./components/AboutTab";
 import { DebugTab } from "./components/DebugTab";
+import { MainTab } from "./components/MainTab";
 import { getSteamInputLexiconEntry } from "./data/steam-input-lexicon";
 import { jumpToSteamInputEntry } from "./utils/steamInputJump";
 import { detectPromptCategory, getContextualPresets, getRandomPresets, type PresetPrompt } from "./data/presets";
-import {
-  AskMicIcon,
-  AskStopIcon,
-  AttachMediaIcon,
-  BackChevronIcon,
-  BonsaiLogoIcon,
-  BonsaiSvgIcon,
-  BugIcon,
-  ClearIcon,
-  GearIcon,
-  ImageAttachmentIcon,
-  RefreshArrowIcon,
-} from "./components/icons";
+import { BonsaiLogoIcon, BonsaiSvgIcon, BugIcon, GearIcon } from "./components/icons";
 import { SETTINGS_DATABASE } from "./data/settingsDatabase";
-
-function splitResponseIntoChunks(text: string): string[] {
-  // Keep responses readable in Decky by splitting dense output into panel-sized chunks.
-  const byParagraph = text.split(/\n\n+/).filter(p => p.trim());
-  if (byParagraph.length > 1) return byParagraph;
-
-  const byLine = text.split(/\n/).filter(l => l.trim());
-  if (byLine.length > 1) return byLine;
-
-  const chunks: string[] = [];
-  let rest = text;
-  while (rest.length > 300) {
-    let cut = rest.lastIndexOf(". ", 300);
-    if (cut < 100) cut = rest.lastIndexOf(" ", 300);
-    if (cut < 100) cut = 300;
-    chunks.push(rest.slice(0, cut + 1).trim());
-    rest = rest.slice(cut + 1).trim();
-  }
-  if (rest.trim()) chunks.push(rest.trim());
-  return chunks.length > 0 ? chunks : [text];
-}
-
+import {
+  TAB_TITLE_ICON_PX_BONSAI,
+  TAB_TITLE_ICON_PX_DEBUG,
+  TAB_TITLE_ICON_PX_SETTINGS,
+  UNIFIED_TEXT_FONT_PX,
+  UNIFIED_TEXT_LINE_HEIGHT,
+} from "./features/unified-input/constants";
+import { useUnifiedInputSurface } from "./features/unified-input/useUnifiedInputSurface";
+import type { AppliedResult, AskAttachment, OllamaContextUi, ScreenshotItem } from "./types/bonsaiUi";
 
 /**
  * This boundary protects the plugin UI from render-time failures so Decky can keep the panel alive.
@@ -115,31 +91,6 @@ type SteamUrlApi = {
 };
 
 const UNIFIED_INPUT_STORAGE_KEY = "bonsai:last-query";
-
-type AppliedResult = {
-  tdp_watts: number | null;
-  gpu_clock_mhz: number | null;
-  errors: string[];
-};
-
-type AskAttachment = {
-  path: string;
-  name: string;
-  source: "capture" | "recent" | "picker";
-  preview_data_uri?: string;
-  size_bytes?: number;
-  app_id?: string;
-};
-
-type ScreenshotItem = {
-  path: string;
-  name: string;
-  mtime: number;
-  size_bytes?: number;
-  source: string;
-  app_id?: string;
-  preview_data_uri?: string;
-};
 
 type BackgroundStartResponse = {
   accepted: boolean;
@@ -258,54 +209,6 @@ function loadSavedIp(): string {
 function saveIp(ip: string): void {
   if (typeof window === "undefined") return;
   try { window.localStorage.setItem(IP_STORAGE_KEY, ip); } catch {}
-}
-
-// Convert absolute file paths to file:// URIs for image rendering contexts.
-function toFileUri(path: string): string {
-  const normalized = path.replace(/\\/g, "/");
-  const prefixed = normalized.startsWith("/") ? normalized : `/${normalized}`;
-  return `file://${encodeURI(prefixed)}`;
-}
-
-// Format screenshot mtimes into concise local timestamps for list rows.
-function formatScreenshotTimestamp(epochSeconds: number): string {
-  if (!Number.isFinite(epochSeconds) || epochSeconds <= 0) return "Unknown time";
-  try {
-    return new Date(epochSeconds * 1000).toLocaleString();
-  } catch {
-    return "Unknown time";
-  }
-}
-
-// Convert byte counts into human-readable units for screenshot metadata.
-function formatBytes(bytes: number): string {
-  if (!Number.isFinite(bytes) || bytes <= 0) return "Unknown size";
-  const units = ["B", "KB", "MB", "GB"];
-  let value = bytes;
-  let idx = 0;
-  while (value >= 1024 && idx < units.length - 1) {
-    value /= 1024;
-    idx += 1;
-  }
-  return `${value >= 10 || idx === 0 ? value.toFixed(0) : value.toFixed(1)} ${units[idx]}`;
-}
-
-function isRightNavigationKey(key: string): boolean {
-  return key === "ArrowRight" || key === "Right" || key === "DPadRight" || key === "GamepadDPadRight";
-}
-
-function isLeftNavigationKey(key: string): boolean {
-  return key === "ArrowLeft" || key === "Left" || key === "DPadLeft" || key === "GamepadDPadLeft";
-}
-
-// Find a visible focusable descendant to support controller-first keyboard navigation.
-function getFocusableWithin(selector: string): HTMLElement | null {
-  const root = document.querySelector(selector) as HTMLElement | null;
-  if (!root) return null;
-  const candidate = root.matches("[tabindex],button,a,input,select,textarea")
-    ? root
-    : (root.querySelector("[tabindex],button,a,input,select,textarea") as HTMLElement | null);
-  return candidate;
 }
 
 // De-duplicate screenshot rows by path while preserving original ordering.
@@ -559,12 +462,20 @@ const Content: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [isUnifiedInputFocused, setIsUnifiedInputFocused] = useState(false);
   const [navigationMessage, setNavigationMessage] = useState<string>("");
-  const unifiedInputHostRef = useRef<HTMLDivElement>(null);
+  const {
+    bonsaiScopeRef,
+    unifiedInputHostRef,
+    unifiedInputFieldLayerRef,
+    unifiedInputMeasureRef,
+    askBarHostRef,
+    unifiedInputSurfacePx,
+    usesNativeMultilineField,
+  } = useUnifiedInputSurface(currentTab, unifiedInput);
 
   // --- AI state ---
   const [ollamaIp, setOllamaIp] = useState(loadSavedIp());
   const [ollamaResponse, setOllamaResponse] = useState("");
-  const [ollamaContext, setOllamaContext] = useState<{ app_id: string; app_context: "active" | "none" } | null>(null);
+  const [ollamaContext, setOllamaContext] = useState<OllamaContextUi>(null);
   const [isAsking, setIsAsking] = useState(false);
   const [lastApplied, setLastApplied] = useState<AppliedResult | null>(null);
   const [suggestedPrompts, setSuggestedPrompts] = useState<PresetPrompt[]>(() => getRandomPresets(3));
@@ -1034,604 +945,52 @@ const Content: React.FC = () => {
   // =====================================================================
 
   const mainTab = (
-    <>
-      <PanelSection>
-        <PanelSectionRow>
-          <div style={{ ...fullBleedRowStyle, display: "grid", gap: 8 }}>
-            {suggestedPrompts.map((p, i) => (
-              <Button
-                key={`preset-${i}`}
-                onClick={() => {
-                  const gameName = Router.MainRunningApp?.display_name ?? "";
-                  setUnifiedInput(gameName ? `${p.text} for ${gameName}` : p.text);
-                }}
-                style={{
-                  width: "100%",
-                  minHeight: 34,
-                  ...presetButtonSurface,
-                  fontSize: 12,
-                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
-                }}
-              >
-                {p.text}
-                {p.beta && (
-                  <span style={{ marginLeft: 6, fontSize: 10, opacity: 0.55, fontStyle: "italic" }}>
-                    [beta]
-                  </span>
-                )}
-              </Button>
-            ))}
-          </div>
-        </PanelSectionRow>
-        <PanelSectionRow>
-          <div ref={unifiedInputHostRef} className="bonsai-unified-input-host" style={fullBleedRowStyle}>
-            <div style={{ position: "relative", width: "100%" }}>
-              <TextField
-                label=""
-                value={unifiedInput}
-                spellCheck={false}
-                style={{ width: "100%", minHeight: 94, fontSize: 14, color: "transparent", caretColor: "white" }}
-                onFocus={() => { setIsUnifiedInputFocused(true); }}
-                onBlur={() => { setIsUnifiedInputFocused(false); }}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setUnifiedInput(e.target.value);
-                  setSelectedIndex(-1);
-                }}
-                onKeyDown={(ev: React.KeyboardEvent<HTMLInputElement>) => {
-                  if (ev.key === "ArrowDown") {
-                    if (filteredSettings.length > 0) {
-                      setSelectedIndex((prev) => Math.min(prev + 1, filteredSettings.length - 1));
-                      ev.preventDefault();
-                    }
-                    return;
-                  }
-                  if (ev.key === "ArrowUp") {
-                    if (filteredSettings.length > 0) {
-                      setSelectedIndex((prev) => Math.max(prev - 1, 0));
-                      ev.preventDefault();
-                    }
-                    return;
-                  }
-                  if (ev.key === "Enter") {
-                    ev.preventDefault();
-                    const hasSelectedResult = selectedIndex >= 0 && selectedIndex < filteredSettings.length;
-                    if (hasSelectedResult) {
-                      onSettingClick(filteredSettings[selectedIndex], selectedIndex);
-                      return;
-                    }
-                    if (!isAsking && unifiedInput.trim() && ollamaIp.trim()) {
-                      (ev.currentTarget as HTMLElement).blur();
-                      onAskOllama();
-                    }
-                  }
-                }}
-              />
-              <div
-                style={{
-                  pointerEvents: "none",
-                  position: "absolute",
-                  left: 12,
-                  right: 12,
-                  top: 10,
-                  bottom: 12,
-                  color: isUnifiedInputFocused ? "#1d2a38" : "#c4d3e2",
-                  whiteSpace: "pre-wrap",
-                  overflowWrap: "anywhere",
-                  lineHeight: "1.25",
-                  fontSize: 13,
-                }}
-              >
-                {unifiedInput}
-              </div>
-            </div>
-          </div>
-        </PanelSectionRow>
-        <PanelSectionRow>
-          <div
-            onKeyDownCapture={(ev: React.KeyboardEvent<HTMLDivElement>) => {
-              const activeEl = document.activeElement as HTMLElement | null;
-              const previewActive = Boolean(activeEl?.closest(".bonsai-attachment-preview-target"));
-              const removeActive = Boolean(activeEl?.closest(".bonsai-attachment-remove-target"));
-              if (isRightNavigationKey(ev.key) && previewActive) {
-                const removeTarget = getFocusableWithin(".bonsai-attachment-remove-target");
-                if (removeTarget) {
-                  ev.preventDefault();
-                  ev.stopPropagation();
-                  removeTarget.focus();
-                }
-                return;
-              }
-              if (isLeftNavigationKey(ev.key) && removeActive) {
-                const previewTarget = getFocusableWithin(".bonsai-attachment-preview-target");
-                if (previewTarget) {
-                  ev.preventDefault();
-                  ev.stopPropagation();
-                  previewTarget.focus();
-                }
-                return;
-              }
-            }}
-            style={{ ...fullBleedRowStyle, display: "flex", flexDirection: "column", gap: 6 }}
-          >
-            {selectedAttachment ? (
-              <Focusable
-                flow-children="horizontal"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 10,
-                  minHeight: 38,
-                  borderRadius: 8,
-                  border: "1px solid rgba(150, 187, 223, 0.62)",
-                  background: "linear-gradient(180deg, rgba(64, 93, 124, 0.42) 0%, rgba(48, 71, 95, 0.42) 100%)",
-                  color: "#e3edf7",
-                  padding: "5px 8px",
-                }}
-              >
-                <Button
-                  className="bonsai-attachment-preview-target"
-                  aria-label={`Attached screenshot ${selectedAttachment.name}`}
-                  onClick={onOpenScreenshotBrowser}
-                  style={{
-                    flex: 1,
-                    minWidth: 0,
-                    minHeight: 30,
-                    padding: 0,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "flex-start",
-                    gap: 8,
-                    border: "none",
-                    background: "transparent",
-                    color: "#e3edf7",
-                    boxShadow: "none",
-                  }}
-                >
-                  <ImageAttachmentIcon size={17} />
-                  <img
-                    src={selectedAttachment.preview_data_uri || toFileUri(selectedAttachment.path)}
-                    alt={selectedAttachment.name}
-                    style={{
-                      width: 58,
-                      height: 34,
-                      borderRadius: 4,
-                      objectFit: "cover",
-                      background: "rgba(255,255,255,0.06)",
-                      flexShrink: 0,
-                    }}
-                  />
-                  <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-                    <span
-                      style={{
-                        display: "block",
-                        fontSize: 11,
-                        color: "#dbe7f3",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {selectedAttachment.name}
-                    </span>
-                    <span style={{ display: "block", fontSize: 8, color: "#cfdeed", fontWeight: 600, marginTop: 2 }}>
-                      {formatBytes(selectedAttachment.size_bytes ?? 0)}
-                    </span>
-                  </div>
-                </Button>
-                <Button
-                  className="bonsai-attachment-remove-target"
-                  onClick={() => setSelectedAttachment(null)}
-                  aria-label="Remove attachment"
-                  style={{
-                    minWidth: 36,
-                    width: 36,
-                    minHeight: 34,
-                    padding: 0,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    border: "none",
-                    background: "transparent",
-                    color: "#dce8f4",
-                    boxShadow: "none",
-                    outline: "none",
-                  }}
-                >
-                  <ClearIcon size={18} />
-                </Button>
-              </Focusable>
-            ) : (
-              <div style={{ fontSize: 11, color: "#8ea2b8", paddingLeft: 2 }}>
-                No screenshot attached.
-              </div>
-            )}
-          </div>
-        </PanelSectionRow>
-        <PanelSectionRow>
-          <Focusable
-            flow-children="horizontal"
-            style={{ ...fullBleedRowStyle, display: "flex", gap: 4, alignItems: "center" }}
-          >
-            <div
-              className="bonsai-askbar-merged"
-              style={{
-                flex: 1,
-                minHeight: 44,
-                display: "flex",
-                borderRadius: 8,
-                overflow: "hidden",
-                border: "1px solid rgba(255,255,255,0.16)",
-                background: "rgba(24, 35, 46, 0.9)",
-              }}
-            >
-              <div ref={attachActionHostRef} style={{ display: "flex" }}>
-                <Button
-                  className="bonsai-askbar-target"
-                  onClick={onOpenScreenshotBrowser}
-                  disabled={isAsking}
-                  aria-label="Attach screenshot"
-                  style={{
-                    minWidth: 42,
-                    width: 42,
-                    minHeight: 44,
-                    padding: 0,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderRadius: 0,
-                    border: "none",
-                    background: "transparent",
-                    color: "#dbe6f3",
-                  }}
-                >
-                  <span style={{ position: "relative", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
-                    <AttachMediaIcon size={18} />
-                    {selectedAttachment && (
-                      <span
-                        style={{
-                          position: "absolute",
-                          right: -8,
-                          top: -8,
-                          minWidth: 14,
-                          height: 14,
-                          borderRadius: 999,
-                          background: "#dfeaf6",
-                          color: "#1d2a38",
-                          fontSize: 9,
-                          lineHeight: "14px",
-                          fontWeight: 700,
-                          textAlign: "center",
-                        }}
-                      >
-                        1
-                      </span>
-                    )}
-                  </span>
-                </Button>
-              </div>
-              <Button
-                className="bonsai-askbar-target"
-                onClick={onAskOllama}
-                disabled={isAsking}
-                style={{
-                  flex: 1,
-                  minHeight: 44,
-                  borderRadius: 0,
-                  border: "none",
-                  background: "rgba(255,255,255,0.04)",
-                  color: "#eef4fb",
-                }}
-              >
-                <span style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%" }}>
-                  <span style={{ fontWeight: 600 }}>Ask</span>
-                </span>
-              </Button>
-              {isAsking ? (
-                <Button
-                  className="bonsai-askbar-target"
-                  onClick={onCancelAsk}
-                  aria-label="Stop generation"
-                  style={{
-                    minWidth: 42,
-                    width: 42,
-                    minHeight: 44,
-                    padding: 0,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderRadius: 0,
-                    border: "none",
-                    background: "transparent",
-                  }}
-                >
-                  <AskStopIcon size={30} />
-                </Button>
-              ) : (
-                <Button
-                  className="bonsai-askbar-target"
-                  onClick={onMicInput}
-                  aria-label="Voice input"
-                  style={{
-                    minWidth: 42,
-                    width: 42,
-                    minHeight: 44,
-                    padding: 0,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    borderRadius: 0,
-                    border: "none",
-                    background: "transparent",
-                    color: "#dbe6f3",
-                  }}
-                >
-                  <AskMicIcon size={20} />
-                </Button>
-              )}
-            </div>
-            {showSearchClearButton && (
-              <Button
-                onClick={clearUnifiedInput}
-                aria-label="Clear"
-                style={{
-                  minWidth: 42,
-                  width: 42,
-                  minHeight: 44,
-                  padding: 0,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  ...presetButtonSurface,
-                  color: "#dfe8ef",
-                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
-                }}
-              >
-                <ClearIcon size={28} />
-              </Button>
-            )}
-          </Focusable>
-        </PanelSectionRow>
-        {isScreenshotBrowserOpen && (
-          <PanelSectionRow>
-            <Focusable
-              flow-children="vertical"
-              ref={screenshotBrowserHostRef}
-              onKeyDown={(ev: React.KeyboardEvent<HTMLDivElement>) => {
-                if (ev.key === "Escape" || ev.key === "Backspace") {
-                  onCloseScreenshotBrowser();
-                  ev.preventDefault();
-                }
-              }}
-              style={{
-                ...fullBleedRowStyle,
-                border: "1px solid rgba(255,255,255,0.14)",
-                borderRadius: 8,
-                background: "rgba(12, 18, 25, 0.96)",
-                padding: 10,
-                display: "grid",
-                gap: 8,
-                minHeight: 320,
-                position: "relative",
-              }}
-            >
-              <Focusable flow-children="horizontal" style={{ display: "flex", gap: 8 }}>
-                <Button
-                  onClick={onCloseScreenshotBrowser}
-                  aria-label="Back"
-                  style={{ minWidth: 52, width: 52, minHeight: 34, padding: 0, ...presetButtonSurface }}
-                >
-                  <BackChevronIcon size={20} />
-                </Button>
-                <Button
-                  onClick={() => {
-                    void loadRecentScreenshots(24);
-                  }}
-                  disabled={isLoadingRecentScreenshots}
-                  aria-label="Refresh screenshots"
-                  style={{ minWidth: 52, width: 52, minHeight: 34, padding: 0, ...presetButtonSurface }}
-                >
-                  <RefreshArrowIcon size={20} />
-                </Button>
-              </Focusable>
-
-              {mediaError && (
-                <div style={{ color: "#f09a8d", fontSize: 11, lineHeight: 1.35 }}>
-                  {mediaError}
-                </div>
-              )}
-
-              {recentScreenshots.length === 0 && !isLoadingRecentScreenshots ? (
-                <div style={{ color: "#9cb0c6", fontSize: 12, lineHeight: 1.4 }}>
-                  No recent screenshots found. Open Steam Media and take a screenshot, then refresh.
-                </div>
-              ) : (
-                <div
-                  style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-                    gap: 8,
-                    alignContent: "start",
-                    width: "100%",
-                    maxWidth: "100%",
-                    overflow: "hidden",
-                  }}
-                >
-                  {recentScreenshots.map((item) => (
-                    <Button
-                      key={item.path}
-                      onClick={() => onSelectRecentScreenshot(item)}
-                      style={{
-                        minHeight: 144,
-                        ...presetButtonSurface,
-                        padding: 6,
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "stretch",
-                        justifyContent: "flex-start",
-                        gap: 4,
-                        textAlign: "left",
-                      }}
-                    >
-                      <img
-                        src={item.preview_data_uri || toFileUri(item.path)}
-                        alt={item.name}
-                        style={{
-                          width: "100%",
-                          height: 94,
-                          objectFit: "cover",
-                          borderRadius: 4,
-                          background: "rgba(255,255,255,0.04)",
-                        }}
-                      />
-                      <span style={{ fontSize: 10, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                        {item.name}
-                      </span>
-                      <span style={{ fontSize: 9, color: "#8ea2b8", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                        {formatScreenshotTimestamp(item.mtime)}
-                      </span>
-                      <span style={{ fontSize: 10, color: "#d9e6f4", fontWeight: 700 }}>
-                        Size: {formatBytes(item.size_bytes ?? 0)}
-                      </span>
-                    </Button>
-                  ))}
-                </div>
-              )}
-
-            </Focusable>
-          </PanelSectionRow>
-        )}
-
-        {navigationMessage && (
-          <PanelSectionRow>
-            <div style={{ color: "#81c784", fontSize: 13 }}>{navigationMessage}</div>
-          </PanelSectionRow>
-        )}
-
-        {filteredSettings.length > 0 && (
-          <>
-            <PanelSectionRow>
-              <div style={{ color: "gray", padding: "6px 0", fontSize: 13 }}>Results</div>
-            </PanelSectionRow>
-            {filteredSettings.map((s, i) => {
-              const isQam = isQamSetting(s);
-              const isSelected = i === selectedIndex;
-              const parts = s.split(">").map((part) => part.trim()).filter(Boolean);
-              const title = parts[parts.length - 1] ?? s;
-              const breadcrumb = parts.slice(0, -1).join(" > ");
-              const compactLine = isQam ? `* QAM > ${title}` : `${title}`;
-              const compactSubline = isQam ? `(${breadcrumb})` : breadcrumb;
-
-              return (
-                <PanelSectionRow key={i}>
-                  <Button
-                    onClick={() => onSettingClick(s, i)}
-                    style={{
-                      width: "100%",
-                      minHeight: 28,
-                      padding: "2px 6px",
-                      borderRadius: 4,
-                      border: `1px solid ${isQam ? "rgba(243, 197, 91, 0.3)" : "rgba(255,255,255,0.1)"}`,
-                      background: isSelected
-                        ? isQam
-                          ? "rgba(243, 197, 91, 0.22)"
-                          : "rgba(255,255,255,0.14)"
-                        : isQam
-                          ? "rgba(243, 197, 91, 0.08)"
-                          : "rgba(255,255,255,0.02)",
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: "100%",
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        textAlign: "center",
-                      }}
-                    >
-                      <div style={{ fontSize: 10, fontWeight: 700, color: isSelected ? "white" : isQam ? "#f2cf84" : "#d4dbe2", lineHeight: "1.15" }}>
-                        {compactLine}
-                      </div>
-                      {compactSubline && (
-                        <div style={{ fontSize: 9, color: isSelected ? "#dfe8ef" : "#9fafbc", lineHeight: "1.1", marginTop: 1 }}>
-                          {compactSubline}
-                        </div>
-                      )}
-                    </div>
-                  </Button>
-                </PanelSectionRow>
-              );
-            })}
-          </>
-        )}
-
-        {isAsking && showSlowWarning && (
-          <PanelSectionRow>
-            <div style={{ color: "#f2cf84", fontSize: 12, padding: "6px 0" }}>
-              This is taking a while (&gt;{latencyWarningSeconds}s)... If responses are consistently slow, verify Ollama is using your GPU, not CPU. CPU inference is dramatically slower.
-            </div>
-          </PanelSectionRow>
-        )}
-        {ollamaResponse && splitResponseIntoChunks(ollamaResponse).map((chunk, i, arr) => (
-          <PanelSectionRow key={`ai-chunk-${i}`}>
-            <Focusable
-              onActivate={() => {}}
-              noFocusRing={false}
-              style={{
-                color: "white",
-                padding: "8px",
-                background: "rgba(0,0,0,0.5)",
-                borderRadius: i === 0 && arr.length === 1 ? 4
-                  : i === 0 ? "4px 4px 0 0"
-                  : i === arr.length - 1 ? "0 0 4px 4px"
-                  : 0,
-                whiteSpace: "pre-wrap",
-                fontSize: "12px",
-                lineHeight: "1.4",
-                marginTop: i > 0 ? -8 : 0,
-                marginBottom: i === arr.length - 1 ? 80 : 0,
-              }}
-            >
-              {chunk}
-            </Focusable>
-          </PanelSectionRow>
-        ))}
-        {!isAsking && elapsedSeconds != null && elapsedSeconds > latencyWarningSeconds && (
-          <PanelSectionRow>
-            <div style={{ color: "#f2cf84", fontSize: 12 }}>
-              Response took {elapsedSeconds}s (warning threshold: {latencyWarningSeconds}s) — verify Ollama is using your GPU, not CPU. CPU inference is dramatically slower.
-            </div>
-          </PanelSectionRow>
-        )}
-        {lastApplied && (lastApplied.tdp_watts != null || lastApplied.gpu_clock_mhz != null) && (
-          <PanelSectionRow>
-            <div style={{ color: "#f2cf84", fontSize: 12 }}>
-              Applied to system successfully. If QAM Performance sliders look stale, close and reopen the QAM Performance tab to verify reflected values.
-            </div>
-          </PanelSectionRow>
-        )}
-        {ollamaContext && (
-          <PanelSectionRow>
-            <div style={{ color: "#9fb7d5", fontSize: 13 }}>
-              {ollamaContext.app_context === "active" && ollamaContext.app_id
-                ? `Context: active game AppID ${ollamaContext.app_id}`
-                : "Context: no active game detected"}
-            </div>
-          </PanelSectionRow>
-        )}
-        <PanelSectionRow>
-          <div style={{ color: "#8b929a", fontSize: 11, fontStyle: "italic", lineHeight: "1.35" }}>
-            Search Steam or QAM settings. Tap a result in the dropdown to open that setting.
-          </div>
-        </PanelSectionRow>
-        <PanelSectionRow>
-          <div style={{ color: "#8b929a", fontSize: 11, fontStyle: "italic", lineHeight: "1.35" }}>
-            Press Enter to run action, Shift+Enter for a new line.
-          </div>
-        </PanelSectionRow>
-      </PanelSection>
-    </>
+    <MainTab
+      fullBleedRowStyle={fullBleedRowStyle}
+      presetButtonSurface={presetButtonSurface}
+      suggestedPrompts={suggestedPrompts}
+      setUnifiedInput={setUnifiedInput}
+      unifiedInputHostRef={unifiedInputHostRef as React.Ref<HTMLDivElement>}
+      unifiedInputFieldLayerRef={unifiedInputFieldLayerRef as React.Ref<HTMLDivElement>}
+      unifiedInputMeasureRef={unifiedInputMeasureRef as React.Ref<HTMLDivElement>}
+      attachActionHostRef={attachActionHostRef as React.Ref<HTMLDivElement>}
+      askBarHostRef={askBarHostRef as React.Ref<HTMLDivElement>}
+      screenshotBrowserHostRef={screenshotBrowserHostRef as React.Ref<HTMLDivElement>}
+      unifiedInputSurfacePx={unifiedInputSurfacePx}
+      unifiedInput={unifiedInput}
+      usesNativeMultilineField={usesNativeMultilineField}
+      setIsUnifiedInputFocused={setIsUnifiedInputFocused}
+      isUnifiedInputFocused={isUnifiedInputFocused}
+      setSelectedIndex={setSelectedIndex}
+      filteredSettings={filteredSettings}
+      selectedIndex={selectedIndex}
+      onSettingClick={onSettingClick}
+      isAsking={isAsking}
+      ollamaIp={ollamaIp}
+      onAskOllama={onAskOllama}
+      onOpenScreenshotBrowser={onOpenScreenshotBrowser}
+      onCancelAsk={onCancelAsk}
+      onMicInput={onMicInput}
+      selectedAttachment={selectedAttachment}
+      setSelectedAttachment={setSelectedAttachment}
+      clearUnifiedInput={clearUnifiedInput}
+      showSearchClearButton={showSearchClearButton}
+      isScreenshotBrowserOpen={isScreenshotBrowserOpen}
+      onCloseScreenshotBrowser={onCloseScreenshotBrowser}
+      loadRecentScreenshots={loadRecentScreenshots}
+      mediaError={mediaError}
+      recentScreenshots={recentScreenshots}
+      isLoadingRecentScreenshots={isLoadingRecentScreenshots}
+      onSelectRecentScreenshot={onSelectRecentScreenshot}
+      navigationMessage={navigationMessage}
+      isQamSetting={isQamSetting}
+      showSlowWarning={showSlowWarning}
+      latencyWarningSeconds={latencyWarningSeconds}
+      ollamaResponse={ollamaResponse}
+      elapsedSeconds={elapsedSeconds}
+      lastApplied={lastApplied}
+      ollamaContext={ollamaContext}
+    />
   );
 
   const settingsTab = (
@@ -1918,8 +1277,22 @@ const Content: React.FC = () => {
   );
 
   return (
-    <div className="bonsai-scope">
+    <div ref={bonsaiScopeRef} className="bonsai-scope">
       <style>{`
+        .bonsai-scope [class*="Tabs"] .Panel.Focusable,
+        .bonsai-scope [class*="Tabs"] .DialogButton,
+        .bonsai-scope [class*="Tabs"] button {
+          transition-property: none !important;
+        }
+        .bonsai-scope [class*="TabContentsScroll"] {
+          scroll-behavior: auto !important;
+        }
+        .bonsai-scope .bonsai-tab-title-icon {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          line-height: 0;
+        }
         .bonsai-scope .Panel.Focusable {
           height: auto !important;
         }
@@ -1949,24 +1322,217 @@ const Content: React.FC = () => {
           max-width: 100% !important;
           margin-top: 0 !important;
           margin-bottom: 0 !important;
+          overflow: visible !important;
+          align-self: stretch !important;
         }
         .bonsai-scope [class*="PanelSectionRow"] > div {
           width: 100% !important;
           max-width: 100% !important;
         }
+        /* Full-bleed: global class; PanelSectionRow direct-child width rules differ by nesting — margins restored here for every bonsai-full-bleed-row. */
+        .bonsai-scope .bonsai-full-bleed-row {
+          width: calc(100% + 24px) !important;
+          max-width: none !important;
+          min-width: calc(100% + 24px) !important;
+          margin-left: -12px !important;
+          margin-right: -12px !important;
+          box-sizing: border-box !important;
+        }
+        .bonsai-scope .bonsai-askbar-row-host {
+          width: var(--bonsai-search-host-width, 100%) !important;
+          min-width: var(--bonsai-search-host-width, 100%) !important;
+          max-width: none !important;
+        }
+        .bonsai-scope .bonsai-askbar-merged .bonsai-ask-primary.DialogButton {
+          width: 100% !important;
+          max-width: none !important;
+        }
+        /* Ask row: same full-bleed math as unified search; width not tied to unified host measurement. */
+        .bonsai-scope .bonsai-ask-bleed-wrap.bonsai-full-bleed-row {
+          width: var(--bonsai-search-host-width, calc(100% + 24px)) !important;
+          min-width: var(--bonsai-search-host-width, calc(100% + 24px)) !important;
+          max-width: none !important;
+        }
+        .bonsai-scope .bonsai-ask-bleed-wrap {
+          flex: 1 1 auto !important;
+          align-self: stretch !important;
+        }
+        .bonsai-scope .bonsai-ask-bleed-wrap .bonsai-askbar-merged {
+          flex: 1 1 auto !important;
+          width: var(--bonsai-search-host-width, 100%) !important;
+          min-width: var(--bonsai-search-host-width, 0px) !important;
+        }
+        .bonsai-scope .bonsai-ask-bleed-wrap .Panel.Focusable {
+          width: 100% !important;
+          min-width: 0 !important;
+        }
         .bonsai-scope .bonsai-unified-input-host input::placeholder {
           font-size: 12px;
         }
-        .bonsai-scope .bonsai-unified-input-host input {
+        .bonsai-scope .bonsai-unified-input-host input,
+        .bonsai-scope .bonsai-unified-input-host textarea {
           color: transparent !important;
           -webkit-text-fill-color: transparent !important;
+          padding: 0 !important;
+          padding-inline-start: 0 !important;
+          padding-inline-end: 0 !important;
+          padding-bottom: 0 !important;
+          margin: 0 !important;
+          text-indent: 0 !important;
+          box-sizing: border-box !important;
+          font-size: ${UNIFIED_TEXT_FONT_PX}px !important;
+          line-height: ${UNIFIED_TEXT_LINE_HEIGHT} !important;
+          vertical-align: top !important;
+        }
+        /* Stable margin: toggling negative margin on wrap caused caret vs overlay jump on line 2. */
+        .bonsai-scope .bonsai-unified-input-host textarea,
+        .bonsai-scope .bonsai-unified-input-host input {
+          margin-top: 0 !important;
+        }
+        .bonsai-scope .bonsai-unified-input-host [class*="FieldLabel"],
+        .bonsai-scope .bonsai-unified-input-host [class*="fieldlabel"] {
+          display: none !important;
+          height: 0 !important;
+          min-height: 0 !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          overflow: hidden !important;
+        }
+        .bonsai-scope .bonsai-unified-input-text-overlay {
+          margin: 0 !important;
+          padding: 0 !important;
+          box-sizing: border-box !important;
+          left: var(--bonsai-unified-field-left, 0px) !important;
+          top: var(--bonsai-unified-field-top, 0px) !important;
+          right: auto !important;
+          width: var(--bonsai-unified-field-width, 100%) !important;
+        }
+        .bonsai-scope .bonsai-unified-input-fake-caret {
+          display: inline-block;
+          margin-left: 1px;
+          opacity: 0.9;
+          transform: translateY(1px);
+          animation: bonsai-caret-blink 1s step-end infinite;
+        }
+        @keyframes bonsai-caret-blink {
+          0%, 45% { opacity: 0.9; }
+          50%, 100% { opacity: 0; }
+        }
+        .bonsai-scope .bonsai-glass-panel {
+          background: rgba(18, 26, 34, 0.25) !important;
+          -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.07) !important;
+          box-sizing: border-box;
+        }
+        .bonsai-scope .bonsai-preset-glass {
+          background: rgba(18, 26, 34, 0.22) !important;
+          -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.07) !important;
+          box-shadow: none !important;
+          box-sizing: border-box;
+        }
+        .bonsai-scope .bonsai-preset-glass > div {
+          background: transparent !important;
+          background-image: none !important;
+        }
+        .bonsai-scope .bonsai-unified-input-host {
+          border-radius: 8px;
+          overflow: hidden;
+        }
+        /* Decky TextField stacks opaque divs; flatten nested paint (exclude text overlay so color stays visible) */
+        .bonsai-scope .bonsai-unified-input-host div:not(.bonsai-unified-input-text-overlay) {
+          background-color: transparent !important;
+          background-image: none !important;
+          box-shadow: none !important;
+        }
+        .bonsai-scope .bonsai-unified-input-host input {
+          background-color: transparent !important;
+          background-image: none !important;
+          box-shadow: none !important;
+        }
+        .bonsai-scope .bonsai-unified-input-host .Panel.Focusable {
+          background: transparent !important;
+          background-color: transparent !important;
+          box-shadow: none !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          min-width: 0 !important;
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: stretch !important;
+          justify-content: flex-start !important;
+        }
+        .bonsai-scope .bonsai-unified-input-host .Panel.Focusable > div {
+          background: transparent !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          min-width: 0 !important;
+        }
+        .bonsai-scope .bonsai-unified-input-icon {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0.15 !important;
+        }
+        .bonsai-scope .bonsai-unified-input-icon svg {
+          opacity: 1;
+        }
+        .bonsai-scope .bonsai-unified-input-bottom-actions .Panel.Focusable {
+          width: 100% !important;
+          min-height: 100% !important;
+          flex-direction: row !important;
+          justify-content: space-between !important;
+          align-items: center !important;
+          flex-wrap: nowrap !important;
+        }
+        .bonsai-scope .bonsai-unified-input-bottom-actions .bonsai-askbar-target.DialogButton,
+        .bonsai-scope .bonsai-unified-input-bottom-actions .bonsai-askbar-target {
+          padding: 0 !important;
+          margin: 0 !important;
+          min-width: 20px !important;
+          min-height: 20px !important;
+          border-radius: 0 !important;
+        }
+        .bonsai-scope .bonsai-unified-input-bottom-actions .bonsai-askbar-target > span {
+          padding: 0 !important;
+          margin: 0 !important;
+        }
+        .bonsai-scope .bonsai-askbar-corner-icon {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0.5 !important;
+        }
+        .bonsai-scope .bonsai-askbar-merged .bonsai-askbar-corner-icon svg {
+          opacity: 1;
+        }
+        .bonsai-scope .bonsai-ai-response-chunk {
+          color: #e8eef4;
+          padding: 8px;
+          white-space: pre-wrap;
+          font-size: 12px;
+          line-height: 1.4;
+          background: rgba(18, 26, 34, 0.28) !important;
+          -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          box-sizing: border-box;
+        }
+        .bonsai-scope .bonsai-askbar-merged .bonsai-ask-primary.DialogButton,
+        .bonsai-scope .bonsai-askbar-merged .bonsai-ask-primary {
+          color: #a8b4c4 !important;
+        }
+        .bonsai-scope .bonsai-askbar-merged .bonsai-ask-primary span {
+          color: inherit !important;
         }
         .bonsai-scope .bonsai-askbar-merged {
           transition: box-shadow 120ms ease, border-color 120ms ease;
         }
         .bonsai-scope .bonsai-askbar-merged:focus-within {
-          border-color: rgba(171, 199, 232, 0.85) !important;
-          box-shadow: 0 0 0 1px rgba(171, 199, 232, 0.55);
+          border-color: rgba(255, 255, 255, 0.12) !important;
+          box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
         }
         .bonsai-scope .bonsai-askbar-target {
           transition: background-color 120ms ease, box-shadow 120ms ease;
@@ -1979,6 +1545,10 @@ const Content: React.FC = () => {
         .bonsai-scope .bonsai-askbar-target > div,
         .bonsai-scope .bonsai-askbar-target > span {
           background: transparent !important;
+          background-image: none !important;
+        }
+        .bonsai-scope .bonsai-askbar-merged .DialogButton {
+          background-color: transparent !important;
           background-image: none !important;
         }
         .bonsai-scope .bonsai-askbar-target:focus-visible {
@@ -2015,9 +1585,33 @@ const Content: React.FC = () => {
         activeTab={currentTab}
         onShowTab={(tabID: string) => { setCurrentTab(tabID); }}
         tabs={[
-          { id: "main", title: <BonsaiLogoIcon size={30} zoom={1.66} offsetX={-1.1} offsetY={-0.9} />, content: mainTab },
-          { id: "settings", title: <GearIcon size={26} />, content: settingsTab },
-          { id: "debug", title: <BugIcon size={26} />, content: debugTab },
+          {
+            id: "main",
+            title: (
+              <span className="bonsai-tab-title-icon bonsai-tab-title-icon--main">
+                <BonsaiLogoIcon size={TAB_TITLE_ICON_PX_BONSAI} zoom={1} offsetX={-4} offsetY={-4} />
+              </span>
+            ),
+            content: mainTab,
+          },
+          {
+            id: "settings",
+            title: (
+              <span className="bonsai-tab-title-icon bonsai-tab-title-icon--settings">
+                <GearIcon size={TAB_TITLE_ICON_PX_SETTINGS} />
+              </span>
+            ),
+            content: settingsTab,
+          },
+          {
+            id: "debug",
+            title: (
+              <span className="bonsai-tab-title-icon bonsai-tab-title-icon--debug">
+                <BugIcon size={TAB_TITLE_ICON_PX_DEBUG} />
+              </span>
+            ),
+            content: debugTab,
+          },
           { id: "about", title: "About", content: aboutTab },
         ]}
       />

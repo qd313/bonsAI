@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FiSettings } from "react-icons/fi";
 import bonsaiLogo from "../assets/icons/bonsai-logo.svg";
 
 /**
@@ -25,13 +26,15 @@ const IconShell: React.FC<{ size: number; children: React.ReactNode }> = ({ size
   </span>
 );
 
-/** This gear icon identifies the Settings tab in a compact Decky-friendly style. */
+/** Settings tab: stroke icon reads clearly on Steam Deck CEF at small sizes (custom fill+stroke gear looked like a blob). */
 export const GearIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
   <IconShell size={size}>
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M12 8.5a3.5 3.5 0 1 0 0 7a3.5 3.5 0 0 0 0-7Z" fill="currentColor" />
-      <path d="m19.4 13.2l1.5 1.2l-1.5 2.6l-1.9-.5a6.8 6.8 0 0 1-1.3.8l-.3 1.9h-3l-.3-1.9a6.8 6.8 0 0 1-1.3-.8l-1.9.5l-1.5-2.6l1.5-1.2a7.4 7.4 0 0 1 0-1.6L6.9 10.4l1.5-2.6l1.9.5c.4-.3.8-.5 1.3-.8l.3-1.9h3l.3 1.9c.5.2.9.5 1.3.8l1.9-.5l1.5 2.6l-1.5 1.2c.1.5.1 1.1 0 1.6Z" stroke="currentColor" strokeWidth="1.35" strokeLinejoin="round" />
-    </svg>
+    <FiSettings
+      size={size}
+      strokeWidth={size > 48 ? 2.25 : 1.35}
+      aria-hidden
+      style={{ display: "block" }}
+    />
   </IconShell>
 );
 

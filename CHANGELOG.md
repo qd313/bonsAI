@@ -5,6 +5,7 @@ All notable changes to this project are documented in this file.
 ## [Unreleased] - 2026-04-13
 
 ### Added
+- **Search Surface Glass Pass:** Unified search `TextField` and ask bar use a shared glass surface (`rgba` ~25% fill, `backdrop-filter` blur, light border); attach/mic/stop/clear icons render at 50% opacity; input height follows wrapped text (min/max clamp); AI response chunks use the same glass family instead of near-black fills (`src/index.tsx`).
 - **Built on Ollama** About tab link to upstream `https://github.com/ollama/ollama` (`OLLAMA_UPSTREAM_REPO_URL`, `AboutTab`).
 - Phase 1 experimental **Steam Input jump** (Debug tab): per-game `steam://controllerconfig/{appId}` via `SteamClient.URL.ExecuteSteamURL`, `Navigation.CloseSideMenus`, and a versioned lexicon in `src/data/steam-input-lexicon.ts` with CEF route-discovery and update-discipline notes in `docs/steam-input-research.md`.
 - Background prompt completion flow so requests can finish while QAM is closed and recover state on reopen (marked complete in `docs/roadmap.md`; verification matrix in `docs/prompt-testing.md` under `Background Prompt Completion (V1)`).
@@ -14,6 +15,17 @@ All notable changes to this project are documented in this file.
 - Added baseline service/data tests: `tests/test_settings_service.py`, `tests/test_ollama_service.py`, `src/data/presets.test.ts`, and `src/data/steam-input-lexicon.test.ts`.
 
 ### Changed
+- **Refactor (unified input / main tab):** `UNIFIED_*` / Ask label color and `splitResponseIntoChunks` live under `src/features/unified-input/constants.ts` and `src/utils/splitResponseIntoChunks.ts`; Deck layout measurement and refs are in `useUnifiedInputSurface`; the main tab body is `src/components/MainTab.tsx` (behavior parity; `src/index.tsx` composes hooks + tabs).
+- **Tabs:** Main/settings/debug tab titles use 4× larger icons (`TAB_TITLE_ICON_PX_*`); plugin store / loader entry icon remains `BonsaiSvgIcon` in `definePlugin`. ResizeObserver and unified-input remeasure run only on the **main** tab to cut tab-switch jitter; tab strip `transition-property: none` reduces twitchy animations (`src/index.tsx`).
+- **Unified search / Ask:** Ask full-bleed width uses the same `calc(100% + 24px)` rule as other `bonsai-full-bleed-row` rows (no `--bonsai-ask-sync-width` from the unified host). Textarea/input use stable `margin-top: 0` so crossing wrap no longer toggles margin and throws off the caret on line 2+ (`src/index.tsx`).
+- **Ask row:** `bonsai-ask-bleed-wrap` + `PanelSectionRow` `overflow: visible` / `align-self: stretch` so full-bleed negative margins are not clipped narrower than the search field (`src/index.tsx`).
+- **Search layout (expand + bleed):** Text-body height adds `UNIFIED_INPUT_EXPAND_AHEAD_PX` (one line at `UNIFIED_TEXT_FONT_PX` × `UNIFIED_TEXT_LINE_HEIGHT`) on top of remeasure padding; **global** `.bonsai-scope .bonsai-full-bleed-row` restores `calc(100% + 24px)` for every tagged row so Ask matches unified input even when `PanelSectionRow` DOM nesting differs (`src/index.tsx`).
+- **Main tab fixes:** Bottom attach/mic strip overrides `flex-direction: row` so icons are not stacked by the TextField column `Panel.Focusable` rule; Ask bar gets `min-width` on full-bleed rows and full-width `DialogButton`; zero top inset/padding and hiding empty Decky field label nodes improve caret alignment (`src/index.tsx`).
+- **Settings tab icon:** `GearIcon` now uses `react-icons/fi` `FiSettings` (stroke-based, readable at 26px on Deck CEF) instead of the custom filled gear (`src/components/icons.tsx`).
+- **Unified search caret vs overlay:** `UNIFIED_TEXT_FONT_PX` / `UNIFIED_TEXT_LINE_HEIGHT` now drive measure div, overlay, `TextField`, and scoped textarea CSS so the caret lines up with painted text; `Panel.Focusable` uses column flex with `justify-content: flex-start` to avoid vertically centering short text in a tall field (`src/index.tsx`).
+- **Search Surface Glass Pass:** Typed overlay uses asymmetric insets (top 1px, L/R/B 0) + tighter strip height; bottom attach/mic in one horizontal `Focusable` (`flex-wrap: nowrap`); Clear sits inside the Ask glass (Ask flex-grow to near full width); Ask label `#a8b4c4` with scoped `!important` so SteamOS/Decky `DialogButton` theming does not force accent/yellow; full-bleed ask row; `TextField`/`textarea` padding trimmed; subtler glass borders; removed temporary debug ingest `fetch` instrumentation from `remeasureUnifiedInputSurface` / `reportGlassStyleProbe` (kept `window.__bonsaiGlassDebug` snapshot).
+- **Search Surface Glass Pass (margins):** Icon strip 24px; remeasure pad 7px; overlay/ measure `line-height` 1.2; zeroed `Panel.Focusable` margins and `text-indent`; logical padding resets on transparent input; overlay `margin`/`padding` pinned to 0; slightly smaller corner hit targets (20px) and glyphs.
+- **Search Surface Glass Pass (height + Ask):** Default empty text-body min height +1 line (`UNIFIED_TEXT_BODY_MIN_PX` 42); Clear control absolutely positioned on the Ask bar so the Ask `DialogButton` spans full bleed width (with right padding when Clear is visible).
 - Reorganized documentation under `docs/` (`development.md`, `troubleshooting.md`, `prompt-testing.md`, `roadmap.md`, `refactor-specialist-sweep.md`) and moved dev automation scripts under `scripts/` with repository-root resolution for `.env`, builds, and Decky CLI paths.
 - Refined frontend request state handling and response UX behavior in `src/index.tsx`.
 - Updated backend request lifecycle and orchestration paths in `main.py` for more resilient local AI interactions.
@@ -22,10 +34,15 @@ All notable changes to this project are documented in this file.
 - `src/index.tsx` now delegates debug/about tab rendering and prompt preset logic to extracted modules.
 
 ### Fixed
+- **Unified search caret vs wrapped text:** Hidden measure + text overlay now use the same horizontal origin and width as the real `textarea`/`input` (from layout rects + `clientWidth`), so word-wrap matches the native field on line 2+ instead of using the full glass width (`src/index.tsx`).
+- **Unified search measure node:** Removed React `left`/`width`/`top` props from the hidden measure div so they are not reset to `width: 0` every render (which broke `scrollHeight` and height sync). Vertical alignment uses `--bonsai-unified-field-top` from the field’s bounding rect; last remeasure snapshot is exposed as `window.__bonsaiLastRemeasure` for on-device debugging (`src/index.tsx`).
+- **Unified search caret baseline:** Disabled the extra painted text overlay and render the native `TextField` text directly (non-transparent), eliminating Deck-specific dual-layer baseline drift where the blinking caret sat ~1-1.5 lines below visible text (`src/index.tsx`).
+- **Ask bar width parity:** Ask row width now keys off `--bonsai-search-host-width` captured from the live unified host measurement, so Ask and search bars stay the same rendered width on-device (`src/index.tsx`).
 - Synced `experimental` with latest remote updates before consolidation to avoid drift and preserve branch history.
 - Resolved roadmap documentation integration conflict during sync so both upstream and local planning updates are retained in `docs/roadmap.md`.
 
 ### Docs
+- Marked **Search Surface Glass Pass** complete in `docs/roadmap.md` (Completed + Implemented Baseline); noted glass tokens and layout in `docs/development.md`.
 - Marked **Built on Ollama Link (About Tab)** complete in `docs/roadmap.md` (Completed + Implemented Baseline).
 - Marked **Steam Input Jump Phase 1** complete in `docs/roadmap.md` and noted Phase 2+ (search + full catalog) as deferred; aligned `docs/steam-input-research.md` and `docs/prompt-testing.md` status language.
 - Expanded `docs/steam-input-research.md` with CEF debugging steps, History API console snippet, verified-route log template, and Steam client update smoke-test discipline.

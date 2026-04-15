@@ -5,10 +5,13 @@
 - NEVER hardcode credentials, secrets, IP addresses, hostnames, or any developer-local configuration in version-controlled files; ALWAYS externalize them to a gitignored `.env` (loaded at runtime) with a committed `.env.example` template documenting every required variable.
 - ALWAYS validate runtime/deployment parity before debugging behavior: after refactors, prove all moved modules import and load on target (plugin startup logs plus a smoke RPC) before changing feature logic or UI.
 - ALWAYS run `./scripts/build.ps1` (Windows) or `./scripts/build.sh` (Linux) after any Deck-facing code change during debugging and confirm `plugin_loader.service` startup is clean before starting the next hypothesis loop.
+- ALWAYS treat `./scripts/build.ps1` or `./scripts/build.sh` as the **final step** before wrapping up any task that touches `src/`, `main.py`, `plugin.json`, or other Deck-facing artifacts: run the script yourself in the agent session (do not only instruct the user), then continue with testing or handoff only after the build completes successfully.
 
 ## Frontend UI (src/)
 - ALWAYS use Decky-Frontend-lib components for UI elements to maintain a native SteamOS look and feel.
 NEVER write CSS overrides targeting third-party component internals based on assumed DOM structure; ALWAYS instrument the runtime DOM first (computed styles, class names, and nesting) to identify the exact element and property causing the layout issue before writing any selector.
+- ALWAYS treat Decky UI bugs as runtime contract problems: instrument and verify live on-device DOM/focus metrics first, then apply the smallest evidence-backed change that aligns overlays/caret/width to the native TextField geometry. 
+- NEVER replace native input primitives or stack speculative CSS nudges in the same loop without log proof, because this causes focus/keyboard regressions and masking feedback loops (like width drift/jitter) instead of fixing root cause.
 - NEVER iterate on styling or prompt wording as a primary fix until the underlying focus path and context payload are proven correct end-to-end.
 
 ## Architecture Constraints

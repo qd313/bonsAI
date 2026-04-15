@@ -79,6 +79,16 @@ If Windows still falls back to CPU after FIX A:
 
 ---
 
+## 1c. Latency warning vs backend timeout (Settings)
+
+**Where:** Settings tab, under **Connection**, **Latency warning and backend timeout**.
+
+**Behavior:** One Steam slider controls **Hard timeout (backend)** (10s steps, max 300s). The **Soft warning (latency)** value remains visible directly below it; the plugin keeps warning **strictly below** timeout so the slow hint can appear before a hard cancel.
+
+**If values look wrong after editing `settings.json` by hand:** Save settings again from the plugin UI, or delete the file to regenerate defaults—the plugin normalizes out-of-order pairs on load.
+
+---
+
 ## 1b. Desktop notes (`BonsAI_notes`)
 
 ### Saving from Game Mode

@@ -30,6 +30,33 @@ def sanitize_desktop_debug_note_auto_save(value: Any) -> bool:
     return value is True
 
 
+REQUEST_TIMEOUT_RECONCILE_STEP_SECONDS = 10
+
+
+def _reconcile_latency_warning_before_timeout(
+    latency: int,
+    timeout: int,
+    *,
+    min_latency: int,
+    max_latency: int,
+    max_timeout: int,
+) -> tuple[int, int]:
+    """Ensure latency warning is strictly less than request timeout (matches frontend)."""
+    if latency < timeout:
+        return latency, timeout
+    t = timeout
+    while latency >= t and t < max_timeout:
+        t = min(max_timeout, t + REQUEST_TIMEOUT_RECONCILE_STEP_SECONDS)
+    if latency < t:
+        return latency, t
+    w = latency
+    while w >= t and w > min_latency:
+        w -= 5
+    if w >= t:
+        w = max(min_latency, min(max_latency, t - 5))
+    return w, t
+
+
 def sanitize_screenshot_max_dimension(
     value: Any,
     valid_dimensions: set[int],
@@ -60,19 +87,28 @@ def sanitize_settings(
 ) -> dict:
     """Normalize the full settings payload into a bounded, backend-safe settings object."""
     raw = data if isinstance(data, dict) else {}
+    latency = clamp_int(
+        raw.get("latency_warning_seconds"),
+        default_latency_warning_seconds,
+        min_latency_warning_seconds,
+        max_latency_warning_seconds,
+    )
+    timeout = clamp_int(
+        raw.get("request_timeout_seconds"),
+        default_request_timeout_seconds,
+        min_request_timeout_seconds,
+        max_request_timeout_seconds,
+    )
+    latency, timeout = _reconcile_latency_warning_before_timeout(
+        latency,
+        timeout,
+        min_latency=min_latency_warning_seconds,
+        max_latency=max_latency_warning_seconds,
+        max_timeout=max_request_timeout_seconds,
+    )
     return {
-        "latency_warning_seconds": clamp_int(
-            raw.get("latency_warning_seconds"),
-            default_latency_warning_seconds,
-            min_latency_warning_seconds,
-            max_latency_warning_seconds,
-        ),
-        "request_timeout_seconds": clamp_int(
-            raw.get("request_timeout_seconds"),
-            default_request_timeout_seconds,
-            min_request_timeout_seconds,
-            max_request_timeout_seconds,
-        ),
+        "latency_warning_seconds": latency,
+        "request_timeout_seconds": timeout,
         "unified_input_persistence_mode": sanitize_unified_input_persistence_mode(
             raw.get("unified_input_persistence_mode"),
             valid_persistence_modes,

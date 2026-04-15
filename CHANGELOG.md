@@ -5,6 +5,7 @@ All notable changes to this project are documented in this file.
 ## [Unreleased] - 2026-04-15
 
 ### Added
+- **Preset carousel (Phase 1):** Main tab shows three suggestion chips with staggered fade in/out (2s each) and hold time scaled to prompt length (doubled dwell vs earlier tuning); chips rotate independently and re-seed when follow-up presets refresh. `PresetAnimatedChips.tsx`, `holdMsForPresetText` / `getRandomPresetExcluding` in `src/data/presets.ts`, styles in `src/index.tsx`. Manual next/previous arrow controls deferred.
 - **Capability Permission Center:** Permissions tab (`LockIcon`, `TAB_TITLE_ICON_PX_PERMISSIONS`) with persisted `capabilities` in `settings.json` (filesystem write, hardware control, media library access, external/Steam navigation). New installs default all OFF; legacy settings files without a `capabilities` object are grandfathered ON until the user saves. Backend enforcement in `main.py` (`backend/services/capabilities.py`); UI in `PermissionsTab.tsx`, `AboutTab.tsx`, `MainTab.tsx`, `src/index.tsx`.
 - **Desktop daily chat auto-save (V2):** Settings tab toggle `desktop_debug_note_auto_save` (default off). When on and filesystem writes are allowed, each Ask and each AI response append to `~/Desktop/BonsAI_notes/bonsai-chat-YYYY-MM-DD.md` (UTC day); Ask entries list attached screenshot paths. RPC `append_desktop_chat_event`, `backend/services/desktop_note_service.py`, `src/index.tsx`.
 - **Desktop Mode Debug Note Save (V1):** After a successful ask, **Save to Desktop note…** opens a consent dialog and writes append-only markdown to `~/Desktop/BonsAI_notes/<name>.md` (UTC timestamps, question + answer). Backend: `append_desktop_debug_note`, `backend/services/desktop_note_service.py`. UI: `DesktopNoteSaveModal`, `MainTab`, `src/index.tsx`.
@@ -18,6 +19,7 @@ All notable changes to this project are documented in this file.
 - Added baseline service/data tests: `tests/test_settings_service.py`, `tests/test_ollama_service.py`, `src/data/presets.test.ts`, and `src/data/steam-input-lexicon.test.ts`.
 
 ### Changed
+- **Settings (Connection):** Hard timeout uses one Steam `SliderField` in `ConnectionTimeoutSlider.tsx` (10s steps, max 300s), while soft warning remains visible as a readout and is auto-reconciled to stay before timeout. Ordering is enforced when loading settings via `reconcileLatencyWarningAndTimeout` in `src/utils/settingsAndResponse.ts` and matching logic in `backend/services/settings_service.py`.
 - **Refactor (unified input / main tab):** `UNIFIED_*` / Ask label color and `splitResponseIntoChunks` live under `src/features/unified-input/constants.ts` and `src/utils/splitResponseIntoChunks.ts`; Deck layout measurement and refs are in `useUnifiedInputSurface`; the main tab body is `src/components/MainTab.tsx` (behavior parity; `src/index.tsx` composes hooks + tabs).
 - **Tabs:** Main/settings/debug tab titles use 4× larger icons (`TAB_TITLE_ICON_PX_*`); plugin store / loader entry icon remains `BonsaiSvgIcon` in `definePlugin`. ResizeObserver and unified-input remeasure run only on the **main** tab to cut tab-switch jitter; tab strip `transition-property: none` reduces twitchy animations (`src/index.tsx`).
 - **Unified search / Ask:** Ask full-bleed width uses the same `calc(100% + 24px)` rule as other `bonsai-full-bleed-row` rows (no `--bonsai-ask-sync-width` from the unified host). Textarea/input use stable `margin-top: 0` so crossing wrap no longer toggles margin and throws off the caret on line 2+ (`src/index.tsx`).
@@ -37,6 +39,7 @@ All notable changes to this project are documented in this file.
 - `src/index.tsx` now delegates debug/about tab rendering and prompt preset logic to extracted modules.
 
 ### Fixed
+- **Settings (Connection):** Soft warning remains visible as a dedicated readout line under the single hard-timeout slider so users can confirm both thresholds on Deck CEF (`src/index.tsx`, `ConnectionTimeoutSlider.tsx`).
 - **Unified search caret vs wrapped text:** Hidden measure + text overlay now use the same horizontal origin and width as the real `textarea`/`input` (from layout rects + `clientWidth`), so word-wrap matches the native field on line 2+ instead of using the full glass width (`src/index.tsx`).
 - **Unified search measure node:** Removed React `left`/`width`/`top` props from the hidden measure div so they are not reset to `width: 0` every render (which broke `scrollHeight` and height sync). Vertical alignment uses `--bonsai-unified-field-top` from the field’s bounding rect; last remeasure snapshot is exposed as `window.__bonsaiLastRemeasure` for on-device debugging (`src/index.tsx`).
 - **Unified search caret baseline:** Disabled the extra painted text overlay and render the native `TextField` text directly (non-transparent), eliminating Deck-specific dual-layer baseline drift where the blinking caret sat ~1-1.5 lines below visible text (`src/index.tsx`).
@@ -45,6 +48,9 @@ All notable changes to this project are documented in this file.
 - Resolved roadmap documentation integration conflict during sync so both upstream and local planning updates are retained in `docs/roadmap.md`.
 
 ### Docs
+- Documented single hard-timeout slider + visible soft-warning readout in `docs/troubleshooting.md` and this changelog.
+- Documented **Preset carousel (Phase 1)** in `docs/roadmap.md`, `docs/prompt-testing.md`, `docs/development.md`, and this changelog.
+
 - Documented **Desktop daily chat auto-save (V2)** in `docs/roadmap.md`, `docs/troubleshooting.md`, and this changelog.
 - Documented **Capability Permission Center** in `docs/roadmap.md` (Completed + Implemented Baseline + candidate status), `docs/troubleshooting.md` (permissions section), and `docs/foss-advocate-report.md`.
 - Marked **Search Surface Glass Pass** complete in `docs/roadmap.md` (Completed + Implemented Baseline); noted glass tokens and layout in `docs/development.md`.

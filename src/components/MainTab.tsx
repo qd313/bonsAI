@@ -1,8 +1,9 @@
 import React from "react";
-import { PanelSection, PanelSectionRow, TextField, Button, Focusable, Router } from "@decky/ui";
+import { PanelSection, PanelSectionRow, TextField, Button, Focusable } from "@decky/ui";
 import type { PresetPrompt } from "../data/presets";
+import { PresetAnimatedChips } from "./PresetAnimatedChips";
 import {
-  ASK_LABEL_COLOR,
+  ASK_BAR_PRIMARY_MIN_HEIGHT_PX,
   UNIFIED_INPUT_ICON_STRIP_PX,
   UNIFIED_TEXT_BODY_MAX_PX,
   UNIFIED_TEXT_FONT_PX,
@@ -128,34 +129,13 @@ export function MainTab(props: MainTabProps) {
     mediaLibraryEnabled = true,
     desktopNoteSaveEnabled = true,
   } = props;
+  const askLooksReady = unifiedInput.trim().length > 0 && !isAsking;
   return (
     <>
       <PanelSection>
         <PanelSectionRow>
           <div className="bonsai-full-bleed-row" style={{ ...fullBleedRowStyle, display: "grid", gap: 8 }}>
-            {suggestedPrompts.map((p, i) => (
-              <Button
-                key={`preset-${i}`}
-                className="bonsai-preset-glass"
-                onClick={() => {
-                  const gameName = Router.MainRunningApp?.display_name ?? "";
-                  setUnifiedInput(gameName ? `${p.text} for ${gameName}` : p.text);
-                }}
-                style={{
-                  width: "100%",
-                  minHeight: 34,
-                  fontSize: 12,
-                  color: "#c4d3e2",
-                }}
-              >
-                {p.text}
-                {p.beta && (
-                  <span style={{ marginLeft: 6, fontSize: 10, opacity: 0.55, fontStyle: "italic" }}>
-                    [beta]
-                  </span>
-                )}
-              </Button>
-            ))}
+            <PresetAnimatedChips seeds={suggestedPrompts} setUnifiedInput={setUnifiedInput} />
           </div>
         </PanelSectionRow>
         <PanelSectionRow>
@@ -507,12 +487,12 @@ export function MainTab(props: MainTabProps) {
           <div className="bonsai-full-bleed-row bonsai-ask-bleed-wrap" style={{ ...fullBleedRowStyle }}>
             <div
               ref={askBarHostRef}
-              className="bonsai-askbar-merged bonsai-glass-panel bonsai-askbar-row-host"
+              className={`bonsai-askbar-merged bonsai-glass-panel bonsai-askbar-row-host${askLooksReady ? " bonsai-askbar-merged--ready" : ""}`}
               style={{
                 position: "relative",
-                width: "var(--bonsai-search-host-width, 100%)",
-                minWidth: "var(--bonsai-search-host-width, 100%)",
-                minHeight: 44,
+                width: "var(--bonsai-askbar-outer-width, var(--bonsai-search-host-width, 100%))",
+                minWidth: "var(--bonsai-askbar-outer-width, var(--bonsai-search-host-width, 100%))",
+                minHeight: ASK_BAR_PRIMARY_MIN_HEIGHT_PX,
                 borderRadius: 8,
                 overflow: "hidden",
                 boxSizing: "border-box",
@@ -525,25 +505,22 @@ export function MainTab(props: MainTabProps) {
                   display: "flex",
                   flexDirection: "row",
                   width: "100%",
-                  minHeight: 44,
+                  minHeight: ASK_BAR_PRIMARY_MIN_HEIGHT_PX,
                   alignItems: "stretch",
                 }}
               >
                 <Button
-                  className="bonsai-askbar-target bonsai-ask-primary"
+                  className={`bonsai-askbar-target bonsai-ask-primary${askLooksReady ? " bonsai-ask-primary--ready" : ""}`}
                   onClick={onAskOllama}
                   disabled={isAsking}
                   style={{
                     position: "relative",
                     width: "100%",
-                    minHeight: 44,
+                    minHeight: ASK_BAR_PRIMARY_MIN_HEIGHT_PX,
                     boxSizing: "border-box",
                     paddingRight: showSearchClearButton ? 42 : 0,
                     borderRadius: 0,
                     border: "none",
-                    background: showSearchClearButton ? "rgba(255,255,255,0.075)" : "rgba(255,255,255,0.04)",
-                    color: ASK_LABEL_COLOR,
-                    transition: "background-color 120ms ease",
                   }}
                 >
                   <span style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
@@ -574,15 +551,15 @@ export function MainTab(props: MainTabProps) {
                       style={{
                         width: "100%",
                         height: "100%",
-                        minHeight: 44,
+                        minHeight: ASK_BAR_PRIMARY_MIN_HEIGHT_PX,
                         padding: 0,
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         border: "none",
-                        background: showSearchClearButton ? "rgba(255,255,255,0.075)" : "rgba(255,255,255,0.04)",
+                        background: askLooksReady ? "rgba(255,255,255,0.1)" : "rgba(255,255,255,0.075)",
                         color: "#c8d4e0",
-                        boxShadow: "inset 1px 0 0 rgba(255,255,255,0.08)",
+                        boxShadow: "inset 1px 0 0 rgba(255,255,255,0.1)",
                         transition: "background-color 120ms ease",
                       }}
                     >
@@ -714,7 +691,7 @@ export function MainTab(props: MainTabProps) {
         )}
 
         {filteredSettings.length > 0 && (
-          <>
+          <div className="bonsai-main-search-results-pane">
             <PanelSectionRow>
               <div style={{ color: "gray", padding: "6px 0", fontSize: 13 }}>Results</div>
             </PanelSectionRow>
@@ -769,7 +746,7 @@ export function MainTab(props: MainTabProps) {
                 </PanelSectionRow>
               );
             })}
-          </>
+          </div>
         )}
 
         {isAsking && showSlowWarning && (

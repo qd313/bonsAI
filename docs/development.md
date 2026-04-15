@@ -124,7 +124,9 @@ Milestone 2 splits heavy orchestration paths while preserving runtime behavior:
 - Frontend components/data:
   - `src/components/DebugTab.tsx`
   - `src/components/AboutTab.tsx`
-  - `src/data/presets.ts`
+  - `src/data/presets.ts` (preset text, category heuristics, carousel helpers `holdMsForPresetText` / `getRandomPresetExcluding`)
+  - `src/components/PresetAnimatedChips.tsx` (main tab preset chip fade/hold carousel)
+  - `src/components/ConnectionTimeoutSlider.tsx` (single Steam `SliderField` for hard timeout + prominent soft-warning readout; ordering via `reconcileLatencyWarningAndTimeout` in `settingsAndResponse.ts`)
   - `src/data/steam-input-lexicon.ts` (versioned Steam Input jump targets; see `docs/steam-input-research.md`)
   - `src/utils/settingsAndResponse.ts`
   - `src/utils/steamInputJump.ts` (Decky `Navigation` / `SteamClient.URL` jump helper)

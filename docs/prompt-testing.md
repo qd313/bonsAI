@@ -143,6 +143,11 @@ Status note:
 
 ## Preset and Follow-Up UX
 - [ ] Initial load shows exactly 3 random presets
+- [ ] Preset carousel: three chips stay visible; each fades in/out on its own schedule (staggered, not synchronized)
+- [ ] Preset carousel: first-cycle fade-in start offset per chip ~0 / 650 / 1300 ms
+- [ ] Preset carousel: fade in and fade out each take ~2s (smooth opacity transition)
+- [ ] Preset carousel: longer preset text stays on screen longer before the next fade-out (hold scales with length)
+- [ ] After a successful ask, follow-up presets re-seed and carousel animation continues without layout break
 - [ ] Tapping a preset with a game running appends " for [game name]" to input
 - [ ] Tapping a preset with NO game running sets only the preset text (no trailing "for")
 - [ ] After asking a battery question, follow-ups include battery/performance/thermal presets

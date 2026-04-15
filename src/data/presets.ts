@@ -59,6 +59,25 @@ export function getRandomPresets(count: number): PresetPrompt[] {
   return pool.slice(0, count);
 }
 
+/** Milliseconds to keep a preset fully visible after fade-in; scales with text length (clamped). */
+export function holdMsForPresetText(text: string): number {
+  const msPerChar = 300;
+  const minMs = 8000;
+  const maxMs = 32000;
+  const raw = text.length * msPerChar;
+  return Math.min(maxMs, Math.max(minMs, raw));
+}
+
+/**
+ * Pick a random preset whose `text` is not in `exclude`.
+ * If every prompt is excluded (unlikely), falls back to a random prompt from the full list.
+ */
+export function getRandomPresetExcluding(exclude: Set<string>): PresetPrompt {
+  const candidates = PRESET_PROMPTS.filter((p) => !exclude.has(p.text));
+  const pool = candidates.length > 0 ? candidates : PRESET_PROMPTS;
+  return pool[Math.floor(Math.random() * pool.length)]!;
+}
+
 export function getContextualPresets(lastCategory: string, count: number): PresetPrompt[] {
   /** Prioritize follow-up prompts related to the previous category, then backfill from remaining prompts. */
   const related = FOLLOW_UP_CATEGORIES[lastCategory] ?? Object.keys(FOLLOW_UP_CATEGORIES);

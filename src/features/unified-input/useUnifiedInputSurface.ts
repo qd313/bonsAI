@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
+  ASK_BAR_LAYOUT_SHIFT_RIGHT_PX,
+  ASK_BAR_ROW_WIDTH_EXTRA_PX,
   UNIFIED_INPUT_EXPAND_AHEAD_PX,
   UNIFIED_INPUT_HEIGHT_PAD_PX,
   UNIFIED_TEXT_BODY_MAX_PX,
@@ -27,6 +29,7 @@ export function useUnifiedInputSurface(currentTab: string, unifiedInput: string)
   const unifiedInputMeasureRef = useRef<HTMLDivElement>(null);
   const askBarHostRef = useRef<HTMLDivElement>(null);
   const askLeftCorrectionPxRef = useRef<number | null>(null);
+  const lastUnifiedHostWRef = useRef(0);
   const [unifiedInputSurfacePx, setUnifiedInputSurfacePx] = useState(UNIFIED_TEXT_BODY_MIN_PX);
   const [usesNativeMultilineField, setUsesNativeMultilineField] = useState(false);
 
@@ -61,10 +64,17 @@ export function useUnifiedInputSurface(currentTab: string, unifiedInput: string)
       Math.max(UNIFIED_TEXT_BODY_MIN_PX, sh + UNIFIED_INPUT_HEIGHT_PAD_PX + UNIFIED_INPUT_EXPAND_AHEAD_PX),
     );
     setUnifiedInputSurfacePx(nextPx);
-    bonsaiScopeRef.current?.style.setProperty("--bonsai-search-host-width", `${Math.round(hostW * 100) / 100}px`);
+    const hostWRounded = Math.round(hostW * 100) / 100;
+    if (Math.abs(hostW - lastUnifiedHostWRef.current) > 0.5) {
+      askLeftCorrectionPxRef.current = null;
+      lastUnifiedHostWRef.current = hostW;
+    }
+    const askOuterW = Math.round((hostW + ASK_BAR_ROW_WIDTH_EXTRA_PX) * 100) / 100;
+    bonsaiScopeRef.current?.style.setProperty("--bonsai-search-host-width", `${hostWRounded}px`);
+    bonsaiScopeRef.current?.style.setProperty("--bonsai-askbar-outer-width", `${askOuterW}px`);
     if (askBarHostRef.current) {
-      askBarHostRef.current.style.width = `${Math.round(hostW * 100) / 100}px`;
-      askBarHostRef.current.style.minWidth = `${Math.round(hostW * 100) / 100}px`;
+      askBarHostRef.current.style.width = `${askOuterW}px`;
+      askBarHostRef.current.style.minWidth = `${askOuterW}px`;
     }
     const askEl = askBarHostRef.current;
     if (askEl) {
@@ -75,7 +85,8 @@ export function useUnifiedInputSurface(currentTab: string, unifiedInput: string)
         askLeftCorrectionPxRef.current = leftDelta;
       }
       const appliedAskShift = askLeftCorrectionPxRef.current ?? 0;
-      askEl.style.marginLeft = `${Math.round(appliedAskShift * 100) / 100}px`;
+      const marginLeftPx = Math.round((appliedAskShift + ASK_BAR_LAYOUT_SHIFT_RIGHT_PX) * 100) / 100;
+      askEl.style.marginLeft = `${marginLeftPx}px`;
     }
   }, []);
 
@@ -87,6 +98,8 @@ export function useUnifiedInputSurface(currentTab: string, unifiedInput: string)
   useEffect(() => {
     if (currentTab !== "main") {
       askLeftCorrectionPxRef.current = null;
+      lastUnifiedHostWRef.current = 0;
+      bonsaiScopeRef.current?.style.removeProperty("--bonsai-askbar-outer-width");
     }
   }, [currentTab]);
 

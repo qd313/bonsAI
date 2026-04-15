@@ -38,19 +38,42 @@ class SettingsServiceTests(unittest.TestCase):
             min_latency_warning_seconds=5,
             max_latency_warning_seconds=300,
             min_request_timeout_seconds=10,
-            max_request_timeout_seconds=600,
+            max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
             valid_screenshot_dimensions={1280, 1920, 3160},
             default_screenshot_dimension=1280,
         )
-        self.assertEqual(sanitized["latency_warning_seconds"], 300)
-        self.assertEqual(sanitized["request_timeout_seconds"], 10)
+        self.assertEqual(sanitized["latency_warning_seconds"], 295)
+        self.assertEqual(sanitized["request_timeout_seconds"], 300)
+        self.assertLess(sanitized["latency_warning_seconds"], sanitized["request_timeout_seconds"])
         self.assertEqual(sanitized["unified_input_persistence_mode"], "persist_all")
         self.assertEqual(sanitized["screenshot_max_dimension"], 1920)
         self.assertFalse(sanitized["desktop_debug_note_auto_save"])
         self.assertFalse(sanitized["capabilities"]["filesystem_write"])
         self.assertFalse(sanitized["capabilities"]["hardware_control"])
+
+    def test_sanitize_settings_orders_latency_before_timeout_when_inverted(self):
+        """Conflicting warning/timeout values are adjusted so warning stays strictly below timeout."""
+        sanitized = sanitize_settings(
+            data={
+                "latency_warning_seconds": 200,
+                "request_timeout_seconds": 60,
+            },
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="persist_all",
+            valid_screenshot_dimensions={1280, 1920, 3160},
+            default_screenshot_dimension=1280,
+        )
+        self.assertEqual(sanitized["latency_warning_seconds"], 200)
+        self.assertGreater(sanitized["request_timeout_seconds"], 200)
+        self.assertLess(sanitized["latency_warning_seconds"], sanitized["request_timeout_seconds"])
 
     def test_sanitize_desktop_debug_note_auto_save_true_only_for_literal_true(self):
         """Only JSON true enables auto-save."""
@@ -61,7 +84,7 @@ class SettingsServiceTests(unittest.TestCase):
             min_latency_warning_seconds=5,
             max_latency_warning_seconds=300,
             min_request_timeout_seconds=10,
-            max_request_timeout_seconds=600,
+            max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
             valid_screenshot_dimensions={1280, 1920, 3160},
@@ -81,7 +104,7 @@ class SettingsServiceTests(unittest.TestCase):
                 min_latency_warning_seconds=5,
                 max_latency_warning_seconds=300,
                 min_request_timeout_seconds=10,
-                max_request_timeout_seconds=600,
+                max_request_timeout_seconds=300,
                 valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
                 default_persistence_mode="persist_all",
                 valid_screenshot_dimensions={1280, 1920, 3160},
@@ -112,7 +135,7 @@ class SettingsServiceTests(unittest.TestCase):
                 min_latency_warning_seconds=5,
                 max_latency_warning_seconds=300,
                 min_request_timeout_seconds=10,
-                max_request_timeout_seconds=600,
+                max_request_timeout_seconds=300,
                 valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
                 default_persistence_mode="persist_all",
                 valid_screenshot_dimensions={1280, 1920, 3160},

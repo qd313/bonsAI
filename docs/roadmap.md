@@ -10,7 +10,7 @@ This file merges the active roadmap with detailed future planning. For the refac
 - [x] ★★ **Ollama Network Routing Fix:** Route frontend requests through Decky backend (`call("ask_game_ai", ...)`) to resolve cross-origin failures.
 - [x] ★★ **Deck and PC Connection Settings:** Add connection-focused settings including visible Deck IP and PC IP management.
 - [x] ★★ **Diagnostic, Latency, and Timeout Warnings:** Return `elapsed_seconds`, show slow-response warnings, and enforce backend timeout messaging.
-- [x] ★★ **Configurable Latency and Timeout Controls:** Add persisted warning/timeout settings with side increment controls (`-` / `+`) in Settings.
+- [x] ★★ **Configurable Latency and Timeout Controls:** Persisted warning + timeout in `settings.json`; Settings Connection uses one Steam `SliderField` for hard timeout with a visible soft-warning readout (`ConnectionTimeoutSlider.tsx`), and ordering is reconciled on load/updates.
 - [x] ★★ **Iconography Pass (Tabs + Plugin + Ask Button):** Add icons to all tabs (bonsAI bonsai-tree icon, Settings gear, Debug bug, About unchanged), switch plugin icon to bonsai SVG, and show the stock diamond beside `Ask` text.
 - [x] ★★ **Persist Last Question and Answer:** Restore prior session state when reopening QAM via Decky settings storage.
 - [x] ★★ **Unified Search + Ask Input:** Merge settings search and AI question entry into one shared input flow.
@@ -72,6 +72,7 @@ Ranked by effort and risk using the GTA star system:
 - Desktop Mode Debug Note Save (V1)
 - Desktop Mode Debug Note Save — Daily chat auto-save (V2)
 - Capability Permission Center (User-Controlled Access)
+- Preset Carousel and Transition UX (Phase 1 — fade/hold; manual arrows deferred)
 
 ---
 
@@ -164,10 +165,12 @@ Ranked by effort and risk using the GTA star system:
 - **Risk note:** value may be limited unless users already run with `PROTON_LOG=1`.
 
 ### ★★★★ Preset Carousel and Transition UX
+- **Status (Phase 1):** Shipped — three preset chips remain visible with **independent** staggered fade in/out (~2s each) and a **length-based hold** (doubled dwell window) between fade-in complete and fade-out start; carousel re-seeds when follow-up presets refresh after an ask. Files: `src/components/PresetAnimatedChips.tsx`, `src/data/presets.ts` (`holdMsForPresetText`, `getRandomPresetExcluding`), scoped CSS in `src/index.tsx`; verification notes in `docs/prompt-testing.md`.
+- **Deferred:** lower-right arrow controls for manual next/previous browsing and controller-focused arrow focus behavior (not implemented in Phase 1).
 - **Goal:** Improve random prompt preset browsing with animated fade transitions and carousel navigation controls.
-- **Expected UX:** preset chips fade in/out during rotation and provide lower-right arrow controls for manual next/previous browsing.
+- **Expected UX (full vision):** preset chips fade in/out during rotation and provide lower-right arrow controls for manual next/previous browsing.
 - **Primary work:** preset display container refactor, transition timing rules, and controller-friendly arrow focus behavior.
-- **Files:** `src/index.tsx`, `prompt-testing.md`.
+- **Files:** `src/index.tsx`, `src/components/PresetAnimatedChips.tsx`, `src/components/MainTab.tsx`, `prompt-testing.md`.
 - **Depends on:** existing preset randomization/category logic.
 - **Not in scope:** changing core preset taxonomy/model routing semantics.
 

@@ -1868,7 +1868,6 @@ const Content: React.FC = () => {
       />
     </div>
   );
-};
 
 // Mount the content tree inside an error boundary to keep plugin recovery user-accessible.
 const Root: React.FC = () => (

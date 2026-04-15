@@ -6,13 +6,44 @@ type Props = {
   githubRepoUrl: string;
   ollamaRepoUrl: string;
   githubIssuesUrl: string;
+  /** When false, external link buttons show a toast and optional navigation to Permissions. */
+  allowExternalNavigation: boolean;
+  onNavigateToPermissions: () => void;
 };
 
 /**
  * This tab explains plugin purpose/safety context and provides contributor support links.
  * It keeps project metadata and external navigation actions out of the main screen component.
  */
-export const AboutTab: React.FC<Props> = ({ githubRepoUrl, ollamaRepoUrl, githubIssuesUrl }) => (
+function openExternalOrExplain(
+  url: string,
+  allow: boolean,
+  onNavigateToPermissions: () => void,
+  toastTitle: string
+) {
+  if (!allow) {
+    toaster.toast({
+      title: "Permission required",
+      body: "Enable External and Steam navigation in the Permissions tab.",
+      duration: 4500,
+    });
+    onNavigateToPermissions();
+    return;
+  }
+  try {
+    Navigation.NavigateToExternalWeb(url);
+  } catch {
+    toaster.toast({ title: toastTitle, body: url, duration: 4000 });
+  }
+}
+
+export const AboutTab: React.FC<Props> = ({
+  githubRepoUrl,
+  ollamaRepoUrl,
+  githubIssuesUrl,
+  allowExternalNavigation,
+  onNavigateToPermissions,
+}) => (
   <PanelSection title="About bonsAI">
     <PanelSectionRow>
       <div style={{ fontSize: 14, fontWeight: 700, color: "white" }}>
@@ -39,12 +70,7 @@ export const AboutTab: React.FC<Props> = ({ githubRepoUrl, ollamaRepoUrl, github
       <ButtonItem
         layout="below"
         onClick={() => {
-          // Decky navigation may fail in some contexts, so we fall back to a toast copy target.
-          try {
-            Navigation.NavigateToExternalWeb(githubRepoUrl);
-          } catch {
-            toaster.toast({ title: "GitHub", body: githubRepoUrl, duration: 4000 });
-          }
+          openExternalOrExplain(githubRepoUrl, allowExternalNavigation, onNavigateToPermissions, "GitHub");
         }}
       >
         <span style={{ fontSize: 13 }}>GitHub Repository</span>
@@ -54,11 +80,7 @@ export const AboutTab: React.FC<Props> = ({ githubRepoUrl, ollamaRepoUrl, github
       <ButtonItem
         layout="below"
         onClick={() => {
-          try {
-            Navigation.NavigateToExternalWeb(ollamaRepoUrl);
-          } catch {
-            toaster.toast({ title: "Ollama", body: ollamaRepoUrl, duration: 4000 });
-          }
+          openExternalOrExplain(ollamaRepoUrl, allowExternalNavigation, onNavigateToPermissions, "Ollama");
         }}
       >
         <span style={{ fontSize: 13 }}>Built on Ollama</span>
@@ -68,12 +90,7 @@ export const AboutTab: React.FC<Props> = ({ githubRepoUrl, ollamaRepoUrl, github
       <ButtonItem
         layout="below"
         onClick={() => {
-          // Keep bug-report flow accessible even when external navigation is unavailable.
-          try {
-            Navigation.NavigateToExternalWeb(githubIssuesUrl);
-          } catch {
-            toaster.toast({ title: "Report a Bug", body: githubIssuesUrl, duration: 4000 });
-          }
+          openExternalOrExplain(githubIssuesUrl, allowExternalNavigation, onNavigateToPermissions, "Report a Bug");
         }}
       >
         <span style={{ fontSize: 13 }}>Report a Bug / Request a Feature</span>

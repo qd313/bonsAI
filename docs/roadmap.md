@@ -19,6 +19,9 @@ This file merges the active roadmap with detailed future planning. For the refac
 - [x] ★★★★★ **Steam Input Jump (Phase 1):** Debug tab jump to per-game controller config via `steam://controllerconfig/{appId}` (`SteamClient.URL.ExecuteSteamURL`), versioned lexicon in `src/data/steam-input-lexicon.ts`, helper in `src/utils/steamInputJump.ts`. Documented in [steam-input-research.md](steam-input-research.md). **Phase 2+** (indexed search, full catalog, ranked results) is **not** planned to continue.
 - [x] ★ **Built on Ollama Link (About Tab):** “Built on Ollama” button in About opens `https://github.com/ollama/ollama` via `Navigation.NavigateToExternalWeb` (toast fallback), wired from `OLLAMA_UPSTREAM_REPO_URL` in `src/index.tsx` and `src/components/AboutTab.tsx`.
 - [x] ★★ **Search Surface Glass Pass (Unified Input):** Glass-style unified search field and ask bar (~25% fill, blur, light edge), 50% opacity on corner action icons, dynamic height for the input shell from wrapped text, AI answer chunks use matching glass instead of near-black panels.
+- [x] ★★★ **Desktop Mode Debug Note Save (Steam Deck, V1):** After a successful ask, **Save to Desktop note…** on the main tab opens a consent + name dialog; append-only writes to `~/Desktop/BonsAI_notes/<name>.md` with UTC timestamps and Q+A (`append_desktop_debug_note` in `main.py`, `backend/services/desktop_note_service.py`, `DesktopNoteSaveModal` + `MainTab` in `src/`).
+- [x] ★★★ **Desktop Mode Debug Note Save — Daily chat auto-save (V2):** Settings tab toggle (`desktop_debug_note_auto_save`, default off). When enabled with Filesystem writes, each **Ask** and each **AI response** append to `~/Desktop/BonsAI_notes/bonsai-chat-YYYY-MM-DD.md` (UTC calendar day); Ask entries list attached screenshot paths. Backend `append_desktop_chat_event`; `src/index.tsx` Settings + ask/response hooks.
+- [x] ★★★★ **Capability Permission Center (User-Controlled Access):** Permissions tab (lock icon, same title scale as other tabs) with toggles for filesystem writes, hardware control (TDP apply), media library access (screenshot attach), and external/Steam navigation (About links, Debug Steam Input jump). Persisted `settings.json` `capabilities`; new installs default OFF; legacy installs without a `capabilities` block are grandfathered ON until saved. Backend enforces gates on `append_desktop_debug_note`, `append_desktop_chat_event`, `list_recent_screenshots`, ask-with-attachments, TDP apply, `capture_screenshot`. Files: `backend/services/capabilities.py`, `PermissionsTab`, `main.py`, `src/utils/settingsAndResponse.ts`.
 
 ## In Progress
 - [ ] ★★★ **QAMP Reflection (Phase 1 - Safe Default):** Show applied-state confirmation and explicit verification guidance when QAM sliders do not immediately mirror hardware writes.
@@ -31,8 +34,6 @@ This file merges the active roadmap with detailed future planning. For the refac
 
 ## Up Next
 - [ ] ★★ **Prompt Testing and Tuning:** Systematically validate prompt quality across games and scenarios (see [prompt-testing.md](prompt-testing.md)).
-- [ ] ★★★ **Desktop Mode Debug Note Save (Steam Deck):** Let BonsAI save emulator/debug notes from Game Mode to `~/Desktop/BonsAI_notes/<user-note-name>.md` for later Desktop Mode troubleshooting.
-  - Behavior: user names the note in an initial or follow-up prompt, BonsAI requests explicit permission before writing, and writes are appended with timestamps.
 - [ ] ★★★ **QAMP Verification Checklist:** Verify behavior across per-game profile modes, QAM reopen, Steam restart/reboot, and GPU-related recommendations.
   - [ ] Verify behavior with per-game profile on/off.
   - [ ] Verify behavior after closing and reopening the QAM Performance tab.
@@ -68,6 +69,9 @@ Ranked by effort and risk using the GTA star system:
 - Steam Input Jump (Phase 1)
 - Built on Ollama Link (About Tab)
 - Search Surface Glass Pass (Unified Input)
+- Desktop Mode Debug Note Save (V1)
+- Desktop Mode Debug Note Save — Daily chat auto-save (V2)
+- Capability Permission Center (User-Controlled Access)
 
 ---
 
@@ -138,13 +142,16 @@ Ranked by effort and risk using the GTA star system:
 - **Not in scope:** clearing host-side Ollama history or deleting screenshot files.
 
 ### ★★★ Desktop Mode Debug Note Save (Steam Deck)
+- **Status (V1):** Shipped — UI-only flow (main tab button after successful ask); user names the file in a modal; append-only markdown under `~/Desktop/BonsAI_notes/` with UTC timestamps; backend `append_desktop_debug_note` + `desktop_note_service.py`.
+- **Status (V2 daily chat auto-save):** Shipped — Settings tab **Auto-save chat to Desktop notes** (persisted `desktop_debug_note_auto_save`, default off). When on and **Filesystem writes** is enabled, each Ask and each AI response append to `~/Desktop/BonsAI_notes/bonsai-chat-YYYY-MM-DD.md` (UTC day); Ask blocks list paths for attached screenshots. RPC `append_desktop_chat_event` in `main.py`; formatting in `desktop_note_service.py`; UI in `src/index.tsx`.
 - **Goal:** Save emulator/debug notes during Game Mode to Desktop Mode files so users can review settings while troubleshooting later.
 - **Save target:** `~/Desktop/BonsAI_notes/<user-note-name>.md`.
-- **Filename behavior:** user provides the note name in an initial or follow-up prompt before saving.
-- **Safety gate:** explicit user permission is required before any filesystem write.
+- **Save target (V2):** `~/Desktop/BonsAI_notes/bonsai-chat-YYYY-MM-DD.md` (one file per UTC day while auto-save is used).
+- **Filename behavior (V1):** user enters the note stem in the save modal (not chat-driven).
+- **Safety gate:** explicit user permission is required before any filesystem write (modal copy + confirm for V1; V2 requires opt-in setting plus **Filesystem writes** capability).
 - **Write mode:** append timestamped entries to preserve prior notes and change history.
-- **Primary work:** define note-save intent flow, safe path normalization under Desktop, confirmation UX copy, and deterministic append formatting.
-- **Files:** `main.py`, `src/index.tsx`, docs/troubleshooting notes.
+- **Possible follow-ups:** natural-language save triggers, optional raw-response export.
+- **Files:** `main.py`, `src/index.tsx`, `src/components/MainTab.tsx`, `src/components/DesktopNoteSaveModal.tsx`, docs/troubleshooting notes.
 - **Depends on:** existing prompt/response flow and settings persistence baseline.
 - **Not in scope:** arbitrary file writes outside `~/Desktop/BonsAI_notes/`, silent/background writes without permission, or replacing existing note content by default.
 
@@ -215,14 +222,8 @@ Ranked by effort and risk using the GTA star system:
 - **Not in scope:** custom graph editor for fan curves.
 
 ### ★★★★ Capability Permission Center (User-Controlled Access)
-- **Goal:** Give users direct control over high-impact capabilities and require explicit consent before privileged actions run.
-- **Permissions tab UX:** add a dedicated `Permissions` tab that lists every capability toggle in one place and uses an OFF-position toggle switch as the tab icon (exact style TBD).
-- **Permission scopes:** filesystem writes (screenshots/notes/log exports), sudo/elevated tasks, hardware control paths (TDP/thermal/fan), web/search actions, and future privileged tools.
-- **Primary work:** capability registry, first-use consent prompts, persistent allow/deny toggles, revocation UX, and blocked-action messaging with clear retry flow.
-- **Default behavior:** on first install all permission toggles are OFF, request permission first per capability, deny when not granted, and allow opt-out/revoke at any time in Settings.
-- **Files:** `src/index.tsx`, `main.py`, settings/troubleshooting docs.
-- **Depends on:** stable settings persistence and action routing through capability checks.
-- **Not in scope:** silent privilege escalation, one blanket permission for all capabilities, or bypassing denied scopes.
+- **Status:** Shipped (see **Completed** and **Implemented Baseline**). Tab uses a lock icon; Ollama/LAN ask traffic is not gated as “web.”
+- **Not in scope (future):** first-use modals per capability beyond blocked-action toasts; separate toggles for sudo vs direct sysfs (currently under Hardware control).
 
 ### ★★★★ Model Policy Tiers + Disclosure UX
 - **Goal:** Separate open-source and open-weight access while preserving explicit higher-permission unlock for non-FOSS models.

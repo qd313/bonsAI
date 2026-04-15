@@ -2,6 +2,8 @@ import json
 import os
 from typing import Any, Callable
 
+from backend.services.capabilities import legacy_grandfather_capabilities, sanitize_capabilities
+
 
 def clamp_int(value: Any, default: int, minimum: int, maximum: int) -> int:
     """Coerce an arbitrary value to int and clamp it to an inclusive range."""
@@ -21,6 +23,11 @@ def sanitize_unified_input_persistence_mode(
     if isinstance(value, str) and value in valid_modes:
         return value
     return default_mode
+
+
+def sanitize_desktop_debug_note_auto_save(value: Any) -> bool:
+    """Only explicit true enables daily chat auto-save."""
+    return value is True
 
 
 def sanitize_screenshot_max_dimension(
@@ -76,18 +83,29 @@ def sanitize_settings(
             valid_screenshot_dimensions,
             default_screenshot_dimension,
         ),
+        "desktop_debug_note_auto_save": sanitize_desktop_debug_note_auto_save(
+            raw.get("desktop_debug_note_auto_save")
+        ),
+        "capabilities": sanitize_capabilities(raw.get("capabilities")),
     }
 
 
 def load_settings(path: str, sanitize_func: Callable[[Any], dict], logger: Any) -> dict:
-    """Read settings from disk and return a sanitized settings object on every path."""
+    """Read settings from disk and return a sanitized settings object on every path.
+
+    If the file exists but has no ``capabilities`` object (legacy installs), all capability
+    toggles are grandfathered to True until the user saves explicit values.
+    """
     try:
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
         if not isinstance(data, dict):
             logger.warning("load_settings: expected object in %s, got %s", path, type(data).__name__)
             return sanitize_func({})
-        return sanitize_func(data)
+        sanitized = sanitize_func(data)
+        if "capabilities" not in data or not isinstance(data.get("capabilities"), dict):
+            sanitized = {**sanitized, "capabilities": legacy_grandfather_capabilities()}
+        return sanitized
     except FileNotFoundError:
         return sanitize_func({})
     except Exception as exc:

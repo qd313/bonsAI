@@ -2,9 +2,12 @@
 
 All notable changes to this project are documented in this file.
 
-## [Unreleased] - 2026-04-13
+## [Unreleased] - 2026-04-15
 
 ### Added
+- **Capability Permission Center:** Permissions tab (`LockIcon`, `TAB_TITLE_ICON_PX_PERMISSIONS`) with persisted `capabilities` in `settings.json` (filesystem write, hardware control, media library access, external/Steam navigation). New installs default all OFF; legacy settings files without a `capabilities` object are grandfathered ON until the user saves. Backend enforcement in `main.py` (`backend/services/capabilities.py`); UI in `PermissionsTab.tsx`, `AboutTab.tsx`, `MainTab.tsx`, `src/index.tsx`.
+- **Desktop daily chat auto-save (V2):** Settings tab toggle `desktop_debug_note_auto_save` (default off). When on and filesystem writes are allowed, each Ask and each AI response append to `~/Desktop/BonsAI_notes/bonsai-chat-YYYY-MM-DD.md` (UTC day); Ask entries list attached screenshot paths. RPC `append_desktop_chat_event`, `backend/services/desktop_note_service.py`, `src/index.tsx`.
+- **Desktop Mode Debug Note Save (V1):** After a successful ask, **Save to Desktop note…** opens a consent dialog and writes append-only markdown to `~/Desktop/BonsAI_notes/<name>.md` (UTC timestamps, question + answer). Backend: `append_desktop_debug_note`, `backend/services/desktop_note_service.py`. UI: `DesktopNoteSaveModal`, `MainTab`, `src/index.tsx`.
 - **Search Surface Glass Pass:** Unified search `TextField` and ask bar use a shared glass surface (`rgba` ~25% fill, `backdrop-filter` blur, light border); attach/mic/stop/clear icons render at 50% opacity; input height follows wrapped text (min/max clamp); AI response chunks use the same glass family instead of near-black fills (`src/index.tsx`).
 - **Built on Ollama** About tab link to upstream `https://github.com/ollama/ollama` (`OLLAMA_UPSTREAM_REPO_URL`, `AboutTab`).
 - Phase 1 experimental **Steam Input jump** (Debug tab): per-game `steam://controllerconfig/{appId}` via `SteamClient.URL.ExecuteSteamURL`, `Navigation.CloseSideMenus`, and a versioned lexicon in `src/data/steam-input-lexicon.ts` with CEF route-discovery and update-discipline notes in `docs/steam-input-research.md`.
@@ -42,6 +45,8 @@ All notable changes to this project are documented in this file.
 - Resolved roadmap documentation integration conflict during sync so both upstream and local planning updates are retained in `docs/roadmap.md`.
 
 ### Docs
+- Documented **Desktop daily chat auto-save (V2)** in `docs/roadmap.md`, `docs/troubleshooting.md`, and this changelog.
+- Documented **Capability Permission Center** in `docs/roadmap.md` (Completed + Implemented Baseline + candidate status), `docs/troubleshooting.md` (permissions section), and `docs/foss-advocate-report.md`.
 - Marked **Search Surface Glass Pass** complete in `docs/roadmap.md` (Completed + Implemented Baseline); noted glass tokens and layout in `docs/development.md`.
 - Marked **Built on Ollama Link (About Tab)** complete in `docs/roadmap.md` (Completed + Implemented Baseline).
 - Marked **Steam Input Jump Phase 1** complete in `docs/roadmap.md` and noted Phase 2+ (search + full catalog) as deferred; aligned `docs/steam-input-research.md` and `docs/prompt-testing.md` status language.

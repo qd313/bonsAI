@@ -27,3 +27,4 @@ export const ASK_LABEL_COLOR = "#a8b4c4";
 export const TAB_TITLE_ICON_PX_BONSAI = 120;
 export const TAB_TITLE_ICON_PX_DEBUG = 104;
 export const TAB_TITLE_ICON_PX_SETTINGS = 104;
+export const TAB_TITLE_ICON_PX_PERMISSIONS = 104;

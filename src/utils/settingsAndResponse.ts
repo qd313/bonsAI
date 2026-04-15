@@ -5,11 +5,22 @@
 export type UnifiedInputPersistenceMode = "persist_all" | "persist_search_only" | "no_persist";
 export type ScreenshotMaxDimension = 1280 | 1920 | 3160;
 
+/** High-impact capability toggles; keep keys aligned with backend `capabilities` and Permission Center UI. */
+export type BonsaiCapabilities = {
+  filesystem_write: boolean;
+  hardware_control: boolean;
+  media_library_access: boolean;
+  external_navigation: boolean;
+};
+
 export type BonsaiSettings = {
   latency_warning_seconds: number;
   request_timeout_seconds: number;
   unified_input_persistence_mode: UnifiedInputPersistenceMode;
   screenshot_max_dimension: ScreenshotMaxDimension;
+  /** When true, append Ask and AI response lines to daily chat files under Desktop/BonsAI_notes (requires filesystem_write). */
+  desktop_debug_note_auto_save: boolean;
+  capabilities: BonsaiCapabilities;
 };
 
 export type AppliedResultLike = {
@@ -29,6 +40,14 @@ export const REQUEST_TIMEOUT_STEP_SECONDS = 30;
 export const DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE: UnifiedInputPersistenceMode = "persist_all";
 export const SCREENSHOT_DIMENSION_OPTIONS: ScreenshotMaxDimension[] = [1280, 1920, 3160];
 export const DEFAULT_SCREENSHOT_MAX_DIMENSION: ScreenshotMaxDimension = 1280;
+export const DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE = false;
+
+export const DEFAULT_CAPABILITIES: BonsaiCapabilities = {
+  filesystem_write: false,
+  hardware_control: false,
+  media_library_access: false,
+  external_navigation: false,
+};
 
 function clampNumber(value: unknown, fallback: number, minimum: number, maximum: number): number {
   /** Coerce unknown input to a bounded integer value. */
@@ -80,6 +99,23 @@ export function normalizeScreenshotMaxDimension(value: unknown): ScreenshotMaxDi
   return DEFAULT_SCREENSHOT_MAX_DIMENSION;
 }
 
+export function normalizeDesktopDebugNoteAutoSave(value: unknown): boolean {
+  /** Only explicit true enables auto-save (matches backend capability-style booleans). */
+  return value === true;
+}
+
+export function normalizeCapabilities(value: unknown): BonsaiCapabilities {
+  /** Coerce capability flags; only explicit true enables a scope (matches backend sanitize). */
+  const raw =
+    typeof value === "object" && value !== null ? (value as Partial<BonsaiCapabilities>) : {};
+  return {
+    filesystem_write: raw.filesystem_write === true,
+    hardware_control: raw.hardware_control === true,
+    media_library_access: raw.media_library_access === true,
+    external_navigation: raw.external_navigation === true,
+  };
+}
+
 export function normalizeSettings(data: unknown): BonsaiSettings {
   /** Normalize a raw settings payload into a fully populated frontend settings object. */
   const raw = (typeof data === "object" && data !== null) ? (data as Partial<BonsaiSettings>) : {};
@@ -94,6 +130,8 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     ),
     unified_input_persistence_mode: normalizeUnifiedInputPersistenceMode(raw.unified_input_persistence_mode),
     screenshot_max_dimension: normalizeScreenshotMaxDimension(raw.screenshot_max_dimension),
+    desktop_debug_note_auto_save: normalizeDesktopDebugNoteAutoSave(raw.desktop_debug_note_auto_save),
+    capabilities: normalizeCapabilities(raw.capabilities),
   };
 }
 

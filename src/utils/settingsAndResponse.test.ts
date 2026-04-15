@@ -31,6 +31,23 @@ describe("settingsAndResponse", () => {
     expect(settings.request_timeout_seconds).toBe(160);
     expect(settings.unified_input_persistence_mode).toBe("persist_all");
     expect(settings.screenshot_max_dimension).toBe(DEFAULT_SCREENSHOT_MAX_DIMENSION);
+    expect(settings.desktop_debug_note_auto_save).toBe(false);
+    expect(settings.capabilities.filesystem_write).toBe(false);
+    expect(settings.capabilities.hardware_control).toBe(false);
+  });
+
+  it("normalizes capability flags to explicit booleans", () => {
+    const settings = normalizeSettings({
+      capabilities: {
+        filesystem_write: true,
+        hardware_control: "no" as unknown as boolean,
+        media_library_access: 1 as unknown as boolean,
+      },
+    });
+    expect(settings.capabilities.filesystem_write).toBe(true);
+    expect(settings.capabilities.hardware_control).toBe(false);
+    expect(settings.capabilities.media_library_access).toBe(false);
+    expect(settings.capabilities.external_navigation).toBe(false);
   });
 
   it("builds applied summary text", () => {

@@ -31,6 +31,7 @@ class SettingsServiceTests(unittest.TestCase):
                 "request_timeout_seconds": "5",
                 "unified_input_persistence_mode": "invalid",
                 "screenshot_max_dimension": "1920",
+                "desktop_debug_note_auto_save": "yes",
             },
             default_latency_warning_seconds=15,
             default_request_timeout_seconds=120,
@@ -47,6 +48,57 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertEqual(sanitized["request_timeout_seconds"], 10)
         self.assertEqual(sanitized["unified_input_persistence_mode"], "persist_all")
         self.assertEqual(sanitized["screenshot_max_dimension"], 1920)
+        self.assertFalse(sanitized["desktop_debug_note_auto_save"])
+        self.assertFalse(sanitized["capabilities"]["filesystem_write"])
+        self.assertFalse(sanitized["capabilities"]["hardware_control"])
+
+    def test_sanitize_desktop_debug_note_auto_save_true_only_for_literal_true(self):
+        """Only JSON true enables auto-save."""
+        on = sanitize_settings(
+            data={"desktop_debug_note_auto_save": True},
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=600,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="persist_all",
+            valid_screenshot_dimensions={1280, 1920, 3160},
+            default_screenshot_dimension=1280,
+        )
+        self.assertTrue(on["desktop_debug_note_auto_save"])
+
+    def test_load_settings_grandfathers_capabilities_when_block_missing(self):
+        """Legacy settings files without a capabilities object get all scopes enabled."""
+        logger = _Logger()
+
+        def sanitize_fn(data):
+            return sanitize_settings(
+                data=data,
+                default_latency_warning_seconds=15,
+                default_request_timeout_seconds=120,
+                min_latency_warning_seconds=5,
+                max_latency_warning_seconds=300,
+                min_request_timeout_seconds=10,
+                max_request_timeout_seconds=600,
+                valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+                default_persistence_mode="persist_all",
+                valid_screenshot_dimensions={1280, 1920, 3160},
+                default_screenshot_dimension=1280,
+            )
+
+        with tempfile.TemporaryDirectory() as tmp:
+            settings_dir = Path(tmp)
+            settings_path = settings_dir / "settings.json"
+            settings_path.write_text('{"latency_warning_seconds": 30}', encoding="utf-8")
+            loaded = load_settings(str(settings_path), sanitize_fn, logger)
+            self.assertEqual(loaded["latency_warning_seconds"], 30)
+            caps = loaded["capabilities"]
+            self.assertTrue(caps["filesystem_write"])
+            self.assertTrue(caps["hardware_control"])
+            self.assertTrue(caps["media_library_access"])
+            self.assertTrue(caps["external_navigation"])
 
     def test_load_save_settings_round_trip(self):
         """Ensure load/save helpers persist sanitized values and reload them consistently."""
@@ -92,6 +144,7 @@ class SettingsServiceTests(unittest.TestCase):
             loaded = load_settings(str(settings_path), sanitize_fn, logger)
             self.assertEqual(loaded["latency_warning_seconds"], 60)
             self.assertEqual(loaded["unified_input_persistence_mode"], "no_persist")
+            self.assertIn("capabilities", loaded)
 
 
 if __name__ == "__main__":

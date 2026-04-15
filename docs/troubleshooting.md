@@ -67,6 +67,33 @@ If Windows still falls back to CPU after FIX A:
 4. Hard restart Ollama and re-test.
 ---
 
+## 1a. Permissions tab (blocked actions)
+
+**Feature:** The **Permissions** tab (lock icon) controls high-impact actions: saving notes to Desktop, applying TDP/GPU suggestions from the model, attaching Steam screenshots to asks, opening external links from About, and the Debug tab Steam Input jump.
+
+**Symptom:** Toasts like “Permission required” or backend errors mentioning Permissions when you try those actions.
+
+**Fix:** Open the **Permissions** tab and set the relevant scope to **ON**. Ollama requests to your PC on the LAN are not gated by these toggles.
+
+**Note:** If you upgraded from an older `settings.json` that had no `capabilities` block, the plugin enables all scopes until you save settings from the Permissions tab (grandfather behavior).
+
+---
+
+## 1b. Desktop notes (`BonsAI_notes`)
+
+### Saving from Game Mode
+**Feature:** After a successful **Ask**, use **Save to Desktop note…** on the main tab. You choose the file name (without `.md`); the plugin appends an entry under `~/Desktop/BonsAI_notes/` on the **Steam Deck user** (not the remote Ollama PC). Each run adds a new timestamped **Question** / **Response** block; existing files are not replaced.
+
+**Optional — daily chat log:** In **Settings**, enable **Auto-save chat to Desktop notes** (default off). With **Filesystem writes** enabled in **Permissions**, each **Ask** and each **AI reply** append to `~/Desktop/BonsAI_notes/bonsai-chat-YYYY-MM-DD.md` (UTC calendar day). Ask lines include paths for any screenshot you attached for that prompt.
+
+### ISSUE: Save failed or permission error
+**Checks:**
+1. Switch to **Desktop Mode** at least once so the Desktop folder exists (SteamOS creates `~/Desktop` when needed).
+2. Ensure the Deck user home volume is not full and is writable.
+3. If you use unusual home layouts or symlinks, verify `~/Desktop/BonsAI_notes` resolves under your Deck user home.
+
+---
+
 ## 2. Network & Communication (The Bridge)
 
 ### ERROR: `TypeError: Failed to fetch`

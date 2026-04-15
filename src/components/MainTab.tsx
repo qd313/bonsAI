@@ -68,6 +68,13 @@ export type MainTabProps = {
   elapsedSeconds: number | null;
   lastApplied: AppliedResult | null;
   ollamaContext: OllamaContextUi;
+  /** True when the last completed ask succeeded and a Q+A snapshot is available for Desktop save. */
+  canSaveDesktopNote: boolean;
+  onOpenDesktopNoteSave: () => void;
+  /** When false, screenshot attach is blocked (Permissions); control is shown dimmed. */
+  mediaLibraryEnabled?: boolean;
+  /** When false, Desktop save is blocked (Permissions); control is shown dimmed. */
+  desktopNoteSaveEnabled?: boolean;
 };
 
 export function MainTab(props: MainTabProps) {
@@ -116,6 +123,10 @@ export function MainTab(props: MainTabProps) {
     elapsedSeconds,
     lastApplied,
     ollamaContext,
+    canSaveDesktopNote,
+    onOpenDesktopNoteSave,
+    mediaLibraryEnabled = true,
+    desktopNoteSaveEnabled = true,
   } = props;
   return (
     <>
@@ -292,6 +303,7 @@ export function MainTab(props: MainTabProps) {
                       background: "transparent",
                       color: "#dbe6f3",
                       flexShrink: 0,
+                      opacity: mediaLibraryEnabled ? 1 : 0.45,
                     }}
                   >
                     <span style={{ position: "relative", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
@@ -765,6 +777,23 @@ export function MainTab(props: MainTabProps) {
             <div style={{ color: "#f2cf84", fontSize: 12, padding: "6px 0" }}>
               This is taking a while (&gt;{latencyWarningSeconds}s)... If responses are consistently slow, verify Ollama is using your GPU, not CPU. CPU inference is dramatically slower.
             </div>
+          </PanelSectionRow>
+        )}
+        {canSaveDesktopNote && (
+          <PanelSectionRow>
+            <Button
+              onClick={() => onOpenDesktopNoteSave()}
+              style={{
+                width: "100%",
+                minHeight: 38,
+                border: "1px solid rgba(150, 187, 223, 0.45)",
+                background: "rgba(64, 93, 124, 0.35)",
+                color: "#dce8f4",
+                opacity: desktopNoteSaveEnabled ? 1 : 0.45,
+              }}
+            >
+              Save to Desktop note…
+            </Button>
           </PanelSectionRow>
         )}
         {ollamaResponse && splitResponseIntoChunks(ollamaResponse).map((chunk, i, arr) => (

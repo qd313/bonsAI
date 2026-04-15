@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FiSettings } from "react-icons/fi";
+import { FiLock, FiSettings } from "react-icons/fi";
 import bonsaiLogo from "../assets/icons/bonsai-logo.svg";
 
 /**
@@ -24,6 +24,18 @@ const IconShell: React.FC<{ size: number; children: React.ReactNode }> = ({ size
   >
     {children}
   </span>
+);
+
+/** Permissions tab: lock icon matches other tab title icon sizing (see TAB_TITLE_ICON_PX_PERMISSIONS). */
+export const LockIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
+  <IconShell size={size}>
+    <FiLock
+      size={size}
+      strokeWidth={size > 48 ? 2.25 : 1.35}
+      aria-hidden
+      style={{ display: "block" }}
+    />
+  </IconShell>
 );
 
 /** Settings tab: stroke icon reads clearly on Steam Deck CEF at small sizes (custom fill+stroke gear looked like a blob). */

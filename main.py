@@ -37,6 +37,11 @@ from backend.services.settings_service import (
     sanitize_unified_input_persistence_mode,
     save_settings as save_settings_to_disk,
 )
+from backend.services.capabilities import capability_enabled
+from backend.services.desktop_note_service import (
+    append_desktop_chat_event_sync,
+    append_desktop_debug_note_sync,
+)
 from backend.services.tdp_service import (
     apply_tdp as apply_tdp_service,
     clean_env,
@@ -51,6 +56,7 @@ from refactor_helpers import (
 )
 
 logger = decky.logger
+
 
 class Plugin:
     """Primary Decky backend orchestrator that preserves RPC contracts and lifecycle state.
@@ -606,6 +612,13 @@ class Plugin:
     async def list_recent_screenshots(self, app_id: str = "", limit: int = 5):
         """List recent screenshots with preview and app metadata for attachment browsing."""
         try:
+            settings = await Plugin._coerce_instance(self).load_settings()
+            if not capability_enabled(settings, "media_library_access"):
+                return {
+                    "success": False,
+                    "items": [],
+                    "error": "Media library access is disabled. Enable it in the Permissions tab.",
+                }
             items = []
             for path in Plugin._resolve_recent_screenshot_paths(app_id, limit):
                 try:
@@ -628,6 +641,59 @@ class Plugin:
             logger.exception("list_recent_screenshots failed")
             return {"success": False, "items": [], "error": str(exc)}
 
+    async def append_desktop_debug_note(self, payload: Any = None):
+        """Append timestamped Q&A markdown under ~/Desktop/BonsAI_notes/<name>.md (append-only)."""
+        plugin = Plugin._coerce_instance(self)
+        settings = await plugin.load_settings()
+        if not capability_enabled(settings, "filesystem_write"):
+            return {"success": False, "error": "Filesystem writes are disabled. Enable them in the Permissions tab."}
+        if not isinstance(payload, dict):
+            return {"success": False, "error": "Invalid request."}
+        stem = str(payload.get("stem", "") or "").strip()
+        question = str(payload.get("question", "") or "").strip()
+        response = str(payload.get("response", "") or "").strip()
+        if not stem:
+            return {"success": False, "error": "Note name is required."}
+        home = getattr(decky, "DECKY_USER_HOME", None) or decky.HOME
+        loop = asyncio.get_running_loop()
+
+        def _run() -> dict:
+            return append_desktop_debug_note_sync(home, stem, question, response)
+
+        result = await loop.run_in_executor(None, _run)
+        if result.get("ok"):
+            return {"success": True, "path": result.get("path", "")}
+        return {"success": False, "error": str(result.get("error", "Write failed."))}
+
+    async def append_desktop_chat_event(self, payload: Any = None):
+        """Append Ask or AI response lines to daily UTC chat file under ~/Desktop/BonsAI_notes/."""
+        plugin = Plugin._coerce_instance(self)
+        settings = await plugin.load_settings()
+        if not capability_enabled(settings, "filesystem_write"):
+            return {"success": False, "error": "Filesystem writes are disabled. Enable them in the Permissions tab."}
+        if not isinstance(payload, dict):
+            return {"success": False, "error": "Invalid request."}
+        event = str(payload.get("event", "") or "").strip().lower()
+        question = str(payload.get("question", "") or "").strip()
+        response_text = str(payload.get("response_text", "") or "").strip()
+        screenshot_paths = payload.get("screenshot_paths")
+        home = getattr(decky, "DECKY_USER_HOME", None) or decky.HOME
+        loop = asyncio.get_running_loop()
+
+        def _run() -> dict:
+            return append_desktop_chat_event_sync(
+                home,
+                event,
+                question=question,
+                response_text=response_text,
+                screenshot_paths=screenshot_paths if isinstance(screenshot_paths, list) else [],
+            )
+
+        result = await loop.run_in_executor(None, _run)
+        if result.get("ok"):
+            return {"success": True, "path": result.get("path", "")}
+        return {"success": False, "error": str(result.get("error", "Write failed."))}
+
     @staticmethod
     def _build_capture_command_candidates(output_path: str, include_overlay: bool) -> list:
         """Build candidate screenshot commands to maximize compatibility across SteamOS variants."""
@@ -645,6 +711,13 @@ class Plugin:
 
     async def capture_screenshot(self, include_overlay: bool = True):
         """Capture a screenshot using available gamescope commands and return attachment metadata."""
+        plugin = Plugin._coerce_instance(self)
+        settings = await plugin.load_settings()
+        if not capability_enabled(settings, "filesystem_write"):
+            return {
+                "success": False,
+                "error": "Filesystem writes are disabled. Enable them in the Permissions tab.",
+            }
         runtime_dir = os.path.join(decky.DECKY_PLUGIN_RUNTIME_DIR, "captures")
         os.makedirs(runtime_dir, exist_ok=True)
         timestamp = time.strftime("%Y%m%d-%H%M%S")
@@ -791,13 +864,27 @@ class Plugin:
             request_timeout_seconds = int(
                 settings.get("request_timeout_seconds", Plugin.DEFAULT_REQUEST_TIMEOUT_SECONDS)
             )
+            atts = attachments or []
+            if atts and not capability_enabled(settings, "media_library_access"):
+                elapsed = round(time.time() - start, 1)
+                return {
+                    "success": False,
+                    "response": (
+                        "Screenshot attachments require media library access. "
+                        "Enable it in the Permissions tab, then try again."
+                    ),
+                    "app_id": app_id,
+                    "app_context": app_context,
+                    "applied": None,
+                    "elapsed_seconds": elapsed,
+                }
             ollama_result = await plugin.ask_ollama(
                 question,
                 pc_ip,
                 app_id,
                 app_name,
                 request_timeout_seconds=request_timeout_seconds,
-                attachments=attachments or [],
+                attachments=atts,
             )
             elapsed = round(time.time() - start, 1)
             response_text = str(ollama_result.get("response", "") or "No response text.")
@@ -807,10 +894,21 @@ class Plugin:
             if ollama_result.get("success"):
                 rec = Plugin._parse_tdp_recommendation(response_text)
                 if rec:
-                    logger.info("ask_game_ai: parsed TDP recommendation: %s", rec)
-                    loop = asyncio.get_running_loop()
-                    applied = await loop.run_in_executor(None, Plugin._apply_tdp, rec)
-                    logger.info("ask_game_ai: apply result: %s", applied)
+                    if not capability_enabled(settings, "hardware_control"):
+                        logger.info("ask_game_ai: TDP recommendation present but hardware_control disabled")
+                        response_text += (
+                            "\n\n[Hardware tuning not applied: enable Hardware control in the Permissions tab.]"
+                        )
+                        applied = {
+                            "tdp_watts": None,
+                            "gpu_clock_mhz": None,
+                            "errors": ["Hardware control disabled in Permissions."],
+                        }
+                    else:
+                        logger.info("ask_game_ai: parsed TDP recommendation: %s", rec)
+                        loop = asyncio.get_running_loop()
+                        applied = await loop.run_in_executor(None, Plugin._apply_tdp, rec)
+                        logger.info("ask_game_ai: apply result: %s", applied)
                 else:
                     logger.info("ask_game_ai: no TDP recommendation found in response")
 

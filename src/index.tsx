@@ -4,6 +4,7 @@ import {
   PanelSection,
   PanelSectionRow,
   TextField,
+  ToggleField,
   ButtonItem,
   Button,
   Navigation,
@@ -18,6 +19,7 @@ import {
   buildResponseText,
   DEFAULT_LATENCY_WARNING_SECONDS,
   DEFAULT_REQUEST_TIMEOUT_SECONDS,
+  DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE,
   DEFAULT_SCREENSHOT_MAX_DIMENSION,
   DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
   LATENCY_WARNING_STEP_SECONDS,
@@ -27,24 +29,29 @@ import {
   MIN_REQUEST_TIMEOUT_SECONDS,
   normalizeLatencyWarningSeconds,
   normalizeRequestTimeoutSeconds,
+  DEFAULT_CAPABILITIES,
   normalizeSettings,
   REQUEST_TIMEOUT_STEP_SECONDS,
   SCREENSHOT_DIMENSION_OPTIONS,
+  type BonsaiCapabilities,
   type BonsaiSettings,
   type ScreenshotMaxDimension,
   type UnifiedInputPersistenceMode,
 } from "./utils/settingsAndResponse";
 import { AboutTab } from "./components/AboutTab";
+import { DesktopNoteSaveModal } from "./components/DesktopNoteSaveModal";
 import { DebugTab } from "./components/DebugTab";
 import { MainTab } from "./components/MainTab";
+import { PermissionsTab } from "./components/PermissionsTab";
 import { getSteamInputLexiconEntry } from "./data/steam-input-lexicon";
 import { jumpToSteamInputEntry } from "./utils/steamInputJump";
 import { detectPromptCategory, getContextualPresets, getRandomPresets, type PresetPrompt } from "./data/presets";
-import { BonsaiLogoIcon, BonsaiSvgIcon, BugIcon, GearIcon } from "./components/icons";
+import { BonsaiLogoIcon, BonsaiSvgIcon, BugIcon, GearIcon, LockIcon } from "./components/icons";
 import { SETTINGS_DATABASE } from "./data/settingsDatabase";
 import {
   TAB_TITLE_ICON_PX_BONSAI,
   TAB_TITLE_ICON_PX_DEBUG,
+  TAB_TITLE_ICON_PX_PERMISSIONS,
   TAB_TITLE_ICON_PX_SETTINGS,
   UNIFIED_TEXT_FONT_PX,
   UNIFIED_TEXT_LINE_HEIGHT,
@@ -93,7 +100,7 @@ type SteamUrlApi = {
 const UNIFIED_INPUT_STORAGE_KEY = "bonsai:last-query";
 
 type BackgroundStartResponse = {
-  accepted: boolean;
+  accepted?: boolean;
   status: "pending" | "busy" | "invalid";
   request_id?: number | null;
   response?: string;
@@ -130,6 +137,52 @@ type RecentScreenshotsResponse = {
   success: boolean;
   items: ScreenshotItem[];
   error?: string;
+};
+
+type AppendDesktopNoteResult = {
+  success: boolean;
+  path?: string;
+  error?: string;
+};
+
+type AppendDesktopChatEventPayload = {
+  event: "ask" | "response";
+  question?: string;
+  response_text?: string;
+  screenshot_paths?: string[];
+};
+
+const AUTO_SAVED_RESPONSE_IDS_KEY = "bonsai:auto-desktop-chat-response-ids";
+
+function loadAutosavedResponseIds(): number[] {
+  try {
+    const raw = sessionStorage.getItem(AUTO_SAVED_RESPONSE_IDS_KEY);
+    if (!raw) return [];
+    const arr = JSON.parse(raw) as unknown;
+    if (!Array.isArray(arr)) return [];
+    return arr.filter((x): x is number => typeof x === "number" && Number.isFinite(x));
+  } catch {
+    return [];
+  }
+}
+
+function markResponseAutosaved(requestId: number): void {
+  try {
+    const ids = loadAutosavedResponseIds();
+    if (ids.includes(requestId)) return;
+    ids.push(requestId);
+    while (ids.length > 120) ids.shift();
+    sessionStorage.setItem(AUTO_SAVED_RESPONSE_IDS_KEY, JSON.stringify(ids));
+  } catch {}
+}
+
+function hasResponseAutosaved(requestId: number): boolean {
+  return loadAutosavedResponseIds().includes(requestId);
+}
+
+type LastExchangeSnapshot = {
+  question: string;
+  answer: string;
 };
 const BACKGROUND_STATUS_POLL_MS = 1200;
 const DECKY_RPC_TIMEOUT_MS = 15000;
@@ -315,6 +368,10 @@ function usePluginSettings() {
   const [screenshotMaxDimension, setScreenshotMaxDimension] = useState<ScreenshotMaxDimension>(
     DEFAULT_SCREENSHOT_MAX_DIMENSION
   );
+  const [desktopDebugNoteAutoSave, setDesktopDebugNoteAutoSave] = useState<boolean>(
+    DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE
+  );
+  const [capabilities, setCapabilities] = useState<BonsaiCapabilities>(() => ({ ...DEFAULT_CAPABILITIES }));
   const [settingsLoaded, setSettingsLoaded] = useState(false);
 
   useEffect(() => {
@@ -327,6 +384,8 @@ function usePluginSettings() {
         setRequestTimeoutSeconds(normalized.request_timeout_seconds);
         setUnifiedInputPersistenceMode(normalized.unified_input_persistence_mode);
         setScreenshotMaxDimension(normalized.screenshot_max_dimension);
+        setDesktopDebugNoteAutoSave(normalized.desktop_debug_note_auto_save);
+        setCapabilities(normalized.capabilities);
       })
       .catch(() => {
         if (cancelled) return;
@@ -334,6 +393,8 @@ function usePluginSettings() {
         setRequestTimeoutSeconds(DEFAULT_REQUEST_TIMEOUT_SECONDS);
         setUnifiedInputPersistenceMode(DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE);
         setScreenshotMaxDimension(DEFAULT_SCREENSHOT_MAX_DIMENSION);
+        setDesktopDebugNoteAutoSave(DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE);
+        setCapabilities(DEFAULT_CAPABILITIES);
       })
       .finally(() => {
         if (!cancelled) setSettingsLoaded(true);
@@ -351,6 +412,8 @@ function usePluginSettings() {
         request_timeout_seconds: requestTimeoutSeconds,
         unified_input_persistence_mode: unifiedInputPersistenceMode,
         screenshot_max_dimension: screenshotMaxDimension,
+        desktop_debug_note_auto_save: desktopDebugNoteAutoSave,
+        capabilities,
       }).catch((err) => {
         console.error("save_settings failed", err);
       });
@@ -361,6 +424,8 @@ function usePluginSettings() {
     requestTimeoutSeconds,
     unifiedInputPersistenceMode,
     screenshotMaxDimension,
+    desktopDebugNoteAutoSave,
+    capabilities,
     settingsLoaded,
   ]);
 
@@ -369,11 +434,15 @@ function usePluginSettings() {
     requestTimeoutSeconds,
     unifiedInputPersistenceMode,
     screenshotMaxDimension,
+    desktopDebugNoteAutoSave,
+    capabilities,
+    setCapabilities,
     settingsLoaded,
     setLatencyWarningSeconds,
     setRequestTimeoutSeconds,
     setUnifiedInputPersistenceMode,
     setScreenshotMaxDimension,
+    setDesktopDebugNoteAutoSave,
   };
 }
 
@@ -450,6 +519,18 @@ function useBackgroundGameAi(
   };
 }
 
+/** Wraps icon tab titles so centering applies inside Steam's tab-button / carousel layout. */
+function bonsaiTabIconTitle(
+  classSuffix: "main" | "settings" | "permissions" | "debug",
+  children: React.ReactNode,
+): React.ReactElement {
+  return (
+    <div className="bonsai-tab-title-shell">
+      <span className={`bonsai-tab-title-icon bonsai-tab-title-icon--${classSuffix}`}>{children}</span>
+    </div>
+  );
+}
+
 /**
  * This component is the primary plugin UI composition shell for tabs, ask flow, and settings tooling.
  * It stitches together extracted hooks/data/modules while keeping behavior parity with prior releases.
@@ -476,6 +557,7 @@ const Content: React.FC = () => {
   const [ollamaIp, setOllamaIp] = useState(loadSavedIp());
   const [ollamaResponse, setOllamaResponse] = useState("");
   const [ollamaContext, setOllamaContext] = useState<OllamaContextUi>(null);
+  const [lastExchange, setLastExchange] = useState<LastExchangeSnapshot | null>(null);
   const [isAsking, setIsAsking] = useState(false);
   const [lastApplied, setLastApplied] = useState<AppliedResult | null>(null);
   const [suggestedPrompts, setSuggestedPrompts] = useState<PresetPrompt[]>(() => getRandomPresets(3));
@@ -501,11 +583,30 @@ const Content: React.FC = () => {
     requestTimeoutSeconds,
     unifiedInputPersistenceMode,
     screenshotMaxDimension,
+    desktopDebugNoteAutoSave,
+    capabilities,
+    setCapabilities,
     setLatencyWarningSeconds,
     setRequestTimeoutSeconds,
     setUnifiedInputPersistenceMode,
     setScreenshotMaxDimension,
+    setDesktopDebugNoteAutoSave,
   } = usePluginSettings();
+
+  const desktopAutoSavePrefsRef = useRef({
+    autoSave: DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE,
+    fsWrite: false,
+  });
+  useEffect(() => {
+    desktopAutoSavePrefsRef.current = {
+      autoSave: desktopDebugNoteAutoSave,
+      fsWrite: capabilities.filesystem_write,
+    };
+  }, [desktopDebugNoteAutoSave, capabilities.filesystem_write]);
+
+  const goToPermissionsTab = useCallback(() => {
+    setCurrentTab("permissions");
+  }, []);
 
   // --- Global error capture (always active regardless of tab) ---
   useEffect(() => {
@@ -632,11 +733,37 @@ const Content: React.FC = () => {
       setElapsedSeconds(Number.isFinite(status.elapsed_seconds) ? status.elapsed_seconds : null);
 
       if (status.status === "completed" && status.success) {
-        const questionForCategory = (status.question || fallbackQuestion || "").trim();
-        if (questionForCategory) {
-          const category = detectPromptCategory(questionForCategory);
+        const q = (status.question || fallbackQuestion || "").trim();
+        const answer = buildResponseText(status.response ?? "No response text.", applied);
+        if (q) {
+          const category = detectPromptCategory(q);
           setSuggestedPrompts(getContextualPresets(category, 3));
+          setLastExchange({ question: q, answer });
+
+          const { autoSave, fsWrite } = desktopAutoSavePrefsRef.current;
+          const rid = status.request_id;
+          if (
+            autoSave &&
+            fsWrite &&
+            rid != null &&
+            typeof rid === "number" &&
+            !hasResponseAutosaved(rid)
+          ) {
+            void callDeckyWithTimeout<[AppendDesktopChatEventPayload], AppendDesktopNoteResult>(
+              "append_desktop_chat_event",
+              [{ event: "response", response_text: answer, question: q }],
+              DECKY_RPC_TIMEOUT_MS
+            )
+              .then((result) => {
+                if (result.success) markResponseAutosaved(rid);
+              })
+              .catch(() => {});
+          }
+        } else {
+          setLastExchange(null);
         }
+      } else {
+        setLastExchange(null);
       }
       return;
     }
@@ -650,6 +777,7 @@ const Content: React.FC = () => {
     setOllamaResponse(`Error: ${formatDeckyRpcError(e)}`);
     setLastApplied(null);
     setOllamaContext(null);
+    setLastExchange(null);
   }, []);
 
   const {
@@ -686,6 +814,7 @@ const Content: React.FC = () => {
     setOllamaResponse("");
     setOllamaContext(null);
     setLastApplied(null);
+    setLastExchange(null);
     setSelectedAttachment(null);
     setElapsedSeconds(null);
     setShowSlowWarning(false);
@@ -757,6 +886,15 @@ const Content: React.FC = () => {
 
   const onOpenScreenshotBrowser = async () => {
     if (isAsking) return;
+    if (!capabilities.media_library_access) {
+      toaster.toast({
+        title: "Permission required",
+        body: "Enable Media library access in the Permissions tab to attach screenshots.",
+        duration: 4500,
+      });
+      goToPermissionsTab();
+      return;
+    }
     setIsScreenshotBrowserOpen(true);
     setMediaError("");
     if (recentScreenshots.length === 0) {
@@ -836,6 +974,15 @@ const Content: React.FC = () => {
       if (data.status === "busy") {
         setIsAsking(true);
         setOllamaResponse(data.response ?? "A request is already in progress.");
+      }
+
+      if (data.status === "pending" && desktopDebugNoteAutoSave && capabilities.filesystem_write) {
+        const screenshotPaths = attachments.map((a) => a.path).filter((p) => p.trim().length > 0);
+        void callDeckyWithTimeout<[AppendDesktopChatEventPayload], AppendDesktopNoteResult>(
+          "append_desktop_chat_event",
+          [{ event: "ask", question: q, screenshot_paths: screenshotPaths }],
+          DECKY_RPC_TIMEOUT_MS
+        ).catch(() => {});
       }
 
       saveIp(ip);
@@ -940,6 +1087,54 @@ const Content: React.FC = () => {
   };
   const showSearchClearButton = Boolean(unifiedInput.trim());
 
+  const openDesktopNoteSaveModal = useCallback(() => {
+    if (!capabilities.filesystem_write) {
+      toaster.toast({
+        title: "Permission required",
+        body: "Enable Filesystem writes in the Permissions tab to save notes to Desktop.",
+        duration: 4500,
+      });
+      goToPermissionsTab();
+      return;
+    }
+    if (!lastExchange) {
+      return;
+    }
+    const ex = lastExchange;
+    const handle = showModal(
+      <DesktopNoteSaveModal
+        strDescriptionPrefix={
+          "This appends to a file on your Steam Deck Desktop (not the PC running Ollama).\n\n" +
+          "Folder: Desktop/BonsAI_notes/\n" +
+          "Existing notes are never replaced; new entries are appended with a timestamp.\n\n" +
+          "Proceed only if you want this question and answer saved there."
+        }
+        defaultStem="bonsai-debug"
+        onCancel={() => handle.Close()}
+        onConfirm={async (stem) => {
+          if (!stem) {
+            toaster.toast({ title: "Note name required", body: "Enter a name for the note file.", duration: 3200 });
+            return;
+          }
+          try {
+            const result = await call<[{ stem: string; question: string; response: string }], AppendDesktopNoteResult>(
+              "append_desktop_debug_note",
+              { stem, question: ex.question, response: ex.answer }
+            );
+            if (result.success) {
+              toaster.toast({ title: "Note saved", body: result.path ?? "Saved.", duration: 3800 });
+              handle.Close();
+            } else {
+              toaster.toast({ title: "Save failed", body: result.error ?? "Unknown error.", duration: 5000 });
+            }
+          } catch (e: unknown) {
+            toaster.toast({ title: "Save failed", body: formatDeckyRpcError(e), duration: 5000 });
+          }
+        }}
+      />
+    );
+  }, [lastExchange, capabilities.filesystem_write, goToPermissionsTab]);
+
   // =====================================================================
   // TAB CONTENT
   // =====================================================================
@@ -990,10 +1185,15 @@ const Content: React.FC = () => {
       elapsedSeconds={elapsedSeconds}
       lastApplied={lastApplied}
       ollamaContext={ollamaContext}
+      canSaveDesktopNote={Boolean(lastExchange)}
+      onOpenDesktopNoteSave={openDesktopNoteSaveModal}
+      mediaLibraryEnabled={capabilities.media_library_access}
+      desktopNoteSaveEnabled={capabilities.filesystem_write}
     />
   );
 
   const settingsTab = (
+    <>
     <PanelSection title="Connection">
       <PanelSectionRow>
         <TextField
@@ -1240,9 +1440,36 @@ const Content: React.FC = () => {
         </PanelSectionRow>
       )}
     </PanelSection>
+    <PanelSection title="Desktop notes">
+      <PanelSectionRow>
+        <ToggleField
+          label="Auto-save chat to Desktop notes"
+          description={
+            "Appends each Ask and each AI reply to Desktop/BonsAI_notes/bonsai-chat-YYYY-MM-DD.md (UTC day). " +
+            "Requires Filesystem writes in the Permissions tab."
+          }
+          checked={desktopDebugNoteAutoSave}
+          onChange={(checked) => setDesktopDebugNoteAutoSave(checked)}
+        />
+      </PanelSectionRow>
+    </PanelSection>
+    </>
+  );
+
+  const permissionsTab = (
+    <PermissionsTab capabilities={capabilities} setCapabilities={setCapabilities} />
   );
 
   const onSteamInputPhase1Jump = () => {
+    if (!capabilities.external_navigation) {
+      toaster.toast({
+        title: "Permission required",
+        body: "Enable External and Steam navigation in the Permissions tab for Steam Input jump.",
+        duration: 4500,
+      });
+      goToPermissionsTab();
+      return;
+    }
     const entry = getSteamInputLexiconEntry("phase1_per_game_controller_config");
     if (!entry) {
       toaster.toast({ title: "Steam Input", body: "Lexicon entry missing.", duration: 3500 });
@@ -1273,6 +1500,8 @@ const Content: React.FC = () => {
       githubRepoUrl={GITHUB_REPO_URL}
       ollamaRepoUrl={OLLAMA_UPSTREAM_REPO_URL}
       githubIssuesUrl={GITHUB_ISSUES_URL}
+      allowExternalNavigation={capabilities.external_navigation}
+      onNavigateToPermissions={goToPermissionsTab}
     />
   );
 
@@ -1284,14 +1513,40 @@ const Content: React.FC = () => {
         .bonsai-scope [class*="Tabs"] button {
           transition-property: none !important;
         }
+        /* Do NOT use :has(.bonsai-tab-title-shell) on DialogButton/Focusable — Steam wraps large regions that
+           contain the tab strip as descendants, so those rules matched the whole panel and destroyed layout. */
         .bonsai-scope [class*="TabContentsScroll"] {
           scroll-behavior: auto !important;
         }
+        /* Tab carousel: use margin for horizontal nudge (not transform) so we do not stack with Steam’s tab row transforms. */
+        .bonsai-scope .bonsai-tab-title-shell {
+          display: flex !important;
+          flex: 1 1 auto !important;
+          align-self: stretch !important;
+          min-width: 0 !important;
+          width: 100% !important;
+          max-width: 100% !important;
+          justify-content: center !important;
+          align-items: center !important;
+          box-sizing: border-box !important;
+          transform: none !important;
+          margin-left: 4px !important;
+        }
+        /* Fill each tab header cell and center the glyph so large icons sit over the column, not hug one edge. */
         .bonsai-scope .bonsai-tab-title-icon {
-          display: inline-flex;
+          display: flex;
+          width: auto;
+          max-width: 100%;
+          min-width: 0;
           align-items: center;
           justify-content: center;
           line-height: 0;
+          padding-left: 0;
+          padding-right: 0;
+          /* CSS does not allow negative padding; negative margin is the equivalent spacing control. */
+          margin-left: -8px;
+          margin-right: -8px;
+          box-sizing: border-box;
         }
         .bonsai-scope .Panel.Focusable {
           height: auto !important;
@@ -1587,29 +1842,25 @@ const Content: React.FC = () => {
         tabs={[
           {
             id: "main",
-            title: (
-              <span className="bonsai-tab-title-icon bonsai-tab-title-icon--main">
-                <BonsaiLogoIcon size={TAB_TITLE_ICON_PX_BONSAI} zoom={1} offsetX={-4} offsetY={-4} />
-              </span>
+            title: bonsaiTabIconTitle(
+              "main",
+              <BonsaiLogoIcon size={TAB_TITLE_ICON_PX_BONSAI} zoom={1} offsetX={-4} offsetY={-4} />,
             ),
             content: mainTab,
           },
           {
             id: "settings",
-            title: (
-              <span className="bonsai-tab-title-icon bonsai-tab-title-icon--settings">
-                <GearIcon size={TAB_TITLE_ICON_PX_SETTINGS} />
-              </span>
-            ),
+            title: bonsaiTabIconTitle("settings", <GearIcon size={TAB_TITLE_ICON_PX_SETTINGS} />),
             content: settingsTab,
           },
           {
+            id: "permissions",
+            title: bonsaiTabIconTitle("permissions", <LockIcon size={TAB_TITLE_ICON_PX_PERMISSIONS} />),
+            content: permissionsTab,
+          },
+          {
             id: "debug",
-            title: (
-              <span className="bonsai-tab-title-icon bonsai-tab-title-icon--debug">
-                <BugIcon size={TAB_TITLE_ICON_PX_DEBUG} />
-              </span>
-            ),
+            title: bonsaiTabIconTitle("debug", <BugIcon size={TAB_TITLE_ICON_PX_DEBUG} />),
             content: debugTab,
           },
           { id: "about", title: "About", content: aboutTab },

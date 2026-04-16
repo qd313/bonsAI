@@ -4,6 +4,8 @@ This file tracks curated roleplay voice/accent presets for **Character Voice Rol
 
 **Implementation:** Preset ids, work titles, and UI grouping live in [`src/data/characterCatalog.ts`](../src/data/characterCatalog.ts); backend prompt text and validation use [`backend/services/ai_character_service.py`](../backend/services/ai_character_service.py). Keep these three in sync when editing the catalog.
 
+**Accent intensity (shipped):** When roleplay is on, Settings **Accent intensity** (`ai_character_accent_intensity`) adjusts how strongly the system prompt requests dialect/accent (`subtle` → `unleashed`). Labels and helper text live in [`src/data/aiCharacterAccentIntensity.ts`](../src/data/aiCharacterAccentIntensity.ts); ids must stay aligned with `VALID_ACCENT_INTENSITY_IDS` in `ai_character_service.py` (see `tests/test_accent_intensity_parity.py`).
+
 ## Preset catalog seed list
 
 - **Cyberpunk 2077**

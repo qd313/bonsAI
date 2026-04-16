@@ -48,6 +48,10 @@ _ID_TO_ROW: dict[str, tuple[str, str, str, str]] = {row[0]: row for row in _CHAR
 
 _MAX_CUSTOM_LEN = 400
 
+# Keep in sync with src/data/aiCharacterAccentIntensity.ts (AI_CHARACTER_ACCENT_INTENSITY_IDS).
+VALID_ACCENT_INTENSITY_IDS: frozenset[str] = frozenset(("subtle", "balanced", "heavy", "unleashed"))
+DEFAULT_ACCENT_INTENSITY = "balanced"
+
 _ROLEPLAY_TECH_FOOTER = (
     "Stay factually correct; keep the answer concise. "
     "Do not claim to be an official or licensed voice actor. "
@@ -94,8 +98,84 @@ def sanitize_ai_character_custom_text(value: Any) -> str:
     return stripped
 
 
+def sanitize_ai_character_accent_intensity(value: Any) -> str:
+    """Validate accent intensity id; default balanced (matches frontend)."""
+    if not isinstance(value, str):
+        return DEFAULT_ACCENT_INTENSITY
+    cleaned = value.strip()
+    if cleaned not in VALID_ACCENT_INTENSITY_IDS:
+        return DEFAULT_ACCENT_INTENSITY
+    return cleaned
+
+
 def _clean_control_chars(text: str) -> str:
     return re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f]", "", text)
+
+
+def _preset_or_random_body(work: str, char: str, hint: str, intensity: str) -> str:
+    """Build preset/random roleplay body for catalog row fields."""
+    if intensity == "subtle":
+        return (
+            f"CHARACTER VOICE (required for this reply): Write and speak as {char} from {work}. "
+            f"Keep the reply easy to follow; reflect {hint} lightly through tone and word choice only—"
+            "minimize heavy dialect or stylization. Do not answer in a flat, generic assistant voice. "
+            f"{_ROLEPLAY_TECH_FOOTER}"
+        )
+    if intensity == "heavy":
+        return (
+            f"CHARACTER VOICE (required for this reply): Write and speak as {char} from {work}. "
+            f"Strongly lean into {hint}—use pronounced accent, rhythm, idioms, and attitude; "
+            "keep facts and any required JSON exact. Do not answer in a flat, generic assistant voice. "
+            f"{_ROLEPLAY_TECH_FOOTER}"
+        )
+    if intensity == "unleashed":
+        return (
+            f"CHARACTER VOICE (required for this reply): Write and speak as {char} from {work}. "
+            f"Push voice to the limit for {hint}—maximize theatrical dialect, mannerisms, and character-colored phrasing "
+            "while staying factually correct and preserving any required JSON block exactly. "
+            "Do not answer in a flat, generic assistant voice. "
+            f"{_ROLEPLAY_TECH_FOOTER}"
+        )
+    # balanced (default)
+    return (
+        f"CHARACTER VOICE (required for this reply): Write and speak as {char} from {work}. "
+        f"Delivery must reflect: {hint} — use accent, rhythm, word choice, and attitude consistent with the character; "
+        "do not answer in a flat, generic assistant voice. "
+        f"{_ROLEPLAY_TECH_FOOTER}"
+    )
+
+
+def _custom_body(custom: str, intensity: str) -> str:
+    """Build custom-description roleplay body."""
+    if intensity == "subtle":
+        return (
+            "CHARACTER VOICE (required for this reply): Adopt the speaking style the user describes below—"
+            "keep explanations clear; use only light accent or mannerism where it does not obscure facts. "
+            f"{custom}. "
+            f"{_ROLEPLAY_TECH_FOOTER}"
+        )
+    if intensity == "heavy":
+        return (
+            "CHARACTER VOICE (required for this reply): Adopt the speaking style the user describes below—"
+            "lean hard into accent, dialect, rhythm, and mannerisms while keeping technical content accurate. "
+            f"{custom}. "
+            f"{_ROLEPLAY_TECH_FOOTER}"
+        )
+    if intensity == "unleashed":
+        return (
+            "CHARACTER VOICE (required for this reply): Adopt the speaking style the user describes below—"
+            "maximize theatrical voice, dialect, and character-colored phrasing; never sacrifice factual accuracy or "
+            "the required JSON block. "
+            f"{custom}. "
+            f"{_ROLEPLAY_TECH_FOOTER}"
+        )
+    # balanced
+    return (
+        "CHARACTER VOICE (required for this reply): Adopt the speaking style the user describes below — "
+        "including accent, dialect, and mannerisms where appropriate; avoid a neutral assistant register. "
+        f"{custom}. "
+        f"{_ROLEPLAY_TECH_FOOTER}"
+    )
 
 
 def build_roleplay_system_suffix(settings: dict[str, Any]) -> str:
@@ -103,25 +183,17 @@ def build_roleplay_system_suffix(settings: dict[str, Any]) -> str:
     if not settings.get("ai_character_enabled"):
         return ""
 
+    intensity = sanitize_ai_character_accent_intensity(settings.get("ai_character_accent_intensity"))
+
     if sanitize_ai_character_random(settings.get("ai_character_random")):
         choice = random.choice(_CHARACTER_ROWS)
         _wid, work, char, hint = choice
-        body = (
-            f"CHARACTER VOICE (required for this reply): Write and speak as {char} from {work}. "
-            f"Delivery must reflect: {hint} — use accent, rhythm, word choice, and attitude consistent with the character; "
-            "do not answer in a flat, generic assistant voice. "
-            f"{_ROLEPLAY_TECH_FOOTER}"
-        )
+        body = _preset_or_random_body(work, char, hint, intensity)
         return "\n\n" + _clean_control_chars(body)
 
     custom = sanitize_ai_character_custom_text(settings.get("ai_character_custom_text"))
     if custom:
-        body = (
-            "CHARACTER VOICE (required for this reply): Adopt the speaking style the user describes below — "
-            "including accent, dialect, and mannerisms where appropriate; avoid a neutral assistant register. "
-            f"{custom}. "
-            f"{_ROLEPLAY_TECH_FOOTER}"
-        )
+        body = _custom_body(custom, intensity)
         return "\n\n" + _clean_control_chars(body)
 
     preset_id = sanitize_ai_character_preset_id(settings.get("ai_character_preset_id"))
@@ -132,10 +204,5 @@ def build_roleplay_system_suffix(settings: dict[str, Any]) -> str:
     if not row:
         return ""
     _wid, work, char, hint = row
-    body = (
-        f"CHARACTER VOICE (required for this reply): Write and speak as {char} from {work}. "
-        f"Delivery must reflect: {hint} — use accent, rhythm, word choice, and attitude consistent with the character; "
-        "do not answer in a flat, generic assistant voice. "
-        f"{_ROLEPLAY_TECH_FOOTER}"
-    )
+    body = _preset_or_random_body(work, char, hint, intensity)
     return "\n\n" + _clean_control_chars(body)

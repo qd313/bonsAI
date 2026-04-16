@@ -305,7 +305,7 @@ export function MainTab(props: MainTabProps) {
               </div>
               {showAiCharacterChrome && (
                 <div
-                  style={{ position: "absolute", top: -1, left: -5, zIndex: 6, width: 14, height: 14 }}
+                  style={{ position: "absolute", top: -2, left: -6, zIndex: 6, width: 18, height: 18 }}
                   onKeyDownCapture={(ev) => {
                     if (!isRightNavigationEvent(ev)) return;
                     if (!(ev.target as HTMLElement).closest?.(".bonsai-ai-character-avatar")) return;
@@ -325,8 +325,8 @@ export function MainTab(props: MainTabProps) {
                     style={{
                       width: "100%",
                       height: "100%",
-                      minWidth: 14,
-                      minHeight: 14,
+                      minWidth: 18,
+                      minHeight: 18,
                       margin: 0,
                       padding: 0,
                       display: "flex",
@@ -344,7 +344,7 @@ export function MainTab(props: MainTabProps) {
                     <CharacterRoleplayEmoticon
                       key={aiCharacterAvatarPresetId ?? "__custom__"}
                       presetId={aiCharacterAvatarPresetId ?? "__custom__"}
-                      size={14}
+                      size={18}
                     />
                   </Focusable>
                 </div>

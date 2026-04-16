@@ -187,6 +187,12 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
                     },
                     onMoveLeft: () => handleEntryMove(columnIndex, flatIndex, "left"),
                     onMoveRight: () => handleEntryMove(columnIndex, flatIndex, "right"),
+                    onMoveUp: () => {
+                      if (flatIndex === 0) {
+                        return focusRandomToggle();
+                      }
+                      return false;
+                    },
                     onMoveDown: () => {
                       if (isLastInColumn) {
                         return focusCustomCharacterField();
@@ -199,7 +205,7 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
                     flexDirection: "row",
                     alignItems: "center",
                     gap: 8,
-                    minHeight: 32,
+                    minHeight: 38,
                     padding: "4px 6px",
                     borderRadius: 4,
                     border: active ? "1px solid rgba(255,255,255,0.5)" : "1px solid rgba(255,255,255,0.12)",
@@ -211,7 +217,7 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
                     minWidth: 0,
                   }}
                 >
-                  <CharacterRoleplayEmoticon presetId={entry.id} size={20} />
+                  <CharacterRoleplayEmoticon presetId={entry.id} size={24} />
                   <span
                     style={{
                       fontSize: 12,

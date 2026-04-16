@@ -27,6 +27,7 @@ import {
   DEFAULT_CAPABILITIES,
   DEFAULT_AI_CHARACTER_CUSTOM_TEXT,
   DEFAULT_AI_CHARACTER_ENABLED,
+  DEFAULT_AI_CHARACTER_ACCENT_INTENSITY,
   DEFAULT_AI_CHARACTER_PRESET_ID,
   DEFAULT_AI_CHARACTER_RANDOM,
   normalizeAiCharacterCustomText,
@@ -40,6 +41,10 @@ import {
   type ScreenshotMaxDimension,
   type UnifiedInputPersistenceMode,
 } from "./utils/settingsAndResponse";
+import {
+  AI_CHARACTER_ACCENT_INTENSITY_OPTIONS,
+  type AiCharacterAccentIntensityId,
+} from "./data/aiCharacterAccentIntensity";
 import { AboutTab } from "./components/AboutTab";
 import { CharacterPickerModal } from "./components/CharacterPickerModal";
 import { DesktopNoteSaveModal } from "./components/DesktopNoteSaveModal";
@@ -407,6 +412,9 @@ function usePluginSettings() {
   const [aiCharacterRandom, setAiCharacterRandom] = useState<boolean>(DEFAULT_AI_CHARACTER_RANDOM);
   const [aiCharacterPresetId, setAiCharacterPresetId] = useState<string>(DEFAULT_AI_CHARACTER_PRESET_ID);
   const [aiCharacterCustomText, setAiCharacterCustomText] = useState<string>(DEFAULT_AI_CHARACTER_CUSTOM_TEXT);
+  const [aiCharacterAccentIntensity, setAiCharacterAccentIntensity] = useState<AiCharacterAccentIntensityId>(
+    DEFAULT_AI_CHARACTER_ACCENT_INTENSITY
+  );
   const [settingsLoaded, setSettingsLoaded] = useState(false);
 
   useEffect(() => {
@@ -428,6 +436,7 @@ function usePluginSettings() {
         setAiCharacterRandom(normalized.ai_character_random);
         setAiCharacterPresetId(normalized.ai_character_preset_id);
         setAiCharacterCustomText(normalized.ai_character_custom_text);
+        setAiCharacterAccentIntensity(normalized.ai_character_accent_intensity);
       })
       .catch(() => {
         if (cancelled) return;
@@ -444,6 +453,7 @@ function usePluginSettings() {
         setAiCharacterRandom(DEFAULT_AI_CHARACTER_RANDOM);
         setAiCharacterPresetId(DEFAULT_AI_CHARACTER_PRESET_ID);
         setAiCharacterCustomText(DEFAULT_AI_CHARACTER_CUSTOM_TEXT);
+        setAiCharacterAccentIntensity(DEFAULT_AI_CHARACTER_ACCENT_INTENSITY);
       })
       .finally(() => {
         if (!cancelled) setSettingsLoaded(true);
@@ -470,6 +480,7 @@ function usePluginSettings() {
         ai_character_random: aiCharacterRandom,
         ai_character_preset_id: aiCharacterPresetId,
         ai_character_custom_text: aiCharacterCustomText,
+        ai_character_accent_intensity: aiCharacterAccentIntensity,
       }).catch((err) => {
         console.error("save_settings failed", err);
       });
@@ -489,6 +500,7 @@ function usePluginSettings() {
     aiCharacterRandom,
     aiCharacterPresetId,
     aiCharacterCustomText,
+    aiCharacterAccentIntensity,
     settingsLoaded,
   ]);
 
@@ -507,10 +519,12 @@ function usePluginSettings() {
     aiCharacterRandom,
     aiCharacterPresetId,
     aiCharacterCustomText,
+    aiCharacterAccentIntensity,
     setAiCharacterEnabled,
     setAiCharacterRandom,
     setAiCharacterPresetId,
     setAiCharacterCustomText,
+    setAiCharacterAccentIntensity,
     settingsLoaded,
     setLatencyWarningSeconds,
     setRequestTimeoutSeconds,
@@ -691,10 +705,12 @@ const Content: React.FC = () => {
     aiCharacterRandom,
     aiCharacterPresetId,
     aiCharacterCustomText,
+    aiCharacterAccentIntensity,
     setAiCharacterEnabled,
     setAiCharacterRandom,
     setAiCharacterPresetId,
     setAiCharacterCustomText,
+    setAiCharacterAccentIntensity,
     setLatencyWarningSeconds,
     setRequestTimeoutSeconds,
     setUnifiedInputPersistenceMode,
@@ -1392,6 +1408,7 @@ const Content: React.FC = () => {
             ai_character_random: next.random,
             ai_character_preset_id: pid,
             ai_character_custom_text: ctxt,
+            ai_character_accent_intensity: aiCharacterAccentIntensity,
           }).catch((err) => {
             console.error("save_settings failed (character picker OK)", err);
           });
@@ -1412,6 +1429,7 @@ const Content: React.FC = () => {
     aiCharacterRandom,
     aiCharacterPresetId,
     aiCharacterCustomText,
+    aiCharacterAccentIntensity,
     aiCharacterEnabled,
     latencyWarningSeconds,
     requestTimeoutSeconds,
@@ -1450,6 +1468,7 @@ const Content: React.FC = () => {
             presetId: aiCharacterPresetId,
             customText: aiCharacterCustomText,
           })}`,
+          `accent=${aiCharacterAccentIntensity}`,
         ].join(" | ")
       : null;
 
@@ -1465,6 +1484,7 @@ const Content: React.FC = () => {
         aiCharacterRandom,
         aiCharacterPresetId,
         aiCharacterCustomText,
+        aiCharacterAccentIntensity,
       })}
       fullBleedRowStyle={fullBleedRowStyle}
       presetButtonSurface={presetButtonSurface}
@@ -1815,6 +1835,60 @@ const Content: React.FC = () => {
                   customText: aiCharacterCustomText,
                 })}
               </Button>
+              <div style={{ marginTop: 12, width: "100%", maxWidth: "100%", minWidth: 0 }}>
+                <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 4 }}>
+                  Accent intensity
+                </div>
+                <div
+                  className="bonsai-prose"
+                  style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}
+                >
+                  {
+                    AI_CHARACTER_ACCENT_INTENSITY_OPTIONS.find((o) => o.id === aiCharacterAccentIntensity)
+                      ?.description ?? ""
+                  }
+                </div>
+                <Focusable
+                  flow-children="horizontal"
+                  style={{
+                    display: "flex",
+                    gap: 6,
+                    width: "100%",
+                    minWidth: 0,
+                    maxWidth: "100%",
+                    alignItems: "stretch",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  {AI_CHARACTER_ACCENT_INTENSITY_OPTIONS.map((opt) => {
+                    const active = opt.id === aiCharacterAccentIntensity;
+                    return (
+                      <Button
+                        key={opt.id}
+                        onClick={() => setAiCharacterAccentIntensity(opt.id)}
+                        style={{
+                          flex: "1 1 22%",
+                          minWidth: 72,
+                          minHeight: 36,
+                          fontSize: 11,
+                          fontWeight: 600,
+                          padding: "4px 4px",
+                          borderRadius: 4,
+                          border: active ? "1px solid rgba(255,255,255,0.45)" : "1px solid rgba(255,255,255,0.12)",
+                          background: active
+                            ? "linear-gradient(180deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.1) 100%)"
+                            : "rgba(255,255,255,0.04)",
+                          color: active ? "#f0f4f8" : "#9fb0c0",
+                          boxShadow: active ? "inset 0 1px 0 rgba(255,255,255,0.15)" : "none",
+                        }}
+                        aria-label={`Accent intensity ${opt.shortLabel}: ${opt.description}`}
+                      >
+                        {opt.shortLabel}
+                      </Button>
+                    );
+                  })}
+                </Focusable>
+              </div>
               <div className="bonsai-prose" style={{ fontSize: 10, color: "#6b7c90", marginTop: 6, lineHeight: 1.35 }}>
                 Tap the row for the fullscreen picker. On the main tab, tap the avatar beside the input to change character.
               </div>

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   buildResponseText,
+  DEFAULT_AI_CHARACTER_ACCENT_INTENSITY,
   DEFAULT_SCREENSHOT_MAX_DIMENSION,
   normalizeLatencyWarningSeconds,
   normalizeRequestTimeoutSeconds,
@@ -54,6 +55,7 @@ describe("settingsAndResponse", () => {
     expect(settings.ai_character_random).toBe(true);
     expect(settings.ai_character_preset_id).toBe("");
     expect(settings.ai_character_custom_text).toBe("");
+    expect(settings.ai_character_accent_intensity).toBe(DEFAULT_AI_CHARACTER_ACCENT_INTENSITY);
     expect(settings.preset_chip_fade_animation_enabled).toBe(true);
     expect(settings.input_sanitizer_user_disabled).toBe(false);
   });
@@ -73,6 +75,13 @@ describe("settingsAndResponse", () => {
     expect(normalizeSettings({}).input_sanitizer_user_disabled).toBe(false);
     expect(normalizeSettings({ input_sanitizer_user_disabled: "yes" as unknown as boolean }).input_sanitizer_user_disabled).toBe(
       false
+    );
+  });
+
+  it("normalizes accent intensity to allowed ids", () => {
+    expect(normalizeSettings({ ai_character_accent_intensity: "heavy" }).ai_character_accent_intensity).toBe("heavy");
+    expect(normalizeSettings({ ai_character_accent_intensity: "bogus" }).ai_character_accent_intensity).toBe(
+      DEFAULT_AI_CHARACTER_ACCENT_INTENSITY
     );
   });
 

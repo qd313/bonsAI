@@ -3,6 +3,7 @@ import os
 from typing import Any, Callable
 
 from backend.services.ai_character_service import (
+    sanitize_ai_character_accent_intensity,
     sanitize_ai_character_custom_text,
     sanitize_ai_character_enabled,
     sanitize_ai_character_preset_id,
@@ -157,6 +158,9 @@ def sanitize_settings(
         "ai_character_random": sanitize_ai_character_random(raw.get("ai_character_random")),
         "ai_character_preset_id": sanitize_ai_character_preset_id(raw.get("ai_character_preset_id")),
         "ai_character_custom_text": sanitize_ai_character_custom_text(raw.get("ai_character_custom_text")),
+        "ai_character_accent_intensity": sanitize_ai_character_accent_intensity(
+            raw.get("ai_character_accent_intensity")
+        ),
     }
 
 

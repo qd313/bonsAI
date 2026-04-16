@@ -23,6 +23,55 @@ class AiCharacterServiceTests(unittest.TestCase):
         self.assertIn("Jackie Welles", out)
         self.assertIn("Cyberpunk 2077", out)
         self.assertIn("CHARACTER VOICE", out)
+        self.assertIn("Delivery must reflect:", out)
+
+    def test_preset_accent_intensity_subtle(self):
+        out = build_roleplay_system_suffix(
+            {
+                "ai_character_enabled": True,
+                "ai_character_random": False,
+                "ai_character_preset_id": "cp2077_jackie",
+                "ai_character_custom_text": "",
+                "ai_character_accent_intensity": "subtle",
+            }
+        )
+        self.assertIn("Keep the reply easy to follow", out)
+
+    def test_preset_accent_intensity_heavy(self):
+        out = build_roleplay_system_suffix(
+            {
+                "ai_character_enabled": True,
+                "ai_character_random": False,
+                "ai_character_preset_id": "cp2077_jackie",
+                "ai_character_custom_text": "",
+                "ai_character_accent_intensity": "heavy",
+            }
+        )
+        self.assertIn("Strongly lean into", out)
+
+    def test_preset_accent_intensity_unleashed(self):
+        out = build_roleplay_system_suffix(
+            {
+                "ai_character_enabled": True,
+                "ai_character_random": False,
+                "ai_character_preset_id": "cp2077_jackie",
+                "ai_character_custom_text": "",
+                "ai_character_accent_intensity": "unleashed",
+            }
+        )
+        self.assertIn("Push voice to the limit", out)
+
+    def test_invalid_accent_intensity_defaults_to_balanced(self):
+        out = build_roleplay_system_suffix(
+            {
+                "ai_character_enabled": True,
+                "ai_character_random": False,
+                "ai_character_preset_id": "cp2077_jackie",
+                "ai_character_custom_text": "",
+                "ai_character_accent_intensity": "not_a_level",
+            }
+        )
+        self.assertIn("Delivery must reflect:", out)
 
     def test_custom_overrides_preset(self):
         out = build_roleplay_system_suffix(
@@ -35,6 +84,18 @@ class AiCharacterServiceTests(unittest.TestCase):
         )
         self.assertIn("test custom character", out)
         self.assertNotIn("Jackie Welles", out)
+
+    def test_custom_accent_intensity_subtle(self):
+        out = build_roleplay_system_suffix(
+            {
+                "ai_character_enabled": True,
+                "ai_character_random": False,
+                "ai_character_preset_id": "cp2077_jackie",
+                "ai_character_custom_text": "A test custom character description",
+                "ai_character_accent_intensity": "subtle",
+            }
+        )
+        self.assertIn("keep explanations clear", out)
 
     @patch("backend.services.ai_character_service.random.choice")
     def test_random_mode_uses_catalog_choice(self, mock_choice):

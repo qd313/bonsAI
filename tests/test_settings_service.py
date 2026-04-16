@@ -57,6 +57,7 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertTrue(sanitized["ai_character_random"])
         self.assertEqual(sanitized["ai_character_preset_id"], "")
         self.assertEqual(sanitized["ai_character_custom_text"], "")
+        self.assertEqual(sanitized["ai_character_accent_intensity"], "balanced")
         self.assertTrue(sanitized["preset_chip_fade_animation_enabled"])
         self.assertFalse(sanitized["input_sanitizer_user_disabled"])
 

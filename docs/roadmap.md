@@ -55,6 +55,7 @@ Same item order as the previous single list (stars unchanged). Headings group re
 ### Character voice roleplay
 
 - [x] ★★★ **Character Voice Roleplay Mode (Opt-In):** Default-off **AI character** in Settings (small caps label); fullscreen `CharacterPickerModal` with per–work-title groups, **Random** toggle, custom line, OK/Cancel; unique pixel emoticons; main-tab glass avatar opens picker; backend `ai_character_service.build_roleplay_system_suffix` appends roleplay instructions to the Ollama system prompt. `src/data/characterCatalog.ts`, `src/components/CharacterPickerModal.tsx`, `main.py`, `settings.json` fields `ai_character_*`.
+- [x] ★★ **Character Accent Intensity Levels (Doom-Style Copy):** Settings **Accent intensity** horizontal chips (`subtle` / `balanced` / `heavy` / `unleashed`, default `balanced`) when AI characters are on; Doom-difficulty–flavored short labels and helper copy. Persisted `ai_character_accent_intensity`; `build_roleplay_system_suffix` varies dialect/accent strength for presets, random, and custom paths without changing TDP/JSON policy. `src/data/aiCharacterAccentIntensity.ts`, `src/index.tsx`, `backend/services/ai_character_service.py`, `settings_service.py`, `settingsAndResponse.ts`.
 
 ## In Progress
 - [ ] ★★★ **QAMP Reflection (Phase 1 - Safe Default):** Show applied-state confirmation and explicit verification guidance when QAM sliders do not immediately mirror hardware writes.
@@ -141,15 +142,12 @@ Compact index of shipped baseline capabilities. **Section order and titles match
 ### Character voice roleplay
 
 - Character voice roleplay mode (opt-in)
+- Character accent intensity levels (Settings chips + system prompt modulation)
 
 ## Candidate Features (Easiest → Hardest)
 
 ### ★★ Character Accent Intensity Levels (Doom-Style Copy)
-- **Goal:** Add an accent intensity setting for character-roleplay responses with thematic level descriptions inspired by Doom Eternal tone.
-- **Primary work:** intensity-level spec, user-facing copy guidance, and prompt-routing notes for safe/optional stylistic modulation.
-- **Files:** `src/index.tsx`, `main.py`, docs copy references.
-- **Depends on:** **Character Voice Roleplay Mode (Opt-In)** (shipped; see **Completed**).
-- **Not in scope:** changing factual response policy or forcing roleplay language by default.
+- **Status:** Shipped — see **Completed** (Character voice roleplay); persisted `ai_character_accent_intensity`; backend prompt varies by `subtle` / `balanced` / `heavy` / `unleashed`.
 
 ### ★★★ Mode Selector Dropdown (Main Screen)
 - **Goal:** Add model mode selector (`Fast`, `Strategy Guide`, `Mega/Ultra/Deep`) on main screen.
@@ -172,6 +170,16 @@ Compact index of shipped baseline capabilities. **Section order and titles match
 - **Files:** `main.py`, `src/index.tsx`.
 - **Depends on:** settings persistence already present.
 - **Not in scope:** full UI localization of plugin labels.
+
+### ★★★ Higher-Resolution Character Avatars (GTA-Style Art Pass)
+- **Status (V1):** Shipped — unified 16×16 SVG emoticon grids (`expand8To16` for every catalog id plus hand-tuned bust overrides for GTA V, all TF2 mercs + Announcer bonsai tree, Random/Custom, and the remaining preset roster); implementation in `src/components/characterEmoticonGrids.ts` + `CharacterRoleplayEmoticon.tsx`; picker/main avatar sizes as in the prior UI pass.
+- **Goal:** Improve AI character avatar recognizability with higher-resolution artwork that is still clear at small icon sizes.
+- **Primary work:** define avatar art spec and dimensions, refresh character image assets, and update avatar rendering rules so each character remains easy to identify in both headshot and full-body compositions.
+- **Visual direction:** Grand Theft Auto-inspired cel-shaded, bold graphic-novel style; recognizability target is clear distinction between similar characters (for example, Michael vs Trevor) even at reduced display size.
+- **Character-note requirement:** TF2 Announcer should use a graphic-novel style bonsai tree avatar treatment.
+- **Files:** `src/data/characterCatalog.ts`, `src/components/CharacterPickerModal.tsx`, `src/components/MainTab.tsx`, `src/index.tsx`, asset folders under `src/assets/`.
+- **Depends on:** **Character Voice Roleplay Mode (Opt-In)** and existing character catalog/avatar mapping.
+- **Not in scope:** changing roleplay prompt behavior, adding animation/VFX, or shipping copyrighted third-party likeness assets without approved replacements.
 
 ### ★★★ Input Sanitizer Lane (Hybrid + User Override)
 - **Goal:** Pre-process low-quality input (junk/gibberish) using a hybrid sanitizer path while preserving user control and intent.
@@ -415,7 +423,8 @@ Compact index of shipped baseline capabilities. **Section order and titles match
 ## Cross-Feature Dependency Summary
 
 - **Mode Selector Dropdown (Main Screen)** (`Strategy Guide` replaces `Thinking`) → required by **Per-Mode Latency/Timeout Profiles** and **Strategy Guide Prompt Path (Beta)**.
-- **Character Voice Roleplay Mode (Opt-In)** (shipped) → unlocks **Character Accent Intensity Levels (Doom-Style Copy)**; curated defaults documented in [voice-character-catalog.md](voice-character-catalog.md) and implemented in [src/data/characterCatalog.ts](../src/data/characterCatalog.ts).
+- **Character Voice Roleplay Mode (Opt-In)** (shipped) → baseline for **Character Accent Intensity Levels** (shipped; `ai_character_accent_intensity`); curated presets in [voice-character-catalog.md](voice-character-catalog.md) and [src/data/characterCatalog.ts](../src/data/characterCatalog.ts).
+- **Character Voice Roleplay Mode (Opt-In)** + character avatar mapping → required baseline for **Higher-Resolution Character Avatars (GTA-Style Art Pass)**.
 - **Input Sanitizer Lane (Hybrid + User Override)** → required by **Input Handling Transparency Panel** to preserve user-visible transformation auditability.
 - **Strategy Guide Prompt Path (Beta)** → required by **Strategy Guide Safety and Spoilers** and **Strategy Checklist Workflow (Chat-Scoped)**.
 - **Global Screenshots and Vision** → enables richer strategy responses with screenshot-aware context and inline visual aids.

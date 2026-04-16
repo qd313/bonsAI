@@ -29,6 +29,10 @@ Related planning (not yet implemented): future prompt policy, search UX, and Ste
 - **Commands:** Send exactly `bonsai:disable-sanitize` or `bonsai:enable-sanitize` as the **whole** Ask message (trim + casefold match). No model call; plugin persists `input_sanitizer_user_disabled` and returns confirmation text.
 - **Testing without touching benchmarks:** Use normal game prompts for model quality rows. To verify the lane only, use short benign strings, empty/whitespace-only asks (expect block when sanitizer is on), and the enable/disable phrases on a throwaway profile or after noting you will flip the flag back. Re-enable with `bonsai:enable-sanitize` before resuming comparative prompt runs so empty-control tests do not leak into “model said X” rows.
 
+### 2026-04-16 - Character accent intensity (Settings)
+- **Accent intensity** (when AI characters is on): four levels persisted as `ai_character_accent_intensity` (`subtle`, `balanced`, `heavy`, `unleashed`). The backend varies how strongly the system prompt asks for dialect/accent; factual answers and required TDP JSON behavior are unchanged.
+- Suggested checks: same preset at **subtle** vs **unleashed** and confirm voice color shifts while JSON/TDP blocks still parse; verify Input handling / verbose trace shows the updated system suffix when logging is on.
+
 ### 2026-04-15 - Character Voice Roleplay Mode (Opt-In) Shipped
 - Settings: opt-in **AI character** with fullscreen picker (work-title sections, Random, custom line, OK/Cancel).
 - Backend: `ai_character_service` appends a concise roleplay instruction to the **system** message; TDP JSON contract unchanged.

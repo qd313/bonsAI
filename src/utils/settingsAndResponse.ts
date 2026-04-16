@@ -2,6 +2,11 @@
  * This module centralizes frontend settings normalization and response formatting behavior.
  * Keeping these pure helpers separate from UI components makes validation rules easy to test and reuse.
  */
+import {
+  AI_CHARACTER_ACCENT_INTENSITY_IDS,
+  DEFAULT_AI_CHARACTER_ACCENT_INTENSITY,
+  type AiCharacterAccentIntensityId,
+} from "../data/aiCharacterAccentIntensity";
 import { AI_CHARACTER_CUSTOM_TEXT_MAX, isValidPresetId } from "../data/characterCatalog";
 export type UnifiedInputPersistenceMode = "persist_all" | "persist_search_only" | "no_persist";
 export type ScreenshotMaxDimension = 1280 | 1920 | 3160;
@@ -34,6 +39,8 @@ export type BonsaiSettings = {
   /** Known catalog id when not using random/custom. */
   ai_character_preset_id: string;
   ai_character_custom_text: string;
+  /** How strongly to lean into accent/dialect for character replies (backend system prompt). */
+  ai_character_accent_intensity: AiCharacterAccentIntensityId;
 };
 
 export type AppliedResultLike = {
@@ -69,6 +76,7 @@ export const DEFAULT_AI_CHARACTER_ENABLED = false;
 export const DEFAULT_AI_CHARACTER_RANDOM = true;
 export const DEFAULT_AI_CHARACTER_PRESET_ID = "";
 export const DEFAULT_AI_CHARACTER_CUSTOM_TEXT = "";
+export { DEFAULT_AI_CHARACTER_ACCENT_INTENSITY };
 
 function clampNumber(value: unknown, fallback: number, minimum: number, maximum: number): number {
   /** Coerce unknown input to a bounded integer value. */
@@ -203,6 +211,15 @@ export function normalizeAiCharacterCustomText(value: unknown): string {
   return s;
 }
 
+const _accentIntensitySet = new Set<string>(AI_CHARACTER_ACCENT_INTENSITY_IDS);
+
+export function normalizeAiCharacterAccentIntensity(value: unknown): AiCharacterAccentIntensityId {
+  if (typeof value !== "string") return DEFAULT_AI_CHARACTER_ACCENT_INTENSITY;
+  const t = value.trim();
+  if (_accentIntensitySet.has(t)) return t as AiCharacterAccentIntensityId;
+  return DEFAULT_AI_CHARACTER_ACCENT_INTENSITY;
+}
+
 export function normalizeCapabilities(value: unknown): BonsaiCapabilities {
   /** Coerce capability flags; only explicit true enables a scope (matches backend sanitize). */
   const raw =
@@ -238,6 +255,7 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     ai_character_random: normalizeAiCharacterRandom(raw.ai_character_random),
     ai_character_preset_id: normalizeAiCharacterPresetId(raw.ai_character_preset_id),
     ai_character_custom_text: normalizeAiCharacterCustomText(raw.ai_character_custom_text),
+    ai_character_accent_intensity: normalizeAiCharacterAccentIntensity(raw.ai_character_accent_intensity),
   };
 }
 

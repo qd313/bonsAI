@@ -1,5 +1,5 @@
 import React from "react";
-import { CHARACTER_EMOTICON_GRIDS, EMOTICON_PALETTE } from "./characterEmoticonGrids";
+import { EMOTICON_PALETTE, resolveCharacterEmoticonGrid } from "./characterEmoticonGrids";
 
 export type CharacterRoleplayEmoticonProps = {
   /** Preset catalog id, or `__random__` / `__custom__` for synthetic avatars. */
@@ -14,13 +14,13 @@ export type CharacterRoleplayEmoticonProps = {
  */
 export function CharacterRoleplayEmoticon(props: CharacterRoleplayEmoticonProps) {
   const { presetId, size, className, title } = props;
-  const grid = CHARACTER_EMOTICON_GRIDS[presetId] ?? CHARACTER_EMOTICON_GRIDS.__custom__;
+  const { grid, cellsPerSide } = resolveCharacterEmoticonGrid(presetId);
   const cells = grid.split("");
   return (
     <svg
       width={size}
       height={size}
-      viewBox="0 0 8 8"
+      viewBox={`0 0 ${cellsPerSide} ${cellsPerSide}`}
       className={className}
       aria-hidden={title ? undefined : true}
       title={title}
@@ -37,8 +37,8 @@ export function CharacterRoleplayEmoticon(props: CharacterRoleplayEmoticonProps)
           Number.isFinite(idx) && idx >= 0 && idx < EMOTICON_PALETTE.length
             ? EMOTICON_PALETTE[idx]
             : EMOTICON_PALETTE[0];
-        const x = i % 8;
-        const y = Math.floor(i / 8);
+        const x = i % cellsPerSide;
+        const y = Math.floor(i / cellsPerSide);
         return <rect key={i} x={x} y={y} width={1} height={1} fill={fill} />;
       })}
     </svg>

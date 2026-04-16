@@ -109,7 +109,7 @@ If Windows still falls back to CPU after FIX A:
 
 ## 1b. AI character (roleplay tone)
 
-**Feature:** Settings → **AI character** (small caps header) enables optional character tone for local Ollama replies. You can pick a preset grouped by game/show title, enable **Random** (one catalog character per Ask), or type a custom description. The main Ask field shows a small pixel avatar; tap it to reopen the picker.
+**Feature:** Settings → **AI character** (small caps header) enables optional character tone for local Ollama replies. You can pick a preset grouped by game/show title, enable **Random** (one catalog character per Ask), or type a custom description. **Accent intensity** (four chips, default **balanced**) controls how strongly the system prompt asks for dialect/accent; it does not change TDP or JSON rules. The main Ask field shows a small pixel avatar; tap it to reopen the picker.
 
 **Symptom:** Replies stay in a neutral voice after you enabled the feature.
 

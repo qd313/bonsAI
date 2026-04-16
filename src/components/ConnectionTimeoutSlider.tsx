@@ -16,14 +16,22 @@ export type ConnectionTimeoutSliderProps = {
   warningSec: number;
   timeoutSec: number;
   onChange: (warningSec: number, timeoutSec: number) => void;
+  /** Deck focus-graph: D-pad down from either thumb focuses the next settings block (e.g. screenshot dimension). */
+  onMoveDownFromThumb?: () => boolean;
+  /** Deck focus-graph: D-pad up from the hard-timeout thumb focuses the Ollama IP row above (not the soft-warning thumb). */
+  onMoveUpFromTimeoutThumb?: () => boolean;
+  /** Parent can focus the soft-warning thumb (e.g. D-pad up from screenshot settings). */
+  warningThumbHostRef?: React.Ref<HTMLDivElement>;
 };
 
 type ThumbKind = "warning" | "timeout";
 
-/** Deck focus-graph passes horizontal moves via these callbacks, not always as keyboard events. */
+/** Deck focus-graph passes moves via these callbacks, not always as keyboard events. */
 type DeckThumbNavProps = {
   onMoveLeft?: () => boolean | void;
   onMoveRight?: () => boolean | void;
+  onMoveUp?: () => boolean | void;
+  onMoveDown?: () => boolean | void;
   onButtonDown?: (button: unknown) => boolean | void;
 };
 
@@ -66,7 +74,8 @@ function isRightDeckButton(key: string): boolean {
  * - hard timeout point (right)
  */
 export function ConnectionTimeoutSlider(props: ConnectionTimeoutSliderProps) {
-  const { warningSec, timeoutSec, onChange } = props;
+  const { warningSec, timeoutSec, onChange, onMoveDownFromThumb, onMoveUpFromTimeoutThumb, warningThumbHostRef } =
+    props;
 
   const [draggingThumb, setDraggingThumb] = useState<ThumbKind | null>(null);
   const [focusedThumb, setFocusedThumb] = useState<ThumbKind | null>(null);
@@ -83,6 +92,18 @@ export function ConnectionTimeoutSlider(props: ConnectionTimeoutSliderProps) {
     const target = host?.querySelector("[tabindex],button") as HTMLElement | null;
     target?.focus();
   }, []);
+
+  const setWarningWrapEl = useCallback(
+    (el: HTMLDivElement | null) => {
+      warningWrapRef.current = el;
+      const ext = warningThumbHostRef;
+      if (typeof ext === "function") ext(el);
+      else if (ext && typeof ext === "object" && "current" in ext) {
+        (ext as React.MutableRefObject<HTMLDivElement | null>).current = el;
+      }
+    },
+    [warningThumbHostRef]
+  );
 
   const applyWarning = useCallback(
     (rawValue: number) => {
@@ -210,6 +231,8 @@ export function ConnectionTimeoutSlider(props: ConnectionTimeoutSliderProps) {
     (thumb: ThumbKind): DeckThumbNavProps => ({
       onMoveLeft: () => handleThumbDirection(thumb, "left"),
       onMoveRight: () => handleThumbDirection(thumb, "right"),
+      onMoveUp: () => (thumb === "timeout" ? onMoveUpFromTimeoutThumb?.() ?? false : false),
+      onMoveDown: () => onMoveDownFromThumb?.() ?? false,
       onButtonDown: (button: unknown) => {
         const buttonKey = String(button ?? "unknown");
         if (isLeftDeckButton(buttonKey)) return handleThumbDirection(thumb, "left");
@@ -217,7 +240,7 @@ export function ConnectionTimeoutSlider(props: ConnectionTimeoutSliderProps) {
         return false;
       },
     }),
-    [handleThumbDirection]
+    [handleThumbDirection, onMoveDownFromThumb, onMoveUpFromTimeoutThumb]
   );
 
   const buildThumbPointerHandlers = useCallback(
@@ -317,12 +340,12 @@ export function ConnectionTimeoutSlider(props: ConnectionTimeoutSliderProps) {
             }}
           />
           <div
-            ref={warningWrapRef}
+            ref={setWarningWrapEl}
             style={{
               position: "absolute",
-              left: `calc(${warningPct}% - 22px)`,
+              left: `calc(${warningPct}% - 21px)`,
               top: 0,
-              width: 44,
+              width: 42,
               height: 40,
               zIndex: 2,
             }}
@@ -377,9 +400,9 @@ export function ConnectionTimeoutSlider(props: ConnectionTimeoutSliderProps) {
             ref={timeoutWrapRef}
             style={{
               position: "absolute",
-              left: `calc(${timeoutPct}% - 22px)`,
+              left: `calc(${timeoutPct}% - 21px)`,
               top: 0,
-              width: 44,
+              width: 42,
               height: 40,
               zIndex: 2,
             }}

@@ -49,6 +49,10 @@ describe("settingsAndResponse", () => {
     expect(settings.desktop_debug_note_auto_save).toBe(false);
     expect(settings.capabilities.filesystem_write).toBe(false);
     expect(settings.capabilities.hardware_control).toBe(false);
+    expect(settings.ai_character_enabled).toBe(false);
+    expect(settings.ai_character_random).toBe(true);
+    expect(settings.ai_character_preset_id).toBe("");
+    expect(settings.ai_character_custom_text).toBe("");
   });
 
   it("normalizes capability flags to explicit booleans", () => {

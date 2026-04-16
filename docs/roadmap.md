@@ -5,23 +5,53 @@ This file merges the active roadmap with detailed future planning. For the refac
 ## Active roadmap (from former TODO.md)
 
 ## Completed
+
+Same item order as the previous single list (stars unchanged). Headings group related work only.
+
+### First-run and prompts
+
 - [x] ★ **Beta Disclaimer Modal:** Show one-time experimental-software warning with risk acknowledgment and bug-report link.
 - [x] ★ **Suggested AI Prompts:** Show curated prompt presets, randomize initial suggestions, and generate contextual follow-ups after responses.
+
+### Connection, routing, diagnostics, and timeouts
+
 - [x] ★★ **Ollama Network Routing Fix:** Route frontend requests through Decky backend (`call("ask_game_ai", ...)`) to resolve cross-origin failures.
 - [x] ★★ **Deck and PC Connection Settings:** Add connection-focused settings including visible Deck IP and PC IP management.
 - [x] ★★ **Diagnostic, Latency, and Timeout Warnings:** Return `elapsed_seconds`, show slow-response warnings, and enforce backend timeout messaging.
 - [x] ★★ **Configurable Latency and Timeout Controls:** Persisted warning + timeout in `settings.json`; Settings Connection uses one Steam `SliderField` for hard timeout with a visible soft-warning readout (`ConnectionTimeoutSlider.tsx`), and ordering is reconciled on load/updates.
+
+### Tabs, icons, and unified ask flow
+
 - [x] ★★ **Iconography Pass (Tabs + Plugin + Ask Button):** Add icons to all tabs (bonsAI bonsai-tree icon, Settings gear, Debug bug, About unchanged), switch plugin icon to bonsai SVG, and show the stock diamond beside `Ask` text.
 - [x] ★★ **Persist Last Question and Answer:** Restore prior session state when reopening QAM via Decky settings storage.
 - [x] ★★ **Unified Search + Ask Input:** Merge settings search and AI question entry into one shared input flow.
+
+### AI-assisted power and long-response UX
+
 - [x] ★★★ **TDP Automation via AI Output:** Parse AI recommendations and apply constrained TDP values through safe sysfs write paths.
 - [x] ★★★ **D-pad Response Scrolling:** Split long responses into focusable chunks for controller-first navigation.
+
+### Steam Input
+
 - [x] ★★★★★ **Steam Input Jump (Phase 1):** Debug tab jump to per-game controller config via `steam://controllerconfig/{appId}` (`SteamClient.URL.ExecuteSteamURL`), versioned lexicon in `src/data/steam-input-lexicon.ts`, helper in `src/utils/steamInputJump.ts`. Documented in [steam-input-research.md](steam-input-research.md). **Phase 2+** (indexed search, full catalog, ranked results) is **not** planned to continue.
+
+### About tab and main surface polish
+
 - [x] ★ **Built on Ollama Link (About Tab):** “Built on Ollama” button in About opens `https://github.com/ollama/ollama` via `Navigation.NavigateToExternalWeb` (toast fallback), wired from `OLLAMA_UPSTREAM_REPO_URL` in `src/index.tsx` and `src/components/AboutTab.tsx`.
 - [x] ★★ **Search Surface Glass Pass (Unified Input):** Glass-style unified search field and ask bar (~25% fill, blur, light edge), 50% opacity on corner action icons, dynamic height for the input shell from wrapped text, AI answer chunks use matching glass instead of near-black panels.
+
+### Desktop notes (Game Mode → Desktop)
+
 - [x] ★★★ **Desktop Mode Debug Note Save (Steam Deck, V1):** After a successful ask, **Save to Desktop note…** on the main tab opens a consent + name dialog; append-only writes to `~/Desktop/BonsAI_notes/<name>.md` with UTC timestamps and Q+A (`append_desktop_debug_note` in `main.py`, `backend/services/desktop_note_service.py`, `DesktopNoteSaveModal` + `MainTab` in `src/`).
 - [x] ★★★ **Desktop Mode Debug Note Save — Daily chat auto-save (V2):** Settings tab toggle (`desktop_debug_note_auto_save`, default off). When enabled with Filesystem writes, each **Ask** and each **AI response** append to `~/Desktop/BonsAI_notes/bonsai-chat-YYYY-MM-DD.md` (UTC calendar day); Ask entries list attached screenshot paths. Backend `append_desktop_chat_event`; `src/index.tsx` Settings + ask/response hooks.
+
+### Permissions and capability gating
+
 - [x] ★★★★ **Capability Permission Center (User-Controlled Access):** Permissions tab (lock icon, same title scale as other tabs) with toggles for filesystem writes, hardware control (TDP apply), media library access (screenshot attach), and external/Steam navigation (About links, Debug Steam Input jump). Persisted `settings.json` `capabilities`; new installs default OFF; legacy installs without a `capabilities` block are grandfathered ON until saved. Backend enforces gates on `append_desktop_debug_note`, `append_desktop_chat_event`, `list_recent_screenshots`, ask-with-attachments, TDP apply, `capture_screenshot`. Files: `backend/services/capabilities.py`, `PermissionsTab`, `main.py`, `src/utils/settingsAndResponse.ts`.
+
+### Character voice roleplay
+
+- [x] ★★★ **Character Voice Roleplay Mode (Opt-In):** Default-off **AI character** in Settings (small caps label); fullscreen `CharacterPickerModal` with per–work-title groups, **Random** toggle, custom line, OK/Cancel; unique pixel emoticons; main-tab glass avatar opens picker; backend `ai_character_service.build_roleplay_system_suffix` appends roleplay instructions to the Ollama system prompt. `src/data/characterCatalog.ts`, `src/components/CharacterPickerModal.tsx`, `main.py`, `settings.json` fields `ai_character_*`.
 
 ## In Progress
 - [ ] ★★★ **QAMP Reflection (Phase 1 - Safe Default):** Show applied-state confirmation and explicit verification guidance when QAM sliders do not immediately mirror hardware writes.
@@ -56,33 +86,72 @@ Ranked by effort and risk using the GTA star system:
 > **DO NOT IMPLEMENT YET** -- This file is planning/reference only.
 
 ## Implemented Baseline
+
+Compact index of shipped baseline capabilities. **Section order and titles match [Completed](#completed) above.** Items listed only here (not repeated as checklist lines in **Completed**) are marked *(baseline index)*.
+
+### First-run and prompts
+
+- Beta disclaimer modal
 - Suggested AI Prompts
-- Diagnostic and latency warnings
+- Background prompt completion (V1) *(baseline index)*
+
+### Connection, routing, diagnostics, and timeouts
+
+- Ollama network routing fix (Decky backend)
 - Deck/PC connection settings
+- Diagnostic and latency warnings
 - Configurable latency and timeout controls
+- Linux Ollama compatibility *(baseline index)*
+
+### Tabs, icons, and unified ask flow
+
+- Iconography pass (tabs + plugin + Ask button)
 - Persist last question and answer
 - Unified Search + Ask input
-- Iconography Pass (Tabs + Plugin + Ask Button)
-- Background Prompt Completion (V1)
-- Linux Ollama Compatibility
-- Global Screenshots and Vision (V1)
-- Steam Input Jump (Phase 1)
-- Built on Ollama Link (About Tab)
-- Search Surface Glass Pass (Unified Input)
-- Desktop Mode Debug Note Save (V1)
-- Desktop Mode Debug Note Save — Daily chat auto-save (V2)
-- Capability Permission Center (User-Controlled Access)
-- Preset Carousel and Transition UX (Phase 1 — fade/hold; manual arrows deferred)
+- Preset carousel and transition UX (Phase 1 — fade/hold; manual arrows deferred) *(baseline index)*
 
----
+### AI-assisted power and long-response UX
+
+- TDP automation via AI output
+- D-pad response scrolling
+
+### Steam Input
+
+- Steam Input jump (Phase 1)
+
+### About tab and main surface polish
+
+- Built on Ollama link (About Tab)
+- Search surface glass pass (unified input)
+
+### Desktop notes (Game Mode → Desktop)
+
+- Desktop mode debug note save (V1)
+- Desktop mode debug note save — daily chat auto-save (V2)
+
+### Permissions and capability gating
+
+- Capability Permission Center (user-controlled access)
+- Global screenshots and vision (V1) *(baseline index)* — multimodal attach; uses media-related capability paths
+
+### Character voice roleplay
+
+- Character voice roleplay mode (opt-in)
 
 ## Candidate Features (Easiest → Hardest)
+
+### ★ Toggle to Disable Preset Chip Fade Animation
+- **Goal:** Settings opt-out that turns off the staggered fade in/out on main-tab suggestion chips while keeping chip content, rotation, and post-ask re-seed behavior unchanged.
+- **Primary work:** persisted boolean (default **on** so current animated behavior is unchanged), Settings UI toggle, plumb flag into `PresetAnimatedChips` / host so transitions are skipped when off (static chips or instant swap—implementation detail).
+- **Files:** `src/index.tsx`, `src/components/MainTab.tsx`, `src/components/PresetAnimatedChips.tsx`, `src/utils/settingsAndResponse.ts`, `backend/services/settings_service.py` / `settings.json` as needed for parity with other toggles.
+- **Depends on:** **Preset carousel (Phase 1)** (shipped; see **Implemented Baseline**).
+- **Not in scope:** manual next/previous arrow controls (still deferred under **Preset Carousel and Transition UX** ★★★★).
 
 ### ★★ Character Accent Intensity Levels (Doom-Style Copy)
 - **Goal:** Add an accent intensity setting for character-roleplay responses with thematic level descriptions inspired by Doom Eternal tone.
 - **Primary work:** intensity-level spec, user-facing copy guidance, and prompt-routing notes for safe/optional stylistic modulation.
 - **Files:** `src/index.tsx`, `main.py`, docs copy references.
-- **Depends on:** **Character Voice Roleplay Mode (Opt-In)**.
+- **Depends on:** **Character Voice Roleplay Mode (Opt-In)** (shipped; see **Completed**).
 - **Not in scope:** changing factual response policy or forcing roleplay language by default.
 
 ### ★★★ Mode Selector Dropdown (Main Screen)
@@ -113,13 +182,6 @@ Ranked by effort and risk using the GTA star system:
 - **Files:** `main.py`, `src/index.tsx`, prompt-policy docs.
 - **Depends on:** settings persistence and transparent input handling controls.
 - **Not in scope:** hidden prompt rewriting with no user visibility or override.
-
-### ★★★ Character Voice Roleplay Mode (Opt-In)
-- **Goal:** Add a default-off setting that enables optional game-character voice/accent response style using a curated list plus user-defined entries.
-- **Primary work:** toggle behavior spec, full-screen character picker flow, and data model backed by [voice-character-catalog.md](voice-character-catalog.md).
-- **Files:** `src/index.tsx`, `main.py`, `docs/voice-character-catalog.md`.
-- **Depends on:** permission/safety copy alignment and prompt-routing controls.
-- **Not in scope:** impersonation claims of official voice actors or non-consensual always-on roleplay.
 
 ### ★★★ Search Results Density + Live Match Emphasis
 - **Goal:** Make search results tighter and more scannable with single-spacing, wider text lines, instant update behavior, and highlighted match tokens.
@@ -293,13 +355,13 @@ Ranked by effort and risk using the GTA star system:
 - **Not in scope:** long-term checklist persistence across restarts/sessions.
 
 ### ★★★★★ Global BonsAI Quick-Launch via Steam Input Macro (Documentation Spike)
-Goal: Provide users with a near-instant way to summon BonsAI from anywhere—whether in-game or on the SteamOS Home Screen—using native system tools, completely bypassing the need for brittle UI hacks.
-Primary work: Document and test the optimal Guide Button Chord macro sequence required to open the QAM, navigate to the Decky tab, and launch BonsAI automatically.
-Files: README.md, docs/development.md.
-Depends on: Native Steam Input functionality (Guide Button Chord Layout) and the user's specific QAM tab order.
-Worth-it assessment: Extremely high. It requires zero code maintenance, carries no performance overhead, is completely immune to Steam client updates, and safely leverages official Valve tools.
-Go/No-Go gate: GO. Requires no code implementation or internal module patching.
-Not in scope: Programmatic background input sniffing (evdev), WebSockets, or React DOM manipulation
+- **Goal:** Provide users with a near-instant way to summon BonsAI from anywhere—whether in-game or on the SteamOS Home Screen—using native system tools, completely bypassing the need for brittle UI hacks.
+- **Primary work:** Document and test the optimal Guide Button Chord macro sequence required to open the QAM, navigate to the Decky tab, and launch BonsAI automatically.
+- **Files:** `README.md`, `docs/development.md`.
+- **Depends on:** Native Steam Input functionality (Guide Button Chord Layout) and the user's specific QAM tab order.
+- **Worth-it assessment:** Extremely high. It requires zero code maintenance, carries no performance overhead, is completely immune to Steam client updates, and safely leverages official Valve tools.
+- **Go/No-Go gate:** GO. Requires no code implementation or internal module patching.
+- **Not in scope:** Programmatic background input sniffing (evdev), WebSockets, or React DOM manipulation.
 
 ### ★★★★★ Voice Command Input
 - **Goal:** Record voice on Deck and transcribe to prompt text using local Whisper service.
@@ -339,7 +401,7 @@ Not in scope: Programmatic background input sniffing (evdev), WebSockets, or Rea
 ## Cross-Feature Dependency Summary
 
 - **Mode Selector Dropdown (Main Screen)** (`Strategy Guide` replaces `Thinking`) → required by **Per-Mode Latency/Timeout Profiles** and **Strategy Guide Prompt Path (Beta)**.
-- **Character Voice Roleplay Mode (Opt-In)** → required by **Character Accent Intensity Levels (Doom-Style Copy)** and sources curated defaults from [voice-character-catalog.md](voice-character-catalog.md).
+- **Character Voice Roleplay Mode (Opt-In)** (shipped) → unlocks **Character Accent Intensity Levels (Doom-Style Copy)**; curated defaults documented in [voice-character-catalog.md](voice-character-catalog.md) and implemented in [src/data/characterCatalog.ts](../src/data/characterCatalog.ts).
 - **Input Sanitizer Lane (Hybrid + User Override)** → required by **Input Handling Transparency Panel** to preserve user-visible transformation auditability.
 - **Strategy Guide Prompt Path (Beta)** → required by **Strategy Guide Safety and Spoilers** and **Strategy Checklist Workflow (Chat-Scoped)**.
 - **Global Screenshots and Vision** → enables richer strategy responses with screenshot-aware context and inline visual aids.

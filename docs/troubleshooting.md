@@ -79,6 +79,16 @@ If Windows still falls back to CPU after FIX A:
 
 ---
 
+## 1b. AI character (roleplay tone)
+
+**Feature:** Settings → **AI character** (small caps header) enables optional character tone for local Ollama replies. You can pick a preset grouped by game/show title, enable **Random** (one catalog character per Ask), or type a custom description. The main Ask field shows a small pixel avatar; tap it to reopen the picker.
+
+**Symptom:** Replies stay in a neutral voice after you enabled the feature.
+
+**Fix:** Confirm **Enable** is on and you chose a preset, Random, or custom text (not only opened the picker). If **Random** is off and both preset and custom are empty, no roleplay instructions are sent.
+
+---
+
 ## 1c. Latency warning vs backend timeout (Settings)
 
 **Where:** Settings tab, under **Connection**, **Latency warning and backend timeout**.

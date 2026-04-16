@@ -1,8 +1,8 @@
-# Voice Character Catalog (Planning Only)
+# Voice Character Catalog
 
-This file tracks curated roleplay voice/accent presets for the roadmap feature **Character Voice Roleplay Mode (Opt-In)** in `docs/roadmap.md`.
+This file tracks curated roleplay voice/accent presets for **Character Voice Roleplay Mode** (see `docs/roadmap.md`).
 
-> Planning reference only. Do not implement directly from this file without a scoped feature task.
+**Implementation:** Preset ids, work titles, and UI grouping live in [`src/data/characterCatalog.ts`](../src/data/characterCatalog.ts); backend prompt text and validation use [`backend/services/ai_character_service.py`](../backend/services/ai_character_service.py). Keep these three in sync when editing the catalog.
 
 ## Preset catalog seed list
 

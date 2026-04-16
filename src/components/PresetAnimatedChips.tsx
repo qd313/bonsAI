@@ -11,7 +11,7 @@ import {
 export const PRESET_CAROUSEL_FADE_IN_MS = 1000;
 /** Fade-out duration (ms); must match the slot wrapper transition when opacity decreases. */
 export const PRESET_CAROUSEL_FADE_OUT_MS = 2000;
-/** Carousel runs for this long after the plugin surface mounts (or presets re-seed); then fades stop until the next mount. */
+/** Carousel schedules new preset cycles for this long after mount/re-seed; in-flight fades still complete, then no more swaps until remount. */
 export const PRESET_CAROUSEL_ACTIVE_MS = 60_000;
 
 type SlotFade = { opacity: number; transitionMs: number };
@@ -43,7 +43,7 @@ export type PresetAnimatedChipsProps = {
 /**
  * Three preset suggestion chips with independent fade in/out cycles.
  * Hold time after each fade-in scales with prompt length; fade durations are fixed.
- * After `PRESET_CAROUSEL_ACTIVE_MS` the carousel stops scheduling cycles (remount to restart).
+ * After `PRESET_CAROUSEL_ACTIVE_MS` no new cycles start; any fade already in progress runs to completion, then the carousel rests until remount.
  */
 export function PresetAnimatedChips(props: PresetAnimatedChipsProps) {
   const { seeds, setUnifiedInput } = props;
@@ -64,14 +64,12 @@ export function PresetAnimatedChips(props: PresetAnimatedChipsProps) {
     const timeouts: number[] = [];
     let cancelled = false;
 
-    const shouldContinueSession = (): boolean => {
-      if (cancelled) return false;
-      return performance.now() < sessionEnd;
-    };
+    /** Only gate starting a *new* cycle after a full fade-out; never abort mid fade/hold. */
+    const mayStartNextCycle = (): boolean => !cancelled && performance.now() < sessionEnd;
 
     const pushTimeout = (fn: () => void, ms: number) => {
       const id = window.setTimeout(() => {
-        if (!shouldContinueSession()) return;
+        if (cancelled) return;
         fn();
       }, ms);
       timeouts.push(id);
@@ -86,8 +84,6 @@ export function PresetAnimatedChips(props: PresetAnimatedChipsProps) {
       const stagger = PRESET_SLOT_STAGGER_MS[slotIndex];
 
       const loop = (prompt: PresetPrompt, firstStagger: number) => {
-        if (!shouldContinueSession()) return;
-
         slotsRef.current = [...slotsRef.current];
         slotsRef.current[slotIndex] = prompt;
         setSlots([slotsRef.current[0]!, slotsRef.current[1]!, slotsRef.current[2]!]);
@@ -100,7 +96,6 @@ export function PresetAnimatedChips(props: PresetAnimatedChipsProps) {
 
         // Fade in after stagger (subsequent cycles: stagger 0).
         pushTimeout(() => {
-          if (!shouldContinueSession()) return;
           setSlotFade((prev) => {
             const next = [...prev] as [SlotFade, SlotFade, SlotFade];
             next[slotIndex] = { opacity: 1, transitionMs: PRESET_CAROUSEL_FADE_IN_MS };
@@ -109,20 +104,18 @@ export function PresetAnimatedChips(props: PresetAnimatedChipsProps) {
 
           // Hold after fade-in completes.
           pushTimeout(() => {
-            if (!shouldContinueSession()) return;
             const hold = holdMsForPresetText(prompt.text);
 
             pushTimeout(() => {
-              if (!shouldContinueSession()) return;
               setSlotFade((prev) => {
                 const next = [...prev] as [SlotFade, SlotFade, SlotFade];
                 next[slotIndex] = { opacity: 0, transitionMs: PRESET_CAROUSEL_FADE_OUT_MS };
                 return next;
               });
 
-              // After fade-out, swap text and loop.
+              // After fade-out: swap and continue only if the session window is still open.
               pushTimeout(() => {
-                if (!shouldContinueSession()) return;
+                if (!mayStartNextCycle()) return;
                 const nextPrompt = pickNextForSlot(slotIndex, prompt);
                 loop(nextPrompt, 0);
               }, PRESET_CAROUSEL_FADE_OUT_MS);

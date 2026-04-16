@@ -5,6 +5,7 @@ All notable changes to this project are documented in this file.
 ## [Unreleased] - 2026-04-15
 
 ### Added
+- **Character Voice Roleplay Mode (Opt-In):** Settings **AI character** toggle (default off); fullscreen `CharacterPickerModal` with per–work-title sections, **Random** toggle, custom character `TextField`, OK/Cancel; unique 8×8-pixel SVG emoticons (`characterEmoticonGrids.ts`, `CharacterRoleplayEmoticon.tsx`); main-tab glass avatar opens picker; persisted `ai_character_*` in `settings.json`; backend `backend/services/ai_character_service.py` appends roleplay instructions to the Ollama system prompt (`main.py`). Catalog: `src/data/characterCatalog.ts` (keep in sync with Python allowlist).
 - **Preset carousel (Phase 1):** Main tab shows three suggestion chips with staggered fade in/out (2s each) and hold time scaled to prompt length (doubled dwell vs earlier tuning); chips rotate independently and re-seed when follow-up presets refresh. `PresetAnimatedChips.tsx`, `holdMsForPresetText` / `getRandomPresetExcluding` in `src/data/presets.ts`, styles in `src/index.tsx`. Manual next/previous arrow controls deferred.
 - **Capability Permission Center:** Permissions tab (`LockIcon`, `TAB_TITLE_ICON_PX_PERMISSIONS`) with persisted `capabilities` in `settings.json` (filesystem write, hardware control, media library access, external/Steam navigation). New installs default all OFF; legacy settings files without a `capabilities` object are grandfathered ON until the user saves. Backend enforcement in `main.py` (`backend/services/capabilities.py`); UI in `PermissionsTab.tsx`, `AboutTab.tsx`, `MainTab.tsx`, `src/index.tsx`.
 - **Desktop daily chat auto-save (V2):** Settings tab toggle `desktop_debug_note_auto_save` (default off). When on and filesystem writes are allowed, each Ask and each AI response append to `~/Desktop/BonsAI_notes/bonsai-chat-YYYY-MM-DD.md` (UTC day); Ask entries list attached screenshot paths. RPC `append_desktop_chat_event`, `backend/services/desktop_note_service.py`, `src/index.tsx`.
@@ -48,6 +49,7 @@ All notable changes to this project are documented in this file.
 - Resolved roadmap documentation integration conflict during sync so both upstream and local planning updates are retained in `docs/roadmap.md`.
 
 ### Docs
+- Documented **Character Voice Roleplay Mode** in `docs/roadmap.md`, `docs/voice-character-catalog.md`, `docs/prompt-testing.md`, `docs/troubleshooting.md`, and this changelog.
 - Documented single hard-timeout slider + visible soft-warning readout in `docs/troubleshooting.md` and this changelog.
 - Documented **Preset carousel (Phase 1)** in `docs/roadmap.md`, `docs/prompt-testing.md`, `docs/development.md`, and this changelog.
 

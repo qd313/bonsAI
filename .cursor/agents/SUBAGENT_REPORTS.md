@@ -1,6 +1,6 @@
 # Subagent review reports
 
-Structured findings from Cursor subagents in this folder (for example `foss-advocate.md`, `security-auditor.md`). Paste or summarize each run here so results live next to the agent definitions and survive chat context.
+Structured findings from Cursor subagents in this folder (for example `foss-advocate.md`, `security-auditor.md`, `master-debugger.md`). Paste or summarize each run here so results live next to the agent definitions and survive chat context.
 
 ## How to use
 
@@ -111,9 +111,55 @@ No issues found
 
 ---
 
+## Template: master-debugger
+
+Use when archiving a debugging session or postmortem from `.cursor/agents/master-debugger.md` (Decky/Steam focus, D-pad, modals, clipping).
+
+```text
+Session: <short title>
+Bug class: <focus|layout|backend|other>
+Root cause: <what was wrong at the platform contract level>
+Evidence: <signals that confirmed it: logs, activeElement, measurements, build parity>
+Resolution: <smallest fix: which surface — e.g. onMoveLeft/onMoveRight, refs, geometry>
+Files: <paths touched or "see commit">
+Regression checks: <build script, on-device smoke>
+```
+
+Example entry:
+
+```text
+Session: AI character picker D-pad only moved vertically
+Bug class: focus
+Root cause: Controller navigation used Deck focus-graph callbacks; DOM keydown did not fire reliably for horizontal routing assumptions.
+Evidence: onButtonDown logged; nav-key/keydown absent; fix required Decky move handlers on catalog controls.
+Resolution: Cross-column focus via onMoveLeft/onMoveRight and stable button refs; footer buttons found by walking ancestors from picker shell.
+Files: src/components/CharacterPickerModal.tsx, src/index.tsx (settings block width)
+Regression checks: ./scripts/build.ps1; verified on Steam Deck
+```
+
+If there is nothing to archive from a run, record:
+
+```text
+No session archived
+```
+
+---
+
 ## Report log
 
 <!-- Newest entries first. -->
+
+### 2026-04-15 - master-debugger - Focus-graph lesson codified (subagent + .cursorrules)
+
+```text
+Session: Steam/Decky D-pad and settings clipping (AI character picker)
+Bug class: focus + layout
+Root cause: Treated D-pad as browser keydown; gated logic on unstable modal/DOM; settings block used calc bleed wider than parent caused clipping.
+Evidence: Runtime showed focus-graph/button path vs missing keydown routing; measured block wider than parent.
+Resolution: master-debugger.md subagent rules; Steam/Decky UI directives in .cursorrules; picker uses onMoveLeft/onMoveRight; container-constrained settings width.
+Files: .cursor/agents/master-debugger.md, .cursorrules, CharacterPickerModal.tsx, index.tsx
+Regression checks: User confirmed fix; instrumentation removed after verification
+```
 
 ### 2026-04-13 - refactor-specialist - Milestone 2 decomposition sweep
 

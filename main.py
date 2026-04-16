@@ -24,6 +24,7 @@ PLUGIN_ROOT = os.path.dirname(os.path.abspath(__file__))
 if PLUGIN_ROOT not in sys.path:
     sys.path.insert(0, PLUGIN_ROOT)
 
+from backend.services.ai_character_service import build_roleplay_system_suffix
 from backend.services.ollama_service import (
     build_system_prompt,
     format_ai_response,
@@ -1154,6 +1155,10 @@ class Plugin:
             normalized_attachments,
             prepared_images,
         )
+        roleplay = build_roleplay_system_suffix(settings)
+        if roleplay:
+            # Lead with voice instructions so they are not diluted after the long bonsAI system preamble.
+            system_content = roleplay.strip() + "\n\n" + system_content
         user_message: dict = {"role": "user", "content": question}
         if prepared_images:
             user_message["images"] = [image["image_b64"] for image in prepared_images]

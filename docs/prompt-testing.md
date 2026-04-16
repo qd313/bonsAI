@@ -24,6 +24,11 @@ Related planning (not yet implemented): future prompt policy, search UX, and Ste
 
 ## Release Notes
 
+### 2026-04-15 - Character Voice Roleplay Mode (Opt-In) Shipped
+- Settings: opt-in **AI character** with fullscreen picker (work-title sections, Random, custom line, OK/Cancel).
+- Backend: `ai_character_service` appends a concise roleplay instruction to the **system** message; TDP JSON contract unchanged.
+- Suggested checks: enable + pick a known preset (e.g. Jackie Welles) and confirm tone shifts while answers stay English and concise; enable **Random** and confirm variation across Asks; custom text only; toggle off and confirm neutral assistant tone returns.
+
 ### 2026-04-13 - Global Screenshots and Vision (V1) Completed
 - Added screenshot attachment flow with fullscreen recent-screenshot browser, thumbnail previews, and controller-first navigation.
 - Added multimodal ask payload support with screenshot preprocessing + dimension clamp options (`1280`, `1920`, `3160`) and persisted settings.

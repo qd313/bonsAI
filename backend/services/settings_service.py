@@ -2,6 +2,12 @@ import json
 import os
 from typing import Any, Callable
 
+from backend.services.ai_character_service import (
+    sanitize_ai_character_custom_text,
+    sanitize_ai_character_enabled,
+    sanitize_ai_character_preset_id,
+    sanitize_ai_character_random,
+)
 from backend.services.capabilities import legacy_grandfather_capabilities, sanitize_capabilities
 
 
@@ -123,6 +129,10 @@ def sanitize_settings(
             raw.get("desktop_debug_note_auto_save")
         ),
         "capabilities": sanitize_capabilities(raw.get("capabilities")),
+        "ai_character_enabled": sanitize_ai_character_enabled(raw.get("ai_character_enabled")),
+        "ai_character_random": sanitize_ai_character_random(raw.get("ai_character_random")),
+        "ai_character_preset_id": sanitize_ai_character_preset_id(raw.get("ai_character_preset_id")),
+        "ai_character_custom_text": sanitize_ai_character_custom_text(raw.get("ai_character_custom_text")),
     }
 
 

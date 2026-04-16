@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo, useEffect, useRef } from "react";
+import React, { useCallback, useState, useMemo, useEffect, useLayoutEffect, useRef } from "react";
 import { definePlugin, toaster, call } from "@decky/api";
 import {
   PanelSection,
@@ -22,6 +22,12 @@ import {
   DEFAULT_SCREENSHOT_MAX_DIMENSION,
   DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
   DEFAULT_CAPABILITIES,
+  DEFAULT_AI_CHARACTER_CUSTOM_TEXT,
+  DEFAULT_AI_CHARACTER_ENABLED,
+  DEFAULT_AI_CHARACTER_PRESET_ID,
+  DEFAULT_AI_CHARACTER_RANDOM,
+  normalizeAiCharacterCustomText,
+  normalizeAiCharacterPresetId,
   normalizeSettings,
   normalizeLatencyWarningSeconds,
   normalizeRequestTimeoutSeconds,
@@ -32,6 +38,7 @@ import {
   type UnifiedInputPersistenceMode,
 } from "./utils/settingsAndResponse";
 import { AboutTab } from "./components/AboutTab";
+import { CharacterPickerModal } from "./components/CharacterPickerModal";
 import { DesktopNoteSaveModal } from "./components/DesktopNoteSaveModal";
 import { DebugTab } from "./components/DebugTab";
 import { ConnectionTimeoutSlider } from "./components/ConnectionTimeoutSlider";
@@ -39,6 +46,7 @@ import { MainTab } from "./components/MainTab";
 import { PermissionsTab } from "./components/PermissionsTab";
 import { getSteamInputLexiconEntry } from "./data/steam-input-lexicon";
 import { jumpToSteamInputEntry } from "./utils/steamInputJump";
+import { formatAiCharacterSelectionLine, resolveMainTabAvatarPresetId } from "./data/characterCatalog";
 import { detectPromptCategory, getContextualPresets, getRandomPresets, type PresetPrompt } from "./data/presets";
 import { BonsaiLogoIcon, BonsaiSvgIcon, BugIcon, GearIcon, LockIcon } from "./components/icons";
 import { SETTINGS_DATABASE } from "./data/settingsDatabase";
@@ -56,6 +64,12 @@ import {
 } from "./features/unified-input/constants";
 import { useUnifiedInputSurface } from "./features/unified-input/useUnifiedInputSurface";
 import type { AppliedResult, AskAttachment, OllamaContextUi, ScreenshotItem } from "./types/bonsaiUi";
+
+/**
+ * If Decky unmounts plugin `Content` when `showModal` closes, React state resets to defaults; this
+ * outlives the component so `useLayoutEffect` can restore the tab on the next mount.
+ */
+let __bonsaiTabRestoreAfterCharacterPicker: string | null = null;
 
 /**
  * This boundary protects the plugin UI from render-time failures so Decky can keep the panel alive.
@@ -370,6 +384,10 @@ function usePluginSettings() {
     DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE
   );
   const [capabilities, setCapabilities] = useState<BonsaiCapabilities>(() => ({ ...DEFAULT_CAPABILITIES }));
+  const [aiCharacterEnabled, setAiCharacterEnabled] = useState<boolean>(DEFAULT_AI_CHARACTER_ENABLED);
+  const [aiCharacterRandom, setAiCharacterRandom] = useState<boolean>(DEFAULT_AI_CHARACTER_RANDOM);
+  const [aiCharacterPresetId, setAiCharacterPresetId] = useState<string>(DEFAULT_AI_CHARACTER_PRESET_ID);
+  const [aiCharacterCustomText, setAiCharacterCustomText] = useState<string>(DEFAULT_AI_CHARACTER_CUSTOM_TEXT);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
 
   useEffect(() => {
@@ -384,6 +402,10 @@ function usePluginSettings() {
         setScreenshotMaxDimension(normalized.screenshot_max_dimension);
         setDesktopDebugNoteAutoSave(normalized.desktop_debug_note_auto_save);
         setCapabilities(normalized.capabilities);
+        setAiCharacterEnabled(normalized.ai_character_enabled);
+        setAiCharacterRandom(normalized.ai_character_random);
+        setAiCharacterPresetId(normalized.ai_character_preset_id);
+        setAiCharacterCustomText(normalized.ai_character_custom_text);
       })
       .catch(() => {
         if (cancelled) return;
@@ -393,6 +415,10 @@ function usePluginSettings() {
         setScreenshotMaxDimension(DEFAULT_SCREENSHOT_MAX_DIMENSION);
         setDesktopDebugNoteAutoSave(DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE);
         setCapabilities(DEFAULT_CAPABILITIES);
+        setAiCharacterEnabled(DEFAULT_AI_CHARACTER_ENABLED);
+        setAiCharacterRandom(DEFAULT_AI_CHARACTER_RANDOM);
+        setAiCharacterPresetId(DEFAULT_AI_CHARACTER_PRESET_ID);
+        setAiCharacterCustomText(DEFAULT_AI_CHARACTER_CUSTOM_TEXT);
       })
       .finally(() => {
         if (!cancelled) setSettingsLoaded(true);
@@ -412,6 +438,10 @@ function usePluginSettings() {
         screenshot_max_dimension: screenshotMaxDimension,
         desktop_debug_note_auto_save: desktopDebugNoteAutoSave,
         capabilities,
+        ai_character_enabled: aiCharacterEnabled,
+        ai_character_random: aiCharacterRandom,
+        ai_character_preset_id: aiCharacterPresetId,
+        ai_character_custom_text: aiCharacterCustomText,
       }).catch((err) => {
         console.error("save_settings failed", err);
       });
@@ -424,6 +454,10 @@ function usePluginSettings() {
     screenshotMaxDimension,
     desktopDebugNoteAutoSave,
     capabilities,
+    aiCharacterEnabled,
+    aiCharacterRandom,
+    aiCharacterPresetId,
+    aiCharacterCustomText,
     settingsLoaded,
   ]);
 
@@ -435,6 +469,14 @@ function usePluginSettings() {
     desktopDebugNoteAutoSave,
     capabilities,
     setCapabilities,
+    aiCharacterEnabled,
+    aiCharacterRandom,
+    aiCharacterPresetId,
+    aiCharacterCustomText,
+    setAiCharacterEnabled,
+    setAiCharacterRandom,
+    setAiCharacterPresetId,
+    setAiCharacterCustomText,
     settingsLoaded,
     setLatencyWarningSeconds,
     setRequestTimeoutSeconds,
@@ -535,6 +577,21 @@ function bonsaiTabIconTitle(
  */
 const Content: React.FC = () => {
   const [currentTab, setCurrentTab] = useState("main");
+  /** Remember tab when opening character picker so we restore after `showModal` closes. */
+  const characterPickerReturnTabRef = useRef<string>("main");
+  /**
+   * After closing the character picker from a non-main tab, Decky sometimes fires `onShowTab("main")`
+   * when focus returns. While this ref is within `until`, treat that as spurious and keep `tab` instead.
+   */
+  const postPickerTabLockRef = useRef<{ until: number; tab: string } | null>(null);
+
+  useLayoutEffect(() => {
+    const pending = __bonsaiTabRestoreAfterCharacterPicker;
+    if (pending != null) {
+      __bonsaiTabRestoreAfterCharacterPicker = null;
+      setCurrentTab(pending);
+    }
+  }, []);
 
   // --- Unified input/search state ---
   const [unifiedInput, setUnifiedInput] = useState(() => loadSavedSearchQuery());
@@ -568,6 +625,12 @@ const Content: React.FC = () => {
   const [selectedAttachment, setSelectedAttachment] = useState<AskAttachment | null>(null);
   const screenshotBrowserHostRef = useRef<HTMLDivElement>(null);
   const attachActionHostRef = useRef<HTMLDivElement>(null);
+  /** Anchor for Deck nav: latency slider thumbs move down into screenshot max-dimension chips. */
+  const screenshotDimensionNavRef = useRef<HTMLDivElement>(null);
+  /** Anchor for Deck nav: hard-timeout thumb moves up into Ollama IP TextField (not soft-warning thumb). */
+  const ollamaIpConnectionNavRef = useRef<HTMLDivElement>(null);
+  /** Exposes soft-warning slider thumb for D-pad up from screenshot dimension row. */
+  const latencyWarningThumbHostRef = useRef<HTMLDivElement>(null);
 
   // --- Debug state (lifted from former ErrorCaptureUI) ---
   const [capturedErrors, setCapturedErrors] = useState<string[]>([]);
@@ -584,6 +647,14 @@ const Content: React.FC = () => {
     desktopDebugNoteAutoSave,
     capabilities,
     setCapabilities,
+    aiCharacterEnabled,
+    aiCharacterRandom,
+    aiCharacterPresetId,
+    aiCharacterCustomText,
+    setAiCharacterEnabled,
+    setAiCharacterRandom,
+    setAiCharacterPresetId,
+    setAiCharacterCustomText,
     setLatencyWarningSeconds,
     setRequestTimeoutSeconds,
     setUnifiedInputPersistenceMode,
@@ -1047,6 +1118,30 @@ const Content: React.FC = () => {
     1920: "1920",
     3160: "3160",
   };
+  const focusScreenshotMaxDimensionFromSlider = useCallback((): boolean => {
+    const root = screenshotDimensionNavRef.current;
+    if (!root) return false;
+    const btn = root.querySelector<HTMLElement>('button[aria-label^="Set screenshot max dimension"]');
+    if (!btn) return false;
+    btn.focus();
+    return true;
+  }, []);
+  const focusOllamaIpFromTimeoutSlider = useCallback((): boolean => {
+    const root = ollamaIpConnectionNavRef.current;
+    if (!root) return false;
+    const field = root.querySelector<HTMLElement>("input, textarea");
+    if (!field) return false;
+    field.focus();
+    return true;
+  }, []);
+  const focusSoftWarningFromScreenshot = useCallback((): boolean => {
+    const host = latencyWarningThumbHostRef.current;
+    if (!host) return false;
+    const target = host.querySelector<HTMLElement>("[tabindex], button");
+    if (!target) return false;
+    target.focus();
+    return true;
+  }, []);
   const fullBleedRowStyle: React.CSSProperties = {
     width: "calc(100% + 24px)",
     marginLeft: -12,
@@ -1109,12 +1204,145 @@ const Content: React.FC = () => {
     );
   }, [lastExchange, capabilities.filesystem_write, goToPermissionsTab]);
 
+  const armPostPickerTabLock = useCallback((back: string) => {
+    if (back === "main") {
+      postPickerTabLockRef.current = null;
+      return;
+    }
+    postPickerTabLockRef.current = { until: Date.now() + 750, tab: back };
+  }, []);
+
+  const onTabsShowTab = useCallback((tabID: string) => {
+    const lock = postPickerTabLockRef.current;
+    const now = Date.now();
+    if (lock && now < lock.until && tabID === "main" && lock.tab !== "main") {
+      setCurrentTab(lock.tab);
+      return;
+    }
+    if (lock && now < lock.until) {
+      if (tabID === lock.tab) {
+        postPickerTabLockRef.current = null;
+      } else if (tabID !== "main") {
+        // User chose another tab (e.g. debug); do not keep rewriting toward the old return tab.
+        postPickerTabLockRef.current = null;
+      }
+    }
+    if (lock && now >= lock.until) {
+      postPickerTabLockRef.current = null;
+    }
+    setCurrentTab(tabID);
+  }, []);
+
+  const openCharacterPickerModal = useCallback(() => {
+    characterPickerReturnTabRef.current = currentTab;
+    const handle = showModal(
+      <CharacterPickerModal
+        initialDraft={{
+          random: aiCharacterRandom,
+          presetId: aiCharacterPresetId,
+          customText: aiCharacterCustomText,
+        }}
+        onCancel={() => {
+          const back = characterPickerReturnTabRef.current;
+          __bonsaiTabRestoreAfterCharacterPicker = back;
+          armPostPickerTabLock(back);
+          setCurrentTab(back);
+          handle.Close();
+          // After modal teardown; immediate setState can lose to Decky’s tab reset (jumps to main).
+          window.setTimeout(() => {
+            setCurrentTab(back);
+            __bonsaiTabRestoreAfterCharacterPicker = null;
+          }, 80);
+        }}
+        onOK={(next) => {
+          const pid = normalizeAiCharacterPresetId(next.presetId);
+          const ctxt = normalizeAiCharacterCustomText(next.customText);
+          setAiCharacterRandom(next.random);
+          setAiCharacterPresetId(pid);
+          setAiCharacterCustomText(ctxt);
+          // Persist immediately so a debounced save scheduled before the modal cannot overwrite with stale random/character state.
+          void call<[BonsaiSettings], BonsaiSettings>("save_settings", {
+            latency_warning_seconds: latencyWarningSeconds,
+            request_timeout_seconds: requestTimeoutSeconds,
+            unified_input_persistence_mode: unifiedInputPersistenceMode,
+            screenshot_max_dimension: screenshotMaxDimension,
+            desktop_debug_note_auto_save: desktopDebugNoteAutoSave,
+            capabilities,
+            ai_character_enabled: aiCharacterEnabled,
+            ai_character_random: next.random,
+            ai_character_preset_id: pid,
+            ai_character_custom_text: ctxt,
+          }).catch((err) => {
+            console.error("save_settings failed (character picker OK)", err);
+          });
+          const back = characterPickerReturnTabRef.current;
+          __bonsaiTabRestoreAfterCharacterPicker = back;
+          armPostPickerTabLock(back);
+          setCurrentTab(back);
+          handle.Close();
+          window.setTimeout(() => {
+            setCurrentTab(back);
+            __bonsaiTabRestoreAfterCharacterPicker = null;
+          }, 80);
+        }}
+      />
+    );
+  }, [
+    currentTab,
+    aiCharacterRandom,
+    aiCharacterPresetId,
+    aiCharacterCustomText,
+    aiCharacterEnabled,
+    latencyWarningSeconds,
+    requestTimeoutSeconds,
+    unifiedInputPersistenceMode,
+    screenshotMaxDimension,
+    desktopDebugNoteAutoSave,
+    capabilities,
+    setAiCharacterRandom,
+    setAiCharacterPresetId,
+    setAiCharacterCustomText,
+    armPostPickerTabLock,
+  ]);
+
+  const mainTabAiCharacterPad = aiCharacterEnabled;
+  const mainTabAvatarPresetId = aiCharacterEnabled
+    ? resolveMainTabAvatarPresetId({
+        enabled: aiCharacterEnabled,
+        random: aiCharacterRandom,
+        presetId: aiCharacterPresetId,
+        customText: aiCharacterCustomText,
+      })
+    : null;
+
+  const aiCharacterDebugLineForMainTab =
+    typeof window !== "undefined" &&
+    (window as unknown as { __BONSAI_DEBUG_AI_CHARACTER__?: boolean }).__BONSAI_DEBUG_AI_CHARACTER__
+      ? [
+          `avatar=${mainTabAvatarPresetId ?? "null"}`,
+          `presetId="${aiCharacterPresetId}"`,
+          `random=${String(aiCharacterRandom)}`,
+          `line=${formatAiCharacterSelectionLine({
+            random: aiCharacterRandom,
+            presetId: aiCharacterPresetId,
+            customText: aiCharacterCustomText,
+          })}`,
+        ].join(" | ")
+      : null;
+
   // =====================================================================
   // TAB CONTENT
   // =====================================================================
 
   const mainTab = (
     <MainTab
+      key={JSON.stringify({
+        t: "main",
+        aiCharacterEnabled,
+        aiCharacterRandom,
+        aiCharacterPresetId,
+        aiCharacterCustomText,
+      })}
       fullBleedRowStyle={fullBleedRowStyle}
       presetButtonSurface={presetButtonSurface}
       suggestedPrompts={suggestedPrompts}
@@ -1163,6 +1391,10 @@ const Content: React.FC = () => {
       onOpenDesktopNoteSave={openDesktopNoteSaveModal}
       mediaLibraryEnabled={capabilities.media_library_access}
       desktopNoteSaveEnabled={capabilities.filesystem_write}
+      aiCharacterPadClass={mainTabAiCharacterPad}
+      aiCharacterAvatarPresetId={mainTabAvatarPresetId}
+      onOpenCharacterPicker={aiCharacterEnabled ? openCharacterPickerModal : undefined}
+      aiCharacterDebugLine={aiCharacterDebugLineForMainTab}
     />
   );
 
@@ -1171,6 +1403,7 @@ const Content: React.FC = () => {
     <PanelSection title="SETTINGS">
       <PanelSectionRow>
         <div
+          ref={ollamaIpConnectionNavRef}
           className="bonsai-settings-connection-host"
           style={{
             width: "100%",
@@ -1302,10 +1535,17 @@ const Content: React.FC = () => {
             setLatencyWarningSeconds(w);
             setRequestTimeoutSeconds(t);
           }}
+          warningThumbHostRef={latencyWarningThumbHostRef}
+          onMoveDownFromThumb={focusScreenshotMaxDimensionFromSlider}
+          onMoveUpFromTimeoutThumb={focusOllamaIpFromTimeoutSlider}
         />
       </PanelSectionRow>
       <PanelSectionRow>
-        <div className="bonsai-prose-host" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
+        <div
+          ref={screenshotDimensionNavRef}
+          className="bonsai-prose-host"
+          style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}
+        >
           <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 4 }}>
             Screenshot max dimension
           </div>
@@ -1321,6 +1561,9 @@ const Content: React.FC = () => {
               return (
                 <Button
                   key={`dim-${option}`}
+                  {...({
+                    onMoveUp: () => focusSoftWarningFromScreenshot(),
+                  } as Record<string, unknown>)}
                   onClick={() => setScreenshotMaxDimension(option)}
                   style={{
                     flex: 1,
@@ -1390,6 +1633,54 @@ const Content: React.FC = () => {
               );
             })}
           </Focusable>
+        </div>
+      </PanelSectionRow>
+      <PanelSectionRow>
+        <div
+          className="bonsai-settings-ai-character-block"
+          style={{
+            width: "100%",
+            maxWidth: "100%",
+            minWidth: 0,
+            boxSizing: "border-box",
+          }}
+        >
+          <ToggleField
+            label="AI characters"
+            description="Optional character tone for local model replies. Choose a preset, randomize each Ask, or type your own."
+            checked={aiCharacterEnabled}
+            onChange={(checked) => setAiCharacterEnabled(checked)}
+          />
+          {aiCharacterEnabled && (
+            <>
+              <Button
+                className="bonsai-ai-character-picker-open"
+                onClick={() => openCharacterPickerModal()}
+                style={{
+                  width: "100%",
+                  marginTop: 10,
+                  minHeight: 38,
+                  fontSize: 12,
+                  fontWeight: 600,
+                  padding: "6px 10px",
+                  borderRadius: 4,
+                  border: "1px solid rgba(255,255,255,0.18)",
+                  background: "linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%)",
+                  color: "#e8eef5",
+                  textAlign: "left",
+                }}
+              >
+                {formatAiCharacterSelectionLine({
+                  random: aiCharacterRandom,
+                  presetId: aiCharacterPresetId,
+                  customText: aiCharacterCustomText,
+                })}
+              </Button>
+              <div className="bonsai-prose" style={{ fontSize: 10, color: "#6b7c90", marginTop: 6, lineHeight: 1.35 }}>
+                Tap the row for the fullscreen picker. On the main tab, tap the avatar beside the input to change character.
+              </div>
+            </>
+          )}
         </div>
       </PanelSectionRow>
     </PanelSection>
@@ -1698,6 +1989,24 @@ const Content: React.FC = () => {
           vertical-align: top !important;
         }
 
+        .bonsai-scope .bonsai-unified-input-host.bonsai-unified-input--ai-character textarea,
+        .bonsai-scope .bonsai-unified-input-host.bonsai-unified-input--ai-character input {
+          padding-left: 22px !important;
+        }
+
+        .bonsai-scope .bonsai-unified-input-host.bonsai-unified-input--ai-character .bonsai-unified-input-measure,
+        .bonsai-scope .bonsai-unified-input-host.bonsai-unified-input--ai-character .bonsai-unified-input-text-overlay {
+          padding-left: 22px !important;
+          box-sizing: border-box !important;
+        }
+
+        .bonsai-scope .bonsai-ai-character-avatar {
+          outline: none;
+          margin: 0 !important;
+          padding: 0 !important;
+          box-sizing: border-box !important;
+        }
+
         .bonsai-scope .bonsai-unified-input-host input::placeholder { font-size: 12px; }
 
         /* Hide standard field labels to allow custom overlays */
@@ -1904,7 +2213,7 @@ const Content: React.FC = () => {
       `}</style>
       <Tabs
         activeTab={currentTab}
-        onShowTab={(tabID: string) => { setCurrentTab(tabID); }}
+        onShowTab={onTabsShowTab}
         tabs={[
           {
             id: "main",

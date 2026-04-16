@@ -11,7 +11,11 @@ import {
   UNIFIED_TEXT_OVERLAY_BOTTOM_GAP_PX,
 } from "../features/unified-input/constants";
 import { splitResponseIntoChunks } from "../utils/splitResponseIntoChunks";
-import { getFocusableWithin, isLeftNavigationKey, isRightNavigationKey } from "../utils/focusNavigation";
+import {
+  getFocusableWithin,
+  isLeftNavigationEvent,
+  isRightNavigationEvent,
+} from "../utils/focusNavigation";
 import { formatBytes, formatScreenshotTimestamp, toFileUri } from "../utils/mediaFormat";
 import type { AppliedResult, AskAttachment, OllamaContextUi, ScreenshotItem } from "../types/bonsaiUi";
 import {
@@ -23,6 +27,7 @@ import {
   ImageAttachmentIcon,
   RefreshArrowIcon,
 } from "./icons";
+import { CharacterRoleplayEmoticon } from "./CharacterRoleplayEmoticon";
 
 export type MainTabProps = {
   fullBleedRowStyle: React.CSSProperties;
@@ -76,6 +81,14 @@ export type MainTabProps = {
   mediaLibraryEnabled?: boolean;
   /** When false, Desktop save is blocked (Permissions); control is shown dimmed. */
   desktopNoteSaveEnabled?: boolean;
+  /** When true, unified input gets left padding and measure/overlay align for the AI character avatar. */
+  aiCharacterPadClass?: boolean;
+  /** Emoticon id for the upper-left avatar (`__random__`, `__custom__`, or a catalog preset id). */
+  aiCharacterAvatarPresetId?: string | null;
+  /** Opens the fullscreen character picker (Settings + main tab avatar). */
+  onOpenCharacterPicker?: () => void;
+  /** Temporary: set `window.__BONSAI_DEBUG_AI_CHARACTER__ = true` in CEF DevTools to show selection state. */
+  aiCharacterDebugLine?: string | null;
 };
 
 export function MainTab(props: MainTabProps) {
@@ -128,20 +141,122 @@ export function MainTab(props: MainTabProps) {
     onOpenDesktopNoteSave,
     mediaLibraryEnabled = true,
     desktopNoteSaveEnabled = true,
+    aiCharacterPadClass = false,
+    aiCharacterAvatarPresetId = null,
+    onOpenCharacterPicker,
+    aiCharacterDebugLine = null,
   } = props;
   const askLooksReady = unifiedInput.trim().length > 0 && !isAsking;
+  /** Do not gate on `aiCharacterAvatarPresetId` — when the feature is on, `resolveMainTabAvatarPresetId` always yields a display id (including `__random__` / `__custom__`). */
+  const showAiCharacterChrome = Boolean(onOpenCharacterPicker && aiCharacterPadClass);
+  const focusUnifiedTextField = React.useCallback((): boolean => {
+    const layer =
+      unifiedInputFieldLayerRef &&
+      typeof unifiedInputFieldLayerRef === "object" &&
+      "current" in unifiedInputFieldLayerRef
+        ? (unifiedInputFieldLayerRef as React.RefObject<HTMLDivElement | null>).current
+        : null;
+    const field = layer?.querySelector<HTMLTextAreaElement | HTMLInputElement>("textarea, input");
+    if (!field) return false;
+    field.focus();
+    return true;
+  }, [unifiedInputFieldLayerRef]);
+  const focusAttachPaperclip = React.useCallback((): boolean => {
+    const host =
+      attachActionHostRef &&
+      typeof attachActionHostRef === "object" &&
+      "current" in attachActionHostRef
+        ? (attachActionHostRef as React.RefObject<HTMLDivElement | null>).current
+        : null;
+    const btn = host?.querySelector<HTMLElement>("button.bonsai-unified-input-corner-left");
+    if (!btn) return false;
+    btn.focus();
+    return true;
+  }, [attachActionHostRef]);
+  const focusAiCharacterAvatar = React.useCallback((): boolean => {
+    if (!showAiCharacterChrome) return false;
+    const layer =
+      unifiedInputFieldLayerRef &&
+      typeof unifiedInputFieldLayerRef === "object" &&
+      "current" in unifiedInputFieldLayerRef
+        ? (unifiedInputFieldLayerRef as React.RefObject<HTMLDivElement | null>).current
+        : null;
+    const avatar = layer?.querySelector<HTMLElement>(".bonsai-ai-character-avatar");
+    if (!avatar) return false;
+    avatar.focus();
+    return true;
+  }, [showAiCharacterChrome, unifiedInputFieldLayerRef]);
+  const presetCarouselHostRef = React.useRef<HTMLDivElement | null>(null);
+  const focusFirstPresetChip = React.useCallback((): boolean => {
+    const host = presetCarouselHostRef.current;
+    const btn = host?.querySelector<HTMLElement>("button.bonsai-preset-glass");
+    if (!btn) return false;
+    btn.focus();
+    return true;
+  }, []);
+  const focusAskPrimary = React.useCallback((): boolean => {
+    const host =
+      askBarHostRef &&
+      typeof askBarHostRef === "object" &&
+      "current" in askBarHostRef
+        ? (askBarHostRef as React.RefObject<HTMLDivElement | null>).current
+        : null;
+    const btn = host?.querySelector<HTMLElement>("button.bonsai-ask-primary");
+    if (!btn) return false;
+    btn.focus();
+    return true;
+  }, [askBarHostRef]);
+  const focusMicOrStop = React.useCallback((): boolean => {
+    const host =
+      attachActionHostRef &&
+      typeof attachActionHostRef === "object" &&
+      "current" in attachActionHostRef
+        ? (attachActionHostRef as React.RefObject<HTMLDivElement | null>).current
+        : null;
+    const btn = host?.querySelector<HTMLElement>("button.bonsai-unified-input-corner-right");
+    if (!btn) return false;
+    btn.focus();
+    return true;
+  }, [attachActionHostRef]);
+  const unifiedInputDeckNavHandlers = React.useMemo(
+    () =>
+      ({
+        onMoveUp: () => focusFirstPresetChip(),
+        onMoveLeft: () => focusAttachPaperclip(),
+        onMoveDown: () => focusAskPrimary(),
+        onMoveRight: () => focusMicOrStop(),
+      }) as Record<string, unknown>,
+    [focusAskPrimary, focusAttachPaperclip, focusFirstPresetChip, focusMicOrStop],
+  );
+  const avatarDeckNavHandlers = React.useMemo(
+    () =>
+      ({
+        /** Deck focus-graph: horizontal move from avatar into the unified text field. */
+        onMoveRight: () => focusUnifiedTextField(),
+        /** Deck focus-graph: vertical move skips the textarea and lands on the attach control under the avatar. */
+        onMoveDown: () => focusAttachPaperclip(),
+      }) as Record<string, unknown>,
+    [focusAttachPaperclip, focusUnifiedTextField],
+  );
   return (
     <>
       <PanelSection>
         <PanelSectionRow>
-          <div className="bonsai-full-bleed-row" style={{ ...fullBleedRowStyle, display: "grid", gap: 8 }}>
+          <div
+            ref={presetCarouselHostRef}
+            className="bonsai-full-bleed-row"
+            style={{ ...fullBleedRowStyle, display: "grid", gap: 8 }}
+          >
             <PresetAnimatedChips seeds={suggestedPrompts} setUnifiedInput={setUnifiedInput} />
           </div>
         </PanelSectionRow>
         <PanelSectionRow>
           <div
             ref={unifiedInputHostRef}
-            className="bonsai-unified-input-host bonsai-glass-panel bonsai-full-bleed-row"
+            className={
+              "bonsai-unified-input-host bonsai-glass-panel bonsai-full-bleed-row" +
+              (aiCharacterPadClass ? " bonsai-unified-input--ai-character" : "")
+            }
             style={fullBleedRowStyle}
           >
             <div
@@ -154,6 +269,7 @@ export function MainTab(props: MainTabProps) {
             >
               <div
                 ref={unifiedInputMeasureRef}
+                className="bonsai-unified-input-measure"
                 aria-hidden
                 style={{
                   position: "absolute",
@@ -167,11 +283,78 @@ export function MainTab(props: MainTabProps) {
               >
                 {unifiedInput || "\u00a0"}
               </div>
+              {showAiCharacterChrome && (
+                <div
+                  style={{ position: "absolute", top: -1, left: -5, zIndex: 6, width: 14, height: 14 }}
+                  onKeyDownCapture={(ev) => {
+                    if (!isRightNavigationEvent(ev)) return;
+                    if (!(ev.target as HTMLElement).closest?.(".bonsai-ai-character-avatar")) return;
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                    focusUnifiedTextField();
+                  }}
+                >
+                  <Focusable
+                    className="bonsai-ai-character-avatar"
+                    aria-label="Choose AI character"
+                    {...avatarDeckNavHandlers}
+                    onClick={() => onOpenCharacterPicker?.()}
+                    onActivate={() => {
+                      onOpenCharacterPicker?.();
+                    }}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      minWidth: 14,
+                      minHeight: 14,
+                      margin: 0,
+                      padding: 0,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      borderRadius: 4,
+                      border: "none",
+                      outline: "none",
+                      background: "transparent",
+                      boxShadow: "none",
+                      backdropFilter: "none",
+                      boxSizing: "border-box",
+                    }}
+                  >
+                    <CharacterRoleplayEmoticon
+                      key={aiCharacterAvatarPresetId ?? "__custom__"}
+                      presetId={aiCharacterAvatarPresetId ?? "__custom__"}
+                      size={14}
+                    />
+                  </Focusable>
+                </div>
+              )}
+              {showAiCharacterChrome && aiCharacterDebugLine ? (
+                <div
+                  className="bonsai-ai-character-debug"
+                  style={{
+                    position: "absolute",
+                    left: -5,
+                    top: 16,
+                    zIndex: 6,
+                    maxWidth: "min(100vw - 48px, 280px)",
+                    fontSize: 9,
+                    lineHeight: 1.15,
+                    color: "rgba(160, 220, 180, 0.95)",
+                    wordBreak: "break-word",
+                    pointerEvents: "none",
+                    fontFamily: "monospace",
+                  }}
+                >
+                  {aiCharacterDebugLine}
+                </div>
+              ) : null}
               <TextField
                 label=""
                 value={unifiedInput}
                 spellCheck={false}
                 {...({ multiline: true, rows: 3 } as unknown as Record<string, unknown>)}
+                {...unifiedInputDeckNavHandlers}
                 style={{
                   width: "100%",
                   minHeight: unifiedInputSurfacePx,
@@ -267,6 +450,10 @@ export function MainTab(props: MainTabProps) {
                 >
                   <Button
                     className="bonsai-askbar-target bonsai-unified-input-corner-left"
+                    {...({
+                      onMoveRight: () => focusUnifiedTextField(),
+                      ...(showAiCharacterChrome ? { onMoveUp: () => focusAiCharacterAvatar() } : {}),
+                    } as Record<string, unknown>)}
                     onClick={onOpenScreenshotBrowser}
                     disabled={isAsking}
                     aria-label="Attach screenshot"
@@ -284,9 +471,17 @@ export function MainTab(props: MainTabProps) {
                       color: "#dbe6f3",
                       flexShrink: 0,
                       opacity: mediaLibraryEnabled ? 1 : 0.45,
+                      transform: "translate(-6px, 1px)",
                     }}
                   >
-                    <span style={{ position: "relative", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
+                    <span
+                      style={{
+                        position: "relative",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
                       <span className="bonsai-unified-input-icon">
                         <AttachMediaIcon size={15} />
                       </span>
@@ -315,6 +510,9 @@ export function MainTab(props: MainTabProps) {
                   {isAsking ? (
                     <Button
                       className="bonsai-askbar-target bonsai-unified-input-corner-right"
+                      {...({
+                        onMoveLeft: () => focusUnifiedTextField(),
+                      } as Record<string, unknown>)}
                       onClick={onCancelAsk}
                       aria-label="Stop generation"
                       style={{
@@ -329,6 +527,7 @@ export function MainTab(props: MainTabProps) {
                         border: "none",
                         background: "transparent",
                         flexShrink: 0,
+                        transform: "translateX(2px)",
                       }}
                     >
                       <span className="bonsai-unified-input-icon">
@@ -338,6 +537,9 @@ export function MainTab(props: MainTabProps) {
                   ) : (
                     <Button
                       className="bonsai-askbar-target bonsai-unified-input-corner-right"
+                      {...({
+                        onMoveLeft: () => focusUnifiedTextField(),
+                      } as Record<string, unknown>)}
                       onClick={onMicInput}
                       aria-label="Voice input"
                       style={{
@@ -353,6 +555,7 @@ export function MainTab(props: MainTabProps) {
                         background: "transparent",
                         color: "#dbe6f3",
                         flexShrink: 0,
+                        transform: "translateX(2px)",
                       }}
                     >
                       <span className="bonsai-unified-input-icon">
@@ -373,7 +576,7 @@ export function MainTab(props: MainTabProps) {
                 const activeEl = document.activeElement as HTMLElement | null;
                 const previewActive = Boolean(activeEl?.closest(".bonsai-attachment-preview-target"));
                 const removeActive = Boolean(activeEl?.closest(".bonsai-attachment-remove-target"));
-                if (isRightNavigationKey(ev.key) && previewActive) {
+                if (isRightNavigationEvent(ev) && previewActive) {
                   const removeTarget = getFocusableWithin(".bonsai-attachment-remove-target");
                   if (removeTarget) {
                     ev.preventDefault();
@@ -382,7 +585,7 @@ export function MainTab(props: MainTabProps) {
                   }
                   return;
                 }
-                if (isLeftNavigationKey(ev.key) && removeActive) {
+                if (isLeftNavigationEvent(ev) && removeActive) {
                   const previewTarget = getFocusableWithin(".bonsai-attachment-preview-target");
                   if (previewTarget) {
                     ev.preventDefault();

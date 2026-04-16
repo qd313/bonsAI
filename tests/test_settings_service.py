@@ -52,6 +52,10 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertFalse(sanitized["desktop_debug_note_auto_save"])
         self.assertFalse(sanitized["capabilities"]["filesystem_write"])
         self.assertFalse(sanitized["capabilities"]["hardware_control"])
+        self.assertFalse(sanitized["ai_character_enabled"])
+        self.assertTrue(sanitized["ai_character_random"])
+        self.assertEqual(sanitized["ai_character_preset_id"], "")
+        self.assertEqual(sanitized["ai_character_custom_text"], "")
 
     def test_sanitize_settings_orders_latency_before_timeout_when_inverted(self):
         """Conflicting warning/timeout values are adjusted so warning stays strictly below timeout."""

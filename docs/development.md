@@ -7,6 +7,7 @@ This guide is for contributors building and deploying bonsAI from source.
 - Frontend: `src/` (React + TypeScript, Decky UI components)
 - **Unified input refactor (phased):** Progress and definition-of-done live in [refactor-unified-input-tracker.md](refactor-unified-input-tracker.md). Deck measurement, refs, and surface height live in [`src/features/unified-input/useUnifiedInputSurface.ts`](../src/features/unified-input/useUnifiedInputSurface.ts); layout constants in [`src/features/unified-input/constants.ts`](../src/features/unified-input/constants.ts); the main tab JSX in [`src/components/MainTab.tsx`](../src/components/MainTab.tsx).
 - Main tab glass styling (unified search shell, ask bar, AI response chunks) lives in the `<style>` block under `.bonsai-scope` in `src/index.tsx` (classes such as `bonsai-glass-panel`, `bonsai-ai-response-chunk`); Decky `TextField` remains the input primitive.
+- **AI character roleplay:** UI catalog and grouping in [`src/data/characterCatalog.ts`](../src/data/characterCatalog.ts); pixel emoticon grids in [`src/components/characterEmoticonGrids.ts`](../src/components/characterEmoticonGrids.ts); picker in [`src/components/CharacterPickerModal.tsx`](../src/components/CharacterPickerModal.tsx); system-prompt suffix in [`backend/services/ai_character_service.py`](../backend/services/ai_character_service.py); persisted fields `ai_character_*` in `settings.json`.
 - Backend: `main.py` (Decky Python backend)
 - Plugin metadata: `plugin.json`
 - Frontend package/build config: `package.json`

@@ -5,6 +5,7 @@
 - NEVER hardcode credentials, secrets, IP addresses, hostnames, or any developer-local configuration in version-controlled files; ALWAYS externalize them to a gitignored `.env` (loaded at runtime) with a committed `.env.example` template documenting every required variable.
 - ALWAYS validate runtime/deployment parity before debugging behavior: after refactors, prove all moved modules import and load on target (plugin startup logs plus a smoke RPC) before changing feature logic or UI.
 - ALWAYS run `./scripts/build.ps1` (Windows) or `./scripts/build.sh` (Linux) after any Deck-facing code change during debugging and confirm `plugin_loader.service` startup is clean before starting the next hypothesis loop.
+- When instrumenting the Decky front-end with `fetch` to `http://127.0.0.1:<port>`, treat `<port>` as **the Deck’s loopback** unless an SSH reverse tunnel (e.g. from the dev PC: `ssh -N -R 127.0.0.1:<port>:127.0.0.1:<port> deck@<deck-host>`) forwards that port to the machine where the ingest server runs; **verify with a probe from an SSH session on the Deck** (same URL as the plugin) before asking the user to reproduce for log capture.
 - ALWAYS treat `./scripts/build.ps1` or `./scripts/build.sh` as the **final step** before wrapping up any task that touches `src/`, `main.py`, `plugin.json`, or other Deck-facing artifacts: run the script yourself in the agent session (do not only instruct the user), then continue with testing or handoff only after the build completes successfully.
 
 ## Frontend UI (src/)
@@ -13,6 +14,10 @@ NEVER write CSS overrides targeting third-party component internals based on ass
 - ALWAYS treat Decky UI bugs as runtime contract problems: instrument and verify live on-device DOM/focus metrics first, then apply the smallest evidence-backed change that aligns overlays/caret/width to the native TextField geometry. 
 - NEVER replace native input primitives or stack speculative CSS nudges in the same loop without log proof, because this causes focus/keyboard regressions and masking feedback loops (like width drift/jitter) instead of fixing root cause.
 - NEVER iterate on styling or prompt wording as a primary fix until the underlying focus path and context payload are proven correct end-to-end.
+
+## Steam / Decky UI (focus & layout)
+- ALWAYS treat Steam/Decky controller navigation as a focus-graph contract: verify and implement D-pad behavior through Decky move/button callbacks and runtime focus traces before using DOM `keydown` handlers.
+- NEVER ship Steam UI layout fixes from assumed DOM structure or speculative width/margin tweaks; first capture live geometry and clipping evidence, then apply the smallest container-constrained fix.
 
 ## Architecture Constraints
 - ALWAYS debug controller-navigation and AI-context issues at the architecture level first: verify focus-graph/event ownership and metadata pipeline integrity before making UX or prompt tweaks.

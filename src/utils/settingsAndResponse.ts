@@ -2,6 +2,7 @@
  * This module centralizes frontend settings normalization and response formatting behavior.
  * Keeping these pure helpers separate from UI components makes validation rules easy to test and reuse.
  */
+import { AI_CHARACTER_CUSTOM_TEXT_MAX, isValidPresetId } from "../data/characterCatalog";
 export type UnifiedInputPersistenceMode = "persist_all" | "persist_search_only" | "no_persist";
 export type ScreenshotMaxDimension = 1280 | 1920 | 3160;
 
@@ -21,6 +22,12 @@ export type BonsaiSettings = {
   /** When true, append Ask and AI response lines to daily chat files under Desktop/BonsAI_notes (requires filesystem_write). */
   desktop_debug_note_auto_save: boolean;
   capabilities: BonsaiCapabilities;
+  /** Opt-in character tone for model replies (system prompt augmentation on the backend). */
+  ai_character_enabled: boolean;
+  ai_character_random: boolean;
+  /** Known catalog id when not using random/custom. */
+  ai_character_preset_id: string;
+  ai_character_custom_text: string;
 };
 
 export type AppliedResultLike = {
@@ -48,6 +55,11 @@ export const DEFAULT_CAPABILITIES: BonsaiCapabilities = {
   media_library_access: false,
   external_navigation: false,
 };
+
+export const DEFAULT_AI_CHARACTER_ENABLED = false;
+export const DEFAULT_AI_CHARACTER_RANDOM = true;
+export const DEFAULT_AI_CHARACTER_PRESET_ID = "";
+export const DEFAULT_AI_CHARACTER_CUSTOM_TEXT = "";
 
 function clampNumber(value: unknown, fallback: number, minimum: number, maximum: number): number {
   /** Coerce unknown input to a bounded integer value. */
@@ -144,6 +156,31 @@ export function normalizeDesktopDebugNoteAutoSave(value: unknown): boolean {
   return value === true;
 }
 
+export function normalizeAiCharacterEnabled(value: unknown): boolean {
+  return value === true;
+}
+
+export function normalizeAiCharacterRandom(value: unknown): boolean {
+  if (value === false) return false;
+  if (value === true) return true;
+  return DEFAULT_AI_CHARACTER_RANDOM;
+}
+
+export function normalizeAiCharacterPresetId(value: unknown): string {
+  if (typeof value !== "string") return DEFAULT_AI_CHARACTER_PRESET_ID;
+  const t = value.trim();
+  if (!t || !isValidPresetId(t)) return DEFAULT_AI_CHARACTER_PRESET_ID;
+  return t;
+}
+
+export function normalizeAiCharacterCustomText(value: unknown): string {
+  if (typeof value !== "string") return DEFAULT_AI_CHARACTER_CUSTOM_TEXT;
+  let s = value.replace(/\r\n/g, "\n").replace(/\r/g, "\n").trim();
+  if (!s) return DEFAULT_AI_CHARACTER_CUSTOM_TEXT;
+  if (s.length > AI_CHARACTER_CUSTOM_TEXT_MAX) s = s.slice(0, AI_CHARACTER_CUSTOM_TEXT_MAX);
+  return s;
+}
+
 export function normalizeCapabilities(value: unknown): BonsaiCapabilities {
   /** Coerce capability flags; only explicit true enables a scope (matches backend sanitize). */
   const raw =
@@ -170,6 +207,10 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     screenshot_max_dimension: normalizeScreenshotMaxDimension(raw.screenshot_max_dimension),
     desktop_debug_note_auto_save: normalizeDesktopDebugNoteAutoSave(raw.desktop_debug_note_auto_save),
     capabilities: normalizeCapabilities(raw.capabilities),
+    ai_character_enabled: normalizeAiCharacterEnabled(raw.ai_character_enabled),
+    ai_character_random: normalizeAiCharacterRandom(raw.ai_character_random),
+    ai_character_preset_id: normalizeAiCharacterPresetId(raw.ai_character_preset_id),
+    ai_character_custom_text: normalizeAiCharacterCustomText(raw.ai_character_custom_text),
   };
 }
 

@@ -21,6 +21,8 @@ export type BonsaiSettings = {
   screenshot_max_dimension: ScreenshotMaxDimension;
   /** When true, append Ask and AI response lines to daily chat files under Desktop/BonsAI_notes (requires filesystem_write). */
   desktop_debug_note_auto_save: boolean;
+  /** When false, main-tab preset suggestion chips stay opaque and swap text without fade transitions (default true). */
+  preset_chip_fade_animation_enabled: boolean;
   capabilities: BonsaiCapabilities;
   /** Opt-in character tone for model replies (system prompt augmentation on the backend). */
   ai_character_enabled: boolean;
@@ -48,6 +50,7 @@ export const DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE: UnifiedInputPersistenceMode
 export const SCREENSHOT_DIMENSION_OPTIONS: ScreenshotMaxDimension[] = [1280, 1920, 3160];
 export const DEFAULT_SCREENSHOT_MAX_DIMENSION: ScreenshotMaxDimension = 1280;
 export const DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE = false;
+export const DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED = true;
 
 export const DEFAULT_CAPABILITIES: BonsaiCapabilities = {
   filesystem_write: false,
@@ -156,6 +159,11 @@ export function normalizeDesktopDebugNoteAutoSave(value: unknown): boolean {
   return value === true;
 }
 
+export function normalizePresetChipFadeAnimationEnabled(value: unknown): boolean {
+  if (value === false) return false;
+  return DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED;
+}
+
 export function normalizeAiCharacterEnabled(value: unknown): boolean {
   return value === true;
 }
@@ -206,6 +214,9 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     unified_input_persistence_mode: normalizeUnifiedInputPersistenceMode(raw.unified_input_persistence_mode),
     screenshot_max_dimension: normalizeScreenshotMaxDimension(raw.screenshot_max_dimension),
     desktop_debug_note_auto_save: normalizeDesktopDebugNoteAutoSave(raw.desktop_debug_note_auto_save),
+    preset_chip_fade_animation_enabled: normalizePresetChipFadeAnimationEnabled(
+      raw.preset_chip_fade_animation_enabled
+    ),
     capabilities: normalizeCapabilities(raw.capabilities),
     ai_character_enabled: normalizeAiCharacterEnabled(raw.ai_character_enabled),
     ai_character_random: normalizeAiCharacterRandom(raw.ai_character_random),

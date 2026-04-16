@@ -33,6 +33,8 @@ export type MainTabProps = {
   fullBleedRowStyle: React.CSSProperties;
   presetButtonSurface: React.CSSProperties;
   suggestedPrompts: PresetPrompt[];
+  /** When false, preset chips omit staggered fade transitions (Settings). */
+  presetChipFadeAnimationEnabled?: boolean;
   setUnifiedInput: React.Dispatch<React.SetStateAction<string>>;
   unifiedInputHostRef: React.Ref<HTMLDivElement>;
   unifiedInputFieldLayerRef: React.Ref<HTMLDivElement>;
@@ -96,6 +98,7 @@ export function MainTab(props: MainTabProps) {
     fullBleedRowStyle,
     presetButtonSurface,
     suggestedPrompts,
+    presetChipFadeAnimationEnabled = true,
     setUnifiedInput,
     unifiedInputHostRef,
     unifiedInputFieldLayerRef,
@@ -247,7 +250,11 @@ export function MainTab(props: MainTabProps) {
             className="bonsai-full-bleed-row"
             style={{ ...fullBleedRowStyle, display: "grid", gap: 8 }}
           >
-            <PresetAnimatedChips seeds={suggestedPrompts} setUnifiedInput={setUnifiedInput} />
+            <PresetAnimatedChips
+              seeds={suggestedPrompts}
+              setUnifiedInput={setUnifiedInput}
+              fadeAnimationEnabled={presetChipFadeAnimationEnabled}
+            />
           </div>
         </PanelSectionRow>
         <PanelSectionRow>

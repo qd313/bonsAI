@@ -143,8 +143,8 @@ def post_ollama_chat(
         "stream": False,
         "keep_alive": -1,
         "options": {
-            "num_predict": 300,
-            "temperature": 0.2,
+            "num_predict": 500,
+            "temperature": 0.4,
         },
     }
     # Keep transport payload shape explicit so backend/frontend contracts remain stable.

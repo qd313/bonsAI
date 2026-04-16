@@ -53,6 +53,17 @@ describe("settingsAndResponse", () => {
     expect(settings.ai_character_random).toBe(true);
     expect(settings.ai_character_preset_id).toBe("");
     expect(settings.ai_character_custom_text).toBe("");
+    expect(settings.preset_chip_fade_animation_enabled).toBe(true);
+  });
+
+  it("normalizes preset chip fade: only explicit false disables", () => {
+    expect(normalizeSettings({ preset_chip_fade_animation_enabled: false }).preset_chip_fade_animation_enabled).toBe(
+      false
+    );
+    expect(normalizeSettings({ preset_chip_fade_animation_enabled: true }).preset_chip_fade_animation_enabled).toBe(
+      true
+    );
+    expect(normalizeSettings({}).preset_chip_fade_animation_enabled).toBe(true);
   });
 
   it("normalizes capability flags to explicit booleans", () => {

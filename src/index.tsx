@@ -19,6 +19,7 @@ import {
   DEFAULT_LATENCY_WARNING_SECONDS,
   DEFAULT_REQUEST_TIMEOUT_SECONDS,
   DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE,
+  DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED,
   DEFAULT_SCREENSHOT_MAX_DIMENSION,
   DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
   DEFAULT_CAPABILITIES,
@@ -383,6 +384,9 @@ function usePluginSettings() {
   const [desktopDebugNoteAutoSave, setDesktopDebugNoteAutoSave] = useState<boolean>(
     DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE
   );
+  const [presetChipFadeAnimationEnabled, setPresetChipFadeAnimationEnabled] = useState<boolean>(
+    DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED
+  );
   const [capabilities, setCapabilities] = useState<BonsaiCapabilities>(() => ({ ...DEFAULT_CAPABILITIES }));
   const [aiCharacterEnabled, setAiCharacterEnabled] = useState<boolean>(DEFAULT_AI_CHARACTER_ENABLED);
   const [aiCharacterRandom, setAiCharacterRandom] = useState<boolean>(DEFAULT_AI_CHARACTER_RANDOM);
@@ -401,6 +405,7 @@ function usePluginSettings() {
         setUnifiedInputPersistenceMode(normalized.unified_input_persistence_mode);
         setScreenshotMaxDimension(normalized.screenshot_max_dimension);
         setDesktopDebugNoteAutoSave(normalized.desktop_debug_note_auto_save);
+        setPresetChipFadeAnimationEnabled(normalized.preset_chip_fade_animation_enabled);
         setCapabilities(normalized.capabilities);
         setAiCharacterEnabled(normalized.ai_character_enabled);
         setAiCharacterRandom(normalized.ai_character_random);
@@ -414,6 +419,7 @@ function usePluginSettings() {
         setUnifiedInputPersistenceMode(DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE);
         setScreenshotMaxDimension(DEFAULT_SCREENSHOT_MAX_DIMENSION);
         setDesktopDebugNoteAutoSave(DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE);
+        setPresetChipFadeAnimationEnabled(DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED);
         setCapabilities(DEFAULT_CAPABILITIES);
         setAiCharacterEnabled(DEFAULT_AI_CHARACTER_ENABLED);
         setAiCharacterRandom(DEFAULT_AI_CHARACTER_RANDOM);
@@ -437,6 +443,7 @@ function usePluginSettings() {
         unified_input_persistence_mode: unifiedInputPersistenceMode,
         screenshot_max_dimension: screenshotMaxDimension,
         desktop_debug_note_auto_save: desktopDebugNoteAutoSave,
+        preset_chip_fade_animation_enabled: presetChipFadeAnimationEnabled,
         capabilities,
         ai_character_enabled: aiCharacterEnabled,
         ai_character_random: aiCharacterRandom,
@@ -453,6 +460,7 @@ function usePluginSettings() {
     unifiedInputPersistenceMode,
     screenshotMaxDimension,
     desktopDebugNoteAutoSave,
+    presetChipFadeAnimationEnabled,
     capabilities,
     aiCharacterEnabled,
     aiCharacterRandom,
@@ -467,6 +475,7 @@ function usePluginSettings() {
     unifiedInputPersistenceMode,
     screenshotMaxDimension,
     desktopDebugNoteAutoSave,
+    presetChipFadeAnimationEnabled,
     capabilities,
     setCapabilities,
     aiCharacterEnabled,
@@ -483,6 +492,7 @@ function usePluginSettings() {
     setUnifiedInputPersistenceMode,
     setScreenshotMaxDimension,
     setDesktopDebugNoteAutoSave,
+    setPresetChipFadeAnimationEnabled,
   };
 }
 
@@ -645,6 +655,7 @@ const Content: React.FC = () => {
     unifiedInputPersistenceMode,
     screenshotMaxDimension,
     desktopDebugNoteAutoSave,
+    presetChipFadeAnimationEnabled,
     capabilities,
     setCapabilities,
     aiCharacterEnabled,
@@ -660,6 +671,7 @@ const Content: React.FC = () => {
     setUnifiedInputPersistenceMode,
     setScreenshotMaxDimension,
     setDesktopDebugNoteAutoSave,
+    setPresetChipFadeAnimationEnabled,
   } = usePluginSettings();
 
   const desktopAutoSavePrefsRef = useRef({
@@ -1267,6 +1279,7 @@ const Content: React.FC = () => {
             unified_input_persistence_mode: unifiedInputPersistenceMode,
             screenshot_max_dimension: screenshotMaxDimension,
             desktop_debug_note_auto_save: desktopDebugNoteAutoSave,
+            preset_chip_fade_animation_enabled: presetChipFadeAnimationEnabled,
             capabilities,
             ai_character_enabled: aiCharacterEnabled,
             ai_character_random: next.random,
@@ -1298,6 +1311,7 @@ const Content: React.FC = () => {
     unifiedInputPersistenceMode,
     screenshotMaxDimension,
     desktopDebugNoteAutoSave,
+    presetChipFadeAnimationEnabled,
     capabilities,
     setAiCharacterRandom,
     setAiCharacterPresetId,
@@ -1346,6 +1360,7 @@ const Content: React.FC = () => {
       fullBleedRowStyle={fullBleedRowStyle}
       presetButtonSurface={presetButtonSurface}
       suggestedPrompts={suggestedPrompts}
+      presetChipFadeAnimationEnabled={presetChipFadeAnimationEnabled}
       setUnifiedInput={setUnifiedInput}
       unifiedInputHostRef={unifiedInputHostRef as React.Ref<HTMLDivElement>}
       unifiedInputFieldLayerRef={unifiedInputFieldLayerRef as React.Ref<HTMLDivElement>}
@@ -1634,6 +1649,14 @@ const Content: React.FC = () => {
             })}
           </Focusable>
         </div>
+      </PanelSectionRow>
+      <PanelSectionRow>
+        <ToggleField
+          label="Preset chip fade animation"
+          description="When off, main-tab suggestion chips stay fully visible and swap prompts without crossfades. Re-seeding after each Ask is unchanged."
+          checked={presetChipFadeAnimationEnabled}
+          onChange={(checked) => setPresetChipFadeAnimationEnabled(checked)}
+        />
       </PanelSectionRow>
       <PanelSectionRow>
         <div

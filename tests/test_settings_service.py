@@ -56,6 +56,38 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertTrue(sanitized["ai_character_random"])
         self.assertEqual(sanitized["ai_character_preset_id"], "")
         self.assertEqual(sanitized["ai_character_custom_text"], "")
+        self.assertTrue(sanitized["preset_chip_fade_animation_enabled"])
+
+    def test_sanitize_preset_chip_fade_animation_enabled_false_only_for_literal_false(self):
+        """Preset chip fades stay enabled unless JSON false is stored."""
+        off = sanitize_settings(
+            data={"preset_chip_fade_animation_enabled": False},
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="persist_all",
+            valid_screenshot_dimensions={1280, 1920, 3160},
+            default_screenshot_dimension=1280,
+        )
+        self.assertFalse(off["preset_chip_fade_animation_enabled"])
+        garbled = sanitize_settings(
+            data={"preset_chip_fade_animation_enabled": "no"},
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="persist_all",
+            valid_screenshot_dimensions={1280, 1920, 3160},
+            default_screenshot_dimension=1280,
+        )
+        self.assertTrue(garbled["preset_chip_fade_animation_enabled"])
 
     def test_sanitize_settings_orders_latency_before_timeout_when_inverted(self):
         """Conflicting warning/timeout values are adjusted so warning stays strictly below timeout."""

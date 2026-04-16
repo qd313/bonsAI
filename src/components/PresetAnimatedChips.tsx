@@ -38,6 +38,8 @@ export type PresetAnimatedChipsProps = {
   /** When upstream presets change (e.g. after ask), carousel re-seeds from this list. */
   seeds: PresetPrompt[];
   setUnifiedInput: React.Dispatch<React.SetStateAction<string>>;
+  /** When false, chips stay fully opaque and prompts rotate after hold without opacity transitions. */
+  fadeAnimationEnabled?: boolean;
 };
 
 /**
@@ -45,8 +47,14 @@ export type PresetAnimatedChipsProps = {
  * Hold time after each fade-in scales with prompt length; fade durations are fixed.
  * After `PRESET_CAROUSEL_ACTIVE_MS` no new cycles start; any fade already in progress runs to completion, then the carousel rests until remount.
  */
+const staticSlotFade = (): [SlotFade, SlotFade, SlotFade] => [
+  { opacity: 1, transitionMs: 0 },
+  { opacity: 1, transitionMs: 0 },
+  { opacity: 1, transitionMs: 0 },
+];
+
 export function PresetAnimatedChips(props: PresetAnimatedChipsProps) {
-  const { seeds, setUnifiedInput } = props;
+  const { seeds, setUnifiedInput, fadeAnimationEnabled = true } = props;
   const seedsKey = seeds.map((s) => s.text).join("\u0000");
 
   const [slots, setSlots] = useState<[PresetPrompt, PresetPrompt, PresetPrompt]>(() => normalizeThreeSeeds(seeds));
@@ -58,7 +66,6 @@ export function PresetAnimatedChips(props: PresetAnimatedChipsProps) {
     const initial = normalizeThreeSeeds(seeds);
     setSlots(initial);
     slotsRef.current = initial;
-    setSlotFade(initialSlotFade());
 
     const sessionEnd = performance.now() + PRESET_CAROUSEL_ACTIVE_MS;
     const timeouts: number[] = [];
@@ -79,6 +86,33 @@ export function PresetAnimatedChips(props: PresetAnimatedChipsProps) {
       const otherTexts = slotsRef.current.filter((_, j) => j !== slotIndex).map((s) => s.text);
       return getRandomPresetExcluding(new Set([...otherTexts, current.text]));
     };
+
+    if (!fadeAnimationEnabled) {
+      setSlotFade(staticSlotFade());
+      const runSlotStatic = (slotIndex: 0 | 1 | 2) => {
+        const loop = (prompt: PresetPrompt) => {
+          const hold = holdMsForPresetText(prompt.text);
+          pushTimeout(() => {
+            if (!mayStartNextCycle()) return;
+            const nextPrompt = pickNextForSlot(slotIndex, prompt);
+            slotsRef.current = [...slotsRef.current];
+            slotsRef.current[slotIndex] = nextPrompt;
+            setSlots([slotsRef.current[0]!, slotsRef.current[1]!, slotsRef.current[2]!]);
+            loop(nextPrompt);
+          }, hold);
+        };
+        loop(initial[slotIndex]!);
+      };
+      runSlotStatic(0);
+      runSlotStatic(1);
+      runSlotStatic(2);
+      return () => {
+        cancelled = true;
+        timeouts.forEach((id) => window.clearTimeout(id));
+      };
+    }
+
+    setSlotFade(initialSlotFade());
 
     const runSlot = (slotIndex: 0 | 1 | 2) => {
       const stagger = PRESET_SLOT_STAGGER_MS[slotIndex];
@@ -136,7 +170,7 @@ export function PresetAnimatedChips(props: PresetAnimatedChipsProps) {
       timeouts.forEach((id) => window.clearTimeout(id));
     };
     // seedsKey drives re-seed; include seeds so the effect sees the matching triple when the key changes.
-  }, [seedsKey, seeds]);
+  }, [seedsKey, seeds, fadeAnimationEnabled]);
 
   return (
     <>

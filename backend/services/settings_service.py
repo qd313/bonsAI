@@ -36,6 +36,11 @@ def sanitize_desktop_debug_note_auto_save(value: Any) -> bool:
     return value is True
 
 
+def sanitize_preset_chip_fade_animation_enabled(value: Any) -> bool:
+    """Staggered preset-chip fades are on unless the user explicitly saves ``false``."""
+    return value is not False
+
+
 REQUEST_TIMEOUT_RECONCILE_STEP_SECONDS = 10
 
 
@@ -127,6 +132,9 @@ def sanitize_settings(
         ),
         "desktop_debug_note_auto_save": sanitize_desktop_debug_note_auto_save(
             raw.get("desktop_debug_note_auto_save")
+        ),
+        "preset_chip_fade_animation_enabled": sanitize_preset_chip_fade_animation_enabled(
+            raw.get("preset_chip_fade_animation_enabled")
         ),
         "capabilities": sanitize_capabilities(raw.get("capabilities")),
         "ai_character_enabled": sanitize_ai_character_enabled(raw.get("ai_character_enabled")),

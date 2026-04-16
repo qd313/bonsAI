@@ -25,6 +25,7 @@ Same item order as the previous single list (stars unchanged). Headings group re
 - [x] ★★ **Iconography Pass (Tabs + Plugin + Ask Button):** Add icons to all tabs (bonsAI bonsai-tree icon, Settings gear, Debug bug, About unchanged), switch plugin icon to bonsai SVG, and show the stock diamond beside `Ask` text.
 - [x] ★★ **Persist Last Question and Answer:** Restore prior session state when reopening QAM via Decky settings storage.
 - [x] ★★ **Unified Search + Ask Input:** Merge settings search and AI question entry into one shared input flow.
+- [x] ★ **Preset Chip Fade Opt-Out:** Settings `ToggleField` **Preset chip fade animation** (persisted `preset_chip_fade_animation_enabled`, default on). When off, main-tab suggestion chips stay opaque and rotate prompts without opacity transitions; post-Ask re-seed unchanged. `PresetAnimatedChips.tsx`, `MainTab.tsx`, `settingsAndResponse.ts`, `settings_service.py`.
 
 ### AI-assisted power and long-response UX
 
@@ -109,6 +110,7 @@ Compact index of shipped baseline capabilities. **Section order and titles match
 - Persist last question and answer
 - Unified Search + Ask input
 - Preset carousel and transition UX (Phase 1 — fade/hold; manual arrows deferred) *(baseline index)*
+- Preset chip fade animation opt-out (Settings toggle, default animated) *(baseline index)*
 
 ### AI-assisted power and long-response UX
 
@@ -139,13 +141,6 @@ Compact index of shipped baseline capabilities. **Section order and titles match
 - Character voice roleplay mode (opt-in)
 
 ## Candidate Features (Easiest → Hardest)
-
-### ★ Toggle to Disable Preset Chip Fade Animation
-- **Goal:** Settings opt-out that turns off the staggered fade in/out on main-tab suggestion chips while keeping chip content, rotation, and post-ask re-seed behavior unchanged.
-- **Primary work:** persisted boolean (default **on** so current animated behavior is unchanged), Settings UI toggle, plumb flag into `PresetAnimatedChips` / host so transitions are skipped when off (static chips or instant swap—implementation detail).
-- **Files:** `src/index.tsx`, `src/components/MainTab.tsx`, `src/components/PresetAnimatedChips.tsx`, `src/utils/settingsAndResponse.ts`, `backend/services/settings_service.py` / `settings.json` as needed for parity with other toggles.
-- **Depends on:** **Preset carousel (Phase 1)** (shipped; see **Implemented Baseline**).
-- **Not in scope:** manual next/previous arrow controls (still deferred under **Preset Carousel and Transition UX** ★★★★).
 
 ### ★★ Character Accent Intensity Levels (Doom-Style Copy)
 - **Goal:** Add an accent intensity setting for character-roleplay responses with thematic level descriptions inspired by Doom Eternal tone.

@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { toaster } from "@decky/api";
 import { PanelSection, PanelSectionRow, TextField, Button, Focusable } from "@decky/ui";
 import type { PresetPrompt } from "../data/presets";
 import { PresetAnimatedChips } from "./PresetAnimatedChips";
@@ -28,6 +29,7 @@ import {
   RefreshArrowIcon,
 } from "./icons";
 import { CharacterRoleplayEmoticon } from "./CharacterRoleplayEmoticon";
+import type { TransparencySnapshot } from "../utils/inputTransparency";
 
 export type MainTabProps = {
   fullBleedRowStyle: React.CSSProperties;
@@ -91,6 +93,10 @@ export type MainTabProps = {
   onOpenCharacterPicker?: () => void;
   /** Temporary: set `window.__BONSAI_DEBUG_AI_CHARACTER__ = true` in CEF DevTools to show selection state. */
   aiCharacterDebugLine?: string | null;
+  /** Last Ask transparency snapshot from backend (after terminal completion). */
+  transparencySnapshot?: TransparencySnapshot | null;
+  /** Restore unified Ask text to the raw user input from the snapshot. */
+  onRunOriginalAsk?: (rawQuestion: string) => void;
 };
 
 export function MainTab(props: MainTabProps) {
@@ -148,7 +154,14 @@ export function MainTab(props: MainTabProps) {
     aiCharacterAvatarPresetId = null,
     onOpenCharacterPicker,
     aiCharacterDebugLine = null,
+    transparencySnapshot = null,
+    onRunOriginalAsk,
   } = props;
+
+  const [transparencyOpen, setTransparencyOpen] = useState(false);
+  useEffect(() => {
+    setTransparencyOpen(false);
+  }, [transparencySnapshot?.raw_question, transparencySnapshot?.final_response]);
   const askLooksReady = unifiedInput.trim().length > 0 && !isAsking;
   /** Do not gate on `aiCharacterAvatarPresetId` — when the feature is on, `resolveMainTabAvatarPresetId` always yields a display id (including `__random__` / `__custom__`). */
   const showAiCharacterChrome = Boolean(onOpenCharacterPicker && aiCharacterPadClass);
@@ -1023,6 +1036,94 @@ export function MainTab(props: MainTabProps) {
                 ? `Context: active game AppID ${ollamaContext.app_id}`
                 : "Context: no active game detected"}
             </div>
+          </PanelSectionRow>
+        )}
+        {transparencySnapshot && (
+          <PanelSectionRow>
+            <Focusable style={{ width: "100%", maxWidth: "100%", minWidth: 0, boxSizing: "border-box" }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: "#b8c9dc", marginBottom: 6 }}>
+                Input handling (last Ask)
+              </div>
+              <div style={{ fontSize: 11, color: "#8fa6bd", marginBottom: 8, lineHeight: 1.35 }}>
+                Route: {transparencySnapshot.route}
+                {transparencySnapshot.ollama_model ? ` · Model: ${transparencySnapshot.ollama_model}` : ""}
+                {transparencySnapshot.success ? " · ok" : " · failed"}
+              </div>
+              <Button
+                onClick={() => setTransparencyOpen((o) => !o)}
+                style={{ width: "100%", minHeight: 34, marginBottom: 8 }}
+              >
+                {transparencyOpen ? "Hide details" : "Show details"}
+              </Button>
+              {transparencyOpen && (
+                <>
+                  <div
+                    style={{
+                      maxHeight: 280,
+                      overflow: "auto",
+                      fontSize: 11,
+                      color: "#dce8f4",
+                      lineHeight: 1.35,
+                      marginBottom: 10,
+                      padding: "8px 10px",
+                      borderRadius: 4,
+                      background: "rgba(0,0,0,0.22)",
+                      border: "1px solid rgba(255,255,255,0.08)",
+                    }}
+                  >
+                    <div style={{ fontWeight: 700, marginBottom: 4 }}>User input (raw)</div>
+                    <pre style={{ margin: "0 0 12px", whiteSpace: "pre-wrap", wordBreak: "break-word", fontFamily: "inherit" }}>
+                      {transparencySnapshot.raw_question || "—"}
+                    </pre>
+                    <div style={{ fontWeight: 700, marginBottom: 4 }}>After sanitizer</div>
+                    <pre style={{ margin: "0 0 12px", whiteSpace: "pre-wrap", wordBreak: "break-word", fontFamily: "inherit" }}>
+                      {transparencySnapshot.text_after_sanitizer || "—"}
+                    </pre>
+                    <div style={{ fontWeight: 700, marginBottom: 4 }}>System prompt (exact)</div>
+                    <pre style={{ margin: "0 0 12px", whiteSpace: "pre-wrap", wordBreak: "break-word", fontFamily: "inherit" }}>
+                      {transparencySnapshot.system_prompt ?? "—"}
+                    </pre>
+                    <div style={{ fontWeight: 700, marginBottom: 4 }}>User message to model (exact)</div>
+                    <pre style={{ margin: "0 0 12px", whiteSpace: "pre-wrap", wordBreak: "break-word", fontFamily: "inherit" }}>
+                      {transparencySnapshot.user_text_for_model ?? "—"}
+                    </pre>
+                    <div style={{ marginBottom: 8, color: "#9fb7d5" }}>
+                      Vision: {transparencySnapshot.user_image_count} image(s) (base64 omitted here)
+                    </div>
+                    <div style={{ fontWeight: 700, marginBottom: 4 }}>Model output (raw)</div>
+                    <pre style={{ margin: "0 0 12px", whiteSpace: "pre-wrap", wordBreak: "break-word", fontFamily: "inherit" }}>
+                      {transparencySnapshot.assistant_raw ?? "—"}
+                    </pre>
+                    <div style={{ fontWeight: 700, marginBottom: 4 }}>Shown in bonsAI (final)</div>
+                    <pre style={{ margin: 0, whiteSpace: "pre-wrap", wordBreak: "break-word", fontFamily: "inherit" }}>
+                      {transparencySnapshot.final_response || "—"}
+                    </pre>
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                    <Button
+                      onClick={() => onRunOriginalAsk?.(transparencySnapshot.raw_question)}
+                      disabled={!onRunOriginalAsk}
+                      style={{ width: "100%", minHeight: 34 }}
+                    >
+                      Run original in Ask
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        try {
+                          void navigator.clipboard.writeText(JSON.stringify(transparencySnapshot, null, 2));
+                          toaster.toast({ title: "Copied", body: "Transparency JSON copied.", duration: 2500 });
+                        } catch {
+                          toaster.toast({ title: "Copy failed", body: "Clipboard unavailable.", duration: 3000 });
+                        }
+                      }}
+                      style={{ width: "100%", minHeight: 34 }}
+                    >
+                      Copy JSON
+                    </Button>
+                  </div>
+                </>
+              )}
+            </Focusable>
           </PanelSectionRow>
         )}
       </PanelSection>

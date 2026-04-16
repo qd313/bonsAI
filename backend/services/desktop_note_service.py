@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import re
 import unicodedata
@@ -175,6 +176,103 @@ def append_desktop_chat_event_sync(
                 f"{r}\n\n"
                 f"---\n"
             )
+
+        os.makedirs(notes_dir, exist_ok=True)
+        notes_real = os.path.realpath(notes_dir)
+        target_path = os.path.normpath(os.path.join(notes_real, f"{stem}.md"))
+        if not _is_path_under(notes_real, target_path):
+            raise ValueError("Resolved path escapes the notes directory.")
+        target_real = os.path.realpath(target_path)
+        if not _is_path_under(notes_real, target_real):
+            raise ValueError("Resolved path escapes the notes directory.")
+
+        with open(target_path, "a", encoding="utf-8") as f:
+            f.write(block)
+
+        return {"ok": True, "path": target_path}
+    except (OSError, ValueError) as exc:
+        return {"ok": False, "error": str(exc)}
+
+
+def _trace_stem_utc() -> str:
+    """File stem for verbose Ask/Ollama trace logs (one file per UTC day)."""
+    day = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    return sanitize_note_stem(f"bonsai-ask-trace-{day}")
+
+
+def _fence_block(title: str, body: str) -> str:
+    """Markdown fenced block; escape inner triple backticks minimally."""
+    b = body or ""
+    b = b.replace("```", "`\u200b``")
+    return f"### {title}\n\n```text\n{b}\n```\n\n"
+
+
+def append_desktop_ask_transparency_sync(home: str, snapshot: dict[str, Any]) -> dict[str, Any]:
+    """
+    Append a structured transparency block to bonsai-ask-trace-YYYY-MM-DD.md (UTC, append-only).
+
+    ``snapshot`` uses string keys aligned with the plugin transparency RPC (see main.py).
+    """
+    try:
+        notes_dir = resolve_bonsai_notes_dir(home)
+        stem = _trace_stem_utc()
+        ts = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+
+        route = str(snapshot.get("route") or "unknown")
+        raw_q = str(snapshot.get("raw_question") or "")
+        action = str(snapshot.get("sanitizer_action") or "")
+        reasons = snapshot.get("sanitizer_reason_codes")
+        if not isinstance(reasons, list):
+            reasons = []
+        after_s = str(snapshot.get("text_after_sanitizer") or "")
+        model = snapshot.get("ollama_model")
+        model_s = "" if model is None else str(model)
+        sys_p = str(snapshot.get("system_prompt") or "")
+        user_t = str(snapshot.get("user_text_for_model") or "")
+        img_n = int(snapshot.get("user_image_count") or 0)
+        paths = snapshot.get("attachment_paths")
+        if not isinstance(paths, list):
+            paths = []
+        paths_s = "\n".join(f"- `{p}`" for p in paths if isinstance(p, str) and p.strip())
+        as_raw = str(snapshot.get("assistant_raw") or "")
+        as_fmt = str(snapshot.get("assistant_after_attachment_format") or "")
+        final = str(snapshot.get("final_response") or "")
+        applied = snapshot.get("applied")
+        applied_s = json.dumps(applied, ensure_ascii=False, indent=2) if applied is not None else ""
+        elapsed = snapshot.get("elapsed_seconds")
+        success = snapshot.get("success")
+        app_id = str(snapshot.get("app_id") or "")
+        app_name = str(snapshot.get("app_name") or "")
+        pc_ip = str(snapshot.get("pc_ip") or "")
+        err = str(snapshot.get("error_message") or "")
+
+        parts: list[str] = [
+            f"\n## Ask trace — {ts}\n\n",
+            f"**Route:** `{route}`\n\n",
+            _fence_block("User input (exact)", raw_q),
+            f"**Sanitizer action:** `{action}`  \n",
+            f"**Sanitizer reason codes:** `{', '.join(str(x) for x in reasons)}`\n\n",
+            _fence_block("After sanitizer (text sent toward model)", after_s),
+            f"**Ollama model:** `{model_s}`\n\n",
+            _fence_block("System message (exact)", sys_p),
+            _fence_block("User message (exact)", user_t),
+            f"**Vision:** {img_n} image(s) attached to API as base64 (omitted from this log).  \n",
+        ]
+        if paths_s:
+            parts.append("**Attachment paths:**\n\n" + paths_s + "\n\n")
+        parts.append(_fence_block("Assistant (raw from API)", as_raw))
+        parts.append(_fence_block("Assistant (after attachment formatting in bonsAI)", as_fmt))
+        parts.append(_fence_block("Final UI text (after TDP / hardware notices)", final))
+        if applied_s:
+            parts.append(_fence_block("Applied (JSON)", applied_s))
+        meta = (
+            f"**Metadata:** success={success!r}, elapsed_seconds={elapsed!r}, "
+            f"app_id={app_id!r}, app_name={app_name!r}, pc_ip={pc_ip!r}"
+        )
+        if err:
+            meta += f", error_message={err!r}"
+        parts.append(meta + "\n\n---\n")
+        block = "".join(parts)
 
         os.makedirs(notes_dir, exist_ok=True)
         notes_real = os.path.realpath(notes_dir)

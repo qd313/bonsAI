@@ -40,6 +40,7 @@ from backend.services.settings_service import (
 )
 from backend.services.capabilities import capability_enabled
 from backend.services.desktop_note_service import (
+    append_desktop_ask_transparency_sync,
     append_desktop_chat_event_sync,
     append_desktop_debug_note_sync,
 )
@@ -95,6 +96,7 @@ class Plugin:
         self._background_task: Optional[asyncio.Task] = None
         self._background_state: dict = self._new_background_state()
         self._background_request_seq = 0
+        self._last_input_transparency: Optional[dict] = None
 
     @staticmethod
     def _coerce_instance(self_or_cls: Any) -> "Plugin":
@@ -177,6 +179,8 @@ class Plugin:
             self._background_state = self._new_background_state()
         if not hasattr(self, "_background_request_seq"):
             self._background_request_seq = 0
+        if not hasattr(self, "_last_input_transparency"):
+            self._last_input_transparency = None
 
     @staticmethod
     def _parse_ask_payload(question: Any, PcIp: str) -> Tuple[str, str, str, str, list]:
@@ -718,6 +722,34 @@ class Plugin:
             return {"success": True, "path": result.get("path", "")}
         return {"success": False, "error": str(result.get("error", "Write failed."))}
 
+    async def _persist_input_transparency(self, snapshot: dict) -> None:
+        """Store last transparency for ``get_input_transparency``; optionally append verbose Desktop trace."""
+        plugin = Plugin._coerce_instance(self)
+        plugin._last_input_transparency = snapshot
+        settings = await plugin.load_settings()
+        if settings.get("desktop_ask_verbose_logging") is not True:
+            return
+        if not capability_enabled(settings, "filesystem_write"):
+            return
+        home = getattr(decky, "DECKY_USER_HOME", None) or decky.HOME
+        loop = asyncio.get_running_loop()
+
+        def _run() -> dict:
+            return append_desktop_ask_transparency_sync(home, snapshot)
+
+        result = await loop.run_in_executor(None, _run)
+        if not result.get("ok"):
+            logger.warning("append_desktop_ask_transparency_sync: %s", result.get("error"))
+
+    async def get_input_transparency(self):
+        """Return the last Ask transparency snapshot (full prompts; fetch after terminal completion)."""
+        plugin = Plugin._coerce_instance(self)
+        plugin._ensure_background_state()
+        snap = plugin._last_input_transparency
+        if not isinstance(snap, dict) or not snap:
+            return {"available": False}
+        return {"available": True, "snapshot": dict(snap)}
+
     @staticmethod
     def _build_capture_command_candidates(output_path: str, include_overlay: bool) -> list:
         """Build candidate screenshot commands to maximize compatibility across SteamOS variants."""
@@ -877,8 +909,8 @@ class Plugin:
         """Run one full ask lifecycle, including Ollama call timing and optional TDP application."""
         start = time.time()
         app_context = "active" if app_id else "none"
+        plugin = Plugin._coerce_instance(self)
         try:
-            plugin = Plugin._coerce_instance(self)
             logger.info(
                 "_execute_game_ai_request: host=%s game=%r appid=%s question=%r (len=%d)",
                 pc_ip, app_name, app_id, question, len(question),
@@ -894,17 +926,66 @@ class Plugin:
                 elapsed = round(time.time() - start, 1)
                 out = {**keyword_result, "elapsed_seconds": elapsed}
                 logger.info("_execute_game_ai_request: sanitizer keyword command handled (elapsed=%.1fs)", elapsed)
+                await plugin._persist_input_transparency(
+                    {
+                        "route": "sanitizer_command",
+                        "raw_question": question,
+                        "sanitizer_action": "command",
+                        "sanitizer_reason_codes": [],
+                        "text_after_sanitizer": question,
+                        "ollama_model": None,
+                        "system_prompt": None,
+                        "user_text_for_model": None,
+                        "user_image_count": 0,
+                        "attachment_paths": [],
+                        "assistant_raw": None,
+                        "assistant_after_attachment_format": None,
+                        "final_response": str(out.get("response", "") or ""),
+                        "applied": None,
+                        "success": True,
+                        "app_id": app_id,
+                        "app_name": app_name,
+                        "pc_ip": pc_ip,
+                        "error_message": "",
+                        "elapsed_seconds": elapsed,
+                    }
+                )
                 return out
 
             atts = attachments or []
             if atts and not capability_enabled(settings, "media_library_access"):
                 elapsed = round(time.time() - start, 1)
+                msg = (
+                    "Screenshot attachments require media library access. "
+                    "Enable it in the Permissions tab, then try again."
+                )
+                await plugin._persist_input_transparency(
+                    {
+                        "route": "capability_denied",
+                        "raw_question": question,
+                        "sanitizer_action": "n/a",
+                        "sanitizer_reason_codes": [],
+                        "text_after_sanitizer": question,
+                        "ollama_model": None,
+                        "system_prompt": None,
+                        "user_text_for_model": None,
+                        "user_image_count": 0,
+                        "attachment_paths": [str(a.get("path", "") or "") for a in atts if isinstance(a, dict)],
+                        "assistant_raw": None,
+                        "assistant_after_attachment_format": None,
+                        "final_response": msg,
+                        "applied": None,
+                        "success": False,
+                        "app_id": app_id,
+                        "app_name": app_name,
+                        "pc_ip": pc_ip,
+                        "error_message": "media_library_access",
+                        "elapsed_seconds": elapsed,
+                    }
+                )
                 return {
                     "success": False,
-                    "response": (
-                        "Screenshot attachments require media library access. "
-                        "Enable it in the Permissions tab, then try again."
-                    ),
+                    "response": msg,
                     "app_id": app_id,
                     "app_context": app_context,
                     "applied": None,
@@ -916,9 +997,34 @@ class Plugin:
             if lane.action == "block":
                 elapsed = round(time.time() - start, 1)
                 logger.info("_execute_game_ai_request: input blocked by sanitizer (%s)", lane.reason_codes)
+                um = str(lane.user_message or "")
+                await plugin._persist_input_transparency(
+                    {
+                        "route": "sanitizer_block",
+                        "raw_question": question,
+                        "sanitizer_action": str(lane.action),
+                        "sanitizer_reason_codes": list(lane.reason_codes),
+                        "text_after_sanitizer": str(lane.text or ""),
+                        "ollama_model": None,
+                        "system_prompt": None,
+                        "user_text_for_model": None,
+                        "user_image_count": 0,
+                        "attachment_paths": [],
+                        "assistant_raw": None,
+                        "assistant_after_attachment_format": None,
+                        "final_response": um,
+                        "applied": None,
+                        "success": False,
+                        "app_id": app_id,
+                        "app_name": app_name,
+                        "pc_ip": pc_ip,
+                        "error_message": "",
+                        "elapsed_seconds": elapsed,
+                    }
+                )
                 return {
                     "success": False,
-                    "response": lane.user_message,
+                    "response": um,
                     "app_id": app_id,
                     "app_context": app_context,
                     "applied": None,
@@ -935,7 +1041,8 @@ class Plugin:
                 attachments=atts,
             )
             elapsed = round(time.time() - start, 1)
-            response_text = str(ollama_result.get("response", "") or "No response text.")
+            base_response_text = str(ollama_result.get("response", "") or "No response text.")
+            response_text = base_response_text
             applied = None
 
             # TDP application remains conditional so non-performance prompts stay read-only.
@@ -960,6 +1067,35 @@ class Plugin:
                 else:
                     logger.info("ask_game_ai: no TDP recommendation found in response")
 
+            err_tail = ""
+            if not ollama_result.get("success"):
+                err_tail = base_response_text[:8000]
+
+            await plugin._persist_input_transparency(
+                {
+                    "route": "ollama",
+                    "raw_question": question,
+                    "sanitizer_action": str(lane.action),
+                    "sanitizer_reason_codes": list(lane.reason_codes),
+                    "text_after_sanitizer": question_for_model,
+                    "ollama_model": ollama_result.get("model"),
+                    "system_prompt": ollama_result.get("system_prompt"),
+                    "user_text_for_model": ollama_result.get("user_text_for_model"),
+                    "user_image_count": int(ollama_result.get("user_image_count") or 0),
+                    "attachment_paths": ollama_result.get("attachment_paths") or [],
+                    "assistant_raw": ollama_result.get("assistant_raw"),
+                    "assistant_after_attachment_format": base_response_text,
+                    "final_response": response_text,
+                    "applied": applied,
+                    "success": bool(ollama_result.get("success", False)),
+                    "app_id": app_id,
+                    "app_name": app_name,
+                    "pc_ip": pc_ip,
+                    "error_message": err_tail,
+                    "elapsed_seconds": elapsed,
+                }
+            )
+
             logger.info("_execute_game_ai_request: completed in %.1fs", elapsed)
             return {
                 "success": bool(ollama_result.get("success", False)),
@@ -972,6 +1108,30 @@ class Plugin:
         except Exception as exc:
             elapsed = round(time.time() - start, 1)
             logger.exception("_execute_game_ai_request failed (%.1fs)", elapsed)
+            await plugin._persist_input_transparency(
+                {
+                    "route": "error",
+                    "raw_question": question,
+                    "sanitizer_action": "error",
+                    "sanitizer_reason_codes": [],
+                    "text_after_sanitizer": question,
+                    "ollama_model": None,
+                    "system_prompt": None,
+                    "user_text_for_model": None,
+                    "user_image_count": 0,
+                    "attachment_paths": [],
+                    "assistant_raw": None,
+                    "assistant_after_attachment_format": None,
+                    "final_response": f"Backend error: {exc}",
+                    "applied": None,
+                    "success": False,
+                    "app_id": app_id,
+                    "app_name": app_name,
+                    "pc_ip": pc_ip,
+                    "error_message": str(exc),
+                    "elapsed_seconds": elapsed,
+                }
+            )
             return {
                 "success": False,
                 "response": f"Backend error: {exc}",
@@ -1059,11 +1219,36 @@ class Plugin:
             if not bool(pre_settings.get("input_sanitizer_user_disabled")):
                 pre_lane = apply_input_sanitizer_lane(parsed_question, False)
                 if pre_lane.action == "block":
+                    um = str(pre_lane.user_message or "")
+                    await plugin._persist_input_transparency(
+                        {
+                            "route": "sanitizer_block",
+                            "raw_question": parsed_question,
+                            "sanitizer_action": str(pre_lane.action),
+                            "sanitizer_reason_codes": list(pre_lane.reason_codes),
+                            "text_after_sanitizer": str(pre_lane.text or ""),
+                            "ollama_model": None,
+                            "system_prompt": None,
+                            "user_text_for_model": None,
+                            "user_image_count": 0,
+                            "attachment_paths": [],
+                            "assistant_raw": None,
+                            "assistant_after_attachment_format": None,
+                            "final_response": um,
+                            "applied": None,
+                            "success": False,
+                            "app_id": app_id,
+                            "app_name": app_name,
+                            "pc_ip": pc_ip,
+                            "error_message": "",
+                            "elapsed_seconds": 0.0,
+                        }
+                    )
                     return {
                         "accepted": False,
                         "status": "blocked",
                         "success": False,
-                        "response": pre_lane.user_message,
+                        "response": um,
                         "app_id": app_id,
                         "app_context": app_context,
                         "applied": None,
@@ -1089,6 +1274,30 @@ class Plugin:
                     request_id = plugin._background_request_seq
                     now = time.time()
                     resp = str(handled.get("response", ""))
+                    await plugin._persist_input_transparency(
+                        {
+                            "route": "sanitizer_command",
+                            "raw_question": parsed_question,
+                            "sanitizer_action": "command",
+                            "sanitizer_reason_codes": [],
+                            "text_after_sanitizer": parsed_question,
+                            "ollama_model": None,
+                            "system_prompt": None,
+                            "user_text_for_model": None,
+                            "user_image_count": 0,
+                            "attachment_paths": [],
+                            "assistant_raw": None,
+                            "assistant_after_attachment_format": None,
+                            "final_response": resp,
+                            "applied": None,
+                            "success": True,
+                            "app_id": app_id,
+                            "app_name": app_name,
+                            "pc_ip": pc_ip,
+                            "error_message": "",
+                            "elapsed_seconds": 0.0,
+                        }
+                    )
                     plugin._background_state = {
                         "status": "completed",
                         "request_id": request_id,
@@ -1243,6 +1452,11 @@ class Plugin:
         """Orchestrate attachment prep, prompt assembly, and model fallback request execution."""
         url = self._build_ollama_chat_url(PcIp)
         normalized_attachments = Plugin._sanitize_attachments(attachments or [])
+        attachment_paths = [
+            str(a.get("path", "") or "").strip()
+            for a in normalized_attachments
+            if isinstance(a, dict) and str(a.get("path", "") or "").strip()
+        ]
         settings = await self.load_settings()
         screenshot_max_dimension = Plugin._sanitize_screenshot_max_dimension(
             settings.get("screenshot_max_dimension")
@@ -1267,6 +1481,13 @@ class Plugin:
             user_message["images"] = [image["image_b64"] for image in prepared_images]
         messages = [{"role": "system", "content": system_content}, user_message]
 
+        ollama_extras = {
+            "system_prompt": system_content,
+            "user_text_for_model": question,
+            "user_image_count": len(prepared_images),
+            "attachment_paths": attachment_paths,
+        }
+
         logger.info(
             "ask_ollama: url=%s game=%r appid=%s attachments=%d user_message=%r (len=%d)",
             url, app_name, app_id, len(prepared_images), question, len(question),
@@ -1277,7 +1498,7 @@ class Plugin:
 
         try:
             loop = asyncio.get_running_loop()
-            last_failure = {"success": False, "response": "No model attempts executed."}
+            last_failure = {"success": False, "response": "No model attempts executed.", **ollama_extras}
 
             for model_name in models_to_try:
                 result = await loop.run_in_executor(
@@ -1292,15 +1513,16 @@ class Plugin:
                     attachment_warnings,
                     attachment_errors,
                 )
+                merged = {**result, **ollama_extras}
                 if result.get("success"):
-                    return result
+                    return merged
 
-                last_failure = result
+                last_failure = merged
                 body = (result.get("body") or "").lower()
                 is_model_not_found = "not found" in body and "model" in body
                 if is_model_not_found:
                     continue
-                return result
+                return merged
 
             if requires_vision:
                 return {
@@ -1310,12 +1532,13 @@ class Plugin:
                         "Install a vision model such as llava, bakllava, qwen2.5vl, or moondream, "
                         "then try again."
                     ),
+                    **ollama_extras,
                 }
 
             return last_failure
         except Exception as e:
             logger.error(f"Ollama request failed: {e}")
-            return {"success": False, "response": str(e)}
+            return {"success": False, "response": str(e), **ollama_extras}
 
     def _build_ollama_chat_url(self, pc_ip: str) -> str:
         """Build the Ollama chat endpoint URL from current connection input."""

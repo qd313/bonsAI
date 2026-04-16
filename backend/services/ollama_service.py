@@ -164,6 +164,7 @@ def post_ollama_chat(
             raw = resp.read().decode("utf-8")
             data = json.loads(raw)
             text = data.get("message", {}).get("content", "No response text.")
+            assistant_raw = text
             text = format_ai_response(
                 text,
                 normalized_attachments,
@@ -180,6 +181,7 @@ def post_ollama_chat(
                 "success": True,
                 "response": text,
                 "model": model_name,
+                "assistant_raw": assistant_raw,
             }
     except urllib.error.HTTPError as e:
         body = e.read().decode("utf-8", errors="replace")

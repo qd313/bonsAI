@@ -19,6 +19,7 @@ import {
   DEFAULT_LATENCY_WARNING_SECONDS,
   DEFAULT_REQUEST_TIMEOUT_SECONDS,
   DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE,
+  DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING,
   DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED,
   DEFAULT_INPUT_SANITIZER_USER_DISABLED,
   DEFAULT_SCREENSHOT_MAX_DIMENSION,
@@ -48,6 +49,7 @@ import { MainTab } from "./components/MainTab";
 import { PermissionsTab } from "./components/PermissionsTab";
 import { getSteamInputLexiconEntry } from "./data/steam-input-lexicon";
 import { jumpToSteamInputEntry } from "./utils/steamInputJump";
+import type { InputTransparencyRpcResult, TransparencySnapshot } from "./utils/inputTransparency";
 import { formatAiCharacterSelectionLine, resolveMainTabAvatarPresetId } from "./data/characterCatalog";
 import { detectPromptCategory, getContextualPresets, getRandomPresets, type PresetPrompt } from "./data/presets";
 import {
@@ -391,6 +393,9 @@ function usePluginSettings() {
   const [desktopDebugNoteAutoSave, setDesktopDebugNoteAutoSave] = useState<boolean>(
     DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE
   );
+  const [desktopAskVerboseLogging, setDesktopAskVerboseLogging] = useState<boolean>(
+    DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING
+  );
   const [presetChipFadeAnimationEnabled, setPresetChipFadeAnimationEnabled] = useState<boolean>(
     DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED
   );
@@ -415,6 +420,7 @@ function usePluginSettings() {
         setUnifiedInputPersistenceMode(normalized.unified_input_persistence_mode);
         setScreenshotMaxDimension(normalized.screenshot_max_dimension);
         setDesktopDebugNoteAutoSave(normalized.desktop_debug_note_auto_save);
+        setDesktopAskVerboseLogging(normalized.desktop_ask_verbose_logging);
         setPresetChipFadeAnimationEnabled(normalized.preset_chip_fade_animation_enabled);
         setInputSanitizerUserDisabled(normalized.input_sanitizer_user_disabled);
         setCapabilities(normalized.capabilities);
@@ -430,6 +436,7 @@ function usePluginSettings() {
         setUnifiedInputPersistenceMode(DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE);
         setScreenshotMaxDimension(DEFAULT_SCREENSHOT_MAX_DIMENSION);
         setDesktopDebugNoteAutoSave(DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE);
+        setDesktopAskVerboseLogging(DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING);
         setPresetChipFadeAnimationEnabled(DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED);
         setInputSanitizerUserDisabled(DEFAULT_INPUT_SANITIZER_USER_DISABLED);
         setCapabilities(DEFAULT_CAPABILITIES);
@@ -455,6 +462,7 @@ function usePluginSettings() {
         unified_input_persistence_mode: unifiedInputPersistenceMode,
         screenshot_max_dimension: screenshotMaxDimension,
         desktop_debug_note_auto_save: desktopDebugNoteAutoSave,
+        desktop_ask_verbose_logging: desktopAskVerboseLogging,
         preset_chip_fade_animation_enabled: presetChipFadeAnimationEnabled,
         input_sanitizer_user_disabled: inputSanitizerUserDisabled,
         capabilities,
@@ -473,6 +481,7 @@ function usePluginSettings() {
     unifiedInputPersistenceMode,
     screenshotMaxDimension,
     desktopDebugNoteAutoSave,
+    desktopAskVerboseLogging,
     presetChipFadeAnimationEnabled,
     inputSanitizerUserDisabled,
     capabilities,
@@ -489,6 +498,7 @@ function usePluginSettings() {
     unifiedInputPersistenceMode,
     screenshotMaxDimension,
     desktopDebugNoteAutoSave,
+    desktopAskVerboseLogging,
     presetChipFadeAnimationEnabled,
     inputSanitizerUserDisabled,
     capabilities,
@@ -507,6 +517,7 @@ function usePluginSettings() {
     setUnifiedInputPersistenceMode,
     setScreenshotMaxDimension,
     setDesktopDebugNoteAutoSave,
+    setDesktopAskVerboseLogging,
     setPresetChipFadeAnimationEnabled,
     setInputSanitizerUserDisabled,
   };
@@ -671,6 +682,7 @@ const Content: React.FC = () => {
     unifiedInputPersistenceMode,
     screenshotMaxDimension,
     desktopDebugNoteAutoSave,
+    desktopAskVerboseLogging,
     presetChipFadeAnimationEnabled,
     inputSanitizerUserDisabled,
     capabilities,
@@ -688,6 +700,7 @@ const Content: React.FC = () => {
     setUnifiedInputPersistenceMode,
     setScreenshotMaxDimension,
     setDesktopDebugNoteAutoSave,
+    setDesktopAskVerboseLogging,
     setPresetChipFadeAnimationEnabled,
     setInputSanitizerUserDisabled,
   } = usePluginSettings();
@@ -810,6 +823,25 @@ const Content: React.FC = () => {
     }
   }, [unifiedInputPersistenceMode]);
 
+  const [lastTransparency, setLastTransparency] = useState<TransparencySnapshot | null>(null);
+
+  const refreshInputTransparency = useCallback(async () => {
+    try {
+      const r = await callDeckyWithTimeout<[], InputTransparencyRpcResult>(
+        "get_input_transparency",
+        [],
+        DECKY_RPC_TIMEOUT_MS
+      );
+      if (r.available && "snapshot" in r) {
+        setLastTransparency(r.snapshot);
+      } else {
+        setLastTransparency(null);
+      }
+    } catch {
+      setLastTransparency(null);
+    }
+  }, []);
+
   const applyBackgroundStatusToUi = useCallback((status: BackgroundRequestStatus, fallbackQuestion: string = "") => {
     const appId = status.app_id ?? "";
     const appContext = status.app_context === "active" ? "active" : "none";
@@ -864,12 +896,13 @@ const Content: React.FC = () => {
       } else {
         setLastExchange(null);
       }
+      void refreshInputTransparency();
       return;
     }
 
     setOllamaContext(null);
     setIsAsking(false);
-  }, []);
+  }, [refreshInputTransparency]);
 
   const onBackgroundPollError = useCallback((e: unknown) => {
     setIsAsking(false);
@@ -1045,6 +1078,7 @@ const Content: React.FC = () => {
     const appName = runningApp?.display_name ?? "";
 
     setIsAsking(true);
+    setLastTransparency(null);
     setOllamaResponse("Thinking...");
     setLastApplied(null);
     setElapsedSeconds(null);
@@ -1076,6 +1110,7 @@ const Content: React.FC = () => {
         setLastApplied(null);
         setElapsedSeconds(null);
         setOllamaContext({ app_id: appId, app_context: appId ? "active" : "none" });
+        void refreshInputTransparency();
         toaster.toast({
           title: "Input not sent",
           body: data.response ?? "Blocked by input checks.",
@@ -1349,6 +1384,7 @@ const Content: React.FC = () => {
             unified_input_persistence_mode: unifiedInputPersistenceMode,
             screenshot_max_dimension: screenshotMaxDimension,
             desktop_debug_note_auto_save: desktopDebugNoteAutoSave,
+            desktop_ask_verbose_logging: desktopAskVerboseLogging,
             preset_chip_fade_animation_enabled: presetChipFadeAnimationEnabled,
             input_sanitizer_user_disabled: inputSanitizerUserDisabled,
             capabilities,
@@ -1382,6 +1418,7 @@ const Content: React.FC = () => {
     unifiedInputPersistenceMode,
     screenshotMaxDimension,
     desktopDebugNoteAutoSave,
+    desktopAskVerboseLogging,
     presetChipFadeAnimationEnabled,
     inputSanitizerUserDisabled,
     capabilities,
@@ -1482,6 +1519,13 @@ const Content: React.FC = () => {
       aiCharacterAvatarPresetId={mainTabAvatarPresetId}
       onOpenCharacterPicker={aiCharacterEnabled ? openCharacterPickerModal : undefined}
       aiCharacterDebugLine={aiCharacterDebugLineForMainTab}
+      transparencySnapshot={lastTransparency}
+      onRunOriginalAsk={(text) => {
+        setUnifiedInput(text);
+        if (unifiedInputPersistenceMode === "persist_all") {
+          persistSearchQuery(text);
+        }
+      }}
     />
   );
 
@@ -1789,6 +1833,18 @@ const Content: React.FC = () => {
           }
           checked={desktopDebugNoteAutoSave}
           onChange={(checked) => setDesktopDebugNoteAutoSave(checked)}
+        />
+      </PanelSectionRow>
+      <PanelSectionRow>
+        <ToggleField
+          label="Verbose Ask logging to Desktop notes"
+          description={
+            "When on and Filesystem writes are allowed, appends full prompts (system + user text), model name, " +
+            "and replies to Desktop/BonsAI_notes/bonsai-ask-trace-YYYY-MM-DD.md (UTC day). " +
+            "May grow large; contains sensitive prompt text. View the latest trace on the main tab under Input handling."
+          }
+          checked={desktopAskVerboseLogging}
+          onChange={(checked) => setDesktopAskVerboseLogging(checked)}
         />
       </PanelSectionRow>
     </PanelSection>

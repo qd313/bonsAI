@@ -47,6 +47,7 @@ describe("settingsAndResponse", () => {
     expect(settings.unified_input_persistence_mode).toBe("persist_all");
     expect(settings.screenshot_max_dimension).toBe(DEFAULT_SCREENSHOT_MAX_DIMENSION);
     expect(settings.desktop_debug_note_auto_save).toBe(false);
+    expect(settings.desktop_ask_verbose_logging).toBe(false);
     expect(settings.capabilities.filesystem_write).toBe(false);
     expect(settings.capabilities.hardware_control).toBe(false);
     expect(settings.ai_character_enabled).toBe(false);
@@ -55,6 +56,15 @@ describe("settingsAndResponse", () => {
     expect(settings.ai_character_custom_text).toBe("");
     expect(settings.preset_chip_fade_animation_enabled).toBe(true);
     expect(settings.input_sanitizer_user_disabled).toBe(false);
+  });
+
+  it("normalizes desktop ask verbose logging: only explicit true enables", () => {
+    expect(normalizeSettings({ desktop_ask_verbose_logging: true }).desktop_ask_verbose_logging).toBe(true);
+    expect(normalizeSettings({ desktop_ask_verbose_logging: false }).desktop_ask_verbose_logging).toBe(false);
+    expect(normalizeSettings({}).desktop_ask_verbose_logging).toBe(false);
+    expect(
+      normalizeSettings({ desktop_ask_verbose_logging: "yes" as unknown as boolean }).desktop_ask_verbose_logging
+    ).toBe(false);
   });
 
   it("normalizes input sanitizer disabled: only explicit true disables", () => {

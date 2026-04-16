@@ -4,6 +4,7 @@ import unittest
 from pathlib import Path
 
 from backend.services.desktop_note_service import (
+    append_desktop_ask_transparency_sync,
     append_desktop_chat_event_sync,
     append_markdown_note,
     resolve_bonsai_notes_dir,
@@ -87,3 +88,45 @@ class DesktopNoteServiceTests(unittest.TestCase):
             text2 = Path(path).read_text(encoding="utf-8")
             self.assertIn("### AI response", text2)
             self.assertIn("Hi there.", text2)
+
+    def test_append_ask_transparency_trace(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            home = tmp
+            snap = {
+                "route": "ollama",
+                "raw_question": "Hello?",
+                "sanitizer_action": "pass",
+                "sanitizer_reason_codes": [],
+                "text_after_sanitizer": "Hello?",
+                "ollama_model": "llama3:latest",
+                "system_prompt": "SYS",
+                "user_text_for_model": "Hello?",
+                "user_image_count": 0,
+                "attachment_paths": [],
+                "assistant_raw": "Hi",
+                "assistant_after_attachment_format": "Hi",
+                "final_response": "Hi",
+                "applied": None,
+                "success": True,
+                "app_id": "123",
+                "app_name": "Test",
+                "pc_ip": "192.168.1.1",
+                "error_message": "",
+                "elapsed_seconds": 1.2,
+            }
+            r = append_desktop_ask_transparency_sync(home, snap)
+            self.assertTrue(r.get("ok"))
+            path = r.get("path")
+            self.assertIsInstance(path, str)
+            text = Path(path).read_text(encoding="utf-8")
+            self.assertIn("Ask trace", text)
+            self.assertIn("User input (exact)", text)
+            self.assertIn("Hello?", text)
+            self.assertIn("llama3:latest", text)
+            self.assertIn("SYS", text)
+
+            r2 = append_desktop_ask_transparency_sync(home, snap)
+            self.assertTrue(r2.get("ok"))
+            self.assertEqual(r2.get("path"), path)
+            text2 = Path(path).read_text(encoding="utf-8")
+            self.assertGreaterEqual(text2.count("Ask trace"), 2)

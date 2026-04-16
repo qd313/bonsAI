@@ -21,6 +21,8 @@ export type BonsaiSettings = {
   screenshot_max_dimension: ScreenshotMaxDimension;
   /** When true, append Ask and AI response lines to daily chat files under Desktop/BonsAI_notes (requires filesystem_write). */
   desktop_debug_note_auto_save: boolean;
+  /** When true, append full Ask/Ollama transparency blocks to Desktop trace files (requires filesystem_write). */
+  desktop_ask_verbose_logging: boolean;
   /** When false, main-tab preset suggestion chips stay opaque and swap text without fade transitions (default true). */
   preset_chip_fade_animation_enabled: boolean;
   /** When true, Ask input sanitizer lane is off (set via README magic phrases, not the Settings UI). */
@@ -52,6 +54,7 @@ export const DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE: UnifiedInputPersistenceMode
 export const SCREENSHOT_DIMENSION_OPTIONS: ScreenshotMaxDimension[] = [1280, 1920, 3160];
 export const DEFAULT_SCREENSHOT_MAX_DIMENSION: ScreenshotMaxDimension = 1280;
 export const DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE = false;
+export const DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING = false;
 export const DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED = true;
 export const DEFAULT_INPUT_SANITIZER_USER_DISABLED = false;
 
@@ -162,6 +165,10 @@ export function normalizeDesktopDebugNoteAutoSave(value: unknown): boolean {
   return value === true;
 }
 
+export function normalizeDesktopAskVerboseLogging(value: unknown): boolean {
+  return value === true;
+}
+
 export function normalizePresetChipFadeAnimationEnabled(value: unknown): boolean {
   if (value === false) return false;
   return DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED;
@@ -221,6 +228,7 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     unified_input_persistence_mode: normalizeUnifiedInputPersistenceMode(raw.unified_input_persistence_mode),
     screenshot_max_dimension: normalizeScreenshotMaxDimension(raw.screenshot_max_dimension),
     desktop_debug_note_auto_save: normalizeDesktopDebugNoteAutoSave(raw.desktop_debug_note_auto_save),
+    desktop_ask_verbose_logging: normalizeDesktopAskVerboseLogging(raw.desktop_ask_verbose_logging),
     preset_chip_fade_animation_enabled: normalizePresetChipFadeAnimationEnabled(
       raw.preset_chip_fade_animation_enabled
     ),

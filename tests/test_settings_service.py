@@ -50,6 +50,7 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertEqual(sanitized["unified_input_persistence_mode"], "persist_all")
         self.assertEqual(sanitized["screenshot_max_dimension"], 1920)
         self.assertFalse(sanitized["desktop_debug_note_auto_save"])
+        self.assertFalse(sanitized["desktop_ask_verbose_logging"])
         self.assertFalse(sanitized["capabilities"]["filesystem_write"])
         self.assertFalse(sanitized["capabilities"]["hardware_control"])
         self.assertFalse(sanitized["ai_character_enabled"])
@@ -128,6 +129,37 @@ class SettingsServiceTests(unittest.TestCase):
             default_screenshot_dimension=1280,
         )
         self.assertTrue(on["desktop_debug_note_auto_save"])
+
+    def test_sanitize_desktop_ask_verbose_logging_true_only_for_literal_true(self):
+        """Only JSON true enables verbose Ask trace logging."""
+        on = sanitize_settings(
+            data={"desktop_ask_verbose_logging": True},
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="persist_all",
+            valid_screenshot_dimensions={1280, 1920, 3160},
+            default_screenshot_dimension=1280,
+        )
+        self.assertTrue(on["desktop_ask_verbose_logging"])
+        garbled = sanitize_settings(
+            data={"desktop_ask_verbose_logging": "yes"},
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="persist_all",
+            valid_screenshot_dimensions={1280, 1920, 3160},
+            default_screenshot_dimension=1280,
+        )
+        self.assertFalse(garbled["desktop_ask_verbose_logging"])
 
     def test_sanitize_input_sanitizer_user_disabled_true_only_for_literal_true(self):
         """Only JSON true disables the sanitizer lane; other values keep sanitization on."""

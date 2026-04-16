@@ -36,6 +36,11 @@ def sanitize_desktop_debug_note_auto_save(value: Any) -> bool:
     return value is True
 
 
+def sanitize_desktop_ask_verbose_logging(value: Any) -> bool:
+    """Only explicit true enables verbose Ask trace append to Desktop notes."""
+    return value is True
+
+
 def sanitize_preset_chip_fade_animation_enabled(value: Any) -> bool:
     """Staggered preset-chip fades are on unless the user explicitly saves ``false``."""
     return value is not False
@@ -137,6 +142,9 @@ def sanitize_settings(
         ),
         "desktop_debug_note_auto_save": sanitize_desktop_debug_note_auto_save(
             raw.get("desktop_debug_note_auto_save")
+        ),
+        "desktop_ask_verbose_logging": sanitize_desktop_ask_verbose_logging(
+            raw.get("desktop_ask_verbose_logging")
         ),
         "preset_chip_fade_animation_enabled": sanitize_preset_chip_fade_animation_enabled(
             raw.get("preset_chip_fade_animation_enabled")

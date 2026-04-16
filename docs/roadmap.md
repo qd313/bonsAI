@@ -13,6 +13,7 @@ Same item order as the previous single list (stars unchanged). Headings group re
 - [x] ★ **Beta Disclaimer Modal:** Show one-time experimental-software warning with risk acknowledgment and bug-report link.
 - [x] ★ **Suggested AI Prompts:** Show curated prompt presets, randomize initial suggestions, and generate contextual follow-ups after responses.
 - [x] ★★ **Input sanitizer lane (hybrid):** Deterministic Ask cleanup and conservative block before Ollama; default on; no Settings UI. Magic phrases `bonsai:disable-sanitize` / `bonsai:enable-sanitize` (exact whole message, trim + casefold) persist `input_sanitizer_user_disabled` via `save_settings` and return confirmation without calling the model. Backend `backend/services/input_sanitizer_service.py`, `main.py` (`ask_game_ai` / `start_background_game_ai`); frontend types and completion path in `src/index.tsx`; phrase constants mirrored in `src/data/inputSanitizerCommands.ts`.
+- [x] ★★★ **Input Handling Transparency Panel:** Main tab **Input handling (last Ask)** shows raw input, sanitizer path, system/user text sent to Ollama, model name, and raw vs final reply; **Run original** / **Copy JSON**. Optional Settings **Verbose Ask logging to Desktop notes** (`desktop_ask_verbose_logging`) appends full trace markdown to `bonsai-ask-trace-YYYY-MM-DD.md` when filesystem writes are allowed. Backend `get_input_transparency`, `_persist_input_transparency`, `append_desktop_ask_transparency_sync` in `desktop_note_service.py`; `main.py`; UI `MainTab.tsx`, `src/utils/inputTransparency.ts`.
 
 ### Connection, routing, diagnostics, and timeouts
 
@@ -187,11 +188,7 @@ Compact index of shipped baseline capabilities. **Section order and titles match
 - **Not in scope:** changing ranking semantics for unrelated search domains.
 
 ### ★★★ Input Handling Transparency Panel
-- **Goal:** Let users inspect exactly how input was transformed before model execution and quickly re-run with original text.
-- **Primary work:** per-request transformation log, before/after view, one-tap `Run Original` action, and exportable local JSON audit trail.
-- **Files:** `src/index.tsx`, `main.py`, troubleshooting/privacy docs.
-- **Depends on:** **Input Sanitizer Lane (Hybrid + User Override)**.
-- **Not in scope:** telemetry upload of prompt transformation history.
+- **Status:** Shipped — main tab panel + optional verbose Desktop trace (`desktop_ask_verbose_logging`); see Completed list above.
 
 ### ★★★ Reset Cache Action (App State)
 - **Goal:** Provide a user-facing reset action that clears cached unified search text and current AI response output in one step.

@@ -97,6 +97,16 @@ If Windows still falls back to CPU after FIX A:
 
 ---
 
+## Verbose Ask logging (Desktop notes)
+
+**Feature:** Settings → **Desktop notes** → **Verbose Ask logging to Desktop notes** (`desktop_ask_verbose_logging`). When enabled and **Filesystem writes** is on, each completed Ask appends a large markdown block to `~/Desktop/BonsAI_notes/bonsai-ask-trace-YYYY-MM-DD.md` (UTC day) with full system and user prompt text, model name, and replies.
+
+**Symptom:** Trace files grow quickly or contain sensitive prompts.
+
+**Fix:** Turn the toggle off, or delete/rename the trace file on Desktop. The main tab **Input handling (last Ask)** section shows the latest trace in-plugin without writing to disk.
+
+---
+
 ## 1b. AI character (roleplay tone)
 
 **Feature:** Settings → **AI character** (small caps header) enables optional character tone for local Ollama replies. You can pick a preset grouped by game/show title, enable **Random** (one catalog character per Ask), or type a custom description. The main Ask field shows a small pixel avatar; tap it to reopen the picker.

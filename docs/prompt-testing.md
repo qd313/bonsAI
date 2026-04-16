@@ -24,6 +24,11 @@ Related planning (not yet implemented): future prompt policy, search UX, and Ste
 
 ## Release Notes
 
+### 2026-04-16 - Input sanitizer lane (hybrid) shipped
+- **Default:** deterministic sanitization runs on Ask text before Ollama (on by default; no Settings UI).
+- **Commands:** Send exactly `bonsai:disable-sanitize` or `bonsai:enable-sanitize` as the **whole** Ask message (trim + casefold match). No model call; plugin persists `input_sanitizer_user_disabled` and returns confirmation text.
+- **Testing without touching benchmarks:** Use normal game prompts for model quality rows. To verify the lane only, use short benign strings, empty/whitespace-only asks (expect block when sanitizer is on), and the enable/disable phrases on a throwaway profile or after noting you will flip the flag back. Re-enable with `bonsai:enable-sanitize` before resuming comparative prompt runs so empty-control tests do not leak into “model said X” rows.
+
 ### 2026-04-15 - Character Voice Roleplay Mode (Opt-In) Shipped
 - Settings: opt-in **AI character** with fullscreen picker (work-title sections, Random, custom line, OK/Cancel).
 - Backend: `ai_character_service` appends a concise roleplay instruction to the **system** message; TDP JSON contract unchanged.

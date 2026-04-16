@@ -25,10 +25,10 @@ describe("presets", () => {
   });
 
   it("holdMsForPresetText clamps by length", () => {
-    expect(holdMsForPresetText("a")).toBe(4000);
-    expect(holdMsForPresetText("x".repeat(200))).toBe(28000);
+    expect(holdMsForPresetText("a")).toBe(8000);
+    expect(holdMsForPresetText("x".repeat(200))).toBe(32000);
     expect(holdMsForPresetText("How do I fix stuttering?")).toBeGreaterThan(4000);
-    expect(holdMsForPresetText("How do I fix stuttering?")).toBeLessThan(28000);
+    expect(holdMsForPresetText("How do I fix stuttering?")).toBeLessThan(32000);
   });
 
   it("getRandomPresetExcluding avoids listed texts when possible", () => {

@@ -54,6 +54,16 @@ describe("settingsAndResponse", () => {
     expect(settings.ai_character_preset_id).toBe("");
     expect(settings.ai_character_custom_text).toBe("");
     expect(settings.preset_chip_fade_animation_enabled).toBe(true);
+    expect(settings.input_sanitizer_user_disabled).toBe(false);
+  });
+
+  it("normalizes input sanitizer disabled: only explicit true disables", () => {
+    expect(normalizeSettings({ input_sanitizer_user_disabled: true }).input_sanitizer_user_disabled).toBe(true);
+    expect(normalizeSettings({ input_sanitizer_user_disabled: false }).input_sanitizer_user_disabled).toBe(false);
+    expect(normalizeSettings({}).input_sanitizer_user_disabled).toBe(false);
+    expect(normalizeSettings({ input_sanitizer_user_disabled: "yes" as unknown as boolean }).input_sanitizer_user_disabled).toBe(
+      false
+    );
   });
 
   it("normalizes preset chip fade: only explicit false disables", () => {

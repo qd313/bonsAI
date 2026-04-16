@@ -79,6 +79,24 @@ If Windows still falls back to CPU after FIX A:
 
 ---
 
+## Input sanitizer (Ask lane)
+
+### “Sanitizer blocked my prompt”
+**Symptom:** Ask returns quickly with a message that the input was blocked or empty, and nothing is sent to Ollama.
+
+**Cause:** With sanitization **on** (default), whitespace-only or otherwise unusable prompts are rejected after deterministic cleanup.
+
+**Fix:** Type a real question. If you were pasting from a source that injected NUL or odd control characters, try retyping the first line or paste into a plain editor first. If you intentionally need to bypass the lane (advanced), see below.
+
+### “I disabled sanitization by mistake”
+**Symptom:** You sent `bonsai:disable-sanitize` or edited `settings.json` and asks no longer get the same guardrails.
+
+**Fix:** In Ask, send exactly **`bonsai:enable-sanitize`** as the entire message (spacing/case around the phrase is fine; no extra text). You should get a confirmation and `input_sanitizer_user_disabled` returns to `false` in plugin `settings.json`.
+
+**Security:** Disabling sanitization is stored locally. Anyone with access to the plugin while the device is unlocked could turn it off; re-enable when you are done testing on a shared Deck.
+
+---
+
 ## 1b. AI character (roleplay tone)
 
 **Feature:** Settings → **AI character** (small caps header) enables optional character tone for local Ollama replies. You can pick a preset grouped by game/show title, enable **Random** (one catalog character per Ask), or type a custom description. The main Ask field shows a small pixel avatar; tap it to reopen the picker.

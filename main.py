@@ -43,6 +43,11 @@ from backend.services.desktop_note_service import (
     append_desktop_chat_event_sync,
     append_desktop_debug_note_sync,
 )
+from backend.services.input_sanitizer_service import (
+    apply_input_sanitizer_lane,
+    classify_sanitizer_command,
+    confirmation_message_for_command,
+)
 from backend.services.tdp_service import (
     apply_tdp as apply_tdp_service,
     clean_env,
@@ -225,6 +230,24 @@ class Plugin:
             "app_context": "active" if app_id else "none",
             "applied": None,
             "elapsed_seconds": 0,
+        }
+
+    async def _try_handle_sanitizer_keyword_command(self, question: str, app_id: str) -> Optional[dict]:
+        """Persist sanitizer on/off from magic phrases; return ask-shaped dict or ``None``."""
+        cmd = classify_sanitizer_command(question)
+        if cmd is None:
+            return None
+        plugin = Plugin._coerce_instance(self)
+        new_disabled = cmd == "disable"
+        await plugin.save_settings({"input_sanitizer_user_disabled": new_disabled})
+        app_context = "active" if app_id else "none"
+        return {
+            "success": True,
+            "response": confirmation_message_for_command(cmd),
+            "app_id": app_id,
+            "app_context": app_context,
+            "applied": None,
+            "elapsed_seconds": 0.0,
         }
 
     async def load_settings(self):
@@ -865,6 +888,14 @@ class Plugin:
             request_timeout_seconds = int(
                 settings.get("request_timeout_seconds", Plugin.DEFAULT_REQUEST_TIMEOUT_SECONDS)
             )
+
+            keyword_result = await plugin._try_handle_sanitizer_keyword_command(question, app_id)
+            if keyword_result is not None:
+                elapsed = round(time.time() - start, 1)
+                out = {**keyword_result, "elapsed_seconds": elapsed}
+                logger.info("_execute_game_ai_request: sanitizer keyword command handled (elapsed=%.1fs)", elapsed)
+                return out
+
             atts = attachments or []
             if atts and not capability_enabled(settings, "media_library_access"):
                 elapsed = round(time.time() - start, 1)
@@ -879,8 +910,24 @@ class Plugin:
                     "applied": None,
                     "elapsed_seconds": elapsed,
                 }
+
+            user_sanitizer_disabled = bool(settings.get("input_sanitizer_user_disabled"))
+            lane = apply_input_sanitizer_lane(question, user_sanitizer_disabled)
+            if lane.action == "block":
+                elapsed = round(time.time() - start, 1)
+                logger.info("_execute_game_ai_request: input blocked by sanitizer (%s)", lane.reason_codes)
+                return {
+                    "success": False,
+                    "response": lane.user_message,
+                    "app_id": app_id,
+                    "app_context": app_context,
+                    "applied": None,
+                    "elapsed_seconds": elapsed,
+                }
+            question_for_model = lane.text
+
             ollama_result = await plugin.ask_ollama(
-                question,
+                question_for_model,
                 pc_ip,
                 app_id,
                 app_name,
@@ -941,6 +988,10 @@ class Plugin:
         if not parsed_question:
             logger.info("ask_game_ai: rejected (empty question)")
             return Plugin._reject_ask_request("Question is required.", app_id=app_id)
+        if classify_sanitizer_command(parsed_question) is not None:
+            handled = await self._try_handle_sanitizer_keyword_command(parsed_question, app_id)
+            if handled is not None:
+                return handled
         if not pc_ip:
             logger.info("ask_game_ai: rejected (empty pc_ip)")
             return Plugin._reject_ask_request("PC IP Address is required.", app_id=app_id)
@@ -995,12 +1046,29 @@ class Plugin:
                 "status": "invalid",
                 **Plugin._reject_ask_request("Question is required.", app_id=app_id),
             }
-        if not pc_ip:
+        is_sanitizer_command = classify_sanitizer_command(parsed_question) is not None
+        if not pc_ip and not is_sanitizer_command:
             return {
                 "accepted": False,
                 "status": "invalid",
                 **Plugin._reject_ask_request("PC IP Address is required.", app_id=app_id),
             }
+
+        if not is_sanitizer_command:
+            pre_settings = await plugin.load_settings()
+            if not bool(pre_settings.get("input_sanitizer_user_disabled")):
+                pre_lane = apply_input_sanitizer_lane(parsed_question, False)
+                if pre_lane.action == "block":
+                    return {
+                        "accepted": False,
+                        "status": "blocked",
+                        "success": False,
+                        "response": pre_lane.user_message,
+                        "app_id": app_id,
+                        "app_context": app_context,
+                        "applied": None,
+                        "elapsed_seconds": 0.0,
+                    }
 
         async with plugin._background_lock:
             if plugin._background_task and not plugin._background_task.done():
@@ -1013,6 +1081,41 @@ class Plugin:
                     "app_context": state.get("app_context", "none"),
                     "response": "A request is already in progress.",
                 }
+
+            if is_sanitizer_command:
+                handled = await plugin._try_handle_sanitizer_keyword_command(parsed_question, app_id)
+                if handled is not None:
+                    plugin._background_request_seq += 1
+                    request_id = plugin._background_request_seq
+                    now = time.time()
+                    resp = str(handled.get("response", ""))
+                    plugin._background_state = {
+                        "status": "completed",
+                        "request_id": request_id,
+                        "question": "",
+                        "app_id": app_id,
+                        "app_context": app_context,
+                        "success": True,
+                        "response": resp,
+                        "applied": None,
+                        "elapsed_seconds": 0.0,
+                        "error": None,
+                        "started_at": now,
+                        "completed_at": now,
+                    }
+                    plugin._background_task = None
+                    return {
+                        "accepted": True,
+                        "status": "completed",
+                        "request_id": request_id,
+                        "app_id": app_id,
+                        "app_context": app_context,
+                        "success": True,
+                        "response": resp,
+                        "applied": None,
+                        "elapsed_seconds": 0.0,
+                        "meta": "sanitizer_keyword",
+                    }
 
             plugin._background_request_seq += 1
             request_id = plugin._background_request_seq

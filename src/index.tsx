@@ -20,6 +20,7 @@ import {
   DEFAULT_REQUEST_TIMEOUT_SECONDS,
   DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE,
   DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED,
+  DEFAULT_INPUT_SANITIZER_USER_DISABLED,
   DEFAULT_SCREENSHOT_MAX_DIMENSION,
   DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
   DEFAULT_CAPABILITIES,
@@ -49,6 +50,10 @@ import { getSteamInputLexiconEntry } from "./data/steam-input-lexicon";
 import { jumpToSteamInputEntry } from "./utils/steamInputJump";
 import { formatAiCharacterSelectionLine, resolveMainTabAvatarPresetId } from "./data/characterCatalog";
 import { detectPromptCategory, getContextualPresets, getRandomPresets, type PresetPrompt } from "./data/presets";
+import {
+  INPUT_SANITIZER_COMMAND_DISABLE,
+  INPUT_SANITIZER_COMMAND_ENABLE,
+} from "./data/inputSanitizerCommands";
 import { BonsaiLogoIcon, BonsaiSvgIcon, BugIcon, GearIcon, LockIcon } from "./components/icons";
 import { SETTINGS_DATABASE } from "./data/settingsDatabase";
 import {
@@ -114,7 +119,7 @@ const UNIFIED_INPUT_STORAGE_KEY = "bonsai:last-query";
 
 type BackgroundStartResponse = {
   accepted?: boolean;
-  status: "pending" | "busy" | "invalid";
+  status: "pending" | "busy" | "invalid" | "completed" | "blocked";
   request_id?: number | null;
   response?: string;
   app_id?: string;
@@ -122,6 +127,8 @@ type BackgroundStartResponse = {
   success?: boolean;
   applied?: AppliedResult | null;
   elapsed_seconds?: number;
+  /** When set, this start finished without Ollama (e.g. sanitizer keyword command). */
+  meta?: string;
 };
 
 type BackgroundRequestStatus = {
@@ -387,6 +394,9 @@ function usePluginSettings() {
   const [presetChipFadeAnimationEnabled, setPresetChipFadeAnimationEnabled] = useState<boolean>(
     DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED
   );
+  const [inputSanitizerUserDisabled, setInputSanitizerUserDisabled] = useState<boolean>(
+    DEFAULT_INPUT_SANITIZER_USER_DISABLED
+  );
   const [capabilities, setCapabilities] = useState<BonsaiCapabilities>(() => ({ ...DEFAULT_CAPABILITIES }));
   const [aiCharacterEnabled, setAiCharacterEnabled] = useState<boolean>(DEFAULT_AI_CHARACTER_ENABLED);
   const [aiCharacterRandom, setAiCharacterRandom] = useState<boolean>(DEFAULT_AI_CHARACTER_RANDOM);
@@ -406,6 +416,7 @@ function usePluginSettings() {
         setScreenshotMaxDimension(normalized.screenshot_max_dimension);
         setDesktopDebugNoteAutoSave(normalized.desktop_debug_note_auto_save);
         setPresetChipFadeAnimationEnabled(normalized.preset_chip_fade_animation_enabled);
+        setInputSanitizerUserDisabled(normalized.input_sanitizer_user_disabled);
         setCapabilities(normalized.capabilities);
         setAiCharacterEnabled(normalized.ai_character_enabled);
         setAiCharacterRandom(normalized.ai_character_random);
@@ -420,6 +431,7 @@ function usePluginSettings() {
         setScreenshotMaxDimension(DEFAULT_SCREENSHOT_MAX_DIMENSION);
         setDesktopDebugNoteAutoSave(DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE);
         setPresetChipFadeAnimationEnabled(DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED);
+        setInputSanitizerUserDisabled(DEFAULT_INPUT_SANITIZER_USER_DISABLED);
         setCapabilities(DEFAULT_CAPABILITIES);
         setAiCharacterEnabled(DEFAULT_AI_CHARACTER_ENABLED);
         setAiCharacterRandom(DEFAULT_AI_CHARACTER_RANDOM);
@@ -444,6 +456,7 @@ function usePluginSettings() {
         screenshot_max_dimension: screenshotMaxDimension,
         desktop_debug_note_auto_save: desktopDebugNoteAutoSave,
         preset_chip_fade_animation_enabled: presetChipFadeAnimationEnabled,
+        input_sanitizer_user_disabled: inputSanitizerUserDisabled,
         capabilities,
         ai_character_enabled: aiCharacterEnabled,
         ai_character_random: aiCharacterRandom,
@@ -461,6 +474,7 @@ function usePluginSettings() {
     screenshotMaxDimension,
     desktopDebugNoteAutoSave,
     presetChipFadeAnimationEnabled,
+    inputSanitizerUserDisabled,
     capabilities,
     aiCharacterEnabled,
     aiCharacterRandom,
@@ -476,6 +490,7 @@ function usePluginSettings() {
     screenshotMaxDimension,
     desktopDebugNoteAutoSave,
     presetChipFadeAnimationEnabled,
+    inputSanitizerUserDisabled,
     capabilities,
     setCapabilities,
     aiCharacterEnabled,
@@ -493,6 +508,7 @@ function usePluginSettings() {
     setScreenshotMaxDimension,
     setDesktopDebugNoteAutoSave,
     setPresetChipFadeAnimationEnabled,
+    setInputSanitizerUserDisabled,
   };
 }
 
@@ -656,6 +672,7 @@ const Content: React.FC = () => {
     screenshotMaxDimension,
     desktopDebugNoteAutoSave,
     presetChipFadeAnimationEnabled,
+    inputSanitizerUserDisabled,
     capabilities,
     setCapabilities,
     aiCharacterEnabled,
@@ -672,6 +689,7 @@ const Content: React.FC = () => {
     setScreenshotMaxDimension,
     setDesktopDebugNoteAutoSave,
     setPresetChipFadeAnimationEnabled,
+    setInputSanitizerUserDisabled,
   } = usePluginSettings();
 
   const desktopAutoSavePrefsRef = useRef({
@@ -1052,6 +1070,58 @@ const Content: React.FC = () => {
         return;
       }
 
+      if (data.status === "blocked") {
+        setIsAsking(false);
+        setOllamaResponse(data.response ?? "That input was not sent.");
+        setLastApplied(null);
+        setElapsedSeconds(null);
+        setOllamaContext({ app_id: appId, app_context: appId ? "active" : "none" });
+        toaster.toast({
+          title: "Input not sent",
+          body: data.response ?? "Blocked by input checks.",
+          duration: 5000,
+        });
+        return;
+      }
+
+      if (data.status === "completed" && data.success) {
+        if (!isRequestActive(seq)) return;
+        const now = Date.now() / 1000;
+        const terminal: BackgroundRequestStatus = {
+          status: "completed",
+          request_id: data.request_id ?? null,
+          question: "",
+          app_id: data.app_id ?? appId,
+          app_context: (appId ? "active" : "none") as "active" | "none",
+          success: true,
+          response: data.response ?? "",
+          applied: data.applied ?? null,
+          elapsed_seconds: Number.isFinite(data.elapsed_seconds) ? Number(data.elapsed_seconds) : 0,
+          error: null,
+          started_at: now,
+          completed_at: now,
+        };
+        applyBackgroundStatusToUi(terminal, "");
+        saveIp(ip);
+        if (unifiedInputPersistenceMode === "persist_search_only") {
+          persistSearchQuery("");
+        }
+        if (data.meta === "sanitizer_keyword") {
+          const key = q.trim().toLowerCase();
+          if (key === INPUT_SANITIZER_COMMAND_DISABLE.toLowerCase()) {
+            setInputSanitizerUserDisabled(true);
+          } else if (key === INPUT_SANITIZER_COMMAND_ENABLE.toLowerCase()) {
+            setInputSanitizerUserDisabled(false);
+          }
+          toaster.toast({
+            title: "Sanitizer",
+            body: "Mode saved. See README for commands.",
+            duration: 4000,
+          });
+        }
+        return;
+      }
+
       if (data.status === "busy") {
         setIsAsking(true);
         setOllamaResponse(data.response ?? "A request is already in progress.");
@@ -1280,6 +1350,7 @@ const Content: React.FC = () => {
             screenshot_max_dimension: screenshotMaxDimension,
             desktop_debug_note_auto_save: desktopDebugNoteAutoSave,
             preset_chip_fade_animation_enabled: presetChipFadeAnimationEnabled,
+            input_sanitizer_user_disabled: inputSanitizerUserDisabled,
             capabilities,
             ai_character_enabled: aiCharacterEnabled,
             ai_character_random: next.random,
@@ -1312,6 +1383,7 @@ const Content: React.FC = () => {
     screenshotMaxDimension,
     desktopDebugNoteAutoSave,
     presetChipFadeAnimationEnabled,
+    inputSanitizerUserDisabled,
     capabilities,
     setAiCharacterRandom,
     setAiCharacterPresetId,

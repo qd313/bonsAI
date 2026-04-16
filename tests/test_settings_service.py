@@ -57,6 +57,7 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertEqual(sanitized["ai_character_preset_id"], "")
         self.assertEqual(sanitized["ai_character_custom_text"], "")
         self.assertTrue(sanitized["preset_chip_fade_animation_enabled"])
+        self.assertFalse(sanitized["input_sanitizer_user_disabled"])
 
     def test_sanitize_preset_chip_fade_animation_enabled_false_only_for_literal_false(self):
         """Preset chip fades stay enabled unless JSON false is stored."""
@@ -127,6 +128,37 @@ class SettingsServiceTests(unittest.TestCase):
             default_screenshot_dimension=1280,
         )
         self.assertTrue(on["desktop_debug_note_auto_save"])
+
+    def test_sanitize_input_sanitizer_user_disabled_true_only_for_literal_true(self):
+        """Only JSON true disables the sanitizer lane; other values keep sanitization on."""
+        off = sanitize_settings(
+            data={"input_sanitizer_user_disabled": True},
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="persist_all",
+            valid_screenshot_dimensions={1280, 1920, 3160},
+            default_screenshot_dimension=1280,
+        )
+        self.assertTrue(off["input_sanitizer_user_disabled"])
+        garbled = sanitize_settings(
+            data={"input_sanitizer_user_disabled": "yes"},
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="persist_all",
+            valid_screenshot_dimensions={1280, 1920, 3160},
+            default_screenshot_dimension=1280,
+        )
+        self.assertFalse(garbled["input_sanitizer_user_disabled"])
 
     def test_load_settings_grandfathers_capabilities_when_block_missing(self):
         """Legacy settings files without a capabilities object get all scopes enabled."""

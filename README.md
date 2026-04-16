@@ -23,6 +23,21 @@ bonsAI is a Decky Loader plugin for running AI help on hardware you control.
   - Option B: local on the Deck/Linux handheld (usually slower).
 - At least one model pulled in Ollama.
 
+## Input sanitization
+
+bonsAI runs a **deterministic input sanitization lane** on Ask text before it is sent to Ollama (NUL/control cleanup, length limits, and conservative empty-or-junk blocking). **Sanitization is on by default** for every install.
+
+There is **no Settings-tab toggle** for this feature. To change behavior you use **exact magic phrases** in the Ask field (trimmed, case-insensitive, whole message only):
+
+- `bonsai:disable-sanitize` — turns the lane **off** for future asks and persists that choice in the plugin `settings.json` key `input_sanitizer_user_disabled` (JSON `true`).
+- `bonsai:enable-sanitize` — turns the lane **back on** and clears that flag.
+
+Those control messages **do not call Ollama**; the plugin saves settings and shows a short confirmation in the normal response area.
+
+**Security note:** Settings live on the device. Anyone who can open bonsAI (for example via QAM while the Deck is unlocked) could send the disable phrase or edit `settings.json`. Treat the Deck like any other local console for sensitive prompts.
+
+More detail: [docs/troubleshooting.md](docs/troubleshooting.md) (sanitizer FAQ), [docs/prompt-testing.md](docs/prompt-testing.md) (how to test without skewing model benchmarks).
+
 ## Quick install flow
 
 1. Install Decky Loader.

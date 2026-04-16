@@ -5,6 +5,7 @@ All notable changes to this project are documented in this file.
 ## [Unreleased] - 2026-04-15
 
 ### Added
+- **Input sanitizer lane (hybrid):** Default-on deterministic Ask sanitization before Ollama (NUL/control cleanup, length cap, empty/junk block). No Settings-tab controls; disable/re-enable with exact Ask-only phrases `bonsai:disable-sanitize` and `bonsai:enable-sanitize` (persisted `input_sanitizer_user_disabled`, confirmation without model call). `backend/services/input_sanitizer_service.py`, `main.py`, `src/index.tsx`, `src/data/inputSanitizerCommands.ts`, `src/utils/settingsAndResponse.ts`, `backend/services/settings_service.py`.
 - **Preset chip fade opt-out:** Settings **Preset chip fade animation** `ToggleField` (persisted `preset_chip_fade_animation_enabled`, default on). When off, main-tab suggestion chips stay fully visible and swap text without crossfades while keeping the same rotation window and post-Ask re-seed. `PresetAnimatedChips.tsx`, `MainTab.tsx`, `src/utils/settingsAndResponse.ts`, `backend/services/settings_service.py`.
 - **Character Voice Roleplay Mode (Opt-In):** Settings **AI character** toggle (default off); fullscreen `CharacterPickerModal` with per–work-title sections, **Random** toggle, custom character `TextField`, OK/Cancel; unique 8×8-pixel SVG emoticons (`characterEmoticonGrids.ts`, `CharacterRoleplayEmoticon.tsx`); main-tab glass avatar opens picker; persisted `ai_character_*` in `settings.json`; backend `backend/services/ai_character_service.py` appends roleplay instructions to the Ollama system prompt (`main.py`). Catalog: `src/data/characterCatalog.ts` (keep in sync with Python allowlist).
 - **Preset carousel (Phase 1):** Main tab shows three suggestion chips with staggered fade in/out (2s each) and hold time scaled to prompt length (doubled dwell vs earlier tuning); chips rotate independently and re-seed when follow-up presets refresh. `PresetAnimatedChips.tsx`, `holdMsForPresetText` / `getRandomPresetExcluding` in `src/data/presets.ts`, styles in `src/index.tsx`. Manual next/previous arrow controls deferred.
@@ -50,6 +51,7 @@ All notable changes to this project are documented in this file.
 - Resolved roadmap documentation integration conflict during sync so both upstream and local planning updates are retained in `docs/roadmap.md`.
 
 ### Docs
+- Documented **Input sanitizer lane** in `README.md`, `docs/prompt-testing.md`, `docs/troubleshooting.md`, `docs/roadmap.md`, and `docs/development.md` (field names).
 - Documented **Character Voice Roleplay Mode** in `docs/roadmap.md`, `docs/voice-character-catalog.md`, `docs/prompt-testing.md`, `docs/troubleshooting.md`, and this changelog.
 - Documented single hard-timeout slider + visible soft-warning readout in `docs/troubleshooting.md` and this changelog.
 - Documented **Preset carousel (Phase 1)** in `docs/roadmap.md`, `docs/prompt-testing.md`, `docs/development.md`, and this changelog.

@@ -12,6 +12,7 @@ Same item order as the previous single list (stars unchanged). Headings group re
 
 - [x] ★ **Beta Disclaimer Modal:** Show one-time experimental-software warning with risk acknowledgment and bug-report link.
 - [x] ★ **Suggested AI Prompts:** Show curated prompt presets, randomize initial suggestions, and generate contextual follow-ups after responses.
+- [x] ★★ **Input sanitizer lane (hybrid):** Deterministic Ask cleanup and conservative block before Ollama; default on; no Settings UI. Magic phrases `bonsai:disable-sanitize` / `bonsai:enable-sanitize` (exact whole message, trim + casefold) persist `input_sanitizer_user_disabled` via `save_settings` and return confirmation without calling the model. Backend `backend/services/input_sanitizer_service.py`, `main.py` (`ask_game_ai` / `start_background_game_ai`); frontend types and completion path in `src/index.tsx`; phrase constants mirrored in `src/data/inputSanitizerCommands.ts`.
 
 ### Connection, routing, diagnostics, and timeouts
 
@@ -221,6 +222,14 @@ Compact index of shipped baseline capabilities. **Section order and titles match
 - **Not in scope:** enabling Proton logging automatically.
 - **Risk note:** value may be limited unless users already run with `PROTON_LOG=1`.
 
+### ★★★ System prompt reorder and general-purpose assistant clause
+- **Status:** Planned (documentation only; implementation backlog TBD—see this roadmap + [rag-sources-research.md](rag-sources-research.md)).
+- **Goal:** Reorder the Ollama **system** message so dynamic game/attachment/vision context comes first, then a **general knowledge** block where bonsAI states **primary** expertise (Steam Deck, SteamOS, gaming) but acts as a **general-purpose** assistant for unrelated questions—**accurate and helpful without forcing gaming references**—then optional RAG snippets, with **TDP limits and the required JSON contract always last** so automation parsing stays stable.
+- **Primary work:** refactor `build_system_prompt` in `backend/services/ollama_service.py`; keep AI character roleplay prefix behavior in `main.py` (roleplay remains first when enabled).
+- **Files:** `backend/services/ollama_service.py`, `main.py`, `docs/prompt-testing.md` after behavior change.
+- **Depends on:** none.
+- **Not in scope:** changing the JSON schema for TDP/GPU recommendations.
+
 ### ★★★★ Preset Carousel and Transition UX
 - **Status (Phase 1):** Shipped — three preset chips remain visible with **independent** staggered fade in/out (~2s each) and a **length-based hold** (doubled dwell window) between fade-in complete and fade-out start; carousel re-seeds when follow-up presets refresh after an ask. Files: `src/components/PresetAnimatedChips.tsx`, `src/data/presets.ts` (`holdMsForPresetText`, `getRandomPresetExcluding`), scoped CSS in `src/index.tsx`; verification notes in `docs/prompt-testing.md`.
 - **Deferred:** lower-right arrow controls for manual next/previous browsing and controller-focused arrow focus behavior (not implemented in Phase 1).
@@ -284,6 +293,7 @@ Compact index of shipped baseline capabilities. **Section order and titles match
 ### ★★★★ Capability Permission Center (User-Controlled Access)
 - **Status:** Shipped (see **Completed** and **Implemented Baseline**). Tab uses a lock icon; Ollama/LAN ask traffic is not gated as “web.”
 - **Not in scope (future):** first-use modals per capability beyond blocked-action toasts; separate toggles for sudo vs direct sysfs (currently under Hardware control).
+- **Planned extension (not shipped):** **`network_web_access`** — a dedicated Permission Center toggle (default policy TBD) whose plain-language description covers outbound HTTP/HTTPS from the Deck plugin (user PC for Ollama, optional knowledge-base/RAG calls, future online features). Implementation tracked with **RAG knowledge base (PC-hosted ingest + Deck query)** below.
 
 ### ★★★★ Model Policy Tiers + Disclosure UX
 - **Goal:** Separate open-source and open-weight access while preserving explicit higher-permission unlock for non-FOSS models.
@@ -374,6 +384,18 @@ Compact index of shipped baseline capabilities. **Section order and titles match
 - **Depends on:** Steam Web API key availability and a reliable source of opponent identities for the current match.
 - **Impediments/Risks:** private or unavailable profiles, games that do not expose opponent SteamIDs, API quota constraints, anti-cheat/privacy boundaries, and false-confidence UX if data is incomplete.
 - **Not in scope:** automated reporting, punitive automation, or bypassing Steam/game protections to collect hidden player data.
+
+### ★★★★★ RAG knowledge base (PC-hosted ingest + Deck query)
+- **Status:** Planned (documentation only; architecture summarized in [rag-sources-research.md](rag-sources-research.md) and this entry).
+- **Goal:** Retrieval-augmented answers using **ChromaDB** + **`nomic-embed-text`** (via Ollama’s HTTP `/api/embed`) over a curated corpus (Proton compatibility hints, wiki-style SteamOS notes, subreddit threads, etc.) **without bloating the plugin**. Heavy fetch/normalize/embed runs on the **user’s PC** next to Ollama; the Deck triggers refresh/query over LAN.
+- **Architecture note:** **Ollama does not implement RAG ingestion.** Use a small **PC companion HTTP service** (working name `bonsai-rag`): persistent Chroma under e.g. `~/.bonsai/rag/chroma`, raw cache under a sibling folder, endpoints such as `POST /v1/refresh` (ingest) and `POST /v1/query` (return top-k text for `main.py` / `ollama_service` to inject **before** the strict hardware + JSON tail in the system prompt). Deck plugin calls `http://{PcIp}:{rag_port}/…` with timeouts; optional dev-only local Chroma on Deck for contributors.
+- **Developer tooling:** a **`scripts/build_rag_db.py`** (or equivalent) runnable on the dev PC to seed/rebuild a DB from JSON/Markdown directories; same embedding contract as runtime.
+- **Settings UX:** new Settings section with **plain-language** disclosure (what will be fetched, approximate **disk footprint band**, **exact PC paths**, that the Deck initiates a **network** job). **“Update knowledge on PC”** runs after **ConfirmModal** consent. Button disabled until **`network_web_access`** (new Permission Center capability; see **Capability Permission Center** planned extension) is enabled.
+- **Primary work:** PC service package + install docs; Deck RPC + `get_rag_context` HTTP client; prompt assembly order; capability + UI + tests; firewall/token guidance for LAN exposure.
+- **Files (expected):** `backend/services/ollama_service.py`, `main.py`, `refactor_helpers.py`, `backend/services/capabilities.py`, `backend/services/settings_service.py`, `src/utils/settingsAndResponse.ts`, `src/index.tsx` / `PermissionsTab`, new `pc/` or `scripts/` tree, `docs/development.md`, `docs/rag-sources-research.md`.
+- **Depends on:** user-run Ollama on PC; user installs/pulls **`nomic-embed-text`** on that host; optional Reddit API credentials **on the PC only** for subreddit sources.
+- **Legal / policy:** respect site ToS, robots, rate limits; prefer official APIs (Reddit); do not commit scraped corpora to git. Candidate and follow-up sources tracked in [rag-sources-research.md](rag-sources-research.md).
+- **Not in scope (v1):** running scrapers on the Deck; shipping multi-gigabyte prebuilt DBs in-repo; automatic refresh on a timer without user action (user-triggered refresh first).
 
 ### ★★★★★★ SteamOS Media Screenshot Share Button (Research Spike)
 - **Goal:** Add a bonsAI share button in SteamOS Media screenshot browsing so users can send the selected screenshot directly to a bonsAI chat.

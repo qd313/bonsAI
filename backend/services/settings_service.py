@@ -41,6 +41,11 @@ def sanitize_preset_chip_fade_animation_enabled(value: Any) -> bool:
     return value is not False
 
 
+def sanitize_input_sanitizer_user_disabled(value: Any) -> bool:
+    """Only explicit ``true`` means the user disabled the sanitizer lane (keyword command)."""
+    return value is True
+
+
 REQUEST_TIMEOUT_RECONCILE_STEP_SECONDS = 10
 
 
@@ -135,6 +140,9 @@ def sanitize_settings(
         ),
         "preset_chip_fade_animation_enabled": sanitize_preset_chip_fade_animation_enabled(
             raw.get("preset_chip_fade_animation_enabled")
+        ),
+        "input_sanitizer_user_disabled": sanitize_input_sanitizer_user_disabled(
+            raw.get("input_sanitizer_user_disabled")
         ),
         "capabilities": sanitize_capabilities(raw.get("capabilities")),
         "ai_character_enabled": sanitize_ai_character_enabled(raw.get("ai_character_enabled")),

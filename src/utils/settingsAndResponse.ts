@@ -23,6 +23,8 @@ export type BonsaiSettings = {
   desktop_debug_note_auto_save: boolean;
   /** When false, main-tab preset suggestion chips stay opaque and swap text without fade transitions (default true). */
   preset_chip_fade_animation_enabled: boolean;
+  /** When true, Ask input sanitizer lane is off (set via README magic phrases, not the Settings UI). */
+  input_sanitizer_user_disabled: boolean;
   capabilities: BonsaiCapabilities;
   /** Opt-in character tone for model replies (system prompt augmentation on the backend). */
   ai_character_enabled: boolean;
@@ -51,6 +53,7 @@ export const SCREENSHOT_DIMENSION_OPTIONS: ScreenshotMaxDimension[] = [1280, 192
 export const DEFAULT_SCREENSHOT_MAX_DIMENSION: ScreenshotMaxDimension = 1280;
 export const DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE = false;
 export const DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED = true;
+export const DEFAULT_INPUT_SANITIZER_USER_DISABLED = false;
 
 export const DEFAULT_CAPABILITIES: BonsaiCapabilities = {
   filesystem_write: false,
@@ -164,6 +167,10 @@ export function normalizePresetChipFadeAnimationEnabled(value: unknown): boolean
   return DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED;
 }
 
+export function normalizeInputSanitizerUserDisabled(value: unknown): boolean {
+  return value === true;
+}
+
 export function normalizeAiCharacterEnabled(value: unknown): boolean {
   return value === true;
 }
@@ -217,6 +224,7 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     preset_chip_fade_animation_enabled: normalizePresetChipFadeAnimationEnabled(
       raw.preset_chip_fade_animation_enabled
     ),
+    input_sanitizer_user_disabled: normalizeInputSanitizerUserDisabled(raw.input_sanitizer_user_disabled),
     capabilities: normalizeCapabilities(raw.capabilities),
     ai_character_enabled: normalizeAiCharacterEnabled(raw.ai_character_enabled),
     ai_character_random: normalizeAiCharacterRandom(raw.ai_character_random),

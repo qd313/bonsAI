@@ -32,6 +32,7 @@ class SettingsServiceTests(unittest.TestCase):
                 "unified_input_persistence_mode": "invalid",
                 "screenshot_max_dimension": "1920",
                 "desktop_debug_note_auto_save": "yes",
+                "ask_mode": "bogus",
             },
             default_latency_warning_seconds=15,
             default_request_timeout_seconds=120,
@@ -43,6 +44,8 @@ class SettingsServiceTests(unittest.TestCase):
             default_persistence_mode="persist_all",
             valid_screenshot_dimensions={1280, 1920, 3160},
             default_screenshot_dimension=1280,
+            valid_ask_modes={"speed", "strategy", "deep"},
+            default_ask_mode="speed",
         )
         self.assertEqual(sanitized["latency_warning_seconds"], 295)
         self.assertEqual(sanitized["request_timeout_seconds"], 300)
@@ -60,6 +63,27 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertEqual(sanitized["ai_character_accent_intensity"], "balanced")
         self.assertTrue(sanitized["preset_chip_fade_animation_enabled"])
         self.assertFalse(sanitized["input_sanitizer_user_disabled"])
+        self.assertEqual(sanitized["ask_mode"], "speed")
+
+    def test_sanitize_ask_mode_accepts_speed_strategy_deep(self):
+        """Ask mode persists only the three known inference modes."""
+        for mode in ("speed", "strategy", "deep"):
+            sanitized = sanitize_settings(
+                data={"ask_mode": mode},
+                default_latency_warning_seconds=15,
+                default_request_timeout_seconds=120,
+                min_latency_warning_seconds=5,
+                max_latency_warning_seconds=300,
+                min_request_timeout_seconds=10,
+                max_request_timeout_seconds=300,
+                valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+                default_persistence_mode="persist_all",
+                valid_screenshot_dimensions={1280, 1920, 3160},
+                default_screenshot_dimension=1280,
+                valid_ask_modes={"speed", "strategy", "deep"},
+                default_ask_mode="speed",
+            )
+            self.assertEqual(sanitized["ask_mode"], mode)
 
     def test_sanitize_preset_chip_fade_animation_enabled_false_only_for_literal_false(self):
         """Preset chip fades stay enabled unless JSON false is stored."""
@@ -75,6 +99,8 @@ class SettingsServiceTests(unittest.TestCase):
             default_persistence_mode="persist_all",
             valid_screenshot_dimensions={1280, 1920, 3160},
             default_screenshot_dimension=1280,
+            valid_ask_modes={"speed", "strategy", "deep"},
+            default_ask_mode="speed",
         )
         self.assertFalse(off["preset_chip_fade_animation_enabled"])
         garbled = sanitize_settings(
@@ -89,6 +115,8 @@ class SettingsServiceTests(unittest.TestCase):
             default_persistence_mode="persist_all",
             valid_screenshot_dimensions={1280, 1920, 3160},
             default_screenshot_dimension=1280,
+            valid_ask_modes={"speed", "strategy", "deep"},
+            default_ask_mode="speed",
         )
         self.assertTrue(garbled["preset_chip_fade_animation_enabled"])
 
@@ -109,6 +137,8 @@ class SettingsServiceTests(unittest.TestCase):
             default_persistence_mode="persist_all",
             valid_screenshot_dimensions={1280, 1920, 3160},
             default_screenshot_dimension=1280,
+            valid_ask_modes={"speed", "strategy", "deep"},
+            default_ask_mode="speed",
         )
         self.assertEqual(sanitized["latency_warning_seconds"], 200)
         self.assertGreater(sanitized["request_timeout_seconds"], 200)
@@ -128,6 +158,8 @@ class SettingsServiceTests(unittest.TestCase):
             default_persistence_mode="persist_all",
             valid_screenshot_dimensions={1280, 1920, 3160},
             default_screenshot_dimension=1280,
+            valid_ask_modes={"speed", "strategy", "deep"},
+            default_ask_mode="speed",
         )
         self.assertTrue(on["desktop_debug_note_auto_save"])
 
@@ -145,6 +177,8 @@ class SettingsServiceTests(unittest.TestCase):
             default_persistence_mode="persist_all",
             valid_screenshot_dimensions={1280, 1920, 3160},
             default_screenshot_dimension=1280,
+            valid_ask_modes={"speed", "strategy", "deep"},
+            default_ask_mode="speed",
         )
         self.assertTrue(on["desktop_ask_verbose_logging"])
         garbled = sanitize_settings(
@@ -159,6 +193,8 @@ class SettingsServiceTests(unittest.TestCase):
             default_persistence_mode="persist_all",
             valid_screenshot_dimensions={1280, 1920, 3160},
             default_screenshot_dimension=1280,
+            valid_ask_modes={"speed", "strategy", "deep"},
+            default_ask_mode="speed",
         )
         self.assertFalse(garbled["desktop_ask_verbose_logging"])
 
@@ -176,6 +212,8 @@ class SettingsServiceTests(unittest.TestCase):
             default_persistence_mode="persist_all",
             valid_screenshot_dimensions={1280, 1920, 3160},
             default_screenshot_dimension=1280,
+            valid_ask_modes={"speed", "strategy", "deep"},
+            default_ask_mode="speed",
         )
         self.assertTrue(off["input_sanitizer_user_disabled"])
         garbled = sanitize_settings(
@@ -190,6 +228,8 @@ class SettingsServiceTests(unittest.TestCase):
             default_persistence_mode="persist_all",
             valid_screenshot_dimensions={1280, 1920, 3160},
             default_screenshot_dimension=1280,
+            valid_ask_modes={"speed", "strategy", "deep"},
+            default_ask_mode="speed",
         )
         self.assertFalse(garbled["input_sanitizer_user_disabled"])
 
@@ -210,6 +250,8 @@ class SettingsServiceTests(unittest.TestCase):
                 default_persistence_mode="persist_all",
                 valid_screenshot_dimensions={1280, 1920, 3160},
                 default_screenshot_dimension=1280,
+                valid_ask_modes={"speed", "strategy", "deep"},
+                default_ask_mode="speed",
             )
 
         with tempfile.TemporaryDirectory() as tmp:
@@ -241,6 +283,8 @@ class SettingsServiceTests(unittest.TestCase):
                 default_persistence_mode="persist_all",
                 valid_screenshot_dimensions={1280, 1920, 3160},
                 default_screenshot_dimension=1280,
+                valid_ask_modes={"speed", "strategy", "deep"},
+                default_ask_mode="speed",
             )
 
         with tempfile.TemporaryDirectory() as tmp:

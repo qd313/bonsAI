@@ -28,6 +28,7 @@ import {
   DEFAULT_AI_CHARACTER_CUSTOM_TEXT,
   DEFAULT_AI_CHARACTER_ENABLED,
   DEFAULT_AI_CHARACTER_ACCENT_INTENSITY,
+  DEFAULT_ASK_MODE,
   DEFAULT_AI_CHARACTER_PRESET_ID,
   DEFAULT_AI_CHARACTER_RANDOM,
   normalizeAiCharacterCustomText,
@@ -37,6 +38,7 @@ import {
   normalizeRequestTimeoutSeconds,
   SCREENSHOT_DIMENSION_OPTIONS,
   type BonsaiCapabilities,
+  type AskModeId,
   type BonsaiSettings,
   type ScreenshotMaxDimension,
   type UnifiedInputPersistenceMode,
@@ -415,6 +417,7 @@ function usePluginSettings() {
   const [aiCharacterAccentIntensity, setAiCharacterAccentIntensity] = useState<AiCharacterAccentIntensityId>(
     DEFAULT_AI_CHARACTER_ACCENT_INTENSITY
   );
+  const [askMode, setAskMode] = useState<AskModeId>(DEFAULT_ASK_MODE);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
 
   useEffect(() => {
@@ -437,6 +440,7 @@ function usePluginSettings() {
         setAiCharacterPresetId(normalized.ai_character_preset_id);
         setAiCharacterCustomText(normalized.ai_character_custom_text);
         setAiCharacterAccentIntensity(normalized.ai_character_accent_intensity);
+        setAskMode(normalized.ask_mode);
       })
       .catch(() => {
         if (cancelled) return;
@@ -454,6 +458,7 @@ function usePluginSettings() {
         setAiCharacterPresetId(DEFAULT_AI_CHARACTER_PRESET_ID);
         setAiCharacterCustomText(DEFAULT_AI_CHARACTER_CUSTOM_TEXT);
         setAiCharacterAccentIntensity(DEFAULT_AI_CHARACTER_ACCENT_INTENSITY);
+        setAskMode(DEFAULT_ASK_MODE);
       })
       .finally(() => {
         if (!cancelled) setSettingsLoaded(true);
@@ -481,6 +486,7 @@ function usePluginSettings() {
         ai_character_preset_id: aiCharacterPresetId,
         ai_character_custom_text: aiCharacterCustomText,
         ai_character_accent_intensity: aiCharacterAccentIntensity,
+        ask_mode: askMode,
       }).catch((err) => {
         console.error("save_settings failed", err);
       });
@@ -501,6 +507,7 @@ function usePluginSettings() {
     aiCharacterPresetId,
     aiCharacterCustomText,
     aiCharacterAccentIntensity,
+    askMode,
     settingsLoaded,
   ]);
 
@@ -525,6 +532,8 @@ function usePluginSettings() {
     setAiCharacterPresetId,
     setAiCharacterCustomText,
     setAiCharacterAccentIntensity,
+    askMode,
+    setAskMode,
     settingsLoaded,
     setLatencyWarningSeconds,
     setRequestTimeoutSeconds,
@@ -719,6 +728,8 @@ const Content: React.FC = () => {
     setDesktopAskVerboseLogging,
     setPresetChipFadeAnimationEnabled,
     setInputSanitizerUserDisabled,
+    askMode,
+    setAskMode,
   } = usePluginSettings();
 
   const desktopAutoSavePrefsRef = useRef({
@@ -1108,7 +1119,7 @@ const Content: React.FC = () => {
       const data = await call<
         [{ question: string; PcIp: string; appId: string; appName: string; attachments: AskAttachment[] }],
         BackgroundStartResponse
-      >("start_background_game_ai", { question: q, PcIp: ip, appId, appName, attachments });
+      >("start_background_game_ai", { question: q, PcIp: ip, appId, appName, attachments, ask_mode: askMode });
 
       if (!isRequestActive(seq)) return;
 
@@ -1409,6 +1420,7 @@ const Content: React.FC = () => {
             ai_character_preset_id: pid,
             ai_character_custom_text: ctxt,
             ai_character_accent_intensity: aiCharacterAccentIntensity,
+            ask_mode: askMode,
           }).catch((err) => {
             console.error("save_settings failed (character picker OK)", err);
           });
@@ -1444,6 +1456,7 @@ const Content: React.FC = () => {
     setAiCharacterPresetId,
     setAiCharacterCustomText,
     armPostPickerTabLock,
+    askMode,
   ]);
 
   const mainTabAiCharacterPad = aiCharacterEnabled;
@@ -1546,6 +1559,8 @@ const Content: React.FC = () => {
           persistSearchQuery(text);
         }
       }}
+      askMode={askMode}
+      onAskModeChange={setAskMode}
     />
   );
 
@@ -2182,6 +2197,10 @@ const Content: React.FC = () => {
           width: var(--bonsai-askbar-outer-width, var(--bonsai-search-host-width, 100%)) !important;
           min-width: 0 !important;
           max-width: none !important;
+          /* Left-edge correction (ASK bar shell starts inset from the unified input host).
+           * Applied via CSS var set in useUnifiedInputSurface; ref-set inline styles on the
+           * ask element get wiped by React re-renders, but scope-level vars persist. */
+          margin-left: var(--bonsai-ask-margin-left, 0px) !important;
         }
 
         .bonsai-scope .bonsai-askbar-merged .bonsai-ask-primary.DialogButton,
@@ -2230,6 +2249,7 @@ const Content: React.FC = () => {
           margin: 0 !important;
           padding: 0 !important;
           box-sizing: border-box !important;
+          opacity: 0.75 !important;
         }
 
         .bonsai-scope .bonsai-unified-input-host input::placeholder { font-size: 12px; }
@@ -2322,28 +2342,145 @@ const Content: React.FC = () => {
           box-shadow: none !important;
         }
 
+        /*
+         * Ask-mode menu lives inside .bonsai-unified-input-host. Section 7 above uses
+         * .bonsai-unified-input-host div and .Panel.Focusable with higher
+         * specificity than .bonsai-ask-mode-menu-surface alone, so every menu
+         * row/stack was forced transparent; ASK/glass bleeds through as a vertical fade.
+         * Undo only under .bonsai-ask-mode-menu-floater (must beat section 7).
+         */
+        .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater div,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater .Panel.Focusable,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater .Panel.Focusable > div {
+          background-image: none !important;
+          /* §7 sets background-color transparent on .Panel.Focusable > div — must override or ASK bleeds through inner wrappers. */
+          background-color: rgb(28, 36, 44) !important;
+          box-shadow: none !important;
+          opacity: 1 !important;
+          filter: none !important;
+          -webkit-backdrop-filter: none !important;
+          backdrop-filter: none !important;
+        }
+        .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater .bonsai-ask-mode-menu-item--selected.Panel.Focusable > div {
+          background-color: rgb(40, 50, 62) !important;
+        }
+        .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater .bonsai-ask-mode-menu-surface div {
+          background-color: rgb(28, 36, 44) !important;
+        }
+        .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater .bonsai-ask-mode-menu-item--selected div {
+          background-color: rgb(40, 50, 62) !important;
+        }
+        .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater .bonsai-ask-mode-menu-surface,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater .bonsai-ask-mode-menu-surface > .Panel.Focusable {
+          background-color: rgb(28, 36, 44) !important;
+        }
+        .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater .bonsai-ask-mode-menu-item {
+          background-color: rgb(28, 36, 44) !important;
+        }
+        .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater .bonsai-ask-mode-menu-item--selected {
+          background-color: rgb(40, 50, 62) !important;
+        }
+        .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater .bonsai-ask-mode-menu-item,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater .bonsai-ask-mode-menu-item.Panel.Focusable {
+          border-top: none !important;
+          border-bottom: none !important;
+        }
+
         /* ==========================================================================
            8. ASKBAR INTERACTIONS & ICONS
            Handles focus states, layout of bottom action icons, and opacity.
            ========================================================================== */
         .bonsai-scope .bonsai-unified-input-host { border-radius: 8px; overflow: hidden; }
+        /*
+         * While the ask-mode dropdown is open: overflow visible for the menu, and raise stacking.
+         * The ASK row is a later PanelSectionRow, so it paints on top of this host by default;
+         * the menu extends over the ASK bar and looked like a vertical fade (ASK ::before gradient on top of rows).
+         */
+        .bonsai-scope .bonsai-unified-input-host.bonsai-ask-mode-menu-open {
+          overflow: visible;
+          position: relative;
+          z-index: 50;
+        }
 
+        /* Ask mode menu: solid stack (Decky sometimes composites menus semi-transparent over glass). */
+        .bonsai-scope .bonsai-ask-mode-menu-floater {
+          opacity: 1 !important;
+          filter: none !important;
+          backdrop-filter: none !important;
+        }
+        .bonsai-scope .bonsai-ask-mode-menu-surface,
+        .bonsai-scope .bonsai-ask-mode-menu-surface > .Panel.Focusable {
+          background-color: rgb(28, 36, 44) !important;
+          opacity: 1 !important;
+        }
+        .bonsai-scope .bonsai-ask-mode-menu-surface .Panel.Focusable {
+          opacity: 1 !important;
+        }
+        .bonsai-scope .bonsai-ask-mode-menu-surface .bonsai-ask-mode-menu-item {
+          background-color: rgb(28, 36, 44) !important;
+          opacity: 1 !important;
+          mix-blend-mode: normal !important;
+        }
+        .bonsai-scope .bonsai-ask-mode-menu-surface .bonsai-ask-mode-menu-item--selected {
+          background-color: rgb(40, 50, 62) !important;
+        }
+        .bonsai-scope .bonsai-ask-mode-menu-surface .bonsai-ask-mode-menu-item,
+        .bonsai-scope .bonsai-ask-mode-menu-surface .bonsai-ask-mode-menu-item.Panel.Focusable {
+          border-top: none !important;
+          border-bottom: none !important;
+        }
+        /* Keep gamepad/pointer focus ring inside the row so it does not extend past the panel edge. */
+        .bonsai-scope .bonsai-ask-mode-menu-surface .bonsai-ask-mode-menu-item:focus,
+        .bonsai-scope .bonsai-ask-mode-menu-surface .bonsai-ask-mode-menu-item:focus-visible {
+          outline: 2px solid rgba(255, 255, 255, 0.38) !important;
+          outline-offset: -2px !important;
+        }
+
+        /*
+         * Reset nested Panel.Focusable under the unified input host. Keep selector specificity LOW: adding :not()
+         * on menu classes raised specificity above .bonsai-unified-input-bottom-actions / .bonsai-unified-input-actions-right,
+         * so flex-direction:column here won the cascade and stacked the paperclip above the mode chip + mic row.
+         */
         .bonsai-scope .bonsai-unified-input-host .Panel.Focusable {
           padding: 0 !important; margin: 0 !important; min-width: 0 !important;
           display: flex !important; flex-direction: column !important;
           align-items: stretch !important; justify-content: flex-start !important;
         }
+        /* Stronger chain beats the rule above so ask-mode menu rows keep horizontal padding (vars from AskModeMenuPopover surface). */
+        .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater .bonsai-ask-mode-menu-surface > .bonsai-ask-mode-menu-list.Panel.Focusable {
+          padding-top: var(--bonsai-ask-mode-menu-list-pad-y, 0px) !important;
+          padding-bottom: var(--bonsai-ask-mode-menu-list-pad-y, 0px) !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+        }
+        .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater .bonsai-ask-mode-menu-surface .bonsai-ask-mode-menu-item.Panel.Focusable {
+          padding: var(--bonsai-ask-mode-menu-pad-y, 10px) var(--bonsai-ask-mode-menu-pad-x, 13px) !important;
+        }
 
-        .bonsai-scope .bonsai-unified-input-bottom-actions .Panel.Focusable {
+        /* Only the outer actions row is full-width; nested Focusable (mode + mic) stays end-aligned. */
+        .bonsai-scope .bonsai-unified-input-bottom-actions > .Panel.Focusable {
           width: 100% !important; min-height: 100% !important;
-          flex-direction: row !important; justify-content: space-between !important;
-          align-items: center !important; flex-wrap: nowrap !important;
+          flex-direction: row !important; justify-content: flex-start !important;
+          align-items: flex-end !important; flex-wrap: nowrap !important;
+        }
+        .bonsai-scope .bonsai-unified-input-actions-right.Panel.Focusable {
+          width: auto !important;
+          min-width: 0 !important;
+          flex: 0 0 auto !important;
+          margin-left: auto !important;
+          flex-direction: row !important;
+          align-items: flex-end !important;
+          justify-content: flex-end !important;
         }
 
         .bonsai-scope .bonsai-unified-input-bottom-actions .bonsai-askbar-target.DialogButton,
         .bonsai-scope .bonsai-unified-input-bottom-actions .bonsai-askbar-target {
           padding: 0 !important; margin: 0 !important;
           min-width: 20px !important; min-height: 20px !important; border-radius: 0 !important;
+        }
+        .bonsai-scope .bonsai-unified-input-bottom-actions .bonsai-ask-mode-trigger.bonsai-askbar-target {
+          min-width: unset !important;
         }
         .bonsai-scope .bonsai-unified-input-bottom-actions .bonsai-askbar-target > span { padding: 0 !important; margin: 0 !important; }
 
@@ -2486,7 +2623,17 @@ const Root: React.FC = () => (
 export default definePlugin(() => {
   return {
     name: "bonsAI",
-    title: "Decky Settings Search",
+    titleView: (
+      <span
+        style={{
+          fontVariant: "small-caps",
+          fontWeight: 600,
+          letterSpacing: "0.06em",
+        }}
+      >
+        bonsAI
+      </span>
+    ),
     content: <Root />,
     icon: (
       <span style={{ display: "inline-flex", transform: "translateX(-5px)" }}>

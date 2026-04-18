@@ -18,6 +18,49 @@ VISION_MODELS_TO_TRY = [
     "moondream",
 ]
 
+# Ordered fallbacks per Ask mode (main tab). "speed" matches legacy TEXT_MODELS_TO_TRY / VISION_MODELS_TO_TRY.
+TEXT_MODELS_BY_MODE = {
+    "speed": TEXT_MODELS_TO_TRY,
+    "strategy": [
+        "gemma3:latest",
+        "llama3:latest",
+        "llama3",
+        "gemma4:latest",
+        "gemma4",
+    ],
+    "deep": [
+        "gemma4:latest",
+        "gemma4",
+        "llama3:latest",
+        "llama3",
+        "gemma3:latest",
+    ],
+}
+VISION_MODELS_BY_MODE = {
+    "speed": VISION_MODELS_TO_TRY,
+    "strategy": [
+        "bakllava:latest",
+        "bakllava",
+        "llava:latest",
+        "llava",
+        "qwen2.5vl:latest",
+        "qwen2.5vl",
+        "moondream:latest",
+        "moondream",
+    ],
+    "deep": [
+        "qwen2.5vl:latest",
+        "qwen2.5vl",
+        "llava:latest",
+        "llava",
+        "bakllava:latest",
+        "bakllava",
+        "moondream:latest",
+        "moondream",
+    ],
+}
+_VALID_ASK_MODES = frozenset(TEXT_MODELS_BY_MODE.keys())
+
 
 def normalize_ollama_base(raw: str) -> Tuple[str, int, str]:
     """Normalize user-provided host input into host/port/base-url tuple values."""
@@ -39,9 +82,12 @@ def build_ollama_chat_url(raw: str) -> str:
     return f"{base}/api/chat"
 
 
-def select_ollama_models(requires_vision: bool) -> list[str]:
-    """Return the ordered model fallback list for text or vision request paths."""
-    return list(VISION_MODELS_TO_TRY if requires_vision else TEXT_MODELS_TO_TRY)
+def select_ollama_models(requires_vision: bool, ask_mode: str = "speed") -> list[str]:
+    """Return the ordered model fallback list for text or vision paths and Ask mode."""
+    mode = ask_mode if ask_mode in _VALID_ASK_MODES else "speed"
+    if requires_vision:
+        return list(VISION_MODELS_BY_MODE[mode])
+    return list(TEXT_MODELS_BY_MODE[mode])
 
 
 def parse_tdp_recommendation(

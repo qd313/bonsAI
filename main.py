@@ -33,6 +33,7 @@ from backend.services.ollama_service import (
 from backend.services.settings_service import (
     clamp_int,
     load_settings as load_settings_from_disk,
+    sanitize_ask_mode,
     sanitize_screenshot_max_dimension,
     sanitize_settings,
     sanitize_unified_input_persistence_mode,
@@ -84,6 +85,8 @@ class Plugin:
         "persist_search_only",
         "no_persist",
     }
+    DEFAULT_ASK_MODE = "speed"
+    VALID_ASK_MODES = {"speed", "strategy", "deep"}
     MIN_LATENCY_WARNING_SECONDS = 5
     MAX_LATENCY_WARNING_SECONDS = 300
     MIN_REQUEST_TIMEOUT_SECONDS = 10
@@ -125,6 +128,8 @@ class Plugin:
             default_persistence_mode=Plugin.DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
             valid_screenshot_dimensions=Plugin.VALID_SCREENSHOT_MAX_DIMENSIONS,
             default_screenshot_dimension=Plugin.DEFAULT_SCREENSHOT_MAX_DIMENSION,
+            valid_ask_modes=Plugin.VALID_ASK_MODES,
+            default_ask_mode=Plugin.DEFAULT_ASK_MODE,
         )
 
     @staticmethod
@@ -183,11 +188,12 @@ class Plugin:
             self._last_input_transparency = None
 
     @staticmethod
-    def _parse_ask_payload(question: Any, PcIp: str) -> Tuple[str, str, str, str, list]:
+    def _parse_ask_payload(question: Any, PcIp: str) -> Tuple[str, str, str, str, list, str]:
         """Normalize ask payload variants into canonical question/ip/context values."""
         app_id = ""
         app_name = ""
         attachments: list = []
+        ask_mode_raw: Any = None
         if isinstance(question, dict):
             payload = question
             question = payload.get("question", "")
@@ -195,9 +201,11 @@ class Plugin:
             app_id = str(payload.get("appId", "") or "").strip()
             app_name = str(payload.get("appName", "") or "").strip()
             attachments = Plugin._sanitize_attachments(payload.get("attachments", []))
+            ask_mode_raw = payload.get("askMode", payload.get("ask_mode", ask_mode_raw))
         normalized_question = str(question or "").strip()
         normalized_pc_ip = str(PcIp or "").strip()
-        return normalized_question, normalized_pc_ip, app_id, app_name, attachments
+        ask_mode = sanitize_ask_mode(ask_mode_raw, Plugin.VALID_ASK_MODES, Plugin.DEFAULT_ASK_MODE)
+        return normalized_question, normalized_pc_ip, app_id, app_name, attachments, ask_mode
 
     @staticmethod
     def _sanitize_attachments(raw_attachments: Any) -> list:
@@ -905,6 +913,7 @@ class Plugin:
         app_id: str = "",
         app_name: str = "",
         attachments: Optional[list] = None,
+        ask_mode: str = "speed",
     ) -> dict:
         """Run one full ask lifecycle, including Ollama call timing and optional TDP application."""
         start = time.time()
@@ -1039,6 +1048,7 @@ class Plugin:
                 app_name,
                 request_timeout_seconds=request_timeout_seconds,
                 attachments=atts,
+                ask_mode=ask_mode,
             )
             elapsed = round(time.time() - start, 1)
             base_response_text = str(ollama_result.get("response", "") or "No response text.")
@@ -1144,7 +1154,9 @@ class Plugin:
     async def ask_game_ai(self, question: Any = "", PcIp: str = ""):
         """Handle foreground ask RPCs and validate required inputs before execution."""
         logger.info("ask_game_ai: RPC entry (arg type=%s)", type(question).__name__)
-        parsed_question, pc_ip, app_id, app_name, attachments = Plugin._parse_ask_payload(question, PcIp)
+        parsed_question, pc_ip, app_id, app_name, attachments, ask_mode = Plugin._parse_ask_payload(
+            question, PcIp
+        )
         if not parsed_question:
             logger.info("ask_game_ai: rejected (empty question)")
             return Plugin._reject_ask_request("Question is required.", app_id=app_id)
@@ -1155,7 +1167,9 @@ class Plugin:
         if not pc_ip:
             logger.info("ask_game_ai: rejected (empty pc_ip)")
             return Plugin._reject_ask_request("PC IP Address is required.", app_id=app_id)
-        return await self._execute_game_ai_request(parsed_question, pc_ip, app_id, app_name, attachments=attachments)
+        return await self._execute_game_ai_request(
+            parsed_question, pc_ip, app_id, app_name, attachments=attachments, ask_mode=ask_mode
+        )
 
     async def _run_background_request(
         self,
@@ -1165,6 +1179,7 @@ class Plugin:
         app_id: str,
         app_name: str,
         attachments: Optional[list] = None,
+        ask_mode: str = "speed",
     ) -> None:
         """Execute a queued background request and publish terminal status for polling clients."""
         result = await self._execute_game_ai_request(
@@ -1173,6 +1188,7 @@ class Plugin:
             app_id,
             app_name,
             attachments=attachments or [],
+            ask_mode=ask_mode,
         )
         self._ensure_background_state()
         async with self._background_lock:
@@ -1198,7 +1214,9 @@ class Plugin:
         plugin._ensure_background_state()
 
         logger.info("start_background_game_ai: RPC entry (arg type=%s)", type(question).__name__)
-        parsed_question, pc_ip, app_id, app_name, attachments = Plugin._parse_ask_payload(question, PcIp)
+        parsed_question, pc_ip, app_id, app_name, attachments, ask_mode = Plugin._parse_ask_payload(
+            question, PcIp
+        )
         app_context = "active" if app_id else "none"
         if not parsed_question:
             return {
@@ -1350,6 +1368,7 @@ class Plugin:
                     app_id,
                     app_name,
                     attachments=attachments,
+                    ask_mode=ask_mode,
                 )
             )
 
@@ -1402,9 +1421,9 @@ class Plugin:
         )
 
     @staticmethod
-    def _select_models(requires_vision: bool) -> list:
-        """Select ordered model fallbacks based on whether vision inputs are present."""
-        return select_ollama_models(requires_vision)
+    def _select_models(requires_vision: bool, ask_mode: str = "speed") -> list:
+        """Select ordered model fallbacks based on vision inputs and Ask mode."""
+        return select_ollama_models(requires_vision, ask_mode)
 
     @staticmethod
     def _format_ai_response(
@@ -1448,6 +1467,7 @@ class Plugin:
         app_name: str,
         request_timeout_seconds: int = 120,
         attachments: Optional[list] = None,
+        ask_mode: str = "speed",
     ):
         """Orchestrate attachment prep, prompt assembly, and model fallback request execution."""
         url = self._build_ollama_chat_url(PcIp)
@@ -1494,7 +1514,7 @@ class Plugin:
         )
 
         requires_vision = len(prepared_images) > 0
-        models_to_try = self._select_models(requires_vision)
+        models_to_try = self._select_models(requires_vision, ask_mode)
 
         try:
             loop = asyncio.get_running_loop()

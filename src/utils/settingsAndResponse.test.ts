@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   buildResponseText,
   DEFAULT_AI_CHARACTER_ACCENT_INTENSITY,
+  DEFAULT_ASK_MODE,
   DEFAULT_SCREENSHOT_MAX_DIMENSION,
   normalizeLatencyWarningSeconds,
   normalizeRequestTimeoutSeconds,
@@ -58,6 +59,12 @@ describe("settingsAndResponse", () => {
     expect(settings.ai_character_accent_intensity).toBe(DEFAULT_AI_CHARACTER_ACCENT_INTENSITY);
     expect(settings.preset_chip_fade_animation_enabled).toBe(true);
     expect(settings.input_sanitizer_user_disabled).toBe(false);
+    expect(settings.ask_mode).toBe(DEFAULT_ASK_MODE);
+  });
+
+  it("normalizes ask_mode to allowed ids", () => {
+    expect(normalizeSettings({ ask_mode: "deep" }).ask_mode).toBe("deep");
+    expect(normalizeSettings({ ask_mode: "bogus" as unknown as string }).ask_mode).toBe(DEFAULT_ASK_MODE);
   });
 
   it("normalizes desktop ask verbose logging: only explicit true enables", () => {

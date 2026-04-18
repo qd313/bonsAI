@@ -32,6 +32,17 @@ def sanitize_unified_input_persistence_mode(
     return default_mode
 
 
+def sanitize_ask_mode(
+    value: Any,
+    valid_modes: set[str],
+    default_mode: str,
+) -> str:
+    """Validate main-tab Ask mode strings and fall back to the configured default."""
+    if isinstance(value, str) and value in valid_modes:
+        return value
+    return default_mode
+
+
 def sanitize_desktop_debug_note_auto_save(value: Any) -> bool:
     """Only explicit true enables daily chat auto-save."""
     return value is True
@@ -106,6 +117,8 @@ def sanitize_settings(
     default_persistence_mode: str,
     valid_screenshot_dimensions: set[int],
     default_screenshot_dimension: int,
+    valid_ask_modes: set[str],
+    default_ask_mode: str,
 ) -> dict:
     """Normalize the full settings payload into a bounded, backend-safe settings object."""
     raw = data if isinstance(data, dict) else {}
@@ -160,6 +173,11 @@ def sanitize_settings(
         "ai_character_custom_text": sanitize_ai_character_custom_text(raw.get("ai_character_custom_text")),
         "ai_character_accent_intensity": sanitize_ai_character_accent_intensity(
             raw.get("ai_character_accent_intensity")
+        ),
+        "ask_mode": sanitize_ask_mode(
+            raw.get("ask_mode"),
+            valid_ask_modes,
+            default_ask_mode,
         ),
     }
 

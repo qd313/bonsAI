@@ -23,6 +23,8 @@ export const UNIFIED_TEXT_INSET_TOP_PX = 0;
 export const UNIFIED_TEXT_OVERLAY_BOTTOM_GAP_PX = 0;
 /** Ask primary label (slightly darker than prior `#eef4fb` for calmer contrast). */
 export const ASK_LABEL_COLOR = "#a8b4c4";
+/** Same chroma as `ASK_LABEL_COLOR` at 50% opacity (e.g. mode selector label to match Ask bar family). */
+export const ASK_LABEL_COLOR_50 = "rgba(168, 180, 196, 0.5)";
 /** Ask label when the prompt has text and Ask is idle — readable “ready” state without Steam accent yellow. */
 export const ASK_LABEL_READY_COLOR = "#d0dbe8";
 /** Duration (ms) for Ask bar idle → ready visual crossfade (glass overlay + label). */

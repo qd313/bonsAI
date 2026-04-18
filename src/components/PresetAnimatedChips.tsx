@@ -174,18 +174,24 @@ export function PresetAnimatedChips(props: PresetAnimatedChipsProps) {
 
   return (
     <>
-      {slots.map((p, i) => (
+      {slots.map((p, i) => {
+        const slotOpacity = slotFade[i]?.opacity ?? 0;
+        /** Faded-out chips (incl. after the 60s carousel session rests at opacity 0) must not stay in the Deck focus graph. */
+        const presetInteractive = !fadeAnimationEnabled || slotOpacity > 0;
+        return (
         <div
           key={`preset-slot-${i}`}
           className="bonsai-preset-carousel-slot"
+          data-bonsai-preset-visible={presetInteractive ? "true" : "false"}
           style={{
-            opacity: slotFade[i]?.opacity ?? 0,
+            opacity: slotOpacity,
             transition: `opacity ${slotFade[i]?.transitionMs ?? PRESET_CAROUSEL_FADE_IN_MS}ms ease-in-out`,
           }}
         >
           <Button
             key={`${i}-${p.text}`}
             className="bonsai-preset-glass"
+            focusable={presetInteractive}
             onClick={() => {
               const gameName = Router.MainRunningApp?.display_name ?? "";
               setUnifiedInput(gameName ? `${p.text} for ${gameName}` : p.text);
@@ -205,7 +211,8 @@ export function PresetAnimatedChips(props: PresetAnimatedChipsProps) {
             )}
           </Button>
         </div>
-      ))}
+        );
+      })}
     </>
   );
 }

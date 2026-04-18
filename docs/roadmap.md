@@ -57,6 +57,7 @@ Headings group related work. Star counts match the historical list.
 - [x] ★★ **Persist Last Question and Answer:** Restore prior session state when reopening QAM via Decky settings storage.
 - [x] ★★ **Unified Search + Ask Input:** Merge settings search and AI question entry into one shared input flow.
 - [x] ★ **Preset Chip Fade Opt-Out:** Settings `ToggleField` **Preset chip fade animation** (persisted `preset_chip_fade_animation_enabled`, default on). When off, main-tab suggestion chips stay opaque and rotate prompts without opacity transitions; post-Ask re-seed unchanged. `PresetAnimatedChips.tsx`, `MainTab.tsx`, `settingsAndResponse.ts`, `settings_service.py`.
+- [x] ★★★ **Mode selector (main screen):** Persisted `ask_mode` (`speed` / `strategy` / `deep`, UI labels Speed / Strategy / Deep). Compact outline control (green / bronze / gold) on the unified input strip, left of mic/stop, opens an anchored popover menu to change mode (no layout reflow); D-pad focus order is text field → mode → mic/stop. Backend orders Ollama model fallbacks per mode in `refactor_helpers.py`; `start_background_game_ai` includes `ask_mode`. `src/data/askMode.ts`, `src/components/AskModeMenuPopover.tsx`, `MainTab.tsx`, `index.tsx`, `settingsAndResponse.ts`, `settings_service.py`, `main.py`.
 
 **Baseline index:** preset carousel and transition UX (Phase 1 — fade/hold; manual arrows deferred).
 
@@ -208,19 +209,6 @@ Longer notes for backlog items: **Shipped feature reference** (extra context, de
 
 > **Planning only** — ranked by effort/risk (easiest to hardest within star bands). Do not treat as an implementation order.
 
-### Mode selector dropdown (main screen)
-
-★★★
-
-- **Goal:** Add model mode selector (`Fast`, `Strategy Guide`, `Mega/Ultra/Deep`) on main screen.
-- **Primary work:** UI selector + backend mode-to-model mapping + installed-model fallback.
-- **Behavior note:** `Strategy Guide` replaces the previous `Thinking` lane (rename/repurpose, not an added mode lane).
-- **Files:** `src/index.tsx`, `main.py`.
-- **Depends on:** none.
-- **Not in scope:** automatic model pulls from plugin UI.
-
-
-
 ### Per-mode latency/timeout profiles
 
 ★★★
@@ -228,7 +216,7 @@ Longer notes for backlog items: **Shipped feature reference** (extra context, de
 - **Goal:** Separate warning and timeout values per selected mode.
 - **Primary work:** mode-keyed settings schema and runtime value resolution.
 - **Files:** `main.py`, `src/index.tsx`.
-- **Depends on:** **Mode selector dropdown (main screen)**.
+- **Depends on:** **Mode selector (main screen)** (shipped).
 - **Not in scope:** per-game/per-model fine-grained profile matrix.
 
 
@@ -304,7 +292,7 @@ Longer notes for backlog items: **Shipped feature reference** (extra context, de
 - **Includes:** Steam Input-aware recommendations when control friction matters.
 - **Policy:** optional `Cheat / Fast Pass` only when user asks for speedrun/shortcut guidance.
 - **Files:** `src/index.tsx`, `main.py`, `prompt-testing.md`.
-- **Depends on:** **Mode selector dropdown (main screen)**.
+- **Depends on:** **Mode selector (main screen)** (shipped).
 - **Not in scope:** guaranteed perfect walkthroughs for every title.
 
 
@@ -516,7 +504,7 @@ Longer notes for backlog items: **Shipped feature reference** (extra context, de
 
 ## Cross-feature dependency summary
 
-- **Mode selector dropdown (main screen)** (`Strategy Guide` replaces `Thinking`) → **Per-mode latency/timeout profiles**, **Strategy Guide prompt path (beta)**.
+- **Mode selector (main screen)** (shipped: Speed / Strategy / Deep + model fallbacks) → **Per-mode latency/timeout profiles**, **Strategy Guide prompt path (beta)**.
 - **Character voice roleplay (shipped)** → baseline for **Character accent intensity (shipped)**; presets in [voice-character-catalog.md](voice-character-catalog.md), [src/data/characterCatalog.ts](../src/data/characterCatalog.ts).
 - **Character voice roleplay** + avatar mapping → **Higher-resolution character avatars (GTA-style art pass)**.
 - **Input sanitizer (shipped)** + **Input handling transparency (shipped)** → future sanitizer extensions should keep user-visible auditability.
@@ -538,7 +526,7 @@ Longer notes for backlog items: **Shipped feature reference** (extra context, de
 
 ```mermaid
 flowchart TD
-  modeSelector[ModeSelectorDropdownMainScreen] --> perModeProfiles[PerModeLatencyTimeoutProfiles]
+  modeSelector[ModeSelectorMainScreenShipped] --> perModeProfiles[PerModeLatencyTimeoutProfiles]
   modeSelector --> strategyPath[StrategyGuidePromptPathBeta]
   strategyPath --> strategySafety[StrategyGuideSafetyAndSpoilers]
   strategyPath --> strategyChecklist[StrategyChecklistWorkflowChatScoped]

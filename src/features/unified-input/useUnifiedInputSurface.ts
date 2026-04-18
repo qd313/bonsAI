@@ -80,13 +80,22 @@ export function useUnifiedInputSurface(currentTab: string, unifiedInput: string)
     if (askEl) {
       const ul = host.getBoundingClientRect().left;
       const al = askEl.getBoundingClientRect().left;
-      const leftDelta = Math.round((ul - al) * 100) / 100;
+      /* CSS var --bonsai-ask-margin-left on the scope root already contributes to al; subtract it
+       * to recover the raw geometric delta so successive remeasures do not compound the correction. */
+      const scopeEl = bonsaiScopeRef.current;
+      const currentCorrection = scopeEl
+        ? parseFloat(scopeEl.style.getPropertyValue("--bonsai-ask-margin-left")) || 0
+        : 0;
+      const rawAskLeft = al - currentCorrection;
+      const leftDelta = Math.round((ul - rawAskLeft) * 100) / 100;
       if (askLeftCorrectionPxRef.current == null && Math.abs(leftDelta) > 0.5) {
         askLeftCorrectionPxRef.current = leftDelta;
       }
       const appliedAskShift = askLeftCorrectionPxRef.current ?? 0;
       const marginLeftPx = Math.round((appliedAskShift + ASK_BAR_LAYOUT_SHIFT_RIGHT_PX) * 100) / 100;
-      askEl.style.marginLeft = `${marginLeftPx}px`;
+      /* Route correction through a CSS var + CSS rule rather than askEl.style.marginLeft: React
+       * re-renders wipe ref-set inline styles on the ask bar element, but scope-level CSS vars survive. */
+      scopeEl?.style.setProperty("--bonsai-ask-margin-left", `${marginLeftPx}px`);
     }
   }, []);
 
@@ -100,6 +109,7 @@ export function useUnifiedInputSurface(currentTab: string, unifiedInput: string)
       askLeftCorrectionPxRef.current = null;
       lastUnifiedHostWRef.current = 0;
       bonsaiScopeRef.current?.style.removeProperty("--bonsai-askbar-outer-width");
+      bonsaiScopeRef.current?.style.removeProperty("--bonsai-ask-margin-left");
     }
   }, [currentTab]);
 

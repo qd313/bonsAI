@@ -5,6 +5,7 @@ import type { PresetPrompt } from "../data/presets";
 import { PresetAnimatedChips } from "./PresetAnimatedChips";
 import {
   ASK_BAR_PRIMARY_MIN_HEIGHT_PX,
+  ASK_LABEL_COLOR_50,
   UNIFIED_INPUT_ICON_STRIP_PX,
   UNIFIED_TEXT_BODY_MAX_PX,
   UNIFIED_TEXT_FONT_PX,
@@ -30,6 +31,8 @@ import {
 } from "./icons";
 import { CharacterRoleplayEmoticon } from "./CharacterRoleplayEmoticon";
 import type { TransparencySnapshot } from "../utils/inputTransparency";
+import { ASK_MODE_LABELS, ASK_MODE_OUTLINE, type AskModeId } from "../data/askMode";
+import { AskModeMenuPopover } from "./AskModeMenuPopover";
 
 export type MainTabProps = {
   fullBleedRowStyle: React.CSSProperties;
@@ -97,6 +100,9 @@ export type MainTabProps = {
   transparencySnapshot?: TransparencySnapshot | null;
   /** Restore unified Ask text to the raw user input from the snapshot. */
   onRunOriginalAsk?: (rawQuestion: string) => void;
+  /** Main-tab inference mode (persisted; drives Ollama model fallback ordering). */
+  askMode: AskModeId;
+  onAskModeChange: (mode: AskModeId) => void;
 };
 
 export function MainTab(props: MainTabProps) {
@@ -156,6 +162,8 @@ export function MainTab(props: MainTabProps) {
     aiCharacterDebugLine = null,
     transparencySnapshot = null,
     onRunOriginalAsk,
+    askMode,
+    onAskModeChange,
   } = props;
 
   const [transparencyOpen, setTransparencyOpen] = useState(false);
@@ -203,9 +211,27 @@ export function MainTab(props: MainTabProps) {
     return true;
   }, [showAiCharacterChrome, unifiedInputFieldLayerRef]);
   const presetCarouselHostRef = React.useRef<HTMLDivElement | null>(null);
+  const askModeMenuAnchorRef = React.useRef<HTMLDivElement | null>(null);
+  const askModeMenuFirstItemRef = React.useRef<HTMLDivElement | null>(null);
+  const [askModeMenuOpen, setAskModeMenuOpen] = useState(false);
+  /** Deck delivers many OK/click events per physical tap; collapse to one toggle per gesture. */
+  const askModeToggleOnceRef = React.useRef(false);
+  const toggleAskModeMenu = React.useCallback(() => {
+    if (askModeToggleOnceRef.current) return;
+    askModeToggleOnceRef.current = true;
+    setAskModeMenuOpen((o) => !o);
+    queueMicrotask(() => {
+      askModeToggleOnceRef.current = false;
+    });
+  }, []);
+  const closeAskModeMenu = React.useCallback(() => {
+    setAskModeMenuOpen(false);
+  }, []);
   const focusFirstPresetChip = React.useCallback((): boolean => {
     const host = presetCarouselHostRef.current;
-    const btn = host?.querySelector<HTMLElement>("button.bonsai-preset-glass");
+    const btn = host?.querySelector<HTMLElement>(
+      '.bonsai-preset-carousel-slot[data-bonsai-preset-visible="true"] button.bonsai-preset-glass',
+    );
     if (!btn) return false;
     btn.focus();
     return true;
@@ -234,15 +260,27 @@ export function MainTab(props: MainTabProps) {
     btn.focus();
     return true;
   }, [attachActionHostRef]);
+  const focusAskModeButton = React.useCallback((): boolean => {
+    const host =
+      attachActionHostRef &&
+      typeof attachActionHostRef === "object" &&
+      "current" in attachActionHostRef
+        ? (attachActionHostRef as React.RefObject<HTMLDivElement | null>).current
+        : null;
+    const btn = host?.querySelector<HTMLElement>("button.bonsai-ask-mode-trigger");
+    if (!btn) return false;
+    btn.focus();
+    return true;
+  }, [attachActionHostRef]);
   const unifiedInputDeckNavHandlers = React.useMemo(
     () =>
       ({
         onMoveUp: () => focusFirstPresetChip(),
         onMoveLeft: () => focusAttachPaperclip(),
         onMoveDown: () => focusAskPrimary(),
-        onMoveRight: () => focusMicOrStop(),
+        onMoveRight: () => focusAskModeButton(),
       }) as Record<string, unknown>,
-    [focusAskPrimary, focusAttachPaperclip, focusFirstPresetChip, focusMicOrStop],
+    [focusAskPrimary, focusAttachPaperclip, focusFirstPresetChip, focusAskModeButton],
   );
   const avatarDeckNavHandlers = React.useMemo(
     () =>
@@ -275,7 +313,8 @@ export function MainTab(props: MainTabProps) {
             ref={unifiedInputHostRef}
             className={
               "bonsai-unified-input-host bonsai-glass-panel bonsai-full-bleed-row" +
-              (aiCharacterPadClass ? " bonsai-unified-input--ai-character" : "")
+              (aiCharacterPadClass ? " bonsai-unified-input--ai-character" : "") +
+              (askModeMenuOpen ? " bonsai-ask-mode-menu-open" : "")
             }
             style={fullBleedRowStyle}
           >
@@ -448,7 +487,7 @@ export function MainTab(props: MainTabProps) {
                   right: 0,
                   bottom: 0,
                   height: UNIFIED_INPUT_ICON_STRIP_PX,
-                  zIndex: 5,
+                  zIndex: 25,
                   margin: 0,
                   padding: 0,
                   boxSizing: "border-box",
@@ -471,7 +510,7 @@ export function MainTab(props: MainTabProps) {
                   <Button
                     className="bonsai-askbar-target bonsai-unified-input-corner-left"
                     {...({
-                      onMoveRight: () => focusUnifiedTextField(),
+                      onMoveRight: () => focusAskModeButton(),
                       ...(showAiCharacterChrome ? { onMoveUp: () => focusAiCharacterAvatar() } : {}),
                     } as Record<string, unknown>)}
                     onClick={onOpenScreenshotBrowser}
@@ -527,62 +566,136 @@ export function MainTab(props: MainTabProps) {
                       )}
                     </span>
                   </Button>
-                  {isAsking ? (
+                  <Focusable
+                    className="bonsai-unified-input-actions-right"
+                    flow-children="horizontal"
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      flexWrap: "nowrap",
+                      alignItems: "flex-end",
+                      justifyContent: "flex-end",
+                      gap: 5,
+                      flexShrink: 0,
+                      margin: 0,
+                      padding: 0,
+                    }}
+                  >
+                    <div ref={askModeMenuAnchorRef} style={{ display: "inline-flex", flexShrink: 0, position: "relative" }}>
                     <Button
-                      className="bonsai-askbar-target bonsai-unified-input-corner-right"
+                      className="bonsai-askbar-target bonsai-ask-mode-trigger"
                       {...({
-                        onMoveLeft: () => focusUnifiedTextField(),
+                        onMoveLeft: () => focusAttachPaperclip(),
+                        onMoveRight: () => focusMicOrStop(),
+                        ...(askModeMenuOpen
+                          ? {
+                              onMoveDown: () => {
+                                askModeMenuFirstItemRef.current?.focus();
+                                return true;
+                              },
+                            }
+                          : {}),
+                        onOKButton: (evt: { stopPropagation: () => void }) => {
+                          evt.stopPropagation();
+                          toggleAskModeMenu();
+                        },
                       } as Record<string, unknown>)}
-                      onClick={onCancelAsk}
-                      aria-label="Stop generation"
+                      onClick={toggleAskModeMenu}
+                      aria-expanded={askModeMenuOpen}
+                      aria-haspopup="menu"
+                      aria-label={`Inference mode: ${ASK_MODE_LABELS[askMode]}. Open to change.`}
                       style={{
-                        minWidth: 20,
-                        width: 20,
                         minHeight: 20,
-                        padding: 0,
+                        height: 20,
+                        padding: "0 5px",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        borderRadius: 0,
-                        border: "none",
+                        borderRadius: 3,
+                        border: `1px solid ${ASK_MODE_OUTLINE[askMode]}`,
                         background: "transparent",
+                        color: ASK_LABEL_COLOR_50,
                         flexShrink: 0,
-                        transform: "translateX(2px)",
+                        fontSize: 10,
+                        fontWeight: 600,
+                        fontVariant: "small-caps",
+                        letterSpacing: 0.15,
+                        lineHeight: 1,
+                        maxWidth: 76,
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        boxSizing: "border-box",
                       }}
                     >
-                      <span className="bonsai-unified-input-icon">
-                        <AskStopIcon size={20} />
-                      </span>
+                      {ASK_MODE_LABELS[askMode]}
                     </Button>
-                  ) : (
-                    <Button
-                      className="bonsai-askbar-target bonsai-unified-input-corner-right"
-                      {...({
-                        onMoveLeft: () => focusUnifiedTextField(),
-                      } as Record<string, unknown>)}
-                      onClick={onMicInput}
-                      aria-label="Voice input"
-                      style={{
-                        minWidth: 20,
-                        width: 20,
-                        minHeight: 20,
-                        padding: 0,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        borderRadius: 0,
-                        border: "none",
-                        background: "transparent",
-                        color: "#dbe6f3",
-                        flexShrink: 0,
-                        transform: "translateX(2px)",
-                      }}
-                    >
-                      <span className="bonsai-unified-input-icon">
-                        <AskMicIcon size={16} />
-                      </span>
-                    </Button>
-                  )}
+                    <AskModeMenuPopover
+                      open={askModeMenuOpen}
+                      firstMenuItemRef={askModeMenuFirstItemRef}
+                      selectedId={askMode}
+                      onSelect={onAskModeChange}
+                      onRequestClose={closeAskModeMenu}
+                      onFocusModeChip={focusAskModeButton}
+                    />
+                    </div>
+                    {isAsking ? (
+                      <Button
+                        className="bonsai-askbar-target bonsai-unified-input-corner-right"
+                        {...({
+                          onMoveLeft: () => focusAskModeButton(),
+                        } as Record<string, unknown>)}
+                        onClick={onCancelAsk}
+                        aria-label="Stop generation"
+                        style={{
+                          minWidth: 20,
+                          width: 20,
+                          minHeight: 20,
+                          padding: 0,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          borderRadius: 0,
+                          border: "none",
+                          background: "transparent",
+                          flexShrink: 0,
+                          transform: "translateX(2px)",
+                        }}
+                      >
+                        <span className="bonsai-unified-input-icon">
+                          <AskStopIcon size={20} />
+                        </span>
+                      </Button>
+                    ) : (
+                      <Button
+                        className="bonsai-askbar-target bonsai-unified-input-corner-right"
+                        {...({
+                          onMoveLeft: () => focusAskModeButton(),
+                        } as Record<string, unknown>)}
+                        onClick={onMicInput}
+                        aria-label="Voice input"
+                        style={{
+                          minWidth: 20,
+                          width: 20,
+                          minHeight: 20,
+                          padding: 0,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          borderRadius: 0,
+                          border: "none",
+                          background: "transparent",
+                          color: "#dbe6f3",
+                          flexShrink: 0,
+                          transform: "translateX(2px)",
+                        }}
+                      >
+                        <span className="bonsai-unified-input-icon">
+                          <AskMicIcon size={16} />
+                        </span>
+                      </Button>
+                    )}
+                  </Focusable>
                 </Focusable>
               </div>
             </div>

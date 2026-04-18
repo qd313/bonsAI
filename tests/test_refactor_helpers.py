@@ -36,6 +36,10 @@ class RefactorHelperTests(unittest.TestCase):
         """Ensure text and vision paths expose expected fallback model families."""
         self.assertIn("llama3:latest", select_ollama_models(False))
         self.assertIn("llava:latest", select_ollama_models(True))
+        self.assertEqual(select_ollama_models(False, "speed")[0], "llama3:latest")
+        self.assertEqual(select_ollama_models(False, "deep")[0], "gemma4:latest")
+        self.assertEqual(select_ollama_models(True, "deep")[0], "qwen2.5vl:latest")
+        self.assertEqual(select_ollama_models(False, "invalid")[0], "llama3:latest")
 
     def test_parse_tdp_recommendation_fenced_json(self):
         """Verify fenced JSON recommendations are parsed and clamped to safe hardware bounds."""

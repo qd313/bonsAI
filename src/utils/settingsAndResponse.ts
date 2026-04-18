@@ -7,8 +7,11 @@ import {
   DEFAULT_AI_CHARACTER_ACCENT_INTENSITY,
   type AiCharacterAccentIntensityId,
 } from "../data/aiCharacterAccentIntensity";
+import type { AskModeId } from "../data/askMode";
+import { ASK_MODE_IDS } from "../data/askMode";
 import { AI_CHARACTER_CUSTOM_TEXT_MAX, isValidPresetId } from "../data/characterCatalog";
 export type UnifiedInputPersistenceMode = "persist_all" | "persist_search_only" | "no_persist";
+export type { AskModeId };
 export type ScreenshotMaxDimension = 1280 | 1920 | 3160;
 
 /** High-impact capability toggles; keep keys aligned with backend `capabilities` and Permission Center UI. */
@@ -41,6 +44,8 @@ export type BonsaiSettings = {
   ai_character_custom_text: string;
   /** How strongly to lean into accent/dialect for character replies (backend system prompt). */
   ai_character_accent_intensity: AiCharacterAccentIntensityId;
+  /** Main-tab Ask inference mode (ordered Ollama model fallbacks on the backend). */
+  ask_mode: AskModeId;
 };
 
 export type AppliedResultLike = {
@@ -64,6 +69,7 @@ export const DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE = false;
 export const DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING = false;
 export const DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED = true;
 export const DEFAULT_INPUT_SANITIZER_USER_DISABLED = false;
+export const DEFAULT_ASK_MODE: AskModeId = "speed";
 
 export const DEFAULT_CAPABILITIES: BonsaiCapabilities = {
   filesystem_write: false,
@@ -186,6 +192,15 @@ export function normalizeInputSanitizerUserDisabled(value: unknown): boolean {
   return value === true;
 }
 
+const _askModeSet = new Set<string>(ASK_MODE_IDS);
+
+export function normalizeAskMode(value: unknown): AskModeId {
+  if (typeof value === "string" && _askModeSet.has(value)) {
+    return value as AskModeId;
+  }
+  return DEFAULT_ASK_MODE;
+}
+
 export function normalizeAiCharacterEnabled(value: unknown): boolean {
   return value === true;
 }
@@ -256,6 +271,7 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     ai_character_preset_id: normalizeAiCharacterPresetId(raw.ai_character_preset_id),
     ai_character_custom_text: normalizeAiCharacterCustomText(raw.ai_character_custom_text),
     ai_character_accent_intensity: normalizeAiCharacterAccentIntensity(raw.ai_character_accent_intensity),
+    ask_mode: normalizeAskMode(raw.ask_mode),
   };
 }
 

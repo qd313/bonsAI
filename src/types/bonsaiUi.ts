@@ -24,3 +24,9 @@ export type ScreenshotItem = {
 };
 
 export type OllamaContextUi = { app_id: string; app_context: "active" | "none" } | null;
+
+/** Parsed from Ollama when Ask mode is Strategy Guide and the model emitted a branch picker block. */
+export type StrategyGuideBranchesPayload = {
+  question: string;
+  options: { id: string; label: string }[];
+};

@@ -5,7 +5,7 @@ export const ASK_MODE_IDS: readonly AskModeId[] = ["speed", "strategy", "deep"];
 
 export const ASK_MODE_LABELS: Record<AskModeId, string> = {
   speed: "Speed",
-  strategy: "Strategy",
+  strategy: "Strategy Guide",
   deep: "Expert",
 };
 

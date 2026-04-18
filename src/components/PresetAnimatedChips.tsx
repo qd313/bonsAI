@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Button, Router } from "@decky/ui";
+import type { AskModeId } from "../data/askMode";
 import {
   getRandomPresetExcluding,
   getRandomPresets,
@@ -40,6 +41,8 @@ export type PresetAnimatedChipsProps = {
   setUnifiedInput: React.Dispatch<React.SetStateAction<string>>;
   /** When false, chips stay fully opaque and prompts rotate after hold without opacity transitions. */
   fadeAnimationEnabled?: boolean;
+  /** If a preset declares `preferAskMode`, apply it when the chip is chosen. */
+  onPreferAskMode?: (mode: AskModeId) => void;
 };
 
 /**
@@ -54,7 +57,7 @@ const staticSlotFade = (): [SlotFade, SlotFade, SlotFade] => [
 ];
 
 export function PresetAnimatedChips(props: PresetAnimatedChipsProps) {
-  const { seeds, setUnifiedInput, fadeAnimationEnabled = true } = props;
+  const { seeds, setUnifiedInput, fadeAnimationEnabled = true, onPreferAskMode } = props;
   const seedsKey = seeds.map((s) => s.text).join("\u0000");
 
   const [slots, setSlots] = useState<[PresetPrompt, PresetPrompt, PresetPrompt]>(() => normalizeThreeSeeds(seeds));
@@ -195,6 +198,9 @@ export function PresetAnimatedChips(props: PresetAnimatedChipsProps) {
             onClick={() => {
               const gameName = Router.MainRunningApp?.display_name ?? "";
               setUnifiedInput(gameName ? `${p.text} for ${gameName}` : p.text);
+              if (p.preferAskMode && onPreferAskMode) {
+                onPreferAskMode(p.preferAskMode);
+              }
             }}
             style={{
               width: "100%",

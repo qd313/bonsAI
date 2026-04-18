@@ -9,9 +9,15 @@ import {
 } from "../data/aiCharacterAccentIntensity";
 import type { AskModeId } from "../data/askMode";
 import { ASK_MODE_IDS } from "../data/askMode";
+import {
+  DEFAULT_OLLAMA_KEEP_ALIVE,
+  isOllamaKeepAliveDuration,
+  type OllamaKeepAliveDuration,
+} from "../data/ollamaKeepAlive";
 import { AI_CHARACTER_CUSTOM_TEXT_MAX, isValidPresetId } from "../data/characterCatalog";
 export type UnifiedInputPersistenceMode = "persist_all" | "persist_search_only" | "no_persist";
 export type { AskModeId };
+export type { OllamaKeepAliveDuration };
 export type ScreenshotMaxDimension = 1280 | 1920 | 3160;
 
 /** High-impact capability toggles; keep keys aligned with backend `capabilities` and Permission Center UI. */
@@ -46,6 +52,8 @@ export type BonsaiSettings = {
   ai_character_accent_intensity: AiCharacterAccentIntensityId;
   /** Main-tab Ask inference mode (ordered Ollama model fallbacks on the backend). */
   ask_mode: AskModeId;
+  /** Ollama `keep_alive` for each Ask (how long the model stays in VRAM on the host after the request). */
+  ollama_keep_alive: OllamaKeepAliveDuration;
 };
 
 export type AppliedResultLike = {
@@ -70,6 +78,7 @@ export const DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING = false;
 export const DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED = true;
 export const DEFAULT_INPUT_SANITIZER_USER_DISABLED = false;
 export const DEFAULT_ASK_MODE: AskModeId = "speed";
+export { DEFAULT_OLLAMA_KEEP_ALIVE };
 
 export const DEFAULT_CAPABILITIES: BonsaiCapabilities = {
   filesystem_write: false,
@@ -201,6 +210,13 @@ export function normalizeAskMode(value: unknown): AskModeId {
   return DEFAULT_ASK_MODE;
 }
 
+export function normalizeOllamaKeepAlive(value: unknown): OllamaKeepAliveDuration {
+  if (typeof value === "string" && isOllamaKeepAliveDuration(value)) {
+    return value;
+  }
+  return DEFAULT_OLLAMA_KEEP_ALIVE;
+}
+
 export function normalizeAiCharacterEnabled(value: unknown): boolean {
   return value === true;
 }
@@ -272,6 +288,7 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     ai_character_custom_text: normalizeAiCharacterCustomText(raw.ai_character_custom_text),
     ai_character_accent_intensity: normalizeAiCharacterAccentIntensity(raw.ai_character_accent_intensity),
     ask_mode: normalizeAskMode(raw.ask_mode),
+    ollama_keep_alive: normalizeOllamaKeepAlive(raw.ollama_keep_alive),
   };
 }
 

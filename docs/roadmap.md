@@ -19,6 +19,9 @@ Star ratings use the GTA scale: `★` easiest … `★★★★★` very high co
 
 ## Up next
 
+- [ ] ★★ **Ollama model VRAM retention:** Plugin-side setting for how long the Ollama host keeps the loaded model in VRAM after a request completes (maps to Ollama **`keep_alive`** on each generate/chat call). **Default: 5 minutes.** Shorter values free VRAM sooner for other GPU work; longer values reduce cold-load latency when asking again in quick succession.
+  - **Shorter than default:** 3 min, 2 min, 1 min, 30 s, 15 s, **0** (unload immediately after the request).
+  - **Longer than default:** 15, 30, 45, 60, 120, 240 **minutes**.
 - [ ] ★★ **Prompt Testing and Tuning:** Systematically validate prompt quality across games and scenarios (see [prompt-testing.md](prompt-testing.md)).
 - [ ] ★★★ **QAMP Verification Checklist:** Verify behavior across per-game profile modes, QAM reopen, Steam restart/reboot, and GPU-related recommendations.
   - [ ] Verify behavior with per-game profile on/off.
@@ -218,6 +221,20 @@ Longer notes for backlog items: **Shipped feature reference** (extra context, de
 - **Files:** `main.py`, `src/index.tsx`.
 - **Depends on:** **Mode selector (main screen)** (shipped).
 - **Not in scope:** per-game/per-model fine-grained profile matrix.
+
+
+
+### Ollama model VRAM retention (keep_alive)
+
+★★
+
+- **Goal:** Let users tune how long the Ollama server keeps the model resident in VRAM after each Ask completes, trading VRAM headroom on the host against reload latency for the next request.
+- **Primary work:** Persisted plugin setting; pass the chosen duration into Ollama on each relevant API call (`keep_alive`); Settings UI with fixed presets (no free-form typing).
+- **Default:** 5 minutes.
+- **Preset list:** **0** (eject immediately), 15 s, 30 s, 1 / 2 / 3 min (shorter than default), **5 min** (default), then 15 / 30 / 45 / 60 / 120 / 240 min (longer than default).
+- **Files:** `main.py`, `backend/services/ollama_service.py`, Settings surface in `src/index.tsx`, `settings_service.py`, `settingsAndResponse.ts`.
+- **Depends on:** Decky → Ollama request path and settings persistence (shipped baseline under **Connection, routing, diagnostics, and timeouts**).
+- **Not in scope:** Per-model or per-game retention profiles; editing the Ollama daemon’s global config on disk outside what each request specifies.
 
 
 

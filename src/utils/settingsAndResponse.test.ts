@@ -3,6 +3,7 @@ import {
   buildResponseText,
   DEFAULT_AI_CHARACTER_ACCENT_INTENSITY,
   DEFAULT_ASK_MODE,
+  DEFAULT_OLLAMA_KEEP_ALIVE,
   DEFAULT_SCREENSHOT_MAX_DIMENSION,
   normalizeLatencyWarningSeconds,
   normalizeRequestTimeoutSeconds,
@@ -60,6 +61,12 @@ describe("settingsAndResponse", () => {
     expect(settings.preset_chip_fade_animation_enabled).toBe(true);
     expect(settings.input_sanitizer_user_disabled).toBe(false);
     expect(settings.ask_mode).toBe(DEFAULT_ASK_MODE);
+    expect(settings.ollama_keep_alive).toBe(DEFAULT_OLLAMA_KEEP_ALIVE);
+  });
+
+  it("normalizes ollama_keep_alive to allowed duration tokens", () => {
+    expect(normalizeSettings({ ollama_keep_alive: "30s" }).ollama_keep_alive).toBe("30s");
+    expect(normalizeSettings({ ollama_keep_alive: "bogus" }).ollama_keep_alive).toBe(DEFAULT_OLLAMA_KEEP_ALIVE);
   });
 
   it("normalizes ask_mode to allowed ids", () => {

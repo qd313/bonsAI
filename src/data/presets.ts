@@ -1,8 +1,16 @@
+import type { AskModeId } from "./askMode";
+
 /**
  * This module owns preset prompt suggestions and category heuristics used by the chat composer.
  * Isolating this data and logic keeps conversational UX tuning separate from view-layer code.
  */
-export type PresetPrompt = { text: string; category: string; beta?: boolean };
+export type PresetPrompt = {
+  text: string;
+  category: string;
+  beta?: boolean;
+  /** When set, tapping this chip also switches Ask mode (e.g. Strategy Guide). */
+  preferAskMode?: AskModeId;
+};
 
 const PRESET_PROMPTS: PresetPrompt[] = [
   { text: "Optimize for battery life", category: "battery" },
@@ -29,6 +37,9 @@ const PRESET_PROMPTS: PresetPrompt[] = [
   { text: "Analyze my controller config", category: "controls", beta: true },
   { text: "Check my Proton logs for errors", category: "troubleshooting", beta: true },
   { text: "Suggest mods or tweaks for this game", category: "general", beta: true },
+  { text: "How do I get past this part?", category: "strategy", preferAskMode: "strategy" },
+  { text: "I'm stuck — what should I try next?", category: "strategy", preferAskMode: "strategy" },
+  { text: "Help me beat this boss or encounter", category: "strategy", preferAskMode: "strategy" },
 ];
 
 const FOLLOW_UP_CATEGORIES: Record<string, string[]> = {
@@ -38,6 +49,7 @@ const FOLLOW_UP_CATEGORIES: Record<string, string[]> = {
   controls: ["controls", "troubleshooting", "general"],
   troubleshooting: ["troubleshooting", "performance", "general"],
   general: ["general", "performance", "battery"],
+  strategy: ["strategy", "general", "troubleshooting"],
 };
 
 const CATEGORY_KEYWORDS: [string, string[]][] = [
@@ -47,6 +59,22 @@ const CATEGORY_KEYWORDS: [string, string[]][] = [
   ["controls", ["controller", "layout", "input", "button", "joystick", "trackpad"]],
   ["troubleshooting", ["crash", "stutter", "fix", "error", "bug", "issue", "problem", "lag", "proton", "launch", "won't"]],
   ["general", ["compatibility", "verified", "run on deck"]],
+  [
+    "strategy",
+    [
+      "stuck",
+      "beat",
+      "boss",
+      "puzzle",
+      "level",
+      "walkthrough",
+      "how do i",
+      "can't get",
+      "progress",
+      "temple",
+      "dungeon",
+    ],
+  ],
 ];
 
 export function getRandomPresets(count: number): PresetPrompt[] {

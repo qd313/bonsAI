@@ -24,6 +24,19 @@ class AiCharacterServiceTests(unittest.TestCase):
         self.assertIn("Cyberpunk 2077", out)
         self.assertIn("CHARACTER VOICE", out)
         self.assertIn("Delivery must reflect:", out)
+        self.assertNotIn("STRATEGY GUIDE / AUDIOBOOK", out)
+
+    def test_strategy_mode_adds_audiobook_framing(self):
+        out = build_roleplay_system_suffix(
+            {
+                "ai_character_enabled": True,
+                "ai_character_random": False,
+                "ai_character_preset_id": "cp2077_jackie",
+                "ai_character_custom_text": "",
+            },
+            ask_mode="strategy",
+        )
+        self.assertIn("STRATEGY GUIDE / AUDIOBOOK FRAMING", out)
 
     def test_preset_accent_intensity_subtle(self):
         out = build_roleplay_system_suffix(

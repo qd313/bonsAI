@@ -58,6 +58,13 @@ _ROLEPLAY_TECH_FOOTER = (
     "When recommending TDP or GPU clock changes, still include the required JSON block exactly as usual."
 )
 
+_STRATEGY_AUDIOBOOK_ADDON = (
+    "STRATEGY GUIDE / AUDIOBOOK FRAMING: The player is in Strategy Guide mode. Treat your reply as read-aloud "
+    "strategy narration—like an audiobook or director's commentary—while staying helpful and accurate. "
+    "Sprinkle occasional fourth-wall beats about the narration itself (e.g. griping at stage directions, asides about "
+    "the script) in character, without drowning out the gameplay help or breaking required JSON fences."
+)
+
 
 def sanitize_ai_character_enabled(value: Any) -> bool:
     return value is True
@@ -178,23 +185,28 @@ def _custom_body(custom: str, intensity: str) -> str:
     )
 
 
-def build_roleplay_system_suffix(settings: dict[str, Any]) -> str:
+def build_roleplay_system_suffix(settings: dict[str, Any], ask_mode: str = "speed") -> str:
     """Return text to append to the system message when AI character mode is active."""
     if not settings.get("ai_character_enabled"):
         return ""
 
     intensity = sanitize_ai_character_accent_intensity(settings.get("ai_character_accent_intensity"))
 
+    def _maybe_strategy_addon(text: str) -> str:
+        if ask_mode != "strategy":
+            return text
+        return text + "\n\n" + _STRATEGY_AUDIOBOOK_ADDON
+
     if sanitize_ai_character_random(settings.get("ai_character_random")):
         choice = random.choice(_CHARACTER_ROWS)
         _wid, work, char, hint = choice
         body = _preset_or_random_body(work, char, hint, intensity)
-        return "\n\n" + _clean_control_chars(body)
+        return "\n\n" + _clean_control_chars(_maybe_strategy_addon(body))
 
     custom = sanitize_ai_character_custom_text(settings.get("ai_character_custom_text"))
     if custom:
         body = _custom_body(custom, intensity)
-        return "\n\n" + _clean_control_chars(body)
+        return "\n\n" + _clean_control_chars(_maybe_strategy_addon(body))
 
     preset_id = sanitize_ai_character_preset_id(settings.get("ai_character_preset_id"))
     if not preset_id:
@@ -205,4 +217,4 @@ def build_roleplay_system_suffix(settings: dict[str, Any]) -> str:
         return ""
     _wid, work, char, hint = row
     body = _preset_or_random_body(work, char, hint, intensity)
-    return "\n\n" + _clean_control_chars(body)
+    return "\n\n" + _clean_control_chars(_maybe_strategy_addon(body))

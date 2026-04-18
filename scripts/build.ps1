@@ -17,6 +17,11 @@ $HostIp     = $DECK_IP
 $User       = $DECK_USER
 $PluginName = "bonsAI"
 
+# Reliability: this script can occasionally fail or appear stuck during the `scp` upload
+# or while the remote step overwrites system files / restarts Decky Loader. If there is
+# no output or progress for about 60 seconds, kill the process (Ctrl+C) and run the
+# script again — a second run usually succeeds.
+
 # Install dependencies (only needed once or when adding new packages)
 pnpm install
 

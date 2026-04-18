@@ -34,6 +34,7 @@ from backend.services.settings_service import (
     clamp_int,
     load_settings as load_settings_from_disk,
     sanitize_ask_mode,
+    sanitize_ollama_keep_alive,
     sanitize_screenshot_max_dimension,
     sanitize_settings,
     sanitize_unified_input_persistence_mode,
@@ -172,6 +173,7 @@ class Plugin:
             "error": None,
             "started_at": None,
             "completed_at": None,
+            "strategy_guide_branches": None,
         }
 
     def _ensure_background_state(self) -> None:
@@ -1114,6 +1116,7 @@ class Plugin:
                 "app_context": app_context,
                 "applied": applied,
                 "elapsed_seconds": elapsed,
+                "strategy_guide_branches": ollama_result.get("strategy_guide_branches"),
             }
         except Exception as exc:
             elapsed = round(time.time() - start, 1)
@@ -1149,6 +1152,7 @@ class Plugin:
                 "app_context": app_context,
                 "applied": None,
                 "elapsed_seconds": elapsed,
+                "strategy_guide_branches": None,
             }
 
     async def ask_game_ai(self, question: Any = "", PcIp: str = ""):
@@ -1206,6 +1210,7 @@ class Plugin:
                 "elapsed_seconds": result.get("elapsed_seconds", 0),
                 "error": None if success else response_text,
                 "completed_at": time.time(),
+                "strategy_guide_branches": result.get("strategy_guide_branches"),
             }
 
     async def start_background_game_ai(self, question: Any = "", PcIp: str = ""):
@@ -1329,6 +1334,7 @@ class Plugin:
                         "error": None,
                         "started_at": now,
                         "completed_at": now,
+                        "strategy_guide_branches": None,
                     }
                     plugin._background_task = None
                     return {
@@ -1359,6 +1365,7 @@ class Plugin:
                 "error": None,
                 "started_at": time.time(),
                 "completed_at": None,
+                "strategy_guide_branches": None,
             }
             plugin._background_task = asyncio.create_task(
                 plugin._run_background_request(
@@ -1398,6 +1405,7 @@ class Plugin:
                         "response": f"Backend error: {exc}",
                         "error": f"Backend error: {exc}",
                         "completed_at": time.time(),
+                        "strategy_guide_branches": None,
                     }
             return dict(plugin._background_state)
 
@@ -1408,6 +1416,7 @@ class Plugin:
         app_name: str,
         normalized_attachments: list,
         prepared_images: list,
+        ask_mode: str = "speed",
     ) -> str:
         """Build the system prompt using plugin-local metadata lookups and attachment context."""
         return build_system_prompt(
@@ -1418,6 +1427,7 @@ class Plugin:
             prepared_images=prepared_images,
             lookup_app_name=Plugin._lookup_steam_app_name,
             lookup_screenshot_vdf_metadata=Plugin._lookup_screenshot_vdf_metadata,
+            ask_mode=ask_mode,
         )
 
     @staticmethod
@@ -1445,6 +1455,8 @@ class Plugin:
         prepared_images: list,
         attachment_warnings: list,
         attachment_errors: list,
+        ask_mode: str = "speed",
+        keep_alive: str = "5m",
     ) -> dict:
         """Execute one Ollama request attempt through the shared service transport helper."""
         return post_ollama_chat(
@@ -1457,6 +1469,8 @@ class Plugin:
             attachment_warnings=attachment_warnings,
             attachment_errors=attachment_errors,
             logger=logger,
+            ask_mode=ask_mode,
+            keep_alive=keep_alive,
         )
 
     async def ask_ollama(
@@ -1478,6 +1492,7 @@ class Plugin:
             if isinstance(a, dict) and str(a.get("path", "") or "").strip()
         ]
         settings = await self.load_settings()
+        keep_alive = sanitize_ollama_keep_alive(settings.get("ollama_keep_alive"))
         screenshot_max_dimension = Plugin._sanitize_screenshot_max_dimension(
             settings.get("screenshot_max_dimension")
         )
@@ -1491,8 +1506,9 @@ class Plugin:
             app_name,
             normalized_attachments,
             prepared_images,
+            ask_mode=ask_mode,
         )
-        roleplay = build_roleplay_system_suffix(settings)
+        roleplay = build_roleplay_system_suffix(settings, ask_mode)
         if roleplay:
             # Lead with voice instructions so they are not diluted after the long bonsAI system preamble.
             system_content = roleplay.strip() + "\n\n" + system_content
@@ -1532,8 +1548,10 @@ class Plugin:
                     prepared_images,
                     attachment_warnings,
                     attachment_errors,
+                    ask_mode,
+                    keep_alive,
                 )
-                merged = {**result, **ollama_extras}
+                merged = {**ollama_extras, **result}
                 if result.get("success"):
                     return merged
 

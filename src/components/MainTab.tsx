@@ -19,7 +19,13 @@ import {
   isRightNavigationEvent,
 } from "../utils/focusNavigation";
 import { formatBytes, formatScreenshotTimestamp, toFileUri } from "../utils/mediaFormat";
-import type { AppliedResult, AskAttachment, OllamaContextUi, ScreenshotItem } from "../types/bonsaiUi";
+import type {
+  AppliedResult,
+  AskAttachment,
+  OllamaContextUi,
+  ScreenshotItem,
+  StrategyGuideBranchesPayload,
+} from "../types/bonsaiUi";
 import {
   AskMicIcon,
   AskStopIcon,
@@ -105,6 +111,11 @@ export type MainTabProps = {
   /** Main-tab inference mode (persisted; drives Ollama model fallback ordering). */
   askMode: AskModeId;
   onAskModeChange: (mode: AskModeId) => void;
+  /** When set, show branch buttons below the last Strategy Guide response. */
+  strategyGuideBranches?: StrategyGuideBranchesPayload | null;
+  onStrategyBranchPick?: (opt: { id: string; label: string }) => void;
+  /** When a preset chip requests an Ask mode (e.g. Strategy Guide), apply it here. */
+  onPresetPreferAskMode?: (mode: AskModeId) => void;
 };
 
 export function MainTab(props: MainTabProps) {
@@ -167,6 +178,9 @@ export function MainTab(props: MainTabProps) {
     onRunOriginalAsk,
     askMode,
     onAskModeChange,
+    strategyGuideBranches = null,
+    onStrategyBranchPick,
+    onPresetPreferAskMode,
   } = props;
 
   const [transparencyOpen, setTransparencyOpen] = useState(false);
@@ -308,6 +322,7 @@ export function MainTab(props: MainTabProps) {
               seeds={suggestedPrompts}
               setUnifiedInput={setUnifiedInput}
               fadeAnimationEnabled={presetChipFadeAnimationEnabled}
+              onPreferAskMode={onPresetPreferAskMode}
             />
           </div>
         </PanelSectionRow>
@@ -418,6 +433,11 @@ export function MainTab(props: MainTabProps) {
               ) : null}
               <TextField
                 label=""
+                description={
+                  askMode === "strategy"
+                    ? "Describe the level, boss, or puzzle you're stuck on."
+                    : undefined
+                }
                 value={unifiedInput}
                 spellCheck={false}
                 {...({ multiline: true, rows: 3 } as unknown as Record<string, unknown>)}
@@ -1136,6 +1156,41 @@ export function MainTab(props: MainTabProps) {
             </Focusable>
           </PanelSectionRow>
         ))}
+        {strategyGuideBranches &&
+          strategyGuideBranches.options.length > 0 &&
+          !isAsking &&
+          onStrategyBranchPick && (
+          <PanelSectionRow>
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                gap: 8,
+                marginBottom: 72,
+              }}
+            >
+              <div style={{ fontSize: 12, color: "#b8cad8", fontWeight: 600 }}>
+                {strategyGuideBranches.question}
+              </div>
+              {strategyGuideBranches.options.map((opt, idx) => (
+                <Button
+                  key={`sg-branch-${opt.id}-${idx}`}
+                  onClick={() => onStrategyBranchPick(opt)}
+                  style={{
+                    width: "100%",
+                    minHeight: 34,
+                    fontSize: 12,
+                    color: "#c4d3e2",
+                    justifyContent: "flex-start",
+                  }}
+                >
+                  {`${String.fromCharCode(65 + idx)}. ${opt.label}`}
+                </Button>
+              ))}
+            </div>
+          </PanelSectionRow>
+        )}
         {!isAsking && elapsedSeconds != null && elapsedSeconds > latencyWarningSeconds && (
           <PanelSectionRow>
             <div style={{ color: "#f2cf84", fontSize: 12 }}>

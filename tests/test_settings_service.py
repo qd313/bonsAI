@@ -64,6 +64,42 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertTrue(sanitized["preset_chip_fade_animation_enabled"])
         self.assertFalse(sanitized["input_sanitizer_user_disabled"])
         self.assertEqual(sanitized["ask_mode"], "speed")
+        self.assertEqual(sanitized["ollama_keep_alive"], "5m")
+
+    def test_sanitize_ollama_keep_alive_accepts_known_tokens(self):
+        """Ollama keep_alive string must be one of the plugin presets or fall back to default."""
+        good = sanitize_settings(
+            data={"ollama_keep_alive": "15s"},
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="persist_all",
+            valid_screenshot_dimensions={1280, 1920, 3160},
+            default_screenshot_dimension=1280,
+            valid_ask_modes={"speed", "strategy", "deep"},
+            default_ask_mode="speed",
+        )
+        self.assertEqual(good["ollama_keep_alive"], "15s")
+        bad = sanitize_settings(
+            data={"ollama_keep_alive": "forever"},
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="persist_all",
+            valid_screenshot_dimensions={1280, 1920, 3160},
+            default_screenshot_dimension=1280,
+            valid_ask_modes={"speed", "strategy", "deep"},
+            default_ask_mode="speed",
+        )
+        self.assertEqual(bad["ollama_keep_alive"], "5m")
 
     def test_sanitize_ask_mode_accepts_speed_strategy_deep(self):
         """Ask mode persists only the three known inference modes."""

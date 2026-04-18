@@ -5,6 +5,11 @@ import urllib.error
 import urllib.request
 from typing import Any, Callable
 
+from backend.services.strategy_guide_parse import (
+    extract_strategy_guide_branches,
+    is_strategy_followup_question,
+)
+
 
 def build_system_prompt(
     question: str,
@@ -14,6 +19,7 @@ def build_system_prompt(
     prepared_images: list,
     lookup_app_name: Callable[[str], str],
     lookup_screenshot_vdf_metadata: Callable[[str], dict],
+    ask_mode: str = "speed",
 ) -> str:
     """Build the system message used for Ollama requests from game and attachment context."""
     attachment_app_ids = sorted(
@@ -93,7 +99,7 @@ def build_system_prompt(
         if user_game_intent
         else "If the user asks about gameplay context, prioritize game-specific visual cues over Steam UI."
     )
-    return (
+    base = (
         "You are bonsAI, an expert system assistant embedded on a Steam Deck handheld. "
         "Always answer directly, concisely, and in English. "
         "The Steam Deck APU supports a TDP range of 3-15 watts and GPU clock of 200-1600 MHz. "
@@ -103,6 +109,36 @@ def build_system_prompt(
         '```json\n{"tdp_watts": <int 3-15>, "gpu_clock_mhz": <int 200-1600 or null>}\n```\n'
         "Without this JSON block, the change will NOT be applied. Only include it when actively recommending a change."
     )
+    if ask_mode != "strategy":
+        return base
+
+    followup = is_strategy_followup_question(question)
+    if followup:
+        strategy_block = (
+            "\n\nSTRATEGY GUIDE MODE (active — follow-up turn):\n"
+            "The user's message begins with the plugin's branch selection prefix. They already chose where they are stuck.\n"
+            "Give direct, controller-first coaching for that exact beat on a Steam Deck (gamepad; short steps; pause-friendly; no PC keyboard assumptions).\n"
+            "Do NOT output a ```bonsai-strategy-branches block on this turn.\n"
+            "End your reply with a clearly marked section using this exact markdown heading on its own line:\n"
+            "**If you want to cheat…**\n"
+            "Under it, briefly list popular skips, sequence breaks, dupes, or wiki-style fast paths that help solo players move past this point. "
+            "Do not encourage cheating in multiplayer, competitive, or anti-cheat contexts.\n"
+        )
+    else:
+        strategy_block = (
+            "\n\nSTRATEGY GUIDE MODE (active — first turn):\n"
+            "You are a patient coach for someone playing on a Steam Deck (assume gamepad). Use plain spoken language; short steps; avoid jargon unless you explain it.\n"
+            "Infer game title and rough progress from the user's text and any screenshots; state uncertainty honestly.\n"
+            "After a brief orientation (no spoilers beyond what is needed to branch), you MUST end the reply with exactly one fenced block so the UI can show choices. "
+            "Use this exact fence label and valid JSON only inside it (2–8 options, each with \"id\" and short \"label\" the player understands):\n"
+            "```bonsai-strategy-branches\n"
+            '{"question":"Where are you at in … ?","options":[{"id":"a","label":"…"},{"id":"b","label":"…"}]}\n'
+            "```\n"
+            "The visible part above the fence should already ask the same branching question in natural language; the JSON question string must match that intent.\n"
+            "Do not put prose after the closing ``` of that fence.\n"
+            "Do NOT repeat this branching fence when the user later sends a message starting with [Strategy follow-up].\n"
+        )
+    return base + strategy_block
 
 
 def format_ai_response(
@@ -135,15 +171,19 @@ def post_ollama_chat(
     attachment_warnings: list,
     attachment_errors: list,
     logger: Any,
+    ask_mode: str = "speed",
+    keep_alive: str = "5m",
 ) -> dict:
     """Execute one Ollama chat request attempt and return a normalized success/error payload."""
+    # Strategy replies include branching JSON plus optional cheat section — allow more tokens than speed/deep defaults.
+    num_predict = 900 if ask_mode == "strategy" else 500
     body_dict = {
         "model": model_name,
         "messages": messages,
         "stream": False,
-        "keep_alive": -1,
+        "keep_alive": keep_alive,
         "options": {
-            "num_predict": 500,
+            "num_predict": num_predict,
             "temperature": 0.4,
         },
     }
@@ -165,6 +205,10 @@ def post_ollama_chat(
             data = json.loads(raw)
             text = data.get("message", {}).get("content", "No response text.")
             assistant_raw = text
+            strategy_guide_branches = None
+            if ask_mode == "strategy":
+                visible, strategy_guide_branches = extract_strategy_guide_branches(text)
+                text = visible
             text = format_ai_response(
                 text,
                 normalized_attachments,
@@ -182,6 +226,7 @@ def post_ollama_chat(
                 "response": text,
                 "model": model_name,
                 "assistant_raw": assistant_raw,
+                "strategy_guide_branches": strategy_guide_branches,
             }
     except urllib.error.HTTPError as e:
         body = e.read().decode("utf-8", errors="replace")

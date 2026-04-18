@@ -65,6 +65,32 @@ def sanitize_input_sanitizer_user_disabled(value: Any) -> bool:
 
 REQUEST_TIMEOUT_RECONCILE_STEP_SECONDS = 10
 
+OLLAMA_KEEP_ALIVE_OPTIONS = frozenset(
+    {
+        "0s",
+        "15s",
+        "30s",
+        "1m",
+        "2m",
+        "3m",
+        "5m",
+        "15m",
+        "30m",
+        "45m",
+        "60m",
+        "120m",
+        "240m",
+    }
+)
+DEFAULT_OLLAMA_KEEP_ALIVE = "5m"
+
+
+def sanitize_ollama_keep_alive(value: Any) -> str:
+    """Validate Ollama keep_alive duration tokens and fall back to the plugin default."""
+    if isinstance(value, str) and value in OLLAMA_KEEP_ALIVE_OPTIONS:
+        return value
+    return DEFAULT_OLLAMA_KEEP_ALIVE
+
 
 def _reconcile_latency_warning_before_timeout(
     latency: int,
@@ -179,6 +205,7 @@ def sanitize_settings(
             valid_ask_modes,
             default_ask_mode,
         ),
+        "ollama_keep_alive": sanitize_ollama_keep_alive(raw.get("ollama_keep_alive")),
     }
 
 

@@ -29,6 +29,7 @@ import {
   DEFAULT_AI_CHARACTER_ENABLED,
   DEFAULT_AI_CHARACTER_ACCENT_INTENSITY,
   DEFAULT_ASK_MODE,
+  DEFAULT_OLLAMA_KEEP_ALIVE,
   DEFAULT_AI_CHARACTER_PRESET_ID,
   DEFAULT_AI_CHARACTER_RANDOM,
   normalizeAiCharacterCustomText,
@@ -40,6 +41,7 @@ import {
   type BonsaiCapabilities,
   type AskModeId,
   type BonsaiSettings,
+  type OllamaKeepAliveDuration,
   type ScreenshotMaxDimension,
   type UnifiedInputPersistenceMode,
 } from "./utils/settingsAndResponse";
@@ -52,6 +54,7 @@ import { CharacterPickerModal } from "./components/CharacterPickerModal";
 import { DesktopNoteSaveModal } from "./components/DesktopNoteSaveModal";
 import { DebugTab } from "./components/DebugTab";
 import { ConnectionTimeoutSlider } from "./components/ConnectionTimeoutSlider";
+import { OllamaKeepAliveSlider } from "./components/OllamaKeepAliveSlider";
 import { MainTab } from "./components/MainTab";
 import { PermissionsTab } from "./components/PermissionsTab";
 import { getSteamInputLexiconEntry } from "./data/steam-input-lexicon";
@@ -63,6 +66,7 @@ import {
   resolveMainTabAvatarPresetId,
 } from "./data/characterCatalog";
 import { detectPromptCategory, getContextualPresets, getRandomPresets, type PresetPrompt } from "./data/presets";
+import { STRATEGY_FOLLOWUP_PREFIX } from "./data/strategyGuideFollowup";
 import {
   INPUT_SANITIZER_COMMAND_DISABLE,
   INPUT_SANITIZER_COMMAND_ENABLE,
@@ -82,7 +86,14 @@ import {
   UNIFIED_TEXT_LINE_HEIGHT,
 } from "./features/unified-input/constants";
 import { useUnifiedInputSurface } from "./features/unified-input/useUnifiedInputSurface";
-import type { AppliedResult, AskAttachment, OllamaContextUi, ScreenshotItem } from "./types/bonsaiUi";
+import { normalizeStrategyGuideBranches } from "./utils/strategyGuideBranches";
+import type {
+  AppliedResult,
+  AskAttachment,
+  OllamaContextUi,
+  ScreenshotItem,
+  StrategyGuideBranchesPayload,
+} from "./types/bonsaiUi";
 
 /**
  * If Decky unmounts plugin `Content` when `showModal` closes, React state resets to defaults; this
@@ -157,6 +168,7 @@ type BackgroundRequestStatus = {
   error: string | null;
   started_at: number | null;
   completed_at: number | null;
+  strategy_guide_branches?: StrategyGuideBranchesPayload | null;
 };
 
 type ConnectionStatus = {
@@ -422,6 +434,7 @@ function usePluginSettings() {
     DEFAULT_AI_CHARACTER_ACCENT_INTENSITY
   );
   const [askMode, setAskMode] = useState<AskModeId>(DEFAULT_ASK_MODE);
+  const [ollamaKeepAlive, setOllamaKeepAlive] = useState<OllamaKeepAliveDuration>(DEFAULT_OLLAMA_KEEP_ALIVE);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
 
   useEffect(() => {
@@ -445,6 +458,7 @@ function usePluginSettings() {
         setAiCharacterCustomText(normalized.ai_character_custom_text);
         setAiCharacterAccentIntensity(normalized.ai_character_accent_intensity);
         setAskMode(normalized.ask_mode);
+        setOllamaKeepAlive(normalized.ollama_keep_alive);
       })
       .catch(() => {
         if (cancelled) return;
@@ -463,6 +477,7 @@ function usePluginSettings() {
         setAiCharacterCustomText(DEFAULT_AI_CHARACTER_CUSTOM_TEXT);
         setAiCharacterAccentIntensity(DEFAULT_AI_CHARACTER_ACCENT_INTENSITY);
         setAskMode(DEFAULT_ASK_MODE);
+        setOllamaKeepAlive(DEFAULT_OLLAMA_KEEP_ALIVE);
       })
       .finally(() => {
         if (!cancelled) setSettingsLoaded(true);
@@ -491,6 +506,7 @@ function usePluginSettings() {
         ai_character_custom_text: aiCharacterCustomText,
         ai_character_accent_intensity: aiCharacterAccentIntensity,
         ask_mode: askMode,
+        ollama_keep_alive: ollamaKeepAlive,
       }).catch((err) => {
         console.error("save_settings failed", err);
       });
@@ -512,6 +528,7 @@ function usePluginSettings() {
     aiCharacterCustomText,
     aiCharacterAccentIntensity,
     askMode,
+    ollamaKeepAlive,
     settingsLoaded,
   ]);
 
@@ -538,6 +555,8 @@ function usePluginSettings() {
     setAiCharacterAccentIntensity,
     askMode,
     setAskMode,
+    ollamaKeepAlive,
+    setOllamaKeepAlive,
     settingsLoaded,
     setLatencyWarningSeconds,
     setRequestTimeoutSeconds,
@@ -677,6 +696,8 @@ const Content: React.FC = () => {
   const [ollamaResponse, setOllamaResponse] = useState("");
   const [ollamaContext, setOllamaContext] = useState<OllamaContextUi>(null);
   const [lastExchange, setLastExchange] = useState<LastExchangeSnapshot | null>(null);
+  const [strategyGuideBranches, setStrategyGuideBranches] = useState<StrategyGuideBranchesPayload | null>(null);
+  const lastStrategyAskQuestionRef = useRef<string>("");
   const [isAsking, setIsAsking] = useState(false);
   const [lastApplied, setLastApplied] = useState<AppliedResult | null>(null);
   const [suggestedPrompts, setSuggestedPrompts] = useState<PresetPrompt[]>(() => getRandomPresets(3));
@@ -689,7 +710,9 @@ const Content: React.FC = () => {
   const [selectedAttachment, setSelectedAttachment] = useState<AskAttachment | null>(null);
   const screenshotBrowserHostRef = useRef<HTMLDivElement>(null);
   const attachActionHostRef = useRef<HTMLDivElement>(null);
-  /** Anchor for Deck nav: latency slider thumbs move down into screenshot max-dimension chips. */
+  /** Exposes VRAM retention slider thumb for D-pad from latency slider / screenshot row. */
+  const ollamaKeepAliveThumbHostRef = useRef<HTMLDivElement>(null);
+  /** Anchor for Deck nav: D-pad up from screenshot row into VRAM retention slider thumb. */
   const screenshotDimensionNavRef = useRef<HTMLDivElement>(null);
   /** Anchor for Deck nav: hard-timeout thumb moves up into Ollama IP TextField (not soft-warning thumb). */
   const ollamaIpConnectionNavRef = useRef<HTMLDivElement>(null);
@@ -734,7 +757,15 @@ const Content: React.FC = () => {
     setInputSanitizerUserDisabled,
     askMode,
     setAskMode,
+    ollamaKeepAlive,
+    setOllamaKeepAlive,
   } = usePluginSettings();
+
+  useEffect(() => {
+    if (askMode !== "strategy") {
+      setStrategyGuideBranches(null);
+    }
+  }, [askMode]);
 
   const desktopAutoSavePrefsRef = useRef({
     autoSave: DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE,
@@ -883,6 +914,7 @@ const Content: React.FC = () => {
       setOllamaResponse(status.response?.trim() ? status.response : "Thinking...");
       setLastApplied(null);
       setElapsedSeconds(null);
+      setStrategyGuideBranches(null);
       return;
     }
 
@@ -901,6 +933,8 @@ const Content: React.FC = () => {
           const category = detectPromptCategory(q);
           setSuggestedPrompts(getContextualPresets(category, 3));
           setLastExchange({ question: q, answer });
+          lastStrategyAskQuestionRef.current = q;
+          setStrategyGuideBranches(normalizeStrategyGuideBranches(status.strategy_guide_branches));
 
           const { autoSave, fsWrite } = desktopAutoSavePrefsRef.current;
           const rid = status.request_id;
@@ -923,9 +957,11 @@ const Content: React.FC = () => {
           }
         } else {
           setLastExchange(null);
+          setStrategyGuideBranches(null);
         }
       } else {
         setLastExchange(null);
+        setStrategyGuideBranches(null);
       }
       void refreshInputTransparency();
       return;
@@ -941,6 +977,7 @@ const Content: React.FC = () => {
     setLastApplied(null);
     setOllamaContext(null);
     setLastExchange(null);
+    setStrategyGuideBranches(null);
   }, []);
 
   const {
@@ -978,6 +1015,7 @@ const Content: React.FC = () => {
     setOllamaContext(null);
     setLastApplied(null);
     setLastExchange(null);
+    setStrategyGuideBranches(null);
     setSelectedAttachment(null);
     setElapsedSeconds(null);
     setShowSlowWarning(false);
@@ -1014,6 +1052,7 @@ const Content: React.FC = () => {
     setLastApplied(null);
     setElapsedSeconds(null);
     setShowSlowWarning(false);
+    setStrategyGuideBranches(null);
   };
 
   const onMicInput = () => {
@@ -1084,13 +1123,13 @@ const Content: React.FC = () => {
     toaster.toast({ title: "Media attached", body: "Recent screenshot attached.", duration: 1800 });
   };
 
-  const onAskOllama = async () => {
+  const onAskOllama = async (overrideQuestion?: string) => {
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
     }
     await new Promise((r) => setTimeout(r, 50));
 
-    const q = unifiedInput.trim();
+    const q = (overrideQuestion ?? unifiedInput).trim();
     const ip = ollamaIp.trim();
     if (!q || !ip) return;
     const attachments = selectedAttachment
@@ -1109,6 +1148,7 @@ const Content: React.FC = () => {
     const appName = runningApp?.display_name ?? "";
 
     setIsAsking(true);
+    setStrategyGuideBranches(null);
     setLastTransparency(null);
     setOllamaResponse("Thinking...");
     setLastApplied(null);
@@ -1121,7 +1161,16 @@ const Content: React.FC = () => {
       console.log(`[bonsAI] deck -> pc=${ip} game=${JSON.stringify(appName)}(${appId}) question=${JSON.stringify(q)}`);
 
       const data = await call<
-        [{ question: string; PcIp: string; appId: string; appName: string; attachments: AskAttachment[] }],
+        [
+          {
+            question: string;
+            PcIp: string;
+            appId: string;
+            appName: string;
+            attachments: AskAttachment[];
+            ask_mode: AskModeId;
+          },
+        ],
         BackgroundStartResponse
       >("start_background_game_ai", { question: q, PcIp: ip, appId, appName, attachments, ask_mode: askMode });
 
@@ -1166,6 +1215,7 @@ const Content: React.FC = () => {
           error: null,
           started_at: now,
           completed_at: now,
+          strategy_guide_branches: null,
         };
         applyBackgroundStatusToUi(terminal, "");
         saveIp(ip);
@@ -1213,7 +1263,22 @@ const Content: React.FC = () => {
       setOllamaResponse(`Error: ${formatDeckyRpcError(e)}`);
       setLastApplied(null);
       setOllamaContext(null);
+      setStrategyGuideBranches(null);
     }
+  };
+
+  const onStrategyBranchPick = (opt: { id: string; label: string }) => {
+    const prior = lastStrategyAskQuestionRef.current.trim();
+    const composed = [
+      `${STRATEGY_FOLLOWUP_PREFIX} I'm at: ${opt.label}.`,
+      prior ? `Earlier I asked: ${prior}` : "",
+      "",
+      "Give controller-friendly coaching for this exact point, then end with **If you want to cheat…** as instructed.",
+    ]
+      .filter((line) => line.length > 0)
+      .join("\n");
+    setUnifiedInput(composed);
+    void onAskOllama(composed);
   };
 
   const onTestConnection = async () => {
@@ -1272,6 +1337,14 @@ const Content: React.FC = () => {
     const btn = root.querySelector<HTMLElement>('button[aria-label^="Set screenshot max dimension"]');
     if (!btn) return false;
     btn.focus();
+    return true;
+  }, []);
+  const focusOllamaKeepAliveThumb = useCallback((): boolean => {
+    const host = ollamaKeepAliveThumbHostRef.current;
+    if (!host) return false;
+    const target = host.querySelector<HTMLElement>("[tabindex], button");
+    if (!target) return false;
+    target.focus();
     return true;
   }, []);
   const focusOllamaIpFromTimeoutSlider = useCallback((): boolean => {
@@ -1425,6 +1498,7 @@ const Content: React.FC = () => {
             ai_character_custom_text: ctxt,
             ai_character_accent_intensity: aiCharacterAccentIntensity,
             ask_mode: askMode,
+            ollama_keep_alive: ollamaKeepAlive,
           }).catch((err) => {
             console.error("save_settings failed (character picker OK)", err);
           });
@@ -1461,6 +1535,7 @@ const Content: React.FC = () => {
     setAiCharacterCustomText,
     armPostPickerTabLock,
     askMode,
+    ollamaKeepAlive,
   ]);
 
   const mainTabAiCharacterPad = aiCharacterEnabled;
@@ -1573,6 +1648,9 @@ const Content: React.FC = () => {
       }}
       askMode={askMode}
       onAskModeChange={setAskMode}
+      strategyGuideBranches={strategyGuideBranches}
+      onStrategyBranchPick={onStrategyBranchPick}
+      onPresetPreferAskMode={setAskMode}
     />
   );
 
@@ -1714,9 +1792,36 @@ const Content: React.FC = () => {
             setRequestTimeoutSeconds(t);
           }}
           warningThumbHostRef={latencyWarningThumbHostRef}
-          onMoveDownFromThumb={focusScreenshotMaxDimensionFromSlider}
+          onMoveDownFromThumb={focusOllamaKeepAliveThumb}
           onMoveUpFromTimeoutThumb={focusOllamaIpFromTimeoutSlider}
         />
+      </PanelSectionRow>
+      <PanelSectionRow>
+        <div className="bonsai-prose-host" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
+          <div
+            style={{
+              fontVariant: "small-caps",
+              letterSpacing: "0.06em",
+              fontSize: 11,
+              fontWeight: 600,
+              color: "#b8c6d6",
+              marginBottom: 4,
+            }}
+          >
+            Ollama model VRAM (keep_alive)
+          </div>
+          <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
+            How long the PC Ollama server keeps the loaded model in VRAM after each Ask. Shorter values free GPU
+            memory sooner; longer values reduce reload delay if you Ask again soon.
+          </div>
+          <OllamaKeepAliveSlider
+            value={ollamaKeepAlive}
+            onChange={setOllamaKeepAlive}
+            thumbHostRef={ollamaKeepAliveThumbHostRef}
+            onMoveUp={() => focusSoftWarningFromScreenshot()}
+            onMoveDown={() => focusScreenshotMaxDimensionFromSlider()}
+          />
+        </div>
       </PanelSectionRow>
       <PanelSectionRow>
         <div
@@ -1740,7 +1845,7 @@ const Content: React.FC = () => {
                 <Button
                   key={`dim-${option}`}
                   {...({
-                    onMoveUp: () => focusSoftWarningFromScreenshot(),
+                    onMoveUp: () => focusOllamaKeepAliveThumb(),
                   } as Record<string, unknown>)}
                   onClick={() => setScreenshotMaxDimension(option)}
                   style={{

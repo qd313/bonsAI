@@ -168,3 +168,38 @@ export function resolveMainTabAvatarPresetId(opts: {
   if (opts.presetId && isValidPresetId(opts.presetId)) return opts.presetId;
   return "__custom__";
 }
+
+const _unicodeLetterRe = /\p{L}/u;
+
+function firstUnicodeLetterUpper(s: string): string | null {
+  const m = _unicodeLetterRe.exec(s);
+  if (!m) return null;
+  return m[0].toUpperCase();
+}
+
+/** Badge letter from a display label (e.g. catalog row: GLaDOS → G). */
+export function resolveAvatarBadgeLetterFromDisplayLabel(label: string): string {
+  return firstUnicodeLetterUpper(label) ?? "?";
+}
+
+/** Single-letter badge for the main-tab avatar (null when AI character chrome is off). */
+export function resolveMainTabAvatarBadgeLetter(opts: {
+  enabled: boolean;
+  random: boolean;
+  presetId: string;
+  customText: string;
+}): string | null {
+  if (!opts.enabled) return null;
+  if (opts.random) return "?";
+  const trimmedCustom = opts.customText.trim();
+  if (trimmedCustom) {
+    return firstUnicodeLetterUpper(trimmedCustom) ?? "?";
+  }
+  if (opts.presetId && isValidPresetId(opts.presetId)) {
+    const found = findCatalogEntry(opts.presetId);
+    if (found) {
+      return firstUnicodeLetterUpper(found.entry.label) ?? "?";
+    }
+  }
+  return "?";
+}

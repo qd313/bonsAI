@@ -4,6 +4,8 @@ import {
   findCatalogEntry,
   formatAiCharacterSelectionLine,
   isValidPresetId,
+  resolveAvatarBadgeLetterFromDisplayLabel,
+  resolveMainTabAvatarBadgeLetter,
   resolveMainTabAvatarPresetId,
 } from "./characterCatalog";
 
@@ -18,6 +20,11 @@ describe("characterCatalog", () => {
     const j = findCatalogEntry("cp2077_jackie");
     expect(j?.workTitle).toContain("Cyberpunk");
     expect(j?.entry.label).toContain("Jackie");
+  });
+
+  it("resolveAvatarBadgeLetterFromDisplayLabel uses first Unicode letter", () => {
+    expect(resolveAvatarBadgeLetterFromDisplayLabel("GLaDOS")).toBe("G");
+    expect(resolveAvatarBadgeLetterFromDisplayLabel("… 123")).toBe("?");
   });
 
   it("formatAiCharacterSelectionLine covers random, preset, custom, empty", () => {
@@ -40,5 +47,51 @@ describe("characterCatalog", () => {
         customText: "",
       })
     ).toBeNull();
+  });
+
+  it("resolveMainTabAvatarBadgeLetter returns null when disabled", () => {
+    expect(
+      resolveMainTabAvatarBadgeLetter({
+        enabled: false,
+        random: true,
+        presetId: "portal_glados",
+        customText: "",
+      })
+    ).toBeNull();
+  });
+
+  it("resolveMainTabAvatarBadgeLetter covers random, preset, custom, empty", () => {
+    expect(
+      resolveMainTabAvatarBadgeLetter({
+        enabled: true,
+        random: true,
+        presetId: "portal_glados",
+        customText: "",
+      })
+    ).toBe("?");
+    expect(
+      resolveMainTabAvatarBadgeLetter({
+        enabled: true,
+        random: false,
+        presetId: "portal_glados",
+        customText: "",
+      })
+    ).toBe("G");
+    expect(
+      resolveMainTabAvatarBadgeLetter({
+        enabled: true,
+        random: false,
+        presetId: "",
+        customText: "villain",
+      })
+    ).toBe("V");
+    expect(
+      resolveMainTabAvatarBadgeLetter({
+        enabled: true,
+        random: false,
+        presetId: "",
+        customText: "… 123",
+      })
+    ).toBe("?");
   });
 });

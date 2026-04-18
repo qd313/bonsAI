@@ -92,6 +92,8 @@ export type MainTabProps = {
   aiCharacterPadClass?: boolean;
   /** Emoticon id for the upper-left avatar (`__random__`, `__custom__`, or a catalog preset id). */
   aiCharacterAvatarPresetId?: string | null;
+  /** Single-character corner badge on the avatar; null when AI character feature is off. */
+  aiCharacterAvatarBadgeLetter?: string | null;
   /** Opens the fullscreen character picker (Settings + main tab avatar). */
   onOpenCharacterPicker?: () => void;
   /** Temporary: set `window.__BONSAI_DEBUG_AI_CHARACTER__ = true` in CEF DevTools to show selection state. */
@@ -158,6 +160,7 @@ export function MainTab(props: MainTabProps) {
     desktopNoteSaveEnabled = true,
     aiCharacterPadClass = false,
     aiCharacterAvatarPresetId = null,
+    aiCharacterAvatarBadgeLetter = null,
     onOpenCharacterPicker,
     aiCharacterDebugLine = null,
     transparencySnapshot = null,
@@ -355,7 +358,11 @@ export function MainTab(props: MainTabProps) {
                 >
                   <Focusable
                     className="bonsai-ai-character-avatar"
-                    aria-label="Choose AI character"
+                    aria-label={
+                      aiCharacterAvatarBadgeLetter
+                        ? `Choose AI character, ${aiCharacterAvatarBadgeLetter}`
+                        : "Choose AI character"
+                    }
                     {...avatarDeckNavHandlers}
                     onClick={() => onOpenCharacterPicker?.()}
                     onActivate={() => {
@@ -384,6 +391,7 @@ export function MainTab(props: MainTabProps) {
                       key={aiCharacterAvatarPresetId ?? "__custom__"}
                       presetId={aiCharacterAvatarPresetId ?? "__custom__"}
                       size={18}
+                      badgeLetter={aiCharacterAvatarBadgeLetter}
                     />
                   </Focusable>
                 </div>

@@ -3,6 +3,9 @@ import { Button, ConfirmModal, Focusable, TextField, ToggleField } from "@decky/
 import {
   AI_CHARACTER_CUSTOM_TEXT_MAX,
   CHARACTER_PICKER_COLUMNS,
+  resolveAvatarBadgeLetterFromDisplayLabel,
+  resolveMainTabAvatarBadgeLetter,
+  resolveMainTabAvatarPresetId,
   type CharacterCatalogEntry,
   type CharacterCatalogSection,
 } from "../data/characterCatalog";
@@ -44,6 +47,59 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
 
   const randomLocked = draft.random;
   const selectedPreset = !draft.random && !draft.customText.trim() ? draft.presetId : "";
+
+  /** Same emoticon id as the main-tab avatar for the current draft (catalog / custom / random). */
+  const okButtonPreviewPresetId = useMemo(
+    () =>
+      resolveMainTabAvatarPresetId({
+        enabled: true,
+        random: draft.random,
+        presetId: draft.presetId,
+        customText: draft.customText,
+      }) ?? "__custom__",
+    [draft.random, draft.presetId, draft.customText]
+  );
+
+  const okButtonPreviewBadgeLetter = useMemo(
+    () =>
+      resolveMainTabAvatarBadgeLetter({
+        enabled: true,
+        random: draft.random,
+        presetId: draft.presetId,
+        customText: draft.customText,
+      }) ?? "?",
+    [draft.random, draft.presetId, draft.customText]
+  );
+
+  const customFieldBadgeLetter = useMemo((): string => {
+    if (draft.random) return "?";
+    const t = draft.customText.trim();
+    if (t) return resolveAvatarBadgeLetterFromDisplayLabel(t);
+    return "?";
+  }, [draft.random, draft.customText]);
+
+  const strOKButtonText = useMemo(
+    () => (
+      <span
+        style={{
+          display: "inline-flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 8,
+        }}
+      >
+        <CharacterRoleplayEmoticon
+          key={okButtonPreviewPresetId}
+          presetId={okButtonPreviewPresetId}
+          size={22}
+          badgeLetter={okButtonPreviewBadgeLetter}
+        />
+        <span>OK</span>
+      </span>
+    ),
+    [okButtonPreviewPresetId, okButtonPreviewBadgeLetter]
+  );
 
   const columnEntryCounts = useMemo(
     () => CHARACTER_PICKER_COLUMNS.map((col) => col.reduce((n, s) => n + s.entries.length, 0)),
@@ -217,7 +273,11 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
                     minWidth: 0,
                   }}
                 >
-                  <CharacterRoleplayEmoticon presetId={entry.id} size={24} />
+                  <CharacterRoleplayEmoticon
+                    presetId={entry.id}
+                    size={24}
+                    badgeLetter={resolveAvatarBadgeLetterFromDisplayLabel(entry.label)}
+                  />
                   <span
                     style={{
                       fontSize: 12,
@@ -265,32 +325,46 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
             padding: "2px 0",
           }}
         >
-          <div className="bonsai-ai-char-random">
-            <ToggleField
-              label="Random"
-              description="Pick a different catalog character for each Ask. Disables the list below."
-              checked={draft.random}
-              {...({
-                onMoveRight: () => focusFooterOk(),
-                ...(draft.random
-                  ? {
-                      onMoveDown: () => focusFooterOk(),
+          <div
+            className="bonsai-ai-char-random"
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 10,
+              minWidth: 0,
+            }}
+          >
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <ToggleField
+                label="Random"
+                description="Pick a different catalog character for each Ask. Disables the list below."
+                checked={draft.random}
+                {...({
+                  onMoveRight: () => focusFooterOk(),
+                  ...(draft.random
+                    ? {
+                        onMoveDown: () => focusFooterOk(),
+                      }
+                    : {}),
+                } as unknown as Record<string, unknown>)}
+                onChange={(raw: unknown) => {
+                  const on = readToggleOn(raw);
+                  setDraft((d) => {
+                    if (on === true) {
+                      return { random: true, presetId: "", customText: "" };
                     }
-                  : {}),
-              } as unknown as Record<string, unknown>)}
-              onChange={(raw: unknown) => {
-                const on = readToggleOn(raw);
-                setDraft((d) => {
-                  if (on === true) {
-                    return { random: true, presetId: "", customText: "" };
-                  }
-                  if (on === false) {
-                    return { ...d, random: false };
-                  }
-                  return d;
-                });
-              }}
-            />
+                    if (on === false) {
+                      return { ...d, random: false };
+                    }
+                    return d;
+                  });
+                }}
+              />
+            </div>
+            <div style={{ flexShrink: 0 }} aria-hidden>
+              <CharacterRoleplayEmoticon presetId="__random__" size={26} badgeLetter="?" />
+            </div>
           </div>
           <div
             className="bonsai-ai-char-catalog-scroll"
@@ -319,32 +393,49 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
             ref={customCharacterShellRef}
             className="bonsai-ai-char-custom"
             inert={randomLocked ? true : undefined}
-            style={{ opacity: randomLocked ? 0.45 : 1, pointerEvents: randomLocked ? "none" : "auto" }}
+            style={{
+              opacity: randomLocked ? 0.45 : 1,
+              pointerEvents: randomLocked ? "none" : "auto",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 10,
+              minWidth: 0,
+            }}
           >
-            <TextField
-              label="Custom character"
-              value={draft.customText}
-              disabled={randomLocked}
-              {...({
-                placeholder: "Or type in your own character!",
-                multiline: true,
-                rows: 2,
-                onMoveUp: () => focusLastButtonInColumn0(),
-              } as unknown as Record<string, unknown>)}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const v = e.target.value;
-                setDraft((d) => ({
-                  ...d,
-                  random: false,
-                  presetId: "",
-                  customText: v.slice(0, AI_CHARACTER_CUSTOM_TEXT_MAX),
-                }));
-              }}
-            />
+            <div style={{ flexShrink: 0 }} aria-hidden>
+              <CharacterRoleplayEmoticon
+                presetId="__custom__"
+                size={26}
+                badgeLetter={customFieldBadgeLetter}
+              />
+            </div>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <TextField
+                label="Custom character"
+                value={draft.customText}
+                disabled={randomLocked}
+                {...({
+                  placeholder: "Or type in your own character!",
+                  multiline: true,
+                  rows: 2,
+                  onMoveUp: () => focusLastButtonInColumn0(),
+                } as unknown as Record<string, unknown>)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const v = e.target.value;
+                  setDraft((d) => ({
+                    ...d,
+                    random: false,
+                    presetId: "",
+                    customText: v.slice(0, AI_CHARACTER_CUSTOM_TEXT_MAX),
+                  }));
+                }}
+              />
+            </div>
           </div>
         </div>
       }
-      strOKButtonText="OK"
+      strOKButtonText={strOKButtonText}
       strCancelButtonText="Cancel"
       onOK={() => {
         void onOK({

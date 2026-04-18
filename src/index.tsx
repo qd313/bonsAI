@@ -57,7 +57,11 @@ import { PermissionsTab } from "./components/PermissionsTab";
 import { getSteamInputLexiconEntry } from "./data/steam-input-lexicon";
 import { jumpToSteamInputEntry } from "./utils/steamInputJump";
 import type { InputTransparencyRpcResult, TransparencySnapshot } from "./utils/inputTransparency";
-import { formatAiCharacterSelectionLine, resolveMainTabAvatarPresetId } from "./data/characterCatalog";
+import {
+  formatAiCharacterSelectionLine,
+  resolveMainTabAvatarBadgeLetter,
+  resolveMainTabAvatarPresetId,
+} from "./data/characterCatalog";
 import { detectPromptCategory, getContextualPresets, getRandomPresets, type PresetPrompt } from "./data/presets";
 import {
   INPUT_SANITIZER_COMMAND_DISABLE,
@@ -1469,6 +1473,13 @@ const Content: React.FC = () => {
       })
     : null;
 
+  const mainTabAvatarBadgeLetter = resolveMainTabAvatarBadgeLetter({
+    enabled: aiCharacterEnabled,
+    random: aiCharacterRandom,
+    presetId: aiCharacterPresetId,
+    customText: aiCharacterCustomText,
+  });
+
   const aiCharacterDebugLineForMainTab =
     typeof window !== "undefined" &&
     (window as unknown as { __BONSAI_DEBUG_AI_CHARACTER__?: boolean }).__BONSAI_DEBUG_AI_CHARACTER__
@@ -1550,6 +1561,7 @@ const Content: React.FC = () => {
       desktopNoteSaveEnabled={capabilities.filesystem_write}
       aiCharacterPadClass={mainTabAiCharacterPad}
       aiCharacterAvatarPresetId={mainTabAvatarPresetId}
+      aiCharacterAvatarBadgeLetter={mainTabAvatarBadgeLetter}
       onOpenCharacterPicker={aiCharacterEnabled ? openCharacterPickerModal : undefined}
       aiCharacterDebugLine={aiCharacterDebugLineForMainTab}
       transparencySnapshot={lastTransparency}

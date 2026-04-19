@@ -199,6 +199,10 @@ export function MainTab(props: MainTabProps) {
   useEffect(() => {
     setTransparencyOpen(false);
   }, [transparencySnapshot?.raw_question, transparencySnapshot?.final_response]);
+  /** Persisted or pasted newline-only values push the native textarea caret to line 2 while the placeholder reads on line 1. */
+  useEffect(() => {
+    if (unifiedInput.trim() === "" && /\n/.test(unifiedInput)) setUnifiedInput("");
+  }, [unifiedInput, setUnifiedInput]);
   const askLooksReady = unifiedInput.trim().length > 0 && !isAsking;
   /** Do not gate on `aiCharacterAvatarPresetId` — when the feature is on, `resolveMainTabAvatarPresetId` always yields a display id (including `__random__` / `__custom__`). */
   const showAiCharacterChrome = Boolean(onOpenCharacterPicker && aiCharacterPadClass);
@@ -478,7 +482,10 @@ export function MainTab(props: MainTabProps) {
                 onFocus={() => { setIsUnifiedInputFocused(true); }}
                 onBlur={() => { setIsUnifiedInputFocused(false); }}
                 onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-                  setUnifiedInput(e.target.value);
+                  let next = e.target.value;
+                  /* Collapse newline-only “empty” values so the caret stays on the first line (native textarea + placeholder). */
+                  if (next.trim() === "" && /\n/.test(next)) next = "";
+                  setUnifiedInput(next);
                   setSelectedIndex(-1);
                 }}
                 onKeyDown={(ev: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -526,10 +533,15 @@ export function MainTab(props: MainTabProps) {
                 >
                   {!unifiedInput.trim() && askMode === "strategy" ? (
                     <>
+                      {/*
+                        Caret must precede the long strategy placeholder: if the caret follows the
+                        placeholder as an inline sibling, a wrapped placeholder leaves the caret alone
+                        on the next line (Deck / narrow QAM).
+                      */}
+                      {isUnifiedInputFocused && <span className="bonsai-unified-input-fake-caret" aria-hidden>|</span>}
                       <span className="bonsai-unified-input-strategy-placeholder">
                         Describe the level, boss, or puzzle you're stuck on.
                       </span>
-                      {isUnifiedInputFocused && <span className="bonsai-unified-input-fake-caret" aria-hidden>|</span>}
                     </>
                   ) : (
                     <>

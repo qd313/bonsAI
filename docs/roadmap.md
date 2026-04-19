@@ -32,6 +32,9 @@ Star ratings use the GTA scale: `★` easiest … `★★★★★` very high co
 - [ ] ★★★★★ **QAMP Reflection (Phase 2 — Experimental Opt-In):** Attempt Steam profile sync only behind explicit warning toggles. *Blocked on Phase 1.*
   - Risks: undocumented internals, Steam update breakage, restart/reboot requirements, and profile corruption risk.
   - Candidate path: fragile `config.vdf` / protobuf edits gated behind experimental mode only.
+- [ ] ★★★ **Character-derived UI accent (preset only):** When **AI character** is on and a **fixed catalog preset** is selected, drive plugin accent UI from a **distinctive color** sampled or defined for that preset’s avatar (highlights = main tone; borders/glows/muted fills = **darker** derivative). **AI character off**, **Random**, and **Custom** character paths keep today’s **forest green** accent system unchanged (including mode selector, tab active glow, chips, and related tokens).
+- [ ] ★★ **Random character avatar = “?”:** In the character picker and main-tab avatar affordance, show a **simple “?”** mark (typographic or minimal glyph) for **Random** instead of a dice / multi-face / catalog preview icon — keeps “unknown voice” obvious at a glance.
+- [ ] ★★ **Debug tab opt-in (Settings):** Hide the **Debug** tab by default; add a **Settings** toggle (persisted) to **show the Debug tab** for power users. When the tab is hidden, **controller/touch navigation** must not land on a non-existent tab (filter tab list / remap focus); if the user turns the toggle **off** while already on Debug, **switch to a safe tab** (e.g. Main) and clear stale debug-only UI state as needed.
 
 ---
 
@@ -240,6 +243,43 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Files:** `main.py`, `backend/services/ollama_service.py`, Settings surface in `src/index.tsx`, `settings_service.py`, `settingsAndResponse.ts`.
 - **Depends on:** Decky → Ollama request path and settings persistence (shipped baseline under **Connection, routing, diagnostics, and timeouts**).
 - **Not in scope:** Per-model or per-game retention profiles; editing the Ollama daemon’s global config on disk outside what each request specifies.
+
+
+
+### Character-derived UI accent theme (preset-selected)
+
+★★★
+
+- **Goal:** Tie visible accent color to the **selected catalog character** so the plugin feels co-branded with that persona. **Exclusions:** no change to the default **bonsAI forest green** when AI character is **disabled**, when **Random** is on, or when **Custom** text is used — those three states stay on the current green token set for predictability and accessibility.
+- **Visual contract:** One **main accent** (highlights, primary outlines, key fills) and one **subtle accent** (dimmer borders, soft glows, low-contrast chips) derived as a **darker** (or lower-chroma) variant of the main color; avoid relying on opacity alone where contrast matters.
+- **Primary work:** Per-preset **accent source** in catalog data (hex from art direction, or programmatic extract from the preset’s emoticon/SVG with a fallback list); CSS variables or equivalent scoped theme on `.bonsai-scope` (or root) switched when `ai_character_enabled` + fixed `ai_character_preset_id` + not random + not effectively custom; audit surfaces already using forest tokens (`MainTab`, mode menu, tabs, preset chips, Settings character row, etc.).
+- **Files (expected):** `src/data/characterCatalog.ts` (or parallel `characterAccent.ts`), `src/index.tsx` scoped CSS / token wiring, `MainTab.tsx`, `CharacterPickerModal.tsx`, shared constants if extracted from `src/features/unified-input/constants.ts` or similar.
+- **Depends on:** **Character voice roleplay** (shipped); stable preset ids.
+- **Not in scope:** Per-game accent overrides; animating hue shifts; changing Ollama or roleplay prompt content solely for theming.
+
+
+
+### Random character “?” avatar (picker + main)
+
+★★
+
+- **Goal:** Replace the current **Random** visual (e.g. dice / composite preview) with a **single “?”** treatment everywhere the random mode is shown as an avatar (picker tile, main-tab glass avatar when random is active, any other summary chip).
+- **Primary work:** Icon or text component branch for `ai_character_random === true`; ensure focus rings and hit targets stay Deck-friendly; optional tooltip still explains random selection behavior.
+- **Files:** `CharacterPickerModal.tsx`, `MainTab.tsx`, `CharacterRoleplayEmoticon.tsx` / grid helpers if Random currently maps to a special emoticon.
+- **Depends on:** **Character voice roleplay** (shipped).
+- **Not in scope:** Changing random roll logic or backend `build_roleplay_system_suffix` behavior.
+
+
+
+### Debug tab hidden by default (Settings toggle)
+
+★★
+
+- **Goal:** Reduce accidental exposure of technical surfaces for typical users: the **Debug** tab is **off the tab strip by default** and only appears after the user enables **Show Debug tab** (or similarly named) on the **Settings** tab. Power users and contributors keep a one-time, persisted path to the same tools as today.
+- **Primary work:** New persisted boolean in `settings.json` (e.g. `show_debug_tab`, default **false**); Settings `ToggleField` with short helper copy; build the `<Tabs tabs={...}>` list from a filtered array so the Debug entry is omitted when disabled; on toggle **off** while `currentTab === "debug"`, programmatically select **Main** (or Settings) and optionally toast that Debug was hidden; verify D-pad / LB–RB order matches the visible tab count only.
+- **Files:** `src/index.tsx` (tabs definition + `onShowTab` / restore paths), Settings block in same file or extracted component, `settings_service.py`, `settingsAndResponse.ts`, default in backend settings load for installs missing the key (**false**).
+- **Depends on:** **Settings persistence** (shipped); existing **Debug** tab content unchanged once visible.
+- **Not in scope:** Hiding individual rows inside Debug while the tab exists; password-gating the toggle; remote kill-switch without user action.
 
 
 
@@ -563,6 +603,7 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Character voice roleplay (shipped)** → baseline for **Character accent intensity (shipped)**; presets in [voice-character-catalog.md](voice-character-catalog.md), [src/data/characterCatalog.ts](../src/data/characterCatalog.ts).
 - **Character voice roleplay (shipped)** → **Pyro talent-manager easter egg (hidden preset)** (planned).
 - **Character voice roleplay** + avatar mapping → **Higher-resolution character avatars (GTA-style art pass)**.
+- **Character voice roleplay (shipped)** → **Character-derived UI accent theme (preset-selected)** (planned); **Random character “?” avatar** (planned).
 - **Input sanitizer (shipped)** + **Input handling transparency (shipped)** → future sanitizer extensions should keep user-visible auditability.
 - **Strategy Guide prompt path (beta)** → **Strategy Guide safety and spoilers**, **Strategy checklist workflow (chat-scoped)**.
 - **Global screenshots and vision** → richer strategy + screenshot context.
@@ -579,7 +620,7 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Bundled VDF parsing** → **Steam Input layout analysis** (and optional deeper parsing).
 - **Steam Input settings search + jump** → Phase 1 shipped; broader catalog deferred.
 - **Offline intent pack exchange** → offline-first search quality.
-- **Settings persistence** → mode profiles, language override, background completion metadata.
+- **Settings persistence** → mode profiles, language override, background completion metadata; **Debug tab hidden by default (Settings toggle)** (planned).
 
 ```mermaid
 flowchart TD

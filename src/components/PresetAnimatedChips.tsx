@@ -7,6 +7,7 @@ import {
   holdMsForPresetText,
   type PresetPrompt,
 } from "../data/presets";
+import { BONSAI_FOREST_GREEN } from "../features/unified-input/constants";
 
 /** Fade-in duration (ms); must match the slot wrapper transition when opacity increases. */
 export const PRESET_CAROUSEL_FADE_IN_MS = 1000;
@@ -211,7 +212,15 @@ export function PresetAnimatedChips(props: PresetAnimatedChipsProps) {
           >
             {p.text}
             {p.beta && (
-              <span style={{ marginLeft: 6, fontSize: 10, opacity: 0.55, fontStyle: "italic" }}>
+              <span
+                style={{
+                  marginLeft: 6,
+                  fontSize: 10,
+                  fontStyle: "italic",
+                  color: BONSAI_FOREST_GREEN,
+                  fontWeight: 600,
+                }}
+              >
                 [beta]
               </span>
             )}

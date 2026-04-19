@@ -28,17 +28,22 @@ export function useUnifiedInputSurface(currentTab: string, unifiedInput: string)
   const unifiedInputFieldLayerRef = useRef<HTMLDivElement>(null);
   const unifiedInputMeasureRef = useRef<HTMLDivElement>(null);
   const askBarHostRef = useRef<HTMLDivElement>(null);
-  const askLeftCorrectionPxRef = useRef<number | null>(null);
   const lastUnifiedHostWRef = useRef(0);
+  /** Tab id can change between RO/RAF ticks; never remeasure Ask when not on main (avoids tab-switch flicker). */
+  const currentTabRef = useRef(currentTab);
+  currentTabRef.current = currentTab;
   const [unifiedInputSurfacePx, setUnifiedInputSurfacePx] = useState(UNIFIED_TEXT_BODY_MIN_PX);
   const [usesNativeMultilineField, setUsesNativeMultilineField] = useState(false);
 
   const remeasureUnifiedInputSurface = useCallback(() => {
+    if (currentTabRef.current !== "main") return;
     const host = unifiedInputHostRef.current;
     const layer = unifiedInputFieldLayerRef.current;
     const measure = unifiedInputMeasureRef.current;
     if (!host || !measure || !host.isConnected) return;
     const hostW = host.getBoundingClientRect().width;
+    /* Mid-carousel / first-paint widths are bogus and cause a visible Ask-row snap (tab switch). */
+    if (hostW < 40) return;
     const field = (layer ?? host).querySelector<HTMLTextAreaElement | HTMLInputElement>("textarea, input");
     setUsesNativeMultilineField(field?.tagName === "TEXTAREA");
     const fieldCw = field && field.clientWidth > 0 ? field.clientWidth : 0;
@@ -66,7 +71,6 @@ export function useUnifiedInputSurface(currentTab: string, unifiedInput: string)
     setUnifiedInputSurfacePx(nextPx);
     const hostWRounded = Math.round(hostW * 100) / 100;
     if (Math.abs(hostW - lastUnifiedHostWRef.current) > 0.5) {
-      askLeftCorrectionPxRef.current = null;
       lastUnifiedHostWRef.current = hostW;
     }
     const askOuterW = Math.round((hostW + ASK_BAR_ROW_WIDTH_EXTRA_PX) * 100) / 100;
@@ -88,11 +92,9 @@ export function useUnifiedInputSurface(currentTab: string, unifiedInput: string)
         : 0;
       const rawAskLeft = al - currentCorrection;
       const leftDelta = Math.round((ul - rawAskLeft) * 100) / 100;
-      if (askLeftCorrectionPxRef.current == null && Math.abs(leftDelta) > 0.5) {
-        askLeftCorrectionPxRef.current = leftDelta;
-      }
-      const appliedAskShift = askLeftCorrectionPxRef.current ?? 0;
-      const marginLeftPx = Math.round((appliedAskShift + ASK_BAR_LAYOUT_SHIFT_RIGHT_PX) * 100) / 100;
+      /* Do not lock leftDelta to the first sample — carousel transforms, preset→field focus, and
+       * ai-character padding change ul/al; a frozen correction caused visible horizontal jumps (logs H5). */
+      const marginLeftPx = Math.round((leftDelta + ASK_BAR_LAYOUT_SHIFT_RIGHT_PX) * 100) / 100;
       /* Route correction through a CSS var + CSS rule rather than askEl.style.marginLeft: React
        * re-renders wipe ref-set inline styles on the ask bar element, but scope-level CSS vars survive. */
       scopeEl?.style.setProperty("--bonsai-ask-margin-left", `${marginLeftPx}px`);
@@ -102,14 +104,31 @@ export function useUnifiedInputSurface(currentTab: string, unifiedInput: string)
   useLayoutEffect(() => {
     if (currentTab !== "main") return;
     remeasureUnifiedInputSurface();
-  }, [unifiedInput, currentTab, remeasureUnifiedInputSurface]);
+  }, [unifiedInput, remeasureUnifiedInputSurface]);
+
+  /** Tab changes only: defer remeasure until after layout/carousel settles (avoids Ask bar flash). */
+  useLayoutEffect(() => {
+    if (currentTab !== "main") return;
+    let rafOuter = 0;
+    let rafInner = 0;
+    let cancelled = false;
+    rafOuter = requestAnimationFrame(() => {
+      rafInner = requestAnimationFrame(() => {
+        if (!cancelled) remeasureUnifiedInputSurface();
+      });
+    });
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(rafOuter);
+      cancelAnimationFrame(rafInner);
+    };
+  }, [currentTab, remeasureUnifiedInputSurface]);
 
   useEffect(() => {
     if (currentTab !== "main") {
-      askLeftCorrectionPxRef.current = null;
       lastUnifiedHostWRef.current = 0;
-      bonsaiScopeRef.current?.style.removeProperty("--bonsai-askbar-outer-width");
-      bonsaiScopeRef.current?.style.removeProperty("--bonsai-ask-margin-left");
+      /* Do not remove --bonsai-ask-* on tab change: one frame with missing vars made the Ask row
+       * jump to CSS fallbacks before MainTab unmounted (visible flash when leaving main). */
     }
   }, [currentTab]);
 
@@ -117,9 +136,19 @@ export function useUnifiedInputSurface(currentTab: string, unifiedInput: string)
     if (currentTab !== "main") return;
     const host = unifiedInputHostRef.current;
     if (!host || typeof ResizeObserver === "undefined") return;
-    const ro = new ResizeObserver(() => remeasureUnifiedInputSurface());
+    let roRaf = 0;
+    const ro = new ResizeObserver(() => {
+      cancelAnimationFrame(roRaf);
+      roRaf = requestAnimationFrame(() => {
+        roRaf = 0;
+        remeasureUnifiedInputSurface();
+      });
+    });
     ro.observe(host);
-    return () => ro.disconnect();
+    return () => {
+      cancelAnimationFrame(roRaf);
+      ro.disconnect();
+    };
   }, [currentTab, remeasureUnifiedInputSurface]);
 
   return {

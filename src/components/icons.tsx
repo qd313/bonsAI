@@ -26,12 +26,14 @@ const IconShell: React.FC<{ size: number; children: React.ReactNode }> = ({ size
   </span>
 );
 
-/** Permissions tab: lock icon matches other tab title icon sizing (see TAB_TITLE_ICON_PX_PERMISSIONS). */
+/** Permissions tab: stroke icon for inline UI and Decky tab title. */
+const strokeForTabSize = (size: number) => (size > 72 ? 2.5 : size > 48 ? 2.25 : 1.35);
+
 export const LockIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
   <IconShell size={size}>
     <FiLock
       size={size}
-      strokeWidth={size > 48 ? 2.25 : 1.35}
+      strokeWidth={strokeForTabSize(size)}
       aria-hidden
       style={{ display: "block" }}
     />
@@ -43,10 +45,42 @@ export const GearIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
   <IconShell size={size}>
     <FiSettings
       size={size}
-      strokeWidth={size > 48 ? 2.25 : 1.35}
+      strokeWidth={strokeForTabSize(size)}
       aria-hidden
       style={{ display: "block" }}
     />
+  </IconShell>
+);
+
+/**
+ * Main tab title: outline bonsai canopy + pot (stroke-only), sized like FiSettings for QAM parity.
+ */
+export const BonsaiTreeTabIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
+  <IconShell size={size}>
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      style={{ display: "block", transform: "translateY(-2px)" }}
+    >
+      <path
+        d="M12 6c-1.8 0-3.3 1.2-3.7 2.8A3.2 3.2 0 0 0 5.5 12c0 1.8 1.4 3.2 3.2 3.2c1.2 0 2.2-.5 2.9-1.4c.5.9 1.5 1.4 2.7 1.4c1.8 0 3.2-1.4 3.2-3.2c0-1.6-1.2-3-2.7-3.2A3.8 3.8 0 0 0 12 6Z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={size > 22 ? 1.08 : 1}
+        strokeLinejoin="round"
+      />
+      <path
+        d="M12 14.5v3.2m-4.8 0h9.6l-1.1 2.3H8.3l-1.1-2.3Z"
+        stroke="currentColor"
+        strokeWidth={size > 22 ? 1.02 : 0.95}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   </IconShell>
 );
 
@@ -54,8 +88,30 @@ export const GearIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
 export const BugIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
   <IconShell size={size}>
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M9 8.5A3 3 0 0 1 12 6a3 3 0 0 1 3 2.5M8 10h8v4.3a4 4 0 0 1-8 0V10Z" stroke="currentColor" strokeWidth="1.45" strokeLinecap="round" />
-      <path d="M7 12H4m13 0h3M9 16l-2 2m8-2l2 2M9 8L7 6m8 2l2-2" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" />
+      <path
+        d="M9 8.5A3 3 0 0 1 12 6a3 3 0 0 1 3 2.5M8 10h8v4.3a4 4 0 0 1-8 0V10Z"
+        stroke="currentColor"
+        strokeWidth={size > 72 ? 1.75 : 1.45}
+        strokeLinecap="round"
+      />
+      <path
+        d="M7 12H4m13 0h3M9 16l-2 2m8-2l2 2M9 8L7 6m8 2l2-2"
+        stroke="currentColor"
+        strokeWidth={size > 72 ? 1.65 : 1.35}
+        strokeLinecap="round"
+      />
+    </svg>
+  </IconShell>
+);
+
+/** About tab title: vector lowercase “i” (skew reads serif-italic; avoids Steam caps on text nodes). */
+export const AboutTabTitleIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
+  <IconShell size={size}>
+    <svg width={size} height={size} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g fill="currentColor" transform="translate(12 12) skewX(-10) translate(-12 -12)">
+        <circle cx="12" cy="6.2" r="2.35" />
+        <rect x="10.15" y="9.9" width="3.7" height="11.6" rx="1.15" />
+      </g>
     </svg>
   </IconShell>
 );

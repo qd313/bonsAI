@@ -1,6 +1,7 @@
 import React from "react";
 import { ButtonItem, Navigation, PanelSection, PanelSectionRow } from "@decky/ui";
 import { toaster } from "@decky/api";
+import { BONSAI_FOREST_GREEN } from "../features/unified-input/constants";
 
 type Props = {
   githubRepoUrl: string;
@@ -59,7 +60,7 @@ export const AboutTab: React.FC<Props> = ({
       </div>
     </PanelSectionRow>
     <PanelSectionRow>
-      <div style={{ fontSize: 12, color: "#f2cf84", lineHeight: "1.5" }}>
+      <div style={{ fontSize: 12, color: BONSAI_FOREST_GREEN, lineHeight: "1.5", fontWeight: 600 }}>
         This plugin is in beta. AI-generated recommendations — especially TDP
         and performance changes — should be verified before relying on them.
         bonsAI modifies system hardware settings based on AI suggestions. Use

@@ -1,0 +1,14 @@
+---
+description: When debugging Decky or Steam Deck UI, ingest local screenshots using the decky-screenshot-ingest skill.
+globs: src/**/*
+alwaysApply: false
+---
+
+# Decky screenshot ingest
+
+When **debugging** Decky / Steam Deck UI in this repo (layout, focus, QAM, overlays, on-device vs code), do the following **before** relying only on code or user descriptions:
+
+1. **Read** `.cursor/skills/decky-screenshot-ingest/SKILL.md` (repo root) and follow its workflow: list `screenshots/` by newest mtime, read PNGs/JPEGs, tie pixels to code.
+2. If `screenshots/` is empty or unchanged, say so and point the user at `scripts/screenshot-deck.ps1` (repo root `.env` for `DECK_IP` / `DECK_USER`).
+
+Do not skip visual ingest when a fresh capture may exist and the task is UI or focus related on the Deck.

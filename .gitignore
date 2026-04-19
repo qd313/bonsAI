@@ -58,3 +58,9 @@ out/*
 cli/
 cli/*
 cli/decky
+
+# Local Deck screenshots (captured by scripts/screenshot-deck.ps1)
+screenshots/
+
+# v0 UI drafts (reference only; not part of the Decky bundle)
+src/v0-drafts/

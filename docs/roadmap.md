@@ -8,33 +8,33 @@ Star ratings use the GTA scale: `★` easiest … `★★★★★` very high co
 
 ## In progress
 
-- [ ] ★★★ **QAMP Reflection (Phase 1 — Safe Default):** Show applied-state confirmation and explicit verification guidance when QAM sliders do not immediately mirror hardware writes.
+- ★★★ **QAMP Reflection (Phase 1 — Safe Default):** Show applied-state confirmation and explicit verification guidance when QAM sliders do not immediately mirror hardware writes.
   - Requirement: every BonsAI performance action must be user-verifiable after execution.
   - Initial behavior: keep sysfs write path as source of truth and guide users to re-open QAM Performance to verify reflected values.
 
 ## Known bugs
 
-- [x] ★ **Question Overlay Alignment Drift:** The 3-line question overlay has minor horizontal spacing mismatch vs native `TextField` internals.
-- [ ] ★★ **D-pad Scroll Bottom Cutoff:** Controller navigation can stop before the final response chunk is fully visible even when touch scroll can reach it.
+- ★ **Question Overlay Alignment Drift:** The 3-line question overlay has minor horizontal spacing mismatch vs native `TextField` internals.
+- ★★ **D-pad Scroll Bottom Cutoff:** Controller navigation can stop before the final response chunk is fully visible even when touch scroll can reach it.
 
 ## Up next
 
-- [ ] ★★ **Text Ask model preference chains (user-configurable):** Screenshot/vision tries an ordered fallback list per Ask mode in [`refactor_helpers.py`](../refactor_helpers.py) (`select_ollama_models(..., requires_vision=True)`). **Text-only** paths still use the same fixed per-mode lists today. Add Settings (or import/export JSON) so users can define **ordered text model tags per mode** (Speed / Strategy / Expert), with validation, sane defaults matching the shipped lists, and the same try-next-on-`model not found` behavior as vision.
-- [ ] ★★ **Ollama model VRAM retention:** Plugin-side setting for how long the Ollama host keeps the loaded model in VRAM after a request completes (maps to Ollama **`keep_alive`** on each generate/chat call). **Default: 5 minutes.** Shorter values free VRAM sooner for other GPU work; longer values reduce cold-load latency when asking again in quick succession.
+- ★★ **Text Ask model preference chains (user-configurable):** Screenshot/vision tries an ordered fallback list per Ask mode in `[refactor_helpers.py](../refactor_helpers.py)` (`select_ollama_models(..., requires_vision=True)`). **Text-only** paths still use the same fixed per-mode lists today. Add Settings (or import/export JSON) so users can define **ordered text model tags per mode** (Speed / Strategy / Expert), with validation, sane defaults matching the shipped lists, and the same try-next-on-`model not found` behavior as vision.
+- ★★ **Ollama model VRAM retention:** Plugin-side setting for how long the Ollama host keeps the loaded model in VRAM after a request completes (maps to Ollama `**keep_alive`** on each generate/chat call). **Default: 5 minutes.** Shorter values free VRAM sooner for other GPU work; longer values reduce cold-load latency when asking again in quick succession.
   - **Shorter than default:** 3 min, 2 min, 1 min, 30 s, 15 s, **0** (unload immediately after the request).
   - **Longer than default:** 15, 30, 45, 60, 120, 240 **minutes**.
-- [ ] ★★ **Prompt Testing and Tuning:** Systematically validate prompt quality across games and scenarios (see [prompt-testing.md](prompt-testing.md)).
-- [ ] ★★★ **QAMP Verification Checklist:** Verify behavior across per-game profile modes, QAM reopen, Steam restart/reboot, and GPU-related recommendations.
-  - [ ] Verify behavior with per-game profile on/off.
-  - [ ] Verify behavior after closing and reopening the QAM Performance tab.
-  - [ ] Verify behavior after Steam restart and full reboot.
-  - [ ] Verify behavior when prompt includes GPU clock recommendations.
-- [ ] ★★★★★ **QAMP Reflection (Phase 2 — Experimental Opt-In):** Attempt Steam profile sync only behind explicit warning toggles. *Blocked on Phase 1.*
+- ★★ **Prompt Testing and Tuning:** Systematically validate prompt quality across games and scenarios (see [prompt-testing.md](prompt-testing.md)).
+- ★★★ **QAMP Verification Checklist:** Verify behavior across per-game profile modes, QAM reopen, Steam restart/reboot, and GPU-related recommendations.
+  - Verify behavior with per-game profile on/off.
+  - Verify behavior after closing and reopening the QAM Performance tab.
+  - Verify behavior after Steam restart and full reboot.
+  - Verify behavior when prompt includes GPU clock recommendations.
+- ★★★★★ **QAMP Reflection (Phase 2 — Experimental Opt-In):** Attempt Steam profile sync only behind explicit warning toggles. *Blocked on Phase 1.*
   - Risks: undocumented internals, Steam update breakage, restart/reboot requirements, and profile corruption risk.
   - Candidate path: fragile `config.vdf` / protobuf edits gated behind experimental mode only.
-- [ ] ★★★ **Character-derived UI accent (preset only):** When **AI character** is on and a **fixed catalog preset** is selected, drive plugin accent UI from a **distinctive color** sampled or defined for that preset’s avatar (highlights = main tone; borders/glows/muted fills = **darker** derivative). **AI character off**, **Random**, and **Custom** character paths keep today’s **forest green** accent system unchanged (including mode selector, tab active glow, chips, and related tokens).
-- [ ] ★★ **Random character avatar = “?”:** In the character picker and main-tab avatar affordance, show a **simple “?”** mark (typographic or minimal glyph) for **Random** instead of a dice / multi-face / catalog preview icon — keeps “unknown voice” obvious at a glance.
-- [ ] ★★ **Debug tab opt-in (Settings):** Hide the **Debug** tab by default; add a **Settings** toggle (persisted) to **show the Debug tab** for power users. When the tab is hidden, **controller/touch navigation** must not land on a non-existent tab (filter tab list / remap focus); if the user turns the toggle **off** while already on Debug, **switch to a safe tab** (e.g. Main) and clear stale debug-only UI state as needed.
+- ★★★ **Character-derived UI accent (preset only):** When **AI character** is on and a **fixed catalog preset** is selected, drive plugin accent UI from a **distinctive color** sampled or defined for that preset’s avatar (highlights = main tone; borders/glows/muted fills = **darker** derivative). **AI character off**, **Random**, and **Custom** character paths keep today’s **forest green** accent system unchanged (including mode selector, tab active glow, chips, and related tokens).
+- ★★ **Random character avatar = “?”:** In the character picker and main-tab avatar affordance, show a **simple “?”** mark (typographic or minimal glyph) for **Random** instead of a dice / multi-face / catalog preview icon — keeps “unknown voice” obvious at a glance.
+- ★★ **Debug tab opt-in (Settings):** Hide the **Debug** tab by default; add a **Settings** toggle (persisted) to **show the Debug tab** for power users. When the tab is hidden, **controller/touch navigation** must not land on a non-existent tab (filter tab list / remap focus); if the user turns the toggle **off** while already on Debug, **switch to a safe tab** (e.g. Main) and clear stale debug-only UI state as needed.
 
 ---
 
@@ -44,59 +44,59 @@ Headings group related work. Star counts match the historical list.
 
 ### First-run and prompts
 
-- [x] ★ **Beta Disclaimer Modal:** Show one-time experimental-software warning with risk acknowledgment and bug-report link.
-- [x] ★ **Suggested AI Prompts:** Show curated prompt presets, randomize initial suggestions, and generate contextual follow-ups after responses.
-- [x] ★★ **Input sanitizer lane (hybrid):** Deterministic Ask cleanup and conservative block before Ollama; default on; no Settings UI. Magic phrases `bonsai:disable-sanitize` / `bonsai:enable-sanitize` (exact whole message, trim + casefold) persist `input_sanitizer_user_disabled` via `save_settings` and return confirmation without calling the model. Backend `backend/services/input_sanitizer_service.py`, `main.py` (`ask_game_ai` / `start_background_game_ai`); frontend types and completion path in `src/index.tsx`; phrase constants in `src/data/inputSanitizerCommands.ts`.
-- [x] ★★★ **Input Handling Transparency Panel:** Main tab **Input handling (last Ask)** shows raw input, sanitizer path, system/user text sent to Ollama, model name, and raw vs final reply; **Run original** / **Copy JSON**. Optional Settings **Verbose Ask logging to Desktop notes** (`desktop_ask_verbose_logging`) appends full trace markdown to `bonsai-ask-trace-YYYY-MM-DD.md` when filesystem writes are allowed. Backend `get_input_transparency`, `_persist_input_transparency`, `append_desktop_ask_transparency_sync` in `desktop_note_service.py`; `main.py`; UI `MainTab.tsx`, `src/utils/inputTransparency.ts`.
+- ★ **Beta Disclaimer Modal:** Show one-time experimental-software warning with risk acknowledgment and bug-report link.
+- ★ **Suggested AI Prompts:** Show curated prompt presets, randomize initial suggestions, and generate contextual follow-ups after responses.
+- ★★ **Input sanitizer lane (hybrid):** Deterministic Ask cleanup and conservative block before Ollama; default on; no Settings UI. Magic phrases `bonsai:disable-sanitize` / `bonsai:enable-sanitize` (exact whole message, trim + casefold) persist `input_sanitizer_user_disabled` via `save_settings` and return confirmation without calling the model. Backend `backend/services/input_sanitizer_service.py`, `main.py` (`ask_game_ai` / `start_background_game_ai`); frontend types and completion path in `src/index.tsx`; phrase constants in `src/data/inputSanitizerCommands.ts`.
+- ★★★ **Input Handling Transparency Panel:** Main tab **Input handling (last Ask)** shows raw input, sanitizer path, system/user text sent to Ollama, model name, and raw vs final reply; **Run original** / **Copy JSON**. Optional Settings **Verbose Ask logging to Desktop notes** (`desktop_ask_verbose_logging`) appends full trace markdown to `bonsai-ask-trace-YYYY-MM-DD.md` when filesystem writes are allowed. Backend `get_input_transparency`, `_persist_input_transparency`, `append_desktop_ask_transparency_sync` in `desktop_note_service.py`; `main.py`; UI `MainTab.tsx`, `src/utils/inputTransparency.ts`.
 
 **Also counted in shipped baseline (not separate checklist lines above):** background prompt completion (V1); Linux Ollama compatibility.
 
 ### Connection, routing, diagnostics, and timeouts
 
-- [x] ★★ **Ollama Network Routing Fix:** Route frontend requests through Decky backend (`call("ask_game_ai", ...)`) to resolve cross-origin failures.
-- [x] ★★ **Deck and PC Connection Settings:** Add connection-focused settings including visible Deck IP and PC IP management.
-- [x] ★★ **Diagnostic, Latency, and Timeout Warnings:** Return `elapsed_seconds`, show slow-response warnings, and enforce backend timeout messaging.
-- [x] ★★ **Configurable Latency and Timeout Controls:** Persisted warning + timeout in `settings.json`; Settings Connection uses one Steam `SliderField` for hard timeout with a visible soft-warning readout (`ConnectionTimeoutSlider.tsx`), and ordering is reconciled on load/updates.
+- ★★ **Ollama Network Routing Fix:** Route frontend requests through Decky backend (`call("ask_game_ai", ...)`) to resolve cross-origin failures.
+- ★★ **Deck and PC Connection Settings:** Add connection-focused settings including visible Deck IP and PC IP management.
+- ★★ **Diagnostic, Latency, and Timeout Warnings:** Return `elapsed_seconds`, show slow-response warnings, and enforce backend timeout messaging.
+- ★★ **Configurable Latency and Timeout Controls:** Persisted warning + timeout in `settings.json`; Settings Connection uses one Steam `SliderField` for hard timeout with a visible soft-warning readout (`ConnectionTimeoutSlider.tsx`), and ordering is reconciled on load/updates.
 
 ### Tabs, icons, and unified ask flow
 
-- [x] ★★ **Iconography Pass (Tabs + Plugin + Ask Button):** Add icons to all tabs (bonsAI bonsai-tree icon, Settings gear, Debug bug, About unchanged), switch plugin icon to bonsai SVG, and show the stock diamond beside `Ask` text.
-- [x] ★★ **Persist Last Question and Answer:** Restore prior session state when reopening QAM via Decky settings storage.
-- [x] ★★ **Unified Search + Ask Input:** Merge settings search and AI question entry into one shared input flow.
-- [x] ★ **Preset Chip Fade Opt-Out:** Settings `ToggleField` **Preset chip fade animation** (persisted `preset_chip_fade_animation_enabled`, default on). When off, main-tab suggestion chips stay opaque and rotate prompts without opacity transitions; post-Ask re-seed unchanged. `PresetAnimatedChips.tsx`, `MainTab.tsx`, `settingsAndResponse.ts`, `settings_service.py`.
-- [x] ★★★ **Mode selector (main screen):** Persisted `ask_mode` (`speed` / `strategy` / `deep`, UI labels Speed / Strategy / Deep). Compact outline control (green / bronze / gold) on the unified input strip, left of mic/stop, opens an anchored popover menu to change mode (no layout reflow); D-pad focus order is text field → mode → mic/stop. Backend orders Ollama model fallbacks per mode in `refactor_helpers.py`; `start_background_game_ai` includes `ask_mode`. `src/data/askMode.ts`, `src/components/AskModeMenuPopover.tsx`, `MainTab.tsx`, `index.tsx`, `settingsAndResponse.ts`, `settings_service.py`, `main.py`.
+- ★★ **Iconography Pass (Tabs + Plugin + Ask Button):** Add icons to all tabs (bonsAI bonsai-tree icon, Settings gear, Debug bug, About unchanged), switch plugin icon to bonsai SVG, and show the stock diamond beside `Ask` text.
+- ★★ **Persist Last Question and Answer:** Restore prior session state when reopening QAM via Decky settings storage.
+- ★★ **Unified Search + Ask Input:** Merge settings search and AI question entry into one shared input flow.
+- ★ **Preset Chip Fade Opt-Out:** Settings `ToggleField` **Preset chip fade animation** (persisted `preset_chip_fade_animation_enabled`, default on). When off, main-tab suggestion chips stay opaque and rotate prompts without opacity transitions; post-Ask re-seed unchanged. `PresetAnimatedChips.tsx`, `MainTab.tsx`, `settingsAndResponse.ts`, `settings_service.py`.
+- ★★★ **Mode selector (main screen):** Persisted `ask_mode` (`speed` / `strategy` / `deep`, UI labels Speed / Strategy / Deep). Compact outline control (green / bronze / gold) on the unified input strip, left of mic/stop, opens an anchored popover menu to change mode (no layout reflow); D-pad focus order is text field → mode → mic/stop. Backend orders Ollama model fallbacks per mode in `refactor_helpers.py`; `start_background_game_ai` includes `ask_mode`. `src/data/askMode.ts`, `src/components/AskModeMenuPopover.tsx`, `MainTab.tsx`, `index.tsx`, `settingsAndResponse.ts`, `settings_service.py`, `main.py`.
 
 **Baseline index:** preset carousel and transition UX (Phase 1 — fade/hold; manual arrows deferred).
 
 ### AI-assisted power and long-response UX
 
-- [x] ★★★ **TDP Automation via AI Output:** Parse AI recommendations and apply constrained TDP values through safe sysfs write paths.
-- [x] ★★★ **D-pad Response Scrolling:** Split long responses into focusable chunks for controller-first navigation.
+- ★★★ **TDP Automation via AI Output:** Parse AI recommendations and apply constrained TDP values through safe sysfs write paths.
+- ★★★ **D-pad Response Scrolling:** Split long responses into focusable chunks for controller-first navigation.
 
 ### Steam Input
 
-- [x] ★★★★★ **Steam Input Jump (Phase 1):** Debug tab jump to per-game controller config via `steam://controllerconfig/{appId}` (`SteamClient.URL.ExecuteSteamURL`), versioned lexicon in `src/data/steam-input-lexicon.ts`, helper in `src/utils/steamInputJump.ts`. Documented in [steam-input-research.md](steam-input-research.md). **Phase 2+** (indexed search, full catalog, ranked results) is **not** planned to continue.
+- ★★★★★ **Steam Input Jump (Phase 1):** Debug tab jump to per-game controller config via `steam://controllerconfig/{appId}` (`SteamClient.URL.ExecuteSteamURL`), versioned lexicon in `src/data/steam-input-lexicon.ts`, helper in `src/utils/steamInputJump.ts`. Documented in [steam-input-research.md](steam-input-research.md). **Phase 2+** (indexed search, full catalog, ranked results) is **not** planned to continue.
 
 ### About tab and main surface polish
 
-- [x] ★ **Built on Ollama Link (About Tab):** “Built on Ollama” button in About opens `https://github.com/ollama/ollama` via `Navigation.NavigateToExternalWeb` (toast fallback), wired from `OLLAMA_UPSTREAM_REPO_URL` in `src/index.tsx` and `src/components/AboutTab.tsx`.
-- [x] ★★ **Search Surface Glass Pass (Unified Input):** Glass-style unified search field and ask bar (~25% fill, blur, light edge), 50% opacity on corner action icons, dynamic height for the input shell from wrapped text, AI answer chunks use matching glass instead of near-black panels.
+- ★ **Built on Ollama Link (About Tab):** “Built on Ollama” button in About opens `https://github.com/ollama/ollama` via `Navigation.NavigateToExternalWeb` (toast fallback), wired from `OLLAMA_UPSTREAM_REPO_URL` in `src/index.tsx` and `src/components/AboutTab.tsx`.
+- ★★ **Search Surface Glass Pass (Unified Input):** Glass-style unified search field and ask bar (~25% fill, blur, light edge), 50% opacity on corner action icons, dynamic height for the input shell from wrapped text, AI answer chunks use matching glass instead of near-black panels.
 
 ### Desktop notes (Game Mode → Desktop)
 
-- [x] ★★★ **Desktop Mode Debug Note Save (Steam Deck, V1):** After a successful ask, **Save to Desktop note…** on the main tab opens a consent + name dialog; append-only writes to `~/Desktop/BonsAI_notes/<name>.md` with UTC timestamps and Q+A (`append_desktop_debug_note` in `main.py`, `backend/services/desktop_note_service.py`, `DesktopNoteSaveModal` + `MainTab` in `src/`).
-- [x] ★★★ **Desktop Mode Debug Note Save — Daily chat auto-save (V2):** Settings tab toggle (`desktop_debug_note_auto_save`, default off). When enabled with Filesystem writes, each **Ask** and each **AI response** append to `~/Desktop/BonsAI_notes/bonsai-chat-YYYY-MM-DD.md` (UTC calendar day); Ask entries list attached screenshot paths. Backend `append_desktop_chat_event`; `src/index.tsx` Settings + ask/response hooks.
+- ★★★ **Desktop Mode Debug Note Save (Steam Deck, V1):** After a successful ask, **Save to Desktop note…** on the main tab opens a consent + name dialog; append-only writes to `~/Desktop/BonsAI_notes/<name>.md` with UTC timestamps and Q+A (`append_desktop_debug_note` in `main.py`, `backend/services/desktop_note_service.py`, `DesktopNoteSaveModal` + `MainTab` in `src/`).
+- ★★★ **Desktop Mode Debug Note Save — Daily chat auto-save (V2):** Settings tab toggle (`desktop_debug_note_auto_save`, default off). When enabled with Filesystem writes, each **Ask** and each **AI response** append to `~/Desktop/BonsAI_notes/bonsai-chat-YYYY-MM-DD.md` (UTC calendar day); Ask entries list attached screenshot paths. Backend `append_desktop_chat_event`; `src/index.tsx` Settings + ask/response hooks.
 
 ### Permissions and capability gating
 
-- [x] ★★★★ **Capability Permission Center (User-Controlled Access):** Permissions tab (lock icon, same title scale as other tabs) with toggles for filesystem writes, hardware control (TDP apply), media library access (screenshot attach), and external/Steam navigation (About links, Debug Steam Input jump). Persisted `settings.json` `capabilities`; new installs default OFF; legacy installs without a `capabilities` block are grandfathered ON until saved. Backend enforces gates on `append_desktop_debug_note`, `append_desktop_chat_event`, `list_recent_screenshots`, ask-with-attachments, TDP apply, `capture_screenshot`. Files: `backend/services/capabilities.py`, `PermissionsTab`, `main.py`, `src/utils/settingsAndResponse.ts`.
+- ★★★★ **Capability Permission Center (User-Controlled Access):** Permissions tab (lock icon, same title scale as other tabs) with toggles for filesystem writes, hardware control (TDP apply), media library access (screenshot attach), and external/Steam navigation (About links, Debug Steam Input jump). Persisted `settings.json` `capabilities`; new installs default OFF; legacy installs without a `capabilities` block are grandfathered ON until saved. Backend enforces gates on `append_desktop_debug_note`, `append_desktop_chat_event`, `list_recent_screenshots`, ask-with-attachments, TDP apply, `capture_screenshot`. Files: `backend/services/capabilities.py`, `PermissionsTab`, `main.py`, `src/utils/settingsAndResponse.ts`.
 
 **Baseline index:** global screenshots and vision (V1) — multimodal attach; uses media-related capability paths.
 
 ### Character voice roleplay
 
-- [x] ★★★ **Character Voice Roleplay Mode (Opt-In):** Default-off **AI character** in Settings (small caps label); fullscreen `CharacterPickerModal` with per–work-title groups, **Random** toggle, custom line, OK/Cancel; unique pixel emoticons; main-tab glass avatar opens picker; backend `ai_character_service.build_roleplay_system_suffix` appends roleplay instructions to the Ollama system prompt. `src/data/characterCatalog.ts`, `src/components/CharacterPickerModal.tsx`, `main.py`, `settings.json` fields `ai_character_*`.
-- [x] ★★ **Character Accent Intensity Levels (Doom-Style Copy):** Settings **Accent intensity** horizontal chips (`subtle` / `balanced` / `heavy` / `unleashed`, default `balanced`) when AI characters are on; Doom-difficulty–flavored short labels and helper copy. Persisted `ai_character_accent_intensity`; `build_roleplay_system_suffix` varies dialect/accent strength for presets, random, and custom paths without changing TDP/JSON policy. `src/data/aiCharacterAccentIntensity.ts`, `src/index.tsx`, `backend/services/ai_character_service.py`, `settings_service.py`, `settingsAndResponse.ts`.
+- ★★★ **Character Voice Roleplay Mode (Opt-In):** Default-off **AI character** in Settings (small caps label); fullscreen `CharacterPickerModal` with per–work-title groups, **Random** toggle, custom line, OK/Cancel; unique pixel emoticons; main-tab glass avatar opens picker; backend `ai_character_service.build_roleplay_system_suffix` appends roleplay instructions to the Ollama system prompt. `src/data/characterCatalog.ts`, `src/components/CharacterPickerModal.tsx`, `main.py`, `settings.json` fields `ai_character_*`.
+- ★★ **Character Accent Intensity Levels (Doom-Style Copy):** Settings **Accent intensity** horizontal chips (`subtle` / `balanced` / `heavy` / `unleashed`, default `balanced`) when AI characters are on; Doom-difficulty–flavored short labels and helper copy. Persisted `ai_character_accent_intensity`; `build_roleplay_system_suffix` varies dialect/accent strength for presets, random, and custom paths without changing TDP/JSON policy. `src/data/aiCharacterAccentIntensity.ts`, `src/index.tsx`, `backend/services/ai_character_service.py`, `settings_service.py`, `settingsAndResponse.ts`.
 
 ---
 
@@ -106,7 +106,7 @@ Longer notes for backlog items: **Shipped feature reference** (extra context, de
 
 ### Vision screenshot model order (canonical)
 
-When a screenshot is attached, `select_ollama_models(..., requires_vision=True)` in [`refactor_helpers.py`](../refactor_helpers.py) picks the try-next chain. **Speed (Fast):** `gemma4:2b`, `gemma4:4b`, `llava:7b`, `llama3.2-vision`, then lighter `llava` / `llama3.2-vision` tag variants. **Strategy:** `gemma4:31b`, `gemma3:27b` (MoE-class ~26–27B fallback), `qwen3.5:32b`, `gemma4:4b`, `gemma4:2b`, `llama3.2-vision`, `llava:7b`, then `qwen2.5vl` and generic vision fallbacks. **Expert (`deep`):** `internvl3.5:38b`, `internvl2.5:38b`, `gemma4:31b`, `gemma3:27b`, Qwen 3-VL family tags, then `qwen2.5vl` / `llava`. Exact strings evolve with the Ollama library; install the tags you care about on the host.
+When a screenshot is attached, `select_ollama_models(..., requires_vision=True)` in `[refactor_helpers.py](../refactor_helpers.py)` picks the try-next chain. **Speed (Fast):** `gemma4:2b`, `gemma4:4b`, `llava:7b`, `llama3.2-vision`, then lighter `llava` / `llama3.2-vision` tag variants. **Strategy:** `gemma4:31b`, `gemma3:27b` (MoE-class ~26–27B fallback), `qwen3.5:32b`, `gemma4:4b`, `gemma4:2b`, `llama3.2-vision`, `llava:7b`, then `qwen2.5vl` and generic vision fallbacks. **Expert (`deep`):** `internvl3.5:38b`, `internvl2.5:38b`, `gemma4:31b`, `gemma3:27b`, Qwen 3-VL family tags, then `qwen2.5vl` / `llava`. Exact strings evolve with the Ollama library; install the tags you care about on the host.
 
 ---
 
@@ -120,8 +120,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 
 **Shipped** — see **Completed** → Character voice roleplay; `ai_character_accent_intensity`; backend varies by `subtle` / `balanced` / `heavy` / `unleashed`.
 
-
-
 ### Higher-resolution character avatars (GTA-style art pass)
 
 ★★★
@@ -131,8 +129,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Files:** `src/data/characterCatalog.ts`, `src/components/CharacterPickerModal.tsx`, `src/components/MainTab.tsx`, `src/index.tsx`, `src/assets/`.
 - **Depends on:** character voice roleplay + existing catalog mapping.
 - **Not in scope:** changing roleplay prompt behavior, animation/VFX, or unapproved third-party likeness assets.
-
-
 
 ### Input sanitizer lane (hybrid + user override) — extensions
 
@@ -145,15 +141,11 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Depends on:** settings persistence and transparent input handling.
 - **Not in scope:** hidden rewriting with no user visibility or override.
 
-
-
 ### Input handling transparency panel
 
 ★★★
 
 **Shipped** — see **Completed** → Input Handling Transparency Panel.
-
-
 
 ### Desktop mode debug note save (Steam Deck)
 
@@ -163,8 +155,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 
 - **Possible follow-ups:** natural-language save triggers, optional raw-response export.
 - **Not in scope:** arbitrary paths outside `~/Desktop/BonsAI_notes/`, silent writes without permission, or replacing note content by default.
-
-
 
 ### Preset carousel and transition UX
 
@@ -176,8 +166,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Depends on:** existing preset randomization/category logic.
 - **Not in scope:** changing core preset taxonomy/model routing.
 
-
-
 ### Capability Permission Center (user-controlled access)
 
 ★★★★
@@ -185,9 +173,7 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 **Shipped** — see **Completed** and baseline index. Ollama/LAN ask traffic is not gated as “web.”
 
 - **Not in scope (future):** first-use modals per capability beyond blocked-action toasts; separate toggles for sudo vs direct sysfs (currently under Hardware control).
-- **Planned extension (not shipped):** **`network_web_access`** — Permission Center toggle (default TBD) covering outbound HTTP/HTTPS from the Deck plugin; ties to **RAG knowledge base** below.
-
-
+- **Planned extension (not shipped):** `**network_web_access`** — Permission Center toggle (default TBD) covering outbound HTTP/HTTPS from the Deck plugin; ties to **RAG knowledge base** below.
 
 ### Steam Input settings search + jump (research-first)
 
@@ -199,8 +185,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Depends on:** route-discovery research and fallback UX.
 - **Not in scope:** private UI patching or brittle route injection.
 
-
-
 ### Global screenshots and vision (implemented V1)
 
 ★★★★★
@@ -211,8 +195,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Files:** `main.py`, `src/index.tsx`, install/troubleshooting docs.
 - **Depends on:** vision-capable models on host PC.
 - **Not in scope:** continuous video streaming.
-
-
 
 ---
 
@@ -230,8 +212,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Depends on:** **Mode selector (main screen)** (shipped).
 - **Not in scope:** per-game/per-model fine-grained profile matrix.
 
-
-
 ### Ollama model VRAM retention (keep_alive)
 
 ★★
@@ -244,8 +224,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Depends on:** Decky → Ollama request path and settings persistence (shipped baseline under **Connection, routing, diagnostics, and timeouts**).
 - **Not in scope:** Per-model or per-game retention profiles; editing the Ollama daemon’s global config on disk outside what each request specifies.
 
-
-
 ### Character-derived UI accent theme (preset-selected)
 
 ★★★
@@ -257,8 +235,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Depends on:** **Character voice roleplay** (shipped); stable preset ids.
 - **Not in scope:** Per-game accent overrides; animating hue shifts; changing Ollama or roleplay prompt content solely for theming.
 
-
-
 ### Random character “?” avatar (picker + main)
 
 ★★
@@ -268,8 +244,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Files:** `CharacterPickerModal.tsx`, `MainTab.tsx`, `CharacterRoleplayEmoticon.tsx` / grid helpers if Random currently maps to a special emoticon.
 - **Depends on:** **Character voice roleplay** (shipped).
 - **Not in scope:** Changing random roll logic or backend `build_roleplay_system_suffix` behavior.
-
-
 
 ### Debug tab hidden by default (Settings toggle)
 
@@ -281,8 +255,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Depends on:** **Settings persistence** (shipped); existing **Debug** tab content unchanged once visible.
 - **Not in scope:** Hiding individual rows inside Debug while the tab exists; password-gating the toggle; remote kill-switch without user action.
 
-
-
 ### Multi-language responses
 
 ★★★
@@ -293,8 +265,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Depends on:** settings persistence already present.
 - **Not in scope:** full UI localization of plugin labels.
 
-
-
 ### Search results density + live match emphasis
 
 ★★★
@@ -303,8 +273,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Files:** `src/index.tsx`, prompt/search UX test notes.
 - **Depends on:** unified search indexing and response-state handling.
 - **Not in scope:** changing ranking semantics for unrelated search domains.
-
-
 
 ### Reset cache action (app state)
 
@@ -315,8 +283,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Files:** `src/index.tsx`, optional settings/docs references.
 - **Depends on:** unified input persistence + response state handling.
 - **Not in scope:** clearing host-side Ollama history or deleting screenshot files.
-
-
 
 ### Debugging and Proton log analysis
 
@@ -329,8 +295,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Not in scope:** enabling Proton logging automatically.
 - **Risk note:** limited value unless users already run with `PROTON_LOG=1`.
 
-
-
 ### System prompt reorder and general-purpose assistant clause
 
 ★★★
@@ -341,8 +305,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Files:** `backend/services/ollama_service.py`, `main.py`, `docs/prompt-testing.md` after behavior change.
 - **Depends on:** none.
 - **Not in scope:** changing the JSON schema for TDP/GPU recommendations.
-
-
 
 ### Strategy Guide prompt path (beta)
 
@@ -357,8 +319,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Depends on:** **Mode selector (main screen)** (shipped).
 - **Not in scope:** guaranteed perfect walkthroughs for every title.
 
-
-
 ### Strategy Guide safety and spoilers
 
 ★★★★
@@ -370,20 +330,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Depends on:** **Strategy Guide prompt path (beta)**.
 - **Not in scope:** hard guarantees in every edge case.
 
-
-
-### Idle safety preset automation
-
-★★★★
-
-- **Goal:** Optionally apply a low-power preset (e.g., 3W) after configurable inactivity.
-- **Primary work:** inactivity detection, guardrails, explicit opt-in, cooldown rules.
-- **Files:** `main.py`, `src/index.tsx`.
-- **Depends on:** robust user opt-in safeguards.
-- **Not in scope:** hidden automation without consent.
-
-
-
 ### Steam Input layout analysis
 
 ★★★★
@@ -394,8 +340,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Depends on:** bundled VDF parser support.
 - **Not in scope:** editing/writing controller configs.
 
-
-
 ### Offline intent pack exchange (local JSON)
 
 ★★★★
@@ -405,20 +349,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Files:** `src/index.tsx`, `main.py`, docs/usage references.
 - **Depends on:** stable search indexing and local storage schema versioning.
 - **Not in scope:** remote-hosted catalogs or mandatory online sync.
-
-
-
-### Advanced thermal and fan curve tuning
-
-★★★★
-
-- **Goal:** Manual fan profile control with thermal failsafes.
-- **Primary work:** hwmon discovery, fan control lifecycle, safety limits, restore-on-unload.
-- **Files:** `main.py`, `src/index.tsx`.
-- **Depends on:** strict safety validation.
-- **Not in scope:** custom graph editor for fan curves.
-
-
 
 ### Model policy tiers + disclosure UX
 
@@ -431,8 +361,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Depends on:** **Capability Permission Center** and stable model routing.
 - **Not in scope:** legal guarantees beyond documented metadata.
 
-
-
 ### Llama.cpp compatibility evaluation (research spike)
 
 ★★★★
@@ -443,8 +371,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Files:** `main.py`, runtime/provider abstraction docs, troubleshooting docs.
 - **Not in scope:** shipping full production support in the spike.
 
-
-
 ### Local runtime mode (default) + beta risk warning
 
 ★★★★★
@@ -454,8 +380,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Files:** `main.py`, `src/index.tsx`, install/troubleshooting docs.
 - **Depends on:** provider routing and **Llama.cpp compatibility evaluation** outcomes.
 - **Not in scope:** zero performance impact guarantees under heavy load.
-
-
 
 ### Restricted kids account master lock
 
@@ -468,8 +392,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Depends on:** **Capability Permission Center** and a detectable Steam signal.
 - **Not in scope:** bypassing platform restrictions or separate auth systems.
 
-
-
 ### Strategy checklist workflow (chat-scoped)
 
 ★★★★★
@@ -479,8 +401,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Files:** `src/index.tsx`, `main.py`, `prompt-testing.md`.
 - **Depends on:** **Strategy Guide prompt path (beta)**.
 - **Not in scope:** long-term persistence across sessions.
-
-
 
 ### Native QAM entry for BonsAI (beneath Decky icon) — decouple research
 
@@ -495,8 +415,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Related:** **Global BonsAI quick-launch via Steam Input macro** below; when a native entry exists, refresh the macro sequence in [troubleshooting.md](troubleshooting.md).
 - **Not in scope:** Shipping a forked Steam client or undocumented UI injection as the default approach.
 
-
-
 ### Global BonsAI quick-launch via Steam Input macro (documentation spike)
 
 ★★★★★
@@ -508,8 +426,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Related / future UX:** Today’s path assumes **Decky as intermediary**. **Native QAM entry for BonsAI (beneath Decky icon) — decouple research** (above) is the target way to **shorten the macro** once platform or Decky support exists.
 - **Assessment:** High value; until a native QAM entry exists, maintenance is mostly documentation and macro tuning. Any future Decky/Steam glue for deep-link or QAM registration would be bounded, small-scope integration — not “zero” work, but still no evdev or DOM hacks.
 - **Not in scope:** evdev sniffing, WebSockets, React DOM hacks.
-
-
 
 ### Pyro talent-manager easter egg (hidden preset)
 
@@ -526,8 +442,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **See also:** [voice-character-catalog.md](voice-character-catalog.md) (Pyro / voice handling); compare current `tf2_pyro` style hint (“wordless playful menace”).
 - **Not in scope:** Ensuring the joke lands in every locale or model.
 
-
-
 ### Voice command input
 
 ★★★★★
@@ -537,8 +451,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Files:** `main.py`, `src/index.tsx`, install/troubleshooting docs.
 - **Depends on:** user-hosted Whisper endpoint.
 - **Not in scope:** wake-word or always-on listening.
-
-
 
 ### VAC opponent check (phased)
 
@@ -553,8 +465,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Risks:** private profiles, games without IDs, quota, privacy boundaries, incomplete-data UX.
 - **Not in scope:** automated reporting, punitive automation, bypassing protections.
 
-
-
 ### RAG knowledge base (PC-hosted ingest + Deck query)
 
 ★★★★★
@@ -563,25 +473,11 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Goal:** RAG with ChromaDB + `nomic-embed-text` (Ollama `/api/embed`) over a curated corpus; heavy work on user’s PC beside Ollama; Deck queries over LAN.
 - **Architecture:** Ollama does not run ingestion — small PC companion (e.g. `bonsai-rag`), Chroma under `~/.bonsai/rag/chroma`, endpoints `POST /v1/refresh`, `POST /v1/query`; inject context **before** hardware + JSON tail in system prompt.
 - **Developer tooling:** e.g. `scripts/build_rag_db.py` on dev PC; same embedding contract as runtime.
-- **Settings:** plain-language disclosure; **Update knowledge on PC** after confirm; requires **`network_web_access`** when added.
+- **Settings:** plain-language disclosure; **Update knowledge on PC** after confirm; requires `**network_web_access`** when added.
 - **Files (expected):** `ollama_service.py`, `main.py`, `capabilities.py`, `settings_service.py`, `settingsAndResponse.ts`, `PermissionsTab`, `pc/` or `scripts/`, `docs/development.md`, `rag-sources-research.md`.
 - **Depends on:** Ollama on PC; `nomic-embed-text` pulled on host; optional Reddit API on PC only.
 - **Legal:** respect ToS, robots, rate limits; no scraped corpora in git.
 - **Not in scope (v1):** Deck-side scrapers, multi-GB DBs in-repo, automatic refresh without user action.
-
-
-
-### SteamOS Media screenshot share button (research spike)
-
-★★★★★★
-
-- **Goal:** bonsAI share action in SteamOS Media screenshot browsing → send shot to chat.
-- **Primary work:** validate Decky/Steam extension point; map metadata/path into attach flow; document no-go if unsupported.
-- **Files:** `src/index.tsx`, Decky API notes, docs.
-- **Risk:** likely no-go if private Steam UI patching required.
-- **Not in scope:** brittle runtime patching of Steam bundles.
-
-
 
 ### Deep mod and port configuration manager
 
@@ -594,8 +490,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Not in scope:** downloading/installing mods automatically.
 
 ---
-
-
 
 ## Cross-feature dependency summary
 
@@ -653,6 +547,8 @@ flowchart TD
   presetCarousel --> pyroManagerEgg
   nativeQamBonsai[NativeQamBonsaiDecoupleResearch] -.->|shorter macro when shipped| globalQuickLaunch[GlobalBonsaiQuickLaunchSteamInputDoc]
 ```
+
+
 
 ---
 

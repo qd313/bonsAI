@@ -27,7 +27,13 @@ _CHARACTER_ROWS: list[tuple[str, str, str, str]] = [
     ("tf2_soldier", "Team Fortress 2", "Soldier", "loud patriotic absurdity"),
     ("tf2_pyro", "Team Fortress 2", "Pyro", "wordless playful menace (describe mood without real speech)"),
     ("tf2_demoman", "Team Fortress 2", "Demoman", "booming Scottish exuberance"),
-    ("tf2_heavy", "Team Fortress 2", "Heavy", "slow simple earnest power"),
+    (
+        "tf2_heavy",
+        "Team Fortress 2",
+        "Heavy",
+        "Heavy Weapons Guy from TF2: few words, blunt warmth, Russian-flavored broken English (not a generic cowboy drawl); "
+        "sandvich/minigun references only if natural",
+    ),
     ("tf2_engineer", "Team Fortress 2", "Engineer", "calm Texan problem-solver"),
     ("tf2_medic", "Team Fortress 2", "Medic", "gleeful mad-science energy"),
     ("tf2_sniper", "Team Fortress 2", "Sniper", "dry professional distance"),
@@ -56,6 +62,23 @@ _ROLEPLAY_TECH_FOOTER = (
     "Stay factually correct; keep the answer concise. "
     "Do not claim to be an official or licensed voice actor. "
     "When recommending TDP or GPU clock changes, still include the required JSON block exactly as usual."
+)
+
+_ROLEPLAY_TECH_FOOTER_VOICE_HEAVY = (
+    "Stay factually correct; the reply may be longer if needed for voice performance, but must still deliver the answer. "
+    "Do not claim to be an official or licensed voice actor. "
+    "When recommending TDP or GPU clock changes, still include the required JSON block exactly as usual."
+)
+
+_ULTRA_RICOCHET = (
+    "RICOCHET (Ultra intensity): You may take one or two brief in-character asides or light tangents, "
+    "then snap back and answer the user plainly."
+)
+
+_NIGHTMARE_RICOCHET = (
+    "RICOCHET (Nightmare intensity): You may wander, rant, or digress in character—the middle may be theatrical or "
+    "almost hard to read—but you must snap back and deliver the substantive answer (and any required JSON fences) "
+    "before you finish. End with one short plainly readable recap sentence after the voiced portion."
 )
 
 _STRATEGY_AUDIOBOOK_ADDON = (
@@ -133,15 +156,15 @@ def _preset_or_random_body(work: str, char: str, hint: str, intensity: str) -> s
             f"CHARACTER VOICE (required for this reply): Write and speak as {char} from {work}. "
             f"Strongly lean into {hint}—use pronounced accent, rhythm, idioms, and attitude; "
             "keep facts and any required JSON exact. Do not answer in a flat, generic assistant voice. "
-            f"{_ROLEPLAY_TECH_FOOTER}"
+            f"{_ULTRA_RICOCHET} {_ROLEPLAY_TECH_FOOTER_VOICE_HEAVY}"
         )
     if intensity == "unleashed":
         return (
             f"CHARACTER VOICE (required for this reply): Write and speak as {char} from {work}. "
-            f"Push voice to the limit for {hint}—maximize theatrical dialect, mannerisms, and character-colored phrasing "
+            f"Push voice to the limit for {hint}—maximize theatrical dialect, mannerisms, and caricature-level phrasing "
             "while staying factually correct and preserving any required JSON block exactly. "
             "Do not answer in a flat, generic assistant voice. "
-            f"{_ROLEPLAY_TECH_FOOTER}"
+            f"{_NIGHTMARE_RICOCHET} {_ROLEPLAY_TECH_FOOTER_VOICE_HEAVY}"
         )
     # balanced (default)
     return (
@@ -166,15 +189,15 @@ def _custom_body(custom: str, intensity: str) -> str:
             "CHARACTER VOICE (required for this reply): Adopt the speaking style the user describes below—"
             "lean hard into accent, dialect, rhythm, and mannerisms while keeping technical content accurate. "
             f"{custom}. "
-            f"{_ROLEPLAY_TECH_FOOTER}"
+            f"{_ULTRA_RICOCHET} {_ROLEPLAY_TECH_FOOTER_VOICE_HEAVY}"
         )
     if intensity == "unleashed":
         return (
             "CHARACTER VOICE (required for this reply): Adopt the speaking style the user describes below—"
-            "maximize theatrical voice, dialect, and character-colored phrasing; never sacrifice factual accuracy or "
+            "maximize theatrical voice, dialect, and caricature-level phrasing; never sacrifice factual accuracy or "
             "the required JSON block. "
             f"{custom}. "
-            f"{_ROLEPLAY_TECH_FOOTER}"
+            f"{_NIGHTMARE_RICOCHET} {_ROLEPLAY_TECH_FOOTER_VOICE_HEAVY}"
         )
     # balanced
     return (

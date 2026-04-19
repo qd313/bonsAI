@@ -30,3 +30,10 @@ export type StrategyGuideBranchesPayload = {
   question: string;
   options: { id: string; label: string }[];
 };
+
+/** One completed Ask round shown in the session thread (client-only; not persisted across reloads). */
+export type AskThreadCollapsedTurn = {
+  id: string;
+  question: string;
+  answer: string;
+};

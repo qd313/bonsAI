@@ -19,6 +19,7 @@ Star ratings use the GTA scale: `★` easiest … `★★★★★` very high co
 
 ## Up next
 
+- [ ] ★★ **Text Ask model preference chains (user-configurable):** Screenshot/vision tries an ordered fallback list per Ask mode in [`refactor_helpers.py`](../refactor_helpers.py) (`select_ollama_models(..., requires_vision=True)`). **Text-only** paths still use the same fixed per-mode lists today. Add Settings (or import/export JSON) so users can define **ordered text model tags per mode** (Speed / Strategy / Expert), with validation, sane defaults matching the shipped lists, and the same try-next-on-`model not found` behavior as vision.
 - [ ] ★★ **Ollama model VRAM retention:** Plugin-side setting for how long the Ollama host keeps the loaded model in VRAM after a request completes (maps to Ollama **`keep_alive`** on each generate/chat call). **Default: 5 minutes.** Shorter values free VRAM sooner for other GPU work; longer values reduce cold-load latency when asking again in quick succession.
   - **Shorter than default:** 3 min, 2 min, 1 min, 30 s, 15 s, **0** (unload immediately after the request).
   - **Longer than default:** 15, 30, 45, 60, 120, 240 **minutes**.
@@ -99,6 +100,10 @@ Headings group related work. Star counts match the historical list.
 ## Detailed future reference
 
 Longer notes for backlog items: **Shipped feature reference** (extra context, deferred phases, extensions) vs **Planned candidates**. Canonical checklist: [Completed](#completed).
+
+### Vision screenshot model order (canonical)
+
+When a screenshot is attached, `select_ollama_models(..., requires_vision=True)` in [`refactor_helpers.py`](../refactor_helpers.py) picks the try-next chain. **Speed (Fast):** `gemma4:2b`, `gemma4:4b`, `llava:7b`, `llama3.2-vision`, then lighter `llava` / `llama3.2-vision` tag variants. **Strategy:** `gemma4:31b`, `gemma3:27b` (MoE-class ~26–27B fallback), `qwen3.5:32b`, `gemma4:4b`, `gemma4:2b`, `llama3.2-vision`, `llava:7b`, then `qwen2.5vl` and generic vision fallbacks. **Expert (`deep`):** `internvl3.5:38b`, `internvl2.5:38b`, `gemma4:31b`, `gemma3:27b`, Qwen 3-VL family tags, then `qwen2.5vl` / `llava`. Exact strings evolve with the Ollama library; install the tags you care about on the host.
 
 ---
 
@@ -437,6 +442,21 @@ Longer notes for backlog items: **Shipped feature reference** (extra context, de
 
 
 
+### Native QAM entry for BonsAI (beneath Decky icon) — decouple research
+
+★★★★★★
+
+- **Goal:** A separate Quick Access Menu (QAM) left-rail entry for BonsAI **directly beneath the Decky Loader icon**, so a Guide-chord macro (and manual navigation) can reach BonsAI with **fewer steps** than the current path through the Decky plugin list (see [troubleshooting.md](troubleshooting.md) § BonsAI shortcut setup).
+- **Why not a plugin-only change:** QAM sidebar tiles are governed by the **Steam client** and **Decky Loader** host; individual plugins cannot register a sibling QAM icon from `plugin.json` alone.
+- **Research tracks:**
+  1. **Decky Loader / plugin API:** Upstream support for pinned QAM entries, deep-linking straight into a plugin, or a launcher row under Decky (docs/issues; may require upstream contribution).
+  2. **Steam / SteamOS:** Whether Valve exposes stable third-party QAM tiles without Decky as intermediary (treat as **assumption until validated**).
+  3. **Standalone or companion host:** What a non-Decky BonsAI surface would cost (separate surface, Decky-only APIs, TDP/sysfs paths, distribution) — long-range path if (1–2) are unavailable.
+- **Related:** **Global BonsAI quick-launch via Steam Input macro** below; when a native entry exists, refresh the macro sequence in [troubleshooting.md](troubleshooting.md).
+- **Not in scope:** Shipping a forked Steam client or undocumented UI injection as the default approach.
+
+
+
 ### Global BonsAI quick-launch via Steam Input macro (documentation spike)
 
 ★★★★★
@@ -445,8 +465,26 @@ Longer notes for backlog items: **Shipped feature reference** (extra context, de
 - **Primary work:** Document and test optimal macro sequence (user-specific QAM tab order).
 - **Files:** `README.md`, `docs/development.md`.
 - **Depends on:** native Steam Input (Guide chord) and QAM layout.
-- **Assessment:** High value, zero code maintenance, official tools only.
+- **Related / future UX:** Today’s path assumes **Decky as intermediary**. **Native QAM entry for BonsAI (beneath Decky icon) — decouple research** (above) is the target way to **shorten the macro** once platform or Decky support exists.
+- **Assessment:** High value; until a native QAM entry exists, maintenance is mostly documentation and macro tuning. Any future Decky/Steam glue for deep-link or QAM registration would be bounded, small-scope integration — not “zero” work, but still no evdev or DOM hacks.
 - **Not in scope:** evdev sniffing, WebSockets, React DOM hacks.
+
+
+
+### Pyro talent-manager easter egg (hidden preset)
+
+★★★★
+
+- **Goal (easter egg):** When the user selects **Pyro** (`tf2_pyro`), Pyro has no intelligible in-universe voice — roleplay switches to Pyro’s **representative / Hollywood-style media manager** (Entourage-adjacent hints: **Vince**, **E**, “the agency”) as parody voice archetype without claiming third-party likeness.
+- **Persona:** Obnoxious agent energy — talks about themselves, bragging; **self-aware** about existing inside BonsAI; **moonlights** as an OSS advocate and nudges the player toward **testing or contributing** to the repository (playful, not deceptive).
+- **Secret tip mechanic:** At the end of (some) replies, the manager **tips a hidden preset**; the UI **injects** it into the main-tab suggestion carousel as a distinguished chip.
+- **Carousel exception:** Injection may appear **after** the normal post-mount carousel rest window (`PRESET_CAROUSEL_ACTIVE_MS`, 60 s in `src/components/PresetAnimatedChips.tsx`) — an explicit exception to the usual “no new cycles after session end” behavior for this chip only.
+- **Chrome:** That chip uses a **persistent orange–red outline** until cleared (exact design token TBD at implementation).
+- **Clear conditions:** Clear the injected chip styling / pin when the user **sends the next Ask** or **resets the plugin session** (implementation TBD: Decky reload vs explicit in-app reset).
+- **Primary work:** Special-case roleplay branch in `backend/services/ai_character_service.py` (or adjacent helper); optional **structured metadata** from backend (preset id / inject flag) vs fragile reply parsing (open design choice); `PresetAnimatedChips.tsx`, `MainTab.tsx` / `src/index.tsx` for highlight/inject lifecycle.
+- **Depends on:** **Character voice roleplay (shipped)**; preset carousel behavior in **Preset carousel and transition UX** (shipped Phase 1).
+- **See also:** [voice-character-catalog.md](voice-character-catalog.md) (Pyro / voice handling); compare current `tf2_pyro` style hint (“wordless playful menace”).
+- **Not in scope:** Ensuring the joke lands in every locale or model.
 
 
 
@@ -523,6 +561,7 @@ Longer notes for backlog items: **Shipped feature reference** (extra context, de
 
 - **Mode selector (main screen)** (shipped: Speed / Strategy / Deep + model fallbacks) → **Per-mode latency/timeout profiles**, **Strategy Guide prompt path (beta)**.
 - **Character voice roleplay (shipped)** → baseline for **Character accent intensity (shipped)**; presets in [voice-character-catalog.md](voice-character-catalog.md), [src/data/characterCatalog.ts](../src/data/characterCatalog.ts).
+- **Character voice roleplay (shipped)** → **Pyro talent-manager easter egg (hidden preset)** (planned).
 - **Character voice roleplay** + avatar mapping → **Higher-resolution character avatars (GTA-style art pass)**.
 - **Input sanitizer (shipped)** + **Input handling transparency (shipped)** → future sanitizer extensions should keep user-visible auditability.
 - **Strategy Guide prompt path (beta)** → **Strategy Guide safety and spoilers**, **Strategy checklist workflow (chat-scoped)**.
@@ -535,7 +574,8 @@ Longer notes for backlog items: **Shipped feature reference** (extra context, de
 - **Built on Ollama link** → shipped in About.
 - **SteamOS Media screenshot share button** → possible fast path into **Global screenshots and vision** if APIs allow.
 - **Reset cache action** → unified-input persistence boundaries.
-- **Preset carousel (Phase 1 shipped)** → extends presentation without changing category routing.
+- **Preset carousel (Phase 1 shipped)** → extends presentation without changing category routing; **Pyro talent-manager easter egg** depends on it for inject + `PRESET_CAROUSEL_ACTIVE_MS` exception semantics.
+- **Global BonsAI quick-launch via Steam Input macro** ↔ **Native QAM entry for BonsAI (beneath Decky icon) — decouple research** (shorter macro once a direct QAM tile exists).
 - **Bundled VDF parsing** → **Steam Input layout analysis** (and optional deeper parsing).
 - **Steam Input settings search + jump** → Phase 1 shipped; broader catalog deferred.
 - **Offline intent pack exchange** → offline-first search quality.
@@ -568,6 +608,9 @@ flowchart TD
   tierNonFoss --> modelRouting
   builtOnOllama[BuiltOnOllamaAboutLink] --> aboutTab[AboutTab]
   vdfSupport[BundledVdfParsingSupport] --> steamInput[SteamInputLayoutAnalysis]
+  characterVoiceRoleplay[CharacterVoiceRoleplayShipped] --> pyroManagerEgg[PyroTalentManagerEasterEgg]
+  presetCarousel --> pyroManagerEgg
+  nativeQamBonsai[NativeQamBonsaiDecoupleResearch] -.->|shorter macro when shipped| globalQuickLaunch[GlobalBonsaiQuickLaunchSteamInputDoc]
 ```
 
 ---

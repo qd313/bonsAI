@@ -55,6 +55,7 @@ import { DesktopNoteSaveModal } from "./components/DesktopNoteSaveModal";
 import { DebugTab } from "./components/DebugTab";
 import { ConnectionTimeoutSlider } from "./components/ConnectionTimeoutSlider";
 import { OllamaKeepAliveSlider } from "./components/OllamaKeepAliveSlider";
+import { AccentIntensityMenuPopover } from "./components/AccentIntensityMenuPopover";
 import { MainTab } from "./components/MainTab";
 import { PermissionsTab } from "./components/PermissionsTab";
 import { getSteamInputLexiconEntry } from "./data/steam-input-lexicon";
@@ -75,6 +76,7 @@ import { BonsaiLogoIcon, BonsaiSvgIcon, BugIcon, GearIcon, LockIcon } from "./co
 import { SETTINGS_DATABASE } from "./data/settingsDatabase";
 import {
   ASK_LABEL_COLOR,
+  ASK_LABEL_COLOR_50,
   ASK_LABEL_READY_COLOR,
   ASK_READY_STATE_TRANSITION_MS,
   SETTINGS_SEARCH_MIN_QUERY_LENGTH,
@@ -90,6 +92,7 @@ import { normalizeStrategyGuideBranches } from "./utils/strategyGuideBranches";
 import type {
   AppliedResult,
   AskAttachment,
+  AskThreadCollapsedTurn,
   OllamaContextUi,
   ScreenshotItem,
   StrategyGuideBranchesPayload,
@@ -698,6 +701,21 @@ const Content: React.FC = () => {
   const [lastExchange, setLastExchange] = useState<LastExchangeSnapshot | null>(null);
   const [strategyGuideBranches, setStrategyGuideBranches] = useState<StrategyGuideBranchesPayload | null>(null);
   const lastStrategyAskQuestionRef = useRef<string>("");
+  const pendingArchiveTurnRef = useRef<{ question: string; answer: string } | null>(null);
+  /** When set for the in-flight Ask, used for thread header / lastExchange.question instead of the full RPC prompt. */
+  const pendingThreadQuestionDisplayRef = useRef<string | null>(null);
+  const lastFlushedExchangeQuestionRef = useRef<string>("");
+  const [askThreadCollapsed, setAskThreadCollapsed] = useState<AskThreadCollapsedTurn[]>([]);
+  const askThreadCollapsedRef = useRef<AskThreadCollapsedTurn[]>([]);
+  useEffect(() => {
+    askThreadCollapsedRef.current = askThreadCollapsed;
+  }, [askThreadCollapsed]);
+  const [askThreadViewIndex, setAskThreadViewIndex] = useState<number | null>(null);
+  const [askThreadDisplayQuestion, setAskThreadDisplayQuestion] = useState("");
+  const [accentIntensityMenuOpen, setAccentIntensityMenuOpen] = useState(false);
+  const accentIntensityMenuAnchorRef = useRef<HTMLDivElement>(null);
+  const accentIntensityMenuFirstItemRef = useRef<HTMLDivElement>(null);
+  const accentIntensityMenuToggleOnceRef = useRef(false);
   const [isAsking, setIsAsking] = useState(false);
   const [lastApplied, setLastApplied] = useState<AppliedResult | null>(null);
   const [suggestedPrompts, setSuggestedPrompts] = useState<PresetPrompt[]>(() => getRandomPresets(3));
@@ -766,6 +784,13 @@ const Content: React.FC = () => {
       setStrategyGuideBranches(null);
     }
   }, [askMode]);
+
+  useEffect(() => {
+    if (!lastExchange?.question?.trim()) return;
+    const qn = lastExchange.question.trim();
+    if (lastFlushedExchangeQuestionRef.current === qn) return;
+    pendingArchiveTurnRef.current = { question: lastExchange.question, answer: lastExchange.answer };
+  }, [lastExchange]);
 
   const desktopAutoSavePrefsRef = useRef({
     autoSave: DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE,
@@ -932,7 +957,9 @@ const Content: React.FC = () => {
         if (q) {
           const category = detectPromptCategory(q);
           setSuggestedPrompts(getContextualPresets(category, 3));
-          setLastExchange({ question: q, answer });
+          const displayQ = (pendingThreadQuestionDisplayRef.current?.trim() || q).trim();
+          pendingThreadQuestionDisplayRef.current = null;
+          setLastExchange({ question: displayQ, answer });
           lastStrategyAskQuestionRef.current = q;
           setStrategyGuideBranches(normalizeStrategyGuideBranches(status.strategy_guide_branches));
 
@@ -958,10 +985,14 @@ const Content: React.FC = () => {
         } else {
           setLastExchange(null);
           setStrategyGuideBranches(null);
+          pendingArchiveTurnRef.current = null;
+          pendingThreadQuestionDisplayRef.current = null;
         }
       } else {
         setLastExchange(null);
         setStrategyGuideBranches(null);
+        pendingArchiveTurnRef.current = null;
+        pendingThreadQuestionDisplayRef.current = null;
       }
       void refreshInputTransparency();
       return;
@@ -978,6 +1009,31 @@ const Content: React.FC = () => {
     setOllamaContext(null);
     setLastExchange(null);
     setStrategyGuideBranches(null);
+    pendingArchiveTurnRef.current = null;
+    pendingThreadQuestionDisplayRef.current = null;
+  }, []);
+
+  const accentIntensityOutline: Record<AiCharacterAccentIntensityId, string> = {
+    subtle: "#eab308",
+    balanced: "#f97316",
+    heavy: "#b91c1c",
+    unleashed: "#a855f7",
+  };
+
+  const toggleAccentIntensityMenu = useCallback(() => {
+    if (accentIntensityMenuToggleOnceRef.current) return;
+    accentIntensityMenuToggleOnceRef.current = true;
+    setAccentIntensityMenuOpen((o) => !o);
+    requestAnimationFrame(() => {
+      accentIntensityMenuToggleOnceRef.current = false;
+    });
+  }, []);
+  const closeAccentIntensityMenu = useCallback(() => setAccentIntensityMenuOpen(false), []);
+  const focusAccentIntensityTrigger = useCallback((): boolean => {
+    const btn = accentIntensityMenuAnchorRef.current?.querySelector<HTMLElement>("button.bonsai-accent-intensity-trigger");
+    if (!btn) return false;
+    btn.focus();
+    return true;
   }, []);
 
   const {
@@ -1123,7 +1179,10 @@ const Content: React.FC = () => {
     toaster.toast({ title: "Media attached", body: "Recent screenshot attached.", duration: 1800 });
   };
 
-  const onAskOllama = async (overrideQuestion?: string) => {
+  const onAskOllama = async (
+    overrideQuestion?: string,
+    opts?: { threadQuestionDisplay?: string },
+  ) => {
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
     }
@@ -1131,7 +1190,28 @@ const Content: React.FC = () => {
 
     const q = (overrideQuestion ?? unifiedInput).trim();
     const ip = ollamaIp.trim();
-    if (!q || !ip) return;
+    if (!q || !ip) {
+      if (!ip) {
+        toaster.toast({ title: "PC IP required", body: "Set your Ollama PC IP before asking.", duration: 4000 });
+      } else if (!q) {
+        toaster.toast({ title: "Question required", body: "Type a question in the ask field first.", duration: 3500 });
+      }
+      return;
+    }
+
+    const arch = pendingArchiveTurnRef.current;
+    if (arch && arch.question.trim() && arch.answer.trim()) {
+      setAskThreadCollapsed((prev) => [
+        ...prev,
+        { id: `turn-${Date.now()}-${prev.length}`, question: arch.question, answer: arch.answer },
+      ]);
+      lastFlushedExchangeQuestionRef.current = arch.question.trim();
+    }
+    pendingArchiveTurnRef.current = null;
+    setAskThreadViewIndex(null);
+    pendingThreadQuestionDisplayRef.current = opts?.threadQuestionDisplay?.trim() || null;
+    setAskThreadDisplayQuestion(pendingThreadQuestionDisplayRef.current ?? q);
+
     const attachments = selectedAttachment
       ? [{
           path: selectedAttachment.path,
@@ -1181,6 +1261,7 @@ const Content: React.FC = () => {
         setOllamaResponse(data.response ?? "Request is invalid.");
         setLastApplied(null);
         setElapsedSeconds(null);
+        pendingThreadQuestionDisplayRef.current = null;
         return;
       }
 
@@ -1191,6 +1272,7 @@ const Content: React.FC = () => {
         setElapsedSeconds(null);
         setOllamaContext({ app_id: appId, app_context: appId ? "active" : "none" });
         void refreshInputTransparency();
+        pendingThreadQuestionDisplayRef.current = null;
         toaster.toast({
           title: "Input not sent",
           body: data.response ?? "Blocked by input checks.",
@@ -1198,6 +1280,9 @@ const Content: React.FC = () => {
         });
         return;
       }
+
+      setUnifiedInput("");
+      setSelectedAttachment(null);
 
       if (data.status === "completed" && data.success) {
         if (!isRequestActive(seq)) return;
@@ -1264,10 +1349,20 @@ const Content: React.FC = () => {
       setLastApplied(null);
       setOllamaContext(null);
       setStrategyGuideBranches(null);
+      pendingThreadQuestionDisplayRef.current = null;
     }
   };
 
   const onStrategyBranchPick = (opt: { id: string; label: string }) => {
+    if (lastExchange?.question?.trim() && lastExchange?.answer?.trim()) {
+      const qn = lastExchange.question.trim();
+      if (lastFlushedExchangeQuestionRef.current !== qn) {
+        pendingArchiveTurnRef.current = {
+          question: lastExchange.question,
+          answer: lastExchange.answer,
+        };
+      }
+    }
     const prior = lastStrategyAskQuestionRef.current.trim();
     const composed = [
       `${STRATEGY_FOLLOWUP_PREFIX} I'm at: ${opt.label}.`,
@@ -1278,7 +1373,7 @@ const Content: React.FC = () => {
       .filter((line) => line.length > 0)
       .join("\n");
     setUnifiedInput(composed);
-    void onAskOllama(composed);
+    void onAskOllama(composed, { threadQuestionDisplay: `I'm at: ${opt.label}` });
   };
 
   const onTestConnection = async () => {
@@ -1651,6 +1746,10 @@ const Content: React.FC = () => {
       strategyGuideBranches={strategyGuideBranches}
       onStrategyBranchPick={onStrategyBranchPick}
       onPresetPreferAskMode={setAskMode}
+      askThreadCollapsed={askThreadCollapsed}
+      askThreadDisplayQuestion={askThreadDisplayQuestion}
+      askThreadViewIndex={askThreadViewIndex}
+      onAskThreadSelectTurn={(i) => setAskThreadViewIndex(i)}
     />
   );
 
@@ -1778,8 +1877,8 @@ const Content: React.FC = () => {
             Latency warning and backend timeout
           </div>
           <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", lineHeight: 1.35 }}>
-            Latency warning is how long an Ask may run before the UI flags the reply as slow. Backend timeout is the
-            hard limit after which the plugin stops waiting and fails the request if Ollama has not finished.
+            <strong>Latency warning</strong>: slow flag after N seconds. <strong>Backend timeout</strong>: hard stop if
+            Ollama is not done.
           </div>
         </div>
       </PanelSectionRow>
@@ -1808,11 +1907,11 @@ const Content: React.FC = () => {
               marginBottom: 4,
             }}
           >
-            Ollama model VRAM (keep_alive)
+            Unload delay
           </div>
           <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
-            How long the PC Ollama server keeps the loaded model in VRAM after each Ask. Shorter values free GPU
-            memory sooner; longer values reduce reload delay if you Ask again soon.
+            How long the host keeps the model in <strong>VRAM</strong> after an Ask (Ollama <code>keep_alive</code>).
+            Lower frees <strong>GPU</strong> sooner; higher avoids reload if you Ask again quickly.
           </div>
           <OllamaKeepAliveSlider
             value={ollamaKeepAlive}
@@ -1967,7 +2066,13 @@ const Content: React.FC = () => {
                   customText: aiCharacterCustomText,
                 })}
               </Button>
-              <div style={{ marginTop: 12, width: "100%", maxWidth: "100%", minWidth: 0 }}>
+              <div
+                className={
+                  "bonsai-settings-inline-menu-host" +
+                  (accentIntensityMenuOpen ? " bonsai-settings-accent-menu-open" : "")
+                }
+                style={{ marginTop: 12, width: "100%", maxWidth: "100%", minWidth: 0, position: "relative" }}
+              >
                 <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 4 }}>
                   Accent intensity
                 </div>
@@ -1980,49 +2085,59 @@ const Content: React.FC = () => {
                       ?.description ?? ""
                   }
                 </div>
-                <Focusable
-                  flow-children="horizontal"
-                  style={{
-                    display: "flex",
-                    gap: 6,
-                    width: "100%",
-                    minWidth: 0,
-                    maxWidth: "100%",
-                    alignItems: "stretch",
-                    flexWrap: "wrap",
-                  }}
-                >
-                  {AI_CHARACTER_ACCENT_INTENSITY_OPTIONS.map((opt) => {
-                    const active = opt.id === aiCharacterAccentIntensity;
-                    return (
-                      <Button
-                        key={opt.id}
-                        onClick={() => setAiCharacterAccentIntensity(opt.id)}
-                        style={{
-                          flex: "1 1 22%",
-                          minWidth: 72,
-                          minHeight: 36,
-                          fontSize: 11,
-                          fontWeight: 600,
-                          padding: "4px 4px",
-                          borderRadius: 4,
-                          border: active ? "1px solid rgba(255,255,255,0.45)" : "1px solid rgba(255,255,255,0.12)",
-                          background: active
-                            ? "linear-gradient(180deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.1) 100%)"
-                            : "rgba(255,255,255,0.04)",
-                          color: active ? "#f0f4f8" : "#9fb0c0",
-                          boxShadow: active ? "inset 0 1px 0 rgba(255,255,255,0.15)" : "none",
-                        }}
-                        aria-label={`Accent intensity ${opt.shortLabel}: ${opt.description}`}
-                      >
-                        {opt.shortLabel}
-                      </Button>
-                    );
-                  })}
-                </Focusable>
-              </div>
-              <div className="bonsai-prose" style={{ fontSize: 10, color: "#6b7c90", marginTop: 6, lineHeight: 1.35 }}>
-                Tap the row for the fullscreen picker. On the main tab, tap the avatar beside the input to change character.
+                <div ref={accentIntensityMenuAnchorRef} style={{ display: "inline-flex", flexShrink: 0, position: "relative" }}>
+                  <Button
+                    className="bonsai-accent-intensity-trigger"
+                    {...({
+                      onOKButton: (evt: { stopPropagation: () => void }) => {
+                        evt.stopPropagation();
+                        toggleAccentIntensityMenu();
+                      },
+                    } as Record<string, unknown>)}
+                    onClick={toggleAccentIntensityMenu}
+                    aria-expanded={accentIntensityMenuOpen}
+                    aria-haspopup="menu"
+                    aria-label={`Accent intensity: ${
+                      AI_CHARACTER_ACCENT_INTENSITY_OPTIONS.find((o) => o.id === aiCharacterAccentIntensity)
+                        ?.shortLabel ?? ""
+                    }`}
+                    style={{
+                      minHeight: 26,
+                      padding: "4px 8px",
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 4,
+                      borderRadius: 3,
+                      border: `1px solid ${accentIntensityOutline[aiCharacterAccentIntensity]}`,
+                      background: "transparent",
+                      color: ASK_LABEL_COLOR_50,
+                      flexShrink: 0,
+                      fontSize: 10,
+                      fontWeight: 600,
+                      fontVariant: "small-caps",
+                      letterSpacing: 0.1,
+                      lineHeight: 1,
+                    }}
+                  >
+                    <span>
+                      {AI_CHARACTER_ACCENT_INTENSITY_OPTIONS.find((o) => o.id === aiCharacterAccentIntensity)
+                        ?.shortLabel ?? ""}
+                    </span>
+                    <span style={{ color: "#7a8fa3", fontSize: 9, lineHeight: 1 }} aria-hidden>
+                      ▾
+                    </span>
+                  </Button>
+                  <AccentIntensityMenuPopover
+                    open={accentIntensityMenuOpen}
+                    firstMenuItemRef={accentIntensityMenuFirstItemRef}
+                    selectedId={aiCharacterAccentIntensity}
+                    onSelect={(id) => setAiCharacterAccentIntensity(id)}
+                    onRequestClose={closeAccentIntensityMenu}
+                    onFocusTrigger={focusAccentIntensityTrigger}
+                  />
+                </div>
               </div>
             </>
           )}
@@ -2412,7 +2527,8 @@ const Content: React.FC = () => {
            ========================================================================== */
         .bonsai-scope .bonsai-glass-panel,
         .bonsai-scope .bonsai-preset-glass,
-        .bonsai-scope .bonsai-ai-response-chunk {
+        .bonsai-scope .bonsai-ai-response-chunk,
+        .bonsai-scope .bonsai-ai-response-stack {
           -webkit-backdrop-filter: blur(10px);
           backdrop-filter: blur(10px);
           box-sizing: border-box;
@@ -2427,6 +2543,33 @@ const Content: React.FC = () => {
           background: rgba(18, 26, 34, 0.22) !important;
           border: 1px solid rgba(255, 255, 255, 0.07) !important;
           box-shadow: none !important;
+        }
+
+        .bonsai-scope .bonsai-unified-input-strategy-placeholder {
+          font-style: italic;
+          font-size: 10px;
+          opacity: 0.4;
+        }
+
+        .bonsai-scope .bonsai-ai-response-stack {
+          display: flex;
+          flex-direction: column;
+          background: rgba(18, 26, 34, 0.28) !important;
+          border: 1px solid rgba(255, 255, 255, 0.08) !important;
+          color: #e8eef4;
+          border-radius: 4px;
+          overflow: hidden;
+        }
+
+        .bonsai-scope .bonsai-ai-response-stack .bonsai-ai-response-chunk {
+          background: transparent !important;
+          border: none !important;
+          border-radius: 0;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .bonsai-scope .bonsai-ai-response-stack .bonsai-ai-response-chunk:last-child {
+          border-bottom: none;
         }
 
         .bonsai-scope .bonsai-ai-response-chunk {
@@ -2679,6 +2822,30 @@ const Content: React.FC = () => {
         .bonsai-scope .bonsai-attachment-remove-target:focus-visible,
         .bonsai-scope .bonsai-attachment-remove-target :focus-visible {
           background: rgba(176, 205, 235, 0.22) !important; box-shadow: inset 0 0 0 1px rgba(206, 229, 249, 0.95); border-radius: 6px;
+        }
+
+        .bonsai-scope .bonsai-settings-inline-menu-host.bonsai-settings-accent-menu-open {
+          overflow: visible;
+          position: relative;
+          z-index: 50;
+        }
+        .bonsai-scope .bonsai-settings-inline-menu-host .bonsai-accent-intensity-menu-floater {
+          opacity: 1 !important;
+          filter: none !important;
+          backdrop-filter: none !important;
+        }
+        .bonsai-scope .bonsai-settings-inline-menu-host .bonsai-accent-intensity-menu-surface,
+        .bonsai-scope .bonsai-settings-inline-menu-host .bonsai-accent-intensity-menu-surface > .Panel.Focusable {
+          background-color: rgb(28, 36, 44) !important;
+          opacity: 1 !important;
+        }
+        .bonsai-scope .bonsai-settings-inline-menu-host .bonsai-accent-intensity-menu-surface .bonsai-accent-intensity-menu-item {
+          background-color: rgb(28, 36, 44) !important;
+          opacity: 1 !important;
+          mix-blend-mode: normal !important;
+        }
+        .bonsai-scope .bonsai-settings-inline-menu-host .bonsai-accent-intensity-menu-item--selected {
+          background-color: rgb(40, 50, 62) !important;
         }
 
         /* ==========================================================================

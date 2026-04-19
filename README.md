@@ -1,33 +1,31 @@
 # bonsAI
 
-bonsAI is a Decky Loader plugin for running AI help on hardware you control.
+bonsAI is a Decky Loader plugin for running a **self-hosted** AI chat using Ollama
 
-- Self-hosted first: run Ollama on your Steam Deck or a PC on your local network.
-- No required cloud AI API for the core workflow.
-- Built on Ollama for local/LAN model serving.
-- Works best when Ollama runs on a stronger LAN PC GPU.
+- Self-hosted first: run Ollama on your Steam Deck or a PC on your local network
+- No required cloud AI API for the core workflow
+- Built on Ollama for local/LAN model serving
+- Works best when Ollama runs on a stronger PC GPU
 
 ## Self-hosted and model transparency
 
-- Self-hosted means your prompts and responses can stay on infrastructure you run (Deck + your LAN).
+- Self-hosted means your prompts and responses can stay on infrastructure you run (Deck + your LAN)
 - Open source and open weight are different:
-  - Open source: source code is available under an open license.
-  - Open weight: model weights are available for local use.
-- Most LLMs are still not "glass-box" models. Even open-weight models can be hard to interpret internally and can still hallucinate.
+  - Open source: source code is available under an open license
+  - Open weight: model weights are available for local use
+- Most LLMs are still not "glass-box" models. Even open-weight models can be hard to interpret internally and can still hallucinate
 
 ## Requirements
 
-- Steam Deck with Decky Loader.
+- Steam Deck with Decky Loader (Targeting compatibility with any SteamOS PC)
 - An Ollama server reachable from the Deck:
-  - Option A (recommended): a Windows/Linux PC on your LAN.
-  - Option B: local on the Deck/Linux handheld (usually slower).
-- At least one model pulled in Ollama.
+  - Option A (recommended): a Windows/Linux PC on your LAN
+  - Option B: local on the Deck/Linux handheld (usually slower)
+- At least one model pulled in Ollama (ideally multiple)
 
 ## Input sanitization
 
-bonsAI runs a **deterministic input sanitization lane** on Ask text before it is sent to Ollama (NUL/control cleanup, length limits, and conservative empty-or-junk blocking). **Sanitization is on by default** for every install.
-
-There is **no Settings-tab toggle** for this feature. To change behavior you use **exact magic phrases** in the Ask field (trimmed, case-insensitive, whole message only):
+bonsAI runs a **deterministic input sanitization lane** on Ask text before it is sent to Ollama (NUL/control cleanup, length limits, and conservative empty-or-junk blocking). **Sanitization is on by default** for every install. There is **no Settings-tab toggle** for this feature and it's not recommended to disable it. To disable the sanitizer you use **exact magic phrases** in the Ask field (trimmed, case-insensitive, whole message only):
 
 - `bonsai:disable-sanitize` — turns the lane **off** for future asks and persists that choice in the plugin `settings.json` key `input_sanitizer_user_disabled` (JSON `true`).
 - `bonsai:enable-sanitize` — turns the lane **back on** and clears that flag.
@@ -98,7 +96,7 @@ ollama run llama3 "Hello from bonsAI"
 
 - General prompts: `llama3`
 - Alternate local text model: `gemma4`
-- Screenshot/vision workflows: use a multimodal Ollama model that supports image input.
+- [ ] Screenshot/vision workflows: use a multimodal Ollama model that supports image input ## This part needs to actually recommend a FOSS model that handles screenshots and vision better. Let's pick a favorite and target it.
 
 See [docs/troubleshooting.md](docs/troubleshooting.md) for advanced tuning and vision troubleshooting details.
 

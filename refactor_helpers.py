@@ -7,18 +7,47 @@ DEFAULT_OLLAMA_HOST = "127.0.0.1"
 DEFAULT_OLLAMA_PORT = 11434
 
 TEXT_MODELS_TO_TRY = ["llama3:latest", "llama3", "gemma4:latest", "gemma4", "gemma3:latest"]
-VISION_MODELS_TO_TRY = [
+
+# Screenshot / vision model order per Ask mode (UI: Speed / Strategy / Expert).
+# Tags are Ollama model names; the host tries each in order until one accepts the chat+images request.
+# See docs/roadmap.md (vision preference + planned text preference work).
+_VISION_SPEED = [
+    "gemma4:2b",
+    "gemma4:4b",
+    "llava:7b",
+    "llama3.2-vision",
     "llava:latest",
     "llava",
-    "bakllava:latest",
-    "bakllava",
+    "llama3.2-vision:latest",
+]
+_VISION_STRATEGY = [
+    "gemma4:31b",
+    "gemma3:27b",
+    "qwen3.5:32b",
+    "gemma4:4b",
+    "gemma4:2b",
+    "llama3.2-vision",
+    "llama3.2-vision:latest",
+    "llava:7b",
+    "llava:latest",
+    "llava",
     "qwen2.5vl:latest",
     "qwen2.5vl",
-    "moondream:latest",
-    "moondream",
+]
+_VISION_DEEP = [
+    "internvl3.5:38b",
+    "internvl2.5:38b",
+    "gemma4:31b",
+    "gemma3:27b",
+    "qwen3-vl",
+    "qwen3-vl:30b-a3b",
+    "qwen2.5vl:latest",
+    "qwen2.5vl",
+    "llava:latest",
+    "llava",
 ]
 
-# Ordered fallbacks per Ask mode (main tab). "speed" matches legacy TEXT_MODELS_TO_TRY / VISION_MODELS_TO_TRY.
+# Ordered fallbacks per Ask mode (main tab). Text lists unchanged here; vision uses mode-specific chains above.
 TEXT_MODELS_BY_MODE = {
     "speed": TEXT_MODELS_TO_TRY,
     "strategy": [
@@ -37,27 +66,9 @@ TEXT_MODELS_BY_MODE = {
     ],
 }
 VISION_MODELS_BY_MODE = {
-    "speed": VISION_MODELS_TO_TRY,
-    "strategy": [
-        "bakllava:latest",
-        "bakllava",
-        "llava:latest",
-        "llava",
-        "qwen2.5vl:latest",
-        "qwen2.5vl",
-        "moondream:latest",
-        "moondream",
-    ],
-    "deep": [
-        "qwen2.5vl:latest",
-        "qwen2.5vl",
-        "llava:latest",
-        "llava",
-        "bakllava:latest",
-        "bakllava",
-        "moondream:latest",
-        "moondream",
-    ],
+    "speed": _VISION_SPEED,
+    "strategy": _VISION_STRATEGY,
+    "deep": _VISION_DEEP,
 }
 _VALID_ASK_MODES = frozenset(TEXT_MODELS_BY_MODE.keys())
 

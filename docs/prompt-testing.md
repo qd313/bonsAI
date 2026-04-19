@@ -31,7 +31,14 @@ Related planning (not yet implemented): future prompt policy, search UX, and Ste
 
 ### 2026-04-16 - Character accent intensity (Settings)
 - **Accent intensity** (when AI characters is on): four levels persisted as `ai_character_accent_intensity` (`subtle`, `balanced`, `heavy`, `unleashed`). The backend varies how strongly the system prompt asks for dialect/accent; factual answers and required TDP JSON behavior are unchanged.
+- **Ultra** (`heavy`): brief in-character tangents allowed, then a clear snap-back to the answer; JSON/TDP fences unchanged.
+- **Nightmare** (`unleashed`): stronger wandering and caricature-level voice allowed, then snap-back and a **short plain recap** so facts stay recoverable; middle may be deliberately hard to read.
 - Suggested checks: same preset at **subtle** vs **unleashed** and confirm voice color shifts while JSON/TDP blocks still parse; verify Input handling / verbose trace shows the updated system suffix when logging is on.
+
+### 2026-04-18 - Strategy Guide + TDP prompt layout
+- **Strategy first turn** without performance/TDP keywords in the user message: system prompt omits the hardware JSON contract block so coaching is not front-loaded with watts/GPU talk; branch-picker fence rules unchanged.
+- **Strategy** when the user *does* ask about TDP/FPS/performance: hardware appendix returns; first-turn instructions place the optional fenced TDP JSON block immediately above the `bonsai-strategy-branches` fence when recommending changes.
+- Suggested checks: Strategy Ask on a pure puzzle prompt → raw model output should avoid opening with TDP; transparency “System prompt” should show the strategy silence paragraph instead of the full JSON contract. Mixed “stuck + what TDP” prompt should still show the contract.
 
 ### 2026-04-15 - Character Voice Roleplay Mode (Opt-In) Shipped
 - Settings: opt-in **AI character** with fullscreen picker (work-title sections, Random, custom line, OK/Cancel).

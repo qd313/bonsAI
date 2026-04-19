@@ -4,7 +4,9 @@ This file tracks curated roleplay voice/accent presets for **Character Voice Rol
 
 **Implementation:** Preset ids, work titles, and UI grouping live in [`src/data/characterCatalog.ts`](../src/data/characterCatalog.ts); backend prompt text and validation use [`backend/services/ai_character_service.py`](../backend/services/ai_character_service.py). Keep these three in sync when editing the catalog.
 
-**Accent intensity (shipped):** When roleplay is on, Settings **Accent intensity** (`ai_character_accent_intensity`) adjusts how strongly the system prompt requests dialect/accent (`subtle` → `unleashed`). Labels and helper text live in [`src/data/aiCharacterAccentIntensity.ts`](../src/data/aiCharacterAccentIntensity.ts); ids must stay aligned with `VALID_ACCENT_INTENSITY_IDS` in `ai_character_service.py` (see `tests/test_accent_intensity_parity.py`).
+**Accent intensity (shipped):** When roleplay is on, Settings **Accent intensity** (`ai_character_accent_intensity`) adjusts how strongly the system prompt requests dialect/accent (`subtle` → `unleashed`). Labels and helper text live in [`src/data/aiCharacterAccentIntensity.ts`](../src/data/aiCharacterAccentIntensity.ts); ids must stay aligned with `VALID_ACCENT_INTENSITY_IDS` in `ai_character_service.py` (see `tests/test_accent_intensity_parity.py`). **Ultra** (`heavy`) allows light tangents with a mandatory snap-back to the question; **Nightmare** (`unleashed`) allows stronger wandering and near-caricature delivery, then the same snap-back plus a short plain recap—replies can be harder to skim on purpose.
+
+**Heavy (TF2):** Backend style hints target the Heavy Weapons Guy register (Russian-flavored broken English, few words), not a generic cowboy drawl—see `tf2_heavy` in `ai_character_service.py` and the picker row in `characterCatalog.ts` (same `id`).
 
 ## Preset catalog seed list
 

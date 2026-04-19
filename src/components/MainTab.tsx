@@ -22,6 +22,7 @@ import { formatBytes, formatScreenshotTimestamp, toFileUri } from "../utils/medi
 import type {
   AppliedResult,
   AskAttachment,
+  AskThreadCollapsedTurn,
   OllamaContextUi,
   ScreenshotItem,
   StrategyGuideBranchesPayload,
@@ -64,7 +65,7 @@ export type MainTabProps = {
   onSettingClick: (settingPath: string, index?: number) => void;
   isAsking: boolean;
   ollamaIp: string;
-  onAskOllama: () => void | Promise<void>;
+  onAskOllama: (overrideQuestion?: string, opts?: { threadQuestionDisplay?: string }) => void | Promise<void>;
   onOpenScreenshotBrowser: () => void | Promise<void>;
   onCancelAsk: () => void;
   onMicInput: () => void;
@@ -116,6 +117,13 @@ export type MainTabProps = {
   onStrategyBranchPick?: (opt: { id: string; label: string }) => void;
   /** When a preset chip requests an Ask mode (e.g. Strategy Guide), apply it here. */
   onPresetPreferAskMode?: (mode: AskModeId) => void;
+  /** Session thread: prior completed Q/A pairs (client-only). */
+  askThreadCollapsed?: AskThreadCollapsedTurn[];
+  /** Latest Ask question text shown above the live response. */
+  askThreadDisplayQuestion?: string;
+  /** When set, UI shows that archived turn instead of the live stream. */
+  askThreadViewIndex?: number | null;
+  onAskThreadSelectTurn?: (index: number) => void;
 };
 
 export function MainTab(props: MainTabProps) {
@@ -181,6 +189,10 @@ export function MainTab(props: MainTabProps) {
     strategyGuideBranches = null,
     onStrategyBranchPick,
     onPresetPreferAskMode,
+    askThreadCollapsed = [],
+    askThreadDisplayQuestion = "",
+    askThreadViewIndex = null,
+    onAskThreadSelectTurn,
   } = props;
 
   const [transparencyOpen, setTransparencyOpen] = useState(false);
@@ -190,6 +202,16 @@ export function MainTab(props: MainTabProps) {
   const askLooksReady = unifiedInput.trim().length > 0 && !isAsking;
   /** Do not gate on `aiCharacterAvatarPresetId` — when the feature is on, `resolveMainTabAvatarPresetId` always yields a display id (including `__random__` / `__custom__`). */
   const showAiCharacterChrome = Boolean(onOpenCharacterPicker && aiCharacterPadClass);
+  const viewingArchivedTurn =
+    askThreadViewIndex !== null &&
+    askThreadViewIndex >= 0 &&
+    askThreadViewIndex < askThreadCollapsed.length
+      ? askThreadCollapsed[askThreadViewIndex]
+      : null;
+  const responseBodyForDisplay = viewingArchivedTurn ? viewingArchivedTurn.answer : ollamaResponse;
+  const questionHeaderDisplay = viewingArchivedTurn ? viewingArchivedTurn.question : askThreadDisplayQuestion;
+  const truncateThreadLine = (s: string, max = 80) =>
+    s.length <= max ? s : `${s.slice(0, Math.max(0, max - 1))}…`;
   const focusUnifiedTextField = React.useCallback((): boolean => {
     const layer =
       unifiedInputFieldLayerRef &&
@@ -433,14 +455,14 @@ export function MainTab(props: MainTabProps) {
               ) : null}
               <TextField
                 label=""
-                description={
-                  askMode === "strategy"
-                    ? "Describe the level, boss, or puzzle you're stuck on."
-                    : undefined
-                }
                 value={unifiedInput}
                 spellCheck={false}
                 {...({ multiline: true, rows: 3 } as unknown as Record<string, unknown>)}
+                {...(askMode === "strategy"
+                  ? ({
+                      placeholder: "Describe the level, boss, or puzzle you're stuck on.",
+                    } as Record<string, unknown>)
+                  : {})}
                 {...unifiedInputDeckNavHandlers}
                 style={{
                   width: "100%",
@@ -502,8 +524,19 @@ export function MainTab(props: MainTabProps) {
                     fontSize: UNIFIED_TEXT_FONT_PX,
                   }}
                 >
-                  {unifiedInput}
-                  {isUnifiedInputFocused && <span className="bonsai-unified-input-fake-caret" aria-hidden>|</span>}
+                  {!unifiedInput.trim() && askMode === "strategy" ? (
+                    <>
+                      <span className="bonsai-unified-input-strategy-placeholder">
+                        Describe the level, boss, or puzzle you're stuck on.
+                      </span>
+                      {isUnifiedInputFocused && <span className="bonsai-unified-input-fake-caret" aria-hidden>|</span>}
+                    </>
+                  ) : (
+                    <>
+                      {unifiedInput}
+                      {isUnifiedInputFocused && <span className="bonsai-unified-input-fake-caret" aria-hidden>|</span>}
+                    </>
+                  )}
                 </div>
               )}
               <div
@@ -875,7 +908,14 @@ export function MainTab(props: MainTabProps) {
               >
                 <Button
                   className={`bonsai-askbar-target bonsai-ask-primary${askLooksReady ? " bonsai-ask-primary--ready" : ""}`}
-                  onClick={onAskOllama}
+                  {...({
+                    onOKButton: (evt: { stopPropagation: () => void }) => {
+                      if (isAsking) return;
+                      evt.stopPropagation();
+                      void onAskOllama();
+                    },
+                  } as Record<string, unknown>)}
+                  onClick={() => void onAskOllama()}
                   disabled={isAsking}
                   style={{
                     position: "relative",
@@ -1113,64 +1153,114 @@ export function MainTab(props: MainTabProps) {
           </div>
         )}
 
-        {isAsking && showSlowWarning && (
+        {(askThreadCollapsed.length > 0 || questionHeaderDisplay.trim()) && (
           <PanelSectionRow>
-            <div style={{ color: "#f2cf84", fontSize: 12, padding: "6px 0" }}>
-              This is taking a while (&gt;{latencyWarningSeconds}s)... If responses are consistently slow, verify Ollama is using your GPU, not CPU. CPU inference is dramatically slower.
+            <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: 8 }}>
+              {askThreadCollapsed.length > 0 && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                  {askThreadCollapsed.map((turn, idx) => (
+                    <Button
+                      key={turn.id}
+                      onClick={() => onAskThreadSelectTurn?.(idx)}
+                      style={{
+                        alignSelf: "flex-start",
+                        width: "auto",
+                        maxWidth: "min(100%, 200px)",
+                        minHeight: 26,
+                        padding: "4px 8px",
+                        borderRadius: 4,
+                        border:
+                          askThreadViewIndex === idx
+                            ? "1px solid rgba(150, 187, 223, 0.55)"
+                            : "1px solid rgba(255,255,255,0.1)",
+                        background:
+                          askThreadViewIndex === idx ? "rgba(64, 93, 124, 0.45)" : "rgba(24, 34, 46, 0.55)",
+                        color: askThreadViewIndex === idx ? "#f0f4f8" : "#9fb7d5",
+                        fontSize: 10,
+                        fontWeight: 600,
+                        justifyContent: "flex-start",
+                        textAlign: "left",
+                      }}
+                    >
+                      {truncateThreadLine(turn.question)}
+                    </Button>
+                  ))}
+                </div>
+              )}
+              {(questionHeaderDisplay.trim() || viewingArchivedTurn) && (
+                <div
+                  className="bonsai-glass-panel"
+                  style={{
+                    width: "100%",
+                    padding: "10px 12px",
+                    borderRadius: 8,
+                    border: "1px solid rgba(150, 187, 223, 0.45)",
+                    background: "linear-gradient(180deg, rgba(64, 93, 124, 0.35) 0%, rgba(48, 71, 95, 0.35) 100%)",
+                    color: "#e8eef4",
+                    fontSize: 12,
+                    lineHeight: 1.4,
+                    whiteSpace: "pre-wrap",
+                    wordBreak: "break-word",
+                  }}
+                >
+                  {questionHeaderDisplay}
+                </div>
+              )}
             </div>
           </PanelSectionRow>
         )}
-        {canSaveDesktopNote && (
+        {isAsking && showSlowWarning && (
           <PanelSectionRow>
-            <Button
-              onClick={() => onOpenDesktopNoteSave()}
-              style={{
-                width: "100%",
-                minHeight: 38,
-                border: "1px solid rgba(150, 187, 223, 0.45)",
-                background: "rgba(64, 93, 124, 0.35)",
-                color: "#dce8f4",
-                opacity: desktopNoteSaveEnabled ? 1 : 0.45,
-              }}
-            >
-              Save to Desktop note…
-            </Button>
+            <div style={{ color: "#f2cf84", fontSize: 12, padding: "6px 0", lineHeight: 1.35 }}>
+              Slow (&gt;{latencyWarningSeconds}s): ensure <strong>Ollama</strong> uses your <strong>GPU</strong>, not{" "}
+              <strong>CPU</strong>.
+            </div>
           </PanelSectionRow>
         )}
-        {ollamaResponse && splitResponseIntoChunks(ollamaResponse).map((chunk, i, arr) => (
-          <PanelSectionRow key={`ai-chunk-${i}`}>
-            <Focusable
-              className="bonsai-ai-response-chunk"
-              onActivate={() => {}}
-              noFocusRing={false}
-              style={{
-                borderRadius: i === 0 && arr.length === 1 ? 4
-                  : i === 0 ? "4px 4px 0 0"
-                  : i === arr.length - 1 ? "0 0 4px 4px"
-                  : 0,
-                marginTop: i > 0 ? -8 : 0,
-                marginBottom: i === arr.length - 1 ? 80 : 0,
-              }}
-            >
-              {chunk}
-            </Focusable>
-          </PanelSectionRow>
-        ))}
+        {responseBodyForDisplay && (() => {
+          const chunks = splitResponseIntoChunks(responseBodyForDisplay);
+          if (!chunks.length) {
+            return null;
+          }
+          return (
+            <PanelSectionRow key="bonsai-ai-response-stack">
+              <Focusable
+                className="bonsai-ai-response-stack bonsai-glass-panel"
+                onActivate={() => {}}
+                noFocusRing={false}
+                style={{ width: "100%", marginBottom: 80, boxSizing: "border-box" }}
+              >
+                {chunks.map((chunk, i) => (
+                  <div key={`ai-chunk-${i}`} className="bonsai-ai-response-chunk">
+                    {chunk}
+                  </div>
+                ))}
+              </Focusable>
+            </PanelSectionRow>
+          );
+        })()}
         {strategyGuideBranches &&
           strategyGuideBranches.options.length > 0 &&
           !isAsking &&
+          askThreadViewIndex === null &&
           onStrategyBranchPick && (
           <PanelSectionRow>
             <div
+              className="bonsai-glass-panel bonsai-strategy-branch-picker"
               style={{
                 width: "100%",
                 display: "flex",
                 flexDirection: "column",
                 gap: 8,
                 marginBottom: 72,
+                padding: "10px 12px",
+                borderRadius: 8,
+                border: "1px solid rgba(150, 187, 223, 0.45)",
+                background: "linear-gradient(180deg, rgba(64, 93, 124, 0.42) 0%, rgba(48, 71, 95, 0.42) 100%)",
+                boxSizing: "border-box",
               }}
             >
-              <div style={{ fontSize: 12, color: "#b8cad8", fontWeight: 600 }}>
+              <div style={{ fontSize: 12, color: "#dce8f4", fontWeight: 600 }}>
                 {strategyGuideBranches.question}
               </div>
               {strategyGuideBranches.options.map((opt, idx) => (
@@ -1179,10 +1269,16 @@ export function MainTab(props: MainTabProps) {
                   onClick={() => onStrategyBranchPick(opt)}
                   style={{
                     width: "100%",
-                    minHeight: 34,
+                    minHeight: 36,
                     fontSize: 12,
-                    color: "#c4d3e2",
+                    fontWeight: 600,
+                    color: "#e8eef4",
                     justifyContent: "flex-start",
+                    textAlign: "left",
+                    borderRadius: 4,
+                    border: "1px solid rgba(150, 187, 223, 0.35)",
+                    background: "rgba(36, 52, 70, 0.75)",
+                    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06)",
                   }}
                 >
                   {`${String.fromCharCode(65 + idx)}. ${opt.label}`}
@@ -1193,8 +1289,9 @@ export function MainTab(props: MainTabProps) {
         )}
         {!isAsking && elapsedSeconds != null && elapsedSeconds > latencyWarningSeconds && (
           <PanelSectionRow>
-            <div style={{ color: "#f2cf84", fontSize: 12 }}>
-              Response took {elapsedSeconds}s (warning threshold: {latencyWarningSeconds}s) — verify Ollama is using your GPU, not CPU. CPU inference is dramatically slower.
+            <div style={{ color: "#f2cf84", fontSize: 12, lineHeight: 1.35 }}>
+              {elapsedSeconds}s (&gt;{latencyWarningSeconds}s): prefer <strong>GPU</strong> for <strong>Ollama</strong>, not{" "}
+              <strong>CPU</strong>.
             </div>
           </PanelSectionRow>
         )}
@@ -1212,6 +1309,23 @@ export function MainTab(props: MainTabProps) {
                 ? `Context: active game AppID ${ollamaContext.app_id}`
                 : "Context: no active game detected"}
             </div>
+          </PanelSectionRow>
+        )}
+        {canSaveDesktopNote && (
+          <PanelSectionRow>
+            <Button
+              onClick={() => onOpenDesktopNoteSave()}
+              style={{
+                width: "100%",
+                minHeight: 38,
+                border: "1px solid rgba(150, 187, 223, 0.45)",
+                background: "rgba(64, 93, 124, 0.35)",
+                color: "#dce8f4",
+                opacity: desktopNoteSaveEnabled ? 1 : 0.45,
+              }}
+            >
+              Save chat to Desktop
+            </Button>
           </PanelSectionRow>
         )}
         {transparencySnapshot && (

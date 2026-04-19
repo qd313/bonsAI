@@ -11,6 +11,24 @@ from backend.services.strategy_guide_parse import (
 )
 
 
+def _user_wants_power_or_performance_topic(question: str) -> bool:
+    """True when the user message plausibly asks for Deck power/performance tuning."""
+    q = (question or "").lower()
+    return bool(
+        re.search(
+            r"\b("
+            r"tdp|watts?|fps|frame\s*rate|frametime|frame\s*pacing|performance|"
+            r"gpu\s*clock|\bmhz\b|\bgpu\b|thermal|overclock|underclock|\bapu\b|"
+            r"battery(\s+life|\s+drain|\s+saving)?|"
+            r"power\s*(limit|cap|saving|profile|draw)|"
+            r"stutter|stuttering|boost\s*mode"
+            r")\b",
+            q,
+            flags=re.IGNORECASE,
+        )
+    )
+
+
 def build_system_prompt(
     question: str,
     app_id: str,
@@ -90,7 +108,8 @@ def build_system_prompt(
         "Use recognizable in-game HUD motifs to improve game hypotheses. "
         "Examples: hearts + rupees + item C-button layout + temple-area labels strongly suggest Zelda Ocarina-style UI. "
         "When these cues are present, explicitly state the likely franchise/title hypothesis with confidence level. "
-        "If the title hint says Ship of Harkinian, treat it as an Ocarina of Time remake/reimplementation context."
+        "RULE: Ship of Harkinian (SoH) is The Legend of Zelda: Ocarina of Time for all coaching—same dungeons, items, "
+        "boss order, terminology, and spoiler boundaries as OoT; do not treat SoH as a separate unknown title."
     )
     user_game_intent = bool(re.search(r"\b(game|title|level|boss|area)\b", question or "", flags=re.IGNORECASE))
     game_intent_line = (
@@ -99,19 +118,28 @@ def build_system_prompt(
         if user_game_intent
         else "If the user asks about gameplay context, prioritize game-specific visual cues over Steam UI."
     )
-    base = (
+    core_identity = (
         "You are bonsAI, an expert system assistant embedded on a Steam Deck handheld. "
-        "Always answer directly, concisely, and in English. "
-        "The Steam Deck APU supports a TDP range of 3-15 watts and GPU clock of 200-1600 MHz. "
-        "Never suggest power values outside these hardware limits. "
-        f"{game_line} {attachment_game_context_line} {attachment_name_context_line} {vdf_context_line} {vision_line} {vision_priority_line} {genre_franchise_cue_line} {game_intent_line}\n\n"
+        "Always answer directly, concisely, and in English.\n\n"
+    )
+    game_context = (
+        f"{game_line} {attachment_game_context_line} {attachment_name_context_line} {vdf_context_line} "
+        f"{vision_line} {vision_priority_line} {genre_franchise_cue_line} {game_intent_line}\n\n"
+    )
+    hardware_tdp_appendix = (
+        "Hardware appendix (apply only when relevant): The Steam Deck APU supports a TDP range of 3-15 watts and "
+        "GPU clock of 200-1600 MHz. Never suggest power values outside these hardware limits.\n\n"
         "IMPORTANT: When you recommend or apply a TDP or GPU clock change, you MUST include this exact JSON block in your response:\n"
         '```json\n{"tdp_watts": <int 3-15>, "gpu_clock_mhz": <int 200-1600 or null>}\n```\n'
-        "Without this JSON block, the change will NOT be applied. Only include it when actively recommending a change."
+        "Without this JSON block, the change will NOT be applied. Only include it when actively recommending a change. "
+        "If the user did not ask about performance, FPS, TDP, battery tuning, or thermal/power limits, skip Deck power talk "
+        "and omit this JSON block."
     )
-    if ask_mode != "strategy":
-        return base
 
+    if ask_mode != "strategy":
+        return core_identity + game_context + hardware_tdp_appendix
+
+    power_topic = _user_wants_power_or_performance_topic(question)
     followup = is_strategy_followup_question(question)
     if followup:
         strategy_block = (
@@ -121,8 +149,11 @@ def build_system_prompt(
             "Do NOT output a ```bonsai-strategy-branches block on this turn.\n"
             "End your reply with a clearly marked section using this exact markdown heading on its own line:\n"
             "**If you want to cheat…**\n"
-            "Under it, briefly list popular skips, sequence breaks, dupes, or wiki-style fast paths that help solo players move past this point. "
-            "Do not encourage cheating in multiplayer, competitive, or anti-cheat contexts.\n"
+            "Under it, give 2–5 CONCRETE solo-player examples (name the glitch, skip, or trick; say roughly how to do it in "
+            "short steps). Assume the game may be running through **Steam on Steam Deck** and/or **emulation** (save "
+            "states, rewind, fast-forward, practice tools) where that fits—mention Steam Input remaps or emulator menus "
+            "when relevant. Do not hand-wave with 'look up cheats online'; each bullet must be actionable. "
+            "Do not encourage cheating in multiplayer, competitive, or anti-cheat contexts; no piracy or illegal ROM talk.\n"
         )
     else:
         strategy_block = (
@@ -130,15 +161,45 @@ def build_system_prompt(
             "You are a patient coach for someone playing on a Steam Deck (assume gamepad). Use plain spoken language; short steps; avoid jargon unless you explain it.\n"
             "Infer game title and rough progress from the user's text and any screenshots; state uncertainty honestly.\n"
             "After a brief orientation (no spoilers beyond what is needed to branch), you MUST end the reply with exactly one fenced block so the UI can show choices. "
-            "Use this exact fence label and valid JSON only inside it (2–8 options, each with \"id\" and short \"label\" the player understands):\n"
+            "Do not trail off into unrelated topics before the fence; the branch picker is mandatory on this turn.\n"
+            "Use this exact opening fence line (no language tag on the fence name) and valid JSON only inside it (2–8 options, each with \"id\" and short \"label\" the player understands):\n"
             "```bonsai-strategy-branches\n"
             '{"question":"Where are you at in … ?","options":[{"id":"a","label":"…"},{"id":"b","label":"…"}]}\n'
             "```\n"
+            "Do not use a literal [bonsai-strategy-branches] line or parenthesized / URL-encoded JSON instead of this fence; "
+            "the Deck UI reads the fenced block.\n"
             "The visible part above the fence should already ask the same branching question in natural language; the JSON question string must match that intent.\n"
-            "Do not put prose after the closing ``` of that fence.\n"
+            "The closing ``` of that fence must be the last characters of your reply — no prose, headings, or extra fences after it.\n"
             "Do NOT repeat this branching fence when the user later sends a message starting with [Strategy follow-up].\n"
         )
-    return base + strategy_block
+
+    out = core_identity + game_context + strategy_block
+
+    if followup:
+        if power_topic:
+            out += "\n\n" + hardware_tdp_appendix
+        else:
+            out += (
+                "\n\nDECK POWER / TDP (strategy follow-up): The branch message is gameplay-focused. "
+                "Unless the user explicitly asks about FPS, TDP, watts, GPU MHz, battery drain, or thermal tuning in this message, "
+                "do not discuss Deck power limits at length and do not output the ```json TDP recommendation block.\n"
+            )
+    else:
+        if power_topic:
+            out += (
+                "\n\nTDP JSON ON THIS FIRST STRATEGY TURN: The user asked about performance or power. "
+                "If you recommend TDP/GPU changes, output the required ```json ... ``` block on its own lines immediately above "
+                "the opening ```bonsai-strategy-branches line. The branch fence remains last; no characters after its closing ```.\n\n"
+            )
+            out += hardware_tdp_appendix
+        else:
+            out += (
+                "\n\nDECK POWER / TDP (strategy first turn): The user did not ask about performance, FPS, TDP, watts, "
+                "GPU clock, battery tuning, or thermal limits. Do not open with hardware or power talk. "
+                "Do not output the ```json TDP/GPU recommendation block on this reply. Focus on gameplay coaching and the branch fence.\n"
+            )
+
+    return out
 
 
 def format_ai_response(
@@ -184,7 +245,7 @@ def post_ollama_chat(
         "keep_alive": keep_alive,
         "options": {
             "num_predict": num_predict,
-            "temperature": 0.4,
+            "temperature": 0.42 if ask_mode == "strategy" else 0.4,
         },
     }
     # Keep transport payload shape explicit so backend/frontend contracts remain stable.

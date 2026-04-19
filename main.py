@@ -1567,8 +1567,9 @@ class Plugin:
                     "success": False,
                     "response": (
                         "No vision-capable Ollama model was found for screenshot analysis. "
-                        "Install a vision model such as llava, bakllava, qwen2.5vl, or moondream, "
-                        "then try again."
+                        "Install at least one multimodal model your Ask mode can use (e.g. gemma4:2b/4b, "
+                        "llava:7b, llama3.2-vision, qwen2.5vl, or larger tags listed for Strategy/Expert in "
+                        "docs/roadmap.md), then try again."
                     ),
                     **ollama_extras,
                 }

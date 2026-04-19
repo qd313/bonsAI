@@ -38,8 +38,10 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertIn("The currently running game is: Game Name (AppID: 123).", prompt)
         self.assertIn("Resolved game-title hints from attachment AppIDs: 123=Test Game.", prompt)
         self.assertIn("Visual context attachments provided: 1.", prompt)
+        self.assertIn("Hardware appendix (apply only when relevant)", prompt)
         self.assertIn("IMPORTANT: When you recommend or apply a TDP or GPU clock change", prompt)
         self.assertNotIn("STRATEGY GUIDE MODE", prompt)
+        self.assertIn("RULE: Ship of Harkinian (SoH)", prompt)
 
     def test_build_system_prompt_strategy_first_turn(self):
         def lookup_app_name(_app_id: str) -> str:
@@ -60,6 +62,8 @@ class OllamaServiceTests(unittest.TestCase):
         )
         self.assertIn("STRATEGY GUIDE MODE (active — first turn)", prompt)
         self.assertIn("bonsai-strategy-branches", prompt)
+        self.assertIn("DECK POWER / TDP (strategy first turn)", prompt)
+        self.assertNotIn("IMPORTANT: When you recommend or apply a TDP or GPU clock change", prompt)
 
     def test_build_system_prompt_strategy_followup_turn(self):
         from backend.services.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
@@ -82,7 +86,51 @@ class OllamaServiceTests(unittest.TestCase):
         )
         self.assertIn("STRATEGY GUIDE MODE (active — follow-up turn)", prompt)
         self.assertIn("If you want to cheat", prompt)
+        self.assertIn("CONCRETE solo-player examples", prompt)
         self.assertIn("Do NOT output a", prompt)
+        self.assertIn("DECK POWER / TDP (strategy follow-up)", prompt)
+        self.assertNotIn("IMPORTANT: When you recommend or apply a TDP or GPU clock change", prompt)
+
+    def test_build_system_prompt_strategy_first_turn_includes_tdp_when_power_asked(self):
+        def lookup_app_name(_app_id: str) -> str:
+            return ""
+
+        def lookup_vdf(_path: str) -> dict:
+            return {}
+
+        prompt = build_system_prompt(
+            question="Stuck in the Water Temple — what TDP should I use?",
+            app_id="",
+            app_name="",
+            normalized_attachments=[],
+            prepared_images=[],
+            lookup_app_name=lookup_app_name,
+            lookup_screenshot_vdf_metadata=lookup_vdf,
+            ask_mode="strategy",
+        )
+        self.assertIn("TDP JSON ON THIS FIRST STRATEGY TURN", prompt)
+        self.assertIn("IMPORTANT: When you recommend or apply a TDP or GPU clock change", prompt)
+
+    def test_build_system_prompt_strategy_followup_includes_tdp_when_power_asked(self):
+        from backend.services.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
+
+        def lookup_app_name(_app_id: str) -> str:
+            return ""
+
+        def lookup_vdf(_path: str) -> dict:
+            return {}
+
+        prompt = build_system_prompt(
+            question=f"{STRATEGY_FOLLOWUP_PREFIX} Also cap my TDP at 9W.",
+            app_id="",
+            app_name="",
+            normalized_attachments=[],
+            prepared_images=[],
+            lookup_app_name=lookup_app_name,
+            lookup_screenshot_vdf_metadata=lookup_vdf,
+            ask_mode="strategy",
+        )
+        self.assertIn("IMPORTANT: When you recommend or apply a TDP or GPU clock change", prompt)
 
 
 if __name__ == "__main__":

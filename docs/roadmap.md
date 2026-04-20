@@ -1,5 +1,26 @@
 # bonsAI Roadmap
 
+## Hard feature freeze — imminent release accountability
+
+**Window:** **2026-04-20** through **release Sunday, April 26, 2026** (calendar end of freeze = ship target day).
+
+**Counsel + judge:** Release priorities for this week are argued under **Red Team vs Blue Team** with a **human judge** in [red-blue-fight-2026-04-20.md](red-blue-fight-2026-04-20.md). **Check-in:** Monday 2026-04-20 **5:30 PM (17:30)** `America/New_York`; **bout:** same day **11:30 PM (23:30)** `America/New_York` (see that file for the legal-report template).
+
+**Priority order** (follow before scheduling new work):
+
+1. **Ship release** — versioning, [CHANGELOG.md](CHANGELOG.md), install smoke, [prompt-testing.md](prompt-testing.md) matrices as applicable, [development.md](development.md) release process.
+2. **Trim the fat** — **Settings tab first** (reduce noise, consolidate sections, improve scanability: grouping, progressive disclosure, shorter helper copy). **Other product/UX** only after Settings is acceptably calm. **Code / bundle / doc noise** last; do not let it distract from Settings.
+3. **Bugfixes** — from [Known bugs](#known-bugs) and QA triage; release-blocking first.
+4. **Testing / regression** — device runs; `scripts/build.ps1` / `scripts/build.sh` per contributor workflow.
+5. **Documentation** — user-facing accuracy, [troubleshooting.md](troubleshooting.md) as needed.
+6. **No new features** — no additions to shipped behavior unless **release-blocking** or **required to trim safely** (e.g. removing a surface without breaking consent or capability gates).
+
+**Chopping block:** Anything **not yet implemented** under [In progress](#in-progress), [Up next](#up-next), or [Planned candidates (not shipped)](#planned-candidates-not-shipped) is **default deferred** until after this window unless it has a **one-line MVP proof** (user-visible value, risk, why deferring harms users). Otherwise tag **`DEFERRED`** or move to a short post-release stub.
+
+**Reading contract:** Execute the priority order above before pulling scope from **Up next** or **Planned candidates**.
+
+---
+
 Operational setup, firewalls, and vision tuning live in [troubleshooting.md](troubleshooting.md); QA and regression matrices live in [prompt-testing.md](prompt-testing.md).
 
 In-progress work, bugs, and **Up next** are first. **[Completed](#completed)** is the canonical shipped checklist. Detailed backlog notes (shipped vs planned) follow. For refactor sweep notes, see [refactor-specialist-sweep.md](refactor-specialist-sweep.md).
@@ -9,6 +30,8 @@ Star ratings use the GTA scale: `★` easiest … `★★★★★` very high co
 ---
 
 ## In progress
+
+**Freeze:** Continue only **release-blocking** work here; otherwise pause or document a **minimal shippable** slice for Sun 2026-04-26. Phase 2 QAMP stays blocked.
 
 - ★★★ **QAMP Reflection (Phase 1 — Safe Default):** Show applied-state confirmation and explicit verification guidance when QAM sliders do not immediately mirror hardware writes.
   - Requirement: every BonsAI performance action must be user-verifiable after execution.
@@ -20,6 +43,8 @@ Star ratings use the GTA scale: `★` easiest … `★★★★★` very high co
 - ★★ **D-pad Scroll Bottom Cutoff:** Controller navigation can stop before the final response chunk is fully visible even when touch scroll can reach it.
 
 ## Up next
+
+**Frozen:** Items below are **not for pre-release pickup** unless they pass the **chopping block** MVP bar at the top of this doc **and** are explicitly scheduled post-release—or are **release-blocking**.
 
 - ★★ **Text Ask model preference chains (user-configurable):** Screenshot/vision tries an ordered fallback list per Ask mode in `[refactor_helpers.py](../refactor_helpers.py)` (`select_ollama_models(..., requires_vision=True)`). **Text-only** paths still use the same fixed per-mode lists today. Add Settings (or import/export JSON) so users can define **ordered text model tags per mode** (Speed / Strategy / Expert), with validation, sane defaults matching the shipped lists, and the same try-next-on-`model not found` behavior as vision.
 - ★★ **Ollama model VRAM retention:** Plugin-side setting for how long the Ollama host keeps the loaded model in VRAM after a request completes (maps to Ollama `**keep_alive`** on each generate/chat call). **Default: 5 minutes.** Shorter values free VRAM sooner for other GPU work; longer values reduce cold-load latency when asking again in quick succession.
@@ -202,6 +227,8 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 ---
 
 ## Planned candidates (not shipped)
+
+**Frozen:** No implementation during this release window except work tied to **trim-the-fat**, **bugfixes**, or **release mechanics** (see **Hard feature freeze — imminent release accountability** at the top of this file).
 
 > **Planning only** — ranked by effort/risk (easiest to hardest within star bands). Do not treat as an implementation order.
 

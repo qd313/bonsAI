@@ -133,6 +133,7 @@ If connection fails, start with:
 | Build, deploy, stack, settings keys     | Contributors            | [docs/development.md](docs/development.md)                                       |
 | Network, GPU, permissions, vision setup | Power users             | [docs/troubleshooting.md](docs/troubleshooting.md)                               |
 | Roadmap, shipped vs planned             | Planning / contributors | [docs/roadmap.md](docs/roadmap.md)                                               |
+| Release freeze / Red vs Blue bout (2026-04-20) | Maintainer (judge) | [docs/red-blue-fight-2026-04-20.md](docs/red-blue-fight-2026-04-20.md) — hard freeze through **Sun 2026-04-26**; see roadmap banner. |
 | QA matrices, release checks             | QA / contributors       | [docs/prompt-testing.md](docs/prompt-testing.md)                                 |
 | Release notes                           | Everyone                | [CHANGELOG.md](CHANGELOG.md)                                                     |
 | Character catalog (roleplay)            | Contributors / lore     | [docs/voice-character-catalog.md](docs/voice-character-catalog.md)               |

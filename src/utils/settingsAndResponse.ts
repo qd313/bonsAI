@@ -54,6 +54,8 @@ export type BonsaiSettings = {
   ask_mode: AskModeId;
   /** Ollama `keep_alive` for each Ask (how long the model stays in VRAM on the host after the request). */
   ollama_keep_alive: OllamaKeepAliveDuration;
+  /** When true, show the Debug tab in the LB/RB strip (default off for typical users). */
+  show_debug_tab: boolean;
 };
 
 export type AppliedResultLike = {
@@ -77,6 +79,7 @@ export const DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE = false;
 export const DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING = false;
 export const DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED = true;
 export const DEFAULT_INPUT_SANITIZER_USER_DISABLED = false;
+export const DEFAULT_SHOW_DEBUG_TAB = false;
 export const DEFAULT_ASK_MODE: AskModeId = "speed";
 export { DEFAULT_OLLAMA_KEEP_ALIVE };
 
@@ -201,6 +204,10 @@ export function normalizeInputSanitizerUserDisabled(value: unknown): boolean {
   return value === true;
 }
 
+export function normalizeShowDebugTab(value: unknown): boolean {
+  return value === true;
+}
+
 const _askModeSet = new Set<string>(ASK_MODE_IDS);
 
 export function normalizeAskMode(value: unknown): AskModeId {
@@ -289,6 +296,7 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     ai_character_accent_intensity: normalizeAiCharacterAccentIntensity(raw.ai_character_accent_intensity),
     ask_mode: normalizeAskMode(raw.ask_mode),
     ollama_keep_alive: normalizeOllamaKeepAlive(raw.ollama_keep_alive),
+    show_debug_tab: normalizeShowDebugTab(raw.show_debug_tab),
   };
 }
 

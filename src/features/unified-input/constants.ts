@@ -5,7 +5,7 @@ export const UNIFIED_INPUT_ICON_STRIP_PX = 24;
 /** Minimum text-body height (px) when empty — one line taller than the prior floor (~+1 overlay line at 13px / line-height 1.2). */
 export const UNIFIED_TEXT_BODY_MIN_PX = 42;
 /** Unified search typography — must match `TextField` and the measure/overlay nodes or the caret misaligns from the painted text. */
-export const UNIFIED_TEXT_FONT_PX = 14;
+export const UNIFIED_TEXT_FONT_PX = 12;
 export const UNIFIED_TEXT_LINE_HEIGHT = 1.2;
 /** Max text-body height: total cap minus icon strip. */
 export const UNIFIED_TEXT_BODY_MAX_PX = UNIFIED_INPUT_HEIGHT_MAX_PX - UNIFIED_INPUT_ICON_STRIP_PX;
@@ -54,6 +54,14 @@ export const TAB_TITLE_ICON_PX = 26;
 export const TAB_TITLE_TAB_CELL_PX = 32;
 /** Space between the LB/RB tab strip and the scrollable tab panel below (QAM). */
 export const TAB_STRIP_BODY_GAP_PX = 14;
+
+/** Main-tab AIM-style transcript: max width for player-side bubbles (px). */
+export const BONSAI_CHAT_USER_BUBBLE_MAX_PX = 260;
+/** Main-tab AI bubble max width as a fraction of the transcript column (0–1). */
+export const BONSAI_CHAT_AI_BUBBLE_MAX_FRAC = 0.92;
+/** Collapsed bubble body line height / font (matches transcript typography). */
+export const BONSAI_CHAT_TRANSCRIPT_FONT_PX = 12;
+export const BONSAI_CHAT_TRANSCRIPT_LINE_HEIGHT = 1.4;
 /** Main tab tree glyph — same outer cell as other tabs for uniform hit/outline; slightly larger than gear. */
 export const TAB_TITLE_MAIN_TAB_ICON_PX = 36;
 export const TAB_TITLE_MAIN_TAB_CELL_PX = TAB_TITLE_TAB_CELL_PX;

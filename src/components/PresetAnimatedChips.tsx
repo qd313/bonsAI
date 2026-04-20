@@ -217,7 +217,7 @@ export function PresetAnimatedChips(props: PresetAnimatedChipsProps) {
                   marginLeft: 6,
                   fontSize: 10,
                   fontStyle: "italic",
-                  color: BONSAI_FOREST_GREEN,
+                  color: `var(--bonsai-ui-accent-main, ${BONSAI_FOREST_GREEN})`,
                   fontWeight: 600,
                 }}
               >

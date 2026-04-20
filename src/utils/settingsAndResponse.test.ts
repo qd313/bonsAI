@@ -62,6 +62,7 @@ describe("settingsAndResponse", () => {
     expect(settings.input_sanitizer_user_disabled).toBe(false);
     expect(settings.ask_mode).toBe(DEFAULT_ASK_MODE);
     expect(settings.ollama_keep_alive).toBe(DEFAULT_OLLAMA_KEEP_ALIVE);
+    expect(settings.show_debug_tab).toBe(false);
   });
 
   it("normalizes ollama_keep_alive to allowed duration tokens", () => {
@@ -97,6 +98,12 @@ describe("settingsAndResponse", () => {
     expect(normalizeSettings({ ai_character_accent_intensity: "bogus" }).ai_character_accent_intensity).toBe(
       DEFAULT_AI_CHARACTER_ACCENT_INTENSITY
     );
+  });
+
+  it("normalizes show_debug_tab: only explicit true enables", () => {
+    expect(normalizeSettings({ show_debug_tab: true }).show_debug_tab).toBe(true);
+    expect(normalizeSettings({ show_debug_tab: false }).show_debug_tab).toBe(false);
+    expect(normalizeSettings({}).show_debug_tab).toBe(false);
   });
 
   it("normalizes preset chip fade: only explicit false disables", () => {

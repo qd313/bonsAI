@@ -1,5 +1,7 @@
 # Refactor-specialist sweep — bonsAI repository
 
+> **Historical note:** This file records a **past** documentation and script-layout reorg (moving guides under `docs/` and automation under `scripts/`). Current canonical paths are [README.md](../README.md) and the other markdown guides in this `docs/` directory. Do not treat the “before this reorg” tables below as the live layout.
+
 Report format follows `.cursor/agents/refactor-specialist.md` (Sweep / Planning + individual findings).
 
 ## Current behavior

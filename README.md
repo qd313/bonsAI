@@ -96,7 +96,7 @@ ollama run llama3 "Hello from bonsAI"
 
 - General prompts: `llama3`
 - Alternate local text model: `gemma4`
-- [ ] Screenshot/vision workflows: use a multimodal Ollama model that supports image input ## This part needs to actually recommend a FOSS model that handles screenshots and vision better. Let's pick a favorite and target it.
+- Screenshot / vision (attachments): use a **multimodal** Ollama model. A practical default to pull is **`llava`** (widely available in the Ollama library; open weights, community-documented for vision). Alternatives include newer vision-capable tags such as **`llama3.2-vision`**—check [Ollama’s model library](https://ollama.com/library) for current names and licenses on your host.
 
 See [docs/troubleshooting.md](docs/troubleshooting.md) for advanced tuning and vision troubleshooting details.
 
@@ -112,8 +112,14 @@ If connection fails, start with:
 
 ## Developer and advanced docs
 
-- Developers: [docs/development.md](docs/development.md)
-- Power users and troubleshooting: [docs/troubleshooting.md](docs/troubleshooting.md)
-- Roadmap and future planning: [docs/roadmap.md](docs/roadmap.md)
-- Prompt testing tracker: [docs/prompt-testing.md](docs/prompt-testing.md)
-- Release history: [CHANGELOG.md](CHANGELOG.md)
+| Topic | Audience | Doc |
+|--------|----------|-----|
+| Build, deploy, stack, settings keys | Contributors | [docs/development.md](docs/development.md) |
+| Network, GPU, permissions, vision setup | Power users | [docs/troubleshooting.md](docs/troubleshooting.md) |
+| Roadmap, shipped vs planned | Planning / contributors | [docs/roadmap.md](docs/roadmap.md) |
+| QA matrices, release checks | QA / contributors | [docs/prompt-testing.md](docs/prompt-testing.md) |
+| Release notes | Everyone | [CHANGELOG.md](CHANGELOG.md) |
+| Character catalog (roleplay) | Contributors / lore | [docs/voice-character-catalog.md](docs/voice-character-catalog.md) |
+| Steam Input jump (debug) | Contributors | [docs/steam-input-research.md](docs/steam-input-research.md) |
+| RAG / KB research (not implemented) | Contributors | [docs/rag-sources-research.md](docs/rag-sources-research.md) |
+| Unified input refactor tracker | Contributors | [docs/refactor-unified-input-tracker.md](docs/refactor-unified-input-tracker.md) |

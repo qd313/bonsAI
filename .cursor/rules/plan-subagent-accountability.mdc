@@ -1,0 +1,12 @@
+---
+description: Require Subagent reports section in plans and tie specialist runs to SUBAGENT_REPORTS.md or docs/*-report.md.
+alwaysApply: true
+---
+
+# Planning and subagent accountability
+
+Follow `.cursorrules` → **Planning & subagent accountability**.
+
+When drafting or updating an implementation plan, include **Subagent reports and follow-ups** when a specialist agent applies or was used (security, FOSS, refactor, Decky debugger, etc.). Summarize findings, cite `.cursor/agents/SUBAGENT_REPORTS.md` (Report log) and/or `docs/security-audit-report.md`, `docs/foss-advocate-report.md` when those are the canonical snapshots.
+
+Before closing risky work (RPC, logging, permissions, large refactors), state triage vs deferred follow-up.

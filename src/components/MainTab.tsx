@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { toaster } from "@decky/api";
 import { PanelSection, PanelSectionRow, TextField, Button, Focusable } from "@decky/ui";
 import type { PresetPrompt } from "../data/presets";
@@ -6,6 +6,9 @@ import { PresetAnimatedChips } from "./PresetAnimatedChips";
 import {
   ASK_BAR_PRIMARY_MIN_HEIGHT_PX,
   ASK_LABEL_COLOR_50,
+  BONSAI_CHAT_AI_BUBBLE_MAX_FRAC,
+  BONSAI_CHAT_TRANSCRIPT_FONT_PX,
+  BONSAI_CHAT_TRANSCRIPT_LINE_HEIGHT,
   UNIFIED_INPUT_ICON_STRIP_PX,
   UNIFIED_TEXT_BODY_MAX_PX,
   UNIFIED_TEXT_FONT_PX,
@@ -40,6 +43,138 @@ import { CharacterRoleplayEmoticon } from "./CharacterRoleplayEmoticon";
 import type { TransparencySnapshot } from "../utils/inputTransparency";
 import { ASK_MODE_LABELS, ASK_MODE_OUTLINE, type AskModeId } from "../data/askMode";
 import { AskModeMenuPopover } from "./AskModeMenuPopover";
+
+const BONSAI_CHAT_AI_MAX_WIDTH_CSS = `min(${Math.round(BONSAI_CHAT_AI_BUBBLE_MAX_FRAC * 100)}%, 100%)`;
+
+/** Single-line-ish collapsed height for fade (one line + fade tail). */
+function collapsedUserMaxHeightEm(): string {
+  const lh = BONSAI_CHAT_TRANSCRIPT_FONT_PX * BONSAI_CHAT_TRANSCRIPT_LINE_HEIGHT;
+  return `${(lh + 2) / BONSAI_CHAT_TRANSCRIPT_FONT_PX}em`;
+}
+
+function useElementOverflows(ref: React.RefObject<HTMLElement | null>, deps: unknown[]): boolean {
+  const [overflows, setOverflows] = useState(false);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) {
+      setOverflows(false);
+      return;
+    }
+    setOverflows(el.scrollHeight > el.clientHeight + 1);
+  }, deps);
+  return overflows;
+}
+
+type BonsaiChatUserBubbleProps = {
+  variant: "history" | "latest";
+  text: string;
+  bubbleKey: string;
+  /** Set on history rows so archived-turn navigation can scroll the row into view. */
+  threadIndex?: number;
+  selected?: boolean;
+  expanded: boolean;
+  onExpandedChange: (next: boolean) => void;
+  onHistorySelect?: () => void;
+};
+
+function BonsaiChatUserBubble(props: BonsaiChatUserBubbleProps) {
+  const { variant, text, bubbleKey, threadIndex, selected, expanded, onExpandedChange, onHistorySelect } = props;
+  const innerRef = useRef<HTMLDivElement>(null);
+  const overflows = useElementOverflows(innerRef, [text, expanded, bubbleKey]);
+  const collapsed = !expanded;
+
+  /** History: first activate expands when truncated; a later activate selects the turn. Latest: expand/collapse only. */
+  const onClick = () => {
+    if (collapsed && overflows) {
+      onExpandedChange(true);
+      return;
+    }
+    if (variant === "history" && onHistorySelect) {
+      onHistorySelect();
+      return;
+    }
+    if (variant === "latest" && expanded && overflows) {
+      onExpandedChange(false);
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      data-bonsai-chat-user-bubble={bubbleKey}
+      {...(threadIndex !== undefined ? { "data-bonsai-thread-index": String(threadIndex) } : {})}
+      className={
+        variant === "latest"
+          ? "bonsai-chat-user-bubble bonsai-chat-user-bubble--latest"
+          : `bonsai-chat-user-bubble bonsai-chat-user-bubble--history${selected ? " bonsai-chat-user-bubble--selected" : ""}`
+      }
+      onClick={onClick}
+      aria-expanded={expanded}
+    >
+      <div
+        ref={innerRef}
+        className={`bonsai-chat-user-bubble-inner${collapsed && overflows ? " bonsai-chat-user-bubble-inner--faded" : ""}`}
+        style={
+          collapsed && overflows
+            ? { maxHeight: collapsedUserMaxHeightEm(), overflow: "hidden" }
+            : undefined
+        }
+      >
+        {text}
+      </div>
+    </button>
+  );
+}
+
+type BonsaiChatAiBubbleProps = {
+  children: React.ReactNode;
+  panelHalfPx: number;
+  expanded: boolean;
+  onExpandedChange: (next: boolean) => void;
+};
+
+function BonsaiChatAiBubble(props: BonsaiChatAiBubbleProps) {
+  const { children, panelHalfPx, expanded, onExpandedChange } = props;
+  const innerRef = useRef<HTMLDivElement>(null);
+  const collapsed = !expanded;
+  const lineCapEm = `${(BONSAI_CHAT_TRANSCRIPT_FONT_PX * BONSAI_CHAT_TRANSCRIPT_LINE_HEIGHT + 2) / BONSAI_CHAT_TRANSCRIPT_FONT_PX}em`;
+  const collapsedMax = `min(${Math.max(120, Math.floor(panelHalfPx))}px, ${lineCapEm})`;
+  const overflows = useElementOverflows(innerRef, [children, expanded, collapsedMax, panelHalfPx]);
+
+  return (
+    <Focusable
+      className="bonsai-chat-ai-bubble bonsai-glass-panel"
+      onActivate={() => {
+        if (collapsed && overflows) {
+          onExpandedChange(true);
+          return;
+        }
+        if (expanded && overflows) {
+          onExpandedChange(false);
+        }
+      }}
+      noFocusRing={false}
+      style={{
+        width: BONSAI_CHAT_AI_MAX_WIDTH_CSS,
+        maxWidth: BONSAI_CHAT_AI_MAX_WIDTH_CSS,
+        alignSelf: "flex-start",
+        marginBottom: 80,
+        boxSizing: "border-box",
+      }}
+    >
+      <div
+        ref={innerRef}
+        className={`bonsai-chat-ai-bubble-inner${collapsed && overflows ? " bonsai-chat-ai-bubble-inner--faded" : ""}`}
+        style={{
+          maxHeight: collapsed ? collapsedMax : undefined,
+          overflow: collapsed ? "hidden" : undefined,
+        }}
+      >
+        {children}
+      </div>
+    </Focusable>
+  );
+}
 
 export type MainTabProps = {
   fullBleedRowStyle: React.CSSProperties;
@@ -123,7 +258,8 @@ export type MainTabProps = {
   askThreadDisplayQuestion?: string;
   /** When set, UI shows that archived turn instead of the live stream. */
   askThreadViewIndex?: number | null;
-  onAskThreadSelectTurn?: (index: number) => void;
+  /** Pass `null` to return to the live (current) turn. */
+  onAskThreadSelectTurn?: (index: number | null) => void;
 };
 
 export function MainTab(props: MainTabProps) {
@@ -214,8 +350,59 @@ export function MainTab(props: MainTabProps) {
       : null;
   const responseBodyForDisplay = viewingArchivedTurn ? viewingArchivedTurn.answer : ollamaResponse;
   const questionHeaderDisplay = viewingArchivedTurn ? viewingArchivedTurn.question : askThreadDisplayQuestion;
-  const truncateThreadLine = (s: string, max = 80) =>
-    s.length <= max ? s : `${s.slice(0, Math.max(0, max - 1))}…`;
+
+  const chatMainColumnRef = useRef<HTMLDivElement | null>(null);
+  const [panelHalfPx, setPanelHalfPx] = useState(240);
+  const [expandedUser, setExpandedUser] = useState<Record<string, boolean>>({});
+  /** Live/latest AI reply starts expanded; archived turns start collapsed to one line. */
+  const [expandedAi, setExpandedAi] = useState(true);
+
+  useEffect(() => {
+    const el = chatMainColumnRef.current;
+    if (!el) return;
+    const scroll = el.closest('[class*="TabContentsScroll"]') as HTMLElement | null;
+    const measure = () => {
+      const target = scroll ?? el;
+      const h = target.getBoundingClientRect().height;
+      setPanelHalfPx(Math.max(160, Math.floor(h / 2)));
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    if (scroll) ro.observe(scroll);
+    return () => ro.disconnect();
+  }, [askThreadCollapsed.length, questionHeaderDisplay, responseBodyForDisplay]);
+
+  useEffect(() => {
+    setExpandedAi(askThreadViewIndex === null);
+  }, [responseBodyForDisplay, askThreadViewIndex]);
+
+  useEffect(() => {
+    setExpandedUser((p) => ({ ...p, latest: true }));
+  }, [questionHeaderDisplay]);
+
+  useEffect(() => {
+    if (askThreadViewIndex === null) return;
+    window.requestAnimationFrame(() => {
+      const el = document.querySelector(`[data-bonsai-thread-index="${askThreadViewIndex}"]`);
+      (el as HTMLElement | null)?.scrollIntoView?.({ block: "nearest", behavior: "smooth" });
+    });
+  }, [askThreadViewIndex]);
+
+  const showThreadNextMessage =
+    askThreadViewIndex !== null &&
+    askThreadCollapsed.length > 0 &&
+    askThreadViewIndex >= 0 &&
+    askThreadViewIndex <= askThreadCollapsed.length - 1;
+
+  const onThreadNextMessage = () => {
+    if (askThreadViewIndex === null) return;
+    if (askThreadViewIndex < askThreadCollapsed.length - 1) {
+      onAskThreadSelectTurn?.(askThreadViewIndex + 1);
+    } else {
+      onAskThreadSelectTurn?.(null);
+    }
+  };
   const focusUnifiedTextField = React.useCallback((): boolean => {
     const layer =
       unifiedInputFieldLayerRef &&
@@ -1167,57 +1354,45 @@ export function MainTab(props: MainTabProps) {
 
         {(askThreadCollapsed.length > 0 || questionHeaderDisplay.trim()) && (
           <PanelSectionRow>
-            <div style={{ width: "100%", display: "flex", flexDirection: "column", gap: 8 }}>
-              {askThreadCollapsed.length > 0 && (
-                <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                  {askThreadCollapsed.map((turn, idx) => (
-                    <Button
+            <div
+              ref={chatMainColumnRef}
+              className="bonsai-chat-main-column"
+              style={{
+                width: "100%",
+                minWidth: 0,
+                boxSizing: "border-box",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "stretch",
+              }}
+            >
+              <div className="bonsai-chat-transcript">
+                {askThreadCollapsed.map((turn, idx) => {
+                  const key = `h-${turn.id}`;
+                  return (
+                    <BonsaiChatUserBubble
                       key={turn.id}
-                      onClick={() => onAskThreadSelectTurn?.(idx)}
-                      style={{
-                        alignSelf: "flex-start",
-                        width: "auto",
-                        maxWidth: "min(100%, 200px)",
-                        minHeight: 26,
-                        padding: "4px 8px",
-                        borderRadius: 4,
-                        border:
-                          askThreadViewIndex === idx
-                            ? "1px solid rgba(150, 187, 223, 0.55)"
-                            : "1px solid rgba(255,255,255,0.1)",
-                        background:
-                          askThreadViewIndex === idx ? "rgba(64, 93, 124, 0.45)" : "rgba(24, 34, 46, 0.55)",
-                        color: askThreadViewIndex === idx ? "#f0f4f8" : "#9fb7d5",
-                        fontSize: 10,
-                        fontWeight: 600,
-                        justifyContent: "flex-start",
-                        textAlign: "left",
-                      }}
-                    >
-                      {truncateThreadLine(turn.question)}
-                    </Button>
-                  ))}
-                </div>
-              )}
-              {(questionHeaderDisplay.trim() || viewingArchivedTurn) && (
-                <div
-                  className="bonsai-glass-panel"
-                  style={{
-                    width: "100%",
-                    padding: "10px 12px",
-                    borderRadius: 8,
-                    border: "1px solid rgba(150, 187, 223, 0.45)",
-                    background: "linear-gradient(180deg, rgba(64, 93, 124, 0.35) 0%, rgba(48, 71, 95, 0.35) 100%)",
-                    color: "#e8eef4",
-                    fontSize: 12,
-                    lineHeight: 1.4,
-                    whiteSpace: "pre-wrap",
-                    wordBreak: "break-word",
-                  }}
-                >
-                  {questionHeaderDisplay}
-                </div>
-              )}
+                      variant="history"
+                      text={turn.question}
+                      bubbleKey={key}
+                      threadIndex={idx}
+                      selected={askThreadViewIndex === idx}
+                      expanded={Boolean(expandedUser[key])}
+                      onExpandedChange={(v) => setExpandedUser((p) => ({ ...p, [key]: v }))}
+                      onHistorySelect={() => onAskThreadSelectTurn?.(idx)}
+                    />
+                  );
+                })}
+                {(questionHeaderDisplay.trim() || viewingArchivedTurn) && (
+                  <BonsaiChatUserBubble
+                    variant="latest"
+                    text={questionHeaderDisplay}
+                    bubbleKey="latest"
+                    expanded={expandedUser.latest !== false}
+                    onExpandedChange={(v) => setExpandedUser((p) => ({ ...p, latest: v }))}
+                  />
+                )}
+              </div>
             </div>
           </PanelSectionRow>
         )}
@@ -1234,23 +1409,46 @@ export function MainTab(props: MainTabProps) {
           if (!chunks.length) {
             return null;
           }
+          const hasTranscriptBlock = askThreadCollapsed.length > 0 || questionHeaderDisplay.trim();
           return (
             <PanelSectionRow key="bonsai-ai-response-stack">
-              <Focusable
-                className="bonsai-ai-response-stack bonsai-glass-panel"
-                onActivate={() => {}}
-                noFocusRing={false}
-                style={{ width: "100%", marginBottom: 80, boxSizing: "border-box" }}
+              <div
+                ref={hasTranscriptBlock ? undefined : chatMainColumnRef}
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                  minWidth: 0,
+                  boxSizing: "border-box",
+                }}
               >
-                {chunks.map((chunk, i) => (
-                  <div key={`ai-chunk-${i}`} className="bonsai-ai-response-chunk">
-                    {chunk}
+                <BonsaiChatAiBubble
+                  panelHalfPx={panelHalfPx}
+                  expanded={expandedAi}
+                  onExpandedChange={setExpandedAi}
+                >
+                  <div className="bonsai-ai-response-stack">
+                    {chunks.map((chunk, i) => (
+                      <div key={`ai-chunk-${i}`} className="bonsai-ai-response-chunk">
+                        {chunk}
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </Focusable>
+                </BonsaiChatAiBubble>
+              </div>
             </PanelSectionRow>
           );
         })()}
+        {showThreadNextMessage && (
+          <PanelSectionRow>
+            <div className="bonsai-chat-transcript bonsai-chat-next-message-row">
+              <button type="button" className="bonsai-chat-next-message" onClick={onThreadNextMessage}>
+                Next message
+              </button>
+            </div>
+          </PanelSectionRow>
+        )}
         {strategyGuideBranches &&
           strategyGuideBranches.options.length > 0 &&
           !isAsking &&

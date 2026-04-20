@@ -1,5 +1,7 @@
 # bonsAI Roadmap
 
+Operational setup, firewalls, and vision tuning live in [troubleshooting.md](troubleshooting.md); QA and regression matrices live in [prompt-testing.md](prompt-testing.md).
+
 In-progress work, bugs, and **Up next** are first. **[Completed](#completed)** is the canonical shipped checklist. Detailed backlog notes (shipped vs planned) follow. For refactor sweep notes, see [refactor-specialist-sweep.md](refactor-specialist-sweep.md).
 
 Star ratings use the GTA scale: `★` easiest … `★★★★★` very high complexity; `★★★★★★` extreme scope.
@@ -124,7 +126,7 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 
 ★★★
 
-- **Status (V1):** Shipped — unified 16×16 SVG emoticon grids (`expand8To16`, hand-tuned bust overrides); `src/components/characterEmoticonGrids.ts`, `CharacterRoleplayEmoticon.tsx`.
+- **Status (V1):** Shipped — unified 16×16 SVG placeholder emoticon grids (`expand8To16`, hand-tuned bust overrides); `src/components/characterPlaceholderEmoticonGrids.ts`, `CharacterRoleplayEmoticon.tsx`.
 - **Goal:** Improve recognizability with higher-resolution art that stays clear at small sizes; GTA-inspired cel-shaded, graphic-novel direction; TF2 Announcer keeps bonsai-tree treatment.
 - **Files:** `src/data/characterCatalog.ts`, `src/components/CharacterPickerModal.tsx`, `src/components/MainTab.tsx`, `src/index.tsx`, `src/assets/`.
 - **Depends on:** character voice roleplay + existing catalog mapping.

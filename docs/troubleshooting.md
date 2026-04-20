@@ -152,15 +152,14 @@ If Windows still falls back to CPU after FIX A:
 ### ERROR: `Connection Refused` or `Timeout`
 **Symptom:** The backend log shows a failure to reach the PC IP.
 **Fixes:**
-1. **Host Listening:** Ensure the Windows PC has environment variable `OLLAMA_HOST=0.0.0.0`.
+1. **Host listening:** On the machine running Ollama, set `OLLAMA_HOST=0.0.0.0` (or use the Ollama app’s **Listen / expose on network** option when the platform provides it) so the Deck can reach TCP **11434**. Restart Ollama after changing this.
 2. **Firewall:** Open Windows Defender Firewall -> Inbound Rules -> New Rule -> Port -> **TCP 11434** -> Allow.
 3. **Verify via SSH:** Run this from the Cursor terminal while connected to the Deck:
    ```bash
    curl -sS -m 5 http://[PC_IP]:11434/api/tags
    ```
 
-- TODO: toggle switch in Ollama "Expose Ollama to the network"
-- TODO: make sure the user installs the appropriate AI models
+4. **Models installed:** On the Ollama host, run `ollama pull <model>` for each tag you use (for example `llama3` for text, `llava` or another vision tag for screenshots). The Deck only talks to Ollama; it does not download weights itself.
 
 ---
 

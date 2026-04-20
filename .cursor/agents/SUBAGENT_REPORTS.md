@@ -8,6 +8,11 @@ Structured findings from Cursor subagents in this folder (for example `foss-advo
 - Copy the matching **Template** block and fill in only confirmed items; if the agent outputs exactly `No issues found`, record that instead of inventing findings.
 - Optional: one section can cover multiple files or scopes if you label them (e.g. `codebase`, `docs/roadmap.md`).
 
+### Contract (plans and handoffs)
+
+- Implementation plans in this repo should include a **Subagent reports and follow-ups** section when required by `.cursorrules` (**Planning & subagent accountability**). That section ties the plan to reviewed agent output and to this log or to `docs/*-report.md` when those are the deliverable.
+- After each substantive subagent run, add a dated **Report log** entry here so findings are not lost when chat context ends.
+
 ---
 
 ## Template: foss-advocate

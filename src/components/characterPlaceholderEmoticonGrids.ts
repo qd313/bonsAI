@@ -1,7 +1,18 @@
 /**
- * Pixel grids for roleplay avatars. Chars: . = transparent, 0–f = palette index in EMOTICON_PALETTE.
- * Base art is 8×8; runtime `expand8To16` pixel-doubles to a unified 16×16 vector grid.
- * `EMOTICON_GRIDS_16_OVERRIDES` replaces expansion with hand-tuned 16×16 busts (GTA V, TF2, catalog cast).
+ * PLACEHOLDER pixel grids for AI character roleplay avatars (not final art).
+ *
+ * Chars: . = transparent, 0–f = palette index in EMOTICON_PALETTE. Base art is 8×8; runtime
+ * `expand8To16` pixel-doubles to a unified 16×16 vector grid. `EMOTICON_PLACEHOLDER_GRIDS_16_OVERRIDES`
+ * replaces expansion with hand-tuned 16×16 busts (GTA V, TF2, catalog cast).
+ *
+ * Final portraits should be higher-detail assets (e.g. raster or vector); preset ids in
+ * `characterCatalog` stay stable — swap rendering in `CharacterRoleplayEmoticon` when ready.
+ *
+ * Larger avatar overlay (future): host outside the tiny input chip — e.g. a positioned layer on the
+ * main tab (`position` + `z-index` above `.bonsai-chat-transcript`, below modals), `max-height` tied
+ * to QAM tab body (`ResizeObserver`), `object-fit: contain`, `min-width: 0` on flex ancestors, and
+ * `pointer-events: none` if decorative only. Reserve horizontal margin so transcript text does not
+ * run under the bust, or use a column layout with explicit gap.
  */
 export const EMOTICON_PALETTE: readonly string[] = [
   "#5c6470",
@@ -56,7 +67,7 @@ function expand8To16(grid8: string): string {
   return out;
 }
 
-export const CHARACTER_EMOTICON_GRIDS: Record<string, string> = {
+export const CHARACTER_EMOTICON_PLACEHOLDER_GRIDS: Record<string, string> = {
   __random__: g8(
     "........",
     "..bb....",
@@ -391,9 +402,9 @@ export const CHARACTER_EMOTICON_GRIDS: Record<string, string> = {
 
 /**
  * Hand-tuned 16×16 art (cel-shaded / graphic-novel style). Merged on top of pixel-doubled 8×8 for each id.
- * GTA V cast + TF2 Announcer + TF2 mercs use bespoke layouts; all other presets use expand8To16(CHARACTER_EMOTICON_GRIDS[id]).
+ * GTA V cast + TF2 Announcer + TF2 mercs use bespoke layouts; all other presets use expand8To16(CHARACTER_EMOTICON_PLACEHOLDER_GRIDS[id]).
  */
-const EMOTICON_GRIDS_16_OVERRIDES: Record<string, string> = {
+const EMOTICON_PLACEHOLDER_GRIDS_16_OVERRIDES: Record<string, string> = {
   gta5_michael: g16(
     "................",
     ".....555555.....",
@@ -992,21 +1003,21 @@ const EMOTICON_GRIDS_16_OVERRIDES: Record<string, string> = {
 
 function buildEmoticonGrids16(): Record<string, string> {
   const out: Record<string, string> = {};
-  for (const [id, grid8] of Object.entries(CHARACTER_EMOTICON_GRIDS)) {
+  for (const [id, grid8] of Object.entries(CHARACTER_EMOTICON_PLACEHOLDER_GRIDS)) {
     out[id] = expand8To16(grid8);
   }
-  Object.assign(out, EMOTICON_GRIDS_16_OVERRIDES);
+  Object.assign(out, EMOTICON_PLACEHOLDER_GRIDS_16_OVERRIDES);
   return out;
 }
 
-const EMOTICON_GRIDS_16: Record<string, string> = buildEmoticonGrids16();
+const EMOTICON_PLACEHOLDER_GRIDS_16: Record<string, string> = buildEmoticonGrids16();
 
 export type CharacterEmoticonGrid = {
   grid: string;
   cellsPerSide: 8 | 16;
 };
 
-export function resolveCharacterEmoticonGrid(presetId: string): CharacterEmoticonGrid {
-  const grid = EMOTICON_GRIDS_16[presetId] ?? EMOTICON_GRIDS_16.__custom__;
+export function resolvePlaceholderCharacterEmoticonGrid(presetId: string): CharacterEmoticonGrid {
+  const grid = EMOTICON_PLACEHOLDER_GRIDS_16[presetId] ?? EMOTICON_PLACEHOLDER_GRIDS_16.__custom__;
   return { grid, cellsPerSide: 16 };
 }

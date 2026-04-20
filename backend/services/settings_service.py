@@ -63,6 +63,11 @@ def sanitize_input_sanitizer_user_disabled(value: Any) -> bool:
     return value is True
 
 
+def sanitize_show_debug_tab(value: Any) -> bool:
+    """Only explicit ``true`` shows the Debug tab; default is hidden."""
+    return value is True
+
+
 REQUEST_TIMEOUT_RECONCILE_STEP_SECONDS = 10
 
 OLLAMA_KEEP_ALIVE_OPTIONS = frozenset(
@@ -206,6 +211,7 @@ def sanitize_settings(
             default_ask_mode,
         ),
         "ollama_keep_alive": sanitize_ollama_keep_alive(raw.get("ollama_keep_alive")),
+        "show_debug_tab": sanitize_show_debug_tab(raw.get("show_debug_tab")),
     }
 
 

@@ -65,6 +65,7 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertFalse(sanitized["input_sanitizer_user_disabled"])
         self.assertEqual(sanitized["ask_mode"], "speed")
         self.assertEqual(sanitized["ollama_keep_alive"], "5m")
+        self.assertFalse(sanitized["show_debug_tab"])
 
     def test_sanitize_ollama_keep_alive_accepts_known_tokens(self):
         """Ollama keep_alive string must be one of the plugin presets or fall back to default."""

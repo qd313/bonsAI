@@ -32,6 +32,7 @@ import {
   DEFAULT_OLLAMA_KEEP_ALIVE,
   DEFAULT_AI_CHARACTER_PRESET_ID,
   DEFAULT_AI_CHARACTER_RANDOM,
+  DEFAULT_SHOW_DEBUG_TAB,
   normalizeAiCharacterCustomText,
   normalizeAiCharacterPresetId,
   normalizeSettings,
@@ -66,6 +67,11 @@ import {
   resolveMainTabAvatarBadgeLetter,
   resolveMainTabAvatarPresetId,
 } from "./data/characterCatalog";
+import {
+  BONSAI_UI_ACCENT_MAIN_FALLBACK,
+  buildBonsaiScopeAccentInlineStyle,
+  resolveUiAccentFromCharacterSettings,
+} from "./data/characterUiAccent";
 import { detectPromptCategory, getContextualPresets, getRandomPresets, type PresetPrompt } from "./data/presets";
 import { STRATEGY_FOLLOWUP_PREFIX } from "./data/strategyGuideFollowup";
 import {
@@ -449,6 +455,7 @@ function usePluginSettings() {
   );
   const [askMode, setAskMode] = useState<AskModeId>(DEFAULT_ASK_MODE);
   const [ollamaKeepAlive, setOllamaKeepAlive] = useState<OllamaKeepAliveDuration>(DEFAULT_OLLAMA_KEEP_ALIVE);
+  const [showDebugTab, setShowDebugTab] = useState<boolean>(DEFAULT_SHOW_DEBUG_TAB);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
 
   useEffect(() => {
@@ -473,6 +480,7 @@ function usePluginSettings() {
         setAiCharacterAccentIntensity(normalized.ai_character_accent_intensity);
         setAskMode(normalized.ask_mode);
         setOllamaKeepAlive(normalized.ollama_keep_alive);
+        setShowDebugTab(normalized.show_debug_tab);
       })
       .catch(() => {
         if (cancelled) return;
@@ -492,6 +500,7 @@ function usePluginSettings() {
         setAiCharacterAccentIntensity(DEFAULT_AI_CHARACTER_ACCENT_INTENSITY);
         setAskMode(DEFAULT_ASK_MODE);
         setOllamaKeepAlive(DEFAULT_OLLAMA_KEEP_ALIVE);
+        setShowDebugTab(DEFAULT_SHOW_DEBUG_TAB);
       })
       .finally(() => {
         if (!cancelled) setSettingsLoaded(true);
@@ -521,6 +530,7 @@ function usePluginSettings() {
         ai_character_accent_intensity: aiCharacterAccentIntensity,
         ask_mode: askMode,
         ollama_keep_alive: ollamaKeepAlive,
+        show_debug_tab: showDebugTab,
       }).catch((err) => {
         console.error("save_settings failed", err);
       });
@@ -543,6 +553,7 @@ function usePluginSettings() {
     aiCharacterAccentIntensity,
     askMode,
     ollamaKeepAlive,
+    showDebugTab,
     settingsLoaded,
   ]);
 
@@ -571,6 +582,8 @@ function usePluginSettings() {
     setAskMode,
     ollamaKeepAlive,
     setOllamaKeepAlive,
+    showDebugTab,
+    setShowDebugTab,
     settingsLoaded,
     setLatencyWarningSeconds,
     setRequestTimeoutSeconds,
@@ -580,6 +593,7 @@ function usePluginSettings() {
     setDesktopAskVerboseLogging,
     setPresetChipFadeAnimationEnabled,
     setInputSanitizerUserDisabled,
+    setShowDebugTab,
   };
 }
 
@@ -790,7 +804,28 @@ const Content: React.FC = () => {
     setAskMode,
     ollamaKeepAlive,
     setOllamaKeepAlive,
+    showDebugTab,
+    setShowDebugTab,
   } = usePluginSettings();
+
+  const uiAccent = useMemo(
+    () =>
+      resolveUiAccentFromCharacterSettings({
+        ai_character_enabled: aiCharacterEnabled,
+        ai_character_random: aiCharacterRandom,
+        ai_character_preset_id: aiCharacterPresetId,
+        ai_character_custom_text: aiCharacterCustomText,
+      }),
+    [aiCharacterEnabled, aiCharacterRandom, aiCharacterPresetId, aiCharacterCustomText]
+  );
+  const bonsaiScopeAccentStyle = useMemo(() => buildBonsaiScopeAccentInlineStyle(uiAccent), [uiAccent]);
+
+  useEffect(() => {
+    if (!showDebugTab && currentTab === "debug") {
+      setCurrentTab("main");
+      toaster.toast({ title: "Debug tab hidden", body: "Switched to Main.", duration: 2800 });
+    }
+  }, [showDebugTab, currentTab]);
 
   useEffect(() => {
     if (askMode !== "strategy") {
@@ -1123,6 +1158,34 @@ const Content: React.FC = () => {
     setShowSlowWarning(false);
     setStrategyGuideBranches(null);
   };
+
+  const resetPluginSession = useCallback(() => {
+    if (isAsking) {
+      invalidateRequests();
+      setIsAsking(false);
+    }
+    persistSearchQuery("");
+    setUnifiedInput("");
+    setSelectedIndex(-1);
+    setNavigationMessage("");
+    setOllamaResponse("");
+    setOllamaContext(null);
+    setLastApplied(null);
+    setLastExchange(null);
+    setStrategyGuideBranches(null);
+    setSelectedAttachment(null);
+    setElapsedSeconds(null);
+    setShowSlowWarning(false);
+    setAskThreadCollapsed([]);
+    setAskThreadViewIndex(null);
+    setAskThreadDisplayQuestion("");
+    setLastTransparency(null);
+    toaster.toast({
+      title: "Session cleared",
+      body: "Unified search, reply, thread, transparency, and attachments were reset.",
+      duration: 3800,
+    });
+  }, [isAsking, invalidateRequests]);
 
   const onMicInput = () => {
     toaster.toast({ title: "Voice input", body: "Voice capture is not implemented yet.", duration: 1800 });
@@ -1607,6 +1670,7 @@ const Content: React.FC = () => {
             ai_character_accent_intensity: aiCharacterAccentIntensity,
             ask_mode: askMode,
             ollama_keep_alive: ollamaKeepAlive,
+            show_debug_tab: showDebugTab,
           }).catch((err) => {
             console.error("save_settings failed (character picker OK)", err);
           });
@@ -1644,6 +1708,7 @@ const Content: React.FC = () => {
     armPostPickerTabLock,
     askMode,
     ollamaKeepAlive,
+    showDebugTab,
   ]);
 
   const mainTabAiCharacterPad = aiCharacterEnabled;
@@ -1883,9 +1948,23 @@ const Content: React.FC = () => {
             Latency warning and backend timeout
           </div>
           <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", lineHeight: 1.35 }}>
-            <span style={{ color: BONSAI_FOREST_GREEN, fontWeight: 700 }}>Latency warning</span>
+            <span
+              style={{
+                color: `var(--bonsai-ui-accent-main, ${BONSAI_UI_ACCENT_MAIN_FALLBACK})`,
+                fontWeight: 700,
+              }}
+            >
+              Latency warning
+            </span>
             {": slow flag after N seconds. "}
-            <span style={{ color: BONSAI_FOREST_GREEN, fontWeight: 700 }}>Backend timeout</span>
+            <span
+              style={{
+                color: `var(--bonsai-ui-accent-main, ${BONSAI_UI_ACCENT_MAIN_FALLBACK})`,
+                fontWeight: 700,
+              }}
+            >
+              Backend timeout
+            </span>
             {": hard stop if Ollama is not done."}
           </div>
         </div>
@@ -2152,6 +2231,38 @@ const Content: React.FC = () => {
         </div>
       </PanelSectionRow>
     </PanelSection>
+    <PanelSection title="Advanced">
+      <PanelSectionRow>
+        <ToggleField
+          label="Show Debug tab"
+          description="Adds the Debug tab to the Quick Access strip (logs, captured errors, Steam Input jump). Off by default for typical use."
+          checked={showDebugTab}
+          onChange={(checked) => setShowDebugTab(checked)}
+        />
+      </PanelSectionRow>
+      <PanelSectionRow>
+        <Button
+          onClick={() => {
+            showModal(
+              <ConfirmModal
+                strTitle="Clear session cache?"
+                strDescription={
+                  "Clears the unified search field, current AI reply, thread history, input transparency, " +
+                  "strategy branch picker, attached screenshot selection, and timers. " +
+                  "Saved settings, Ollama on the PC, and screenshot files are not changed."
+                }
+                strOKButtonText="Clear"
+                onOK={() => {
+                  resetPluginSession();
+                }}
+              />
+            );
+          }}
+        >
+          Reset session cache…
+        </Button>
+      </PanelSectionRow>
+    </PanelSection>
     <PanelSection title="Desktop notes">
       <PanelSectionRow>
         <ToggleField
@@ -2229,8 +2340,46 @@ const Content: React.FC = () => {
     />
   );
 
+  const deckyTabs = useMemo(
+    () => {
+      const rows: Array<{ id: string; title: React.ReactElement; content: React.ReactNode }> = [
+        {
+          id: "main",
+          title: bonsaiTabIconTitle("main", <BonsaiTreeTabIcon size={TAB_TITLE_MAIN_TAB_ICON_PX} />),
+          content: mainTab,
+        },
+        {
+          id: "settings",
+          title: bonsaiTabIconTitle("settings", <GearIcon size={TAB_TITLE_ICON_PX} />),
+          content: settingsTab,
+        },
+        {
+          id: "permissions",
+          title: bonsaiTabIconTitle("permissions", <LockIcon size={TAB_TITLE_ICON_PX} />),
+          content: (
+            <div className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight">{permissionsTab}</div>
+          ),
+        },
+      ];
+      if (showDebugTab) {
+        rows.push({
+          id: "debug",
+          title: bonsaiTabIconTitle("debug", <BugIcon size={TAB_TITLE_DEBUG_TAB_ICON_PX} />),
+          content: <div className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight">{debugTab}</div>,
+        });
+      }
+      rows.push({
+        id: "about",
+        title: bonsaiTabIconTitle("about", <AboutTabTitleIcon size={TAB_TITLE_ICON_PX} />),
+        content: <div className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight">{aboutTab}</div>,
+      });
+      return rows;
+    },
+    [showDebugTab, mainTab, settingsTab, permissionsTab, debugTab, aboutTab]
+  );
+
   return (
-    <div ref={bonsaiScopeRef} className="bonsai-scope">
+    <div ref={bonsaiScopeRef} className="bonsai-scope" style={bonsaiScopeAccentStyle}>
       <style>{`
         /* Keep plugin subtree shrinkable inside QAM flex layout (avoids horizontal spill). */
         /*
@@ -2409,8 +2558,8 @@ const Content: React.FC = () => {
         .bonsai-scope .bonsai-decky-tabs-root .DialogButton.Active:not(:focus-within) .bonsai-tab-title-leaf,
         .bonsai-scope .bonsai-decky-tabs-root .DialogButton.active:not(:focus-within) .bonsai-tab-title-leaf {
           box-shadow:
-            0 0 0 1px rgba(82, 216, 138, 0.2),
-            0 0 6px 1px rgba(34, 100, 65, 0.12) !important;
+            0 0 0 1px var(--bonsai-ui-tab-dim-1, rgba(82, 216, 138, 0.2)),
+            0 0 6px 1px var(--bonsai-ui-tab-dim-2, rgba(34, 100, 65, 0.12)) !important;
         }
 
         .bonsai-scope .bonsai-decky-tabs-root .Panel.Focusable.Active:focus-within .bonsai-tab-title-leaf,
@@ -2423,9 +2572,9 @@ const Content: React.FC = () => {
         .bonsai-scope .bonsai-decky-tabs-root .DialogButton.Active.gpfocus .bonsai-tab-title-leaf,
         .bonsai-scope .bonsai-decky-tabs-root .DialogButton.active.gpfocus .bonsai-tab-title-leaf {
           box-shadow:
-            0 0 0 2px rgba(82, 216, 138, 0.95),
-            0 0 18px 6px rgba(34, 100, 65, 0.55),
-            0 0 36px 12px rgba(82, 216, 138, 0.32) !important;
+            0 0 0 2px var(--bonsai-ui-tab-bright-1, rgba(82, 216, 138, 0.95)),
+            0 0 18px 6px var(--bonsai-ui-tab-bright-2, rgba(34, 100, 65, 0.55)),
+            0 0 36px 12px var(--bonsai-ui-tab-bright-3, rgba(82, 216, 138, 0.32)) !important;
         }
 
         .bonsai-scope .bonsai-decky-tabs-root .Panel.Focusable.gpfocus:has(.bonsai-tab-title-leaf),
@@ -2443,8 +2592,8 @@ const Content: React.FC = () => {
         .bonsai-scope .bonsai-decky-tabs-root .Panel.Focusable:focus-visible:not(.Active) .bonsai-tab-title-leaf,
         .bonsai-scope .bonsai-decky-tabs-root .DialogButton:focus-visible:not(.Active):not(.active) .bonsai-tab-title-leaf {
           box-shadow:
-            0 0 0 2px rgba(82, 216, 138, 0.92),
-            0 0 0 5px rgba(82, 216, 138, 0.18) !important;
+            0 0 0 2px var(--bonsai-ui-tab-focus-1, rgba(82, 216, 138, 0.92)),
+            0 0 0 5px var(--bonsai-ui-tab-focus-2, rgba(82, 216, 138, 0.18)) !important;
         }
 
         /* No green icon glow on non-active DialogButton tabs only. Avoid Panel.Focusable:not(.Active):
@@ -2466,8 +2615,8 @@ const Content: React.FC = () => {
         .bonsai-scope .bonsai-decky-tabs-root .Focusable.Active:not(:focus-within) .bonsai-tab-title-icon {
           color: rgba(252, 252, 252, 1) !important;
           filter:
-            drop-shadow(0 0 2px rgba(82, 216, 138, 0.22))
-            drop-shadow(0 0 6px rgba(34, 100, 65, 0.16)) !important;
+            drop-shadow(0 0 2px var(--bonsai-ui-tab-icon-ds-1, rgba(82, 216, 138, 0.22)))
+            drop-shadow(0 0 6px var(--bonsai-ui-tab-icon-ds-2, rgba(34, 100, 65, 0.16))) !important;
         }
 
         .bonsai-scope .bonsai-decky-tabs-root .Panel.Focusable.Active:focus-within .bonsai-tab-title-icon,
@@ -2480,9 +2629,9 @@ const Content: React.FC = () => {
         .bonsai-scope .bonsai-decky-tabs-root .DialogButton.Active.gpfocus .bonsai-tab-title-icon,
         .bonsai-scope .bonsai-decky-tabs-root .DialogButton.active.gpfocus .bonsai-tab-title-icon {
           filter:
-            drop-shadow(0 0 6px rgba(82, 216, 138, 0.95))
-            drop-shadow(0 0 14px rgba(34, 100, 65, 0.62))
-            drop-shadow(0 0 24px rgba(82, 216, 138, 0.45)) !important;
+            drop-shadow(0 0 6px var(--bonsai-ui-tab-icon-ds-3, rgba(82, 216, 138, 0.95)))
+            drop-shadow(0 0 14px var(--bonsai-ui-tab-icon-ds-4, rgba(34, 100, 65, 0.62)))
+            drop-shadow(0 0 24px var(--bonsai-ui-tab-icon-ds-5, rgba(82, 216, 138, 0.45))) !important;
         }
 
         .bonsai-scope [class*="TabContentsScroll"] {
@@ -2718,7 +2867,10 @@ const Content: React.FC = () => {
           opacity: 0.75 !important;
         }
 
-        .bonsai-scope .bonsai-unified-input-host input::placeholder { font-size: 12px; }
+        .bonsai-scope .bonsai-unified-input-host input::placeholder,
+        .bonsai-scope .bonsai-unified-input-host textarea::placeholder {
+          font-size: ${UNIFIED_TEXT_FONT_PX}px !important;
+        }
 
         /* Hide standard field labels to allow custom overlays */
         .bonsai-scope .bonsai-unified-input-host [class*="FieldLabel"],
@@ -2790,7 +2942,7 @@ const Content: React.FC = () => {
           flex-direction: column;
           background: rgba(18, 26, 34, 0.28) !important;
           border: 1px solid rgba(255, 255, 255, 0.08) !important;
-          color: #e8eef4;
+          color: #dadde3;
           border-radius: 4px;
           overflow: hidden;
         }
@@ -2809,11 +2961,154 @@ const Content: React.FC = () => {
         .bonsai-scope .bonsai-ai-response-chunk {
           background: rgba(18, 26, 34, 0.28) !important;
           border: 1px solid rgba(255, 255, 255, 0.08);
-          color: #e8eef4;
+          color: #dadde3;
           padding: 8px;
           white-space: pre-wrap;
           font-size: 12px;
           line-height: 1.4;
+        }
+
+        /*
+          Main-tab AIM-style transcript: column shell + bubbles. Overrides broad PanelSectionRow
+          child width where needed so player bubbles stay right-aligned (fit-content) without QAM bleed.
+        */
+        .bonsai-scope .bonsai-chat-main-column {
+          width: 100% !important;
+          max-width: 100% !important;
+          min-width: 0 !important;
+          box-sizing: border-box !important;
+        }
+        .bonsai-scope .bonsai-chat-transcript {
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: stretch !important;
+          gap: 8px !important;
+          min-width: 0 !important;
+          width: 100% !important;
+          max-width: 100% !important;
+          box-sizing: border-box !important;
+          padding: 0 6px 0 4px !important;
+        }
+        .bonsai-scope .bonsai-chat-next-message-row {
+          align-items: flex-end !important;
+        }
+        .bonsai-scope button.bonsai-chat-user-bubble {
+          display: block !important;
+          width: fit-content !important;
+          max-width: min(88%, 260px) !important;
+          min-width: 0 !important;
+          margin-left: auto !important;
+          margin-right: 0 !important;
+          align-self: flex-end !important;
+          box-sizing: border-box !important;
+          text-align: right !important;
+          white-space: pre-wrap !important;
+          word-break: break-word !important;
+          overflow-wrap: anywhere !important;
+          font-size: 12px !important;
+          line-height: 1.4 !important;
+          padding: 8px 10px !important;
+          border-radius: 10px !important;
+          cursor: pointer !important;
+          outline: none !important;
+          appearance: none !important;
+          -webkit-appearance: none !important;
+          color: #dce6f2 !important;
+          border: 1px solid rgba(90, 130, 185, 0.42) !important;
+          background: linear-gradient(
+            180deg,
+            rgba(28, 44, 68, 0.72) 0%,
+            rgba(18, 30, 48, 0.78) 100%
+          ) !important;
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+        }
+        .bonsai-scope button.bonsai-chat-user-bubble--history {
+          font-size: 10px !important;
+          font-weight: 600 !important;
+          line-height: 1.25 !important;
+          padding: 5px 8px !important;
+          border-radius: 8px !important;
+          max-width: min(100%, 200px) !important;
+          border: 1px solid rgba(255, 255, 255, 0.08) !important;
+          background: linear-gradient(
+            180deg,
+            rgba(22, 34, 48, 0.78) 0%,
+            rgba(14, 22, 34, 0.82) 100%
+          ) !important;
+          color: #8fa8c4 !important;
+        }
+        .bonsai-scope button.bonsai-chat-user-bubble--history.bonsai-chat-user-bubble--selected {
+          border: 1px solid rgba(120, 155, 198, 0.42) !important;
+          background: linear-gradient(
+            180deg,
+            rgba(36, 52, 72, 0.82) 0%,
+            rgba(24, 36, 52, 0.85) 100%
+          ) !important;
+          color: #e8eef4 !important;
+        }
+        .bonsai-scope button.bonsai-chat-user-bubble--latest {
+          border: 1px solid rgba(100, 145, 205, 0.48) !important;
+          background: linear-gradient(
+            180deg,
+            rgba(32, 52, 78, 0.8) 0%,
+            rgba(20, 34, 54, 0.85) 100%
+          ) !important;
+          box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.06),
+            0 0 0 1px rgba(70, 120, 175, 0.1) !important;
+        }
+        .bonsai-scope .bonsai-chat-user-bubble-inner--faded {
+          -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 52%, transparent 100%) !important;
+          mask-image: linear-gradient(to bottom, #000 0%, #000 52%, transparent 100%) !important;
+        }
+        .bonsai-scope .bonsai-chat-ai-bubble.bonsai-glass-panel {
+          border-radius: 10px !important;
+          border: 1px solid var(--bonsai-chat-ai-bubble-border, rgba(46, 135, 83, 0.48)) !important;
+          background: linear-gradient(
+            180deg,
+            var(--bonsai-chat-ai-bubble-bg-top, rgba(46, 135, 83, 0.12)) 0%,
+            var(--bonsai-chat-ai-bubble-bg-bottom, rgba(18, 52, 34, 0.55)) 100%
+          ) !important;
+          color: var(--bonsai-chat-ai-bubble-text, #d4dde6) !important;
+          overflow: hidden !important;
+        }
+        .bonsai-scope .bonsai-chat-ai-bubble .bonsai-ai-response-stack {
+          background: transparent !important;
+          border: none !important;
+          width: 100% !important;
+          max-width: 100% !important;
+        }
+        .bonsai-scope .bonsai-chat-ai-bubble .bonsai-ai-response-chunk {
+          background: transparent !important;
+          border: none !important;
+          border-bottom: 1px solid var(--bonsai-chat-ai-bubble-chunk-border, rgba(255, 255, 255, 0.08)) !important;
+          color: var(--bonsai-chat-ai-bubble-text, #d4dde6) !important;
+        }
+        .bonsai-scope .bonsai-chat-ai-bubble .bonsai-ai-response-chunk:last-child {
+          border-bottom: none !important;
+        }
+        .bonsai-scope .bonsai-chat-ai-bubble-inner--faded {
+          -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%) !important;
+          mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%) !important;
+        }
+        .bonsai-scope button.bonsai-chat-next-message {
+          display: block !important;
+          width: fit-content !important;
+          max-width: min(88%, 260px) !important;
+          margin-left: auto !important;
+          align-self: flex-end !important;
+          padding: 6px 12px !important;
+          border-radius: 10px !important;
+          font-size: 11px !important;
+          font-weight: 600 !important;
+          cursor: pointer !important;
+          border: 1px solid rgba(110, 150, 200, 0.38) !important;
+          background: linear-gradient(
+            180deg,
+            rgba(26, 42, 62, 0.82) 0%,
+            rgba(18, 28, 42, 0.88) 100%
+          ) !important;
+          color: #c8daf0 !important;
         }
 
         /* ==========================================================================
@@ -3092,39 +3387,7 @@ const Content: React.FC = () => {
         .bonsai-scope [class*="SliderControlAndNotches"] > div { min-width: 0 !important; }
       `}</style>
       <div className="bonsai-decky-tabs-root">
-        <Tabs
-          activeTab={currentTab}
-          onShowTab={onTabsShowTab}
-          tabs={[
-            {
-              id: "main",
-              title: bonsaiTabIconTitle("main", <BonsaiTreeTabIcon size={TAB_TITLE_MAIN_TAB_ICON_PX} />),
-              content: mainTab,
-            },
-            {
-              id: "settings",
-              title: bonsaiTabIconTitle("settings", <GearIcon size={TAB_TITLE_ICON_PX} />),
-              content: settingsTab,
-            },
-            {
-              id: "permissions",
-              title: bonsaiTabIconTitle("permissions", <LockIcon size={TAB_TITLE_ICON_PX} />),
-              content: (
-                <div className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight">{permissionsTab}</div>
-              ),
-            },
-            {
-              id: "debug",
-              title: bonsaiTabIconTitle("debug", <BugIcon size={TAB_TITLE_DEBUG_TAB_ICON_PX} />),
-              content: <div className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight">{debugTab}</div>,
-            },
-            {
-              id: "about",
-              title: bonsaiTabIconTitle("about", <AboutTabTitleIcon size={TAB_TITLE_ICON_PX} />),
-              content: <div className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight">{aboutTab}</div>,
-            },
-          ]}
-        />
+        <Tabs activeTab={currentTab} onShowTab={onTabsShowTab} tabs={deckyTabs} />
       </div>
     </div>
   );

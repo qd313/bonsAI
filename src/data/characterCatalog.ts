@@ -155,7 +155,7 @@ export function formatAiCharacterSelectionLine(opts: {
   return "Choose character…";
 }
 
-/** Which emoticon to show in the main input chrome. */
+/** Which PLACEHOLDER emoticon grid to show in the main input chrome (`characterPlaceholderEmoticonGrids`). */
 export function resolveMainTabAvatarPresetId(opts: {
   enabled: boolean;
   random: boolean;

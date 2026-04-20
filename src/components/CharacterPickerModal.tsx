@@ -363,7 +363,7 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
               />
             </div>
             <div style={{ flexShrink: 0 }} aria-hidden>
-              <CharacterRoleplayEmoticon presetId="__random__" size={26} badgeLetter="?" />
+              <CharacterRoleplayEmoticon presetId="__random__" size={26} />
             </div>
           </div>
           <div

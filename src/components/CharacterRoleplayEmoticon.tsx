@@ -1,5 +1,5 @@
 import React from "react";
-import { EMOTICON_PALETTE, resolveCharacterEmoticonGrid } from "./characterEmoticonGrids";
+import { EMOTICON_PALETTE, resolvePlaceholderCharacterEmoticonGrid } from "./characterPlaceholderEmoticonGrids";
 
 export type CharacterRoleplayEmoticonProps = {
   /** Preset catalog id, or `__random__` / `__custom__` for synthetic avatars. */
@@ -35,11 +35,45 @@ function badgeOverlayStyle(size: number): React.CSSProperties {
 }
 
 /**
- * Renders a small pixel-art style emoticon for the character roleplay picker and main input avatar.
+ * Renders the PLACEHOLDER pixel-art emoticon for the character roleplay picker and main input avatar.
+ * Final AI character art is expected to be higher-detail; see `characterPlaceholderEmoticonGrids.ts`.
  */
 export function CharacterRoleplayEmoticon(props: CharacterRoleplayEmoticonProps) {
   const { presetId, size, className, title, badgeLetter } = props;
-  const { grid, cellsPerSide } = resolveCharacterEmoticonGrid(presetId);
+
+  if (presetId === "__random__") {
+    const qSize = Math.max(12, Math.round(size * 0.72));
+    return (
+      <div
+        className={className}
+        title={title}
+        aria-hidden={title ? undefined : true}
+        style={{
+          width: size,
+          height: size,
+          flexShrink: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          boxSizing: "border-box",
+        }}
+      >
+        <span
+          style={{
+            fontSize: qSize,
+            fontWeight: 700,
+            lineHeight: 1,
+            color: "rgba(220, 232, 244, 0.96)",
+            fontFamily: "system-ui, Segoe UI, sans-serif",
+          }}
+        >
+          ?
+        </span>
+      </div>
+    );
+  }
+
+  const { grid, cellsPerSide } = resolvePlaceholderCharacterEmoticonGrid(presetId);
   const cells = grid.split("");
   const svg = (
     <svg

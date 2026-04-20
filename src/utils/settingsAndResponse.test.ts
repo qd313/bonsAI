@@ -63,6 +63,27 @@ describe("settingsAndResponse", () => {
     expect(settings.ask_mode).toBe(DEFAULT_ASK_MODE);
     expect(settings.ollama_keep_alive).toBe(DEFAULT_OLLAMA_KEEP_ALIVE);
     expect(settings.show_debug_tab).toBe(false);
+    expect(settings.model_policy_tier).toBe("open_source_only");
+    expect(settings.model_policy_non_foss_unlocked).toBe(false);
+    expect(settings.model_allow_high_vram_fallbacks).toBe(false);
+  });
+
+  it("normalizes model_allow_high_vram_fallbacks: only explicit true enables", () => {
+    expect(normalizeSettings({ model_allow_high_vram_fallbacks: true }).model_allow_high_vram_fallbacks).toBe(
+      true
+    );
+    expect(normalizeSettings({ model_allow_high_vram_fallbacks: false }).model_allow_high_vram_fallbacks).toBe(
+      false
+    );
+  });
+
+  it("downgrades non_foss tier without unlock to open_weight", () => {
+    const settings = normalizeSettings({
+      model_policy_tier: "non_foss",
+      model_policy_non_foss_unlocked: false,
+    });
+    expect(settings.model_policy_tier).toBe("open_weight");
+    expect(settings.model_policy_non_foss_unlocked).toBe(false);
   });
 
   it("normalizes ollama_keep_alive to allowed duration tokens", () => {

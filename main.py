@@ -41,6 +41,11 @@ from backend.services.settings_service import (
     save_settings as save_settings_to_disk,
 )
 from backend.services.capabilities import capability_enabled
+from backend.services.model_policy import (
+    disclosure_for_model,
+    empty_filter_user_message,
+    filter_model_list,
+)
 from backend.services.desktop_note_service import (
     append_desktop_ask_transparency_sync,
     append_desktop_chat_event_sync,
@@ -174,6 +179,7 @@ class Plugin:
             "started_at": None,
             "completed_at": None,
             "strategy_guide_branches": None,
+            "model_policy_disclosure": None,
         }
 
     def _ensure_background_state(self) -> None:
@@ -959,9 +965,10 @@ class Plugin:
                         "pc_ip": pc_ip,
                         "error_message": "",
                         "elapsed_seconds": elapsed,
+                        "model_policy_disclosure": None,
                     }
                 )
-                return out
+                return {**out, "model_policy_disclosure": None, "strategy_guide_branches": None}
 
             atts = attachments or []
             if atts and not capability_enabled(settings, "media_library_access"):
@@ -992,6 +999,7 @@ class Plugin:
                         "pc_ip": pc_ip,
                         "error_message": "media_library_access",
                         "elapsed_seconds": elapsed,
+                        "model_policy_disclosure": None,
                     }
                 )
                 return {
@@ -1001,6 +1009,8 @@ class Plugin:
                     "app_context": app_context,
                     "applied": None,
                     "elapsed_seconds": elapsed,
+                    "strategy_guide_branches": None,
+                    "model_policy_disclosure": None,
                 }
 
             user_sanitizer_disabled = bool(settings.get("input_sanitizer_user_disabled"))
@@ -1031,6 +1041,7 @@ class Plugin:
                         "pc_ip": pc_ip,
                         "error_message": "",
                         "elapsed_seconds": elapsed,
+                        "model_policy_disclosure": None,
                     }
                 )
                 return {
@@ -1040,6 +1051,8 @@ class Plugin:
                     "app_context": app_context,
                     "applied": None,
                     "elapsed_seconds": elapsed,
+                    "strategy_guide_branches": None,
+                    "model_policy_disclosure": None,
                 }
             question_for_model = lane.text
 
@@ -1105,6 +1118,7 @@ class Plugin:
                     "pc_ip": pc_ip,
                     "error_message": err_tail,
                     "elapsed_seconds": elapsed,
+                    "model_policy_disclosure": ollama_result.get("model_policy_disclosure"),
                 }
             )
 
@@ -1117,6 +1131,7 @@ class Plugin:
                 "applied": applied,
                 "elapsed_seconds": elapsed,
                 "strategy_guide_branches": ollama_result.get("strategy_guide_branches"),
+                "model_policy_disclosure": ollama_result.get("model_policy_disclosure"),
             }
         except Exception as exc:
             elapsed = round(time.time() - start, 1)
@@ -1143,6 +1158,7 @@ class Plugin:
                     "pc_ip": pc_ip,
                     "error_message": str(exc),
                     "elapsed_seconds": elapsed,
+                    "model_policy_disclosure": None,
                 }
             )
             return {
@@ -1153,6 +1169,7 @@ class Plugin:
                 "applied": None,
                 "elapsed_seconds": elapsed,
                 "strategy_guide_branches": None,
+                "model_policy_disclosure": None,
             }
 
     async def ask_game_ai(self, question: Any = "", PcIp: str = ""):
@@ -1211,6 +1228,7 @@ class Plugin:
                 "error": None if success else response_text,
                 "completed_at": time.time(),
                 "strategy_guide_branches": result.get("strategy_guide_branches"),
+                "model_policy_disclosure": result.get("model_policy_disclosure"),
             }
 
     async def start_background_game_ai(self, question: Any = "", PcIp: str = ""):
@@ -1265,6 +1283,7 @@ class Plugin:
                             "pc_ip": pc_ip,
                             "error_message": "",
                             "elapsed_seconds": 0.0,
+                            "model_policy_disclosure": None,
                         }
                     )
                     return {
@@ -1319,6 +1338,7 @@ class Plugin:
                             "pc_ip": pc_ip,
                             "error_message": "",
                             "elapsed_seconds": 0.0,
+                            "model_policy_disclosure": None,
                         }
                     )
                     plugin._background_state = {
@@ -1335,6 +1355,7 @@ class Plugin:
                         "started_at": now,
                         "completed_at": now,
                         "strategy_guide_branches": None,
+                        "model_policy_disclosure": None,
                     }
                     plugin._background_task = None
                     return {
@@ -1366,6 +1387,7 @@ class Plugin:
                 "started_at": time.time(),
                 "completed_at": None,
                 "strategy_guide_branches": None,
+                "model_policy_disclosure": None,
             }
             plugin._background_task = asyncio.create_task(
                 plugin._run_background_request(
@@ -1406,6 +1428,7 @@ class Plugin:
                         "error": f"Backend error: {exc}",
                         "completed_at": time.time(),
                         "strategy_guide_branches": None,
+                        "model_policy_disclosure": None,
                     }
             return dict(plugin._background_state)
 
@@ -1431,9 +1454,9 @@ class Plugin:
         )
 
     @staticmethod
-    def _select_models(requires_vision: bool, ask_mode: str = "speed") -> list:
+    def _select_models(requires_vision: bool, ask_mode: str = "speed", high_vram_fallbacks: bool = False) -> list:
         """Select ordered model fallbacks based on vision inputs and Ask mode."""
-        return select_ollama_models(requires_vision, ask_mode)
+        return select_ollama_models(requires_vision, ask_mode, high_vram_fallbacks)
 
     @staticmethod
     def _format_ai_response(
@@ -1530,7 +1553,18 @@ class Plugin:
         )
 
         requires_vision = len(prepared_images) > 0
-        models_to_try = self._select_models(requires_vision, ask_mode)
+        high_vram = settings.get("model_allow_high_vram_fallbacks") is True
+        models_to_try = self._select_models(requires_vision, ask_mode, high_vram)
+        policy_tier = str(settings.get("model_policy_tier") or "open_source_only")
+        non_foss_unlocked = settings.get("model_policy_non_foss_unlocked") is True
+        models_to_try = filter_model_list(models_to_try, policy_tier, non_foss_unlocked)
+        if not models_to_try:
+            return {
+                "success": False,
+                "response": empty_filter_user_message(policy_tier, non_foss_unlocked, requires_vision),
+                "model_policy_disclosure": None,
+                **ollama_extras,
+            }
 
         try:
             loop = asyncio.get_running_loop()
@@ -1553,10 +1587,12 @@ class Plugin:
                 )
                 merged = {**ollama_extras, **result}
                 if result.get("success"):
-                    return merged
+                    disc = disclosure_for_model(str(result.get("model") or model_name))
+                    return {**merged, "model_policy_disclosure": disc}
 
                 last_failure = merged
                 body = (result.get("body") or "").lower()
+                # Missing local Ollama tags: try the next fallback instead of failing the whole Ask.
                 is_model_not_found = "not found" in body and "model" in body
                 if is_model_not_found:
                     continue

@@ -33,6 +33,8 @@ import {
   DEFAULT_AI_CHARACTER_PRESET_ID,
   DEFAULT_AI_CHARACTER_RANDOM,
   DEFAULT_SHOW_DEBUG_TAB,
+  DEFAULT_MODEL_POLICY_TIER,
+  DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS,
   normalizeAiCharacterCustomText,
   normalizeAiCharacterPresetId,
   normalizeSettings,
@@ -86,6 +88,50 @@ import {
   GearIcon,
   LockIcon,
 } from "./components/icons";
+import {
+  MODEL_POLICY_README_URL,
+  MODEL_POLICY_SETTINGS_INTRO,
+  MODEL_POLICY_TIER_IDS,
+  MODEL_POLICY_TIER_LABELS,
+  type ModelPolicyDisclosurePayload,
+  type ModelPolicyTierId,
+} from "./data/modelPolicy";
+
+/** Selected tier: Tier 1 FOSS = green, Tier 2 open model = orange, Tier 3 = red. */
+const MODEL_POLICY_TIER_SELECTED_CHROME: Record<
+  ModelPolicyTierId,
+  { border: string; background: string }
+> = {
+  open_source_only: {
+    border: "1px solid rgba(74, 222, 128, 0.9)",
+    background: "rgba(18, 48, 32, 0.92)",
+  },
+  open_weight: {
+    border: "1px solid rgba(251, 146, 60, 0.92)",
+    background: "rgba(52, 32, 14, 0.92)",
+  },
+  non_foss: {
+    border: "1px solid rgba(248, 113, 113, 0.92)",
+    background: "rgba(48, 20, 24, 0.92)",
+  },
+};
+
+const MODEL_POLICY_TIER_BUTTON_IDLE = {
+  border: "1px solid rgba(58, 76, 96, 0.85)",
+  background: "rgba(26, 34, 44, 0.88)",
+};
+
+const MODEL_POLICY_TIER_LIST_HOST: React.CSSProperties = {
+  width: "100%",
+  boxSizing: "border-box",
+  borderRadius: 8,
+  border: "1px solid rgba(72, 98, 124, 0.45)",
+  background: "rgba(12, 18, 26, 0.96)",
+  padding: 10,
+  display: "flex",
+  flexDirection: "column",
+  gap: 8,
+};
 import { SETTINGS_DATABASE } from "./data/settingsDatabase";
 import {
   ASK_LABEL_COLOR,
@@ -189,6 +235,7 @@ type BackgroundRequestStatus = {
   started_at: number | null;
   completed_at: number | null;
   strategy_guide_branches?: StrategyGuideBranchesPayload | null;
+  model_policy_disclosure?: ModelPolicyDisclosurePayload | null;
 };
 
 type ConnectionStatus = {
@@ -456,6 +503,11 @@ function usePluginSettings() {
   const [askMode, setAskMode] = useState<AskModeId>(DEFAULT_ASK_MODE);
   const [ollamaKeepAlive, setOllamaKeepAlive] = useState<OllamaKeepAliveDuration>(DEFAULT_OLLAMA_KEEP_ALIVE);
   const [showDebugTab, setShowDebugTab] = useState<boolean>(DEFAULT_SHOW_DEBUG_TAB);
+  const [modelPolicyTier, setModelPolicyTier] = useState<ModelPolicyTierId>(DEFAULT_MODEL_POLICY_TIER);
+  const [modelPolicyNonFossUnlocked, setModelPolicyNonFossUnlocked] = useState<boolean>(false);
+  const [modelAllowHighVramFallbacks, setModelAllowHighVramFallbacks] = useState<boolean>(
+    DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS
+  );
   const [settingsLoaded, setSettingsLoaded] = useState(false);
 
   useEffect(() => {
@@ -481,6 +533,9 @@ function usePluginSettings() {
         setAskMode(normalized.ask_mode);
         setOllamaKeepAlive(normalized.ollama_keep_alive);
         setShowDebugTab(normalized.show_debug_tab);
+        setModelPolicyTier(normalized.model_policy_tier);
+        setModelPolicyNonFossUnlocked(normalized.model_policy_non_foss_unlocked);
+        setModelAllowHighVramFallbacks(normalized.model_allow_high_vram_fallbacks);
       })
       .catch(() => {
         if (cancelled) return;
@@ -501,6 +556,9 @@ function usePluginSettings() {
         setAskMode(DEFAULT_ASK_MODE);
         setOllamaKeepAlive(DEFAULT_OLLAMA_KEEP_ALIVE);
         setShowDebugTab(DEFAULT_SHOW_DEBUG_TAB);
+        setModelPolicyTier(DEFAULT_MODEL_POLICY_TIER);
+        setModelPolicyNonFossUnlocked(false);
+        setModelAllowHighVramFallbacks(DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS);
       })
       .finally(() => {
         if (!cancelled) setSettingsLoaded(true);
@@ -531,6 +589,9 @@ function usePluginSettings() {
         ask_mode: askMode,
         ollama_keep_alive: ollamaKeepAlive,
         show_debug_tab: showDebugTab,
+        model_policy_tier: modelPolicyTier,
+        model_policy_non_foss_unlocked: modelPolicyNonFossUnlocked,
+        model_allow_high_vram_fallbacks: modelAllowHighVramFallbacks,
       }).catch((err) => {
         console.error("save_settings failed", err);
       });
@@ -554,6 +615,9 @@ function usePluginSettings() {
     askMode,
     ollamaKeepAlive,
     showDebugTab,
+    modelPolicyTier,
+    modelPolicyNonFossUnlocked,
+    modelAllowHighVramFallbacks,
     settingsLoaded,
   ]);
 
@@ -584,6 +648,12 @@ function usePluginSettings() {
     setOllamaKeepAlive,
     showDebugTab,
     setShowDebugTab,
+    modelPolicyTier,
+    setModelPolicyTier,
+    modelPolicyNonFossUnlocked,
+    setModelPolicyNonFossUnlocked,
+    modelAllowHighVramFallbacks,
+    setModelAllowHighVramFallbacks,
     settingsLoaded,
     setLatencyWarningSeconds,
     setRequestTimeoutSeconds,
@@ -593,7 +663,6 @@ function usePluginSettings() {
     setDesktopAskVerboseLogging,
     setPresetChipFadeAnimationEnabled,
     setInputSanitizerUserDisabled,
-    setShowDebugTab,
   };
 }
 
@@ -727,6 +796,7 @@ const Content: React.FC = () => {
   const [ollamaContext, setOllamaContext] = useState<OllamaContextUi>(null);
   const [lastExchange, setLastExchange] = useState<LastExchangeSnapshot | null>(null);
   const [strategyGuideBranches, setStrategyGuideBranches] = useState<StrategyGuideBranchesPayload | null>(null);
+  const [modelPolicyDisclosure, setModelPolicyDisclosure] = useState<ModelPolicyDisclosurePayload | null>(null);
   const lastStrategyAskQuestionRef = useRef<string>("");
   const pendingArchiveTurnRef = useRef<{ question: string; answer: string } | null>(null);
   /** When set for the in-flight Ask, used for thread header / lastExchange.question instead of the full RPC prompt. */
@@ -806,6 +876,12 @@ const Content: React.FC = () => {
     setOllamaKeepAlive,
     showDebugTab,
     setShowDebugTab,
+    modelPolicyTier,
+    setModelPolicyTier,
+    modelPolicyNonFossUnlocked,
+    setModelPolicyNonFossUnlocked,
+    modelAllowHighVramFallbacks,
+    setModelAllowHighVramFallbacks,
   } = usePluginSettings();
 
   const uiAccent = useMemo(
@@ -854,6 +930,38 @@ const Content: React.FC = () => {
   const goToPermissionsTab = useCallback(() => {
     setCurrentTab("permissions");
   }, []);
+
+  const onSelectModelPolicyTier = useCallback(
+    (t: ModelPolicyTierId) => {
+      if (t === "non_foss" && !modelPolicyNonFossUnlocked) {
+        toaster.toast({
+          title: "Unlock required",
+          body: "Turn on “Allow non-FOSS and unclassified tags” below before using Tier 3.",
+          duration: 5000,
+        });
+        return;
+      }
+      setModelPolicyTier(t);
+    },
+    [modelPolicyNonFossUnlocked]
+  );
+
+  const openModelPolicyReadme = useCallback(() => {
+    if (!capabilities.external_navigation) {
+      toaster.toast({
+        title: "Permission required",
+        body: "Enable External and Steam navigation in the Permissions tab.",
+        duration: 4500,
+      });
+      goToPermissionsTab();
+      return;
+    }
+    try {
+      Navigation.NavigateToExternalWeb(MODEL_POLICY_README_URL);
+    } catch {
+      toaster.toast({ title: "README", body: MODEL_POLICY_README_URL, duration: 4000 });
+    }
+  }, [capabilities.external_navigation, goToPermissionsTab]);
 
   // --- Global error capture (always active regardless of tab) ---
   useEffect(() => {
@@ -988,6 +1096,7 @@ const Content: React.FC = () => {
       setLastApplied(null);
       setElapsedSeconds(null);
       setStrategyGuideBranches(null);
+      setModelPolicyDisclosure(null);
       return;
     }
 
@@ -1002,6 +1111,12 @@ const Content: React.FC = () => {
       if (status.status === "completed" && status.success) {
         const q = (status.question || fallbackQuestion || "").trim();
         const answer = buildResponseText(status.response ?? "No response text.", applied);
+        const disc = status.model_policy_disclosure;
+        setModelPolicyDisclosure(
+          disc && typeof disc === "object" && typeof (disc as ModelPolicyDisclosurePayload).model === "string"
+            ? (disc as ModelPolicyDisclosurePayload)
+            : null
+        );
         if (q) {
           const category = detectPromptCategory(q);
           setSuggestedPrompts(getContextualPresets(category, 3));
@@ -1039,6 +1154,7 @@ const Content: React.FC = () => {
       } else {
         setLastExchange(null);
         setStrategyGuideBranches(null);
+        setModelPolicyDisclosure(null);
         pendingArchiveTurnRef.current = null;
         pendingThreadQuestionDisplayRef.current = null;
       }
@@ -1057,6 +1173,7 @@ const Content: React.FC = () => {
     setOllamaContext(null);
     setLastExchange(null);
     setStrategyGuideBranches(null);
+    setModelPolicyDisclosure(null);
     pendingArchiveTurnRef.current = null;
     pendingThreadQuestionDisplayRef.current = null;
   }, []);
@@ -1157,6 +1274,7 @@ const Content: React.FC = () => {
     setElapsedSeconds(null);
     setShowSlowWarning(false);
     setStrategyGuideBranches(null);
+    setModelPolicyDisclosure(null);
   };
 
   const resetPluginSession = useCallback(() => {
@@ -1180,6 +1298,7 @@ const Content: React.FC = () => {
     setAskThreadViewIndex(null);
     setAskThreadDisplayQuestion("");
     setLastTransparency(null);
+    setModelPolicyDisclosure(null);
     toaster.toast({
       title: "Session cleared",
       body: "Unified search, reply, thread, transparency, and attachments were reset.",
@@ -1305,6 +1424,7 @@ const Content: React.FC = () => {
 
     setIsAsking(true);
     setStrategyGuideBranches(null);
+    setModelPolicyDisclosure(null);
     setLastTransparency(null);
     setOllamaResponse("Thinking...");
     setLastApplied(null);
@@ -1377,6 +1497,7 @@ const Content: React.FC = () => {
           started_at: now,
           completed_at: now,
           strategy_guide_branches: null,
+          model_policy_disclosure: null,
         };
         applyBackgroundStatusToUi(terminal, "");
         saveIp(ip);
@@ -1821,6 +1942,8 @@ const Content: React.FC = () => {
       askThreadDisplayQuestion={askThreadDisplayQuestion}
       askThreadViewIndex={askThreadViewIndex}
       onAskThreadSelectTurn={(i) => setAskThreadViewIndex(i)}
+      modelPolicyDisclosure={modelPolicyDisclosure}
+      onOpenModelPolicyReadme={openModelPolicyReadme}
     />
   );
 
@@ -2231,6 +2354,77 @@ const Content: React.FC = () => {
         </div>
       </PanelSectionRow>
     </PanelSection>
+    <PanelSection title="Model policy">
+      <PanelSectionRow>
+        <div style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45, marginBottom: 4 }}>
+          {MODEL_POLICY_SETTINGS_INTRO} Open model (open-weight) means weights are often published for local inference;
+          licenses and training visibility can still differ from Tier 1. Prefer Tier 1 unless you need broader tags.
+        </div>
+      </PanelSectionRow>
+      <PanelSectionRow>
+        <div style={MODEL_POLICY_TIER_LIST_HOST}>
+          {MODEL_POLICY_TIER_IDS.map((id) => {
+            const selected = modelPolicyTier === id;
+            const chrome = selected ? MODEL_POLICY_TIER_SELECTED_CHROME[id] : MODEL_POLICY_TIER_BUTTON_IDLE;
+            return (
+              <Button
+                key={id}
+                onClick={() => onSelectModelPolicyTier(id)}
+                style={{
+                  width: "100%",
+                  border: chrome.border,
+                  background: chrome.background,
+                  boxSizing: "border-box",
+                }}
+              >
+                {MODEL_POLICY_TIER_LABELS[id]}
+              </Button>
+            );
+          })}
+        </div>
+      </PanelSectionRow>
+      <PanelSectionRow>
+        <div style={{ width: "100%", paddingTop: 14, boxSizing: "border-box" }}>
+        <ToggleField
+          label="Allow non-FOSS and unclassified Ollama tags (Tier 3)"
+          description={
+            "Required for Tier 3. Unclassified tags are only tried when this is on. " +
+            "Turn off to drop back from Tier 3 to Tier 2."
+          }
+          checked={modelPolicyNonFossUnlocked}
+          onChange={(checked) => {
+            setModelPolicyNonFossUnlocked(checked);
+            if (!checked && modelPolicyTier === "non_foss") {
+              setModelPolicyTier("open_weight");
+            }
+          }}
+        />
+        </div>
+      </PanelSectionRow>
+      <PanelSectionRow>
+        <div style={{ width: "100%", paddingTop: 12, boxSizing: "border-box" }}>
+          <ToggleField
+            label="Allow high-VRAM model fallbacks"
+            description={
+              "Appends large Ollama tags (about 27B+ / 31B+ / 38B+ class) after the default chains sized for ~16GB VRAM. " +
+              "May exceed 16GB, load slowly, or cause out-of-memory errors depending on quantization and hardware. " +
+              "Leave off unless you intentionally pull those models on your host."
+            }
+            checked={modelAllowHighVramFallbacks}
+            onChange={(checked) => setModelAllowHighVramFallbacks(checked)}
+          />
+        </div>
+      </PanelSectionRow>
+      <PanelSectionRow>
+        <Button
+          onClick={() => {
+            openModelPolicyReadme();
+          }}
+        >
+          Read model policy (README)…
+        </Button>
+      </PanelSectionRow>
+    </PanelSection>
     <PanelSection title="Advanced">
       <PanelSectionRow>
         <ToggleField
@@ -2292,7 +2486,11 @@ const Content: React.FC = () => {
   );
 
   const permissionsTab = (
-    <PermissionsTab capabilities={capabilities} setCapabilities={setCapabilities} />
+    <PermissionsTab
+      capabilities={capabilities}
+      setCapabilities={setCapabilities}
+      onReadModelPolicy={openModelPolicyReadme}
+    />
   );
 
   const onSteamInputPhase1Jump = () => {

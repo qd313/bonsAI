@@ -33,15 +33,26 @@ class RefactorHelperTests(unittest.TestCase):
         )
 
     def test_select_ollama_models_text_and_vision(self):
-        """Ensure text and vision paths expose expected fallback model families."""
+        """FOSS-first safe chains; optional high-VRAM tail extends the list."""
         self.assertIn("llama3:latest", select_ollama_models(False))
         self.assertIn("llava:7b", select_ollama_models(True, "speed"))
-        self.assertEqual(select_ollama_models(False, "speed")[0], "llama3:latest")
-        self.assertEqual(select_ollama_models(False, "deep")[0], "gemma4:latest")
-        self.assertEqual(select_ollama_models(True, "speed")[0], "gemma4:2b")
-        self.assertEqual(select_ollama_models(True, "strategy")[0], "gemma4:31b")
-        self.assertEqual(select_ollama_models(True, "deep")[0], "internvl3.5:38b")
-        self.assertEqual(select_ollama_models(False, "invalid")[0], "llama3:latest")
+        self.assertEqual(select_ollama_models(False, "speed")[0], "qwen2.5:1.5b")
+        self.assertEqual(select_ollama_models(False, "strategy")[0], "qwen2.5:latest")
+        self.assertEqual(select_ollama_models(False, "deep")[0], "qwen2.5:14b")
+        self.assertEqual(select_ollama_models(True, "speed")[0], "llava:7b")
+        self.assertEqual(select_ollama_models(True, "strategy")[0], "qwen2.5vl:latest")
+        self.assertEqual(select_ollama_models(True, "deep")[0], "qwen2.5vl:latest")
+        self.assertEqual(select_ollama_models(False, "invalid")[0], "qwen2.5:1.5b")
+
+        safe_speed = select_ollama_models(False, "speed", False)
+        hi_speed = select_ollama_models(False, "speed", True)
+        self.assertLess(len(safe_speed), len(hi_speed))
+        self.assertIn("qwen2.5:32b", hi_speed)
+
+        safe_vis = select_ollama_models(True, "deep", False)
+        hi_vis = select_ollama_models(True, "deep", True)
+        self.assertLess(len(safe_vis), len(hi_vis))
+        self.assertIn("internvl3.5:38b", hi_vis)
 
     def test_parse_tdp_recommendation_fenced_json(self):
         """Verify fenced JSON recommendations are parsed and clamped to safe hardware bounds."""

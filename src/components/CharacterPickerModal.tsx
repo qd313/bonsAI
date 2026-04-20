@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
-import { Button, ConfirmModal, Focusable, TextField, ToggleField } from "@decky/ui";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Button, ConfirmModal, Focusable, Router, TextField, ToggleField } from "@decky/ui";
 import {
   AI_CHARACTER_CUSTOM_TEXT_MAX,
   CHARACTER_PICKER_COLUMNS,
@@ -9,6 +9,10 @@ import {
   type CharacterCatalogEntry,
   type CharacterCatalogSection,
 } from "../data/characterCatalog";
+import {
+  resolveRunningGameCharacterSuggestions,
+  type RunningGameCharacterSuggestions,
+} from "../utils/runningGameCharacterSuggestions";
 import { CharacterRoleplayEmoticon } from "./CharacterRoleplayEmoticon";
 
 export type AiCharacterPickerDraft = {
@@ -25,6 +29,8 @@ export type CharacterPickerModalProps = {
 
 const PICKER_COL_COUNT = CHARACTER_PICKER_COLUMNS.length;
 const LAST_PICKER_COL = PICKER_COL_COUNT - 1;
+/** Only show the spinner if resolving takes longer than this (avoids flash on fast path). */
+const RUNNING_STRIP_SLOW_MS = 160;
 
 /** Decky `ToggleField` may pass `boolean` or numeric `0`/`1` depending on CEF build — normalize. */
 function readToggleOn(raw: unknown): boolean | null {
@@ -44,6 +50,12 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
   const columnButtonRefs = useRef<Array<Array<HTMLElement | null>>>(
     Array.from({ length: PICKER_COL_COUNT }, () => [])
   );
+  const suggestionButtonRefs = useRef<(HTMLElement | null)[]>([]);
+
+  const [runningStrip, setRunningStrip] = useState<
+    RunningGameCharacterSuggestions | null | undefined
+  >(undefined);
+  const [showSlowSpinner, setShowSlowSpinner] = useState(false);
 
   const randomLocked = draft.random;
   const selectedPreset = !draft.random && !draft.customText.trim() ? draft.presetId : "";
@@ -105,6 +117,170 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
     () => CHARACTER_PICKER_COLUMNS.map((col) => col.reduce((n, s) => n + s.entries.length, 0)),
     []
   );
+
+  useEffect(() => {
+    let cancelled = false;
+    let slowTimer: number | null = null;
+    setRunningStrip(undefined);
+    setShowSlowSpinner(false);
+    slowTimer = window.setTimeout(() => {
+      if (!cancelled) setShowSlowSpinner(true);
+    }, RUNNING_STRIP_SLOW_MS);
+
+    void (async () => {
+      // #region agent log
+      void fetch("http://127.0.0.1:7682/ingest/455d5c32-fa64-45d1-b31c-f17b50f3371a", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "144cea" },
+        body: JSON.stringify({
+          sessionId: "144cea",
+          hypothesisId: "H3",
+          location: "CharacterPickerModal.tsx:useEffect:start",
+          message: "running-strip effect started",
+          data: {},
+          timestamp: Date.now(),
+        }),
+      }).catch(() => {});
+      try {
+        console.info(
+          "[bonsAI-debug]",
+          JSON.stringify({ hypothesisId: "H3", message: "running-strip effect started" })
+        );
+      } catch {
+        /* ignore */
+      }
+      // #endregion
+      await new Promise<void>((resolve) => {
+        requestAnimationFrame(() => resolve());
+      });
+      if (cancelled) {
+        // #region agent log
+        void fetch("http://127.0.0.1:7682/ingest/455d5c32-fa64-45d1-b31c-f17b50f3371a", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "144cea" },
+          body: JSON.stringify({
+            sessionId: "144cea",
+            hypothesisId: "H3",
+            location: "CharacterPickerModal.tsx:useEffect:afterRafCancelled",
+            message: "running-strip aborted cancelled after rAF",
+            data: {},
+            timestamp: Date.now(),
+          }),
+        }).catch(() => {});
+        try {
+          console.info("[bonsAI-debug]", JSON.stringify({ hypothesisId: "H3", message: "cancelled after rAF" }));
+        } catch {
+          /* ignore */
+        }
+        // #endregion
+        return;
+      }
+      const app = Router.MainRunningApp;
+      const appId = app?.appid != null ? String(app.appid).trim() : "";
+      const displayName = app?.display_name != null ? String(app.display_name) : "";
+      // #region agent log
+      void fetch("http://127.0.0.1:7682/ingest/455d5c32-fa64-45d1-b31c-f17b50f3371a", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "144cea" },
+        body: JSON.stringify({
+          sessionId: "144cea",
+          hypothesisId: "H1",
+          location: "CharacterPickerModal.tsx:useEffect:routerSnapshot",
+          message: "Router.MainRunningApp snapshot",
+          data: {
+            hasApp: !!app,
+            appIdLen: appId.length,
+            displayNameLen: displayName.length,
+            appIdPrefix: appId.slice(0, 12),
+            namePrefix: displayName.slice(0, 40),
+          },
+          timestamp: Date.now(),
+        }),
+      }).catch(() => {});
+      try {
+        console.info(
+          "[bonsAI-debug]",
+          JSON.stringify({
+            hypothesisId: "H1",
+            hasApp: !!app,
+            appId,
+            displayName,
+          })
+        );
+      } catch {
+        /* ignore */
+      }
+      // #endregion
+      const next = resolveRunningGameCharacterSuggestions(
+        appId || undefined,
+        displayName || undefined
+      );
+      // #region agent log
+      void fetch("http://127.0.0.1:7682/ingest/455d5c32-fa64-45d1-b31c-f17b50f3371a", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "144cea" },
+        body: JSON.stringify({
+          sessionId: "144cea",
+          hypothesisId: "H2",
+          location: "CharacterPickerModal.tsx:useEffect:resolved",
+          message: "resolveRunningGameCharacterSuggestions result",
+          data: {
+            cancelledBeforeSet: cancelled,
+            stripNull: next === null,
+            entryCount: next?.entries?.length ?? 0,
+            ids: next?.entries?.map((e) => e.id) ?? [],
+          },
+          timestamp: Date.now(),
+        }),
+      }).catch(() => {});
+      try {
+        console.info(
+          "[bonsAI-debug]",
+          JSON.stringify({
+            hypothesisId: "H2",
+            cancelled,
+            nextIsNull: next === null,
+            entryCount: next?.entries?.length ?? 0,
+            ids: next?.entries?.map((e) => e.id) ?? [],
+          })
+        );
+      } catch {
+        /* ignore */
+      }
+      // #endregion
+      if (cancelled) return;
+      if (slowTimer != null) {
+        window.clearTimeout(slowTimer);
+        slowTimer = null;
+      }
+      setShowSlowSpinner(false);
+      setRunningStrip(next);
+    })();
+
+    return () => {
+      // #region agent log
+      void fetch("http://127.0.0.1:7682/ingest/455d5c32-fa64-45d1-b31c-f17b50f3371a", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "144cea" },
+        body: JSON.stringify({
+          sessionId: "144cea",
+          hypothesisId: "H3",
+          location: "CharacterPickerModal.tsx:useEffect:cleanup",
+          message: "running-strip effect cleanup",
+          data: {},
+          timestamp: Date.now(),
+        }),
+      }).catch(() => {});
+      try {
+        console.info("[bonsAI-debug]", JSON.stringify({ hypothesisId: "H3", message: "effect cleanup" }));
+      } catch {
+        /* ignore */
+      }
+      // #endregion
+      cancelled = true;
+      if (slowTimer != null) window.clearTimeout(slowTimer);
+    };
+  }, []);
 
   const selectPreset = useCallback((entry: CharacterCatalogEntry) => {
     setDraft((d) => ({
@@ -201,6 +377,32 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
     return false;
   }, [findFooterButton]);
 
+  const focusFirstSuggestion = useCallback((): boolean => {
+    if (!runningStrip?.entries.length) return false;
+    const el = suggestionButtonRefs.current[0];
+    if (!el) return false;
+    el.focus();
+    el.scrollIntoView({ block: "nearest", inline: "nearest" });
+    return true;
+  }, [runningStrip]);
+
+  const focusLastSuggestion = useCallback((): boolean => {
+    if (!runningStrip?.entries.length) return false;
+    const i = runningStrip.entries.length - 1;
+    const el = suggestionButtonRefs.current[i];
+    if (!el) return false;
+    el.focus();
+    el.scrollIntoView({ block: "nearest", inline: "nearest" });
+    return true;
+  }, [runningStrip]);
+
+  const focusAboveCatalogColumn0 = useCallback((): boolean => {
+    if (runningStrip?.entries.length) {
+      return focusLastSuggestion();
+    }
+    return focusLastButtonInColumn0();
+  }, [runningStrip, focusLastSuggestion, focusLastButtonInColumn0]);
+
   const renderSection = (section: CharacterCatalogSection, columnIndex: number, indexOffset: number) => {
     const lastFlatInColumn = columnEntryCounts[columnIndex] - 1;
     const sectionKey = `c${columnIndex}-${section.entries[0]?.id ?? "x"}-${section.workTitle}`;
@@ -245,6 +447,9 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
                     onMoveRight: () => handleEntryMove(columnIndex, flatIndex, "right"),
                     onMoveUp: () => {
                       if (flatIndex === 0) {
+                        if (runningStrip?.entries.length) {
+                          return focusLastSuggestion();
+                        }
                         return focusRandomToggle();
                       }
                       return false;
@@ -346,7 +551,12 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
                     ? {
                         onMoveDown: () => focusFooterOk(),
                       }
-                    : {}),
+                    : {
+                        onMoveDown: () => {
+                          if (focusFirstSuggestion()) return true;
+                          return focusButtonAtColumnIndex(0, 0);
+                        },
+                      }),
                 } as unknown as Record<string, unknown>)}
                 onChange={(raw: unknown) => {
                   const on = readToggleOn(raw);
@@ -366,6 +576,136 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
               <CharacterRoleplayEmoticon presetId="__random__" size={26} />
             </div>
           </div>
+          {runningStrip === undefined && showSlowSpinner && (
+            <div
+              className="bonsai-ai-char-running-loading"
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 10,
+                minHeight: 28,
+                minWidth: 0,
+              }}
+              aria-busy
+            >
+              <style>{`@keyframes bonsai-ai-char-running-spin { to { transform: rotate(360deg); } }`}</style>
+              <div
+                style={{
+                  width: 20,
+                  height: 20,
+                  borderRadius: "50%",
+                  border: "2px solid rgba(255,255,255,0.14)",
+                  borderTopColor: "rgba(255, 214, 150, 0.92)",
+                  animation: "bonsai-ai-char-running-spin 0.65s linear infinite",
+                  flexShrink: 0,
+                }}
+              />
+            </div>
+          )}
+          {runningStrip != null && (
+            <div
+              className="bonsai-ai-char-running-strip"
+              inert={randomLocked ? true : undefined}
+              style={{
+                opacity: randomLocked ? 0.45 : 1,
+                pointerEvents: randomLocked ? "none" : "auto",
+                display: "flex",
+                flexDirection: "column",
+                gap: 6,
+                minWidth: 0,
+              }}
+            >
+              <div
+                style={{
+                  fontSize: 12,
+                  fontWeight: 700,
+                  color: "#b8c6d6",
+                  letterSpacing: "0.02em",
+                }}
+              >
+                Playing: {runningStrip.headline}
+              </div>
+              <Focusable style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 6 }}>
+                {runningStrip.entries.map((entry, si) => {
+                  const lastSi = runningStrip.entries.length - 1;
+                  const active = selectedPreset === entry.id;
+                  return (
+                    <Button
+                      key={`run-suggest-${entry.id}`}
+                      ref={(el: HTMLElement | null) => {
+                        suggestionButtonRefs.current[si] = el;
+                      }}
+                      disabled={randomLocked}
+                      focusable={!randomLocked}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        selectPreset(entry);
+                      }}
+                      {...({
+                        onOKButton: (evt: { stopPropagation: () => void }) => {
+                          evt.stopPropagation();
+                          selectPreset(entry);
+                        },
+                        onMoveUp: () => focusRandomToggle(),
+                        onMoveDown: () => {
+                          if (si === lastSi) {
+                            return focusButtonAtColumnIndex(0, 0);
+                          }
+                          return false;
+                        },
+                        onMoveLeft: () => {
+                          if (si === 0) return focusRandomToggle();
+                          suggestionButtonRefs.current[si - 1]?.focus();
+                          return true;
+                        },
+                        onMoveRight: () => {
+                          if (si === lastSi) return focusButtonAtColumnIndex(0, 0);
+                          suggestionButtonRefs.current[si + 1]?.focus();
+                          return true;
+                        },
+                      } as unknown as Record<string, unknown>)}
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 8,
+                        minHeight: 38,
+                        padding: "4px 6px",
+                        borderRadius: 4,
+                        border: active ? "1px solid rgba(255,255,255,0.5)" : "1px solid rgba(255,255,255,0.12)",
+                        background: active
+                          ? "linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.06) 100%)"
+                          : "rgba(255,255,255,0.04)",
+                        color: "#e8eef5",
+                        justifyContent: "flex-start",
+                        minWidth: 0,
+                        flex: "1 1 auto",
+                      }}
+                    >
+                      <CharacterRoleplayEmoticon
+                        presetId={entry.id}
+                        size={24}
+                        badgeLetter={resolveAvatarBadgeLetterFromDisplayLabel(entry.label)}
+                      />
+                      <span
+                        style={{
+                          fontSize: 12,
+                          fontWeight: 600,
+                          minWidth: 0,
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
+                        {entry.label}
+                      </span>
+                    </Button>
+                  );
+                })}
+              </Focusable>
+            </div>
+          )}
           <div
             className="bonsai-ai-char-catalog-scroll"
             inert={randomLocked ? true : undefined}
@@ -419,7 +759,7 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
                   placeholder: "Or type in your own character!",
                   multiline: true,
                   rows: 2,
-                  onMoveUp: () => focusLastButtonInColumn0(),
+                  onMoveUp: () => focusAboveCatalogColumn0(),
                 } as unknown as Record<string, unknown>)}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   const v = e.target.value;

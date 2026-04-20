@@ -15,6 +15,27 @@ import {
   type OllamaKeepAliveDuration,
 } from "../data/ollamaKeepAlive";
 import { AI_CHARACTER_CUSTOM_TEXT_MAX, isValidPresetId } from "../data/characterCatalog";
+import {
+  DEFAULT_MODEL_POLICY_TIER,
+  normalizeModelPolicyNonFossUnlocked,
+  normalizeModelPolicyTier,
+  type ModelPolicyTierId,
+} from "../data/modelPolicy";
+
+function reconcileModelPolicySettings(
+  tierRaw: unknown,
+  unlockRaw: unknown
+): { model_policy_tier: ModelPolicyTierId; model_policy_non_foss_unlocked: boolean } {
+  const tier = normalizeModelPolicyTier(tierRaw);
+  const unlock = normalizeModelPolicyNonFossUnlocked(unlockRaw);
+  if (tier !== "non_foss") {
+    return { model_policy_tier: tier, model_policy_non_foss_unlocked: false };
+  }
+  if (!unlock) {
+    return { model_policy_tier: "open_weight", model_policy_non_foss_unlocked: false };
+  }
+  return { model_policy_tier: "non_foss", model_policy_non_foss_unlocked: true };
+}
 export type UnifiedInputPersistenceMode = "persist_all" | "persist_search_only" | "no_persist";
 export type { AskModeId };
 export type { OllamaKeepAliveDuration };
@@ -56,6 +77,12 @@ export type BonsaiSettings = {
   ollama_keep_alive: OllamaKeepAliveDuration;
   /** When true, show the Debug tab in the LB/RB strip (default off for typical users). */
   show_debug_tab: boolean;
+  /** Which Ollama model families the backend may try (see README model policy). */
+  model_policy_tier: ModelPolicyTierId;
+  /** Tier 3 requires explicit acknowledgment for non-FOSS and unclassified tags. */
+  model_policy_non_foss_unlocked: boolean;
+  /** When true, append large-model tags to fallback chains (may exceed ~16GB VRAM). */
+  model_allow_high_vram_fallbacks: boolean;
 };
 
 export type AppliedResultLike = {
@@ -80,8 +107,12 @@ export const DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING = false;
 export const DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED = true;
 export const DEFAULT_INPUT_SANITIZER_USER_DISABLED = false;
 export const DEFAULT_SHOW_DEBUG_TAB = false;
+export const DEFAULT_MODEL_POLICY_NON_FOSS_UNLOCKED = false;
+export const DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS = false;
 export const DEFAULT_ASK_MODE: AskModeId = "speed";
 export { DEFAULT_OLLAMA_KEEP_ALIVE };
+export type { ModelPolicyTierId };
+export { DEFAULT_MODEL_POLICY_TIER } from "../data/modelPolicy";
 
 export const DEFAULT_CAPABILITIES: BonsaiCapabilities = {
   filesystem_write: false,
@@ -208,6 +239,10 @@ export function normalizeShowDebugTab(value: unknown): boolean {
   return value === true;
 }
 
+export function normalizeModelAllowHighVramFallbacks(value: unknown): boolean {
+  return value === true;
+}
+
 const _askModeSet = new Set<string>(ASK_MODE_IDS);
 
 export function normalizeAskMode(value: unknown): AskModeId {
@@ -277,6 +312,7 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     raw.latency_warning_seconds ?? DEFAULT_LATENCY_WARNING_SECONDS,
     raw.request_timeout_seconds ?? DEFAULT_REQUEST_TIMEOUT_SECONDS
   );
+  const modelPolicy = reconcileModelPolicySettings(raw.model_policy_tier, raw.model_policy_non_foss_unlocked);
   return {
     latency_warning_seconds: latencyTimeout.latency_warning_seconds,
     request_timeout_seconds: latencyTimeout.request_timeout_seconds,
@@ -297,6 +333,9 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     ask_mode: normalizeAskMode(raw.ask_mode),
     ollama_keep_alive: normalizeOllamaKeepAlive(raw.ollama_keep_alive),
     show_debug_tab: normalizeShowDebugTab(raw.show_debug_tab),
+    model_policy_tier: modelPolicy.model_policy_tier,
+    model_policy_non_foss_unlocked: modelPolicy.model_policy_non_foss_unlocked,
+    model_allow_high_vram_fallbacks: normalizeModelAllowHighVramFallbacks(raw.model_allow_high_vram_fallbacks),
   };
 }
 

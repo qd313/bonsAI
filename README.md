@@ -1,4 +1,4 @@
-# bonsAI
+# bonsAI (## this project is a prime example of unhinged requirement creep ##)
 
 bonsAI is a Decky Loader plugin for running a **self-hosted** AI chat using Ollama
 
@@ -14,6 +14,20 @@ bonsAI is a Decky Loader plugin for running a **self-hosted** AI chat using Olla
   - Open source: source code is available under an open license
   - Open weight: model weights are available for local use
 - Most LLMs are still not "glass-box" models. Even open-weight models can be hard to interpret internally and can still hallucinate
+
+### Model policy tiers
+
+bonsAI routes Ask requests through **ordered Ollama model fallbacks**. In **Settings → Model policy** you choose how permissive that list is. Classifications are **heuristic** (for UX and routing), not legal advice.
+
+
+| Tier                                                | What it unlocks vs Tier 1 (FOSS-aligned routing)                                                                                                                                                                   |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Tier 1 — Open-source only** (default)             | Only families the plugin treats as **open-source–aligned** for routing (e.g. many Qwen/Llava-style tags in our table). Safest default; stay here unless you need broader tags.                                     |
+| **Tier 2 — Open-source + open model (open-weight)** | Adds common **“open model”** releases (e.g. Llama, Gemma, InternVL in our table): weights are usually published for local inference, but **licenses, training visibility, or use rules may differ** from Tier 1.   |
+| **Tier 3 — Non-FOSS + unclassified**                | Requires an explicit **unlock** toggle. Adds tags we classify as **non-FOSS** and **any Ollama name not in the curated list** (“unclassified”) — treat license and trust as **unknown** until you verify upstream. |
+
+
+**Recommendation:** Do not raise the tier unless you **need** a model outside Tier 1 or **know** why you are accepting broader terms. Each successful reply includes a short **Model source disclosure** with a link back to this section.
 
 ## Requirements
 
@@ -96,7 +110,7 @@ ollama run llama3 "Hello from bonsAI"
 
 - General prompts: `llama3`
 - Alternate local text model: `gemma4`
-- Screenshot / vision (attachments): use a **multimodal** Ollama model. A practical default to pull is **`llava`** (widely available in the Ollama library; open weights, community-documented for vision). Alternatives include newer vision-capable tags such as **`llama3.2-vision`**—check [Ollama’s model library](https://ollama.com/library) for current names and licenses on your host.
+- Screenshot / vision (attachments): use a **multimodal** Ollama model. A practical default to pull is `**llava`** (widely available in the Ollama library; open weights, community-documented for vision). Alternatives include newer vision-capable tags such as `**llama3.2-vision**`—check [Ollama’s model library](https://ollama.com/library) for current names and licenses on your host.
 
 See [docs/troubleshooting.md](docs/troubleshooting.md) for advanced tuning and vision troubleshooting details.
 
@@ -108,18 +122,22 @@ See [docs/troubleshooting.md](docs/troubleshooting.md) for advanced tuning and v
 - Test with a simple prompt.
 
 If connection fails, start with:
+
 - [docs/troubleshooting.md](docs/troubleshooting.md) (network/firewall/GPU notes)
 
 ## Developer and advanced docs
 
-| Topic | Audience | Doc |
-|--------|----------|-----|
-| Build, deploy, stack, settings keys | Contributors | [docs/development.md](docs/development.md) |
-| Network, GPU, permissions, vision setup | Power users | [docs/troubleshooting.md](docs/troubleshooting.md) |
-| Roadmap, shipped vs planned | Planning / contributors | [docs/roadmap.md](docs/roadmap.md) |
-| QA matrices, release checks | QA / contributors | [docs/prompt-testing.md](docs/prompt-testing.md) |
-| Release notes | Everyone | [CHANGELOG.md](CHANGELOG.md) |
-| Character catalog (roleplay) | Contributors / lore | [docs/voice-character-catalog.md](docs/voice-character-catalog.md) |
-| Steam Input jump (debug) | Contributors | [docs/steam-input-research.md](docs/steam-input-research.md) |
-| RAG / KB research (not implemented) | Contributors | [docs/rag-sources-research.md](docs/rag-sources-research.md) |
-| Unified input refactor tracker | Contributors | [docs/refactor-unified-input-tracker.md](docs/refactor-unified-input-tracker.md) |
+
+| Topic                                   | Audience                | Doc                                                                              |
+| --------------------------------------- | ----------------------- | -------------------------------------------------------------------------------- |
+| Build, deploy, stack, settings keys     | Contributors            | [docs/development.md](docs/development.md)                                       |
+| Network, GPU, permissions, vision setup | Power users             | [docs/troubleshooting.md](docs/troubleshooting.md)                               |
+| Roadmap, shipped vs planned             | Planning / contributors | [docs/roadmap.md](docs/roadmap.md)                                               |
+| QA matrices, release checks             | QA / contributors       | [docs/prompt-testing.md](docs/prompt-testing.md)                                 |
+| Release notes                           | Everyone                | [CHANGELOG.md](CHANGELOG.md)                                                     |
+| Character catalog (roleplay)            | Contributors / lore     | [docs/voice-character-catalog.md](docs/voice-character-catalog.md)               |
+| Steam Input jump (debug)                | Contributors            | [docs/steam-input-research.md](docs/steam-input-research.md)                     |
+| RAG / KB research (not implemented)     | Contributors            | [docs/rag-sources-research.md](docs/rag-sources-research.md)                     |
+| Unified input refactor tracker          | Contributors            | [docs/refactor-unified-input-tracker.md](docs/refactor-unified-input-tracker.md) |
+
+

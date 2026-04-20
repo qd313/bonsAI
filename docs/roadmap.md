@@ -26,17 +26,17 @@ Star ratings use the GTA scale: `★` easiest … `★★★★★` very high co
   - **Shorter than default:** 3 min, 2 min, 1 min, 30 s, 15 s, **0** (unload immediately after the request).
   - **Longer than default:** 15, 30, 45, 60, 120, 240 **minutes**.
 - ★★ **Prompt Testing and Tuning:** Systematically validate prompt quality across games and scenarios (see [prompt-testing.md](prompt-testing.md)).
+- ★★ **Random character avatar = “?”:** In the character picker and main-tab avatar affordance, show a **simple “?”** mark (typographic or minimal glyph) for **Random** instead of a dice / multi-face / catalog preview icon — keeps “unknown voice” obvious at a glance.
+- ★★ **Debug tab opt-in (Settings):** Hide the **Debug** tab by default; add a **Settings** toggle (persisted) to **show the Debug tab** for power users. When the tab is hidden, **controller/touch navigation** must not land on a non-existent tab (filter tab list / remap focus); if the user turns the toggle **off** while already on Debug, **switch to a safe tab** (e.g. Main) and clear stale debug-only UI state as needed.
 - ★★★ **QAMP Verification Checklist:** Verify behavior across per-game profile modes, QAM reopen, Steam restart/reboot, and GPU-related recommendations.
   - Verify behavior with per-game profile on/off.
   - Verify behavior after closing and reopening the QAM Performance tab.
   - Verify behavior after Steam restart and full reboot.
   - Verify behavior when prompt includes GPU clock recommendations.
+- ★★★ **Character-derived UI accent (preset only):** When **AI character** is on and a **fixed catalog preset** is selected, drive plugin accent UI from a **distinctive color** sampled or defined for that preset’s avatar (highlights = main tone; borders/glows/muted fills = **darker** derivative). **AI character off**, **Random**, and **Custom** character paths keep today’s **forest green** accent system unchanged (including mode selector, tab active glow, chips, and related tokens).
 - ★★★★★ **QAMP Reflection (Phase 2 — Experimental Opt-In):** Attempt Steam profile sync only behind explicit warning toggles. *Blocked on Phase 1.*
   - Risks: undocumented internals, Steam update breakage, restart/reboot requirements, and profile corruption risk.
   - Candidate path: fragile `config.vdf` / protobuf edits gated behind experimental mode only.
-- ★★★ **Character-derived UI accent (preset only):** When **AI character** is on and a **fixed catalog preset** is selected, drive plugin accent UI from a **distinctive color** sampled or defined for that preset’s avatar (highlights = main tone; borders/glows/muted fills = **darker** derivative). **AI character off**, **Random**, and **Custom** character paths keep today’s **forest green** accent system unchanged (including mode selector, tab active glow, chips, and related tokens).
-- ★★ **Random character avatar = “?”:** In the character picker and main-tab avatar affordance, show a **simple “?”** mark (typographic or minimal glyph) for **Random** instead of a dice / multi-face / catalog preview icon — keeps “unknown voice” obvious at a glance.
-- ★★ **Debug tab opt-in (Settings):** Hide the **Debug** tab by default; add a **Settings** toggle (persisted) to **show the Debug tab** for power users. When the tab is hidden, **controller/touch navigation** must not land on a non-existent tab (filter tab list / remap focus); if the user turns the toggle **off** while already on Debug, **switch to a safe tab** (e.g. Main) and clear stale debug-only UI state as needed.
 
 ---
 
@@ -99,6 +99,7 @@ Headings group related work. Star counts match the historical list.
 
 - ★★★ **Character Voice Roleplay Mode (Opt-In):** Default-off **AI character** in Settings (small caps label); fullscreen `CharacterPickerModal` with per–work-title groups, **Random** toggle, custom line, OK/Cancel; unique pixel emoticons; main-tab glass avatar opens picker; backend `ai_character_service.build_roleplay_system_suffix` appends roleplay instructions to the Ollama system prompt. `src/data/characterCatalog.ts`, `src/components/CharacterPickerModal.tsx`, `main.py`, `settings.json` fields `ai_character_*`.
 - ★★ **Character Accent Intensity Levels (Doom-Style Copy):** Settings **Accent intensity** horizontal chips (`subtle` / `balanced` / `heavy` / `unleashed`, default `balanced`) when AI characters are on; Doom-difficulty–flavored short labels and helper copy. Persisted `ai_character_accent_intensity`; `build_roleplay_system_suffix` varies dialect/accent strength for presets, random, and custom paths without changing TDP/JSON policy. `src/data/aiCharacterAccentIntensity.ts`, `src/index.tsx`, `backend/services/ai_character_service.py`, `settings_service.py`, `settingsAndResponse.ts`.
+- ★★ **Running-game character suggestions (AI picker):** On `CharacterPickerModal` open, read `Router.MainRunningApp`, resolve 1–3 catalog presets via `src/utils/runningGameCharacterSuggestions.ts` (Steam AppID map + normalized title match + TF2 merge), show **Playing:** headline and suggestion row with `CharacterRoleplayEmoticon`; async after first paint with delayed spinner (~160 ms); D-pad links Random, suggestions, column 0, and custom field.
 
 ---
 
@@ -108,7 +109,7 @@ Longer notes for backlog items: **Shipped feature reference** (extra context, de
 
 ### Vision screenshot model order (canonical)
 
-When a screenshot is attached, `select_ollama_models(..., requires_vision=True)` in `[refactor_helpers.py](../refactor_helpers.py)` picks the try-next chain. **Speed (Fast):** `gemma4:2b`, `gemma4:4b`, `llava:7b`, `llama3.2-vision`, then lighter `llava` / `llama3.2-vision` tag variants. **Strategy:** `gemma4:31b`, `gemma3:27b` (MoE-class ~26–27B fallback), `qwen3.5:32b`, `gemma4:4b`, `gemma4:2b`, `llama3.2-vision`, `llava:7b`, then `qwen2.5vl` and generic vision fallbacks. **Expert (`deep`):** `internvl3.5:38b`, `internvl2.5:38b`, `gemma4:31b`, `gemma3:27b`, Qwen 3-VL family tags, then `qwen2.5vl` / `llava`. Exact strings evolve with the Ollama library; install the tags you care about on the host.
+When a screenshot is attached, `select_ollama_models(..., requires_vision=True)` in `[refactor_helpers.py](../refactor_helpers.py)` picks the try-next chain. Defaults are **FOSS-first** and **~16GB VRAM–friendly** (llava / qwen2.5vl first, then smaller open-weight multimodal tags). **Settings → Model policy → Allow high-VRAM model fallbacks** appends large tags (e.g. 31B / 38B class) after the safe chain. **Speed** prefers the smallest FOSS vision tags first; **Strategy** leads with `qwen2.5vl:latest`; **Expert** prefers stronger FOSS vision within the safe list before open-weight midsize tags. Exact strings evolve with the Ollama library; install the tags you care about on the host.
 
 ---
 
@@ -499,7 +500,7 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Character voice roleplay (shipped)** → baseline for **Character accent intensity (shipped)**; presets in [voice-character-catalog.md](voice-character-catalog.md), [src/data/characterCatalog.ts](../src/data/characterCatalog.ts).
 - **Character voice roleplay (shipped)** → **Pyro talent-manager easter egg (hidden preset)** (planned).
 - **Character voice roleplay** + avatar mapping → **Higher-resolution character avatars (GTA-style art pass)**.
-- **Character voice roleplay (shipped)** → **Character-derived UI accent theme (preset-selected)** (planned); **Random character “?” avatar** (planned).
+- **Character voice roleplay (shipped)** → **Character-derived UI accent theme (preset-selected)** (planned); **Random character “?” avatar** (planned); **Running-game character suggestions (AI picker)** (shipped — see **Completed** → Character voice roleplay).
 - **Input sanitizer (shipped)** + **Input handling transparency (shipped)** → future sanitizer extensions should keep user-visible auditability.
 - **Strategy Guide prompt path (beta)** → **Strategy Guide safety and spoilers**, **Strategy checklist workflow (chat-scoped)**.
 - **Global screenshots and vision** → richer strategy + screenshot context.

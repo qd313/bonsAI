@@ -66,6 +66,32 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertEqual(sanitized["ask_mode"], "speed")
         self.assertEqual(sanitized["ollama_keep_alive"], "5m")
         self.assertFalse(sanitized["show_debug_tab"])
+        self.assertEqual(sanitized["model_policy_tier"], "open_source_only")
+        self.assertFalse(sanitized["model_policy_non_foss_unlocked"])
+        self.assertFalse(sanitized["model_allow_high_vram_fallbacks"])
+
+    def test_sanitize_model_policy_non_foss_requires_ack(self):
+        """non_foss tier without unlock is downgraded to open_weight."""
+        sanitized = sanitize_settings(
+            data={
+                "model_policy_tier": "non_foss",
+                "model_policy_non_foss_unlocked": False,
+            },
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="persist_all",
+            valid_screenshot_dimensions={1280, 1920, 3160},
+            default_screenshot_dimension=1280,
+            valid_ask_modes={"speed", "strategy", "deep"},
+            default_ask_mode="speed",
+        )
+        self.assertEqual(sanitized["model_policy_tier"], "open_weight")
+        self.assertFalse(sanitized["model_policy_non_foss_unlocked"])
 
     def test_sanitize_ollama_keep_alive_accepts_known_tokens(self):
         """Ollama keep_alive string must be one of the plugin presets or fall back to default."""

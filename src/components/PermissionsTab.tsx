@@ -5,6 +5,8 @@ import type { BonsaiCapabilities } from "../utils/settingsAndResponse";
 type Props = {
   capabilities: BonsaiCapabilities;
   setCapabilities: React.Dispatch<React.SetStateAction<BonsaiCapabilities>>;
+  /** Opens README model policy (same gating as About external links). */
+  onReadModelPolicy?: () => void;
 };
 
 const ROWS: {
@@ -42,12 +44,33 @@ const ROWS: {
  * Central place for capability toggles. Uses Decky `ToggleField` for Steam QAM-style switches.
  * Defaults for new installs are off; legacy settings without this block are grandfathered on the backend until saved here.
  */
-export const PermissionsTab: React.FC<Props> = ({ capabilities, setCapabilities }) => (
+export const PermissionsTab: React.FC<Props> = ({ capabilities, setCapabilities, onReadModelPolicy }) => (
   <PanelSection title="Permissions">
     <PanelSectionRow>
       <div style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45, marginBottom: 4 }}>
         High-impact actions stay off until you enable them here. Ollama requests on your LAN are not gated by
-        these toggles.
+        these toggles. Which Ollama model names the plugin may try is controlled separately under Settings → Model
+        policy.
+        {onReadModelPolicy ? (
+          <>
+            {" "}
+            <button
+              type="button"
+              onClick={onReadModelPolicy}
+              style={{
+                color: "#7dd3fc",
+                textDecoration: "underline",
+                cursor: "pointer",
+                background: "none",
+                border: "none",
+                padding: 0,
+                font: "inherit",
+              }}
+            >
+              Read model policy
+            </button>
+          </>
+        ) : null}
       </div>
     </PanelSectionRow>
     {ROWS.map((row) => (

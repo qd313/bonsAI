@@ -1,3 +1,5 @@
+import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
+
 /**
  * Last Ask transparency snapshot from backend `get_input_transparency` (matches main.py keys).
  */
@@ -22,6 +24,7 @@ export type TransparencySnapshot = {
   pc_ip: string;
   error_message: string;
   elapsed_seconds: number;
+  model_policy_disclosure?: ModelPolicyDisclosurePayload | null;
 };
 
 export type InputTransparencyRpcResult =

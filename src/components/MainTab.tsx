@@ -42,6 +42,10 @@ import {
 import { CharacterRoleplayEmoticon } from "./CharacterRoleplayEmoticon";
 import type { TransparencySnapshot } from "../utils/inputTransparency";
 import { ASK_MODE_LABELS, ASK_MODE_OUTLINE, type AskModeId } from "../data/askMode";
+import {
+  disclosureSummaryForSourceClass,
+  type ModelPolicyDisclosurePayload,
+} from "../data/modelPolicy";
 import { AskModeMenuPopover } from "./AskModeMenuPopover";
 
 const BONSAI_CHAT_AI_MAX_WIDTH_CSS = `min(${Math.round(BONSAI_CHAT_AI_BUBBLE_MAX_FRAC * 100)}%, 100%)`;
@@ -260,6 +264,10 @@ export type MainTabProps = {
   askThreadViewIndex?: number | null;
   /** Pass `null` to return to the live (current) turn. */
   onAskThreadSelectTurn?: (index: number | null) => void;
+  /** Last successful Ask model disclosure from the backend (live turn only). */
+  modelPolicyDisclosure?: ModelPolicyDisclosurePayload | null;
+  /** Opens README model policy section (external nav permission). */
+  onOpenModelPolicyReadme?: () => void;
 };
 
 export function MainTab(props: MainTabProps) {
@@ -329,6 +337,8 @@ export function MainTab(props: MainTabProps) {
     askThreadDisplayQuestion = "",
     askThreadViewIndex = null,
     onAskThreadSelectTurn,
+    modelPolicyDisclosure = null,
+    onOpenModelPolicyReadme,
   } = props;
 
   const [transparencyOpen, setTransparencyOpen] = useState(false);
@@ -1436,6 +1446,51 @@ export function MainTab(props: MainTabProps) {
                     ))}
                   </div>
                 </BonsaiChatAiBubble>
+                {askThreadViewIndex === null && modelPolicyDisclosure && (
+                  <div
+                    style={{
+                      marginTop: 10,
+                      padding: "8px 10px",
+                      borderRadius: 8,
+                      border: "1px solid rgba(100, 140, 180, 0.35)",
+                      background: "rgba(20, 32, 44, 0.5)",
+                      fontSize: 11,
+                      color: "#b8cce0",
+                      lineHeight: 1.45,
+                      maxWidth: BONSAI_CHAT_AI_MAX_WIDTH_CSS,
+                      boxSizing: "border-box",
+                    }}
+                  >
+                    <div style={{ fontWeight: 700, marginBottom: 4, color: "#dce8f4" }}>
+                      Model source disclosure
+                    </div>
+                    <div>
+                      <strong>Model:</strong> {modelPolicyDisclosure.model}
+                    </div>
+                    <div style={{ marginTop: 4 }}>
+                      {disclosureSummaryForSourceClass(modelPolicyDisclosure.source_class)}
+                    </div>
+                    {onOpenModelPolicyReadme ? (
+                      <div style={{ marginTop: 6 }}>
+                        <button
+                          type="button"
+                          onClick={onOpenModelPolicyReadme}
+                          style={{
+                            color: "#7dd3fc",
+                            textDecoration: "underline",
+                            cursor: "pointer",
+                            background: "none",
+                            border: "none",
+                            padding: 0,
+                            font: "inherit",
+                          }}
+                        >
+                          Read more
+                        </button>
+                      </div>
+                    ) : null}
+                  </div>
+                )}
               </div>
             </PanelSectionRow>
           );

@@ -10,6 +10,7 @@ from backend.services.ai_character_service import (
     sanitize_ai_character_random,
 )
 from backend.services.capabilities import legacy_grandfather_capabilities, sanitize_capabilities
+from backend.services.model_policy import reconcile_model_policy_tier
 
 
 def clamp_int(value: Any, default: int, minimum: int, maximum: int) -> int:
@@ -65,6 +66,11 @@ def sanitize_input_sanitizer_user_disabled(value: Any) -> bool:
 
 def sanitize_show_debug_tab(value: Any) -> bool:
     """Only explicit ``true`` shows the Debug tab; default is hidden."""
+    return value is True
+
+
+def sanitize_model_allow_high_vram_fallbacks(value: Any) -> bool:
+    """Only explicit ``true`` appends large-model tails to Ollama fallback chains."""
     return value is True
 
 
@@ -172,6 +178,9 @@ def sanitize_settings(
         max_latency=max_latency_warning_seconds,
         max_timeout=max_request_timeout_seconds,
     )
+    mp_tier, mp_unlock = reconcile_model_policy_tier(
+        raw.get("model_policy_tier"), raw.get("model_policy_non_foss_unlocked")
+    )
     return {
         "latency_warning_seconds": latency,
         "request_timeout_seconds": timeout,
@@ -212,6 +221,11 @@ def sanitize_settings(
         ),
         "ollama_keep_alive": sanitize_ollama_keep_alive(raw.get("ollama_keep_alive")),
         "show_debug_tab": sanitize_show_debug_tab(raw.get("show_debug_tab")),
+        "model_policy_tier": mp_tier,
+        "model_policy_non_foss_unlocked": mp_unlock,
+        "model_allow_high_vram_fallbacks": sanitize_model_allow_high_vram_fallbacks(
+            raw.get("model_allow_high_vram_fallbacks")
+        ),
     }
 
 

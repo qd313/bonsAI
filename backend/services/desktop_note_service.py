@@ -3,14 +3,34 @@
 from __future__ import annotations
 
 import json
+import logging
 import os
 import re
 import unicodedata
 from datetime import datetime, timezone
 from typing import Any, Optional
 
+logger = logging.getLogger(__name__)
+
 # Entries use UTC ISO-8601 timestamps (suffix Z) for deterministic, locale-independent logs.
 _MAX_STEM_LEN = 80
+
+# User-visible when makedirs/open fails; do not embed errno paths (security).
+DESKTOP_NOTE_WRITE_OS_ERROR_MESSAGE = (
+    "Could not write to Desktop notes. Check filesystem permission (Permissions tab), "
+    "disk space, and that ~/Desktop/BonsAI_notes is writable."
+)
+
+
+def _desktop_write_failure_result(exc: BaseException) -> dict[str, Any]:
+    """Map OSError/ValueError to RPC-safe {ok, error}; log OS detail without echoing paths to UI."""
+    if isinstance(exc, ValueError):
+        return {"ok": False, "error": str(exc)}
+    if isinstance(exc, OSError):
+        logger.warning("desktop_note_service: write failed", exc_info=True)
+        return {"ok": False, "error": DESKTOP_NOTE_WRITE_OS_ERROR_MESSAGE}
+    logger.exception("desktop_note_service: unexpected error during write")
+    return {"ok": False, "error": DESKTOP_NOTE_WRITE_OS_ERROR_MESSAGE}
 
 
 def sanitize_note_stem(name: str) -> str:
@@ -105,7 +125,7 @@ def append_desktop_debug_note_sync(
             response=response,
         )
     except (OSError, ValueError) as exc:
-        return {"ok": False, "error": str(exc)}
+        return _desktop_write_failure_result(exc)
 
 
 def _daily_chat_stem_utc() -> str:
@@ -191,7 +211,7 @@ def append_desktop_chat_event_sync(
 
         return {"ok": True, "path": target_path}
     except (OSError, ValueError) as exc:
-        return {"ok": False, "error": str(exc)}
+        return _desktop_write_failure_result(exc)
 
 
 def _trace_stem_utc() -> str:
@@ -288,4 +308,4 @@ def append_desktop_ask_transparency_sync(home: str, snapshot: dict[str, Any]) ->
 
         return {"ok": True, "path": target_path}
     except (OSError, ValueError) as exc:
-        return {"ok": False, "error": str(exc)}
+        return _desktop_write_failure_result(exc)

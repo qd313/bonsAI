@@ -490,8 +490,12 @@ class Plugin:
             models = list(tested.get("models", []))
 
             return {"reachable": True, "version": version, "models": models}
-        except Exception as e:
-            return {"reachable": False, "error": str(e)}
+        except Exception:
+            logger.exception("test_ollama_connection failed")
+            return {
+                "reachable": False,
+                "error": "Could not reach Ollama. Check PC IP, firewall, and that Ollama is running on the host.",
+            }
 
     @staticmethod
     def _resolve_recent_screenshot_paths(app_id: str = "", limit: int = 5) -> list:
@@ -681,9 +685,9 @@ class Plugin:
                     }
                 )
             return {"success": True, "items": items}
-        except Exception as exc:
+        except Exception:
             logger.exception("list_recent_screenshots failed")
-            return {"success": False, "items": [], "error": str(exc)}
+            return {"success": False, "items": [], "error": "Could not load recent screenshots."}
 
     async def append_desktop_debug_note(self, payload: Any = None):
         """Append timestamped Q&A markdown under ~/Desktop/BonsAI_notes/<name>.md (append-only)."""
@@ -929,8 +933,11 @@ class Plugin:
         plugin = Plugin._coerce_instance(self)
         try:
             logger.info(
-                "_execute_game_ai_request: host=%s game=%r appid=%s question=%r (len=%d)",
-                pc_ip, app_name, app_id, question, len(question),
+                "_execute_game_ai_request: host=%s game=%r appid=%s question_len=%d",
+                pc_ip,
+                app_name,
+                app_id,
+                len(question),
             )
 
             settings = await plugin.load_settings()
@@ -1150,20 +1157,26 @@ class Plugin:
                     "attachment_paths": [],
                     "assistant_raw": None,
                     "assistant_after_attachment_format": None,
-                    "final_response": f"Backend error: {exc}",
+                    "final_response": (
+                        "Something went wrong while processing your Ask. "
+                        "If this repeats, check the plugin log on the Deck."
+                    ),
                     "applied": None,
                     "success": False,
                     "app_id": app_id,
                     "app_name": app_name,
                     "pc_ip": pc_ip,
-                    "error_message": str(exc),
+                    "error_message": "Internal error (details logged on device).",
                     "elapsed_seconds": elapsed,
                     "model_policy_disclosure": None,
                 }
             )
             return {
                 "success": False,
-                "response": f"Backend error: {exc}",
+                "response": (
+                    "Something went wrong while processing your Ask. "
+                    "If this repeats, check the plugin log on the Deck."
+                ),
                 "app_id": app_id,
                 "app_context": app_context,
                 "applied": None,
@@ -1548,8 +1561,12 @@ class Plugin:
         }
 
         logger.info(
-            "ask_ollama: url=%s game=%r appid=%s attachments=%d user_message=%r (len=%d)",
-            url, app_name, app_id, len(prepared_images), question, len(question),
+            "ask_ollama: url=%s game=%r appid=%s attachments=%d question_len=%d",
+            url,
+            app_name,
+            app_id,
+            len(prepared_images),
+            len(question),
         )
 
         requires_vision = len(prepared_images) > 0
@@ -1565,6 +1582,12 @@ class Plugin:
                 "model_policy_disclosure": None,
                 **ollama_extras,
             }
+
+        def _strip_ollama_http_body(payload: dict) -> dict:
+            """Remove raw HTTP bodies from payloads returned to the UI / transparency (security)."""
+            out = dict(payload)
+            out.pop("body", None)
+            return out
 
         try:
             loop = asyncio.get_running_loop()
@@ -1588,15 +1611,15 @@ class Plugin:
                 merged = {**ollama_extras, **result}
                 if result.get("success"):
                     disc = disclosure_for_model(str(result.get("model") or model_name))
-                    return {**merged, "model_policy_disclosure": disc}
+                    return {**_strip_ollama_http_body(merged), "model_policy_disclosure": disc}
 
-                last_failure = merged
+                last_failure = _strip_ollama_http_body(merged)
                 body = (result.get("body") or "").lower()
                 # Missing local Ollama tags: try the next fallback instead of failing the whole Ask.
                 is_model_not_found = "not found" in body and "model" in body
                 if is_model_not_found:
                     continue
-                return merged
+                return _strip_ollama_http_body(merged)
 
             if requires_vision:
                 return {
@@ -1611,9 +1634,13 @@ class Plugin:
                 }
 
             return last_failure
-        except Exception as e:
-            logger.error(f"Ollama request failed: {e}")
-            return {"success": False, "response": str(e), **ollama_extras}
+        except Exception:
+            logger.exception("Ollama request failed")
+            return {
+                "success": False,
+                "response": "Ollama request failed. Check connection, model names, and the Deck plugin log.",
+                **ollama_extras,
+            }
 
     def _build_ollama_chat_url(self, pc_ip: str) -> str:
         """Build the Ollama chat endpoint URL from current connection input."""

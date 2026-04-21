@@ -47,5 +47,5 @@ export function getSteamInputLexiconEntry(id: string): SteamInputLexiconEntry | 
 
 /** Replace `{appId}` only; app ids are numeric strings from Steam. */
 export function interpolateSteamInputTemplate(template: string, appId: string): string {
-  return template.replaceAll("{appId}", appId);
+  return template.split("{appId}").join(appId);
 }

@@ -2,6 +2,8 @@
 
 Track what prompts have been tested, what model responded, and whether the result was correct.
 
+**PR / release gates:** automated commands, per-area tests, and Deck smoke checklist → [regression-and-smoke.md](regression-and-smoke.md).
+
 Related planning (not yet implemented): future prompt policy, search UX, and Steam Input work are ranked in [roadmap.md](roadmap.md). When those ship, use the research and catalog notes below to extend test matrices.
 
 - [steam-input-research.md](steam-input-research.md) — Steam Input search/jump feasibility, fallback UX, validation checklist.
@@ -108,6 +110,7 @@ Related planning (not yet implemented): future prompt policy, search UX, and Ste
 ## QAMP Verification (Phase 1 — In Progress)
 - [ ] After TDP write: confirmation message includes applied wattage
 - [ ] After TDP write: response includes guidance to re-open QAM Performance tab to verify reflected value
+- [ ] After successful sysfs apply (no errors): model transcript includes the **Note:** paragraph about stale QAM sliders (`buildResponseText` / main tab body), not only the yellow banner row
 - [ ] With per-game profile ON: TDP write applies and verification guidance is shown
 - [ ] With per-game profile OFF: TDP write applies and verification guidance is shown
 - [ ] After closing and reopening QAM Performance tab: verify slider reflects the written value

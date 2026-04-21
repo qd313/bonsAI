@@ -2,22 +2,24 @@
 
 ## Hard feature freeze — imminent release accountability
 
-**Window:** **2026-04-20** through **release Sunday, April 26, 2026** (calendar end of freeze = ship target day).
+**Window:** **2026-04-21** through **release Sunday, April 26, 2026** (calendar end of freeze = ship target day).
 
-**Counsel + judge:** Release priorities for this week are argued under **Red Team vs Blue Team** with a **human judge** in [red-blue-fight-2026-04-20.md](red-blue-fight-2026-04-20.md). **Check-in:** Monday 2026-04-20 **5:30 PM (17:30)** `America/New_York`; **bout:** same day **11:30 PM (23:30)** `America/New_York` (see that file for the legal-report template).
+**Counsel + judge:** Release priorities for this week are argued under **Red Team vs Blue Team** with a **human judge** in [red-blue-fight-2026-04-21.md](red-blue-fight-2026-04-21.md). **Bout:** **in session / effective immediately** Tuesday **2026-04-21** `America/New_York` (Monday 2026-04-20 planned check-in was skipped; see that file for the legal-report template).
 
 **Priority order** (follow before scheduling new work):
 
 1. **Ship release** — versioning, [CHANGELOG.md](CHANGELOG.md), install smoke, [prompt-testing.md](prompt-testing.md) matrices as applicable, [development.md](development.md) release process.
 2. **Trim the fat** — **Settings tab first** (reduce noise, consolidate sections, improve scanability: grouping, progressive disclosure, shorter helper copy). **Other product/UX** only after Settings is acceptably calm. **Code / bundle / doc noise** last; do not let it distract from Settings.
 3. **Bugfixes** — from [Known bugs](#known-bugs) and QA triage; release-blocking first.
-4. **Testing / regression** — device runs; `scripts/build.ps1` / `scripts/build.sh` per contributor workflow.
+4. **Testing / regression** — device runs; `scripts/build.ps1` / `scripts/build.sh` per contributor workflow; standing matrix in [regression-and-smoke.md](regression-and-smoke.md).
 5. **Documentation** — user-facing accuracy, [troubleshooting.md](troubleshooting.md) as needed.
 6. **No new features** — no additions to shipped behavior unless **release-blocking** or **required to trim safely** (e.g. removing a surface without breaking consent or capability gates).
 
 **Chopping block:** Anything **not yet implemented** under [In progress](#in-progress), [Up next](#up-next), or [Planned candidates (not shipped)](#planned-candidates-not-shipped) is **default deferred** until after this window unless it has a **one-line MVP proof** (user-visible value, risk, why deferring harms users). Otherwise tag **`DEFERRED`** or move to a short post-release stub.
 
 **Reading contract:** Execute the priority order above before pulling scope from **Up next** or **Planned candidates**.
+
+**Doc index:** Curated map of every file under `docs/` → [README.md](README.md) (this directory’s index).
 
 ---
 
@@ -36,6 +38,9 @@ Star ratings use the GTA scale: `★` easiest … `★★★★★` very high co
 - ★★★ **QAMP Reflection (Phase 1 — Safe Default):** Show applied-state confirmation and explicit verification guidance when QAM sliders do not immediately mirror hardware writes.
   - Requirement: every BonsAI performance action must be user-verifiable after execution.
   - Initial behavior: keep sysfs write path as source of truth and guide users to re-open QAM Performance to verify reflected values.
+- ★★★ **Settings trim (ship window — judge week list):** Deliver **trim the fat** on **Settings** first: fewer simultaneous controls per screen, clearer grouping / `PanelSection` boundaries, progressive disclosure, shorter helper copy on toggles and sliders. Align with [red-blue-fight-2026-04-21.md](red-blue-fight-2026-04-21.md) Week work list and roadmap **Priority order** §2. **Files:** primarily `src/index.tsx` Settings composition (extract deferred).
+- ★★ **Prompt-testing matrix (ship-window pass):** On Deck (or agreed target), run the scenarios the judge accepted for this release — [prompt-testing.md](prompt-testing.md) (including **QAMP Verification** and any rows touched by recent changes); mark checkboxes and record **Pass / Partial / Fail** with build id in PR text or a short note linked from the fight doc Week work list. No code change required unless a run exposes a defect.
+- ★★ **Global quick-launch macro — device verify + troubleshooting tune:** Exercise the Guide-chord → QAM → Decky → bonsAI sequence on real hardware using [README.md](../README.md) and [troubleshooting.md](troubleshooting.md) §5; confirm **Fire Start Delay** steps and D-pad depth match common QAM rails; update troubleshooting (and README pointer if needed) when a different rail count or delay pattern works better. Ties to [regression-and-smoke.md](regression-and-smoke.md) plugin shell checks.
 
 ## Known bugs
 
@@ -46,19 +51,15 @@ Star ratings use the GTA scale: `★` easiest … `★★★★★` very high co
 
 **Frozen:** Items below are **not for pre-release pickup** unless they pass the **chopping block** MVP bar at the top of this doc **and** are explicitly scheduled post-release—or are **release-blocking**.
 
+> **Judge ruling (2026-04-21):** Active ship-window work is listed under **Week work list (after the bell)** in [red-blue-fight-2026-04-21.md](red-blue-fight-2026-04-21.md) (Settings trim, D-pad/last-chunk fix, QAMP Phase 1 copy, prompt-testing pass, global quick-launch docs). Non-code follow-ups are also tracked as starred items under **[In progress](#in-progress)** above.
+
 - ★★ **Text Ask model preference chains (user-configurable):** Screenshot/vision tries an ordered fallback list per Ask mode in `[refactor_helpers.py](../refactor_helpers.py)` (`select_ollama_models(..., requires_vision=True)`). **Text-only** paths still use the same fixed per-mode lists today. Add Settings (or import/export JSON) so users can define **ordered text model tags per mode** (Speed / Strategy / Expert), with validation, sane defaults matching the shipped lists, and the same try-next-on-`model not found` behavior as vision.
-- ★★ **Ollama model VRAM retention:** Plugin-side setting for how long the Ollama host keeps the loaded model in VRAM after a request completes (maps to Ollama `**keep_alive`** on each generate/chat call). **Default: 5 minutes.** Shorter values free VRAM sooner for other GPU work; longer values reduce cold-load latency when asking again in quick succession.
-  - **Shorter than default:** 3 min, 2 min, 1 min, 30 s, 15 s, **0** (unload immediately after the request).
-  - **Longer than default:** 15, 30, 45, 60, 120, 240 **minutes**.
 - ★★ **Prompt Testing and Tuning:** Systematically validate prompt quality across games and scenarios (see [prompt-testing.md](prompt-testing.md)).
-- ★★ **Random character avatar = “?”:** In the character picker and main-tab avatar affordance, show a **simple “?”** mark (typographic or minimal glyph) for **Random** instead of a dice / multi-face / catalog preview icon — keeps “unknown voice” obvious at a glance.
-- ★★ **Debug tab opt-in (Settings):** Hide the **Debug** tab by default; add a **Settings** toggle (persisted) to **show the Debug tab** for power users. When the tab is hidden, **controller/touch navigation** must not land on a non-existent tab (filter tab list / remap focus); if the user turns the toggle **off** while already on Debug, **switch to a safe tab** (e.g. Main) and clear stale debug-only UI state as needed.
 - ★★★ **QAMP Verification Checklist:** Verify behavior across per-game profile modes, QAM reopen, Steam restart/reboot, and GPU-related recommendations.
   - Verify behavior with per-game profile on/off.
   - Verify behavior after closing and reopening the QAM Performance tab.
   - Verify behavior after Steam restart and full reboot.
   - Verify behavior when prompt includes GPU clock recommendations.
-- ★★★ **Character-derived UI accent (preset only):** When **AI character** is on and a **fixed catalog preset** is selected, drive plugin accent UI from a **distinctive color** sampled or defined for that preset’s avatar (highlights = main tone; borders/glows/muted fills = **darker** derivative). **AI character off**, **Random**, and **Custom** character paths keep today’s **forest green** accent system unchanged (including mode selector, tab active glow, chips, and related tokens).
 - ★★★★★ **QAMP Reflection (Phase 2 — Experimental Opt-In):** Attempt Steam profile sync only behind explicit warning toggles. *Blocked on Phase 1.*
   - Risks: undocumented internals, Steam update breakage, restart/reboot requirements, and profile corruption risk.
   - Candidate path: fragile `config.vdf` / protobuf edits gated behind experimental mode only.
@@ -84,6 +85,7 @@ Headings group related work. Star counts match the historical list.
 - ★★ **Deck and PC Connection Settings:** Add connection-focused settings including visible Deck IP and PC IP management.
 - ★★ **Diagnostic, Latency, and Timeout Warnings:** Return `elapsed_seconds`, show slow-response warnings, and enforce backend timeout messaging.
 - ★★ **Configurable Latency and Timeout Controls:** Persisted warning + timeout in `settings.json`; Settings Connection uses one Steam `SliderField` for hard timeout with a visible soft-warning readout (`ConnectionTimeoutSlider.tsx`), and ordering is reconciled on load/updates.
+- ★★ **Ollama model VRAM retention (`keep_alive`):** Persisted `ollama_keep_alive` with fixed preset durations (default **5 minutes**); Settings → Connection `OllamaKeepAliveSlider.tsx`; value passed on each Ask through `main.py` into `backend/services/ollama_service.py`. `settings_service.py`, `settingsAndResponse.ts`.
 
 ### Tabs, icons, and unified ask flow
 
@@ -92,6 +94,8 @@ Headings group related work. Star counts match the historical list.
 - ★★ **Unified Search + Ask Input:** Merge settings search and AI question entry into one shared input flow.
 - ★ **Preset Chip Fade Opt-Out:** Settings `ToggleField` **Preset chip fade animation** (persisted `preset_chip_fade_animation_enabled`, default on). When off, main-tab suggestion chips stay opaque and rotate prompts without opacity transitions; post-Ask re-seed unchanged. `PresetAnimatedChips.tsx`, `MainTab.tsx`, `settingsAndResponse.ts`, `settings_service.py`.
 - ★★★ **Mode selector (main screen):** Persisted `ask_mode` (`speed` / `strategy` / `deep`, UI labels Speed / Strategy / Deep). Compact outline control (green / bronze / gold) on the unified input strip, left of mic/stop, opens an anchored popover menu to change mode (no layout reflow); D-pad focus order is text field → mode → mic/stop. Backend orders Ollama model fallbacks per mode in `refactor_helpers.py`; `start_background_game_ai` includes `ask_mode`. `src/data/askMode.ts`, `src/components/AskModeMenuPopover.tsx`, `MainTab.tsx`, `index.tsx`, `settingsAndResponse.ts`, `settings_service.py`, `main.py`.
+- ★★ **Debug tab opt-in (Settings):** Persisted `show_debug_tab` (default **false**); **Debug** omitted from the tab strip until **Show Debug tab** is enabled in Settings; safe tab switch when turning the toggle off while on **Debug**. `src/index.tsx`, `settings_service.py`, `settingsAndResponse.ts`.
+- ★★★ **Reset session cache (app state):** Settings → Advanced **Reset session cache…** with confirm modal; `resetPluginSession()` clears in-memory unified search, reply, thread, transparency, branch picker, attachments, and timers. Does **not** change persisted `settings.json`, host Ollama history, or screenshot files. `src/index.tsx`.
 
 **Baseline index:** preset carousel and transition UX (Phase 1 — fade/hold; manual arrows deferred).
 
@@ -117,6 +121,7 @@ Headings group related work. Star counts match the historical list.
 ### Permissions and capability gating
 
 - ★★★★ **Capability Permission Center (User-Controlled Access):** Permissions tab (lock icon, same title scale as other tabs) with toggles for filesystem writes, hardware control (TDP apply), media library access (screenshot attach), and external/Steam navigation (About links, Debug Steam Input jump). Persisted `settings.json` `capabilities`; new installs default OFF; legacy installs without a `capabilities` block are grandfathered ON until saved. Backend enforces gates on `append_desktop_debug_note`, `append_desktop_chat_event`, `list_recent_screenshots`, ask-with-attachments, TDP apply, `capture_screenshot`. Files: `backend/services/capabilities.py`, `PermissionsTab`, `main.py`, `src/utils/settingsAndResponse.ts`.
+- ★★★★ **Model policy tiers + disclosure UX:** Persisted `model_policy_tier` / `model_policy_non_foss_unlocked` and related allow-high-VRAM flag; Settings **Model policy** (tier chips, unlock flow, README link); backend `backend/services/model_policy.py` classifies model tags and enforces tier when selecting fallbacks; successful replies can include **Model source disclosure** on Main. `src/data/modelPolicy.ts`, `MainTab.tsx`, `src/utils/inputTransparency.ts`, `main.py`, [README.md](../README.md) § Model policy tiers.
 
 **Baseline index:** global screenshots and vision (V1) — multimodal attach; uses media-related capability paths.
 
@@ -125,6 +130,8 @@ Headings group related work. Star counts match the historical list.
 - ★★★ **Character Voice Roleplay Mode (Opt-In):** Default-off **AI character** in Settings (small caps label); fullscreen `CharacterPickerModal` with per–work-title groups, **Random** toggle, custom line, OK/Cancel; unique pixel emoticons; main-tab glass avatar opens picker; backend `ai_character_service.build_roleplay_system_suffix` appends roleplay instructions to the Ollama system prompt. `src/data/characterCatalog.ts`, `src/components/CharacterPickerModal.tsx`, `main.py`, `settings.json` fields `ai_character_*`.
 - ★★ **Character Accent Intensity Levels (Doom-Style Copy):** Settings **Accent intensity** horizontal chips (`subtle` / `balanced` / `heavy` / `unleashed`, default `balanced`) when AI characters are on; Doom-difficulty–flavored short labels and helper copy. Persisted `ai_character_accent_intensity`; `build_roleplay_system_suffix` varies dialect/accent strength for presets, random, and custom paths without changing TDP/JSON policy. `src/data/aiCharacterAccentIntensity.ts`, `src/index.tsx`, `backend/services/ai_character_service.py`, `settings_service.py`, `settingsAndResponse.ts`.
 - ★★ **Running-game character suggestions (AI picker):** On `CharacterPickerModal` open, read `Router.MainRunningApp`, resolve 1–3 catalog presets via `src/utils/runningGameCharacterSuggestions.ts` (Steam AppID map + normalized title match + TF2 merge), show **Playing:** headline and suggestion row with `CharacterRoleplayEmoticon`; async after first paint with delayed spinner (~160 ms); D-pad links Random, suggestions, column 0, and custom field.
+- ★★ **Random character “?” avatar (picker + main):** When **Random** is on, picker tile, main-tab glass avatar, and related summary chips use a single **“?”** affordance. `CharacterRoleplayEmoticon.tsx`, `CharacterPickerModal.tsx`, `MainTab.tsx`.
+- ★★★ **Character-derived UI accent theme (preset-selected):** With AI character on and a fixed catalog preset (not Random / not custom), accent tokens follow `src/data/characterUiAccent.ts` and catalog-driven colors; **AI character off**, **Random**, and **Custom** stay bonsAI forest green. `src/index.tsx` scoped CSS / token wiring, `MainTab.tsx`, `CharacterPickerModal.tsx`.
 
 ---
 
@@ -242,49 +249,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Depends on:** **Mode selector (main screen)** (shipped).
 - **Not in scope:** per-game/per-model fine-grained profile matrix.
 
-### Ollama model VRAM retention (keep_alive)
-
-★★
-
-- **Goal:** Let users tune how long the Ollama server keeps the model resident in VRAM after each Ask completes, trading VRAM headroom on the host against reload latency for the next request.
-- **Primary work:** Persisted plugin setting; pass the chosen duration into Ollama on each relevant API call (`keep_alive`); Settings UI with fixed presets (no free-form typing).
-- **Default:** 5 minutes.
-- **Preset list:** **0** (eject immediately), 15 s, 30 s, 1 / 2 / 3 min (shorter than default), **5 min** (default), then 15 / 30 / 45 / 60 / 120 / 240 min (longer than default).
-- **Files:** `main.py`, `backend/services/ollama_service.py`, Settings surface in `src/index.tsx`, `settings_service.py`, `settingsAndResponse.ts`.
-- **Depends on:** Decky → Ollama request path and settings persistence (shipped baseline under **Connection, routing, diagnostics, and timeouts**).
-- **Not in scope:** Per-model or per-game retention profiles; editing the Ollama daemon’s global config on disk outside what each request specifies.
-
-### Character-derived UI accent theme (preset-selected)
-
-★★★
-
-- **Goal:** Tie visible accent color to the **selected catalog character** so the plugin feels co-branded with that persona. **Exclusions:** no change to the default **bonsAI forest green** when AI character is **disabled**, when **Random** is on, or when **Custom** text is used — those three states stay on the current green token set for predictability and accessibility.
-- **Visual contract:** One **main accent** (highlights, primary outlines, key fills) and one **subtle accent** (dimmer borders, soft glows, low-contrast chips) derived as a **darker** (or lower-chroma) variant of the main color; avoid relying on opacity alone where contrast matters.
-- **Primary work:** Per-preset **accent source** in catalog data (hex from art direction, or programmatic extract from the preset’s emoticon/SVG with a fallback list); CSS variables or equivalent scoped theme on `.bonsai-scope` (or root) switched when `ai_character_enabled` + fixed `ai_character_preset_id` + not random + not effectively custom; audit surfaces already using forest tokens (`MainTab`, mode menu, tabs, preset chips, Settings character row, etc.).
-- **Files (expected):** `src/data/characterCatalog.ts` (or parallel `characterAccent.ts`), `src/index.tsx` scoped CSS / token wiring, `MainTab.tsx`, `CharacterPickerModal.tsx`, shared constants if extracted from `src/features/unified-input/constants.ts` or similar.
-- **Depends on:** **Character voice roleplay** (shipped); stable preset ids.
-- **Not in scope:** Per-game accent overrides; animating hue shifts; changing Ollama or roleplay prompt content solely for theming.
-
-### Random character “?” avatar (picker + main)
-
-★★
-
-- **Goal:** Replace the current **Random** visual (e.g. dice / composite preview) with a **single “?”** treatment everywhere the random mode is shown as an avatar (picker tile, main-tab glass avatar when random is active, any other summary chip).
-- **Primary work:** Icon or text component branch for `ai_character_random === true`; ensure focus rings and hit targets stay Deck-friendly; optional tooltip still explains random selection behavior.
-- **Files:** `CharacterPickerModal.tsx`, `MainTab.tsx`, `CharacterRoleplayEmoticon.tsx` / grid helpers if Random currently maps to a special emoticon.
-- **Depends on:** **Character voice roleplay** (shipped).
-- **Not in scope:** Changing random roll logic or backend `build_roleplay_system_suffix` behavior.
-
-### Debug tab hidden by default (Settings toggle)
-
-★★
-
-- **Goal:** Reduce accidental exposure of technical surfaces for typical users: the **Debug** tab is **off the tab strip by default** and only appears after the user enables **Show Debug tab** (or similarly named) on the **Settings** tab. Power users and contributors keep a one-time, persisted path to the same tools as today.
-- **Primary work:** New persisted boolean in `settings.json` (e.g. `show_debug_tab`, default **false**); Settings `ToggleField` with short helper copy; build the `<Tabs tabs={...}>` list from a filtered array so the Debug entry is omitted when disabled; on toggle **off** while `currentTab === "debug"`, programmatically select **Main** (or Settings) and optionally toast that Debug was hidden; verify D-pad / LB–RB order matches the visible tab count only.
-- **Files:** `src/index.tsx` (tabs definition + `onShowTab` / restore paths), Settings block in same file or extracted component, `settings_service.py`, `settingsAndResponse.ts`, default in backend settings load for installs missing the key (**false**).
-- **Depends on:** **Settings persistence** (shipped); existing **Debug** tab content unchanged once visible.
-- **Not in scope:** Hiding individual rows inside Debug while the tab exists; password-gating the toggle; remote kill-switch without user action.
-
 ### Multi-language responses
 
 ★★★
@@ -303,16 +267,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Files:** `src/index.tsx`, prompt/search UX test notes.
 - **Depends on:** unified search indexing and response-state handling.
 - **Not in scope:** changing ranking semantics for unrelated search domains.
-
-### Reset cache action (app state)
-
-★★★
-
-- **Goal:** One user action clears cached unified search text and current AI response.
-- **Primary work:** UI control, clear local storage + in-memory response state, explicit/confirmable behavior.
-- **Files:** `src/index.tsx`, optional settings/docs references.
-- **Depends on:** unified input persistence + response state handling.
-- **Not in scope:** clearing host-side Ollama history or deleting screenshot files.
 
 ### Debugging and Proton log analysis
 
@@ -379,17 +333,6 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Files:** `src/index.tsx`, `main.py`, docs/usage references.
 - **Depends on:** stable search indexing and local storage schema versioning.
 - **Not in scope:** remote-hosted catalogs or mandatory online sync.
-
-### Model policy tiers + disclosure UX
-
-★★★★
-
-- **Goal:** Separate open-source and open-weight access with explicit unlock for non-FOSS models.
-- **Required behavior:** Tier 1 default `Open-Source only`; Tier 2 `Open-Source + Open-Weight`; Tier 3 `Non-FOSS` via explicit unlock; disclosure label every response; `Read more` links in disclosure and permission rows.
-- **Primary work:** model-source metadata, tiered policy in Settings, route guard, disclosure UI, doc links.
-- **Files:** `src/index.tsx`, `main.py`, docs/about/permissions references.
-- **Depends on:** **Capability Permission Center** and stable model routing.
-- **Not in scope:** legal guarantees beyond documented metadata.
 
 ### Llama.cpp compatibility evaluation (research spike)
 
@@ -527,24 +470,24 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 - **Character voice roleplay (shipped)** → baseline for **Character accent intensity (shipped)**; presets in [voice-character-catalog.md](voice-character-catalog.md), [src/data/characterCatalog.ts](../src/data/characterCatalog.ts).
 - **Character voice roleplay (shipped)** → **Pyro talent-manager easter egg (hidden preset)** (planned).
 - **Character voice roleplay** + avatar mapping → **Higher-resolution character avatars (GTA-style art pass)**.
-- **Character voice roleplay (shipped)** → **Character-derived UI accent theme (preset-selected)** (planned); **Random character “?” avatar** (planned); **Running-game character suggestions (AI picker)** (shipped — see **Completed** → Character voice roleplay).
+- **Character voice roleplay (shipped)** → **Character-derived UI accent theme (preset-selected)** (shipped — see **Completed**); **Random character “?” avatar** (shipped — see **Completed**); **Running-game character suggestions (AI picker)** (shipped — see **Completed**).
 - **Input sanitizer (shipped)** + **Input handling transparency (shipped)** → future sanitizer extensions should keep user-visible auditability.
 - **Strategy Guide prompt path (beta)** → **Strategy Guide safety and spoilers**, **Strategy checklist workflow (chat-scoped)**.
 - **Global screenshots and vision** → richer strategy + screenshot context.
 - **Capability Permission Center** → gates filesystem, elevated tasks, hardware, and (future) web/search calls.
-- **Model policy tiers + disclosure UX** → depends on **Capability Permission Center**; tiered routing.
+- **Model policy tiers + disclosure UX (shipped)** → layered on **Capability Permission Center**; tiered routing + per-reply disclosure — see **Completed** → Permissions.
 - **Llama.cpp compatibility evaluation** → informs **Local runtime mode (default)**.
 - **Local runtime mode (default)** → provider priority and remote fallback.
 - **Restricted kids account master lock** → above permission toggles while restricted.
 - **Built on Ollama link** → shipped in About.
 - **SteamOS Media screenshot share button** → possible fast path into **Global screenshots and vision** if APIs allow.
-- **Reset cache action** → unified-input persistence boundaries.
+- **Reset session cache (shipped)** → in-memory unified-input / reply state only; see **Completed** → Tabs.
 - **Preset carousel (Phase 1 shipped)** → extends presentation without changing category routing; **Pyro talent-manager easter egg** depends on it for inject + `PRESET_CAROUSEL_ACTIVE_MS` exception semantics.
 - **Global BonsAI quick-launch via Steam Input macro** ↔ **Native QAM entry for BonsAI (beneath Decky icon) — decouple research** (shorter macro once a direct QAM tile exists).
 - **Bundled VDF parsing** → **Steam Input layout analysis** (and optional deeper parsing).
 - **Steam Input settings search + jump** → Phase 1 shipped; broader catalog deferred.
 - **Offline intent pack exchange** → offline-first search quality.
-- **Settings persistence** → mode profiles, language override, background completion metadata; **Debug tab hidden by default (Settings toggle)** (planned).
+- **Settings persistence** → mode profiles, language override, background completion metadata; **Debug tab opt-in (Settings)** (shipped — see **Completed** → Tabs).
 
 ```mermaid
 flowchart TD
@@ -554,14 +497,14 @@ flowchart TD
   strategyPath --> strategyChecklist[StrategyChecklistWorkflowChatScoped]
   visionFeature[GlobalScreenshotsAndVision] --> strategyPath
   mediaShareButton[SteamOSMediaScreenshotShareButtonResearchSpike] --> visionFeature
-  resetCacheAction[ResetCacheActionAppState] --> settingsBase
+  resetCacheAction[ResetSessionCacheShipped] --> settingsBase
   presetCarousel[PresetCarouselAndTransitionUx] --> strategyPath
   settingsBase[SettingsPersistenceBase] --> perModeProfiles
   settingsBase --> strategySafety
   settingsBase --> multiLanguage[MultiLanguageResponses]
   settingsBase --> backgroundCompletion[BackgroundPromptCompletion]
   settingsBase --> capabilityPermission[CapabilityPermissionCenter]
-  capabilityPermission --> modelPolicyTiers[ModelPolicyTiersAndDisclosure]
+  capabilityPermission --> modelPolicyTiers[ModelPolicyTiersDisclosureShipped]
   modelPolicyTiers --> tierOpenSource[OpenSourceOnly]
   modelPolicyTiers --> tierOpenWeight[OpenSourcePlusOpenWeight]
   modelPolicyTiers --> tierNonFoss[NonFossUnlock]

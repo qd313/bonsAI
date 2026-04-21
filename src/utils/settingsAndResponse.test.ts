@@ -169,4 +169,15 @@ describe("settingsAndResponse", () => {
     expect(output).toContain("[Applied: TDP: 8W, GPU: 900 MHz]");
     expect(output).toContain("[Errors: GPU write skipped]");
   });
+
+  it("appends QAM verification note when hardware applied without errors", () => {
+    const output = buildResponseText("Tuned.", {
+      tdp_watts: 11,
+      gpu_clock_mhz: null,
+      errors: [],
+    });
+    expect(output).toContain("[Applied: TDP: 11W]");
+    expect(output).toContain("QAM Performance");
+    expect(output).not.toContain("[Errors:");
+  });
 });

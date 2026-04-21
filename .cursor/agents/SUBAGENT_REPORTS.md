@@ -98,7 +98,7 @@ Tests and docs status: <what is covered, what still needs updates>
 Trade-offs: <quality ideal vs pragmatic choice and rationale>
 ```
 
-Example entry:
+Example entry (illustrative only; not an open backlog item):
 
 ```text
 Finding: Monolithic request orchestrator in backend
@@ -153,6 +153,24 @@ No session archived
 ## Report log
 
 <!-- Newest entries first. -->
+
+### 2026-04-21 - Judge ruling handoff (red-blue-fight)
+
+```text
+Source: docs/red-blue-fight-2026-04-21.md — Week work list (after the bell) populated from Accept rulings.
+Execution this session: per-chunk Focusable for AI reply stack (D-pad reaches last chunk); buildResponseText appends QAM Performance verification when sysfs apply succeeds without errors; README quick-launch pointer to troubleshooting §5; roadmap Up next blockquote links fight doc week list.
+Deferred per judge: Strategy Guide (beta) path, Pyro easter egg, most Planned candidates (unchanged).
+```
+
+### 2026-04-21 - security (Phase 2) - Disclosure hardening + audit refresh
+
+```text
+Scope: docs/security-audit-report.md triage; RPC/UI/log paths for prompts, tracebacks, Ollama HTTP bodies, exception strings.
+Agents: security-auditor N/A (in-repo triage + fixes in session); findings recorded in docs/security-audit-report.md.
+Changes: formatDeckyRpcError strips traceback from UI; removed sensitive Ask console.log; INFO logs use question_len; ollama_service short HTTP user message + no first_200 in logs; ask_ollama strips body from client payloads; generic RPC errors for test connection, screenshots, execute_game_ai except, ask_ollama except.
+Follow-up (2026-04-21): desktop note / chat append RPC — `backend/services/desktop_note_service.py` now maps **OSError** to a fixed user message + journal logging; **ValueError** still returns validation text. Closes the prior Partial item in docs/security-audit-report.md.
+Tests: pnpm exec tsc --noEmit; pnpm test; pnpm run test:py; pnpm run build — all green.
+```
 
 ### 2026-04-15 - master-debugger - Focus-graph lesson codified (subagent + .cursorrules)
 

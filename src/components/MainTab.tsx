@@ -131,33 +131,35 @@ function BonsaiChatUserBubble(props: BonsaiChatUserBubbleProps) {
 }
 
 type BonsaiChatAiBubbleProps = {
-  children: React.ReactNode;
+  /** Split model body so each chunk is its own gamepad focus stop (D-pad can reach the tail). */
+  responseChunks: string[];
   panelHalfPx: number;
   expanded: boolean;
   onExpandedChange: (next: boolean) => void;
 };
 
 function BonsaiChatAiBubble(props: BonsaiChatAiBubbleProps) {
-  const { children, panelHalfPx, expanded, onExpandedChange } = props;
+  const { responseChunks, panelHalfPx, expanded, onExpandedChange } = props;
   const innerRef = useRef<HTMLDivElement>(null);
   const collapsed = !expanded;
   const lineCapEm = `${(BONSAI_CHAT_TRANSCRIPT_FONT_PX * BONSAI_CHAT_TRANSCRIPT_LINE_HEIGHT + 2) / BONSAI_CHAT_TRANSCRIPT_FONT_PX}em`;
   const collapsedMax = `min(${Math.max(120, Math.floor(panelHalfPx))}px, ${lineCapEm})`;
-  const overflows = useElementOverflows(innerRef, [children, expanded, collapsedMax, panelHalfPx]);
+  const stackKey = responseChunks.join("\u0000");
+  const overflows = useElementOverflows(innerRef, [stackKey, expanded, collapsedMax, panelHalfPx]);
+
+  const onChunkActivate = () => {
+    if (collapsed && overflows) {
+      onExpandedChange(true);
+      return;
+    }
+    if (expanded && overflows) {
+      onExpandedChange(false);
+    }
+  };
 
   return (
-    <Focusable
+    <div
       className="bonsai-chat-ai-bubble bonsai-glass-panel"
-      onActivate={() => {
-        if (collapsed && overflows) {
-          onExpandedChange(true);
-          return;
-        }
-        if (expanded && overflows) {
-          onExpandedChange(false);
-        }
-      }}
-      noFocusRing={false}
       style={{
         width: BONSAI_CHAT_AI_MAX_WIDTH_CSS,
         maxWidth: BONSAI_CHAT_AI_MAX_WIDTH_CSS,
@@ -174,9 +176,20 @@ function BonsaiChatAiBubble(props: BonsaiChatAiBubbleProps) {
           overflow: collapsed ? "hidden" : undefined,
         }}
       >
-        {children}
+        <div className="bonsai-ai-response-stack">
+          {responseChunks.map((chunk, i) => (
+            <Focusable
+              key={`ai-chunk-${i}`}
+              noFocusRing={false}
+              onActivate={onChunkActivate}
+              style={{ width: "100%", minWidth: 0, boxSizing: "border-box" }}
+            >
+              <div className="bonsai-ai-response-chunk">{chunk}</div>
+            </Focusable>
+          ))}
+        </div>
       </div>
-    </Focusable>
+    </div>
   );
 }
 
@@ -1434,18 +1447,11 @@ export function MainTab(props: MainTabProps) {
                 }}
               >
                 <BonsaiChatAiBubble
+                  responseChunks={chunks}
                   panelHalfPx={panelHalfPx}
                   expanded={expandedAi}
                   onExpandedChange={setExpandedAi}
-                >
-                  <div className="bonsai-ai-response-stack">
-                    {chunks.map((chunk, i) => (
-                      <div key={`ai-chunk-${i}`} className="bonsai-ai-response-chunk">
-                        {chunk}
-                      </div>
-                    ))}
-                  </div>
-                </BonsaiChatAiBubble>
+                />
                 {askThreadViewIndex === null && modelPolicyDisclosure && (
                   <div
                     style={{

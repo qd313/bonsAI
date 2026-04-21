@@ -44,8 +44,7 @@ export const MODEL_POLICY_TIER_LABELS: Record<ModelPolicyTierId, string> = {
 
 /** Short Settings helper: what changes vs staying on Tier 1. */
 export const MODEL_POLICY_SETTINGS_INTRO =
-  "Recommended: keep Tier 1 unless you need Llama/Gemma-class “open models” or other tags and understand license differences. " +
-  "Changing tiers affects which Ollama fallback names the plugin will try.";
+  "Tier 1 (default) limits fallbacks to FOSS-friendly tags. Tier 2 adds open-weight names; Tier 3 can include non-FOSS and unclassified tags when unlocked. Only changes which tags the plugin tries—your host still decides what is installed.";
 
 export function disclosureSummaryForSourceClass(sourceClass: ModelSourceClass): string {
   switch (sourceClass) {

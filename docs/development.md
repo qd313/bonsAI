@@ -5,7 +5,7 @@ This guide is for contributors building and deploying bonsAI from source.
 ## Stack and layout
 
 - Frontend: `src/` (React + TypeScript, Decky UI components)
-- **Unified input refactor (phased):** Progress and definition-of-done live in [refactor-unified-input-tracker.md](refactor-unified-input-tracker.md). Deck measurement, refs, and surface height live in [`src/features/unified-input/useUnifiedInputSurface.ts`](../src/features/unified-input/useUnifiedInputSurface.ts); layout constants in [`src/features/unified-input/constants.ts`](../src/features/unified-input/constants.ts); the main tab JSX in [`src/components/MainTab.tsx`](../src/components/MainTab.tsx).
+- **Unified input refactor (phased, complete):** Archived in [refactor-specialist-sweep.md § Unified input refactor (completed)](refactor-specialist-sweep.md#unified-input-refactor-completed). Deck measurement, refs, and surface height live in [`src/features/unified-input/useUnifiedInputSurface.ts`](../src/features/unified-input/useUnifiedInputSurface.ts); layout constants in [`src/features/unified-input/constants.ts`](../src/features/unified-input/constants.ts); the main tab JSX in [`src/components/MainTab.tsx`](../src/components/MainTab.tsx).
 - Main tab glass styling (unified search shell, ask bar, AI response chunks) lives in the `<style>` block under `.bonsai-scope` in `src/index.tsx` (classes such as `bonsai-glass-panel`, `bonsai-ai-response-chunk`); Decky `TextField` remains the input primitive.
 - **AI character roleplay:** UI catalog and grouping in [`src/data/characterCatalog.ts`](../src/data/characterCatalog.ts); accent intensity labels/options in [`src/data/aiCharacterAccentIntensity.ts`](../src/data/aiCharacterAccentIntensity.ts); per-preset UI accent colors (when used) in [`src/data/characterUiAccent.ts`](../src/data/characterUiAccent.ts); placeholder pixel emoticon grids in [`src/components/characterPlaceholderEmoticonGrids.ts`](../src/components/characterPlaceholderEmoticonGrids.ts); picker in [`src/components/CharacterPickerModal.tsx`](../src/components/CharacterPickerModal.tsx) (including running-game suggestion strip from [`src/utils/runningGameCharacterSuggestions.ts`](../src/utils/runningGameCharacterSuggestions.ts)); system-prompt suffix in [`backend/services/ai_character_service.py`](../backend/services/ai_character_service.py); persisted fields `ai_character_*` in `settings.json` (including `ai_character_accent_intensity`: `subtle` \| `balanced` \| `heavy` \| `unleashed`, default `balanced`).
 - **Input sanitizer:** Phrase constants in [`src/data/inputSanitizerCommands.ts`](../src/data/inputSanitizerCommands.ts) (must match Python); lane + commands in [`backend/services/input_sanitizer_service.py`](../backend/services/input_sanitizer_service.py); persisted `input_sanitizer_user_disabled` (JSON boolean, default effective **false** / sanitizer on) in `settings.json` via `settings_service.py` and `normalizeSettings` in `settingsAndResponse.ts`.
@@ -29,6 +29,8 @@ pnpm install
 pnpm run build
 pnpm run watch
 ```
+
+Regression and on-device smoke before merge or release: [regression-and-smoke.md](regression-and-smoke.md) (automated gates + PR-scoped matrix + Deck checklist).
 
 If Decky UI packages drift:
 

@@ -16,7 +16,6 @@ import {
 } from "../data/ollamaKeepAlive";
 import { AI_CHARACTER_CUSTOM_TEXT_MAX, isValidPresetId } from "../data/characterCatalog";
 import {
-  DEFAULT_MODEL_POLICY_TIER,
   normalizeModelPolicyNonFossUnlocked,
   normalizeModelPolicyTier,
   type ModelPolicyTierId,
@@ -348,5 +347,9 @@ export function buildResponseText(responseText: string, applied?: AppliedResultL
   if (applied.gpu_clock_mhz != null) parts.push(`GPU: ${applied.gpu_clock_mhz} MHz`);
   if (parts.length > 0) text += `\n\n[Applied: ${parts.join(", ")}]`;
   if (applied.errors?.length) text += `\n[Errors: ${applied.errors.join("; ")}]`;
+  else if (parts.length > 0) {
+    text +=
+      "\n\nNote: If Steam's QAM Performance sliders look stale, close and reopen that tab to verify values match what was applied.";
+  }
   return text;
 }

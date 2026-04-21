@@ -64,6 +64,10 @@ Optional **Verbose Ask logging to Desktop notes** (Settings → Desktop notes) a
 4. In bonsAI Settings, point host/base URL to your Ollama server.
 5. Send a test prompt.
 
+## Open bonsAI quickly (Steam Input macro)
+
+From in-game or Home, use a **Guide button chord** to open the Quick Access Menu, move the QAM rail to **Decky**, then open bonsAI. Delays and D-pad step counts depend on your QAM layout — full recipe and tuning tips: **[docs/troubleshooting.md](docs/troubleshooting.md)** (section **5. bonsai shortcut setup**).
+
 ## Set up Ollama (Windows PowerShell)
 
 ### Quick path (repo script)
@@ -130,15 +134,17 @@ If connection fails, start with:
 
 | Topic                                   | Audience                | Doc                                                                              |
 | --------------------------------------- | ----------------------- | -------------------------------------------------------------------------------- |
+| Index of all `docs/*.md` guides         | Contributors            | [docs/README.md](docs/README.md)                                                |
 | Build, deploy, stack, settings keys     | Contributors            | [docs/development.md](docs/development.md)                                       |
 | Network, GPU, permissions, vision setup | Power users             | [docs/troubleshooting.md](docs/troubleshooting.md)                               |
 | Roadmap, shipped vs planned             | Planning / contributors | [docs/roadmap.md](docs/roadmap.md)                                               |
-| Release freeze / Red vs Blue bout (2026-04-20) | Maintainer (judge) | [docs/red-blue-fight-2026-04-20.md](docs/red-blue-fight-2026-04-20.md) — hard freeze through **Sun 2026-04-26**; see roadmap banner. |
+| Release freeze / Red vs Blue bout (2026-04-21) | Maintainer (judge) | [docs/red-blue-fight-2026-04-21.md](docs/red-blue-fight-2026-04-21.md) — hard freeze through **Sun 2026-04-26**; see roadmap banner. |
 | QA matrices, release checks             | QA / contributors       | [docs/prompt-testing.md](docs/prompt-testing.md)                                 |
+| PR regression + Deck smoke checklist    | Contributors / QA       | [docs/regression-and-smoke.md](docs/regression-and-smoke.md)                    |
 | Release notes                           | Everyone                | [CHANGELOG.md](CHANGELOG.md)                                                     |
 | Character catalog (roleplay)            | Contributors / lore     | [docs/voice-character-catalog.md](docs/voice-character-catalog.md)               |
 | Steam Input jump (debug)                | Contributors            | [docs/steam-input-research.md](docs/steam-input-research.md)                     |
 | RAG / KB research (not implemented)     | Contributors            | [docs/rag-sources-research.md](docs/rag-sources-research.md)                     |
-| Unified input refactor tracker          | Contributors            | [docs/refactor-unified-input-tracker.md](docs/refactor-unified-input-tracker.md) |
+| Refactor sweep + unified input (archive) | Contributors            | [docs/refactor-specialist-sweep.md](docs/refactor-specialist-sweep.md#unified-input-refactor-completed) |
 
 

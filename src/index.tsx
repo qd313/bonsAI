@@ -320,18 +320,30 @@ async function callDeckyWithTimeout<Args extends unknown[], Result>(
 }
 
 // Normalize inconsistent Decky RPC error payloads into user-facing message strings.
+// Never append Python tracebacks to chat/toasts; log them to console for local debugging only.
 function formatDeckyRpcError(e: unknown): string {
+  const logTraceback = (base: string, tb: string) => {
+    if (typeof console !== "undefined" && typeof console.error === "function") {
+      console.error("[bonsAI] RPC error (traceback not shown in UI)", base, tb);
+    }
+  };
   if (e instanceof Error) {
     const traceback = (e as Error & { traceback?: string }).traceback;
     const base = e.message || String(e);
-    return traceback ? `${base}\n\n${traceback}` : base;
+    if (typeof traceback === "string" && traceback.trim()) {
+      logTraceback(base, traceback);
+    }
+    return base;
   }
   if (e && typeof e === "object") {
     const o = e as Record<string, unknown>;
     const msg = [o.message, o.error].find((x) => typeof x === "string");
     const tb = typeof o.traceback === "string" ? o.traceback : "";
     if (typeof msg === "string") {
-      return tb ? `${msg}\n\n${tb}` : msg;
+      if (tb.trim()) {
+        logTraceback(msg, tb);
+      }
+      return msg;
     }
   }
   return String(e);
@@ -1434,8 +1446,6 @@ const Content: React.FC = () => {
       app_context: appId ? "active" : "none",
     });
     try {
-      console.log(`[bonsAI] deck -> pc=${ip} game=${JSON.stringify(appName)}(${appId}) question=${JSON.stringify(q)}`);
-
       const data = await call<
         [
           {
@@ -1792,6 +1802,9 @@ const Content: React.FC = () => {
             ask_mode: askMode,
             ollama_keep_alive: ollamaKeepAlive,
             show_debug_tab: showDebugTab,
+            model_policy_tier: modelPolicyTier,
+            model_policy_non_foss_unlocked: modelPolicyNonFossUnlocked,
+            model_allow_high_vram_fallbacks: modelAllowHighVramFallbacks,
           }).catch((err) => {
             console.error("save_settings failed (character picker OK)", err);
           });
@@ -1949,7 +1962,7 @@ const Content: React.FC = () => {
 
   const settingsTab = (
     <div className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight">
-    <PanelSection title="SETTINGS">
+    <PanelSection title="Connection">
       <PanelSectionRow>
         <div
           ref={ollamaIpConnectionNavRef}
@@ -2065,10 +2078,12 @@ const Content: React.FC = () => {
           )}
         </PanelSectionRow>
       )}
+    </PanelSection>
+    <PanelSection title="Ask timing">
       <PanelSectionRow>
         <div className="bonsai-prose-host" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
           <div style={{ fontSize: 13, color: "#d9d9d9", fontWeight: 600, marginBottom: 4 }}>
-            Latency warning and backend timeout
+            Latency warning & timeout
           </div>
           <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", lineHeight: 1.35 }}>
             <span
@@ -2077,18 +2092,18 @@ const Content: React.FC = () => {
                 fontWeight: 700,
               }}
             >
-              Latency warning
+              Warning
             </span>
-            {": slow flag after N seconds. "}
+            {" = flag slow replies. "}
             <span
               style={{
                 color: `var(--bonsai-ui-accent-main, ${BONSAI_UI_ACCENT_MAIN_FALLBACK})`,
                 fontWeight: 700,
               }}
             >
-              Backend timeout
+              Timeout
             </span>
-            {": hard stop if Ollama is not done."}
+            {" = abort if Ollama is still busy."}
           </div>
         </div>
       </PanelSectionRow>
@@ -2105,6 +2120,8 @@ const Content: React.FC = () => {
           onMoveUpFromTimeoutThumb={focusOllamaIpFromTimeoutSlider}
         />
       </PanelSectionRow>
+    </PanelSection>
+    <PanelSection title="Model unload (VRAM)">
       <PanelSectionRow>
         <div className="bonsai-prose-host" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
           <div
@@ -2117,11 +2134,11 @@ const Content: React.FC = () => {
               marginBottom: 4,
             }}
           >
-            Unload delay
+            Ollama keep_alive
           </div>
           <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
-            How long the host keeps the model in <strong>VRAM</strong> after an Ask (Ollama <code>keep_alive</code>).
-            Lower frees <strong>GPU</strong> sooner; higher avoids reload if you Ask again quickly.
+            How long the PC host keeps the model in VRAM after each Ask. Lower frees GPU sooner; higher avoids reload if
+            you Ask again soon.
           </div>
           <OllamaKeepAliveSlider
             value={ollamaKeepAlive}
@@ -2132,6 +2149,8 @@ const Content: React.FC = () => {
           />
         </div>
       </PanelSectionRow>
+    </PanelSection>
+    <PanelSection title="Screenshots">
       <PanelSectionRow>
         <div
           ref={screenshotDimensionNavRef}
@@ -2139,10 +2158,10 @@ const Content: React.FC = () => {
           style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}
         >
           <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 4 }}>
-            Screenshot max dimension
+            Max long edge (vision)
           </div>
           <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
-            Long-edge clamp applied before sending image attachments to vision-capable models.
+            Clamp before sending attachments to vision models.
           </div>
           <Focusable
             flow-children="horizontal"
@@ -2180,17 +2199,19 @@ const Content: React.FC = () => {
           </Focusable>
         </div>
       </PanelSectionRow>
+    </PanelSection>
+    <PanelSection title="Saved text">
       <PanelSectionRow>
         <div className="bonsai-prose-host" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
           <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 4 }}>
-            Unified input persistence
+            Ask / search persistence
           </div>
           <div
             className="bonsai-prose"
             style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}
             title={persistenceSettingsTooltip}
           >
-            Whether the Ask/search box is restored when you reopen the plugin. Hover for mode details.
+            What to restore when you reopen the plugin. Hover for per-mode details.
           </div>
           <Focusable
             flow-children="horizontal"
@@ -2227,14 +2248,18 @@ const Content: React.FC = () => {
           </Focusable>
         </div>
       </PanelSectionRow>
+    </PanelSection>
+    <PanelSection title="Main tab">
       <PanelSectionRow>
         <ToggleField
           label="Preset chip fade animation"
-          description="When off, main-tab suggestion chips stay fully visible and swap prompts without crossfades. Re-seeding after each Ask is unchanged."
+          description="When off, suggestion chips stay opaque and swap text without crossfades. Post-Ask re-seed is unchanged."
           checked={presetChipFadeAnimationEnabled}
           onChange={(checked) => setPresetChipFadeAnimationEnabled(checked)}
         />
       </PanelSectionRow>
+    </PanelSection>
+    <PanelSection title="Character">
       <PanelSectionRow>
         <div
           className="bonsai-settings-ai-character-block"
@@ -2247,7 +2272,7 @@ const Content: React.FC = () => {
         >
           <ToggleField
             label="AI characters"
-            description="Optional character tone for local model replies. Choose a preset, randomize each Ask, or type your own."
+            description="Optional tone for replies: preset, random per Ask, or custom line."
             checked={aiCharacterEnabled}
             onChange={(checked) => setAiCharacterEnabled(checked)}
           />
@@ -2357,8 +2382,7 @@ const Content: React.FC = () => {
     <PanelSection title="Model policy">
       <PanelSectionRow>
         <div style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45, marginBottom: 4 }}>
-          {MODEL_POLICY_SETTINGS_INTRO} Open model (open-weight) means weights are often published for local inference;
-          licenses and training visibility can still differ from Tier 1. Prefer Tier 1 unless you need broader tags.
+          {MODEL_POLICY_SETTINGS_INTRO}
         </div>
       </PanelSectionRow>
       <PanelSectionRow>
@@ -2387,10 +2411,7 @@ const Content: React.FC = () => {
         <div style={{ width: "100%", paddingTop: 14, boxSizing: "border-box" }}>
         <ToggleField
           label="Allow non-FOSS and unclassified Ollama tags (Tier 3)"
-          description={
-            "Required for Tier 3. Unclassified tags are only tried when this is on. " +
-            "Turn off to drop back from Tier 3 to Tier 2."
-          }
+          description="Needed for Tier 3; unclassified tags only run when this is on. Turn off to fall back from Tier 3 to Tier 2."
           checked={modelPolicyNonFossUnlocked}
           onChange={(checked) => {
             setModelPolicyNonFossUnlocked(checked);
@@ -2405,11 +2426,7 @@ const Content: React.FC = () => {
         <div style={{ width: "100%", paddingTop: 12, boxSizing: "border-box" }}>
           <ToggleField
             label="Allow high-VRAM model fallbacks"
-            description={
-              "Appends large Ollama tags (about 27B+ / 31B+ / 38B+ class) after the default chains sized for ~16GB VRAM. " +
-              "May exceed 16GB, load slowly, or cause out-of-memory errors depending on quantization and hardware. " +
-              "Leave off unless you intentionally pull those models on your host."
-            }
+            description="Adds large-model tags after the ~16GB-friendly chain. Can OOM or load slowly—leave off unless you use those tags on purpose."
             checked={modelAllowHighVramFallbacks}
             onChange={(checked) => setModelAllowHighVramFallbacks(checked)}
           />
@@ -2429,7 +2446,7 @@ const Content: React.FC = () => {
       <PanelSectionRow>
         <ToggleField
           label="Show Debug tab"
-          description="Adds the Debug tab to the Quick Access strip (logs, captured errors, Steam Input jump). Off by default for typical use."
+          description="Shows Debug on the tab strip (logs, errors, Steam Input jump). Off by default."
           checked={showDebugTab}
           onChange={(checked) => setShowDebugTab(checked)}
         />
@@ -2441,9 +2458,8 @@ const Content: React.FC = () => {
               <ConfirmModal
                 strTitle="Clear session cache?"
                 strDescription={
-                  "Clears the unified search field, current AI reply, thread history, input transparency, " +
-                  "strategy branch picker, attached screenshot selection, and timers. " +
-                  "Saved settings, Ollama on the PC, and screenshot files are not changed."
+                  "Clears in-memory session: search field, reply, thread, transparency, branch picker, attachments, timers. " +
+                  "Does not change saved settings, Ollama, or screenshot files."
                 }
                 strOKButtonText="Clear"
                 onOK={() => {
@@ -2461,10 +2477,7 @@ const Content: React.FC = () => {
       <PanelSectionRow>
         <ToggleField
           label="Auto-save chat to Desktop notes"
-          description={
-            "Appends each Ask and each AI reply to Desktop/BonsAI_notes/bonsai-chat-YYYY-MM-DD.md (UTC day). " +
-            "Requires Filesystem writes in the Permissions tab."
-          }
+          description="Appends each Ask and reply to Desktop/BonsAI_notes/bonsai-chat-YYYY-MM-DD.md (UTC). Needs Filesystem writes (Permissions)."
           checked={desktopDebugNoteAutoSave}
           onChange={(checked) => setDesktopDebugNoteAutoSave(checked)}
         />
@@ -2473,9 +2486,8 @@ const Content: React.FC = () => {
         <ToggleField
           label="Verbose Ask logging to Desktop notes"
           description={
-            "When on and Filesystem writes are allowed, appends full prompts (system + user text), model name, " +
-            "and replies to Desktop/BonsAI_notes/bonsai-ask-trace-YYYY-MM-DD.md (UTC day). " +
-            "May grow large; contains sensitive prompt text. View the latest trace on the main tab under Input handling."
+            "With Filesystem writes, appends full prompts, model name, and replies to Desktop/BonsAI_notes/bonsai-ask-trace-YYYY-MM-DD.md. " +
+            "Large / sensitive—see Main → Input handling for the latest trace."
           }
           checked={desktopAskVerboseLogging}
           onChange={(checked) => setDesktopAskVerboseLogging(checked)}

@@ -19,7 +19,7 @@ You are **Red Team**: counsel whose client is **the release** — calendar integ
 
 ## Legal-report / bout workflow
 
-When invoked for [docs/red-blue-fight-2026-04-20.md](../../docs/red-blue-fight-2026-04-20.md):
+When invoked for [docs/red-blue-fight-2026-04-21.md](../../docs/red-blue-fight-2026-04-21.md):
 
 1. Draft **opening argument** (ship bar, risk, why deferrals help users this week).
 2. Address **issues / findings** with a release lens (what to cut, what to finish minimally).

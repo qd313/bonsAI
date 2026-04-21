@@ -278,10 +278,7 @@ def post_ollama_chat(
             )
             if attachment_warnings:
                 logger.info("ask_ollama: attachment warnings: %s", "; ".join(attachment_warnings))
-            logger.info(
-                "ask_ollama: OK model=%s response_len=%d first_200=%r",
-                model_name, len(text), text[:200],
-            )
+            logger.info("ask_ollama: OK model=%s response_len=%d", model_name, len(text))
             return {
                 "success": True,
                 "response": text,
@@ -291,9 +288,18 @@ def post_ollama_chat(
             }
     except urllib.error.HTTPError as e:
         body = e.read().decode("utf-8", errors="replace")
+        logger.warning(
+            "ask_ollama: HTTPError code=%s model=%s body_len=%d",
+            e.code,
+            model_name,
+            len(body),
+        )
         return {
             "success": False,
-            "response": f"HTTP {e.code} from {url} using model '{model_name}': {body}",
+            "response": (
+                f"Ollama returned HTTP {e.code} for model '{model_name}'. "
+                "Check the host Ollama log; the full error body is not copied into the chat UI."
+            ),
             "status": e.code,
             "body": body,
         }
@@ -308,10 +314,14 @@ def post_ollama_chat(
             }
         return {
             "success": False,
-            "response": f"Failed to reach {url} using model '{model_name}': {e}",
+            "response": (
+                f"Could not reach Ollama at the configured host for model '{model_name}'. "
+                "Verify PC IP, firewall, and that Ollama is listening."
+            ),
         }
     except Exception as e:
+        logger.exception("ask_ollama: unexpected error model=%s", model_name)
         return {
             "success": False,
-            "response": f"Failed to reach {url} using model '{model_name}': {e}",
+            "response": f"Ollama request failed for model '{model_name}'. Check the Deck plugin log.",
         }

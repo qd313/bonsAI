@@ -72,3 +72,38 @@ Report format follows `.cursor/agents/refactor-specialist.md` (Sweep / Planning 
 ## Trade-offs
 
 - **Canonical paths only:** No root wrapper scripts for `build.ps1`; `.cursorrules` and docs now reference `./scripts/build.ps1` (or `.\scripts\build.ps1` on Windows) for clarity and a single source of truth.
+
+---
+
+## Unified input refactor (completed)
+
+> **Former tracker:** Progress lived in `docs/refactor-unified-input-tracker.md` (now a one-line redirect). This section is the archived snapshot.
+
+Phased work backed plans under `.cursor/plans` (unified input / main tab scope). **All phases A–C and doc hooks are done** (as of 2026-04-14). **Phase D** (optional `.bonsai-scope` CSS extract) remains **not started** if layout pain returns.
+
+### Rules (historical)
+
+1. **One phase at a time** — Do not start Phase B until Phase A is done and verified; do not start C until B is done and verified.
+2. **Done means** — Merged change + `pnpm test` + `pnpm run build` + `./scripts/build.ps1` or `./scripts/build.sh` when Deck UI changes + short on-device check (unified input wrap, caret, Ask width, D-pad focus, OSK).
+3. **If you pause** — Record **Paused at** and **Blockers / next steps** in a PR or planning artifact (this section is closed).
+4. **Optional work** — Phase C was optional after B was stable. Phase D only if still painful after A–C.
+
+### Final status
+
+| Phase | Status | Last updated |
+|-------|--------|----------------|
+| A — Extract `UNIFIED_*` / `ASK_*` constants (+ optional `splitResponseIntoChunks`) | done | 2026-04-14 |
+| B — Extract `useUnifiedInputSurface` (remeasure, refs, surface state) | done | 2026-04-14 |
+| Verify — Deck smoke after A | done | 2026-04-14 (`pnpm test`, `pnpm run build`, `scripts/build.ps1`) |
+| Verify — Deck smoke after B | done | 2026-04-14 (same; on-device caret/Ask/focus per contributor) |
+| C — Optional `MainTab.tsx` | done | 2026-04-14 |
+| D — Defer: optional `.bonsai-scope` CSS extract | not started | — |
+| Docs — CHANGELOG + `development.md` pointer (if B+ ships) | done | 2026-04-14 |
+
+### Where the code lives
+
+- Deck measurement, refs, surface height: [`src/features/unified-input/useUnifiedInputSurface.ts`](../src/features/unified-input/useUnifiedInputSurface.ts)
+- Layout constants: [`src/features/unified-input/constants.ts`](../src/features/unified-input/constants.ts)
+- Main tab JSX: [`src/components/MainTab.tsx`](../src/components/MainTab.tsx)
+
+See [development.md](development.md) for general Deck plugin dev notes.

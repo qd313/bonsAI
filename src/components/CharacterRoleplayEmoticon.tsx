@@ -82,13 +82,13 @@ export function CharacterRoleplayEmoticon(props: CharacterRoleplayEmoticonProps)
       viewBox={`0 0 ${cellsPerSide} ${cellsPerSide}`}
       className={className}
       aria-hidden={title ? undefined : true}
-      title={title}
       style={{
         imageRendering: "pixelated",
         flexShrink: 0,
         display: "block",
       }}
     >
+      {title ? <title>{title}</title> : null}
       {cells.map((ch, i) => {
         if (ch === ".") return null;
         const idx = parseInt(ch, 16);

@@ -2,10 +2,13 @@ import os
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from backend.services.desktop_note_service import (
+    DESKTOP_NOTE_WRITE_OS_ERROR_MESSAGE,
     append_desktop_ask_transparency_sync,
     append_desktop_chat_event_sync,
+    append_desktop_debug_note_sync,
     append_markdown_note,
     resolve_bonsai_notes_dir,
     sanitize_note_stem,
@@ -58,6 +61,48 @@ class DesktopNoteServiceTests(unittest.TestCase):
                 append_markdown_note(notes_dir=notes_dir, stem="x", question="", response="a")
             with self.assertRaises(ValueError):
                 append_markdown_note(notes_dir=notes_dir, stem="x", question="q", response="")
+
+    def test_append_desktop_debug_note_valueerror_returns_validation_text(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            home = tmp
+            r = append_desktop_debug_note_sync(home, "stem", "", "only response")
+            self.assertFalse(r.get("ok"))
+            self.assertEqual(r.get("error"), "Question text is required.")
+
+    def test_append_desktop_debug_note_oserror_returns_generic_message(self):
+        real_open = open
+
+        def open_append_raises(path, mode="r", *args, **kwargs):
+            if mode == "a":
+                raise OSError(13, "Permission denied", "/secret/path/note.md")
+            return real_open(path, mode, *args, **kwargs)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            home = tmp
+            notes_dir = os.path.join(home, "Desktop", "BonsAI_notes")
+            os.makedirs(notes_dir, exist_ok=True)
+            with patch("backend.services.desktop_note_service.open", side_effect=open_append_raises):
+                r = append_desktop_debug_note_sync(home, "my_note", "Q?", "R.")
+            self.assertFalse(r.get("ok"))
+            self.assertEqual(r.get("error"), DESKTOP_NOTE_WRITE_OS_ERROR_MESSAGE)
+            self.assertNotIn("Permission denied", r.get("error", ""))
+            self.assertNotIn("/secret", r.get("error", ""))
+
+    def test_append_chat_event_oserror_returns_generic_message(self):
+        real_open = open
+
+        def open_append_raises(path, mode="r", *args, **kwargs):
+            if mode == "a":
+                raise OSError(5, "I/O error", "/other/secret.md")
+            return real_open(path, mode, *args, **kwargs)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            home = tmp
+            os.makedirs(os.path.join(home, "Desktop", "BonsAI_notes"), exist_ok=True)
+            with patch("backend.services.desktop_note_service.open", side_effect=open_append_raises):
+                r = append_desktop_chat_event_sync(home, "ask", question="Hi?", response_text="")
+            self.assertFalse(r.get("ok"))
+            self.assertEqual(r.get("error"), DESKTOP_NOTE_WRITE_OS_ERROR_MESSAGE)
 
     def test_append_chat_event_ask_and_response_same_day_file(self):
         with tempfile.TemporaryDirectory() as tmp:

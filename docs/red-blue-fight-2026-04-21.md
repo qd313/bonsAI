@@ -15,6 +15,16 @@ Release priorities for the imminent ship week are argued here under **counsel (R
 
 ---
 
+## Content tuning approvals (freeze-compatible)
+
+The following changes are **content / data only** (no logic, schema, RPC, permissions, capability gating, or runtime behavior changes) and are **approved by the human judge** as freeze-week-compatible during the 2026-04-21 → 2026-04-26 window.
+
+- **2026-04-24 — Preset chip refresh** ([src/data/presets.ts](../src/data/presets.ts)):
+  - **What:** Rephrase shipped chips to **advice-first questions** (battery, TDP, performance, FSR, GPU clock); keep action wording only for strong shipped features (Steam Input jump, screenshot vision V1); drop chips that overstate what bonsAI can change without trading cooling or performance (fan noise, long-session thermal); add bonsAI-feature chips (slow-Ollama diagnosis, model policy tier explainer, Ollama model fit, Deck-running-hot diagnosis); add eight `beta: true` chips: quiet fan profile (QAMP), Proton log, Steam Input layout, which Ollama models for bonsAI, how to use strategy mode, spoiler-safe tips, `VAC bans on opponents?`, suggest mods/tweaks (restored).
+  - **Why:** Guide users into a *question* before any hardware action so the AI advises first and the user opts into apply during chat; surface bonsAI's strongest shipped surfaces and tease roadmap items honestly without implying they ship this window.
+  - **Scope:** [src/data/presets.ts](../src/data/presets.ts) `PRESET_PROMPTS` only. No type, function, follow-up category, keyword, schema, RPC, or runtime change. [src/data/presets.test.ts](../src/data/presets.test.ts) passes unchanged. CHANGELOG updated under `[Unreleased]` → `### Changed`.
+  - **Approval:** Maintainer approved 2026-04-24 — content tuning falls inside the freeze's `No new features` exception narrowly: no behavior added, only chip text/list changed; chip routing/category logic unchanged.
+
 ## Red Team — opening argument
 
 **Counsel for release / risk (Petitioner):** *(Draft here.)*

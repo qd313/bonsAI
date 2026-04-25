@@ -24,6 +24,16 @@ describe("presets", () => {
     expect(presets.length).toBe(3);
   });
 
+  it("with TEMP_PRESET_CAROUSEL_FROZEN, all three chips match the fixed testing triple (random and contextual)", () => {
+    const want = [
+      "Why is my game crashing?",
+      "How do I fix stuttering?",
+      "Help me troubleshoot a Proton issue",
+    ] as const;
+    expect(getRandomPresets(3).map((p) => p.text)).toEqual([...want]);
+    expect(getContextualPresets("performance", 3).map((p) => p.text)).toEqual([...want]);
+  });
+
   it("holdMsForPresetText clamps by length", () => {
     expect(holdMsForPresetText("a")).toBe(8000);
     expect(holdMsForPresetText("x".repeat(200))).toBe(32000);

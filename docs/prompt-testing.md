@@ -13,6 +13,17 @@ Related planning (not yet implemented): future prompt policy, search UX, and Ste
 - **PASS** - AI responded correctly and action (if any) was applied
 - **FAIL** - Wrong answer, hallucination, or action not applied
 - **PARTIAL** - Correct idea but formatting/parsing issue prevented full success
+- **PENDING** - Row reserved for a ship-window / on-device run; update Model, Status, and Notes after testing
+
+### Current frozen preset carousel (temporary dev only)
+
+While **`TEMP_PRESET_CAROUSEL_FROZEN`** is `true` in `src/data/presets.ts`, the main-tab **three** suggestion chips are fixed in order (not random, not contextual follow-up), using shipped `PRESET_PROMPTS` strings and **`TEMP_CAROUSEL_FROZEN_TEXTS`**:
+
+1. `Why is my game crashing?` (checklist: with game running — reference the game by name)
+2. `How do I fix stuttering?` (checklist: TDP / FSR / framerate-cap style advice)
+3. `Help me troubleshoot a Proton issue` (checklist: general Proton advice)
+
+- **Remove** `TEMP_PRESET_CAROUSEL_FROZEN` (and the `applyTempFrozenCarousel` calls in `getRandomPresets` / `getContextualPresets`) when this round of testing is done.
 
 ## Test Results
 
@@ -23,6 +34,7 @@ Related planning (not yet implemented): future prompt policy, search UX, and Ste
 | 3 | Left 4 Dead 2 | "Set my TDP to 8 watts" | JSON block `{"tdp_watts": 8}`, sysfs write | llama3:latest | PASS | Backend wrote 8W via steamos-priv-write |
 | 4 | Left 4 Dead 2 | "Set my TDP to 6 watts" | JSON block `{"tdp_watts": 6}`, sysfs write | llama3:latest | PASS | Confirmed via journalctl: 6000000 written to power1_cap |
 | 5 | Left 4 Dead 2 | "Optimize for battery life" | Low TDP (3-6W) with JSON block | llama3:latest | FAIL | Gave generic Steam Deck instructions, no JSON block (before game context was wired up) |
+| 6 | Game running (track title per session) | "Recommended TDP for this game?" | TDP recommendation with fenced JSON (`tdp_watts` 3–15W per backend clamp) | *record after run* | PASS | Intended response on-device; in the TDP / Performance list below, mark ✓ for pass and ✗ for fail. If TDP was applied, complete the **QAMP Verification (Phase 1)** checklist in this file. |
 
 ## Release Notes
 
@@ -58,9 +70,11 @@ Related planning (not yet implemented): future prompt policy, search UX, and Ste
 ## Prompts Still Needing Testing
 
 ### TDP / Performance
-- [ ] "Recommended TDP for this game?" (with game running — should give JSON block)
-- [ ] "Max performance for this game" (should suggest high TDP with JSON block)
-- [ ] "Best settings for 60fps" (should include TDP recommendation with JSON block)
+- [✓] "Recommended TDP for this game?" (with game running — should give JSON block) — **tracked as [Test Results #6](#test-results)**
+- [✓] "What's the efficiency sweet spot for this game?" (done — balanced TDP / JSON; chip freeze moved on)
+- [✓] "What are the best settings for 60fps?" (prior freeze round — TDP / tuning guidance, JSON when recommending watts)
+- [ ] "What GPU clock should I use?" (advisory; no sysfs GPU write)
+- [ ] "How can I optimize for battery life?" (low TDP JSON when applicable)
 - [ ] "Set TDP to 15 watts" (max boundary — should clamp at 15W)
 - [ ] "Set TDP to 3 watts" (min boundary — should clamp at 3W)
 - [ ] "Set TDP to 1 watt" (below min — should clamp to 3W)
@@ -68,29 +82,29 @@ Related planning (not yet implemented): future prompt policy, search UX, and Ste
 - [ ] "Lower my TDP by 2 watts" (relative adjustment — may not parse yet)
 
 ### GPU Clock (Advisory)
-- [ ] "What GPU clock should I use?" (should recommend a value but NOT auto-apply — sysfs write not yet implemented)
+- [✓] "What GPU clock should I use?" (should recommend a value but NOT auto-apply — sysfs write not yet implemented)
 - [ ] "Set GPU clock to 800 MHz" (verify JSON includes `gpu_clock_mhz` field; backend logs value but does not write)
 
 ### Battery Optimization
-- [ ] "Optimize for battery life" (with game running — should give low TDP JSON block)
-- [ ] "Balance FPS and battery" (with game running — should give moderate TDP)
-- [ ] "Set TDP to minimum for menu/idle" (should suggest 3W JSON block)
-- [ ] "Best settings for 30fps with max battery" (with game running)
-- [ ] "Optimize for battery life" (NO game running — should give general advice, no JSON block)
+- [✓] "Optimize for battery life" (with game running — should give low TDP JSON block)
+- [✓] "Balance FPS and battery" (with game running — should give moderate TDP) (`How do I balance FPS and battery?`)
+- [ ] "Set TDP to minimum for menu/idle" (should suggest 3W JSON block) (`What TDP should I use for menus and idle?`)
+- [✓] "Best settings for 30fps with max battery" (with game running) (`What are the best settings for 30fps with max battery?`)
+- [✓] "Optimize for battery life" (NO game running — should give general advice, no JSON block) (`How can I optimize for battery life?`)
 
 ### Thermal
-- [ ] "Reduce fan noise" (should suggest lower TDP to reduce thermal load)
-- [ ] "Best thermal settings for long play sessions" (should give conservative TDP advice)
+- [✓] "Reduce fan noise" (should suggest lower TDP to reduce thermal load) (`How can I reduce fan noise?`)
+- [✓] "Best thermal settings for long play sessions" (should give conservative TDP advice) (`What are the best thermal settings for long play sessions?`)
 
 ### General / Compatibility
-- [ ] "What settings should I use?" (with game running — should give game-specific advice)
-- [ ] "Any known issues running this on Deck?" (open-ended — should not hallucinate a binary verified/not-verified status)
-- [ ] "How well does this game run on Deck?" (open-ended compatibility advice)
+- [✓] "What settings should I use?" (with game running — should give game-specific advice) (`What settings should I use?`)
+- [✓] "Any known issues running this on Deck?" (open-ended — should not hallucinate a binary verified/not-verified status) (`Any known issues running this on Deck?`)
+- [✓] "How well does this game run on Deck?" (open-ended compatibility advice) (`How well does this game run on Deck?`)
 
 ### Troubleshooting / Proton
-- [ ] "Why is my game crashing?" (with game running — should reference the game by name)
-- [ ] "How do I fix stuttering?" (should suggest TDP/FSR/framerate-cap advice)
-- [ ] "Help me troubleshoot a Proton issue" (general Proton advice)
+- [✓] "Why is my game crashing?" (with game running — should reference the game by name) — **1st frozen chip** (`Why is my game crashing?`)
+- [✓] "How do I fix stuttering?" (should suggest TDP/FSR/framerate-cap advice) — **2nd frozen chip** (`How do I fix stuttering?`)
+- [✓] "Help me troubleshoot a Proton issue" (general Proton advice) — **3rd frozen chip** (`Help me troubleshoot a Proton issue`)
 - [ ] "Game won't launch, what should I check?" (general troubleshooting checklist)
 
 ### Controls
@@ -99,10 +113,10 @@ Related planning (not yet implemented): future prompt policy, search UX, and Ste
 
 ### General Knowledge / Edge Cases
 - [ ] "What game am I playing?" (should name the running game)
-- [ ] "What is my current TDP?" (we don't read it back yet — should say so)
+- [x] "What is my current TDP?" (we don't read it back yet — should say so) **failed: i had my tdp at 15, it then force set it to 7 watts and then read back 7 watts**
 - [ ] Non-English input (should still respond in English)
 - [ ] Very long prompt (stress test)
-- [ ] Empty-ish prompts like "hi" or "help"
+- [✓] Empty-ish prompts like "hi" or "help"
 - [ ] Prompt with no game running asking for TDP optimization (should give generic advice, not hallucinate a game)
 
 ---

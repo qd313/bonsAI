@@ -21,12 +21,103 @@ def _user_wants_power_or_performance_topic(question: str) -> bool:
             r"gpu\s*clock|\bmhz\b|\bgpu\b|thermal|overclock|underclock|\bapu\b|"
             r"battery(\s+life|\s+drain|\s+saving)?|"
             r"power\s*(limit|cap|saving|profile|draw)|"
-            r"stutter|stuttering|boost\s*mode"
+            r"stutter|stuttering|boost\s*mode|"
+            r"efficiency|sweet\s*spot"
             r")\b",
             q,
             flags=re.IGNORECASE,
         )
     )
+
+
+def _user_asks_sweet_spot_tuning(question: str) -> bool:
+    """True when the user asks for an efficiency / performance sweet spot (QAM-oriented copy)."""
+    s = (question or "").lower()
+    if "sweet spot" in s:
+        return True
+    return "efficiency" in s and "spot" in s
+
+
+SWEET_SPOT_QAM_LINE = (
+    "\n\nDECK TUNING (efficiency / sweet spot): The user wants a practical balance for the running game. "
+    "Answer using the same levers as **Steam Quick Access (⋯) → Performance**: "
+    "**Framerate limit** (target Hz or off), **TDP limit** (watts), and **GPU clock** (automatic vs manual MHz). "
+    "Recommend concrete values for all three when possible. Put TDP and manual GPU clock into the required JSON when you change them; "
+    "state the framerate cap clearly in the prose (this plugin JSON has no FPS field).\n"
+)
+
+GRAPHICS_RESOLUTION_SPEED = (
+    "\n\nDISPLAY TARGETS (Speed mode): This ask is about graphics or performance tuning on Deck. "
+    "The device may be used at **1280×800** (built-in panel), **1080p** on an external display, or **4K**. "
+    "In **one reply**, give **separate labeled guidance for all three** (clear headings: 1280×800, 1080p, 4K), including "
+    "in-game options, **Quick Access → Performance** levers where relevant, and the required JSON when you change TDP or GPU MHz.\n"
+)
+
+GRAPHICS_RESOLUTION_STRATEGY = (
+    "\n\nDISPLAY TARGETS (Strategy mode): Do **not** give full triple-resolution tuning tables in this first reply. "
+    "Use the required ```bonsai-strategy-branches``` fence with **exactly four** options: **a, b, c** = **1280×800**, **1080p**, **4K** (short, clear labels); "
+    "**d** = a custom entry with **exact JSON** `\"id\":\"d\"` and a short label like **Enter your own** (or **Type my resolution**). "
+    "The plugin turns option **d** into a button that only opens the text field with a starter line—do not describe that UI behavior in the visible prose. "
+    "If the message is only about **FPS, settings, TDP, or GPU** (not a gameplay beat or location), the branch question must be "
+    "about that display choice — do **not** default to a story or progress branch. "
+    "Save detailed per-target advice for after they pick a, b, or c, or after they send a follow-up with a custom resolution from **d**.\n"
+)
+
+GRAPHICS_RESOLUTION_DEEP = (
+    "\n\nDISPLAY TARGETS (Expert / Deep mode): Give **concrete recommendations for all three** outputs—**1280×800**, **1080p**, and **4K**—in separate labeled sections. "
+    "Then **end** with a follow-up that lists **(1) 1280×800 (2) 1080p (3) 4K (4) Enter your own** — for (4) tell the user they can describe their exact display in the next message, "
+    "starting with **My resolution is:** … (Strategy mode on Deck also exposes this as a branch button **d**). "
+    "Ask which target to refine next, or to send their custom line.\n"
+)
+
+
+def _user_asks_resolution_relevant_performance(question: str) -> bool:
+    """Graphics / FPS tuning where output resolution variant matters (matches shipped performance presets)."""
+    s = (question or "").lower()
+    if re.search(r"best settings for \d+\s*fps", s):
+        return True
+    if re.search(r"\bhow do i balance fps and battery\b", s):
+        return True
+    if "gpu clock" in s:
+        return True
+    if re.search(r"\bfsr\b", s):
+        return True
+    if re.search(r"\brecommended tdp\b", s) and "this game" in s:
+        return True
+    return False
+
+
+def _user_asks_deck_troubleshooting_or_compat_line(question: str) -> bool:
+    """General compatibility / Proton / stability prompts (shipped main-tab presets, prompt-testing group)."""
+    s = (question or "").lower()
+    if "what settings should i use" in s:
+        return True
+    if "any known issues" in s and "deck" in s:
+        return True
+    if "how well does this game run" in s and "deck" in s:
+        return True
+    if "why is my game crashing" in s:
+        return True
+    if re.search(r"\b(how do i fix stuttering|fix stuttering)\b", s):
+        return True
+    if "troubleshoot" in s and "proton" in s:
+        return True
+    if re.search(r"\bgame won'?t launch\b", s) and "check" in s:
+        return True
+    if "proton issue" in s:
+        return True
+    return False
+
+
+DECK_TROUBLESHOOT_GAME_SETTINGS_LINE = (
+    "\n\nDECK TROUBLESHOOTING (game in focus): The user is asking about settings, how the title runs, crashes, stutter, Proton, or launch. "
+    "The plugin cannot run a web browser or live web search. Use **established, widely repeated** public compatibility guidance (for example the "
+    "kinds of tips players share on ProtonDB and Steam Deck community threads), phrased as *often reported* or *commonly tried* — and **state uncertainty** when you are not sure. "
+    "Do **not** claim to have used Google, performed a real-time search, or read the web today. "
+    "When a **game title** is provided above, add a **dedicated short section** on **in-game and launcher** options, Windows/Linux port quirks, and anti-cheat/DRM that are **frequently** tied to that kind of problem on Deck (e.g. graphics API, fullscreen mode, EAC, shader cache, VSync, frame-gen, or game-specific options). "
+    "Tie what you name to the **user’s specific symptom** (crash, stutter, Proton, won’t launch) where possible. "
+    "On STRATEGY first-turn messages that end with a ```bonsai-strategy-branches``` fence, put that guidance only in the **visible** text **above** the fence; the branch fence must remain the **last** characters of the reply.\n"
+)
 
 
 def build_system_prompt(
@@ -137,7 +228,19 @@ def build_system_prompt(
     )
 
     if ask_mode != "strategy":
-        return core_identity + game_context + hardware_tdp_appendix
+        sweet = _user_asks_sweet_spot_tuning(question)
+        gfx = ""
+        if _user_asks_resolution_relevant_performance(question):
+            gfx = GRAPHICS_RESOLUTION_DEEP if ask_mode == "deep" else GRAPHICS_RESOLUTION_SPEED
+        troubleshoot = app_name.strip() and _user_asks_deck_troubleshooting_or_compat_line(question)
+        return (
+            core_identity
+            + game_context
+            + hardware_tdp_appendix
+            + (SWEET_SPOT_QAM_LINE if sweet else "")
+            + gfx
+            + (DECK_TROUBLESHOOT_GAME_SETTINGS_LINE if troubleshoot else "")
+        )
 
     power_topic = _user_wants_power_or_performance_topic(question)
     followup = is_strategy_followup_question(question)
@@ -199,6 +302,12 @@ def build_system_prompt(
                 "Do not output the ```json TDP/GPU recommendation block on this reply. Focus on gameplay coaching and the branch fence.\n"
             )
 
+    if ask_mode == "strategy" and _user_asks_resolution_relevant_performance(question):
+        out += GRAPHICS_RESOLUTION_STRATEGY
+    if _user_asks_sweet_spot_tuning(question):
+        out += SWEET_SPOT_QAM_LINE
+    if app_name.strip() and _user_asks_deck_troubleshooting_or_compat_line(question):
+        out += DECK_TROUBLESHOOT_GAME_SETTINGS_LINE
     return out
 
 

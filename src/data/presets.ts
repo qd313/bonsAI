@@ -12,17 +12,37 @@ export type PresetPrompt = {
   preferAskMode?: AskModeId;
 };
 
+/**
+ * **TEMP (manual testing only):** When `TEMP_PRESET_CAROUSEL_FROZEN`, the main-tab preset
+ * carousel uses **all three** fixed prompts (left / middle / right) and ignores random
+ * or contextual shuffling. Remove the flag and `applyTempFrozenCarousel` when done testing.
+ * See `docs/prompt-testing.md` for the current frozen set.
+ */
+export const TEMP_PRESET_CAROUSEL_FROZEN = true;
+
+/**
+ * Shipped `PRESET_PROMPTS.text` values in chip order: slot1, slot2, slot3.
+ * Must match entries in `PRESET_PROMPTS` (same strings).
+ */
+export const TEMP_CAROUSEL_FROZEN_TEXTS: readonly [string, string, string] = [
+  "Why is my game crashing?",
+  "How do I fix stuttering?",
+  "Help me troubleshoot a Proton issue",
+] as const;
+
 const PRESET_PROMPTS: PresetPrompt[] = [
   // Shipped — advice-first questions (TDP/GPU guidance); action only for strong shipped surfaces.
   { text: "How can I optimize for battery life?", category: "battery" },
   { text: "How do I balance FPS and battery?", category: "battery" },
   { text: "What TDP should I use for menus and idle?", category: "battery" },
   { text: "What are the best settings for 30fps with max battery?", category: "battery" },
-  { text: "How can I get max performance for this game?", category: "performance" },
+  { text: "What's the efficiency sweet spot for this game?", category: "performance" },
   { text: "What are the best settings for 60fps?", category: "performance" },
   { text: "Recommended TDP for this game?", category: "performance" },
   { text: "What GPU clock should I use?", category: "performance" },
   { text: "What are the best FSR settings?", category: "performance" },
+  { text: "How can I reduce fan noise?", category: "thermal" },
+  { text: "What are the best thermal settings for long play sessions?", category: "thermal" },
   { text: "Why is my Deck running hot?", category: "thermal" },
   { text: "Recommended controller layout?", category: "controls" },
   { text: "How can I reduce input lag?", category: "controls" },
@@ -32,6 +52,8 @@ const PRESET_PROMPTS: PresetPrompt[] = [
   { text: "Help me troubleshoot a Proton issue", category: "troubleshooting" },
   { text: "Game won't launch, what should I check?", category: "troubleshooting" },
   { text: "Diagnose a slow Ollama response", category: "troubleshooting" },
+  { text: "What settings should I use?", category: "general" },
+  { text: "Any known issues running this on Deck?", category: "general" },
   { text: "How well does this game run on Deck?", category: "general" },
   { text: "Describe what you see in this screenshot", category: "general" },
   { text: "What does my model policy tier mean?", category: "general" },
@@ -85,6 +107,27 @@ const CATEGORY_KEYWORDS: [string, string[]][] = [
   ],
 ];
 
+/**
+ * When `TEMP_PRESET_CAROUSEL_FROZEN` and `count === 3`, replace the triple with
+ * `TEMP_CAROUSEL_FROZEN_TEXTS` in order. Shared by random and contextual seed paths.
+ */
+function applyTempFrozenCarousel(picked: PresetPrompt[], count: number): PresetPrompt[] {
+  if (!TEMP_PRESET_CAROUSEL_FROZEN || count < 3 || picked.length < 3) {
+    return picked;
+  }
+  const resolved: PresetPrompt[] = [];
+  for (const text of TEMP_CAROUSEL_FROZEN_TEXTS) {
+    const p = PRESET_PROMPTS.find((x) => x.text === text);
+    if (p) {
+      resolved.push(p);
+    }
+  }
+  if (resolved.length === 3) {
+    return resolved;
+  }
+  return picked;
+}
+
 export function getRandomPresets(count: number): PresetPrompt[] {
   /** Shuffle and return a bounded random subset of starter prompts. */
   const pool = [...PRESET_PROMPTS];
@@ -92,7 +135,11 @@ export function getRandomPresets(count: number): PresetPrompt[] {
     const j = Math.floor(Math.random() * (i + 1));
     [pool[i], pool[j]] = [pool[j], pool[i]];
   }
-  return pool.slice(0, count);
+  const sliced = pool.slice(0, count);
+  if (count === 3) {
+    return applyTempFrozenCarousel(sliced, count);
+  }
+  return sliced;
 }
 
 /** Milliseconds to keep a preset fully visible after fade-in; scales with text length (clamped). */
@@ -137,7 +184,7 @@ export function getContextualPresets(lastCategory: string, count: number): Prese
     used.add(choice.text);
   }
 
-  return picked;
+  return count === 3 ? applyTempFrozenCarousel(picked, count) : picked;
 }
 
 export function detectPromptCategory(question: string): string {

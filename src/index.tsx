@@ -75,7 +75,11 @@ import {
   resolveUiAccentFromCharacterSettings,
 } from "./data/characterUiAccent";
 import { detectPromptCategory, getContextualPresets, getRandomPresets, type PresetPrompt } from "./data/presets";
-import { STRATEGY_FOLLOWUP_PREFIX } from "./data/strategyGuideFollowup";
+import {
+  CUSTOM_RESOLUTION_INPUT_PREFIX,
+  isStrategyCustomResolutionBranch,
+  STRATEGY_FOLLOWUP_PREFIX,
+} from "./data/strategyGuideFollowup";
 import {
   INPUT_SANITIZER_COMMAND_DISABLE,
   INPUT_SANITIZER_COMMAND_ENABLE,
@@ -1561,6 +1565,26 @@ const Content: React.FC = () => {
   };
 
   const onStrategyBranchPick = (opt: { id: string; label: string }) => {
+    if (isStrategyCustomResolutionBranch(opt)) {
+      setStrategyGuideBranches(null);
+      setUnifiedInput(CUSTOM_RESOLUTION_INPUT_PREFIX);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          const root = unifiedInputFieldLayerRef.current ?? unifiedInputHostRef.current;
+          if (!root) return;
+          const field = root.querySelector<HTMLTextAreaElement | HTMLInputElement>("textarea, input");
+          if (!field) return;
+          field.focus();
+          const len = field.value.length;
+          try {
+            field.setSelectionRange(len, len);
+          } catch {
+            // decky field quirks
+          }
+        });
+      });
+      return;
+    }
     if (lastExchange?.question?.trim() && lastExchange?.answer?.trim()) {
       const qn = lastExchange.question.trim();
       if (lastFlushedExchangeQuestionRef.current !== qn) {
@@ -2497,10 +2521,64 @@ const Content: React.FC = () => {
     </div>
   );
 
+  /** Persist immediately: Decky can unmount `Content` when the disclaimer modal closes, which drops in-memory state and cancels the debounced save. */
+  const onConfirmEnableHardwareControl = useCallback(() => {
+    setCapabilities((prev) => {
+      const next = { ...prev, hardware_control: true };
+      void call<[BonsaiSettings], BonsaiSettings>("save_settings", {
+        latency_warning_seconds: latencyWarningSeconds,
+        request_timeout_seconds: requestTimeoutSeconds,
+        unified_input_persistence_mode: unifiedInputPersistenceMode,
+        screenshot_max_dimension: screenshotMaxDimension,
+        desktop_debug_note_auto_save: desktopDebugNoteAutoSave,
+        desktop_ask_verbose_logging: desktopAskVerboseLogging,
+        preset_chip_fade_animation_enabled: presetChipFadeAnimationEnabled,
+        input_sanitizer_user_disabled: inputSanitizerUserDisabled,
+        capabilities: next,
+        ai_character_enabled: aiCharacterEnabled,
+        ai_character_random: aiCharacterRandom,
+        ai_character_preset_id: aiCharacterPresetId,
+        ai_character_custom_text: aiCharacterCustomText,
+        ai_character_accent_intensity: aiCharacterAccentIntensity,
+        ask_mode: askMode,
+        ollama_keep_alive: ollamaKeepAlive,
+        show_debug_tab: showDebugTab,
+        model_policy_tier: modelPolicyTier,
+        model_policy_non_foss_unlocked: modelPolicyNonFossUnlocked,
+        model_allow_high_vram_fallbacks: modelAllowHighVramFallbacks,
+      }).catch((err) => {
+        console.error("save_settings failed (hardware control confirm)", err);
+      });
+      return next;
+    });
+  }, [
+    latencyWarningSeconds,
+    requestTimeoutSeconds,
+    unifiedInputPersistenceMode,
+    screenshotMaxDimension,
+    desktopDebugNoteAutoSave,
+    desktopAskVerboseLogging,
+    presetChipFadeAnimationEnabled,
+    inputSanitizerUserDisabled,
+    setCapabilities,
+    aiCharacterEnabled,
+    aiCharacterRandom,
+    aiCharacterPresetId,
+    aiCharacterCustomText,
+    aiCharacterAccentIntensity,
+    askMode,
+    ollamaKeepAlive,
+    showDebugTab,
+    modelPolicyTier,
+    modelPolicyNonFossUnlocked,
+    modelAllowHighVramFallbacks,
+  ]);
+
   const permissionsTab = (
     <PermissionsTab
       capabilities={capabilities}
       setCapabilities={setCapabilities}
+      onConfirmEnableHardwareControl={onConfirmEnableHardwareControl}
       onReadModelPolicy={openModelPolicyReadme}
     />
   );
@@ -3173,9 +3251,57 @@ const Content: React.FC = () => {
           border: 1px solid rgba(255, 255, 255, 0.08);
           color: #dadde3;
           padding: 8px;
-          white-space: pre-wrap;
+          white-space: normal;
+          word-break: break-word;
+          overflow-wrap: anywhere;
           font-size: 12px;
           line-height: 1.4;
+        }
+        .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-p {
+          margin: 0 0 0.5em 0;
+        }
+        .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-p:last-child {
+          margin-bottom: 0;
+        }
+        .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-ul,
+        .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-ol {
+          margin: 0.35em 0 0.5em 1.1em;
+          padding: 0;
+        }
+        .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-li {
+          margin: 0.2em 0;
+        }
+        .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-blockquote {
+          margin: 0.4em 0;
+          padding-left: 0.6em;
+          border-left: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-a {
+          color: #7eb8ff;
+          text-decoration: underline;
+        }
+        .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-inline-code {
+          font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+          background: rgba(0, 0, 0, 0.28);
+          padding: 0.05em 0.3em;
+          border-radius: 3px;
+          font-size: 0.95em;
+        }
+        .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-fenced-pre {
+          margin: 0.5em 0;
+          padding: 8px 10px;
+          white-space: pre-wrap;
+          word-break: break-word;
+          overflow-x: auto;
+          border-radius: 6px;
+          background: rgba(0, 0, 0, 0.4);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .bonsai-scope .bonsai-ai-response-chunk .bonsai-md-fenced-code {
+          font-family: ui-monospace, "Cascadia Code", "Consolas", monospace;
+          font-size: 11px;
+          line-height: 1.35;
+          display: block;
         }
 
         /*

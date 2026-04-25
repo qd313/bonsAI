@@ -43,6 +43,29 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertNotIn("STRATEGY GUIDE MODE", prompt)
         self.assertIn("RULE: Ship of Harkinian (SoH)", prompt)
 
+    def test_build_system_prompt_speed_includes_qam_sweet_spot_line(self):
+        """Efficiency / sweet spot questions get QAM Performance lever instructions."""
+
+        def lookup_app_name(_app_id: str) -> str:
+            return ""
+
+        def lookup_vdf(_path: str) -> dict:
+            return {}
+
+        prompt = build_system_prompt(
+            question="What's the efficiency sweet spot for this game?",
+            app_id="123",
+            app_name="Deep Rock Galactic: Survivor",
+            normalized_attachments=[],
+            prepared_images=[],
+            lookup_app_name=lookup_app_name,
+            lookup_screenshot_vdf_metadata=lookup_vdf,
+            ask_mode="speed",
+        )
+        self.assertIn("DECK TUNING (efficiency / sweet spot)", prompt)
+        self.assertIn("Quick Access", prompt)
+        self.assertIn("Framerate limit", prompt)
+
     def test_build_system_prompt_strategy_first_turn(self):
         def lookup_app_name(_app_id: str) -> str:
             return ""
@@ -131,6 +154,114 @@ class OllamaServiceTests(unittest.TestCase):
             ask_mode="strategy",
         )
         self.assertIn("IMPORTANT: When you recommend or apply a TDP or GPU clock change", prompt)
+
+    def test_build_system_prompt_speed_includes_triple_resolution_for_fps_preset(self):
+        def lookup_app_name(_app_id: str) -> str:
+            return ""
+
+        def lookup_vdf(_path: str) -> dict:
+            return {}
+
+        prompt = build_system_prompt(
+            question="What are the best settings for 60fps?",
+            app_id="",
+            app_name="",
+            normalized_attachments=[],
+            prepared_images=[],
+            lookup_app_name=lookup_app_name,
+            lookup_screenshot_vdf_metadata=lookup_vdf,
+            ask_mode="speed",
+        )
+        self.assertIn("DISPLAY TARGETS (Speed mode)", prompt)
+        self.assertIn("1280×800", prompt)
+        self.assertIn("1080p", prompt)
+        self.assertIn("4K", prompt)
+
+    def test_build_system_prompt_strategy_fps_asks_resolution_first(self):
+        def lookup_app_name(_app_id: str) -> str:
+            return ""
+
+        def lookup_vdf(_path: str) -> dict:
+            return {}
+
+        prompt = build_system_prompt(
+            question="What are the best settings for 60fps?",
+            app_id="",
+            app_name="",
+            normalized_attachments=[],
+            prepared_images=[],
+            lookup_app_name=lookup_app_name,
+            lookup_screenshot_vdf_metadata=lookup_vdf,
+            ask_mode="strategy",
+        )
+        self.assertIn("DISPLAY TARGETS (Strategy mode)", prompt)
+        self.assertIn("exactly four", prompt)
+        self.assertIn('"d"', prompt)
+        self.assertIn("1280×800", prompt)
+        self.assertIn("1080p", prompt)
+        self.assertIn("4K", prompt)
+
+    def test_build_system_prompt_deep_includes_triple_resolution_then_followup(self):
+        def lookup_app_name(_app_id: str) -> str:
+            return ""
+
+        def lookup_vdf(_path: str) -> dict:
+            return {}
+
+        prompt = build_system_prompt(
+            question="What GPU clock should I use?",
+            app_id="",
+            app_name="",
+            normalized_attachments=[],
+            prepared_images=[],
+            lookup_app_name=lookup_app_name,
+            lookup_screenshot_vdf_metadata=lookup_vdf,
+            ask_mode="deep",
+        )
+        self.assertIn("DISPLAY TARGETS (Expert / Deep mode)", prompt)
+        self.assertIn("(1) 1280×800 (2) 1080p (3) 4K (4) Enter your own", prompt)
+
+    def test_build_system_prompt_includes_deck_troubleshoot_game_gotchas_with_title(self):
+        """Compatibility / crash / Proton style presets get game-specific Deck community-guidance when a title is known."""
+
+        def lookup_app_name(_app_id: str) -> str:
+            return ""
+
+        def lookup_vdf(_path: str) -> dict:
+            return {}
+
+        prompt = build_system_prompt(
+            question="Why is my game crashing?",
+            app_id="123",
+            app_name="Deep Rock Galactic: Survivor",
+            normalized_attachments=[],
+            prepared_images=[],
+            lookup_app_name=lookup_app_name,
+            lookup_screenshot_vdf_metadata=lookup_vdf,
+            ask_mode="speed",
+        )
+        self.assertIn("DECK TROUBLESHOOTING (game in focus)", prompt)
+        self.assertIn("cannot run a web browser", prompt)
+        self.assertIn("ProtonDB", prompt)
+
+    def test_build_system_prompt_omits_deck_troubleshoot_gotchas_without_game_name(self):
+        def lookup_app_name(_app_id: str) -> str:
+            return ""
+
+        def lookup_vdf(_path: str) -> dict:
+            return {}
+
+        prompt = build_system_prompt(
+            question="Why is my game crashing?",
+            app_id="",
+            app_name="",
+            normalized_attachments=[],
+            prepared_images=[],
+            lookup_app_name=lookup_app_name,
+            lookup_screenshot_vdf_metadata=lookup_vdf,
+            ask_mode="speed",
+        )
+        self.assertNotIn("DECK TROUBLESHOOTING (game in focus)", prompt)
 
 
 if __name__ == "__main__":

@@ -128,126 +128,19 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
     }, RUNNING_STRIP_SLOW_MS);
 
     void (async () => {
-      // #region agent log
-      void fetch("http://127.0.0.1:7682/ingest/455d5c32-fa64-45d1-b31c-f17b50f3371a", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "144cea" },
-        body: JSON.stringify({
-          sessionId: "144cea",
-          hypothesisId: "H3",
-          location: "CharacterPickerModal.tsx:useEffect:start",
-          message: "running-strip effect started",
-          data: {},
-          timestamp: Date.now(),
-        }),
-      }).catch(() => {});
-      try {
-        console.info(
-          "[bonsAI-debug]",
-          JSON.stringify({ hypothesisId: "H3", message: "running-strip effect started" })
-        );
-      } catch {
-        /* ignore */
-      }
-      // #endregion
       await new Promise<void>((resolve) => {
         requestAnimationFrame(() => resolve());
       });
       if (cancelled) {
-        // #region agent log
-        void fetch("http://127.0.0.1:7682/ingest/455d5c32-fa64-45d1-b31c-f17b50f3371a", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "144cea" },
-          body: JSON.stringify({
-            sessionId: "144cea",
-            hypothesisId: "H3",
-            location: "CharacterPickerModal.tsx:useEffect:afterRafCancelled",
-            message: "running-strip aborted cancelled after rAF",
-            data: {},
-            timestamp: Date.now(),
-          }),
-        }).catch(() => {});
-        try {
-          console.info("[bonsAI-debug]", JSON.stringify({ hypothesisId: "H3", message: "cancelled after rAF" }));
-        } catch {
-          /* ignore */
-        }
-        // #endregion
         return;
       }
       const app = Router.MainRunningApp;
       const appId = app?.appid != null ? String(app.appid).trim() : "";
       const displayName = app?.display_name != null ? String(app.display_name) : "";
-      // #region agent log
-      void fetch("http://127.0.0.1:7682/ingest/455d5c32-fa64-45d1-b31c-f17b50f3371a", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "144cea" },
-        body: JSON.stringify({
-          sessionId: "144cea",
-          hypothesisId: "H1",
-          location: "CharacterPickerModal.tsx:useEffect:routerSnapshot",
-          message: "Router.MainRunningApp snapshot",
-          data: {
-            hasApp: !!app,
-            appIdLen: appId.length,
-            displayNameLen: displayName.length,
-            appIdPrefix: appId.slice(0, 12),
-            namePrefix: displayName.slice(0, 40),
-          },
-          timestamp: Date.now(),
-        }),
-      }).catch(() => {});
-      try {
-        console.info(
-          "[bonsAI-debug]",
-          JSON.stringify({
-            hypothesisId: "H1",
-            hasApp: !!app,
-            appId,
-            displayName,
-          })
-        );
-      } catch {
-        /* ignore */
-      }
-      // #endregion
       const next = resolveRunningGameCharacterSuggestions(
         appId || undefined,
         displayName || undefined
       );
-      // #region agent log
-      void fetch("http://127.0.0.1:7682/ingest/455d5c32-fa64-45d1-b31c-f17b50f3371a", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "144cea" },
-        body: JSON.stringify({
-          sessionId: "144cea",
-          hypothesisId: "H2",
-          location: "CharacterPickerModal.tsx:useEffect:resolved",
-          message: "resolveRunningGameCharacterSuggestions result",
-          data: {
-            cancelledBeforeSet: cancelled,
-            stripNull: next === null,
-            entryCount: next?.entries?.length ?? 0,
-            ids: next?.entries?.map((e) => e.id) ?? [],
-          },
-          timestamp: Date.now(),
-        }),
-      }).catch(() => {});
-      try {
-        console.info(
-          "[bonsAI-debug]",
-          JSON.stringify({
-            hypothesisId: "H2",
-            cancelled,
-            nextIsNull: next === null,
-            entryCount: next?.entries?.length ?? 0,
-            ids: next?.entries?.map((e) => e.id) ?? [],
-          })
-        );
-      } catch {
-        /* ignore */
-      }
-      // #endregion
       if (cancelled) return;
       if (slowTimer != null) {
         window.clearTimeout(slowTimer);
@@ -258,25 +151,6 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
     })();
 
     return () => {
-      // #region agent log
-      void fetch("http://127.0.0.1:7682/ingest/455d5c32-fa64-45d1-b31c-f17b50f3371a", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "144cea" },
-        body: JSON.stringify({
-          sessionId: "144cea",
-          hypothesisId: "H3",
-          location: "CharacterPickerModal.tsx:useEffect:cleanup",
-          message: "running-strip effect cleanup",
-          data: {},
-          timestamp: Date.now(),
-        }),
-      }).catch(() => {});
-      try {
-        console.info("[bonsAI-debug]", JSON.stringify({ hypothesisId: "H3", message: "effect cleanup" }));
-      } catch {
-        /* ignore */
-      }
-      // #endregion
       cancelled = true;
       if (slowTimer != null) window.clearTimeout(slowTimer);
     };

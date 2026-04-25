@@ -47,6 +47,7 @@ import {
   type ModelPolicyDisclosurePayload,
 } from "../data/modelPolicy";
 import { AskModeMenuPopover } from "./AskModeMenuPopover";
+import { BonsaiAiMarkdownChunk } from "./BonsaiAiMarkdownChunk";
 
 const BONSAI_CHAT_AI_MAX_WIDTH_CSS = `min(${Math.round(BONSAI_CHAT_AI_BUBBLE_MAX_FRAC * 100)}%, 100%)`;
 
@@ -184,7 +185,9 @@ function BonsaiChatAiBubble(props: BonsaiChatAiBubbleProps) {
               onActivate={onChunkActivate}
               style={{ width: "100%", minWidth: 0, boxSizing: "border-box" }}
             >
-              <div className="bonsai-ai-response-chunk">{chunk}</div>
+              <div className="bonsai-ai-response-chunk">
+                <BonsaiAiMarkdownChunk source={chunk} />
+              </div>
             </Focusable>
           ))}
         </div>

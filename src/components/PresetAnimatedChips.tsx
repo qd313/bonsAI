@@ -8,6 +8,7 @@ import {
   type PresetPrompt,
 } from "../data/presets";
 import { BONSAI_FOREST_GREEN } from "../features/unified-input/constants";
+import { joinPresetWithRunningGame } from "../utils/joinPresetWithRunningGame";
 
 /** Fade-in duration (ms); must match the slot wrapper transition when opacity increases. */
 export const PRESET_CAROUSEL_FADE_IN_MS = 1000;
@@ -198,7 +199,7 @@ export function PresetAnimatedChips(props: PresetAnimatedChipsProps) {
             focusable={presetInteractive}
             onClick={() => {
               const gameName = Router.MainRunningApp?.display_name ?? "";
-              setUnifiedInput(gameName ? `${p.text} for ${gameName}` : p.text);
+              setUnifiedInput(gameName ? joinPresetWithRunningGame(p.text, gameName) : p.text);
               if (p.preferAskMode && onPreferAskMode) {
                 onPreferAskMode(p.preferAskMode);
               }

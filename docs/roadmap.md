@@ -19,7 +19,6 @@ Active features, maintainer tasks, and **known defects**. *QAMP Phase 1 (safe de
 
 - ★★ **Prompt-testing — finish device matrix:** **MVP ready** (matrices, QAMP rows, optional frozen carousel in [prompt-testing.md](prompt-testing.md)); Deck checkbox pass is **partially complete** — finish remaining scenarios, mark checkboxes, record **Pass / Partial / Fail** with build id in PR or [red-blue-fight-2026-04-21.md](red-blue-fight-2026-04-21.md) where applicable.
 - ★★ **README — end-user install and usage (restore clear language):** [README.md](../README.md) regressed; restore **plain, step-by-step** guidance so users are never left inferring: **(1)** how to **install Ollama** (Deck vs PC, official download or repo helper scripts, firewall/`OLLAMA_HOST` pointer to [troubleshooting.md](troubleshooting.md) for detail), **(2)** how to **obtain and install the bonsAI plugin** (where the **`.zip`** comes from—e.g. GitHub Release—and how to load it in Decky Loader), **(3)** how to **use the app** after install (open via Decky/QAM, set Ollama host/base URL in Settings, pull a model if needed, send an Ask, optional permissions). Keep troubleshooting deep-dives in `docs/`, not the main path.
-- ★★ **Decky plugin release `.zip` process + clean-machine install proof:** Define and document a **repeatable** maintainer process to build the shippable plugin **`.zip`** (entry points: [development.md](development.md) / `scripts/build.*` as applicable; contents, `plugin.json`, versioning). **QA gate:** from an **empty** target (no Ollama installed yet), follow only README + that process and confirm **end-to-end** success—Ollama install, plugin zip install, first Ask—fixing any gaps in docs or scripts. Log build id and Pass/Partial/Fail in release notes, [regression-and-smoke.md](regression-and-smoke.md), or the ship PR as appropriate.
 
 ---
 
@@ -275,6 +274,10 @@ When a screenshot is attached, `select_ollama_models(..., requires_vision=True)`
 ## Completed
 
 Headings group related work. Star counts match the historical list.
+
+### Release and distribution
+
+- ★★ **Decky plugin release `.zip` (CI) + clean install proof:** [`.github/workflows/build-plugin-zip.yml`](../.github/workflows/build-plugin-zip.yml) builds the shippable zip via Decky CLI on **`v*` tags** and **workflow_dispatch**; [`scripts/verify-decky-plugin-zip.sh`](../scripts/verify-decky-plugin-zip.sh) enforces the same file layout as deploy (`main.py`, `refactor_helpers.py`, `backend/services/`, `dist/`). Maintainer flow and versioning: [development.md](development.md) → **Release (plugin zip)**. **QA log template:** [regression-and-smoke.md](regression-and-smoke.md) §5 — run README-only path from **no Ollama yet**, then record Pass/Partial/Fail (human gate).
 
 ### First-run and prompts
 

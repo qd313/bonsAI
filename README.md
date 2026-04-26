@@ -47,8 +47,8 @@ You do **not** need a copy of this git repo to use bonsAI.
 
 1. **Install [Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader)** on the Steam Deck using the official project instructions (Stable channel is a good default for most users).
 2. **Download the release bundle**
-  - Open the project’s [GitHub Releases](https://github.com/cantcurecancer/DeckySettingsSearch/releases) page.  
-  - Download the **plugin `.zip` asset** for bonsAI (e.g. a file like `pluginname-version.zip` — exact filename follows each release).
+  - Open **[GitHub Releases for this repository](https://github.com/cantcurecancer/DeckySettingsSearch/releases)** and download the **plugin `.zip`** attached to the release you want (filename follows the build; often under `out/` in CI).
+  - **Pre-release / bleeding edge:** maintainers can run the **Build plugin zip** workflow under the repo’s **Actions** tab and download the **`bonsai-plugin-*`** artifact (see [docs/development.md](docs/development.md) → **Release (plugin zip)**).
 3. **Install the plugin in Decky**
   - Open **Decky Loader** from the QAM, open its **settings** (gear), and use the **install plugin from a local ZIP** / **developer**-style option (wording can change between Decky versions). Point it at the downloaded `.zip`.  
   - If your build ships through the **Decky store** instead, you can use that path when it is available; the release ZIP remains the direct install from source.

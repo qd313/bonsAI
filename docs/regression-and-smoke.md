@@ -17,6 +17,7 @@ Run from repo root (Windows or Linux shell as appropriate):
 | Backend unit tests | `pnpm run test:py` | Any `main.py`, `backend/`, `refactor_helpers.py`, or `tests/` change |
 | Bundle | `pnpm run build` | Any `src/` or build config change |
 | Deck deploy build | `.\scripts\build.ps1` or `./scripts/build.sh` | Any `src/`, `main.py`, `plugin.json`, or Deck-facing asset change |
+| Plugin zip CI | Run **Build plugin zip** in Actions (or `bash scripts/verify-decky-plugin-zip.sh` on a local `out/*.zip`) | Changes to [`.github/workflows/build-plugin-zip.yml`](../.github/workflows/build-plugin-zip.yml) or [`scripts/verify-decky-plugin-zip.sh`](../scripts/verify-decky-plugin-zip.sh) |
 
 If a step does not apply (e.g. docs-only), state **N/A** in the PR description and still run the steps that do apply.
 
@@ -81,8 +82,31 @@ Model-quality, strategy/TDP rows, and sanitizer checks live in **[prompt-testing
 
 ---
 
+## 5. Release / clean install proof
+
+**Purpose:** Prove a **new user** can succeed using only **[README.md](../README.md)** plus **[development.md](development.md) → Release (plugin zip)** for where the `.zip` comes from—no unstated maintainer shortcuts.
+
+**Prep:** Start from a target where **Ollama is not installed yet** on the path you are testing (**PC on LAN** or **Deck**). Decky Loader is installed.
+
+**Steps (checklist):**
+
+1. Install Ollama per README §2 (official or helper scripts).
+2. Obtain the plugin `.zip`: **GitHub Release** asset and/or **Actions** artifact from workflow **Build plugin zip** (see [development.md](development.md)).
+3. Install the zip in Decky (developer / local ZIP path; wording varies by Loader version).
+4. In bonsAI **Settings**, set the Ollama base URL; pull at least one text model per README (**Pull models**).
+5. Send one **text** Ask and confirm a normal reply (no import/traceback errors).
+
+**Log (append a row after each full pass):**
+
+| Date | Git SHA or tag | Workflow run ID (if CI zip) | Result | SteamOS / Decky | Ollama host (PC LAN / Deck) | Notes |
+|------|----------------|-------------------------------|--------|-----------------|-----------------------------|-------|
+| *(example)* | | | Pass / Partial / Fail | | | |
+
+---
+
 ## Revision log
 
 | Date | Change |
 |------|--------|
+| 2026-04-26 | §5 Release / clean install proof + zip QA log table ([roadmap](roadmap.md) release process). |
 | 2026-04-21 | Phase 6: initial standing matrix + Deck smoke checklist ([ship-week cleanup](roadmap.md)). |

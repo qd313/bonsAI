@@ -100,8 +100,20 @@ What it does at a high level:
 Available modes:
 - `./scripts/build.sh` (default `dev`): build + deploy to remote Deck
 - `./scripts/build.sh local`: build + deploy locally on this Linux/Bazzite machine
-- `./scripts/build.sh release`: build distributable zip via Decky CLI
+- `./scripts/build.sh release`: build distributable zip via Decky CLI (no `.env` required; skips dev-only `src/config.ts` generation)
 - `./scripts/build.sh deploy`: deploy last build without rebuilding
+
+### Release (plugin zip)
+
+**Version source:** bump the **`version`** field in root [`plugin.json`](../plugin.json) before tagging or cutting a release. [`pnpm run build`](../package.json) runs [`scripts/sync-version-from-plugin.mjs`](../scripts/sync-version-from-plugin.mjs) so the UI’s [`PLUGIN_VERSION`](../src/pluginVersion.ts) matches the manifest.
+
+**Primary build (CI):** workflow **[`.github/workflows/build-plugin-zip.yml`](../.github/workflows/build-plugin-zip.yml)** — triggers on **`v*` tags** and **`workflow_dispatch`** (optional **ref** input). It runs `pnpm install`, `pnpm run build`, downloads the [Decky CLI](https://github.com/SteamDeckHomebrew/cli) Linux binary, runs `decky plugin build`, then **[`scripts/verify-decky-plugin-zip.sh`](../scripts/verify-decky-plugin-zip.sh)** so the zip includes `main.py`, `refactor_helpers.py`, `backend/services/`, and `dist/index.js` (same parity as deploy scripts). Download the **`bonsai-plugin-*`** artifact from the workflow run (or attach that zip to a GitHub Release for end users).
+
+**Canonical release:** prefer a **`v*`** tag push so the artifact matches the tagged commit. Use **workflow_dispatch** for ad-hoc or branch builds when you only need a binary to test.
+
+**Local / WSL:** after `./scripts/setup-dev.sh` installs `cli/decky`, run `./scripts/build.sh release` from repo root on Linux or WSL. Output is under **`out/*.zip`**; verification runs automatically after packaging.
+
+**Subagent reports and follow-ups:** N/A for this process (no specialist agent required). If `verify-decky-plugin-zip` fails, treat it as a **release blocker** until packaging matches deploy layout.
 
 ## Ollama for development testing
 

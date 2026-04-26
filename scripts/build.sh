@@ -46,24 +46,23 @@ for arg in "$@"; do
     esac
 done
 
-# ---------- load .env ----------
-if [[ ! -f .env ]]; then
-    red ".env not found. Run ./scripts/setup-dev.sh first."
-    exit 1
+# ---------- load .env (not required for release zip) ----------
+if [[ "$COMMAND" != "release" && "$COMMAND" != "-h" && "$COMMAND" != "--help" ]]; then
+    if [[ ! -f .env ]]; then
+        red ".env not found. Run ./scripts/setup-dev.sh first."
+        exit 1
+    fi
+    source .env
+    : "${DECK_IP:?DECK_IP is not set in .env}"
+    : "${DECK_PORT:=22}"
+    : "${DECK_USER:=deck}"
+    : "${DECK_DIR:=/home/deck}"
+    : "${PC_IP:?PC_IP is not set in .env}"
+    : "${PLUGIN_NAME:=bonsAI}"
+    SSH_DEST="${DECK_USER}@${DECK_IP}"
+    SSH_OPTS="-p ${DECK_PORT}"
+    PLUGIN_DIR="${DECK_DIR}/homebrew/plugins/${PLUGIN_NAME}"
 fi
-
-source .env
-
-: "${DECK_IP:?DECK_IP is not set in .env}"
-: "${DECK_PORT:=22}"
-: "${DECK_USER:=deck}"
-: "${DECK_DIR:=/home/deck}"
-: "${PC_IP:?PC_IP is not set in .env}"
-: "${PLUGIN_NAME:=bonsAI}"
-
-SSH_DEST="${DECK_USER}@${DECK_IP}"
-SSH_OPTS="-p ${DECK_PORT}"
-PLUGIN_DIR="${DECK_DIR}/homebrew/plugins/${PLUGIN_NAME}"
 
 # ---------- helper: SSH command to Deck ----------
 deck_ssh() {
@@ -242,6 +241,9 @@ do_release() {
         green "Release build complete!"
         echo "  Zip file(s):"
         ls -lh out/*.zip
+        for z in out/*.zip; do
+            bash "$REPO_ROOT/scripts/verify-decky-plugin-zip.sh" "$z" || exit 1
+        done
     else
         red "Expected zip in out/ but none found."
         exit 1
@@ -266,7 +268,10 @@ case "$COMMAND" in
         deploy_local
         ;;
     release)
-        do_full_build
+        ensure_pnpm
+        ensure_node
+        do_install
+        do_build
         echo
         do_release
         ;;

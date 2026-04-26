@@ -223,6 +223,54 @@ def select_ollama_models(
     return base
 
 
+def is_current_tdp_read_intent(question: str) -> bool:
+    """True when the user wants to *read* the current TDP cap, not change or recommend one."""
+    t = (question or "").strip().lower()
+    if not t:
+        return False
+    if "tdp" not in t and "thermal design power" not in t:
+        return False
+    excl = (
+        "recommend",
+        "suggest",
+        "set tdp",
+        "set my tdp",
+        "change ",
+        "increase",
+        "decrease",
+        "lower my",
+        "raise my",
+        "cap at",
+        "best tdp",
+        "optimal tdp",
+        "should i",
+        "should i use",
+        "optimize for",
+    )
+    if any(s in t for s in excl):
+        return False
+    if re.search(
+        r"\b(what|how much)\b.{0,40}\b(tdp|watts?)\b",
+        t,
+    ) and "current" in t:
+        return True
+    if re.search(r"\b(what|how much)\b.{0,20}\b(current|the)\b.{0,20}\b(tdp|watts?)\b", t):
+        return True
+    if re.search(
+        r"\b(current|read|right now|present|actual)\b.{0,30}\b(tdp|watts?)\b",
+        t,
+    ):
+        return True
+    if re.search(
+        r"\b(tdp|watts?)\b.{0,20}\b(is|are|am i|we at|we running)\b",
+        t,
+    ):
+        return True
+    if re.search(r"\bwhat tdp (is|am|are|right now)\b", t) or re.search(r"\bhow much tdp\b", t):
+        return True
+    return "what's" in t and "tdp" in t
+
+
 def parse_tdp_recommendation(
     text: str,
     tdp_min: int,

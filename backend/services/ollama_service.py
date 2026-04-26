@@ -3,7 +3,7 @@ import re
 import socket
 import urllib.error
 import urllib.request
-from typing import Any, Callable
+from typing import Any, Callable, Optional
 
 from backend.services.strategy_guide_parse import (
     extract_strategy_guide_branches,
@@ -11,7 +11,7 @@ from backend.services.strategy_guide_parse import (
 )
 
 
-def _user_wants_power_or_performance_topic(question: str) -> bool:
+def user_wants_power_or_performance_topic(question: str) -> bool:
     """True when the user message plausibly asks for Deck power/performance tuning."""
     q = (question or "").lower()
     return bool(
@@ -87,7 +87,7 @@ def _user_asks_resolution_relevant_performance(question: str) -> bool:
     return False
 
 
-def _user_asks_ollama_bonsai_host_or_latency(question: str) -> bool:
+def user_asks_ollama_bonsai_host_or_latency(question: str) -> bool:
     """True when the user is asking about Ollama/bonsAI connectivity, host setup, or slow LLM responses."""
     s = (question or "").lower().strip()
     if not s:
@@ -152,6 +152,40 @@ def _user_asks_ollama_bonsai_host_or_latency(question: str) -> bool:
     if re.search(r"\b(inference|generation)\b.*\b(slow|latency)\b", s):
         return True
     return False
+
+
+def append_deck_tdp_sysfs_grounding(
+    system_text: str,
+    *,
+    read_tdp: bool = False,
+    cap_w: Optional[int] = None,
+    grounding_requested: bool = False,
+) -> str:
+    """Append measured TDP cap (or read-failure notice) to the system prompt; no-op if not requested."""
+    if not grounding_requested:
+        return system_text
+    if cap_w is not None:
+        block = (
+            f"\n\nON-DEVICE TDP (measured; do not contradict for the **current** cap): "
+            f"amdgpu `power1_cap` in sysfs reports **{cap_w}W** as the current **power cap** — not the overlay's instant draw. "
+        )
+        if read_tdp:
+            block += (
+                "The user is asking for the current TDP / cap. State this value clearly in your usual voice. "
+                "Do not use a different wattage for the **current** limit. "
+            )
+        else:
+            block += (
+                "When recommending a different TDP, treat this as the **baseline**; you may still suggest a new cap in the required JSON. "
+            )
+        block += (
+            "Hardware range remains 3–15W. The Steam performance overlay shows **power draw (W)**, which may differ from this cap."
+        )
+        return system_text + block
+    return (
+        system_text
+        + "\n\nON-DEVICE TDP: The power cap could not be read from sysfs. Do not invent a current wattage; say it could not be read."
+    )
 
 
 def _user_asks_model_policy_tiers_explainer(question: str) -> bool:
@@ -353,7 +387,7 @@ def build_system_prompt(
     )
 
     if ask_mode != "strategy":
-        ollama_q = _user_asks_ollama_bonsai_host_or_latency(question)
+        ollama_q = user_asks_ollama_bonsai_host_or_latency(question)
         model_policy_q = _user_asks_model_policy_tiers_explainer(question)
         sweet = _user_asks_sweet_spot_tuning(question)
         gfx = ""
@@ -378,9 +412,9 @@ def build_system_prompt(
             + (DECK_TROUBLESHOOT_GAME_SETTINGS_LINE if troubleshoot else "")
         )
 
-    ollama_q = _user_asks_ollama_bonsai_host_or_latency(question)
+    ollama_q = user_asks_ollama_bonsai_host_or_latency(question)
     model_policy_q = _user_asks_model_policy_tiers_explainer(question)
-    power_topic = _user_wants_power_or_performance_topic(question)
+    power_topic = user_wants_power_or_performance_topic(question)
     followup = is_strategy_followup_question(question)
     if followup:
         strategy_block = (

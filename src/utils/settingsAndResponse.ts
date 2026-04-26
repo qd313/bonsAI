@@ -423,6 +423,40 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
   };
 }
 
+/** QAM Performance verification line — sysfs is source of truth; QAM can lag. */
+const QAM_VERIFY_SLIDER_LINE =
+  "If QAM Performance sliders look stale, close and reopen the QAM Performance tab to verify values match the applied cap.";
+
+/**
+ * One short banner for the main tab when last Ask included tuning `applied` metadata.
+ * TDP (sysfs) is distinguished from GPU MHz (advisory; not written by this plugin yet).
+ */
+export function formatAppliedTuningBannerText(applied: AppliedResultLike | null | undefined): string | null {
+  if (!applied) return null;
+  const tdp = applied.tdp_watts;
+  const gpu = applied.gpu_clock_mhz;
+  if (tdp == null && gpu == null) return null;
+
+  const errList = applied.errors?.length ? applied.errors : [];
+  if (tdp != null) {
+    let s = `TDP ${tdp}W was applied. ${QAM_VERIFY_SLIDER_LINE}`;
+    if (gpu != null) {
+      s += ` GPU ${gpu} MHz is a recommendation; this plugin does not write GPU clock to hardware yet.`;
+    }
+    return s;
+  }
+
+  if (gpu != null) {
+    const pre =
+      errList.length > 0
+        ? `TDP was not applied (${errList[0]}). `
+        : "";
+    return `${pre}GPU ${gpu} MHz is from the model; this plugin does not write GPU clock to hardware yet.`;
+  }
+
+  return null;
+}
+
 export function buildResponseText(responseText: string, applied?: AppliedResultLike | null): string {
   /** Append applied tuning metadata to model text for the conversation transcript. */
   let text = responseText || "No response text.";
@@ -433,8 +467,7 @@ export function buildResponseText(responseText: string, applied?: AppliedResultL
   if (parts.length > 0) text += `\n\n[Applied: ${parts.join(", ")}]`;
   if (applied.errors?.length) text += `\n[Errors: ${applied.errors.join("; ")}]`;
   else if (parts.length > 0) {
-    text +=
-      "\n\nNote: If Steam's QAM Performance sliders look stale, close and reopen that tab to verify values match what was applied.";
+    text += `\n\nNote: If Steam's QAM Performance sliders look stale, close and reopen that tab to verify values match what was applied.`;
   }
   return text;
 }

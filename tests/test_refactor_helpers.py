@@ -2,6 +2,7 @@ import unittest
 
 from refactor_helpers import (
     build_ollama_chat_url,
+    is_current_tdp_read_intent,
     normalize_ollama_base,
     parse_tdp_recommendation,
     select_ollama_models,
@@ -69,6 +70,15 @@ class RefactorHelperTests(unittest.TestCase):
         """Ensure parser returns None when no actionable recommendation exists."""
         parsed = parse_tdp_recommendation("No power recommendation provided.", 3, 15, 200, 1600)
         self.assertIsNone(parsed)
+
+    def test_is_current_tdp_read_intent_detects(self):
+        self.assertTrue(is_current_tdp_read_intent("what is the current tdp"))
+        self.assertTrue(is_current_tdp_read_intent("What is current TDP?"))
+        self.assertTrue(is_current_tdp_read_intent("read tdp from hardware"))
+
+    def test_is_current_tdp_read_intent_rejects_tuning(self):
+        self.assertFalse(is_current_tdp_read_intent("What TDP should I use for 60fps?"))
+        self.assertFalse(is_current_tdp_read_intent("recommend tdp for this game"))
 
 
 if __name__ == "__main__":

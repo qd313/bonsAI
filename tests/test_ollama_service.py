@@ -1,6 +1,12 @@
 import unittest
 
-from backend.services.ollama_service import build_system_prompt, format_ai_response
+from backend.services.ollama_service import (
+    append_deck_tdp_sysfs_grounding,
+    build_system_prompt,
+    format_ai_response,
+    user_asks_ollama_bonsai_host_or_latency,
+    user_wants_power_or_performance_topic,
+)
 
 
 class OllamaServiceTests(unittest.TestCase):
@@ -332,6 +338,35 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertIn("MODEL POLICY TIERS (bonsAI)", prompt)
         self.assertIn("```bonsai-strategy-branches```", prompt)
         self.assertIn("normal explanation", prompt)
+
+    def test_append_deck_tdp_sysfs_grounding_noop(self):
+        self.assertEqual(
+            append_deck_tdp_sysfs_grounding("base", grounding_requested=False),
+            "base",
+        )
+
+    def test_append_deck_tdp_sysfs_grounding_read_tdp(self):
+        out = append_deck_tdp_sysfs_grounding("sys", read_tdp=True, cap_w=7, grounding_requested=True)
+        self.assertTrue(out.startswith("sys"))
+        self.assertIn("7W", out)
+        self.assertIn("ON-DEVICE TDP", out)
+        self.assertIn("usual voice", out)
+
+    def test_append_deck_tdp_sysfs_grounding_tuning(self):
+        out = append_deck_tdp_sysfs_grounding("sys", read_tdp=False, cap_w=12, grounding_requested=True)
+        self.assertIn("12W", out)
+        self.assertIn("baseline", out)
+
+    def test_append_deck_tdp_sysfs_grounding_unavailable(self):
+        out = append_deck_tdp_sysfs_grounding("sys", read_tdp=False, cap_w=None, grounding_requested=True)
+        self.assertIn("could not be read", out)
+
+    def test_user_asks_ollama_host_detects_latency_diagnose(self):
+        self.assertTrue(user_asks_ollama_bonsai_host_or_latency("Diagnose a slow Ollama response"))
+
+    def test_fps_wants_power_not_ollama_host(self):
+        self.assertTrue(user_wants_power_or_performance_topic("What is my fps?"))
+        self.assertFalse(user_asks_ollama_bonsai_host_or_latency("What is my fps?"))
 
 
 if __name__ == "__main__":

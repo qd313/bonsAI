@@ -8,7 +8,7 @@ Star ratings use the GTA scale: `★` easiest … `★★★★★` very high co
 
 ## In Progress
 
-Active features, maintainer tasks, and **known defects**. *Phase 2 QAMP (experimental profile sync) stays blocked until Phase 1 lands.*
+Active features, maintainer tasks, and **known defects**. *QAMP Phase 1 (safe default) is [shipped](#ai-assisted-power-and-long-response-ux). Phase 2 (experimental profile sync) remains backlog-only.*
 
 ### Bugs
 
@@ -17,9 +17,6 @@ Active features, maintainer tasks, and **known defects**. *Phase 2 QAMP (experim
 
 ### Active work
 
-- ★★★ **QAMP Reflection (Phase 1 — Safe Default):** Show applied-state confirmation and explicit verification guidance when QAM sliders do not immediately mirror hardware writes.
-  - Requirement: every BonsAI performance action must be user-verifiable after execution.
-  - Initial behavior: keep sysfs write path as source of truth and guide users to re-open QAM Performance to verify reflected values.
 - ★★ **Prompt-testing — finish device matrix:** **MVP ready** (matrices, QAMP rows, optional frozen carousel in [prompt-testing.md](prompt-testing.md)); Deck checkbox pass is **partially complete** — finish remaining scenarios, mark checkboxes, record **Pass / Partial / Fail** with build id in PR or [red-blue-fight-2026-04-21.md](red-blue-fight-2026-04-21.md) where applicable.
 - ★★ **Global quick-launch macro — device verify + troubleshooting tune:** Exercise the Guide-chord → QAM → Decky → bonsAI sequence on real hardware using [README.md](../README.md) and [troubleshooting.md](troubleshooting.md) §5; confirm **Fire Start Delay** steps and D-pad depth match common QAM rails; update troubleshooting (and README pointer if needed) when a different rail count or delay pattern works better. Ties to [regression-and-smoke.md](regression-and-smoke.md) plugin shell checks.
 - ★★ **README — end-user install and usage (restore clear language):** [README.md](../README.md) regressed; restore **plain, step-by-step** guidance so users are never left inferring: **(1)** how to **install Ollama** (Deck vs PC, official download or repo helper scripts, firewall/`OLLAMA_HOST` pointer to [troubleshooting.md](troubleshooting.md) for detail), **(2)** how to **obtain and install the bonsAI plugin** (where the **`.zip`** comes from—e.g. GitHub Release—and how to load it in Decky Loader), **(3)** how to **use the app** after install (open via Decky/QAM, set Ollama host/base URL in Settings, pull a model if needed, send an Ask, optional permissions). Keep troubleshooting deep-dives in `docs/`, not the main path.
@@ -42,7 +39,7 @@ Backlog items are **not** listed in execution order. Stars are effort/risk withi
   - Verify behavior after closing and reopening the QAM Performance tab.
   - Verify behavior after Steam restart and full reboot.
   - Verify behavior when prompt includes GPU clock recommendations.
-- ★★★★★ **QAMP Reflection (Phase 2 — Experimental Opt-In):** Attempt Steam profile sync only behind explicit warning toggles. *Blocked on Phase 1.*
+- ★★★★★ **QAMP Reflection (Phase 2 — Experimental Opt-In):** Attempt Steam profile sync only behind explicit warning toggles. *Phase 1 (safe default sysfs + user verification copy) is shipped; Phase 2 is unblocked for future scoping, not an active commitment.*
   - Risks: undocumented internals, Steam update breakage, restart/reboot requirements, and profile corruption risk.
   - Candidate path: fragile `config.vdf` / protobuf edits gated behind experimental mode only.
 
@@ -313,6 +310,7 @@ Headings group related work. Star counts match the historical list.
 ### AI-assisted power and long-response UX
 
 - ★★★ **TDP Automation via AI Output:** Parse AI recommendations and apply constrained TDP values through safe sysfs write paths.
+- ★★★ **QAMP Reflection (Phase 1 — Safe Default):** After a sysfs TDP apply, the main tab shows an explicit **TDP nW** confirmation plus re-open **QAM → Performance** guidance (`formatAppliedTuningBannerText` / `buildResponseText` in [src/utils/settingsAndResponse.ts](../src/utils/settingsAndResponse.ts), [src/components/MainTab.tsx](../src/components/MainTab.tsx)). GPU MHz from the model is labeled **recommendation only** (not written in sysfs in this build). On-Deck QAMP / restart checks: [prompt-testing.md](prompt-testing.md) § QAMP Verification. **Phase 2** (Steam profile / experimental opt-in) remains in [Planned](#near-term) — *blocked until explicitly scoped*.
 - ★★★ **D-pad Response Scrolling:** Split long responses into focusable chunks for controller-first navigation.
 
 ### Steam Input

@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   buildResponseText,
+  formatAppliedTuningBannerText,
   DEFAULT_AI_CHARACTER_ACCENT_INTENSITY,
   DEFAULT_ASK_MODE,
   DEFAULT_CAPABILITIES,
@@ -251,5 +252,56 @@ describe("settingsAndResponse", () => {
     expect(output).toContain("[Applied: TDP: 11W]");
     expect(output).toContain("QAM Performance");
     expect(output).not.toContain("[Errors:");
+  });
+
+  it("formatAppliedTuningBannerText: TDP only includes watts and QAM verify line", () => {
+    const t = formatAppliedTuningBannerText({
+      tdp_watts: 11,
+      gpu_clock_mhz: null,
+      errors: [],
+    });
+    expect(t).toContain("TDP 11W was applied");
+    expect(t).toContain("QAM Performance");
+    expect(t).not.toContain("GPU");
+  });
+
+  it("formatAppliedTuningBannerText: TDP and GPU — advisory line for GPU only", () => {
+    const t = formatAppliedTuningBannerText({
+      tdp_watts: 9,
+      gpu_clock_mhz: 1000,
+      errors: [],
+    });
+    expect(t).toContain("TDP 9W was applied");
+    expect(t).toContain("GPU 1000 MHz");
+    expect(t).toContain("does not write GPU clock");
+  });
+
+  it("formatAppliedTuningBannerText: GPU only, no TDP (model output)", () => {
+    const t = formatAppliedTuningBannerText({
+      tdp_watts: null,
+      gpu_clock_mhz: 800,
+      errors: [],
+    });
+    expect(t).toContain("GPU 800 MHz");
+    expect(t).toContain("does not write GPU clock");
+    expect(t).not.toMatch(/TDP \d+W was applied/);
+  });
+
+  it("formatAppliedTuningBannerText: TDP failed, GPU present — no false success for TDP", () => {
+    const t = formatAppliedTuningBannerText({
+      tdp_watts: null,
+      gpu_clock_mhz: 900,
+      errors: ["Failed to write TDP to /sys/…"],
+    });
+    expect(t).toContain("TDP was not applied");
+    expect(t).toContain("Failed to write TDP");
+    expect(t).toContain("GPU 900 MHz");
+  });
+
+  it("formatAppliedTuningBannerText: null", () => {
+    expect(formatAppliedTuningBannerText(null)).toBeNull();
+    expect(
+      formatAppliedTuningBannerText({ tdp_watts: null, gpu_clock_mhz: null, errors: ["x"] })
+    ).toBeNull();
   });
 });

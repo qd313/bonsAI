@@ -41,6 +41,7 @@ import {
 } from "./icons";
 import { CharacterRoleplayEmoticon } from "./CharacterRoleplayEmoticon";
 import type { TransparencySnapshot } from "../utils/inputTransparency";
+import { formatAppliedTuningBannerText } from "../utils/settingsAndResponse";
 import { ASK_MODE_LABELS, ASK_MODE_OUTLINE, type AskModeId } from "../data/askMode";
 import {
   disclosureSummaryForSourceClass,
@@ -376,6 +377,7 @@ export function MainTab(props: MainTabProps) {
       : null;
   const responseBodyForDisplay = viewingArchivedTurn ? viewingArchivedTurn.answer : ollamaResponse;
   const questionHeaderDisplay = viewingArchivedTurn ? viewingArchivedTurn.question : askThreadDisplayQuestion;
+  const appliedTuningBannerText = formatAppliedTuningBannerText(lastApplied);
 
   const chatMainColumnRef = useRef<HTMLDivElement | null>(null);
   const [panelHalfPx, setPanelHalfPx] = useState(240);
@@ -1569,11 +1571,9 @@ export function MainTab(props: MainTabProps) {
             </div>
           </PanelSectionRow>
         )}
-        {lastApplied && (lastApplied.tdp_watts != null || lastApplied.gpu_clock_mhz != null) && (
+        {appliedTuningBannerText && (
           <PanelSectionRow>
-            <div style={{ color: "#f2cf84", fontSize: 12 }}>
-              Applied to system successfully. If QAM Performance sliders look stale, close and reopen the QAM Performance tab to verify reflected values.
-            </div>
+            <div style={{ color: "#f2cf84", fontSize: 12, lineHeight: 1.35 }}>{appliedTuningBannerText}</div>
           </PanelSectionRow>
         )}
         {ollamaContext && (

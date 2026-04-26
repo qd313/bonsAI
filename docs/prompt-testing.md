@@ -115,7 +115,13 @@ Turn the flag **off** before shipping or when you want production-like chip vari
 
 ### General Knowledge / Edge Cases
 - [ ] "What game am I playing?" (should name the running game)
-- [x] "What is my current TDP?" (we don't read it back yet — should say so) **failed: i had my tdp at 15, it then force set it to 7 watts and then read back 7 watts**
+- [x] "What is my current TDP?" — **read path + broader performance grounding:** `read_current_tdp_watts` runs **before** Ollama when the ask matches `is_current_tdp_read_intent` **or** `user_wants_power_or_performance_topic`, **unless** `user_asks_ollama_bonsai_host_or_latency` (Ollama host / latency / connection — no TDP injection). The measured cap is appended to the **system** prompt via `append_deck_tdp_sysfs_grounding` in `backend/services/ollama_service.py`; the **user** message stays the raw question (good for Input transparency). The model answers **in character**; tuning JSON from the reply is **not** applied on read-TDP turns. See `main.py` → `ask_ollama` / `_build_system_prompt`.
+
+### TDP sysfs grounding (best-effort)
+
+- **When:** One sysfs read per gated Ask; system text gains an **ON-DEVICE TDP** block with **W** from `power1_cap` (or a “could not read” line).
+- **Performance / tuning prompts** (e.g. sweet spot, FPS, stutter, recommended TDP): model should treat the value as **current cap / baseline**; JSON apply still uses the normal parse + `apply_tdp` path when **Hardware** is on. Prose alignment with sysfs is **best-effort** (not machine-verified).
+- **Ollama-only** asks (e.g. “Diagnose a slow Ollama response”): **no** TDP grounding block, even if the same message could match loose “performance” wording — the Ollama-host predicate wins.
 - [ ] Non-English input (should still respond in English)
 - [ ] Very long prompt (stress test)
 - [✓] Empty-ish prompts like "hi" or "help"
@@ -123,16 +129,22 @@ Turn the flag **off** before shipping or when you want production-like chip vari
 
 ---
 
-## QAMP Verification (Phase 1 — In Progress)
-- [ ] After TDP write: confirmation message includes applied wattage
-- [ ] After TDP write: response includes guidance to re-open QAM Performance tab to verify reflected value
-- [ ] After successful sysfs apply (no errors): model transcript includes the **Note:** paragraph about stale QAM sliders (`buildResponseText` / main tab body), not only the yellow banner row
+## QAMP Verification (Phase 1)
+
+**Code / automated (2026-04-26, `vitest` + review):** confirmation banner names **TDP nW**; main transcript uses `buildResponseText` (`[Applied: …]`, **Note** about re-opening QAM Performance; GPU MHz labeled as not written in sysfs in banner when both appear). See `formatAppliedTuningBannerText` in `src/utils/settingsAndResponse.test.ts`.
+
+- [x] After TDP write: confirmation message includes applied wattage (yellow banner + `[Applied: TDP: nW]`)
+- [x] After TDP write: response includes guidance to re-open QAM Performance to verify (banner + `Note` in transcript)
+- [x] After successful sysfs apply (no errors): transcript includes the **Note** about stale QAM sliders, not only the yellow banner
+- [x] Prompt includes GPU clock recommendation: TDP line still includes QAM **Note**; banner states GPU recommendation is not sysfs-applied
+
+**On-Deck (manual — record build id + SteamOS when checked)**
+
 - [ ] With per-game profile ON: TDP write applies and verification guidance is shown
 - [ ] With per-game profile OFF: TDP write applies and verification guidance is shown
-- [ ] After closing and reopening QAM Performance tab: verify slider reflects the written value
-- [ ] After Steam restart: verify TDP returns to default (not persisted across restarts)
-- [ ] After full reboot: verify TDP returns to default
-- [ ] Prompt includes GPU clock recommendation: verify verification guidance still shown for TDP portion
+- [ ] After closing and reopening QAM Performance tab: TDP / cap reflects the written value
+- [ ] After Steam restart: TDP / cap returns to default (per OS), not a plugin regression if expected
+- [ ] After full reboot: same as above
 
 ---
 

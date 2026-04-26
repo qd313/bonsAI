@@ -16,6 +16,24 @@ def find_amdgpu_hwmon() -> Optional[str]:
     return None
 
 
+def read_current_tdp_watts(logger: Any) -> Optional[int]:
+    """Read the amdgpu TDP *cap* in watts from power1_cap (microwatts in sysfs on Steam Deck / amdgpu)."""
+    hwmon = find_amdgpu_hwmon()
+    if not hwmon:
+        logger.info("read_current_tdp_watts: no amdgpu hwmon")
+        return None
+    cap_path = f"{hwmon}/power1_cap"
+    try:
+        with open(cap_path) as f:
+            uw = int(f.read().strip())
+    except (OSError, ValueError) as exc:
+        logger.info("read_current_tdp_watts: read %s failed: %s", cap_path, exc)
+        return None
+    watts = max(0, int(round(uw / 1_000_000)))
+    logger.info("read_current_tdp_watts: %s -> %dW", cap_path, watts)
+    return watts
+
+
 def clean_env() -> dict:
     """Return a subprocess-safe environment without Decky LD overrides."""
     env = dict(os.environ)

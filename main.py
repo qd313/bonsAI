@@ -26,9 +26,12 @@ if PLUGIN_ROOT not in sys.path:
 
 from backend.services.ai_character_service import build_roleplay_system_suffix
 from backend.services.ollama_service import (
+    append_deck_tdp_sysfs_grounding,
     build_system_prompt,
     format_ai_response,
     post_ollama_chat,
+    user_asks_ollama_bonsai_host_or_latency,
+    user_wants_power_or_performance_topic,
 )
 from backend.services.settings_service import (
     clamp_int,
@@ -59,10 +62,12 @@ from backend.services.tdp_service import (
     apply_tdp as apply_tdp_service,
     clean_env,
     find_amdgpu_hwmon,
+    read_current_tdp_watts,
     write_sysfs,
 )
 from refactor_helpers import (
     build_ollama_chat_url,
+    is_current_tdp_read_intent,
     normalize_ollama_base,
     parse_tdp_recommendation,
     select_ollama_models,
@@ -1069,6 +1074,18 @@ class Plugin:
                     "model_policy_disclosure": None,
                 }
             question_for_model = lane.text
+            read_tdp = is_current_tdp_read_intent(question_for_model)
+            wants_grounding = user_wants_power_or_performance_topic(question_for_model)
+            ollama_host_topic = user_asks_ollama_bonsai_host_or_latency(question_for_model)
+            tdp_grounding_requested = (read_tdp or wants_grounding) and not ollama_host_topic
+            pre_cap: Optional[int] = None
+            if tdp_grounding_requested:
+                _loop = asyncio.get_running_loop()
+
+                def _read_cap():
+                    return read_current_tdp_watts(logger)
+
+                pre_cap = await _loop.run_in_executor(None, _read_cap)
 
             ollama_result = await plugin.ask_ollama(
                 question_for_model,
@@ -1078,16 +1095,33 @@ class Plugin:
                 request_timeout_seconds=request_timeout_seconds,
                 attachments=atts,
                 ask_mode=ask_mode,
+                read_tdp=read_tdp,
+                tdp_grounding_requested=tdp_grounding_requested,
+                tdp_cap_w=pre_cap,
             )
             elapsed = round(time.time() - start, 1)
             base_response_text = str(ollama_result.get("response", "") or "No response text.")
             response_text = base_response_text
             applied = None
 
-            # TDP application remains conditional so non-performance prompts stay read-only.
+            # TDP: read intent skips apply (model is given sysfs cap in prompt). Otherwise parse + optional apply.
             if ollama_result.get("success"):
-                rec = Plugin._parse_tdp_recommendation(response_text)
-                if rec:
+                loop = asyncio.get_running_loop()
+
+                def _parse_only():
+                    return parse_tdp_recommendation(
+                        base_response_text,
+                        Plugin.TDP_MIN_W,
+                        Plugin.TDP_MAX_W,
+                        Plugin.GPU_CLK_MIN_MHZ,
+                        Plugin.GPU_CLK_MAX_MHZ,
+                    )
+
+                rec = await loop.run_in_executor(None, _parse_only)
+
+                if read_tdp:
+                    logger.info("ask_game_ai: read-TDP question; sysfs apply skipped")
+                elif rec:
                     if not capability_enabled(settings, "hardware_control"):
                         logger.info("ask_game_ai: TDP recommendation present but hardware_control disabled")
                         response_text += (
@@ -1100,7 +1134,6 @@ class Plugin:
                         }
                     else:
                         logger.info("ask_game_ai: parsed TDP recommendation: %s", rec)
-                        loop = asyncio.get_running_loop()
                         applied = await loop.run_in_executor(None, Plugin._apply_tdp, rec)
                         logger.info("ask_game_ai: apply result: %s", applied)
                 else:
@@ -1460,9 +1493,13 @@ class Plugin:
         normalized_attachments: list,
         prepared_images: list,
         ask_mode: str = "speed",
+        *,
+        read_tdp: bool = False,
+        tdp_grounding_requested: bool = False,
+        tdp_cap_w: Optional[int] = None,
     ) -> str:
         """Build the system prompt using plugin-local metadata lookups and attachment context."""
-        return build_system_prompt(
+        base = build_system_prompt(
             question=question,
             app_id=app_id,
             app_name=app_name,
@@ -1471,6 +1508,12 @@ class Plugin:
             lookup_app_name=Plugin._lookup_steam_app_name,
             lookup_screenshot_vdf_metadata=Plugin._lookup_screenshot_vdf_metadata,
             ask_mode=ask_mode,
+        )
+        return append_deck_tdp_sysfs_grounding(
+            base,
+            read_tdp=read_tdp,
+            cap_w=tdp_cap_w,
+            grounding_requested=tdp_grounding_requested,
         )
 
     @staticmethod
@@ -1525,6 +1568,10 @@ class Plugin:
         request_timeout_seconds: int = 120,
         attachments: Optional[list] = None,
         ask_mode: str = "speed",
+        *,
+        read_tdp: bool = False,
+        tdp_grounding_requested: bool = False,
+        tdp_cap_w: Optional[int] = None,
     ):
         """Orchestrate attachment prep, prompt assembly, and model fallback request execution."""
         url = self._build_ollama_chat_url(PcIp)
@@ -1550,6 +1597,9 @@ class Plugin:
             normalized_attachments,
             prepared_images,
             ask_mode=ask_mode,
+            read_tdp=read_tdp,
+            tdp_grounding_requested=tdp_grounding_requested,
+            tdp_cap_w=tdp_cap_w,
         )
         roleplay = build_roleplay_system_suffix(settings, ask_mode)
         if roleplay:

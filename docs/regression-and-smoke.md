@@ -45,6 +45,7 @@ Run after **`scripts/build.ps1`** or **`scripts/build.sh`** succeeds. Check **Pa
 ### Plugin shell
 
 - [ ] Plugin opens from QAM; no crash on first paint.
+- [ ] (Optional) **Guide-chord / Steam Input macro** reaches bonsAI as in [troubleshooting.md](troubleshooting.md) §5 — **N/A** for docs-only or backend-only changes; use **Pass / Partial** when QAM, Decky entry, or first paint behavior changes.
 - [ ] LB/RB (or equivalent) cycles **Main → Settings → Permissions → (Debug if enabled) → About** without landing on a missing tab.
 - [ ] Return to game and reopen plugin: no duplicate ghost tabs or blank panel.
 

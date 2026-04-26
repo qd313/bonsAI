@@ -285,6 +285,10 @@ export type MainTabProps = {
   modelPolicyDisclosure?: ModelPolicyDisclosurePayload | null;
   /** Opens README model policy section (external nav permission). */
   onOpenModelPolicyReadme?: () => void;
+  /** When the last reply was a shortcut-setup keyword, show extra navigation help. */
+  shortcutSetupVariant?: "deck" | "stadia" | null;
+  /** Opens Steam Controller settings (External/Steam nav permission). */
+  onOpenControllerSettings?: () => void;
 };
 
 export function MainTab(props: MainTabProps) {
@@ -356,6 +360,8 @@ export function MainTab(props: MainTabProps) {
     onAskThreadSelectTurn,
     modelPolicyDisclosure = null,
     onOpenModelPolicyReadme,
+    shortcutSetupVariant = null,
+    onOpenControllerSettings,
   } = props;
 
   const [transparencyOpen, setTransparencyOpen] = useState(false);
@@ -1457,6 +1463,28 @@ export function MainTab(props: MainTabProps) {
                   expanded={expandedAi}
                   onExpandedChange={setExpandedAi}
                 />
+                {askThreadViewIndex === null && shortcutSetupVariant && onOpenControllerSettings && (
+                  <div
+                    style={{
+                      marginTop: 10,
+                      maxWidth: BONSAI_CHAT_AI_MAX_WIDTH_CSS,
+                    }}
+                  >
+                    <Button onClick={onOpenControllerSettings}>Open Controller settings</Button>
+                    <div
+                      style={{
+                        marginTop: 6,
+                        fontSize: 11,
+                        color: "rgba(200, 215, 230, 0.85)",
+                        lineHeight: 1.4,
+                      }}
+                    >
+                      {shortcutSetupVariant === "deck"
+                        ? "Then: Guide Button Chord Layout → your chord. Full macro steps: docs (§5 bonsai shortcut setup)."
+                        : "Pick a spare button on your Stadia layout, then Guide Button Chord. Full steps: docs (§5)."}
+                    </div>
+                  </div>
+                )}
                 {askThreadViewIndex === null && modelPolicyDisclosure && (
                   <div
                     style={{

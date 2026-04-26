@@ -127,6 +127,8 @@ type SteamUrlApi = {
 
 const UNIFIED_INPUT_STORAGE_KEY = "bonsai:last-query";
 
+type ShortcutSetupKind = "deck" | "stadia";
+
 type BackgroundStartResponse = {
   accepted?: boolean;
   status: "pending" | "busy" | "invalid" | "completed" | "blocked";
@@ -139,6 +141,8 @@ type BackgroundStartResponse = {
   elapsed_seconds?: number;
   /** When set, this start finished without Ollama (e.g. sanitizer keyword command). */
   meta?: string;
+  /** Set when the Ask was a bonsai:shortcut-setup-* keyword (no Ollama). */
+  shortcut_setup?: ShortcutSetupKind;
 };
 
 type BackgroundRequestStatus = {
@@ -156,6 +160,8 @@ type BackgroundRequestStatus = {
   completed_at: number | null;
   strategy_guide_branches?: StrategyGuideBranchesPayload | null;
   model_policy_disclosure?: ModelPolicyDisclosurePayload | null;
+  /** Present when the completed Ask was a shortcut-setup keyword. */
+  shortcut_setup?: ShortcutSetupKind | null;
 };
 
 type RecentScreenshotsResponse = {
@@ -411,6 +417,7 @@ const Content: React.FC = () => {
   const [lastExchange, setLastExchange] = useState<LastExchangeSnapshot | null>(null);
   const [strategyGuideBranches, setStrategyGuideBranches] = useState<StrategyGuideBranchesPayload | null>(null);
   const [modelPolicyDisclosure, setModelPolicyDisclosure] = useState<ModelPolicyDisclosurePayload | null>(null);
+  const [shortcutSetupVariant, setShortcutSetupVariant] = useState<ShortcutSetupKind | null>(null);
   const lastStrategyAskQuestionRef = useRef<string>("");
   const pendingArchiveTurnRef = useRef<{ question: string; answer: string } | null>(null);
   /** When set for the in-flight Ask, used for thread header / lastExchange.question instead of the full RPC prompt. */
@@ -568,6 +575,26 @@ const Content: React.FC = () => {
     }
   }, [capabilities.external_navigation, goToPermissionsTab]);
 
+  const onOpenControllerSettingsForShortcut = useCallback(() => {
+    if (!capabilities.external_navigation) {
+      toaster.toast({
+        title: "Permission required",
+        body: "Enable External and Steam navigation in the Permissions tab to open Controller settings from bonsAI.",
+        duration: 4500,
+      });
+      goToPermissionsTab();
+      return;
+    }
+    try {
+      const steamUrlApi = SteamClient.URL as unknown as SteamUrlApi;
+      steamUrlApi.ExecuteSteamURL(getSteamSettingsUrl("Settings > Controller"));
+      toaster.toast({ title: "Opening settings", body: "Controller", duration: 2000 });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      toaster.toast({ title: "Navigation failed", body: message, duration: 3000 });
+    }
+  }, [capabilities.external_navigation, goToPermissionsTab]);
+
   // --- Global error capture (always active regardless of tab) ---
   useEffect(() => {
     const onErr = (e: any) => {
@@ -698,6 +725,9 @@ const Content: React.FC = () => {
       const applied = status.applied ?? null;
       setOllamaContext({ app_id: appId, app_context: appContext });
       setIsAsking(false);
+      setShortcutSetupVariant(
+        status.status === "completed" && status.success ? status.shortcut_setup ?? null : null
+      );
       setOllamaResponse(buildResponseText(status.response ?? "No response text.", applied));
       setLastApplied(applied);
       setElapsedSeconds(Number.isFinite(status.elapsed_seconds) ? status.elapsed_seconds : null);
@@ -768,6 +798,7 @@ const Content: React.FC = () => {
     setLastExchange(null);
     setStrategyGuideBranches(null);
     setModelPolicyDisclosure(null);
+    setShortcutSetupVariant(null);
     pendingArchiveTurnRef.current = null;
     pendingThreadQuestionDisplayRef.current = null;
   }, []);
@@ -808,6 +839,8 @@ const Content: React.FC = () => {
     setLastApplied(null);
     setLastExchange(null);
     setStrategyGuideBranches(null);
+    setModelPolicyDisclosure(null);
+    setShortcutSetupVariant(null);
     setSelectedAttachment(null);
     setElapsedSeconds(null);
     setShowSlowWarning(false);
@@ -846,6 +879,7 @@ const Content: React.FC = () => {
     setShowSlowWarning(false);
     setStrategyGuideBranches(null);
     setModelPolicyDisclosure(null);
+    setShortcutSetupVariant(null);
   };
 
   const resetPluginSession = useCallback(() => {
@@ -870,6 +904,7 @@ const Content: React.FC = () => {
     setAskThreadDisplayQuestion("");
     setLastTransparency(null);
     setModelPolicyDisclosure(null);
+    setShortcutSetupVariant(null);
     toaster.toast({
       title: "Session cleared",
       body: "Unified search, reply, thread, transparency, and attachments were reset.",
@@ -996,6 +1031,7 @@ const Content: React.FC = () => {
     setIsAsking(true);
     setStrategyGuideBranches(null);
     setModelPolicyDisclosure(null);
+    setShortcutSetupVariant(null);
     setLastTransparency(null);
     setOllamaResponse("Thinking...");
     setLastApplied(null);
@@ -1055,7 +1091,7 @@ const Content: React.FC = () => {
         const terminal: BackgroundRequestStatus = {
           status: "completed",
           request_id: data.request_id ?? null,
-          question: "",
+          question: q,
           app_id: data.app_id ?? appId,
           app_context: (appId ? "active" : "none") as "active" | "none",
           success: true,
@@ -1067,11 +1103,19 @@ const Content: React.FC = () => {
           completed_at: now,
           strategy_guide_branches: null,
           model_policy_disclosure: null,
+          shortcut_setup: data.shortcut_setup ?? null,
         };
         applyBackgroundStatusToUi(terminal, "");
         saveIp(ip);
         if (unifiedInputPersistenceMode === "persist_search_only") {
           persistSearchQuery("");
+        }
+        if (data.meta === "shortcut_setup") {
+          toaster.toast({
+            title: "Quick-launch help",
+            body: "In-app guide only; tune the chord in Controller settings. See full recipe in docs.",
+            duration: 5000,
+          });
         }
         if (data.meta === "sanitizer_keyword") {
           const key = q.trim().toLowerCase();
@@ -1469,6 +1513,8 @@ const Content: React.FC = () => {
       onAskThreadSelectTurn={(i) => setAskThreadViewIndex(i)}
       modelPolicyDisclosure={modelPolicyDisclosure}
       onOpenModelPolicyReadme={openModelPolicyReadme}
+      shortcutSetupVariant={shortcutSetupVariant}
+      onOpenControllerSettings={onOpenControllerSettingsForShortcut}
     />
   );
 

@@ -41,6 +41,11 @@ scp package.json plugin.json main.py "${User}@${HostIp}:~/decky_temp_$PluginName
 scp refactor_helpers.py "${User}@${HostIp}:~/decky_temp_$PluginName/"
 scp -r backend "${User}@${HostIp}:~/decky_temp_$PluginName/"
 scp dist/index.js "${User}@${HostIp}:~/decky_temp_$PluginName/dist/"
+# Rollup emits hashed files under dist/assets/ (rollup-plugin-import-assets). Without this copy,
+# <img> URLs in index.js 404 on device (dev server URL points into the plugin dist folder).
+if (Test-Path "dist\assets") {
+    scp -r "dist\assets" "${User}@${HostIp}:~/decky_temp_$PluginName/dist/"
+}
 
 Write-Host "Overwriting system files and restarting Decky Loader..."
 

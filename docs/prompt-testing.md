@@ -27,6 +27,16 @@ When enabled, the carousel ignores random/contextual shuffling and uses **`TEMP_
 
 Turn the flag **off** before shipping or when you want production-like chip variety. `vitest` includes a conditional test that asserts the frozen triple when the flag is on, and that sampling varies when it is off.
 
+## Shortcut setup keywords (no Ollama)
+
+Deterministic **Ask** commands: `bonsai:shortcut-setup-deck` and `bonsai:shortcut-setup-stadia` (optional leading `/`). They **do not** call the model. There is **no** carousel chip for these — type the keyword (or **Paste from clipboard** if you saved it) as the full Ask line to get the fixed reply. See [troubleshooting.md](troubleshooting.md) §5.
+
+1. **PC IP** can be set; **not required** for these commands (same as sanitizer enable/disable). Send `bonsai:shortcut-setup-deck` as the **entire** Ask line.
+2. **Assert:** response explains that bonsAI does **not** auto-write Steam Input; it mentions **Guide** chord, QAM, Decky, and points to this doc (§5). **Input handling** / transparency should show **no** Ollama user/system text for the command path.
+3. **Variant:** `bonsai:shortcut-setup-stadia` (and `/bonsai:shortcut-setup-stadia`) should mention a **spare** button / Stadia layout, not “R4” as the only example.
+4. **Permissions — External/Steam on:** after the response, use **Open Controller settings**; **Steam** should open **Controller** settings (via `steam://open/settings/controller`).
+5. **Permissions off:** the button still appears; the toast should direct you to **Permissions** to enable navigation.
+
 ## Test Results
 
 | # | Game Running | Prompt | Expected Behavior | Model | Status | Notes |

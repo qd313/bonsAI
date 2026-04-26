@@ -2,6 +2,9 @@ import React from "react";
 import { ButtonItem, Navigation, PanelSection, PanelSectionRow } from "@decky/ui";
 import { toaster } from "@decky/api";
 import { BONSAI_FOREST_GREEN } from "../features/unified-input/constants";
+import supportPaypalQr from "../assets/qrcode.png";
+
+const PAYPAL_SUPPORT_URL = "https://paypal.me/quentind313";
 
 type Props = {
   githubRepoUrl: string;
@@ -91,6 +94,64 @@ export const AboutTab: React.FC<Props> = ({
       >
         <span style={{ fontSize: 13 }}>Bugs & Feature Requests</span>
       </ButtonItem>
+    </PanelSectionRow>
+    <PanelSectionRow>
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          boxSizing: "border-box",
+        }}
+      >
+        <div
+          style={{
+            width: "100%",
+            maxWidth: 180,
+            margin: "0 auto",
+            minWidth: 0,
+            boxSizing: "border-box",
+          }}
+        >
+          <ButtonItem
+            layout="below"
+            onClick={() => {
+              openExternalOrExplain(
+                PAYPAL_SUPPORT_URL,
+                allowExternalNavigation,
+                onNavigateToPermissions,
+                "PayPal"
+              );
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 6,
+                textAlign: "center",
+                width: "100%",
+                boxSizing: "border-box",
+              }}
+            >
+              <span style={{ fontSize: 14, lineHeight: 1.2 }}>Support my Steam Sale habit</span>
+              <img
+                src={supportPaypalQr}
+                alt="Support on PayPal — Support my Steam Sale habit"
+                style={{
+                  display: "block",
+                  width: 132,
+                  maxWidth: "100%",
+                  height: "auto",
+                  margin: "0 auto",
+                }}
+              />
+            </div>
+          </ButtonItem>
+        </div>
+      </div>
     </PanelSectionRow>
   </PanelSection>
 );

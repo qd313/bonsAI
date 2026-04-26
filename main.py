@@ -58,6 +58,10 @@ from backend.services.input_sanitizer_service import (
     classify_sanitizer_command,
     confirmation_message_for_command,
 )
+from backend.services.shortcut_setup_commands import (
+    classify_shortcut_setup_command,
+    response_message_for_shortcut,
+)
 from backend.services.tdp_service import (
     apply_tdp as apply_tdp_service,
     clean_env,
@@ -260,6 +264,23 @@ class Plugin:
             "app_context": app_context,
             "applied": None,
             "elapsed_seconds": 0.0,
+        }
+
+    async def _try_handle_shortcut_setup_command(self, question: str, app_id: str) -> Optional[dict]:
+        """Return fixed shortcut guidance (no Ollama) or ``None`` if not a shortcut keyword."""
+        variant = classify_shortcut_setup_command(question)
+        if variant is None:
+            return None
+        response = response_message_for_shortcut(variant)
+        app_context = "active" if app_id else "none"
+        return {
+            "success": True,
+            "response": response,
+            "app_id": app_id,
+            "app_context": app_context,
+            "applied": None,
+            "elapsed_seconds": 0.0,
+            "shortcut_setup": variant,
         }
 
     async def load_settings(self):
@@ -1238,6 +1259,10 @@ class Plugin:
             handled = await self._try_handle_sanitizer_keyword_command(parsed_question, app_id)
             if handled is not None:
                 return handled
+        if classify_shortcut_setup_command(parsed_question) is not None:
+            sc = await self._try_handle_shortcut_setup_command(parsed_question, app_id)
+            if sc is not None:
+                return sc
         if not pc_ip:
             logger.info("ask_game_ai: rejected (empty pc_ip)")
             return Plugin._reject_ask_request("PC IP Address is required.", app_id=app_id)
@@ -1282,6 +1307,7 @@ class Plugin:
                 "completed_at": time.time(),
                 "strategy_guide_branches": result.get("strategy_guide_branches"),
                 "model_policy_disclosure": result.get("model_policy_disclosure"),
+                "shortcut_setup": result.get("shortcut_setup"),
             }
 
     async def start_background_game_ai(self, question: Any = "", PcIp: str = ""):
@@ -1301,14 +1327,16 @@ class Plugin:
                 **Plugin._reject_ask_request("Question is required.", app_id=app_id),
             }
         is_sanitizer_command = classify_sanitizer_command(parsed_question) is not None
-        if not pc_ip and not is_sanitizer_command:
+        is_shortcut_command = classify_shortcut_setup_command(parsed_question) is not None
+        is_local_ask_command = is_sanitizer_command or is_shortcut_command
+        if not pc_ip and not is_local_ask_command:
             return {
                 "accepted": False,
                 "status": "invalid",
                 **Plugin._reject_ask_request("PC IP Address is required.", app_id=app_id),
             }
 
-        if not is_sanitizer_command:
+        if not is_local_ask_command:
             pre_settings = await plugin.load_settings()
             if not bool(pre_settings.get("input_sanitizer_user_disabled")):
                 pre_lane = apply_input_sanitizer_lane(parsed_question, False)
@@ -1422,6 +1450,71 @@ class Plugin:
                         "applied": None,
                         "elapsed_seconds": 0.0,
                         "meta": "sanitizer_keyword",
+                    }
+
+            if is_shortcut_command:
+                handled = await plugin._try_handle_shortcut_setup_command(parsed_question, app_id)
+                if handled is not None:
+                    plugin._background_request_seq += 1
+                    request_id = plugin._background_request_seq
+                    now = time.time()
+                    resp = str(handled.get("response", ""))
+                    variant = handled.get("shortcut_setup")
+                    await plugin._persist_input_transparency(
+                        {
+                            "route": "shortcut_setup",
+                            "raw_question": parsed_question,
+                            "sanitizer_action": "pass",
+                            "sanitizer_reason_codes": [],
+                            "text_after_sanitizer": parsed_question,
+                            "ollama_model": None,
+                            "system_prompt": None,
+                            "user_text_for_model": None,
+                            "user_image_count": 0,
+                            "attachment_paths": [],
+                            "assistant_raw": None,
+                            "assistant_after_attachment_format": None,
+                            "final_response": resp,
+                            "applied": None,
+                            "success": True,
+                            "app_id": app_id,
+                            "app_name": app_name,
+                            "pc_ip": pc_ip,
+                            "error_message": "",
+                            "elapsed_seconds": 0.0,
+                            "model_policy_disclosure": None,
+                        }
+                    )
+                    plugin._background_state = {
+                        "status": "completed",
+                        "request_id": request_id,
+                        "question": parsed_question,
+                        "app_id": app_id,
+                        "app_context": app_context,
+                        "success": True,
+                        "response": resp,
+                        "applied": None,
+                        "elapsed_seconds": 0.0,
+                        "error": None,
+                        "started_at": now,
+                        "completed_at": now,
+                        "strategy_guide_branches": None,
+                        "model_policy_disclosure": None,
+                        "shortcut_setup": variant,
+                    }
+                    plugin._background_task = None
+                    return {
+                        "accepted": True,
+                        "status": "completed",
+                        "request_id": request_id,
+                        "app_id": app_id,
+                        "app_context": app_context,
+                        "success": True,
+                        "response": resp,
+                        "applied": None,
+                        "elapsed_seconds": 0.0,
+                        "meta": "shortcut_setup",
+                        "shortcut_setup": variant,
                     }
 
             plugin._background_request_seq += 1

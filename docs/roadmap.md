@@ -18,7 +18,6 @@ Active features, maintainer tasks, and **known defects**. *QAMP Phase 1 (safe de
 ### Active work
 
 - ★★ **Prompt-testing — finish device matrix:** **MVP ready** (matrices, QAMP rows, optional frozen carousel in [prompt-testing.md](prompt-testing.md)); Deck checkbox pass is **partially complete** — finish remaining scenarios, mark checkboxes, record **Pass / Partial / Fail** with build id in PR or [red-blue-fight-2026-04-21.md](red-blue-fight-2026-04-21.md) where applicable.
-- ★★ **Global quick-launch macro — device verify + troubleshooting tune:** Exercise the Guide-chord → QAM → Decky → bonsAI sequence on real hardware using [README.md](../README.md) and [troubleshooting.md](troubleshooting.md) §5; confirm **Fire Start Delay** steps and D-pad depth match common QAM rails; update troubleshooting (and README pointer if needed) when a different rail count or delay pattern works better. Ties to [regression-and-smoke.md](regression-and-smoke.md) plugin shell checks.
 - ★★ **README — end-user install and usage (restore clear language):** [README.md](../README.md) regressed; restore **plain, step-by-step** guidance so users are never left inferring: **(1)** how to **install Ollama** (Deck vs PC, official download or repo helper scripts, firewall/`OLLAMA_HOST` pointer to [troubleshooting.md](troubleshooting.md) for detail), **(2)** how to **obtain and install the bonsAI plugin** (where the **`.zip`** comes from—e.g. GitHub Release—and how to load it in Decky Loader), **(3)** how to **use the app** after install (open via Decky/QAM, set Ollama host/base URL in Settings, pull a model if needed, send an Ask, optional permissions). Keep troubleshooting deep-dives in `docs/`, not the main path.
 - ★★ **Decky plugin release `.zip` process + clean-machine install proof:** Define and document a **repeatable** maintainer process to build the shippable plugin **`.zip`** (entry points: [development.md](development.md) / `scripts/build.*` as applicable; contents, `plugin.json`, versioning). **QA gate:** from an **empty** target (no Ollama installed yet), follow only README + that process and confirm **end-to-end** success—Ollama install, plugin zip install, first Ask—fixing any gaps in docs or scripts. Log build id and Pass/Partial/Fail in release notes, [regression-and-smoke.md](regression-and-smoke.md), or the ship PR as appropriate.
 
@@ -196,6 +195,7 @@ Backlog items are **not** listed in execution order. Stars are effort/risk withi
 
 ★★★★★
 
+- **Status:** **Baseline doc shipped** — full recipe, delay ladder, tuning, and maintainer **Verification checklist** in [troubleshooting.md](troubleshooting.md) §5; optional macro row in [regression-and-smoke.md](regression-and-smoke.md) §3. Ongoing: refresh if Steam/Decky QAM or Decky list behavior changes, or when **Native QAM entry for BonsAI (beneath Decky icon) — decouple research** (see above) lands (shorter macro).
 - **Goal:** Near-instant BonsAI from in-game or Home via Guide chord → QAM → Decky → BonsAI.
 - **Primary work:** Document and test optimal macro sequence (user-specific QAM tab order).
 - **Files:** `README.md`, `docs/development.md`.
@@ -316,6 +316,8 @@ Headings group related work. Star counts match the historical list.
 ### Steam Input
 
 - ★★★★★ **Steam Input Jump (Phase 1):** Debug tab jump to per-game controller config via `steam://controllerconfig/{appId}` (`SteamClient.URL.ExecuteSteamURL`), versioned lexicon in `src/data/steam-input-lexicon.ts`, helper in `src/utils/steamInputJump.ts`. Documented in [steam-input-research.md](steam-input-research.md). **Phase 2+** (indexed search, full catalog, ranked results) is **not** planned to continue.
+- ★★ **Global quick-launch macro (documentation + verification checklist):** Guide-chord path QAM → Decky → bonsAI with **Fire Start Delay** and per-user rail depth documented in [troubleshooting.md](troubleshooting.md) §5; [README.md](../README.md) quick-launch blurb; optional device check in [regression-and-smoke.md](regression-and-smoke.md) §3 (Plugin shell). On-device **Last verified** line in §5 is maintainer-updated when hardware is exercised.
+- ★ **Shortcut setup keywords (Ask, no Ollama):** `bonsai:shortcut-setup-deck` and `bonsai:shortcut-setup-stadia` typed in Ask (optional leading `/`); `backend/services/shortcut_setup_commands.py`; response + optional **Open Controller settings**; documented in [troubleshooting.md](troubleshooting.md) §5 and [prompt-testing.md](prompt-testing.md). **Not in scope:** auto-writing Steam Input / VDF (see [steam-input-research.md](steam-input-research.md)).
 
 ### About tab and main surface polish
 

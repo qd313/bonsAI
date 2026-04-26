@@ -190,6 +190,9 @@ deploy_remote() {
     bold "Copying files..."
     deck_scp package.json plugin.json main.py "${SSH_DEST}:${PLUGIN_DIR}/"
     deck_scp dist/index.js "${SSH_DEST}:${PLUGIN_DIR}/dist/"
+    if [[ -d dist/assets ]]; then
+        deck_scp -r dist/assets "${SSH_DEST}:${PLUGIN_DIR}/dist/"
+    fi
 
     bold "Fixing permissions & restarting plugin_loader..."
     deck_ssh "sudo chmod -R 755 ${PLUGIN_DIR}; \
@@ -212,6 +215,9 @@ deploy_local() {
     bold "Copying files..."
     cp package.json plugin.json main.py "$LOCAL_PLUGIN_DIR/"
     cp dist/index.js "$LOCAL_PLUGIN_DIR/dist/"
+    if [[ -d dist/assets ]]; then
+        cp -r dist/assets "$LOCAL_PLUGIN_DIR/dist/"
+    fi
 
     bold "Fixing permissions & restarting plugin_loader..."
     sudo chmod -R 755 "$LOCAL_PLUGIN_DIR"

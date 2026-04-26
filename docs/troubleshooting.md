@@ -233,35 +233,70 @@ If Windows still falls back to CPU after FIX A:
 - Verify after Steam restart and full reboot.
 
 ## 5. bonsai shortcut setup
-## 🚀 Pro-Tip: Create a Global Quick-Launch Shortcut for BonsAI
 
-Because Decky Loader acts as a secure container for plugins, we cannot force a custom button onto the main Steam interface. However, whether you are on standard SteamOS or running a Bazzite Gamescope session, you can use a native **Steam Input Macro** to instantly open BonsAI from *anywhere* (in-game or on the Home Screen) with a single button combination.
+### Pro tip: global quick-launch (Steam Input macro)
 
-We recommend binding this to a **Guide Button Chord** (e.g., holding the `Steam` or `Guide` button + `R4`). This ensures the shortcut works globally without interfering with your standard in-game controls.
+Because Decky Loader acts as a secure container for plugins, we cannot force a custom QAM tile for BonsAI. On standard SteamOS or a Bazzite Gamescope session, you can use a native **Steam Input** chord macro to open BonsAI from almost anywhere (in-game or the Home screen) with one combination after setup.
 
-### How to set up the BonsAI Quick-Launch Macro:
+**Short path in the main README:** [README.md](../README.md) (section *Open bonsAI quickly*). This section is the full recipe, delay ladder, and maintainer checks. For default plugin-shell smoke, see [regression-and-smoke.md](regression-and-smoke.md) §3 (Plugin shell), including the optional **Guide-chord / macro** row.
 
-1. **Access Chord Settings:**
-   * Press the `Steam` button and go to **Settings** > **Controller**.
-   * Scroll down to **Guide Button Chord Layout** and click **Edit**.
-   * Click **Edit Layout**.
+**In-app help (no Ollama):** In the main tab Ask field, send exactly `bonsai:shortcut-setup-deck` or `bonsai:shortcut-setup-stadia` (optional leading `/`, trim + casefold) for a **fixed** reply, **Open Controller settings** when Permissions allow, and a pointer here. bonsAI **cannot** auto-create the chord; you still build the macro in **Controller → Guide Button Chord Layout**.
 
-2. **Pick Your Trigger Button:**
-   * Navigate to the **Buttons** tab (or wherever you want to map this, such as the Back Grips).
-   * Find an available button, like `R4`, and select it.
+#### What changes between devices
 
-3. **Build the Macro Sequence:**
-   You will need to stack commands and add slight delays so the Steam UI has time to catch up to the inputs. 
+- **QAM left-rail order:** The vertical list under Quick Access Menu depends on your tabs and order; you need enough **D-pad down** (or the direction your rail uses) to reach the **Decky** row.
+- **Decky position in that list:** If you add or reorder QAM items, the count of pad moves to Decky changes.
+- **Plugin list order inside Decky:** bonsAI’s position in the loader list sets how many **D-pad** moves and one **A** press you need after Decky opens.
 
-   * **Command 1 (Open Menu):** Select `System` > `Quick Access Menu`.
-   * **Command 2 (Navigate to Decky):** Press the Gear icon next to your new command -> `Add Extra Command`. Set this command to `D-Pad Down`. 
-     * *Important:* Click the Gear icon next to Command 2, select `Settings`, and increase the **Fire Start Delay** to `100` or `150` (to give the QAM time to open).
-   * **Command 3, 4, etc. (Scroll down):** Repeat the `Add Extra Command` process for `D-Pad Down` as many times as needed to reach the Decky plug icon in your specific left-rail list. (Increase the Fire Start Delay slightly for each new command, e.g., `200`, `250`).
-   * **Command 5 (Open Decky):** Add one final Extra Command mapped to the `A Button` to enter the Decky menu. (Set Fire Start Delay to roughly `50` higher than the last command).
-   * **Command 6 (Scroll to BonsAI):** Depending on where BonsAI lives in your specific plugin list, add subsequent `D-Pad Down` and `A Button` extra commands with increasing delays to finalize the sequence.
+There is no single universal step count; treat every number below as a **starting point** you tune in **Controller** settings.
 
-**Testing Your Macro:**
-Once built, hold the `Steam` button and press your assigned button (e.g., `R4`). You should see the QAM fly open and automatically navigate straight into the BonsAI panel! If it misses a step, go back into the chord settings and slightly increase the **Fire Start Delay** for the step that failed.
+#### Generic macro shape
+
+1. **Open QAM** (one bound command, e.g. *System* → *Quick Access Menu*).
+2. ***n* × move along the QAM rail** (usually *D-pad down*) until the **Decky** row is selected.
+3. **Confirm** to enter Decky (usually **A**).
+4. ***m* × move in the plugin list** until **bonsAI** is highlighted.
+5. **Confirm** to open the plugin (usually **A**).
+
+Each of those steps is usually a **separate** command in the chord, with its own **Fire Start Delay** so the next input runs after the UI has finished the previous transition.
+
+#### How to set up the chord (Steam / Deck)
+
+1. **Access Chord settings:** Press the **Steam** button → **Settings** → **Controller** → **Guide Button Chord Layout** → **Edit** → **Edit Layout**.
+
+2. **Pick a trigger** that does not collide with in-game actions (e.g. hold **Steam** + **R4**). On the **Buttons** tab (or back grips, etc.), choose the face or grip you want.
+
+3. **Add commands in order** (use **Add Extra Command** from the gear menu on the previous command in the stack):
+
+   - **Open QAM:** *System* → *Quick Access Menu* (this is always the first command in the stack).
+   - **Reach Decky on the QAM rail:** For each *D-pad* move that advances the selection toward the Decky row, add an extra command and set **D-pad** (down or the direction your layout needs). The **first** move after QAM opens should use **Fire Start Delay** around **100–150 ms** so QAM is fully open before the pad acts.
+   - **Open Decky:** Add **A** (or *Confirm*) once the Decky row is selected. Set **Fire Start Delay** on this command a bit higher than the last rail step (e.g. **+50 ms** over the previous command’s delay) so Decky has time to focus.
+   - **Reach bonsAI in the plugin list:** Add *D-pad* moves and a final **A** with **increasing** delays per step, same idea as the QAM rail.
+
+**Fire Start Delay (starting points, not law):** Steam applies delay **before** that command’s action. After the first post-QAM *D-pad*, increase delay slightly on each following step (e.g. add about **50 ms** per step) so focus and animation can keep up. If the UI lags (thermal throttle, many plugins), nudge the failing step up by **25–50 ms** at a time.
+
+#### If the macro misbehaves (tuning)
+
+- **A step is skipped (focus never reaches the right row):** Increase **Fire Start Delay** on the **first command that should run after** the transition that was too fast—often the command right after QAM opens, or right after **A** opens Decky.
+- **Selection overshoots (too many moves):** Reduce **Fire Start Delay** on the *D-pad* command that moved one row too late, or remove one *D-pad* if you added a spare.
+- **Repeat from Home and from in-game** after changes; timing can differ slightly.
+
+*Reverse* pad directions are only an option if your Guide Button Chord command stack supports them for your layout.
+
+#### Testing your macro (end users)
+
+Hold **Steam** and press your chord button (e.g. **R4**). You should see QAM open and the chain advance into the bonsAI panel without manual correction. If a step fails, adjust **Fire Start Delay** on that step or the one immediately after the missed transition, then re-test.
+
+#### Verification checklist (maintainers / release QA)
+
+Run with a build that also satisfies [regression-and-smoke.md](regression-and-smoke.md) §3 *Plugin shell* when you touch QAM, Decky, or first paint.
+
+- [ ] Chord triggers from the **Home** shell and with a **game focused** (at least one title).
+- [ ] QAM opens reliably; the rail moves until **Decky** is selected, then **Decky** opens.
+- [ ] The Decky list advances until **bonsAI** is selected and the plugin **main** tab is visible (no blank panel, no need to complete the last steps by hand).
+- [ ] Re-run after SteamOS or Steam **Big Picture** updates if macro behavior regresses.
+
+**Last verified (optional):** *Record SteamOS / Steam client build when a maintainer runs the checklist on hardware; update after major client updates.*
 
 ---
 

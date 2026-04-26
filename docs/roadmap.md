@@ -277,7 +277,7 @@ Headings group related work. Star counts match the historical list.
 
 ### Release and distribution
 
-- ★★ **Decky plugin release `.zip` (CI) + clean install proof:** [`.github/workflows/build-plugin-zip.yml`](../.github/workflows/build-plugin-zip.yml) builds the shippable zip via Decky CLI on **`v*` tags** and **workflow_dispatch**; [`scripts/verify-decky-plugin-zip.sh`](../scripts/verify-decky-plugin-zip.sh) enforces the same file layout as deploy (`main.py`, `refactor_helpers.py`, `backend/services/`, `dist/`). Maintainer flow and versioning: [development.md](development.md) → **Release (plugin zip)**. **QA log template:** [regression-and-smoke.md](regression-and-smoke.md) §5 — run README-only path from **no Ollama yet**, then record Pass/Partial/Fail (human gate).
+- ★★ **Decky plugin release `.zip` (CI) + clean install proof:** [`.github/workflows/build-plugin-zip.yml`](../.github/workflows/build-plugin-zip.yml) builds the shippable zip via Decky CLI on **`v*` tags** and **workflow_dispatch**; [`scripts/verify-decky-plugin-zip.sh`](../scripts/verify-decky-plugin-zip.sh) enforces the same file layout as deploy (`main.py`, `refactor_helpers.py`, `py_modules/backend/services/`, `dist/`). Maintainer flow and versioning: [development.md](development.md) → **Release (plugin zip)**. **QA log template:** [regression-and-smoke.md](regression-and-smoke.md) §5 — run README-only path from **no Ollama yet**, then record Pass/Partial/Fail (human gate).
 
 ### First-run and prompts
 

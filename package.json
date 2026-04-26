@@ -11,7 +11,7 @@
     "watch": "rollup -c -w",
     "pretest": "node scripts/sync-version-from-plugin.mjs",
     "test": "vitest run",
-    "test:py": "python -m unittest discover -s tests -p \"test_*.py\""
+    "test:py": "python scripts/run_python_tests.py"
   },
   "repository": {
     "type": "git",

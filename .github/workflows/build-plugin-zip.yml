@@ -1,3 +1,5 @@
+# Release-like zip: push an annotated or lightweight tag matching v* (e.g. v0.1.0, v0.2.0-rc1).
+# workflow_dispatch is for ad-hoc builds; optional ref input should match the commit you want packaged.
 name: Build plugin zip
 
 on:
@@ -61,9 +63,22 @@ jobs:
             bash ./scripts/verify-decky-plugin-zip.sh "$z"
           done
 
+      - name: Artifact label (tag, dispatch ref, or branch)
+        id: artifact_label
+        shell: bash
+        run: |
+          LABEL="${GITHUB_REF_NAME}"
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && -n "${{ github.event.inputs.ref }}" ]]; then
+            LABEL="${{ github.event.inputs.ref }}"
+          fi
+          LABEL="${LABEL#refs/tags/}"
+          LABEL="${LABEL//\//-}"
+          SHORT_SHA="${GITHUB_SHA:0:7}"
+          echo "slug=${LABEL}-${SHORT_SHA}" >> "$GITHUB_OUTPUT"
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: bonsai-plugin-${{ github.sha }}
+          name: bonsai-plugin-${{ steps.artifact_label.outputs.slug }}
           path: out/*.zip
           if-no-files-found: error

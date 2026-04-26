@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Verify a Decky distributable zip contains the same runtime layout as dev deploy
-# (main.py, backend/, refactor_helpers.py, dist/index.js, manifests).
+# (main.py, py_modules/backend/, refactor_helpers.py, dist/index.js, manifests).
 set -euo pipefail
 
 usage() {
@@ -44,17 +44,17 @@ need_file dist/index.js
 need_file refactor_helpers.py
 
 for spot in \
-    backend/services/ollama_service.py \
-    backend/services/settings_service.py \
-    backend/__init__.py; do
+    py_modules/backend/services/ollama_service.py \
+    py_modules/backend/services/settings_service.py \
+    py_modules/backend/__init__.py; do
     need_file "$spot"
 done
 
 shopt -s nullglob
-py_services=( "$ROOT"/backend/services/*.py )
+py_services=( "$ROOT"/py_modules/backend/services/*.py )
 shopt -u nullglob
 if [[ ${#py_services[@]} -lt 3 ]]; then
-    echo "verify-decky-plugin-zip: expected multiple backend/services/*.py, found ${#py_services[@]}" >&2
+    echo "verify-decky-plugin-zip: expected multiple py_modules/backend/services/*.py, found ${#py_services[@]}" >&2
     exit 1
 fi
 

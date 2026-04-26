@@ -56,7 +56,7 @@ const PRESET_PROMPTS: PresetPrompt[] = [
   { text: "Any known issues running this on Deck?", category: "general" },
   { text: "How well does this game run on Deck?", category: "general" },
   { text: "Describe what you see in this screenshot", category: "general" },
-  { text: "What does my model policy tier mean?", category: "general" },
+  { text: "Explain the model policy tiers", category: "general" },
   { text: "Which Ollama model fits my Deck setup?", category: "general" },
   { text: "How do I get past this part?", category: "strategy", preferAskMode: "strategy" },
   { text: "I'm stuck — what should I try next?", category: "strategy", preferAskMode: "strategy" },

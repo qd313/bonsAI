@@ -288,6 +288,51 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertNotIn("DECK TROUBLESHOOTING (game in focus)", prompt)
         self.assertNotIn("IMPORTANT: When you recommend or apply a TDP or GPU clock change", prompt)
 
+    def test_build_system_prompt_includes_model_policy_tiers_explainer(self):
+        """Chip / paraphrases about Model policy get tier + FOSS vs open-weight vs proprietary guidance."""
+
+        def lookup_app_name(_app_id: str) -> str:
+            return ""
+
+        def lookup_vdf(_path: str) -> dict:
+            return {}
+
+        prompt = build_system_prompt(
+            question="Explain the model policy tiers",
+            app_id="",
+            app_name="",
+            normalized_attachments=[],
+            prepared_images=[],
+            lookup_app_name=lookup_app_name,
+            lookup_screenshot_vdf_metadata=lookup_vdf,
+            ask_mode="speed",
+        )
+        self.assertIn("MODEL POLICY TIERS (bonsAI)", prompt)
+        self.assertIn("Tier 1", prompt)
+        self.assertIn("open-weight", prompt)
+        self.assertIn("Strategy Guide mode", prompt)
+
+    def test_build_system_prompt_model_policy_explainer_in_strategy_allows_normal_reply(self):
+        def lookup_app_name(_app_id: str) -> str:
+            return ""
+
+        def lookup_vdf(_path: str) -> dict:
+            return {}
+
+        prompt = build_system_prompt(
+            question="Explain the model policy tiers",
+            app_id="",
+            app_name="",
+            normalized_attachments=[],
+            prepared_images=[],
+            lookup_app_name=lookup_app_name,
+            lookup_screenshot_vdf_metadata=lookup_vdf,
+            ask_mode="strategy",
+        )
+        self.assertIn("MODEL POLICY TIERS (bonsAI)", prompt)
+        self.assertIn("```bonsai-strategy-branches```", prompt)
+        self.assertIn("normal explanation", prompt)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -154,6 +154,32 @@ def _user_asks_ollama_bonsai_host_or_latency(question: str) -> bool:
     return False
 
 
+def _user_asks_model_policy_tiers_explainer(question: str) -> bool:
+    """True when the user wants bonsAI Model policy tiers / FOSS vs open-weight vs proprietary explained."""
+    s = (question or "").lower().strip()
+    if not s:
+        return False
+    if "explain the model policy tiers" in s:
+        return True
+    if "model policy tier" in s:
+        return True
+    if "what does my model policy" in s:
+        return True
+    if "model policy" in s and (
+        "tier" in s
+        or "foss" in s
+        or "open weight" in s
+        or "open-weight" in s
+        or "open model" in s
+        or "closed source" in s
+        or "non-foss" in s
+        or "non foss" in s
+        or "difference" in s
+    ):
+        return True
+    return False
+
+
 def _user_asks_deck_troubleshooting_or_compat_line(question: str) -> bool:
     """General compatibility / Proton / stability prompts (shipped main-tab presets, prompt-testing group)."""
     s = (question or "").lower()
@@ -190,6 +216,22 @@ OLLAMA_BONSAI_SETUP_LINE = (
 HARDWARE_APPENDIX_SKIPPED_FOR_OLLAMA_TOPIC = (
     "Hardware appendix (Deck TDP/GPU JSON): **Skipped for this topic** — the user is focused on Ollama/bonsAI inference or networking, not in-game power sliders. "
     "Do **not** output the ```json``` TDP/GPU block unless they **also** explicitly ask for Deck TDP or GPU MHz changes in the same message.\n\n"
+)
+
+MODEL_POLICY_TIERS_LINE = (
+    "\n\nMODEL POLICY TIERS (bonsAI): The user wants **what bonsAI’s Model policy tiers are** and how they differ—not a vague nod. "
+    "Answer in clear sections:\n"
+    "**1) What this controls:** bonsAI picks **ordered Ollama model fallbacks** from tags on the user’s host; the tier only changes **which tag families may appear** in that list. It does not install models.\n"
+    "**2) FOSS / open-source vs open-weight vs closed:** In plain language: **FOSS / open-source–aligned** (Tier 1 routing) means families we classify as **source-available under open licenses** for routing—**not** a lawyer’s verdict. "
+    "**Open model / open-weight** (Tier 2) usually means **weights are published** for local inference, but **license, training transparency, or use rules** can differ from Tier 1. "
+    "**Closed / proprietary / non-FOSS** (Tier 3 bucket) means tags we treat as outside those defaults, plus **unclassified** Ollama names not in our table—users must **read upstream licenses**.\n"
+    "**3) The three tiers (match UI labels):** "
+    "**Tier 1 — Open-source only:** strictest; FOSS-aligned routing families only. "
+    "**Tier 2 — Open-source + open model (open-weight):** Tier 1 **plus** common open-weight families. "
+    "**Tier 3 — Non-FOSS + unclassified:** requires explicit unlock; broadest; unknown tags only when allowed—**verify trust and license**.\n"
+    "State that classifications are **heuristic for UX/routing**, not legal advice. Mention **Permissions (or Settings) → Model policy** where the user changes tier, and that replies can show a short **Model source disclosure** after an Ask. "
+    "Do **not** pivot to Steam Performance/TDP unless they ask. "
+    "If **Strategy Guide mode** is active but this message is **only** about model policy (not gameplay), **do not** output ```bonsai-strategy-branches```—answer with a normal explanation.\n"
 )
 
 DECK_TROUBLESHOOT_GAME_SETTINGS_LINE = (
@@ -312,6 +354,7 @@ def build_system_prompt(
 
     if ask_mode != "strategy":
         ollama_q = _user_asks_ollama_bonsai_host_or_latency(question)
+        model_policy_q = _user_asks_model_policy_tiers_explainer(question)
         sweet = _user_asks_sweet_spot_tuning(question)
         gfx = ""
         if _user_asks_resolution_relevant_performance(question):
@@ -329,12 +372,14 @@ def build_system_prompt(
             + game_context
             + hardware_block
             + (OLLAMA_BONSAI_SETUP_LINE if ollama_q else "")
+            + (MODEL_POLICY_TIERS_LINE if model_policy_q else "")
             + (SWEET_SPOT_QAM_LINE if sweet else "")
             + gfx
             + (DECK_TROUBLESHOOT_GAME_SETTINGS_LINE if troubleshoot else "")
         )
 
     ollama_q = _user_asks_ollama_bonsai_host_or_latency(question)
+    model_policy_q = _user_asks_model_policy_tiers_explainer(question)
     power_topic = _user_wants_power_or_performance_topic(question)
     followup = is_strategy_followup_question(question)
     if followup:
@@ -403,6 +448,8 @@ def build_system_prompt(
         out += DECK_TROUBLESHOOT_GAME_SETTINGS_LINE
     if ollama_q:
         out += OLLAMA_BONSAI_SETUP_LINE
+    if model_policy_q:
+        out += MODEL_POLICY_TIERS_LINE
     return out
 
 

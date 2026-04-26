@@ -1,6 +1,8 @@
 import React, { useCallback, useState, useMemo, useEffect, useLayoutEffect, useRef } from "react";
 import { definePlugin, toaster, call } from "@decky/api";
 import { Navigation, Router, showModal, ConfirmModal, Tabs } from "@decky/ui";
+
+import { PLUGIN_VERSION } from "./pluginVersion";
 import {
   buildResponseText,
   DEFAULT_LATENCY_WARNING_SECONDS,
@@ -49,6 +51,7 @@ import { MODEL_POLICY_README_URL, type ModelPolicyDisclosurePayload, type ModelP
 import { SETTINGS_DATABASE } from "./data/settingsDatabase";
 import {
   ASK_LABEL_COLOR,
+  ASK_LABEL_COLOR_50,
   ASK_LABEL_READY_COLOR,
   ASK_READY_STATE_TRANSITION_MS,
   BONSAI_FOREST_GREEN,
@@ -2763,6 +2766,7 @@ export default definePlugin(() => {
     name: "bonsAI",
     titleView: (
       <span
+        title={`bonsAI v${PLUGIN_VERSION}`}
         style={{
           fontVariant: "small-caps",
           fontWeight: 600,
@@ -2773,6 +2777,24 @@ export default definePlugin(() => {
         }}
       >
         bonsAI
+        <sub
+          style={{
+            fontVariant: "normal",
+            fontSize: "0.46em",
+            fontWeight: 600,
+            letterSpacing: "0.04em",
+            color: ASK_LABEL_COLOR_50,
+            marginLeft: "0.38em",
+            lineHeight: 1,
+            verticalAlign: "baseline",
+            position: "relative",
+            bottom: "-0.2em",
+            WebkitTextStroke: "0 transparent",
+            paintOrder: "normal",
+          }}
+        >
+          v{PLUGIN_VERSION}
+        </sub>
       </span>
     ),
     content: <Root />,

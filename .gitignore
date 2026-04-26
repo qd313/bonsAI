@@ -35,6 +35,9 @@ Thumbs.db
 # Ignore built ts files
 dist/
 
+# Generated config (IPs injected at build time)
+src/config.ts
+
 __pycache__/
 
 /.yalc
@@ -55,3 +58,9 @@ out/*
 cli/
 cli/*
 cli/decky
+
+# Local Deck screenshots (captured by scripts/screenshot-deck.ps1)
+screenshots/
+
+# v0 UI drafts (reference only; not part of the Decky bundle)
+src/v0-drafts/

@@ -1,8 +1,8 @@
 {
   "name": "bonsAI",
   "author": "qwert",
-  "description": "bonsAI: local AI assistance for your Steam Deck.",
-  "version": "1.0.0",
+  "description": "bonsAI: self-hosted AI for SteamOS",
+  "version": "0.1.0",
   "api_version": 1,
   "main": "main.py",
   "icon": "fas fa-search",

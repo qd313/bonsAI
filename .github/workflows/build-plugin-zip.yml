@@ -1,0 +1,69 @@
+name: Build plugin zip
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Git ref to build (branch, tag, or SHA; leave empty for default branch)"
+        required: false
+        default: ""
+        type: string
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.ref != '' && github.event.inputs.ref || github.ref }}
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build frontend
+        run: pnpm run build
+
+      - name: Install Decky CLI
+        run: |
+          mkdir -p cli
+          curl -fsSL -o cli/decky "https://github.com/SteamDeckHomebrew/cli/releases/latest/download/decky-linux-x86_64"
+          chmod +x cli/decky
+
+      - name: Build plugin zip
+        run: sudo ./cli/decky plugin build "$GITHUB_WORKSPACE"
+
+      - name: Verify zip contents
+        run: |
+          shopt -s nullglob
+          zips=(out/*.zip)
+          if [[ ${#zips[@]} -eq 0 ]]; then
+            echo "No zip produced under out/"
+            ls -la out || true
+            exit 1
+          fi
+          for z in "${zips[@]}"; do
+            bash ./scripts/verify-decky-plugin-zip.sh "$z"
+          done
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bonsai-plugin-${{ github.sha }}
+          path: out/*.zip
+          if-no-files-found: error

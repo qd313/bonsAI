@@ -9,6 +9,6 @@ Follow `.cursorrules` → **Planning & subagent accountability**.
 
 When drafting or updating an implementation plan, include **Subagent reports and follow-ups** when a specialist agent applies or was used (security, FOSS, refactor, Decky debugger, **red-team**, **blue-team**, etc.). Summarize findings, cite `.cursor/agents/SUBAGENT_REPORTS.md` (Report log) and/or `docs/security-audit-report.md`, `docs/foss-advocate-report.md` when those are the canonical snapshots.
 
-For **ship / no-ship**, **freeze-week scope**, or **release prioritization**, also state whether **red-team** and/or **blue-team** were invoked or **N/A**, and link or cite [docs/red-blue-fight-2026-04-21.md](docs/red-blue-fight-2026-04-21.md) when the bout / legal-report template is the venue for that decision.
+For **ship / no-ship**, **release-window scope**, or **release prioritization**, also state whether **red-team** and/or **blue-team** were invoked or **N/A**, and link or cite [docs/red-blue-fight-2026-04-21.md](docs/red-blue-fight-2026-04-21.md) when the bout / legal-report template is the venue for that decision.
 
 Before closing risky work (RPC, logging, permissions, large refactors), state triage vs deferred follow-up.

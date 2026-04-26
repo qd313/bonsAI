@@ -3,12 +3,14 @@ import {
   buildResponseText,
   DEFAULT_AI_CHARACTER_ACCENT_INTENSITY,
   DEFAULT_ASK_MODE,
+  DEFAULT_CAPABILITIES,
   DEFAULT_OLLAMA_KEEP_ALIVE,
-  DEFAULT_SCREENSHOT_MAX_DIMENSION,
+  DEFAULT_SCREENSHOT_ATTACHMENT_PRESET,
   normalizeLatencyWarningSeconds,
   normalizeRequestTimeoutSeconds,
   normalizeSettings,
   reconcileLatencyWarningAndTimeout,
+  toBonsaiSettingsPayload,
 } from "./settingsAndResponse";
 
 /** Regression tests for normalization bounds and response formatting behavior. */
@@ -48,7 +50,8 @@ describe("settingsAndResponse", () => {
     expect(settings.latency_warning_seconds).toBe(20);
     expect(settings.request_timeout_seconds).toBe(150);
     expect(settings.unified_input_persistence_mode).toBe("persist_all");
-    expect(settings.screenshot_max_dimension).toBe(DEFAULT_SCREENSHOT_MAX_DIMENSION);
+    expect(settings.screenshot_attachment_preset).toBe(DEFAULT_SCREENSHOT_ATTACHMENT_PRESET);
+    expect(settings.latency_timeouts_custom_enabled).toBe(false);
     expect(settings.desktop_debug_note_auto_save).toBe(false);
     expect(settings.desktop_ask_verbose_logging).toBe(false);
     expect(settings.capabilities.filesystem_write).toBe(false);
@@ -158,6 +161,75 @@ describe("settingsAndResponse", () => {
     });
     expect(settings.latency_warning_seconds).toBeLessThan(settings.request_timeout_seconds);
     expect(settings.request_timeout_seconds).toBeGreaterThanOrEqual(120);
+  });
+
+  it("toBonsaiSettingsPayload maps snapshot input to RPC keys", () => {
+    const p = toBonsaiSettingsPayload({
+      latencyWarningSeconds: 20,
+      requestTimeoutSeconds: 150,
+      latencyTimeoutsCustomEnabled: true,
+      unifiedInputPersistenceMode: "no_persist",
+      screenshotAttachmentPreset: "mid",
+      desktopDebugNoteAutoSave: true,
+      desktopAskVerboseLogging: false,
+      presetChipFadeAnimationEnabled: true,
+      inputSanitizerUserDisabled: false,
+      capabilities: DEFAULT_CAPABILITIES,
+      aiCharacterEnabled: true,
+      aiCharacterRandom: false,
+      aiCharacterPresetId: "preset-a",
+      aiCharacterCustomText: "hi",
+      aiCharacterAccentIntensity: "balanced",
+      askMode: "deep",
+      ollamaKeepAlive: "30s",
+      showDebugTab: true,
+      modelPolicyTier: "open_weight",
+      modelPolicyNonFossUnlocked: false,
+      modelAllowHighVramFallbacks: true,
+    });
+    expect(p.latency_warning_seconds).toBe(20);
+    expect(p.request_timeout_seconds).toBe(150);
+    expect(p.unified_input_persistence_mode).toBe("no_persist");
+    expect(p.screenshot_attachment_preset).toBe("mid");
+    expect(p.ai_character_preset_id).toBe("preset-a");
+    expect(p.ask_mode).toBe("deep");
+    expect(p.ollama_keep_alive).toBe("30s");
+    expect(p.model_allow_high_vram_fallbacks).toBe(true);
+  });
+
+  it("toBonsaiSettingsPayload merges patch over base (character picker path)", () => {
+    const base = {
+      latencyWarningSeconds: 15,
+      requestTimeoutSeconds: 120,
+      latencyTimeoutsCustomEnabled: false,
+      unifiedInputPersistenceMode: "persist_all" as const,
+      screenshotAttachmentPreset: DEFAULT_SCREENSHOT_ATTACHMENT_PRESET,
+      desktopDebugNoteAutoSave: false,
+      desktopAskVerboseLogging: false,
+      presetChipFadeAnimationEnabled: true,
+      inputSanitizerUserDisabled: false,
+      capabilities: DEFAULT_CAPABILITIES,
+      aiCharacterEnabled: true,
+      aiCharacterRandom: true,
+      aiCharacterPresetId: "old",
+      aiCharacterCustomText: "oldtext",
+      aiCharacterAccentIntensity: DEFAULT_AI_CHARACTER_ACCENT_INTENSITY,
+      askMode: DEFAULT_ASK_MODE,
+      ollamaKeepAlive: DEFAULT_OLLAMA_KEEP_ALIVE,
+      showDebugTab: false,
+      modelPolicyTier: "open_source_only" as const,
+      modelPolicyNonFossUnlocked: false,
+      modelAllowHighVramFallbacks: false,
+    };
+    const p = toBonsaiSettingsPayload(base, {
+      ai_character_random: false,
+      ai_character_preset_id: "new-id",
+      ai_character_custom_text: "newtext",
+    });
+    expect(p.ai_character_random).toBe(false);
+    expect(p.ai_character_preset_id).toBe("new-id");
+    expect(p.ai_character_custom_text).toBe("newtext");
+    expect(p.latency_warning_seconds).toBe(15);
   });
 
   it("builds applied summary text", () => {

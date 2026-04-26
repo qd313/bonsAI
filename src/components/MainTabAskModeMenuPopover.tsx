@@ -1,32 +1,46 @@
 import React, { useLayoutEffect, useRef } from "react";
 import { Focusable } from "@decky/ui";
 import { ASK_LABEL_COLOR } from "../features/unified-input/constants";
-import {
-  AI_CHARACTER_ACCENT_INTENSITY_OPTIONS,
-  type AiCharacterAccentIntensityId,
-} from "../data/aiCharacterAccentIntensity";
+import { ASK_MODE_IDS, ASK_MODE_LABELS, type AskModeId } from "../data/askMode";
 
-export type AccentIntensityMenuPopoverProps = {
+export type MainTabAskModeMenuPopoverProps = {
   open: boolean;
   firstMenuItemRef: React.MutableRefObject<HTMLDivElement | null>;
-  selectedId: AiCharacterAccentIntensityId;
-  onSelect: (id: AiCharacterAccentIntensityId) => void;
+  selectedId: AskModeId;
+  onSelect: (mode: AskModeId) => void;
   onRequestClose: () => void;
-  onFocusTrigger: () => boolean;
+  /** Focus mode chip after closing (e.g. D-pad up from Speed closes menu without changing mode). */
+  onFocusModeChip: () => boolean;
 };
 
+/** Gap under mode chip; was 4px — +1px lowers whole dropdown. */
 const MENU_GAP_PX = 6;
+/** Horizontal padding per row (mirrored in `index.tsx` via `--bonsai-ask-mode-menu-pad-x` / `-pad-y`). */
 const MENU_ROW_PAD_X_PX = 6;
 const MENU_ROW_PAD_Y_PX = 8;
+/** Minimum dropdown width: at least chip width (`100%` of anchor) or this many CSS pixels, whichever is larger. */
 const MENU_PANEL_MIN_WIDTH_PX = 14;
 const MENU_ROW_GAP_PX = 0;
+
+/** Solid panel aligned with `.bonsai-glass-panel` family (see `index.tsx` §7–8). */
 const MENU_PANEL_BG = "rgb(28, 36, 44)";
 const MENU_ROW_SELECTED_BG = "rgb(40, 50, 62)";
 const MENU_FONT_PX = 13;
 
-/** Settings-tab inline menu; mirrors AskModeMenuPopover paint model for Steam compositing. */
-export function AccentIntensityMenuPopover(props: AccentIntensityMenuPopoverProps) {
-  const { open, firstMenuItemRef, selectedId, onSelect, onRequestClose, onFocusTrigger } = props;
+/**
+ * Anchored under the mode chip (`position: relative` on `askModeMenuAnchorRef`).
+ * Plain div + scoped CSS forces opaque paint; Decky `Focusable` alone can composite semi-transparent in QAM.
+ */
+export function MainTabAskModeMenuPopover(props: MainTabAskModeMenuPopoverProps) {
+  const {
+    open,
+    firstMenuItemRef,
+    selectedId,
+    onSelect,
+    onRequestClose,
+    onFocusModeChip,
+  } = props;
+
   const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useLayoutEffect(() => {
@@ -54,12 +68,13 @@ export function AccentIntensityMenuPopover(props: AccentIntensityMenuPopoverProp
 
   return (
     <div
-      className="bonsai-accent-intensity-menu-floater"
+      className="bonsai-ask-mode-menu-floater"
       style={{
         position: "absolute",
         top: "100%",
         left: 0,
         marginTop: MENU_GAP_PX,
+        // `max(100%, Npx)` gives a stable pixel floor; `100%` alone tracks the chip anchor.
         minWidth: `max(100%, ${MENU_PANEL_MIN_WIDTH_PX}px)`,
         width: "max-content",
         zIndex: 100,
@@ -69,7 +84,7 @@ export function AccentIntensityMenuPopover(props: AccentIntensityMenuPopoverProp
       }}
     >
       <div
-        className="bonsai-accent-intensity-menu-surface"
+        className="bonsai-ask-mode-menu-surface"
         style={{
           backgroundColor: MENU_PANEL_BG,
           border: "1px solid rgba(255, 255, 255, 0.08)",
@@ -78,16 +93,16 @@ export function AccentIntensityMenuPopover(props: AccentIntensityMenuPopoverProp
           boxSizing: "border-box",
           overflow: "hidden",
           mixBlendMode: "normal",
-          ["--bonsai-accent-intensity-menu-pad-x" as string]: `${MENU_ROW_PAD_X_PX}px`,
-          ["--bonsai-accent-intensity-menu-pad-y" as string]: `${MENU_ROW_PAD_Y_PX}px`,
-          ["--bonsai-accent-intensity-menu-list-pad-y" as string]: `${MENU_ROW_GAP_PX}px`,
+          ["--bonsai-ask-mode-menu-pad-x" as string]: `${MENU_ROW_PAD_X_PX}px`,
+          ["--bonsai-ask-mode-menu-pad-y" as string]: `${MENU_ROW_PAD_Y_PX}px`,
+          ["--bonsai-ask-mode-menu-list-pad-y" as string]: `${MENU_ROW_GAP_PX}px`,
         }}
       >
         <Focusable
-          className="bonsai-accent-intensity-menu-list"
+          className="bonsai-ask-mode-menu-list"
           flow-children="vertical"
           role="menu"
-          aria-label="Accent intensity"
+          aria-label="Inference mode"
           onCancel={onRequestClose}
           style={{
             width: "100%",
@@ -100,14 +115,14 @@ export function AccentIntensityMenuPopover(props: AccentIntensityMenuPopoverProp
             boxSizing: "border-box",
           }}
         >
-          {AI_CHARACTER_ACCENT_INTENSITY_OPTIONS.map((opt, i) => {
-            const isSelected = selectedId === opt.id;
+          {ASK_MODE_IDS.map((id, i) => {
+            const isSelected = selectedId === id;
             return (
               <Focusable
-                key={opt.id}
+                key={id}
                 role="menuitem"
                 className={
-                  "bonsai-accent-intensity-menu-item" + (isSelected ? " bonsai-accent-intensity-menu-item--selected" : "")
+                  "bonsai-ask-mode-menu-item" + (isSelected ? " bonsai-ask-mode-menu-item--selected" : "")
                 }
                 ref={(el) => {
                   itemRefs.current[i] = el;
@@ -117,14 +132,14 @@ export function AccentIntensityMenuPopover(props: AccentIntensityMenuPopoverProp
                   onMoveUp: () => {
                     if (i === 0) {
                       onRequestClose();
-                      onFocusTrigger();
+                      onFocusModeChip();
                       return true;
                     }
                     itemRefs.current[i - 1]?.focus();
                     return true;
                   },
                   onMoveDown: () => {
-                    if (i === AI_CHARACTER_ACCENT_INTENSITY_OPTIONS.length - 1) return true;
+                    if (id === "deep") return true;
                     itemRefs.current[i + 1]?.focus();
                     return true;
                   },
@@ -132,16 +147,16 @@ export function AccentIntensityMenuPopover(props: AccentIntensityMenuPopoverProp
                   onMoveRight: () => true,
                   onOKButton: (evt: { stopPropagation: () => void }) => {
                     evt.stopPropagation();
-                    onSelect(opt.id);
+                    onSelect(id);
                     onRequestClose();
                   },
                 } as Record<string, unknown>)}
                 onActivate={() => {
-                  onSelect(opt.id);
+                  onSelect(id);
                   onRequestClose();
                 }}
                 onClick={() => {
-                  onSelect(opt.id);
+                  onSelect(id);
                   onRequestClose();
                 }}
                 style={{
@@ -165,7 +180,7 @@ export function AccentIntensityMenuPopover(props: AccentIntensityMenuPopoverProp
                   boxSizing: "border-box",
                 }}
               >
-                {opt.shortLabel}
+                {ASK_MODE_LABELS[id].toLowerCase()}
               </Focusable>
             );
           })}

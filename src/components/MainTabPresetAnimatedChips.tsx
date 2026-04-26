@@ -37,7 +37,7 @@ function normalizeThreeSeeds(seeds: PresetPrompt[]): [PresetPrompt, PresetPrompt
   ];
 }
 
-export type PresetAnimatedChipsProps = {
+export type MainTabPresetAnimatedChipsProps = {
   /** When upstream presets change (e.g. after ask), carousel re-seeds from this list. */
   seeds: PresetPrompt[];
   setUnifiedInput: React.Dispatch<React.SetStateAction<string>>;
@@ -58,7 +58,7 @@ const staticSlotFade = (): [SlotFade, SlotFade, SlotFade] => [
   { opacity: 1, transitionMs: 0 },
 ];
 
-export function PresetAnimatedChips(props: PresetAnimatedChipsProps) {
+export function MainTabPresetAnimatedChips(props: MainTabPresetAnimatedChipsProps) {
   const { seeds, setUnifiedInput, fadeAnimationEnabled = true, onPreferAskMode } = props;
   const seedsKey = seeds.map((s) => s.text).join("\u0000");
 

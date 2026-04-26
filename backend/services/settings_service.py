@@ -142,6 +142,30 @@ def sanitize_screenshot_max_dimension(
     return default_dimension
 
 
+def sanitize_latency_timeouts_custom_enabled(value: Any) -> bool:
+    """Only explicit true lets stored warning/timeout values apply to Ollama and UI (defaults when false)."""
+    return value is True
+
+
+def resolve_screenshot_attachment_preset(data: Any, default_preset: str) -> str:
+    """Prefer screenshot_attachment_preset; map legacy screenshot_max_dimension when absent."""
+    if not isinstance(data, dict):
+        return default_preset
+    p = data.get("screenshot_attachment_preset")
+    if isinstance(p, str) and p in ("low", "mid", "max"):
+        return p
+    dim = data.get("screenshot_max_dimension")
+    try:
+        di = int(dim)
+    except (TypeError, ValueError):
+        return default_preset
+    if di == 1920:
+        return "mid"
+    if di == 3160:
+        return "max"
+    return "low"
+
+
 def sanitize_settings(
     data: Any,
     default_latency_warning_seconds: int,
@@ -152,8 +176,6 @@ def sanitize_settings(
     max_request_timeout_seconds: int,
     valid_persistence_modes: set[str],
     default_persistence_mode: str,
-    valid_screenshot_dimensions: set[int],
-    default_screenshot_dimension: int,
     valid_ask_modes: set[str],
     default_ask_mode: str,
 ) -> dict:
@@ -181,19 +203,19 @@ def sanitize_settings(
     mp_tier, mp_unlock = reconcile_model_policy_tier(
         raw.get("model_policy_tier"), raw.get("model_policy_non_foss_unlocked")
     )
+    screenshot_attachment_preset = resolve_screenshot_attachment_preset(raw, "low")
     return {
         "latency_warning_seconds": latency,
         "request_timeout_seconds": timeout,
+        "latency_timeouts_custom_enabled": sanitize_latency_timeouts_custom_enabled(
+            raw.get("latency_timeouts_custom_enabled")
+        ),
         "unified_input_persistence_mode": sanitize_unified_input_persistence_mode(
             raw.get("unified_input_persistence_mode"),
             valid_persistence_modes,
             default_persistence_mode,
         ),
-        "screenshot_max_dimension": sanitize_screenshot_max_dimension(
-            raw.get("screenshot_max_dimension"),
-            valid_screenshot_dimensions,
-            default_screenshot_dimension,
-        ),
+        "screenshot_attachment_preset": screenshot_attachment_preset,
         "desktop_debug_note_auto_save": sanitize_desktop_debug_note_auto_save(
             raw.get("desktop_debug_note_auto_save")
         ),

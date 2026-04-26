@@ -1,8 +1,8 @@
 # Change-risk hotspots (CRAP-style inventory)
 
-**Purpose:** Prioritize refactors and reviews by **change risk** — large surfaces, branching logic, and **how much automated test signal** exists before edits. This is a working companion to the ship-week freeze in [roadmap.md](roadmap.md) and the bout template in [red-blue-fight-2026-04-21.md](red-blue-fight-2026-04-21.md).
+**Purpose:** Prioritize refactors and reviews by **change risk** — large surfaces, branching logic, and **how much automated test signal** exists before edits. Use alongside [roadmap.md](roadmap.md) (**[In Progress](roadmap.md#in-progress)**, **[Planned](roadmap.md#planned)**) and the historical bout template in [red-blue-fight-2026-04-21.md](red-blue-fight-2026-04-21.md).
 
-**How to use:** Before a non-trivial edit, find the row for the file you touch; run the listed tests plus `pnpm test`, `pnpm run test:py`, and `pnpm run build` (and `scripts/build.ps1` / `scripts/build.sh` when Deck UI or RPC changes). Full standing gate + Deck smoke: [regression-and-smoke.md](regression-and-smoke.md). After **Settings** is acceptably calm (roadmap order), pull the **next extraction** items from the bottom queue — one slice per PR.
+**How to use:** Before a non-trivial edit, find the row for the file you touch; run the listed tests plus `pnpm test`, `pnpm run test:py`, and `pnpm run build` (and `scripts/build.ps1` / `scripts/build.sh` when Deck UI or RPC changes). Full standing gate + Deck smoke: [regression-and-smoke.md](regression-and-smoke.md). After **Settings** is acceptably calm (see **Completed** in [roadmap.md](roadmap.md)), pull the **next extraction** items from the bottom queue — one slice per PR.
 
 **CRAP (Change Risk Analysis and Prediction) lens:** High **cyclomatic / structural complexity** plus **low coverage** means higher regression cost. This doc does not ship numeric CRAP scores; optional tooling: `radon cc` on Python (not wired in CI today) if you want numbers later.
 

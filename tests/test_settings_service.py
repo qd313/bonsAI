@@ -42,8 +42,6 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
-            valid_screenshot_dimensions={1280, 1920, 3160},
-            default_screenshot_dimension=1280,
             valid_ask_modes={"speed", "strategy", "deep"},
             default_ask_mode="speed",
         )
@@ -51,7 +49,8 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertEqual(sanitized["request_timeout_seconds"], 300)
         self.assertLess(sanitized["latency_warning_seconds"], sanitized["request_timeout_seconds"])
         self.assertEqual(sanitized["unified_input_persistence_mode"], "persist_all")
-        self.assertEqual(sanitized["screenshot_max_dimension"], 1920)
+        self.assertEqual(sanitized["screenshot_attachment_preset"], "mid")
+        self.assertFalse(sanitized["latency_timeouts_custom_enabled"])
         self.assertFalse(sanitized["desktop_debug_note_auto_save"])
         self.assertFalse(sanitized["desktop_ask_verbose_logging"])
         self.assertFalse(sanitized["capabilities"]["filesystem_write"])
@@ -85,8 +84,6 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
-            valid_screenshot_dimensions={1280, 1920, 3160},
-            default_screenshot_dimension=1280,
             valid_ask_modes={"speed", "strategy", "deep"},
             default_ask_mode="speed",
         )
@@ -105,8 +102,6 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
-            valid_screenshot_dimensions={1280, 1920, 3160},
-            default_screenshot_dimension=1280,
             valid_ask_modes={"speed", "strategy", "deep"},
             default_ask_mode="speed",
         )
@@ -121,8 +116,6 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
-            valid_screenshot_dimensions={1280, 1920, 3160},
-            default_screenshot_dimension=1280,
             valid_ask_modes={"speed", "strategy", "deep"},
             default_ask_mode="speed",
         )
@@ -141,8 +134,6 @@ class SettingsServiceTests(unittest.TestCase):
                 max_request_timeout_seconds=300,
                 valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
                 default_persistence_mode="persist_all",
-                valid_screenshot_dimensions={1280, 1920, 3160},
-                default_screenshot_dimension=1280,
                 valid_ask_modes={"speed", "strategy", "deep"},
                 default_ask_mode="speed",
             )
@@ -160,8 +151,6 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
-            valid_screenshot_dimensions={1280, 1920, 3160},
-            default_screenshot_dimension=1280,
             valid_ask_modes={"speed", "strategy", "deep"},
             default_ask_mode="speed",
         )
@@ -176,8 +165,6 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
-            valid_screenshot_dimensions={1280, 1920, 3160},
-            default_screenshot_dimension=1280,
             valid_ask_modes={"speed", "strategy", "deep"},
             default_ask_mode="speed",
         )
@@ -198,8 +185,6 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
-            valid_screenshot_dimensions={1280, 1920, 3160},
-            default_screenshot_dimension=1280,
             valid_ask_modes={"speed", "strategy", "deep"},
             default_ask_mode="speed",
         )
@@ -219,8 +204,6 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
-            valid_screenshot_dimensions={1280, 1920, 3160},
-            default_screenshot_dimension=1280,
             valid_ask_modes={"speed", "strategy", "deep"},
             default_ask_mode="speed",
         )
@@ -238,8 +221,6 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
-            valid_screenshot_dimensions={1280, 1920, 3160},
-            default_screenshot_dimension=1280,
             valid_ask_modes={"speed", "strategy", "deep"},
             default_ask_mode="speed",
         )
@@ -254,8 +235,6 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
-            valid_screenshot_dimensions={1280, 1920, 3160},
-            default_screenshot_dimension=1280,
             valid_ask_modes={"speed", "strategy", "deep"},
             default_ask_mode="speed",
         )
@@ -273,8 +252,6 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
-            valid_screenshot_dimensions={1280, 1920, 3160},
-            default_screenshot_dimension=1280,
             valid_ask_modes={"speed", "strategy", "deep"},
             default_ask_mode="speed",
         )
@@ -289,8 +266,6 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
-            valid_screenshot_dimensions={1280, 1920, 3160},
-            default_screenshot_dimension=1280,
             valid_ask_modes={"speed", "strategy", "deep"},
             default_ask_mode="speed",
         )
@@ -311,8 +286,6 @@ class SettingsServiceTests(unittest.TestCase):
                 max_request_timeout_seconds=300,
                 valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
                 default_persistence_mode="persist_all",
-                valid_screenshot_dimensions={1280, 1920, 3160},
-                default_screenshot_dimension=1280,
                 valid_ask_modes={"speed", "strategy", "deep"},
                 default_ask_mode="speed",
             )
@@ -344,8 +317,6 @@ class SettingsServiceTests(unittest.TestCase):
                 max_request_timeout_seconds=300,
                 valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
                 default_persistence_mode="persist_all",
-                valid_screenshot_dimensions={1280, 1920, 3160},
-                default_screenshot_dimension=1280,
                 valid_ask_modes={"speed", "strategy", "deep"},
                 default_ask_mode="speed",
             )

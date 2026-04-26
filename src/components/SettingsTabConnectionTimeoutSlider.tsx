@@ -12,7 +12,7 @@ import {
 } from "../utils/settingsAndResponse";
 import { isLeftNavigationKey, isRightNavigationKey } from "../utils/focusNavigation";
 
-export type ConnectionTimeoutSliderProps = {
+export type SettingsTabConnectionTimeoutSliderProps = {
   warningSec: number;
   timeoutSec: number;
   onChange: (warningSec: number, timeoutSec: number) => void;
@@ -73,7 +73,7 @@ function isRightDeckButton(key: string): boolean {
  * - soft warning point (left)
  * - hard timeout point (right)
  */
-export function ConnectionTimeoutSlider(props: ConnectionTimeoutSliderProps) {
+export function SettingsTabConnectionTimeoutSlider(props: SettingsTabConnectionTimeoutSliderProps) {
   const { warningSec, timeoutSec, onChange, onMoveDownFromThumb, onMoveUpFromTimeoutThumb, warningThumbHostRef } =
     props;
 
@@ -287,11 +287,28 @@ export function ConnectionTimeoutSlider(props: ConnectionTimeoutSliderProps) {
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
-        gap: 8,
+        gap: 6,
         overflowWrap: "anywhere",
         wordBreak: "break-word",
       }}
     >
+      <div
+        className="bonsai-prose"
+        style={{
+          fontSize: 13,
+          color: "#cdd9e6",
+          lineHeight: 1.35,
+          paddingLeft: 2,
+          minWidth: 0,
+          maxWidth: "100%",
+          overflowWrap: "anywhere",
+          wordBreak: "break-word",
+        }}
+      >
+        Soft warning: <span style={{ color: "#ffd299", fontWeight: 700 }}>{warningSec}s</span>{" "}
+        <span style={{ color: "rgba(255,255,255,0.35)" }}>|</span>{" "}
+        Hard timeout: <span style={{ color: "#9ce7ff", fontWeight: 700 }}>{timeoutSec}s</span>
+      </div>
       <div
         style={{
           width: "100%",
@@ -336,7 +353,7 @@ export function ConnectionTimeoutSlider(props: ConnectionTimeoutSliderProps) {
               top: 14,
               height: 6,
               borderRadius: 999,
-              background: "rgba(124, 214, 255, 0.55)",
+              background: "linear-gradient(90deg, rgba(255, 210, 150, 0.45) 0%, rgba(124, 214, 255, 0.5) 100%)",
             }}
           />
           <div
@@ -381,14 +398,14 @@ export function ConnectionTimeoutSlider(props: ConnectionTimeoutSliderProps) {
                     focusedThumb === "warning"
                       ? editingThumb === "warning"
                         ? "2px solid #7af3b0"
-                        : "2px solid #9ce7ff"
-                      : "2px solid #77c4da",
-                  background: "#0f2a34",
+                        : "2px solid #ffd299"
+                      : "2px solid #c4a06e",
+                  background: "#2a1f0f",
                   boxShadow:
                     focusedThumb === "warning"
                       ? editingThumb === "warning"
                         ? "0 0 0 2px rgba(122,243,176,0.28)"
-                        : "0 0 0 2px rgba(124,214,255,0.22)"
+                        : "0 0 0 2px rgba(255,199,124,0.25)"
                       : "none",
                   flexShrink: 0,
                   touchAction: "none",
@@ -438,14 +455,14 @@ export function ConnectionTimeoutSlider(props: ConnectionTimeoutSliderProps) {
                     focusedThumb === "timeout"
                       ? editingThumb === "timeout"
                         ? "2px solid #7af3b0"
-                        : "2px solid #ffd299"
-                      : "2px solid #d5b07c",
-                  background: "#352610",
+                        : "2px solid #9ce7ff"
+                      : "2px solid #5a8aaa",
+                  background: "#0f2434",
                   boxShadow:
                     focusedThumb === "timeout"
                       ? editingThumb === "timeout"
                         ? "0 0 0 2px rgba(122,243,176,0.28)"
-                        : "0 0 0 2px rgba(255,199,124,0.22)"
+                        : "0 0 0 2px rgba(124,214,255,0.25)"
                       : "none",
                   flexShrink: 0,
                   touchAction: "none",
@@ -454,23 +471,6 @@ export function ConnectionTimeoutSlider(props: ConnectionTimeoutSliderProps) {
             </Focusable>
           </div>
         </div>
-      </div>
-      <div
-        className="bonsai-prose"
-        style={{
-          fontSize: 13,
-          color: "#cdd9e6",
-          lineHeight: 1.35,
-          paddingLeft: 2,
-          minWidth: 0,
-          maxWidth: "100%",
-          overflowWrap: "anywhere",
-          wordBreak: "break-word",
-        }}
-      >
-        Soft warning: <span style={{ color: "#9ce7ff", fontWeight: 700 }}>{warningSec}s</span>{" "}
-        <span style={{ color: "rgba(255,255,255,0.35)" }}>|</span>{" "}
-        Hard timeout: <span style={{ color: "#ffd299", fontWeight: 700 }}>{timeoutSec}s</span>
       </div>
     </div>
   );

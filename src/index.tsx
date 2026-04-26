@@ -1,66 +1,23 @@
 import React, { useCallback, useState, useMemo, useEffect, useLayoutEffect, useRef } from "react";
 import { definePlugin, toaster, call } from "@decky/api";
-import {
-  PanelSection,
-  PanelSectionRow,
-  TextField,
-  ToggleField,
-  Button,
-  Navigation,
-  QuickAccessTab,
-  Focusable,
-  Router,
-  showModal,
-  ConfirmModal,
-  Tabs,
-} from "@decky/ui";
+import { Navigation, Router, showModal, ConfirmModal, Tabs } from "@decky/ui";
 import {
   buildResponseText,
   DEFAULT_LATENCY_WARNING_SECONDS,
-  DEFAULT_REQUEST_TIMEOUT_SECONDS,
   DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE,
-  DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING,
-  DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED,
-  DEFAULT_INPUT_SANITIZER_USER_DISABLED,
-  DEFAULT_SCREENSHOT_MAX_DIMENSION,
-  DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
-  DEFAULT_CAPABILITIES,
-  DEFAULT_AI_CHARACTER_CUSTOM_TEXT,
-  DEFAULT_AI_CHARACTER_ENABLED,
-  DEFAULT_AI_CHARACTER_ACCENT_INTENSITY,
-  DEFAULT_ASK_MODE,
-  DEFAULT_OLLAMA_KEEP_ALIVE,
-  DEFAULT_AI_CHARACTER_PRESET_ID,
-  DEFAULT_AI_CHARACTER_RANDOM,
-  DEFAULT_SHOW_DEBUG_TAB,
-  DEFAULT_MODEL_POLICY_TIER,
-  DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS,
   normalizeAiCharacterCustomText,
   normalizeAiCharacterPresetId,
-  normalizeSettings,
-  normalizeLatencyWarningSeconds,
-  normalizeRequestTimeoutSeconds,
-  SCREENSHOT_DIMENSION_OPTIONS,
-  type BonsaiCapabilities,
+  toBonsaiSettingsPayload,
   type AskModeId,
   type BonsaiSettings,
-  type OllamaKeepAliveDuration,
-  type ScreenshotMaxDimension,
-  type UnifiedInputPersistenceMode,
 } from "./utils/settingsAndResponse";
-import {
-  AI_CHARACTER_ACCENT_INTENSITY_OPTIONS,
-  type AiCharacterAccentIntensityId,
-} from "./data/aiCharacterAccentIntensity";
 import { AboutTab } from "./components/AboutTab";
 import { CharacterPickerModal } from "./components/CharacterPickerModal";
 import { DesktopNoteSaveModal } from "./components/DesktopNoteSaveModal";
 import { DebugTab } from "./components/DebugTab";
-import { ConnectionTimeoutSlider } from "./components/ConnectionTimeoutSlider";
-import { OllamaKeepAliveSlider } from "./components/OllamaKeepAliveSlider";
-import { AccentIntensityMenuPopover } from "./components/AccentIntensityMenuPopover";
 import { MainTab } from "./components/MainTab";
 import { PermissionsTab } from "./components/PermissionsTab";
+import { SettingsTab } from "./components/SettingsTab";
 import { getSteamInputLexiconEntry } from "./data/steam-input-lexicon";
 import { jumpToSteamInputEntry } from "./utils/steamInputJump";
 import type { InputTransparencyRpcResult, TransparencySnapshot } from "./utils/inputTransparency";
@@ -69,11 +26,7 @@ import {
   resolveMainTabAvatarBadgeLetter,
   resolveMainTabAvatarPresetId,
 } from "./data/characterCatalog";
-import {
-  BONSAI_UI_ACCENT_MAIN_FALLBACK,
-  buildBonsaiScopeAccentInlineStyle,
-  resolveUiAccentFromCharacterSettings,
-} from "./data/characterUiAccent";
+import { buildBonsaiScopeAccentInlineStyle, resolveUiAccentFromCharacterSettings } from "./data/characterUiAccent";
 import { detectPromptCategory, getContextualPresets, getRandomPresets, type PresetPrompt } from "./data/presets";
 import {
   CUSTOM_RESOLUTION_INPUT_PREFIX,
@@ -92,54 +45,10 @@ import {
   GearIcon,
   LockIcon,
 } from "./components/icons";
-import {
-  MODEL_POLICY_README_URL,
-  MODEL_POLICY_SETTINGS_INTRO,
-  MODEL_POLICY_TIER_IDS,
-  MODEL_POLICY_TIER_LABELS,
-  type ModelPolicyDisclosurePayload,
-  type ModelPolicyTierId,
-} from "./data/modelPolicy";
-
-/** Selected tier: Tier 1 FOSS = green, Tier 2 open model = orange, Tier 3 = red. */
-const MODEL_POLICY_TIER_SELECTED_CHROME: Record<
-  ModelPolicyTierId,
-  { border: string; background: string }
-> = {
-  open_source_only: {
-    border: "1px solid rgba(74, 222, 128, 0.9)",
-    background: "rgba(18, 48, 32, 0.92)",
-  },
-  open_weight: {
-    border: "1px solid rgba(251, 146, 60, 0.92)",
-    background: "rgba(52, 32, 14, 0.92)",
-  },
-  non_foss: {
-    border: "1px solid rgba(248, 113, 113, 0.92)",
-    background: "rgba(48, 20, 24, 0.92)",
-  },
-};
-
-const MODEL_POLICY_TIER_BUTTON_IDLE = {
-  border: "1px solid rgba(58, 76, 96, 0.85)",
-  background: "rgba(26, 34, 44, 0.88)",
-};
-
-const MODEL_POLICY_TIER_LIST_HOST: React.CSSProperties = {
-  width: "100%",
-  boxSizing: "border-box",
-  borderRadius: 8,
-  border: "1px solid rgba(72, 98, 124, 0.45)",
-  background: "rgba(12, 18, 26, 0.96)",
-  padding: 10,
-  display: "flex",
-  flexDirection: "column",
-  gap: 8,
-};
+import { MODEL_POLICY_README_URL, type ModelPolicyDisclosurePayload, type ModelPolicyTierId } from "./data/modelPolicy";
 import { SETTINGS_DATABASE } from "./data/settingsDatabase";
 import {
   ASK_LABEL_COLOR,
-  ASK_LABEL_COLOR_50,
   ASK_LABEL_READY_COLOR,
   ASK_READY_STATE_TRANSITION_MS,
   BONSAI_FOREST_GREEN,
@@ -156,6 +65,9 @@ import {
 } from "./features/unified-input/constants";
 import { useUnifiedInputSurface } from "./features/unified-input/useUnifiedInputSurface";
 import { normalizeStrategyGuideBranches } from "./utils/strategyGuideBranches";
+import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "./utils/deckyCall";
+import { usePluginSettings } from "./hooks/usePluginSettings";
+import { getQamTab, getSteamSettingsUrl, isQamSetting } from "./data/steamSettingsNavigation";
 import type {
   AppliedResult,
   AskAttachment,
@@ -167,9 +79,10 @@ import type {
 
 /**
  * If Decky unmounts plugin `Content` when `showModal` closes, React state resets to defaults; this
- * outlives the component so `useLayoutEffect` can restore the tab on the next mount.
+ * outlives the component so `useLayoutEffect` can restore the tab on the next mount. Used for any
+ * fullscreen modal (character picker, model policy, permissions confirm, clear session, etc.).
  */
-let __bonsaiTabRestoreAfterCharacterPicker: string | null = null;
+let __bonsaiTabRestoreAfterModal: string | null = null;
 
 /**
  * This boundary protects the plugin UI from render-time failures so Decky can keep the panel alive.
@@ -242,13 +155,6 @@ type BackgroundRequestStatus = {
   model_policy_disclosure?: ModelPolicyDisclosurePayload | null;
 };
 
-type ConnectionStatus = {
-  reachable: boolean;
-  version?: string;
-  models?: string[];
-  error?: string;
-};
-
 type RecentScreenshotsResponse = {
   success: boolean;
   items: ScreenshotItem[];
@@ -301,57 +207,6 @@ type LastExchangeSnapshot = {
   answer: string;
 };
 const BACKGROUND_STATUS_POLL_MS = 1200;
-const DECKY_RPC_TIMEOUT_MS = 15000;
-const TEST_CONNECTION_TIMEOUT_SECONDS = 10;
-
-async function callDeckyWithTimeout<Args extends unknown[], Result>(
-  method: string,
-  args: Args,
-  timeoutMs: number = DECKY_RPC_TIMEOUT_MS
-): Promise<Result> {
-  const callPromise = call<Args, Result>(method, ...args);
-  let timerId: number | undefined;
-  const timeoutPromise = new Promise<never>((_, reject) => {
-    timerId = window.setTimeout(() => {
-      reject(new Error(`RPC timeout after ${timeoutMs}ms: ${method}`));
-    }, timeoutMs);
-  });
-  try {
-    return await Promise.race([callPromise, timeoutPromise]);
-  } finally {
-    if (typeof timerId === "number") window.clearTimeout(timerId);
-  }
-}
-
-// Normalize inconsistent Decky RPC error payloads into user-facing message strings.
-// Never append Python tracebacks to chat/toasts; log them to console for local debugging only.
-function formatDeckyRpcError(e: unknown): string {
-  const logTraceback = (base: string, tb: string) => {
-    if (typeof console !== "undefined" && typeof console.error === "function") {
-      console.error("[bonsAI] RPC error (traceback not shown in UI)", base, tb);
-    }
-  };
-  if (e instanceof Error) {
-    const traceback = (e as Error & { traceback?: string }).traceback;
-    const base = e.message || String(e);
-    if (typeof traceback === "string" && traceback.trim()) {
-      logTraceback(base, traceback);
-    }
-    return base;
-  }
-  if (e && typeof e === "object") {
-    const o = e as Record<string, unknown>;
-    const msg = [o.message, o.error].find((x) => typeof x === "string");
-    const tb = typeof o.traceback === "string" ? o.traceback : "";
-    if (typeof msg === "string") {
-      if (tb.trim()) {
-        logTraceback(msg, tb);
-      }
-      return msg;
-    }
-  }
-  return String(e);
-}
 
 // Load persisted unified input text based on the selected persistence mode.
 function loadSavedSearchQuery(): string {
@@ -420,266 +275,6 @@ function hasAcceptedDisclaimer(): boolean {
 // Persist acknowledgement so the disclaimer does not reappear each session.
 function markDisclaimerAccepted(): void {
   try { window.localStorage.setItem(DISCLAIMER_STORAGE_KEY, "1"); } catch {}
-}
-
-const SETTINGS_SECTION_URLS: Record<string, string> = {
-  system: "steam://open/settings/system",
-  security: "steam://open/settings/security",
-  internet: "steam://open/settings/internet",
-  notifications: "steam://open/settings/notifications",
-  display: "steam://open/settings/display",
-  power: "steam://open/settings/power",
-  audio: "steam://open/settings/audio",
-  bluetooth: "steam://open/settings/bluetooth",
-  controller: "steam://open/settings/controller",
-  keyboard: "steam://open/settings/keyboard",
-  customization: "steam://open/settings/customization",
-  accessibility: "steam://open/settings/accessibility",
-  "friends & chat": "steam://open/settings/friends",
-  downloads: "steam://open/settings/downloads",
-  cloud: "steam://open/settings/cloud",
-  "in game": "steam://open/settings/ingame",
-  family: "steam://open/settings/family",
-  "remote play": "steam://open/settings/remoteplay",
-  storage: "steam://open/settings/storage",
-  "game recording": "steam://open/settings/gamerecording",
-  home: "steam://open/settings/home",
-  library: "steam://open/settings/library",
-  store: "steam://open/settings/store",
-  developer: "steam://open/settings/developer",
-};
-
-// Identify QAM-only setting routes so navigation can use tab switching instead of URLs.
-function isQamSetting(settingPath: string): boolean {
-  return settingPath.startsWith("QAM >");
-}
-
-const QAM_SECTION_TABS: Record<string, QuickAccessTab> = {
-  "quick settings": QuickAccessTab.Settings,
-  performance: QuickAccessTab.Perf,
-  help: QuickAccessTab.Help,
-  soundtracks: QuickAccessTab.Music,
-};
-
-// Extract section grouping label from a normalized setting-path string.
-function getSettingSection(settingPath: string): string {
-  const parts = settingPath.split(">").map((part) => part.trim().toLowerCase());
-  return parts[1] ?? "";
-}
-
-// Build Steam settings deep-link URLs from selected search result entries.
-function getSteamSettingsUrl(settingPath: string): string {
-  const category = getSettingSection(settingPath);
-  return SETTINGS_SECTION_URLS[category] ?? "steam://open/settings";
-}
-
-// Map QAM search paths to the tab enum needed for Router navigation.
-function getQamTab(settingPath: string): QuickAccessTab {
-  const section = getSettingSection(settingPath);
-  return QAM_SECTION_TABS[section] ?? QuickAccessTab.Settings;
-}
-
-/**
- * This hook manages frontend settings loading, normalization, and persistence updates.
- * It keeps RPC and fallback logic out of the main component render body.
- */
-function usePluginSettings() {
-  const [latencyWarningSeconds, setLatencyWarningSeconds] = useState<number>(
-    normalizeLatencyWarningSeconds(DEFAULT_LATENCY_WARNING_SECONDS)
-  );
-  const [requestTimeoutSeconds, setRequestTimeoutSeconds] = useState<number>(
-    normalizeRequestTimeoutSeconds(DEFAULT_REQUEST_TIMEOUT_SECONDS)
-  );
-  const [unifiedInputPersistenceMode, setUnifiedInputPersistenceMode] = useState<UnifiedInputPersistenceMode>(
-    DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE
-  );
-  const [screenshotMaxDimension, setScreenshotMaxDimension] = useState<ScreenshotMaxDimension>(
-    DEFAULT_SCREENSHOT_MAX_DIMENSION
-  );
-  const [desktopDebugNoteAutoSave, setDesktopDebugNoteAutoSave] = useState<boolean>(
-    DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE
-  );
-  const [desktopAskVerboseLogging, setDesktopAskVerboseLogging] = useState<boolean>(
-    DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING
-  );
-  const [presetChipFadeAnimationEnabled, setPresetChipFadeAnimationEnabled] = useState<boolean>(
-    DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED
-  );
-  const [inputSanitizerUserDisabled, setInputSanitizerUserDisabled] = useState<boolean>(
-    DEFAULT_INPUT_SANITIZER_USER_DISABLED
-  );
-  const [capabilities, setCapabilities] = useState<BonsaiCapabilities>(() => ({ ...DEFAULT_CAPABILITIES }));
-  const [aiCharacterEnabled, setAiCharacterEnabled] = useState<boolean>(DEFAULT_AI_CHARACTER_ENABLED);
-  const [aiCharacterRandom, setAiCharacterRandom] = useState<boolean>(DEFAULT_AI_CHARACTER_RANDOM);
-  const [aiCharacterPresetId, setAiCharacterPresetId] = useState<string>(DEFAULT_AI_CHARACTER_PRESET_ID);
-  const [aiCharacterCustomText, setAiCharacterCustomText] = useState<string>(DEFAULT_AI_CHARACTER_CUSTOM_TEXT);
-  const [aiCharacterAccentIntensity, setAiCharacterAccentIntensity] = useState<AiCharacterAccentIntensityId>(
-    DEFAULT_AI_CHARACTER_ACCENT_INTENSITY
-  );
-  const [askMode, setAskMode] = useState<AskModeId>(DEFAULT_ASK_MODE);
-  const [ollamaKeepAlive, setOllamaKeepAlive] = useState<OllamaKeepAliveDuration>(DEFAULT_OLLAMA_KEEP_ALIVE);
-  const [showDebugTab, setShowDebugTab] = useState<boolean>(DEFAULT_SHOW_DEBUG_TAB);
-  const [modelPolicyTier, setModelPolicyTier] = useState<ModelPolicyTierId>(DEFAULT_MODEL_POLICY_TIER);
-  const [modelPolicyNonFossUnlocked, setModelPolicyNonFossUnlocked] = useState<boolean>(false);
-  const [modelAllowHighVramFallbacks, setModelAllowHighVramFallbacks] = useState<boolean>(
-    DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS
-  );
-  const [settingsLoaded, setSettingsLoaded] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-    call<[], BonsaiSettings>("load_settings")
-      .then((saved) => {
-        if (cancelled) return;
-        const normalized = normalizeSettings(saved);
-        setLatencyWarningSeconds(normalized.latency_warning_seconds);
-        setRequestTimeoutSeconds(normalized.request_timeout_seconds);
-        setUnifiedInputPersistenceMode(normalized.unified_input_persistence_mode);
-        setScreenshotMaxDimension(normalized.screenshot_max_dimension);
-        setDesktopDebugNoteAutoSave(normalized.desktop_debug_note_auto_save);
-        setDesktopAskVerboseLogging(normalized.desktop_ask_verbose_logging);
-        setPresetChipFadeAnimationEnabled(normalized.preset_chip_fade_animation_enabled);
-        setInputSanitizerUserDisabled(normalized.input_sanitizer_user_disabled);
-        setCapabilities(normalized.capabilities);
-        setAiCharacterEnabled(normalized.ai_character_enabled);
-        setAiCharacterRandom(normalized.ai_character_random);
-        setAiCharacterPresetId(normalized.ai_character_preset_id);
-        setAiCharacterCustomText(normalized.ai_character_custom_text);
-        setAiCharacterAccentIntensity(normalized.ai_character_accent_intensity);
-        setAskMode(normalized.ask_mode);
-        setOllamaKeepAlive(normalized.ollama_keep_alive);
-        setShowDebugTab(normalized.show_debug_tab);
-        setModelPolicyTier(normalized.model_policy_tier);
-        setModelPolicyNonFossUnlocked(normalized.model_policy_non_foss_unlocked);
-        setModelAllowHighVramFallbacks(normalized.model_allow_high_vram_fallbacks);
-      })
-      .catch(() => {
-        if (cancelled) return;
-        setLatencyWarningSeconds(DEFAULT_LATENCY_WARNING_SECONDS);
-        setRequestTimeoutSeconds(DEFAULT_REQUEST_TIMEOUT_SECONDS);
-        setUnifiedInputPersistenceMode(DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE);
-        setScreenshotMaxDimension(DEFAULT_SCREENSHOT_MAX_DIMENSION);
-        setDesktopDebugNoteAutoSave(DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE);
-        setDesktopAskVerboseLogging(DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING);
-        setPresetChipFadeAnimationEnabled(DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED);
-        setInputSanitizerUserDisabled(DEFAULT_INPUT_SANITIZER_USER_DISABLED);
-        setCapabilities(DEFAULT_CAPABILITIES);
-        setAiCharacterEnabled(DEFAULT_AI_CHARACTER_ENABLED);
-        setAiCharacterRandom(DEFAULT_AI_CHARACTER_RANDOM);
-        setAiCharacterPresetId(DEFAULT_AI_CHARACTER_PRESET_ID);
-        setAiCharacterCustomText(DEFAULT_AI_CHARACTER_CUSTOM_TEXT);
-        setAiCharacterAccentIntensity(DEFAULT_AI_CHARACTER_ACCENT_INTENSITY);
-        setAskMode(DEFAULT_ASK_MODE);
-        setOllamaKeepAlive(DEFAULT_OLLAMA_KEEP_ALIVE);
-        setShowDebugTab(DEFAULT_SHOW_DEBUG_TAB);
-        setModelPolicyTier(DEFAULT_MODEL_POLICY_TIER);
-        setModelPolicyNonFossUnlocked(false);
-        setModelAllowHighVramFallbacks(DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS);
-      })
-      .finally(() => {
-        if (!cancelled) setSettingsLoaded(true);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!settingsLoaded) return;
-    const timer = setTimeout(() => {
-      call<[BonsaiSettings], BonsaiSettings>("save_settings", {
-        latency_warning_seconds: latencyWarningSeconds,
-        request_timeout_seconds: requestTimeoutSeconds,
-        unified_input_persistence_mode: unifiedInputPersistenceMode,
-        screenshot_max_dimension: screenshotMaxDimension,
-        desktop_debug_note_auto_save: desktopDebugNoteAutoSave,
-        desktop_ask_verbose_logging: desktopAskVerboseLogging,
-        preset_chip_fade_animation_enabled: presetChipFadeAnimationEnabled,
-        input_sanitizer_user_disabled: inputSanitizerUserDisabled,
-        capabilities,
-        ai_character_enabled: aiCharacterEnabled,
-        ai_character_random: aiCharacterRandom,
-        ai_character_preset_id: aiCharacterPresetId,
-        ai_character_custom_text: aiCharacterCustomText,
-        ai_character_accent_intensity: aiCharacterAccentIntensity,
-        ask_mode: askMode,
-        ollama_keep_alive: ollamaKeepAlive,
-        show_debug_tab: showDebugTab,
-        model_policy_tier: modelPolicyTier,
-        model_policy_non_foss_unlocked: modelPolicyNonFossUnlocked,
-        model_allow_high_vram_fallbacks: modelAllowHighVramFallbacks,
-      }).catch((err) => {
-        console.error("save_settings failed", err);
-      });
-    }, 400);
-    return () => clearTimeout(timer);
-  }, [
-    latencyWarningSeconds,
-    requestTimeoutSeconds,
-    unifiedInputPersistenceMode,
-    screenshotMaxDimension,
-    desktopDebugNoteAutoSave,
-    desktopAskVerboseLogging,
-    presetChipFadeAnimationEnabled,
-    inputSanitizerUserDisabled,
-    capabilities,
-    aiCharacterEnabled,
-    aiCharacterRandom,
-    aiCharacterPresetId,
-    aiCharacterCustomText,
-    aiCharacterAccentIntensity,
-    askMode,
-    ollamaKeepAlive,
-    showDebugTab,
-    modelPolicyTier,
-    modelPolicyNonFossUnlocked,
-    modelAllowHighVramFallbacks,
-    settingsLoaded,
-  ]);
-
-  return {
-    latencyWarningSeconds,
-    requestTimeoutSeconds,
-    unifiedInputPersistenceMode,
-    screenshotMaxDimension,
-    desktopDebugNoteAutoSave,
-    desktopAskVerboseLogging,
-    presetChipFadeAnimationEnabled,
-    inputSanitizerUserDisabled,
-    capabilities,
-    setCapabilities,
-    aiCharacterEnabled,
-    aiCharacterRandom,
-    aiCharacterPresetId,
-    aiCharacterCustomText,
-    aiCharacterAccentIntensity,
-    setAiCharacterEnabled,
-    setAiCharacterRandom,
-    setAiCharacterPresetId,
-    setAiCharacterCustomText,
-    setAiCharacterAccentIntensity,
-    askMode,
-    setAskMode,
-    ollamaKeepAlive,
-    setOllamaKeepAlive,
-    showDebugTab,
-    setShowDebugTab,
-    modelPolicyTier,
-    setModelPolicyTier,
-    modelPolicyNonFossUnlocked,
-    setModelPolicyNonFossUnlocked,
-    modelAllowHighVramFallbacks,
-    setModelAllowHighVramFallbacks,
-    settingsLoaded,
-    setLatencyWarningSeconds,
-    setRequestTimeoutSeconds,
-    setUnifiedInputPersistenceMode,
-    setScreenshotMaxDimension,
-    setDesktopDebugNoteAutoSave,
-    setDesktopAskVerboseLogging,
-    setPresetChipFadeAnimationEnabled,
-    setInputSanitizerUserDisabled,
-  };
 }
 
 /**
@@ -784,9 +379,9 @@ const Content: React.FC = () => {
   const postPickerTabLockRef = useRef<{ until: number; tab: string } | null>(null);
 
   useLayoutEffect(() => {
-    const pending = __bonsaiTabRestoreAfterCharacterPicker;
+    const pending = __bonsaiTabRestoreAfterModal;
     if (pending != null) {
-      __bonsaiTabRestoreAfterCharacterPicker = null;
+      __bonsaiTabRestoreAfterModal = null;
       setCurrentTab(pending);
     }
   }, []);
@@ -825,10 +420,6 @@ const Content: React.FC = () => {
   }, [askThreadCollapsed]);
   const [askThreadViewIndex, setAskThreadViewIndex] = useState<number | null>(null);
   const [askThreadDisplayQuestion, setAskThreadDisplayQuestion] = useState("");
-  const [accentIntensityMenuOpen, setAccentIntensityMenuOpen] = useState(false);
-  const accentIntensityMenuAnchorRef = useRef<HTMLDivElement>(null);
-  const accentIntensityMenuFirstItemRef = useRef<HTMLDivElement>(null);
-  const accentIntensityMenuToggleOnceRef = useRef(false);
   const [isAsking, setIsAsking] = useState(false);
   const [lastApplied, setLastApplied] = useState<AppliedResult | null>(null);
   const [suggestedPrompts, setSuggestedPrompts] = useState<PresetPrompt[]>(() => getRandomPresets(3));
@@ -841,27 +432,16 @@ const Content: React.FC = () => {
   const [selectedAttachment, setSelectedAttachment] = useState<AskAttachment | null>(null);
   const screenshotBrowserHostRef = useRef<HTMLDivElement>(null);
   const attachActionHostRef = useRef<HTMLDivElement>(null);
-  /** Exposes VRAM retention slider thumb for D-pad from latency slider / screenshot row. */
-  const ollamaKeepAliveThumbHostRef = useRef<HTMLDivElement>(null);
-  /** Anchor for Deck nav: D-pad up from screenshot row into VRAM retention slider thumb. */
-  const screenshotDimensionNavRef = useRef<HTMLDivElement>(null);
-  /** Anchor for Deck nav: hard-timeout thumb moves up into Ollama IP TextField (not soft-warning thumb). */
-  const ollamaIpConnectionNavRef = useRef<HTMLDivElement>(null);
-  /** Exposes soft-warning slider thumb for D-pad up from screenshot dimension row. */
-  const latencyWarningThumbHostRef = useRef<HTMLDivElement>(null);
 
   // --- Debug state (lifted from former ErrorCaptureUI) ---
   const [capturedErrors, setCapturedErrors] = useState<string[]>([]);
 
-  // --- Settings tab state ---
-  const [deckIp, setDeckIp] = useState<string>("...");
-  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus | null>(null);
-  const [connectionTesting, setConnectionTesting] = useState(false);
   const {
     latencyWarningSeconds,
     requestTimeoutSeconds,
+    latencyTimeoutsCustomEnabled,
     unifiedInputPersistenceMode,
-    screenshotMaxDimension,
+    screenshotAttachmentPreset,
     desktopDebugNoteAutoSave,
     desktopAskVerboseLogging,
     presetChipFadeAnimationEnabled,
@@ -880,8 +460,9 @@ const Content: React.FC = () => {
     setAiCharacterAccentIntensity,
     setLatencyWarningSeconds,
     setRequestTimeoutSeconds,
+    setLatencyTimeoutsCustomEnabled,
     setUnifiedInputPersistenceMode,
-    setScreenshotMaxDimension,
+    setScreenshotAttachmentPreset,
     setDesktopDebugNoteAutoSave,
     setDesktopAskVerboseLogging,
     setPresetChipFadeAnimationEnabled,
@@ -899,6 +480,11 @@ const Content: React.FC = () => {
     modelAllowHighVramFallbacks,
     setModelAllowHighVramFallbacks,
   } = usePluginSettings();
+
+  const effectiveLatencyWarningSeconds = useMemo(
+    () => (latencyTimeoutsCustomEnabled ? latencyWarningSeconds : DEFAULT_LATENCY_WARNING_SECONDS),
+    [latencyTimeoutsCustomEnabled, latencyWarningSeconds]
+  );
 
   const uiAccent = useMemo(
     () =>
@@ -952,7 +538,7 @@ const Content: React.FC = () => {
       if (t === "non_foss" && !modelPolicyNonFossUnlocked) {
         toaster.toast({
           title: "Unlock required",
-          body: "Turn on “Allow non-FOSS and unclassified tags” below before using Tier 3.",
+          body: "Turn on “Allow non-FOSS and unclassified tags” in Permissions → Model policy before Tier 3.",
           duration: 5000,
         });
         return;
@@ -1006,26 +592,15 @@ const Content: React.FC = () => {
     };
   }, []);
 
-  // --- Fetch Deck IP on mount ---
-  useEffect(() => {
-    callDeckyWithTimeout<[], string>("get_deck_ip", [], DECKY_RPC_TIMEOUT_MS)
-      .then((ip) => {
-        setDeckIp(ip ?? "unknown");
-      })
-      .catch(() => {
-        setDeckIp("unknown");
-      });
-  }, []);
-
   // --- Slow-response warning timer ---
   useEffect(() => {
     if (!isAsking) {
       setShowSlowWarning(false);
       return;
     }
-    const timer = setTimeout(() => setShowSlowWarning(true), latencyWarningSeconds * 1000);
+    const timer = setTimeout(() => setShowSlowWarning(true), effectiveLatencyWarningSeconds * 1000);
     return () => clearTimeout(timer);
-  }, [isAsking, latencyWarningSeconds]);
+  }, [isAsking, effectiveLatencyWarningSeconds]);
 
   // --- Disclaimer modal on first open ---
   useEffect(() => {
@@ -1192,29 +767,6 @@ const Content: React.FC = () => {
     setModelPolicyDisclosure(null);
     pendingArchiveTurnRef.current = null;
     pendingThreadQuestionDisplayRef.current = null;
-  }, []);
-
-  const accentIntensityOutline: Record<AiCharacterAccentIntensityId, string> = {
-    subtle: "#eab308",
-    balanced: "#f97316",
-    heavy: "#b91c1c",
-    unleashed: "#a855f7",
-  };
-
-  const toggleAccentIntensityMenu = useCallback(() => {
-    if (accentIntensityMenuToggleOnceRef.current) return;
-    accentIntensityMenuToggleOnceRef.current = true;
-    setAccentIntensityMenuOpen((o) => !o);
-    requestAnimationFrame(() => {
-      accentIntensityMenuToggleOnceRef.current = false;
-    });
-  }, []);
-  const closeAccentIntensityMenu = useCallback(() => setAccentIntensityMenuOpen(false), []);
-  const focusAccentIntensityTrigger = useCallback((): boolean => {
-    const btn = accentIntensityMenuAnchorRef.current?.querySelector<HTMLElement>("button.bonsai-accent-intensity-trigger");
-    if (!btn) return false;
-    btn.focus();
-    return true;
   }, []);
 
   const {
@@ -1607,88 +1159,6 @@ const Content: React.FC = () => {
     void onAskOllama(composed, { threadQuestionDisplay: `I'm at: ${opt.label}` });
   };
 
-  const onTestConnection = async () => {
-    const ip = ollamaIp.trim();
-    if (!ip) return;
-    setConnectionTesting(true);
-    setConnectionStatus(null);
-    try {
-      const result = await callDeckyWithTimeout<[string, number], ConnectionStatus>(
-        "test_ollama_connection",
-        [ip, TEST_CONNECTION_TIMEOUT_SECONDS],
-        TEST_CONNECTION_TIMEOUT_SECONDS * 1000 + 3000
-      );
-      setConnectionStatus(result);
-      if (result.reachable) saveIp(ip);
-    } catch (e: unknown) {
-      setConnectionStatus({ reachable: false, error: formatDeckyRpcError(e) });
-    } finally {
-      setConnectionTesting(false);
-    }
-  };
-
-  const persistenceModeLabel: Record<UnifiedInputPersistenceMode, string> = {
-    persist_all: "Persist all text",
-    persist_search_only: "Persist search-only",
-    no_persist: "No persistence",
-  };
-  const persistenceModeShortLabel: Record<UnifiedInputPersistenceMode, string> = {
-    persist_all: "All",
-    persist_search_only: "Search",
-    no_persist: "None",
-  };
-  const persistenceModeOptions: UnifiedInputPersistenceMode[] = [
-    "persist_all",
-    "persist_search_only",
-    "no_persist",
-  ];
-  const persistenceModeDescription: Record<UnifiedInputPersistenceMode, string> = {
-    persist_all: "Restore all unified input text, including AI prompts.",
-    persist_search_only: "Restore only text that matches settings search results.",
-    no_persist: "Never restore unified input text on reopen.",
-  };
-  const persistenceSettingsTooltip = [
-    `All text — ${persistenceModeDescription.persist_all}`,
-    `Search-only — ${persistenceModeDescription.persist_search_only}`,
-    `None — ${persistenceModeDescription.no_persist}`,
-  ].join(" ");
-  const screenshotDimensionLabel: Record<ScreenshotMaxDimension, string> = {
-    1280: "1280",
-    1920: "1920",
-    3160: "3160",
-  };
-  const focusScreenshotMaxDimensionFromSlider = useCallback((): boolean => {
-    const root = screenshotDimensionNavRef.current;
-    if (!root) return false;
-    const btn = root.querySelector<HTMLElement>('button[aria-label^="Set screenshot max dimension"]');
-    if (!btn) return false;
-    btn.focus();
-    return true;
-  }, []);
-  const focusOllamaKeepAliveThumb = useCallback((): boolean => {
-    const host = ollamaKeepAliveThumbHostRef.current;
-    if (!host) return false;
-    const target = host.querySelector<HTMLElement>("[tabindex], button");
-    if (!target) return false;
-    target.focus();
-    return true;
-  }, []);
-  const focusOllamaIpFromTimeoutSlider = useCallback((): boolean => {
-    const root = ollamaIpConnectionNavRef.current;
-    if (!root) return false;
-    const field = root.querySelector<HTMLElement>("input, textarea");
-    if (!field) return false;
-    field.focus();
-    return true;
-  }, []);
-  const focusSoftWarningFromScreenshot = useCallback((): boolean => {
-    const host = latencyWarningThumbHostRef.current;
-    if (!host) return false;
-    const target = host.querySelector<HTMLElement>("[tabindex], button");
-    if (!target) return false;
-    target.focus();
-    return true;
-  }, []);
   const fullBleedRowStyle: React.CSSProperties = {
     width: "calc(100% + 24px)",
     marginLeft: -12,
@@ -1702,6 +1172,30 @@ const Content: React.FC = () => {
     color: "#93a3b0",
   };
   const showSearchClearButton = Boolean(unifiedInput.trim());
+
+  const armPostPickerTabLock = useCallback((back: string) => {
+    if (back === "main") {
+      postPickerTabLockRef.current = null;
+      return;
+    }
+    postPickerTabLockRef.current = { until: Date.now() + 750, tab: back };
+  }, []);
+
+  /** Call after any `showModal` closes so the active tab is restored (Decky can reset to main on dismiss). */
+  const finalizeShowModalAndRestoreActiveTab = useCallback(
+    (close: () => void) => {
+      const back = characterPickerReturnTabRef.current;
+      __bonsaiTabRestoreAfterModal = back;
+      armPostPickerTabLock(back);
+      setCurrentTab(back);
+      close();
+      window.setTimeout(() => {
+        setCurrentTab(back);
+        __bonsaiTabRestoreAfterModal = null;
+      }, 80);
+    },
+    [armPostPickerTabLock]
+  );
 
   const openDesktopNoteSaveModal = useCallback(() => {
     if (!capabilities.filesystem_write) {
@@ -1717,6 +1211,7 @@ const Content: React.FC = () => {
       return;
     }
     const ex = lastExchange;
+    characterPickerReturnTabRef.current = currentTab;
     const handle = showModal(
       <DesktopNoteSaveModal
         strDescriptionPrefix={
@@ -1726,7 +1221,7 @@ const Content: React.FC = () => {
           "Proceed only if you want this question and answer saved there."
         }
         defaultStem="bonsai-debug"
-        onCancel={() => handle.Close()}
+        onCancel={() => finalizeShowModalAndRestoreActiveTab(() => handle.Close())}
         onConfirm={async (stem) => {
           if (!stem) {
             toaster.toast({ title: "Note name required", body: "Enter a name for the note file.", duration: 3200 });
@@ -1739,7 +1234,7 @@ const Content: React.FC = () => {
             );
             if (result.success) {
               toaster.toast({ title: "Note saved", body: result.path ?? "Saved.", duration: 3800 });
-              handle.Close();
+              finalizeShowModalAndRestoreActiveTab(() => handle.Close());
             } else {
               toaster.toast({ title: "Save failed", body: result.error ?? "Unknown error.", duration: 5000 });
             }
@@ -1749,15 +1244,7 @@ const Content: React.FC = () => {
         }}
       />
     );
-  }, [lastExchange, capabilities.filesystem_write, goToPermissionsTab]);
-
-  const armPostPickerTabLock = useCallback((back: string) => {
-    if (back === "main") {
-      postPickerTabLockRef.current = null;
-      return;
-    }
-    postPickerTabLockRef.current = { until: Date.now() + 750, tab: back };
-  }, []);
+  }, [lastExchange, capabilities.filesystem_write, goToPermissionsTab, currentTab, finalizeShowModalAndRestoreActiveTab]);
 
   const onTabsShowTab = useCallback((tabID: string) => {
     const lock = postPickerTabLockRef.current;
@@ -1790,16 +1277,7 @@ const Content: React.FC = () => {
           customText: aiCharacterCustomText,
         }}
         onCancel={() => {
-          const back = characterPickerReturnTabRef.current;
-          __bonsaiTabRestoreAfterCharacterPicker = back;
-          armPostPickerTabLock(back);
-          setCurrentTab(back);
-          handle.Close();
-          // After modal teardown; immediate setState can lose to Decky’s tab reset (jumps to main).
-          window.setTimeout(() => {
-            setCurrentTab(back);
-            __bonsaiTabRestoreAfterCharacterPicker = null;
-          }, 80);
+          finalizeShowModalAndRestoreActiveTab(() => handle.Close());
         }}
         onOK={(next) => {
           const pid = normalizeAiCharacterPresetId(next.presetId);
@@ -1808,39 +1286,42 @@ const Content: React.FC = () => {
           setAiCharacterPresetId(pid);
           setAiCharacterCustomText(ctxt);
           // Persist immediately so a debounced save scheduled before the modal cannot overwrite with stale random/character state.
-          void call<[BonsaiSettings], BonsaiSettings>("save_settings", {
-            latency_warning_seconds: latencyWarningSeconds,
-            request_timeout_seconds: requestTimeoutSeconds,
-            unified_input_persistence_mode: unifiedInputPersistenceMode,
-            screenshot_max_dimension: screenshotMaxDimension,
-            desktop_debug_note_auto_save: desktopDebugNoteAutoSave,
-            desktop_ask_verbose_logging: desktopAskVerboseLogging,
-            preset_chip_fade_animation_enabled: presetChipFadeAnimationEnabled,
-            input_sanitizer_user_disabled: inputSanitizerUserDisabled,
-            capabilities,
-            ai_character_enabled: aiCharacterEnabled,
-            ai_character_random: next.random,
-            ai_character_preset_id: pid,
-            ai_character_custom_text: ctxt,
-            ai_character_accent_intensity: aiCharacterAccentIntensity,
-            ask_mode: askMode,
-            ollama_keep_alive: ollamaKeepAlive,
-            show_debug_tab: showDebugTab,
-            model_policy_tier: modelPolicyTier,
-            model_policy_non_foss_unlocked: modelPolicyNonFossUnlocked,
-            model_allow_high_vram_fallbacks: modelAllowHighVramFallbacks,
-          }).catch((err) => {
+          void call<[BonsaiSettings], BonsaiSettings>(
+            "save_settings",
+            toBonsaiSettingsPayload(
+              {
+                latencyWarningSeconds,
+                requestTimeoutSeconds,
+                latencyTimeoutsCustomEnabled,
+                unifiedInputPersistenceMode,
+                screenshotAttachmentPreset,
+                desktopDebugNoteAutoSave,
+                desktopAskVerboseLogging,
+                presetChipFadeAnimationEnabled,
+                inputSanitizerUserDisabled,
+                capabilities,
+                aiCharacterEnabled,
+                aiCharacterRandom,
+                aiCharacterPresetId,
+                aiCharacterCustomText,
+                aiCharacterAccentIntensity,
+                askMode,
+                ollamaKeepAlive,
+                showDebugTab,
+                modelPolicyTier,
+                modelPolicyNonFossUnlocked,
+                modelAllowHighVramFallbacks,
+              },
+              {
+                ai_character_random: next.random,
+                ai_character_preset_id: pid,
+                ai_character_custom_text: ctxt,
+              }
+            )
+          ).catch((err) => {
             console.error("save_settings failed (character picker OK)", err);
           });
-          const back = characterPickerReturnTabRef.current;
-          __bonsaiTabRestoreAfterCharacterPicker = back;
-          armPostPickerTabLock(back);
-          setCurrentTab(back);
-          handle.Close();
-          window.setTimeout(() => {
-            setCurrentTab(back);
-            __bonsaiTabRestoreAfterCharacterPicker = null;
-          }, 80);
+          finalizeShowModalAndRestoreActiveTab(() => handle.Close());
         }}
       />
     );
@@ -1853,8 +1334,9 @@ const Content: React.FC = () => {
     aiCharacterEnabled,
     latencyWarningSeconds,
     requestTimeoutSeconds,
+    latencyTimeoutsCustomEnabled,
     unifiedInputPersistenceMode,
-    screenshotMaxDimension,
+    screenshotAttachmentPreset,
     desktopDebugNoteAutoSave,
     desktopAskVerboseLogging,
     presetChipFadeAnimationEnabled,
@@ -1863,10 +1345,13 @@ const Content: React.FC = () => {
     setAiCharacterRandom,
     setAiCharacterPresetId,
     setAiCharacterCustomText,
-    armPostPickerTabLock,
+    finalizeShowModalAndRestoreActiveTab,
     askMode,
     ollamaKeepAlive,
     showDebugTab,
+    modelPolicyTier,
+    modelPolicyNonFossUnlocked,
+    modelAllowHighVramFallbacks,
   ]);
 
   const mainTabAiCharacterPad = aiCharacterEnabled;
@@ -1949,7 +1434,7 @@ const Content: React.FC = () => {
       navigationMessage={navigationMessage}
       isQamSetting={isQamSetting}
       showSlowWarning={showSlowWarning}
-      latencyWarningSeconds={latencyWarningSeconds}
+      latencyWarningSeconds={effectiveLatencyWarningSeconds}
       ollamaResponse={ollamaResponse}
       elapsedSeconds={elapsedSeconds}
       lastApplied={lastApplied}
@@ -1985,568 +1470,77 @@ const Content: React.FC = () => {
   );
 
   const settingsTab = (
-    <div className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight">
-    <PanelSection title="Connection">
-      <PanelSectionRow>
-        <div
-          ref={ollamaIpConnectionNavRef}
-          className="bonsai-settings-connection-host"
-          style={{
-            width: "100%",
-            maxWidth: "100%",
-            minWidth: 0,
-            boxSizing: "border-box",
-            display: "flex",
-            flexDirection: "column",
-            gap: 6,
-          }}
-        >
-          <Focusable
-            className="bonsai-settings-connection-row"
-            flow-children="horizontal"
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "flex-end",
-              gap: 8,
-              width: "100%",
-              maxWidth: "100%",
-              minWidth: 0,
-              boxSizing: "border-box",
-            }}
-          >
-            <div
-              style={{
-                flex: "0 1 172px",
-                width: 172,
-                maxWidth: "172px",
-                minWidth: 0,
-                overflow: "hidden",
-              }}
-            >
-              <div
-                style={{
-                  fontVariant: "small-caps",
-                  letterSpacing: "0.06em",
-                  fontSize: 11,
-                  fontWeight: 600,
-                  color: "#b8c6d6",
-                  marginBottom: 2,
-                }}
-              >
-                OLLAMA IP ADDRESS
-              </div>
-              <TextField
-                label=""
-                value={ollamaIp}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setOllamaIp(e.target.value)}
-                style={{ width: "100%", minWidth: 0, maxWidth: "100%" }}
-              />
-            </div>
-            <Button
-              onClick={onTestConnection}
-              disabled={connectionTesting || !ollamaIp.trim()}
-              style={{
-                flex: "1 1 auto",
-                alignSelf: "flex-end",
-                marginBottom: 2,
-                minHeight: 38,
-                minWidth: 0,
-                height: 38,
-                maxWidth: 68,
-                padding: "0 4px",
-                fontSize: 11,
-                fontWeight: 600,
-                borderRadius: 4,
-                border: "1px solid rgba(255,255,255,0.22)",
-                background: "linear-gradient(180deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.06) 100%)",
-                color: "#e8eef5",
-              }}
-              aria-label={connectionTesting ? "Testing Ollama connection" : "Test connection to Ollama"}
-            >
-              {connectionTesting ? "…" : "Test"}
-            </Button>
-          </Focusable>
-          <div
-            className="bonsai-prose"
-            style={{
-              fontSize: 10,
-              color: "#6b7c90",
-              lineHeight: 1.35,
-              userSelect: "none",
-              pointerEvents: "none",
-            }}
-            title="Network address of this Steam Deck (informational)"
-            aria-live="polite"
-          >
-            {"This Deck's IP: "}
-            <span style={{ color: "#8fa0b4", fontVariantNumeric: "tabular-nums" }}>{deckIp}</span>
-          </div>
-        </div>
-      </PanelSectionRow>
-      {connectionStatus && (
-        <PanelSectionRow>
-          {connectionStatus.reachable ? (
-            <div style={{ fontSize: 12, color: "#81c784" }}>
-              <div>Connected — Ollama v{connectionStatus.version}</div>
-              {connectionStatus.models && connectionStatus.models.length > 0 && (
-                <div className="bonsai-prose" style={{ color: "#9fb7d5", marginTop: 4 }}>
-                  Models: {connectionStatus.models.join(", ")}
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="bonsai-prose" style={{ fontSize: 12, color: "tomato" }}>
-              Unreachable — {connectionStatus.error}
-            </div>
-          )}
-        </PanelSectionRow>
-      )}
-    </PanelSection>
-    <PanelSection title="Ask timing">
-      <PanelSectionRow>
-        <div className="bonsai-prose-host" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-          <div style={{ fontSize: 13, color: "#d9d9d9", fontWeight: 600, marginBottom: 4 }}>
-            Latency warning & timeout
-          </div>
-          <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", lineHeight: 1.35 }}>
-            <span
-              style={{
-                color: `var(--bonsai-ui-accent-main, ${BONSAI_UI_ACCENT_MAIN_FALLBACK})`,
-                fontWeight: 700,
-              }}
-            >
-              Warning
-            </span>
-            {" = flag slow replies. "}
-            <span
-              style={{
-                color: `var(--bonsai-ui-accent-main, ${BONSAI_UI_ACCENT_MAIN_FALLBACK})`,
-                fontWeight: 700,
-              }}
-            >
-              Timeout
-            </span>
-            {" = abort if Ollama is still busy."}
-          </div>
-        </div>
-      </PanelSectionRow>
-      <PanelSectionRow>
-        <ConnectionTimeoutSlider
-          warningSec={latencyWarningSeconds}
-          timeoutSec={requestTimeoutSeconds}
-          onChange={(w, t) => {
-            setLatencyWarningSeconds(w);
-            setRequestTimeoutSeconds(t);
-          }}
-          warningThumbHostRef={latencyWarningThumbHostRef}
-          onMoveDownFromThumb={focusOllamaKeepAliveThumb}
-          onMoveUpFromTimeoutThumb={focusOllamaIpFromTimeoutSlider}
-        />
-      </PanelSectionRow>
-    </PanelSection>
-    <PanelSection title="Model unload (VRAM)">
-      <PanelSectionRow>
-        <div className="bonsai-prose-host" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-          <div
-            style={{
-              fontVariant: "small-caps",
-              letterSpacing: "0.06em",
-              fontSize: 11,
-              fontWeight: 600,
-              color: "#b8c6d6",
-              marginBottom: 4,
-            }}
-          >
-            Ollama keep_alive
-          </div>
-          <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
-            How long the PC host keeps the model in VRAM after each Ask. Lower frees GPU sooner; higher avoids reload if
-            you Ask again soon.
-          </div>
-          <OllamaKeepAliveSlider
-            value={ollamaKeepAlive}
-            onChange={setOllamaKeepAlive}
-            thumbHostRef={ollamaKeepAliveThumbHostRef}
-            onMoveUp={() => focusSoftWarningFromScreenshot()}
-            onMoveDown={() => focusScreenshotMaxDimensionFromSlider()}
-          />
-        </div>
-      </PanelSectionRow>
-    </PanelSection>
-    <PanelSection title="Screenshots">
-      <PanelSectionRow>
-        <div
-          ref={screenshotDimensionNavRef}
-          className="bonsai-prose-host"
-          style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}
-        >
-          <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 4 }}>
-            Max long edge (vision)
-          </div>
-          <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
-            Clamp before sending attachments to vision models.
-          </div>
-          <Focusable
-            flow-children="horizontal"
-            style={{ display: "flex", gap: 6, width: "100%", minWidth: 0, maxWidth: "100%", alignItems: "stretch" }}
-          >
-            {SCREENSHOT_DIMENSION_OPTIONS.map((option) => {
-              const active = option === screenshotMaxDimension;
-              return (
-                <Button
-                  key={`dim-${option}`}
-                  {...({
-                    onMoveUp: () => focusOllamaKeepAliveThumb(),
-                  } as Record<string, unknown>)}
-                  onClick={() => setScreenshotMaxDimension(option)}
-                  style={{
-                    flex: 1,
-                    minHeight: 36,
-                    fontSize: 12,
-                    fontWeight: 600,
-                    padding: "4px 4px",
-                    borderRadius: 4,
-                    border: active ? "1px solid rgba(255,255,255,0.45)" : "1px solid rgba(255,255,255,0.12)",
-                    background: active
-                      ? "linear-gradient(180deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.1) 100%)"
-                      : "rgba(255,255,255,0.04)",
-                    color: active ? "#f0f4f8" : "#9fb0c0",
-                    boxShadow: active ? "inset 0 1px 0 rgba(255,255,255,0.15)" : "none",
-                  }}
-                  aria-label={`Set screenshot max dimension to ${option}`}
-                >
-                  {screenshotDimensionLabel[option]}
-                </Button>
-              );
-            })}
-          </Focusable>
-        </div>
-      </PanelSectionRow>
-    </PanelSection>
-    <PanelSection title="Saved text">
-      <PanelSectionRow>
-        <div className="bonsai-prose-host" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-          <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 4 }}>
-            Ask / search persistence
-          </div>
-          <div
-            className="bonsai-prose"
-            style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}
-            title={persistenceSettingsTooltip}
-          >
-            What to restore when you reopen the plugin. Hover for per-mode details.
-          </div>
-          <Focusable
-            flow-children="horizontal"
-            style={{ display: "flex", gap: 6, width: "100%", minWidth: 0, maxWidth: "100%", alignItems: "stretch" }}
-          >
-            {persistenceModeOptions.map((mode) => {
-              const active = mode === unifiedInputPersistenceMode;
-              return (
-                <Button
-                  key={mode}
-                  onClick={() => {
-                    setUnifiedInputPersistenceMode(mode);
-                  }}
-                  style={{
-                    flex: 1,
-                    minHeight: 36,
-                    fontSize: 12,
-                    fontWeight: 600,
-                    padding: "4px 4px",
-                    borderRadius: 4,
-                    border: active ? "1px solid rgba(255,255,255,0.45)" : "1px solid rgba(255,255,255,0.12)",
-                    background: active
-                      ? "linear-gradient(180deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.1) 100%)"
-                      : "rgba(255,255,255,0.04)",
-                    color: active ? "#f0f4f8" : "#9fb0c0",
-                    boxShadow: active ? "inset 0 1px 0 rgba(255,255,255,0.15)" : "none",
-                  }}
-                  aria-label={`${persistenceModeLabel[mode]}: ${persistenceModeDescription[mode]}`}
-                >
-                  {persistenceModeShortLabel[mode]}
-                </Button>
-              );
-            })}
-          </Focusable>
-        </div>
-      </PanelSectionRow>
-    </PanelSection>
-    <PanelSection title="Main tab">
-      <PanelSectionRow>
-        <ToggleField
-          label="Preset chip fade animation"
-          description="When off, suggestion chips stay opaque and swap text without crossfades. Post-Ask re-seed is unchanged."
-          checked={presetChipFadeAnimationEnabled}
-          onChange={(checked) => setPresetChipFadeAnimationEnabled(checked)}
-        />
-      </PanelSectionRow>
-    </PanelSection>
-    <PanelSection title="Character">
-      <PanelSectionRow>
-        <div
-          className="bonsai-settings-ai-character-block"
-          style={{
-            width: "100%",
-            maxWidth: "100%",
-            minWidth: 0,
-            boxSizing: "border-box",
-          }}
-        >
-          <ToggleField
-            label="AI characters"
-            description="Optional tone for replies: preset, random per Ask, or custom line."
-            checked={aiCharacterEnabled}
-            onChange={(checked) => setAiCharacterEnabled(checked)}
-          />
-          {aiCharacterEnabled && (
-            <>
-              <Button
-                className="bonsai-ai-character-picker-open"
-                onClick={() => openCharacterPickerModal()}
-                style={{
-                  width: "100%",
-                  marginTop: 10,
-                  minHeight: 38,
-                  fontSize: 12,
-                  fontWeight: 600,
-                  padding: "6px 10px",
-                  borderRadius: 4,
-                  border: "1px solid rgba(255,255,255,0.18)",
-                  background: "linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%)",
-                  color: "#e8eef5",
-                  textAlign: "left",
-                }}
-              >
-                {formatAiCharacterSelectionLine({
-                  random: aiCharacterRandom,
-                  presetId: aiCharacterPresetId,
-                  customText: aiCharacterCustomText,
-                })}
-              </Button>
-              <div
-                className={
-                  "bonsai-settings-inline-menu-host" +
-                  (accentIntensityMenuOpen ? " bonsai-settings-accent-menu-open" : "")
-                }
-                style={{ marginTop: 12, width: "100%", maxWidth: "100%", minWidth: 0, position: "relative" }}
-              >
-                <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 4 }}>
-                  Accent intensity
-                </div>
-                <div
-                  className="bonsai-prose"
-                  style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}
-                >
-                  {
-                    AI_CHARACTER_ACCENT_INTENSITY_OPTIONS.find((o) => o.id === aiCharacterAccentIntensity)
-                      ?.description ?? ""
-                  }
-                </div>
-                <div ref={accentIntensityMenuAnchorRef} style={{ display: "inline-flex", flexShrink: 0, position: "relative" }}>
-                  <Button
-                    className="bonsai-accent-intensity-trigger"
-                    {...({
-                      onOKButton: (evt: { stopPropagation: () => void }) => {
-                        evt.stopPropagation();
-                        toggleAccentIntensityMenu();
-                      },
-                    } as Record<string, unknown>)}
-                    onClick={toggleAccentIntensityMenu}
-                    aria-expanded={accentIntensityMenuOpen}
-                    aria-haspopup="menu"
-                    aria-label={`Accent intensity: ${
-                      AI_CHARACTER_ACCENT_INTENSITY_OPTIONS.find((o) => o.id === aiCharacterAccentIntensity)
-                        ?.shortLabel ?? ""
-                    }`}
-                    style={{
-                      minHeight: 26,
-                      padding: "4px 8px",
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: 4,
-                      borderRadius: 3,
-                      border: `1px solid ${accentIntensityOutline[aiCharacterAccentIntensity]}`,
-                      background: "transparent",
-                      color: ASK_LABEL_COLOR_50,
-                      flexShrink: 0,
-                      fontSize: 10,
-                      fontWeight: 600,
-                      fontVariant: "small-caps",
-                      letterSpacing: 0.1,
-                      lineHeight: 1,
-                    }}
-                  >
-                    <span>
-                      {AI_CHARACTER_ACCENT_INTENSITY_OPTIONS.find((o) => o.id === aiCharacterAccentIntensity)
-                        ?.shortLabel ?? ""}
-                    </span>
-                    <span style={{ color: "#7a8fa3", fontSize: 9, lineHeight: 1 }} aria-hidden>
-                      ▾
-                    </span>
-                  </Button>
-                  <AccentIntensityMenuPopover
-                    open={accentIntensityMenuOpen}
-                    firstMenuItemRef={accentIntensityMenuFirstItemRef}
-                    selectedId={aiCharacterAccentIntensity}
-                    onSelect={(id) => setAiCharacterAccentIntensity(id)}
-                    onRequestClose={closeAccentIntensityMenu}
-                    onFocusTrigger={focusAccentIntensityTrigger}
-                  />
-                </div>
-              </div>
-            </>
-          )}
-        </div>
-      </PanelSectionRow>
-    </PanelSection>
-    <PanelSection title="Model policy">
-      <PanelSectionRow>
-        <div style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45, marginBottom: 4 }}>
-          {MODEL_POLICY_SETTINGS_INTRO}
-        </div>
-      </PanelSectionRow>
-      <PanelSectionRow>
-        <div style={MODEL_POLICY_TIER_LIST_HOST}>
-          {MODEL_POLICY_TIER_IDS.map((id) => {
-            const selected = modelPolicyTier === id;
-            const chrome = selected ? MODEL_POLICY_TIER_SELECTED_CHROME[id] : MODEL_POLICY_TIER_BUTTON_IDLE;
-            return (
-              <Button
-                key={id}
-                onClick={() => onSelectModelPolicyTier(id)}
-                style={{
-                  width: "100%",
-                  border: chrome.border,
-                  background: chrome.background,
-                  boxSizing: "border-box",
-                }}
-              >
-                {MODEL_POLICY_TIER_LABELS[id]}
-              </Button>
-            );
-          })}
-        </div>
-      </PanelSectionRow>
-      <PanelSectionRow>
-        <div style={{ width: "100%", paddingTop: 14, boxSizing: "border-box" }}>
-        <ToggleField
-          label="Allow non-FOSS and unclassified Ollama tags (Tier 3)"
-          description="Needed for Tier 3; unclassified tags only run when this is on. Turn off to fall back from Tier 3 to Tier 2."
-          checked={modelPolicyNonFossUnlocked}
-          onChange={(checked) => {
-            setModelPolicyNonFossUnlocked(checked);
-            if (!checked && modelPolicyTier === "non_foss") {
-              setModelPolicyTier("open_weight");
-            }
-          }}
-        />
-        </div>
-      </PanelSectionRow>
-      <PanelSectionRow>
-        <div style={{ width: "100%", paddingTop: 12, boxSizing: "border-box" }}>
-          <ToggleField
-            label="Allow high-VRAM model fallbacks"
-            description="Adds large-model tags after the ~16GB-friendly chain. Can OOM or load slowly—leave off unless you use those tags on purpose."
-            checked={modelAllowHighVramFallbacks}
-            onChange={(checked) => setModelAllowHighVramFallbacks(checked)}
-          />
-        </div>
-      </PanelSectionRow>
-      <PanelSectionRow>
-        <Button
-          onClick={() => {
-            openModelPolicyReadme();
-          }}
-        >
-          Read model policy (README)…
-        </Button>
-      </PanelSectionRow>
-    </PanelSection>
-    <PanelSection title="Advanced">
-      <PanelSectionRow>
-        <ToggleField
-          label="Show Debug tab"
-          description="Shows Debug on the tab strip (logs, errors, Steam Input jump). Off by default."
-          checked={showDebugTab}
-          onChange={(checked) => setShowDebugTab(checked)}
-        />
-      </PanelSectionRow>
-      <PanelSectionRow>
-        <Button
-          onClick={() => {
-            showModal(
-              <ConfirmModal
-                strTitle="Clear session cache?"
-                strDescription={
-                  "Clears in-memory session: search field, reply, thread, transparency, branch picker, attachments, timers. " +
-                  "Does not change saved settings, Ollama, or screenshot files."
-                }
-                strOKButtonText="Clear"
-                onOK={() => {
-                  resetPluginSession();
-                }}
-              />
-            );
-          }}
-        >
-          Reset session cache…
-        </Button>
-      </PanelSectionRow>
-    </PanelSection>
-    <PanelSection title="Desktop notes">
-      <PanelSectionRow>
-        <ToggleField
-          label="Auto-save chat to Desktop notes"
-          description="Appends each Ask and reply to Desktop/BonsAI_notes/bonsai-chat-YYYY-MM-DD.md (UTC). Needs Filesystem writes (Permissions)."
-          checked={desktopDebugNoteAutoSave}
-          onChange={(checked) => setDesktopDebugNoteAutoSave(checked)}
-        />
-      </PanelSectionRow>
-      <PanelSectionRow>
-        <ToggleField
-          label="Verbose Ask logging to Desktop notes"
-          description={
-            "With Filesystem writes, appends full prompts, model name, and replies to Desktop/BonsAI_notes/bonsai-ask-trace-YYYY-MM-DD.md. " +
-            "Large / sensitive—see Main → Input handling for the latest trace."
-          }
-          checked={desktopAskVerboseLogging}
-          onChange={(checked) => setDesktopAskVerboseLogging(checked)}
-        />
-      </PanelSectionRow>
-    </PanelSection>
-    </div>
+    <SettingsTab
+      ollamaIp={ollamaIp}
+      onOllamaIpChange={setOllamaIp}
+      onPersistOllamaIp={saveIp}
+      latencyWarningSeconds={latencyWarningSeconds}
+      requestTimeoutSeconds={requestTimeoutSeconds}
+      latencyTimeoutsCustomEnabled={latencyTimeoutsCustomEnabled}
+      setLatencyTimeoutsCustomEnabled={setLatencyTimeoutsCustomEnabled}
+      setLatencyWarningSeconds={setLatencyWarningSeconds}
+      setRequestTimeoutSeconds={setRequestTimeoutSeconds}
+      ollamaKeepAlive={ollamaKeepAlive}
+      setOllamaKeepAlive={setOllamaKeepAlive}
+      screenshotAttachmentPreset={screenshotAttachmentPreset}
+      setScreenshotAttachmentPreset={setScreenshotAttachmentPreset}
+      unifiedInputPersistenceMode={unifiedInputPersistenceMode}
+      setUnifiedInputPersistenceMode={setUnifiedInputPersistenceMode}
+      presetChipFadeAnimationEnabled={presetChipFadeAnimationEnabled}
+      setPresetChipFadeAnimationEnabled={setPresetChipFadeAnimationEnabled}
+      aiCharacterEnabled={aiCharacterEnabled}
+      setAiCharacterEnabled={setAiCharacterEnabled}
+      aiCharacterRandom={aiCharacterRandom}
+      aiCharacterPresetId={aiCharacterPresetId}
+      aiCharacterCustomText={aiCharacterCustomText}
+      aiCharacterAccentIntensity={aiCharacterAccentIntensity}
+      setAiCharacterAccentIntensity={setAiCharacterAccentIntensity}
+      showDebugTab={showDebugTab}
+      setShowDebugTab={setShowDebugTab}
+      desktopDebugNoteAutoSave={desktopDebugNoteAutoSave}
+      setDesktopDebugNoteAutoSave={setDesktopDebugNoteAutoSave}
+      desktopAskVerboseLogging={desktopAskVerboseLogging}
+      setDesktopAskVerboseLogging={setDesktopAskVerboseLogging}
+      onOpenCharacterPicker={openCharacterPickerModal}
+      onBeforeDeckyModal={() => {
+        characterPickerReturnTabRef.current = currentTab;
+      }}
+      onCompleteDeckyModalClose={finalizeShowModalAndRestoreActiveTab}
+      onResetSession={resetPluginSession}
+    />
   );
+
 
   /** Persist immediately: Decky can unmount `Content` when the disclaimer modal closes, which drops in-memory state and cancels the debounced save. */
   const onConfirmEnableHardwareControl = useCallback(() => {
     setCapabilities((prev) => {
       const next = { ...prev, hardware_control: true };
-      void call<[BonsaiSettings], BonsaiSettings>("save_settings", {
-        latency_warning_seconds: latencyWarningSeconds,
-        request_timeout_seconds: requestTimeoutSeconds,
-        unified_input_persistence_mode: unifiedInputPersistenceMode,
-        screenshot_max_dimension: screenshotMaxDimension,
-        desktop_debug_note_auto_save: desktopDebugNoteAutoSave,
-        desktop_ask_verbose_logging: desktopAskVerboseLogging,
-        preset_chip_fade_animation_enabled: presetChipFadeAnimationEnabled,
-        input_sanitizer_user_disabled: inputSanitizerUserDisabled,
-        capabilities: next,
-        ai_character_enabled: aiCharacterEnabled,
-        ai_character_random: aiCharacterRandom,
-        ai_character_preset_id: aiCharacterPresetId,
-        ai_character_custom_text: aiCharacterCustomText,
-        ai_character_accent_intensity: aiCharacterAccentIntensity,
-        ask_mode: askMode,
-        ollama_keep_alive: ollamaKeepAlive,
-        show_debug_tab: showDebugTab,
-        model_policy_tier: modelPolicyTier,
-        model_policy_non_foss_unlocked: modelPolicyNonFossUnlocked,
-        model_allow_high_vram_fallbacks: modelAllowHighVramFallbacks,
-      }).catch((err) => {
+      void call<[BonsaiSettings], BonsaiSettings>(
+        "save_settings",
+        toBonsaiSettingsPayload({
+          latencyWarningSeconds,
+          requestTimeoutSeconds,
+          latencyTimeoutsCustomEnabled,
+          unifiedInputPersistenceMode,
+          screenshotAttachmentPreset,
+          desktopDebugNoteAutoSave,
+          desktopAskVerboseLogging,
+          presetChipFadeAnimationEnabled,
+          inputSanitizerUserDisabled,
+          capabilities: next,
+          aiCharacterEnabled,
+          aiCharacterRandom,
+          aiCharacterPresetId,
+          aiCharacterCustomText,
+          aiCharacterAccentIntensity,
+          askMode,
+          ollamaKeepAlive,
+          showDebugTab,
+          modelPolicyTier,
+          modelPolicyNonFossUnlocked,
+          modelAllowHighVramFallbacks,
+        })
+      ).catch((err) => {
         console.error("save_settings failed (hardware control confirm)", err);
       });
       return next;
@@ -2554,8 +1548,9 @@ const Content: React.FC = () => {
   }, [
     latencyWarningSeconds,
     requestTimeoutSeconds,
+    latencyTimeoutsCustomEnabled,
     unifiedInputPersistenceMode,
-    screenshotMaxDimension,
+    screenshotAttachmentPreset,
     desktopDebugNoteAutoSave,
     desktopAskVerboseLogging,
     presetChipFadeAnimationEnabled,
@@ -2580,6 +1575,16 @@ const Content: React.FC = () => {
       setCapabilities={setCapabilities}
       onConfirmEnableHardwareControl={onConfirmEnableHardwareControl}
       onReadModelPolicy={openModelPolicyReadme}
+      modelPolicyTier={modelPolicyTier}
+      onSelectModelPolicyTier={onSelectModelPolicyTier}
+      setModelPolicyNonFossUnlocked={setModelPolicyNonFossUnlocked}
+      modelPolicyNonFossUnlocked={modelPolicyNonFossUnlocked}
+      setModelAllowHighVramFallbacks={setModelAllowHighVramFallbacks}
+      modelAllowHighVramFallbacks={modelAllowHighVramFallbacks}
+      onBeforeDeckyModal={() => {
+        characterPickerReturnTabRef.current = currentTab;
+      }}
+      onCompleteDeckyModalClose={finalizeShowModalAndRestoreActiveTab}
     />
   );
 
@@ -2645,7 +1650,9 @@ const Content: React.FC = () => {
           id: "permissions",
           title: bonsaiTabIconTitle("permissions", <LockIcon size={TAB_TITLE_ICON_PX} />),
           content: (
-            <div className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight">{permissionsTab}</div>
+            <div className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight bonsai-settings-section-stack">
+              {permissionsTab}
+            </div>
           ),
         },
       ];
@@ -2697,6 +1704,21 @@ const Content: React.FC = () => {
           min-width: 0;
           box-sizing: border-box;
           overflow-x: hidden;
+        }
+
+        /* Flushes row content with PanelSection title (counters default row inset). */
+        .bonsai-scope .bonsai-settings-bleed {
+          box-sizing: border-box;
+          width: calc(100% + 24px);
+          max-width: calc(100% + 24px);
+          margin-left: -12px;
+          margin-right: -12px;
+        }
+
+        .bonsai-scope .bonsai-settings-section-stack {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
         }
 
         /*
@@ -3572,7 +2594,7 @@ const Content: React.FC = () => {
           display: flex !important; flex-direction: column !important;
           align-items: stretch !important; justify-content: flex-start !important;
         }
-        /* Stronger chain beats the rule above so ask-mode menu rows keep horizontal padding (vars from AskModeMenuPopover surface). */
+        /* Stronger chain beats the rule above so ask-mode menu rows keep horizontal padding (vars from MainTabAskModeMenuPopover surface). */
         .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater .bonsai-ask-mode-menu-surface > .bonsai-ask-mode-menu-list.Panel.Focusable {
           padding-top: var(--bonsai-ask-mode-menu-list-pad-y, 0px) !important;
           padding-bottom: var(--bonsai-ask-mode-menu-list-pad-y, 0px) !important;

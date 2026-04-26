@@ -2,7 +2,7 @@ import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { toaster } from "@decky/api";
 import { PanelSection, PanelSectionRow, TextField, Button, Focusable } from "@decky/ui";
 import type { PresetPrompt } from "../data/presets";
-import { PresetAnimatedChips } from "./PresetAnimatedChips";
+import { MainTabPresetAnimatedChips } from "./MainTabPresetAnimatedChips";
 import {
   ASK_BAR_PRIMARY_MIN_HEIGHT_PX,
   ASK_LABEL_COLOR_50,
@@ -46,8 +46,8 @@ import {
   disclosureSummaryForSourceClass,
   type ModelPolicyDisclosurePayload,
 } from "../data/modelPolicy";
-import { AskModeMenuPopover } from "./AskModeMenuPopover";
-import { BonsaiAiMarkdownChunk } from "./BonsaiAiMarkdownChunk";
+import { MainTabAskModeMenuPopover } from "./MainTabAskModeMenuPopover";
+import { MainTabBonsaiAiMarkdownChunk } from "./MainTabBonsaiAiMarkdownChunk";
 
 const BONSAI_CHAT_AI_MAX_WIDTH_CSS = `min(${Math.round(BONSAI_CHAT_AI_BUBBLE_MAX_FRAC * 100)}%, 100%)`;
 
@@ -186,7 +186,7 @@ function BonsaiChatAiBubble(props: BonsaiChatAiBubbleProps) {
               style={{ width: "100%", minWidth: 0, boxSizing: "border-box" }}
             >
               <div className="bonsai-ai-response-chunk">
-                <BonsaiAiMarkdownChunk source={chunk} />
+                <MainTabBonsaiAiMarkdownChunk source={chunk} />
               </div>
             </Focusable>
           ))}
@@ -557,7 +557,7 @@ export function MainTab(props: MainTabProps) {
             className="bonsai-full-bleed-row"
             style={{ ...fullBleedRowStyle, display: "grid", gap: 8 }}
           >
-            <PresetAnimatedChips
+            <MainTabPresetAnimatedChips
               seeds={suggestedPrompts}
               setUnifiedInput={setUnifiedInput}
               fadeAnimationEnabled={presetChipFadeAnimationEnabled}
@@ -916,7 +916,7 @@ export function MainTab(props: MainTabProps) {
                     >
                       {ASK_MODE_LABELS[askMode]}
                     </Button>
-                    <AskModeMenuPopover
+                    <MainTabAskModeMenuPopover
                       open={askModeMenuOpen}
                       firstMenuItemRef={askModeMenuFirstItemRef}
                       selectedId={askMode}

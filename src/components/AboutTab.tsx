@@ -47,24 +47,19 @@ export const AboutTab: React.FC<Props> = ({
 }) => (
   <PanelSection title="About bonsAI">
     <PanelSectionRow>
-      <div style={{ fontSize: 14, fontWeight: 700, color: "white" }}>
-        bonsAI
+      <div style={{ fontSize: 12, color: "#c8c8c8", lineHeight: "1.2" }}>
+        Backend Ollama Node for Steam (A.I.) - An AI assistant embedded in the
+        Steam Deck Quick Access Menu. Ask questions, search settings, get game-specific
+        performance recommendations and apply TDP/GPU changes directly from
+        the QAM
       </div>
     </PanelSectionRow>
     <PanelSectionRow>
-      <div style={{ fontSize: 12, color: "#c8c8c8", lineHeight: "1.5" }}>
-        Backend Ollama Node for Steam (A.I.) — an AI assistant embedded in the
-        Steam Deck Quick Access Menu. Ask questions, get game-specific
-        performance recommendations, and apply TDP/GPU changes directly from
-        the QAM.
-      </div>
-    </PanelSectionRow>
-    <PanelSectionRow>
-      <div style={{ fontSize: 12, color: BONSAI_FOREST_GREEN, lineHeight: "1.5", fontWeight: 600 }}>
+      <div style={{ fontSize: 12, color: BONSAI_FOREST_GREEN, lineHeight: "1.2", fontWeight: 600 }}>
         This plugin is in beta. AI-generated recommendations — especially TDP
         and performance changes — should be verified before relying on them.
         bonsAI modifies system hardware settings based on AI suggestions. Use
-        at your own risk.
+        at your own risk!
       </div>
     </PanelSectionRow>
     <PanelSectionRow>
@@ -74,7 +69,7 @@ export const AboutTab: React.FC<Props> = ({
           openExternalOrExplain(githubRepoUrl, allowExternalNavigation, onNavigateToPermissions, "GitHub");
         }}
       >
-        <span style={{ fontSize: 13 }}>GitHub Repository</span>
+        <span style={{ fontSize: 13 }}>GitHub</span>
       </ButtonItem>
     </PanelSectionRow>
     <PanelSectionRow>
@@ -84,7 +79,7 @@ export const AboutTab: React.FC<Props> = ({
           openExternalOrExplain(ollamaRepoUrl, allowExternalNavigation, onNavigateToPermissions, "Ollama");
         }}
       >
-        <span style={{ fontSize: 13 }}>Built on Ollama</span>
+        <span style={{ fontSize: 13 }}>Built on Ollama!</span>
       </ButtonItem>
     </PanelSectionRow>
     <PanelSectionRow>
@@ -94,7 +89,7 @@ export const AboutTab: React.FC<Props> = ({
           openExternalOrExplain(githubIssuesUrl, allowExternalNavigation, onNavigateToPermissions, "Report a Bug");
         }}
       >
-        <span style={{ fontSize: 13 }}>Report a Bug / Request a Feature</span>
+        <span style={{ fontSize: 13 }}>Bugs & Feature Requests</span>
       </ButtonItem>
     </PanelSectionRow>
   </PanelSection>

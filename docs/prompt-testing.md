@@ -15,15 +15,17 @@ Related planning (not yet implemented): future prompt policy, search UX, and Ste
 - **PARTIAL** - Correct idea but formatting/parsing issue prevented full success
 - **PENDING** - Row reserved for a ship-window / on-device run; update Model, Status, and Notes after testing
 
-### Current frozen preset carousel (temporary dev only)
+### Frozen preset carousel (optional — prompt testing)
 
-While **`TEMP_PRESET_CAROUSEL_FROZEN`** is `true` in `src/data/presets.ts`, the main-tab **three** suggestion chips are fixed in order (not random, not contextual follow-up), using shipped `PRESET_PROMPTS` strings and **`TEMP_CAROUSEL_FROZEN_TEXTS`**:
+For **repeatable** main-tab chip prompts (same three strings, same order, every load), set **`TEMP_PRESET_CAROUSEL_FROZEN`** to `true` in [`src/data/presets.ts`](../src/data/presets.ts). Default is **`false`** (normal random shuffle and contextual re-seed).
+
+When enabled, the carousel ignores random/contextual shuffling and uses **`TEMP_CAROUSEL_FROZEN_TEXTS`** (each line must exist verbatim in `PRESET_PROMPTS`):
 
 1. `Why is my game crashing?` (checklist: with game running — reference the game by name)
 2. `How do I fix stuttering?` (checklist: TDP / FSR / framerate-cap style advice)
 3. `Help me troubleshoot a Proton issue` (checklist: general Proton advice)
 
-- **Remove** `TEMP_PRESET_CAROUSEL_FROZEN` (and the `applyTempFrozenCarousel` calls in `getRandomPresets` / `getContextualPresets`) when this round of testing is done.
+Turn the flag **off** before shipping or when you want production-like chip variety. `vitest` includes a conditional test that asserts the frozen triple when the flag is on, and that sampling varies when it is off.
 
 ## Test Results
 
@@ -61,7 +63,7 @@ While **`TEMP_PRESET_CAROUSEL_FROZEN`** is `true` in `src/data/presets.ts`, the 
 
 ### 2026-04-13 - Global Screenshots and Vision (V1) Completed
 - Added screenshot attachment flow with fullscreen recent-screenshot browser, thumbnail previews, and controller-first navigation.
-- Added multimodal ask payload support with screenshot preprocessing + dimension clamp options (`1280`, `1920`, `3160`) and persisted settings.
+- Added multimodal ask payload support with screenshot preprocessing + attachment quality presets (**Low** / **Mid** / **Max**) and persisted settings (legacy numeric dimensions migrate on load).
 - Added game-context enrichment for vision prompts (running app + attachment metadata hints), plus guardrails to prioritize in-game cues over Steam overlay UI.
 - Improved composer UX for attachments: visible chip preview, remove action, and integrated ask-bar behavior for screenshot-assisted prompts.
 
@@ -102,9 +104,9 @@ While **`TEMP_PRESET_CAROUSEL_FROZEN`** is `true` in `src/data/presets.ts`, the 
 - [✓] "How well does this game run on Deck?" (open-ended compatibility advice) (`How well does this game run on Deck?`)
 
 ### Troubleshooting / Proton
-- [✓] "Why is my game crashing?" (with game running — should reference the game by name) — **1st frozen chip** (`Why is my game crashing?`)
-- [✓] "How do I fix stuttering?" (should suggest TDP/FSR/framerate-cap advice) — **2nd frozen chip** (`How do I fix stuttering?`)
-- [✓] "Help me troubleshoot a Proton issue" (general Proton advice) — **3rd frozen chip** (`Help me troubleshoot a Proton issue`)
+- [✓] "Why is my game crashing?" (with game running — should reference the game by name) — **easy retest:** enable frozen carousel (`TEMP_PRESET_CAROUSEL_FROZEN`) → 1st chip (`Why is my game crashing?`)
+- [✓] "How do I fix stuttering?" (should suggest TDP/FSR/framerate-cap advice) — **frozen carousel:** 2nd chip (`How do I fix stuttering?`)
+- [✓] "Help me troubleshoot a Proton issue" (general Proton advice) — **frozen carousel:** 3rd chip (`Help me troubleshoot a Proton issue`)
 - [ ] "Game won't launch, what should I check?" (general troubleshooting checklist)
 
 ### Controls
@@ -229,12 +231,12 @@ Status note:
 - [x] Merged action control exposes exactly 3 targets: `Attach` (left), `Ask` (center), `Mic` idle / `Stop` while asking (right).
 - [x] Remove attachment action clears composer indicator and sends next ask request as text-only.
 
-### Screenshot Dimension Clamp Settings
-- [x] Settings tab shows screenshot max dimension options `1280`, `1920`, `3160`.
-- [x] Changing max dimension persists after closing/reopening plugin.
-- [x] With `1280` selected, backend sends compressed image and response remains stable on slower hosts.
-- [x] With `1920` selected, backend accepts screenshot attachment and model response remains valid.
-- [x] With `3160` selected, large captures still avoid backend crashes; if processing fails, user gets actionable attachment error text.
+### Screenshot attachment quality (Settings)
+- [x] Settings tab shows attachment quality **Low**, **Mid**, **Max** (vision).
+- [x] Changing quality persists after closing/reopening plugin.
+- [x] **Low:** backend sends small JPEG; response remains stable on slower hosts.
+- [x] **Mid:** backend accepts screenshot attachment and model response remains valid.
+- [x] **Max:** large captures still avoid backend crashes; if processing fails, user gets actionable attachment error text.
 
 ### Manual Deck Test Run (Staged)
 - [x] Set test environment details in **Current Test Environment** section before starting.
@@ -242,8 +244,8 @@ Status note:
 - [x] Repeat with no active game and confirm browser still lists recent screenshots (global fallback).
 - [x] Verify attachment chip visuals and controls: source badge label, filename truncation, remove button, attach-button count badge.
 - [x] Verify button sizing/focus usability with controller only: attach button, ask/stop button, clear button, and fullscreen browser grid navigation.
-- [x] Run the dimension clamp sweep (`1280` then `1920` then `3160`) and record latency + any attachment warnings/errors in Notes.
-- [x] Close/reopen plugin after changing dimension clamp and confirm the selected value persists.
+- [x] Run the quality sweep (**Low** then **Mid** then **Max**) and record latency + any attachment warnings/errors in Notes.
+- [x] Close/reopen plugin after changing attachment quality and confirm the selected value persists.
 - [x] Mark PASS/PARTIAL/FAIL for each step above and capture screenshots/log snippets for any failures.
 
 ### Spoiler Policy and Consent

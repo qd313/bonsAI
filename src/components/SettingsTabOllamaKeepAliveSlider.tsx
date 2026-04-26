@@ -9,7 +9,7 @@ import {
 } from "../data/ollamaKeepAlive";
 import { isLeftNavigationKey, isRightNavigationKey } from "../utils/focusNavigation";
 
-export type OllamaKeepAliveSliderProps = {
+export type SettingsTabOllamaKeepAliveSliderProps = {
   value: OllamaKeepAliveDuration;
   onChange: (next: OllamaKeepAliveDuration) => void;
   /** Parent assigns ref to the thumb wrapper for external focus (e.g. D-pad from screenshot row). */
@@ -61,7 +61,7 @@ function isRightDeckButton(key: string): boolean {
 /**
  * Single-thumb track with discrete slots matching Ollama `keep_alive` presets (0s … 240m).
  */
-export function OllamaKeepAliveSlider(props: OllamaKeepAliveSliderProps) {
+export function SettingsTabOllamaKeepAliveSlider(props: SettingsTabOllamaKeepAliveSliderProps) {
   const { value, onChange, thumbHostRef, onMoveUp, onMoveDown } = props;
   const maxIdx = OLLAMA_KEEP_ALIVE_ORDER.length - 1;
   const index = indexOfOllamaKeepAlive(value);
@@ -213,11 +213,27 @@ export function OllamaKeepAliveSlider(props: OllamaKeepAliveSliderProps) {
         maxWidth: "100%",
         display: "flex",
         flexDirection: "column",
-        gap: 8,
+        gap: 6,
         overflowWrap: "anywhere",
         wordBreak: "break-word",
       }}
     >
+      <div
+        className="bonsai-prose"
+        style={{
+          fontSize: 13,
+          color: "#cdd9e6",
+          lineHeight: 1.35,
+          paddingLeft: 2,
+          minWidth: 0,
+          maxWidth: "100%",
+          overflowWrap: "anywhere",
+          wordBreak: "break-word",
+        }}
+      >
+        Unload delay:{" "}
+        <span style={{ color: "#9ce7ff", fontWeight: 700 }}>{OLLAMA_KEEP_ALIVE_CHIP_LABEL[value]}</span>
+      </div>
       <div
         style={{
           width: "100%",
@@ -325,22 +341,6 @@ export function OllamaKeepAliveSlider(props: OllamaKeepAliveSliderProps) {
             </Focusable>
           </div>
         </div>
-      </div>
-      <div
-        className="bonsai-prose"
-        style={{
-          fontSize: 13,
-          color: "#cdd9e6",
-          lineHeight: 1.35,
-          paddingLeft: 2,
-          minWidth: 0,
-          maxWidth: "100%",
-          overflowWrap: "anywhere",
-          wordBreak: "break-word",
-        }}
-      >
-        Unload delay:{" "}
-        <span style={{ color: "#9ce7ff", fontWeight: 700 }}>{OLLAMA_KEEP_ALIVE_CHIP_LABEL[value]}</span>
       </div>
     </div>
   );

@@ -28,6 +28,6 @@ const mdComponents: Components = {
   em: ({ children }) => <em className="bonsai-md-em">{children}</em>,
 };
 
-export function BonsaiAiMarkdownChunk(props: { source: string }) {
+export function MainTabBonsaiAiMarkdownChunk(props: { source: string }) {
   return <ReactMarkdown components={mdComponents}>{props.source}</ReactMarkdown>;
 }

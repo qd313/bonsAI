@@ -35,7 +35,6 @@ from backend.services.settings_service import (
     load_settings as load_settings_from_disk,
     sanitize_ask_mode,
     sanitize_ollama_keep_alive,
-    sanitize_screenshot_max_dimension,
     sanitize_settings,
     sanitize_unified_input_persistence_mode,
     save_settings as save_settings_to_disk,
@@ -81,8 +80,6 @@ class Plugin:
     DEFAULT_LATENCY_WARNING_SECONDS = 15
     DEFAULT_REQUEST_TIMEOUT_SECONDS = 120
     DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE = "persist_all"
-    DEFAULT_SCREENSHOT_MAX_DIMENSION = 1280
-    VALID_SCREENSHOT_MAX_DIMENSIONS = {1280, 1920, 3160}
     MAX_ATTACHMENT_FILE_BYTES = 40 * 1024 * 1024
     MAX_ATTACHMENT_INLINE_BYTES = 15 * 1024 * 1024
     SUPPORTED_IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp"}
@@ -132,8 +129,6 @@ class Plugin:
             max_request_timeout_seconds=Plugin.MAX_REQUEST_TIMEOUT_SECONDS,
             valid_persistence_modes=Plugin.VALID_UNIFIED_INPUT_PERSISTENCE_MODES,
             default_persistence_mode=Plugin.DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
-            valid_screenshot_dimensions=Plugin.VALID_SCREENSHOT_MAX_DIMENSIONS,
-            default_screenshot_dimension=Plugin.DEFAULT_SCREENSHOT_MAX_DIMENSION,
             valid_ask_modes=Plugin.VALID_ASK_MODES,
             default_ask_mode=Plugin.DEFAULT_ASK_MODE,
         )
@@ -144,14 +139,6 @@ class Plugin:
             value,
             Plugin.VALID_UNIFIED_INPUT_PERSISTENCE_MODES,
             Plugin.DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
-        )
-
-    @staticmethod
-    def _sanitize_screenshot_max_dimension(value: Any) -> int:
-        return sanitize_screenshot_max_dimension(
-            value,
-            Plugin.VALID_SCREENSHOT_MAX_DIMENSIONS,
-            Plugin.DEFAULT_SCREENSHOT_MAX_DIMENSION,
         )
 
     async def _main(self):
@@ -837,9 +824,11 @@ class Plugin:
         return {"success": False, "error": error_text}
 
     @staticmethod
-    def _encode_image_with_pillow(path: str, max_dimension: int) -> tuple[Optional[str], Optional[str], list]:
-        """Resize and encode images with Pillow to keep attachment payload sizes predictable."""
+    def _encode_image_with_pillow(path: str, attachment_preset: str) -> tuple[Optional[str], Optional[str], list]:
+        """Resize and encode images with Pillow using Low / Mid / Max attachment preset."""
         warnings: list = []
+        if attachment_preset not in ("low", "mid", "max"):
+            attachment_preset = "low"
         try:
             from PIL import Image  # type: ignore
         except Exception:
@@ -849,8 +838,23 @@ class Plugin:
             image.load()
             width, height = image.size
             longest_edge = max(width, height)
-            if longest_edge > max_dimension:
-                ratio = max_dimension / float(longest_edge)
+            if attachment_preset == "low":
+                max_dim = 800
+                quality = 62
+            elif attachment_preset == "mid":
+                max_dim = 1080
+                quality = 75
+            else:
+                max_dim = 16384
+                quality = 94
+
+            if attachment_preset == "mid" and longest_edge > 1080:
+                ratio = 1080 / float(longest_edge)
+                resized = image.resize((max(1, int(width * ratio)), max(1, int(height * ratio))), Image.LANCZOS)
+            elif attachment_preset == "mid":
+                resized = image.copy()
+            elif longest_edge > max_dim:
+                ratio = max_dim / float(longest_edge)
                 resized = image.resize((max(1, int(width * ratio)), max(1, int(height * ratio))), Image.LANCZOS)
             else:
                 resized = image.copy()
@@ -860,12 +864,12 @@ class Plugin:
                 resized = resized.convert("RGB")
 
             output = io.BytesIO()
-            resized.save(output, format="JPEG", quality=82, optimize=True)
+            resized.save(output, format="JPEG", quality=quality, optimize=True)
             data = output.getvalue()
             return base64.b64encode(data).decode("ascii"), "image/jpeg", warnings
 
     @staticmethod
-    def _prepare_image_attachment(attachment: dict, max_dimension: int) -> dict:
+    def _prepare_image_attachment(attachment: dict, attachment_preset: str) -> dict:
         """Validate, transform, and encode one image attachment for Ollama multimodal requests."""
         path = str(attachment.get("path", "") or "").strip()
         if not path:
@@ -879,7 +883,7 @@ class Plugin:
         if file_size > Plugin.MAX_ATTACHMENT_FILE_BYTES:
             return {"ok": False, "error": f"Image is too large ({file_size} bytes)."}
 
-        encoded, mime_type, warnings = Plugin._encode_image_with_pillow(path, max_dimension)
+        encoded, mime_type, warnings = Plugin._encode_image_with_pillow(path, attachment_preset)
         if encoded is None:
             with open(path, "rb") as f:
                 raw = f.read()
@@ -888,7 +892,7 @@ class Plugin:
                     "ok": False,
                     "error": (
                         f"Image inline payload is too large ({len(raw)} bytes). "
-                        "Install Pillow or lower screenshot dimension."
+                        "Install Pillow or lower the screenshot attachment quality (Settings)."
                     ),
                 }
             encoded = base64.b64encode(raw).decode("ascii")
@@ -904,13 +908,13 @@ class Plugin:
         }
 
     @staticmethod
-    def _prepare_attachment_images(attachments: list, max_dimension: int) -> tuple[list, list, list]:
+    def _prepare_attachment_images(attachments: list, attachment_preset: str) -> tuple[list, list, list]:
         """Prepare a batch of attachments and return successful images, warnings, and errors."""
         prepared_images: list = []
         warnings: list = []
         errors: list = []
         for attachment in attachments:
-            prepared = Plugin._prepare_image_attachment(attachment, max_dimension)
+            prepared = Plugin._prepare_image_attachment(attachment, attachment_preset)
             if prepared.get("ok"):
                 prepared_images.append(prepared)
                 warnings.extend(prepared.get("warnings", []))
@@ -941,9 +945,12 @@ class Plugin:
             )
 
             settings = await plugin.load_settings()
-            request_timeout_seconds = int(
-                settings.get("request_timeout_seconds", Plugin.DEFAULT_REQUEST_TIMEOUT_SECONDS)
-            )
+            if settings.get("latency_timeouts_custom_enabled") is True:
+                request_timeout_seconds = int(
+                    settings.get("request_timeout_seconds", Plugin.DEFAULT_REQUEST_TIMEOUT_SECONDS)
+                )
+            else:
+                request_timeout_seconds = Plugin.DEFAULT_REQUEST_TIMEOUT_SECONDS
 
             keyword_result = await plugin._try_handle_sanitizer_keyword_command(question, app_id)
             if keyword_result is not None:
@@ -1529,12 +1536,12 @@ class Plugin:
         ]
         settings = await self.load_settings()
         keep_alive = sanitize_ollama_keep_alive(settings.get("ollama_keep_alive"))
-        screenshot_max_dimension = Plugin._sanitize_screenshot_max_dimension(
-            settings.get("screenshot_max_dimension")
-        )
+        apreset = str(settings.get("screenshot_attachment_preset") or "low")
+        if apreset not in ("low", "mid", "max"):
+            apreset = "low"
         prepared_images, attachment_warnings, attachment_errors = Plugin._prepare_attachment_images(
             normalized_attachments,
-            screenshot_max_dimension,
+            apreset,
         )
         system_content = self._build_system_prompt(
             question,

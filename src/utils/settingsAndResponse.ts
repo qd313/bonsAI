@@ -38,7 +38,9 @@ function reconcileModelPolicySettings(
 export type UnifiedInputPersistenceMode = "persist_all" | "persist_search_only" | "no_persist";
 export type { AskModeId };
 export type { OllamaKeepAliveDuration };
+/** Legacy; migration maps to ScreenshotAttachmentPreset. */
 export type ScreenshotMaxDimension = 1280 | 1920 | 3160;
+export type ScreenshotAttachmentPreset = "low" | "mid" | "max";
 
 /** High-impact capability toggles; keep keys aligned with backend `capabilities` and Permission Center UI. */
 export type BonsaiCapabilities = {
@@ -51,8 +53,11 @@ export type BonsaiCapabilities = {
 export type BonsaiSettings = {
   latency_warning_seconds: number;
   request_timeout_seconds: number;
+  /** When true, stored warning/timeout apply; when false, defaults (15s / 120s) for Ask + Ollama. */
+  latency_timeouts_custom_enabled: boolean;
   unified_input_persistence_mode: UnifiedInputPersistenceMode;
-  screenshot_max_dimension: ScreenshotMaxDimension;
+  /** Vision attachment downscale and JPEG quality preset. */
+  screenshot_attachment_preset: ScreenshotAttachmentPreset;
   /** When true, append Ask and AI response lines to daily chat files under Desktop/BonsAI_notes (requires filesystem_write). */
   desktop_debug_note_auto_save: boolean;
   /** When true, append full Ask/Ollama transparency blocks to Desktop trace files (requires filesystem_write). */
@@ -84,6 +89,62 @@ export type BonsaiSettings = {
   model_allow_high_vram_fallbacks: boolean;
 };
 
+/** Fields mirrored from React state / hook before `save_settings` RPC. */
+export type BonsaiSettingsSnapshotInput = {
+  latencyWarningSeconds: number;
+  requestTimeoutSeconds: number;
+  latencyTimeoutsCustomEnabled: boolean;
+  unifiedInputPersistenceMode: UnifiedInputPersistenceMode;
+  screenshotAttachmentPreset: ScreenshotAttachmentPreset;
+  desktopDebugNoteAutoSave: boolean;
+  desktopAskVerboseLogging: boolean;
+  presetChipFadeAnimationEnabled: boolean;
+  inputSanitizerUserDisabled: boolean;
+  capabilities: BonsaiCapabilities;
+  aiCharacterEnabled: boolean;
+  aiCharacterRandom: boolean;
+  aiCharacterPresetId: string;
+  aiCharacterCustomText: string;
+  aiCharacterAccentIntensity: AiCharacterAccentIntensityId;
+  askMode: AskModeId;
+  ollamaKeepAlive: OllamaKeepAliveDuration;
+  showDebugTab: boolean;
+  modelPolicyTier: ModelPolicyTierId;
+  modelPolicyNonFossUnlocked: boolean;
+  modelAllowHighVramFallbacks: boolean;
+};
+
+/** Build the backend `BonsaiSettings` object; optional `patch` for immediate saves (character picker, permissions). */
+export function toBonsaiSettingsPayload(
+  input: BonsaiSettingsSnapshotInput,
+  patch?: Partial<BonsaiSettings>
+): BonsaiSettings {
+  const base: BonsaiSettings = {
+    latency_warning_seconds: input.latencyWarningSeconds,
+    request_timeout_seconds: input.requestTimeoutSeconds,
+    latency_timeouts_custom_enabled: input.latencyTimeoutsCustomEnabled,
+    unified_input_persistence_mode: input.unifiedInputPersistenceMode,
+    screenshot_attachment_preset: input.screenshotAttachmentPreset,
+    desktop_debug_note_auto_save: input.desktopDebugNoteAutoSave,
+    desktop_ask_verbose_logging: input.desktopAskVerboseLogging,
+    preset_chip_fade_animation_enabled: input.presetChipFadeAnimationEnabled,
+    input_sanitizer_user_disabled: input.inputSanitizerUserDisabled,
+    capabilities: input.capabilities,
+    ai_character_enabled: input.aiCharacterEnabled,
+    ai_character_random: input.aiCharacterRandom,
+    ai_character_preset_id: input.aiCharacterPresetId,
+    ai_character_custom_text: input.aiCharacterCustomText,
+    ai_character_accent_intensity: input.aiCharacterAccentIntensity,
+    ask_mode: input.askMode,
+    ollama_keep_alive: input.ollamaKeepAlive,
+    show_debug_tab: input.showDebugTab,
+    model_policy_tier: input.modelPolicyTier,
+    model_policy_non_foss_unlocked: input.modelPolicyNonFossUnlocked,
+    model_allow_high_vram_fallbacks: input.modelAllowHighVramFallbacks,
+  };
+  return patch ? { ...base, ...patch } : base;
+}
+
 export type AppliedResultLike = {
   tdp_watts: number | null;
   gpu_clock_mhz: number | null;
@@ -99,7 +160,9 @@ export const MAX_REQUEST_TIMEOUT_SECONDS = 300;
 export const LATENCY_WARNING_STEP_SECONDS = 5;
 export const REQUEST_TIMEOUT_STEP_SECONDS = 10;
 export const DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE: UnifiedInputPersistenceMode = "persist_all";
-export const SCREENSHOT_DIMENSION_OPTIONS: ScreenshotMaxDimension[] = [1280, 1920, 3160];
+export const SCREENSHOT_ATTACHMENT_PRESET_OPTIONS: ScreenshotAttachmentPreset[] = ["low", "mid", "max"];
+export const DEFAULT_SCREENSHOT_ATTACHMENT_PRESET: ScreenshotAttachmentPreset = "low";
+/** @deprecated use DEFAULT_SCREENSHOT_ATTACHMENT_PRESET; kept for tests/migration. */
 export const DEFAULT_SCREENSHOT_MAX_DIMENSION: ScreenshotMaxDimension = 1280;
 export const DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE = false;
 export const DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING = false;
@@ -209,11 +272,30 @@ export function normalizeUnifiedInputPersistenceMode(value: unknown): UnifiedInp
 }
 
 export function normalizeScreenshotMaxDimension(value: unknown): ScreenshotMaxDimension {
-  /** Validate screenshot dimension against the explicit option set shown in settings UI. */
   if (value === 1920 || value === 3160) {
     return value;
   }
   return DEFAULT_SCREENSHOT_MAX_DIMENSION;
+}
+
+export function normalizeScreenshotAttachmentPreset(
+  data: Record<string, unknown> | null | undefined
+): ScreenshotAttachmentPreset {
+  if (!data) {
+    return DEFAULT_SCREENSHOT_ATTACHMENT_PRESET;
+  }
+  const direct = data.screenshot_attachment_preset;
+  if (direct === "low" || direct === "mid" || direct === "max") {
+    return direct;
+  }
+  const leg = data.screenshot_max_dimension;
+  if (leg === 1920 || leg === "1920") return "mid";
+  if (leg === 3160 || leg === "3160") return "max";
+  return DEFAULT_SCREENSHOT_ATTACHMENT_PRESET;
+}
+
+export function normalizeLatencyTimeoutsCustomEnabled(value: unknown): boolean {
+  return value === true;
 }
 
 export function normalizeDesktopDebugNoteAutoSave(value: unknown): boolean {
@@ -312,11 +394,14 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     raw.request_timeout_seconds ?? DEFAULT_REQUEST_TIMEOUT_SECONDS
   );
   const modelPolicy = reconcileModelPolicySettings(raw.model_policy_tier, raw.model_policy_non_foss_unlocked);
+  const rawRecord =
+    typeof data === "object" && data !== null ? (data as Record<string, unknown>) : undefined;
   return {
     latency_warning_seconds: latencyTimeout.latency_warning_seconds,
     request_timeout_seconds: latencyTimeout.request_timeout_seconds,
+    latency_timeouts_custom_enabled: normalizeLatencyTimeoutsCustomEnabled(raw.latency_timeouts_custom_enabled),
     unified_input_persistence_mode: normalizeUnifiedInputPersistenceMode(raw.unified_input_persistence_mode),
-    screenshot_max_dimension: normalizeScreenshotMaxDimension(raw.screenshot_max_dimension),
+    screenshot_attachment_preset: normalizeScreenshotAttachmentPreset(rawRecord),
     desktop_debug_note_auto_save: normalizeDesktopDebugNoteAutoSave(raw.desktop_debug_note_auto_save),
     desktop_ask_verbose_logging: normalizeDesktopAskVerboseLogging(raw.desktop_ask_verbose_logging),
     preset_chip_fade_animation_enabled: normalizePresetChipFadeAnimationEnabled(

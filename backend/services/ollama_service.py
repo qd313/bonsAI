@@ -87,6 +87,73 @@ def _user_asks_resolution_relevant_performance(question: str) -> bool:
     return False
 
 
+def _user_asks_ollama_bonsai_host_or_latency(question: str) -> bool:
+    """True when the user is asking about Ollama/bonsAI connectivity, host setup, or slow LLM responses."""
+    s = (question or "").lower().strip()
+    if not s:
+        return False
+    if "ollama" in s:
+        if any(
+            k in s
+            for k in (
+                "slow",
+                "latency",
+                "timeout",
+                "hang",
+                "stuck",
+                "diagnose",
+                "connection",
+                "refused",
+                "firewall",
+                "host",
+                "11434",
+                "ollama_host",
+                "not responding",
+                "speed up",
+                "faster",
+                "first token",
+                "unload",
+                "remote",
+                "lan",
+                "wi-fi",
+                "wifi",
+                "network",
+                "laggy",
+                "stalling",
+            )
+        ):
+            return True
+        if re.search(r"\blag\b", s):
+            return True
+        if ("response" in s or "reply" in s) and ("slow" in s or "diagnose" in s):
+            return True
+        if any(k in s for k in ("setup", "configure", "install")) and any(
+            k in s for k in ("bonsai", "deck", "pc", "connect", "url", "http")
+        ):
+            return True
+    if "bonsai" in s and any(
+        k in s
+        for k in (
+            "ollama",
+            "host",
+            "connection",
+            "timeout",
+            "slow",
+            "connect",
+            "can't connect",
+            "cannot connect",
+            "127.0.0.1",
+            "11434",
+        )
+    ):
+        return True
+    if re.search(r"\b(slow|latency|timeout|hanging)\b.*\b(inference|generation|llm)\b", s):
+        return True
+    if re.search(r"\b(inference|generation)\b.*\b(slow|latency)\b", s):
+        return True
+    return False
+
+
 def _user_asks_deck_troubleshooting_or_compat_line(question: str) -> bool:
     """General compatibility / Proton / stability prompts (shipped main-tab presets, prompt-testing group)."""
     s = (question or "").lower()
@@ -108,6 +175,22 @@ def _user_asks_deck_troubleshooting_or_compat_line(question: str) -> bool:
         return True
     return False
 
+
+OLLAMA_BONSAI_SETUP_LINE = (
+    "\n\nOLLAMA / bonsAI (host & inference): The user is asking about **slow or failing Ollama responses** and/or **how Ollama is set up for bonsAI**. "
+    "Answer as **LLM/host/network** guidance — **not** Steam **Performance / TDP / FPS / QAM game sliders** unless they explicitly tie slowness to those.\n"
+    "Cover, in plain steps: **bonsAI Settings → Connection** — base URL / host (Deck-local `http://127.0.0.1:11434` vs Ollama on a **PC** on the LAN), **hard timeout** and warning threshold, **Ollama keep-alive** (how long models stay loaded vs VRAM).\n"
+    "Cover **host reachability**: on the PC running Ollama, `OLLAMA_HOST` / bind address, OS firewall allowing **11434**, same subnet as the Deck, and correcting typos in the URL.\n"
+    "Cover **model load**: large or heavy tags are slower on Deck; suggest smaller or better-quantized models; **Ask mode** (Speed / Strategy / Deep) changes fallback chains; **model policy tier** can limit which tags run.\n"
+    "Cover **telling network vs compute delay**: first-token wait vs steady tokens/s; if the host is remote, mention Wi‑Fi vs Ethernet and distance to the PC.\n"
+    "Point to **docs/troubleshooting.md** themes (firewall, `OLLAMA_HOST`, LAN) when relevant. "
+    "Do **not** output the ```json``` TDP/GPU recommendation block for this topic.\n"
+)
+
+HARDWARE_APPENDIX_SKIPPED_FOR_OLLAMA_TOPIC = (
+    "Hardware appendix (Deck TDP/GPU JSON): **Skipped for this topic** — the user is focused on Ollama/bonsAI inference or networking, not in-game power sliders. "
+    "Do **not** output the ```json``` TDP/GPU block unless they **also** explicitly ask for Deck TDP or GPU MHz changes in the same message.\n\n"
+)
 
 DECK_TROUBLESHOOT_GAME_SETTINGS_LINE = (
     "\n\nDECK TROUBLESHOOTING (game in focus): The user is asking about settings, how the title runs, crashes, stutter, Proton, or launch. "
@@ -228,20 +311,30 @@ def build_system_prompt(
     )
 
     if ask_mode != "strategy":
+        ollama_q = _user_asks_ollama_bonsai_host_or_latency(question)
         sweet = _user_asks_sweet_spot_tuning(question)
         gfx = ""
         if _user_asks_resolution_relevant_performance(question):
             gfx = GRAPHICS_RESOLUTION_DEEP if ask_mode == "deep" else GRAPHICS_RESOLUTION_SPEED
-        troubleshoot = app_name.strip() and _user_asks_deck_troubleshooting_or_compat_line(question)
+        troubleshoot = (
+            app_name.strip()
+            and _user_asks_deck_troubleshooting_or_compat_line(question)
+            and not ollama_q
+        )
+        hardware_block = (
+            HARDWARE_APPENDIX_SKIPPED_FOR_OLLAMA_TOPIC if ollama_q else hardware_tdp_appendix
+        )
         return (
             core_identity
             + game_context
-            + hardware_tdp_appendix
+            + hardware_block
+            + (OLLAMA_BONSAI_SETUP_LINE if ollama_q else "")
             + (SWEET_SPOT_QAM_LINE if sweet else "")
             + gfx
             + (DECK_TROUBLESHOOT_GAME_SETTINGS_LINE if troubleshoot else "")
         )
 
+    ollama_q = _user_asks_ollama_bonsai_host_or_latency(question)
     power_topic = _user_wants_power_or_performance_topic(question)
     followup = is_strategy_followup_question(question)
     if followup:
@@ -306,8 +399,10 @@ def build_system_prompt(
         out += GRAPHICS_RESOLUTION_STRATEGY
     if _user_asks_sweet_spot_tuning(question):
         out += SWEET_SPOT_QAM_LINE
-    if app_name.strip() and _user_asks_deck_troubleshooting_or_compat_line(question):
+    if app_name.strip() and _user_asks_deck_troubleshooting_or_compat_line(question) and not ollama_q:
         out += DECK_TROUBLESHOOT_GAME_SETTINGS_LINE
+    if ollama_q:
+        out += OLLAMA_BONSAI_SETUP_LINE
     return out
 
 

@@ -17,25 +17,5 @@ export function joinPresetWithRunningGame(presetText: string, gameName: string):
   } else {
     out = `${t} \u2014 ${g}`;
   }
-  // #region agent log
-  const joinKind = /\bthis game\?$/i.test(t)
-    ? "swapThisGameQ"
-    : /\bthis game$/i.test(t)
-      ? "swapThisGame"
-      : "emDashTitle";
-  void fetch("http://127.0.0.1:7682/ingest/455d5c32-fa64-45d1-b31c-f17b50f3371a", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "96660f" },
-    body: JSON.stringify({
-      sessionId: "96660f",
-      runId: "join-preset",
-      hypothesisId: "H1",
-      location: "joinPresetWithRunningGame",
-      message: "preset_with_game",
-      data: { joinKind },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => {});
-  // #endregion
   return out;
 }

@@ -1,6 +1,8 @@
 import React from "react";
 import { PanelSection, PanelSectionRow, ToggleField, showModal, ConfirmModal } from "@decky/ui";
 import type { BonsaiCapabilities } from "../utils/settingsAndResponse";
+import { PermissionsTabModelPolicyPanel } from "./PermissionsTabModelPolicyPanel";
+import type { ModelPolicyTierId } from "../data/modelPolicy";
 
 type Props = {
   capabilities: BonsaiCapabilities;
@@ -9,6 +11,16 @@ type Props = {
   onConfirmEnableHardwareControl: () => void;
   /** Opens README model policy (same gating as About external links). */
   onReadModelPolicy?: () => void;
+  modelPolicyTier: ModelPolicyTierId;
+  onSelectModelPolicyTier: (t: ModelPolicyTierId) => void;
+  setModelPolicyNonFossUnlocked: (v: boolean) => void;
+  modelPolicyNonFossUnlocked: boolean;
+  setModelAllowHighVramFallbacks: (v: boolean) => void;
+  modelAllowHighVramFallbacks: boolean;
+  /** Call before any `showModal` from this tab so the active tab restores after close. */
+  onBeforeDeckyModal: () => void;
+  /** After modal dismiss; pass `() => handle.Close()`. */
+  onCompleteDeckyModalClose: (close: () => void) => void;
 };
 
 const ROWS: {
@@ -59,94 +71,101 @@ export const PermissionsTab: React.FC<Props> = ({
   setCapabilities,
   onConfirmEnableHardwareControl,
   onReadModelPolicy,
+  modelPolicyTier,
+  onSelectModelPolicyTier,
+  setModelPolicyNonFossUnlocked,
+  modelPolicyNonFossUnlocked,
+  setModelAllowHighVramFallbacks,
+  modelAllowHighVramFallbacks,
+  onBeforeDeckyModal,
+  onCompleteDeckyModalClose,
 }) => (
+  <>
   <PanelSection title="Permissions">
     <PanelSectionRow>
-      <div style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45, marginBottom: 4 }}>
+      <div className="bonsai-settings-bleed" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45, marginBottom: 4 }}>
         High-impact actions stay off until you enable them here. Ollama requests on your LAN are not gated by
-        these toggles. Which Ollama model names the plugin may try is controlled separately under Settings → Model
-        policy.
-        {onReadModelPolicy ? (
-          <>
-            {" "}
-            <button
-              type="button"
-              onClick={onReadModelPolicy}
-              style={{
-                color: "#7dd3fc",
-                textDecoration: "underline",
-                cursor: "pointer",
-                background: "none",
-                border: "none",
-                padding: 0,
-                font: "inherit",
-              }}
-            >
-              Read model policy
-            </button>
-          </>
-        ) : null}
+        these toggles. Which Ollama tag families the plugin may try is set under <strong>Model policy</strong> at
+        the bottom of this tab.
       </div>
     </PanelSectionRow>
     {ROWS.map((row) => (
       <PanelSectionRow key={row.key}>
         {row.key === "hardware_control" ? (
-          <ToggleField
-            label={row.title}
-            description={row.description}
-            checked={capabilities.hardware_control}
-            onChange={(checked) => {
-              if (checked) {
-                showModal(
-                  <ConfirmModal
-                    strTitle="Hardware control — beta risk"
-                    strDescription={
-                      <div
-                        style={{
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: 10,
-                          textAlign: "left",
-                          maxWidth: "100%",
-                          maxHeight: "min(70vh, 420px)",
-                          overflowY: "auto",
-                        }}
-                      >
+          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
+            <ToggleField
+              label={row.title}
+              description={row.description}
+              checked={capabilities.hardware_control}
+              onChange={(checked) => {
+                if (checked) {
+                  onBeforeDeckyModal();
+                  const handle = showModal(
+                    <ConfirmModal
+                      strTitle="Hardware control — beta risk"
+                      strDescription={
                         <div
-                          className="bonsai-permissions-hardware-disclaimer"
-                          style={{ whiteSpace: "pre-wrap", fontSize: 14, lineHeight: 1.4, color: "#dce8f4" }}
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 10,
+                            textAlign: "left",
+                            maxWidth: "100%",
+                            maxHeight: "min(70vh, 420px)",
+                            overflowY: "auto",
+                          }}
                         >
-                          {HARDWARE_DISCLAIMER_BODY}
+                          <div
+                            className="bonsai-permissions-hardware-disclaimer"
+                            style={{ whiteSpace: "pre-wrap", fontSize: 14, lineHeight: 1.4, color: "#dce8f4" }}
+                          >
+                            {HARDWARE_DISCLAIMER_BODY}
+                          </div>
                         </div>
-                      </div>
-                    }
-                    strOKButtonText="I understand! Let 'er rip!"
-                    strCancelButtonText="Cancel"
-                    bAlertDialog
-                    onOK={() => {
-                      onConfirmEnableHardwareControl();
-                    }}
-                    onCancel={() => {
-                      /* keep toggle off; state unchanged */
-                    }}
-                  />
-                );
-                return;
-              }
-              setCapabilities((prev) => ({ ...prev, hardware_control: false }));
-            }}
-          />
+                      }
+                      strOKButtonText="I understand! Let 'er rip!"
+                      strCancelButtonText="Cancel"
+                      bAlertDialog
+                      onOK={() => {
+                        onConfirmEnableHardwareControl();
+                        onCompleteDeckyModalClose(() => handle.Close());
+                      }}
+                      onCancel={() => {
+                        onCompleteDeckyModalClose(() => handle.Close());
+                      }}
+                    />
+                  );
+                  return;
+                }
+                setCapabilities((prev) => ({ ...prev, hardware_control: false }));
+              }}
+            />
+          </div>
         ) : (
-          <ToggleField
-            label={row.title}
-            description={row.description}
-            checked={capabilities[row.key]}
-            onChange={(checked) =>
-              setCapabilities((prev) => ({ ...prev, [row.key]: checked }))
-            }
-          />
+          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
+            <ToggleField
+              label={row.title}
+              description={row.description}
+              checked={capabilities[row.key]}
+              onChange={(checked) =>
+                setCapabilities((prev) => ({ ...prev, [row.key]: checked }))
+              }
+            />
+          </div>
         )}
       </PanelSectionRow>
     ))}
   </PanelSection>
+  <PermissionsTabModelPolicyPanel
+    modelPolicyTier={modelPolicyTier}
+    modelPolicyNonFossUnlocked={modelPolicyNonFossUnlocked}
+    modelAllowHighVramFallbacks={modelAllowHighVramFallbacks}
+    onSelectModelPolicyTier={onSelectModelPolicyTier}
+    setModelPolicyNonFossUnlocked={setModelPolicyNonFossUnlocked}
+    setModelAllowHighVramFallbacks={setModelAllowHighVramFallbacks}
+    onReadModelPolicy={onReadModelPolicy ?? (() => {})}
+    onBeforeDeckyModal={onBeforeDeckyModal}
+    onCompleteDeckyModalClose={onCompleteDeckyModalClose}
+  />
+  </>
 );

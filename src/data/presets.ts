@@ -13,12 +13,12 @@ export type PresetPrompt = {
 };
 
 /**
- * **TEMP (manual testing only):** When `TEMP_PRESET_CAROUSEL_FROZEN`, the main-tab preset
- * carousel uses **all three** fixed prompts (left / middle / right) and ignores random
- * or contextual shuffling. Remove the flag and `applyTempFrozenCarousel` when done testing.
- * See `docs/prompt-testing.md` for the current frozen set.
+ * **Prompt-testing helper (default off):** When `true`, the main-tab preset carousel uses the
+ * three fixed strings in `TEMP_CAROUSEL_FROZEN_TEXTS` (order preserved) instead of random or
+ * contextual sampling — stable chips for repeatable Deck / model checks. Shipped builds keep
+ * this `false`; set to `true` locally while working through matrices in `docs/prompt-testing.md`.
  */
-export const TEMP_PRESET_CAROUSEL_FROZEN = true;
+export const TEMP_PRESET_CAROUSEL_FROZEN = false;
 
 /**
  * Shipped `PRESET_PROMPTS.text` values in chip order: slot1, slot2, slot3.
@@ -51,7 +51,7 @@ const PRESET_PROMPTS: PresetPrompt[] = [
   { text: "How do I fix stuttering?", category: "troubleshooting" },
   { text: "Help me troubleshoot a Proton issue", category: "troubleshooting" },
   { text: "Game won't launch, what should I check?", category: "troubleshooting" },
-  { text: "Diagnose a slow Ollama response", category: "troubleshooting" },
+  { text: "Diagnose a slow Ollama response", category: "ollama" },
   { text: "What settings should I use?", category: "general" },
   { text: "Any known issues running this on Deck?", category: "general" },
   { text: "How well does this game run on Deck?", category: "general" },
@@ -78,12 +78,26 @@ const FOLLOW_UP_CATEGORIES: Record<string, string[]> = {
   thermal: ["thermal", "battery", "performance"],
   controls: ["controls", "troubleshooting", "general"],
   troubleshooting: ["troubleshooting", "performance", "general"],
+  /** After Ollama/latency chips, prefer model policy and connection-adjacent prompts over TDP/FPS. */
+  ollama: ["general", "general", "troubleshooting"],
   general: ["general", "performance", "battery"],
   strategy: ["strategy", "general", "troubleshooting"],
 };
 
 const CATEGORY_KEYWORDS: [string, string[]][] = [
   ["battery", ["battery", "power", "tdp", "watt", "charge", "idle"]],
+  [
+    "ollama",
+    [
+      "ollama",
+      "ollama_host",
+      "11434",
+      "keep alive",
+      "keep_alive",
+      "inference latency",
+      "model loads",
+    ],
+  ],
   ["performance", ["fps", "performance", "speed", "framerate", "frame rate", "fsr", "resolution"]],
   ["thermal", ["fan", "thermal", "temp", "heat", "cool", "noise", "long session"]],
   ["controls", ["controller", "layout", "input", "button", "joystick", "trackpad"]],
@@ -109,7 +123,7 @@ const CATEGORY_KEYWORDS: [string, string[]][] = [
 
 /**
  * When `TEMP_PRESET_CAROUSEL_FROZEN` and `count === 3`, replace the triple with
- * `TEMP_CAROUSEL_FROZEN_TEXTS` in order. Shared by random and contextual seed paths.
+ * `TEMP_CAROUSEL_FROZEN_TEXTS` in order. Shared by `getRandomPresets` and `getContextualPresets`.
  */
 function applyTempFrozenCarousel(picked: PresetPrompt[], count: number): PresetPrompt[] {
   if (!TEMP_PRESET_CAROUSEL_FROZEN || count < 3 || picked.length < 3) {

@@ -263,6 +263,31 @@ class OllamaServiceTests(unittest.TestCase):
         )
         self.assertNotIn("DECK TROUBLESHOOTING (game in focus)", prompt)
 
+    def test_build_system_prompt_slow_ollama_uses_host_setup_not_deck_performance(self):
+        """Preset / paraphrases about Ollama latency get bonsAI Connection guidance, not QAM/TDP focus."""
+
+        def lookup_app_name(_app_id: str) -> str:
+            return ""
+
+        def lookup_vdf(_path: str) -> dict:
+            return {}
+
+        prompt = build_system_prompt(
+            question="Diagnose a slow Ollama response",
+            app_id="123",
+            app_name="Deep Rock Galactic: Survivor",
+            normalized_attachments=[],
+            prepared_images=[],
+            lookup_app_name=lookup_app_name,
+            lookup_screenshot_vdf_metadata=lookup_vdf,
+            ask_mode="speed",
+        )
+        self.assertIn("OLLAMA / bonsAI (host & inference)", prompt)
+        self.assertIn("Settings → Connection", prompt)
+        self.assertIn("Hardware appendix (Deck TDP/GPU JSON): **Skipped for this topic**", prompt)
+        self.assertNotIn("DECK TROUBLESHOOTING (game in focus)", prompt)
+        self.assertNotIn("IMPORTANT: When you recommend or apply a TDP or GPU clock change", prompt)
+
 
 if __name__ == "__main__":
     unittest.main()

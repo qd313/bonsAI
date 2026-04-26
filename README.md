@@ -1,4 +1,4 @@
-# bonsAI (## this project is a prime example of unhinged requirement creep ##)
+# bonsAI
 
 bonsAI is a Decky Loader plugin for running a **self-hosted** AI chat using Ollama
 

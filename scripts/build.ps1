@@ -39,7 +39,7 @@ ssh "$User@$HostIp" "mkdir -p ~/decky_temp_$PluginName/dist"
 # 2. Upload everything into the temporary directory
 scp package.json plugin.json main.py "${User}@${HostIp}:~/decky_temp_$PluginName/"
 scp refactor_helpers.py "${User}@${HostIp}:~/decky_temp_$PluginName/"
-scp -r backend "${User}@${HostIp}:~/decky_temp_$PluginName/"
+scp -r py_modules "${User}@${HostIp}:~/decky_temp_$PluginName/"
 scp dist/index.js "${User}@${HostIp}:~/decky_temp_$PluginName/dist/"
 # Rollup emits hashed files under dist/assets/ (rollup-plugin-import-assets). Without this copy,
 # <img> URLs in index.js 404 on device (dev server URL points into the plugin dist folder).

@@ -187,7 +187,8 @@ deploy_remote() {
               sudo chmod -R 755 ${PLUGIN_DIR}"
 
     bold "Copying files..."
-    deck_scp package.json plugin.json main.py "${SSH_DEST}:${PLUGIN_DIR}/"
+    deck_scp package.json plugin.json main.py refactor_helpers.py "${SSH_DEST}:${PLUGIN_DIR}/"
+    deck_scp -r py_modules "${SSH_DEST}:${PLUGIN_DIR}/"
     deck_scp dist/index.js "${SSH_DEST}:${PLUGIN_DIR}/dist/"
     if [[ -d dist/assets ]]; then
         deck_scp -r dist/assets "${SSH_DEST}:${PLUGIN_DIR}/dist/"
@@ -212,7 +213,8 @@ deploy_local() {
     sudo chown -R "$(whoami)" "$LOCAL_PLUGIN_DIR"
 
     bold "Copying files..."
-    cp package.json plugin.json main.py "$LOCAL_PLUGIN_DIR/"
+    cp package.json plugin.json main.py refactor_helpers.py "$LOCAL_PLUGIN_DIR/"
+    cp -r py_modules "$LOCAL_PLUGIN_DIR/"
     cp dist/index.js "$LOCAL_PLUGIN_DIR/dist/"
     if [[ -d dist/assets ]]; then
         cp -r dist/assets "$LOCAL_PLUGIN_DIR/dist/"

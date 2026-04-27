@@ -489,6 +489,7 @@ const Content: React.FC = () => {
     setModelPolicyNonFossUnlocked,
     modelAllowHighVramFallbacks,
     setModelAllowHighVramFallbacks,
+    hydrateFromSettings,
   } = usePluginSettings();
 
   const effectiveLatencyWarningSeconds = useMemo(
@@ -911,6 +912,55 @@ const Content: React.FC = () => {
       duration: 3800,
     });
   }, [isAsking, invalidateRequests]);
+
+  const onClearAllPluginData = useCallback(async () => {
+    try {
+      const defaults = await call<[], BonsaiSettings>("clear_plugin_data");
+      hydrateFromSettings(defaults);
+      try {
+        window.localStorage.removeItem(IP_STORAGE_KEY);
+        window.localStorage.removeItem(DISCLAIMER_STORAGE_KEY);
+        window.localStorage.removeItem(UNIFIED_INPUT_STORAGE_KEY);
+        window.sessionStorage.removeItem(AUTO_SAVED_RESPONSE_IDS_KEY);
+      } catch {
+        /* ignore */
+      }
+      setOllamaIp(IP_DEFAULT);
+      resetPluginSession();
+      showModal(
+        <ConfirmModal
+          strTitle="bonsAI - Beta Notice"
+          strDescription={
+            "Welcome to bonsAI!\n\n" +
+            "This plugin is currently in beta. Some features may not work as expected, " +
+            "and AI-generated recommendations \u2014 especially TDP and performance changes \u2014 " +
+            "should be verified before relying on them.\n\n" +
+            "bonsAI modifies system hardware settings based on AI suggestions. " +
+            "Use at your own risk.\n\n" +
+            "To report bugs or request features, visit:\n" +
+            GITHUB_ISSUES_URL + "\n\n" +
+            "By continuing, you acknowledge this is experimental software."
+          }
+          strOKButtonText="Got it"
+          bAlertDialog={true}
+          onOK={() => {
+            markDisclaimerAccepted();
+          }}
+        />
+      );
+      toaster.toast({
+        title: "Plugin data cleared",
+        body: "Settings and local plugin storage were reset. Re-enter your Ollama host and permissions as needed.",
+        duration: 4500,
+      });
+    } catch (e: unknown) {
+      toaster.toast({
+        title: "Clear failed",
+        body: formatDeckyRpcError(e),
+        duration: 5000,
+      });
+    }
+  }, [hydrateFromSettings, resetPluginSession]);
 
   const onMicInput = () => {
     toaster.toast({ title: "Voice input", body: "Voice capture is not implemented yet.", duration: 1800 });
@@ -1556,6 +1606,7 @@ const Content: React.FC = () => {
       }}
       onCompleteDeckyModalClose={finalizeShowModalAndRestoreActiveTab}
       onResetSession={resetPluginSession}
+      onClearAllPluginData={onClearAllPluginData}
     />
   );
 

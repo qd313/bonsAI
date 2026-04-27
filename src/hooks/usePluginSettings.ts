@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { call } from "@decky/api";
 import { type AiCharacterAccentIntensityId } from "../data/aiCharacterAccentIntensity";
 import { type ModelPolicyTierId } from "../data/modelPolicy";
@@ -81,6 +81,31 @@ export function usePluginSettings() {
     DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS
   );
   const [settingsLoaded, setSettingsLoaded] = useState(false);
+
+  const hydrateFromSettings = useCallback((saved: BonsaiSettings) => {
+    const normalized = normalizeSettings(saved);
+    setLatencyWarningSeconds(normalized.latency_warning_seconds);
+    setRequestTimeoutSeconds(normalized.request_timeout_seconds);
+    setLatencyTimeoutsCustomEnabled(normalized.latency_timeouts_custom_enabled);
+    setUnifiedInputPersistenceMode(normalized.unified_input_persistence_mode);
+    setScreenshotAttachmentPreset(normalized.screenshot_attachment_preset);
+    setDesktopDebugNoteAutoSave(normalized.desktop_debug_note_auto_save);
+    setDesktopAskVerboseLogging(normalized.desktop_ask_verbose_logging);
+    setPresetChipFadeAnimationEnabled(normalized.preset_chip_fade_animation_enabled);
+    setInputSanitizerUserDisabled(normalized.input_sanitizer_user_disabled);
+    setCapabilities(normalized.capabilities);
+    setAiCharacterEnabled(normalized.ai_character_enabled);
+    setAiCharacterRandom(normalized.ai_character_random);
+    setAiCharacterPresetId(normalized.ai_character_preset_id);
+    setAiCharacterCustomText(normalized.ai_character_custom_text);
+    setAiCharacterAccentIntensity(normalized.ai_character_accent_intensity);
+    setAskMode(normalized.ask_mode);
+    setOllamaKeepAlive(normalized.ollama_keep_alive);
+    setShowDebugTab(normalized.show_debug_tab);
+    setModelPolicyTier(normalized.model_policy_tier);
+    setModelPolicyNonFossUnlocked(normalized.model_policy_non_foss_unlocked);
+    setModelAllowHighVramFallbacks(normalized.model_allow_high_vram_fallbacks);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -244,5 +269,6 @@ export function usePluginSettings() {
     setInputSanitizerUserDisabled,
     setLatencyTimeoutsCustomEnabled,
     setScreenshotAttachmentPreset,
+    hydrateFromSettings,
   };
 }

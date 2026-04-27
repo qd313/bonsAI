@@ -33,6 +33,7 @@ from backend.services.ollama_service import (
     user_asks_ollama_bonsai_host_or_latency,
     user_wants_power_or_performance_topic,
 )
+from backend.services.plugin_data_reset import reset_plugin_disk_and_defaults
 from backend.services.settings_service import (
     clamp_int,
     load_settings as load_settings_from_disk,
@@ -300,6 +301,35 @@ class Plugin:
             sanitize_func=Plugin._sanitize_settings,
             logger=logger,
         )
+
+    async def clear_plugin_data(self):
+        """Remove persisted settings/runtime/logs and return fresh defaults (new-install behavior)."""
+        plugin = Plugin._coerce_instance(self)
+        plugin._ensure_background_state()
+        async with plugin._background_lock:
+            task = plugin._background_task
+            plugin._background_task = None
+            if task is not None and not task.done():
+                task.cancel()
+                try:
+                    await task
+                except asyncio.CancelledError:
+                    pass
+            plugin._background_state = plugin._new_background_state()
+            plugin._background_request_seq += 1
+        plugin._last_input_transparency = None
+
+        defaults = reset_plugin_disk_and_defaults(
+            settings_path=Plugin._settings_path(),
+            settings_dir=decky.DECKY_PLUGIN_SETTINGS_DIR,
+            runtime_dir=decky.DECKY_PLUGIN_RUNTIME_DIR,
+            log_dir=decky.DECKY_PLUGIN_LOG_DIR,
+            sanitize_func=Plugin._sanitize_settings,
+            load_settings=load_settings_from_disk,
+            save_settings=save_settings_to_disk,
+            logger=logger,
+        )
+        return defaults
 
     TDP_MIN_W = 3
     TDP_MAX_W = 15

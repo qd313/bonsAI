@@ -113,6 +113,8 @@ export type SettingsTabProps = {
   onBeforeDeckyModal: () => void;
   onCompleteDeckyModalClose: (close: () => void) => void;
   onResetSession: () => void;
+  /** Reset Decky-persisted settings, runtime data, and browser storage (see confirm copy). */
+  onClearAllPluginData: () => void | Promise<void>;
 };
 
 export const SettingsTab: React.FC<SettingsTabProps> = ({
@@ -150,6 +152,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   onBeforeDeckyModal,
   onCompleteDeckyModalClose,
   onResetSession,
+  onClearAllPluginData,
 }) => {
   const [deckIp, setDeckIp] = useState<string>("...");
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus | null>(null);
@@ -713,7 +716,16 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
       </PanelSection>
       <div
         className="bonsai-settings-cache-row"
-        style={{ width: "100%", minWidth: 0, maxWidth: "100%", boxSizing: "border-box", alignSelf: "stretch" }}
+        style={{
+          width: "100%",
+          minWidth: 0,
+          maxWidth: "100%",
+          boxSizing: "border-box",
+          alignSelf: "stretch",
+          display: "flex",
+          flexDirection: "row",
+          gap: 8,
+        }}
       >
         <Button
           onClick={() => {
@@ -732,7 +744,8 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
             );
           }}
           style={{
-            width: "100%",
+            flex: 1,
+            minWidth: 0,
             minHeight: 38,
             fontSize: 12,
             fontWeight: 600,
@@ -745,6 +758,45 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
           }}
         >
           Clear cache...
+        </Button>
+        <Button
+          onClick={() => {
+            onBeforeDeckyModal();
+            const handle = showModal(
+              <ConfirmModal
+                strTitle="Clear all plugin data?"
+                strDescription={
+                  "This resets bonsAI like a fresh install for this device.\n\n" +
+                  "It deletes saved settings and permissions, runtime cache and plugin logs under Decky, " +
+                  "and clears the Ollama host field, safety disclaimer flag, and unified-input persistence stored in the plugin browser.\n\n" +
+                  "It does not delete Desktop notes under BonsAI_notes.\n\n" +
+                  "Afterward, set your Ollama host again and re-enable any permissions you need."
+                }
+                strOKButtonText="Clear all data"
+                onOK={() => {
+                  void Promise.resolve(onClearAllPluginData()).finally(() => {
+                    onCompleteDeckyModalClose(() => handle.Close());
+                  });
+                }}
+                onCancel={() => onCompleteDeckyModalClose(() => handle.Close())}
+              />
+            );
+          }}
+          style={{
+            flex: 1,
+            minWidth: 0,
+            minHeight: 38,
+            fontSize: 12,
+            fontWeight: 600,
+            padding: "6px 10px",
+            borderRadius: 4,
+            border: "1px solid rgba(255,255,255,0.18)",
+            background: "linear-gradient(180deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.04) 100%)",
+            color: "#e8eef5",
+            boxSizing: "border-box",
+          }}
+        >
+          Clear all data...
         </Button>
       </div>
     </div>

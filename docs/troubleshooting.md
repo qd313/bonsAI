@@ -79,6 +79,16 @@ If Windows still falls back to CPU after FIX A:
 
 ---
 
+## 1b. Uninstall vs “Clear all data” (Settings)
+
+**Uninstalling** the plugin from Decky removes the plugin bundle under `~/homebrew/plugins/` but often **leaves** Decky’s per-plugin **settings**, **runtime**, and **logs** directories. Reinstalling the same plugin can therefore look like nothing was reset.
+
+**Settings → Advanced** (bottom of the tab): **Clear cache…** only clears the **current session** in RAM (Ask thread, attachments, etc.) and does **not** touch `settings.json`.
+
+**Clear all data…** resets bonsAI to a **new-install** state on the device: it removes saved settings (including permissions), clears plugin runtime cache and log files under Decky’s homebrew layout, clears the Ollama host / disclaimer / unified-input keys stored in the plugin’s browser storage, and shows the beta notice again. It does **not** delete markdown files under `~/Desktop/BonsAI_notes/`.
+
+---
+
 ## Input sanitizer (Ask lane)
 
 ### “Sanitizer blocked my prompt”

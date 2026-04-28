@@ -17,14 +17,13 @@ Active features, maintainer tasks, and **known defects**. *QAMP Phase 1 (safe de
 
 ### Active work
 
-- ★★ **Prompt-testing — finish device matrix:** **MVP ready** (matrices, QAMP rows, optional frozen carousel in [prompt-testing.md](prompt-testing.md)); Deck checkbox pass is **partially complete** — finish remaining scenarios, mark checkboxes, record **Pass / Partial / Fail** with build id in PR or [red-blue-fight-2026-04-21.md](red-blue-fight-2026-04-21.md) where applicable.
-- ★★ **README — end-user install and usage (restore clear language):** [README.md](../README.md) regressed; restore **plain, step-by-step** guidance so users are never left inferring: **(1)** how to **install Ollama** (Deck vs PC, official download or repo helper scripts, firewall/`OLLAMA_HOST` pointer to [troubleshooting.md](troubleshooting.md) for detail), **(2)** how to **obtain and install the bonsAI plugin** (where the **`.zip`** comes from—e.g. GitHub Release—and how to load it in Decky Loader), **(3)** how to **use the app** after install (open via Decky/QAM, set Ollama host/base URL in Settings, pull a model if needed, send an Ask, optional permissions). Keep troubleshooting deep-dives in `docs/`, not the main path.
+- ★★ **Prompt-testing — finish device matrix:** **MVP ready** (matrices, QAMP rows, optional frozen carousel in [prompt-testing.md](prompt-testing.md)); Deck checkbox pass is **partially complete** — finish remaining scenarios, mark checkboxes, record **Pass / Partial / Fail** with build id in the PR and/or in [prompt-testing.md](prompt-testing.md) / [regression-and-smoke.md](regression-and-smoke.md) as appropriate.
 
 ---
 
 ## Planned
 
-Backlog items are **not** listed in execution order. Stars are effort/risk within bands. For **historical** Red/Blue counsel and judge notes from the 2026-04-21 release window, see [red-blue-fight-2026-04-21.md](red-blue-fight-2026-04-21.md).
+Backlog items are **not** listed in execution order. Stars are effort/risk within bands. **The April 2026 release-window requirements freeze has ended.**
 
 > **Backlog:** ranked by effort/risk (easiest to hardest within star bands). **Not** an implementation order.
 
@@ -278,6 +277,7 @@ Headings group related work. Star counts match the historical list.
 ### Release and distribution
 
 - ★★ **Decky plugin release `.zip` (CI) + clean install proof:** [`.github/workflows/build-plugin-zip.yml`](../.github/workflows/build-plugin-zip.yml) builds the shippable zip via Decky CLI on **`v*` tags** and **workflow_dispatch**; [`scripts/verify-decky-plugin-zip.sh`](../scripts/verify-decky-plugin-zip.sh) enforces the same file layout as deploy (`main.py`, `refactor_helpers.py`, `py_modules/backend/services/`, `dist/`). Maintainer flow and versioning: [development.md](development.md) → **Release (plugin zip)**. **QA log template:** [regression-and-smoke.md](regression-and-smoke.md) §5 — run README-only path from **no Ollama yet**, then record Pass/Partial/Fail (human gate).
+- ★★ **README — end-user install and usage:** [README.md](../README.md) gives **plain, step-by-step** guidance for **(1)** installing **Ollama** (Deck vs PC, official download or repo helper scripts; firewall/`OLLAMA_HOST` in [troubleshooting.md](troubleshooting.md)), **(2)** obtaining and installing the bonsAI plugin (**`.zip`** from e.g. GitHub Release, load in Decky Loader), **(3)** **using the app** (Decky/QAM, Ollama host/base URL in Settings, pull a model, Ask, optional permissions). Troubleshooting deep-dives remain in `docs/`, not the main path.
 
 ### First-run and prompts
 
@@ -305,7 +305,7 @@ Headings group related work. Star counts match the historical list.
 - ★ **Preset Chip Fade Opt-Out:** Settings `ToggleField` **Preset chip fade animation** (persisted `preset_chip_fade_animation_enabled`, default on). When off, main-tab suggestion chips stay opaque and rotate prompts without opacity transitions; post-Ask re-seed unchanged. `PresetAnimatedChips.tsx`, `MainTab.tsx`, `settingsAndResponse.ts`, `settings_service.py`.
 - ★★★ **Mode selector (main screen):** Persisted `ask_mode` (`speed` / `strategy` / `deep`, UI labels Speed / Strategy / Deep). Compact outline control (green / bronze / gold) on the unified input strip, left of mic/stop, opens an anchored popover menu to change mode (no layout reflow); D-pad focus order is text field → mode → mic/stop. Backend orders Ollama model fallbacks per mode in `refactor_helpers.py`; `start_background_game_ai` includes `ask_mode`. `src/data/askMode.ts`, `src/components/AskModeMenuPopover.tsx`, `MainTab.tsx`, `index.tsx`, `settingsAndResponse.ts`, `settings_service.py`, `main.py`.
 - ★★ **Debug tab opt-in (Settings):** Persisted `show_debug_tab` (default **false**); **Debug** omitted from the tab strip until **Show Debug tab** is enabled in Settings; safe tab switch when turning the toggle off while on **Debug**. `src/index.tsx`, `settings_service.py`, `settingsAndResponse.ts`.
-- ★★ **Settings tab trim:** **Trim the fat** on Settings: fewer simultaneous controls per view, clearer `PanelSection` grouping, progressive disclosure, shorter helper copy on toggles and sliders; dedicated Settings composition (`SettingsTab.tsx` and related controls). Documented in [red-blue-fight-2026-04-21.md](red-blue-fight-2026-04-21.md) as part of the 2026-04-21 release-week priorities.
+- ★★ **Settings tab trim:** **Trim the fat** on Settings: fewer simultaneous controls per view, clearer `PanelSection` grouping, progressive disclosure, shorter helper copy on toggles and sliders; dedicated Settings composition (`SettingsTab.tsx` and related controls).
 - ★★★ **Reset session cache (app state):** Settings → Advanced **Reset session cache…** with confirm modal; `resetPluginSession()` clears in-memory unified search, reply, thread, transparency, branch picker, attachments, and timers. Does **not** change persisted `settings.json`, host Ollama history, or screenshot files. `src/index.tsx`.
 
 **Baseline index:** preset carousel and transition UX (Phase 1 — fade/hold; manual arrows deferred).

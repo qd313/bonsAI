@@ -7,6 +7,17 @@
 
 <img width="385" height="568" alt="DeckCapture_20260428_002601" src="https://github.com/user-attachments/assets/a7e7223e-877b-43ac-a6bc-87199551e95a" />
 
+## Quick start
+
+1. Install **[Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader)** on the Steam Deck (official instructions; Stable is a good default).
+2. Download **bonsAI** from **[GitHub Releases](https://github.com/cantcurecancer/bonsAI/releases)** (same org/repo as in-app links). Open **Decky** from the QAM → settings (gear) → **install from local ZIP** / developer install (wording varies by Decky version) and point at the plugin `.zip`. When the plugin is on the **Decky store**, you can use that path instead. **Bleeding edge:** maintainers can use the **Build plugin zip** workflow under **Actions** and the `bonsai-plugin-*` artifact—see [docs/development.md](docs/development.md) → **Release (plugin zip)**.
+3. On a **PC on the same LAN** (recommended), install **[Ollama](https://ollama.com/download)**. Make Ollama reachable at **`<PC-IP>:11434`** (`OLLAMA_HOST`, firewall)—full checklist and `curl` test: [docs/troubleshooting.md](docs/troubleshooting.md#2-network--communication-the-bridge).
+4. On the Ollama host, pull at least one **text** model, for example `ollama pull qwen2.5:1.5b`. For **screenshots / vision**, also pull a multimodal model (e.g. `llava`); see [docs/troubleshooting.md](docs/troubleshooting.md#25-screenshot-vision-setup-v1). The plugin tries several model names in order per **Speed / Strategy / Expert**; defaults are **Tier 1 (FOSS-first)**. Full tag lists, **Model policy** tiers, and high-VRAM fallbacks are documented in [docs/development.md](docs/development.md#stack-and-layout) and [`refactor_helpers.py`](refactor_helpers.py) (`select_ollama_models`, `TEXT_MODELS_BY_MODE`, `VISION_MODELS_BY_MODE`).
+5. Open **bonsAI** → **Settings** → set **Ollama host / base URL** to `http://<PC-IP>:11434`, or `http://127.0.0.1:11434` if Ollama runs on the same device as the plugin (port **11434** unless you changed it).
+6. Open the **Main** tab and send a short test message.
+
+_Unfamiliar with **QAM**, **LAN**, or **Ollama**? See [Glossary](#glossary-quick) below. **Model policy** tiers are explained under [Model policy tiers](#model-policy-tiers)._
+
 ## Glossary (quick)
 
 
@@ -23,133 +34,52 @@
 
 ## What bonsAI does
 
-- **Ask (chat)** — Send questions from the main tab; the **Python backend** calls Ollama (the UI does not `fetch` the PC directly; that avoids browser security issues). Replies are shown in the chat area with markdown-style chunks.
-- **Ask modes: Speed, Strategy, Expert** — The mode control on the main tab (labels: **Speed**, **Strategy**, **Expert**) picks different **Ollama model fallback chains** and, for Strategy only, a different **coaching** style in the system prompt. Broadly: **Speed** prioritizes a faster, smaller-model chain; **Expert** allows deeper, larger-model fallbacks; **Strategy** sits in the **middle** for model choice and is tuned for **gameplay help** (see below).
-- **Strategy mode (the middle mode)** — Use this when you want **how do I get past this / where should I go next?**-style help rather than a quick setting lookup. The assistant is steered toward **Strategy Guide** behavior: **Steam Deck** and **gamepad**-first, step-by-step coaching, and honest uncertainty. On an initial Strategy response, the model may end with a **small multiple-choice block** the plugin can show as **branch options** so you narrow the topic (e.g. where you are in the game); in follow-up messages you get **deeper tips** for the branch you implied or selected—without repeating that branching block. Replies can take **longer** than **Speed** mode because the model is allowed a richer answer. For raw speed or for non-game questions, use **Speed** or **Expert** instead.
-- **Game context** — When available, the active game is included so answers can be **game-aware** (name/context depends on what Steam/Decky exposes for that session).
-- **Presets** — Quick **preset chips** and a unified **search / ask** bar help you reuse common prompts without retyping.
-- **Screenshot attachments (vision)** — You can attach a **Steam screenshot** for image+text asks. Ollama must be using a **multimodal (vision) model**; set **Attachment quality** under Settings. **Permissions** may be required to read screenshots; see [docs/troubleshooting.md](docs/troubleshooting.md#25-screenshot-vision-setup-v1) (vision setup).
-- **Performance (TDP / power) guidance** — The assistant can discuss power limits; with **Permissions**, bonsAI may **apply** suggested TDP changes on the Deck. After changes, the UI reports what was applied. For QAM display quirks and verification, see [docs/troubleshooting.md](docs/troubleshooting.md#4-qam--qamp-reflection-strategy).
-- **AI character (roleplay tone)** — Optional style via the in-app character picker; technical keys are summarized for contributors in [docs/development.md](docs/development.md).
-- **Model policy and disclosure** — You choose a **Model policy** tier in Settings. Successful replies can include a short **model source** line with a link; see the [Model policy tiers](#model-policy-tiers) section below.
+- **Ask (chat)** — Questions from the main tab go through the **Python backend** to Ollama (not direct `fetch` from the UI). Replies show in the chat area with markdown-style chunks.
+- **Ask modes: Speed, Strategy, Expert** — Picks different **model fallback chains**; **Strategy** also uses a **gameplay-coaching** system prompt. **Speed** favors smaller/faster models; **Expert** allows larger fallbacks; **Strategy** is the middle choice for **where do I go / how do I get past this**-style help. More behavior detail: [docs/roadmap.md](docs/roadmap.md).
+- **Game context** — When available, the active game is included for **game-aware** answers.
+- **Presets** — **Preset chips** and a unified **search / ask** bar for reusing prompts.
+- **Screenshot attachments (vision)** — Attach a **Steam screenshot** for image+text asks; needs a **vision** model and **Attachment quality** in Settings. **Permissions** may be required; see [docs/troubleshooting.md](docs/troubleshooting.md#25-screenshot-vision-setup-v1).
+- **Performance (TDP / power)** — With **Permissions**, suggested TDP changes can be **applied** on the Deck. QAM quirks: [docs/troubleshooting.md](docs/troubleshooting.md#4-qam--qamp-reflection-strategy).
+- **AI character (roleplay)** — Optional tone via the in-app picker; keys for contributors: [docs/development.md](docs/development.md).
+- **Model policy** — Tier in Settings controls how permissive fallback tags are; replies can include a short **model source** line. See [Model policy tiers](#model-policy-tiers) below.
 
-**Tabs (simple map):** **Main** (Ask and thread), **Settings** (Ollama URL, policy, timing, notes), **Permissions** (lock icon — what’s gated), **About** (links and context), **Debug** (diagnostics; mainly for advanced users and contributors).
+**Tabs:** **Main** (Ask), **Settings** (Ollama URL, policy, timing, notes), **Permissions** (gated actions), **About**, **Debug**.
 
 ## Requirements
 
-- A Steam Deck (or compatible **SteamOS** handheld) with **Decky Loader** installed.
-- **Ollama** reachable from the Deck:
-  - **Option A (recommended):** a Windows or Linux **PC on the same LAN** (often much faster on a dedicated GPU).
-  - **Option B:** Ollama **on the Deck** (same device as the plugin) — expect heavier CPU/VRAM use and slower generation.
-- At least one text model **pulled** in Ollama. For vision/screenshots, also pull a **multimodal** model from the [Ollama library](https://ollama.com/library).
+- Steam Deck (or compatible **SteamOS** handheld) with **Decky Loader**.
+- **Ollama** reachable from the Deck: **PC on the LAN** (recommended) or **on the Deck** (heavier load, slower).
+- At least one **text** model in Ollama; **vision** model optional but needed for screenshot asks.
 
-## 1) Install the plugin (end users)
+## Detailed setup
 
-You do **not** need a copy of this git repo to use bonsAI.
+You do **not** need this git repo to **use** bonsAI—only the release ZIP (or store install).
 
-1. **Install [Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader)** on the Steam Deck using the official project instructions (Stable channel is a good default for most users).
-2. **Download the release bundle**
-  - Open **[GitHub Releases for this repository](https://github.com/cantcurecancer/DeckySettingsSearch/releases)** and download the **plugin `.zip`** attached to the release you want (filename follows the build; often under `out/` in CI).
-  - **Pre-release / bleeding edge:** maintainers can run the **Build plugin zip** workflow under the repo’s **Actions** tab and download the **`bonsai-plugin-*`** artifact (see [docs/development.md](docs/development.md) → **Release (plugin zip)**).
-3. **Install the plugin in Decky**
-  - Open **Decky Loader** from the QAM, open its **settings** (gear), and use the **install plugin from a local ZIP** / **developer**-style option (wording can change between Decky versions). Point it at the downloaded `.zip`.  
-  - If your build ships through the **Decky store** instead, you can use that path when it is available; the release ZIP remains the direct install from source.
-4. You should see **bonsAI** in Decky’s plugin list. Continue with Ollama setup before expecting answers.
-
-## 2) Set up Ollama (step by step)
-
-### Choose where Ollama runs
-
+### Where Ollama runs
 
 | Where                                               | When to use                                                                                                                                                                                    |
 | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **PC on the LAN**                                   | You want faster answers and have a main rig. You will point bonsAI at `http://<PC-IP>:11434`. You must make Ollama **listen** on the network and allow **port 11434** through the PC firewall. |
-| **On the Steam Deck (beta, not fully implemented)** | Use bonsAI on the go. Use `http://127.0.0.1:11434` in Settings (see below). Use the **Linux** install method. Expect higher load on the Deck.                                                  |
+| **PC on the LAN**                                   | Faster on a GPU. Point bonsAI at `http://<PC-IP>:11434`. Ollama must **listen** on the network and allow **TCP 11434** through the firewall.                                                      |
+| **On the Steam Deck**                               | On-the-go; use `http://127.0.0.1:11434`. Expect higher CPU/VRAM use. Linux install: [ollama.com/download](https://ollama.com/download).                                                           |
 
+### Install Ollama
 
-### Install Ollama (official + optional repo scripts)
+- **Windows:** Installer from [ollama.com/download](https://ollama.com/download).
+- **Linux:** Same page, or `curl -fsSL https://ollama.com/install.sh | sh`. If bundled `pull` steps fail, pick tags from the [Ollama library](https://ollama.com/library). Quick smoke test: `ollama run qwen2.5:1.5b "Hello from bonsAI"`.
 
-**Windows (typical for a gaming PC)**
+### PC on LAN: Deck → Ollama
 
-- **Official:** download and run the installer from [ollama.com/download](https://ollama.com/download) (Windows)
-or
-- **Manual one-liner (PowerShell)** if you prefer copy-paste:
-  ```powershell
-  $installerPath = "$env:TEMP\OllamaSetup.exe"
-  Invoke-WebRequest -Uri "https://ollama.com/download/OllamaSetup.exe" -OutFile $installerPath
-  Start-Process -FilePath $installerPath -Wait
-  $env:Path = [System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")
-  ollama pull llama3
-  ollama run llama3 "Hello from bonsAI"
-  ```
+Do this on the **machine that runs Ollama**: `OLLAMA_HOST=0.0.0.0` (or the app’s “listen on network” option), **restart Ollama**, allow **inbound TCP 11434**, then verify with `curl` as in [docs/troubleshooting.md](docs/troubleshooting.md#2-network--communication-the-bridge). WSL, Bazzite/ROCm, and more: same doc.
 
-**Linux (Linux PC, Bazzite, etc. Deck specific instructions for local Ollama is forthcoming)**
+### First run and permissions
 
-- **Official:** [ollama.com/download](https://ollama.com/download) or:
-  ```bash
-  curl -fsSL https://ollama.com/install.sh | sh
-  ```
-  The script runs the official install and then tries to `ollama pull` the models it lists. **If a `pull` fails**, open the [Ollama model library](https://ollama.com/library) and use a current tag, or use the **FOSS-first** lists below.
-- **Manual pulls after install:** use the **five-line default `ollama pull` block** under [Pull models (required)](#pull-models-required). Quick check after pulling:
-  ```bash
-  ollama run qwen2.5:1.5b "Hello from bonsAI"
-  ```
-
-### Let the Deck reach Ollama (PC on LAN)
-
-If bonsAI runs on the Deck and Ollama runs on a **PC**, do all of the following on the **PC that runs Ollama**:
-
-1. **Listen on the LAN** — set `**OLLAMA_HOST=0.0.0.0`** (user or system environment variable) **or** use the Ollama app’s “listen on network / expose on LAN” option if your build has it. **Restart Ollama** after changing this.
-2. **Firewall** — allow **inbound TCP 11434** (Windows: Defender Firewall → Inbound rules → new rule for port 11434).
-3. **Check** — from the Deck (Terminal or SSH) or from the PC:
-  ```bash
-   curl -sS -m 5 http://<PC-IP>:11434/api/tags
-  ```
-   You should see JSON listing models, not a connection error.
-
-More edge cases (CORS is not the issue for bonsAI; the Python backend does the call), WSL, and Bazzite/ROCm are covered in [docs/troubleshooting.md](docs/troubleshooting.md#2-network--communication-the-bridge) (section **2 · Network & communication**).
-
-### Pull models (required)
-
-You need a **text** model for every ask and, for **screenshot** asks, a **vision** (multimodal) model. bonsAI tries tags **in a fixed order** per **Speed / Strategy / Expert**; the first name that exists in Ollama wins. Defaults are **Tier 1 (FOSS-first)**, then Tier 2+ tags only if your [Model policy](#model-policy-tiers) allows them.
-
-**Default install (smallest useful set, Tier 1 only)** — the **first** FOSS tag in each mode for text and for vision, from [refactor_helpers.py](refactor_helpers.py) (`_TEXT_FOSS_`*, `_VISION_FOSS_*`). There are **five** `ollama pull` lines because **Strategy** and **Expert** use the same first **vision** tag (`qwen2.5vl:latest`). Check tags on [ollama.com/library](https://ollama.com/library). Rough **total disk: ~22–30 GB** in typical Ollama quants.
-
-```bash
-ollama pull qwen2.5:1.5b     # text · Speed
-ollama pull qwen2.5:latest   # text · Strategy
-ollama pull qwen2.5:14b      # text · Expert
-ollama pull llava:7b         # vision · Speed
-ollama pull qwen2.5vl:latest  # vision · Strategy & Expert
-```
-
-**Full try order (every hop and fallback chain)** including Tier 1 FOSS, open-weight tails, and high-VRAM tails: see [refactor_helpers.py](refactor_helpers.py) (`TEXT_MODELS_BY_MODE`, `VISION_MODELS_BY_MODE`, `select_ollama_models`).
-
-**Tier 2, Tier 3, and large / high-VRAM models**
-
-- In **bonsAI → Settings → Model policy**, pick a **tier** to allow broader model families in the try lists ([Model policy tiers](#model-policy-tiers) below). Tier 2+ still only uses models you have actually `pull`ed in Ollama.
-- For **larger** checkpoints (e.g. 31B / 38B class) after the default ~16 GB–friendly chain, turn on **Allow high-VRAM model fallbacks** in the same place. This can **OOM** on smaller GPUs. Which tags are appended, per mode, is in [refactor_helpers.py](refactor_helpers.py) (`_TEXT_HIGH_VRAM_*`, `_VISION_HIGH_VRAM_*`); [docs/roadmap.md](docs/roadmap.md#reference--vision-model-fallback-order) (**Reference — vision model fallback order**).
-- `settings.json` keys and code pointers: [docs/development.md](docs/development.md#stack-and-layout) (bullet **Ask modes (main screen)**: `select_ollama_models`, `model_allow_high_vram_fallbacks`).
-- Slow runs or GPU not used: [docs/troubleshooting.md](docs/troubleshooting.md#1-core-hardware--performance) §1; vision attach issues: [§2.5 Screenshot / vision](docs/troubleshooting.md#25-screenshot-vision-setup-v1).
-
-**Windows** — `scripts/setup_ollama.ps1` may `ollama pull llama3` as a quick smoke test; for Tier 1 parity with the plugin, prefer the block above.
-
-## 3) Configure bonsAI and your first Ask
-
-1. On the Deck, open the **Quick Access Menu (QAM)** (Quick Access / Guide button, depending on your device).
-2. Open **Decky** from the QAM, then open **bonsAI** from the plugin list (order depends on your QAM layout).
-3. Open the **Settings** tab. Set the **Ollama host / base URL** to:
-  - `http://<PC-IP>:11434` if Ollama is on a PC, or
-  - `http://127.0.0.1:11434` if Ollama runs **on the same Steam Deck** as the plugin.  
-   Default Ollama **port** is **11434** unless you changed it.
-4. Return to the **main** tab. Send a **short test question** (or use a connection test if your build exposes one in Settings). You should get a model reply, not a timeout.
-5. **Permissions (lock tab)** — Optional until you need them. The **Permissions** tab gates things like: saving **Desktop notes**, **applying** TDP or similar tuning from the model, **attaching** Steam screenshots, opening **external** links from **About**, and some **Debug** features. Ollama connectivity itself is not blocked by these toggles. See [docs/troubleshooting.md](docs/troubleshooting.md#1a-permissions-tab-blocked-actions).
+Open **Decky** → **bonsAI** → **Settings** for the base URL; **Main** for your first Ask. **Permissions** (lock tab) gate Desktop notes, TDP apply, screenshot attach, some external links, and parts of **Debug**—not basic Ollama connectivity. See [docs/troubleshooting.md](docs/troubleshooting.md#1a-permissions-tab-blocked-actions).
 
 ## Open bonsAI faster (optional)
 
-To jump into the QAM and Decky with a **controller chord** (Guide + other buttons), tune **Controller → Guide Button Chord** in Steam. **Fire Start Delay** and D-pad steps depend on your QAM order. Full recipe: [docs/troubleshooting.md](docs/troubleshooting.md#5-bonsai-shortcut-setup) — section **5 · bonsai shortcut setup**.
+Controller **Guide chord** setup: [docs/troubleshooting.md](docs/troubleshooting.md#5-bonsai-shortcut-setup).
 
-**Ask-field shortcuts (not normal prompts)** — for sanitizer and shortcut help phrases (e.g. `bonsai:shortcut-setup-deck`), see [Input sanitization](#input-sanitization) below; they are **not** part of the default onboarding path.
+**Ask-field shortcuts** (e.g. `bonsai:shortcut-setup-deck`): [Input sanitization](#input-sanitization)—not part of default onboarding.
 
 ---
 
@@ -218,5 +148,4 @@ Optional **Verbose Ask logging to Desktop notes** (Settings → Desktop notes) a
 | Steam Input jump (debug)                       | Contributors            | [docs/steam-input-research.md](docs/steam-input-research.md)                                                                         |
 | RAG / KB research (not implemented)            | Contributors            | [docs/rag-sources-research.md](docs/rag-sources-research.md)                                                                         |
 | Refactor sweep + unified input (archive)       | Contributors            | [docs/refactor-specialist-sweep.md](docs/refactor-specialist-sweep.md#unified-input-refactor-completed)                              |
-
 

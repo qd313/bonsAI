@@ -90,10 +90,10 @@ Model-quality, strategy/TDP rows, and sanitizer checks live in **[prompt-testing
 
 **Steps (checklist):**
 
-1. Install Ollama per README §2 (official or helper scripts).
+1. Install Ollama per README **Detailed setup** / **Quick start** (official installer or install script on the Ollama host).
 2. Obtain the plugin `.zip`: **GitHub Release** asset and/or **Actions** artifact from workflow **Build plugin zip** (see [development.md](development.md)).
 3. Install the zip in Decky (developer / local ZIP path; wording varies by Loader version).
-4. In bonsAI **Settings**, set the Ollama base URL; pull at least one text model per README (**Pull models**).
+4. In bonsAI **Settings**, set the Ollama base URL; pull at least one text model (README **Quick start**, step 4).
 5. Send one **text** Ask and confirm a normal reply (no import/traceback errors).
 
 **Log (append a row after each full pass):**

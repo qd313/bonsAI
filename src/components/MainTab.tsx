@@ -201,6 +201,10 @@ export type MainTabProps = {
   fullBleedRowStyle: React.CSSProperties;
   presetButtonSurface: React.CSSProperties;
   suggestedPrompts: PresetPrompt[];
+  /** When true, show the green “How to use” chip above the three preset slots. */
+  showPluginHelpChip: boolean;
+  /** Opens instructions modal and dismisses the help chip for the session. */
+  onOpenPluginHelp: () => void;
   /** When false, preset chips omit staggered fade transitions (Settings). */
   presetChipFadeAnimationEnabled?: boolean;
   setUnifiedInput: React.Dispatch<React.SetStateAction<string>>;
@@ -296,6 +300,8 @@ export function MainTab(props: MainTabProps) {
     fullBleedRowStyle,
     presetButtonSurface,
     suggestedPrompts,
+    showPluginHelpChip,
+    onOpenPluginHelp,
     presetChipFadeAnimationEnabled = true,
     setUnifiedInput,
     unifiedInputHostRef,
@@ -493,6 +499,11 @@ export function MainTab(props: MainTabProps) {
   }, []);
   const focusFirstPresetChip = React.useCallback((): boolean => {
     const host = presetCarouselHostRef.current;
+    const help = host?.querySelector<HTMLElement>("button.bonsai-preset-help-chip");
+    if (help) {
+      help.focus();
+      return true;
+    }
     const btn = host?.querySelector<HTMLElement>(
       '.bonsai-preset-carousel-slot[data-bonsai-preset-visible="true"] button.bonsai-preset-glass',
     );
@@ -565,6 +576,23 @@ export function MainTab(props: MainTabProps) {
             className="bonsai-full-bleed-row"
             style={{ ...fullBleedRowStyle, display: "grid", gap: 8 }}
           >
+            {showPluginHelpChip && (
+              <Button
+                className="bonsai-preset-glass bonsai-preset-help-chip"
+                {...({
+                  onMoveDown: () => focusUnifiedTextField(),
+                } as Record<string, unknown>)}
+                onClick={() => onOpenPluginHelp()}
+                style={{
+                  width: "100%",
+                  minHeight: 34,
+                  fontSize: 12,
+                }}
+                aria-label="How to use bonsAI — open quick start"
+              >
+                How to use bonsAI
+              </Button>
+            )}
             <MainTabPresetAnimatedChips
               seeds={suggestedPrompts}
               setUnifiedInput={setUnifiedInput}

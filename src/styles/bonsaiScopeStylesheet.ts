@@ -572,6 +572,16 @@ export function buildBonsaiScopeStylesheet(): string {
           box-shadow: none !important;
         }
 
+        .bonsai-scope button.bonsai-preset-help-chip.bonsai-preset-glass {
+          background: linear-gradient(
+            180deg,
+            rgba(46, 135, 83, 0.28) 0%,
+            rgba(18, 52, 34, 0.48) 100%
+          ) !important;
+          border: 1px solid var(--bonsai-ui-accent-main, rgba(46, 135, 83, 0.65)) !important;
+          color: #dff5ea !important;
+        }
+
         .bonsai-scope .bonsai-unified-input-strategy-placeholder {
           font-style: italic;
           font-size: 10px;

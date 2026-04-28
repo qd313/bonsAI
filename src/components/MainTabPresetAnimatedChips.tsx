@@ -184,49 +184,49 @@ export function MainTabPresetAnimatedChips(props: MainTabPresetAnimatedChipsProp
         /** Faded-out chips (incl. after the 60s carousel session rests at opacity 0) must not stay in the Deck focus graph. */
         const presetInteractive = !fadeAnimationEnabled || slotOpacity > 0;
         return (
-        <div
-          key={`preset-slot-${i}`}
-          className="bonsai-preset-carousel-slot"
-          data-bonsai-preset-visible={presetInteractive ? "true" : "false"}
-          style={{
-            opacity: slotOpacity,
-            transition: `opacity ${slotFade[i]?.transitionMs ?? PRESET_CAROUSEL_FADE_IN_MS}ms ease-in-out`,
-          }}
-        >
-          <Button
-            key={`${i}-${p.text}`}
-            className="bonsai-preset-glass"
-            focusable={presetInteractive}
-            onClick={() => {
-              const gameName = Router.MainRunningApp?.display_name ?? "";
-              setUnifiedInput(gameName ? joinPresetWithRunningGame(p.text, gameName) : p.text);
-              if (p.preferAskMode && onPreferAskMode) {
-                onPreferAskMode(p.preferAskMode);
-              }
-            }}
+          <div
+            key={`preset-slot-${i}`}
+            className="bonsai-preset-carousel-slot"
+            data-bonsai-preset-visible={presetInteractive ? "true" : "false"}
             style={{
-              width: "100%",
-              minHeight: 34,
-              fontSize: 12,
-              color: "#c4d3e2",
+              opacity: slotOpacity,
+              transition: `opacity ${slotFade[i]?.transitionMs ?? PRESET_CAROUSEL_FADE_IN_MS}ms ease-in-out`,
             }}
           >
-            {p.text}
-            {p.beta && (
-              <span
-                style={{
-                  marginLeft: 6,
-                  fontSize: 10,
-                  fontStyle: "italic",
-                  color: `var(--bonsai-ui-accent-main, ${BONSAI_FOREST_GREEN})`,
-                  fontWeight: 600,
-                }}
-              >
-                [beta]
-              </span>
-            )}
-          </Button>
-        </div>
+            <Button
+              key={`${i}-${p.text}`}
+              className="bonsai-preset-glass"
+              focusable={presetInteractive}
+              onClick={() => {
+                const gameName = Router.MainRunningApp?.display_name ?? "";
+                setUnifiedInput(gameName ? joinPresetWithRunningGame(p.text, gameName) : p.text);
+                if (p.preferAskMode && onPreferAskMode) {
+                  onPreferAskMode(p.preferAskMode);
+                }
+              }}
+              style={{
+                width: "100%",
+                minHeight: 34,
+                fontSize: 12,
+                color: "#c4d3e2",
+              }}
+            >
+              {p.text}
+              {p.beta && (
+                <span
+                  style={{
+                    marginLeft: 6,
+                    fontSize: 10,
+                    fontStyle: "italic",
+                    color: `var(--bonsai-ui-accent-main, ${BONSAI_FOREST_GREEN})`,
+                    fontWeight: 600,
+                  }}
+                >
+                  [beta]
+                </span>
+              )}
+            </Button>
+          </div>
         );
       })}
     </>

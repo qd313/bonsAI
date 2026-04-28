@@ -19,6 +19,7 @@ import { CharacterPickerModal } from "./components/CharacterPickerModal";
 import { DesktopNoteSaveModal } from "./components/DesktopNoteSaveModal";
 import { DebugTab } from "./components/DebugTab";
 import { MainTab } from "./components/MainTab";
+import { PluginHelpModal } from "./components/PluginHelpModal";
 import { PermissionsTab } from "./components/PermissionsTab";
 import { SettingsTab } from "./components/SettingsTab";
 import { getSteamInputLexiconEntry } from "./data/steam-input-lexicon";
@@ -78,6 +79,12 @@ import type {
  * fullscreen modal (character picker, model policy, permissions confirm, clear session, etc.).
  */
 let __bonsaiTabRestoreAfterModal: string | null = null;
+
+/**
+ * Preserves “plugin help chip dismissed” across Decky remounting `Content` when `showModal`
+ * opens/closes (same lifecycle issue as {@link __bonsaiTabRestoreAfterModal}).
+ */
+let __bonsaiPluginHelpDismissed = false;
 
 /**
  * This boundary protects the plugin UI from render-time failures so Decky can keep the panel alive.
@@ -424,7 +431,11 @@ const Content: React.FC = () => {
   const [askThreadDisplayQuestion, setAskThreadDisplayQuestion] = useState("");
   const [isAsking, setIsAsking] = useState(false);
   const [lastApplied, setLastApplied] = useState<AppliedResult | null>(null);
+  const [pluginHelpDismissed, setPluginHelpDismissed] = useState(() => __bonsaiPluginHelpDismissed);
   const [suggestedPrompts, setSuggestedPrompts] = useState<PresetPrompt[]>(() => getRandomPresets(3));
+  useEffect(() => {
+    __bonsaiPluginHelpDismissed = pluginHelpDismissed;
+  }, [pluginHelpDismissed]);
   const [showSlowWarning, setShowSlowWarning] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState<number | null>(null);
   const [isScreenshotBrowserOpen, setIsScreenshotBrowserOpen] = useState(false);
@@ -918,6 +929,9 @@ const Content: React.FC = () => {
         /* ignore */
       }
       setOllamaIp(IP_DEFAULT);
+      __bonsaiPluginHelpDismissed = false;
+      setPluginHelpDismissed(false);
+      setSuggestedPrompts(getRandomPresets(3));
       resetPluginSession();
       showModal(
         <ConfirmModal
@@ -1286,6 +1300,15 @@ const Content: React.FC = () => {
     [armPostPickerTabLock]
   );
 
+  const openPluginHelpModal = useCallback(() => {
+    __bonsaiPluginHelpDismissed = true;
+    setPluginHelpDismissed(true);
+    characterPickerReturnTabRef.current = currentTab;
+    const handle = showModal(
+      <PluginHelpModal onClose={() => finalizeShowModalAndRestoreActiveTab(() => handle.Close())} />
+    );
+  }, [currentTab, finalizeShowModalAndRestoreActiveTab]);
+
   const openDesktopNoteSaveModal = useCallback(() => {
     if (!capabilities.filesystem_write) {
       toaster.toast({
@@ -1486,6 +1509,8 @@ const Content: React.FC = () => {
       fullBleedRowStyle={fullBleedRowStyle}
       presetButtonSurface={presetButtonSurface}
       suggestedPrompts={suggestedPrompts}
+      showPluginHelpChip={!pluginHelpDismissed}
+      onOpenPluginHelp={openPluginHelpModal}
       presetChipFadeAnimationEnabled={presetChipFadeAnimationEnabled}
       setUnifiedInput={setUnifiedInput}
       unifiedInputHostRef={unifiedInputHostRef as React.Ref<HTMLDivElement>}

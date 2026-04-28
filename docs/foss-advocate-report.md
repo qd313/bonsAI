@@ -1,6 +1,6 @@
 # FOSS advocate snapshot
 
-**Date:** 2026-04-19  
+**Date:** 2026-04-28  
 **Scope:** Repository metadata and declared runtime dependencies (not a full transitive license audit).
 
 ## Summary
@@ -13,7 +13,8 @@ bonsAI is a **self-hosted** Decky plugin: the user’s Ollama instance and chose
 
 | Item | Notes |
 |------|--------|
-| `package.json` `license` | `BSD-3-Clause` |
+| `package.json` `license` | `Apache-2.0` |
+| Root [`LICENSE`](../LICENSE) / [`NOTICE`](../NOTICE) | Apache License 2.0 text; `NOTICE` lists bonsAI copyright (Quentin Davis) and retained BSD 3-Clause attribution for Steam Deck Homebrew decky-plugin-template portions |
 | Frontend bundle | TypeScript/React; see `package.json` `dependencies` / `devDependencies` |
 | Backend | Python 3 on-device (`main.py`, `backend/services/`); standard library plus project code for HTTP to Ollama |
 

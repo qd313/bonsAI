@@ -5,6 +5,8 @@
 - Self-hosted: prompts and answers can stay on your Deck and LAN.
 - Best experience when Ollama runs on a **PC with a GPU**; the Deck sends requests over the network.
 
+<img width="385" height="568" alt="DeckCapture_20260428_002601" src="https://github.com/user-attachments/assets/a7e7223e-877b-43ac-a6bc-87199551e95a" />
+
 ## Glossary (quick)
 
 

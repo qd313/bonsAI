@@ -714,8 +714,9 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
           </div>
         </PanelSectionRow>
       </PanelSection>
-      <div
+      <Focusable
         className="bonsai-settings-cache-row"
+        flow-children="horizontal"
         style={{
           width: "100%",
           minWidth: 0,
@@ -798,7 +799,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
         >
           Clear all data...
         </Button>
-      </div>
+      </Focusable>
     </div>
   );
 };

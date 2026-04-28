@@ -159,7 +159,7 @@ export const MIN_REQUEST_TIMEOUT_SECONDS = 10;
 export const MAX_REQUEST_TIMEOUT_SECONDS = 300;
 export const LATENCY_WARNING_STEP_SECONDS = 5;
 export const REQUEST_TIMEOUT_STEP_SECONDS = 10;
-export const DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE: UnifiedInputPersistenceMode = "persist_all";
+export const DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE: UnifiedInputPersistenceMode = "no_persist";
 export const SCREENSHOT_ATTACHMENT_PRESET_OPTIONS: ScreenshotAttachmentPreset[] = ["low", "mid", "max"];
 export const DEFAULT_SCREENSHOT_ATTACHMENT_PRESET: ScreenshotAttachmentPreset = "low";
 /** @deprecated use DEFAULT_SCREENSHOT_ATTACHMENT_PRESET; kept for tests/migration. */
@@ -265,7 +265,7 @@ export function reconcileLatencyWarningAndTimeout(
 
 export function normalizeUnifiedInputPersistenceMode(value: unknown): UnifiedInputPersistenceMode {
   /** Validate persistence mode input and fall back to the default UI behavior. */
-  if (value === "persist_search_only" || value === "no_persist") {
+  if (value === "persist_all" || value === "persist_search_only" || value === "no_persist") {
     return value;
   }
   return DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE;

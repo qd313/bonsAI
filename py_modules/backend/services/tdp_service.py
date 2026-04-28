@@ -3,6 +3,13 @@ import os
 import subprocess
 from typing import Any, Optional
 
+# Safe clamp bounds for TDP / GPU clock recommendations (match Steam Deck class limits in sysfs tooling).
+TDP_MIN_W = 3
+TDP_MAX_W = 15
+GPU_CLK_MIN_MHZ = 200
+GPU_CLK_MAX_MHZ = 1600
+STEAMOS_PRIV_WRITE = "/usr/bin/steamos-polkit-helpers/steamos-priv-write"
+
 
 def find_amdgpu_hwmon() -> Optional[str]:
     """Locate the amdgpu hwmon directory used for Steam Deck power limit writes."""

@@ -50,7 +50,7 @@ describe("settingsAndResponse", () => {
     });
     expect(settings.latency_warning_seconds).toBe(20);
     expect(settings.request_timeout_seconds).toBe(150);
-    expect(settings.unified_input_persistence_mode).toBe("persist_all");
+    expect(settings.unified_input_persistence_mode).toBe("no_persist");
     expect(settings.screenshot_attachment_preset).toBe(DEFAULT_SCREENSHOT_ATTACHMENT_PRESET);
     expect(settings.latency_timeouts_custom_enabled).toBe(false);
     expect(settings.desktop_debug_note_auto_save).toBe(false);

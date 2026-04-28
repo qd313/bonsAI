@@ -41,14 +41,14 @@ class SettingsServiceTests(unittest.TestCase):
             min_request_timeout_seconds=10,
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
-            default_persistence_mode="persist_all",
+            default_persistence_mode="no_persist",
             valid_ask_modes={"speed", "strategy", "deep"},
             default_ask_mode="speed",
         )
         self.assertEqual(sanitized["latency_warning_seconds"], 295)
         self.assertEqual(sanitized["request_timeout_seconds"], 300)
         self.assertLess(sanitized["latency_warning_seconds"], sanitized["request_timeout_seconds"])
-        self.assertEqual(sanitized["unified_input_persistence_mode"], "persist_all")
+        self.assertEqual(sanitized["unified_input_persistence_mode"], "no_persist")
         self.assertEqual(sanitized["screenshot_attachment_preset"], "mid")
         self.assertFalse(sanitized["latency_timeouts_custom_enabled"])
         self.assertFalse(sanitized["desktop_debug_note_auto_save"])

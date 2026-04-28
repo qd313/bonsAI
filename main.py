@@ -1,14 +1,11 @@
 import asyncio
 import base64
 import fcntl
-import glob
-import io
+import functools
 import ipaddress
 import json
-import mimetypes
 import os
 import re
-import shutil
 import socket
 import struct
 import subprocess
@@ -28,10 +25,7 @@ from backend.services.ai_character_service import build_roleplay_system_suffix
 from backend.services.ollama_service import (
     append_deck_tdp_sysfs_grounding,
     build_system_prompt,
-    format_ai_response,
     post_ollama_chat,
-    user_asks_ollama_bonsai_host_or_latency,
-    user_wants_power_or_performance_topic,
 )
 from backend.services.plugin_data_reset import reset_plugin_disk_and_defaults
 from backend.services.settings_service import (
@@ -63,18 +57,28 @@ from backend.services.shortcut_setup_commands import (
     classify_shortcut_setup_command,
     response_message_for_shortcut,
 )
+from backend.services.screenshot_media import (
+    MAX_ATTACHMENT_FILE_BYTES,
+    MAX_ATTACHMENT_INLINE_BYTES,
+    SUPPORTED_IMAGE_EXTENSIONS,
+    build_screenshot_preview_data_uri,
+    extract_app_id_from_screenshot_path,
+    lookup_screenshot_vdf_metadata,
+    lookup_steam_app_name,
+    prepare_attachment_images,
+    resolve_recent_screenshot_paths,
+    try_gamescope_screenshot_capture,
+)
+from backend.services.game_ai_request import run_game_ai_request
 from backend.services.tdp_service import (
-    apply_tdp as apply_tdp_service,
+    STEAMOS_PRIV_WRITE,
     clean_env,
     find_amdgpu_hwmon,
-    read_current_tdp_watts,
     write_sysfs,
 )
 from refactor_helpers import (
     build_ollama_chat_url,
-    is_current_tdp_read_intent,
     normalize_ollama_base,
-    parse_tdp_recommendation,
     select_ollama_models,
 )
 
@@ -89,10 +93,10 @@ class Plugin:
     """
     DEFAULT_LATENCY_WARNING_SECONDS = 15
     DEFAULT_REQUEST_TIMEOUT_SECONDS = 120
-    DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE = "persist_all"
-    MAX_ATTACHMENT_FILE_BYTES = 40 * 1024 * 1024
-    MAX_ATTACHMENT_INLINE_BYTES = 15 * 1024 * 1024
-    SUPPORTED_IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp"}
+    DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE = "no_persist"
+    MAX_ATTACHMENT_FILE_BYTES = MAX_ATTACHMENT_FILE_BYTES
+    MAX_ATTACHMENT_INLINE_BYTES = MAX_ATTACHMENT_INLINE_BYTES
+    SUPPORTED_IMAGE_EXTENSIONS = SUPPORTED_IMAGE_EXTENSIONS
     VALID_UNIFIED_INPUT_PERSISTENCE_MODES = {
         "persist_all",
         "persist_search_only",
@@ -331,48 +335,20 @@ class Plugin:
         )
         return defaults
 
-    TDP_MIN_W = 3
-    TDP_MAX_W = 15
-    GPU_CLK_MIN_MHZ = 200
-    GPU_CLK_MAX_MHZ = 1600
-
-    @staticmethod
-    def _parse_tdp_recommendation(text: str) -> Optional[dict]:
-        """Extract a TDP recommendation from the AI response.
-        Tries: fenced JSON, bare JSON, then natural-language patterns."""
-        rec = parse_tdp_recommendation(
-            text,
-            tdp_min=Plugin.TDP_MIN_W,
-            tdp_max=Plugin.TDP_MAX_W,
-            gpu_min_mhz=Plugin.GPU_CLK_MIN_MHZ,
-            gpu_max_mhz=Plugin.GPU_CLK_MAX_MHZ,
-        )
-        if rec is None:
-            logger.info("_parse_tdp_recommendation: no TDP value found in response")
-            return None
-        return rec
-
     @staticmethod
     def _find_amdgpu_hwmon() -> Optional[str]:
         """Proxy hwmon discovery through the service layer for compatibility and reuse."""
         return find_amdgpu_hwmon()
 
-    PRIV_WRITE = "/usr/bin/steamos-polkit-helpers/steamos-priv-write"
+    @staticmethod
+    def _write_sysfs(path: str, value: str) -> None:
+        """Write sysfs values via service-managed privilege fallbacks."""
+        write_sysfs(path, value, STEAMOS_PRIV_WRITE, logger)
 
     @staticmethod
     def _clean_env() -> dict:
         """Proxy sanitized subprocess environment generation through the service layer."""
         return clean_env()
-
-    @staticmethod
-    def _write_sysfs(path: str, value: str) -> None:
-        """Write sysfs values via service-managed privilege fallbacks."""
-        write_sysfs(path, value, Plugin.PRIV_WRITE, logger)
-
-    @staticmethod
-    def _apply_tdp(rec: dict) -> dict:
-        """Apply TDP recommendations through the service layer and return result metadata."""
-        return apply_tdp_service(rec, Plugin.PRIV_WRITE, logger)
 
     async def log_navigation(self, setting_path: str):
         """Log settings-navigation actions from the frontend for diagnostics."""
@@ -540,166 +516,6 @@ class Plugin:
                 "error": "Could not reach Ollama. Check PC IP, firewall, and that Ollama is running on the host.",
             }
 
-    @staticmethod
-    def _resolve_recent_screenshot_paths(app_id: str = "", limit: int = 5) -> list:
-        """Resolve recent screenshot paths across common Steam userdata roots."""
-        app_filter = str(app_id or "").strip()
-        safe_limit = max(1, min(48, int(limit)))
-        home = os.path.expanduser("~")
-        roots = [
-            os.path.join(home, ".local", "share", "Steam", "userdata"),
-            os.path.join(home, ".steam", "steam", "userdata"),
-        ]
-        app_patterns = []
-        global_patterns = []
-        for root in roots:
-            if app_filter:
-                app_patterns.extend(
-                    [
-                        os.path.join(root, "*", "760", "remote", app_filter, "screenshots", "*.png"),
-                        os.path.join(root, "*", "760", "remote", app_filter, "screenshots", "*.jpg"),
-                        os.path.join(root, "*", "760", "remote", app_filter, "screenshots", "*.jpeg"),
-                        os.path.join(root, "*", "760", "remote", app_filter, "screenshots", "*.webp"),
-                    ]
-                )
-            global_patterns.extend(
-                [
-                    os.path.join(root, "*", "760", "remote", "*", "screenshots", "*.png"),
-                    os.path.join(root, "*", "760", "remote", "*", "screenshots", "*.jpg"),
-                    os.path.join(root, "*", "760", "remote", "*", "screenshots", "*.jpeg"),
-                    os.path.join(root, "*", "760", "remote", "*", "screenshots", "*.webp"),
-                ]
-            )
-
-        app_files: list = []
-        for pattern in app_patterns:
-            app_files.extend(glob.glob(pattern))
-        app_files = [path for path in set(app_files) if os.path.isfile(path)]
-        app_files.sort(key=lambda p: os.path.getmtime(p), reverse=True)
-
-        global_files: list = []
-        for pattern in global_patterns:
-            global_files.extend(glob.glob(pattern))
-        global_files = [path for path in set(global_files) if os.path.isfile(path)]
-        global_files.sort(key=lambda p: os.path.getmtime(p), reverse=True)
-
-        ordered: list = []
-        seen: set = set()
-        for path in app_files + global_files:
-            canonical = os.path.realpath(path)
-            dedupe_key = canonical
-            try:
-                st = os.stat(canonical)
-                dedupe_key = f"{st.st_dev}:{st.st_ino}"
-            except OSError:
-                dedupe_key = canonical
-            if dedupe_key in seen:
-                continue
-            seen.add(dedupe_key)
-            ordered.append(path)
-            if len(ordered) >= safe_limit:
-                break
-        return ordered
-
-    @staticmethod
-    def _lookup_steam_app_name(app_id: str) -> str:
-        """Resolve app names from local Steam appmanifest metadata."""
-        candidate = str(app_id or "").strip()
-        if not candidate.isdigit():
-            return ""
-        home = os.path.expanduser("~")
-        manifest_paths = [
-            os.path.join(home, ".local", "share", "Steam", "steamapps", f"appmanifest_{candidate}.acf"),
-            os.path.join(home, ".steam", "steam", "steamapps", f"appmanifest_{candidate}.acf"),
-        ]
-        for manifest in manifest_paths:
-            if not os.path.isfile(manifest):
-                continue
-            try:
-                with open(manifest, "r", encoding="utf-8", errors="ignore") as fp:
-                    raw = fp.read()
-                match = re.search(r'"name"\s+"([^"]+)"', raw)
-                if match:
-                    return match.group(1).strip()
-            except Exception:
-                continue
-        return ""
-
-    @staticmethod
-    def _lookup_screenshot_vdf_metadata(screenshot_path: str) -> dict:
-        """Extract caption and shortcut hints from screenshots.vdf near a screenshot filename."""
-        marker = f"{os.sep}760{os.sep}remote{os.sep}"
-        if marker not in screenshot_path:
-            return {"caption": "", "shortcut_name": ""}
-        base = screenshot_path.split(marker, 1)[0]
-        vdf_path = os.path.join(base, "760", "screenshots.vdf")
-        filename = os.path.basename(screenshot_path)
-        if not os.path.isfile(vdf_path) or not filename:
-            return {"caption": "", "shortcut_name": ""}
-        try:
-            with open(vdf_path, "r", encoding="utf-8", errors="ignore") as fp:
-                raw = fp.read()
-            idx = raw.find(filename)
-            if idx < 0:
-                return {"caption": "", "shortcut_name": ""}
-            window = raw[max(0, idx - 2200): idx + 2200]
-            caption_match = re.search(r'"caption"\s+"([^"]*)"', window, flags=re.IGNORECASE)
-            shortcut_match = re.search(r'"shortcutname"\s+"([^"]*)"', window, flags=re.IGNORECASE)
-            return {
-                "caption": (caption_match.group(1).strip() if caption_match else ""),
-                "shortcut_name": (shortcut_match.group(1).strip() if shortcut_match else ""),
-            }
-        except Exception:
-            return {"caption": "", "shortcut_name": ""}
-
-    @staticmethod
-    def _extract_app_id_from_screenshot_path(path: str) -> str:
-        """Extract the app id segment from Steam screenshot path patterns."""
-        marker = f"{os.sep}760{os.sep}remote{os.sep}"
-        if marker not in path:
-            return ""
-        tail = path.split(marker, 1)[1]
-        return tail.split(os.sep, 1)[0].strip()
-
-    @staticmethod
-    def _build_screenshot_preview_data_uri(path: str, max_dimension: int = 220) -> Optional[str]:
-        """Generate a compact preview data URI from screenshot files for UI thumbnails."""
-        ext = os.path.splitext(path)[1].lower()
-        if ext not in Plugin.SUPPORTED_IMAGE_EXTENSIONS:
-            return None
-        try:
-            from PIL import Image  # type: ignore
-            with Image.open(path) as image:
-                image.load()
-                width, height = image.size
-                longest_edge = max(width, height)
-                if longest_edge > max_dimension:
-                    ratio = max_dimension / float(longest_edge)
-                    image = image.resize(
-                        (max(1, int(width * ratio)), max(1, int(height * ratio))),
-                        Image.LANCZOS,
-                    )
-                if image.mode not in ("RGB", "L"):
-                    image = image.convert("RGB")
-                elif image.mode == "L":
-                    image = image.convert("RGB")
-                output = io.BytesIO()
-                image.save(output, format="JPEG", quality=62, optimize=True)
-                encoded = base64.b64encode(output.getvalue()).decode("ascii")
-                return f"data:image/jpeg;base64,{encoded}"
-        except Exception:
-            try:
-                file_size = os.path.getsize(path)
-                if file_size > 1_800_000:
-                    return None
-                with open(path, "rb") as f:
-                    raw = f.read()
-                mime_type = mimetypes.guess_type(path)[0] or "image/png"
-                encoded = base64.b64encode(raw).decode("ascii")
-                return f"data:{mime_type};base64,{encoded}"
-            except Exception:
-                return None
-
     async def list_recent_screenshots(self, app_id: str = "", limit: int = 5):
         """List recent screenshots with preview and app metadata for attachment browsing."""
         try:
@@ -711,7 +527,7 @@ class Plugin:
                     "error": "Media library access is disabled. Enable it in the Permissions tab.",
                 }
             items = []
-            for path in Plugin._resolve_recent_screenshot_paths(app_id, limit):
+            for path in resolve_recent_screenshot_paths(app_id, limit):
                 try:
                     mtime = os.path.getmtime(path)
                 except OSError:
@@ -723,8 +539,8 @@ class Plugin:
                         "mtime": mtime,
                         "size_bytes": os.path.getsize(path) if os.path.isfile(path) else 0,
                         "source": "steam_recent",
-                        "app_id": Plugin._extract_app_id_from_screenshot_path(path),
-                        "preview_data_uri": Plugin._build_screenshot_preview_data_uri(path),
+                        "app_id": extract_app_id_from_screenshot_path(path),
+                        "preview_data_uri": build_screenshot_preview_data_uri(path),
                     }
                 )
             return {"success": True, "items": items}
@@ -813,21 +629,6 @@ class Plugin:
             return {"available": False}
         return {"available": True, "snapshot": dict(snap)}
 
-    @staticmethod
-    def _build_capture_command_candidates(output_path: str, include_overlay: bool) -> list:
-        """Build candidate screenshot commands to maximize compatibility across SteamOS variants."""
-        candidates = [
-            ["gamescope-screenshot", "--file", output_path],
-            ["gamescope-screenshot", "-o", output_path],
-            ["gamescope-screenshot", output_path],
-            ["/usr/bin/gamescope-screenshot", "--file", output_path],
-            ["/usr/bin/gamescope-screenshot", "-o", output_path],
-            ["/usr/bin/gamescope-screenshot", output_path],
-        ]
-        if not include_overlay:
-            candidates = [cmd + ["--focused"] for cmd in candidates] + candidates
-        return candidates
-
     async def capture_screenshot(self, include_overlay: bool = True):
         """Capture a screenshot using available gamescope commands and return attachment metadata."""
         plugin = Plugin._coerce_instance(self)
@@ -842,141 +643,7 @@ class Plugin:
         timestamp = time.strftime("%Y%m%d-%H%M%S")
         output_path = os.path.join(runtime_dir, f"bonsai-capture-{timestamp}.png")
         clean_env = Plugin._clean_env()
-        errors: list = []
-
-        for command in Plugin._build_capture_command_candidates(output_path, include_overlay):
-            executable = command[0]
-            if executable.startswith("/") and not os.path.isfile(executable):
-                continue
-            if not executable.startswith("/") and shutil.which(executable) is None:
-                continue
-            try:
-                result = subprocess.run(
-                    command,
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                    env=clean_env,
-                    timeout=8,
-                )
-                if result.returncode == 0 and os.path.isfile(output_path) and os.path.getsize(output_path) > 0:
-                    return {
-                        "success": True,
-                        "item": {
-                            "path": output_path,
-                            "name": os.path.basename(output_path),
-                            "mtime": os.path.getmtime(output_path),
-                            "source": "capture",
-                            "app_id": "",
-                        },
-                    }
-                stderr = result.stderr.decode("utf-8", errors="replace").strip()
-                errors.append(f"{' '.join(command)} -> {stderr or f'rc={result.returncode}'}")
-            except Exception as exc:
-                errors.append(f"{' '.join(command)} -> {exc}")
-
-        error_text = "No supported screenshot capture command succeeded."
-        if errors:
-            error_text = f"{error_text} Attempts: {' | '.join(errors[:3])}"
-        return {"success": False, "error": error_text}
-
-    @staticmethod
-    def _encode_image_with_pillow(path: str, attachment_preset: str) -> tuple[Optional[str], Optional[str], list]:
-        """Resize and encode images with Pillow using Low / Mid / Max attachment preset."""
-        warnings: list = []
-        if attachment_preset not in ("low", "mid", "max"):
-            attachment_preset = "low"
-        try:
-            from PIL import Image  # type: ignore
-        except Exception:
-            return None, None, ["Pillow is unavailable; sent original image bytes."]
-
-        with Image.open(path) as image:
-            image.load()
-            width, height = image.size
-            longest_edge = max(width, height)
-            if attachment_preset == "low":
-                max_dim = 800
-                quality = 62
-            elif attachment_preset == "mid":
-                max_dim = 1080
-                quality = 75
-            else:
-                max_dim = 16384
-                quality = 94
-
-            if attachment_preset == "mid" and longest_edge > 1080:
-                ratio = 1080 / float(longest_edge)
-                resized = image.resize((max(1, int(width * ratio)), max(1, int(height * ratio))), Image.LANCZOS)
-            elif attachment_preset == "mid":
-                resized = image.copy()
-            elif longest_edge > max_dim:
-                ratio = max_dim / float(longest_edge)
-                resized = image.resize((max(1, int(width * ratio)), max(1, int(height * ratio))), Image.LANCZOS)
-            else:
-                resized = image.copy()
-            if resized.mode not in ("RGB", "L"):
-                resized = resized.convert("RGB")
-            elif resized.mode == "L":
-                resized = resized.convert("RGB")
-
-            output = io.BytesIO()
-            resized.save(output, format="JPEG", quality=quality, optimize=True)
-            data = output.getvalue()
-            return base64.b64encode(data).decode("ascii"), "image/jpeg", warnings
-
-    @staticmethod
-    def _prepare_image_attachment(attachment: dict, attachment_preset: str) -> dict:
-        """Validate, transform, and encode one image attachment for Ollama multimodal requests."""
-        path = str(attachment.get("path", "") or "").strip()
-        if not path:
-            return {"ok": False, "error": "Attachment path is empty."}
-        if not os.path.isfile(path):
-            return {"ok": False, "error": f"Attachment file not found: {path}"}
-        ext = os.path.splitext(path)[1].lower()
-        if ext not in Plugin.SUPPORTED_IMAGE_EXTENSIONS:
-            return {"ok": False, "error": f"Unsupported image type '{ext}'."}
-        file_size = os.path.getsize(path)
-        if file_size > Plugin.MAX_ATTACHMENT_FILE_BYTES:
-            return {"ok": False, "error": f"Image is too large ({file_size} bytes)."}
-
-        encoded, mime_type, warnings = Plugin._encode_image_with_pillow(path, attachment_preset)
-        if encoded is None:
-            with open(path, "rb") as f:
-                raw = f.read()
-            if len(raw) > Plugin.MAX_ATTACHMENT_INLINE_BYTES:
-                return {
-                    "ok": False,
-                    "error": (
-                        f"Image inline payload is too large ({len(raw)} bytes). "
-                        "Install Pillow or lower the screenshot attachment quality (Settings)."
-                    ),
-                }
-            encoded = base64.b64encode(raw).decode("ascii")
-            guessed = mimetypes.guess_type(path)[0] or "image/png"
-            mime_type = guessed
-
-        return {
-            "ok": True,
-            "image_b64": encoded,
-            "mime_type": mime_type or "image/jpeg",
-            "name": str(attachment.get("name", "") or os.path.basename(path)),
-            "warnings": warnings,
-        }
-
-    @staticmethod
-    def _prepare_attachment_images(attachments: list, attachment_preset: str) -> tuple[list, list, list]:
-        """Prepare a batch of attachments and return successful images, warnings, and errors."""
-        prepared_images: list = []
-        warnings: list = []
-        errors: list = []
-        for attachment in attachments:
-            prepared = Plugin._prepare_image_attachment(attachment, attachment_preset)
-            if prepared.get("ok"):
-                prepared_images.append(prepared)
-                warnings.extend(prepared.get("warnings", []))
-            else:
-                errors.append(str(prepared.get("error", "Failed to prepare attachment.")))
-        return prepared_images, warnings, errors
+        return try_gamescope_screenshot_capture(output_path, include_overlay, clean_env)
 
     async def _execute_game_ai_request(
         self,
@@ -988,293 +655,16 @@ class Plugin:
         ask_mode: str = "speed",
     ) -> dict:
         """Run one full ask lifecycle, including Ollama call timing and optional TDP application."""
-        start = time.time()
-        app_context = "active" if app_id else "none"
         plugin = Plugin._coerce_instance(self)
-        try:
-            logger.info(
-                "_execute_game_ai_request: host=%s game=%r appid=%s question_len=%d",
-                pc_ip,
-                app_name,
-                app_id,
-                len(question),
-            )
-
-            settings = await plugin.load_settings()
-            if settings.get("latency_timeouts_custom_enabled") is True:
-                request_timeout_seconds = int(
-                    settings.get("request_timeout_seconds", Plugin.DEFAULT_REQUEST_TIMEOUT_SECONDS)
-                )
-            else:
-                request_timeout_seconds = Plugin.DEFAULT_REQUEST_TIMEOUT_SECONDS
-
-            keyword_result = await plugin._try_handle_sanitizer_keyword_command(question, app_id)
-            if keyword_result is not None:
-                elapsed = round(time.time() - start, 1)
-                out = {**keyword_result, "elapsed_seconds": elapsed}
-                logger.info("_execute_game_ai_request: sanitizer keyword command handled (elapsed=%.1fs)", elapsed)
-                await plugin._persist_input_transparency(
-                    {
-                        "route": "sanitizer_command",
-                        "raw_question": question,
-                        "sanitizer_action": "command",
-                        "sanitizer_reason_codes": [],
-                        "text_after_sanitizer": question,
-                        "ollama_model": None,
-                        "system_prompt": None,
-                        "user_text_for_model": None,
-                        "user_image_count": 0,
-                        "attachment_paths": [],
-                        "assistant_raw": None,
-                        "assistant_after_attachment_format": None,
-                        "final_response": str(out.get("response", "") or ""),
-                        "applied": None,
-                        "success": True,
-                        "app_id": app_id,
-                        "app_name": app_name,
-                        "pc_ip": pc_ip,
-                        "error_message": "",
-                        "elapsed_seconds": elapsed,
-                        "model_policy_disclosure": None,
-                    }
-                )
-                return {**out, "model_policy_disclosure": None, "strategy_guide_branches": None}
-
-            atts = attachments or []
-            if atts and not capability_enabled(settings, "media_library_access"):
-                elapsed = round(time.time() - start, 1)
-                msg = (
-                    "Screenshot attachments require media library access. "
-                    "Enable it in the Permissions tab, then try again."
-                )
-                await plugin._persist_input_transparency(
-                    {
-                        "route": "capability_denied",
-                        "raw_question": question,
-                        "sanitizer_action": "n/a",
-                        "sanitizer_reason_codes": [],
-                        "text_after_sanitizer": question,
-                        "ollama_model": None,
-                        "system_prompt": None,
-                        "user_text_for_model": None,
-                        "user_image_count": 0,
-                        "attachment_paths": [str(a.get("path", "") or "") for a in atts if isinstance(a, dict)],
-                        "assistant_raw": None,
-                        "assistant_after_attachment_format": None,
-                        "final_response": msg,
-                        "applied": None,
-                        "success": False,
-                        "app_id": app_id,
-                        "app_name": app_name,
-                        "pc_ip": pc_ip,
-                        "error_message": "media_library_access",
-                        "elapsed_seconds": elapsed,
-                        "model_policy_disclosure": None,
-                    }
-                )
-                return {
-                    "success": False,
-                    "response": msg,
-                    "app_id": app_id,
-                    "app_context": app_context,
-                    "applied": None,
-                    "elapsed_seconds": elapsed,
-                    "strategy_guide_branches": None,
-                    "model_policy_disclosure": None,
-                }
-
-            user_sanitizer_disabled = bool(settings.get("input_sanitizer_user_disabled"))
-            lane = apply_input_sanitizer_lane(question, user_sanitizer_disabled)
-            if lane.action == "block":
-                elapsed = round(time.time() - start, 1)
-                logger.info("_execute_game_ai_request: input blocked by sanitizer (%s)", lane.reason_codes)
-                um = str(lane.user_message or "")
-                await plugin._persist_input_transparency(
-                    {
-                        "route": "sanitizer_block",
-                        "raw_question": question,
-                        "sanitizer_action": str(lane.action),
-                        "sanitizer_reason_codes": list(lane.reason_codes),
-                        "text_after_sanitizer": str(lane.text or ""),
-                        "ollama_model": None,
-                        "system_prompt": None,
-                        "user_text_for_model": None,
-                        "user_image_count": 0,
-                        "attachment_paths": [],
-                        "assistant_raw": None,
-                        "assistant_after_attachment_format": None,
-                        "final_response": um,
-                        "applied": None,
-                        "success": False,
-                        "app_id": app_id,
-                        "app_name": app_name,
-                        "pc_ip": pc_ip,
-                        "error_message": "",
-                        "elapsed_seconds": elapsed,
-                        "model_policy_disclosure": None,
-                    }
-                )
-                return {
-                    "success": False,
-                    "response": um,
-                    "app_id": app_id,
-                    "app_context": app_context,
-                    "applied": None,
-                    "elapsed_seconds": elapsed,
-                    "strategy_guide_branches": None,
-                    "model_policy_disclosure": None,
-                }
-            question_for_model = lane.text
-            read_tdp = is_current_tdp_read_intent(question_for_model)
-            wants_grounding = user_wants_power_or_performance_topic(question_for_model)
-            ollama_host_topic = user_asks_ollama_bonsai_host_or_latency(question_for_model)
-            tdp_grounding_requested = (read_tdp or wants_grounding) and not ollama_host_topic
-            pre_cap: Optional[int] = None
-            if tdp_grounding_requested:
-                _loop = asyncio.get_running_loop()
-
-                def _read_cap():
-                    return read_current_tdp_watts(logger)
-
-                pre_cap = await _loop.run_in_executor(None, _read_cap)
-
-            ollama_result = await plugin.ask_ollama(
-                question_for_model,
-                pc_ip,
-                app_id,
-                app_name,
-                request_timeout_seconds=request_timeout_seconds,
-                attachments=atts,
-                ask_mode=ask_mode,
-                read_tdp=read_tdp,
-                tdp_grounding_requested=tdp_grounding_requested,
-                tdp_cap_w=pre_cap,
-            )
-            elapsed = round(time.time() - start, 1)
-            base_response_text = str(ollama_result.get("response", "") or "No response text.")
-            response_text = base_response_text
-            applied = None
-
-            # TDP: read intent skips apply (model is given sysfs cap in prompt). Otherwise parse + optional apply.
-            if ollama_result.get("success"):
-                loop = asyncio.get_running_loop()
-
-                def _parse_only():
-                    return parse_tdp_recommendation(
-                        base_response_text,
-                        Plugin.TDP_MIN_W,
-                        Plugin.TDP_MAX_W,
-                        Plugin.GPU_CLK_MIN_MHZ,
-                        Plugin.GPU_CLK_MAX_MHZ,
-                    )
-
-                rec = await loop.run_in_executor(None, _parse_only)
-
-                if read_tdp:
-                    logger.info("ask_game_ai: read-TDP question; sysfs apply skipped")
-                elif rec:
-                    if not capability_enabled(settings, "hardware_control"):
-                        logger.info("ask_game_ai: TDP recommendation present but hardware_control disabled")
-                        response_text += (
-                            "\n\n[Hardware tuning not applied: enable Hardware control in the Permissions tab.]"
-                        )
-                        applied = {
-                            "tdp_watts": None,
-                            "gpu_clock_mhz": None,
-                            "errors": ["Hardware control disabled in Permissions."],
-                        }
-                    else:
-                        logger.info("ask_game_ai: parsed TDP recommendation: %s", rec)
-                        applied = await loop.run_in_executor(None, Plugin._apply_tdp, rec)
-                        logger.info("ask_game_ai: apply result: %s", applied)
-                else:
-                    logger.info("ask_game_ai: no TDP recommendation found in response")
-
-            err_tail = ""
-            if not ollama_result.get("success"):
-                err_tail = base_response_text[:8000]
-
-            await plugin._persist_input_transparency(
-                {
-                    "route": "ollama",
-                    "raw_question": question,
-                    "sanitizer_action": str(lane.action),
-                    "sanitizer_reason_codes": list(lane.reason_codes),
-                    "text_after_sanitizer": question_for_model,
-                    "ollama_model": ollama_result.get("model"),
-                    "system_prompt": ollama_result.get("system_prompt"),
-                    "user_text_for_model": ollama_result.get("user_text_for_model"),
-                    "user_image_count": int(ollama_result.get("user_image_count") or 0),
-                    "attachment_paths": ollama_result.get("attachment_paths") or [],
-                    "assistant_raw": ollama_result.get("assistant_raw"),
-                    "assistant_after_attachment_format": base_response_text,
-                    "final_response": response_text,
-                    "applied": applied,
-                    "success": bool(ollama_result.get("success", False)),
-                    "app_id": app_id,
-                    "app_name": app_name,
-                    "pc_ip": pc_ip,
-                    "error_message": err_tail,
-                    "elapsed_seconds": elapsed,
-                    "model_policy_disclosure": ollama_result.get("model_policy_disclosure"),
-                }
-            )
-
-            logger.info("_execute_game_ai_request: completed in %.1fs", elapsed)
-            return {
-                "success": bool(ollama_result.get("success", False)),
-                "response": response_text,
-                "app_id": app_id,
-                "app_context": app_context,
-                "applied": applied,
-                "elapsed_seconds": elapsed,
-                "strategy_guide_branches": ollama_result.get("strategy_guide_branches"),
-                "model_policy_disclosure": ollama_result.get("model_policy_disclosure"),
-            }
-        except Exception as exc:
-            elapsed = round(time.time() - start, 1)
-            logger.exception("_execute_game_ai_request failed (%.1fs)", elapsed)
-            await plugin._persist_input_transparency(
-                {
-                    "route": "error",
-                    "raw_question": question,
-                    "sanitizer_action": "error",
-                    "sanitizer_reason_codes": [],
-                    "text_after_sanitizer": question,
-                    "ollama_model": None,
-                    "system_prompt": None,
-                    "user_text_for_model": None,
-                    "user_image_count": 0,
-                    "attachment_paths": [],
-                    "assistant_raw": None,
-                    "assistant_after_attachment_format": None,
-                    "final_response": (
-                        "Something went wrong while processing your Ask. "
-                        "If this repeats, check the plugin log on the Deck."
-                    ),
-                    "applied": None,
-                    "success": False,
-                    "app_id": app_id,
-                    "app_name": app_name,
-                    "pc_ip": pc_ip,
-                    "error_message": "Internal error (details logged on device).",
-                    "elapsed_seconds": elapsed,
-                    "model_policy_disclosure": None,
-                }
-            )
-            return {
-                "success": False,
-                "response": (
-                    "Something went wrong while processing your Ask. "
-                    "If this repeats, check the plugin log on the Deck."
-                ),
-                "app_id": app_id,
-                "app_context": app_context,
-                "applied": None,
-                "elapsed_seconds": elapsed,
-                "strategy_guide_branches": None,
-                "model_policy_disclosure": None,
-            }
+        return await run_game_ai_request(
+            plugin,
+            question,
+            pc_ip,
+            app_id,
+            app_name,
+            attachments=attachments,
+            ask_mode=ask_mode,
+        )
 
     async def ask_game_ai(self, question: Any = "", PcIp: str = ""):
         """Handle foreground ask RPCs and validate required inputs before execution."""
@@ -1628,8 +1018,8 @@ class Plugin:
             app_name=app_name,
             normalized_attachments=normalized_attachments,
             prepared_images=prepared_images,
-            lookup_app_name=Plugin._lookup_steam_app_name,
-            lookup_screenshot_vdf_metadata=Plugin._lookup_screenshot_vdf_metadata,
+            lookup_app_name=lookup_steam_app_name,
+            lookup_screenshot_vdf_metadata=lookup_screenshot_vdf_metadata,
             ask_mode=ask_mode,
         )
         return append_deck_tdp_sysfs_grounding(
@@ -1637,49 +1027,6 @@ class Plugin:
             read_tdp=read_tdp,
             cap_w=tdp_cap_w,
             grounding_requested=tdp_grounding_requested,
-        )
-
-    @staticmethod
-    def _select_models(requires_vision: bool, ask_mode: str = "speed", high_vram_fallbacks: bool = False) -> list:
-        """Select ordered model fallbacks based on vision inputs and Ask mode."""
-        return select_ollama_models(requires_vision, ask_mode, high_vram_fallbacks)
-
-    @staticmethod
-    def _format_ai_response(
-        text: str,
-        normalized_attachments: list,
-        prepared_images: list,
-        attachment_errors: list,
-    ) -> str:
-        """Format response text with attachment diagnostics that frontend rendering expects."""
-        return format_ai_response(text, normalized_attachments, prepared_images, attachment_errors)
-
-    def _post_ollama_chat(
-        self,
-        url: str,
-        model_name: str,
-        messages: list,
-        request_timeout_seconds: int,
-        normalized_attachments: list,
-        prepared_images: list,
-        attachment_warnings: list,
-        attachment_errors: list,
-        ask_mode: str = "speed",
-        keep_alive: str = "5m",
-    ) -> dict:
-        """Execute one Ollama request attempt through the shared service transport helper."""
-        return post_ollama_chat(
-            url=url,
-            model_name=model_name,
-            messages=messages,
-            request_timeout_seconds=request_timeout_seconds,
-            normalized_attachments=normalized_attachments,
-            prepared_images=prepared_images,
-            attachment_warnings=attachment_warnings,
-            attachment_errors=attachment_errors,
-            logger=logger,
-            ask_mode=ask_mode,
-            keep_alive=keep_alive,
         )
 
     async def ask_ollama(
@@ -1709,7 +1056,7 @@ class Plugin:
         apreset = str(settings.get("screenshot_attachment_preset") or "low")
         if apreset not in ("low", "mid", "max"):
             apreset = "low"
-        prepared_images, attachment_warnings, attachment_errors = Plugin._prepare_attachment_images(
+        prepared_images, attachment_warnings, attachment_errors = prepare_attachment_images(
             normalized_attachments,
             apreset,
         )
@@ -1751,7 +1098,7 @@ class Plugin:
 
         requires_vision = len(prepared_images) > 0
         high_vram = settings.get("model_allow_high_vram_fallbacks") is True
-        models_to_try = self._select_models(requires_vision, ask_mode, high_vram)
+        models_to_try = select_ollama_models(requires_vision, ask_mode, high_vram)
         policy_tier = str(settings.get("model_policy_tier") or "open_source_only")
         non_foss_unlocked = settings.get("model_policy_non_foss_unlocked") is True
         models_to_try = filter_model_list(models_to_try, policy_tier, non_foss_unlocked)
@@ -1776,17 +1123,20 @@ class Plugin:
             for model_name in models_to_try:
                 result = await loop.run_in_executor(
                     None,
-                    self._post_ollama_chat,
-                    url,
-                    model_name,
-                    messages,
-                    request_timeout_seconds,
-                    normalized_attachments,
-                    prepared_images,
-                    attachment_warnings,
-                    attachment_errors,
-                    ask_mode,
-                    keep_alive,
+                    functools.partial(
+                        post_ollama_chat,
+                        url,
+                        model_name,
+                        messages,
+                        request_timeout_seconds,
+                        normalized_attachments,
+                        prepared_images,
+                        attachment_warnings,
+                        attachment_errors,
+                        logger,
+                        ask_mode,
+                        keep_alive,
+                    ),
                 )
                 merged = {**ollama_extras, **result}
                 if result.get("success"):

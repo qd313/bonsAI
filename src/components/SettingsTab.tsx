@@ -31,6 +31,8 @@ import { ASK_LABEL_COLOR_50 } from "../features/unified-input/constants";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 
 const TEST_CONNECTION_TIMEOUT_SECONDS = 10;
+/** Loopback probes may start systemd / ``ollama serve``; Decky RPC must outlive nested waits. */
+const LOCAL_LOOPBACK_CONNECTION_TEST_RPC_EXTRA_MS = 42000;
 
 const LOCAL_OLLAMA_SETUP_PROFILE_STARTER = "starter";
 const LOCAL_OLLAMA_SETUP_PROFILE_TIER1_FOSS_FULL = "tier1_foss_full";
@@ -79,6 +81,9 @@ type ConnectionStatus = {
     vram_weight_share_pct_appx: number | null;
   }>;
   error?: string;
+  /** Backend attempted to wake localhost Ollama (Connection Test loopback failure path). */
+  recovery_attempted?: boolean;
+  recovery_succeeded_before_retry?: boolean | null;
 };
 
 const persistenceModeLabel: Record<UnifiedInputPersistenceMode, string> = {
@@ -233,13 +238,21 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   const onTestConnection = async () => {
     const target = ollamaLocalOnDeck ? OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP : ollamaIp.trim();
     if (!target) return;
+    const loopbackLikelyProbe =
+      ollamaLocalOnDeck ||
+      /^\s*127\.0\.0\.1\s*(:\s*\d+)?\s*$/i.test(target) ||
+      /^\s*localhost\s*(:\s*\d+)?\s*$/i.test(target);
+    const rpcDeadlineMs =
+      TEST_CONNECTION_TIMEOUT_SECONDS * 1000 +
+      (loopbackLikelyProbe ? LOCAL_LOOPBACK_CONNECTION_TEST_RPC_EXTRA_MS : 3000);
+
     setConnectionTesting(true);
     setConnectionStatus(null);
     try {
       const result = await callDeckyWithTimeout<[string, number], ConnectionStatus>(
         "test_ollama_connection",
         [target, TEST_CONNECTION_TIMEOUT_SECONDS],
-        TEST_CONNECTION_TIMEOUT_SECONDS * 1000 + 3000
+        rpcDeadlineMs
       );
       setConnectionStatus(result);
       if (result.reachable && !ollamaLocalOnDeck) onPersistOllamaIp(target);
@@ -748,6 +761,11 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
             {connectionStatus.reachable ? (
               <div className="bonsai-settings-bleed" style={{ fontSize: 12, color: "#81c784" }}>
                 <div>Connected — Ollama v{connectionStatus.version}</div>
+                {connectionStatus.recovery_attempted ? (
+                  <div className="bonsai-prose" style={{ fontSize: 10, color: "#7d8fa3", marginTop: 4 }}>
+                    Started or woke the local Ollama listener for this check.
+                  </div>
+                ) : null}
                 {connectionStatus.ps_loaded && connectionStatus.ps_loaded.length > 0 ? (
                   <div className="bonsai-prose" style={{ color: "#b8dfe8", marginTop: 6, lineHeight: 1.4 }}>
                     <div style={{ fontWeight: 600, marginBottom: 4 }}>

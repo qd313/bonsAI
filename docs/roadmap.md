@@ -145,16 +145,6 @@ Backlog items are **not** listed in execution order. Stars are effort/risk withi
 - **Files:** `main.py`, runtime/provider abstraction docs, troubleshooting docs.
 - **Not in scope:** shipping full production support in the spike.
 
-### Local runtime mode (default) + beta risk warning
-
-★★★★★
-
-- **Goal:** Prefer on-device inference by default; retain remote fallback.
-- **Primary work:** `local first` policy, fallback heuristics, health checks, beta warning for in-game inference risk.
-- **Files:** `main.py`, `src/index.tsx`, install/troubleshooting docs.
-- **Depends on:** provider routing and **Llama.cpp compatibility evaluation** outcomes.
-- **Not in scope:** zero performance impact guarantees under heavy load.
-
 ### Restricted kids account master lock
 
 ★★★★★
@@ -296,6 +286,7 @@ Headings group related work. Star counts match the historical list.
 - ★★ **Diagnostic, Latency, and Timeout Warnings:** Return `elapsed_seconds`, show slow-response warnings, and enforce backend timeout messaging.
 - ★★ **Configurable Latency and Timeout Controls:** Persisted warning + timeout in `settings.json`; Settings Connection uses one Steam `SliderField` for hard timeout with a visible soft-warning readout (`ConnectionTimeoutSlider.tsx`), and ordering is reconciled on load/updates.
 - ★★ **Ollama model VRAM retention (`keep_alive`):** Persisted `ollama_keep_alive` with fixed preset durations (default **5 minutes**); Settings → Connection `OllamaKeepAliveSlider.tsx`; value passed on each Ask through `main.py` into `backend/services/ollama_service.py`. `settings_service.py`, `settingsAndResponse.ts`.
+- ★★★ **[Local/runtime] Default off + onboarding:** When `ollama_local_on_deck` is absent from persisted settings, default **`false`** (LAN PC host field applies); explicit **`true`** / **`false`** in JSON unchanged. Global beta modal warns LAN-hosted Ollama is typically faster than on-device inference and that heavy VRAM use may crash games (**use at your own risk**). **`bonsai:local-runtime-beta-dismissed-v1`** **`ConfirmModal`** when the user enables **Ollama on Deck** (optional local routing); Starter/Connection Tier-1 FOSS tags per [`TIER1_FOSS_STARTER_PULL_TAGS`](../refactor_helpers.py). **Clear all plugin data** resets flags and storage keys. Connection **Test** to localhost may **`systemctl --user`** / **`ollama serve`** wake the listener (`recover_loopback_ollama_listening`, **`main.py`**). `settings_service.py`, `settingsAndResponse.ts`, `src/index.tsx`, `py_modules/backend/services/local_ollama_setup_service.py`.
 
 ### Tabs, icons, and unified ask flow
 
@@ -451,8 +442,8 @@ Dependency graph and implementation notes that are not feature checklist items.
 - **Global screenshots and vision** → richer strategy + screenshot context.
 - **Capability Permission Center** → gates filesystem, elevated tasks, hardware, and (future) web/search calls.
 - **Model policy tiers + disclosure UX (shipped)** → layered on **Capability Permission Center**; tiered routing + per-reply disclosure — see **Completed** → Permissions.
-- **Llama.cpp compatibility evaluation** → informs **Local runtime mode (default)**.
-- **Local runtime mode (default)** → provider priority and remote fallback.
+- **Llama.cpp compatibility evaluation** → may inform deeper **Lan vs Deck provider layering** atop shipped Deck-first routing defaults (**Local/runtime deck-first defaults + onboarding** — see **Completed** → Connection).
+- **Local/runtime deck-first defaults + onboarding** (Completed) lays baseline routing + **Connection** onboarding; advanced provider matrix work remains backlog if needed alongside **Llama.cpp compatibility evaluation**.
 - **Restricted kids account master lock** → above permission toggles while restricted.
 - **Built on Ollama link** → shipped in About.
 - **SteamOS Media screenshot share button** → possible fast path into **Global screenshots and vision** if APIs allow.
@@ -484,8 +475,8 @@ flowchart TD
   modelPolicyTiers --> tierOpenWeight[OpenSourcePlusOpenWeight]
   modelPolicyTiers --> tierNonFoss[NonFossUnlock]
   kidsLock[RestrictedKidsAccountMasterLock] --> capabilityPermission
-  llamaEval[LlamaCppCompatibilityEvaluation] --> localRuntime[LocalRuntimeModeDefault]
-  localRuntime --> modelRouting[ModelProviderRoutingLayer]
+  llamaEval[LlamaCppCompatibilityEvaluation] -.-> deckLanAdvance[LanVsDeckProviderLayerFuture]
+  localRuntimeBanner[LocalRuntimeDefaultsBetaShipped] --> modelRouting[ModelProviderRoutingLayer]
   tierOpenSource --> modelRouting
   tierOpenWeight --> modelRouting
   tierNonFoss --> modelRouting

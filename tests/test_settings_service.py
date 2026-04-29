@@ -272,10 +272,9 @@ class SettingsServiceTests(unittest.TestCase):
         )
         self.assertFalse(garbled["input_sanitizer_user_disabled"])
 
-    def test_sanitize_ollama_local_on_deck_true_only_for_literal_true(self):
-        """Only JSON true routes to on-device Ollama; LAN field remains default off."""
-        on = sanitize_settings(
-            data={"ollama_local_on_deck": True},
+    def test_sanitize_ollama_local_on_deck_default_off_explicit_true_enables(self):
+        """Omitted key defaults off (LAN routing); literal JSON ``true`` enables local Ollama."""
+        base_kwargs = dict(
             default_latency_warning_seconds=15,
             default_request_timeout_seconds=120,
             min_latency_warning_seconds=5,
@@ -287,20 +286,15 @@ class SettingsServiceTests(unittest.TestCase):
             valid_ask_modes={"speed", "strategy", "deep"},
             default_ask_mode="speed",
         )
+        missing = sanitize_settings(data={}, **base_kwargs)
+        self.assertFalse(missing["ollama_local_on_deck"])
+
+        explicit_false = sanitize_settings(data={"ollama_local_on_deck": False}, **base_kwargs)
+        self.assertFalse(explicit_false["ollama_local_on_deck"])
+
+        on = sanitize_settings(data={"ollama_local_on_deck": True}, **base_kwargs)
         self.assertTrue(on["ollama_local_on_deck"])
-        garbled = sanitize_settings(
-            data={"ollama_local_on_deck": "yes"},
-            default_latency_warning_seconds=15,
-            default_request_timeout_seconds=120,
-            min_latency_warning_seconds=5,
-            max_latency_warning_seconds=300,
-            min_request_timeout_seconds=10,
-            max_request_timeout_seconds=300,
-            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
-            default_persistence_mode="persist_all",
-            valid_ask_modes={"speed", "strategy", "deep"},
-            default_ask_mode="speed",
-        )
+        garbled = sanitize_settings(data={"ollama_local_on_deck": "yes"}, **base_kwargs)
         self.assertFalse(garbled["ollama_local_on_deck"])
 
     def test_load_settings_grandfathers_capabilities_when_block_missing(self):

@@ -73,7 +73,9 @@ from backend.services.screenshot_media import (
 )
 from backend.services.game_ai_request import run_game_ai_request
 from backend.services.local_ollama_setup_service import (
+    is_loopback_ollama_host,
     new_local_ollama_setup_state,
+    recover_loopback_ollama_listening,
     run_local_setup,
 )
 from backend.services.tdp_service import (
@@ -539,65 +541,127 @@ class Plugin:
         raw = (pc_ip or "").strip()
         if not raw:
             return {"reachable": False, "error": "No PC IP provided."}
-        _, _, base = normalize_ollama_base(raw)
+        host, _port, base = normalize_ollama_base(raw)
 
+        def _test_connection_sync() -> dict:
+            deadline = started_at + safe_timeout_seconds
+            ver_timeout = max(0.25, deadline - time.time())
+            ver_req = urllib.request.Request(f"{base}/api/version", method="GET")
+            ver_resp = urllib.request.urlopen(ver_req, timeout=ver_timeout)
+            ver_data = json.loads(ver_resp.read().decode("utf-8"))
+            version_local = ver_data.get("version", "unknown")
+
+            tags_timeout = max(0.25, deadline - time.time())
+            tags_req = urllib.request.Request(f"{base}/api/tags", method="GET")
+            tags_resp = urllib.request.urlopen(tags_req, timeout=tags_timeout)
+            tags_data = json.loads(tags_resp.read().decode("utf-8"))
+            models_local = [m.get("name", "?") for m in tags_data.get("models", [])]
+
+            # /api/ps: currently loaded models + size_vram vs size (approximate GPU-visible weight share).
+            ps_snapshots: list[dict[str, Any]] = []
+            ps_timeout = max(0.25, deadline - time.time())
+            try:
+                ps_req = urllib.request.Request(f"{base}/api/ps", method="GET")
+                ps_resp = urllib.request.urlopen(ps_req, timeout=ps_timeout)
+                ps_data = json.loads(ps_resp.read().decode("utf-8"))
+                for m in ps_data.get("models", []) or []:
+                    name_m = str(m.get("name") or m.get("model") or "?")
+                    sz_b = int(m.get("size") or 0)
+                    vram_b = int(m.get("size_vram") or 0)
+                    ratio = None
+                    if sz_b > 0 and vram_b >= 0:
+                        ratio = round(100.0 * min(vram_b, sz_b) / sz_b, 1)
+                    ps_snapshots.append(
+                        {
+                            "name": name_m,
+                            "size_bytes": sz_b,
+                            "size_vram_bytes": vram_b,
+                            "vram_weight_share_pct_appx": ratio,
+                        }
+                    )
+            except Exception:
+                ps_snapshots = []
+
+            return {"version": version_local, "models": models_local, "ps_loaded": ps_snapshots}
+
+        recovery_attempted = False
+        recovery_succeeded_before_retry: bool | None = None
+
+        tested: Optional[dict[str, Any]] = None
         try:
-            def _test_connection_sync() -> dict:
-                deadline = started_at + safe_timeout_seconds
-                ver_timeout = max(0.25, deadline - time.time())
-                ver_req = urllib.request.Request(f"{base}/api/version", method="GET")
-                ver_resp = urllib.request.urlopen(ver_req, timeout=ver_timeout)
-                ver_data = json.loads(ver_resp.read().decode("utf-8"))
-                version_local = ver_data.get("version", "unknown")
-
-                tags_timeout = max(0.25, deadline - time.time())
-                tags_req = urllib.request.Request(f"{base}/api/tags", method="GET")
-                tags_resp = urllib.request.urlopen(tags_req, timeout=tags_timeout)
-                tags_data = json.loads(tags_resp.read().decode("utf-8"))
-                models_local = [m.get("name", "?") for m in tags_data.get("models", [])]
-
-                # /api/ps: currently loaded models + size_vram vs size (approximate GPU-visible weight share).
-                ps_snapshots: list[dict[str, Any]] = []
-                ps_timeout = max(0.25, deadline - time.time())
-                try:
-                    ps_req = urllib.request.Request(f"{base}/api/ps", method="GET")
-                    ps_resp = urllib.request.urlopen(ps_req, timeout=ps_timeout)
-                    ps_data = json.loads(ps_resp.read().decode("utf-8"))
-                    for m in ps_data.get("models", []) or []:
-                        name_m = str(m.get("name") or m.get("model") or "?")
-                        sz_b = int(m.get("size") or 0)
-                        vram_b = int(m.get("size_vram") or 0)
-                        ratio = None
-                        if sz_b > 0 and vram_b >= 0:
-                            ratio = round(100.0 * min(vram_b, sz_b) / sz_b, 1)
-                        ps_snapshots.append(
-                            {
-                                "name": name_m,
-                                "size_bytes": sz_b,
-                                "size_vram_bytes": vram_b,
-                                "vram_weight_share_pct_appx": ratio,
-                            }
-                        )
-                except Exception:
-                    ps_snapshots = []
-
-                return {"version": version_local, "models": models_local, "ps_loaded": ps_snapshots}
-
             tested = await asyncio.wait_for(
                 asyncio.to_thread(_test_connection_sync),
                 timeout=float(safe_timeout_seconds) + 1.0,
             )
-            version = str(tested.get("version", "unknown"))
-            models = list(tested.get("models", []))
-            ps_loaded = list(tested.get("ps_loaded", []))
-
-            return {"reachable": True, "version": version, "models": models, "ps_loaded": ps_loaded}
         except Exception:
-            logger.exception("test_ollama_connection failed")
-            return {
-                "reachable": False,
-                "error": "Could not reach Ollama. Check PC IP, firewall, and that Ollama is running on the host.",
-            }
+            if not is_loopback_ollama_host(host):
+                logger.exception("test_ollama_connection failed (non-loopback)")
+                return {
+                    "reachable": False,
+                    "error": "Could not reach Ollama. Check PC IP, firewall, and that Ollama is running on the host.",
+                }
+
+            recovery_attempted = True
+
+            def _recover_log(line: str) -> None:
+                try:
+                    logger.info(line)
+                except Exception:
+                    pass
+
+            try:
+                recovered = await asyncio.wait_for(
+                    asyncio.to_thread(lambda: recover_loopback_ollama_listening(_recover_log)),
+                    timeout=float(safe_timeout_seconds) + 35.0,
+                )
+            except Exception:
+                logger.exception("recover_loopback_ollama_listening raised")
+                recovered = False
+
+            recovery_succeeded_before_retry = bool(recovered)
+
+            if not recovered:
+                return {
+                    "reachable": False,
+                    "recovery_attempted": recovery_attempted,
+                    "recovery_succeeded_before_retry": False,
+                    "error": (
+                        "Could not start or reach Ollama on this device. Try Starter setup in Connection, "
+                        "or run ``ollama serve`` from Desktop Konsole."
+                    ),
+                }
+
+            try:
+                tested = await asyncio.wait_for(
+                    asyncio.to_thread(_test_connection_sync),
+                    timeout=float(safe_timeout_seconds) + 1.0,
+                )
+            except Exception:
+                logger.exception("test_ollama_connection failed after loopback recovery")
+                return {
+                    "reachable": False,
+                    "recovery_attempted": recovery_attempted,
+                    "recovery_succeeded_before_retry": True,
+                    "error": (
+                        "Ollama was started but the health check still failed. Retry the test or check "
+                        "~/.ollama and disk space."
+                    ),
+                }
+
+        version = str(tested.get("version", "unknown"))
+        models = list(tested.get("models", []))
+        ps_loaded = list(tested.get("ps_loaded", []))
+
+        base_out: dict[str, Any] = {
+            "reachable": True,
+            "version": version,
+            "models": models,
+            "ps_loaded": ps_loaded,
+        }
+        if recovery_attempted:
+            base_out["recovery_attempted"] = True
+            base_out["recovery_succeeded_before_retry"] = recovery_succeeded_before_retry
+        return base_out
 
     async def start_local_ollama_setup(self, data: Any = None):
         """Install/start Ollama on this Linux host and pull Tier-1 FOSS tags (runs in background)."""

@@ -24,6 +24,7 @@ import { PluginHelpModal } from "./components/PluginHelpModal";
 import { PermissionsTab } from "./components/PermissionsTab";
 import { SettingsTab } from "./components/SettingsTab";
 import { getSteamInputLexiconEntry } from "./data/steam-input-lexicon";
+import { TIER1_FOSS_STARTER_PRIMARY_TAGS } from "./data/tier1FossStarterTags";
 import { jumpToSteamInputEntry } from "./utils/steamInputJump";
 import type { InputTransparencyRpcResult, TransparencySnapshot } from "./utils/inputTransparency";
 import {
@@ -272,9 +273,76 @@ function dedupeScreenshotItems(items: ScreenshotItem[]): ScreenshotItem[] {
 }
 
 const DISCLAIMER_STORAGE_KEY = "bonsai:disclaimer-accepted";
+const PLUGIN_HELP_DISMISSED_STORAGE_KEY = "bonsai:plugin-help-dismissed";
+const LOCAL_RUNTIME_BETA_DISMISSED_STORAGE_KEY = "bonsai:local-runtime-beta-dismissed-v1";
 const GITHUB_ISSUES_URL = "https://github.com/cantcurecancer/bonsAI/issues";
 const GITHUB_REPO_URL = GITHUB_ISSUES_URL.replace(/\/issues$/, "");
 const OLLAMA_UPSTREAM_REPO_URL = "https://github.com/ollama/ollama";
+
+/**
+ * Shared copy for the global beta banner (first run and replay after clearing plugin data).
+ * LAN + in-game VRAM wording sits with the hardware-risk section before the Help link line.
+ */
+const BONSAI_BETA_NOTICE_DESCRIPTION =
+  "Welcome to bonsAI!\n\n" +
+  "This plugin is currently in beta. Some features may not work as expected, " +
+  "and AI-generated recommendations \u2014 especially TDP and performance changes \u2014 " +
+  "should be verified before relying on them.\n\n" +
+  "bonsAI modifies system hardware settings based on AI suggestions. " +
+  "Use at your own risk.\n\n" +
+  "If you have another PC on your LAN that can host Ollama, that path is typically much faster than inference on-device.\n\n" +
+  "Running heavy local AI while a game has high VRAM / graphics load may crash the game or cause unstable behavior " +
+  "from memory pressure — use at your own risk.\n\n" +
+  "To report bugs or request features, visit:\n" +
+  GITHUB_ISSUES_URL +
+  "\n\n" +
+  "By continuing, you acknowledge this is experimental software.";
+
+function pluginHelpDismissedFromStorage(): boolean {
+  try {
+    return window.localStorage.getItem(PLUGIN_HELP_DISMISSED_STORAGE_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function markPluginHelpDismissedPersist(): void {
+  try {
+    window.localStorage.setItem(PLUGIN_HELP_DISMISSED_STORAGE_KEY, "1");
+  } catch {
+    /* ignore */
+  }
+}
+
+function hasDismissedLocalRuntimeBeta(): boolean {
+  try {
+    return window.localStorage.getItem(LOCAL_RUNTIME_BETA_DISMISSED_STORAGE_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function markLocalRuntimeBetaDismissed(): void {
+  try {
+    window.localStorage.setItem(LOCAL_RUNTIME_BETA_DISMISSED_STORAGE_KEY, "1");
+  } catch {
+    /* ignore */
+  }
+}
+
+/** Full local-runtime banner text (one-time when Ollama on Deck is enabled). */
+function localRuntimeBetaNoticeDescription(): string {
+  const tagLine = TIER1_FOSS_STARTER_PRIMARY_TAGS.join(", ");
+  return (
+    "You are using Ollama on this device (local runtime).\n\n" +
+    "If you have another PC on your LAN that can host Ollama, that path is typically much faster than on-device inference.\n\n" +
+    "Heavy local AI while a game has high VRAM / graphics load may crash the game or cause unstable behavior from memory pressure — " +
+    "use at your own risk. This path is beta: screenshots and attachments use vision-capable models where available; Expert and heavier models can add delay.\n\n" +
+    "Speed (Fast) is the default for quick answers. Use Strategy when you need branching choices. Expert is heavier and slower.\n\n" +
+    `Tier-1 FOSS starter tags include ${tagLine}. Use Starter (README) and Full Tier-1 FOSS under Connection to pull models.\n\n` +
+    "You can turn off Ollama on Deck in Settings if you prefer a LAN host."
+  );
+}
 
 // Check whether the one-time safety disclaimer has already been acknowledged.
 function hasAcceptedDisclaimer(): boolean {
@@ -434,7 +502,13 @@ const Content: React.FC = () => {
   const [askThreadDisplayQuestion, setAskThreadDisplayQuestion] = useState("");
   const [isAsking, setIsAsking] = useState(false);
   const [lastApplied, setLastApplied] = useState<AppliedResult | null>(null);
-  const [pluginHelpDismissed, setPluginHelpDismissed] = useState(() => __bonsaiPluginHelpDismissed);
+  const [pluginHelpDismissed, setPluginHelpDismissed] = useState(() => {
+    if (pluginHelpDismissedFromStorage()) {
+      __bonsaiPluginHelpDismissed = true;
+      return true;
+    }
+    return __bonsaiPluginHelpDismissed;
+  });
   const [suggestedPrompts, setSuggestedPrompts] = useState<PresetPrompt[]>(() => getRandomPresets(3));
   useEffect(() => {
     __bonsaiPluginHelpDismissed = pluginHelpDismissed;
@@ -447,6 +521,10 @@ const Content: React.FC = () => {
   const [isLoadingRecentScreenshots, setIsLoadingRecentScreenshots] = useState(false);
   const [selectedAttachment, setSelectedAttachment] = useState<AskAttachment | null>(null);
   const screenshotBrowserHostRef = useRef<HTMLDivElement>(null);
+  const [disclaimerAckVersion, setDisclaimerAckVersion] = useState(0);
+  /** Tracks previous `ollamaLocalOnDeck` after settings load — used to detect user turning local on (false→true). */
+  const ollamaLocalOnDeckPrevRef = useRef<boolean | null>(null);
+  const localRuntimeBetaPromptIssuedRef = useRef(false);
   const attachActionHostRef = useRef<HTMLDivElement>(null);
 
   // --- Debug state (lifted from former ErrorCaptureUI) ---
@@ -497,8 +575,14 @@ const Content: React.FC = () => {
     setModelAllowHighVramFallbacks,
     ollamaLocalOnDeck,
     setOllamaLocalOnDeck,
+    settingsLoaded,
     hydrateFromSettings,
   } = usePluginSettings();
+
+  const acknowledgeDisclaimer = useCallback(() => {
+    markDisclaimerAccepted();
+    setDisclaimerAckVersion((v) => v + 1);
+  }, []);
 
   const effectiveOllamaPcIp = useMemo(
     () => (ollamaLocalOnDeck ? OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP : ollamaIp.trim()),
@@ -652,24 +736,49 @@ const Content: React.FC = () => {
       showModal(
         <ConfirmModal
           strTitle="bonsAI - Beta Notice"
-          strDescription={
-            "Welcome to bonsAI!\n\n" +
-            "This plugin is currently in beta. Some features may not work as expected, " +
-            "and AI-generated recommendations \u2014 especially TDP and performance changes \u2014 " +
-            "should be verified before relying on them.\n\n" +
-            "bonsAI modifies system hardware settings based on AI suggestions. " +
-            "Use at your own risk.\n\n" +
-            "To report bugs or request features, visit:\n" +
-            GITHUB_ISSUES_URL + "\n\n" +
-            "By continuing, you acknowledge this is experimental software."
-          }
+          strDescription={BONSAI_BETA_NOTICE_DESCRIPTION}
           strOKButtonText="Got it"
           bAlertDialog={true}
-          onOK={() => { markDisclaimerAccepted(); }}
+          onOK={() => {
+            acknowledgeDisclaimer();
+          }}
         />
       );
     }
-  }, []);
+  }, [acknowledgeDisclaimer]);
+
+  // --- One-time local-runtime (Ollama on Deck) banner when user enables routing (false→true), after disclaimer OK ---
+  useEffect(() => {
+    if (!settingsLoaded) return;
+    if (!hasAcceptedDisclaimer()) return;
+
+    const prevDeck = ollamaLocalOnDeckPrevRef.current;
+    if (prevDeck === null) {
+      ollamaLocalOnDeckPrevRef.current = ollamaLocalOnDeck;
+      return;
+    }
+
+    const userTurnedLocalOn = !prevDeck && ollamaLocalOnDeck;
+    ollamaLocalOnDeckPrevRef.current = ollamaLocalOnDeck;
+
+    if (!userTurnedLocalOn) return;
+    if (hasDismissedLocalRuntimeBeta()) return;
+    if (localRuntimeBetaPromptIssuedRef.current) return;
+
+    localRuntimeBetaPromptIssuedRef.current = true;
+    showModal(
+      <ConfirmModal
+        strTitle="bonsAI - Local runtime (beta)"
+        strDescription={localRuntimeBetaNoticeDescription()}
+        strOKButtonText="Got it"
+        bAlertDialog={true}
+        onOK={() => {
+          markLocalRuntimeBetaDismissed();
+          localRuntimeBetaPromptIssuedRef.current = false;
+        }}
+      />
+    );
+  }, [settingsLoaded, ollamaLocalOnDeck, disclaimerAckVersion]);
 
 
   const filteredSettings = useMemo(() => {
@@ -952,6 +1061,8 @@ const Content: React.FC = () => {
       try {
         window.localStorage.removeItem(IP_STORAGE_KEY);
         window.localStorage.removeItem(DISCLAIMER_STORAGE_KEY);
+        window.localStorage.removeItem(PLUGIN_HELP_DISMISSED_STORAGE_KEY);
+        window.localStorage.removeItem(LOCAL_RUNTIME_BETA_DISMISSED_STORAGE_KEY);
         window.localStorage.removeItem(UNIFIED_INPUT_STORAGE_KEY);
         window.sessionStorage.removeItem(AUTO_SAVED_RESPONSE_IDS_KEY);
       } catch {
@@ -959,27 +1070,19 @@ const Content: React.FC = () => {
       }
       setOllamaIp(IP_DEFAULT);
       __bonsaiPluginHelpDismissed = false;
+      localRuntimeBetaPromptIssuedRef.current = false;
+      ollamaLocalOnDeckPrevRef.current = null;
       setPluginHelpDismissed(false);
       setSuggestedPrompts(getRandomPresets(3));
       resetPluginSession();
       showModal(
         <ConfirmModal
           strTitle="bonsAI - Beta Notice"
-          strDescription={
-            "Welcome to bonsAI!\n\n" +
-            "This plugin is currently in beta. Some features may not work as expected, " +
-            "and AI-generated recommendations \u2014 especially TDP and performance changes \u2014 " +
-            "should be verified before relying on them.\n\n" +
-            "bonsAI modifies system hardware settings based on AI suggestions. " +
-            "Use at your own risk.\n\n" +
-            "To report bugs or request features, visit:\n" +
-            GITHUB_ISSUES_URL + "\n\n" +
-            "By continuing, you acknowledge this is experimental software."
-          }
+          strDescription={BONSAI_BETA_NOTICE_DESCRIPTION}
           strOKButtonText="Got it"
           bAlertDialog={true}
           onOK={() => {
-            markDisclaimerAccepted();
+            acknowledgeDisclaimer();
           }}
         />
       );
@@ -995,7 +1098,7 @@ const Content: React.FC = () => {
         duration: 5000,
       });
     }
-  }, [hydrateFromSettings, resetPluginSession]);
+  }, [hydrateFromSettings, resetPluginSession, acknowledgeDisclaimer]);
 
   const onMicInput = () => {
     toaster.toast({ title: "Voice input", body: "Voice capture is not implemented yet.", duration: 1800 });
@@ -1330,6 +1433,7 @@ const Content: React.FC = () => {
   );
 
   const openPluginHelpModal = useCallback(() => {
+    markPluginHelpDismissedPersist();
     __bonsaiPluginHelpDismissed = true;
     setPluginHelpDismissed(true);
     characterPickerReturnTabRef.current = currentTab;

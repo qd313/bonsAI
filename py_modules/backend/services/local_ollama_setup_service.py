@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import ipaddress
 import os
 import shutil
 import signal
@@ -148,6 +149,8 @@ def ensure_ollama_server_listening_before_pull(
     shell_log: Callable[[str], None],
     ollama_bin: str,
     cancelled: Callable[[], bool],
+    *,
+    max_listen_probe_iterations: int = 90,
 ) -> bool:
     """
     ``ollama pull`` requires the HTTP API. User-prefix tarball installs do not register systemd;
@@ -194,7 +197,7 @@ def ensure_ollama_server_listening_before_pull(
         shell_log(f"[bonsAI] Could not start ollama serve: {exc}")
         return False
 
-    for i in range(90):
+    for i in range(max_listen_probe_iterations):
         if cancelled():
             terminate_setup_started_ollama_serve()
             return False
@@ -226,9 +229,40 @@ def ensure_ollama_server_listening_before_pull(
         hypothesis_id="H7-ollama-serve",
         location="ensure_ollama_server_listening_before_pull",
         message="probe timeout",
-        data={"timed_out_s": 45.0},
+        data={"timed_out_s": round(0.5 * max_listen_probe_iterations, 1)},
     )
     return False
+
+
+def recover_loopback_ollama_listening(
+    shell_log: Callable[[str], None],
+    *,
+    max_listen_probe_iterations: int = 40,
+) -> bool:
+    """
+    Best-effort start of localhost Ollama (systemd user unit, then ``ollama serve``) before a probe retry.
+
+    Intended for Connection Test failures on **127.0.0.1** / localhost only — not LAN hosts.
+    """
+    if probe_ollama_http_ok(DEFAULT_BASE, timeout_seconds=2.5):
+        return True
+    try_restart_ollama_user_service(shell_log)
+    time.sleep(1.0)
+    if probe_ollama_http_ok(DEFAULT_BASE, timeout_seconds=2.5):
+        return True
+
+    _prepend_home_local_bin_to_environ(shell_log)
+    ollama_bin = resolve_ollama_executable()
+    if not ollama_bin:
+        shell_log("[bonsAI] ``ollama`` not found on PATH — use Starter setup to install.")
+        return False
+
+    return ensure_ollama_server_listening_before_pull(
+        shell_log,
+        ollama_bin,
+        lambda: False,
+        max_listen_probe_iterations=max_listen_probe_iterations,
+    )
 
 
 def _bash_exe() -> str:
@@ -257,6 +291,18 @@ def probe_ollama_http_ok(base_http: str, timeout_seconds: float = 2.5) -> bool:
             return 200 <= (resp.status or 0) < 300
     except Exception:
         return False
+
+
+def is_loopback_ollama_host(host: str) -> bool:
+    """True when ``host`` identifies the local Ollama machine (loopback or ``localhost`` hostname)."""
+    h = (host or "").strip()
+    if not h:
+        return False
+    try:
+        return bool(ipaddress.ip_address(h).is_loopback)
+    except ValueError:
+        pass
+    return h.casefold() == "localhost"
 
 
 def resolve_ollama_executable() -> Optional[str]:

@@ -70,7 +70,9 @@ def sanitize_show_debug_tab(value: Any) -> bool:
 
 
 def sanitize_ollama_local_on_deck(value: Any) -> bool:
-    """Only explicit ``true`` routes Ask traffic to localhost Ollama on this device."""
+    """Explicit ``true`` routes Ask to localhost Ollama; omitted / ``None`` defaults off (LAN field applies)."""
+    if value is None:
+        return False
     return value is True
 
 

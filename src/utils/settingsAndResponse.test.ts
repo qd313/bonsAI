@@ -82,7 +82,7 @@ describe("settingsAndResponse", () => {
     );
   });
 
-  it("normalizes ollama_local_on_deck: only explicit true enables", () => {
+  it("normalizes ollama_local_on_deck: missing key defaults off; explicit true enables", () => {
     expect(normalizeSettings({ ollama_local_on_deck: true }).ollama_local_on_deck).toBe(true);
     expect(normalizeSettings({ ollama_local_on_deck: false }).ollama_local_on_deck).toBe(false);
     expect(normalizeSettings({}).ollama_local_on_deck).toBe(false);

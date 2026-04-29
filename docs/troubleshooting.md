@@ -85,7 +85,7 @@ If Windows still falls back to CPU after FIX A:
 
 **Settings → Advanced** (bottom of the tab): **Clear cache…** only clears the **current session** in RAM (Ask thread, attachments, etc.) and does **not** touch `settings.json`.
 
-**Clear all data…** resets bonsAI to a **new-install** state on the device: it removes saved settings (including permissions), clears plugin runtime cache and log files under Decky’s homebrew layout, clears the Ollama host / disclaimer / unified-input keys stored in the plugin’s browser storage, and shows the beta notice again. It does **not** delete markdown files under `~/Desktop/BonsAI_notes/`.
+**Clear all data…** resets bonsAI to a **new-install** state on the device: it removes saved settings (including permissions), clears plugin runtime cache and log files under Decky’s homebrew layout, clears the Ollama host / disclaimer / unified-input keys stored in the plugin’s browser storage (and related `bonsai:*` flags such as the **How to use bonsAI** quick-start chip and **Local runtime (beta)** notice dismissals), and shows the beta notices again. It does **not** delete markdown files under `~/Desktop/BonsAI_notes/`.
 
 ---
 
@@ -170,6 +170,14 @@ If Windows still falls back to CPU after FIX A:
    ```
 
 4. **Models installed:** On the Ollama host, run `ollama pull <model>` for each tag you use (for example `llama3` for text, `llava` or another vision tag for screenshots). The Deck only talks to Ollama; it does not download weights itself.
+
+### On-device Ollama (localhost — **Test** vs cold boot)
+
+**Symptom:** Right after a full reboot, Connection **Test** fails for **127.0.0.1:11434** even though pulls succeeded earlier.
+
+**Why:** Full boot can leave the **`ollama`** user service idle until first use — nothing is listening on **11434** until the daemon (`ollama serve` / systemd unit) accepts traffic.
+
+**What bonsAI does (v0.2.1+):** With **Test** targeting loopback (**Ollama on this Deck on**, or **`127.0.0.1` / localhost** typed as the host), an initial failed probe triggers a best‑effort **wake** (**`systemctl --user try-restart` / start `ollama`**, then **`ollama serve`** if needed — same primitives as Starter setup under `py_modules/backend/services/local_ollama_setup_service.py`) and **retests once**. Prefer waiting a minute after boot before assuming Ollama is broken.
 
 ---
 

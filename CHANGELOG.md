@@ -2,6 +2,19 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.2.1] - 2026-04-28
+
+### Changed
+- **Local Ollama routing default off:** Omitting `ollama_local_on_deck` in `settings.json` now normalizes and sanitizes to **`false`** (`settingsAndResponse.ts`, `settings_service.py`); LAN PC IP applies until the user opts in. Existing explicit `true`/`false` preserved.
+- **Local-runtime (beta) modal on enable:** `bonsAI:local-runtime-beta-dismissed-v1` **`ConfirmModal`** runs when the user turns **Ollama on Deck** **on** (tracked `false→true` transition), after global disclaimer and settings load — not solely because the key was defaulted on (`src/index.tsx`).
+- **Connection Test — loopback wake-up:** Failed probe to **`127.0.0.1:11434` / localhost** attempts `systemctl --user` start/restart and **`ollama serve`** (reuse `recover_loopback_ollama_listening` in `py_modules/backend/services/local_ollama_setup_service.py`), then retries **once**. Response may include **`recovery_attempted`**; **`SettingsTab`** uses a longer Decky RPC deadline for localhost tests (~52s padded).
+- **Beta disclaimers + quick-start persistence** (prior drop): LAN speed + VRAM/crash wording on global banner; **`bonsai:plugin-help-dismissed`** chip; changelog items from **[Unreleased] - 2026-04-28** drafts consolidated here where still accurate.
+
+### Docs
+- **`docs/troubleshooting.md`:** localhost Connection Test wake-up note; Clear all behavior for stored flags.
+- **`docs/roadmap.md`:** Completed bullet updated for routing default / modal UX.
+
+
 ## [Unreleased] - 2026-04-19
 
 ### Added

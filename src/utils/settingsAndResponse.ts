@@ -333,6 +333,9 @@ export function normalizeModelAllowHighVramFallbacks(value: unknown): boolean {
 }
 
 export function normalizeOllamaLocalOnDeck(value: unknown): boolean {
+  if (value === undefined || value === null) {
+    return DEFAULT_OLLAMA_LOCAL_ON_DECK;
+  }
   return value === true;
 }
 

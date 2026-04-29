@@ -276,6 +276,7 @@ async def run_game_ai_request(
         logger.info("run_game_ai_request: completed in %.1fs", elapsed)
         return {
             "success": bool(ollama_result.get("success", False)),
+            "cancelled": bool(ollama_result.get("cancelled")),
             "response": response_text,
             "app_id": app_id,
             "app_context": app_context,

@@ -7,6 +7,7 @@ import {
   buildResponseText,
   DEFAULT_LATENCY_WARNING_SECONDS,
   DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE,
+  OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP,
   normalizeAiCharacterCustomText,
   normalizeAiCharacterPresetId,
   toBonsaiSettingsPayload,
@@ -145,7 +146,7 @@ type BackgroundStartResponse = {
 };
 
 type BackgroundRequestStatus = {
-  status: "idle" | "pending" | "completed" | "failed";
+  status: "idle" | "pending" | "completed" | "failed" | "cancelled";
   request_id: number | null;
   question: string;
   app_id: string;
@@ -161,6 +162,8 @@ type BackgroundRequestStatus = {
   model_policy_disclosure?: ModelPolicyDisclosurePayload | null;
   /** Present when the completed Ask was a shortcut-setup keyword. */
   shortcut_setup?: ShortcutSetupKind | null;
+  /** True when the user hit Stop mid-generation (HTTP session closed locally). */
+  cancelled?: boolean;
 };
 
 type RecentScreenshotsResponse = {
@@ -492,8 +495,15 @@ const Content: React.FC = () => {
     setModelPolicyNonFossUnlocked,
     modelAllowHighVramFallbacks,
     setModelAllowHighVramFallbacks,
+    ollamaLocalOnDeck,
+    setOllamaLocalOnDeck,
     hydrateFromSettings,
   } = usePluginSettings();
+
+  const effectiveOllamaPcIp = useMemo(
+    () => (ollamaLocalOnDeck ? OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP : ollamaIp.trim()),
+    [ollamaLocalOnDeck, ollamaIp]
+  );
 
   const effectiveLatencyWarningSeconds = useMemo(
     () => (latencyTimeoutsCustomEnabled ? latencyWarningSeconds : DEFAULT_LATENCY_WARNING_SECONDS),
@@ -725,6 +735,22 @@ const Content: React.FC = () => {
       return;
     }
 
+    if (status.status === "cancelled") {
+      setOllamaContext({ app_id: appId, app_context: appContext });
+      setIsAsking(false);
+      setShortcutSetupVariant(null);
+      setOllamaResponse(status.response?.trim() ? status.response.trim() : "Stopped.");
+      setLastApplied(null);
+      setElapsedSeconds(Number.isFinite(status.elapsed_seconds) ? status.elapsed_seconds : null);
+      setLastExchange(null);
+      setStrategyGuideBranches(null);
+      setModelPolicyDisclosure(null);
+      pendingArchiveTurnRef.current = null;
+      pendingThreadQuestionDisplayRef.current = null;
+      void refreshInputTransparency();
+      return;
+    }
+
     if (status.status === "completed" || status.status === "failed") {
       const applied = status.applied ?? null;
       setOllamaContext({ app_id: appId, app_context: appContext });
@@ -874,6 +900,9 @@ const Content: React.FC = () => {
   };
 
   const onCancelAsk = () => {
+    void call<[], { ok?: boolean }>("abort_background_game_ai").catch(() => {
+      /* best-effort RPC */
+    });
     invalidateRequests();
     setIsAsking(false);
     setOllamaResponse("Request cancelled.");
@@ -1046,7 +1075,7 @@ const Content: React.FC = () => {
     await new Promise((r) => setTimeout(r, 50));
 
     const q = (overrideQuestion ?? unifiedInput).trim();
-    const ip = ollamaIp.trim();
+    const ip = effectiveOllamaPcIp;
     if (!q || !ip) {
       if (!ip) {
         toaster.toast({ title: "PC IP required", body: "Set your Ollama PC IP before asking.", duration: 4000 });
@@ -1423,6 +1452,7 @@ const Content: React.FC = () => {
                 modelPolicyTier,
                 modelPolicyNonFossUnlocked,
                 modelAllowHighVramFallbacks,
+                ollamaLocalOnDeck,
               },
               {
                 ai_character_random: next.random,
@@ -1464,6 +1494,7 @@ const Content: React.FC = () => {
     modelPolicyTier,
     modelPolicyNonFossUnlocked,
     modelAllowHighVramFallbacks,
+    ollamaLocalOnDeck,
   ]);
 
   const mainTabAiCharacterPad = aiCharacterEnabled;
@@ -1529,7 +1560,7 @@ const Content: React.FC = () => {
       selectedIndex={selectedIndex}
       onSettingClick={onSettingClick}
       isAsking={isAsking}
-      ollamaIp={ollamaIp}
+      ollamaIp={effectiveOllamaPcIp}
       onAskOllama={onAskOllama}
       onOpenScreenshotBrowser={onOpenScreenshotBrowser}
       onCancelAsk={onCancelAsk}
@@ -1590,6 +1621,8 @@ const Content: React.FC = () => {
       ollamaIp={ollamaIp}
       onOllamaIpChange={setOllamaIp}
       onPersistOllamaIp={saveIp}
+      ollamaLocalOnDeck={ollamaLocalOnDeck}
+      setOllamaLocalOnDeck={setOllamaLocalOnDeck}
       latencyWarningSeconds={latencyWarningSeconds}
       requestTimeoutSeconds={requestTimeoutSeconds}
       latencyTimeoutsCustomEnabled={latencyTimeoutsCustomEnabled}
@@ -1656,6 +1689,7 @@ const Content: React.FC = () => {
           modelPolicyTier,
           modelPolicyNonFossUnlocked,
           modelAllowHighVramFallbacks,
+          ollamaLocalOnDeck,
         })
       ).catch((err) => {
         console.error("save_settings failed (hardware control confirm)", err);
@@ -1684,6 +1718,7 @@ const Content: React.FC = () => {
     modelPolicyTier,
     modelPolicyNonFossUnlocked,
     modelAllowHighVramFallbacks,
+    ollamaLocalOnDeck,
   ]);
 
   const permissionsTab = (

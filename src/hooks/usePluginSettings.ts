@@ -17,6 +17,7 @@ import {
   DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS,
   DEFAULT_MODEL_POLICY_TIER,
   DEFAULT_OLLAMA_KEEP_ALIVE,
+  DEFAULT_OLLAMA_LOCAL_ON_DECK,
   DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED,
   DEFAULT_REQUEST_TIMEOUT_SECONDS,
   DEFAULT_SCREENSHOT_ATTACHMENT_PRESET,
@@ -80,6 +81,7 @@ export function usePluginSettings() {
   const [modelAllowHighVramFallbacks, setModelAllowHighVramFallbacks] = useState<boolean>(
     DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS
   );
+  const [ollamaLocalOnDeck, setOllamaLocalOnDeck] = useState<boolean>(DEFAULT_OLLAMA_LOCAL_ON_DECK);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
 
   const hydrateFromSettings = useCallback((saved: BonsaiSettings) => {
@@ -105,6 +107,7 @@ export function usePluginSettings() {
     setModelPolicyTier(normalized.model_policy_tier);
     setModelPolicyNonFossUnlocked(normalized.model_policy_non_foss_unlocked);
     setModelAllowHighVramFallbacks(normalized.model_allow_high_vram_fallbacks);
+    setOllamaLocalOnDeck(normalized.ollama_local_on_deck);
   }, []);
 
   useEffect(() => {
@@ -134,6 +137,7 @@ export function usePluginSettings() {
         setModelPolicyTier(normalized.model_policy_tier);
         setModelPolicyNonFossUnlocked(normalized.model_policy_non_foss_unlocked);
         setModelAllowHighVramFallbacks(normalized.model_allow_high_vram_fallbacks);
+        setOllamaLocalOnDeck(normalized.ollama_local_on_deck);
       })
       .catch(() => {
         if (cancelled) return;
@@ -158,6 +162,7 @@ export function usePluginSettings() {
         setModelPolicyTier(DEFAULT_MODEL_POLICY_TIER);
         setModelPolicyNonFossUnlocked(false);
         setModelAllowHighVramFallbacks(DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS);
+        setOllamaLocalOnDeck(DEFAULT_OLLAMA_LOCAL_ON_DECK);
       })
       .finally(() => {
         if (!cancelled) setSettingsLoaded(true);
@@ -194,6 +199,7 @@ export function usePluginSettings() {
           modelPolicyTier,
           modelPolicyNonFossUnlocked,
           modelAllowHighVramFallbacks,
+          ollamaLocalOnDeck,
         })
       ).catch((err) => {
         console.error("save_settings failed", err);
@@ -222,6 +228,7 @@ export function usePluginSettings() {
     modelPolicyTier,
     modelPolicyNonFossUnlocked,
     modelAllowHighVramFallbacks,
+    ollamaLocalOnDeck,
     settingsLoaded,
   ]);
 
@@ -259,6 +266,8 @@ export function usePluginSettings() {
     setModelPolicyNonFossUnlocked,
     modelAllowHighVramFallbacks,
     setModelAllowHighVramFallbacks,
+    ollamaLocalOnDeck,
+    setOllamaLocalOnDeck,
     settingsLoaded,
     setLatencyWarningSeconds,
     setRequestTimeoutSeconds,

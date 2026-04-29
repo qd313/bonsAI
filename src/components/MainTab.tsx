@@ -966,6 +966,10 @@ export function MainTab(props: MainTabProps) {
                         className="bonsai-askbar-target bonsai-unified-input-corner-right"
                         {...({
                           onMoveLeft: () => focusAskModeButton(),
+                          onOKButton: (evt: { stopPropagation: () => void }) => {
+                            evt.stopPropagation();
+                            onCancelAsk();
+                          },
                         } as Record<string, unknown>)}
                         onClick={onCancelAsk}
                         aria-label="Stop generation"
@@ -993,6 +997,10 @@ export function MainTab(props: MainTabProps) {
                         className="bonsai-askbar-target bonsai-unified-input-corner-right"
                         {...({
                           onMoveLeft: () => focusAskModeButton(),
+                          onOKButton: (evt: { stopPropagation: () => void }) => {
+                            evt.stopPropagation();
+                            onMicInput();
+                          },
                         } as Record<string, unknown>)}
                         onClick={onMicInput}
                         aria-label="Voice input"

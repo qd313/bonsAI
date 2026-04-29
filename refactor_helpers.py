@@ -1,6 +1,6 @@
 import json
 import re
-from typing import Optional, Tuple
+from typing import Any, Optional, Tuple
 from urllib.parse import urlparse
 
 DEFAULT_OLLAMA_HOST = "127.0.0.1"
@@ -75,6 +75,7 @@ _TEXT_HIGH_VRAM_DEEP: list[str] = [
 ]
 
 # --- Vision: FOSS multimodal first (llava / qwen2.5vl / qwen3-vl small), then open-weight; 16GB-safe defaults.
+# Strategy/Expert order matches Speed: try smaller FOSS VL models before heavier qwen2.5vl (Steam Deck / low VRAM).
 _VISION_FOSS_SPEED = [
     "llava:7b",
     "llava:latest",
@@ -83,18 +84,18 @@ _VISION_FOSS_SPEED = [
     "qwen2.5vl",
 ]
 _VISION_FOSS_STRATEGY = [
-    "qwen2.5vl:latest",
-    "qwen2.5vl",
     "llava:7b",
     "llava:latest",
     "llava",
+    "qwen2.5vl:latest",
+    "qwen2.5vl",
 ]
 _VISION_FOSS_DEEP = [
-    "qwen2.5vl:latest",
-    "qwen2.5vl",
     "llava:7b",
     "llava:latest",
     "llava",
+    "qwen2.5vl:latest",
+    "qwen2.5vl",
 ]
 
 _VISION_OPEN_WEIGHT_SAFE = [
@@ -126,6 +127,44 @@ _VISION_HIGH_VRAM_DEEP: list[str] = [
     "qwen2.5vl:latest",
     "qwen2.5vl",
 ]
+
+# README-aligned minimal local pulls (text + multimodal Tier-1 FOSS). Keep in sync with README quick start.
+TIER1_FOSS_STARTER_PULL_TAGS = (
+    "qwen2.5:1.5b",
+    "llava:7b",
+)
+
+_VALID_SETUP_PULL_PROFILES = frozenset({"starter", "tier1_foss_full"})
+
+
+def tier1_foss_recommended_pull_tags(profile: str) -> list[str]:
+    """Tags to ``ollama pull`` for local Tier-1 FOSS-only setups (no open-weight/high-VRAM tails).
+
+    ``starter`` matches README (small text + early vision FOSS tag). ``tier1_foss_full`` dedupes the union
+    of ``_TEXT_FOSS_*`` and ``_VISION_FOSS_*`` chains so installs cover every Tier-1 FOSS fallback in
+    ``select_ollama_models`` before Tier-2 open-weight alternatives.
+    """
+    prof = (profile or "").strip()
+    if prof == "starter":
+        return list(TIER1_FOSS_STARTER_PULL_TAGS)
+    if prof == "tier1_foss_full":
+        merged: list[str] = []
+        for lst in (
+            _TEXT_FOSS_SPEED,
+            _TEXT_FOSS_STRATEGY,
+            _TEXT_FOSS_DEEP,
+            _VISION_FOSS_SPEED,
+            _VISION_FOSS_STRATEGY,
+            _VISION_FOSS_DEEP,
+        ):
+            merged.extend(lst)
+        return _dedupe_preserve_order(merged)
+    return []
+
+
+def is_valid_setup_pull_profile(profile: Any) -> bool:
+    """True when ``profile`` is a recognized local-Ollama pull preset."""
+    return isinstance(profile, str) and profile.strip() in _VALID_SETUP_PULL_PROFILES
 
 
 def _text_safe_chain(mode: str) -> list[str]:
@@ -209,7 +248,8 @@ def select_ollama_models(
     """Return ordered Ollama model fallbacks. FOSS-first safe chains (~16GB); optional large-model tail.
 
     The Decky backend tries each name in order; if the host returns a missing-model style error,
-    it continues to the next tag (see ``ask_ollama`` in ``main.py``).
+    it continues to the next tag (see ``ask_ollama`` in ``main.py``). For screenshot asks, HTTP 500 / OOM-style
+    responses also advance to the next vision tag so smaller FOSS models (e.g. ``llava:7b``) run before heavier VL tags.
     """
     mode = ask_mode if ask_mode in _VALID_ASK_MODES else "speed"
     if requires_vision:

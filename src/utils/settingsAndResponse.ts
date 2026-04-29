@@ -53,7 +53,7 @@ export type BonsaiCapabilities = {
 export type BonsaiSettings = {
   latency_warning_seconds: number;
   request_timeout_seconds: number;
-  /** When true, stored warning/timeout apply; when false, defaults (15s / 120s) for Ask + Ollama. */
+  /** When true, stored warning/timeout apply; when false, defaults (30s / 360s) for Ask + Ollama. */
   latency_timeouts_custom_enabled: boolean;
   unified_input_persistence_mode: UnifiedInputPersistenceMode;
   /** Vision attachment downscale and JPEG quality preset. */
@@ -87,6 +87,8 @@ export type BonsaiSettings = {
   model_policy_non_foss_unlocked: boolean;
   /** When true, append large-model tags to fallback chains (may exceed ~16GB VRAM). */
   model_allow_high_vram_fallbacks: boolean;
+  /** When true, route Ollama to this device only (fixed 127.0.0.1:11434); LAN PC IP field ignored for Ask/Test. */
+  ollama_local_on_deck: boolean;
 };
 
 /** Fields mirrored from React state / hook before `save_settings` RPC. */
@@ -112,6 +114,7 @@ export type BonsaiSettingsSnapshotInput = {
   modelPolicyTier: ModelPolicyTierId;
   modelPolicyNonFossUnlocked: boolean;
   modelAllowHighVramFallbacks: boolean;
+  ollamaLocalOnDeck: boolean;
 };
 
 /** Build the backend `BonsaiSettings` object; optional `patch` for immediate saves (character picker, permissions). */
@@ -141,6 +144,7 @@ export function toBonsaiSettingsPayload(
     model_policy_tier: input.modelPolicyTier,
     model_policy_non_foss_unlocked: input.modelPolicyNonFossUnlocked,
     model_allow_high_vram_fallbacks: input.modelAllowHighVramFallbacks,
+    ollama_local_on_deck: input.ollamaLocalOnDeck,
   };
   return patch ? { ...base, ...patch } : base;
 }
@@ -151,12 +155,12 @@ export type AppliedResultLike = {
   errors: string[];
 };
 
-export const DEFAULT_LATENCY_WARNING_SECONDS = 15;
-export const DEFAULT_REQUEST_TIMEOUT_SECONDS = 120;
+export const DEFAULT_LATENCY_WARNING_SECONDS = 30;
+export const DEFAULT_REQUEST_TIMEOUT_SECONDS = 360;
 export const MIN_LATENCY_WARNING_SECONDS = 5;
 export const MAX_LATENCY_WARNING_SECONDS = 300;
 export const MIN_REQUEST_TIMEOUT_SECONDS = 10;
-export const MAX_REQUEST_TIMEOUT_SECONDS = 300;
+export const MAX_REQUEST_TIMEOUT_SECONDS = 600;
 export const LATENCY_WARNING_STEP_SECONDS = 5;
 export const REQUEST_TIMEOUT_STEP_SECONDS = 10;
 export const DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE: UnifiedInputPersistenceMode = "no_persist";
@@ -169,6 +173,10 @@ export const DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING = false;
 export const DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED = true;
 export const DEFAULT_INPUT_SANITIZER_USER_DISABLED = false;
 export const DEFAULT_SHOW_DEBUG_TAB = false;
+/** Persisted routing: off = LAN PC IP text field applies; when on, Ask uses localhost Ollama on the Deck only. */
+export const DEFAULT_OLLAMA_LOCAL_ON_DECK = false;
+/** Fixed host:port for on-device Ollama (matches `refactor_helpers.DEFAULT_OLLAMA_*`). */
+export const OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP = "127.0.0.1:11434";
 export const DEFAULT_MODEL_POLICY_NON_FOSS_UNLOCKED = false;
 export const DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS = false;
 export const DEFAULT_ASK_MODE: AskModeId = "speed";
@@ -324,6 +332,10 @@ export function normalizeModelAllowHighVramFallbacks(value: unknown): boolean {
   return value === true;
 }
 
+export function normalizeOllamaLocalOnDeck(value: unknown): boolean {
+  return value === true;
+}
+
 const _askModeSet = new Set<string>(ASK_MODE_IDS);
 
 export function normalizeAskMode(value: unknown): AskModeId {
@@ -420,6 +432,7 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     model_policy_tier: modelPolicy.model_policy_tier,
     model_policy_non_foss_unlocked: modelPolicy.model_policy_non_foss_unlocked,
     model_allow_high_vram_fallbacks: normalizeModelAllowHighVramFallbacks(raw.model_allow_high_vram_fallbacks),
+    ollama_local_on_deck: normalizeOllamaLocalOnDeck(raw.ollama_local_on_deck),
   };
 }
 

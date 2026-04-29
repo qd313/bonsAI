@@ -17,12 +17,12 @@ class _Logger:
 def _sanitize(data):
     return sanitize_settings(
         data,
-        default_latency_warning_seconds=15,
-        default_request_timeout_seconds=120,
+        default_latency_warning_seconds=30,
+        default_request_timeout_seconds=360,
         min_latency_warning_seconds=5,
         max_latency_warning_seconds=300,
         min_request_timeout_seconds=10,
-        max_request_timeout_seconds=300,
+        max_request_timeout_seconds=600,
         valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
         default_persistence_mode="no_persist",
         valid_ask_modes={"speed", "strategy", "deep"},
@@ -61,9 +61,9 @@ class PluginDataResetTests(unittest.TestCase):
                 logger=logger,
             )
 
-            self.assertEqual(out["latency_warning_seconds"], 15)
+            self.assertEqual(out["latency_warning_seconds"], 30)
             reloaded = load_settings(settings_path, _sanitize, logger)
-            self.assertEqual(reloaded["latency_warning_seconds"], 15)
+            self.assertEqual(reloaded["latency_warning_seconds"], 30)
             self.assertFalse(out["capabilities"]["filesystem_write"])
             self.assertTrue(Path(runtime_dir).is_dir())
             self.assertFalse((Path(runtime_dir) / "captures").exists())

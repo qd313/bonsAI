@@ -23,7 +23,7 @@ describe("settingsAndResponse", () => {
 
   it("normalizes timeout to configured bounds and step", () => {
     expect(normalizeRequestTimeoutSeconds(9)).toBe(10);
-    expect(normalizeRequestTimeoutSeconds(611)).toBe(300);
+    expect(normalizeRequestTimeoutSeconds(611)).toBe(600);
     expect(normalizeRequestTimeoutSeconds(121)).toBe(120);
   });
 
@@ -36,8 +36,8 @@ describe("settingsAndResponse", () => {
 
   it("reconcileLatencyWarningAndTimeout lowers warning when timeout is already maxed", () => {
     const pair = reconcileLatencyWarningAndTimeout(300, 600);
-    expect(pair.request_timeout_seconds).toBe(300);
-    expect(pair.latency_warning_seconds).toBeLessThan(300);
+    expect(pair.request_timeout_seconds).toBe(600);
+    expect(pair.latency_warning_seconds).toBeLessThan(600);
     expect(pair.latency_warning_seconds).toBeLessThan(pair.request_timeout_seconds);
   });
 
@@ -70,6 +70,7 @@ describe("settingsAndResponse", () => {
     expect(settings.model_policy_tier).toBe("open_source_only");
     expect(settings.model_policy_non_foss_unlocked).toBe(false);
     expect(settings.model_allow_high_vram_fallbacks).toBe(false);
+    expect(settings.ollama_local_on_deck).toBe(false);
   });
 
   it("normalizes model_allow_high_vram_fallbacks: only explicit true enables", () => {
@@ -79,6 +80,13 @@ describe("settingsAndResponse", () => {
     expect(normalizeSettings({ model_allow_high_vram_fallbacks: false }).model_allow_high_vram_fallbacks).toBe(
       false
     );
+  });
+
+  it("normalizes ollama_local_on_deck: only explicit true enables", () => {
+    expect(normalizeSettings({ ollama_local_on_deck: true }).ollama_local_on_deck).toBe(true);
+    expect(normalizeSettings({ ollama_local_on_deck: false }).ollama_local_on_deck).toBe(false);
+    expect(normalizeSettings({}).ollama_local_on_deck).toBe(false);
+    expect(normalizeSettings({ ollama_local_on_deck: "yes" as unknown as boolean }).ollama_local_on_deck).toBe(false);
   });
 
   it("downgrades non_foss tier without unlock to open_weight", () => {
@@ -161,7 +169,7 @@ describe("settingsAndResponse", () => {
       request_timeout_seconds: 90,
     });
     expect(settings.latency_warning_seconds).toBeLessThan(settings.request_timeout_seconds);
-    expect(settings.request_timeout_seconds).toBeGreaterThanOrEqual(120);
+    expect(settings.request_timeout_seconds).toBeGreaterThanOrEqual(190);
   });
 
   it("toBonsaiSettingsPayload maps snapshot input to RPC keys", () => {
@@ -187,6 +195,7 @@ describe("settingsAndResponse", () => {
       modelPolicyTier: "open_weight",
       modelPolicyNonFossUnlocked: false,
       modelAllowHighVramFallbacks: true,
+      ollamaLocalOnDeck: true,
     });
     expect(p.latency_warning_seconds).toBe(20);
     expect(p.request_timeout_seconds).toBe(150);
@@ -196,12 +205,13 @@ describe("settingsAndResponse", () => {
     expect(p.ask_mode).toBe("deep");
     expect(p.ollama_keep_alive).toBe("30s");
     expect(p.model_allow_high_vram_fallbacks).toBe(true);
+    expect(p.ollama_local_on_deck).toBe(true);
   });
 
   it("toBonsaiSettingsPayload merges patch over base (character picker path)", () => {
     const base = {
-      latencyWarningSeconds: 15,
-      requestTimeoutSeconds: 120,
+      latencyWarningSeconds: 30,
+      requestTimeoutSeconds: 360,
       latencyTimeoutsCustomEnabled: false,
       unifiedInputPersistenceMode: "persist_all" as const,
       screenshotAttachmentPreset: DEFAULT_SCREENSHOT_ATTACHMENT_PRESET,
@@ -221,6 +231,7 @@ describe("settingsAndResponse", () => {
       modelPolicyTier: "open_source_only" as const,
       modelPolicyNonFossUnlocked: false,
       modelAllowHighVramFallbacks: false,
+      ollamaLocalOnDeck: false,
     };
     const p = toBonsaiSettingsPayload(base, {
       ai_character_random: false,
@@ -230,7 +241,7 @@ describe("settingsAndResponse", () => {
     expect(p.ai_character_random).toBe(false);
     expect(p.ai_character_preset_id).toBe("new-id");
     expect(p.ai_character_custom_text).toBe("newtext");
-    expect(p.latency_warning_seconds).toBe(15);
+    expect(p.latency_warning_seconds).toBe(30);
   });
 
   it("builds applied summary text", () => {

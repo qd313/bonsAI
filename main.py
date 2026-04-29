@@ -10,6 +10,7 @@ import socket
 import struct
 import subprocess
 import sys
+import threading
 import time
 import urllib.request
 import urllib.error
@@ -24,6 +25,7 @@ if PLUGIN_ROOT not in sys.path:
 from backend.services.ai_character_service import build_roleplay_system_suffix
 from backend.services.ollama_service import (
     append_deck_tdp_sysfs_grounding,
+    best_effort_abort_ollama_inference,
     build_system_prompt,
     post_ollama_chat,
 )
@@ -70,6 +72,10 @@ from backend.services.screenshot_media import (
     try_gamescope_screenshot_capture,
 )
 from backend.services.game_ai_request import run_game_ai_request
+from backend.services.local_ollama_setup_service import (
+    new_local_ollama_setup_state,
+    run_local_setup,
+)
 from backend.services.tdp_service import (
     STEAMOS_PRIV_WRITE,
     clean_env,
@@ -78,6 +84,7 @@ from backend.services.tdp_service import (
 )
 from refactor_helpers import (
     build_ollama_chat_url,
+    is_valid_setup_pull_profile,
     normalize_ollama_base,
     select_ollama_models,
 )
@@ -91,8 +98,8 @@ class Plugin:
     The class coordinates request flow, background task state, and service delegation so behavior stays
     stable while heavy logic is extracted into focused helper and service modules.
     """
-    DEFAULT_LATENCY_WARNING_SECONDS = 15
-    DEFAULT_REQUEST_TIMEOUT_SECONDS = 120
+    DEFAULT_LATENCY_WARNING_SECONDS = 30
+    DEFAULT_REQUEST_TIMEOUT_SECONDS = 360
     DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE = "no_persist"
     MAX_ATTACHMENT_FILE_BYTES = MAX_ATTACHMENT_FILE_BYTES
     MAX_ATTACHMENT_INLINE_BYTES = MAX_ATTACHMENT_INLINE_BYTES
@@ -107,7 +114,7 @@ class Plugin:
     MIN_LATENCY_WARNING_SECONDS = 5
     MAX_LATENCY_WARNING_SECONDS = 300
     MIN_REQUEST_TIMEOUT_SECONDS = 10
-    MAX_REQUEST_TIMEOUT_SECONDS = 300
+    MAX_REQUEST_TIMEOUT_SECONDS = 600
     SETTINGS_FILENAME = "settings.json"
 
     def __init__(self):
@@ -117,6 +124,20 @@ class Plugin:
         self._background_state: dict = self._new_background_state()
         self._background_request_seq = 0
         self._last_input_transparency: Optional[dict] = None
+        self._local_ollama_setup_lock = asyncio.Lock()
+        self._local_ollama_setup_task: Optional[asyncio.Task] = None
+        self._local_ollama_cancel_event: Optional[asyncio.Event] = None
+        self._local_ollama_setup_state: dict = new_local_ollama_setup_state()
+        self._abort_current_ollama_chat = threading.Event()
+        self._active_ollama_chat_pc_ip: Optional[str] = None
+        self._active_ollama_chat_model: Optional[str] = None
+        self._active_ollama_chat_http_response: Any = None
+        self._chat_resp_ready_evt: Optional[threading.Event] = None
+
+    def _abort_ollama_chat_check(self) -> bool:
+        """True when frontend requested Stop mid-generation (closes HTTP quickly; executor thread exits)."""
+        evt = getattr(self, "_abort_current_ollama_chat", None)
+        return isinstance(evt, threading.Event) and evt.is_set()
 
     @staticmethod
     def _coerce_instance(self_or_cls: Any) -> "Plugin":
@@ -162,6 +183,17 @@ class Plugin:
 
     async def _unload(self):
         """Run plugin shutdown logging for Decky unload events."""
+        plugin = Plugin._coerce_instance(self)
+        ce = getattr(plugin, "_local_ollama_cancel_event", None)
+        if isinstance(ce, asyncio.Event):
+            ce.set()
+        lt = getattr(plugin, "_local_ollama_setup_task", None)
+        if lt is not None and not lt.done():
+            lt.cancel()
+            try:
+                await lt
+            except asyncio.CancelledError:
+                pass
         logger.info("bonsAI plugin unloaded!")
 
     def _new_background_state(self) -> dict:
@@ -195,6 +227,16 @@ class Plugin:
             self._background_request_seq = 0
         if not hasattr(self, "_last_input_transparency"):
             self._last_input_transparency = None
+        if not hasattr(self, "_abort_current_ollama_chat"):
+            self._abort_current_ollama_chat = threading.Event()
+        if not hasattr(self, "_active_ollama_chat_pc_ip"):
+            self._active_ollama_chat_pc_ip = None
+        if not hasattr(self, "_active_ollama_chat_model"):
+            self._active_ollama_chat_model = None
+        if not hasattr(self, "_active_ollama_chat_http_response"):
+            self._active_ollama_chat_http_response = None
+        if not hasattr(self, "_chat_resp_ready_evt"):
+            self._chat_resp_ready_evt = None
 
     @staticmethod
     def _parse_ask_payload(question: Any, PcIp: str) -> Tuple[str, str, str, str, list, str]:
@@ -322,6 +364,20 @@ class Plugin:
             plugin._background_state = plugin._new_background_state()
             plugin._background_request_seq += 1
         plugin._last_input_transparency = None
+
+        async with plugin._local_ollama_setup_lock:
+            if plugin._local_ollama_cancel_event is not None:
+                plugin._local_ollama_cancel_event.set()
+            lst = plugin._local_ollama_setup_task
+            if lst is not None and not lst.done():
+                lst.cancel()
+                try:
+                    await lst
+                except asyncio.CancelledError:
+                    pass
+            plugin._local_ollama_setup_task = None
+            plugin._local_ollama_cancel_event = None
+            plugin._local_ollama_setup_state = new_local_ollama_setup_state()
 
         defaults = reset_plugin_disk_and_defaults(
             settings_path=Plugin._settings_path(),
@@ -499,7 +555,33 @@ class Plugin:
                 tags_resp = urllib.request.urlopen(tags_req, timeout=tags_timeout)
                 tags_data = json.loads(tags_resp.read().decode("utf-8"))
                 models_local = [m.get("name", "?") for m in tags_data.get("models", [])]
-                return {"version": version_local, "models": models_local}
+
+                # /api/ps: currently loaded models + size_vram vs size (approximate GPU-visible weight share).
+                ps_snapshots: list[dict[str, Any]] = []
+                ps_timeout = max(0.25, deadline - time.time())
+                try:
+                    ps_req = urllib.request.Request(f"{base}/api/ps", method="GET")
+                    ps_resp = urllib.request.urlopen(ps_req, timeout=ps_timeout)
+                    ps_data = json.loads(ps_resp.read().decode("utf-8"))
+                    for m in ps_data.get("models", []) or []:
+                        name_m = str(m.get("name") or m.get("model") or "?")
+                        sz_b = int(m.get("size") or 0)
+                        vram_b = int(m.get("size_vram") or 0)
+                        ratio = None
+                        if sz_b > 0 and vram_b >= 0:
+                            ratio = round(100.0 * min(vram_b, sz_b) / sz_b, 1)
+                        ps_snapshots.append(
+                            {
+                                "name": name_m,
+                                "size_bytes": sz_b,
+                                "size_vram_bytes": vram_b,
+                                "vram_weight_share_pct_appx": ratio,
+                            }
+                        )
+                except Exception:
+                    ps_snapshots = []
+
+                return {"version": version_local, "models": models_local, "ps_loaded": ps_snapshots}
 
             tested = await asyncio.wait_for(
                 asyncio.to_thread(_test_connection_sync),
@@ -507,14 +589,80 @@ class Plugin:
             )
             version = str(tested.get("version", "unknown"))
             models = list(tested.get("models", []))
+            ps_loaded = list(tested.get("ps_loaded", []))
 
-            return {"reachable": True, "version": version, "models": models}
+            return {"reachable": True, "version": version, "models": models, "ps_loaded": ps_loaded}
         except Exception:
             logger.exception("test_ollama_connection failed")
             return {
                 "reachable": False,
                 "error": "Could not reach Ollama. Check PC IP, firewall, and that Ollama is running on the host.",
             }
+
+    async def start_local_ollama_setup(self, data: Any = None):
+        """Install/start Ollama on this Linux host and pull Tier-1 FOSS tags (runs in background)."""
+        plugin = Plugin._coerce_instance(self)
+        prof = ""
+        if isinstance(data, dict):
+            prof = str(data.get("profile", data.get("Profile", "")) or "").strip()
+        elif isinstance(data, str):
+            prof = data.strip()
+        settings = await plugin.load_settings()
+        if not settings.get("ollama_local_on_deck"):
+            return {
+                "accepted": False,
+                "reason": "Enable «Ollama on this Deck» in Settings → Connection first.",
+            }
+        if not is_valid_setup_pull_profile(prof):
+            return {
+                "accepted": False,
+                "reason": 'Invalid profile: use "starter" or "tier1_foss_full".',
+            }
+
+        async with plugin._local_ollama_setup_lock:
+            existing = plugin._local_ollama_setup_task
+            if existing is not None and not existing.done():
+                return {"accepted": False, "reason": "Setup already running."}
+
+            plugin._local_ollama_cancel_event = asyncio.Event()
+            plugin._local_ollama_cancel_event.clear()
+            new_st = new_local_ollama_setup_state()
+            new_st.update(
+                {
+                    "phase": "running",
+                    "done": False,
+                    "error": "",
+                    "accepted": True,
+                    "profile": prof,
+                }
+            )
+            plugin._local_ollama_setup_state = new_st
+
+            async def runner() -> None:
+                assert plugin._local_ollama_cancel_event is not None
+                await run_local_setup(
+                    profile=prof,
+                    state=plugin._local_ollama_setup_state,
+                    logger=logger,
+                    cancel_event=plugin._local_ollama_cancel_event,
+                )
+
+            plugin._local_ollama_setup_task = asyncio.create_task(runner())
+
+        return {"accepted": True}
+
+    async def get_local_ollama_setup_status(self):
+        """Return last status for the local Ollama installer (plain JSON dict)."""
+        plugin = Plugin._coerce_instance(self)
+        return dict(plugin._local_ollama_setup_state)
+
+    async def cancel_local_ollama_setup(self):
+        """Request cancellation of an in-progress setup (best-effort)."""
+        plugin = Plugin._coerce_instance(self)
+        ce = getattr(plugin, "_local_ollama_cancel_event", None)
+        if isinstance(ce, asyncio.Event):
+            ce.set()
+        return {"cancel_requested": True}
 
     async def list_recent_screenshots(self, app_id: str = "", limit: int = 5):
         """List recent screenshots with preview and app metadata for attachment browsing."""
@@ -710,24 +858,36 @@ class Plugin:
             ask_mode=ask_mode,
         )
         self._ensure_background_state()
+        plugin_bg = Plugin._coerce_instance(self)
+        bg_abort = getattr(plugin_bg, "_abort_current_ollama_chat", None)
+        if isinstance(bg_abort, threading.Event):
+            bg_abort.clear()
         async with self._background_lock:
             active_request_id = self._background_state.get("request_id")
             if active_request_id != request_id:
                 return
-            success = bool(result.get("success", False))
+            cancelled_rq = bool(result.get("cancelled"))
+            success = bool(result.get("success", False)) and not cancelled_rq
             response_text = str(result.get("response", "") or "No response text.")
+            if cancelled_rq:
+                terminal = "cancelled"
+            elif success:
+                terminal = "completed"
+            else:
+                terminal = "failed"
             self._background_state = {
                 **self._background_state,
-                "status": "completed" if success else "failed",
-                "success": success,
+                "status": terminal,
+                "success": success if not cancelled_rq else False,
                 "response": response_text,
                 "applied": result.get("applied"),
                 "elapsed_seconds": result.get("elapsed_seconds", 0),
-                "error": None if success else response_text,
+                "error": None if (success or cancelled_rq) else response_text,
                 "completed_at": time.time(),
                 "strategy_guide_branches": result.get("strategy_guide_branches"),
                 "model_policy_disclosure": result.get("model_policy_disclosure"),
                 "shortcut_setup": result.get("shortcut_setup"),
+                "cancelled": cancelled_rq,
             }
 
     async def start_background_game_ai(self, question: Any = "", PcIp: str = ""):
@@ -998,6 +1158,48 @@ class Plugin:
                     }
             return dict(plugin._background_state)
 
+    async def abort_background_game_ai(self):
+        """Frontend Stop: unblock in-flight urllib read(s); Ollama may stop once the TCP session closes."""
+        plugin = Plugin._coerce_instance(self)
+        plugin._ensure_background_state()
+        evt = getattr(plugin, "_abort_current_ollama_chat", None)
+        if isinstance(evt, threading.Event):
+            evt.set()
+            logger.info(
+                "abort_background_game_ai: stop requested — closing HTTP read; scheduling Ollama stop/unload"
+            )
+
+        wre = getattr(plugin, "_active_ollama_chat_http_response", None)
+        if wre is None:
+            ev = getattr(plugin, "_chat_resp_ready_evt", None)
+            if isinstance(ev, threading.Event):
+                ev.wait(timeout=1.5)
+                wre = getattr(plugin, "_active_ollama_chat_http_response", None)
+        if wre is not None:
+            try:
+                wre.close()
+                logger.info(
+                    "abort_background_game_ai: closed active urllib HTTP response (cross-thread unblock read)"
+                )
+            except Exception as exc:
+                logger.warning("abort_background_game_ai: close active HTTP response failed: %s", exc)
+
+        ipc = str(getattr(plugin, "_active_ollama_chat_pc_ip", None) or "").strip()
+        imodel = getattr(plugin, "_active_ollama_chat_model", None)
+
+        def _stop_bg() -> None:
+            try:
+                best_effort_abort_ollama_inference(
+                    pc_ip_field=ipc,
+                    model_name=imodel if isinstance(imodel, str) else None,
+                    logger=logger,
+                )
+            except Exception:
+                logger.exception("abort_background_game_ai: kill/unload helper failed")
+
+        threading.Thread(target=_stop_bg, name="bonsai-ollama-stop", daemon=True).start()
+        return {"ok": True}
+
     def _build_system_prompt(
         self,
         question: str,
@@ -1110,6 +1312,22 @@ class Plugin:
                 **ollama_extras,
             }
 
+        plugin_inst = Plugin._coerce_instance(self)
+        plugin_inst._ensure_background_state()
+
+        def _on_http_response_opened(resp: Any) -> None:
+            plugin_inst._active_ollama_chat_http_response = resp
+            ev = getattr(plugin_inst, "_chat_resp_ready_evt", None)
+            if isinstance(ev, threading.Event):
+                ev.set()
+
+        def _on_http_response_done() -> None:
+            plugin_inst._active_ollama_chat_http_response = None
+
+        _abort_ev = getattr(plugin_inst, "_abort_current_ollama_chat", None)
+        if isinstance(_abort_ev, threading.Event):
+            _abort_ev.clear()
+
         def _strip_ollama_http_body(payload: dict) -> dict:
             """Remove raw HTTP bodies from payloads returned to the UI / transparency (security)."""
             out = dict(payload)
@@ -1121,24 +1339,36 @@ class Plugin:
             last_failure = {"success": False, "response": "No model attempts executed.", **ollama_extras}
 
             for model_name in models_to_try:
-                result = await loop.run_in_executor(
-                    None,
-                    functools.partial(
-                        post_ollama_chat,
-                        url,
-                        model_name,
-                        messages,
-                        request_timeout_seconds,
-                        normalized_attachments,
-                        prepared_images,
-                        attachment_warnings,
-                        attachment_errors,
-                        logger,
-                        ask_mode,
-                        keep_alive,
-                    ),
-                )
+                plugin_inst._chat_resp_ready_evt = threading.Event()
+                plugin_inst._active_ollama_chat_pc_ip = str(PcIp or "").strip()
+                plugin_inst._active_ollama_chat_model = str(model_name)
+                try:
+                    result = await loop.run_in_executor(
+                        None,
+                        functools.partial(
+                            post_ollama_chat,
+                            url,
+                            model_name,
+                            messages,
+                            request_timeout_seconds,
+                            normalized_attachments,
+                            prepared_images,
+                            attachment_warnings,
+                            attachment_errors,
+                            logger,
+                            ask_mode,
+                            keep_alive,
+                            plugin_inst._abort_ollama_chat_check,
+                            on_http_response_opened=_on_http_response_opened,
+                            on_http_response_done=_on_http_response_done,
+                        ),
+                    )
+                finally:
+                    plugin_inst._active_ollama_chat_pc_ip = None
+                    plugin_inst._active_ollama_chat_model = None
                 merged = {**ollama_extras, **result}
+                if result.get("cancelled"):
+                    return {**_strip_ollama_http_body(merged), "model_policy_disclosure": None, "cancelled": True}
                 if result.get("success"):
                     disc = disclosure_for_model(str(result.get("model") or model_name))
                     return {**_strip_ollama_http_body(merged), "model_policy_disclosure": disc}
@@ -1149,19 +1379,30 @@ class Plugin:
                 is_model_not_found = "not found" in body and "model" in body
                 if is_model_not_found:
                     continue
-                return _strip_ollama_http_body(merged)
 
-            if requires_vision:
-                return {
-                    "success": False,
-                    "response": (
-                        "No vision-capable Ollama model was found for screenshot analysis. "
-                        "Install at least one multimodal model your Ask mode can use (e.g. gemma4:2b/4b, "
-                        "llava:7b, llama3.2-vision, qwen2.5vl, or larger tags listed for Strategy/Expert in "
-                        "docs/roadmap.md), then try again."
-                    ),
-                    **ollama_extras,
-                }
+                status = result.get("status")
+                oomish = any(
+                    s in body
+                    for s in (
+                        "out of memory",
+                        "failed to allocate",
+                        "resource exhausted",
+                        "cuda error",
+                        "vulkan",
+                    )
+                )
+                # Vision + large multimodal models often return HTTP 500 on OOM or internal runner errors; try next tag.
+                if requires_vision and (
+                    (isinstance(status, int) and status in (413, 500, 502, 503, 504)) or oomish
+                ):
+                    logger.warning(
+                        "ask_ollama: vision attempt failed status=%s model=%s — trying next fallback",
+                        status,
+                        model_name,
+                    )
+                    continue
+
+                return _strip_ollama_http_body(merged)
 
             return last_failure
         except Exception:

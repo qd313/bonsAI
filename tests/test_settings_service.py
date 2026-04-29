@@ -68,6 +68,7 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertEqual(sanitized["model_policy_tier"], "open_source_only")
         self.assertFalse(sanitized["model_policy_non_foss_unlocked"])
         self.assertFalse(sanitized["model_allow_high_vram_fallbacks"])
+        self.assertFalse(sanitized["ollama_local_on_deck"])
 
     def test_sanitize_model_policy_non_foss_requires_ack(self):
         """non_foss tier without unlock is downgraded to open_weight."""
@@ -270,6 +271,37 @@ class SettingsServiceTests(unittest.TestCase):
             default_ask_mode="speed",
         )
         self.assertFalse(garbled["input_sanitizer_user_disabled"])
+
+    def test_sanitize_ollama_local_on_deck_true_only_for_literal_true(self):
+        """Only JSON true routes to on-device Ollama; LAN field remains default off."""
+        on = sanitize_settings(
+            data={"ollama_local_on_deck": True},
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="persist_all",
+            valid_ask_modes={"speed", "strategy", "deep"},
+            default_ask_mode="speed",
+        )
+        self.assertTrue(on["ollama_local_on_deck"])
+        garbled = sanitize_settings(
+            data={"ollama_local_on_deck": "yes"},
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="persist_all",
+            valid_ask_modes={"speed", "strategy", "deep"},
+            default_ask_mode="speed",
+        )
+        self.assertFalse(garbled["ollama_local_on_deck"])
 
     def test_load_settings_grandfathers_capabilities_when_block_missing(self):
         """Legacy settings files without a capabilities object get all scopes enabled."""

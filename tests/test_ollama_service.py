@@ -1,9 +1,13 @@
+import json
 import unittest
+from unittest.mock import MagicMock, patch
 
 from backend.services.ollama_service import (
     append_deck_tdp_sysfs_grounding,
     build_system_prompt,
     format_ai_response,
+    post_ollama_chat,
+    request_ollama_stop_model_via_api,
     user_asks_ollama_bonsai_host_or_latency,
     user_wants_power_or_performance_topic,
 )
@@ -11,6 +15,83 @@ from backend.services.ollama_service import (
 
 class OllamaServiceTests(unittest.TestCase):
     """Service tests for prompt construction and response formatting contracts."""
+
+    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    def test_request_ollama_stop_model_via_api_posts_keep_alive_zero(
+        self, mock_urlopen: MagicMock
+    ) -> None:
+        """Emergency stop uses /api/generate keep_alive 0 — same unload contract as CLI ollama stop."""
+
+        class _Rsp:
+            def read(self, n: int = -1):
+                return b"{}"
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *a):
+                pass
+
+        mock_urlopen.return_value = _Rsp()
+        lg = MagicMock()
+        ok = request_ollama_stop_model_via_api("http://127.0.0.1:11434", "llama3:test", lg, timeout_seconds=10.0)
+        self.assertTrue(ok)
+        self.assertGreaterEqual(mock_urlopen.call_count, 1)
+        req_first = mock_urlopen.call_args[0][0]
+        self.assertIn("/api/generate", req_first.full_url)
+
+    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    def test_post_ollama_chat_streams_ndjson_deltas(
+        self, mock_urlopen: MagicMock
+    ) -> None:
+        """stream:true emits NDJSON lines; deltas aggregate to the same assistant text as buffered JSON."""
+        body = (
+            "\n".join(
+                [
+                    '{"message":{"role":"assistant","content":"Hell"}}',
+                    '{"message":{"role":"assistant","content":"o"},"done":true}',
+                ]
+            )
+            + "\n"
+        ).encode("utf-8")
+
+        idx = {"i": 0}
+
+        class _Rsp:
+            def read(self, n: int):
+                chunk = body[idx["i"] : idx["i"] + n]
+                idx["i"] += len(chunk)
+                return chunk
+
+            def close(self) -> None:
+                pass
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_):
+                pass
+
+        mock_urlopen.return_value = _Rsp()
+        lg = MagicMock()
+        out = post_ollama_chat(
+            "http://127.0.0.1:11434/api/chat",
+            "vision:test",
+            [{"role": "system", "content": "x"}],
+            60,
+            [],
+            [],
+            [],
+            [],
+            lg,
+            "speed",
+            "5m",
+            cancel_requested=lambda: False,
+        )
+        req = mock_urlopen.call_args[0][0]
+        self.assertTrue(json.loads(req.data.decode("utf-8")).get("stream"))
+        self.assertTrue(out.get("success"))
+        self.assertEqual(out.get("assistant_raw"), "Hello")
 
     def test_format_ai_response_appends_attachment_metadata(self):
         """Confirm attachment debug and error blocks are appended for UI diagnostics."""

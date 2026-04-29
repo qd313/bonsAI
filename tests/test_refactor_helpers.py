@@ -3,9 +3,12 @@ import unittest
 from refactor_helpers import (
     build_ollama_chat_url,
     is_current_tdp_read_intent,
+    is_valid_setup_pull_profile,
     normalize_ollama_base,
     parse_tdp_recommendation,
     select_ollama_models,
+    tier1_foss_recommended_pull_tags,
+    TIER1_FOSS_STARTER_PULL_TAGS,
 )
 
 
@@ -33,6 +36,29 @@ class RefactorHelperTests(unittest.TestCase):
             "http://10.0.0.2:11434/api/chat",
         )
 
+    def test_tier1_foss_recommended_pull_tags_starter(self):
+        starter = tier1_foss_recommended_pull_tags("starter")
+        self.assertEqual(starter, list(TIER1_FOSS_STARTER_PULL_TAGS))
+        self.assertEqual(len(starter), 2)
+
+    def test_tier1_foss_recommended_pull_tags_full_is_foss_union_superset_of_starter(self):
+        full = tier1_foss_recommended_pull_tags("tier1_foss_full")
+        starter = tier1_foss_recommended_pull_tags("starter")
+        self.assertGreater(len(full), len(starter))
+        self.assertTrue(set(starter).issubset(set(full)))
+        self.assertEqual(len(full), len(set(full)))
+        self.assertNotIn("llama3:latest", full)
+        self.assertNotIn("gemma4", full)
+
+    def test_tier1_foss_recommended_pull_tags_unknown_returns_empty(self):
+        self.assertEqual(tier1_foss_recommended_pull_tags("bogus"), [])
+
+    def test_is_valid_setup_pull_profile(self):
+        self.assertTrue(is_valid_setup_pull_profile("starter"))
+        self.assertTrue(is_valid_setup_pull_profile("tier1_foss_full"))
+        self.assertFalse(is_valid_setup_pull_profile("Starter"))
+        self.assertFalse(is_valid_setup_pull_profile(None))
+
     def test_select_ollama_models_text_and_vision(self):
         """FOSS-first safe chains; optional high-VRAM tail extends the list."""
         self.assertIn("llama3:latest", select_ollama_models(False))
@@ -41,8 +67,8 @@ class RefactorHelperTests(unittest.TestCase):
         self.assertEqual(select_ollama_models(False, "strategy")[0], "qwen2.5:latest")
         self.assertEqual(select_ollama_models(False, "deep")[0], "qwen2.5:14b")
         self.assertEqual(select_ollama_models(True, "speed")[0], "llava:7b")
-        self.assertEqual(select_ollama_models(True, "strategy")[0], "qwen2.5vl:latest")
-        self.assertEqual(select_ollama_models(True, "deep")[0], "qwen2.5vl:latest")
+        self.assertEqual(select_ollama_models(True, "strategy")[0], "llava:7b")
+        self.assertEqual(select_ollama_models(True, "deep")[0], "llava:7b")
         self.assertEqual(select_ollama_models(False, "invalid")[0], "qwen2.5:1.5b")
 
         safe_speed = select_ollama_models(False, "speed", False)

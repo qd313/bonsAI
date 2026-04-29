@@ -9,9 +9,11 @@ import {
   showModal,
   ConfirmModal,
 } from "@decky/ui";
+import { toaster } from "@decky/api";
 import {
   DEFAULT_LATENCY_WARNING_SECONDS,
   DEFAULT_REQUEST_TIMEOUT_SECONDS,
+  OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP,
   SCREENSHOT_ATTACHMENT_PRESET_OPTIONS,
   type OllamaKeepAliveDuration,
   type ScreenshotAttachmentPreset,
@@ -30,10 +32,52 @@ import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from 
 
 const TEST_CONNECTION_TIMEOUT_SECONDS = 10;
 
+const LOCAL_OLLAMA_SETUP_PROFILE_STARTER = "starter";
+const LOCAL_OLLAMA_SETUP_PROFILE_TIER1_FOSS_FULL = "tier1_foss_full";
+
+/** Shown in setup modals; align with `refactor_helpers.tier1_foss_recommended_pull_tags` sizes. */
+const OLLAMA_MODELS_DISK_HINT =
+  "Default model folder on this account: /home/deck/.ollama/models (override with the OLLAMA_MODELS environment variable if you moved the store).";
+const LOCAL_SETUP_SIZE_STARTER_GIB =
+  "Rough total download: about 5–10 GiB (typical Q4-style weights; exact size varies).";
+const LOCAL_SETUP_SIZE_TIER1_FULL_GIB =
+  "Rough total download: about 15–40 GiB (11 deduped pulls; shared layers reduce disk vs. adding each size naively; quant varies).";
+
+const LOCAL_SETUP_NETWORK_AND_POWER_HINT = (
+  <>
+    <div style={{ marginBottom: 8 }}>
+      Total time depends heavily on <span style={{ color: "#9ce7ff" }}>Wi‑Fi speed and disk</span>. You may close the
+      bonsAI plugin while downloads run as long as Ollama stays up; <span style={{ fontWeight: 700 }}>avoid</span>{" "}
+      suspending the Steam Deck, restarting, toggling network off, or powering down until pulls finish.
+    </div>
+    <div>Use AC power where possible for long Tier‑1 batches.</div>
+  </>
+);
+
+type LocalOllamaSetupStatus = {
+  phase: string;
+  stage: string;
+  profile: string;
+  pull_tags?: string[];
+  pull_step?: number;
+  total_pull_steps?: number;
+  current_tag?: string;
+  log_tail?: string[];
+  error?: string;
+  done?: boolean;
+};
+
 type ConnectionStatus = {
   reachable: boolean;
   version?: string;
   models?: string[];
+  /** Ollama /api/ps while models are loaded (size_vram vs size ≈ GPU-visible weight share). */
+  ps_loaded?: Array<{
+    name: string;
+    size_bytes: number;
+    size_vram_bytes: number;
+    vram_weight_share_pct_appx: number | null;
+  }>;
   error?: string;
 };
 
@@ -74,6 +118,8 @@ export type SettingsTabProps = {
   ollamaIp: string;
   onOllamaIpChange: (ip: string) => void;
   onPersistOllamaIp: (ip: string) => void;
+  ollamaLocalOnDeck: boolean;
+  setOllamaLocalOnDeck: (v: boolean) => void;
 
   latencyWarningSeconds: number;
   requestTimeoutSeconds: number;
@@ -121,6 +167,8 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   ollamaIp,
   onOllamaIpChange,
   onPersistOllamaIp,
+  ollamaLocalOnDeck,
+  setOllamaLocalOnDeck,
   latencyWarningSeconds,
   requestTimeoutSeconds,
   latencyTimeoutsCustomEnabled,
@@ -157,6 +205,9 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   const [deckIp, setDeckIp] = useState<string>("...");
   const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus | null>(null);
   const [connectionTesting, setConnectionTesting] = useState(false);
+  const [localSetupStatus, setLocalSetupStatus] = useState<LocalOllamaSetupStatus | null>(null);
+  const setupAutoTestRanRef = useRef(false);
+  const onTestConnectionRef = useRef<() => Promise<void>>(async () => {});
 
   const [accentIntensityMenuOpen, setAccentIntensityMenuOpen] = useState(false);
   const accentIntensityMenuAnchorRef = useRef<HTMLDivElement>(null);
@@ -166,6 +217,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   const ollamaKeepAliveThumbHostRef = useRef<HTMLDivElement>(null);
   const screenshotDimensionNavRef = useRef<HTMLDivElement>(null);
   const ollamaIpConnectionNavRef = useRef<HTMLDivElement>(null);
+  const ollamaLocalToggleNavRef = useRef<HTMLDivElement>(null);
   const latencyWarningThumbHostRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -179,24 +231,176 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   }, []);
 
   const onTestConnection = async () => {
-    const ip = ollamaIp.trim();
-    if (!ip) return;
+    const target = ollamaLocalOnDeck ? OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP : ollamaIp.trim();
+    if (!target) return;
     setConnectionTesting(true);
     setConnectionStatus(null);
     try {
       const result = await callDeckyWithTimeout<[string, number], ConnectionStatus>(
         "test_ollama_connection",
-        [ip, TEST_CONNECTION_TIMEOUT_SECONDS],
+        [target, TEST_CONNECTION_TIMEOUT_SECONDS],
         TEST_CONNECTION_TIMEOUT_SECONDS * 1000 + 3000
       );
       setConnectionStatus(result);
-      if (result.reachable) onPersistOllamaIp(ip);
+      if (result.reachable && !ollamaLocalOnDeck) onPersistOllamaIp(target);
     } catch (e: unknown) {
       setConnectionStatus({ reachable: false, error: formatDeckyRpcError(e) });
     } finally {
       setConnectionTesting(false);
     }
   };
+
+  onTestConnectionRef.current = onTestConnection;
+
+  const localSetupBusy = localSetupStatus?.phase === "running";
+
+  const formatLocalSetupStageLine = useCallback((st: LocalOllamaSetupStatus | null) => {
+    if (!st || st.phase !== "running") return "";
+    const stage = st.stage ?? "";
+    if (stage === "pull" && (st.total_pull_steps ?? 0) > 0) {
+      const cur = st.current_tag ? ` — ${st.current_tag}` : "";
+      return `Pull ${st.pull_step ?? 0}/${st.total_pull_steps}${cur}`;
+    }
+    const map: Record<string, string> = {
+      check: "Checking…",
+      install: "Installing Ollama…",
+      service: "Starting Ollama service…",
+      pull: "Pulling models…",
+      complete: "Finishing…",
+    };
+    return map[stage] || (stage ? `${stage}…` : "Working…");
+  }, []);
+
+  const cancelLocalSetup = useCallback(async () => {
+    try {
+      await callDeckyWithTimeout<[], { cancel_requested?: boolean }>("cancel_local_ollama_setup", [], 8000);
+    } catch {
+      /* best-effort */
+    }
+  }, []);
+
+  const openLocalSetupConfirm = useCallback(
+    (profile: typeof LOCAL_OLLAMA_SETUP_PROFILE_STARTER | typeof LOCAL_OLLAMA_SETUP_PROFILE_TIER1_FOSS_FULL) => {
+      if (localSetupBusy) return;
+      const isStarter = profile === LOCAL_OLLAMA_SETUP_PROFILE_STARTER;
+      onBeforeDeckyModal();
+      const handle = showModal(
+        <ConfirmModal
+          strTitle={isStarter ? "Set up starter models?" : "Pull full Tier‑1 FOSS set?"}
+          strDescription={
+            <div
+              className="bonsai-prose"
+              style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45, textAlign: "left" }}
+            >
+              {isStarter ? (
+                <>
+                  <div style={{ marginBottom: 8 }}>
+                    This downloads two README-sized models (<span style={{ color: "#9ce7ff" }}>text + vision</span>).{" "}
+                    {LOCAL_SETUP_SIZE_STARTER_GIB}
+                  </div>
+                  <div style={{ marginBottom: 8, color: "#c5d4e3" }}>{OLLAMA_MODELS_DISK_HINT}</div>
+                  {LOCAL_SETUP_NETWORK_AND_POWER_HINT}
+                  <div style={{ marginTop: 8 }}>
+                    Install uses the official script; if it fails in this environment, finish in Desktop Konsole and retry
+                    here for pulls only.
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div style={{ marginBottom: 8 }}>
+                    This pulls the full Tier‑1 FOSS union used by model chains: many consecutive downloads.{" "}
+                    {LOCAL_SETUP_SIZE_TIER1_FULL_GIB}
+                  </div>
+                  <div style={{ marginBottom: 8, color: "#c5d4e3" }}>{OLLAMA_MODELS_DISK_HINT}</div>
+                  {LOCAL_SETUP_NETWORK_AND_POWER_HINT}
+                  <div style={{ marginTop: 8 }}>
+                    Prefer stable Wi‑Fi; plan for long runtimes on slow links.
+                  </div>
+                </>
+              )}
+            </div>
+          }
+          strOKButtonText={isStarter ? "Start starter setup" : "Start full Tier‑1 pull"}
+          onOK={() => {
+            setupAutoTestRanRef.current = false;
+            onCompleteDeckyModalClose(() => handle.Close());
+            void callDeckyWithTimeout<
+              [{ profile: string }],
+              {
+                accepted?: boolean;
+                reason?: string;
+              }
+            >("start_local_ollama_setup", [{ profile }], 15000)
+              .then((out) => {
+                if (!out?.accepted) {
+                  toaster.toast({
+                    title: "Setup not started",
+                    body: out?.reason ?? "Unknown error.",
+                    duration: 6000,
+                  });
+                  return;
+                }
+                toaster.toast({
+                  title: "Local Ollama setup started",
+                  body: "Pulls continue in the background (Ollama). You may close bonsAI; avoid sleep, reboot, Wi‑Fi off, or power loss until pulls finish.",
+                  duration: 6000,
+                });
+                void callDeckyWithTimeout<[], LocalOllamaSetupStatus>("get_local_ollama_setup_status", [], DECKY_RPC_TIMEOUT_MS)
+                  .then(setLocalSetupStatus)
+                  .catch(() => {});
+              })
+              .catch((e: unknown) => {
+                toaster.toast({
+                  title: "Setup RPC failed",
+                  body: formatDeckyRpcError(e),
+                  duration: 6000,
+                });
+              });
+          }}
+          onCancel={() => onCompleteDeckyModalClose(() => handle.Close())}
+        />
+      );
+    },
+    [localSetupBusy, onBeforeDeckyModal, onCompleteDeckyModalClose]
+  );
+
+  useEffect(() => {
+    if (!ollamaLocalOnDeck) {
+      setLocalSetupStatus(null);
+      setupAutoTestRanRef.current = false;
+      return;
+    }
+    let id: number | undefined;
+    const poll = () => {
+      void callDeckyWithTimeout<[], LocalOllamaSetupStatus>(
+        "get_local_ollama_setup_status",
+        [],
+        DECKY_RPC_TIMEOUT_MS
+      )
+        .then(setLocalSetupStatus)
+        .catch(() => {});
+    };
+    poll();
+    id = window.setInterval(poll, 1500);
+    return () => window.clearInterval(id);
+  }, [ollamaLocalOnDeck]);
+
+  useEffect(() => {
+    if (!ollamaLocalOnDeck || !localSetupStatus) return;
+    if (localSetupStatus.phase === "running") {
+      setupAutoTestRanRef.current = false;
+      return;
+    }
+    if (localSetupStatus.phase === "done" && localSetupStatus.done !== false && !setupAutoTestRanRef.current && !(localSetupStatus.error ?? "").trim()) {
+      setupAutoTestRanRef.current = true;
+      toaster.toast({
+        title: "Local Ollama setup complete",
+        body: "Running connection test.",
+        duration: 4000,
+      });
+      void onTestConnectionRef.current();
+    }
+  }, [ollamaLocalOnDeck, localSetupStatus]);
 
   const toggleAccentIntensityMenu = useCallback(() => {
     if (accentIntensityMenuToggleOnceRef.current) return;
@@ -230,14 +434,23 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
     target.focus();
     return true;
   }, []);
-  const focusOllamaIpFromTimeoutSlider = useCallback((): boolean => {
+  /** When local Ollama is on, timeout slider D-pad up should not focus a disabled IP field. */
+  const focusOllamaRoutingFromTimeoutSlider = useCallback((): boolean => {
+    if (ollamaLocalOnDeck) {
+      const root = ollamaLocalToggleNavRef.current;
+      if (!root) return false;
+      const toggle = root.querySelector<HTMLElement>('button[role="switch"], [role="switch"], button');
+      if (!toggle) return false;
+      toggle.focus();
+      return true;
+    }
     const root = ollamaIpConnectionNavRef.current;
     if (!root) return false;
     const field = root.querySelector<HTMLElement>("input, textarea");
     if (!field) return false;
     field.focus();
     return true;
-  }, []);
+  }, [ollamaLocalOnDeck]);
   const focusSoftWarningFromScreenshot = useCallback((): boolean => {
     const host = latencyWarningThumbHostRef.current;
     if (!host) return false;
@@ -250,6 +463,183 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   return (
     <div className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight bonsai-settings-section-stack">
       <PanelSection title="Connection">
+        <PanelSectionRow>
+          <div
+            ref={ollamaLocalToggleNavRef}
+            className="bonsai-settings-bleed"
+            style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}
+          >
+            <ToggleField
+              label="Ollama on this Deck (local)"
+              checked={ollamaLocalOnDeck}
+              onChange={(c) => setOllamaLocalOnDeck(c)}
+            />
+            <div
+              className="bonsai-prose"
+              style={{
+                fontSize: 10,
+                color: "#9fb7d5",
+                lineHeight: 1.35,
+                marginTop: 4,
+                userSelect: "none",
+              }}
+            >
+              Off: use a PC on your LAN. On: Ollama runs on this device at {OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP}.
+            </div>
+          </div>
+        </PanelSectionRow>
+        {ollamaLocalOnDeck ? (
+          <PanelSectionRow>
+            <Focusable
+              className="bonsai-settings-bleed"
+              flow-children="vertical"
+              style={{
+                width: "100%",
+                maxWidth: "100%",
+                minWidth: 0,
+                display: "flex",
+                flexDirection: "column",
+                gap: 8,
+              }}
+            >
+              <div
+                className="bonsai-prose"
+                style={{ fontSize: 11, color: "#b8c6d6", fontWeight: 600, letterSpacing: "0.03em", userSelect: "none" }}
+              >
+                Local Ollama setup
+              </div>
+              <Focusable flow-children="horizontal" style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 8, width: "100%" }}>
+                <Button
+                  disabled={localSetupBusy}
+                  onClick={() => openLocalSetupConfirm(LOCAL_OLLAMA_SETUP_PROFILE_STARTER)}
+                  style={{
+                    flex: "1 1 140px",
+                    minHeight: 36,
+                    minWidth: 0,
+                    padding: "6px 8px",
+                    fontSize: 11,
+                    fontWeight: 600,
+                    borderRadius: 4,
+                    border: "1px solid rgba(255,255,255,0.22)",
+                    background: localSetupBusy
+                      ? "linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)"
+                      : "linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.05) 100%)",
+                    color: "#e8eef5",
+                  }}
+                  aria-label="Set up starter Ollama models"
+                >
+                  Starter (README)
+                </Button>
+                <Button
+                  disabled={localSetupBusy}
+                  onClick={() => openLocalSetupConfirm(LOCAL_OLLAMA_SETUP_PROFILE_TIER1_FOSS_FULL)}
+                  style={{
+                    flex: "1 1 160px",
+                    minHeight: 36,
+                    minWidth: 0,
+                    padding: "6px 8px",
+                    fontSize: 11,
+                    fontWeight: 600,
+                    borderRadius: 4,
+                    border: "1px solid rgba(251,146,60,0.45)",
+                    background: localSetupBusy
+                      ? "rgba(48,32,14,0.5)"
+                      : "linear-gradient(180deg, rgba(251,146,60,0.22) 0%, rgba(120,53,15,0.35) 100%)",
+                    color: "#fef3c7",
+                  }}
+                  aria-label="Pull full Tier-1 FOSS model set"
+                >
+                  Full Tier‑1 FOSS
+                </Button>
+                {localSetupBusy ? (
+                  <Button
+                    onClick={() => void cancelLocalSetup()}
+                    style={{
+                      flex: "0 1 auto",
+                      minHeight: 36,
+                      padding: "6px 10px",
+                      fontSize: 11,
+                      fontWeight: 600,
+                      borderRadius: 4,
+                      border: "1px solid rgba(248,113,113,0.45)",
+                      background: "rgba(48,24,26,0.65)",
+                      color: "#fecaca",
+                    }}
+                    aria-label="Cancel local Ollama setup"
+                  >
+                    Cancel
+                  </Button>
+                ) : null}
+              </Focusable>
+              {(localSetupStatus?.phase === "running" ||
+                (localSetupStatus?.log_tail?.length ?? 0) > 0 ||
+                localSetupStatus?.phase === "failed" ||
+                localSetupStatus?.phase === "cancelled") &&
+              localSetupStatus ? (
+                <>
+                  {localSetupStatus.phase === "running" ? (
+                    <div
+                      className="bonsai-settings-bleed"
+                      style={{
+                        fontSize: 11,
+                        color: "#9ce7ff",
+                        lineHeight: 1.4,
+                      }}
+                      aria-live="polite"
+                    >
+                      {formatLocalSetupStageLine(localSetupStatus)}
+                    </div>
+                  ) : null}
+                  {(localSetupStatus.phase === "failed" || localSetupStatus.phase === "cancelled") &&
+                  localSetupStatus.error ? (
+                    <div
+                      className="bonsai-prose bonsai-settings-bleed"
+                      style={{ fontSize: 11, color: "tomato", lineHeight: 1.35, whiteSpace: "pre-wrap" }}
+                      aria-live="polite"
+                    >
+                      {localSetupStatus.error}
+                    </div>
+                  ) : null}
+                  {(localSetupStatus.log_tail?.length ?? 0) > 0 ? (
+                    <pre
+                      className="bonsai-settings-bleed"
+                      style={{
+                        margin: 0,
+                        width: "100%",
+                        boxSizing: "border-box",
+                        maxHeight: 200,
+                        overflowY: "auto",
+                        fontFamily: "Consolas, 'Liberation Mono', monospace",
+                        fontSize: 10,
+                        lineHeight: 1.35,
+                        color: "#aab8ca",
+                        background: "rgba(8,14,22,0.85)",
+                        border: "1px solid rgba(72,98,124,0.35)",
+                        borderRadius: 4,
+                        padding: "8px 10px",
+                        whiteSpace: "pre-wrap",
+                        wordBreak: "break-word",
+                      }}
+                      tabIndex={0}
+                      aria-label="Local Ollama setup log"
+                    >
+                      {(localSetupStatus.log_tail ?? []).join("\n")}
+                    </pre>
+                  ) : localSetupBusy ? (
+                    <div className="bonsai-prose" style={{ fontSize: 10, color: "#6b7c90", userSelect: "none" }}>
+                      Setup is running. Log lines fill in as the installer or <code>ollama pull</code> prints output (first
+                      line can take a moment after you confirm).
+                    </div>
+                  ) : null}
+                </>
+              ) : (
+                <div className="bonsai-prose" style={{ fontSize: 10, color: "#6b7c90", userSelect: "none" }}>
+                  Install the official daemon, restart the service if needed, then pull models. Prefer stable Wi‑Fi.
+                </div>
+              )}
+            </Focusable>
+          </PanelSectionRow>
+        ) : null}
         <PanelSectionRow>
           <div
             ref={ollamaIpConnectionNavRef}
@@ -303,12 +693,18 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                   label=""
                   value={ollamaIp}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => onOllamaIpChange(e.target.value)}
-                  style={{ width: "100%", minWidth: 0, maxWidth: "100%" }}
+                  disabled={ollamaLocalOnDeck}
+                  style={{
+                    width: "100%",
+                    minWidth: 0,
+                    maxWidth: "100%",
+                    ...(ollamaLocalOnDeck ? { opacity: 0.55 } : undefined),
+                  }}
                 />
               </div>
               <Button
                 onClick={onTestConnection}
-                disabled={connectionTesting || !ollamaIp.trim()}
+                disabled={connectionTesting || localSetupBusy || (!ollamaLocalOnDeck && !ollamaIp.trim())}
                 style={{
                   flex: "1 1 auto",
                   alignSelf: "flex-end",
@@ -352,6 +748,46 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
             {connectionStatus.reachable ? (
               <div className="bonsai-settings-bleed" style={{ fontSize: 12, color: "#81c784" }}>
                 <div>Connected — Ollama v{connectionStatus.version}</div>
+                {connectionStatus.ps_loaded && connectionStatus.ps_loaded.length > 0 ? (
+                  <div className="bonsai-prose" style={{ color: "#b8dfe8", marginTop: 6, lineHeight: 1.4 }}>
+                    <div style={{ fontWeight: 600, marginBottom: 4 }}>
+                      Loaded now (GET /api/ps) — approximate GPU-visible weight share
+                    </div>
+                    {connectionStatus.ps_loaded.map((m) => (
+                      <div key={m.name} style={{ marginBottom: 6 }}>
+                        <span style={{ color: "#9ce7ff" }}>{m.name}</span>
+                        {m.vram_weight_share_pct_appx != null ? (
+                          <>
+                            {": "}
+                            <span style={{ fontVariantNumeric: "tabular-nums" }}>
+                              ~{m.vram_weight_share_pct_appx}% in GPU-visible VRAM ({m.size_vram_bytes} / {m.size_bytes}
+                              B)
+                            </span>
+                          </>
+                        ) : (
+                          <span style={{ color: "#9fb7d5" }}>: (no size split from Ollama)</span>
+                        )}
+                        {(m.size_vram_bytes === 0 ||
+                          (m.vram_weight_share_pct_appx != null && m.vram_weight_share_pct_appx <= 0)) && (
+                          <div style={{ fontSize: 10, color: "#7d8fa3", marginTop: 4 }}>
+                            Ollama reports no GPU-visible weight bytes here (<span style={{ color: "#9ce7ff" }}>size_vram</span>{" "}
+                            0 vs <span style={{ color: "#9ce7ff" }}>size</span>) — weights usually sit on CPU/system RAM
+                            offload, not a bonsAI bug.
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                    <div style={{ fontSize: 10, color: "#7d8fa3", marginTop: 6 }}>
+                      Low % with very long generations often means CPU-heavy offload. Press Test during an active Ask (model
+                      still loaded). Empty list here means nothing resident in Ollama memory yet.
+                    </div>
+                  </div>
+                ) : (
+                  <div className="bonsai-prose" style={{ color: "#7d8fa3", fontSize: 10, marginTop: 6, lineHeight: 1.38 }}>
+                    /api/ps: no models loaded in Ollama memory right now — tap Test during generation to see size vs
+                    size_vram.
+                  </div>
+                )}
                 {connectionStatus.models && connectionStatus.models.length > 0 && (
                   <div
                     className="bonsai-prose"
@@ -363,7 +799,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                       lineHeight: 1.35,
                     }}
                   >
-                    Models: {connectionStatus.models.join(", ")}
+                    Installed tags: {connectionStatus.models.join(", ")}
                   </div>
                 )}
               </div>
@@ -416,7 +852,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                 }}
                 warningThumbHostRef={latencyWarningThumbHostRef}
                 onMoveDownFromThumb={focusOllamaKeepAliveThumb}
-                onMoveUpFromTimeoutThumb={focusOllamaIpFromTimeoutSlider}
+                onMoveUpFromTimeoutThumb={focusOllamaRoutingFromTimeoutSlider}
               />
             </div>
           </PanelSectionRow>
@@ -445,7 +881,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
               onMoveUp={
                 latencyTimeoutsCustomEnabled
                   ? () => focusSoftWarningFromScreenshot()
-                  : () => focusOllamaIpFromTimeoutSlider()
+                  : () => focusOllamaRoutingFromTimeoutSlider()
               }
               onMoveDown={() => focusScreenshotMaxDimensionFromSlider()}
             />

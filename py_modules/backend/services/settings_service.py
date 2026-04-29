@@ -69,6 +69,11 @@ def sanitize_show_debug_tab(value: Any) -> bool:
     return value is True
 
 
+def sanitize_ollama_local_on_deck(value: Any) -> bool:
+    """Only explicit ``true`` routes Ask traffic to localhost Ollama on this device."""
+    return value is True
+
+
 def sanitize_model_allow_high_vram_fallbacks(value: Any) -> bool:
     """Only explicit ``true`` appends large-model tails to Ollama fallback chains."""
     return value is True
@@ -242,6 +247,7 @@ def sanitize_settings(
             default_ask_mode,
         ),
         "ollama_keep_alive": sanitize_ollama_keep_alive(raw.get("ollama_keep_alive")),
+        "ollama_local_on_deck": sanitize_ollama_local_on_deck(raw.get("ollama_local_on_deck")),
         "show_debug_tab": sanitize_show_debug_tab(raw.get("show_debug_tab")),
         "model_policy_tier": mp_tier,
         "model_policy_non_foss_unlocked": mp_unlock,

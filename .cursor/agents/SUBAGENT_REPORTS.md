@@ -154,24 +154,14 @@ No session archived
 
 <!-- Newest entries first. -->
 
-### 2026-04-30 - refactor batch implementation (refactor-specialist plan)
+### 2026-04-30 - security-auditor (full refresh + doc cleanup)
 
 ```text
-Scope: Capability grandfather test vs steam_web_api; main.py immediate background-command dedupe helpers; src/index.tsx composer + hooks under src/hooks/ and src/features/; ollama_prompts.py vs ollama_service.py with stable re-exports; tiered commentary pass (main/settings/game_ai_request, refactor_helpers, sensitive services, prompts/strategy/TDP, frontend deckyCall/settingsAndResponse/hooks/markdown chunk).
-Agents: refactor-specialist — docs/refactor-specialist-report.md; triage complete for this refactor batch.
+Scope: Whole-repo RPC/UI/log/error sinks, capability gates, subprocess and attachment paths; removed superseded subagent markdown snapshots.
+Agents: security-auditor — canonical deliverable docs/security-audit-report.md only (foss/refactor report files deleted per cleanup).
+Code: main.py — generic user message for failed background asyncio tasks (no str(exc) in RPC JSON).
 Red-team / blue-team: N/A.
-Tests: pnpm test (64); python scripts/run_python_tests.py (134 OK); scripts/build.ps1 — green.
-Risk triage: RPC and background state shapes preserved; any regression in those contracts is immediate-fix scope, not deferred cosmetic work.
-```
-
-### 2026-04-30 - foss-advocate + refactor-specialist (full codebase read)
-
-```text
-Scope: Whole-repo review for FOSS/transparency and maintainability hotspots (features + architecture).
-Agents: foss-advocate (confirmed findings only); refactor-specialist (structure + verification).
-Deliverables: docs/foss-advocate-report.md; docs/refactor-specialist-report.md.
-Tests this session: pnpm test — pass (64 tests). python scripts/run_python_tests.py — 1 failure (test_capabilities legacy grandfather vs steam_web_api=False); see refactor report.
-Ship/no-ship / red-blue: N/A.
+Tests: pnpm test (64 OK); python scripts/run_python_tests.py (134 OK).
 ```
 
 ### 2026-04-21 - Judge ruling handoff (red-blue-fight)

@@ -1,64 +1,105 @@
-# Security audit report (point-in-time)
+# Security audit report
 
-**Last reviewed:** 2026-04-21 (Phase 2 ship-week pass). **Prior review:** 2026-04-19. **Purpose:** track privacy and information-disclosure hazards in RPC, logs, and user-visible errors. Re-run after large refactors; line numbers drift.
+**Last reviewed:** 2026-04-30 (full pass). **Purpose:** confirmed privacy and information-disclosure hazards in RPC responses, logs, browser consoles, and sensitive-action gates—not hypothetical CVE-style speculation.
 
-**Legend:** **Open** = behavior still present as described. **Mitigated** = addressed in code; see note. **Partial** = reduced risk; follow-up noted.
+**Legend:** **Open** = behavior present and actionable. **Mitigated** = verified safe behavior or fixed in tree. **Partial** = reduced risk; optional hardening noted.
 
-**Phase 2 note:** Mitigations were triaged and implemented in-tree (RPC error shaping, logging redaction, Ollama HTTP handling, `body` stripping before UI-bound payloads). Optional follow-up: gate `console.error` traceback logging behind an explicit dev flag if contributors want quieter consoles.
-
----
-
-**Finding:** Decky RPC errors concatenate optional Python tracebacks into user-visible strings  
-**File:** [`src/index.tsx`](../src/index.tsx) (`formatDeckyRpcError`)  
-**Severity:** ★★★  
-**Status:** **Mitigated** — UI shows **message only**; tracebacks go to `console.error` with a fixed prefix so they are not concatenated into chat, toasts, or connection status.  
-**Attack vector:** (historical) Python RPC failures could attach `traceback`; that string was shown in the UI.  
-**Residual:** Anyone with DevTools open can still read `console.error` output (expected for local debugging).
+**Regression verification:** `pnpm test` — pass (64 tests). `python scripts/run_python_tests.py` — pass (134 tests). Ran after edits in this pass.
 
 ---
 
-**Finding:** INFO logs include full user question text via printf-style `%r`  
-**File:** [`main.py`](../main.py) (`_execute_game_ai_request`, `ask_ollama` logging)  
-**Severity:** ★★  
-**Status:** **Mitigated** — INFO lines now log **`question_len`** / **`question_len`** instead of `%r` question text.  
-**Attack vector:** (historical) Shared logs could leak prompts containing secrets.
+## Open findings
+
+No confirmed open findings after this review and the mitigation below.
 
 ---
 
-**Finding:** Unconditional browser console logging of LAN IP, game title, and full prompt  
-**File:** [`src/index.tsx`](../src/index.tsx) (Ask path)  
-**Severity:** ★★  
-**Status:** **Mitigated** — **Removed** the `console.log` that included PC IP, game name, and full question JSON.  
-**Attack vector:** (historical) Remote debugging or console observers could capture the same data.
+## Mitigated (verified 2026-04-30)
+
+Finding: Background asyncio task failure surfaced raw `str(exc)` in RPC/UI state  
+File: main.py:1333  
+Severity: ★★  
+Attack vector: Any bug causing `_run_background_game_ai` to raise would expose exception text (paths, library internals) in `get_background_game_ai_status` payloads consumed by the Main tab.  
+Specific fix: Use a fixed `_BACKGROUND_TASK_FAILED_USER_MESSAGE` for `response`/`error`; retain detail via `logger.exception` only (`main.py` `_BACKGROUND_TASK_FAILED_USER_MESSAGE`, ~112).  
+Status: **Mitigated** (2026-04-30).
+
+Finding: Decky RPC errors could concatenate Python tracebacks into user-visible strings  
+File: src/utils/deckyCall.ts:29  
+Severity: ★★★  
+Attack vector: Decky error objects carrying `traceback` would surface full stacks in chat/toasts if appended to the UI message.  
+Specific fix: `formatDeckyRpcError` returns `message`/`error` string only; logs traceback via `console.error` with a fixed prefix.  
+Status: **Mitigated**.
+
+Finding: INFO logs included full user question text  
+File: main.py:1047; py_modules/backend/services/game_ai_request.py:55  
+Severity: ★★  
+Attack vector: Shared journald/plugin logs could retain secrets typed into Ask.  
+Specific fix: Log `question_len` and types; avoid `%r` on question bodies.  
+Status: **Mitigated**.
+
+Finding: Unconditional browser logging of LAN IP, game title, and full Ask payload  
+File: src/index.tsx (Ask path)  
+Severity: ★★  
+Attack vector: Anyone with DevTools could read prompts and addressing metadata.  
+Specific fix: Removed sensitive `console.log` usage (no `console.log` in `src/` as of this pass).  
+Status: **Mitigated**.
+
+Finding: Ollama HTTP error bodies echoed into chat responses  
+File: py_modules/backend/services/ollama_service.py:496  
+Severity: ★★  
+Attack vector: Verbose upstream JSON/errors could fill the chat UI.  
+Specific fix: User-facing `response` is a short HTTP code + guidance string; `body` kept only on the internal dict for model detection and stripped before client merge (`main.py` `out.pop("body", None)` near ask path).  
+Status: **Mitigated**.
+
+Finding: Raw Python exception strings in RPC JSON for common failure paths  
+File: main.py; py_modules/backend/services/desktop_note_service.py:25  
+Severity: ★★  
+Attack vector: RPC consumers could display filesystem paths or stack fragments from `str(exc)`.  
+Specific fix: Desktop note writes map `OSError` to `DESKTOP_NOTE_WRITE_OS_ERROR_MESSAGE`; other RPC paths use curated strings where previously triaged.  
+Status: **Mitigated**.
+
+Finding: INFO logs included a prefix of model reply text  
+File: py_modules/backend/services/ollama_service.py:482  
+Severity: ★  
+Attack vector: Log leakage of assistant content.  
+Specific fix: Success path logs `model` and `response_len` only.  
+Status: **Mitigated**.
+
+Finding: Sensitive plugin actions without capability checks  
+File: main.py; py_modules/backend/services/capabilities.py  
+Severity: ★★★  
+Attack vector: Filesystem writes, media enumeration, hardware/TDP apply, Steam Web API outbound calls without explicit permission toggles.  
+Specific fix: `capability_enabled(settings, ...)` enforced before desktop notes, screenshots listing, TDP apply, VAC HTTP (`steam_web_api`), etc.  
+Status: **Mitigated** (re-verified gates present).
 
 ---
 
-**Finding:** Ollama HTTP error responses embed the full remote response body in the returned error string  
-**File:** [`backend/services/ollama_service.py`](../backend/services/ollama_service.py) (`HTTPError` path)  
-**Severity:** ★★  
-**Status:** **Mitigated** — User-facing `response` is a **short** HTTP code + model message; full body length is logged at **WARNING** without logging full body content by default. Raw `body` remains **only** on the in-memory `result` dict inside `ask_ollama` for model-not-found detection and is **stripped** (`body` key popped) before merging into payloads returned to callers / transparency.  
-**Attack vector:** (historical) Verbose server bodies could appear in the chat UI.
+## Partial / residual
 
----
+Finding: RPC success payloads may include absolute Desktop note paths  
+File: main.py:839  
+Severity: ★  
+Attack vector: With `filesystem_write` enabled, successful `append_desktop_*` RPCs return a full `path` (may include home directory/username). Local attacker or companion plugin with RPC access could observe layout.  
+Specific fix (optional): Return basename or a path relative to `~/Desktop/BonsAI_notes` only; omit `path` when UI does not need it.
 
-**Finding:** Raw Python exception text returned in multiple RPC JSON payloads  
-**File:** [`main.py`](../main.py) (`test_ollama_connection`, `list_recent_screenshots`, `_execute_game_ai_request` failure path, `ask_ollama` outer except); [`backend/services/desktop_note_service.py`](../backend/services/desktop_note_service.py) (`append_*_sync` helpers)  
-**Severity:** ★★  
-**Status:** **Mitigated** — Same RPC paths as 2026-04-21 Phase 2. **Desktop notes:** `OSError` from filesystem writes no longer surfaces `str(exc)` to the UI; [`desktop_note_service.py`](../backend/services/desktop_note_service.py) returns a fixed **`DESKTOP_NOTE_WRITE_OS_ERROR_MESSAGE`**, logs detail with **`logger.warning(..., exc_info=True)`**, and still returns **`str(exc)`** only for intentional **`ValueError`** validation (e.g. missing question text). [`main.py`](../main.py) continues to pass through the `error` string from the sync helper result.
+Finding: Python tracebacks still reachable in the browser console  
+File: src/utils/deckyCall.ts:31  
+Severity: ★  
+Attack vector: Developer tooling / attached debugger sees `console.error(..., traceback)`. Expected for local debugging.  
+Specific fix (optional): Gate verbose traceback logging behind an explicit dev flag.
 
----
-
-**Finding:** INFO logs include first 200 characters of model reply text  
-**File:** [`backend/services/ollama_service.py`](../backend/services/ollama_service.py) (success path logging)  
-**Severity:** ★  
-**Status:** **Mitigated** — success path logs **model name and `response_len` only** (no content prefix).
+Finding: Steam Web API key sent as HTTPS query parameter  
+File: py_modules/backend/services/steam_vac_service.py:95  
+Severity: ★  
+Attack vector: Valve’s API shape places the key in the URL; corporate HTTPS proxies that log URLs could retain key material (infrastructure-dependent).  
+Specific fix: Document operational risk; rely on user Permissions toggle + key hygiene; no alternative HTTP shape documented by Valve for `GetPlayerBans`.
 
 ---
 
 ## Revision log
 
-| Date | Summary |
-|------|---------|
-| 2026-04-19 | Initial report (five findings, all open). |
-| 2026-04-21 | Phase 2: mitigations landed as above; partial remaining on desktop-note `error` passthrough. |
-| 2026-04-21 | Desktop note `OSError` responses sanitized in `desktop_note_service.py`; `ValueError` validation text unchanged. |
+| Date       | Summary                                                                 |
+| ---------- | ----------------------------------------------------------------------- |
+| 2026-04-30 | Full pass; refreshed mitigations; fixed background-task exception leak. |
+| 2026-04-21 | Phase 2 triage (prior snapshot superseded by this document).            |
+| 2026-04-19 | Initial documented findings (prior snapshot superseded).                  |

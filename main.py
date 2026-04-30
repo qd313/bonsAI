@@ -108,6 +108,11 @@ from refactor_helpers import (
 
 logger = decky.logger
 
+# User-visible when a background asyncio task dies unexpectedly; never embed ``str(exc)`` (paths/internals).
+_BACKGROUND_TASK_FAILED_USER_MESSAGE = (
+    "Backend error: something went wrong while processing your request. Details were logged on the device."
+)
+
 # Sentinel: sanitizer immediate-complete path omits ``shortcut_setup`` from state/response; VAC sets state only.
 _OMIT_SHORTCUT_SETUP_FIELD = object()
 
@@ -1325,8 +1330,8 @@ class Plugin:
                         **plugin._background_state,
                         "status": "failed",
                         "success": False,
-                        "response": f"Backend error: {exc}",
-                        "error": f"Backend error: {exc}",
+                        "response": _BACKGROUND_TASK_FAILED_USER_MESSAGE,
+                        "error": _BACKGROUND_TASK_FAILED_USER_MESSAGE,
                         "completed_at": time.time(),
                         "strategy_guide_branches": None,
                         "model_policy_disclosure": None,

@@ -7,6 +7,8 @@ import {
   DEFAULT_CAPABILITIES,
   DEFAULT_OLLAMA_KEEP_ALIVE,
   DEFAULT_SCREENSHOT_ATTACHMENT_PRESET,
+  DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT,
+  DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED,
   normalizeLatencyWarningSeconds,
   normalizeRequestTimeoutSeconds,
   normalizeSettings,
@@ -199,6 +201,8 @@ describe("settingsAndResponse", () => {
       modelPolicyNonFossUnlocked: false,
       modelAllowHighVramFallbacks: true,
       ollamaLocalOnDeck: true,
+      strategySpoilerMaskingEnabled: false,
+      strategySpoilerAutoRevealAfterConsent: true,
     });
     expect(p.latency_warning_seconds).toBe(20);
     expect(p.request_timeout_seconds).toBe(150);
@@ -210,6 +214,8 @@ describe("settingsAndResponse", () => {
     expect(p.model_allow_high_vram_fallbacks).toBe(true);
     expect(p.ollama_local_on_deck).toBe(true);
     expect(p.attach_proton_logs_when_troubleshooting).toBe(true);
+    expect(p.strategy_spoiler_masking_enabled).toBe(false);
+    expect(p.strategy_spoiler_auto_reveal_after_consent).toBe(true);
   });
 
   it("toBonsaiSettingsPayload merges patch over base (character picker path)", () => {
@@ -237,6 +243,8 @@ describe("settingsAndResponse", () => {
       modelPolicyNonFossUnlocked: false,
       modelAllowHighVramFallbacks: false,
       ollamaLocalOnDeck: false,
+      strategySpoilerMaskingEnabled: DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED,
+      strategySpoilerAutoRevealAfterConsent: DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT,
     };
     const p = toBonsaiSettingsPayload(base, {
       ai_character_random: false,

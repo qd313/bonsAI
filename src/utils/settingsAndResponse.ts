@@ -92,6 +92,10 @@ export type BonsaiSettings = {
   model_allow_high_vram_fallbacks: boolean;
   /** When true, route Ollama to this device only (fixed 127.0.0.1:11434); LAN PC IP field ignored for Ask/Test. */
   ollama_local_on_deck: boolean;
+  /** When false, Strategy ```bonsai-spoiler``` blocks render as visible text (no tap-to-reveal). Default on. */
+  strategy_spoiler_masking_enabled: boolean;
+  /** When true, spoiler blocks start expanded after the user consented on that Ask (still collapsible). */
+  strategy_spoiler_auto_reveal_after_consent: boolean;
 };
 
 /** Fields mirrored from React state / hook before `save_settings` RPC. */
@@ -119,6 +123,8 @@ export type BonsaiSettingsSnapshotInput = {
   modelPolicyNonFossUnlocked: boolean;
   modelAllowHighVramFallbacks: boolean;
   ollamaLocalOnDeck: boolean;
+  strategySpoilerMaskingEnabled: boolean;
+  strategySpoilerAutoRevealAfterConsent: boolean;
 };
 
 /** Build the backend `BonsaiSettings` object; optional `patch` for immediate saves (character picker, permissions). */
@@ -150,6 +156,8 @@ export function toBonsaiSettingsPayload(
     model_policy_non_foss_unlocked: input.modelPolicyNonFossUnlocked,
     model_allow_high_vram_fallbacks: input.modelAllowHighVramFallbacks,
     ollama_local_on_deck: input.ollamaLocalOnDeck,
+    strategy_spoiler_masking_enabled: input.strategySpoilerMaskingEnabled,
+    strategy_spoiler_auto_reveal_after_consent: input.strategySpoilerAutoRevealAfterConsent,
   };
   return patch ? { ...base, ...patch } : base;
 }
@@ -186,6 +194,8 @@ export const OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP = "127.0.0.1:11434";
 export const DEFAULT_MODEL_POLICY_NON_FOSS_UNLOCKED = false;
 export const DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS = false;
 export const DEFAULT_ASK_MODE: AskModeId = "speed";
+export const DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED = true;
+export const DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT = false;
 export { DEFAULT_OLLAMA_KEEP_ALIVE };
 export type { ModelPolicyTierId };
 export { DEFAULT_MODEL_POLICY_TIER } from "../data/modelPolicy";
@@ -350,6 +360,15 @@ export function normalizeOllamaLocalOnDeck(value: unknown): boolean {
   return value === true;
 }
 
+export function normalizeStrategySpoilerMaskingEnabled(value: unknown): boolean {
+  if (value === false) return false;
+  return DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED;
+}
+
+export function normalizeStrategySpoilerAutoRevealAfterConsent(value: unknown): boolean {
+  return value === true;
+}
+
 const _askModeSet = new Set<string>(ASK_MODE_IDS);
 
 export function normalizeAskMode(value: unknown): AskModeId {
@@ -451,6 +470,10 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     model_policy_non_foss_unlocked: modelPolicy.model_policy_non_foss_unlocked,
     model_allow_high_vram_fallbacks: normalizeModelAllowHighVramFallbacks(raw.model_allow_high_vram_fallbacks),
     ollama_local_on_deck: normalizeOllamaLocalOnDeck(raw.ollama_local_on_deck),
+    strategy_spoiler_masking_enabled: normalizeStrategySpoilerMaskingEnabled(raw.strategy_spoiler_masking_enabled),
+    strategy_spoiler_auto_reveal_after_consent: normalizeStrategySpoilerAutoRevealAfterConsent(
+      raw.strategy_spoiler_auto_reveal_after_consent
+    ),
   };
 }
 

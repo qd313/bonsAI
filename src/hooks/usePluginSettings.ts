@@ -23,6 +23,8 @@ import {
   DEFAULT_REQUEST_TIMEOUT_SECONDS,
   DEFAULT_SCREENSHOT_ATTACHMENT_PRESET,
   DEFAULT_SHOW_DEBUG_TAB,
+  DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT,
+  DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED,
   DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
   normalizeLatencyWarningSeconds,
   normalizeRequestTimeoutSeconds,
@@ -86,6 +88,12 @@ export function usePluginSettings() {
     DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS
   );
   const [ollamaLocalOnDeck, setOllamaLocalOnDeck] = useState<boolean>(DEFAULT_OLLAMA_LOCAL_ON_DECK);
+  const [strategySpoilerMaskingEnabled, setStrategySpoilerMaskingEnabled] = useState<boolean>(
+    DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED
+  );
+  const [strategySpoilerAutoRevealAfterConsent, setStrategySpoilerAutoRevealAfterConsent] = useState<boolean>(
+    DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT
+  );
   const [settingsLoaded, setSettingsLoaded] = useState(false);
 
   const hydrateFromSettings = useCallback((saved: BonsaiSettings) => {
@@ -113,6 +121,8 @@ export function usePluginSettings() {
     setModelPolicyNonFossUnlocked(normalized.model_policy_non_foss_unlocked);
     setModelAllowHighVramFallbacks(normalized.model_allow_high_vram_fallbacks);
     setOllamaLocalOnDeck(normalized.ollama_local_on_deck);
+    setStrategySpoilerMaskingEnabled(normalized.strategy_spoiler_masking_enabled);
+    setStrategySpoilerAutoRevealAfterConsent(normalized.strategy_spoiler_auto_reveal_after_consent);
   }, []);
 
   useEffect(() => {
@@ -144,6 +154,8 @@ export function usePluginSettings() {
         setModelPolicyNonFossUnlocked(normalized.model_policy_non_foss_unlocked);
         setModelAllowHighVramFallbacks(normalized.model_allow_high_vram_fallbacks);
         setOllamaLocalOnDeck(normalized.ollama_local_on_deck);
+        setStrategySpoilerMaskingEnabled(normalized.strategy_spoiler_masking_enabled);
+        setStrategySpoilerAutoRevealAfterConsent(normalized.strategy_spoiler_auto_reveal_after_consent);
       })
       .catch(() => {
         if (cancelled) return;
@@ -170,6 +182,8 @@ export function usePluginSettings() {
         setModelPolicyNonFossUnlocked(false);
         setModelAllowHighVramFallbacks(DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS);
         setOllamaLocalOnDeck(DEFAULT_OLLAMA_LOCAL_ON_DECK);
+        setStrategySpoilerMaskingEnabled(DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED);
+        setStrategySpoilerAutoRevealAfterConsent(DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT);
       })
       .finally(() => {
         if (!cancelled) setSettingsLoaded(true);
@@ -208,6 +222,8 @@ export function usePluginSettings() {
           modelPolicyNonFossUnlocked,
           modelAllowHighVramFallbacks,
           ollamaLocalOnDeck,
+          strategySpoilerMaskingEnabled,
+          strategySpoilerAutoRevealAfterConsent,
         })
       ).catch((err) => {
         console.error("save_settings failed", err);
@@ -238,6 +254,8 @@ export function usePluginSettings() {
     modelPolicyNonFossUnlocked,
     modelAllowHighVramFallbacks,
     ollamaLocalOnDeck,
+    strategySpoilerMaskingEnabled,
+    strategySpoilerAutoRevealAfterConsent,
     settingsLoaded,
   ]);
 
@@ -278,6 +296,10 @@ export function usePluginSettings() {
     setModelAllowHighVramFallbacks,
     ollamaLocalOnDeck,
     setOllamaLocalOnDeck,
+    strategySpoilerMaskingEnabled,
+    setStrategySpoilerMaskingEnabled,
+    strategySpoilerAutoRevealAfterConsent,
+    setStrategySpoilerAutoRevealAfterConsent,
     settingsLoaded,
     setLatencyWarningSeconds,
     setRequestTimeoutSeconds,

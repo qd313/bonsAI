@@ -9,6 +9,7 @@ from backend.services.ollama_service import (
     post_ollama_chat,
     request_ollama_stop_model_via_api,
     user_asks_ollama_bonsai_host_or_latency,
+    user_consents_strategy_spoilers,
     user_wants_power_or_performance_topic,
 )
 
@@ -177,6 +178,8 @@ class OllamaServiceTests(unittest.TestCase):
             ask_mode="strategy",
         )
         self.assertIn("STRATEGY GUIDE MODE (active — first turn)", prompt)
+        self.assertIn("STRATEGY SPOILER POLICY (default)", prompt)
+        self.assertIn("bonsai-spoiler", prompt)
         self.assertIn("bonsai-strategy-branches", prompt)
         self.assertIn("DECK POWER / TDP (strategy first turn)", prompt)
         self.assertNotIn("IMPORTANT: When you recommend or apply a TDP or GPU clock change", prompt)
@@ -204,6 +207,8 @@ class OllamaServiceTests(unittest.TestCase):
             ask_mode="strategy",
         )
         self.assertIn("STRATEGY GUIDE MODE (active — follow-up turn)", prompt)
+        self.assertIn("STRATEGY SPOILER POLICY (default)", prompt)
+        self.assertIn("bonsai-spoiler", prompt)
         self.assertIn("If you want to cheat", prompt)
         self.assertIn("CONCRETE solo-player examples", prompt)
         self.assertIn("Do NOT output a", prompt)
@@ -500,6 +505,32 @@ class OllamaServiceTests(unittest.TestCase):
     def test_fps_wants_power_not_ollama_host(self):
         self.assertTrue(user_wants_power_or_performance_topic("What is my fps?"))
         self.assertFalse(user_asks_ollama_bonsai_host_or_latency("What is my fps?"))
+
+    def test_build_system_prompt_strategy_spoiler_consent_opt_in(self):
+        def lookup_app_name(_app_id: str) -> str:
+            return ""
+
+        def lookup_vdf(_path: str) -> dict:
+            return {}
+
+        prompt = build_system_prompt(
+            question="Stuck",
+            app_id="",
+            app_name="",
+            normalized_attachments=[],
+            prepared_images=[],
+            lookup_app_name=lookup_app_name,
+            lookup_screenshot_vdf_metadata=lookup_vdf,
+            ask_mode="strategy",
+            strategy_spoiler_consent=True,
+        )
+        self.assertIn("STRATEGY SPOILER POLICY (user opted in)", prompt)
+        self.assertNotIn("STRATEGY SPOILER POLICY (default)", prompt)
+
+    def test_user_consents_strategy_spoilers_phrases(self):
+        self.assertTrue(user_consents_strategy_spoilers("full spoilers please"))
+        self.assertTrue(user_consents_strategy_spoilers("Spoilers are okay"))
+        self.assertFalse(user_consents_strategy_spoilers("no spoilers please"))
 
 
 if __name__ == "__main__":

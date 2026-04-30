@@ -13,6 +13,7 @@ from backend.services.input_sanitizer_service import apply_input_sanitizer_lane
 from backend.services.ollama_service import (
     question_matches_troubleshooting_log_context,
     user_asks_ollama_bonsai_host_or_latency,
+    user_consents_strategy_spoilers,
     user_wants_power_or_performance_topic,
 )
 from backend.services.proton_troubleshooting_logs import collect_proton_troubleshooting_logs
@@ -38,6 +39,7 @@ async def run_game_ai_request(
     app_name: str = "",
     attachments: Optional[list] = None,
     ask_mode: str = "speed",
+    spoiler_consent: bool = False,
 ) -> dict:
     """Run one full ask lifecycle, including Ollama call timing and optional TDP application."""
     start = time.time()
@@ -93,7 +95,7 @@ async def run_game_ai_request(
                     "proton_log_notes": "",
                 }
             )
-            return {**out, "model_policy_disclosure": None, "strategy_guide_branches": None}
+            return {**out, "model_policy_disclosure": None, "strategy_guide_branches": None, "strategy_spoiler_consent_effective": False}
 
         atts = attachments or []
         if atts and not capability_enabled(settings, "media_library_access"):
@@ -139,6 +141,7 @@ async def run_game_ai_request(
                 "elapsed_seconds": elapsed,
                 "strategy_guide_branches": None,
                 "model_policy_disclosure": None,
+                "strategy_spoiler_consent_effective": False,
             }
 
         user_sanitizer_disabled = bool(settings.get("input_sanitizer_user_disabled"))
@@ -184,6 +187,7 @@ async def run_game_ai_request(
                 "elapsed_seconds": elapsed,
                 "strategy_guide_branches": None,
                 "model_policy_disclosure": None,
+                "strategy_spoiler_consent_effective": False,
             }
         question_for_model = lane.text
 
@@ -232,6 +236,12 @@ async def run_game_ai_request(
 
             pre_cap = await _loop.run_in_executor(None, _read_cap)
 
+        strategy_spoiler_consent_effective = False
+        if ask_mode == "strategy":
+            strategy_spoiler_consent_effective = bool(spoiler_consent) or user_consents_strategy_spoilers(
+                question_for_model
+            )
+
         ollama_result = await plugin.ask_ollama(
             question_for_model,
             pc_ip,
@@ -245,6 +255,7 @@ async def run_game_ai_request(
             tdp_cap_w=pre_cap,
             proton_log_attachment=proton_attachment_text or None,
             proton_log_transparency=proton_log_transparency,
+            strategy_spoiler_consent=strategy_spoiler_consent_effective,
         )
         elapsed = round(time.time() - start, 1)
         base_response_text = str(ollama_result.get("response", "") or "No response text.")
@@ -333,6 +344,10 @@ async def run_game_ai_request(
             "elapsed_seconds": elapsed,
             "strategy_guide_branches": ollama_result.get("strategy_guide_branches"),
             "model_policy_disclosure": ollama_result.get("model_policy_disclosure"),
+            "strategy_spoiler_consent_effective": bool(
+                ollama_result.get("strategy_spoiler_consent_effective", False)
+            ),
+            "preset_carousel_inject": ollama_result.get("preset_carousel_inject"),
         }
     except Exception:
         elapsed = round(time.time() - start, 1)
@@ -380,4 +395,5 @@ async def run_game_ai_request(
             "elapsed_seconds": elapsed,
             "strategy_guide_branches": None,
             "model_policy_disclosure": None,
+            "strategy_spoiler_consent_effective": False,
         }

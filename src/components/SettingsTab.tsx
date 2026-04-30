@@ -162,6 +162,11 @@ export type SettingsTabProps = {
   attachProtonLogsWhenTroubleshooting: boolean;
   setAttachProtonLogsWhenTroubleshooting: (v: boolean) => void;
 
+  strategySpoilerMaskingEnabled: boolean;
+  setStrategySpoilerMaskingEnabled: (v: boolean) => void;
+  strategySpoilerAutoRevealAfterConsent: boolean;
+  setStrategySpoilerAutoRevealAfterConsent: (v: boolean) => void;
+
   onOpenCharacterPicker: () => void;
   onBeforeDeckyModal: () => void;
   onCompleteDeckyModalClose: (close: () => void) => void;
@@ -205,6 +210,10 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   setDesktopAskVerboseLogging,
   attachProtonLogsWhenTroubleshooting,
   setAttachProtonLogsWhenTroubleshooting,
+  strategySpoilerMaskingEnabled,
+  setStrategySpoilerMaskingEnabled,
+  strategySpoilerAutoRevealAfterConsent,
+  setStrategySpoilerAutoRevealAfterConsent,
   onOpenCharacterPicker,
   onBeforeDeckyModal,
   onCompleteDeckyModalClose,
@@ -1019,6 +1028,24 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
             description="Off: no crossfade when suggestion chips update (re-seed after Ask unchanged)."
             checked={presetChipFadeAnimationEnabled}
             onChange={(checked) => setPresetChipFadeAnimationEnabled(checked)}
+          />
+        </PanelSectionRow>
+      </PanelSection>
+      <PanelSection title="Strategy Guide">
+        <PanelSectionRow>
+          <ToggleField
+            label="Spoiler tap-to-reveal"
+            description="On: fenced bonsai-spoiler blocks stay collapsed until you show them. Off: show that text inline (no masking)."
+            checked={strategySpoilerMaskingEnabled}
+            onChange={(checked) => setStrategySpoilerMaskingEnabled(checked)}
+          />
+        </PanelSectionRow>
+        <PanelSectionRow>
+          <ToggleField
+            label="Expand spoilers after consent"
+            description="When you opt in (toggle or wording), start with spoiler sections open; you can still collapse them."
+            checked={strategySpoilerAutoRevealAfterConsent}
+            onChange={(checked) => setStrategySpoilerAutoRevealAfterConsent(checked)}
           />
         </PanelSectionRow>
       </PanelSection>

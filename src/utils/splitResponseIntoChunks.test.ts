@@ -26,4 +26,12 @@ describe("splitResponseIntoChunks", () => {
     const c = splitResponseIntoChunks(t);
     expect(c).toEqual([t.trim()]);
   });
+
+  it("keeps bonsai-spoiler fence intact across internal blank lines", () => {
+    const t = "Hint here.\n\n```bonsai-spoiler\nBoss: Ganon\n\nPhase 2: ...\n```\n\nAfter.";
+    const c = splitResponseIntoChunks(t);
+    expect(c.length).toBeGreaterThanOrEqual(1);
+    const spoilerChunk = c.find((x) => x.includes("bonsai-spoiler") && x.includes("Phase 2"));
+    expect(spoilerChunk).toBeDefined();
+  });
 });

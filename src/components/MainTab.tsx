@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { toaster } from "@decky/api";
-import { PanelSection, PanelSectionRow, TextField, Button, Focusable } from "@decky/ui";
+import { PanelSection, PanelSectionRow, TextField, Button, Focusable, Router, ToggleField } from "@decky/ui";
 import type { PresetPrompt } from "../data/presets";
 import { MainTabPresetAnimatedChips } from "./MainTabPresetAnimatedChips";
 import {
@@ -49,6 +49,7 @@ import {
 } from "../data/modelPolicy";
 import { MainTabAskModeMenuPopover } from "./MainTabAskModeMenuPopover";
 import { MainTabBonsaiAiMarkdownChunk } from "./MainTabBonsaiAiMarkdownChunk";
+import { joinPresetWithRunningGame } from "../utils/joinPresetWithRunningGame";
 
 const BONSAI_CHAT_AI_MAX_WIDTH_CSS = `min(${Math.round(BONSAI_CHAT_AI_BUBBLE_MAX_FRAC * 100)}%, 100%)`;
 
@@ -138,10 +139,19 @@ type BonsaiChatAiBubbleProps = {
   panelHalfPx: number;
   expanded: boolean;
   onExpandedChange: (next: boolean) => void;
+  spoilerMaskingEnabled: boolean;
+  spoilerDefaultExpandedForReply: boolean;
 };
 
 function BonsaiChatAiBubble(props: BonsaiChatAiBubbleProps) {
-  const { responseChunks, panelHalfPx, expanded, onExpandedChange } = props;
+  const {
+    responseChunks,
+    panelHalfPx,
+    expanded,
+    onExpandedChange,
+    spoilerMaskingEnabled,
+    spoilerDefaultExpandedForReply,
+  } = props;
   const innerRef = useRef<HTMLDivElement>(null);
   const collapsed = !expanded;
   const lineCapEm = `${(BONSAI_CHAT_TRANSCRIPT_FONT_PX * BONSAI_CHAT_TRANSCRIPT_LINE_HEIGHT + 2) / BONSAI_CHAT_TRANSCRIPT_FONT_PX}em`;
@@ -187,7 +197,11 @@ function BonsaiChatAiBubble(props: BonsaiChatAiBubbleProps) {
               style={{ width: "100%", minWidth: 0, boxSizing: "border-box" }}
             >
               <div className="bonsai-ai-response-chunk">
-                <MainTabBonsaiAiMarkdownChunk source={chunk} />
+                <MainTabBonsaiAiMarkdownChunk
+                  source={chunk}
+                  spoilerMaskingEnabled={spoilerMaskingEnabled}
+                  spoilerDefaultExpanded={spoilerDefaultExpandedForReply}
+                />
               </div>
             </Focusable>
           ))}
@@ -293,6 +307,12 @@ export type MainTabProps = {
   shortcutSetupVariant?: "deck" | "stadia" | null;
   /** Opens Steam Controller settings (External/Steam nav permission). */
   onOpenControllerSettings?: () => void;
+  strategySpoilerMaskingEnabled?: boolean;
+  strategySpoilerDefaultExpandedForReply?: boolean;
+  strategySpoilerConsentForNextAsk?: boolean;
+  onStrategySpoilerConsentForNextAskChange?: (next: boolean) => void;
+  /** Pyro easter egg: backend-injected suggestion chip (not in normal preset pool). */
+  presetCarouselInject?: { text: string } | null;
 };
 
 export function MainTab(props: MainTabProps) {
@@ -368,6 +388,11 @@ export function MainTab(props: MainTabProps) {
     onOpenModelPolicyReadme,
     shortcutSetupVariant = null,
     onOpenControllerSettings,
+    strategySpoilerMaskingEnabled = true,
+    strategySpoilerDefaultExpandedForReply = false,
+    strategySpoilerConsentForNextAsk = false,
+    onStrategySpoilerConsentForNextAskChange,
+    presetCarouselInject = null,
   } = props;
 
   const [transparencyOpen, setTransparencyOpen] = useState(false);
@@ -599,6 +624,26 @@ export function MainTab(props: MainTabProps) {
               fadeAnimationEnabled={presetChipFadeAnimationEnabled}
               onPreferAskMode={onPresetPreferAskMode}
             />
+            {presetCarouselInject?.text?.trim() ? (
+              <Button
+                className="bonsai-preset-glass bonsai-pyro-inject-chip"
+                focusable
+                onClick={() => {
+                  const gameName = Router.MainRunningApp?.display_name ?? "";
+                  const t = presetCarouselInject.text.trim();
+                  setUnifiedInput(gameName ? joinPresetWithRunningGame(t, gameName) : t);
+                }}
+                style={{
+                  width: "100%",
+                  minHeight: 34,
+                  fontSize: 12,
+                  color: "#c4d3e2",
+                }}
+                aria-label="Agent tip suggestion"
+              >
+                {presetCarouselInject.text.trim()}
+              </Button>
+            ) : null}
           </div>
         </PanelSectionRow>
         <PanelSectionRow>
@@ -1031,6 +1076,16 @@ export function MainTab(props: MainTabProps) {
             </div>
           </div>
         </PanelSectionRow>
+        {askMode === "strategy" && (
+          <PanelSectionRow>
+            <ToggleField
+              label="Spoilers OK for this Ask"
+              description="Also works if you say spoilers are okay in your message."
+              checked={strategySpoilerConsentForNextAsk}
+              onChange={(checked) => onStrategySpoilerConsentForNextAskChange?.(checked)}
+            />
+          </PanelSectionRow>
+        )}
         {selectedAttachment && (
           <PanelSectionRow>
             <div
@@ -1498,6 +1553,8 @@ export function MainTab(props: MainTabProps) {
                   panelHalfPx={panelHalfPx}
                   expanded={expandedAi}
                   onExpandedChange={setExpandedAi}
+                  spoilerMaskingEnabled={strategySpoilerMaskingEnabled}
+                  spoilerDefaultExpandedForReply={strategySpoilerDefaultExpandedForReply}
                 />
                 {askThreadViewIndex === null && shortcutSetupVariant && onOpenControllerSettings && (
                   <div

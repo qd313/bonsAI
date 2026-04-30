@@ -70,6 +70,8 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertFalse(sanitized["model_policy_non_foss_unlocked"])
         self.assertFalse(sanitized["model_allow_high_vram_fallbacks"])
         self.assertFalse(sanitized["ollama_local_on_deck"])
+        self.assertTrue(sanitized["strategy_spoiler_masking_enabled"])
+        self.assertFalse(sanitized["strategy_spoiler_auto_reveal_after_consent"])
 
     def test_sanitize_model_policy_non_foss_requires_ack(self):
         """non_foss tier without unlock is downgraded to open_weight."""

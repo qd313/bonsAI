@@ -32,7 +32,7 @@ Use the **Touched area** column to extend §1; prefer the narrowest tests first.
 | `backend/services/settings_service.py`, `settingsAndResponse.ts`, Settings UI | `tests/test_settings_service.py`, `src/utils/settingsAndResponse.test.ts` | Change a setting, reload plugin, confirm persistence ([prompt-testing.md](prompt-testing.md) release notes for recent Settings features). |
 | `backend/services/ollama_service.py`, `refactor_helpers.py` | `tests/test_ollama_service.py`, `tests/test_refactor_helpers.py` | One Ask per changed mode; verify model routing / errors ([prompt-testing.md](prompt-testing.md)). |
 | `backend/services/desktop_note_service.py` | `tests/test_desktop_note_service.py` | With filesystem capability on: save note / auto-save if touched; confirm no raw path in error toast. |
-| `backend/services/ai_character_service.py`, character UI | `tests/test_ai_character_service.py`, catalog/accent tests under `src/data/` | Character picker open/close, accent chip, one Ask with character on. |
+| `backend/services/ai_character_service.py`, character UI | `tests/test_ai_character_service.py`, catalog/accent tests under `src/data/` | Character picker open/close, accent chip, one Ask with character on. **Pyro easter egg (optional):** AI character on, choose Pyro (or Random until Pyro); after a successful Ask, confirm whether the extra orange **agent tip** chip appears (probabilistic ~30%), tap fills input, chip clears on next Ask or **Reset session cache**; three rotating chips may rest while inject stays focusable. |
 | `backend/services/capabilities.py`, Permissions UI | `tests/test_capabilities.py` | Toggle capability; confirm blocked action toast when off. |
 | `src/components/MainTab.tsx`, unified input | `pnpm test` (utils/data) | **§3** items for unified input, overlay, D-pad scroll. |
 | `src/index.tsx` tabs, CSS, RPC wiring | Full §1 + §3 | Tab order, Settings sections, focus after modal. |
@@ -55,7 +55,7 @@ Run after **`scripts/build.ps1`** or **`scripts/build.sh`** succeeds. Check **Pa
 - [ ] **TextField**: type, wrap, caret visible; no horizontal drift vs native baseline after edits.
 - [ ] **Ask** sends; stop/clear behavior still sensible if your change touches ask state.
 - [ ] **D-pad**: each AI reply **chunk** is its own focus stop; move down through chunks and confirm the **last** chunk receives focus and is readable (regression target for long replies).
-- [ ] **Question overlay** (if shown): alignment acceptable vs `TextField` (known minor drift).
+- [ ] **Preset row:** three rotating suggestion chips behave as before; optional **Pyro / character QA** — with AI character **Pyro** (or Random), after replies, watch for an extra orange-outlined **agent tip** chip (stochastic); confirm it fills the Ask field when selected and disappears on the next Ask or **Settings → Advanced → Reset session cache**.
 
 ### Settings (post–Phase 4 sections)
 
@@ -109,6 +109,7 @@ Model-quality, strategy/TDP rows, and sanitizer checks live in **[prompt-testing
 
 | Date | Change |
 |------|--------|
+| 2026-04-30 | Main tab: Pyro talent-manager inject chip manual QA note (see §2 character row); roadmap marks feature shipped pending device pass. |
 | 2026-04-30 | Permissions: optional Steam/Proton log attachment smoke → [prompt-testing.md](prompt-testing.md) § Proton / Steam log attachment (QA). |
 | 2026-04-26 | §5 Release / clean install proof + zip QA log table ([roadmap](roadmap.md) release process). |
 | 2026-04-21 | Phase 6: initial standing matrix + Deck smoke checklist ([ship-week cleanup](roadmap.md)). |

@@ -69,6 +69,16 @@ def sanitize_input_sanitizer_user_disabled(value: Any) -> bool:
     return value is True
 
 
+def sanitize_strategy_spoiler_masking_enabled(value: Any) -> bool:
+    """Strategy ```bonsai-spoiler``` tap-to-reveal is on unless the user explicitly saves ``false``."""
+    return value is not False
+
+
+def sanitize_strategy_spoiler_auto_reveal_after_consent(value: Any) -> bool:
+    """Only explicit ``true`` expands spoiler blocks by default after an opted-in Ask."""
+    return value is True
+
+
 def sanitize_show_debug_tab(value: Any) -> bool:
     """Only explicit ``true`` shows the Debug tab; default is hidden."""
     return value is True
@@ -263,6 +273,12 @@ def sanitize_settings(
         "model_policy_non_foss_unlocked": mp_unlock,
         "model_allow_high_vram_fallbacks": sanitize_model_allow_high_vram_fallbacks(
             raw.get("model_allow_high_vram_fallbacks")
+        ),
+        "strategy_spoiler_masking_enabled": sanitize_strategy_spoiler_masking_enabled(
+            raw.get("strategy_spoiler_masking_enabled")
+        ),
+        "strategy_spoiler_auto_reveal_after_consent": sanitize_strategy_spoiler_auto_reveal_after_consent(
+            raw.get("strategy_spoiler_auto_reveal_after_consent")
         ),
     }
 

@@ -14,9 +14,74 @@ from urllib.parse import urlparse
 from refactor_helpers import normalize_ollama_base
 
 from backend.services.strategy_guide_parse import (
+    STRATEGY_FOLLOWUP_PREFIX,
     extract_strategy_guide_branches,
     is_strategy_followup_question,
 )
+
+
+def user_consents_strategy_spoilers(question: str) -> bool:
+    """True when sanitized user text (plus optional branch prefix strip) signals spoiler permission."""
+    raw = (question or "").strip()
+    if not raw:
+        return False
+    if raw.startswith(STRATEGY_FOLLOWUP_PREFIX):
+        raw = raw[len(STRATEGY_FOLLOWUP_PREFIX) :].lstrip()
+    s = raw.lower()
+    needles = (
+        "spoilers are okay",
+        "spoilers are ok",
+        "spoiler ok",
+        "spoilers okay",
+        "full spoilers",
+        "i want spoilers",
+        "spoil me",
+        "spoilers allowed",
+        "unrestricted spoilers",
+        "spoilers are fine",
+        "okay to spoil",
+        "ok to spoil",
+        "spoilers welcome",
+    )
+    return any(n in s for n in needles)
+
+
+def _strategy_spoiler_policy_block(consent: bool, followup: bool) -> str:
+    """Injected after STRATEGY GUIDE MODE header; defines ```bonsai-spoiler fences and ordering."""
+    if consent:
+        lines = (
+            "STRATEGY SPOILER POLICY (user opted in): The user explicitly consented to spoilers for this turn "
+            "(plugin toggle and/or their wording). Give direct walkthrough detail, names, and puzzle solutions as needed. "
+            "You may still wrap optional ultra-sensitive notes in ```bonsai-spoiler ... ``` fences, "
+            "but it is not required for normal tactics.\n"
+        )
+        if not followup:
+            lines += (
+                "On this first turn, the ```bonsai-strategy-branches fence remains the last characters of the reply; "
+                "place any optional ```bonsai-spoiler blocks above it only.\n\n"
+            )
+        else:
+            lines += "\n"
+        return lines
+    if followup:
+        return (
+            "STRATEGY SPOILER POLICY (default): Coaching is spoiler-minimized unless the user opted in. "
+            "Avoid story endings, major twists, and precise puzzle or boss spoilers in plain text. "
+            "Put spoilery narrative only inside ```bonsai-spoiler ... ``` fences "
+            "(opening line exactly ```bonsai-spoiler, closing ``` on its own line). "
+            "These fences may appear anywhere in this reply. "
+            "Even under **If you want to cheat…**, keep spoilery plot or ending detail inside ```bonsai-spoiler "
+            "when the user has not opted in.\n\n"
+        )
+    return (
+        "STRATEGY SPOILER POLICY (default): Coaching is spoiler-minimized by default; say so briefly in your opening. "
+        "Avoid story endings, major twists, late-game boss names, and exact puzzle solutions in plain text unless "
+        "essential for branching; prefer vague labels until the player picks a branch.\n"
+        "Put unavoidably spoilery detail only inside ```bonsai-spoiler ... ``` fences "
+        "(opening line exactly ```bonsai-spoiler).\n"
+        "On this first turn, every ```bonsai-spoiler block must appear **above** the opening ```bonsai-strategy-branches line; "
+        "the branch fence must still close the reply — no characters after its closing ```.\n\n"
+    )
 
 # Smaller than 64KiB so Stop re-checks ``cancel_requested`` more often while ``read()`` blocks on slow streams.
 OLLAMA_CHAT_READ_CHUNK = 4096
@@ -318,6 +383,7 @@ def build_system_prompt(
     lookup_screenshot_vdf_metadata: Callable[[str], dict],
     ask_mode: str = "speed",
     early_context_suffix: str = "",
+    strategy_spoiler_consent: bool = False,
 ) -> str:
     """Build the system message used for Ollama requests from game and attachment context.
 
@@ -448,9 +514,11 @@ def build_system_prompt(
     model_policy_q = _user_asks_model_policy_tiers_explainer(question)
     power_topic = user_wants_power_or_performance_topic(question)
     followup = is_strategy_followup_question(question)
+    spoiler_policy = _strategy_spoiler_policy_block(strategy_spoiler_consent, followup)
     if followup:
         strategy_block = (
             "\n\nSTRATEGY GUIDE MODE (active — follow-up turn):\n"
+            f"{spoiler_policy}"
             "The user's message begins with the plugin's branch selection prefix. They already chose where they are stuck.\n"
             "Give direct, controller-first coaching for that exact beat on a Steam Deck (gamepad; short steps; pause-friendly; no PC keyboard assumptions).\n"
             "Do NOT output a ```bonsai-strategy-branches block on this turn.\n"
@@ -465,6 +533,7 @@ def build_system_prompt(
     else:
         strategy_block = (
             "\n\nSTRATEGY GUIDE MODE (active — first turn):\n"
+            f"{spoiler_policy}"
             "You are a patient coach for someone playing on a Steam Deck (assume gamepad). Use plain spoken language; short steps; avoid jargon unless you explain it.\n"
             "Infer game title and rough progress from the user's text and any screenshots; state uncertainty honestly.\n"
             "After a brief orientation (no spoilers beyond what is needed to branch), you MUST end the reply with exactly one fenced block so the UI can show choices. "

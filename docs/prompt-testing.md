@@ -70,6 +70,7 @@ Deterministic **Ask** commands: `bonsai:shortcut-setup-deck` and `bonsai:shortcu
 - Settings: opt-in **AI character** with fullscreen picker (work-title sections, Random, custom line, OK/Cancel).
 - Backend: `ai_character_service` appends a concise roleplay instruction to the **system** message; TDP JSON contract unchanged.
 - Suggested checks: enable + pick a known preset (e.g. Jackie Welles) and confirm tone shifts while answers stay English and concise; enable **Random** and confirm variation across Asks; custom text only; toggle off and confirm neutral assistant tone returns.
+- **Pyro talent-manager easter egg (shipped):** With **Pyro** selected or **Random** resolving to Pyro, voice is a Hollywood-style manager parody; some successful Asks include a structured carousel inject and Main shows an extra orange-outlined **agent tip** chip (probabilistic). Full device steps: [regression-and-smoke.md](regression-and-smoke.md) §2 (character row) and §3 Main tab.
 
 ### 2026-04-13 - Global Screenshots and Vision (V1) Completed
 - Added screenshot attachment flow with fullscreen recent-screenshot browser, thumbnail previews, and controller-first navigation.
@@ -285,6 +286,9 @@ Status note:
 - [x] Mark PASS/PARTIAL/FAIL for each step above and capture screenshots/log snippets for any failures.
 
 ### Spoiler Policy and Consent
+
+**Verification note (2026-04-30):** Shipped UI + prompt/RPC: `STRATEGY SPOILER POLICY` and `bonsai-spoiler` fenced blocks in strategy system prompt; `spoiler_consent` payload + conservative phrase detection on sanitized text; Settings **Strategy Guide** (tap-to-reveal + expand-after-consent); main-tab **Spoilers OK for this Ask** when mode is Strategy; backend echoes `strategy_spoiler_consent_effective` for the auto-expand path. Automated: `tests/test_ollama_service.py`, `npm test`, `npm run test:py` green. **On-device:** complete the checklist rows below and record Pass/Partial/Fail.
+
 - [ ] First strategy answer includes best-effort "no spoilers by default" disclosure.
 - [ ] Without explicit permission, response avoids direct puzzle/boss/story spoilers.
 - [ ] With explicit user permission ("spoilers are okay"), unrestricted guidance is allowed.

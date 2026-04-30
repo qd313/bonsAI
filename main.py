@@ -5,6 +5,7 @@ import functools
 import ipaddress
 import json
 import os
+import random
 import re
 import socket
 import struct
@@ -22,7 +23,13 @@ PLUGIN_ROOT = os.path.dirname(os.path.abspath(__file__))
 if PLUGIN_ROOT not in sys.path:
     sys.path.insert(0, PLUGIN_ROOT)
 
-from backend.services.ai_character_service import build_roleplay_system_suffix
+from backend.services.ai_character_service import (
+    PYRO_MANAGER_TIP_LINES,
+    PYRO_MANAGER_TIP_PROBABILITY,
+    PYRO_PRESET_ID,
+    build_roleplay_system_suffix_meta,
+    pyro_manager_carousel_tip_addon,
+)
 from backend.services.ollama_service import (
     append_deck_tdp_sysfs_grounding,
     best_effort_abort_ollama_inference,
@@ -215,6 +222,7 @@ class Plugin:
             "completed_at": None,
             "strategy_guide_branches": None,
             "model_policy_disclosure": None,
+            "preset_carousel_inject": None,
         }
 
     def _ensure_background_state(self) -> None:
@@ -241,12 +249,21 @@ class Plugin:
             self._chat_resp_ready_evt = None
 
     @staticmethod
-    def _parse_ask_payload(question: Any, PcIp: str) -> Tuple[str, str, str, str, list, str]:
+    def _coerce_payload_bool(value: Any) -> bool:
+        if value is True:
+            return True
+        if isinstance(value, str) and value.strip().lower() in ("true", "1", "yes"):
+            return True
+        return False
+
+    @staticmethod
+    def _parse_ask_payload(question: Any, PcIp: str) -> Tuple[str, str, str, str, list, str, bool]:
         """Normalize ask payload variants into canonical question/ip/context values."""
         app_id = ""
         app_name = ""
         attachments: list = []
         ask_mode_raw: Any = None
+        spoiler_consent_raw: Any = None
         if isinstance(question, dict):
             payload = question
             question = payload.get("question", "")
@@ -255,10 +272,12 @@ class Plugin:
             app_name = str(payload.get("appName", "") or "").strip()
             attachments = Plugin._sanitize_attachments(payload.get("attachments", []))
             ask_mode_raw = payload.get("askMode", payload.get("ask_mode", ask_mode_raw))
+            spoiler_consent_raw = payload.get("spoiler_consent", payload.get("spoilerConsent", spoiler_consent_raw))
         normalized_question = str(question or "").strip()
         normalized_pc_ip = str(PcIp or "").strip()
         ask_mode = sanitize_ask_mode(ask_mode_raw, Plugin.VALID_ASK_MODES, Plugin.DEFAULT_ASK_MODE)
-        return normalized_question, normalized_pc_ip, app_id, app_name, attachments, ask_mode
+        spoiler_consent = Plugin._coerce_payload_bool(spoiler_consent_raw)
+        return normalized_question, normalized_pc_ip, app_id, app_name, attachments, ask_mode, spoiler_consent
 
     @staticmethod
     def _sanitize_attachments(raw_attachments: Any) -> list:
@@ -865,6 +884,7 @@ class Plugin:
         app_name: str = "",
         attachments: Optional[list] = None,
         ask_mode: str = "speed",
+        spoiler_consent: bool = False,
     ) -> dict:
         """Run one full ask lifecycle, including Ollama call timing and optional TDP application."""
         plugin = Plugin._coerce_instance(self)
@@ -876,13 +896,14 @@ class Plugin:
             app_name,
             attachments=attachments,
             ask_mode=ask_mode,
+            spoiler_consent=spoiler_consent,
         )
 
     async def ask_game_ai(self, question: Any = "", PcIp: str = ""):
         """Handle foreground ask RPCs and validate required inputs before execution."""
         logger.info("ask_game_ai: RPC entry (arg type=%s)", type(question).__name__)
-        parsed_question, pc_ip, app_id, app_name, attachments, ask_mode = Plugin._parse_ask_payload(
-            question, PcIp
+        parsed_question, pc_ip, app_id, app_name, attachments, ask_mode, spoiler_consent = (
+            Plugin._parse_ask_payload(question, PcIp)
         )
         if not parsed_question:
             logger.info("ask_game_ai: rejected (empty question)")
@@ -899,7 +920,13 @@ class Plugin:
             logger.info("ask_game_ai: rejected (empty pc_ip)")
             return Plugin._reject_ask_request("PC IP Address is required.", app_id=app_id)
         return await self._execute_game_ai_request(
-            parsed_question, pc_ip, app_id, app_name, attachments=attachments, ask_mode=ask_mode
+            parsed_question,
+            pc_ip,
+            app_id,
+            app_name,
+            attachments=attachments,
+            ask_mode=ask_mode,
+            spoiler_consent=spoiler_consent,
         )
 
     async def _run_background_request(
@@ -911,6 +938,7 @@ class Plugin:
         app_name: str,
         attachments: Optional[list] = None,
         ask_mode: str = "speed",
+        spoiler_consent: bool = False,
     ) -> None:
         """Execute a queued background request and publish terminal status for polling clients."""
         result = await self._execute_game_ai_request(
@@ -920,6 +948,7 @@ class Plugin:
             app_name,
             attachments=attachments or [],
             ask_mode=ask_mode,
+            spoiler_consent=spoiler_consent,
         )
         self._ensure_background_state()
         plugin_bg = Plugin._coerce_instance(self)
@@ -950,8 +979,10 @@ class Plugin:
                 "completed_at": time.time(),
                 "strategy_guide_branches": result.get("strategy_guide_branches"),
                 "model_policy_disclosure": result.get("model_policy_disclosure"),
+                "strategy_spoiler_consent_effective": result.get("strategy_spoiler_consent_effective"),
                 "shortcut_setup": result.get("shortcut_setup"),
                 "cancelled": cancelled_rq,
+                "preset_carousel_inject": result.get("preset_carousel_inject"),
             }
 
     async def start_background_game_ai(self, question: Any = "", PcIp: str = ""):
@@ -960,8 +991,8 @@ class Plugin:
         plugin._ensure_background_state()
 
         logger.info("start_background_game_ai: RPC entry (arg type=%s)", type(question).__name__)
-        parsed_question, pc_ip, app_id, app_name, attachments, ask_mode = Plugin._parse_ask_payload(
-            question, PcIp
+        parsed_question, pc_ip, app_id, app_name, attachments, ask_mode, spoiler_consent = (
+            Plugin._parse_ask_payload(question, PcIp)
         )
         app_context = "active" if app_id else "none"
         if not parsed_question:
@@ -1081,6 +1112,7 @@ class Plugin:
                         "completed_at": now,
                         "strategy_guide_branches": None,
                         "model_policy_disclosure": None,
+                        "preset_carousel_inject": None,
                     }
                     plugin._background_task = None
                     return {
@@ -1145,6 +1177,7 @@ class Plugin:
                         "strategy_guide_branches": None,
                         "model_policy_disclosure": None,
                         "shortcut_setup": variant,
+                        "preset_carousel_inject": None,
                     }
                     plugin._background_task = None
                     return {
@@ -1178,6 +1211,7 @@ class Plugin:
                 "completed_at": None,
                 "strategy_guide_branches": None,
                 "model_policy_disclosure": None,
+                "preset_carousel_inject": None,
             }
             plugin._background_task = asyncio.create_task(
                 plugin._run_background_request(
@@ -1188,6 +1222,7 @@ class Plugin:
                     app_name,
                     attachments=attachments,
                     ask_mode=ask_mode,
+                    spoiler_consent=spoiler_consent,
                 )
             )
 
@@ -1219,6 +1254,7 @@ class Plugin:
                         "completed_at": time.time(),
                         "strategy_guide_branches": None,
                         "model_policy_disclosure": None,
+                        "preset_carousel_inject": None,
                     }
             return dict(plugin._background_state)
 
@@ -1277,6 +1313,7 @@ class Plugin:
         tdp_grounding_requested: bool = False,
         tdp_cap_w: Optional[int] = None,
         proton_log_attachment: Optional[str] = None,
+        strategy_spoiler_consent: bool = False,
     ) -> str:
         """Build the system prompt using plugin-local metadata lookups and attachment context."""
         proton = (proton_log_attachment or "").strip()
@@ -1290,6 +1327,7 @@ class Plugin:
             lookup_screenshot_vdf_metadata=lookup_screenshot_vdf_metadata,
             ask_mode=ask_mode,
             early_context_suffix=proton,
+            strategy_spoiler_consent=strategy_spoiler_consent,
         )
         return append_deck_tdp_sysfs_grounding(
             base,
@@ -1313,6 +1351,7 @@ class Plugin:
         tdp_cap_w: Optional[int] = None,
         proton_log_attachment: Optional[str] = None,
         proton_log_transparency: Optional[dict] = None,
+        strategy_spoiler_consent: bool = False,
     ):
         """Orchestrate attachment prep, prompt assembly, and model fallback request execution."""
         url = self._build_ollama_chat_url(PcIp)
@@ -1342,8 +1381,16 @@ class Plugin:
             tdp_grounding_requested=tdp_grounding_requested,
             tdp_cap_w=tdp_cap_w,
             proton_log_attachment=proton_log_attachment,
+            strategy_spoiler_consent=strategy_spoiler_consent,
         )
-        roleplay = build_roleplay_system_suffix(settings, ask_mode)
+        rp_meta = build_roleplay_system_suffix_meta(settings, ask_mode)
+        roleplay = rp_meta.suffix
+        preset_carousel_inject = None
+        if rp_meta.resolved_preset_id == PYRO_PRESET_ID and roleplay:
+            if random.random() < PYRO_MANAGER_TIP_PROBABILITY:
+                tip = random.choice(PYRO_MANAGER_TIP_LINES)
+                roleplay = roleplay + pyro_manager_carousel_tip_addon(tip)
+                preset_carousel_inject = {"text": tip}
         if roleplay:
             # Lead with voice instructions so they are not diluted after the long bonsAI system preamble.
             system_content = roleplay.strip() + "\n\n" + system_content
@@ -1365,6 +1412,7 @@ class Plugin:
             "proton_log_excerpt_attached": proton_excerpt,
             "proton_log_sources": proton_sources,
             "proton_log_notes": proton_notes,
+            "strategy_spoiler_consent_effective": bool(strategy_spoiler_consent) if ask_mode == "strategy" else False,
         }
 
         logger.info(
@@ -1449,7 +1497,10 @@ class Plugin:
                     return {**_strip_ollama_http_body(merged), "model_policy_disclosure": None, "cancelled": True}
                 if result.get("success"):
                     disc = disclosure_for_model(str(result.get("model") or model_name))
-                    return {**_strip_ollama_http_body(merged), "model_policy_disclosure": disc}
+                    out = {**_strip_ollama_http_body(merged), "model_policy_disclosure": disc}
+                    if preset_carousel_inject is not None:
+                        out["preset_carousel_inject"] = preset_carousel_inject
+                    return out
 
                 last_failure = _strip_ollama_http_body(merged)
                 body = (result.get("body") or "").lower()

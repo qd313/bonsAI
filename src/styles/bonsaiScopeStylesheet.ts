@@ -582,6 +582,15 @@ export function buildBonsaiScopeStylesheet(): string {
           color: #dff5ea !important;
         }
 
+        .bonsai-scope button.bonsai-preset-glass.bonsai-pyro-inject-chip {
+          border: 2px solid rgba(255, 107, 53, 0.92) !important;
+          box-shadow:
+            0 0 0 1px rgba(160, 45, 28, 0.5),
+            0 0 12px rgba(255, 85, 40, 0.38) !important;
+          background: rgba(38, 22, 18, 0.38) !important;
+          color: #f0ddd6 !important;
+        }
+
         .bonsai-scope .bonsai-unified-input-strategy-placeholder {
           font-style: italic;
           font-size: 10px;

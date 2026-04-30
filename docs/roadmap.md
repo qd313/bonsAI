@@ -69,17 +69,6 @@ Backlog items are **not** listed in execution order. Stars are effort/risk withi
 - **Depends on:** unified search indexing and response-state handling.
 - **Not in scope:** changing ranking semantics for unrelated search domains.
 
-### Strategy Guide safety and spoilers
-
-★★★★
-
-- **Goal:** Useful strategy help without unwanted spoilers by default.
-- **Primary work:** spoiler-safe policy, explicit consent for unrestricted spoilers, tap-to-reveal blocks.
-- **Settings note:** optional setting to show spoilers directly after consent.
-- **Files:** `src/index.tsx`, `main.py`, `prompt-testing.md`.
-- **Depends on:** **Strategy Ask mode (`strategy`; Strategy Guide in prompts)** — shipped; see **[Completed](#tabs-icons-and-unified-ask-flow)**.
-- **Not in scope:** hard guarantees in every edge case.
-
 ### Steam Input layout analysis
 
 ★★★★
@@ -156,21 +145,6 @@ Backlog items are **not** listed in execution order. Stars are effort/risk withi
 - **Related / future UX:** Today’s path assumes **Decky as intermediary**. **Native QAM entry for BonsAI (beneath Decky icon) — decouple research** (above) is the target way to **shorten the macro** once platform or Decky support exists.
 - **Assessment:** High value; until a native QAM entry exists, maintenance is mostly documentation and macro tuning. Any future Decky/Steam glue for deep-link or QAM registration would be bounded, small-scope integration — not “zero” work, but still no evdev or DOM hacks.
 - **Not in scope:** evdev sniffing, WebSockets, React DOM hacks.
-
-### Pyro talent-manager easter egg (hidden preset)
-
-★★★★
-
-- **Goal (easter egg):** When the user selects **Pyro** (`tf2_pyro`), Pyro has no intelligible in-universe voice — roleplay switches to Pyro’s **representative / Hollywood-style media manager** (Entourage-adjacent hints: **Vince**, **E**, “the agency”) as parody voice archetype without claiming third-party likeness.
-- **Persona:** Obnoxious agent energy — talks about themselves, bragging; **self-aware** about existing inside BonsAI; **moonlights** as an OSS advocate and nudges the player toward **testing or contributing** to the repository (playful, not deceptive).
-- **Secret tip mechanic:** At the end of (some) replies, the manager **tips a hidden preset**; the UI **injects** it into the main-tab suggestion carousel as a distinguished chip.
-- **Carousel exception:** Injection may appear **after** the normal post-mount carousel rest window (`PRESET_CAROUSEL_ACTIVE_MS`, 60 s in `src/components/PresetAnimatedChips.tsx`) — an explicit exception to the usual “no new cycles after session end” behavior for this chip only.
-- **Chrome:** That chip uses a **persistent orange–red outline** until cleared (exact design token TBD at implementation).
-- **Clear conditions:** Clear the injected chip styling / pin when the user **sends the next Ask** or **resets the plugin session** (implementation TBD: Decky reload vs explicit in-app reset).
-- **Primary work:** Special-case roleplay branch in `backend/services/ai_character_service.py` (or adjacent helper); optional **structured metadata** from backend (preset id / inject flag) vs fragile reply parsing (open design choice); `PresetAnimatedChips.tsx`, `MainTab.tsx` / `src/index.tsx` for highlight/inject lifecycle.
-- **Depends on:** **Character voice roleplay (shipped)**; preset carousel behavior in **Preset carousel and transition UX** (shipped Phase 1).
-- **See also:** [voice-character-catalog.md](voice-character-catalog.md) (Pyro / voice handling); compare current `tf2_pyro` style hint (“wordless playful menace”).
-- **Not in scope:** Ensuring the joke lands in every locale or model.
 
 ### Voice command input
 
@@ -262,6 +236,7 @@ Headings group related work. Star counts match the historical list.
 - ★ **Preset Chip Fade Opt-Out:** Settings `ToggleField` **Preset chip fade animation** (persisted `preset_chip_fade_animation_enabled`, default on). When off, main-tab suggestion chips stay opaque and rotate prompts without opacity transitions; post-Ask re-seed unchanged. `PresetAnimatedChips.tsx`, `MainTab.tsx`, `settingsAndResponse.ts`, `settings_service.py`.
 - ★★★ **Mode selector (main screen):** Persisted `ask_mode` (`speed` / `strategy` / `deep`, UI labels Speed / Strategy / Deep). Compact outline control (green / bronze / gold) on the unified input strip, left of mic/stop, opens an anchored popover menu to change mode (no layout reflow); D-pad focus order is text field → mode → mic/stop. Backend orders Ollama model fallbacks per mode in `refactor_helpers.py`; `start_background_game_ai` includes `ask_mode`. `src/data/askMode.ts`, `src/components/AskModeMenuPopover.tsx`, `MainTab.tsx`, `index.tsx`, `settingsAndResponse.ts`, `settings_service.py`, `main.py`.
 - ★★★★ **Strategy Guide prompt path (beta):** Shipped — **Strategy Guide** in prompts and tooling is the same path as **`ask_mode: strategy`** (main-tab label **Strategy**). Strategy presets can switch Ask mode; strategy-specific placeholder (“describe the level / boss / puzzle”); **`STRATEGY GUIDE MODE`** scaffolding and branch-picker contract in `backend/services/ollama_service.py` + `backend/services/strategy_guide_parse.py`; follow-up UX in `src/index.tsx`, `MainTab.tsx`, `src/data/presets.ts`, `src/data/strategyGuideFollowup.ts`; character framing in `ai_character_service.py` when roleplay is on. Optional cheat / shortcut guidance when the user asks; Steam Input-aware copy where relevant. Regression notes: [prompt-testing.md](prompt-testing.md) § Strategy Guide. **Not in scope:** perfect walkthroughs for every title.
+- ★★★★ **Strategy Guide safety and spoilers:** Shipped — spoiler-minimized default and `bonsai-spoiler` fenced blocks in the strategy system prompt; effective consent from Ask payload plus conservative phrase match on sanitized text; Settings → **Strategy Guide** (tap-to-reveal, expand-after-consent); main-tab **Spoilers OK for this Ask** when mode is Strategy; `strategy_spoiler_consent_effective` on Ask results for UI; tap-to-reveal in `MainTabBonsaiAiMarkdownChunk.tsx`. **`settings.json`:** `strategy_spoiler_masking_enabled`, `strategy_spoiler_auto_reveal_after_consent`. **Not in scope:** hard model guarantees. **Testing:** unit coverage in repo for prompt, settings, and chunk splitting; **on-device and real-model verification still required** — complete [prompt-testing.md](prompt-testing.md) § **Spoiler Policy and Consent** (Pass / Partial / Fail + build id when exercised).
 - ★★ **Debug tab opt-in (Settings):** Persisted `show_debug_tab` (default **false**); **Debug** omitted from the tab strip until **Show Debug tab** is enabled in Settings; safe tab switch when turning the toggle off while on **Debug**. `src/index.tsx`, `settings_service.py`, `settingsAndResponse.ts`.
 - ★★ **Settings tab trim:** **Trim the fat** on Settings: fewer simultaneous controls per view, clearer `PanelSection` grouping, progressive disclosure, shorter helper copy on toggles and sliders; dedicated Settings composition (`SettingsTab.tsx` and related controls).
 - ★★★ **Reset session cache (app state):** Settings → Advanced **Reset session cache…** with confirm modal; `resetPluginSession()` clears in-memory unified search, reply, thread, transparency, branch picker, attachments, and timers. Does **not** change persisted `settings.json`, host Ollama history, or screenshot files. `src/index.tsx`.
@@ -305,6 +280,7 @@ Headings group related work. Star counts match the historical list.
 - ★★ **Running-game character suggestions (AI picker):** On `CharacterPickerModal` open, read `Router.MainRunningApp`, resolve 1–3 catalog presets via `src/utils/runningGameCharacterSuggestions.ts` (Steam AppID map + normalized title match + TF2 merge), show **Playing:** headline and suggestion row with `CharacterRoleplayEmoticon`; async after first paint with delayed spinner (~160 ms); D-pad links Random, suggestions, column 0, and custom field.
 - ★★ **Random character “?” avatar (picker + main):** When **Random** is on, picker tile, main-tab glass avatar, and related summary chips use a single **“?”** affordance. `CharacterRoleplayEmoticon.tsx`, `CharacterPickerModal.tsx`, `MainTab.tsx`.
 - ★★★ **Character-derived UI accent theme (preset-selected):** With AI character on and a fixed catalog preset (not Random / not custom), accent tokens follow `src/data/characterUiAccent.ts` and catalog-driven colors; **AI character off**, **Random**, and **Custom** stay bonsAI forest green. `src/index.tsx` scoped CSS / token wiring, `MainTab.tsx`, `CharacterPickerModal.tsx`.
+- ★★★★ **Pyro talent-manager easter egg (hidden preset):** With AI character on and resolved voice **Pyro** (`tf2_pyro`, fixed picker or Random), replies use a Hollywood-style talent-manager parody (not in-universe Pyro speech); some successful Asks attach structured **`preset_carousel_inject`** so Main shows an extra orange-outlined suggestion chip (hidden OSS-angled tip pool) **beside** the three-slot carousel—the inject chip does not use `PRESET_CAROUSEL_ACTIVE_MS` and stays focusable after the trio may rest. Clears on the next Ask or **Reset session cache**. `backend/services/ai_character_service.py` (`build_roleplay_system_suffix_meta`, tips), `main.py` (`ask_ollama`), `game_ai_request.py`, `MainTab.tsx`, `bonsaiScopeStylesheet.ts`. [voice-character-catalog.md](voice-character-catalog.md). **On-device QA:** not yet fully exercised in the standing matrices — follow [regression-and-smoke.md](regression-and-smoke.md) §2 (character / carousel touches) and §3 Main tab (Pyro + inject chip).
 
 ### Shipped detail (extensions and deferred phases)
 
@@ -315,6 +291,12 @@ Headings group related work. Star counts match the historical list.
 ★★
 
 **Shipped** — see **Completed** → Character voice roleplay; `ai_character_accent_intensity`; backend varies by `subtle` / `balanced` / `heavy` / `unleashed`.
+
+#### Pyro talent-manager easter egg (hidden preset)
+
+★★★★
+
+**Shipped** — see **Completed** → Character voice roleplay. Tip appearance is probabilistic; verify on hardware per [regression-and-smoke.md](regression-and-smoke.md) §2 / §3.
 
 #### Higher-resolution character avatars (GTA-style art pass)
 
@@ -402,11 +384,11 @@ Dependency graph and implementation notes that are not feature checklist items.
 
 - **Mode selector (main screen)** (shipped: Speed / Strategy / Deep + model fallbacks) → **Per-mode latency/timeout profiles**; **Strategy Guide prompt path (beta)** is shipped as **`strategy`** Ask mode — see **[Completed](#tabs-icons-and-unified-ask-flow)**.
 - **Character voice roleplay (shipped)** → baseline for **Character accent intensity (shipped)**; presets in [voice-character-catalog.md](voice-character-catalog.md), [src/data/characterCatalog.ts](../src/data/characterCatalog.ts).
-- **Character voice roleplay (shipped)** → **Pyro talent-manager easter egg (hidden preset)** (planned).
+- **Character voice roleplay (shipped)** → **Pyro talent-manager easter egg (hidden preset)** (shipped — see **Completed** → Character voice roleplay; on-device QA: [regression-and-smoke.md](regression-and-smoke.md) §2 / §3).
 - **Character voice roleplay** + avatar mapping → **Higher-resolution character avatars (GTA-style art pass)**.
 - **Character voice roleplay (shipped)** → **Character-derived UI accent theme (preset-selected)** (shipped — see **Completed**); **Random character “?” avatar** (shipped — see **Completed**); **Running-game character suggestions (AI picker)** (shipped — see **Completed**).
 - **Input sanitizer (shipped)** + **Input handling transparency (shipped)** → future sanitizer extensions should keep user-visible auditability.
-- **Strategy Ask mode (`strategy`; Strategy Guide in prompts)** (shipped) → **Strategy Guide safety and spoilers**, **Strategy checklist workflow (chat-scoped)**.
+- **Strategy Ask mode (`strategy`; Strategy Guide in prompts)** (shipped) → **Strategy Guide safety and spoilers** (shipped — on-device QA: [prompt-testing.md](prompt-testing.md) § Spoiler Policy and Consent), **Strategy checklist workflow (chat-scoped)** (planned).
 - **Global screenshots and vision** → richer strategy + screenshot context.
 - **Capability Permission Center** → gates filesystem, elevated tasks, hardware, Steam/Proton log reads for troubleshooting excerpts, and (future) web/search calls.
 - **Model policy tiers + disclosure UX (shipped)** → layered on **Capability Permission Center**; tiered routing + per-reply disclosure — see **Completed** → Permissions.
@@ -416,7 +398,7 @@ Dependency graph and implementation notes that are not feature checklist items.
 - **Built on Ollama link** → shipped in About.
 - **SteamOS Media screenshot share button** → possible fast path into **Global screenshots and vision** if APIs allow.
 - **Reset session cache (shipped)** → in-memory unified-input / reply state only; see **Completed** → Tabs.
-- **Preset carousel (Phase 1 shipped)** → extends presentation without changing category routing; **Pyro talent-manager easter egg** depends on it for inject + `PRESET_CAROUSEL_ACTIVE_MS` exception semantics.
+- **Preset carousel (Phase 1 shipped)** → extends presentation without changing category routing; **Pyro talent-manager easter egg (shipped)** adds a separate inject chip outside the trio’s `PRESET_CAROUSEL_ACTIVE_MS` window.
 - **Global BonsAI quick-launch via Steam Input macro** ↔ **Native QAM entry for BonsAI (beneath Decky icon) — decouple research** (shorter macro once a direct QAM tile exists).
 - **Bundled VDF parsing** → **Steam Input layout analysis** (and optional deeper parsing).
 - **Steam Input settings search + jump** → Phase 1 shipped; broader catalog deferred.
@@ -427,7 +409,7 @@ Dependency graph and implementation notes that are not feature checklist items.
 flowchart TD
   modeSelector[ModeSelectorMainScreenShipped] --> perModeProfiles[PerModeLatencyTimeoutProfiles]
   modeSelector --> strategyPath[StrategyGuidePromptPathBetaShipped]
-  strategyPath --> strategySafety[StrategyGuideSafetyAndSpoilers]
+  strategyPath --> strategySafety[StrategyGuideSafetyShipped]
   strategyPath --> strategyChecklist[StrategyChecklistWorkflowChatScoped]
   visionFeature[GlobalScreenshotsAndVision] --> strategyPath
   mediaShareButton[SteamOSMediaScreenshotShareButtonResearchSpike] --> visionFeature
@@ -450,7 +432,7 @@ flowchart TD
   tierNonFoss --> modelRouting
   builtOnOllama[BuiltOnOllamaAboutLink] --> aboutTab[AboutTab]
   vdfSupport[BundledVdfParsingSupport] --> steamInput[SteamInputLayoutAnalysis]
-  characterVoiceRoleplay[CharacterVoiceRoleplayShipped] --> pyroManagerEgg[PyroTalentManagerEasterEgg]
+  characterVoiceRoleplay[CharacterVoiceRoleplayShipped] --> pyroManagerEgg[PyroTalentManagerEasterEggShipped]
   presetCarousel --> pyroManagerEgg
   nativeQamBonsai[NativeQamBonsaiDecoupleResearch] -.->|shorter macro when shipped| globalQuickLaunch[GlobalBonsaiQuickLaunchSteamInputDoc]
 ```

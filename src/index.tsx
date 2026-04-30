@@ -146,6 +146,19 @@ type BackgroundStartResponse = {
   shortcut_setup?: ShortcutSetupKind;
 };
 
+type PresetCarouselInjectPayload = {
+  text: string;
+};
+
+function normalizePresetCarouselInject(value: unknown): PresetCarouselInjectPayload | null {
+  if (!value || typeof value !== "object") return null;
+  const raw = (value as { text?: unknown }).text;
+  if (typeof raw !== "string") return null;
+  const text = raw.trim();
+  if (!text) return null;
+  return { text };
+}
+
 type BackgroundRequestStatus = {
   status: "idle" | "pending" | "completed" | "failed" | "cancelled";
   request_id: number | null;
@@ -161,6 +174,10 @@ type BackgroundRequestStatus = {
   completed_at: number | null;
   strategy_guide_branches?: StrategyGuideBranchesPayload | null;
   model_policy_disclosure?: ModelPolicyDisclosurePayload | null;
+  /** True when this Ask had explicit spoiler consent (toggle and/or backend phrase match). */
+  strategy_spoiler_consent_effective?: boolean;
+  /** Pyro talent-manager easter egg: distinguished chip text from last successful Ask. */
+  preset_carousel_inject?: PresetCarouselInjectPayload | null;
   /** Present when the completed Ask was a shortcut-setup keyword. */
   shortcut_setup?: ShortcutSetupKind | null;
   /** True when the user hit Stop mid-generation (HTTP session closed locally). */
@@ -487,6 +504,9 @@ const Content: React.FC = () => {
   const [lastExchange, setLastExchange] = useState<LastExchangeSnapshot | null>(null);
   const [strategyGuideBranches, setStrategyGuideBranches] = useState<StrategyGuideBranchesPayload | null>(null);
   const [modelPolicyDisclosure, setModelPolicyDisclosure] = useState<ModelPolicyDisclosurePayload | null>(null);
+  const [strategySpoilerConsentForNextAsk, setStrategySpoilerConsentForNextAsk] = useState(false);
+  const [lastStrategySpoilerConsentEffective, setLastStrategySpoilerConsentEffective] = useState(false);
+  const [presetCarouselInject, setPresetCarouselInject] = useState<PresetCarouselInjectPayload | null>(null);
   const [shortcutSetupVariant, setShortcutSetupVariant] = useState<ShortcutSetupKind | null>(null);
   const lastStrategyAskQuestionRef = useRef<string>("");
   const pendingArchiveTurnRef = useRef<{ question: string; answer: string } | null>(null);
@@ -577,9 +597,19 @@ const Content: React.FC = () => {
     setModelAllowHighVramFallbacks,
     ollamaLocalOnDeck,
     setOllamaLocalOnDeck,
+    strategySpoilerMaskingEnabled,
+    setStrategySpoilerMaskingEnabled,
+    strategySpoilerAutoRevealAfterConsent,
+    setStrategySpoilerAutoRevealAfterConsent,
     settingsLoaded,
     hydrateFromSettings,
   } = usePluginSettings();
+
+  useEffect(() => {
+    if (askMode !== "strategy") {
+      setStrategySpoilerConsentForNextAsk(false);
+    }
+  }, [askMode]);
 
   const acknowledgeDisclaimer = useCallback(() => {
     markDisclaimerAccepted();
@@ -843,6 +873,7 @@ const Content: React.FC = () => {
       setElapsedSeconds(null);
       setStrategyGuideBranches(null);
       setModelPolicyDisclosure(null);
+      setPresetCarouselInject(null);
       return;
     }
 
@@ -856,6 +887,7 @@ const Content: React.FC = () => {
       setLastExchange(null);
       setStrategyGuideBranches(null);
       setModelPolicyDisclosure(null);
+      setPresetCarouselInject(null);
       pendingArchiveTurnRef.current = null;
       pendingThreadQuestionDisplayRef.current = null;
       void refreshInputTransparency();
@@ -882,6 +914,7 @@ const Content: React.FC = () => {
             ? (disc as ModelPolicyDisclosurePayload)
             : null
         );
+        setPresetCarouselInject(normalizePresetCarouselInject(status.preset_carousel_inject));
         if (q) {
           const category = detectPromptCategory(q);
           setSuggestedPrompts(getContextualPresets(category, 3));
@@ -890,6 +923,7 @@ const Content: React.FC = () => {
           setLastExchange({ question: displayQ, answer });
           lastStrategyAskQuestionRef.current = q;
           setStrategyGuideBranches(normalizeStrategyGuideBranches(status.strategy_guide_branches));
+          setLastStrategySpoilerConsentEffective(status.strategy_spoiler_consent_effective === true);
 
           const { autoSave, fsWrite } = desktopAutoSavePrefsRef.current;
           const rid = status.request_id;
@@ -913,6 +947,7 @@ const Content: React.FC = () => {
         } else {
           setLastExchange(null);
           setStrategyGuideBranches(null);
+          setLastStrategySpoilerConsentEffective(false);
           pendingArchiveTurnRef.current = null;
           pendingThreadQuestionDisplayRef.current = null;
         }
@@ -920,6 +955,8 @@ const Content: React.FC = () => {
         setLastExchange(null);
         setStrategyGuideBranches(null);
         setModelPolicyDisclosure(null);
+        setPresetCarouselInject(null);
+        setLastStrategySpoilerConsentEffective(false);
         pendingArchiveTurnRef.current = null;
         pendingThreadQuestionDisplayRef.current = null;
       }
@@ -929,7 +966,13 @@ const Content: React.FC = () => {
 
     setOllamaContext(null);
     setIsAsking(false);
+    setPresetCarouselInject(null);
   }, [refreshInputTransparency]);
+
+  const strategySpoilerDefaultExpandedForReply = useMemo(
+    () => strategySpoilerAutoRevealAfterConsent && lastStrategySpoilerConsentEffective,
+    [strategySpoilerAutoRevealAfterConsent, lastStrategySpoilerConsentEffective]
+  );
 
   const onBackgroundPollError = useCallback((e: unknown) => {
     setIsAsking(false);
@@ -939,9 +982,11 @@ const Content: React.FC = () => {
     setLastExchange(null);
     setStrategyGuideBranches(null);
     setModelPolicyDisclosure(null);
+    setPresetCarouselInject(null);
     setShortcutSetupVariant(null);
     pendingArchiveTurnRef.current = null;
     pendingThreadQuestionDisplayRef.current = null;
+    setLastStrategySpoilerConsentEffective(false);
   }, []);
 
   const {
@@ -981,6 +1026,7 @@ const Content: React.FC = () => {
     setLastExchange(null);
     setStrategyGuideBranches(null);
     setModelPolicyDisclosure(null);
+    setPresetCarouselInject(null);
     setShortcutSetupVariant(null);
     setSelectedAttachment(null);
     setElapsedSeconds(null);
@@ -1023,6 +1069,7 @@ const Content: React.FC = () => {
     setShowSlowWarning(false);
     setStrategyGuideBranches(null);
     setModelPolicyDisclosure(null);
+    setPresetCarouselInject(null);
     setShortcutSetupVariant(null);
   };
 
@@ -1048,7 +1095,10 @@ const Content: React.FC = () => {
     setAskThreadDisplayQuestion("");
     setLastTransparency(null);
     setModelPolicyDisclosure(null);
+    setPresetCarouselInject(null);
     setShortcutSetupVariant(null);
+    setStrategySpoilerConsentForNextAsk(false);
+    setLastStrategySpoilerConsentEffective(false);
     toaster.toast({
       title: "Session cleared",
       body: "Unified search, reply, thread, transparency, and attachments were reset.",
@@ -1219,6 +1269,7 @@ const Content: React.FC = () => {
     const appName = runningApp?.display_name ?? "";
 
     setIsAsking(true);
+    setPresetCarouselInject(null);
     setStrategyGuideBranches(null);
     setModelPolicyDisclosure(null);
     setShortcutSetupVariant(null);
@@ -1230,6 +1281,7 @@ const Content: React.FC = () => {
       app_id: appId,
       app_context: appId ? "active" : "none",
     });
+    const spoiler_consent = askMode === "strategy" && strategySpoilerConsentForNextAsk;
     try {
       const data = await call<
         [
@@ -1240,10 +1292,19 @@ const Content: React.FC = () => {
             appName: string;
             attachments: AskAttachment[];
             ask_mode: AskModeId;
+            spoiler_consent: boolean;
           },
         ],
         BackgroundStartResponse
-      >("start_background_game_ai", { question: q, PcIp: ip, appId, appName, attachments, ask_mode: askMode });
+      >("start_background_game_ai", {
+        question: q,
+        PcIp: ip,
+        appId,
+        appName,
+        attachments,
+        ask_mode: askMode,
+        spoiler_consent,
+      });
 
       if (!isRequestActive(seq)) return;
 
@@ -1293,6 +1354,7 @@ const Content: React.FC = () => {
           completed_at: now,
           strategy_guide_branches: null,
           model_policy_disclosure: null,
+          strategy_spoiler_consent_effective: false,
           shortcut_setup: data.shortcut_setup ?? null,
         };
         applyBackgroundStatusToUi(terminal, "");
@@ -1560,6 +1622,8 @@ const Content: React.FC = () => {
                 modelPolicyNonFossUnlocked,
                 modelAllowHighVramFallbacks,
                 ollamaLocalOnDeck,
+                strategySpoilerMaskingEnabled,
+                strategySpoilerAutoRevealAfterConsent,
               },
               {
                 ai_character_random: next.random,
@@ -1603,6 +1667,8 @@ const Content: React.FC = () => {
     modelPolicyNonFossUnlocked,
     modelAllowHighVramFallbacks,
     ollamaLocalOnDeck,
+    strategySpoilerMaskingEnabled,
+    strategySpoilerAutoRevealAfterConsent,
   ]);
 
   const mainTabAiCharacterPad = aiCharacterEnabled;
@@ -1721,6 +1787,11 @@ const Content: React.FC = () => {
       onOpenModelPolicyReadme={openModelPolicyReadme}
       shortcutSetupVariant={shortcutSetupVariant}
       onOpenControllerSettings={onOpenControllerSettingsForShortcut}
+      strategySpoilerMaskingEnabled={strategySpoilerMaskingEnabled}
+      strategySpoilerDefaultExpandedForReply={strategySpoilerDefaultExpandedForReply}
+      strategySpoilerConsentForNextAsk={strategySpoilerConsentForNextAsk}
+      onStrategySpoilerConsentForNextAskChange={setStrategySpoilerConsentForNextAsk}
+      presetCarouselInject={presetCarouselInject}
     />
   );
 
@@ -1760,6 +1831,10 @@ const Content: React.FC = () => {
       setDesktopAskVerboseLogging={setDesktopAskVerboseLogging}
       attachProtonLogsWhenTroubleshooting={attachProtonLogsWhenTroubleshooting}
       setAttachProtonLogsWhenTroubleshooting={setAttachProtonLogsWhenTroubleshooting}
+      strategySpoilerMaskingEnabled={strategySpoilerMaskingEnabled}
+      setStrategySpoilerMaskingEnabled={setStrategySpoilerMaskingEnabled}
+      strategySpoilerAutoRevealAfterConsent={strategySpoilerAutoRevealAfterConsent}
+      setStrategySpoilerAutoRevealAfterConsent={setStrategySpoilerAutoRevealAfterConsent}
       onOpenCharacterPicker={openCharacterPickerModal}
       onBeforeDeckyModal={() => {
         characterPickerReturnTabRef.current = currentTab;
@@ -1801,6 +1876,8 @@ const Content: React.FC = () => {
           modelPolicyNonFossUnlocked,
           modelAllowHighVramFallbacks,
           ollamaLocalOnDeck,
+          strategySpoilerMaskingEnabled,
+          strategySpoilerAutoRevealAfterConsent,
         })
       ).catch((err) => {
         console.error("save_settings failed (hardware control confirm)", err);
@@ -1831,6 +1908,8 @@ const Content: React.FC = () => {
     modelPolicyNonFossUnlocked,
     modelAllowHighVramFallbacks,
     ollamaLocalOnDeck,
+    strategySpoilerMaskingEnabled,
+    strategySpoilerAutoRevealAfterConsent,
   ]);
 
   const permissionsTab = (

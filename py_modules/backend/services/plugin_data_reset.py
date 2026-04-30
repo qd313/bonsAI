@@ -24,7 +24,8 @@ def reset_plugin_disk_and_defaults(
 ) -> dict:
     """Remove settings.json, clear runtime and log files, then write fresh defaults.
 
-    Does not touch Desktop notes or other paths outside Decky's plugin dirs.
+    Does not touch Desktop notes or other paths outside Decky's plugin dirs. RPC callers should reload
+    sanitized settings into memory after this returns so UI and backend state match disk.
     """
     try:
         os.remove(settings_path)

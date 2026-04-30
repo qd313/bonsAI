@@ -33,6 +33,7 @@ class VacCacheEntry:
     player: dict[str, Any]
 
 
+# Process-local TTL cache: dampens repeated GetPlayerBans traffic when users resend the same keyword Ask.
 _vac_cache: dict[str, VacCacheEntry] = {}
 
 

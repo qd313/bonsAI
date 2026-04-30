@@ -154,6 +154,16 @@ No session archived
 
 <!-- Newest entries first. -->
 
+### 2026-04-30 - refactor batch implementation (refactor-specialist plan)
+
+```text
+Scope: Capability grandfather test vs steam_web_api; main.py immediate background-command dedupe helpers; src/index.tsx composer + hooks under src/hooks/ and src/features/; ollama_prompts.py vs ollama_service.py with stable re-exports; tiered commentary pass (main/settings/game_ai_request, refactor_helpers, sensitive services, prompts/strategy/TDP, frontend deckyCall/settingsAndResponse/hooks/markdown chunk).
+Agents: refactor-specialist — docs/refactor-specialist-report.md; triage complete for this refactor batch.
+Red-team / blue-team: N/A.
+Tests: pnpm test (64); python scripts/run_python_tests.py (134 OK); scripts/build.ps1 — green.
+Risk triage: RPC and background state shapes preserved; any regression in those contracts is immediate-fix scope, not deferred cosmetic work.
+```
+
 ### 2026-04-30 - foss-advocate + refactor-specialist (full codebase read)
 
 ```text

@@ -1,3 +1,10 @@
+"""Decky Loader plugin entrypoint: RPC surface, capability gates, and Ask orchestration.
+
+The Python side owns Ollama calls and privileged I/O; the React bundle invokes methods via Decky RPC
+only. Some Ask branches (sanitizer keywords, shortcut guidance, VAC check) finalize inside the RPC
+handler so the UI polling loop can observe ``completed`` immediately without a worker task.
+"""
+
 import asyncio
 import base64
 import fcntl
@@ -100,6 +107,9 @@ from refactor_helpers import (
 )
 
 logger = decky.logger
+
+# Sentinel: sanitizer immediate-complete path omits ``shortcut_setup`` from state/response; VAC sets state only.
+_OMIT_SHORTCUT_SETUP_FIELD = object()
 
 
 class Plugin:
@@ -872,6 +882,118 @@ class Plugin:
         if not result.get("ok"):
             logger.warning("append_desktop_ask_transparency_sync: %s", result.get("error"))
 
+    @staticmethod
+    def _immediate_command_transparency_snapshot(
+        *,
+        route: str,
+        parsed_question: str,
+        resp: str,
+        sanitizer_action: str,
+        sanitizer_reason_codes: list,
+        app_id: str,
+        app_name: str,
+        pc_ip: str,
+    ) -> dict:
+        """Shared transparency row for sanitizer/shortcut/VAC paths that finish inside ``start_background_game_ai``."""
+        return {
+            "route": route,
+            "raw_question": parsed_question,
+            "sanitizer_action": sanitizer_action,
+            "sanitizer_reason_codes": list(sanitizer_reason_codes),
+            "text_after_sanitizer": parsed_question,
+            "ollama_model": None,
+            "system_prompt": None,
+            "user_text_for_model": None,
+            "user_image_count": 0,
+            "attachment_paths": [],
+            "assistant_raw": None,
+            "assistant_after_attachment_format": None,
+            "final_response": resp,
+            "applied": None,
+            "success": True,
+            "app_id": app_id,
+            "app_name": app_name,
+            "pc_ip": pc_ip,
+            "error_message": "",
+            "elapsed_seconds": 0.0,
+            "model_policy_disclosure": None,
+        }
+
+    async def _finalize_immediate_background_local_command(
+        self,
+        *,
+        parsed_question: str,
+        resp: str,
+        app_id: str,
+        app_name: str,
+        pc_ip: str,
+        app_context: str,
+        transparency_route: str,
+        sanitizer_action: str,
+        sanitizer_reason_codes: list,
+        state_question: str,
+        meta: str,
+        shortcut_setup_for_state: Any = _OMIT_SHORTCUT_SETUP_FIELD,
+        shortcut_setup_for_response: Any = _OMIT_SHORTCUT_SETUP_FIELD,
+    ) -> dict:
+        """Persist transparency, publish ``completed`` background state, and return the RPC body.
+
+        Local keyword branches (sanitizer / shortcut / VAC) never spawn ``_run_background_request``; they must
+        still mint a monotonic ``request_id`` so UI polling and Desktop autosave dedupe stay consistent.
+        """
+        plugin = Plugin._coerce_instance(self)
+        plugin._background_request_seq += 1
+        request_id = plugin._background_request_seq
+        now = time.time()
+        await plugin._persist_input_transparency(
+            Plugin._immediate_command_transparency_snapshot(
+                route=transparency_route,
+                parsed_question=parsed_question,
+                resp=resp,
+                sanitizer_action=sanitizer_action,
+                sanitizer_reason_codes=sanitizer_reason_codes,
+                app_id=app_id,
+                app_name=app_name,
+                pc_ip=pc_ip,
+            )
+        )
+        state: dict[str, Any] = {
+            "status": "completed",
+            "request_id": request_id,
+            "question": state_question,
+            "app_id": app_id,
+            "app_context": app_context,
+            "success": True,
+            "response": resp,
+            "applied": None,
+            "elapsed_seconds": 0.0,
+            "error": None,
+            "started_at": now,
+            "completed_at": now,
+            "strategy_guide_branches": None,
+            "model_policy_disclosure": None,
+            "preset_carousel_inject": None,
+        }
+        if shortcut_setup_for_state is not _OMIT_SHORTCUT_SETUP_FIELD:
+            state["shortcut_setup"] = shortcut_setup_for_state
+        plugin._background_state = state
+        plugin._background_task = None
+        out: dict[str, Any] = {
+            "accepted": True,
+            "status": "completed",
+            "request_id": request_id,
+            "app_id": app_id,
+            "app_context": app_context,
+            "success": True,
+            "response": resp,
+            "applied": None,
+            "elapsed_seconds": 0.0,
+            "meta": meta,
+        }
+        if shortcut_setup_for_response is not _OMIT_SHORTCUT_SETUP_FIELD:
+            out["shortcut_setup"] = shortcut_setup_for_response
+        return out
+
     async def get_input_transparency(self):
         """Return the last Ask transparency snapshot (full prompts; fetch after terminal completion)."""
         plugin = Plugin._coerce_instance(self)
@@ -1093,195 +1215,60 @@ class Plugin:
             if is_sanitizer_command:
                 handled = await plugin._try_handle_sanitizer_keyword_command(parsed_question, app_id)
                 if handled is not None:
-                    plugin._background_request_seq += 1
-                    request_id = plugin._background_request_seq
-                    now = time.time()
                     resp = str(handled.get("response", ""))
-                    await plugin._persist_input_transparency(
-                        {
-                            "route": "sanitizer_command",
-                            "raw_question": parsed_question,
-                            "sanitizer_action": "command",
-                            "sanitizer_reason_codes": [],
-                            "text_after_sanitizer": parsed_question,
-                            "ollama_model": None,
-                            "system_prompt": None,
-                            "user_text_for_model": None,
-                            "user_image_count": 0,
-                            "attachment_paths": [],
-                            "assistant_raw": None,
-                            "assistant_after_attachment_format": None,
-                            "final_response": resp,
-                            "applied": None,
-                            "success": True,
-                            "app_id": app_id,
-                            "app_name": app_name,
-                            "pc_ip": pc_ip,
-                            "error_message": "",
-                            "elapsed_seconds": 0.0,
-                            "model_policy_disclosure": None,
-                        }
+                    return await plugin._finalize_immediate_background_local_command(
+                        parsed_question=parsed_question,
+                        resp=resp,
+                        app_id=app_id,
+                        app_name=app_name,
+                        pc_ip=pc_ip,
+                        app_context=app_context,
+                        transparency_route="sanitizer_command",
+                        sanitizer_action="command",
+                        sanitizer_reason_codes=[],
+                        state_question="",
+                        meta="sanitizer_keyword",
                     )
-                    plugin._background_state = {
-                        "status": "completed",
-                        "request_id": request_id,
-                        "question": "",
-                        "app_id": app_id,
-                        "app_context": app_context,
-                        "success": True,
-                        "response": resp,
-                        "applied": None,
-                        "elapsed_seconds": 0.0,
-                        "error": None,
-                        "started_at": now,
-                        "completed_at": now,
-                        "strategy_guide_branches": None,
-                        "model_policy_disclosure": None,
-                        "preset_carousel_inject": None,
-                    }
-                    plugin._background_task = None
-                    return {
-                        "accepted": True,
-                        "status": "completed",
-                        "request_id": request_id,
-                        "app_id": app_id,
-                        "app_context": app_context,
-                        "success": True,
-                        "response": resp,
-                        "applied": None,
-                        "elapsed_seconds": 0.0,
-                        "meta": "sanitizer_keyword",
-                    }
 
             if is_shortcut_command:
                 handled = await plugin._try_handle_shortcut_setup_command(parsed_question, app_id)
                 if handled is not None:
-                    plugin._background_request_seq += 1
-                    request_id = plugin._background_request_seq
-                    now = time.time()
                     resp = str(handled.get("response", ""))
                     variant = handled.get("shortcut_setup")
-                    await plugin._persist_input_transparency(
-                        {
-                            "route": "shortcut_setup",
-                            "raw_question": parsed_question,
-                            "sanitizer_action": "pass",
-                            "sanitizer_reason_codes": [],
-                            "text_after_sanitizer": parsed_question,
-                            "ollama_model": None,
-                            "system_prompt": None,
-                            "user_text_for_model": None,
-                            "user_image_count": 0,
-                            "attachment_paths": [],
-                            "assistant_raw": None,
-                            "assistant_after_attachment_format": None,
-                            "final_response": resp,
-                            "applied": None,
-                            "success": True,
-                            "app_id": app_id,
-                            "app_name": app_name,
-                            "pc_ip": pc_ip,
-                            "error_message": "",
-                            "elapsed_seconds": 0.0,
-                            "model_policy_disclosure": None,
-                        }
+                    return await plugin._finalize_immediate_background_local_command(
+                        parsed_question=parsed_question,
+                        resp=resp,
+                        app_id=app_id,
+                        app_name=app_name,
+                        pc_ip=pc_ip,
+                        app_context=app_context,
+                        transparency_route="shortcut_setup",
+                        sanitizer_action="pass",
+                        sanitizer_reason_codes=[],
+                        state_question=parsed_question,
+                        meta="shortcut_setup",
+                        shortcut_setup_for_state=variant,
+                        shortcut_setup_for_response=variant,
                     )
-                    plugin._background_state = {
-                        "status": "completed",
-                        "request_id": request_id,
-                        "question": parsed_question,
-                        "app_id": app_id,
-                        "app_context": app_context,
-                        "success": True,
-                        "response": resp,
-                        "applied": None,
-                        "elapsed_seconds": 0.0,
-                        "error": None,
-                        "started_at": now,
-                        "completed_at": now,
-                        "strategy_guide_branches": None,
-                        "model_policy_disclosure": None,
-                        "shortcut_setup": variant,
-                        "preset_carousel_inject": None,
-                    }
-                    plugin._background_task = None
-                    return {
-                        "accepted": True,
-                        "status": "completed",
-                        "request_id": request_id,
-                        "app_id": app_id,
-                        "app_context": app_context,
-                        "success": True,
-                        "response": resp,
-                        "applied": None,
-                        "elapsed_seconds": 0.0,
-                        "meta": "shortcut_setup",
-                        "shortcut_setup": variant,
-                    }
 
             if is_vac_command:
                 handled_v = await plugin._try_handle_vac_check_command(parsed_question, app_id)
                 if handled_v is not None:
-                    plugin._background_request_seq += 1
-                    request_id = plugin._background_request_seq
-                    now = time.time()
                     resp = str(handled_v.get("response", ""))
-                    await plugin._persist_input_transparency(
-                        {
-                            "route": "vac_check",
-                            "raw_question": parsed_question,
-                            "sanitizer_action": "pass",
-                            "sanitizer_reason_codes": [],
-                            "text_after_sanitizer": parsed_question,
-                            "ollama_model": None,
-                            "system_prompt": None,
-                            "user_text_for_model": None,
-                            "user_image_count": 0,
-                            "attachment_paths": [],
-                            "assistant_raw": None,
-                            "assistant_after_attachment_format": None,
-                            "final_response": resp,
-                            "applied": None,
-                            "success": True,
-                            "app_id": app_id,
-                            "app_name": app_name,
-                            "pc_ip": pc_ip,
-                            "error_message": "",
-                            "elapsed_seconds": 0.0,
-                            "model_policy_disclosure": None,
-                        }
+                    return await plugin._finalize_immediate_background_local_command(
+                        parsed_question=parsed_question,
+                        resp=resp,
+                        app_id=app_id,
+                        app_name=app_name,
+                        pc_ip=pc_ip,
+                        app_context=app_context,
+                        transparency_route="vac_check",
+                        sanitizer_action="pass",
+                        sanitizer_reason_codes=[],
+                        state_question=parsed_question,
+                        meta="vac_check",
+                        shortcut_setup_for_state=None,
                     )
-                    plugin._background_state = {
-                        "status": "completed",
-                        "request_id": request_id,
-                        "question": parsed_question,
-                        "app_id": app_id,
-                        "app_context": app_context,
-                        "success": True,
-                        "response": resp,
-                        "applied": None,
-                        "elapsed_seconds": 0.0,
-                        "error": None,
-                        "started_at": now,
-                        "completed_at": now,
-                        "strategy_guide_branches": None,
-                        "model_policy_disclosure": None,
-                        "shortcut_setup": None,
-                        "preset_carousel_inject": None,
-                    }
-                    plugin._background_task = None
-                    return {
-                        "accepted": True,
-                        "status": "completed",
-                        "request_id": request_id,
-                        "app_id": app_id,
-                        "app_context": app_context,
-                        "success": True,
-                        "response": resp,
-                        "applied": None,
-                        "elapsed_seconds": 0.0,
-                        "meta": "vac_check",
-                    }
 
             plugin._background_request_seq += 1
             request_id = plugin._background_request_seq

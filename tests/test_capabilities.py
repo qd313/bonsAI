@@ -31,10 +31,14 @@ class CapabilitiesTests(unittest.TestCase):
         self.assertTrue(out["media_library_access"])
         self.assertFalse(out["external_navigation"])
 
-    def test_legacy_grandfather_all_true(self):
+    def test_legacy_grandfather_all_true_except_steam_web_api(self):
+        # Matches legacy_grandfather_capabilities docstring: outbound Steam Web API stays off for legacy installs.
         g = legacy_grandfather_capabilities()
         self.assertEqual(set(g.keys()), set(CAPABILITY_KEYS))
-        self.assertTrue(all(g.values()))
+        self.assertFalse(g["steam_web_api"])
+        for key in CAPABILITY_KEYS:
+            if key != "steam_web_api":
+                self.assertTrue(g[key], msg=key)
 
     def test_capability_enabled_requires_explicit_true(self):
         self.assertFalse(capability_enabled({}, "filesystem_write"))

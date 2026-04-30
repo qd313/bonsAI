@@ -1,3 +1,8 @@
+"""Steam Deck TDP and GPU clock sysfs helpers (privileged writes via ``steamos-priv-write``).
+
+Clamp bounds mirror Deck-class limits; callers surface user-visible errors without echoing raw sysfs paths.
+"""
+
 import glob
 import os
 import subprocess

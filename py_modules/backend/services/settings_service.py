@@ -1,3 +1,9 @@
+"""Load, sanitize, and save persisted plugin ``settings.json`` (shared by RPC handlers and tests).
+
+Keys and defaults must stay aligned with frontend ``normalizeSettings`` / ``BonsaiSettings`` and with
+``plugin.json`` migrations — breaking names strands older installs until reset.
+"""
+
 import json
 import os
 from typing import Any, Callable

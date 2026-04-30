@@ -1,4 +1,8 @@
-"""Discover and read bounded Proton / Steam log excerpts for troubleshooting Ask context."""
+"""Discover and read bounded Proton / Steam log excerpts for troubleshooting Ask context.
+
+Attachment runs only when settings opt in and ``steam_logs_read`` is enabled; ``path_allowed_*``
+guards realpaths so symlink tricks cannot escape allowed Steam log roots.
+"""
 
 from __future__ import annotations
 

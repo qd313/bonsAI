@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
+## [0.3.0] - 2026-04-30
+
+### Changed
+- Refactor / contributor-UX pass: deduplicated synchronous immediate background Ask paths in `main.py`; split `Content` orchestration into focused hooks under `src/hooks/` (and related modules); moved prompt/policy helpers to `py_modules/backend/services/ollama_prompts.py` with HTTP/streaming remaining in `ollama_service.py` (stable re-exports); aligned capability grandfather tests with `steam_web_api` privacy default; expanded tiered code comments on RPC shapes, capability gates, and Decky UI assumptions.
+
 ## [0.2.1] - 2026-04-28
 
 ### Changed

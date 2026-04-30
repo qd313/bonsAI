@@ -177,7 +177,7 @@ If Windows still falls back to CPU after FIX A:
 
 **Why:** Full boot can leave the **`ollama`** user service idle until first use — nothing is listening on **11434** until the daemon (`ollama serve` / systemd unit) accepts traffic.
 
-**What bonsAI does (v0.2.1+):** With **Test** targeting loopback (**Ollama on this Deck on**, or **`127.0.0.1` / localhost** typed as the host), an initial failed probe triggers a best‑effort **wake** (**`systemctl --user try-restart` / start `ollama`**, then **`ollama serve`** if needed — same primitives as Starter setup under `py_modules/backend/services/local_ollama_setup_service.py`) and **retests once**. Prefer waiting a minute after boot before assuming Ollama is broken.
+**What bonsAI does (v0.3.0+):** With **Test** targeting loopback (**Ollama on this Deck on**, or **`127.0.0.1` / localhost** typed as the host), an initial failed probe triggers a best‑effort **wake** (**`systemctl --user try-restart` / start `ollama`**, then **`ollama serve`** if needed — same primitives as Starter setup under `py_modules/backend/services/local_ollama_setup_service.py`) and **retests once**. Prefer waiting a minute after boot before assuming Ollama is broken.
 
 ---
 

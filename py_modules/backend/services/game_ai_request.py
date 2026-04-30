@@ -1,4 +1,9 @@
-"""Foreground/background game Ask orchestration (Ollama + TDP) without importing main.py."""
+"""Foreground game Ask orchestration (Ollama + optional TDP) without importing ``main``.
+
+Expects a Decky ``Plugin`` instance for ``load_settings``, transparency persistence, and keyword
+short-circuits. Top-level return dict keys must stay aligned with ``execute_game_ai`` RPC consumers and
+frontend parsers (success, response, applied, disclosure flags, etc.).
+"""
 
 from __future__ import annotations
 

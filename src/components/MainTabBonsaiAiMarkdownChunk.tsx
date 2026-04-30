@@ -1,3 +1,7 @@
+/**
+ * One assistant markdown bubble: Decky `Focusable` for controller routing plus nested `ReactMarkdown` when
+ * fenced code blocks tagged `language-bonsai-spoiler` need inner formatting without breaking collapse UX.
+ */
 import type { Components } from "react-markdown";
 import { useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";

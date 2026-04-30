@@ -1,6 +1,6 @@
 {
   "name": "bonsai",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "bonsAI Steam Deck plugin: local AI assistance and Ollama integration.",
   "type": "module",
   "main": "dist/index.js",

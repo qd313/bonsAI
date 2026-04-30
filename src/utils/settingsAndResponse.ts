@@ -21,6 +21,7 @@ import {
   type ModelPolicyTierId,
 } from "../data/modelPolicy";
 
+/** Tier ``non_foss`` without explicit unlock collapses to ``open_weight`` so we never persist an illegal pair. */
 function reconcileModelPolicySettings(
   tierRaw: unknown,
   unlockRaw: unknown

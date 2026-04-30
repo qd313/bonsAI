@@ -1,3 +1,4 @@
+/** Main-tab unified Ask/search bar geometry: Decky `TextField` wrappers often diverge from host width, so we measure and sync CSS vars. */
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   ASK_BAR_LAYOUT_SHIFT_RIGHT_PX,

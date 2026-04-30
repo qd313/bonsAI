@@ -1,3 +1,8 @@
+"""Shared model-selection and Ollama URL normalization helpers used by ``main`` and backend services.
+
+Keeps tier/mode tag lists in one place so Python tests and RPC routing stay consistent.
+"""
+
 import json
 import re
 from typing import Any, Optional, Tuple

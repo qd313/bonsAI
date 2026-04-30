@@ -1,4 +1,7 @@
-"""Ask keyword: ``bonsai:vac-check`` — Steam GetPlayerBans without Ollama."""
+"""Ask keyword: ``bonsai:vac-check`` — Steam Web API GetPlayerBans (no Ollama).
+
+Requires the ``steam_web_api`` capability and a stored Web API key; responses are deterministic markdown.
+"""
 
 from __future__ import annotations
 

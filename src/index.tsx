@@ -538,6 +538,7 @@ const Content: React.FC = () => {
     screenshotAttachmentPreset,
     desktopDebugNoteAutoSave,
     desktopAskVerboseLogging,
+    attachProtonLogsWhenTroubleshooting,
     presetChipFadeAnimationEnabled,
     inputSanitizerUserDisabled,
     capabilities,
@@ -559,6 +560,7 @@ const Content: React.FC = () => {
     setScreenshotAttachmentPreset,
     setDesktopDebugNoteAutoSave,
     setDesktopAskVerboseLogging,
+    setAttachProtonLogsWhenTroubleshooting,
     setPresetChipFadeAnimationEnabled,
     setInputSanitizerUserDisabled,
     askMode,
@@ -1542,6 +1544,7 @@ const Content: React.FC = () => {
                 screenshotAttachmentPreset,
                 desktopDebugNoteAutoSave,
                 desktopAskVerboseLogging,
+                attachProtonLogsWhenTroubleshooting,
                 presetChipFadeAnimationEnabled,
                 inputSanitizerUserDisabled,
                 capabilities,
@@ -1585,6 +1588,7 @@ const Content: React.FC = () => {
     screenshotAttachmentPreset,
     desktopDebugNoteAutoSave,
     desktopAskVerboseLogging,
+    attachProtonLogsWhenTroubleshooting,
     presetChipFadeAnimationEnabled,
     inputSanitizerUserDisabled,
     capabilities,
@@ -1754,6 +1758,8 @@ const Content: React.FC = () => {
       setDesktopDebugNoteAutoSave={setDesktopDebugNoteAutoSave}
       desktopAskVerboseLogging={desktopAskVerboseLogging}
       setDesktopAskVerboseLogging={setDesktopAskVerboseLogging}
+      attachProtonLogsWhenTroubleshooting={attachProtonLogsWhenTroubleshooting}
+      setAttachProtonLogsWhenTroubleshooting={setAttachProtonLogsWhenTroubleshooting}
       onOpenCharacterPicker={openCharacterPickerModal}
       onBeforeDeckyModal={() => {
         characterPickerReturnTabRef.current = currentTab;
@@ -1779,6 +1785,7 @@ const Content: React.FC = () => {
           screenshotAttachmentPreset,
           desktopDebugNoteAutoSave,
           desktopAskVerboseLogging,
+          attachProtonLogsWhenTroubleshooting,
           presetChipFadeAnimationEnabled,
           inputSanitizerUserDisabled,
           capabilities: next,
@@ -1808,6 +1815,7 @@ const Content: React.FC = () => {
     screenshotAttachmentPreset,
     desktopDebugNoteAutoSave,
     desktopAskVerboseLogging,
+    attachProtonLogsWhenTroubleshooting,
     presetChipFadeAnimationEnabled,
     inputSanitizerUserDisabled,
     setCapabilities,

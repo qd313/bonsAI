@@ -7,6 +7,7 @@ CAPABILITY_KEYS = (
     "filesystem_write",
     "hardware_control",
     "media_library_access",
+    "steam_logs_read",
     "external_navigation",
 )
 

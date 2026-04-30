@@ -1276,8 +1276,10 @@ class Plugin:
         read_tdp: bool = False,
         tdp_grounding_requested: bool = False,
         tdp_cap_w: Optional[int] = None,
+        proton_log_attachment: Optional[str] = None,
     ) -> str:
         """Build the system prompt using plugin-local metadata lookups and attachment context."""
+        proton = (proton_log_attachment or "").strip()
         base = build_system_prompt(
             question=question,
             app_id=app_id,
@@ -1287,6 +1289,7 @@ class Plugin:
             lookup_app_name=lookup_steam_app_name,
             lookup_screenshot_vdf_metadata=lookup_screenshot_vdf_metadata,
             ask_mode=ask_mode,
+            early_context_suffix=proton,
         )
         return append_deck_tdp_sysfs_grounding(
             base,
@@ -1308,6 +1311,8 @@ class Plugin:
         read_tdp: bool = False,
         tdp_grounding_requested: bool = False,
         tdp_cap_w: Optional[int] = None,
+        proton_log_attachment: Optional[str] = None,
+        proton_log_transparency: Optional[dict] = None,
     ):
         """Orchestrate attachment prep, prompt assembly, and model fallback request execution."""
         url = self._build_ollama_chat_url(PcIp)
@@ -1336,6 +1341,7 @@ class Plugin:
             read_tdp=read_tdp,
             tdp_grounding_requested=tdp_grounding_requested,
             tdp_cap_w=tdp_cap_w,
+            proton_log_attachment=proton_log_attachment,
         )
         roleplay = build_roleplay_system_suffix(settings, ask_mode)
         if roleplay:
@@ -1346,11 +1352,19 @@ class Plugin:
             user_message["images"] = [image["image_b64"] for image in prepared_images]
         messages = [{"role": "system", "content": system_content}, user_message]
 
+        proton_snap = proton_log_transparency if isinstance(proton_log_transparency, dict) else {}
+        proton_excerpt = proton_snap.get("proton_log_excerpt_attached") is True
+        proton_sources = proton_snap.get("proton_log_sources") if isinstance(proton_snap.get("proton_log_sources"), list) else []
+        proton_notes = str(proton_snap.get("proton_log_notes") or "")
+
         ollama_extras = {
             "system_prompt": system_content,
             "user_text_for_model": question,
             "user_image_count": len(prepared_images),
             "attachment_paths": attachment_paths,
+            "proton_log_excerpt_attached": proton_excerpt,
+            "proton_log_sources": proton_sources,
+            "proton_log_notes": proton_notes,
         }
 
         logger.info(

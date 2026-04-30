@@ -159,6 +159,8 @@ export type SettingsTabProps = {
   setDesktopDebugNoteAutoSave: (v: boolean) => void;
   desktopAskVerboseLogging: boolean;
   setDesktopAskVerboseLogging: (v: boolean) => void;
+  attachProtonLogsWhenTroubleshooting: boolean;
+  setAttachProtonLogsWhenTroubleshooting: (v: boolean) => void;
 
   onOpenCharacterPicker: () => void;
   onBeforeDeckyModal: () => void;
@@ -201,6 +203,8 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   setDesktopDebugNoteAutoSave,
   desktopAskVerboseLogging,
   setDesktopAskVerboseLogging,
+  attachProtonLogsWhenTroubleshooting,
+  setAttachProtonLogsWhenTroubleshooting,
   onOpenCharacterPicker,
   onBeforeDeckyModal,
   onCompleteDeckyModalClose,
@@ -1164,6 +1168,16 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
               description="Append full Ollama trace (prompts, model, replies) to bonsai-ask-trace-*.md. Needs Filesystem writes; can be large/sensitive. Latest trace also on Main → Input handling."
               checked={desktopAskVerboseLogging}
               onChange={(checked) => setDesktopAskVerboseLogging(checked)}
+            />
+          </div>
+        </PanelSectionRow>
+        <PanelSectionRow>
+          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
+            <ToggleField
+              label="Attach Proton logs when troubleshooting"
+              description="On troubleshooting-style questions (crashes, Proton, stutter), attach bounded local log tails to the model context. Requires Steam / Proton log read in Permissions. Rich Proton traces need PROTON_LOG=1; this plugin does not enable it."
+              checked={attachProtonLogsWhenTroubleshooting}
+              onChange={(checked) => setAttachProtonLogsWhenTroubleshooting(checked)}
             />
           </div>
         </PanelSectionRow>

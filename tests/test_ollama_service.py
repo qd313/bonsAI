@@ -125,10 +125,16 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertIn("The currently running game is: Game Name (AppID: 123).", prompt)
         self.assertIn("Resolved game-title hints from attachment AppIDs: 123=Test Game.", prompt)
         self.assertIn("Visual context attachments provided: 1.", prompt)
+        self.assertIn("Your primary expertise is Steam Deck", prompt)
         self.assertIn("Hardware appendix (apply only when relevant)", prompt)
         self.assertIn("IMPORTANT: When you recommend or apply a TDP or GPU clock change", prompt)
         self.assertNotIn("STRATEGY GUIDE MODE", prompt)
         self.assertIn("RULE: Ship of Harkinian (SoH)", prompt)
+        i_dyn = prompt.index("The currently running game is:")
+        i_gp = prompt.index("Your primary expertise is Steam Deck")
+        i_hw = prompt.index("Hardware appendix (apply only when relevant)")
+        self.assertLess(i_dyn, i_gp)
+        self.assertLess(i_gp, i_hw)
 
     def test_build_system_prompt_speed_includes_qam_sweet_spot_line(self):
         """Efficiency / sweet spot questions get QAM Performance lever instructions."""
@@ -174,6 +180,9 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertIn("bonsai-strategy-branches", prompt)
         self.assertIn("DECK POWER / TDP (strategy first turn)", prompt)
         self.assertNotIn("IMPORTANT: When you recommend or apply a TDP or GPU clock change", prompt)
+        i_mode = prompt.index("STRATEGY GUIDE MODE (active — first turn)")
+        i_deck = prompt.index("DECK POWER / TDP (strategy first turn)")
+        self.assertLess(i_mode, i_deck)
 
     def test_build_system_prompt_strategy_followup_turn(self):
         from backend.services.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
@@ -220,6 +229,11 @@ class OllamaServiceTests(unittest.TestCase):
         )
         self.assertIn("TDP JSON ON THIS FIRST STRATEGY TURN", prompt)
         self.assertIn("IMPORTANT: When you recommend or apply a TDP or GPU clock change", prompt)
+        i_strat = prompt.index("STRATEGY GUIDE MODE (active — first turn)")
+        i_first_json = prompt.index("TDP JSON ON THIS FIRST STRATEGY TURN")
+        i_hw = prompt.index("IMPORTANT: When you recommend or apply a TDP or GPU clock change")
+        self.assertLess(i_strat, i_first_json)
+        self.assertLess(i_first_json, i_hw)
 
     def test_build_system_prompt_strategy_followup_includes_tdp_when_power_asked(self):
         from backend.services.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
@@ -241,6 +255,9 @@ class OllamaServiceTests(unittest.TestCase):
             ask_mode="strategy",
         )
         self.assertIn("IMPORTANT: When you recommend or apply a TDP or GPU clock change", prompt)
+        i_cheat = prompt.index("If you want to cheat")
+        i_hw = prompt.index("IMPORTANT: When you recommend or apply a TDP or GPU clock change")
+        self.assertLess(i_cheat, i_hw)
 
     def test_build_system_prompt_speed_includes_triple_resolution_for_fps_preset(self):
         def lookup_app_name(_app_id: str) -> str:
@@ -330,6 +347,11 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertIn("DECK TROUBLESHOOTING (game in focus)", prompt)
         self.assertIn("cannot run a web browser", prompt)
         self.assertIn("ProtonDB", prompt)
+        i_game = prompt.index("The currently running game is:")
+        i_trouble = prompt.index("DECK TROUBLESHOOTING (game in focus)")
+        i_appendix = prompt.index("Hardware appendix (apply only when relevant)")
+        self.assertLess(i_game, i_trouble)
+        self.assertLess(i_trouble, i_appendix)
 
     def test_build_system_prompt_omits_deck_troubleshoot_gotchas_without_game_name(self):
         def lookup_app_name(_app_id: str) -> str:
@@ -374,6 +396,36 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertIn("Hardware appendix (Deck TDP/GPU JSON): **Skipped for this topic**", prompt)
         self.assertNotIn("DECK TROUBLESHOOTING (game in focus)", prompt)
         self.assertNotIn("IMPORTANT: When you recommend or apply a TDP or GPU clock change", prompt)
+        i_ollama = prompt.index("OLLAMA / bonsAI (host & inference)")
+        i_skip = prompt.index("Hardware appendix (Deck TDP/GPU JSON): **Skipped for this topic**")
+        self.assertLess(i_ollama, i_skip)
+
+    def test_build_system_prompt_early_context_suffix_before_hardware_appendix(self):
+        """Proton-style excerpts splice after identity and before the TDP/JSON tail."""
+
+        def lookup_app_name(_app_id: str) -> str:
+            return ""
+
+        def lookup_vdf(_path: str) -> dict:
+            return {}
+
+        marker = "SYNTHETIC_PROTON_EXCERPT_FOR_ORDER_TEST"
+        prompt = build_system_prompt(
+            question="Hello",
+            app_id="",
+            app_name="",
+            normalized_attachments=[],
+            prepared_images=[],
+            lookup_app_name=lookup_app_name,
+            lookup_screenshot_vdf_metadata=lookup_vdf,
+            ask_mode="speed",
+            early_context_suffix=marker,
+        )
+        i_id = prompt.index("You are bonsAI")
+        i_mark = prompt.index(marker)
+        i_hw = prompt.index("Hardware appendix (apply only when relevant)")
+        self.assertLess(i_id, i_mark)
+        self.assertLess(i_mark, i_hw)
 
     def test_build_system_prompt_includes_model_policy_tiers_explainer(self):
         """Chip / paraphrases about Model policy get tier + FOSS vs open-weight vs proprietary guidance."""

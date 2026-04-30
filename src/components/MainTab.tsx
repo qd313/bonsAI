@@ -1677,6 +1677,16 @@ export function MainTab(props: MainTabProps) {
                 {transparencySnapshot.ollama_model ? ` · Model: ${transparencySnapshot.ollama_model}` : ""}
                 {transparencySnapshot.success ? " · ok" : " · failed"}
               </div>
+              {(Boolean(transparencySnapshot.proton_log_excerpt_attached) ||
+                Boolean(transparencySnapshot.proton_log_notes?.trim())) && (
+                <div style={{ fontSize: 10, color: "#7a93ad", marginBottom: 8, lineHeight: 1.35 }}>
+                  Proton/Steam logs:{" "}
+                  {transparencySnapshot.proton_log_excerpt_attached ? "excerpt in system prompt" : "no excerpt attached"}
+                  {transparencySnapshot.proton_log_notes?.trim()
+                    ? ` — ${transparencySnapshot.proton_log_notes}`
+                    : ""}
+                </div>
+              )}
               <Button
                 onClick={() => setTransparencyOpen((o) => !o)}
                 style={{ width: "100%", minHeight: 34, marginBottom: 8 }}

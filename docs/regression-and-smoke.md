@@ -69,6 +69,7 @@ Run after **`scripts/build.ps1`** or **`scripts/build.sh`** succeeds. Check **Pa
 ### Permissions
 
 - [ ] Toggle at least one capability off and trigger a blocked action; toast matches expectation.
+- [ ] **Steam / Proton log read** (optional): with **Attach Proton logs when troubleshooting** on in Settings → Advanced, run an on-device troubleshooting Ask per [prompt-testing.md](prompt-testing.md) § **Proton / Steam log attachment (QA)** and confirm **Input handling** / transparency behavior.
 
 ### About / Debug (if applicable)
 
@@ -108,5 +109,6 @@ Model-quality, strategy/TDP rows, and sanitizer checks live in **[prompt-testing
 
 | Date | Change |
 |------|--------|
+| 2026-04-30 | Permissions: optional Steam/Proton log attachment smoke → [prompt-testing.md](prompt-testing.md) § Proton / Steam log attachment (QA). |
 | 2026-04-26 | §5 Release / clean install proof + zip QA log table ([roadmap](roadmap.md) release process). |
 | 2026-04-21 | Phase 6: initial standing matrix + Deck smoke checklist ([ship-week cleanup](roadmap.md)). |

@@ -247,6 +247,11 @@ def _user_asks_deck_troubleshooting_or_compat_line(question: str) -> bool:
     return False
 
 
+def question_matches_troubleshooting_log_context(question: str) -> bool:
+    """True when the Ask matches troubleshooting presets (crashes, Proton, stutter, etc.)."""
+    return _user_asks_deck_troubleshooting_or_compat_line(question)
+
+
 OLLAMA_BONSAI_SETUP_LINE = (
     "\n\nOLLAMA / bonsAI (host & inference): The user is asking about **slow or failing Ollama responses** and/or **how Ollama is set up for bonsAI**. "
     "Answer as **LLM/host/network** guidance — **not** Steam **Performance / TDP / FPS / QAM game sliders** unless they explicitly tie slowness to those.\n"
@@ -289,6 +294,19 @@ DECK_TROUBLESHOOT_GAME_SETTINGS_LINE = (
     "On STRATEGY first-turn messages that end with a ```bonsai-strategy-branches``` fence, put that guidance only in the **visible** text **above** the fence; the branch fence must remain the **last** characters of the reply.\n"
 )
 
+# Identity + scope (after dynamic game/attachment/vision block; TDP/JSON contract is appended last).
+BONSAI_SYSTEM_IDENTITY = (
+    "You are bonsAI, an expert system assistant embedded on a Steam Deck handheld. "
+    "Always answer directly, concisely, and in English.\n\n"
+)
+
+GENERAL_PURPOSE_ASSISTANT_CLAUSE = (
+    "Your primary expertise is Steam Deck and handheld PC gaming—including performance, compatibility, and how to use this plugin's "
+    "context (running title, screenshots, and any excerpts supplied above). When the user asks about something else, still help usefully "
+    "from general knowledge; say clearly when you are unsure or when an answer would need live tools you do not have. Do not claim to "
+    "run shell commands or code, browse the web, perform real-time search, or read files beyond what appears in this system message.\n\n"
+)
+
 
 def build_system_prompt(
     question: str,
@@ -299,8 +317,15 @@ def build_system_prompt(
     lookup_app_name: Callable[[str], str],
     lookup_screenshot_vdf_metadata: Callable[[str], dict],
     ask_mode: str = "speed",
+    early_context_suffix: str = "",
 ) -> str:
-    """Build the system message used for Ollama requests from game and attachment context."""
+    """Build the system message used for Ollama requests from game and attachment context.
+
+    Layers (excluding optional roleplay prefix from ``main.py``): dynamic game/attachment/vision → identity +
+    general-purpose clause → ``early_context_suffix`` (e.g. Proton excerpts) → topic/mode injects → TDP + JSON
+    contract tail. Future RAG snippets belong immediately before the topic injects (same splice as
+    ``early_context_suffix``, or an adjacent block in ``main.py``).
+    """
     attachment_app_ids = sorted(
         {
             str(att.get("app_id", "") or "").strip()
@@ -379,14 +404,14 @@ def build_system_prompt(
         if user_game_intent
         else "If the user asks about gameplay context, prioritize game-specific visual cues over Steam UI."
     )
-    core_identity = (
-        "You are bonsAI, an expert system assistant embedded on a Steam Deck handheld. "
-        "Always answer directly, concisely, and in English.\n\n"
-    )
-    game_context = (
+    dynamic_block = (
         f"{game_line} {attachment_game_context_line} {attachment_name_context_line} {vdf_context_line} "
         f"{vision_line} {vision_priority_line} {genre_franchise_cue_line} {game_intent_line}\n\n"
     )
+    general_block = BONSAI_SYSTEM_IDENTITY + GENERAL_PURPOSE_ASSISTANT_CLAUSE
+    early_stripped = (early_context_suffix or "").strip()
+    early_block = f"\n\n{early_stripped}" if early_stripped else ""
+
     hardware_tdp_appendix = (
         "Hardware appendix (apply only when relevant): The Steam Deck APU supports a TDP range of 3-15 watts and "
         "GPU clock of 200-1600 MHz. Never suggest power values outside these hardware limits.\n\n"
@@ -409,19 +434,15 @@ def build_system_prompt(
             and _user_asks_deck_troubleshooting_or_compat_line(question)
             and not ollama_q
         )
-        hardware_block = (
-            HARDWARE_APPENDIX_SKIPPED_FOR_OLLAMA_TOPIC if ollama_q else hardware_tdp_appendix
-        )
-        return (
-            core_identity
-            + game_context
-            + hardware_block
-            + (OLLAMA_BONSAI_SETUP_LINE if ollama_q else "")
+        middle = (
+            (OLLAMA_BONSAI_SETUP_LINE if ollama_q else "")
             + (MODEL_POLICY_TIERS_LINE if model_policy_q else "")
             + (SWEET_SPOT_QAM_LINE if sweet else "")
             + gfx
             + (DECK_TROUBLESHOOT_GAME_SETTINGS_LINE if troubleshoot else "")
         )
+        tail = HARDWARE_APPENDIX_SKIPPED_FOR_OLLAMA_TOPIC if ollama_q else hardware_tdp_appendix
+        return dynamic_block + general_block + early_block + middle + tail
 
     ollama_q = user_asks_ollama_bonsai_host_or_latency(question)
     model_policy_q = _user_asks_model_policy_tiers_explainer(question)
@@ -459,43 +480,50 @@ def build_system_prompt(
             "Do NOT repeat this branching fence when the user later sends a message starting with [Strategy follow-up].\n"
         )
 
-    out = core_identity + game_context + strategy_block
-
     if followup:
         if power_topic:
-            out += "\n\n" + hardware_tdp_appendix
+            strategy_tdp_prose = ""
         else:
-            out += (
+            strategy_tdp_prose = (
                 "\n\nDECK POWER / TDP (strategy follow-up): The branch message is gameplay-focused. "
                 "Unless the user explicitly asks about FPS, TDP, watts, GPU MHz, battery drain, or thermal tuning in this message, "
                 "do not discuss Deck power limits at length and do not output the ```json TDP recommendation block.\n"
             )
     else:
         if power_topic:
-            out += (
-                "\n\nTDP JSON ON THIS FIRST STRATEGY TURN: The user asked about performance or power. "
-                "If you recommend TDP/GPU changes, output the required ```json ... ``` block on its own lines immediately above "
-                "the opening ```bonsai-strategy-branches line. The branch fence remains last; no characters after its closing ```.\n\n"
-            )
-            out += hardware_tdp_appendix
+            strategy_tdp_prose = ""
         else:
-            out += (
+            strategy_tdp_prose = (
                 "\n\nDECK POWER / TDP (strategy first turn): The user did not ask about performance, FPS, TDP, watts, "
                 "GPU clock, battery tuning, or thermal limits. Do not open with hardware or power talk. "
                 "Do not output the ```json TDP/GPU recommendation block on this reply. Focus on gameplay coaching and the branch fence.\n"
             )
 
+    middle = strategy_block + strategy_tdp_prose
+
     if ask_mode == "strategy" and _user_asks_resolution_relevant_performance(question):
-        out += GRAPHICS_RESOLUTION_STRATEGY
+        middle += GRAPHICS_RESOLUTION_STRATEGY
     if _user_asks_sweet_spot_tuning(question):
-        out += SWEET_SPOT_QAM_LINE
+        middle += SWEET_SPOT_QAM_LINE
     if app_name.strip() and _user_asks_deck_troubleshooting_or_compat_line(question) and not ollama_q:
-        out += DECK_TROUBLESHOOT_GAME_SETTINGS_LINE
+        middle += DECK_TROUBLESHOOT_GAME_SETTINGS_LINE
     if ollama_q:
-        out += OLLAMA_BONSAI_SETUP_LINE
+        middle += OLLAMA_BONSAI_SETUP_LINE
     if model_policy_q:
-        out += MODEL_POLICY_TIERS_LINE
-    return out
+        middle += MODEL_POLICY_TIERS_LINE
+
+    tail = ""
+    if followup and power_topic:
+        tail = "\n\n" + hardware_tdp_appendix
+    elif not followup and power_topic:
+        tail = (
+            "\n\nTDP JSON ON THIS FIRST STRATEGY TURN: The user asked about performance or power. "
+            "If you recommend TDP/GPU changes, output the required ```json ... ``` block on its own lines immediately above "
+            "the opening ```bonsai-strategy-branches line. The branch fence remains last; no characters after its closing ```.\n\n"
+        )
+        tail += hardware_tdp_appendix
+
+    return dynamic_block + general_block + early_block + middle + tail
 
 
 def format_ai_response(

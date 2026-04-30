@@ -53,6 +53,7 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertFalse(sanitized["latency_timeouts_custom_enabled"])
         self.assertFalse(sanitized["desktop_debug_note_auto_save"])
         self.assertFalse(sanitized["desktop_ask_verbose_logging"])
+        self.assertFalse(sanitized["attach_proton_logs_when_troubleshooting"])
         self.assertFalse(sanitized["capabilities"]["filesystem_write"])
         self.assertFalse(sanitized["capabilities"]["hardware_control"])
         self.assertFalse(sanitized["ai_character_enabled"])

@@ -11,9 +11,11 @@ import decky
 from backend.services.capabilities import capability_enabled
 from backend.services.input_sanitizer_service import apply_input_sanitizer_lane
 from backend.services.ollama_service import (
+    question_matches_troubleshooting_log_context,
     user_asks_ollama_bonsai_host_or_latency,
     user_wants_power_or_performance_topic,
 )
+from backend.services.proton_troubleshooting_logs import collect_proton_troubleshooting_logs
 from backend.services.tdp_service import (
     GPU_CLK_MAX_MHZ,
     GPU_CLK_MIN_MHZ,
@@ -86,6 +88,9 @@ async def run_game_ai_request(
                     "error_message": "",
                     "elapsed_seconds": elapsed,
                     "model_policy_disclosure": None,
+                    "proton_log_excerpt_attached": False,
+                    "proton_log_sources": [],
+                    "proton_log_notes": "",
                 }
             )
             return {**out, "model_policy_disclosure": None, "strategy_guide_branches": None}
@@ -120,6 +125,9 @@ async def run_game_ai_request(
                     "error_message": "media_library_access",
                     "elapsed_seconds": elapsed,
                     "model_policy_disclosure": None,
+                    "proton_log_excerpt_attached": False,
+                    "proton_log_sources": [],
+                    "proton_log_notes": "",
                 }
             )
             return {
@@ -162,6 +170,9 @@ async def run_game_ai_request(
                     "error_message": "",
                     "elapsed_seconds": elapsed,
                     "model_policy_disclosure": None,
+                    "proton_log_excerpt_attached": False,
+                    "proton_log_sources": [],
+                    "proton_log_notes": "",
                 }
             )
             return {
@@ -175,6 +186,39 @@ async def run_game_ai_request(
                 "model_policy_disclosure": None,
             }
         question_for_model = lane.text
+
+        proton_attachment_text = ""
+        proton_sources: list = []
+        proton_notes_parts: list[str] = []
+        want_proton_logs = (
+            settings.get("attach_proton_logs_when_troubleshooting") is True
+            and question_matches_troubleshooting_log_context(question_for_model)
+            and bool(str(app_id or "").strip())
+        )
+        if want_proton_logs:
+            if not capability_enabled(settings, "steam_logs_read"):
+                proton_notes_parts.append(
+                    "Proton log excerpts skipped: enable Steam/Proton log read in Permissions."
+                )
+            else:
+                _loop_pl = asyncio.get_running_loop()
+
+                def _collect_logs() -> dict:
+                    return collect_proton_troubleshooting_logs(app_id)
+
+                pl_result = await _loop_pl.run_in_executor(None, _collect_logs)
+                proton_attachment_text = str(pl_result.get("text") or "")
+                proton_sources = list(pl_result.get("sources") or [])
+                for w in pl_result.get("warnings") or []:
+                    if isinstance(w, str) and w.strip():
+                        proton_notes_parts.append(w.strip())
+
+        proton_log_transparency = {
+            "proton_log_excerpt_attached": bool(proton_attachment_text.strip()),
+            "proton_log_sources": proton_sources,
+            "proton_log_notes": "; ".join(proton_notes_parts),
+        }
+
         read_tdp = is_current_tdp_read_intent(question_for_model)
         wants_grounding = user_wants_power_or_performance_topic(question_for_model)
         ollama_host_topic = user_asks_ollama_bonsai_host_or_latency(question_for_model)
@@ -199,6 +243,8 @@ async def run_game_ai_request(
             read_tdp=read_tdp,
             tdp_grounding_requested=tdp_grounding_requested,
             tdp_cap_w=pre_cap,
+            proton_log_attachment=proton_attachment_text or None,
+            proton_log_transparency=proton_log_transparency,
         )
         elapsed = round(time.time() - start, 1)
         base_response_text = str(ollama_result.get("response", "") or "No response text.")
@@ -270,6 +316,9 @@ async def run_game_ai_request(
                 "error_message": err_tail,
                 "elapsed_seconds": elapsed,
                 "model_policy_disclosure": ollama_result.get("model_policy_disclosure"),
+                "proton_log_excerpt_attached": bool(ollama_result.get("proton_log_excerpt_attached")),
+                "proton_log_sources": ollama_result.get("proton_log_sources") or [],
+                "proton_log_notes": str(ollama_result.get("proton_log_notes") or ""),
             }
         )
 
@@ -314,6 +363,9 @@ async def run_game_ai_request(
                 "error_message": "Internal error (details logged on device).",
                 "elapsed_seconds": elapsed,
                 "model_policy_disclosure": None,
+                "proton_log_excerpt_attached": False,
+                "proton_log_sources": [],
+                "proton_log_notes": "",
             }
         )
         return {

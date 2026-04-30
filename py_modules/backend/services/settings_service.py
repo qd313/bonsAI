@@ -54,6 +54,11 @@ def sanitize_desktop_ask_verbose_logging(value: Any) -> bool:
     return value is True
 
 
+def sanitize_attach_proton_logs_when_troubleshooting(value: Any) -> bool:
+    """Only explicit true attaches local Proton/Steam log excerpts on troubleshooting-style Asks."""
+    return value is True
+
+
 def sanitize_preset_chip_fade_animation_enabled(value: Any) -> bool:
     """Staggered preset-chip fades are on unless the user explicitly saves ``false``."""
     return value is not False
@@ -228,6 +233,9 @@ def sanitize_settings(
         ),
         "desktop_ask_verbose_logging": sanitize_desktop_ask_verbose_logging(
             raw.get("desktop_ask_verbose_logging")
+        ),
+        "attach_proton_logs_when_troubleshooting": sanitize_attach_proton_logs_when_troubleshooting(
+            raw.get("attach_proton_logs_when_troubleshooting")
         ),
         "preset_chip_fade_animation_enabled": sanitize_preset_chip_fade_animation_enabled(
             raw.get("preset_chip_fade_animation_enabled")

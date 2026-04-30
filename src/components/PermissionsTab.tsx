@@ -47,6 +47,12 @@ const ROWS: {
       "Listing and attaching Steam screenshots for vision prompts. Off blocks screenshot browse and attach.",
   },
   {
+    key: "steam_logs_read",
+    title: "Steam / Proton log read",
+    description:
+      "Reading bounded local Proton and Steam log excerpts for troubleshooting-style Asks when enabled in Settings. Off blocks log attachment.",
+  },
+  {
     key: "external_navigation",
     title: "External and Steam navigation",
     description:

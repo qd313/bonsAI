@@ -69,41 +69,6 @@ Backlog items are **not** listed in execution order. Stars are effort/risk withi
 - **Depends on:** unified search indexing and response-state handling.
 - **Not in scope:** changing ranking semantics for unrelated search domains.
 
-### Debugging and Proton log analysis
-
-★★★
-
-- **Goal:** Attach relevant Proton/game logs to troubleshooting prompts.
-- **Primary work:** log discovery, truncation/filtering, context injection.
-- **Files:** `main.py`, `src/index.tsx`.
-- **Depends on:** active-game context.
-- **Not in scope:** enabling Proton logging automatically.
-- **Risk note:** limited value unless users already run with `PROTON_LOG=1`.
-
-### System prompt reorder and general-purpose assistant clause
-
-★★★
-
-- **Status:** Planned (documentation only; implementation backlog TBD — see [rag-sources-research.md](rag-sources-research.md)).
-- **Goal:** Reorder Ollama **system** message: dynamic game/attachment/vision first, then general-knowledge block (Deck/gaming primary expertise but general-purpose for other topics), optional RAG snippets, **TDP limits and JSON contract last**.
-- **Primary work:** refactor `build_system_prompt` in `backend/services/ollama_service.py`; keep AI character prefix in `main.py` when enabled.
-- **Files:** `backend/services/ollama_service.py`, `main.py`, `docs/prompt-testing.md` after behavior change.
-- **Depends on:** none.
-- **Not in scope:** changing the JSON schema for TDP/GPU recommendations.
-
-### Strategy Guide prompt path (beta)
-
-★★★★
-
-- **Goal:** Strategy-focused path for “how do I beat this level” and related prompts.
-- **Primary work:** strategy intent routing, coaching-first format, prompt scaffolding.
-- **Expected UX:** strategy preset switches to `Strategy Guide` mode with placeholder like `Describe the level or problem`.
-- **Includes:** Steam Input-aware recommendations when control friction matters.
-- **Policy:** optional `Cheat / Fast Pass` only when user asks for speedrun/shortcut guidance.
-- **Files:** `src/index.tsx`, `main.py`, `prompt-testing.md`.
-- **Depends on:** **Mode selector (main screen)** (shipped).
-- **Not in scope:** guaranteed perfect walkthroughs for every title.
-
 ### Strategy Guide safety and spoilers
 
 ★★★★
@@ -112,7 +77,7 @@ Backlog items are **not** listed in execution order. Stars are effort/risk withi
 - **Primary work:** spoiler-safe policy, explicit consent for unrestricted spoilers, tap-to-reveal blocks.
 - **Settings note:** optional setting to show spoilers directly after consent.
 - **Files:** `src/index.tsx`, `main.py`, `prompt-testing.md`.
-- **Depends on:** **Strategy Guide prompt path (beta)**.
+- **Depends on:** **Strategy Ask mode (`strategy`; Strategy Guide in prompts)** — shipped; see **[Completed](#tabs-icons-and-unified-ask-flow)**.
 - **Not in scope:** hard guarantees in every edge case.
 
 ### Steam Input layout analysis
@@ -163,7 +128,7 @@ Backlog items are **not** listed in execution order. Stars are effort/risk withi
 - **Goal:** Strategy Guide responses with actionable checklists for the current chat.
 - **Primary work:** checklist format, interactive check/uncheck, follow-up sync when user reports progress in text.
 - **Files:** `src/index.tsx`, `main.py`, `prompt-testing.md`.
-- **Depends on:** **Strategy Guide prompt path (beta)**.
+- **Depends on:** **Strategy Ask mode (`strategy`; Strategy Guide in prompts)** — shipped; see **[Completed](#tabs-icons-and-unified-ask-flow)**.
 - **Not in scope:** long-term persistence across sessions.
 
 ### Native QAM entry for BonsAI (beneath Decky icon) — decouple research
@@ -276,6 +241,7 @@ Headings group related work. Star counts match the historical list.
 - ★★ **Prompt-testing MVP:** [prompt-testing.md](prompt-testing.md) — scenario matrices (incl. QAMP verification), checklist workflow, and **optional frozen preset carousel** for repeatable main-tab chips (`TEMP_PRESET_CAROUSEL_FROZEN` / `TEMP_CAROUSEL_FROZEN_TEXTS` in `src/data/presets.ts`). **Status:** MVP ready for contributors; Deck checkbox pass **partially complete** (see **In Progress**).
 - ★★ **Input sanitizer lane (hybrid):** Deterministic Ask cleanup and conservative block before Ollama; default on; no Settings UI. Magic phrases `bonsai:disable-sanitize` / `bonsai:enable-sanitize` (exact whole message, trim + casefold) persist `input_sanitizer_user_disabled` via `save_settings` and return confirmation without calling the model. Backend `backend/services/input_sanitizer_service.py`, `main.py` (`ask_game_ai` / `start_background_game_ai`); frontend types and completion path in `src/index.tsx`; phrase constants in `src/data/inputSanitizerCommands.ts`.
 - ★★★ **Input Handling Transparency Panel:** Main tab **Input handling (last Ask)** shows raw input, sanitizer path, system/user text sent to Ollama, model name, and raw vs final reply; **Run original** / **Copy JSON**. Optional Settings **Verbose Ask logging to Desktop notes** (`desktop_ask_verbose_logging`) appends full trace markdown to `bonsai-ask-trace-YYYY-MM-DD.md` when filesystem writes are allowed. Backend `get_input_transparency`, `_persist_input_transparency`, `append_desktop_ask_transparency_sync` in `desktop_note_service.py`; `main.py`; UI `MainTab.tsx`, `src/utils/inputTransparency.ts`.
+- ★★★ **System prompt reorder + general-purpose assistant clause:** Shipped — `build_system_prompt` in [`py_modules/backend/services/ollama_service.py`](../py_modules/backend/services/ollama_service.py) assembles the Ollama **system** message in layers: dynamic game/attachment/vision → identity + general-purpose clause → optional early context (e.g. Proton via `early_context_suffix` from `main.py`) → topic/mode injects → **TDP + ```json``` contract tail** last; `append_deck_tdp_sysfs_grounding` after that; AI character roleplay remains a **prefix** when enabled. Unit ordering tests in [`tests/test_ollama_service.py`](../tests/test_ollama_service.py); maintainer notes in [prompt-testing.md](prompt-testing.md) (**System message layer order**). **Still needs on-device / matrix validation:** use Input transparency to confirm layer order and quality on real Asks (Speed, Strategy, Ollama-host, TDP/read paths) — track in [prompt-testing.md](prompt-testing.md) and [regression-and-smoke.md](regression-and-smoke.md) as appropriate. RAG injection in-prompt remains future (see [rag-sources-research.md](rag-sources-research.md)); **not in scope:** changing TDP/GPU JSON schema.
 
 **Also counted in shipped baseline (not separate checklist lines above):** background prompt completion (V1); Linux Ollama compatibility.
 
@@ -295,6 +261,7 @@ Headings group related work. Star counts match the historical list.
 - ★★ **Unified Search + Ask Input:** Merge settings search and AI question entry into one shared input flow.
 - ★ **Preset Chip Fade Opt-Out:** Settings `ToggleField` **Preset chip fade animation** (persisted `preset_chip_fade_animation_enabled`, default on). When off, main-tab suggestion chips stay opaque and rotate prompts without opacity transitions; post-Ask re-seed unchanged. `PresetAnimatedChips.tsx`, `MainTab.tsx`, `settingsAndResponse.ts`, `settings_service.py`.
 - ★★★ **Mode selector (main screen):** Persisted `ask_mode` (`speed` / `strategy` / `deep`, UI labels Speed / Strategy / Deep). Compact outline control (green / bronze / gold) on the unified input strip, left of mic/stop, opens an anchored popover menu to change mode (no layout reflow); D-pad focus order is text field → mode → mic/stop. Backend orders Ollama model fallbacks per mode in `refactor_helpers.py`; `start_background_game_ai` includes `ask_mode`. `src/data/askMode.ts`, `src/components/AskModeMenuPopover.tsx`, `MainTab.tsx`, `index.tsx`, `settingsAndResponse.ts`, `settings_service.py`, `main.py`.
+- ★★★★ **Strategy Guide prompt path (beta):** Shipped — **Strategy Guide** in prompts and tooling is the same path as **`ask_mode: strategy`** (main-tab label **Strategy**). Strategy presets can switch Ask mode; strategy-specific placeholder (“describe the level / boss / puzzle”); **`STRATEGY GUIDE MODE`** scaffolding and branch-picker contract in `backend/services/ollama_service.py` + `backend/services/strategy_guide_parse.py`; follow-up UX in `src/index.tsx`, `MainTab.tsx`, `src/data/presets.ts`, `src/data/strategyGuideFollowup.ts`; character framing in `ai_character_service.py` when roleplay is on. Optional cheat / shortcut guidance when the user asks; Steam Input-aware copy where relevant. Regression notes: [prompt-testing.md](prompt-testing.md) § Strategy Guide. **Not in scope:** perfect walkthroughs for every title.
 - ★★ **Debug tab opt-in (Settings):** Persisted `show_debug_tab` (default **false**); **Debug** omitted from the tab strip until **Show Debug tab** is enabled in Settings; safe tab switch when turning the toggle off while on **Debug**. `src/index.tsx`, `settings_service.py`, `settingsAndResponse.ts`.
 - ★★ **Settings tab trim:** **Trim the fat** on Settings: fewer simultaneous controls per view, clearer `PanelSection` grouping, progressive disclosure, shorter helper copy on toggles and sliders; dedicated Settings composition (`SettingsTab.tsx` and related controls).
 - ★★★ **Reset session cache (app state):** Settings → Advanced **Reset session cache…** with confirm modal; `resetPluginSession()` clears in-memory unified search, reply, thread, transparency, branch picker, attachments, and timers. Does **not** change persisted `settings.json`, host Ollama history, or screenshot files. `src/index.tsx`.
@@ -325,7 +292,8 @@ Headings group related work. Star counts match the historical list.
 
 ### Permissions and capability gating
 
-- ★★★★ **Capability Permission Center (User-Controlled Access):** Permissions tab (lock icon, same title scale as other tabs) with toggles for filesystem writes, hardware control (TDP apply), media library access (screenshot attach), and external/Steam navigation (About links, Debug Steam Input jump). Persisted `settings.json` `capabilities`; new installs default OFF; legacy installs without a `capabilities` block are grandfathered ON until saved. Backend enforces gates on `append_desktop_debug_note`, `append_desktop_chat_event`, `list_recent_screenshots`, ask-with-attachments, TDP apply, `capture_screenshot`. Files: `backend/services/capabilities.py`, `PermissionsTab`, `main.py`, `src/utils/settingsAndResponse.ts`.
+- ★★★★ **Capability Permission Center (User-Controlled Access):** Permissions tab (lock icon, same title scale as other tabs) with toggles for filesystem writes, hardware control (TDP apply), media library access (screenshot attach), Steam/Proton log read (troubleshooting Ask excerpts), and external/Steam navigation (About links, Debug Steam Input jump). Persisted `settings.json` `capabilities`; new installs default OFF; legacy installs without a `capabilities` block are grandfathered ON until saved. Backend enforces gates on `append_desktop_debug_note`, `append_desktop_chat_event`, `list_recent_screenshots`, ask-with-attachments, TDP apply, `capture_screenshot`, and bounded reads for Proton/log attachment when enabled. Files: `backend/services/capabilities.py`, `PermissionsTab`, `main.py`, `src/utils/settingsAndResponse.ts`.
+- ★★★ **Debugging and Proton log analysis:** Settings → Advanced **Attach Proton logs when troubleshooting** (`attach_proton_logs_when_troubleshooting`) plus Permissions **Steam / Proton log read** (`steam_logs_read`). On Linux, when the sanitized question matches the troubleshooting heuristic and a running AppID is present, the backend attaches bounded tails from `~/steam-<appid>.log` (typical with `PROTON_LOG=1`) and shallow `steamapps/compatdata/<appid>/*.log` files into the **system** prompt before roleplay prefixing (`backend/services/proton_troubleshooting_logs.py`, `backend/services/game_ai_request.py`, `main.py`). Main **Input handling** shows excerpt/notes. Does **not** enable Proton logging automatically. **On-device QA:** not yet exercised in the prompt matrix — follow [prompt-testing.md](prompt-testing.md) § **Proton / Steam log attachment (QA)**; optional Permissions smoke row in [regression-and-smoke.md](regression-and-smoke.md) § Permissions.
 - ★★★★ **Model policy tiers + disclosure UX:** Persisted `model_policy_tier` / `model_policy_non_foss_unlocked` and related allow-high-VRAM flag; Settings **Model policy** (tier chips, unlock flow, README link); backend `backend/services/model_policy.py` classifies model tags and enforces tier when selecting fallbacks; successful replies can include **Model source disclosure** on Main. `src/data/modelPolicy.ts`, `MainTab.tsx`, `src/utils/inputTransparency.ts`, `main.py`, [README.md](../README.md) § Model policy tiers.
 
 **Baseline index:** global screenshots and vision (V1) — multimodal attach; uses media-related capability paths.
@@ -432,15 +400,15 @@ Dependency graph and implementation notes that are not feature checklist items.
 
 ### Cross-feature dependency summary
 
-- **Mode selector (main screen)** (shipped: Speed / Strategy / Deep + model fallbacks) → **Per-mode latency/timeout profiles**, **Strategy Guide prompt path (beta)**.
+- **Mode selector (main screen)** (shipped: Speed / Strategy / Deep + model fallbacks) → **Per-mode latency/timeout profiles**; **Strategy Guide prompt path (beta)** is shipped as **`strategy`** Ask mode — see **[Completed](#tabs-icons-and-unified-ask-flow)**.
 - **Character voice roleplay (shipped)** → baseline for **Character accent intensity (shipped)**; presets in [voice-character-catalog.md](voice-character-catalog.md), [src/data/characterCatalog.ts](../src/data/characterCatalog.ts).
 - **Character voice roleplay (shipped)** → **Pyro talent-manager easter egg (hidden preset)** (planned).
 - **Character voice roleplay** + avatar mapping → **Higher-resolution character avatars (GTA-style art pass)**.
 - **Character voice roleplay (shipped)** → **Character-derived UI accent theme (preset-selected)** (shipped — see **Completed**); **Random character “?” avatar** (shipped — see **Completed**); **Running-game character suggestions (AI picker)** (shipped — see **Completed**).
 - **Input sanitizer (shipped)** + **Input handling transparency (shipped)** → future sanitizer extensions should keep user-visible auditability.
-- **Strategy Guide prompt path (beta)** → **Strategy Guide safety and spoilers**, **Strategy checklist workflow (chat-scoped)**.
+- **Strategy Ask mode (`strategy`; Strategy Guide in prompts)** (shipped) → **Strategy Guide safety and spoilers**, **Strategy checklist workflow (chat-scoped)**.
 - **Global screenshots and vision** → richer strategy + screenshot context.
-- **Capability Permission Center** → gates filesystem, elevated tasks, hardware, and (future) web/search calls.
+- **Capability Permission Center** → gates filesystem, elevated tasks, hardware, Steam/Proton log reads for troubleshooting excerpts, and (future) web/search calls.
 - **Model policy tiers + disclosure UX (shipped)** → layered on **Capability Permission Center**; tiered routing + per-reply disclosure — see **Completed** → Permissions.
 - **Llama.cpp compatibility evaluation** → may inform deeper **Lan vs Deck provider layering** atop shipped Deck-first routing defaults (**Local/runtime deck-first defaults + onboarding** — see **Completed** → Connection).
 - **Local/runtime deck-first defaults + onboarding** (Completed) lays baseline routing + **Connection** onboarding; advanced provider matrix work remains backlog if needed alongside **Llama.cpp compatibility evaluation**.
@@ -458,7 +426,7 @@ Dependency graph and implementation notes that are not feature checklist items.
 ```mermaid
 flowchart TD
   modeSelector[ModeSelectorMainScreenShipped] --> perModeProfiles[PerModeLatencyTimeoutProfiles]
-  modeSelector --> strategyPath[StrategyGuidePromptPathBeta]
+  modeSelector --> strategyPath[StrategyGuidePromptPathBetaShipped]
   strategyPath --> strategySafety[StrategyGuideSafetyAndSpoilers]
   strategyPath --> strategyChecklist[StrategyChecklistWorkflowChatScoped]
   visionFeature[GlobalScreenshotsAndVision] --> strategyPath

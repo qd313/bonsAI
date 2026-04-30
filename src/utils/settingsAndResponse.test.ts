@@ -55,6 +55,7 @@ describe("settingsAndResponse", () => {
     expect(settings.latency_timeouts_custom_enabled).toBe(false);
     expect(settings.desktop_debug_note_auto_save).toBe(false);
     expect(settings.desktop_ask_verbose_logging).toBe(false);
+    expect(settings.attach_proton_logs_when_troubleshooting).toBe(false);
     expect(settings.capabilities.filesystem_write).toBe(false);
     expect(settings.capabilities.hardware_control).toBe(false);
     expect(settings.ai_character_enabled).toBe(false);
@@ -160,6 +161,7 @@ describe("settingsAndResponse", () => {
     expect(settings.capabilities.filesystem_write).toBe(true);
     expect(settings.capabilities.hardware_control).toBe(false);
     expect(settings.capabilities.media_library_access).toBe(false);
+    expect(settings.capabilities.steam_logs_read).toBe(false);
     expect(settings.capabilities.external_navigation).toBe(false);
   });
 
@@ -181,6 +183,7 @@ describe("settingsAndResponse", () => {
       screenshotAttachmentPreset: "mid",
       desktopDebugNoteAutoSave: true,
       desktopAskVerboseLogging: false,
+      attachProtonLogsWhenTroubleshooting: true,
       presetChipFadeAnimationEnabled: true,
       inputSanitizerUserDisabled: false,
       capabilities: DEFAULT_CAPABILITIES,
@@ -206,6 +209,7 @@ describe("settingsAndResponse", () => {
     expect(p.ollama_keep_alive).toBe("30s");
     expect(p.model_allow_high_vram_fallbacks).toBe(true);
     expect(p.ollama_local_on_deck).toBe(true);
+    expect(p.attach_proton_logs_when_troubleshooting).toBe(true);
   });
 
   it("toBonsaiSettingsPayload merges patch over base (character picker path)", () => {
@@ -217,6 +221,7 @@ describe("settingsAndResponse", () => {
       screenshotAttachmentPreset: DEFAULT_SCREENSHOT_ATTACHMENT_PRESET,
       desktopDebugNoteAutoSave: false,
       desktopAskVerboseLogging: false,
+      attachProtonLogsWhenTroubleshooting: false,
       presetChipFadeAnimationEnabled: true,
       inputSanitizerUserDisabled: false,
       capabilities: DEFAULT_CAPABILITIES,

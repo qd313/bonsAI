@@ -47,6 +47,7 @@ export type BonsaiCapabilities = {
   filesystem_write: boolean;
   hardware_control: boolean;
   media_library_access: boolean;
+  steam_logs_read: boolean;
   external_navigation: boolean;
 };
 
@@ -62,6 +63,8 @@ export type BonsaiSettings = {
   desktop_debug_note_auto_save: boolean;
   /** When true, append full Ask/Ollama transparency blocks to Desktop trace files (requires filesystem_write). */
   desktop_ask_verbose_logging: boolean;
+  /** When true (with Permissions → Steam/Proton log read), troubleshooting-style Asks attach bounded local log excerpts. */
+  attach_proton_logs_when_troubleshooting: boolean;
   /** When false, main-tab preset suggestion chips stay opaque and swap text without fade transitions (default true). */
   preset_chip_fade_animation_enabled: boolean;
   /** When true, Ask input sanitizer lane is off (set via README magic phrases, not the Settings UI). */
@@ -100,6 +103,7 @@ export type BonsaiSettingsSnapshotInput = {
   screenshotAttachmentPreset: ScreenshotAttachmentPreset;
   desktopDebugNoteAutoSave: boolean;
   desktopAskVerboseLogging: boolean;
+  attachProtonLogsWhenTroubleshooting: boolean;
   presetChipFadeAnimationEnabled: boolean;
   inputSanitizerUserDisabled: boolean;
   capabilities: BonsaiCapabilities;
@@ -130,6 +134,7 @@ export function toBonsaiSettingsPayload(
     screenshot_attachment_preset: input.screenshotAttachmentPreset,
     desktop_debug_note_auto_save: input.desktopDebugNoteAutoSave,
     desktop_ask_verbose_logging: input.desktopAskVerboseLogging,
+    attach_proton_logs_when_troubleshooting: input.attachProtonLogsWhenTroubleshooting,
     preset_chip_fade_animation_enabled: input.presetChipFadeAnimationEnabled,
     input_sanitizer_user_disabled: input.inputSanitizerUserDisabled,
     capabilities: input.capabilities,
@@ -170,6 +175,7 @@ export const DEFAULT_SCREENSHOT_ATTACHMENT_PRESET: ScreenshotAttachmentPreset = 
 export const DEFAULT_SCREENSHOT_MAX_DIMENSION: ScreenshotMaxDimension = 1280;
 export const DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE = false;
 export const DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING = false;
+export const DEFAULT_ATTACH_PROTON_LOGS_WHEN_TROUBLESHOOTING = false;
 export const DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED = true;
 export const DEFAULT_INPUT_SANITIZER_USER_DISABLED = false;
 export const DEFAULT_SHOW_DEBUG_TAB = false;
@@ -188,6 +194,7 @@ export const DEFAULT_CAPABILITIES: BonsaiCapabilities = {
   filesystem_write: false,
   hardware_control: false,
   media_library_access: false,
+  steam_logs_read: false,
   external_navigation: false,
 };
 
@@ -315,6 +322,10 @@ export function normalizeDesktopAskVerboseLogging(value: unknown): boolean {
   return value === true;
 }
 
+export function normalizeAttachProtonLogsWhenTroubleshooting(value: unknown): boolean {
+  return value === true;
+}
+
 export function normalizePresetChipFadeAnimationEnabled(value: unknown): boolean {
   if (value === false) return false;
   return DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED;
@@ -397,6 +408,7 @@ export function normalizeCapabilities(value: unknown): BonsaiCapabilities {
     filesystem_write: raw.filesystem_write === true,
     hardware_control: raw.hardware_control === true,
     media_library_access: raw.media_library_access === true,
+    steam_logs_read: raw.steam_logs_read === true,
     external_navigation: raw.external_navigation === true,
   };
 }
@@ -419,6 +431,9 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     screenshot_attachment_preset: normalizeScreenshotAttachmentPreset(rawRecord),
     desktop_debug_note_auto_save: normalizeDesktopDebugNoteAutoSave(raw.desktop_debug_note_auto_save),
     desktop_ask_verbose_logging: normalizeDesktopAskVerboseLogging(raw.desktop_ask_verbose_logging),
+    attach_proton_logs_when_troubleshooting: normalizeAttachProtonLogsWhenTroubleshooting(
+      raw.attach_proton_logs_when_troubleshooting
+    ),
     preset_chip_fade_animation_enabled: normalizePresetChipFadeAnimationEnabled(
       raw.preset_chip_fade_animation_enabled
     ),

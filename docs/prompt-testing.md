@@ -119,6 +119,16 @@ Deterministic **Ask** commands: `bonsai:shortcut-setup-deck` and `bonsai:shortcu
 - [✓] "Help me troubleshoot a Proton issue" (general Proton advice) — **frozen carousel:** 3rd chip (`Help me troubleshoot a Proton issue`)
 - [ ] "Game won't launch, what should I check?" (general troubleshooting checklist)
 
+#### Proton / Steam log attachment (QA)
+
+**Shipped** — see [roadmap.md](roadmap.md) → **Completed** → Permissions (**Debugging and Proton log analysis**). Enable **Settings → Advanced → Attach Proton logs when troubleshooting** and **Permissions → Steam / Proton log read**. Rich tails usually require `PROTON_LOG=1` (plugin does not set it).
+
+On-Deck / Linux manual checks (record build id when marking **PASS**):
+
+- [ ] Troubleshooting heuristic + toggle + permission **on**, game focused, `steam-<appid>.log` present → **Input handling** shows excerpt attached; **System prompt** in transparency includes the delimited log block.
+- [ ] Toggle **on**, **Steam / Proton log read** **off** → Ask still completes; transparency notes that log read was skipped (no failed Ask).
+- [ ] Heuristic prompt with no log files → transparency warning about missing logs; model answer still returns.
+
 ### Controls
 - [ ] "Recommended controller layout?" (with game running — should give game-specific advice)
 - [ ] "How to reduce input lag?" (general advice for Steam Deck input settings)
@@ -126,6 +136,10 @@ Deterministic **Ask** commands: `bonsai:shortcut-setup-deck` and `bonsai:shortcu
 ### General Knowledge / Edge Cases
 - [ ] "What game am I playing?" (should name the running game)
 - [x] "What is my current TDP?" — **read path + broader performance grounding:** `read_current_tdp_watts` runs **before** Ollama when the ask matches `is_current_tdp_read_intent` **or** `user_wants_power_or_performance_topic`, **unless** `user_asks_ollama_bonsai_host_or_latency` (Ollama host / latency / connection — no TDP injection). The measured cap is appended to the **system** prompt via `append_deck_tdp_sysfs_grounding` in `backend/services/ollama_service.py`; the **user** message stays the raw question (good for Input transparency). The model answers **in character**; tuning JSON from the reply is **not** applied on read-TDP turns. See `main.py` → `ask_ollama` / `_build_system_prompt`.
+
+**System message layer order** (Input transparency — `build_system_prompt` + `main.py`): **(1)** dynamic game / attachment / vision context lines first; **(2)** bonsAI identity + general-purpose assistant clause; **(3)** optional early context (e.g. Proton log excerpt from `early_context_suffix`); **(4)** topic/mode injects (Ollama host, model policy, strategy mode, troubleshooting, display-target lines, …); **(5)** TDP limits + ```json``` recommendation contract tail (or Ollama-topic “skip hardware appendix” tail); **(6)** after that, `append_deck_tdp_sysfs_grounding` adds **ON-DEVICE TDP** when gated. Optional AI character roleplay is still a **prefix** on the full system string when enabled in Settings.
+
+**Regression:** Layer order is covered by `tests/test_ollama_service.py`; **Deck / real-model** passes should still spot-check Input handling (expand **System**): order matches the list above, replies stay coherent for Strategy first turn + branch fence, Ollama-host preset, sweet-spot/TDP JSON, and roleplay-on if you use it. Log **Pass / Partial / Fail** in this doc or [regression-and-smoke.md](regression-and-smoke.md) when you run a full matrix.
 
 ### TDP sysfs grounding (best-effort)
 

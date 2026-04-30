@@ -25,6 +25,10 @@ export type TransparencySnapshot = {
   error_message: string;
   elapsed_seconds: number;
   model_policy_disclosure?: ModelPolicyDisclosurePayload | null;
+  /** Local Proton/Steam log excerpts attached to the last Ollama system prompt (troubleshooting flow). */
+  proton_log_excerpt_attached?: boolean;
+  proton_log_sources?: { path: string; bytes_read: number }[];
+  proton_log_notes?: string;
 };
 
 export type InputTransparencyRpcResult =

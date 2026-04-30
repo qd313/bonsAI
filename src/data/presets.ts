@@ -68,7 +68,7 @@ const PRESET_PROMPTS: PresetPrompt[] = [
   { text: "Which Ollama models do I need for bonsAI?", category: "general", beta: true },
   { text: "How do I use strategy mode?", category: "strategy", beta: true, preferAskMode: "strategy" },
   { text: "What's ahead (without spoilers)?", category: "strategy", beta: true, preferAskMode: "strategy" },
-  { text: "VAC bans on opponents?", category: "troubleshooting", beta: true },
+  { text: "bonsai:vac-check (paste 64-bit SteamIDs)", category: "troubleshooting", beta: true },
   { text: "Suggest mods or tweaks for this game", category: "general", beta: true },
 ];
 

@@ -70,6 +70,7 @@ Run after **`scripts/build.ps1`** or **`scripts/build.sh`** succeeds. Check **Pa
 
 - [ ] Toggle at least one capability off and trigger a blocked action; toast matches expectation.
 - [ ] **Steam / Proton log read** (optional): with **Attach Proton logs when troubleshooting** on in Settings → Advanced, run an on-device troubleshooting Ask per [prompt-testing.md](prompt-testing.md) § **Proton / Steam log attachment (QA)** and confirm **Input handling** / transparency behavior.
+- [ ] **Steam Web API** (optional): `bonsai:vac-check` flow per [prompt-testing.md](prompt-testing.md) § **VAC / Steam ban lookup (`bonsai:vac-check`)** (capability + key + at least one real ID or URL); log Pass / Partial / Fail in that doc with build id. Until checked, roadmap marks Phase 1 **complete** with **QA pending**.
 
 ### About / Debug (if applicable)
 
@@ -109,6 +110,7 @@ Model-quality, strategy/TDP rows, and sanitizer checks live in **[prompt-testing
 
 | Date | Change |
 |------|--------|
+| 2026-04-30 | VAC Phase 1 (`bonsai:vac-check`): roadmap **complete** with QA deferred to [prompt-testing.md](prompt-testing.md) § VAC / Steam ban lookup; optional Permissions smoke row above. |
 | 2026-04-30 | Main tab: Pyro talent-manager inject chip manual QA note (see §2 character row); roadmap marks feature shipped pending device pass. |
 | 2026-04-30 | Permissions: optional Steam/Proton log attachment smoke → [prompt-testing.md](prompt-testing.md) § Proton / Steam log attachment (QA). |
 | 2026-04-26 | §5 Release / clean install proof + zip QA log table ([roadmap](roadmap.md) release process). |

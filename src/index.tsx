@@ -601,6 +601,8 @@ const Content: React.FC = () => {
     setStrategySpoilerMaskingEnabled,
     strategySpoilerAutoRevealAfterConsent,
     setStrategySpoilerAutoRevealAfterConsent,
+    steamWebApiKey,
+    setSteamWebApiKey,
     settingsLoaded,
     hydrateFromSettings,
   } = usePluginSettings();
@@ -1382,6 +1384,13 @@ const Content: React.FC = () => {
             duration: 4000,
           });
         }
+        if (data.meta === "vac_check") {
+          toaster.toast({
+            title: "Steam ban lookup",
+            body: "Account-level GetPlayerBans only — not proof someone was your opponent.",
+            duration: 6000,
+          });
+        }
         return;
       }
 
@@ -1624,6 +1633,7 @@ const Content: React.FC = () => {
                 ollamaLocalOnDeck,
                 strategySpoilerMaskingEnabled,
                 strategySpoilerAutoRevealAfterConsent,
+                steamWebApiKey,
               },
               {
                 ai_character_random: next.random,
@@ -1835,6 +1845,8 @@ const Content: React.FC = () => {
       setStrategySpoilerMaskingEnabled={setStrategySpoilerMaskingEnabled}
       strategySpoilerAutoRevealAfterConsent={strategySpoilerAutoRevealAfterConsent}
       setStrategySpoilerAutoRevealAfterConsent={setStrategySpoilerAutoRevealAfterConsent}
+      steamWebApiKey={steamWebApiKey}
+      setSteamWebApiKey={setSteamWebApiKey}
       onOpenCharacterPicker={openCharacterPickerModal}
       onBeforeDeckyModal={() => {
         characterPickerReturnTabRef.current = currentTab;
@@ -1878,6 +1890,7 @@ const Content: React.FC = () => {
           ollamaLocalOnDeck,
           strategySpoilerMaskingEnabled,
           strategySpoilerAutoRevealAfterConsent,
+          steamWebApiKey,
         })
       ).catch((err) => {
         console.error("save_settings failed (hardware control confirm)", err);
@@ -1910,6 +1923,7 @@ const Content: React.FC = () => {
     ollamaLocalOnDeck,
     strategySpoilerMaskingEnabled,
     strategySpoilerAutoRevealAfterConsent,
+    steamWebApiKey,
   ]);
 
   const permissionsTab = (

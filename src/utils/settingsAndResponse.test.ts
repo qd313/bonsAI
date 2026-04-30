@@ -60,6 +60,8 @@ describe("settingsAndResponse", () => {
     expect(settings.attach_proton_logs_when_troubleshooting).toBe(false);
     expect(settings.capabilities.filesystem_write).toBe(false);
     expect(settings.capabilities.hardware_control).toBe(false);
+    expect(settings.capabilities.steam_web_api).toBe(false);
+    expect(settings.steam_web_api_key).toBe("");
     expect(settings.ai_character_enabled).toBe(false);
     expect(settings.ai_character_random).toBe(true);
     expect(settings.ai_character_preset_id).toBe("");
@@ -203,6 +205,7 @@ describe("settingsAndResponse", () => {
       ollamaLocalOnDeck: true,
       strategySpoilerMaskingEnabled: false,
       strategySpoilerAutoRevealAfterConsent: true,
+      steamWebApiKey: "abc",
     });
     expect(p.latency_warning_seconds).toBe(20);
     expect(p.request_timeout_seconds).toBe(150);
@@ -216,6 +219,7 @@ describe("settingsAndResponse", () => {
     expect(p.attach_proton_logs_when_troubleshooting).toBe(true);
     expect(p.strategy_spoiler_masking_enabled).toBe(false);
     expect(p.strategy_spoiler_auto_reveal_after_consent).toBe(true);
+    expect(p.steam_web_api_key).toBe("abc");
   });
 
   it("toBonsaiSettingsPayload merges patch over base (character picker path)", () => {
@@ -245,6 +249,7 @@ describe("settingsAndResponse", () => {
       ollamaLocalOnDeck: false,
       strategySpoilerMaskingEnabled: DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED,
       strategySpoilerAutoRevealAfterConsent: DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT,
+      steamWebApiKey: "",
     };
     const p = toBonsaiSettingsPayload(base, {
       ai_character_random: false,

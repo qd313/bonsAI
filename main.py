@@ -66,6 +66,7 @@ from backend.services.shortcut_setup_commands import (
     classify_shortcut_setup_command,
     response_message_for_shortcut,
 )
+from backend.services.vac_check_commands import parse_vac_check_command, response_for_vac_check
 from backend.services.screenshot_media import (
     MAX_ATTACHMENT_FILE_BYTES,
     MAX_ATTACHMENT_INLINE_BYTES,
@@ -349,6 +350,26 @@ class Plugin:
             "applied": None,
             "elapsed_seconds": 0.0,
             "shortcut_setup": variant,
+        }
+
+    async def _try_handle_vac_check_command(self, question: str, app_id: str) -> Optional[dict]:
+        """Steam Web API GetPlayerBans via ``bonsai:vac-check`` (no Ollama)."""
+        parsed_arg = parse_vac_check_command(question)
+        if parsed_arg is None:
+            return None
+        plugin = Plugin._coerce_instance(self)
+        settings = await plugin.load_settings()
+        ok = capability_enabled(settings, "steam_web_api")
+        key = str(settings.get("steam_web_api_key") or "")
+        response = response_for_vac_check(parsed_arg, api_key=key, capability_ok=ok)
+        app_context = "active" if app_id else "none"
+        return {
+            "success": True,
+            "response": response,
+            "app_id": app_id,
+            "app_context": app_context,
+            "applied": None,
+            "elapsed_seconds": 0.0,
         }
 
     async def load_settings(self):
@@ -916,6 +937,9 @@ class Plugin:
             sc = await self._try_handle_shortcut_setup_command(parsed_question, app_id)
             if sc is not None:
                 return sc
+        vac = await self._try_handle_vac_check_command(parsed_question, app_id)
+        if vac is not None:
+            return vac
         if not pc_ip:
             logger.info("ask_game_ai: rejected (empty pc_ip)")
             return Plugin._reject_ask_request("PC IP Address is required.", app_id=app_id)
@@ -1003,7 +1027,8 @@ class Plugin:
             }
         is_sanitizer_command = classify_sanitizer_command(parsed_question) is not None
         is_shortcut_command = classify_shortcut_setup_command(parsed_question) is not None
-        is_local_ask_command = is_sanitizer_command or is_shortcut_command
+        is_vac_command = parse_vac_check_command(parsed_question) is not None
+        is_local_ask_command = is_sanitizer_command or is_shortcut_command or is_vac_command
         if not pc_ip and not is_local_ask_command:
             return {
                 "accepted": False,
@@ -1192,6 +1217,70 @@ class Plugin:
                         "elapsed_seconds": 0.0,
                         "meta": "shortcut_setup",
                         "shortcut_setup": variant,
+                    }
+
+            if is_vac_command:
+                handled_v = await plugin._try_handle_vac_check_command(parsed_question, app_id)
+                if handled_v is not None:
+                    plugin._background_request_seq += 1
+                    request_id = plugin._background_request_seq
+                    now = time.time()
+                    resp = str(handled_v.get("response", ""))
+                    await plugin._persist_input_transparency(
+                        {
+                            "route": "vac_check",
+                            "raw_question": parsed_question,
+                            "sanitizer_action": "pass",
+                            "sanitizer_reason_codes": [],
+                            "text_after_sanitizer": parsed_question,
+                            "ollama_model": None,
+                            "system_prompt": None,
+                            "user_text_for_model": None,
+                            "user_image_count": 0,
+                            "attachment_paths": [],
+                            "assistant_raw": None,
+                            "assistant_after_attachment_format": None,
+                            "final_response": resp,
+                            "applied": None,
+                            "success": True,
+                            "app_id": app_id,
+                            "app_name": app_name,
+                            "pc_ip": pc_ip,
+                            "error_message": "",
+                            "elapsed_seconds": 0.0,
+                            "model_policy_disclosure": None,
+                        }
+                    )
+                    plugin._background_state = {
+                        "status": "completed",
+                        "request_id": request_id,
+                        "question": parsed_question,
+                        "app_id": app_id,
+                        "app_context": app_context,
+                        "success": True,
+                        "response": resp,
+                        "applied": None,
+                        "elapsed_seconds": 0.0,
+                        "error": None,
+                        "started_at": now,
+                        "completed_at": now,
+                        "strategy_guide_branches": None,
+                        "model_policy_disclosure": None,
+                        "shortcut_setup": None,
+                        "preset_carousel_inject": None,
+                    }
+                    plugin._background_task = None
+                    return {
+                        "accepted": True,
+                        "status": "completed",
+                        "request_id": request_id,
+                        "app_id": app_id,
+                        "app_context": app_context,
+                        "success": True,
+                        "response": resp,
+                        "applied": None,
+                        "elapsed_seconds": 0.0,
+                        "meta": "vac_check",
                     }
 
             plugin._background_request_seq += 1

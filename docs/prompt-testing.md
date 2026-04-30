@@ -37,6 +37,19 @@ Deterministic **Ask** commands: `bonsai:shortcut-setup-deck` and `bonsai:shortcu
 4. **Permissions — External/Steam on:** after the response, use **Open Controller settings**; **Steam** should open **Controller** settings (via `steam://open/settings/controller`).
 5. **Permissions off:** the button still appears; the toast should direct you to **Permissions** to enable navigation.
 
+## VAC / Steam ban lookup (`bonsai:vac-check`)
+
+Deterministic **Ask** command (optional leading `/`); **does not** call Ollama. Requires **Permissions → Steam Web API** and a **Steam Web API** key under **Settings → Connection**. See [README.md](../README.md) (shortcut keywords / ban lookup).
+
+**Matrix maintainer:** mark each row **Pass / Partial / Fail** and record **build id** + **SteamOS** when exercised. Until these are checked on hardware, Phase 1 is treated as **implementation complete, QA pending** in [roadmap.md](roadmap.md).
+
+- [ ] **Capability off, any key:** Send `bonsai:vac-check 7656119…` — response tells you to enable **Steam Web API**; no outbound Valve request.
+- [ ] **Capability on, empty key:** Response points to Settings → **Steam Web API key**; no request.
+- [ ] **Capability on, valid key, one known SteamID:** Markdown table or rows; **Input handling** route `vac_check`; no Ollama system/user text.
+- [ ] **Profile URL token:** `bonsai:vac-check https://steamcommunity.com/profiles/76561198…/` parses and queries.
+- [ ] **Vanity `/id/…`:** Skipped with explicit “unsupported” note (no ResolveVanityURL in this build).
+- [ ] **Permissions toggled off after key saved:** Command returns capability message only (no network).
+
 ## Test Results
 
 | # | Game Running | Prompt | Expected Behavior | Model | Status | Notes |

@@ -94,6 +94,7 @@ export function usePluginSettings() {
   const [strategySpoilerAutoRevealAfterConsent, setStrategySpoilerAutoRevealAfterConsent] = useState<boolean>(
     DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT
   );
+  const [steamWebApiKey, setSteamWebApiKey] = useState<string>("");
   const [settingsLoaded, setSettingsLoaded] = useState(false);
 
   const hydrateFromSettings = useCallback((saved: BonsaiSettings) => {
@@ -123,6 +124,7 @@ export function usePluginSettings() {
     setOllamaLocalOnDeck(normalized.ollama_local_on_deck);
     setStrategySpoilerMaskingEnabled(normalized.strategy_spoiler_masking_enabled);
     setStrategySpoilerAutoRevealAfterConsent(normalized.strategy_spoiler_auto_reveal_after_consent);
+    setSteamWebApiKey(normalized.steam_web_api_key);
   }, []);
 
   useEffect(() => {
@@ -156,6 +158,7 @@ export function usePluginSettings() {
         setOllamaLocalOnDeck(normalized.ollama_local_on_deck);
         setStrategySpoilerMaskingEnabled(normalized.strategy_spoiler_masking_enabled);
         setStrategySpoilerAutoRevealAfterConsent(normalized.strategy_spoiler_auto_reveal_after_consent);
+        setSteamWebApiKey(normalized.steam_web_api_key);
       })
       .catch(() => {
         if (cancelled) return;
@@ -184,6 +187,7 @@ export function usePluginSettings() {
         setOllamaLocalOnDeck(DEFAULT_OLLAMA_LOCAL_ON_DECK);
         setStrategySpoilerMaskingEnabled(DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED);
         setStrategySpoilerAutoRevealAfterConsent(DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT);
+        setSteamWebApiKey("");
       })
       .finally(() => {
         if (!cancelled) setSettingsLoaded(true);
@@ -224,6 +228,7 @@ export function usePluginSettings() {
           ollamaLocalOnDeck,
           strategySpoilerMaskingEnabled,
           strategySpoilerAutoRevealAfterConsent,
+          steamWebApiKey,
         })
       ).catch((err) => {
         console.error("save_settings failed", err);
@@ -256,6 +261,7 @@ export function usePluginSettings() {
     ollamaLocalOnDeck,
     strategySpoilerMaskingEnabled,
     strategySpoilerAutoRevealAfterConsent,
+    steamWebApiKey,
     settingsLoaded,
   ]);
 
@@ -300,6 +306,8 @@ export function usePluginSettings() {
     setStrategySpoilerMaskingEnabled,
     strategySpoilerAutoRevealAfterConsent,
     setStrategySpoilerAutoRevealAfterConsent,
+    steamWebApiKey,
+    setSteamWebApiKey,
     settingsLoaded,
     setLatencyWarningSeconds,
     setRequestTimeoutSeconds,

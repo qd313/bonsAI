@@ -9,6 +9,7 @@ CAPABILITY_KEYS = (
     "media_library_access",
     "steam_logs_read",
     "external_navigation",
+    "steam_web_api",
 )
 
 
@@ -27,7 +28,10 @@ def sanitize_capabilities(value: Any) -> dict[str, bool]:
 
 def legacy_grandfather_capabilities() -> dict[str, bool]:
     """All-on defaults for settings files created before the capabilities block existed."""
-    return {k: True for k in CAPABILITY_KEYS}
+    out = {k: True for k in CAPABILITY_KEYS}
+    # Outbound Steam Web API uses the user's key; do not auto-enable for legacy installs.
+    out["steam_web_api"] = False
+    return out
 
 
 def capability_enabled(settings: dict, key: str) -> bool:

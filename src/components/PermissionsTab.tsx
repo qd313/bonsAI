@@ -53,13 +53,18 @@ const ROWS: {
       "Reading bounded local Proton and Steam log excerpts for troubleshooting-style Asks when enabled in Settings. Off blocks log attachment.",
   },
   {
+    key: "steam_web_api",
+    title: "Steam Web API",
+    description:
+      "Outbound requests to Valve’s Steam Web API (e.g. bonsai:vac-check / GetPlayerBans). Your API key is stored in plugin settings. Off blocks those calls.",
+  },
+  {
     key: "external_navigation",
     title: "External and Steam navigation",
     description:
       "Opening GitHub/Ollama links in the browser and Steam Input deep links from Debug. Off blocks those actions.",
   },
 ];
-
 const HARDWARE_DISCLAIMER_BODY =
   "We have put guardrails in place to reduce obviously unsafe TDP and GPU clock settings for Steam Deck, " +
   "but this feature is still very beta. Models can be wrong, and the plugin can apply power changes " +

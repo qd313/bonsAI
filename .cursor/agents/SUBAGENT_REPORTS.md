@@ -154,6 +154,16 @@ No session archived
 
 <!-- Newest entries first. -->
 
+### 2026-04-30 - foss-advocate + refactor-specialist (full codebase read)
+
+```text
+Scope: Whole-repo review for FOSS/transparency and maintainability hotspots (features + architecture).
+Agents: foss-advocate (confirmed findings only); refactor-specialist (structure + verification).
+Deliverables: docs/foss-advocate-report.md; docs/refactor-specialist-report.md.
+Tests this session: pnpm test — pass (64 tests). python scripts/run_python_tests.py — 1 failure (test_capabilities legacy grandfather vs steam_web_api=False); see refactor report.
+Ship/no-ship / red-blue: N/A.
+```
+
 ### 2026-04-21 - Judge ruling handoff (red-blue-fight)
 
 ```text

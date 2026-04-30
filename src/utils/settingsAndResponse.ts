@@ -49,6 +49,8 @@ export type BonsaiCapabilities = {
   media_library_access: boolean;
   steam_logs_read: boolean;
   external_navigation: boolean;
+  /** Outbound Steam Web API (GetPlayerBans) for ``bonsai:vac-check``; key stored in settings. */
+  steam_web_api: boolean;
 };
 
 export type BonsaiSettings = {
@@ -96,6 +98,8 @@ export type BonsaiSettings = {
   strategy_spoiler_masking_enabled: boolean;
   /** When true, spoiler blocks start expanded after the user consented on that Ask (still collapsible). */
   strategy_spoiler_auto_reveal_after_consent: boolean;
+  /** Steam Web API key for GetPlayerBans (VAC check command); stored on device with plugin settings. */
+  steam_web_api_key: string;
 };
 
 /** Fields mirrored from React state / hook before `save_settings` RPC. */
@@ -125,6 +129,7 @@ export type BonsaiSettingsSnapshotInput = {
   ollamaLocalOnDeck: boolean;
   strategySpoilerMaskingEnabled: boolean;
   strategySpoilerAutoRevealAfterConsent: boolean;
+  steamWebApiKey: string;
 };
 
 /** Build the backend `BonsaiSettings` object; optional `patch` for immediate saves (character picker, permissions). */
@@ -158,6 +163,7 @@ export function toBonsaiSettingsPayload(
     ollama_local_on_deck: input.ollamaLocalOnDeck,
     strategy_spoiler_masking_enabled: input.strategySpoilerMaskingEnabled,
     strategy_spoiler_auto_reveal_after_consent: input.strategySpoilerAutoRevealAfterConsent,
+    steam_web_api_key: input.steamWebApiKey.trim().slice(0, STEAM_WEB_API_KEY_MAX_LEN),
   };
   return patch ? { ...base, ...patch } : base;
 }
@@ -196,6 +202,8 @@ export const DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS = false;
 export const DEFAULT_ASK_MODE: AskModeId = "speed";
 export const DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED = true;
 export const DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT = false;
+/** Align with backend ``STEAM_WEB_API_KEY_MAX_LEN``. */
+export const STEAM_WEB_API_KEY_MAX_LEN = 128;
 export { DEFAULT_OLLAMA_KEEP_ALIVE };
 export type { ModelPolicyTierId };
 export { DEFAULT_MODEL_POLICY_TIER } from "../data/modelPolicy";
@@ -206,6 +214,7 @@ export const DEFAULT_CAPABILITIES: BonsaiCapabilities = {
   media_library_access: false,
   steam_logs_read: false,
   external_navigation: false,
+  steam_web_api: false,
 };
 
 export const DEFAULT_AI_CHARACTER_ENABLED = false;
@@ -369,6 +378,12 @@ export function normalizeStrategySpoilerAutoRevealAfterConsent(value: unknown): 
   return value === true;
 }
 
+export function normalizeSteamWebApiKey(value: unknown): string {
+  if (typeof value !== "string") return "";
+  const t = value.trim().slice(0, STEAM_WEB_API_KEY_MAX_LEN);
+  return t;
+}
+
 const _askModeSet = new Set<string>(ASK_MODE_IDS);
 
 export function normalizeAskMode(value: unknown): AskModeId {
@@ -429,6 +444,7 @@ export function normalizeCapabilities(value: unknown): BonsaiCapabilities {
     media_library_access: raw.media_library_access === true,
     steam_logs_read: raw.steam_logs_read === true,
     external_navigation: raw.external_navigation === true,
+    steam_web_api: raw.steam_web_api === true,
   };
 }
 
@@ -474,6 +490,7 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     strategy_spoiler_auto_reveal_after_consent: normalizeStrategySpoilerAutoRevealAfterConsent(
       raw.strategy_spoiler_auto_reveal_after_consent
     ),
+    steam_web_api_key: normalizeSteamWebApiKey(raw.steam_web_api_key),
   };
 }
 

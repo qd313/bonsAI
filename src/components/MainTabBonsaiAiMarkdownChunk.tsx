@@ -1,5 +1,5 @@
 import type { Components } from "react-markdown";
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { Focusable } from "@decky/ui";
 

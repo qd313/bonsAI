@@ -79,6 +79,19 @@ def sanitize_strategy_spoiler_auto_reveal_after_consent(value: Any) -> bool:
     return value is True
 
 
+STEAM_WEB_API_KEY_MAX_LEN = 128
+
+
+def sanitize_steam_web_api_key(value: Any) -> str:
+    """Strip and bound Steam Web API key length; never store non-string blobs."""
+    if not isinstance(value, str):
+        return ""
+    s = value.strip()
+    if len(s) > STEAM_WEB_API_KEY_MAX_LEN:
+        s = s[:STEAM_WEB_API_KEY_MAX_LEN]
+    return s
+
+
 def sanitize_show_debug_tab(value: Any) -> bool:
     """Only explicit ``true`` shows the Debug tab; default is hidden."""
     return value is True
@@ -280,6 +293,7 @@ def sanitize_settings(
         "strategy_spoiler_auto_reveal_after_consent": sanitize_strategy_spoiler_auto_reveal_after_consent(
             raw.get("strategy_spoiler_auto_reveal_after_consent")
         ),
+        "steam_web_api_key": sanitize_steam_web_api_key(raw.get("steam_web_api_key")),
     }
 
 

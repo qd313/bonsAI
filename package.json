@@ -15,21 +15,23 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SteamDeckHomebrew/decky-plugin-template.git"
+    "url": "git+https://github.com/cantcurecancer/bonsAI.git"
   },
   "keywords": [
+    "bonsai",
     "decky",
     "plugin",
-    "plugin-template",
     "steam-deck",
-    "deck"
+    "deck",
+    "ollama",
+    "ai"
   ],
-  "author": "You <you@you.tld>",
+  "author": "qwert",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/SteamDeckHomebrew/decky-plugin-template/issues"
+    "url": "https://github.com/cantcurecancer/bonsAI/issues"
   },
-  "homepage": "https://github.com/SteamDeckHomebrew/decky-plugin-template#readme",
+  "homepage": "https://github.com/cantcurecancer/bonsAI#readme",
   "devDependencies": {
     "@decky/rollup": "^1.0.2",
     "@decky/ui": "^4.11.3",

@@ -56,6 +56,8 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertFalse(sanitized["attach_proton_logs_when_troubleshooting"])
         self.assertFalse(sanitized["capabilities"]["filesystem_write"])
         self.assertFalse(sanitized["capabilities"]["hardware_control"])
+        self.assertFalse(sanitized["capabilities"]["steam_web_api"])
+        self.assertEqual(sanitized["steam_web_api_key"], "")
         self.assertFalse(sanitized["ai_character_enabled"])
         self.assertTrue(sanitized["ai_character_random"])
         self.assertEqual(sanitized["ai_character_preset_id"], "")
@@ -301,7 +303,7 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertFalse(garbled["ollama_local_on_deck"])
 
     def test_load_settings_grandfathers_capabilities_when_block_missing(self):
-        """Legacy settings files without a capabilities object get all scopes enabled."""
+        """Legacy settings files without a capabilities object get known scopes enabled except Steam Web API."""
         logger = _Logger()
 
         def sanitize_fn(data):
@@ -330,6 +332,7 @@ class SettingsServiceTests(unittest.TestCase):
             self.assertTrue(caps["hardware_control"])
             self.assertTrue(caps["media_library_access"])
             self.assertTrue(caps["external_navigation"])
+            self.assertFalse(caps["steam_web_api"])
 
     def test_load_save_settings_round_trip(self):
         """Ensure load/save helpers persist sanitized values and reload them consistently."""

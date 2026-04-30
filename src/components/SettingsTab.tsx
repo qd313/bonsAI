@@ -15,6 +15,7 @@ import {
   DEFAULT_REQUEST_TIMEOUT_SECONDS,
   OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP,
   SCREENSHOT_ATTACHMENT_PRESET_OPTIONS,
+  STEAM_WEB_API_KEY_MAX_LEN,
   type OllamaKeepAliveDuration,
   type ScreenshotAttachmentPreset,
   type UnifiedInputPersistenceMode,
@@ -162,6 +163,9 @@ export type SettingsTabProps = {
   attachProtonLogsWhenTroubleshooting: boolean;
   setAttachProtonLogsWhenTroubleshooting: (v: boolean) => void;
 
+  steamWebApiKey: string;
+  setSteamWebApiKey: (v: string) => void;
+
   strategySpoilerMaskingEnabled: boolean;
   setStrategySpoilerMaskingEnabled: (v: boolean) => void;
   strategySpoilerAutoRevealAfterConsent: boolean;
@@ -210,6 +214,8 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   setDesktopAskVerboseLogging,
   attachProtonLogsWhenTroubleshooting,
   setAttachProtonLogsWhenTroubleshooting,
+  steamWebApiKey,
+  setSteamWebApiKey,
   strategySpoilerMaskingEnabled,
   setStrategySpoilerMaskingEnabled,
   strategySpoilerAutoRevealAfterConsent,
@@ -841,6 +847,38 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
             )}
           </PanelSectionRow>
         )}
+        <PanelSectionRow>
+          <div className="bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
+            <div
+              style={{
+                fontVariant: "small-caps",
+                letterSpacing: "0.06em",
+                fontSize: 11,
+                fontWeight: 600,
+                color: "#b8c6d6",
+                marginBottom: 4,
+              }}
+            >
+              Steam Web API key (VAC check)
+            </div>
+            <TextField
+              label=""
+              value={steamWebApiKey}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const v = e.target.value.slice(0, STEAM_WEB_API_KEY_MAX_LEN);
+                setSteamWebApiKey(v);
+              }}
+              style={{ width: "100%", minWidth: 0 }}
+            />
+            <div
+              className="bonsai-prose"
+              style={{ fontSize: 10, color: "#6b7c90", lineHeight: 1.35, marginTop: 6, userSelect: "none" }}
+            >
+              Used only for the Ask command <code>bonsai:vac-check</code> (GetPlayerBans). Register a key on Steam, enable{" "}
+              <strong>Permissions → Steam Web API</strong>, then paste here. Stored on this device with plugin settings.
+            </div>
+          </div>
+        </PanelSectionRow>
       </PanelSection>
       <PanelSection title="Ollama host">
         <PanelSectionRow>

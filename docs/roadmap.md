@@ -18,6 +18,7 @@ Active features, maintainer tasks, and **known defects**. *QAMP Phase 1 (safe de
 ### Active work
 
 - ★★ **Prompt-testing — finish device matrix:** **MVP ready** (matrices, QAMP rows, optional frozen carousel in [prompt-testing.md](prompt-testing.md)); Deck checkbox pass is **partially complete** — finish remaining scenarios, mark checkboxes, record **Pass / Partial / Fail** with build id in the PR and/or in [prompt-testing.md](prompt-testing.md) / [regression-and-smoke.md](regression-and-smoke.md) as appropriate.
+- ★ **VAC / `bonsai:vac-check` (Phase 1) — on-device QA:** Implementation is [marked complete](#steam-input); hardware pass and checklist rows still **pending** — [prompt-testing.md](prompt-testing.md) § **VAC / Steam ban lookup (`bonsai:vac-check`)** and optional [regression-and-smoke.md](regression-and-smoke.md) § **Permissions**.
 
 ---
 
@@ -156,17 +157,18 @@ Backlog items are **not** listed in execution order. Stars are effort/risk withi
 - **Depends on:** user-hosted Whisper endpoint.
 - **Not in scope:** wake-word or always-on listening.
 
-### VAC opponent check (phased)
+### VAC Phase 2 opponent ID research
 
 ★★★★★
 
-- **Goal:** Flag likely opponents with VAC history during a session, with clear confidence messaging.
-- **Phase 1:** Parse user-provided SteamIDs; query ban data.
-- **Phase 2:** Live opponent extraction when metadata allows.
-- **Primary work:** SteamID normalization, PlayerBans flow, cache/rate limits, confidence, warning UI.
-- **Files:** `main.py`, `src/index.tsx`.
-- **Depends on:** Steam Web API key and reliable opponent identities.
-- **Risks:** private profiles, games without IDs, quota, privacy boundaries, incomplete-data UX.
+- **Status:** **Phase 1 complete** (shipped); **QA** still pending — see [prompt-testing.md](prompt-testing.md) § **VAC / Steam ban lookup (`bonsai:vac-check`)**. Feature summary: [Completed](#steam-input) → **VAC / ban lookup (Phase 1 — Ask command)**.
+- **Goal:** When metadata allows, surface **live opponent** Steam identities so ban checks map to **this session** with **lower confidence** if identity is inferred rather than pasted.
+- **Research spike (before implementation):**
+  - **Decky Loader** APIs: what **Steam/CEF** surfaces expose lobby or recent-player lists to plugins (if any); stability across Steam updates.
+  - **Steam client** on Deck: overlay/friends/game **Router** or similar JS APIs — document what is reachable from Decky’s injected context vs unsupported.
+  - **Per-game variance:** many titles never expose opponent SteamIDs to the client; plan UX for **manual paste** remaining primary.
+- **If no stable API:** Phase 2 becomes **enhanced manual flow** (clipboard split, recent-ID scratch list in-session) rather than automation.
+- **Risks:** same as Phase 1 (quota, privacy, incomplete data) plus **false linkage** if IDs are guessed.
 - **Not in scope:** automated reporting, punitive automation, bypassing protections.
 
 ### RAG knowledge base (PC-hosted ingest + Deck query)
@@ -254,6 +256,7 @@ Headings group related work. Star counts match the historical list.
 - ★★★★★ **Steam Input Jump (Phase 1):** Debug tab jump to per-game controller config via `steam://controllerconfig/{appId}` (`SteamClient.URL.ExecuteSteamURL`), versioned lexicon in `src/data/steam-input-lexicon.ts`, helper in `src/utils/steamInputJump.ts`. Documented in [steam-input-research.md](steam-input-research.md). **Phase 2+** (indexed search, full catalog, ranked results) is **not** planned to continue.
 - ★★ **Global quick-launch macro (documentation + verification checklist):** Guide-chord path QAM → Decky → bonsAI with **Fire Start Delay** and per-user rail depth documented in [troubleshooting.md](troubleshooting.md) §5; [README.md](../README.md) quick-launch blurb; optional device check in [regression-and-smoke.md](regression-and-smoke.md) §3 (Plugin shell). On-device **Last verified** line in §5 is maintainer-updated when hardware is exercised.
 - ★ **Shortcut setup keywords (Ask, no Ollama):** `bonsai:shortcut-setup-deck` and `bonsai:shortcut-setup-stadia` typed in Ask (optional leading `/`); `backend/services/shortcut_setup_commands.py`; response + optional **Open Controller settings**; documented in [troubleshooting.md](troubleshooting.md) §5 and [prompt-testing.md](prompt-testing.md). **Not in scope:** auto-writing Steam Input / VDF (see [steam-input-research.md](steam-input-research.md)).
+- ★★ **VAC / ban lookup (Phase 1 — Ask command) — complete:** `bonsai:vac-check` with user-supplied 64-bit SteamIDs or `/profiles/765…` URLs; Steam **GetPlayerBans** via `backend/services/steam_vac_service.py`, `vac_check_commands.py`; Permission **`steam_web_api`** (default off; legacy grandfather leaves it off); Settings **Steam Web API key**; TTL cache; disclaimer that results are account-level, not opponent attribution. README + optional preset chip. **Phase 2** (live opponent IDs) remains in [Planned](#vac-phase-2-opponent-id-research). **On-device QA:** Phase 1 is **not** fully covered in the matrices until someone runs [prompt-testing.md](prompt-testing.md) § **VAC / Steam ban lookup (`bonsai:vac-check`)** and records Pass / Partial / Fail + build id; optional smoke row in [regression-and-smoke.md](regression-and-smoke.md) § **Permissions**.
 
 ### About tab and main surface polish
 
@@ -267,7 +270,7 @@ Headings group related work. Star counts match the historical list.
 
 ### Permissions and capability gating
 
-- ★★★★ **Capability Permission Center (User-Controlled Access):** Permissions tab (lock icon, same title scale as other tabs) with toggles for filesystem writes, hardware control (TDP apply), media library access (screenshot attach), Steam/Proton log read (troubleshooting Ask excerpts), and external/Steam navigation (About links, Debug Steam Input jump). Persisted `settings.json` `capabilities`; new installs default OFF; legacy installs without a `capabilities` block are grandfathered ON until saved. Backend enforces gates on `append_desktop_debug_note`, `append_desktop_chat_event`, `list_recent_screenshots`, ask-with-attachments, TDP apply, `capture_screenshot`, and bounded reads for Proton/log attachment when enabled. Files: `backend/services/capabilities.py`, `PermissionsTab`, `main.py`, `src/utils/settingsAndResponse.ts`.
+- ★★★★ **Capability Permission Center (User-Controlled Access):** Permissions tab (lock icon, same title scale as other tabs) with toggles for filesystem writes, hardware control (TDP apply), media library access (screenshot attach), Steam/Proton log read (troubleshooting Ask excerpts), **Steam Web API** (outbound GetPlayerBans for `bonsai:vac-check`), and external/Steam navigation (About links, Debug Steam Input jump). Persisted `settings.json` `capabilities`; new installs default OFF; legacy installs without a `capabilities` block are grandfathered ON until saved (**Steam Web API** stays off in that path). Backend enforces gates on `append_desktop_debug_note`, `append_desktop_chat_event`, `list_recent_screenshots`, ask-with-attachments, TDP apply, `capture_screenshot`, bounded reads for Proton/log attachment when enabled, and Steam ban lookups when enabled. Files: `backend/services/capabilities.py`, `PermissionsTab`, `main.py`, `src/utils/settingsAndResponse.ts`.
 - ★★★ **Debugging and Proton log analysis:** Settings → Advanced **Attach Proton logs when troubleshooting** (`attach_proton_logs_when_troubleshooting`) plus Permissions **Steam / Proton log read** (`steam_logs_read`). On Linux, when the sanitized question matches the troubleshooting heuristic and a running AppID is present, the backend attaches bounded tails from `~/steam-<appid>.log` (typical with `PROTON_LOG=1`) and shallow `steamapps/compatdata/<appid>/*.log` files into the **system** prompt before roleplay prefixing (`backend/services/proton_troubleshooting_logs.py`, `backend/services/game_ai_request.py`, `main.py`). Main **Input handling** shows excerpt/notes. Does **not** enable Proton logging automatically. **On-device QA:** not yet exercised in the prompt matrix — follow [prompt-testing.md](prompt-testing.md) § **Proton / Steam log attachment (QA)**; optional Permissions smoke row in [regression-and-smoke.md](regression-and-smoke.md) § Permissions.
 - ★★★★ **Model policy tiers + disclosure UX:** Persisted `model_policy_tier` / `model_policy_non_foss_unlocked` and related allow-high-VRAM flag; Settings **Model policy** (tier chips, unlock flow, README link); backend `backend/services/model_policy.py` classifies model tags and enforces tier when selecting fallbacks; successful replies can include **Model source disclosure** on Main. `src/data/modelPolicy.ts`, `MainTab.tsx`, `src/utils/inputTransparency.ts`, `main.py`, [README.md](../README.md) § Model policy tiers.
 

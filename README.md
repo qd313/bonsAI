@@ -119,6 +119,8 @@ Those control messages **do not call Ollama**; the plugin saves settings and sho
 - `bonsai:shortcut-setup-deck` — Deck-style example (Guide + R4 or grip), link to the full doc.
 - `bonsai:shortcut-setup-stadia` — Stadia / non-Deck pad; pick a spare button, same macro shape.
 
+**Steam account ban lookup (optional)** — `bonsai:vac-check` plus one or more **64-bit SteamIDs** or `steamcommunity.com/profiles/765…` links (space- or comma-separated). **Skips Ollama** and calls Valve **GetPlayerBans** when **Permissions → Steam Web API** is on and you saved a **Steam Web API** key under **Settings → Connection**. Output is **account-level** for those IDs only—not proof someone was your in-game opponent unless you verified the IDs. Vanity `/id/…` profile URLs are not resolved in this build.
+
 **Security note:** Settings live on the device. Anyone who can open bonsAI (for example via QAM while the Deck is unlocked) could send the disable phrase or edit `settings.json`. Treat the Deck like any other local console for sensitive prompts.
 
 More detail: [docs/troubleshooting.md](docs/troubleshooting.md) (sanitizer FAQ), [docs/prompt-testing.md](docs/prompt-testing.md) (how to test without skewing model benchmarks).

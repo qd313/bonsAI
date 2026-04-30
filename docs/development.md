@@ -107,9 +107,9 @@ Available modes:
 
 **Version source:** bump the **`version`** field in root [`plugin.json`](../plugin.json) before tagging or cutting a release. [`pnpm run build`](../package.json) runs [`scripts/sync-version-from-plugin.mjs`](../scripts/sync-version-from-plugin.mjs) so the UI’s [`PLUGIN_VERSION`](../src/pluginVersion.ts) matches the manifest.
 
-**Primary build (CI):** workflow **[`.github/workflows/build-plugin-zip.yml`](../.github/workflows/build-plugin-zip.yml)** — triggers on **`v*` tags** and **`workflow_dispatch`** (optional **ref** input). It runs `pnpm install`, `pnpm run build`, downloads the [Decky CLI](https://github.com/SteamDeckHomebrew/cli) Linux binary, runs `decky plugin build`, then **[`scripts/verify-decky-plugin-zip.sh`](../scripts/verify-decky-plugin-zip.sh)** so the zip includes `main.py`, `refactor_helpers.py`, `py_modules/backend/services/`, and `dist/index.js` (same parity as deploy scripts). Download the **`bonsai-plugin-*`** artifact from the workflow run (or attach that zip to a GitHub Release for end users).
+**Primary build (CI):** workflow **[`.github/workflows/build-plugin-zip.yml`](../.github/workflows/build-plugin-zip.yml)** — triggers on **`v*` tags** and **`workflow_dispatch`** (optional **ref** input). It runs `pnpm install`, `pnpm run build`, downloads the [Decky CLI](https://github.com/SteamDeckHomebrew/cli) Linux binary, runs `decky plugin build`, then **[`scripts/verify-decky-plugin-zip.sh`](../scripts/verify-decky-plugin-zip.sh)** so the zip includes `main.py`, `refactor_helpers.py`, `py_modules/backend/services/`, and `dist/index.js` (same parity as deploy scripts). **Pushing a `v*` tag** also creates or updates a **[GitHub Release](https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases)** with the zip attached (generated release notes). **workflow_dispatch** uploads an Actions artifact always; check **Publish GitHub Release** and set **ref** to a tag (e.g. `v0.2.1`) to publish or refresh the Release for an existing tag.
 
-**Canonical release:** prefer a **`v*`** tag push so the artifact matches the tagged commit. Use **workflow_dispatch** for ad-hoc or branch builds when you only need a binary to test.
+**Canonical release:** prefer a **`v*`** tag push so the artifact matches the tagged commit and the Releases page gets the zip automatically. Use **workflow_dispatch** without **Publish GitHub Release** for ad-hoc or branch builds when you only need an Actions artifact to test.
 
 **Test or release tag (same CI path as shipping):**
 
@@ -121,7 +121,7 @@ Available modes:
    git push origin v0.2.0-test
    ```
 
-3. In GitHub: **Actions** → **Build plugin zip** → open the run for that push; the artifact is named like **`bonsai-plugin-v0.2.0-test-<shortsha>`** so it is obvious which tag produced it.
+3. In GitHub: **Actions** → **Build plugin zip** → open the run for that push; the Releases page lists the tag with the zip attached. You can still download the **`bonsai-plugin-*`** Actions artifact if needed.
 
 Tags must match the workflow filter `v*` (e.g. `v1.0.0` works; `1.0.0` without the leading `v` does not).
 

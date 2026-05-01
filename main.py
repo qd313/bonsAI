@@ -145,6 +145,9 @@ class Plugin:
     def __init__(self):
         """Initialize plugin runtime state used for background-request coordination."""
         self._background_lock = asyncio.Lock()
+        # Serialize ``start_background_game_ai`` so immediate-command paths can release ``_background_lock``
+        # before awaiting transparency persistence (otherwise ``get_background_game_ai_status`` deadlocks).
+        self._background_start_serial_lock = asyncio.Lock()
         self._background_task: Optional[asyncio.Task] = None
         self._background_state: dict = self._new_background_state()
         self._background_request_seq = 0
@@ -245,6 +248,8 @@ class Plugin:
         """Backfill runtime attributes for compatibility with loaders that skip __init__."""
         if not hasattr(self, "_background_lock"):
             self._background_lock = asyncio.Lock()
+        if not hasattr(self, "_background_start_serial_lock"):
+            self._background_start_serial_lock = asyncio.Lock()
         if not hasattr(self, "_background_task"):
             self._background_task = None
         if not hasattr(self, "_background_state") or not isinstance(self._background_state, dict):
@@ -1205,108 +1210,120 @@ class Plugin:
                         "elapsed_seconds": 0.0,
                     }
 
-        async with plugin._background_lock:
-            if plugin._background_task and not plugin._background_task.done():
-                state = dict(plugin._background_state)
-                return {
-                    "accepted": False,
-                    "status": "busy",
-                    "request_id": state.get("request_id"),
-                    "app_id": state.get("app_id", ""),
-                    "app_context": state.get("app_context", "none"),
-                    "response": "A request is already in progress.",
-                }
+        busy_body: Optional[dict] = None
+        imm_args: Optional[dict] = None
+        request_id: Optional[int] = None
 
-            if is_sanitizer_command:
-                handled = await plugin._try_handle_sanitizer_keyword_command(parsed_question, app_id)
-                if handled is not None:
-                    resp = str(handled.get("response", ""))
-                    return await plugin._finalize_immediate_background_local_command(
-                        parsed_question=parsed_question,
-                        resp=resp,
-                        app_id=app_id,
-                        app_name=app_name,
-                        pc_ip=pc_ip,
-                        app_context=app_context,
-                        transparency_route="sanitizer_command",
-                        sanitizer_action="command",
-                        sanitizer_reason_codes=[],
-                        state_question="",
-                        meta="sanitizer_keyword",
-                    )
+        async with plugin._background_start_serial_lock:
+            async with plugin._background_lock:
+                if plugin._background_task and not plugin._background_task.done():
+                    state = dict(plugin._background_state)
+                    busy_body = {
+                        "accepted": False,
+                        "status": "busy",
+                        "request_id": state.get("request_id"),
+                        "app_id": state.get("app_id", ""),
+                        "app_context": state.get("app_context", "none"),
+                        "response": "A request is already in progress.",
+                    }
+                else:
+                    if is_sanitizer_command:
+                        handled = await plugin._try_handle_sanitizer_keyword_command(parsed_question, app_id)
+                        if handled is not None:
+                            resp = str(handled.get("response", ""))
+                            imm_args = {
+                                "parsed_question": parsed_question,
+                                "resp": resp,
+                                "app_id": app_id,
+                                "app_name": app_name,
+                                "pc_ip": pc_ip,
+                                "app_context": app_context,
+                                "transparency_route": "sanitizer_command",
+                                "sanitizer_action": "command",
+                                "sanitizer_reason_codes": [],
+                                "state_question": "",
+                                "meta": "sanitizer_keyword",
+                            }
 
-            if is_shortcut_command:
-                handled = await plugin._try_handle_shortcut_setup_command(parsed_question, app_id)
-                if handled is not None:
-                    resp = str(handled.get("response", ""))
-                    variant = handled.get("shortcut_setup")
-                    return await plugin._finalize_immediate_background_local_command(
-                        parsed_question=parsed_question,
-                        resp=resp,
-                        app_id=app_id,
-                        app_name=app_name,
-                        pc_ip=pc_ip,
-                        app_context=app_context,
-                        transparency_route="shortcut_setup",
-                        sanitizer_action="pass",
-                        sanitizer_reason_codes=[],
-                        state_question=parsed_question,
-                        meta="shortcut_setup",
-                        shortcut_setup_for_state=variant,
-                        shortcut_setup_for_response=variant,
-                    )
+                    if imm_args is None and is_shortcut_command:
+                        handled = await plugin._try_handle_shortcut_setup_command(parsed_question, app_id)
+                        if handled is not None:
+                            resp = str(handled.get("response", ""))
+                            variant = handled.get("shortcut_setup")
+                            imm_args = {
+                                "parsed_question": parsed_question,
+                                "resp": resp,
+                                "app_id": app_id,
+                                "app_name": app_name,
+                                "pc_ip": pc_ip,
+                                "app_context": app_context,
+                                "transparency_route": "shortcut_setup",
+                                "sanitizer_action": "pass",
+                                "sanitizer_reason_codes": [],
+                                "state_question": parsed_question,
+                                "meta": "shortcut_setup",
+                                "shortcut_setup_for_state": variant,
+                                "shortcut_setup_for_response": variant,
+                            }
 
-            if is_vac_command:
-                handled_v = await plugin._try_handle_vac_check_command(parsed_question, app_id)
-                if handled_v is not None:
-                    resp = str(handled_v.get("response", ""))
-                    return await plugin._finalize_immediate_background_local_command(
-                        parsed_question=parsed_question,
-                        resp=resp,
-                        app_id=app_id,
-                        app_name=app_name,
-                        pc_ip=pc_ip,
-                        app_context=app_context,
-                        transparency_route="vac_check",
-                        sanitizer_action="pass",
-                        sanitizer_reason_codes=[],
-                        state_question=parsed_question,
-                        meta="vac_check",
-                        shortcut_setup_for_state=None,
-                    )
+                    if imm_args is None and is_vac_command:
+                        handled_v = await plugin._try_handle_vac_check_command(parsed_question, app_id)
+                        if handled_v is not None:
+                            resp = str(handled_v.get("response", ""))
+                            imm_args = {
+                                "parsed_question": parsed_question,
+                                "resp": resp,
+                                "app_id": app_id,
+                                "app_name": app_name,
+                                "pc_ip": pc_ip,
+                                "app_context": app_context,
+                                "transparency_route": "vac_check",
+                                "sanitizer_action": "pass",
+                                "sanitizer_reason_codes": [],
+                                "state_question": parsed_question,
+                                "meta": "vac_check",
+                                "shortcut_setup_for_state": None,
+                            }
 
-            plugin._background_request_seq += 1
-            request_id = plugin._background_request_seq
-            plugin._background_state = {
-                "status": "pending",
-                "request_id": request_id,
-                "question": parsed_question,
-                "app_id": app_id,
-                "app_context": app_context,
-                "success": None,
-                "response": "Thinking...",
-                "applied": None,
-                "elapsed_seconds": 0,
-                "error": None,
-                "started_at": time.time(),
-                "completed_at": None,
-                "strategy_guide_branches": None,
-                "model_policy_disclosure": None,
-                "preset_carousel_inject": None,
-            }
-            plugin._background_task = asyncio.create_task(
-                plugin._run_background_request(
-                    request_id,
-                    parsed_question,
-                    pc_ip,
-                    app_id,
-                    app_name,
-                    attachments=attachments,
-                    ask_mode=ask_mode,
-                    spoiler_consent=spoiler_consent,
-                )
-            )
+                    if imm_args is None:
+                        plugin._background_request_seq += 1
+                        request_id = plugin._background_request_seq
+                        plugin._background_state = {
+                            "status": "pending",
+                            "request_id": request_id,
+                            "question": parsed_question,
+                            "app_id": app_id,
+                            "app_context": app_context,
+                            "success": None,
+                            "response": "Thinking...",
+                            "applied": None,
+                            "elapsed_seconds": 0,
+                            "error": None,
+                            "started_at": time.time(),
+                            "completed_at": None,
+                            "strategy_guide_branches": None,
+                            "model_policy_disclosure": None,
+                            "preset_carousel_inject": None,
+                        }
+                        plugin._background_task = asyncio.create_task(
+                            plugin._run_background_request(
+                                request_id,
+                                parsed_question,
+                                pc_ip,
+                                app_id,
+                                app_name,
+                                attachments=attachments,
+                                ask_mode=ask_mode,
+                                spoiler_consent=spoiler_consent,
+                            )
+                        )
 
+            if busy_body is not None:
+                return busy_body
+            if imm_args is not None:
+                return await plugin._finalize_immediate_background_local_command(**imm_args)
+
+        assert request_id is not None
         return {
             "accepted": True,
             "status": "pending",

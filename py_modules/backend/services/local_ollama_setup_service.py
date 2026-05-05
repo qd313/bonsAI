@@ -151,10 +151,15 @@ def ensure_ollama_server_listening_before_pull(
     cancelled: Callable[[], bool],
     *,
     max_listen_probe_iterations: int = 90,
+    leave_serve_running: bool = False,
 ) -> bool:
     """
     ``ollama pull`` requires the HTTP API. User-prefix tarball installs do not register systemd;
     start ``ollama serve`` in the background when port 11434 is down.
+
+    When ``leave_serve_running`` is True (Connection Test recovery only), a spawned ``ollama serve``
+    is detached instead of tracked for teardown — otherwise a stray process would keep running with
+    no code path to stop it after the health check succeeds.
     """
     global _OLLAMA_SERVE_PROC, _OLLAMA_SERVE_STARTED_BY_SETUP
     if probe_ollama_http_ok(DEFAULT_BASE, timeout_seconds=2.5):
@@ -220,6 +225,10 @@ def ensure_ollama_server_listening_before_pull(
                 data={"attempts": i + 1},
             )
             shell_log("[bonsAI] Ollama API is reachable on localhost:11434.")
+            if leave_serve_running and _OLLAMA_SERVE_STARTED_BY_SETUP:
+                # Detach child: connection-test path must not orphan an unstoppable serve process.
+                _OLLAMA_SERVE_PROC = None
+                _OLLAMA_SERVE_STARTED_BY_SETUP = False
             return True
         time.sleep(0.5)
 
@@ -262,6 +271,7 @@ def recover_loopback_ollama_listening(
         ollama_bin,
         lambda: False,
         max_listen_probe_iterations=max_listen_probe_iterations,
+        leave_serve_running=True,
     )
 
 

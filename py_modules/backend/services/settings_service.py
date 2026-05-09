@@ -15,7 +15,11 @@ from backend.services.ai_character_service import (
     sanitize_ai_character_preset_id,
     sanitize_ai_character_random,
 )
-from backend.services.capabilities import legacy_grandfather_capabilities, sanitize_capabilities
+from backend.services.capabilities import (
+    capability_enabled,
+    legacy_grandfather_capabilities,
+    sanitize_capabilities,
+)
 from backend.services.model_policy import reconcile_model_policy_tier
 
 
@@ -324,6 +328,21 @@ def load_settings(path: str, sanitize_func: Callable[[Any], dict], logger: Any) 
     except Exception as exc:
         logger.warning("load_settings: failed to read %s: %s", path, exc)
         return sanitize_func({})
+
+
+def append_desktop_chat_event_rpc_allowed(settings: dict) -> tuple[bool, str]:
+    """Return whether ``append_desktop_chat_event`` may run (filesystem capability + explicit auto-save)."""
+    if not capability_enabled(settings, "filesystem_write"):
+        return (
+            False,
+            "Filesystem writes are disabled. Enable them in the Permissions tab.",
+        )
+    if not sanitize_desktop_debug_note_auto_save(settings.get("desktop_debug_note_auto_save")):
+        return (
+            False,
+            "Desktop daily chat auto-save is disabled. Turn it on under Settings to append chat notes.",
+        )
+    return True, ""
 
 
 def save_settings(

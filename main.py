@@ -45,6 +45,7 @@ from backend.services.ollama_service import (
 )
 from backend.services.plugin_data_reset import reset_plugin_disk_and_defaults
 from backend.services.settings_service import (
+    append_desktop_chat_event_rpc_allowed,
     clamp_int,
     load_settings as load_settings_from_disk,
     sanitize_ask_mode,
@@ -843,8 +844,9 @@ class Plugin:
         """Append Ask or AI response lines to daily UTC chat file under ~/Desktop/BonsAI_notes/."""
         plugin = Plugin._coerce_instance(self)
         settings = await plugin.load_settings()
-        if not capability_enabled(settings, "filesystem_write"):
-            return {"success": False, "error": "Filesystem writes are disabled. Enable them in the Permissions tab."}
+        allowed, deny_reason = append_desktop_chat_event_rpc_allowed(settings)
+        if not allowed:
+            return {"success": False, "error": deny_reason}
         if not isinstance(payload, dict):
             return {"success": False, "error": "Invalid request."}
         event = str(payload.get("event", "") or "").strip().lower()

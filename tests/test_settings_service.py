@@ -4,6 +4,7 @@ import unittest
 from pathlib import Path
 
 from backend.services.settings_service import (
+    append_desktop_chat_event_rpc_allowed,
     load_settings,
     sanitize_settings,
     save_settings,
@@ -379,6 +380,28 @@ class SettingsServiceTests(unittest.TestCase):
             self.assertEqual(loaded["latency_warning_seconds"], 60)
             self.assertEqual(loaded["unified_input_persistence_mode"], "no_persist")
             self.assertIn("capabilities", loaded)
+
+    def test_append_desktop_chat_event_rpc_allowed_requires_fs_and_auto_save(self):
+        """Daily chat RPC must match product policy: filesystem capability plus explicit auto-save."""
+        caps_on = {"capabilities": {"filesystem_write": True}}
+        caps_off = {"capabilities": {"filesystem_write": False}}
+
+        ok, _msg = append_desktop_chat_event_rpc_allowed(
+            {**caps_on, "desktop_debug_note_auto_save": True}
+        )
+        self.assertTrue(ok)
+
+        ok_fs, msg_fs = append_desktop_chat_event_rpc_allowed(
+            {**caps_off, "desktop_debug_note_auto_save": True}
+        )
+        self.assertFalse(ok_fs)
+        self.assertIn("Filesystem", msg_fs)
+
+        ok_as, msg_as = append_desktop_chat_event_rpc_allowed(
+            {**caps_on, "desktop_debug_note_auto_save": False}
+        )
+        self.assertFalse(ok_as)
+        self.assertIn("auto-save", msg_as.lower())
 
 
 if __name__ == "__main__":

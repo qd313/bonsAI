@@ -10,6 +10,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from backend.services.local_ollama_setup_service import (
+    _append_log,
     _bash_exe,
     _env_for_host_system_tools,
     _env_for_ollama_cli,
@@ -17,6 +18,16 @@ from backend.services.local_ollama_setup_service import (
 
 
 class LocalOllamaSetupServiceTests(unittest.TestCase):
+    def test_append_log_updates_state_log_tail_not_a_copy(self):
+        """Regression: setup ``log()`` must append to ``state['log_tail']``, not a temporary list."""
+        state: dict[str, list[str]] = {}
+        _append_log(state.setdefault("log_tail", []), "first")
+        self.assertEqual(state["log_tail"], ["first"])
+        _append_log(list(state["log_tail"]), "orphan")
+        self.assertEqual(state["log_tail"], ["first"])
+        _append_log(state.setdefault("log_tail", []), "second")
+        self.assertEqual(state["log_tail"], ["first", "second"])
+
     def test_child_env_strips_ld_overrides_but_keeps_path(self):
         merged = dict(
             PATH="/usr/bin:/bin",

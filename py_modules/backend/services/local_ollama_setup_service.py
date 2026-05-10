@@ -607,7 +607,8 @@ async def run_local_setup(
     """Populate ``state`` while installing / pulling models. Plain dict for JSON-RPC compatibility."""
 
     def log(msg: str) -> None:
-        _append_log(list(state.setdefault("log_tail", [])), msg)
+        # Mutate the list in ``state`` — ``list(...)`` would copy and discard all lines.
+        _append_log(state.setdefault("log_tail", []), msg)
         try:
             logger.info("local_ollama_setup: %s", msg[:500])
         except Exception:

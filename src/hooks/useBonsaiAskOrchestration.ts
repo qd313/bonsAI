@@ -38,6 +38,7 @@ import type {
   AskThreadCollapsedTurn,
 } from "../types/bonsaiUi";
 import { hasResponseAutosaved, markResponseAutosaved } from "../utils/desktopChatAutosave";
+import { isPcIpOptionalForLocalAsk } from "../utils/localAskKeywords";
 import { normalizePresetCarouselInject } from "../utils/presetCarouselInject";
 import type { InputTransparencyRpcResult, TransparencySnapshot } from "../utils/inputTransparency";
 
@@ -321,9 +322,10 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
       await new Promise((r) => setTimeout(r, 50));
 
       const q = (overrideQuestion ?? a.unifiedInput).trim();
-      const ip = a.effectiveOllamaPcIp;
-      if (!q || !ip) {
-        if (!ip) {
+      const ip = (a.effectiveOllamaPcIp || "").trim();
+      const localNoHost = isPcIpOptionalForLocalAsk(q);
+      if (!q || (!ip && !localNoHost)) {
+        if (!ip && !localNoHost) {
           toaster.toast({ title: "PC IP required", body: "Set your Ollama PC IP before asking.", duration: 4000 });
         } else if (!q) {
           toaster.toast({

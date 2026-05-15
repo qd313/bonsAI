@@ -105,8 +105,6 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
 
   useEffect(() => {
     if (!lastExchange?.question?.trim()) return;
-    const qn = lastExchange.question.trim();
-    if (lastFlushedExchangeQuestionRef.current === qn) return;
     pendingArchiveTurnRef.current = { question: lastExchange.question, answer: lastExchange.answer };
   }, [lastExchange]);
 
@@ -294,6 +292,9 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     a.setSelectedAttachment(null);
     setElapsedSeconds(null);
     setShowSlowWarning(false);
+    pendingArchiveTurnRef.current = null;
+    pendingThreadQuestionDisplayRef.current = null;
+    lastFlushedExchangeQuestionRef.current = "";
   }, [a, invalidateRequests, isAsking]);
 
   const onCancelAsk = useCallback(() => {

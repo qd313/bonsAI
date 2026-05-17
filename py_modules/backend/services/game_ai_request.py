@@ -309,34 +309,42 @@ async def run_game_ai_request(
         if not ollama_result.get("success"):
             err_tail = base_response_text[:8000]
 
-        await plugin._persist_input_transparency(
-            {
-                "route": "ollama",
-                "raw_question": question,
-                "sanitizer_action": str(lane.action),
-                "sanitizer_reason_codes": list(lane.reason_codes),
-                "text_after_sanitizer": question_for_model,
-                "ollama_model": ollama_result.get("model"),
-                "system_prompt": ollama_result.get("system_prompt"),
-                "user_text_for_model": ollama_result.get("user_text_for_model"),
-                "user_image_count": int(ollama_result.get("user_image_count") or 0),
-                "attachment_paths": ollama_result.get("attachment_paths") or [],
-                "assistant_raw": ollama_result.get("assistant_raw"),
-                "assistant_after_attachment_format": base_response_text,
-                "final_response": response_text,
-                "applied": applied,
-                "success": bool(ollama_result.get("success", False)),
-                "app_id": app_id,
-                "app_name": app_name,
-                "pc_ip": pc_ip,
-                "error_message": err_tail,
-                "elapsed_seconds": elapsed,
-                "model_policy_disclosure": ollama_result.get("model_policy_disclosure"),
-                "proton_log_excerpt_attached": bool(ollama_result.get("proton_log_excerpt_attached")),
-                "proton_log_sources": ollama_result.get("proton_log_sources") or [],
-                "proton_log_notes": str(ollama_result.get("proton_log_notes") or ""),
-            }
-        )
+        # Transparency append is best-effort: a disk/permission failure here must not
+        # downgrade a successful model answer (or mis-report failure after TDP apply).
+        try:
+            await plugin._persist_input_transparency(
+                {
+                    "route": "ollama",
+                    "raw_question": question,
+                    "sanitizer_action": str(lane.action),
+                    "sanitizer_reason_codes": list(lane.reason_codes),
+                    "text_after_sanitizer": question_for_model,
+                    "ollama_model": ollama_result.get("model"),
+                    "system_prompt": ollama_result.get("system_prompt"),
+                    "user_text_for_model": ollama_result.get("user_text_for_model"),
+                    "user_image_count": int(ollama_result.get("user_image_count") or 0),
+                    "attachment_paths": ollama_result.get("attachment_paths") or [],
+                    "assistant_raw": ollama_result.get("assistant_raw"),
+                    "assistant_after_attachment_format": base_response_text,
+                    "final_response": response_text,
+                    "applied": applied,
+                    "success": bool(ollama_result.get("success", False)),
+                    "app_id": app_id,
+                    "app_name": app_name,
+                    "pc_ip": pc_ip,
+                    "error_message": err_tail,
+                    "elapsed_seconds": elapsed,
+                    "model_policy_disclosure": ollama_result.get("model_policy_disclosure"),
+                    "proton_log_excerpt_attached": bool(ollama_result.get("proton_log_excerpt_attached")),
+                    "proton_log_sources": ollama_result.get("proton_log_sources") or [],
+                    "proton_log_notes": str(ollama_result.get("proton_log_notes") or ""),
+                }
+            )
+        except Exception:
+            logger.exception(
+                "run_game_ai_request: _persist_input_transparency failed after Ollama (success=%s)",
+                bool(ollama_result.get("success", False)),
+            )
 
         logger.info("run_game_ai_request: completed in %.1fs", elapsed)
         return {

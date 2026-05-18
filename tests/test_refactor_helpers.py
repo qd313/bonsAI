@@ -56,6 +56,7 @@ class RefactorHelperTests(unittest.TestCase):
     def test_is_valid_setup_pull_profile(self):
         self.assertTrue(is_valid_setup_pull_profile("starter"))
         self.assertTrue(is_valid_setup_pull_profile("tier1_foss_full"))
+        self.assertTrue(is_valid_setup_pull_profile("update_installed"))
         self.assertFalse(is_valid_setup_pull_profile("Starter"))
         self.assertFalse(is_valid_setup_pull_profile(None))
 

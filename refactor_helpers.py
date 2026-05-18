@@ -139,7 +139,7 @@ TIER1_FOSS_STARTER_PULL_TAGS = (
     "llava:7b",
 )
 
-_VALID_SETUP_PULL_PROFILES = frozenset({"starter", "tier1_foss_full"})
+_VALID_SETUP_PULL_PROFILES = frozenset({"starter", "tier1_foss_full", "update_installed"})
 
 
 def tier1_foss_recommended_pull_tags(profile: str) -> list[str]:

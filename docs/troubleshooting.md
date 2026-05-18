@@ -179,6 +179,10 @@ If Windows still falls back to CPU after FIX A:
 
 **What bonsAI does (v0.3.0+):** With **Test** targeting loopback (**Ollama on this Deck on**, or **`127.0.0.1` / localhost** typed as the host), an initial failed probe triggers a best‑effort **wake** (**`systemctl --user try-restart` / start `ollama`**, then **`ollama serve`** if needed — same primitives as Starter setup under `py_modules/backend/services/local_ollama_setup_service.py`) and **retests once**. Prefer waiting a minute after boot before assuming Ollama is broken.
 
+**Keeping Ollama and models current:** With **Ollama on this Deck** enabled, Settings → Connection → **Update Ollama & Models** re-runs the official installer (binary refresh), then **`ollama pull`** each tag already listed under **Installed tags** from Connection **Test** — downloads only when upstream weights changed.
+
+**Local toggle and saved LAN IP:** While **Ollama on this Deck** is **on**, Ask uses `127.0.0.1:11434` but does **not** overwrite the saved **OLLAMA IP ADDRESS** field in browser storage. Toggling local **off** should restore your LAN PC host instead of leaving `127.0.0.1:11434` in the field after local-mode Asks.
+
 ---
 
 ## 2.5 Screenshot Vision Setup (V1)

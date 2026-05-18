@@ -28,6 +28,7 @@ import {
   resolveMainTabAvatarPresetId,
 } from "./data/characterCatalog";
 import { buildBonsaiScopeAccentInlineStyle, resolveUiAccentFromCharacterSettings } from "./data/characterUiAccent";
+import { persistOllamaIpIfRoutingToLan as persistOllamaIpIfRoutingToLanUtil } from "./utils/persistOllamaIp";
 import { getRandomPresets } from "./data/presets";
 import {
   AboutTabTitleIcon,
@@ -345,6 +346,13 @@ const Content: React.FC = () => {
     [ollamaLocalOnDeck, ollamaIp]
   );
 
+  const persistOllamaIpIfRoutingToLan = useCallback(
+    (ip: string) => {
+      persistOllamaIpIfRoutingToLanUtil(ollamaLocalOnDeck, saveIp, ip);
+    },
+    [ollamaLocalOnDeck]
+  );
+
   const {
     ollamaResponse,
     ollamaContext,
@@ -389,7 +397,7 @@ const Content: React.FC = () => {
     unifiedInputHostRef,
     setSelectedIndex,
     setNavigationMessage,
-    saveIp,
+    saveIp: persistOllamaIpIfRoutingToLan,
     persistSearchQuery,
   });
 

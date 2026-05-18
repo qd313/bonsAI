@@ -37,6 +37,7 @@ const LOCAL_LOOPBACK_CONNECTION_TEST_RPC_EXTRA_MS = 42000;
 
 const LOCAL_OLLAMA_SETUP_PROFILE_STARTER = "starter";
 const LOCAL_OLLAMA_SETUP_PROFILE_TIER1_FOSS_FULL = "tier1_foss_full";
+const LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED = "update_installed";
 
 /** Shown in setup modals; align with `refactor_helpers.tier1_foss_recommended_pull_tags` sizes. */
 const OLLAMA_MODELS_DISK_HINT =
@@ -312,13 +313,25 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   }, []);
 
   const openLocalSetupConfirm = useCallback(
-    (profile: typeof LOCAL_OLLAMA_SETUP_PROFILE_STARTER | typeof LOCAL_OLLAMA_SETUP_PROFILE_TIER1_FOSS_FULL) => {
+    (
+      profile:
+        | typeof LOCAL_OLLAMA_SETUP_PROFILE_STARTER
+        | typeof LOCAL_OLLAMA_SETUP_PROFILE_TIER1_FOSS_FULL
+        | typeof LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED
+    ) => {
       if (localSetupBusy) return;
       const isStarter = profile === LOCAL_OLLAMA_SETUP_PROFILE_STARTER;
+      const isUpdateInstalled = profile === LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED;
       onBeforeDeckyModal();
       const handle = showModal(
         <ConfirmModal
-          strTitle={isStarter ? "Set up starter models?" : "Pull full Tier‑1 FOSS set?"}
+          strTitle={
+            isStarter
+              ? "Set up starter models?"
+              : isUpdateInstalled
+                ? "Update Ollama and models?"
+                : "Pull full Tier‑1 FOSS set?"
+          }
           strDescription={
             <div
               className="bonsai-prose"
@@ -337,6 +350,19 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                     here for pulls only.
                   </div>
                 </>
+              ) : isUpdateInstalled ? (
+                <>
+                  <div style={{ marginBottom: 8 }}>
+                    Re-runs the official Ollama installer, then re-pulls each model already installed on this Deck so
+                    newer weights are fetched when upstream changed.
+                  </div>
+                  <div style={{ marginBottom: 8, color: "#c5d4e3" }}>{OLLAMA_MODELS_DISK_HINT}</div>
+                  {LOCAL_SETUP_NETWORK_AND_POWER_HINT}
+                  <div style={{ marginTop: 8 }}>
+                    If nothing is installed yet, the update finishes after the binary refresh — use Starter or Full
+                    Tier‑1 FOSS to pull models first.
+                  </div>
+                </>
               ) : (
                 <>
                   <div style={{ marginBottom: 8 }}>
@@ -352,7 +378,13 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
               )}
             </div>
           }
-          strOKButtonText={isStarter ? "Start starter setup" : "Start full Tier‑1 pull"}
+          strOKButtonText={
+            isStarter
+              ? "Start starter setup"
+              : isUpdateInstalled
+                ? "Start update"
+                : "Start full Tier‑1 pull"
+          }
           onOK={() => {
             setupAutoTestRanRef.current = false;
             onCompleteDeckyModalClose(() => handle.Close());
@@ -561,6 +593,27 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                   aria-label="Set up starter Ollama models"
                 >
                   Starter (README)
+                </Button>
+                <Button
+                  disabled={localSetupBusy}
+                  onClick={() => openLocalSetupConfirm(LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED)}
+                  style={{
+                    flex: "1 1 160px",
+                    minHeight: 36,
+                    minWidth: 0,
+                    padding: "6px 8px",
+                    fontSize: 11,
+                    fontWeight: 600,
+                    borderRadius: 4,
+                    border: "1px solid rgba(56,189,248,0.55)",
+                    background: localSetupBusy
+                      ? "rgba(14,32,48,0.5)"
+                      : "linear-gradient(180deg, rgba(56,189,248,0.22) 0%, rgba(14,116,144,0.35) 100%)",
+                    color: "#e0f2fe",
+                  }}
+                  aria-label="Update Ollama and re-pull installed models"
+                >
+                  Update Ollama & Models
                 </Button>
                 <Button
                   disabled={localSetupBusy}

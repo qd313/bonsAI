@@ -735,7 +735,7 @@ class Plugin:
         if not is_valid_setup_pull_profile(prof):
             return {
                 "accepted": False,
-                "reason": 'Invalid profile: use "starter" or "tier1_foss_full".',
+                "reason": 'Invalid profile: use "starter", "tier1_foss_full", or "update_installed".',
             }
 
         async with plugin._local_ollama_setup_lock:

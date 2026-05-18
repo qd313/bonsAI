@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented in this file.
 
+## [Unreleased]
+
+### Added
+- **Settings → Connection — Update Ollama & Models:** When **Ollama on this Deck** is on, a new button re-runs the official Ollama installer, then `ollama pull` every locally installed tag (via `/api/tags`) so newer weights are fetched when upstream changed. Profile `update_installed` in `local_ollama_setup_service.py`; UI in `SettingsTab.tsx`.
+
+### Fixed
+- **Local toggle no longer overwrites LAN PC IP:** Ask no longer persists `127.0.0.1:11434` to `bonsai:pc-ip` localStorage while **Ollama on this Deck** is enabled, so toggling local off restores the user's LAN host (`src/utils/persistOllamaIp.ts`, `src/index.tsx`).
+
 ## [0.3.0] - 2026-04-30
 
 ### Changed

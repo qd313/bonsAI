@@ -43,6 +43,7 @@ import { CharacterRoleplayEmoticon } from "./CharacterRoleplayEmoticon";
 import type { TransparencySnapshot } from "../utils/inputTransparency";
 import { formatAppliedTuningBannerText } from "../utils/settingsAndResponse";
 import { ASK_MODE_LABELS, ASK_MODE_OUTLINE, type AskModeId } from "../data/askMode";
+import { isLocalAskCommandWithoutOllama } from "../utils/localAskCommands";
 import {
   disclosureSummaryForSourceClass,
   type ModelPolicyDisclosurePayload,
@@ -804,7 +805,11 @@ export function MainTab(props: MainTabProps) {
                       onSettingClick(filteredSettings[selectedIndex], selectedIndex);
                       return;
                     }
-                    if (!isAsking && unifiedInput.trim() && ollamaIp.trim()) {
+                    if (
+                      !isAsking &&
+                      unifiedInput.trim() &&
+                      (ollamaIp.trim() || isLocalAskCommandWithoutOllama(unifiedInput))
+                    ) {
                       (ev.currentTarget as HTMLElement).blur();
                       onAskOllama();
                     }

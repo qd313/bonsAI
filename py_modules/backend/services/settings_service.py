@@ -60,6 +60,16 @@ def sanitize_desktop_ask_verbose_logging(value: Any) -> bool:
     return value is True
 
 
+_VALID_DESKTOP_APP_LOG_LEVELS = frozenset({"off", "default", "verbose"})
+
+
+def sanitize_desktop_app_log_level(value: Any) -> str:
+    """App activity log level for Desktop/bonsAI_logs; default off (opt-in)."""
+    if isinstance(value, str) and value.strip() in _VALID_DESKTOP_APP_LOG_LEVELS:
+        return value.strip()
+    return "off"
+
+
 def sanitize_attach_proton_logs_when_troubleshooting(value: Any) -> bool:
     """Only explicit true attaches local Proton/Steam log excerpts on troubleshooting-style Asks."""
     return value is True
@@ -263,6 +273,7 @@ def sanitize_settings(
         "desktop_ask_verbose_logging": sanitize_desktop_ask_verbose_logging(
             raw.get("desktop_ask_verbose_logging")
         ),
+        "desktop_app_log_level": sanitize_desktop_app_log_level(raw.get("desktop_app_log_level")),
         "attach_proton_logs_when_troubleshooting": sanitize_attach_proton_logs_when_troubleshooting(
             raw.get("attach_proton_logs_when_troubleshooting")
         ),

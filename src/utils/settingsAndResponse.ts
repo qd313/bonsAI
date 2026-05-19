@@ -37,6 +37,7 @@ function reconcileModelPolicySettings(
   return { model_policy_tier: "non_foss", model_policy_non_foss_unlocked: true };
 }
 export type UnifiedInputPersistenceMode = "persist_all" | "persist_search_only" | "no_persist";
+export type DesktopAppLogLevel = "off" | "default" | "verbose";
 export type { AskModeId };
 export type { OllamaKeepAliveDuration };
 /** Legacy; migration maps to ScreenshotAttachmentPreset. */
@@ -62,10 +63,12 @@ export type BonsaiSettings = {
   unified_input_persistence_mode: UnifiedInputPersistenceMode;
   /** Vision attachment downscale and JPEG quality preset. */
   screenshot_attachment_preset: ScreenshotAttachmentPreset;
-  /** When true, append Ask and AI response lines to daily chat files under Desktop/BonsAI_notes (requires filesystem_write). */
+  /** When true, append Ask and AI response lines to daily chat files under Desktop/bonsAI_logs (requires filesystem_write). */
   desktop_debug_note_auto_save: boolean;
   /** When true, append full Ask/Ollama transparency blocks to Desktop trace files (requires filesystem_write). */
   desktop_ask_verbose_logging: boolean;
+  /** App activity log level written to Desktop/bonsAI_logs/bonsai-app-YYYY-MM-DD.log (requires filesystem_write). */
+  desktop_app_log_level: DesktopAppLogLevel;
   /** When true (with Permissions → Steam/Proton log read), troubleshooting-style Asks attach bounded local log excerpts. */
   attach_proton_logs_when_troubleshooting: boolean;
   /** When false, main-tab preset suggestion chips stay opaque and swap text without fade transitions (default true). */
@@ -112,6 +115,7 @@ export type BonsaiSettingsSnapshotInput = {
   screenshotAttachmentPreset: ScreenshotAttachmentPreset;
   desktopDebugNoteAutoSave: boolean;
   desktopAskVerboseLogging: boolean;
+  desktopAppLogLevel: DesktopAppLogLevel;
   attachProtonLogsWhenTroubleshooting: boolean;
   presetChipFadeAnimationEnabled: boolean;
   inputSanitizerUserDisabled: boolean;
@@ -146,6 +150,7 @@ export function toBonsaiSettingsPayload(
     screenshot_attachment_preset: input.screenshotAttachmentPreset,
     desktop_debug_note_auto_save: input.desktopDebugNoteAutoSave,
     desktop_ask_verbose_logging: input.desktopAskVerboseLogging,
+    desktop_app_log_level: input.desktopAppLogLevel,
     attach_proton_logs_when_troubleshooting: input.attachProtonLogsWhenTroubleshooting,
     preset_chip_fade_animation_enabled: input.presetChipFadeAnimationEnabled,
     input_sanitizer_user_disabled: input.inputSanitizerUserDisabled,
@@ -190,6 +195,8 @@ export const DEFAULT_SCREENSHOT_ATTACHMENT_PRESET: ScreenshotAttachmentPreset = 
 export const DEFAULT_SCREENSHOT_MAX_DIMENSION: ScreenshotMaxDimension = 1280;
 export const DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE = false;
 export const DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING = false;
+export const DEFAULT_DESKTOP_APP_LOG_LEVEL: DesktopAppLogLevel = "off";
+export const DESKTOP_APP_LOG_LEVEL_OPTIONS: DesktopAppLogLevel[] = ["off", "default", "verbose"];
 export const DEFAULT_ATTACH_PROTON_LOGS_WHEN_TROUBLESHOOTING = false;
 export const DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED = true;
 export const DEFAULT_INPUT_SANITIZER_USER_DISABLED = false;
@@ -342,6 +349,13 @@ export function normalizeDesktopAskVerboseLogging(value: unknown): boolean {
   return value === true;
 }
 
+export function normalizeDesktopAppLogLevel(value: unknown): DesktopAppLogLevel {
+  if (value === "off" || value === "default" || value === "verbose") {
+    return value;
+  }
+  return DEFAULT_DESKTOP_APP_LOG_LEVEL;
+}
+
 export function normalizeAttachProtonLogsWhenTroubleshooting(value: unknown): boolean {
   return value === true;
 }
@@ -467,6 +481,7 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     screenshot_attachment_preset: normalizeScreenshotAttachmentPreset(rawRecord),
     desktop_debug_note_auto_save: normalizeDesktopDebugNoteAutoSave(raw.desktop_debug_note_auto_save),
     desktop_ask_verbose_logging: normalizeDesktopAskVerboseLogging(raw.desktop_ask_verbose_logging),
+    desktop_app_log_level: normalizeDesktopAppLogLevel(raw.desktop_app_log_level),
     attach_proton_logs_when_troubleshooting: normalizeAttachProtonLogsWhenTroubleshooting(
       raw.attach_proton_logs_when_troubleshooting
     ),

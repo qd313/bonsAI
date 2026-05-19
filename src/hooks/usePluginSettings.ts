@@ -12,6 +12,7 @@ import {
   DEFAULT_CAPABILITIES,
   DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING,
   DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE,
+  DEFAULT_DESKTOP_APP_LOG_LEVEL,
   DEFAULT_ATTACH_PROTON_LOGS_WHEN_TROUBLESHOOTING,
   DEFAULT_INPUT_SANITIZER_USER_DISABLED,
   DEFAULT_LATENCY_WARNING_SECONDS,
@@ -33,6 +34,7 @@ import {
   type AskModeId,
   type BonsaiCapabilities,
   type BonsaiSettings,
+  type DesktopAppLogLevel,
   type OllamaKeepAliveDuration,
   type ScreenshotAttachmentPreset,
   type UnifiedInputPersistenceMode,
@@ -61,6 +63,9 @@ export function usePluginSettings() {
   );
   const [desktopAskVerboseLogging, setDesktopAskVerboseLogging] = useState<boolean>(
     DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING
+  );
+  const [desktopAppLogLevel, setDesktopAppLogLevel] = useState<DesktopAppLogLevel>(
+    DEFAULT_DESKTOP_APP_LOG_LEVEL
   );
   const [attachProtonLogsWhenTroubleshooting, setAttachProtonLogsWhenTroubleshooting] = useState<boolean>(
     DEFAULT_ATTACH_PROTON_LOGS_WHEN_TROUBLESHOOTING
@@ -106,6 +111,7 @@ export function usePluginSettings() {
     setScreenshotAttachmentPreset(normalized.screenshot_attachment_preset);
     setDesktopDebugNoteAutoSave(normalized.desktop_debug_note_auto_save);
     setDesktopAskVerboseLogging(normalized.desktop_ask_verbose_logging);
+    setDesktopAppLogLevel(normalized.desktop_app_log_level);
     setAttachProtonLogsWhenTroubleshooting(normalized.attach_proton_logs_when_troubleshooting);
     setPresetChipFadeAnimationEnabled(normalized.preset_chip_fade_animation_enabled);
     setInputSanitizerUserDisabled(normalized.input_sanitizer_user_disabled);
@@ -169,6 +175,7 @@ export function usePluginSettings() {
         setScreenshotAttachmentPreset(DEFAULT_SCREENSHOT_ATTACHMENT_PRESET);
         setDesktopDebugNoteAutoSave(DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE);
         setDesktopAskVerboseLogging(DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING);
+        setDesktopAppLogLevel(DEFAULT_DESKTOP_APP_LOG_LEVEL);
         setAttachProtonLogsWhenTroubleshooting(DEFAULT_ATTACH_PROTON_LOGS_WHEN_TROUBLESHOOTING);
         setPresetChipFadeAnimationEnabled(DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED);
         setInputSanitizerUserDisabled(DEFAULT_INPUT_SANITIZER_USER_DISABLED);
@@ -210,6 +217,7 @@ export function usePluginSettings() {
           screenshotAttachmentPreset,
           desktopDebugNoteAutoSave,
           desktopAskVerboseLogging,
+          desktopAppLogLevel,
           attachProtonLogsWhenTroubleshooting,
           presetChipFadeAnimationEnabled,
           inputSanitizerUserDisabled,
@@ -243,6 +251,7 @@ export function usePluginSettings() {
     screenshotAttachmentPreset,
     desktopDebugNoteAutoSave,
     desktopAskVerboseLogging,
+    desktopAppLogLevel,
     attachProtonLogsWhenTroubleshooting,
     presetChipFadeAnimationEnabled,
     inputSanitizerUserDisabled,
@@ -273,6 +282,7 @@ export function usePluginSettings() {
     screenshotAttachmentPreset,
     desktopDebugNoteAutoSave,
     desktopAskVerboseLogging,
+    desktopAppLogLevel,
     attachProtonLogsWhenTroubleshooting,
     presetChipFadeAnimationEnabled,
     inputSanitizerUserDisabled,
@@ -314,6 +324,7 @@ export function usePluginSettings() {
     setUnifiedInputPersistenceMode,
     setDesktopDebugNoteAutoSave,
     setDesktopAskVerboseLogging,
+    setDesktopAppLogLevel,
     setAttachProtonLogsWhenTroubleshooting,
     setPresetChipFadeAnimationEnabled,
     setInputSanitizerUserDisabled,

@@ -6,6 +6,10 @@ All notable changes to this project are documented in this file.
 
 ### Added
 - **Settings → Connection — Update Ollama & Models:** When **Ollama on this Deck** is on, a new button re-runs the official Ollama installer, then `ollama pull` every locally installed tag (via `/api/tags`) so newer weights are fetched when upstream changed. Profile `update_installed` in `local_ollama_setup_service.py`; UI in `SettingsTab.tsx`.
+- **Desktop app activity logging (opt-in):** Settings → Advanced → **App activity logging to Desktop** (`desktop_app_log_level`: Off / Default / Verbose; default Off). When enabled with **Filesystem writes**, summary or detailed events append to `~/Desktop/bonsAI_logs/bonsai-app-YYYY-MM-DD.log`. Backend `_maybe_app_log` / RPC `append_app_log`; frontend helper `src/utils/appDesktopLog.ts`.
+
+### Changed
+- **Desktop logs folder rename:** All Desktop writes (chat auto-save, Ask traces, manual notes, app logs) now use `~/Desktop/bonsAI_logs/` instead of `~/Desktop/BonsAI_notes/`. Existing folders are not auto-migrated — rename manually if you already have notes there.
 
 ### Fixed
 - **Local toggle no longer overwrites LAN PC IP:** Ask no longer persists `127.0.0.1:11434` to `bonsai:pc-ip` localStorage while **Ollama on this Deck** is enabled, so toggling local off restores the user's LAN host (`src/utils/persistOllamaIp.ts`, `src/index.tsx`).

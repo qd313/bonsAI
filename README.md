@@ -129,7 +129,9 @@ More detail: [docs/troubleshooting.md](docs/troubleshooting.md) (sanitizer FAQ),
 
 After each Ask finishes (including blocked input), the **main** tab can show **Input handling (last Ask)** with raw text, post-sanitizer text, the system and user strings sent to Ollama, model id, and responses. Use **Run original in Ask** to paste the raw prompt back into the Ask field.
 
-Optional **Verbose Ask logging to Desktop notes** (Settings → Desktop notes) appends the same detail to `~/Desktop/BonsAI_notes/bonsai-ask-trace-YYYY-MM-DD.md` when **Filesystem writes** is enabled. That file can contain long prompts; disable the toggle or delete the file if you need to reclaim space.
+Optional **Verbose Ask logging to Desktop notes** (Settings → Desktop notes) appends the same detail to `~/Desktop/bonsAI_logs/bonsai-ask-trace-YYYY-MM-DD.md` when **Filesystem writes** is enabled. That file can contain long prompts; disable the toggle or delete the file if you need to reclaim space.
+
+Optional **App activity logging to Desktop** (Settings → Advanced, default Off) writes summary or verbose one-line events to `~/Desktop/bonsAI_logs/bonsai-app-YYYY-MM-DD.log` when **Filesystem writes** is enabled.
 
 ## Buy me a beer
 ![Donate](assets/qrcode.png)

@@ -246,6 +246,25 @@ class SettingsServiceTests(unittest.TestCase):
         )
         self.assertFalse(garbled["desktop_ask_verbose_logging"])
 
+    def test_sanitize_desktop_app_log_level(self):
+        kwargs = dict(
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="persist_all",
+            valid_ask_modes={"speed", "strategy", "deep"},
+            default_ask_mode="speed",
+        )
+        self.assertEqual(sanitize_settings(data={"desktop_app_log_level": "default"}, **kwargs)["desktop_app_log_level"], "default")
+        self.assertEqual(sanitize_settings(data={"desktop_app_log_level": "verbose"}, **kwargs)["desktop_app_log_level"], "verbose")
+        self.assertEqual(sanitize_settings(data={"desktop_app_log_level": "off"}, **kwargs)["desktop_app_log_level"], "off")
+        self.assertEqual(sanitize_settings(data={}, **kwargs)["desktop_app_log_level"], "off")
+        self.assertEqual(sanitize_settings(data={"desktop_app_log_level": "bogus"}, **kwargs)["desktop_app_log_level"], "off")
+
     def test_sanitize_input_sanitizer_user_disabled_true_only_for_literal_true(self):
         """Only JSON true disables the sanitizer lane; other values keep sanitization on."""
         off = sanitize_settings(

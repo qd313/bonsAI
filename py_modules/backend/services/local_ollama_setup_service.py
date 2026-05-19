@@ -494,11 +494,32 @@ async def run_local_setup(
     state: dict[str, Any],
     logger: Any,
     cancel_event: asyncio.Event,
+    on_stage: Optional[Callable[[str, dict[str, Any]], Any]] = None,
+    on_verbose_line: Optional[Callable[[str], None]] = None,
 ) -> None:
     """Populate ``state`` while installing / pulling models. Plain dict for JSON-RPC compatibility."""
 
+    prof = (profile or "").strip()
+    last_stage_emitted = ""
+
+    async def emit_stage(stage: str, extra: Optional[dict[str, Any]] = None) -> None:
+        nonlocal last_stage_emitted
+        st = (stage or "").strip()
+        if not st or st == last_stage_emitted or on_stage is None:
+            return
+        last_stage_emitted = st
+        fields = {"profile": prof, **(extra or {})}
+        maybe = on_stage(st, fields)
+        if asyncio.iscoroutine(maybe):
+            await maybe
+
     def log(msg: str) -> None:
         _append_log(list(state.setdefault("log_tail", [])), msg)
+        if on_verbose_line is not None:
+            try:
+                on_verbose_line(msg)
+            except Exception:
+                pass
         try:
             logger.info("local_ollama_setup: %s", msg[:500])
         except Exception:
@@ -513,7 +534,7 @@ async def run_local_setup(
         state["done"] = False
         state["error"] = ""
         state["profile"] = profile
-        prof = (profile or "").strip()
+        await emit_stage("check")
         is_update_installed = prof == "update_installed"
         tags = tier1_foss_recommended_pull_tags(prof) if not is_update_installed else []
         if not is_update_installed and not tags:
@@ -537,8 +558,10 @@ async def run_local_setup(
             cancelled=cancelled,
             force_reinstall=is_update_installed,
         )
+        await emit_stage(state.get("stage", "install"))
 
         state["stage"] = "service"
+        await emit_stage("service")
         if not probe_ollama_http_ok(DEFAULT_BASE):
             log("[bonsAI] Ollama not responding on localhost:11434; trying user systemd unit…")
             await asyncio.to_thread(lambda: try_restart_ollama_user_service(log))
@@ -565,11 +588,13 @@ async def run_local_setup(
                 state["done"] = True
                 state["current_tag"] = ""
                 log("[bonsAI] Local Ollama update finished (binary refresh only).")
+                await emit_stage("complete")
                 return
 
             log(f"[bonsAI] Re-pulling {len(tags)} installed tag(s) for updates…")
 
         state["stage"] = "pull"
+        await emit_stage("pull", {"pull_steps": len(tags)})
         for i, tag in enumerate(tags):
             if cancelled():
                 raise RuntimeError("Cancelled.")
@@ -586,6 +611,7 @@ async def run_local_setup(
         state["done"] = True
         state["current_tag"] = ""
         log("[bonsAI] Local Ollama setup finished.")
+        await emit_stage("complete")
 
     except Exception as exc:
         msg = str(exc)
@@ -594,6 +620,7 @@ async def run_local_setup(
         state["phase"] = "cancelled" if is_cancelled else "failed"
         state["error"] = msg
         state["done"] = True
+        await emit_stage("failed" if not is_cancelled else "cancelled", {"error": msg[:200]})
         if not is_cancelled:
             try:
                 logger.exception("local_ollama_setup failed")

@@ -28,6 +28,7 @@ import {
   resolveMainTabAvatarPresetId,
 } from "./data/characterCatalog";
 import { buildBonsaiScopeAccentInlineStyle, resolveUiAccentFromCharacterSettings } from "./data/characterUiAccent";
+import { appendAppDesktopLogWithPrefs } from "./utils/appDesktopLog";
 import { persistOllamaIpIfRoutingToLan as persistOllamaIpIfRoutingToLanUtil } from "./utils/persistOllamaIp";
 import { getRandomPresets } from "./data/presets";
 import {
@@ -270,8 +271,6 @@ const Content: React.FC = () => {
   const screenshotBrowserHostRef = useRef<HTMLDivElement>(null);
   const attachActionHostRef = useRef<HTMLDivElement>(null);
 
-  const [capturedErrors, setCapturedErrors] = useCapturedFrontendErrors();
-
   const {
     latencyWarningSeconds,
     requestTimeoutSeconds,
@@ -302,6 +301,8 @@ const Content: React.FC = () => {
     setScreenshotAttachmentPreset,
     setDesktopDebugNoteAutoSave,
     setDesktopAskVerboseLogging,
+    desktopAppLogLevel,
+    setDesktopAppLogLevel,
     setAttachProtonLogsWhenTroubleshooting,
     setPresetChipFadeAnimationEnabled,
     setInputSanitizerUserDisabled,
@@ -328,6 +329,21 @@ const Content: React.FC = () => {
     settingsLoaded,
     hydrateFromSettings,
   } = usePluginSettings();
+
+  const appLogPrefs = useMemo(
+    () => ({
+      desktopAppLogLevel,
+      capabilities: { filesystem_write: capabilities.filesystem_write },
+    }),
+    [desktopAppLogLevel, capabilities.filesystem_write]
+  );
+  const [capturedErrors, setCapturedErrors] = useCapturedFrontendErrors(appLogPrefs);
+
+  useEffect(() => {
+    if (!settingsLoaded) return;
+    if (currentTab !== "debug" && currentTab !== "settings") return;
+    appendAppDesktopLogWithPrefs(appLogPrefs, "verbose", "ui.tab", `opened ${currentTab} tab`);
+  }, [currentTab, settingsLoaded, appLogPrefs]);
 
   useEffect(() => {
     if (askMode !== "strategy") {
@@ -737,7 +753,7 @@ const Content: React.FC = () => {
       <DesktopNoteSaveModal
         strDescriptionPrefix={
           "This appends to a file on your Steam Deck Desktop (not the PC running Ollama).\n\n" +
-          "Folder: Desktop/BonsAI_notes/\n" +
+          "Folder: Desktop/bonsAI_logs/\n" +
           "Existing notes are never replaced; new entries are appended with a timestamp.\n\n" +
           "Proceed only if you want this question and answer saved there."
         }
@@ -818,6 +834,7 @@ const Content: React.FC = () => {
                 screenshotAttachmentPreset,
                 desktopDebugNoteAutoSave,
                 desktopAskVerboseLogging,
+                desktopAppLogLevel,
                 attachProtonLogsWhenTroubleshooting,
                 presetChipFadeAnimationEnabled,
                 inputSanitizerUserDisabled,
@@ -865,6 +882,7 @@ const Content: React.FC = () => {
     screenshotAttachmentPreset,
     desktopDebugNoteAutoSave,
     desktopAskVerboseLogging,
+    desktopAppLogLevel,
     attachProtonLogsWhenTroubleshooting,
     presetChipFadeAnimationEnabled,
     inputSanitizerUserDisabled,
@@ -1042,6 +1060,9 @@ const Content: React.FC = () => {
       setDesktopDebugNoteAutoSave={setDesktopDebugNoteAutoSave}
       desktopAskVerboseLogging={desktopAskVerboseLogging}
       setDesktopAskVerboseLogging={setDesktopAskVerboseLogging}
+      desktopAppLogLevel={desktopAppLogLevel}
+      setDesktopAppLogLevel={setDesktopAppLogLevel}
+      filesystemWrite={capabilities.filesystem_write}
       attachProtonLogsWhenTroubleshooting={attachProtonLogsWhenTroubleshooting}
       setAttachProtonLogsWhenTroubleshooting={setAttachProtonLogsWhenTroubleshooting}
       strategySpoilerMaskingEnabled={strategySpoilerMaskingEnabled}
@@ -1075,6 +1096,7 @@ const Content: React.FC = () => {
           screenshotAttachmentPreset,
           desktopDebugNoteAutoSave,
           desktopAskVerboseLogging,
+          desktopAppLogLevel,
           attachProtonLogsWhenTroubleshooting,
           presetChipFadeAnimationEnabled,
           inputSanitizerUserDisabled,
@@ -1108,6 +1130,7 @@ const Content: React.FC = () => {
     screenshotAttachmentPreset,
     desktopDebugNoteAutoSave,
     desktopAskVerboseLogging,
+    desktopAppLogLevel,
     attachProtonLogsWhenTroubleshooting,
     presetChipFadeAnimationEnabled,
     inputSanitizerUserDisabled,

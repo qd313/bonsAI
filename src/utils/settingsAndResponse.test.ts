@@ -9,6 +9,7 @@ import {
   DEFAULT_SCREENSHOT_ATTACHMENT_PRESET,
   DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT,
   DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED,
+  type DesktopAppLogLevel,
   normalizeLatencyWarningSeconds,
   normalizeRequestTimeoutSeconds,
   normalizeSettings,
@@ -57,6 +58,7 @@ describe("settingsAndResponse", () => {
     expect(settings.latency_timeouts_custom_enabled).toBe(false);
     expect(settings.desktop_debug_note_auto_save).toBe(false);
     expect(settings.desktop_ask_verbose_logging).toBe(false);
+    expect(settings.desktop_app_log_level).toBe("off");
     expect(settings.attach_proton_logs_when_troubleshooting).toBe(false);
     expect(settings.capabilities.filesystem_write).toBe(false);
     expect(settings.capabilities.hardware_control).toBe(false);
@@ -111,6 +113,14 @@ describe("settingsAndResponse", () => {
   it("normalizes ask_mode to allowed ids", () => {
     expect(normalizeSettings({ ask_mode: "deep" }).ask_mode).toBe("deep");
     expect(normalizeSettings({ ask_mode: "bogus" as unknown as string }).ask_mode).toBe(DEFAULT_ASK_MODE);
+  });
+
+  it("normalizes desktop app log level", () => {
+    expect(normalizeSettings({ desktop_app_log_level: "default" }).desktop_app_log_level).toBe("default");
+    expect(normalizeSettings({ desktop_app_log_level: "verbose" }).desktop_app_log_level).toBe("verbose");
+    expect(normalizeSettings({ desktop_app_log_level: "off" }).desktop_app_log_level).toBe("off");
+    expect(normalizeSettings({}).desktop_app_log_level).toBe("off");
+    expect(normalizeSettings({ desktop_app_log_level: "bogus" as unknown as DesktopAppLogLevel }).desktop_app_log_level).toBe("off");
   });
 
   it("normalizes desktop ask verbose logging: only explicit true enables", () => {
@@ -187,6 +197,7 @@ describe("settingsAndResponse", () => {
       screenshotAttachmentPreset: "mid",
       desktopDebugNoteAutoSave: true,
       desktopAskVerboseLogging: false,
+      desktopAppLogLevel: "off",
       attachProtonLogsWhenTroubleshooting: true,
       presetChipFadeAnimationEnabled: true,
       inputSanitizerUserDisabled: false,
@@ -231,6 +242,7 @@ describe("settingsAndResponse", () => {
       screenshotAttachmentPreset: DEFAULT_SCREENSHOT_ATTACHMENT_PRESET,
       desktopDebugNoteAutoSave: false,
       desktopAskVerboseLogging: false,
+      desktopAppLogLevel: "off" as const,
       attachProtonLogsWhenTroubleshooting: false,
       presetChipFadeAnimationEnabled: true,
       inputSanitizerUserDisabled: false,

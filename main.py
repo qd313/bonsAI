@@ -60,6 +60,7 @@ from backend.services.model_policy import (
     filter_model_list,
 )
 from backend.services.desktop_note_service import (
+    append_app_log_sync,
     append_desktop_ask_transparency_sync,
     append_desktop_chat_event_sync,
     append_desktop_debug_note_sync,
@@ -205,10 +206,12 @@ class Plugin:
         """Run plugin startup hooks and ensure background state exists before serving RPCs."""
         self._ensure_background_state()
         logger.info("bonsAI plugin loaded!")
+        await self._maybe_app_log("plugin.lifecycle", "plugin loaded")
 
     async def _unload(self):
         """Run plugin shutdown logging for Decky unload events."""
         plugin = Plugin._coerce_instance(self)
+        await plugin._maybe_app_log("plugin.lifecycle", "plugin unloading")
         ce = getattr(plugin, "_local_ollama_cancel_event", None)
         if isinstance(ce, asyncio.Event):
             ce.set()
@@ -263,6 +266,70 @@ class Plugin:
             self._active_ollama_chat_http_response = None
         if not hasattr(self, "_chat_resp_ready_evt"):
             self._chat_resp_ready_evt = None
+
+    @staticmethod
+    def _desktop_app_log_level_allows(settings: dict, event_level: str) -> bool:
+        lvl = str(settings.get("desktop_app_log_level") or "off")
+        if lvl == "off":
+            return False
+        if event_level == "default":
+            return lvl in ("default", "verbose")
+        if event_level == "verbose":
+            return lvl == "verbose"
+        return False
+
+    @staticmethod
+    def _settings_change_keys_for_log(before: dict, after: dict) -> list[str]:
+        sensitive = frozenset({"steam_web_api_key"})
+        changed: list[str] = []
+        keys = set(before.keys()) | set(after.keys())
+        for key in sorted(keys):
+            if before.get(key) == after.get(key):
+                continue
+            if key in sensitive:
+                changed.append(f"{key}=<redacted>")
+            elif key == "capabilities" and isinstance(before.get(key), dict) and isinstance(after.get(key), dict):
+                cap_keys = set(before["capabilities"].keys()) | set(after["capabilities"].keys())
+                for ck in sorted(cap_keys):
+                    if before["capabilities"].get(ck) != after["capabilities"].get(ck):
+                        changed.append(f"capabilities.{ck}")
+            else:
+                changed.append(key)
+        return changed
+
+    async def _maybe_app_log(
+        self,
+        category: str,
+        message: str,
+        *,
+        level: str = "default",
+        fields: Optional[dict] = None,
+    ) -> None:
+        """Best-effort append to Desktop/bonsAI_logs/bonsai-app-*.log; never raises."""
+        plugin = Plugin._coerce_instance(self)
+        try:
+            settings = await plugin.load_settings()
+            if not Plugin._desktop_app_log_level_allows(settings, level):
+                return
+            if not capability_enabled(settings, "filesystem_write"):
+                return
+            home = getattr(decky, "DECKY_USER_HOME", None) or decky.HOME
+            loop = asyncio.get_running_loop()
+
+            def _run() -> dict:
+                return append_app_log_sync(
+                    home,
+                    level=level,
+                    category=category,
+                    message=message,
+                    fields=fields,
+                )
+
+            result = await loop.run_in_executor(None, _run)
+            if not result.get("ok"):
+                logger.warning("append_app_log_sync: %s", result.get("error"))
+        except Exception:
+            logger.exception("_maybe_app_log failed")
 
     @staticmethod
     def _coerce_payload_bool(value: Any) -> bool:
@@ -396,7 +463,7 @@ class Plugin:
         """Persist plugin settings to Decky's settings directory."""
         current = await self.load_settings()
         path = Plugin._settings_path()
-        return save_settings_to_disk(
+        saved = save_settings_to_disk(
             path=path,
             settings_dir=decky.DECKY_PLUGIN_SETTINGS_DIR,
             incoming=data,
@@ -404,6 +471,14 @@ class Plugin:
             sanitize_func=Plugin._sanitize_settings,
             logger=logger,
         )
+        changed = Plugin._settings_change_keys_for_log(current, saved)
+        if changed:
+            await self._maybe_app_log(
+                "settings.save",
+                "settings updated",
+                fields={"changed": ",".join(changed)},
+            )
+        return saved
 
     async def clear_plugin_data(self):
         """Remove persisted settings/runtime/logs and return fresh defaults (new-install behavior)."""
@@ -594,8 +669,29 @@ class Plugin:
         started_at = time.time()
         safe_timeout_seconds = max(1, min(120, int(timeout_seconds or 5)))
         raw = (pc_ip or "").strip()
+
+        async def _finish(out: dict[str, Any]) -> dict[str, Any]:
+            reachable = bool(out.get("reachable"))
+            fields: dict[str, Any] = {
+                "reachable": reachable,
+                "recovery_attempted": bool(out.get("recovery_attempted")),
+            }
+            if reachable:
+                fields["version"] = str(out.get("version", "unknown"))
+                fields["model_count"] = len(out.get("models") or [])
+            else:
+                fields["error"] = str(out.get("error") or "")[:160]
+            await self._maybe_app_log("connection.test", "ollama connection test", fields=fields)
+            await self._maybe_app_log(
+                "connection.test",
+                "RPC test_ollama_connection",
+                level="verbose",
+                fields={"host": raw, "timeout_seconds": safe_timeout_seconds},
+            )
+            return out
+
         if not raw:
-            return {"reachable": False, "error": "No PC IP provided."}
+            return await _finish({"reachable": False, "error": "No PC IP provided."})
         host, _port, base = normalize_ollama_base(raw)
 
         def _test_connection_sync() -> dict:
@@ -651,10 +747,12 @@ class Plugin:
         except Exception:
             if not is_loopback_ollama_host(host):
                 logger.exception("test_ollama_connection failed (non-loopback)")
-                return {
-                    "reachable": False,
-                    "error": "Could not reach Ollama. Check PC IP, firewall, and that Ollama is running on the host.",
-                }
+                return await _finish(
+                    {
+                        "reachable": False,
+                        "error": "Could not reach Ollama. Check PC IP, firewall, and that Ollama is running on the host.",
+                    }
+                )
 
             recovery_attempted = True
 
@@ -676,15 +774,17 @@ class Plugin:
             recovery_succeeded_before_retry = bool(recovered)
 
             if not recovered:
-                return {
-                    "reachable": False,
-                    "recovery_attempted": recovery_attempted,
-                    "recovery_succeeded_before_retry": False,
-                    "error": (
-                        "Could not start or reach Ollama on this device. Try Starter setup in Connection, "
-                        "or run ``ollama serve`` from Desktop Konsole."
-                    ),
-                }
+                return await _finish(
+                    {
+                        "reachable": False,
+                        "recovery_attempted": recovery_attempted,
+                        "recovery_succeeded_before_retry": False,
+                        "error": (
+                            "Could not start or reach Ollama on this device. Try Starter setup in Connection, "
+                            "or run ``ollama serve`` from Desktop Konsole."
+                        ),
+                    }
+                )
 
             try:
                 tested = await asyncio.wait_for(
@@ -693,15 +793,17 @@ class Plugin:
                 )
             except Exception:
                 logger.exception("test_ollama_connection failed after loopback recovery")
-                return {
-                    "reachable": False,
-                    "recovery_attempted": recovery_attempted,
-                    "recovery_succeeded_before_retry": True,
-                    "error": (
-                        "Ollama was started but the health check still failed. Retry the test or check "
-                        "~/.ollama and disk space."
-                    ),
-                }
+                return await _finish(
+                    {
+                        "reachable": False,
+                        "recovery_attempted": recovery_attempted,
+                        "recovery_succeeded_before_retry": True,
+                        "error": (
+                            "Ollama was started but the health check still failed. Retry the test or check "
+                            "~/.ollama and disk space."
+                        ),
+                    }
+                )
 
         version = str(tested.get("version", "unknown"))
         models = list(tested.get("models", []))
@@ -716,7 +818,7 @@ class Plugin:
         if recovery_attempted:
             base_out["recovery_attempted"] = True
             base_out["recovery_succeeded_before_retry"] = recovery_succeeded_before_retry
-        return base_out
+        return await _finish(base_out)
 
     async def start_local_ollama_setup(self, data: Any = None):
         """Install/start Ollama on this Linux host and pull Tier-1 FOSS tags (runs in background)."""
@@ -728,20 +830,38 @@ class Plugin:
             prof = data.strip()
         settings = await plugin.load_settings()
         if not settings.get("ollama_local_on_deck"):
-            return {
+            out = {
                 "accepted": False,
                 "reason": "Enable «Ollama on this Deck» in Settings → Connection first.",
             }
+            await plugin._maybe_app_log(
+                "local_setup.start",
+                "setup rejected",
+                fields={"profile": prof, "accepted": False, "reason": "local_off"},
+            )
+            return out
         if not is_valid_setup_pull_profile(prof):
-            return {
+            out = {
                 "accepted": False,
                 "reason": 'Invalid profile: use "starter", "tier1_foss_full", or "update_installed".',
             }
+            await plugin._maybe_app_log(
+                "local_setup.start",
+                "setup rejected",
+                fields={"profile": prof, "accepted": False, "reason": "invalid_profile"},
+            )
+            return out
 
         async with plugin._local_ollama_setup_lock:
             existing = plugin._local_ollama_setup_task
             if existing is not None and not existing.done():
-                return {"accepted": False, "reason": "Setup already running."}
+                out = {"accepted": False, "reason": "Setup already running."}
+                await plugin._maybe_app_log(
+                    "local_setup.start",
+                    "setup rejected",
+                    fields={"profile": prof, "accepted": False, "reason": "busy"},
+                )
+                return out
 
             plugin._local_ollama_cancel_event = asyncio.Event()
             plugin._local_ollama_cancel_event.clear()
@@ -757,6 +877,32 @@ class Plugin:
             )
             plugin._local_ollama_setup_state = new_st
 
+            setup_loop = asyncio.get_running_loop()
+            last_logged_stage = {"value": ""}
+
+            async def on_stage(stage: str, fields: dict[str, Any]) -> None:
+                st = (stage or "").strip()
+                if not st or st == last_logged_stage["value"]:
+                    return
+                last_logged_stage["value"] = st
+                await plugin._maybe_app_log(
+                    "local_setup.stage",
+                    f"stage={st}",
+                    fields=fields,
+                )
+
+            def on_verbose_line(line: str) -> None:
+                msg = (line or "").strip()
+                if not msg:
+                    return
+
+                def _schedule() -> None:
+                    asyncio.create_task(
+                        plugin._maybe_app_log("local_setup.line", msg[:500], level="verbose")
+                    )
+
+                setup_loop.call_soon_threadsafe(_schedule)
+
             async def runner() -> None:
                 assert plugin._local_ollama_cancel_event is not None
                 await run_local_setup(
@@ -764,10 +910,17 @@ class Plugin:
                     state=plugin._local_ollama_setup_state,
                     logger=logger,
                     cancel_event=plugin._local_ollama_cancel_event,
+                    on_stage=on_stage,
+                    on_verbose_line=on_verbose_line,
                 )
 
             plugin._local_ollama_setup_task = asyncio.create_task(runner())
 
+        await plugin._maybe_app_log(
+            "local_setup.start",
+            "setup accepted",
+            fields={"profile": prof, "accepted": True},
+        )
         return {"accepted": True}
 
     async def get_local_ollama_setup_status(self):
@@ -816,10 +969,15 @@ class Plugin:
             return {"success": False, "items": [], "error": "Could not load recent screenshots."}
 
     async def append_desktop_debug_note(self, payload: Any = None):
-        """Append timestamped Q&A markdown under ~/Desktop/BonsAI_notes/<name>.md (append-only)."""
+        """Append timestamped Q&A markdown under ~/Desktop/bonsAI_logs/<name>.md (append-only)."""
         plugin = Plugin._coerce_instance(self)
         settings = await plugin.load_settings()
         if not capability_enabled(settings, "filesystem_write"):
+            await plugin._maybe_app_log(
+                "capability.denied",
+                "filesystem_write denied for append_desktop_debug_note",
+                level="verbose",
+            )
             return {"success": False, "error": "Filesystem writes are disabled. Enable them in the Permissions tab."}
         if not isinstance(payload, dict):
             return {"success": False, "error": "Invalid request."}
@@ -840,10 +998,15 @@ class Plugin:
         return {"success": False, "error": str(result.get("error", "Write failed."))}
 
     async def append_desktop_chat_event(self, payload: Any = None):
-        """Append Ask or AI response lines to daily UTC chat file under ~/Desktop/BonsAI_notes/."""
+        """Append Ask or AI response lines to daily UTC chat file under ~/Desktop/bonsAI_logs/."""
         plugin = Plugin._coerce_instance(self)
         settings = await plugin.load_settings()
         if not capability_enabled(settings, "filesystem_write"):
+            await plugin._maybe_app_log(
+                "capability.denied",
+                "filesystem_write denied for append_desktop_chat_event",
+                level="verbose",
+            )
             return {"success": False, "error": "Filesystem writes are disabled. Enable them in the Permissions tab."}
         if not isinstance(payload, dict):
             return {"success": False, "error": "Invalid request."}
@@ -861,6 +1024,40 @@ class Plugin:
                 question=question,
                 response_text=response_text,
                 screenshot_paths=screenshot_paths if isinstance(screenshot_paths, list) else [],
+            )
+
+        result = await loop.run_in_executor(None, _run)
+        if result.get("ok"):
+            return {"success": True, "path": result.get("path", "")}
+        return {"success": False, "error": str(result.get("error", "Write failed."))}
+
+    async def append_app_log(self, payload: Any = None):
+        """Append one app-activity line to ~/Desktop/bonsAI_logs/bonsai-app-YYYY-MM-DD.log."""
+        plugin = Plugin._coerce_instance(self)
+        settings = await plugin.load_settings()
+        if not isinstance(payload, dict):
+            return {"success": False, "error": "Invalid request."}
+        event_level = str(payload.get("level", "default") or "default").strip().lower()
+        if event_level not in ("default", "verbose"):
+            event_level = "default"
+        if not Plugin._desktop_app_log_level_allows(settings, event_level):
+            return {"success": True, "skipped": True}
+        if not capability_enabled(settings, "filesystem_write"):
+            return {"success": False, "error": "Filesystem writes are disabled. Enable them in the Permissions tab."}
+        category = str(payload.get("category", "") or "app").strip() or "app"
+        message = str(payload.get("message", "") or "").strip()
+        fields_raw = payload.get("fields")
+        fields = fields_raw if isinstance(fields_raw, dict) else None
+        home = getattr(decky, "DECKY_USER_HOME", None) or decky.HOME
+        loop = asyncio.get_running_loop()
+
+        def _run() -> dict:
+            return append_app_log_sync(
+                home,
+                level=event_level,
+                category=category,
+                message=message,
+                fields=fields,
             )
 
         result = await loop.run_in_executor(None, _run)
@@ -1135,6 +1332,19 @@ class Plugin:
                 "cancelled": cancelled_rq,
                 "preset_carousel_inject": result.get("preset_carousel_inject"),
             }
+        await self._maybe_app_log(
+            "ask.background",
+            f"background ask {terminal}",
+            fields={
+                "status": terminal,
+                "success": success,
+                "ask_mode": ask_mode,
+                "app_id": app_id,
+                "attachment_count": len(attachments or []),
+                "question_len": len(question or ""),
+                "elapsed_seconds": result.get("elapsed_seconds", 0),
+            },
+        )
 
     async def start_background_game_ai(self, question: Any = "", PcIp: str = ""):
         """Start a background ask request unless one is already active or payload is invalid."""
@@ -1306,6 +1516,28 @@ class Plugin:
                     spoiler_consent=spoiler_consent,
                 )
             )
+            await plugin._maybe_app_log(
+                "ask.start",
+                "background ask pending",
+                fields={
+                    "status": "pending",
+                    "ask_mode": ask_mode,
+                    "app_id": app_id,
+                    "attachment_count": len(attachments or []),
+                    "question_len": len(parsed_question or ""),
+                },
+            )
+            await plugin._maybe_app_log(
+                "ask.rpc",
+                "RPC start_background_game_ai",
+                level="verbose",
+                fields={
+                    "ask_mode": ask_mode,
+                    "app_id": app_id,
+                    "attachment_count": len(attachments or []),
+                    "question_len": len(parsed_question or ""),
+                },
+            )
 
         return {
             "accepted": True,
@@ -1379,6 +1611,7 @@ class Plugin:
                 logger.exception("abort_background_game_ai: kill/unload helper failed")
 
         threading.Thread(target=_stop_bg, name="bonsai-ollama-stop", daemon=True).start()
+        await plugin._maybe_app_log("ask.abort", "background ask abort requested")
         return {"ok": True}
 
     def _build_system_prompt(
@@ -1574,6 +1807,17 @@ class Plugin:
                     plugin_inst._active_ollama_chat_pc_ip = None
                     plugin_inst._active_ollama_chat_model = None
                 merged = {**ollama_extras, **result}
+                if not result.get("success"):
+                    await plugin_inst._maybe_app_log(
+                        "ask.model",
+                        "ollama model attempt failed",
+                        level="verbose",
+                        fields={
+                            "model": model_name,
+                            "status": result.get("status"),
+                            "cancelled": bool(result.get("cancelled")),
+                        },
+                    )
                 if result.get("cancelled"):
                     return {**_strip_ollama_http_body(merged), "model_policy_disclosure": None, "cancelled": True}
                 if result.get("success"):

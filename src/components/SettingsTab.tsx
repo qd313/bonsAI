@@ -14,11 +14,13 @@ import {
   DEFAULT_LATENCY_WARNING_SECONDS,
   DEFAULT_REQUEST_TIMEOUT_SECONDS,
   OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP,
+  DESKTOP_APP_LOG_LEVEL_OPTIONS,
   SCREENSHOT_ATTACHMENT_PRESET_OPTIONS,
   STEAM_WEB_API_KEY_MAX_LEN,
   type OllamaKeepAliveDuration,
   type ScreenshotAttachmentPreset,
   type UnifiedInputPersistenceMode,
+  type DesktopAppLogLevel,
 } from "../utils/settingsAndResponse";
 import {
   AI_CHARACTER_ACCENT_INTENSITY_OPTIONS,
@@ -108,6 +110,16 @@ const persistenceModeDescription: Record<UnifiedInputPersistenceMode, string> = 
   persist_search_only: "Restore only text that matches settings search results.",
   no_persist: "Never restore unified input text on reopen.",
 };
+const desktopAppLogLevelLabel: Record<DesktopAppLogLevel, string> = {
+  off: "Off",
+  default: "Default",
+  verbose: "Verbose",
+};
+const desktopAppLogLevelDescription: Record<DesktopAppLogLevel, string> = {
+  off: "No app activity log file on Desktop.",
+  default: "Summary events (connection tests, asks, settings changes).",
+  verbose: "Default events plus RPC details, setup log lines, and frontend errors.",
+};
 const screenshotPresetLabel: Record<ScreenshotAttachmentPreset, string> = {
   low: "Low",
   mid: "Mid",
@@ -161,6 +173,9 @@ export type SettingsTabProps = {
   setDesktopDebugNoteAutoSave: (v: boolean) => void;
   desktopAskVerboseLogging: boolean;
   setDesktopAskVerboseLogging: (v: boolean) => void;
+  desktopAppLogLevel: DesktopAppLogLevel;
+  setDesktopAppLogLevel: (v: DesktopAppLogLevel) => void;
+  filesystemWrite: boolean;
   attachProtonLogsWhenTroubleshooting: boolean;
   setAttachProtonLogsWhenTroubleshooting: (v: boolean) => void;
 
@@ -213,6 +228,9 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   setDesktopDebugNoteAutoSave,
   desktopAskVerboseLogging,
   setDesktopAskVerboseLogging,
+  desktopAppLogLevel,
+  setDesktopAppLogLevel,
+  filesystemWrite,
   attachProtonLogsWhenTroubleshooting,
   setAttachProtonLogsWhenTroubleshooting,
   steamWebApiKey,
@@ -1260,6 +1278,53 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
       </PanelSection>
       <PanelSection title="Advanced">
         <PanelSectionRow>
+          <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
+            <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 6 }}>
+              App activity logging to Desktop
+            </div>
+            <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
+              {desktopAppLogLevelDescription[desktopAppLogLevel]} Writes{" "}
+              <span style={{ color: "#9ce7ff" }}>bonsai-app-YYYY-MM-DD.log</span> under Desktop/bonsAI_logs/.
+              {!filesystemWrite ? (
+                <span style={{ display: "block", marginTop: 6, color: "#fbbf24" }}>
+                  Enable Filesystem writes in Permissions to save logs.
+                </span>
+              ) : null}
+            </div>
+            <Focusable
+              flow-children="horizontal"
+              style={{ display: "flex", gap: 6, width: "100%", minWidth: 0, maxWidth: "100%", alignItems: "stretch" }}
+            >
+              {DESKTOP_APP_LOG_LEVEL_OPTIONS.map((level) => {
+                const active = level === desktopAppLogLevel;
+                return (
+                  <Button
+                    key={level}
+                    onClick={() => setDesktopAppLogLevel(level)}
+                    style={{
+                      flex: 1,
+                      minHeight: 36,
+                      fontSize: 12,
+                      fontWeight: 600,
+                      padding: "4px 4px",
+                      borderRadius: 4,
+                      border: active ? "1px solid rgba(56,189,248,0.55)" : "1px solid rgba(255,255,255,0.12)",
+                      background: active
+                        ? "linear-gradient(180deg, rgba(56,189,248,0.22) 0%, rgba(14,116,144,0.35) 100%)"
+                        : "rgba(255,255,255,0.04)",
+                      color: active ? "#e0f2fe" : "#9fb0c0",
+                      boxShadow: active ? "inset 0 1px 0 rgba(255,255,255,0.15)" : "none",
+                    }}
+                    aria-label={`${desktopAppLogLevelLabel[level]}: ${desktopAppLogLevelDescription[level]}`}
+                  >
+                    {desktopAppLogLevelLabel[level]}
+                  </Button>
+                );
+              })}
+            </Focusable>
+          </div>
+        </PanelSectionRow>
+        <PanelSectionRow>
           <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
             <ToggleField
               label="Show Debug tab"
@@ -1273,7 +1338,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
           <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
             <ToggleField
               label="Auto-save chat to Desktop notes"
-              description="Append Q+A to Desktop/BonsAI_notes/bonsai-chat-YYYY-MM-DD.md (UTC). Needs Filesystem writes."
+              description="Append Q+A to Desktop/bonsAI_logs/bonsai-chat-YYYY-MM-DD.md (UTC). Needs Filesystem writes."
               checked={desktopDebugNoteAutoSave}
               onChange={(checked) => setDesktopDebugNoteAutoSave(checked)}
             />
@@ -1283,7 +1348,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
           <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
             <ToggleField
               label="Verbose Ask logging to Desktop notes"
-              description="Append full Ollama trace (prompts, model, replies) to bonsai-ask-trace-*.md. Needs Filesystem writes; can be large/sensitive. Latest trace also on Main → Input handling."
+              description="Append full Ollama trace (prompts, model, replies) to bonsai-ask-trace-*.md under Desktop/bonsAI_logs. Needs Filesystem writes; can be large/sensitive. Latest trace also on Main → Input handling."
               checked={desktopAskVerboseLogging}
               onChange={(checked) => setDesktopAskVerboseLogging(checked)}
             />
@@ -1356,7 +1421,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                   "This resets bonsAI like a fresh install for this device.\n\n" +
                   "It deletes saved settings and permissions, runtime cache and plugin logs under Decky, " +
                   "and clears the Ollama host field, safety disclaimer flag, and unified-input persistence stored in the plugin browser.\n\n" +
-                  "It does not delete Desktop notes under BonsAI_notes.\n\n" +
+                  "It does not delete Desktop logs under bonsAI_logs.\n\n" +
                   "Afterward, set your Ollama host again and re-enable any permissions you need."
                 }
                 strOKButtonText="Clear all data"

@@ -32,7 +32,7 @@ const ROWS: {
     key: "filesystem_write",
     title: "Filesystem writes",
     description:
-      "Saving debug notes to Desktop/BonsAI_notes and similar exports. Off blocks those writes.",
+      "Saving debug notes to Desktop/bonsAI_logs and similar exports. Off blocks those writes.",
   },
   {
     key: "hardware_control",

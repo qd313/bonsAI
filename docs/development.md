@@ -71,6 +71,8 @@ curl -s http://127.0.0.1:11434/api/tags
 ollama run qwen2.5:1.5b "Hello from bonsAI"
 ```
 
+**In-app model management:** With **Ollama on this Deck** enabled, open **Settings → Connection → Browse models…** to open the Pull Models picker — curated catalog with live registry sizes (offline fallback), multi-select pull, and per-row delete. Progress appears in the Local Ollama setup log on the same tab.
+
 ## Build and deploy (same Deck)
 
 ```bash
@@ -189,6 +191,7 @@ Build output: [`dist/index.js`](../dist/index.js) (referenced by [`plugin.json`]
 | `ai_character_service.py` | Roleplay system-prompt suffix |
 | `screenshot_media.py` | Vision attachment capture and encoding |
 | `local_ollama_setup_service.py` | In-plugin Ollama install/pull helpers |
+| `ollama_catalog_service.py` | Pull Models tag validation + registry.ollama.ai metadata fetch |
 | `tdp_service.py` | TDP/sysfs read/write |
 | `desktop_note_service.py` | Desktop note and verbose Ask trace append |
 | `capabilities.py` | Permission capability checks |

@@ -18,6 +18,7 @@ import { DesktopNoteSaveModal } from "./components/DesktopNoteSaveModal";
 import { DeveloperTab, type DeveloperConnectionStatus } from "./components/DeveloperTab";
 import { MainTab } from "./components/MainTab";
 import { PluginHelpModal } from "./components/PluginHelpModal";
+import { PullModelsModal } from "./components/PullModelsModal";
 import { PermissionsTab } from "./components/PermissionsTab";
 import { SettingsTab } from "./components/SettingsTab";
 import { getSteamInputLexiconEntry } from "./data/steam-input-lexicon";
@@ -903,6 +904,21 @@ const Content: React.FC = () => {
     strategySpoilerAutoRevealAfterConsent,
   ]);
 
+  const openPullModelsModal = useCallback(() => {
+    characterPickerReturnTabRef.current = currentTab;
+    const handle = showModal(
+      <PullModelsModal
+        activeRoutingTag={modelPolicyDisclosure?.model ?? null}
+        onCancel={() => {
+          finalizeShowModalAndRestoreActiveTab(() => handle.Close());
+        }}
+        onPullAccepted={() => {
+          finalizeShowModalAndRestoreActiveTab(() => handle.Close());
+        }}
+      />
+    );
+  }, [currentTab, finalizeShowModalAndRestoreActiveTab, modelPolicyDisclosure?.model]);
+
   const mainTabAiCharacterPad = aiCharacterEnabled;
   const mainTabAvatarPresetId = aiCharacterEnabled
     ? resolveMainTabAvatarPresetId({
@@ -1053,6 +1069,7 @@ const Content: React.FC = () => {
       strategySpoilerAutoRevealAfterConsent={strategySpoilerAutoRevealAfterConsent}
       setStrategySpoilerAutoRevealAfterConsent={setStrategySpoilerAutoRevealAfterConsent}
       onOpenCharacterPicker={openCharacterPickerModal}
+      onOpenPullModels={openPullModelsModal}
       onBeforeDeckyModal={() => {
         characterPickerReturnTabRef.current = currentTab;
       }}

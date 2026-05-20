@@ -1092,5 +1092,206 @@ export function buildBonsaiScopeStylesheet(): string {
         .bonsai-scope [class*="SliderControlPanelGroup"],
         .bonsai-scope [class*="SliderControlAndNotches"] { width: 100% !important; min-width: 0 !important; max-width: 100% !important; }
         .bonsai-scope [class*="SliderControlPanelGroup"] > div,
-        .bonsai-scope [class*="SliderControlAndNotches"] > div { min-width: 0 !important; }`;
+        .bonsai-scope [class*="SliderControlAndNotches"] > div { min-width: 0 !important; }
+
+        /* ==========================================================================
+           10. PULL MODELS MODAL
+           ========================================================================== */
+        .bonsai-scope {
+          --bonsai-pullmodels-delete-fg: #f87171;
+          --bonsai-pullmodels-row-bg: rgba(12, 20, 30, 0.55);
+          --bonsai-pullmodels-row-border: rgba(72, 98, 124, 0.35);
+          --bonsai-pullmodels-accent: #9ce7ff;
+        }
+        .bonsai-scope .bonsai-pullmodels-shell {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          width: 100%;
+          min-width: 0;
+          max-height: min(72vh, 520px);
+          overflow: hidden;
+          text-align: left;
+        }
+        .bonsai-scope .bonsai-pullmodels-header {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px 14px;
+          font-size: 11px;
+          color: #b8cce0;
+          line-height: 1.35;
+        }
+        .bonsai-scope .bonsai-pullmodels-size-source {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+        }
+        .bonsai-scope .bonsai-pullmodels-refresh-btn {
+          min-width: 28px !important;
+          min-height: 24px !important;
+          padding: 2px 6px !important;
+          font-size: 10px !important;
+          font-weight: 700 !important;
+        }
+        .bonsai-scope .bonsai-pullmodels-filters {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+        .bonsai-scope .bonsai-pullmodels-filter-chips {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
+        }
+        .bonsai-scope .bonsai-pullmodels-chip {
+          min-height: 28px !important;
+          padding: 4px 10px !important;
+          font-size: 10px !important;
+          border-radius: 4px !important;
+          border: 1px solid rgba(255,255,255,0.18) !important;
+          background: rgba(255,255,255,0.06) !important;
+          color: #dce8f4 !important;
+        }
+        .bonsai-scope .bonsai-pullmodels-chip--active {
+          border-color: rgba(56,189,248,0.55) !important;
+          background: rgba(56,189,248,0.18) !important;
+          color: #e0f2fe !important;
+        }
+        .bonsai-scope .bonsai-pullmodels-chip--foss {
+          border-color: rgba(74, 222, 128, 0.45) !important;
+          color: #bbf7d0 !important;
+          font-size: 9px !important;
+          padding: 2px 6px !important;
+          min-height: 20px !important;
+        }
+        .bonsai-scope .bonsai-pullmodels-toggles {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 12px;
+        }
+        .bonsai-scope .bonsai-pullmodels-list {
+          flex: 1;
+          min-height: 0;
+          overflow-y: auto;
+          overflow-x: hidden;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          padding-right: 4px;
+        }
+        .bonsai-scope .bonsai-pullmodels-group-title {
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.04em;
+          color: #8fa8c4;
+          margin-bottom: 6px;
+          text-transform: uppercase;
+        }
+        .bonsai-scope .bonsai-pullmodels-row {
+          border: 1px solid var(--bonsai-pullmodels-row-border);
+          border-radius: 6px;
+          background: var(--bonsai-pullmodels-row-bg);
+          margin-bottom: 6px;
+        }
+        .bonsai-scope .bonsai-pullmodels-row--stretch {
+          border-color: rgba(251, 146, 60, 0.35);
+        }
+        .bonsai-scope .bonsai-pullmodels-row-inner {
+          display: flex !important;
+          flex-direction: row !important;
+          align-items: flex-start !important;
+          gap: 8px !important;
+          padding: 8px 10px !important;
+          width: 100% !important;
+          min-width: 0 !important;
+          box-sizing: border-box !important;
+        }
+        .bonsai-scope .bonsai-pullmodels-slot {
+          flex-shrink: 0;
+          width: 24px !important;
+          min-width: 24px !important;
+          min-height: 24px !important;
+          padding: 0 !important;
+          font-size: 11px !important;
+          font-weight: 700 !important;
+          font-family: monospace !important;
+          border: 1px solid rgba(255,255,255,0.2) !important;
+          background: rgba(0,0,0,0.25) !important;
+          color: #c5d4e3 !important;
+        }
+        .bonsai-scope .bonsai-pullmodels-slot--selected {
+          border-color: rgba(56,189,248,0.6) !important;
+          background: rgba(56,189,248,0.2) !important;
+          color: #e0f2fe !important;
+        }
+        .bonsai-scope .bonsai-pullmodels-slot--installed {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--bonsai-pullmodels-accent);
+        }
+        .bonsai-scope .bonsai-pullmodels-row-body {
+          flex: 1;
+          min-width: 0;
+        }
+        .bonsai-scope .bonsai-pullmodels-row-head {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          gap: 6px 10px;
+          font-size: 11px;
+          color: #dce8f4;
+        }
+        .bonsai-scope .bonsai-pullmodels-tag {
+          font-weight: 700;
+          color: #f0f6fc;
+        }
+        .bonsai-scope .bonsai-pullmodels-installed-label {
+          font-size: 9px;
+          font-weight: 700;
+          letter-spacing: 0.06em;
+          color: var(--bonsai-pullmodels-accent);
+        }
+        .bonsai-scope .bonsai-pullmodels-size,
+        .bonsai-scope .bonsai-pullmodels-date,
+        .bonsai-scope .bonsai-pullmodels-license {
+          font-size: 10px;
+          color: #9fb7d5;
+        }
+        .bonsai-scope .bonsai-pullmodels-stars {
+          font-size: 10px;
+          color: #fcd34d;
+          letter-spacing: 1px;
+        }
+        .bonsai-scope .bonsai-pullmodels-blurb {
+          margin-top: 4px;
+          font-size: 10px;
+          color: #b8cce0;
+          line-height: 1.4;
+        }
+        .bonsai-scope .bonsai-pullmodels-tags-line {
+          margin-top: 2px;
+          font-size: 9px;
+          color: #6b7c90;
+        }
+        .bonsai-scope .bonsai-pullmodels-delete-btn {
+          flex-shrink: 0;
+          min-width: 28px !important;
+          min-height: 28px !important;
+          padding: 0 !important;
+          font-size: 12px !important;
+          font-weight: 700 !important;
+          color: var(--bonsai-pullmodels-delete-fg) !important;
+          border: 1px solid rgba(248, 113, 113, 0.45) !important;
+          background: rgba(48, 24, 26, 0.65) !important;
+        }
+        .bonsai-scope .bonsai-pullmodels-delete-btn[disabled] {
+          opacity: 0.4 !important;
+          pointer-events: none !important;
+        }
+        .bonsai-scope .bonsai-pullmodels-empty {
+          font-size: 11px;
+          color: #6b7c90;
+          padding: 12px 0;
+        }`;
 }

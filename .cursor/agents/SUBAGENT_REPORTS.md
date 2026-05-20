@@ -154,6 +154,17 @@ No session archived
 
 <!-- Newest entries first. -->
 
+### 2026-05-19 - foss-advocate + security-auditor (Pull Models fullscreen picker)
+
+```text
+Scope: Pull Models picker — src/data/pullModelCatalog.ts, PullModelsModal.tsx, ollama_catalog_service.py, main.py pull/delete/metadata RPCs, local_ollama_setup custom profile + ollama rm.
+foss-advocate: 1 finding (licenseClass vs model_policy mismatch) — triaged/fixed via aligned catalog licenseClass + tests/test_pull_model_catalog_parity.py; docs/foss-advocate-report.md → No issues found.
+security-auditor: no new confirmed findings; tag regex + argv subprocess + ollama_local_on_deck gate reviewed; docs/security-audit-report.md revision log updated.
+Red-team / blue-team: N/A.
+Tests: python scripts/run_python_tests.py (146 OK); pnpm run build OK.
+Deploy: ./scripts/build.sh local — frontend build OK; plugin_loader restart blocked (sudo password in agent session).
+```
+
 ### 2026-05-19 - security-auditor + refactor-specialist (script/doc cleanup)
 
 ```text

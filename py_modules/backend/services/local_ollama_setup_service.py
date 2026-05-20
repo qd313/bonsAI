@@ -536,9 +536,17 @@ async def run_local_setup(
         state["profile"] = profile
         await emit_stage("check")
         is_update_installed = prof == "update_installed"
-        tags = tier1_foss_recommended_pull_tags(prof) if not is_update_installed else []
-        if not is_update_installed and not tags:
-            raise RuntimeError(f"Unknown pull profile: {profile!r}.")
+        is_custom = prof == "custom"
+        if is_custom:
+            tags = [str(t).strip() for t in (state.get("pull_tags") or []) if str(t).strip()]
+            if not tags:
+                raise RuntimeError("Custom pull profile requires pull_tags.")
+        elif is_update_installed:
+            tags = []
+        else:
+            tags = tier1_foss_recommended_pull_tags(prof)
+            if not tags:
+                raise RuntimeError(f"Unknown pull profile: {profile!r}.")
         state["pull_tags"] = list(tags)
         state["total_pull_steps"] = len(tags)
         models_dir = os.environ.get("OLLAMA_MODELS") or str(Path.home() / ".ollama" / "models")
@@ -546,18 +554,28 @@ async def run_local_setup(
         log(f"[bonsAI] Model blobs store: {models_dir} (override with OLLAMA_MODELS).")
         if is_update_installed:
             log("[bonsAI] Profile 'update_installed': refresh Ollama binary, then re-pull each locally installed tag.")
+        elif is_custom:
+            log(f"[bonsAI] Profile 'custom': {len(tags)} selected pull(s).")
         else:
             log(f"[bonsAI] Profile {profile!r}: {len(tags)} pull step(s); output streams below when the CLI prints lines.")
 
         if sys.platform.startswith("win"):
             raise RuntimeError("Local Ollama setup runs on SteamOS/Linux only.")
 
-        ollama_bin = await _install_or_update_ollama_binary(
-            state=state,
-            log=log,
-            cancelled=cancelled,
-            force_reinstall=is_update_installed,
-        )
+        if is_custom:
+            _prepend_home_local_bin_to_environ(log)
+            ollama_bin = resolve_ollama_executable()
+            if not ollama_bin:
+                raise RuntimeError(
+                    "``ollama`` not found on PATH. Use Local Ollama setup or install from Desktop Konsole first."
+                )
+        else:
+            ollama_bin = await _install_or_update_ollama_binary(
+                state=state,
+                log=log,
+                cancelled=cancelled,
+                force_reinstall=is_update_installed,
+            )
         await emit_stage(state.get("stage", "install"))
 
         state["stage"] = "service"
@@ -629,6 +647,34 @@ async def run_local_setup(
     finally:
         if cancel_event.is_set():
             terminate_setup_started_ollama_serve()
+
+
+def run_ollama_rm(ollama_bin: str, tag: str) -> tuple[bool, str]:
+    """Run ``ollama rm <tag>`` (argv form, no shell)."""
+    try:
+        proc = subprocess.run(
+            [ollama_bin, "rm", tag],
+            capture_output=True,
+            text=True,
+            timeout=120,
+            env=_env_for_ollama_cli(ollama_bin),
+            check=False,
+        )
+        if proc.returncode != 0:
+            err = (proc.stderr or proc.stdout or "").strip()
+            return False, err or f"ollama rm failed with exit code {proc.returncode}"
+        return True, ""
+    except Exception as exc:
+        return False, str(exc)
+
+
+async def run_ollama_rm_async(tag: str) -> tuple[bool, str]:
+    """Resolve ollama binary and remove one tag."""
+    _prepend_home_local_bin_to_environ(lambda _m: None)
+    ollama_bin = resolve_ollama_executable()
+    if not ollama_bin:
+        return False, "ollama_not_found"
+    return await asyncio.to_thread(run_ollama_rm, ollama_bin, tag)
 
 
 def new_local_ollama_setup_state() -> dict[str, Any]:

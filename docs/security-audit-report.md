@@ -100,6 +100,7 @@ Specific fix: Document operational risk; rely on user Permissions toggle + key h
 
 | Date       | Summary                                                                 |
 | ---------- | ----------------------------------------------------------------------- |
+| 2026-05-19 | Pull Models picker: reviewed `pull_ollama_models`, `delete_ollama_model`, `fetch_ollama_catalog_metadata`, `ollama_catalog_service.py` tag regex + registry allowlist; no new confirmed findings. |
 | 2026-04-30 | Full pass; refreshed mitigations; fixed background-task exception leak. |
 | 2026-04-21 | Phase 2 triage (prior snapshot superseded by this document).            |
 | 2026-04-19 | Initial documented findings (prior snapshot superseded).                  |

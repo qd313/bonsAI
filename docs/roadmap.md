@@ -102,6 +102,14 @@ Within this section: ascending stars (★★ → ★★★ → ★★★★). Br
   - **Depends on:** **Mode selector (main screen)** (shipped).
   - **Not in scope:** per-game/per-model fine-grained profile matrix.
 
+- ★★★ **Pull Models free-space readout**
+
+  - **Goal:** Show available disk space in the Pull Models modal header before committing a pull batch.
+  - **Primary work:** small RPC over `shutil.disk_usage` for the Deck home / `OLLAMA_MODELS` mount; surface in `PullModelsModal.tsx` header next to installed/selected totals.
+  - **Files:** `main.py`, `PullModelsModal.tsx`.
+  - **Depends on:** **Pull Models fullscreen picker** (shipped).
+  - **Not in scope:** automatic prune of partial downloads.
+
 - ★★★ **Per-turn local feedback** (thumbs / flags, S)
 
   - **Goal:** Lightweight **local-only** quality signal for future tuning or export; no telemetry server.
@@ -394,6 +402,7 @@ Headings group related work. Star counts match the historical list.
 - ★★ **Ollama model VRAM retention (`keep_alive`):** Persisted `ollama_keep_alive` with fixed preset durations (default **5 minutes**); Settings → Connection `OllamaKeepAliveSlider.tsx`; value passed on each Ask through `main.py` into `backend/services/ollama_service.py`. `settings_service.py`, `settingsAndResponse.ts`.
 - ★★★ **[Local/runtime] Default off + onboarding:** When `ollama_local_on_deck` is absent from persisted settings, default **`false`** (LAN PC host field applies); explicit **`true`** / **`false`** in JSON unchanged. Global beta modal warns LAN-hosted Ollama is typically faster than on-device inference and that heavy VRAM use may crash games (**use at your own risk**). **`bonsai:local-runtime-beta-dismissed-v1`** **`ConfirmModal`** when the user enables **Ollama on Deck** (optional local routing); Starter/Connection Tier-1 FOSS tags per [`TIER1_FOSS_STARTER_PULL_TAGS`](../refactor_helpers.py). **Clear all plugin data** resets flags and storage keys. Connection **Test** to localhost may **`systemctl --user`** / **`ollama serve`** wake the listener (`recover_loopback_ollama_listening`, **`main.py`**). `settings_service.py`, `settingsAndResponse.ts`, `src/index.tsx`, `py_modules/backend/services/local_ollama_setup_service.py`.
 - ★★ **Local Ollama update + saved LAN IP fix:** Settings → Connection adds **Update Ollama & Models** when **Ollama on this Deck** is on — re-runs the official installer, then re-pulls each tag from local `/api/tags` (no-op model step if none installed). Ask no longer overwrites `bonsai:pc-ip` with `127.0.0.1:11434` while local routing is active, so toggling local off restores the LAN host. `update_installed` profile in `refactor_helpers.py`, `local_ollama_setup_service.py` (`list_installed_ollama_tags`), `SettingsTab.tsx`, `src/utils/persistOllamaIp.ts`, `src/index.tsx`.
+- ★★★ **Pull Models fullscreen picker:** Settings → Connection **Browse models…** opens a fullscreen `ConfirmModal` (`PullModelsModal.tsx`) to browse a curated 13-model catalog (`src/data/pullModelCatalog.ts`) with size, release date, license, FOSS badge, and Deck star ratings; multi-select pull via `pull_ollama_models` (custom profile on `local_ollama_setup_service`); per-row delete via `delete_ollama_model` (`ollama rm`, argv form) with active-model and busy guards; live size overlay from `registry.ollama.ai` (`fetch_ollama_catalog_metadata`) with bundled offline fallback; **Other installed** group for uncatalogued tags. `main.py`, `ollama_catalog_service.py`, `bonsaiScopeStylesheet.ts`.
 
 ### Tabs, icons, and unified ask flow
 

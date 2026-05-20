@@ -132,6 +132,7 @@ export type SettingsTabProps = {
   setStrategySpoilerAutoRevealAfterConsent: (v: boolean) => void;
 
   onOpenCharacterPicker: () => void;
+  onOpenPullModels: () => void;
   onBeforeDeckyModal: () => void;
   onCompleteDeckyModalClose: (close: () => void) => void;
   onResetSession: () => void;
@@ -164,6 +165,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   strategySpoilerAutoRevealAfterConsent,
   setStrategySpoilerAutoRevealAfterConsent,
   onOpenCharacterPicker,
+  onOpenPullModels,
   onBeforeDeckyModal,
   onCompleteDeckyModalClose,
   onResetSession,
@@ -471,7 +473,38 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                 style={{ fontSize: 11, color: "#b8c6d6", fontWeight: 600, letterSpacing: "0.03em", userSelect: "none" }}
               >
                 Local Ollama setup
+                {connectionStatus?.reachable && Array.isArray(connectionStatus.models) ? (
+                  <span style={{ fontWeight: 400, color: "#9fb7d5", marginLeft: 8 }}>
+                    Installed: {connectionStatus.models.length}
+                  </span>
+                ) : null}
               </div>
+              <Focusable flow-children="horizontal" style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 8, width: "100%" }}>
+                <Button
+                  disabled={localSetupBusy}
+                  onClick={() => {
+                    onBeforeDeckyModal();
+                    onOpenPullModels();
+                  }}
+                  style={{
+                    flex: "1 1 160px",
+                    minHeight: 36,
+                    minWidth: 0,
+                    padding: "6px 8px",
+                    fontSize: 11,
+                    fontWeight: 600,
+                    borderRadius: 4,
+                    border: "1px solid rgba(56,189,248,0.45)",
+                    background: localSetupBusy
+                      ? "rgba(14,32,48,0.5)"
+                      : "linear-gradient(180deg, rgba(56,189,248,0.15) 0%, rgba(14,116,144,0.28) 100%)",
+                    color: "#e0f2fe",
+                  }}
+                  aria-label="Browse and pull Ollama models"
+                >
+                  Browse models…
+                </Button>
+              </Focusable>
               <Focusable flow-children="horizontal" style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 8, width: "100%" }}>
                 <Button
                   disabled={localSetupBusy}

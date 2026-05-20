@@ -93,6 +93,12 @@ from backend.services.local_ollama_setup_service import (
     new_local_ollama_setup_state,
     recover_loopback_ollama_listening,
     run_local_setup,
+    run_ollama_rm_async,
+)
+from backend.services.ollama_catalog_service import (
+    fetch_catalog_metadata,
+    is_valid_ollama_pull_tag,
+    normalize_ollama_pull_tags,
 )
 from backend.services.tdp_service import (
     STEAMOS_PRIV_WRITE,
@@ -935,6 +941,155 @@ class Plugin:
         if isinstance(ce, asyncio.Event):
             ce.set()
         return {"cancel_requested": True}
+
+    async def _require_local_ollama_on_deck(self) -> tuple[bool, dict[str, Any] | None]:
+        plugin = Plugin._coerce_instance(self)
+        settings = await plugin.load_settings()
+        if not settings.get("ollama_local_on_deck"):
+            return False, {
+                "accepted": False,
+                "ok": False,
+                "reason": "Enable «Ollama on this Deck» in Settings → Connection first.",
+                "error": "local_off",
+            }
+        return True, None
+
+    async def _start_custom_ollama_pull(self, pull_tags: list[str]) -> dict[str, Any]:
+        plugin = Plugin._coerce_instance(self)
+        ok_gate, gate_out = await plugin._require_local_ollama_on_deck()
+        if not ok_gate:
+            return gate_out or {"accepted": False, "reason": "local_off"}
+
+        tags = normalize_ollama_pull_tags(pull_tags)
+        if not tags:
+            return {"accepted": False, "reason": "No valid model tags to pull."}
+
+        async with plugin._local_ollama_setup_lock:
+            existing = plugin._local_ollama_setup_task
+            if existing is not None and not existing.done():
+                return {"accepted": False, "reason": "Setup already running.", "error": "busy"}
+
+            plugin._local_ollama_cancel_event = asyncio.Event()
+            plugin._local_ollama_cancel_event.clear()
+            new_st = new_local_ollama_setup_state()
+            new_st.update(
+                {
+                    "phase": "running",
+                    "done": False,
+                    "error": "",
+                    "accepted": True,
+                    "profile": "custom",
+                    "pull_tags": list(tags),
+                    "total_pull_steps": len(tags),
+                }
+            )
+            plugin._local_ollama_setup_state = new_st
+
+            setup_loop = asyncio.get_running_loop()
+            last_logged_stage = {"value": ""}
+
+            async def on_stage(stage: str, fields: dict[str, Any]) -> None:
+                st = (stage or "").strip()
+                if not st or st == last_logged_stage["value"]:
+                    return
+                last_logged_stage["value"] = st
+                await plugin._maybe_app_log(
+                    "local_setup.stage",
+                    f"stage={st}",
+                    fields=fields,
+                )
+
+            def on_verbose_line(line: str) -> None:
+                msg = (line or "").strip()
+                if not msg:
+                    return
+
+                def _schedule() -> None:
+                    asyncio.create_task(
+                        plugin._maybe_app_log("local_setup.line", msg[:500], level="verbose")
+                    )
+
+                setup_loop.call_soon_threadsafe(_schedule)
+
+            async def runner() -> None:
+                assert plugin._local_ollama_cancel_event is not None
+                await run_local_setup(
+                    profile="custom",
+                    state=plugin._local_ollama_setup_state,
+                    logger=logger,
+                    cancel_event=plugin._local_ollama_cancel_event,
+                    on_stage=on_stage,
+                    on_verbose_line=on_verbose_line,
+                )
+
+            plugin._local_ollama_setup_task = asyncio.create_task(runner())
+
+        await plugin._maybe_app_log(
+            "local_setup.start",
+            "custom pull accepted",
+            fields={"profile": "custom", "accepted": True, "tag_count": len(tags)},
+        )
+        return {"accepted": True, "pull_tags": tags}
+
+    async def pull_ollama_models(self, tags: Any = None):
+        """Pull one or more Ollama tags on this Deck (background, reuses setup service)."""
+        plugin = Plugin._coerce_instance(self)
+        raw = tags if isinstance(tags, list) else []
+        return await plugin._start_custom_ollama_pull(raw)
+
+    async def delete_ollama_model(self, tag: str = ""):
+        """Remove one installed Ollama model via ``ollama rm`` (argv form)."""
+        plugin = Plugin._coerce_instance(self)
+        ok_gate, gate_out = await plugin._require_local_ollama_on_deck()
+        if not ok_gate:
+            return gate_out or {"ok": False, "error": "local_off"}
+
+        t = (tag or "").strip()
+        if not is_valid_ollama_pull_tag(t):
+            return {"ok": False, "error": "invalid_tag"}
+
+        st = dict(getattr(plugin, "_local_ollama_setup_state", {}) or {})
+        if st.get("phase") == "running" and not st.get("done", True):
+            return {"ok": False, "error": "busy"}
+
+        active = getattr(plugin, "_active_ollama_chat_model", None)
+        if isinstance(active, str) and active.strip() and active.strip() == t:
+            return {"ok": False, "error": "in_use", "removed": ""}
+
+        ok_rm, err = await run_ollama_rm_async(t)
+        if not ok_rm:
+            safe_err = (err or "delete_failed")[:160]
+            await plugin._maybe_app_log(
+                "local_setup.delete",
+                "ollama rm failed",
+                fields={"ok": False, "error": safe_err},
+            )
+            return {"ok": False, "error": safe_err, "removed": ""}
+
+        await plugin._maybe_app_log(
+            "local_setup.delete",
+            "ollama rm succeeded",
+            fields={"ok": True},
+        )
+        return {"ok": True, "removed": t, "error": ""}
+
+    async def fetch_ollama_catalog_metadata(self, tags: Any = None):
+        """Live sizes from registry.ollama.ai with offline fallback metadata."""
+        plugin = Plugin._coerce_instance(self)
+        ok_gate, gate_out = await plugin._require_local_ollama_on_deck()
+        if not ok_gate:
+            return {**(gate_out or {}), "source": "offline", "tags": {}}
+
+        raw = tags if isinstance(tags, list) else []
+        normalized = normalize_ollama_pull_tags(raw)
+        try:
+            out = await asyncio.wait_for(
+                asyncio.to_thread(fetch_catalog_metadata, normalized),
+                timeout=10.0,
+            )
+        except Exception:
+            out = {"source": "offline", "error": "fetch_failed", "tags": {}, "fetched_at": None}
+        return out
 
     async def list_recent_screenshots(self, app_id: str = "", limit: int = 5):
         """List recent screenshots with preview and app metadata for attachment browsing."""

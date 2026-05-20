@@ -34,16 +34,6 @@ const ROWS: {
     description: "AI may suggest TDP and GPU clock changes. Off keeps responses read-only.",
   },
   {
-    key: "media_library_access",
-    title: "Use Steam screenshots",
-    description: "Attach screenshots when asking about games. Off blocks screenshot browse and attach.",
-  },
-  {
-    key: "steam_logs_read",
-    title: "Read game logs",
-    description: "Helps with crashes and Proton issues when enabled in Developer settings.",
-  },
-  {
     key: "steam_web_api",
     title: "Steam ban lookup",
     description: "For the bonsai:vac-check command. API key lives in Developer → Integrations.",
@@ -54,12 +44,17 @@ const ROWS: {
     description: "GitHub, docs, and Steam settings links from the plugin.",
   },
 ];
+
 const HARDWARE_DISCLAIMER_BODY =
   "We have put guardrails in place to reduce obviously unsafe TDP and GPU clock settings for Steam Deck, " +
   "but this feature is still very beta. Models can be wrong, and the plugin can apply power changes " +
   "from AI text when you enable this. Use at your own risk!\n\n" +
   "We are not responsible if you follow an AI suggestion and something goes wrong, including if you " +
   "damage or stress your hardware or lose data. Only turn this on if you accept that.";
+
+function gameContextReadEnabled(caps: BonsaiCapabilities): boolean {
+  return caps.media_library_access && caps.steam_logs_read;
+}
 
 /**
  * Central place for capability toggles. Uses Decky `ToggleField` for Steam QAM-style switches.
@@ -82,6 +77,22 @@ export const PermissionsTab: React.FC<Props> = ({
       <div className="bonsai-settings-bleed" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45, marginBottom: 4 }}>
         High-impact actions stay off until you enable them here. AI requests on your home network are not
         gated by these toggles. Which models the plugin may try is set under <strong>AI model choice</strong> below.
+      </div>
+    </PanelSectionRow>
+    <PanelSectionRow>
+      <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
+        <ToggleField
+          label="Read game & screenshot context"
+          description="Lets bonsAI attach Steam screenshots and read local game/Proton logs for troubleshooting. One permission for both."
+          checked={gameContextReadEnabled(capabilities)}
+          onChange={(checked) => {
+            setCapabilities((prev) => ({
+              ...prev,
+              media_library_access: checked,
+              steam_logs_read: checked,
+            }));
+          }}
+        />
       </div>
     </PanelSectionRow>
     {ROWS.map((row) => (
@@ -118,21 +129,18 @@ export const PermissionsTab: React.FC<Props> = ({
                           </div>
                         </div>
                       }
-                      strOKButtonText="I understand! Let 'er rip!"
+                      strOKButtonText="I understand — enable"
                       strCancelButtonText="Cancel"
-                      bAlertDialog
                       onOK={() => {
                         onConfirmEnableHardwareControl();
                         onCompleteDeckyModalClose(() => handle.Close());
                       }}
-                      onCancel={() => {
-                        onCompleteDeckyModalClose(() => handle.Close());
-                      }}
+                      onCancel={() => onCompleteDeckyModalClose(() => handle.Close())}
                     />
                   );
-                  return;
+                } else {
+                  setCapabilities((prev) => ({ ...prev, hardware_control: false }));
                 }
-                setCapabilities((prev) => ({ ...prev, hardware_control: false }));
               }}
             />
           </div>
@@ -142,9 +150,7 @@ export const PermissionsTab: React.FC<Props> = ({
               label={row.title}
               description={row.description}
               checked={capabilities[row.key]}
-              onChange={(checked) =>
-                setCapabilities((prev) => ({ ...prev, [row.key]: checked }))
-              }
+              onChange={(checked) => setCapabilities((prev) => ({ ...prev, [row.key]: checked }))}
             />
           </div>
         )}
@@ -153,8 +159,8 @@ export const PermissionsTab: React.FC<Props> = ({
   </PanelSection>
   <PermissionsTabModelPolicyPanel
     modelPolicyTier={modelPolicyTier}
-    modelPolicyNonFossUnlocked={modelPolicyNonFossUnlocked}
     onCommitModelPolicyTier={onCommitModelPolicyTier}
+    modelPolicyNonFossUnlocked={modelPolicyNonFossUnlocked}
     onBeforeDeckyModal={onBeforeDeckyModal}
     onCompleteDeckyModalClose={onCompleteDeckyModalClose}
   />

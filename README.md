@@ -67,7 +67,7 @@ Prompts and responses stay on hardware you control. Models can still hallucinate
 
 Want to develop on your Steam Deck (Cursor + Ollama + Decky on one machine)? See **[docs/development.md](docs/development.md)** — step-by-step setup, BPM fast-test loop, and architecture diagram.
 
-More docs: [docs/README.md](docs/README.md) · [CHANGELOG.md](CHANGELOG.md)
+More docs: [docs/DOCUMENTATION_INDEX.md](docs/DOCUMENTATION_INDEX.md) · [CHANGELOG.md](CHANGELOG.md)
 
 ## Buy me a beer
 

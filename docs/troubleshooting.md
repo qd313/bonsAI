@@ -77,6 +77,30 @@ If Windows still falls back to CPU after FIX A:
 
 **Note:** If you upgraded from an older `settings.json` that had no `capabilities` block, the plugin enables all scopes until you save settings from the Permissions tab (grandfather behavior).
 
+### AI model choice tier (fullscreen modal)
+
+**Symptom:** In **Permissions → AI model choice**, opening the fullscreen tier list does not switch tiers (e.g. Tier 1 → Tier 2) with the controller, or the choice reverts after **Done**.
+
+**Cause (fixed 2026-05-19):** Tier buttons only handled mouse `onClick`, not Steam **A/OK** (`onOKButton`). Immediate save on each highlight also raced Decky remount + debounced settings save.
+
+**Fix:** Update to a build that uses draft selection inside the modal, `onOKButton` on tier rows, **awaits `save_settings` before closing** (avoids remount loading stale tier), and persist on **Done** with `hydrateFromSettings`. If tier still reverts, open Permissions again and confirm the row label; check Developer → Model routing for Tier 3 unlock.
+
+---
+
+### AI voice & personality (character tone)
+
+**Symptom:** **Settings → AI voice & personality** is on and a character is selected, but replies sound like plain bonsAI (no accent, no character).
+
+**Checks:**
+
+1. Toggle **AI voice & personality** on and pick a character (or **Random**); press **OK** in the picker.
+2. Confirm **Accent intensity** is not **Subtle** if you want obvious voice (Subtle is intentionally light).
+3. Re-ask after a settings save — character fields must be in `settings.json` (`ai_character_enabled`, `ai_character_*`).
+
+**Cause (fixed 2026-05-19):** Character instructions were prepended *before* the long bonsAI identity block; later lines (“answer directly, concisely, in English”) overrode voice. Build now **appends** character voice + a short end-of-system reminder.
+
+**Plan for stronger model honesty:** [plans/post-p0-feature-backlog.md](plans/post-p0-feature-backlog.md) (model truth section).
+
 ---
 
 ## 1b. Uninstall vs “Clear all data” (Settings)
@@ -128,6 +152,8 @@ If Windows still falls back to CPU after FIX A:
 ---
 
 ## 1c. Latency warning vs backend timeout (Settings)
+
+**Defaults (when “Custom timeouts” is off):** slow-reply warning at **30s**, hard abort at **45s** (2026-05-19; previously 360s). Enable **Developer → Custom timeouts** for your own warning/timeout pair.
 
 **Where:** Settings tab, under **Connection**, **Latency warning and backend timeout**.
 

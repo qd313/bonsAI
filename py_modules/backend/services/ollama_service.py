@@ -467,6 +467,21 @@ def post_ollama_chat(
                         ),
                         "body": stream_err_txt[:4000],
                     }
+                # Without ``done: true``, the TCP stream ended mid-reply — do not report success with truncated text.
+                if not done_flag:
+                    if _should_cancel():
+                        return {
+                            "success": False,
+                            "response": "Request stopped (connection closed).",
+                            "cancelled": True,
+                        }
+                    return {
+                        "success": False,
+                        "response": (
+                            f"The Ollama stream ended before '{model_name}' finished "
+                            "(no completion marker). Try again or check the host Ollama service and network."
+                        ),
+                    }
                 assistant_raw = "".join(deltas)
                 if on_delta:
                     try:

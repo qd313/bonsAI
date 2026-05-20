@@ -3,6 +3,7 @@ import unittest
 from refactor_helpers import (
     build_ollama_chat_url,
     is_current_tdp_read_intent,
+    is_ollama_model_missing_error,
     is_valid_setup_pull_profile,
     normalize_ollama_base,
     parse_tdp_recommendation,
@@ -63,6 +64,10 @@ class RefactorHelperTests(unittest.TestCase):
     def test_select_ollama_models_text_and_vision(self):
         """FOSS-first safe chains; optional high-VRAM tail extends the list."""
         self.assertIn("llama3:latest", select_ollama_models(False))
+        self.assertIn("gemma3:4b", select_ollama_models(False))
+        self.assertIn("gemma4:4b", select_ollama_models(False))
+        self.assertIn("gemma3:4b", select_ollama_models(True, "speed"))
+        self.assertIn("gemma4:4b", select_ollama_models(True, "speed"))
         self.assertIn("llava:7b", select_ollama_models(True, "speed"))
         self.assertEqual(select_ollama_models(False, "speed")[0], "qwen2.5:1.5b")
         self.assertEqual(select_ollama_models(False, "strategy")[0], "qwen2.5:latest")
@@ -97,6 +102,14 @@ class RefactorHelperTests(unittest.TestCase):
         """Ensure parser returns None when no actionable recommendation exists."""
         parsed = parse_tdp_recommendation("No power recommendation provided.", 3, 15, 200, 1600)
         self.assertIsNone(parsed)
+
+    def test_is_ollama_model_missing_error(self):
+        self.assertTrue(is_ollama_model_missing_error(404, ""))
+        self.assertTrue(is_ollama_model_missing_error(404, "{}"))
+        self.assertTrue(
+            is_ollama_model_missing_error(400, '{"error":"model \'gemma3:latest\' not found"}')
+        )
+        self.assertFalse(is_ollama_model_missing_error(500, "internal server error"))
 
     def test_is_current_tdp_read_intent_detects(self):
         self.assertTrue(is_current_tdp_read_intent("what is the current tdp"))

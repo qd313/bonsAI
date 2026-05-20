@@ -53,13 +53,19 @@ _TEXT_FOSS_DEEP = [
     "qwen2.5:1.5b",
 ]
 
-# Open-weight (Tier 2+); midsize tags only for 16GB-friendly defaults.
+# Open-weight (Tier 2+); prefer Pull Models catalog sizes before generic :latest tags.
 _TEXT_OPEN_WEIGHT_SAFE = [
+    "llama3.2:3b",
+    "llama3.2:1b",
     "llama3:latest",
     "llama3",
+    "gemma3:4b",
+    "gemma3:1b",
+    "gemma3:latest",
+    "gemma4:4b",
+    "gemma4:2b",
     "gemma4:latest",
     "gemma4",
-    "gemma3:latest",
 ]
 
 # Appended only when Settings "high VRAM fallbacks" is on (may OOM or exceed 16GB depending on quant/host).
@@ -104,8 +110,12 @@ _VISION_FOSS_DEEP = [
 ]
 
 _VISION_OPEN_WEIGHT_SAFE = [
-    "gemma4:2b",
+    "gemma3:4b",
     "gemma4:4b",
+    "gemma4:2b",
+    "gemma4:latest",
+    "gemma4",
+    "llama3.2-vision:11b",
     "llama3.2-vision",
     "llama3.2-vision:latest",
 ]
@@ -266,6 +276,18 @@ def select_ollama_models(
         if high_vram_fallbacks:
             base = _dedupe_preserve_order(base + _text_high_vram_tail(mode))
     return base
+
+
+def is_ollama_model_missing_error(status: object, body: str) -> bool:
+    """True when Ollama reports the requested model tag is not installed (try next fallback)."""
+    if isinstance(status, int) and status == 404:
+        return True
+    b = (body or "").lower()
+    if "not found" in b and "model" in b:
+        return True
+    if "does not exist" in b and "model" in b:
+        return True
+    return False
 
 
 def is_current_tdp_read_intent(question: str) -> bool:

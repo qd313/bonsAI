@@ -430,14 +430,25 @@ export function buildBonsaiScopeStylesheet(): string {
           margin-top: 14px !important;
         }
 
+        .bonsai-scope .bonsai-preset-carousel-focus-root {
+          width: 100% !important;
+          min-width: 0 !important;
+        }
         .bonsai-scope .bonsai-preset-carousel-vertical {
+          display: flex !important;
+          flex-direction: column !important;
+          width: 100% !important;
+          min-width: 0 !important;
+          max-height: 118px !important;
+          overflow: hidden !important;
+        }
+        .bonsai-scope .bonsai-preset-carousel-track {
           display: flex !important;
           flex-direction: column !important;
           gap: 5px !important;
           width: 100% !important;
           min-width: 0 !important;
-          max-height: 118px !important;
-          overflow: hidden !important;
+          will-change: transform !important;
         }
         .bonsai-scope .bonsai-preset-carousel-vertical .bonsai-preset-carousel-slot--focus .bonsai-preset-glass {
           border-color: rgba(56, 189, 248, 0.45) !important;

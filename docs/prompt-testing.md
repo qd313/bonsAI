@@ -245,11 +245,14 @@ Status note:
 
 ## Preset and Follow-Up UX
 - [ ] Initial load shows exactly 3 random presets
-- [ ] Preset carousel: three chips stay visible; each fades in/out on its own schedule (staggered, not synchronized)
-- [ ] Preset carousel: first-cycle fade-in start offset per chip ~0 / 650 / 1300 ms
-- [ ] Preset carousel: fade in and fade out each take ~2s (smooth opacity transition)
-- [ ] Preset carousel: longer preset text stays on screen longer before the next fade-out (hold scales with length)
-- [ ] After a successful ask, follow-up presets re-seed and carousel animation continues without layout break
+- [ ] Preset carousel (**fade** mode): three chips stay visible; each fades in/out on its own schedule (staggered, not synchronized)
+- [ ] Preset carousel (**fade**): first-cycle fade-in start offset per chip ~750 / 1300 / 1700 ms
+- [ ] Preset carousel (**fade**): fade in ~1s and fade out ~2s (smooth opacity transition)
+- [ ] Preset carousel (**fade**): longer preset text stays on screen longer before the next fade-out (hold scales with length)
+- [ ] Preset carousel (**carousel** mode, Developer → preset animation): auto-advance ~5.8s; chips **slide** vertically (`translateY` track, ~550ms ease)
+- [ ] Preset carousel (**carousel**): D-pad **Up** browses earlier presets in history; **Down** at end of history moves focus to Ask field; auto-pause ~12s after manual browse
+- [ ] Preset carousel (**carousel**): after a successful Ask, contextual presets merge without full blackout or grid snap
+- [ ] After a successful ask, follow-up presets re-seed and carousel animation continues without layout break (fade or carousel)
 - [ ] Tapping a preset with a game running appends " for [game name]" to input
 - [ ] Tapping a preset with NO game running sets only the preset text (no trailing "for")
 - [ ] After asking a battery question, follow-ups include battery/performance/thermal presets

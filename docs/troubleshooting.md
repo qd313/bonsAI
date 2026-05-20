@@ -85,6 +85,20 @@ If Windows still falls back to CPU after FIX A:
 
 **Fix:** Update to a build that uses draft selection inside the modal, `onOKButton` on tier rows, **awaits `save_settings` before closing** (avoids remount loading stale tier), and persist on **Done** with `hydrateFromSettings`. If tier still reverts, open Permissions again and confirm the row label; check Developer → Model routing for Tier 3 unlock.
 
+### Ollama HTTP 404 with Gemma / open-weight models (Tier 2)
+
+**Symptom:** You pulled **Gemma 3** or **Gemma 4** from **Settings → Connection → Browse models…**, Tier 2 is selected, but Ask fails with **HTTP 404** for `gemma3:latest` or `gemma4:latest`.
+
+**Cause:** Ollama requires an **exact tag** match. The Pull Models picker installs tags like `gemma3:4b` or `gemma4:4b`, while older builds only tried generic names such as `gemma3:latest`. If no tag in the fallback chain is installed, every attempt 404s.
+
+**Fix (2026-05-20):** Routing now tries catalog sizes (`gemma3:4b`, `gemma4:4b`, …) before `:latest`, and HTTP **404** advances to the next fallback. Pull **Gemma 4** entries appear in Browse models (`gemma4:4b`, `gemma4:2b`).
+
+**Checks:**
+
+1. List installed tags: `curl -s http://127.0.0.1:11434/api/tags` (or your PC IP).
+2. Confirm at least one tag in the chain is present (e.g. `gemma3:4b` after a featured pull).
+3. Tier 1 still tries Qwen/Llava first — install a Tier-1 model or stay on Tier 2 so Gemma tags are eligible.
+
 ---
 
 ### AI voice & personality (character tone)

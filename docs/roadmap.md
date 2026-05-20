@@ -1,6 +1,6 @@
 # bonsAI Roadmap
 
-This document tracks **shipped** work (**[Completed](#completed)**), **active** engineering and QA (**[In Progress](#in-progress)**), and the **backlog** (**[Planned](#planned)**). Operational setup, firewalls, and vision tuning: [troubleshooting.md](troubleshooting.md). QA and regression matrices: [prompt-testing.md](prompt-testing.md), [regression-and-smoke.md](regression-and-smoke.md). Index of all `docs/` files: [DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md). Refactor notes: [refactor-specialist-sweep.md](refactor-specialist-sweep.md). Release process and versioning: [development.md](development.md), [CHANGELOG.md](CHANGELOG.md).
+This document tracks **shipped** work (**[Completed](#completed)**), **active** engineering and QA (**[In Progress](#in-progress)**), and the **backlog** (**[Planned](#planned)**). Operational setup, firewalls, and vision tuning: [troubleshooting.md](troubleshooting.md). QA and regression matrices: [prompt-testing.md](prompt-testing.md), [regression-and-smoke.md](regression-and-smoke.md). Index of all `docs/` files: [README.md](README.md). Refactor notes: [refactor-specialist-sweep.md](refactor-specialist-sweep.md). Release process and versioning: [development.md](development.md), [CHANGELOG.md](CHANGELOG.md).
 
 Star ratings use the GTA scale: `★` easiest … `★★★★★` very high complexity; `★★★★★★` extreme scope.
 
@@ -14,8 +14,6 @@ Active features, maintainer tasks, and **known defects**. *QAMP Phase 1 (safe de
 
 - ★ **Question Overlay Alignment Drift:** The 3-line question overlay has minor horizontal spacing mismatch vs native `TextField` internals.
 - ★★ **D-pad Scroll Bottom Cutoff:** Controller navigation can stop before the final response chunk is fully visible even when touch scroll can reach it.
-
-**Recently fixed (2026-05-19 bugfix pass):** Fullscreen **AI model choice** tier picker (D-pad + await save before close); **AI voice & personality** system-prompt ordering (character voice appended with recency reminder). Deferred feature plan: [backlog-implementation-plan.md](backlog-implementation-plan.md).
 
 ### Active work
 
@@ -48,7 +46,13 @@ Within this section: ascending stars (★★ → ★★★ → ★★★★). Br
 
   - **Goal:** Broader systematic validation and tuning beyond the shipped doc MVP (see **Completed** → Prompt-testing MVP; working matrices in [prompt-testing.md](prompt-testing.md)).
 
-- ★★ **Regenerate same prompt** (B) — **shipped (2026-05-19):** Main-tab **Retry same prompt** after a completed reply; reuses last question via `useBonsaiAskOrchestration.onRetryLastResponse`. `MainTab.tsx`, `useBonsaiAskOrchestration.ts`.
+- ★★ **Regenerate same prompt** (B)
+
+  - **Goal:** Let the user request another model reply from the **same** sanitized user input without retyping (bounded UX; respects transparency / sanitizer path).
+  - **Primary work:** UI affordance + orchestration hook to re-submit stored payload; optional model rotation policy.
+  - **Files:** `src/index.tsx`, `main.py`, ask orchestration hooks.
+  - **Depends on:** unified Ask pipeline and input transparency behavior.
+  - **Not in scope:** automatic multi-model tournaments or silent retries without user intent.
 
 - ★★ **Text model chains** (user-configurable text fallbacks)
 
@@ -98,14 +102,6 @@ Within this section: ascending stars (★★ → ★★★ → ★★★★). Br
   - **Depends on:** **Mode selector (main screen)** (shipped).
   - **Not in scope:** per-game/per-model fine-grained profile matrix.
 
-- ★★★ **Pull Models free-space readout**
-
-  - **Goal:** Show available disk space in the Pull Models modal header before committing a pull batch.
-  - **Primary work:** small RPC over `shutil.disk_usage` for the Deck home / `OLLAMA_MODELS` mount; surface in `PullModelsModal.tsx` header next to installed/selected totals.
-  - **Files:** `main.py`, `PullModelsModal.tsx`.
-  - **Depends on:** **Pull Models fullscreen picker** (shipped).
-  - **Not in scope:** automatic prune of partial downloads.
-
 - ★★★ **Per-turn local feedback** (thumbs / flags, S)
 
   - **Goal:** Lightweight **local-only** quality signal for future tuning or export; no telemetry server.
@@ -153,20 +149,21 @@ Within this section: ascending stars (★★ → ★★★ → ★★★★). Br
   - **Depends on:** prompt assembly hooks.
   - **Not in scope:** embeddings, vector DBs, or multi-MB corpora (see **RAG** Medium-term).
 
-- ★★★★ **Llama.cpp provider spike** (compat evaluation — POC approved)
+- ★★★★ **Llama.cpp provider spike** (compat evaluation)
 
-  - **Status:** **POC approved (2026-05-19)** — proof-of-concept spike for local llama.cpp inference **alongside** Ollama; **not** a shippable production provider in this phase. Spike doc: [spikes/llama-cpp-provider.md](spikes/llama-cpp-provider.md); backlog phase: [backlog-implementation-plan.md](backlog-implementation-plan.md) Phase 5.
-  - **Goal:** Evaluate llama.cpp runtime compatibility (chat API, streaming, model load, Deck constraints) and produce go/no-go for a future shippable provider.
-  - **Primary work:** API parity matrix, thin dev/eval routing hook if needed, Deck VRAM/latency notes.
-  - **Expected output:** go/no-go, phased path, risk matrix — no Settings provider UI or default routing switch.
-  - **Files:** `main.py` (eval hook only), [spikes/llama-cpp-provider.md](spikes/llama-cpp-provider.md), [troubleshooting.md](troubleshooting.md).
-  - **Not in scope:** shipping full production provider, Connection UI for llama.cpp hosts, or model-management parity with Ollama in the spike.
+  - **Goal:** Evaluate first-class llama.cpp runtime/provider support.
+  - **Primary work:** API formats, streaming, model management, tokenizer/context, Deck constraints.
+  - **Expected output:** go/no-go, phased path, risk matrix.
+  - **Files:** `main.py`, runtime/provider abstraction docs, troubleshooting docs.
+  - **Not in scope:** shipping full production support in the spike.
 
-- ★★★★ **SteamOS Share path** (capture → attach, A) — **deferred / out of BonsAI backlog**
+- ★★★★ **SteamOS Share path** (capture → attach, A)
 
-  - **Status:** **Deferred (2026-05-19)** — user-owned; handled separately from BonsAI plugin work. **Do not** schedule design or implementation under this roadmap/backlog until explicitly re-promoted.
-  - **Goal (historical):** Faster path from SteamOS **Share** / capture flows into screenshot attach or Ask context where APIs allow.
-  - **Not in active backlog:** path conventions, export formats, and Share-hook integration are **out of scope** for [backlog-implementation-plan.md](backlog-implementation-plan.md).
+  - **Goal:** Faster path from SteamOS **Share** / capture flows into screenshot attach or Ask context where APIs allow.
+  - **Primary work:** research spike on Decky/SteamOS hooks; gated integration behind capabilities.
+  - **Files:** `main.py`, `src/index.tsx`, [troubleshooting.md](troubleshooting.md).
+  - **Depends on:** **media library access** patterns for screenshots (shipped capability lane).
+  - **Not in scope:** kernel framebuffer hacks or unsupported private APIs as default.
 
 - ★★★★ **SteamOS spin hint card** (immutable spins, M)
 
@@ -189,7 +186,7 @@ Within this section: ascending stars (★★★★ → ★★★★★ → ★�
   - **Not in scope:** cross-device merge or server-backed sync.
 
 - ★★★★ **Offline intent packs** (local JSON import/export)
-
+b
   - **Goal:** Import/export user-created offline search intent packs (aliases, synonyms, expansions) without cloud dependence.
   - **Primary work:** local JSON schema, add/edit/export/import, merge conflict rules.
   - **Files:** `src/index.tsx`, `main.py`, docs/usage references.
@@ -215,7 +212,7 @@ Within this section: ascending stars (★★★★ → ★★★★★ → ★�
 
 - ★★★★★ **Global quick-launch macro** (Steam Input doc spike)
 
-  - **GitHub (tracking placeholder):** [bonsAI Issues](https://github.com/cantcurecancer/bonsAI/issues) — dedicated issue TBD.
+  - **GitHub (tracking pblaceholder):** [bonsAI Issues](https://github.com/cantcurecancer/bonsAI/issues) — dedicated issue TBD.
   - **Status:** **Baseline doc shipped** — full recipe, delay ladder, tuning, and maintainer **Verification checklist** in [troubleshooting.md](troubleshooting.md) §5; optional macro row in [regression-and-smoke.md](regression-and-smoke.md) §3. Ongoing: refresh if Steam/Decky QAM or Decky list behavior changes, or when **Native QAM shortcut tile** (**Long-term**) lands (shorter macro).
   - **Goal:** Near-instant BonsAI from in-game or Home via Guide chord → QAM → Decky → bonsAI.
   - **Primary work:** Document and test optimal macro sequence (user-specific QAM tab order).
@@ -352,12 +349,15 @@ Within this section: ★★★★★ items first (ascending stars), then ★★�
   - **Related:** **Global quick-launch macro** (Medium-term); when a native entry exists, refresh the macro sequence in [troubleshooting.md](troubleshooting.md).
   - **Not in scope:** Shipping a forked Steam client or undocumented UI injection as the default approach.
 
-- ★★★★★★ **Token stream replies — Phase 2+** (incremental chunks, partial-on-cancel; U)
+- ★★★★★★ **Token stream replies** (live markdown; U)
 
   - **GitHub (tracking placeholder):** [bonsAI Issues](https://github.com/cantcurecancer/bonsAI/issues) — dedicated issue TBD.
-  - **Status:** **Phase 1 shipped** — see [Completed](#connection-routing-diagnostics-and-timeouts) → **Token stream replies (Phase 1 — dev-flag preview)**. Remaining: incremental D-pad chunk splitting during stream, partial-preserve-on-cancel, user-facing Settings toggle outside Developer.
-  - **Goal:** Further polish beyond the Phase 1 preview-then-finalize path.
-  - **Not in scope:** new SSE/WebSocket transport (Phase 1 uses existing background poll).
+  - **Goal:** Progressive reveal as Ollama streams — perceived latency win vs buffer-then-chunk.
+  - **Risk:** Decky/React plumbing, partial markdown, stop semantics — large refactor touch.
+  - **Primary work:** stream tokens from backend to Main markdown chunks; partial-render safety; align Stop with cancel.
+  - **Files (expected):** `main.py`, `src/index.tsx`, ask orchestration / Ollama client path.
+  - **Depends on:** Ollama streaming API stability and timeout handling.
+  - **Not in scope:** shipping without parity for Input transparency and sanitizer contracts.
 
 ### Reference — vision model fallback order
 
@@ -390,20 +390,10 @@ Headings group related work. Star counts match the historical list.
 - ★★ **Ollama Network Routing Fix:** Route frontend requests through Decky backend (`call("ask_game_ai", ...)`) to resolve cross-origin failures.
 - ★★ **Deck and PC Connection Settings:** Add connection-focused settings including visible Deck IP and PC IP management.
 - ★★ **Diagnostic, Latency, and Timeout Warnings:** Return `elapsed_seconds`, show slow-response warnings, and enforce backend timeout messaging.
-- ★★ **Default Ask timeout 45s (2026-05-19):** Default hard timeout when custom timeouts are off is **45s** (was 360s) for Speed-mode turnaround; custom timeout slider unchanged. `DEFAULT_REQUEST_TIMEOUT_SECONDS` in `settingsAndResponse.ts`, `main.py`, Developer tab copy.
-- ★★ **Retry same prompt (2026-05-19):** Main-tab **Retry same prompt** button after a completed reply; `useBonsaiAskOrchestration.onRetryLastResponse`, `MainTab.tsx`.
-- ★★ **Modal remount session survival (2026-05-19):** `bonsaiSessionSurvival.ts` preserves unified input, thread, and reply across Decky `showModal` unmounts; tab restore unchanged.
-- ★★ **Preset chip carousel mode (2026-05-19):** Settings → Developer → preset animation **fade / carousel / static** (`preset_chip_animation`); vertical carousel with middle chip in focus. Default **`fade`** (carousel off). `MainTabPresetAnimatedChips.tsx`, `settings_service.py`.
-- ★★ **AI model choice tier picker fix (2026-05-19):** Fullscreen Permissions modal uses draft tier + `onOKButton` on rows; **awaits `save_settings` before close** (remount race); persist on **Done**; `hydrateFromSettings` after save. `PermissionsTabModelPolicyPanel.tsx`, `index.tsx`.
-- ★★★ **Character voice prompt ordering (2026-05-19):** Roleplay block appended after bonsAI preamble with recency reminder (`apply_roleplay_to_system_content`). `ai_character_service.py`, `main.py`.
-- ★★ **Speed-mode accuracy inject (2026-05-19):** System prompt conservative-facts line when `ask_mode` is speed. `ollama_prompts.py`.
-- ★ **Docs index rename (2026-05-19):** `docs/README.md` → [DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md) to avoid confusion with root README.
 - ★★ **Configurable Latency and Timeout Controls:** Persisted warning + timeout in `settings.json`; Settings Connection uses one Steam `SliderField` for hard timeout with a visible soft-warning readout (`ConnectionTimeoutSlider.tsx`), and ordering is reconciled on load/updates.
 - ★★ **Ollama model VRAM retention (`keep_alive`):** Persisted `ollama_keep_alive` with fixed preset durations (default **5 minutes**); Settings → Connection `OllamaKeepAliveSlider.tsx`; value passed on each Ask through `main.py` into `backend/services/ollama_service.py`. `settings_service.py`, `settingsAndResponse.ts`.
 - ★★★ **[Local/runtime] Default off + onboarding:** When `ollama_local_on_deck` is absent from persisted settings, default **`false`** (LAN PC host field applies); explicit **`true`** / **`false`** in JSON unchanged. Global beta modal warns LAN-hosted Ollama is typically faster than on-device inference and that heavy VRAM use may crash games (**use at your own risk**). **`bonsai:local-runtime-beta-dismissed-v1`** **`ConfirmModal`** when the user enables **Ollama on Deck** (optional local routing); Starter/Connection Tier-1 FOSS tags per [`TIER1_FOSS_STARTER_PULL_TAGS`](../refactor_helpers.py). **Clear all plugin data** resets flags and storage keys. Connection **Test** to localhost may **`systemctl --user`** / **`ollama serve`** wake the listener (`recover_loopback_ollama_listening`, **`main.py`**). `settings_service.py`, `settingsAndResponse.ts`, `src/index.tsx`, `py_modules/backend/services/local_ollama_setup_service.py`.
 - ★★ **Local Ollama update + saved LAN IP fix:** Settings → Connection adds **Update Ollama & Models** when **Ollama on this Deck** is on — re-runs the official installer, then re-pulls each tag from local `/api/tags` (no-op model step if none installed). Ask no longer overwrites `bonsai:pc-ip` with `127.0.0.1:11434` while local routing is active, so toggling local off restores the LAN host. `update_installed` profile in `refactor_helpers.py`, `local_ollama_setup_service.py` (`list_installed_ollama_tags`), `SettingsTab.tsx`, `src/utils/persistOllamaIp.ts`, `src/index.tsx`.
-- ★★★ **Pull Models fullscreen picker:** Settings → Connection **Browse models…** opens a fullscreen `ConfirmModal` (`PullModelsModal.tsx`) to browse a curated 13-model catalog (`src/data/pullModelCatalog.ts`) with size, release date, license, FOSS badge, and Deck star ratings; multi-select pull via `pull_ollama_models` (custom profile on `local_ollama_setup_service`); per-row delete via `delete_ollama_model` (`ollama rm`, argv form) with active-model and busy guards; live size overlay from `registry.ollama.ai` (`fetch_ollama_catalog_metadata`) with bundled offline fallback; **Other installed** group for uncatalogued tags. `main.py`, `ollama_catalog_service.py`, `bonsaiScopeStylesheet.ts`.
-- ★★★★ **Token stream replies (Phase 1 — dev-flag preview):** Developer tab **Token streaming (experimental)** (`bonsai_token_streaming_enabled`, default off). Ollama already streams NDJSON; backend exposes `partial_response` + `streaming` on `get_background_game_ai_status` while pending (thread-safe throttle); frontend polls at 350ms during stream and renders one preview markdown chunk, then existing `splitResponseIntoChunks` at terminal. Strategy spoiler masking without consent suppresses preview until complete. Transparency, desktop chat, TDP apply, and branch extraction remain terminal-only. `main.py`, `ollama_service.py`, `useBonsaiAskOrchestration.ts`, `useBackgroundGameAi.ts`, `MainTab.tsx`, `DeveloperTab.tsx`. **On-device QA:** [prompt-testing.md](prompt-testing.md) § Token streaming (experimental).
 
 ### Tabs, icons, and unified ask flow
 
@@ -411,11 +401,13 @@ Headings group related work. Star counts match the historical list.
 - ★★ **Persist Last Question and Answer:** Restore prior session state when reopening QAM via Decky settings storage.
 - ★★ **Unified Search + Ask Input:** Merge settings search and AI question entry into one shared input flow.
 - ★ **Preset Chip Fade Opt-Out:** Settings `ToggleField` **Preset chip fade animation** (persisted `preset_chip_fade_animation_enabled`, default on). When off, main-tab suggestion chips stay opaque and rotate prompts without opacity transitions; post-Ask re-seed unchanged. `PresetAnimatedChips.tsx`, `MainTab.tsx`, `settingsAndResponse.ts`, `settings_service.py`.
+- ★★★ **Preset carousel scroll + slide (2026-05-20):** Developer → **carousel** mode: slower auto-advance (~5.8s), `translateY` slide animation, D-pad scrollable history (~12 items), soft contextual re-seed after Ask, `React.memo` on chips, inject-row placeholder during Ask. `src/features/preset-carousel/carouselState.ts`, `MainTabPresetAnimatedChips.tsx`, `bonsaiScopeStylesheet.ts`, `MainTab.tsx`.
+- ★★ **Gemma Pull Models + routing parity (2026-05-20):** Browse models adds `gemma4:4b` / `gemma4:2b`; Tier 2 fallbacks try `gemma3:4b` and catalog Gemma tags before `:latest`; HTTP 404 advances to next model. `pullModelCatalog.ts`, `refactor_helpers.py`, `main.py`, `docs/troubleshooting.md`.
 - ★★★ **Mode selector (main screen):** Persisted `ask_mode` (`speed` / `strategy` / `deep`, UI labels Speed / Strategy / Deep). Compact outline control (green / bronze / gold) on the unified input strip, left of mic/stop, opens an anchored popover menu to change mode (no layout reflow); D-pad focus order is text field → mode → mic/stop. Backend orders Ollama model fallbacks per mode in `refactor_helpers.py`; `start_background_game_ai` includes `ask_mode`. `src/data/askMode.ts`, `src/components/AskModeMenuPopover.tsx`, `MainTab.tsx`, `index.tsx`, `settingsAndResponse.ts`, `settings_service.py`, `main.py`.
 - ★★★★ **Strategy Guide prompt path (beta):** Shipped — **Strategy Guide** in prompts and tooling is the same path as **`ask_mode: strategy`** (main-tab label **Strategy**). Strategy presets can switch Ask mode; strategy-specific placeholder (“describe the level / boss / puzzle”); **`STRATEGY GUIDE MODE`** scaffolding and branch-picker contract in `backend/services/ollama_service.py` + `backend/services/strategy_guide_parse.py`; follow-up UX in `src/index.tsx`, `MainTab.tsx`, `src/data/presets.ts`, `src/data/strategyGuideFollowup.ts`; character framing in `ai_character_service.py` when roleplay is on. Optional cheat / shortcut guidance when the user asks; Steam Input-aware copy where relevant. Regression notes: [prompt-testing.md](prompt-testing.md) § Strategy Guide. **Not in scope:** perfect walkthroughs for every title.
 - ★★★★ **Strategy Guide safety and spoilers:** Shipped — spoiler-minimized default and `bonsai-spoiler` fenced blocks in the strategy system prompt; effective consent from Ask payload plus conservative phrase match on sanitized text; Settings → **Strategy Guide** (tap-to-reveal, expand-after-consent); main-tab **Spoilers OK for this Ask** when mode is Strategy; `strategy_spoiler_consent_effective` on Ask results for UI; tap-to-reveal in `MainTabBonsaiAiMarkdownChunk.tsx`. **`settings.json`:** `strategy_spoiler_masking_enabled`, `strategy_spoiler_auto_reveal_after_consent`. **Not in scope:** hard model guarantees. **Testing:** unit coverage in repo for prompt, settings, and chunk splitting; **on-device and real-model verification still required** — complete [prompt-testing.md](prompt-testing.md) § **Spoiler Policy and Consent** (Pass / Partial / Fail + build id when exercised).
-- ★★ **Developer tab opt-in (Settings):** Shipped — persisted `show_developer_tab` (default **false**; migrates legacy `show_debug_tab`); **Developer** tab omitted until **Show Developer tab** in Settings → Data; merges Debug diagnostics with advanced logging/tuning; safe tab redirect when disabled. `DeveloperTab.tsx`, `index.tsx`, `settings_service.py`, `settingsAndResponse.ts`.
-- ★★ **Settings tab trim:** Shipped — plain-language Settings/Permissions copy; progressive disclosure via Developer tab; shorter section labels (`Where AI runs`, `AI model choice`, etc.). `SettingsTab.tsx`, `PermissionsTab.tsx`, related controls.
+- ★★ **Debug tab opt-in (Settings):** Persisted `show_debug_tab` (default **false**); **Debug** omitted from the tab strip until **Show Debug tab** is enabled in Settings; safe tab switch when turning the toggle off while on **Debug**. `src/index.tsx`, `settings_service.py`, `settingsAndResponse.ts`.
+- ★★ **Settings tab trim:** **Trim the fat** on Settings: fewer simultaneous controls per view, clearer `PanelSection` grouping, progressive disclosure, shorter helper copy on toggles and sliders; dedicated Settings composition (`SettingsTab.tsx` and related controls).
 - ★★★ **Reset session cache (app state):** Settings → Advanced **Reset session cache…** with confirm modal; `resetPluginSession()` clears in-memory unified search, reply, thread, transparency, branch picker, attachments, and timers. Does **not** change persisted `settings.json`, host Ollama history, or screenshot files. `src/index.tsx`.
 
 **Baseline index:** preset carousel and transition UX (Phase 1 — fade/hold; manual arrows deferred).
@@ -517,8 +509,8 @@ Headings group related work. Star counts match the historical list.
 
 ★★★★
 
-- **Status (Phase 1):** Shipped — three chips, staggered fade, length-based hold; `PresetAnimatedChips.tsx`, `src/data/presets.ts`, scoped CSS in `src/index.tsx`; notes in `docs/prompt-testing.md`.
-- **Deferred:** lower-right arrow controls for manual next/previous and controller focus (not in Phase 1).
+- **Status (Phase 1):** Shipped — three chips, staggered fade, length-based hold; `PresetAnimatedChips.tsx`, `src/data/presets.ts`, scoped CSS in `src/index.tsx`; notes in `docs/prompt-testing.md`. **Carousel mode extension (2026-05-20):** slide animation, scrollable history, anti-flicker re-seed — see Completed changelog above.
+- **Deferred:** lower-right arrow controls for manual next/previous (D-pad history browse shipped in carousel mode 2026-05-20).
 - **Goal (full vision):** Carousel navigation controls as above.
 - **Depends on:** existing preset randomization/category logic.
 - **Not in scope:** changing core preset taxonomy/model routing.
@@ -572,18 +564,18 @@ Dependency graph and implementation notes that are not feature checklist items.
 - **Global screenshots and vision** → richer strategy + screenshot context.
 - **Capability Permission Center** → gates filesystem, elevated tasks, hardware, Steam/Proton log reads for troubleshooting excerpts, and (future) web/search calls.
 - **Model policy tiers + disclosure UX (shipped)** → layered on **Capability Permission Center**; tiered routing + per-reply disclosure — see **Completed** → Permissions.
-- **Llama.cpp compatibility evaluation (POC approved, 2026-05-19)** → spike only; may inform deeper **Lan vs Deck provider layering** atop shipped Deck-first routing defaults (**Local/runtime deck-first defaults + onboarding** — see **Completed** → Connection). Shippable provider remains backlog-gated on spike go/no-go.
+- **Llama.cpp compatibility evaluation** → may inform deeper **Lan vs Deck provider layering** atop shipped Deck-first routing defaults (**Local/runtime deck-first defaults + onboarding** — see **Completed** → Connection).
 - **Local/runtime deck-first defaults + onboarding** (Completed) lays baseline routing + **Connection** onboarding; advanced provider matrix work remains backlog if needed alongside **Llama.cpp compatibility evaluation**.
 - **Restricted kids account master lock** → above permission toggles while restricted.
 - **Built on Ollama link** → shipped in About.
-- **SteamOS Media screenshot share button** → **deferred (user-owned, 2026-05-19)**; was a possible fast path into **Global screenshots and vision** — out of BonsAI backlog until re-promoted.
+- **SteamOS Media screenshot share button** → possible fast path into **Global screenshots and vision** if APIs allow.
 - **Reset session cache (shipped)** → in-memory unified-input / reply state only; see **Completed** → Tabs.
 - **Preset carousel (Phase 1 shipped)** → extends presentation without changing category routing; **Pyro talent-manager easter egg (shipped)** adds a separate inject chip outside the trio’s `PRESET_CAROUSEL_ACTIVE_MS` window.
 - **Global quick-launch macro** ↔ **Native QAM shortcut tile** (shorter macro once a direct QAM tile exists).
 - **Bundled VDF parsing** → **Steam Input layout parse** (and optional deeper parsing).
 - **Steam Input settings search + jump** → Phase 1 shipped; broader catalog deferred.
 - **Offline intent pack exchange** → offline-first search quality.
-- **Settings persistence** → mode profiles, language override, background completion metadata; **Developer tab opt-in (Settings)** (shipped — see **Completed** → Tabs).
+- **Settings persistence** → mode profiles, language override, background completion metadata; **Debug tab opt-in (Settings)** (shipped — see **Completed** → Tabs).
 - **Brainstorm letters (ecosystem E–H, companion J–N, chat R–V)** are indexed in [roadmap_feature_ideas plan](../.cursor/plans/roadmap_feature_ideas_f5560e15.plan.md); **Planned** above is canonical for horizon ordering.
 
 ```mermaid

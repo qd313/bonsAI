@@ -409,6 +409,20 @@ export function MainTab(props: MainTabProps) {
   } = props;
 
   const [transparencyOpen, setTransparencyOpen] = useState(false);
+  /** Reserve inject row height while asking so clearing Pyro tip does not snap the preset grid. */
+  const hadInjectChipRef = React.useRef(false);
+  useEffect(() => {
+    if (presetCarouselInject?.text?.trim()) {
+      hadInjectChipRef.current = true;
+    }
+  }, [presetCarouselInject]);
+  useEffect(() => {
+    if (!isAsking && !presetCarouselInject?.text?.trim()) {
+      hadInjectChipRef.current = false;
+    }
+  }, [isAsking, presetCarouselInject]);
+  const showInjectPlaceholder =
+    isAsking && hadInjectChipRef.current && !presetCarouselInject?.text?.trim();
   useEffect(() => {
     setTransparencyOpen(false);
   }, [transparencySnapshot?.raw_question, transparencySnapshot?.final_response]);
@@ -542,9 +556,13 @@ export function MainTab(props: MainTabProps) {
       help.focus();
       return true;
     }
-    const btn = host?.querySelector<HTMLElement>(
-      '.bonsai-preset-carousel-slot[data-bonsai-preset-visible="true"] button.bonsai-preset-glass',
-    );
+    const btn =
+      host?.querySelector<HTMLElement>(
+        ".bonsai-preset-carousel-slot--focus button.bonsai-preset-glass",
+      ) ??
+      host?.querySelector<HTMLElement>(
+        '.bonsai-preset-carousel-slot[data-bonsai-preset-visible="true"] button.bonsai-preset-glass',
+      );
     if (!btn) return false;
     btn.focus();
     return true;
@@ -637,6 +655,7 @@ export function MainTab(props: MainTabProps) {
               fadeAnimationEnabled={presetChipAnimation === "fade" && presetChipFadeAnimationEnabled}
               animationMode={presetChipAnimation}
               onPreferAskMode={onPresetPreferAskMode}
+              onCarouselExitDown={focusUnifiedTextField}
             />
             {presetCarouselInject?.text?.trim() ? (
               <Button
@@ -657,6 +676,12 @@ export function MainTab(props: MainTabProps) {
               >
                 {presetCarouselInject.text.trim()}
               </Button>
+            ) : showInjectPlaceholder ? (
+              <div
+                aria-hidden
+                className="bonsai-preset-inject-placeholder"
+                style={{ minHeight: 34, visibility: "hidden" }}
+              />
             ) : null}
           </div>
         </PanelSectionRow>

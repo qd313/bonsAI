@@ -47,9 +47,6 @@ bonsai_try_gamescope_atom_screenshot() {
   for d in :0 :1 :2; do
     case $cands in *"$d|"*) ;; *) cands="$cands"$'\n'"$d|" ;; esac
   done
-  # #region agent log
-  BONSAI_DBG_HYP="H2-H3" bonsai_dbg "gamescope candidates collected" "{\"count\":$(printf '%s\n' "$cands" | grep -c .),\"first3\":\"$(printf '%s\n' "$cands" | head -3 | tr '\n' ';' | sed 's/"/\\"/g')\"}"
-  # #endregion
   rm -f "$GS_OUT" 2>/dev/null || sudo rm -f "$GS_OUT" 2>/dev/null || true
   while IFS= read -r line; do
     [ -z "$line" ] && continue
@@ -61,17 +58,11 @@ bonsai_try_gamescope_atom_screenshot() {
       sudo -u "$TARGET_USER" env DISPLAY="$d" xprop -root -f GAMESCOPECTRL_REQUEST_SCREENSHOT 32c -set GAMESCOPECTRL_REQUEST_SCREENSHOT 3 >/dev/null 2>&1
     fi
     rc=$?
-    # #region agent log
-    BONSAI_DBG_HYP="H2-H3" bonsai_dbg "xprop attempt" "{\"display\":\"$d\",\"xauth_present\":$([ -n "$xa" ] && echo true || echo false),\"rc\":$rc}"
-    # #endregion
     [ "$rc" != 0 ] && continue
     for _ in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20; do
       [ -s "$GS_OUT" ] && break
       sleep 0.25
     done
-    # #region agent log
-    BONSAI_DBG_HYP="H3" bonsai_dbg "gamescope png poll done" "{\"display\":\"$d\",\"gs_out_exists\":$([ -s "$GS_OUT" ] && echo true || echo false),\"gs_out_size\":$(stat -c%s "$GS_OUT" 2>/dev/null || echo 0)}"
-    # #endregion
     if [ -s "$GS_OUT" ]; then
       cp "$GS_OUT" "$OUT" && chmod 0644 "$OUT" 2>/dev/null
       return 0
@@ -83,21 +74,16 @@ EOF_CANDS
 }
 bonsai_progress "trying gamescope X11 atom (composited)..."
 if bonsai_try_gamescope_atom_screenshot; then
-  # #region agent log
-  BONSAI_DBG_HYP="H2-H3" bonsai_dbg "gamescope-atom success, exiting" "{\"out_size\":$(stat -c%s "$OUT" 2>/dev/null || echo 0)}"
-  # #endregion
   CAPTURE_METHOD="gamescope-atom"
   echo "---CAPTURE_METHOD---"
   echo "$CAPTURE_METHOD"
   exit 0
 fi
 bonsai_progress "gamescope atom path failed; trying grim (Wayland)..."
-# #region agent log
-BONSAI_DBG_HYP="H2-H3" bonsai_dbg "gamescope-atom FAILED, proceeding to grim" "null"
-# #endregion
 
 # X11 desktop capture: when gamescope is not running, capture the Plasma X11
-# session root window via ImageMagick `import` or `xwd | convert`. Reuses the
+# session root window via ffmpeg x11grab (preferred, no DRM master needed),
+# falling back to ImageMagick `import` or `xwd | convert`. Reuses the
 # DISPLAY/XAUTHORITY discovery logic so it picks up the live deck user session.
 bonsai_try_x11_desktop_capture() {
   # ffmpeg is the universal fallback because it's already required for kmsgrab.
@@ -127,9 +113,6 @@ bonsai_try_x11_desktop_capture() {
     [ -z "$line" ] && continue
     d_x="${line%%|*}"
     xa_x="${line#*|}"
-    # #region agent log
-    BONSAI_DBG_HYP="H3-H5-H6" bonsai_dbg "x11 capture attempt" "{\"display\":\"$d_x\",\"xauth_present\":$([ -n "$xa_x" ] && echo true || echo false),\"have_ffmpeg\":$(command -v ffmpeg >/dev/null 2>&1 && echo true || echo false)}"
-    # #endregion
     # ffmpeg x11grab works without DRM master (uses X11 protocol).
     # No video_size = auto-detect screen size on modern ffmpeg (>=4.x).
     if command -v ffmpeg >/dev/null 2>&1; then
@@ -140,9 +123,6 @@ bonsai_try_x11_desktop_capture() {
         sudo -u "$TARGET_USER" env DISPLAY="$d_x" \
           ffmpeg -loglevel error -f x11grab -i "$d_x" -vframes 1 -y "$OUT" 2>>/tmp/bonsai_x11_err.log
       fi
-      # #region agent log
-      BONSAI_DBG_HYP="H6" bonsai_dbg "ffmpeg x11grab result" "{\"display\":\"$d_x\",\"out_size\":$(stat -c%s "$OUT" 2>/dev/null || echo 0)}"
-      # #endregion
       if [ -s "$OUT" ]; then
         chmod 0644 "$OUT" 2>/dev/null
         return 0
@@ -178,9 +158,6 @@ bonsai_try_x11_desktop_capture() {
   done <<EOF_X
 $cands_x
 EOF_X
-  # #region agent log
-  BONSAI_DBG_HYP="H3-H5" bonsai_dbg "x11 capture exhausted candidates" "{\"err_tail\":\"$(tail -c 400 /tmp/bonsai_x11_err.log 2>/dev/null | tr '\n' ' ' | sed 's/\\/\\\\/g; s/"/\\"/g')\"}"
-  # #endregion
   ok=0
   return 1
 }
@@ -282,14 +259,8 @@ bonsai_scan_procs_for_wayland_sockets() {
   done
   rm -f "$seen"
 }
-# #region agent log
-BONSAI_DBG_HYP="H4" bonsai_dbg "ensuring grim" "null"
-# #endregion
 bonsai_ensure_grim || true
 GRIM_EXE=$(bonsai_resolve_grim_exe) || GRIM_EXE=""
-# #region agent log
-BONSAI_DBG_HYP="H4" bonsai_dbg "grim resolved" "{\"grim_exe\":\"${GRIM_EXE//\"/\\\"}\"}"
-# #endregion
 if [ -n "$GRIM_EXE" ]; then
   shopt -s nullglob
   grim_socks=()
@@ -333,22 +304,13 @@ fi
 # Try X11 root-window capture instead; fast-fail with a helpful message otherwise.
 if [ "$GS_RUNNING" -eq 0 ]; then
   bonsai_progress "Desktop Mode detected; trying X11 root capture (ffmpeg x11grab/import/xwd)..."
-  # #region agent log
-  BONSAI_DBG_HYP="H3-H5-H6" bonsai_dbg "desktop mode: trying x11 capture" "{\"have_ffmpeg\":$(command -v ffmpeg >/dev/null 2>&1 && echo true || echo false),\"have_import\":$(command -v import >/dev/null 2>&1 && echo true || echo false),\"have_xwd\":$(command -v xwd >/dev/null 2>&1 && echo true || echo false)}"
-  # #endregion
   if bonsai_try_x11_desktop_capture; then
     CAPTURE_METHOD="x11-root"
-    # #region agent log
-    BONSAI_DBG_HYP="H3-H5" bonsai_dbg "x11-root capture success" "{\"out_size\":$(stat -c%s "$OUT" 2>/dev/null || echo 0)}"
-    # #endregion
     bonsai_progress "captured via X11 root window."
     echo "---CAPTURE_METHOD---"
     echo "$CAPTURE_METHOD"
     exit 0
   fi
-  # #region agent log
-  BONSAI_DBG_HYP="H3-H5" bonsai_dbg "x11-root capture failed; refusing kmsgrab in desktop mode" "null"
-  # #endregion
   bonsai_progress "ERROR: no usable capture path in Desktop Mode."
   bonsai_progress "ffmpeg x11grab stderr tail: $(tail -c 300 /tmp/bonsai_x11_err.log 2>/dev/null | tr '\n' ' ')"
   bonsai_progress "Hint: switch to Game Mode for gamescope capture, or install ImageMagick ('sudo pacman -S imagemagick')."
@@ -358,9 +320,6 @@ if [ "$GS_RUNNING" -eq 0 ]; then
 fi
 
 bonsai_progress "trying ffmpeg kmsgrab (Game Mode fallback)..."
-# #region agent log
-BONSAI_DBG_HYP="H5" bonsai_dbg "starting kmsgrab fallback" "null"
-# #endregion
 if command -v timeout >/dev/null 2>&1; then
   timeout 90 ffmpeg -loglevel error -device /dev/dri/card0 -f kmsgrab -i - -vframes 1 -vf 'hwmap=derive_device=vaapi,hwdownload,format=bgr0' -y "$OUT"
   FE=$?
@@ -368,9 +327,6 @@ else
   ffmpeg -loglevel error -device /dev/dri/card0 -f kmsgrab -i - -vframes 1 -vf 'hwmap=derive_device=vaapi,hwdownload,format=bgr0' -y "$OUT"
   FE=$?
 fi
-# #region agent log
-BONSAI_DBG_HYP="H5" bonsai_dbg "kmsgrab done" "{\"exit\":$FE,\"out_size\":$(stat -c%s "$OUT" 2>/dev/null || echo 0)}"
-# #endregion
 echo "---CAPTURE_METHOD---"
 echo "$CAPTURE_METHOD"
 exit $FE

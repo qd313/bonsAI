@@ -162,13 +162,6 @@ run_capture_local() {
   prepare_capture_script >"$tmp_script"
   chmod 700 "$tmp_script"
 
-  # #region agent log
-  local _dbg_ts_start
-  _dbg_ts_start=$(date +%s%3N 2>/dev/null || echo "$(date +%s)000")
-  printf '{"sessionId":"457101","hypothesisId":"H1","location":"screenshot-deck.sh","message":"before sudo bash","data":{"tmp_script":"%s"},"timestamp":%s}\n' \
-    "$tmp_script" "$_dbg_ts_start" >> /home/deck/bonsAI/.cursor/debug-457101.log 2>/dev/null || true
-  # #endregion
-
   local capture_out
   local capture_exit=0
   local capture_log
@@ -182,14 +175,6 @@ run_capture_local() {
   set -e
   capture_out="$(cat "$capture_log")"
   rm -f "$capture_log" "$tmp_script"
-
-  # #region agent log
-  local _dbg_ts_end _dbg_elapsed
-  _dbg_ts_end=$(date +%s%3N 2>/dev/null || echo "$(date +%s)000")
-  _dbg_elapsed=$(( _dbg_ts_end - _dbg_ts_start ))
-  printf '{"sessionId":"457101","hypothesisId":"H1","location":"screenshot-deck.sh","message":"after sudo bash","data":{"exit":%d,"elapsed_ms":%d,"out_bytes":%d,"out_tail":"%s"},"timestamp":%s}\n' \
-    "$capture_exit" "$_dbg_elapsed" "${#capture_out}" "$(printf '%s' "${capture_out: -400}" | tr '\n' ' ' | sed 's/\\/\\\\/g; s/"/\\"/g')" "$_dbg_ts_end" >> /home/deck/bonsAI/.cursor/debug-457101.log 2>/dev/null || true
-  # #endregion
 
   local cap_method
   cap_method="$(parse_capture_method "$capture_out")"

@@ -60,16 +60,16 @@ Based on `refactor_helpers.py` chains, `pullModelCatalog.ts`, and Deck ~16GB VRA
 - **Files:** `src/components/MainTab.tsx`, unified input hooks.
 - **Acceptance:** One action appends clipboard to Ask field with sanitizer; permission-free for text-only.
 
-### SteamOS share path (export conversation) — ★★★
+### SteamOS share path — **out of scope (user-owned)**
 
-- **Files:** `main.py` (`append_desktop_debug_note` pattern), Permissions filesystem gate.
-- **Acceptance:** Share sheet or copy-friendly export of last Q&A; path under Desktop/bonsAI_logs.
+- **Decision (2026-05-19):** User will handle export/share separately; not part of BonsAI backlog.
+- No design or implementation in this plan.
 
-### llama.cpp provider spike — ★★★★★★
+### llama.cpp provider spike (POC) — ★★★★ — **approved**
 
-- **Files:** new `py_modules/backend/services/llama_cpp_provider.py`, `main.py` routing, docs/spikes/llama-cpp-provider.md.
-- **Acceptance:** Spike doc with bench + ship/no-ship; optional RPC behind Developer flag only.
-- **Spike:** [llama-cpp-provider.md](../spikes/llama-cpp-provider.md).
+- **Decision (2026-05-19):** **Yes — proof-of-concept only** alongside Ollama; not a shippable provider in this phase.
+- **Files:** `py_modules/backend/services/llama_cpp_provider.py` (spike), `main.py` dev-gated hook, [llama-cpp-provider.md](../spikes/llama-cpp-provider.md).
+- **Acceptance:** API parity matrix, Deck constraints, go/no-go; optional maintainer-only ask path — no Connection UI or default routing switch.
 
 ### Cursor visibility automation — ★★★★
 
@@ -101,13 +101,12 @@ Based on `refactor_helpers.py` chains, `pullModelCatalog.ts`, and Deck ~16GB VRA
 1. Named Ollama hosts  
 2. Text stash inject  
 3. Per-turn feedback  
-4. SteamOS share path  
 
 ### Phase 5 — Heavy / research — ★★★★+
 
 1. Diagnostics block  
 2. Cursor visibility automation (maintainer)  
-3. llama.cpp provider (spike → ship decision)
+3. **llama.cpp POC spike** (approved; see [llama-cpp-provider.md](../spikes/llama-cpp-provider.md)) — go/no-go for a *future* shippable provider only
 
 ---
 

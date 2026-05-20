@@ -219,6 +219,7 @@ describe("settingsAndResponse", () => {
       strategySpoilerMaskingEnabled: false,
       strategySpoilerAutoRevealAfterConsent: true,
       steamWebApiKey: "abc",
+      bonsaiTokenStreamingEnabled: true,
     });
     expect(p.latency_warning_seconds).toBe(20);
     expect(p.request_timeout_seconds).toBe(150);
@@ -234,6 +235,7 @@ describe("settingsAndResponse", () => {
     expect(p.strategy_spoiler_auto_reveal_after_consent).toBe(true);
     expect(p.steam_web_api_key).toBe("abc");
     expect(p.show_developer_tab).toBe(true);
+    expect(p.bonsai_token_streaming_enabled).toBe(true);
   });
 
   it("toBonsaiSettingsPayload merges patch over base (character picker path)", () => {
@@ -266,6 +268,7 @@ describe("settingsAndResponse", () => {
       strategySpoilerMaskingEnabled: DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED,
       strategySpoilerAutoRevealAfterConsent: DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT,
       steamWebApiKey: "",
+      bonsaiTokenStreamingEnabled: false,
     };
     const p = toBonsaiSettingsPayload(base, {
       ai_character_random: false,

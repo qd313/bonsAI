@@ -60,6 +60,11 @@ def sanitize_desktop_ask_verbose_logging(value: Any) -> bool:
     return value is True
 
 
+def sanitize_bonsai_token_streaming_enabled(value: Any) -> bool:
+    """Only explicit true enables progressive token streaming to the Main tab (Developer opt-in)."""
+    return value is True
+
+
 _VALID_DESKTOP_APP_LOG_LEVELS = frozenset({"off", "default", "verbose"})
 
 
@@ -290,6 +295,9 @@ def sanitize_settings(
         ),
         "desktop_ask_verbose_logging": sanitize_desktop_ask_verbose_logging(
             raw.get("desktop_ask_verbose_logging")
+        ),
+        "bonsai_token_streaming_enabled": sanitize_bonsai_token_streaming_enabled(
+            raw.get("bonsai_token_streaming_enabled")
         ),
         "desktop_app_log_level": sanitize_desktop_app_log_level(raw.get("desktop_app_log_level")),
         "attach_proton_logs_when_troubleshooting": sanitize_attach_proton_logs_when_troubleshooting(

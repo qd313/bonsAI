@@ -141,6 +141,8 @@ type BonsaiChatAiBubbleProps = {
   onExpandedChange: (next: boolean) => void;
   spoilerMaskingEnabled: boolean;
   spoilerDefaultExpandedForReply: boolean;
+  /** Single growing preview chunk while token streaming is active. */
+  isStreamingPreview?: boolean;
 };
 
 function BonsaiChatAiBubble(props: BonsaiChatAiBubbleProps) {
@@ -151,6 +153,7 @@ function BonsaiChatAiBubble(props: BonsaiChatAiBubbleProps) {
     onExpandedChange,
     spoilerMaskingEnabled,
     spoilerDefaultExpandedForReply,
+    isStreamingPreview = false,
   } = props;
   const innerRef = useRef<HTMLDivElement>(null);
   const collapsed = !expanded;
@@ -171,7 +174,7 @@ function BonsaiChatAiBubble(props: BonsaiChatAiBubbleProps) {
 
   return (
     <div
-      className="bonsai-chat-ai-bubble bonsai-glass-panel"
+      className={`bonsai-chat-ai-bubble bonsai-glass-panel${isStreamingPreview ? " bonsai-chat-ai-bubble--stream-preview" : ""}`}
       style={{
         width: BONSAI_CHAT_AI_MAX_WIDTH_CSS,
         maxWidth: BONSAI_CHAT_AI_MAX_WIDTH_CSS,
@@ -194,6 +197,7 @@ function BonsaiChatAiBubble(props: BonsaiChatAiBubbleProps) {
               key={`ai-chunk-${i}`}
               noFocusRing={false}
               onActivate={onChunkActivate}
+              {...(isStreamingPreview ? { "data-bonsai-stream-preview": "true" } : {})}
               style={{ width: "100%", minWidth: 0, boxSizing: "border-box" }}
             >
               <div className="bonsai-ai-response-chunk">
@@ -317,6 +321,8 @@ export type MainTabProps = {
   onStrategySpoilerConsentForNextAskChange?: (next: boolean) => void;
   /** Pyro easter egg: backend-injected suggestion chip (not in normal preset pool). */
   presetCarouselInject?: { text: string } | null;
+  /** While true, render one preview chunk instead of D-pad split chunks. */
+  isStreamingPreview?: boolean;
 };
 
 export function MainTab(props: MainTabProps) {
@@ -399,6 +405,7 @@ export function MainTab(props: MainTabProps) {
     strategySpoilerConsentForNextAsk = false,
     onStrategySpoilerConsentForNextAskChange,
     presetCarouselInject = null,
+    isStreamingPreview = false,
   } = props;
 
   const [transparencyOpen, setTransparencyOpen] = useState(false);
@@ -1537,7 +1544,9 @@ export function MainTab(props: MainTabProps) {
           </PanelSectionRow>
         )}
         {responseBodyForDisplay && (() => {
-          const chunks = splitResponseIntoChunks(responseBodyForDisplay);
+          const chunks = isStreamingPreview
+            ? [responseBodyForDisplay]
+            : splitResponseIntoChunks(responseBodyForDisplay);
           if (!chunks.length) {
             return null;
           }
@@ -1563,6 +1572,7 @@ export function MainTab(props: MainTabProps) {
                   onExpandedChange={setExpandedAi}
                   spoilerMaskingEnabled={strategySpoilerMaskingEnabled}
                   spoilerDefaultExpandedForReply={strategySpoilerDefaultExpandedForReply}
+                  isStreamingPreview={isStreamingPreview}
                 />
                 {askThreadViewIndex === null && shortcutSetupVariant && onOpenControllerSettings && (
                   <div

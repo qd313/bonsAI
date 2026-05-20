@@ -4,6 +4,8 @@ import type { BackgroundRequestStatus } from "../types/backgroundAsk";
 
 /** Poll interval while backend ``status`` stays ``pending`` (matches Steam Deck cadence vs RPC load). */
 export const BACKGROUND_STATUS_POLL_MS = 1200;
+/** Faster poll while token streaming exposes partial_response on pending asks. */
+export const BACKGROUND_STREAM_POLL_MS = 350;
 
 /**
  * Background ask lifecycle: invalidates stale polls when the user submits again or unmounts,
@@ -50,9 +52,10 @@ export function useBackgroundGameAi(
           applyBackgroundStatusToUi(status, fallbackQuestion);
 
           if (status.status === "pending") {
+            const delayMs = status.streaming ? BACKGROUND_STREAM_POLL_MS : BACKGROUND_STATUS_POLL_MS;
             backgroundPollTimerRef.current = window.setTimeout(() => {
               void pollOnce();
-            }, BACKGROUND_STATUS_POLL_MS);
+            }, delayMs);
           }
         } catch (e: unknown) {
           if (!isRequestActive(seq)) return;

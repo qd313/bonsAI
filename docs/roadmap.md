@@ -352,15 +352,12 @@ Within this section: ★★★★★ items first (ascending stars), then ★★�
   - **Related:** **Global quick-launch macro** (Medium-term); when a native entry exists, refresh the macro sequence in [troubleshooting.md](troubleshooting.md).
   - **Not in scope:** Shipping a forked Steam client or undocumented UI injection as the default approach.
 
-- ★★★★★★ **Token stream replies** (live markdown; U)
+- ★★★★★★ **Token stream replies — Phase 2+** (incremental chunks, partial-on-cancel; U)
 
   - **GitHub (tracking placeholder):** [bonsAI Issues](https://github.com/cantcurecancer/bonsAI/issues) — dedicated issue TBD.
-  - **Goal:** Progressive reveal as Ollama streams — perceived latency win vs buffer-then-chunk.
-  - **Risk:** Decky/React plumbing, partial markdown, stop semantics — large refactor touch.
-  - **Primary work:** stream tokens from backend to Main markdown chunks; partial-render safety; align Stop with cancel.
-  - **Files (expected):** `main.py`, `src/index.tsx`, ask orchestration / Ollama client path.
-  - **Depends on:** Ollama streaming API stability and timeout handling.
-  - **Not in scope:** shipping without parity for Input transparency and sanitizer contracts.
+  - **Status:** **Phase 1 shipped** — see [Completed](#connection-routing-diagnostics-and-timeouts) → **Token stream replies (Phase 1 — dev-flag preview)**. Remaining: incremental D-pad chunk splitting during stream, partial-preserve-on-cancel, user-facing Settings toggle outside Developer.
+  - **Goal:** Further polish beyond the Phase 1 preview-then-finalize path.
+  - **Not in scope:** new SSE/WebSocket transport (Phase 1 uses existing background poll).
 
 ### Reference — vision model fallback order
 
@@ -406,6 +403,7 @@ Headings group related work. Star counts match the historical list.
 - ★★★ **[Local/runtime] Default off + onboarding:** When `ollama_local_on_deck` is absent from persisted settings, default **`false`** (LAN PC host field applies); explicit **`true`** / **`false`** in JSON unchanged. Global beta modal warns LAN-hosted Ollama is typically faster than on-device inference and that heavy VRAM use may crash games (**use at your own risk**). **`bonsai:local-runtime-beta-dismissed-v1`** **`ConfirmModal`** when the user enables **Ollama on Deck** (optional local routing); Starter/Connection Tier-1 FOSS tags per [`TIER1_FOSS_STARTER_PULL_TAGS`](../refactor_helpers.py). **Clear all plugin data** resets flags and storage keys. Connection **Test** to localhost may **`systemctl --user`** / **`ollama serve`** wake the listener (`recover_loopback_ollama_listening`, **`main.py`**). `settings_service.py`, `settingsAndResponse.ts`, `src/index.tsx`, `py_modules/backend/services/local_ollama_setup_service.py`.
 - ★★ **Local Ollama update + saved LAN IP fix:** Settings → Connection adds **Update Ollama & Models** when **Ollama on this Deck** is on — re-runs the official installer, then re-pulls each tag from local `/api/tags` (no-op model step if none installed). Ask no longer overwrites `bonsai:pc-ip` with `127.0.0.1:11434` while local routing is active, so toggling local off restores the LAN host. `update_installed` profile in `refactor_helpers.py`, `local_ollama_setup_service.py` (`list_installed_ollama_tags`), `SettingsTab.tsx`, `src/utils/persistOllamaIp.ts`, `src/index.tsx`.
 - ★★★ **Pull Models fullscreen picker:** Settings → Connection **Browse models…** opens a fullscreen `ConfirmModal` (`PullModelsModal.tsx`) to browse a curated 13-model catalog (`src/data/pullModelCatalog.ts`) with size, release date, license, FOSS badge, and Deck star ratings; multi-select pull via `pull_ollama_models` (custom profile on `local_ollama_setup_service`); per-row delete via `delete_ollama_model` (`ollama rm`, argv form) with active-model and busy guards; live size overlay from `registry.ollama.ai` (`fetch_ollama_catalog_metadata`) with bundled offline fallback; **Other installed** group for uncatalogued tags. `main.py`, `ollama_catalog_service.py`, `bonsaiScopeStylesheet.ts`.
+- ★★★★ **Token stream replies (Phase 1 — dev-flag preview):** Developer tab **Token streaming (experimental)** (`bonsai_token_streaming_enabled`, default off). Ollama already streams NDJSON; backend exposes `partial_response` + `streaming` on `get_background_game_ai_status` while pending (thread-safe throttle); frontend polls at 350ms during stream and renders one preview markdown chunk, then existing `splitResponseIntoChunks` at terminal. Strategy spoiler masking without consent suppresses preview until complete. Transparency, desktop chat, TDP apply, and branch extraction remain terminal-only. `main.py`, `ollama_service.py`, `useBonsaiAskOrchestration.ts`, `useBackgroundGameAi.ts`, `MainTab.tsx`, `DeveloperTab.tsx`. **On-device QA:** [prompt-testing.md](prompt-testing.md) § Token streaming (experimental).
 
 ### Tabs, icons, and unified ask flow
 

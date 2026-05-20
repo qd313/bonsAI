@@ -107,6 +107,8 @@ export type BonsaiSettings = {
   strategy_spoiler_auto_reveal_after_consent: boolean;
   /** Steam Web API key for GetPlayerBans (VAC check command); stored on device with plugin settings. */
   steam_web_api_key: string;
+  /** When true, Main tab shows progressive Ollama token streaming (Developer tab opt-in). */
+  bonsai_token_streaming_enabled: boolean;
 };
 
 /** Fields mirrored from React state / hook before `save_settings` RPC. */
@@ -139,6 +141,7 @@ export type BonsaiSettingsSnapshotInput = {
   strategySpoilerMaskingEnabled: boolean;
   strategySpoilerAutoRevealAfterConsent: boolean;
   steamWebApiKey: string;
+  bonsaiTokenStreamingEnabled: boolean;
 };
 
 /** Build the backend `BonsaiSettings` object; optional `patch` for immediate saves (character picker, permissions). */
@@ -175,6 +178,7 @@ export function toBonsaiSettingsPayload(
     strategy_spoiler_masking_enabled: input.strategySpoilerMaskingEnabled,
     strategy_spoiler_auto_reveal_after_consent: input.strategySpoilerAutoRevealAfterConsent,
     steam_web_api_key: input.steamWebApiKey.trim().slice(0, STEAM_WEB_API_KEY_MAX_LEN),
+    bonsai_token_streaming_enabled: input.bonsaiTokenStreamingEnabled,
   };
   return patch ? { ...base, ...patch } : base;
 }
@@ -200,6 +204,7 @@ export const DEFAULT_SCREENSHOT_ATTACHMENT_PRESET: ScreenshotAttachmentPreset = 
 export const DEFAULT_SCREENSHOT_MAX_DIMENSION: ScreenshotMaxDimension = 1280;
 export const DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE = false;
 export const DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING = false;
+export const DEFAULT_BONSAI_TOKEN_STREAMING_ENABLED = false;
 export const DEFAULT_DESKTOP_APP_LOG_LEVEL: DesktopAppLogLevel = "off";
 export const DESKTOP_APP_LOG_LEVEL_OPTIONS: DesktopAppLogLevel[] = ["off", "default", "verbose"];
 export const DEFAULT_ATTACH_PROTON_LOGS_WHEN_TROUBLESHOOTING = false;
@@ -353,6 +358,10 @@ export function normalizeDesktopDebugNoteAutoSave(value: unknown): boolean {
 }
 
 export function normalizeDesktopAskVerboseLogging(value: unknown): boolean {
+  return value === true;
+}
+
+export function normalizeBonsaiTokenStreamingEnabled(value: unknown): boolean {
   return value === true;
 }
 
@@ -531,6 +540,7 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
       raw.strategy_spoiler_auto_reveal_after_consent
     ),
     steam_web_api_key: normalizeSteamWebApiKey(raw.steam_web_api_key),
+    bonsai_token_streaming_enabled: normalizeBonsaiTokenStreamingEnabled(raw.bonsai_token_streaming_enabled),
   };
 }
 

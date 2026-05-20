@@ -154,6 +154,20 @@ No session archived
 
 <!-- Newest entries first. -->
 
+### 2026-05-19 - Token stream replies Phase 1 (plan accountability)
+
+**refactor-specialist** — Triaged. Separate `threading.Lock` for `_partial_stream_snapshot` vs `asyncio.Lock` on `_background_state` keeps executor-thread NDJSON callbacks off the event-loop lock; `on_delta(text, done)` is minimal and does not leak HTTP bodies. No further refactor required before ship.
+
+**red-team** — Triaged. Dev-flag default-off limits regression blast radius; ship as experimental. Phase 2 (incremental chunks, public Settings toggle) deferred per roadmap.
+
+**blue-team** — Triaged. Opt-in behind Developer tab matches honest-UX / power-user disclosure; terminal-only transparency and post-processors preserve sanitizer/transparency contracts.
+
+**security-auditor** — Triaged. `get_background_game_ai_status` adds only `partial_response` (assistant text) and `streaming` (bool)—same sensitivity class as terminal `response`; no new secrets or paths.
+
+**foss-advocate** — N/A (no new runtime/provider).
+
+**master-debugger** — Deferred to on-device QA ([prompt-testing.md](../docs/prompt-testing.md) § Token streaming (experimental)); escalate if D-pad focus drops on preview→chunk finalize.
+
 ### 2026-05-19 - foss-advocate + security-auditor (Pull Models fullscreen picker)
 
 ```text

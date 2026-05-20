@@ -75,6 +75,11 @@ class OllamaServiceTests(unittest.TestCase):
 
         mock_urlopen.return_value = _Rsp()
         lg = MagicMock()
+        deltas_seen: list[tuple[str, bool]] = []
+
+        def _on_delta(text: str, done: bool) -> None:
+            deltas_seen.append((text, done))
+
         out = post_ollama_chat(
             "http://127.0.0.1:11434/api/chat",
             "vision:test",
@@ -88,11 +93,14 @@ class OllamaServiceTests(unittest.TestCase):
             "speed",
             "5m",
             cancel_requested=lambda: False,
+            on_delta=_on_delta,
         )
         req = mock_urlopen.call_args[0][0]
         self.assertTrue(json.loads(req.data.decode("utf-8")).get("stream"))
         self.assertTrue(out.get("success"))
         self.assertEqual(out.get("assistant_raw"), "Hello")
+        self.assertTrue(any(t == "Hell" and not done for t, done in deltas_seen))
+        self.assertEqual(deltas_seen[-1], ("Hello", True))
 
     def test_format_ai_response_appends_attachment_metadata(self):
         """Confirm attachment debug and error blocks are appended for UI diagnostics."""

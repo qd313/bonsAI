@@ -817,6 +817,30 @@ export function buildBonsaiScopeStylesheet(): string {
           -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%) !important;
           mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%) !important;
         }
+        .bonsai-scope .bonsai-chat-ai-bubble--stream-preview.bonsai-glass-panel {
+          border-color: var(--bonsai-stream-preview-border, rgba(56, 189, 248, 0.55)) !important;
+          animation: bonsai-stream-preview-pulse 1.2s ease-in-out infinite;
+        }
+        @keyframes bonsai-stream-preview-pulse {
+          0%, 100% {
+            box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.12);
+          }
+          50% {
+            box-shadow: 0 0 8px 1px rgba(56, 189, 248, 0.32);
+          }
+        }
+        .bonsai-scope [data-bonsai-stream-preview="true"] .bonsai-ai-response-chunk::after {
+          content: "▋";
+          display: inline;
+          margin-left: 2px;
+          opacity: 0.85;
+          animation: bonsai-stream-caret-blink 0.9s step-end infinite;
+        }
+        @keyframes bonsai-stream-caret-blink {
+          50% {
+            opacity: 0.15;
+          }
+        }
         .bonsai-scope button.bonsai-chat-next-message {
           display: block !important;
           width: fit-content !important;

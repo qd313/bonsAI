@@ -37,6 +37,18 @@ Deterministic **Ask** commands: `bonsai:shortcut-setup-deck` and `bonsai:shortcu
 4. **Permissions — External/Steam on:** after the response, use **Open Controller settings**; **Steam** should open **Controller** settings (via `steam://open/settings/controller`).
 5. **Permissions off:** the button still appears; the toast should direct you to **Permissions** to enable navigation.
 
+## Token streaming (experimental)
+
+Requires **Settings → Data → Show Developer tab**, then **Developer → Token streaming (experimental)** (`bonsai_token_streaming_enabled`). Default is **off**.
+
+**Matrix maintainer:** mark each row **Pass / Partial / Fail** and record **build id** + **SteamOS** when exercised.
+
+- [ ] **Flag off:** Ask shows **Thinking…** until the full reply appears; normal multi-chunk D-pad layout after completion.
+- [ ] **Flag on, Speed/Deep:** Reply text grows in a **single** preview bubble (pulsing border/caret) during generation; after completion, response splits into normal focusable chunks; TDP banner / model disclosure appear only at terminal.
+- [ ] **Flag on, Strategy + spoiler masking, no Spoilers OK:** Preview stays **Thinking…** until terminal; spoiler fences never flash unmasked mid-stream.
+- [ ] **Stop mid-stream:** Stop shows cancelled/stopped copy; no stale partial overwrites a later Ask.
+- [ ] **Input handling:** Transparency panel still populates only after terminal completion (no partial assistant in snapshot).
+
 ## VAC / Steam ban lookup (`bonsai:vac-check`)
 
 Deterministic **Ask** command (optional leading `/`); **does not** call Ollama. Requires **Permissions → Steam Web API** and a **Steam Web API** key under **Settings → Connection**. See [README.md](../README.md) (shortcut keywords / ban lookup).

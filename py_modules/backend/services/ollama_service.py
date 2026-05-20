@@ -325,6 +325,7 @@ def post_ollama_chat(
     cancel_requested: Optional[Callable[[], bool]] = None,
     on_http_response_opened: Optional[Callable[[Any], None]] = None,
     on_http_response_done: Optional[Callable[[], None]] = None,
+    on_delta: Optional[Callable[[str, bool], None]] = None,
 ) -> dict:
     """Execute one Ollama chat request attempt and return a normalized success/error payload."""
 
@@ -385,6 +386,13 @@ def post_ollama_chat(
                     mc = msg_blk.get("content")
                     if isinstance(mc, str) and mc:
                         deltas.append(mc)
+                        if on_delta:
+                            try:
+                                on_delta("".join(deltas), False)
+                            except Exception:
+                                logger.exception(
+                                    "ask_ollama: on_delta hook failed model=%s", model_name
+                                )
                     if jo.get("done"):
                         done_flag = True
 
@@ -460,6 +468,11 @@ def post_ollama_chat(
                         "body": stream_err_txt[:4000],
                     }
                 assistant_raw = "".join(deltas)
+                if on_delta:
+                    try:
+                        on_delta(assistant_raw, True)
+                    except Exception:
+                        logger.exception("ask_ollama: on_delta terminal hook failed model=%s", model_name)
                 if _should_cancel():
                     return {
                         "success": False,

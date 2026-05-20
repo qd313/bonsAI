@@ -5,6 +5,7 @@ All notable changes to this project are documented in this file.
 ## [Unreleased]
 
 ### Added
+- **Token streaming (experimental, Developer tab):** When **Token streaming (experimental)** is enabled (`bonsai_token_streaming_enabled`), Main shows a single growing preview chunk while Ollama NDJSON deltas arrive (`partial_response` on background status poll at 350ms); terminal replies still run strategy branches, TDP apply, model-policy disclosure, and normal D-pad chunk splitting. `main.py`, `ollama_service.py`, `useBonsaiAskOrchestration.ts`, `MainTab.tsx`, `DeveloperTab.tsx`.
 - **Developer tab (opt-in):** Settings → Data → **Show Developer tab** (`show_developer_tab`; migrates legacy `show_debug_tab`). Merges former Debug diagnostics with advanced logging, connection tuning, Steam Web API key, and model-policy advanced controls. `DeveloperTab.tsx`, `index.tsx`, `settings_service.py`, `settingsAndResponse.ts`.
 
 ### Changed

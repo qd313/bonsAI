@@ -43,6 +43,10 @@ export type BackgroundRequestStatus = {
   shortcut_setup?: ShortcutSetupKind | null;
   /** True when the user hit Stop mid-generation (HTTP session closed locally). */
   cancelled?: boolean;
+  /** Progressive assistant text while status is pending and token streaming is enabled. */
+  partial_response?: string | null;
+  /** True while Ollama NDJSON deltas are still arriving (faster poll cadence on the frontend). */
+  streaming?: boolean;
 };
 
 export type PresetCarouselInjectPayload = {

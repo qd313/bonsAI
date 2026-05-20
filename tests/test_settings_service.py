@@ -74,6 +74,31 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertFalse(sanitized["ollama_local_on_deck"])
         self.assertTrue(sanitized["strategy_spoiler_masking_enabled"])
         self.assertFalse(sanitized["strategy_spoiler_auto_reveal_after_consent"])
+        self.assertFalse(sanitized["bonsai_token_streaming_enabled"])
+
+    def test_bonsai_token_streaming_enabled_opt_in(self):
+        kwargs = dict(
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="no_persist",
+            valid_ask_modes={"speed", "strategy", "deep"},
+            default_ask_mode="speed",
+        )
+        self.assertTrue(
+            sanitize_settings(data={"bonsai_token_streaming_enabled": True}, **kwargs)[
+                "bonsai_token_streaming_enabled"
+            ]
+        )
+        self.assertFalse(
+            sanitize_settings(data={"bonsai_token_streaming_enabled": False}, **kwargs)[
+                "bonsai_token_streaming_enabled"
+            ]
+        )
 
     def test_show_developer_tab_migrates_legacy_show_debug_tab(self):
         """Legacy show_debug_tab enables Developer tab on read."""

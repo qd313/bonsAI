@@ -149,6 +149,7 @@ class Plugin:
     MIN_REQUEST_TIMEOUT_SECONDS = 10
     MAX_REQUEST_TIMEOUT_SECONDS = 600
     SETTINGS_FILENAME = "settings.json"
+    PARTIAL_RESPONSE_FLUSH_INTERVAL_S = 0.12
 
     def __init__(self):
         """Initialize plugin runtime state used for background-request coordination."""
@@ -166,6 +167,13 @@ class Plugin:
         self._active_ollama_chat_model: Optional[str] = None
         self._active_ollama_chat_http_response: Any = None
         self._chat_resp_ready_evt: Optional[threading.Event] = None
+        self._partial_response_lock = threading.Lock()
+        self._partial_stream_snapshot: dict = {
+            "request_id": None,
+            "partial_response": None,
+            "streaming": False,
+            "last_flush_monotonic": 0.0,
+        }
 
     def _abort_ollama_chat_check(self) -> bool:
         """True when frontend requested Stop mid-generation (closes HTTP quickly; executor thread exits)."""
@@ -249,7 +257,59 @@ class Plugin:
             "strategy_guide_branches": None,
             "model_policy_disclosure": None,
             "preset_carousel_inject": None,
+            "partial_response": None,
+            "streaming": False,
         }
+
+    def _new_partial_stream_snapshot(self, request_id: int) -> dict:
+        return {
+            "request_id": request_id,
+            "partial_response": None,
+            "streaming": False,
+            "last_flush_monotonic": 0.0,
+        }
+
+    def _reset_partial_stream_snapshot(self, request_id: int) -> None:
+        with self._partial_response_lock:
+            self._partial_stream_snapshot = self._new_partial_stream_snapshot(request_id)
+
+    def _clear_partial_stream_snapshot(self) -> None:
+        with self._partial_response_lock:
+            self._partial_stream_snapshot = {
+                "request_id": None,
+                "partial_response": None,
+                "streaming": False,
+                "last_flush_monotonic": 0.0,
+            }
+
+    def _update_partial_response(self, request_id: int, text: str, done: bool) -> None:
+        """Thread-safe partial assistant text for background status polling (executor thread)."""
+        with self._partial_response_lock:
+            snap = self._partial_stream_snapshot
+            if snap.get("request_id") != request_id:
+                return
+            now = time.monotonic()
+            if not done:
+                prev = snap.get("partial_response")
+                last_flush = float(snap.get("last_flush_monotonic") or 0.0)
+                if prev and text and (now - last_flush) < Plugin.PARTIAL_RESPONSE_FLUSH_INTERVAL_S:
+                    return
+            snap["partial_response"] = text if text else None
+            snap["streaming"] = (not done) and bool(text)
+            snap["last_flush_monotonic"] = now
+
+    def _merge_partial_into_background_status(self, state: dict) -> dict:
+        out = dict(state)
+        with self._partial_response_lock:
+            snap = dict(self._partial_stream_snapshot)
+        rid = out.get("request_id")
+        if out.get("status") == "pending" and rid is not None and snap.get("request_id") == rid:
+            out["partial_response"] = snap.get("partial_response")
+            out["streaming"] = bool(snap.get("streaming"))
+        else:
+            out["partial_response"] = None
+            out["streaming"] = False
+        return out
 
     def _ensure_background_state(self) -> None:
         """Backfill runtime attributes for compatibility with loaders that skip __init__."""
@@ -273,6 +333,17 @@ class Plugin:
             self._active_ollama_chat_http_response = None
         if not hasattr(self, "_chat_resp_ready_evt"):
             self._chat_resp_ready_evt = None
+        if not hasattr(self, "_partial_response_lock"):
+            self._partial_response_lock = threading.Lock()
+        if not hasattr(self, "_partial_stream_snapshot") or not isinstance(
+            self._partial_stream_snapshot, dict
+        ):
+            self._partial_stream_snapshot = {
+                "request_id": None,
+                "partial_response": None,
+                "streaming": False,
+                "last_flush_monotonic": 0.0,
+            }
 
     @staticmethod
     def _desktop_app_log_level_allows(settings: dict, event_level: str) -> bool:
@@ -1487,7 +1558,10 @@ class Plugin:
                 "shortcut_setup": result.get("shortcut_setup"),
                 "cancelled": cancelled_rq,
                 "preset_carousel_inject": result.get("preset_carousel_inject"),
+                "partial_response": None,
+                "streaming": False,
             }
+            self._clear_partial_stream_snapshot()
         await self._maybe_app_log(
             "ask.background",
             f"background ask {terminal}",
@@ -1643,6 +1717,7 @@ class Plugin:
 
             plugin._background_request_seq += 1
             request_id = plugin._background_request_seq
+            plugin._reset_partial_stream_snapshot(request_id)
             plugin._background_state = {
                 "status": "pending",
                 "request_id": request_id,
@@ -1659,6 +1734,8 @@ class Plugin:
                 "strategy_guide_branches": None,
                 "model_policy_disclosure": None,
                 "preset_carousel_inject": None,
+                "partial_response": None,
+                "streaming": False,
             }
             plugin._background_task = asyncio.create_task(
                 plugin._run_background_request(
@@ -1724,8 +1801,10 @@ class Plugin:
                         "strategy_guide_branches": None,
                         "model_policy_disclosure": None,
                         "preset_carousel_inject": None,
+                        "partial_response": None,
+                        "streaming": False,
                     }
-            return dict(plugin._background_state)
+            return plugin._merge_partial_into_background_status(dict(plugin._background_state))
 
     async def abort_background_game_ai(self):
         """Frontend Stop: unblock in-flight urllib read(s); Ollama may stop once the TCP session closes."""
@@ -1767,6 +1846,10 @@ class Plugin:
                 logger.exception("abort_background_game_ai: kill/unload helper failed")
 
         threading.Thread(target=_stop_bg, name="bonsai-ollama-stop", daemon=True).start()
+        with plugin._partial_response_lock:
+            snap = plugin._partial_stream_snapshot
+            if snap.get("request_id") == plugin._background_state.get("request_id"):
+                snap["streaming"] = False
         await plugin._maybe_app_log("ask.abort", "background ask abort requested")
         return {"ok": True}
 
@@ -1910,6 +1993,16 @@ class Plugin:
 
         plugin_inst = Plugin._coerce_instance(self)
         plugin_inst._ensure_background_state()
+        active_request_id = plugin_inst._background_state.get("request_id")
+        token_streaming = settings.get("bonsai_token_streaming_enabled") is True
+        on_delta_cb = None
+        if token_streaming and isinstance(active_request_id, int):
+            stream_rid = active_request_id
+
+            def _on_delta(text: str, done: bool) -> None:
+                plugin_inst._update_partial_response(stream_rid, text, done)
+
+            on_delta_cb = _on_delta
 
         def _on_http_response_opened(resp: Any) -> None:
             plugin_inst._active_ollama_chat_http_response = resp
@@ -1957,6 +2050,7 @@ class Plugin:
                             plugin_inst._abort_ollama_chat_check,
                             on_http_response_opened=_on_http_response_opened,
                             on_http_response_done=_on_http_response_done,
+                            on_delta=on_delta_cb,
                         ),
                     )
                 finally:

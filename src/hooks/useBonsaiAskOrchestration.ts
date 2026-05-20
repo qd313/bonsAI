@@ -47,6 +47,7 @@ export type UseBonsaiAskOrchestrationArgs = {
   desktopDebugNoteAutoSave: boolean;
   filesystemWrite: boolean;
   strategySpoilerAutoRevealAfterConsent: boolean;
+  strategySpoilerMaskingEnabled: boolean;
   askMode: AskModeId;
   strategySpoilerConsentForNextAsk: boolean;
   unifiedInput: string;
@@ -94,6 +95,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
   const [showSlowWarning, setShowSlowWarning] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState<number | null>(null);
   const [lastTransparency, setLastTransparency] = useState<TransparencySnapshot | null>(null);
+  const [isStreamingPreview, setIsStreamingPreview] = useState(false);
 
   const desktopAutoSavePrefsRef = useRef({
     autoSave: a.desktopDebugNoteAutoSave,
@@ -138,7 +140,23 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
       if (status.status === "pending") {
         setOllamaContext({ app_id: appId, app_context: appContext });
         setIsAsking(true);
-        setOllamaResponse(status.response?.trim() ? status.response : "Thinking...");
+        const partial =
+          status.streaming === true &&
+          typeof status.partial_response === "string" &&
+          status.partial_response.trim()
+            ? status.partial_response
+            : "";
+        const suppressStreamPreview =
+          a.askMode === "strategy" &&
+          a.strategySpoilerMaskingEnabled &&
+          !a.strategySpoilerConsentForNextAsk;
+        if (partial && !suppressStreamPreview) {
+          setOllamaResponse(partial);
+          setIsStreamingPreview(true);
+        } else {
+          setOllamaResponse(status.response?.trim() ? status.response : "Thinking...");
+          setIsStreamingPreview(false);
+        }
         setLastApplied(null);
         setElapsedSeconds(null);
         setStrategyGuideBranches(null);
@@ -148,6 +166,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
       }
 
       if (status.status === "cancelled") {
+        setIsStreamingPreview(false);
         setOllamaContext({ app_id: appId, app_context: appContext });
         setIsAsking(false);
         setShortcutSetupVariant(null);
@@ -165,6 +184,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
       }
 
       if (status.status === "completed" || status.status === "failed") {
+        setIsStreamingPreview(false);
         const applied = status.applied ?? null;
         setOllamaContext({ app_id: appId, app_context: appContext });
         setIsAsking(false);
@@ -228,6 +248,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
       return;
     }
 
+    setIsStreamingPreview(false);
     setOllamaContext(null);
     setIsAsking(false);
     setPresetCarouselInject(null);
@@ -244,6 +265,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     const msg = formatDeckyRpcError(e);
     a.onExternalFailure?.("background_poll", msg);
     setIsAsking(false);
+    setIsStreamingPreview(false);
     setOllamaResponse(`Error: ${msg}`);
     setLastApplied(null);
     setOllamaContext(null);
@@ -299,6 +321,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     a.setSelectedAttachment(null);
     setElapsedSeconds(null);
     setShowSlowWarning(false);
+    setIsStreamingPreview(false);
   }, [a, invalidateRequests, isAsking]);
 
   const onCancelAsk = useCallback(() => {
@@ -307,6 +330,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     });
     invalidateRequests();
     setIsAsking(false);
+    setIsStreamingPreview(false);
     setOllamaResponse("Request cancelled.");
     setOllamaContext(null);
     setLastApplied(null);
@@ -376,6 +400,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
       setModelPolicyDisclosure(null);
       setShortcutSetupVariant(null);
       setLastTransparency(null);
+      setIsStreamingPreview(false);
       setOllamaResponse("Thinking...");
       setLastApplied(null);
       setElapsedSeconds(null);
@@ -649,6 +674,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     askThreadDisplayQuestion,
     setAskThreadDisplayQuestion,
     isAsking,
+    isStreamingPreview,
     lastApplied,
     refreshInputTransparency,
     strategySpoilerDefaultExpandedForReply,

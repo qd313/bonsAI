@@ -334,6 +334,8 @@ const Content: React.FC = () => {
     setStrategySpoilerAutoRevealAfterConsent,
     steamWebApiKey,
     setSteamWebApiKey,
+    bonsaiTokenStreamingEnabled,
+    setBonsaiTokenStreamingEnabled,
     settingsLoaded,
     hydrateFromSettings,
   } = usePluginSettings();
@@ -395,6 +397,7 @@ const Content: React.FC = () => {
     setAskThreadViewIndex,
     askThreadDisplayQuestion,
     isAsking,
+    isStreamingPreview,
     lastApplied,
     strategySpoilerDefaultExpandedForReply,
     clearUnifiedInput,
@@ -410,6 +413,7 @@ const Content: React.FC = () => {
     desktopDebugNoteAutoSave,
     filesystemWrite: capabilities.filesystem_write,
     strategySpoilerAutoRevealAfterConsent,
+    strategySpoilerMaskingEnabled,
     askMode,
     strategySpoilerConsentForNextAsk,
     unifiedInput,
@@ -1135,6 +1139,7 @@ const Content: React.FC = () => {
       strategySpoilerConsentForNextAsk={strategySpoilerConsentForNextAsk}
       onStrategySpoilerConsentForNextAskChange={setStrategySpoilerConsentForNextAsk}
       presetCarouselInject={presetCarouselInject}
+      isStreamingPreview={isStreamingPreview}
     />
   ),
     [
@@ -1327,6 +1332,8 @@ const Content: React.FC = () => {
       setModelAllowHighVramFallbacks={setModelAllowHighVramFallbacks}
       onSelectModelPolicyTier={onCommitModelPolicyTier}
       onReadModelPolicy={openModelPolicyReadme}
+      bonsaiTokenStreamingEnabled={bonsaiTokenStreamingEnabled}
+      setBonsaiTokenStreamingEnabled={setBonsaiTokenStreamingEnabled}
     />
   );
   const aboutTab = (

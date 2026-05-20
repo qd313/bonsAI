@@ -25,6 +25,7 @@ import {
   DEFAULT_REQUEST_TIMEOUT_SECONDS,
   DEFAULT_SCREENSHOT_ATTACHMENT_PRESET,
   DEFAULT_SHOW_DEVELOPER_TAB,
+  DEFAULT_BONSAI_TOKEN_STREAMING_ENABLED,
   DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT,
   DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED,
   DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
@@ -103,6 +104,9 @@ export function usePluginSettings() {
     DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT
   );
   const [steamWebApiKey, setSteamWebApiKey] = useState<string>("");
+  const [bonsaiTokenStreamingEnabled, setBonsaiTokenStreamingEnabled] = useState<boolean>(
+    DEFAULT_BONSAI_TOKEN_STREAMING_ENABLED
+  );
   const [settingsLoaded, setSettingsLoaded] = useState(false);
 
   const hydrateFromSettings = useCallback((saved: BonsaiSettings) => {
@@ -135,6 +139,7 @@ export function usePluginSettings() {
     setStrategySpoilerMaskingEnabled(normalized.strategy_spoiler_masking_enabled);
     setStrategySpoilerAutoRevealAfterConsent(normalized.strategy_spoiler_auto_reveal_after_consent);
     setSteamWebApiKey(normalized.steam_web_api_key);
+    setBonsaiTokenStreamingEnabled(normalized.bonsai_token_streaming_enabled);
   }, []);
 
   useEffect(() => {
@@ -170,6 +175,7 @@ export function usePluginSettings() {
         setStrategySpoilerMaskingEnabled(normalized.strategy_spoiler_masking_enabled);
         setStrategySpoilerAutoRevealAfterConsent(normalized.strategy_spoiler_auto_reveal_after_consent);
         setSteamWebApiKey(normalized.steam_web_api_key);
+        setBonsaiTokenStreamingEnabled(normalized.bonsai_token_streaming_enabled);
       })
       .catch(() => {
         if (cancelled) return;
@@ -201,6 +207,7 @@ export function usePluginSettings() {
         setStrategySpoilerMaskingEnabled(DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED);
         setStrategySpoilerAutoRevealAfterConsent(DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT);
         setSteamWebApiKey("");
+        setBonsaiTokenStreamingEnabled(DEFAULT_BONSAI_TOKEN_STREAMING_ENABLED);
       })
       .finally(() => {
         if (!cancelled) setSettingsLoaded(true);
@@ -244,6 +251,7 @@ export function usePluginSettings() {
           strategySpoilerMaskingEnabled,
           strategySpoilerAutoRevealAfterConsent,
           steamWebApiKey,
+          bonsaiTokenStreamingEnabled,
         })
       ).catch((err) => {
         console.error("save_settings failed", err);
@@ -279,6 +287,7 @@ export function usePluginSettings() {
     strategySpoilerMaskingEnabled,
     strategySpoilerAutoRevealAfterConsent,
     steamWebApiKey,
+    bonsaiTokenStreamingEnabled,
     settingsLoaded,
   ]);
 
@@ -329,6 +338,8 @@ export function usePluginSettings() {
     setStrategySpoilerAutoRevealAfterConsent,
     steamWebApiKey,
     setSteamWebApiKey,
+    bonsaiTokenStreamingEnabled,
+    setBonsaiTokenStreamingEnabled,
     settingsLoaded,
     setLatencyWarningSeconds,
     setRequestTimeoutSeconds,

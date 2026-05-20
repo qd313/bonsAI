@@ -1,3 +1,7 @@
+/**
+ * Chunk splitter contract for terminal replies. Token streaming preview bypasses this helper
+ * and renders a single growing chunk until the Ask completes (see MainTab + useBonsaiAskOrchestration).
+ */
 import { describe, expect, it } from "vitest";
 import { splitResponseIntoChunks } from "./splitResponseIntoChunks";
 

@@ -80,6 +80,20 @@ def sanitize_preset_chip_fade_animation_enabled(value: Any) -> bool:
     return value is not False
 
 
+_VALID_PRESET_CHIP_ANIMATION = frozenset({"fade", "carousel", "static"})
+
+
+def sanitize_preset_chip_animation(value: Any, legacy_fade: Any) -> str:
+    """Main-tab preset chip animation mode; migrates from legacy fade boolean when unset."""
+    if isinstance(value, str):
+        t = value.strip()
+        if t in _VALID_PRESET_CHIP_ANIMATION:
+            return t
+    if legacy_fade is False:
+        return "static"
+    return "fade"
+
+
 def sanitize_input_sanitizer_user_disabled(value: Any) -> bool:
     """Only explicit ``true`` means the user disabled the sanitizer lane (keyword command)."""
     return value is True
@@ -283,6 +297,10 @@ def sanitize_settings(
         ),
         "preset_chip_fade_animation_enabled": sanitize_preset_chip_fade_animation_enabled(
             raw.get("preset_chip_fade_animation_enabled")
+        ),
+        "preset_chip_animation": sanitize_preset_chip_animation(
+            raw.get("preset_chip_animation"),
+            raw.get("preset_chip_fade_animation_enabled"),
         ),
         "input_sanitizer_user_disabled": sanitize_input_sanitizer_user_disabled(
             raw.get("input_sanitizer_user_disabled")

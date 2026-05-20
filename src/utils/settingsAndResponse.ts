@@ -38,6 +38,7 @@ function reconcileModelPolicySettings(
 }
 export type UnifiedInputPersistenceMode = "persist_all" | "persist_search_only" | "no_persist";
 export type DesktopAppLogLevel = "off" | "default" | "verbose";
+export type PresetChipAnimation = "fade" | "carousel" | "static";
 export type { AskModeId };
 export type { OllamaKeepAliveDuration };
 /** Legacy; migration maps to ScreenshotAttachmentPreset. */
@@ -58,7 +59,7 @@ export type BonsaiCapabilities = {
 export type BonsaiSettings = {
   latency_warning_seconds: number;
   request_timeout_seconds: number;
-  /** When true, stored warning/timeout apply; when false, defaults (30s / 360s) for Ask + Ollama. */
+  /** When true, stored warning/timeout apply; when false, defaults (30s / 45s) for Ask + Ollama. */
   latency_timeouts_custom_enabled: boolean;
   unified_input_persistence_mode: UnifiedInputPersistenceMode;
   /** Vision attachment downscale and JPEG quality preset. */
@@ -71,8 +72,10 @@ export type BonsaiSettings = {
   desktop_app_log_level: DesktopAppLogLevel;
   /** When true (with Permissions → Steam/Proton log read), troubleshooting-style Asks attach bounded local log excerpts. */
   attach_proton_logs_when_troubleshooting: boolean;
-  /** When false, main-tab preset suggestion chips stay opaque and swap text without fade transitions (default true). */
+  /** @deprecated Prefer `preset_chip_animation`; kept for migration from older settings.json. */
   preset_chip_fade_animation_enabled: boolean;
+  /** Main-tab preset chips: crossfade cycle, vertical carousel, or static rotation without opacity animation. */
+  preset_chip_animation: PresetChipAnimation;
   /** When true, Ask input sanitizer lane is off (set via README magic phrases, not the Settings UI). */
   input_sanitizer_user_disabled: boolean;
   capabilities: BonsaiCapabilities;
@@ -118,6 +121,7 @@ export type BonsaiSettingsSnapshotInput = {
   desktopAppLogLevel: DesktopAppLogLevel;
   attachProtonLogsWhenTroubleshooting: boolean;
   presetChipFadeAnimationEnabled: boolean;
+  presetChipAnimation: PresetChipAnimation;
   inputSanitizerUserDisabled: boolean;
   capabilities: BonsaiCapabilities;
   aiCharacterEnabled: boolean;
@@ -152,7 +156,8 @@ export function toBonsaiSettingsPayload(
     desktop_ask_verbose_logging: input.desktopAskVerboseLogging,
     desktop_app_log_level: input.desktopAppLogLevel,
     attach_proton_logs_when_troubleshooting: input.attachProtonLogsWhenTroubleshooting,
-    preset_chip_fade_animation_enabled: input.presetChipFadeAnimationEnabled,
+    preset_chip_fade_animation_enabled: input.presetChipAnimation === "fade",
+    preset_chip_animation: input.presetChipAnimation,
     input_sanitizer_user_disabled: input.inputSanitizerUserDisabled,
     capabilities: input.capabilities,
     ai_character_enabled: input.aiCharacterEnabled,
@@ -181,7 +186,7 @@ export type AppliedResultLike = {
 };
 
 export const DEFAULT_LATENCY_WARNING_SECONDS = 30;
-export const DEFAULT_REQUEST_TIMEOUT_SECONDS = 360;
+export const DEFAULT_REQUEST_TIMEOUT_SECONDS = 45;
 export const MIN_LATENCY_WARNING_SECONDS = 5;
 export const MAX_LATENCY_WARNING_SECONDS = 300;
 export const MIN_REQUEST_TIMEOUT_SECONDS = 10;
@@ -199,6 +204,8 @@ export const DEFAULT_DESKTOP_APP_LOG_LEVEL: DesktopAppLogLevel = "off";
 export const DESKTOP_APP_LOG_LEVEL_OPTIONS: DesktopAppLogLevel[] = ["off", "default", "verbose"];
 export const DEFAULT_ATTACH_PROTON_LOGS_WHEN_TROUBLESHOOTING = false;
 export const DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED = true;
+export const DEFAULT_PRESET_CHIP_ANIMATION: PresetChipAnimation = "fade";
+export const PRESET_CHIP_ANIMATION_OPTIONS: PresetChipAnimation[] = ["fade", "carousel", "static"];
 export const DEFAULT_INPUT_SANITIZER_USER_DISABLED = false;
 export const DEFAULT_SHOW_DEVELOPER_TAB = false;
 /** Persisted routing: off = LAN PC IP text field applies; when on, Ask uses localhost Ollama on the Deck only. */
@@ -365,6 +372,18 @@ export function normalizePresetChipFadeAnimationEnabled(value: unknown): boolean
   return DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED;
 }
 
+export function normalizePresetChipAnimation(
+  value: unknown,
+  legacyFadeEnabled: unknown
+): PresetChipAnimation {
+  if (typeof value === "string") {
+    const t = value.trim() as PresetChipAnimation;
+    if (PRESET_CHIP_ANIMATION_OPTIONS.includes(t)) return t;
+  }
+  if (legacyFadeEnabled === false) return "static";
+  return DEFAULT_PRESET_CHIP_ANIMATION;
+}
+
 export function normalizeInputSanitizerUserDisabled(value: unknown): boolean {
   return value === true;
 }
@@ -487,9 +506,12 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     attach_proton_logs_when_troubleshooting: normalizeAttachProtonLogsWhenTroubleshooting(
       raw.attach_proton_logs_when_troubleshooting
     ),
-    preset_chip_fade_animation_enabled: normalizePresetChipFadeAnimationEnabled(
+    preset_chip_animation: normalizePresetChipAnimation(
+      raw.preset_chip_animation,
       raw.preset_chip_fade_animation_enabled
     ),
+    preset_chip_fade_animation_enabled:
+      normalizePresetChipAnimation(raw.preset_chip_animation, raw.preset_chip_fade_animation_enabled) === "fade",
     input_sanitizer_user_disabled: normalizeInputSanitizerUserDisabled(raw.input_sanitizer_user_disabled),
     capabilities: normalizeCapabilities(raw.capabilities),
     ai_character_enabled: normalizeAiCharacterEnabled(raw.ai_character_enabled),

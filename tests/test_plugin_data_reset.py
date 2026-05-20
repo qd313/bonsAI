@@ -18,7 +18,7 @@ def _sanitize(data):
     return sanitize_settings(
         data,
         default_latency_warning_seconds=30,
-        default_request_timeout_seconds=360,
+        default_request_timeout_seconds=45,
         min_latency_warning_seconds=5,
         max_latency_warning_seconds=300,
         min_request_timeout_seconds=10,

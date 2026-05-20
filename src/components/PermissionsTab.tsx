@@ -10,7 +10,7 @@ type Props = {
   /** Turn hardware control on, persist to disk immediately (Decky can remount the panel when the modal closes). */
   onConfirmEnableHardwareControl: () => void;
   modelPolicyTier: ModelPolicyTierId;
-  onSelectModelPolicyTier: (t: ModelPolicyTierId) => void;
+  onCommitModelPolicyTier: (t: ModelPolicyTierId) => void | Promise<void>;
   modelPolicyNonFossUnlocked: boolean;
   /** Call before any `showModal` from this tab so the active tab restores after close. */
   onBeforeDeckyModal: () => void;
@@ -71,7 +71,7 @@ export const PermissionsTab: React.FC<Props> = ({
   setCapabilities,
   onConfirmEnableHardwareControl,
   modelPolicyTier,
-  onSelectModelPolicyTier,
+  onCommitModelPolicyTier,
   modelPolicyNonFossUnlocked,
   onBeforeDeckyModal,
   onCompleteDeckyModalClose,
@@ -154,7 +154,7 @@ export const PermissionsTab: React.FC<Props> = ({
   <PermissionsTabModelPolicyPanel
     modelPolicyTier={modelPolicyTier}
     modelPolicyNonFossUnlocked={modelPolicyNonFossUnlocked}
-    onSelectModelPolicyTier={onSelectModelPolicyTier}
+    onCommitModelPolicyTier={onCommitModelPolicyTier}
     onBeforeDeckyModal={onBeforeDeckyModal}
     onCompleteDeckyModalClose={onCompleteDeckyModalClose}
   />

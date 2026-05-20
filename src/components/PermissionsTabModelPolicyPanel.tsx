@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button, ConfirmModal, PanelSection, PanelSectionRow, showModal } from "@decky/ui";
 import {
   MODEL_POLICY_PERMISSIONS_INTRO,
@@ -45,11 +45,37 @@ type ModalProps = {
   onClose: () => void;
   modelPolicyTier: ModelPolicyTierId;
   modelPolicyNonFossUnlocked: boolean;
-  onSelectModelPolicyTier: (t: ModelPolicyTierId) => void;
+  onCommitModelPolicyTier: (t: ModelPolicyTierId) => void | Promise<void>;
 };
 
 function PermissionsTabModelPolicyDetailModalContent(props: ModalProps) {
-  const { onClose, modelPolicyTier, modelPolicyNonFossUnlocked, onSelectModelPolicyTier } = props;
+  const { onClose, modelPolicyTier, modelPolicyNonFossUnlocked, onCommitModelPolicyTier } = props;
+  const [draftTier, setDraftTier] = useState<ModelPolicyTierId>(() => modelPolicyTier);
+  const draftTierRef = useRef<ModelPolicyTierId>(modelPolicyTier);
+
+  useEffect(() => {
+    draftTierRef.current = modelPolicyTier;
+    setDraftTier(modelPolicyTier);
+  }, [modelPolicyTier]);
+
+  const selectDraftTier = useCallback(
+    (id: ModelPolicyTierId) => {
+      if (id === "non_foss" && !modelPolicyNonFossUnlocked) return;
+      draftTierRef.current = id;
+      setDraftTier(id);
+    },
+    [modelPolicyNonFossUnlocked]
+  );
+
+  const handleDone = useCallback(() => {
+    void Promise.resolve(onCommitModelPolicyTier(draftTierRef.current))
+      .then(() => {
+        onClose();
+      })
+      .catch((err) => {
+        console.error("save_settings failed (model policy tier Done)", err);
+      });
+  }, [onCommitModelPolicyTier, onClose]);
 
   return (
     <ConfirmModal
@@ -77,17 +103,25 @@ function PermissionsTabModelPolicyDetailModalContent(props: ModalProps) {
           </div>
           <div style={TIER_LIST_HOST}>
             {MODEL_POLICY_TIER_IDS.map((id) => {
-              const selected = modelPolicyTier === id;
+              const selected = draftTier === id;
               const tier3Disabled = id === "non_foss" && !modelPolicyNonFossUnlocked;
               const chrome = selected ? TIER_SELECTED_CHROME[id] : TIER_BUTTON_IDLE;
               return (
                 <Button
                   key={id}
                   disabled={tier3Disabled}
-                  onClick={() => {
-                    if (tier3Disabled) return;
-                    onSelectModelPolicyTier(id);
+                  focusable={!tier3Disabled}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    selectDraftTier(id);
                   }}
+                  {...({
+                    onOKButton: (evt: { stopPropagation: () => void }) => {
+                      evt.stopPropagation();
+                      selectDraftTier(id);
+                    },
+                  } as Record<string, unknown>)}
                   aria-label={
                     tier3Disabled
                       ? `${MODEL_POLICY_TIER_LABELS_PLAIN[id]} (enable Tier 3 unlock in Developer first)`
@@ -110,7 +144,7 @@ function PermissionsTabModelPolicyDetailModalContent(props: ModalProps) {
         </div>
       }
       strOKButtonText="Done"
-      onOK={onClose}
+      onOK={handleDone}
       onCancel={onClose}
     />
   );
@@ -119,7 +153,7 @@ function PermissionsTabModelPolicyDetailModalContent(props: ModalProps) {
 export type PermissionsTabModelPolicyPanelProps = {
   modelPolicyTier: ModelPolicyTierId;
   modelPolicyNonFossUnlocked: boolean;
-  onSelectModelPolicyTier: (t: ModelPolicyTierId) => void;
+  onCommitModelPolicyTier: (t: ModelPolicyTierId) => void | Promise<void>;
   onBeforeDeckyModal: () => void;
   onCompleteDeckyModalClose: (close: () => void) => void;
 };
@@ -131,7 +165,7 @@ export function PermissionsTabModelPolicyPanel(props: PermissionsTabModelPolicyP
   const {
     modelPolicyTier,
     modelPolicyNonFossUnlocked,
-    onSelectModelPolicyTier,
+    onCommitModelPolicyTier,
     onBeforeDeckyModal,
     onCompleteDeckyModalClose,
   } = props;
@@ -143,13 +177,13 @@ export function PermissionsTabModelPolicyPanel(props: PermissionsTabModelPolicyP
         onClose={() => onCompleteDeckyModalClose(() => handle.Close())}
         modelPolicyTier={modelPolicyTier}
         modelPolicyNonFossUnlocked={modelPolicyNonFossUnlocked}
-        onSelectModelPolicyTier={onSelectModelPolicyTier}
+        onCommitModelPolicyTier={onCommitModelPolicyTier}
       />
     );
   }, [
     modelPolicyTier,
     modelPolicyNonFossUnlocked,
-    onSelectModelPolicyTier,
+    onCommitModelPolicyTier,
     onBeforeDeckyModal,
     onCompleteDeckyModalClose,
   ]);

@@ -34,6 +34,7 @@ from backend.services.ai_character_service import (
     PYRO_MANAGER_TIP_LINES,
     PYRO_MANAGER_TIP_PROBABILITY,
     PYRO_PRESET_ID,
+    apply_roleplay_to_system_content,
     build_roleplay_system_suffix_meta,
     pyro_manager_carousel_tip_addon,
 )
@@ -131,7 +132,7 @@ class Plugin:
     stable while heavy logic is extracted into focused helper and service modules.
     """
     DEFAULT_LATENCY_WARNING_SECONDS = 30
-    DEFAULT_REQUEST_TIMEOUT_SECONDS = 360
+    DEFAULT_REQUEST_TIMEOUT_SECONDS = 45
     DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE = "no_persist"
     MAX_ATTACHMENT_FILE_BYTES = MAX_ATTACHMENT_FILE_BYTES
     MAX_ATTACHMENT_INLINE_BYTES = MAX_ATTACHMENT_INLINE_BYTES
@@ -1861,8 +1862,8 @@ class Plugin:
                 roleplay = roleplay + pyro_manager_carousel_tip_addon(tip)
                 preset_carousel_inject = {"text": tip}
         if roleplay:
-            # Lead with voice instructions so they are not diluted after the long bonsAI system preamble.
-            system_content = roleplay.strip() + "\n\n" + system_content
+            # Append after the bonsAI preamble so recency favors character voice over neutral identity lines.
+            system_content = apply_roleplay_to_system_content(system_content, roleplay)
         user_message: dict = {"role": "user", "content": question}
         if prepared_images:
             user_message["images"] = [image["image_b64"] for image in prepared_images]

@@ -4,6 +4,7 @@ from unittest.mock import patch
 from backend.services.ai_character_service import (
     PYRO_PRESET_ID,
     RoleplayBuildResult,
+    apply_roleplay_to_system_content,
     build_roleplay_system_suffix,
     build_roleplay_system_suffix_meta,
     pyro_manager_carousel_tip_addon,
@@ -18,6 +19,15 @@ class AiCharacterServiceTests(unittest.TestCase):
         self.assertEqual(build_roleplay_system_suffix({"ai_character_enabled": False}), "")
         m = build_roleplay_system_suffix_meta({})
         self.assertEqual(m, RoleplayBuildResult(suffix="", resolved_preset_id=None))
+
+    def test_apply_roleplay_appends_after_preamble(self):
+        base = "You are bonsAI. Always answer directly, concisely, and in English."
+        rp = "CHARACTER VOICE (required): Write as Jackie Welles."
+        out = apply_roleplay_to_system_content(base, rp)
+        self.assertTrue(out.startswith(base))
+        self.assertIn(rp, out)
+        self.assertIn("REMINDER (character voice", out)
+        self.assertGreater(out.index(rp), out.index("English"))
 
     def test_preset_character(self):
         out = build_roleplay_system_suffix(

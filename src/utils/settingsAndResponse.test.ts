@@ -201,6 +201,7 @@ describe("settingsAndResponse", () => {
       desktopAppLogLevel: "off",
       attachProtonLogsWhenTroubleshooting: true,
       presetChipFadeAnimationEnabled: true,
+      presetChipAnimation: "fade",
       inputSanitizerUserDisabled: false,
       capabilities: DEFAULT_CAPABILITIES,
       aiCharacterEnabled: true,
@@ -238,7 +239,7 @@ describe("settingsAndResponse", () => {
   it("toBonsaiSettingsPayload merges patch over base (character picker path)", () => {
     const base = {
       latencyWarningSeconds: 30,
-      requestTimeoutSeconds: 360,
+      requestTimeoutSeconds: 45,
       latencyTimeoutsCustomEnabled: false,
       unifiedInputPersistenceMode: "persist_all" as const,
       screenshotAttachmentPreset: DEFAULT_SCREENSHOT_ATTACHMENT_PRESET,
@@ -247,6 +248,7 @@ describe("settingsAndResponse", () => {
       desktopAppLogLevel: "off" as const,
       attachProtonLogsWhenTroubleshooting: false,
       presetChipFadeAnimationEnabled: true,
+      presetChipAnimation: "fade" as const,
       inputSanitizerUserDisabled: false,
       capabilities: DEFAULT_CAPABILITIES,
       aiCharacterEnabled: true,

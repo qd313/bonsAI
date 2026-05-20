@@ -37,15 +37,109 @@ function normalizeThreeSeeds(seeds: PresetPrompt[]): [PresetPrompt, PresetPrompt
   ];
 }
 
+export type PresetChipAnimationMode = "fade" | "carousel" | "static";
+
 export type MainTabPresetAnimatedChipsProps = {
   /** When upstream presets change (e.g. after ask), carousel re-seeds from this list. */
   seeds: PresetPrompt[];
   setUnifiedInput: React.Dispatch<React.SetStateAction<string>>;
   /** When false, chips stay fully opaque and prompts rotate after hold without opacity transitions. */
   fadeAnimationEnabled?: boolean;
+  /** fade = opacity crossfade; carousel = vertical stack with middle focus; static = no opacity animation. */
+  animationMode?: PresetChipAnimationMode;
   /** If a preset declares `preferAskMode`, apply it when the chip is chosen. */
   onPreferAskMode?: (mode: AskModeId) => void;
 };
+
+const CAROUSEL_STEP_MS = 3200;
+
+function PresetChipButton(props: {
+  preset: PresetPrompt;
+  setUnifiedInput: React.Dispatch<React.SetStateAction<string>>;
+  onPreferAskMode?: (mode: AskModeId) => void;
+  dimmed?: boolean;
+}) {
+  const { preset: p, setUnifiedInput, onPreferAskMode, dimmed } = props;
+  return (
+    <Button
+      className="bonsai-preset-glass"
+      onClick={() => {
+        const gameName = Router.MainRunningApp?.display_name ?? "";
+        setUnifiedInput(gameName ? joinPresetWithRunningGame(p.text, gameName) : p.text);
+        if (p.preferAskMode && onPreferAskMode) {
+          onPreferAskMode(p.preferAskMode);
+        }
+      }}
+      style={{
+        width: "100%",
+        minHeight: 34,
+        fontSize: 12,
+        color: dimmed ? "#8fa3b8" : "#c4d3e2",
+        opacity: dimmed ? 0.55 : 1,
+        transform: dimmed ? "scale(0.96)" : "scale(1)",
+        transition: "opacity 420ms ease, transform 420ms ease, color 420ms ease",
+      }}
+    >
+      {p.text}
+      {p.beta ? (
+        <span
+          style={{
+            marginLeft: 6,
+            fontSize: 10,
+            fontStyle: "italic",
+            color: `var(--bonsai-ui-accent-main, ${BONSAI_FOREST_GREEN})`,
+            fontWeight: 600,
+          }}
+        >
+          [beta]
+        </span>
+      ) : null}
+    </Button>
+  );
+}
+
+function MainTabPresetVerticalCarousel(props: Omit<MainTabPresetAnimatedChipsProps, "fadeAnimationEnabled" | "animationMode">) {
+  const { seeds, setUnifiedInput, onPreferAskMode } = props;
+  const seedsKey = seeds.map((s) => s.text).join("\u0000");
+  const [slots, setSlots] = useState<[PresetPrompt, PresetPrompt, PresetPrompt]>(() => normalizeThreeSeeds(seeds));
+
+  useEffect(() => {
+    setSlots(normalizeThreeSeeds(seeds));
+  }, [seedsKey, seeds]);
+
+  useEffect(() => {
+    const sessionEnd = performance.now() + PRESET_CAROUSEL_ACTIVE_MS;
+    let cancelled = false;
+    const tick = () => {
+      if (cancelled || performance.now() >= sessionEnd) return;
+      setSlots((prev) => {
+        const otherTexts = new Set(prev.map((s) => s.text));
+        const nextBottom = getRandomPresetExcluding(otherTexts);
+        return [prev[1]!, prev[2]!, nextBottom];
+      });
+      window.setTimeout(tick, CAROUSEL_STEP_MS);
+    };
+    const id = window.setTimeout(tick, CAROUSEL_STEP_MS);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(id);
+    };
+  }, [seedsKey]);
+
+  return (
+    <div className="bonsai-preset-carousel-vertical">
+      <div className="bonsai-preset-carousel-slot" data-bonsai-preset-visible="true">
+        <PresetChipButton preset={slots[0]!} setUnifiedInput={setUnifiedInput} onPreferAskMode={onPreferAskMode} dimmed />
+      </div>
+      <div className="bonsai-preset-carousel-slot bonsai-preset-carousel-slot--focus" data-bonsai-preset-visible="true">
+        <PresetChipButton preset={slots[1]!} setUnifiedInput={setUnifiedInput} onPreferAskMode={onPreferAskMode} />
+      </div>
+      <div className="bonsai-preset-carousel-slot" data-bonsai-preset-visible="true">
+        <PresetChipButton preset={slots[2]!} setUnifiedInput={setUnifiedInput} onPreferAskMode={onPreferAskMode} dimmed />
+      </div>
+    </div>
+  );
+}
 
 /**
  * Three preset suggestion chips with independent fade in/out cycles.
@@ -59,7 +153,13 @@ const staticSlotFade = (): [SlotFade, SlotFade, SlotFade] => [
 ];
 
 export function MainTabPresetAnimatedChips(props: MainTabPresetAnimatedChipsProps) {
-  const { seeds, setUnifiedInput, fadeAnimationEnabled = true, onPreferAskMode } = props;
+  const { seeds, setUnifiedInput, fadeAnimationEnabled = true, animationMode = "fade", onPreferAskMode } = props;
+  if (animationMode === "carousel") {
+    return (
+      <MainTabPresetVerticalCarousel seeds={seeds} setUnifiedInput={setUnifiedInput} onPreferAskMode={onPreferAskMode} />
+    );
+  }
+  const staticMode = animationMode === "static" || !fadeAnimationEnabled;
   const seedsKey = seeds.map((s) => s.text).join("\u0000");
 
   const [slots, setSlots] = useState<[PresetPrompt, PresetPrompt, PresetPrompt]>(() => normalizeThreeSeeds(seeds));
@@ -92,7 +192,7 @@ export function MainTabPresetAnimatedChips(props: MainTabPresetAnimatedChipsProp
       return getRandomPresetExcluding(new Set([...otherTexts, current.text]));
     };
 
-    if (!fadeAnimationEnabled) {
+    if (staticMode) {
       setSlotFade(staticSlotFade());
       const runSlotStatic = (slotIndex: 0 | 1 | 2) => {
         const loop = (prompt: PresetPrompt) => {
@@ -175,14 +275,14 @@ export function MainTabPresetAnimatedChips(props: MainTabPresetAnimatedChipsProp
       timeouts.forEach((id) => window.clearTimeout(id));
     };
     // seedsKey drives re-seed; include seeds so the effect sees the matching triple when the key changes.
-  }, [seedsKey, seeds, fadeAnimationEnabled]);
+  }, [seedsKey, seeds, staticMode]);
 
   return (
     <>
       {slots.map((p, i) => {
         const slotOpacity = slotFade[i]?.opacity ?? 0;
         /** Faded-out chips (incl. after the 60s carousel session rests at opacity 0) must not stay in the Deck focus graph. */
-        const presetInteractive = !fadeAnimationEnabled || slotOpacity > 0;
+        const presetInteractive = staticMode || slotOpacity > 0;
         return (
           <div
             key={`preset-slot-${i}`}

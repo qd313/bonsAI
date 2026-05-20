@@ -110,6 +110,20 @@ _STRATEGY_AUDIOBOOK_ADDON = (
     "the script) in character, without drowning out the gameplay help or breaking required JSON fences."
 )
 
+_ROLEPLAY_RECENCY_RECAP = (
+    "REMINDER (character voice — applies to this entire reply): Stay in the CHARACTER VOICE instructions above. "
+    "Do not answer in a flat, neutral assistant register even when the bonsAI system text asks for concise English."
+)
+
+
+def apply_roleplay_to_system_content(system_content: str, roleplay: str) -> str:
+    """Append roleplay after the bonsAI preamble so recency favors in-character replies."""
+    rp = (roleplay or "").strip()
+    if not rp:
+        return system_content
+    base = (system_content or "").strip()
+    return f"{base}\n\n{rp}\n\n{_ROLEPLAY_RECENCY_RECAP}"
+
 
 def sanitize_ai_character_enabled(value: Any) -> bool:
     return value is True

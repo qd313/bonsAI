@@ -221,6 +221,10 @@ export type MainTabProps = {
   onOpenPluginHelp: () => void;
   /** When false, preset chips omit staggered fade transitions (Settings). */
   presetChipFadeAnimationEnabled?: boolean;
+  /** Preset chip animation style (fade / carousel / static). */
+  presetChipAnimation?: "fade" | "carousel" | "static";
+  /** Re-run the last completed Ask with the same prompt text. */
+  onRetryLastResponse?: () => void;
   setUnifiedInput: React.Dispatch<React.SetStateAction<string>>;
   unifiedInputHostRef: React.Ref<HTMLDivElement>;
   unifiedInputFieldLayerRef: React.Ref<HTMLDivElement>;
@@ -323,6 +327,8 @@ export function MainTab(props: MainTabProps) {
     showPluginHelpChip,
     onOpenPluginHelp,
     presetChipFadeAnimationEnabled = true,
+    presetChipAnimation = "fade",
+    onRetryLastResponse,
     setUnifiedInput,
     unifiedInputHostRef,
     unifiedInputFieldLayerRef,
@@ -621,7 +627,8 @@ export function MainTab(props: MainTabProps) {
             <MainTabPresetAnimatedChips
               seeds={suggestedPrompts}
               setUnifiedInput={setUnifiedInput}
-              fadeAnimationEnabled={presetChipFadeAnimationEnabled}
+              fadeAnimationEnabled={presetChipAnimation === "fade" && presetChipFadeAnimationEnabled}
+              animationMode={presetChipAnimation}
               onPreferAskMode={onPresetPreferAskMode}
             />
             {presetCarouselInject?.text?.trim() ? (
@@ -1539,6 +1546,7 @@ export function MainTab(props: MainTabProps) {
             <PanelSectionRow key="bonsai-ai-response-stack">
               <div
                 ref={hasTranscriptBlock ? undefined : chatMainColumnRef}
+                className="bonsai-chat-response-stack"
                 style={{
                   width: "100%",
                   display: "flex",
@@ -1623,6 +1631,31 @@ export function MainTab(props: MainTabProps) {
                     ) : null}
                   </div>
                 )}
+                {!isAsking && askThreadViewIndex === null && onRetryLastResponse ? (
+                  <div
+                    className="bonsai-chat-retry-row"
+                    style={{
+                      marginTop: 14,
+                      maxWidth: BONSAI_CHAT_AI_MAX_WIDTH_CSS,
+                    }}
+                  >
+                    <Button
+                      onClick={onRetryLastResponse}
+                      aria-label="Retry same prompt"
+                      style={{
+                        minHeight: 34,
+                        padding: "6px 12px",
+                        fontSize: 12,
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 8,
+                      }}
+                    >
+                      <RefreshArrowIcon size={16} />
+                      Retry same prompt
+                    </Button>
+                  </div>
+                ) : null}
               </div>
             </PanelSectionRow>
           );

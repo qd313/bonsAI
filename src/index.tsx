@@ -30,6 +30,10 @@ import {
 } from "./data/characterCatalog";
 import { buildBonsaiScopeAccentInlineStyle, resolveUiAccentFromCharacterSettings } from "./data/characterUiAccent";
 import { appendAppDesktopLogWithPrefs } from "./utils/appDesktopLog";
+import {
+  captureBonsaiSessionForModal,
+  consumeBonsaiSessionAfterRemount,
+} from "./utils/bonsaiSessionSurvival";
 import { persistOllamaIpIfRoutingToLan as persistOllamaIpIfRoutingToLanUtil } from "./utils/persistOllamaIp";
 import { getRandomPresets } from "./data/presets";
 import {
@@ -282,7 +286,6 @@ const Content: React.FC = () => {
     desktopDebugNoteAutoSave,
     desktopAskVerboseLogging,
     attachProtonLogsWhenTroubleshooting,
-    presetChipFadeAnimationEnabled,
     inputSanitizerUserDisabled,
     capabilities,
     setCapabilities,
@@ -306,6 +309,9 @@ const Content: React.FC = () => {
     desktopAppLogLevel,
     setDesktopAppLogLevel,
     setAttachProtonLogsWhenTroubleshooting,
+    presetChipFadeAnimationEnabled,
+    presetChipAnimation,
+    setPresetChipAnimation,
     setPresetChipFadeAnimationEnabled,
     setInputSanitizerUserDisabled,
     askMode,
@@ -394,10 +400,12 @@ const Content: React.FC = () => {
     clearUnifiedInput,
     onCancelAsk,
     onAskOllama,
+    onRetryLastResponse,
     onStrategyBranchPick,
     resetAskSessionSlice,
     setStrategyGuideBranches,
     setSuggestedPrompts,
+    restoreSessionSnapshot,
   } = useBonsaiAskOrchestration({
     desktopDebugNoteAutoSave,
     filesystemWrite: capabilities.filesystem_write,
@@ -417,7 +425,22 @@ const Content: React.FC = () => {
     setNavigationMessage,
     saveIp: persistOllamaIpIfRoutingToLan,
     persistSearchQuery,
+    onExternalFailure: (source, message, detail) => {
+      appendAppDesktopLogWithPrefs(appLogPrefs, "verbose", "external.failure", message, {
+        source,
+        ...detail,
+      });
+    },
   });
+
+  useLayoutEffect(() => {
+    const survived = consumeBonsaiSessionAfterRemount();
+    if (!survived) return;
+    setUnifiedInput(survived.unifiedInput);
+    setPluginHelpDismissed(survived.pluginHelpDismissed);
+    __bonsaiPluginHelpDismissed = survived.pluginHelpDismissed;
+    restoreSessionSnapshot(survived);
+  }, [restoreSessionSnapshot]);
 
   const effectiveLatencyWarningSeconds = useMemo(
     () => (latencyTimeoutsCustomEnabled ? latencyWarningSeconds : DEFAULT_LATENCY_WARNING_SECONDS),
@@ -453,8 +476,98 @@ const Content: React.FC = () => {
     setCurrentTab("permissions");
   }, []);
 
-  const onSelectModelPolicyTier = useCallback(
-    (t: ModelPolicyTierId) => {
+  const settingsSnapshotForSave = useMemo(
+    () => ({
+      latencyWarningSeconds,
+      requestTimeoutSeconds,
+      latencyTimeoutsCustomEnabled,
+      unifiedInputPersistenceMode,
+      screenshotAttachmentPreset,
+      desktopDebugNoteAutoSave,
+      desktopAskVerboseLogging,
+      desktopAppLogLevel,
+      attachProtonLogsWhenTroubleshooting,
+      presetChipFadeAnimationEnabled,
+      presetChipAnimation,
+      inputSanitizerUserDisabled,
+      capabilities,
+      aiCharacterEnabled,
+      aiCharacterRandom,
+      aiCharacterPresetId,
+      aiCharacterCustomText,
+      aiCharacterAccentIntensity,
+      askMode,
+      ollamaKeepAlive,
+      showDeveloperTab,
+      modelPolicyTier,
+      modelPolicyNonFossUnlocked,
+      modelAllowHighVramFallbacks,
+      ollamaLocalOnDeck,
+      strategySpoilerMaskingEnabled,
+      strategySpoilerAutoRevealAfterConsent,
+      steamWebApiKey,
+    }),
+    [
+      latencyWarningSeconds,
+      requestTimeoutSeconds,
+      latencyTimeoutsCustomEnabled,
+      unifiedInputPersistenceMode,
+      screenshotAttachmentPreset,
+      desktopDebugNoteAutoSave,
+      desktopAskVerboseLogging,
+      desktopAppLogLevel,
+      attachProtonLogsWhenTroubleshooting,
+      presetChipFadeAnimationEnabled,
+      presetChipAnimation,
+      inputSanitizerUserDisabled,
+      capabilities,
+      aiCharacterEnabled,
+      aiCharacterRandom,
+      aiCharacterPresetId,
+      aiCharacterCustomText,
+      aiCharacterAccentIntensity,
+      askMode,
+      ollamaKeepAlive,
+      showDeveloperTab,
+      modelPolicyTier,
+      modelPolicyNonFossUnlocked,
+      modelAllowHighVramFallbacks,
+      ollamaLocalOnDeck,
+      strategySpoilerMaskingEnabled,
+      strategySpoilerAutoRevealAfterConsent,
+      steamWebApiKey,
+    ]
+  );
+
+  const buildSettingsPayload = useCallback(
+    (patch?: Partial<BonsaiSettings>) => toBonsaiSettingsPayload(settingsSnapshotForSave, patch),
+    [settingsSnapshotForSave]
+  );
+
+  const captureSessionBeforeModal = useCallback(() => {
+    characterPickerReturnTabRef.current = currentTab;
+    captureBonsaiSessionForModal({
+      unifiedInput,
+      ollamaResponse,
+      askThreadCollapsed,
+      askThreadDisplayQuestion,
+      askThreadViewIndex,
+      suggestedPrompts,
+      pluginHelpDismissed,
+    });
+  }, [
+    currentTab,
+    unifiedInput,
+    ollamaResponse,
+    askThreadCollapsed,
+    askThreadDisplayQuestion,
+    askThreadViewIndex,
+    suggestedPrompts,
+    pluginHelpDismissed,
+  ]);
+
+  const onCommitModelPolicyTier = useCallback(
+    async (t: ModelPolicyTierId) => {
       if (t === "non_foss" && !modelPolicyNonFossUnlocked) {
         toaster.toast({
           title: "Unlock required",
@@ -464,8 +577,13 @@ const Content: React.FC = () => {
         return;
       }
       setModelPolicyTier(t);
+      const saved = await call<[BonsaiSettings], BonsaiSettings>(
+        "save_settings",
+        buildSettingsPayload({ model_policy_tier: t, model_policy_non_foss_unlocked: modelPolicyNonFossUnlocked })
+      );
+      hydrateFromSettings(saved);
     },
-    [modelPolicyNonFossUnlocked]
+    [modelPolicyNonFossUnlocked, buildSettingsPayload, hydrateFromSettings]
   );
 
   const openModelPolicyReadme = useCallback(() => {
@@ -621,7 +739,12 @@ const Content: React.FC = () => {
   }, [hydrateFromSettings, resetPluginSession, showDisclaimerModalAgain]);
 
   const onMicInput = () => {
-    toaster.toast({ title: "Voice input", body: "Voice capture is not implemented yet.", duration: 1800 });
+    toaster.toast({
+      title: "Voice Ask not available yet",
+      body:
+        "Speech-to-text is on the roadmap (see README). This mic is not Ollama unload delay or Steam Web API — those are under Developer → Connection tuning / Integrations.",
+      duration: 5500,
+    });
   };
 
   const loadRecentScreenshots = async (limit: number = 24) => {
@@ -807,7 +930,7 @@ const Content: React.FC = () => {
   }, []);
 
   const openCharacterPickerModal = useCallback(() => {
-    characterPickerReturnTabRef.current = currentTab;
+    captureSessionBeforeModal();
     const handle = showModal(
       <CharacterPickerModal
         initialDraft={{
@@ -827,42 +950,11 @@ const Content: React.FC = () => {
           // Persist immediately so a debounced save scheduled before the modal cannot overwrite with stale random/character state.
           void call<[BonsaiSettings], BonsaiSettings>(
             "save_settings",
-            toBonsaiSettingsPayload(
-              {
-                latencyWarningSeconds,
-                requestTimeoutSeconds,
-                latencyTimeoutsCustomEnabled,
-                unifiedInputPersistenceMode,
-                screenshotAttachmentPreset,
-                desktopDebugNoteAutoSave,
-                desktopAskVerboseLogging,
-                desktopAppLogLevel,
-                attachProtonLogsWhenTroubleshooting,
-                presetChipFadeAnimationEnabled,
-                inputSanitizerUserDisabled,
-                capabilities,
-                aiCharacterEnabled,
-                aiCharacterRandom,
-                aiCharacterPresetId,
-                aiCharacterCustomText,
-                aiCharacterAccentIntensity,
-                askMode,
-                ollamaKeepAlive,
-                showDeveloperTab,
-                modelPolicyTier,
-                modelPolicyNonFossUnlocked,
-                modelAllowHighVramFallbacks,
-                ollamaLocalOnDeck,
-                strategySpoilerMaskingEnabled,
-                strategySpoilerAutoRevealAfterConsent,
-                steamWebApiKey,
-              },
-              {
-                ai_character_random: next.random,
-                ai_character_preset_id: pid,
-                ai_character_custom_text: ctxt,
-              }
-            )
+            buildSettingsPayload({
+              ai_character_random: next.random,
+              ai_character_preset_id: pid,
+              ai_character_custom_text: ctxt,
+            })
           ).catch((err) => {
             console.error("save_settings failed (character picker OK)", err);
           });
@@ -905,7 +997,7 @@ const Content: React.FC = () => {
   ]);
 
   const openPullModelsModal = useCallback(() => {
-    characterPickerReturnTabRef.current = currentTab;
+    captureSessionBeforeModal();
     const handle = showModal(
       <PullModelsModal
         activeRoutingTag={modelPolicyDisclosure?.model ?? null}
@@ -956,7 +1048,8 @@ const Content: React.FC = () => {
   // TAB CONTENT
   // =====================================================================
 
-  const mainTab = (
+  const mainTab = useMemo(
+    () => (
     <MainTab
       key="bonsai-main-tab"
       fullBleedRowStyle={fullBleedRowStyle}
@@ -965,6 +1058,8 @@ const Content: React.FC = () => {
       showPluginHelpChip={!pluginHelpDismissed}
       onOpenPluginHelp={openPluginHelpModal}
       presetChipFadeAnimationEnabled={presetChipFadeAnimationEnabled}
+      presetChipAnimation={presetChipAnimation}
+      onRetryLastResponse={onRetryLastResponse}
       setUnifiedInput={setUnifiedInput}
       unifiedInputHostRef={unifiedInputHostRef as React.Ref<HTMLDivElement>}
       unifiedInputFieldLayerRef={unifiedInputFieldLayerRef as React.Ref<HTMLDivElement>}
@@ -1041,9 +1136,58 @@ const Content: React.FC = () => {
       onStrategySpoilerConsentForNextAskChange={setStrategySpoilerConsentForNextAsk}
       presetCarouselInject={presetCarouselInject}
     />
+  ),
+    [
+      fullBleedRowStyle,
+      presetButtonSurface,
+      suggestedPrompts,
+      pluginHelpDismissed,
+      presetChipFadeAnimationEnabled,
+      presetChipAnimation,
+      unifiedInput,
+      unifiedInputSurfacePx,
+      usesNativeMultilineField,
+      isUnifiedInputFocused,
+      filteredSettings,
+      selectedIndex,
+      isAsking,
+      effectiveOllamaPcIp,
+      selectedAttachment,
+      showSearchClearButton,
+      isScreenshotBrowserOpen,
+      mediaError,
+      recentScreenshots,
+      isLoadingRecentScreenshots,
+      navigationMessage,
+      showSlowWarning,
+      effectiveLatencyWarningSeconds,
+      ollamaResponse,
+      elapsedSeconds,
+      lastApplied,
+      ollamaContext,
+      lastExchange,
+      aiCharacterEnabled,
+      mainTabAvatarPresetId,
+      mainTabAvatarBadgeLetter,
+      aiCharacterDebugLineForMainTab,
+      lastTransparency,
+      askMode,
+      strategyGuideBranches,
+      askThreadCollapsed,
+      askThreadDisplayQuestion,
+      askThreadViewIndex,
+      modelPolicyDisclosure,
+      shortcutSetupVariant,
+      strategySpoilerMaskingEnabled,
+      strategySpoilerDefaultExpandedForReply,
+      strategySpoilerConsentForNextAsk,
+      presetCarouselInject,
+      onRetryLastResponse,
+    ]
   );
 
-  const settingsTab = (
+  const settingsTab = useMemo(
+    () => (
     <SettingsTab
       ollamaIp={ollamaIp}
       onOllamaIpChange={setOllamaIp}
@@ -1070,15 +1214,27 @@ const Content: React.FC = () => {
       setStrategySpoilerAutoRevealAfterConsent={setStrategySpoilerAutoRevealAfterConsent}
       onOpenCharacterPicker={openCharacterPickerModal}
       onOpenPullModels={openPullModelsModal}
-      onBeforeDeckyModal={() => {
-        characterPickerReturnTabRef.current = currentTab;
-      }}
+      onBeforeDeckyModal={captureSessionBeforeModal}
       onCompleteDeckyModalClose={finalizeShowModalAndRestoreActiveTab}
       onResetSession={resetPluginSession}
       onClearAllPluginData={onClearAllPluginData}
     />
+  ),
+    [
+      ollamaIp,
+      ollamaLocalOnDeck,
+      screenshotAttachmentPreset,
+      unifiedInputPersistenceMode,
+      aiCharacterEnabled,
+      aiCharacterRandom,
+      aiCharacterPresetId,
+      aiCharacterCustomText,
+      aiCharacterAccentIntensity,
+      showDeveloperTab,
+      strategySpoilerMaskingEnabled,
+      strategySpoilerAutoRevealAfterConsent,
+    ]
   );
-
 
   /** Persist immediately: Decky can unmount `Content` when the disclaimer modal closes, which drops in-memory state and cancels the debounced save. */
   const onConfirmEnableHardwareControl = useCallback(() => {
@@ -1086,69 +1242,13 @@ const Content: React.FC = () => {
       const next = { ...prev, hardware_control: true };
       void call<[BonsaiSettings], BonsaiSettings>(
         "save_settings",
-        toBonsaiSettingsPayload({
-          latencyWarningSeconds,
-          requestTimeoutSeconds,
-          latencyTimeoutsCustomEnabled,
-          unifiedInputPersistenceMode,
-          screenshotAttachmentPreset,
-          desktopDebugNoteAutoSave,
-          desktopAskVerboseLogging,
-          desktopAppLogLevel,
-          attachProtonLogsWhenTroubleshooting,
-          presetChipFadeAnimationEnabled,
-          inputSanitizerUserDisabled,
-          capabilities: next,
-          aiCharacterEnabled,
-          aiCharacterRandom,
-          aiCharacterPresetId,
-          aiCharacterCustomText,
-          aiCharacterAccentIntensity,
-          askMode,
-          ollamaKeepAlive,
-          showDeveloperTab,
-          modelPolicyTier,
-          modelPolicyNonFossUnlocked,
-          modelAllowHighVramFallbacks,
-          ollamaLocalOnDeck,
-          strategySpoilerMaskingEnabled,
-          strategySpoilerAutoRevealAfterConsent,
-          steamWebApiKey,
-        })
+        buildSettingsPayload({ capabilities: next })
       ).catch((err) => {
         console.error("save_settings failed (hardware control confirm)", err);
       });
       return next;
     });
-  }, [
-    latencyWarningSeconds,
-    requestTimeoutSeconds,
-    latencyTimeoutsCustomEnabled,
-    unifiedInputPersistenceMode,
-    screenshotAttachmentPreset,
-    desktopDebugNoteAutoSave,
-    desktopAskVerboseLogging,
-    desktopAppLogLevel,
-    attachProtonLogsWhenTroubleshooting,
-    presetChipFadeAnimationEnabled,
-    inputSanitizerUserDisabled,
-    setCapabilities,
-    aiCharacterEnabled,
-    aiCharacterRandom,
-    aiCharacterPresetId,
-    aiCharacterCustomText,
-    aiCharacterAccentIntensity,
-    askMode,
-    ollamaKeepAlive,
-    showDeveloperTab,
-    modelPolicyTier,
-    modelPolicyNonFossUnlocked,
-    modelAllowHighVramFallbacks,
-    ollamaLocalOnDeck,
-    strategySpoilerMaskingEnabled,
-    strategySpoilerAutoRevealAfterConsent,
-    steamWebApiKey,
-  ]);
+  }, [buildSettingsPayload, setCapabilities]);
 
   const permissionsTab = (
     <PermissionsTab
@@ -1156,11 +1256,9 @@ const Content: React.FC = () => {
       setCapabilities={setCapabilities}
       onConfirmEnableHardwareControl={onConfirmEnableHardwareControl}
       modelPolicyTier={modelPolicyTier}
-      onSelectModelPolicyTier={onSelectModelPolicyTier}
+      onCommitModelPolicyTier={onCommitModelPolicyTier}
       modelPolicyNonFossUnlocked={modelPolicyNonFossUnlocked}
-      onBeforeDeckyModal={() => {
-        characterPickerReturnTabRef.current = currentTab;
-      }}
+      onBeforeDeckyModal={captureSessionBeforeModal}
       onCompleteDeckyModalClose={finalizeShowModalAndRestoreActiveTab}
     />
   );
@@ -1218,6 +1316,8 @@ const Content: React.FC = () => {
       setAttachProtonLogsWhenTroubleshooting={setAttachProtonLogsWhenTroubleshooting}
       presetChipFadeAnimationEnabled={presetChipFadeAnimationEnabled}
       setPresetChipFadeAnimationEnabled={setPresetChipFadeAnimationEnabled}
+      presetChipAnimation={presetChipAnimation}
+      setPresetChipAnimation={setPresetChipAnimation}
       steamWebApiKey={steamWebApiKey}
       setSteamWebApiKey={setSteamWebApiKey}
       modelPolicyTier={modelPolicyTier}
@@ -1225,7 +1325,7 @@ const Content: React.FC = () => {
       setModelPolicyNonFossUnlocked={setModelPolicyNonFossUnlocked}
       modelAllowHighVramFallbacks={modelAllowHighVramFallbacks}
       setModelAllowHighVramFallbacks={setModelAllowHighVramFallbacks}
-      onSelectModelPolicyTier={onSelectModelPolicyTier}
+      onSelectModelPolicyTier={onCommitModelPolicyTier}
       onReadModelPolicy={openModelPolicyReadme}
     />
   );

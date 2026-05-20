@@ -37,6 +37,7 @@ import type {
   StrategyGuideBranchesPayload,
   AskThreadCollapsedTurn,
 } from "../types/bonsaiUi";
+import type { BonsaiSessionSurvivalSnapshot } from "../utils/bonsaiSessionSurvival";
 import { hasResponseAutosaved, markResponseAutosaved } from "../utils/desktopChatAutosave";
 import { normalizePresetCarouselInject } from "../utils/presetCarouselInject";
 import type { InputTransparencyRpcResult, TransparencySnapshot } from "../utils/inputTransparency";
@@ -61,6 +62,8 @@ export type UseBonsaiAskOrchestrationArgs = {
   setNavigationMessage: Dispatch<SetStateAction<string>>;
   saveIp: (ip: string) => void;
   persistSearchQuery: (unifiedInputText: string) => void;
+  /** When app log level is verbose, copy external/RPC failures into Desktop bonsAI_logs. */
+  onExternalFailure?: (source: string, message: string, detail?: Record<string, unknown>) => void;
 };
 
 export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
@@ -238,8 +241,10 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
   );
 
   const onBackgroundPollError = useCallback((e: unknown) => {
+    const msg = formatDeckyRpcError(e);
+    a.onExternalFailure?.("background_poll", msg);
     setIsAsking(false);
-    setOllamaResponse(`Error: ${formatDeckyRpcError(e)}`);
+    setOllamaResponse(`Error: ${msg}`);
     setLastApplied(null);
     setOllamaContext(null);
     setLastExchange(null);
@@ -250,7 +255,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     pendingArchiveTurnRef.current = null;
     pendingThreadQuestionDisplayRef.current = null;
     setLastStrategySpoilerConsentEffective(false);
-  }, []);
+  }, [a]);
 
   const {
     startNextRequest,
@@ -510,8 +515,10 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
         startBackgroundStatusPolling(seq, q);
       } catch (e: unknown) {
         if (!isRequestActive(seq)) return;
+        const msg = formatDeckyRpcError(e);
+        a.onExternalFailure?.("ask_ollama", msg);
         setIsAsking(false);
-        setOllamaResponse(`Error: ${formatDeckyRpcError(e)}`);
+        setOllamaResponse(`Error: ${msg}`);
         setLastApplied(null);
         setOllamaContext(null);
         setStrategyGuideBranches(null);
@@ -574,6 +581,27 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     [a, lastExchange, onAskOllama],
   );
 
+  const onRetryLastResponse = useCallback(() => {
+    const q = (lastExchange?.question || a.unifiedInput || askThreadDisplayQuestion).trim();
+    if (!q) {
+      toaster.toast({
+        title: "Nothing to retry",
+        body: "Complete an Ask first, or type a question in the field.",
+        duration: 3500,
+      });
+      return;
+    }
+    void onAskOllama(q, { threadQuestionDisplay: q });
+  }, [lastExchange?.question, a.unifiedInput, askThreadDisplayQuestion, onAskOllama]);
+
+  const restoreSessionSnapshot = useCallback((snap: BonsaiSessionSurvivalSnapshot) => {
+    setOllamaResponse(snap.ollamaResponse);
+    setAskThreadCollapsed(snap.askThreadCollapsed);
+    setAskThreadDisplayQuestion(snap.askThreadDisplayQuestion);
+    setAskThreadViewIndex(snap.askThreadViewIndex);
+    setSuggestedPrompts(snap.suggestedPrompts);
+  }, []);
+
   const resetAskSessionSlice = useCallback(() => {
     if (isAsking) {
       invalidateRequests();
@@ -629,7 +657,9 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     clearUnifiedInput,
     onCancelAsk,
     onAskOllama,
+    onRetryLastResponse,
     onStrategyBranchPick,
+    restoreSessionSnapshot,
     resetAskSessionSlice,
     setStrategyGuideBranches,
     setSuggestedPrompts,

@@ -420,9 +420,27 @@ export function buildBonsaiScopeStylesheet(): string {
 
         /* Main unified search + Ask row: small right bias vs prior 0/6 (nudge body slightly right). */
         .bonsai-scope .bonsai-unified-input-host.bonsai-full-bleed-row {
-          width: calc(100% - 8px) !important;
-          margin-left: 3px !important;
-          margin-right: 5px !important;
+          width: calc(100% - 16px) !important;
+          max-width: calc(100% - 16px) !important;
+          margin-left: 6px !important;
+          margin-right: 10px !important;
+        }
+
+        .bonsai-scope .bonsai-chat-response-stack {
+          margin-top: 14px !important;
+        }
+
+        .bonsai-scope .bonsai-preset-carousel-vertical {
+          display: flex !important;
+          flex-direction: column !important;
+          gap: 5px !important;
+          width: 100% !important;
+          min-width: 0 !important;
+          max-height: 118px !important;
+          overflow: hidden !important;
+        }
+        .bonsai-scope .bonsai-preset-carousel-vertical .bonsai-preset-carousel-slot--focus .bonsai-preset-glass {
+          border-color: rgba(56, 189, 248, 0.45) !important;
         }
 
         /* Settings search hits — same horizontal track as unified host so results line up under the textarea. */
@@ -1235,16 +1253,38 @@ export function buildBonsaiScopeStylesheet(): string {
           min-width: 0;
         }
         .bonsai-scope .bonsai-pullmodels-row-head {
-          display: flex;
-          flex-wrap: wrap;
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) auto auto;
+          grid-template-areas:
+            "tag size stars"
+            "meta meta meta";
           align-items: center;
-          gap: 6px 10px;
+          gap: 4px 8px;
           font-size: 11px;
           color: #dce8f4;
         }
         .bonsai-scope .bonsai-pullmodels-tag {
+          grid-area: tag;
           font-weight: 700;
           color: #f0f6fc;
+          min-width: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .bonsai-scope .bonsai-pullmodels-installed-label {
+          grid-area: meta;
+        }
+        .bonsai-scope .bonsai-pullmodels-size {
+          grid-area: size;
+        }
+        .bonsai-scope .bonsai-pullmodels-stars {
+          grid-area: stars;
+        }
+        .bonsai-scope .bonsai-pullmodels-date,
+        .bonsai-scope .bonsai-pullmodels-license,
+        .bonsai-scope .bonsai-pullmodels-chip--foss {
+          grid-area: meta;
         }
         .bonsai-scope .bonsai-pullmodels-installed-label {
           font-size: 9px;

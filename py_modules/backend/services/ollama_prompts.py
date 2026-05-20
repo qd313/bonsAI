@@ -568,6 +568,12 @@ def build_system_prompt(
         middle += OLLAMA_BONSAI_SETUP_LINE
     if model_policy_q:
         middle += MODEL_POLICY_TIERS_LINE
+    if ask_mode == "speed":
+        middle += (
+            "\n\nACCURACY (Speed mode): Prefer verifiable, conservative claims. "
+            "If you are unsure about a fact, version number, store policy, or game-specific detail, say so briefly "
+            "instead of inventing specifics. For hardware or OS claims, stick to what the system message already states.\n"
+        )
 
     tail = ""
     if followup and power_topic:

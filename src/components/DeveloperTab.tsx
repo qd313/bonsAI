@@ -73,6 +73,8 @@ export type DeveloperTabProps = {
 
   presetChipFadeAnimationEnabled: boolean;
   setPresetChipFadeAnimationEnabled: (v: boolean) => void;
+  presetChipAnimation: import("../utils/settingsAndResponse").PresetChipAnimation;
+  setPresetChipAnimation: (v: import("../utils/settingsAndResponse").PresetChipAnimation) => void;
 
   steamWebApiKey: string;
   setSteamWebApiKey: (v: string) => void;
@@ -111,8 +113,9 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
   filesystemWrite,
   attachProtonLogsWhenTroubleshooting,
   setAttachProtonLogsWhenTroubleshooting,
-  presetChipFadeAnimationEnabled,
   setPresetChipFadeAnimationEnabled,
+  presetChipAnimation,
+  setPresetChipAnimation,
   steamWebApiKey,
   setSteamWebApiKey,
   modelPolicyTier,
@@ -301,12 +304,25 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
         </PanelSectionRow>
         <PanelSectionRow>
           <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
-            <ToggleField
-              label="Preset chip fade animation"
-              description="Off: no crossfade when suggestion chips update on the Main tab."
-              checked={presetChipFadeAnimationEnabled}
-              onChange={(checked) => setPresetChipFadeAnimationEnabled(checked)}
-            />
+            <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 4 }}>Preset chip animation</div>
+            <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
+              Fade = crossfade chips. Carousel = vertical stack (middle chip in focus). Static = rotate text without opacity
+              animation. Voice input (mic on Main) is not implemented yet — separate from Ollama unload delay below.
+            </div>
+            <Focusable flow-children="horizontal" style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              {(["fade", "carousel", "static"] as const).map((mode) => (
+                <ButtonItem
+                  key={mode}
+                  layout="below"
+                  onClick={() => {
+                    setPresetChipAnimation(mode);
+                    setPresetChipFadeAnimationEnabled(mode === "fade");
+                  }}
+                >
+                  {mode === presetChipAnimation ? `● ${mode}` : mode}
+                </ButtonItem>
+              ))}
+            </Focusable>
           </div>
         </PanelSectionRow>
       </PanelSection>

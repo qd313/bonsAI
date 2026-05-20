@@ -154,6 +154,14 @@ No session archived
 
 <!-- Newest entries first. -->
 
+### 2026-05-19 - security-auditor + refactor-specialist (script/doc cleanup)
+
+```text
+Scope: Remove duplicate Ollama helpers under src/, root build.ps1 (hardcoded DECK_IP/PC_IP/$Pass), and Decky-template .vscode/ deploy tasks (${config:deckpass}).
+Agents: security-auditor — triaged by deletion; canonical paths scripts/build.ps1 and scripts/build.sh load .env. refactor-specialist — closes asymmetric Ollama scripts finding in docs/refactor-specialist-sweep.md.
+Red-team / blue-team: N/A.
+```
+
 ### 2026-04-30 - security-auditor (full refresh + doc cleanup)
 
 ```text

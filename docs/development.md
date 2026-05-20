@@ -1,36 +1,229 @@
 # bonsAI Development Guide
 
-This guide is for contributors building and deploying bonsAI from source.
+This guide is for contributors building and deploying bonsAI from source. **Primary target:** one Steam Deck runs everything — Cursor, the git repo, Ollama, Decky, and bonsAI on the same machine. A separate PC on the LAN still works; see [Other-machine LAN workflow](#other-machine-lan-workflow).
 
-## Stack and layout
+## What you'll have when done
 
-- Frontend: `src/` (React + TypeScript, Decky UI components)
-- **Unified input refactor (phased, complete):** Archived in [refactor-specialist-sweep.md § Unified input refactor (completed)](refactor-specialist-sweep.md#unified-input-refactor-completed). Deck measurement, refs, and surface height live in [`src/features/unified-input/useUnifiedInputSurface.ts`](../src/features/unified-input/useUnifiedInputSurface.ts); layout constants in [`src/features/unified-input/constants.ts`](../src/features/unified-input/constants.ts); the main tab JSX in [`src/components/MainTab.tsx`](../src/components/MainTab.tsx).
-- Main tab glass styling (unified search shell, ask bar, AI response chunks) lives in the `<style>` block under `.bonsai-scope` in `src/index.tsx` (classes such as `bonsai-glass-panel`, `bonsai-ai-response-chunk`); Decky `TextField` remains the input primitive.
-- **AI character roleplay:** UI catalog and grouping in [`src/data/characterCatalog.ts`](../src/data/characterCatalog.ts); accent intensity labels/options in [`src/data/aiCharacterAccentIntensity.ts`](../src/data/aiCharacterAccentIntensity.ts); per-preset UI accent colors (when used) in [`src/data/characterUiAccent.ts`](../src/data/characterUiAccent.ts); placeholder pixel emoticon grids in [`src/components/characterPlaceholderEmoticonGrids.ts`](../src/components/characterPlaceholderEmoticonGrids.ts); picker in [`src/components/CharacterPickerModal.tsx`](../src/components/CharacterPickerModal.tsx) (including running-game suggestion strip from [`src/utils/runningGameCharacterSuggestions.ts`](../src/utils/runningGameCharacterSuggestions.ts)); system-prompt suffix in [`backend/services/ai_character_service.py`](../py_modules/backend/services/ai_character_service.py); persisted fields `ai_character_*` in `settings.json` (including `ai_character_accent_intensity`: `subtle` \| `balanced` \| `heavy` \| `unleashed`, default `balanced`).
-- **Input sanitizer:** Phrase constants in [`src/data/inputSanitizerCommands.ts`](../src/data/inputSanitizerCommands.ts) (must match Python); lane + commands in [`backend/services/input_sanitizer_service.py`](../py_modules/backend/services/input_sanitizer_service.py); persisted `input_sanitizer_user_disabled` (JSON boolean, default effective **false** / sanitizer on) in `settings.json` via `settings_service.py` and `normalizeSettings` in `settingsAndResponse.ts`.
-- **Input transparency:** Last-ask snapshot is stored server-side (`Plugin._last_input_transparency`) and exposed via RPC `get_input_transparency`. Optional verbose Desktop append uses `desktop_ask_verbose_logging` (JSON boolean, only literal `true` enables) plus filesystem capability; writes `bonsai-ask-trace-YYYY-MM-DD.md` via [`backend/services/desktop_note_service.py`](../py_modules/backend/services/desktop_note_service.py) (`append_desktop_ask_transparency_sync`). Frontend types in [`src/utils/inputTransparency.ts`](../src/utils/inputTransparency.ts`).
-- **Ask modes (main screen):** Persisted `ask_mode` (`speed` \| `strategy` \| `deep`); UI in [`src/components/AskModeMenuPopover.tsx`](../src/components/AskModeMenuPopover.tsx) and [`src/components/MainTab.tsx`](../src/components/MainTab.tsx); normalization in [`src/data/askMode.ts`](../src/data/askMode.ts) and [`src/utils/settingsAndResponse.ts`](../src/utils/settingsAndResponse.ts); backend FOSS-first, ~16GB-default chains in [`refactor_helpers.py`](../refactor_helpers.py) (`select_ollama_models(..., high_vram_fallbacks)`), optional large-model tail when `model_allow_high_vram_fallbacks` is true in `settings.json`.
-- Backend: `main.py` (Decky Python backend)
-- Plugin metadata: `plugin.json`
-- Frontend package/build config: `package.json`
-- Build output: `dist/index.js`
+- **bonsAI** loaded in the Quick Access Menu (QAM) via Decky Loader
+- **Ollama** on `http://127.0.0.1:11434` on the same Deck
+- A repeatable **build → deploy → test** loop without leaving Desktop Mode for most UI work
+
+## Prerequisites (Steam Deck, Desktop Mode)
+
+1. **Switch to Desktop Mode** — Steam button → **Power** → **Switch to Desktop**.
+2. Open **Konsole** (or your terminal).
+3. Set a sudo password if you have not already (required for Decky deploy restarts):
+
+   ```bash
+   sudo passwd
+   ```
+
+4. Install **[Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader)** if it is not already on the Deck (Stable channel is a good default).
+
+## Install Cursor and clone the repo
+
+Install Cursor on the Deck (Flatpak or AppImage from [cursor.com](https://cursor.com)). Then:
+
+```bash
+cd ~
+git clone https://github.com/cantcurecancer/bonsAI.git
+cd bonsAI
+```
+
+Open the `~/bonsAI` folder in Cursor.
+
+## One-time developer setup
+
+From the repo root:
+
+```bash
+cp .env.example .env
+```
+
+For **same-machine** development on the Deck, edit `.env`:
+
+```bash
+DECK_IP=127.0.0.1
+DECK_USER=deck
+PC_IP=127.0.0.1
+```
+
+Then run the setup script (installs `pnpm`, Decky CLI to `cli/decky`, SSH key auth to self, and `pnpm install`):
+
+```bash
+./scripts/setup-dev.sh
+```
+
+On **Windows** (remote deploy to a Deck on the LAN), use `.\scripts\setup-dev.ps1` instead and set `DECK_IP` / `PC_IP` to real LAN addresses.
+
+## Install Ollama on the Deck
+
+```bash
+./scripts/setup-ollama.sh
+```
+
+This installs Ollama and pulls starter models (`gemma4`, `llama3`). For Tier-1 FOSS tags aligned with bonsAI routing, see `TIER1_FOSS_STARTER_PULL_TAGS` in [`refactor_helpers.py`](../refactor_helpers.py) (`qwen2.5:1.5b`, `llava:7b`).
+
+Verify:
+
+```bash
+curl -s http://127.0.0.1:11434/api/tags
+ollama run qwen2.5:1.5b "Hello from bonsAI"
+```
+
+## Build and deploy (same Deck)
+
+```bash
+./scripts/build.sh local
+```
+
+What this does:
+
+- `pnpm install` (when needed) → `pnpm run build` → writes dev `src/config.ts` from `.env`
+- Copies `main.py`, `refactor_helpers.py`, `py_modules/`, and `dist/` into `~/homebrew/plugins/bonsAI/`
+- Restarts `plugin_loader` via `sudo systemctl`
+
+**Modes** (all from repo root):
+
+| Command | Use when |
+| -------- | -------- |
+| `./scripts/build.sh local` | Build + deploy on **this** machine (Deck-native default) |
+| `./scripts/build.sh` | Build + deploy to a **remote** Deck (`DECK_IP` in `.env`) |
+| `./scripts/build.sh deploy --local` | Re-deploy last build without rebuilding |
+| `./scripts/build.sh release` | Produce distributable zip under `out/` (no `.env` required) |
+| `pnpm run watch` | Rebuild on file changes; pair with Decky **Reload** in QAM |
+
+Windows equivalent: `.\scripts\build.ps1` (remote deploy only; loads `.env`).
+
+## Test bonsAI after deploy (two tracks)
+
+Decky injects into Steam's **gamepadui** layer — the same React/CEF surface as **Gaming Mode** and **Big Picture Mode (BPM)**. The classic Desktop Steam window does **not** load QAM or Decky. See [steam-input-research.md](steam-input-research.md) § "Game Mode / Big Picture".
+
+### Track A — Fast loop (recommended; stay in Desktop Mode)
+
+Use this for daily UI, Settings, Permissions, Ask flow, Ollama RPC, and QAM focus work.
+
+1. After `./scripts/build.sh local`, if Steam was already running, **fully exit Steam and relaunch** (or use Decky **Reload** in QAM after the first open) so the new bundle loads.
+2. Open Steam in Desktop Mode → **Steam menu → View → Big Picture Mode** (or the BPM icon, top-right).
+3. Press **`...` (Quick Access)** on the controller (or click the QAM glyph) → **Decky plug icon** → **bonsAI**.
+4. Exit BPM via **Exit Big Picture** or `Alt+Tab` back to Konsole/Cursor — no Gaming Mode switch required.
+
+**Iterating:** run `pnpm run watch` in Konsole, then **Reload** the plugin in Decky QAM for a near-HMR loop.
+
+**What BPM proves:** Main tab UI, Settings, Permissions, Ask flow, backend RPC, D-pad focus in QAM overlays.
+
+**What BPM does not prove:** Guide-chord shortcuts (`bonsai:shortcut-setup-deck`), TDP apply under gamescope, in-game overlay behavior, gamescope screenshot capture during a running title — use Track B for those.
+
+### Track B — Full validation (Gaming Mode)
+
+Use before merge when changes touch Steam Input, TDP, screenshot attach, or in-session overlay behavior.
+
+1. Double-click **Return to Gaming Mode** on the Desktop (or Steam → Power → Switch to Gaming Mode).
+2. Press **`...` (QAM)** → **Decky plug icon** → **bonsAI**.
+
+### Troubleshooting (both tracks)
+
+If the plugin does not appear after deploy:
+
+```bash
+sudo systemctl restart plugin_loader
+journalctl -u plugin_loader -f --no-pager
+```
+
+Some Decky installs run the loader as a user unit; if the above shows nothing, try `journalctl --user -u plugin_loader -f --no-pager`.
+
+More deploy edge cases: [troubleshooting.md](troubleshooting.md) § Build & Deploy.
+
+## First Ask
+
+1. Open **bonsAI** → **Settings** → set **Ollama host / base URL** to `http://127.0.0.1:11434`.
+2. Open **Main** → send `hello`.
+3. If it fails, confirm Ollama is up (`curl http://127.0.0.1:11434/api/tags`) and check **Permissions** for gated features.
+
+## Architecture at a glance
+
+<a id="stack-and-layout"></a>
+
+```mermaid
+flowchart LR
+  UI[src/ React UI in QAM] -->|deckyCall| RPC[main.py Decky RPC]
+  RPC --> Sanitizer[input_sanitizer_service]
+  RPC --> SettingsSvc[settings_service]
+  RPC --> OllamaSvc[ollama_service + ollama_prompts]
+  OllamaSvc -->|HTTP 11434| OllamaHost[Ollama on 127.0.0.1]
+  RPC --> Character[ai_character_service]
+  RPC --> Vision[screenshot_media]
+  RPC --> Desktop[desktop_note_service]
+  RPC --> TDP[tdp_service]
+  Shared[refactor_helpers.py + model_policy] --- RPC
+  Shared --- OllamaSvc
+```
+
+**Request path (Ask):** User types in `MainTab` → `useBonsaiAskOrchestration` → `deckyCall` → `main.py` RPC → `input_sanitizer_service` → `ollama_service` (model selection via `refactor_helpers.select_ollama_models`) → HTTP to Ollama → response chunks back to the UI.
+
+### Frontend (`src/`)
+
+| Path | Role |
+| ---- | ---- |
+| [`index.tsx`](../src/index.tsx) | Decky plugin shell, tab routing, `.bonsai-scope` glass styles |
+| [`components/`](../src/components/) | Tabs: `MainTab`, `SettingsTab`, `PermissionsTab`, `AboutTab`, `DebugTab`, `DeveloperTab`, modals |
+| [`hooks/`](../src/hooks/) | `usePluginSettings`, `useBonsaiAskOrchestration`, disclaimer/runtime gates |
+| [`data/`](../src/data/) | Presets, character catalog, model policy, settings keys, ask modes |
+| [`utils/`](../src/utils/) | `deckyCall`, `settingsAndResponse`, focus navigation, chunk splitting |
+| [`features/unified-input/`](../src/features/unified-input/) | Ask bar measurement and layout constants |
+| [`styles/bonsaiScopeStylesheet.ts`](../src/styles/bonsaiScopeStylesheet.ts) | Durable scoped CSS for Decky focus/layout |
+
+Build output: [`dist/index.js`](../dist/index.js) (referenced by [`plugin.json`](../plugin.json)).
+
+### Backend (`main.py` + `py_modules/backend/services/`)
+
+| Module | Role |
+| ------ | ---- |
+| [`main.py`](../main.py) | Decky RPC entrypoint; wires UI calls to services |
+| [`refactor_helpers.py`](../refactor_helpers.py) | Ollama URL normalization, model fallback chains, TDP parse helpers |
+| `input_sanitizer_service.py` | Ask sanitization lane and magic-phrase commands |
+| `settings_service.py` | Load/save/normalize `settings.json` |
+| `ollama_service.py` + `ollama_prompts.py` | Prompt assembly and Ollama HTTP transport |
+| `game_ai_request.py` | Orchestrates Ask pipeline (sanitizer → Ollama → response) |
+| `model_policy.py` | Tier classification for model routing |
+| `ai_character_service.py` | Roleplay system-prompt suffix |
+| `screenshot_media.py` | Vision attachment capture and encoding |
+| `local_ollama_setup_service.py` | In-plugin Ollama install/pull helpers |
+| `tdp_service.py` | TDP/sysfs read/write |
+| `desktop_note_service.py` | Desktop note and verbose Ask trace append |
+| `capabilities.py` | Permission capability checks |
+| `steam_vac_service.py` / `vac_check_commands.py` | Steam ban lookup |
+| `shortcut_setup_commands.py` | Guide-chord setup guidance |
+| `plugin_data_reset.py` | Reset plugin persisted data |
+| `strategy_guide_parse.py` | Strategy-mode response parsing |
+| `proton_troubleshooting_logs.py` | Proton log helpers |
+
+Decky loads `py_modules` on `sys.path`; keep the `backend` package name for imports.
+
+### Deep-dive pointers (preserved for agents and contributors)
+
+- **Unified input refactor (complete):** [refactor-specialist-sweep.md § Unified input refactor](refactor-specialist-sweep.md#unified-input-refactor-completed) — [`useUnifiedInputSurface.ts`](../src/features/unified-input/useUnifiedInputSurface.ts), [`MainTab.tsx`](../src/components/MainTab.tsx).
+- **AI character roleplay:** [`characterCatalog.ts`](../src/data/characterCatalog.ts), [`CharacterPickerModal.tsx`](../src/components/CharacterPickerModal.tsx), [`ai_character_service.py`](../py_modules/backend/services/ai_character_service.py).
+- **Input sanitizer:** [`inputSanitizerCommands.ts`](../src/data/inputSanitizerCommands.ts) (must match Python); `input_sanitizer_user_disabled` in settings.
+- **Input transparency:** RPC `get_input_transparency`; optional Desktop trace via `desktop_note_service.py`.
+- **Ask modes:** `ask_mode` (`speed` \| `strategy` \| `deep`); chains in `refactor_helpers.select_ollama_models`.
+- **Model policy tiers:** [`modelPolicy.ts`](../src/data/modelPolicy.ts), [`model_policy.py`](../py_modules/backend/services/model_policy.py).
 
 ## Toolchain
 
-- Node.js (modern LTS; Decky template baseline is Node 16.14+)
-- `pnpm` (v9 recommended for compatibility with template workflow)
-- SSH/SCP client (for remote deploy to Deck)
-
-Core commands:
+- Node.js (modern LTS; Node 16.14+ minimum)
+- `pnpm` (v9 recommended)
+- SSH/SCP (for remote deploy only)
 
 ```bash
 pnpm install
 pnpm run build
 pnpm run watch
+pnpm test          # Vitest (frontend)
+pnpm run test:py   # Python unit tests
 ```
 
-Regression and on-device smoke before merge or release: [regression-and-smoke.md](regression-and-smoke.md) (automated gates + PR-scoped matrix + Deck checklist).
+Regression and on-device smoke: [regression-and-smoke.md](regression-and-smoke.md).
 
 If Decky UI packages drift:
 
@@ -38,140 +231,45 @@ If Decky UI packages drift:
 pnpm update @decky/ui --latest
 ```
 
-## Environment setup
+## Other-machine LAN workflow
 
-Use local env files for host/device config.
+Still supported when Ollama runs on a PC and the Deck is the deploy target:
 
-1. Copy `.env.example` to `.env`.
-2. Fill required values (`DECK_IP`, `DECK_USER`, `PC_IP`, and related fields).
-3. Keep secrets/local values out of git.
+1. In `.env`: `DECK_IP=<deck-lan-ip>`, `PC_IP=<pc-lan-ip>`.
+2. On the PC: install Ollama, set `OLLAMA_HOST=0.0.0.0`, open firewall **TCP 11434**. See [troubleshooting.md](troubleshooting.md#2-network--communication-the-bridge).
+3. Run `./scripts/setup-dev.sh` (or `setup-dev.ps1` on Windows) once, then `./scripts/build.sh` (default `dev` — remote deploy).
+4. In bonsAI Settings, point Ollama URL at `http://<PC-IP>:11434`.
 
-## Windows workflow
+Ollama helpers: [`scripts/setup-ollama.sh`](../scripts/setup-ollama.sh) (Linux), [`scripts/setup_ollama.ps1`](../scripts/setup_ollama.ps1) (Windows).
 
-### First-time setup
+## Release (plugin zip)
 
-Run from repo root:
+**Version source:** bump **`version`** in [`plugin.json`](../plugin.json). [`pnpm run build`](../package.json) syncs [`PLUGIN_VERSION`](../src/pluginVersion.ts) via [`scripts/sync-version-from-plugin.mjs`](../scripts/sync-version-from-plugin.mjs).
 
-```powershell
-.\scripts\setup-dev.ps1
-```
+**CI:** [`.github/workflows/build-plugin-zip.yml`](../.github/workflows/build-plugin-zip.yml) — triggers on **`v*` tags** and **workflow_dispatch**. Artifact: `bonsai-plugin-*`; verified by [`scripts/verify-decky-plugin-zip.sh`](../scripts/verify-decky-plugin-zip.sh).
 
-What it does at a high level:
-- Loads `.env` values
-- Sets up SSH key auth to Deck
-- Installs dev-mode sudoers override on Deck
-- Prepares plugin ownership/path for deploy
-
-### Build and deploy
-
-```powershell
-.\scripts\build.ps1
-```
-
-High-level behavior:
-- `pnpm install`
-- `pnpm run build`
-- Upload `package.json`, `plugin.json`, `main.py`, `dist/index.js`
-- Restart Decky plugin loader service
-
-## Bazzite / Linux workflow
-
-### First-time setup
-
-Run from repo root:
+**Local release:**
 
 ```bash
-./scripts/setup-dev.sh
+./scripts/build.sh release
 ```
 
-What it does at a high level:
-- Validates/loads `.env`
-- Ensures `pnpm` is available
-- Installs Decky CLI binary to `cli/decky` when needed
-- Sets up SSH key auth
-- Runs `pnpm install`
-
-### Build and deploy modes
-
-```bash
-./scripts/build.sh
-```
-
-Available modes:
-- `./scripts/build.sh` (default `dev`): build + deploy to remote Deck
-- `./scripts/build.sh local`: build + deploy locally on this Linux/Bazzite machine
-- `./scripts/build.sh release`: build distributable zip via Decky CLI (no `.env` required; skips dev-only `src/config.ts` generation)
-- `./scripts/build.sh deploy`: deploy last build without rebuilding
-
-### Release (plugin zip)
-
-**Version source:** bump the **`version`** field in root [`plugin.json`](../plugin.json) before tagging or cutting a release. [`pnpm run build`](../package.json) runs [`scripts/sync-version-from-plugin.mjs`](../scripts/sync-version-from-plugin.mjs) so the UI’s [`PLUGIN_VERSION`](../src/pluginVersion.ts) matches the manifest.
-
-**Primary build (CI):** workflow **[`.github/workflows/build-plugin-zip.yml`](../.github/workflows/build-plugin-zip.yml)** — triggers on **`v*` tags** and **`workflow_dispatch`** (optional **ref** input). It runs `pnpm install`, `pnpm run build`, downloads the [Decky CLI](https://github.com/SteamDeckHomebrew/cli) Linux binary, runs `decky plugin build`, then **[`scripts/verify-decky-plugin-zip.sh`](../scripts/verify-decky-plugin-zip.sh)** so the zip includes `main.py`, `refactor_helpers.py`, `py_modules/backend/services/`, and `dist/index.js` (same parity as deploy scripts). Download the **`bonsai-plugin-*`** artifact from the workflow run (or attach that zip to a GitHub Release for end users).
-
-**Canonical release:** prefer a **`v*`** tag push so the artifact matches the tagged commit. Use **workflow_dispatch** for ad-hoc or branch builds when you only need a binary to test.
-
-**Test or release tag (same CI path as shipping):**
-
-1. Bump **`version`** in [`plugin.json`](../plugin.json) if needed, commit, and push.
-2. Create and push a tag whose name starts with **`v`** (examples: `v0.1.0`, `v0.2.0-rc1`, `v0.2.0-test`):
-
-   ```bash
-   git tag v0.2.0-test
-   git push origin v0.2.0-test
-   ```
-
-3. In GitHub: **Actions** → **Build plugin zip** → open the run for that push; the artifact is named like **`bonsai-plugin-v0.2.0-test-<shortsha>`** so it is obvious which tag produced it.
-
-Tags must match the workflow filter `v*` (e.g. `v1.0.0` works; `1.0.0` without the leading `v` does not).
-
-**Local / WSL:** after `./scripts/setup-dev.sh` installs `cli/decky`, run `./scripts/build.sh release` from repo root on Linux or WSL. Output is under **`out/*.zip`**; verification runs automatically after packaging.
-
-**Subagent reports and follow-ups:** N/A for this process (no specialist agent required). If `verify-decky-plugin-zip` fails, treat it as a **release blocker** until packaging matches deploy layout.
-
-## Ollama for development testing
-
-If you need a local/LAN Ollama test host:
-
-- Windows helper: `scripts/setup_ollama.ps1`
-- Linux helper: `scripts/setup-ollama.sh`
-
-Then point bonsAI settings to the matching Ollama host/base URL.
+Output under **`out/*.zip`**.
 
 ## Documentation maintenance (releases)
 
-When you mark a feature **complete**, update the same change set so release notes stay coherent (see [`.cursorrules`](../.cursorrules)):
+When you mark a feature **complete**, update the same change set (see [`.cursorrules`](../.cursorrules)):
 
-- [docs/roadmap.md](roadmap.md) — status / Implemented Baseline as applicable
-- [docs/prompt-testing.md](prompt-testing.md) — verification notes or matrices when behavior is user-visible
-- [docs/troubleshooting.md](troubleshooting.md) — when end users need new setup steps or FAQs
-- [CHANGELOG.md](../CHANGELOG.md) — concise shipped note (what, where, user-visible behavior)
+- [roadmap.md](roadmap.md)
+- [prompt-testing.md](prompt-testing.md) — when behavior is user-visible
+- [troubleshooting.md](troubleshooting.md) — new setup steps or FAQs
+- [CHANGELOG.md](../CHANGELOG.md)
 
 ## Docs and references
 
-- Prompt tests and quality tracking: [prompt-testing.md](prompt-testing.md)
-- Planned RAG / knowledge-base sources (research only, not implemented yet): [rag-sources-research.md](rag-sources-research.md)
+- Doc index: [README.md](README.md)
 - Power-user troubleshooting: [troubleshooting.md](troubleshooting.md)
-- Decky frontend library: [https://github.com/SteamDeckHomebrew/decky-frontend-lib](https://github.com/SteamDeckHomebrew/decky-frontend-lib)
-- Decky docs/wiki: [https://wiki.deckbrew.xyz/](https://wiki.deckbrew.xyz/)
-
-## Refactor architecture notes
-
-Milestone 2 splits heavy orchestration paths while preserving runtime behavior:
-
-- Backend services: `py_modules/backend/services/` (Decky loads `py_modules` on `sys.path`; keep the `backend` package name for imports)
-  - `input_sanitizer_service.py` for Ask sanitization lane and magic-phrase handling (shared with `main.py`)
-  - `settings_service.py` for settings load/save/sanitization helpers
-  - `tdp_service.py` for TDP/sysfs write helpers
-  - `ollama_service.py` for prompt assembly and Ollama transport formatting
-- Frontend components/data:
-  - `src/components/DeveloperTab.tsx`
-  - `src/components/AboutTab.tsx`
-  - `src/data/presets.ts` (preset text, category heuristics, carousel helpers `holdMsForPresetText` / `getRandomPresetExcluding`)
-  - `src/components/PresetAnimatedChips.tsx` (main tab preset chip fade/hold carousel)
-  - `src/components/ConnectionTimeoutSlider.tsx` (single Steam `SliderField` for hard timeout + prominent soft-warning readout; ordering via `reconcileLatencyWarningAndTimeout` in `settingsAndResponse.ts`)
-  - `src/data/steam-input-lexicon.ts` (versioned Steam Input jump targets; see `docs/steam-input-research.md`)
-  - `src/utils/settingsAndResponse.ts`
-  - `src/utils/steamInputJump.ts` (Decky `Navigation` / `SteamClient.URL` jump helper)
-
-`main.py` and `src/index.tsx` remain the integration shells for Decky RPC/UI wiring and should continue to be treated as composition entrypoints.
+- Prompt QA: [prompt-testing.md](prompt-testing.md)
+- RAG research (not implemented): [rag-sources-research.md](rag-sources-research.md)
+- [Decky frontend library](https://github.com/SteamDeckHomebrew/decky-frontend-lib)
+- [Decky wiki](https://wiki.deckbrew.xyz/)

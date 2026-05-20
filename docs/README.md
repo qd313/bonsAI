@@ -4,7 +4,7 @@ Short guide to markdown under `docs/`. Repo root **[README.md](../README.md)** s
 
 | Doc | Audience | What it is |
 |-----|----------|------------|
-| [development.md](development.md) | Contributors | Toolchain, env, build/deploy, architecture pointers |
+| [development.md](development.md) | Contributors | Deck-first setup, build/deploy, BPM test loop, architecture |
 | [troubleshooting.md](troubleshooting.md) | Power users | GPU, network, vision, permissions, QAM, deploy edge cases |
 | [roadmap.md](roadmap.md) | Planning / contributors | In progress, planned backlog, and completed shipped work |
 | [prompt-testing.md](prompt-testing.md) | QA / contributors | Prompt matrices and release-related test notes |

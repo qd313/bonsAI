@@ -15,7 +15,7 @@ import { AboutTab } from "./components/AboutTab";
 import { BonsaiPluginShell } from "./components/BonsaiPluginShell";
 import { CharacterPickerModal } from "./components/CharacterPickerModal";
 import { DesktopNoteSaveModal } from "./components/DesktopNoteSaveModal";
-import { DebugTab } from "./components/DebugTab";
+import { DeveloperTab, type DeveloperConnectionStatus } from "./components/DeveloperTab";
 import { MainTab } from "./components/MainTab";
 import { PluginHelpModal } from "./components/PluginHelpModal";
 import { PermissionsTab } from "./components/PermissionsTab";
@@ -200,7 +200,7 @@ function markPluginHelpDismissedPersist(): void {
 }
 
 function bonsaiTabIconTitle(
-  classSuffix: "main" | "settings" | "permissions" | "debug" | "about",
+  classSuffix: "main" | "settings" | "permissions" | "developer" | "about",
   children: React.ReactNode,
 ): React.ReactElement {
   return (
@@ -219,6 +219,7 @@ function bonsaiTabIconTitle(
  */
 const Content: React.FC = () => {
   const [currentTab, setCurrentTab] = useState("main");
+  const [lastConnectionStatus, setLastConnectionStatus] = useState<DeveloperConnectionStatus | null>(null);
   /** Remember tab when opening character picker so we restore after `showModal` closes. */
   const characterPickerReturnTabRef = useRef<string>("main");
   /**
@@ -310,8 +311,8 @@ const Content: React.FC = () => {
     setAskMode,
     ollamaKeepAlive,
     setOllamaKeepAlive,
-    showDebugTab,
-    setShowDebugTab,
+    showDeveloperTab,
+    setShowDeveloperTab,
     modelPolicyTier,
     setModelPolicyTier,
     modelPolicyNonFossUnlocked,
@@ -341,7 +342,7 @@ const Content: React.FC = () => {
 
   useEffect(() => {
     if (!settingsLoaded) return;
-    if (currentTab !== "debug" && currentTab !== "settings") return;
+    if (currentTab !== "developer" && currentTab !== "settings") return;
     appendAppDesktopLogWithPrefs(appLogPrefs, "verbose", "ui.tab", `opened ${currentTab} tab`);
   }, [currentTab, settingsLoaded, appLogPrefs]);
 
@@ -435,11 +436,11 @@ const Content: React.FC = () => {
   const bonsaiScopeAccentStyle = useMemo(() => buildBonsaiScopeAccentInlineStyle(uiAccent), [uiAccent]);
 
   useEffect(() => {
-    if (!showDebugTab && currentTab === "debug") {
+    if (!showDeveloperTab && currentTab === "developer") {
       setCurrentTab("main");
-      toaster.toast({ title: "Debug tab hidden", body: "Switched to Main.", duration: 2800 });
+      toaster.toast({ title: "Developer tab hidden", body: "Switched to Main.", duration: 2800 });
     }
-  }, [showDebugTab, currentTab]);
+  }, [showDeveloperTab, currentTab]);
 
   useEffect(() => {
     if (askMode !== "strategy") {
@@ -456,7 +457,7 @@ const Content: React.FC = () => {
       if (t === "non_foss" && !modelPolicyNonFossUnlocked) {
         toaster.toast({
           title: "Unlock required",
-          body: "Turn on “Allow non-FOSS and unclassified tags” in Permissions → Model policy before Tier 3.",
+          body: "Turn on Tier 3 unlock under Developer → Model routing (advanced) before Any installed model.",
           duration: 5000,
         });
         return;
@@ -846,7 +847,7 @@ const Content: React.FC = () => {
                 aiCharacterAccentIntensity,
                 askMode,
                 ollamaKeepAlive,
-                showDebugTab,
+                showDeveloperTab,
                 modelPolicyTier,
                 modelPolicyNonFossUnlocked,
                 modelAllowHighVramFallbacks,
@@ -893,7 +894,7 @@ const Content: React.FC = () => {
     finalizeShowModalAndRestoreActiveTab,
     askMode,
     ollamaKeepAlive,
-    showDebugTab,
+    showDeveloperTab,
     modelPolicyTier,
     modelPolicyNonFossUnlocked,
     modelAllowHighVramFallbacks,
@@ -1033,20 +1034,11 @@ const Content: React.FC = () => {
       onPersistOllamaIp={saveIp}
       ollamaLocalOnDeck={ollamaLocalOnDeck}
       setOllamaLocalOnDeck={setOllamaLocalOnDeck}
-      latencyWarningSeconds={latencyWarningSeconds}
-      requestTimeoutSeconds={requestTimeoutSeconds}
-      latencyTimeoutsCustomEnabled={latencyTimeoutsCustomEnabled}
-      setLatencyTimeoutsCustomEnabled={setLatencyTimeoutsCustomEnabled}
-      setLatencyWarningSeconds={setLatencyWarningSeconds}
-      setRequestTimeoutSeconds={setRequestTimeoutSeconds}
-      ollamaKeepAlive={ollamaKeepAlive}
-      setOllamaKeepAlive={setOllamaKeepAlive}
+      onLastConnectionStatus={setLastConnectionStatus}
       screenshotAttachmentPreset={screenshotAttachmentPreset}
       setScreenshotAttachmentPreset={setScreenshotAttachmentPreset}
       unifiedInputPersistenceMode={unifiedInputPersistenceMode}
       setUnifiedInputPersistenceMode={setUnifiedInputPersistenceMode}
-      presetChipFadeAnimationEnabled={presetChipFadeAnimationEnabled}
-      setPresetChipFadeAnimationEnabled={setPresetChipFadeAnimationEnabled}
       aiCharacterEnabled={aiCharacterEnabled}
       setAiCharacterEnabled={setAiCharacterEnabled}
       aiCharacterRandom={aiCharacterRandom}
@@ -1054,23 +1046,12 @@ const Content: React.FC = () => {
       aiCharacterCustomText={aiCharacterCustomText}
       aiCharacterAccentIntensity={aiCharacterAccentIntensity}
       setAiCharacterAccentIntensity={setAiCharacterAccentIntensity}
-      showDebugTab={showDebugTab}
-      setShowDebugTab={setShowDebugTab}
-      desktopDebugNoteAutoSave={desktopDebugNoteAutoSave}
-      setDesktopDebugNoteAutoSave={setDesktopDebugNoteAutoSave}
-      desktopAskVerboseLogging={desktopAskVerboseLogging}
-      setDesktopAskVerboseLogging={setDesktopAskVerboseLogging}
-      desktopAppLogLevel={desktopAppLogLevel}
-      setDesktopAppLogLevel={setDesktopAppLogLevel}
-      filesystemWrite={capabilities.filesystem_write}
-      attachProtonLogsWhenTroubleshooting={attachProtonLogsWhenTroubleshooting}
-      setAttachProtonLogsWhenTroubleshooting={setAttachProtonLogsWhenTroubleshooting}
+      showDeveloperTab={showDeveloperTab}
+      setShowDeveloperTab={setShowDeveloperTab}
       strategySpoilerMaskingEnabled={strategySpoilerMaskingEnabled}
       setStrategySpoilerMaskingEnabled={setStrategySpoilerMaskingEnabled}
       strategySpoilerAutoRevealAfterConsent={strategySpoilerAutoRevealAfterConsent}
       setStrategySpoilerAutoRevealAfterConsent={setStrategySpoilerAutoRevealAfterConsent}
-      steamWebApiKey={steamWebApiKey}
-      setSteamWebApiKey={setSteamWebApiKey}
       onOpenCharacterPicker={openCharacterPickerModal}
       onBeforeDeckyModal={() => {
         characterPickerReturnTabRef.current = currentTab;
@@ -1108,7 +1089,7 @@ const Content: React.FC = () => {
           aiCharacterAccentIntensity,
           askMode,
           ollamaKeepAlive,
-          showDebugTab,
+          showDeveloperTab,
           modelPolicyTier,
           modelPolicyNonFossUnlocked,
           modelAllowHighVramFallbacks,
@@ -1142,7 +1123,7 @@ const Content: React.FC = () => {
     aiCharacterAccentIntensity,
     askMode,
     ollamaKeepAlive,
-    showDebugTab,
+    showDeveloperTab,
     modelPolicyTier,
     modelPolicyNonFossUnlocked,
     modelAllowHighVramFallbacks,
@@ -1157,13 +1138,9 @@ const Content: React.FC = () => {
       capabilities={capabilities}
       setCapabilities={setCapabilities}
       onConfirmEnableHardwareControl={onConfirmEnableHardwareControl}
-      onReadModelPolicy={openModelPolicyReadme}
       modelPolicyTier={modelPolicyTier}
       onSelectModelPolicyTier={onSelectModelPolicyTier}
-      setModelPolicyNonFossUnlocked={setModelPolicyNonFossUnlocked}
       modelPolicyNonFossUnlocked={modelPolicyNonFossUnlocked}
-      setModelAllowHighVramFallbacks={setModelAllowHighVramFallbacks}
-      modelAllowHighVramFallbacks={modelAllowHighVramFallbacks}
       onBeforeDeckyModal={() => {
         characterPickerReturnTabRef.current = currentTab;
       }}
@@ -1199,11 +1176,40 @@ const Content: React.FC = () => {
     }
   };
 
-  const debugTab = (
-    <DebugTab
+  const developerTab = (
+    <DeveloperTab
       capturedErrors={capturedErrors}
       onClearErrors={() => setCapturedErrors([])}
       onSteamInputPhase1Jump={onSteamInputPhase1Jump}
+      lastConnectionStatus={lastConnectionStatus}
+      latencyWarningSeconds={latencyWarningSeconds}
+      requestTimeoutSeconds={requestTimeoutSeconds}
+      latencyTimeoutsCustomEnabled={latencyTimeoutsCustomEnabled}
+      setLatencyTimeoutsCustomEnabled={setLatencyTimeoutsCustomEnabled}
+      setLatencyWarningSeconds={setLatencyWarningSeconds}
+      setRequestTimeoutSeconds={setRequestTimeoutSeconds}
+      ollamaKeepAlive={ollamaKeepAlive}
+      setOllamaKeepAlive={setOllamaKeepAlive}
+      desktopDebugNoteAutoSave={desktopDebugNoteAutoSave}
+      setDesktopDebugNoteAutoSave={setDesktopDebugNoteAutoSave}
+      desktopAskVerboseLogging={desktopAskVerboseLogging}
+      setDesktopAskVerboseLogging={setDesktopAskVerboseLogging}
+      desktopAppLogLevel={desktopAppLogLevel}
+      setDesktopAppLogLevel={setDesktopAppLogLevel}
+      filesystemWrite={capabilities.filesystem_write}
+      attachProtonLogsWhenTroubleshooting={attachProtonLogsWhenTroubleshooting}
+      setAttachProtonLogsWhenTroubleshooting={setAttachProtonLogsWhenTroubleshooting}
+      presetChipFadeAnimationEnabled={presetChipFadeAnimationEnabled}
+      setPresetChipFadeAnimationEnabled={setPresetChipFadeAnimationEnabled}
+      steamWebApiKey={steamWebApiKey}
+      setSteamWebApiKey={setSteamWebApiKey}
+      modelPolicyTier={modelPolicyTier}
+      modelPolicyNonFossUnlocked={modelPolicyNonFossUnlocked}
+      setModelPolicyNonFossUnlocked={setModelPolicyNonFossUnlocked}
+      modelAllowHighVramFallbacks={modelAllowHighVramFallbacks}
+      setModelAllowHighVramFallbacks={setModelAllowHighVramFallbacks}
+      onSelectModelPolicyTier={onSelectModelPolicyTier}
+      onReadModelPolicy={openModelPolicyReadme}
     />
   );
   const aboutTab = (
@@ -1239,11 +1245,11 @@ const Content: React.FC = () => {
           ),
         },
       ];
-      if (showDebugTab) {
+      if (showDeveloperTab) {
         rows.push({
-          id: "debug",
-          title: bonsaiTabIconTitle("debug", <BugIcon size={TAB_TITLE_DEBUG_TAB_ICON_PX} />),
-          content: <div className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight">{debugTab}</div>,
+          id: "developer",
+          title: bonsaiTabIconTitle("developer", <BugIcon size={TAB_TITLE_DEBUG_TAB_ICON_PX} />),
+          content: developerTab,
         });
       }
       rows.push({
@@ -1253,7 +1259,7 @@ const Content: React.FC = () => {
       });
       return rows;
     },
-    [showDebugTab, mainTab, settingsTab, permissionsTab, debugTab, aboutTab]
+    [showDeveloperTab, mainTab, settingsTab, permissionsTab, developerTab, aboutTab]
   );
 
   return (

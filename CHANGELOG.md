@@ -5,10 +5,10 @@ All notable changes to this project are documented in this file.
 ## [Unreleased]
 
 ### Added
-- **Settings → Connection — Update Ollama & Models:** When **Ollama on this Deck** is on, a new button re-runs the official Ollama installer, then `ollama pull` every locally installed tag (via `/api/tags`) so newer weights are fetched when upstream changed. Profile `update_installed` in `local_ollama_setup_service.py`; UI in `SettingsTab.tsx`.
-- **Desktop app activity logging (opt-in):** Settings → Advanced → **App activity logging to Desktop** (`desktop_app_log_level`: Off / Default / Verbose; default Off). When enabled with **Filesystem writes**, summary or detailed events append to `~/Desktop/bonsAI_logs/bonsai-app-YYYY-MM-DD.log`. Backend `_maybe_app_log` / RPC `append_app_log`; frontend helper `src/utils/appDesktopLog.ts`.
+- **Developer tab (opt-in):** Settings → Data → **Show Developer tab** (`show_developer_tab`; migrates legacy `show_debug_tab`). Merges former Debug diagnostics with advanced logging, connection tuning, Steam Web API key, and model-policy advanced controls. `DeveloperTab.tsx`, `index.tsx`, `settings_service.py`, `settingsAndResponse.ts`.
 
 ### Changed
+- **Settings UX cleanup:** Plain-language labels on Settings and Permissions; technical options moved to Developer tab; simplified connection test output and AI model choice on Permissions. `SettingsTab.tsx`, `PermissionsTab.tsx`, `PermissionsTabModelPolicyPanel.tsx`, `modelPolicy.ts`, `aiCharacterAccentIntensity.ts`.
 - **Desktop logs folder rename:** All Desktop writes (chat auto-save, Ask traces, manual notes, app logs) now use `~/Desktop/bonsAI_logs/` instead of `~/Desktop/BonsAI_notes/`. Existing folders are not auto-migrated — rename manually if you already have notes there.
 
 ### Fixed

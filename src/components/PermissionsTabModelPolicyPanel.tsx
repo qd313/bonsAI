@@ -1,9 +1,9 @@
 import React, { useCallback } from "react";
-import { Button, ConfirmModal, PanelSection, PanelSectionRow, showModal, ToggleField } from "@decky/ui";
+import { Button, ConfirmModal, PanelSection, PanelSectionRow, showModal } from "@decky/ui";
 import {
-  MODEL_POLICY_SETTINGS_INTRO,
+  MODEL_POLICY_PERMISSIONS_INTRO,
   MODEL_POLICY_TIER_IDS,
-  MODEL_POLICY_TIER_LABELS,
+  MODEL_POLICY_TIER_LABELS_PLAIN,
   type ModelPolicyTierId,
 } from "../data/modelPolicy";
 
@@ -45,28 +45,15 @@ type ModalProps = {
   onClose: () => void;
   modelPolicyTier: ModelPolicyTierId;
   modelPolicyNonFossUnlocked: boolean;
-  modelAllowHighVramFallbacks: boolean;
   onSelectModelPolicyTier: (t: ModelPolicyTierId) => void;
-  setModelPolicyNonFossUnlocked: (v: boolean) => void;
-  setModelAllowHighVramFallbacks: (v: boolean) => void;
-  onReadModelPolicy: () => void;
 };
 
 function PermissionsTabModelPolicyDetailModalContent(props: ModalProps) {
-  const {
-    onClose,
-    modelPolicyTier,
-    modelPolicyNonFossUnlocked,
-    modelAllowHighVramFallbacks,
-    onSelectModelPolicyTier,
-    setModelPolicyNonFossUnlocked,
-    setModelAllowHighVramFallbacks,
-    onReadModelPolicy,
-  } = props;
+  const { onClose, modelPolicyTier, modelPolicyNonFossUnlocked, onSelectModelPolicyTier } = props;
 
   return (
     <ConfirmModal
-      strTitle="Model policy"
+      strTitle="AI model choice"
       strDescription={
         <div
           style={{
@@ -81,7 +68,12 @@ function PermissionsTabModelPolicyDetailModalContent(props: ModalProps) {
           }}
         >
           <div className="bonsai-prose" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45 }}>
-            {MODEL_POLICY_SETTINGS_INTRO}
+            {MODEL_POLICY_PERMISSIONS_INTRO}
+            {modelPolicyTier === "non_foss" && !modelPolicyNonFossUnlocked ? (
+              <span style={{ display: "block", marginTop: 8, color: "#fbbf24" }}>
+                Enable Tier 3 unlock under Developer → Model routing (advanced) before choosing Any installed model.
+              </span>
+            ) : null}
           </div>
           <div style={TIER_LIST_HOST}>
             {MODEL_POLICY_TIER_IDS.map((id) => {
@@ -98,8 +90,8 @@ function PermissionsTabModelPolicyDetailModalContent(props: ModalProps) {
                   }}
                   aria-label={
                     tier3Disabled
-                      ? `${MODEL_POLICY_TIER_LABELS[id]} (turn on the Tier 3 unlock below first)`
-                      : MODEL_POLICY_TIER_LABELS[id]
+                      ? `${MODEL_POLICY_TIER_LABELS_PLAIN[id]} (enable Tier 3 unlock in Developer first)`
+                      : MODEL_POLICY_TIER_LABELS_PLAIN[id]
                   }
                   style={{
                     width: "100%",
@@ -110,40 +102,10 @@ function PermissionsTabModelPolicyDetailModalContent(props: ModalProps) {
                     opacity: tier3Disabled ? 0.4 : 1,
                   }}
                 >
-                  {MODEL_POLICY_TIER_LABELS[id]}
+                  {MODEL_POLICY_TIER_LABELS_PLAIN[id]}
                 </Button>
               );
             })}
-          </div>
-          <div style={{ width: "100%", paddingTop: 4, boxSizing: "border-box" }}>
-            <ToggleField
-              label="Allow non-FOSS and unclassified Ollama tags (Tier 3)"
-              description="Required for Tier 3; unclassified tags only run when this is on. Turn off to fall back from Tier 3 to Tier 2."
-              checked={modelPolicyNonFossUnlocked}
-              onChange={(checked) => {
-                setModelPolicyNonFossUnlocked(checked);
-                if (!checked && modelPolicyTier === "non_foss") {
-                  onSelectModelPolicyTier("open_weight");
-                }
-              }}
-            />
-          </div>
-          <div style={{ width: "100%" }}>
-            <ToggleField
-              label="Allow high-VRAM model fallbacks"
-              description="Adds large-model tags after the ~16GB-friendly chain. Can OOM or load slowly—leave off unless you use those tags on purpose."
-              checked={modelAllowHighVramFallbacks}
-              onChange={(checked) => setModelAllowHighVramFallbacks(checked)}
-            />
-          </div>
-          <div style={{ display: "flex", justifyContent: "flex-end", paddingTop: 4 }}>
-            <Button
-              onClick={() => {
-                onReadModelPolicy();
-              }}
-            >
-              Read model policy (README)…
-            </Button>
           </div>
         </div>
       }
@@ -157,27 +119,19 @@ function PermissionsTabModelPolicyDetailModalContent(props: ModalProps) {
 export type PermissionsTabModelPolicyPanelProps = {
   modelPolicyTier: ModelPolicyTierId;
   modelPolicyNonFossUnlocked: boolean;
-  modelAllowHighVramFallbacks: boolean;
   onSelectModelPolicyTier: (t: ModelPolicyTierId) => void;
-  setModelPolicyNonFossUnlocked: (v: boolean) => void;
-  setModelAllowHighVramFallbacks: (v: boolean) => void;
-  onReadModelPolicy: () => void;
   onBeforeDeckyModal: () => void;
   onCompleteDeckyModalClose: (close: () => void) => void;
 };
 
 /**
- * Compact model policy: one row opens a modal with full tier selection, unlocks, and README.
+ * Compact model policy: one row opens a modal with tier selection (advanced unlocks live in Developer tab).
  */
 export function PermissionsTabModelPolicyPanel(props: PermissionsTabModelPolicyPanelProps) {
   const {
     modelPolicyTier,
     modelPolicyNonFossUnlocked,
-    modelAllowHighVramFallbacks,
     onSelectModelPolicyTier,
-    setModelPolicyNonFossUnlocked,
-    setModelAllowHighVramFallbacks,
-    onReadModelPolicy,
     onBeforeDeckyModal,
     onCompleteDeckyModalClose,
   } = props;
@@ -189,31 +143,23 @@ export function PermissionsTabModelPolicyPanel(props: PermissionsTabModelPolicyP
         onClose={() => onCompleteDeckyModalClose(() => handle.Close())}
         modelPolicyTier={modelPolicyTier}
         modelPolicyNonFossUnlocked={modelPolicyNonFossUnlocked}
-        modelAllowHighVramFallbacks={modelAllowHighVramFallbacks}
         onSelectModelPolicyTier={onSelectModelPolicyTier}
-        setModelPolicyNonFossUnlocked={setModelPolicyNonFossUnlocked}
-        setModelAllowHighVramFallbacks={setModelAllowHighVramFallbacks}
-        onReadModelPolicy={onReadModelPolicy}
       />
     );
   }, [
     modelPolicyTier,
     modelPolicyNonFossUnlocked,
-    modelAllowHighVramFallbacks,
     onSelectModelPolicyTier,
-    setModelPolicyNonFossUnlocked,
-    setModelAllowHighVramFallbacks,
-    onReadModelPolicy,
     onBeforeDeckyModal,
     onCompleteDeckyModalClose,
   ]);
 
   return (
-    <PanelSection title="Model policy">
+    <PanelSection title="AI model choice">
       <PanelSectionRow>
         <div className="bonsai-settings-bleed" style={{ width: "100%", minWidth: 0 }}>
           <div className="bonsai-prose" style={{ fontSize: 11, color: "#8fa0b4", lineHeight: 1.35, marginBottom: 8 }}>
-            Which Ollama tag families the plugin may try. Open for details and tier selection.
+            Which installed models bonsAI may try. Open for options.
           </div>
           <Button
             onClick={openDetailModal}
@@ -224,9 +170,9 @@ export function PermissionsTabModelPolicyPanel(props: PermissionsTabModelPolicyP
               fontWeight: 600,
               textAlign: "left",
             }}
-            aria-label="Open model policy options"
+            aria-label="Open AI model choice options"
           >
-            {MODEL_POLICY_TIER_LABELS[modelPolicyTier]}
+            {MODEL_POLICY_TIER_LABELS_PLAIN[modelPolicyTier]}
           </Button>
         </div>
       </PanelSectionRow>

@@ -9,14 +9,9 @@ type Props = {
   setCapabilities: React.Dispatch<React.SetStateAction<BonsaiCapabilities>>;
   /** Turn hardware control on, persist to disk immediately (Decky can remount the panel when the modal closes). */
   onConfirmEnableHardwareControl: () => void;
-  /** Opens README model policy (same gating as About external links). */
-  onReadModelPolicy?: () => void;
   modelPolicyTier: ModelPolicyTierId;
   onSelectModelPolicyTier: (t: ModelPolicyTierId) => void;
-  setModelPolicyNonFossUnlocked: (v: boolean) => void;
   modelPolicyNonFossUnlocked: boolean;
-  setModelAllowHighVramFallbacks: (v: boolean) => void;
-  modelAllowHighVramFallbacks: boolean;
   /** Call before any `showModal` from this tab so the active tab restores after close. */
   onBeforeDeckyModal: () => void;
   /** After modal dismiss; pass `() => handle.Close()`. */
@@ -30,39 +25,33 @@ const ROWS: {
 }[] = [
   {
     key: "filesystem_write",
-    title: "Filesystem writes",
-    description:
-      "Saving debug notes to Desktop/bonsAI_logs and similar exports. Off blocks those writes.",
+    title: "Save files to Desktop",
+    description: "Notes, logs, and exports under Desktop/bonsAI_logs. Off blocks those writes.",
   },
   {
     key: "hardware_control",
-    title: "Hardware control",
-    description:
-      "Applying TDP and GPU clock suggestions from AI output (sysfs / privileged helpers). Off keeps responses read-only.",
+    title: "Adjust power limits (beta)",
+    description: "AI may suggest TDP and GPU clock changes. Off keeps responses read-only.",
   },
   {
     key: "media_library_access",
-    title: "Media library access",
-    description:
-      "Listing and attaching Steam screenshots for vision prompts. Off blocks screenshot browse and attach.",
+    title: "Use Steam screenshots",
+    description: "Attach screenshots when asking about games. Off blocks screenshot browse and attach.",
   },
   {
     key: "steam_logs_read",
-    title: "Steam / Proton log read",
-    description:
-      "Reading bounded local Proton and Steam log excerpts for troubleshooting-style Asks when enabled in Settings. Off blocks log attachment.",
+    title: "Read game logs",
+    description: "Helps with crashes and Proton issues when enabled in Developer settings.",
   },
   {
     key: "steam_web_api",
-    title: "Steam Web API",
-    description:
-      "Outbound requests to Valve’s Steam Web API (e.g. bonsai:vac-check / GetPlayerBans). Your API key is stored in plugin settings. Off blocks those calls.",
+    title: "Steam ban lookup",
+    description: "For the bonsai:vac-check command. API key lives in Developer → Integrations.",
   },
   {
     key: "external_navigation",
-    title: "External and Steam navigation",
-    description:
-      "Opening GitHub/Ollama links in the browser and Steam Input deep links from Debug. Off blocks those actions.",
+    title: "Open web links",
+    description: "GitHub, docs, and Steam settings links from the plugin.",
   },
 ];
 const HARDWARE_DISCLAIMER_BODY =
@@ -81,13 +70,9 @@ export const PermissionsTab: React.FC<Props> = ({
   capabilities,
   setCapabilities,
   onConfirmEnableHardwareControl,
-  onReadModelPolicy,
   modelPolicyTier,
   onSelectModelPolicyTier,
-  setModelPolicyNonFossUnlocked,
   modelPolicyNonFossUnlocked,
-  setModelAllowHighVramFallbacks,
-  modelAllowHighVramFallbacks,
   onBeforeDeckyModal,
   onCompleteDeckyModalClose,
 }) => (
@@ -95,9 +80,8 @@ export const PermissionsTab: React.FC<Props> = ({
   <PanelSection title="Permissions">
     <PanelSectionRow>
       <div className="bonsai-settings-bleed" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45, marginBottom: 4 }}>
-        High-impact actions stay off until you enable them here. Ollama requests on your LAN are not gated by
-        these toggles. Which Ollama tag families the plugin may try is set under <strong>Model policy</strong> at
-        the bottom of this tab.
+        High-impact actions stay off until you enable them here. AI requests on your home network are not
+        gated by these toggles. Which models the plugin may try is set under <strong>AI model choice</strong> below.
       </div>
     </PanelSectionRow>
     {ROWS.map((row) => (
@@ -170,11 +154,7 @@ export const PermissionsTab: React.FC<Props> = ({
   <PermissionsTabModelPolicyPanel
     modelPolicyTier={modelPolicyTier}
     modelPolicyNonFossUnlocked={modelPolicyNonFossUnlocked}
-    modelAllowHighVramFallbacks={modelAllowHighVramFallbacks}
     onSelectModelPolicyTier={onSelectModelPolicyTier}
-    setModelPolicyNonFossUnlocked={setModelPolicyNonFossUnlocked}
-    setModelAllowHighVramFallbacks={setModelAllowHighVramFallbacks}
-    onReadModelPolicy={onReadModelPolicy ?? (() => {})}
     onBeforeDeckyModal={onBeforeDeckyModal}
     onCompleteDeckyModalClose={onCompleteDeckyModalClose}
   />

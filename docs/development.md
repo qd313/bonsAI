@@ -165,7 +165,7 @@ Milestone 2 splits heavy orchestration paths while preserving runtime behavior:
   - `tdp_service.py` for TDP/sysfs write helpers
   - `ollama_service.py` for prompt assembly and Ollama transport formatting
 - Frontend components/data:
-  - `src/components/DebugTab.tsx`
+  - `src/components/DeveloperTab.tsx`
   - `src/components/AboutTab.tsx`
   - `src/data/presets.ts` (preset text, category heuristics, carousel helpers `holdMsForPresetText` / `getRandomPresetExcluding`)
   - `src/components/PresetAnimatedChips.tsx` (main tab preset chip fade/hold carousel)

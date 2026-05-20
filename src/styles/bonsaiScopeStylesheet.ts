@@ -120,9 +120,9 @@ export function buildBonsaiScopeStylesheet(): string {
         .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-shell--main .bonsai-tab-title-icon {
           transform: translateX(${TAB_TITLE_MAIN_ICON_SHIFT_X_PX}px) !important;
         }
-        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-shell--debug .bonsai-tab-title-icon,
-        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-shell--debug .bonsai-tab-title-icon > span,
-        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-shell--debug .bonsai-tab-title-icon svg {
+        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-shell--developer .bonsai-tab-title-icon,
+        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-shell--developer .bonsai-tab-title-icon > span,
+        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-shell--developer .bonsai-tab-title-icon svg {
           width: ${TAB_TITLE_DEBUG_TAB_ICON_PX}px !important;
           height: ${TAB_TITLE_DEBUG_TAB_ICON_PX}px !important;
           min-width: ${TAB_TITLE_DEBUG_TAB_ICON_PX}px !important;

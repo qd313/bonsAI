@@ -11,25 +11,18 @@ import {
 } from "@decky/ui";
 import { toaster } from "@decky/api";
 import {
-  DEFAULT_LATENCY_WARNING_SECONDS,
-  DEFAULT_REQUEST_TIMEOUT_SECONDS,
   OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP,
-  DESKTOP_APP_LOG_LEVEL_OPTIONS,
   SCREENSHOT_ATTACHMENT_PRESET_OPTIONS,
-  STEAM_WEB_API_KEY_MAX_LEN,
-  type OllamaKeepAliveDuration,
   type ScreenshotAttachmentPreset,
   type UnifiedInputPersistenceMode,
-  type DesktopAppLogLevel,
 } from "../utils/settingsAndResponse";
 import {
   AI_CHARACTER_ACCENT_INTENSITY_OPTIONS,
   type AiCharacterAccentIntensityId,
 } from "../data/aiCharacterAccentIntensity";
 import { formatAiCharacterSelectionLine } from "../data/characterCatalog";
-import { SettingsTabConnectionTimeoutSlider } from "./SettingsTabConnectionTimeoutSlider";
-import { SettingsTabOllamaKeepAliveSlider } from "./SettingsTabOllamaKeepAliveSlider";
 import { SettingsTabAccentIntensityMenuPopover } from "./SettingsTabAccentIntensityMenuPopover";
+import type { DeveloperConnectionStatus } from "./DeveloperTab";
 import { ASK_LABEL_COLOR_50 } from "../features/unified-input/constants";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 
@@ -73,27 +66,12 @@ type LocalOllamaSetupStatus = {
   done?: boolean;
 };
 
-type ConnectionStatus = {
-  reachable: boolean;
-  version?: string;
-  models?: string[];
-  /** Ollama /api/ps while models are loaded (size_vram vs size ≈ GPU-visible weight share). */
-  ps_loaded?: Array<{
-    name: string;
-    size_bytes: number;
-    size_vram_bytes: number;
-    vram_weight_share_pct_appx: number | null;
-  }>;
-  error?: string;
-  /** Backend attempted to wake localhost Ollama (Connection Test loopback failure path). */
-  recovery_attempted?: boolean;
-  recovery_succeeded_before_retry?: boolean | null;
-};
+type ConnectionStatus = DeveloperConnectionStatus;
 
 const persistenceModeLabel: Record<UnifiedInputPersistenceMode, string> = {
-  persist_all: "Persist all text",
-  persist_search_only: "Persist search-only",
-  no_persist: "No persistence",
+  persist_all: "Remember everything",
+  persist_search_only: "Remember search only",
+  no_persist: "Don't remember",
 };
 const persistenceModeShortLabel: Record<UnifiedInputPersistenceMode, string> = {
   persist_all: "All",
@@ -106,24 +84,14 @@ const persistenceModeOptions: UnifiedInputPersistenceMode[] = [
   "no_persist",
 ];
 const persistenceModeDescription: Record<UnifiedInputPersistenceMode, string> = {
-  persist_all: "Restore all unified input text, including AI prompts.",
-  persist_search_only: "Restore only text that matches settings search results.",
-  no_persist: "Never restore unified input text on reopen.",
-};
-const desktopAppLogLevelLabel: Record<DesktopAppLogLevel, string> = {
-  off: "Off",
-  default: "Default",
-  verbose: "Verbose",
-};
-const desktopAppLogLevelDescription: Record<DesktopAppLogLevel, string> = {
-  off: "No app activity log file on Desktop.",
-  default: "Summary events (connection tests, asks, settings changes).",
-  verbose: "Default events plus RPC details, setup log lines, and frontend errors.",
+  persist_all: "Restore all typed text when you reopen the plugin.",
+  persist_search_only: "Restore only text from Steam settings search.",
+  no_persist: "Never restore typed text on reopen.",
 };
 const screenshotPresetLabel: Record<ScreenshotAttachmentPreset, string> = {
-  low: "Low",
-  mid: "Mid",
-  max: "Max",
+  low: "Save memory",
+  mid: "Balanced",
+  max: "Best detail",
 };
 
 const accentIntensityOutline: Record<AiCharacterAccentIntensityId, string> = {
@@ -139,25 +107,13 @@ export type SettingsTabProps = {
   onPersistOllamaIp: (ip: string) => void;
   ollamaLocalOnDeck: boolean;
   setOllamaLocalOnDeck: (v: boolean) => void;
-
-  latencyWarningSeconds: number;
-  requestTimeoutSeconds: number;
-  latencyTimeoutsCustomEnabled: boolean;
-  setLatencyTimeoutsCustomEnabled: (v: boolean) => void;
-  setLatencyWarningSeconds: (v: number) => void;
-  setRequestTimeoutSeconds: (v: number) => void;
-
-  ollamaKeepAlive: OllamaKeepAliveDuration;
-  setOllamaKeepAlive: (v: OllamaKeepAliveDuration) => void;
+  onLastConnectionStatus?: (status: ConnectionStatus | null) => void;
 
   screenshotAttachmentPreset: ScreenshotAttachmentPreset;
   setScreenshotAttachmentPreset: (v: ScreenshotAttachmentPreset) => void;
 
   unifiedInputPersistenceMode: UnifiedInputPersistenceMode;
   setUnifiedInputPersistenceMode: (v: UnifiedInputPersistenceMode) => void;
-
-  presetChipFadeAnimationEnabled: boolean;
-  setPresetChipFadeAnimationEnabled: (v: boolean) => void;
 
   aiCharacterEnabled: boolean;
   setAiCharacterEnabled: (v: boolean) => void;
@@ -167,20 +123,8 @@ export type SettingsTabProps = {
   aiCharacterAccentIntensity: AiCharacterAccentIntensityId;
   setAiCharacterAccentIntensity: (v: AiCharacterAccentIntensityId) => void;
 
-  showDebugTab: boolean;
-  setShowDebugTab: (v: boolean) => void;
-  desktopDebugNoteAutoSave: boolean;
-  setDesktopDebugNoteAutoSave: (v: boolean) => void;
-  desktopAskVerboseLogging: boolean;
-  setDesktopAskVerboseLogging: (v: boolean) => void;
-  desktopAppLogLevel: DesktopAppLogLevel;
-  setDesktopAppLogLevel: (v: DesktopAppLogLevel) => void;
-  filesystemWrite: boolean;
-  attachProtonLogsWhenTroubleshooting: boolean;
-  setAttachProtonLogsWhenTroubleshooting: (v: boolean) => void;
-
-  steamWebApiKey: string;
-  setSteamWebApiKey: (v: string) => void;
+  showDeveloperTab: boolean;
+  setShowDeveloperTab: (v: boolean) => void;
 
   strategySpoilerMaskingEnabled: boolean;
   setStrategySpoilerMaskingEnabled: (v: boolean) => void;
@@ -201,20 +145,11 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   onPersistOllamaIp,
   ollamaLocalOnDeck,
   setOllamaLocalOnDeck,
-  latencyWarningSeconds,
-  requestTimeoutSeconds,
-  latencyTimeoutsCustomEnabled,
-  setLatencyTimeoutsCustomEnabled,
-  setLatencyWarningSeconds,
-  setRequestTimeoutSeconds,
-  ollamaKeepAlive,
-  setOllamaKeepAlive,
+  onLastConnectionStatus,
   screenshotAttachmentPreset,
   setScreenshotAttachmentPreset,
   unifiedInputPersistenceMode,
   setUnifiedInputPersistenceMode,
-  presetChipFadeAnimationEnabled,
-  setPresetChipFadeAnimationEnabled,
   aiCharacterEnabled,
   setAiCharacterEnabled,
   aiCharacterRandom,
@@ -222,19 +157,8 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   aiCharacterCustomText,
   aiCharacterAccentIntensity,
   setAiCharacterAccentIntensity,
-  showDebugTab,
-  setShowDebugTab,
-  desktopDebugNoteAutoSave,
-  setDesktopDebugNoteAutoSave,
-  desktopAskVerboseLogging,
-  setDesktopAskVerboseLogging,
-  desktopAppLogLevel,
-  setDesktopAppLogLevel,
-  filesystemWrite,
-  attachProtonLogsWhenTroubleshooting,
-  setAttachProtonLogsWhenTroubleshooting,
-  steamWebApiKey,
-  setSteamWebApiKey,
+  showDeveloperTab,
+  setShowDeveloperTab,
   strategySpoilerMaskingEnabled,
   setStrategySpoilerMaskingEnabled,
   strategySpoilerAutoRevealAfterConsent,
@@ -257,11 +181,9 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   const accentIntensityMenuFirstItemRef = useRef<HTMLDivElement>(null);
   const accentIntensityMenuToggleOnceRef = useRef(false);
 
-  const ollamaKeepAliveThumbHostRef = useRef<HTMLDivElement>(null);
   const screenshotDimensionNavRef = useRef<HTMLDivElement>(null);
   const ollamaIpConnectionNavRef = useRef<HTMLDivElement>(null);
   const ollamaLocalToggleNavRef = useRef<HTMLDivElement>(null);
-  const latencyWarningThumbHostRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     callDeckyWithTimeout<[], string>("get_deck_ip", [], DECKY_RPC_TIMEOUT_MS)
@@ -293,9 +215,11 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
         rpcDeadlineMs
       );
       setConnectionStatus(result);
+      onLastConnectionStatus?.(result);
       if (result.reachable && !ollamaLocalOnDeck) onPersistOllamaIp(target);
     } catch (e: unknown) {
       setConnectionStatus({ reachable: false, error: formatDeckyRpcError(e) });
+      onLastConnectionStatus?.({ reachable: false, error: formatDeckyRpcError(e) });
     } finally {
       setConnectionTesting(false);
     }
@@ -500,51 +424,9 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
     return true;
   }, []);
 
-  const focusScreenshotMaxDimensionFromSlider = useCallback((): boolean => {
-    const root = screenshotDimensionNavRef.current;
-    if (!root) return false;
-    const btn = root.querySelector<HTMLElement>('button[aria-label^="Set screenshot attachment"]');
-    if (!btn) return false;
-    btn.focus();
-    return true;
-  }, []);
-  const focusOllamaKeepAliveThumb = useCallback((): boolean => {
-    const host = ollamaKeepAliveThumbHostRef.current;
-    if (!host) return false;
-    const target = host.querySelector<HTMLElement>("[tabindex], button");
-    if (!target) return false;
-    target.focus();
-    return true;
-  }, []);
-  /** When local Ollama is on, timeout slider D-pad up should not focus a disabled IP field. */
-  const focusOllamaRoutingFromTimeoutSlider = useCallback((): boolean => {
-    if (ollamaLocalOnDeck) {
-      const root = ollamaLocalToggleNavRef.current;
-      if (!root) return false;
-      const toggle = root.querySelector<HTMLElement>('button[role="switch"], [role="switch"], button');
-      if (!toggle) return false;
-      toggle.focus();
-      return true;
-    }
-    const root = ollamaIpConnectionNavRef.current;
-    if (!root) return false;
-    const field = root.querySelector<HTMLElement>("input, textarea");
-    if (!field) return false;
-    field.focus();
-    return true;
-  }, [ollamaLocalOnDeck]);
-  const focusSoftWarningFromScreenshot = useCallback((): boolean => {
-    const host = latencyWarningThumbHostRef.current;
-    if (!host) return false;
-    const target = host.querySelector<HTMLElement>("[tabindex], button");
-    if (!target) return false;
-    target.focus();
-    return true;
-  }, []);
-
   return (
     <div className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight bonsai-settings-section-stack">
-      <PanelSection title="Connection">
+      <PanelSection title="Where AI runs">
         <PanelSectionRow>
           <div
             ref={ollamaLocalToggleNavRef}
@@ -552,7 +434,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
             style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}
           >
             <ToggleField
-              label="Ollama on this Deck (local)"
+              label="Run AI on this Deck"
               checked={ollamaLocalOnDeck}
               onChange={(c) => setOllamaLocalOnDeck(c)}
             />
@@ -566,7 +448,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                 userSelect: "none",
               }}
             >
-              Off: use a PC on your LAN. On: Ollama runs on this device at {OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP}.
+              Off: use a PC on your home network. On: AI runs on this device.
             </div>
           </div>
         </PanelSectionRow>
@@ -608,9 +490,9 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                       : "linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.05) 100%)",
                     color: "#e8eef5",
                   }}
-                  aria-label="Set up starter Ollama models"
+                  aria-label="Install starter models"
                 >
-                  Starter (README)
+                  Install starter models
                 </Button>
                 <Button
                   disabled={localSetupBusy}
@@ -629,9 +511,9 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                       : "linear-gradient(180deg, rgba(56,189,248,0.22) 0%, rgba(14,116,144,0.35) 100%)",
                     color: "#e0f2fe",
                   }}
-                  aria-label="Update Ollama and re-pull installed models"
+                  aria-label="Update AI engine and installed models"
                 >
-                  Update Ollama & Models
+                  Update AI & models
                 </Button>
                 <Button
                   disabled={localSetupBusy}
@@ -650,9 +532,9 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                       : "linear-gradient(180deg, rgba(251,146,60,0.22) 0%, rgba(120,53,15,0.35) 100%)",
                     color: "#fef3c7",
                   }}
-                  aria-label="Pull full Tier-1 FOSS model set"
+                  aria-label="Install full model set"
                 >
-                  Full Tier‑1 FOSS
+                  Install full model set
                 </Button>
                 {localSetupBusy ? (
                   <Button
@@ -790,7 +672,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                     marginBottom: 2,
                   }}
                 >
-                  OLLAMA IP ADDRESS
+                  PC address
                 </div>
                 <TextField
                   label=""
@@ -850,66 +732,17 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
           <PanelSectionRow>
             {connectionStatus.reachable ? (
               <div className="bonsai-settings-bleed" style={{ fontSize: 12, color: "#81c784" }}>
-                <div>Connected — Ollama v{connectionStatus.version}</div>
+                <div>
+                  Connected · Ollama v{connectionStatus.version}
+                  {connectionStatus.models && connectionStatus.models.length > 0
+                    ? ` · ${connectionStatus.models.length} model${connectionStatus.models.length === 1 ? "" : "s"}`
+                    : ""}
+                </div>
                 {connectionStatus.recovery_attempted ? (
                   <div className="bonsai-prose" style={{ fontSize: 10, color: "#7d8fa3", marginTop: 4 }}>
-                    Started or woke the local Ollama listener for this check.
+                    Started or woke the local AI service for this check.
                   </div>
                 ) : null}
-                {connectionStatus.ps_loaded && connectionStatus.ps_loaded.length > 0 ? (
-                  <div className="bonsai-prose" style={{ color: "#b8dfe8", marginTop: 6, lineHeight: 1.4 }}>
-                    <div style={{ fontWeight: 600, marginBottom: 4 }}>
-                      Loaded now (GET /api/ps) — approximate GPU-visible weight share
-                    </div>
-                    {connectionStatus.ps_loaded.map((m) => (
-                      <div key={m.name} style={{ marginBottom: 6 }}>
-                        <span style={{ color: "#9ce7ff" }}>{m.name}</span>
-                        {m.vram_weight_share_pct_appx != null ? (
-                          <>
-                            {": "}
-                            <span style={{ fontVariantNumeric: "tabular-nums" }}>
-                              ~{m.vram_weight_share_pct_appx}% in GPU-visible VRAM ({m.size_vram_bytes} / {m.size_bytes}
-                              B)
-                            </span>
-                          </>
-                        ) : (
-                          <span style={{ color: "#9fb7d5" }}>: (no size split from Ollama)</span>
-                        )}
-                        {(m.size_vram_bytes === 0 ||
-                          (m.vram_weight_share_pct_appx != null && m.vram_weight_share_pct_appx <= 0)) && (
-                          <div style={{ fontSize: 10, color: "#7d8fa3", marginTop: 4 }}>
-                            Ollama reports no GPU-visible weight bytes here (<span style={{ color: "#9ce7ff" }}>size_vram</span>{" "}
-                            0 vs <span style={{ color: "#9ce7ff" }}>size</span>) — weights usually sit on CPU/system RAM
-                            offload, not a bonsAI bug.
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                    <div style={{ fontSize: 10, color: "#7d8fa3", marginTop: 6 }}>
-                      Low % with very long generations often means CPU-heavy offload. Press Test during an active Ask (model
-                      still loaded). Empty list here means nothing resident in Ollama memory yet.
-                    </div>
-                  </div>
-                ) : (
-                  <div className="bonsai-prose" style={{ color: "#7d8fa3", fontSize: 10, marginTop: 6, lineHeight: 1.38 }}>
-                    /api/ps: no models loaded in Ollama memory right now — tap Test during generation to see size vs
-                    size_vram.
-                  </div>
-                )}
-                {connectionStatus.models && connectionStatus.models.length > 0 && (
-                  <div
-                    className="bonsai-prose"
-                    style={{
-                      color: "#9fb7d5",
-                      marginTop: 4,
-                      maxHeight: 88,
-                      overflowY: "auto",
-                      lineHeight: 1.35,
-                    }}
-                  >
-                    Installed tags: {connectionStatus.models.join(", ")}
-                  </div>
-                )}
               </div>
             ) : (
               <div className="bonsai-prose bonsai-settings-bleed" style={{ fontSize: 12, color: "tomato" }}>
@@ -918,117 +751,8 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
             )}
           </PanelSectionRow>
         )}
-        <PanelSectionRow>
-          <div className="bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-            <div
-              style={{
-                fontVariant: "small-caps",
-                letterSpacing: "0.06em",
-                fontSize: 11,
-                fontWeight: 600,
-                color: "#b8c6d6",
-                marginBottom: 4,
-              }}
-            >
-              Steam Web API key (VAC check)
-            </div>
-            <TextField
-              label=""
-              value={steamWebApiKey}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const v = e.target.value.slice(0, STEAM_WEB_API_KEY_MAX_LEN);
-                setSteamWebApiKey(v);
-              }}
-              style={{ width: "100%", minWidth: 0 }}
-            />
-            <div
-              className="bonsai-prose"
-              style={{ fontSize: 10, color: "#6b7c90", lineHeight: 1.35, marginTop: 6, userSelect: "none" }}
-            >
-              Used only for the Ask command <code>bonsai:vac-check</code> (GetPlayerBans). Register a key on Steam, enable{" "}
-              <strong>Permissions → Steam Web API</strong>, then paste here. Stored on this device with plugin settings.
-            </div>
-          </div>
-        </PanelSectionRow>
       </PanelSection>
-      <PanelSection title="Ollama host">
-        <PanelSectionRow>
-          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
-            <ToggleField
-              label="Custom timeouts"
-              checked={latencyTimeoutsCustomEnabled}
-              onChange={(c) => setLatencyTimeoutsCustomEnabled(c)}
-            />
-          </div>
-        </PanelSectionRow>
-        {!latencyTimeoutsCustomEnabled ? (
-          <PanelSectionRow>
-            <div className="bonsai-prose bonsai-settings-bleed" style={{ fontSize: 12, color: "#cdd9e6", lineHeight: 1.4 }}>
-              Default:{" "}
-              <span style={{ color: "#ffd299", fontWeight: 700 }}>Warning {DEFAULT_LATENCY_WARNING_SECONDS}s</span>
-              <span style={{ color: "rgba(255,255,255,0.35)" }}> | </span>
-              <span style={{ color: "#9ce7ff", fontWeight: 700 }}>Timeout {DEFAULT_REQUEST_TIMEOUT_SECONDS}s</span>
-            </div>
-          </PanelSectionRow>
-        ) : (
-          <PanelSectionRow>
-            <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-              <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", lineHeight: 1.35, marginBottom: 6 }}>
-                <div>
-                  <span style={{ color: "#ffd299", fontWeight: 700 }}>Warning</span>
-                  {" = slow-reply nudge"}
-                </div>
-                <div style={{ marginTop: 4 }}>
-                  <span style={{ color: "#9ce7ff", fontWeight: 700 }}>Timeout</span>
-                  {" = abort if still busy"}
-                </div>
-              </div>
-              <SettingsTabConnectionTimeoutSlider
-                warningSec={latencyWarningSeconds}
-                timeoutSec={requestTimeoutSeconds}
-                onChange={(w, t) => {
-                  setLatencyWarningSeconds(w);
-                  setRequestTimeoutSeconds(t);
-                }}
-                warningThumbHostRef={latencyWarningThumbHostRef}
-                onMoveDownFromThumb={focusOllamaKeepAliveThumb}
-                onMoveUpFromTimeoutThumb={focusOllamaRoutingFromTimeoutSlider}
-              />
-            </div>
-          </PanelSectionRow>
-        )}
-        <PanelSectionRow>
-          <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-            <div
-              style={{
-                fontVariant: "small-caps",
-                letterSpacing: "0.06em",
-                fontSize: 11,
-                fontWeight: 600,
-                color: "#b8c6d6",
-                marginBottom: 4,
-              }}
-            >
-              VRAM: Ollama keep_alive
-            </div>
-            <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 6, lineHeight: 1.35 }}>
-              Time to keep model loaded in VRAM after a prompt
-            </div>
-            <SettingsTabOllamaKeepAliveSlider
-              value={ollamaKeepAlive}
-              onChange={setOllamaKeepAlive}
-              thumbHostRef={ollamaKeepAliveThumbHostRef}
-              onMoveUp={
-                latencyTimeoutsCustomEnabled
-                  ? () => focusSoftWarningFromScreenshot()
-                  : () => focusOllamaRoutingFromTimeoutSlider()
-              }
-              onMoveDown={() => focusScreenshotMaxDimensionFromSlider()}
-            />
-          </div>
-        </PanelSectionRow>
-      </PanelSection>
-      <PanelSection title="Screenshots">
+      <PanelSection title="Screenshot quality">
         <PanelSectionRow>
           <div
             ref={screenshotDimensionNavRef}
@@ -1045,10 +769,10 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                 marginBottom: 4,
               }}
             >
-              <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13 }}>Attachment quality (vision)</div>
+              <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13 }}>Screenshot quality</div>
             </div>
             <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
-              Downscale image attachments to save memory.
+              For vision questions — lower quality uses less memory.
             </div>
             <Focusable
               flow-children="horizontal"
@@ -1059,9 +783,6 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                 return (
                   <Button
                     key={`preset-${option}`}
-                    {...({
-                      onMoveUp: () => focusOllamaKeepAliveThumb(),
-                    } as Record<string, unknown>)}
                     onClick={() => setScreenshotAttachmentPreset(option)}
                     style={{
                       flex: 1,
@@ -1077,7 +798,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                       color: active ? "#f0f4f8" : "#9fb0c0",
                       boxShadow: active ? "inset 0 1px 0 rgba(255,255,255,0.15)" : "none",
                     }}
-                    aria-label={`Set screenshot attachment to ${option}`}
+                    aria-label={`Set screenshot quality to ${screenshotPresetLabel[option]}`}
                   >
                     {screenshotPresetLabel[option]}
                   </Button>
@@ -1087,12 +808,11 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
           </div>
         </PanelSectionRow>
       </PanelSection>
-      <PanelSection title="Saved text">
+      <PanelSection title="Remember what I typed">
         <PanelSectionRow>
           <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-            <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 6 }}>Ask / search persistence</div>
             <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
-              {persistenceModeLabel[unifiedInputPersistenceMode]} — what reloads when you reopen the plugin.
+              {persistenceModeDescription[unifiedInputPersistenceMode]}
             </div>
             <Focusable
               flow-children="horizontal"
@@ -1130,35 +850,25 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
           </div>
         </PanelSectionRow>
       </PanelSection>
-      <PanelSection title="Main tab">
+      <PanelSection title="Story spoilers (Strategy mode)">
         <PanelSectionRow>
           <ToggleField
-            label="Preset chip fade animation"
-            description="Off: no crossfade when suggestion chips update (re-seed after Ask unchanged)."
-            checked={presetChipFadeAnimationEnabled}
-            onChange={(checked) => setPresetChipFadeAnimationEnabled(checked)}
-          />
-        </PanelSectionRow>
-      </PanelSection>
-      <PanelSection title="Strategy Guide">
-        <PanelSectionRow>
-          <ToggleField
-            label="Spoiler tap-to-reveal"
-            description="On: fenced bonsai-spoiler blocks stay collapsed until you show them. Off: show that text inline (no masking)."
+            label="Hide spoilers until I tap"
+            description="Strategy mode masks spoiler sections until you choose to reveal them."
             checked={strategySpoilerMaskingEnabled}
             onChange={(checked) => setStrategySpoilerMaskingEnabled(checked)}
           />
         </PanelSectionRow>
         <PanelSectionRow>
           <ToggleField
-            label="Expand spoilers after consent"
-            description="When you opt in (toggle or wording), start with spoiler sections open; you can still collapse them."
+            label="Open spoilers after I opt in on an Ask"
+            description="When you consent on an Ask, spoiler sections start expanded (you can still collapse them)."
             checked={strategySpoilerAutoRevealAfterConsent}
             onChange={(checked) => setStrategySpoilerAutoRevealAfterConsent(checked)}
           />
         </PanelSectionRow>
       </PanelSection>
-      <PanelSection title="Character">
+      <PanelSection title="AI voice & personality">
         <PanelSectionRow>
           <div
             className="bonsai-settings-ai-character-block"
@@ -1170,8 +880,8 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
             }}
           >
             <ToggleField
-              label="AI characters"
-              description="Preset, random, or custom voice in system prompt."
+              label="AI voice & personality"
+              description="Preset, random, or custom character tone in replies."
               checked={aiCharacterEnabled}
               onChange={(checked) => setAiCharacterEnabled(checked)}
             />
@@ -1276,91 +986,14 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
           </div>
         </PanelSectionRow>
       </PanelSection>
-      <PanelSection title="Advanced">
-        <PanelSectionRow>
-          <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-            <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 6 }}>
-              App activity logging to Desktop
-            </div>
-            <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
-              {desktopAppLogLevelDescription[desktopAppLogLevel]} Writes{" "}
-              <span style={{ color: "#9ce7ff" }}>bonsai-app-YYYY-MM-DD.log</span> under Desktop/bonsAI_logs/.
-              {!filesystemWrite ? (
-                <span style={{ display: "block", marginTop: 6, color: "#fbbf24" }}>
-                  Enable Filesystem writes in Permissions to save logs.
-                </span>
-              ) : null}
-            </div>
-            <Focusable
-              flow-children="horizontal"
-              style={{ display: "flex", gap: 6, width: "100%", minWidth: 0, maxWidth: "100%", alignItems: "stretch" }}
-            >
-              {DESKTOP_APP_LOG_LEVEL_OPTIONS.map((level) => {
-                const active = level === desktopAppLogLevel;
-                return (
-                  <Button
-                    key={level}
-                    onClick={() => setDesktopAppLogLevel(level)}
-                    style={{
-                      flex: 1,
-                      minHeight: 36,
-                      fontSize: 12,
-                      fontWeight: 600,
-                      padding: "4px 4px",
-                      borderRadius: 4,
-                      border: active ? "1px solid rgba(56,189,248,0.55)" : "1px solid rgba(255,255,255,0.12)",
-                      background: active
-                        ? "linear-gradient(180deg, rgba(56,189,248,0.22) 0%, rgba(14,116,144,0.35) 100%)"
-                        : "rgba(255,255,255,0.04)",
-                      color: active ? "#e0f2fe" : "#9fb0c0",
-                      boxShadow: active ? "inset 0 1px 0 rgba(255,255,255,0.15)" : "none",
-                    }}
-                    aria-label={`${desktopAppLogLevelLabel[level]}: ${desktopAppLogLevelDescription[level]}`}
-                  >
-                    {desktopAppLogLevelLabel[level]}
-                  </Button>
-                );
-              })}
-            </Focusable>
-          </div>
-        </PanelSectionRow>
+      <PanelSection title="Data">
         <PanelSectionRow>
           <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
             <ToggleField
-              label="Show Debug tab"
-              description="Add Debug tab: logs, errors, Steam Input jump. Default off."
-              checked={showDebugTab}
-              onChange={(checked) => setShowDebugTab(checked)}
-            />
-          </div>
-        </PanelSectionRow>
-        <PanelSectionRow>
-          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
-            <ToggleField
-              label="Auto-save chat to Desktop notes"
-              description="Append Q+A to Desktop/bonsAI_logs/bonsai-chat-YYYY-MM-DD.md (UTC). Needs Filesystem writes."
-              checked={desktopDebugNoteAutoSave}
-              onChange={(checked) => setDesktopDebugNoteAutoSave(checked)}
-            />
-          </div>
-        </PanelSectionRow>
-        <PanelSectionRow>
-          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
-            <ToggleField
-              label="Verbose Ask logging to Desktop notes"
-              description="Append full Ollama trace (prompts, model, replies) to bonsai-ask-trace-*.md under Desktop/bonsAI_logs. Needs Filesystem writes; can be large/sensitive. Latest trace also on Main → Input handling."
-              checked={desktopAskVerboseLogging}
-              onChange={(checked) => setDesktopAskVerboseLogging(checked)}
-            />
-          </div>
-        </PanelSectionRow>
-        <PanelSectionRow>
-          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
-            <ToggleField
-              label="Attach Proton logs when troubleshooting"
-              description="On troubleshooting-style questions (crashes, Proton, stutter), attach bounded local log tails to the model context. Requires Steam / Proton log read in Permissions. Rich Proton traces need PROTON_LOG=1; this plugin does not enable it."
-              checked={attachProtonLogsWhenTroubleshooting}
-              onChange={(checked) => setAttachProtonLogsWhenTroubleshooting(checked)}
+              label="Show Developer tab"
+              description="Adds a Developer tab with logs, exports, and advanced tuning. Default off."
+              checked={showDeveloperTab}
+              onChange={(checked) => setShowDeveloperTab(checked)}
             />
           </div>
         </PanelSectionRow>

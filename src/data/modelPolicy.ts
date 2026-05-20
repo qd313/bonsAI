@@ -42,6 +42,17 @@ export const MODEL_POLICY_TIER_LABELS: Record<ModelPolicyTierId, string> = {
   non_foss: "Tier 3 — Include non-FOSS + unclassified tags",
 };
 
+/** Plain-language tier labels for Permissions tab (technical detail lives in Developer). */
+export const MODEL_POLICY_TIER_LABELS_PLAIN: Record<ModelPolicyTierId, string> = {
+  open_source_only: "Open source only (recommended)",
+  open_weight: "Also try open-weight models",
+  non_foss: "Any installed model",
+};
+
+/** Short Permissions modal intro (Developer tab holds full FOSS/Tier disclosure). */
+export const MODEL_POLICY_PERMISSIONS_INTRO =
+  "Controls which installed models bonsAI will try, in order. Your PC or Deck still decides what is installed.";
+
 /** Short Settings helper: what changes vs staying on Tier 1. */
 export const MODEL_POLICY_SETTINGS_INTRO =
   "Tier 1 (default) limits fallbacks to FOSS-friendly tags. Tier 2 adds open-weight names; Tier 3 can include non-FOSS and unclassified tags when unlocked. Only changes which tags the plugin tries—your host still decides what is installed.";

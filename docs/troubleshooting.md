@@ -69,7 +69,7 @@ If Windows still falls back to CPU after FIX A:
 
 ## 1a. Permissions tab (blocked actions)
 
-**Feature:** The **Permissions** tab (lock icon) controls high-impact actions: saving notes to Desktop, applying TDP/GPU suggestions from the model, attaching Steam screenshots to asks, opening external links from About, and the Debug tab Steam Input jump.
+**Feature:** The **Permissions** tab (lock icon) controls high-impact actions: saving notes to Desktop, applying TDP/GPU suggestions from the model, attaching Steam screenshots to asks, opening external links from About, and the Developer tab Steam Input jump.
 
 **Symptom:** Toasts like “Permission required” or backend errors mentioning Permissions when you try those actions.
 
@@ -331,7 +331,9 @@ Run with a build that also satisfies [regression-and-smoke.md](regression-and-sm
 
 ---
 
-## Steam Input jump (Phase 1, Debug tab)
+## Steam Input jump (Phase 1, Developer tab)
+
+Enable **Settings → Data → Show Developer tab**, then open **Developer** → **Diagnostics**.
 
 Phase 1 is the **completed** scope for this feature; full search + catalog (Phase 2+) is deferred per [roadmap.md](roadmap.md).
 

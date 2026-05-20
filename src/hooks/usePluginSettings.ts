@@ -23,7 +23,7 @@ import {
   DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED,
   DEFAULT_REQUEST_TIMEOUT_SECONDS,
   DEFAULT_SCREENSHOT_ATTACHMENT_PRESET,
-  DEFAULT_SHOW_DEBUG_TAB,
+  DEFAULT_SHOW_DEVELOPER_TAB,
   DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT,
   DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED,
   DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
@@ -86,7 +86,7 @@ export function usePluginSettings() {
   );
   const [askMode, setAskMode] = useState<AskModeId>(DEFAULT_ASK_MODE);
   const [ollamaKeepAlive, setOllamaKeepAlive] = useState<OllamaKeepAliveDuration>(DEFAULT_OLLAMA_KEEP_ALIVE);
-  const [showDebugTab, setShowDebugTab] = useState<boolean>(DEFAULT_SHOW_DEBUG_TAB);
+  const [showDeveloperTab, setShowDeveloperTab] = useState<boolean>(DEFAULT_SHOW_DEVELOPER_TAB);
   const [modelPolicyTier, setModelPolicyTier] = useState<ModelPolicyTierId>(DEFAULT_MODEL_POLICY_TIER);
   const [modelPolicyNonFossUnlocked, setModelPolicyNonFossUnlocked] = useState<boolean>(false);
   const [modelAllowHighVramFallbacks, setModelAllowHighVramFallbacks] = useState<boolean>(
@@ -123,7 +123,7 @@ export function usePluginSettings() {
     setAiCharacterAccentIntensity(normalized.ai_character_accent_intensity);
     setAskMode(normalized.ask_mode);
     setOllamaKeepAlive(normalized.ollama_keep_alive);
-    setShowDebugTab(normalized.show_debug_tab);
+    setShowDeveloperTab(normalized.show_developer_tab);
     setModelPolicyTier(normalized.model_policy_tier);
     setModelPolicyNonFossUnlocked(normalized.model_policy_non_foss_unlocked);
     setModelAllowHighVramFallbacks(normalized.model_allow_high_vram_fallbacks);
@@ -157,7 +157,7 @@ export function usePluginSettings() {
         setAiCharacterAccentIntensity(normalized.ai_character_accent_intensity);
         setAskMode(normalized.ask_mode);
         setOllamaKeepAlive(normalized.ollama_keep_alive);
-        setShowDebugTab(normalized.show_debug_tab);
+        setShowDeveloperTab(normalized.show_developer_tab);
         setModelPolicyTier(normalized.model_policy_tier);
         setModelPolicyNonFossUnlocked(normalized.model_policy_non_foss_unlocked);
         setModelAllowHighVramFallbacks(normalized.model_allow_high_vram_fallbacks);
@@ -187,7 +187,7 @@ export function usePluginSettings() {
         setAiCharacterAccentIntensity(DEFAULT_AI_CHARACTER_ACCENT_INTENSITY);
         setAskMode(DEFAULT_ASK_MODE);
         setOllamaKeepAlive(DEFAULT_OLLAMA_KEEP_ALIVE);
-        setShowDebugTab(DEFAULT_SHOW_DEBUG_TAB);
+        setShowDeveloperTab(DEFAULT_SHOW_DEVELOPER_TAB);
         setModelPolicyTier(DEFAULT_MODEL_POLICY_TIER);
         setModelPolicyNonFossUnlocked(false);
         setModelAllowHighVramFallbacks(DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS);
@@ -229,7 +229,7 @@ export function usePluginSettings() {
           aiCharacterAccentIntensity,
           askMode,
           ollamaKeepAlive,
-          showDebugTab,
+          showDeveloperTab,
           modelPolicyTier,
           modelPolicyNonFossUnlocked,
           modelAllowHighVramFallbacks,
@@ -263,7 +263,7 @@ export function usePluginSettings() {
     aiCharacterAccentIntensity,
     askMode,
     ollamaKeepAlive,
-    showDebugTab,
+    showDeveloperTab,
     modelPolicyTier,
     modelPolicyNonFossUnlocked,
     modelAllowHighVramFallbacks,
@@ -302,8 +302,8 @@ export function usePluginSettings() {
     setAskMode,
     ollamaKeepAlive,
     setOllamaKeepAlive,
-    showDebugTab,
-    setShowDebugTab,
+    showDeveloperTab,
+    setShowDeveloperTab,
     modelPolicyTier,
     setModelPolicyTier,
     modelPolicyNonFossUnlocked,

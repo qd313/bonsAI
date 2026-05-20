@@ -63,7 +63,7 @@ Run after **`scripts/build.ps1`** or **`scripts/build.sh`** succeeds. Check **Pa
 - [ ] **Ask timing / Model unload / Screenshots / Saved text**: change value, leave tab, return — persisted.
 - [ ] **Character**: open picker, OK/Cancel, accent menu if AI character on.
 - [ ] **Model policy**: tier change + README link still opens if touched.
-- [ ] **Advanced**: Debug tab toggle; reset session cache confirm if touched.
+- [ ] **Data**: Show Developer tab toggle; reset session cache confirm if touched.
 - [ ] **Desktop notes**: toggles persist; errors are readable, not raw stack traces.
 
 ### Permissions

@@ -108,9 +108,13 @@ def sanitize_steam_web_api_key(value: Any) -> str:
     return s
 
 
-def sanitize_show_debug_tab(value: Any) -> bool:
-    """Only explicit ``true`` shows the Debug tab; default is hidden."""
-    return value is True
+def sanitize_show_developer_tab(value: Any, legacy_show_debug_tab: Any = None) -> bool:
+    """Only explicit ``true`` shows the Developer tab; legacy ``show_debug_tab`` migrates on read."""
+    if value is True:
+        return True
+    if legacy_show_debug_tab is True:
+        return True
+    return False
 
 
 def sanitize_ollama_local_on_deck(value: Any) -> bool:
@@ -298,7 +302,9 @@ def sanitize_settings(
         ),
         "ollama_keep_alive": sanitize_ollama_keep_alive(raw.get("ollama_keep_alive")),
         "ollama_local_on_deck": sanitize_ollama_local_on_deck(raw.get("ollama_local_on_deck")),
-        "show_debug_tab": sanitize_show_debug_tab(raw.get("show_debug_tab")),
+        "show_developer_tab": sanitize_show_developer_tab(
+            raw.get("show_developer_tab"), raw.get("show_debug_tab")
+        ),
         "model_policy_tier": mp_tier,
         "model_policy_non_foss_unlocked": mp_unlock,
         "model_allow_high_vram_fallbacks": sanitize_model_allow_high_vram_fallbacks(

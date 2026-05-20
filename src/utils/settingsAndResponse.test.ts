@@ -73,7 +73,7 @@ describe("settingsAndResponse", () => {
     expect(settings.input_sanitizer_user_disabled).toBe(false);
     expect(settings.ask_mode).toBe(DEFAULT_ASK_MODE);
     expect(settings.ollama_keep_alive).toBe(DEFAULT_OLLAMA_KEEP_ALIVE);
-    expect(settings.show_debug_tab).toBe(false);
+    expect(settings.show_developer_tab).toBe(false);
     expect(settings.model_policy_tier).toBe("open_source_only");
     expect(settings.model_policy_non_foss_unlocked).toBe(false);
     expect(settings.model_allow_high_vram_fallbacks).toBe(false);
@@ -148,10 +148,11 @@ describe("settingsAndResponse", () => {
     );
   });
 
-  it("normalizes show_debug_tab: only explicit true enables", () => {
-    expect(normalizeSettings({ show_debug_tab: true }).show_debug_tab).toBe(true);
-    expect(normalizeSettings({ show_debug_tab: false }).show_debug_tab).toBe(false);
-    expect(normalizeSettings({}).show_debug_tab).toBe(false);
+  it("normalizes show_developer_tab: only explicit true enables; migrates show_debug_tab", () => {
+    expect(normalizeSettings({ show_developer_tab: true }).show_developer_tab).toBe(true);
+    expect(normalizeSettings({ show_developer_tab: false }).show_developer_tab).toBe(false);
+    expect(normalizeSettings({ show_debug_tab: true }).show_developer_tab).toBe(true);
+    expect(normalizeSettings({}).show_developer_tab).toBe(false);
   });
 
   it("normalizes preset chip fade: only explicit false disables", () => {
@@ -209,7 +210,7 @@ describe("settingsAndResponse", () => {
       aiCharacterAccentIntensity: "balanced",
       askMode: "deep",
       ollamaKeepAlive: "30s",
-      showDebugTab: true,
+      showDeveloperTab: true,
       modelPolicyTier: "open_weight",
       modelPolicyNonFossUnlocked: false,
       modelAllowHighVramFallbacks: true,
@@ -231,6 +232,7 @@ describe("settingsAndResponse", () => {
     expect(p.strategy_spoiler_masking_enabled).toBe(false);
     expect(p.strategy_spoiler_auto_reveal_after_consent).toBe(true);
     expect(p.steam_web_api_key).toBe("abc");
+    expect(p.show_developer_tab).toBe(true);
   });
 
   it("toBonsaiSettingsPayload merges patch over base (character picker path)", () => {
@@ -254,7 +256,7 @@ describe("settingsAndResponse", () => {
       aiCharacterAccentIntensity: DEFAULT_AI_CHARACTER_ACCENT_INTENSITY,
       askMode: DEFAULT_ASK_MODE,
       ollamaKeepAlive: DEFAULT_OLLAMA_KEEP_ALIVE,
-      showDebugTab: false,
+      showDeveloperTab: false,
       modelPolicyTier: "open_source_only" as const,
       modelPolicyNonFossUnlocked: false,
       modelAllowHighVramFallbacks: false,

@@ -88,8 +88,8 @@ export type BonsaiSettings = {
   ask_mode: AskModeId;
   /** Ollama `keep_alive` for each Ask (how long the model stays in VRAM on the host after the request). */
   ollama_keep_alive: OllamaKeepAliveDuration;
-  /** When true, show the Debug tab in the LB/RB strip (default off for typical users). */
-  show_debug_tab: boolean;
+  /** When true, show the Developer tab in the LB/RB strip (default off for typical users). */
+  show_developer_tab: boolean;
   /** Which Ollama model families the backend may try (see README model policy). */
   model_policy_tier: ModelPolicyTierId;
   /** Tier 3 requires explicit acknowledgment for non-FOSS and unclassified tags. */
@@ -127,7 +127,7 @@ export type BonsaiSettingsSnapshotInput = {
   aiCharacterAccentIntensity: AiCharacterAccentIntensityId;
   askMode: AskModeId;
   ollamaKeepAlive: OllamaKeepAliveDuration;
-  showDebugTab: boolean;
+  showDeveloperTab: boolean;
   modelPolicyTier: ModelPolicyTierId;
   modelPolicyNonFossUnlocked: boolean;
   modelAllowHighVramFallbacks: boolean;
@@ -162,7 +162,7 @@ export function toBonsaiSettingsPayload(
     ai_character_accent_intensity: input.aiCharacterAccentIntensity,
     ask_mode: input.askMode,
     ollama_keep_alive: input.ollamaKeepAlive,
-    show_debug_tab: input.showDebugTab,
+    show_developer_tab: input.showDeveloperTab,
     model_policy_tier: input.modelPolicyTier,
     model_policy_non_foss_unlocked: input.modelPolicyNonFossUnlocked,
     model_allow_high_vram_fallbacks: input.modelAllowHighVramFallbacks,
@@ -200,7 +200,7 @@ export const DESKTOP_APP_LOG_LEVEL_OPTIONS: DesktopAppLogLevel[] = ["off", "defa
 export const DEFAULT_ATTACH_PROTON_LOGS_WHEN_TROUBLESHOOTING = false;
 export const DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED = true;
 export const DEFAULT_INPUT_SANITIZER_USER_DISABLED = false;
-export const DEFAULT_SHOW_DEBUG_TAB = false;
+export const DEFAULT_SHOW_DEVELOPER_TAB = false;
 /** Persisted routing: off = LAN PC IP text field applies; when on, Ask uses localhost Ollama on the Deck only. */
 export const DEFAULT_OLLAMA_LOCAL_ON_DECK = false;
 /** Fixed host:port for on-device Ollama (matches `refactor_helpers.DEFAULT_OLLAMA_*`). */
@@ -369,8 +369,10 @@ export function normalizeInputSanitizerUserDisabled(value: unknown): boolean {
   return value === true;
 }
 
-export function normalizeShowDebugTab(value: unknown): boolean {
-  return value === true;
+export function normalizeShowDeveloperTab(value: unknown, legacyShowDebugTab?: unknown): boolean {
+  if (value === true) return true;
+  if (legacyShowDebugTab === true) return true;
+  return false;
 }
 
 export function normalizeModelAllowHighVramFallbacks(value: unknown): boolean {
@@ -497,7 +499,7 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     ai_character_accent_intensity: normalizeAiCharacterAccentIntensity(raw.ai_character_accent_intensity),
     ask_mode: normalizeAskMode(raw.ask_mode),
     ollama_keep_alive: normalizeOllamaKeepAlive(raw.ollama_keep_alive),
-    show_debug_tab: normalizeShowDebugTab(raw.show_debug_tab),
+    show_developer_tab: normalizeShowDeveloperTab(raw.show_developer_tab, rawRecord?.show_debug_tab),
     model_policy_tier: modelPolicy.model_policy_tier,
     model_policy_non_foss_unlocked: modelPolicy.model_policy_non_foss_unlocked,
     model_allow_high_vram_fallbacks: normalizeModelAllowHighVramFallbacks(raw.model_allow_high_vram_fallbacks),

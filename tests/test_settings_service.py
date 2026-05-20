@@ -67,13 +67,30 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertFalse(sanitized["input_sanitizer_user_disabled"])
         self.assertEqual(sanitized["ask_mode"], "speed")
         self.assertEqual(sanitized["ollama_keep_alive"], "5m")
-        self.assertFalse(sanitized["show_debug_tab"])
+        self.assertFalse(sanitized["show_developer_tab"])
         self.assertEqual(sanitized["model_policy_tier"], "open_source_only")
         self.assertFalse(sanitized["model_policy_non_foss_unlocked"])
         self.assertFalse(sanitized["model_allow_high_vram_fallbacks"])
         self.assertFalse(sanitized["ollama_local_on_deck"])
         self.assertTrue(sanitized["strategy_spoiler_masking_enabled"])
         self.assertFalse(sanitized["strategy_spoiler_auto_reveal_after_consent"])
+
+    def test_show_developer_tab_migrates_legacy_show_debug_tab(self):
+        """Legacy show_debug_tab enables Developer tab on read."""
+        kwargs = dict(
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="no_persist",
+            valid_ask_modes={"speed", "strategy", "deep"},
+            default_ask_mode="speed",
+        )
+        self.assertTrue(sanitize_settings(data={"show_debug_tab": True}, **kwargs)["show_developer_tab"])
+        self.assertFalse(sanitize_settings(data={"show_debug_tab": False}, **kwargs)["show_developer_tab"])
 
     def test_sanitize_model_policy_non_foss_requires_ack(self):
         """non_foss tier without unlock is downgraded to open_weight."""

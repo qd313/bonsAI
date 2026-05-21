@@ -109,19 +109,17 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     };
   }, [a.desktopDebugNoteAutoSave, a.filesystemWrite]);
 
-  /** Keep latest spoiler-stream gate for poll callbacks (`applyBackgroundStatusToUi` must stay stable deps). */
+  /** Latest spoiler-stream gate for poll callbacks (`applyBackgroundStatusToUi` keeps stable deps). */
   const strategyStreamGateRef = useRef({
     askMode: a.askMode,
     strategySpoilerMaskingEnabled: a.strategySpoilerMaskingEnabled,
     strategySpoilerConsentForNextAsk: a.strategySpoilerConsentForNextAsk,
   });
-  useEffect(() => {
-    strategyStreamGateRef.current = {
-      askMode: a.askMode,
-      strategySpoilerMaskingEnabled: a.strategySpoilerMaskingEnabled,
-      strategySpoilerConsentForNextAsk: a.strategySpoilerConsentForNextAsk,
-    };
-  }, [a.askMode, a.strategySpoilerMaskingEnabled, a.strategySpoilerConsentForNextAsk]);
+  strategyStreamGateRef.current = {
+    askMode: a.askMode,
+    strategySpoilerMaskingEnabled: a.strategySpoilerMaskingEnabled,
+    strategySpoilerConsentForNextAsk: a.strategySpoilerConsentForNextAsk,
+  };
 
   useEffect(() => {
     if (!lastExchange?.question?.trim()) return;

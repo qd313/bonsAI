@@ -13,6 +13,7 @@ All notable changes to this project are documented in this file.
 - **Desktop logs folder rename:** All Desktop writes (chat auto-save, Ask traces, manual notes, app logs) now use `~/Desktop/bonsAI_logs/` instead of `~/Desktop/BonsAI_notes/`. Existing folders are not auto-migrated — rename manually if you already have notes there.
 
 ### Fixed
+- **App activity log level survives plugin load:** `load_settings` success path now hydrates `desktop_app_log_level` into React state (it was only applied in `hydrateFromSettings` / error fallback). Without this, the debounced autosave could rewrite `settings.json` with the default **`off`** and silently drop **`default`** / **`verbose`** (`src/hooks/usePluginSettings.ts`).
 - **Local toggle no longer overwrites LAN PC IP:** Ask no longer persists `127.0.0.1:11434` to `bonsai:pc-ip` localStorage while **Ollama on this Deck** is enabled, so toggling local off restores the user's LAN host (`src/utils/persistOllamaIp.ts`, `src/index.tsx`).
 
 ## [0.3.0] - 2026-04-30

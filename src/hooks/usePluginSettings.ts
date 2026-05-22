@@ -155,6 +155,7 @@ export function usePluginSettings() {
         setScreenshotAttachmentPreset(normalized.screenshot_attachment_preset);
         setDesktopDebugNoteAutoSave(normalized.desktop_debug_note_auto_save);
         setDesktopAskVerboseLogging(normalized.desktop_ask_verbose_logging);
+        setDesktopAppLogLevel(normalized.desktop_app_log_level);
         setAttachProtonLogsWhenTroubleshooting(normalized.attach_proton_logs_when_troubleshooting);
         setPresetChipAnimation(normalized.preset_chip_animation);
         setPresetChipFadeAnimationEnabled(normalized.preset_chip_fade_animation_enabled);

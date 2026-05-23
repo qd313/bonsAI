@@ -22,6 +22,12 @@ from backend.services.ollama_service import (
     user_wants_power_or_performance_topic,
 )
 from backend.services.proton_troubleshooting_logs import collect_proton_troubleshooting_logs
+from backend.services.response_verify import (
+    maybe_append_verifier_notice,
+    run_verifier_second_pass,
+    verify_ollama_response,
+)
+from refactor_helpers import build_ollama_chat_url
 from backend.services.tdp_service import (
     GPU_CLK_MAX_MHZ,
     GPU_CLK_MIN_MHZ,
@@ -266,6 +272,51 @@ async def run_game_ai_request(
         base_response_text = str(ollama_result.get("response", "") or "No response text.")
         response_text = base_response_text
         applied = None
+        verify_result = None
+        pyro_asshole = ollama_result.get("pyro_asshole_mode") is True
+
+        if ollama_result.get("success"):
+            has_game = bool((app_id or "").strip()) or bool((app_name or "").strip())
+            run_rules = settings.get("response_verify_enabled") is True
+            verify_model = str(settings.get("response_verify_model") or "").strip()
+            run_second = (
+                settings.get("response_verify_second_pass") is True and bool(verify_model)
+            )
+            if run_rules or run_second:
+                verify_result = (
+                    verify_ollama_response(
+                        response_text=base_response_text,
+                        app_id=app_id,
+                        app_name=app_name,
+                    )
+                    if run_rules
+                    else {"passed": True, "warnings": []}
+                )
+                should_second = run_second and (
+                    not run_rules or not verify_result.get("passed")
+                )
+                if should_second:
+                    loop_verify = asyncio.get_running_loop()
+
+                    def _second_pass() -> dict:
+                        return run_verifier_second_pass(
+                            chat_url=build_ollama_chat_url(pc_ip),
+                            model_name=verify_model,
+                            response_text=base_response_text,
+                            has_game=has_game,
+                            request_timeout_seconds=request_timeout_seconds,
+                            logger=logger,
+                        )
+
+                    second = await loop_verify.run_in_executor(None, _second_pass)
+                    verify_result = {**verify_result, "second_pass": second}
+                    if second.get("ran") and second.get("passed") is False:
+                        warnings = list(verify_result.get("warnings") or [])
+                        warnings.append("verifier model flagged possible unsupported claims")
+                        verify_result["passed"] = False
+                        verify_result["warnings"] = warnings
+                if not verify_result.get("passed") and not pyro_asshole:
+                    response_text = maybe_append_verifier_notice(base_response_text, verify_result)
 
         if ollama_result.get("success"):
             loop = asyncio.get_running_loop()
@@ -281,10 +332,12 @@ async def run_game_ai_request(
                     gmax,
                 )
 
-            rec = await loop.run_in_executor(None, _parse_only)
+            rec = None if pyro_asshole else await loop.run_in_executor(None, _parse_only)
 
             if read_tdp:
                 logger.info("ask_game_ai: read-TDP question; sysfs apply skipped")
+            elif pyro_asshole:
+                logger.info("ask_game_ai: pyro asshole easter egg; hardware apply suppressed")
             elif rec:
                 if not capability_enabled(settings, "hardware_control"):
                     logger.info("ask_game_ai: TDP recommendation present but hardware_control disabled")
@@ -335,6 +388,8 @@ async def run_game_ai_request(
                 "proton_log_excerpt_attached": bool(ollama_result.get("proton_log_excerpt_attached")),
                 "proton_log_sources": ollama_result.get("proton_log_sources") or [],
                 "proton_log_notes": str(ollama_result.get("proton_log_notes") or ""),
+                "ask_diagnostics": ollama_result.get("ask_diagnostics"),
+                "response_verify": verify_result,
             }
         )
 

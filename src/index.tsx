@@ -13,6 +13,7 @@ import {
 } from "./utils/settingsAndResponse";
 import { AboutTab } from "./components/AboutTab";
 import { BonsaiPluginShell } from "./components/BonsaiPluginShell";
+import { BonsaiDebugOverlay } from "./components/BonsaiDebugOverlay";
 import { CharacterPickerModal } from "./components/CharacterPickerModal";
 import { DesktopNoteSaveModal } from "./components/DesktopNoteSaveModal";
 import { DeveloperTab, type DeveloperConnectionStatus } from "./components/DeveloperTab";
@@ -32,8 +33,16 @@ import { buildBonsaiScopeAccentInlineStyle, resolveUiAccentFromCharacterSettings
 import { appendAppDesktopLogWithPrefs } from "./utils/appDesktopLog";
 import {
   captureBonsaiSessionForModal,
+  clearBonsaiSessionSurvival,
   consumeBonsaiSessionAfterRemount,
+  finalizeSessionRestoreAfterRemount,
+  peekBonsaiSessionPendingRestore,
 } from "./utils/bonsaiSessionSurvival";
+import { bonsaiDebugLog, bumpContentMountCount } from "./utils/bonsaiDebugIngest";
+import {
+  captureSettingsTabLocalSnapshot,
+  clearSettingsTabLocalSurvival,
+} from "./utils/settingsTabLocalSurvival";
 import { persistOllamaIpIfRoutingToLan as persistOllamaIpIfRoutingToLanUtil } from "./utils/persistOllamaIp";
 import { getRandomPresets } from "./data/presets";
 import {
@@ -217,13 +226,50 @@ function bonsaiTabIconTitle(
   );
 }
 
+const FULL_BLEED_ROW_STYLE: React.CSSProperties = {
+  width: "calc(100% + 24px)",
+  marginLeft: -12,
+  marginRight: -10,
+  boxSizing: "border-box",
+};
+
+const PRESET_BUTTON_SURFACE: React.CSSProperties = {
+  border: "1px solid rgba(255,255,255,0.1)",
+  background: "rgba(255,255,255,0.03)",
+  color: "#93a3b0",
+};
+
+const DECKY_TAB_TITLES = {
+  main: bonsaiTabIconTitle("main", <BonsaiTreeTabIcon size={TAB_TITLE_MAIN_TAB_ICON_PX} />),
+  settings: bonsaiTabIconTitle("settings", <GearIcon size={TAB_TITLE_ICON_PX} />),
+  permissions: bonsaiTabIconTitle("permissions", <LockIcon size={TAB_TITLE_ICON_PX} />),
+  developer: bonsaiTabIconTitle("developer", <BugIcon size={TAB_TITLE_DEBUG_TAB_ICON_PX} />),
+  about: bonsaiTabIconTitle("about", <AboutTabTitleIcon size={TAB_TITLE_ICON_PX} />),
+} as const;
+
+function resolveInitialTab(): string {
+  const snap = peekBonsaiSessionPendingRestore();
+  if (snap?.currentTab) return snap.currentTab;
+  if (__bonsaiTabRestoreAfterModal != null) return __bonsaiTabRestoreAfterModal;
+  return "main";
+}
+
 /**
  * Primary plugin shell: tabs plus Ask/settings wiring. Heavy logic lives in hooks under `src/hooks/`
  * (`usePluginSettings`, `useBackgroundGameAi`, `useDisclaimerAndLocalRuntimeGates`, `useBonsaiAskOrchestration`,
  * `useCapturedFrontendErrors`) and feature modules under `src/features/` so this file stays a composer.
  */
 const Content: React.FC = () => {
-  const [currentTab, setCurrentTab] = useState("main");
+  useLayoutEffect(() => {
+    const mount = bumpContentMountCount();
+    bonsaiDebugLog("index.tsx:Content", "content mounted", "H1", {
+      mount,
+      pendingPeek: !!peekBonsaiSessionPendingRestore(),
+      tab: resolveInitialTab(),
+    });
+  }, []);
+
+  const [currentTab, setCurrentTab] = useState(resolveInitialTab);
   const [lastConnectionStatus, setLastConnectionStatus] = useState<DeveloperConnectionStatus | null>(null);
   /** Remember tab when opening character picker so we restore after `showModal` closes. */
   const characterPickerReturnTabRef = useRef<string>("main");
@@ -232,6 +278,9 @@ const Content: React.FC = () => {
    * when focus returns. While this ref is within `until`, treat that as spurious and keep `tab` instead.
    */
   const postPickerTabLockRef = useRef<{ until: number; tab: string } | null>(null);
+  /** Assigned after `finalizeShowModalAndRestoreActiveTab` is created (disclaimer hook runs earlier). */
+  const finalizeModalCloseRef = useRef<(close: () => void) => void>((close) => close());
+  const pendingSessionRestoreFinalizeRef = useRef(false);
 
   useLayoutEffect(() => {
     const pending = __bonsaiTabRestoreAfterModal;
@@ -242,10 +291,16 @@ const Content: React.FC = () => {
   }, []);
 
   // --- Unified input/search state ---
-  const [unifiedInput, setUnifiedInput] = useState(() => loadSavedSearchQuery());
-  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [unifiedInput, setUnifiedInput] = useState(() => {
+    const snap = peekBonsaiSessionPendingRestore();
+    if (snap?.unifiedInput != null) return snap.unifiedInput;
+    return loadSavedSearchQuery();
+  });
+  const [selectedIndex, setSelectedIndex] = useState(() => peekBonsaiSessionPendingRestore()?.selectedIndex ?? -1);
   const [isUnifiedInputFocused, setIsUnifiedInputFocused] = useState(false);
-  const [navigationMessage, setNavigationMessage] = useState<string>("");
+  const [navigationMessage, setNavigationMessage] = useState(
+    () => peekBonsaiSessionPendingRestore()?.navigationMessage ?? ""
+  );
   const {
     bonsaiScopeRef,
     unifiedInputHostRef,
@@ -257,9 +312,18 @@ const Content: React.FC = () => {
   } = useUnifiedInputSurface(currentTab, unifiedInput);
 
   // --- Connection / misc shell state (Ask + poll state: ``useBonsaiAskOrchestration``) ---
-  const [ollamaIp, setOllamaIp] = useState(loadSavedIp());
-  const [strategySpoilerConsentForNextAsk, setStrategySpoilerConsentForNextAsk] = useState(false);
+  const [ollamaIp, setOllamaIp] = useState(
+    () => peekBonsaiSessionPendingRestore()?.ollamaIp ?? loadSavedIp()
+  );
+  const [strategySpoilerConsentForNextAsk, setStrategySpoilerConsentForNextAsk] = useState(
+    () => peekBonsaiSessionPendingRestore()?.strategySpoilerConsentForNextAsk ?? false
+  );
   const [pluginHelpDismissed, setPluginHelpDismissed] = useState(() => {
+    const snap = peekBonsaiSessionPendingRestore();
+    if (snap?.pluginHelpDismissed != null) {
+      __bonsaiPluginHelpDismissed = snap.pluginHelpDismissed;
+      return snap.pluginHelpDismissed;
+    }
     if (pluginHelpDismissedFromStorage()) {
       __bonsaiPluginHelpDismissed = true;
       return true;
@@ -269,11 +333,21 @@ const Content: React.FC = () => {
   useEffect(() => {
     __bonsaiPluginHelpDismissed = pluginHelpDismissed;
   }, [pluginHelpDismissed]);
-  const [isScreenshotBrowserOpen, setIsScreenshotBrowserOpen] = useState(false);
-  const [mediaError, setMediaError] = useState<string>("");
-  const [recentScreenshots, setRecentScreenshots] = useState<ScreenshotItem[]>([]);
-  const [isLoadingRecentScreenshots, setIsLoadingRecentScreenshots] = useState(false);
-  const [selectedAttachment, setSelectedAttachment] = useState<AskAttachment | null>(null);
+  const [isScreenshotBrowserOpen, setIsScreenshotBrowserOpen] = useState(
+    () => peekBonsaiSessionPendingRestore()?.isScreenshotBrowserOpen ?? false
+  );
+  const [mediaError, setMediaError] = useState(
+    () => peekBonsaiSessionPendingRestore()?.mediaError ?? ""
+  );
+  const [recentScreenshots, setRecentScreenshots] = useState<ScreenshotItem[]>(
+    () => peekBonsaiSessionPendingRestore()?.recentScreenshots ?? []
+  );
+  const [isLoadingRecentScreenshots, setIsLoadingRecentScreenshots] = useState(
+    () => peekBonsaiSessionPendingRestore()?.isLoadingRecentScreenshots ?? false
+  );
+  const [selectedAttachment, setSelectedAttachment] = useState<AskAttachment | null>(
+    () => peekBonsaiSessionPendingRestore()?.selectedAttachment ?? null
+  );
   const screenshotBrowserHostRef = useRef<HTMLDivElement>(null);
   const attachActionHostRef = useRef<HTMLDivElement>(null);
 
@@ -336,6 +410,14 @@ const Content: React.FC = () => {
     setSteamWebApiKey,
     bonsaiTokenStreamingEnabled,
     setBonsaiTokenStreamingEnabled,
+    responseVerifyEnabled,
+    setResponseVerifyEnabled,
+    responseVerifySecondPass,
+    setResponseVerifySecondPass,
+    responseVerifyModel,
+    setResponseVerifyModel,
+    namedOllamaHosts,
+    setNamedOllamaHosts,
     settingsLoaded,
     hydrateFromSettings,
   } = usePluginSettings();
@@ -360,12 +442,6 @@ const Content: React.FC = () => {
       setStrategySpoilerConsentForNextAsk(false);
     }
   }, [askMode]);
-
-  const {
-    showDisclaimerModalAgain,
-    ollamaLocalOnDeckPrevRef,
-    localRuntimeBetaPromptIssuedRef,
-  } = useDisclaimerAndLocalRuntimeGates(settingsLoaded, ollamaLocalOnDeck);
 
   const effectiveOllamaPcIp = useMemo(
     () => (ollamaLocalOnDeck ? OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP : ollamaIp.trim()),
@@ -392,6 +468,8 @@ const Content: React.FC = () => {
     setShowSlowWarning,
     elapsedSeconds,
     lastTransparency,
+    thinkingSummary,
+    lastRequestId,
     askThreadCollapsed,
     askThreadViewIndex,
     setAskThreadViewIndex,
@@ -439,12 +517,36 @@ const Content: React.FC = () => {
 
   useLayoutEffect(() => {
     const survived = consumeBonsaiSessionAfterRemount();
+    bonsaiDebugLog("index.tsx:consume", survived ? "restored snapshot" : "no snapshot", "H1", {
+      tab: survived?.currentTab,
+      inputLen: survived?.unifiedInput?.length ?? 0,
+      hasExchange: !!survived?.lastExchange,
+    });
     if (!survived) return;
+    if (survived.currentTab) setCurrentTab(survived.currentTab);
     setUnifiedInput(survived.unifiedInput);
+    setSelectedIndex(survived.selectedIndex);
+    setNavigationMessage(survived.navigationMessage);
+    setSelectedAttachment(survived.selectedAttachment);
+    setIsScreenshotBrowserOpen(survived.isScreenshotBrowserOpen);
+    setMediaError(survived.mediaError);
+    setRecentScreenshots(survived.recentScreenshots);
+    setIsLoadingRecentScreenshots(survived.isLoadingRecentScreenshots);
+    setStrategySpoilerConsentForNextAsk(survived.strategySpoilerConsentForNextAsk);
     setPluginHelpDismissed(survived.pluginHelpDismissed);
     __bonsaiPluginHelpDismissed = survived.pluginHelpDismissed;
+    setOllamaIp(survived.ollamaIp);
+    hydrateFromSettings(toBonsaiSettingsPayload(survived.settingsSnapshot));
     restoreSessionSnapshot(survived);
-  }, [restoreSessionSnapshot]);
+    pendingSessionRestoreFinalizeRef.current = true;
+  }, [restoreSessionSnapshot, hydrateFromSettings]);
+
+  useEffect(() => {
+    if (!pendingSessionRestoreFinalizeRef.current) return;
+    pendingSessionRestoreFinalizeRef.current = false;
+    finalizeSessionRestoreAfterRemount();
+    bonsaiDebugLog("index.tsx:finalizeRestore", "cleared pending snapshot", "H1", {});
+  }, []);
 
   const effectiveLatencyWarningSeconds = useMemo(
     () => (latencyTimeoutsCustomEnabled ? latencyWarningSeconds : DEFAULT_LATENCY_WARNING_SECONDS),
@@ -510,6 +612,11 @@ const Content: React.FC = () => {
       strategySpoilerMaskingEnabled,
       strategySpoilerAutoRevealAfterConsent,
       steamWebApiKey,
+      bonsaiTokenStreamingEnabled,
+      responseVerifyEnabled,
+      responseVerifySecondPass,
+      responseVerifyModel,
+      namedOllamaHosts,
     }),
     [
       latencyWarningSeconds,
@@ -540,6 +647,11 @@ const Content: React.FC = () => {
       strategySpoilerMaskingEnabled,
       strategySpoilerAutoRevealAfterConsent,
       steamWebApiKey,
+      bonsaiTokenStreamingEnabled,
+      responseVerifyEnabled,
+      responseVerifySecondPass,
+      responseVerifyModel,
+      namedOllamaHosts,
     ]
   );
 
@@ -550,25 +662,86 @@ const Content: React.FC = () => {
 
   const captureSessionBeforeModal = useCallback(() => {
     characterPickerReturnTabRef.current = currentTab;
+    const settingsLocal = captureSettingsTabLocalSnapshot();
     captureBonsaiSessionForModal({
+      currentTab,
       unifiedInput,
+      selectedIndex,
+      navigationMessage,
+      selectedAttachment,
+      isScreenshotBrowserOpen,
+      mediaError,
+      recentScreenshots,
+      isLoadingRecentScreenshots,
+      strategySpoilerConsentForNextAsk,
+      pluginHelpDismissed,
+      ollamaIp,
+      settingsSnapshot: settingsSnapshotForSave,
       ollamaResponse,
+      ollamaContext,
+      lastExchange,
       askThreadCollapsed,
       askThreadDisplayQuestion,
       askThreadViewIndex,
       suggestedPrompts,
-      pluginHelpDismissed,
+      lastTransparency,
+      modelPolicyDisclosure,
+      strategyGuideBranches,
+      elapsedSeconds,
+      lastApplied,
+      shortcutSetupVariant,
+      presetCarouselInject,
+      showSlowWarning,
+      lastRequestId,
+      thinkingSummary,
+    });
+    bonsaiDebugLog("index.tsx:captureSessionBeforeModal", "captured", "H4", {
+      tab: currentTab,
+      inputLen: unifiedInput.length,
+      hasExchange: !!lastExchange,
+      settingsLocal: !!settingsLocal,
     });
   }, [
     currentTab,
     unifiedInput,
+    selectedIndex,
+    navigationMessage,
+    selectedAttachment,
+    isScreenshotBrowserOpen,
+    mediaError,
+    recentScreenshots,
+    isLoadingRecentScreenshots,
+    strategySpoilerConsentForNextAsk,
+    pluginHelpDismissed,
+    ollamaIp,
+    settingsSnapshotForSave,
     ollamaResponse,
+    ollamaContext,
+    lastExchange,
     askThreadCollapsed,
     askThreadDisplayQuestion,
     askThreadViewIndex,
     suggestedPrompts,
-    pluginHelpDismissed,
+    lastTransparency,
+    modelPolicyDisclosure,
+    strategyGuideBranches,
+    elapsedSeconds,
+    lastApplied,
+    shortcutSetupVariant,
+    presetCarouselInject,
+    showSlowWarning,
+    lastRequestId,
+    thinkingSummary,
   ]);
+
+  const {
+    showDisclaimerModalAgain,
+    ollamaLocalOnDeckPrevRef,
+    localRuntimeBetaPromptIssuedRef,
+  } = useDisclaimerAndLocalRuntimeGates(settingsLoaded, ollamaLocalOnDeck, {
+    onBeforeDeckyModal: captureSessionBeforeModal,
+    onCompleteDeckyModalClose: (close) => finalizeModalCloseRef.current(close),
+  });
 
   const onCommitModelPolicyTier = useCallback(
     async (t: ModelPolicyTierId) => {
@@ -726,6 +899,8 @@ const Content: React.FC = () => {
       ollamaLocalOnDeckPrevRef.current = null;
       setPluginHelpDismissed(false);
       setSuggestedPrompts(getRandomPresets(3));
+      clearBonsaiSessionSurvival();
+      clearSettingsTabLocalSurvival();
       resetPluginSession();
       showDisclaimerModalAgain();
       toaster.toast({
@@ -780,17 +955,12 @@ const Content: React.FC = () => {
 
   const onOpenScreenshotBrowser = async () => {
     if (isAsking) return;
-    if (!capabilities.media_library_access) {
-      toaster.toast({
-        title: "Permission required",
-        body: "Enable Media library access in the Permissions tab to attach screenshots.",
-        duration: 4500,
-      });
-      goToPermissionsTab();
-      return;
-    }
     setIsScreenshotBrowserOpen(true);
     setMediaError("");
+    if (!capabilities.media_library_access) {
+      setMediaError("Enable Media library access in Permissions to attach screenshots.");
+      return;
+    }
     if (recentScreenshots.length === 0) {
       await loadRecentScreenshots(24);
     }
@@ -815,18 +985,6 @@ const Content: React.FC = () => {
     toaster.toast({ title: "Media attached", body: "Recent screenshot attached.", duration: 1800 });
   };
 
-  const fullBleedRowStyle: React.CSSProperties = {
-    width: "calc(100% + 24px)",
-    marginLeft: -12,
-    marginRight: -10,
-    boxSizing: "border-box",
-  };
-
-  const presetButtonSurface: React.CSSProperties = {
-    border: "1px solid rgba(255,255,255,0.1)",
-    background: "rgba(255,255,255,0.03)",
-    color: "#93a3b0",
-  };
   const showSearchClearButton = Boolean(unifiedInput.trim());
 
   const armPostPickerTabLock = useCallback((back: string) => {
@@ -841,6 +999,7 @@ const Content: React.FC = () => {
   const finalizeShowModalAndRestoreActiveTab = useCallback(
     (close: () => void) => {
       const back = characterPickerReturnTabRef.current;
+      bonsaiDebugLog("index.tsx:finalizeModal", "modal close", "H4", { backTab: back });
       __bonsaiTabRestoreAfterModal = back;
       armPostPickerTabLock(back);
       setCurrentTab(back);
@@ -853,7 +1012,12 @@ const Content: React.FC = () => {
     [armPostPickerTabLock]
   );
 
+  useEffect(() => {
+    finalizeModalCloseRef.current = finalizeShowModalAndRestoreActiveTab;
+  }, [finalizeShowModalAndRestoreActiveTab]);
+
   const openPluginHelpModal = useCallback(() => {
+    captureSessionBeforeModal();
     markPluginHelpDismissedPersist();
     __bonsaiPluginHelpDismissed = true;
     setPluginHelpDismissed(true);
@@ -861,7 +1025,7 @@ const Content: React.FC = () => {
     const handle = showModal(
       <PluginHelpModal onClose={() => finalizeShowModalAndRestoreActiveTab(() => handle.Close())} />
     );
-  }, [currentTab, finalizeShowModalAndRestoreActiveTab]);
+  }, [currentTab, captureSessionBeforeModal, finalizeShowModalAndRestoreActiveTab]);
 
   const openDesktopNoteSaveModal = useCallback(() => {
     if (!capabilities.filesystem_write) {
@@ -913,6 +1077,7 @@ const Content: React.FC = () => {
   }, [lastExchange, capabilities.filesystem_write, goToPermissionsTab, currentTab, finalizeShowModalAndRestoreActiveTab]);
 
   const onTabsShowTab = useCallback((tabID: string) => {
+    bonsaiDebugLog("index.tsx:onTabsShowTab", "bumper tab", "H3", { from: currentTab, to: tabID });
     const lock = postPickerTabLockRef.current;
     const now = Date.now();
     if (lock && now < lock.until && tabID === "main" && lock.tab !== "main") {
@@ -931,7 +1096,7 @@ const Content: React.FC = () => {
       postPickerTabLockRef.current = null;
     }
     setCurrentTab(tabID);
-  }, []);
+  }, [currentTab]);
 
   const openCharacterPickerModal = useCallback(() => {
     captureSessionBeforeModal();
@@ -945,24 +1110,31 @@ const Content: React.FC = () => {
         onCancel={() => {
           finalizeShowModalAndRestoreActiveTab(() => handle.Close());
         }}
-        onOK={(next) => {
+        onOK={async (next) => {
           const pid = normalizeAiCharacterPresetId(next.presetId);
           const ctxt = normalizeAiCharacterCustomText(next.customText);
           setAiCharacterRandom(next.random);
           setAiCharacterPresetId(pid);
           setAiCharacterCustomText(ctxt);
-          // Persist immediately so a debounced save scheduled before the modal cannot overwrite with stale random/character state.
-          void call<[BonsaiSettings], BonsaiSettings>(
-            "save_settings",
-            buildSettingsPayload({
-              ai_character_random: next.random,
-              ai_character_preset_id: pid,
-              ai_character_custom_text: ctxt,
-            })
-          ).catch((err) => {
+          try {
+            const saved = await call<[BonsaiSettings], BonsaiSettings>(
+              "save_settings",
+              buildSettingsPayload({
+                ai_character_random: next.random,
+                ai_character_preset_id: pid,
+                ai_character_custom_text: ctxt,
+              })
+            );
+            hydrateFromSettings(saved);
+            finalizeShowModalAndRestoreActiveTab(() => handle.Close());
+          } catch (err: unknown) {
             console.error("save_settings failed (character picker OK)", err);
-          });
-          finalizeShowModalAndRestoreActiveTab(() => handle.Close());
+            toaster.toast({
+              title: "Character not saved",
+              body: formatDeckyRpcError(err),
+              duration: 5000,
+            });
+          }
         }}
       />
     );
@@ -988,6 +1160,8 @@ const Content: React.FC = () => {
     setAiCharacterRandom,
     setAiCharacterPresetId,
     setAiCharacterCustomText,
+    buildSettingsPayload,
+    hydrateFromSettings,
     finalizeShowModalAndRestoreActiveTab,
     askMode,
     ollamaKeepAlive,
@@ -1005,6 +1179,8 @@ const Content: React.FC = () => {
     const handle = showModal(
       <PullModelsModal
         activeRoutingTag={modelPolicyDisclosure?.model ?? null}
+        onBeforeNestedDeckyModal={captureSessionBeforeModal}
+        onCompleteNestedDeckyModalClose={finalizeShowModalAndRestoreActiveTab}
         onCancel={() => {
           finalizeShowModalAndRestoreActiveTab(() => handle.Close());
         }}
@@ -1013,8 +1189,10 @@ const Content: React.FC = () => {
         }}
       />
     );
-  }, [currentTab, finalizeShowModalAndRestoreActiveTab, modelPolicyDisclosure?.model]);
+  }, [finalizeShowModalAndRestoreActiveTab, modelPolicyDisclosure?.model, captureSessionBeforeModal]);
 
+  const fullBleedRowStyle = FULL_BLEED_ROW_STYLE;
+  const presetButtonSurface = PRESET_BUTTON_SURFACE;
   const mainTabAiCharacterPad = aiCharacterEnabled;
   const mainTabAvatarPresetId = aiCharacterEnabled
     ? resolveMainTabAvatarPresetId({
@@ -1140,6 +1318,10 @@ const Content: React.FC = () => {
       onStrategySpoilerConsentForNextAskChange={setStrategySpoilerConsentForNextAsk}
       presetCarouselInject={presetCarouselInject}
       isStreamingPreview={isStreamingPreview}
+      thinkingSummary={thinkingSummary}
+      desktopAskVerboseLogging={desktopAskVerboseLogging}
+      lastRequestId={lastRequestId}
+      lastExchange={lastExchange}
     />
   ),
     [
@@ -1219,6 +1401,8 @@ const Content: React.FC = () => {
       setStrategySpoilerAutoRevealAfterConsent={setStrategySpoilerAutoRevealAfterConsent}
       onOpenCharacterPicker={openCharacterPickerModal}
       onOpenPullModels={openPullModelsModal}
+      namedOllamaHosts={namedOllamaHosts}
+      setNamedOllamaHosts={setNamedOllamaHosts}
       onBeforeDeckyModal={captureSessionBeforeModal}
       onCompleteDeckyModalClose={finalizeShowModalAndRestoreActiveTab}
       onResetSession={resetPluginSession}
@@ -1238,6 +1422,7 @@ const Content: React.FC = () => {
       showDeveloperTab,
       strategySpoilerMaskingEnabled,
       strategySpoilerAutoRevealAfterConsent,
+      namedOllamaHosts,
     ]
   );
 
@@ -1245,30 +1430,40 @@ const Content: React.FC = () => {
   const onConfirmEnableHardwareControl = useCallback(() => {
     setCapabilities((prev) => {
       const next = { ...prev, hardware_control: true };
-      void call<[BonsaiSettings], BonsaiSettings>(
-        "save_settings",
-        buildSettingsPayload({ capabilities: next })
-      ).catch((err) => {
-        console.error("save_settings failed (hardware control confirm)", err);
-      });
+      void call<[BonsaiSettings], BonsaiSettings>("save_settings", buildSettingsPayload({ capabilities: next }))
+        .then((saved) => hydrateFromSettings(saved))
+        .catch((err) => {
+          console.error("save_settings failed (hardware control confirm)", err);
+        });
       return next;
     });
-  }, [buildSettingsPayload, setCapabilities]);
+  }, [buildSettingsPayload, hydrateFromSettings, setCapabilities]);
 
-  const permissionsTab = (
-    <PermissionsTab
-      capabilities={capabilities}
-      setCapabilities={setCapabilities}
-      onConfirmEnableHardwareControl={onConfirmEnableHardwareControl}
-      modelPolicyTier={modelPolicyTier}
-      onCommitModelPolicyTier={onCommitModelPolicyTier}
-      modelPolicyNonFossUnlocked={modelPolicyNonFossUnlocked}
-      onBeforeDeckyModal={captureSessionBeforeModal}
-      onCompleteDeckyModalClose={finalizeShowModalAndRestoreActiveTab}
-    />
+  const permissionsTab = useMemo(
+    () => (
+      <PermissionsTab
+        capabilities={capabilities}
+        setCapabilities={setCapabilities}
+        onConfirmEnableHardwareControl={onConfirmEnableHardwareControl}
+        modelPolicyTier={modelPolicyTier}
+        onCommitModelPolicyTier={onCommitModelPolicyTier}
+        modelPolicyNonFossUnlocked={modelPolicyNonFossUnlocked}
+        onBeforeDeckyModal={captureSessionBeforeModal}
+        onCompleteDeckyModalClose={finalizeShowModalAndRestoreActiveTab}
+      />
+    ),
+    [
+      capabilities,
+      modelPolicyTier,
+      modelPolicyNonFossUnlocked,
+      onConfirmEnableHardwareControl,
+      onCommitModelPolicyTier,
+      captureSessionBeforeModal,
+      finalizeShowModalAndRestoreActiveTab,
+    ]
   );
 
-  const onSteamInputPhase1Jump = () => {
+  const onSteamInputPhase1Jump = useCallback(() => {
     if (!capabilities.external_navigation) {
       toaster.toast({
         title: "Permission required",
@@ -1294,10 +1489,11 @@ const Content: React.FC = () => {
       const hint = entry.breadcrumb.length ? ` ${entry.breadcrumb[0]}` : "";
       toaster.toast({ title: "Steam Input jump", body: `${result.reason}${hint}`, duration: 6000 });
     }
-  };
+  }, [capabilities.external_navigation, goToPermissionsTab]);
 
-  const developerTab = (
-    <DeveloperTab
+  const developerTab = useMemo(
+    () => (
+      <DeveloperTab
       capturedErrors={capturedErrors}
       onClearErrors={() => setCapturedErrors([])}
       onSteamInputPhase1Jump={onSteamInputPhase1Jump}
@@ -1334,16 +1530,53 @@ const Content: React.FC = () => {
       onReadModelPolicy={openModelPolicyReadme}
       bonsaiTokenStreamingEnabled={bonsaiTokenStreamingEnabled}
       setBonsaiTokenStreamingEnabled={setBonsaiTokenStreamingEnabled}
-    />
+      responseVerifyEnabled={responseVerifyEnabled}
+      setResponseVerifyEnabled={setResponseVerifyEnabled}
+      responseVerifySecondPass={responseVerifySecondPass}
+      setResponseVerifySecondPass={setResponseVerifySecondPass}
+      responseVerifyModel={responseVerifyModel}
+      setResponseVerifyModel={setResponseVerifyModel}
+      />
+    ),
+    [
+      capturedErrors,
+      onSteamInputPhase1Jump,
+      lastConnectionStatus,
+      latencyWarningSeconds,
+      requestTimeoutSeconds,
+      latencyTimeoutsCustomEnabled,
+      ollamaKeepAlive,
+      desktopDebugNoteAutoSave,
+      desktopAskVerboseLogging,
+      desktopAppLogLevel,
+      capabilities.filesystem_write,
+      attachProtonLogsWhenTroubleshooting,
+      presetChipFadeAnimationEnabled,
+      presetChipAnimation,
+      steamWebApiKey,
+      modelPolicyTier,
+      modelPolicyNonFossUnlocked,
+      modelAllowHighVramFallbacks,
+      onCommitModelPolicyTier,
+      openModelPolicyReadme,
+      bonsaiTokenStreamingEnabled,
+      responseVerifyEnabled,
+      responseVerifySecondPass,
+      responseVerifyModel,
+    ]
   );
-  const aboutTab = (
-    <AboutTab
-      githubRepoUrl={GITHUB_REPO_URL}
-      ollamaRepoUrl={OLLAMA_UPSTREAM_REPO_URL}
-      githubIssuesUrl={GITHUB_ISSUES_URL}
-      allowExternalNavigation={capabilities.external_navigation}
-      onNavigateToPermissions={goToPermissionsTab}
-    />
+
+  const aboutTab = useMemo(
+    () => (
+      <AboutTab
+        githubRepoUrl={GITHUB_REPO_URL}
+        ollamaRepoUrl={OLLAMA_UPSTREAM_REPO_URL}
+        githubIssuesUrl={GITHUB_ISSUES_URL}
+        allowExternalNavigation={capabilities.external_navigation}
+        onNavigateToPermissions={goToPermissionsTab}
+      />
+    ),
+    [capabilities.external_navigation, goToPermissionsTab]
   );
 
   const deckyTabs = useMemo(
@@ -1351,17 +1584,17 @@ const Content: React.FC = () => {
       const rows: Array<{ id: string; title: React.ReactElement; content: React.ReactNode }> = [
         {
           id: "main",
-          title: bonsaiTabIconTitle("main", <BonsaiTreeTabIcon size={TAB_TITLE_MAIN_TAB_ICON_PX} />),
+          title: DECKY_TAB_TITLES.main,
           content: mainTab,
         },
         {
           id: "settings",
-          title: bonsaiTabIconTitle("settings", <GearIcon size={TAB_TITLE_ICON_PX} />),
+          title: DECKY_TAB_TITLES.settings,
           content: settingsTab,
         },
         {
           id: "permissions",
-          title: bonsaiTabIconTitle("permissions", <LockIcon size={TAB_TITLE_ICON_PX} />),
+          title: DECKY_TAB_TITLES.permissions,
           content: (
             <div className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight bonsai-settings-section-stack">
               {permissionsTab}
@@ -1372,13 +1605,13 @@ const Content: React.FC = () => {
       if (showDeveloperTab) {
         rows.push({
           id: "developer",
-          title: bonsaiTabIconTitle("developer", <BugIcon size={TAB_TITLE_DEBUG_TAB_ICON_PX} />),
+          title: DECKY_TAB_TITLES.developer,
           content: developerTab,
         });
       }
       rows.push({
         id: "about",
-        title: bonsaiTabIconTitle("about", <AboutTabTitleIcon size={TAB_TITLE_ICON_PX} />),
+        title: DECKY_TAB_TITLES.about,
         content: <div className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight">{aboutTab}</div>,
       });
       return rows;
@@ -1388,8 +1621,14 @@ const Content: React.FC = () => {
 
   return (
     <BonsaiPluginShell scopeRef={bonsaiScopeRef} scopeStyle={bonsaiScopeAccentStyle}>
+      <BonsaiDebugOverlay />
       <div className="bonsai-decky-tabs-root">
-        <Tabs activeTab={currentTab} onShowTab={onTabsShowTab} tabs={deckyTabs} />
+        <Tabs
+          activeTab={currentTab}
+          onShowTab={onTabsShowTab}
+          tabs={deckyTabs}
+          {...({ autoFocusContents: false } as Record<string, unknown>)}
+        />
       </div>
     </BonsaiPluginShell>
   );

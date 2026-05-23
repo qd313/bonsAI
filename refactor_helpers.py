@@ -139,7 +139,61 @@ TIER1_FOSS_STARTER_PULL_TAGS = (
     "llava:7b",
 )
 
+# Tags moved to the tail of ``select_ollama_models`` chains (still tryable as last resort).
+DEPRIORITIZED_OLLAMA_TAGS = frozenset(
+    {
+        "qwen2.5:1.5b",
+        "tinyllama",
+        "orca-mini",
+        "vicuna",
+        "llava:latest",
+        "llava",
+        "gemma3:27b",
+        "gemma4:31b",
+        "qwen2.5:32b",
+        "qwen3.5:32b",
+        "qwen3-vl:30b-a3b",
+        "internvl3.5:38b",
+        "internvl2.5:38b",
+    }
+)
+
+# Omit from curated Pull Models catalog (manual ``ollama pull`` still allowed).
+BLOCKED_PULL_CATALOG_TAGS = frozenset(
+    {
+        "qwen3-vl:30b-a3b",
+        "internvl3.5:38b",
+        "internvl2.5:38b",
+    }
+)
+
+# Legacy small-chat families (any ``:tag`` variant).
+_DEPRIORITIZED_OLLAMA_BASES = frozenset({"tinyllama", "orca-mini", "vicuna", "phi"})
+
 _VALID_SETUP_PULL_PROFILES = frozenset({"starter", "tier1_foss_full", "update_installed"})
+
+
+def ollama_tag_is_deprioritized(tag: str) -> bool:
+    """True when a model tag should sort after safer FOSS/backbone tags in fallback chains."""
+    t = (tag or "").strip().lower()
+    if not t:
+        return False
+    if t in DEPRIORITIZED_OLLAMA_TAGS:
+        return True
+    base = t.split(":", 1)[0]
+    return base in _DEPRIORITIZED_OLLAMA_BASES
+
+
+def sort_models_deprioritized_last(tags: list[str]) -> list[str]:
+    """Preserve order within primary and deprioritized groups; deprioritized tags trail the list."""
+    primary: list[str] = []
+    tail: list[str] = []
+    for tag in tags:
+        if ollama_tag_is_deprioritized(tag):
+            tail.append(tag)
+        else:
+            primary.append(tag)
+    return primary + tail
 
 
 def tier1_foss_recommended_pull_tags(profile: str) -> list[str]:
@@ -265,7 +319,7 @@ def select_ollama_models(
         base = _text_safe_chain(mode)
         if high_vram_fallbacks:
             base = _dedupe_preserve_order(base + _text_high_vram_tail(mode))
-    return base
+    return sort_models_deprioritized_last(base)
 
 
 def is_current_tdp_read_intent(question: str) -> bool:

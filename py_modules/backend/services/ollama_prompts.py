@@ -360,6 +360,20 @@ GENERAL_PURPOSE_ASSISTANT_CLAUSE = (
     "run shell commands or code, browse the web, perform real-time search, or read files beyond what appears in this system message.\n\n"
 )
 
+BONSAI_STATUS_STREAM_INSTRUCTION = (
+    "STATUS LINE (required): As the very first characters of your assistant reply, emit exactly one line "
+    "<bonsai-status>short plain-English status for the user</bonsai-status> "
+    "(under ~120 characters; no markdown inside the tag). Then continue with your normal answer on the following lines. "
+    "The status tag is stripped before the user sees the final reply.\n\n"
+)
+
+THIN_CONTEXT_HONESTY_CLAUSE = (
+    "LIMITED CONTEXT: No active game and no screenshots were attached for this turn. "
+    "Prefer general Steam Deck guidance; say when you are uncertain or guessing; do not invent a specific game title, "
+    "AppID, or on-screen detail you cannot see. Optional: wrap log-derived claims in ```bonsai-cite ... ``` if you cite "
+    "attached excerpts.\n\n"
+)
+
 
 def build_system_prompt(
     question: str,
@@ -458,11 +472,14 @@ def build_system_prompt(
         if user_game_intent
         else "If the user asks about gameplay context, prioritize game-specific visual cues over Steam UI."
     )
+    thin_context = not (app_id or "").strip() and not (app_name or "").strip() and not prepared_images
     dynamic_block = (
         f"{game_line} {attachment_game_context_line} {attachment_name_context_line} {vdf_context_line} "
         f"{vision_line} {vision_priority_line} {genre_franchise_cue_line} {game_intent_line}\n\n"
     )
-    general_block = BONSAI_SYSTEM_IDENTITY + GENERAL_PURPOSE_ASSISTANT_CLAUSE
+    if thin_context:
+        dynamic_block += THIN_CONTEXT_HONESTY_CLAUSE
+    general_block = BONSAI_SYSTEM_IDENTITY + GENERAL_PURPOSE_ASSISTANT_CLAUSE + BONSAI_STATUS_STREAM_INSTRUCTION
     early_stripped = (early_context_suffix or "").strip()
     early_block = f"\n\n{early_stripped}" if early_stripped else ""
 

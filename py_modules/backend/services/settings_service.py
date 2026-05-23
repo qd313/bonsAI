@@ -6,6 +6,7 @@ Keys and defaults must stay aligned with frontend ``normalizeSettings`` / ``Bons
 
 import json
 import os
+import re
 from typing import Any, Callable
 
 from backend.services.ai_character_service import (
@@ -146,6 +147,57 @@ def sanitize_ollama_local_on_deck(value: Any) -> bool:
 def sanitize_model_allow_high_vram_fallbacks(value: Any) -> bool:
     """Only explicit ``true`` appends large-model tails to Ollama fallback chains."""
     return value is True
+
+
+def sanitize_response_verify_enabled(value: Any) -> bool:
+    """Only explicit ``true`` runs rule-based post-check on Ollama replies."""
+    return value is True
+
+
+def sanitize_response_verify_second_pass(value: Any) -> bool:
+    """Only explicit ``true`` allows optional second-model verifier (default off)."""
+    return value is True
+
+
+_RESPONSE_VERIFY_MODEL_MAX = 64
+_RESPONSE_VERIFY_MODEL_RE = re.compile(r"^[a-zA-Z0-9][a-zA-Z0-9._:/-]{0,63}$")
+
+
+def sanitize_response_verify_model(value: Any) -> str:
+    """Ollama tag for the optional verifier second pass (empty = disabled)."""
+    if not isinstance(value, str):
+        return ""
+    tag = value.strip()[:_RESPONSE_VERIFY_MODEL_MAX]
+    if not tag or not _RESPONSE_VERIFY_MODEL_RE.match(tag):
+        return ""
+    return tag
+
+
+MAX_NAMED_OLLAMA_HOSTS = 4
+NAMED_OLLAMA_HOST_LABEL_MAX = 32
+NAMED_OLLAMA_HOST_VALUE_MAX = 128
+
+
+def sanitize_named_ollama_hosts(value: Any) -> list[dict[str, str]]:
+    """Up to four labeled ``host:port`` presets for quick Connection switching."""
+    if not isinstance(value, list):
+        return []
+    out: list[dict[str, str]] = []
+    for item in value:
+        if len(out) >= MAX_NAMED_OLLAMA_HOSTS:
+            break
+        if not isinstance(item, dict):
+            continue
+        label = item.get("label")
+        host = item.get("host")
+        if not isinstance(label, str) or not isinstance(host, str):
+            continue
+        lab = label.strip()[:NAMED_OLLAMA_HOST_LABEL_MAX]
+        h = host.strip()[:NAMED_OLLAMA_HOST_VALUE_MAX]
+        if not lab or not h:
+            continue
+        out.append({"label": lab, "host": h})
+    return out
 
 
 REQUEST_TIMEOUT_RECONCILE_STEP_SECONDS = 10
@@ -336,6 +388,12 @@ def sanitize_settings(
         "model_allow_high_vram_fallbacks": sanitize_model_allow_high_vram_fallbacks(
             raw.get("model_allow_high_vram_fallbacks")
         ),
+        "response_verify_enabled": sanitize_response_verify_enabled(raw.get("response_verify_enabled")),
+        "response_verify_second_pass": sanitize_response_verify_second_pass(
+            raw.get("response_verify_second_pass")
+        ),
+        "response_verify_model": sanitize_response_verify_model(raw.get("response_verify_model")),
+        "named_ollama_hosts": sanitize_named_ollama_hosts(raw.get("named_ollama_hosts")),
         "strategy_spoiler_masking_enabled": sanitize_strategy_spoiler_masking_enabled(
             raw.get("strategy_spoiler_masking_enabled")
         ),

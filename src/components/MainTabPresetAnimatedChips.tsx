@@ -80,20 +80,22 @@ function PresetChipButton(props: {
         transition: "opacity 420ms ease, transform 420ms ease, color 420ms ease",
       }}
     >
-      {p.text}
-      {p.beta ? (
-        <span
-          style={{
-            marginLeft: 6,
-            fontSize: 10,
-            fontStyle: "italic",
-            color: `var(--bonsai-ui-accent-main, ${BONSAI_FOREST_GREEN})`,
-            fontWeight: 600,
-          }}
-        >
-          [beta]
-        </span>
-      ) : null}
+      <span className="bonsai-preset-chip-label">
+        {p.text}
+        {p.beta ? (
+          <span
+            style={{
+              marginLeft: 6,
+              fontSize: 10,
+              fontStyle: "italic",
+              color: `var(--bonsai-ui-accent-main, ${BONSAI_FOREST_GREEN})`,
+              fontWeight: 600,
+            }}
+          >
+            [beta]
+          </span>
+        ) : null}
+      </span>
     </Button>
   );
 }
@@ -311,20 +313,22 @@ export function MainTabPresetAnimatedChips(props: MainTabPresetAnimatedChipsProp
                 color: "#c4d3e2",
               }}
             >
-              {p.text}
-              {p.beta && (
-                <span
-                  style={{
-                    marginLeft: 6,
-                    fontSize: 10,
-                    fontStyle: "italic",
-                    color: `var(--bonsai-ui-accent-main, ${BONSAI_FOREST_GREEN})`,
-                    fontWeight: 600,
-                  }}
-                >
-                  [beta]
-                </span>
-              )}
+              <span className="bonsai-preset-chip-label">
+                {p.text}
+                {p.beta && (
+                  <span
+                    style={{
+                      marginLeft: 6,
+                      fontSize: 10,
+                      fontStyle: "italic",
+                      color: `var(--bonsai-ui-accent-main, ${BONSAI_FOREST_GREEN})`,
+                      fontWeight: 600,
+                    }}
+                  >
+                    [beta]
+                  </span>
+                )}
+              </span>
             </Button>
           </div>
         );

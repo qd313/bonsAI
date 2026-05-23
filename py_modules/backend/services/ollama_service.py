@@ -18,6 +18,7 @@ from urllib.parse import urlparse
 
 from refactor_helpers import normalize_ollama_base
 
+from backend.services.bonsai_stream_tags import extract_bonsai_status
 from backend.services.strategy_guide_parse import extract_strategy_guide_branches
 from backend.services.ollama_prompts import (
     append_deck_tdp_sysfs_grounding,
@@ -325,7 +326,7 @@ def post_ollama_chat(
     cancel_requested: Optional[Callable[[], bool]] = None,
     on_http_response_opened: Optional[Callable[[Any], None]] = None,
     on_http_response_done: Optional[Callable[[], None]] = None,
-    on_delta: Optional[Callable[[str, bool], None]] = None,
+    on_delta: Optional[Callable[..., None]] = None,
 ) -> dict:
     """Execute one Ollama chat request attempt and return a normalized success/error payload."""
 
@@ -388,7 +389,9 @@ def post_ollama_chat(
                         deltas.append(mc)
                         if on_delta:
                             try:
-                                on_delta("".join(deltas), False)
+                                _joined = "".join(deltas)
+                                _thinking, _visible = extract_bonsai_status(_joined)
+                                on_delta(_visible, False, _thinking)
                             except Exception:
                                 logger.exception(
                                     "ask_ollama: on_delta hook failed model=%s", model_name
@@ -468,9 +471,10 @@ def post_ollama_chat(
                         "body": stream_err_txt[:4000],
                     }
                 assistant_raw = "".join(deltas)
+                thinking_summary, visible_raw = extract_bonsai_status(assistant_raw)
                 if on_delta:
                     try:
-                        on_delta(assistant_raw, True)
+                        on_delta(visible_raw, True, thinking_summary)
                     except Exception:
                         logger.exception("ask_ollama: on_delta terminal hook failed model=%s", model_name)
                 if _should_cancel():
@@ -479,7 +483,7 @@ def post_ollama_chat(
                         "response": "Request stopped (connection closed).",
                         "cancelled": True,
                     }
-                text = assistant_raw.strip() or "No response text."
+                text = visible_raw.strip() or "No response text."
                 strategy_guide_branches = None
                 if ask_mode == "strategy":
                     visible, strategy_guide_branches = extract_strategy_guide_branches(text)
@@ -498,6 +502,7 @@ def post_ollama_chat(
                     "response": text,
                     "model": model_name,
                     "assistant_raw": assistant_raw,
+                    "thinking_summary": thinking_summary,
                     "strategy_guide_branches": strategy_guide_branches,
                 }
             finally:

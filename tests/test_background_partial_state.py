@@ -43,12 +43,49 @@ class BackgroundPartialStateTests(unittest.TestCase):
             "status": "pending",
             "request_id": 7,
             "response": "Thinking...",
+            "started_at": 0.0,
         }
         self.plugin._reset_partial_stream_snapshot(7)
         self.plugin._update_partial_response(7, "Growing reply", False)
         merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
         self.assertTrue(merged.get("streaming"))
         self.assertEqual(merged.get("partial_response"), "Growing reply")
+
+    def test_thinking_only_delta_without_partial(self) -> None:
+        self.plugin._background_state = {
+            "status": "pending",
+            "request_id": 9,
+            "response": "Thinking...",
+            "started_at": 0.0,
+        }
+        self.plugin._reset_partial_stream_snapshot(9)
+        self.plugin._update_partial_response(
+            9,
+            "Should not appear",
+            False,
+            "Checking Proton log",
+            update_partial=False,
+        )
+        with self.plugin._partial_response_lock:
+            snap = self.plugin._partial_stream_snapshot
+            self.assertIsNone(snap.get("partial_response"))
+            self.assertEqual(snap.get("thinking_summary"), "Checking Proton log")
+        merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
+        self.assertEqual(merged.get("thinking_summary"), "Checking Proton log")
+        self.assertIsNone(merged.get("partial_response"))
+
+    def test_merge_thinking_fallback_when_no_model_tag(self) -> None:
+        import time
+
+        self.plugin._background_state = {
+            "status": "pending",
+            "request_id": 8,
+            "response": "Thinking...",
+            "started_at": time.time() - 10,
+        }
+        self.plugin._reset_partial_stream_snapshot(8)
+        merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
+        self.assertEqual(merged.get("thinking_summary"), "Still working…")
 
     def test_merge_omits_partial_when_not_pending(self) -> None:
         self.plugin._background_state = {"status": "completed", "request_id": 7}

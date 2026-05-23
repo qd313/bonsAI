@@ -2,7 +2,7 @@
 
 export type PullModelLicenseClass = "foss" | "open_weight" | "non_foss" | "unknown";
 
-export type PullModelUseTag = "chat" | "vision" | "ocr" | "strategy" | "coding";
+export type PullModelUseTag = "chat" | "vision" | "ocr" | "strategy";
 
 export type PullModelGroup = "featured" | "smallest" | "stretch" | "specialist";
 
@@ -20,10 +20,10 @@ export interface PullModelEntry {
 }
 
 export const PULL_MODEL_GROUP_LABELS: Record<PullModelGroup, string> = {
-  featured: "Featured (chat + vision + strategy, each ≤ 3.3 GB)",
-  smallest: "Smallest / fastest",
-  stretch: "If you have room (slower, bigger; confirm before pull)",
-  specialist: "Specialists",
+  featured: "Featured",
+  smallest: "Fastest",
+  stretch: "Expert (large)",
+  specialist: "Specialist",
 };
 
 export const PULL_MODEL_GROUP_ORDER: readonly PullModelGroup[] = [
@@ -35,15 +35,51 @@ export const PULL_MODEL_GROUP_ORDER: readonly PullModelGroup[] = [
 
 export const PULL_MODEL_FILTER_OPTIONS = [
   { id: "all", label: "All" },
-  { id: "chat", label: "Chat" },
-  { id: "vision", label: "Vision" },
+  { id: "speed", label: "Speed" },
   { id: "strategy", label: "Strategy" },
-  { id: "coding", label: "Coding" },
+  { id: "expert", label: "Expert" },
+  { id: "vision", label: "Vision" },
 ] as const;
 
 export type PullModelFilterId = (typeof PULL_MODEL_FILTER_OPTIONS)[number]["id"];
 
 export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
+  {
+    tag: "gemma4:4b",
+    params: "4B",
+    sizeGb: 3.3,
+    releasedYm: "2025-05",
+    license: "Gemma Terms",
+    licenseClass: "open_weight",
+    group: "featured",
+    tags: ["chat", "vision"],
+    rating: 6,
+    blurb: "Newer Gemma generation — multimodal chat + vision at ~4B (matches Tier 2 routing).",
+  },
+  {
+    tag: "gemma4:2b",
+    params: "2B",
+    sizeGb: 1.6,
+    releasedYm: "2025-05",
+    license: "Gemma Terms",
+    licenseClass: "open_weight",
+    group: "featured",
+    tags: ["chat", "vision"],
+    rating: 5,
+    blurb: "Compact Gemma 4 multimodal — fast vision fallback on tight RAM.",
+  },
+  {
+    tag: "qwen3:4b",
+    params: "4B",
+    sizeGb: 2.5,
+    releasedYm: "2025-04",
+    license: "Apache 2.0",
+    licenseClass: "foss",
+    group: "featured",
+    tags: ["strategy", "chat"],
+    rating: 6,
+    blurb: 'Top strategy/reasoning under 5 GB; optional "thinking" mode.',
+  },
   {
     tag: "gemma3:4b",
     params: "4B",
@@ -69,16 +105,76 @@ export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
     blurb: "Best small VLM for screenshots, OCR, game/UI identification.",
   },
   {
-    tag: "qwen3:4b",
-    params: "4B",
-    sizeGb: 2.5,
-    releasedYm: "2025-04",
+    tag: "qwen2.5:7b",
+    params: "7B",
+    sizeGb: 4.7,
+    releasedYm: "2024-09",
     license: "Apache 2.0",
     licenseClass: "foss",
     group: "featured",
+    tags: ["chat", "strategy"],
+    rating: 5,
+    blurb: "Strong FOSS chat + strategy backbone; good mid-size default.",
+  },
+  {
+    tag: "llava:7b",
+    params: "7B",
+    sizeGb: 4.7,
+    releasedYm: "2024-05",
+    license: "Apache 2.0",
+    licenseClass: "foss",
+    group: "featured",
+    tags: ["vision", "ocr"],
+    rating: 5,
+    blurb: "Tier-1 FOSS vision starter — pinned tag avoids ambiguous `llava:latest` pulls.",
+  },
+  {
+    tag: "qwen3:1.7b",
+    params: "1.7B",
+    sizeGb: 1.4,
+    releasedYm: "2025-04",
+    license: "Apache 2.0",
+    licenseClass: "foss",
+    group: "smallest",
     tags: ["strategy", "chat"],
-    rating: 6,
-    blurb: 'Top strategy/reasoning under 5 GB; optional "thinking" mode.',
+    rating: 5,
+    blurb: "Punchy reasoning at 1B-class speed; great fallback if 4b feels slow.",
+  },
+  {
+    tag: "gemma3:1b",
+    params: "1B",
+    sizeGb: 0.8,
+    releasedYm: "2025-03",
+    license: "Gemma Terms",
+    licenseClass: "open_weight",
+    group: "smallest",
+    tags: ["chat"],
+    rating: 4,
+    blurb: "Smallest serious chat; text-only.",
+  },
+  {
+    tag: "qwen2.5:3b",
+    params: "3B",
+    sizeGb: 1.9,
+    releasedYm: "2024-09",
+    license: "Apache 2.0",
+    licenseClass: "foss",
+    group: "smallest",
+    tags: ["chat"],
+    rating: 5,
+    blurb: "Fast FOSS chat at ~2 GB — common speed-tier fallback.",
+  },
+  {
+    tag: "qwen2.5:1.5b",
+    params: "1.5B",
+    sizeGb: 1.0,
+    releasedYm: "2024-09",
+    license: "Apache 2.0",
+    licenseClass: "foss",
+    group: "smallest",
+    tags: ["chat"],
+    rating: 4,
+    blurb: "README starter tag — ultra-light text; deprioritized in Ask chains.",
   },
   {
     tag: "llama3.2:3b",
@@ -87,9 +183,9 @@ export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
     releasedYm: "2024-09",
     license: "Llama 3.2",
     licenseClass: "open_weight",
-    group: "featured",
+    group: "smallest",
     tags: ["chat"],
-    rating: 6,
+    rating: 5,
     blurb: "Default fast generic chat; standard baseline at 2 GB.",
   },
   {
@@ -105,30 +201,6 @@ export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
     blurb: "Ultra-fast tiny chat; instant, weaker on multi-step reasoning.",
   },
   {
-    tag: "gemma3:1b",
-    params: "1B",
-    sizeGb: 0.8,
-    releasedYm: "2025-03",
-    license: "Gemma Terms",
-    licenseClass: "open_weight",
-    group: "smallest",
-    tags: ["chat"],
-    rating: 4,
-    blurb: "Smallest serious chat; text-only.",
-  },
-  {
-    tag: "qwen3:1.7b",
-    params: "1.7B",
-    sizeGb: 1.4,
-    releasedYm: "2025-04",
-    license: "Apache 2.0",
-    licenseClass: "foss",
-    group: "smallest",
-    tags: ["strategy", "chat"],
-    rating: 5,
-    blurb: "Punchy reasoning at 1B-class speed; great fallback if 4b feels slow.",
-  },
-  {
     tag: "moondream",
     params: "1.8B",
     sizeGb: 1.7,
@@ -137,8 +209,20 @@ export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
     licenseClass: "unknown",
     group: "smallest",
     tags: ["vision", "ocr"],
-    rating: 5,
+    rating: 4,
     blurb: "Tiniest practical vision model; great companion to a chat model.",
+  },
+  {
+    tag: "qwen2.5:14b",
+    params: "14B",
+    sizeGb: 9.0,
+    releasedYm: "2024-09",
+    license: "Apache 2.0",
+    licenseClass: "foss",
+    group: "stretch",
+    tags: ["strategy", "chat"],
+    rating: 4,
+    blurb: "Strongest FOSS text that may fit 16 GB — slower on Deck CPU.",
   },
   {
     tag: "minicpm-v:8b",
@@ -176,30 +260,6 @@ export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
     rating: 4,
     blurb: "Cheap reasoning specialist for math/logic; verbose CoT slow on CPU.",
   },
-  {
-    tag: "llava-phi3",
-    params: "3.8B",
-    sizeGb: 2.9,
-    releasedYm: "2024-04",
-    license: "MIT",
-    licenseClass: "foss",
-    group: "specialist",
-    tags: ["vision"],
-    rating: 4,
-    blurb: "Compact MIT-licensed vision alternative.",
-  },
-  {
-    tag: "qwen2.5-coder:3b",
-    params: "3B",
-    sizeGb: 1.9,
-    releasedYm: "2024-11",
-    license: "Qwen Research",
-    licenseClass: "foss",
-    group: "specialist",
-    tags: ["coding"],
-    rating: 3,
-    blurb: "Coding/tool-use bonus; low priority for a gamer unless scripting.",
-  },
 ] as const;
 
 export const PULL_MODEL_CATALOG_TAGS: readonly string[] = PULL_MODEL_CATALOG.map((e) => e.tag);
@@ -208,6 +268,13 @@ const catalogTagSet = new Set<string>(PULL_MODEL_CATALOG_TAGS);
 
 export function isCatalogModelTag(tag: string): boolean {
   return catalogTagSet.has(tag);
+}
+
+/** Sort catalog entries newest-first within a group. */
+export function comparePullModelEntriesNewestFirst(a: PullModelEntry, b: PullModelEntry): number {
+  const byDate = b.releasedYm.localeCompare(a.releasedYm);
+  if (byDate !== 0) return byDate;
+  return a.tag.localeCompare(b.tag);
 }
 
 /** Format YYYY-MM as "Mon YYYY" for the table. */
@@ -228,6 +295,10 @@ export function formatSizeGb(gb: number): string {
 export function formatGtaStars(rating: number): string {
   const n = Math.max(1, Math.min(6, Math.round(rating)));
   return "★".repeat(n);
+}
+
+export function formatPullModelTags(tags: ReadonlyArray<PullModelUseTag>): string {
+  return tags.map((t) => t.charAt(0).toUpperCase() + t.slice(1)).join(" · ");
 }
 
 export function bytesToGb(bytes: number): number {

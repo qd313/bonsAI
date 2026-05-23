@@ -7,6 +7,8 @@ from backend.services.ai_character_service import (
     apply_roleplay_to_system_content,
     build_roleplay_system_suffix,
     build_roleplay_system_suffix_meta,
+    is_pyro_asshole_mode,
+    pyro_asshole_mode_active,
     pyro_manager_carousel_tip_addon,
 )
 
@@ -172,6 +174,50 @@ class AiCharacterServiceTests(unittest.TestCase):
         self.assertIn("talent manager", out)
         self.assertNotIn("wordless playful menace", out)
         self.assertIn("bonsai", out.lower())
+        self.assertIn("Stay factually correct", out)
+
+    def test_pyro_heavy_uses_asshole_mode_not_helpful_footer(self):
+        out = build_roleplay_system_suffix(
+            {
+                "ai_character_enabled": True,
+                "ai_character_random": False,
+                "ai_character_preset_id": PYRO_PRESET_ID,
+                "ai_character_custom_text": "",
+                "ai_character_accent_intensity": "heavy",
+            }
+        )
+        self.assertIn("deliberately **useless**", out)
+        self.assertIn("Never include ```json``` blocks", out)
+        self.assertNotIn("Stay factually correct", out)
+
+    def test_pyro_unleashed_uses_asshole_mode(self):
+        out = build_roleplay_system_suffix(
+            {
+                "ai_character_enabled": True,
+                "ai_character_random": False,
+                "ai_character_preset_id": PYRO_PRESET_ID,
+                "ai_character_custom_text": "",
+                "ai_character_accent_intensity": "unleashed",
+            }
+        )
+        self.assertIn("Maximize obnoxious agent theater", out)
+        self.assertIn("HARD LIMITS", out)
+
+    def test_is_pyro_asshole_mode_and_active_helper(self):
+        self.assertFalse(is_pyro_asshole_mode("balanced"))
+        self.assertTrue(is_pyro_asshole_mode("heavy"))
+        self.assertTrue(is_pyro_asshole_mode("unleashed"))
+        settings = {
+            "ai_character_accent_intensity": "unleashed",
+        }
+        self.assertTrue(pyro_asshole_mode_active(settings, PYRO_PRESET_ID))
+        self.assertFalse(pyro_asshole_mode_active(settings, "cp2077_jackie"))
+        self.assertFalse(
+            pyro_asshole_mode_active(
+                {"ai_character_accent_intensity": "balanced"},
+                PYRO_PRESET_ID,
+            )
+        )
 
     @patch("backend.services.ai_character_service.random.choice")
     def test_pyro_random_resolves_tf2_pyro_id(self, mock_choice):
@@ -196,6 +242,12 @@ class AiCharacterServiceTests(unittest.TestCase):
         addon = pyro_manager_carousel_tip_addon("File an issue with repro steps")
         self.assertIn("CAROUSEL TIP", addon)
         self.assertIn("File an issue with repro steps", addon)
+        self.assertIn("TDP/GPU JSON block", addon)
+
+    def test_pyro_asshole_carousel_tip_addon_omits_json_instruction(self):
+        addon = pyro_manager_carousel_tip_addon("Set my TDP to 50 watts", asshole=True)
+        self.assertIn("Set my TDP to 50 watts", addon)
+        self.assertNotIn("TDP/GPU JSON block", addon)
 
 
 if __name__ == "__main__":

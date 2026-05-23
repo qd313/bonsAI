@@ -13,7 +13,7 @@ Run from repo root (Windows or Linux shell as appropriate):
 | Step | Command | When |
 |------|---------|------|
 | Typecheck | `pnpm exec tsc --noEmit` | Any TS change or dependency bump |
-| Frontend unit tests | `pnpm test` | Any `src/` change |
+| Frontend unit tests | `pnpm test` | Any `src/` change (includes Vitest headless Decky harness under `src/test-harness/`) |
 | Backend unit tests | `pnpm run test:py` | Any `main.py`, `py_modules/backend/`, `refactor_helpers.py`, or `tests/` change |
 | Bundle | `pnpm run build` | Any `src/` or build config change |
 | Deck deploy build | `.\scripts\build.ps1` or `./scripts/build.sh` | Any `src/`, `main.py`, `plugin.json`, or Deck-facing asset change |
@@ -32,10 +32,11 @@ Use the **Touched area** column to extend §1; prefer the narrowest tests first.
 | `backend/services/settings_service.py`, `settingsAndResponse.ts`, Settings UI | `tests/test_settings_service.py`, `src/utils/settingsAndResponse.test.ts` | Change a setting, reload plugin, confirm persistence ([prompt-testing.md](prompt-testing.md) release notes for recent Settings features). |
 | `backend/services/ollama_service.py`, `refactor_helpers.py` | `tests/test_ollama_service.py`, `tests/test_refactor_helpers.py` | One Ask per changed mode; verify model routing / errors ([prompt-testing.md](prompt-testing.md)). |
 | `backend/services/desktop_note_service.py` | `tests/test_desktop_note_service.py` | With filesystem capability on: save note / auto-save if touched; confirm no raw path in error toast. |
-| `backend/services/ai_character_service.py`, character UI | `tests/test_ai_character_service.py`, catalog/accent tests under `src/data/` | Character picker open/close, accent chip, one Ask with character on. **Pyro easter egg (optional):** AI character on, choose Pyro (or Random until Pyro); after a successful Ask, confirm whether the extra orange **agent tip** chip appears (probabilistic ~30%), tap fills input, chip clears on next Ask or **Reset session cache**; three rotating chips may rest while inject stays focusable. |
+| `backend/services/ai_character_service.py`, character UI | `tests/test_ai_character_service.py`, `tests/test_pyro_asshole_safety.py`, catalog/accent tests under `src/data/` | Character picker open/close, accent chip, one Ask with character on. **Pyro easter egg (optional):** AI character on, choose Pyro (or Random until Pyro). **Balanced:** helpful manager; optional orange **agent suggestion** chip (~30%). **Nightmare:** asshole tier—mocking bad advice; confirm no TDP apply banner. Tap fills input; chip clears on next Ask or **Reset session cache**. |
 | `backend/services/capabilities.py`, Permissions UI | `tests/test_capabilities.py` | Toggle capability; confirm blocked action toast when off. |
 | `src/components/MainTab.tsx`, unified input | `pnpm test` (utils/data) | **§3** items for unified input, overlay, D-pad scroll. |
 | `src/index.tsx` tabs, CSS, RPC wiring | Full §1 + §3 | Tab order, Settings sections, focus after modal. |
+| `ollama_mdns_discovery_service.py`, Connection **Find LAN** | `tests/test_ollama_mdns_discovery_service.py` | With LAN Ollama advertised: confirm → Find LAN → Use host → Test → Ask. N/A if no mDNS publish. |
 
 ---
 
@@ -55,11 +56,12 @@ Run after **`scripts/build.ps1`** or **`scripts/build.sh`** succeeds. Check **Pa
 - [ ] **TextField**: type, wrap, caret visible; no horizontal drift vs native baseline after edits.
 - [ ] **Ask** sends; stop/clear behavior still sensible if your change touches ask state.
 - [ ] **D-pad**: each AI reply **chunk** is its own focus stop; move down through chunks and confirm the **last** chunk receives focus and is readable (regression target for long replies).
-- [ ] **Preset row:** three rotating suggestion chips behave as before; optional **Pyro / character QA** — with AI character **Pyro** (or Random), after replies, watch for an extra orange-outlined **agent tip** chip (stochastic); confirm it fills the Ask field when selected and disappears on the next Ask or **Settings → Advanced → Reset session cache**.
+- [ ] **Preset row:** three rotating suggestion chips behave as before; optional **Pyro / character QA** — with AI character **Pyro** (or Random): **Balanced** → helpful manager + optional inject chip; **Nightmare** → asshole tier, no TDP apply; inject chip fills Ask when selected and disappears on next Ask or **Settings → Advanced → Reset session cache**.
 
 ### Settings (post–Phase 4 sections)
 
 - [ ] **Connection**: Test Ollama reaches or shows stable unreachable message (no traceback in UI).
+- [ ] (Optional) **Find LAN (mDNS)**: With `_ollama._tcp` advertised on LAN, **Find LAN** lists a host; **Use** fills PC address; **Test** succeeds. N/A without Avahi/Bonjour publish.
 - [ ] **Ask timing / Model unload / Screenshots / Saved text**: change value, leave tab, return — persisted.
 - [ ] **Character**: open picker, OK/Cancel, accent menu if AI character on.
 - [ ] **Model policy**: tier change + README link still opens if touched.

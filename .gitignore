@@ -62,5 +62,8 @@ cli/decky
 # Local Deck screenshots (captured by scripts/screenshot-deck.ps1)
 screenshots/
 
+# Local Deck screen recordings (captured by scripts/record-deck.ps1 / record-deck.sh)
+recordings/
+
 # v0 UI drafts (reference only; not part of the Decky bundle)
 src/v0-drafts/

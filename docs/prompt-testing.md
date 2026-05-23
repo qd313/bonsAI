@@ -95,7 +95,7 @@ Deterministic **Ask** command (optional leading `/`); **does not** call Ollama. 
 - Settings: opt-in **AI character** with fullscreen picker (work-title sections, Random, custom line, OK/Cancel).
 - Backend: `ai_character_service` appends a concise roleplay instruction to the **system** message; TDP JSON contract unchanged.
 - Suggested checks: enable + pick a known preset (e.g. Jackie Welles) and confirm tone shifts while answers stay English and concise; enable **Random** and confirm variation across Asks; custom text only; toggle off and confirm neutral assistant tone returns.
-- **Pyro talent-manager easter egg (shipped):** With **Pyro** selected or **Random** resolving to Pyro, voice is a Hollywood-style manager parody; some successful Asks include a structured carousel inject and Main shows an extra orange-outlined **agent tip** chip (probabilistic). Full device steps: [regression-and-smoke.md](regression-and-smoke.md) §2 (character row) and §3 Main tab.
+- **Pyro talent-manager easter egg (shipped):** With **Pyro** selected or **Random** resolving to Pyro, voice is a Hollywood-style manager parody (archetype only). **Balanced:** still helpful; optional OSS **agent suggestion** inject chip (~30%). **Heavy/Nightmare:** asshole AI tier—mocking, useless advice; confirm **no TDP apply banner** even if the model mentions watts/JSON. Full device steps: [regression-and-smoke.md](regression-and-smoke.md) §2 (character row) and §3 Main tab.
 
 ### 2026-04-13 - Global Screenshots and Vision (V1) Completed
 - Added screenshot attachment flow with fullscreen recent-screenshot browser, thumbnail previews, and controller-first navigation.

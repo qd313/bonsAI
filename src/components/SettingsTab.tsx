@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   PanelSection,
   PanelSectionRow,
@@ -15,6 +15,8 @@ import {
   SCREENSHOT_ATTACHMENT_PRESET_OPTIONS,
   type ScreenshotAttachmentPreset,
   type UnifiedInputPersistenceMode,
+  type NamedOllamaHost,
+  MAX_NAMED_OLLAMA_HOSTS,
 } from "../utils/settingsAndResponse";
 import {
   AI_CHARACTER_ACCENT_INTENSITY_OPTIONS,
@@ -25,10 +27,32 @@ import { SettingsTabAccentIntensityMenuPopover } from "./SettingsTabAccentIntens
 import type { DeveloperConnectionStatus } from "./DeveloperTab";
 import { ASK_LABEL_COLOR_50 } from "../features/unified-input/constants";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
+import {
+  consumeSettingsTabLocalPending,
+  peekSettingsTabLocalPending,
+  registerSettingsTabLocalGetter,
+  unregisterSettingsTabLocalGetter,
+} from "../utils/settingsTabLocalSurvival";
 
 const TEST_CONNECTION_TIMEOUT_SECONDS = 10;
 /** Loopback probes may start systemd / ``ollama serve``; Decky RPC must outlive nested waits. */
 const LOCAL_LOOPBACK_CONNECTION_TEST_RPC_EXTRA_MS = 42000;
+const MDNS_DISCOVERY_TIMEOUT_SECONDS = 10;
+const MDNS_DISCOVERY_RPC_MS = 18_000;
+
+type MdnsOllamaHost = {
+  label: string;
+  host: string;
+  port: number;
+  verified?: boolean;
+};
+
+type MdnsDiscoveryResult = {
+  ok?: boolean;
+  hosts?: MdnsOllamaHost[];
+  error?: string;
+  hint?: string;
+};
 
 const LOCAL_OLLAMA_SETUP_PROFILE_STARTER = "starter";
 const LOCAL_OLLAMA_SETUP_PROFILE_TIER1_FOSS_FULL = "tier1_foss_full";
@@ -133,6 +157,8 @@ export type SettingsTabProps = {
 
   onOpenCharacterPicker: () => void;
   onOpenPullModels: () => void;
+  namedOllamaHosts: NamedOllamaHost[];
+  setNamedOllamaHosts: React.Dispatch<React.SetStateAction<NamedOllamaHost[]>>;
   onBeforeDeckyModal: () => void;
   onCompleteDeckyModalClose: (close: () => void) => void;
   onResetSession: () => void;
@@ -166,19 +192,32 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   setStrategySpoilerAutoRevealAfterConsent,
   onOpenCharacterPicker,
   onOpenPullModels,
+  namedOllamaHosts,
+  setNamedOllamaHosts,
   onBeforeDeckyModal,
   onCompleteDeckyModalClose,
   onResetSession,
   onClearAllPluginData,
 }) => {
   const [deckIp, setDeckIp] = useState<string>("...");
-  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus | null>(null);
+  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus | null>(
+    () => peekSettingsTabLocalPending()?.connectionStatus ?? null
+  );
   const [connectionTesting, setConnectionTesting] = useState(false);
+  const [mdnsDiscovering, setMdnsDiscovering] = useState(false);
+  const [mdnsHosts, setMdnsHosts] = useState<MdnsOllamaHost[]>(
+    () => peekSettingsTabLocalPending()?.mdnsHosts ?? []
+  );
+  const [mdnsDiscoveryMessage, setMdnsDiscoveryMessage] = useState<string | null>(
+    () => peekSettingsTabLocalPending()?.mdnsDiscoveryMessage ?? null
+  );
   const [localSetupStatus, setLocalSetupStatus] = useState<LocalOllamaSetupStatus | null>(null);
   const setupAutoTestRanRef = useRef(false);
   const onTestConnectionRef = useRef<() => Promise<void>>(async () => {});
 
-  const [accentIntensityMenuOpen, setAccentIntensityMenuOpen] = useState(false);
+  const [accentIntensityMenuOpen, setAccentIntensityMenuOpen] = useState(
+    () => peekSettingsTabLocalPending()?.accentIntensityMenuOpen ?? false
+  );
   const accentIntensityMenuAnchorRef = useRef<HTMLDivElement>(null);
   const accentIntensityMenuFirstItemRef = useRef<HTMLDivElement>(null);
   const accentIntensityMenuToggleOnceRef = useRef(false);
@@ -186,6 +225,36 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   const screenshotDimensionNavRef = useRef<HTMLDivElement>(null);
   const ollamaIpConnectionNavRef = useRef<HTMLDivElement>(null);
   const ollamaLocalToggleNavRef = useRef<HTMLDivElement>(null);
+  const [localInstallMenuOpen, setLocalInstallMenuOpen] = useState(
+    () => peekSettingsTabLocalPending()?.localInstallMenuOpen ?? false
+  );
+
+  useLayoutEffect(() => {
+    const local = consumeSettingsTabLocalPending();
+    if (!local) return;
+    setConnectionStatus(local.connectionStatus);
+    setMdnsHosts(local.mdnsHosts);
+    setMdnsDiscoveryMessage(local.mdnsDiscoveryMessage);
+    setAccentIntensityMenuOpen(local.accentIntensityMenuOpen);
+    setLocalInstallMenuOpen(local.localInstallMenuOpen);
+  }, []);
+
+  useEffect(() => {
+    registerSettingsTabLocalGetter(() => ({
+      connectionStatus,
+      mdnsHosts,
+      mdnsDiscoveryMessage,
+      accentIntensityMenuOpen,
+      localInstallMenuOpen,
+    }));
+    return () => unregisterSettingsTabLocalGetter();
+  }, [
+    connectionStatus,
+    mdnsHosts,
+    mdnsDiscoveryMessage,
+    accentIntensityMenuOpen,
+    localInstallMenuOpen,
+  ]);
 
   useEffect(() => {
     callDeckyWithTimeout<[], string>("get_deck_ip", [], DECKY_RPC_TIMEOUT_MS)
@@ -230,6 +299,71 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   onTestConnectionRef.current = onTestConnection;
 
   const localSetupBusy = localSetupStatus?.phase === "running";
+
+  const runMdnsDiscovery = useCallback(async () => {
+    setMdnsDiscovering(true);
+    setMdnsDiscoveryMessage(null);
+    setMdnsHosts([]);
+    try {
+      const result = await callDeckyWithTimeout<[number], MdnsDiscoveryResult>(
+        "discover_mdns_ollama_hosts",
+        [MDNS_DISCOVERY_TIMEOUT_SECONDS],
+        MDNS_DISCOVERY_RPC_MS
+      );
+      const hosts = Array.isArray(result.hosts) ? result.hosts : [];
+      if (hosts.length > 0) {
+        setMdnsHosts(hosts);
+        setMdnsDiscoveryMessage(null);
+      } else {
+        setMdnsHosts([]);
+        setMdnsDiscoveryMessage(
+          (result.hint || result.error || "No Ollama services found via mDNS on this network.").trim()
+        );
+      }
+    } catch (e: unknown) {
+      setMdnsHosts([]);
+      setMdnsDiscoveryMessage(formatDeckyRpcError(e));
+    } finally {
+      setMdnsDiscovering(false);
+    }
+  }, []);
+
+  const openMdnsDiscoveryConfirm = useCallback(() => {
+    if (ollamaLocalOnDeck || mdnsDiscovering || localSetupBusy) return;
+    onBeforeDeckyModal();
+    const handle = showModal(
+      <ConfirmModal
+        strTitle="Find Ollama on LAN (mDNS)"
+        strDescription={
+          <div className="bonsai-prose" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45, textAlign: "left" }}>
+            <div style={{ marginBottom: 8 }}>
+              This browses your local network for services advertised as{" "}
+              <code style={{ color: "#9ce7ff" }}>_ollama._tcp</code> (Bonjour / Avahi). It does not scan IP addresses or
+              ports.
+            </div>
+            <div>
+              Stock Ollama on a PC often needs an Avahi or Bonjour publish step — see troubleshooting. You can still
+              enter a PC address manually.
+            </div>
+          </div>
+        }
+        strOKButtonText="Search"
+        strCancelButtonText="Cancel"
+        onOK={() => {
+          onCompleteDeckyModalClose(() => handle.Close());
+          void runMdnsDiscovery();
+        }}
+        onCancel={() => onCompleteDeckyModalClose(() => handle.Close())}
+      />
+    );
+  }, [
+    localSetupBusy,
+    mdnsDiscovering,
+    ollamaLocalOnDeck,
+    onBeforeDeckyModal,
+    onCompleteDeckyModalClose,
+    runMdnsDiscovery,
+  ]);
 
   const formatLocalSetupStageLine = useCallback((st: LocalOllamaSetupStatus | null) => {
     if (!st || st.phase !== "running") return "";
@@ -508,7 +642,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
               <Focusable flow-children="horizontal" style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 8, width: "100%" }}>
                 <Button
                   disabled={localSetupBusy}
-                  onClick={() => openLocalSetupConfirm(LOCAL_OLLAMA_SETUP_PROFILE_STARTER)}
+                  onClick={() => setLocalInstallMenuOpen((o) => !o)}
                   style={{
                     flex: "1 1 140px",
                     minHeight: 36,
@@ -518,14 +652,15 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                     fontWeight: 600,
                     borderRadius: 4,
                     border: "1px solid rgba(255,255,255,0.22)",
-                    background: localSetupBusy
-                      ? "linear-gradient(180deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)"
+                    background: localInstallMenuOpen
+                      ? "linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.08) 100%)"
                       : "linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.05) 100%)",
                     color: "#e8eef5",
                   }}
-                  aria-label="Install starter models"
+                  aria-expanded={localInstallMenuOpen}
+                  aria-label="Install model bundles"
                 >
-                  Install starter models
+                  Install options…
                 </Button>
                 <Button
                   disabled={localSetupBusy}
@@ -548,27 +683,35 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                 >
                   Update AI & models
                 </Button>
-                <Button
-                  disabled={localSetupBusy}
-                  onClick={() => openLocalSetupConfirm(LOCAL_OLLAMA_SETUP_PROFILE_TIER1_FOSS_FULL)}
-                  style={{
-                    flex: "1 1 160px",
-                    minHeight: 36,
-                    minWidth: 0,
-                    padding: "6px 8px",
-                    fontSize: 11,
-                    fontWeight: 600,
-                    borderRadius: 4,
-                    border: "1px solid rgba(251,146,60,0.45)",
-                    background: localSetupBusy
-                      ? "rgba(48,32,14,0.5)"
-                      : "linear-gradient(180deg, rgba(251,146,60,0.22) 0%, rgba(120,53,15,0.35) 100%)",
-                    color: "#fef3c7",
-                  }}
-                  aria-label="Install full model set"
-                >
-                  Install full model set
-                </Button>
+                {localInstallMenuOpen ? (
+                  <Focusable
+                    flow-children="vertical"
+                    style={{ display: "flex", flexDirection: "column", gap: 6, width: "100%" }}
+                  >
+                    <Button
+                      disabled={localSetupBusy}
+                      onClick={() => {
+                        setLocalInstallMenuOpen(false);
+                        openLocalSetupConfirm(LOCAL_OLLAMA_SETUP_PROFILE_STARTER);
+                      }}
+                      style={{ width: "100%", minHeight: 34, fontSize: 11, fontWeight: 600 }}
+                      aria-label="Install starter models"
+                    >
+                      Install starter models
+                    </Button>
+                    <Button
+                      disabled={localSetupBusy}
+                      onClick={() => {
+                        setLocalInstallMenuOpen(false);
+                        openLocalSetupConfirm(LOCAL_OLLAMA_SETUP_PROFILE_TIER1_FOSS_FULL);
+                      }}
+                      style={{ width: "100%", minHeight: 34, fontSize: 11, fontWeight: 600 }}
+                      aria-label="Install full model set"
+                    >
+                      Install full model set
+                    </Button>
+                  </Focusable>
+                ) : null}
                 {localSetupBusy ? (
                   <Button
                     onClick={() => void cancelLocalSetup()}
@@ -658,6 +801,46 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
             </Focusable>
           </PanelSectionRow>
         ) : null}
+        {!ollamaLocalOnDeck && namedOllamaHosts.length > 0 ? (
+          <PanelSectionRow>
+            <div style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 6 }}>Saved Ollama hosts (LAN)</div>
+            <Focusable flow-children="horizontal" style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+              {namedOllamaHosts.map((entry) => (
+                <Button
+                  key={`${entry.label}-${entry.host}`}
+                  onClick={() => {
+                    onOllamaIpChange(entry.host);
+                    onPersistOllamaIp(entry.host);
+                  }}
+                  style={{ minHeight: 32, fontSize: 11 }}
+                >
+                  {entry.label}
+                </Button>
+              ))}
+            </Focusable>
+          </PanelSectionRow>
+        ) : null}
+        {!ollamaLocalOnDeck ? (
+          <PanelSectionRow>
+            <Button
+              disabled={!ollamaIp.trim() || namedOllamaHosts.length >= MAX_NAMED_OLLAMA_HOSTS}
+              onClick={() => {
+                const host = ollamaIp.trim();
+                if (!host) return;
+                const label = host.length > 24 ? `${host.slice(0, 21)}…` : host;
+                setNamedOllamaHosts((prev) => {
+                  const next = prev.filter((h) => h.host !== host);
+                  next.push({ label, host });
+                  return next.slice(-MAX_NAMED_OLLAMA_HOSTS);
+                });
+                toaster.toast({ title: "Host saved", body: label, duration: 2500 });
+              }}
+              style={{ width: "100%", minHeight: 34 }}
+            >
+              Save current PC address as quick host
+            </Button>
+          </PanelSectionRow>
+        ) : null}
         <PanelSectionRow>
           <div
             ref={ollamaIpConnectionNavRef}
@@ -686,52 +869,64 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                 boxSizing: "border-box",
               }}
             >
-              <div
-                style={{
-                  flex: "0 1 172px",
-                  width: 172,
-                  maxWidth: "172px",
-                  minWidth: 0,
-                  overflow: "hidden",
-                }}
-              >
+              {!ollamaLocalOnDeck ? (
                 <div
                   style={{
-                    fontVariant: "small-caps",
-                    letterSpacing: "0.06em",
-                    fontSize: 11,
-                    fontWeight: 600,
-                    color: "#b8c6d6",
-                    marginBottom: 2,
+                    flex: "1 1 auto",
+                    minWidth: 0,
+                    overflow: "hidden",
                   }}
                 >
-                  PC address
+                  <div
+                    style={{
+                      fontVariant: "small-caps",
+                      letterSpacing: "0.06em",
+                      fontSize: 11,
+                      fontWeight: 600,
+                      color: "#b8c6d6",
+                      marginBottom: 2,
+                    }}
+                  >
+                    PC address
+                  </div>
+                  <TextField
+                    label=""
+                    value={ollamaIp}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => onOllamaIpChange(e.target.value)}
+                    style={{
+                      width: "100%",
+                      minWidth: 0,
+                      maxWidth: "100%",
+                    }}
+                  />
                 </div>
-                <TextField
-                  label=""
-                  value={ollamaIp}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => onOllamaIpChange(e.target.value)}
-                  disabled={ollamaLocalOnDeck}
+              ) : (
+                <div
+                  className="bonsai-prose"
                   style={{
-                    width: "100%",
-                    minWidth: 0,
-                    maxWidth: "100%",
-                    ...(ollamaLocalOnDeck ? { opacity: 0.55 } : undefined),
+                    flex: "1 1 auto",
+                    fontSize: 11,
+                    color: "#b8c6d6",
+                    lineHeight: 1.35,
+                    paddingBottom: 8,
                   }}
-                />
-              </div>
+                >
+                  Ollama runs on this Deck at <span style={{ color: "#9ce7ff" }}>127.0.0.1:11434</span>
+                </div>
+              )}
               <Button
                 onClick={onTestConnection}
                 disabled={connectionTesting || localSetupBusy || (!ollamaLocalOnDeck && !ollamaIp.trim())}
                 style={{
-                  flex: "1 1 auto",
+                  flex: ollamaLocalOnDeck ? "1 1 100%" : "0 0 auto",
                   alignSelf: "flex-end",
                   marginBottom: 2,
                   minHeight: 38,
-                  minWidth: 0,
+                  minWidth: ollamaLocalOnDeck ? 0 : 68,
+                  width: ollamaLocalOnDeck ? "100%" : undefined,
                   height: 38,
-                  maxWidth: 68,
-                  padding: "0 4px",
+                  maxWidth: ollamaLocalOnDeck ? "100%" : 68,
+                  padding: "0 8px",
                   fontSize: 11,
                   fontWeight: 600,
                   borderRadius: 4,
@@ -741,26 +936,109 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                 }}
                 aria-label={connectionTesting ? "Testing Ollama connection" : "Test connection to Ollama"}
               >
-                {connectionTesting ? "…" : "Test"}
+                {connectionTesting ? "…" : "Test connection"}
               </Button>
+              {!ollamaLocalOnDeck ? (
+                <Button
+                  onClick={openMdnsDiscoveryConfirm}
+                  disabled={mdnsDiscovering || connectionTesting || localSetupBusy}
+                  style={{
+                    flex: "0 0 auto",
+                    alignSelf: "flex-end",
+                    marginBottom: 2,
+                    minHeight: 38,
+                    minWidth: 0,
+                    height: 38,
+                    maxWidth: 88,
+                    padding: "0 4px",
+                    fontSize: 10,
+                    fontWeight: 600,
+                    borderRadius: 4,
+                    border: "1px solid rgba(255,255,255,0.18)",
+                    background: "rgba(255,255,255,0.06)",
+                    color: "#c8d4e0",
+                  }}
+                  aria-label={mdnsDiscovering ? "Searching LAN for Ollama" : "Find Ollama on LAN via mDNS"}
+                >
+                  {mdnsDiscovering ? "…" : "Find LAN"}
+                </Button>
+              ) : null}
             </Focusable>
-            <div
-              className="bonsai-prose"
-              style={{
-                fontSize: 10,
-                color: "#6b7c90",
-                lineHeight: 1.35,
-                userSelect: "none",
-                pointerEvents: "none",
-              }}
-              title="Network address of this Steam Deck (informational)"
-              aria-live="polite"
-            >
-              {"This Deck's IP: "}
-              <span style={{ color: "#8fa0b4", fontVariantNumeric: "tabular-nums" }}>{deckIp}</span>
-            </div>
+            {!ollamaLocalOnDeck ? (
+              <div
+                className="bonsai-prose"
+                style={{
+                  fontSize: 10,
+                  color: "#6b7c90",
+                  lineHeight: 1.35,
+                  userSelect: "none",
+                  pointerEvents: "none",
+                }}
+                title="Network address of this Steam Deck (informational)"
+                aria-live="polite"
+              >
+                {"This Deck's IP: "}
+                <span style={{ color: "#8fa0b4", fontVariantNumeric: "tabular-nums" }}>{deckIp}</span>
+              </div>
+            ) : null}
           </div>
         </PanelSectionRow>
+        {!ollamaLocalOnDeck && mdnsHosts.length > 0 ? (
+          <PanelSectionRow>
+            <div style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 6 }}>Found on LAN (mDNS)</div>
+            <Focusable flow-children="vertical" style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              {mdnsHosts.map((entry) => (
+                <Focusable
+                  key={`${entry.label}-${entry.host}`}
+                  flow-children="horizontal"
+                  style={{ display: "flex", flexWrap: "wrap", gap: 6 }}
+                >
+                  <Button
+                    onClick={() => {
+                      onOllamaIpChange(entry.host);
+                      onPersistOllamaIp(entry.host);
+                      toaster.toast({
+                        title: "PC address set",
+                        body: entry.host,
+                        duration: 2500,
+                      });
+                    }}
+                    style={{ minHeight: 32, fontSize: 11, flex: "1 1 auto" }}
+                  >
+                    Use {entry.label}
+                    {entry.verified ? " ✓" : ""}
+                  </Button>
+                  <Button
+                    disabled={namedOllamaHosts.length >= MAX_NAMED_OLLAMA_HOSTS}
+                    onClick={() => {
+                      const host = entry.host.trim();
+                      const label =
+                        entry.label.length > 24 ? `${entry.label.slice(0, 21)}…` : entry.label || host;
+                      setNamedOllamaHosts((prev) => {
+                        const next = prev.filter((h) => h.host !== host);
+                        next.push({ label, host });
+                        return next.slice(-MAX_NAMED_OLLAMA_HOSTS);
+                      });
+                      onOllamaIpChange(host);
+                      onPersistOllamaIp(host);
+                      toaster.toast({ title: "Host saved", body: label, duration: 2500 });
+                    }}
+                    style={{ minHeight: 32, fontSize: 10 }}
+                  >
+                    Save
+                  </Button>
+                </Focusable>
+              ))}
+            </Focusable>
+          </PanelSectionRow>
+        ) : null}
+        {!ollamaLocalOnDeck && mdnsDiscoveryMessage ? (
+          <PanelSectionRow>
+            <div className="bonsai-prose bonsai-settings-bleed" style={{ fontSize: 11, color: "#8fa0b4" }}>
+              {mdnsDiscoveryMessage}
+            </div>
+          </PanelSectionRow>
+        ) : null}
         {connectionStatus && (
           <PanelSectionRow>
             {connectionStatus.reachable ? (

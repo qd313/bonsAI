@@ -206,6 +206,27 @@ All Desktop writes now land in **`~/Desktop/bonsAI_logs/`** (was `BonsAI_notes`)
 
 4. **Models installed:** On the Ollama host, run `ollama pull <model>` for each tag you use (for example `llama3` for text, `llava` or another vision tag for screenshots). The Deck only talks to Ollama; it does not download weights itself.
 
+### Find Ollama on LAN (mDNS — optional)
+
+bonsAI can browse for **`_ollama._tcp`** services on your LAN (**Settings → Connection → Find LAN**). This uses **mDNS only** (Bonjour / Avahi) — it does **not** scan IP subnets or arbitrary ports.
+
+Stock Ollama on Linux/Windows often **does not advertise** mDNS until you publish it. Example on a Fedora/Bazzite PC (adjust paths):
+
+```ini
+# /etc/avahi/services/ollama.service
+<?xml version="1.0" standalone='no'?>
+<!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+<service-group>
+  <name replace-wildcards="yes">Ollama on %h</name>
+  <service>
+    <type>_ollama._tcp</type>
+    <port>11434</port>
+  </service>
+</service-group>
+```
+
+Then `sudo systemctl restart avahi-daemon` and ensure `OLLAMA_HOST=0.0.0.0` and firewall **TCP 11434** as above. Manual **PC address** entry still works if mDNS finds nothing.
+
 ### On-device Ollama (localhost — **Test** vs cold boot)
 
 **Symptom:** Right after a full reboot, Connection **Test** fails for **127.0.0.1:11434** even though pulls succeeded earlier.

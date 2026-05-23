@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef, useCallback } from "react";
 import { toaster } from "@decky/api";
 import { PanelSection, PanelSectionRow, TextField, Button, Focusable, Router, ToggleField } from "@decky/ui";
 import type { PresetPrompt } from "../data/presets";
@@ -41,6 +41,8 @@ import {
 } from "./icons";
 import { CharacterRoleplayEmoticon } from "./CharacterRoleplayEmoticon";
 import type { TransparencySnapshot } from "../utils/inputTransparency";
+import { readClipboardText, sanitizeClipboardStashText } from "../utils/clipboardStash";
+import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import { formatAppliedTuningBannerText } from "../utils/settingsAndResponse";
 import { ASK_MODE_LABELS, ASK_MODE_OUTLINE, type AskModeId } from "../data/askMode";
 import {
@@ -323,6 +325,12 @@ export type MainTabProps = {
   presetCarouselInject?: { text: string } | null;
   /** While true, render one preview chunk instead of D-pad split chunks. */
   isStreamingPreview?: boolean;
+  /** Pending Ask phase line from ``<bonsai-status>`` or backend fallback. */
+  thinkingSummary?: string | null;
+  /** When true, show full Ask diagnostics block (model chain, timing). */
+  desktopAskVerboseLogging?: boolean;
+  lastRequestId?: number | null;
+  lastExchange?: { question: string; answer: string } | null;
 };
 
 export function MainTab(props: MainTabProps) {
@@ -406,12 +414,59 @@ export function MainTab(props: MainTabProps) {
     onStrategySpoilerConsentForNextAskChange,
     presetCarouselInject = null,
     isStreamingPreview = false,
+    thinkingSummary = null,
+    desktopAskVerboseLogging = false,
+    lastRequestId = null,
+    lastExchange = null,
   } = props;
 
   const [transparencyOpen, setTransparencyOpen] = useState(false);
+  const [diagnosticsOpen, setDiagnosticsOpen] = useState(false);
+  const [feedbackRating, setFeedbackRating] = useState<"up" | "down" | null>(null);
   useEffect(() => {
     setTransparencyOpen(false);
+    setDiagnosticsOpen(false);
+    setFeedbackRating(null);
   }, [transparencySnapshot?.raw_question, transparencySnapshot?.final_response]);
+
+  const noActiveGameContext =
+    ollamaContext?.app_context !== "active" || !ollamaContext?.app_id?.trim();
+
+  const onPasteClipboardStash = useCallback(async () => {
+    try {
+      const raw = await readClipboardText();
+      const piece = sanitizeClipboardStashText(raw);
+      if (!piece) {
+        toaster.toast({ title: "Clipboard empty", body: "", duration: 2500 });
+        return;
+      }
+      setUnifiedInput((prev) => {
+        const base = (prev || "").trim();
+        return base ? `${base}\n\n${piece}` : piece;
+      });
+      onCloseScreenshotBrowser();
+      toaster.toast({ title: "Pasted from clipboard", body: "", duration: 2200 });
+    } catch (e: unknown) {
+      toaster.toast({ title: "Clipboard unavailable", body: formatDeckyRpcError(e), duration: 4000 });
+    }
+  }, [setUnifiedInput, onCloseScreenshotBrowser]);
+
+  const onSendFeedback = useCallback(
+    async (rating: "up" | "down") => {
+      setFeedbackRating(rating);
+      try {
+        await callDeckyWithTimeout<[string, number, number, boolean], { ok?: boolean }>(
+          "save_ask_feedback",
+          [rating, lastRequestId ?? 0, lastExchange?.question?.length ?? 0, true],
+          DECKY_RPC_TIMEOUT_MS
+        );
+        toaster.toast({ title: "Feedback saved locally", body: "", duration: 2500 });
+      } catch (e: unknown) {
+        toaster.toast({ title: "Feedback not saved", body: formatDeckyRpcError(e), duration: 4000 });
+      }
+    },
+    [lastExchange?.question, lastRequestId]
+  );
   /** Persisted or pasted newline-only values push the native textarea caret to line 2 while the placeholder reads on line 1. */
   useEffect(() => {
     if (unifiedInput.trim() === "" && /\n/.test(unifiedInput)) setUnifiedInput("");
@@ -611,8 +666,8 @@ export function MainTab(props: MainTabProps) {
         <PanelSectionRow>
           <div
             ref={presetCarouselHostRef}
-            className="bonsai-full-bleed-row"
-            style={{ ...fullBleedRowStyle, display: "grid", gap: 8 }}
+            className="bonsai-full-bleed-row bonsai-preset-row-host"
+            style={{ display: "grid", gap: 8, minWidth: 0, width: "100%", boxSizing: "border-box" }}
           >
             {showPluginHelpChip && (
               <Button
@@ -653,7 +708,7 @@ export function MainTab(props: MainTabProps) {
                   fontSize: 12,
                   color: "#c4d3e2",
                 }}
-                aria-label="Agent tip suggestion"
+                aria-label="Agent suggestion"
               >
                 {presetCarouselInject.text.trim()}
               </Button>
@@ -696,7 +751,7 @@ export function MainTab(props: MainTabProps) {
               </div>
               {showAiCharacterChrome && (
                 <div
-                  style={{ position: "absolute", top: -2, left: -6, zIndex: 6, width: 18, height: 18 }}
+                  style={{ position: "absolute", top: 2, left: 2, zIndex: 6, width: 18, height: 18 }}
                   onKeyDownCapture={(ev) => {
                     if (!isRightNavigationEvent(ev)) return;
                     if (!(ev.target as HTMLElement).closest?.(".bonsai-ai-character-avatar")) return;
@@ -871,6 +926,7 @@ export function MainTab(props: MainTabProps) {
                   zIndex: 25,
                   margin: 0,
                   padding: 0,
+                  paddingLeft: showAiCharacterChrome ? 26 : 8,
                   boxSizing: "border-box",
                 }}
               >
@@ -883,7 +939,7 @@ export function MainTab(props: MainTabProps) {
                     width: "100%",
                     height: "100%",
                     alignItems: "flex-end",
-                    justifyContent: "space-between",
+                    justifyContent: "flex-start",
                     margin: 0,
                     padding: 0,
                   }}
@@ -896,7 +952,7 @@ export function MainTab(props: MainTabProps) {
                     } as Record<string, unknown>)}
                     onClick={onOpenScreenshotBrowser}
                     disabled={isAsking}
-                    aria-label="Attach screenshot"
+                    aria-label="Attach screenshot or paste from clipboard"
                     style={{
                       minWidth: 20,
                       width: 20,
@@ -911,7 +967,6 @@ export function MainTab(props: MainTabProps) {
                       color: "#dbe6f3",
                       flexShrink: 0,
                       opacity: mediaLibraryEnabled ? 1 : 0.45,
-                      transform: "translate(-6px, 1px)",
                     }}
                   >
                     <span
@@ -922,7 +977,7 @@ export function MainTab(props: MainTabProps) {
                         justifyContent: "center",
                       }}
                     >
-                      <span className="bonsai-unified-input-icon">
+                      <span className="bonsai-askbar-corner-icon">
                         <AttachMediaIcon size={15} />
                       </span>
                       {selectedAttachment && (
@@ -1219,7 +1274,10 @@ export function MainTab(props: MainTabProps) {
           </PanelSectionRow>
         )}
         <PanelSectionRow>
-          <div className="bonsai-full-bleed-row bonsai-ask-bleed-wrap" style={{ ...fullBleedRowStyle }}>
+          <div
+            className="bonsai-full-bleed-row bonsai-ask-bleed-wrap"
+            style={{ ...fullBleedRowStyle, marginTop: 1 }}
+          >
             <div
               ref={askBarHostRef}
               className={`bonsai-askbar-merged bonsai-glass-panel bonsai-askbar-row-host${askLooksReady ? " bonsai-askbar-merged--ready" : ""}`}
@@ -1339,7 +1397,7 @@ export function MainTab(props: MainTabProps) {
                 position: "relative",
               }}
             >
-              <Focusable flow-children="horizontal" style={{ display: "flex", gap: 8 }}>
+              <Focusable flow-children="horizontal" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                 <Button
                   onClick={onCloseScreenshotBrowser}
                   aria-label="Back"
@@ -1349,9 +1407,18 @@ export function MainTab(props: MainTabProps) {
                 </Button>
                 <Button
                   onClick={() => {
+                    void onPasteClipboardStash();
+                  }}
+                  aria-label="Paste from clipboard into Ask field"
+                  style={{ minHeight: 34, padding: "0 12px", fontSize: 12, ...presetButtonSurface }}
+                >
+                  Paste clipboard
+                </Button>
+                <Button
+                  onClick={() => {
                     void loadRecentScreenshots(24);
                   }}
-                  disabled={isLoadingRecentScreenshots}
+                  disabled={isLoadingRecentScreenshots || !mediaLibraryEnabled}
                   aria-label="Refresh screenshots"
                   style={{ minWidth: 52, width: 52, minHeight: 34, padding: 0, ...presetButtonSurface }}
                 >
@@ -1367,7 +1434,9 @@ export function MainTab(props: MainTabProps) {
 
               {recentScreenshots.length === 0 && !isLoadingRecentScreenshots ? (
                 <div style={{ color: "#9cb0c6", fontSize: 12, lineHeight: 1.4 }}>
-                  No recent screenshots found. Open Steam Media and take a screenshot, then refresh.
+                  {mediaLibraryEnabled
+                    ? "No recent screenshots found. Open Steam Media and take a screenshot, then refresh — or use Paste clipboard."
+                    : "Paste clipboard into Ask, or enable Media library access in Permissions to attach screenshots."}
                 </div>
               ) : (
                 <div
@@ -1535,6 +1604,29 @@ export function MainTab(props: MainTabProps) {
             </div>
           </PanelSectionRow>
         )}
+        {isAsking && thinkingSummary ? (
+          <PanelSectionRow>
+            <div style={{ color: "#9fb7d5", fontSize: 12, lineHeight: 1.35, fontStyle: "italic" }}>
+              {thinkingSummary}
+            </div>
+          </PanelSectionRow>
+        ) : null}
+        {!isAsking && !selectedAttachment && noActiveGameContext && unifiedInput.trim() ? (
+          <PanelSectionRow>
+            <div
+              className="bonsai-full-bleed-row"
+              style={{
+                ...fullBleedRowStyle,
+                fontSize: 10,
+                color: "#8fa8c4",
+                lineHeight: 1.35,
+                fontStyle: "italic",
+              }}
+            >
+              No game detected — attach a screenshot or name the game for sharper answers.
+            </div>
+          </PanelSectionRow>
+        ) : null}
         {isAsking && showSlowWarning && (
           <PanelSectionRow>
             <div style={{ color: "#f2cf84", fontSize: 12, padding: "6px 0", lineHeight: 1.35 }}>
@@ -1766,6 +1858,55 @@ export function MainTab(props: MainTabProps) {
             </Button>
           </PanelSectionRow>
         )}
+        {!isAsking && lastExchange?.answer?.trim() ? (
+          <PanelSectionRow>
+            <div style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 6 }}>Rate last reply (saved on device only)</div>
+            <Focusable flow-children="horizontal" style={{ display: "flex", gap: 8 }}>
+              <Button
+                onClick={() => void onSendFeedback("up")}
+                disabled={feedbackRating !== null}
+                style={{ minHeight: 34, flex: 1, opacity: feedbackRating === "up" ? 1 : 0.85 }}
+              >
+                👍 Helpful
+              </Button>
+              <Button
+                onClick={() => void onSendFeedback("down")}
+                disabled={feedbackRating !== null}
+                style={{ minHeight: 34, flex: 1, opacity: feedbackRating === "down" ? 1 : 0.85 }}
+              >
+                👎 Off
+              </Button>
+            </Focusable>
+          </PanelSectionRow>
+        ) : null}
+        {desktopAskVerboseLogging && transparencySnapshot?.ask_diagnostics ? (
+          <PanelSectionRow>
+            <Focusable style={{ width: "100%" }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: "#b8c9dc", marginBottom: 6 }}>
+                Ask diagnostics
+              </div>
+              <Button onClick={() => setDiagnosticsOpen((o) => !o)} style={{ width: "100%", minHeight: 34, marginBottom: 8 }}>
+                {diagnosticsOpen ? "Hide diagnostics" : "Show diagnostics"}
+              </Button>
+              {diagnosticsOpen && (
+                <pre
+                  style={{
+                    fontSize: 10,
+                    lineHeight: 1.35,
+                    color: "#dce8f4",
+                    whiteSpace: "pre-wrap",
+                    wordBreak: "break-word",
+                    padding: 8,
+                    background: "rgba(0,0,0,0.22)",
+                    borderRadius: 4,
+                  }}
+                >
+                  {JSON.stringify(transparencySnapshot.ask_diagnostics, null, 2)}
+                </pre>
+              )}
+            </Focusable>
+          </PanelSectionRow>
+        ) : null}
         {transparencySnapshot && (
           <PanelSectionRow>
             <Focusable style={{ width: "100%", maxWidth: "100%", minWidth: 0, boxSizing: "border-box" }}>

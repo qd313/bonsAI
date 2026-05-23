@@ -220,6 +220,10 @@ describe("settingsAndResponse", () => {
       strategySpoilerAutoRevealAfterConsent: true,
       steamWebApiKey: "abc",
       bonsaiTokenStreamingEnabled: true,
+      responseVerifyEnabled: false,
+      responseVerifySecondPass: false,
+      responseVerifyModel: "",
+      namedOllamaHosts: [],
     });
     expect(p.latency_warning_seconds).toBe(20);
     expect(p.request_timeout_seconds).toBe(150);
@@ -269,6 +273,10 @@ describe("settingsAndResponse", () => {
       strategySpoilerAutoRevealAfterConsent: DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT,
       steamWebApiKey: "",
       bonsaiTokenStreamingEnabled: false,
+      responseVerifyEnabled: false,
+      responseVerifySecondPass: false,
+      responseVerifyModel: "",
+      namedOllamaHosts: [],
     };
     const p = toBonsaiSettingsPayload(base, {
       ai_character_random: false,

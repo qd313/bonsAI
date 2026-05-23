@@ -31,11 +31,13 @@ if PLUGIN_ROOT not in sys.path:
     sys.path.insert(0, PLUGIN_ROOT)
 
 from backend.services.ai_character_service import (
+    PYRO_ASSHOLE_TIP_LINES,
     PYRO_MANAGER_TIP_LINES,
     PYRO_MANAGER_TIP_PROBABILITY,
     PYRO_PRESET_ID,
     apply_roleplay_to_system_content,
     build_roleplay_system_suffix_meta,
+    pyro_asshole_mode_active,
     pyro_manager_carousel_tip_addon,
 )
 from backend.services.ollama_service import (
@@ -96,6 +98,9 @@ from backend.services.local_ollama_setup_service import (
     run_local_setup,
     run_ollama_rm_async,
 )
+from backend.services.ollama_mdns_discovery_service import (
+    discover_mdns_ollama_hosts as run_mdns_ollama_discovery,
+)
 from backend.services.ollama_catalog_service import (
     fetch_catalog_metadata,
     is_valid_ollama_pull_tag,
@@ -131,8 +136,8 @@ class Plugin:
     The class coordinates request flow, background task state, and service delegation so behavior stays
     stable while heavy logic is extracted into focused helper and service modules.
     """
-    DEFAULT_LATENCY_WARNING_SECONDS = 30
-    DEFAULT_REQUEST_TIMEOUT_SECONDS = 45
+    DEFAULT_LATENCY_WARNING_SECONDS = 45
+    DEFAULT_REQUEST_TIMEOUT_SECONDS = 180
     DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE = "no_persist"
     MAX_ATTACHMENT_FILE_BYTES = MAX_ATTACHMENT_FILE_BYTES
     MAX_ATTACHMENT_INLINE_BYTES = MAX_ATTACHMENT_INLINE_BYTES
@@ -171,6 +176,7 @@ class Plugin:
         self._partial_stream_snapshot: dict = {
             "request_id": None,
             "partial_response": None,
+            "thinking_summary": None,
             "streaming": False,
             "last_flush_monotonic": 0.0,
         }
@@ -259,12 +265,14 @@ class Plugin:
             "preset_carousel_inject": None,
             "partial_response": None,
             "streaming": False,
+            "thinking_summary": None,
         }
 
     def _new_partial_stream_snapshot(self, request_id: int) -> dict:
         return {
             "request_id": request_id,
             "partial_response": None,
+            "thinking_summary": None,
             "streaming": False,
             "last_flush_monotonic": 0.0,
         }
@@ -278,17 +286,32 @@ class Plugin:
             self._partial_stream_snapshot = {
                 "request_id": None,
                 "partial_response": None,
+                "thinking_summary": None,
                 "streaming": False,
                 "last_flush_monotonic": 0.0,
             }
 
-    def _update_partial_response(self, request_id: int, text: str, done: bool) -> None:
+    def _update_partial_response(
+        self,
+        request_id: int,
+        text: str,
+        done: bool,
+        thinking_summary: Optional[str] = None,
+        *,
+        update_partial: bool = True,
+    ) -> None:
         """Thread-safe partial assistant text for background status polling (executor thread)."""
         with self._partial_response_lock:
             snap = self._partial_stream_snapshot
             if snap.get("request_id") != request_id:
                 return
             now = time.monotonic()
+            if thinking_summary:
+                snap["thinking_summary"] = thinking_summary
+            if not update_partial:
+                if done:
+                    snap["streaming"] = False
+                return
             if not done:
                 prev = snap.get("partial_response")
                 last_flush = float(snap.get("last_flush_monotonic") or 0.0)
@@ -299,6 +322,8 @@ class Plugin:
             snap["last_flush_monotonic"] = now
 
     def _merge_partial_into_background_status(self, state: dict) -> dict:
+        from backend.services.bonsai_stream_tags import deterministic_thinking_phase_fallback
+
         out = dict(state)
         with self._partial_response_lock:
             snap = dict(self._partial_stream_snapshot)
@@ -306,9 +331,21 @@ class Plugin:
         if out.get("status") == "pending" and rid is not None and snap.get("request_id") == rid:
             out["partial_response"] = snap.get("partial_response")
             out["streaming"] = bool(snap.get("streaming"))
+            thinking = snap.get("thinking_summary")
+            if isinstance(thinking, str) and thinking.strip():
+                out["thinking_summary"] = thinking.strip()
+            else:
+                started = float(out.get("started_at") or 0.0)
+                elapsed = max(0.0, time.time() - started) if started else 0.0
+                out["thinking_summary"] = deterministic_thinking_phase_fallback(
+                    streaming=bool(snap.get("streaming")),
+                    has_partial=bool(snap.get("partial_response")),
+                    elapsed_seconds=elapsed,
+                )
         else:
             out["partial_response"] = None
             out["streaming"] = False
+            out["thinking_summary"] = None
         return out
 
     def _ensure_background_state(self) -> None:
@@ -341,6 +378,7 @@ class Plugin:
             self._partial_stream_snapshot = {
                 "request_id": None,
                 "partial_response": None,
+                "thinking_summary": None,
                 "streaming": False,
                 "last_flush_monotonic": 0.0,
             }
@@ -898,6 +936,50 @@ class Plugin:
             base_out["recovery_succeeded_before_retry"] = recovery_succeeded_before_retry
         return await _finish(base_out)
 
+    async def discover_mdns_ollama_hosts(self, timeout_seconds: int = 8):
+        """User-triggered mDNS browse for ``_ollama._tcp.local`` only (no subnet scan)."""
+        plugin = Plugin._coerce_instance(self)
+        safe_timeout = max(2, min(15, int(timeout_seconds or 8)))
+
+        try:
+            settings = await plugin.load_settings()
+            if settings.get("ollama_local_on_deck"):
+                return {
+                    "ok": False,
+                    "hosts": [],
+                    "error": "Turn off «Ollama on this Deck» to discover LAN hosts.",
+                }
+
+            def _run_sync() -> dict[str, Any]:
+                return run_mdns_ollama_discovery(timeout_seconds=float(safe_timeout))
+
+            out = await asyncio.wait_for(asyncio.to_thread(_run_sync), timeout=float(safe_timeout) + 2.0)
+            host_count = len(out.get("hosts") or [])
+            await plugin._maybe_app_log(
+                "connection.discover",
+                "mDNS Ollama discovery",
+                fields={"found": host_count, "ok": bool(out.get("ok"))},
+            )
+            return out
+        except asyncio.TimeoutError:
+            await plugin._maybe_app_log(
+                "connection.discover",
+                "mDNS discovery timed out",
+                fields={"found": 0, "ok": False},
+            )
+            return {
+                "ok": False,
+                "hosts": [],
+                "error": "Discovery timed out. Try again or enter the PC address manually.",
+            }
+        except Exception:
+            logger.exception("discover_mdns_ollama_hosts failed")
+            return {
+                "ok": False,
+                "hosts": [],
+                "error": "Discovery failed on this device. Use manual PC address or see troubleshooting.",
+            }
+
     async def start_local_ollama_setup(self, data: Any = None):
         """Install/start Ollama on this Linux host and pull Tier-1 FOSS tags (runs in background)."""
         plugin = Plugin._coerce_instance(self)
@@ -1432,6 +1514,26 @@ class Plugin:
             return {"available": False}
         return {"available": True, "snapshot": dict(snap)}
 
+    async def save_ask_feedback(self, rating: str, request_id: int = 0, question_len: int = 0, success: bool = False):
+        """Persist thumbs up/down locally (JSONL under plugin settings); no network."""
+        from backend.services.feedback_service import append_ask_feedback
+
+        plugin = Plugin._coerce_instance(self)
+        rid = int(request_id) if request_id else None
+        return append_ask_feedback(
+            decky.DECKY_PLUGIN_SETTINGS_DIR,
+            request_id=rid,
+            rating=str(rating or ""),
+            question_len=int(question_len or 0),
+            success=success is True,
+        )
+
+    async def read_host_clipboard_text(self):
+        """Read clipboard via host script when the WebView cannot use ``navigator.clipboard``."""
+        from backend.services.clipboard_service import read_host_clipboard_text
+
+        return read_host_clipboard_text(logger)
+
     async def capture_screenshot(self, include_overlay: bool = True):
         """Capture a screenshot using available gamescope commands and return attachment metadata."""
         plugin = Plugin._coerce_instance(self)
@@ -1736,6 +1838,7 @@ class Plugin:
                 "preset_carousel_inject": None,
                 "partial_response": None,
                 "streaming": False,
+                "thinking_summary": None,
             }
             plugin._background_task = asyncio.create_task(
                 plugin._run_background_request(
@@ -1938,11 +2041,16 @@ class Plugin:
         )
         rp_meta = build_roleplay_system_suffix_meta(settings, ask_mode)
         roleplay = rp_meta.suffix
+        pyro_asshole = pyro_asshole_mode_active(settings, rp_meta.resolved_preset_id)
         preset_carousel_inject = None
         if rp_meta.resolved_preset_id == PYRO_PRESET_ID and roleplay:
             if random.random() < PYRO_MANAGER_TIP_PROBABILITY:
-                tip = random.choice(PYRO_MANAGER_TIP_LINES)
-                roleplay = roleplay + pyro_manager_carousel_tip_addon(tip)
+                if pyro_asshole:
+                    tip = random.choice(PYRO_ASSHOLE_TIP_LINES)
+                    roleplay = roleplay + pyro_manager_carousel_tip_addon(tip, asshole=True)
+                else:
+                    tip = random.choice(PYRO_MANAGER_TIP_LINES)
+                    roleplay = roleplay + pyro_manager_carousel_tip_addon(tip)
                 preset_carousel_inject = {"text": tip}
         if roleplay:
             # Append after the bonsAI preamble so recency favors character voice over neutral identity lines.
@@ -1951,6 +2059,33 @@ class Plugin:
         if prepared_images:
             user_message["images"] = [image["image_b64"] for image in prepared_images]
         messages = [{"role": "system", "content": system_content}, user_message]
+
+        if os.environ.get("BONSAI_LLAMACPP_ASK") == "1":
+            from backend.services.llama_cpp_provider import llama_cpp_base_from_env, post_llama_cpp_chat_poc
+
+            llama_base = llama_cpp_base_from_env()
+            if llama_base:
+                loop = asyncio.get_running_loop()
+                llama_model = (os.environ.get("BONSAI_LLAMACPP_MODEL") or "default").strip()
+                result = await loop.run_in_executor(
+                    None,
+                    functools.partial(
+                        post_llama_cpp_chat_poc,
+                        llama_base,
+                        llama_model,
+                        messages,
+                        request_timeout_seconds,
+                        logger,
+                    ),
+                )
+                return {
+                    **result,
+                    "system_prompt": system_content,
+                    "user_text_for_model": question,
+                    "user_image_count": len(prepared_images),
+                    "attachment_paths": attachment_paths,
+                    "ask_diagnostics": {"provider": "llama_cpp_poc", "model": llama_model},
+                }
 
         proton_snap = proton_log_transparency if isinstance(proton_log_transparency, dict) else {}
         proton_excerpt = proton_snap.get("proton_log_excerpt_attached") is True
@@ -1966,6 +2101,8 @@ class Plugin:
             "proton_log_sources": proton_sources,
             "proton_log_notes": proton_notes,
             "strategy_spoiler_consent_effective": bool(strategy_spoiler_consent) if ask_mode == "strategy" else False,
+            "resolved_character_preset_id": rp_meta.resolved_preset_id,
+            "pyro_asshole_mode": pyro_asshole,
         }
 
         logger.info(
@@ -1979,10 +2116,25 @@ class Plugin:
 
         requires_vision = len(prepared_images) > 0
         high_vram = settings.get("model_allow_high_vram_fallbacks") is True
-        models_to_try = select_ollama_models(requires_vision, ask_mode, high_vram)
+        models_before_policy = select_ollama_models(requires_vision, ask_mode, high_vram)
         policy_tier = str(settings.get("model_policy_tier") or "open_source_only")
         non_foss_unlocked = settings.get("model_policy_non_foss_unlocked") is True
-        models_to_try = filter_model_list(models_to_try, policy_tier, non_foss_unlocked)
+        models_to_try = filter_model_list(models_before_policy, policy_tier, non_foss_unlocked)
+        ask_started = time.time()
+        ask_diagnostics: dict = {
+            "models_before_policy": list(models_before_policy),
+            "models_after_policy": list(models_to_try),
+            "policy_tier": policy_tier,
+            "policy_dropped_count": max(0, len(models_before_policy) - len(models_to_try)),
+            "requires_vision": requires_vision,
+            "attachment_count": len(prepared_images),
+            "attachment_warnings": list(attachment_warnings),
+            "attachment_errors": list(attachment_errors),
+            "models_attempted": [],
+            "model_succeeded": None,
+            "elapsed_seconds": None,
+        }
+        ollama_extras["ask_diagnostics"] = ask_diagnostics
         if not models_to_try:
             return {
                 "success": False,
@@ -1996,11 +2148,17 @@ class Plugin:
         active_request_id = plugin_inst._background_state.get("request_id")
         token_streaming = settings.get("bonsai_token_streaming_enabled") is True
         on_delta_cb = None
-        if token_streaming and isinstance(active_request_id, int):
+        if isinstance(active_request_id, int):
             stream_rid = active_request_id
 
-            def _on_delta(text: str, done: bool) -> None:
-                plugin_inst._update_partial_response(stream_rid, text, done)
+            def _on_delta(text: str, done: bool, thinking_summary: Optional[str] = None) -> None:
+                plugin_inst._update_partial_response(
+                    stream_rid,
+                    text,
+                    done,
+                    thinking_summary,
+                    update_partial=token_streaming,
+                )
 
             on_delta_cb = _on_delta
 
@@ -2028,6 +2186,7 @@ class Plugin:
             last_failure = {"success": False, "response": "No model attempts executed.", **ollama_extras}
 
             for model_name in models_to_try:
+                ask_diagnostics["models_attempted"].append(model_name)
                 plugin_inst._chat_resp_ready_evt = threading.Event()
                 plugin_inst._active_ollama_chat_pc_ip = str(PcIp or "").strip()
                 plugin_inst._active_ollama_chat_model = str(model_name)
@@ -2071,6 +2230,8 @@ class Plugin:
                 if result.get("cancelled"):
                     return {**_strip_ollama_http_body(merged), "model_policy_disclosure": None, "cancelled": True}
                 if result.get("success"):
+                    ask_diagnostics["model_succeeded"] = str(result.get("model") or model_name)
+                    ask_diagnostics["elapsed_seconds"] = round(time.time() - ask_started, 2)
                     disc = disclosure_for_model(str(result.get("model") or model_name))
                     out = {**_strip_ollama_http_body(merged), "model_policy_disclosure": disc}
                     if preset_carousel_inject is not None:
@@ -2108,6 +2269,7 @@ class Plugin:
 
                 return _strip_ollama_http_body(merged)
 
+            ask_diagnostics["elapsed_seconds"] = round(time.time() - ask_started, 2)
             return last_failure
         except Exception:
             logger.exception("Ollama request failed")

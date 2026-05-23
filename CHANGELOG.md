@@ -5,15 +5,19 @@ All notable changes to this project are documented in this file.
 ## [Unreleased]
 
 ### Added
+- **LAN Ollama discovery (mDNS):** Settings → Connection **Find LAN** — user-triggered browse for `_ollama._tcp` only (no subnet scan). `ollama_mdns_discovery_service.py`, `discover_mdns_ollama_hosts` RPC, `SettingsTab.tsx`.
+- **Maintainer automation:** Vitest headless Decky harness (`src/test-harness/`, `vitest.config.ts`); `scripts/watch-deploy.sh` / `.ps1`; prepare-only `pnpm run version:bump`; Cursor skill `.cursor/skills/bonsai-deck-dev-loop/`.
 - **Token streaming (experimental, Developer tab):** When **Token streaming (experimental)** is enabled (`bonsai_token_streaming_enabled`), Main shows a single growing preview chunk while Ollama NDJSON deltas arrive (`partial_response` on background status poll at 350ms); terminal replies still run strategy branches, TDP apply, model-policy disclosure, and normal D-pad chunk splitting. `main.py`, `ollama_service.py`, `useBonsaiAskOrchestration.ts`, `MainTab.tsx`, `DeveloperTab.tsx`.
 - **Developer tab (opt-in):** Settings → Data → **Show Developer tab** (`show_developer_tab`; migrates legacy `show_debug_tab`). Merges former Debug diagnostics with advanced logging, connection tuning, Steam Web API key, and model-policy advanced controls. `DeveloperTab.tsx`, `index.tsx`, `settings_service.py`, `settingsAndResponse.ts`.
 
 ### Changed
 - **Settings UX cleanup:** Plain-language labels on Settings and Permissions; technical options moved to Developer tab; simplified connection test output and AI model choice on Permissions. `SettingsTab.tsx`, `PermissionsTab.tsx`, `PermissionsTabModelPolicyPanel.tsx`, `modelPolicy.ts`, `aiCharacterAccentIntensity.ts`.
 - **Desktop logs folder rename:** All Desktop writes (chat auto-save, Ask traces, manual notes, app logs) now use `~/Desktop/bonsAI_logs/` instead of `~/Desktop/BonsAI_notes/`. Existing folders are not auto-migrated — rename manually if you already have notes there.
+- **Pull models:** Filters Speed / Strategy / Expert / Vision (coding removed); coverage-based suggestions; install bundles dropdown; default slow warning **45s** and hard timeout **3 min** when custom timeouts are off.
 
 ### Fixed
 - **Local toggle no longer overwrites LAN PC IP:** Ask no longer persists `127.0.0.1:11434` to `bonsai:pc-ip` localStorage while **Ollama on this Deck** is enabled, so toggling local off restores the user's LAN host (`src/utils/persistOllamaIp.ts`, `src/index.tsx`).
+- **Deck UI polish (QAM):** Avatar containment in unified input; 1px Ask spacing; full-bleed settings/pull picker; clearer no-game hint (replaces “Limited context” chip); pull picker D-pad on filter toggles; logging level persists after reload; merged screenshot+log permission; PC IP hidden when local Ollama is on; **Clear all data** clears modal session survival; Proton attach toggle removed from Developer.
 
 ## [0.3.0] - 2026-04-30
 

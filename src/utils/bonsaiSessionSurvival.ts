@@ -65,11 +65,16 @@ export function captureBonsaiSessionForModal(snapshot: BonsaiSessionSurvivalSnap
 
 export function consumeBonsaiSessionAfterRemount(): BonsaiSessionSurvivalSnapshot | null {
   const snap = pendingRestore;
-  pendingRestore = null;
-  if (snap?.settingsSnapshot) {
+  if (!snap) return null;
+  if (snap.settingsSnapshot) {
     restoredSettingsSnapshot = snap.settingsSnapshot;
   }
   return snap;
+}
+
+/** Call after remount restore commits so a second Strict Mode mount can still peek the snapshot. */
+export function finalizeSessionRestoreAfterRemount(): void {
+  pendingRestore = null;
 }
 
 /** After modal remount, prefer in-memory settings over stale disk when load_settings completes. */

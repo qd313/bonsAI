@@ -1,6 +1,6 @@
 # Post-P0 feature backlog & model truth plan
 
-**Status:** Planning only — do **not** implement from this doc during bugfix passes unless a row is explicitly promoted to P0.
+**Status:** Implemented (2026-05-20) — see repo changelog / roadmap mirrors; SteamOS share path remains user-owned out of scope.
 
 **Overall scope:** ★★★★ (multi-surface product work across settings, RPC, prompts, and Deck UX).
 
@@ -49,6 +49,12 @@ Based on `refactor_helpers.py` chains, `pullModelCatalog.ts`, and Deck ~16GB VRA
 - **Files:** `src/components/MainTab.tsx`, `main.py` (optional RPC), `Desktop/bonsAI_logs` or local JSONL.
 - **Acceptance:** Optional thumbs on last exchange; stored locally only; no network without new permission.
 - **Not in scope:** Model fine-tuning pipeline.
+
+### Thinking blurb during reply — ★★★
+
+- **Files:** `ollama_service.py`, `main.py` (background status), `useBackgroundGameAi.ts`, `MainTab.tsx`, `src/types/backgroundAsk.ts`.
+- **Acceptance:** Model-emitted `<bonsai-status>` extracted from the live stream; shown in pending UI; stripped from final reply; deterministic phase fallback when absent.
+- **Roadmap mirror:** [roadmap.md](../roadmap.md) → Thinking blurb during reply.
 
 ### Diagnostics block (structured Ask transparency) — ★★★★
 
@@ -116,7 +122,7 @@ Based on `refactor_helpers.py` chains, `pullModelCatalog.ts`, and Deck ~16GB VRA
 |-------|---------|---------|
 | red-team | N/A | Bugfix-only pass; no scope expansion beyond plan doc. |
 | blue-team | N/A | Character voice fix aligns with product voice promise. |
-| security-auditor | Deferred | Post-check phase should avoid logging raw user PII from verifier. |
+| security-auditor | Triaged | Post-check logs warnings only; no raw user text in verifier paths. Second-pass toggle reserved, no extra model call yet. |
 | master-debugger | Deferred | Tier picker fix uses established `onOKButton` + draft-on-Done pattern from character picker. |
 
 ---

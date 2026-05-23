@@ -1,0 +1,22 @@
+---
+description: Deck-facing dev handoff — build, deploy, watch, screenshots, regression gates
+globs:
+  - src/**
+  - main.py
+  - refactor_helpers.py
+  - py_modules/**
+  - plugin.json
+  - scripts/build.sh
+  - scripts/build.ps1
+  - scripts/watch-deploy.*
+alwaysApply: false
+---
+
+# bonsAI Deck dev loop
+
+When changing Deck-facing UI, RPC, or deploy scripts:
+
+1. Read `.cursor/skills/bonsai-deck-dev-loop/SKILL.md` before closing the task.
+2. Run automated gates (`pnpm test`, `pnpm run test:py`, `pnpm run build`) when applicable.
+3. For layout/focus/QAM issues, run `scripts/screenshot-deck.ps1` and follow **decky-screenshot-ingest**.
+4. Do not commit `.env`, dev IPs, or tunnel secrets.

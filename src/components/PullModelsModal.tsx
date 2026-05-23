@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Button, ConfirmModal, Focusable, ToggleField, showModal } from "@decky/ui";
+import { useCallback, useEffect, useMemo, useRef, useState, type RefCallback } from "react";
+import { Button, ConfirmModal, Focusable, showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
 import {
   PULL_MODEL_CATALOG,
@@ -8,7 +8,9 @@ import {
   PULL_MODEL_GROUP_LABELS,
   PULL_MODEL_GROUP_ORDER,
   bytesToGb,
+  comparePullModelEntriesNewestFirst,
   formatGtaStars,
+  formatPullModelTags,
   formatReleasedYm,
   formatSizeGb,
   isCatalogModelTag,
@@ -16,8 +18,11 @@ import {
   type PullModelFilterId,
   type PullModelGroup,
 } from "../data/pullModelCatalog";
+import { isDeprioritizedOllamaTag } from "../data/deprioritizedModels";
 import { OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP } from "../utils/settingsAndResponse";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
+import { BonsaiModalScope } from "./BonsaiModalScope";
+import { recommendPullModelsForGaps } from "../utils/pullModelRecommendations";
 
 const TEST_CONNECTION_TIMEOUT_SECONDS = 10;
 const LOCAL_LOOPBACK_CONNECTION_TEST_RPC_EXTRA_MS = 42000;
@@ -35,8 +40,19 @@ type ConnectionTestResult = {
   error?: string;
 };
 
+type VisibleCatalogRow = { kind: "catalog"; entry: PullModelEntry; group: PullModelGroup };
+type VisibleOtherRow = { kind: "other"; tag: string };
+type VisibleTableRow = VisibleCatalogRow | VisibleOtherRow;
+
+type TableSection = {
+  title: string;
+  rows: VisibleTableRow[];
+};
+
 export type PullModelsModalProps = {
   activeRoutingTag: string | null;
+  onBeforeNestedDeckyModal?: () => void;
+  onCompleteNestedDeckyModalClose?: (close: () => void) => void;
   onCancel: () => void;
   onPullAccepted: () => void;
 };
@@ -61,10 +77,7 @@ function isTagInstalled(tag: string, installed: Set<string>): boolean {
   return false;
 }
 
-function resolveRowSizeGb(
-  entry: PullModelEntry,
-  liveSizes: Record<string, number | undefined>
-): number {
+function resolveRowSizeGb(entry: PullModelEntry, liveSizes: Record<string, number | undefined>): number {
   const live = liveSizes[entry.tag];
   if (typeof live === "number" && live > 0) return live;
   return entry.sizeGb;
@@ -72,18 +85,35 @@ function resolveRowSizeGb(
 
 function entryMatchesFilter(entry: PullModelEntry, filter: PullModelFilterId): boolean {
   if (filter === "all") return true;
-  if (filter === "chat") return entry.tags.includes("chat");
+  if (filter === "speed") return entry.tags.includes("chat");
   if (filter === "vision") return entry.tags.includes("vision") || entry.tags.includes("ocr");
   if (filter === "strategy") return entry.tags.includes("strategy");
-  if (filter === "coding") return entry.tags.includes("coding");
+  if (filter === "expert") {
+    return entry.group === "stretch" || (entry.tags.includes("strategy") && entry.rating >= 5);
+  }
   return true;
+}
+
+function findFooterButton(label: string): HTMLElement | null {
+  const buttons = Array.from(document.querySelectorAll<HTMLElement>("button, .DialogButton"));
+  for (const btn of buttons) {
+    const text = (btn.textContent ?? "").trim();
+    if (text === label || text.startsWith(label)) return btn;
+  }
+  return null;
 }
 
 /**
  * Pass only to `showModal()` — `ConfirmModal` supplies Steam modal chrome.
  */
 export function PullModelsModal(props: PullModelsModalProps) {
-  const { activeRoutingTag, onCancel, onPullAccepted } = props;
+  const {
+    activeRoutingTag,
+    onBeforeNestedDeckyModal,
+    onCompleteNestedDeckyModalClose,
+    onCancel,
+    onPullAccepted,
+  } = props;
 
   const [installedTags, setInstalledTags] = useState<Set<string>>(() => new Set());
   const [selectedTags, setSelectedTags] = useState<Set<string>>(() => new Set());
@@ -97,6 +127,12 @@ export function PullModelsModal(props: PullModelsModalProps) {
   const [pullBusy, setPullBusy] = useState(false);
   const [deleteBusyTag, setDeleteBusyTag] = useState<string | null>(null);
   const stretchConfirmedRef = useRef<Set<string>>(new Set());
+  const shellRef = useRef<HTMLDivElement | null>(null);
+  const filterChipRefs = useRef<(HTMLElement | null)[]>([]);
+  const installedOnlyRef = useRef<HTMLElement | null>(null);
+  const fossOnlyRef = useRef<HTMLElement | null>(null);
+  const selectCellRefs = useRef<(HTMLElement | null)[]>([]);
+  const deleteCellRefs = useRef<(HTMLElement | null)[]>([]);
 
   const refreshInstalledAndMeta = useCallback(async (metaOnly = false) => {
     if (!metaOnly) setLoadingMeta(true);
@@ -177,8 +213,32 @@ export function PullModelsModal(props: PullModelsModalProps) {
     for (const entry of filteredCatalog) {
       map.get(entry.group)?.push(entry);
     }
+    for (const g of PULL_MODEL_GROUP_ORDER) {
+      map.get(g)?.sort(comparePullModelEntriesNewestFirst);
+    }
     return map;
   }, [filteredCatalog]);
+
+  const tableSections = useMemo((): TableSection[] => {
+    const sections: TableSection[] = [];
+    for (const group of PULL_MODEL_GROUP_ORDER) {
+      const entries = groupedCatalog.get(group) ?? [];
+      if (!entries.length) continue;
+      sections.push({
+        title: PULL_MODEL_GROUP_LABELS[group],
+        rows: entries.map((entry) => ({ kind: "catalog", entry, group })),
+      });
+    }
+    if (!installedOnly && otherInstalledTags.length > 0) {
+      sections.push({
+        title: "Other installed (not in curated catalog)",
+        rows: otherInstalledTags.map((tag) => ({ kind: "other", tag })),
+      });
+    }
+    return sections;
+  }, [groupedCatalog, installedOnly, otherInstalledTags]);
+
+  const flatRows = useMemo(() => tableSections.flatMap((s) => s.rows), [tableSections]);
 
   const installedCatalogCount = useMemo(() => {
     let n = 0;
@@ -208,11 +268,104 @@ export function PullModelsModal(props: PullModelsModalProps) {
     return sum;
   }, [selectedTags, liveSizeGbByTag]);
 
+  const focusInstalledOnlyToggle = useCallback((): boolean => {
+    installedOnlyRef.current?.focus();
+    return Boolean(installedOnlyRef.current);
+  }, []);
+
+  const focusFossOnlyToggle = useCallback((): boolean => {
+    fossOnlyRef.current?.focus();
+    return Boolean(fossOnlyRef.current);
+  }, []);
+
+  const focusFilterChip = useCallback((index: number): boolean => {
+    const list = filterChipRefs.current.filter(Boolean) as HTMLElement[];
+    if (!list.length) return false;
+    const i = Math.max(0, Math.min(index, list.length - 1));
+    list[i]?.focus();
+    list[i]?.scrollIntoView({ block: "nearest", inline: "nearest" });
+    return true;
+  }, []);
+
+  const focusRowCell = useCallback((rowIndex: number, cell: "select" | "delete"): boolean => {
+    if (!flatRows.length) return false;
+    const i = Math.max(0, Math.min(rowIndex, flatRows.length - 1));
+    const row = flatRows[i];
+    const installed =
+      row.kind === "catalog" ? isTagInstalled(row.entry.tag, installedTags) : true;
+    const selectEl = selectCellRefs.current[i];
+    const deleteEl = deleteCellRefs.current[i];
+    const target =
+      cell === "delete" || (installed && !selectEl)
+        ? deleteEl
+        : selectEl ?? deleteEl;
+    if (!target) return false;
+    target.focus();
+    target.scrollIntoView({ block: "nearest", inline: "nearest" });
+    return true;
+  }, [flatRows, installedTags]);
+
+  const focusFooterPull = useCallback((): boolean => {
+    const pull = findFooterButton("Pull selected");
+    if (pull) {
+      pull.focus();
+      return true;
+    }
+    return false;
+  }, []);
+
+  const rowNavHandlers = useCallback(
+    (rowIndex: number, cell: "select" | "delete", installed: boolean) => ({
+      onMoveUp: () => {
+        if (rowIndex > 0) return focusRowCell(rowIndex - 1, cell);
+        return focusFossOnlyToggle() || focusInstalledOnlyToggle() || focusFilterChip(PULL_MODEL_FILTER_OPTIONS.length - 1);
+      },
+      onMoveDown: () => {
+        if (rowIndex < flatRows.length - 1) return focusRowCell(rowIndex + 1, cell);
+        return focusFooterPull();
+      },
+      onMoveRight: () => {
+        if (cell === "select" && installed) return focusRowCell(rowIndex, "delete");
+        return false;
+      },
+      onMoveLeft: () => {
+        if (cell === "delete") return focusRowCell(rowIndex, "select");
+        return false;
+      },
+    }),
+    [flatRows.length, focusFilterChip, focusFossOnlyToggle, focusFooterPull, focusInstalledOnlyToggle, focusRowCell]
+  );
+
+  const recommendedEntries = useMemo(
+    () => recommendPullModelsForGaps(installedTags, { fossOnly, limit: 4 }),
+    [installedTags, fossOnly]
+  );
+
+  const completeNestedModalClose = useCallback(
+    (close: () => void) => {
+      if (onCompleteNestedDeckyModalClose) {
+        onCompleteNestedDeckyModalClose(close);
+      } else {
+        close();
+      }
+    },
+    [onCompleteNestedDeckyModalClose]
+  );
+
   const toggleSelected = useCallback(
-    (entry: PullModelEntry) => {
-      if (isTagInstalled(entry.tag, installedTags)) return;
+    (entry: PullModelEntry, ev?: { stopPropagation?: () => void }) => {
+      ev?.stopPropagation?.();
+      if (isTagInstalled(entry.tag, installedTags)) {
+        toaster.toast({
+          title: "Already installed",
+          body: `${entry.tag} is on this Deck. Use Del to remove it.`,
+          duration: 3500,
+        });
+        return;
+      }
       if (entry.group === "stretch" && !stretchConfirmedRef.current.has(entry.tag)) {
-        showModal(
+        onBeforeNestedDeckyModal?.();
+        const handle = showModal(
           <ConfirmModal
             strTitle="Large model — continue?"
             strDescription={
@@ -230,20 +383,34 @@ export function PullModelsModal(props: PullModelsModalProps) {
                 next.add(entry.tag);
                 return next;
               });
+              completeNestedModalClose(() => handle.Close());
             }}
-            onCancel={() => {}}
+            onCancel={() => completeNestedModalClose(() => handle.Close())}
           />
         );
         return;
       }
       setSelectedTags((prev) => {
         const next = new Set(prev);
-        if (next.has(entry.tag)) next.delete(entry.tag);
-        else next.add(entry.tag);
+        if (next.has(entry.tag)) {
+          next.delete(entry.tag);
+          toaster.toast({
+            title: "Removed from pull queue",
+            body: entry.tag,
+            duration: 2200,
+          });
+        } else {
+          next.add(entry.tag);
+          toaster.toast({
+            title: "Queued to pull",
+            body: entry.tag,
+            duration: 2200,
+          });
+        }
         return next;
       });
     },
-    [installedTags, liveSizeGbByTag]
+    [installedTags, liveSizeGbByTag, completeNestedModalClose, onBeforeNestedDeckyModal]
   );
 
   const confirmDelete = useCallback(
@@ -256,7 +423,8 @@ export function PullModelsModal(props: PullModelsModalProps) {
         });
         return;
       }
-      showModal(
+      onBeforeNestedDeckyModal?.();
+      const handle = showModal(
         <ConfirmModal
           strTitle={`Remove ${tag} from the Deck?`}
           strDescription={
@@ -268,6 +436,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
           strOKButtonText="Remove model"
           strCancelButtonText="Cancel"
           onOK={() => {
+            completeNestedModalClose(() => handle.Close());
             void (async () => {
               setDeleteBusyTag(tag);
               try {
@@ -310,11 +479,11 @@ export function PullModelsModal(props: PullModelsModalProps) {
               }
             })();
           }}
-          onCancel={() => {}}
+          onCancel={() => completeNestedModalClose(() => handle.Close())}
         />
       );
     },
-    [activeRoutingTag, refreshInstalledAndMeta]
+    [activeRoutingTag, refreshInstalledAndMeta, completeNestedModalClose, onBeforeNestedDeckyModal]
   );
 
   const onPullSelected = useCallback(async () => {
@@ -348,53 +517,92 @@ export function PullModelsModal(props: PullModelsModalProps) {
     }
   }, [onPullAccepted, selectedTags]);
 
-  const renderCatalogRow = (entry: PullModelEntry) => {
+  const bindSelectRef =
+    (rowIndex: number): RefCallback<HTMLElement> =>
+    (el) => {
+      selectCellRefs.current[rowIndex] = el;
+    };
+
+  const bindDeleteRef =
+    (rowIndex: number): RefCallback<HTMLElement> =>
+    (el) => {
+      deleteCellRefs.current[rowIndex] = el;
+    };
+
+  const renderTableHeader = () => (
+    <div className="bonsai-pullmodels-table-row bonsai-pullmodels-table-row--head" role="row">
+      <div className="bonsai-pullmodels-col bonsai-pullmodels-col--pull" role="columnheader">Pull</div>
+      <div className="bonsai-pullmodels-col" role="columnheader">Model</div>
+      <div className="bonsai-pullmodels-col" role="columnheader">Size</div>
+      <div className="bonsai-pullmodels-col" role="columnheader">Date</div>
+      <div className="bonsai-pullmodels-col" role="columnheader">License</div>
+      <div className="bonsai-pullmodels-col" role="columnheader">★</div>
+      <div className="bonsai-pullmodels-col" role="columnheader">Tags</div>
+      <div className="bonsai-pullmodels-col bonsai-pullmodels-col--del" role="columnheader">Del</div>
+    </div>
+  );
+
+  const renderCatalogRow = (entry: PullModelEntry, rowIndex: number) => {
     const installed = isTagInstalled(entry.tag, installedTags);
     const selected = selectedTags.has(entry.tag);
     const sizeGb = resolveRowSizeGb(entry, liveSizeGbByTag);
     const deleteDisabled =
       Boolean(activeRoutingTag && activeRoutingTag === entry.tag) || deleteBusyTag === entry.tag;
+    const navSelect = rowNavHandlers(rowIndex, "select", installed);
+    const navDelete = rowNavHandlers(rowIndex, "delete", installed);
     const rowClass = [
-      "bonsai-pullmodels-row",
-      installed ? "bonsai-pullmodels-row--installed" : "",
-      entry.group === "stretch" ? "bonsai-pullmodels-row--stretch" : "",
+      "bonsai-pullmodels-table-row",
+      "bonsai-pullmodels-table-row--data",
+      installed ? "bonsai-pullmodels-table-row--installed" : "",
+      entry.group === "stretch" ? "bonsai-pullmodels-table-row--stretch" : "",
     ]
       .filter(Boolean)
       .join(" ");
 
     return (
-      <div key={entry.tag} className={rowClass}>
-        <Focusable className="bonsai-pullmodels-row-inner" flow-children="horizontal">
+      <div key={entry.tag} className={rowClass} role="row">
+        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--pull" role="cell">
           {installed ? (
-            <span className="bonsai-pullmodels-slot bonsai-pullmodels-slot--installed" aria-label="Installed">
-              *
-            </span>
+            <span className="bonsai-pullmodels-slot--installed" aria-label="Installed">*</span>
           ) : (
             <Button
+              ref={bindSelectRef(rowIndex)}
               className={`bonsai-pullmodels-slot${selected ? " bonsai-pullmodels-slot--selected" : ""}`}
-              onClick={() => toggleSelected(entry)}
+              onClick={(ev) => toggleSelected(entry, ev)}
               aria-label={selected ? `Deselect ${entry.tag}` : `Select ${entry.tag} to pull`}
+              {...(navSelect as Record<string, unknown>)}
             >
-              {selected ? "v" : " "}
+              {selected ? "✔" : ""}
             </Button>
           )}
-          <div className="bonsai-pullmodels-row-body">
-            <div className="bonsai-pullmodels-row-head">
-              <span className="bonsai-pullmodels-tag">{entry.tag}</span>
-              {installed ? <span className="bonsai-pullmodels-installed-label">INSTALLED</span> : null}
-              <span className="bonsai-pullmodels-size">{formatSizeGb(sizeGb)}</span>
-              <span className="bonsai-pullmodels-date">{formatReleasedYm(entry.releasedYm)}</span>
-              <span className="bonsai-pullmodels-license">{entry.license}</span>
-              <span className="bonsai-pullmodels-stars">{formatGtaStars(entry.rating)}</span>
-              {entry.licenseClass === "foss" ? <span className="bonsai-pullmodels-chip bonsai-pullmodels-chip--foss">FOSS</span> : null}
-            </div>
-            <div className="bonsai-pullmodels-blurb">{entry.blurb}</div>
-            <div className="bonsai-pullmodels-tags-line">
-              Tags: {entry.tags.map((t) => t.charAt(0).toUpperCase() + t.slice(1)).join(" · ")}
-            </div>
-          </div>
+        </div>
+        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--model" role="cell">
+          <span className="bonsai-pullmodels-tag">
+            {installed ? <span className="bonsai-pullmodels-installed-label">INSTALLED · </span> : null}
+            {entry.tag}
+          </span>
+          <span className="bonsai-pullmodels-blurb">{entry.blurb}</span>
+        </div>
+        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted" role="cell">{formatSizeGb(sizeGb)}</div>
+        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted" role="cell">
+          {formatReleasedYm(entry.releasedYm)}
+        </div>
+        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted bonsai-pullmodels-license-cell" role="cell">
+          <span>{entry.license}{isDeprioritizedOllamaTag(entry.tag) ? " !" : ""}</span>
+          {entry.licenseClass === "foss" ? (
+            <span className="bonsai-pullmodels-chip bonsai-pullmodels-chip--foss bonsai-pullmodels-chip--foss-inline">FOSS</span>
+          ) : null}
+        </div>
+        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--stars" role="cell">
+          {formatGtaStars(entry.rating)}
+        </div>
+        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted" role="cell">
+          {formatPullModelTags(entry.tags)}
+        </div>
+        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--del" role="cell">
           {installed ? (
             <Button
+              ref={bindDeleteRef(rowIndex)}
               className="bonsai-pullmodels-delete-btn"
               disabled={deleteDisabled}
               aria-disabled={deleteDisabled}
@@ -404,36 +612,47 @@ export function PullModelsModal(props: PullModelsModalProps) {
                   : "Remove from Deck"
               }
               onClick={() => confirmDelete(entry.tag, sizeGb)}
+              {...(navDelete as Record<string, unknown>)}
             >
               X
             </Button>
           ) : null}
-        </Focusable>
+        </div>
       </div>
     );
   };
 
-  const renderOtherRow = (tag: string) => {
+  const renderOtherRow = (tag: string, rowIndex: number) => {
     const sizeGb = liveSizeGbByTag[tag] ?? 0;
     const deleteDisabled = Boolean(activeRoutingTag && activeRoutingTag === tag) || deleteBusyTag === tag;
+    const navDelete = rowNavHandlers(rowIndex, "delete", true);
+
     return (
-      <div key={`other-${tag}`} className="bonsai-pullmodels-row bonsai-pullmodels-row--installed bonsai-pullmodels-row--other">
-        <Focusable className="bonsai-pullmodels-row-inner" flow-children="horizontal">
-          <span className="bonsai-pullmodels-slot bonsai-pullmodels-slot--installed">*</span>
-          <div className="bonsai-pullmodels-row-body">
-            <div className="bonsai-pullmodels-row-head">
-              <span className="bonsai-pullmodels-tag">{tag}</span>
-              <span className="bonsai-pullmodels-installed-label">INSTALLED</span>
-              <span className="bonsai-pullmodels-size">{sizeGb > 0 ? formatSizeGb(sizeGb) : "(unknown)"}</span>
-              <span className="bonsai-pullmodels-date">(unknown)</span>
-              <span className="bonsai-pullmodels-license">(unknown)</span>
-              <span className="bonsai-pullmodels-stars">--</span>
-            </div>
-            <div className="bonsai-pullmodels-blurb">
-              Pulled outside this catalog; metadata not curated. Delete to free disk.
-            </div>
-          </div>
+      <div
+        key={`other-${tag}`}
+        className="bonsai-pullmodels-table-row bonsai-pullmodels-table-row--data bonsai-pullmodels-table-row--installed"
+        role="row"
+      >
+        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--pull" role="cell">
+          <span className="bonsai-pullmodels-slot--installed" aria-label="Installed">*</span>
+        </div>
+        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--model" role="cell">
+          <span className="bonsai-pullmodels-tag">
+            <span className="bonsai-pullmodels-installed-label">INSTALLED · </span>
+            {tag}
+          </span>
+          <span className="bonsai-pullmodels-blurb">Pulled outside catalog — delete to free disk.</span>
+        </div>
+        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted" role="cell">
+          {sizeGb > 0 ? formatSizeGb(sizeGb) : "?"}
+        </div>
+        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted" role="cell">—</div>
+        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted" role="cell">—</div>
+        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--stars" role="cell">—</div>
+        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted" role="cell">Other</div>
+        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--del" role="cell">
           <Button
+            ref={bindDeleteRef(rowIndex)}
             className="bonsai-pullmodels-delete-btn"
             disabled={deleteDisabled}
             aria-disabled={deleteDisabled}
@@ -443,84 +662,144 @@ export function PullModelsModal(props: PullModelsModalProps) {
                 : "Remove from Deck"
             }
             onClick={() => confirmDelete(tag, sizeGb)}
+            {...(navDelete as Record<string, unknown>)}
           >
             X
           </Button>
-        </Focusable>
+        </div>
       </div>
     );
   };
 
+  let rowCounter = 0;
   const strOKButtonText =
     selectedTags.size > 0
       ? `Pull selected (${selectedTags.size}) · ${formatSizeGb(selectedTotalGb)}`
       : "Pull selected";
+  const lastFilterIndex = PULL_MODEL_FILTER_OPTIONS.length - 1;
 
   return (
     <ConfirmModal
-      strTitle="Pull Models — choose what to download to this Deck"
+      strTitle="Pull models"
       strDescription={
-        <div className="bonsai-pullmodels-shell bonsai-prose">
+        <BonsaiModalScope shellRef={shellRef} className="bonsai-pullmodels-shell bonsai-prose">
           <div className="bonsai-pullmodels-header">
-            <span>
-              Installed: {installedCatalogCount} · {formatSizeGb(installedTotalGb)}
-            </span>
-            <span>
-              Selected: {selectedTags.size} · {formatSizeGb(selectedTotalGb)}
-            </span>
+            <span>Installed {installedCatalogCount} · {formatSizeGb(installedTotalGb)}</span>
+            <span>Queue {selectedTags.size} · {formatSizeGb(selectedTotalGb)}</span>
             <span className="bonsai-pullmodels-size-source">
-              Sizes: {sizeSource === "live" ? "live (Ollama registry)" : "bundled (offline)"}
+              {sizeSource === "live" ? "Live sizes" : "Offline sizes"}
               <Button
                 className="bonsai-pullmodels-refresh-btn"
                 disabled={refreshingMeta || loadingMeta}
-                onClick={() => void refreshInstalledAndMeta(true)}
+                onClick={(ev) => {
+                  ev.stopPropagation();
+                  void refreshInstalledAndMeta(true);
+                }}
                 aria-label="Refresh sizes from registry"
               >
-                R
+                ↻
               </Button>
             </span>
           </div>
 
+          {recommendedEntries.length > 0 ? (
+            <div className="bonsai-pullmodels-recommend">
+              <div className="bonsai-pullmodels-recommend-title">Suggested pulls (speed · strategy · expert · vision)</div>
+              <Focusable flow-children="horizontal" className="bonsai-pullmodels-recommend-row">
+                {recommendedEntries.map((entry) => {
+                  const selected = selectedTags.has(entry.tag);
+                  return (
+                    <Button
+                      key={`rec-${entry.tag}`}
+                      className={`bonsai-pullmodels-chip${selected ? " bonsai-pullmodels-chip--active" : ""}`}
+                      onClick={(ev) => toggleSelected(entry, ev)}
+                      aria-label={selected ? `Remove ${entry.tag} from queue` : `Queue ${entry.tag}`}
+                    >
+                      {entry.tag}
+                    </Button>
+                  );
+                })}
+              </Focusable>
+            </div>
+          ) : null}
+
           <div className="bonsai-pullmodels-filters">
             <Focusable flow-children="horizontal" className="bonsai-pullmodels-filter-chips">
-              {PULL_MODEL_FILTER_OPTIONS.map((opt) => (
+              {PULL_MODEL_FILTER_OPTIONS.map((opt, chipIndex) => (
                 <Button
                   key={opt.id}
+                  ref={(el) => {
+                    filterChipRefs.current[chipIndex] = el;
+                  }}
                   className={`bonsai-pullmodels-chip${filterId === opt.id ? " bonsai-pullmodels-chip--active" : ""}`}
-                  onClick={() => setFilterId(opt.id)}
+                  onClick={(ev) => {
+                    ev.stopPropagation();
+                    setFilterId(opt.id);
+                  }}
+                  onMoveLeft={() => (chipIndex > 0 ? focusFilterChip(chipIndex - 1) : false)}
+                  onMoveRight={() => (chipIndex < lastFilterIndex ? focusFilterChip(chipIndex + 1) : false)}
+                  onMoveDown={() => focusInstalledOnlyToggle() || focusRowCell(0, "select")}
                 >
                   {opt.label}
                 </Button>
               ))}
             </Focusable>
-            <div className="bonsai-pullmodels-toggles">
-              <ToggleField label="Installed only" checked={installedOnly} onChange={(c) => setInstalledOnly(c)} />
-              <ToggleField label="FOSS only" checked={fossOnly} onChange={(c) => setFossOnly(c)} />
-            </div>
+            <Focusable flow-children="horizontal" className="bonsai-pullmodels-toggles">
+              <Button
+                ref={installedOnlyRef}
+                className={`bonsai-pullmodels-chip${installedOnly ? " bonsai-pullmodels-chip--active" : ""}`}
+                onClick={(ev) => {
+                  ev.stopPropagation();
+                  setInstalledOnly((v) => !v);
+                }}
+                onMoveUp={() => focusFilterChip(lastFilterIndex)}
+                onMoveRight={() => focusFossOnlyToggle()}
+                onMoveDown={() => focusRowCell(0, "select")}
+                aria-pressed={installedOnly}
+              >
+                Installed only
+              </Button>
+              <Button
+                ref={fossOnlyRef}
+                className={`bonsai-pullmodels-chip bonsai-pullmodels-chip--foss${fossOnly ? " bonsai-pullmodels-chip--active" : ""}`}
+                onClick={(ev) => {
+                  ev.stopPropagation();
+                  setFossOnly((v) => !v);
+                }}
+                onMoveLeft={() => focusInstalledOnlyToggle()}
+                onMoveUp={() => focusFilterChip(lastFilterIndex)}
+                onMoveDown={() => focusRowCell(0, "select")}
+                aria-pressed={fossOnly}
+              >
+                FOSS only
+              </Button>
+            </Focusable>
           </div>
 
           <div className="bonsai-pullmodels-list" aria-busy={loadingMeta}>
-            {PULL_MODEL_GROUP_ORDER.map((group) => {
-              const rows = groupedCatalog.get(group) ?? [];
-              if (rows.length === 0) return null;
-              return (
-                <div key={group} className="bonsai-pullmodels-group">
-                  <div className="bonsai-pullmodels-group-title">{PULL_MODEL_GROUP_LABELS[group]}</div>
-                  {rows.map(renderCatalogRow)}
+            {flatRows.length > 0 ? (
+              <div className="bonsai-pullmodels-table" role="table">
+                {renderTableHeader()}
+                <div role="rowgroup">
+                  {tableSections.map((section) => (
+                    <div key={section.title}>
+                      <div className="bonsai-pullmodels-group-title">{section.title}</div>
+                      {section.rows.map((row) => {
+                        const rowIndex = rowCounter++;
+                        if (row.kind === "catalog") {
+                          return renderCatalogRow(row.entry, rowIndex);
+                        }
+                        return renderOtherRow(row.tag, rowIndex);
+                      })}
+                    </div>
+                  ))}
                 </div>
-              );
-            })}
-            {!installedOnly && otherInstalledTags.length > 0 ? (
-              <div className="bonsai-pullmodels-group">
-                <div className="bonsai-pullmodels-group-title">Other installed (not in curated catalog)</div>
-                {otherInstalledTags.map(renderOtherRow)}
               </div>
-            ) : null}
-            {filteredCatalog.length === 0 && (installedOnly ? otherInstalledTags.length === 0 : true) ? (
+            ) : (
               <div className="bonsai-pullmodels-empty">No models match the current filters.</div>
-            ) : null}
+            )}
           </div>
-        </div>
+        </BonsaiModalScope>
       }
       strOKButtonText={strOKButtonText}
       strCancelButtonText="Cancel"

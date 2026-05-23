@@ -94,8 +94,20 @@ What this does:
 | `./scripts/build.sh deploy --local` | Re-deploy last build without rebuilding |
 | `./scripts/build.sh release` | Produce distributable zip under `out/` (no `.env` required) |
 | `pnpm run watch` | Rebuild on file changes; pair with Decky **Reload** in QAM |
+| `./scripts/watch-deploy.sh` | Rollup watch + debounced **deploy** to remote Deck (see `--local` below) |
+| `./scripts/watch-deploy.sh --local` | Watch + deploy on **this** Deck (Deck-native fast loop) |
 
-Windows equivalent: `.\scripts\build.ps1` (remote deploy only; loads `.env`).
+Windows equivalent: `.\scripts\build.ps1` (remote deploy only; loads `.env`). Watch deploy: `.\scripts\watch-deploy.ps1`.
+
+### Maintainer dev loop (Cursor)
+
+- Skill: [`.cursor/skills/bonsai-deck-dev-loop/SKILL.md`](../.cursor/skills/bonsai-deck-dev-loop/SKILL.md) — build/deploy, BPM vs Gaming Mode, screenshots, optional log tunnel.
+- Screenshots: [`.cursor/skills/decky-screenshot-ingest/SKILL.md`](../.cursor/skills/decky-screenshot-ingest/SKILL.md).
+- Visibility workflow: [spikes/cursor-deck-visibility.md](spikes/cursor-deck-visibility.md).
+
+### Headless Decky harness (Vitest)
+
+Frontend tests use a fake `@decky/api` registry under `src/test-harness/` (jsdom). Run `pnpm test` after `src/` or hook changes. Registry contract: `src/test-harness/fakeDeckyRpc.test.ts`.
 
 ## Test bonsAI after deploy (two tracks)
 
@@ -247,7 +259,15 @@ Ollama helpers: [`scripts/setup-ollama.sh`](../scripts/setup-ollama.sh) (Linux),
 
 ## Release (plugin zip)
 
-**Version source:** bump **`version`** in [`plugin.json`](../plugin.json). [`pnpm run build`](../package.json) syncs [`PLUGIN_VERSION`](../src/pluginVersion.ts) via [`scripts/sync-version-from-plugin.mjs`](../scripts/sync-version-from-plugin.mjs).
+**Version source:** bump **`version`** in [`plugin.json`](../plugin.json). [`pnpm run build`](../package.json) syncs [`PLUGIN_VERSION`](../src/pluginVersion.ts) and [`package.json`](../package.json) via [`scripts/sync-version-from-plugin.mjs`](../scripts/sync-version-from-plugin.mjs).
+
+**Prepare-only bump** (updates manifest, package.json, pluginVersion.ts, CHANGELOG header; does **not** commit or tag):
+
+```bash
+pnpm run version:bump patch   # or minor | major | 0.4.0
+```
+
+Then edit CHANGELOG bullets, commit, `git tag vX.Y.Z`, push tag for CI zip.
 
 **CI:** [`.github/workflows/build-plugin-zip.yml`](../.github/workflows/build-plugin-zip.yml) — triggers on **`v*` tags** and **workflow_dispatch**. Artifact: `bonsai-plugin-*`; verified by [`scripts/verify-decky-plugin-zip.sh`](../scripts/verify-decky-plugin-zip.sh).
 

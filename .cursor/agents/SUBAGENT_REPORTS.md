@@ -251,3 +251,15 @@ Regression risk checks: python -m unittest discover -s tests -p "test_*.py"; pnp
 Tests and docs status: Added tests for new service/data modules and updated docs/development.md + CHANGELOG.md architecture traceability notes.
 Trade-offs: Prioritized safe seam extraction and modularity over deep behavior changes (model fallback policy remains unchanged in this milestone).
 ```
+
+## 2026-05-20 — Self-hosted automation (harness, dev loop, mDNS)
+
+| Agent | Invoked | Summary |
+|-------|---------|---------|
+| explore ×3 | Yes | Mapped harness, scripts, LAN discovery surfaces |
+| security-auditor | Planning triage | mDNS: user-triggered only, fixed `_ollama._tcp`, no CIDR/port scan params, curated logs |
+| red-team / blue-team | N/A | Tooling + opt-in discovery |
+
+**Shipped:** Vitest `src/test-harness/` + hook/RPC tests; `.cursor/skills/bonsai-deck-dev-loop/`; `watch-deploy` scripts; `bump-version.mjs` + `sync-versions.mjs`; `discover_mdns_ollama_hosts` + Settings **Find LAN**; docs/CHANGELOG updates.
+
+**Deferred:** Subnet scanning; auto git tag/push; stock Ollama mDNS without Avahi publish.

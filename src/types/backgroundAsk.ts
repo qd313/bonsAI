@@ -37,7 +37,7 @@ export type BackgroundRequestStatus = {
   model_policy_disclosure?: ModelPolicyDisclosurePayload | null;
   /** True when this Ask had explicit spoiler consent (toggle and/or backend phrase match). */
   strategy_spoiler_consent_effective?: boolean;
-  /** Pyro talent-manager easter egg: distinguished chip text from last successful Ask. */
+  /** Pyro talent-manager easter egg: optional inject chip text from last successful Ask (helpful or asshole tip). */
   preset_carousel_inject?: PresetCarouselInjectPayload | null;
   /** Present when the completed Ask was a shortcut-setup keyword. */
   shortcut_setup?: ShortcutSetupKind | null;
@@ -47,6 +47,8 @@ export type BackgroundRequestStatus = {
   partial_response?: string | null;
   /** True while Ollama NDJSON deltas are still arriving (faster poll cadence on the frontend). */
   streaming?: boolean;
+  /** Model-emitted or deterministic phase label while status is pending. */
+  thinking_summary?: string | null;
 };
 
 export type PresetCarouselInjectPayload = {

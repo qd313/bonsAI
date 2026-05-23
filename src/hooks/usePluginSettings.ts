@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { call } from "@decky/api";
 import { type AiCharacterAccentIntensityId } from "../data/aiCharacterAccentIntensity";
 import { type ModelPolicyTierId } from "../data/modelPolicy";
+import { takeRestoredSettingsSnapshot } from "../utils/bonsaiSessionSurvival";
 import {
   DEFAULT_AI_CHARACTER_ACCENT_INTENSITY,
   DEFAULT_AI_CHARACTER_CUSTOM_TEXT,
@@ -26,6 +27,10 @@ import {
   DEFAULT_SCREENSHOT_ATTACHMENT_PRESET,
   DEFAULT_SHOW_DEVELOPER_TAB,
   DEFAULT_BONSAI_TOKEN_STREAMING_ENABLED,
+  DEFAULT_RESPONSE_VERIFY_ENABLED,
+  DEFAULT_RESPONSE_VERIFY_MODEL,
+  DEFAULT_RESPONSE_VERIFY_SECOND_PASS,
+  type NamedOllamaHost,
   DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT,
   DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED,
   DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
@@ -107,6 +112,12 @@ export function usePluginSettings() {
   const [bonsaiTokenStreamingEnabled, setBonsaiTokenStreamingEnabled] = useState<boolean>(
     DEFAULT_BONSAI_TOKEN_STREAMING_ENABLED
   );
+  const [responseVerifyEnabled, setResponseVerifyEnabled] = useState<boolean>(DEFAULT_RESPONSE_VERIFY_ENABLED);
+  const [responseVerifySecondPass, setResponseVerifySecondPass] = useState<boolean>(
+    DEFAULT_RESPONSE_VERIFY_SECOND_PASS
+  );
+  const [responseVerifyModel, setResponseVerifyModel] = useState<string>(DEFAULT_RESPONSE_VERIFY_MODEL);
+  const [namedOllamaHosts, setNamedOllamaHosts] = useState<NamedOllamaHost[]>([]);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
 
   const hydrateFromSettings = useCallback((saved: BonsaiSettings) => {
@@ -140,6 +151,10 @@ export function usePluginSettings() {
     setStrategySpoilerAutoRevealAfterConsent(normalized.strategy_spoiler_auto_reveal_after_consent);
     setSteamWebApiKey(normalized.steam_web_api_key);
     setBonsaiTokenStreamingEnabled(normalized.bonsai_token_streaming_enabled);
+    setResponseVerifyEnabled(normalized.response_verify_enabled);
+    setResponseVerifySecondPass(normalized.response_verify_second_pass);
+    setResponseVerifyModel(normalized.response_verify_model);
+    setNamedOllamaHosts(normalized.named_ollama_hosts);
   }, []);
 
   useEffect(() => {
@@ -147,7 +162,10 @@ export function usePluginSettings() {
     call<[], BonsaiSettings>("load_settings")
       .then((saved) => {
         if (cancelled) return;
-        const normalized = normalizeSettings(saved);
+        const restored = takeRestoredSettingsSnapshot();
+        const normalized = restored
+          ? normalizeSettings(toBonsaiSettingsPayload(restored))
+          : normalizeSettings(saved);
         setLatencyWarningSeconds(normalized.latency_warning_seconds);
         setRequestTimeoutSeconds(normalized.request_timeout_seconds);
         setLatencyTimeoutsCustomEnabled(normalized.latency_timeouts_custom_enabled);
@@ -155,6 +173,7 @@ export function usePluginSettings() {
         setScreenshotAttachmentPreset(normalized.screenshot_attachment_preset);
         setDesktopDebugNoteAutoSave(normalized.desktop_debug_note_auto_save);
         setDesktopAskVerboseLogging(normalized.desktop_ask_verbose_logging);
+        setDesktopAppLogLevel(normalized.desktop_app_log_level);
         setAttachProtonLogsWhenTroubleshooting(normalized.attach_proton_logs_when_troubleshooting);
         setPresetChipAnimation(normalized.preset_chip_animation);
         setPresetChipFadeAnimationEnabled(normalized.preset_chip_fade_animation_enabled);
@@ -176,6 +195,10 @@ export function usePluginSettings() {
         setStrategySpoilerAutoRevealAfterConsent(normalized.strategy_spoiler_auto_reveal_after_consent);
         setSteamWebApiKey(normalized.steam_web_api_key);
         setBonsaiTokenStreamingEnabled(normalized.bonsai_token_streaming_enabled);
+        setResponseVerifyEnabled(normalized.response_verify_enabled);
+        setResponseVerifySecondPass(normalized.response_verify_second_pass);
+        setResponseVerifyModel(normalized.response_verify_model);
+        setNamedOllamaHosts(normalized.named_ollama_hosts);
       })
       .catch(() => {
         if (cancelled) return;
@@ -208,6 +231,10 @@ export function usePluginSettings() {
         setStrategySpoilerAutoRevealAfterConsent(DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT);
         setSteamWebApiKey("");
         setBonsaiTokenStreamingEnabled(DEFAULT_BONSAI_TOKEN_STREAMING_ENABLED);
+        setResponseVerifyEnabled(DEFAULT_RESPONSE_VERIFY_ENABLED);
+        setResponseVerifySecondPass(DEFAULT_RESPONSE_VERIFY_SECOND_PASS);
+        setResponseVerifyModel(DEFAULT_RESPONSE_VERIFY_MODEL);
+        setNamedOllamaHosts([]);
       })
       .finally(() => {
         if (!cancelled) setSettingsLoaded(true);
@@ -252,6 +279,10 @@ export function usePluginSettings() {
           strategySpoilerAutoRevealAfterConsent,
           steamWebApiKey,
           bonsaiTokenStreamingEnabled,
+          responseVerifyEnabled,
+          responseVerifySecondPass,
+          responseVerifyModel,
+          namedOllamaHosts,
         })
       ).catch((err) => {
         console.error("save_settings failed", err);
@@ -288,6 +319,10 @@ export function usePluginSettings() {
     strategySpoilerAutoRevealAfterConsent,
     steamWebApiKey,
     bonsaiTokenStreamingEnabled,
+    responseVerifyEnabled,
+    responseVerifySecondPass,
+    responseVerifyModel,
+    namedOllamaHosts,
     settingsLoaded,
   ]);
 
@@ -340,6 +375,14 @@ export function usePluginSettings() {
     setSteamWebApiKey,
     bonsaiTokenStreamingEnabled,
     setBonsaiTokenStreamingEnabled,
+    responseVerifyEnabled,
+    setResponseVerifyEnabled,
+    responseVerifySecondPass,
+    setResponseVerifySecondPass,
+    responseVerifyModel,
+    setResponseVerifyModel,
+    namedOllamaHosts,
+    setNamedOllamaHosts,
     settingsLoaded,
     setLatencyWarningSeconds,
     setRequestTimeoutSeconds,

@@ -344,6 +344,7 @@ export function buildBonsaiScopeStylesheet(): string {
           padding-left: 0 !important;
           padding-right: 0 !important;
         }
+
         .bonsai-scope .bonsai-decky-tabs-root [class*="TabContentsScroll"] > div {
           margin-left: 0 !important;
           margin-right: 0 !important;
@@ -367,6 +368,16 @@ export function buildBonsaiScopeStylesheet(): string {
           align-self: stretch !important;
           width: 100% !important;
           max-width: 100% !important;
+        }
+
+        /*
+          LB/RB bumper tab switches use Steam's native carousel and can flash when tab content
+          hosts animate. Keep icon-strip transitions; suppress only the content pane motion.
+        */
+        .bonsai-scope .bonsai-decky-tabs-root [class*="TabContentsScroll"],
+        .bonsai-scope .bonsai-decky-tabs-root [class*="TabContentsScroll"] > div {
+          transition: none !important;
+          animation: none !important;
         }
 
         .bonsai-scope .bonsai-decky-tabs-root [class*="PanelSectionRow"] {
@@ -419,11 +430,31 @@ export function buildBonsaiScopeStylesheet(): string {
         }
 
         /* Main unified search + Ask row: small right bias vs prior 0/6 (nudge body slightly right). */
-        .bonsai-scope .bonsai-unified-input-host.bonsai-full-bleed-row {
+        .bonsai-scope .bonsai-unified-input-host.bonsai-full-bleed-row,
+        .bonsai-scope .bonsai-preset-row-host.bonsai-full-bleed-row {
           width: calc(100% - 16px) !important;
           max-width: calc(100% - 16px) !important;
           margin-left: 6px !important;
           margin-right: 10px !important;
+        }
+
+        .bonsai-scope .bonsai-preset-row-host {
+          min-width: 0 !important;
+          overflow: hidden !important;
+        }
+
+        .bonsai-scope button.bonsai-preset-glass {
+          max-width: 100% !important;
+          min-width: 0 !important;
+          overflow: hidden !important;
+        }
+        .bonsai-scope button.bonsai-preset-glass > div,
+        .bonsai-scope button.bonsai-preset-glass .bonsai-preset-chip-label {
+          max-width: 100% !important;
+          min-width: 0 !important;
+          overflow: hidden !important;
+          text-overflow: ellipsis !important;
+          white-space: nowrap !important;
         }
 
         .bonsai-scope .bonsai-chat-response-stack {
@@ -507,14 +538,18 @@ export function buildBonsaiScopeStylesheet(): string {
           vertical-align: top !important;
         }
 
+        .bonsai-scope .bonsai-unified-input-host.bonsai-unified-input--ai-character {
+          overflow: hidden !important;
+        }
+
         .bonsai-scope .bonsai-unified-input-host.bonsai-unified-input--ai-character textarea,
         .bonsai-scope .bonsai-unified-input-host.bonsai-unified-input--ai-character input {
-          padding-left: 22px !important;
+          padding-left: 26px !important;
         }
 
         .bonsai-scope .bonsai-unified-input-host.bonsai-unified-input--ai-character .bonsai-unified-input-measure,
         .bonsai-scope .bonsai-unified-input-host.bonsai-unified-input--ai-character .bonsai-unified-input-text-overlay {
-          padding-left: 22px !important;
+          padding-left: 26px !important;
           box-sizing: border-box !important;
         }
 
@@ -523,7 +558,8 @@ export function buildBonsaiScopeStylesheet(): string {
           margin: 0 !important;
           padding: 0 !important;
           box-sizing: border-box !important;
-          opacity: 0.75 !important;
+          opacity: 0.85 !important;
+          overflow: hidden !important;
         }
 
         .bonsai-scope .bonsai-unified-input-host input::placeholder,
@@ -1003,6 +1039,14 @@ export function buildBonsaiScopeStylesheet(): string {
           flex-direction: row !important; justify-content: flex-start !important;
           align-items: flex-end !important; flex-wrap: nowrap !important;
         }
+        .bonsai-scope .bonsai-unified-input-actions-left.Panel.Focusable {
+          width: auto !important;
+          min-width: 0 !important;
+          flex: 0 0 auto !important;
+          flex-direction: row !important;
+          align-items: flex-end !important;
+          justify-content: flex-start !important;
+        }
         .bonsai-scope .bonsai-unified-input-actions-right.Panel.Focusable {
           width: auto !important;
           min-width: 0 !important;
@@ -1022,6 +1066,15 @@ export function buildBonsaiScopeStylesheet(): string {
           min-width: unset !important;
         }
         .bonsai-scope .bonsai-unified-input-bottom-actions .bonsai-askbar-target > span { padding: 0 !important; margin: 0 !important; }
+
+        .bonsai-scope .bonsai-unified-input-bottom-actions .bonsai-askbar-corner-icon {
+          opacity: 0.5 !important;
+        }
+        .bonsai-scope .bonsai-unified-input-bottom-actions .bonsai-askbar-corner-icon:focus-within,
+        .bonsai-scope .bonsai-unified-input-bottom-actions .bonsai-askbar-target:focus-visible .bonsai-askbar-corner-icon,
+        .bonsai-scope .bonsai-unified-input-bottom-actions .bonsai-askbar-target.gpfocus .bonsai-askbar-corner-icon {
+          opacity: 0.92 !important;
+        }
 
         .bonsai-scope .bonsai-unified-input-icon { display: inline-flex; align-items: center; justify-content: center; opacity: 0.15 !important; }
         .bonsai-scope .bonsai-unified-input-icon svg { opacity: 1; }
@@ -1136,8 +1189,14 @@ export function buildBonsaiScopeStylesheet(): string {
         .bonsai-scope [class*="SliderControlPanelGroup"] > div,
         .bonsai-scope [class*="SliderControlAndNotches"] > div { min-width: 0 !important; }
 
+        ${buildPullModelsStylesheet()}`;
+}
+
+/** Pull Models modal table CSS — also injected under `.bonsai-scope` in `showModal()` portals. */
+export function buildPullModelsStylesheet(): string {
+  return `
         /* ==========================================================================
-           10. PULL MODELS MODAL
+           10. PULL MODELS MODAL (table)
            ========================================================================== */
         .bonsai-scope {
           --bonsai-pullmodels-delete-fg: #f87171;
@@ -1151,9 +1210,26 @@ export function buildBonsaiScopeStylesheet(): string {
           gap: 10px;
           width: 100%;
           min-width: 0;
-          max-height: min(72vh, 520px);
+          max-width: none;
+          max-height: min(78vh, 560px);
           overflow: hidden;
           text-align: left;
+        }
+        .bonsai-scope .bonsai-pullmodels-recommend {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+        .bonsai-scope .bonsai-pullmodels-recommend-title {
+          font-size: 10px;
+          font-weight: 700;
+          color: #9ce7ff;
+          letter-spacing: 0.03em;
+        }
+        .bonsai-scope .bonsai-pullmodels-recommend-row {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
         }
         .bonsai-scope .bonsai-pullmodels-header {
           display: flex;
@@ -1202,9 +1278,19 @@ export function buildBonsaiScopeStylesheet(): string {
         .bonsai-scope .bonsai-pullmodels-chip--foss {
           border-color: rgba(74, 222, 128, 0.45) !important;
           color: #bbf7d0 !important;
-          font-size: 9px !important;
-          padding: 2px 6px !important;
-          min-height: 20px !important;
+        }
+        .bonsai-scope .bonsai-pullmodels-license-cell {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+          min-width: 0;
+        }
+        .bonsai-scope .bonsai-pullmodels-chip--foss-inline {
+          align-self: flex-start;
+          font-size: 8px !important;
+          padding: 1px 5px !important;
+          min-height: 16px !important;
+          line-height: 1.2 !important;
         }
         .bonsai-scope .bonsai-pullmodels-toggles {
           display: flex;
@@ -1215,139 +1301,151 @@ export function buildBonsaiScopeStylesheet(): string {
           flex: 1;
           min-height: 0;
           overflow-y: auto;
-          overflow-x: hidden;
+          overflow-x: auto;
           display: flex;
           flex-direction: column;
-          gap: 12px;
-          padding-right: 4px;
+          gap: 10px;
+          padding-right: 2px;
         }
         .bonsai-scope .bonsai-pullmodels-group-title {
           font-size: 10px;
           font-weight: 700;
           letter-spacing: 0.04em;
           color: #8fa8c4;
-          margin-bottom: 6px;
+          margin: 4px 0 2px;
           text-transform: uppercase;
         }
-        .bonsai-scope .bonsai-pullmodels-row {
-          border: 1px solid var(--bonsai-pullmodels-row-border);
-          border-radius: 6px;
+        .bonsai-scope .bonsai-pullmodels-table {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          min-width: 720px;
+        }
+        .bonsai-scope .bonsai-pullmodels-table-row {
+          display: grid;
+          grid-template-columns: 44px minmax(120px, 1.6fr) 54px 52px minmax(88px, 1fr) 48px minmax(80px, 0.95fr) 40px;
+          gap: 6px;
+          align-items: center;
+          padding: 6px 8px;
+          border-bottom: 1px solid rgba(72, 98, 124, 0.22);
+          box-sizing: border-box;
+        }
+        .bonsai-scope .bonsai-pullmodels-table-row--head {
+          position: sticky;
+          top: 0;
+          z-index: 1;
+          background: rgba(8, 14, 22, 0.96);
+          border-bottom: 1px solid rgba(72, 98, 124, 0.45);
+          font-size: 9px;
+          font-weight: 700;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+          color: #8fa8c4;
+          padding-top: 4px;
+          padding-bottom: 6px;
+        }
+        .bonsai-scope .bonsai-pullmodels-table-row--data {
           background: var(--bonsai-pullmodels-row-bg);
-          margin-bottom: 6px;
         }
-        .bonsai-scope .bonsai-pullmodels-row--stretch {
-          border-color: rgba(251, 146, 60, 0.35);
+        .bonsai-scope .bonsai-pullmodels-table-row--data:nth-child(even) {
+          background: rgba(12, 20, 30, 0.72);
         }
-        .bonsai-scope .bonsai-pullmodels-row-inner {
-          display: flex !important;
-          flex-direction: row !important;
-          align-items: flex-start !important;
-          gap: 8px !important;
-          padding: 8px 10px !important;
-          width: 100% !important;
-          min-width: 0 !important;
-          box-sizing: border-box !important;
+        .bonsai-scope .bonsai-pullmodels-table-row--stretch {
+          border-left: 2px solid rgba(251, 146, 60, 0.55);
+        }
+        .bonsai-scope .bonsai-pullmodels-table-row--installed {
+          border-left: 2px solid rgba(156, 231, 255, 0.45);
+        }
+        .bonsai-scope .bonsai-pullmodels-col {
+          min-width: 0;
+          font-size: 10px;
+          color: #dce8f4;
+          line-height: 1.3;
+        }
+        .bonsai-scope .bonsai-pullmodels-col--pull {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .bonsai-scope .bonsai-pullmodels-col--del {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+        }
+        .bonsai-scope .bonsai-pullmodels-col--model {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+          min-width: 0;
+        }
+        .bonsai-scope .bonsai-pullmodels-col--stars {
+          color: #fcd34d;
+          letter-spacing: 0.5px;
+          white-space: nowrap;
+        }
+        .bonsai-scope .bonsai-pullmodels-col--muted {
+          color: #9fb7d5;
+        }
+        .bonsai-scope .bonsai-pullmodels-tag {
+          font-weight: 700;
+          color: #f0f6fc;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .bonsai-scope .bonsai-pullmodels-blurb {
+          font-size: 9px;
+          color: #8fa8c4;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .bonsai-scope .bonsai-pullmodels-installed-label {
+          font-size: 8px;
+          font-weight: 700;
+          letter-spacing: 0.06em;
+          color: var(--bonsai-pullmodels-accent);
         }
         .bonsai-scope .bonsai-pullmodels-slot {
-          flex-shrink: 0;
-          width: 24px !important;
-          min-width: 24px !important;
-          min-height: 24px !important;
+          width: 40px !important;
+          min-width: 40px !important;
+          min-height: 40px !important;
           padding: 0 !important;
-          font-size: 11px !important;
+          font-size: 18px !important;
           font-weight: 700 !important;
           font-family: monospace !important;
-          border: 1px solid rgba(255,255,255,0.2) !important;
-          background: rgba(0,0,0,0.25) !important;
+          border: 1px solid rgba(255,255,255,0.22) !important;
+          background: rgba(0,0,0,0.28) !important;
           color: #c5d4e3 !important;
+          border-radius: 4px !important;
         }
         .bonsai-scope .bonsai-pullmodels-slot--selected {
-          border-color: rgba(56,189,248,0.6) !important;
-          background: rgba(56,189,248,0.2) !important;
+          border-color: rgba(56,189,248,0.65) !important;
+          background: rgba(56,189,248,0.22) !important;
           color: #e0f2fe !important;
         }
         .bonsai-scope .bonsai-pullmodels-slot--installed {
           display: inline-flex;
           align-items: center;
           justify-content: center;
+          width: 36px;
+          min-width: 36px;
+          min-height: 36px;
           color: var(--bonsai-pullmodels-accent);
-        }
-        .bonsai-scope .bonsai-pullmodels-row-body {
-          flex: 1;
-          min-width: 0;
-        }
-        .bonsai-scope .bonsai-pullmodels-row-head {
-          display: grid;
-          grid-template-columns: minmax(0, 1fr) auto auto;
-          grid-template-areas:
-            "tag size stars"
-            "meta meta meta";
-          align-items: center;
-          gap: 4px 8px;
-          font-size: 11px;
-          color: #dce8f4;
-        }
-        .bonsai-scope .bonsai-pullmodels-tag {
-          grid-area: tag;
+          font-size: 16px;
           font-weight: 700;
-          color: #f0f6fc;
-          min-width: 0;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-        .bonsai-scope .bonsai-pullmodels-installed-label {
-          grid-area: meta;
-        }
-        .bonsai-scope .bonsai-pullmodels-size {
-          grid-area: size;
-        }
-        .bonsai-scope .bonsai-pullmodels-stars {
-          grid-area: stars;
-        }
-        .bonsai-scope .bonsai-pullmodels-date,
-        .bonsai-scope .bonsai-pullmodels-license,
-        .bonsai-scope .bonsai-pullmodels-chip--foss {
-          grid-area: meta;
-        }
-        .bonsai-scope .bonsai-pullmodels-installed-label {
-          font-size: 9px;
-          font-weight: 700;
-          letter-spacing: 0.06em;
-          color: var(--bonsai-pullmodels-accent);
-        }
-        .bonsai-scope .bonsai-pullmodels-size,
-        .bonsai-scope .bonsai-pullmodels-date,
-        .bonsai-scope .bonsai-pullmodels-license {
-          font-size: 10px;
-          color: #9fb7d5;
-        }
-        .bonsai-scope .bonsai-pullmodels-stars {
-          font-size: 10px;
-          color: #fcd34d;
-          letter-spacing: 1px;
-        }
-        .bonsai-scope .bonsai-pullmodels-blurb {
-          margin-top: 4px;
-          font-size: 10px;
-          color: #b8cce0;
-          line-height: 1.4;
-        }
-        .bonsai-scope .bonsai-pullmodels-tags-line {
-          margin-top: 2px;
-          font-size: 9px;
-          color: #6b7c90;
         }
         .bonsai-scope .bonsai-pullmodels-delete-btn {
-          flex-shrink: 0;
-          min-width: 28px !important;
-          min-height: 28px !important;
+          width: 36px !important;
+          min-width: 36px !important;
+          min-height: 36px !important;
           padding: 0 !important;
-          font-size: 12px !important;
+          font-size: 13px !important;
           font-weight: 700 !important;
           color: var(--bonsai-pullmodels-delete-fg) !important;
           border: 1px solid rgba(248, 113, 113, 0.45) !important;
           background: rgba(48, 24, 26, 0.65) !important;
+          border-radius: 4px !important;
         }
         .bonsai-scope .bonsai-pullmodels-delete-btn[disabled] {
           opacity: 0.4 !important;

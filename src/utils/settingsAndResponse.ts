@@ -56,6 +56,11 @@ export type BonsaiCapabilities = {
   steam_web_api: boolean;
 };
 
+export type NamedOllamaHost = {
+  label: string;
+  host: string;
+};
+
 export type BonsaiSettings = {
   latency_warning_seconds: number;
   request_timeout_seconds: number;
@@ -109,6 +114,14 @@ export type BonsaiSettings = {
   steam_web_api_key: string;
   /** When true, Main tab shows progressive Ollama token streaming (Developer tab opt-in). */
   bonsai_token_streaming_enabled: boolean;
+  /** Rule-based post-check on Ollama replies (Developer / advanced). */
+  response_verify_enabled: boolean;
+  /** Optional second-model verifier (default off). */
+  response_verify_second_pass: boolean;
+  /** Ollama tag for verifier second pass (empty disables the model call). */
+  response_verify_model: string;
+  /** Labeled ``host:port`` presets for quick Connection switching (max 4). */
+  named_ollama_hosts: NamedOllamaHost[];
 };
 
 /** Fields mirrored from React state / hook before `save_settings` RPC. */
@@ -142,6 +155,10 @@ export type BonsaiSettingsSnapshotInput = {
   strategySpoilerAutoRevealAfterConsent: boolean;
   steamWebApiKey: string;
   bonsaiTokenStreamingEnabled: boolean;
+  responseVerifyEnabled: boolean;
+  responseVerifySecondPass: boolean;
+  responseVerifyModel: string;
+  namedOllamaHosts: NamedOllamaHost[];
 };
 
 /** Build the backend `BonsaiSettings` object; optional `patch` for immediate saves (character picker, permissions). */
@@ -179,6 +196,10 @@ export function toBonsaiSettingsPayload(
     strategy_spoiler_auto_reveal_after_consent: input.strategySpoilerAutoRevealAfterConsent,
     steam_web_api_key: input.steamWebApiKey.trim().slice(0, STEAM_WEB_API_KEY_MAX_LEN),
     bonsai_token_streaming_enabled: input.bonsaiTokenStreamingEnabled,
+    response_verify_enabled: input.responseVerifyEnabled,
+    response_verify_second_pass: input.responseVerifySecondPass,
+    response_verify_model: input.responseVerifyModel.trim().slice(0, 64),
+    named_ollama_hosts: input.namedOllamaHosts,
   };
   return patch ? { ...base, ...patch } : base;
 }
@@ -189,8 +210,8 @@ export type AppliedResultLike = {
   errors: string[];
 };
 
-export const DEFAULT_LATENCY_WARNING_SECONDS = 30;
-export const DEFAULT_REQUEST_TIMEOUT_SECONDS = 45;
+export const DEFAULT_LATENCY_WARNING_SECONDS = 45;
+export const DEFAULT_REQUEST_TIMEOUT_SECONDS = 180;
 export const MIN_LATENCY_WARNING_SECONDS = 5;
 export const MAX_LATENCY_WARNING_SECONDS = 300;
 export const MIN_REQUEST_TIMEOUT_SECONDS = 10;
@@ -205,6 +226,11 @@ export const DEFAULT_SCREENSHOT_MAX_DIMENSION: ScreenshotMaxDimension = 1280;
 export const DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE = false;
 export const DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING = false;
 export const DEFAULT_BONSAI_TOKEN_STREAMING_ENABLED = false;
+export const DEFAULT_RESPONSE_VERIFY_ENABLED = false;
+export const DEFAULT_RESPONSE_VERIFY_SECOND_PASS = false;
+export const DEFAULT_RESPONSE_VERIFY_MODEL = "";
+export const RESPONSE_VERIFY_MODEL_MAX_LEN = 64;
+export const MAX_NAMED_OLLAMA_HOSTS = 4;
 export const DEFAULT_DESKTOP_APP_LOG_LEVEL: DesktopAppLogLevel = "off";
 export const DESKTOP_APP_LOG_LEVEL_OPTIONS: DesktopAppLogLevel[] = ["off", "default", "verbose"];
 export const DEFAULT_ATTACH_PROTON_LOGS_WHEN_TROUBLESHOOTING = false;
@@ -363,6 +389,39 @@ export function normalizeDesktopAskVerboseLogging(value: unknown): boolean {
 
 export function normalizeBonsaiTokenStreamingEnabled(value: unknown): boolean {
   return value === true;
+}
+
+export function normalizeResponseVerifyEnabled(value: unknown): boolean {
+  return value === true;
+}
+
+export function normalizeResponseVerifySecondPass(value: unknown): boolean {
+  return value === true;
+}
+
+const RESPONSE_VERIFY_MODEL_RE = /^[a-zA-Z0-9][a-zA-Z0-9._:/-]{0,63}$/;
+
+export function normalizeResponseVerifyModel(value: unknown): string {
+  if (typeof value !== "string") return DEFAULT_RESPONSE_VERIFY_MODEL;
+  const tag = value.trim().slice(0, RESPONSE_VERIFY_MODEL_MAX_LEN);
+  if (!tag || !RESPONSE_VERIFY_MODEL_RE.test(tag)) return DEFAULT_RESPONSE_VERIFY_MODEL;
+  return tag;
+}
+
+export function normalizeNamedOllamaHosts(value: unknown): NamedOllamaHost[] {
+  if (!Array.isArray(value)) return [];
+  const out: NamedOllamaHost[] = [];
+  for (const item of value) {
+    if (out.length >= MAX_NAMED_OLLAMA_HOSTS) break;
+    if (!item || typeof item !== "object") continue;
+    const rec = item as { label?: unknown; host?: unknown };
+    if (typeof rec.label !== "string" || typeof rec.host !== "string") continue;
+    const label = rec.label.trim().slice(0, 32);
+    const host = rec.host.trim().slice(0, 128);
+    if (!label || !host) continue;
+    out.push({ label, host });
+  }
+  return out;
 }
 
 export function normalizeDesktopAppLogLevel(value: unknown): DesktopAppLogLevel {
@@ -541,6 +600,10 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     ),
     steam_web_api_key: normalizeSteamWebApiKey(raw.steam_web_api_key),
     bonsai_token_streaming_enabled: normalizeBonsaiTokenStreamingEnabled(raw.bonsai_token_streaming_enabled),
+    response_verify_enabled: normalizeResponseVerifyEnabled(raw.response_verify_enabled),
+    response_verify_second_pass: normalizeResponseVerifySecondPass(raw.response_verify_second_pass),
+    response_verify_model: normalizeResponseVerifyModel(raw.response_verify_model),
+    named_ollama_hosts: normalizeNamedOllamaHosts(raw.named_ollama_hosts),
   };
 }
 

@@ -37,7 +37,10 @@ import type {
   StrategyGuideBranchesPayload,
   AskThreadCollapsedTurn,
 } from "../types/bonsaiUi";
-import type { BonsaiSessionSurvivalSnapshot } from "../utils/bonsaiSessionSurvival";
+import {
+  peekBonsaiSessionPendingRestore,
+  type BonsaiSessionSurvivalSnapshot,
+} from "../utils/bonsaiSessionSurvival";
 import { hasResponseAutosaved, markResponseAutosaved } from "../utils/desktopChatAutosave";
 import { normalizePresetCarouselInject } from "../utils/presetCarouselInject";
 import type { InputTransparencyRpcResult, TransparencySnapshot } from "../utils/inputTransparency";
@@ -68,33 +71,64 @@ export type UseBonsaiAskOrchestrationArgs = {
 };
 
 export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
-  const [ollamaResponse, setOllamaResponse] = useState("");
-  const [ollamaContext, setOllamaContext] = useState<OllamaContextUi>(null);
-  const [lastExchange, setLastExchange] = useState<LastExchangeSnapshot | null>(null);
-  const [strategyGuideBranches, setStrategyGuideBranches] = useState<StrategyGuideBranchesPayload | null>(null);
-  const [modelPolicyDisclosure, setModelPolicyDisclosure] = useState<ModelPolicyDisclosurePayload | null>(null);
+  const survivalPeek = peekBonsaiSessionPendingRestore();
+  const [ollamaResponse, setOllamaResponse] = useState(() => survivalPeek?.ollamaResponse ?? "");
+  const [ollamaContext, setOllamaContext] = useState<OllamaContextUi>(
+    () => survivalPeek?.ollamaContext ?? null
+  );
+  const [lastExchange, setLastExchange] = useState<LastExchangeSnapshot | null>(
+    () => survivalPeek?.lastExchange ?? null
+  );
+  const [strategyGuideBranches, setStrategyGuideBranches] = useState<StrategyGuideBranchesPayload | null>(
+    () => survivalPeek?.strategyGuideBranches ?? null
+  );
+  const [modelPolicyDisclosure, setModelPolicyDisclosure] = useState<ModelPolicyDisclosurePayload | null>(
+    () => survivalPeek?.modelPolicyDisclosure ?? null
+  );
   const [lastStrategySpoilerConsentEffective, setLastStrategySpoilerConsentEffective] = useState(false);
-  const [presetCarouselInject, setPresetCarouselInject] = useState<PresetCarouselInjectPayload | null>(null);
+  const [presetCarouselInject, setPresetCarouselInject] = useState<PresetCarouselInjectPayload | null>(
+    () => survivalPeek?.presetCarouselInject ?? null
+  );
   const [shortcutSetupVariant, setShortcutSetupVariant] = useState<NonNullable<
     BackgroundRequestStatus["shortcut_setup"]
-  > | null>(null);
+  > | null>(() => survivalPeek?.shortcutSetupVariant ?? null);
   const lastStrategyAskQuestionRef = useRef<string>("");
   const pendingArchiveTurnRef = useRef<{ question: string; answer: string } | null>(null);
   const pendingThreadQuestionDisplayRef = useRef<string | null>(null);
   const lastFlushedExchangeQuestionRef = useRef<string>("");
-  const [askThreadCollapsed, setAskThreadCollapsed] = useState<AskThreadCollapsedTurn[]>([]);
+  const [askThreadCollapsed, setAskThreadCollapsed] = useState<AskThreadCollapsedTurn[]>(
+    () => survivalPeek?.askThreadCollapsed ?? []
+  );
   const askThreadCollapsedRef = useRef(askThreadCollapsed);
   useEffect(() => {
     askThreadCollapsedRef.current = askThreadCollapsed;
   }, [askThreadCollapsed]);
-  const [askThreadViewIndex, setAskThreadViewIndex] = useState<number | null>(null);
-  const [askThreadDisplayQuestion, setAskThreadDisplayQuestion] = useState("");
+  const [askThreadViewIndex, setAskThreadViewIndex] = useState<number | null>(
+    () => survivalPeek?.askThreadViewIndex ?? null
+  );
+  const [askThreadDisplayQuestion, setAskThreadDisplayQuestion] = useState(
+    () => survivalPeek?.askThreadDisplayQuestion ?? ""
+  );
   const [isAsking, setIsAsking] = useState(false);
-  const [lastApplied, setLastApplied] = useState<AppliedResult | null>(null);
-  const [suggestedPrompts, setSuggestedPrompts] = useState<PresetPrompt[]>(() => getRandomPresets(3));
-  const [showSlowWarning, setShowSlowWarning] = useState(false);
-  const [elapsedSeconds, setElapsedSeconds] = useState<number | null>(null);
-  const [lastTransparency, setLastTransparency] = useState<TransparencySnapshot | null>(null);
+  const [lastApplied, setLastApplied] = useState<AppliedResult | null>(
+    () => survivalPeek?.lastApplied ?? null
+  );
+  const [suggestedPrompts, setSuggestedPrompts] = useState<PresetPrompt[]>(
+    () => survivalPeek?.suggestedPrompts ?? getRandomPresets(3)
+  );
+  const [showSlowWarning, setShowSlowWarning] = useState(() => survivalPeek?.showSlowWarning ?? false);
+  const [elapsedSeconds, setElapsedSeconds] = useState<number | null>(
+    () => survivalPeek?.elapsedSeconds ?? null
+  );
+  const [lastTransparency, setLastTransparency] = useState<TransparencySnapshot | null>(
+    () => survivalPeek?.lastTransparency ?? null
+  );
+  const [thinkingSummary, setThinkingSummary] = useState<string | null>(
+    () => survivalPeek?.thinkingSummary ?? null
+  );
+  const [lastRequestId, setLastRequestId] = useState<number | null>(
+    () => survivalPeek?.lastRequestId ?? null
+  );
   const [isStreamingPreview, setIsStreamingPreview] = useState(false);
 
   const desktopAutoSavePrefsRef = useRef({
@@ -140,6 +174,11 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
       if (status.status === "pending") {
         setOllamaContext({ app_id: appId, app_context: appContext });
         setIsAsking(true);
+        const thinking =
+          typeof status.thinking_summary === "string" && status.thinking_summary.trim()
+            ? status.thinking_summary.trim()
+            : null;
+        setThinkingSummary(thinking);
         const partial =
           status.streaming === true &&
           typeof status.partial_response === "string" &&
@@ -166,6 +205,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
       }
 
       if (status.status === "cancelled") {
+        setThinkingSummary(null);
         setIsStreamingPreview(false);
         setOllamaContext({ app_id: appId, app_context: appContext });
         setIsAsking(false);
@@ -184,6 +224,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
       }
 
       if (status.status === "completed" || status.status === "failed") {
+        setThinkingSummary(null);
         setIsStreamingPreview(false);
         const applied = status.applied ?? null;
         setOllamaContext({ app_id: appId, app_context: appContext });
@@ -195,6 +236,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
         setLastApplied(applied);
         setElapsedSeconds(Number.isFinite(status.elapsed_seconds) ? status.elapsed_seconds : null);
 
+        setLastRequestId(typeof status.request_id === "number" ? status.request_id : null);
         if (status.status === "completed" && status.success) {
           const q = (status.question || fallbackQuestion || "").trim();
           const answer = buildResponseText(status.response ?? "No response text.", applied);
@@ -265,6 +307,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     const msg = formatDeckyRpcError(e);
     a.onExternalFailure?.("background_poll", msg);
     setIsAsking(false);
+    setThinkingSummary(null);
     setIsStreamingPreview(false);
     setOllamaResponse(`Error: ${msg}`);
     setLastApplied(null);
@@ -322,6 +365,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     setElapsedSeconds(null);
     setShowSlowWarning(false);
     setIsStreamingPreview(false);
+    setThinkingSummary(null);
   }, [a, invalidateRequests, isAsking]);
 
   const onCancelAsk = useCallback(() => {
@@ -330,6 +374,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     });
     invalidateRequests();
     setIsAsking(false);
+    setThinkingSummary(null);
     setIsStreamingPreview(false);
     setOllamaResponse("Request cancelled.");
     setOllamaContext(null);
@@ -395,6 +440,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
       const appName = runningApp?.display_name ?? "";
 
       setIsAsking(true);
+      setThinkingSummary(null);
       setPresetCarouselInject(null);
       setStrategyGuideBranches(null);
       setModelPolicyDisclosure(null);
@@ -621,10 +667,22 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
 
   const restoreSessionSnapshot = useCallback((snap: BonsaiSessionSurvivalSnapshot) => {
     setOllamaResponse(snap.ollamaResponse);
+    setOllamaContext(snap.ollamaContext);
+    setLastExchange(snap.lastExchange);
     setAskThreadCollapsed(snap.askThreadCollapsed);
     setAskThreadDisplayQuestion(snap.askThreadDisplayQuestion);
     setAskThreadViewIndex(snap.askThreadViewIndex);
     setSuggestedPrompts(snap.suggestedPrompts);
+    setLastTransparency(snap.lastTransparency);
+    setModelPolicyDisclosure(snap.modelPolicyDisclosure);
+    setStrategyGuideBranches(snap.strategyGuideBranches);
+    setElapsedSeconds(snap.elapsedSeconds);
+    setLastApplied(snap.lastApplied);
+    setShortcutSetupVariant(snap.shortcutSetupVariant);
+    setPresetCarouselInject(snap.presetCarouselInject);
+    setShowSlowWarning(snap.showSlowWarning);
+    setLastRequestId(snap.lastRequestId);
+    setThinkingSummary(snap.thinkingSummary);
   }, []);
 
   const resetAskSessionSlice = useCallback(() => {
@@ -667,6 +725,8 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     elapsedSeconds,
     lastTransparency,
     setLastTransparency,
+    thinkingSummary,
+    lastRequestId,
     askThreadCollapsed,
     setAskThreadCollapsed,
     askThreadViewIndex,

@@ -108,6 +108,8 @@ export function usePluginSettings() {
     DEFAULT_BONSAI_TOKEN_STREAMING_ENABLED
   );
   const [settingsLoaded, setSettingsLoaded] = useState(false);
+  /** When false, debounced ``save_settings`` is skipped so a failed initial load cannot wipe disk with UI defaults. */
+  const [settingsPersistEnabled, setSettingsPersistEnabled] = useState(false);
 
   const hydrateFromSettings = useCallback((saved: BonsaiSettings) => {
     const normalized = normalizeSettings(saved);
@@ -140,6 +142,7 @@ export function usePluginSettings() {
     setStrategySpoilerAutoRevealAfterConsent(normalized.strategy_spoiler_auto_reveal_after_consent);
     setSteamWebApiKey(normalized.steam_web_api_key);
     setBonsaiTokenStreamingEnabled(normalized.bonsai_token_streaming_enabled);
+    setSettingsPersistEnabled(true);
   }, []);
 
   useEffect(() => {
@@ -147,38 +150,11 @@ export function usePluginSettings() {
     call<[], BonsaiSettings>("load_settings")
       .then((saved) => {
         if (cancelled) return;
-        const normalized = normalizeSettings(saved);
-        setLatencyWarningSeconds(normalized.latency_warning_seconds);
-        setRequestTimeoutSeconds(normalized.request_timeout_seconds);
-        setLatencyTimeoutsCustomEnabled(normalized.latency_timeouts_custom_enabled);
-        setUnifiedInputPersistenceMode(normalized.unified_input_persistence_mode);
-        setScreenshotAttachmentPreset(normalized.screenshot_attachment_preset);
-        setDesktopDebugNoteAutoSave(normalized.desktop_debug_note_auto_save);
-        setDesktopAskVerboseLogging(normalized.desktop_ask_verbose_logging);
-        setAttachProtonLogsWhenTroubleshooting(normalized.attach_proton_logs_when_troubleshooting);
-        setPresetChipAnimation(normalized.preset_chip_animation);
-        setPresetChipFadeAnimationEnabled(normalized.preset_chip_fade_animation_enabled);
-        setInputSanitizerUserDisabled(normalized.input_sanitizer_user_disabled);
-        setCapabilities(normalized.capabilities);
-        setAiCharacterEnabled(normalized.ai_character_enabled);
-        setAiCharacterRandom(normalized.ai_character_random);
-        setAiCharacterPresetId(normalized.ai_character_preset_id);
-        setAiCharacterCustomText(normalized.ai_character_custom_text);
-        setAiCharacterAccentIntensity(normalized.ai_character_accent_intensity);
-        setAskMode(normalized.ask_mode);
-        setOllamaKeepAlive(normalized.ollama_keep_alive);
-        setShowDeveloperTab(normalized.show_developer_tab);
-        setModelPolicyTier(normalized.model_policy_tier);
-        setModelPolicyNonFossUnlocked(normalized.model_policy_non_foss_unlocked);
-        setModelAllowHighVramFallbacks(normalized.model_allow_high_vram_fallbacks);
-        setOllamaLocalOnDeck(normalized.ollama_local_on_deck);
-        setStrategySpoilerMaskingEnabled(normalized.strategy_spoiler_masking_enabled);
-        setStrategySpoilerAutoRevealAfterConsent(normalized.strategy_spoiler_auto_reveal_after_consent);
-        setSteamWebApiKey(normalized.steam_web_api_key);
-        setBonsaiTokenStreamingEnabled(normalized.bonsai_token_streaming_enabled);
+        hydrateFromSettings(saved);
       })
       .catch(() => {
         if (cancelled) return;
+        setSettingsPersistEnabled(false);
         setLatencyWarningSeconds(DEFAULT_LATENCY_WARNING_SECONDS);
         setRequestTimeoutSeconds(DEFAULT_REQUEST_TIMEOUT_SECONDS);
         setUnifiedInputPersistenceMode(DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE);
@@ -215,10 +191,10 @@ export function usePluginSettings() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [hydrateFromSettings]);
 
   useEffect(() => {
-    if (!settingsLoaded) return;
+    if (!settingsPersistEnabled) return;
     const timer = setTimeout(() => {
       call<[BonsaiSettings], BonsaiSettings>(
         "save_settings",
@@ -288,7 +264,7 @@ export function usePluginSettings() {
     strategySpoilerAutoRevealAfterConsent,
     steamWebApiKey,
     bonsaiTokenStreamingEnabled,
-    settingsLoaded,
+    settingsPersistEnabled,
   ]);
 
   return {

@@ -2,7 +2,7 @@
 
 export type PullModelLicenseClass = "foss" | "open_weight" | "non_foss" | "unknown";
 
-export type PullModelUseTag = "chat" | "vision" | "ocr" | "strategy";
+export type PullModelUseTag = "chat" | "vision" | "ocr" | "strategy" | "coding";
 
 export type PullModelGroup = "featured" | "smallest" | "stretch" | "specialist";
 
@@ -39,6 +39,7 @@ export const PULL_MODEL_FILTER_OPTIONS = [
   { id: "strategy", label: "Strategy" },
   { id: "expert", label: "Expert" },
   { id: "vision", label: "Vision" },
+  { id: "coding", label: "Coding" },
 ] as const;
 
 export type PullModelFilterId = (typeof PULL_MODEL_FILTER_OPTIONS)[number]["id"];
@@ -259,6 +260,30 @@ export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
     tags: ["strategy"],
     rating: 4,
     blurb: "Cheap reasoning specialist for math/logic; verbose CoT slow on CPU.",
+  },
+  {
+    tag: "llava-phi3",
+    params: "3.8B",
+    sizeGb: 2.9,
+    releasedYm: "2024-04",
+    license: "MIT",
+    licenseClass: "foss",
+    group: "specialist",
+    tags: ["vision"],
+    rating: 4,
+    blurb: "Compact MIT-licensed vision alternative.",
+  },
+  {
+    tag: "qwen2.5-coder:3b",
+    params: "3B",
+    sizeGb: 1.9,
+    releasedYm: "2024-11",
+    license: "Qwen Research",
+    licenseClass: "foss",
+    group: "specialist",
+    tags: ["coding"],
+    rating: 3,
+    blurb: "Coding/tool-use bonus; low priority for a gamer unless scripting.",
   },
 ] as const;
 

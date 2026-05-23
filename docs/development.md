@@ -1,3 +1,4 @@
+
 # bonsAI Development Guide
 
 This guide is for contributors building and deploying bonsAI from source. **Primary target:** one Steam Deck runs everything — Cursor, the git repo, Ollama, Decky, and bonsAI on the same machine. A separate PC on the LAN still works; see [Other-machine LAN workflow](#other-machine-lan-workflow).
@@ -123,6 +124,14 @@ Use this for daily UI, Settings, Permissions, Ask flow, Ollama RPC, and QAM focu
 4. Exit BPM via **Exit Big Picture** or `Alt+Tab` back to Konsole/Cursor — no Gaming Mode switch required.
 
 **Iterating:** run `pnpm run watch` in Konsole, then **Reload** the plugin in Decky QAM for a near-HMR loop.
+
+**Screenshots for Cursor (BPM / QAM UI):** After reproducing UI in BPM (or with BPM still running in the background), Alt+Tab to Cursor and run:
+
+```bash
+./scripts/screenshot-deck.sh
+```
+
+With `DECK_IP=127.0.0.1` in `.env` (recommended for same-machine Deck), or `steamdeck.local` while running on the Deck, the script captures **locally** (no SSH). Saves `screenshots/DeckCapture_<timestamp>.png` for agents using the [decky-screenshot-ingest](../.cursor/skills/decky-screenshot-ingest/SKILL.md) skill. Keep Steam/BPM running for composited QAM captures; fully quitting Steam may fall back to KMS grab (game plane only). If a run hangs on `deck@steamdeck.local's password:`, press Ctrl+C and retry (auto-local should apply) or run `./scripts/screenshot-deck.sh --local`. Windows remote deploy: `.\scripts\screenshot-deck.ps1`.
 
 **What BPM proves:** Main tab UI, Settings, Permissions, Ask flow, backend RPC, D-pad focus in QAM overlays.
 

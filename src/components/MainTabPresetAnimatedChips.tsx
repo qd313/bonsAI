@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Button, Router } from "@decky/ui";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Button, Focusable, Router } from "@decky/ui";
 import type { AskModeId } from "../data/askMode";
 import {
   getRandomPresetExcluding,
@@ -7,6 +7,16 @@ import {
   holdMsForPresetText,
   type PresetPrompt,
 } from "../data/presets";
+import {
+  advanceCarouselFocus,
+  buildInitialCarouselState,
+  CAROUSEL_MANUAL_PAUSE_MS,
+  CAROUSEL_SLIDE_MS,
+  CAROUSEL_STEP_MS,
+  carouselTrackOffsetPx,
+  mergeContextualSeeds,
+  seedsKeyFrom,
+} from "../features/preset-carousel/carouselState";
 import { BONSAI_FOREST_GREEN } from "../features/unified-input/constants";
 import { joinPresetWithRunningGame } from "../utils/joinPresetWithRunningGame";
 
@@ -49,20 +59,22 @@ export type MainTabPresetAnimatedChipsProps = {
   animationMode?: PresetChipAnimationMode;
   /** If a preset declares `preferAskMode`, apply it when the chip is chosen. */
   onPreferAskMode?: (mode: AskModeId) => void;
+  /** Carousel mode: D-pad Down at end of history moves focus to the Ask field. */
+  onCarouselExitDown?: () => void;
 };
-
-const CAROUSEL_STEP_MS = 3200;
 
 function PresetChipButton(props: {
   preset: PresetPrompt;
   setUnifiedInput: React.Dispatch<React.SetStateAction<string>>;
   onPreferAskMode?: (mode: AskModeId) => void;
   dimmed?: boolean;
+  focusable?: boolean;
 }) {
-  const { preset: p, setUnifiedInput, onPreferAskMode, dimmed } = props;
+  const { preset: p, setUnifiedInput, onPreferAskMode, dimmed, focusable = true } = props;
   return (
     <Button
       className="bonsai-preset-glass"
+      focusable={focusable}
       onClick={() => {
         const gameName = Router.MainRunningApp?.display_name ?? "";
         setUnifiedInput(gameName ? joinPresetWithRunningGame(p.text, gameName) : p.text);
@@ -100,46 +112,129 @@ function PresetChipButton(props: {
   );
 }
 
-function MainTabPresetVerticalCarousel(props: Omit<MainTabPresetAnimatedChipsProps, "fadeAnimationEnabled" | "animationMode">) {
-  const { seeds, setUnifiedInput, onPreferAskMode } = props;
-  const seedsKey = seeds.map((s) => s.text).join("\u0000");
-  const [slots, setSlots] = useState<[PresetPrompt, PresetPrompt, PresetPrompt]>(() => normalizeThreeSeeds(seeds));
+function MainTabPresetVerticalCarousel(
+  props: Omit<MainTabPresetAnimatedChipsProps, "fadeAnimationEnabled" | "animationMode">,
+) {
+  const { seeds, setUnifiedInput, onPreferAskMode, onCarouselExitDown } = props;
+  const seedsKey = seedsKeyFrom(seeds);
+  const contextualRef = useRef(normalizeThreeSeeds(seeds));
+  contextualRef.current = normalizeThreeSeeds(seeds);
+
+  const [{ history, focusIndex }, setCarousel] = useState(() =>
+    buildInitialCarouselState(normalizeThreeSeeds(seeds)),
+  );
+  const historyRef = useRef(history);
+  const focusIndexRef = useRef(focusIndex);
+  historyRef.current = history;
+  focusIndexRef.current = focusIndex;
+
+  const autoPausedUntilRef = useRef(0);
+
+  const pauseAuto = useCallback(() => {
+    autoPausedUntilRef.current = performance.now() + CAROUSEL_MANUAL_PAUSE_MS;
+  }, []);
 
   useEffect(() => {
-    setSlots(normalizeThreeSeeds(seeds));
-  }, [seedsKey, seeds]);
+    setCarousel((prev) => mergeContextualSeeds(prev.history, contextualRef.current, prev.focusIndex));
+  }, [seedsKey]);
 
   useEffect(() => {
     const sessionEnd = performance.now() + PRESET_CAROUSEL_ACTIVE_MS;
     let cancelled = false;
+    let timeoutId = 0;
+
     const tick = () => {
       if (cancelled || performance.now() >= sessionEnd) return;
-      setSlots((prev) => {
-        const otherTexts = new Set(prev.map((s) => s.text));
-        const nextBottom = getRandomPresetExcluding(otherTexts);
-        return [prev[1]!, prev[2]!, nextBottom];
+      if (performance.now() < autoPausedUntilRef.current) {
+        timeoutId = window.setTimeout(tick, CAROUSEL_STEP_MS);
+        return;
+      }
+
+      setCarousel((prev) => {
+        const texts = new Set(prev.history.map((s) => s.text));
+        const nextPreset = getRandomPresetExcluding(texts);
+        return advanceCarouselFocus(prev.history, prev.focusIndex, nextPreset);
       });
-      window.setTimeout(tick, CAROUSEL_STEP_MS);
+
+      timeoutId = window.setTimeout(tick, CAROUSEL_STEP_MS);
     };
-    const id = window.setTimeout(tick, CAROUSEL_STEP_MS);
+
+    timeoutId = window.setTimeout(tick, CAROUSEL_STEP_MS);
     return () => {
       cancelled = true;
-      window.clearTimeout(id);
+      window.clearTimeout(timeoutId);
     };
   }, [seedsKey]);
 
+  const moveFocusUp = useCallback(() => {
+    pauseAuto();
+    setCarousel((prev) => ({
+      ...prev,
+      focusIndex: Math.max(0, prev.focusIndex - 1),
+    }));
+  }, [pauseAuto]);
+
+  const moveFocusDown = useCallback(() => {
+    pauseAuto();
+    const atEnd = focusIndexRef.current >= historyRef.current.length - 1;
+    if (atEnd) {
+      onCarouselExitDown?.();
+      return;
+    }
+    setCarousel((prev) => ({
+      ...prev,
+      focusIndex: Math.min(prev.history.length - 1, prev.focusIndex + 1),
+    }));
+  }, [onCarouselExitDown, pauseAuto]);
+
+  const trackOffset = carouselTrackOffsetPx(focusIndex);
+
+  const deckNavHandlers = {
+    onMoveUp: () => {
+      moveFocusUp();
+      return true;
+    },
+    onMoveDown: () => {
+      moveFocusDown();
+      return true;
+    },
+  } as Record<string, unknown>;
+
   return (
-    <div className="bonsai-preset-carousel-vertical">
-      <div className="bonsai-preset-carousel-slot" data-bonsai-preset-visible="true">
-        <PresetChipButton preset={slots[0]!} setUnifiedInput={setUnifiedInput} onPreferAskMode={onPreferAskMode} dimmed />
+    <Focusable {...deckNavHandlers} className="bonsai-preset-carousel-focus-root">
+      <div className="bonsai-preset-carousel-vertical">
+        <div
+          className="bonsai-preset-carousel-track"
+          style={{
+            transform: `translateY(-${trackOffset}px)`,
+            transition: `transform ${CAROUSEL_SLIDE_MS}ms ease-in-out`,
+          }}
+        >
+          {history.map((preset, i) => {
+            const isFocus = i === focusIndex;
+            const dimmed = !isFocus;
+            return (
+              <div
+                key={`${i}-${preset.text}`}
+                className={
+                  "bonsai-preset-carousel-slot" +
+                  (isFocus ? " bonsai-preset-carousel-slot--focus" : "")
+                }
+                data-bonsai-preset-visible="true"
+              >
+                <PresetChipButton
+                  preset={preset}
+                  setUnifiedInput={setUnifiedInput}
+                  onPreferAskMode={onPreferAskMode}
+                  dimmed={dimmed}
+                  focusable={isFocus}
+                />
+              </div>
+            );
+          })}
+        </div>
       </div>
-      <div className="bonsai-preset-carousel-slot bonsai-preset-carousel-slot--focus" data-bonsai-preset-visible="true">
-        <PresetChipButton preset={slots[1]!} setUnifiedInput={setUnifiedInput} onPreferAskMode={onPreferAskMode} />
-      </div>
-      <div className="bonsai-preset-carousel-slot" data-bonsai-preset-visible="true">
-        <PresetChipButton preset={slots[2]!} setUnifiedInput={setUnifiedInput} onPreferAskMode={onPreferAskMode} dimmed />
-      </div>
-    </div>
+    </Focusable>
   );
 }
 
@@ -154,15 +249,27 @@ const staticSlotFade = (): [SlotFade, SlotFade, SlotFade] => [
   { opacity: 1, transitionMs: 0 },
 ];
 
-export function MainTabPresetAnimatedChips(props: MainTabPresetAnimatedChipsProps) {
-  const { seeds, setUnifiedInput, fadeAnimationEnabled = true, animationMode = "fade", onPreferAskMode } = props;
+function MainTabPresetAnimatedChipsInner(props: MainTabPresetAnimatedChipsProps) {
+  const {
+    seeds,
+    setUnifiedInput,
+    fadeAnimationEnabled = true,
+    animationMode = "fade",
+    onPreferAskMode,
+    onCarouselExitDown,
+  } = props;
   if (animationMode === "carousel") {
     return (
-      <MainTabPresetVerticalCarousel seeds={seeds} setUnifiedInput={setUnifiedInput} onPreferAskMode={onPreferAskMode} />
+      <MainTabPresetVerticalCarousel
+        seeds={seeds}
+        setUnifiedInput={setUnifiedInput}
+        onPreferAskMode={onPreferAskMode}
+        onCarouselExitDown={onCarouselExitDown}
+      />
     );
   }
   const staticMode = animationMode === "static" || !fadeAnimationEnabled;
-  const seedsKey = seeds.map((s) => s.text).join("\u0000");
+  const seedsKey = seedsKeyFrom(seeds);
 
   const [slots, setSlots] = useState<[PresetPrompt, PresetPrompt, PresetPrompt]>(() => normalizeThreeSeeds(seeds));
   const [slotFade, setSlotFade] = useState<[SlotFade, SlotFade, SlotFade]>(initialSlotFade);
@@ -235,7 +342,6 @@ export function MainTabPresetAnimatedChips(props: MainTabPresetAnimatedChipsProp
           return next;
         });
 
-        // Fade in after stagger (subsequent cycles: stagger 0).
         pushTimeout(() => {
           setSlotFade((prev) => {
             const next = [...prev] as [SlotFade, SlotFade, SlotFade];
@@ -243,7 +349,6 @@ export function MainTabPresetAnimatedChips(props: MainTabPresetAnimatedChipsProp
             return next;
           });
 
-          // Hold after fade-in completes.
           pushTimeout(() => {
             const hold = holdMsForPresetText(prompt.text);
 
@@ -254,7 +359,6 @@ export function MainTabPresetAnimatedChips(props: MainTabPresetAnimatedChipsProp
                 return next;
               });
 
-              // After fade-out: swap and continue only if the session window is still open.
               pushTimeout(() => {
                 if (!mayStartNextCycle()) return;
                 const nextPrompt = pickNextForSlot(slotIndex, prompt);
@@ -276,14 +380,12 @@ export function MainTabPresetAnimatedChips(props: MainTabPresetAnimatedChipsProp
       cancelled = true;
       timeouts.forEach((id) => window.clearTimeout(id));
     };
-    // seedsKey drives re-seed; include seeds so the effect sees the matching triple when the key changes.
   }, [seedsKey, seeds, staticMode]);
 
   return (
     <>
       {slots.map((p, i) => {
         const slotOpacity = slotFade[i]?.opacity ?? 0;
-        /** Faded-out chips (incl. after the 60s carousel session rests at opacity 0) must not stay in the Deck focus graph. */
         const presetInteractive = staticMode || slotOpacity > 0;
         return (
           <div
@@ -336,3 +438,18 @@ export function MainTabPresetAnimatedChips(props: MainTabPresetAnimatedChipsProp
     </>
   );
 }
+
+function presetChipsPropsEqual(
+  prev: MainTabPresetAnimatedChipsProps,
+  next: MainTabPresetAnimatedChipsProps,
+): boolean {
+  return (
+    seedsKeyFrom(prev.seeds) === seedsKeyFrom(next.seeds) &&
+    prev.animationMode === next.animationMode &&
+    prev.fadeAnimationEnabled === next.fadeAnimationEnabled &&
+    prev.onPreferAskMode === next.onPreferAskMode &&
+    prev.onCarouselExitDown === next.onCarouselExitDown
+  );
+}
+
+export const MainTabPresetAnimatedChips = React.memo(MainTabPresetAnimatedChipsInner, presetChipsPropsEqual);

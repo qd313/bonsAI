@@ -3,8 +3,9 @@ name: decky-screenshot-ingest
 description: >-
   Ingests fresh Steam Deck UI captures from the repo `screenshots/` directory for
   visual debugging of Decky plugins and game-mode UI. Use when debugging layout,
-  focus, QAM, or on-device behavior; when the user runs `scripts/screenshot-deck.ps1`
-  or mentions new screenshots; or when verifying UI against what the Deck actually
+  focus, QAM, or on-device behavior; when the user runs `scripts/screenshot-deck.sh`
+  (Deck-native, auto-local when `DECK_IP=127.0.0.1`) or `scripts/screenshot-deck.ps1`
+  (Windows remote); or when verifying UI against what the Deck actually
   shows.
 ---
 
@@ -22,7 +23,7 @@ Use during **debugging** of Decky / Steam Deck UI (this repo’s plugin, overlay
 2. **Detect new or relevant captures**  
    - List image files: `screenshots/**/*.png` (and `.jpg`/`.jpeg` if present).  
    - Sort by **last modified time**, newest first.  
-   - Prefer files matching `DeckCapture_*.png` from `scripts/screenshot-deck.ps1` (e.g. `DeckCapture_20260520_153045_auto.png` — timestamp + mode suffix), but do not exclude other names.
+   - Prefer files matching `DeckCapture_*.png` from `scripts/screenshot-deck.sh` / `.ps1` (e.g. `DeckCapture_20260520_153045_auto.png` — timestamp + mode suffix), but do not exclude other names.
 
 3. **Ingest for the model**  
    - **Read** the newest screenshot(s) with the image read capability (same as opening an image file in the workspace).  
@@ -35,7 +36,7 @@ Use during **debugging** of Decky / Steam Deck UI (this repo’s plugin, overlay
 5. **Dev loop** — For build/deploy/watch workflow, read `.cursor/skills/bonsai-deck-dev-loop/SKILL.md`.
 
 6. **If nothing to ingest**  
-   Say that `screenshots/` is empty or unchanged, and suggest running `scripts/screenshot-deck.ps1` after reproducing on the Deck (with `.env` `DECK_IP` / `DECK_USER`). For QAM/bonsAI in game mode, keep QAM open before capturing; use `-Mode auto` or `-Mode game`.
+   Say that `screenshots/` is empty or unchanged, and suggest running `./scripts/screenshot-deck.sh` on the Deck (or `.ps1` from Windows) after reproducing in BPM/QAM (`.env` `DECK_IP` / `DECK_USER`). For QAM/bonsAI in game mode, keep QAM open before capturing; use `-Mode auto` / `--mode auto` or `-Mode game` / `--mode game`.
 
 ## Notes
 

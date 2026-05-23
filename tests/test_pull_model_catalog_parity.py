@@ -26,6 +26,8 @@ CATALOG_POLICY_PARITY: dict[str, str] = {
     "minicpm-v:8b": "unknown",
     "llama3.2-vision:11b": "open_weight",
     "deepseek-r1:1.5b": "open_weight",
+    "llava-phi3": "foss",
+    "qwen2.5-coder:3b": "foss",
 }
 
 

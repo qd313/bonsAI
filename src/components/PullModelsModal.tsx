@@ -91,6 +91,7 @@ function entryMatchesFilter(entry: PullModelEntry, filter: PullModelFilterId): b
   if (filter === "expert") {
     return entry.group === "stretch" || (entry.tags.includes("strategy") && entry.rating >= 5);
   }
+  if (filter === "coding") return entry.tags.includes("coding");
   return true;
 }
 

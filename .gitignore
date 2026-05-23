@@ -59,7 +59,7 @@ cli/
 cli/*
 cli/decky
 
-# Local Deck screenshots (captured by scripts/screenshot-deck.ps1)
+# Local Deck screenshots (scripts/screenshot-deck.sh / screenshot-deck.ps1)
 screenshots/
 
 # Local Deck screen recordings (captured by scripts/record-deck.ps1 / record-deck.sh)

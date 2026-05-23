@@ -116,6 +116,7 @@ from refactor_helpers import (
     build_ollama_chat_url,
     is_valid_setup_pull_profile,
     normalize_ollama_base,
+    is_ollama_model_missing_error,
     select_ollama_models,
 )
 
@@ -2239,15 +2240,15 @@ class Plugin:
                     return out
 
                 last_failure = _strip_ollama_http_body(merged)
-                body = (result.get("body") or "").lower()
+                body = result.get("body") or ""
                 # Missing local Ollama tags: try the next fallback instead of failing the whole Ask.
-                is_model_not_found = "not found" in body and "model" in body
-                if is_model_not_found:
+                if is_ollama_model_missing_error(result.get("status"), body):
                     continue
 
                 status = result.get("status")
+                body_lower = body.lower()
                 oomish = any(
-                    s in body
+                    s in body_lower
                     for s in (
                         "out of memory",
                         "failed to allocate",

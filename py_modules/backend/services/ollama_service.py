@@ -467,6 +467,22 @@ def post_ollama_chat(
                         ),
                         "body": stream_err_txt[:4000],
                     }
+                if not done_flag:
+                    # Without Ollama's terminal ``done: true`` object, treating buffered text as a full
+                    # reply would mis-report truncated TCP/proxy drops as successful completions.
+                    assistant_so_far = "".join(deltas)
+                    if assistant_so_far.strip():
+                        msg = (
+                            f"Ollama stream ended before completion for model '{model_name}'. "
+                            "Partial output was not used as the final answer."
+                        )
+                    else:
+                        msg = (
+                            f"Ollama returned an incomplete stream for model '{model_name}' "
+                            "(no completion marker and no assistant text)."
+                        )
+                    logger.warning("ask_ollama: %s", msg)
+                    return {"success": False, "response": msg}
                 assistant_raw = "".join(deltas)
                 if on_delta:
                     try:

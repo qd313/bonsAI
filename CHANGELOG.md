@@ -13,6 +13,7 @@ All notable changes to this project are documented in this file.
 - **Desktop logs folder rename:** All Desktop writes (chat auto-save, Ask traces, manual notes, app logs) now use `~/Desktop/bonsAI_logs/` instead of `~/Desktop/BonsAI_notes/`. Existing folders are not auto-migrated — rename manually if you already have notes there.
 
 ### Fixed
+- **Ollama NDJSON stream must end with ``done: true``:** If the HTTP stream closes before Ollama emits the terminal completion object (e.g. dropped connection), the backend no longer returns `success: true` with truncated assistant text as if the reply were complete (`py_modules/backend/services/ollama_service.py`, `tests/test_ollama_service.py`).
 - **Local toggle no longer overwrites LAN PC IP:** Ask no longer persists `127.0.0.1:11434` to `bonsai:pc-ip` localStorage while **Ollama on this Deck** is enabled, so toggling local off restores the user's LAN host (`src/utils/persistOllamaIp.ts`, `src/index.tsx`).
 
 ## [0.3.0] - 2026-04-30

@@ -102,6 +102,49 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertTrue(any(t == "Hell" and not done for t, done in deltas_seen))
         self.assertEqual(deltas_seen[-1], ("Hello", True))
 
+    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    def test_post_ollama_chat_fails_when_stream_eof_without_done(
+        self, mock_urlopen: MagicMock
+    ) -> None:
+        """TCP/proxy EOF before Ollama's final ``done: true`` line must not return success with truncated text."""
+        body = ('{"message":{"role":"assistant","content":"truncated"}}\n').encode("utf-8")
+        idx = {"i": 0}
+
+        class _Rsp:
+            def read(self, n: int):
+                chunk = body[idx["i"] : idx["i"] + n]
+                idx["i"] += len(chunk)
+                return chunk
+
+            def close(self) -> None:
+                pass
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_):
+                pass
+
+        mock_urlopen.return_value = _Rsp()
+        lg = MagicMock()
+        out = post_ollama_chat(
+            "http://127.0.0.1:11434/api/chat",
+            "qwen:test",
+            [{"role": "system", "content": "x"}],
+            60,
+            [],
+            [],
+            [],
+            [],
+            lg,
+            "speed",
+            "5m",
+            cancel_requested=lambda: False,
+            on_delta=None,
+        )
+        self.assertFalse(out.get("success"))
+        self.assertIn("before completion", str(out.get("response") or ""))
+
     def test_format_ai_response_appends_attachment_metadata(self):
         """Confirm attachment debug and error blocks are appended for UI diagnostics."""
         output = format_ai_response(

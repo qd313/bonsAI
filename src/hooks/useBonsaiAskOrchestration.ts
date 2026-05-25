@@ -140,18 +140,20 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
       if (status.status === "pending") {
         setOllamaContext({ app_id: appId, app_context: appContext });
         setIsAsking(true);
-        const partial =
-          status.streaming === true &&
-          typeof status.partial_response === "string" &&
-          status.partial_response.trim()
+        const rawPartial =
+          typeof status.partial_response === "string" && status.partial_response.trim()
             ? status.partial_response
             : "";
         const suppressStreamPreview =
           a.askMode === "strategy" &&
           a.strategySpoilerMaskingEnabled &&
           !a.strategySpoilerConsentForNextAsk;
-        if (partial && !suppressStreamPreview) {
-          setOllamaResponse(partial);
+        // Backend clears ``streaming`` on the terminal on_delta(done) before status flips to
+        // completed; still show ``partial_response`` so the UI does not flash "Thinking..." and
+        // slow-poll for up to ~1.2s (see useBackgroundGameAi poll cadence).
+        const streamablePartial = !suppressStreamPreview && rawPartial ? rawPartial : "";
+        if (streamablePartial) {
+          setOllamaResponse(streamablePartial);
           setIsStreamingPreview(true);
         } else {
           setOllamaResponse(status.response?.trim() ? status.response : "Thinking...");

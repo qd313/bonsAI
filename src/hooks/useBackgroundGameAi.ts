@@ -52,7 +52,10 @@ export function useBackgroundGameAi(
           applyBackgroundStatusToUi(status, fallbackQuestion);
 
           if (status.status === "pending") {
-            const delayMs = status.streaming ? BACKGROUND_STREAM_POLL_MS : BACKGROUND_STATUS_POLL_MS;
+            const hasPartial =
+              typeof status.partial_response === "string" && status.partial_response.trim().length > 0;
+            const delayMs =
+              status.streaming === true || hasPartial ? BACKGROUND_STREAM_POLL_MS : BACKGROUND_STATUS_POLL_MS;
             backgroundPollTimerRef.current = window.setTimeout(() => {
               void pollOnce();
             }, delayMs);

@@ -49,13 +49,15 @@ Python/RPC changes still need a full deploy (watch-deploy copies `py_modules/` +
 
 ## Which test track?
 
-| Track | When |
-|-------|------|
-| **A — BPM (Desktop)** | Daily UI, Settings, Ask, Ollama RPC, D-pad focus |
-| **B — Gaming Mode** | Steam Input, TDP, in-game overlay, gamescope screenshots |
+| Track | When | Runbook |
+|-------|------|---------|
+| **A — BPM (Desktop)** | Daily UI, Settings, Ask, Ollama RPC, D-pad focus | [device-qa-runbook.md](../../docs/device-qa-runbook.md) **Tier 0** (SMOKE-A, C, F) |
+| **B — Gaming Mode** | Steam Input, TDP, in-game overlay, gamescope screenshots | **Tier 1** (SMOKE-B, E, H) after Tier 0 |
 
 Track A: Steam Desktop → View → Big Picture → QAM → bonsAI.  
 Track B: Return to Gaming Mode → QAM → bonsAI.
+
+Scenario detail and coverage: [prompt-testing.md](../../docs/prompt-testing.md). PR gates: [regression-and-smoke.md](../../docs/regression-and-smoke.md) §1 + §3.
 
 ## Automated gates (before handoff)
 
@@ -119,5 +121,7 @@ git push origin vX.Y.Z   # triggers CI plugin zip
 
 - [docs/spikes/cursor-deck-visibility.md](../../docs/spikes/cursor-deck-visibility.md)
 - [docs/development.md](../../docs/development.md)
+- [docs/device-qa-runbook.md](../../docs/device-qa-runbook.md)
+- [docs/prompt-testing.md](../../docs/prompt-testing.md)
 - [docs/regression-and-smoke.md](../../docs/regression-and-smoke.md)
 - `.cursor/skills/decky-screenshot-ingest/SKILL.md`

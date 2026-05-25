@@ -7,8 +7,9 @@ Short guide to markdown under `docs/`. Repo root **[README.md](../README.md)** s
 | [development.md](development.md) | Contributors | Deck-first setup, build/deploy, BPM test loop, architecture |
 | [troubleshooting.md](troubleshooting.md) | Power users | GPU, network, vision, permissions, QAM, deploy edge cases |
 | [roadmap.md](roadmap.md) | Planning / contributors | In progress, planned backlog, and completed shipped work |
-| [prompt-testing.md](prompt-testing.md) | QA / contributors | Prompt matrices and release-related test notes |
-| [regression-and-smoke.md](regression-and-smoke.md) | Contributors / QA | **Standing** PR gates, scoped matrix, Deck smoke checklist |
+| [device-qa-runbook.md](device-qa-runbook.md) | QA / contributors | **What to run on Deck next** — Tier 0–4, cross-cutting smokes, progress tracker |
+| [prompt-testing.md](prompt-testing.md) | QA / contributors | Shipped-feature coverage index, scenario checkboxes, Test Results log |
+| [regression-and-smoke.md](regression-and-smoke.md) | Contributors / QA | **Standing** PR automated gates (§1); Deck smokes → runbook Tier 0–1 |
 | [change-risk-hotspots.md](change-risk-hotspots.md) | Contributors | Large files, test signal, suggested refactor order |
 | [security-audit-report.md](security-audit-report.md) | Maintainers | RPC/log/UI disclosure review and status |
 | [refactor-specialist-sweep.md](refactor-specialist-sweep.md) | Contributors | Past doc/script reorg + **completed** unified-input refactor section |

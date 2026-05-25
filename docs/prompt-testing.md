@@ -1,387 +1,447 @@
-# bonsAI Prompt Testing Tracker
+# bonsAI prompt testing tracker
 
-Track what prompts have been tested, what model responded, and whether the result was correct.
+**Run order (what to do next):** [device-qa-runbook.md](device-qa-runbook.md) — Tier 0 quick wins first, heavy setup in Tier 3–4.  
+**PR automated gates:** [regression-and-smoke.md](regression-and-smoke.md) §1.
 
-**PR / release gates:** automated commands, per-area tests, and Deck smoke checklist → [regression-and-smoke.md](regression-and-smoke.md).
+This file holds the **shipped-feature coverage index**, **Test Results log**, and **detailed scenario checkboxes** linked from the runbook.
 
-Related planning (not yet implemented): future prompt policy, search UX, and Steam Input work are ranked in [roadmap.md](roadmap.md). When those ship, use the research and catalog notes below to extend test matrices.
+Related planning (not yet implemented): [roadmap.md](roadmap.md) **Planned** section. Research notes: [steam-input-research.md](steam-input-research.md), [voice-character-catalog.md](voice-character-catalog.md).
 
-- [steam-input-research.md](steam-input-research.md) — Steam Input search/jump feasibility, fallback UX, validation checklist.
-- [voice-character-catalog.md](voice-character-catalog.md) — opt-in character voice/accent preset catalog (planning-only).
+---
 
-## Status Legend
-- **PASS** - AI responded correctly and action (if any) was applied
-- **FAIL** - Wrong answer, hallucination, or action not applied
-- **PARTIAL** - Correct idea but formatting/parsing issue prevented full success
-- **PENDING** - Row reserved for a ship-window / on-device run; update Model, Status, and Notes after testing
+## Evidence rules (check-offs)
 
-### Frozen preset carousel (optional — prompt testing)
+Mark `- [x]` when:
 
-For **repeatable** main-tab chip prompts (same three strings, same order, every load), set **`TEMP_PRESET_CAROUSEL_FROZEN`** to `true` in [`src/data/presets.ts`](../src/data/presets.ts). Default is **`false`** (normal random shuffle and contextual re-seed).
+1. **On-device PASS** recorded in Test Results (with build / date when known), or  
+2. **Documented verified sweep** — e.g. vision V1 manual run (2026-04), QAMP banner unit tests (2026-04-26), frozen-carousel troubleshooting pass.
 
-When enabled, the carousel ignores random/contextual shuffling and uses **`TEMP_CAROUSEL_FROZEN_TEXTS`** (each line must exist verbatim in `PRESET_PROMPTS`):
+Historical **FAIL** rows stay open for optional retest with a superseded note. Standardize on `- [x]` / `- [ ]` only.
 
-1. `Why is my game crashing?` (checklist: with game running — reference the game by name)
-2. `How do I fix stuttering?` (checklist: TDP / FSR / framerate-cap style advice)
-3. `Help me troubleshoot a Proton issue` (checklist: general Proton advice)
+---
 
-Turn the flag **off** before shipping or when you want production-like chip variety. `vitest` includes a conditional test that asserts the frozen triple when the flag is on, and that sampling varies when it is off.
+## Status legend
 
-## Shortcut setup keywords (no Ollama)
+| Status | Meaning |
+|--------|---------|
+| **PASS** | Correct answer and action (if any) applied |
+| **FAIL** | Wrong answer, hallucination, or action not applied |
+| **PARTIAL** | Correct idea; formatting/parsing blocked full success |
+| **PENDING** | Reserved for next on-device run |
 
-Deterministic **Ask** commands: `bonsai:shortcut-setup-deck` and `bonsai:shortcut-setup-stadia` (optional leading `/`). They **do not** call the model. There is **no** carousel chip for these — type the keyword (or **Paste from clipboard** if you saved it) as the full Ask line to get the fixed reply. See [troubleshooting.md](troubleshooting.md) §5.
+Coverage table: **Verified** / **Partial** / **Open** / **N/A (unit-only)**.
 
-1. **PC IP** can be set; **not required** for these commands (same as sanitizer enable/disable). Send `bonsai:shortcut-setup-deck` as the **entire** Ask line.
-2. **Assert:** response explains that bonsAI does **not** auto-write Steam Input; it mentions **Guide** chord, QAM, Decky, and points to this doc (§5). **Input handling** / transparency should show **no** Ollama user/system text for the command path.
-3. **Variant:** `bonsai:shortcut-setup-stadia` (and `/bonsai:shortcut-setup-stadia`) should mention a **spare** button / Stadia layout, not “R4” as the only example.
-4. **Permissions — External/Steam on:** after the response, use **Open Controller settings**; **Steam** should open **Controller** settings (via `steam://open/settings/controller`).
-5. **Permissions off:** the button still appears; the toast should direct you to **Permissions** to enable navigation.
+---
 
-## Token streaming (experimental)
+## Shipped feature coverage
 
-Requires **Settings → Data → Show Developer tab**, then **Developer → Token streaming (experimental)** (`bonsai_token_streaming_enabled`). Default is **off**.
+Maps [roadmap.md](roadmap.md) **Completed** items to test IDs. Update **Status** when runbook smokes or scenario rows pass.
 
-**Matrix maintainer:** mark each row **Pass / Partial / Fail** and record **build id** + **SteamOS** when exercised.
+### Release and first-run
 
-- [ ] **Flag off:** Ask shows **Thinking…** until the full reply appears; normal multi-chunk D-pad layout after completion.
-- [ ] **Flag on, Speed/Deep:** Reply text grows in a **single** preview bubble (pulsing border/caret) during generation; after completion, response splits into normal focusable chunks; TDP banner / model disclosure appear only at terminal.
-- [ ] **Flag on, Strategy + spoiler masking, no Spoilers OK:** Preview stays **Thinking…** until terminal; spoiler fences never flash unmasked mid-stream.
-- [ ] **Stop mid-stream:** Stop shows cancelled/stopped copy; no stale partial overwrites a later Ask.
-- [ ] **Input handling:** Transparency panel still populates only after terminal completion (no partial assistant in snapshot).
+| Feature ID | Shipped feature | Test ID(s) | Status | Evidence |
+|------------|-----------------|------------|--------|----------|
+| BETA-MODAL | Beta disclaimer modal | SMOKE-A | Open | First paint |
+| PRESETS-CAROUSEL | Suggested AI prompts + carousel | SMOKE-A, SMOKE-D | Partial | Troubleshooting triple verified; animation ms → Tier 3 |
+| PROMPT-TEST-MVP | Prompt-testing MVP (this doc) | — | Partial | Matrices shipped; Tier 0–1 open |
+| SANITIZER | Input sanitizer lane | SMOKE-F | Open | Unit + SMOKE-F |
+| TRANSPARENCY | Input handling transparency panel | SMOKE-A | Open | Expand panel in golden path |
 
-## VAC / Steam ban lookup (`bonsai:vac-check`)
+### Connection, routing, diagnostics
 
-Deterministic **Ask** command (optional leading `/`); **does not** call Ollama. Requires **Permissions → Steam Web API** and a **Steam Web API** key under **Settings → Connection**. See [README.md](../README.md) (shortcut keywords / ban lookup).
+| Feature ID | Shipped feature | Test ID(s) | Status | Evidence |
+|------------|-----------------|------------|--------|----------|
+| CONN-TEST | Deck/PC connection + Test Ollama | SMOKE-A | Open | |
+| CONN-TIMEOUT | Latency/timeout warnings + sliders | SMOKE-A | Open | Slow Ask optional |
+| KEEP-ALIVE | Ollama keep_alive presets | — | Open | Settings persist |
+| LOCAL-RUNTIME | Local Ollama on Deck default-off + onboarding | — | Open | Tier 2 |
+| MDNS-FIND | LAN mDNS Find LAN | — | Open | Tier 2; needs Avahi |
+| MAINT-HARNESS | Vitest Deck harness, watch-deploy | N/A (unit-only) | N/A | CI |
+| OLLAMA-UPDATE | Update Ollama & Models on Deck | — | Open | Tier 2 |
 
-**Matrix maintainer:** mark each row **Pass / Partial / Fail** and record **build id** + **SteamOS** when exercised. Until these are checked on hardware, Phase 1 is treated as **implementation complete, QA pending** in [roadmap.md](roadmap.md).
+### Tabs, icons, unified ask
 
-- [ ] **Capability off, any key:** Send `bonsai:vac-check 7656119…` — response tells you to enable **Steam Web API**; no outbound Valve request.
-- [ ] **Capability on, empty key:** Response points to Settings → **Steam Web API key**; no request.
-- [ ] **Capability on, valid key, one known SteamID:** Markdown table or rows; **Input handling** route `vac_check`; no Ollama system/user text.
-- [ ] **Profile URL token:** `bonsai:vac-check https://steamcommunity.com/profiles/76561198…/` parses and queries.
-- [ ] **Vanity `/id/…`:** Skipped with explicit “unsupported” note (no ResolveVanityURL in this build).
-- [ ] **Permissions toggled off after key saved:** Command returns capability message only (no network).
+| Feature ID | Shipped feature | Test ID(s) | Status | Evidence |
+|------------|-----------------|------------|--------|----------|
+| CORE-UI | Iconography, tabs, unified input | SMOKE-A | Open | |
+| PERSIST-QA | Persist last Q&A on reopen | Tier 1 extra | Open | |
+| UNIFIED-INPUT | Unified search + ask | SMOKE-A | Open | |
+| PRESET-FADE-OPT | Preset chip fade opt-out | — | Open | Tier 3 cosmetic |
+| CAROUSEL-SLIDE | Carousel slide + history (2026-05-20) | — | Open | Tier 3 cosmetic |
+| GEMMA-PULL | Gemma pull models + routing | — | Partial | Unit tests |
+| MODE-SELECTOR | Speed / Strategy / Deep | SMOKE-E, Tier 1 | Open | |
+| STRATEGY-CORE | Strategy Guide prompt path | SMOKE-E | Open | |
+| STRATEGY-SPOILER | Strategy spoiler policy + consent | SMOKE-E, STRAT-01…05 | Open | Unit green 2026-04-30 |
+| DEBUG-TAB | Debug tab opt-in | SMOKE-A | Open | Tab strip when enabled |
+| SETTINGS-TRIM | Settings tab trim | SMOKE-A | Open | |
+| RESET-SESSION | Reset session cache | — | Open | Tier 2 |
+
+### AI-assisted power and UX
+
+| Feature ID | Shipped feature | Test ID(s) | Status | Evidence |
+|------------|-----------------|------------|--------|----------|
+| TDP-APPLY | TDP automation via AI JSON | SMOKE-B, Test #3–4, 6 | Verified | PASS rows + sysfs |
+| QAMP-BANNER | QAMP Phase 1 banner (safe default) | SMOKE-B, QAMP-CODE | Verified | Vitest 2026-04-26; on-Deck → Tier 3 |
+| QAMP-ONDECK | QAMP manual (profile/reboot) | QAMP-DECK-01…05 | Open | Tier 3 |
+| D-PAD-CHUNKS | D-pad response scrolling | SMOKE-A | Open | |
+| BG-ASK-V1 | Background prompt completion V1 | SMOKE-H, BG-* | Partial | SMOKE-H Tier 1; full matrix Tier 4 |
+| SYS-PROMPT-LAYERS | System prompt layer order | SMOKE-A transparency | Partial | `tests/test_ollama_service.py` only |
+
+### Steam Input
+
+| Feature ID | Shipped feature | Test ID(s) | Status | Evidence |
+|------------|-----------------|------------|--------|----------|
+| STEAM-JUMP | Debug Steam Input jump Phase 1 | — | Open | Tier 2 optional |
+| QUICK-LAUNCH-DOC | Guide-chord macro documentation | — | Open | Tier 3; [troubleshooting.md](troubleshooting.md) §5 |
+| SHORTCUT-KW | Shortcut setup keywords | SMOKE-F | Open | |
+| VAC-01…06 | VAC / ban lookup Phase 1 | SMOKE-F, VAC-* | Partial | SMOKE-F = capability-off; full → Tier 2 |
+
+### About and polish
+
+| Feature ID | Shipped feature | Test ID(s) | Status | Evidence |
+|------------|-----------------|------------|--------|----------|
+| ABOUT-OLLAMA | Built on Ollama link | — | Open | Tier 3 |
+| GLASS-UI | Search surface glass pass | SMOKE-A | Open | |
+
+### Desktop notes
+
+| Feature ID | Shipped feature | Test ID(s) | Status | Evidence |
+|------------|-----------------|------------|--------|----------|
+| APP-LOG | App activity logging to Desktop | — | Open | Tier 2 |
+| DESKTOP-NOTES | Save to Desktop note V1 | — | Open | Tier 2 |
+| DESKTOP-AUTOSAVE | Daily chat auto-save V2 | — | Open | Tier 2 |
+
+### Permissions and capabilities
+
+| Feature ID | Shipped feature | Test ID(s) | Status | Evidence |
+|------------|-----------------|------------|--------|----------|
+| PERMS-GATE | Capability Permission Center | SMOKE-C | Open | |
+| PROTON-LOG | Proton log attachment | PROTON-LOG-01…03 | Open | Tier 2; needs PROTON_LOG |
+| MODEL-POLICY | Model policy tiers + disclosure | — | Open | Tier 2 |
+
+### Character voice
+
+| Feature ID | Shipped feature | Test ID(s) | Status | Evidence |
+|------------|-----------------|------------|--------|----------|
+| CHAR-VOICE | Character roleplay mode | — | Open | Tier 2 |
+| CHAR-ACCENT | Accent intensity levels | — | Open | Tier 2–3 |
+| CHAR-SUGGEST | Running-game character suggestions | — | Open | Tier 2 |
+| CHAR-RANDOM | Random “?” avatar | — | Open | Tier 3 |
+| CHAR-ACCENT-UI | Character-derived UI accent theme | — | Open | Tier 3 |
+| PYRO-EGG | Pyro talent-manager easter egg | — | Open | Tier 2–3 |
+
+### Vision (baseline index)
+
+| Feature ID | Shipped feature | Test ID(s) | Status | Evidence |
+|------------|-----------------|------------|--------|----------|
+| VISION-V1 | Global screenshots and vision V1 | SMOKE-G | Verified | Vision sweep 2026-04; rows below |
+
+### Other shipped baseline
+
+| Feature ID | Shipped feature | Test ID(s) | Status | Evidence |
+|------------|-----------------|------------|--------|----------|
+| CORE-ASK | Ask pipeline / Ollama routing | SMOKE-A | Open | |
+| GAME-CTX | Running game context | SMOKE-B, game-name Ask | Partial | Test #6 |
+| TROUBLESHOOT-3 | Frozen carousel troubleshooting triple | SMOKE-D | Verified | ✓ prompts below |
+| LINUX-OLLAMA | Linux Ollama compatibility | CONN-TEST | Open | |
+| ZIP-CI | Plugin release zip CI | N/A | N/A | CI + Tier 4 clean install |
+
+---
 
 ## Test Results
 
-| # | Game Running | Prompt | Expected Behavior | Model | Status | Notes |
-|---|---|---|---|---|---|---|
-| 1 | None | "What is the capital of Michigan?" | "Lansing" (concise) | gemma3:latest | PASS | Earlier models (gemma4) hallucinated Korean/philosophical essays |
-| 2 | Elden Ring | "What TDP should I use?" | 8-12W recommendation with JSON block | llama3:latest | FAIL | Suggested 70-80W (desktop values) before system prompt was fixed |
-| 3 | Left 4 Dead 2 | "Set my TDP to 8 watts" | JSON block `{"tdp_watts": 8}`, sysfs write | llama3:latest | PASS | Backend wrote 8W via steamos-priv-write |
-| 4 | Left 4 Dead 2 | "Set my TDP to 6 watts" | JSON block `{"tdp_watts": 6}`, sysfs write | llama3:latest | PASS | Confirmed via journalctl: 6000000 written to power1_cap |
-| 5 | Left 4 Dead 2 | "Optimize for battery life" | Low TDP (3-6W) with JSON block | llama3:latest | FAIL | Gave generic Steam Deck instructions, no JSON block (before game context was wired up) |
-| 6 | Game running (track title per session) | "Recommended TDP for this game?" | TDP recommendation with fenced JSON (`tdp_watts` 3–15W per backend clamp) | *record after run* | PASS | Intended response on-device; in the TDP / Performance list below, mark ✓ for pass and ✗ for fail. If TDP was applied, complete the **QAMP Verification (Phase 1)** checklist in this file. |
-
-## Release Notes
-
-### 2026-04-16 - Input sanitizer lane (hybrid) shipped
-- **Default:** deterministic sanitization runs on Ask text before Ollama (on by default; no Settings UI).
-- **Commands:** Send exactly `bonsai:disable-sanitize` or `bonsai:enable-sanitize` as the **whole** Ask message (trim + casefold match). No model call; plugin persists `input_sanitizer_user_disabled` and returns confirmation text.
-- **Testing without touching benchmarks:** Use normal game prompts for model quality rows. To verify the lane only, use short benign strings, empty/whitespace-only asks (expect block when sanitizer is on), and the enable/disable phrases on a throwaway profile or after noting you will flip the flag back. Re-enable with `bonsai:enable-sanitize` before resuming comparative prompt runs so empty-control tests do not leak into “model said X” rows.
-
-### 2026-04-16 - Character accent intensity (Settings)
-- **Accent intensity** (when AI characters is on): four levels persisted as `ai_character_accent_intensity` (`subtle`, `balanced`, `heavy`, `unleashed`). The backend varies how strongly the system prompt asks for dialect/accent; factual answers and required TDP JSON behavior are unchanged.
-- **Ultra** (`heavy`): brief in-character tangents allowed, then a clear snap-back to the answer; JSON/TDP fences unchanged.
-- **Nightmare** (`unleashed`): stronger wandering and caricature-level voice allowed, then snap-back and a **short plain recap** so facts stay recoverable; middle may be deliberately hard to read.
-- Suggested checks: same preset at **subtle** vs **unleashed** and confirm voice color shifts while JSON/TDP blocks still parse; verify Input handling / verbose trace shows the updated system suffix when logging is on.
-
-### 2026-04-18 - Strategy Guide + TDP prompt layout
-- **Strategy first turn** without performance/TDP keywords in the user message: system prompt omits the hardware JSON contract block so coaching is not front-loaded with watts/GPU talk; branch-picker fence rules unchanged.
-- **Strategy** when the user *does* ask about TDP/FPS/performance: hardware appendix returns; first-turn instructions place the optional fenced TDP JSON block immediately above the `bonsai-strategy-branches` fence when recommending changes.
-- Suggested checks: Strategy Ask on a pure puzzle prompt → raw model output should avoid opening with TDP; transparency “System prompt” should show the strategy silence paragraph instead of the full JSON contract. Mixed “stuck + what TDP” prompt should still show the contract.
-
-### 2026-04-15 - Character Voice Roleplay Mode (Opt-In) Shipped
-- Settings: opt-in **AI character** with fullscreen picker (work-title sections, Random, custom line, OK/Cancel).
-- Backend: `ai_character_service` appends a concise roleplay instruction to the **system** message; TDP JSON contract unchanged.
-- Suggested checks: enable + pick a known preset (e.g. Jackie Welles) and confirm tone shifts while answers stay English and concise; enable **Random** and confirm variation across Asks; custom text only; toggle off and confirm neutral assistant tone returns.
-- **Pyro talent-manager easter egg (shipped):** With **Pyro** selected or **Random** resolving to Pyro, voice is a Hollywood-style manager parody (archetype only). **Balanced:** still helpful; optional OSS **agent suggestion** inject chip (~30%). **Heavy/Nightmare:** asshole AI tier—mocking, useless advice; confirm **no TDP apply banner** even if the model mentions watts/JSON. Full device steps: [regression-and-smoke.md](regression-and-smoke.md) §2 (character row) and §3 Main tab.
-
-### 2026-04-13 - Global Screenshots and Vision (V1) Completed
-- Added screenshot attachment flow with fullscreen recent-screenshot browser, thumbnail previews, and controller-first navigation.
-- Added multimodal ask payload support with screenshot preprocessing + attachment quality presets (**Low** / **Mid** / **Max**) and persisted settings (legacy numeric dimensions migrate on load).
-- Added game-context enrichment for vision prompts (running app + attachment metadata hints), plus guardrails to prioritize in-game cues over Steam overlay UI.
-- Improved composer UX for attachments: visible chip preview, remove action, and integrated ask-bar behavior for screenshot-assisted prompts.
+| # | Build / date | Game | Prompt | Expected | Model | Status | Notes |
+|---|--------------|------|--------|----------|-------|--------|-------|
+| 1 | — | None | "What is the capital of Michigan?" | Lansing (concise) | gemma3:latest | PASS | |
+| 2 | — | Elden Ring | "What TDP should I use?" | 8–12W + JSON | llama3:latest | FAIL | Pre–system-prompt fix; **optional retest** |
+| 3 | — | L4D2 | "Set my TDP to 8 watts" | JSON 8W, sysfs write | llama3:latest | PASS | → SMOKE-B |
+| 4 | — | L4D2 | "Set my TDP to 6 watts" | JSON 6W, sysfs write | llama3:latest | PASS | journalctl confirmed |
+| 5 | — | L4D2 | "Optimize for battery life" | Low TDP JSON | llama3:latest | FAIL | Pre–game context; **superseded** — with-game path verified below |
+| 6 | — | *(session title)* | "Recommended TDP for this game?" | JSON 3–15W clamp | *record* | PASS | → TDP-REC |
 
 ---
 
-## Prompts Still Needing Testing
+## Tier 0 scenarios (S0)
 
-### TDP / Performance
-- [✓] "Recommended TDP for this game?" (with game running — should give JSON block) — **tracked as [Test Results #6](#test-results)**
-- [✓] "What's the efficiency sweet spot for this game?" (done — balanced TDP / JSON; chip freeze moved on)
-- [✓] "What are the best settings for 60fps?" (prior freeze round — TDP / tuning guidance, JSON when recommending watts)
-- [ ] "What GPU clock should I use?" (advisory; no sysfs GPU write)
-- [ ] "How can I optimize for battery life?" (low TDP JSON when applicable)
-- [ ] "Set TDP to 15 watts" (max boundary — should clamp at 15W)
-- [ ] "Set TDP to 3 watts" (min boundary — should clamp at 3W)
-- [ ] "Set TDP to 1 watt" (below min — should clamp to 3W)
-- [ ] "Set TDP to 20 watts" (above max — should clamp to 15W)
-- [ ] "Lower my TDP by 2 watts" (relative adjustment — may not parse yet)
+Linked from [device-qa-runbook.md](device-qa-runbook.md) **Tier 0**. Prefer smokes over individual rows.
 
-### GPU Clock (Advisory)
-- [✓] "What GPU clock should I use?" (should recommend a value but NOT auto-apply — sysfs write not yet implemented)
-- [ ] "Set GPU clock to 800 MHz" (verify JSON includes `gpu_clock_mhz` field; backend logs value but does not write)
+### Deterministic commands (SMOKE-F)
 
-### Battery Optimization
-- [✓] "Optimize for battery life" (with game running — should give low TDP JSON block)
-- [✓] "Balance FPS and battery" (with game running — should give moderate TDP) (`How do I balance FPS and battery?`)
-- [ ] "Set TDP to minimum for menu/idle" (should suggest 3W JSON block) (`What TDP should I use for menus and idle?`)
-- [✓] "Best settings for 30fps with max battery" (with game running) (`What are the best settings for 30fps with max battery?`)
-- [✓] "Optimize for battery life" (NO game running — should give general advice, no JSON block) (`How can I optimize for battery life?`)
+- [ ] `bonsai:disable-sanitize` / `bonsai:enable-sanitize` — whole message; confirmation; no Ollama text in transparency
+- [ ] `bonsai:shortcut-setup-deck` — Guide chord, QAM, Decky; points to [troubleshooting.md](troubleshooting.md) §5
+- [ ] `bonsai:shortcut-setup-stadia` — spare button / Stadia layout (not R4-only)
+- [ ] Shortcut: **Open Controller settings** with External/Steam on → `steam://open/settings/controller`
+- [ ] Shortcut: permissions off → toast to enable navigation
+- [ ] `bonsai:vac-check` with **Steam Web API** off → capability message only (**VAC-01**)
 
-### Thermal
-- [✓] "Reduce fan noise" (should suggest lower TDP to reduce thermal load) (`How can I reduce fan noise?`)
-- [✓] "Best thermal settings for long play sessions" (should give conservative TDP advice) (`What are the best thermal settings for long play sessions?`)
+### Token streaming (Tier 2 — Developer tab)
 
-### General / Compatibility
-- [✓] "What settings should I use?" (with game running — should give game-specific advice) (`What settings should I use?`)
-- [✓] "Any known issues running this on Deck?" (open-ended — should not hallucinate a binary verified/not-verified status) (`Any known issues running this on Deck?`)
-- [✓] "How well does this game run on Deck?" (open-ended compatibility advice) (`How well does this game run on Deck?`)
+Requires **Settings → Data → Show Developer tab** → **Token streaming (experimental)**.
+
+- [ ] **STREAM-01** Flag off: **Thinking…** until full reply; normal chunks after
+- [ ] **STREAM-02** Flag on, Speed/Deep: single preview bubble; terminal split + banners
+- [ ] **STREAM-03** Flag on, Strategy + spoiler masking, no Spoilers OK: no unmasked mid-stream flash
+- [ ] **STREAM-04** Stop mid-stream: cancelled copy; no stale overwrite
+- [ ] **STREAM-05** Transparency populates only after terminal
+
+---
+
+## Tier 1 scenarios (S1)
+
+### TDP / performance
+
+- [x] **TDP-REC** "Recommended TDP for this game?" (game running, JSON) — Test Results #6
+- [x] "What's the efficiency sweet spot for this game?" — verified prior pass
+- [x] "What are the best settings for 60fps?" — verified prior pass
+- [x] **GPU-ADV** "What GPU clock should I use?" (advisory only; no sysfs GPU write) — verified
+- [ ] **GPU-800** "Set GPU clock to 800 MHz" — JSON `gpu_clock_mhz`; backend logs, no write
+- [ ] **TDP-15W** "Set TDP to 15 watts" — clamp at 15W
+- [ ] **TDP-3W** "Set TDP to 3 watts" — clamp at 3W
+- [ ] **TDP-1W** "Set TDP to 1 watt" — clamp to 3W
+- [ ] **TDP-20W** "Set TDP to 20 watts" — clamp to 15W
+- [ ] "Lower my TDP by 2 watts" — relative adjustment (may not parse)
+
+### Battery / thermal / compatibility
+
+- [x] "Optimize for battery life" (game running, low TDP JSON) — verified (supersedes Test #5 fail)
+- [x] "Balance FPS and battery" / `How do I balance FPS and battery?`
+- [ ] "Set TDP to minimum for menu/idle" / `What TDP should I use for menus and idle?`
+- [x] "Best settings for 30fps with max battery"
+- [x] "Optimize for battery life" (no game — general advice, no JSON)
+- [x] "Reduce fan noise" / thermal long-session prompts — verified
+- [x] General compatibility prompts ("What settings…", "known issues", "how well on Deck") — verified
 
 ### Troubleshooting / Proton
-- [✓] "Why is my game crashing?" (with game running — should reference the game by name) — **easy retest:** enable frozen carousel (`TEMP_PRESET_CAROUSEL_FROZEN`) → 1st chip (`Why is my game crashing?`)
-- [✓] "How do I fix stuttering?" (should suggest TDP/FSR/framerate-cap advice) — **frozen carousel:** 2nd chip (`How do I fix stuttering?`)
-- [✓] "Help me troubleshoot a Proton issue" (general Proton advice) — **frozen carousel:** 3rd chip (`Help me troubleshoot a Proton issue`)
-- [ ] "Game won't launch, what should I check?" (general troubleshooting checklist)
 
-#### Proton / Steam log attachment (QA)
+- [x] **TROUBLESHOOT-3** Frozen carousel: crashing / stuttering / Proton — verified (SMOKE-D)
+- [ ] "Game won't launch, what should I check?"
 
-**Shipped** — see [roadmap.md](roadmap.md) → **Completed** → Permissions (**Debugging and Proton log analysis**). Enable **Settings → Advanced → Attach Proton logs when troubleshooting** and **Permissions → Steam / Proton log read**. Rich tails usually require `PROTON_LOG=1` (plugin does not set it).
+#### Proton log attachment (Tier 2)
 
-On-Deck / Linux manual checks (record build id when marking **PASS**):
+- [ ] **PROTON-LOG-01** Toggle + permission on, `steam-<appid>.log` present → transparency excerpt
+- [ ] **PROTON-LOG-02** Toggle on, log read off → Ask completes; skip noted
+- [ ] **PROTON-LOG-03** Heuristic ask, no log files → warning; answer still returns
 
-- [ ] Troubleshooting heuristic + toggle + permission **on**, game focused, `steam-<appid>.log` present → **Input handling** shows excerpt attached; **System prompt** in transparency includes the delimited log block.
-- [ ] Toggle **on**, **Steam / Proton log read** **off** → Ask still completes; transparency notes that log read was skipped (no failed Ask).
-- [ ] Heuristic prompt with no log files → transparency warning about missing logs; model answer still returns.
+### Controls and edge cases
 
-### Controls
-- [ ] "Recommended controller layout?" (with game running — should give game-specific advice)
-- [ ] "How to reduce input lag?" (general advice for Steam Deck input settings)
+- [ ] "Recommended controller layout?" (game running)
+- [ ] "How to reduce input lag?"
+- [ ] "What game am I playing?" (game running)
+- [x] "What is my current TDP?" — read path + sysfs grounding (unit + prior pass)
+- [ ] Non-English input → English reply
+- [ ] Very long prompt stress test
+- [x] Empty-ish "hi" / "help"
+- [ ] TDP optimization ask with **no** game — generic advice only
 
-### General Knowledge / Edge Cases
-- [ ] "What game am I playing?" (should name the running game)
-- [x] "What is my current TDP?" — **read path + broader performance grounding:** `read_current_tdp_watts` runs **before** Ollama when the ask matches `is_current_tdp_read_intent` **or** `user_wants_power_or_performance_topic`, **unless** `user_asks_ollama_bonsai_host_or_latency` (Ollama host / latency / connection — no TDP injection). The measured cap is appended to the **system** prompt via `append_deck_tdp_sysfs_grounding` in `backend/services/ollama_service.py`; the **user** message stays the raw question (good for Input transparency). The model answers **in character**; tuning JSON from the reply is **not** applied on read-TDP turns. See `main.py` → `ask_ollama` / `_build_system_prompt`.
-
-**System message layer order** (Input transparency — `build_system_prompt` + `main.py`): **(1)** dynamic game / attachment / vision context lines first; **(2)** bonsAI identity + general-purpose assistant clause; **(3)** optional early context (e.g. Proton log excerpt from `early_context_suffix`); **(4)** topic/mode injects (Ollama host, model policy, strategy mode, troubleshooting, display-target lines, …); **(5)** TDP limits + ```json``` recommendation contract tail (or Ollama-topic “skip hardware appendix” tail); **(6)** after that, `append_deck_tdp_sysfs_grounding` adds **ON-DEVICE TDP** when gated. Optional AI character roleplay is still a **prefix** on the full system string when enabled in Settings.
-
-**Regression:** Layer order is covered by `tests/test_ollama_service.py`; **Deck / real-model** passes should still spot-check Input handling (expand **System**): order matches the list above, replies stay coherent for Strategy first turn + branch fence, Ollama-host preset, sweet-spot/TDP JSON, and roleplay-on if you use it. Log **Pass / Partial / Fail** in this doc or [regression-and-smoke.md](regression-and-smoke.md) when you run a full matrix.
-
-### TDP sysfs grounding (best-effort)
-
-- **When:** One sysfs read per gated Ask; system text gains an **ON-DEVICE TDP** block with **W** from `power1_cap` (or a “could not read” line).
-- **Performance / tuning prompts** (e.g. sweet spot, FPS, stutter, recommended TDP): model should treat the value as **current cap / baseline**; JSON apply still uses the normal parse + `apply_tdp` path when **Hardware** is on. Prose alignment with sysfs is **best-effort** (not machine-verified).
-- **Ollama-only** asks (e.g. “Diagnose a slow Ollama response”): **no** TDP grounding block, even if the same message could match loose “performance” wording — the Ollama-host predicate wins.
-- [ ] Non-English input (should still respond in English)
-- [ ] Very long prompt (stress test)
-- [✓] Empty-ish prompts like "hi" or "help"
-- [ ] Prompt with no game running asking for TDP optimization (should give generic advice, not hallucinate a game)
+**System prompt layers:** spot-check via SMOKE-A transparency; unit tests in `tests/test_ollama_service.py`.
 
 ---
 
-## QAMP Verification (Phase 1)
+## QAMP verification (Phase 1)
 
-**Code / automated (2026-04-26, `vitest` + review):** confirmation banner names **TDP nW**; main transcript uses `buildResponseText` (`[Applied: …]`, **Note** about re-opening QAM Performance; GPU MHz labeled as not written in sysfs in banner when both appear). See `formatAppliedTuningBannerText` in `src/utils/settingsAndResponse.test.ts`.
+### Code / automated (verified 2026-04-26)
 
-- [x] After TDP write: confirmation message includes applied wattage (yellow banner + `[Applied: TDP: nW]`)
-- [x] After TDP write: response includes guidance to re-open QAM Performance to verify (banner + `Note` in transcript)
-- [x] After successful sysfs apply (no errors): transcript includes the **Note** about stale QAM sliders, not only the yellow banner
-- [x] Prompt includes GPU clock recommendation: TDP line still includes QAM **Note**; banner states GPU recommendation is not sysfs-applied
+- [x] TDP write banner includes applied wattage
+- [x] Transcript includes re-open QAM Performance guidance
+- [x] **Note** about stale sliders on successful apply
+- [x] GPU MHz recommendation labeled not sysfs-applied
 
-**On-Deck (manual — record build id + SteamOS when checked)**
+### On-Deck manual (Tier 3 — record build + SteamOS)
 
-- [ ] With per-game profile ON: TDP write applies and verification guidance is shown
-- [ ] With per-game profile OFF: TDP write applies and verification guidance is shown
-- [ ] After closing and reopening QAM Performance tab: TDP / cap reflects the written value
-- [ ] After Steam restart: TDP / cap returns to default (per OS), not a plugin regression if expected
-- [ ] After full reboot: same as above
-
----
-
-## Background Prompt Completion (V1) - Feature Shipped, Verification Matrix In Progress
-
-Status note:
-- Feature is implemented and marked complete in [roadmap.md](roadmap.md).
-- The checklist below is the ongoing regression/verification matrix for post-ship hardening.
-
-### Lifecycle and Restore
-- [ ] Start prompt, close QAM/plugin UI while request is pending, reopen before completion -> pending status restores with "Thinking...".
-- [ ] Start prompt, close QAM/plugin UI while request is pending, reopen after completion -> final response restores automatically.
-- [ ] Start prompt, keep QAM open -> behavior matches normal foreground request flow (no regressions).
-- [ ] Reopen plugin multiple times during one pending request -> no duplicate/stacked results; single final result shown.
-
-### Busy Guardrails (Single In-Flight)
-- [ ] While one request is pending, second Ask attempt is blocked with clear "request in progress" feedback.
-- [ ] While one request is pending, Enter submit path is also blocked from starting a second request.
-- [ ] After pending request completes, next Ask request can start normally.
-
-### Timeout, Error, and Cancel Semantics
-- [ ] Timeout path: exceeds configured request timeout and restores failed state + timeout message on reopen.
-- [ ] Backend/network error path: failed state restores with meaningful error text on reopen.
-- [ ] Local Stop/Cancel interaction does not create a second backend request and does not leave UI stuck in loading state.
-- [ ] Local Clear interaction while pending does not break eventual restore behavior when status is polled again.
-
-### Apply/Action Parity
-- [ ] Response with valid TDP JSON still applies once and displays `[Applied: ...]` summary after completion/reopen.
-- [ ] Apply errors (if any) continue to render in `[Errors: ...]` suffix without breaking restore flow.
-
-### Session-Only Limitation (Expected)
-- [ ] Verify/reconfirm V1 boundary: Steam crash/plugin restart/reboot does NOT restore pending/completed background status.
-
-### Regression Subset (Run after any prompt/system update)
-- [ ] Slow warning still appears after configured latency threshold while pending.
-- [ ] Elapsed-time warning still appears for responses slower than configured threshold.
-- [ ] Suggested follow-up presets still refresh after successful completion.
-- [ ] Unified input persistence mode behavior is unchanged (`persist_all`, `persist_search_only`, `no_persist`).
-- [ ] Saved PC IP behavior is unchanged after successful ask/connection test.
-
-### Verification Runbook (Record PASS/FAIL)
-- [ ] Build validation (`npm run build`) -> PASS when build completes with no TypeScript errors that block output.
-- [ ] Backend syntax validation (`python -m py_compile main.py`) -> PASS when command exits cleanly.
-- [ ] Deck manual lifecycle matrix -> PASS when all Lifecycle, Busy Guardrails, Timeout/Error/Cancel, and Apply/Action checks above are marked complete.
-- [ ] Session-only boundary check -> PASS when restart/crash scenarios correctly do **not** restore state (expected V1 limitation).
+- [ ] **QAMP-DECK-01** Per-game profile ON: TDP apply + guidance
+- [ ] **QAMP-DECK-02** Per-game profile OFF: same
+- [ ] **QAMP-DECK-03** Close/reopen QAM Performance: cap reflects write
+- [ ] **QAMP-DECK-04** After Steam restart: OS default (not plugin regression)
+- [ ] **QAMP-DECK-05** After full reboot: same
 
 ---
 
-## Preset and Follow-Up UX
-- [ ] Initial load shows exactly 3 random presets
-- [ ] Preset carousel (**fade** mode): three chips stay visible; each fades in/out on its own schedule (staggered, not synchronized)
-- [ ] Preset carousel (**fade**): first-cycle fade-in start offset per chip ~750 / 1300 / 1700 ms
-- [ ] Preset carousel (**fade**): fade in ~1s and fade out ~2s (smooth opacity transition)
-- [ ] Preset carousel (**fade**): longer preset text stays on screen longer before the next fade-out (hold scales with length)
-- [ ] Preset carousel (**carousel** mode, Developer → preset animation): auto-advance ~5.8s; chips **slide** vertically (`translateY` track, ~550ms ease)
-- [ ] Preset carousel (**carousel**): D-pad **Up** browses earlier presets in history; **Down** at end of history moves focus to Ask field; auto-pause ~12s after manual browse
-- [ ] Preset carousel (**carousel**): after a successful Ask, contextual presets merge without full blackout or grid snap
-- [ ] After a successful ask, follow-up presets re-seed and carousel animation continues without layout break (fade or carousel)
-- [ ] Tapping a preset with a game running appends " for [game name]" to input
-- [ ] Tapping a preset with NO game running sets only the preset text (no trailing "for")
-- [ ] After asking a battery question, follow-ups include battery/performance/thermal presets
-- [ ] After asking a performance question, follow-ups include performance/thermal/battery presets
-- [ ] After asking a troubleshooting question, follow-ups include troubleshooting/performance/general presets
-- [ ] After asking a controls question, follow-ups include controls/troubleshooting/general presets
-- [ ] Category detection works for freeform questions (not just exact preset matches)
+## Tier 2 — Strategy depth
+
+Run after **SMOKE-E**. Unit coverage green 2026-04-30.
+
+### Core mode UX
+
+- [ ] **STRAT-01** "How do I beat this level" beta preset visible
+- [ ] Strategy preset switches mode to Strategy Guide
+- [ ] Strategy placeholder copy
+- [ ] Follow-ups stay strategy-relevant
+
+### Spoiler policy
+
+- [ ] **STRAT-SPOIL-01** First answer: no-spoilers-by-default disclosure
+- [ ] **STRAT-SPOIL-02** Without permission: no direct puzzle/boss spoilers
+- [ ] **STRAT-SPOIL-03** With permission: unrestricted guidance OK
+- [ ] **STRAT-SPOIL-04** Tap-to-reveal blocks default
+- [ ] **STRAT-SPOIL-05** Settings spoiler masking toggle behavior
+
+### Vision + strategy
+
+- [ ] Strategy without screenshot: notes limited context
+- [ ] Strategy with screenshot: scene-aware guidance
+- [ ] Inline visual aid renders or degrades gracefully
+
+### Steam Input coaching / checklist / cheat
+
+- [ ] Headshots / control-specific Deck advice
+- [ ] Checklist check/uncheck + follow-up progress
+- [ ] Cheat / Fast Pass gating only when user asks to rush
+
+### Strategy regression subset
+
+- [ ] Beat level (no screenshot, no spoiler OK)
+- [ ] Beat level + screenshot
+- [ ] "Spoilers are okay, give me exact steps"
+- [ ] "I can't hit headshots in this game"
+- [ ] Checklist iteration prompt
+- [ ] "Fastest cheese" cheat gating
 
 ---
 
-## Beta Preset Behavior
-- [ ] `[beta]` tag renders visually on chip (dimmer italic text)
-- [ ] `[beta]` tag is NOT included in the submitted prompt text
-- [ ] "Set a quiet fan profile" — AI gives reasonable fan/thermal advice even without fan control backend
-- [ ] "Analyze my controller config" — AI gives general controller advice even without VDF parsing
-- [ ] "Check my Proton logs for errors" — AI gives Proton troubleshooting steps even without log attachment
-- [ ] "Suggest mods or tweaks for this game" — AI gives general mod advice even without mod detection
-- [ ] Beta presets trigger correct category detection and follow-up chain
+## VAC / Steam ban lookup (`bonsai:vac-check`) — Tier 2
+
+- [ ] **VAC-01** Capability off — SMOKE-F; no outbound request
+- [ ] **VAC-02** Capability on, empty key
+- [ ] **VAC-03** Valid key + known SteamID; route `vac_check`
+- [ ] **VAC-04** Profile URL token
+- [ ] **VAC-05** Vanity `/id/…` unsupported note
+- [ ] **VAC-06** Permission off after key saved — no network
 
 ---
 
-## Strategy Guide Prompt Testing
+## Vision V1 (verified 2026-04)
 
-### Core Strategy Preset and Mode UX
-- [ ] "How do I beat this level" preset appears as beta strategy preset.
-- [ ] Tapping strategy preset switches mode from `Thinking` replacement lane to `Strategy Guide`.
-- [ ] Strategy mode placeholder changes from generic ask text to strategy copy (e.g. "Describe the level or problem").
-- [ ] Follow-up prompts after strategy questions continue to include strategy-relevant suggestions.
+Spot-check only if attach/RPC changes. **SMOKE-G**.
 
-### Vision and Inline Visuals
-- [ ] Strategy prompt with no screenshot: gives useful fallback guidance and clearly notes limited visual context.
-- [ ] Strategy prompt with screenshot attached: response references visible scene/problem details.
-- [ ] If inline visual aid is returned (map/dungeon hint), it renders inline correctly in response.
-- [ ] If inline visual cannot render, response degrades gracefully (text-only fallback, no broken UI).
-
-### Global Screenshots and Vision (V1) - Completed
-- [x] Attach target opens fullscreen screenshot browser with visible thumbnail previews.
-- [x] Screenshot browser lists recent screenshots with app-priority ordering when a game is active and global fallback when not.
-- [x] Selecting a screenshot from the grid attaches it and closes browser back to composer.
-- [x] Browser supports controller navigation and Back/Escape close path without focus traps.
-- [x] Merged action control exposes exactly 3 targets: `Attach` (left), `Ask` (center), `Mic` idle / `Stop` while asking (right).
-- [x] Remove attachment action clears composer indicator and sends next ask request as text-only.
-
-### Screenshot attachment quality (Settings)
-- [x] Settings tab shows attachment quality **Low**, **Mid**, **Max** (vision).
-- [x] Changing quality persists after closing/reopening plugin.
-- [x] **Low:** backend sends small JPEG; response remains stable on slower hosts.
-- [x] **Mid:** backend accepts screenshot attachment and model response remains valid.
-- [x] **Max:** large captures still avoid backend crashes; if processing fails, user gets actionable attachment error text.
-
-### Manual Deck Test Run (Staged)
-- [x] Set test environment details in **Current Test Environment** section before starting.
-- [x] Launch a game, open bonsAI, open fullscreen browser from `Attach`, pick a screenshot tile, then submit one `Ask`.
-- [x] Repeat with no active game and confirm browser still lists recent screenshots (global fallback).
-- [x] Verify attachment chip visuals and controls: source badge label, filename truncation, remove button, attach-button count badge.
-- [x] Verify button sizing/focus usability with controller only: attach button, ask/stop button, clear button, and fullscreen browser grid navigation.
-- [x] Run the quality sweep (**Low** then **Mid** then **Max**) and record latency + any attachment warnings/errors in Notes.
-- [x] Close/reopen plugin after changing attachment quality and confirm the selected value persists.
-- [x] Mark PASS/PARTIAL/FAIL for each step above and capture screenshots/log snippets for any failures.
-
-### Spoiler Policy and Consent
-
-**Verification note (2026-04-30):** Shipped UI + prompt/RPC: `STRATEGY SPOILER POLICY` and `bonsai-spoiler` fenced blocks in strategy system prompt; `spoiler_consent` payload + conservative phrase detection on sanitized text; Settings **Strategy Guide** (tap-to-reveal + expand-after-consent); main-tab **Spoilers OK for this Ask** when mode is Strategy; backend echoes `strategy_spoiler_consent_effective` for the auto-expand path. Automated: `tests/test_ollama_service.py`, `npm test`, `npm run test:py` green. **On-device:** complete the checklist rows below and record Pass/Partial/Fail.
-
-- [ ] First strategy answer includes best-effort "no spoilers by default" disclosure.
-- [ ] Without explicit permission, response avoids direct puzzle/boss/story spoilers.
-- [ ] With explicit user permission ("spoilers are okay"), unrestricted guidance is allowed.
-- [ ] Spoiler segments render as tap-to-reveal blocks by default.
-- [ ] Settings toggle for spoiler masking changes behavior as expected (masked vs directly visible after consent).
-
-### Steam Input-Tailored Coaching
-**Phase 1 (navigation plumbing)** is **complete** (Debug tab jump + lexicon); broader search+jump is **deferred** per [roadmap.md](roadmap.md).
-
-When full **Steam Input Settings Search + Jump** ships (if revived), add matrix rows against [steam-input-research.md](steam-input-research.md) validation checklist (exact vs near vs manual-only routes).
-
-**Regression smoke (optional):** After Steam client updates that may affect Input, run the Debug tab **Jump to Steam Input (running game)** with a focused title and record PASS/PARTIAL/FAIL against the smoke-test bullets in [steam-input-research.md](steam-input-research.md).
-
-- [ ] User issue like "I can't hit headshots" triggers control-specific advice (gyro/trackpad/layout/sensitivity).
-- [ ] Recommendations remain actionable for Steam Deck (not generic desktop-only control tips).
-- [ ] If Steam Input context is missing, response explicitly gives best-effort generic control advice.
-
-### Checklist Workflow (Chat-Scoped)
-- [ ] Strategy response can include checklist summary with actionable steps.
-- [ ] User can check/uncheck checklist items in chat.
-- [ ] Follow-up question updates checklist progress based on previous checked items.
-- [ ] Follow-up can infer progress from user text even when boxes were not manually checked.
-- [ ] Checklist state is chat-scoped only (does not leak to unrelated/new chat context).
-
-### Cheat / Fast Pass Gating
-- [ ] No cheat section appears for normal coaching requests.
-- [ ] "Give me fastest way / I just want to pass quickly" explicitly enables `Cheat / Fast Pass` section.
-- [ ] Cheat section stays clearly separated from normal coaching guidance.
-
-### PASS / PARTIAL / FAIL Examples (Strategy)
-- **PASS:** Correctly follows spoiler policy, provides practical strategy, and updates checklist state consistently.
-- **PARTIAL:** Good tactical advice but misses one policy/format rule (e.g. spoiler disclosure missing, checklist not updated).
-- **FAIL:** Gives unconsented spoilers, ignores explicit consent handling, provides irrelevant control advice, or breaks checklist/visual rendering expectations.
-
-### Strategy Regression Subset (Run after prompt/system updates)
-- [ ] "How do I beat this level" (no screenshot, no spoiler permission).
-- [ ] "How do I beat this level" + screenshot attachment (scene-aware guidance expected).
-- [ ] "Spoilers are okay, give me exact steps" (unrestricted but spoiler formatting/toggle behavior correct).
-- [ ] "I can't hit headshots in this game" (Steam Input-focused coaching expected).
-- [ ] "Give me a checklist and keep it updated while we iterate" (checklist lifecycle sanity check).
-- [ ] "I don't care, just the fastest cheese" (Cheat/Fast Pass gating expected).
+- [x] Fullscreen screenshot browser + thumbnails
+- [x] App-priority ordering + global fallback
+- [x] Select attaches; Back/Escape; controller navigation
+- [x] Attach / Ask / Mic|Stop control row
+- [x] Remove attachment → text-only next Ask
+- [x] Quality Low / Mid / Max settings persist
+- [x] Quality sweep on device (Low → Mid → Max)
+- [x] Manual Deck staged run completed
 
 ---
 
-## Games to Test With
-- [ ] Left 4 Dead 2 (confirmed working — lightweight Source engine)
-- [ ] Elden Ring (demanding, Proton-dependent)
-- [ ] A lightweight indie game (Celeste, Hollow Knight, Stardew Valley, etc.)
-- [ ] A demanding AAA game (Cyberpunk 2077, Red Dead Redemption 2, etc.)
-- [ ] A native Linux game (if available in library)
-- [ ] A non-Steam game / emulator (added via shortcut)
+## Appendix — Tier 3 cosmetic (P3)
 
-## Environment Matrix
+### Preset and follow-up UX
 
-All tests above should be validated on the stable channels that most users run. Re-test any PASS result if switching channels.
+- [ ] Three random presets on load
+- [ ] Fade mode: stagger, offsets (~750/1300/1700 ms), fade in/out timing, length hold
+- [ ] Carousel mode: slide, D-pad history, post-Ask re-seed
+- [ ] Preset tap appends " for [game]" when game running
+- [ ] Follow-up category detection (battery / performance / troubleshooting / controls)
 
-| Component | Channel to Test | Notes |
-|---|---|---|
-| Decky Loader | **Stable** (Release) | Most users are on Stable. Dev/pre-release builds may have APIs or behaviors that don't exist on Stable. |
-| SteamOS | **Stable** (Default client update channel) | Beta/Preview channels may change sysfs paths, permission models, or QAM behavior. Always confirm on Stable before shipping. |
+### Beta preset behavior
 
-### Current Test Environment
-- [ ] Record Decky Loader version: ___
-- [ ] Record Decky Loader channel: Stable / Pre-release
-- [ ] Record SteamOS version: ___
-- [ ] Record SteamOS update channel: Stable / Beta / Preview
-- [ ] Record Ollama version on host PC: ___
-- [ ] Record model(s) installed: ___
+- [ ] `[beta]` tag visual only (not in submitted text)
+- [ ] Beta preset prompts give reasonable generic advice
+- [ ] Beta category detection + follow-ups
+
+---
+
+## Appendix — Tier 4 heavy (S3)
+
+### Background prompt completion (V1)
+
+**Tier 1 smoke:** SMOKE-H (reopen pending / complete). Full matrix below.
+
+#### Lifecycle
+
+- [ ] Close QAM while pending → reopen → Thinking…
+- [ ] Close QAM after complete → reopen → final reply
+- [ ] Foreground flow unchanged
+- [ ] Multiple reopens → single result
+
+#### Busy / timeout / cancel
+
+- [ ] Second Ask blocked while pending
+- [ ] Timeout + error restore on reopen
+- [ ] Stop/Clear semantics
+
+#### Apply parity
+
+- [ ] TDP JSON applies after background complete
+- [ ] Session crash/reboot does **not** restore (expected V1)
+
+#### Regression subset
+
+- [ ] Slow / elapsed warnings; follow-up presets; input persistence; PC IP unchanged
+
+### Games to test with
+
+- [ ] Left 4 Dead 2
+- [ ] Elden Ring
+- [ ] Lightweight indie
+- [ ] Demanding AAA
+- [ ] Native Linux title
+- [ ] Non-Steam / emulator shortcut
+
+---
+
+## Environment matrix
+
+Validate on **Stable** Decky + **Stable** SteamOS when possible. Re-test PASS after channel changes.
+
+| Component | Channel | Notes |
+|-----------|---------|-------|
+| Decky Loader | Stable (Release) | |
+| SteamOS | Stable | Beta/Preview may change sysfs / QAM |
+
+### Current test environment
+
+Record before Tier 1+ runs:
+
+- [ ] Decky Loader version: ___
+- [ ] Decky channel: Stable / Pre-release
+- [ ] SteamOS version: ___
+- [ ] SteamOS channel: Stable / Beta / Preview
+- [ ] Ollama version: ___
+- [ ] Model(s) installed: ___
+
+---
+
+## Optional deep dives (release notes)
+
+Historical **suggested checks** from shipped features — run when touching that area; not required for Tier 0–1.
+
+### Input sanitizer (2026-04-16)
+
+Magic phrases `bonsai:disable-sanitize` / `bonsai:enable-sanitize`; re-enable before comparative model runs.
+
+### Character accent intensity (2026-04-16)
+
+Same preset at subtle vs unleashed; JSON/TDP unchanged.
+
+### Strategy + TDP layout (2026-04-18)
+
+Pure puzzle Strategy ask → no hardware JSON in system prompt; mixed performance ask → contract returns.
+
+### Character voice + Pyro (2026-04-15)
+
+Picker, Random, custom line; Pyro Balanced vs Nightmare — no TDP apply on Nightmare asshole tier.
+
+### Global screenshots (2026-04-13)
+
+See **Vision V1** verified section.
+
+### Frozen preset carousel (maintainers)
+
+Set `TEMP_PRESET_CAROUSEL_FROZEN` in [`src/data/presets.ts`](../src/data/presets.ts) for repeatable chips:
+
+1. `Why is my game crashing?`
+2. `How do I fix stuttering?`
+3. `Help me troubleshoot a Proton issue`
+
+Turn **off** before release builds. `vitest` asserts frozen triple when flag on.
+
+---
+
+## Revision log
+
+| Date | Change |
+|------|--------|
+| 2026-05-24 | Refactor: coverage matrix, tier-linked scenarios, dedupe, runbook split; audit ✓/x → [x] |
+| *(prior)* | MVP matrices, vision sweep, QAMP unit verification |

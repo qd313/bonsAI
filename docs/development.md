@@ -247,7 +247,7 @@ pnpm test          # Vitest (frontend)
 pnpm run test:py   # Python unit tests
 ```
 
-Regression and on-device smoke: [regression-and-smoke.md](regression-and-smoke.md).
+Regression gates: [regression-and-smoke.md](regression-and-smoke.md) §1. On-device run order: [device-qa-runbook.md](device-qa-runbook.md) (Tier 0–1 first); coverage and scenarios: [prompt-testing.md](prompt-testing.md).
 
 If Decky UI packages drift:
 
@@ -293,15 +293,16 @@ Output under **`out/*.zip`**.
 When you mark a feature **complete**, update the same change set (see [`.cursorrules`](../.cursorrules)):
 
 - [roadmap.md](roadmap.md)
-- [prompt-testing.md](prompt-testing.md) — when behavior is user-visible
+- [prompt-testing.md](prompt-testing.md) and [device-qa-runbook.md](device-qa-runbook.md) — when behavior is user-visible
 - [troubleshooting.md](troubleshooting.md) — new setup steps or FAQs
 - [CHANGELOG.md](../CHANGELOG.md)
 
 ## Docs and references
 
-- Doc index: [README.md](README.md)
+- Doc index: [DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md)
 - Power-user troubleshooting: [troubleshooting.md](troubleshooting.md)
-- Prompt QA: [prompt-testing.md](prompt-testing.md)
+- [device-qa-runbook.md](device-qa-runbook.md) — Deck QA run order (Tier 0–4)
+- [prompt-testing.md](prompt-testing.md) — shipped-feature coverage + scenario detail
 - RAG research (not implemented): [rag-sources-research.md](rag-sources-research.md)
 - [Decky frontend library](https://github.com/SteamDeckHomebrew/decky-frontend-lib)
 - [Decky wiki](https://wiki.deckbrew.xyz/)

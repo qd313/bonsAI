@@ -1,6 +1,6 @@
 # Regression matrix and device smoke (standing gate)
 
-**Purpose:** Default checklist for **every PR** and **every Deck-facing change** before merge or release. Complements qualitative rows in [prompt-testing.md](prompt-testing.md) and hotspots in [change-risk-hotspots.md](change-risk-hotspots.md).
+**Purpose:** Default checklist for **every PR** and **every Deck-facing change** before merge or release. Manual Deck work runs from **[device-qa-runbook.md](device-qa-runbook.md)** (Tier 0–1 first). Scenario detail and coverage index: **[prompt-testing.md](prompt-testing.md)**. Hotspots: **[change-risk-hotspots.md](change-risk-hotspots.md)**.
 
 **Contract:** Run **§1** always. Add **§2** rows that match touched paths. Run **§3** when `src/`, `main.py`, `plugin.json`, or Deck RPC contracts change (per [.cursorrules](../.cursorrules)).
 
@@ -27,66 +27,56 @@ If a step does not apply (e.g. docs-only), state **N/A** in the PR description a
 
 Use the **Touched area** column to extend §1; prefer the narrowest tests first.
 
-| Touched area | Extra automated focus | Manual / prompt-testing |
-|--------------|----------------------|-------------------------|
-| `backend/services/settings_service.py`, `settingsAndResponse.ts`, Settings UI | `tests/test_settings_service.py`, `src/utils/settingsAndResponse.test.ts` | Change a setting, reload plugin, confirm persistence ([prompt-testing.md](prompt-testing.md) release notes for recent Settings features). |
-| `backend/services/ollama_service.py`, `refactor_helpers.py` | `tests/test_ollama_service.py`, `tests/test_refactor_helpers.py` | One Ask per changed mode; verify model routing / errors ([prompt-testing.md](prompt-testing.md)). |
-| `backend/services/desktop_note_service.py` | `tests/test_desktop_note_service.py` | With filesystem capability on: save note / auto-save if touched; confirm no raw path in error toast. |
-| `backend/services/ai_character_service.py`, character UI | `tests/test_ai_character_service.py`, `tests/test_pyro_asshole_safety.py`, catalog/accent tests under `src/data/` | Character picker open/close, accent chip, one Ask with character on. **Pyro easter egg (optional):** AI character on, choose Pyro (or Random until Pyro). **Balanced:** helpful manager; optional orange **agent suggestion** chip (~30%). **Nightmare:** asshole tier—mocking bad advice; confirm no TDP apply banner. Tap fills input; chip clears on next Ask or **Reset session cache**. |
-| `backend/services/capabilities.py`, Permissions UI | `tests/test_capabilities.py` | Toggle capability; confirm blocked action toast when off. |
-| `src/components/MainTab.tsx`, unified input | `pnpm test` (utils/data) | **§3** items for unified input, overlay, D-pad scroll. |
-| `src/index.tsx` tabs, CSS, RPC wiring | Full §1 + §3 | Tab order, Settings sections, focus after modal. |
-| `ollama_mdns_discovery_service.py`, Connection **Find LAN** | `tests/test_ollama_mdns_discovery_service.py` | With LAN Ollama advertised: confirm → Find LAN → Use host → Test → Ask. N/A if no mDNS publish. |
+| Touched area | Extra automated focus | Manual / runbook tier |
+|--------------|----------------------|------------------------|
+| `backend/services/settings_service.py`, `settingsAndResponse.ts`, Settings UI | `tests/test_settings_service.py`, `src/utils/settingsAndResponse.test.ts` | Tier 0 **SMOKE-A** + setting persist spot-check |
+| `backend/services/ollama_service.py`, `refactor_helpers.py` | `tests/test_ollama_service.py`, `tests/test_refactor_helpers.py` | Tier 1 one Ask per changed mode ([prompt-testing.md](prompt-testing.md)) |
+| `backend/services/desktop_note_service.py` | `tests/test_desktop_note_service.py` | Tier 2 desktop notes block |
+| `backend/services/ai_character_service.py`, character UI | `tests/test_ai_character_service.py`, `tests/test_pyro_asshole_safety.py`, catalog/accent tests under `src/data/` | Tier 2 character / Pyro ([prompt-testing.md](prompt-testing.md) PYRO-EGG) |
+| `backend/services/capabilities.py`, Permissions UI | `tests/test_capabilities.py` | Tier 0 **SMOKE-C** |
+| `src/components/MainTab.tsx`, unified input | `pnpm test` (utils/data) | Tier 0 **SMOKE-A** |
+| `src/index.tsx` tabs, CSS, RPC wiring | Full §1 + §3 | Tier 0 **SMOKE-A** |
+| `ollama_mdns_discovery_service.py`, Connection **Find LAN** | `tests/test_ollama_mdns_discovery_service.py` | Tier 2 mDNS block; N/A without publish |
 
 ---
 
-## 3. Device smoke checklist (Steam Deck / Game Mode)
+## 3. Device smoke (Deck-facing PRs)
 
-Run after **`scripts/build.ps1`** or **`scripts/build.sh`** succeeds. Check **Pass / Fail / N/A** mentally or in PR text.
+Run after **`scripts/build.ps1`** or **`scripts/build.sh`** succeeds. Use **[device-qa-runbook.md](device-qa-runbook.md)** — do not duplicate the full matrix here.
 
-### Plugin shell
+### Required: Runbook Tier 0 (~15 min, BPM)
 
-- [ ] Plugin opens from QAM; no crash on first paint.
-- [ ] (Optional) **Guide-chord / Steam Input macro** reaches bonsAI as in [troubleshooting.md](troubleshooting.md) §5 — **N/A** for docs-only or backend-only changes; use **Pass / Partial** when QAM, Decky entry, or first paint behavior changes.
-- [ ] LB/RB (or equivalent) cycles **Main → Settings → Permissions → (Debug if enabled) → About** without landing on a missing tab.
-- [ ] Return to game and reopen plugin: no duplicate ghost tabs or blank panel.
+Complete **SMOKE-A → SMOKE-C → SMOKE-F** and check off runbook + linked [prompt-testing.md](prompt-testing.md) rows. State **Pass / Partial / Fail / N/A** in the PR.
 
-### Main tab (unified input)
+| Smoke | When N/A |
+|-------|----------|
+| **SMOKE-A** Golden path | Never for Deck-facing UI/RPC changes |
+| **SMOKE-C** Permission gate | Never when Permissions or gated actions touched |
+| **SMOKE-F** Deterministic commands | Docs-only with no sanitizer/shortcut/VAC path changes |
 
-- [ ] **TextField**: type, wrap, caret visible; no horizontal drift vs native baseline after edits.
-- [ ] **Ask** sends; stop/clear behavior still sensible if your change touches ask state.
-- [ ] **D-pad**: each AI reply **chunk** is its own focus stop; move down through chunks and confirm the **last** chunk receives focus and is readable (regression target for long replies).
-- [ ] **Preset row:** three rotating suggestion chips behave as before; optional **Pyro / character QA** — with AI character **Pyro** (or Random): **Balanced** → helpful manager + optional inject chip; **Nightmare** → asshole tier, no TDP apply; inject chip fills Ask when selected and disappears on next Ask or **Settings → Advanced → Reset session cache**.
+### Add Tier 1 when touching Ask / TDP / strategy / game context
 
-### Settings (post–Phase 4 sections)
+| Smoke | Trigger |
+|-------|---------|
+| **SMOKE-B** TDP apply 8W | TDP, hardware permission, QAMP banner, `apply_tdp` |
+| **SMOKE-E** Strategy one-shot | Strategy mode, spoilers, `ask_mode: strategy` |
+| **SMOKE-H** Background reopen | Background Ask / pending restore |
+| **SMOKE-D / G** | Preset or vision changes — spot-check if already Verified |
 
-- [ ] **Connection**: Test Ollama reaches or shows stable unreachable message (no traceback in UI).
-- [ ] (Optional) **Find LAN (mDNS)**: With `_ollama._tcp` advertised on LAN, **Find LAN** lists a host; **Use** fills PC address; **Test** succeeds. N/A without Avahi/Bonjour publish.
-- [ ] **Ask timing / Model unload / Screenshots / Saved text**: change value, leave tab, return — persisted.
-- [ ] **Character**: open picker, OK/Cancel, accent menu if AI character on.
-- [ ] **Model policy**: tier change + README link still opens if touched.
-- [ ] **Data**: Show Developer tab toggle; reset session cache confirm if touched.
-- [ ] **Desktop notes**: toggles persist; errors are readable, not raw stack traces.
-
-### Permissions
-
-- [ ] Toggle at least one capability off and trigger a blocked action; toast matches expectation.
-- [ ] **Steam / Proton log read** (optional): with **Attach Proton logs when troubleshooting** on in Settings → Advanced, run an on-device troubleshooting Ask per [prompt-testing.md](prompt-testing.md) § **Proton / Steam log attachment (QA)** and confirm **Input handling** / transparency behavior.
-- [ ] **Steam Web API** (optional): `bonsai:vac-check` flow per [prompt-testing.md](prompt-testing.md) § **VAC / Steam ban lookup (`bonsai:vac-check`)** (capability + key + at least one real ID or URL); log Pass / Partial / Fail in that doc with build id. Until checked, roadmap marks Phase 1 **complete** with **QA pending**.
-
-### About / Debug (if applicable)
-
-- [ ] External link / Steam Input jump still respect capability gates.
+Full Tier 2–4 blocks (VAC matrix, Proton logs, QAMP reboot, clean install): see runbook; required before **release tag**, not every PR.
 
 ---
 
-## 4. Prompt-testing matrix (qualitative)
+## 4. Prompt-testing and coverage
 
-Model-quality, strategy/TDP rows, and sanitizer checks live in **[prompt-testing.md](prompt-testing.md)**. After behavior changes to prompts or routing, add or update rows there and run the relevant scenarios on device or staging.
+Qualitative scenarios, **Shipped feature coverage** table, and Test Results log: **[prompt-testing.md](prompt-testing.md)**.  
+Execution order: **[device-qa-runbook.md](device-qa-runbook.md)**.
+
+After prompt/routing changes, add or update scenario rows and run the matching runbook tier.
 
 ---
 
-## 5. Release / clean install proof
+## 5. Release / clean install proof (Runbook Tier 4)
 
 **Purpose:** Prove a **new user** can succeed using only **[README.md](../README.md)** plus **[development.md](development.md) → Release (plugin zip)** for where the `.zip` comes from—no unstated maintainer shortcuts.
 
@@ -112,8 +102,9 @@ Model-quality, strategy/TDP rows, and sanitizer checks live in **[prompt-testing
 
 | Date | Change |
 |------|--------|
-| 2026-04-30 | VAC Phase 1 (`bonsai:vac-check`): roadmap **complete** with QA deferred to [prompt-testing.md](prompt-testing.md) § VAC / Steam ban lookup; optional Permissions smoke row above. |
-| 2026-04-30 | Main tab: Pyro talent-manager inject chip manual QA note (see §2 character row); roadmap marks feature shipped pending device pass. |
-| 2026-04-30 | Permissions: optional Steam/Proton log attachment smoke → [prompt-testing.md](prompt-testing.md) § Proton / Steam log attachment (QA). |
-| 2026-04-26 | §5 Release / clean install proof + zip QA log table ([roadmap](roadmap.md) release process). |
-| 2026-04-21 | Phase 6: initial standing matrix + Deck smoke checklist ([ship-week cleanup](roadmap.md)). |
+| 2026-05-24 | §3 slimmed to runbook Tier 0–1 smokes; §2 adds runbook tier column; §4 points to device-qa-runbook.md |
+| 2026-04-30 | VAC Phase 1 QA deferred to prompt-testing.md |
+| 2026-04-30 | Pyro inject chip manual QA note |
+| 2026-04-30 | Proton log attachment smoke pointer |
+| 2026-04-26 | §5 Release / clean install proof |
+| 2026-04-21 | Initial standing matrix |

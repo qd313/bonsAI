@@ -460,6 +460,13 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
           return;
         }
 
+        if (data.status === "busy") {
+          setIsAsking(true);
+          setOllamaResponse(data.response ?? "A request is already in progress.");
+          startBackgroundStatusPolling(seq, q);
+          return;
+        }
+
         a.setUnifiedInput("");
         a.setSelectedAttachment(null);
 
@@ -517,11 +524,6 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
             });
           }
           return;
-        }
-
-        if (data.status === "busy") {
-          setIsAsking(true);
-          setOllamaResponse(data.response ?? "A request is already in progress.");
         }
 
         if (data.status === "pending" && a.desktopDebugNoteAutoSave && a.filesystemWrite) {

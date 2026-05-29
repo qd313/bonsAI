@@ -339,3 +339,122 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
             />
           </div>
         </PanelSectionRow>
+      </PanelSection>
+
+      <PanelSection title="Connection tuning">
+        <PanelSectionRow>
+          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
+            <ToggleField
+              label="Custom timeouts"
+              checked={latencyTimeoutsCustomEnabled}
+              onChange={(c) => setLatencyTimeoutsCustomEnabled(c)}
+            />
+          </div>
+        </PanelSectionRow>
+        {!latencyTimeoutsCustomEnabled ? (
+          <PanelSectionRow>
+            <div className="bonsai-prose bonsai-settings-bleed" style={{ fontSize: 12, color: "#cdd9e6", lineHeight: 1.4 }}>
+              Default:{" "}
+              <span style={{ color: "#ffd299", fontWeight: 700 }}>Warning {DEFAULT_LATENCY_WARNING_SECONDS}s</span>
+              <span style={{ color: "rgba(255,255,255,0.35)" }}> | </span>
+              <span style={{ color: "#9ce7ff", fontWeight: 700 }}>Timeout {DEFAULT_REQUEST_TIMEOUT_SECONDS}s</span>
+            </div>
+          </PanelSectionRow>
+        ) : (
+          <PanelSectionRow>
+            <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
+              <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", lineHeight: 1.35, marginBottom: 6 }}>
+                <div>
+                  <span style={{ color: "#ffd299", fontWeight: 700 }}>Warning</span>
+                  {" = slow-reply nudge"}
+                </div>
+                <div style={{ marginTop: 4 }}>
+                  <span style={{ color: "#9ce7ff", fontWeight: 700 }}>Timeout</span>
+                  {" = abort if still busy"}
+                </div>
+              </div>
+              <SettingsTabConnectionTimeoutSlider
+                warningSec={latencyWarningSeconds}
+                timeoutSec={requestTimeoutSeconds}
+                onChange={(w, t) => {
+                  setLatencyWarningSeconds(w);
+                  setRequestTimeoutSeconds(t);
+                }}
+                warningThumbHostRef={latencyWarningThumbHostRef}
+                onMoveDownFromThumb={focusOllamaKeepAliveThumb}
+              />
+            </div>
+          </PanelSectionRow>
+        )}
+        <PanelSectionRow>
+          <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
+            <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 4 }}>Keep models loaded</div>
+            <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 6, lineHeight: 1.35 }}>
+              How long Ollama keeps the model in memory after a prompt (VRAM on the host).
+            </div>
+            <SettingsTabOllamaKeepAliveSlider
+              value={ollamaKeepAlive}
+              onChange={setOllamaKeepAlive}
+              thumbHostRef={ollamaKeepAliveThumbHostRef}
+              onMoveUp={latencyTimeoutsCustomEnabled ? focusLatencyWarningThumb : undefined}
+            />
+          </div>
+        </PanelSectionRow>
+      </PanelSection>
+
+      <PanelSection title="Integrations">
+        <PanelSectionRow>
+          <div className="bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
+            <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 4 }}>Steam Web API key</div>
+            <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 6, lineHeight: 1.35 }}>
+              For the <span style={{ color: "#9ce7ff" }}>bonsai:vac-check</span> command. Enable Steam ban lookup in
+              Permissions. Stored on this device.
+            </div>
+            <TextField
+              label=""
+              value={steamWebApiKey}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const v = e.target.value.slice(0, STEAM_WEB_API_KEY_MAX_LEN);
+                setSteamWebApiKey(v);
+              }}
+            />
+          </div>
+        </PanelSectionRow>
+      </PanelSection>
+
+      <PanelSection title="Model routing (advanced)">
+        <PanelSectionRow>
+          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
+            <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", lineHeight: 1.45, marginBottom: 10 }}>
+              {MODEL_POLICY_SETTINGS_INTRO}
+            </div>
+            <ToggleField
+              label="Allow non-FOSS and unclassified Ollama tags (Tier 3)"
+              description="Required for Tier 3 / Any installed model. Turn off to fall back from Tier 3 to open-weight."
+              checked={modelPolicyNonFossUnlocked}
+              onChange={(checked) => {
+                setModelPolicyNonFossUnlocked(checked);
+                if (!checked && modelPolicyTier === "non_foss") {
+                  onSelectModelPolicyTier("open_weight");
+                }
+              }}
+            />
+          </div>
+        </PanelSectionRow>
+        <PanelSectionRow>
+          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
+            <ToggleField
+              label="Allow high-VRAM model fallbacks"
+              description="Adds large-model tags after the ~16GB-friendly chain. Can OOM or load slowly."
+              checked={modelAllowHighVramFallbacks}
+              onChange={(checked) => setModelAllowHighVramFallbacks(checked)}
+            />
+          </div>
+        </PanelSectionRow>
+        <PanelSectionRow>
+          <Button onClick={onReadModelPolicy}>Read model policy (README)…</Button>
+        </PanelSectionRow>
+      </PanelSection>
+    </div>
+  );
+};

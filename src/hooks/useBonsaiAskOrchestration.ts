@@ -41,6 +41,7 @@ import type { BonsaiSessionSurvivalSnapshot } from "../utils/bonsaiSessionSurviv
 import { hasResponseAutosaved, markResponseAutosaved } from "../utils/desktopChatAutosave";
 import { normalizePresetCarouselInject } from "../utils/presetCarouselInject";
 import type { InputTransparencyRpcResult, TransparencySnapshot } from "../utils/inputTransparency";
+import { shouldSuppressStrategyTokenStreamPreview } from "../utils/strategyTokenStreamGate";
 
 /** Maps RPC poll payloads into Main-tab AI presentation state (pending vs terminal branches differ sharply). */
 export type UseBonsaiAskOrchestrationArgs = {
@@ -108,6 +109,18 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     };
   }, [a.desktopDebugNoteAutoSave, a.filesystemWrite]);
 
+  /** Latest spoiler-stream gate for poll callbacks (`applyBackgroundStatusToUi` keeps stable deps). */
+  const strategyStreamGateRef = useRef({
+    askMode: a.askMode,
+    strategySpoilerMaskingEnabled: a.strategySpoilerMaskingEnabled,
+    strategySpoilerConsentForNextAsk: a.strategySpoilerConsentForNextAsk,
+  });
+  strategyStreamGateRef.current = {
+    askMode: a.askMode,
+    strategySpoilerMaskingEnabled: a.strategySpoilerMaskingEnabled,
+    strategySpoilerConsentForNextAsk: a.strategySpoilerConsentForNextAsk,
+  };
+
   useEffect(() => {
     if (!lastExchange?.question?.trim()) return;
     const qn = lastExchange.question.trim();
@@ -146,10 +159,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
           status.partial_response.trim()
             ? status.partial_response
             : "";
-        const suppressStreamPreview =
-          a.askMode === "strategy" &&
-          a.strategySpoilerMaskingEnabled &&
-          !a.strategySpoilerConsentForNextAsk;
+        const suppressStreamPreview = shouldSuppressStrategyTokenStreamPreview(strategyStreamGateRef.current);
         if (partial && !suppressStreamPreview) {
           setOllamaResponse(partial);
           setIsStreamingPreview(true);
@@ -460,6 +470,13 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
           return;
         }
 
+        if (data.status === "busy") {
+          setIsAsking(true);
+          setOllamaResponse(data.response ?? "A request is already in progress.");
+          startBackgroundStatusPolling(seq, q);
+          return;
+        }
+
         a.setUnifiedInput("");
         a.setSelectedAttachment(null);
 
@@ -517,11 +534,6 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
             });
           }
           return;
-        }
-
-        if (data.status === "busy") {
-          setIsAsking(true);
-          setOllamaResponse(data.response ?? "A request is already in progress.");
         }
 
         if (data.status === "pending" && a.desktopDebugNoteAutoSave && a.filesystemWrite) {

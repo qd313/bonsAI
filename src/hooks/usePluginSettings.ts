@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { call } from "@decky/api";
 import { type AiCharacterAccentIntensityId } from "../data/aiCharacterAccentIntensity";
 import { type ModelPolicyTierId } from "../data/modelPolicy";
@@ -36,6 +36,7 @@ import {
   type AskModeId,
   type BonsaiCapabilities,
   type BonsaiSettings,
+  type BonsaiSettingsSnapshotInput,
   type DesktopAppLogLevel,
   type OllamaKeepAliveDuration,
   type PresetChipAnimation,
@@ -108,6 +109,71 @@ export function usePluginSettings() {
     DEFAULT_BONSAI_TOKEN_STREAMING_ENABLED
   );
   const [settingsLoaded, setSettingsLoaded] = useState(false);
+
+  /** Latest in-memory settings for debounced save; avoids stale closure overwriting immediate modal saves. */
+  const settingsSnapshotForDebouncedSaveRef = useRef<BonsaiSettingsSnapshotInput>({
+    latencyWarningSeconds: DEFAULT_LATENCY_WARNING_SECONDS,
+    requestTimeoutSeconds: DEFAULT_REQUEST_TIMEOUT_SECONDS,
+    latencyTimeoutsCustomEnabled: false,
+    unifiedInputPersistenceMode: DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
+    screenshotAttachmentPreset: DEFAULT_SCREENSHOT_ATTACHMENT_PRESET,
+    desktopDebugNoteAutoSave: DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE,
+    desktopAskVerboseLogging: DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING,
+    desktopAppLogLevel: DEFAULT_DESKTOP_APP_LOG_LEVEL,
+    attachProtonLogsWhenTroubleshooting: DEFAULT_ATTACH_PROTON_LOGS_WHEN_TROUBLESHOOTING,
+    presetChipFadeAnimationEnabled: DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED,
+    presetChipAnimation: DEFAULT_PRESET_CHIP_ANIMATION,
+    inputSanitizerUserDisabled: DEFAULT_INPUT_SANITIZER_USER_DISABLED,
+    capabilities: { ...DEFAULT_CAPABILITIES },
+    aiCharacterEnabled: DEFAULT_AI_CHARACTER_ENABLED,
+    aiCharacterRandom: DEFAULT_AI_CHARACTER_RANDOM,
+    aiCharacterPresetId: DEFAULT_AI_CHARACTER_PRESET_ID,
+    aiCharacterCustomText: DEFAULT_AI_CHARACTER_CUSTOM_TEXT,
+    aiCharacterAccentIntensity: DEFAULT_AI_CHARACTER_ACCENT_INTENSITY,
+    askMode: DEFAULT_ASK_MODE,
+    ollamaKeepAlive: DEFAULT_OLLAMA_KEEP_ALIVE,
+    showDeveloperTab: DEFAULT_SHOW_DEVELOPER_TAB,
+    modelPolicyTier: DEFAULT_MODEL_POLICY_TIER,
+    modelPolicyNonFossUnlocked: false,
+    modelAllowHighVramFallbacks: DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS,
+    ollamaLocalOnDeck: DEFAULT_OLLAMA_LOCAL_ON_DECK,
+    strategySpoilerMaskingEnabled: DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED,
+    strategySpoilerAutoRevealAfterConsent: DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT,
+    steamWebApiKey: "",
+    bonsaiTokenStreamingEnabled: DEFAULT_BONSAI_TOKEN_STREAMING_ENABLED,
+  });
+
+  settingsSnapshotForDebouncedSaveRef.current = {
+    latencyWarningSeconds,
+    requestTimeoutSeconds,
+    latencyTimeoutsCustomEnabled,
+    unifiedInputPersistenceMode,
+    screenshotAttachmentPreset,
+    desktopDebugNoteAutoSave,
+    desktopAskVerboseLogging,
+    desktopAppLogLevel,
+    attachProtonLogsWhenTroubleshooting,
+    presetChipFadeAnimationEnabled,
+    presetChipAnimation,
+    inputSanitizerUserDisabled,
+    capabilities,
+    aiCharacterEnabled,
+    aiCharacterRandom,
+    aiCharacterPresetId,
+    aiCharacterCustomText,
+    aiCharacterAccentIntensity,
+    askMode,
+    ollamaKeepAlive,
+    showDeveloperTab,
+    modelPolicyTier,
+    modelPolicyNonFossUnlocked,
+    modelAllowHighVramFallbacks,
+    ollamaLocalOnDeck,
+    strategySpoilerMaskingEnabled,
+    strategySpoilerAutoRevealAfterConsent,
+    steamWebApiKey,
+    bonsaiTokenStreamingEnabled,
+  };
 
   const hydrateFromSettings = useCallback((saved: BonsaiSettings) => {
     const normalized = normalizeSettings(saved);
@@ -222,37 +288,7 @@ export function usePluginSettings() {
     const timer = setTimeout(() => {
       call<[BonsaiSettings], BonsaiSettings>(
         "save_settings",
-        toBonsaiSettingsPayload({
-          latencyWarningSeconds,
-          requestTimeoutSeconds,
-          latencyTimeoutsCustomEnabled,
-          unifiedInputPersistenceMode,
-          screenshotAttachmentPreset,
-          desktopDebugNoteAutoSave,
-          desktopAskVerboseLogging,
-          desktopAppLogLevel,
-          attachProtonLogsWhenTroubleshooting,
-          presetChipFadeAnimationEnabled,
-          presetChipAnimation,
-          inputSanitizerUserDisabled,
-          capabilities,
-          aiCharacterEnabled,
-          aiCharacterRandom,
-          aiCharacterPresetId,
-          aiCharacterCustomText,
-          aiCharacterAccentIntensity,
-          askMode,
-          ollamaKeepAlive,
-          showDeveloperTab,
-          modelPolicyTier,
-          modelPolicyNonFossUnlocked,
-          modelAllowHighVramFallbacks,
-          ollamaLocalOnDeck,
-          strategySpoilerMaskingEnabled,
-          strategySpoilerAutoRevealAfterConsent,
-          steamWebApiKey,
-          bonsaiTokenStreamingEnabled,
-        })
+        toBonsaiSettingsPayload(settingsSnapshotForDebouncedSaveRef.current)
       ).catch((err) => {
         console.error("save_settings failed", err);
       });

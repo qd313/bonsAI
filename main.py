@@ -1458,6 +1458,7 @@ class Plugin:
         attachments: Optional[list] = None,
         ask_mode: str = "speed",
         spoiler_consent: bool = False,
+        token_stream_request_id: Optional[int] = None,
     ) -> dict:
         """Run one full ask lifecycle, including Ollama call timing and optional TDP application."""
         plugin = Plugin._coerce_instance(self)
@@ -1470,6 +1471,7 @@ class Plugin:
             attachments=attachments,
             ask_mode=ask_mode,
             spoiler_consent=spoiler_consent,
+            token_stream_request_id=token_stream_request_id,
         )
 
     async def ask_game_ai(self, question: Any = "", PcIp: str = ""):
@@ -1525,6 +1527,7 @@ class Plugin:
             attachments=attachments or [],
             ask_mode=ask_mode,
             spoiler_consent=spoiler_consent,
+            token_stream_request_id=request_id,
         )
         self._ensure_background_state()
         plugin_bg = Plugin._coerce_instance(self)
@@ -1534,6 +1537,8 @@ class Plugin:
         async with self._background_lock:
             active_request_id = self._background_state.get("request_id")
             if active_request_id != request_id:
+                return
+            if self._background_state.get("status") == "cancelled":
                 return
             cancelled_rq = bool(result.get("cancelled"))
             success = bool(result.get("success", False)) and not cancelled_rq
@@ -1851,6 +1856,20 @@ class Plugin:
             snap = plugin._partial_stream_snapshot
             if snap.get("request_id") == plugin._background_state.get("request_id"):
                 snap["streaming"] = False
+        async with plugin._background_lock:
+            if plugin._background_state.get("status") == "pending":
+                plugin._background_state = {
+                    **plugin._background_state,
+                    "status": "cancelled",
+                    "success": False,
+                    "response": "Stopped.",
+                    "error": None,
+                    "cancelled": True,
+                    "completed_at": time.time(),
+                    "partial_response": None,
+                    "streaming": False,
+                }
+                plugin._clear_partial_stream_snapshot()
         await plugin._maybe_app_log("ask.abort", "background ask abort requested")
         return {"ok": True}
 
@@ -1906,6 +1925,7 @@ class Plugin:
         proton_log_attachment: Optional[str] = None,
         proton_log_transparency: Optional[dict] = None,
         strategy_spoiler_consent: bool = False,
+        token_stream_request_id: Optional[int] = None,
     ):
         """Orchestrate attachment prep, prompt assembly, and model fallback request execution."""
         url = self._build_ollama_chat_url(PcIp)
@@ -1994,11 +2014,13 @@ class Plugin:
 
         plugin_inst = Plugin._coerce_instance(self)
         plugin_inst._ensure_background_state()
-        active_request_id = plugin_inst._background_state.get("request_id")
+        # Only background `_run_background_request` passes this id. Foreground `ask_game_ai` must not
+        # attach `on_delta` while `_background_state` still shows a pending id — another RPC can await
+        # inside `ask_ollama` (executor yield) and would otherwise corrupt the same partial snapshot.
         token_streaming = settings.get("bonsai_token_streaming_enabled") is True
         on_delta_cb = None
-        if token_streaming and isinstance(active_request_id, int):
-            stream_rid = active_request_id
+        if token_streaming and isinstance(token_stream_request_id, int):
+            stream_rid = token_stream_request_id
 
             def _on_delta(text: str, done: bool) -> None:
                 plugin_inst._update_partial_response(stream_rid, text, done)

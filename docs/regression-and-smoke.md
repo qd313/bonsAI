@@ -16,6 +16,7 @@ Run from repo root (Windows or Linux shell as appropriate):
 | Frontend unit tests | `pnpm test` | Any `src/` change (includes Vitest headless Decky harness under `src/test-harness/`) |
 | Backend unit tests | `pnpm run test:py` | Any `main.py`, `py_modules/backend/`, `refactor_helpers.py`, or `tests/` change |
 | Bundle | `pnpm run build` | Any `src/` or build config change |
+| Preview suite | `pnpm run test:preview:tier -- --tier=<batch> --write` | Tier QA batches; requires **Decky: Open Preview** for C/D buckets; evidence → `docs/test-evidence/` |
 | Deck deploy build | `.\scripts\build.ps1` or `./scripts/build.sh` | Any `src/`, `main.py`, `plugin.json`, or Deck-facing asset change |
 | Plugin zip CI | Run **Build plugin zip** in Actions (or `bash scripts/verify-decky-plugin-zip.sh` on a local `out/*.zip`) | Changes to [`.github/workflows/build-plugin-zip.yml`](../.github/workflows/build-plugin-zip.yml) or [`scripts/verify-decky-plugin-zip.sh`](../scripts/verify-decky-plugin-zip.sh) |
 

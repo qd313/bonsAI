@@ -252,6 +252,21 @@ Tests and docs status: Added tests for new service/data modules and updated docs
 Trade-offs: Prioritized safe seam extraction and modularity over deep behavior changes (model fallback policy remains unchanged in this milestone).
 ```
 
+## 2026-05-26 — Preview test automation (Decky Plugin Studio v0.1.1)
+
+| Agent | Invoked | Summary |
+|-------|---------|---------|
+| master-debugger | Yes (planning) | Installed VSIX v0.1.0 was stale — MCP preview tools were stubs; sibling source at `C:/Users/still/decky-plugin-studio` had real IPC + sidecar |
+| security-auditor | Yes (Phase 2 gate) | `preview.callRpc` gated by `PREVIEW_RPC_ALLOWLIST` in mcp-server + sidecar; no arbitrary method dispatch |
+
+**Shipped (bonsAI):** `tests/preview-suite/*.json`, `scripts/run-preview-suite.mjs`, `pnpm run test:preview`, preview test hooks (`src/preview/previewTestHooks.ts`), sandbox sysfs mock (`tdp_service.py`), `tests/test_tdp_sandbox_sysfs.py`, updated `mcp.json` → v0.1.1 + `DECKY_STUDIO_REPO=C:/Users/still/decky-plugin-studio`.
+
+**Shipped (decky-plugin-studio v0.1.1):** Real `preview.callRpc` via IPC→HTTP sidecar, `preview.snapshotDom`, `preview.captureScreenshot`, `preview.setHttpAllow`, focus event log in `focusManager`, `preview-state.json` for MCP URL sync.
+
+**User action:** Reload Cursor after VSIX install; run **Decky: Open Preview** once per session before `pnpm run test:preview`.
+
+**Deferred (bucket E):** QAMP reboot matrix, CEF CORS Ollama PC bug — `tests/preview-suite/deck-only-e-bucket.json` + `deck.deploy`.
+
 ## 2026-05-20 — Self-hosted automation (harness, dev loop, mDNS)
 
 | Agent | Invoked | Summary |

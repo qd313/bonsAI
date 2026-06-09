@@ -1,0 +1,42 @@
+{
+  "batch": "tier1Boundaries",
+  "runDate": "2026-05-26",
+  "gitSha": "9e20a82",
+  "passed": 5,
+  "failed": 0,
+  "skipped": 0,
+  "total": 5,
+  "evidenceRoot": "docs/test-evidence/tier1Boundaries/2026-05-26-9e20a82",
+  "results": [
+    {
+      "id": "TDP-15W-clamp",
+      "status": "pass",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/tier1Boundaries/2026-05-26-9e20a82/TDP-15W-clamp"
+    },
+    {
+      "id": "TDP-3W-clamp",
+      "status": "pass",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/tier1Boundaries/2026-05-26-9e20a82/TDP-3W-clamp"
+    },
+    {
+      "id": "TDP-1W-clamp-to-3",
+      "status": "pass",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/tier1Boundaries/2026-05-26-9e20a82/TDP-1W-clamp-to-3"
+    },
+    {
+      "id": "TDP-20W-clamp-to-15",
+      "status": "pass",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/tier1Boundaries/2026-05-26-9e20a82/TDP-20W-clamp-to-15"
+    },
+    {
+      "id": "GPU-800-advisory",
+      "status": "pass",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/tier1Boundaries/2026-05-26-9e20a82/GPU-800-advisory"
+    }
+  ]
+}

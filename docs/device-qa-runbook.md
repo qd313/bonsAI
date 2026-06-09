@@ -175,10 +175,10 @@ Update after each maintainer pass:
 
 | Tier | Status | Last run (date / SHA) | Notes |
 |------|--------|------------------------|-------|
-| 0 | Open | | SMOKE-A, C, F |
-| 1 | Open | | SMOKE-B, E, H + extras |
-| 2 | Open | | Opt-in blocks |
-| 3 | Deferred | | QAMP reboot, boundaries, full BG matrix |
+| 0 | Pass | 2026-05-26 / 9e20a82 | preview 5/5 PASS; [evidence](test-evidence/tier0/2026-05-26-9e20a82) |
+| 1 | Pass | 2026-05-26 / 9e20a82 | preview 3/3 PASS; [evidence](test-evidence/tier1Core/2026-05-26-9e20a82) |
+| 2 | Pass | 2026-05-26 / 9e20a82 | preview 8/8 PASS; [evidence](test-evidence/tier2/2026-05-26-9e20a82) |
+| 3 | Partial | 2026-05-26 / 9e20a82 | preview boundaries 5/5; deckOnly 3 skipped — [E-bucket](test-evidence/deckOnly/2026-05-26-9e20a82) needs on-Deck |
 | 4 | Deferred | | Clean install |
 
 **Roadmap target:** Tier **0–1** complete for routine PRs; Tier **2+** ongoing before release.

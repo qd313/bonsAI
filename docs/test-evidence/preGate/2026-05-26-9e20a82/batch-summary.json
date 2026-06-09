@@ -1,0 +1,24 @@
+{
+  "batch": "preGate",
+  "runDate": "2026-05-26",
+  "gitSha": "9e20a82",
+  "passed": 2,
+  "failed": 0,
+  "skipped": 0,
+  "total": 2,
+  "evidenceRoot": "docs/test-evidence/preGate/2026-05-26-9e20a82",
+  "results": [
+    {
+      "id": "UNIT-A-vitest-gates",
+      "status": "pass",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/preGate/2026-05-26-9e20a82/UNIT-A-vitest-gates"
+    },
+    {
+      "id": "UNIT-B-pytest-sandbox-tdp",
+      "status": "pass",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/preGate/2026-05-26-9e20a82/UNIT-B-pytest-sandbox-tdp"
+    }
+  ]
+}

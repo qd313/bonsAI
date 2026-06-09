@@ -1,0 +1,6 @@
+{
+  "ok": true,
+  "hosts": [],
+  "error": "",
+  "hint": "No _ollama._tcp services found. Advertise Ollama with Avahi or Bonjour (see docs/troubleshooting.md). Manual PC address still works."
+}

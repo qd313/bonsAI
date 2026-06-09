@@ -12,6 +12,9 @@
     "pretest": "node scripts/sync-version-from-plugin.mjs",
     "test": "vitest run",
     "test:py": "python scripts/run_python_tests.py",
+    "test:preview": "node scripts/run-preview-suite.mjs",
+    "test:preview:tier": "node scripts/run-preview-suite.mjs --evidence",
+    "build:preview": "node scripts/build-preview.mjs",
     "version:sync": "node scripts/sync-version-from-plugin.mjs",
     "version:bump": "node scripts/bump-version.mjs"
   },

@@ -1,0 +1,4 @@
+{
+  "success": false,
+  "error": "Filesystem writes are disabled. Enable them in the Permissions tab."
+}

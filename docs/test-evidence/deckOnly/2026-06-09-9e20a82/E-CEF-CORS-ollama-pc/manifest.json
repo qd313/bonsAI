@@ -1,0 +1,19 @@
+{
+  "scenarioId": "E-CEF-CORS-ollama-pc",
+  "tier": "deckOnly",
+  "batch": "deckOnly",
+  "status": "skipped",
+  "error": null,
+  "durationMs": null,
+  "gitSha": "9e20a82",
+  "runDate": "2026-06-09",
+  "previewUrl": null,
+  "evidenceProfile": "deck-only",
+  "tags": [
+    "CONN-TEST",
+    "LINUX-OLLAMA"
+  ],
+  "captureArtifact": null,
+  "captureError": null,
+  "evidenceFiles": []
+}

@@ -62,6 +62,9 @@ cli/decky
 # Local Deck screenshots (scripts/screenshot-deck.sh / screenshot-deck.ps1)
 screenshots/
 
+# Preview suite run artifacts (JUnit-style JSON reports)
+tests/preview-results/
+
 # Local Deck screen recordings (captured by scripts/record-deck.ps1 / record-deck.sh)
 recordings/
 

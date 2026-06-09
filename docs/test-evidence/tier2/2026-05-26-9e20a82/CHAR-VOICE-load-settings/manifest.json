@@ -1,0 +1,31 @@
+{
+  "scenarioId": "CHAR-VOICE-load-settings",
+  "tier": "tier2",
+  "batch": "tier2",
+  "status": "pass",
+  "error": null,
+  "durationMs": 316,
+  "gitSha": "9e20a82",
+  "runDate": "2026-05-26",
+  "previewUrl": "http://127.0.0.1:5272",
+  "evidenceProfile": "preview",
+  "tags": [
+    "CHAR-VOICE"
+  ],
+  "captureArtifact": {
+    "type": "png",
+    "path": "C:\\Users\\still\\Documents\\BonsAI\\docs\\test-evidence\\tier2\\2026-05-26-9e20a82\\CHAR-VOICE-load-settings\\final.png"
+  },
+  "captureError": null,
+  "evidenceFiles": [
+    "active-element.txt",
+    "dom-final.html",
+    "final.png",
+    "focus-path.json",
+    "rpc-last.json",
+    "steps",
+    "steps\\step-02-snapshotDom-rpc.json",
+    "steps\\step-02-snapshotDom.html",
+    "steps\\step-02-snapshotDom.json"
+  ]
+}

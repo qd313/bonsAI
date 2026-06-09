@@ -1,0 +1,22 @@
+{
+  "scenarioId": "UNIT-B-pytest-sandbox-tdp",
+  "tier": "preGate",
+  "batch": "preGate",
+  "status": "pass",
+  "error": null,
+  "durationMs": 230,
+  "gitSha": "9e20a82",
+  "runDate": "2026-05-26",
+  "previewUrl": "http://127.0.0.1:5678",
+  "evidenceProfile": "shell",
+  "tags": [
+    "TDP-APPLY"
+  ],
+  "captureArtifact": null,
+  "captureError": null,
+  "evidenceFiles": [
+    "manifest.json",
+    "steps",
+    "steps\\step-01-shellPytest.json"
+  ]
+}

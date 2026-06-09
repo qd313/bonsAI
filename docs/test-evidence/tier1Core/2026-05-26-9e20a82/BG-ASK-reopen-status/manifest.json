@@ -1,0 +1,28 @@
+{
+  "scenarioId": "BG-ASK-reopen-status",
+  "tier": "tier1Core",
+  "batch": "tier1Core",
+  "status": "pass",
+  "error": null,
+  "durationMs": 61,
+  "gitSha": "9e20a82",
+  "runDate": "2026-05-26",
+  "previewUrl": "http://127.0.0.1:5272",
+  "evidenceProfile": "preview",
+  "tags": [
+    "SMOKE-H",
+    "BG-ASK-V1"
+  ],
+  "captureArtifact": {
+    "type": "png",
+    "path": "C:\\Users\\still\\Documents\\BonsAI\\docs\\test-evidence\\tier1Core\\2026-05-26-9e20a82\\BG-ASK-reopen-status\\final.png"
+  },
+  "captureError": null,
+  "evidenceFiles": [
+    "final.png",
+    "rpc-last.json",
+    "steps",
+    "steps\\step-00-callRpc-rpc.json",
+    "steps\\step-00-callRpc.json"
+  ]
+}

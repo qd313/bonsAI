@@ -71,6 +71,7 @@ import { useDisclaimerAndLocalRuntimeGates } from "./hooks/useDisclaimerAndLocal
 import { useCapturedFrontendErrors } from "./hooks/useCapturedFrontendErrors";
 import { AUTO_SAVED_RESPONSE_IDS_KEY } from "./utils/desktopChatAutosave";
 import { getQamTab, getSteamSettingsUrl, isQamSetting } from "./data/steamSettingsNavigation";
+import { registerPreviewTestHooks, isDeckyPreviewRuntime } from "./preview/previewTestHooks";
 import type { AskAttachment, ScreenshotItem } from "./types/bonsaiUi";
 
 /**
@@ -742,6 +743,69 @@ const Content: React.FC = () => {
     onBeforeDeckyModal: captureSessionBeforeModal,
     onCompleteDeckyModalClose: (close) => finalizeModalCloseRef.current(close),
   });
+
+  useEffect(() => {
+    if (!isDeckyPreviewRuntime()) return;
+    registerPreviewTestHooks({
+      getState: () => ({
+        currentTab,
+        unifiedInput,
+        askMode,
+        isAsking,
+        ollamaResponseLen: ollamaResponse.length,
+        hasLastExchange: !!lastExchange,
+        capabilities,
+      }),
+      setGame: (title: string, appId?: string) => {
+        const app = { display_name: title, appid: Number(appId) || 0 };
+        (Router as { setMainRunningApp?: (a: typeof app | null) => void }).setMainRunningApp?.(app);
+      },
+      triggerAsk: async (text: string) => {
+        setUnifiedInput(text);
+        await onAskOllama(text);
+      },
+      attachScreenshot: (base64: string, name = "preview.png") => {
+        setSelectedAttachment({
+          path: name,
+          name,
+          source: "picker",
+          preview_data_uri: base64.startsWith("data:") ? base64 : `data:image/png;base64,${base64}`,
+        });
+      },
+      getTransparencyJson: () => lastTransparency,
+      getSysfsWrites: async () => {
+        try {
+          const res = (await call("get_input_transparency")) as { sysfs_writes?: unknown };
+          return res?.sysfs_writes ?? [];
+        } catch {
+          return [];
+        }
+      },
+      setTab: (tabId: string) => setCurrentTab(tabId),
+      resetDisclaimer: () => {
+        try {
+          window.localStorage.removeItem("bonsai:disclaimer-accepted");
+        } catch {
+          /* ignore */
+        }
+        showDisclaimerModalAgain();
+      },
+    });
+  }, [
+    currentTab,
+    unifiedInput,
+    askMode,
+    isAsking,
+    ollamaResponse,
+    lastExchange,
+    capabilities,
+    lastTransparency,
+    onAskOllama,
+    setUnifiedInput,
+    setSelectedAttachment,
+    setCurrentTab,
+    showDisclaimerModalAgain,
+  ]);
 
   const onCommitModelPolicyTier = useCallback(
     async (t: ModelPolicyTierId) => {

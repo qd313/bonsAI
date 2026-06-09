@@ -1,0 +1,27 @@
+{
+  "scenarioId": "MDNS-FIND-rpc",
+  "tier": "tier2",
+  "batch": "tier2",
+  "status": "pass",
+  "error": null,
+  "durationMs": 3062,
+  "gitSha": "9e20a82",
+  "runDate": "2026-05-26",
+  "previewUrl": "http://127.0.0.1:5272",
+  "evidenceProfile": "preview",
+  "tags": [
+    "MDNS-FIND"
+  ],
+  "captureArtifact": {
+    "type": "png",
+    "path": "C:\\Users\\still\\Documents\\BonsAI\\docs\\test-evidence\\tier2\\2026-05-26-9e20a82\\MDNS-FIND-rpc\\final.png"
+  },
+  "captureError": null,
+  "evidenceFiles": [
+    "final.png",
+    "rpc-last.json",
+    "steps",
+    "steps\\step-00-callRpc-rpc.json",
+    "steps\\step-00-callRpc.json"
+  ]
+}

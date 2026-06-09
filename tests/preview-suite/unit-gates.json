@@ -1,0 +1,30 @@
+{
+  "scenarios": [
+    {
+      "id": "UNIT-A-vitest-gates",
+      "tier": "preGate",
+      "bucket": "A",
+      "evidenceProfile": "shell",
+      "tags": ["MAINT-HARNESS"],
+      "checkboxIds": [],
+      "captureSteps": [1],
+      "steps": [
+        { "action": "shellVitest", "file": "src/data/presets.test.ts" },
+        { "action": "shellVitest", "file": "src/utils/settingsAndResponse.test.ts" }
+      ]
+    },
+    {
+      "id": "UNIT-B-pytest-sandbox-tdp",
+      "tier": "preGate",
+      "bucket": "B",
+      "evidenceProfile": "shell",
+      "tags": ["TDP-APPLY"],
+      "checkboxIds": [],
+      "captureSteps": [1],
+      "steps": [
+        { "action": "shellPytest", "file": "tests/test_tdp_sandbox_sysfs.py" },
+        { "action": "shellPytest", "file": "tests/test_capabilities.py" }
+      ]
+    }
+  ]
+}

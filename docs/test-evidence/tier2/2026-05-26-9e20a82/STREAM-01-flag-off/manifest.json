@@ -1,0 +1,30 @@
+{
+  "scenarioId": "STREAM-01-flag-off",
+  "tier": "tier2",
+  "batch": "tier2",
+  "status": "pass",
+  "error": null,
+  "durationMs": 140,
+  "gitSha": "9e20a82",
+  "runDate": "2026-05-26",
+  "previewUrl": "http://127.0.0.1:5272",
+  "evidenceProfile": "preview",
+  "tags": [
+    "STREAM-01"
+  ],
+  "captureArtifact": {
+    "type": "png",
+    "path": "C:\\Users\\still\\Documents\\BonsAI\\docs\\test-evidence\\tier2\\2026-05-26-9e20a82\\STREAM-01-flag-off\\final.png"
+  },
+  "captureError": null,
+  "evidenceFiles": [
+    "active-element.txt",
+    "dom-final.html",
+    "final.png",
+    "rpc-last.json",
+    "steps",
+    "steps\\step-01-snapshotDom-rpc.json",
+    "steps\\step-01-snapshotDom.html",
+    "steps\\step-01-snapshotDom.json"
+  ]
+}

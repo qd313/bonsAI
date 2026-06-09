@@ -1,0 +1,18 @@
+{
+  "batch": "tier2",
+  "runDate": "2026-05-26",
+  "gitSha": "9e20a82",
+  "passed": 1,
+  "failed": 0,
+  "skipped": 0,
+  "total": 1,
+  "evidenceRoot": "docs/test-evidence/tier2/2026-05-26-9e20a82",
+  "results": [
+    {
+      "id": "VISION-V1-spot-dom",
+      "status": "pass",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/tier2/2026-05-26-9e20a82/VISION-V1-spot-dom"
+    }
+  ]
+}

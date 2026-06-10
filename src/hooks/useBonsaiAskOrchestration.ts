@@ -18,7 +18,6 @@ import {
   isStrategyCustomResolutionBranch,
   STRATEGY_FOLLOWUP_PREFIX,
 } from "../data/strategyGuideFollowup";
-import { INPUT_SANITIZER_COMMAND_DISABLE, INPUT_SANITIZER_COMMAND_ENABLE } from "../data/inputSanitizerCommands";
 import { normalizeStrategyGuideBranches } from "../utils/strategyGuideBranches";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import { useBackgroundGameAi } from "./useBackgroundGameAi";
@@ -59,7 +58,8 @@ export type UseBonsaiAskOrchestrationArgs = {
   effectiveOllamaPcIp: string;
   selectedAttachment: AskAttachment | null;
   setSelectedAttachment: Dispatch<SetStateAction<AskAttachment | null>>;
-  setInputSanitizerUserDisabled: Dispatch<SetStateAction<boolean>>;
+  /** Reload settings from disk after server-side persistence (e.g. sanitizer keywords). */
+  syncSettingsFromDisk: () => Promise<unknown>;
   unifiedInputFieldLayerRef: RefObject<HTMLDivElement | null>;
   unifiedInputHostRef: RefObject<HTMLDivElement | null>;
   setSelectedIndex: Dispatch<SetStateAction<number>>;
@@ -543,12 +543,9 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
             });
           }
           if (data.meta === "sanitizer_keyword") {
-            const key = q.trim().toLowerCase();
-            if (key === INPUT_SANITIZER_COMMAND_DISABLE.toLowerCase()) {
-              a.setInputSanitizerUserDisabled(true);
-            } else if (key === INPUT_SANITIZER_COMMAND_ENABLE.toLowerCase()) {
-              a.setInputSanitizerUserDisabled(false);
-            }
+            void a.syncSettingsFromDisk().catch((err) => {
+              console.error("syncSettingsFromDisk failed (sanitizer keyword)", err);
+            });
             toaster.toast({
               title: "Sanitizer",
               body: "Mode saved. See README for commands.",

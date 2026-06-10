@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { call } from "@decky/api";
 import { type AiCharacterAccentIntensityId } from "../data/aiCharacterAccentIntensity";
 import { type ModelPolicyTierId } from "../data/modelPolicy";
@@ -41,12 +41,55 @@ import {
   type AskModeId,
   type BonsaiCapabilities,
   type BonsaiSettings,
+  type BonsaiSettingsSnapshotInput,
   type DesktopAppLogLevel,
   type OllamaKeepAliveDuration,
   type PresetChipAnimation,
   type ScreenshotAttachmentPreset,
   type UnifiedInputPersistenceMode,
 } from "../utils/settingsAndResponse";
+
+function snapshotFromBonsaiSettings(normalized: BonsaiSettings): BonsaiSettingsSnapshotInput {
+  return {
+    latencyWarningSeconds: normalized.latency_warning_seconds,
+    requestTimeoutSeconds: normalized.request_timeout_seconds,
+    latencyTimeoutsCustomEnabled: normalized.latency_timeouts_custom_enabled,
+    unifiedInputPersistenceMode: normalized.unified_input_persistence_mode,
+    screenshotAttachmentPreset: normalized.screenshot_attachment_preset,
+    desktopDebugNoteAutoSave: normalized.desktop_debug_note_auto_save,
+    desktopAskVerboseLogging: normalized.desktop_ask_verbose_logging,
+    desktopAppLogLevel: normalized.desktop_app_log_level,
+    attachProtonLogsWhenTroubleshooting: normalized.attach_proton_logs_when_troubleshooting,
+    presetChipFadeAnimationEnabled: normalized.preset_chip_fade_animation_enabled,
+    presetChipAnimation: normalized.preset_chip_animation,
+    inputSanitizerUserDisabled: normalized.input_sanitizer_user_disabled,
+    capabilities: normalized.capabilities,
+    aiCharacterEnabled: normalized.ai_character_enabled,
+    aiCharacterRandom: normalized.ai_character_random,
+    aiCharacterPresetId: normalized.ai_character_preset_id,
+    aiCharacterCustomText: normalized.ai_character_custom_text,
+    aiCharacterAccentIntensity: normalized.ai_character_accent_intensity,
+    askMode: normalized.ask_mode,
+    ollamaKeepAlive: normalized.ollama_keep_alive,
+    showDeveloperTab: normalized.show_developer_tab,
+    modelPolicyTier: normalized.model_policy_tier,
+    modelPolicyNonFossUnlocked: normalized.model_policy_non_foss_unlocked,
+    modelAllowHighVramFallbacks: normalized.model_allow_high_vram_fallbacks,
+    ollamaLocalOnDeck: normalized.ollama_local_on_deck,
+    strategySpoilerMaskingEnabled: normalized.strategy_spoiler_masking_enabled,
+    strategySpoilerAutoRevealAfterConsent: normalized.strategy_spoiler_auto_reveal_after_consent,
+    steamWebApiKey: normalized.steam_web_api_key,
+    bonsaiTokenStreamingEnabled: normalized.bonsai_token_streaming_enabled,
+    responseVerifyEnabled: normalized.response_verify_enabled,
+    responseVerifySecondPass: normalized.response_verify_second_pass,
+    responseVerifyModel: normalized.response_verify_model,
+    namedOllamaHosts: normalized.named_ollama_hosts,
+  };
+}
+
+function defaultSettingsSnapshot(): BonsaiSettingsSnapshotInput {
+  return snapshotFromBonsaiSettings(normalizeSettings({}));
+}
 
 /**
  * Frontend settings load, normalization, and debounced persistence.
@@ -119,6 +162,50 @@ export function usePluginSettings() {
   const [responseVerifyModel, setResponseVerifyModel] = useState<string>(DEFAULT_RESPONSE_VERIFY_MODEL);
   const [namedOllamaHosts, setNamedOllamaHosts] = useState<NamedOllamaHost[]>([]);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
+  /** When false, debounced ``save_settings`` is skipped so a failed initial load cannot wipe disk with UI defaults. */
+  const [settingsPersistEnabled, setSettingsPersistEnabled] = useState(false);
+
+  /** Latest in-memory settings for debounced save; avoids stale closure overwriting immediate modal saves. */
+  const settingsSnapshotForDebouncedSaveRef = useRef<BonsaiSettingsSnapshotInput>(defaultSettingsSnapshot());
+  /** Bumped to invalidate scheduled debounced saves (clear data, server-side settings writes). */
+  const settingsPersistEpochRef = useRef(0);
+  const settingsSaveInFlightRef = useRef(0);
+
+  settingsSnapshotForDebouncedSaveRef.current = {
+    latencyWarningSeconds,
+    requestTimeoutSeconds,
+    latencyTimeoutsCustomEnabled,
+    unifiedInputPersistenceMode,
+    screenshotAttachmentPreset,
+    desktopDebugNoteAutoSave,
+    desktopAskVerboseLogging,
+    desktopAppLogLevel,
+    attachProtonLogsWhenTroubleshooting,
+    presetChipFadeAnimationEnabled,
+    presetChipAnimation,
+    inputSanitizerUserDisabled,
+    capabilities,
+    aiCharacterEnabled,
+    aiCharacterRandom,
+    aiCharacterPresetId,
+    aiCharacterCustomText,
+    aiCharacterAccentIntensity,
+    askMode,
+    ollamaKeepAlive,
+    showDeveloperTab,
+    modelPolicyTier,
+    modelPolicyNonFossUnlocked,
+    modelAllowHighVramFallbacks,
+    ollamaLocalOnDeck,
+    strategySpoilerMaskingEnabled,
+    strategySpoilerAutoRevealAfterConsent,
+    steamWebApiKey,
+    bonsaiTokenStreamingEnabled,
+    responseVerifyEnabled,
+    responseVerifySecondPass,
+    responseVerifyModel,
+    namedOllamaHosts,
+  };
 
   const hydrateFromSettings = useCallback((saved: BonsaiSettings) => {
     const normalized = normalizeSettings(saved);
@@ -155,7 +242,39 @@ export function usePluginSettings() {
     setResponseVerifySecondPass(normalized.response_verify_second_pass);
     setResponseVerifyModel(normalized.response_verify_model);
     setNamedOllamaHosts(normalized.named_ollama_hosts);
+    settingsSnapshotForDebouncedSaveRef.current = snapshotFromBonsaiSettings(normalized);
+    setSettingsPersistEnabled(true);
   }, []);
+
+  const pauseDebouncedSettingsSave = useCallback(async () => {
+    settingsPersistEpochRef.current += 1;
+    const deadline = Date.now() + 3000;
+    while (settingsSaveInFlightRef.current > 0 && Date.now() < deadline) {
+      await new Promise((resolve) => setTimeout(resolve, 25));
+    }
+  }, []);
+
+  const flushSettingsSnapshotNow = useCallback(async () => {
+    await pauseDebouncedSettingsSave();
+    settingsSaveInFlightRef.current += 1;
+    try {
+      const saved = await call<[BonsaiSettings], BonsaiSettings>(
+        "save_settings",
+        toBonsaiSettingsPayload(settingsSnapshotForDebouncedSaveRef.current)
+      );
+      hydrateFromSettings(saved);
+      return saved;
+    } finally {
+      settingsSaveInFlightRef.current -= 1;
+    }
+  }, [hydrateFromSettings, pauseDebouncedSettingsSave]);
+
+  const syncSettingsFromDisk = useCallback(async () => {
+    await pauseDebouncedSettingsSave();
+    const saved = await call<[], BonsaiSettings>("load_settings");
+    hydrateFromSettings(saved);
+    return saved;
+  }, [hydrateFromSettings, pauseDebouncedSettingsSave]);
 
   useEffect(() => {
     let cancelled = false;
@@ -163,45 +282,15 @@ export function usePluginSettings() {
       .then((saved) => {
         if (cancelled) return;
         const restored = takeRestoredSettingsSnapshot();
-        const normalized = restored
-          ? normalizeSettings(toBonsaiSettingsPayload(restored))
-          : normalizeSettings(saved);
-        setLatencyWarningSeconds(normalized.latency_warning_seconds);
-        setRequestTimeoutSeconds(normalized.request_timeout_seconds);
-        setLatencyTimeoutsCustomEnabled(normalized.latency_timeouts_custom_enabled);
-        setUnifiedInputPersistenceMode(normalized.unified_input_persistence_mode);
-        setScreenshotAttachmentPreset(normalized.screenshot_attachment_preset);
-        setDesktopDebugNoteAutoSave(normalized.desktop_debug_note_auto_save);
-        setDesktopAskVerboseLogging(normalized.desktop_ask_verbose_logging);
-        setDesktopAppLogLevel(normalized.desktop_app_log_level);
-        setAttachProtonLogsWhenTroubleshooting(normalized.attach_proton_logs_when_troubleshooting);
-        setPresetChipAnimation(normalized.preset_chip_animation);
-        setPresetChipFadeAnimationEnabled(normalized.preset_chip_fade_animation_enabled);
-        setInputSanitizerUserDisabled(normalized.input_sanitizer_user_disabled);
-        setCapabilities(normalized.capabilities);
-        setAiCharacterEnabled(normalized.ai_character_enabled);
-        setAiCharacterRandom(normalized.ai_character_random);
-        setAiCharacterPresetId(normalized.ai_character_preset_id);
-        setAiCharacterCustomText(normalized.ai_character_custom_text);
-        setAiCharacterAccentIntensity(normalized.ai_character_accent_intensity);
-        setAskMode(normalized.ask_mode);
-        setOllamaKeepAlive(normalized.ollama_keep_alive);
-        setShowDeveloperTab(normalized.show_developer_tab);
-        setModelPolicyTier(normalized.model_policy_tier);
-        setModelPolicyNonFossUnlocked(normalized.model_policy_non_foss_unlocked);
-        setModelAllowHighVramFallbacks(normalized.model_allow_high_vram_fallbacks);
-        setOllamaLocalOnDeck(normalized.ollama_local_on_deck);
-        setStrategySpoilerMaskingEnabled(normalized.strategy_spoiler_masking_enabled);
-        setStrategySpoilerAutoRevealAfterConsent(normalized.strategy_spoiler_auto_reveal_after_consent);
-        setSteamWebApiKey(normalized.steam_web_api_key);
-        setBonsaiTokenStreamingEnabled(normalized.bonsai_token_streaming_enabled);
-        setResponseVerifyEnabled(normalized.response_verify_enabled);
-        setResponseVerifySecondPass(normalized.response_verify_second_pass);
-        setResponseVerifyModel(normalized.response_verify_model);
-        setNamedOllamaHosts(normalized.named_ollama_hosts);
+        if (restored) {
+          hydrateFromSettings(normalizeSettings(toBonsaiSettingsPayload(restored)));
+        } else {
+          hydrateFromSettings(saved);
+        }
       })
       .catch(() => {
         if (cancelled) return;
+        setSettingsPersistEnabled(false);
         setLatencyWarningSeconds(DEFAULT_LATENCY_WARNING_SECONDS);
         setRequestTimeoutSeconds(DEFAULT_REQUEST_TIMEOUT_SECONDS);
         setUnifiedInputPersistenceMode(DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE);
@@ -242,51 +331,24 @@ export function usePluginSettings() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [hydrateFromSettings]);
 
   useEffect(() => {
-    if (!settingsLoaded) return;
+    if (!settingsPersistEnabled) return;
+    const epochAtSchedule = settingsPersistEpochRef.current;
     const timer = setTimeout(() => {
+      if (settingsPersistEpochRef.current !== epochAtSchedule) return;
+      settingsSaveInFlightRef.current += 1;
       call<[BonsaiSettings], BonsaiSettings>(
         "save_settings",
-        toBonsaiSettingsPayload({
-          latencyWarningSeconds,
-          requestTimeoutSeconds,
-          latencyTimeoutsCustomEnabled,
-          unifiedInputPersistenceMode,
-          screenshotAttachmentPreset,
-          desktopDebugNoteAutoSave,
-          desktopAskVerboseLogging,
-          desktopAppLogLevel,
-          attachProtonLogsWhenTroubleshooting,
-          presetChipFadeAnimationEnabled,
-          presetChipAnimation,
-          inputSanitizerUserDisabled,
-          capabilities,
-          aiCharacterEnabled,
-          aiCharacterRandom,
-          aiCharacterPresetId,
-          aiCharacterCustomText,
-          aiCharacterAccentIntensity,
-          askMode,
-          ollamaKeepAlive,
-          showDeveloperTab,
-          modelPolicyTier,
-          modelPolicyNonFossUnlocked,
-          modelAllowHighVramFallbacks,
-          ollamaLocalOnDeck,
-          strategySpoilerMaskingEnabled,
-          strategySpoilerAutoRevealAfterConsent,
-          steamWebApiKey,
-          bonsaiTokenStreamingEnabled,
-          responseVerifyEnabled,
-          responseVerifySecondPass,
-          responseVerifyModel,
-          namedOllamaHosts,
+        toBonsaiSettingsPayload(settingsSnapshotForDebouncedSaveRef.current)
+      )
+        .catch((err) => {
+          console.error("save_settings failed", err);
         })
-      ).catch((err) => {
-        console.error("save_settings failed", err);
-      });
+        .finally(() => {
+          settingsSaveInFlightRef.current -= 1;
+        });
     }, 400);
     return () => clearTimeout(timer);
   }, [
@@ -323,7 +385,7 @@ export function usePluginSettings() {
     responseVerifySecondPass,
     responseVerifyModel,
     namedOllamaHosts,
-    settingsLoaded,
+    settingsPersistEnabled,
   ]);
 
   return {
@@ -395,5 +457,8 @@ export function usePluginSettings() {
     setLatencyTimeoutsCustomEnabled,
     setScreenshotAttachmentPreset,
     hydrateFromSettings,
+    pauseDebouncedSettingsSave,
+    flushSettingsSnapshotNow,
+    syncSettingsFromDisk,
   };
 }

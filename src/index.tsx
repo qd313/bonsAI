@@ -421,6 +421,9 @@ const Content: React.FC = () => {
     setNamedOllamaHosts,
     settingsLoaded,
     hydrateFromSettings,
+    pauseDebouncedSettingsSave,
+    flushSettingsSnapshotNow,
+    syncSettingsFromDisk,
   } = usePluginSettings();
 
   const appLogPrefs = useMemo(
@@ -501,7 +504,7 @@ const Content: React.FC = () => {
     effectiveOllamaPcIp,
     selectedAttachment,
     setSelectedAttachment,
-    setInputSanitizerUserDisabled,
+    syncSettingsFromDisk,
     unifiedInputFieldLayerRef,
     unifiedInputHostRef,
     setSelectedIndex,
@@ -945,8 +948,10 @@ const Content: React.FC = () => {
 
   const onClearAllPluginData = useCallback(async () => {
     try {
+      await pauseDebouncedSettingsSave();
       const defaults = await call<[], BonsaiSettings>("clear_plugin_data");
       hydrateFromSettings(defaults);
+      await flushSettingsSnapshotNow();
       try {
         window.localStorage.removeItem(IP_STORAGE_KEY);
         window.localStorage.removeItem(DISCLAIMER_STORAGE_KEY);
@@ -979,7 +984,13 @@ const Content: React.FC = () => {
         duration: 5000,
       });
     }
-  }, [hydrateFromSettings, resetPluginSession, showDisclaimerModalAgain]);
+  }, [
+    flushSettingsSnapshotNow,
+    hydrateFromSettings,
+    pauseDebouncedSettingsSave,
+    resetPluginSession,
+    showDisclaimerModalAgain,
+  ]);
 
   const onMicInput = () => {
     toaster.toast({

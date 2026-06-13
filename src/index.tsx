@@ -44,6 +44,7 @@ import {
   clearSettingsTabLocalSurvival,
 } from "./utils/settingsTabLocalSurvival";
 import { persistOllamaIpIfRoutingToLan as persistOllamaIpIfRoutingToLanUtil } from "./utils/persistOllamaIp";
+import { shouldClearUnifiedInputForPersistenceMode } from "./utils/unifiedInputPersistenceMode";
 import { getRandomPresets } from "./data/presets";
 import {
   AboutTabTitleIcon,
@@ -897,8 +898,11 @@ const Content: React.FC = () => {
     persistSearchQuery("");
   }, [unifiedInput, unifiedInputPersistenceMode, filteredSettings.length]);
 
+  const unifiedInputPersistenceModePrevRef = useRef<typeof unifiedInputPersistenceMode | null>(null);
   useEffect(() => {
-    if (unifiedInputPersistenceMode === "no_persist") {
+    const prev = unifiedInputPersistenceModePrevRef.current;
+    unifiedInputPersistenceModePrevRef.current = unifiedInputPersistenceMode;
+    if (shouldClearUnifiedInputForPersistenceMode(prev, unifiedInputPersistenceMode)) {
       setUnifiedInput("");
     }
   }, [unifiedInputPersistenceMode]);

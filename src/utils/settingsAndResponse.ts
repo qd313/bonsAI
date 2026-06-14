@@ -54,7 +54,11 @@ export type BonsaiCapabilities = {
   external_navigation: boolean;
   /** Outbound Steam Web API (GetPlayerBans) for ``bonsai:vac-check``; key stored in settings. */
   steam_web_api: boolean;
+  /** Local microphone capture for speech-to-text in the Ask bar. */
+  microphone_access: boolean;
 };
+
+export type VoiceSttModelId = "tiny.en" | "base.en";
 
 export type NamedOllamaHost = {
   label: string;
@@ -64,7 +68,7 @@ export type NamedOllamaHost = {
 export type BonsaiSettings = {
   latency_warning_seconds: number;
   request_timeout_seconds: number;
-  /** When true, stored warning/timeout apply; when false, defaults (30s / 45s) for Ask + Ollama. */
+  /** When true, stored warning/timeout apply; when false, defaults (60s / 180s) for Ask + Ollama. */
   latency_timeouts_custom_enabled: boolean;
   unified_input_persistence_mode: UnifiedInputPersistenceMode;
   /** Vision attachment downscale and JPEG quality preset. */
@@ -124,6 +128,8 @@ export type BonsaiSettings = {
   response_verify_model: string;
   /** Labeled ``host:port`` presets for quick Connection switching (max 4). */
   named_ollama_hosts: NamedOllamaHost[];
+  /** Local whisper.cpp model for voice Ask (tiny.en default for Deck real-time). */
+  voice_stt_model: VoiceSttModelId;
 };
 
 /** Fields mirrored from React state / hook before `save_settings` RPC. */
@@ -154,7 +160,6 @@ export type BonsaiSettingsSnapshotInput = {
   modelAllowHighVramFallbacks: boolean;
   ollamaLocalOnDeck: boolean;
   strategySpoilerMaskingEnabled: boolean;
-  strategySpoilerAutoRevealAfterConsent: boolean;
   steamWebApiKey: string;
   bonsaiTokenStreamingEnabled: boolean;
   showOnscreenDebugHud: boolean;
@@ -162,6 +167,7 @@ export type BonsaiSettingsSnapshotInput = {
   responseVerifySecondPass: boolean;
   responseVerifyModel: string;
   namedOllamaHosts: NamedOllamaHost[];
+  voiceSttModel: VoiceSttModelId;
 };
 
 /** Build the backend `BonsaiSettings` object; optional `patch` for immediate saves (character picker, permissions). */
@@ -196,7 +202,7 @@ export function toBonsaiSettingsPayload(
     model_allow_high_vram_fallbacks: input.modelAllowHighVramFallbacks,
     ollama_local_on_deck: input.ollamaLocalOnDeck,
     strategy_spoiler_masking_enabled: input.strategySpoilerMaskingEnabled,
-    strategy_spoiler_auto_reveal_after_consent: input.strategySpoilerAutoRevealAfterConsent,
+    strategy_spoiler_auto_reveal_after_consent: false,
     steam_web_api_key: input.steamWebApiKey.trim().slice(0, STEAM_WEB_API_KEY_MAX_LEN),
     bonsai_token_streaming_enabled: input.bonsaiTokenStreamingEnabled,
     show_onscreen_debug_hud: input.showOnscreenDebugHud,
@@ -204,6 +210,7 @@ export function toBonsaiSettingsPayload(
     response_verify_second_pass: input.responseVerifySecondPass,
     response_verify_model: input.responseVerifyModel.trim().slice(0, 64),
     named_ollama_hosts: input.namedOllamaHosts,
+    voice_stt_model: input.voiceSttModel,
   };
   return patch ? { ...base, ...patch } : base;
 }
@@ -214,7 +221,7 @@ export type AppliedResultLike = {
   errors: string[];
 };
 
-export const DEFAULT_LATENCY_WARNING_SECONDS = 45;
+export const DEFAULT_LATENCY_WARNING_SECONDS = 60;
 export const DEFAULT_REQUEST_TIMEOUT_SECONDS = 180;
 export const MIN_LATENCY_WARNING_SECONDS = 5;
 export const MAX_LATENCY_WARNING_SECONDS = 300;
@@ -266,7 +273,11 @@ export const DEFAULT_CAPABILITIES: BonsaiCapabilities = {
   steam_logs_read: false,
   external_navigation: false,
   steam_web_api: false,
+  microphone_access: false,
 };
+
+export const DEFAULT_VOICE_STT_MODEL: VoiceSttModelId = "tiny.en";
+export const VOICE_STT_MODEL_OPTIONS: VoiceSttModelId[] = ["tiny.en", "base.en"];
 
 export const DEFAULT_AI_CHARACTER_ENABLED = false;
 export const DEFAULT_AI_CHARACTER_RANDOM = true;
@@ -558,7 +569,15 @@ export function normalizeCapabilities(value: unknown): BonsaiCapabilities {
     steam_logs_read: raw.steam_logs_read === true,
     external_navigation: raw.external_navigation === true,
     steam_web_api: raw.steam_web_api === true,
+    microphone_access: raw.microphone_access === true,
   };
+}
+
+export function normalizeVoiceSttModel(value: unknown): VoiceSttModelId {
+  if (typeof value === "string" && (VOICE_STT_MODEL_OPTIONS as string[]).includes(value.trim())) {
+    return value.trim() as VoiceSttModelId;
+  }
+  return DEFAULT_VOICE_STT_MODEL;
 }
 
 export function normalizeSettings(data: unknown): BonsaiSettings {
@@ -614,6 +633,7 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     response_verify_second_pass: normalizeResponseVerifySecondPass(raw.response_verify_second_pass),
     response_verify_model: normalizeResponseVerifyModel(raw.response_verify_model),
     named_ollama_hosts: normalizeNamedOllamaHosts(raw.named_ollama_hosts),
+    voice_stt_model: normalizeVoiceSttModel(raw.voice_stt_model),
   };
 }
 

@@ -105,7 +105,10 @@
         "VAC-06-perm-off-after-key",
         "BG-ASK-lifecycle",
         "SMOKE-B-apply-with-perms",
-        "TDP-boundary-clamps-assert"
+        "TDP-boundary-clamps-assert",
+        "THINKING-01-pending-phases",
+        "STREAM-06-smooth-reveal",
+        "FEEDBACK-01-reply-action-chrome"
       ],
       "sourceFiles": ["tier2-deep.json"],
       "requiresPreview": true,

@@ -443,30 +443,6 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     }
   }, [ollamaLocalOnDeck, localSetupStatus]);
 
-  // #region agent log
-  useEffect(() => {
-    const installLabel = "Install options…";
-    const browseLabel = "Browse models…";
-    fetch("http://127.0.0.1:7548/ingest/455d5c32-fa64-45d1-b31c-f17b50f3371a", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "441b11" },
-      body: JSON.stringify({
-        sessionId: "441b11",
-        location: "OllamaWhereAiRunsSection.tsx:mount",
-        message: "Ollama local setup UI labels",
-        data: {
-          ollamaLocalOnDeck,
-          installLabelOk: installLabel.endsWith("…") && !installLabel.includes("â"),
-          browseLabelOk: browseLabel.endsWith("…") && !browseLabel.includes("â"),
-          installLastChar: installLabel.charCodeAt(installLabel.length - 1),
-        },
-        timestamp: Date.now(),
-        hypothesisId: "A",
-      }),
-    }).catch(() => {});
-  }, [ollamaLocalOnDeck]);
-  // #endregion
-
   return (
       <PanelSection title="Where AI runs">
         <PanelSectionRow>
@@ -523,20 +499,6 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                 <Button
                   disabled={localSetupBusy}
                   onClick={() => {
-                    // #region agent log
-                    fetch("http://127.0.0.1:7548/ingest/455d5c32-fa64-45d1-b31c-f17b50f3371a", {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "441b11" },
-                      body: JSON.stringify({
-                        sessionId: "441b11",
-                        location: "OllamaWhereAiRunsSection.tsx:browseClick",
-                        message: "Browse models hub open",
-                        data: { initialSection: "browse" },
-                        timestamp: Date.now(),
-                        hypothesisId: "B",
-                      }),
-                    }).catch(() => {});
-                    // #endregion
                     onBeforeDeckyModal();
                     onOpenOllamaModelsHub({ initialSection: "browse" });
                   }}

@@ -44,17 +44,17 @@ Based on `refactor_helpers.py` chains, `pullModelCatalog.ts`, and Deck ~16GB VRA
 - **Acceptance:** User saves 2–4 labeled `host:port` entries; one-tap switch updates Ask/Test target; LAN vs local-on-Deck rules documented.
 - **Roadmap mirror:** [roadmap.md](../roadmap.md) → Named Ollama hosts.
 
-### Per-turn feedback (thumbs / quality) — ★★★
+### Per-turn feedback (thumbs / quality) — ★★★ — **polish shipped 2026-06-14**
 
-- **Files:** `src/components/MainTab.tsx`, `main.py` (optional RPC), `Desktop/bonsAI_logs` or local JSONL.
-- **Acceptance:** Optional thumbs on last exchange; stored locally only; no network without new permission.
+- **Files:** `src/components/MainTab.tsx`, `BonsaiChatFeedbackRow.tsx`, `BonsaiChatSecondaryButton.tsx`, `bonsaiScopeStylesheet.ts`, `main.py` (RPC), local JSONL.
+- **Acceptance:** Optional thumbs on last exchange under AI bubble; stored locally only; unified glass secondary-button chrome shared with Retry and Show details.
 - **Not in scope:** Model fine-tuning pipeline.
 
-### Thinking blurb during reply — ★★★
+### Thinking blurb during reply — ★★★ — **complete 2026-06-14**
 
-- **Files:** `ollama_service.py`, `main.py` (background status), `useBackgroundGameAi.ts`, `MainTab.tsx`, `src/types/backgroundAsk.ts`.
-- **Acceptance:** Model-emitted `<bonsai-status>` extracted from the live stream; shown in pending UI; stripped from final reply; deterministic phase fallback when absent.
-- **Roadmap mirror:** [roadmap.md](../roadmap.md) → Thinking blurb during reply.
+- **Files:** `bonsai_stream_tags.py`, `game_ai_request.py`, `main.py`, `ollama_prompts.py`, `useBonsaiAskOrchestration.ts`, `askThinkingPhases.ts`, `MainTab.tsx`.
+- **Acceptance:** Deterministic prep phases + model `<bonsai-status>`; italic status line while pending; no duplicate Thinking bubble; `Starting…` on submit.
+- **Roadmap mirror:** [roadmap.md](../roadmap.md) → Completed → Thinking blurb during reply.
 
 ### Diagnostics block (structured Ask transparency) — ★★★★
 

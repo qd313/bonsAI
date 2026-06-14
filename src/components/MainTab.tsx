@@ -1,21 +1,18 @@
 import React, { useState, useEffect, useLayoutEffect, useRef, useCallback } from "react";
 import { toaster } from "@decky/api";
-import { PanelSection, PanelSectionRow, TextField, Button, Focusable, Router, ToggleField } from "@decky/ui";
+import { PanelSection, PanelSectionRow, TextField, Button, Focusable, Router } from "@decky/ui";
 import type { PresetPrompt } from "../data/presets";
 import { MainTabPresetAnimatedChips } from "./MainTabPresetAnimatedChips";
 import {
   ASK_BAR_PRIMARY_MIN_HEIGHT_PX,
   ASK_LABEL_COLOR_50,
   BONSAI_CHAT_AI_BUBBLE_MAX_FRAC,
-  BONSAI_CHAT_TRANSCRIPT_FONT_PX,
-  BONSAI_CHAT_TRANSCRIPT_LINE_HEIGHT,
   UNIFIED_INPUT_ICON_STRIP_PX,
   UNIFIED_TEXT_BODY_MAX_PX,
   UNIFIED_TEXT_FONT_PX,
   UNIFIED_TEXT_LINE_HEIGHT,
   UNIFIED_TEXT_OVERLAY_BOTTOM_GAP_PX,
 } from "../features/unified-input/constants";
-import { splitResponseIntoChunks } from "../utils/splitResponseIntoChunks";
 import {
   getFocusableWithin,
   isLeftNavigationEvent,
@@ -38,6 +35,7 @@ import {
   ClearIcon,
   ImageAttachmentIcon,
   RefreshArrowIcon,
+  ThinkingSpinnerIcon,
 } from "./icons";
 import { CharacterRoleplayEmoticon } from "./CharacterRoleplayEmoticon";
 import type { TransparencySnapshot } from "../utils/inputTransparency";
@@ -50,172 +48,28 @@ import {
   type ModelPolicyDisclosurePayload,
 } from "../data/modelPolicy";
 import { MainTabAskModeMenuPopover } from "./MainTabAskModeMenuPopover";
-import { MainTabBonsaiAiMarkdownChunk } from "./MainTabBonsaiAiMarkdownChunk";
 import { joinPresetWithRunningGame } from "../utils/joinPresetWithRunningGame";
+import { isPendingPlaceholderResponse } from "../utils/askThinkingPhases";
+import { buildReplyActionsElement } from "../utils/buildReplyActionsElement";
+import { BonsaiChatSecondaryButton } from "./BonsaiChatSecondaryButton";
+import { buildAnswerBubbleElement } from "../utils/buildAnswerBubbleElement";
+import { buildTurnHeaderElement } from "../utils/buildTurnHeaderElement";
+import { buildCollapsedTurnTitle } from "../utils/chatTurnTitle";
+import type { AskThreadExpandedTurnKey } from "../types/bonsaiUi";
+import { debugSessionLog } from "../utils/debugSessionLog";
+import { describeFocusTarget } from "../utils/focusTrace";
+import { useStreamScrollPin } from "../hooks/useStreamScrollPin";
+import {
+  invokeAnswerBubbleMoveDown,
+  invokeAnswerBubbleMoveUp,
+} from "../utils/answerBubbleNavRegistry";
+import { focusAnswerBubbleAfterHeader } from "../utils/answerBubbleNavigation";
+import {
+  isDownNavigationEvent,
+  isUpNavigationEvent,
+} from "../utils/focusNavigation";
 
 const BONSAI_CHAT_AI_MAX_WIDTH_CSS = `min(${Math.round(BONSAI_CHAT_AI_BUBBLE_MAX_FRAC * 100)}%, 100%)`;
-
-/** Single-line-ish collapsed height for fade (one line + fade tail). */
-function collapsedUserMaxHeightEm(): string {
-  const lh = BONSAI_CHAT_TRANSCRIPT_FONT_PX * BONSAI_CHAT_TRANSCRIPT_LINE_HEIGHT;
-  return `${(lh + 2) / BONSAI_CHAT_TRANSCRIPT_FONT_PX}em`;
-}
-
-function useElementOverflows(ref: React.RefObject<HTMLElement | null>, deps: unknown[]): boolean {
-  const [overflows, setOverflows] = useState(false);
-  useLayoutEffect(() => {
-    const el = ref.current;
-    if (!el) {
-      setOverflows(false);
-      return;
-    }
-    setOverflows(el.scrollHeight > el.clientHeight + 1);
-  }, deps);
-  return overflows;
-}
-
-type BonsaiChatUserBubbleProps = {
-  variant: "history" | "latest";
-  text: string;
-  bubbleKey: string;
-  /** Set on history rows so archived-turn navigation can scroll the row into view. */
-  threadIndex?: number;
-  selected?: boolean;
-  expanded: boolean;
-  onExpandedChange: (next: boolean) => void;
-  onHistorySelect?: () => void;
-};
-
-function BonsaiChatUserBubble(props: BonsaiChatUserBubbleProps) {
-  const { variant, text, bubbleKey, threadIndex, selected, expanded, onExpandedChange, onHistorySelect } = props;
-  const innerRef = useRef<HTMLDivElement>(null);
-  const overflows = useElementOverflows(innerRef, [text, expanded, bubbleKey]);
-  const collapsed = !expanded;
-
-  /** History: first activate expands when truncated; a later activate selects the turn. Latest: expand/collapse only. */
-  const onClick = () => {
-    if (collapsed && overflows) {
-      onExpandedChange(true);
-      return;
-    }
-    if (variant === "history" && onHistorySelect) {
-      onHistorySelect();
-      return;
-    }
-    if (variant === "latest" && expanded && overflows) {
-      onExpandedChange(false);
-    }
-  };
-
-  return (
-    <button
-      type="button"
-      data-bonsai-chat-user-bubble={bubbleKey}
-      {...(threadIndex !== undefined ? { "data-bonsai-thread-index": String(threadIndex) } : {})}
-      className={
-        variant === "latest"
-          ? "bonsai-chat-user-bubble bonsai-chat-user-bubble--latest"
-          : `bonsai-chat-user-bubble bonsai-chat-user-bubble--history${selected ? " bonsai-chat-user-bubble--selected" : ""}`
-      }
-      onClick={onClick}
-      aria-expanded={expanded}
-    >
-      <div
-        ref={innerRef}
-        className={`bonsai-chat-user-bubble-inner${collapsed && overflows ? " bonsai-chat-user-bubble-inner--faded" : ""}`}
-        style={
-          collapsed && overflows
-            ? { maxHeight: collapsedUserMaxHeightEm(), overflow: "hidden" }
-            : undefined
-        }
-      >
-        {text}
-      </div>
-    </button>
-  );
-}
-
-type BonsaiChatAiBubbleProps = {
-  /** Split model body so each chunk is its own gamepad focus stop (D-pad can reach the tail). */
-  responseChunks: string[];
-  panelHalfPx: number;
-  expanded: boolean;
-  onExpandedChange: (next: boolean) => void;
-  spoilerMaskingEnabled: boolean;
-  spoilerDefaultExpandedForReply: boolean;
-  /** Single growing preview chunk while token streaming is active. */
-  isStreamingPreview?: boolean;
-};
-
-function BonsaiChatAiBubble(props: BonsaiChatAiBubbleProps) {
-  const {
-    responseChunks,
-    panelHalfPx,
-    expanded,
-    onExpandedChange,
-    spoilerMaskingEnabled,
-    spoilerDefaultExpandedForReply,
-    isStreamingPreview = false,
-  } = props;
-  const innerRef = useRef<HTMLDivElement>(null);
-  const collapsed = !expanded;
-  const lineCapEm = `${(BONSAI_CHAT_TRANSCRIPT_FONT_PX * BONSAI_CHAT_TRANSCRIPT_LINE_HEIGHT + 2) / BONSAI_CHAT_TRANSCRIPT_FONT_PX}em`;
-  const collapsedMax = `min(${Math.max(120, Math.floor(panelHalfPx))}px, ${lineCapEm})`;
-  const stackKey = responseChunks.join("\u0000");
-  const overflows = useElementOverflows(innerRef, [stackKey, expanded, collapsedMax, panelHalfPx]);
-
-  const onChunkActivate = () => {
-    if (collapsed && overflows) {
-      onExpandedChange(true);
-      return;
-    }
-    if (expanded && overflows) {
-      onExpandedChange(false);
-    }
-  };
-
-  return (
-    <div
-      className={`bonsai-chat-ai-bubble bonsai-glass-panel${isStreamingPreview ? " bonsai-chat-ai-bubble--stream-preview" : ""}`}
-      style={{
-        width: BONSAI_CHAT_AI_MAX_WIDTH_CSS,
-        maxWidth: BONSAI_CHAT_AI_MAX_WIDTH_CSS,
-        alignSelf: "flex-start",
-        marginBottom: 80,
-        boxSizing: "border-box",
-      }}
-    >
-      <div
-        ref={innerRef}
-        className={`bonsai-chat-ai-bubble-inner${collapsed && overflows ? " bonsai-chat-ai-bubble-inner--faded" : ""}`}
-        style={{
-          maxHeight: collapsed ? collapsedMax : undefined,
-          overflow: collapsed ? "hidden" : undefined,
-        }}
-      >
-        <div className="bonsai-ai-response-stack">
-          {responseChunks.map((chunk, i) => (
-            <Focusable
-              key={`ai-chunk-${i}`}
-              noFocusRing={false}
-              onActivate={onChunkActivate}
-              {...(isStreamingPreview ? { "data-bonsai-stream-preview": "true" } : {})}
-              style={{ width: "100%", minWidth: 0, boxSizing: "border-box" }}
-            >
-              <div className="bonsai-ai-response-chunk">
-                <MainTabBonsaiAiMarkdownChunk
-                  source={chunk}
-                  spoilerMaskingEnabled={spoilerMaskingEnabled}
-                  spoilerDefaultExpanded={spoilerDefaultExpandedForReply}
-                />
-              </div>
-            </Focusable>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export type MainTabProps = {
   fullBleedRowStyle: React.CSSProperties;
@@ -253,6 +107,7 @@ export type MainTabProps = {
   onOpenScreenshotBrowser: () => void | Promise<void>;
   onCancelAsk: () => void;
   onMicInput: () => void;
+  voiceRecording?: boolean;
   selectedAttachment: AskAttachment | null;
   setSelectedAttachment: React.Dispatch<React.SetStateAction<AskAttachment | null>>;
   clearUnifiedInput: () => void;
@@ -303,12 +158,10 @@ export type MainTabProps = {
   onPresetPreferAskMode?: (mode: AskModeId) => void;
   /** Session thread: prior completed Q/A pairs (client-only). */
   askThreadCollapsed?: AskThreadCollapsedTurn[];
-  /** Latest Ask question text shown above the live response. */
+  /** Latest Ask question text for the live turn title. */
   askThreadDisplayQuestion?: string;
-  /** When set, UI shows that archived turn instead of the live stream. */
-  askThreadViewIndex?: number | null;
-  /** Pass `null` to return to the live (current) turn. */
-  onAskThreadSelectTurn?: (index: number | null) => void;
+  expandedTurnKey?: AskThreadExpandedTurnKey;
+  onTurnActivate?: (key: string | "live") => void;
   /** Last successful Ask model disclosure from the backend (live turn only). */
   modelPolicyDisclosure?: ModelPolicyDisclosurePayload | null;
   /** Opens README model policy section (external nav permission). */
@@ -318,13 +171,12 @@ export type MainTabProps = {
   /** Opens Steam Controller settings (External/Steam nav permission). */
   onOpenControllerSettings?: () => void;
   strategySpoilerMaskingEnabled?: boolean;
-  strategySpoilerDefaultExpandedForReply?: boolean;
-  strategySpoilerConsentForNextAsk?: boolean;
-  onStrategySpoilerConsentForNextAskChange?: (next: boolean) => void;
   /** Pyro easter egg: backend-injected suggestion chip (not in normal preset pool). */
   presetCarouselInject?: { text: string } | null;
   /** While true, render one preview chunk instead of D-pad split chunks. */
   isStreamingPreview?: boolean;
+  /** Smoothly revealed stream text while ``isStreamingPreview`` is active. */
+  streamDisplayText?: string;
   /** Pending Ask phase line from ``<bonsai-status>`` or backend fallback. */
   thinkingSummary?: string | null;
   /** When true, show full Ask diagnostics block (model chain, timing). */
@@ -365,6 +217,7 @@ export function MainTab(props: MainTabProps) {
     onOpenScreenshotBrowser,
     onCancelAsk,
     onMicInput,
+    voiceRecording = false,
     selectedAttachment,
     setSelectedAttachment,
     clearUnifiedInput,
@@ -402,18 +255,16 @@ export function MainTab(props: MainTabProps) {
     onPresetPreferAskMode,
     askThreadCollapsed = [],
     askThreadDisplayQuestion = "",
-    askThreadViewIndex = null,
-    onAskThreadSelectTurn,
+    expandedTurnKey = "live",
+    onTurnActivate,
     modelPolicyDisclosure = null,
     onOpenModelPolicyReadme,
     shortcutSetupVariant = null,
     onOpenControllerSettings,
     strategySpoilerMaskingEnabled = true,
-    strategySpoilerDefaultExpandedForReply = false,
-    strategySpoilerConsentForNextAsk = false,
-    onStrategySpoilerConsentForNextAskChange,
     presetCarouselInject = null,
     isStreamingPreview = false,
+    streamDisplayText = "",
     thinkingSummary = null,
     desktopAskVerboseLogging = false,
     lastRequestId = null,
@@ -488,67 +339,120 @@ export function MainTab(props: MainTabProps) {
   const askLooksReady = unifiedInput.trim().length > 0 && !isAsking;
   /** Do not gate on `aiCharacterAvatarPresetId` — when the feature is on, `resolveMainTabAvatarPresetId` always yields a display id (including `__random__` / `__custom__`). */
   const showAiCharacterChrome = Boolean(onOpenCharacterPicker && aiCharacterPadClass);
-  const viewingArchivedTurn =
-    askThreadViewIndex !== null &&
-    askThreadViewIndex >= 0 &&
-    askThreadViewIndex < askThreadCollapsed.length
-      ? askThreadCollapsed[askThreadViewIndex]
-      : null;
-  const responseBodyForDisplay = viewingArchivedTurn ? viewingArchivedTurn.answer : ollamaResponse;
-  const questionHeaderDisplay = viewingArchivedTurn ? viewingArchivedTurn.question : askThreadDisplayQuestion;
+  const liveQuestion = askThreadDisplayQuestion.trim();
+  const liveResponseBody = isStreamingPreview ? streamDisplayText : ollamaResponse;
+  const showLiveResponse =
+    Boolean(liveResponseBody.trim()) &&
+    !(isAsking && !isStreamingPreview && isPendingPlaceholderResponse(liveResponseBody));
+  const showLiveTurn = Boolean(liveQuestion) || isAsking || showLiveResponse;
   const appliedTuningBannerText = formatAppliedTuningBannerText(lastApplied);
 
   const chatMainColumnRef = useRef<HTMLDivElement | null>(null);
-  const [panelHalfPx, setPanelHalfPx] = useState(240);
-  const [expandedUser, setExpandedUser] = useState<Record<string, boolean>>({});
-  /** Live/latest AI reply starts expanded; archived turns start collapsed to one line. */
-  const [expandedAi, setExpandedAi] = useState(true);
+
+  useStreamScrollPin(chatMainColumnRef, streamDisplayText, isStreamingPreview);
 
   useEffect(() => {
-    const el = chatMainColumnRef.current;
-    if (!el) return;
-    const scroll = el.closest('[class*="TabContentsScroll"]') as HTMLElement | null;
-    const measure = () => {
-      const target = scroll ?? el;
-      const h = target.getBoundingClientRect().height;
-      setPanelHalfPx(Math.max(160, Math.floor(h / 2)));
-    };
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-    if (scroll) ro.observe(scroll);
-    return () => ro.disconnect();
-  }, [askThreadCollapsed.length, questionHeaderDisplay, responseBodyForDisplay]);
-
-  useEffect(() => {
-    setExpandedAi(askThreadViewIndex === null);
-  }, [responseBodyForDisplay, askThreadViewIndex]);
-
-  useEffect(() => {
-    setExpandedUser((p) => ({ ...p, latest: true }));
-  }, [questionHeaderDisplay]);
-
-  useEffect(() => {
-    if (askThreadViewIndex === null) return;
+    if (!expandedTurnKey) return;
     window.requestAnimationFrame(() => {
-      const el = document.querySelector(`[data-bonsai-thread-index="${askThreadViewIndex}"]`);
-      (el as HTMLElement | null)?.scrollIntoView?.({ block: "nearest", behavior: "smooth" });
+      const header = document.querySelector(
+        `[data-bonsai-turn-id="${expandedTurnKey}"]`
+      ) as HTMLElement | null;
+      header?.scrollIntoView?.({ block: "nearest", behavior: "auto" });
     });
-  }, [askThreadViewIndex]);
+  }, [expandedTurnKey]);
 
-  const showThreadNextMessage =
-    askThreadViewIndex !== null &&
-    askThreadCollapsed.length > 0 &&
-    askThreadViewIndex >= 0 &&
-    askThreadViewIndex <= askThreadCollapsed.length - 1;
+  useEffect(() => {
+    const col = chatMainColumnRef.current;
+    if (!col) return;
+    const onFocusIn = (ev: FocusEvent) => {
+      const target = ev.target as HTMLElement | null;
+      if (!target?.closest(".bonsai-chat-main-column")) return;
+      const scroll = col.closest('[class*="TabContentsScroll"]') as HTMLElement | null;
+      const focus = describeFocusTarget(target);
+      // #region agent log
+      debugSessionLog("MainTab.tsx:focusin", "focus", "H4", {
+        ...focus,
+        scrollTop: scroll?.scrollTop ?? null,
+        runId: "post-fix-14",
+      });
+      // #endregion
+    };
+    col.addEventListener("focusin", onFocusIn, true);
 
-  const onThreadNextMessage = () => {
-    if (askThreadViewIndex === null) return;
-    if (askThreadViewIndex < askThreadCollapsed.length - 1) {
-      onAskThreadSelectTurn?.(askThreadViewIndex + 1);
-    } else {
-      onAskThreadSelectTurn?.(null);
-    }
+    const onKeyDown = (ev: KeyboardEvent) => {
+      if (!col.contains(document.activeElement)) return;
+      const active = document.activeElement as HTMLElement | null;
+      const onAnswer = Boolean(active?.closest(".bonsai-chat-ai-bubble"));
+      const inHeader = Boolean(active?.closest(".bonsai-chat-turn-row-header"));
+      if (isDownNavigationEvent(ev)) {
+        if (inHeader) {
+          const turnId = active
+            ?.closest(".bonsai-chat-turn-row-header")
+            ?.getAttribute("data-bonsai-turn-id");
+          const handled = focusAnswerBubbleAfterHeader(
+            active?.closest(".bonsai-chat-turn-row-header") as HTMLElement | null,
+            turnId ?? undefined
+          );
+          // #region agent log
+          debugSessionLog("MainTab.tsx:keydown", "header keydown down fallback", "H20", {
+            handled,
+            turnId,
+            runId: "post-fix-14",
+          });
+          // #endregion
+          if (handled) {
+            ev.preventDefault();
+            ev.stopPropagation();
+          }
+          return;
+        }
+        if (!onAnswer) return;
+        const handled = invokeAnswerBubbleMoveDown();
+        // #region agent log
+        debugSessionLog("MainTab.tsx:keydown", "answer keydown down fallback", "H9", {
+          handled,
+          key: ev.key,
+          code: ev.code,
+          runId: "post-fix-14",
+        });
+        // #endregion
+        if (handled) {
+          ev.preventDefault();
+          ev.stopPropagation();
+        }
+      } else if (isUpNavigationEvent(ev)) {
+        if (!onAnswer) return;
+        const handled = invokeAnswerBubbleMoveUp();
+        // #region agent log
+        debugSessionLog("MainTab.tsx:keydown", "answer keydown up fallback", "H9", {
+          handled,
+          key: ev.key,
+          code: ev.code,
+          runId: "post-fix-14",
+        });
+        // #endregion
+        if (handled) {
+          ev.preventDefault();
+          ev.stopPropagation();
+        }
+      }
+    };
+    col.addEventListener("keydown", onKeyDown, true);
+
+    return () => {
+      col.removeEventListener("focusin", onFocusIn, true);
+      col.removeEventListener("keydown", onKeyDown, true);
+    };
+  }, [askThreadCollapsed.length, expandedTurnKey]);
+
+  const renderAnswerBubble = (body: string, streaming: boolean, answerKey: string) => {
+    return buildAnswerBubbleElement({
+      body,
+      streaming,
+      spoilerMaskingEnabled: strategySpoilerMaskingEnabled,
+      maxWidthCss: BONSAI_CHAT_AI_MAX_WIDTH_CSS,
+      answerKey,
+    });
   };
   const focusUnifiedTextField = React.useCallback((): boolean => {
     const layer =
@@ -1138,6 +1042,38 @@ export function MainTab(props: MainTabProps) {
                           <AskStopIcon size={20} />
                         </span>
                       </Button>
+                    ) : voiceRecording ? (
+                      <Button
+                        className="bonsai-askbar-target bonsai-unified-input-corner-right bonsai-voice-recording-active"
+                        {...({
+                          onMoveLeft: () => focusAskModeButton(),
+                          onOKButton: (evt: { stopPropagation: () => void }) => {
+                            evt.stopPropagation();
+                            onMicInput();
+                          },
+                        } as Record<string, unknown>)}
+                        onClick={onMicInput}
+                        aria-label="Stop voice input"
+                        style={{
+                          minWidth: 20,
+                          width: 20,
+                          minHeight: 20,
+                          padding: 0,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          borderRadius: 0,
+                          border: "none",
+                          background: "transparent",
+                          color: "#f87171",
+                          flexShrink: 0,
+                          transform: "translateX(2px)",
+                        }}
+                      >
+                        <span className="bonsai-unified-input-icon">
+                          <AskStopIcon size={16} />
+                        </span>
+                      </Button>
                     ) : (
                       <Button
                         className="bonsai-askbar-target bonsai-unified-input-corner-right"
@@ -1187,16 +1123,6 @@ export function MainTab(props: MainTabProps) {
             </div>
           </div>
         </PanelSectionRow>
-        {askMode === "strategy" && (
-          <PanelSectionRow>
-            <ToggleField
-              label="Spoilers OK for this Ask"
-              description="Also works if you say spoilers are okay in your message."
-              checked={strategySpoilerConsentForNextAsk}
-              onChange={(checked) => onStrategySpoilerConsentForNextAskChange?.(checked)}
-            />
-          </PanelSectionRow>
-        )}
         {selectedAttachment && (
           <PanelSectionRow>
             <div
@@ -1602,7 +1528,7 @@ export function MainTab(props: MainTabProps) {
           </div>
         )}
 
-        {(askThreadCollapsed.length > 0 || questionHeaderDisplay.trim()) && (
+        {(askThreadCollapsed.length > 0 || showLiveTurn) && (
           <PanelSectionRow>
             <div
               ref={chatMainColumnRef}
@@ -1617,42 +1543,142 @@ export function MainTab(props: MainTabProps) {
               }}
             >
               <div className="bonsai-chat-transcript">
-                {askThreadCollapsed.map((turn, idx) => {
-                  const key = `h-${turn.id}`;
-                  return (
-                    <BonsaiChatUserBubble
-                      key={turn.id}
-                      variant="history"
-                      text={turn.question}
-                      bubbleKey={key}
-                      threadIndex={idx}
-                      selected={askThreadViewIndex === idx}
-                      expanded={Boolean(expandedUser[key])}
-                      onExpandedChange={(v) => setExpandedUser((p) => ({ ...p, [key]: v }))}
-                      onHistorySelect={() => onAskThreadSelectTurn?.(idx)}
-                    />
-                  );
-                })}
-                {(questionHeaderDisplay.trim() || viewingArchivedTurn) && (
-                  <BonsaiChatUserBubble
-                    variant="latest"
-                    text={questionHeaderDisplay}
-                    bubbleKey="latest"
-                    expanded={expandedUser.latest !== false}
-                    onExpandedChange={(v) => setExpandedUser((p) => ({ ...p, latest: v }))}
-                  />
-                )}
+                {askThreadCollapsed.map((turn) => (
+                  <Focusable
+                    key={turn.id}
+                    flow-children="vertical"
+                    className="bonsai-chat-turn-slot"
+                  >
+                    {buildTurnHeaderElement({
+                      turnId: turn.id,
+                      title: buildCollapsedTurnTitle(turn.question),
+                      expanded: expandedTurnKey === turn.id,
+                      onActivate: () => onTurnActivate?.(turn.id),
+                    })}
+                    {expandedTurnKey === turn.id
+                      ? renderAnswerBubble(turn.answer, false, turn.id)
+                      : null}
+                  </Focusable>
+                ))}
+                {showLiveTurn ? (
+                  <Focusable key="live" flow-children="vertical" className="bonsai-chat-turn-slot">
+                    {buildTurnHeaderElement({
+                      turnId: "live",
+                      variant: "live",
+                      title: buildCollapsedTurnTitle(liveQuestion) || "…",
+                      expanded: expandedTurnKey === "live",
+                      isStreaming: isStreamingPreview,
+                      onActivate: () => onTurnActivate?.("live"),
+                    })}
+                    {expandedTurnKey === "live" && isAsking && thinkingSummary && !isStreamingPreview ? (
+                      <div
+                        className="bonsai-chat-status-line bonsai-chat-thinking-line"
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 8,
+                          color: "#9fb7d5",
+                          fontSize: 12,
+                          lineHeight: 1.35,
+                          fontStyle: "italic",
+                          marginBottom: 8,
+                        }}
+                      >
+                        <ThinkingSpinnerIcon size={14} className="bonsai-thinking-spinner" />
+                        {thinkingSummary}
+                      </div>
+                    ) : null}
+                    {expandedTurnKey === "live" && showLiveResponse
+                      ? renderAnswerBubble(liveResponseBody, isStreamingPreview, "live")
+                      : null}
+                    {expandedTurnKey === "live" &&
+                    !isAsking &&
+                    (lastExchange?.answer?.trim() || onRetryLastResponse)
+                      ? buildReplyActionsElement({
+                          replyKey: "live",
+                          rating: feedbackRating,
+                          onRate: (rating) => void onSendFeedback(rating),
+                          showFeedback: Boolean(lastExchange?.answer?.trim()),
+                          onRetry: onRetryLastResponse ?? undefined,
+                          transparencyOpen,
+                          onToggleTransparency: transparencySnapshot
+                            ? () => setTransparencyOpen((o) => !o)
+                            : undefined,
+                        })
+                      : null}
+                    {expandedTurnKey === "live" && shortcutSetupVariant && onOpenControllerSettings ? (
+                      <div
+                        style={{
+                          marginTop: 10,
+                          maxWidth: BONSAI_CHAT_AI_MAX_WIDTH_CSS,
+                        }}
+                      >
+                        <Button onClick={onOpenControllerSettings}>Open Controller settings</Button>
+                        <div
+                          style={{
+                            marginTop: 6,
+                            fontSize: 11,
+                            color: "rgba(200, 215, 230, 0.85)",
+                            lineHeight: 1.4,
+                          }}
+                        >
+                          {shortcutSetupVariant === "deck"
+                            ? "Then: Guide Button Chord Layout → your chord. Full macro steps: docs (§5 bonsai shortcut setup)."
+                            : "Pick a spare button on your Stadia layout, then Guide Button Chord. Full steps: docs (§5)."}
+                        </div>
+                      </div>
+                    ) : null}
+                    {expandedTurnKey === "live" && modelPolicyDisclosure ? (
+                      <div
+                        style={{
+                          marginTop: 10,
+                          padding: "8px 10px",
+                          borderRadius: 8,
+                          border: "1px solid rgba(100, 140, 180, 0.35)",
+                          background: "rgba(20, 32, 44, 0.5)",
+                          fontSize: 11,
+                          color: "#b8cce0",
+                          lineHeight: 1.45,
+                          maxWidth: BONSAI_CHAT_AI_MAX_WIDTH_CSS,
+                          boxSizing: "border-box",
+                        }}
+                      >
+                        <div style={{ fontWeight: 700, marginBottom: 4, color: "#dce8f4" }}>
+                          Model source disclosure
+                        </div>
+                        <div>
+                          <strong>Model:</strong> {modelPolicyDisclosure.model}
+                        </div>
+                        <div style={{ marginTop: 4 }}>
+                          {disclosureSummaryForSourceClass(modelPolicyDisclosure.source_class)}
+                        </div>
+                        {onOpenModelPolicyReadme ? (
+                          <div style={{ marginTop: 6 }}>
+                            <button
+                              type="button"
+                              onClick={onOpenModelPolicyReadme}
+                              style={{
+                                color: "#7dd3fc",
+                                textDecoration: "underline",
+                                cursor: "pointer",
+                                background: "none",
+                                border: "none",
+                                padding: 0,
+                                font: "inherit",
+                              }}
+                            >
+                              Read more
+                            </button>
+                          </div>
+                        ) : null}
+                      </div>
+                    ) : null}
+                  </Focusable>
+                ) : null}
               </div>
             </div>
           </PanelSectionRow>
         )}
-        {isAsking && thinkingSummary ? (
-          <PanelSectionRow>
-            <div className="bonsai-chat-status-line" style={{ color: "#9fb7d5", fontSize: 12, lineHeight: 1.35, fontStyle: "italic" }}>
-              {thinkingSummary}
-            </div>
-          </PanelSectionRow>
-        ) : null}
         {!isAsking && !selectedAttachment && noActiveGameContext && unifiedInput.trim() ? (
           <PanelSectionRow>
             <div
@@ -1669,7 +1695,7 @@ export function MainTab(props: MainTabProps) {
             </div>
           </PanelSectionRow>
         ) : null}
-        {isAsking && showSlowWarning && (
+        {isAsking && showSlowWarning && !isStreamingPreview && (
           <PanelSectionRow>
             <div className="bonsai-chat-status-line" style={{ color: "#f2cf84", fontSize: 12, padding: "6px 0", lineHeight: 1.35 }}>
               Slow (&gt;{latencyWarningSeconds}s): ensure <strong>Ollama</strong> uses your <strong>GPU</strong>, not{" "}
@@ -1677,146 +1703,10 @@ export function MainTab(props: MainTabProps) {
             </div>
           </PanelSectionRow>
         )}
-        {responseBodyForDisplay && (() => {
-          const chunks = isStreamingPreview
-            ? [responseBodyForDisplay]
-            : splitResponseIntoChunks(responseBodyForDisplay);
-          if (!chunks.length) {
-            return null;
-          }
-          const hasTranscriptBlock = askThreadCollapsed.length > 0 || questionHeaderDisplay.trim();
-          return (
-            <PanelSectionRow key="bonsai-ai-response-stack">
-              <div
-                ref={hasTranscriptBlock ? undefined : chatMainColumnRef}
-                className="bonsai-chat-response-stack"
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "flex-start",
-                  minWidth: 0,
-                  boxSizing: "border-box",
-                }}
-              >
-                <BonsaiChatAiBubble
-                  responseChunks={chunks}
-                  panelHalfPx={panelHalfPx}
-                  expanded={expandedAi}
-                  onExpandedChange={setExpandedAi}
-                  spoilerMaskingEnabled={strategySpoilerMaskingEnabled}
-                  spoilerDefaultExpandedForReply={strategySpoilerDefaultExpandedForReply}
-                  isStreamingPreview={isStreamingPreview}
-                />
-                {askThreadViewIndex === null && shortcutSetupVariant && onOpenControllerSettings && (
-                  <div
-                    style={{
-                      marginTop: 10,
-                      maxWidth: BONSAI_CHAT_AI_MAX_WIDTH_CSS,
-                    }}
-                  >
-                    <Button onClick={onOpenControllerSettings}>Open Controller settings</Button>
-                    <div
-                      style={{
-                        marginTop: 6,
-                        fontSize: 11,
-                        color: "rgba(200, 215, 230, 0.85)",
-                        lineHeight: 1.4,
-                      }}
-                    >
-                      {shortcutSetupVariant === "deck"
-                        ? "Then: Guide Button Chord Layout → your chord. Full macro steps: docs (§5 bonsai shortcut setup)."
-                        : "Pick a spare button on your Stadia layout, then Guide Button Chord. Full steps: docs (§5)."}
-                    </div>
-                  </div>
-                )}
-                {askThreadViewIndex === null && modelPolicyDisclosure && (
-                  <div
-                    style={{
-                      marginTop: 10,
-                      padding: "8px 10px",
-                      borderRadius: 8,
-                      border: "1px solid rgba(100, 140, 180, 0.35)",
-                      background: "rgba(20, 32, 44, 0.5)",
-                      fontSize: 11,
-                      color: "#b8cce0",
-                      lineHeight: 1.45,
-                      maxWidth: BONSAI_CHAT_AI_MAX_WIDTH_CSS,
-                      boxSizing: "border-box",
-                    }}
-                  >
-                    <div style={{ fontWeight: 700, marginBottom: 4, color: "#dce8f4" }}>
-                      Model source disclosure
-                    </div>
-                    <div>
-                      <strong>Model:</strong> {modelPolicyDisclosure.model}
-                    </div>
-                    <div style={{ marginTop: 4 }}>
-                      {disclosureSummaryForSourceClass(modelPolicyDisclosure.source_class)}
-                    </div>
-                    {onOpenModelPolicyReadme ? (
-                      <div style={{ marginTop: 6 }}>
-                        <button
-                          type="button"
-                          onClick={onOpenModelPolicyReadme}
-                          style={{
-                            color: "#7dd3fc",
-                            textDecoration: "underline",
-                            cursor: "pointer",
-                            background: "none",
-                            border: "none",
-                            padding: 0,
-                            font: "inherit",
-                          }}
-                        >
-                          Read more
-                        </button>
-                      </div>
-                    ) : null}
-                  </div>
-                )}
-                {!isAsking && askThreadViewIndex === null && onRetryLastResponse ? (
-                  <div
-                    className="bonsai-chat-retry-row"
-                    style={{
-                      marginTop: 14,
-                      maxWidth: BONSAI_CHAT_AI_MAX_WIDTH_CSS,
-                    }}
-                  >
-                    <Button
-                      onClick={onRetryLastResponse}
-                      aria-label="Retry same prompt"
-                      style={{
-                        minHeight: 34,
-                        padding: "6px 12px",
-                        fontSize: 12,
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: 8,
-                      }}
-                    >
-                      <RefreshArrowIcon size={16} />
-                      Retry same prompt
-                    </Button>
-                  </div>
-                ) : null}
-              </div>
-            </PanelSectionRow>
-          );
-        })()}
-        {showThreadNextMessage && (
-          <PanelSectionRow>
-            <div className="bonsai-chat-transcript bonsai-chat-next-message-row">
-              <button type="button" className="bonsai-chat-next-message" onClick={onThreadNextMessage}>
-                Next message
-              </button>
-            </div>
-          </PanelSectionRow>
-        )}
         {strategyGuideBranches &&
           strategyGuideBranches.options.length > 0 &&
           !isAsking &&
-          askThreadViewIndex === null &&
+          expandedTurnKey === "live" &&
           onStrategyBranchPick && (
           <PanelSectionRow>
             <div
@@ -1874,15 +1764,6 @@ export function MainTab(props: MainTabProps) {
             <div style={{ color: "#f2cf84", fontSize: 12, lineHeight: 1.35 }}>{appliedTuningBannerText}</div>
           </PanelSectionRow>
         )}
-        {ollamaContext && (
-          <PanelSectionRow>
-            <div style={{ color: "#9fb7d5", fontSize: 13 }}>
-              {ollamaContext.app_context === "active" && ollamaContext.app_id
-                ? `Context: active game AppID ${ollamaContext.app_id}`
-                : "Context: no active game detected"}
-            </div>
-          </PanelSectionRow>
-        )}
         {canSaveDesktopNote && (
           <PanelSectionRow>
             <Button
@@ -1900,36 +1781,19 @@ export function MainTab(props: MainTabProps) {
             </Button>
           </PanelSectionRow>
         )}
-        {!isAsking && lastExchange?.answer?.trim() ? (
-          <PanelSectionRow>
-            <div style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 6 }}>Rate last reply (saved on device only)</div>
-            <Focusable flow-children="horizontal" style={{ display: "flex", gap: 8 }}>
-              <Button
-                onClick={() => void onSendFeedback("up")}
-                disabled={feedbackRating !== null}
-                style={{ minHeight: 34, flex: 1, opacity: feedbackRating === "up" ? 1 : 0.85 }}
-              >
-                👍 Helpful
-              </Button>
-              <Button
-                onClick={() => void onSendFeedback("down")}
-                disabled={feedbackRating !== null}
-                style={{ minHeight: 34, flex: 1, opacity: feedbackRating === "down" ? 1 : 0.85 }}
-              >
-                👎 Off
-              </Button>
-            </Focusable>
-          </PanelSectionRow>
-        ) : null}
         {desktopAskVerboseLogging && transparencySnapshot?.ask_diagnostics ? (
           <PanelSectionRow>
             <Focusable style={{ width: "100%" }}>
               <div style={{ fontSize: 12, fontWeight: 700, color: "#b8c9dc", marginBottom: 6 }}>
                 Ask diagnostics
               </div>
-              <Button onClick={() => setDiagnosticsOpen((o) => !o)} style={{ width: "100%", minHeight: 34, marginBottom: 8 }}>
+              <BonsaiChatSecondaryButton
+                onClick={() => setDiagnosticsOpen((o) => !o)}
+                aria-expanded={diagnosticsOpen}
+                aria-label={diagnosticsOpen ? "Hide diagnostics" : "Show diagnostics"}
+              >
                 {diagnosticsOpen ? "Hide diagnostics" : "Show diagnostics"}
-              </Button>
+              </BonsaiChatSecondaryButton>
               {diagnosticsOpen && (
                 <pre
                   style={{
@@ -1970,12 +1834,6 @@ export function MainTab(props: MainTabProps) {
                     : ""}
                 </div>
               )}
-              <Button
-                onClick={() => setTransparencyOpen((o) => !o)}
-                style={{ width: "100%", minHeight: 34, marginBottom: 8 }}
-              >
-                {transparencyOpen ? "Hide details" : "Show details"}
-              </Button>
               {transparencyOpen && (
                 <>
                   <div
@@ -2021,14 +1879,14 @@ export function MainTab(props: MainTabProps) {
                     </pre>
                   </div>
                   <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                    <Button
+                    <BonsaiChatSecondaryButton
                       onClick={() => onRunOriginalAsk?.(transparencySnapshot.raw_question)}
                       disabled={!onRunOriginalAsk}
-                      style={{ width: "100%", minHeight: 34 }}
+                      style={{ width: "100%" }}
                     >
                       Run original in Ask
-                    </Button>
-                    <Button
+                    </BonsaiChatSecondaryButton>
+                    <BonsaiChatSecondaryButton
                       onClick={() => {
                         try {
                           void navigator.clipboard.writeText(JSON.stringify(transparencySnapshot, null, 2));
@@ -2037,14 +1895,31 @@ export function MainTab(props: MainTabProps) {
                           toaster.toast({ title: "Copy failed", body: "Clipboard unavailable.", duration: 3000 });
                         }
                       }}
-                      style={{ width: "100%", minHeight: 34 }}
+                      style={{ width: "100%" }}
                     >
                       Copy JSON
-                    </Button>
+                    </BonsaiChatSecondaryButton>
                   </div>
                 </>
               )}
             </Focusable>
+          </PanelSectionRow>
+        )}
+        {ollamaContext && (
+          <PanelSectionRow>
+            <div
+              className="bonsai-context-footnote"
+              style={{
+                fontSize: 10,
+                color: "#8fa8c4",
+                lineHeight: 1.35,
+                fontStyle: "italic",
+              }}
+            >
+              {ollamaContext.app_context === "active" && ollamaContext.app_id
+                ? `Context: active game AppID ${ollamaContext.app_id}`
+                : "Context: no active game detected"}
+            </div>
           </PanelSectionRow>
         )}
       </PanelSection>

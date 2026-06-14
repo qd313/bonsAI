@@ -154,6 +154,14 @@ No session archived
 
 <!-- Newest entries first. -->
 
+### 2026-06-14 - Ask thread accordion UX
+
+**master-debugger** — Triaged. Static review found transcript `flow-children` broken by non-Focusable row wrapper and missing header→body vertical link; fixed in `BonsaiChatTurnRow.tsx` (row + body as nested `Focusable flow-children="vertical"`). Deferred: nested spoiler `Focusable` inside chunk wrappers (pre-existing pattern); model-policy Read more native button.
+
+**red-team** / **blue-team** — N/A (UX parity, no new capabilities).
+
+**security-auditor** — Deferred; removed client `spoiler_consent` toggle only; phrase-based backend consent unchanged.
+
 ### 2026-05-19 - Token stream replies Phase 1 (plan accountability)
 
 **refactor-specialist** — Triaged. Separate `threading.Lock` for `_partial_stream_snapshot` vs `asyncio.Lock` on `_background_state` keeps executor-thread NDJSON callbacks off the event-loop lock; `on_delta(text, done)` is minimal and does not leak HTTP bodies. No further refactor required before ship.
@@ -195,6 +203,19 @@ Agents: security-auditor — canonical deliverable docs/security-audit-report.md
 Code: main.py — generic user message for failed background asyncio tasks (no str(exc) in RPC JSON).
 Red-team / blue-team: N/A.
 Tests: pnpm test (64 OK); python scripts/run_python_tests.py (134 OK).
+```
+
+## Report log
+
+### 2026-06-11 - Voice input (local STT) — security / FOSS / Decky triage
+
+```text
+Scope: microphone_access capability, voice_transcription_service.py, main.py voice RPCs, useVoiceTranscription.ts, PermissionsTab, MainTab mic button.
+Agents: security-auditor, foss-advocate, master-debugger — triaged in implementation session (no separate subagent spawn); recorded here per plan accountability.
+Security (triaged): microphone_access default off, not legacy-grandfathered; backend RPCs deny when off; save_settings revokes active session; audio buffer in-memory only; transient WAV for whisper-cli deleted immediately; errors surfaced without raw PCM in logs. Deferred: formal security-auditor re-run on device with ingest logs.
+FOSS (triaged): whisper.cpp (MIT) + GGUF from Hugging Face; no cloud STT path; transparency route voice.transcribe documents local-only + no audio persistence. Deferred: ship bundled whisper-cli binary license file in bin/.
+Master-debugger (triaged): mic button keeps existing focus-graph (mode ← → mic); recording state swaps to stop affordance without new focus nodes. Deferred: on-Deck QA for PipeWire capture chain (VOICE-01…04 in prompt-testing.md).
+Follow-up: complete VOICE-01…04 on hardware; bundle bin/whisper-cli x86_64 for SteamOS.
 ```
 
 ### 2026-04-21 - Judge ruling handoff (red-blue-fight)

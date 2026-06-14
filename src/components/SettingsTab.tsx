@@ -26,6 +26,8 @@ import {
   registerSettingsTabLocalGetter,
   unregisterSettingsTabLocalGetter,
 } from "../utils/settingsTabLocalSurvival";
+import { VoiceInputSettingsSection } from "./VoiceInputSettingsSection";
+import type { VoiceSttModelId } from "../utils/settingsAndResponse";
 
 const persistenceModeLabel: Record<UnifiedInputPersistenceMode, string> = {
   persist_all: "Remember everything",
@@ -80,8 +82,10 @@ export type SettingsTabProps = {
 
   strategySpoilerMaskingEnabled: boolean;
   setStrategySpoilerMaskingEnabled: (v: boolean) => void;
-  strategySpoilerAutoRevealAfterConsent: boolean;
-  setStrategySpoilerAutoRevealAfterConsent: (v: boolean) => void;
+
+  voiceSttModel: VoiceSttModelId;
+  setVoiceSttModel: (v: VoiceSttModelId) => void;
+  microphoneAccessEnabled: boolean;
 
   onOpenCharacterPicker: () => void;
   onBeforeDeckyModal: () => void;
@@ -106,8 +110,9 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   setShowDeveloperTab,
   strategySpoilerMaskingEnabled,
   setStrategySpoilerMaskingEnabled,
-  strategySpoilerAutoRevealAfterConsent,
-  setStrategySpoilerAutoRevealAfterConsent,
+  voiceSttModel,
+  setVoiceSttModel,
+  microphoneAccessEnabled,
   onOpenCharacterPicker,
   onBeforeDeckyModal,
   onCompleteDeckyModalClose,
@@ -260,15 +265,12 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
             onChange={(checked) => setStrategySpoilerMaskingEnabled(checked)}
           />
         </PanelSectionRow>
-        <PanelSectionRow>
-          <ToggleField
-            label="Open spoilers after I opt in on an Ask"
-            description="When you consent on an Ask, spoiler sections start expanded (you can still collapse them)."
-            checked={strategySpoilerAutoRevealAfterConsent}
-            onChange={(checked) => setStrategySpoilerAutoRevealAfterConsent(checked)}
-          />
-        </PanelSectionRow>
       </PanelSection>
+      <VoiceInputSettingsSection
+        voiceSttModel={voiceSttModel}
+        setVoiceSttModel={setVoiceSttModel}
+        microphoneAccessEnabled={microphoneAccessEnabled}
+      />
       <PanelSection title="AI voice & personality">
         <PanelSectionRow>
           <div

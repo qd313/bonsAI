@@ -394,6 +394,7 @@ class SettingsServiceTests(unittest.TestCase):
             self.assertTrue(caps["media_library_access"])
             self.assertTrue(caps["external_navigation"])
             self.assertFalse(caps["steam_web_api"])
+            self.assertFalse(caps["microphone_access"])
 
     def test_load_save_settings_round_trip(self):
         """Ensure load/save helpers persist sanitized values and reload them consistently."""

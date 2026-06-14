@@ -4,8 +4,8 @@ import type { PresetPrompt } from "../../data/presets";
 export const CAROUSEL_STEP_MS = 5800;
 /** CSS slide transition duration on the track (ms). */
 export const CAROUSEL_SLIDE_MS = 550;
-/** Max presets kept in scrollable history. */
-export const CAROUSEL_HISTORY_MAX = 12;
+/** Max presets kept in scrollable history (limits D-pad rows above the Ask field). */
+export const CAROUSEL_HISTORY_MAX = 5;
 /** Pause auto-advance after manual D-pad browse (ms). */
 export const CAROUSEL_MANUAL_PAUSE_MS = 12_000;
 /** Row height: chip minHeight 34 + track gap 5. */

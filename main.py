@@ -108,11 +108,14 @@ from backend.services.ollama_catalog_service import (
     is_valid_ollama_pull_tag,
     normalize_ollama_pull_tags,
 )
-from backend.services.tdp_service import (
-    STEAMOS_PRIV_WRITE,
-    clean_env,
-    find_amdgpu_hwmon,
-    write_sysfs,
+from backend.services.voice_transcription_service import (
+    VoiceTranscriptionSession,
+    download_voice_model,
+    engine_readiness,
+    install_whisper_cli,
+    new_voice_install_state,
+    new_voice_transcription_state,
+    sanitize_voice_stt_model,
 )
 from refactor_helpers import (
     build_ollama_chat_url,
@@ -142,7 +145,7 @@ class Plugin:
     The class coordinates request flow, background task state, and service delegation so behavior stays
     stable while heavy logic is extracted into focused helper and service modules.
     """
-    DEFAULT_LATENCY_WARNING_SECONDS = 45
+    DEFAULT_LATENCY_WARNING_SECONDS = 60
     DEFAULT_REQUEST_TIMEOUT_SECONDS = 180
     DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE = "no_persist"
     MAX_ATTACHMENT_FILE_BYTES = MAX_ATTACHMENT_FILE_BYTES
@@ -186,6 +189,12 @@ class Plugin:
             "streaming": False,
             "last_flush_monotonic": 0.0,
         }
+        self._voice_lock = asyncio.Lock()
+        self._voice_session: Optional[VoiceTranscriptionSession] = None
+        self._voice_install_lock = asyncio.Lock()
+        self._voice_install_task: Optional[asyncio.Task] = None
+        self._voice_install_cancel = threading.Event()
+        self._voice_install_state: dict = new_voice_install_state()
 
     def _abort_ollama_chat_check(self) -> bool:
         """True when frontend requested Stop mid-generation (closes HTTP quickly; executor thread exits)."""
@@ -247,6 +256,17 @@ class Plugin:
             lt.cancel()
             try:
                 await lt
+            except asyncio.CancelledError:
+                pass
+        await plugin._stop_voice_transcription_internal()
+        vit = getattr(plugin, "_voice_install_task", None)
+        if vit is not None and not vit.done():
+            ce_voice = getattr(plugin, "_voice_install_cancel", None)
+            if isinstance(ce_voice, threading.Event):
+                ce_voice.set()
+            vit.cancel()
+            try:
+                await vit
             except asyncio.CancelledError:
                 pass
         logger.info("bonsAI plugin unloaded!")
@@ -326,6 +346,40 @@ class Plugin:
             snap["partial_response"] = text if text else None
             snap["streaming"] = (not done) and bool(text)
             snap["last_flush_monotonic"] = now
+
+    def _active_request_id(self) -> Optional[int]:
+        """Return the in-flight background Ask request_id, if any."""
+        self._ensure_background_state()
+        rid = self._background_state.get("request_id")
+        return rid if isinstance(rid, int) else None
+
+    def _publish_thinking_phase(self, request_id: int, summary: str) -> None:
+        """Publish a deterministic prep-phase label without partial reply text."""
+        text = (summary or "").strip()
+        if not text:
+            return
+        self._update_partial_response(request_id, "", False, text[:240], update_partial=False)
+
+    def _publish_thinking_phase_key(
+        self,
+        request_id: int,
+        phase: str,
+        *,
+        app_name: str = "",
+        attachment_count: int = 0,
+        ask_mode: str = "speed",
+    ) -> None:
+        from backend.services.bonsai_stream_tags import format_thinking_phase
+
+        self._publish_thinking_phase(
+            request_id,
+            format_thinking_phase(
+                phase,  # type: ignore[arg-type]
+                app_name=app_name,
+                attachment_count=attachment_count,
+                ask_mode=ask_mode,
+            ),
+        )
 
     def _merge_partial_into_background_status(self, state: dict) -> dict:
         from backend.services.bonsai_stream_tags import deterministic_thinking_phase_fallback
@@ -600,6 +654,13 @@ class Plugin:
                 "settings updated",
                 fields={"changed": ",".join(changed)},
             )
+        plugin = Plugin._coerce_instance(self)
+        prev_caps = current.get("capabilities") if isinstance(current.get("capabilities"), dict) else {}
+        next_caps = saved.get("capabilities") if isinstance(saved.get("capabilities"), dict) else {}
+        prev_mic = prev_caps.get("microphone_access") is True
+        next_mic = next_caps.get("microphone_access") is True
+        if prev_mic and not next_mic:
+            await plugin._stop_voice_transcription_internal()
         return saved
 
     async def clear_plugin_data(self):
@@ -1853,6 +1914,7 @@ class Plugin:
             plugin._background_request_seq += 1
             request_id = plugin._background_request_seq
             plugin._reset_partial_stream_snapshot(request_id)
+            plugin._publish_thinking_phase_key(request_id, "starting", ask_mode=ask_mode)
             plugin._background_state = {
                 "status": "pending",
                 "request_id": request_id,
@@ -2056,6 +2118,10 @@ class Plugin:
         strategy_spoiler_consent: bool = False,
     ):
         """Orchestrate attachment prep, prompt assembly, and model fallback request execution."""
+        plugin_inst = Plugin._coerce_instance(self)
+        plugin_inst._ensure_background_state()
+        active_request_id = plugin_inst._active_request_id()
+
         url = self._build_ollama_chat_url(PcIp)
         normalized_attachments = Plugin._sanitize_attachments(attachments or [])
         attachment_paths = [
@@ -2063,6 +2129,13 @@ class Plugin:
             for a in normalized_attachments
             if isinstance(a, dict) and str(a.get("path", "") or "").strip()
         ]
+        if normalized_attachments and isinstance(active_request_id, int):
+            plugin_inst._publish_thinking_phase_key(
+                active_request_id,
+                "screenshot_prep",
+                attachment_count=len(normalized_attachments),
+                ask_mode=ask_mode,
+            )
         settings = await self.load_settings()
         keep_alive = sanitize_ollama_keep_alive(settings.get("ollama_keep_alive"))
         apreset = str(settings.get("screenshot_attachment_preset") or "low")
@@ -2208,9 +2281,6 @@ class Plugin:
             }
         ask_diagnostics["models_after_installed_filter"] = list(models_to_try)
 
-        plugin_inst = Plugin._coerce_instance(self)
-        plugin_inst._ensure_background_state()
-        active_request_id = plugin_inst._background_state.get("request_id")
         token_streaming = settings.get("bonsai_token_streaming_enabled") is True
         on_delta_cb = None
         if isinstance(active_request_id, int):
@@ -2250,7 +2320,9 @@ class Plugin:
             loop = asyncio.get_running_loop()
             last_failure = {"success": False, "response": "No model attempts executed.", **ollama_extras}
 
-            for model_name in models_to_try:
+            for model_idx, model_name in enumerate(models_to_try):
+                if isinstance(active_request_id, int) and model_idx > 0:
+                    plugin_inst._publish_thinking_phase_key(active_request_id, "model_retry", ask_mode=ask_mode)
                 ask_diagnostics["models_attempted"].append(model_name)
                 plugin_inst._chat_resp_ready_evt = threading.Event()
                 plugin_inst._active_ollama_chat_pc_ip = str(PcIp or "").strip()
@@ -2349,6 +2421,213 @@ class Plugin:
                 "response": "Ollama request failed. Check connection, model names, and the Deck plugin log.",
                 **ollama_extras,
             }
+
+    async def _stop_voice_transcription_internal(self) -> None:
+        plugin = Plugin._coerce_instance(self)
+        async with plugin._voice_lock:
+            session = plugin._voice_session
+            plugin._voice_session = None
+        if session is not None:
+            await asyncio.to_thread(session.force_stop)
+
+    async def _require_microphone_access(self) -> tuple[bool, dict[str, Any]]:
+        plugin = Plugin._coerce_instance(self)
+        settings = await plugin.load_settings()
+        if not capability_enabled(settings, "microphone_access"):
+            return False, {
+                "accepted": False,
+                "error": "permission_denied",
+                "reason": "Enable Voice input (microphone) in the Permissions tab first.",
+            }
+        return True, {}
+
+    async def get_voice_engine_status(self):
+        """Return whisper binary + model readiness for the configured STT model."""
+        plugin = Plugin._coerce_instance(self)
+        settings = await plugin.load_settings()
+        model_id = sanitize_voice_stt_model(settings.get("voice_stt_model"))
+        ready = engine_readiness(PLUGIN_ROOT, decky.DECKY_PLUGIN_SETTINGS_DIR, model_id)
+        install = dict(plugin._voice_install_state)
+        return {**ready, "install": install}
+
+    async def install_voice_engine(self, model_id: str = ""):
+        """Install whisper-cli (podman) and download the selected GGUF model (requires microphone_access)."""
+        plugin = Plugin._coerce_instance(self)
+        ok_gate, gate_out = await plugin._require_microphone_access()
+        if not ok_gate:
+            return gate_out or {"accepted": False, "reason": "permission_denied"}
+
+        settings = await plugin.load_settings()
+        mid = sanitize_voice_stt_model(model_id or settings.get("voice_stt_model"))
+        async with plugin._voice_install_lock:
+            existing = plugin._voice_install_task
+            if existing is not None and not existing.done():
+                return {"accepted": False, "reason": "Voice engine install already running.", "error": "busy"}
+
+            plugin._voice_install_cancel = threading.Event()
+            plugin._voice_install_cancel.clear()
+            plugin._voice_install_state = new_voice_install_state()
+            plugin._voice_install_state.update(
+                {"phase": "running", "done": False, "accepted": True, "model_id": mid}
+            )
+
+            def on_stage(stage: str, fields: dict[str, Any]) -> None:
+                st = plugin._voice_install_state
+                st["stage"] = stage
+                if fields.get("progress_pct") is not None:
+                    st["progress_pct"] = fields["progress_pct"]
+
+            async def runner() -> None:
+                try:
+                    await asyncio.to_thread(
+                        install_whisper_cli,
+                        PLUGIN_ROOT,
+                        decky.DECKY_PLUGIN_SETTINGS_DIR,
+                        plugin._voice_install_state,
+                        plugin._voice_install_cancel,
+                        on_stage,
+                    )
+                    await asyncio.to_thread(
+                        download_voice_model,
+                        PLUGIN_ROOT,
+                        decky.DECKY_PLUGIN_SETTINGS_DIR,
+                        mid,
+                        plugin._voice_install_state,
+                        plugin._voice_install_cancel,
+                        on_stage,
+                    )
+                except Exception as exc:
+                    plugin._voice_install_state.update(
+                        {"phase": "failed", "done": True, "error": str(exc)[:500]}
+                    )
+
+            plugin._voice_install_task = asyncio.create_task(runner())
+
+        await plugin._maybe_app_log("voice.install", "voice engine install accepted", fields={"model_id": mid})
+        return {"accepted": True, "model_id": mid}
+
+    async def get_voice_install_status(self):
+        """Poll voice model download progress."""
+        plugin = Plugin._coerce_instance(self)
+        return dict(plugin._voice_install_state)
+
+    async def start_voice_transcription(self):
+        """Start PipeWire/Pulse capture and local whisper interim transcription."""
+        plugin = Plugin._coerce_instance(self)
+        ok_gate, gate_out = await plugin._require_microphone_access()
+        if not ok_gate:
+            return gate_out or {"accepted": False, "reason": "permission_denied"}
+
+        settings = await plugin.load_settings()
+        model_id = sanitize_voice_stt_model(settings.get("voice_stt_model"))
+        ready = engine_readiness(PLUGIN_ROOT, decky.DECKY_PLUGIN_SETTINGS_DIR, model_id)
+        if not ready.get("binary_ready"):
+            return {
+                "accepted": False,
+                "error": "engine_missing",
+                "reason": (
+                    "whisper-cli is not installed. Open Settings → Voice input and tap "
+                    "Install voice engine (downloads whisper-cli + model)."
+                ),
+            }
+        if not ready.get("model_ready"):
+            return {
+                "accepted": False,
+                "error": "model_missing",
+                "reason": f"Download the {model_id} voice model in Settings → Voice input first.",
+            }
+
+        async with plugin._voice_lock:
+            if plugin._voice_session is not None:
+                st = plugin._voice_session.status()
+                if st.get("recording"):
+                    return {"accepted": True, "status": st}
+                plugin._voice_session = None
+
+            session = VoiceTranscriptionSession(
+                PLUGIN_ROOT,
+                decky.DECKY_PLUGIN_SETTINGS_DIR,
+                model_id,
+                logger,
+            )
+            out = await asyncio.to_thread(session.start)
+            if out.get("accepted"):
+                plugin._voice_session = session
+            else:
+                plugin._voice_session = None
+
+        if out.get("accepted"):
+            await plugin._persist_input_transparency(
+                {
+                    "route": "voice.transcribe",
+                    "raw_question": None,
+                    "sanitizer_action": None,
+                    "sanitizer_reason_codes": [],
+                    "text_after_sanitizer": None,
+                    "ollama_model": None,
+                    "system_prompt": None,
+                    "user_text_for_model": None,
+                    "user_image_count": 0,
+                    "attachment_paths": [],
+                    "assistant_raw": None,
+                    "assistant_after_attachment_format": None,
+                    "final_response": None,
+                    "voice_local_only": True,
+                    "voice_model_id": model_id,
+                    "voice_audio_persisted": False,
+                }
+            )
+            await plugin._maybe_app_log(
+                "voice.start",
+                "voice transcription started",
+                fields={"model_id": model_id},
+            )
+        return out
+
+    async def stop_voice_transcription(self):
+        """Stop capture and return finalized transcript."""
+        plugin = Plugin._coerce_instance(self)
+        async with plugin._voice_lock:
+            session = plugin._voice_session
+            plugin._voice_session = None
+        if session is None:
+            return {
+                "stopped": True,
+                "status": "idle",
+                "finalized_transcript": "",
+                "partial_transcript": "",
+            }
+        out = await asyncio.to_thread(session.stop)
+        await plugin._maybe_app_log(
+            "voice.stop",
+            "voice transcription stopped",
+            fields={"transcript_len": len(str(out.get("finalized_transcript") or ""))},
+        )
+        return out
+
+    async def get_voice_transcription_status(self):
+        """Poll interim/final transcript while recording."""
+        plugin = Plugin._coerce_instance(self)
+        settings = await plugin.load_settings()
+        if not capability_enabled(settings, "microphone_access"):
+            await plugin._stop_voice_transcription_internal()
+            return {
+                **new_voice_transcription_state(),
+                "status": "permission_denied",
+                "error": "Microphone permission revoked.",
+                "recording": False,
+                "streaming": False,
+            }
+
+        async with plugin._voice_lock:
+            session = plugin._voice_session
+        if session is None:
+            return new_voice_transcription_state()
+        st = await asyncio.to_thread(session.status)
+        st["streaming"] = bool(st.get("recording")) and (
+            bool(st.get("partial_transcript")) or bool(st.get("finalized_transcript"))
+        )
+        return st
 
     def _build_ollama_chat_url(self, pc_ip: str) -> str:
         """Build the Ollama chat endpoint URL from current connection input."""

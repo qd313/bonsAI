@@ -36,8 +36,9 @@ class CapabilitiesTests(unittest.TestCase):
         g = legacy_grandfather_capabilities()
         self.assertEqual(set(g.keys()), set(CAPABILITY_KEYS))
         self.assertFalse(g["steam_web_api"])
+        self.assertFalse(g["microphone_access"])
         for key in CAPABILITY_KEYS:
-            if key != "steam_web_api":
+            if key not in ("steam_web_api", "microphone_access"):
                 self.assertTrue(g[key], msg=key)
 
     def test_capability_enabled_requires_explicit_true(self):

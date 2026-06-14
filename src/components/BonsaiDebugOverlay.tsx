@@ -15,22 +15,30 @@ export function BonsaiDebugOverlay({ enabled }: BonsaiDebugOverlayProps) {
       return;
     }
     const id = window.setInterval(() => {
-      setLines(readBonsaiDebugRing().slice(-6));
-    }, 400);
+      setLines(readBonsaiDebugRing().slice(-10));
+    }, 300);
     return () => window.clearInterval(id);
   }, [enabled]);
 
-  if (!enabled || lines.length === 0) return null;
+  if (!enabled) return null;
 
   return (
     <div className="bonsai-debug-overlay">
-      <div className="bonsai-debug-overlay__header">debug mounts={readContentMountCount()}</div>
-      {lines.map((e, i) => (
-        <div key={`${e.ts}-${i}`} className="bonsai-debug-overlay__line">
-          [{e.hypothesisId ?? "?"}] {e.message}
-          {e.data ? ` ${JSON.stringify(e.data)}` : ""}
+      <div className="bonsai-debug-overlay__header">
+        focus trace · mounts={readContentMountCount()}
+      </div>
+      {lines.length === 0 ? (
+        <div className="bonsai-debug-overlay__line bonsai-debug-overlay__line--idle">
+          D-pad around — entries appear here + plugin log
         </div>
-      ))}
+      ) : (
+        lines.map((e, i) => (
+          <div key={`${e.ts}-${i}`} className="bonsai-debug-overlay__line">
+            [{e.hypothesisId ?? "?"}] {e.message}
+            {e.data ? ` ${JSON.stringify(e.data)}` : ""}
+          </div>
+        ))
+      )}
     </div>
   );
 }

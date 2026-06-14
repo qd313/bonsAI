@@ -40,6 +40,7 @@ import {
   peekBonsaiSessionPendingRestore,
 } from "./utils/bonsaiSessionSurvival";
 import { bonsaiDebugLog, bumpContentMountCount } from "./utils/bonsaiDebugIngest";
+import { debugSessionLog } from "./utils/debugSessionLog";
 import {
   captureSettingsTabLocalSnapshot,
   clearSettingsTabLocalSurvival,
@@ -72,6 +73,7 @@ import {
 import { useUnifiedInputSurface } from "./features/unified-input/useUnifiedInputSurface";
 import { formatDeckyRpcError } from "./utils/deckyCall";
 import { usePluginSettings } from "./hooks/usePluginSettings";
+import { useVoiceTranscription } from "./hooks/useVoiceTranscription";
 import { useBonsaiAskOrchestration } from "./hooks/useBonsaiAskOrchestration";
 import { useDisclaimerAndLocalRuntimeGates } from "./hooks/useDisclaimerAndLocalRuntimeGates";
 import { useCapturedFrontendErrors } from "./hooks/useCapturedFrontendErrors";
@@ -275,6 +277,12 @@ const Content: React.FC = () => {
       pendingPeek: !!peekBonsaiSessionPendingRestore(),
       tab: resolveInitialTab(),
     });
+    // #region agent log
+    debugSessionLog("index.tsx:Content", "content mounted dbg_fe_log probe", "H0", {
+      mount,
+      runId: "post-fix-12",
+    });
+    // #endregion
   }, []);
 
   const [currentTab, setCurrentTab] = useState(resolveInitialTab);
@@ -322,9 +330,6 @@ const Content: React.FC = () => {
   // --- Connection / misc shell state (Ask + poll state: ``useBonsaiAskOrchestration``) ---
   const [ollamaIp, setOllamaIp] = useState(
     () => peekBonsaiSessionPendingRestore()?.ollamaIp ?? loadSavedIp()
-  );
-  const [strategySpoilerConsentForNextAsk, setStrategySpoilerConsentForNextAsk] = useState(
-    () => peekBonsaiSessionPendingRestore()?.strategySpoilerConsentForNextAsk ?? false
   );
   const [pluginHelpDismissed, setPluginHelpDismissed] = useState(() => {
     const snap = peekBonsaiSessionPendingRestore();
@@ -412,8 +417,6 @@ const Content: React.FC = () => {
     setOllamaLocalOnDeck,
     strategySpoilerMaskingEnabled,
     setStrategySpoilerMaskingEnabled,
-    strategySpoilerAutoRevealAfterConsent,
-    setStrategySpoilerAutoRevealAfterConsent,
     steamWebApiKey,
     setSteamWebApiKey,
     bonsaiTokenStreamingEnabled,
@@ -428,9 +431,36 @@ const Content: React.FC = () => {
     setResponseVerifyModel,
     namedOllamaHosts,
     setNamedOllamaHosts,
+    voiceSttModel,
+    setVoiceSttModel,
     settingsLoaded,
     hydrateFromSettings,
   } = usePluginSettings();
+
+  const [voiceRecording, setVoiceRecording] = useState(false);
+
+  const onVoiceError = useCallback((e: unknown) => {
+    setVoiceRecording(false);
+    toaster.toast({
+      title: "Voice input error",
+      body: formatDeckyRpcError(e),
+      duration: 5000,
+    });
+  }, []);
+
+  const {
+    startVoiceTranscription,
+    stopVoiceTranscription,
+    invalidateVoice,
+  } = useVoiceTranscription(setUnifiedInput, onVoiceError);
+
+  useEffect(() => {
+    if (!capabilities.microphone_access && voiceRecording) {
+      void stopVoiceTranscription();
+      invalidateVoice();
+      setVoiceRecording(false);
+    }
+  }, [capabilities.microphone_access, voiceRecording, stopVoiceTranscription, invalidateVoice]);
 
   const appLogPrefs = useMemo(
     () => ({
@@ -446,12 +476,6 @@ const Content: React.FC = () => {
     if (currentTab !== "developer" && currentTab !== "settings") return;
     appendAppDesktopLogWithPrefs(appLogPrefs, "verbose", "ui.tab", `opened ${currentTab} tab`);
   }, [currentTab, settingsLoaded, appLogPrefs]);
-
-  useEffect(() => {
-    if (askMode !== "strategy") {
-      setStrategySpoilerConsentForNextAsk(false);
-    }
-  }, [askMode]);
 
   const effectiveOllamaPcIp = useMemo(
     () => (ollamaLocalOnDeck ? OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP : ollamaIp.trim()),
@@ -481,13 +505,13 @@ const Content: React.FC = () => {
     thinkingSummary,
     lastRequestId,
     askThreadCollapsed,
-    askThreadViewIndex,
-    setAskThreadViewIndex,
+    expandedTurnKey,
+    onTurnActivate,
     askThreadDisplayQuestion,
     isAsking,
     isStreamingPreview,
+    streamDisplayText,
     lastApplied,
-    strategySpoilerDefaultExpandedForReply,
     clearUnifiedInput,
     onCancelAsk,
     onAskOllama,
@@ -500,10 +524,8 @@ const Content: React.FC = () => {
   } = useBonsaiAskOrchestration({
     desktopDebugNoteAutoSave,
     filesystemWrite: capabilities.filesystem_write,
-    strategySpoilerAutoRevealAfterConsent,
     strategySpoilerMaskingEnabled,
     askMode,
-    strategySpoilerConsentForNextAsk,
     unifiedInput,
     setUnifiedInput,
     unifiedInputPersistenceMode,
@@ -542,7 +564,6 @@ const Content: React.FC = () => {
     setMediaError(survived.mediaError);
     setRecentScreenshots(survived.recentScreenshots);
     setIsLoadingRecentScreenshots(survived.isLoadingRecentScreenshots);
-    setStrategySpoilerConsentForNextAsk(survived.strategySpoilerConsentForNextAsk);
     setPluginHelpDismissed(survived.pluginHelpDismissed);
     __bonsaiPluginHelpDismissed = survived.pluginHelpDismissed;
     setOllamaIp(survived.ollamaIp);
@@ -624,7 +645,6 @@ const Content: React.FC = () => {
       modelAllowHighVramFallbacks,
       ollamaLocalOnDeck,
       strategySpoilerMaskingEnabled,
-      strategySpoilerAutoRevealAfterConsent,
       steamWebApiKey,
       bonsaiTokenStreamingEnabled,
       showOnscreenDebugHud,
@@ -632,6 +652,7 @@ const Content: React.FC = () => {
       responseVerifySecondPass,
       responseVerifyModel,
       namedOllamaHosts,
+      voiceSttModel,
     }),
     [
       latencyWarningSeconds,
@@ -660,7 +681,6 @@ const Content: React.FC = () => {
       modelAllowHighVramFallbacks,
       ollamaLocalOnDeck,
       strategySpoilerMaskingEnabled,
-      strategySpoilerAutoRevealAfterConsent,
       steamWebApiKey,
       bonsaiTokenStreamingEnabled,
       showOnscreenDebugHud,
@@ -668,6 +688,7 @@ const Content: React.FC = () => {
       responseVerifySecondPass,
       responseVerifyModel,
       namedOllamaHosts,
+      voiceSttModel,
     ]
   );
 
@@ -690,7 +711,6 @@ const Content: React.FC = () => {
       mediaError,
       recentScreenshots,
       isLoadingRecentScreenshots,
-      strategySpoilerConsentForNextAsk,
       pluginHelpDismissed,
       ollamaIp,
       settingsSnapshot: settingsSnapshotForSave,
@@ -699,7 +719,7 @@ const Content: React.FC = () => {
       lastExchange,
       askThreadCollapsed,
       askThreadDisplayQuestion,
-      askThreadViewIndex,
+      expandedTurnKey,
       suggestedPrompts,
       lastTransparency,
       modelPolicyDisclosure,
@@ -729,7 +749,6 @@ const Content: React.FC = () => {
     mediaError,
     recentScreenshots,
     isLoadingRecentScreenshots,
-    strategySpoilerConsentForNextAsk,
     pluginHelpDismissed,
     ollamaIp,
     settingsSnapshotForSave,
@@ -738,7 +757,7 @@ const Content: React.FC = () => {
     lastExchange,
     askThreadCollapsed,
     askThreadDisplayQuestion,
-    askThreadViewIndex,
+    expandedTurnKey,
     suggestedPrompts,
     lastTransparency,
     modelPolicyDisclosure,
@@ -861,15 +880,19 @@ const Content: React.FC = () => {
     }
   }, [capabilities.external_navigation, goToPermissionsTab]);
 
-  // --- Slow-response warning timer ---
+  // --- Slow-response warning timer (suppress once token streaming begins) ---
   useEffect(() => {
     if (!isAsking) {
       setShowSlowWarning(false);
       return;
     }
+    if (isStreamingPreview) {
+      setShowSlowWarning(false);
+      return;
+    }
     const timer = setTimeout(() => setShowSlowWarning(true), effectiveLatencyWarningSeconds * 1000);
     return () => clearTimeout(timer);
-  }, [isAsking, effectiveLatencyWarningSeconds]);
+  }, [isAsking, isStreamingPreview, effectiveLatencyWarningSeconds]);
 
   const filteredSettings = useMemo(() => {
     const q = unifiedInput.trim();
@@ -931,7 +954,6 @@ const Content: React.FC = () => {
     setSelectedIndex(-1);
     setNavigationMessage("");
     setSelectedAttachment(null);
-    setStrategySpoilerConsentForNextAsk(false);
     setSuggestedPrompts(getRandomPresets(3));
     toaster.toast({
       title: "Session cleared",
@@ -979,14 +1001,40 @@ const Content: React.FC = () => {
     }
   }, [hydrateFromSettings, resetPluginSession, showDisclaimerModalAgain]);
 
-  const onMicInput = () => {
-    toaster.toast({
-      title: "Voice Ask not available yet",
-      body:
-        "Speech-to-text is on the roadmap (see README). This mic is not Ollama unload delay or Steam Web API — those are under Developer → Connection tuning / Integrations.",
-      duration: 5500,
-    });
-  };
+  const onMicInput = useCallback(() => {
+    if (isAsking) return;
+    if (voiceRecording) {
+      void stopVoiceTranscription().finally(() => setVoiceRecording(false));
+      return;
+    }
+    if (!capabilities.microphone_access) {
+      toaster.toast({
+        title: "Permission required",
+        body: "Enable Voice input (microphone) in the Permissions tab to use speech-to-text.",
+        duration: 4500,
+      });
+      goToPermissionsTab();
+      return;
+    }
+    void startVoiceTranscription(unifiedInput)
+      .then(() => setVoiceRecording(true))
+      .catch((e: unknown) => {
+        setVoiceRecording(false);
+        toaster.toast({
+          title: "Voice input unavailable",
+          body: e instanceof Error ? e.message : formatDeckyRpcError(e),
+          duration: 5500,
+        });
+      });
+  }, [
+    isAsking,
+    voiceRecording,
+    capabilities.microphone_access,
+    goToPermissionsTab,
+    startVoiceTranscription,
+    stopVoiceTranscription,
+    unifiedInput,
+  ]);
 
   const loadRecentScreenshots = async (limit: number = 24) => {
     const runningApp = Router.MainRunningApp;
@@ -1233,7 +1281,6 @@ const Content: React.FC = () => {
     modelAllowHighVramFallbacks,
     ollamaLocalOnDeck,
     strategySpoilerMaskingEnabled,
-    strategySpoilerAutoRevealAfterConsent,
   ]);
 
   const onCommitOllamaModelsHub = useCallback(
@@ -1269,20 +1316,6 @@ const Content: React.FC = () => {
 
   const openOllamaModelsHub = useCallback(
     (opts?: { initialSection?: OllamaModelsHubSection }) => {
-      // #region agent log
-      fetch("http://127.0.0.1:7548/ingest/455d5c32-fa64-45d1-b31c-f17b50f3371a", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "441b11" },
-        body: JSON.stringify({
-          sessionId: "441b11",
-          location: "index.tsx:openOllamaModelsHub",
-          message: "AI models hub modal opening",
-          data: { initialSection: opts?.initialSection ?? "policy" },
-          timestamp: Date.now(),
-          hypothesisId: "C",
-        }),
-      }).catch(() => {});
-      // #endregion
       captureSessionBeforeModal();
       const handle = showModal(
         <OllamaModelsHubModal
@@ -1386,6 +1419,7 @@ const Content: React.FC = () => {
       onOpenScreenshotBrowser={onOpenScreenshotBrowser}
       onCancelAsk={onCancelAsk}
       onMicInput={onMicInput}
+      voiceRecording={voiceRecording}
       selectedAttachment={selectedAttachment}
       setSelectedAttachment={setSelectedAttachment}
       clearUnifiedInput={clearUnifiedInput}
@@ -1428,18 +1462,16 @@ const Content: React.FC = () => {
       onPresetPreferAskMode={setAskMode}
       askThreadCollapsed={askThreadCollapsed}
       askThreadDisplayQuestion={askThreadDisplayQuestion}
-      askThreadViewIndex={askThreadViewIndex}
-      onAskThreadSelectTurn={(i) => setAskThreadViewIndex(i)}
+      expandedTurnKey={expandedTurnKey}
+      onTurnActivate={onTurnActivate}
       modelPolicyDisclosure={modelPolicyDisclosure}
       onOpenModelPolicyReadme={openModelPolicyReadme}
       shortcutSetupVariant={shortcutSetupVariant}
       onOpenControllerSettings={onOpenControllerSettingsForShortcut}
       strategySpoilerMaskingEnabled={strategySpoilerMaskingEnabled}
-      strategySpoilerDefaultExpandedForReply={strategySpoilerDefaultExpandedForReply}
-      strategySpoilerConsentForNextAsk={strategySpoilerConsentForNextAsk}
-      onStrategySpoilerConsentForNextAskChange={setStrategySpoilerConsentForNextAsk}
       presetCarouselInject={presetCarouselInject}
       isStreamingPreview={isStreamingPreview}
+      streamDisplayText={streamDisplayText}
       thinkingSummary={thinkingSummary}
       desktopAskVerboseLogging={desktopAskVerboseLogging}
       lastRequestId={lastRequestId}
@@ -1484,14 +1516,14 @@ const Content: React.FC = () => {
       strategyGuideBranches,
       askThreadCollapsed,
       askThreadDisplayQuestion,
-      askThreadViewIndex,
+      expandedTurnKey,
       modelPolicyDisclosure,
       shortcutSetupVariant,
       strategySpoilerMaskingEnabled,
-      strategySpoilerDefaultExpandedForReply,
-      strategySpoilerConsentForNextAsk,
       presetCarouselInject,
       onRetryLastResponse,
+      voiceRecording,
+      onMicInput,
     ]
   );
 
@@ -1513,8 +1545,9 @@ const Content: React.FC = () => {
       setShowDeveloperTab={setShowDeveloperTab}
       strategySpoilerMaskingEnabled={strategySpoilerMaskingEnabled}
       setStrategySpoilerMaskingEnabled={setStrategySpoilerMaskingEnabled}
-      strategySpoilerAutoRevealAfterConsent={strategySpoilerAutoRevealAfterConsent}
-      setStrategySpoilerAutoRevealAfterConsent={setStrategySpoilerAutoRevealAfterConsent}
+      voiceSttModel={voiceSttModel}
+      setVoiceSttModel={setVoiceSttModel}
+      microphoneAccessEnabled={capabilities.microphone_access}
       onOpenCharacterPicker={openCharacterPickerModal}
       onBeforeDeckyModal={captureSessionBeforeModal}
       onCompleteDeckyModalClose={finalizeShowModalAndRestoreActiveTab}
@@ -1532,7 +1565,8 @@ const Content: React.FC = () => {
       aiCharacterAccentIntensity,
       showDeveloperTab,
       strategySpoilerMaskingEnabled,
-      strategySpoilerAutoRevealAfterConsent,
+      voiceSttModel,
+      capabilities.microphone_access,
     ]
   );
 

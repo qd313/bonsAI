@@ -102,13 +102,7 @@ Within this section: ascending stars (★★ → ★★★ → ★★★★). Br
   - **Depends on:** **Mode selector (main screen)** (shipped).
   - **Not in scope:** per-game/per-model fine-grained profile matrix.
 
-- ★★★ **Per-turn local feedback** (thumbs / flags, S)
-
-  - **Goal:** Lightweight **local-only** quality signal for future tuning or export; no telemetry server.
-  - **Primary work:** optional thumbs/flag control on last reply; persisted JSON or settings blob.
-  - **Files:** `src/index.tsx`, `main.py`, storage helpers.
-  - **Depends on:** last-reply state available on Main.
-  - **Not in scope:** model fine-tuning pipeline or cloud upload.
+- ★★★ **Per-turn local feedback** (thumbs / flags, S) — **polish shipped 2026-06-14:** compact feedback row under AI bubble; shared `.bonsai-chat-secondary-btn` with Retry and Show details toggles.
 
 - ★★★ **QAMP verification checklist** (profiles / GPU / reboot matrix)
 
@@ -140,14 +134,6 @@ Within this section: ascending stars (★★ → ★★★ → ★★★★). Br
   - **Files:** `MainTab` / `AboutTab` / transparency utils, `main.py`.
   - **Depends on:** optional Input transparency surfaces.
   - **Not in scope:** telemetry upload.
-
-- ★★★ **Thinking blurb during reply** (model-emitted status line)
-
-  - **Goal:** While a reply is pending or streaming, show one short sentence from the answering model describing what it's working on (e.g. "Looking up your TDP and Proton log excerpt"). More clarifying than a generic spinner, less verbose than running tool-call narration.
-  - **Primary work:** System-prompt instruction to emit `<bonsai-status>...</bonsai-status>` as the first line; backend tag extraction during NDJSON stream; new `thinking_summary` field on `get_background_game_ai_status`; pending-area UI in `MainTab.tsx`; strip tag from final chunks. Deterministic phase fallback when tag missing.
-  - **Files:** `py_modules/backend/services/ollama_service.py` (system prompt), `main.py` (`_update_partial_response`, `get_background_game_ai_status`), `src/hooks/useBackgroundGameAi.ts`, `src/types/backgroundAsk.ts`, `src/components/MainTab.tsx`.
-  - **Depends on:** **Token stream replies (Phase 1)** (shipped) — reuses the existing partial-response polling channel.
-  - **Not in scope:** separate pre-pass model call; per-token narration like Cursor; persisting thinking summaries to Desktop notes; spoiler-policy interaction (treat the status line as never-spoiler).
 
 - ★★★★ **Local text stash inject** (non-RAG snippets, C)
 
@@ -283,15 +269,6 @@ b
   - **Depends on:** **Strategy Ask mode (`strategy`; Strategy Guide in prompts)** — shipped; see **[Completed](#tabs-icons-and-unified-ask-flow)**.
   - **Not in scope:** long-term persistence across sessions.
 
-- ★★★★★ **Whisper voice Ask** (Deck STT)
-
-  - **GitHub (tracking placeholder):** [bonsAI Issues](https://github.com/cantcurecancer/bonsAI/issues) — dedicated issue TBD.
-  - **Goal:** Record voice on Deck, transcribe to prompt via local Whisper service.
-  - **Primary work:** PipeWire recording, transcription RPC, UI states.
-  - **Files:** `main.py`, `src/index.tsx`, install/troubleshooting docs.
-  - **Depends on:** user-hosted Whisper endpoint.
-  - **Not in scope:** wake-word or always-on listening.
-
 - ★★★★★★ **Remote Play diagnostics layer** (streaming host/client, E)
 
   - **GitHub (tracking placeholder):** [bonsAI Issues](https://github.com/cantcurecancer/bonsAI/issues) — dedicated issue TBD.
@@ -357,15 +334,7 @@ Within this section: ★★★★★ items first (ascending stars), then ★★�
   - **Related:** **Global quick-launch macro** (Medium-term); when a native entry exists, refresh the macro sequence in [troubleshooting.md](troubleshooting.md).
   - **Not in scope:** Shipping a forked Steam client or undocumented UI injection as the default approach.
 
-- ★★★★★★ **Token stream replies** (live markdown; U)
-
-  - **GitHub (tracking placeholder):** [bonsAI Issues](https://github.com/cantcurecancer/bonsAI/issues) — dedicated issue TBD.
-  - **Goal:** Progressive reveal as Ollama streams — perceived latency win vs buffer-then-chunk.
-  - **Risk:** Decky/React plumbing, partial markdown, stop semantics — large refactor touch.
-  - **Primary work:** stream tokens from backend to Main markdown chunks; partial-render safety; align Stop with cancel.
-  - **Files (expected):** `main.py`, `src/index.tsx`, ask orchestration / Ollama client path.
-  - **Depends on:** Ollama streaming API stability and timeout handling.
-  - **Not in scope:** shipping without parity for Input transparency and sanitizer contracts.
+- ★★★★★★ **Token stream replies** (live markdown; U) — **incremental 2026-06-14:** `useSmoothStreamReveal` RAF reveal, 150 ms stream poll, plain-text preview chunk during stream.
 
 ### Reference — vision model fallback order
 
@@ -389,6 +358,7 @@ Headings group related work. Star counts match the historical list.
 - ★★ **Prompt-testing MVP:** [device-qa-runbook.md](device-qa-runbook.md) (tiered run order) + [prompt-testing.md](prompt-testing.md) (shipped-feature coverage, scenarios, Test Results) + optional frozen preset carousel (`TEMP_PRESET_CAROUSEL_FROZEN` / `TEMP_CAROUSEL_FROZEN_TEXTS` in `src/data/presets.ts`). **Status:** Refactored 2026-05-24; Tier 0–1 execution tracked in **In Progress**.
 - ★★ **Input sanitizer lane (hybrid):** Deterministic Ask cleanup and conservative block before Ollama; default on; no Settings UI. Magic phrases `bonsai:disable-sanitize` / `bonsai:enable-sanitize` (exact whole message, trim + casefold) persist `input_sanitizer_user_disabled` via `save_settings` and return confirmation without calling the model. Backend `backend/services/input_sanitizer_service.py`, `main.py` (`ask_game_ai` / `start_background_game_ai`); frontend types and completion path in `src/index.tsx`; phrase constants in `src/data/inputSanitizerCommands.ts`.
 - ★★★ **Input Handling Transparency Panel:** Main tab **Input handling (last Ask)** shows raw input, sanitizer path, system/user text sent to Ollama, model name, and raw vs final reply; **Run original** / **Copy JSON**. Optional Settings **Verbose Ask logging to Desktop notes** (`desktop_ask_verbose_logging`) appends full trace markdown to `bonsai-ask-trace-YYYY-MM-DD.md` when filesystem writes are allowed. Backend `get_input_transparency`, `_persist_input_transparency`, `append_desktop_ask_transparency_sync` in `desktop_note_service.py`; `main.py`; UI `MainTab.tsx`, `src/utils/inputTransparency.ts`.
+- ★★★ **Thinking blurb during reply (2026-06-14):** While pending, users see one italic `thinking_summary` line (deterministic prep phases via `format_thinking_phase` / `_publish_thinking_phase`, plus model `<bonsai-status>` once streaming). Submit shows `Starting…` immediately with no duplicate Thinking AI bubble; `useSmoothStreamReveal` smooths token preview. Files: `bonsai_stream_tags.py`, `game_ai_request.py`, `main.py`, `ollama_prompts.py`, `useBonsaiAskOrchestration.ts`, `askThinkingPhases.ts`, `useSmoothStreamReveal.ts`, `MainTab.tsx`, `BonsaiChatFeedbackRow.tsx`.
 - ★★★ **System prompt reorder + general-purpose assistant clause:** Shipped — `build_system_prompt` in [`py_modules/backend/services/ollama_service.py`](../py_modules/backend/services/ollama_service.py) assembles the Ollama **system** message in layers: dynamic game/attachment/vision → identity + general-purpose clause → optional early context (e.g. Proton via `early_context_suffix` from `main.py`) → topic/mode injects → **TDP + ```json``` contract tail** last; `append_deck_tdp_sysfs_grounding` after that; AI character roleplay remains a **prefix** when enabled. Unit ordering tests in [`tests/test_ollama_service.py`](../tests/test_ollama_service.py); maintainer notes in [prompt-testing.md](prompt-testing.md) (**System message layer order**). **Still needs on-device / matrix validation:** use Input transparency to confirm layer order and quality on real Asks (Speed, Strategy, Ollama-host, TDP/read paths) — track in [prompt-testing.md](prompt-testing.md) and [regression-and-smoke.md](regression-and-smoke.md) as appropriate. RAG injection in-prompt remains future (see [rag-sources-research.md](rag-sources-research.md)); **not in scope:** changing TDP/GPU JSON schema.
 
 **Also counted in shipped baseline (not separate checklist lines above):** background prompt completion (V1); Linux Ollama compatibility.
@@ -415,8 +385,10 @@ Headings group related work. Star counts match the historical list.
 - ★★★ **Preset carousel scroll + slide (2026-05-20):** Developer → **carousel** mode: slower auto-advance (~5.8s), `translateY` slide animation, D-pad scrollable history (~12 items), soft contextual re-seed after Ask, `React.memo` on chips, inject-row placeholder during Ask. `src/features/preset-carousel/carouselState.ts`, `MainTabPresetAnimatedChips.tsx`, `bonsaiScopeStylesheet.ts`, `MainTab.tsx`.
 - ★★ **Gemma Pull Models + routing parity (2026-05-20):** Browse models adds `gemma4:4b` / `gemma4:2b`; Tier 2 fallbacks try `gemma3:4b` and catalog Gemma tags before `:latest`; HTTP 404 advances to next model. `pullModelCatalog.ts`, `refactor_helpers.py`, `main.py`, `docs/troubleshooting.md`.
 - ★★★ **Mode selector (main screen):** Persisted `ask_mode` (`speed` / `strategy` / `deep`, UI labels Speed / Strategy / Deep). Compact outline control (green / bronze / gold) on the unified input strip, left of mic/stop, opens an anchored popover menu to change mode (no layout reflow); D-pad focus order is text field → mode → mic/stop. Backend orders Ollama model fallbacks per mode in `refactor_helpers.py`; `start_background_game_ai` includes `ask_mode`. `src/data/askMode.ts`, `src/components/AskModeMenuPopover.tsx`, `MainTab.tsx`, `index.tsx`, `settingsAndResponse.ts`, `settings_service.py`, `main.py`.
+- ★★★★★ **Whisper voice Ask (Deck STT, 2026-06-11):** Local speech-to-text into the unified Ask input via the mic button. Backend PipeWire/Pulse/ALSA capture (`voice_transcription_service.py`), rolling-window **whisper.cpp** interim transcription, poll-based status RPCs (`start_voice_transcription`, `stop_voice_transcription`, `get_voice_transcription_status`). **Permission:** `microphone_access` toggle in **Permissions** tab (default off; not legacy-grandfathered). **Settings → Voice input:** `tiny.en` / `base.en` model selector + GGUF download (`install_voice_engine`). Bundle `bin/whisper-cli` on device (see `bin/README.md`). Audio in-memory only; transparency route `voice.transcribe`. Files: `main.py`, `src/hooks/useVoiceTranscription.ts`, `VoiceInputSettingsSection.tsx`, `PermissionsTab.tsx`, `MainTab.tsx`.
 - ★★★★ **Strategy Guide prompt path (beta):** Shipped — **Strategy Guide** in prompts and tooling is the same path as **`ask_mode: strategy`** (main-tab label **Strategy**). Strategy presets can switch Ask mode; strategy-specific placeholder (“describe the level / boss / puzzle”); **`STRATEGY GUIDE MODE`** scaffolding and branch-picker contract in `backend/services/ollama_service.py` + `backend/services/strategy_guide_parse.py`; follow-up UX in `src/index.tsx`, `MainTab.tsx`, `src/data/presets.ts`, `src/data/strategyGuideFollowup.ts`; character framing in `ai_character_service.py` when roleplay is on. Optional cheat / shortcut guidance when the user asks; Steam Input-aware copy where relevant. Regression notes: [prompt-testing.md](prompt-testing.md) § Strategy Guide. **Not in scope:** perfect walkthroughs for every title.
-- ★★★★ **Strategy Guide safety and spoilers:** Shipped — spoiler-minimized default and `bonsai-spoiler` fenced blocks in the strategy system prompt; effective consent from Ask payload plus conservative phrase match on sanitized text; Settings → **Strategy Guide** (tap-to-reveal, expand-after-consent); main-tab **Spoilers OK for this Ask** when mode is Strategy; `strategy_spoiler_consent_effective` on Ask results for UI; tap-to-reveal in `MainTabBonsaiAiMarkdownChunk.tsx`. **`settings.json`:** `strategy_spoiler_masking_enabled`, `strategy_spoiler_auto_reveal_after_consent`. **Not in scope:** hard model guarantees. **Testing:** unit coverage in repo for prompt, settings, and chunk splitting; **on-device and real-model verification still required** — complete [prompt-testing.md](prompt-testing.md) § **Spoiler Policy and Consent** (Pass / Partial / Fail + build id when exercised).
+- ★★★ **Ask thread accordion (2026-06-14):** Main-tab transcript uses one **accordion row per turn** — collapsed title is a truncated question (`buildCollapsedTurnTitle`); OK expands **full AI answer only** inline; exactly one turn open (`expandedTurnKey` in `useBonsaiAskOrchestration.ts`). Removed detached question chips + shared AI bubble and **Next message** navigation. **Spoilers:** removed main-tab **Spoilers OK for this Ask** and Settings **Open spoilers after I opt in**; masking is controlled only by **Hide spoilers until I tap** (`strategy_spoiler_masking_enabled`); darker tap-to-reveal styling on `.bonsai-spoiler-reveal-target`. Files: `BonsaiChatTurnRow.tsx`, `MainTab.tsx`, `chatTurnTitle.ts`, `bonsaiScopeStylesheet.ts`.
+- ★★★★ **Strategy Guide safety and spoilers:** Shipped — spoiler-minimized default and `bonsai-spoiler` fenced blocks in the strategy system prompt; phrase-match consent on sanitized user text; Settings → **Story spoilers (Strategy mode)** → **Hide spoilers until I tap**; tap-to-reveal in `MainTabBonsaiAiMarkdownChunk.tsx`. **`settings.json`:** `strategy_spoiler_masking_enabled` (legacy `strategy_spoiler_auto_reveal_after_consent` ignored on save). **Not in scope:** hard model guarantees. **Testing:** [prompt-testing.md](prompt-testing.md) § **Spoiler Policy and Consent**.
 - ★★ **Debug tab opt-in (Settings):** Persisted `show_debug_tab` (default **false**); **Debug** omitted from the tab strip until **Show Debug tab** is enabled in Settings; safe tab switch when turning the toggle off while on **Debug**. `src/index.tsx`, `settings_service.py`, `settingsAndResponse.ts`.
 - ★★ **Settings tab trim:** **Trim the fat** on Settings: fewer simultaneous controls per view, clearer `PanelSection` grouping, progressive disclosure, shorter helper copy on toggles and sliders; dedicated Settings composition (`SettingsTab.tsx` and related controls).
 - ★★★ **Reset session cache (app state):** Settings → Advanced **Reset session cache…** with confirm modal; `resetPluginSession()` clears in-memory unified search, reply, thread, transparency, branch picker, attachments, and timers. Does **not** change persisted `settings.json`, host Ollama history, or screenshot files. `src/index.tsx`.

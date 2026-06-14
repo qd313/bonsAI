@@ -32,9 +32,9 @@ import {
   DEFAULT_RESPONSE_VERIFY_MODEL,
   DEFAULT_RESPONSE_VERIFY_SECOND_PASS,
   type NamedOllamaHost,
-  DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT,
   DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED,
   DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
+  DEFAULT_VOICE_STT_MODEL,
   normalizeLatencyWarningSeconds,
   normalizeRequestTimeoutSeconds,
   normalizeSettings,
@@ -47,6 +47,7 @@ import {
   type PresetChipAnimation,
   type ScreenshotAttachmentPreset,
   type UnifiedInputPersistenceMode,
+  type VoiceSttModelId,
 } from "../utils/settingsAndResponse";
 
 /**
@@ -106,9 +107,6 @@ export function usePluginSettings() {
   const [strategySpoilerMaskingEnabled, setStrategySpoilerMaskingEnabled] = useState<boolean>(
     DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED
   );
-  const [strategySpoilerAutoRevealAfterConsent, setStrategySpoilerAutoRevealAfterConsent] = useState<boolean>(
-    DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT
-  );
   const [steamWebApiKey, setSteamWebApiKey] = useState<string>("");
   const [bonsaiTokenStreamingEnabled, setBonsaiTokenStreamingEnabled] = useState<boolean>(
     DEFAULT_BONSAI_TOKEN_STREAMING_ENABLED
@@ -120,6 +118,7 @@ export function usePluginSettings() {
   );
   const [responseVerifyModel, setResponseVerifyModel] = useState<string>(DEFAULT_RESPONSE_VERIFY_MODEL);
   const [namedOllamaHosts, setNamedOllamaHosts] = useState<NamedOllamaHost[]>([]);
+  const [voiceSttModel, setVoiceSttModel] = useState<VoiceSttModelId>(DEFAULT_VOICE_STT_MODEL);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
 
   const hydrateFromSettings = useCallback((saved: BonsaiSettings) => {
@@ -150,7 +149,6 @@ export function usePluginSettings() {
     setModelAllowHighVramFallbacks(normalized.model_allow_high_vram_fallbacks);
     setOllamaLocalOnDeck(normalized.ollama_local_on_deck);
     setStrategySpoilerMaskingEnabled(normalized.strategy_spoiler_masking_enabled);
-    setStrategySpoilerAutoRevealAfterConsent(normalized.strategy_spoiler_auto_reveal_after_consent);
     setSteamWebApiKey(normalized.steam_web_api_key);
     setBonsaiTokenStreamingEnabled(normalized.bonsai_token_streaming_enabled);
     setShowOnscreenDebugHud(normalized.show_onscreen_debug_hud);
@@ -158,6 +156,7 @@ export function usePluginSettings() {
     setResponseVerifySecondPass(normalized.response_verify_second_pass);
     setResponseVerifyModel(normalized.response_verify_model);
     setNamedOllamaHosts(normalized.named_ollama_hosts);
+    setVoiceSttModel(normalized.voice_stt_model);
   }, []);
 
   useEffect(() => {
@@ -195,7 +194,6 @@ export function usePluginSettings() {
         setModelAllowHighVramFallbacks(normalized.model_allow_high_vram_fallbacks);
         setOllamaLocalOnDeck(normalized.ollama_local_on_deck);
         setStrategySpoilerMaskingEnabled(normalized.strategy_spoiler_masking_enabled);
-        setStrategySpoilerAutoRevealAfterConsent(normalized.strategy_spoiler_auto_reveal_after_consent);
         setSteamWebApiKey(normalized.steam_web_api_key);
         setBonsaiTokenStreamingEnabled(normalized.bonsai_token_streaming_enabled);
         setShowOnscreenDebugHud(normalized.show_onscreen_debug_hud);
@@ -203,6 +201,7 @@ export function usePluginSettings() {
         setResponseVerifySecondPass(normalized.response_verify_second_pass);
         setResponseVerifyModel(normalized.response_verify_model);
         setNamedOllamaHosts(normalized.named_ollama_hosts);
+        setVoiceSttModel(normalized.voice_stt_model);
       })
       .catch(() => {
         if (cancelled) return;
@@ -232,7 +231,6 @@ export function usePluginSettings() {
         setModelAllowHighVramFallbacks(DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS);
         setOllamaLocalOnDeck(DEFAULT_OLLAMA_LOCAL_ON_DECK);
         setStrategySpoilerMaskingEnabled(DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED);
-        setStrategySpoilerAutoRevealAfterConsent(DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT);
         setSteamWebApiKey("");
         setBonsaiTokenStreamingEnabled(DEFAULT_BONSAI_TOKEN_STREAMING_ENABLED);
         setShowOnscreenDebugHud(DEFAULT_SHOW_ONSCREEN_DEBUG_HUD);
@@ -240,6 +238,7 @@ export function usePluginSettings() {
         setResponseVerifySecondPass(DEFAULT_RESPONSE_VERIFY_SECOND_PASS);
         setResponseVerifyModel(DEFAULT_RESPONSE_VERIFY_MODEL);
         setNamedOllamaHosts([]);
+        setVoiceSttModel(DEFAULT_VOICE_STT_MODEL);
       })
       .finally(() => {
         if (!cancelled) setSettingsLoaded(true);
@@ -281,7 +280,6 @@ export function usePluginSettings() {
           modelAllowHighVramFallbacks,
           ollamaLocalOnDeck,
           strategySpoilerMaskingEnabled,
-          strategySpoilerAutoRevealAfterConsent,
           steamWebApiKey,
           bonsaiTokenStreamingEnabled,
           showOnscreenDebugHud,
@@ -289,6 +287,7 @@ export function usePluginSettings() {
           responseVerifySecondPass,
           responseVerifyModel,
           namedOllamaHosts,
+          voiceSttModel,
         })
       ).catch((err) => {
         console.error("save_settings failed", err);
@@ -322,7 +321,6 @@ export function usePluginSettings() {
     modelAllowHighVramFallbacks,
     ollamaLocalOnDeck,
     strategySpoilerMaskingEnabled,
-    strategySpoilerAutoRevealAfterConsent,
     steamWebApiKey,
     bonsaiTokenStreamingEnabled,
     showOnscreenDebugHud,
@@ -330,6 +328,7 @@ export function usePluginSettings() {
     responseVerifySecondPass,
     responseVerifyModel,
     namedOllamaHosts,
+    voiceSttModel,
     settingsLoaded,
   ]);
 
@@ -376,8 +375,6 @@ export function usePluginSettings() {
     setOllamaLocalOnDeck,
     strategySpoilerMaskingEnabled,
     setStrategySpoilerMaskingEnabled,
-    strategySpoilerAutoRevealAfterConsent,
-    setStrategySpoilerAutoRevealAfterConsent,
     steamWebApiKey,
     setSteamWebApiKey,
     bonsaiTokenStreamingEnabled,
@@ -392,6 +389,8 @@ export function usePluginSettings() {
     setResponseVerifyModel,
     namedOllamaHosts,
     setNamedOllamaHosts,
+    voiceSttModel,
+    setVoiceSttModel,
     settingsLoaded,
     setLatencyWarningSeconds,
     setRequestTimeoutSeconds,

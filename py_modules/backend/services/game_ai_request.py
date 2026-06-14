@@ -202,6 +202,8 @@ async def run_game_ai_request(
             }
         question_for_model = lane.text
 
+        active_rid = plugin._active_request_id() if hasattr(plugin, "_active_request_id") else None
+
         proton_attachment_text = ""
         proton_sources: list = []
         proton_notes_parts: list[str] = []
@@ -211,6 +213,10 @@ async def run_game_ai_request(
             and bool(str(app_id or "").strip())
         )
         if want_proton_logs:
+            if isinstance(active_rid, int) and hasattr(plugin, "_publish_thinking_phase_key"):
+                plugin._publish_thinking_phase_key(
+                    active_rid, "proton_logs", app_name=app_name, ask_mode=ask_mode
+                )
             if not capability_enabled(settings, "steam_logs_read"):
                 proton_notes_parts.append(
                     "Proton log excerpts skipped: enable Steam/Proton log read in Permissions."
@@ -240,6 +246,8 @@ async def run_game_ai_request(
         tdp_grounding_requested = (read_tdp or wants_grounding) and not ollama_host_topic
         pre_cap: Optional[int] = None
         if tdp_grounding_requested:
+            if isinstance(active_rid, int) and hasattr(plugin, "_publish_thinking_phase_key"):
+                plugin._publish_thinking_phase_key(active_rid, "tdp_read", ask_mode=ask_mode)
             _loop = asyncio.get_running_loop()
 
             def _read_cap():
@@ -251,6 +259,15 @@ async def run_game_ai_request(
         if ask_mode == "strategy":
             strategy_spoiler_consent_effective = bool(spoiler_consent) or user_consents_strategy_spoilers(
                 question_for_model
+            )
+
+        if isinstance(active_rid, int) and hasattr(plugin, "_publish_thinking_phase_key"):
+            plugin._publish_thinking_phase_key(
+                active_rid,
+                "building_context",
+                app_name=app_name,
+                attachment_count=len(atts),
+                ask_mode=ask_mode,
             )
 
         ollama_result = await plugin.ask_ollama(

@@ -10,6 +10,7 @@ CAPABILITY_KEYS = (
     "steam_logs_read",
     "external_navigation",
     "steam_web_api",
+    "microphone_access",
 )
 
 
@@ -31,6 +32,8 @@ def legacy_grandfather_capabilities() -> dict[str, bool]:
     out = {k: True for k in CAPABILITY_KEYS}
     # Outbound Steam Web API uses the user's key; do not auto-enable for legacy installs.
     out["steam_web_api"] = False
+    # Microphone capture is opt-in even for legacy installs.
+    out["microphone_access"] = False
     return out
 
 

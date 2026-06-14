@@ -602,6 +602,153 @@
           "expect": "\"applied\":{\"tdp_watts\":15"
         }
       ]
+    },
+    {
+      "id": "THINKING-01-pending-phases",
+      "tier": "tier2Deep",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": [
+        "THINKING-01"
+      ],
+      "checkboxIds": [
+        "**THINKING-01**"
+      ],
+      "captureSteps": [
+        2
+      ],
+      "steps": [
+        {
+          "action": "callRpc",
+          "method": "start_background_game_ai",
+          "args": [
+            "Say hello in one short sentence",
+            "127.0.0.1:11434"
+          ]
+        },
+        {
+          "action": "sleep",
+          "ms": 400
+        },
+        {
+          "action": "callRpc",
+          "method": "get_background_game_ai_status"
+        },
+        {
+          "action": "assert",
+          "type": "rpcResult",
+          "expect": "thinking_summary"
+        },
+        {
+          "action": "snapshotDom",
+          "selector": ".bonsai-scope"
+        },
+        {
+          "action": "assert",
+          "type": "domContains",
+          "expect": "bonsai-chat-status-line"
+        }
+      ]
+    },
+    {
+      "id": "STREAM-06-smooth-reveal",
+      "tier": "tier2Deep",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": [
+        "STREAM-06"
+      ],
+      "checkboxIds": [
+        "**STREAM-06**"
+      ],
+      "captureSteps": [
+        3
+      ],
+      "steps": [
+        {
+          "action": "callRpc",
+          "method": "save_settings",
+          "args": [
+            {
+              "show_developer_tab": true,
+              "bonsai_token_streaming_enabled": true,
+              "ask_mode": "speed"
+            }
+          ]
+        },
+        {
+          "action": "callRpc",
+          "method": "start_background_game_ai",
+          "args": [
+            "Count from one to five slowly",
+            "127.0.0.1:11434"
+          ]
+        },
+        {
+          "action": "sleep",
+          "ms": 500
+        },
+        {
+          "action": "callRpc",
+          "method": "get_background_game_ai_status"
+        },
+        {
+          "action": "assert",
+          "type": "rpcResult",
+          "expect": "pending"
+        },
+        {
+          "action": "sleep",
+          "ms": 800
+        },
+        {
+          "action": "callRpc",
+          "method": "get_background_game_ai_status"
+        },
+        {
+          "action": "assert",
+          "type": "rpcResult",
+          "expect": "status"
+        }
+      ]
+    },
+    {
+      "id": "FEEDBACK-01-reply-action-chrome",
+      "tier": "tier2Deep",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": [
+        "FEEDBACK-01"
+      ],
+      "checkboxIds": [
+        "**FEEDBACK-01**"
+      ],
+      "captureSteps": [
+        2
+      ],
+      "steps": [
+        {
+          "action": "callRpc",
+          "method": "ask_game_ai",
+          "args": [
+            "Reply with exactly: ok",
+            "127.0.0.1:11434"
+          ]
+        },
+        {
+          "action": "sleep",
+          "ms": 1200
+        },
+        {
+          "action": "snapshotDom",
+          "selector": ".bonsai-scope"
+        },
+        {
+          "action": "assert",
+          "type": "domContains",
+          "expect": "bonsai-chat-secondary-btn"
+        }
+      ]
     }
   ]
 }

@@ -18,6 +18,7 @@ from backend.services.ai_character_service import (
 )
 from backend.services.capabilities import legacy_grandfather_capabilities, sanitize_capabilities
 from backend.services.model_policy import reconcile_model_policy_tier
+from backend.services.voice_transcription_service import sanitize_voice_stt_model
 
 
 def clamp_int(value: Any, default: int, minimum: int, maximum: int) -> int:
@@ -407,6 +408,7 @@ def sanitize_settings(
             raw.get("strategy_spoiler_auto_reveal_after_consent")
         ),
         "steam_web_api_key": sanitize_steam_web_api_key(raw.get("steam_web_api_key")),
+        "voice_stt_model": sanitize_voice_stt_model(raw.get("voice_stt_model")),
     }
 
 

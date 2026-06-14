@@ -3,7 +3,7 @@
  * (Developer → On-screen debug HUD, rendered by BonsaiDebugOverlay).
  */
 
-const MAX_RING = 12;
+const MAX_RING = 24;
 
 export type BonsaiDebugEntry = {
   ts: number;

@@ -5,6 +5,7 @@ All notable changes to this project are documented in this file.
 ## [Unreleased]
 
 ### Added
+- **Voice input (local STT):** Mic button on the unified Ask bar records via backend PipeWire/Pulse/ALSA capture and streams interim whisper.cpp transcription into the text field. **Permissions → Voice input (microphone)** (default off). **Settings → Voice input** for `tiny.en` / `base.en` model download. RPCs: `start_voice_transcription`, `stop_voice_transcription`, `get_voice_transcription_status`, `install_voice_engine`. `voice_transcription_service.py`, `useVoiceTranscription.ts`, `VoiceInputSettingsSection.tsx`.
 - **LAN Ollama discovery (mDNS):** Settings → Connection **Find LAN** — user-triggered browse for `_ollama._tcp` only (no subnet scan). `ollama_mdns_discovery_service.py`, `discover_mdns_ollama_hosts` RPC, `SettingsTab.tsx`.
 - **Maintainer automation:** Vitest headless Decky harness (`src/test-harness/`, `vitest.config.ts`); `scripts/watch-deploy.sh` / `.ps1`; prepare-only `pnpm run version:bump`; Cursor skill `.cursor/skills/bonsai-deck-dev-loop/`.
 - **Token streaming (experimental, Developer tab):** When **Token streaming (experimental)** is enabled (`bonsai_token_streaming_enabled`), Main shows a single growing preview chunk while Ollama NDJSON deltas arrive (`partial_response` on background status poll at 350ms); terminal replies still run strategy branches, TDP apply, model-policy disclosure, and normal D-pad chunk splitting. `main.py`, `ollama_service.py`, `useBonsaiAskOrchestration.ts`, `MainTab.tsx`, `DeveloperTab.tsx`.

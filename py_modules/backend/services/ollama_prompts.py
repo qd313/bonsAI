@@ -43,7 +43,7 @@ def _strategy_spoiler_policy_block(consent: bool, followup: bool) -> str:
     if consent:
         lines = (
             "STRATEGY SPOILER POLICY (user opted in): The user explicitly consented to spoilers for this turn "
-            "(plugin toggle and/or their wording). Give direct walkthrough detail, names, and puzzle solutions as needed. "
+            "(their wording). Give direct walkthrough detail, names, and puzzle solutions as needed. "
             "You may still wrap optional ultra-sensitive notes in ```bonsai-spoiler ... ``` fences, "
             "but it is not required for normal tactics.\n"
         )
@@ -367,6 +367,44 @@ BONSAI_STATUS_STREAM_INSTRUCTION = (
     "The status tag is stripped before the user sees the final reply.\n\n"
 )
 
+
+def build_bonsai_status_stream_instruction(
+    app_name: str = "",
+    ask_mode: str = "speed",
+    has_images: bool = False,
+) -> str:
+    """Dynamic guidance for model-emitted ``<bonsai-status>`` tags during streaming."""
+    game = (app_name or "").strip()
+    game_hint = f" for {game}" if game else ""
+    example_game = game or "your game"
+    image_hint = (
+        " When screenshots are attached, mention what you are reviewing in the image "
+        "(e.g. HUD, puzzle, boss arena) without inventing details you cannot see."
+        if has_images
+        else ""
+    )
+    strategy_hint = ""
+    if ask_mode == "strategy":
+        strategy_hint = (
+            " In Strategy Guide mode, the status line must NEVER spoil story beats, boss names, "
+            "puzzle solutions, or hidden secrets — describe your investigative focus only "
+            "(e.g. 'Reviewing the shrine layout in your screenshot').\n"
+        )
+    example = (
+        f"<bonsai-status>Reviewing your {example_game} screenshot for the shrine puzzle</bonsai-status>"
+        if has_images
+        else f"<bonsai-status>Checking Deck context{game_hint} for your question</bonsai-status>"
+    )
+    return (
+        "STATUS LINE (required): As the very first characters of your assistant reply, emit exactly one line "
+        "<bonsai-status>short plain-English status for the user</bonsai-status> "
+        "(under ~120 characters; no markdown inside the tag). Then continue with your normal answer on the following lines. "
+        "The status tag is stripped before the user sees the final reply.\n"
+        f"Example: {example}\n"
+        f"{strategy_hint}"
+        f"{image_hint}\n\n"
+    )
+
 THIN_CONTEXT_HONESTY_CLAUSE = (
     "LIMITED CONTEXT: No active game and no screenshots were attached for this turn. "
     "Prefer general Steam Deck guidance; say when you are uncertain or guessing; do not invent a specific game title, "
@@ -479,7 +517,15 @@ def build_system_prompt(
     )
     if thin_context:
         dynamic_block += THIN_CONTEXT_HONESTY_CLAUSE
-    general_block = BONSAI_SYSTEM_IDENTITY + GENERAL_PURPOSE_ASSISTANT_CLAUSE + BONSAI_STATUS_STREAM_INSTRUCTION
+    general_block = (
+        BONSAI_SYSTEM_IDENTITY
+        + GENERAL_PURPOSE_ASSISTANT_CLAUSE
+        + build_bonsai_status_stream_instruction(
+            app_name=app_name,
+            ask_mode=ask_mode,
+            has_images=bool(prepared_images),
+        )
+    )
     early_stripped = (early_context_suffix or "").strip()
     early_block = f"\n\n{early_stripped}" if early_stripped else ""
 

@@ -7,7 +7,6 @@ import {
   DEFAULT_CAPABILITIES,
   DEFAULT_OLLAMA_KEEP_ALIVE,
   DEFAULT_SCREENSHOT_ATTACHMENT_PRESET,
-  DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT,
   DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED,
   type DesktopAppLogLevel,
   normalizeLatencyWarningSeconds,
@@ -63,6 +62,8 @@ describe("settingsAndResponse", () => {
     expect(settings.capabilities.filesystem_write).toBe(false);
     expect(settings.capabilities.hardware_control).toBe(false);
     expect(settings.capabilities.steam_web_api).toBe(false);
+    expect(settings.capabilities.microphone_access).toBe(false);
+    expect(settings.voice_stt_model).toBe("tiny.en");
     expect(settings.steam_web_api_key).toBe("");
     expect(settings.ai_character_enabled).toBe(false);
     expect(settings.ai_character_random).toBe(true);
@@ -217,7 +218,6 @@ describe("settingsAndResponse", () => {
       modelAllowHighVramFallbacks: true,
       ollamaLocalOnDeck: true,
       strategySpoilerMaskingEnabled: false,
-      strategySpoilerAutoRevealAfterConsent: true,
       steamWebApiKey: "abc",
       bonsaiTokenStreamingEnabled: true,
       showOnscreenDebugHud: false,
@@ -225,6 +225,7 @@ describe("settingsAndResponse", () => {
       responseVerifySecondPass: false,
       responseVerifyModel: "",
       namedOllamaHosts: [],
+      voiceSttModel: "tiny.en",
     });
     expect(p.latency_warning_seconds).toBe(20);
     expect(p.request_timeout_seconds).toBe(150);
@@ -237,7 +238,7 @@ describe("settingsAndResponse", () => {
     expect(p.ollama_local_on_deck).toBe(true);
     expect(p.attach_proton_logs_when_troubleshooting).toBe(true);
     expect(p.strategy_spoiler_masking_enabled).toBe(false);
-    expect(p.strategy_spoiler_auto_reveal_after_consent).toBe(true);
+    expect(p.strategy_spoiler_auto_reveal_after_consent).toBe(false);
     expect(p.steam_web_api_key).toBe("abc");
     expect(p.show_developer_tab).toBe(true);
     expect(p.bonsai_token_streaming_enabled).toBe(true);
@@ -271,7 +272,6 @@ describe("settingsAndResponse", () => {
       modelAllowHighVramFallbacks: false,
       ollamaLocalOnDeck: false,
       strategySpoilerMaskingEnabled: DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED,
-      strategySpoilerAutoRevealAfterConsent: DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT,
       steamWebApiKey: "",
       bonsaiTokenStreamingEnabled: false,
       showOnscreenDebugHud: false,
@@ -279,6 +279,7 @@ describe("settingsAndResponse", () => {
       responseVerifySecondPass: false,
       responseVerifyModel: "",
       namedOllamaHosts: [],
+      voiceSttModel: "tiny.en" as const,
     };
     const p = toBonsaiSettingsPayload(base, {
       ai_character_random: false,

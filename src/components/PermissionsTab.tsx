@@ -34,6 +34,12 @@ const ROWS: {
     description: "For the bonsai:vac-check command. API key lives in Developer → Integrations.",
   },
   {
+    key: "microphone_access",
+    title: "Voice input (microphone)",
+    description:
+      "Record from this device's microphone for local speech-to-text in the Ask bar. Audio stays on-device and is never saved.",
+  },
+  {
     key: "external_navigation",
     title: "Open web links",
     description: "GitHub, docs, and Steam settings links from the plugin.",

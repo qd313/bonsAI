@@ -72,6 +72,7 @@ Maps [roadmap.md](roadmap.md) **Completed** items to test IDs. Update **Status**
 | CAROUSEL-SLIDE | Carousel slide + history (2026-05-20) | — | Open | Tier 3 cosmetic |
 | GEMMA-PULL | Gemma pull models + routing | — | Partial | Unit tests |
 | MODE-SELECTOR | Speed / Strategy / Deep | SMOKE-E, Tier 1 | Open | |
+| VOICE-STT | Whisper voice Ask (local STT) | VOICE-01…04 | Open | Permissions + Settings model download; on-Deck mic required |
 | STRATEGY-CORE | Strategy Guide prompt path | SMOKE-E | Open | |
 | STRATEGY-SPOILER | Strategy spoiler policy + consent | SMOKE-E, STRAT-01…05 | Partial | Unit green 2026-04-30; [preview 2026-05-26](test-evidence/tier1Core/2026-05-26-9e20a82/SMOKE-E-strategy-mode/manifest.json) |
 | DEBUG-TAB | Debug tab opt-in | SMOKE-A | Open | Tab strip when enabled |
@@ -220,6 +221,9 @@ Requires **Settings → Data → Show Developer tab** → **Token streaming (exp
 - [x] **STREAM-03** Flag on, Strategy + spoiler masking, no Spoilers OK: no unmasked mid-stream flash
 - [x] **STREAM-04** Stop mid-stream: cancelled copy; no stale overwrite
 - [x] **STREAM-05** Transparency populates only after terminal
+- [ ] **STREAM-06** Smooth reveal: pending stream polls without text regression (preview RPC)
+- [ ] **THINKING-01** Pending: `thinking_summary` line visible; no placeholder AI bubble before partial
+- [ ] **FEEDBACK-01** Reply-action chrome: `.bonsai-chat-secondary-btn` on feedback/retry/details
 
 ---
 
@@ -292,6 +296,15 @@ Requires **Settings → Data → Show Developer tab** → **Token streaming (exp
 - [ ] **QAMP-DECK-05** After full reboot: same
 
 ---
+
+## Tier 2 — Voice input (local STT)
+
+Deck-only (mic + PipeWire capture). Preview harness stubs RPCs but cannot validate real audio.
+
+- [ ] **VOICE-01** Permissions off → mic redirects to Permissions tab; no `start_voice_transcription` capture
+- [ ] **VOICE-02** Permissions on + model downloaded → interim text streams into Ask field while speaking
+- [ ] **VOICE-03** Stop mic (red stop) finalizes transcript; Ask can be submitted normally
+- [ ] **VOICE-04** Revoke microphone permission mid-recording → capture stops immediately
 
 ## Tier 2 — Strategy depth
 

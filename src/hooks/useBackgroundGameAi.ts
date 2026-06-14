@@ -5,7 +5,7 @@ import type { BackgroundRequestStatus } from "../types/backgroundAsk";
 /** Poll interval while backend ``status`` stays ``pending`` (matches Steam Deck cadence vs RPC load). */
 export const BACKGROUND_STATUS_POLL_MS = 1200;
 /** Faster poll while token streaming exposes partial_response on pending asks. */
-export const BACKGROUND_STREAM_POLL_MS = 350;
+export const BACKGROUND_STREAM_POLL_MS = 150;
 
 /**
  * Background ask lifecycle: invalidates stale polls when the user submits again or unmounts,

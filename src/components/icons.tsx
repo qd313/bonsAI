@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FiLock, FiSettings } from "react-icons/fi";
+import { FiLock, FiSettings, FiThumbsDown, FiThumbsUp } from "react-icons/fi";
 import bonsaiLogo from "../assets/icons/bonsai-logo.svg";
 
 /**
@@ -158,6 +158,55 @@ export const BackChevronIcon: React.FC<{ size?: number }> = ({ size = 18 }) => (
   <IconShell size={size}>
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path d="M14.5 6.5 9 12l5.5 5.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  </IconShell>
+);
+
+/** Outline thumbs for reply feedback — stroke-only, matches bonsAI glass chrome. */
+export const ThumbUpOutlineIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
+  <IconShell size={size}>
+    <FiThumbsUp
+      size={size}
+      strokeWidth={strokeForTabSize(size)}
+      aria-hidden
+      style={{ display: "block" }}
+    />
+  </IconShell>
+);
+
+export const ThumbDownOutlineIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
+  <IconShell size={size}>
+    <FiThumbsDown
+      size={size}
+      strokeWidth={strokeForTabSize(size)}
+      aria-hidden
+      style={{ display: "block" }}
+    />
+  </IconShell>
+);
+
+/** Outline spinner for thinking / pending Ask status. */
+export const ThinkingSpinnerIcon: React.FC<{ size?: number; className?: string }> = ({
+  size = 14,
+  className,
+}) => (
+  <IconShell size={size}>
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      className={className}
+      style={{ display: "block" }}
+    >
+      <path
+        d="M12 3a9 9 0 1 0 9 9"
+        stroke="currentColor"
+        strokeWidth={size > 22 ? 1.6 : 1.35}
+        strokeLinecap="round"
+      />
     </svg>
   </IconShell>
 );

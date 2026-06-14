@@ -69,15 +69,33 @@ If Windows still falls back to CPU after FIX A:
 
 ## 1a. Permissions tab (blocked actions)
 
-**Feature:** The **Permissions** tab (lock icon) controls high-impact actions: saving notes to Desktop, applying TDP/GPU suggestions from the model, attaching Steam screenshots to asks, opening external links from About, and the Developer tab Steam Input jump.
+**Feature:** The **Permissions** tab (lock icon) controls high-impact actions: saving notes to Desktop, applying TDP/GPU suggestions from the model, attaching Steam screenshots to asks, **voice input (microphone)**, opening external links from About, and the Developer tab Steam Input jump.
 
 **Symptom:** Toasts like “Permission required” or backend errors mentioning Permissions when you try those actions.
 
 **Fix:** Open the **Permissions** tab and set the relevant scope to **ON**. Ollama requests to your PC on the LAN are not gated by these toggles.
 
-**Note:** If you upgraded from an older `settings.json` that had no `capabilities` block, the plugin enables all scopes until you save settings from the Permissions tab (grandfather behavior).
+**Note:** If you upgraded from an older `settings.json` that had no `capabilities` block, the plugin enables most scopes until you save settings from the Permissions tab (grandfather behavior). **Voice input (microphone)** and **Steam ban lookup** stay **off** until you enable them explicitly.
 
-### AI model choice tier (AI models hub)
+### Voice input (speech-to-text)
+
+**Symptom:** Mic button shows “Permission required” or voice does not start.
+
+**Fix:**
+
+1. **Permissions** tab → enable **Voice input (microphone)**.
+2. **Settings → Voice input** → choose **tiny.en** (fastest on Deck) or **base.en** → **Install voice engine** (pulls whisper-cli via podman on SteamOS, then downloads the GGUF model).
+3. If install fails, ensure **podman** is available (`which podman`) or place **`bin/whisper-cli`** in the plugin manually. See [`bin/README.md`](../bin/README.md).
+
+**Symptom:** “No audio capture tool found”.
+
+**Fix:** On SteamOS, install PipeWire/Pulse capture utilities (`pw-record` or `parecord`). Gaming Mode usually has PipeWire; desktop BPM may need `wf-recorder`’s audio stack intact.
+
+**Symptom:** Interim text is slow or stalls.
+
+**Fix:** Use **tiny.en**; **base.en** needs more CPU on the Deck APU. Close heavy games while transcribing. Audio is processed in RAM only — nothing is uploaded or saved to disk.
+
+---
 
 **Symptom:** On the **Ollama** tab, **Open AI models…** does not switch policy tiers (e.g. Tier 1 → Tier 2) with the controller, or the choice reverts after **Done**.
 

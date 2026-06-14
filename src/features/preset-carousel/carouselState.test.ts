@@ -25,7 +25,7 @@ describe("carouselState", () => {
     const long = Array.from({ length: 20 }, (_, i) => p(`item-${i}`));
     const clamped = clampHistory(long);
     expect(clamped.length).toBe(CAROUSEL_HISTORY_MAX);
-    expect(clamped[0]?.text).toBe("item-8");
+    expect(clamped[0]?.text).toBe("item-15");
   });
 
   it("advanceCarouselFocus increments until end then appends", () => {

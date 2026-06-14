@@ -27,6 +27,12 @@ export const FRONTEND_RPC_METHODS = [
   "get_input_transparency",
   "save_ask_feedback",
   "list_recent_screenshots",
+  "start_voice_transcription",
+  "stop_voice_transcription",
+  "get_voice_transcription_status",
+  "get_voice_engine_status",
+  "install_voice_engine",
+  "get_voice_install_status",
 ] as const;
 
 export type FrontendRpcMethod = (typeof FRONTEND_RPC_METHODS)[number];
@@ -62,6 +68,29 @@ function defaultHandlers(): Record<string, RpcHandler> {
     pull_ollama_models: () => ({ accepted: true }),
     delete_ollama_model: () => ({ ok: true }),
     list_recent_screenshots: () => ({ paths: [] }),
+    start_voice_transcription: () => ({ accepted: true }),
+    stop_voice_transcription: () => ({
+      stopped: true,
+      status: "stopped",
+      finalized_transcript: "",
+      partial_transcript: "",
+    }),
+    get_voice_transcription_status: () => ({
+      status: "idle",
+      recording: false,
+      streaming: false,
+      partial_transcript: "",
+      finalized_transcript: "",
+    }),
+    get_voice_engine_status: () => ({
+      model_id: "tiny.en",
+      binary_ready: true,
+      model_ready: true,
+      ready: true,
+      install: { phase: "idle", done: true },
+    }),
+    install_voice_engine: () => ({ accepted: true, model_id: "tiny.en" }),
+    get_voice_install_status: () => ({ phase: "idle", done: true }),
   };
 }
 

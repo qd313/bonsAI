@@ -2,7 +2,7 @@
  * Main-tab Ask orchestration: RPC submit, background status bridge, presets/transparency/desktop autosave hooks.
  * Refs pair with `useBackgroundGameAi` polling — reordering hooks risks stale poll callbacks after unmount.
  */
-import { useCallback, useEffect, useMemo, useRef, useState, type Dispatch, type RefObject, type SetStateAction } from "react";
+import { useCallback, useEffect, useRef, useState, type Dispatch, type RefObject, type SetStateAction } from "react";
 import { call, toaster } from "@decky/api";
 import { Router } from "@decky/ui";
 
@@ -36,23 +36,39 @@ import type {
   AppliedResult,
   StrategyGuideBranchesPayload,
   AskThreadCollapsedTurn,
+  AskThreadExpandedTurnKey,
 } from "../types/bonsaiUi";
+import { hasResponseAutosaved, markResponseAutosaved } from "../utils/desktopChatAutosave";
+import { normalizePresetCarouselInject } from "../utils/presetCarouselInject";
+import type { InputTransparencyRpcResult, TransparencySnapshot } from "../utils/inputTransparency";
+import { ASK_THINKING_STARTING_DISPLAY, isPendingPlaceholderResponse } from "../utils/askThinkingPhases";
+import { useSmoothStreamReveal } from "./useSmoothStreamReveal";
 import {
   peekBonsaiSessionPendingRestore,
   type BonsaiSessionSurvivalSnapshot,
 } from "../utils/bonsaiSessionSurvival";
-import { hasResponseAutosaved, markResponseAutosaved } from "../utils/desktopChatAutosave";
-import { normalizePresetCarouselInject } from "../utils/presetCarouselInject";
-import type { InputTransparencyRpcResult, TransparencySnapshot } from "../utils/inputTransparency";
+
+export type { AskThreadExpandedTurnKey } from "../types/bonsaiUi";
+
+function initialExpandedTurnKeyFromSurvival(): AskThreadExpandedTurnKey {
+  const peek = peekBonsaiSessionPendingRestore();
+  if (!peek) return "live";
+  if (peek.expandedTurnKey !== undefined) {
+    return peek.expandedTurnKey;
+  }
+  const legacyIdx = peek.askThreadViewIndex;
+  if (legacyIdx != null && legacyIdx >= 0 && legacyIdx < peek.askThreadCollapsed.length) {
+    return peek.askThreadCollapsed[legacyIdx]?.id ?? "live";
+  }
+  return "live";
+}
 
 /** Maps RPC poll payloads into Main-tab AI presentation state (pending vs terminal branches differ sharply). */
 export type UseBonsaiAskOrchestrationArgs = {
   desktopDebugNoteAutoSave: boolean;
   filesystemWrite: boolean;
-  strategySpoilerAutoRevealAfterConsent: boolean;
   strategySpoilerMaskingEnabled: boolean;
   askMode: AskModeId;
-  strategySpoilerConsentForNextAsk: boolean;
   unifiedInput: string;
   setUnifiedInput: Dispatch<SetStateAction<string>>;
   unifiedInputPersistenceMode: UnifiedInputPersistenceMode;
@@ -85,7 +101,6 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
   const [modelPolicyDisclosure, setModelPolicyDisclosure] = useState<ModelPolicyDisclosurePayload | null>(
     () => survivalPeek?.modelPolicyDisclosure ?? null
   );
-  const [lastStrategySpoilerConsentEffective, setLastStrategySpoilerConsentEffective] = useState(false);
   const [presetCarouselInject, setPresetCarouselInject] = useState<PresetCarouselInjectPayload | null>(
     () => survivalPeek?.presetCarouselInject ?? null
   );
@@ -105,8 +120,8 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
   useEffect(() => {
     askThreadCollapsedRef.current = askThreadCollapsed;
   }, [askThreadCollapsed]);
-  const [askThreadViewIndex, setAskThreadViewIndex] = useState<number | null>(
-    () => survivalPeek?.askThreadViewIndex ?? null
+  const [expandedTurnKey, setExpandedTurnKey] = useState<AskThreadExpandedTurnKey>(
+    () => initialExpandedTurnKeyFromSurvival()
   );
   const [askThreadDisplayQuestion, setAskThreadDisplayQuestion] = useState(
     () => survivalPeek?.askThreadDisplayQuestion ?? ""
@@ -132,6 +147,12 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     () => survivalPeek?.lastRequestId ?? null
   );
   const [isStreamingPreview, setIsStreamingPreview] = useState(false);
+
+  const streamDisplayText = useSmoothStreamReveal({
+    targetText: ollamaResponse,
+    enabled: isStreamingPreview,
+    done: !isAsking,
+  });
 
   const desktopAutoSavePrefsRef = useRef({
     autoSave: a.desktopDebugNoteAutoSave,
@@ -179,7 +200,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
         const thinking =
           typeof status.thinking_summary === "string" && status.thinking_summary.trim()
             ? status.thinking_summary.trim()
-            : null;
+            : ASK_THINKING_STARTING_DISPLAY;
         setThinkingSummary(thinking);
         const partial =
           status.streaming === true &&
@@ -187,15 +208,13 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
           status.partial_response.trim()
             ? status.partial_response
             : "";
-        const suppressStreamPreview =
-          a.askMode === "strategy" &&
-          a.strategySpoilerMaskingEnabled &&
-          !a.strategySpoilerConsentForNextAsk;
+        const suppressStreamPreview = a.askMode === "strategy" && a.strategySpoilerMaskingEnabled;
         if (partial && !suppressStreamPreview) {
           setOllamaResponse(partial);
           setIsStreamingPreview(true);
         } else {
-          setOllamaResponse(status.response?.trim() ? status.response : "Thinking...");
+          const raw = status.response?.trim() ? status.response : "";
+          setOllamaResponse(isPendingPlaceholderResponse(raw) ? "" : raw);
           setIsStreamingPreview(false);
         }
         setLastApplied(null);
@@ -266,7 +285,6 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
             setLastExchange({ question: displayQ, answer });
             lastStrategyAskQuestionRef.current = q;
             setStrategyGuideBranches(normalizeStrategyGuideBranches(status.strategy_guide_branches));
-            setLastStrategySpoilerConsentEffective(status.strategy_spoiler_consent_effective === true);
 
             const { autoSave, fsWrite } = desktopAutoSavePrefsRef.current;
             const rid = status.request_id;
@@ -284,7 +302,6 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
           } else {
             setLastExchange(null);
             setStrategyGuideBranches(null);
-            setLastStrategySpoilerConsentEffective(false);
             pendingArchiveTurnRef.current = null;
             pendingThreadQuestionDisplayRef.current = null;
           }
@@ -293,7 +310,6 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
           setStrategyGuideBranches(null);
           setModelPolicyDisclosure(null);
           setPresetCarouselInject(null);
-          setLastStrategySpoilerConsentEffective(false);
           pendingArchiveTurnRef.current = null;
           pendingThreadQuestionDisplayRef.current = null;
         }
@@ -309,10 +325,9 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     [refreshInputTransparency],
   );
 
-  const strategySpoilerDefaultExpandedForReply = useMemo(
-    () => a.strategySpoilerAutoRevealAfterConsent && lastStrategySpoilerConsentEffective,
-    [a.strategySpoilerAutoRevealAfterConsent, lastStrategySpoilerConsentEffective],
-  );
+  const onTurnActivate = useCallback((key: string | "live") => {
+    setExpandedTurnKey((prev) => (prev === key ? null : key));
+  }, []);
 
   const onBackgroundPollError = useCallback((e: unknown) => {
     const msg = formatDeckyRpcError(e);
@@ -330,7 +345,6 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     setShortcutSetupVariant(null);
     pendingArchiveTurnRef.current = null;
     pendingThreadQuestionDisplayRef.current = null;
-    setLastStrategySpoilerConsentEffective(false);
   }, [a]);
 
   const {
@@ -444,7 +458,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
         lastFlushedExchangeQuestionRef.current = arch.question.trim();
       }
       pendingArchiveTurnRef.current = null;
-      setAskThreadViewIndex(null);
+      setExpandedTurnKey("live");
       pendingThreadQuestionDisplayRef.current = opts?.threadQuestionDisplay?.trim() || null;
       setAskThreadDisplayQuestion(pendingThreadQuestionDisplayRef.current ?? q);
 
@@ -466,21 +480,20 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
       const appName = runningApp?.display_name ?? "";
 
       setIsAsking(true);
-      setThinkingSummary(null);
+      setThinkingSummary(ASK_THINKING_STARTING_DISPLAY);
       setPresetCarouselInject(null);
       setStrategyGuideBranches(null);
       setModelPolicyDisclosure(null);
       setShortcutSetupVariant(null);
       setLastTransparency(null);
       setIsStreamingPreview(false);
-      setOllamaResponse("Thinking...");
+      setOllamaResponse("");
       setLastApplied(null);
       setElapsedSeconds(null);
       setOllamaContext({
         app_id: appId,
         app_context: appId ? "active" : "none",
       });
-      const spoiler_consent = a.askMode === "strategy" && a.strategySpoilerConsentForNextAsk;
       try {
         const data = await call<
           [
@@ -502,7 +515,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
           appName,
           attachments,
           ask_mode: a.askMode,
-          spoiler_consent,
+          spoiler_consent: false,
         });
 
         if (!isRequestActive(seq)) return;
@@ -697,7 +710,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     setLastExchange(snap.lastExchange);
     setAskThreadCollapsed(snap.askThreadCollapsed);
     setAskThreadDisplayQuestion(snap.askThreadDisplayQuestion);
-    setAskThreadViewIndex(snap.askThreadViewIndex);
+    setExpandedTurnKey(snap.expandedTurnKey ?? "live");
     setSuggestedPrompts(snap.suggestedPrompts);
     setLastTransparency(snap.lastTransparency);
     setModelPolicyDisclosure(snap.modelPolicyDisclosure);
@@ -724,7 +737,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     setElapsedSeconds(null);
     setShowSlowWarning(false);
     setAskThreadCollapsed([]);
-    setAskThreadViewIndex(null);
+    setExpandedTurnKey("live");
     setAskThreadDisplayQuestion("");
     setLastTransparency(null);
     setModelPolicyDisclosure(null);
@@ -733,7 +746,6 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     pendingArchiveTurnRef.current = null;
     pendingThreadQuestionDisplayRef.current = null;
     lastFlushedExchangeQuestionRef.current = "";
-    setLastStrategySpoilerConsentEffective(false);
   }, [invalidateRequests, isAsking]);
 
   return {
@@ -742,7 +754,6 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     lastExchange,
     strategyGuideBranches,
     modelPolicyDisclosure,
-    lastStrategySpoilerConsentEffective,
     presetCarouselInject,
     shortcutSetupVariant,
     suggestedPrompts,
@@ -755,15 +766,16 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     lastRequestId,
     askThreadCollapsed,
     setAskThreadCollapsed,
-    askThreadViewIndex,
-    setAskThreadViewIndex,
+    expandedTurnKey,
+    setExpandedTurnKey,
+    onTurnActivate,
     askThreadDisplayQuestion,
     setAskThreadDisplayQuestion,
     isAsking,
     isStreamingPreview,
+    streamDisplayText,
     lastApplied,
     refreshInputTransparency,
-    strategySpoilerDefaultExpandedForReply,
     startNextRequest,
     invalidateRequests,
     clearUnifiedInput,

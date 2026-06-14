@@ -77,7 +77,7 @@ class OllamaServiceTests(unittest.TestCase):
         lg = MagicMock()
         deltas_seen: list[tuple[str, bool]] = []
 
-        def _on_delta(text: str, done: bool) -> None:
+        def _on_delta(text: str, done: bool, thinking_summary: str | None = None) -> None:
             deltas_seen.append((text, done))
 
         out = post_ollama_chat(

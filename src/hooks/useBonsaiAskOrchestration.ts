@@ -42,6 +42,7 @@ import {
   type BonsaiSessionSurvivalSnapshot,
 } from "../utils/bonsaiSessionSurvival";
 import { hasResponseAutosaved, markResponseAutosaved } from "../utils/desktopChatAutosave";
+import { questionBypassesOllamaPcIpRequirement } from "../utils/localOnlyAskCommands";
 import { normalizePresetCarouselInject } from "../utils/presetCarouselInject";
 import type { InputTransparencyRpcResult, TransparencySnapshot } from "../utils/inputTransparency";
 
@@ -396,16 +397,16 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
 
       const q = (overrideQuestion ?? a.unifiedInput).trim();
       const ip = a.effectiveOllamaPcIp;
-      if (!q || !ip) {
-        if (!ip) {
-          toaster.toast({ title: "PC IP required", body: "Set your Ollama PC IP before asking.", duration: 4000 });
-        } else if (!q) {
-          toaster.toast({
-            title: "Question required",
-            body: "Type a question in the ask field first.",
-            duration: 3500,
-          });
-        }
+      if (!q) {
+        toaster.toast({
+          title: "Question required",
+          body: "Type a question in the ask field first.",
+          duration: 3500,
+        });
+        return;
+      }
+      if (!ip && !questionBypassesOllamaPcIpRequirement(q)) {
+        toaster.toast({ title: "PC IP required", body: "Set your Ollama PC IP before asking.", duration: 4000 });
         return;
       }
 
@@ -531,7 +532,9 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
             shortcut_setup: data.shortcut_setup ?? null,
           };
           applyBackgroundStatusToUi(terminal, "");
-          a.saveIp(ip);
+          if (ip.trim().length > 0) {
+            a.saveIp(ip);
+          }
           if (a.unifiedInputPersistenceMode === "persist_search_only") {
             a.persistSearchQuery("");
           }
@@ -579,7 +582,9 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
           ).catch(() => {});
         }
 
-        a.saveIp(ip);
+        if (ip.trim().length > 0) {
+          a.saveIp(ip);
+        }
         if (a.unifiedInputPersistenceMode === "persist_search_only") {
           a.persistSearchQuery("");
         }

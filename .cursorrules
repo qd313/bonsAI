@@ -1,5 +1,12 @@
 # BonsAI Decky Plugin - Global Rules
 
+## Git & remote branches
+- NEVER run `git push`, `git push -u`, or `gh` commands that publish branches/commits unless the user explicitly asks to push in the current message.
+- NEVER create or push branches under `cursor/` (e.g. `cursor/critical-bug-*`). Investigation and bugfix work stays on the user's current branch (`experimental`, `features`, `main`, or a named feature branch) until the user approves push.
+- Prefer local commits; open a PR only when the user requests it.
+- Release tags (`git push origin vX.Y.Z`) are allowed only when the user explicitly requests a release push (see `docs/development.md`).
+- Cloud Agents / Bugbot Autofix can still push `cursor/*` via the GitHub App — disable Autofix at [cursor.com/dashboard/bugbot](https://cursor.com/dashboard/bugbot) if unwanted; see `.cursor/BUGBOT.md`.
+
 ## Scripts & Automation
 - ALWAYS capture and inspect the full stdout and stderr of the actual failing command before forming hypotheses; NEVER rely solely on exit codes or indirect diagnostics from surrounding code.
 - NEVER hardcode credentials, secrets, IP addresses, hostnames, or any developer-local configuration in version-controlled files; ALWAYS externalize them to a gitignored `.env` (loaded at runtime) with a committed `.env.example` template documenting every required variable.

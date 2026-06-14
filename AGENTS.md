@@ -51,6 +51,12 @@ Invoke personas from `.cursor/agents/` for specialized reviews:
 
 Archive substantive runs in `.cursor/agents/SUBAGENT_REPORTS.md`.
 
+## Git & remote branches
+
+- **Local agents:** Do not `git push` or publish branches unless the user explicitly asks in the current message.
+- **Never push `cursor/*` branches** — work on `experimental`, `features`, `main`, or a user-named branch; merge locally.
+- **Bugbot / Cloud Agents:** Repo policy in `.cursor/BUGBOT.md`. Dashboard: [Bugbot](https://cursor.com/dashboard/bugbot) — keep **Autofix Off** unless you want auto-pushed investigation branches.
+
 ## Preview limitations
 
 - Approximate `@decky/ui` mocks (not pixel-perfect Steam CEF)

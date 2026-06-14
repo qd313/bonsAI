@@ -1,0 +1,12 @@
+---
+description: Git push and cursor/* branch policy for local agents
+alwaysApply: true
+---
+
+# Git & remote branches (BonsAI)
+
+- NEVER run `git push`, `git push -u`, or `gh` publish commands unless the user explicitly asks to push in the current message.
+- NEVER create or push branches under `cursor/` (e.g. `cursor/critical-bug-*`). Bugfix work stays on the user's current branch until they approve push.
+- Prefer local commits; open PRs only when requested.
+- Release tags (`git push origin vX.Y.Z`) only when the user explicitly requests a release push.
+- Bugbot Autofix policy: `.cursor/BUGBOT.md`. Dashboard Autofix should stay **Off** to avoid `cursor/*` sprawl.

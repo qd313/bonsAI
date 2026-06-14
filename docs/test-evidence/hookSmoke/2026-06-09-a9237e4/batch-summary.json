@@ -1,0 +1,18 @@
+{
+  "batch": "hookSmoke",
+  "runDate": "2026-06-09",
+  "gitSha": "a9237e4",
+  "passed": 0,
+  "failed": 1,
+  "skipped": 0,
+  "total": 1,
+  "evidenceRoot": "docs/test-evidence/hookSmoke/2026-06-09-a9237e4",
+  "results": [
+    {
+      "id": "HOOK-smoke-setTab",
+      "status": "fail",
+      "error": "Error: IPC timeout for callTestHook",
+      "evidenceDir": "docs/test-evidence/hookSmoke/2026-06-09-a9237e4/HOOK-smoke-setTab"
+    }
+  ]
+}

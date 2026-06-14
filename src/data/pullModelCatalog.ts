@@ -10,6 +10,7 @@ export interface PullModelEntry {
   tag: string;
   params: string;
   sizeGb: number;
+  /** Public model-family release month (YYYY-MM), not Ollama tag publish date. */
   releasedYm: string;
   license: string;
   licenseClass: PullModelLicenseClass;
@@ -44,30 +45,26 @@ export const PULL_MODEL_FILTER_OPTIONS = [
 
 export type PullModelFilterId = (typeof PULL_MODEL_FILTER_OPTIONS)[number]["id"];
 
+/** Pull models table header — curated 1–6 ★ score for quality/fit on Steam Deck. */
+export const PULL_MODEL_RATING_COLUMN_LABEL = "Deck fit";
+
+/** Daily-driver picks — stretch (Expert large) models may run but are slow on Deck CPU/RAM. */
+export function isDeckDailyPullModel(entry: PullModelEntry): boolean {
+  return entry.group !== "stretch";
+}
+
 export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
   {
-    tag: "gemma4:4b",
+    tag: "gemma4:latest",
     params: "4B",
     sizeGb: 3.3,
-    releasedYm: "2025-05",
+    releasedYm: "2026-04",
     license: "Gemma Terms",
     licenseClass: "open_weight",
     group: "featured",
     tags: ["chat", "vision"],
     rating: 6,
-    blurb: "Newer Gemma generation — multimodal chat + vision at ~4B (matches Tier 2 routing).",
-  },
-  {
-    tag: "gemma4:2b",
-    params: "2B",
-    sizeGb: 1.6,
-    releasedYm: "2025-05",
-    license: "Gemma Terms",
-    licenseClass: "open_weight",
-    group: "featured",
-    tags: ["chat", "vision"],
-    rating: 5,
-    blurb: "Compact Gemma 4 multimodal — fast vision fallback on tight RAM.",
+    blurb: "Gemma 4 on Ollama (latest tag) — multimodal chat + vision; matches Tier 2 routing.",
   },
   {
     tag: "qwen3:4b",
@@ -121,7 +118,7 @@ export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
     tag: "llava:7b",
     params: "7B",
     sizeGb: 4.7,
-    releasedYm: "2024-05",
+    releasedYm: "2024-01",
     license: "Apache 2.0",
     licenseClass: "foss",
     group: "featured",
@@ -241,7 +238,7 @@ export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
     tag: "llama3.2-vision:11b",
     params: "11B",
     sizeGb: 7.8,
-    releasedYm: "2024-11",
+    releasedYm: "2024-09",
     license: "Llama 3.2",
     licenseClass: "open_weight",
     group: "stretch",
@@ -310,6 +307,16 @@ export function formatReleasedYm(ym: string): string {
   const idx = parseInt(m[2], 10) - 1;
   if (idx < 0 || idx > 11) return ym;
   return `${months[idx]} ${m[1]}`;
+}
+
+/** Compact table date — e.g. May '25 — saves horizontal space in Pull models. */
+export function formatReleasedYmShort(ym: string): string {
+  const m = /^(\d{4})-(\d{2})$/.exec(ym.trim());
+  if (!m) return ym;
+  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const idx = parseInt(m[2], 10) - 1;
+  if (idx < 0 || idx > 11) return ym;
+  return `${months[idx]} '${m[1].slice(2)}`;
 }
 
 export function formatSizeGb(gb: number): string {

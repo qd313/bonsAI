@@ -67,6 +67,50 @@
       "requiresPreview": true,
       "requiresOllama": true
     },
+    "hookSmoke": {
+      "runbookTier": 0,
+      "description": "callTestHook IPC smoke (setTab + getState) before tier3UI hook scenarios.",
+      "scenarioIds": ["HOOK-smoke-setTab"],
+      "sourceFiles": ["hook-smoke.json"],
+      "requiresPreview": true
+    },
+    "tier3UI": {
+      "runbookTier": "2-3",
+      "description": "UI navigation via preview hooks + focus-graph sequences (tab tour, settings, permissions).",
+      "scenarioIds": [
+        "UI-A-beta-modal",
+        "UI-A-tab-tour",
+        "UI-A-ollama-conn",
+        "UI-A-permissions-ui",
+        "UI-A-mode-menu",
+        "UI-A-transparency-expand",
+        "UI-A-debug-tab",
+        "UI-A-presets-visible"
+      ],
+      "sourceFiles": ["tier3-ui-navigation.json"],
+      "requiresPreview": true,
+      "requiresOllama": true
+    },
+    "tier2Deep": {
+      "runbookTier": "2-3",
+      "description": "Deep Tier 2: streaming flags, VAC matrix, BG-ASK lifecycle, sysfs TDP apply + clamp asserts.",
+      "scenarioIds": [
+        "STREAM-02-flag-on-speed",
+        "STREAM-03-strategy-spoiler",
+        "STREAM-04-stop-mid-stream",
+        "STREAM-05-transparency-terminal",
+        "VAC-03-valid-key-steamid",
+        "VAC-04-profile-url",
+        "VAC-05-vanity-url",
+        "VAC-06-perm-off-after-key",
+        "BG-ASK-lifecycle",
+        "SMOKE-B-apply-with-perms",
+        "TDP-boundary-clamps-assert"
+      ],
+      "sourceFiles": ["tier2-deep.json"],
+      "requiresPreview": true,
+      "requiresOllama": true
+    },
     "deckOnly": {
       "runbookTier": "3-4",
       "description": "E-bucket — deck.deploy + on-device QA; not runnable in preview.",
@@ -86,6 +130,9 @@
     "tier1Core",
     "tier1Boundaries",
     "tier2",
+    "hookSmoke",
+    "tier3UI",
+    "tier2Deep",
     "deckOnly"
   ]
 }

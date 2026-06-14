@@ -47,7 +47,7 @@ Maps [roadmap.md](roadmap.md) **Completed** items to test IDs. Update **Status**
 | PRESETS-CAROUSEL | Suggested AI prompts + carousel | SMOKE-A, SMOKE-D | Partial | Troubleshooting triple verified; animation ms → Tier 3 |
 | PROMPT-TEST-MVP | Prompt-testing MVP (this doc) | — | Partial | Matrices shipped; Tier 0–1 open |
 | SANITIZER | Input sanitizer lane | SMOKE-F | Partial | [SMOKE-F-disable-sanitize](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-F-disable-sanitize/manifest.json); [preview 2026-05-26](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-F-disable-sanitize/manifest.json) |
-| TRANSPARENCY | Input handling transparency panel | SMOKE-A | Open | Expand panel in golden path (on-Deck); [preview 2026-05-26](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-A-golden-path/manifest.json) |
+| TRANSPARENCY | Input handling transparency panel | SMOKE-A | Partial | Expand panel in golden path (on-Deck); [preview 2026-05-26](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-A-golden-path/manifest.json) |
 
 ### Connection, routing, diagnostics
 
@@ -73,7 +73,7 @@ Maps [roadmap.md](roadmap.md) **Completed** items to test IDs. Update **Status**
 | GEMMA-PULL | Gemma pull models + routing | — | Partial | Unit tests |
 | MODE-SELECTOR | Speed / Strategy / Deep | SMOKE-E, Tier 1 | Open | |
 | STRATEGY-CORE | Strategy Guide prompt path | SMOKE-E | Open | |
-| STRATEGY-SPOILER | Strategy spoiler policy + consent | SMOKE-E, STRAT-01…05 | Open | Unit green 2026-04-30; [preview 2026-05-26](test-evidence/tier1Core/2026-05-26-9e20a82/SMOKE-E-strategy-mode/manifest.json) |
+| STRATEGY-SPOILER | Strategy spoiler policy + consent | SMOKE-E, STRAT-01…05 | Partial | Unit green 2026-04-30; [preview 2026-05-26](test-evidence/tier1Core/2026-05-26-9e20a82/SMOKE-E-strategy-mode/manifest.json) |
 | DEBUG-TAB | Debug tab opt-in | SMOKE-A | Open | Tab strip when enabled |
 | SETTINGS-TRIM | Settings tab trim | SMOKE-A | Open | |
 | RESET-SESSION | Reset session cache | — | Open | Tier 2 |
@@ -183,6 +183,17 @@ On-Deck and preview-suite **PASS** rows only. FAIL / retry queue: [prompt-testin
 | 27 | 2026-05-26 / 9e20a82 | preview | DESKTOP-NOTES-rpc | DESKTOP-NOTES | preview-suite | PASS | [manifest](test-evidence/tier2/2026-05-26-9e20a82/DESKTOP-NOTES-rpc/manifest.json) |
 | 28 | 2026-05-26 / 9e20a82 | preview | STEAM-JUMP-shim | STEAM-JUMP | preview-suite | PASS | [manifest](test-evidence/tier2/2026-05-26-9e20a82/STEAM-JUMP-shim/manifest.json) |
 | 29 | 2026-05-26 / 9e20a82 | preview | VISION-V1-spot-dom | VISION-V1, SMOKE-G | preview-suite | PASS | [manifest](test-evidence/tier2/2026-05-26-9e20a82/VISION-V1-spot-dom/manifest.json) |
+| 30 | 2026-06-09 / a9237e4 | preview | STREAM-02-flag-on-speed | STREAM-02 | preview-suite | PASS | [manifest](test-evidence/tier2Deep/2026-06-09-a9237e4/STREAM-02-flag-on-speed/manifest.json) |
+| 31 | 2026-06-09 / a9237e4 | preview | STREAM-03-strategy-spoiler | STREAM-03, STRATEGY-SPOILER | preview-suite | PASS | [manifest](test-evidence/tier2Deep/2026-06-09-a9237e4/STREAM-03-strategy-spoiler/manifest.json) |
+| 32 | 2026-06-09 / a9237e4 | preview | STREAM-04-stop-mid-stream | STREAM-04 | preview-suite | PASS | [manifest](test-evidence/tier2Deep/2026-06-09-a9237e4/STREAM-04-stop-mid-stream/manifest.json) |
+| 33 | 2026-06-09 / a9237e4 | preview | STREAM-05-transparency-terminal | STREAM-05, TRANSPARENCY | preview-suite | PASS | [manifest](test-evidence/tier2Deep/2026-06-09-a9237e4/STREAM-05-transparency-terminal/manifest.json) |
+| 34 | 2026-06-09 / a9237e4 | preview | VAC-03-valid-key-steamid | VAC-03 | preview-suite | PASS | [manifest](test-evidence/tier2Deep/2026-06-09-a9237e4/VAC-03-valid-key-steamid/manifest.json) |
+| 35 | 2026-06-09 / a9237e4 | preview | VAC-04-profile-url | VAC-04 | preview-suite | PASS | [manifest](test-evidence/tier2Deep/2026-06-09-a9237e4/VAC-04-profile-url/manifest.json) |
+| 36 | 2026-06-09 / a9237e4 | preview | VAC-05-vanity-url | VAC-05 | preview-suite | PASS | [manifest](test-evidence/tier2Deep/2026-06-09-a9237e4/VAC-05-vanity-url/manifest.json) |
+| 37 | 2026-06-09 / a9237e4 | preview | VAC-06-perm-off-after-key | VAC-06 | preview-suite | PASS | [manifest](test-evidence/tier2Deep/2026-06-09-a9237e4/VAC-06-perm-off-after-key/manifest.json) |
+| 38 | 2026-06-09 / a9237e4 | preview | TDP-boundary-clamps-assert | TDP-1W, TDP-20W | preview-suite | PASS | [manifest](test-evidence/tier2Deep/2026-06-09-a9237e4/TDP-boundary-clamps-assert/manifest.json) |
+| 39 | 2026-06-09 / a9237e4 | preview | SMOKE-B-apply-with-perms | SMOKE-B, TDP-APPLY | preview-suite | PASS | [manifest](test-evidence/tier2Deep/2026-06-09-a9237e4/SMOKE-B-apply-with-perms/manifest.json) |
+| 40 | 2026-06-09 / a9237e4 | preview | BG-ASK-lifecycle | BG-ASK-V1, SMOKE-H | preview-suite | PASS | [manifest](test-evidence/tier2Deep/2026-06-09-a9237e4/BG-ASK-lifecycle/manifest.json) |
 
 **Tier 0 preview batch (5/5):** [test-evidence/tier0/2026-05-26-9e20a82/](test-evidence/tier0/2026-05-26-9e20a82/) · **preGate (2/2):** [batch-summary](test-evidence/preGate/2026-05-26-9e20a82/batch-summary.json) · **tier1Core (3/3):** [batch-summary](test-evidence/tier1Core/2026-05-26-9e20a82/batch-summary.json) · **tier1Boundaries (5/5):** [batch-summary](test-evidence/tier1Boundaries/2026-05-26-9e20a82/batch-summary.json) · **tier2 (8/8):** [batch-summary](test-evidence/tier2/2026-05-26-9e20a82/batch-summary.json) · **deckOnly (3 skipped):** [batch-summary](test-evidence/deckOnly/2026-05-26-9e20a82/batch-summary.json)
 ---
@@ -205,10 +216,10 @@ Linked from [device-qa-runbook.md](device-qa-runbook.md) **Tier 0**. Prefer smok
 Requires **Settings → Data → Show Developer tab** → **Token streaming (experimental)**.
 
 - [x] **STREAM-01** Flag off: **Thinking…** until full reply; normal chunks after
-- [ ] **STREAM-02** Flag on, Speed/Deep: single preview bubble; terminal split + banners
-- [ ] **STREAM-03** Flag on, Strategy + spoiler masking, no Spoilers OK: no unmasked mid-stream flash
-- [ ] **STREAM-04** Stop mid-stream: cancelled copy; no stale overwrite
-- [ ] **STREAM-05** Transparency populates only after terminal
+- [x] **STREAM-02** Flag on, Speed/Deep: single preview bubble; terminal split + banners
+- [x] **STREAM-03** Flag on, Strategy + spoiler masking, no Spoilers OK: no unmasked mid-stream flash
+- [x] **STREAM-04** Stop mid-stream: cancelled copy; no stale overwrite
+- [x] **STREAM-05** Transparency populates only after terminal
 
 ---
 
@@ -328,10 +339,10 @@ Run after **SMOKE-E**. Unit coverage green 2026-04-30.
 
 - [x] **VAC-01** Capability off — SMOKE-F; no outbound request
 - [x] **VAC-02** Capability on, empty key
-- [ ] **VAC-03** Valid key + known SteamID; route `vac_check`
-- [ ] **VAC-04** Profile URL token
-- [ ] **VAC-05** Vanity `/id/…` unsupported note
-- [ ] **VAC-06** Permission off after key saved — no network
+- [x] **VAC-03** Valid key + known SteamID; route `vac_check`
+- [x] **VAC-04** Profile URL token
+- [x] **VAC-05** Vanity `/id/…` unsupported note
+- [x] **VAC-06** Permission off after key saved — no network
 
 ---
 

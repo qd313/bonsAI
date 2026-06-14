@@ -39,8 +39,14 @@ Sidecar / assertion tuning before final **5/5 PASS**. Evidence folders may conta
 ## Preview FAIL table (auto-updated)
 
 <!-- preview-fail-results:start -->
-| Build / date | Batch | Scenario | Status | Notes |
-|--------------|-------|----------|--------|-------|
+| 2026-06-09 / a9237e4 | tier3UI | UI-A-beta-modal | FAIL | [manifest](test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-beta-modal/manifest.json) — Error: IPC timeout for callTestHook |
+| 2026-06-09 / a9237e4 | tier3UI | UI-A-tab-tour | FAIL | [manifest](test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-tab-tour/manifest.json) — Error: IPC timeout for callTestHook |
+| 2026-06-09 / a9237e4 | tier3UI | UI-A-settings-conn | FAIL | [manifest](test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-settings-conn/manifest.json) — Error: IPC timeout for callTestHook |
+| 2026-06-09 / a9237e4 | tier3UI | UI-A-permissions-ui | FAIL | [manifest](test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-permissions-ui/manifest.json) — Error: IPC timeout for callTestHook |
+| 2026-06-09 / a9237e4 | tier3UI | UI-A-mode-menu | FAIL | [manifest](test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-mode-menu/manifest.json) — Error: IPC timeout for callTestHook |
+| 2026-06-09 / a9237e4 | tier3UI | UI-A-transparency-expand | FAIL | [manifest](test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-transparency-expand/manifest.json) — Error: IPC timeout for callTestHook |
+| 2026-06-09 / a9237e4 | tier3UI | UI-A-debug-tab | FAIL | [manifest](test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-debug-tab/manifest.json) — Error: IPC timeout for callTestHook |
+| 2026-06-09 / a9237e4 | tier3UI | UI-A-presets-visible | FAIL | [manifest](test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-presets-visible/manifest.json) — Error: IPC timeout for callTestHook |
 <!-- preview-fail-results:end -->
 
 ---

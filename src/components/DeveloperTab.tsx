@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react";
+import React from "react";
 import {
   Button,
   ButtonItem,
@@ -9,17 +9,10 @@ import {
   ToggleField,
 } from "@decky/ui";
 import {
-  DEFAULT_LATENCY_WARNING_SECONDS,
-  DEFAULT_REQUEST_TIMEOUT_SECONDS,
   DESKTOP_APP_LOG_LEVEL_OPTIONS,
-  RESPONSE_VERIFY_MODEL_MAX_LEN,
   STEAM_WEB_API_KEY_MAX_LEN,
   type DesktopAppLogLevel,
-  type OllamaKeepAliveDuration,
 } from "../utils/settingsAndResponse";
-import { MODEL_POLICY_SETTINGS_INTRO, type ModelPolicyTierId } from "../data/modelPolicy";
-import { SettingsTabConnectionTimeoutSlider } from "./SettingsTabConnectionTimeoutSlider";
-import { SettingsTabOllamaKeepAliveSlider } from "./SettingsTabOllamaKeepAliveSlider";
 
 const desktopAppLogLevelLabel: Record<DesktopAppLogLevel, string> = {
   off: "Off",
@@ -52,16 +45,6 @@ export type DeveloperTabProps = {
   onSteamInputPhase1Jump?: () => void;
   lastConnectionStatus?: DeveloperConnectionStatus | null;
 
-  latencyWarningSeconds: number;
-  requestTimeoutSeconds: number;
-  latencyTimeoutsCustomEnabled: boolean;
-  setLatencyTimeoutsCustomEnabled: (v: boolean) => void;
-  setLatencyWarningSeconds: (v: number) => void;
-  setRequestTimeoutSeconds: (v: number) => void;
-
-  ollamaKeepAlive: OllamaKeepAliveDuration;
-  setOllamaKeepAlive: (v: OllamaKeepAliveDuration) => void;
-
   desktopDebugNoteAutoSave: boolean;
   setDesktopDebugNoteAutoSave: (v: boolean) => void;
   desktopAskVerboseLogging: boolean;
@@ -80,39 +63,20 @@ export type DeveloperTabProps = {
   steamWebApiKey: string;
   setSteamWebApiKey: (v: string) => void;
 
-  modelPolicyTier: ModelPolicyTierId;
-  modelPolicyNonFossUnlocked: boolean;
-  setModelPolicyNonFossUnlocked: (v: boolean) => void;
-  modelAllowHighVramFallbacks: boolean;
-  setModelAllowHighVramFallbacks: (v: boolean) => void;
-  onSelectModelPolicyTier: (t: ModelPolicyTierId) => void;
-  onReadModelPolicy: () => void;
   bonsaiTokenStreamingEnabled: boolean;
   setBonsaiTokenStreamingEnabled: (v: boolean) => void;
-  responseVerifyEnabled: boolean;
-  setResponseVerifyEnabled: (v: boolean) => void;
-  responseVerifySecondPass: boolean;
-  setResponseVerifySecondPass: (v: boolean) => void;
-  responseVerifyModel: string;
-  setResponseVerifyModel: (v: string) => void;
+  showOnscreenDebugHud: boolean;
+  setShowOnscreenDebugHud: (v: boolean) => void;
 };
 
 /**
- * Opt-in power-user tab: diagnostics, logging, connection tuning, integrations, and model routing advanced.
+ * Opt-in power-user tab: diagnostics, logging, and integrations.
  */
 export const DeveloperTab: React.FC<DeveloperTabProps> = ({
   capturedErrors,
   onClearErrors,
   onSteamInputPhase1Jump,
   lastConnectionStatus,
-  latencyWarningSeconds,
-  requestTimeoutSeconds,
-  latencyTimeoutsCustomEnabled,
-  setLatencyTimeoutsCustomEnabled,
-  setLatencyWarningSeconds,
-  setRequestTimeoutSeconds,
-  ollamaKeepAlive,
-  setOllamaKeepAlive,
   desktopDebugNoteAutoSave,
   setDesktopDebugNoteAutoSave,
   desktopAskVerboseLogging,
@@ -120,53 +84,29 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
   desktopAppLogLevel,
   setDesktopAppLogLevel,
   filesystemWrite,
-  attachProtonLogsWhenTroubleshooting,
-  setAttachProtonLogsWhenTroubleshooting,
   setPresetChipFadeAnimationEnabled,
   presetChipAnimation,
   setPresetChipAnimation,
   steamWebApiKey,
   setSteamWebApiKey,
-  modelPolicyTier,
-  modelPolicyNonFossUnlocked,
-  setModelPolicyNonFossUnlocked,
-  modelAllowHighVramFallbacks,
-  setModelAllowHighVramFallbacks,
-  onSelectModelPolicyTier,
-  onReadModelPolicy,
   bonsaiTokenStreamingEnabled,
   setBonsaiTokenStreamingEnabled,
-  responseVerifyEnabled,
-  setResponseVerifyEnabled,
-  responseVerifySecondPass,
-  setResponseVerifySecondPass,
-  responseVerifyModel,
-  setResponseVerifyModel,
+  showOnscreenDebugHud,
+  setShowOnscreenDebugHud,
 }) => {
-  const latencyWarningThumbHostRef = useRef<HTMLDivElement>(null);
-  const ollamaKeepAliveThumbHostRef = useRef<HTMLDivElement>(null);
-
-  const focusOllamaKeepAliveThumb = useCallback((): boolean => {
-    const host = ollamaKeepAliveThumbHostRef.current;
-    if (!host) return false;
-    const target = host.querySelector<HTMLElement>("[tabindex], button");
-    if (!target) return false;
-    target.focus();
-    return true;
-  }, []);
-
-  const focusLatencyWarningThumb = useCallback((): boolean => {
-    const host = latencyWarningThumbHostRef.current;
-    if (!host) return false;
-    const target = host.querySelector<HTMLElement>("[tabindex], button");
-    if (!target) return false;
-    target.focus();
-    return true;
-  }, []);
-
   return (
     <div className="bonsai-tab-panel-shell bonsai-tab-panel-shell--tight bonsai-settings-section-stack">
       <PanelSection title="Diagnostics">
+        <PanelSectionRow>
+          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
+            <ToggleField
+              label="On-screen debug HUD"
+              description="Shows a small translucent log at the bottom of the plugin (focus, tab changes, ingest). Off by default so Settings and connection UI stay readable."
+              checked={showOnscreenDebugHud}
+              onChange={(checked) => setShowOnscreenDebugHud(checked)}
+            />
+          </div>
+        </PanelSectionRow>
         {onSteamInputPhase1Jump ? (
           <PanelSectionRow>
             <div className="bonsai-settings-bleed" style={{ fontSize: 12, color: "#9fb7d5", marginBottom: 6 }}>
@@ -354,94 +294,6 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
             />
           </div>
         </PanelSectionRow>
-        <PanelSectionRow>
-          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
-            <ToggleField
-              label="Response verify (rules)"
-              description="After Ollama, run lightweight rules (e.g. invented AppID without game context). May append a short caution line; logs avoid raw user text."
-              checked={responseVerifyEnabled}
-              onChange={(checked) => setResponseVerifyEnabled(checked)}
-            />
-            <ToggleField
-              label="Response verify second pass (model)"
-              description="When rules fail (or rules are off), ask the verifier model below via Ollama. Requires a pulled tag on the active host."
-              checked={responseVerifySecondPass}
-              onChange={(checked) => setResponseVerifySecondPass(checked)}
-            />
-            <TextField
-              label="Verifier model tag"
-              description="Ollama tag for the second pass (e.g. qwen2.5:3b). Leave empty to disable the model call."
-              value={responseVerifyModel}
-              onChange={(e) =>
-                setResponseVerifyModel(
-                  e?.target?.value?.slice(0, RESPONSE_VERIFY_MODEL_MAX_LEN) ?? ""
-                )
-              }
-              disabled={!responseVerifySecondPass}
-            />
-          </div>
-        </PanelSectionRow>
-      </PanelSection>
-
-      <PanelSection title="Connection tuning">
-        <PanelSectionRow>
-          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
-            <ToggleField
-              label="Custom timeouts"
-              checked={latencyTimeoutsCustomEnabled}
-              onChange={(c) => setLatencyTimeoutsCustomEnabled(c)}
-            />
-          </div>
-        </PanelSectionRow>
-        {!latencyTimeoutsCustomEnabled ? (
-          <PanelSectionRow>
-            <div className="bonsai-prose bonsai-settings-bleed" style={{ fontSize: 12, color: "#cdd9e6", lineHeight: 1.4 }}>
-              Default:{" "}
-              <span style={{ color: "#ffd299", fontWeight: 700 }}>Warning {DEFAULT_LATENCY_WARNING_SECONDS}s</span>
-              <span style={{ color: "rgba(255,255,255,0.35)" }}> | </span>
-              <span style={{ color: "#9ce7ff", fontWeight: 700 }}>Timeout {DEFAULT_REQUEST_TIMEOUT_SECONDS}s</span>
-            </div>
-          </PanelSectionRow>
-        ) : (
-          <PanelSectionRow>
-            <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-              <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", lineHeight: 1.35, marginBottom: 6 }}>
-                <div>
-                  <span style={{ color: "#ffd299", fontWeight: 700 }}>Warning</span>
-                  {" = slow-reply nudge"}
-                </div>
-                <div style={{ marginTop: 4 }}>
-                  <span style={{ color: "#9ce7ff", fontWeight: 700 }}>Timeout</span>
-                  {" = abort if still busy"}
-                </div>
-              </div>
-              <SettingsTabConnectionTimeoutSlider
-                warningSec={latencyWarningSeconds}
-                timeoutSec={requestTimeoutSeconds}
-                onChange={(w, t) => {
-                  setLatencyWarningSeconds(w);
-                  setRequestTimeoutSeconds(t);
-                }}
-                warningThumbHostRef={latencyWarningThumbHostRef}
-                onMoveDownFromThumb={focusOllamaKeepAliveThumb}
-              />
-            </div>
-          </PanelSectionRow>
-        )}
-        <PanelSectionRow>
-          <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
-            <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 4 }}>Keep models loaded</div>
-            <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 6, lineHeight: 1.35 }}>
-              How long Ollama keeps the model in memory after a prompt (VRAM on the host).
-            </div>
-            <SettingsTabOllamaKeepAliveSlider
-              value={ollamaKeepAlive}
-              onChange={setOllamaKeepAlive}
-              thumbHostRef={ollamaKeepAliveThumbHostRef}
-              onMoveUp={latencyTimeoutsCustomEnabled ? focusLatencyWarningThumb : undefined}
-            />
-          </div>
-        </PanelSectionRow>
       </PanelSection>
 
       <PanelSection title="Integrations">
@@ -461,40 +313,6 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
               }}
             />
           </div>
-        </PanelSectionRow>
-      </PanelSection>
-
-      <PanelSection title="Model routing (advanced)">
-        <PanelSectionRow>
-          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
-            <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", lineHeight: 1.45, marginBottom: 10 }}>
-              {MODEL_POLICY_SETTINGS_INTRO}
-            </div>
-            <ToggleField
-              label="Allow non-FOSS and unclassified Ollama tags (Tier 3)"
-              description="Required for Tier 3 / Any installed model. Turn off to fall back from Tier 3 to open-weight."
-              checked={modelPolicyNonFossUnlocked}
-              onChange={(checked) => {
-                setModelPolicyNonFossUnlocked(checked);
-                if (!checked && modelPolicyTier === "non_foss") {
-                  onSelectModelPolicyTier("open_weight");
-                }
-              }}
-            />
-          </div>
-        </PanelSectionRow>
-        <PanelSectionRow>
-          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
-            <ToggleField
-              label="Allow high-VRAM model fallbacks"
-              description="Adds large-model tags after the ~16GB-friendly chain. Can OOM or load slowly."
-              checked={modelAllowHighVramFallbacks}
-              onChange={(checked) => setModelAllowHighVramFallbacks(checked)}
-            />
-          </div>
-        </PanelSectionRow>
-        <PanelSectionRow>
-          <Button onClick={onReadModelPolicy}>Read model policy (README)…</Button>
         </PanelSectionRow>
       </PanelSection>
     </div>

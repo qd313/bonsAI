@@ -114,6 +114,8 @@ export type BonsaiSettings = {
   steam_web_api_key: string;
   /** When true, Main tab shows progressive Ollama token streaming (Developer tab opt-in). */
   bonsai_token_streaming_enabled: boolean;
+  /** When true, show the translucent on-screen ingest debug HUD (Developer tab opt-in). */
+  show_onscreen_debug_hud: boolean;
   /** Rule-based post-check on Ollama replies (Developer / advanced). */
   response_verify_enabled: boolean;
   /** Optional second-model verifier (default off). */
@@ -155,6 +157,7 @@ export type BonsaiSettingsSnapshotInput = {
   strategySpoilerAutoRevealAfterConsent: boolean;
   steamWebApiKey: string;
   bonsaiTokenStreamingEnabled: boolean;
+  showOnscreenDebugHud: boolean;
   responseVerifyEnabled: boolean;
   responseVerifySecondPass: boolean;
   responseVerifyModel: string;
@@ -196,6 +199,7 @@ export function toBonsaiSettingsPayload(
     strategy_spoiler_auto_reveal_after_consent: input.strategySpoilerAutoRevealAfterConsent,
     steam_web_api_key: input.steamWebApiKey.trim().slice(0, STEAM_WEB_API_KEY_MAX_LEN),
     bonsai_token_streaming_enabled: input.bonsaiTokenStreamingEnabled,
+    show_onscreen_debug_hud: input.showOnscreenDebugHud,
     response_verify_enabled: input.responseVerifyEnabled,
     response_verify_second_pass: input.responseVerifySecondPass,
     response_verify_model: input.responseVerifyModel.trim().slice(0, 64),
@@ -226,6 +230,7 @@ export const DEFAULT_SCREENSHOT_MAX_DIMENSION: ScreenshotMaxDimension = 1280;
 export const DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE = false;
 export const DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING = false;
 export const DEFAULT_BONSAI_TOKEN_STREAMING_ENABLED = false;
+export const DEFAULT_SHOW_ONSCREEN_DEBUG_HUD = false;
 export const DEFAULT_RESPONSE_VERIFY_ENABLED = false;
 export const DEFAULT_RESPONSE_VERIFY_SECOND_PASS = false;
 export const DEFAULT_RESPONSE_VERIFY_MODEL = "";
@@ -388,6 +393,10 @@ export function normalizeDesktopAskVerboseLogging(value: unknown): boolean {
 }
 
 export function normalizeBonsaiTokenStreamingEnabled(value: unknown): boolean {
+  return value === true;
+}
+
+export function normalizeShowOnscreenDebugHud(value: unknown): boolean {
   return value === true;
 }
 
@@ -600,6 +609,7 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     ),
     steam_web_api_key: normalizeSteamWebApiKey(raw.steam_web_api_key),
     bonsai_token_streaming_enabled: normalizeBonsaiTokenStreamingEnabled(raw.bonsai_token_streaming_enabled),
+    show_onscreen_debug_hud: normalizeShowOnscreenDebugHud(raw.show_onscreen_debug_hud),
     response_verify_enabled: normalizeResponseVerifyEnabled(raw.response_verify_enabled),
     response_verify_second_pass: normalizeResponseVerifySecondPass(raw.response_verify_second_pass),
     response_verify_model: normalizeResponseVerifyModel(raw.response_verify_model),

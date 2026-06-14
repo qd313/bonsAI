@@ -27,6 +27,7 @@ import {
   DEFAULT_SCREENSHOT_ATTACHMENT_PRESET,
   DEFAULT_SHOW_DEVELOPER_TAB,
   DEFAULT_BONSAI_TOKEN_STREAMING_ENABLED,
+  DEFAULT_SHOW_ONSCREEN_DEBUG_HUD,
   DEFAULT_RESPONSE_VERIFY_ENABLED,
   DEFAULT_RESPONSE_VERIFY_MODEL,
   DEFAULT_RESPONSE_VERIFY_SECOND_PASS,
@@ -112,6 +113,7 @@ export function usePluginSettings() {
   const [bonsaiTokenStreamingEnabled, setBonsaiTokenStreamingEnabled] = useState<boolean>(
     DEFAULT_BONSAI_TOKEN_STREAMING_ENABLED
   );
+  const [showOnscreenDebugHud, setShowOnscreenDebugHud] = useState<boolean>(DEFAULT_SHOW_ONSCREEN_DEBUG_HUD);
   const [responseVerifyEnabled, setResponseVerifyEnabled] = useState<boolean>(DEFAULT_RESPONSE_VERIFY_ENABLED);
   const [responseVerifySecondPass, setResponseVerifySecondPass] = useState<boolean>(
     DEFAULT_RESPONSE_VERIFY_SECOND_PASS
@@ -151,6 +153,7 @@ export function usePluginSettings() {
     setStrategySpoilerAutoRevealAfterConsent(normalized.strategy_spoiler_auto_reveal_after_consent);
     setSteamWebApiKey(normalized.steam_web_api_key);
     setBonsaiTokenStreamingEnabled(normalized.bonsai_token_streaming_enabled);
+    setShowOnscreenDebugHud(normalized.show_onscreen_debug_hud);
     setResponseVerifyEnabled(normalized.response_verify_enabled);
     setResponseVerifySecondPass(normalized.response_verify_second_pass);
     setResponseVerifyModel(normalized.response_verify_model);
@@ -195,6 +198,7 @@ export function usePluginSettings() {
         setStrategySpoilerAutoRevealAfterConsent(normalized.strategy_spoiler_auto_reveal_after_consent);
         setSteamWebApiKey(normalized.steam_web_api_key);
         setBonsaiTokenStreamingEnabled(normalized.bonsai_token_streaming_enabled);
+        setShowOnscreenDebugHud(normalized.show_onscreen_debug_hud);
         setResponseVerifyEnabled(normalized.response_verify_enabled);
         setResponseVerifySecondPass(normalized.response_verify_second_pass);
         setResponseVerifyModel(normalized.response_verify_model);
@@ -231,6 +235,7 @@ export function usePluginSettings() {
         setStrategySpoilerAutoRevealAfterConsent(DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT);
         setSteamWebApiKey("");
         setBonsaiTokenStreamingEnabled(DEFAULT_BONSAI_TOKEN_STREAMING_ENABLED);
+        setShowOnscreenDebugHud(DEFAULT_SHOW_ONSCREEN_DEBUG_HUD);
         setResponseVerifyEnabled(DEFAULT_RESPONSE_VERIFY_ENABLED);
         setResponseVerifySecondPass(DEFAULT_RESPONSE_VERIFY_SECOND_PASS);
         setResponseVerifyModel(DEFAULT_RESPONSE_VERIFY_MODEL);
@@ -279,6 +284,7 @@ export function usePluginSettings() {
           strategySpoilerAutoRevealAfterConsent,
           steamWebApiKey,
           bonsaiTokenStreamingEnabled,
+          showOnscreenDebugHud,
           responseVerifyEnabled,
           responseVerifySecondPass,
           responseVerifyModel,
@@ -319,6 +325,7 @@ export function usePluginSettings() {
     strategySpoilerAutoRevealAfterConsent,
     steamWebApiKey,
     bonsaiTokenStreamingEnabled,
+    showOnscreenDebugHud,
     responseVerifyEnabled,
     responseVerifySecondPass,
     responseVerifyModel,
@@ -375,6 +382,8 @@ export function usePluginSettings() {
     setSteamWebApiKey,
     bonsaiTokenStreamingEnabled,
     setBonsaiTokenStreamingEnabled,
+    showOnscreenDebugHud,
+    setShowOnscreenDebugHud,
     responseVerifyEnabled,
     setResponseVerifyEnabled,
     responseVerifySecondPass,

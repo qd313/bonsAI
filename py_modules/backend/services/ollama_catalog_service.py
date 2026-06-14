@@ -122,3 +122,23 @@ def fetch_catalog_metadata(tags: list[str]) -> dict[str, Any]:
         "tags": results,
         "fetched_at": int(time.time()),
     }
+
+
+def partition_pull_tags_by_registry(tags: list[str]) -> tuple[list[str], list[str]]:
+    """Split tags into registry-published vs missing manifest (offline → all valid)."""
+    valid_tags = normalize_ollama_pull_tags(tags)
+    if not valid_tags:
+        return [], []
+    meta = fetch_catalog_metadata(valid_tags)
+    if meta.get("source") != "live":
+        return valid_tags, []
+    tag_meta = meta.get("tags") if isinstance(meta.get("tags"), dict) else {}
+    ok: list[str] = []
+    bad: list[str] = []
+    for tag in valid_tags:
+        entry = tag_meta.get(tag)
+        if isinstance(entry, dict) and entry.get("exists"):
+            ok.append(tag)
+        else:
+            bad.append(tag)
+    return ok, bad

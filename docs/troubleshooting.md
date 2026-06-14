@@ -77,21 +77,21 @@ If Windows still falls back to CPU after FIX A:
 
 **Note:** If you upgraded from an older `settings.json` that had no `capabilities` block, the plugin enables all scopes until you save settings from the Permissions tab (grandfather behavior).
 
-### AI model choice tier (fullscreen modal)
+### AI model choice tier (AI models hub)
 
-**Symptom:** In **Permissions → AI model choice**, opening the fullscreen tier list does not switch tiers (e.g. Tier 1 → Tier 2) with the controller, or the choice reverts after **Done**.
+**Symptom:** On the **Ollama** tab, **Open AI models…** does not switch policy tiers (e.g. Tier 1 → Tier 2) with the controller, or the choice reverts after **Done**.
 
 **Cause (fixed 2026-05-19):** Tier buttons only handled mouse `onClick`, not Steam **A/OK** (`onOKButton`). Immediate save on each highlight also raced Decky remount + debounced settings save.
 
-**Fix:** Update to a build that uses draft selection inside the modal, `onOKButton` on tier rows, **awaits `save_settings` before closing** (avoids remount loading stale tier), and persist on **Done** with `hydrateFromSettings`. If tier still reverts, open Permissions again and confirm the row label; check Developer → Model routing for Tier 3 unlock.
+**Fix:** Update to a build that uses draft selection inside the **AI models** hub (Policy / Browse & pull / Advanced), `onOKButton` on tier rows, **awaits `save_settings` before closing** (avoids remount loading stale tier), and persist on **Done** with `hydrateFromSettings`. If tier still reverts, open the hub again and confirm the row label; enable Tier 3 unlock under **Advanced** when choosing Any installed model.
 
 ### Ollama HTTP 404 with Gemma / open-weight models (Tier 2)
 
-**Symptom:** You pulled **Gemma 3** or **Gemma 4** from **Settings → Connection → Browse models…**, Tier 2 is selected, but Ask fails with **HTTP 404** for `gemma3:latest` or `gemma4:latest`.
+**Symptom:** You pulled **Gemma 3** or **Gemma 4** from **Ollama → Open AI models… → Browse & pull**, Tier 2 is selected, but Ask fails with **HTTP 404** for `gemma3:latest` or `gemma4:latest`.
 
-**Cause:** Ollama requires an **exact tag** match. The Pull Models picker installs tags like `gemma3:4b` or `gemma4:4b`, while older builds only tried generic names such as `gemma3:latest`. If no tag in the fallback chain is installed, every attempt 404s.
+**Cause:** Ollama requires an **exact tag** match. Tags like `gemma4:4b` are **not** on the public library (manifest missing → pull exit code 1). Older builds also tried generic names such as `gemma3:latest` only in routing.
 
-**Fix (2026-05-20):** Routing now tries catalog sizes (`gemma3:4b`, `gemma4:4b`, …) before `:latest`, and HTTP **404** advances to the next fallback. Pull **Gemma 4** entries appear in Browse models (`gemma4:4b`, `gemma4:2b`).
+**Fix (2026-05-26):** Pull Models catalog uses **`gemma4:latest`** (valid on Ollama). Invalid tags are rejected before pull when the registry is reachable; setup logs include the last `ollama pull` output, not only exit code. Routing tries `gemma3:4b` and `gemma4:latest` before generic `gemma4`.
 
 **Checks:**
 

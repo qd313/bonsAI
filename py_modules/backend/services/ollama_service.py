@@ -341,6 +341,12 @@ def post_ollama_chat(
         # stream:true returns HTTP headers + HTTPResponse promptly; stream:false buffers the full completion first.
         "stream": True,
         "keep_alive": keep_alive,
+        # Thinking models (gemma4, qwen3, ...) emit reasoning in message.thinking, which the
+        # stream reader does not surface as answer text. On-device evidence: gemma4 burned the
+        # full num_predict budget thinking (done_reason=length, eval_count=500, raw_len=0) and
+        # the user saw no response. Disable thinking so the whole budget goes to visible output;
+        # non-thinking models ignore this flag.
+        "think": False,
         "options": {
             "num_predict": num_predict,
             "temperature": 0.42 if ask_mode == "strategy" else 0.4,
@@ -372,6 +378,7 @@ def post_ollama_chat(
                 deltas: list[str] = []
                 stream_err_txt: Optional[str] = None
                 done_flag = False
+                done_meta: dict = {}
 
                 def _apply_stream_obj(jo: dict) -> None:
                     nonlocal stream_err_txt, done_flag
@@ -398,6 +405,9 @@ def post_ollama_chat(
                                 )
                     if jo.get("done"):
                         done_flag = True
+                        for _k in ("done_reason", "eval_count", "prompt_eval_count"):
+                            if jo.get(_k) is not None:
+                                done_meta[_k] = jo.get(_k)
 
                 while True:
                     if _should_cancel():
@@ -472,6 +482,19 @@ def post_ollama_chat(
                     }
                 assistant_raw = "".join(deltas)
                 thinking_summary, visible_raw = extract_bonsai_status(assistant_raw)
+                # Permanent completion telemetry: done_reason=length with raw_len=0 means the
+                # model spent the whole num_predict budget on hidden thinking (the bug behind
+                # "no response" on gemma4) — keep this line so that failure mode stays visible.
+                logger.info(
+                    "ask_ollama: stream done model=%s done_reason=%s eval_count=%s prompt_eval=%s raw_len=%d visible_len=%d num_predict=%d",
+                    model_name,
+                    done_meta.get("done_reason"),
+                    done_meta.get("eval_count"),
+                    done_meta.get("prompt_eval_count"),
+                    len(assistant_raw),
+                    len(visible_raw or ""),
+                    num_predict,
+                )
                 if on_delta:
                     try:
                         on_delta(visible_raw, True, thinking_summary)
@@ -542,6 +565,16 @@ def post_ollama_chat(
             "response": (
                 f"Could not reach Ollama at the configured host for model '{model_name}'. "
                 "Verify PC IP, firewall, and that Ollama is listening."
+            ),
+        }
+    except (TimeoutError, socket.timeout):
+        return {
+            "success": False,
+            "timed_out": True,
+            "response": (
+                f"Ollama did not finish within {request_timeout_seconds} seconds for model '{model_name}'. "
+                "On Steam Deck this usually means inference is on CPU — configure Ollama to use the GPU, "
+                "or pull a smaller model in Settings → Connection (e.g. qwen2.5:1.5b for Speed mode)."
             ),
         }
     except Exception as e:

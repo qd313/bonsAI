@@ -395,6 +395,7 @@ Headings group related work. Star counts match the historical list.
 
 ### Connection, routing, diagnostics, and timeouts
 
+- ★★★ **Ollama tab + unified AI models hub (2026-06-11):** New **Ollama** LB/RB tab (outline llama icon) between Main and Settings consolidates **Where AI runs**, response verification, connection timeouts/keep-alive, and **Models & routing** → **Open AI models…** fullscreen hub with **Policy**, **Browse & pull**, and **Advanced** chips (tier selection, pull table, Tier 3 unlock / high-VRAM fallbacks). Removed scattered controls from Permissions (model policy), Settings (connection block), and Developer (verify + tuning + routing). Implemented in `src/components/OllamaTab.tsx`, `OllamaWhereAiRunsSection.tsx`, `OllamaModelsHubModal.tsx`, `ModelPolicyTierPanel.tsx`, `ModelRoutingAdvancedPanel.tsx`; tab wiring in `src/index.tsx`.
 - ★★ **Ollama Network Routing Fix:** Route frontend requests through Decky backend (`call("ask_game_ai", ...)`) to resolve cross-origin failures.
 - ★★ **Deck and PC Connection Settings:** Add connection-focused settings including visible Deck IP and PC IP management.
 - ★★ **Diagnostic, Latency, and Timeout Warnings:** Return `elapsed_seconds`, show slow-response warnings, and enforce backend timeout messaging.

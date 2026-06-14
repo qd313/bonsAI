@@ -115,7 +115,7 @@ function PresetChipButton(props: {
 function MainTabPresetVerticalCarousel(
   props: Omit<MainTabPresetAnimatedChipsProps, "fadeAnimationEnabled" | "animationMode">,
 ) {
-  const { seeds, setUnifiedInput, onPreferAskMode, onCarouselExitDown } = props;
+  const { seeds, setUnifiedInput, onPreferAskMode } = props;
   const seedsKey = seedsKeyFrom(seeds);
   const contextualRef = useRef(normalizeThreeSeeds(seeds));
   contextualRef.current = normalizeThreeSeeds(seeds);
@@ -123,12 +123,9 @@ function MainTabPresetVerticalCarousel(
   const [{ history, focusIndex }, setCarousel] = useState(() =>
     buildInitialCarouselState(normalizeThreeSeeds(seeds)),
   );
-  const historyRef = useRef(history);
-  const focusIndexRef = useRef(focusIndex);
-  historyRef.current = history;
-  focusIndexRef.current = focusIndex;
 
   const autoPausedUntilRef = useRef(0);
+  const verticalRef = useRef<HTMLDivElement | null>(null);
 
   const pauseAuto = useCallback(() => {
     autoPausedUntilRef.current = performance.now() + CAROUSEL_MANUAL_PAUSE_MS;
@@ -149,11 +146,18 @@ function MainTabPresetVerticalCarousel(
         timeoutId = window.setTimeout(tick, CAROUSEL_STEP_MS);
         return;
       }
+      /* Never auto-advance while the user is browsing the carousel: focusIndex follows DOM
+         focus, so moving it under the user would desync the white Steam ring from the blue row. */
+      if (verticalRef.current?.contains(document.activeElement)) {
+        timeoutId = window.setTimeout(tick, CAROUSEL_STEP_MS);
+        return;
+      }
 
       setCarousel((prev) => {
         const texts = new Set(prev.history.map((s) => s.text));
         const nextPreset = getRandomPresetExcluding(texts);
-        return advanceCarouselFocus(prev.history, prev.focusIndex, nextPreset);
+        const advanced = advanceCarouselFocus(prev.history, prev.focusIndex, nextPreset);
+        return advanced;
       });
 
       timeoutId = window.setTimeout(tick, CAROUSEL_STEP_MS);
@@ -166,43 +170,26 @@ function MainTabPresetVerticalCarousel(
     };
   }, [seedsKey]);
 
-  const moveFocusUp = useCallback(() => {
-    pauseAuto();
-    setCarousel((prev) => ({
-      ...prev,
-      focusIndex: Math.max(0, prev.focusIndex - 1),
-    }));
-  }, [pauseAuto]);
-
-  const moveFocusDown = useCallback(() => {
-    pauseAuto();
-    const atEnd = focusIndexRef.current >= historyRef.current.length - 1;
-    if (atEnd) {
-      onCarouselExitDown?.();
-      return;
-    }
-    setCarousel((prev) => ({
-      ...prev,
-      focusIndex: Math.min(prev.history.length - 1, prev.focusIndex + 1),
-    }));
-  }, [onCarouselExitDown, pauseAuto]);
+  /**
+   * Focus model: the Steam DOM focus (white ring) is the single source of truth. Every chip is
+   * focusable; D-pad moves between them natively, and each chip's onFocus syncs `focusIndex`
+   * (blue highlight + track centering) to itself. The previous design moved `focusIndex` via
+   * parent onMoveUp/onMoveDown without moving DOM focus, which left the white ring one row
+   * behind the blue row — the "two outlines, the white one actually selects" confusion.
+   */
+  const onChipFocus = useCallback(
+    (i: number) => {
+      pauseAuto();
+      setCarousel((prev) => (prev.focusIndex === i ? prev : { ...prev, focusIndex: i }));
+    },
+    [pauseAuto],
+  );
 
   const trackOffset = carouselTrackOffsetPx(focusIndex);
 
-  const deckNavHandlers = {
-    onMoveUp: () => {
-      moveFocusUp();
-      return true;
-    },
-    onMoveDown: () => {
-      moveFocusDown();
-      return true;
-    },
-  } as Record<string, unknown>;
-
   return (
-    <Focusable {...deckNavHandlers} className="bonsai-preset-carousel-focus-root">
-      <div className="bonsai-preset-carousel-vertical">
+    <Focusable className="bonsai-preset-carousel-focus-root">
+      <div className="bonsai-preset-carousel-vertical" ref={verticalRef}>
         <div
           className="bonsai-preset-carousel-track"
           style={{
@@ -221,13 +208,16 @@ function MainTabPresetVerticalCarousel(
                   (isFocus ? " bonsai-preset-carousel-slot--focus" : "")
                 }
                 data-bonsai-preset-visible="true"
+                /* React onFocus delegates focusin (bubbles): fires when the inner chip Button
+                   gains Steam focus. @decky/ui Button doesn't expose onFocus itself. */
+                onFocus={() => onChipFocus(i)}
               >
                 <PresetChipButton
                   preset={preset}
                   setUnifiedInput={setUnifiedInput}
                   onPreferAskMode={onPreferAskMode}
                   dimmed={dimmed}
-                  focusable={isFocus}
+                  focusable
                 />
               </div>
             );

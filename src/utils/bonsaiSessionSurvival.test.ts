@@ -54,6 +54,7 @@ function minimalSnapshot(overrides: Partial<BonsaiSessionSurvivalSnapshot> = {})
       strategySpoilerAutoRevealAfterConsent: false,
       steamWebApiKey: "",
       bonsaiTokenStreamingEnabled: true,
+      showOnscreenDebugHud: false,
       responseVerifyEnabled: false,
       responseVerifySecondPass: false,
       responseVerifyModel: "",

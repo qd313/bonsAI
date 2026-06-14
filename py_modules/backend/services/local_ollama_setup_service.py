@@ -53,9 +53,45 @@ def _ollama_bundle_lib_dir(ollama_bin: str) -> Optional[Path]:
     return None
 
 
+def _is_steam_deck_hardware() -> bool:
+    """True on Valve handheld product IDs (LCD Jupiter, OLED Galileo, …)."""
+    try:
+        product = Path("/sys/devices/virtual/dmi/id/product_name").read_text().strip()
+    except OSError:
+        return False
+    return product in ("Jupiter", "Galileo")
+
+
+def _linux_ollama_gpu_env_defaults() -> dict[str, str]:
+    """Best-effort GPU env for Steam Deck / AMD Linux when the user has not set overrides."""
+    if not sys.platform.startswith("linux"):
+        return {}
+    out: dict[str, str] = {}
+    if os.environ.get("OLLAMA_VULKAN") is None:
+        out["OLLAMA_VULKAN"] = "1"
+    # The Deck's APU is an *integrated* GPU; Ollama (>=0.12) discovers it via Vulkan
+    # ("RADV VANGOGH") but DROPS it by default ("dropping integrated GPU; to enable, set
+    # OLLAMA_IGPU_ENABLE=1") and falls back to CPU. Without this, inference runs on CPU
+    # (~180s for a short reply on Deck). Required for any GPU offload on Deck-class iGPUs.
+    if os.environ.get("OLLAMA_IGPU_ENABLE") is None and _is_steam_deck_hardware():
+        out["OLLAMA_IGPU_ENABLE"] = "1"
+    # Gemma4 + Vulkan flash-attn can garble on AMD iGPU; prefer stable output on Deck-class hardware.
+    if os.environ.get("OLLAMA_FLASH_ATTENTION") is None and _is_steam_deck_hardware():
+        out["OLLAMA_FLASH_ATTENTION"] = "0"
+    if os.environ.get("HSA_OVERRIDE_GFX_VERSION") is None and _is_steam_deck_hardware():
+        # Van Gogh / Galileo report gfx1033; bundled ROCm accepts gfx1030 override (ollama#3243).
+        out["HSA_OVERRIDE_GFX_VERSION"] = "gfx1030"
+    if os.environ.get("OLLAMA_NUM_PARALLEL") is None:
+        out["OLLAMA_NUM_PARALLEL"] = "1"
+    if os.environ.get("OLLAMA_MAX_LOADED_MODELS") is None:
+        out["OLLAMA_MAX_LOADED_MODELS"] = "1"
+    return out
+
+
 def _env_for_ollama_cli(ollama_bin: str) -> dict[str, str]:
     """Host env stripped of Steam ``LD_*`` pollution, plus Ollama's lib dir prepended."""
     env = dict(_env_for_host_system_tools())
+    env.update(_linux_ollama_gpu_env_defaults())
     lib = _ollama_bundle_lib_dir(ollama_bin)
     if lib is not None:
         prev = env.get("LD_LIBRARY_PATH", "")
@@ -409,6 +445,21 @@ def try_restart_ollama_user_service(shell_log: Callable[[str], None]) -> None:
             shell_log(str(exc))
 
 
+def _format_ollama_pull_failure(tag: str, code: int, tail_lines: list[str]) -> str:
+    """Human-readable pull failure with stderr tail and registry-tag hints."""
+    tail_text = "\n".join(tail_lines).strip()
+    tail_snip = tail_text[-480:] if tail_text else ""
+    msg = f"ollama pull {tag} failed with exit code {code}"
+    if tail_snip:
+        msg += f". Last output: {tail_snip}"
+    low = tail_text.casefold()
+    if "manifest" in low and ("not exist" in low or "does not exist" in low):
+        msg += (
+            f" Tag «{tag}» is not on the Ollama library — try gemma4:latest, gemma3:4b, or qwen2.5:1.5b."
+        )
+    return msg
+
+
 def run_ollama_pull(
     ollama_bin: str,
     tag: str,
@@ -419,6 +470,7 @@ def run_ollama_pull(
     shell_log(f"[bonsAI] ollama pull {tag}")
     if cancelled():
         return False, "Cancelled."
+    tail_lines: list[str] = []
     try:
         proc = subprocess.Popen(
             [ollama_bin, "pull", tag],
@@ -440,9 +492,10 @@ def run_ollama_pull(
             line = line.rstrip("\n")
             if line:
                 shell_log(line)
+                tail_lines.append(line)
         code = proc.wait()
         if code != 0:
-            return False, f"ollama pull {tag} failed with exit code {code}"
+            return False, _format_ollama_pull_failure(tag, code, tail_lines)
         return True, ""
     except Exception as exc:
         return False, str(exc)

@@ -30,17 +30,18 @@ class TestTdpSandboxSysfs(unittest.TestCase):
         self.assertEqual(rows[0]["path"], "/sys/fake/power1_cap")
         self.assertEqual(rows[0]["value"], "8000000")
 
+    def test_find_amdgpu_hwmon_in_sandbox_preview(self):
+        self.assertEqual(
+            tdp_service.find_amdgpu_hwmon(),
+            "/sys/class/hwmon/hwmon-amdgpu-preview",
+        )
+
     def test_apply_tdp_uses_sandbox_when_hwmon_missing(self):
         logger = MagicMock()
-        orig_find = tdp_service.find_amdgpu_hwmon
-        tdp_service.find_amdgpu_hwmon = lambda: "/sys/class/hwmon/hwmon0"
-        try:
-            out = tdp_service.apply_tdp({"tdp_watts": 8}, "/no/helper", logger)
-            self.assertEqual(out["tdp_watts"], 8)
-            rows = tdp_service.read_sandbox_sysfs_writes()
-            self.assertTrue(any("power1_cap" in r["path"] for r in rows))
-        finally:
-            tdp_service.find_amdgpu_hwmon = orig_find
+        out = tdp_service.apply_tdp({"tdp_watts": 8}, "/no/helper", logger)
+        self.assertEqual(out["tdp_watts"], 8)
+        rows = tdp_service.read_sandbox_sysfs_writes()
+        self.assertTrue(any("power1_cap" in r["path"] for r in rows))
 
 
 if __name__ == "__main__":

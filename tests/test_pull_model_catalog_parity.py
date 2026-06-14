@@ -8,8 +8,7 @@ from backend.services.model_policy import classify_ollama_model_name
 
 # Keep in sync with src/data/pullModelCatalog.ts PULL_MODEL_CATALOG tags + licenseClass.
 CATALOG_POLICY_PARITY: dict[str, str] = {
-    "gemma4:4b": "open_weight",
-    "gemma4:2b": "open_weight",
+    "gemma4:latest": "open_weight",
     "qwen3:4b": "foss",
     "gemma3:4b": "open_weight",
     "qwen2.5vl:3b": "foss",

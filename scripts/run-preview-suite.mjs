@@ -242,9 +242,17 @@ function assertStep(step, context) {
     }
   }
   if (type === "rpcResult") {
-    const val = JSON.stringify(context.lastRpc ?? "");
+    const rpc = context.lastRpc ?? "";
+    const texts = [JSON.stringify(rpc)];
+    if (rpc && typeof rpc.response === "string") texts.push(rpc.response);
+    if (expect && !texts.some((t) => t.includes(expect))) {
+      throw new Error(`rpcResult failed: expected "${expect}" in ${texts[0].slice(0, 200)}`);
+    }
+  }
+  if (type === "hookResult") {
+    const val = JSON.stringify(context.lastHook ?? "");
     if (expect && !val.includes(expect)) {
-      throw new Error(`rpcResult failed: expected "${expect}" in ${val.slice(0, 200)}`);
+      throw new Error(`hookResult failed: expected "${expect}" in ${val.slice(0, 200)}`);
     }
   }
   if (type === "domContainsAny") {
@@ -309,6 +317,7 @@ async function runStep(step, context) {
       if (inner && typeof inner === "object" && inner.ok === false) {
         throw new Error(inner.error ?? `previewHook ${step.method} failed`);
       }
+      context.lastHook = inner ?? res.result;
       break;
     }
     case "callRpc":

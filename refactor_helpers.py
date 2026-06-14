@@ -62,8 +62,6 @@ _TEXT_OPEN_WEIGHT_SAFE = [
     "gemma3:4b",
     "gemma3:1b",
     "gemma3:latest",
-    "gemma4:4b",
-    "gemma4:2b",
     "gemma4:latest",
     "gemma4",
 ]
@@ -111,8 +109,6 @@ _VISION_FOSS_DEEP = [
 
 _VISION_OPEN_WEIGHT_SAFE = [
     "gemma3:4b",
-    "gemma4:4b",
-    "gemma4:2b",
     "gemma4:latest",
     "gemma4",
     "llama3.2-vision:11b",
@@ -342,6 +338,59 @@ def is_ollama_model_missing_error(status: object, body: str) -> bool:
     if "does not exist" in b and "model" in b:
         return True
     return False
+
+
+def filter_models_to_installed(
+    models: list[str], installed: list[str]
+) -> tuple[list[str], list[str]]:
+    """Keep routing order but drop tags not present on the Ollama host (``/api/tags``)."""
+    if not installed:
+        return list(models), []
+    inst = set(installed)
+    matched = [m for m in models if m in inst]
+    skipped = [m for m in models if m not in inst]
+    return matched, skipped
+
+
+def build_effective_models_to_try(
+    models_after_policy: list[str],
+    installed: list[str],
+) -> tuple[list[str], str]:
+    """
+    Prefer what is actually installed on the Ollama host.
+
+    When ``/api/tags`` is known, never walk the full curated chain through missing tags —
+    use installed chain matches first, then any other installed tag as a host fallback
+    (e.g. only ``gemma4:latest`` on Deck in Speed mode).
+    """
+    if not installed:
+        return list(models_after_policy), "full_chain"
+
+    inst = set(installed)
+    in_chain = [m for m in models_after_policy if m in inst]
+    if in_chain:
+        return in_chain, "installed_in_policy_chain"
+
+    return list(installed), "installed_host_fallback"
+
+
+def no_installed_routing_models_message(installed: list[str], requires_vision: bool) -> str:
+    """Actionable error when the host has models but none match the Ask routing chain."""
+    kind = "vision " if requires_vision else ""
+    if installed:
+        shown = ", ".join(installed[:4])
+        if len(installed) > 4:
+            shown += f", +{len(installed) - 4} more"
+        installed_clause = f"Installed on this host: {shown}. "
+    else:
+        installed_clause = "Ollama reports no installed models. "
+    starter = "llava:7b" if requires_vision else "qwen2.5:1.5b"
+    return (
+        f"No {kind}model in bonsAI's routing list is installed on this Ollama host. "
+        f"{installed_clause}"
+        f"Open Settings → Connection → Browse models and pull {starter} (recommended on Deck), "
+        "or use local setup. Large models such as gemma4:latest often time out on CPU-only inference."
+    )
 
 
 def is_current_tdp_read_intent(question: str) -> bool:

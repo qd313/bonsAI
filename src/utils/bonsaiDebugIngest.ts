@@ -1,8 +1,8 @@
-/** Debug session 29d6af — picker/tab stability instrumentation (remove after verify). */
+/**
+ * In-memory debug ring buffer feeding the opt-in on-screen HUD
+ * (Developer → On-screen debug HUD, rendered by BonsaiDebugOverlay).
+ */
 
-const INGEST =
-  "http://127.0.0.1:7682/ingest/455d5c32-fa64-45d1-b31c-f17b50f3371a";
-const SESSION = "29d6af";
 const MAX_RING = 12;
 
 export type BonsaiDebugEntry = {
@@ -45,23 +45,6 @@ export function bonsaiDebugLog(
   } catch {
     /* ignore */
   }
-  // #region agent log
-  fetch(INGEST, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Debug-Session-Id": SESSION,
-    },
-    body: JSON.stringify({
-      sessionId: SESSION,
-      location,
-      message,
-      hypothesisId,
-      data,
-      timestamp: entry.ts,
-    }),
-  }).catch(() => {});
-  // #endregion
 }
 
 export function readBonsaiDebugRing(): BonsaiDebugEntry[] {

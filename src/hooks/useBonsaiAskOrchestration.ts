@@ -95,6 +95,8 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
   const lastStrategyAskQuestionRef = useRef<string>("");
   const pendingArchiveTurnRef = useRef<{ question: string; answer: string } | null>(null);
   const pendingThreadQuestionDisplayRef = useRef<string | null>(null);
+  /** Last request_id whose completion already re-seeded suggested prompts (reseed is randomized). */
+  const promptsReseededForRequestRef = useRef<number | null>(null);
   const lastFlushedExchangeQuestionRef = useRef<string>("");
   const [askThreadCollapsed, setAskThreadCollapsed] = useState<AskThreadCollapsedTurn[]>(
     () => survivalPeek?.askThreadCollapsed ?? []
@@ -249,7 +251,16 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
           setPresetCarouselInject(normalizePresetCarouselInject(status.preset_carousel_inject));
           if (q) {
             const category = detectPromptCategory(q);
-            setSuggestedPrompts(getContextualPresets(category, 3));
+            /*
+             * Re-seed suggested prompts at most once per completed request: the same terminal
+             * status can be applied more than once (restore + poll), and getContextualPresets
+             * is randomized — repeated calls churned seedsKey and made the carousel twitch.
+             */
+            const reseedRid = typeof status.request_id === "number" ? status.request_id : null;
+            if (reseedRid === null || promptsReseededForRequestRef.current !== reseedRid) {
+              promptsReseededForRequestRef.current = reseedRid;
+              setSuggestedPrompts(getContextualPresets(category, 3));
+            }
             const displayQ = (pendingThreadQuestionDisplayRef.current?.trim() || q).trim();
             pendingThreadQuestionDisplayRef.current = null;
             setLastExchange({ question: displayQ, answer });
@@ -329,24 +340,39 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     isRequestActive,
   } = useBackgroundGameAi(applyBackgroundStatusToUi, onBackgroundPollError);
 
+  /**
+   * Mount-only restore. Must NOT re-run on dependency identity churn: callback deps change every
+   * render (hook args object), so depending on them re-fired this effect each render → status RPC
+   * → "completed" re-applied → setSuggestedPrompts(random) → render → loop (~15ms, proven by
+   * 19k dbg log entries). Latest callbacks are read through a ref instead.
+   */
+  const restoreFnsRef = useRef({ applyBackgroundStatusToUi, isRequestActive, startBackgroundStatusPolling, startNextRequest });
+  restoreFnsRef.current = { applyBackgroundStatusToUi, isRequestActive, startBackgroundStatusPolling, startNextRequest };
   useEffect(() => {
-    const seq = startNextRequest();
+    const fns = restoreFnsRef.current;
+    const seq = fns.startNextRequest();
 
     call<[], BackgroundRequestStatus>("get_background_game_ai_status")
       .then((status) => {
-        if (!isRequestActive(seq)) return;
-        applyBackgroundStatusToUi(status);
+        const f = restoreFnsRef.current;
+        if (!f.isRequestActive(seq)) return;
+        f.applyBackgroundStatusToUi(status);
         if (status.status === "pending") {
-          startBackgroundStatusPolling(seq, status.question ?? "");
+          f.startBackgroundStatusPolling(seq, status.question ?? "");
         }
       })
       .catch(() => {
         // Best-effort restore only; keep startup quiet if backend status isn't available.
       });
-  }, [applyBackgroundStatusToUi, isRequestActive, startBackgroundStatusPolling, startNextRequest]);
+  }, []);
 
   const clearUnifiedInput = useCallback(() => {
     if (isAsking) {
+      /* Ask-bar ✕ while a request is in flight: abort the backend too (it only reset UI state
+         before, so Ollama kept generating — the "x doesn't stop it" regression). */
+      void call<[], { ok?: boolean }>("abort_background_game_ai").catch(() => {
+        /* best-effort RPC */
+      });
       invalidateRequests();
       setIsAsking(false);
     }

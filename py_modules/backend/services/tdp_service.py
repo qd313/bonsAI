@@ -65,8 +65,13 @@ def read_sandbox_sysfs_writes() -> list[dict]:
     return rows
 
 
+_PREVIEW_AMGPU_HWMON = "/sys/class/hwmon/hwmon-amdgpu-preview"
+
+
 def find_amdgpu_hwmon() -> Optional[str]:
     """Locate the amdgpu hwmon directory used for Steam Deck power limit writes."""
+    if sandbox_sysfs_root():
+        return _PREVIEW_AMGPU_HWMON
     for name_path in sorted(glob.glob("/sys/class/hwmon/hwmon*/name")):
         try:
             with open(name_path) as f:

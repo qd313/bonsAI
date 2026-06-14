@@ -2,6 +2,9 @@ import {
   ASK_LABEL_COLOR,
   ASK_LABEL_READY_COLOR,
   ASK_READY_STATE_TRANSITION_MS,
+  BONSAI_PLUGIN_SIDE_PAD_PX,
+  BONSAI_CHAT_INPUT_TO_TRANSCRIPT_GAP_PX,
+  BONSAI_CHAT_RESPONSE_STACK_MARGIN_TOP_PX,
   TAB_TITLE_DEBUG_TAB_ICON_PX,
   TAB_TITLE_ICON_PX,
   TAB_TITLE_MAIN_ICON_SHIFT_X_PX,
@@ -9,7 +12,12 @@ import {
   TAB_TITLE_TAB_CELL_PX,
   TAB_TITLE_TAB_GAP_PX,
   TAB_STRIP_BODY_GAP_PX,
+  UNIFIED_INPUT_ICON_STRIP_PAD_X_PX,
   UNIFIED_TEXT_FONT_PX,
+  UNIFIED_TEXT_INSET_BOTTOM_PX,
+  UNIFIED_TEXT_INSET_LEFT_PX,
+  UNIFIED_TEXT_INSET_RIGHT_PX,
+  UNIFIED_TEXT_INSET_TOP_PX,
   UNIFIED_TEXT_LINE_HEIGHT,
 } from "../features/unified-input/constants";
 
@@ -49,10 +57,12 @@ export function buildBonsaiScopeStylesheet(): string {
         /* Flushes row content with PanelSection title (counters default row inset). */
         .bonsai-scope .bonsai-settings-bleed {
           box-sizing: border-box;
-          width: calc(100% + 24px);
-          max-width: calc(100% + 24px);
-          margin-left: -12px;
-          margin-right: -12px;
+          width: 100%;
+          max-width: 100%;
+          margin-left: -${BONSAI_PLUGIN_SIDE_PAD_PX}px;
+          margin-right: -${BONSAI_PLUGIN_SIDE_PAD_PX}px;
+          padding-left: ${BONSAI_PLUGIN_SIDE_PAD_PX}px;
+          padding-right: ${BONSAI_PLUGIN_SIDE_PAD_PX}px;
         }
 
         .bonsai-scope .bonsai-settings-section-stack {
@@ -95,6 +105,7 @@ export function buildBonsaiScopeStylesheet(): string {
           min-width: 0 !important;
           min-height: 0 !important;
           box-sizing: border-box !important;
+          overflow-x: clip !important;
         }
 
         /* Uniform tab glyph box. Icon components use an inner IconShell <span>; logo uses <img>. */
@@ -341,8 +352,9 @@ export function buildBonsaiScopeStylesheet(): string {
           padding-top: 6px !important;
           margin-left: 0 !important;
           margin-right: 0 !important;
-          padding-left: 0 !important;
-          padding-right: 0 !important;
+          padding-left: ${BONSAI_PLUGIN_SIDE_PAD_PX}px !important;
+          padding-right: ${BONSAI_PLUGIN_SIDE_PAD_PX}px !important;
+          box-sizing: border-box !important;
         }
 
         .bonsai-scope .bonsai-decky-tabs-root [class*="TabContentsScroll"] > div {
@@ -415,27 +427,30 @@ export function buildBonsaiScopeStylesheet(): string {
            Forces specific containers to break out of standard bounds for edge-to-edge UI.
            ========================================================================== */
         /*
-          Full-bleed width uses negative margins; do not set min-width to (100% + Npx) or the tab
-          scroll region gains a wider min-content width and the QAM scrolls horizontally.
+          Row width tracks the tab scroll area; side inset lives on TabContentsScroll (BONSAI_PLUGIN_SIDE_PAD_PX).
+          Do not use negative margins here — they cancel the scroll inset and hug the QAM edge.
         */
         .bonsai-scope .bonsai-full-bleed-row,
         .bonsai-scope .bonsai-ask-bleed-wrap.bonsai-full-bleed-row {
-          width: calc(100% + 24px) !important;
-          max-width: none !important;
+          width: 100% !important;
+          max-width: 100% !important;
           min-width: 0 !important;
-          /* Slight left pull vs symmetric -12/-12; eased from -14 so body reads a bit more to the right. */
-          margin-left: -12px !important;
-          margin-right: -10px !important;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
           box-sizing: border-box !important;
         }
 
-        /* Main unified search + Ask row: small right bias vs prior 0/6 (nudge body slightly right). */
+        /* Main unified search + Ask row: stay within tab scroll width (no calc bleed spill). */
         .bonsai-scope .bonsai-unified-input-host.bonsai-full-bleed-row,
         .bonsai-scope .bonsai-preset-row-host.bonsai-full-bleed-row {
-          width: calc(100% - 16px) !important;
-          max-width: calc(100% - 16px) !important;
-          margin-left: 6px !important;
-          margin-right: 10px !important;
+          width: 100% !important;
+          max-width: 100% !important;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
         }
 
         .bonsai-scope .bonsai-preset-row-host {
@@ -458,7 +473,7 @@ export function buildBonsaiScopeStylesheet(): string {
         }
 
         .bonsai-scope .bonsai-chat-response-stack {
-          margin-top: 14px !important;
+          margin-top: ${BONSAI_CHAT_RESPONSE_STACK_MARGIN_TOP_PX}px !important;
         }
 
         .bonsai-scope .bonsai-preset-carousel-focus-root {
@@ -487,20 +502,20 @@ export function buildBonsaiScopeStylesheet(): string {
 
         /* Settings search hits — same horizontal track as unified host so results line up under the textarea. */
         .bonsai-scope .bonsai-main-search-results-pane {
-          width: calc(100% - 8px) !important;
+          width: 100% !important;
           max-width: none !important;
           min-width: 0 !important;
-          margin-left: 3px !important;
-          margin-right: 5px !important;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
           box-sizing: border-box !important;
         }
 
         /* Re-map width for specific askbar rows using CSS Variables with fallbacks */
         .bonsai-scope .bonsai-ask-bleed-wrap.bonsai-full-bleed-row {
-          width: var(--bonsai-askbar-outer-width, var(--bonsai-search-host-width, calc(100% + 2px))) !important;
+          width: var(--bonsai-askbar-outer-width, var(--bonsai-search-host-width, 100%)) !important;
           min-width: 0 !important;
-          margin-left: -1px !important;
-          margin-right: -1px !important;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
         }
 
         /*
@@ -541,12 +556,18 @@ export function buildBonsaiScopeStylesheet(): string {
           color: transparent !important;
           -webkit-text-fill-color: transparent !important;
           margin: 0 !important;
-          padding: 0 !important;
+          padding: ${UNIFIED_TEXT_INSET_TOP_PX}px ${UNIFIED_TEXT_INSET_RIGHT_PX}px ${UNIFIED_TEXT_INSET_BOTTOM_PX}px ${UNIFIED_TEXT_INSET_LEFT_PX}px !important;
           text-indent: 0 !important;
           box-sizing: border-box !important;
           font-size: ${UNIFIED_TEXT_FONT_PX}px !important;
           line-height: ${UNIFIED_TEXT_LINE_HEIGHT} !important;
           vertical-align: top !important;
+        }
+
+        .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-measure,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-text-overlay {
+          padding: ${UNIFIED_TEXT_INSET_TOP_PX}px ${UNIFIED_TEXT_INSET_RIGHT_PX}px ${UNIFIED_TEXT_INSET_BOTTOM_PX}px ${UNIFIED_TEXT_INSET_LEFT_PX}px !important;
+          box-sizing: border-box !important;
         }
 
         .bonsai-scope .bonsai-unified-input-host.bonsai-unified-input--ai-character {
@@ -592,7 +613,6 @@ export function buildBonsaiScopeStylesheet(): string {
         /* Position the fake text overlay to perfectly cover the invisible actual input */
         .bonsai-scope .bonsai-unified-input-text-overlay {
           margin: 0 !important;
-          padding: 0 !important;
           box-sizing: border-box !important;
           left: var(--bonsai-unified-field-left, 0px) !important;
           top: var(--bonsai-unified-field-top, 0px) !important;
@@ -750,6 +770,11 @@ export function buildBonsaiScopeStylesheet(): string {
           max-width: 100% !important;
           min-width: 0 !important;
           box-sizing: border-box !important;
+          margin-top: ${BONSAI_CHAT_INPUT_TO_TRANSCRIPT_GAP_PX}px !important;
+        }
+        .bonsai-scope .bonsai-chat-status-line {
+          margin-top: 8px !important;
+          margin-bottom: 4px !important;
         }
         .bonsai-scope .bonsai-chat-transcript {
           display: flex !important;
@@ -972,6 +997,23 @@ export function buildBonsaiScopeStylesheet(): string {
           border-top: none !important;
           border-bottom: none !important;
         }
+        .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater button.bonsai-ask-mode-menu-item-btn,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater button.bonsai-ask-mode-menu-item-btn.DialogButton,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater button.bonsai-ask-mode-menu-item-btn > div,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater button.bonsai-ask-mode-menu-item-btn > span {
+          background-color: rgb(28, 36, 44) !important;
+          background-image: none !important;
+          box-shadow: none !important;
+          opacity: 1 !important;
+          mix-blend-mode: normal !important;
+          width: 100% !important;
+          max-width: 100% !important;
+          box-sizing: border-box !important;
+        }
+        .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater button.bonsai-ask-mode-menu-item-btn.bonsai-ask-mode-menu-item--selected,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater button.bonsai-ask-mode-menu-item-btn.bonsai-ask-mode-menu-item--selected > div {
+          background-color: rgb(40, 50, 62) !important;
+        }
 
         /* ==========================================================================
            8. ASKBAR INTERACTIONS & ICONS
@@ -984,9 +1026,41 @@ export function buildBonsaiScopeStylesheet(): string {
          * the menu extends over the ASK bar and looked like a vertical fade (ASK ::before gradient on top of rows).
          */
         .bonsai-scope .bonsai-unified-input-host.bonsai-ask-mode-menu-open {
-          overflow: visible;
+          /*
+            !important required: with an AI character active the host also carries
+            .bonsai-unified-input--ai-character which sets overflow: hidden !important (sec. earlier),
+            and that beat this rule — the open menu was clipped to the host box (probe log:
+            hostOverflow "hidden" while open; only the EXPERT row inside the host painted).
+            This rule is later in source, so equal-specificity !important resolves to visible.
+          */
+          overflow: visible !important;
           position: relative;
           z-index: 50;
+        }
+        /* Dropdown opens upward from the bottom icon strip — keep field layer + icon row from clipping it. */
+        .bonsai-scope .bonsai-unified-input-host.bonsai-ask-mode-menu-open .bonsai-unified-input-bottom-actions,
+        .bonsai-scope .bonsai-unified-input-host.bonsai-ask-mode-menu-open .bonsai-unified-input-actions-right {
+          overflow: visible !important;
+        }
+        /*
+          Tab scroll clips absolutely positioned menus that extend outside the input host.
+          NOTE: Deck CEF predates :has() support — these used to be :has(...) selectors and
+          silently never applied on-device; the class is toggled from MainTab instead.
+        */
+        .bonsai-scope.bonsai-ask-menu-open-scope [class*="TabContentsScroll"] {
+          overflow: visible !important;
+        }
+        .bonsai-scope.bonsai-ask-menu-open-scope [class*="TabContentsScroll"] > div {
+          overflow: visible !important;
+        }
+        /* Ask row sits below the input host — keep it under the open menu stack. */
+        .bonsai-scope.bonsai-ask-menu-open-scope .bonsai-askbar-row-host {
+          z-index: 0 !important;
+          position: relative !important;
+        }
+        /* Anything after the input host in the tab flow must paint under the open menu. */
+        .bonsai-scope.bonsai-ask-menu-open-scope .bonsai-unified-input-host.bonsai-ask-mode-menu-open {
+          z-index: 60 !important;
         }
 
         /* Ask mode menu: solid stack (Decky sometimes composites menus semi-transparent over glass). */
@@ -1028,7 +1102,7 @@ export function buildBonsaiScopeStylesheet(): string {
          * on menu classes raised specificity above .bonsai-unified-input-bottom-actions / .bonsai-unified-input-actions-right,
          * so flex-direction:column here won the cascade and stacked the paperclip above the mode chip + mic row.
          */
-        .bonsai-scope .bonsai-unified-input-host .Panel.Focusable {
+        .bonsai-scope .bonsai-unified-input-host .Panel.Focusable:not(.bonsai-ask-mode-menu-list) {
           padding: 0 !important; margin: 0 !important; min-width: 0 !important;
           display: flex !important; flex-direction: column !important;
           align-items: stretch !important; justify-content: flex-start !important;
@@ -1042,15 +1116,36 @@ export function buildBonsaiScopeStylesheet(): string {
         }
         .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater .bonsai-ask-mode-menu-surface .bonsai-ask-mode-menu-item.Panel.Focusable {
           padding: var(--bonsai-ask-mode-menu-pad-y, 10px) var(--bonsai-ask-mode-menu-pad-x, 13px) !important;
+          flex-direction: row !important;
+          align-items: center !important;
+        }
+        .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater .bonsai-ask-mode-menu-surface > .bonsai-ask-mode-menu-list.Panel.Focusable {
+          flex-direction: column !important;
+        }
+        .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater .bonsai-ask-mode-menu-list .DialogButton.bonsai-ask-mode-menu-item-btn {
+          flex: 0 0 auto !important;
+          align-self: stretch !important;
         }
 
-        /* Only the outer actions row is full-width; nested Focusable (mode + mic) stays end-aligned. */
-        .bonsai-scope .bonsai-unified-input-bottom-actions > .Panel.Focusable {
+        /* Bottom icon strip: hug left/right corners (independent of ai-character text indent). */
+        .bonsai-scope .bonsai-unified-input-bottom-actions {
+          padding-left: ${UNIFIED_INPUT_ICON_STRIP_PAD_X_PX}px !important;
+          padding-right: ${UNIFIED_INPUT_ICON_STRIP_PAD_X_PX}px !important;
+          box-sizing: border-box !important;
+        }
+
+        /* Only the outer actions row is full-width; nested Focusable (mode + mic) stays end-aligned.
+         * Must include .bonsai-unified-input-host — the section-8 column reset on
+         * .bonsai-unified-input-host .Panel.Focusable:not(.bonsai-ask-mode-menu-list) has higher
+         * specificity than .bonsai-unified-input-bottom-actions alone and was stacking paperclip /
+         * mode / mic vertically (see DeckCapture_20260611_201557). */
+        .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions > .Panel.Focusable,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions > .Panel.Focusable.bonsai-unified-input-actions-row {
           width: 100% !important; min-height: 100% !important;
           flex-direction: row !important; justify-content: flex-start !important;
           align-items: flex-end !important; flex-wrap: nowrap !important;
         }
-        .bonsai-scope .bonsai-unified-input-actions-left.Panel.Focusable {
+        .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions .bonsai-unified-input-actions-left.Panel.Focusable {
           width: auto !important;
           min-width: 0 !important;
           flex: 0 0 auto !important;
@@ -1058,7 +1153,7 @@ export function buildBonsaiScopeStylesheet(): string {
           align-items: flex-end !important;
           justify-content: flex-start !important;
         }
-        .bonsai-scope .bonsai-unified-input-actions-right.Panel.Focusable {
+        .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions .bonsai-unified-input-actions-right.Panel.Focusable {
           width: auto !important;
           min-width: 0 !important;
           flex: 0 0 auto !important;
@@ -1218,13 +1313,15 @@ export function buildPullModelsStylesheet(): string {
         .bonsai-scope .bonsai-pullmodels-shell {
           display: flex;
           flex-direction: column;
-          gap: 10px;
+          gap: 6px;
           width: 100%;
           min-width: 0;
-          max-width: none;
-          max-height: min(78vh, 560px);
+          max-width: 100%;
+          max-height: min(48vh, 400px);
           overflow: hidden;
+          overflow-x: clip;
           text-align: left;
+          box-sizing: border-box;
         }
         .bonsai-scope .bonsai-pullmodels-recommend {
           display: flex;
@@ -1265,7 +1362,7 @@ export function buildPullModelsStylesheet(): string {
         .bonsai-scope .bonsai-pullmodels-filters {
           display: flex;
           flex-direction: column;
-          gap: 8px;
+          gap: 6px;
         }
         .bonsai-scope .bonsai-pullmodels-filter-chips {
           display: flex;
@@ -1273,9 +1370,9 @@ export function buildPullModelsStylesheet(): string {
           gap: 6px;
         }
         .bonsai-scope .bonsai-pullmodels-chip {
-          min-height: 28px !important;
-          padding: 4px 10px !important;
-          font-size: 10px !important;
+          min-height: 24px !important;
+          padding: 2px 8px !important;
+          font-size: 9px !important;
           border-radius: 4px !important;
           border: 1px solid rgba(255,255,255,0.18) !important;
           background: rgba(255,255,255,0.06) !important;
@@ -1298,9 +1395,9 @@ export function buildPullModelsStylesheet(): string {
         }
         .bonsai-scope .bonsai-pullmodels-chip--foss-inline {
           align-self: flex-start;
-          font-size: 8px !important;
-          padding: 1px 5px !important;
-          min-height: 16px !important;
+          font-size: 9px !important;
+          padding: 2px 6px !important;
+          min-height: 17px !important;
           line-height: 1.2 !important;
         }
         .bonsai-scope .bonsai-pullmodels-toggles {
@@ -1309,14 +1406,16 @@ export function buildPullModelsStylesheet(): string {
           gap: 12px;
         }
         .bonsai-scope .bonsai-pullmodels-list {
-          flex: 1;
+          flex: 1 1 auto;
           min-height: 0;
           overflow-y: auto;
-          overflow-x: auto;
+          overflow-x: hidden;
           display: flex;
           flex-direction: column;
-          gap: 10px;
-          padding-right: 2px;
+          gap: 6px;
+          padding-right: 0;
+          width: 100%;
+          max-width: 100%;
         }
         .bonsai-scope .bonsai-pullmodels-group-title {
           font-size: 10px;
@@ -1330,16 +1429,26 @@ export function buildPullModelsStylesheet(): string {
           display: flex;
           flex-direction: column;
           width: 100%;
-          min-width: 720px;
+          min-width: 0;
+          max-width: 100%;
         }
         .bonsai-scope .bonsai-pullmodels-table-row {
           display: grid;
-          grid-template-columns: 44px minmax(120px, 1.6fr) 54px 52px minmax(88px, 1fr) 48px minmax(80px, 0.95fr) 40px;
+          grid-template-columns:
+            28px
+            minmax(5.5rem, 1.4fr)
+            minmax(42px, 0.55fr)
+            minmax(46px, 0.62fr)
+            minmax(0, 1fr)
+            minmax(52px, 0.72fr)
+            28px;
           gap: 6px;
           align-items: center;
-          padding: 6px 8px;
+          padding: 5px 6px;
           border-bottom: 1px solid rgba(72, 98, 124, 0.22);
           box-sizing: border-box;
+          width: 100%;
+          max-width: 100%;
         }
         .bonsai-scope .bonsai-pullmodels-table-row--head {
           position: sticky;
@@ -1347,13 +1456,13 @@ export function buildPullModelsStylesheet(): string {
           z-index: 1;
           background: rgba(8, 14, 22, 0.96);
           border-bottom: 1px solid rgba(72, 98, 124, 0.45);
-          font-size: 9px;
+          font-size: 10px;
           font-weight: 700;
           letter-spacing: 0.05em;
           text-transform: uppercase;
           color: #8fa8c4;
-          padding-top: 4px;
-          padding-bottom: 6px;
+          padding-top: 5px;
+          padding-bottom: 7px;
         }
         .bonsai-scope .bonsai-pullmodels-table-row--data {
           background: var(--bonsai-pullmodels-row-bg);
@@ -1369,9 +1478,12 @@ export function buildPullModelsStylesheet(): string {
         }
         .bonsai-scope .bonsai-pullmodels-col {
           min-width: 0;
+          max-width: 100%;
           font-size: 10px;
           color: #dce8f4;
           line-height: 1.3;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         .bonsai-scope .bonsai-pullmodels-col--pull {
           display: flex;
@@ -1384,32 +1496,86 @@ export function buildPullModelsStylesheet(): string {
           justify-content: flex-end;
         }
         .bonsai-scope .bonsai-pullmodels-col--model {
-          display: flex;
-          flex-direction: column;
-          gap: 2px;
+          min-width: 0;
+          overflow: hidden;
+        }
+        .bonsai-scope .bonsai-pullmodels-model-line {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) 48px;
+          align-items: center;
+          gap: 4px;
+          width: 100%;
           min-width: 0;
         }
-        .bonsai-scope .bonsai-pullmodels-col--stars {
-          color: #fcd34d;
-          letter-spacing: 0.5px;
-          white-space: nowrap;
-        }
-        .bonsai-scope .bonsai-pullmodels-col--muted {
-          color: #9fb7d5;
-        }
-        .bonsai-scope .bonsai-pullmodels-tag {
+        .bonsai-scope .bonsai-pullmodels-tag-name {
+          min-width: 0;
           font-weight: 700;
           color: #f0f6fc;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
         }
-        .bonsai-scope .bonsai-pullmodels-blurb {
+        .bonsai-scope .bonsai-pullmodels-foss-slot {
+          width: 48px;
+          min-width: 48px;
+          max-width: 48px;
+          box-sizing: border-box;
+          padding-right: 6px;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          flex-shrink: 0;
+        }
+        .bonsai-scope .bonsai-pullmodels-col--date {
+          white-space: nowrap;
           font-size: 9px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .bonsai-scope .bonsai-pullmodels-col--modes {
+          white-space: nowrap;
+          font-size: 9px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .bonsai-scope .bonsai-pullmodels-table-row--head .bonsai-pullmodels-col--date,
+        .bonsai-scope .bonsai-pullmodels-table-row--head .bonsai-pullmodels-col--modes {
+          font-size: 9px;
+        }
+        .bonsai-scope .bonsai-pullmodels-col--rating {
+          white-space: nowrap;
+          font-size: 8px;
+          line-height: 1.2;
+          text-align: center;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .bonsai-scope .bonsai-pullmodels-col--stars {
+          color: #fcd34d;
+          font-size: 8px;
+          letter-spacing: 0;
+          white-space: nowrap;
+          text-align: center;
+          overflow: hidden;
+          max-width: 100%;
+        }
+        .bonsai-scope .bonsai-pullmodels-col--muted {
+          color: #9fb7d5;
+        }
+        .bonsai-scope .bonsai-pullmodels-chip--foss-inline {
+          flex-shrink: 0;
+          margin-right: 1px;
+        }
+        .bonsai-scope .bonsai-pullmodels-blurb {
+          font-size: 8px;
           color: #8fa8c4;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
+          max-width: 100%;
+        }
+        .bonsai-scope .bonsai-pullmodels-table-row--data .bonsai-pullmodels-blurb {
+          display: none;
         }
         .bonsai-scope .bonsai-pullmodels-installed-label {
           font-size: 8px;
@@ -1418,45 +1584,52 @@ export function buildPullModelsStylesheet(): string {
           color: var(--bonsai-pullmodels-accent);
         }
         .bonsai-scope .bonsai-pullmodels-slot {
-          width: 40px !important;
-          min-width: 40px !important;
-          min-height: 40px !important;
+          width: 24px !important;
+          min-width: 24px !important;
+          min-height: 24px !important;
           padding: 0 !important;
-          font-size: 18px !important;
+          font-size: 14px !important;
           font-weight: 700 !important;
           font-family: monospace !important;
           border: 1px solid rgba(255,255,255,0.22) !important;
           background: rgba(0,0,0,0.28) !important;
           color: #c5d4e3 !important;
-          border-radius: 4px !important;
+          border-radius: 3px !important;
         }
         .bonsai-scope .bonsai-pullmodels-slot--selected {
           border-color: rgba(56,189,248,0.65) !important;
           background: rgba(56,189,248,0.22) !important;
           color: #e0f2fe !important;
         }
-        .bonsai-scope .bonsai-pullmodels-slot--installed {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          width: 36px;
-          min-width: 36px;
-          min-height: 36px;
-          color: var(--bonsai-pullmodels-accent);
-          font-size: 16px;
-          font-weight: 700;
+        .bonsai-scope .bonsai-pullmodels-slot--installed,
+        .bonsai-scope .bonsai-pullmodels-slot--installed.DialogButton {
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          width: 24px !important;
+          min-width: 24px !important;
+          min-height: 24px !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          border: none !important;
+          border-radius: 0 !important;
+          background: transparent !important;
+          box-shadow: none !important;
+          color: var(--bonsai-pullmodels-accent) !important;
+          font-size: 14px !important;
+          font-weight: 700 !important;
         }
         .bonsai-scope .bonsai-pullmodels-delete-btn {
-          width: 36px !important;
-          min-width: 36px !important;
-          min-height: 36px !important;
+          width: 24px !important;
+          min-width: 24px !important;
+          min-height: 24px !important;
           padding: 0 !important;
-          font-size: 13px !important;
+          font-size: 11px !important;
           font-weight: 700 !important;
           color: var(--bonsai-pullmodels-delete-fg) !important;
           border: 1px solid rgba(248, 113, 113, 0.45) !important;
           background: rgba(48, 24, 26, 0.65) !important;
-          border-radius: 4px !important;
+          border-radius: 3px !important;
         }
         .bonsai-scope .bonsai-pullmodels-delete-btn[disabled] {
           opacity: 0.4 !important;
@@ -1466,5 +1639,35 @@ export function buildPullModelsStylesheet(): string {
           font-size: 11px;
           color: #6b7c90;
           padding: 12px 0;
+        }
+
+        /* Opt-in ingest debug HUD (Developer → On-screen debug HUD). */
+        .bonsai-scope .bonsai-debug-overlay {
+          position: fixed !important;
+          left: 4px !important;
+          bottom: 4px !important;
+          z-index: 99999 !important;
+          max-width: min(96vw, 380px) !important;
+          max-height: 28vh !important;
+          overflow: hidden !important;
+          pointer-events: none !important;
+          font-family: monospace !important;
+          font-size: 9px !important;
+          line-height: 1.25 !important;
+          color: rgba(167, 243, 208, 0.88) !important;
+          background: rgba(0, 0, 0, 0.28) !important;
+          border: 1px solid rgba(82, 216, 138, 0.22) !important;
+          border-radius: 4px !important;
+          padding: 4px 6px !important;
+          white-space: pre-wrap !important;
+          word-break: break-word !important;
+          backdrop-filter: blur(2px) !important;
+        }
+        .bonsai-scope .bonsai-debug-overlay__header {
+          color: rgba(110, 231, 183, 0.9) !important;
+          margin-bottom: 2px !important;
+        }
+        .bonsai-scope .bonsai-debug-overlay__line {
+          color: rgba(167, 243, 208, 0.82) !important;
         }`;
 }

@@ -589,7 +589,7 @@ export function MainTab(props: MainTabProps) {
   }, [showAiCharacterChrome, unifiedInputFieldLayerRef]);
   const presetCarouselHostRef = React.useRef<HTMLDivElement | null>(null);
   const askModeMenuAnchorRef = React.useRef<HTMLDivElement | null>(null);
-  const askModeMenuFirstItemRef = React.useRef<HTMLDivElement | null>(null);
+  const askModeMenuFirstItemRef = React.useRef<HTMLElement | null>(null);
   const [askModeMenuOpen, setAskModeMenuOpen] = useState(false);
   /** Deck delivers many OK/click events per physical tap; collapse to one toggle per gesture. */
   const askModeToggleOnceRef = React.useRef(false);
@@ -604,6 +604,20 @@ export function MainTab(props: MainTabProps) {
   const closeAskModeMenu = React.useCallback(() => {
     setAskModeMenuOpen(false);
   }, []);
+  /*
+   * Deck CEF (Chromium < 105) does not support :has(), so the stylesheet cannot key ancestor
+   * unclip/z-order rules off the open menu. Toggle an explicit class on the scope root instead.
+   */
+  useLayoutEffect(() => {
+    const hostEl =
+      unifiedInputHostRef && typeof unifiedInputHostRef === "object" && "current" in unifiedInputHostRef
+        ? (unifiedInputHostRef as React.RefObject<HTMLDivElement | null>).current
+        : null;
+    const scope = hostEl?.closest(".bonsai-scope");
+    if (!scope) return;
+    scope.classList.toggle("bonsai-ask-menu-open-scope", askModeMenuOpen);
+    return () => scope.classList.remove("bonsai-ask-menu-open-scope");
+  }, [askModeMenuOpen, unifiedInputHostRef]);
   const focusFirstPresetChip = React.useCallback((): boolean => {
     const host = presetCarouselHostRef.current;
     const help = host?.querySelector<HTMLElement>("button.bonsai-preset-help-chip");
@@ -756,6 +770,7 @@ export function MainTab(props: MainTabProps) {
                 position: "relative",
                 width: "100%",
                 minHeight: unifiedInputSurfacePx + UNIFIED_INPUT_ICON_STRIP_PX,
+                overflow: askModeMenuOpen ? "visible" : undefined,
               }}
             >
               <div
@@ -951,11 +966,11 @@ export function MainTab(props: MainTabProps) {
                   zIndex: 25,
                   margin: 0,
                   padding: 0,
-                  paddingLeft: showAiCharacterChrome ? 26 : 8,
                   boxSizing: "border-box",
                 }}
               >
                 <Focusable
+                  className="bonsai-unified-input-actions-row"
                   flow-children="horizontal"
                   style={{
                     display: "flex",
@@ -1091,14 +1106,6 @@ export function MainTab(props: MainTabProps) {
                     >
                       {ASK_MODE_LABELS[askMode]}
                     </Button>
-                    <MainTabAskModeMenuPopover
-                      open={askModeMenuOpen}
-                      firstMenuItemRef={askModeMenuFirstItemRef}
-                      selectedId={askMode}
-                      onSelect={onAskModeChange}
-                      onRequestClose={closeAskModeMenu}
-                      onFocusModeChip={focusAskModeButton}
-                    />
                     </div>
                     {isAsking ? (
                       <Button
@@ -1167,6 +1174,16 @@ export function MainTab(props: MainTabProps) {
                   </Focusable>
                 </Focusable>
               </div>
+              <MainTabAskModeMenuPopover
+                open={askModeMenuOpen}
+                anchorRef={askModeMenuAnchorRef}
+                hostRef={unifiedInputHostRef as React.RefObject<HTMLElement | null>}
+                firstMenuItemRef={askModeMenuFirstItemRef}
+                selectedId={askMode}
+                onSelect={onAskModeChange}
+                onRequestClose={closeAskModeMenu}
+                onFocusModeChip={focusAskModeButton}
+              />
             </div>
           </div>
         </PanelSectionRow>
@@ -1631,7 +1648,7 @@ export function MainTab(props: MainTabProps) {
         )}
         {isAsking && thinkingSummary ? (
           <PanelSectionRow>
-            <div style={{ color: "#9fb7d5", fontSize: 12, lineHeight: 1.35, fontStyle: "italic" }}>
+            <div className="bonsai-chat-status-line" style={{ color: "#9fb7d5", fontSize: 12, lineHeight: 1.35, fontStyle: "italic" }}>
               {thinkingSummary}
             </div>
           </PanelSectionRow>
@@ -1654,7 +1671,7 @@ export function MainTab(props: MainTabProps) {
         ) : null}
         {isAsking && showSlowWarning && (
           <PanelSectionRow>
-            <div style={{ color: "#f2cf84", fontSize: 12, padding: "6px 0", lineHeight: 1.35 }}>
+            <div className="bonsai-chat-status-line" style={{ color: "#f2cf84", fontSize: 12, padding: "6px 0", lineHeight: 1.35 }}>
               Slow (&gt;{latencyWarningSeconds}s): ensure <strong>Ollama</strong> uses your <strong>GPU</strong>, not{" "}
               <strong>CPU</strong>.
             </div>

@@ -66,6 +66,11 @@ def sanitize_bonsai_token_streaming_enabled(value: Any) -> bool:
     return value is True
 
 
+def sanitize_show_onscreen_debug_hud(value: Any) -> bool:
+    """Only explicit true shows the translucent on-screen ingest debug HUD."""
+    return value is True
+
+
 _VALID_DESKTOP_APP_LOG_LEVELS = frozenset({"off", "default", "verbose"})
 
 
@@ -351,6 +356,7 @@ def sanitize_settings(
         "bonsai_token_streaming_enabled": sanitize_bonsai_token_streaming_enabled(
             raw.get("bonsai_token_streaming_enabled")
         ),
+        "show_onscreen_debug_hud": sanitize_show_onscreen_debug_hud(raw.get("show_onscreen_debug_hud")),
         "desktop_app_log_level": sanitize_desktop_app_log_level(raw.get("desktop_app_log_level")),
         "attach_proton_logs_when_troubleshooting": sanitize_attach_proton_logs_when_troubleshooting(
             raw.get("attach_proton_logs_when_troubleshooting")

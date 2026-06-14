@@ -7,13 +7,15 @@ import {
   PULL_MODEL_FILTER_OPTIONS,
   PULL_MODEL_GROUP_LABELS,
   PULL_MODEL_GROUP_ORDER,
+  PULL_MODEL_RATING_COLUMN_LABEL,
   bytesToGb,
   comparePullModelEntriesNewestFirst,
   formatGtaStars,
   formatPullModelTags,
-  formatReleasedYm,
+  formatReleasedYmShort,
   formatSizeGb,
   isCatalogModelTag,
+  isDeckDailyPullModel,
   type PullModelEntry,
   type PullModelFilterId,
   type PullModelGroup,
@@ -49,12 +51,21 @@ type TableSection = {
   rows: VisibleTableRow[];
 };
 
+export type PullModelsFooterState = {
+  okText: string;
+  onOk: () => void;
+  okDisabled: boolean;
+};
+
 export type PullModelsModalProps = {
   activeRoutingTag: string | null;
   onBeforeNestedDeckyModal?: () => void;
   onCompleteNestedDeckyModalClose?: (close: () => void) => void;
   onCancel: () => void;
   onPullAccepted: () => void;
+  /** When true, render panel body only (for AI models hub). */
+  embedded?: boolean;
+  onFooterStateChange?: (state: PullModelsFooterState) => void;
 };
 
 function normalizeInstalledSet(models: string[]): Set<string> {
@@ -95,15 +106,6 @@ function entryMatchesFilter(entry: PullModelEntry, filter: PullModelFilterId): b
   return true;
 }
 
-function findFooterButton(label: string): HTMLElement | null {
-  const buttons = Array.from(document.querySelectorAll<HTMLElement>("button, .DialogButton"));
-  for (const btn of buttons) {
-    const text = (btn.textContent ?? "").trim();
-    if (text === label || text.startsWith(label)) return btn;
-  }
-  return null;
-}
-
 /**
  * Pass only to `showModal()` — `ConfirmModal` supplies Steam modal chrome.
  */
@@ -114,6 +116,8 @@ export function PullModelsModal(props: PullModelsModalProps) {
     onCompleteNestedDeckyModalClose,
     onCancel,
     onPullAccepted,
+    embedded = false,
+    onFooterStateChange,
   } = props;
 
   const [installedTags, setInstalledTags] = useState<Set<string>>(() => new Set());
@@ -121,6 +125,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
   const [filterId, setFilterId] = useState<PullModelFilterId>("all");
   const [fossOnly, setFossOnly] = useState(false);
   const [installedOnly, setInstalledOnly] = useState(false);
+  const [deckDailyOnly, setDeckDailyOnly] = useState(false);
   const [sizeSource, setSizeSource] = useState<"live" | "offline">("offline");
   const [liveSizeGbByTag, setLiveSizeGbByTag] = useState<Record<string, number>>({});
   const [loadingMeta, setLoadingMeta] = useState(true);
@@ -132,6 +137,8 @@ export function PullModelsModal(props: PullModelsModalProps) {
   const filterChipRefs = useRef<(HTMLElement | null)[]>([]);
   const installedOnlyRef = useRef<HTMLElement | null>(null);
   const fossOnlyRef = useRef<HTMLElement | null>(null);
+  const deckDailyOnlyRef = useRef<HTMLElement | null>(null);
+  const footerPullRef = useRef<HTMLElement | null>(null);
   const selectCellRefs = useRef<(HTMLElement | null)[]>([]);
   const deleteCellRefs = useRef<(HTMLElement | null)[]>([]);
 
@@ -204,9 +211,10 @@ export function PullModelsModal(props: PullModelsModalProps) {
       if (fossOnly && entry.licenseClass !== "foss") return false;
       if (!entryMatchesFilter(entry, filterId)) return false;
       if (installedOnly && !isTagInstalled(entry.tag, installedTags)) return false;
+      if (deckDailyOnly && !isDeckDailyPullModel(entry)) return false;
       return true;
     });
-  }, [filterId, fossOnly, installedOnly, installedTags]);
+  }, [filterId, fossOnly, installedOnly, deckDailyOnly, installedTags]);
 
   const groupedCatalog = useMemo(() => {
     const map = new Map<PullModelGroup, PullModelEntry[]>();
@@ -279,6 +287,30 @@ export function PullModelsModal(props: PullModelsModalProps) {
     return Boolean(fossOnlyRef.current);
   }, []);
 
+  const focusDeckDailyOnlyToggle = useCallback((): boolean => {
+    deckDailyOnlyRef.current?.focus();
+    return Boolean(deckDailyOnlyRef.current);
+  }, []);
+
+  const findModalFooterButton = useCallback((labelPrefix: string): HTMLElement | null => {
+    const shell = shellRef.current;
+    if (!shell) return null;
+    const prefix = labelPrefix.trim().toLowerCase();
+    let parent: HTMLElement | null = shell.parentElement;
+    for (let depth = 0; depth < 24 && parent; depth++) {
+      const matches: HTMLElement[] = [];
+      for (const btn of parent.querySelectorAll("button, [role=\"button\"]")) {
+        const el = btn as HTMLElement;
+        if (shell.contains(el)) continue;
+        const text = el.textContent?.trim().toLowerCase() ?? "";
+        if (text === prefix || text.startsWith(prefix)) matches.push(el);
+      }
+      if (matches.length) return matches[matches.length - 1];
+      parent = parent.parentElement;
+    }
+    return null;
+  }, []);
+
   const focusFilterChip = useCallback((index: number): boolean => {
     const list = filterChipRefs.current.filter(Boolean) as HTMLElement[];
     if (!list.length) return false;
@@ -291,39 +323,75 @@ export function PullModelsModal(props: PullModelsModalProps) {
   const focusRowCell = useCallback((rowIndex: number, cell: "select" | "delete"): boolean => {
     if (!flatRows.length) return false;
     const i = Math.max(0, Math.min(rowIndex, flatRows.length - 1));
-    const row = flatRows[i];
-    const installed =
-      row.kind === "catalog" ? isTagInstalled(row.entry.tag, installedTags) : true;
-    const selectEl = selectCellRefs.current[i];
-    const deleteEl = deleteCellRefs.current[i];
     const target =
-      cell === "delete" || (installed && !selectEl)
-        ? deleteEl
-        : selectEl ?? deleteEl;
+      cell === "select" ? selectCellRefs.current[i] : deleteCellRefs.current[i];
     if (!target) return false;
     target.focus();
     target.scrollIntoView({ block: "nearest", inline: "nearest" });
     return true;
-  }, [flatRows, installedTags]);
+  }, [flatRows.length]);
+
+  const focusNextRowSelect = useCallback(
+    (fromIndex: number): boolean => {
+      for (let j = fromIndex + 1; j < flatRows.length; j++) {
+        if (selectCellRefs.current[j]) return focusRowCell(j, "select");
+      }
+      return false;
+    },
+    [flatRows.length, focusRowCell]
+  );
+
+  const focusPrevRowSelect = useCallback(
+    (fromIndex: number): boolean => {
+      for (let j = fromIndex - 1; j >= 0; j--) {
+        if (selectCellRefs.current[j]) return focusRowCell(j, "select");
+      }
+      return false;
+    },
+    [focusRowCell]
+  );
 
   const focusFooterPull = useCallback((): boolean => {
-    const pull = findFooterButton("Pull selected");
+    const pull = footerPullRef.current ?? findModalFooterButton("pull selected");
     if (pull) {
       pull.focus();
+      pull.scrollIntoView({ block: "nearest", inline: "nearest" });
       return true;
     }
     return false;
-  }, []);
+  }, [findModalFooterButton]);
+
+  useEffect(() => {
+    const id = window.requestAnimationFrame(() => {
+      footerPullRef.current = findModalFooterButton("pull selected");
+    });
+    return () => window.cancelAnimationFrame(id);
+  }, [findModalFooterButton, selectedTags.size, pullBusy]);
 
   const rowNavHandlers = useCallback(
     (rowIndex: number, cell: "select" | "delete", installed: boolean) => ({
       onMoveUp: () => {
-        if (rowIndex > 0) return focusRowCell(rowIndex - 1, cell);
-        return focusFossOnlyToggle() || focusInstalledOnlyToggle() || focusFilterChip(PULL_MODEL_FILTER_OPTIONS.length - 1);
+        if (cell === "delete") {
+          if (focusPrevRowSelect(rowIndex)) return true;
+          return (
+            focusDeckDailyOnlyToggle() ||
+            focusFossOnlyToggle() ||
+            focusInstalledOnlyToggle() ||
+            focusFilterChip(PULL_MODEL_FILTER_OPTIONS.length - 1)
+          );
+        }
+        if (focusPrevRowSelect(rowIndex)) return true;
+        return (
+          focusDeckDailyOnlyToggle() ||
+          focusFossOnlyToggle() ||
+          focusInstalledOnlyToggle() ||
+          focusFilterChip(PULL_MODEL_FILTER_OPTIONS.length - 1)
+        );
       },
       onMoveDown: () => {
-        if (rowIndex < flatRows.length - 1) return focusRowCell(rowIndex + 1, cell);
-        return focusFooterPull();
+        if (focusNextRowSelect(rowIndex)) return true;
+        if (focusFooterPull()) return true;
+        return true;
       },
       onMoveRight: () => {
         if (cell === "select" && installed) return focusRowCell(rowIndex, "delete");
@@ -334,7 +402,17 @@ export function PullModelsModal(props: PullModelsModalProps) {
         return false;
       },
     }),
-    [flatRows.length, focusFilterChip, focusFossOnlyToggle, focusFooterPull, focusInstalledOnlyToggle, focusRowCell]
+    [
+      flatRows.length,
+      focusDeckDailyOnlyToggle,
+      focusFilterChip,
+      focusFossOnlyToggle,
+      focusFooterPull,
+      focusInstalledOnlyToggle,
+      focusNextRowSelect,
+      focusPrevRowSelect,
+      focusRowCell,
+    ]
   );
 
   const recommendedEntries = useMemo(
@@ -528,17 +606,23 @@ export function PullModelsModal(props: PullModelsModalProps) {
     (rowIndex: number): RefCallback<HTMLElement> =>
     (el) => {
       deleteCellRefs.current[rowIndex] = el;
+      if (el) el.tabIndex = -1;
     };
 
   const renderTableHeader = () => (
     <div className="bonsai-pullmodels-table-row bonsai-pullmodels-table-row--head" role="row">
       <div className="bonsai-pullmodels-col bonsai-pullmodels-col--pull" role="columnheader">Pull</div>
-      <div className="bonsai-pullmodels-col" role="columnheader">Model</div>
+      <div className="bonsai-pullmodels-col bonsai-pullmodels-col--model" role="columnheader">Model</div>
       <div className="bonsai-pullmodels-col" role="columnheader">Size</div>
-      <div className="bonsai-pullmodels-col" role="columnheader">Date</div>
-      <div className="bonsai-pullmodels-col" role="columnheader">License</div>
-      <div className="bonsai-pullmodels-col" role="columnheader">★</div>
-      <div className="bonsai-pullmodels-col" role="columnheader">Tags</div>
+      <div className="bonsai-pullmodels-col bonsai-pullmodels-col--date" role="columnheader">Date</div>
+      <div className="bonsai-pullmodels-col bonsai-pullmodels-col--modes" role="columnheader">Modes</div>
+      <div
+        className="bonsai-pullmodels-col bonsai-pullmodels-col--rating"
+        role="columnheader"
+        title="Curated Steam Deck quality — more stars = stronger pick"
+      >
+        {PULL_MODEL_RATING_COLUMN_LABEL}
+      </div>
       <div className="bonsai-pullmodels-col bonsai-pullmodels-col--del" role="columnheader">Del</div>
     </div>
   );
@@ -564,10 +648,20 @@ export function PullModelsModal(props: PullModelsModalProps) {
       <div key={entry.tag} className={rowClass} role="row">
         <div className="bonsai-pullmodels-col bonsai-pullmodels-col--pull" role="cell">
           {installed ? (
-            <span className="bonsai-pullmodels-slot--installed" aria-label="Installed">*</span>
+            <Button
+              ref={bindSelectRef(rowIndex)}
+              focusable
+              className="bonsai-pullmodels-slot bonsai-pullmodels-slot--installed"
+              aria-label={`Installed ${entry.tag}`}
+              onClick={(ev) => ev.stopPropagation()}
+              {...(navSelect as Record<string, unknown>)}
+            >
+              *
+            </Button>
           ) : (
             <Button
               ref={bindSelectRef(rowIndex)}
+              focusable
               className={`bonsai-pullmodels-slot${selected ? " bonsai-pullmodels-slot--selected" : ""}`}
               onClick={(ev) => toggleSelected(entry, ev)}
               aria-label={selected ? `Deselect ${entry.tag}` : `Select ${entry.tag} to pull`}
@@ -578,32 +672,38 @@ export function PullModelsModal(props: PullModelsModalProps) {
           )}
         </div>
         <div className="bonsai-pullmodels-col bonsai-pullmodels-col--model" role="cell">
-          <span className="bonsai-pullmodels-tag">
-            {installed ? <span className="bonsai-pullmodels-installed-label">INSTALLED · </span> : null}
-            {entry.tag}
+          <span className="bonsai-pullmodels-model-line">
+            <span className="bonsai-pullmodels-tag-name">
+              {entry.tag}
+              {isDeprioritizedOllamaTag(entry.tag) ? " !" : ""}
+            </span>
+            <span
+              className="bonsai-pullmodels-foss-slot"
+              aria-hidden={entry.licenseClass !== "foss"}
+            >
+              {entry.licenseClass === "foss" ? (
+                <span className="bonsai-pullmodels-chip bonsai-pullmodels-chip--foss bonsai-pullmodels-chip--foss-inline">
+                  FOSS
+                </span>
+              ) : null}
+            </span>
           </span>
-          <span className="bonsai-pullmodels-blurb">{entry.blurb}</span>
         </div>
         <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted" role="cell">{formatSizeGb(sizeGb)}</div>
-        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted" role="cell">
-          {formatReleasedYm(entry.releasedYm)}
+        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted bonsai-pullmodels-col--date" role="cell">
+          {formatReleasedYmShort(entry.releasedYm)}
         </div>
-        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted bonsai-pullmodels-license-cell" role="cell">
-          <span>{entry.license}{isDeprioritizedOllamaTag(entry.tag) ? " !" : ""}</span>
-          {entry.licenseClass === "foss" ? (
-            <span className="bonsai-pullmodels-chip bonsai-pullmodels-chip--foss bonsai-pullmodels-chip--foss-inline">FOSS</span>
-          ) : null}
+        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted bonsai-pullmodels-col--modes" role="cell">
+          {formatPullModelTags(entry.tags)}
         </div>
         <div className="bonsai-pullmodels-col bonsai-pullmodels-col--stars" role="cell">
           {formatGtaStars(entry.rating)}
-        </div>
-        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted" role="cell">
-          {formatPullModelTags(entry.tags)}
         </div>
         <div className="bonsai-pullmodels-col bonsai-pullmodels-col--del" role="cell">
           {installed ? (
             <Button
               ref={bindDeleteRef(rowIndex)}
+              focusable={false}
               className="bonsai-pullmodels-delete-btn"
               disabled={deleteDisabled}
               aria-disabled={deleteDisabled}
@@ -635,25 +735,33 @@ export function PullModelsModal(props: PullModelsModalProps) {
         role="row"
       >
         <div className="bonsai-pullmodels-col bonsai-pullmodels-col--pull" role="cell">
-          <span className="bonsai-pullmodels-slot--installed" aria-label="Installed">*</span>
+          <Button
+            ref={bindSelectRef(rowIndex)}
+            focusable
+            className="bonsai-pullmodels-slot bonsai-pullmodels-slot--installed"
+            aria-label={`Installed ${tag}`}
+            onClick={(ev) => ev.stopPropagation()}
+            {...(rowNavHandlers(rowIndex, "select", true) as Record<string, unknown>)}
+          >
+            *
+          </Button>
         </div>
         <div className="bonsai-pullmodels-col bonsai-pullmodels-col--model" role="cell">
-          <span className="bonsai-pullmodels-tag">
-            <span className="bonsai-pullmodels-installed-label">INSTALLED · </span>
-            {tag}
+          <span className="bonsai-pullmodels-model-line">
+            <span className="bonsai-pullmodels-tag-name">{tag}</span>
+            <span className="bonsai-pullmodels-foss-slot" aria-hidden={true} />
           </span>
-          <span className="bonsai-pullmodels-blurb">Pulled outside catalog — delete to free disk.</span>
         </div>
         <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted" role="cell">
           {sizeGb > 0 ? formatSizeGb(sizeGb) : "?"}
         </div>
-        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted" role="cell">—</div>
-        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted" role="cell">—</div>
+        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted bonsai-pullmodels-col--date" role="cell">—</div>
+        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted bonsai-pullmodels-col--modes" role="cell">Other</div>
         <div className="bonsai-pullmodels-col bonsai-pullmodels-col--stars" role="cell">—</div>
-        <div className="bonsai-pullmodels-col bonsai-pullmodels-col--muted" role="cell">Other</div>
         <div className="bonsai-pullmodels-col bonsai-pullmodels-col--del" role="cell">
           <Button
             ref={bindDeleteRef(rowIndex)}
+            focusable={false}
             className="bonsai-pullmodels-delete-btn"
             disabled={deleteDisabled}
             aria-disabled={deleteDisabled}
@@ -679,10 +787,19 @@ export function PullModelsModal(props: PullModelsModalProps) {
       : "Pull selected";
   const lastFilterIndex = PULL_MODEL_FILTER_OPTIONS.length - 1;
 
-  return (
-    <ConfirmModal
-      strTitle="Pull models"
-      strDescription={
+  useEffect(() => {
+    if (!embedded || !onFooterStateChange) return;
+    onFooterStateChange({
+      okText: strOKButtonText,
+      onOk: () => {
+        if (selectedTags.size === 0 || pullBusy) return;
+        void onPullSelected();
+      },
+      okDisabled: selectedTags.size === 0 || pullBusy,
+    });
+  }, [embedded, onFooterStateChange, strOKButtonText, selectedTags.size, pullBusy, onPullSelected]);
+
+  const panelBody = (
         <BonsaiModalScope shellRef={shellRef} className="bonsai-pullmodels-shell bonsai-prose">
           <div className="bonsai-pullmodels-header">
             <span>Installed {installedCatalogCount} · {formatSizeGb(installedTotalGb)}</span>
@@ -705,7 +822,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
 
           {recommendedEntries.length > 0 ? (
             <div className="bonsai-pullmodels-recommend">
-              <div className="bonsai-pullmodels-recommend-title">Suggested pulls (speed · strategy · expert · vision)</div>
+              <div className="bonsai-pullmodels-recommend-title">Suggested</div>
               <Focusable flow-children="horizontal" className="bonsai-pullmodels-recommend-row">
                 {recommendedEntries.map((entry) => {
                   const selected = selectedTags.has(entry.tag);
@@ -737,9 +854,11 @@ export function PullModelsModal(props: PullModelsModalProps) {
                     ev.stopPropagation();
                     setFilterId(opt.id);
                   }}
-                  onMoveLeft={() => (chipIndex > 0 ? focusFilterChip(chipIndex - 1) : false)}
-                  onMoveRight={() => (chipIndex < lastFilterIndex ? focusFilterChip(chipIndex + 1) : false)}
-                  onMoveDown={() => focusInstalledOnlyToggle() || focusRowCell(0, "select")}
+                  {...({
+                    onMoveLeft: () => (chipIndex > 0 ? focusFilterChip(chipIndex - 1) : false),
+                    onMoveRight: () => (chipIndex < lastFilterIndex ? focusFilterChip(chipIndex + 1) : false),
+                    onMoveDown: () => focusInstalledOnlyToggle() || focusRowCell(0, "select") || focusFooterPull(),
+                  } as unknown as Record<string, unknown>)}
                 >
                   {opt.label}
                 </Button>
@@ -747,32 +866,63 @@ export function PullModelsModal(props: PullModelsModalProps) {
             </Focusable>
             <Focusable flow-children="horizontal" className="bonsai-pullmodels-toggles">
               <Button
-                ref={installedOnlyRef}
+                ref={(el) => {
+                  installedOnlyRef.current = el;
+                }}
                 className={`bonsai-pullmodels-chip${installedOnly ? " bonsai-pullmodels-chip--active" : ""}`}
                 onClick={(ev) => {
                   ev.stopPropagation();
                   setInstalledOnly((v) => !v);
                 }}
-                onMoveUp={() => focusFilterChip(lastFilterIndex)}
-                onMoveRight={() => focusFossOnlyToggle()}
-                onMoveDown={() => focusRowCell(0, "select")}
+                {...({
+                  onMoveUp: () => focusFilterChip(lastFilterIndex),
+                  onMoveRight: () => focusFossOnlyToggle(),
+                  onMoveDown: () =>
+                    focusRowCell(0, "select") || (selectedTags.size > 0 ? focusFooterPull() : false),
+                } as unknown as Record<string, unknown>)}
                 aria-pressed={installedOnly}
               >
                 Installed only
               </Button>
               <Button
-                ref={fossOnlyRef}
+                ref={(el) => {
+                  fossOnlyRef.current = el;
+                }}
                 className={`bonsai-pullmodels-chip bonsai-pullmodels-chip--foss${fossOnly ? " bonsai-pullmodels-chip--active" : ""}`}
                 onClick={(ev) => {
                   ev.stopPropagation();
                   setFossOnly((v) => !v);
                 }}
-                onMoveLeft={() => focusInstalledOnlyToggle()}
-                onMoveUp={() => focusFilterChip(lastFilterIndex)}
-                onMoveDown={() => focusRowCell(0, "select")}
+                {...({
+                  onMoveLeft: () => focusInstalledOnlyToggle(),
+                  onMoveRight: () => focusDeckDailyOnlyToggle(),
+                  onMoveUp: () => focusFilterChip(lastFilterIndex),
+                  onMoveDown: () =>
+                    focusRowCell(0, "select") || (selectedTags.size > 0 ? focusFooterPull() : false),
+                } as unknown as Record<string, unknown>)}
                 aria-pressed={fossOnly}
               >
                 FOSS only
+              </Button>
+              <Button
+                ref={(el) => {
+                  deckDailyOnlyRef.current = el;
+                }}
+                className={`bonsai-pullmodels-chip${deckDailyOnly ? " bonsai-pullmodels-chip--active" : ""}`}
+                onClick={(ev) => {
+                  ev.stopPropagation();
+                  setDeckDailyOnly((v) => !v);
+                }}
+                {...({
+                  onMoveLeft: () => focusFossOnlyToggle(),
+                  onMoveUp: () => focusFilterChip(lastFilterIndex),
+                  onMoveDown: () =>
+                    focusRowCell(0, "select") || (selectedTags.size > 0 ? focusFooterPull() : false),
+                } as unknown as Record<string, unknown>)}
+                aria-pressed={deckDailyOnly}
+                aria-label="Deck daily only — hides Expert (large) models that run slowly on Deck"
+              >
+                Deck daily
               </Button>
             </Focusable>
           </div>
@@ -801,7 +951,16 @@ export function PullModelsModal(props: PullModelsModalProps) {
             )}
           </div>
         </BonsaiModalScope>
-      }
+  );
+
+  if (embedded) {
+    return panelBody;
+  }
+
+  return (
+    <ConfirmModal
+      strTitle="Pull models"
+      strDescription={panelBody}
       strOKButtonText={strOKButtonText}
       strCancelButtonText="Cancel"
       onOK={() => {

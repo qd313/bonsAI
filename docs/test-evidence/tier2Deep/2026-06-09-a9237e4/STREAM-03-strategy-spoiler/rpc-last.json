@@ -1,0 +1,17 @@
+{
+  "success": true,
+  "cancelled": false,
+  "response": "To help you better, I would need to see some screenshots or at least know more about the level's characteristics. Can you describe it in detail? Specifically mention any recognizable elements like HUD motifs, character designs, world art style, or objective text?",
+  "app_id": "",
+  "app_context": "none",
+  "applied": null,
+  "elapsed_seconds": 0.8,
+  "strategy_guide_branches": null,
+  "model_policy_disclosure": {
+    "model": "qwen2.5:3b",
+    "source_class": "foss",
+    "read_more_anchor": "model-policy-tiers"
+  },
+  "strategy_spoiler_consent_effective": false,
+  "preset_carousel_inject": null
+}

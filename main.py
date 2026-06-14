@@ -93,7 +93,9 @@ from backend.services.screenshot_media import (
 from backend.services.game_ai_request import run_game_ai_request
 from backend.services.local_ollama_setup_service import (
     is_loopback_ollama_host,
+    list_installed_ollama_tags,
     new_local_ollama_setup_state,
+    probe_ollama_http_ok,
     recover_loopback_ollama_listening,
     run_local_setup,
     run_ollama_rm_async,
@@ -114,9 +116,12 @@ from backend.services.tdp_service import (
 )
 from refactor_helpers import (
     build_ollama_chat_url,
+    build_effective_models_to_try,
+    filter_models_to_installed,
     is_valid_setup_pull_profile,
     normalize_ollama_base,
     is_ollama_model_missing_error,
+    no_installed_routing_models_message,
     select_ollama_models,
 )
 
@@ -1119,6 +1124,28 @@ class Plugin:
         if not tags:
             return {"accepted": False, "reason": "No valid model tags to pull."}
 
+        from backend.services.ollama_catalog_service import partition_pull_tags_by_registry
+
+        registry_ok, registry_bad = await asyncio.to_thread(partition_pull_tags_by_registry, tags)
+        if registry_bad and not registry_ok:
+            bad_list = ", ".join(registry_bad[:6])
+            return {
+                "accepted": False,
+                "reason": (
+                    f"Tag(s) not on Ollama library: {bad_list}. "
+                    "Try gemma4:latest, gemma3:4b, or qwen2.5:1.5b."
+                ),
+                "error": "invalid_registry_tag",
+                "invalid_tags": registry_bad,
+            }
+        if registry_bad:
+            await plugin._maybe_app_log(
+                "local_setup.start",
+                "skipped invalid registry tags",
+                fields={"invalid_tags": registry_bad[:12]},
+            )
+        tags = registry_ok
+
         async with plugin._local_ollama_setup_lock:
             existing = plugin._local_ollama_setup_task
             if existing is not None and not existing.done():
@@ -1508,12 +1535,17 @@ class Plugin:
 
     async def get_input_transparency(self):
         """Return the last Ask transparency snapshot (full prompts; fetch after terminal completion)."""
+        from backend.services.tdp_service import read_sandbox_sysfs_writes, sandbox_sysfs_root
+
         plugin = Plugin._coerce_instance(self)
         plugin._ensure_background_state()
         snap = plugin._last_input_transparency
         if not isinstance(snap, dict) or not snap:
             return {"available": False}
-        return {"available": True, "snapshot": dict(snap)}
+        out: dict = {"available": True, "snapshot": dict(snap)}
+        if sandbox_sysfs_root():
+            out["sysfs_writes"] = read_sandbox_sysfs_writes()
+        return out
 
     async def save_ask_feedback(self, rating: str, request_id: int = 0, question_len: int = 0, success: bool = False):
         """Persist thumbs up/down locally (JSONL under plugin settings); no network."""
@@ -1885,6 +1917,19 @@ class Plugin:
             "response": "Thinking...",
         }
 
+    async def dbg_fe_log(self, tag: str = "", data=None):
+        """Frontend → plugin-log bridge for debug instrumentation.
+
+        On-device the frontend cannot reach a dev-PC HTTP ingest without a tunnel, so frontend
+        debug probes call this RPC and land in the Deck plugin log (~/homebrew/logs/bonsAI/),
+        readable over SSH. Keep this RPC; debug sessions add/remove the frontend callsites.
+        """
+        try:
+            logger.info("[FE] %s %s", str(tag)[:80], json.dumps(data)[:600] if data is not None else "")
+        except Exception:
+            logger.info("[FE] %s <unserializable>", str(tag)[:80])
+        return {"ok": True}
+
     async def get_background_game_ai_status(self):
         """Return current background request status and reconcile completed task failures."""
         plugin = Plugin._coerce_instance(self)
@@ -2122,11 +2167,21 @@ class Plugin:
         non_foss_unlocked = settings.get("model_policy_non_foss_unlocked") is True
         models_to_try = filter_model_list(models_before_policy, policy_tier, non_foss_unlocked)
         ask_started = time.time()
+        ollama_host, _, ollama_base = normalize_ollama_base(PcIp)
+        if is_loopback_ollama_host(ollama_host) and not probe_ollama_http_ok(ollama_base):
+            recover_loopback_ollama_listening(logger.info)
+        installed_tags = list_installed_ollama_tags(ollama_base)
+        models_after_policy = list(models_to_try)
+        models_to_try, routing_strategy = build_effective_models_to_try(models_to_try, installed_tags)
+        _, models_skipped_not_installed = filter_models_to_installed(models_after_policy, installed_tags)
         ask_diagnostics: dict = {
             "models_before_policy": list(models_before_policy),
-            "models_after_policy": list(models_to_try),
+            "models_after_policy": models_after_policy,
+            "installed_tags": list(installed_tags),
+            "routing_strategy": routing_strategy,
+            "routing_skipped_not_installed": list(models_skipped_not_installed),
             "policy_tier": policy_tier,
-            "policy_dropped_count": max(0, len(models_before_policy) - len(models_to_try)),
+            "policy_dropped_count": max(0, len(models_before_policy) - len(models_after_policy)),
             "requires_vision": requires_vision,
             "attachment_count": len(prepared_images),
             "attachment_warnings": list(attachment_warnings),
@@ -2136,13 +2191,22 @@ class Plugin:
             "elapsed_seconds": None,
         }
         ollama_extras["ask_diagnostics"] = ask_diagnostics
-        if not models_to_try:
+        if not models_after_policy and not installed_tags:
             return {
                 "success": False,
                 "response": empty_filter_user_message(policy_tier, non_foss_unlocked, requires_vision),
                 "model_policy_disclosure": None,
                 **ollama_extras,
             }
+        if not models_to_try:
+            ask_diagnostics["elapsed_seconds"] = round(time.time() - ask_started, 2)
+            return {
+                "success": False,
+                "response": no_installed_routing_models_message(installed_tags, requires_vision),
+                "model_policy_disclosure": None,
+                **ollama_extras,
+            }
+        ask_diagnostics["models_after_installed_filter"] = list(models_to_try)
 
         plugin_inst = Plugin._coerce_instance(self)
         plugin_inst._ensure_background_state()
@@ -2241,6 +2305,12 @@ class Plugin:
 
                 last_failure = _strip_ollama_http_body(merged)
                 body = result.get("body") or ""
+                if result.get("timed_out") and model_name != models_to_try[-1]:
+                    logger.warning(
+                        "ask_ollama: timeout model=%s — trying next installed fallback",
+                        model_name,
+                    )
+                    continue
                 # Missing local Ollama tags: try the next fallback instead of failing the whole Ask.
                 if is_ollama_model_missing_error(result.get("status"), body):
                     continue

@@ -177,8 +177,8 @@ Update after each maintainer pass:
 |------|--------|------------------------|-------|
 | 0 | Pass | 2026-05-26 / 9e20a82 | preview 5/5 PASS; [evidence](test-evidence/tier0/2026-05-26-9e20a82) |
 | 1 | Pass | 2026-05-26 / 9e20a82 | preview 3/3 PASS; [evidence](test-evidence/tier1Core/2026-05-26-9e20a82) |
-| 2 | Pass | 2026-05-26 / 9e20a82 | preview 8/8 PASS; [evidence](test-evidence/tier2/2026-05-26-9e20a82) |
-| 3 | Partial | 2026-05-26 / 9e20a82 | preview boundaries 5/5; deckOnly 3 skipped — [E-bucket](test-evidence/deckOnly/2026-05-26-9e20a82) needs on-Deck |
+| 2 | Partial | 2026-06-09 / 9e20a82 | preview 7/11 PASS; [evidence](test-evidence/tier2Deep/2026-06-09-9e20a82) |
+| 3 | Open | 2026-06-09 / a9237e4 | preview 0/0 PASS; [evidence](test-evidence/deckOnly/2026-06-09-a9237e4) |
 | 4 | Deferred | | Clean install |
 
 **Roadmap target:** Tier **0–1** complete for routine PRs; Tier **2+** ongoing before release.

@@ -1,0 +1,25 @@
+{
+  "scenarioId": "SMOKE-B-apply-with-perms",
+  "tier": "tier2Deep",
+  "batch": "tier2Deep",
+  "status": "pass",
+  "error": null,
+  "durationMs": 121533,
+  "gitSha": "a9237e4",
+  "runDate": "2026-06-09",
+  "previewUrl": null,
+  "evidenceProfile": "preview",
+  "tags": [
+    "SMOKE-B",
+    "TDP-APPLY"
+  ],
+  "captureArtifact": null,
+  "captureError": "Error: IPC timeout for captureScreenshot",
+  "evidenceFiles": [
+    "manifest.json",
+    "rpc-last.json",
+    "steps",
+    "steps\\step-03-sleep-rpc.json",
+    "steps\\step-03-sleep.json"
+  ]
+}

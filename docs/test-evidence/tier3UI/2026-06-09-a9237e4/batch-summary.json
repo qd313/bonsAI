@@ -1,0 +1,60 @@
+{
+  "batch": "tier3UI",
+  "runDate": "2026-06-09",
+  "gitSha": "a9237e4",
+  "passed": 0,
+  "failed": 8,
+  "skipped": 0,
+  "total": 8,
+  "evidenceRoot": "docs/test-evidence/tier3UI/2026-06-09-a9237e4",
+  "results": [
+    {
+      "id": "UI-A-beta-modal",
+      "status": "fail",
+      "error": "Error: IPC timeout for callTestHook",
+      "evidenceDir": "docs/test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-beta-modal"
+    },
+    {
+      "id": "UI-A-tab-tour",
+      "status": "fail",
+      "error": "Error: IPC timeout for callTestHook",
+      "evidenceDir": "docs/test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-tab-tour"
+    },
+    {
+      "id": "UI-A-settings-conn",
+      "status": "fail",
+      "error": "Error: IPC timeout for callTestHook",
+      "evidenceDir": "docs/test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-settings-conn"
+    },
+    {
+      "id": "UI-A-permissions-ui",
+      "status": "fail",
+      "error": "Error: IPC timeout for callTestHook",
+      "evidenceDir": "docs/test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-permissions-ui"
+    },
+    {
+      "id": "UI-A-mode-menu",
+      "status": "fail",
+      "error": "Error: IPC timeout for callTestHook",
+      "evidenceDir": "docs/test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-mode-menu"
+    },
+    {
+      "id": "UI-A-transparency-expand",
+      "status": "fail",
+      "error": "Error: IPC timeout for callTestHook",
+      "evidenceDir": "docs/test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-transparency-expand"
+    },
+    {
+      "id": "UI-A-debug-tab",
+      "status": "fail",
+      "error": "Error: IPC timeout for callTestHook",
+      "evidenceDir": "docs/test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-debug-tab"
+    },
+    {
+      "id": "UI-A-presets-visible",
+      "status": "fail",
+      "error": "Error: IPC timeout for callTestHook",
+      "evidenceDir": "docs/test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-presets-visible"
+    }
+  ]
+}

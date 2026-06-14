@@ -8,7 +8,7 @@ import { PULL_MODEL_CATALOG } from "../data/pullModelCatalog";
 
 describe("pullModelRecommendations", () => {
   it("scores smaller high-rated multimodal models higher", () => {
-    const gemma4 = PULL_MODEL_CATALOG.find((e) => e.tag === "gemma4:4b")!;
+    const gemma4 = PULL_MODEL_CATALOG.find((e) => e.tag === "gemma4:latest")!;
     const qwen14 = PULL_MODEL_CATALOG.find((e) => e.tag === "qwen2.5:14b")!;
     expect(scorePullModelPerformance(gemma4)).toBeGreaterThan(scorePullModelPerformance(qwen14));
   });

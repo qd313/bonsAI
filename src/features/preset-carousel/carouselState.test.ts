@@ -10,7 +10,7 @@ import {
 } from "./carouselState";
 
 function p(text: string): PresetPrompt {
-  return { text };
+  return { text, category: "test" };
 }
 
 describe("carouselState", () => {

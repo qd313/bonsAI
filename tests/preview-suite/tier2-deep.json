@@ -1,0 +1,607 @@
+{
+  "scenarios": [
+    {
+      "id": "STREAM-02-flag-on-speed",
+      "tier": "tier2Deep",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": [
+        "STREAM-02"
+      ],
+      "checkboxIds": [
+        "**STREAM-02**"
+      ],
+      "captureSteps": [
+        2
+      ],
+      "steps": [
+        {
+          "action": "callRpc",
+          "method": "load_settings"
+        },
+        {
+          "action": "callRpc",
+          "method": "save_settings",
+          "args": [
+            {
+              "show_developer_tab": true,
+              "bonsai_token_streaming_enabled": true,
+              "ask_mode": "speed"
+            }
+          ]
+        },
+        {
+          "action": "sleep",
+          "ms": 400
+        },
+        {
+          "action": "callRpc",
+          "method": "ask_game_ai",
+          "args": [
+            "Say hello in one word",
+            "127.0.0.1:11434"
+          ]
+        },
+        {
+          "action": "assert",
+          "type": "rpcResult",
+          "expect": "success"
+        }
+      ]
+    },
+    {
+      "id": "STREAM-03-strategy-spoiler",
+      "tier": "tier2Deep",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": [
+        "STREAM-03",
+        "STRATEGY-SPOILER"
+      ],
+      "checkboxIds": [
+        "**STREAM-03**"
+      ],
+      "captureSteps": [
+        2
+      ],
+      "steps": [
+        {
+          "action": "callRpc",
+          "method": "load_settings"
+        },
+        {
+          "action": "callRpc",
+          "method": "save_settings",
+          "args": [
+            {
+              "show_developer_tab": true,
+              "bonsai_token_streaming_enabled": true,
+              "ask_mode": "strategy",
+              "strategy_spoiler_masking_enabled": true
+            }
+          ]
+        },
+        {
+          "action": "sleep",
+          "ms": 400
+        },
+        {
+          "action": "callRpc",
+          "method": "ask_game_ai",
+          "args": [
+            "How do I beat this level without spoilers",
+            "127.0.0.1:11434"
+          ]
+        },
+        {
+          "action": "assert",
+          "type": "rpcResult",
+          "expect": "strategy_spoiler"
+        }
+      ]
+    },
+    {
+      "id": "STREAM-04-stop-mid-stream",
+      "tier": "tier2Deep",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": [
+        "STREAM-04"
+      ],
+      "checkboxIds": [
+        "**STREAM-04**"
+      ],
+      "captureSteps": [
+        1
+      ],
+      "steps": [
+        {
+          "action": "callRpc",
+          "method": "load_settings"
+        },
+        {
+          "action": "callRpc",
+          "method": "save_settings",
+          "args": [
+            {
+              "show_developer_tab": true,
+              "bonsai_token_streaming_enabled": true
+            }
+          ]
+        },
+        {
+          "action": "callRpc",
+          "method": "start_background_game_ai",
+          "args": [
+            "Write a long paragraph about Steam Deck battery life tips",
+            "127.0.0.1:11434"
+          ]
+        },
+        {
+          "action": "sleep",
+          "ms": 500
+        },
+        {
+          "action": "callRpc",
+          "method": "abort_background_game_ai"
+        },
+        {
+          "action": "sleep",
+          "ms": 800
+        },
+        {
+          "action": "callRpc",
+          "method": "get_background_game_ai_status"
+        },
+        {
+          "action": "assert",
+          "type": "rpcResult",
+          "expect": "cancelled"
+        }
+      ]
+    },
+    {
+      "id": "STREAM-05-transparency-terminal",
+      "tier": "tier2Deep",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": [
+        "STREAM-05",
+        "TRANSPARENCY"
+      ],
+      "checkboxIds": [
+        "**STREAM-05**"
+      ],
+      "captureSteps": [
+        2
+      ],
+      "steps": [
+        {
+          "action": "callRpc",
+          "method": "load_settings"
+        },
+        {
+          "action": "callRpc",
+          "method": "save_settings",
+          "args": [
+            {
+              "show_developer_tab": true,
+              "bonsai_token_streaming_enabled": true
+            }
+          ]
+        },
+        {
+          "action": "callRpc",
+          "method": "ask_game_ai",
+          "args": [
+            "Reply with only: ok",
+            "127.0.0.1:11434"
+          ]
+        },
+        {
+          "action": "sleep",
+          "ms": 2000
+        },
+        {
+          "action": "callRpc",
+          "method": "get_input_transparency"
+        },
+        {
+          "action": "assert",
+          "type": "rpcResult",
+          "expect": "final_response"
+        }
+      ]
+    },
+    {
+      "id": "VAC-03-valid-key-steamid",
+      "tier": "tier2Deep",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": [
+        "VAC-03"
+      ],
+      "checkboxIds": [
+        "**VAC-03**"
+      ],
+      "captureSteps": [
+        1
+      ],
+      "steps": [
+        {
+          "action": "callRpc",
+          "method": "load_settings"
+        },
+        {
+          "action": "callRpc",
+          "method": "save_settings",
+          "args": [
+            {
+              "capabilities": {
+                "filesystem_write": true,
+                "hardware_control": true,
+                "media_library_access": true,
+                "steam_logs_read": true,
+                "steam_web_api": true,
+                "external_navigation": true
+              },
+              "steam_web_api_key": "preview-test-key-00000000000000000000"
+            }
+          ]
+        },
+        {
+          "action": "callRpc",
+          "method": "ask_game_ai",
+          "args": [
+            "bonsai:vac-check 76561198000000000",
+            "127.0.0.1:11434"
+          ]
+        },
+        {
+          "action": "assert",
+          "type": "rpcResult",
+          "expect": "76561198000000000"
+        }
+      ]
+    },
+    {
+      "id": "VAC-04-profile-url",
+      "tier": "tier2Deep",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": [
+        "VAC-04"
+      ],
+      "checkboxIds": [
+        "**VAC-04**"
+      ],
+      "captureSteps": [
+        1
+      ],
+      "steps": [
+        {
+          "action": "callRpc",
+          "method": "load_settings"
+        },
+        {
+          "action": "callRpc",
+          "method": "save_settings",
+          "args": [
+            {
+              "capabilities": {
+                "filesystem_write": true,
+                "hardware_control": true,
+                "media_library_access": true,
+                "steam_logs_read": true,
+                "steam_web_api": true,
+                "external_navigation": true
+              },
+              "steam_web_api_key": "preview-test-key-00000000000000000000"
+            }
+          ]
+        },
+        {
+          "action": "callRpc",
+          "method": "ask_game_ai",
+          "args": [
+            "bonsai:vac-check https://steamcommunity.com/profiles/76561197960287930",
+            "127.0.0.1:11434"
+          ]
+        },
+        {
+          "action": "assert",
+          "type": "rpcResult",
+          "expect": "76561197960287930"
+        }
+      ]
+    },
+    {
+      "id": "VAC-05-vanity-url",
+      "tier": "tier2Deep",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": [
+        "VAC-05"
+      ],
+      "checkboxIds": [
+        "**VAC-05**"
+      ],
+      "captureSteps": [
+        1
+      ],
+      "steps": [
+        {
+          "action": "callRpc",
+          "method": "load_settings"
+        },
+        {
+          "action": "callRpc",
+          "method": "save_settings",
+          "args": [
+            {
+              "capabilities": {
+                "filesystem_write": true,
+                "hardware_control": true,
+                "media_library_access": true,
+                "steam_logs_read": true,
+                "steam_web_api": true,
+                "external_navigation": true
+              },
+              "steam_web_api_key": "preview-test-key-00000000000000000000"
+            }
+          ]
+        },
+        {
+          "action": "callRpc",
+          "method": "ask_game_ai",
+          "args": [
+            "bonsai:vac-check https://steamcommunity.com/id/gabelogannewell",
+            "127.0.0.1:11434"
+          ]
+        },
+        {
+          "action": "assert",
+          "type": "rpcResult",
+          "expect": "Skipped"
+        }
+      ]
+    },
+    {
+      "id": "VAC-06-perm-off-after-key",
+      "tier": "tier2Deep",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": [
+        "VAC-06"
+      ],
+      "checkboxIds": [
+        "**VAC-06**"
+      ],
+      "captureSteps": [
+        1
+      ],
+      "steps": [
+        {
+          "action": "callRpc",
+          "method": "load_settings"
+        },
+        {
+          "action": "callRpc",
+          "method": "save_settings",
+          "args": [
+            {
+              "capabilities": {
+                "filesystem_write": true,
+                "hardware_control": true,
+                "media_library_access": true,
+                "steam_logs_read": true,
+                "steam_web_api": false,
+                "external_navigation": true
+              },
+              "steam_web_api_key": "preview-test-key-00000000000000000000"
+            }
+          ]
+        },
+        {
+          "action": "callRpc",
+          "method": "ask_game_ai",
+          "args": [
+            "bonsai:vac-check 76561198000000000",
+            "127.0.0.1:11434"
+          ]
+        },
+        {
+          "action": "assert",
+          "type": "rpcResult",
+          "expect": "Steam Web API is off"
+        }
+      ]
+    },
+    {
+      "id": "BG-ASK-lifecycle",
+      "tier": "tier2Deep",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": [
+        "BG-ASK-V1",
+        "SMOKE-H"
+      ],
+      "checkboxIds": [],
+      "captureSteps": [
+        1,
+        3
+      ],
+      "steps": [
+        {
+          "action": "callRpc",
+          "method": "start_background_game_ai",
+          "args": [
+            "What is my current TDP?",
+            "127.0.0.1:11434"
+          ]
+        },
+        {
+          "action": "sleep",
+          "ms": 1500
+        },
+        {
+          "action": "callRpc",
+          "method": "get_background_game_ai_status"
+        },
+        {
+          "action": "assert",
+          "type": "rpcResult",
+          "expect": "status"
+        },
+        {
+          "action": "sleep",
+          "ms": 6000
+        },
+        {
+          "action": "callRpc",
+          "method": "get_background_game_ai_status"
+        },
+        {
+          "action": "assert",
+          "type": "rpcResult",
+          "expect": "completed"
+        }
+      ]
+    },
+    {
+      "id": "SMOKE-B-apply-with-perms",
+      "tier": "tier2Deep",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": [
+        "SMOKE-B",
+        "TDP-APPLY"
+      ],
+      "checkboxIds": [],
+      "captureSteps": [
+        3
+      ],
+      "steps": [
+        {
+          "action": "setHardware",
+          "state": {
+            "preset": "Hot Game",
+            "tdp": 15
+          }
+        },
+        {
+          "action": "callRpc",
+          "method": "load_settings"
+        },
+        {
+          "action": "callRpc",
+          "method": "save_settings",
+          "args": [
+            {
+              "capabilities": {
+                "filesystem_write": true,
+                "hardware_control": true,
+                "media_library_access": true,
+                "steam_logs_read": true,
+                "steam_web_api": false,
+                "external_navigation": true
+              }
+            }
+          ]
+        },
+        {
+          "action": "sleep",
+          "ms": 400
+        },
+        {
+          "action": "callRpc",
+          "method": "ask_game_ai",
+          "args": [
+            "Set my TDP to 8 watts",
+            "127.0.0.1:11434"
+          ]
+        },
+        {
+          "action": "assert",
+          "type": "rpcResult",
+          "expect": "\"applied\":{\"tdp_watts\":8"
+        },
+        {
+          "action": "callRpc",
+          "method": "get_input_transparency"
+        },
+        {
+          "action": "assert",
+          "type": "rpcResult",
+          "expect": "power1_cap"
+        }
+      ]
+    },
+    {
+      "id": "TDP-boundary-clamps-assert",
+      "tier": "tier2Deep",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": [
+        "TDP-1W",
+        "TDP-20W"
+      ],
+      "checkboxIds": [
+        "**TDP-1W**",
+        "**TDP-20W**"
+      ],
+      "captureSteps": [
+        2,
+        4
+      ],
+      "steps": [
+        {
+          "action": "callRpc",
+          "method": "load_settings"
+        },
+        {
+          "action": "callRpc",
+          "method": "save_settings",
+          "args": [
+            {
+              "capabilities": {
+                "filesystem_write": true,
+                "hardware_control": true,
+                "media_library_access": true,
+                "steam_logs_read": true,
+                "steam_web_api": false,
+                "external_navigation": true
+              }
+            }
+          ]
+        },
+        {
+          "action": "callRpc",
+          "method": "ask_game_ai",
+          "args": [
+            "Set TDP to 1 watt",
+            "127.0.0.1:11434"
+          ]
+        },
+        {
+          "action": "assert",
+          "type": "rpcResult",
+          "expect": "\"applied\":{\"tdp_watts\":3"
+        },
+        {
+          "action": "callRpc",
+          "method": "ask_game_ai",
+          "args": [
+            "Set TDP to 20 watts",
+            "127.0.0.1:11434"
+          ]
+        },
+        {
+          "action": "assert",
+          "type": "rpcResult",
+          "expect": "\"applied\":{\"tdp_watts\":15"
+        }
+      ]
+    }
+  ]
+}

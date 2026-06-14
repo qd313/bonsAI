@@ -1,0 +1,24 @@
+{
+  "scenarioId": "STREAM-05-transparency-terminal",
+  "tier": "tier2Deep",
+  "batch": "tier2Deep",
+  "status": "pass",
+  "error": null,
+  "durationMs": 127008,
+  "gitSha": "a9237e4",
+  "runDate": "2026-06-09",
+  "previewUrl": null,
+  "evidenceProfile": "preview",
+  "tags": [
+    "STREAM-05",
+    "TRANSPARENCY"
+  ],
+  "captureArtifact": null,
+  "captureError": "Error: IPC timeout for captureScreenshot",
+  "evidenceFiles": [
+    "rpc-last.json",
+    "steps",
+    "steps\\step-02-callRpc-rpc.json",
+    "steps\\step-02-callRpc.json"
+  ]
+}

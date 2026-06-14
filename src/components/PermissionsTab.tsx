@@ -1,17 +1,12 @@
 import React from "react";
 import { PanelSection, PanelSectionRow, ToggleField, showModal, ConfirmModal } from "@decky/ui";
 import type { BonsaiCapabilities } from "../utils/settingsAndResponse";
-import { PermissionsTabModelPolicyPanel } from "./PermissionsTabModelPolicyPanel";
-import type { ModelPolicyTierId } from "../data/modelPolicy";
 
 type Props = {
   capabilities: BonsaiCapabilities;
   setCapabilities: React.Dispatch<React.SetStateAction<BonsaiCapabilities>>;
   /** Turn hardware control on, persist to disk immediately (Decky can remount the panel when the modal closes). */
   onConfirmEnableHardwareControl: () => void;
-  modelPolicyTier: ModelPolicyTierId;
-  onCommitModelPolicyTier: (t: ModelPolicyTierId) => void | Promise<void>;
-  modelPolicyNonFossUnlocked: boolean;
   /** Call before any `showModal` from this tab so the active tab restores after close. */
   onBeforeDeckyModal: () => void;
   /** After modal dismiss; pass `() => handle.Close()`. */
@@ -65,9 +60,6 @@ export const PermissionsTab: React.FC<Props> = ({
   capabilities,
   setCapabilities,
   onConfirmEnableHardwareControl,
-  modelPolicyTier,
-  onCommitModelPolicyTier,
-  modelPolicyNonFossUnlocked,
   onBeforeDeckyModal,
   onCompleteDeckyModalClose,
 }) => (
@@ -76,7 +68,7 @@ export const PermissionsTab: React.FC<Props> = ({
     <PanelSectionRow>
       <div className="bonsai-settings-bleed" style={{ fontSize: 12, color: "#9fb7d5", lineHeight: 1.45, marginBottom: 4 }}>
         High-impact actions stay off until you enable them here. AI requests on your home network are not
-        gated by these toggles. Which models the plugin may try is set under <strong>AI model choice</strong> below.
+        gated by these toggles. Model policy and routing live on the <strong>Ollama</strong> tab.
       </div>
     </PanelSectionRow>
     <PanelSectionRow>
@@ -157,12 +149,5 @@ export const PermissionsTab: React.FC<Props> = ({
       </PanelSectionRow>
     ))}
   </PanelSection>
-  <PermissionsTabModelPolicyPanel
-    modelPolicyTier={modelPolicyTier}
-    onCommitModelPolicyTier={onCommitModelPolicyTier}
-    modelPolicyNonFossUnlocked={modelPolicyNonFossUnlocked}
-    onBeforeDeckyModal={onBeforeDeckyModal}
-    onCompleteDeckyModalClose={onCompleteDeckyModalClose}
-  />
   </>
 );

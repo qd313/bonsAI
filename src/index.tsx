@@ -19,7 +19,8 @@ import { DesktopNoteSaveModal } from "./components/DesktopNoteSaveModal";
 import { DeveloperTab, type DeveloperConnectionStatus } from "./components/DeveloperTab";
 import { MainTab } from "./components/MainTab";
 import { PluginHelpModal } from "./components/PluginHelpModal";
-import { PullModelsModal } from "./components/PullModelsModal";
+import { OllamaModelsHubModal, type OllamaModelsHubSection } from "./components/OllamaModelsHubModal";
+import { OllamaTab } from "./components/OllamaTab";
 import { PermissionsTab } from "./components/PermissionsTab";
 import { SettingsTab } from "./components/SettingsTab";
 import { getSteamInputLexiconEntry } from "./data/steam-input-lexicon";
@@ -43,6 +44,10 @@ import {
   captureSettingsTabLocalSnapshot,
   clearSettingsTabLocalSurvival,
 } from "./utils/settingsTabLocalSurvival";
+import {
+  captureOllamaTabLocalSnapshot,
+  clearOllamaTabLocalSurvival,
+} from "./utils/ollamaTabLocalSurvival";
 import { persistOllamaIpIfRoutingToLan as persistOllamaIpIfRoutingToLanUtil } from "./utils/persistOllamaIp";
 import { getRandomPresets } from "./data/presets";
 import {
@@ -52,6 +57,7 @@ import {
   BugIcon,
   GearIcon,
   LockIcon,
+  OllamaTabIcon,
 } from "./components/icons";
 import { MODEL_POLICY_README_URL, type ModelPolicyTierId } from "./data/modelPolicy";
 import { SETTINGS_DATABASE } from "./data/settingsDatabase";
@@ -215,7 +221,7 @@ function markPluginHelpDismissedPersist(): void {
 }
 
 function bonsaiTabIconTitle(
-  classSuffix: "main" | "settings" | "permissions" | "developer" | "about",
+  classSuffix: "main" | "ollama" | "settings" | "permissions" | "developer" | "about",
   children: React.ReactNode,
 ): React.ReactElement {
   return (
@@ -228,9 +234,9 @@ function bonsaiTabIconTitle(
 }
 
 const FULL_BLEED_ROW_STYLE: React.CSSProperties = {
-  width: "calc(100% + 24px)",
-  marginLeft: -12,
-  marginRight: -10,
+  width: "100%",
+  marginLeft: 0,
+  marginRight: 0,
   boxSizing: "border-box",
 };
 
@@ -242,6 +248,7 @@ const PRESET_BUTTON_SURFACE: React.CSSProperties = {
 
 const DECKY_TAB_TITLES = {
   main: bonsaiTabIconTitle("main", <BonsaiTreeTabIcon size={TAB_TITLE_MAIN_TAB_ICON_PX} />),
+  ollama: bonsaiTabIconTitle("ollama", <OllamaTabIcon size={TAB_TITLE_ICON_PX} />),
   settings: bonsaiTabIconTitle("settings", <GearIcon size={TAB_TITLE_ICON_PX} />),
   permissions: bonsaiTabIconTitle("permissions", <LockIcon size={TAB_TITLE_ICON_PX} />),
   developer: bonsaiTabIconTitle("developer", <BugIcon size={TAB_TITLE_DEBUG_TAB_ICON_PX} />),
@@ -411,6 +418,8 @@ const Content: React.FC = () => {
     setSteamWebApiKey,
     bonsaiTokenStreamingEnabled,
     setBonsaiTokenStreamingEnabled,
+    showOnscreenDebugHud,
+    setShowOnscreenDebugHud,
     responseVerifyEnabled,
     setResponseVerifyEnabled,
     responseVerifySecondPass,
@@ -583,6 +592,10 @@ const Content: React.FC = () => {
     setCurrentTab("permissions");
   }, []);
 
+  const goToOllamaTab = useCallback(() => {
+    setCurrentTab("ollama");
+  }, []);
+
   const settingsSnapshotForSave = useMemo(
     () => ({
       latencyWarningSeconds,
@@ -614,6 +627,7 @@ const Content: React.FC = () => {
       strategySpoilerAutoRevealAfterConsent,
       steamWebApiKey,
       bonsaiTokenStreamingEnabled,
+      showOnscreenDebugHud,
       responseVerifyEnabled,
       responseVerifySecondPass,
       responseVerifyModel,
@@ -649,6 +663,7 @@ const Content: React.FC = () => {
       strategySpoilerAutoRevealAfterConsent,
       steamWebApiKey,
       bonsaiTokenStreamingEnabled,
+      showOnscreenDebugHud,
       responseVerifyEnabled,
       responseVerifySecondPass,
       responseVerifyModel,
@@ -664,6 +679,7 @@ const Content: React.FC = () => {
   const captureSessionBeforeModal = useCallback(() => {
     characterPickerReturnTabRef.current = currentTab;
     const settingsLocal = captureSettingsTabLocalSnapshot();
+    const ollamaLocal = captureOllamaTabLocalSnapshot();
     captureBonsaiSessionForModal({
       currentTab,
       unifiedInput,
@@ -701,6 +717,7 @@ const Content: React.FC = () => {
       inputLen: unifiedInput.length,
       hasExchange: !!lastExchange,
       settingsLocal: !!settingsLocal,
+      ollamaLocal: !!ollamaLocal,
     });
   }, [
     currentTab,
@@ -806,26 +823,6 @@ const Content: React.FC = () => {
     setCurrentTab,
     showDisclaimerModalAgain,
   ]);
-
-  const onCommitModelPolicyTier = useCallback(
-    async (t: ModelPolicyTierId) => {
-      if (t === "non_foss" && !modelPolicyNonFossUnlocked) {
-        toaster.toast({
-          title: "Unlock required",
-          body: "Turn on Tier 3 unlock under Developer → Model routing (advanced) before Any installed model.",
-          duration: 5000,
-        });
-        return;
-      }
-      setModelPolicyTier(t);
-      const saved = await call<[BonsaiSettings], BonsaiSettings>(
-        "save_settings",
-        buildSettingsPayload({ model_policy_tier: t, model_policy_non_foss_unlocked: modelPolicyNonFossUnlocked })
-      );
-      hydrateFromSettings(saved);
-    },
-    [modelPolicyNonFossUnlocked, buildSettingsPayload, hydrateFromSettings]
-  );
 
   const openModelPolicyReadme = useCallback(() => {
     if (!capabilities.external_navigation) {
@@ -965,6 +962,7 @@ const Content: React.FC = () => {
       setSuggestedPrompts(getRandomPresets(3));
       clearBonsaiSessionSurvival();
       clearSettingsTabLocalSurvival();
+      clearOllamaTabLocalSurvival();
       resetPluginSession();
       showDisclaimerModalAgain();
       toaster.toast({
@@ -1238,22 +1236,68 @@ const Content: React.FC = () => {
     strategySpoilerAutoRevealAfterConsent,
   ]);
 
-  const openPullModelsModal = useCallback(() => {
-    captureSessionBeforeModal();
-    const handle = showModal(
-      <PullModelsModal
-        activeRoutingTag={modelPolicyDisclosure?.model ?? null}
-        onBeforeNestedDeckyModal={captureSessionBeforeModal}
-        onCompleteNestedDeckyModalClose={finalizeShowModalAndRestoreActiveTab}
-        onCancel={() => {
-          finalizeShowModalAndRestoreActiveTab(() => handle.Close());
-        }}
-        onPullAccepted={() => {
-          finalizeShowModalAndRestoreActiveTab(() => handle.Close());
-        }}
-      />
-    );
-  }, [finalizeShowModalAndRestoreActiveTab, modelPolicyDisclosure?.model, captureSessionBeforeModal]);
+  const onCommitOllamaModelsHub = useCallback(
+    async (patch: {
+      modelPolicyTier: ModelPolicyTierId;
+      modelPolicyNonFossUnlocked: boolean;
+      modelAllowHighVramFallbacks: boolean;
+    }) => {
+      if (patch.modelPolicyTier === "non_foss" && !patch.modelPolicyNonFossUnlocked) {
+        toaster.toast({
+          title: "Unlock required",
+          body: "Turn on Tier 3 unlock under Advanced before Any installed model.",
+          duration: 5000,
+        });
+        goToOllamaTab();
+        return;
+      }
+      setModelPolicyTier(patch.modelPolicyTier);
+      setModelPolicyNonFossUnlocked(patch.modelPolicyNonFossUnlocked);
+      setModelAllowHighVramFallbacks(patch.modelAllowHighVramFallbacks);
+      const saved = await call<[BonsaiSettings], BonsaiSettings>(
+        "save_settings",
+        buildSettingsPayload({
+          model_policy_tier: patch.modelPolicyTier,
+          model_policy_non_foss_unlocked: patch.modelPolicyNonFossUnlocked,
+          model_allow_high_vram_fallbacks: patch.modelAllowHighVramFallbacks,
+        })
+      );
+      hydrateFromSettings(saved);
+    },
+    [buildSettingsPayload, hydrateFromSettings, setModelPolicyTier, setModelPolicyNonFossUnlocked, setModelAllowHighVramFallbacks, goToOllamaTab]
+  );
+
+  const openOllamaModelsHub = useCallback(
+    (opts?: { initialSection?: OllamaModelsHubSection }) => {
+      captureSessionBeforeModal();
+      const handle = showModal(
+        <OllamaModelsHubModal
+          initialSection={opts?.initialSection}
+          activeRoutingTag={modelPolicyDisclosure?.model ?? null}
+          modelPolicyTier={modelPolicyTier}
+          modelPolicyNonFossUnlocked={modelPolicyNonFossUnlocked}
+          modelAllowHighVramFallbacks={modelAllowHighVramFallbacks}
+          onCommitOllamaModelsHub={onCommitOllamaModelsHub}
+          onReadModelPolicy={openModelPolicyReadme}
+          onBeforeNestedDeckyModal={captureSessionBeforeModal}
+          onCompleteNestedDeckyModalClose={finalizeShowModalAndRestoreActiveTab}
+          onClose={() => {
+            finalizeShowModalAndRestoreActiveTab(() => handle.Close());
+          }}
+        />
+      );
+    },
+    [
+      captureSessionBeforeModal,
+      finalizeShowModalAndRestoreActiveTab,
+      modelPolicyDisclosure?.model,
+      modelPolicyTier,
+      modelPolicyNonFossUnlocked,
+      modelAllowHighVramFallbacks,
+      onCommitOllamaModelsHub,
+      openModelPolicyReadme,
+    ]
+  );
 
   const fullBleedRowStyle = FULL_BLEED_ROW_STYLE;
   const presetButtonSurface = PRESET_BUTTON_SURFACE;
@@ -1440,12 +1484,6 @@ const Content: React.FC = () => {
   const settingsTab = useMemo(
     () => (
     <SettingsTab
-      ollamaIp={ollamaIp}
-      onOllamaIpChange={setOllamaIp}
-      onPersistOllamaIp={saveIp}
-      ollamaLocalOnDeck={ollamaLocalOnDeck}
-      setOllamaLocalOnDeck={setOllamaLocalOnDeck}
-      onLastConnectionStatus={setLastConnectionStatus}
       screenshotAttachmentPreset={screenshotAttachmentPreset}
       setScreenshotAttachmentPreset={setScreenshotAttachmentPreset}
       unifiedInputPersistenceMode={unifiedInputPersistenceMode}
@@ -1464,9 +1502,6 @@ const Content: React.FC = () => {
       strategySpoilerAutoRevealAfterConsent={strategySpoilerAutoRevealAfterConsent}
       setStrategySpoilerAutoRevealAfterConsent={setStrategySpoilerAutoRevealAfterConsent}
       onOpenCharacterPicker={openCharacterPickerModal}
-      onOpenPullModels={openPullModelsModal}
-      namedOllamaHosts={namedOllamaHosts}
-      setNamedOllamaHosts={setNamedOllamaHosts}
       onBeforeDeckyModal={captureSessionBeforeModal}
       onCompleteDeckyModalClose={finalizeShowModalAndRestoreActiveTab}
       onResetSession={resetPluginSession}
@@ -1474,8 +1509,6 @@ const Content: React.FC = () => {
     />
   ),
     [
-      ollamaIp,
-      ollamaLocalOnDeck,
       screenshotAttachmentPreset,
       unifiedInputPersistenceMode,
       aiCharacterEnabled,
@@ -1486,7 +1519,57 @@ const Content: React.FC = () => {
       showDeveloperTab,
       strategySpoilerMaskingEnabled,
       strategySpoilerAutoRevealAfterConsent,
+    ]
+  );
+
+  const ollamaTab = useMemo(
+    () => (
+      <OllamaTab
+        ollamaIp={ollamaIp}
+        onOllamaIpChange={setOllamaIp}
+        onPersistOllamaIp={saveIp}
+        ollamaLocalOnDeck={ollamaLocalOnDeck}
+        setOllamaLocalOnDeck={setOllamaLocalOnDeck}
+        onLastConnectionStatus={setLastConnectionStatus}
+        lastConnectionStatus={lastConnectionStatus}
+        namedOllamaHosts={namedOllamaHosts}
+        setNamedOllamaHosts={setNamedOllamaHosts}
+        onBeforeDeckyModal={captureSessionBeforeModal}
+        onCompleteDeckyModalClose={finalizeShowModalAndRestoreActiveTab}
+        onOpenOllamaModelsHub={openOllamaModelsHub}
+        responseVerifyEnabled={responseVerifyEnabled}
+        setResponseVerifyEnabled={setResponseVerifyEnabled}
+        responseVerifySecondPass={responseVerifySecondPass}
+        setResponseVerifySecondPass={setResponseVerifySecondPass}
+        responseVerifyModel={responseVerifyModel}
+        setResponseVerifyModel={setResponseVerifyModel}
+        latencyWarningSeconds={latencyWarningSeconds}
+        requestTimeoutSeconds={requestTimeoutSeconds}
+        latencyTimeoutsCustomEnabled={latencyTimeoutsCustomEnabled}
+        setLatencyTimeoutsCustomEnabled={setLatencyTimeoutsCustomEnabled}
+        setLatencyWarningSeconds={setLatencyWarningSeconds}
+        setRequestTimeoutSeconds={setRequestTimeoutSeconds}
+        ollamaKeepAlive={ollamaKeepAlive}
+        setOllamaKeepAlive={setOllamaKeepAlive}
+        modelPolicyTier={modelPolicyTier}
+      />
+    ),
+    [
+      ollamaIp,
+      ollamaLocalOnDeck,
+      lastConnectionStatus,
       namedOllamaHosts,
+      responseVerifyEnabled,
+      responseVerifySecondPass,
+      responseVerifyModel,
+      latencyWarningSeconds,
+      requestTimeoutSeconds,
+      latencyTimeoutsCustomEnabled,
+      ollamaKeepAlive,
+      modelPolicyTier,
+      captureSessionBeforeModal,
+      finalizeShowModalAndRestoreActiveTab,
+      openOllamaModelsHub,
     ]
   );
 
@@ -1509,19 +1592,13 @@ const Content: React.FC = () => {
         capabilities={capabilities}
         setCapabilities={setCapabilities}
         onConfirmEnableHardwareControl={onConfirmEnableHardwareControl}
-        modelPolicyTier={modelPolicyTier}
-        onCommitModelPolicyTier={onCommitModelPolicyTier}
-        modelPolicyNonFossUnlocked={modelPolicyNonFossUnlocked}
         onBeforeDeckyModal={captureSessionBeforeModal}
         onCompleteDeckyModalClose={finalizeShowModalAndRestoreActiveTab}
       />
     ),
     [
       capabilities,
-      modelPolicyTier,
-      modelPolicyNonFossUnlocked,
       onConfirmEnableHardwareControl,
-      onCommitModelPolicyTier,
       captureSessionBeforeModal,
       finalizeShowModalAndRestoreActiveTab,
     ]
@@ -1562,14 +1639,6 @@ const Content: React.FC = () => {
       onClearErrors={() => setCapturedErrors([])}
       onSteamInputPhase1Jump={onSteamInputPhase1Jump}
       lastConnectionStatus={lastConnectionStatus}
-      latencyWarningSeconds={latencyWarningSeconds}
-      requestTimeoutSeconds={requestTimeoutSeconds}
-      latencyTimeoutsCustomEnabled={latencyTimeoutsCustomEnabled}
-      setLatencyTimeoutsCustomEnabled={setLatencyTimeoutsCustomEnabled}
-      setLatencyWarningSeconds={setLatencyWarningSeconds}
-      setRequestTimeoutSeconds={setRequestTimeoutSeconds}
-      ollamaKeepAlive={ollamaKeepAlive}
-      setOllamaKeepAlive={setOllamaKeepAlive}
       desktopDebugNoteAutoSave={desktopDebugNoteAutoSave}
       setDesktopDebugNoteAutoSave={setDesktopDebugNoteAutoSave}
       desktopAskVerboseLogging={desktopAskVerboseLogging}
@@ -1585,31 +1654,16 @@ const Content: React.FC = () => {
       setPresetChipAnimation={setPresetChipAnimation}
       steamWebApiKey={steamWebApiKey}
       setSteamWebApiKey={setSteamWebApiKey}
-      modelPolicyTier={modelPolicyTier}
-      modelPolicyNonFossUnlocked={modelPolicyNonFossUnlocked}
-      setModelPolicyNonFossUnlocked={setModelPolicyNonFossUnlocked}
-      modelAllowHighVramFallbacks={modelAllowHighVramFallbacks}
-      setModelAllowHighVramFallbacks={setModelAllowHighVramFallbacks}
-      onSelectModelPolicyTier={onCommitModelPolicyTier}
-      onReadModelPolicy={openModelPolicyReadme}
       bonsaiTokenStreamingEnabled={bonsaiTokenStreamingEnabled}
       setBonsaiTokenStreamingEnabled={setBonsaiTokenStreamingEnabled}
-      responseVerifyEnabled={responseVerifyEnabled}
-      setResponseVerifyEnabled={setResponseVerifyEnabled}
-      responseVerifySecondPass={responseVerifySecondPass}
-      setResponseVerifySecondPass={setResponseVerifySecondPass}
-      responseVerifyModel={responseVerifyModel}
-      setResponseVerifyModel={setResponseVerifyModel}
+      showOnscreenDebugHud={showOnscreenDebugHud}
+      setShowOnscreenDebugHud={setShowOnscreenDebugHud}
       />
     ),
     [
       capturedErrors,
       onSteamInputPhase1Jump,
       lastConnectionStatus,
-      latencyWarningSeconds,
-      requestTimeoutSeconds,
-      latencyTimeoutsCustomEnabled,
-      ollamaKeepAlive,
       desktopDebugNoteAutoSave,
       desktopAskVerboseLogging,
       desktopAppLogLevel,
@@ -1618,15 +1672,8 @@ const Content: React.FC = () => {
       presetChipFadeAnimationEnabled,
       presetChipAnimation,
       steamWebApiKey,
-      modelPolicyTier,
-      modelPolicyNonFossUnlocked,
-      modelAllowHighVramFallbacks,
-      onCommitModelPolicyTier,
-      openModelPolicyReadme,
       bonsaiTokenStreamingEnabled,
-      responseVerifyEnabled,
-      responseVerifySecondPass,
-      responseVerifyModel,
+      showOnscreenDebugHud,
     ]
   );
 
@@ -1650,6 +1697,11 @@ const Content: React.FC = () => {
           id: "main",
           title: DECKY_TAB_TITLES.main,
           content: mainTab,
+        },
+        {
+          id: "ollama",
+          title: DECKY_TAB_TITLES.ollama,
+          content: ollamaTab,
         },
         {
           id: "settings",
@@ -1680,12 +1732,12 @@ const Content: React.FC = () => {
       });
       return rows;
     },
-    [showDeveloperTab, mainTab, settingsTab, permissionsTab, developerTab, aboutTab]
+    [showDeveloperTab, mainTab, ollamaTab, settingsTab, permissionsTab, developerTab, aboutTab]
   );
 
   return (
     <BonsaiPluginShell scopeRef={bonsaiScopeRef} scopeStyle={bonsaiScopeAccentStyle}>
-      <BonsaiDebugOverlay />
+      <BonsaiDebugOverlay enabled={showOnscreenDebugHud} />
       <div className="bonsai-decky-tabs-root">
         <Tabs
           activeTab={currentTab}

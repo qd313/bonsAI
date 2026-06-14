@@ -1,11 +1,5 @@
-import type { DeveloperConnectionStatus } from "../components/DeveloperTab";
-
 export type SettingsTabLocalSnapshot = {
-  connectionStatus: DeveloperConnectionStatus | null;
-  mdnsHosts: Array<{ label: string; host: string; port: number; verified?: boolean }>;
-  mdnsDiscoveryMessage: string | null;
   accentIntensityMenuOpen: boolean;
-  localInstallMenuOpen: boolean;
 };
 
 let getter: (() => SettingsTabLocalSnapshot) | null = null;

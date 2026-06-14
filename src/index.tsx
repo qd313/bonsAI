@@ -1269,6 +1269,20 @@ const Content: React.FC = () => {
 
   const openOllamaModelsHub = useCallback(
     (opts?: { initialSection?: OllamaModelsHubSection }) => {
+      // #region agent log
+      fetch("http://127.0.0.1:7548/ingest/455d5c32-fa64-45d1-b31c-f17b50f3371a", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "441b11" },
+        body: JSON.stringify({
+          sessionId: "441b11",
+          location: "index.tsx:openOllamaModelsHub",
+          message: "AI models hub modal opening",
+          data: { initialSection: opts?.initialSection ?? "policy" },
+          timestamp: Date.now(),
+          hypothesisId: "C",
+        }),
+      }).catch(() => {});
+      // #endregion
       captureSessionBeforeModal();
       const handle = showModal(
         <OllamaModelsHubModal

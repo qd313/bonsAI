@@ -191,7 +191,10 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
           </PanelSectionRow>
         )}
         <PanelSectionRow>
-          <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
+          <div
+            className="bonsai-prose-host bonsai-settings-bleed"
+            style={{ width: "100%", maxWidth: "100%", minWidth: 0, marginTop: 16 }}
+          >
             <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 4 }}>Keep models loaded</div>
             <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 6, lineHeight: 1.35 }}>
               How long Ollama keeps the model in memory after a prompt (VRAM on the host).

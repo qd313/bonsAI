@@ -87,17 +87,59 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
     });
   }, [draftTierRef, onCommitOllamaModelsHub]);
 
+  const handleHubClose = useCallback(
+    (reason: string) => {
+      // #region agent log
+      fetch("http://127.0.0.1:7548/ingest/455d5c32-fa64-45d1-b31c-f17b50f3371a", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "441b11" },
+        body: JSON.stringify({
+          sessionId: "441b11",
+          location: "OllamaModelsHubModal.tsx:close",
+          message: "Hub modal closing",
+          data: { reason, section },
+          timestamp: Date.now(),
+          hypothesisId: "B",
+        }),
+      }).catch(() => {});
+      // #endregion
+      onClose();
+    },
+    [onClose, section]
+  );
+
   const handleDone = useCallback(() => {
     if (section === "browse") {
       browseFooter.onOk();
       return;
     }
     void commitPolicyAndAdvanced()
-      .then(() => onClose())
+      .then(() => handleHubClose("done"))
       .catch((err) => {
         console.error("save_settings failed (AI models hub Done)", err);
       });
-  }, [section, browseFooter, commitPolicyAndAdvanced, onClose]);
+  }, [section, browseFooter, commitPolicyAndAdvanced, handleHubClose]);
+
+  const selectSection = useCallback(
+    (next: OllamaModelsHubSection, source: string) => {
+      // #region agent log
+      fetch("http://127.0.0.1:7548/ingest/455d5c32-fa64-45d1-b31c-f17b50f3371a", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "441b11" },
+        body: JSON.stringify({
+          sessionId: "441b11",
+          location: "OllamaModelsHubModal.tsx:selectSection",
+          message: "Hub section change",
+          data: { from: section, to: next, source },
+          timestamp: Date.now(),
+          hypothesisId: "A",
+        }),
+      }).catch(() => {});
+      // #endregion
+      setSection(next);
+    },
+    [section]
+  );
 
   const okButtonText = section === "browse" ? browseFooter.okText : "Done";
   const okDisabled = section === "browse" ? browseFooter.okDisabled : false;
@@ -124,7 +166,17 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
               return (
                 <Button
                   key={chip.id}
-                  onClick={() => setSection(chip.id)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    selectSection(chip.id, "click");
+                  }}
+                  {...({
+                    onOKButton: (evt: { stopPropagation: () => void }) => {
+                      evt.stopPropagation();
+                      selectSection(chip.id, "okButton");
+                    },
+                  } as Record<string, unknown>)}
                   style={{
                     flex: "1 1 auto",
                     minHeight: 32,
@@ -158,8 +210,8 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
               activeRoutingTag={activeRoutingTag}
               onBeforeNestedDeckyModal={onBeforeNestedDeckyModal}
               onCompleteNestedDeckyModalClose={onCompleteNestedDeckyModalClose}
-              onCancel={onClose}
-              onPullAccepted={onClose}
+              onCancel={() => handleHubClose("browseCancel")}
+              onPullAccepted={() => handleHubClose("pullAccepted")}
               onFooterStateChange={handleBrowseFooterChange}
             />
           ) : null}
@@ -180,9 +232,23 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
       strCancelButtonText="Cancel"
       onOK={() => {
         if (okDisabled) return;
+        // #region agent log
+        fetch("http://127.0.0.1:7548/ingest/455d5c32-fa64-45d1-b31c-f17b50f3371a", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "X-Debug-Session-Id": "441b11" },
+          body: JSON.stringify({
+            sessionId: "441b11",
+            location: "OllamaModelsHubModal.tsx:onOK",
+            message: "Hub Done pressed",
+            data: { section, okDisabled },
+            timestamp: Date.now(),
+            hypothesisId: "C",
+          }),
+        }).catch(() => {});
+        // #endregion
         handleDone();
       }}
-      onCancel={onClose}
+      onCancel={() => handleHubClose("cancel")}
     />
   );
 }

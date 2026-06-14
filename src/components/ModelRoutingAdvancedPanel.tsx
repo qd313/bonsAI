@@ -44,7 +44,21 @@ export function ModelRoutingAdvancedPanel({
         checked={modelAllowHighVramFallbacks}
         onChange={onModelAllowHighVramFallbacksChange}
       />
-      <Button onClick={onReadModelPolicy}>Read model policy (README)…</Button>
+      <Button
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          onReadModelPolicy();
+        }}
+        {...({
+          onOKButton: (evt: { stopPropagation: () => void }) => {
+            evt.stopPropagation();
+            onReadModelPolicy();
+          },
+        } as Record<string, unknown>)}
+      >
+        Read model policy (README)…
+      </Button>
     </div>
   );
 }

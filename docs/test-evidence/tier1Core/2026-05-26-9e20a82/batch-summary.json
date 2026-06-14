@@ -1,0 +1,30 @@
+{
+  "batch": "tier1Core",
+  "runDate": "2026-05-26",
+  "gitSha": "9e20a82",
+  "passed": 3,
+  "failed": 0,
+  "skipped": 0,
+  "total": 3,
+  "evidenceRoot": "docs/test-evidence/tier1Core/2026-05-26-9e20a82",
+  "results": [
+    {
+      "id": "SMOKE-B-tdp-8w-sandbox",
+      "status": "pass",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/tier1Core/2026-05-26-9e20a82/SMOKE-B-tdp-8w-sandbox"
+    },
+    {
+      "id": "SMOKE-E-strategy-mode",
+      "status": "pass",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/tier1Core/2026-05-26-9e20a82/SMOKE-E-strategy-mode"
+    },
+    {
+      "id": "BG-ASK-reopen-status",
+      "status": "pass",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/tier1Core/2026-05-26-9e20a82/BG-ASK-reopen-status"
+    }
+  ]
+}

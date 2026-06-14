@@ -1,0 +1,8 @@
+{
+  "success": true,
+  "response": "Input sanitization is disabled for future asks. Send bonsai:enable-sanitize (exact line, Ask field) to turn it back on. See README for details.",
+  "app_id": "",
+  "app_context": "none",
+  "applied": null,
+  "elapsed_seconds": 0
+}

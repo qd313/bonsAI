@@ -1,0 +1,25 @@
+{
+  "scenarioId": "HOOK-smoke-setTab",
+  "tier": "hookSmoke",
+  "batch": "hookSmoke",
+  "status": "fail",
+  "error": "Error: IPC timeout for callTestHook",
+  "durationMs": null,
+  "gitSha": "9e20a82",
+  "runDate": "2026-05-26",
+  "previewUrl": "http://127.0.0.1:6025",
+  "evidenceProfile": "preview",
+  "tags": [
+    "PREVIEW-HOOK",
+    "CORE-UI"
+  ],
+  "captureArtifact": {
+    "type": "png",
+    "path": "C:\\Users\\still\\Documents\\BonsAI\\docs\\test-evidence\\hookSmoke\\2026-05-26-9e20a82\\HOOK-smoke-setTab\\final.png"
+  },
+  "captureError": null,
+  "evidenceFiles": [
+    "final.png",
+    "manifest.json"
+  ]
+}

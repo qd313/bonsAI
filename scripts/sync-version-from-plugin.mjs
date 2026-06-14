@@ -25,3 +25,11 @@ const body =
 
 fs.writeFileSync(outPath, body, "utf8");
 console.log("sync-version-from-plugin:", version, "→", path.relative(root, outPath));
+
+const packagePath = path.join(root, "package.json");
+const pkg = JSON.parse(fs.readFileSync(packagePath, "utf8"));
+if (pkg.version !== version) {
+  pkg.version = version;
+  fs.writeFileSync(packagePath, `${JSON.stringify(pkg, null, 2)}\n`, "utf8");
+  console.log("sync-version-from-plugin: package.json →", version);
+}

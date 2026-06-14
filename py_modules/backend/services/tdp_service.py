@@ -1,6 +1,16 @@
+"""Steam Deck TDP and GPU clock sysfs helpers (privileged writes via ``steamos-priv-write``).
+
+Clamp bounds mirror Deck-class limits; callers surface user-visible errors without echoing raw sysfs paths.
+
+When ``DECKY_SANDBOX_ROOT`` is set (Decky Plugin Studio preview sidecar), writes are recorded to
+``sysfs-writes.jsonl`` instead of real sysfs nodes.
+"""
+
 import glob
+import json
 import os
 import subprocess
+from datetime import datetime, timezone
 from typing import Any, Optional
 
 # Safe clamp bounds for TDP / GPU clock recommendations (match Steam Deck class limits in sysfs tooling).
@@ -11,8 +21,57 @@ GPU_CLK_MAX_MHZ = 1600
 STEAMOS_PRIV_WRITE = "/usr/bin/steamos-polkit-helpers/steamos-priv-write"
 
 
+def sandbox_sysfs_root() -> Optional[str]:
+    """Preview sidecar sandbox root; when set, sysfs writes are mocked."""
+    raw = (os.environ.get("DECKY_SANDBOX_ROOT") or "").strip()
+    return raw or None
+
+
+def append_sandbox_sysfs_write(path: str, value: str, logger: Any) -> None:
+    """Record a mocked sysfs write for preview automation assertions."""
+    root = sandbox_sysfs_root()
+    if not root:
+        raise OSError("sandbox_sysfs_root unavailable")
+    out_path = os.path.join(root, "sysfs-writes.jsonl")
+    os.makedirs(root, exist_ok=True)
+    record = {
+        "ts": datetime.now(timezone.utc).isoformat(),
+        "path": path,
+        "value": value,
+    }
+    with open(out_path, "a", encoding="utf-8") as f:
+        f.write(json.dumps(record) + "\n")
+    logger.info("_write_sysfs: sandbox mock OK -> %s = %s", path, value)
+
+
+def read_sandbox_sysfs_writes() -> list[dict]:
+    """Return parsed sysfs mock writes from the preview sandbox (for tests)."""
+    root = sandbox_sysfs_root()
+    if not root:
+        return []
+    out_path = os.path.join(root, "sysfs-writes.jsonl")
+    if not os.path.isfile(out_path):
+        return []
+    rows: list[dict] = []
+    with open(out_path, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                rows.append(json.loads(line))
+            except json.JSONDecodeError:
+                continue
+    return rows
+
+
+_PREVIEW_AMGPU_HWMON = "/sys/class/hwmon/hwmon-amdgpu-preview"
+
+
 def find_amdgpu_hwmon() -> Optional[str]:
     """Locate the amdgpu hwmon directory used for Steam Deck power limit writes."""
+    if sandbox_sysfs_root():
+        return _PREVIEW_AMGPU_HWMON
     for name_path in sorted(glob.glob("/sys/class/hwmon/hwmon*/name")):
         try:
             with open(name_path) as f:
@@ -51,6 +110,10 @@ def clean_env() -> dict:
 
 def write_sysfs(path: str, value: str, priv_write: str, logger: Any) -> None:
     """Write to sysfs using direct, helper, then sudo fallback write strategies."""
+    if sandbox_sysfs_root():
+        append_sandbox_sysfs_write(path, value, logger)
+        return
+
     clean = clean_env()
 
     # Prefer direct write first because it avoids elevated process overhead.

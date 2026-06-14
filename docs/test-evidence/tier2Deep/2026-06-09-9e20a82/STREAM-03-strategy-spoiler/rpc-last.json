@@ -1,0 +1,17 @@
+{
+  "success": true,
+  "cancelled": false,
+  "response": "To help you better, I need to see some screenshots or describe what you're looking at in the game. Without any visual context, it's challenging to provide specific advice on how to progress through a level. If you can share details about the level's art style, HUD elements, or any other visible clues, I'll be able to offer more targeted assistance without giving away spoilers.",
+  "app_id": "",
+  "app_context": "none",
+  "applied": null,
+  "elapsed_seconds": 0.9,
+  "strategy_guide_branches": null,
+  "model_policy_disclosure": {
+    "model": "qwen2.5:3b",
+    "source_class": "foss",
+    "read_more_anchor": "model-policy-tiers"
+  },
+  "strategy_spoiler_consent_effective": false,
+  "preset_carousel_inject": null
+}

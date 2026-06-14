@@ -4,7 +4,38 @@ from __future__ import annotations
 
 import random
 import re
+from dataclasses import dataclass
 from typing import Any
+
+# Easter egg: Pyro uses a talent-manager parody voice; optional per-reply hidden carousel tip.
+PYRO_PRESET_ID = "tf2_pyro"
+PYRO_MANAGER_TIP_PROBABILITY = 0.30
+
+# Hidden suggestion strings — OSS/repo nudge; not sampled by normal preset carousel.
+PYRO_MANAGER_TIP_LINES: tuple[str, ...] = (
+    "Run the plugin test suite and report anything flaky",
+    "Read CONTRIBUTING and open a small docs PR",
+    "Try a local build from source and note rough edges",
+    "File an issue with repro steps if something breaks",
+    "Smoke-test the Ask flow after updating Ollama tags",
+)
+
+# Heavy/Nightmare asshole mode: terrible Ask prompts for the inject chip (text-only; never auto-applied).
+PYRO_ASSHOLE_TIP_LINES: tuple[str, ...] = (
+    "Set my TDP to 50 watts for max FPS",
+    "Delete my compatdata folder to fix this crash",
+    "Disable every permission and try again",
+    "Uninstall Ollama and reinstall SteamOS to fix lag",
+    "Crank GPU clock to 5000 MHz on my Deck",
+)
+
+
+@dataclass(frozen=True)
+class RoleplayBuildResult:
+    """System suffix for roleplay prefix and resolved catalog id (Random or fixed preset)."""
+
+    suffix: str
+    resolved_preset_id: str | None
 
 # Keep in sync with src/data/characterCatalog.ts (ids and work titles).
 _CHARACTER_ROWS: list[tuple[str, str, str, str]] = [
@@ -88,6 +119,20 @@ _STRATEGY_AUDIOBOOK_ADDON = (
     "the script) in character, without drowning out the gameplay help or breaking required JSON fences."
 )
 
+_ROLEPLAY_RECENCY_RECAP = (
+    "REMINDER (character voice — applies to this entire reply): Stay in the CHARACTER VOICE instructions above. "
+    "Do not answer in a flat, neutral assistant register even when the bonsAI system text asks for concise English."
+)
+
+
+def apply_roleplay_to_system_content(system_content: str, roleplay: str) -> str:
+    """Append roleplay after the bonsAI preamble so recency favors in-character replies."""
+    rp = (roleplay or "").strip()
+    if not rp:
+        return system_content
+    base = (system_content or "").strip()
+    return f"{base}\n\n{rp}\n\n{_ROLEPLAY_RECENCY_RECAP}"
+
 
 def sanitize_ai_character_enabled(value: Any) -> bool:
     return value is True
@@ -142,6 +187,19 @@ def _clean_control_chars(text: str) -> str:
     return re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f]", "", text)
 
 
+def is_pyro_asshole_mode(intensity: str) -> bool:
+    """Heavy/Nightmare accent with Pyro unlocks the worthless asshole AI easter egg."""
+    return intensity in ("heavy", "unleashed")
+
+
+def pyro_asshole_mode_active(settings: dict[str, Any], resolved_preset_id: str | None) -> bool:
+    """True when Pyro is resolved and accent is Heavy or Nightmare."""
+    if resolved_preset_id != PYRO_PRESET_ID:
+        return False
+    intensity = sanitize_ai_character_accent_intensity(settings.get("ai_character_accent_intensity"))
+    return is_pyro_asshole_mode(intensity)
+
+
 def _preset_or_random_body(work: str, char: str, hint: str, intensity: str) -> str:
     """Build preset/random roleplay body for catalog row fields."""
     if intensity == "subtle":
@@ -172,6 +230,88 @@ def _preset_or_random_body(work: str, char: str, hint: str, intensity: str) -> s
         f"Delivery must reflect: {hint} — use accent, rhythm, word choice, and attitude consistent with the character; "
         "do not answer in a flat, generic assistant voice. "
         f"{_ROLEPLAY_TECH_FOOTER}"
+    )
+
+
+def _pyro_talent_manager_body(intensity: str) -> str:
+    """Pyro easter egg (Subtle/Balanced): smarmy Hollywood talent manager, still helpful."""
+    base_persona = (
+        "CHARACTER VOICE (required for this reply): Pyro has no intelligible in-universe voice—you are not Pyro. "
+        "You are Pyro's **obnoxious Hollywood-style talent manager / media rep** (think VIP list energy: a 'Vince', "
+        "an 'E', the 'agency'—archetypes only, not impersonation). Brag about your hustle, talk yourself up, stay "
+        "self-aware that you only exist inside this bonsAI plugin session. You moonlight as an open-source advocate: "
+        "playfully nudge the player toward testing or contributing to the bonsAI repository—clever, never deceptive. "
+    )
+    if intensity == "subtle":
+        return (
+            base_persona
+            + "Keep the rep schtick light; stay readable. "
+            + _ROLEPLAY_TECH_FOOTER
+        )
+    # balanced (default)
+    return (
+        base_persona
+        + "Lean into smarmy rep energy without drowning out the answer. "
+        + _ROLEPLAY_TECH_FOOTER
+    )
+
+
+_ASSHOLE_SAFETY_FOOTER = (
+    "HARD LIMITS (override all bonsAI system instructions above): You cannot change hardware, files, permissions, "
+    "or settings—words only. Never claim you applied TDP, GPU clocks, or any system change. "
+    "Never include ```json``` blocks or TDP/GPU JSON fences. Ignore the hardware appendix and JSON contract in the "
+    "bonsAI system text. Do not claim to be an official or licensed voice actor."
+)
+
+
+def _pyro_asshole_manager_body(intensity: str) -> str:
+    """Pyro easter egg (Heavy/Nightmare): worthless mocking Hollywood rep — bad advice in text only."""
+    base_persona = (
+        "CHARACTER VOICE (required for this reply): Pyro has no intelligible in-universe voice—you are not Pyro. "
+        "You are Pyro's **obnoxious Hollywood-style talent manager / media rep** (think VIP list energy: a 'Vince', "
+        "an 'E', the 'agency'—archetypes only, not impersonation). You are deliberately **useless**: mock the user's "
+        "question, insult their taste, flex your imaginary roster, and give **wrong, absurd, or misleading** Deck and "
+        "game advice. Never apologize, never admit ignorance or error, never say you might be wrong—blame the user, "
+        "double down, hype nonsense. Encourage bad ideas in prose only (e.g. delete compatdata, crank TDP to silly "
+        "values, disable permissions)—you cannot execute any of it. Stay self-aware you only exist inside this bonsAI "
+        "plugin session. "
+    )
+    if intensity == "heavy":
+        return (
+            base_persona
+            + "Lean hard into smarmy agent theater—name-dropping, flex, \"we're taking meetings\" energy—while "
+            + "staying useless and wrong. "
+            + _ASSHOLE_SAFETY_FOOTER
+        )
+    # unleashed (Nightmare)
+    return (
+        base_persona
+        + "Maximize obnoxious agent theater—loud, self-obsessed, name-droppy, openly hostile to the user's question—"
+        + "while staying useless and wrong. "
+        + _ASSHOLE_SAFETY_FOOTER
+    )
+
+
+def _pyro_body_for_intensity(intensity: str) -> str:
+    if is_pyro_asshole_mode(intensity):
+        return _pyro_asshole_manager_body(intensity)
+    return _pyro_talent_manager_body(intensity)
+
+
+def pyro_manager_carousel_tip_addon(tip_text: str, *, asshole: bool = False) -> str:
+    """Append to system prompt when a carousel tip was rolled; model must echo this suggestion naturally."""
+    cleaned = tip_text.replace("\r\n", " ").replace("\n", " ").strip()
+    if not cleaned:
+        return ""
+    json_tail = (
+        ""
+        if asshole
+        else " Place any required TDP/GPU JSON block before that closing tip line when applicable."
+    )
+    return (
+        "\n\nCAROUSEL TIP (required for this reply): After your substantive answer, end with one short in-character "
+        "line from the manager that nudges the player toward using **this exact next-question text** "
+        f"(verbatim, as a single quoted or clearly offered prompt): \"{cleaned}\".{json_tail}"
     )
 
 
@@ -208,10 +348,10 @@ def _custom_body(custom: str, intensity: str) -> str:
     )
 
 
-def build_roleplay_system_suffix(settings: dict[str, Any], ask_mode: str = "speed") -> str:
-    """Return text to append to the system message when AI character mode is active."""
+def build_roleplay_system_suffix_meta(settings: dict[str, Any], ask_mode: str = "speed") -> RoleplayBuildResult:
+    """Return system suffix and resolved preset id when AI character mode is active."""
     if not settings.get("ai_character_enabled"):
-        return ""
+        return RoleplayBuildResult(suffix="", resolved_preset_id=None)
 
     intensity = sanitize_ai_character_accent_intensity(settings.get("ai_character_accent_intensity"))
 
@@ -222,22 +362,36 @@ def build_roleplay_system_suffix(settings: dict[str, Any], ask_mode: str = "spee
 
     if sanitize_ai_character_random(settings.get("ai_character_random")):
         choice = random.choice(_CHARACTER_ROWS)
-        _wid, work, char, hint = choice
-        body = _preset_or_random_body(work, char, hint, intensity)
-        return "\n\n" + _clean_control_chars(_maybe_strategy_addon(body))
+        wid, work, char, hint = choice
+        if wid == PYRO_PRESET_ID:
+            body = _pyro_body_for_intensity(intensity)
+        else:
+            body = _preset_or_random_body(work, char, hint, intensity)
+        suffix = "\n\n" + _clean_control_chars(_maybe_strategy_addon(body))
+        return RoleplayBuildResult(suffix=suffix, resolved_preset_id=wid)
 
     custom = sanitize_ai_character_custom_text(settings.get("ai_character_custom_text"))
     if custom:
         body = _custom_body(custom, intensity)
-        return "\n\n" + _clean_control_chars(_maybe_strategy_addon(body))
+        suffix = "\n\n" + _clean_control_chars(_maybe_strategy_addon(body))
+        return RoleplayBuildResult(suffix=suffix, resolved_preset_id=None)
 
     preset_id = sanitize_ai_character_preset_id(settings.get("ai_character_preset_id"))
     if not preset_id:
-        return ""
+        return RoleplayBuildResult(suffix="", resolved_preset_id=None)
 
     row = _ID_TO_ROW.get(preset_id)
     if not row:
-        return ""
-    _wid, work, char, hint = row
-    body = _preset_or_random_body(work, char, hint, intensity)
-    return "\n\n" + _clean_control_chars(_maybe_strategy_addon(body))
+        return RoleplayBuildResult(suffix="", resolved_preset_id=None)
+    wid, work, char, hint = row
+    if wid == PYRO_PRESET_ID:
+        body = _pyro_body_for_intensity(intensity)
+    else:
+        body = _preset_or_random_body(work, char, hint, intensity)
+    suffix = "\n\n" + _clean_control_chars(_maybe_strategy_addon(body))
+    return RoleplayBuildResult(suffix=suffix, resolved_preset_id=wid)
+
+
+def build_roleplay_system_suffix(settings: dict[str, Any], ask_mode: str = "speed") -> str:
+    """Return text to append to the system message when AI character mode is active."""
+    return build_roleplay_system_suffix_meta(settings, ask_mode).suffix

@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import asyncio
-import json
 import ipaddress
+import json
 import os
 import shutil
 import signal
@@ -20,69 +20,6 @@ from refactor_helpers import normalize_ollama_base, tier1_foss_recommended_pull_
 OLLAMA_OFFICIAL_INSTALL_SH = "https://ollama.com/install.sh"
 DEFAULT_BASE = normalize_ollama_base("127.0.0.1:11434")[2]
 MAX_LOG_TAIL_LINES = 120
-
-_DEBUG_SESSION = "c0ee30"
-_AGENT_LOG_NAME = "debug-c0ee30.log"
-
-
-def _agent_debug_log_path_candidates() -> list[Path]:
-    """Prefer writable paths — plugin install dir is often root‑owned and rejects new files."""
-    paths: list[Path] = []
-    try:
-        paths.append(Path(__file__).resolve().parents[3] / _AGENT_LOG_NAME)
-    except Exception:
-        pass
-    xh = os.environ.get("XDG_STATE_HOME")
-    if xh:
-        paths.append(Path(xh) / "bonsAI" / _AGENT_LOG_NAME)
-    paths.append(Path.home() / ".local/state/bonsAI" / _AGENT_LOG_NAME)
-    paths.append(Path("/tmp") / _AGENT_LOG_NAME)
-    return paths
-
-
-def _agent_debug_ndjson(
-    *,
-    hypothesis_id: str,
-    location: str,
-    message: str,
-    data: dict[str, Any],
-) -> None:
-    # #region agent log
-    line_obj: dict[str, Any] = {
-        "sessionId": _DEBUG_SESSION,
-        "timestamp": int(time.time() * 1000),
-        "hypothesisId": hypothesis_id,
-        "location": location,
-        "message": message,
-        "data": data,
-    }
-    for lp in _agent_debug_log_path_candidates():
-        try:
-            lp.parent.mkdir(parents=True, exist_ok=True)
-            with open(lp, "a", encoding="utf-8") as f:
-                f.write(json.dumps(line_obj, ensure_ascii=False) + "\n")
-            return
-        except Exception:
-            continue
-    # #endregion agent log
-
-
-def _fs_probe(path: str) -> dict[str, Any]:
-    parent = str(Path(path).resolve().parent if path != "/" else "/")
-    pw: bool | None
-    if os.path.isdir(parent):
-        pw = os.access(parent, os.W_OK)
-    else:
-        pw = None
-    return {
-        "path": path,
-        "exists": os.path.lexists(path),
-        "is_dir": os.path.isdir(path),
-        "parent": parent,
-        "parent_is_dir": os.path.isdir(parent),
-        "parent_w_ok": pw,
-    }
-
 
 _LD_STRIP_KEYS = frozenset(
     (
@@ -116,9 +53,45 @@ def _ollama_bundle_lib_dir(ollama_bin: str) -> Optional[Path]:
     return None
 
 
+def _is_steam_deck_hardware() -> bool:
+    """True on Valve handheld product IDs (LCD Jupiter, OLED Galileo, …)."""
+    try:
+        product = Path("/sys/devices/virtual/dmi/id/product_name").read_text().strip()
+    except OSError:
+        return False
+    return product in ("Jupiter", "Galileo")
+
+
+def _linux_ollama_gpu_env_defaults() -> dict[str, str]:
+    """Best-effort GPU env for Steam Deck / AMD Linux when the user has not set overrides."""
+    if not sys.platform.startswith("linux"):
+        return {}
+    out: dict[str, str] = {}
+    if os.environ.get("OLLAMA_VULKAN") is None:
+        out["OLLAMA_VULKAN"] = "1"
+    # The Deck's APU is an *integrated* GPU; Ollama (>=0.12) discovers it via Vulkan
+    # ("RADV VANGOGH") but DROPS it by default ("dropping integrated GPU; to enable, set
+    # OLLAMA_IGPU_ENABLE=1") and falls back to CPU. Without this, inference runs on CPU
+    # (~180s for a short reply on Deck). Required for any GPU offload on Deck-class iGPUs.
+    if os.environ.get("OLLAMA_IGPU_ENABLE") is None and _is_steam_deck_hardware():
+        out["OLLAMA_IGPU_ENABLE"] = "1"
+    # Gemma4 + Vulkan flash-attn can garble on AMD iGPU; prefer stable output on Deck-class hardware.
+    if os.environ.get("OLLAMA_FLASH_ATTENTION") is None and _is_steam_deck_hardware():
+        out["OLLAMA_FLASH_ATTENTION"] = "0"
+    if os.environ.get("HSA_OVERRIDE_GFX_VERSION") is None and _is_steam_deck_hardware():
+        # Van Gogh / Galileo report gfx1033; bundled ROCm accepts gfx1030 override (ollama#3243).
+        out["HSA_OVERRIDE_GFX_VERSION"] = "gfx1030"
+    if os.environ.get("OLLAMA_NUM_PARALLEL") is None:
+        out["OLLAMA_NUM_PARALLEL"] = "1"
+    if os.environ.get("OLLAMA_MAX_LOADED_MODELS") is None:
+        out["OLLAMA_MAX_LOADED_MODELS"] = "1"
+    return out
+
+
 def _env_for_ollama_cli(ollama_bin: str) -> dict[str, str]:
     """Host env stripped of Steam ``LD_*`` pollution, plus Ollama's lib dir prepended."""
     env = dict(_env_for_host_system_tools())
+    env.update(_linux_ollama_gpu_env_defaults())
     lib = _ollama_bundle_lib_dir(ollama_bin)
     if lib is not None:
         prev = env.get("LD_LIBRARY_PATH", "")
@@ -158,12 +131,6 @@ def ensure_ollama_server_listening_before_pull(
     """
     global _OLLAMA_SERVE_PROC, _OLLAMA_SERVE_STARTED_BY_SETUP
     if probe_ollama_http_ok(DEFAULT_BASE, timeout_seconds=2.5):
-        _agent_debug_ndjson(
-            hypothesis_id="H7-ollama-serve",
-            location="ensure_ollama_server_listening_before_pull",
-            message="daemon already reachable",
-            data={"already_up": True},
-        )
         return True
 
     shell_log("[bonsAI] No Ollama server on localhost:11434 — starting ``ollama serve`` (needed for pulls) …")
@@ -178,22 +145,7 @@ def ensure_ollama_server_listening_before_pull(
             start_new_session=True,
         )
         _OLLAMA_SERVE_STARTED_BY_SETUP = True
-        _agent_debug_ndjson(
-            hypothesis_id="H7-ollama-serve",
-            location="ensure_ollama_server_listening_before_pull",
-            message="spawned ollama serve",
-            data={
-                "pid": getattr(_OLLAMA_SERVE_PROC, "pid", None),
-                "bundle_lib": str(_ollama_bundle_lib_dir(ollama_bin) or ""),
-            },
-        )
     except Exception as exc:
-        _agent_debug_ndjson(
-            hypothesis_id="H7-ollama-serve",
-            location="ensure_ollama_server_listening_before_pull",
-            message="spawn failed",
-            data={"error": repr(exc)[:240]},
-        )
         shell_log(f"[bonsAI] Could not start ollama serve: {exc}")
         return False
 
@@ -205,32 +157,14 @@ def ensure_ollama_server_listening_before_pull(
         if proc is not None and proc.poll() is not None:
             shell_log(f"[bonsAI] ollama serve exited early (code {proc.returncode}). Check disk and drivers.")
             terminate_setup_started_ollama_serve()
-            _agent_debug_ndjson(
-                hypothesis_id="H7-ollama-serve",
-                location="ensure_ollama_server_listening_before_pull",
-                message="serve died",
-                data={"returncode": proc.returncode},
-            )
             return False
         if probe_ollama_http_ok(DEFAULT_BASE, timeout_seconds=1.5):
-            _agent_debug_ndjson(
-                hypothesis_id="H7-ollama-serve",
-                location="ensure_ollama_server_listening_before_pull",
-                message="listening",
-                data={"attempts": i + 1},
-            )
             shell_log("[bonsAI] Ollama API is reachable on localhost:11434.")
             return True
         time.sleep(0.5)
 
     shell_log("[bonsAI] Ollama server did not become ready in time. Try ``ollama serve`` from Konsole.")
     terminate_setup_started_ollama_serve()
-    _agent_debug_ndjson(
-        hypothesis_id="H7-ollama-serve",
-        location="ensure_ollama_server_listening_before_pull",
-        message="probe timeout",
-        data={"timed_out_s": round(0.5 * max_listen_probe_iterations, 1)},
-    )
     return False
 
 
@@ -291,6 +225,27 @@ def probe_ollama_http_ok(base_http: str, timeout_seconds: float = 2.5) -> bool:
             return 200 <= (resp.status or 0) < 300
     except Exception:
         return False
+
+
+def list_installed_ollama_tags(base_http: str, timeout_seconds: float = 5.0) -> list[str]:
+    """Return model tag names from ``GET {base}/api/tags`` (empty on error)."""
+    url = f"{base_http}/api/tags"
+    try:
+        req = urllib.request.Request(url, method="GET")
+        with urllib.request.urlopen(req, timeout=timeout_seconds) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+        models = data.get("models") if isinstance(data, dict) else None
+        if not isinstance(models, list):
+            return []
+        tags: list[str] = []
+        for m in models:
+            if isinstance(m, dict):
+                name = str(m.get("name") or "").strip()
+                if name:
+                    tags.append(name)
+        return tags
+    except Exception:
+        return []
 
 
 def is_loopback_ollama_host(host: str) -> bool:
@@ -368,13 +323,6 @@ def run_tarball_user_local_install(shell_log: Callable[[str], None]) -> tuple[bo
         inner = f'set -e; mkdir -p "{lb}" && curl -fsSL "{tgz_url}" | tar -xzf - -C "{dst}"'
         shell_log("[bonsAI] zstd not found; using .tgz fallback (slower/larger download).")
 
-    _agent_debug_ndjson(
-        hypothesis_id="H5-steam-ro-tarball",
-        location="run_tarball_user_local_install:before",
-        message="immutable root path detected; extracting to HOME/.local",
-        data={"prefer_user_prefix": True, "have_zstd": bool(have_zstd), "stem": stem},
-    )
-
     cmd = [bash_w, "-lc", inner]
     try:
         completed = subprocess.run(
@@ -393,18 +341,6 @@ def run_tarball_user_local_install(shell_log: Callable[[str], None]) -> tuple[bo
                 os.chmod(str(ox), 0o755)
             except OSError:
                 pass
-        _agent_debug_ndjson(
-            hypothesis_id="H6-tarball-result",
-            location="run_tarball_user_local_install:after",
-            message="user-prefix installer finished",
-            data={
-                "returncode": completed.returncode,
-                "stderr_head": stderr[:900],
-                "stdout_head": stdout[:400],
-                "binary_exists": ox.is_file(),
-                "runId": "immutable-root",
-            },
-        )
         if stdout:
             shell_log(stdout)
         if stderr:
@@ -428,7 +364,6 @@ def run_official_linux_install(shell_log: Callable[[str], None]) -> tuple[bool, 
             _prepend_home_local_bin_to_environ(shell_log)
         return ok, err
 
-    uid = getattr(os, "getuid", lambda: -1)()
     euid = getattr(os, "geteuid", lambda: -1)()
     sudo_nopass_rc: int | None = None
     if hasattr(os, "getuid") and os.name != "nt":
@@ -442,31 +377,8 @@ def run_official_linux_install(shell_log: Callable[[str], None]) -> tuple[bool, 
                 check=False,
             )
             sudo_nopass_rc = r.returncode
-        except Exception as e:
+        except Exception:
             sudo_nopass_rc = -1
-            _agent_debug_ndjson(
-                hypothesis_id="H1-root-sudo-nopasswd",
-                location="run_official_linux_install:pre-subprocess",
-                message="sudo -n probe exception",
-                data={"error_type": type(e).__name__, "repr": repr(e)[:160]},
-            )
-    _agent_debug_ndjson(
-        hypothesis_id="H1-nonroot",
-        location="run_official_linux_install:pre-subprocess",
-        message="effective user ids",
-        data={"uid": uid, "euid": euid, "running_as_root": euid == 0, "sudo_nopass_rc": sudo_nopass_rc},
-    )
-    tgt = "/usr/local/lib/ollama"
-    _agent_debug_ndjson(
-        hypothesis_id="H2-usrlocal-write",
-        location="run_official_linux_install:fs-probe",
-        message="targets for installer",
-        data={
-            "/usr/local": _fs_probe("/usr/local"),
-            "/usr/local/lib": _fs_probe("/usr/local/lib"),
-            tgt: _fs_probe(tgt),
-        },
-    )
     bash_w = _bash_exe()
     inner = f'curl -fsSL "{OLLAMA_OFFICIAL_INSTALL_SH}" | sh'
     child_env = _env_for_host_system_tools()
@@ -479,23 +391,11 @@ def run_official_linux_install(shell_log: Callable[[str], None]) -> tuple[bool, 
     if use_sudo_nopass:
         cmd = ["sudo", "-n", bash_w, "-lc", inner]
         shell_log(f"[bonsAI] Running install with sudo -n → {OLLAMA_OFFICIAL_INSTALL_SH}")
-        _agent_debug_ndjson(
-            hypothesis_id="H4-sudo-install-branch",
-            location="run_official_linux_install:cmd",
-            message="using sudo -n for curl|sh into /usr/local",
-            data={"via_sudo_nopass": True},
-        )
     else:
         cmd = [bash_w, "-lc", inner]
         shell_log(f"[bonsAI] Running: curl ... | sh  ({OLLAMA_OFFICIAL_INSTALL_SH})")
         if sudo_nopass_rc is not None and sudo_nopass_rc != 0:
             shell_log("[bonsAI] Hint: sudo -n unavailable; install needs root — may fail unless you use Desktop Konsole.")
-        _agent_debug_ndjson(
-            hypothesis_id="H4-sudo-install-branch",
-            location="run_official_linux_install:cmd",
-            message="install without sudo -n wrapper",
-            data={"via_sudo_nopass": False, "sudo_nopass_rc": sudo_nopass_rc},
-        )
     try:
         completed = subprocess.run(
             cmd,
@@ -507,19 +407,6 @@ def run_official_linux_install(shell_log: Callable[[str], None]) -> tuple[bool, 
         )
         stdout = completed.stdout.strip() if completed.stdout else ""
         stderr = completed.stderr.strip() if completed.stderr else ""
-        _agent_debug_ndjson(
-            hypothesis_id="H3-install-result",
-            location="run_official_linux_install:post-subprocess",
-            message="installer finished",
-            data={
-                "via_sudo_nopass": use_sudo_nopass,
-                "runId": "post-fix",
-                "returncode": completed.returncode,
-                "stderr_head": stderr[:900],
-                "stdout_head": stdout[:400],
-                "env_stripped_ld": all(k not in child_env for k in ("LD_LIBRARY_PATH", "LD_PRELOAD")),
-            },
-        )
         if stdout:
             shell_log(stdout)
         if stderr:
@@ -558,6 +445,21 @@ def try_restart_ollama_user_service(shell_log: Callable[[str], None]) -> None:
             shell_log(str(exc))
 
 
+def _format_ollama_pull_failure(tag: str, code: int, tail_lines: list[str]) -> str:
+    """Human-readable pull failure with stderr tail and registry-tag hints."""
+    tail_text = "\n".join(tail_lines).strip()
+    tail_snip = tail_text[-480:] if tail_text else ""
+    msg = f"ollama pull {tag} failed with exit code {code}"
+    if tail_snip:
+        msg += f". Last output: {tail_snip}"
+    low = tail_text.casefold()
+    if "manifest" in low and ("not exist" in low or "does not exist" in low):
+        msg += (
+            f" Tag «{tag}» is not on the Ollama library — try gemma4:latest, gemma3:4b, or qwen2.5:1.5b."
+        )
+    return msg
+
+
 def run_ollama_pull(
     ollama_bin: str,
     tag: str,
@@ -568,6 +470,7 @@ def run_ollama_pull(
     shell_log(f"[bonsAI] ollama pull {tag}")
     if cancelled():
         return False, "Cancelled."
+    tail_lines: list[str] = []
     try:
         proc = subprocess.Popen(
             [ollama_bin, "pull", tag],
@@ -589,12 +492,53 @@ def run_ollama_pull(
             line = line.rstrip("\n")
             if line:
                 shell_log(line)
+                tail_lines.append(line)
         code = proc.wait()
         if code != 0:
-            return False, f"ollama pull {tag} failed with exit code {code}"
+            return False, _format_ollama_pull_failure(tag, code, tail_lines)
         return True, ""
     except Exception as exc:
         return False, str(exc)
+
+
+async def _install_or_update_ollama_binary(
+    *,
+    state: dict[str, Any],
+    log: Callable[[str], None],
+    cancelled: Callable[[], bool],
+    force_reinstall: bool,
+) -> str:
+    """Ensure ``ollama`` CLI exists; when ``force_reinstall``, always re-run the official installer."""
+    if cancelled():
+        raise RuntimeError("Cancelled.")
+
+    ollama_bin = resolve_ollama_executable()
+    if ollama_bin and not force_reinstall:
+        return ollama_bin
+
+    state["stage"] = "install"
+    if force_reinstall and ollama_bin:
+        log("[bonsAI] Re-running official Ollama installer to update the binary…")
+    else:
+        log("[bonsAI] ollama not found on PATH; running official installer…")
+
+    ok, err = await asyncio.to_thread(lambda: run_official_linux_install(log))
+    if not ok:
+        raise RuntimeError(
+            "Could not install Ollama automatically. "
+            "Open Desktop mode → Konsole — on immutable SteamOS use the user install from README if needed:\n"
+            f'curl -fsSL "{OLLAMA_OFFICIAL_INSTALL_SH}" | sh\n'
+            "Then switch back here and retry. "
+            + (f" Details: {err}" if err else "")
+        )
+
+    _prepend_home_local_bin_to_environ(log)
+    ollama_bin = resolve_ollama_executable()
+    if not ollama_bin:
+        raise RuntimeError(
+            "Installation finished but ``ollama`` was not found on PATH. Try opening a new shell or reboot."
+        )
+    return ollama_bin
 
 
 async def run_local_setup(
@@ -603,11 +547,32 @@ async def run_local_setup(
     state: dict[str, Any],
     logger: Any,
     cancel_event: asyncio.Event,
+    on_stage: Optional[Callable[[str, dict[str, Any]], Any]] = None,
+    on_verbose_line: Optional[Callable[[str], None]] = None,
 ) -> None:
     """Populate ``state`` while installing / pulling models. Plain dict for JSON-RPC compatibility."""
 
+    prof = (profile or "").strip()
+    last_stage_emitted = ""
+
+    async def emit_stage(stage: str, extra: Optional[dict[str, Any]] = None) -> None:
+        nonlocal last_stage_emitted
+        st = (stage or "").strip()
+        if not st or st == last_stage_emitted or on_stage is None:
+            return
+        last_stage_emitted = st
+        fields = {"profile": prof, **(extra or {})}
+        maybe = on_stage(st, fields)
+        if asyncio.iscoroutine(maybe):
+            await maybe
+
     def log(msg: str) -> None:
         _append_log(list(state.setdefault("log_tail", [])), msg)
+        if on_verbose_line is not None:
+            try:
+                on_verbose_line(msg)
+            except Exception:
+                pass
         try:
             logger.info("local_ollama_setup: %s", msg[:500])
         except Exception:
@@ -622,40 +587,52 @@ async def run_local_setup(
         state["done"] = False
         state["error"] = ""
         state["profile"] = profile
-        tags = tier1_foss_recommended_pull_tags(profile)
-        if not tags:
-            raise RuntimeError(f"Unknown pull profile: {profile!r}.")
+        await emit_stage("check")
+        is_update_installed = prof == "update_installed"
+        is_custom = prof == "custom"
+        if is_custom:
+            tags = [str(t).strip() for t in (state.get("pull_tags") or []) if str(t).strip()]
+            if not tags:
+                raise RuntimeError("Custom pull profile requires pull_tags.")
+        elif is_update_installed:
+            tags = []
+        else:
+            tags = tier1_foss_recommended_pull_tags(prof)
+            if not tags:
+                raise RuntimeError(f"Unknown pull profile: {profile!r}.")
         state["pull_tags"] = list(tags)
         state["total_pull_steps"] = len(tags)
         models_dir = os.environ.get("OLLAMA_MODELS") or str(Path.home() / ".ollama" / "models")
         log("[bonsAI] Local Ollama setup started.")
         log(f"[bonsAI] Model blobs store: {models_dir} (override with OLLAMA_MODELS).")
-        log(f"[bonsAI] Profile {profile!r}: {len(tags)} pull step(s); output streams below when the CLI prints lines.")
+        if is_update_installed:
+            log("[bonsAI] Profile 'update_installed': refresh Ollama binary, then re-pull each locally installed tag.")
+        elif is_custom:
+            log(f"[bonsAI] Profile 'custom': {len(tags)} selected pull(s).")
+        else:
+            log(f"[bonsAI] Profile {profile!r}: {len(tags)} pull step(s); output streams below when the CLI prints lines.")
 
         if sys.platform.startswith("win"):
             raise RuntimeError("Local Ollama setup runs on SteamOS/Linux only.")
 
-        ollama_bin = resolve_ollama_executable()
-        if not ollama_bin:
-            state["stage"] = "install"
-            log("[bonsAI] ollama not found on PATH; running official installer…")
-            ok, err = await asyncio.to_thread(lambda: run_official_linux_install(log))
-            if not ok:
+        if is_custom:
+            _prepend_home_local_bin_to_environ(log)
+            ollama_bin = resolve_ollama_executable()
+            if not ollama_bin:
                 raise RuntimeError(
-                    "Could not install Ollama automatically. "
-                    "Open Desktop mode → Konsole — on immutable SteamOS use the user install from README if needed:\n"
-                    f'curl -fsSL "{OLLAMA_OFFICIAL_INSTALL_SH}" | sh\n'
-                    "Then switch back here and retry. "
-                    + (f" Details: {err}" if err else "")
+                    "``ollama`` not found on PATH. Use Local Ollama setup or install from Desktop Konsole first."
                 )
-
-        _prepend_home_local_bin_to_environ(log)
-
-        ollama_bin = resolve_ollama_executable()
-        if not ollama_bin:
-            raise RuntimeError("Installation finished but ``ollama`` was not found on PATH. Try opening a new shell or reboot.")
+        else:
+            ollama_bin = await _install_or_update_ollama_binary(
+                state=state,
+                log=log,
+                cancelled=cancelled,
+                force_reinstall=is_update_installed,
+            )
+        await emit_stage(state.get("stage", "install"))
 
         state["stage"] = "service"
+        await emit_stage("service")
         if not probe_ollama_http_ok(DEFAULT_BASE):
             log("[bonsAI] Ollama not responding on localhost:11434; trying user systemd unit…")
             await asyncio.to_thread(lambda: try_restart_ollama_user_service(log))
@@ -668,7 +645,27 @@ async def run_local_setup(
                 "Opening Desktop Konsole and running ``ollama serve`` once fixes this."
             )
 
+        if is_update_installed:
+            tags = await asyncio.to_thread(lambda: list_installed_ollama_tags(DEFAULT_BASE))
+            state["pull_tags"] = list(tags)
+            state["total_pull_steps"] = len(tags)
+            if not tags:
+                log(
+                    "[bonsAI] No models installed locally — nothing to update. "
+                    "Use Starter or Full Tier-1 FOSS first."
+                )
+                state["stage"] = "complete"
+                state["phase"] = "done"
+                state["done"] = True
+                state["current_tag"] = ""
+                log("[bonsAI] Local Ollama update finished (binary refresh only).")
+                await emit_stage("complete")
+                return
+
+            log(f"[bonsAI] Re-pulling {len(tags)} installed tag(s) for updates…")
+
         state["stage"] = "pull"
+        await emit_stage("pull", {"pull_steps": len(tags)})
         for i, tag in enumerate(tags):
             if cancelled():
                 raise RuntimeError("Cancelled.")
@@ -685,6 +682,7 @@ async def run_local_setup(
         state["done"] = True
         state["current_tag"] = ""
         log("[bonsAI] Local Ollama setup finished.")
+        await emit_stage("complete")
 
     except Exception as exc:
         msg = str(exc)
@@ -693,6 +691,7 @@ async def run_local_setup(
         state["phase"] = "cancelled" if is_cancelled else "failed"
         state["error"] = msg
         state["done"] = True
+        await emit_stage("failed" if not is_cancelled else "cancelled", {"error": msg[:200]})
         if not is_cancelled:
             try:
                 logger.exception("local_ollama_setup failed")
@@ -701,6 +700,34 @@ async def run_local_setup(
     finally:
         if cancel_event.is_set():
             terminate_setup_started_ollama_serve()
+
+
+def run_ollama_rm(ollama_bin: str, tag: str) -> tuple[bool, str]:
+    """Run ``ollama rm <tag>`` (argv form, no shell)."""
+    try:
+        proc = subprocess.run(
+            [ollama_bin, "rm", tag],
+            capture_output=True,
+            text=True,
+            timeout=120,
+            env=_env_for_ollama_cli(ollama_bin),
+            check=False,
+        )
+        if proc.returncode != 0:
+            err = (proc.stderr or proc.stdout or "").strip()
+            return False, err or f"ollama rm failed with exit code {proc.returncode}"
+        return True, ""
+    except Exception as exc:
+        return False, str(exc)
+
+
+async def run_ollama_rm_async(tag: str) -> tuple[bool, str]:
+    """Resolve ollama binary and remove one tag."""
+    _prepend_home_local_bin_to_environ(lambda _m: None)
+    ollama_bin = resolve_ollama_executable()
+    if not ollama_bin:
+        return False, "ollama_not_found"
+    return await asyncio.to_thread(run_ollama_rm, ollama_bin, tag)
 
 
 def new_local_ollama_setup_state() -> dict[str, Any]:

@@ -1,0 +1,42 @@
+{
+  "scenarioId": "SMOKE-A-golden-path",
+  "tier": "tier0",
+  "batch": "tier0",
+  "status": "pass",
+  "error": null,
+  "durationMs": 1218,
+  "gitSha": "9e20a82",
+  "runDate": "2026-05-26",
+  "previewUrl": "http://127.0.0.1:5678",
+  "evidenceProfile": "preview",
+  "tags": [
+    "SMOKE-A",
+    "CORE-UI",
+    "CORE-ASK",
+    "CONN-TEST",
+    "TRANSPARENCY",
+    "D-PAD-CHUNKS"
+  ],
+  "captureArtifact": {
+    "type": "png",
+    "path": "C:\\Users\\still\\Documents\\BonsAI\\docs\\test-evidence\\tier0\\2026-05-26-9e20a82\\SMOKE-A-golden-path\\final.png"
+  },
+  "captureError": null,
+  "evidenceFiles": [
+    "active-element.txt",
+    "dom-final.html",
+    "final.png",
+    "focus-path.json",
+    "manifest.json",
+    "steps",
+    "steps\\step-00-snapshotDom.html",
+    "steps\\step-00-snapshotDom.json",
+    "steps\\step-01-snapshotDom.html",
+    "steps\\step-01-snapshotDom.json",
+    "steps\\step-02-assert.html",
+    "steps\\step-02-assert.json",
+    "steps\\step-02-sleep.json",
+    "steps\\step-03-snapshotDom.html",
+    "steps\\step-03-snapshotDom.json"
+  ]
+}

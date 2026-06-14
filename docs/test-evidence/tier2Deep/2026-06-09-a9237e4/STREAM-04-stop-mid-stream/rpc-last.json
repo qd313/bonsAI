@@ -1,0 +1,23 @@
+{
+  "status": "cancelled",
+  "request_id": 1,
+  "question": "Write a long paragraph about Steam Deck battery life tips",
+  "app_id": "",
+  "app_context": "none",
+  "success": false,
+  "response": "Request stopped (connection closed).",
+  "applied": null,
+  "elapsed_seconds": 0.5,
+  "error": null,
+  "started_at": 1781047006.8265214,
+  "completed_at": 1781047007.3344524,
+  "strategy_guide_branches": null,
+  "model_policy_disclosure": null,
+  "preset_carousel_inject": null,
+  "partial_response": null,
+  "streaming": false,
+  "thinking_summary": null,
+  "strategy_spoiler_consent_effective": false,
+  "shortcut_setup": null,
+  "cancelled": true
+}

@@ -21,6 +21,44 @@ export function isLeftNavigationEvent(ev: Pick<KeyboardEvent, "key" | "code">): 
   return c === "ArrowLeft" || c === "Numpad4";
 }
 
+export function isDownNavigationKey(key: string): boolean {
+  return key === "ArrowDown" || key === "Down" || key === "DPadDown" || key === "GamepadDPadDown";
+}
+
+export function isUpNavigationKey(key: string): boolean {
+  return key === "ArrowUp" || key === "Up" || key === "DPadUp" || key === "GamepadDPadUp";
+}
+
+export function isDownNavigationEvent(ev: Pick<KeyboardEvent, "key" | "code">): boolean {
+  if (isDownNavigationKey(ev.key)) return true;
+  const c = ev.code;
+  return c === "ArrowDown" || c === "Numpad2";
+}
+
+export function isUpNavigationEvent(ev: Pick<KeyboardEvent, "key" | "code">): boolean {
+  if (isUpNavigationKey(ev.key)) return true;
+  const c = ev.code;
+  return c === "ArrowUp" || c === "Numpad8";
+}
+
+function isDownDeckButton(key: string): boolean {
+  const lower = key.toLowerCase();
+  return isDownNavigationKey(key) || key === "GamepadLeftStickDown" || lower.includes("down");
+}
+
+function isUpDeckButton(key: string): boolean {
+  const lower = key.toLowerCase();
+  return isUpNavigationKey(key) || key === "GamepadLeftStickUp" || lower.includes("up");
+}
+
+export function isDownDeckButtonEvent(button: unknown): boolean {
+  return isDownDeckButton(String(button ?? ""));
+}
+
+export function isUpDeckButtonEvent(button: unknown): boolean {
+  return isUpDeckButton(String(button ?? ""));
+}
+
 /** Find a visible focusable descendant to support controller-first keyboard navigation. */
 export function getFocusableWithin(selector: string): HTMLElement | null {
   const root = document.querySelector(selector) as HTMLElement | null;

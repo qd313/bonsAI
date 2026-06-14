@@ -1,5 +1,9 @@
 import { call } from "@decky/api";
 
+/**
+ * Decky's `call()` has no built-in deadline; racing with `DECKY_RPC_TIMEOUT_MS` avoids hung Python RPC
+ * strands leaving the UI overlay stuck indefinitely.
+ */
 export const DECKY_RPC_TIMEOUT_MS = 15000;
 
 export async function callDeckyWithTimeout<Args extends unknown[], Result>(

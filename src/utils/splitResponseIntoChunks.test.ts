@@ -1,3 +1,7 @@
+/**
+ * Chunk splitter contract for terminal replies. Token streaming preview bypasses this helper
+ * and renders a single growing chunk until the Ask completes (see MainTab + useBonsaiAskOrchestration).
+ */
 import { describe, expect, it } from "vitest";
 import { splitResponseIntoChunks } from "./splitResponseIntoChunks";
 
@@ -25,5 +29,13 @@ describe("splitResponseIntoChunks", () => {
     const t = "```json\n{\"a\":1}\n```";
     const c = splitResponseIntoChunks(t);
     expect(c).toEqual([t.trim()]);
+  });
+
+  it("keeps bonsai-spoiler fence intact across internal blank lines", () => {
+    const t = "Hint here.\n\n```bonsai-spoiler\nBoss: Ganon\n\nPhase 2: ...\n```\n\nAfter.";
+    const c = splitResponseIntoChunks(t);
+    expect(c.length).toBeGreaterThanOrEqual(1);
+    const spoilerChunk = c.find((x) => x.includes("bonsai-spoiler") && x.includes("Phase 2"));
+    expect(spoilerChunk).toBeDefined();
   });
 });

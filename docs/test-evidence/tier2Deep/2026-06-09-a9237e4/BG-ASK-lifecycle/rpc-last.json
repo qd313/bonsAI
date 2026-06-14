@@ -1,0 +1,27 @@
+{
+  "status": "completed",
+  "request_id": 1,
+  "question": "What is my current TDP?",
+  "app_id": "",
+  "app_context": "none",
+  "success": true,
+  "response": "bonsai-status>Current TDP cannot be read.</bonsai-status> The power cap could not be read from sysfs. I don't have the ability to change or provide a specific TDP value without additional information or user instruction. If you need assistance with performance settings, we can discuss general recommendations based on hardware capabilities.",
+  "applied": null,
+  "elapsed_seconds": 1,
+  "error": null,
+  "started_at": 1781048380.7702029,
+  "completed_at": 1781048381.7602284,
+  "strategy_guide_branches": null,
+  "model_policy_disclosure": {
+    "model": "qwen2.5:3b",
+    "source_class": "foss",
+    "read_more_anchor": "model-policy-tiers"
+  },
+  "preset_carousel_inject": null,
+  "partial_response": null,
+  "streaming": false,
+  "thinking_summary": null,
+  "strategy_spoiler_consent_effective": false,
+  "shortcut_setup": null,
+  "cancelled": false
+}

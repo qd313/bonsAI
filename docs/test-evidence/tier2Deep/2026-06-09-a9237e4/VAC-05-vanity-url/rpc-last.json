@@ -1,0 +1,8 @@
+{
+  "success": true,
+  "response": "**Steam ban status (GetPlayerBans)**\n\n> **Limitation:** This reflects **these Steam accounts only**. bonsAI does **not** prove someone was **your opponent** unless you copied their **verified** 64-bit SteamID (or trusted profile URL) yourself.\n\n**Skipped inputs**\n- `https://steamcommunity.com/id/gabelogannewell` — Vanity URLs (/id/…) need ResolveVanityURL; paste the numeric /profiles/765… URL or 64-bit SteamID instead.\n\nNo valid SteamIDs to query from those tokens. Usage: `bonsai:vac-check 7656119…` (comma- or space-separated), or **steamcommunity.com/profiles/765…** URLs. Vanity `/id/…` links are not supported in this build.",
+  "app_id": "",
+  "app_context": "none",
+  "applied": null,
+  "elapsed_seconds": 0
+}

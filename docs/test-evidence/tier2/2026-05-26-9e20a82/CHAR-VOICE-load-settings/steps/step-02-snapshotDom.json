@@ -1,0 +1,9 @@
+{
+  "stepIndex": 2,
+  "action": "snapshotDom",
+  "activeElement": "document.body",
+  "focusPath": [
+    "onMove(A)",
+    "onMove(Down)"
+  ]
+}

@@ -1,0 +1,791 @@
+/**
+ * Main-tab Ask orchestration: RPC submit, background status bridge, presets/transparency/desktop autosave hooks.
+ * Refs pair with `useBackgroundGameAi` polling — reordering hooks risks stale poll callbacks after unmount.
+ */
+import { useCallback, useEffect, useRef, useState, type Dispatch, type RefObject, type SetStateAction } from "react";
+import { call, toaster } from "@decky/api";
+import { Router } from "@decky/ui";
+
+import type { AskAttachment } from "../types/bonsaiUi";
+import {
+  buildResponseText,
+  type AskModeId,
+  type UnifiedInputPersistenceMode,
+} from "../utils/settingsAndResponse";
+import { detectPromptCategory, getContextualPresets, getRandomPresets, type PresetPrompt } from "../data/presets";
+import {
+  CUSTOM_RESOLUTION_INPUT_PREFIX,
+  isStrategyCustomResolutionBranch,
+  STRATEGY_FOLLOWUP_PREFIX,
+} from "../data/strategyGuideFollowup";
+import { INPUT_SANITIZER_COMMAND_DISABLE, INPUT_SANITIZER_COMMAND_ENABLE } from "../data/inputSanitizerCommands";
+import { normalizeStrategyGuideBranches } from "../utils/strategyGuideBranches";
+import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
+import { useBackgroundGameAi } from "./useBackgroundGameAi";
+import type {
+  AppendDesktopChatEventPayload,
+  AppendDesktopNoteResult,
+  BackgroundRequestStatus,
+  BackgroundStartResponse,
+  LastExchangeSnapshot,
+  PresetCarouselInjectPayload,
+} from "../types/backgroundAsk";
+import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
+import type {
+  OllamaContextUi,
+  AppliedResult,
+  StrategyGuideBranchesPayload,
+  AskThreadCollapsedTurn,
+  AskThreadExpandedTurnKey,
+} from "../types/bonsaiUi";
+import { hasResponseAutosaved, markResponseAutosaved } from "../utils/desktopChatAutosave";
+import { normalizePresetCarouselInject } from "../utils/presetCarouselInject";
+import type { InputTransparencyRpcResult, TransparencySnapshot } from "../utils/inputTransparency";
+import { ASK_THINKING_STARTING_DISPLAY, isPendingPlaceholderResponse } from "../utils/askThinkingPhases";
+import { useSmoothStreamReveal } from "./useSmoothStreamReveal";
+import {
+  peekBonsaiSessionPendingRestore,
+  type BonsaiSessionSurvivalSnapshot,
+} from "../utils/bonsaiSessionSurvival";
+
+export type { AskThreadExpandedTurnKey } from "../types/bonsaiUi";
+
+function initialExpandedTurnKeyFromSurvival(): AskThreadExpandedTurnKey {
+  const peek = peekBonsaiSessionPendingRestore();
+  if (!peek) return "live";
+  if (peek.expandedTurnKey !== undefined) {
+    return peek.expandedTurnKey;
+  }
+  const legacyIdx = peek.askThreadViewIndex;
+  if (legacyIdx != null && legacyIdx >= 0 && legacyIdx < peek.askThreadCollapsed.length) {
+    return peek.askThreadCollapsed[legacyIdx]?.id ?? "live";
+  }
+  return "live";
+}
+
+/** Maps RPC poll payloads into Main-tab AI presentation state (pending vs terminal branches differ sharply). */
+export type UseBonsaiAskOrchestrationArgs = {
+  desktopDebugNoteAutoSave: boolean;
+  filesystemWrite: boolean;
+  strategySpoilerMaskingEnabled: boolean;
+  askMode: AskModeId;
+  unifiedInput: string;
+  setUnifiedInput: Dispatch<SetStateAction<string>>;
+  unifiedInputPersistenceMode: UnifiedInputPersistenceMode;
+  effectiveOllamaPcIp: string;
+  selectedAttachment: AskAttachment | null;
+  setSelectedAttachment: Dispatch<SetStateAction<AskAttachment | null>>;
+  setInputSanitizerUserDisabled: Dispatch<SetStateAction<boolean>>;
+  unifiedInputFieldLayerRef: RefObject<HTMLDivElement | null>;
+  unifiedInputHostRef: RefObject<HTMLDivElement | null>;
+  setSelectedIndex: Dispatch<SetStateAction<number>>;
+  setNavigationMessage: Dispatch<SetStateAction<string>>;
+  saveIp: (ip: string) => void;
+  persistSearchQuery: (unifiedInputText: string) => void;
+  /** When app log level is verbose, copy external/RPC failures into Desktop bonsAI_logs. */
+  onExternalFailure?: (source: string, message: string, detail?: Record<string, unknown>) => void;
+};
+
+export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
+  const survivalPeek = peekBonsaiSessionPendingRestore();
+  const [ollamaResponse, setOllamaResponse] = useState(() => survivalPeek?.ollamaResponse ?? "");
+  const [ollamaContext, setOllamaContext] = useState<OllamaContextUi>(
+    () => survivalPeek?.ollamaContext ?? null
+  );
+  const [lastExchange, setLastExchange] = useState<LastExchangeSnapshot | null>(
+    () => survivalPeek?.lastExchange ?? null
+  );
+  const [strategyGuideBranches, setStrategyGuideBranches] = useState<StrategyGuideBranchesPayload | null>(
+    () => survivalPeek?.strategyGuideBranches ?? null
+  );
+  const [modelPolicyDisclosure, setModelPolicyDisclosure] = useState<ModelPolicyDisclosurePayload | null>(
+    () => survivalPeek?.modelPolicyDisclosure ?? null
+  );
+  const [presetCarouselInject, setPresetCarouselInject] = useState<PresetCarouselInjectPayload | null>(
+    () => survivalPeek?.presetCarouselInject ?? null
+  );
+  const [shortcutSetupVariant, setShortcutSetupVariant] = useState<NonNullable<
+    BackgroundRequestStatus["shortcut_setup"]
+  > | null>(() => survivalPeek?.shortcutSetupVariant ?? null);
+  const lastStrategyAskQuestionRef = useRef<string>("");
+  const pendingArchiveTurnRef = useRef<{ question: string; answer: string } | null>(null);
+  const pendingThreadQuestionDisplayRef = useRef<string | null>(null);
+  /** Last request_id whose completion already re-seeded suggested prompts (reseed is randomized). */
+  const promptsReseededForRequestRef = useRef<number | null>(null);
+  const lastFlushedExchangeQuestionRef = useRef<string>("");
+  const [askThreadCollapsed, setAskThreadCollapsed] = useState<AskThreadCollapsedTurn[]>(
+    () => survivalPeek?.askThreadCollapsed ?? []
+  );
+  const askThreadCollapsedRef = useRef(askThreadCollapsed);
+  useEffect(() => {
+    askThreadCollapsedRef.current = askThreadCollapsed;
+  }, [askThreadCollapsed]);
+  const [expandedTurnKey, setExpandedTurnKey] = useState<AskThreadExpandedTurnKey>(
+    () => initialExpandedTurnKeyFromSurvival()
+  );
+  const [askThreadDisplayQuestion, setAskThreadDisplayQuestion] = useState(
+    () => survivalPeek?.askThreadDisplayQuestion ?? ""
+  );
+  const [isAsking, setIsAsking] = useState(false);
+  const [lastApplied, setLastApplied] = useState<AppliedResult | null>(
+    () => survivalPeek?.lastApplied ?? null
+  );
+  const [suggestedPrompts, setSuggestedPrompts] = useState<PresetPrompt[]>(
+    () => survivalPeek?.suggestedPrompts ?? getRandomPresets(3)
+  );
+  const [showSlowWarning, setShowSlowWarning] = useState(() => survivalPeek?.showSlowWarning ?? false);
+  const [elapsedSeconds, setElapsedSeconds] = useState<number | null>(
+    () => survivalPeek?.elapsedSeconds ?? null
+  );
+  const [lastTransparency, setLastTransparency] = useState<TransparencySnapshot | null>(
+    () => survivalPeek?.lastTransparency ?? null
+  );
+  const [thinkingSummary, setThinkingSummary] = useState<string | null>(
+    () => survivalPeek?.thinkingSummary ?? null
+  );
+  const [lastRequestId, setLastRequestId] = useState<number | null>(
+    () => survivalPeek?.lastRequestId ?? null
+  );
+  const [isStreamingPreview, setIsStreamingPreview] = useState(false);
+
+  const streamDisplayText = useSmoothStreamReveal({
+    targetText: ollamaResponse,
+    enabled: isStreamingPreview,
+    done: !isAsking,
+  });
+
+  const desktopAutoSavePrefsRef = useRef({
+    autoSave: a.desktopDebugNoteAutoSave,
+    fsWrite: a.filesystemWrite,
+  });
+  useEffect(() => {
+    desktopAutoSavePrefsRef.current = {
+      autoSave: a.desktopDebugNoteAutoSave,
+      fsWrite: a.filesystemWrite,
+    };
+  }, [a.desktopDebugNoteAutoSave, a.filesystemWrite]);
+
+  useEffect(() => {
+    if (!lastExchange?.question?.trim()) return;
+    const qn = lastExchange.question.trim();
+    if (lastFlushedExchangeQuestionRef.current === qn) return;
+    pendingArchiveTurnRef.current = { question: lastExchange.question, answer: lastExchange.answer };
+  }, [lastExchange]);
+
+  const refreshInputTransparency = useCallback(async () => {
+    try {
+      const r = await callDeckyWithTimeout<[], InputTransparencyRpcResult>(
+        "get_input_transparency",
+        [],
+        DECKY_RPC_TIMEOUT_MS,
+      );
+      if (r.available && "snapshot" in r) {
+        setLastTransparency(r.snapshot);
+      } else {
+        setLastTransparency(null);
+      }
+    } catch {
+      setLastTransparency(null);
+    }
+  }, []);
+
+  const applyBackgroundStatusToUi = useCallback(
+    (status: BackgroundRequestStatus, fallbackQuestion: string = "") => {
+      const appId = status.app_id ?? "";
+      const appContext = status.app_context === "active" ? "active" : "none";
+
+      if (status.status === "pending") {
+        setOllamaContext({ app_id: appId, app_context: appContext });
+        setIsAsking(true);
+        const thinking =
+          typeof status.thinking_summary === "string" && status.thinking_summary.trim()
+            ? status.thinking_summary.trim()
+            : ASK_THINKING_STARTING_DISPLAY;
+        setThinkingSummary(thinking);
+        const partial =
+          status.streaming === true &&
+          typeof status.partial_response === "string" &&
+          status.partial_response.trim()
+            ? status.partial_response
+            : "";
+        const suppressStreamPreview = a.askMode === "strategy" && a.strategySpoilerMaskingEnabled;
+        if (partial && !suppressStreamPreview) {
+          setOllamaResponse(partial);
+          setIsStreamingPreview(true);
+        } else {
+          const raw = status.response?.trim() ? status.response : "";
+          setOllamaResponse(isPendingPlaceholderResponse(raw) ? "" : raw);
+          setIsStreamingPreview(false);
+        }
+        setLastApplied(null);
+        setElapsedSeconds(null);
+        setStrategyGuideBranches(null);
+        setModelPolicyDisclosure(null);
+        setPresetCarouselInject(null);
+        return;
+      }
+
+      if (status.status === "cancelled") {
+        setThinkingSummary(null);
+        setIsStreamingPreview(false);
+        setOllamaContext({ app_id: appId, app_context: appContext });
+        setIsAsking(false);
+        setShortcutSetupVariant(null);
+        setOllamaResponse(status.response?.trim() ? status.response.trim() : "Stopped.");
+        setLastApplied(null);
+        setElapsedSeconds(Number.isFinite(status.elapsed_seconds) ? status.elapsed_seconds : null);
+        setLastExchange(null);
+        setStrategyGuideBranches(null);
+        setModelPolicyDisclosure(null);
+        setPresetCarouselInject(null);
+        pendingArchiveTurnRef.current = null;
+        pendingThreadQuestionDisplayRef.current = null;
+        void refreshInputTransparency();
+        return;
+      }
+
+      if (status.status === "completed" || status.status === "failed") {
+        setThinkingSummary(null);
+        setIsStreamingPreview(false);
+        const applied = status.applied ?? null;
+        setOllamaContext({ app_id: appId, app_context: appContext });
+        setIsAsking(false);
+        setShortcutSetupVariant(
+          status.status === "completed" && status.success ? status.shortcut_setup ?? null : null,
+        );
+        setOllamaResponse(buildResponseText(status.response ?? "No response text.", applied));
+        setLastApplied(applied);
+        setElapsedSeconds(Number.isFinite(status.elapsed_seconds) ? status.elapsed_seconds : null);
+
+        setLastRequestId(typeof status.request_id === "number" ? status.request_id : null);
+        if (status.status === "completed" && status.success) {
+          const q = (status.question || fallbackQuestion || "").trim();
+          const answer = buildResponseText(status.response ?? "No response text.", applied);
+          const disc = status.model_policy_disclosure;
+          setModelPolicyDisclosure(
+            disc && typeof disc === "object" && typeof (disc as ModelPolicyDisclosurePayload).model === "string"
+              ? (disc as ModelPolicyDisclosurePayload)
+              : null,
+          );
+          setPresetCarouselInject(normalizePresetCarouselInject(status.preset_carousel_inject));
+          if (q) {
+            const category = detectPromptCategory(q);
+            /*
+             * Re-seed suggested prompts at most once per completed request: the same terminal
+             * status can be applied more than once (restore + poll), and getContextualPresets
+             * is randomized — repeated calls churned seedsKey and made the carousel twitch.
+             */
+            const reseedRid = typeof status.request_id === "number" ? status.request_id : null;
+            if (reseedRid === null || promptsReseededForRequestRef.current !== reseedRid) {
+              promptsReseededForRequestRef.current = reseedRid;
+              setSuggestedPrompts(getContextualPresets(category, 3));
+            }
+            const displayQ = (pendingThreadQuestionDisplayRef.current?.trim() || q).trim();
+            pendingThreadQuestionDisplayRef.current = null;
+            setLastExchange({ question: displayQ, answer });
+            lastStrategyAskQuestionRef.current = q;
+            setStrategyGuideBranches(normalizeStrategyGuideBranches(status.strategy_guide_branches));
+
+            const { autoSave, fsWrite } = desktopAutoSavePrefsRef.current;
+            const rid = status.request_id;
+            if (autoSave && fsWrite && rid != null && typeof rid === "number" && !hasResponseAutosaved(rid)) {
+              void callDeckyWithTimeout<[AppendDesktopChatEventPayload], AppendDesktopNoteResult>(
+                "append_desktop_chat_event",
+                [{ event: "response", response_text: answer, question: q }],
+                DECKY_RPC_TIMEOUT_MS,
+              )
+                .then((result) => {
+                  if (result.success) markResponseAutosaved(rid);
+                })
+                .catch(() => {});
+            }
+          } else {
+            setLastExchange(null);
+            setStrategyGuideBranches(null);
+            pendingArchiveTurnRef.current = null;
+            pendingThreadQuestionDisplayRef.current = null;
+          }
+        } else {
+          setLastExchange(null);
+          setStrategyGuideBranches(null);
+          setModelPolicyDisclosure(null);
+          setPresetCarouselInject(null);
+          pendingArchiveTurnRef.current = null;
+          pendingThreadQuestionDisplayRef.current = null;
+        }
+      void refreshInputTransparency();
+      return;
+    }
+
+    setIsStreamingPreview(false);
+    setOllamaContext(null);
+    setIsAsking(false);
+    setPresetCarouselInject(null);
+  },
+    [refreshInputTransparency],
+  );
+
+  const onTurnActivate = useCallback((key: string | "live") => {
+    setExpandedTurnKey((prev) => (prev === key ? null : key));
+  }, []);
+
+  const onBackgroundPollError = useCallback((e: unknown) => {
+    const msg = formatDeckyRpcError(e);
+    a.onExternalFailure?.("background_poll", msg);
+    setIsAsking(false);
+    setThinkingSummary(null);
+    setIsStreamingPreview(false);
+    setOllamaResponse(`Error: ${msg}`);
+    setLastApplied(null);
+    setOllamaContext(null);
+    setLastExchange(null);
+    setStrategyGuideBranches(null);
+    setModelPolicyDisclosure(null);
+    setPresetCarouselInject(null);
+    setShortcutSetupVariant(null);
+    pendingArchiveTurnRef.current = null;
+    pendingThreadQuestionDisplayRef.current = null;
+  }, [a]);
+
+  const {
+    startNextRequest,
+    invalidateRequests,
+    startBackgroundStatusPolling,
+    isRequestActive,
+  } = useBackgroundGameAi(applyBackgroundStatusToUi, onBackgroundPollError);
+
+  /**
+   * Mount-only restore. Must NOT re-run on dependency identity churn: callback deps change every
+   * render (hook args object), so depending on them re-fired this effect each render → status RPC
+   * → "completed" re-applied → setSuggestedPrompts(random) → render → loop (~15ms, proven by
+   * 19k dbg log entries). Latest callbacks are read through a ref instead.
+   */
+  const restoreFnsRef = useRef({ applyBackgroundStatusToUi, isRequestActive, startBackgroundStatusPolling, startNextRequest });
+  restoreFnsRef.current = { applyBackgroundStatusToUi, isRequestActive, startBackgroundStatusPolling, startNextRequest };
+  useEffect(() => {
+    const fns = restoreFnsRef.current;
+    const seq = fns.startNextRequest();
+
+    call<[], BackgroundRequestStatus>("get_background_game_ai_status")
+      .then((status) => {
+        const f = restoreFnsRef.current;
+        if (!f.isRequestActive(seq)) return;
+        f.applyBackgroundStatusToUi(status);
+        if (status.status === "pending") {
+          f.startBackgroundStatusPolling(seq, status.question ?? "");
+        }
+      })
+      .catch(() => {
+        // Best-effort restore only; keep startup quiet if backend status isn't available.
+      });
+  }, []);
+
+  const clearUnifiedInput = useCallback(() => {
+    if (isAsking) {
+      /* Ask-bar ✕ while a request is in flight: abort the backend too (it only reset UI state
+         before, so Ollama kept generating — the "x doesn't stop it" regression). */
+      void call<[], { ok?: boolean }>("abort_background_game_ai").catch(() => {
+        /* best-effort RPC */
+      });
+      invalidateRequests();
+      setIsAsking(false);
+    }
+    a.setUnifiedInput("");
+    a.setSelectedIndex(-1);
+    a.setNavigationMessage("");
+    setOllamaResponse("");
+    setOllamaContext(null);
+    setLastApplied(null);
+    setLastExchange(null);
+    setStrategyGuideBranches(null);
+    setModelPolicyDisclosure(null);
+    setPresetCarouselInject(null);
+    setShortcutSetupVariant(null);
+    a.setSelectedAttachment(null);
+    setElapsedSeconds(null);
+    setShowSlowWarning(false);
+    setIsStreamingPreview(false);
+    setThinkingSummary(null);
+  }, [a, invalidateRequests, isAsking]);
+
+  const onCancelAsk = useCallback(() => {
+    void call<[], { ok?: boolean }>("abort_background_game_ai").catch(() => {
+      /* best-effort RPC */
+    });
+    invalidateRequests();
+    setIsAsking(false);
+    setThinkingSummary(null);
+    setIsStreamingPreview(false);
+    setOllamaResponse("Request cancelled.");
+    setOllamaContext(null);
+    setLastApplied(null);
+    setElapsedSeconds(null);
+    setShowSlowWarning(false);
+    setStrategyGuideBranches(null);
+    setModelPolicyDisclosure(null);
+    setPresetCarouselInject(null);
+    setShortcutSetupVariant(null);
+  }, [invalidateRequests]);
+
+  const onAskOllama = useCallback(
+    async (overrideQuestion?: string, opts?: { threadQuestionDisplay?: string }) => {
+      if (document.activeElement instanceof HTMLElement) {
+        document.activeElement.blur();
+      }
+      await new Promise((r) => setTimeout(r, 50));
+
+      const q = (overrideQuestion ?? a.unifiedInput).trim();
+      const ip = a.effectiveOllamaPcIp;
+      if (!q || !ip) {
+        if (!ip) {
+          toaster.toast({ title: "PC IP required", body: "Set your Ollama PC IP before asking.", duration: 4000 });
+        } else if (!q) {
+          toaster.toast({
+            title: "Question required",
+            body: "Type a question in the ask field first.",
+            duration: 3500,
+          });
+        }
+        return;
+      }
+
+      const arch = pendingArchiveTurnRef.current;
+      if (arch && arch.question.trim() && arch.answer.trim()) {
+        setAskThreadCollapsed((prev) => [
+          ...prev,
+          { id: `turn-${Date.now()}-${prev.length}`, question: arch.question, answer: arch.answer },
+        ]);
+        lastFlushedExchangeQuestionRef.current = arch.question.trim();
+      }
+      pendingArchiveTurnRef.current = null;
+      setExpandedTurnKey("live");
+      pendingThreadQuestionDisplayRef.current = opts?.threadQuestionDisplay?.trim() || null;
+      setAskThreadDisplayQuestion(pendingThreadQuestionDisplayRef.current ?? q);
+
+      const attachments = a.selectedAttachment
+        ? [
+            {
+              path: a.selectedAttachment.path,
+              name: a.selectedAttachment.name,
+              source: a.selectedAttachment.source,
+              app_id: a.selectedAttachment.app_id,
+            },
+          ]
+        : [];
+
+      const seq = startNextRequest();
+
+      const runningApp = Router.MainRunningApp;
+      const appId = runningApp?.appid?.toString() ?? "";
+      const appName = runningApp?.display_name ?? "";
+
+      setIsAsking(true);
+      setThinkingSummary(ASK_THINKING_STARTING_DISPLAY);
+      setPresetCarouselInject(null);
+      setStrategyGuideBranches(null);
+      setModelPolicyDisclosure(null);
+      setShortcutSetupVariant(null);
+      setLastTransparency(null);
+      setIsStreamingPreview(false);
+      setOllamaResponse("");
+      setLastApplied(null);
+      setElapsedSeconds(null);
+      setOllamaContext({
+        app_id: appId,
+        app_context: appId ? "active" : "none",
+      });
+      try {
+        const data = await call<
+          [
+            {
+              question: string;
+              PcIp: string;
+              appId: string;
+              appName: string;
+              attachments: AskAttachment[];
+              ask_mode: AskModeId;
+              spoiler_consent: boolean;
+            },
+          ],
+          BackgroundStartResponse
+        >("start_background_game_ai", {
+          question: q,
+          PcIp: ip,
+          appId,
+          appName,
+          attachments,
+          ask_mode: a.askMode,
+          spoiler_consent: false,
+        });
+
+        if (!isRequestActive(seq)) return;
+
+        if (data.status === "invalid") {
+          setIsAsking(false);
+          setOllamaResponse(data.response ?? "Request is invalid.");
+          setLastApplied(null);
+          setElapsedSeconds(null);
+          pendingThreadQuestionDisplayRef.current = null;
+          return;
+        }
+
+        if (data.status === "blocked") {
+          setIsAsking(false);
+          setOllamaResponse(data.response ?? "That input was not sent.");
+          setLastApplied(null);
+          setElapsedSeconds(null);
+          setOllamaContext({ app_id: appId, app_context: appId ? "active" : "none" });
+          void refreshInputTransparency();
+          pendingThreadQuestionDisplayRef.current = null;
+          toaster.toast({
+            title: "Input not sent",
+            body: data.response ?? "Blocked by input checks.",
+            duration: 5000,
+          });
+          return;
+        }
+
+        a.setUnifiedInput("");
+        a.setSelectedAttachment(null);
+
+        if (data.status === "completed" && data.success) {
+          if (!isRequestActive(seq)) return;
+          const now = Date.now() / 1000;
+          const terminal: BackgroundRequestStatus = {
+            status: "completed",
+            request_id: data.request_id ?? null,
+            question: q,
+            app_id: data.app_id ?? appId,
+            app_context: (appId ? "active" : "none") as "active" | "none",
+            success: true,
+            response: data.response ?? "",
+            applied: data.applied ?? null,
+            elapsed_seconds: Number.isFinite(data.elapsed_seconds) ? Number(data.elapsed_seconds) : 0,
+            error: null,
+            started_at: now,
+            completed_at: now,
+            strategy_guide_branches: null,
+            model_policy_disclosure: null,
+            strategy_spoiler_consent_effective: false,
+            shortcut_setup: data.shortcut_setup ?? null,
+          };
+          applyBackgroundStatusToUi(terminal, "");
+          a.saveIp(ip);
+          if (a.unifiedInputPersistenceMode === "persist_search_only") {
+            a.persistSearchQuery("");
+          }
+          if (data.meta === "shortcut_setup") {
+            toaster.toast({
+              title: "Quick-launch help",
+              body: "In-app guide only; tune the chord in Controller settings. See full recipe in docs.",
+              duration: 5000,
+            });
+          }
+          if (data.meta === "sanitizer_keyword") {
+            const key = q.trim().toLowerCase();
+            if (key === INPUT_SANITIZER_COMMAND_DISABLE.toLowerCase()) {
+              a.setInputSanitizerUserDisabled(true);
+            } else if (key === INPUT_SANITIZER_COMMAND_ENABLE.toLowerCase()) {
+              a.setInputSanitizerUserDisabled(false);
+            }
+            toaster.toast({
+              title: "Sanitizer",
+              body: "Mode saved. See README for commands.",
+              duration: 4000,
+            });
+          }
+          if (data.meta === "vac_check") {
+            toaster.toast({
+              title: "Steam ban lookup",
+              body: "Account-level GetPlayerBans only — not proof someone was your opponent.",
+              duration: 6000,
+            });
+          }
+          return;
+        }
+
+        if (data.status === "busy") {
+          setIsAsking(true);
+          setOllamaResponse(data.response ?? "A request is already in progress.");
+        }
+
+        if (data.status === "pending" && a.desktopDebugNoteAutoSave && a.filesystemWrite) {
+          const screenshotPaths = attachments.map((at) => at.path).filter((p) => p.trim().length > 0);
+          void callDeckyWithTimeout<[AppendDesktopChatEventPayload], AppendDesktopNoteResult>(
+            "append_desktop_chat_event",
+            [{ event: "ask", question: q, screenshot_paths: screenshotPaths }],
+            DECKY_RPC_TIMEOUT_MS,
+          ).catch(() => {});
+        }
+
+        a.saveIp(ip);
+        if (a.unifiedInputPersistenceMode === "persist_search_only") {
+          a.persistSearchQuery("");
+        }
+        startBackgroundStatusPolling(seq, q);
+      } catch (e: unknown) {
+        if (!isRequestActive(seq)) return;
+        const msg = formatDeckyRpcError(e);
+        a.onExternalFailure?.("ask_ollama", msg);
+        setIsAsking(false);
+        setOllamaResponse(`Error: ${msg}`);
+        setLastApplied(null);
+        setOllamaContext(null);
+        setStrategyGuideBranches(null);
+        pendingThreadQuestionDisplayRef.current = null;
+      }
+    },
+    [
+      a,
+      applyBackgroundStatusToUi,
+      isRequestActive,
+      refreshInputTransparency,
+      startBackgroundStatusPolling,
+      startNextRequest,
+    ],
+  );
+
+  const onStrategyBranchPick = useCallback(
+    (opt: { id: string; label: string }) => {
+      if (isStrategyCustomResolutionBranch(opt)) {
+        setStrategyGuideBranches(null);
+        a.setUnifiedInput(CUSTOM_RESOLUTION_INPUT_PREFIX);
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            const root = a.unifiedInputFieldLayerRef.current ?? a.unifiedInputHostRef.current;
+            if (!root) return;
+            const field = root.querySelector<HTMLTextAreaElement | HTMLInputElement>("textarea, input");
+            if (!field) return;
+            field.focus();
+            const len = field.value.length;
+            try {
+              field.setSelectionRange(len, len);
+            } catch {
+              // decky field quirks
+            }
+          });
+        });
+        return;
+      }
+      if (lastExchange?.question?.trim() && lastExchange?.answer?.trim()) {
+        const qn = lastExchange.question.trim();
+        if (lastFlushedExchangeQuestionRef.current !== qn) {
+          pendingArchiveTurnRef.current = {
+            question: lastExchange.question,
+            answer: lastExchange.answer,
+          };
+        }
+      }
+      const prior = lastStrategyAskQuestionRef.current.trim();
+      const composed = [
+        `${STRATEGY_FOLLOWUP_PREFIX} I'm at: ${opt.label}.`,
+        prior ? `Earlier I asked: ${prior}` : "",
+        "",
+        "Give controller-friendly coaching for this exact point, then end with **If you want to cheat…** as instructed.",
+      ]
+        .filter((line) => line.length > 0)
+        .join("\n");
+      a.setUnifiedInput(composed);
+      void onAskOllama(composed, { threadQuestionDisplay: `I'm at: ${opt.label}` });
+    },
+    [a, lastExchange, onAskOllama],
+  );
+
+  const onRetryLastResponse = useCallback(() => {
+    const q = (lastExchange?.question || a.unifiedInput || askThreadDisplayQuestion).trim();
+    if (!q) {
+      toaster.toast({
+        title: "Nothing to retry",
+        body: "Complete an Ask first, or type a question in the field.",
+        duration: 3500,
+      });
+      return;
+    }
+    void onAskOllama(q, { threadQuestionDisplay: q });
+  }, [lastExchange?.question, a.unifiedInput, askThreadDisplayQuestion, onAskOllama]);
+
+  const restoreSessionSnapshot = useCallback((snap: BonsaiSessionSurvivalSnapshot) => {
+    setOllamaResponse(snap.ollamaResponse);
+    setOllamaContext(snap.ollamaContext);
+    setLastExchange(snap.lastExchange);
+    setAskThreadCollapsed(snap.askThreadCollapsed);
+    setAskThreadDisplayQuestion(snap.askThreadDisplayQuestion);
+    setExpandedTurnKey(snap.expandedTurnKey ?? "live");
+    setSuggestedPrompts(snap.suggestedPrompts);
+    setLastTransparency(snap.lastTransparency);
+    setModelPolicyDisclosure(snap.modelPolicyDisclosure);
+    setStrategyGuideBranches(snap.strategyGuideBranches);
+    setElapsedSeconds(snap.elapsedSeconds);
+    setLastApplied(snap.lastApplied);
+    setShortcutSetupVariant(snap.shortcutSetupVariant);
+    setPresetCarouselInject(snap.presetCarouselInject);
+    setShowSlowWarning(snap.showSlowWarning);
+    setLastRequestId(snap.lastRequestId);
+    setThinkingSummary(snap.thinkingSummary);
+  }, []);
+
+  const resetAskSessionSlice = useCallback(() => {
+    if (isAsking) {
+      invalidateRequests();
+      setIsAsking(false);
+    }
+    setOllamaResponse("");
+    setOllamaContext(null);
+    setLastApplied(null);
+    setLastExchange(null);
+    setStrategyGuideBranches(null);
+    setElapsedSeconds(null);
+    setShowSlowWarning(false);
+    setAskThreadCollapsed([]);
+    setExpandedTurnKey("live");
+    setAskThreadDisplayQuestion("");
+    setLastTransparency(null);
+    setModelPolicyDisclosure(null);
+    setPresetCarouselInject(null);
+    setShortcutSetupVariant(null);
+    pendingArchiveTurnRef.current = null;
+    pendingThreadQuestionDisplayRef.current = null;
+    lastFlushedExchangeQuestionRef.current = "";
+  }, [invalidateRequests, isAsking]);
+
+  return {
+    ollamaResponse,
+    ollamaContext,
+    lastExchange,
+    strategyGuideBranches,
+    modelPolicyDisclosure,
+    presetCarouselInject,
+    shortcutSetupVariant,
+    suggestedPrompts,
+    showSlowWarning,
+    setShowSlowWarning,
+    elapsedSeconds,
+    lastTransparency,
+    setLastTransparency,
+    thinkingSummary,
+    lastRequestId,
+    askThreadCollapsed,
+    setAskThreadCollapsed,
+    expandedTurnKey,
+    setExpandedTurnKey,
+    onTurnActivate,
+    askThreadDisplayQuestion,
+    setAskThreadDisplayQuestion,
+    isAsking,
+    isStreamingPreview,
+    streamDisplayText,
+    lastApplied,
+    refreshInputTransparency,
+    startNextRequest,
+    invalidateRequests,
+    clearUnifiedInput,
+    onCancelAsk,
+    onAskOllama,
+    onRetryLastResponse,
+    onStrategyBranchPick,
+    restoreSessionSnapshot,
+    resetAskSessionSlice,
+    setStrategyGuideBranches,
+    setSuggestedPrompts,
+  };
+}

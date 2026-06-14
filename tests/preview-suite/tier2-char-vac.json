@@ -1,0 +1,69 @@
+{
+  "scenarios": [
+    {
+      "id": "CHAR-VOICE-load-settings",
+      "tier": "tier2",
+      "bucket": "C+D",
+      "evidenceProfile": "preview",
+      "tags": ["CHAR-VOICE"],
+      "checkboxIds": [],
+      "captureSteps": [2],
+      "steps": [
+        { "action": "callRpc", "method": "load_settings" },
+        { "action": "runSequence", "inputs": ["A", "Down"] },
+        { "action": "snapshotDom" }
+      ]
+    },
+    {
+      "id": "VAC-02-empty-key",
+      "tier": "tier2",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": ["VAC-02"],
+      "checkboxIds": ["**VAC-02**"],
+      "captureSteps": [0],
+      "steps": [
+        { "action": "callRpc", "method": "ask_game_ai", "args": ["bonsai:vac-check 76561198000000001", "127.0.0.1:11434"] }
+      ]
+    },
+    {
+      "id": "DESKTOP-NOTES-rpc",
+      "tier": "tier2",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": ["DESKTOP-NOTES"],
+      "checkboxIds": [],
+      "captureSteps": [0],
+      "steps": [
+        { "action": "callRpc", "method": "append_desktop_debug_note", "args": [{ "name": "preview-test", "question": "q", "answer": "a" }] }
+      ]
+    },
+    {
+      "id": "VISION-V1-spot-dom",
+      "tier": "tier2",
+      "bucket": "C",
+      "evidenceProfile": "preview",
+      "tags": ["VISION-V1", "SMOKE-G"],
+      "checkboxIds": [],
+      "captureSteps": [0],
+      "steps": [
+        { "action": "sleep", "ms": 400 },
+        { "action": "snapshotDom", "selector": ".bonsai-scope" },
+        { "action": "assert", "type": "domContainsAny", "expect": ["bonsai-decky-tabs-root", "bonsai-askbar", "bonsai-search-host"] }
+      ]
+    },
+    {
+      "id": "STEAM-JUMP-shim",
+      "tier": "tier2",
+      "bucket": "C",
+      "evidenceProfile": "preview",
+      "tags": ["STEAM-JUMP"],
+      "checkboxIds": [],
+      "captureSteps": [1],
+      "steps": [
+        { "action": "runSequence", "inputs": ["Down", "A"] },
+        { "action": "snapshotDom" }
+      ]
+    }
+  ]
+}

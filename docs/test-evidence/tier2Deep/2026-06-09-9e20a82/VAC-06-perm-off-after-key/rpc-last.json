@@ -1,0 +1,8 @@
+{
+  "success": true,
+  "response": "**Steam Web API is off for bonsAI.**\n\nEnable **Permissions → Steam Web API**, add your Web API key under **Settings → Connection**, then run:\n\n`bonsai:vac-check 7656119…`\n\nThis command skips the AI and queries Valve **GetPlayerBans** for **account-level** ban flags only.",
+  "app_id": "",
+  "app_context": "none",
+  "applied": null,
+  "elapsed_seconds": 0
+}

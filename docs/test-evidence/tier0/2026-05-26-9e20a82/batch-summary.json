@@ -1,0 +1,42 @@
+{
+  "batch": "tier0",
+  "runDate": "2026-05-26",
+  "gitSha": "9e20a82",
+  "passed": 5,
+  "failed": 0,
+  "skipped": 0,
+  "total": 5,
+  "evidenceRoot": "docs/test-evidence/tier0/2026-05-26-9e20a82",
+  "results": [
+    {
+      "id": "SMOKE-A-golden-path",
+      "status": "pass",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/tier0/2026-05-26-9e20a82/SMOKE-A-golden-path"
+    },
+    {
+      "id": "SMOKE-C-perms-gate",
+      "status": "pass",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/tier0/2026-05-26-9e20a82/SMOKE-C-perms-gate"
+    },
+    {
+      "id": "SMOKE-F-disable-sanitize",
+      "status": "pass",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/tier0/2026-05-26-9e20a82/SMOKE-F-disable-sanitize"
+    },
+    {
+      "id": "SMOKE-F-shortcut-deck",
+      "status": "pass",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/tier0/2026-05-26-9e20a82/SMOKE-F-shortcut-deck"
+    },
+    {
+      "id": "SMOKE-F-vac-capability-off",
+      "status": "pass",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/tier0/2026-05-26-9e20a82/SMOKE-F-vac-capability-off"
+    }
+  ]
+}

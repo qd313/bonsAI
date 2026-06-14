@@ -25,6 +25,30 @@ export type TransparencySnapshot = {
   error_message: string;
   elapsed_seconds: number;
   model_policy_disclosure?: ModelPolicyDisclosurePayload | null;
+  /** Local Proton/Steam log excerpts attached to the last Ollama system prompt (troubleshooting flow). */
+  proton_log_excerpt_attached?: boolean;
+  proton_log_sources?: { path: string; bytes_read: number }[];
+  proton_log_notes?: string;
+  ask_diagnostics?: AskDiagnosticsSnapshot | null;
+  response_verify?: {
+    passed?: boolean;
+    warnings?: string[];
+    second_pass?: { ran?: boolean; passed?: boolean; model?: string; verdict?: string };
+  } | null;
+};
+
+export type AskDiagnosticsSnapshot = {
+  models_before_policy?: string[];
+  models_after_policy?: string[];
+  models_attempted?: string[];
+  model_succeeded?: string | null;
+  policy_tier?: string;
+  policy_dropped_count?: number;
+  requires_vision?: boolean;
+  attachment_count?: number;
+  attachment_warnings?: string[];
+  attachment_errors?: string[];
+  elapsed_seconds?: number | null;
 };
 
 export type InputTransparencyRpcResult =

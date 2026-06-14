@@ -2,6 +2,8 @@
 export const UNIFIED_INPUT_HEIGHT_MAX_PX = 200;
 /** Reserved height (px) for attach + mic strip inside the glass host (below the text body). */
 export const UNIFIED_INPUT_ICON_STRIP_PX = 24;
+/** Horizontal inset (px) for bottom icon strip — matches avatar top-left (2px), not text body indent. */
+export const UNIFIED_INPUT_ICON_STRIP_PAD_X_PX = 2;
 /** Minimum text-body height (px) when empty — one line taller than the prior floor (~+1 overlay line at 13px / line-height 1.2). */
 export const UNIFIED_TEXT_BODY_MIN_PX = 42;
 /** Unified search typography — must match `TextField` and the measure/overlay nodes or the caret misaligns from the painted text. */
@@ -14,11 +16,13 @@ export const UNIFIED_INPUT_HEIGHT_PAD_PX = 7;
 /** Extra text-body height (px) so growth triggers ~one overlay line before text crowds the icon strip. */
 export const UNIFIED_INPUT_EXPAND_AHEAD_PX = Math.ceil(UNIFIED_TEXT_FONT_PX * UNIFIED_TEXT_LINE_HEIGHT);
 /** Left inset (px) for typed-text overlay and measure — top inset kept separate (often looser than L/R/B). */
-export const UNIFIED_TEXT_INSET_LEFT_PX = 0;
+export const UNIFIED_TEXT_INSET_LEFT_PX = 8;
 /** Right inset (px) for typed-text overlay and measure. */
-export const UNIFIED_TEXT_INSET_RIGHT_PX = 0;
-/** Top inset (px) for typed-text overlay and measure div — keep 0 so caret/overlay align with the glass top (Decky adds its own field chrome). */
-export const UNIFIED_TEXT_INSET_TOP_PX = 0;
+export const UNIFIED_TEXT_INSET_RIGHT_PX = 8;
+/** Top inset (px) for typed-text overlay and measure div. */
+export const UNIFIED_TEXT_INSET_TOP_PX = 6;
+/** Bottom inset (px) inside the text body (above the icon strip). */
+export const UNIFIED_TEXT_INSET_BOTTOM_PX = 2;
 /** Gap (px) between text body and bottom icon strip in overlay. */
 export const UNIFIED_TEXT_OVERLAY_BOTTOM_GAP_PX = 0;
 /** Ask primary label (slightly darker than prior `#eef4fb` for calmer contrast). */
@@ -54,6 +58,13 @@ export const TAB_TITLE_ICON_PX = 26;
 export const TAB_TITLE_TAB_CELL_PX = 32;
 /** Space between the LB/RB tab strip and the scrollable tab panel below (QAM). */
 export const TAB_STRIP_BODY_GAP_PX = 14;
+/** Horizontal inset (px) for tab body content inside the QAM plugin panel. */
+export const BONSAI_PLUGIN_SIDE_PAD_PX = 4;
+
+/** Vertical gap (px) between the Ask bar and the chat transcript (user bubble column). */
+export const BONSAI_CHAT_INPUT_TO_TRANSCRIPT_GAP_PX = 12;
+/** Vertical gap (px) above the AI response bubble stack (below status/thinking lines). */
+export const BONSAI_CHAT_RESPONSE_STACK_MARGIN_TOP_PX = 12;
 
 /** Main-tab AIM-style transcript: max width for player-side bubbles (px). */
 export const BONSAI_CHAT_USER_BUBBLE_MAX_PX = 260;

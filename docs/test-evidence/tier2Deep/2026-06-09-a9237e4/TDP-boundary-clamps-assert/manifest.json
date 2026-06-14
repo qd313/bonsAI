@@ -1,0 +1,26 @@
+{
+  "scenarioId": "TDP-boundary-clamps-assert",
+  "tier": "tier2Deep",
+  "batch": "tier2Deep",
+  "status": "pass",
+  "error": null,
+  "durationMs": 122067,
+  "gitSha": "a9237e4",
+  "runDate": "2026-06-09",
+  "previewUrl": null,
+  "evidenceProfile": "preview",
+  "tags": [
+    "TDP-1W",
+    "TDP-20W"
+  ],
+  "captureArtifact": null,
+  "captureError": "Error: IPC timeout for captureScreenshot",
+  "evidenceFiles": [
+    "rpc-last.json",
+    "steps",
+    "steps\\step-02-callRpc-rpc.json",
+    "steps\\step-02-callRpc.json",
+    "steps\\step-04-callRpc-rpc.json",
+    "steps\\step-04-callRpc.json"
+  ]
+}

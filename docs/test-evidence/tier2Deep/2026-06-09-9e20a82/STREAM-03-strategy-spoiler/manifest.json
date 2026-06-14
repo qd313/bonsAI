@@ -1,0 +1,24 @@
+{
+  "scenarioId": "STREAM-03-strategy-spoiler",
+  "tier": "tier2Deep",
+  "batch": "tier2Deep",
+  "status": "pass",
+  "error": null,
+  "durationMs": 121314,
+  "gitSha": "9e20a82",
+  "runDate": "2026-06-09",
+  "previewUrl": "http://127.0.0.1:5902",
+  "evidenceProfile": "preview",
+  "tags": [
+    "STREAM-03",
+    "STRATEGY-SPOILER"
+  ],
+  "captureArtifact": null,
+  "captureError": "Error: IPC timeout for captureScreenshot",
+  "evidenceFiles": [
+    "rpc-last.json",
+    "steps",
+    "steps\\step-02-sleep-rpc.json",
+    "steps\\step-02-sleep.json"
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "batch": "tier2Deep",
+  "runDate": "2026-06-09",
+  "gitSha": "9e20a82",
+  "passed": 7,
+  "failed": 4,
+  "skipped": 0,
+  "total": 11,
+  "evidenceRoot": "docs/test-evidence/tier2Deep/2026-06-09-9e20a82",
+  "results": [
+    {
+      "id": "STREAM-02-flag-on-speed",
+      "status": "fail",
+      "error": "Error: IPC timeout for snapshotDom",
+      "evidenceDir": "docs/test-evidence/tier2Deep/2026-06-09-9e20a82/STREAM-02-flag-on-speed"
+    },
+    {
+      "id": "STREAM-03-strategy-spoiler",
+      "status": "pass",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/tier2Deep/2026-06-09-9e20a82/STREAM-03-strategy-spoiler"
+    },
+    {
+      "id": "STREAM-04-stop-mid-stream",
+      "status": "fail",
+      "error": "Error: RPC method not allowlisted for preview: abort_background_game_ai",
+      "evidenceDir": "docs/test-evidence/tier2Deep/2026-06-09-9e20a82/STREAM-04-stop-mid-stream"
+    },
+    {
+      "id": "STREAM-05-transparency-terminal",
+      "status": "pass",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/tier2Deep/2026-06-09-9e20a82/STREAM-05-transparency-terminal"
+    },
+    {
+      "id": "VAC-03-valid-key-steamid",
+      "status": "pass",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/tier2Deep/2026-06-09-9e20a82/VAC-03-valid-key-steamid"
+    },
+    {
+      "id": "VAC-04-profile-url",
+      "status": "pass",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/tier2Deep/2026-06-09-9e20a82/VAC-04-profile-url"
+    },
+    {
+      "id": "VAC-05-vanity-url",
+      "status": "pass",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/tier2Deep/2026-06-09-9e20a82/VAC-05-vanity-url"
+    },
+    {
+      "id": "VAC-06-perm-off-after-key",
+      "status": "pass",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/tier2Deep/2026-06-09-9e20a82/VAC-06-perm-off-after-key"
+    },
+    {
+      "id": "BG-ASK-lifecycle",
+      "status": "pass",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/tier2Deep/2026-06-09-9e20a82/BG-ASK-lifecycle"
+    },
+    {
+      "id": "SMOKE-B-apply-with-perms",
+      "status": "fail",
+      "error": "Error: rpcResult failed: expected \"\"tdp_watts\": 8\" in {\"success\":true,\"cancelled\":false,\"response\":\"```json\\n{\\\"tdp_watts\\\": 8, \\\"gpu_clock_mhz\\\": null}\\n```\\nThe TDP has been set to 8 watts. Ensure your device is powered down and unplugged before making",
+      "evidenceDir": "docs/test-evidence/tier2Deep/2026-06-09-9e20a82/SMOKE-B-apply-with-perms"
+    },
+    {
+      "id": "TDP-boundary-clamps-assert",
+      "status": "fail",
+      "error": "Error: rpcResult failed: expected \"\"tdp_watts\": 3\" in {\"success\":true,\"cancelled\":false,\"response\":\"```json\\n{\\\"tdp_watts\\\": 1, \\\"gpu_clock_mhz\\\": null}\\n```\\nAs the power cap could not be read from sysfs, I cannot determine the current TDP value and hav",
+      "evidenceDir": "docs/test-evidence/tier2Deep/2026-06-09-9e20a82/TDP-boundary-clamps-assert"
+    }
+  ]
+}

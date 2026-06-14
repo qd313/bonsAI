@@ -1,0 +1,19 @@
+{
+  "scenarioId": "UI-A-settings-conn",
+  "tier": "tier3UI",
+  "batch": "tier3UI",
+  "status": "fail",
+  "error": "Error: IPC timeout for callTestHook",
+  "durationMs": null,
+  "gitSha": "a9237e4",
+  "runDate": "2026-06-09",
+  "previewUrl": null,
+  "evidenceProfile": "preview",
+  "tags": [
+    "CONN-TEST",
+    "KEEP-ALIVE"
+  ],
+  "captureArtifact": null,
+  "captureError": "Error: IPC timeout for captureScreenshot",
+  "evidenceFiles": []
+}

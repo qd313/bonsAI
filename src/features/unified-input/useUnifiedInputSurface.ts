@@ -1,3 +1,4 @@
+/** Main-tab unified Ask/search bar geometry: Decky `TextField` wrappers often diverge from host width, so we measure and sync CSS vars. */
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   ASK_BAR_LAYOUT_SHIFT_RIGHT_PX,
@@ -7,7 +8,6 @@ import {
   UNIFIED_TEXT_BODY_MAX_PX,
   UNIFIED_TEXT_BODY_MIN_PX,
   UNIFIED_TEXT_INSET_LEFT_PX,
-  UNIFIED_TEXT_INSET_RIGHT_PX,
   UNIFIED_TEXT_INSET_TOP_PX,
 } from "./constants";
 
@@ -47,10 +47,7 @@ export function useUnifiedInputSurface(currentTab: string, unifiedInput: string)
     const field = (layer ?? host).querySelector<HTMLTextAreaElement | HTMLInputElement>("textarea, input");
     setUsesNativeMultilineField(field?.tagName === "TEXTAREA");
     const fieldCw = field && field.clientWidth > 0 ? field.clientWidth : 0;
-    const textWidth = Math.max(
-      0,
-      fieldCw > 0 ? fieldCw - UNIFIED_TEXT_INSET_LEFT_PX - UNIFIED_TEXT_INSET_RIGHT_PX : hostW - UNIFIED_TEXT_INSET_LEFT_PX - UNIFIED_TEXT_INSET_RIGHT_PX,
-    );
+    const textWidth = Math.max(0, fieldCw > 0 ? fieldCw : hostW);
     const container = layer ?? measure.offsetParent ?? host;
     const cr = container.getBoundingClientRect();
     const fr = field?.getBoundingClientRect();

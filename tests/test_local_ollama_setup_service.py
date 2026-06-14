@@ -13,6 +13,7 @@ from backend.services.local_ollama_setup_service import (
     _bash_exe,
     _env_for_host_system_tools,
     _env_for_ollama_cli,
+    list_installed_ollama_tags,
 )
 
 
@@ -51,6 +52,17 @@ class LocalOllamaSetupServiceTests(unittest.TestCase):
                 e = _env_for_ollama_cli(str(bin_o))
             self.assertIn("LD_LIBRARY_PATH", e)
             self.assertTrue(e["LD_LIBRARY_PATH"].startswith(str(libs)))
+
+    def test_list_installed_ollama_tags_parses_models(self):
+        payload = b'{"models":[{"name":"qwen2.5:1.5b"},{"name":"llava:7b"}]}'
+        with patch("urllib.request.urlopen") as mock_open:
+            mock_open.return_value.__enter__.return_value.read.return_value = payload
+            tags = list_installed_ollama_tags("http://127.0.0.1:11434")
+        self.assertEqual(tags, ["qwen2.5:1.5b", "llava:7b"])
+
+    def test_list_installed_ollama_tags_returns_empty_on_error(self):
+        with patch("urllib.request.urlopen", side_effect=OSError("down")):
+            self.assertEqual(list_installed_ollama_tags("http://127.0.0.1:11434"), [])
 
 
 if __name__ == "__main__":

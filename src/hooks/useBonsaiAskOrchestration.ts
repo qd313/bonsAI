@@ -18,7 +18,6 @@ import {
   isStrategyCustomResolutionBranch,
   STRATEGY_FOLLOWUP_PREFIX,
 } from "../data/strategyGuideFollowup";
-import { INPUT_SANITIZER_COMMAND_DISABLE, INPUT_SANITIZER_COMMAND_ENABLE } from "../data/inputSanitizerCommands";
 import { normalizeStrategyGuideBranches } from "../utils/strategyGuideBranches";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import { useBackgroundGameAi } from "./useBackgroundGameAi";
@@ -39,6 +38,7 @@ import type {
   AskThreadExpandedTurnKey,
 } from "../types/bonsaiUi";
 import { hasResponseAutosaved, markResponseAutosaved } from "../utils/desktopChatAutosave";
+import { questionBypassesOllamaPcIpRequirement } from "../utils/localOnlyAskCommands";
 import { normalizePresetCarouselInject } from "../utils/presetCarouselInject";
 import type { InputTransparencyRpcResult, TransparencySnapshot } from "../utils/inputTransparency";
 import { ASK_THINKING_STARTING_DISPLAY, isPendingPlaceholderResponse } from "../utils/askThinkingPhases";
@@ -75,7 +75,8 @@ export type UseBonsaiAskOrchestrationArgs = {
   effectiveOllamaPcIp: string;
   selectedAttachment: AskAttachment | null;
   setSelectedAttachment: Dispatch<SetStateAction<AskAttachment | null>>;
-  setInputSanitizerUserDisabled: Dispatch<SetStateAction<boolean>>;
+  /** Reload settings from disk after server-side persistence (e.g. sanitizer keywords). */
+  syncSettingsFromDisk: () => Promise<unknown>;
   unifiedInputFieldLayerRef: RefObject<HTMLDivElement | null>;
   unifiedInputHostRef: RefObject<HTMLDivElement | null>;
   setSelectedIndex: Dispatch<SetStateAction<number>>;
@@ -436,16 +437,16 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
 
       const q = (overrideQuestion ?? a.unifiedInput).trim();
       const ip = a.effectiveOllamaPcIp;
-      if (!q || !ip) {
-        if (!ip) {
-          toaster.toast({ title: "PC IP required", body: "Set your Ollama PC IP before asking.", duration: 4000 });
-        } else if (!q) {
-          toaster.toast({
-            title: "Question required",
-            body: "Type a question in the ask field first.",
-            duration: 3500,
-          });
-        }
+      if (!q) {
+        toaster.toast({
+          title: "Question required",
+          body: "Type a question in the ask field first.",
+          duration: 3500,
+        });
+        return;
+      }
+      if (!ip && !questionBypassesOllamaPcIpRequirement(q)) {
+        toaster.toast({ title: "PC IP required", body: "Set your Ollama PC IP before asking.", duration: 4000 });
         return;
       }
 
@@ -570,7 +571,9 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
             shortcut_setup: data.shortcut_setup ?? null,
           };
           applyBackgroundStatusToUi(terminal, "");
-          a.saveIp(ip);
+          if (ip.trim().length > 0) {
+            a.saveIp(ip);
+          }
           if (a.unifiedInputPersistenceMode === "persist_search_only") {
             a.persistSearchQuery("");
           }
@@ -582,12 +585,9 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
             });
           }
           if (data.meta === "sanitizer_keyword") {
-            const key = q.trim().toLowerCase();
-            if (key === INPUT_SANITIZER_COMMAND_DISABLE.toLowerCase()) {
-              a.setInputSanitizerUserDisabled(true);
-            } else if (key === INPUT_SANITIZER_COMMAND_ENABLE.toLowerCase()) {
-              a.setInputSanitizerUserDisabled(false);
-            }
+            void a.syncSettingsFromDisk().catch((err) => {
+              console.error("syncSettingsFromDisk failed (sanitizer keyword)", err);
+            });
             toaster.toast({
               title: "Sanitizer",
               body: "Mode saved. See README for commands.",
@@ -618,7 +618,9 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
           ).catch(() => {});
         }
 
-        a.saveIp(ip);
+        if (ip.trim().length > 0) {
+          a.saveIp(ip);
+        }
         if (a.unifiedInputPersistenceMode === "persist_search_only") {
           a.persistSearchQuery("");
         }

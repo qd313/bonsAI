@@ -4,6 +4,8 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-06-14
+
 ### Added
 - **Voice input (local STT):** Mic button on the unified Ask bar records via backend PipeWire/Pulse/ALSA capture and streams interim whisper.cpp transcription into the text field. **Permissions → Voice input (microphone)** (default off). **Settings → Voice input** for `tiny.en` / `base.en` model download. RPCs: `start_voice_transcription`, `stop_voice_transcription`, `get_voice_transcription_status`, `install_voice_engine`. `voice_transcription_service.py`, `useVoiceTranscription.ts`, `VoiceInputSettingsSection.tsx`.
 - **LAN Ollama discovery (mDNS):** Settings → Connection **Find LAN** — user-triggered browse for `_ollama._tcp` only (no subnet scan). `ollama_mdns_discovery_service.py`, `discover_mdns_ollama_hosts` RPC, `SettingsTab.tsx`.
@@ -17,6 +19,11 @@ All notable changes to this project are documented in this file.
 - **Pull models:** Filters Speed / Strategy / Expert / Vision (coding removed); coverage-based suggestions; install bundles dropdown; default slow warning **45s** and hard timeout **3 min** when custom timeouts are off.
 
 ### Fixed
+- **Token stream isolation:** Background Ask partial streaming binds only to the active background `request_id`; foreground asks no longer corrupt shared partial snapshots (`main.py`, `game_ai_request.py`).
+- **Settings persist safety:** Debounced `save_settings` gated on successful hydrate; atomic `settings.json` writes; epoch cancel before clear/sync (`usePluginSettings.ts`, `settings_service.py`).
+- **Ask input survival:** `no_persist` mode no longer clears the Ask field on every Decky remount after modal close (`unifiedInputPersistenceMode.ts`, `index.tsx`).
+- **Local-only Ask commands:** Sanitizer keywords, shortcut setup, and vac-check work without a configured Ollama PC IP (`localOnlyAskCommands.ts`, `useBonsaiAskOrchestration.ts`).
+- **Ollama stream integrity:** NDJSON streams that end without Ollama's `done: true` marker are rejected instead of returning truncated success (`ollama_service.py`).
 - **Local toggle no longer overwrites LAN PC IP:** Ask no longer persists `127.0.0.1:11434` to `bonsai:pc-ip` localStorage while **Ollama on this Deck** is enabled, so toggling local off restores the user's LAN host (`src/utils/persistOllamaIp.ts`, `src/index.tsx`).
 - **Deck UI polish (QAM):** Avatar containment in unified input; 1px Ask spacing; full-bleed settings/pull picker; clearer no-game hint (replaces “Limited context” chip); pull picker D-pad on filter toggles; logging level persists after reload; merged screenshot+log permission; PC IP hidden when local Ollama is on; **Clear all data** clears modal session survival; Proton attach toggle removed from Developer.
 

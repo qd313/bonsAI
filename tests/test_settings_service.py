@@ -441,6 +441,43 @@ class SettingsServiceTests(unittest.TestCase):
             self.assertEqual(loaded["latency_warning_seconds"], 60)
             self.assertEqual(loaded["unified_input_persistence_mode"], "no_persist")
             self.assertIn("capabilities", loaded)
+            self.assertFalse(settings_path.with_suffix(".json.tmp").exists())
+
+    def test_save_settings_uses_atomic_replace(self):
+        """Writes go through a temp file so a crash mid-write cannot truncate settings.json."""
+        logger = _Logger()
+
+        def sanitize_fn(data):
+            return sanitize_settings(
+                data=data,
+                default_latency_warning_seconds=15,
+                default_request_timeout_seconds=120,
+                min_latency_warning_seconds=5,
+                max_latency_warning_seconds=300,
+                min_request_timeout_seconds=10,
+                max_request_timeout_seconds=300,
+                valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+                default_persistence_mode="persist_all",
+                valid_ask_modes={"speed", "strategy", "deep"},
+                default_ask_mode="speed",
+            )
+
+        with tempfile.TemporaryDirectory() as tmp:
+            settings_dir = Path(tmp)
+            settings_path = settings_dir / "settings.json"
+            baseline = load_settings(str(settings_path), sanitize_fn, logger)
+            save_settings(
+                path=str(settings_path),
+                settings_dir=str(settings_dir),
+                incoming={"latency_warning_seconds": 42},
+                current=baseline,
+                sanitize_func=sanitize_fn,
+                logger=logger,
+            )
+            self.assertTrue(settings_path.is_file())
+            self.assertFalse(settings_path.with_suffix(".json.tmp").exists())
+            loaded = load_settings(str(settings_path), sanitize_fn, logger)
+            self.assertEqual(loaded["latency_warning_seconds"], 42)
 
 
 if __name__ == "__main__":

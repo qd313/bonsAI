@@ -2,7 +2,7 @@
   "name": "bonsAI",
   "author": "qwert",
   "description": "bonsAI: self-hosted AI for SteamOS",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "api_version": 1,
   "main": "main.py",
   "icon": "fas fa-search",

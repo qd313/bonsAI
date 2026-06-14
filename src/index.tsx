@@ -50,6 +50,7 @@ import {
   clearOllamaTabLocalSurvival,
 } from "./utils/ollamaTabLocalSurvival";
 import { persistOllamaIpIfRoutingToLan as persistOllamaIpIfRoutingToLanUtil } from "./utils/persistOllamaIp";
+import { shouldClearUnifiedInputForPersistenceMode } from "./utils/unifiedInputPersistenceMode";
 import { getRandomPresets } from "./data/presets";
 import {
   AboutTabTitleIcon,
@@ -400,7 +401,6 @@ const Content: React.FC = () => {
     presetChipAnimation,
     setPresetChipAnimation,
     setPresetChipFadeAnimationEnabled,
-    setInputSanitizerUserDisabled,
     askMode,
     setAskMode,
     ollamaKeepAlive,
@@ -435,6 +435,9 @@ const Content: React.FC = () => {
     setVoiceSttModel,
     settingsLoaded,
     hydrateFromSettings,
+    pauseDebouncedSettingsSave,
+    flushSettingsSnapshotNow,
+    syncSettingsFromDisk,
   } = usePluginSettings();
 
   const [voiceRecording, setVoiceRecording] = useState(false);
@@ -532,7 +535,7 @@ const Content: React.FC = () => {
     effectiveOllamaPcIp,
     selectedAttachment,
     setSelectedAttachment,
-    setInputSanitizerUserDisabled,
+    syncSettingsFromDisk,
     unifiedInputFieldLayerRef,
     unifiedInputHostRef,
     setSelectedIndex,
@@ -917,8 +920,11 @@ const Content: React.FC = () => {
     persistSearchQuery("");
   }, [unifiedInput, unifiedInputPersistenceMode, filteredSettings.length]);
 
+  const unifiedInputPersistenceModePrevRef = useRef<typeof unifiedInputPersistenceMode | null>(null);
   useEffect(() => {
-    if (unifiedInputPersistenceMode === "no_persist") {
+    const prev = unifiedInputPersistenceModePrevRef.current;
+    unifiedInputPersistenceModePrevRef.current = unifiedInputPersistenceMode;
+    if (shouldClearUnifiedInputForPersistenceMode(prev, unifiedInputPersistenceMode)) {
       setUnifiedInput("");
     }
   }, [unifiedInputPersistenceMode]);
@@ -964,8 +970,10 @@ const Content: React.FC = () => {
 
   const onClearAllPluginData = useCallback(async () => {
     try {
+      await pauseDebouncedSettingsSave();
       const defaults = await call<[], BonsaiSettings>("clear_plugin_data");
       hydrateFromSettings(defaults);
+      await flushSettingsSnapshotNow();
       try {
         window.localStorage.removeItem(IP_STORAGE_KEY);
         window.localStorage.removeItem(DISCLAIMER_STORAGE_KEY);
@@ -999,7 +1007,13 @@ const Content: React.FC = () => {
         duration: 5000,
       });
     }
-  }, [hydrateFromSettings, resetPluginSession, showDisclaimerModalAgain]);
+  }, [
+    flushSettingsSnapshotNow,
+    hydrateFromSettings,
+    pauseDebouncedSettingsSave,
+    resetPluginSession,
+    showDisclaimerModalAgain,
+  ]);
 
   const onMicInput = useCallback(() => {
     if (isAsking) return;

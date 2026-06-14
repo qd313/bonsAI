@@ -449,8 +449,12 @@ def save_settings(
     sanitized = sanitize_func(merged)
     try:
         os.makedirs(settings_dir, exist_ok=True)
-        with open(path, "w", encoding="utf-8") as f:
+        tmp_path = f"{path}.tmp"
+        with open(tmp_path, "w", encoding="utf-8") as f:
             json.dump(sanitized, f, indent=2, sort_keys=True)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp_path, path)
         return sanitized
     except Exception as exc:
         logger.exception("save_settings: failed to write %s", path)

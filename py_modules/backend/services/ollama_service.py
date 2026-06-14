@@ -480,6 +480,20 @@ def post_ollama_chat(
                         ),
                         "body": stream_err_txt[:4000],
                     }
+                if not done_flag:
+                    assistant_so_far = "".join(deltas)
+                    if assistant_so_far.strip():
+                        msg = (
+                            f"Ollama stream ended before completion for model '{model_name}'. "
+                            "Partial output was not used as the final answer."
+                        )
+                    else:
+                        msg = (
+                            f"Ollama returned an incomplete stream for model '{model_name}' "
+                            "(no completion marker and no assistant text)."
+                        )
+                    logger.warning("ask_ollama: %s", msg)
+                    return {"success": False, "response": msg}
                 assistant_raw = "".join(deltas)
                 thinking_summary, visible_raw = extract_bonsai_status(assistant_raw)
                 # Permanent completion telemetry: done_reason=length with raw_len=0 means the

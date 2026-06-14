@@ -4,6 +4,18 @@ import sys
 import types
 import unittest
 
+if "fcntl" not in sys.modules:
+    _fcntl = types.ModuleType("fcntl")
+    _fcntl.LOCK_EX = 2
+    _fcntl.LOCK_NB = 4
+    _fcntl.LOCK_UN = 8
+
+    def _noop_flock(*_a, **_k):
+        return False
+
+    _fcntl.flock = _noop_flock
+    sys.modules["fcntl"] = _fcntl
+
 if "decky" not in sys.modules:
     _decky = types.ModuleType("decky")
     _decky.DECKY_PLUGIN_SETTINGS_DIR = "/tmp"

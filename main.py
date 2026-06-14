@@ -1653,6 +1653,7 @@ class Plugin:
         attachments: Optional[list] = None,
         ask_mode: str = "speed",
         spoiler_consent: bool = False,
+        token_stream_request_id: Optional[int] = None,
     ) -> dict:
         """Run one full ask lifecycle, including Ollama call timing and optional TDP application."""
         plugin = Plugin._coerce_instance(self)
@@ -1665,6 +1666,7 @@ class Plugin:
             attachments=attachments,
             ask_mode=ask_mode,
             spoiler_consent=spoiler_consent,
+            token_stream_request_id=token_stream_request_id,
         )
 
     async def ask_game_ai(self, question: Any = "", PcIp: str = ""):
@@ -1720,6 +1722,7 @@ class Plugin:
             attachments=attachments or [],
             ask_mode=ask_mode,
             spoiler_consent=spoiler_consent,
+            token_stream_request_id=request_id,
         )
         self._ensure_background_state()
         plugin_bg = Plugin._coerce_instance(self)
@@ -2116,6 +2119,7 @@ class Plugin:
         proton_log_attachment: Optional[str] = None,
         proton_log_transparency: Optional[dict] = None,
         strategy_spoiler_consent: bool = False,
+        token_stream_request_id: Optional[int] = None,
     ):
         """Orchestrate attachment prep, prompt assembly, and model fallback request execution."""
         plugin_inst = Plugin._coerce_instance(self)
@@ -2281,10 +2285,13 @@ class Plugin:
             }
         ask_diagnostics["models_after_installed_filter"] = list(models_to_try)
 
+        # Only background `_run_background_request` passes token_stream_request_id. Foreground
+        # `ask_game_ai` must not attach `on_delta` while `_background_state` still shows a pending
+        # id — another RPC can await inside `ask_ollama` and corrupt the same partial snapshot.
         token_streaming = settings.get("bonsai_token_streaming_enabled") is True
         on_delta_cb = None
-        if isinstance(active_request_id, int):
-            stream_rid = active_request_id
+        if isinstance(token_stream_request_id, int):
+            stream_rid = token_stream_request_id
 
             def _on_delta(text: str, done: bool, thinking_summary: Optional[str] = None) -> None:
                 plugin_inst._update_partial_response(

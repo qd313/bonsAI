@@ -51,6 +51,7 @@ async def run_game_ai_request(
     attachments: Optional[list] = None,
     ask_mode: str = "speed",
     spoiler_consent: bool = False,
+    token_stream_request_id: Optional[int] = None,
 ) -> dict:
     """Run one full ask lifecycle, including Ollama call timing and optional TDP application."""
     start = time.time()
@@ -284,6 +285,7 @@ async def run_game_ai_request(
             proton_log_attachment=proton_attachment_text or None,
             proton_log_transparency=proton_log_transparency,
             strategy_spoiler_consent=strategy_spoiler_consent_effective,
+            token_stream_request_id=token_stream_request_id,
         )
         elapsed = round(time.time() - start, 1)
         base_response_text = str(ollama_result.get("response", "") or "No response text.")

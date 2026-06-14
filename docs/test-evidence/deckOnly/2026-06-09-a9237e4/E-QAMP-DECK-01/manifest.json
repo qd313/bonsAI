@@ -1,0 +1,19 @@
+{
+  "scenarioId": "E-QAMP-DECK-01",
+  "tier": "deckOnly",
+  "batch": "deckOnly",
+  "status": "skipped",
+  "error": null,
+  "durationMs": null,
+  "gitSha": "a9237e4",
+  "runDate": "2026-06-09",
+  "previewUrl": null,
+  "evidenceProfile": "deck-only",
+  "tags": [
+    "QAMP-DECK-01",
+    "QAMP-ONDECK"
+  ],
+  "captureArtifact": null,
+  "captureError": null,
+  "evidenceFiles": []
+}

@@ -7,6 +7,8 @@ import {
   DEFAULT_CAPABILITIES,
   DEFAULT_OLLAMA_KEEP_ALIVE,
   DEFAULT_SCREENSHOT_ATTACHMENT_PRESET,
+  DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED,
+  type DesktopAppLogLevel,
   normalizeLatencyWarningSeconds,
   normalizeRequestTimeoutSeconds,
   normalizeSettings,
@@ -55,8 +57,14 @@ describe("settingsAndResponse", () => {
     expect(settings.latency_timeouts_custom_enabled).toBe(false);
     expect(settings.desktop_debug_note_auto_save).toBe(false);
     expect(settings.desktop_ask_verbose_logging).toBe(false);
+    expect(settings.desktop_app_log_level).toBe("off");
+    expect(settings.attach_proton_logs_when_troubleshooting).toBe(false);
     expect(settings.capabilities.filesystem_write).toBe(false);
     expect(settings.capabilities.hardware_control).toBe(false);
+    expect(settings.capabilities.steam_web_api).toBe(false);
+    expect(settings.capabilities.microphone_access).toBe(false);
+    expect(settings.voice_stt_model).toBe("tiny.en");
+    expect(settings.steam_web_api_key).toBe("");
     expect(settings.ai_character_enabled).toBe(false);
     expect(settings.ai_character_random).toBe(true);
     expect(settings.ai_character_preset_id).toBe("");
@@ -66,7 +74,7 @@ describe("settingsAndResponse", () => {
     expect(settings.input_sanitizer_user_disabled).toBe(false);
     expect(settings.ask_mode).toBe(DEFAULT_ASK_MODE);
     expect(settings.ollama_keep_alive).toBe(DEFAULT_OLLAMA_KEEP_ALIVE);
-    expect(settings.show_debug_tab).toBe(false);
+    expect(settings.show_developer_tab).toBe(false);
     expect(settings.model_policy_tier).toBe("open_source_only");
     expect(settings.model_policy_non_foss_unlocked).toBe(false);
     expect(settings.model_allow_high_vram_fallbacks).toBe(false);
@@ -108,6 +116,14 @@ describe("settingsAndResponse", () => {
     expect(normalizeSettings({ ask_mode: "bogus" as unknown as string }).ask_mode).toBe(DEFAULT_ASK_MODE);
   });
 
+  it("normalizes desktop app log level", () => {
+    expect(normalizeSettings({ desktop_app_log_level: "default" }).desktop_app_log_level).toBe("default");
+    expect(normalizeSettings({ desktop_app_log_level: "verbose" }).desktop_app_log_level).toBe("verbose");
+    expect(normalizeSettings({ desktop_app_log_level: "off" }).desktop_app_log_level).toBe("off");
+    expect(normalizeSettings({}).desktop_app_log_level).toBe("off");
+    expect(normalizeSettings({ desktop_app_log_level: "bogus" as unknown as DesktopAppLogLevel }).desktop_app_log_level).toBe("off");
+  });
+
   it("normalizes desktop ask verbose logging: only explicit true enables", () => {
     expect(normalizeSettings({ desktop_ask_verbose_logging: true }).desktop_ask_verbose_logging).toBe(true);
     expect(normalizeSettings({ desktop_ask_verbose_logging: false }).desktop_ask_verbose_logging).toBe(false);
@@ -133,10 +149,11 @@ describe("settingsAndResponse", () => {
     );
   });
 
-  it("normalizes show_debug_tab: only explicit true enables", () => {
-    expect(normalizeSettings({ show_debug_tab: true }).show_debug_tab).toBe(true);
-    expect(normalizeSettings({ show_debug_tab: false }).show_debug_tab).toBe(false);
-    expect(normalizeSettings({}).show_debug_tab).toBe(false);
+  it("normalizes show_developer_tab: only explicit true enables; migrates show_debug_tab", () => {
+    expect(normalizeSettings({ show_developer_tab: true }).show_developer_tab).toBe(true);
+    expect(normalizeSettings({ show_developer_tab: false }).show_developer_tab).toBe(false);
+    expect(normalizeSettings({ show_debug_tab: true }).show_developer_tab).toBe(true);
+    expect(normalizeSettings({}).show_developer_tab).toBe(false);
   });
 
   it("normalizes preset chip fade: only explicit false disables", () => {
@@ -160,6 +177,7 @@ describe("settingsAndResponse", () => {
     expect(settings.capabilities.filesystem_write).toBe(true);
     expect(settings.capabilities.hardware_control).toBe(false);
     expect(settings.capabilities.media_library_access).toBe(false);
+    expect(settings.capabilities.steam_logs_read).toBe(false);
     expect(settings.capabilities.external_navigation).toBe(false);
   });
 
@@ -181,7 +199,10 @@ describe("settingsAndResponse", () => {
       screenshotAttachmentPreset: "mid",
       desktopDebugNoteAutoSave: true,
       desktopAskVerboseLogging: false,
+      desktopAppLogLevel: "off",
+      attachProtonLogsWhenTroubleshooting: true,
       presetChipFadeAnimationEnabled: true,
+      presetChipAnimation: "fade",
       inputSanitizerUserDisabled: false,
       capabilities: DEFAULT_CAPABILITIES,
       aiCharacterEnabled: true,
@@ -191,11 +212,20 @@ describe("settingsAndResponse", () => {
       aiCharacterAccentIntensity: "balanced",
       askMode: "deep",
       ollamaKeepAlive: "30s",
-      showDebugTab: true,
+      showDeveloperTab: true,
       modelPolicyTier: "open_weight",
       modelPolicyNonFossUnlocked: false,
       modelAllowHighVramFallbacks: true,
       ollamaLocalOnDeck: true,
+      strategySpoilerMaskingEnabled: false,
+      steamWebApiKey: "abc",
+      bonsaiTokenStreamingEnabled: true,
+      showOnscreenDebugHud: false,
+      responseVerifyEnabled: false,
+      responseVerifySecondPass: false,
+      responseVerifyModel: "",
+      namedOllamaHosts: [],
+      voiceSttModel: "tiny.en",
     });
     expect(p.latency_warning_seconds).toBe(20);
     expect(p.request_timeout_seconds).toBe(150);
@@ -206,18 +236,27 @@ describe("settingsAndResponse", () => {
     expect(p.ollama_keep_alive).toBe("30s");
     expect(p.model_allow_high_vram_fallbacks).toBe(true);
     expect(p.ollama_local_on_deck).toBe(true);
+    expect(p.attach_proton_logs_when_troubleshooting).toBe(true);
+    expect(p.strategy_spoiler_masking_enabled).toBe(false);
+    expect(p.strategy_spoiler_auto_reveal_after_consent).toBe(false);
+    expect(p.steam_web_api_key).toBe("abc");
+    expect(p.show_developer_tab).toBe(true);
+    expect(p.bonsai_token_streaming_enabled).toBe(true);
   });
 
   it("toBonsaiSettingsPayload merges patch over base (character picker path)", () => {
     const base = {
       latencyWarningSeconds: 30,
-      requestTimeoutSeconds: 360,
+      requestTimeoutSeconds: 45,
       latencyTimeoutsCustomEnabled: false,
       unifiedInputPersistenceMode: "persist_all" as const,
       screenshotAttachmentPreset: DEFAULT_SCREENSHOT_ATTACHMENT_PRESET,
       desktopDebugNoteAutoSave: false,
       desktopAskVerboseLogging: false,
+      desktopAppLogLevel: "off" as const,
+      attachProtonLogsWhenTroubleshooting: false,
       presetChipFadeAnimationEnabled: true,
+      presetChipAnimation: "fade" as const,
       inputSanitizerUserDisabled: false,
       capabilities: DEFAULT_CAPABILITIES,
       aiCharacterEnabled: true,
@@ -227,11 +266,20 @@ describe("settingsAndResponse", () => {
       aiCharacterAccentIntensity: DEFAULT_AI_CHARACTER_ACCENT_INTENSITY,
       askMode: DEFAULT_ASK_MODE,
       ollamaKeepAlive: DEFAULT_OLLAMA_KEEP_ALIVE,
-      showDebugTab: false,
+      showDeveloperTab: false,
       modelPolicyTier: "open_source_only" as const,
       modelPolicyNonFossUnlocked: false,
       modelAllowHighVramFallbacks: false,
       ollamaLocalOnDeck: false,
+      strategySpoilerMaskingEnabled: DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED,
+      steamWebApiKey: "",
+      bonsaiTokenStreamingEnabled: false,
+      showOnscreenDebugHud: false,
+      responseVerifyEnabled: false,
+      responseVerifySecondPass: false,
+      responseVerifyModel: "",
+      namedOllamaHosts: [],
+      voiceSttModel: "tiny.en" as const,
     };
     const p = toBonsaiSettingsPayload(base, {
       ai_character_random: false,

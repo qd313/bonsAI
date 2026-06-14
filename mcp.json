@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "decky-plugin-studio": {
+      "command": "node",
+      "args": ["c:/Users/still/.cursor/extensions/decky-plugin-studio.decky-plugin-studio-extension-0.1.1/resources/mcp-server/dist/index.js"],
+      "env": {
+        "DECKY_STUDIO_WORKSPACE": "${workspaceFolder}",
+        "DECKY_STUDIO_REPO": "C:/Users/still/decky-plugin-studio"
+      }
+    }
+  }
+}

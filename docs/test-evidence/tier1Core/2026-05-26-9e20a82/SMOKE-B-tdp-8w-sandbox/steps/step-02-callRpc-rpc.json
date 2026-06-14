@@ -1,0 +1,23 @@
+{
+  "success": true,
+  "cancelled": false,
+  "response": "```json\n{\"tdp_watts\": 8, \"gpu_clock_mhz\": null}\n```\nAs the power cap was not available for reading from sysfs, I am unable to set a specific TDP value directly. However, I have provided a recommended TDP of 8 watts in the JSON block.\n\n[Hardware tuning not applied: enable Hardware control in the Permissions tab.]",
+  "app_id": "",
+  "app_context": "none",
+  "applied": {
+    "tdp_watts": null,
+    "gpu_clock_mhz": null,
+    "errors": [
+      "Hardware control disabled in Permissions."
+    ]
+  },
+  "elapsed_seconds": 6.1,
+  "strategy_guide_branches": null,
+  "model_policy_disclosure": {
+    "model": "qwen2.5:3b",
+    "source_class": "foss",
+    "read_more_anchor": "model-policy-tiers"
+  },
+  "strategy_spoiler_consent_effective": false,
+  "preset_carousel_inject": null
+}

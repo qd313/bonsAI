@@ -1,5 +1,12 @@
+"""Load, sanitize, and save persisted plugin ``settings.json`` (shared by RPC handlers and tests).
+
+Keys and defaults must stay aligned with frontend ``normalizeSettings`` / ``BonsaiSettings`` and with
+``plugin.json`` migrations — breaking names strands older installs until reset.
+"""
+
 import json
 import os
+import re
 from typing import Any, Callable
 
 from backend.services.ai_character_service import (
@@ -11,6 +18,7 @@ from backend.services.ai_character_service import (
 )
 from backend.services.capabilities import legacy_grandfather_capabilities, sanitize_capabilities
 from backend.services.model_policy import reconcile_model_policy_tier
+from backend.services.voice_transcription_service import sanitize_voice_stt_model
 
 
 def clamp_int(value: Any, default: int, minimum: int, maximum: int) -> int:
@@ -54,9 +62,48 @@ def sanitize_desktop_ask_verbose_logging(value: Any) -> bool:
     return value is True
 
 
+def sanitize_bonsai_token_streaming_enabled(value: Any) -> bool:
+    """Only explicit true enables progressive token streaming to the Main tab (Developer opt-in)."""
+    return value is True
+
+
+def sanitize_show_onscreen_debug_hud(value: Any) -> bool:
+    """Only explicit true shows the translucent on-screen ingest debug HUD."""
+    return value is True
+
+
+_VALID_DESKTOP_APP_LOG_LEVELS = frozenset({"off", "default", "verbose"})
+
+
+def sanitize_desktop_app_log_level(value: Any) -> str:
+    """App activity log level for Desktop/bonsAI_logs; default off (opt-in)."""
+    if isinstance(value, str) and value.strip() in _VALID_DESKTOP_APP_LOG_LEVELS:
+        return value.strip()
+    return "off"
+
+
+def sanitize_attach_proton_logs_when_troubleshooting(value: Any) -> bool:
+    """Only explicit true attaches local Proton/Steam log excerpts on troubleshooting-style Asks."""
+    return value is True
+
+
 def sanitize_preset_chip_fade_animation_enabled(value: Any) -> bool:
     """Staggered preset-chip fades are on unless the user explicitly saves ``false``."""
     return value is not False
+
+
+_VALID_PRESET_CHIP_ANIMATION = frozenset({"fade", "carousel", "static"})
+
+
+def sanitize_preset_chip_animation(value: Any, legacy_fade: Any) -> str:
+    """Main-tab preset chip animation mode; migrates from legacy fade boolean when unset."""
+    if isinstance(value, str):
+        t = value.strip()
+        if t in _VALID_PRESET_CHIP_ANIMATION:
+            return t
+    if legacy_fade is False:
+        return "static"
+    return "fade"
 
 
 def sanitize_input_sanitizer_user_disabled(value: Any) -> bool:
@@ -64,9 +111,36 @@ def sanitize_input_sanitizer_user_disabled(value: Any) -> bool:
     return value is True
 
 
-def sanitize_show_debug_tab(value: Any) -> bool:
-    """Only explicit ``true`` shows the Debug tab; default is hidden."""
+def sanitize_strategy_spoiler_masking_enabled(value: Any) -> bool:
+    """Strategy ```bonsai-spoiler``` tap-to-reveal is on unless the user explicitly saves ``false``."""
+    return value is not False
+
+
+def sanitize_strategy_spoiler_auto_reveal_after_consent(value: Any) -> bool:
+    """Only explicit ``true`` expands spoiler blocks by default after an opted-in Ask."""
     return value is True
+
+
+STEAM_WEB_API_KEY_MAX_LEN = 128
+
+
+def sanitize_steam_web_api_key(value: Any) -> str:
+    """Strip and bound Steam Web API key length; never store non-string blobs."""
+    if not isinstance(value, str):
+        return ""
+    s = value.strip()
+    if len(s) > STEAM_WEB_API_KEY_MAX_LEN:
+        s = s[:STEAM_WEB_API_KEY_MAX_LEN]
+    return s
+
+
+def sanitize_show_developer_tab(value: Any, legacy_show_debug_tab: Any = None) -> bool:
+    """Only explicit ``true`` shows the Developer tab; legacy ``show_debug_tab`` migrates on read."""
+    if value is True:
+        return True
+    if legacy_show_debug_tab is True:
+        return True
+    return False
 
 
 def sanitize_ollama_local_on_deck(value: Any) -> bool:
@@ -79,6 +153,57 @@ def sanitize_ollama_local_on_deck(value: Any) -> bool:
 def sanitize_model_allow_high_vram_fallbacks(value: Any) -> bool:
     """Only explicit ``true`` appends large-model tails to Ollama fallback chains."""
     return value is True
+
+
+def sanitize_response_verify_enabled(value: Any) -> bool:
+    """Only explicit ``true`` runs rule-based post-check on Ollama replies."""
+    return value is True
+
+
+def sanitize_response_verify_second_pass(value: Any) -> bool:
+    """Only explicit ``true`` allows optional second-model verifier (default off)."""
+    return value is True
+
+
+_RESPONSE_VERIFY_MODEL_MAX = 64
+_RESPONSE_VERIFY_MODEL_RE = re.compile(r"^[a-zA-Z0-9][a-zA-Z0-9._:/-]{0,63}$")
+
+
+def sanitize_response_verify_model(value: Any) -> str:
+    """Ollama tag for the optional verifier second pass (empty = disabled)."""
+    if not isinstance(value, str):
+        return ""
+    tag = value.strip()[:_RESPONSE_VERIFY_MODEL_MAX]
+    if not tag or not _RESPONSE_VERIFY_MODEL_RE.match(tag):
+        return ""
+    return tag
+
+
+MAX_NAMED_OLLAMA_HOSTS = 4
+NAMED_OLLAMA_HOST_LABEL_MAX = 32
+NAMED_OLLAMA_HOST_VALUE_MAX = 128
+
+
+def sanitize_named_ollama_hosts(value: Any) -> list[dict[str, str]]:
+    """Up to four labeled ``host:port`` presets for quick Connection switching."""
+    if not isinstance(value, list):
+        return []
+    out: list[dict[str, str]] = []
+    for item in value:
+        if len(out) >= MAX_NAMED_OLLAMA_HOSTS:
+            break
+        if not isinstance(item, dict):
+            continue
+        label = item.get("label")
+        host = item.get("host")
+        if not isinstance(label, str) or not isinstance(host, str):
+            continue
+        lab = label.strip()[:NAMED_OLLAMA_HOST_LABEL_MAX]
+        h = host.strip()[:NAMED_OLLAMA_HOST_VALUE_MAX]
+        if not lab or not h:
+            continue
+        out.append({"label": lab, "host": h})
+    return out
 
 
 REQUEST_TIMEOUT_RECONCILE_STEP_SECONDS = 10
@@ -229,8 +354,20 @@ def sanitize_settings(
         "desktop_ask_verbose_logging": sanitize_desktop_ask_verbose_logging(
             raw.get("desktop_ask_verbose_logging")
         ),
+        "bonsai_token_streaming_enabled": sanitize_bonsai_token_streaming_enabled(
+            raw.get("bonsai_token_streaming_enabled")
+        ),
+        "show_onscreen_debug_hud": sanitize_show_onscreen_debug_hud(raw.get("show_onscreen_debug_hud")),
+        "desktop_app_log_level": sanitize_desktop_app_log_level(raw.get("desktop_app_log_level")),
+        "attach_proton_logs_when_troubleshooting": sanitize_attach_proton_logs_when_troubleshooting(
+            raw.get("attach_proton_logs_when_troubleshooting")
+        ),
         "preset_chip_fade_animation_enabled": sanitize_preset_chip_fade_animation_enabled(
             raw.get("preset_chip_fade_animation_enabled")
+        ),
+        "preset_chip_animation": sanitize_preset_chip_animation(
+            raw.get("preset_chip_animation"),
+            raw.get("preset_chip_fade_animation_enabled"),
         ),
         "input_sanitizer_user_disabled": sanitize_input_sanitizer_user_disabled(
             raw.get("input_sanitizer_user_disabled")
@@ -250,12 +387,28 @@ def sanitize_settings(
         ),
         "ollama_keep_alive": sanitize_ollama_keep_alive(raw.get("ollama_keep_alive")),
         "ollama_local_on_deck": sanitize_ollama_local_on_deck(raw.get("ollama_local_on_deck")),
-        "show_debug_tab": sanitize_show_debug_tab(raw.get("show_debug_tab")),
+        "show_developer_tab": sanitize_show_developer_tab(
+            raw.get("show_developer_tab"), raw.get("show_debug_tab")
+        ),
         "model_policy_tier": mp_tier,
         "model_policy_non_foss_unlocked": mp_unlock,
         "model_allow_high_vram_fallbacks": sanitize_model_allow_high_vram_fallbacks(
             raw.get("model_allow_high_vram_fallbacks")
         ),
+        "response_verify_enabled": sanitize_response_verify_enabled(raw.get("response_verify_enabled")),
+        "response_verify_second_pass": sanitize_response_verify_second_pass(
+            raw.get("response_verify_second_pass")
+        ),
+        "response_verify_model": sanitize_response_verify_model(raw.get("response_verify_model")),
+        "named_ollama_hosts": sanitize_named_ollama_hosts(raw.get("named_ollama_hosts")),
+        "strategy_spoiler_masking_enabled": sanitize_strategy_spoiler_masking_enabled(
+            raw.get("strategy_spoiler_masking_enabled")
+        ),
+        "strategy_spoiler_auto_reveal_after_consent": sanitize_strategy_spoiler_auto_reveal_after_consent(
+            raw.get("strategy_spoiler_auto_reveal_after_consent")
+        ),
+        "steam_web_api_key": sanitize_steam_web_api_key(raw.get("steam_web_api_key")),
+        "voice_stt_model": sanitize_voice_stt_model(raw.get("voice_stt_model")),
     }
 
 

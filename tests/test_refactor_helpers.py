@@ -1,9 +1,13 @@
 import unittest
 
 from refactor_helpers import (
+    build_effective_models_to_try,
     build_ollama_chat_url,
+    filter_models_to_installed,
     is_current_tdp_read_intent,
+    is_ollama_model_missing_error,
     is_valid_setup_pull_profile,
+    no_installed_routing_models_message,
     normalize_ollama_base,
     parse_tdp_recommendation,
     select_ollama_models,
@@ -56,12 +60,17 @@ class RefactorHelperTests(unittest.TestCase):
     def test_is_valid_setup_pull_profile(self):
         self.assertTrue(is_valid_setup_pull_profile("starter"))
         self.assertTrue(is_valid_setup_pull_profile("tier1_foss_full"))
+        self.assertTrue(is_valid_setup_pull_profile("update_installed"))
         self.assertFalse(is_valid_setup_pull_profile("Starter"))
         self.assertFalse(is_valid_setup_pull_profile(None))
 
     def test_select_ollama_models_text_and_vision(self):
         """FOSS-first safe chains; optional high-VRAM tail extends the list."""
         self.assertIn("llama3:latest", select_ollama_models(False))
+        self.assertIn("gemma3:4b", select_ollama_models(False))
+        self.assertIn("gemma4:latest", select_ollama_models(False))
+        self.assertIn("gemma3:4b", select_ollama_models(True, "speed"))
+        self.assertIn("gemma4:latest", select_ollama_models(True, "speed"))
         self.assertIn("llava:7b", select_ollama_models(True, "speed"))
         self.assertEqual(select_ollama_models(False, "speed")[0], "qwen2.5:1.5b")
         self.assertEqual(select_ollama_models(False, "strategy")[0], "qwen2.5:latest")
@@ -97,6 +106,14 @@ class RefactorHelperTests(unittest.TestCase):
         parsed = parse_tdp_recommendation("No power recommendation provided.", 3, 15, 200, 1600)
         self.assertIsNone(parsed)
 
+    def test_is_ollama_model_missing_error(self):
+        self.assertTrue(is_ollama_model_missing_error(404, ""))
+        self.assertTrue(is_ollama_model_missing_error(404, "{}"))
+        self.assertTrue(
+            is_ollama_model_missing_error(400, '{"error":"model \'gemma3:latest\' not found"}')
+        )
+        self.assertFalse(is_ollama_model_missing_error(500, "internal server error"))
+
     def test_is_current_tdp_read_intent_detects(self):
         self.assertTrue(is_current_tdp_read_intent("what is the current tdp"))
         self.assertTrue(is_current_tdp_read_intent("What is current TDP?"))
@@ -105,6 +122,41 @@ class RefactorHelperTests(unittest.TestCase):
     def test_is_current_tdp_read_intent_rejects_tuning(self):
         self.assertFalse(is_current_tdp_read_intent("What TDP should I use for 60fps?"))
         self.assertFalse(is_current_tdp_read_intent("recommend tdp for this game"))
+
+    def test_filter_models_to_installed_preserves_order(self):
+        chain = ["qwen2.5:3b", "gemma4:latest", "llama3:latest"]
+        matched, skipped = filter_models_to_installed(chain, ["llama3:latest", "gemma4:latest"])
+        self.assertEqual(matched, ["gemma4:latest", "llama3:latest"])
+        self.assertEqual(skipped, ["qwen2.5:3b"])
+
+    def test_filter_models_to_installed_empty_installed_passthrough(self):
+        chain = ["qwen2.5:3b"]
+        matched, skipped = filter_models_to_installed(chain, [])
+        self.assertEqual(matched, chain)
+        self.assertEqual(skipped, [])
+
+    def test_no_installed_routing_models_message_mentions_starter(self):
+        msg = no_installed_routing_models_message(["custom:7b"], False)
+        self.assertIn("qwen2.5:1.5b", msg)
+        self.assertIn("custom:7b", msg)
+
+    def test_build_effective_models_to_try_host_fallback(self):
+        chain = ["qwen2.5:3b", "gemma4:latest"]
+        models, strategy = build_effective_models_to_try(chain, ["gemma4:latest"])
+        self.assertEqual(strategy, "installed_in_policy_chain")
+        self.assertEqual(models, ["gemma4:latest"])
+
+    def test_build_effective_models_to_try_only_gemma_on_tier1_chain(self):
+        tier1_chain = ["qwen2.5:3b", "qwen2.5:7b"]
+        models, strategy = build_effective_models_to_try(tier1_chain, ["gemma4:latest"])
+        self.assertEqual(strategy, "installed_host_fallback")
+        self.assertEqual(models, ["gemma4:latest"])
+
+    def test_build_effective_models_to_try_no_tags_uses_chain(self):
+        chain = ["qwen2.5:3b"]
+        models, strategy = build_effective_models_to_try(chain, [])
+        self.assertEqual(strategy, "full_chain")
+        self.assertEqual(models, chain)
 
 
 if __name__ == "__main__":

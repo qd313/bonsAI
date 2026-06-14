@@ -53,8 +53,11 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertFalse(sanitized["latency_timeouts_custom_enabled"])
         self.assertFalse(sanitized["desktop_debug_note_auto_save"])
         self.assertFalse(sanitized["desktop_ask_verbose_logging"])
+        self.assertFalse(sanitized["attach_proton_logs_when_troubleshooting"])
         self.assertFalse(sanitized["capabilities"]["filesystem_write"])
         self.assertFalse(sanitized["capabilities"]["hardware_control"])
+        self.assertFalse(sanitized["capabilities"]["steam_web_api"])
+        self.assertEqual(sanitized["steam_web_api_key"], "")
         self.assertFalse(sanitized["ai_character_enabled"])
         self.assertTrue(sanitized["ai_character_random"])
         self.assertEqual(sanitized["ai_character_preset_id"], "")
@@ -64,11 +67,55 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertFalse(sanitized["input_sanitizer_user_disabled"])
         self.assertEqual(sanitized["ask_mode"], "speed")
         self.assertEqual(sanitized["ollama_keep_alive"], "5m")
-        self.assertFalse(sanitized["show_debug_tab"])
+        self.assertFalse(sanitized["show_developer_tab"])
         self.assertEqual(sanitized["model_policy_tier"], "open_source_only")
         self.assertFalse(sanitized["model_policy_non_foss_unlocked"])
         self.assertFalse(sanitized["model_allow_high_vram_fallbacks"])
         self.assertFalse(sanitized["ollama_local_on_deck"])
+        self.assertTrue(sanitized["strategy_spoiler_masking_enabled"])
+        self.assertFalse(sanitized["strategy_spoiler_auto_reveal_after_consent"])
+        self.assertFalse(sanitized["bonsai_token_streaming_enabled"])
+
+    def test_bonsai_token_streaming_enabled_opt_in(self):
+        kwargs = dict(
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="no_persist",
+            valid_ask_modes={"speed", "strategy", "deep"},
+            default_ask_mode="speed",
+        )
+        self.assertTrue(
+            sanitize_settings(data={"bonsai_token_streaming_enabled": True}, **kwargs)[
+                "bonsai_token_streaming_enabled"
+            ]
+        )
+        self.assertFalse(
+            sanitize_settings(data={"bonsai_token_streaming_enabled": False}, **kwargs)[
+                "bonsai_token_streaming_enabled"
+            ]
+        )
+
+    def test_show_developer_tab_migrates_legacy_show_debug_tab(self):
+        """Legacy show_debug_tab enables Developer tab on read."""
+        kwargs = dict(
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="no_persist",
+            valid_ask_modes={"speed", "strategy", "deep"},
+            default_ask_mode="speed",
+        )
+        self.assertTrue(sanitize_settings(data={"show_debug_tab": True}, **kwargs)["show_developer_tab"])
+        self.assertFalse(sanitize_settings(data={"show_debug_tab": False}, **kwargs)["show_developer_tab"])
 
     def test_sanitize_model_policy_non_foss_requires_ack(self):
         """non_foss tier without unlock is downgraded to open_weight."""
@@ -241,6 +288,25 @@ class SettingsServiceTests(unittest.TestCase):
         )
         self.assertFalse(garbled["desktop_ask_verbose_logging"])
 
+    def test_sanitize_desktop_app_log_level(self):
+        kwargs = dict(
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="persist_all",
+            valid_ask_modes={"speed", "strategy", "deep"},
+            default_ask_mode="speed",
+        )
+        self.assertEqual(sanitize_settings(data={"desktop_app_log_level": "default"}, **kwargs)["desktop_app_log_level"], "default")
+        self.assertEqual(sanitize_settings(data={"desktop_app_log_level": "verbose"}, **kwargs)["desktop_app_log_level"], "verbose")
+        self.assertEqual(sanitize_settings(data={"desktop_app_log_level": "off"}, **kwargs)["desktop_app_log_level"], "off")
+        self.assertEqual(sanitize_settings(data={}, **kwargs)["desktop_app_log_level"], "off")
+        self.assertEqual(sanitize_settings(data={"desktop_app_log_level": "bogus"}, **kwargs)["desktop_app_log_level"], "off")
+
     def test_sanitize_input_sanitizer_user_disabled_true_only_for_literal_true(self):
         """Only JSON true disables the sanitizer lane; other values keep sanitization on."""
         off = sanitize_settings(
@@ -298,7 +364,7 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertFalse(garbled["ollama_local_on_deck"])
 
     def test_load_settings_grandfathers_capabilities_when_block_missing(self):
-        """Legacy settings files without a capabilities object get all scopes enabled."""
+        """Legacy settings files without a capabilities object get known scopes enabled except Steam Web API."""
         logger = _Logger()
 
         def sanitize_fn(data):
@@ -327,6 +393,8 @@ class SettingsServiceTests(unittest.TestCase):
             self.assertTrue(caps["hardware_control"])
             self.assertTrue(caps["media_library_access"])
             self.assertTrue(caps["external_navigation"])
+            self.assertFalse(caps["steam_web_api"])
+            self.assertFalse(caps["microphone_access"])
 
     def test_load_save_settings_round_trip(self):
         """Ensure load/save helpers persist sanitized values and reload them consistently."""

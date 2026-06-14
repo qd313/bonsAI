@@ -1,39 +1,43 @@
-import React, { useLayoutEffect, useRef } from "react";
-import { Focusable } from "@decky/ui";
+import React, { useLayoutEffect, useRef, useState } from "react";
+import { Button } from "@decky/ui";
 import { ASK_LABEL_COLOR } from "../features/unified-input/constants";
 import { ASK_MODE_IDS, ASK_MODE_LABELS, type AskModeId } from "../data/askMode";
 
 export type MainTabAskModeMenuPopoverProps = {
   open: boolean;
-  firstMenuItemRef: React.MutableRefObject<HTMLDivElement | null>;
+  anchorRef: React.RefObject<HTMLElement | null>;
+  hostRef: React.RefObject<HTMLElement | null>;
+  firstMenuItemRef: React.MutableRefObject<HTMLElement | null>;
   selectedId: AskModeId;
   onSelect: (mode: AskModeId) => void;
   onRequestClose: () => void;
-  /** Focus mode chip after closing (e.g. D-pad up from Speed closes menu without changing mode). */
   onFocusModeChip: () => boolean;
 };
 
-/** Gap under mode chip; was 4px — +1px lowers whole dropdown. */
 const MENU_GAP_PX = 6;
-/** Horizontal padding per row (mirrored in `index.tsx` via `--bonsai-ask-mode-menu-pad-x` / `-pad-y`). */
-const MENU_ROW_PAD_X_PX = 6;
+const MENU_ROW_PAD_X_PX = 10;
 const MENU_ROW_PAD_Y_PX = 8;
-/** Minimum dropdown width: at least chip width (`100%` of anchor) or this many CSS pixels, whichever is larger. */
-const MENU_PANEL_MIN_WIDTH_PX = 14;
-const MENU_ROW_GAP_PX = 0;
+const MENU_PANEL_MIN_WIDTH_PX = 88;
 
-/** Solid panel aligned with `.bonsai-glass-panel` family (see `index.tsx` §7–8). */
 const MENU_PANEL_BG = "rgb(28, 36, 44)";
 const MENU_ROW_SELECTED_BG = "rgb(40, 50, 62)";
 const MENU_FONT_PX = 13;
 
+type MenuPosition = {
+  left: number;
+  top: number;
+  minWidth: number;
+};
+
 /**
- * Anchored under the mode chip (`position: relative` on `askModeMenuAnchorRef`).
- * Plain div + scoped CSS forces opaque paint; Decky `Focusable` alone can composite semi-transparent in QAM.
+ * Painted on the unified input host (not inside the 24px icon strip) with explicit left/top
+ * from the mode chip rect — avoids QAM focus-graph scatter and wrong containing blocks.
  */
 export function MainTabAskModeMenuPopover(props: MainTabAskModeMenuPopoverProps) {
   const {
     open,
+    anchorRef,
+    hostRef,
     firstMenuItemRef,
     selectedId,
     onSelect,
@@ -41,15 +45,50 @@ export function MainTabAskModeMenuPopover(props: MainTabAskModeMenuPopoverProps)
     onFocusModeChip,
   } = props;
 
-  const itemRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const itemRefs = useRef<(HTMLElement | null)[]>([]);
+  const surfaceRef = useRef<HTMLDivElement | null>(null);
+  const [menuPos, setMenuPos] = useState<MenuPosition | null>(null);
 
   useLayoutEffect(() => {
-    if (!open) return;
+    if (!open) {
+      setMenuPos(null);
+      return;
+    }
+    /**
+     * Absolute within the unified-input host (portal-to-body did not render inside the QAM
+     * overlay). left/top are host-relative; the host gets overflow:visible while open.
+     */
+    const measure = () => {
+      const anchor = anchorRef.current;
+      const host = hostRef.current;
+      const surface = surfaceRef.current;
+      if (!anchor || !host) return;
+      const a = anchor.getBoundingClientRect();
+      const h = host.getBoundingClientRect();
+      const menuW = Math.max(MENU_PANEL_MIN_WIDTH_PX, a.width, surface?.offsetWidth ?? 0);
+      const menuH = surface?.offsetHeight ?? 0;
+      /* Stay hidden until the surface has a measured height (rAF pass), otherwise the first
+         paint lands at the wrong top for one frame. */
+      if (menuH === 0) return;
+      const nextPos: MenuPosition = {
+        left: Math.max(0, a.right - h.left - menuW),
+        /*
+         * No lower clamp: the menu opens ABOVE the chip, i.e. above the host top → negative
+         * host-relative top. The old Math.max(0, …) clamp pinned a 108px menu inside a ~70px
+         * host, overlapping the text area and sliding under the Ask row (proven by geometry log).
+         */
+        top: a.top - h.top - menuH - MENU_GAP_PX,
+        minWidth: menuW,
+      };
+      setMenuPos(nextPos);
+    };
+    measure();
     const id = requestAnimationFrame(() => {
+      measure();
       itemRefs.current[0]?.focus();
     });
     return () => cancelAnimationFrame(id);
-  }, [open]);
+  }, [open, anchorRef, hostRef]);
 
   useLayoutEffect(() => {
     if (!open) return;
@@ -68,22 +107,23 @@ export function MainTabAskModeMenuPopover(props: MainTabAskModeMenuPopoverProps)
 
   return (
     <div
-      className="bonsai-ask-mode-menu-floater"
+      className="bonsai-ask-mode-menu bonsai-ask-mode-menu-floater"
       style={{
         position: "absolute",
-        top: "100%",
-        left: 0,
-        marginTop: MENU_GAP_PX,
-        // `max(100%, Npx)` gives a stable pixel floor; `100%` alone tracks the chip anchor.
-        minWidth: `max(100%, ${MENU_PANEL_MIN_WIDTH_PX}px)`,
+        left: menuPos?.left ?? 0,
+        top: menuPos?.top ?? 0,
+        right: "auto",
+        minWidth: menuPos?.minWidth ?? MENU_PANEL_MIN_WIDTH_PX,
         width: "max-content",
-        zIndex: 100,
+        zIndex: 200,
         pointerEvents: "auto",
         isolation: "isolate",
         boxSizing: "border-box",
+        visibility: menuPos ? "visible" : "hidden",
       }}
     >
       <div
+        ref={surfaceRef}
         className="bonsai-ask-mode-menu-surface"
         style={{
           backgroundColor: MENU_PANEL_BG,
@@ -93,21 +133,16 @@ export function MainTabAskModeMenuPopover(props: MainTabAskModeMenuPopoverProps)
           boxSizing: "border-box",
           overflow: "hidden",
           mixBlendMode: "normal",
-          ["--bonsai-ask-mode-menu-pad-x" as string]: `${MENU_ROW_PAD_X_PX}px`,
-          ["--bonsai-ask-mode-menu-pad-y" as string]: `${MENU_ROW_PAD_Y_PX}px`,
-          ["--bonsai-ask-mode-menu-list-pad-y" as string]: `${MENU_ROW_GAP_PX}px`,
         }}
       >
-        <Focusable
+        <div
           className="bonsai-ask-mode-menu-list"
-          flow-children="vertical"
           role="menu"
           aria-label="Inference mode"
-          onCancel={onRequestClose}
           style={{
             width: "100%",
             margin: 0,
-            padding: `${MENU_ROW_GAP_PX}px 0`,
+            padding: 0,
             backgroundColor: MENU_PANEL_BG,
             display: "flex",
             flexDirection: "column",
@@ -118,11 +153,11 @@ export function MainTabAskModeMenuPopover(props: MainTabAskModeMenuPopoverProps)
           {ASK_MODE_IDS.map((id, i) => {
             const isSelected = selectedId === id;
             return (
-              <Focusable
+              <Button
                 key={id}
-                role="menuitem"
                 className={
-                  "bonsai-ask-mode-menu-item" + (isSelected ? " bonsai-ask-mode-menu-item--selected" : "")
+                  "bonsai-ask-mode-menu-item-btn bonsai-ask-mode-menu-item" +
+                  (isSelected ? " bonsai-ask-mode-menu-item--selected" : "")
                 }
                 ref={(el) => {
                   itemRefs.current[i] = el;
@@ -139,7 +174,7 @@ export function MainTabAskModeMenuPopover(props: MainTabAskModeMenuPopoverProps)
                     return true;
                   },
                   onMoveDown: () => {
-                    if (id === "deep") return true;
+                    if (i === ASK_MODE_IDS.length - 1) return true;
                     itemRefs.current[i + 1]?.focus();
                     return true;
                   },
@@ -150,11 +185,12 @@ export function MainTabAskModeMenuPopover(props: MainTabAskModeMenuPopoverProps)
                     onSelect(id);
                     onRequestClose();
                   },
+                  onCancelButton: () => {
+                    onRequestClose();
+                    onFocusModeChip();
+                    return true;
+                  },
                 } as Record<string, unknown>)}
-                onActivate={() => {
-                  onSelect(id);
-                  onRequestClose();
-                }}
                 onClick={() => {
                   onSelect(id);
                   onRequestClose();
@@ -165,6 +201,7 @@ export function MainTabAskModeMenuPopover(props: MainTabAskModeMenuPopoverProps)
                   justifyContent: "flex-start",
                   width: "100%",
                   minHeight: 0,
+                  margin: 0,
                   padding: `${MENU_ROW_PAD_Y_PX}px ${MENU_ROW_PAD_X_PX}px`,
                   fontSize: MENU_FONT_PX,
                   fontWeight: isSelected ? 700 : 500,
@@ -173,18 +210,19 @@ export function MainTabAskModeMenuPopover(props: MainTabAskModeMenuPopoverProps)
                   letterSpacing: "0.03em",
                   lineHeight: 1.5,
                   borderRadius: 0,
-                  borderTop: "none",
+                  border: "none",
                   backgroundColor: isSelected ? MENU_ROW_SELECTED_BG : MENU_PANEL_BG,
                   color: ASK_LABEL_COLOR,
                   cursor: "pointer",
                   boxSizing: "border-box",
+                  textAlign: "left",
                 }}
               >
                 {ASK_MODE_LABELS[id].toLowerCase()}
-              </Focusable>
+              </Button>
             );
           })}
-        </Focusable>
+        </div>
       </div>
     </div>
   );

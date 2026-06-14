@@ -1,0 +1,180 @@
+<div class="decky-qam-scope"><div class="bonsai-scope" style="--bonsai-chat-ai-bubble-border: rgba(27, 78, 48, 0.5); --bonsai-chat-ai-bubble-bg-top: rgba(46, 135, 83, 0.1); --bonsai-chat-ai-bubble-bg-bottom: rgba(15, 43, 27, 0.45); --bonsai-chat-ai-bubble-text: #d4dde6; --bonsai-chat-ai-bubble-chunk-border: rgba(46, 135, 83, 0.1); --bonsai-search-host-width: 489.6px; --bonsai-askbar-outer-width: 488.6px; --bonsai-ask-margin-left: 7px;"><style>
+        /* Keep plugin subtree shrinkable inside QAM flex layout (avoids horizontal spill). */
+        /*
+          Do not set overflow-x on .bonsai-scope: if overflow-x is not visible, CSS forces overflow-y
+          away from visible, which clipped tab content below the icon strip. Horizontal containment
+          stays on TabContentsScroll + width/min-width fixes on bleed/ask rows.
+        */
+        .bonsai-scope {
+          width: 100%;
+          max-width: 100%;
+          min-width: 0;
+          box-sizing: border-box;
+        }
+        .bonsai-scope .bonsai-settings-connection-row {
+          min-width: 0;
+          max-width: 100%;
+        }
+        .bonsai-scope .bonsai-settings-connection-host input {
+          min-width: 0 !important;
+          max-width: 100%;
+        }
+
+        /* Non-main tabs: clip horizontal paint overflow without touching Main full-bleed (shell only). */
+        .bonsai-scope .bonsai-tab-panel-shell--tight {
+          width: 100%;
+          max-width: 100%;
+          min-width: 0;
+          box-sizing: border-box;
+          overflow-x: hidden;
+        }
+
+        /* Flushes row content with PanelSection title (counters default row inset). */
+        .bonsai-scope .bonsai-settings-bleed {
+          box-sizing: border-box;
+          width: calc(100% + 24px);
+          max-width: calc(100% + 24px);
+          margin-left: -12px;
+          margin-right: -12px;
+        }
+
+        .bonsai-scope .bonsai-settings-section-stack {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+        }
+
+        /*
+          Explicit prose hooks: Deck CEF often ignored inherited overflow-wrap on PanelSection subtrees
+          (class names do not always match our [class*="PanelSection"] patterns). H6 fix.
+        */
+        .bonsai-scope .bonsai-prose-host {
+          width: 100% !important;
+          max-width: 100% !important;
+          min-width: 0 !important;
+          box-sizing: border-box !important;
+        }
+        .bonsai-scope .bonsai-prose {
+          display: block !important;
+          width: 100% !important;
+          max-width: 100% !important;
+          min-width: 0 !important;
+          box-sizing: border-box !important;
+          white-space: normal !important;
+          overflow-wrap: anywhere !important;
+          word-wrap: break-word !important;
+          word-break: break-word !important;
+        }
+
+        /* ==========================================================================
+           1. DECKY TAB HOST (do not kill transitions — Steam's tab carousel uses them to slide).
+           ========================================================================== */
+
+        /* Tab host: width only — do not make this a flex column with flex-grow (Deck logs showed
+           tab strip ancestors blowing past hostW ~300 with negative left; content vanished). */
+        .bonsai-scope .bonsai-decky-tabs-root {
+          width: 100% !important;
+          max-width: 100% !important;
+          min-width: 0 !important;
+          min-height: 0 !important;
+          box-sizing: border-box !important;
+        }
+
+        /* Uniform tab glyph box. Icon components use an inner IconShell <span>; logo uses <img>. */
+        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-shell {
+          width: 32px !important;
+          height: 32px !important;
+          min-width: 32px !important;
+          min-height: 32px !important;
+          max-width: 32px !important;
+          max-height: 32px !important;
+          box-sizing: border-box !important;
+        }
+        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-shell--main .bonsai-tab-title-icon,
+        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-shell--main .bonsai-tab-title-icon > span,
+        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-shell--main .bonsai-tab-title-icon svg {
+          width: 36px !important;
+          height: 36px !important;
+          min-width: 36px !important;
+          min-height: 36px !important;
+          max-width: 36px !important;
+          max-height: 36px !important;
+        }
+        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-shell--main .bonsai-tab-title-icon {
+          transform: translateX(1px) !important;
+        }
+        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-shell--developer .bonsai-tab-title-icon,
+        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-shell--developer .bonsai-tab-title-icon > span,
+        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-shell--developer .bonsai-tab-title-icon svg {
+          width: 36px !important;
+          height: 36px !important;
+          min-width: 36px !important;
+          min-height: 36px !important;
+          max-width: 36px !important;
+          max-height: 36px !important;
+        }
+        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-icon {
+          width: 26px !important;
+          height: 26px !important;
+          min-width: 26px !important;
+          min-height: 26px !important;
+          max-width: 26px !important;
+          max-height: 26px !important;
+          box-sizing: border-box !important;
+          color: rgba(168, 182, 198, 0.62) !important;
+          opacity: 1 !important;
+        }
+        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-icon > span {
+          width: 26px !important;
+          height: 26px !important;
+          min-width: 26px !important;
+          min-height: 26px !important;
+          max-width: 26px !important;
+          max-height: 26px !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          box-sizing: border-box !important;
+        }
+        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-icon svg {
+          width: 26px !important;
+          height: 26px !important;
+          max-width: 26px !important;
+          max-height: 26px !important;
+          box-sizing: border-box !important;
+        }
+        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-icon img {
+          width: 26px !important;
+          height: 26px !important;
+          max-width: 26px !important;
+          max-height: 26px !important;
+          object-fit: contain !important;
+          box-sizing: border-box !important;
+        }
+
+        /*
+          Chip sizing lives on .bonsai-tab-title-leaf only (see bonsaiTabIconTitle).
+          Prior :has(.bonsai-tab-title-shell) + width:40px matched intermediate carousel Panels (H2 depth-3),
+          collapsing the strip so only one tab column peeked through.
+        */
+        .bonsai-scope .bonsai-decky-tabs-root .bonsai-tab-title-leaf {
+          box-sizing: border-box !important;
+          width: 40px !important;
+          min-width: 40px !important;
+          max-width: 40px !important;
+          min-height: 44px !important;
+          display: inline-flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          flex-shrink: 0 !important;
+          margin-left: -6px !important;
+          margin-right: -6px !important;
+          padding: 2px !important;
+          border-radius: 12px !important;
+          outline: none !important;
+        }
+
+        .bonsai-scope .bonsai-decky-tabs-root .Panel.Focusable:has(.bonsai-tab-title-leaf),
+        .bonsai-scope .bonsai-decky-tabs-root .DialogButton:has(.bonsai-tab-title-leaf) {
+          background: transparent !important;
+          background-color: transparent !i

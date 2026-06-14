@@ -1,0 +1,30 @@
+{
+  "batch": "deckOnly",
+  "runDate": "2026-06-09",
+  "gitSha": "9e20a82",
+  "passed": 0,
+  "failed": 0,
+  "skipped": 3,
+  "total": 3,
+  "evidenceRoot": "docs/test-evidence/deckOnly/2026-06-09-9e20a82",
+  "results": [
+    {
+      "id": "E-QAMP-DECK-01",
+      "status": "skipped",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/deckOnly/2026-06-09-9e20a82/E-QAMP-DECK-01"
+    },
+    {
+      "id": "E-CEF-CORS-ollama-pc",
+      "status": "skipped",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/deckOnly/2026-06-09-9e20a82/E-CEF-CORS-ollama-pc"
+    },
+    {
+      "id": "E-CLEAN-INSTALL",
+      "status": "skipped",
+      "error": null,
+      "evidenceDir": "docs/test-evidence/deckOnly/2026-06-09-9e20a82/E-CLEAN-INSTALL"
+    }
+  ]
+}

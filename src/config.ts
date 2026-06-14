@@ -1,2 +1,2 @@
-export const HostIp = '192.168.86.52';
-export const PcIp = '192.168.86.35';
+export const HostIp = 'steamdeck.local';
+export const PcIp = '192.168.1.100';

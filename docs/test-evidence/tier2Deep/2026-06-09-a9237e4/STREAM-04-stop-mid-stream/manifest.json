@@ -1,0 +1,23 @@
+{
+  "scenarioId": "STREAM-04-stop-mid-stream",
+  "tier": "tier2Deep",
+  "batch": "tier2Deep",
+  "status": "pass",
+  "error": null,
+  "durationMs": 121336,
+  "gitSha": "a9237e4",
+  "runDate": "2026-06-09",
+  "previewUrl": null,
+  "evidenceProfile": "preview",
+  "tags": [
+    "STREAM-04"
+  ],
+  "captureArtifact": null,
+  "captureError": "Error: IPC timeout for captureScreenshot",
+  "evidenceFiles": [
+    "rpc-last.json",
+    "steps",
+    "steps\\step-01-callRpc-rpc.json",
+    "steps\\step-01-callRpc.json"
+  ]
+}

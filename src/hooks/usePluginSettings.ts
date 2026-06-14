@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { call } from "@decky/api";
 import { type AiCharacterAccentIntensityId } from "../data/aiCharacterAccentIntensity";
 import { type ModelPolicyTierId } from "../data/modelPolicy";
+import { takeRestoredSettingsSnapshot } from "../utils/bonsaiSessionSurvival";
 import {
   DEFAULT_AI_CHARACTER_ACCENT_INTENSITY,
   DEFAULT_AI_CHARACTER_CUSTOM_TEXT,
@@ -12,17 +13,28 @@ import {
   DEFAULT_CAPABILITIES,
   DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING,
   DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE,
+  DEFAULT_DESKTOP_APP_LOG_LEVEL,
+  DEFAULT_ATTACH_PROTON_LOGS_WHEN_TROUBLESHOOTING,
   DEFAULT_INPUT_SANITIZER_USER_DISABLED,
   DEFAULT_LATENCY_WARNING_SECONDS,
   DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS,
   DEFAULT_MODEL_POLICY_TIER,
   DEFAULT_OLLAMA_KEEP_ALIVE,
   DEFAULT_OLLAMA_LOCAL_ON_DECK,
+  DEFAULT_PRESET_CHIP_ANIMATION,
   DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED,
   DEFAULT_REQUEST_TIMEOUT_SECONDS,
   DEFAULT_SCREENSHOT_ATTACHMENT_PRESET,
-  DEFAULT_SHOW_DEBUG_TAB,
+  DEFAULT_SHOW_DEVELOPER_TAB,
+  DEFAULT_BONSAI_TOKEN_STREAMING_ENABLED,
+  DEFAULT_SHOW_ONSCREEN_DEBUG_HUD,
+  DEFAULT_RESPONSE_VERIFY_ENABLED,
+  DEFAULT_RESPONSE_VERIFY_MODEL,
+  DEFAULT_RESPONSE_VERIFY_SECOND_PASS,
+  type NamedOllamaHost,
+  DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED,
   DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
+  DEFAULT_VOICE_STT_MODEL,
   normalizeLatencyWarningSeconds,
   normalizeRequestTimeoutSeconds,
   normalizeSettings,
@@ -30,9 +42,12 @@ import {
   type AskModeId,
   type BonsaiCapabilities,
   type BonsaiSettings,
+  type DesktopAppLogLevel,
   type OllamaKeepAliveDuration,
+  type PresetChipAnimation,
   type ScreenshotAttachmentPreset,
   type UnifiedInputPersistenceMode,
+  type VoiceSttModelId,
 } from "../utils/settingsAndResponse";
 
 /**
@@ -59,9 +74,16 @@ export function usePluginSettings() {
   const [desktopAskVerboseLogging, setDesktopAskVerboseLogging] = useState<boolean>(
     DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING
   );
+  const [desktopAppLogLevel, setDesktopAppLogLevel] = useState<DesktopAppLogLevel>(
+    DEFAULT_DESKTOP_APP_LOG_LEVEL
+  );
+  const [attachProtonLogsWhenTroubleshooting, setAttachProtonLogsWhenTroubleshooting] = useState<boolean>(
+    DEFAULT_ATTACH_PROTON_LOGS_WHEN_TROUBLESHOOTING
+  );
   const [presetChipFadeAnimationEnabled, setPresetChipFadeAnimationEnabled] = useState<boolean>(
     DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED
   );
+  const [presetChipAnimation, setPresetChipAnimation] = useState<PresetChipAnimation>(DEFAULT_PRESET_CHIP_ANIMATION);
   const [inputSanitizerUserDisabled, setInputSanitizerUserDisabled] = useState<boolean>(
     DEFAULT_INPUT_SANITIZER_USER_DISABLED
   );
@@ -75,13 +97,28 @@ export function usePluginSettings() {
   );
   const [askMode, setAskMode] = useState<AskModeId>(DEFAULT_ASK_MODE);
   const [ollamaKeepAlive, setOllamaKeepAlive] = useState<OllamaKeepAliveDuration>(DEFAULT_OLLAMA_KEEP_ALIVE);
-  const [showDebugTab, setShowDebugTab] = useState<boolean>(DEFAULT_SHOW_DEBUG_TAB);
+  const [showDeveloperTab, setShowDeveloperTab] = useState<boolean>(DEFAULT_SHOW_DEVELOPER_TAB);
   const [modelPolicyTier, setModelPolicyTier] = useState<ModelPolicyTierId>(DEFAULT_MODEL_POLICY_TIER);
   const [modelPolicyNonFossUnlocked, setModelPolicyNonFossUnlocked] = useState<boolean>(false);
   const [modelAllowHighVramFallbacks, setModelAllowHighVramFallbacks] = useState<boolean>(
     DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS
   );
   const [ollamaLocalOnDeck, setOllamaLocalOnDeck] = useState<boolean>(DEFAULT_OLLAMA_LOCAL_ON_DECK);
+  const [strategySpoilerMaskingEnabled, setStrategySpoilerMaskingEnabled] = useState<boolean>(
+    DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED
+  );
+  const [steamWebApiKey, setSteamWebApiKey] = useState<string>("");
+  const [bonsaiTokenStreamingEnabled, setBonsaiTokenStreamingEnabled] = useState<boolean>(
+    DEFAULT_BONSAI_TOKEN_STREAMING_ENABLED
+  );
+  const [showOnscreenDebugHud, setShowOnscreenDebugHud] = useState<boolean>(DEFAULT_SHOW_ONSCREEN_DEBUG_HUD);
+  const [responseVerifyEnabled, setResponseVerifyEnabled] = useState<boolean>(DEFAULT_RESPONSE_VERIFY_ENABLED);
+  const [responseVerifySecondPass, setResponseVerifySecondPass] = useState<boolean>(
+    DEFAULT_RESPONSE_VERIFY_SECOND_PASS
+  );
+  const [responseVerifyModel, setResponseVerifyModel] = useState<string>(DEFAULT_RESPONSE_VERIFY_MODEL);
+  const [namedOllamaHosts, setNamedOllamaHosts] = useState<NamedOllamaHost[]>([]);
+  const [voiceSttModel, setVoiceSttModel] = useState<VoiceSttModelId>(DEFAULT_VOICE_STT_MODEL);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
 
   const hydrateFromSettings = useCallback((saved: BonsaiSettings) => {
@@ -93,6 +130,9 @@ export function usePluginSettings() {
     setScreenshotAttachmentPreset(normalized.screenshot_attachment_preset);
     setDesktopDebugNoteAutoSave(normalized.desktop_debug_note_auto_save);
     setDesktopAskVerboseLogging(normalized.desktop_ask_verbose_logging);
+    setDesktopAppLogLevel(normalized.desktop_app_log_level);
+    setAttachProtonLogsWhenTroubleshooting(normalized.attach_proton_logs_when_troubleshooting);
+    setPresetChipAnimation(normalized.preset_chip_animation);
     setPresetChipFadeAnimationEnabled(normalized.preset_chip_fade_animation_enabled);
     setInputSanitizerUserDisabled(normalized.input_sanitizer_user_disabled);
     setCapabilities(normalized.capabilities);
@@ -103,11 +143,20 @@ export function usePluginSettings() {
     setAiCharacterAccentIntensity(normalized.ai_character_accent_intensity);
     setAskMode(normalized.ask_mode);
     setOllamaKeepAlive(normalized.ollama_keep_alive);
-    setShowDebugTab(normalized.show_debug_tab);
+    setShowDeveloperTab(normalized.show_developer_tab);
     setModelPolicyTier(normalized.model_policy_tier);
     setModelPolicyNonFossUnlocked(normalized.model_policy_non_foss_unlocked);
     setModelAllowHighVramFallbacks(normalized.model_allow_high_vram_fallbacks);
     setOllamaLocalOnDeck(normalized.ollama_local_on_deck);
+    setStrategySpoilerMaskingEnabled(normalized.strategy_spoiler_masking_enabled);
+    setSteamWebApiKey(normalized.steam_web_api_key);
+    setBonsaiTokenStreamingEnabled(normalized.bonsai_token_streaming_enabled);
+    setShowOnscreenDebugHud(normalized.show_onscreen_debug_hud);
+    setResponseVerifyEnabled(normalized.response_verify_enabled);
+    setResponseVerifySecondPass(normalized.response_verify_second_pass);
+    setResponseVerifyModel(normalized.response_verify_model);
+    setNamedOllamaHosts(normalized.named_ollama_hosts);
+    setVoiceSttModel(normalized.voice_stt_model);
   }, []);
 
   useEffect(() => {
@@ -115,7 +164,10 @@ export function usePluginSettings() {
     call<[], BonsaiSettings>("load_settings")
       .then((saved) => {
         if (cancelled) return;
-        const normalized = normalizeSettings(saved);
+        const restored = takeRestoredSettingsSnapshot();
+        const normalized = restored
+          ? normalizeSettings(toBonsaiSettingsPayload(restored))
+          : normalizeSettings(saved);
         setLatencyWarningSeconds(normalized.latency_warning_seconds);
         setRequestTimeoutSeconds(normalized.request_timeout_seconds);
         setLatencyTimeoutsCustomEnabled(normalized.latency_timeouts_custom_enabled);
@@ -123,6 +175,9 @@ export function usePluginSettings() {
         setScreenshotAttachmentPreset(normalized.screenshot_attachment_preset);
         setDesktopDebugNoteAutoSave(normalized.desktop_debug_note_auto_save);
         setDesktopAskVerboseLogging(normalized.desktop_ask_verbose_logging);
+        setDesktopAppLogLevel(normalized.desktop_app_log_level);
+        setAttachProtonLogsWhenTroubleshooting(normalized.attach_proton_logs_when_troubleshooting);
+        setPresetChipAnimation(normalized.preset_chip_animation);
         setPresetChipFadeAnimationEnabled(normalized.preset_chip_fade_animation_enabled);
         setInputSanitizerUserDisabled(normalized.input_sanitizer_user_disabled);
         setCapabilities(normalized.capabilities);
@@ -133,11 +188,20 @@ export function usePluginSettings() {
         setAiCharacterAccentIntensity(normalized.ai_character_accent_intensity);
         setAskMode(normalized.ask_mode);
         setOllamaKeepAlive(normalized.ollama_keep_alive);
-        setShowDebugTab(normalized.show_debug_tab);
+        setShowDeveloperTab(normalized.show_developer_tab);
         setModelPolicyTier(normalized.model_policy_tier);
         setModelPolicyNonFossUnlocked(normalized.model_policy_non_foss_unlocked);
         setModelAllowHighVramFallbacks(normalized.model_allow_high_vram_fallbacks);
         setOllamaLocalOnDeck(normalized.ollama_local_on_deck);
+        setStrategySpoilerMaskingEnabled(normalized.strategy_spoiler_masking_enabled);
+        setSteamWebApiKey(normalized.steam_web_api_key);
+        setBonsaiTokenStreamingEnabled(normalized.bonsai_token_streaming_enabled);
+        setShowOnscreenDebugHud(normalized.show_onscreen_debug_hud);
+        setResponseVerifyEnabled(normalized.response_verify_enabled);
+        setResponseVerifySecondPass(normalized.response_verify_second_pass);
+        setResponseVerifyModel(normalized.response_verify_model);
+        setNamedOllamaHosts(normalized.named_ollama_hosts);
+        setVoiceSttModel(normalized.voice_stt_model);
       })
       .catch(() => {
         if (cancelled) return;
@@ -148,6 +212,9 @@ export function usePluginSettings() {
         setScreenshotAttachmentPreset(DEFAULT_SCREENSHOT_ATTACHMENT_PRESET);
         setDesktopDebugNoteAutoSave(DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE);
         setDesktopAskVerboseLogging(DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING);
+        setDesktopAppLogLevel(DEFAULT_DESKTOP_APP_LOG_LEVEL);
+        setAttachProtonLogsWhenTroubleshooting(DEFAULT_ATTACH_PROTON_LOGS_WHEN_TROUBLESHOOTING);
+        setPresetChipAnimation(DEFAULT_PRESET_CHIP_ANIMATION);
         setPresetChipFadeAnimationEnabled(DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED);
         setInputSanitizerUserDisabled(DEFAULT_INPUT_SANITIZER_USER_DISABLED);
         setCapabilities(DEFAULT_CAPABILITIES);
@@ -158,11 +225,20 @@ export function usePluginSettings() {
         setAiCharacterAccentIntensity(DEFAULT_AI_CHARACTER_ACCENT_INTENSITY);
         setAskMode(DEFAULT_ASK_MODE);
         setOllamaKeepAlive(DEFAULT_OLLAMA_KEEP_ALIVE);
-        setShowDebugTab(DEFAULT_SHOW_DEBUG_TAB);
+        setShowDeveloperTab(DEFAULT_SHOW_DEVELOPER_TAB);
         setModelPolicyTier(DEFAULT_MODEL_POLICY_TIER);
         setModelPolicyNonFossUnlocked(false);
         setModelAllowHighVramFallbacks(DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS);
         setOllamaLocalOnDeck(DEFAULT_OLLAMA_LOCAL_ON_DECK);
+        setStrategySpoilerMaskingEnabled(DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED);
+        setSteamWebApiKey("");
+        setBonsaiTokenStreamingEnabled(DEFAULT_BONSAI_TOKEN_STREAMING_ENABLED);
+        setShowOnscreenDebugHud(DEFAULT_SHOW_ONSCREEN_DEBUG_HUD);
+        setResponseVerifyEnabled(DEFAULT_RESPONSE_VERIFY_ENABLED);
+        setResponseVerifySecondPass(DEFAULT_RESPONSE_VERIFY_SECOND_PASS);
+        setResponseVerifyModel(DEFAULT_RESPONSE_VERIFY_MODEL);
+        setNamedOllamaHosts([]);
+        setVoiceSttModel(DEFAULT_VOICE_STT_MODEL);
       })
       .finally(() => {
         if (!cancelled) setSettingsLoaded(true);
@@ -185,7 +261,10 @@ export function usePluginSettings() {
           screenshotAttachmentPreset,
           desktopDebugNoteAutoSave,
           desktopAskVerboseLogging,
+          desktopAppLogLevel,
+          attachProtonLogsWhenTroubleshooting,
           presetChipFadeAnimationEnabled,
+          presetChipAnimation,
           inputSanitizerUserDisabled,
           capabilities,
           aiCharacterEnabled,
@@ -195,11 +274,20 @@ export function usePluginSettings() {
           aiCharacterAccentIntensity,
           askMode,
           ollamaKeepAlive,
-          showDebugTab,
+          showDeveloperTab,
           modelPolicyTier,
           modelPolicyNonFossUnlocked,
           modelAllowHighVramFallbacks,
           ollamaLocalOnDeck,
+          strategySpoilerMaskingEnabled,
+          steamWebApiKey,
+          bonsaiTokenStreamingEnabled,
+          showOnscreenDebugHud,
+          responseVerifyEnabled,
+          responseVerifySecondPass,
+          responseVerifyModel,
+          namedOllamaHosts,
+          voiceSttModel,
         })
       ).catch((err) => {
         console.error("save_settings failed", err);
@@ -214,7 +302,10 @@ export function usePluginSettings() {
     screenshotAttachmentPreset,
     desktopDebugNoteAutoSave,
     desktopAskVerboseLogging,
+    desktopAppLogLevel,
+    attachProtonLogsWhenTroubleshooting,
     presetChipFadeAnimationEnabled,
+    presetChipAnimation,
     inputSanitizerUserDisabled,
     capabilities,
     aiCharacterEnabled,
@@ -224,11 +315,20 @@ export function usePluginSettings() {
     aiCharacterAccentIntensity,
     askMode,
     ollamaKeepAlive,
-    showDebugTab,
+    showDeveloperTab,
     modelPolicyTier,
     modelPolicyNonFossUnlocked,
     modelAllowHighVramFallbacks,
     ollamaLocalOnDeck,
+    strategySpoilerMaskingEnabled,
+    steamWebApiKey,
+    bonsaiTokenStreamingEnabled,
+    showOnscreenDebugHud,
+    responseVerifyEnabled,
+    responseVerifySecondPass,
+    responseVerifyModel,
+    namedOllamaHosts,
+    voiceSttModel,
     settingsLoaded,
   ]);
 
@@ -240,7 +340,12 @@ export function usePluginSettings() {
     screenshotAttachmentPreset,
     desktopDebugNoteAutoSave,
     desktopAskVerboseLogging,
+    desktopAppLogLevel,
+    attachProtonLogsWhenTroubleshooting,
     presetChipFadeAnimationEnabled,
+    setPresetChipFadeAnimationEnabled,
+    presetChipAnimation,
+    setPresetChipAnimation,
     inputSanitizerUserDisabled,
     capabilities,
     setCapabilities,
@@ -258,8 +363,8 @@ export function usePluginSettings() {
     setAskMode,
     ollamaKeepAlive,
     setOllamaKeepAlive,
-    showDebugTab,
-    setShowDebugTab,
+    showDeveloperTab,
+    setShowDeveloperTab,
     modelPolicyTier,
     setModelPolicyTier,
     modelPolicyNonFossUnlocked,
@@ -268,13 +373,32 @@ export function usePluginSettings() {
     setModelAllowHighVramFallbacks,
     ollamaLocalOnDeck,
     setOllamaLocalOnDeck,
+    strategySpoilerMaskingEnabled,
+    setStrategySpoilerMaskingEnabled,
+    steamWebApiKey,
+    setSteamWebApiKey,
+    bonsaiTokenStreamingEnabled,
+    setBonsaiTokenStreamingEnabled,
+    showOnscreenDebugHud,
+    setShowOnscreenDebugHud,
+    responseVerifyEnabled,
+    setResponseVerifyEnabled,
+    responseVerifySecondPass,
+    setResponseVerifySecondPass,
+    responseVerifyModel,
+    setResponseVerifyModel,
+    namedOllamaHosts,
+    setNamedOllamaHosts,
+    voiceSttModel,
+    setVoiceSttModel,
     settingsLoaded,
     setLatencyWarningSeconds,
     setRequestTimeoutSeconds,
     setUnifiedInputPersistenceMode,
     setDesktopDebugNoteAutoSave,
     setDesktopAskVerboseLogging,
-    setPresetChipFadeAnimationEnabled,
+    setDesktopAppLogLevel,
+    setAttachProtonLogsWhenTroubleshooting,
     setInputSanitizerUserDisabled,
     setLatencyTimeoutsCustomEnabled,
     setScreenshotAttachmentPreset,

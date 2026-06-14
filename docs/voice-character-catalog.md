@@ -33,7 +33,7 @@ This file tracks curated roleplay voice/accent presets for **Character Voice Rol
   - Lae'zel
 - **Team Fortress 2**
   - All classes (including Announcer)
-  - Pyro voice handling: research/TBD
+  - **Pyro:** hidden easter egg—not in-universe Pyro speech. Unlocked by picking Pyro (or Random → Pyro). **Subtle/Balanced:** smarmy Hollywood talent-manager parody, still helpful. **Heavy/Nightmare:** asshole AI tier (bad advice in text only; backend never applies TDP from those replies). See [roadmap.md](roadmap.md) Completed → Pyro talent-manager easter egg.
 - **Left 4 Dead 2**
   - Ellis
 - **Hades**

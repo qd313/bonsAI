@@ -1,0 +1,31 @@
+{
+  "scenarioId": "SMOKE-C-perms-gate",
+  "tier": "tier0",
+  "batch": "tier0",
+  "status": "pass",
+  "error": null,
+  "durationMs": 88,
+  "gitSha": "9e20a82",
+  "runDate": "2026-05-26",
+  "previewUrl": "http://127.0.0.1:5678",
+  "evidenceProfile": "preview",
+  "tags": [
+    "SMOKE-C",
+    "PERMS-GATE"
+  ],
+  "captureArtifact": {
+    "type": "png",
+    "path": "C:\\Users\\still\\Documents\\BonsAI\\docs\\test-evidence\\tier0\\2026-05-26-9e20a82\\SMOKE-C-perms-gate\\final.png"
+  },
+  "captureError": null,
+  "evidenceFiles": [
+    "active-element.txt",
+    "dom-final.html",
+    "final.png",
+    "manifest.json",
+    "rpc-last.json",
+    "steps",
+    "steps\\step-01-assert-rpc.json",
+    "steps\\step-01-assert.json"
+  ]
+}

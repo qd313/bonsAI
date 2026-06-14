@@ -1,0 +1,68 @@
+{
+  "scenarios": [
+    {
+      "id": "SMOKE-E-strategy-mode",
+      "tier": "tier1Core",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": ["SMOKE-E", "STRATEGY-CORE", "STRATEGY-SPOILER", "MODE-SELECTOR"],
+      "checkboxIds": ["**STRAT-01**", "SMOKE-E"],
+      "captureSteps": [2],
+      "steps": [
+        { "action": "callRpc", "method": "load_settings" },
+        { "action": "callRpc", "method": "ask_game_ai", "args": ["How do I beat this level", "127.0.0.1:11434"] },
+        { "action": "callRpc", "method": "get_input_transparency" }
+      ]
+    },
+    {
+      "id": "STREAM-01-flag-off",
+      "tier": "tier2",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": ["STREAM-01"],
+      "checkboxIds": ["**STREAM-01**"],
+      "captureSteps": [1],
+      "steps": [
+        { "action": "callRpc", "method": "load_settings" },
+        { "action": "snapshotDom" }
+      ]
+    },
+    {
+      "id": "BG-ASK-reopen-status",
+      "tier": "tier1Core",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": ["SMOKE-H", "BG-ASK-V1"],
+      "checkboxIds": ["SMOKE-H"],
+      "captureSteps": [0],
+      "steps": [
+        { "action": "callRpc", "method": "get_background_game_ai_status" }
+      ]
+    },
+    {
+      "id": "MDNS-FIND-rpc",
+      "tier": "tier2",
+      "bucket": "B+D",
+      "evidenceProfile": "preview",
+      "tags": ["MDNS-FIND"],
+      "checkboxIds": [],
+      "captureSteps": [0],
+      "steps": [
+        { "action": "callRpc", "method": "discover_mdns_ollama_hosts", "args": [3] }
+      ]
+    },
+    {
+      "id": "MODEL-POLICY-load",
+      "tier": "tier2",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": ["MODEL-POLICY"],
+      "checkboxIds": [],
+      "captureSteps": [1],
+      "steps": [
+        { "action": "callRpc", "method": "load_settings" },
+        { "action": "snapshotDom", "selector": ".bonsai-scope" }
+      ]
+    }
+  ]
+}

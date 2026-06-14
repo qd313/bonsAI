@@ -6,10 +6,12 @@ from unittest.mock import patch
 
 from backend.services.desktop_note_service import (
     DESKTOP_NOTE_WRITE_OS_ERROR_MESSAGE,
+    append_app_log_sync,
     append_desktop_ask_transparency_sync,
     append_desktop_chat_event_sync,
     append_desktop_debug_note_sync,
     append_markdown_note,
+    resolve_bonsai_logs_dir,
     resolve_bonsai_notes_dir,
     sanitize_note_stem,
 )
@@ -28,9 +30,12 @@ class DesktopNoteServiceTests(unittest.TestCase):
         self.assertEqual(sanitize_note_stem("  emu  notes  "), "emu_notes")
         self.assertEqual(sanitize_note_stem("café-test"), "café-test")
 
-    def test_resolve_bonsai_notes_dir(self):
-        d = resolve_bonsai_notes_dir("/home/deck")
-        self.assertTrue(d.endswith(os.path.join("Desktop", "BonsAI_notes")))
+    def test_resolve_bonsai_logs_dir(self):
+        d = resolve_bonsai_logs_dir("/home/deck")
+        self.assertTrue(d.endswith(os.path.join("Desktop", "bonsAI_logs")))
+
+    def test_resolve_bonsai_notes_dir_alias(self):
+        self.assertEqual(resolve_bonsai_notes_dir("/home/deck"), resolve_bonsai_logs_dir("/home/deck"))
 
     def test_append_preserves_prior_content(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -79,7 +84,7 @@ class DesktopNoteServiceTests(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as tmp:
             home = tmp
-            notes_dir = os.path.join(home, "Desktop", "BonsAI_notes")
+            notes_dir = os.path.join(home, "Desktop", "bonsAI_logs")
             os.makedirs(notes_dir, exist_ok=True)
             with patch("backend.services.desktop_note_service.open", side_effect=open_append_raises):
                 r = append_desktop_debug_note_sync(home, "my_note", "Q?", "R.")
@@ -98,7 +103,7 @@ class DesktopNoteServiceTests(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as tmp:
             home = tmp
-            os.makedirs(os.path.join(home, "Desktop", "BonsAI_notes"), exist_ok=True)
+            os.makedirs(os.path.join(home, "Desktop", "bonsAI_logs"), exist_ok=True)
             with patch("backend.services.desktop_note_service.open", side_effect=open_append_raises):
                 r = append_desktop_chat_event_sync(home, "ask", question="Hi?", response_text="")
             self.assertFalse(r.get("ok"))
@@ -175,3 +180,44 @@ class DesktopNoteServiceTests(unittest.TestCase):
             self.assertEqual(r2.get("path"), path)
             text2 = Path(path).read_text(encoding="utf-8")
             self.assertGreaterEqual(text2.count("Ask trace"), 2)
+
+    def test_append_app_log_sync_writes_line(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            home = tmp
+            r = append_app_log_sync(
+                home,
+                level="default",
+                category="connection.test",
+                message="ollama connection test",
+                fields={"reachable": True, "model_count": 2},
+            )
+            self.assertTrue(r.get("ok"))
+            path = r.get("path")
+            self.assertIsInstance(path, str)
+            self.assertTrue(str(path).endswith(".log"))
+            text = Path(path).read_text(encoding="utf-8")
+            self.assertIn("[default] connection.test", text)
+            self.assertIn("reachable=true", text)
+            self.assertIn("model_count=2", text)
+
+    def test_append_app_log_sync_redacts_sensitive_fields(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            home = tmp
+            r = append_app_log_sync(
+                home,
+                level="verbose",
+                category="settings.save",
+                message="settings updated",
+                fields={
+                    "steam_web_api_key": "secret-key",
+                    "system_prompt": "long prompt text",
+                    "question_len": 12,
+                },
+            )
+            self.assertTrue(r.get("ok"))
+            path = r.get("path")
+            text = Path(path).read_text(encoding="utf-8")
+            self.assertIn("steam_web_api_key=<redacted>", text)
+            self.assertIn("system_prompt_len=", text)
+            self.assertNotIn("secret-key", text)
+            self.assertNotIn("long prompt text", text)

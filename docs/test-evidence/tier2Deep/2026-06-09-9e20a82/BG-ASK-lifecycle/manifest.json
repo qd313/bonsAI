@@ -1,0 +1,26 @@
+{
+  "scenarioId": "BG-ASK-lifecycle",
+  "tier": "tier2Deep",
+  "batch": "tier2Deep",
+  "status": "pass",
+  "error": null,
+  "durationMs": 130635,
+  "gitSha": "9e20a82",
+  "runDate": "2026-06-09",
+  "previewUrl": "http://127.0.0.1:5902",
+  "evidenceProfile": "preview",
+  "tags": [
+    "BG-ASK-V1",
+    "SMOKE-H"
+  ],
+  "captureArtifact": null,
+  "captureError": "Error: IPC timeout for captureScreenshot",
+  "evidenceFiles": [
+    "rpc-last.json",
+    "steps",
+    "steps\\step-01-assert-rpc.json",
+    "steps\\step-01-assert.json",
+    "steps\\step-03-callRpc-rpc.json",
+    "steps\\step-03-callRpc.json"
+  ]
+}

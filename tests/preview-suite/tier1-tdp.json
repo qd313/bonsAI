@@ -1,0 +1,78 @@
+{
+  "scenarios": [
+    {
+      "id": "SMOKE-B-tdp-8w-sandbox",
+      "tier": "tier1Core",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": ["SMOKE-B", "TDP-APPLY", "QAMP-BANNER", "GAME-CTX"],
+      "checkboxIds": ["SMOKE-B"],
+      "captureSteps": [2],
+      "steps": [
+        { "action": "setHardware", "state": { "preset": "Hot Game", "tdp": 15 } },
+        { "action": "callRpc", "method": "load_settings" },
+        { "action": "callRpc", "method": "ask_game_ai", "args": ["Set my TDP to 8 watts", "127.0.0.1:11434"] }
+      ]
+    },
+    {
+      "id": "TDP-15W-clamp",
+      "tier": "tier1Boundaries",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": ["TDP-15W"],
+      "checkboxIds": ["**TDP-15W**"],
+      "captureSteps": [0],
+      "steps": [
+        { "action": "callRpc", "method": "ask_game_ai", "args": ["Set TDP to 15 watts", "127.0.0.1:11434"] }
+      ]
+    },
+    {
+      "id": "TDP-3W-clamp",
+      "tier": "tier1Boundaries",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": ["TDP-3W"],
+      "checkboxIds": ["**TDP-3W**"],
+      "captureSteps": [0],
+      "steps": [
+        { "action": "callRpc", "method": "ask_game_ai", "args": ["Set TDP to 3 watts", "127.0.0.1:11434"] }
+      ]
+    },
+    {
+      "id": "TDP-1W-clamp-to-3",
+      "tier": "tier1Boundaries",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": ["TDP-1W"],
+      "checkboxIds": ["**TDP-1W**"],
+      "captureSteps": [0],
+      "steps": [
+        { "action": "callRpc", "method": "ask_game_ai", "args": ["Set TDP to 1 watt", "127.0.0.1:11434"] }
+      ]
+    },
+    {
+      "id": "TDP-20W-clamp-to-15",
+      "tier": "tier1Boundaries",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": ["TDP-20W"],
+      "checkboxIds": ["**TDP-20W**"],
+      "captureSteps": [0],
+      "steps": [
+        { "action": "callRpc", "method": "ask_game_ai", "args": ["Set TDP to 20 watts", "127.0.0.1:11434"] }
+      ]
+    },
+    {
+      "id": "GPU-800-advisory",
+      "tier": "tier1Boundaries",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": ["GPU-800"],
+      "checkboxIds": ["**GPU-800**"],
+      "captureSteps": [0],
+      "steps": [
+        { "action": "callRpc", "method": "ask_game_ai", "args": ["Set GPU clock to 800 MHz", "127.0.0.1:11434"] }
+      ]
+    }
+  ]
+}

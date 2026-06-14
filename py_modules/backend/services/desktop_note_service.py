@@ -1,4 +1,4 @@
-"""Append-only markdown notes under ~/Desktop/BonsAI_notes/ with path confinement."""
+"""Append-only markdown notes and app activity logs under ~/Desktop/bonsAI_logs/ with path confinement."""
 
 from __future__ import annotations
 
@@ -14,11 +14,26 @@ logger = logging.getLogger(__name__)
 
 # Entries use UTC ISO-8601 timestamps (suffix Z) for deterministic, locale-independent logs.
 _MAX_STEM_LEN = 80
+_MAX_APP_LOG_FIELD_LEN = 240
+_SENSITIVE_FIELD_SUBSTRINGS = ("password", "token", "secret", "steam_web_api", "api_key")
+_BLOB_LOG_FIELD_KEYS = frozenset(
+    {
+        "system_prompt",
+        "user_text_for_model",
+        "raw_question",
+        "question",
+        "response",
+        "response_text",
+        "assistant_raw",
+        "assistant_after_attachment_format",
+        "final_response",
+    }
+)
 
 # User-visible when makedirs/open fails; do not embed errno paths (security).
 DESKTOP_NOTE_WRITE_OS_ERROR_MESSAGE = (
-    "Could not write to Desktop notes. Check filesystem permission (Permissions tab), "
-    "disk space, and that ~/Desktop/BonsAI_notes is writable."
+    "Could not write to Desktop logs. Check filesystem permission (Permissions tab), "
+    "disk space, and that ~/Desktop/bonsAI_logs is writable."
 )
 
 
@@ -51,12 +66,16 @@ def sanitize_note_stem(name: str) -> str:
     return s
 
 
-def resolve_bonsai_notes_dir(home: str) -> str:
-    """Return the absolute notes directory path: <home>/Desktop/BonsAI_notes."""
+def resolve_bonsai_logs_dir(home: str) -> str:
+    """Return the absolute logs directory path: <home>/Desktop/bonsAI_logs."""
     base = (home or "").strip()
     if not base:
         raise ValueError("Home directory is not available.")
-    return os.path.normpath(os.path.join(base, "Desktop", "BonsAI_notes"))
+    return os.path.normpath(os.path.join(base, "Desktop", "bonsAI_logs"))
+
+
+# Deprecated alias for one release; in-repo callers use resolve_bonsai_logs_dir.
+resolve_bonsai_notes_dir = resolve_bonsai_logs_dir
 
 
 def _is_path_under(parent_real: str, child_candidate: str) -> bool:
@@ -68,6 +87,107 @@ def _is_path_under(parent_real: str, child_candidate: str) -> bool:
     except ValueError:
         return False
     return common == parent_real
+
+
+def _utc_ts_z() -> str:
+    return datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+
+
+def _redact_log_fields(fields: dict[str, Any] | None) -> dict[str, str]:
+    """Return flat string fields safe for one-line app logs (no secrets or full prompts)."""
+    if not isinstance(fields, dict):
+        return {}
+    out: dict[str, str] = {}
+    for raw_key, raw_val in fields.items():
+        key = str(raw_key or "").strip()
+        if not key:
+            continue
+        key_l = key.casefold()
+        if any(sub in key_l for sub in _SENSITIVE_FIELD_SUBSTRINGS):
+            out[key] = "<redacted>"
+            continue
+        if key in _BLOB_LOG_FIELD_KEYS or key_l.endswith("_text") or key_l.endswith("_body"):
+            if isinstance(raw_val, str):
+                out[f"{key}_len"] = str(len(raw_val))
+            elif raw_val is None:
+                out[f"{key}_len"] = "0"
+            else:
+                out[key] = "<omitted>"
+            continue
+        if raw_val is None:
+            out[key] = "null"
+        elif isinstance(raw_val, bool):
+            out[key] = "true" if raw_val else "false"
+        elif isinstance(raw_val, (int, float)):
+            out[key] = str(raw_val)
+        elif isinstance(raw_val, str):
+            s = raw_val.replace("\n", " ").replace("\r", " ").strip()
+            if len(s) > _MAX_APP_LOG_FIELD_LEN:
+                s = s[: _MAX_APP_LOG_FIELD_LEN - 3] + "..."
+            out[key] = s
+        else:
+            try:
+                encoded = json.dumps(raw_val, ensure_ascii=False, separators=(",", ":"))
+            except Exception:
+                encoded = str(raw_val)
+            if len(encoded) > _MAX_APP_LOG_FIELD_LEN:
+                encoded = encoded[: _MAX_APP_LOG_FIELD_LEN - 3] + "..."
+            out[key] = encoded
+    return out
+
+
+def _format_app_log_line(
+    *,
+    level: str,
+    category: str,
+    message: str,
+    fields: dict[str, Any] | None = None,
+) -> str:
+    cat = (category or "app").strip() or "app"
+    msg = (message or "").replace("\n", " ").replace("\r", " ").strip()
+    parts = [f"{_utc_ts_z()} [{level}] {cat}"]
+    if msg:
+        parts.append(msg)
+    flat = _redact_log_fields(fields)
+    if flat:
+        parts.append(" ".join(f"{k}={v}" for k, v in flat.items()))
+    return " ".join(parts) + "\n"
+
+
+def _daily_app_log_stem_utc() -> str:
+    day = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    return sanitize_note_stem(f"bonsai-app-{day}")
+
+
+def append_app_log_sync(
+    home: str,
+    *,
+    level: str,
+    category: str,
+    message: str,
+    fields: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Append one line to bonsai-app-YYYY-MM-DD.log under bonsAI_logs (UTC day)."""
+    ev_level = (level or "default").strip().lower()
+    if ev_level not in ("default", "verbose"):
+        ev_level = "default"
+    try:
+        logs_dir = resolve_bonsai_logs_dir(home)
+        stem = _daily_app_log_stem_utc()
+        line = _format_app_log_line(level=ev_level, category=category, message=message, fields=fields)
+        os.makedirs(logs_dir, exist_ok=True)
+        logs_real = os.path.realpath(logs_dir)
+        target_path = os.path.normpath(os.path.join(logs_real, f"{stem}.log"))
+        if not _is_path_under(logs_real, target_path):
+            raise ValueError("Resolved path escapes the logs directory.")
+        target_real = os.path.realpath(target_path)
+        if not _is_path_under(logs_real, target_real):
+            raise ValueError("Resolved path escapes the logs directory.")
+        with open(target_path, "a", encoding="utf-8") as f:
+            f.write(line)
+        return {"ok": True, "path": target_path}
+    except (OSError, ValueError) as exc:
+        return _desktop_write_failure_result(exc)
 
 
 def append_markdown_note(*, notes_dir: str, stem: str, question: str, response: str) -> dict[str, Any]:
@@ -93,7 +213,7 @@ def append_markdown_note(*, notes_dir: str, stem: str, question: str, response: 
     if not _is_path_under(notes_real, target_real):
         raise ValueError("Resolved path escapes the notes directory.")
 
-    ts = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+    ts = _utc_ts_z()
     block = (
         f"\n## {ts}\n\n"
         f"### Question\n\n"
@@ -117,7 +237,7 @@ def append_desktop_debug_note_sync(
 ) -> dict[str, Any]:
     """Sync entry point for plugin RPC; returns {ok, path} or {ok: False, error}."""
     try:
-        notes_dir = resolve_bonsai_notes_dir(home)
+        notes_dir = resolve_bonsai_logs_dir(home)
         return append_markdown_note(
             notes_dir=notes_dir,
             stem=stem,
@@ -170,9 +290,9 @@ def append_desktop_chat_event_sync(
     paths = _sanitize_screenshot_paths(screenshot_paths or [])
 
     try:
-        notes_dir = resolve_bonsai_notes_dir(home)
+        notes_dir = resolve_bonsai_logs_dir(home)
         stem = _daily_chat_stem_utc()
-        ts = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+        ts = _utc_ts_z()
 
         if ev == "ask":
             if not q:
@@ -234,9 +354,9 @@ def append_desktop_ask_transparency_sync(home: str, snapshot: dict[str, Any]) ->
     ``snapshot`` uses string keys aligned with the plugin transparency RPC (see main.py).
     """
     try:
-        notes_dir = resolve_bonsai_notes_dir(home)
+        notes_dir = resolve_bonsai_logs_dir(home)
         stem = _trace_stem_utc()
-        ts = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+        ts = _utc_ts_z()
 
         route = str(snapshot.get("route") or "unknown")
         raw_q = str(snapshot.get("raw_question") or "")

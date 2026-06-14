@@ -1,0 +1,18 @@
+{
+  "scenarioId": "E-CLEAN-INSTALL",
+  "tier": "deckOnly",
+  "batch": "deckOnly",
+  "status": "skipped",
+  "error": null,
+  "durationMs": null,
+  "gitSha": "9e20a82",
+  "runDate": "2026-05-26",
+  "previewUrl": "http://127.0.0.1:5272",
+  "evidenceProfile": "deck-only",
+  "tags": [
+    "ZIP-CI"
+  ],
+  "captureArtifact": null,
+  "captureError": null,
+  "evidenceFiles": []
+}

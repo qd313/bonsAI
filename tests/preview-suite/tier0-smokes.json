@@ -1,0 +1,74 @@
+{
+  "scenarios": [
+    {
+      "id": "SMOKE-A-golden-path",
+      "tier": "tier0",
+      "bucket": "C",
+      "evidenceProfile": "preview",
+      "tags": ["SMOKE-A", "CORE-UI", "CORE-ASK", "CONN-TEST", "TRANSPARENCY", "D-PAD-CHUNKS"],
+      "checkboxIds": ["SMOKE-A"],
+      "captureSteps": [2, 3],
+      "steps": [
+        { "action": "sleep", "ms": 400 },
+        { "action": "injectFocus", "direction": "A" },
+        { "action": "sleep", "ms": 200 },
+        { "action": "snapshotDom", "selector": ".bonsai-scope" },
+        { "action": "assert", "type": "domContainsAny", "expect": ["bonsai-decky-tabs-root", "bonsai-tab-title-leaf"] },
+        { "action": "runSequence", "inputs": ["Down", "Down"] },
+        { "action": "assert", "type": "focusPathIncludes", "expect": "onMove" }
+      ]
+    },
+    {
+      "id": "SMOKE-C-perms-gate",
+      "tier": "tier0",
+      "bucket": "C+D",
+      "evidenceProfile": "preview",
+      "tags": ["SMOKE-C", "PERMS-GATE"],
+      "checkboxIds": ["SMOKE-C"],
+      "captureSteps": [1],
+      "steps": [
+        { "action": "callRpc", "method": "load_settings" },
+        { "action": "assert", "type": "rpcResult", "expect": "hardware_control" }
+      ]
+    },
+    {
+      "id": "SMOKE-F-disable-sanitize",
+      "tier": "tier0",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": ["SMOKE-F", "SANITIZER"],
+      "checkboxIds": ["`bonsai:disable-sanitize`"],
+      "captureSteps": [0],
+      "steps": [
+        { "action": "callRpc", "method": "ask_game_ai", "args": ["bonsai:disable-sanitize", "127.0.0.1:11434"] },
+        { "action": "assert", "type": "rpcResult", "expect": "sanitiz" }
+      ]
+    },
+    {
+      "id": "SMOKE-F-shortcut-deck",
+      "tier": "tier0",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": ["SMOKE-F", "SHORTCUT-KW"],
+      "checkboxIds": ["`bonsai:shortcut-setup-deck`"],
+      "captureSteps": [1],
+      "steps": [
+        { "action": "callRpc", "method": "ask_game_ai", "args": ["bonsai:shortcut-setup-deck", "127.0.0.1:11434"] },
+        { "action": "callRpc", "method": "get_input_transparency" }
+      ]
+    },
+    {
+      "id": "SMOKE-F-vac-capability-off",
+      "tier": "tier0",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": ["SMOKE-F", "VAC-01"],
+      "checkboxIds": ["**VAC-01**"],
+      "captureSteps": [1],
+      "steps": [
+        { "action": "callRpc", "method": "ask_game_ai", "args": ["bonsai:vac-check 76561198000000000", "127.0.0.1:11434"] },
+        { "action": "assert", "type": "rpcResult", "expect": "Steam Web API is off" }
+      ]
+    }
+  ]
+}

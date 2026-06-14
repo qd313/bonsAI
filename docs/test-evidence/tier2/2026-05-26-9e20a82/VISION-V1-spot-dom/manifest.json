@@ -1,0 +1,31 @@
+{
+  "scenarioId": "VISION-V1-spot-dom",
+  "tier": "tier2",
+  "batch": "tier2",
+  "status": "pass",
+  "error": null,
+  "durationMs": 509,
+  "gitSha": "9e20a82",
+  "runDate": "2026-05-26",
+  "previewUrl": "http://127.0.0.1:5272",
+  "evidenceProfile": "preview",
+  "tags": [
+    "VISION-V1",
+    "SMOKE-G"
+  ],
+  "captureArtifact": {
+    "type": "png",
+    "path": "C:\\Users\\still\\Documents\\BonsAI\\docs\\test-evidence\\tier2\\2026-05-26-9e20a82\\VISION-V1-spot-dom\\final.png"
+  },
+  "captureError": null,
+  "evidenceFiles": [
+    "active-element.txt",
+    "dom-final.html",
+    "final.png",
+    "manifest.json",
+    "steps",
+    "steps\\step-00-sleep.json",
+    "steps\\step-00-snapshotDom.html",
+    "steps\\step-00-snapshotDom.json"
+  ]
+}

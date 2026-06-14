@@ -1,0 +1,27 @@
+{
+  "status": "completed",
+  "request_id": 2,
+  "question": "What is my current TDP?",
+  "app_id": "",
+  "app_context": "none",
+  "success": true,
+  "response": "bonsai-status>Current TDP cannot be read.</bonsai-status> The power cap could not be read from sysfs. I don't have the ability to check or change this setting at the moment. If you need assistance with other Steam Deck tasks, feel free to ask!",
+  "applied": null,
+  "elapsed_seconds": 7.1,
+  "error": null,
+  "started_at": 1781045662.59829,
+  "completed_at": 1781045669.7237184,
+  "strategy_guide_branches": null,
+  "model_policy_disclosure": {
+    "model": "qwen2.5:3b",
+    "source_class": "foss",
+    "read_more_anchor": "model-policy-tiers"
+  },
+  "preset_carousel_inject": null,
+  "partial_response": null,
+  "streaming": false,
+  "thinking_summary": null,
+  "strategy_spoiler_consent_effective": false,
+  "shortcut_setup": null,
+  "cancelled": false
+}

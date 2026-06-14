@@ -1,0 +1,98 @@
+{
+  "available": true,
+  "snapshot": {
+    "route": "ollama",
+    "raw_question": "Set my TDP to 8 watts",
+    "sanitizer_action": "pass",
+    "sanitizer_reason_codes": [
+      "user_lane_disabled"
+    ],
+    "text_after_sanitizer": "Set my TDP to 8 watts",
+    "ollama_model": "qwen2.5:3b",
+    "system_prompt": "No game is currently running. No attachment AppID metadata is available. No local Steam manifest title hints were resolved for attachment AppIDs. No useful screenshot-level hints were found in screenshots.vdf. No visual context attachments provided. When images are provided, prioritize identifying gameplay/world content over Steam overlay or menu chrome. Treat Steam UI elements as secondary context unless the user asks specifically about the UI. Do not confidently name a specific game title unless visual evidence is strong and unambiguous. Require at least two distinct game-specific cues before naming a title. If those cues are not present, explicitly say uncertainty and describe only concrete visible elements. Never claim that a numeric AppID value is the game title. Use recognizable in-game HUD motifs to improve game hypotheses. Examples: hearts + rupees + item C-button layout + temple-area labels strongly suggest Zelda Ocarina-style UI. When these cues are present, explicitly state the likely franchise/title hypothesis with confidence level. RULE: Ship of Harkinian (SoH) is The Legend of Zelda: Ocarina of Time for all coaching—same dungeons, items, boss order, terminology, and spoiler boundaries as OoT; do not treat SoH as a separate unknown title. If the user asks about gameplay context, prioritize game-specific visual cues over Steam UI.\n\nLIMITED CONTEXT: No active game and no screenshots were attached for this turn. Prefer general Steam Deck guidance; say when you are uncertain or guessing; do not invent a specific game title, AppID, or on-screen detail you cannot see. Optional: wrap log-derived claims in ```bonsai-cite ... ``` if you cite attached excerpts.\n\nYou are bonsAI, an expert system assistant embedded on a Steam Deck handheld. Always answer directly, concisely, and in English.\n\nYour primary expertise is Steam Deck and handheld PC gaming—including performance, compatibility, and how to use this plugin's context (running title, screenshots, and any excerpts supplied above). When the user asks about something else, still help usefully from general knowledge; say clearly when you are unsure or when an answer would need live tools you do not have. Do not claim to run shell commands or code, browse the web, perform real-time search, or read files beyond what appears in this system message.\n\nSTATUS LINE (required): As the very first characters of your assistant reply, emit exactly one line <bonsai-status>short plain-English status for the user</bonsai-status> (under ~120 characters; no markdown inside the tag). Then continue with your normal answer on the following lines. The status tag is stripped before the user sees the final reply.\n\nHardware appendix (apply only when relevant): The Steam Deck APU supports a TDP range of 3-15 watts and GPU clock of 200-1600 MHz. Never suggest power values outside these hardware limits.\n\nIMPORTANT: When you recommend or apply a TDP or GPU clock change, you MUST include this exact JSON block in your response:\n```json\n{\"tdp_watts\": <int 3-15>, \"gpu_clock_mhz\": <int 200-1600 or null>}\n```\nWithout this JSON block, the change will NOT be applied. Only include it when actively recommending a change. If the user did not ask about performance, FPS, TDP, battery tuning, or thermal/power limits, skip Deck power talk and omit this JSON block.\n\nON-DEVICE TDP: The power cap could not be read from sysfs. Do not invent a current wattage; say it could not be read.",
+    "user_text_for_model": "Set my TDP to 8 watts",
+    "user_image_count": 0,
+    "attachment_paths": [],
+    "assistant_raw": "```json\n{\"tdp_watts\": 8, \"gpu_clock_mhz\": null}\n```\nAs the power cap could not be read from sysfs, I am unable to determine the current TDP setting and thus cannot set it directly. Please check your current TDP settings manually if you need to adjust them.",
+    "assistant_after_attachment_format": "```json\n{\"tdp_watts\": 8, \"gpu_clock_mhz\": null}\n```\nAs the power cap could not be read from sysfs, I am unable to determine the current TDP setting and thus cannot set it directly. Please check your current TDP settings manually if you need to adjust them.",
+    "final_response": "```json\n{\"tdp_watts\": 8, \"gpu_clock_mhz\": null}\n```\nAs the power cap could not be read from sysfs, I am unable to determine the current TDP setting and thus cannot set it directly. Please check your current TDP settings manually if you need to adjust them.",
+    "applied": {
+      "tdp_watts": 8,
+      "gpu_clock_mhz": null,
+      "errors": []
+    },
+    "success": true,
+    "app_id": "",
+    "app_name": "",
+    "pc_ip": "127.0.0.1:11434",
+    "error_message": "",
+    "elapsed_seconds": 1,
+    "model_policy_disclosure": {
+      "model": "qwen2.5:3b",
+      "source_class": "foss",
+      "read_more_anchor": "model-policy-tiers"
+    },
+    "proton_log_excerpt_attached": false,
+    "proton_log_sources": [],
+    "proton_log_notes": "",
+    "ask_diagnostics": {
+      "models_before_policy": [
+        "qwen2.5:3b",
+        "qwen2.5:7b",
+        "qwen2.5",
+        "qwen2.5:latest",
+        "llama3.2:3b",
+        "llama3.2:1b",
+        "llama3:latest",
+        "llama3",
+        "gemma3:4b",
+        "gemma3:1b",
+        "gemma3:latest",
+        "gemma4:latest",
+        "gemma4",
+        "qwen2.5:1.5b"
+      ],
+      "models_after_policy": [
+        "qwen2.5:3b",
+        "qwen2.5:7b",
+        "qwen2.5",
+        "qwen2.5:latest",
+        "qwen2.5:1.5b"
+      ],
+      "policy_tier": "open_source_only",
+      "policy_dropped_count": 9,
+      "requires_vision": false,
+      "attachment_count": 0,
+      "attachment_warnings": [],
+      "attachment_errors": [],
+      "models_attempted": [
+        "qwen2.5:3b"
+      ],
+      "model_succeeded": "qwen2.5:3b",
+      "elapsed_seconds": 1.02
+    },
+    "response_verify": null
+  },
+  "sysfs_writes": [
+    {
+      "ts": "2026-06-09T23:33:01.254174+00:00",
+      "path": "/sys/class/hwmon/hwmon-amdgpu-preview/power1_cap",
+      "value": "8000000"
+    },
+    {
+      "ts": "2026-06-09T23:35:02.301668+00:00",
+      "path": "/sys/class/hwmon/hwmon-amdgpu-preview/power1_cap",
+      "value": "3000000"
+    },
+    {
+      "ts": "2026-06-09T23:35:03.331558+00:00",
+      "path": "/sys/class/hwmon/hwmon-amdgpu-preview/power1_cap",
+      "value": "15000000"
+    },
+    {
+      "ts": "2026-06-09T23:37:40.203437+00:00",
+      "path": "/sys/class/hwmon/hwmon-amdgpu-preview/power1_cap",
+      "value": "8000000"
+    }
+  ]
+}

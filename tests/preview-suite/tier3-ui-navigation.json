@@ -1,0 +1,489 @@
+{
+  "scenarios": [
+    {
+      "id": "UI-A-beta-modal",
+      "tier": "tier3UI",
+      "bucket": "C",
+      "evidenceProfile": "preview",
+      "tags": [
+        "BETA-MODAL"
+      ],
+      "checkboxIds": [],
+      "captureSteps": [
+        3
+      ],
+      "steps": [
+        {
+          "action": "sleep",
+          "ms": 400
+        },
+        {
+          "action": "previewHook",
+          "method": "resetDisclaimer"
+        },
+        {
+          "action": "sleep",
+          "ms": 600
+        },
+        {
+          "action": "runSequence",
+          "inputs": [
+            "A"
+          ]
+        },
+        {
+          "action": "sleep",
+          "ms": 400
+        },
+        {
+          "action": "snapshotDom",
+          "selector": ".bonsai-scope"
+        },
+        {
+          "action": "assert",
+          "type": "domContainsAny",
+          "expect": [
+            "bonsai-decky-tabs-root",
+            "bonsai-tab-title-leaf"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "UI-A-tab-tour",
+      "tier": "tier3UI",
+      "bucket": "C",
+      "evidenceProfile": "preview",
+      "tags": [
+        "CORE-UI",
+        "SETTINGS-TRIM",
+        "ABOUT-OLLAMA"
+      ],
+      "checkboxIds": [],
+      "captureSteps": [
+        1,
+        3,
+        5,
+        7
+      ],
+      "steps": [
+        {
+          "action": "previewHook",
+          "method": "setTab",
+          "args": [
+            "main"
+          ]
+        },
+        {
+          "action": "sleep",
+          "ms": 200
+        },
+        {
+          "action": "snapshotDom",
+          "selector": ".bonsai-scope"
+        },
+        {
+          "action": "assert",
+          "type": "domContainsAny",
+          "expect": [
+            "bonsai-decky-tabs-root",
+            "bonsai-askbar",
+            "bonsai-preset-glass"
+          ]
+        },
+        {
+          "action": "previewHook",
+          "method": "setTab",
+          "args": [
+            "ollama"
+          ]
+        },
+        {
+          "action": "sleep",
+          "ms": 200
+        },
+        {
+          "action": "snapshotDom",
+          "selector": ".bonsai-scope"
+        },
+        {
+          "action": "assert",
+          "type": "domContainsAny",
+          "expect": [
+            "bonsai-settings-section-stack",
+            "bonsai-settings-connection-host",
+            "Where AI runs"
+          ]
+        },
+        {
+          "action": "previewHook",
+          "method": "setTab",
+          "args": [
+            "settings"
+          ]
+        },
+        {
+          "action": "sleep",
+          "ms": 200
+        },
+        {
+          "action": "snapshotDom",
+          "selector": ".bonsai-scope"
+        },
+        {
+          "action": "assert",
+          "type": "domContainsAny",
+          "expect": [
+            "bonsai-settings-section-stack",
+            "Screenshot quality"
+          ]
+        },
+        {
+          "action": "previewHook",
+          "method": "setTab",
+          "args": [
+            "permissions"
+          ]
+        },
+        {
+          "action": "sleep",
+          "ms": 200
+        },
+        {
+          "action": "snapshotDom",
+          "selector": ".bonsai-scope"
+        },
+        {
+          "action": "assert",
+          "type": "domContainsAny",
+          "expect": [
+            "Save files to Desktop",
+            "Adjust power limits"
+          ]
+        },
+        {
+          "action": "previewHook",
+          "method": "setTab",
+          "args": [
+            "about"
+          ]
+        },
+        {
+          "action": "sleep",
+          "ms": 200
+        },
+        {
+          "action": "snapshotDom",
+          "selector": ".bonsai-scope"
+        },
+        {
+          "action": "assert",
+          "type": "domContainsAny",
+          "expect": [
+            "About bonsAI",
+            "Built on Ollama"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "UI-A-ollama-conn",
+      "tier": "tier3UI",
+      "bucket": "C",
+      "evidenceProfile": "preview",
+      "tags": [
+        "CONN-TEST",
+        "KEEP-ALIVE"
+      ],
+      "checkboxIds": [],
+      "captureSteps": [
+        2
+      ],
+      "steps": [
+        {
+          "action": "previewHook",
+          "method": "setTab",
+          "args": [
+            "ollama"
+          ]
+        },
+        {
+          "action": "sleep",
+          "ms": 300
+        },
+        {
+          "action": "callRpc",
+          "method": "test_ollama_connection",
+          "args": [
+            "127.0.0.1:11434",
+            15
+          ]
+        },
+        {
+          "action": "assert",
+          "type": "rpcResult",
+          "expect": "reachable"
+        },
+        {
+          "action": "snapshotDom",
+          "selector": ".bonsai-scope"
+        },
+        {
+          "action": "assert",
+          "type": "domContainsAny",
+          "expect": [
+            "bonsai-settings-connection-host",
+            "Test connection"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "UI-A-permissions-ui",
+      "tier": "tier3UI",
+      "bucket": "C",
+      "evidenceProfile": "preview",
+      "tags": [
+        "PERMS-GATE"
+      ],
+      "checkboxIds": [],
+      "captureSteps": [
+        2
+      ],
+      "steps": [
+        {
+          "action": "previewHook",
+          "method": "setTab",
+          "args": [
+            "permissions"
+          ]
+        },
+        {
+          "action": "sleep",
+          "ms": 300
+        },
+        {
+          "action": "snapshotDom",
+          "selector": ".bonsai-scope"
+        },
+        {
+          "action": "assert",
+          "type": "domContainsAny",
+          "expect": [
+            "Steam ban lookup",
+            "Open web links"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "UI-A-mode-menu",
+      "tier": "tier3UI",
+      "bucket": "C",
+      "evidenceProfile": "preview",
+      "tags": [
+        "MODE-SELECTOR"
+      ],
+      "checkboxIds": [],
+      "captureSteps": [
+        3
+      ],
+      "steps": [
+        {
+          "action": "previewHook",
+          "method": "setTab",
+          "args": [
+            "main"
+          ]
+        },
+        {
+          "action": "sleep",
+          "ms": 300
+        },
+        {
+          "action": "snapshotDom",
+          "selector": ".bonsai-scope"
+        },
+        {
+          "action": "assert",
+          "type": "domContainsAny",
+          "expect": [
+            "bonsai-ask-mode-trigger",
+            "bonsai-askbar"
+          ]
+        },
+        {
+          "action": "runSequence",
+          "inputs": [
+            "A"
+          ]
+        },
+        {
+          "action": "sleep",
+          "ms": 250
+        },
+        {
+          "action": "snapshotDom",
+          "selector": ".bonsai-scope"
+        },
+        {
+          "action": "assert",
+          "type": "domContainsAny",
+          "expect": [
+            "Speed",
+            "Strategy",
+            "Expert",
+            "bonsai-ask-mode-menu"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "UI-A-transparency-expand",
+      "tier": "tier3UI",
+      "bucket": "D",
+      "evidenceProfile": "preview",
+      "tags": [
+        "TRANSPARENCY",
+        "STRATEGY-CORE"
+      ],
+      "checkboxIds": [],
+      "captureSteps": [
+        2
+      ],
+      "steps": [
+        {
+          "action": "previewHook",
+          "method": "setTab",
+          "args": [
+            "main"
+          ]
+        },
+        {
+          "action": "previewHook",
+          "method": "triggerAsk",
+          "args": [
+            "hi"
+          ]
+        },
+        {
+          "action": "sleep",
+          "ms": 8000
+        },
+        {
+          "action": "callRpc",
+          "method": "get_input_transparency"
+        },
+        {
+          "action": "assert",
+          "type": "rpcResult",
+          "expect": "raw_question"
+        },
+        {
+          "action": "previewHook",
+          "method": "getTransparencyJson"
+        },
+        {
+          "action": "assert",
+          "type": "hookResult",
+          "expect": "hi"
+        }
+      ]
+    },
+    {
+      "id": "UI-A-debug-tab",
+      "tier": "tier3UI",
+      "bucket": "C",
+      "evidenceProfile": "preview",
+      "tags": [
+        "DEBUG-TAB"
+      ],
+      "checkboxIds": [],
+      "captureSteps": [
+        3
+      ],
+      "steps": [
+        {
+          "action": "callRpc",
+          "method": "load_settings"
+        },
+        {
+          "action": "callRpc",
+          "method": "save_settings",
+          "args": [
+            {
+              "show_developer_tab": true
+            }
+          ]
+        },
+        {
+          "action": "sleep",
+          "ms": 400
+        },
+        {
+          "action": "previewHook",
+          "method": "setTab",
+          "args": [
+            "developer"
+          ]
+        },
+        {
+          "action": "sleep",
+          "ms": 300
+        },
+        {
+          "action": "snapshotDom",
+          "selector": ".bonsai-scope"
+        },
+        {
+          "action": "assert",
+          "type": "domContainsAny",
+          "expect": [
+            "Token streaming",
+            "Integrations",
+            "Model routing"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "UI-A-presets-visible",
+      "tier": "tier3UI",
+      "bucket": "C",
+      "evidenceProfile": "preview",
+      "tags": [
+        "PRESETS-CAROUSEL",
+        "GLASS-UI"
+      ],
+      "checkboxIds": [],
+      "captureSteps": [
+        2
+      ],
+      "steps": [
+        {
+          "action": "previewHook",
+          "method": "setTab",
+          "args": [
+            "main"
+          ]
+        },
+        {
+          "action": "sleep",
+          "ms": 300
+        },
+        {
+          "action": "snapshotDom",
+          "selector": ".bonsai-scope"
+        },
+        {
+          "action": "assert",
+          "type": "domContainsAny",
+          "expect": [
+            "bonsai-preset-glass",
+            "bonsai-preset-carousel"
+          ]
+        }
+      ]
+    }
+  ]
+}

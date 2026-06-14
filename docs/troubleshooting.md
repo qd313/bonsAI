@@ -69,13 +69,69 @@ If Windows still falls back to CPU after FIX A:
 
 ## 1a. Permissions tab (blocked actions)
 
-**Feature:** The **Permissions** tab (lock icon) controls high-impact actions: saving notes to Desktop, applying TDP/GPU suggestions from the model, attaching Steam screenshots to asks, opening external links from About, and the Debug tab Steam Input jump.
+**Feature:** The **Permissions** tab (lock icon) controls high-impact actions: saving notes to Desktop, applying TDP/GPU suggestions from the model, attaching Steam screenshots to asks, **voice input (microphone)**, opening external links from About, and the Developer tab Steam Input jump.
 
 **Symptom:** Toasts like “Permission required” or backend errors mentioning Permissions when you try those actions.
 
 **Fix:** Open the **Permissions** tab and set the relevant scope to **ON**. Ollama requests to your PC on the LAN are not gated by these toggles.
 
-**Note:** If you upgraded from an older `settings.json` that had no `capabilities` block, the plugin enables all scopes until you save settings from the Permissions tab (grandfather behavior).
+**Note:** If you upgraded from an older `settings.json` that had no `capabilities` block, the plugin enables most scopes until you save settings from the Permissions tab (grandfather behavior). **Voice input (microphone)** and **Steam ban lookup** stay **off** until you enable them explicitly.
+
+### Voice input (speech-to-text)
+
+**Symptom:** Mic button shows “Permission required” or voice does not start.
+
+**Fix:**
+
+1. **Permissions** tab → enable **Voice input (microphone)**.
+2. **Settings → Voice input** → choose **tiny.en** (fastest on Deck) or **base.en** → **Install voice engine** (pulls whisper-cli via podman on SteamOS, then downloads the GGUF model).
+3. If install fails, ensure **podman** is available (`which podman`) or place **`bin/whisper-cli`** in the plugin manually. See [`bin/README.md`](../bin/README.md).
+
+**Symptom:** “No audio capture tool found”.
+
+**Fix:** On SteamOS, install PipeWire/Pulse capture utilities (`pw-record` or `parecord`). Gaming Mode usually has PipeWire; desktop BPM may need `wf-recorder`’s audio stack intact.
+
+**Symptom:** Interim text is slow or stalls.
+
+**Fix:** Use **tiny.en**; **base.en** needs more CPU on the Deck APU. Close heavy games while transcribing. Audio is processed in RAM only — nothing is uploaded or saved to disk.
+
+---
+
+**Symptom:** On the **Ollama** tab, **Open AI models…** does not switch policy tiers (e.g. Tier 1 → Tier 2) with the controller, or the choice reverts after **Done**.
+
+**Cause (fixed 2026-05-19):** Tier buttons only handled mouse `onClick`, not Steam **A/OK** (`onOKButton`). Immediate save on each highlight also raced Decky remount + debounced settings save.
+
+**Fix:** Update to a build that uses draft selection inside the **AI models** hub (Policy / Browse & pull / Advanced), `onOKButton` on tier rows, **awaits `save_settings` before closing** (avoids remount loading stale tier), and persist on **Done** with `hydrateFromSettings`. If tier still reverts, open the hub again and confirm the row label; enable Tier 3 unlock under **Advanced** when choosing Any installed model.
+
+### Ollama HTTP 404 with Gemma / open-weight models (Tier 2)
+
+**Symptom:** You pulled **Gemma 3** or **Gemma 4** from **Ollama → Open AI models… → Browse & pull**, Tier 2 is selected, but Ask fails with **HTTP 404** for `gemma3:latest` or `gemma4:latest`.
+
+**Cause:** Ollama requires an **exact tag** match. Tags like `gemma4:4b` are **not** on the public library (manifest missing → pull exit code 1). Older builds also tried generic names such as `gemma3:latest` only in routing.
+
+**Fix (2026-05-26):** Pull Models catalog uses **`gemma4:latest`** (valid on Ollama). Invalid tags are rejected before pull when the registry is reachable; setup logs include the last `ollama pull` output, not only exit code. Routing tries `gemma3:4b` and `gemma4:latest` before generic `gemma4`.
+
+**Checks:**
+
+1. List installed tags: `curl -s http://127.0.0.1:11434/api/tags` (or your PC IP).
+2. Confirm at least one tag in the chain is present (e.g. `gemma3:4b` after a featured pull).
+3. Tier 1 still tries Qwen/Llava first — install a Tier-1 model or stay on Tier 2 so Gemma tags are eligible.
+
+---
+
+### AI voice & personality (character tone)
+
+**Symptom:** **Settings → AI voice & personality** is on and a character is selected, but replies sound like plain bonsAI (no accent, no character).
+
+**Checks:**
+
+1. Toggle **AI voice & personality** on and pick a character (or **Random**); press **OK** in the picker.
+2. Confirm **Accent intensity** is not **Subtle** if you want obvious voice (Subtle is intentionally light).
+3. Re-ask after a settings save — character fields must be in `settings.json` (`ai_character_enabled`, `ai_character_*`).
+
+**Cause (fixed 2026-05-19):** Character instructions were prepended *before* the long bonsAI identity block; later lines (“answer directly, concisely, in English”) overrode voice. Build now **appends** character voice + a short end-of-system reminder.
+
+**Plan for stronger model honesty:** [plans/post-p0-feature-backlog.md](plans/post-p0-feature-backlog.md) (model truth section).
 
 ---
 
@@ -85,7 +141,7 @@ If Windows still falls back to CPU after FIX A:
 
 **Settings → Advanced** (bottom of the tab): **Clear cache…** only clears the **current session** in RAM (Ask thread, attachments, etc.) and does **not** touch `settings.json`.
 
-**Clear all data…** resets bonsAI to a **new-install** state on the device: it removes saved settings (including permissions), clears plugin runtime cache and log files under Decky’s homebrew layout, clears the Ollama host / disclaimer / unified-input keys stored in the plugin’s browser storage (and related `bonsai:*` flags such as the **How to use bonsAI** quick-start chip and **Local runtime (beta)** notice dismissals), and shows the beta notices again. It does **not** delete markdown files under `~/Desktop/BonsAI_notes/`.
+**Clear all data…** resets bonsAI to a **new-install** state on the device: it removes saved settings (including permissions), clears plugin runtime cache and log files under Decky’s homebrew layout, clears the Ollama host / disclaimer / unified-input keys stored in the plugin’s browser storage (and related `bonsai:*` flags such as the **How to use bonsAI** quick-start chip and **Local runtime (beta)** notice dismissals), and shows the beta notices again. It does **not** delete markdown or log files under `~/Desktop/bonsAI_logs/`.
 
 ---
 
@@ -109,7 +165,7 @@ If Windows still falls back to CPU after FIX A:
 
 ## Verbose Ask logging (Desktop notes)
 
-**Feature:** Settings → **Desktop notes** → **Verbose Ask logging to Desktop notes** (`desktop_ask_verbose_logging`). When enabled and **Filesystem writes** is on, each completed Ask appends a large markdown block to `~/Desktop/BonsAI_notes/bonsai-ask-trace-YYYY-MM-DD.md` (UTC day) with full system and user prompt text, model name, and replies.
+**Feature:** Settings → **Desktop notes** → **Verbose Ask logging to Desktop notes** (`desktop_ask_verbose_logging`). When enabled and **Filesystem writes** is on, each completed Ask appends a large markdown block to `~/Desktop/bonsAI_logs/bonsai-ask-trace-YYYY-MM-DD.md` (UTC day) with full system and user prompt text, model name, and replies.
 
 **Symptom:** Trace files grow quickly or contain sensitive prompts.
 
@@ -129,6 +185,8 @@ If Windows still falls back to CPU after FIX A:
 
 ## 1c. Latency warning vs backend timeout (Settings)
 
+**Defaults (when “Custom timeouts” is off):** slow-reply warning at **30s**, hard abort at **45s** (2026-05-19; previously 360s). Enable **Developer → Custom timeouts** for your own warning/timeout pair.
+
 **Where:** Settings tab, under **Connection**, **Latency warning and backend timeout**.
 
 **Behavior:** One Steam slider controls **Hard timeout (backend)** (10s steps, max 300s). The **Soft warning (latency)** value remains visible directly below it; the plugin keeps warning **strictly below** timeout so the slow hint can appear before a hard cancel.
@@ -137,18 +195,27 @@ If Windows still falls back to CPU after FIX A:
 
 ---
 
-## 1b. Desktop notes (`BonsAI_notes`)
+## 1b. Desktop logs (`bonsAI_logs`)
+
+### Folder rename (existing users)
+All Desktop writes now land in **`~/Desktop/bonsAI_logs/`** (was `BonsAI_notes`). The plugin does **not** move your old folder automatically. If you already have notes under `~/Desktop/BonsAI_notes/`, rename that folder to `bonsAI_logs` in Desktop Mode (or copy files you want to keep).
 
 ### Saving from Game Mode
-**Feature:** After a successful **Ask**, use **Save to Desktop note…** on the main tab. You choose the file name (without `.md`); the plugin appends an entry under `~/Desktop/BonsAI_notes/` on the **Steam Deck user** (not the remote Ollama PC). Each run adds a new timestamped **Question** / **Response** block; existing files are not replaced.
+**Feature:** After a successful **Ask**, use **Save to Desktop note…** on the main tab. You choose the file name (without `.md`); the plugin appends an entry under `~/Desktop/bonsAI_logs/` on the **Steam Deck user** (not the remote Ollama PC). Each run adds a new timestamped **Question** / **Response** block; existing files are not replaced.
 
-**Optional — daily chat log:** In **Settings**, enable **Auto-save chat to Desktop notes** (default off). With **Filesystem writes** enabled in **Permissions**, each **Ask** and each **AI reply** append to `~/Desktop/BonsAI_notes/bonsai-chat-YYYY-MM-DD.md` (UTC calendar day). Ask lines include paths for any screenshot you attached for that prompt.
+**Optional — daily chat log:** In **Settings**, enable **Auto-save chat to Desktop notes** (default off). With **Filesystem writes** enabled in **Permissions**, each **Ask** and each **AI reply** append to `~/Desktop/bonsAI_logs/bonsai-chat-YYYY-MM-DD.md` (UTC calendar day). Ask lines include paths for any screenshot you attached for that prompt.
+
+**Optional — app activity log:** Settings → Advanced → **App activity logging to Desktop** (`desktop_app_log_level`, default **Off**). With **Filesystem writes** on:
+- **Default** — one-line summary events (plugin load/unload, connection test, Ask start/complete, settings key changes without secret values) in `~/Desktop/bonsAI_logs/bonsai-app-YYYY-MM-DD.log`.
+- **Verbose** — adds RPC summaries, local Ollama setup log tail lines, model fallback attempts, and captured frontend errors. Still redacts API keys and full prompts; use **Verbose Ask logging** separately if you need full Ollama trace markdown.
+
+**PII caution:** Verbose app logs and Ask trace files can include route names, error text, and (for Ask traces) full prompts. Disable toggles or delete files on shared Decks.
 
 ### ISSUE: Save failed or permission error
 **Checks:**
 1. Switch to **Desktop Mode** at least once so the Desktop folder exists (SteamOS creates `~/Desktop` when needed).
 2. Ensure the Deck user home volume is not full and is writable.
-3. If you use unusual home layouts or symlinks, verify `~/Desktop/BonsAI_notes` resolves under your Deck user home.
+3. If you use unusual home layouts or symlinks, verify `~/Desktop/bonsAI_logs` resolves under your Deck user home.
 
 ---
 
@@ -171,13 +238,38 @@ If Windows still falls back to CPU after FIX A:
 
 4. **Models installed:** On the Ollama host, run `ollama pull <model>` for each tag you use (for example `llama3` for text, `llava` or another vision tag for screenshots). The Deck only talks to Ollama; it does not download weights itself.
 
+### Find Ollama on LAN (mDNS — optional)
+
+bonsAI can browse for **`_ollama._tcp`** services on your LAN (**Settings → Connection → Find LAN**). This uses **mDNS only** (Bonjour / Avahi) — it does **not** scan IP subnets or arbitrary ports.
+
+Stock Ollama on Linux/Windows often **does not advertise** mDNS until you publish it. Example on a Fedora/Bazzite PC (adjust paths):
+
+```ini
+# /etc/avahi/services/ollama.service
+<?xml version="1.0" standalone='no'?>
+<!DOCTYPE service-group SYSTEM "avahi-service.dtd">
+<service-group>
+  <name replace-wildcards="yes">Ollama on %h</name>
+  <service>
+    <type>_ollama._tcp</type>
+    <port>11434</port>
+  </service>
+</service-group>
+```
+
+Then `sudo systemctl restart avahi-daemon` and ensure `OLLAMA_HOST=0.0.0.0` and firewall **TCP 11434** as above. Manual **PC address** entry still works if mDNS finds nothing.
+
 ### On-device Ollama (localhost — **Test** vs cold boot)
 
 **Symptom:** Right after a full reboot, Connection **Test** fails for **127.0.0.1:11434** even though pulls succeeded earlier.
 
 **Why:** Full boot can leave the **`ollama`** user service idle until first use — nothing is listening on **11434** until the daemon (`ollama serve` / systemd unit) accepts traffic.
 
-**What bonsAI does (v0.2.1+):** With **Test** targeting loopback (**Ollama on this Deck on**, or **`127.0.0.1` / localhost** typed as the host), an initial failed probe triggers a best‑effort **wake** (**`systemctl --user try-restart` / start `ollama`**, then **`ollama serve`** if needed — same primitives as Starter setup under `py_modules/backend/services/local_ollama_setup_service.py`) and **retests once**. Prefer waiting a minute after boot before assuming Ollama is broken.
+**What bonsAI does (v0.3.0+):** With **Test** targeting loopback (**Ollama on this Deck on**, or **`127.0.0.1` / localhost** typed as the host), an initial failed probe triggers a best‑effort **wake** (**`systemctl --user try-restart` / start `ollama`**, then **`ollama serve`** if needed — same primitives as Starter setup under `py_modules/backend/services/local_ollama_setup_service.py`) and **retests once**. Prefer waiting a minute after boot before assuming Ollama is broken.
+
+**Keeping Ollama and models current:** With **Ollama on this Deck** enabled, Settings → Connection → **Update Ollama & Models** re-runs the official installer (binary refresh), then **`ollama pull`** each tag already listed under **Installed tags** from Connection **Test** — downloads only when upstream weights changed.
+
+**Local toggle and saved LAN IP:** While **Ollama on this Deck** is **on**, Ask uses `127.0.0.1:11434` but does **not** overwrite the saved **OLLAMA IP ADDRESS** field in browser storage. Toggling local **off** should restore your LAN PC host instead of leaving `127.0.0.1:11434` in the field after local-mode Asks.
 
 ---
 
@@ -318,7 +410,9 @@ Run with a build that also satisfies [regression-and-smoke.md](regression-and-sm
 
 ---
 
-## Steam Input jump (Phase 1, Debug tab)
+## Steam Input jump (Phase 1, Developer tab)
+
+Enable **Settings → Data → Show Developer tab**, then open **Developer** → **Diagnostics**.
 
 Phase 1 is the **completed** scope for this feature; full search + catalog (Phase 2+) is deferred per [roadmap.md](roadmap.md).
 

@@ -21,6 +21,7 @@ import {
   type ModelPolicyTierId,
 } from "../data/modelPolicy";
 
+/** Tier ``non_foss`` without explicit unlock collapses to ``open_weight`` so we never persist an illegal pair. */
 function reconcileModelPolicySettings(
   tierRaw: unknown,
   unlockRaw: unknown
@@ -36,6 +37,8 @@ function reconcileModelPolicySettings(
   return { model_policy_tier: "non_foss", model_policy_non_foss_unlocked: true };
 }
 export type UnifiedInputPersistenceMode = "persist_all" | "persist_search_only" | "no_persist";
+export type DesktopAppLogLevel = "off" | "default" | "verbose";
+export type PresetChipAnimation = "fade" | "carousel" | "static";
 export type { AskModeId };
 export type { OllamaKeepAliveDuration };
 /** Legacy; migration maps to ScreenshotAttachmentPreset. */
@@ -47,23 +50,41 @@ export type BonsaiCapabilities = {
   filesystem_write: boolean;
   hardware_control: boolean;
   media_library_access: boolean;
+  steam_logs_read: boolean;
   external_navigation: boolean;
+  /** Outbound Steam Web API (GetPlayerBans) for ``bonsai:vac-check``; key stored in settings. */
+  steam_web_api: boolean;
+  /** Local microphone capture for speech-to-text in the Ask bar. */
+  microphone_access: boolean;
+};
+
+export type VoiceSttModelId = "tiny.en" | "base.en";
+
+export type NamedOllamaHost = {
+  label: string;
+  host: string;
 };
 
 export type BonsaiSettings = {
   latency_warning_seconds: number;
   request_timeout_seconds: number;
-  /** When true, stored warning/timeout apply; when false, defaults (30s / 360s) for Ask + Ollama. */
+  /** When true, stored warning/timeout apply; when false, defaults (60s / 180s) for Ask + Ollama. */
   latency_timeouts_custom_enabled: boolean;
   unified_input_persistence_mode: UnifiedInputPersistenceMode;
   /** Vision attachment downscale and JPEG quality preset. */
   screenshot_attachment_preset: ScreenshotAttachmentPreset;
-  /** When true, append Ask and AI response lines to daily chat files under Desktop/BonsAI_notes (requires filesystem_write). */
+  /** When true, append Ask and AI response lines to daily chat files under Desktop/bonsAI_logs (requires filesystem_write). */
   desktop_debug_note_auto_save: boolean;
   /** When true, append full Ask/Ollama transparency blocks to Desktop trace files (requires filesystem_write). */
   desktop_ask_verbose_logging: boolean;
-  /** When false, main-tab preset suggestion chips stay opaque and swap text without fade transitions (default true). */
+  /** App activity log level written to Desktop/bonsAI_logs/bonsai-app-YYYY-MM-DD.log (requires filesystem_write). */
+  desktop_app_log_level: DesktopAppLogLevel;
+  /** When true (with Permissions → Steam/Proton log read), troubleshooting-style Asks attach bounded local log excerpts. */
+  attach_proton_logs_when_troubleshooting: boolean;
+  /** @deprecated Prefer `preset_chip_animation`; kept for migration from older settings.json. */
   preset_chip_fade_animation_enabled: boolean;
+  /** Main-tab preset chips: crossfade cycle, vertical carousel, or static rotation without opacity animation. */
+  preset_chip_animation: PresetChipAnimation;
   /** When true, Ask input sanitizer lane is off (set via README magic phrases, not the Settings UI). */
   input_sanitizer_user_disabled: boolean;
   capabilities: BonsaiCapabilities;
@@ -79,8 +100,8 @@ export type BonsaiSettings = {
   ask_mode: AskModeId;
   /** Ollama `keep_alive` for each Ask (how long the model stays in VRAM on the host after the request). */
   ollama_keep_alive: OllamaKeepAliveDuration;
-  /** When true, show the Debug tab in the LB/RB strip (default off for typical users). */
-  show_debug_tab: boolean;
+  /** When true, show the Developer tab in the LB/RB strip (default off for typical users). */
+  show_developer_tab: boolean;
   /** Which Ollama model families the backend may try (see README model policy). */
   model_policy_tier: ModelPolicyTierId;
   /** Tier 3 requires explicit acknowledgment for non-FOSS and unclassified tags. */
@@ -89,6 +110,26 @@ export type BonsaiSettings = {
   model_allow_high_vram_fallbacks: boolean;
   /** When true, route Ollama to this device only (fixed 127.0.0.1:11434); LAN PC IP field ignored for Ask/Test. */
   ollama_local_on_deck: boolean;
+  /** When false, Strategy ```bonsai-spoiler``` blocks render as visible text (no tap-to-reveal). Default on. */
+  strategy_spoiler_masking_enabled: boolean;
+  /** When true, spoiler blocks start expanded after the user consented on that Ask (still collapsible). */
+  strategy_spoiler_auto_reveal_after_consent: boolean;
+  /** Steam Web API key for GetPlayerBans (VAC check command); stored on device with plugin settings. */
+  steam_web_api_key: string;
+  /** When true, Main tab shows progressive Ollama token streaming (Developer tab opt-in). */
+  bonsai_token_streaming_enabled: boolean;
+  /** When true, show the translucent on-screen ingest debug HUD (Developer tab opt-in). */
+  show_onscreen_debug_hud: boolean;
+  /** Rule-based post-check on Ollama replies (Developer / advanced). */
+  response_verify_enabled: boolean;
+  /** Optional second-model verifier (default off). */
+  response_verify_second_pass: boolean;
+  /** Ollama tag for verifier second pass (empty disables the model call). */
+  response_verify_model: string;
+  /** Labeled ``host:port`` presets for quick Connection switching (max 4). */
+  named_ollama_hosts: NamedOllamaHost[];
+  /** Local whisper.cpp model for voice Ask (tiny.en default for Deck real-time). */
+  voice_stt_model: VoiceSttModelId;
 };
 
 /** Fields mirrored from React state / hook before `save_settings` RPC. */
@@ -100,7 +141,10 @@ export type BonsaiSettingsSnapshotInput = {
   screenshotAttachmentPreset: ScreenshotAttachmentPreset;
   desktopDebugNoteAutoSave: boolean;
   desktopAskVerboseLogging: boolean;
+  desktopAppLogLevel: DesktopAppLogLevel;
+  attachProtonLogsWhenTroubleshooting: boolean;
   presetChipFadeAnimationEnabled: boolean;
+  presetChipAnimation: PresetChipAnimation;
   inputSanitizerUserDisabled: boolean;
   capabilities: BonsaiCapabilities;
   aiCharacterEnabled: boolean;
@@ -110,11 +154,20 @@ export type BonsaiSettingsSnapshotInput = {
   aiCharacterAccentIntensity: AiCharacterAccentIntensityId;
   askMode: AskModeId;
   ollamaKeepAlive: OllamaKeepAliveDuration;
-  showDebugTab: boolean;
+  showDeveloperTab: boolean;
   modelPolicyTier: ModelPolicyTierId;
   modelPolicyNonFossUnlocked: boolean;
   modelAllowHighVramFallbacks: boolean;
   ollamaLocalOnDeck: boolean;
+  strategySpoilerMaskingEnabled: boolean;
+  steamWebApiKey: string;
+  bonsaiTokenStreamingEnabled: boolean;
+  showOnscreenDebugHud: boolean;
+  responseVerifyEnabled: boolean;
+  responseVerifySecondPass: boolean;
+  responseVerifyModel: string;
+  namedOllamaHosts: NamedOllamaHost[];
+  voiceSttModel: VoiceSttModelId;
 };
 
 /** Build the backend `BonsaiSettings` object; optional `patch` for immediate saves (character picker, permissions). */
@@ -130,7 +183,10 @@ export function toBonsaiSettingsPayload(
     screenshot_attachment_preset: input.screenshotAttachmentPreset,
     desktop_debug_note_auto_save: input.desktopDebugNoteAutoSave,
     desktop_ask_verbose_logging: input.desktopAskVerboseLogging,
-    preset_chip_fade_animation_enabled: input.presetChipFadeAnimationEnabled,
+    desktop_app_log_level: input.desktopAppLogLevel,
+    attach_proton_logs_when_troubleshooting: input.attachProtonLogsWhenTroubleshooting,
+    preset_chip_fade_animation_enabled: input.presetChipAnimation === "fade",
+    preset_chip_animation: input.presetChipAnimation,
     input_sanitizer_user_disabled: input.inputSanitizerUserDisabled,
     capabilities: input.capabilities,
     ai_character_enabled: input.aiCharacterEnabled,
@@ -140,11 +196,21 @@ export function toBonsaiSettingsPayload(
     ai_character_accent_intensity: input.aiCharacterAccentIntensity,
     ask_mode: input.askMode,
     ollama_keep_alive: input.ollamaKeepAlive,
-    show_debug_tab: input.showDebugTab,
+    show_developer_tab: input.showDeveloperTab,
     model_policy_tier: input.modelPolicyTier,
     model_policy_non_foss_unlocked: input.modelPolicyNonFossUnlocked,
     model_allow_high_vram_fallbacks: input.modelAllowHighVramFallbacks,
     ollama_local_on_deck: input.ollamaLocalOnDeck,
+    strategy_spoiler_masking_enabled: input.strategySpoilerMaskingEnabled,
+    strategy_spoiler_auto_reveal_after_consent: false,
+    steam_web_api_key: input.steamWebApiKey.trim().slice(0, STEAM_WEB_API_KEY_MAX_LEN),
+    bonsai_token_streaming_enabled: input.bonsaiTokenStreamingEnabled,
+    show_onscreen_debug_hud: input.showOnscreenDebugHud,
+    response_verify_enabled: input.responseVerifyEnabled,
+    response_verify_second_pass: input.responseVerifySecondPass,
+    response_verify_model: input.responseVerifyModel.trim().slice(0, 64),
+    named_ollama_hosts: input.namedOllamaHosts,
+    voice_stt_model: input.voiceSttModel,
   };
   return patch ? { ...base, ...patch } : base;
 }
@@ -155,8 +221,8 @@ export type AppliedResultLike = {
   errors: string[];
 };
 
-export const DEFAULT_LATENCY_WARNING_SECONDS = 30;
-export const DEFAULT_REQUEST_TIMEOUT_SECONDS = 360;
+export const DEFAULT_LATENCY_WARNING_SECONDS = 60;
+export const DEFAULT_REQUEST_TIMEOUT_SECONDS = 180;
 export const MIN_LATENCY_WARNING_SECONDS = 5;
 export const MAX_LATENCY_WARNING_SECONDS = 300;
 export const MIN_REQUEST_TIMEOUT_SECONDS = 10;
@@ -170,9 +236,21 @@ export const DEFAULT_SCREENSHOT_ATTACHMENT_PRESET: ScreenshotAttachmentPreset = 
 export const DEFAULT_SCREENSHOT_MAX_DIMENSION: ScreenshotMaxDimension = 1280;
 export const DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE = false;
 export const DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING = false;
+export const DEFAULT_BONSAI_TOKEN_STREAMING_ENABLED = false;
+export const DEFAULT_SHOW_ONSCREEN_DEBUG_HUD = false;
+export const DEFAULT_RESPONSE_VERIFY_ENABLED = false;
+export const DEFAULT_RESPONSE_VERIFY_SECOND_PASS = false;
+export const DEFAULT_RESPONSE_VERIFY_MODEL = "";
+export const RESPONSE_VERIFY_MODEL_MAX_LEN = 64;
+export const MAX_NAMED_OLLAMA_HOSTS = 4;
+export const DEFAULT_DESKTOP_APP_LOG_LEVEL: DesktopAppLogLevel = "off";
+export const DESKTOP_APP_LOG_LEVEL_OPTIONS: DesktopAppLogLevel[] = ["off", "default", "verbose"];
+export const DEFAULT_ATTACH_PROTON_LOGS_WHEN_TROUBLESHOOTING = false;
 export const DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED = true;
+export const DEFAULT_PRESET_CHIP_ANIMATION: PresetChipAnimation = "fade";
+export const PRESET_CHIP_ANIMATION_OPTIONS: PresetChipAnimation[] = ["fade", "carousel", "static"];
 export const DEFAULT_INPUT_SANITIZER_USER_DISABLED = false;
-export const DEFAULT_SHOW_DEBUG_TAB = false;
+export const DEFAULT_SHOW_DEVELOPER_TAB = false;
 /** Persisted routing: off = LAN PC IP text field applies; when on, Ask uses localhost Ollama on the Deck only. */
 export const DEFAULT_OLLAMA_LOCAL_ON_DECK = false;
 /** Fixed host:port for on-device Ollama (matches `refactor_helpers.DEFAULT_OLLAMA_*`). */
@@ -180,6 +258,10 @@ export const OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP = "127.0.0.1:11434";
 export const DEFAULT_MODEL_POLICY_NON_FOSS_UNLOCKED = false;
 export const DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS = false;
 export const DEFAULT_ASK_MODE: AskModeId = "speed";
+export const DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED = true;
+export const DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT = false;
+/** Align with backend ``STEAM_WEB_API_KEY_MAX_LEN``. */
+export const STEAM_WEB_API_KEY_MAX_LEN = 128;
 export { DEFAULT_OLLAMA_KEEP_ALIVE };
 export type { ModelPolicyTierId };
 export { DEFAULT_MODEL_POLICY_TIER } from "../data/modelPolicy";
@@ -188,8 +270,14 @@ export const DEFAULT_CAPABILITIES: BonsaiCapabilities = {
   filesystem_write: false,
   hardware_control: false,
   media_library_access: false,
+  steam_logs_read: false,
   external_navigation: false,
+  steam_web_api: false,
+  microphone_access: false,
 };
+
+export const DEFAULT_VOICE_STT_MODEL: VoiceSttModelId = "tiny.en";
+export const VOICE_STT_MODEL_OPTIONS: VoiceSttModelId[] = ["tiny.en", "base.en"];
 
 export const DEFAULT_AI_CHARACTER_ENABLED = false;
 export const DEFAULT_AI_CHARACTER_RANDOM = true;
@@ -315,17 +403,83 @@ export function normalizeDesktopAskVerboseLogging(value: unknown): boolean {
   return value === true;
 }
 
+export function normalizeBonsaiTokenStreamingEnabled(value: unknown): boolean {
+  return value === true;
+}
+
+export function normalizeShowOnscreenDebugHud(value: unknown): boolean {
+  return value === true;
+}
+
+export function normalizeResponseVerifyEnabled(value: unknown): boolean {
+  return value === true;
+}
+
+export function normalizeResponseVerifySecondPass(value: unknown): boolean {
+  return value === true;
+}
+
+const RESPONSE_VERIFY_MODEL_RE = /^[a-zA-Z0-9][a-zA-Z0-9._:/-]{0,63}$/;
+
+export function normalizeResponseVerifyModel(value: unknown): string {
+  if (typeof value !== "string") return DEFAULT_RESPONSE_VERIFY_MODEL;
+  const tag = value.trim().slice(0, RESPONSE_VERIFY_MODEL_MAX_LEN);
+  if (!tag || !RESPONSE_VERIFY_MODEL_RE.test(tag)) return DEFAULT_RESPONSE_VERIFY_MODEL;
+  return tag;
+}
+
+export function normalizeNamedOllamaHosts(value: unknown): NamedOllamaHost[] {
+  if (!Array.isArray(value)) return [];
+  const out: NamedOllamaHost[] = [];
+  for (const item of value) {
+    if (out.length >= MAX_NAMED_OLLAMA_HOSTS) break;
+    if (!item || typeof item !== "object") continue;
+    const rec = item as { label?: unknown; host?: unknown };
+    if (typeof rec.label !== "string" || typeof rec.host !== "string") continue;
+    const label = rec.label.trim().slice(0, 32);
+    const host = rec.host.trim().slice(0, 128);
+    if (!label || !host) continue;
+    out.push({ label, host });
+  }
+  return out;
+}
+
+export function normalizeDesktopAppLogLevel(value: unknown): DesktopAppLogLevel {
+  if (value === "off" || value === "default" || value === "verbose") {
+    return value;
+  }
+  return DEFAULT_DESKTOP_APP_LOG_LEVEL;
+}
+
+export function normalizeAttachProtonLogsWhenTroubleshooting(value: unknown): boolean {
+  return value === true;
+}
+
 export function normalizePresetChipFadeAnimationEnabled(value: unknown): boolean {
   if (value === false) return false;
   return DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED;
+}
+
+export function normalizePresetChipAnimation(
+  value: unknown,
+  legacyFadeEnabled: unknown
+): PresetChipAnimation {
+  if (typeof value === "string") {
+    const t = value.trim() as PresetChipAnimation;
+    if (PRESET_CHIP_ANIMATION_OPTIONS.includes(t)) return t;
+  }
+  if (legacyFadeEnabled === false) return "static";
+  return DEFAULT_PRESET_CHIP_ANIMATION;
 }
 
 export function normalizeInputSanitizerUserDisabled(value: unknown): boolean {
   return value === true;
 }
 
-export function normalizeShowDebugTab(value: unknown): boolean {
-  return value === true;
+export function normalizeShowDeveloperTab(value: unknown, legacyShowDebugTab?: unknown): boolean {
+  if (value === true) return true;
+  if (legacyShowDebugTab === true) return true;
+  return false;
 }
 
 export function normalizeModelAllowHighVramFallbacks(value: unknown): boolean {
@@ -337,6 +491,21 @@ export function normalizeOllamaLocalOnDeck(value: unknown): boolean {
     return DEFAULT_OLLAMA_LOCAL_ON_DECK;
   }
   return value === true;
+}
+
+export function normalizeStrategySpoilerMaskingEnabled(value: unknown): boolean {
+  if (value === false) return false;
+  return DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED;
+}
+
+export function normalizeStrategySpoilerAutoRevealAfterConsent(value: unknown): boolean {
+  return value === true;
+}
+
+export function normalizeSteamWebApiKey(value: unknown): string {
+  if (typeof value !== "string") return "";
+  const t = value.trim().slice(0, STEAM_WEB_API_KEY_MAX_LEN);
+  return t;
 }
 
 const _askModeSet = new Set<string>(ASK_MODE_IDS);
@@ -397,8 +566,18 @@ export function normalizeCapabilities(value: unknown): BonsaiCapabilities {
     filesystem_write: raw.filesystem_write === true,
     hardware_control: raw.hardware_control === true,
     media_library_access: raw.media_library_access === true,
+    steam_logs_read: raw.steam_logs_read === true,
     external_navigation: raw.external_navigation === true,
+    steam_web_api: raw.steam_web_api === true,
+    microphone_access: raw.microphone_access === true,
   };
+}
+
+export function normalizeVoiceSttModel(value: unknown): VoiceSttModelId {
+  if (typeof value === "string" && (VOICE_STT_MODEL_OPTIONS as string[]).includes(value.trim())) {
+    return value.trim() as VoiceSttModelId;
+  }
+  return DEFAULT_VOICE_STT_MODEL;
 }
 
 export function normalizeSettings(data: unknown): BonsaiSettings {
@@ -419,9 +598,16 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     screenshot_attachment_preset: normalizeScreenshotAttachmentPreset(rawRecord),
     desktop_debug_note_auto_save: normalizeDesktopDebugNoteAutoSave(raw.desktop_debug_note_auto_save),
     desktop_ask_verbose_logging: normalizeDesktopAskVerboseLogging(raw.desktop_ask_verbose_logging),
-    preset_chip_fade_animation_enabled: normalizePresetChipFadeAnimationEnabled(
+    desktop_app_log_level: normalizeDesktopAppLogLevel(raw.desktop_app_log_level),
+    attach_proton_logs_when_troubleshooting: normalizeAttachProtonLogsWhenTroubleshooting(
+      raw.attach_proton_logs_when_troubleshooting
+    ),
+    preset_chip_animation: normalizePresetChipAnimation(
+      raw.preset_chip_animation,
       raw.preset_chip_fade_animation_enabled
     ),
+    preset_chip_fade_animation_enabled:
+      normalizePresetChipAnimation(raw.preset_chip_animation, raw.preset_chip_fade_animation_enabled) === "fade",
     input_sanitizer_user_disabled: normalizeInputSanitizerUserDisabled(raw.input_sanitizer_user_disabled),
     capabilities: normalizeCapabilities(raw.capabilities),
     ai_character_enabled: normalizeAiCharacterEnabled(raw.ai_character_enabled),
@@ -431,11 +617,23 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     ai_character_accent_intensity: normalizeAiCharacterAccentIntensity(raw.ai_character_accent_intensity),
     ask_mode: normalizeAskMode(raw.ask_mode),
     ollama_keep_alive: normalizeOllamaKeepAlive(raw.ollama_keep_alive),
-    show_debug_tab: normalizeShowDebugTab(raw.show_debug_tab),
+    show_developer_tab: normalizeShowDeveloperTab(raw.show_developer_tab, rawRecord?.show_debug_tab),
     model_policy_tier: modelPolicy.model_policy_tier,
     model_policy_non_foss_unlocked: modelPolicy.model_policy_non_foss_unlocked,
     model_allow_high_vram_fallbacks: normalizeModelAllowHighVramFallbacks(raw.model_allow_high_vram_fallbacks),
     ollama_local_on_deck: normalizeOllamaLocalOnDeck(raw.ollama_local_on_deck),
+    strategy_spoiler_masking_enabled: normalizeStrategySpoilerMaskingEnabled(raw.strategy_spoiler_masking_enabled),
+    strategy_spoiler_auto_reveal_after_consent: normalizeStrategySpoilerAutoRevealAfterConsent(
+      raw.strategy_spoiler_auto_reveal_after_consent
+    ),
+    steam_web_api_key: normalizeSteamWebApiKey(raw.steam_web_api_key),
+    bonsai_token_streaming_enabled: normalizeBonsaiTokenStreamingEnabled(raw.bonsai_token_streaming_enabled),
+    show_onscreen_debug_hud: normalizeShowOnscreenDebugHud(raw.show_onscreen_debug_hud),
+    response_verify_enabled: normalizeResponseVerifyEnabled(raw.response_verify_enabled),
+    response_verify_second_pass: normalizeResponseVerifySecondPass(raw.response_verify_second_pass),
+    response_verify_model: normalizeResponseVerifyModel(raw.response_verify_model),
+    named_ollama_hosts: normalizeNamedOllamaHosts(raw.named_ollama_hosts),
+    voice_stt_model: normalizeVoiceSttModel(raw.voice_stt_model),
   };
 }
 

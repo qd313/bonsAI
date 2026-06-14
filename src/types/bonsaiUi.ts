@@ -37,3 +37,6 @@ export type AskThreadCollapsedTurn = {
   question: string;
   answer: string;
 };
+
+/** Accordion key for the Ask transcript: archived turn id, live turn, or all collapsed. */
+export type AskThreadExpandedTurnKey = string | "live" | null;

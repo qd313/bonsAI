@@ -1,0 +1,20 @@
+{
+  "status": "pending",
+  "request_id": 2,
+  "question": "What is my current TDP?",
+  "app_id": "",
+  "app_context": "none",
+  "success": null,
+  "response": "Thinking...",
+  "applied": null,
+  "elapsed_seconds": 0,
+  "error": null,
+  "started_at": 1781045662.59829,
+  "completed_at": null,
+  "strategy_guide_branches": null,
+  "model_policy_disclosure": null,
+  "preset_carousel_inject": null,
+  "partial_response": null,
+  "streaming": false,
+  "thinking_summary": "Connecting…"
+}

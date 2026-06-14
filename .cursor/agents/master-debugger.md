@@ -19,6 +19,24 @@ Your job: **get runtime evidence on-screen or in a workspace log file yourself, 
 3. **Measured geometry beats vibes.** Width/position bugs come from container math exceeding the real parent. Measure `getBoundingClientRect()` / `clientWidth` / `scrollWidth` of the block AND its parent before changing CSS.
 4. **The deployed artifact is authoritative.** Always `./scripts/build.ps1` (or `.sh`) after Deck-facing TS changes; on-device behavior wins over local reasoning.
 5. **127.0.0.1 on the Deck ≠ the dev PC.** Plugin `fetch` to `http://127.0.0.1:7682/...` lands on **the Deck's loopback**. Reaching the PC ingest requires a reverse SSH tunnel from PC → Deck (the PC is the one that runs `-R`, using its own ingest port).
+6. **The plugin log is the always-works channel.** A whole debug round was lost because frontend `fetch` ingest silently dropped every probe (no tunnel) and the user reported "no debug logs." The channel that always works on every deploy target: frontend probes call the **`dbg_fe_log` RPC** (`main.py`) → Python logger → Decky plugin log; backend probes use `logger.info` directly. Read the log where the build actually runs (see §Log channel selection). Verify the chosen channel with one probe entry **before** asking the user to reproduce.
+
+## Log channel selection — decide by deploy target BEFORE instrumenting
+
+Determine where the build under test executes, then pick the channel. Never instrument first and hope the logs land somewhere.
+
+| Deploy target | Frontend probes | Backend probes | How to read |
+|---|---|---|---|
+| **Remote Deck** (`scripts/build.ps1`/`.sh` → SSH deploy) | `void call("dbg_fe_log", "tag", {…}).catch(() => {})` (RPC bridge in `main.py`) | `logger.info(...)` | SSH to the Deck and tail the **newest** plugin log:<br>`ssh $DECK_USER@$DECK_IP "ls -t ~/homebrew/logs/bonsAI/*.log \| head -1"` then `tail -n 100` / `grep` that file. Load `DECK_USER`/`DECK_IP` from repo-root `.env`. |
+| **In-IDE preview** (`preview.start`) | same `dbg_fe_log` RPC, or direct `fetch` to the ingest URL (PC loopback works here) | `logger.info(...)` | `preview.readLog` MCP tool, or `Read` the ingest log file |
+| **Local SteamOS/Bazzite** (developing on the device itself) | `dbg_fe_log` RPC, or `fetch` to `127.0.0.1` ingest (same machine) | `logger.info(...)` | `Read`/`tail` the plugin log or ingest file locally |
+
+Hard rules:
+
+- **Decky Loader starts a NEW timestamped log file on every restart/deploy** (`~/homebrew/logs/bonsAI/<YYYY-MM-DD HH.MM.SS>.log`). Always re-resolve the newest file with `ls -t … | head -1` after each deploy; never tail a stale filename.
+- **NEVER rely on frontend `fetch` to a dev-PC ingest URL from a remote Deck** unless you have first proven the reverse tunnel works with a probe **from an SSH session on the Deck** (`curl` the same URL the plugin would use). If the probe fails, fall back to the `dbg_fe_log` RPC immediately instead of debugging the tunnel.
+- **When the user says "I see no debug logs," the logs are almost certainly landing somewhere you are not reading** (most often the Deck plugin log while you watch a workspace file). Re-run the channel decision above and read from the device before generating new hypotheses.
+- After a deploy, confirm channel liveness by grepping the new plugin log for a known startup line or a freshly emitted probe before handing the user reproduction steps.
 
 ## Anti-patterns (reject)
 
@@ -95,7 +113,17 @@ Never `delete_file` logs from other sessions (different UUID suffixes).
 
 All instrumentation MUST be wrapped in `// #region agent log` … `// #endregion` so editors fold it. Never log secrets, tokens, full prompts, or paths that identify the user.
 
-### Pattern A — NDJSON over `fetch` (preferred when tunnel is healthy)
+### Pattern A0 — `dbg_fe_log` RPC bridge (preferred on-device; works on every target)
+
+```ts
+// #region agent log
+void call("dbg_fe_log", "short-tag", { /* compact primitives only */ }).catch(() => {});
+// #endregion
+```
+
+Lands in the Decky plugin log as `[FE] short-tag {...}` via `main.py::dbg_fe_log` (permanent RPC — add/remove only the frontend callsites). Backend-side probes: plain `logger.info` in the same flow. Read per §Log channel selection.
+
+### Pattern A — NDJSON over `fetch` (only when ingest reachability is PROVEN from the runtime's own loopback)
 
 ```ts
 // #region agent log

@@ -25,7 +25,7 @@ Report format follows `.cursor/agents/refactor-specialist.md` (Sweep / Planning 
 ## Hotspots
 
 - **Split roadmap:** `TODO.md` duplicated themes from `FUTURE_FEATURES.md` (checkbox list vs deep specs), increasing the chance one file drifts from the other.
-- **Asymmetric Ollama scripts:** Windows path pointed to `src/setup_ollama.ps1`, Linux to root `setup-ollama.sh`, plus an extra `src/setup_ollama.sh` variant — three entrypoints for similar intent.
+- **Asymmetric Ollama scripts:** ~~Windows path pointed to `src/setup_ollama.ps1`, Linux to root `setup-ollama.sh`, plus an extra `src/setup_ollama.sh` variant — three entrypoints for similar intent.~~ **Done (2026-05-19):** consolidated under `scripts/setup_ollama.ps1` and `scripts/setup-ollama.sh`; removed `src/setup_ollama.ps1` and `src/setup_ollama.sh`.
 - **Long troubleshooting KB:** Single large file mixed GPU tuning, CORS, vision, sudoers/deploy debugging, and QAM strategy — acceptable as one KB but sat at root with a long filename.
 - **Deploy scripts coupled to cwd:** After any move to `scripts/`, scripts must resolve **repository root** for `.env`, `pnpm`, `cli/decky`, and Decky `plugin build` (not the `scripts/` directory).
 
@@ -44,10 +44,14 @@ Report format follows `.cursor/agents/refactor-specialist.md` (Sweep / Planning 
 **Specific refactor:** Set `REPO_ROOT` to parent of `scripts/`, `cd` there, and use `REPO_ROOT` for CLI paths and `decky plugin build`.
 
 **Finding:** Ollama helper scripts fragmented  
-**File:** `src/setup_ollama.ps1`, `setup-ollama.sh`, `src/setup_ollama.sh`  
+**File:** ~~`src/setup_ollama.ps1`, `setup-ollama.sh`, `src/setup_ollama.sh`~~  
 **Severity:** ★★  
-**Clarity tax:** Users and docs reference different paths; two Linux scripts differ slightly (model lists).  
-**Specific refactor:** Consolidate under `scripts/`; keep one Linux `setup-ollama.sh` (bonsAI-oriented) and one Windows `setup_ollama.ps1`; remove redundant `src/setup_ollama.sh`.
+**Status:** **Done (2026-05-19)** — consolidated under `scripts/`; removed redundant `src/setup_ollama.ps1` and `src/setup_ollama.sh`. Canonical Linux entrypoint: [`scripts/setup-ollama.sh`](../scripts/setup-ollama.sh); Windows: [`scripts/setup_ollama.ps1`](../scripts/setup_ollama.ps1).
+
+**Finding:** Root `build.ps1` with hardcoded credentials + Decky-template `.vscode/` deploy tasks  
+**File:** ~~`build.ps1` (repo root), `.vscode/tasks.json`~~  
+**Severity:** ★★★  
+**Status:** **Done (2026-05-19)** — deleted root `build.ps1` (hardcoded `$Pass`) and unused `.vscode/` template scripts. Canonical deploy: [`scripts/build.ps1`](../scripts/build.ps1) / [`scripts/build.sh`](../scripts/build.sh) (load `.env`; SSH-key auth via [`scripts/setup-dev.sh`](../scripts/setup-dev.sh)).
 
 ## Refactor plan (executed in this change set)
 

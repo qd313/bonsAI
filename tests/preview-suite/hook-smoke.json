@@ -1,0 +1,56 @@
+{
+  "scenarios": [
+    {
+      "id": "HOOK-smoke-setTab",
+      "tier": "hookSmoke",
+      "bucket": "C",
+      "evidenceProfile": "preview",
+      "tags": [
+        "PREVIEW-HOOK",
+        "CORE-UI"
+      ],
+      "checkboxIds": [],
+      "captureSteps": [
+        4
+      ],
+      "steps": [
+        {
+          "action": "sleep",
+          "ms": 400
+        },
+        {
+          "action": "previewHook",
+          "method": "setTab",
+          "args": [
+            "settings"
+          ]
+        },
+        {
+          "action": "sleep",
+          "ms": 300
+        },
+        {
+          "action": "previewHook",
+          "method": "getState"
+        },
+        {
+          "action": "assert",
+          "type": "hookResult",
+          "expect": "settings"
+        },
+        {
+          "action": "snapshotDom",
+          "selector": ".bonsai-scope"
+        },
+        {
+          "action": "assert",
+          "type": "domContainsAny",
+          "expect": [
+            "bonsai-settings-section-stack",
+            "bonsai-settings-connection-host"
+          ]
+        }
+      ]
+    }
+  ]
+}

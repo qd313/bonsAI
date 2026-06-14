@@ -1,0 +1,22 @@
+{
+  "scenarioId": "UNIT-A-vitest-gates",
+  "tier": "preGate",
+  "batch": "preGate",
+  "status": "pass",
+  "error": null,
+  "durationMs": 4576,
+  "gitSha": "9e20a82",
+  "runDate": "2026-05-26",
+  "previewUrl": "http://127.0.0.1:5678",
+  "evidenceProfile": "shell",
+  "tags": [
+    "MAINT-HARNESS"
+  ],
+  "captureArtifact": null,
+  "captureError": null,
+  "evidenceFiles": [
+    "manifest.json",
+    "steps",
+    "steps\\step-01-shellVitest.json"
+  ]
+}

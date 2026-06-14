@@ -1,0 +1,23 @@
+{
+  "scenarioId": "VAC-03-valid-key-steamid",
+  "tier": "tier2Deep",
+  "batch": "tier2Deep",
+  "status": "pass",
+  "error": null,
+  "durationMs": 120043,
+  "gitSha": "a9237e4",
+  "runDate": "2026-06-09",
+  "previewUrl": null,
+  "evidenceProfile": "preview",
+  "tags": [
+    "VAC-03"
+  ],
+  "captureArtifact": null,
+  "captureError": "Error: IPC timeout for captureScreenshot",
+  "evidenceFiles": [
+    "rpc-last.json",
+    "steps",
+    "steps\\step-01-callRpc-rpc.json",
+    "steps\\step-01-callRpc.json"
+  ]
+}

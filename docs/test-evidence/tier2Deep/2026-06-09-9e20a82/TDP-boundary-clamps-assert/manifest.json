@@ -1,0 +1,24 @@
+{
+  "scenarioId": "TDP-boundary-clamps-assert",
+  "tier": "tier2Deep",
+  "batch": "tier2Deep",
+  "status": "fail",
+  "error": "Error: rpcResult failed: expected \"\"tdp_watts\": 3\" in {\"success\":true,\"cancelled\":false,\"response\":\"```json\\n{\\\"tdp_watts\\\": 1, \\\"gpu_clock_mhz\\\": null}\\n```\\nAs the power cap could not be read from sysfs, I cannot determine the current TDP value and hav",
+  "durationMs": null,
+  "gitSha": "9e20a82",
+  "runDate": "2026-06-09",
+  "previewUrl": "http://127.0.0.1:5902",
+  "evidenceProfile": "preview",
+  "tags": [
+    "TDP-1W",
+    "TDP-20W"
+  ],
+  "captureArtifact": null,
+  "captureError": "Error: IPC timeout for captureScreenshot",
+  "evidenceFiles": [
+    "rpc-last.json",
+    "steps",
+    "steps\\step-02-callRpc-rpc.json",
+    "steps\\step-02-callRpc.json"
+  ]
+}

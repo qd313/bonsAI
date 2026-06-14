@@ -1,6 +1,6 @@
 {
   "name": "bonsai",
-  "version": "0.2.1",
+  "version": "0.3.3",
   "description": "bonsAI Steam Deck plugin: local AI assistance and Ollama integration.",
   "type": "module",
   "main": "dist/index.js",
@@ -11,25 +11,32 @@
     "watch": "rollup -c -w",
     "pretest": "node scripts/sync-version-from-plugin.mjs",
     "test": "vitest run",
-    "test:py": "python scripts/run_python_tests.py"
+    "test:py": "python scripts/run_python_tests.py",
+    "test:preview": "node scripts/run-preview-suite.mjs",
+    "test:preview:tier": "node scripts/run-preview-suite.mjs --evidence",
+    "build:preview": "node scripts/build-preview.mjs",
+    "version:sync": "node scripts/sync-version-from-plugin.mjs",
+    "version:bump": "node scripts/bump-version.mjs"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SteamDeckHomebrew/decky-plugin-template.git"
+    "url": "git+https://github.com/cantcurecancer/bonsAI.git"
   },
   "keywords": [
+    "bonsai",
     "decky",
     "plugin",
-    "plugin-template",
     "steam-deck",
-    "deck"
+    "deck",
+    "ollama",
+    "ai"
   ],
-  "author": "You <you@you.tld>",
+  "author": "qwert",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/SteamDeckHomebrew/decky-plugin-template/issues"
+    "url": "https://github.com/cantcurecancer/bonsAI/issues"
   },
-  "homepage": "https://github.com/SteamDeckHomebrew/decky-plugin-template#readme",
+  "homepage": "https://github.com/cantcurecancer/bonsAI#readme",
   "devDependencies": {
     "@decky/rollup": "^1.0.2",
     "@decky/ui": "^4.11.3",
@@ -39,6 +46,10 @@
     "@types/webpack": "^5.28.5",
     "decky-frontend-lib": "^3.25.0",
     "rollup": "^4.53.3",
+    "@testing-library/react": "^16.3.0",
+    "jsdom": "^26.1.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "typescript": "^5.6.2",
     "vitest": "^3.2.4"
   },

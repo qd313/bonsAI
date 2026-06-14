@@ -1,0 +1,41 @@
+{
+  "description": "Deck-only scenarios — require deck.deploy + on-device QA; not runnable in preview.",
+  "scenarios": [
+    {
+      "id": "E-QAMP-DECK-01",
+      "tier": "deckOnly",
+      "bucket": "E",
+      "evidenceProfile": "deck-only",
+      "tags": ["QAMP-DECK-01", "QAMP-ONDECK"],
+      "deckOnly": true,
+      "runbook": "docs/device-qa-runbook.md Tier 3",
+      "checkboxIds": ["**QAMP-DECK-01**"],
+      "captureSteps": [],
+      "steps": []
+    },
+    {
+      "id": "E-CEF-CORS-ollama-pc",
+      "tier": "deckOnly",
+      "bucket": "E",
+      "evidenceProfile": "deck-only",
+      "tags": ["CONN-TEST", "LINUX-OLLAMA"],
+      "deckOnly": true,
+      "note": "TypeError Failed to fetch — CEF origin; use deck.deploy + deck.tailIngest",
+      "checkboxIds": [],
+      "captureSteps": [],
+      "steps": []
+    },
+    {
+      "id": "E-CLEAN-INSTALL",
+      "tier": "deckOnly",
+      "bucket": "E",
+      "evidenceProfile": "deck-only",
+      "tags": ["ZIP-CI"],
+      "deckOnly": true,
+      "runbook": "docs/regression-and-smoke.md §5",
+      "checkboxIds": [],
+      "captureSteps": [],
+      "steps": []
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "scenarioId": "TDP-1W-clamp-to-3",
+  "tier": "tier1Boundaries",
+  "batch": "tier1Boundaries",
+  "status": "pass",
+  "error": null,
+  "durationMs": 572,
+  "gitSha": "9e20a82",
+  "runDate": "2026-05-26",
+  "previewUrl": "http://127.0.0.1:5272",
+  "evidenceProfile": "preview",
+  "tags": [
+    "TDP-1W"
+  ],
+  "captureArtifact": {
+    "type": "png",
+    "path": "C:\\Users\\still\\Documents\\BonsAI\\docs\\test-evidence\\tier1Boundaries\\2026-05-26-9e20a82\\TDP-1W-clamp-to-3\\final.png"
+  },
+  "captureError": null,
+  "evidenceFiles": [
+    "final.png",
+    "rpc-last.json",
+    "steps",
+    "steps\\step-00-callRpc-rpc.json",
+    "steps\\step-00-callRpc.json"
+  ]
+}

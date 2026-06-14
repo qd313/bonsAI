@@ -1,4 +1,7 @@
-"""Extract Strategy Guide branch-picker payloads from model replies."""
+"""Extract Strategy Guide branch-picker payloads from model replies.
+
+The Main tab sends follow-up Asks prefixed with ``STRATEGY_FOLLOWUP_PREFIX`` when the user picks a branch.
+"""
 
 from __future__ import annotations
 

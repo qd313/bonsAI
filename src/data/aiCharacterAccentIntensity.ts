@@ -24,26 +24,22 @@ export type AiCharacterAccentIntensityOption = {
 export const AI_CHARACTER_ACCENT_INTENSITY_OPTIONS: readonly AiCharacterAccentIntensityOption[] = [
   {
     id: "subtle",
-    shortLabel: "Too Young To Die",
-    description:
-      "I'm Too Young to Die — light seasoning: clear explanations, only occasional voice color.",
+    shortLabel: "Light",
+    description: "Occasional personality; answers stay plain.",
   },
   {
     id: "balanced",
-    shortLabel: "Hurt Me Plenty",
-    description:
-      "Hurt Me Plenty — default strength: accent, rhythm, and attitude without burying the answer.",
+    shortLabel: "Default",
+    description: "Balanced voice without burying facts.",
   },
   {
     id: "heavy",
-    shortLabel: "Ultra Violence",
-    description:
-      "Ultra-Violence — strong dialect and rhythm; you may take a brief in-character tangent, then snap back to a clear answer. Facts and JSON stay exact.",
+    shortLabel: "Strong",
+    description: "Strong dialect; brief tangents OK, then a clear answer.",
   },
   {
     id: "unleashed",
-    shortLabel: "Nightmare",
-    description:
-      "Nightmare — voice may wander into caricature and be hard to read for stretches, but you must snap back and finish with a short plain recap; JSON-safe.",
+    shortLabel: "Wild",
+    description: "Most expressive; ends with a short plain recap.",
   },
 ];

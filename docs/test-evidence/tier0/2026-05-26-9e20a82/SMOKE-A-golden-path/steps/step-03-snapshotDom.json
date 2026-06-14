@@ -1,0 +1,6 @@
+{
+  "stepIndex": 3,
+  "action": "snapshotDom",
+  "activeElement": "document.body",
+  "focusPath": null
+}

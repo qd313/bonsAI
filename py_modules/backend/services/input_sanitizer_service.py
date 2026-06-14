@@ -1,4 +1,7 @@
-"""Deterministic input sanitization and magic-phrase commands for Ask payloads."""
+"""Deterministic input sanitization and README-documented magic phrases for Ask payloads.
+
+Lane results drive transparency ``sanitizer_action`` / ``reason_codes`` and may block before Ollama is called.
+"""
 
 from __future__ import annotations
 

@@ -154,6 +154,70 @@ No session archived
 
 <!-- Newest entries first. -->
 
+### 2026-06-14 - Ask thread accordion UX
+
+**master-debugger** — Triaged. Static review found transcript `flow-children` broken by non-Focusable row wrapper and missing header→body vertical link; fixed in `BonsaiChatTurnRow.tsx` (row + body as nested `Focusable flow-children="vertical"`). Deferred: nested spoiler `Focusable` inside chunk wrappers (pre-existing pattern); model-policy Read more native button.
+
+**red-team** / **blue-team** — N/A (UX parity, no new capabilities).
+
+**security-auditor** — Deferred; removed client `spoiler_consent` toggle only; phrase-based backend consent unchanged.
+
+### 2026-05-19 - Token stream replies Phase 1 (plan accountability)
+
+**refactor-specialist** — Triaged. Separate `threading.Lock` for `_partial_stream_snapshot` vs `asyncio.Lock` on `_background_state` keeps executor-thread NDJSON callbacks off the event-loop lock; `on_delta(text, done)` is minimal and does not leak HTTP bodies. No further refactor required before ship.
+
+**red-team** — Triaged. Dev-flag default-off limits regression blast radius; ship as experimental. Phase 2 (incremental chunks, public Settings toggle) deferred per roadmap.
+
+**blue-team** — Triaged. Opt-in behind Developer tab matches honest-UX / power-user disclosure; terminal-only transparency and post-processors preserve sanitizer/transparency contracts.
+
+**security-auditor** — Triaged. `get_background_game_ai_status` adds only `partial_response` (assistant text) and `streaming` (bool)—same sensitivity class as terminal `response`; no new secrets or paths.
+
+**foss-advocate** — N/A (no new runtime/provider).
+
+**master-debugger** — Deferred to on-device QA ([prompt-testing.md](../docs/prompt-testing.md) § Token streaming (experimental)); escalate if D-pad focus drops on preview→chunk finalize.
+
+### 2026-05-19 - foss-advocate + security-auditor (Pull Models fullscreen picker)
+
+```text
+Scope: Pull Models picker — src/data/pullModelCatalog.ts, PullModelsModal.tsx, ollama_catalog_service.py, main.py pull/delete/metadata RPCs, local_ollama_setup custom profile + ollama rm.
+foss-advocate: 1 finding (licenseClass vs model_policy mismatch) — triaged/fixed via aligned catalog licenseClass + tests/test_pull_model_catalog_parity.py; docs/foss-advocate-report.md → No issues found.
+security-auditor: no new confirmed findings; tag regex + argv subprocess + ollama_local_on_deck gate reviewed; docs/security-audit-report.md revision log updated.
+Red-team / blue-team: N/A.
+Tests: python scripts/run_python_tests.py (146 OK); pnpm run build OK.
+Deploy: ./scripts/build.sh local — frontend build OK; plugin_loader restart blocked (sudo password in agent session).
+```
+
+### 2026-05-19 - security-auditor + refactor-specialist (script/doc cleanup)
+
+```text
+Scope: Remove duplicate Ollama helpers under src/, root build.ps1 (hardcoded DECK_IP/PC_IP/$Pass), and Decky-template .vscode/ deploy tasks (${config:deckpass}).
+Agents: security-auditor — triaged by deletion; canonical paths scripts/build.ps1 and scripts/build.sh load .env. refactor-specialist — closes asymmetric Ollama scripts finding in docs/refactor-specialist-sweep.md.
+Red-team / blue-team: N/A.
+```
+
+### 2026-04-30 - security-auditor (full refresh + doc cleanup)
+
+```text
+Scope: Whole-repo RPC/UI/log/error sinks, capability gates, subprocess and attachment paths; removed superseded subagent markdown snapshots.
+Agents: security-auditor — canonical deliverable docs/security-audit-report.md only (foss/refactor report files deleted per cleanup).
+Code: main.py — generic user message for failed background asyncio tasks (no str(exc) in RPC JSON).
+Red-team / blue-team: N/A.
+Tests: pnpm test (64 OK); python scripts/run_python_tests.py (134 OK).
+```
+
+## Report log
+
+### 2026-06-11 - Voice input (local STT) — security / FOSS / Decky triage
+
+```text
+Scope: microphone_access capability, voice_transcription_service.py, main.py voice RPCs, useVoiceTranscription.ts, PermissionsTab, MainTab mic button.
+Agents: security-auditor, foss-advocate, master-debugger — triaged in implementation session (no separate subagent spawn); recorded here per plan accountability.
+Security (triaged): microphone_access default off, not legacy-grandfathered; backend RPCs deny when off; save_settings revokes active session; audio buffer in-memory only; transient WAV for whisper-cli deleted immediately; errors surfaced without raw PCM in logs. Deferred: formal security-auditor re-run on device with ingest logs.
+FOSS (triaged): whisper.cpp (MIT) + GGUF from Hugging Face; no cloud STT path; transparency route voice.transcribe documents local-only + no audio persistence. Deferred: ship bundled whisper-cli binary license file in bin/.
+Master-debugger (triaged): mic button keeps existing focus-graph (mode ← → mic); recording state swaps to stop affordance without new focus nodes. Deferred: on-Deck QA for PipeWire capture chain (VOICE-01…04 in prompt-testing.md).
+Follow-up: complete VOICE-01…04 on hardware; bundle bin/whisper-cli x86_64 for SteamOS.
+```
+
 ### 2026-04-21 - Judge ruling handoff (red-blue-fight)
 
 ```text
@@ -208,3 +272,30 @@ Regression risk checks: python -m unittest discover -s tests -p "test_*.py"; pnp
 Tests and docs status: Added tests for new service/data modules and updated docs/development.md + CHANGELOG.md architecture traceability notes.
 Trade-offs: Prioritized safe seam extraction and modularity over deep behavior changes (model fallback policy remains unchanged in this milestone).
 ```
+
+## 2026-05-26 — Preview test automation (Decky Plugin Studio v0.1.1)
+
+| Agent | Invoked | Summary |
+|-------|---------|---------|
+| master-debugger | Yes (planning) | Installed VSIX v0.1.0 was stale — MCP preview tools were stubs; sibling source at `C:/Users/still/decky-plugin-studio` had real IPC + sidecar |
+| security-auditor | Yes (Phase 2 gate) | `preview.callRpc` gated by `PREVIEW_RPC_ALLOWLIST` in mcp-server + sidecar; no arbitrary method dispatch |
+
+**Shipped (bonsAI):** `tests/preview-suite/*.json`, `scripts/run-preview-suite.mjs`, `pnpm run test:preview`, preview test hooks (`src/preview/previewTestHooks.ts`), sandbox sysfs mock (`tdp_service.py`), `tests/test_tdp_sandbox_sysfs.py`, updated `mcp.json` → v0.1.1 + `DECKY_STUDIO_REPO=C:/Users/still/decky-plugin-studio`.
+
+**Shipped (decky-plugin-studio v0.1.1):** Real `preview.callRpc` via IPC→HTTP sidecar, `preview.snapshotDom`, `preview.captureScreenshot`, `preview.setHttpAllow`, focus event log in `focusManager`, `preview-state.json` for MCP URL sync.
+
+**User action:** Reload Cursor after VSIX install; run **Decky: Open Preview** once per session before `pnpm run test:preview`.
+
+**Deferred (bucket E):** QAMP reboot matrix, CEF CORS Ollama PC bug — `tests/preview-suite/deck-only-e-bucket.json` + `deck.deploy`.
+
+## 2026-05-20 — Self-hosted automation (harness, dev loop, mDNS)
+
+| Agent | Invoked | Summary |
+|-------|---------|---------|
+| explore ×3 | Yes | Mapped harness, scripts, LAN discovery surfaces |
+| security-auditor | Planning triage | mDNS: user-triggered only, fixed `_ollama._tcp`, no CIDR/port scan params, curated logs |
+| red-team / blue-team | N/A | Tooling + opt-in discovery |
+
+**Shipped:** Vitest `src/test-harness/` + hook/RPC tests; `.cursor/skills/bonsai-deck-dev-loop/`; `watch-deploy` scripts; `bump-version.mjs` + `sync-versions.mjs`; `discover_mdns_ollama_hosts` + Settings **Find LAN**; docs/CHANGELOG updates.
+
+**Deferred:** Subnet scanning; auto git tag/push; stock Ollama mDNS without Avahi publish.

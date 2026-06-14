@@ -1,0 +1,8 @@
+{
+  "success": true,
+  "response": "**Steam Web API error:** Network error calling Steam Web API: Preview sandbox blocked HTTP to https://api.steampowered.com/ISteamUser/GetPlayerBans/v1/?key=preview-test-key-00000000000000000000&steamids=76561198000000000\n\nCheck your key, network, and try again with fewer IDs.",
+  "app_id": "",
+  "app_context": "none",
+  "applied": null,
+  "elapsed_seconds": 0
+}

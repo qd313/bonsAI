@@ -10,7 +10,7 @@ export type DesktopNoteSaveModalProps = {
 };
 
 /**
- * Permission + name entry for saving the last Q&A to ~/Desktop/BonsAI_notes/<stem>.md (append-only).
+ * Permission + name entry for saving the last Q&A to ~/Desktop/bonsAI_logs/<stem>.md (append-only).
  */
 export function DesktopNoteSaveModal(props: DesktopNoteSaveModalProps) {
   const { strDescriptionPrefix, defaultStem, onCancel, onConfirm } = props;

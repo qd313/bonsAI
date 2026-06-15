@@ -457,6 +457,7 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
                   "This resets bonsAI like a fresh install for this device.\n\n" +
                   "It deletes saved settings and permissions, runtime cache and plugin logs under Decky, " +
                   "and clears the Ollama host field, safety disclaimer flag, and unified-input persistence stored in the plugin browser.\n\n" +
+                  "If Ollama on this Deck was enabled, this also removes downloaded models and the local Ollama install bonsAI set up under your account (~/.ollama and ~/.local/bin/ollama).\n\n" +
                   "It does not delete Desktop logs under bonsAI_logs.\n\n" +
                   "Afterward, set your Ollama host again and re-enable any permissions you need."
                 }

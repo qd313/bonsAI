@@ -13,6 +13,7 @@ import {
   formatReleasedYmShort,
   formatSizeGb,
   isDeckDailyPullModel,
+  isDeckEssentialsPullModel,
   type PullModelEntry,
   type PullModelFilterId,
   type PullModelGroup,
@@ -130,7 +131,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
   const [filterId, setFilterId] = useState<PullModelFilterId>("all");
   const [fossOnly, setFossOnly] = useState(false);
   const [installedOnly, setInstalledOnly] = useState(false);
-  const [deckDailyOnly, setDeckDailyOnly] = useState(false);
+  const [essentialsOnly, setEssentialsOnly] = useState(true);
   const [sizeSource, setSizeSource] = useState<"live" | "offline">("offline");
   const [liveSizeGbByTag, setLiveSizeGbByTag] = useState<Record<string, number>>({});
   const [loadingMeta, setLoadingMeta] = useState(true);
@@ -142,7 +143,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
   const filterChipRefs = useRef<(HTMLElement | null)[]>([]);
   const installedOnlyRef = useRef<HTMLElement | null>(null);
   const fossOnlyRef = useRef<HTMLElement | null>(null);
-  const deckDailyOnlyRef = useRef<HTMLElement | null>(null);
+  const essentialsOnlyRef = useRef<HTMLElement | null>(null);
   const footerPullRef = useRef<HTMLElement | null>(null);
   const selectCellRefs = useRef<(HTMLElement | null)[]>([]);
   const deleteCellRefs = useRef<(HTMLElement | null)[]>([]);
@@ -215,10 +216,11 @@ export function PullModelsModal(props: PullModelsModalProps) {
       if (fossOnly && entry.licenseClass !== "foss") return false;
       if (!entryMatchesFilter(entry, filterId)) return false;
       if (installedOnly && !isTagInstalled(entry.tag, installedTags)) return false;
-      if (deckDailyOnly && !isDeckDailyPullModel(entry)) return false;
+      if (essentialsOnly && !isDeckEssentialsPullModel(entry)) return false;
+      if (!essentialsOnly && !isDeckDailyPullModel(entry)) return false;
       return true;
     });
-  }, [filterId, fossOnly, installedOnly, deckDailyOnly, installedTags, mergedCatalog]);
+  }, [filterId, fossOnly, installedOnly, essentialsOnly, installedTags, mergedCatalog]);
 
   const groupedCatalog = useMemo(() => {
     const map = new Map<PullModelGroup, PullModelEntry[]>();
@@ -291,9 +293,9 @@ export function PullModelsModal(props: PullModelsModalProps) {
     return Boolean(fossOnlyRef.current);
   }, []);
 
-  const focusDeckDailyOnlyToggle = useCallback((): boolean => {
-    deckDailyOnlyRef.current?.focus();
-    return Boolean(deckDailyOnlyRef.current);
+  const focusEssentialsOnlyToggle = useCallback((): boolean => {
+    essentialsOnlyRef.current?.focus();
+    return Boolean(essentialsOnlyRef.current);
   }, []);
 
   const findModalFooterButton = useCallback((labelPrefix: string): HTMLElement | null => {
@@ -378,7 +380,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
         if (cell === "delete") {
           if (focusPrevRowSelect(rowIndex)) return true;
           return (
-            focusDeckDailyOnlyToggle() ||
+            focusEssentialsOnlyToggle() ||
             focusFossOnlyToggle() ||
             focusInstalledOnlyToggle() ||
             focusFilterChip(PULL_MODEL_FILTER_OPTIONS.length - 1)
@@ -386,7 +388,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
         }
         if (focusPrevRowSelect(rowIndex)) return true;
         return (
-          focusDeckDailyOnlyToggle() ||
+          focusEssentialsOnlyToggle() ||
           focusFossOnlyToggle() ||
           focusInstalledOnlyToggle() ||
           focusFilterChip(PULL_MODEL_FILTER_OPTIONS.length - 1)
@@ -408,7 +410,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
     }),
     [
       flatRows.length,
-      focusDeckDailyOnlyToggle,
+      focusEssentialsOnlyToggle,
       focusFilterChip,
       focusFossOnlyToggle,
       focusFooterPull,
@@ -901,7 +903,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                 }}
                 {...({
                   onMoveLeft: () => focusInstalledOnlyToggle(),
-                  onMoveRight: () => focusDeckDailyOnlyToggle(),
+                  onMoveRight: () => focusEssentialsOnlyToggle(),
                   onMoveUp: () => focusFilterChip(lastFilterIndex),
                   onMoveDown: () =>
                     focusRowCell(0, "select") || (selectedTags.size > 0 ? focusFooterPull() : false),
@@ -912,12 +914,12 @@ export function PullModelsModal(props: PullModelsModalProps) {
               </Button>
               <Button
                 ref={(el) => {
-                  deckDailyOnlyRef.current = el;
+                  essentialsOnlyRef.current = el;
                 }}
-                className={`bonsai-pullmodels-chip${deckDailyOnly ? " bonsai-pullmodels-chip--active" : ""}`}
+                className={`bonsai-pullmodels-chip${essentialsOnly ? " bonsai-pullmodels-chip--active" : ""}`}
                 onClick={(ev) => {
                   ev.stopPropagation();
-                  setDeckDailyOnly((v) => !v);
+                  setEssentialsOnly((v) => !v);
                 }}
                 {...({
                   onMoveLeft: () => focusFossOnlyToggle(),
@@ -925,10 +927,10 @@ export function PullModelsModal(props: PullModelsModalProps) {
                   onMoveDown: () =>
                     focusRowCell(0, "select") || (selectedTags.size > 0 ? focusFooterPull() : false),
                 } as unknown as Record<string, unknown>)}
-                aria-pressed={deckDailyOnly}
-                aria-label="Deck daily only — hides Expert (large) models that run slowly on Deck"
+                aria-pressed={essentialsOnly}
+                aria-label="Essentials only — show Tier 1 and Tier 2 one-model presets"
               >
-                Deck daily
+                Essentials only
               </Button>
             </Focusable>
           </div>

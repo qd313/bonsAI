@@ -63,7 +63,7 @@ On **Windows** (remote deploy to a Deck on the LAN), use `.\scripts\setup-dev.ps
 ./scripts/setup-ollama.sh
 ```
 
-This installs Ollama and pulls starter models (`gemma4`, `llama3`). For Tier-1 FOSS tags aligned with bonsAI routing, see `TIER1_FOSS_STARTER_PULL_TAGS` in [`refactor_helpers.py`](../refactor_helpers.py) (`qwen2.5:1.5b`, `llava:7b`).
+This installs Ollama and pulls the Tier 1 essentials model (`qwen2.5vl:3b`). For preset tags aligned with bonsAI routing, see `TIER1_ESSENTIALS_PULL_TAGS` in [`refactor_helpers.py`](../refactor_helpers.py).
 
 Verify:
 

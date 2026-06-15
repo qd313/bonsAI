@@ -44,6 +44,7 @@ export type OllamaTabProps = {
   setOllamaKeepAlive: (v: OllamaKeepAliveDuration) => void;
 
   modelPolicyTier: ModelPolicyTierId;
+  onApplyTier2MultimodalPolicy?: () => void | Promise<void>;
 };
 
 export const OllamaTab: React.FC<OllamaTabProps> = ({
@@ -74,6 +75,7 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
   ollamaKeepAlive,
   setOllamaKeepAlive,
   modelPolicyTier,
+  onApplyTier2MultimodalPolicy,
 }) => {
   const latencyWarningThumbHostRef = useRef<HTMLDivElement>(null);
   const ollamaKeepAliveThumbHostRef = useRef<HTMLDivElement>(null);
@@ -115,6 +117,7 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
         onBeforeDeckyModal={onBeforeDeckyModal}
         onCompleteDeckyModalClose={onCompleteDeckyModalClose}
         onOpenOllamaModelsHub={onOpenOllamaModelsHub}
+        onApplyTier2MultimodalPolicy={onApplyTier2MultimodalPolicy}
       />
 
       <PanelSection title="Response verification">

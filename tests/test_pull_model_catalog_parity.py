@@ -8,12 +8,13 @@ from backend.services.model_policy import classify_ollama_model_name
 
 # Keep in sync with src/data/pullModelCatalog.ts PULL_MODEL_CATALOG tags + licenseClass.
 CATALOG_POLICY_PARITY: dict[str, str] = {
-    "gemma4:latest": "open_weight",
-    "qwen3:4b": "foss",
-    "gemma3:4b": "open_weight",
     "qwen2.5vl:3b": "foss",
+    "gemma4:e2b-it-qat": "open_weight",
+    "qwen3:4b": "foss",
     "qwen2.5:7b": "foss",
     "llava:7b": "foss",
+    "gemma4:latest": "open_weight",
+    "gemma3:4b": "open_weight",
     "qwen3:1.7b": "foss",
     "gemma3:1b": "open_weight",
     "qwen2.5:3b": "foss",
@@ -27,7 +28,6 @@ CATALOG_POLICY_PARITY: dict[str, str] = {
     "deepseek-r1:1.5b": "open_weight",
     "llava-phi3": "foss",
     "qwen2.5-coder:3b": "foss",
-    "qwen3:2b": "foss",
 }
 
 

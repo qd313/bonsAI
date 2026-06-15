@@ -1,6 +1,8 @@
 import unittest
 
 from refactor_helpers import (
+    TIER1_ESSENTIALS_PULL_TAGS,
+    TIER2_MULTIMODAL_PULL_TAGS,
     build_effective_models_to_try,
     build_ollama_chat_url,
     filter_models_to_installed,
@@ -11,8 +13,7 @@ from refactor_helpers import (
     normalize_ollama_base,
     parse_tdp_recommendation,
     select_ollama_models,
-    tier1_foss_recommended_pull_tags,
-    TIER1_FOSS_STARTER_PULL_TAGS,
+    setup_recommended_pull_tags,
 )
 
 
@@ -40,45 +41,46 @@ class RefactorHelperTests(unittest.TestCase):
             "http://10.0.0.2:11434/api/chat",
         )
 
-    def test_tier1_foss_recommended_pull_tags_starter(self):
-        starter = tier1_foss_recommended_pull_tags("starter")
-        self.assertEqual(starter, list(TIER1_FOSS_STARTER_PULL_TAGS))
-        self.assertEqual(len(starter), 2)
+    def test_setup_recommended_pull_tags_tier1_essentials(self):
+        tags = setup_recommended_pull_tags("tier1_essentials")
+        self.assertEqual(tags, list(TIER1_ESSENTIALS_PULL_TAGS))
+        self.assertEqual(len(tags), 1)
+        self.assertEqual(tags[0], "qwen2.5vl:3b")
 
-    def test_tier1_foss_recommended_pull_tags_full_is_foss_union_superset_of_starter(self):
-        full = tier1_foss_recommended_pull_tags("tier1_foss_full")
-        starter = tier1_foss_recommended_pull_tags("starter")
-        self.assertGreater(len(full), len(starter))
-        self.assertTrue(set(starter).issubset(set(full)))
-        self.assertEqual(len(full), len(set(full)))
-        self.assertNotIn("llama3:latest", full)
-        self.assertNotIn("gemma4", full)
+    def test_setup_recommended_pull_tags_tier2_multimodal(self):
+        tags = setup_recommended_pull_tags("tier2_multimodal")
+        self.assertEqual(tags, list(TIER2_MULTIMODAL_PULL_TAGS))
 
-    def test_tier1_foss_recommended_pull_tags_unknown_returns_empty(self):
-        self.assertEqual(tier1_foss_recommended_pull_tags("bogus"), [])
+    def test_setup_recommended_pull_tags_unknown_returns_empty(self):
+        self.assertEqual(setup_recommended_pull_tags("bogus"), [])
+        self.assertEqual(setup_recommended_pull_tags("tier1_foss_full"), [])
+        self.assertEqual(setup_recommended_pull_tags("starter"), [])
 
     def test_is_valid_setup_pull_profile(self):
-        self.assertTrue(is_valid_setup_pull_profile("starter"))
-        self.assertTrue(is_valid_setup_pull_profile("tier1_foss_full"))
+        self.assertTrue(is_valid_setup_pull_profile("tier1_essentials"))
+        self.assertTrue(is_valid_setup_pull_profile("tier2_multimodal"))
         self.assertTrue(is_valid_setup_pull_profile("update_installed"))
-        self.assertFalse(is_valid_setup_pull_profile("Starter"))
+        self.assertFalse(is_valid_setup_pull_profile("starter"))
+        self.assertFalse(is_valid_setup_pull_profile("tier1_foss_full"))
         self.assertFalse(is_valid_setup_pull_profile(None))
 
     def test_select_ollama_models_text_and_vision(self):
-        """FOSS-first safe chains; optional high-VRAM tail extends the list."""
-        self.assertIn("llama3:latest", select_ollama_models(False))
-        self.assertIn("gemma3:4b", select_ollama_models(False))
-        self.assertIn("gemma4:latest", select_ollama_models(False))
-        self.assertIn("gemma3:4b", select_ollama_models(True, "speed"))
-        self.assertIn("gemma4:latest", select_ollama_models(True, "speed"))
-        self.assertIn("llava:7b", select_ollama_models(True, "speed"))
-        self.assertEqual(select_ollama_models(False, "speed")[0], "qwen2.5:3b")
-        self.assertEqual(select_ollama_models(False, "strategy")[0], "qwen2.5:latest")
-        self.assertEqual(select_ollama_models(False, "deep")[0], "qwen2.5:14b")
-        self.assertEqual(select_ollama_models(True, "speed")[0], "llava:7b")
-        self.assertEqual(select_ollama_models(True, "strategy")[0], "llava:7b")
-        self.assertEqual(select_ollama_models(True, "deep")[0], "llava:7b")
-        self.assertEqual(select_ollama_models(False, "invalid")[0], "qwen2.5:3b")
+        """Essentials chains: qwen2.5vl first; Tier 2 gemma tail; deprioritized tags last."""
+        text = select_ollama_models(False, "speed")
+        self.assertEqual(text[0], "qwen2.5vl:3b")
+        self.assertIn("qwen2.5:3b", text)
+        self.assertIn("gemma4:e2b-it-qat", text)
+        self.assertIn("gemma4:latest", text)
+        self.assertEqual(select_ollama_models(False, "strategy")[0], "qwen2.5vl:3b")
+        self.assertEqual(select_ollama_models(False, "deep")[0], "qwen2.5vl:3b")
+
+        vision = select_ollama_models(True, "speed")
+        self.assertEqual(vision[0], "qwen2.5vl:3b")
+        self.assertIn("gemma4:e2b-it-qat", vision)
+        self.assertIn("llava:7b", vision)
+        self.assertLess(vision.index("gemma4:e2b-it-qat"), vision.index("llava:7b"))
+
+        self.assertEqual(select_ollama_models(False, "invalid")[0], "qwen2.5vl:3b")
 
         safe_speed = select_ollama_models(False, "speed", False)
         hi_speed = select_ollama_models(False, "speed", True)
@@ -124,36 +126,36 @@ class RefactorHelperTests(unittest.TestCase):
         self.assertFalse(is_current_tdp_read_intent("recommend tdp for this game"))
 
     def test_filter_models_to_installed_preserves_order(self):
-        chain = ["qwen2.5:3b", "gemma4:latest", "llama3:latest"]
-        matched, skipped = filter_models_to_installed(chain, ["llama3:latest", "gemma4:latest"])
-        self.assertEqual(matched, ["gemma4:latest", "llama3:latest"])
-        self.assertEqual(skipped, ["qwen2.5:3b"])
+        chain = ["qwen2.5vl:3b", "gemma4:e2b-it-qat", "llama3:latest"]
+        matched, skipped = filter_models_to_installed(chain, ["gemma4:e2b-it-qat"])
+        self.assertEqual(matched, ["gemma4:e2b-it-qat"])
+        self.assertEqual(skipped, ["qwen2.5vl:3b", "llama3:latest"])
 
     def test_filter_models_to_installed_empty_installed_passthrough(self):
-        chain = ["qwen2.5:3b"]
+        chain = ["qwen2.5vl:3b"]
         matched, skipped = filter_models_to_installed(chain, [])
         self.assertEqual(matched, chain)
         self.assertEqual(skipped, [])
 
-    def test_no_installed_routing_models_message_mentions_starter(self):
+    def test_no_installed_routing_models_message_mentions_essentials(self):
         msg = no_installed_routing_models_message(["custom:7b"], False)
-        self.assertIn("qwen2.5:1.5b", msg)
+        self.assertIn("qwen2.5vl:3b", msg)
         self.assertIn("custom:7b", msg)
 
     def test_build_effective_models_to_try_host_fallback(self):
-        chain = ["qwen2.5:3b", "gemma4:latest"]
-        models, strategy = build_effective_models_to_try(chain, ["gemma4:latest"])
+        chain = ["qwen2.5vl:3b", "gemma4:e2b-it-qat"]
+        models, strategy = build_effective_models_to_try(chain, ["gemma4:e2b-it-qat"])
         self.assertEqual(strategy, "installed_in_policy_chain")
-        self.assertEqual(models, ["gemma4:latest"])
+        self.assertEqual(models, ["gemma4:e2b-it-qat"])
 
     def test_build_effective_models_to_try_only_gemma_on_tier1_chain(self):
-        tier1_chain = ["qwen2.5:3b", "qwen2.5:7b"]
-        models, strategy = build_effective_models_to_try(tier1_chain, ["gemma4:latest"])
+        tier1_chain = ["qwen2.5vl:3b", "qwen2.5:3b"]
+        models, strategy = build_effective_models_to_try(tier1_chain, ["gemma4:e2b-it-qat"])
         self.assertEqual(strategy, "installed_host_fallback")
-        self.assertEqual(models, ["gemma4:latest"])
+        self.assertEqual(models, ["gemma4:e2b-it-qat"])
 
     def test_build_effective_models_to_try_no_tags_uses_chain(self):
-        chain = ["qwen2.5:3b"]
+        chain = ["qwen2.5vl:3b"]
         models, strategy = build_effective_models_to_try(chain, [])
         self.assertEqual(strategy, "full_chain")
         self.assertEqual(models, chain)

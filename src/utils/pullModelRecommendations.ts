@@ -21,6 +21,25 @@ export function scorePullModelPerformance(entry: PullModelEntry): number {
   return (entry.rating / gb) * multimodal;
 }
 
+function entryIsSwissArmyMultimodal(entry: PullModelEntry): boolean {
+  return (
+    entry.tags.includes("chat") &&
+    entry.tags.includes("vision") &&
+    (entry.tags.includes("strategy") || entry.tags.includes("ocr"))
+  );
+}
+
+function installedSwissArmyEntry(
+  installedTags: Set<string>,
+  catalog: readonly PullModelEntry[]
+): PullModelEntry | undefined {
+  for (const entry of catalog) {
+    if (!installedTags.has(entry.tag) && !installedTags.has(`${entry.tag}:latest`)) continue;
+    if (entryIsSwissArmyMultimodal(entry)) return entry;
+  }
+  return undefined;
+}
+
 function entryCoversRole(entry: PullModelEntry, role: PullCoverageRole): boolean {
   const tags = ROLE_TAGS[role];
   if (role === "expert") {
@@ -45,6 +64,7 @@ export function findCoverageGaps(
   installedTags: Set<string>,
   catalog: readonly PullModelEntry[] = PULL_MODEL_CATALOG
 ): PullCoverageRole[] {
+  if (installedSwissArmyEntry(installedTags, catalog)) return [];
   const roles: PullCoverageRole[] = ["speed", "strategy", "expert", "vision"];
   return roles.filter((role) => !installedCoversRole(installedTags, role, catalog));
 }
@@ -54,7 +74,7 @@ export function recommendPullModelsForGaps(
   opts?: { fossOnly?: boolean; limit?: number; catalog?: readonly PullModelEntry[] }
 ): PullModelEntry[] {
   const fossOnly = opts?.fossOnly ?? false;
-  const limit = opts?.limit ?? 4;
+  const limit = opts?.limit ?? 1;
   const catalog = opts?.catalog ?? PULL_MODEL_CATALOG;
   const gaps = findCoverageGaps(installedTags, catalog);
   if (!gaps.length) return [];
@@ -65,7 +85,12 @@ export function recommendPullModelsForGaps(
     return gaps.some((role) => entryCoversRole(entry, role));
   });
 
-  const scored = [...candidates].sort((a, b) => scorePullModelPerformance(b) - scorePullModelPerformance(a));
+  const scored = [...candidates].sort((a, b) => {
+    const aEss = a.group === "essentials" ? 1 : 0;
+    const bEss = b.group === "essentials" ? 1 : 0;
+    if (aEss !== bEss) return bEss - aEss;
+    return scorePullModelPerformance(b) - scorePullModelPerformance(a);
+  });
   const picked: PullModelEntry[] = [];
   const covered = new Set<PullCoverageRole>();
 

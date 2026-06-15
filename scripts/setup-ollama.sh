@@ -21,7 +21,7 @@ fi
 green "Ollama installed/updated successfully."
 echo
 
-MODELS=("gemma4" "llama3")
+MODELS=("qwen2.5vl:3b")
 
 for model in "${MODELS[@]}"; do
     echo "Pulling '${model}' model (this may take a while)..."
@@ -37,5 +37,5 @@ cyan "========================================"
 green "Ollama setup complete!"
 echo "Models pulled: ${MODELS[*]}"
 echo "Ollama should be running on port 11434."
-echo "Test with: ollama run llama3 'Hello, Ollama!'"
+echo "Test with: ollama run qwen2.5vl:3b 'Hello, Ollama!'"
 cyan "========================================"

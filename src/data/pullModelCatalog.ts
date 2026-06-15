@@ -5,7 +5,7 @@ export type PullModelLicenseClass = "foss" | "open_weight" | "non_foss" | "unkno
 
 export type PullModelUseTag = "chat" | "vision" | "ocr" | "strategy" | "coding";
 
-export type PullModelGroup = "featured" | "smallest" | "stretch" | "specialist";
+export type PullModelGroup = "essentials" | "smallest" | "stretch" | "specialist";
 
 export interface PullModelEntry {
   tag: string;
@@ -22,14 +22,14 @@ export interface PullModelEntry {
 }
 
 export const PULL_MODEL_GROUP_LABELS: Record<PullModelGroup, string> = {
-  featured: "Featured",
-  smallest: "Fastest",
+  essentials: "Deck essentials",
+  smallest: "More models",
   stretch: "Expert (large)",
   specialist: "Specialist",
 };
 
 export const PULL_MODEL_GROUP_ORDER: readonly PullModelGroup[] = [
-  "featured",
+  "essentials",
   "smallest",
   "stretch",
   "specialist",
@@ -54,18 +54,35 @@ export function isDeckDailyPullModel(entry: PullModelEntry): boolean {
   return entry.group !== "stretch";
 }
 
+/** One-pull Deck presets shown by default in Browse models. */
+export function isDeckEssentialsPullModel(entry: PullModelEntry): boolean {
+  return entry.group === "essentials";
+}
+
 export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
   {
-    tag: "gemma4:latest",
-    params: "4B",
-    sizeGb: 3.3,
-    releasedYm: "2026-04",
-    license: "Gemma Terms",
-    licenseClass: "open_weight",
-    group: "featured",
-    tags: ["chat", "vision"],
+    tag: "qwen2.5vl:3b",
+    params: "3B",
+    sizeGb: 3.2,
+    releasedYm: "2025-01",
+    license: "Apache 2.0",
+    licenseClass: "foss",
+    group: "essentials",
+    tags: ["chat", "vision", "ocr", "strategy"],
     rating: 6,
-    blurb: "Gemma 4 on Ollama (latest tag) — multimodal chat + vision; matches Tier 2 routing.",
+    blurb: "Tier 1 default — one FOSS pull for chat, screenshots, OCR, and Strategy mode.",
+  },
+  {
+    tag: "gemma4:e2b-it-qat",
+    params: "E2B",
+    sizeGb: 4.3,
+    releasedYm: "2026-04",
+    license: "Apache 2.0 (Gemma)",
+    licenseClass: "open_weight",
+    group: "essentials",
+    tags: ["chat", "vision", "ocr", "strategy"],
+    rating: 6,
+    blurb: "Tier 2 one-model multimodal — Gemma 4 edge QAT; requires open-weight policy tier.",
   },
   {
     tag: "qwen3:4b",
@@ -74,34 +91,10 @@ export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
     releasedYm: "2025-04",
     license: "Apache 2.0",
     licenseClass: "foss",
-    group: "featured",
+    group: "smallest",
     tags: ["strategy", "chat"],
-    rating: 6,
-    blurb: 'Top strategy/reasoning under 5 GB; optional "thinking" mode.',
-  },
-  {
-    tag: "gemma3:4b",
-    params: "4B",
-    sizeGb: 3.3,
-    releasedYm: "2025-03",
-    license: "Gemma Terms",
-    licenseClass: "open_weight",
-    group: "featured",
-    tags: ["chat", "vision"],
-    rating: 6,
-    blurb: "Multimodal — chat + screenshot understanding in one pull.",
-  },
-  {
-    tag: "qwen2.5vl:3b",
-    params: "3B",
-    sizeGb: 3.2,
-    releasedYm: "2025-01",
-    license: "Qwen Research",
-    licenseClass: "foss",
-    group: "featured",
-    tags: ["vision", "ocr", "strategy"],
-    rating: 6,
-    blurb: "Best small VLM for screenshots, OCR, game/UI identification.",
+    rating: 5,
+    blurb: 'Optional strategy specialist; optional "thinking" mode.',
   },
   {
     tag: "qwen2.5:7b",
@@ -110,10 +103,10 @@ export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
     releasedYm: "2024-09",
     license: "Apache 2.0",
     licenseClass: "foss",
-    group: "featured",
+    group: "smallest",
     tags: ["chat", "strategy"],
     rating: 5,
-    blurb: "Strong FOSS chat + strategy backbone; good mid-size default.",
+    blurb: "Stronger FOSS text when essentials feel too small.",
   },
   {
     tag: "llava:7b",
@@ -122,10 +115,34 @@ export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
     releasedYm: "2024-01",
     license: "Apache 2.0",
     licenseClass: "foss",
-    group: "featured",
+    group: "smallest",
     tags: ["vision", "ocr"],
-    rating: 5,
-    blurb: "Tier-1 FOSS vision starter — pinned tag avoids ambiguous `llava:latest` pulls.",
+    rating: 4,
+    blurb: "Legacy vision fallback — pinned tag avoids ambiguous `llava:latest` pulls.",
+  },
+  {
+    tag: "gemma4:latest",
+    params: "E4B",
+    sizeGb: 9.6,
+    releasedYm: "2026-04",
+    license: "Apache 2.0 (Gemma)",
+    licenseClass: "open_weight",
+    group: "smallest",
+    tags: ["chat", "vision"],
+    rating: 4,
+    blurb: "Same as gemma4:e4b on Ollama — heavier than e2b-it-qat; Tier 2 only.",
+  },
+  {
+    tag: "gemma3:4b",
+    params: "4B",
+    sizeGb: 3.3,
+    releasedYm: "2025-03",
+    license: "Gemma Terms",
+    licenseClass: "open_weight",
+    group: "smallest",
+    tags: ["chat", "vision"],
+    rating: 4,
+    blurb: "Older Gemma multimodal — superseded by Gemma 4 edge tags.",
   },
   {
     tag: "qwen3:1.7b",
@@ -161,7 +178,7 @@ export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
     group: "smallest",
     tags: ["chat"],
     rating: 5,
-    blurb: "Fast FOSS chat at ~2 GB — common speed-tier fallback.",
+    blurb: "Fast FOSS text-only fallback if you skip the essentials VLM.",
   },
   {
     tag: "qwen2.5:1.5b",
@@ -172,8 +189,8 @@ export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
     licenseClass: "foss",
     group: "smallest",
     tags: ["chat"],
-    rating: 4,
-    blurb: "README starter tag — ultra-light text; deprioritized in Ask chains.",
+    rating: 3,
+    blurb: "Ultra-light text; deprioritized in Ask chains.",
   },
   {
     tag: "llama3.2:3b",

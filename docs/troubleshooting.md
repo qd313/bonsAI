@@ -103,19 +103,29 @@ If Windows still falls back to CPU after FIX A:
 
 **Fix:** Update to a build that uses draft selection inside the **AI models** hub (Policy / Browse & pull / Advanced), `onOKButton` on tier rows, **awaits `save_settings` before closing** (avoids remount loading stale tier), and persist on **Done** with `hydrateFromSettings`. If tier still reverts, open the hub again and confirm the row label; enable Tier 3 unlock under **Advanced** when choosing Any installed model.
 
+### Deck essentials models (Tier 1 / Tier 2)
+
+**Default Tier 1 pull:** `qwen2.5vl:3b` — one FOSS multimodal model for chat, screenshots, OCR, and Strategy mode. In bonsAI → **Ollama** → **Install Tier 1 essentials** (or `ollama pull qwen2.5vl:3b`).
+
+**Optional Tier 2 one-model multimodal:** `gemma4:e2b-it-qat` (falls back to `gemma4:e2b` if the QAT tag is unavailable on the registry). Use **Install Tier 2 one-model multimodal** under Connection; bonsAI switches Model policy to Tier 2 (open-weight) and shows license disclosure before pull.
+
+**Browse models** defaults to **Essentials only** (two preset rows). Turn the filter off to see more models; stretch/specialist rows are for power users.
+
+**Clear all data:** When **Ollama on this Deck** was enabled, **Settings → Clear all data** also removes local model blobs (`~/.ollama`), the user-prefix Ollama binary under `~/.local`, and `~/.bonsai/cache`. LAN-hosted Ollama on another PC is not touched.
+
 ### Ollama HTTP 404 with Gemma / open-weight models (Tier 2)
 
-**Symptom:** You pulled **Gemma 3** or **Gemma 4** from **Ollama → Open AI models… → Browse & pull**, Tier 2 is selected, but Ask fails with **HTTP 404** for `gemma3:latest` or `gemma4:latest`.
+**Symptom:** Ask fails with **HTTP 404** for a Gemma tag you thought you installed.
 
-**Cause:** Ollama requires an **exact tag** match. Tags like `gemma4:4b` are **not** on the public library (manifest missing → pull exit code 1). Older builds also tried generic names such as `gemma3:latest` only in routing.
+**Cause:** Ollama requires an **exact tag** match. Tags like `gemma4:4b` are **not** on the public library. Use **`gemma4:e2b-it-qat`**, **`gemma4:e2b`**, or **`gemma4:latest`** (= E4B on Ollama).
 
-**Fix (2026-05-26):** Pull Models catalog uses **`gemma4:latest`** (valid on Ollama). Invalid tags are rejected before pull when the registry is reachable; setup logs include the last `ollama pull` output, not only exit code. Routing tries `gemma3:4b` and `gemma4:latest` before generic `gemma4`.
+**Fix:** Pull via **Install Tier 2 one-model multimodal** or an exact catalog tag. Enable **Tier 2** model policy so routing can use open-weight tags.
 
 **Checks:**
 
 1. List installed tags: `curl -s http://127.0.0.1:11434/api/tags` (or your PC IP).
-2. Confirm at least one tag in the chain is present (e.g. `gemma3:4b` after a featured pull).
-3. Tier 1 still tries Qwen/Llava first — install a Tier-1 model or stay on Tier 2 so Gemma tags are eligible.
+2. Confirm `qwen2.5vl:3b` (Tier 1) or your Tier 2 Gemma tag is listed.
+3. Tier 1 policy only allows FOSS tags — use Tier 2 for Gemma.
 
 ---
 

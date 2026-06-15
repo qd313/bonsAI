@@ -8,7 +8,7 @@
 
 1. Install **[Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader)** on your Steam Deck.
 2. Install **bonsAI** from **[GitHub Releases](https://github.com/cantcurecancer/bonsAI/releases)** — open **Decky** from QAM → install from local ZIP.
-3. Install **[Ollama](https://ollama.com/download)** on the machine that will run models, then pull at least one text model (e.g. `ollama pull qwen2.5:1.5b`).
+3. Install **[Ollama](https://ollama.com/download)** on the machine that will run models, then pull the Deck essentials model: `ollama pull qwen2.5vl:3b` (one FOSS model for chat and screenshots). Optional Tier 2: `ollama pull gemma4:e2b-it-qat`.
 4. Open **bonsAI** → **Settings** → set **Ollama host** to `http://127.0.0.1:11434` (same device) or `http://<PC-IP>:11434` (PC on your LAN) → **Main** → send a test message.
 
 Unfamiliar with **QAM**, **LAN**, or **Ollama**? See [Glossary](#glossary-quick). Network and vision setup: [docs/troubleshooting.md](docs/troubleshooting.md).

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { showModal, ConfirmModal } from "@decky/ui";
-import { TIER1_FOSS_STARTER_PRIMARY_TAGS } from "../data/tier1FossStarterTags";
+import { TIER1_ESSENTIALS_TAG } from "../data/deckEssentialsTags";
 
 const DISCLAIMER_STORAGE_KEY = "bonsai:disclaimer-accepted";
 const LOCAL_RUNTIME_BETA_DISMISSED_STORAGE_KEY = "bonsai:local-runtime-beta-dismissed-v1";
@@ -13,14 +13,14 @@ export type DeckyModalSurvivalHooks = {
 
 /** Full local-runtime banner text (one-time when Ollama on Deck is enabled). */
 function localRuntimeBetaNoticeDescription(): string {
-  const tagLine = TIER1_FOSS_STARTER_PRIMARY_TAGS.join(", ");
   return (
     "You are using Ollama on this device (local runtime).\n\n" +
     "If you have another PC on your LAN that can host Ollama, that path is typically much faster than on-device inference.\n\n" +
     "Heavy local AI while a game has high VRAM / graphics load may crash the game or cause unstable behavior from memory pressure — " +
     "use at your own risk. This path is beta: screenshots and attachments use vision-capable models where available; Expert and heavier models can add delay.\n\n" +
     "Speed (Fast) is the default for quick answers. Use Strategy when you need branching choices. Expert is heavier and slower.\n\n" +
-    `Tier-1 FOSS starter tags include ${tagLine}. Use Starter (README) and Full Tier-1 FOSS under Connection to pull models.\n\n` +
+    `Default Tier-1 pull: ${TIER1_ESSENTIALS_TAG} (one FOSS model for chat and screenshots). ` +
+    "Under Connection, use Install Tier 1 essentials or optional Tier 2 one-model multimodal.\n\n" +
     "You can turn off Ollama on Deck in Settings if you prefer a LAN host."
   );
 }

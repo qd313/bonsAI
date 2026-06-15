@@ -1,20 +1,7 @@
-{
-  "schema_version": 1,
-  "updated_at": "2026-06-11",
-  "entries": [
-    {
-      "tag": "qwen3:2b",
-      "params": "2B",
-      "sizeGb": 1.6,
-      "releasedYm": "2025-04",
-      "license": "Apache 2.0",
-      "licenseClass": "foss",
-      "group": "smallest",
-      "tags": ["chat", "strategy"],
-      "rating": 5,
-      "blurb": "Lightweight Qwen 3 reasoning — good speed/strategy balance on Deck."
-    }
-  ],
-  "removed_tags": [],
-  "overrides": {}
-}
+{
+  "schema_version": 1,
+  "updated_at": "2026-06-15",
+  "entries": [],
+  "removed_tags": [],
+  "overrides": {}
+}

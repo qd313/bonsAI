@@ -15,7 +15,12 @@ import urllib.request
 from pathlib import Path
 from typing import Any, Callable, Optional
 
-from refactor_helpers import normalize_ollama_base, tier1_foss_recommended_pull_tags
+from refactor_helpers import (
+    TIER2_MULTIMODAL_PULL_FALLBACK_TAG,
+    TIER2_MULTIMODAL_PULL_TAGS,
+    normalize_ollama_base,
+    setup_recommended_pull_tags,
+)
 
 OLLAMA_OFFICIAL_INSTALL_SH = "https://ollama.com/install.sh"
 DEFAULT_BASE = normalize_ollama_base("127.0.0.1:11434")[2]
@@ -260,6 +265,24 @@ def is_loopback_ollama_host(host: str) -> bool:
     return h.casefold() == "localhost"
 
 
+def resolve_tier2_multimodal_pull_tags() -> list[str]:
+    """Prefer ``gemma4:e2b-it-qat``; fall back to ``gemma4:e2b`` when registry has no QAT manifest."""
+    from backend.services.ollama_catalog_service import partition_pull_tags_by_registry
+
+    primary = list(TIER2_MULTIMODAL_PULL_TAGS)
+    ok, _bad = partition_pull_tags_by_registry(primary)
+    if ok:
+        return ok
+    fallback = [TIER2_MULTIMODAL_PULL_FALLBACK_TAG]
+    ok_fb, _ = partition_pull_tags_by_registry(fallback)
+    return ok_fb if ok_fb else fallback
+
+
+def tier1_foss_recommended_pull_tags(profile: str) -> list[str]:
+    """Deprecated alias — use ``setup_recommended_pull_tags``."""
+    return setup_recommended_pull_tags(profile)
+
+
 def resolve_ollama_executable() -> Optional[str]:
     """Return path to ``ollama`` CLI if present on PATH."""
     return shutil.which("ollama")
@@ -455,7 +478,7 @@ def _format_ollama_pull_failure(tag: str, code: int, tail_lines: list[str]) -> s
     low = tail_text.casefold()
     if "manifest" in low and ("not exist" in low or "does not exist" in low):
         msg += (
-            f" Tag «{tag}» is not on the Ollama library — try gemma4:latest, gemma3:4b, or qwen2.5:1.5b."
+            f" Tag «{tag}» is not on the Ollama library — try qwen2.5vl:3b or gemma4:e2b-it-qat."
         )
     return msg
 
@@ -597,7 +620,9 @@ async def run_local_setup(
         elif is_update_installed:
             tags = []
         else:
-            tags = tier1_foss_recommended_pull_tags(prof)
+            tags = setup_recommended_pull_tags(prof)
+            if prof == "tier2_multimodal":
+                tags = resolve_tier2_multimodal_pull_tags()
             if not tags:
                 raise RuntimeError(f"Unknown pull profile: {profile!r}.")
         state["pull_tags"] = list(tags)
@@ -652,7 +677,7 @@ async def run_local_setup(
             if not tags:
                 log(
                     "[bonsAI] No models installed locally — nothing to update. "
-                    "Use Starter or Full Tier-1 FOSS first."
+                    "Use Install Tier 1 essentials or Tier 2 one-model multimodal first."
                 )
                 state["stage"] = "complete"
                 state["phase"] = "done"

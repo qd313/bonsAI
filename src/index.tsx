@@ -1584,6 +1584,15 @@ const Content: React.FC = () => {
     ]
   );
 
+  const onApplyTier2MultimodalPolicy = useCallback(async () => {
+    setModelPolicyTier("open_weight");
+    const saved = await call<[BonsaiSettings], BonsaiSettings>(
+      "save_settings",
+      buildSettingsPayload({ model_policy_tier: "open_weight" })
+    );
+    hydrateFromSettings(saved);
+  }, [buildSettingsPayload, hydrateFromSettings, setModelPolicyTier]);
+
   const ollamaTab = useMemo(
     () => (
       <OllamaTab
@@ -1614,6 +1623,7 @@ const Content: React.FC = () => {
         ollamaKeepAlive={ollamaKeepAlive}
         setOllamaKeepAlive={setOllamaKeepAlive}
         modelPolicyTier={modelPolicyTier}
+        onApplyTier2MultimodalPolicy={onApplyTier2MultimodalPolicy}
       />
     ),
     [
@@ -1629,6 +1639,7 @@ const Content: React.FC = () => {
       latencyTimeoutsCustomEnabled,
       ollamaKeepAlive,
       modelPolicyTier,
+      onApplyTier2MultimodalPolicy,
       captureSessionBeforeModal,
       finalizeShowModalAndRestoreActiveTab,
       openOllamaModelsHub,

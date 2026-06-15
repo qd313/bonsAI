@@ -22,7 +22,7 @@ CACHE_TTL_S = 7 * 24 * 3600
 CACHE_DIR = Path.home() / ".bonsai" / "cache"
 CACHE_FILE = CACHE_DIR / "pull_model_catalog_overlay.json"
 
-VALID_GROUPS = frozenset({"featured", "smallest", "stretch", "specialist"})
+VALID_GROUPS = frozenset({"essentials", "smallest", "stretch", "specialist"})
 VALID_LICENSE = frozenset({"foss", "open_weight", "non_foss", "unknown"})
 VALID_USE_TAGS = frozenset({"chat", "vision", "ocr", "strategy", "coding"})
 RELEASED_YM_RE = re.compile(r"^\d{4}-\d{2}$")

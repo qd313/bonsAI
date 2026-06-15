@@ -8,18 +8,24 @@ import { PULL_MODEL_CATALOG } from "../data/pullModelCatalog";
 
 describe("pullModelRecommendations", () => {
   it("scores smaller high-rated multimodal models higher", () => {
-    const gemma4 = PULL_MODEL_CATALOG.find((e) => e.tag === "gemma4:latest")!;
+    const essentials = PULL_MODEL_CATALOG.find((e) => e.tag === "qwen2.5vl:3b")!;
     const qwen14 = PULL_MODEL_CATALOG.find((e) => e.tag === "qwen2.5:14b")!;
-    expect(scorePullModelPerformance(gemma4)).toBeGreaterThan(scorePullModelPerformance(qwen14));
+    expect(scorePullModelPerformance(essentials)).toBeGreaterThan(scorePullModelPerformance(qwen14));
   });
 
-  it("recommends pulls when speed/vision gaps exist", () => {
+  it("treats essentials VLM as covering all roles", () => {
+    const installed = new Set(["qwen2.5vl:3b"]);
+    expect(findCoverageGaps(installed)).toEqual([]);
+    expect(recommendPullModelsForGaps(installed, { limit: 1 })).toEqual([]);
+  });
+
+  it("recommends one pull when speed/vision gaps exist", () => {
     const installed = new Set(["deepseek-r1:1.5b"]);
     const gaps = findCoverageGaps(installed);
     expect(gaps).toContain("speed");
     expect(gaps).toContain("vision");
-    const recs = recommendPullModelsForGaps(installed, { limit: 3 });
-    expect(recs.length).toBeGreaterThan(0);
-    expect(recs.every((e) => !installed.has(e.tag))).toBe(true);
+    const recs = recommendPullModelsForGaps(installed, { limit: 1 });
+    expect(recs.length).toBe(1);
+    expect(recs[0]?.tag).toBe("qwen2.5vl:3b");
   });
 });

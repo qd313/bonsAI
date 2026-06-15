@@ -18,7 +18,7 @@ class OllamaPullFailureFormatTests(unittest.TestCase):
         )
         self.assertIn("exit code 1", msg)
         self.assertIn("not on the Ollama library", msg)
-        self.assertIn("gemma4:latest", msg)
+        self.assertIn("qwen2.5vl:3b", msg)
 
 
 class PartitionPullTagsTests(unittest.TestCase):

@@ -23,47 +23,18 @@ def _dedupe_preserve_order(tags: list[str]) -> list[str]:
     return out
 
 
-# --- Text: FOSS-first (matches model_policy Tier 1 families), then open-weight fallbacks.
-# Default chains target ~16GB VRAM at common Ollama quants; no 27B+ / 30B+ class in "safe" lists.
-#
-# Speed: smallest / lowest-latency FOSS first (fastest intent turnaround on modest GPUs).
-_TEXT_FOSS_SPEED = [
-    "qwen2.5:1.5b",
+# --- Essentials routing: one FOSS multimodal default, short tails for legacy + Tier 2 open-weight.
+# Ask mode (speed/strategy/deep) differs by prompt and token budget only — not separate tag lists.
+_TEXT_FOSS_ESSENTIALS = [
+    "qwen2.5vl:3b",
     "qwen2.5:3b",
-    "qwen2.5:7b",
-    "qwen2.5",
-    "qwen2.5:latest",
-]
-# Strategy: rolling "latest" FOSS first, then stronger midsize FOSS fallbacks.
-_TEXT_FOSS_STRATEGY = [
-    "qwen2.5:latest",
-    "qwen2.5:14b",
-    "qwen2.5:7b",
-    "qwen2.5",
-    "qwen2.5:3b",
-    "qwen2.5:1.5b",
-]
-# Expert: strongest FOSS that typically fits ~16GB before smaller FOSS (no :32b in safe list).
-_TEXT_FOSS_DEEP = [
-    "qwen2.5:14b",
-    "qwen2.5:7b",
-    "qwen2.5:latest",
-    "qwen2.5",
-    "qwen2.5:3b",
-    "qwen2.5:1.5b",
 ]
 
-# Open-weight (Tier 2+); prefer Pull Models catalog sizes before generic :latest tags.
-_TEXT_OPEN_WEIGHT_SAFE = [
-    "llama3.2:3b",
-    "llama3.2:1b",
-    "llama3:latest",
-    "llama3",
-    "gemma3:4b",
-    "gemma3:1b",
-    "gemma3:latest",
+# Tier 2 one-model multimodal preset + long-tail open-weight fallbacks.
+_TEXT_OPEN_WEIGHT_ESSENTIALS = [
+    "gemma4:e2b-it-qat",
+    "gemma4:e2b",
     "gemma4:latest",
-    "gemma4",
 ]
 
 # Appended only when Settings "high VRAM fallbacks" is on (may OOM or exceed 16GB depending on quant/host).
@@ -83,37 +54,15 @@ _TEXT_HIGH_VRAM_DEEP: list[str] = [
     "gemma3:27b",
 ]
 
-# --- Vision: FOSS multimodal first (llava / qwen2.5vl / qwen3-vl small), then open-weight; 16GB-safe defaults.
-# Strategy/Expert order matches Speed: try smaller FOSS VL models before heavier qwen2.5vl (Steam Deck / low VRAM).
-_VISION_FOSS_SPEED = [
+_VISION_FOSS_ESSENTIALS = [
+    "qwen2.5vl:3b",
     "llava:7b",
-    "llava:latest",
-    "llava",
-    "qwen2.5vl:latest",
-    "qwen2.5vl",
-]
-_VISION_FOSS_STRATEGY = [
-    "llava:7b",
-    "llava:latest",
-    "llava",
-    "qwen2.5vl:latest",
-    "qwen2.5vl",
-]
-_VISION_FOSS_DEEP = [
-    "llava:7b",
-    "llava:latest",
-    "llava",
-    "qwen2.5vl:latest",
-    "qwen2.5vl",
 ]
 
-_VISION_OPEN_WEIGHT_SAFE = [
+_VISION_OPEN_WEIGHT_ESSENTIALS = [
+    "gemma4:e2b-it-qat",
+    "gemma4:e2b",
     "gemma3:4b",
-    "gemma4:latest",
-    "gemma4",
-    "llama3.2-vision:11b",
-    "llama3.2-vision",
-    "llama3.2-vision:latest",
 ]
 
 _VISION_HIGH_VRAM_SPEED: list[str] = [
@@ -139,21 +88,30 @@ _VISION_HIGH_VRAM_DEEP: list[str] = [
     "qwen2.5vl",
 ]
 
-# README-aligned minimal local pulls (text + multimodal Tier-1 FOSS). Keep in sync with README quick start.
-TIER1_FOSS_STARTER_PULL_TAGS = (
-    "qwen2.5:1.5b",
-    "llava:7b",
-)
+# Deck essentials — one Tier-1 FOSS multimodal pull. Keep in sync with README and deckEssentialsTags.ts.
+TIER1_ESSENTIALS_PULL_TAGS = ("qwen2.5vl:3b",)
+
+# Tier-2 one-model multimodal preset (registry may fall back to gemma4:e2b in setup service).
+TIER2_MULTIMODAL_PULL_TAGS = ("gemma4:e2b-it-qat",)
+TIER2_MULTIMODAL_PULL_FALLBACK_TAG = "gemma4:e2b"
 
 # Tags moved to the tail of ``select_ollama_models`` chains (still tryable as last resort).
 DEPRIORITIZED_OLLAMA_TAGS = frozenset(
     {
         "qwen2.5:1.5b",
+        "qwen2.5:7b",
+        "qwen2.5:14b",
+        "qwen2.5:latest",
+        "qwen2.5",
         "tinyllama",
         "orca-mini",
         "vicuna",
+        "llava:7b",
         "llava:latest",
         "llava",
+        "gemma3:4b",
+        "gemma3:1b",
+        "gemma3:latest",
         "gemma3:27b",
         "gemma4:31b",
         "qwen2.5:32b",
@@ -161,6 +119,10 @@ DEPRIORITIZED_OLLAMA_TAGS = frozenset(
         "qwen3-vl:30b-a3b",
         "internvl3.5:38b",
         "internvl2.5:38b",
+        "llama3.2:3b",
+        "llama3.2:1b",
+        "llama3:latest",
+        "llama3",
     }
 )
 
@@ -176,7 +138,9 @@ BLOCKED_PULL_CATALOG_TAGS = frozenset(
 # Legacy small-chat families (any ``:tag`` variant).
 _DEPRIORITIZED_OLLAMA_BASES = frozenset({"tinyllama", "orca-mini", "vicuna", "phi"})
 
-_VALID_SETUP_PULL_PROFILES = frozenset({"starter", "tier1_foss_full", "update_installed"})
+_VALID_SETUP_PULL_PROFILES = frozenset(
+    {"tier1_essentials", "tier2_multimodal", "update_installed"}
+)
 
 
 def ollama_tag_is_deprioritized(tag: str) -> bool:
@@ -202,29 +166,19 @@ def sort_models_deprioritized_last(tags: list[str]) -> list[str]:
     return primary + tail
 
 
-def tier1_foss_recommended_pull_tags(profile: str) -> list[str]:
-    """Tags to ``ollama pull`` for local Tier-1 FOSS-only setups (no open-weight/high-VRAM tails).
-
-    ``starter`` matches README (small text + early vision FOSS tag). ``tier1_foss_full`` dedupes the union
-    of ``_TEXT_FOSS_*`` and ``_VISION_FOSS_*`` chains so installs cover every Tier-1 FOSS fallback in
-    ``select_ollama_models`` before Tier-2 open-weight alternatives.
-    """
+def setup_recommended_pull_tags(profile: str) -> list[str]:
+    """Tags to ``ollama pull`` for local Deck essentials presets (see ``_VALID_SETUP_PULL_PROFILES``)."""
     prof = (profile or "").strip()
-    if prof == "starter":
-        return list(TIER1_FOSS_STARTER_PULL_TAGS)
-    if prof == "tier1_foss_full":
-        merged: list[str] = []
-        for lst in (
-            _TEXT_FOSS_SPEED,
-            _TEXT_FOSS_STRATEGY,
-            _TEXT_FOSS_DEEP,
-            _VISION_FOSS_SPEED,
-            _VISION_FOSS_STRATEGY,
-            _VISION_FOSS_DEEP,
-        ):
-            merged.extend(lst)
-        return _dedupe_preserve_order(merged)
+    if prof == "tier1_essentials":
+        return list(TIER1_ESSENTIALS_PULL_TAGS)
+    if prof == "tier2_multimodal":
+        return list(TIER2_MULTIMODAL_PULL_TAGS)
     return []
+
+
+def tier1_foss_recommended_pull_tags(profile: str) -> list[str]:
+    """Deprecated alias — use ``setup_recommended_pull_tags``."""
+    return setup_recommended_pull_tags(profile)
 
 
 def is_valid_setup_pull_profile(profile: Any) -> bool:
@@ -233,13 +187,8 @@ def is_valid_setup_pull_profile(profile: Any) -> bool:
 
 
 def _text_safe_chain(mode: str) -> list[str]:
-    if mode == "speed":
-        return _dedupe_preserve_order(_TEXT_FOSS_SPEED + _TEXT_OPEN_WEIGHT_SAFE)
-    if mode == "strategy":
-        return _dedupe_preserve_order(_TEXT_FOSS_STRATEGY + _TEXT_OPEN_WEIGHT_SAFE)
-    if mode == "deep":
-        return _dedupe_preserve_order(_TEXT_FOSS_DEEP + _TEXT_OPEN_WEIGHT_SAFE)
-    return _dedupe_preserve_order(_TEXT_FOSS_SPEED + _TEXT_OPEN_WEIGHT_SAFE)
+    del mode  # Ask mode differs by prompt only; same essentials chain for all modes.
+    return _dedupe_preserve_order(_TEXT_FOSS_ESSENTIALS + _TEXT_OPEN_WEIGHT_ESSENTIALS)
 
 
 def _text_high_vram_tail(mode: str) -> list[str]:
@@ -253,13 +202,8 @@ def _text_high_vram_tail(mode: str) -> list[str]:
 
 
 def _vision_safe_chain(mode: str) -> list[str]:
-    if mode == "speed":
-        return _dedupe_preserve_order(_VISION_FOSS_SPEED + _VISION_OPEN_WEIGHT_SAFE)
-    if mode == "strategy":
-        return _dedupe_preserve_order(_VISION_FOSS_STRATEGY + _VISION_OPEN_WEIGHT_SAFE)
-    if mode == "deep":
-        return _dedupe_preserve_order(_VISION_FOSS_DEEP + _VISION_OPEN_WEIGHT_SAFE)
-    return _dedupe_preserve_order(_VISION_FOSS_SPEED + _VISION_OPEN_WEIGHT_SAFE)
+    del mode
+    return _dedupe_preserve_order(_VISION_FOSS_ESSENTIALS + _VISION_OPEN_WEIGHT_ESSENTIALS)
 
 
 def _vision_high_vram_tail(mode: str) -> list[str]:
@@ -384,12 +328,12 @@ def no_installed_routing_models_message(installed: list[str], requires_vision: b
         installed_clause = f"Installed on this host: {shown}. "
     else:
         installed_clause = "Ollama reports no installed models. "
-    starter = "llava:7b" if requires_vision else "qwen2.5:1.5b"
+    essential = "qwen2.5vl:3b"
     return (
         f"No {kind}model in bonsAI's routing list is installed on this Ollama host. "
         f"{installed_clause}"
-        f"Open Settings → Connection → Browse models and pull {starter} (recommended on Deck), "
-        "or use local setup. Large models such as gemma4:latest often time out on CPU-only inference."
+        f"Open Settings → Connection and run Install Tier 1 essentials, or pull {essential} "
+        "(one FOSS multimodal model for chat and screenshots). Tier 2 optional: gemma4:e2b-it-qat."
     )
 
 

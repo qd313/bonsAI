@@ -12,17 +12,16 @@ from refactor_helpers import (
 
 class ModelSelectionTests(unittest.TestCase):
     def test_deprioritized_tags_sort_last(self):
-        tags = ["qwen2.5:7b", "qwen2.5:1.5b", "qwen2.5:3b"]
+        tags = ["qwen2.5vl:3b", "llava:7b", "qwen2.5:3b"]
         out = sort_models_deprioritized_last(tags)
-        self.assertEqual(out[-1], "qwen2.5:1.5b")
-        self.assertEqual(out[0], "qwen2.5:7b")
+        self.assertEqual(out[-1], "llava:7b")
+        self.assertEqual(out[0], "qwen2.5vl:3b")
 
-    def test_select_ollama_models_puts_1_5b_after_safer_foss(self):
-        models = select_ollama_models(False, "speed", False)
-        self.assertIn("qwen2.5:1.5b", models)
-        idx_15 = models.index("qwen2.5:1.5b")
-        idx_7 = models.index("qwen2.5:7b")
-        self.assertGreater(idx_15, idx_7)
+    def test_select_ollama_models_puts_llava_after_essentials(self):
+        models = select_ollama_models(True, "speed", False)
+        self.assertIn("llava:7b", models)
+        self.assertIn("qwen2.5vl:3b", models)
+        self.assertLess(models.index("qwen2.5vl:3b"), models.index("llava:7b"))
 
     def test_legacy_vicuna_family_deprioritized(self):
         self.assertTrue(ollama_tag_is_deprioritized("vicuna:latest"))

@@ -47,6 +47,7 @@ from backend.services.ollama_service import (
     post_ollama_chat,
 )
 from backend.services.plugin_data_reset import reset_plugin_disk_and_defaults
+from backend.services.local_ollama_teardown_service import teardown_local_ollama_for_plugin_reset
 from backend.services.settings_service import (
     clamp_int,
     load_settings as load_settings_from_disk,
@@ -695,6 +696,21 @@ class Plugin:
             plugin._local_ollama_cancel_event = None
             plugin._local_ollama_setup_state = new_local_ollama_setup_state()
 
+        current = await plugin.load_settings()
+        local_on_deck = isinstance(current, dict) and current.get("ollama_local_on_deck") is True
+        if local_on_deck:
+            teardown_summary = await asyncio.to_thread(
+                teardown_local_ollama_for_plugin_reset, logger
+            )
+            await plugin._maybe_app_log(
+                "clear_plugin_data.ollama_teardown",
+                "local ollama teardown",
+                fields={
+                    "removed_tag_count": len(teardown_summary.get("removed_tags") or []),
+                    "error_count": len(teardown_summary.get("errors") or []),
+                },
+            )
+
         defaults = reset_plugin_disk_and_defaults(
             settings_path=Plugin._settings_path(),
             settings_dir=decky.DECKY_PLUGIN_SETTINGS_DIR,
@@ -1071,7 +1087,7 @@ class Plugin:
         if not is_valid_setup_pull_profile(prof):
             out = {
                 "accepted": False,
-                "reason": 'Invalid profile: use "starter", "tier1_foss_full", or "update_installed".',
+                "reason": 'Invalid profile: use "tier1_essentials", "tier2_multimodal", or "update_installed".',
             }
             await plugin._maybe_app_log(
                 "local_setup.start",
@@ -1195,7 +1211,7 @@ class Plugin:
                 "accepted": False,
                 "reason": (
                     f"Tag(s) not on Ollama library: {bad_list}. "
-                    "Try gemma4:latest, gemma3:4b, or qwen2.5:1.5b."
+                    "Try qwen2.5vl:3b or gemma4:e2b-it-qat."
                 ),
                 "error": "invalid_registry_tag",
                 "invalid_tags": registry_bad,

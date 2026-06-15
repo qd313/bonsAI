@@ -25,7 +25,7 @@ export type FetchPullModelCatalogResponse = {
   overrides?: Record<string, Partial<PullModelEntry>>;
 };
 
-const VALID_GROUPS = new Set<PullModelGroup>(["featured", "smallest", "stretch", "specialist"]);
+const VALID_GROUPS = new Set<PullModelGroup>(["essentials", "smallest", "stretch", "specialist"]);
 const VALID_LICENSE = new Set<PullModelLicenseClass>(["foss", "open_weight", "non_foss", "unknown"]);
 const VALID_USE_TAGS = new Set<PullModelUseTag>(["chat", "vision", "ocr", "strategy", "coding"]);
 const TAG_RE = /^[a-z0-9][a-z0-9._-]{0,63}(:[a-z0-9._-]{1,32})?$/;

@@ -108,6 +108,7 @@ from backend.services.ollama_catalog_service import (
     is_valid_ollama_pull_tag,
     normalize_ollama_pull_tags,
 )
+from backend.services.pull_model_catalog_service import fetch_pull_model_catalog
 from backend.services.voice_transcription_service import (
     VoiceTranscriptionSession,
     download_voice_model,
@@ -1333,6 +1334,41 @@ class Plugin:
         except Exception:
             out = {"source": "offline", "error": "fetch_failed", "tags": {}, "fetched_at": None}
         return out
+
+    async def fetch_pull_model_catalog(self, opts: Any = None):
+        """Living Pull Models overlay (remote JSON + disk cache) for frontend merge."""
+        plugin = Plugin._coerce_instance(self)
+        ok_gate, gate_out = await plugin._require_local_ollama_on_deck()
+        force = False
+        if isinstance(opts, dict):
+            force = bool(opts.get("force"))
+        elif isinstance(opts, bool):
+            force = opts
+        if not ok_gate:
+            return {
+                **(gate_out or {}),
+                "source": "bundled",
+                "entries": [],
+                "removed_tags": [],
+                "overrides": {},
+                "fetched_at": None,
+                "updated_at": None,
+            }
+        try:
+            return await asyncio.wait_for(
+                asyncio.to_thread(fetch_pull_model_catalog, force),
+                timeout=12.0,
+            )
+        except Exception:
+            return {
+                "source": "bundled",
+                "error": "fetch_failed",
+                "entries": [],
+                "removed_tags": [],
+                "overrides": {},
+                "fetched_at": None,
+                "updated_at": None,
+            }
 
     async def list_recent_screenshots(self, app_id: str = "", limit: int = 5):
         """List recent screenshots with preview and app metadata for attachment browsing."""

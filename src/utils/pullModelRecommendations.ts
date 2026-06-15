@@ -29,29 +29,37 @@ function entryCoversRole(entry: PullModelEntry, role: PullCoverageRole): boolean
   return tags.some((t) => entry.tags.includes(t));
 }
 
-export function installedCoversRole(installedTags: Set<string>, role: PullCoverageRole): boolean {
-  for (const entry of PULL_MODEL_CATALOG) {
+export function installedCoversRole(
+  installedTags: Set<string>,
+  role: PullCoverageRole,
+  catalog: readonly PullModelEntry[] = PULL_MODEL_CATALOG
+): boolean {
+  for (const entry of catalog) {
     if (!installedTags.has(entry.tag) && !installedTags.has(`${entry.tag}:latest`)) continue;
     if (entryCoversRole(entry, role)) return true;
   }
   return false;
 }
 
-export function findCoverageGaps(installedTags: Set<string>): PullCoverageRole[] {
+export function findCoverageGaps(
+  installedTags: Set<string>,
+  catalog: readonly PullModelEntry[] = PULL_MODEL_CATALOG
+): PullCoverageRole[] {
   const roles: PullCoverageRole[] = ["speed", "strategy", "expert", "vision"];
-  return roles.filter((role) => !installedCoversRole(installedTags, role));
+  return roles.filter((role) => !installedCoversRole(installedTags, role, catalog));
 }
 
 export function recommendPullModelsForGaps(
   installedTags: Set<string>,
-  opts?: { fossOnly?: boolean; limit?: number }
+  opts?: { fossOnly?: boolean; limit?: number; catalog?: readonly PullModelEntry[] }
 ): PullModelEntry[] {
   const fossOnly = opts?.fossOnly ?? false;
   const limit = opts?.limit ?? 4;
-  const gaps = findCoverageGaps(installedTags);
+  const catalog = opts?.catalog ?? PULL_MODEL_CATALOG;
+  const gaps = findCoverageGaps(installedTags, catalog);
   if (!gaps.length) return [];
 
-  const candidates = PULL_MODEL_CATALOG.filter((entry) => {
+  const candidates = catalog.filter((entry) => {
     if (installedTags.has(entry.tag) || installedTags.has(`${entry.tag}:latest`)) return false;
     if (fossOnly && entry.licenseClass !== "foss") return false;
     return gaps.some((role) => entryCoversRole(entry, role));

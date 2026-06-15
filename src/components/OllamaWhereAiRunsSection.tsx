@@ -23,6 +23,7 @@ import {
   registerOllamaTabLocalGetter,
   unregisterOllamaTabLocalGetter,
 } from "../utils/ollamaTabLocalSurvival";
+import { notifyPullModelCatalogRefresh } from "../utils/pullModelCatalogRefresh";
 
 const TEST_CONNECTION_TIMEOUT_SECONDS = 10;
 /** Loopback probes may start systemd / ``ollama serve``; Decky RPC must outlive nested waits. */
@@ -123,6 +124,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   );
   const [localSetupStatus, setLocalSetupStatus] = useState<LocalOllamaSetupStatus | null>(null);
   const setupAutoTestRanRef = useRef(false);
+  const lastCompletedSetupProfileRef = useRef<string>("");
   const onTestConnectionRef = useRef<() => Promise<void>>(async () => {});
 
   const ollamaIpConnectionNavRef = useRef<HTMLDivElement>(null);
@@ -364,6 +366,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
           }
           onOK={() => {
             setupAutoTestRanRef.current = false;
+            lastCompletedSetupProfileRef.current = profile;
             onCompleteDeckyModalClose(() => handle.Close());
             void callDeckyWithTimeout<
               [{ profile: string }],
@@ -434,9 +437,20 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     }
     if (localSetupStatus.phase === "done" && localSetupStatus.done !== false && !setupAutoTestRanRef.current && !(localSetupStatus.error ?? "").trim()) {
       setupAutoTestRanRef.current = true;
+      const wasUpdateInstalled =
+        lastCompletedSetupProfileRef.current === LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED ||
+        localSetupStatus.profile === LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED;
+      if (wasUpdateInstalled) {
+        notifyPullModelCatalogRefresh(true);
+        void callDeckyWithTimeout<[{ force?: boolean }], { source?: string }>(
+          "fetch_pull_model_catalog",
+          [{ force: true }],
+          DECKY_RPC_TIMEOUT_MS
+        ).catch(() => {});
+      }
       toaster.toast({
         title: "Local Ollama setup complete",
-        body: "Running connection test.",
+        body: wasUpdateInstalled ? "Running connection test and refreshing model catalog." : "Running connection test.",
         duration: 4000,
       });
       void onTestConnectionRef.current();

@@ -2,8 +2,6 @@ import { useCallback, useEffect, useMemo, useRef, useState, type RefCallback } f
 import { Button, ConfirmModal, Focusable, showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
 import {
-  PULL_MODEL_CATALOG,
-  PULL_MODEL_CATALOG_TAGS,
   PULL_MODEL_FILTER_OPTIONS,
   PULL_MODEL_GROUP_LABELS,
   PULL_MODEL_GROUP_ORDER,
@@ -14,7 +12,6 @@ import {
   formatPullModelTags,
   formatReleasedYmShort,
   formatSizeGb,
-  isCatalogModelTag,
   isDeckDailyPullModel,
   type PullModelEntry,
   type PullModelFilterId,
@@ -25,6 +22,13 @@ import { OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP } from "../utils/settingsAndResponse"
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import { BonsaiModalScope } from "./BonsaiModalScope";
 import { recommendPullModelsForGaps } from "../utils/pullModelRecommendations";
+import { usePullModelCatalog } from "../hooks/usePullModelCatalog";
+import {
+  getCatalogTags,
+  isCatalogModelTagInList,
+  mergePullModelCatalog,
+} from "../utils/mergePullModelCatalog";
+import { PULL_MODEL_CATALOG } from "../data/pullModelCatalog";
 
 const TEST_CONNECTION_TIMEOUT_SECONDS = 10;
 const LOCAL_LOOPBACK_CONNECTION_TEST_RPC_EXTRA_MS = 42000;
@@ -120,6 +124,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
     onFooterStateChange,
   } = props;
 
+  const { mergedCatalog, catalogSource, refreshCatalog } = usePullModelCatalog();
   const [installedTags, setInstalledTags] = useState<Set<string>>(() => new Set());
   const [selectedTags, setSelectedTags] = useState<Set<string>>(() => new Set());
   const [filterId, setFilterId] = useState<PullModelFilterId>("all");
@@ -142,13 +147,15 @@ export function PullModelsModal(props: PullModelsModalProps) {
   const selectCellRefs = useRef<(HTMLElement | null)[]>([]);
   const deleteCellRefs = useRef<(HTMLElement | null)[]>([]);
 
-  const refreshInstalledAndMeta = useCallback(async (metaOnly = false) => {
-    if (!metaOnly) setLoadingMeta(true);
-    else setRefreshingMeta(true);
-    try {
-      const tasks: Promise<unknown>[] = [];
-      if (!metaOnly) {
-        tasks.push(
+  const refreshInstalledAndMeta = useCallback(
+    async (forceCatalog = false) => {
+      if (forceCatalog) setRefreshingMeta(true);
+      else setLoadingMeta(true);
+      try {
+        const overlayRes = await refreshCatalog(forceCatalog);
+        const tags = getCatalogTags(mergePullModelCatalog(PULL_MODEL_CATALOG, overlayRes ?? undefined));
+
+        const tasks: Promise<unknown>[] = [
           callDeckyWithTimeout<[string, number], ConnectionTestResult>(
             "test_ollama_connection",
             [OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP, TEST_CONNECTION_TIMEOUT_SECONDS],
@@ -157,41 +164,38 @@ export function PullModelsModal(props: PullModelsModalProps) {
             if (res.reachable && Array.isArray(res.models)) {
               setInstalledTags(normalizeInstalledSet(res.models));
             }
-          })
-        );
-      }
-      tasks.push(
-        callDeckyWithTimeout<[string[]], CatalogMetadataResponse>(
-          "fetch_ollama_catalog_metadata",
-          [[...PULL_MODEL_CATALOG_TAGS]],
-          DECKY_RPC_TIMEOUT_MS
-        ).then((meta) => {
-          const src = meta.source === "live" ? "live" : "offline";
-          setSizeSource(src);
-          const next: Record<string, number> = {};
-          const tagMap = meta.tags ?? {};
-          for (const [tag, info] of Object.entries(tagMap)) {
-            const b = info?.size_bytes;
-            if (typeof b === "number" && b > 0) next[tag] = bytesToGb(b);
-          }
-          setLiveSizeGbByTag(next);
-        })
-      );
-      await Promise.all(tasks);
-    } catch (e) {
-      setSizeSource("offline");
-      if (!metaOnly) {
+          }),
+          callDeckyWithTimeout<[string[]], CatalogMetadataResponse>(
+            "fetch_ollama_catalog_metadata",
+            [tags],
+            DECKY_RPC_TIMEOUT_MS
+          ).then((meta) => {
+            const src = meta.source === "live" ? "live" : "offline";
+            setSizeSource(src);
+            const next: Record<string, number> = {};
+            const tagMap = meta.tags ?? {};
+            for (const [tag, info] of Object.entries(tagMap)) {
+              const b = info?.size_bytes;
+              if (typeof b === "number" && b > 0) next[tag] = bytesToGb(b);
+            }
+            setLiveSizeGbByTag(next);
+          }),
+        ];
+        await Promise.all(tasks);
+      } catch (e) {
+        setSizeSource("offline");
         toaster.toast({
           title: "Could not refresh models",
           body: formatDeckyRpcError(e),
           duration: 5000,
         });
+      } finally {
+        setLoadingMeta(false);
+        setRefreshingMeta(false);
       }
-    } finally {
-      setLoadingMeta(false);
-      setRefreshingMeta(false);
-    }
-  }, []);
+    },
+    [refreshCatalog]
+  );
 
   useEffect(() => {
     void refreshInstalledAndMeta(false);
@@ -200,21 +204,21 @@ export function PullModelsModal(props: PullModelsModalProps) {
   const otherInstalledTags = useMemo(() => {
     const out: string[] = [];
     for (const t of installedTags) {
-      if (!isCatalogModelTag(t)) out.push(t);
+      if (!isCatalogModelTagInList(mergedCatalog, t)) out.push(t);
     }
     out.sort((a, b) => a.localeCompare(b));
     return out;
-  }, [installedTags]);
+  }, [installedTags, mergedCatalog]);
 
   const filteredCatalog = useMemo(() => {
-    return PULL_MODEL_CATALOG.filter((entry) => {
+    return mergedCatalog.filter((entry) => {
       if (fossOnly && entry.licenseClass !== "foss") return false;
       if (!entryMatchesFilter(entry, filterId)) return false;
       if (installedOnly && !isTagInstalled(entry.tag, installedTags)) return false;
       if (deckDailyOnly && !isDeckDailyPullModel(entry)) return false;
       return true;
     });
-  }, [filterId, fossOnly, installedOnly, deckDailyOnly, installedTags]);
+  }, [filterId, fossOnly, installedOnly, deckDailyOnly, installedTags, mergedCatalog]);
 
   const groupedCatalog = useMemo(() => {
     const map = new Map<PullModelGroup, PullModelEntry[]>();
@@ -251,31 +255,31 @@ export function PullModelsModal(props: PullModelsModalProps) {
 
   const installedCatalogCount = useMemo(() => {
     let n = 0;
-    for (const e of PULL_MODEL_CATALOG) {
+    for (const e of mergedCatalog) {
       if (isTagInstalled(e.tag, installedTags)) n += 1;
     }
     return n + otherInstalledTags.length;
-  }, [installedTags, otherInstalledTags.length]);
+  }, [installedTags, mergedCatalog, otherInstalledTags.length]);
 
   const installedTotalGb = useMemo(() => {
     let sum = 0;
-    for (const e of PULL_MODEL_CATALOG) {
+    for (const e of mergedCatalog) {
       if (isTagInstalled(e.tag, installedTags)) sum += resolveRowSizeGb(e, liveSizeGbByTag);
     }
     for (const t of otherInstalledTags) {
       sum += liveSizeGbByTag[t] ?? 0;
     }
     return sum;
-  }, [installedTags, otherInstalledTags, liveSizeGbByTag]);
+  }, [installedTags, mergedCatalog, otherInstalledTags, liveSizeGbByTag]);
 
   const selectedTotalGb = useMemo(() => {
     let sum = 0;
     for (const tag of selectedTags) {
-      const entry = PULL_MODEL_CATALOG.find((e) => e.tag === tag);
+      const entry = mergedCatalog.find((e) => e.tag === tag);
       if (entry) sum += resolveRowSizeGb(entry, liveSizeGbByTag);
     }
     return sum;
-  }, [selectedTags, liveSizeGbByTag]);
+  }, [selectedTags, mergedCatalog, liveSizeGbByTag]);
 
   const focusInstalledOnlyToggle = useCallback((): boolean => {
     installedOnlyRef.current?.focus();
@@ -416,8 +420,8 @@ export function PullModelsModal(props: PullModelsModalProps) {
   );
 
   const recommendedEntries = useMemo(
-    () => recommendPullModelsForGaps(installedTags, { fossOnly, limit: 4 }),
-    [installedTags, fossOnly]
+    () => recommendPullModelsForGaps(installedTags, { fossOnly, limit: 4, catalog: mergedCatalog }),
+    [installedTags, fossOnly, mergedCatalog]
   );
 
   const completeNestedModalClose = useCallback(
@@ -805,6 +809,8 @@ export function PullModelsModal(props: PullModelsModalProps) {
             <span>Installed {installedCatalogCount} · {formatSizeGb(installedTotalGb)}</span>
             <span>Queue {selectedTags.size} · {formatSizeGb(selectedTotalGb)}</span>
             <span className="bonsai-pullmodels-size-source">
+              {catalogSource === "live" || catalogSource === "cached" ? "Live catalog" : "Offline catalog"}
+              {" · "}
               {sizeSource === "live" ? "Live sizes" : "Offline sizes"}
               <Button
                 className="bonsai-pullmodels-refresh-btn"
@@ -813,7 +819,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                   ev.stopPropagation();
                   void refreshInstalledAndMeta(true);
                 }}
-                aria-label="Refresh sizes from registry"
+                aria-label="Refresh model catalog"
               >
                 ↻
               </Button>

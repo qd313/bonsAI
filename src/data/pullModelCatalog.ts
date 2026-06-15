@@ -1,4 +1,5 @@
-/** Curated Ollama models for the Pull Models fullscreen picker (bundled offline fallback sizes). */
+/** Curated Ollama models for the Pull Models fullscreen picker (bundled offline fallback sizes).
+ *  Living recommendations: see data/pull-model-catalog-overlay.json (merged at runtime). */
 
 export type PullModelLicenseClass = "foss" | "open_weight" | "non_foss" | "unknown";
 

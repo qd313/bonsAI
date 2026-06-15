@@ -176,6 +176,16 @@ No session archived
 
 **master-debugger** — Deferred to on-device QA ([prompt-testing.md](../docs/prompt-testing.md) § Token streaming (experimental)); escalate if D-pad focus drops on preview→chunk finalize.
 
+### 2026-06-11 - Living Pull Models catalog (overlay merge + refresh triggers)
+
+```text
+Scope: data/pull-model-catalog-overlay.json, pull_model_catalog_service.py, fetch_pull_model_catalog RPC, mergePullModelCatalog.ts, usePullModelCatalog hook, PullModelsModal.tsx, OllamaWhereAiRunsSection.tsx.
+security-auditor: Triaged — host allowlist (raw.githubusercontent.com), JSON size cap, OLLAMA_TAG_RE validation, no user URLs; cache under ~/.bonsai/cache. No new confirmed findings.
+foss-advocate: Triaged — transparent GitHub-hosted overlay; FOSS licenseClass on qwen3:2b example; bundled baseline remains offline fallback.
+red-team / blue-team: Triaged — picker-only v1 (routing deferred); user-initiated refresh on Update AI & models + ↻ aligns with honest UX.
+Tests: pnpm test (merge + recommendations); python tests/test_pull_model_catalog_merge.py + parity OK.
+```
+
 ### 2026-05-19 - foss-advocate + security-auditor (Pull Models fullscreen picker)
 
 ```text

@@ -4,6 +4,16 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-06-15
+
+### Added
+- **Tier 2 one-model multimodal preset:** Connection → **Install Tier 2 one-model multimodal** pulls `gemma4:e2b-it-qat` (falls back to `gemma4:e2b`) with open-weight license disclosure and auto Tier 2 policy.
+- **Clear all data — local Ollama teardown:** When **Ollama on this Deck** was enabled, clearing plugin data removes downloaded models, user-prefix Ollama binary, `~/.ollama`, and `~/.bonsai/cache`.
+
+### Changed
+- **Deck essentials model simplification:** Tier 1 default is one pull (`qwen2.5vl:3b`); shortened Ask routing chains; Pull Models defaults to **Essentials only**; removed 11-model “full Tier-1” and dual-model starter presets.
+- **Docs/scripts:** README and `scripts/setup-ollama.sh` recommend `qwen2.5vl:3b`; troubleshooting covers essentials tags and clear-data Ollama purge.
+
 ## [0.4.0] - 2026-06-14
 
 ### Added

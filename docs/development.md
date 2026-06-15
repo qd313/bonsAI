@@ -279,9 +279,9 @@ Ollama helpers: [`scripts/setup-ollama.sh`](../scripts/setup-ollama.sh) (Linux),
 pnpm run version:bump patch   # or minor | major | 0.4.0
 ```
 
-Then edit CHANGELOG bullets, commit, `git tag vX.Y.Z`, push tag for CI zip.
+Then edit CHANGELOG bullets and commit to **`main`**. CI builds the zip and publishes a [GitHub Release](https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases) when **`plugin.json`** lands on **`main`** with a **new** `vX.Y.Z` tag (no manual `git tag` required). You can still tag manually (`git tag vX.Y.Z && git push origin vX.Y.Z`) or use **workflow_dispatch** with **publish_github_release**.
 
-**CI:** [`.github/workflows/build-plugin-zip.yml`](../.github/workflows/build-plugin-zip.yml) — triggers on **`v*` tags** and **workflow_dispatch**. Pushing a **`v*`** tag also publishes a [GitHub Release](https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases) with the zip attached. Artifact: `bonsai-plugin-*`; verified by [`scripts/verify-decky-plugin-zip.sh`](../scripts/verify-decky-plugin-zip.sh).
+**CI:** [`.github/workflows/build-plugin-zip.yml`](../.github/workflows/build-plugin-zip.yml) — triggers on **`main`** pushes that change **`plugin.json`**, **`v*` tags**, and **workflow_dispatch**. Artifact: `bonsai-plugin-*`; verified by [`scripts/verify-decky-plugin-zip.sh`](../scripts/verify-decky-plugin-zip.sh).
 
 **Local release:**
 

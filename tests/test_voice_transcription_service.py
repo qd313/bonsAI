@@ -1,11 +1,14 @@
 import os
 import tempfile
+import threading
+import time
 import unittest
 import struct
 import sys
 
 from backend.services.voice_transcription_service import (
     DEFAULT_VOICE_STT_MODEL,
+    VoiceTranscriptionSession,
     _link_versioned_sonames,
     _parse_whisper_stdout,
     _pcm_rms,
@@ -151,6 +154,38 @@ class VoiceTranscriptionServiceTests(unittest.TestCase):
         )
         self.assertEqual(fin, "Testing, one two,")
         self.assertEqual(partial, "three, four.")
+
+    def test_pcm_buffer_survives_concurrent_append_and_window(self) -> None:
+        logger = type("_L", (), {"warning": lambda *a, **k: None})()
+        session = VoiceTranscriptionSession("/tmp", "/tmp", DEFAULT_VOICE_STT_MODEL, logger)
+        chunk = struct.pack("<100h", *([1000] * 100))
+        stop = threading.Event()
+        errors: list[BaseException] = []
+
+        def writer() -> None:
+            try:
+                while not stop.is_set():
+                    session._append_pcm(chunk)
+            except BaseException as exc:
+                errors.append(exc)
+
+        def reader() -> None:
+            try:
+                while not stop.is_set():
+                    session._window_pcm(1.0)
+                    session._drop_pcm_before(0.25)
+            except BaseException as exc:
+                errors.append(exc)
+
+        threads = [threading.Thread(target=writer, name=f"voice-writer-{i}") for i in range(2)]
+        threads.append(threading.Thread(target=reader, name="voice-reader"))
+        for thread in threads:
+            thread.start()
+        time.sleep(0.4)
+        stop.set()
+        for thread in threads:
+            thread.join(timeout=2.0)
+        self.assertEqual(errors, [])
 
 
 if __name__ == "__main__":

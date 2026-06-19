@@ -197,6 +197,7 @@ class Plugin:
         self._voice_install_task: Optional[asyncio.Task] = None
         self._voice_install_cancel = threading.Event()
         self._voice_install_state: dict = new_voice_install_state()
+        self._settings_save_lock = asyncio.Lock()
 
     def _abort_ollama_chat_check(self) -> bool:
         """True when frontend requested Stop mid-generation (closes HTTP quickly; executor thread exits)."""
@@ -639,31 +640,34 @@ class Plugin:
 
     async def save_settings(self, data: Any = None):
         """Persist plugin settings to Decky's settings directory."""
-        current = await self.load_settings()
-        path = Plugin._settings_path()
-        saved = save_settings_to_disk(
-            path=path,
-            settings_dir=decky.DECKY_PLUGIN_SETTINGS_DIR,
-            incoming=data,
-            current=current,
-            sanitize_func=Plugin._sanitize_settings,
-            logger=logger,
-        )
-        changed = Plugin._settings_change_keys_for_log(current, saved)
-        if changed:
-            await self._maybe_app_log(
-                "settings.save",
-                "settings updated",
-                fields={"changed": ",".join(changed)},
-            )
         plugin = Plugin._coerce_instance(self)
-        prev_caps = current.get("capabilities") if isinstance(current.get("capabilities"), dict) else {}
-        next_caps = saved.get("capabilities") if isinstance(saved.get("capabilities"), dict) else {}
-        prev_mic = prev_caps.get("microphone_access") is True
-        next_mic = next_caps.get("microphone_access") is True
-        if prev_mic and not next_mic:
-            await plugin._stop_voice_transcription_internal()
-        return saved
+        if not hasattr(plugin, "_settings_save_lock"):
+            plugin._settings_save_lock = asyncio.Lock()
+        async with plugin._settings_save_lock:
+            current = await self.load_settings()
+            path = Plugin._settings_path()
+            saved = save_settings_to_disk(
+                path=path,
+                settings_dir=decky.DECKY_PLUGIN_SETTINGS_DIR,
+                incoming=data,
+                current=current,
+                sanitize_func=Plugin._sanitize_settings,
+                logger=logger,
+            )
+            changed = Plugin._settings_change_keys_for_log(current, saved)
+            if changed:
+                await self._maybe_app_log(
+                    "settings.save",
+                    "settings updated",
+                    fields={"changed": ",".join(changed)},
+                )
+            prev_caps = current.get("capabilities") if isinstance(current.get("capabilities"), dict) else {}
+            next_caps = saved.get("capabilities") if isinstance(saved.get("capabilities"), dict) else {}
+            prev_mic = prev_caps.get("microphone_access") is True
+            next_mic = next_caps.get("microphone_access") is True
+            if prev_mic and not next_mic:
+                await plugin._stop_voice_transcription_internal()
+            return saved
 
     async def clear_plugin_data(self):
         """Remove persisted settings/runtime/logs and return fresh defaults (new-install behavior)."""

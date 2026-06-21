@@ -4,8 +4,15 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [0.4.2] - 2026-06-21
+
+### Added
+- **bonsai-mcp knowledge server:** In-repo IDE-agnostic MCP (`packages/bonsai-mcp/`) for policies, workflows, specialist personas, doc search, and generated RPC/architecture index. Cursor bootstrap via `.cursor/mcp.json` and `sessionStart` hook. CI: `validate-mcp.yml`.
+
 ### Changed
 - **Documentation consolidation:** Active docs are now `README.md`, `docs/development.md`, `docs/troubleshooting.md`, `docs/roadmap.md`, and `docs/testing.md` (merged PR gates, device QA runbook, prompt testing, and failures). Historical research, plans, sweeps, and the full completed-feature checklist moved to `docs/archive/`. Removed stale root `TODO.md`.
+- **Agent/bootstrap lean-out:** `.cursorrules`, subagent stubs, and skills now point at MCP; canonical knowledge in `packages/bonsai-mcp/knowledge/`.
+
 ## [0.4.1] - 2026-06-15
 
 ### Added

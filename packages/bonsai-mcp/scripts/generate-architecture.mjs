@@ -44,7 +44,7 @@ function generateRpcMap() {
       line: i + 1,
     });
   }
-  return { generatedAt: new Date().toISOString(), methods };
+  return { methods };
 }
 
 function walkDir(dir, base = dir, exts = [".ts", ".tsx", ".py"]) {
@@ -97,7 +97,7 @@ function generateModuleMap() {
       role: MODULE_ROLES[f.path] ?? "",
     }));
 
-  return { generatedAt: new Date().toISOString(), hotspots };
+  return { hotspots };
 }
 
 function generateTestInventory() {
@@ -106,7 +106,6 @@ function generateTestInventory() {
     f.path.includes("test_"),
   );
   return {
-    generatedAt: new Date().toISOString(),
     vitest: vitest.map((f) => f.path),
     pytest: pytest.map((f) => f.path),
   };
@@ -115,7 +114,7 @@ function generateTestInventory() {
 function generatePreviewTiers() {
   const manifest = path.join(REPO_ROOT, "tests", "preview-suite", "tier-manifest.json");
   const data = JSON.parse(fs.readFileSync(manifest, "utf8"));
-  return { generatedAt: new Date().toISOString(), ...data };
+  return data;
 }
 
 function generateEnvVars() {
@@ -133,7 +132,7 @@ function generateEnvVars() {
     if (eq === -1) continue;
     vars.push({ name: t.slice(0, eq), default: t.slice(eq + 1), comment: "" });
   }
-  return { generatedAt: new Date().toISOString(), vars };
+  return { vars };
 }
 
 function writeJson(name, data) {

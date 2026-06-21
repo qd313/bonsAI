@@ -1,5 +1,4 @@
 {
-  "generatedAt": "2026-06-21T19:20:07.058Z",
   "_schema": "bonsAI preview-suite tier batches — see README.md",
   "_nextPhase": "Rebuild decky-plugin-studio VSIX ≥0.1.2 after html2canvas capture; reload Cursor for sidecar IPC.",
   "batches": {

@@ -1,5 +1,4 @@
 {
-  "generatedAt": "2026-06-21T19:20:07.057Z",
   "vitest": [
     "src/components/SettingsTab.mdns.test.ts",
     "src/data/characterCatalog.test.ts",

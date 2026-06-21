@@ -1,0 +1,200 @@
+{
+  "generatedAt": "2026-06-21T19:20:07.010Z",
+  "methods": [
+    {
+      "name": "load_settings",
+      "domain": "settings",
+      "line": 635
+    },
+    {
+      "name": "save_settings",
+      "domain": "settings",
+      "line": 640
+    },
+    {
+      "name": "clear_plugin_data",
+      "domain": "settings",
+      "line": 668
+    },
+    {
+      "name": "log_navigation",
+      "domain": "settings",
+      "line": 741
+    },
+    {
+      "name": "get_deck_ip",
+      "domain": "capabilities",
+      "line": 746
+    },
+    {
+      "name": "test_ollama_connection",
+      "domain": "ollama",
+      "line": 867
+    },
+    {
+      "name": "discover_mdns_ollama_hosts",
+      "domain": "ollama",
+      "line": 1023
+    },
+    {
+      "name": "start_local_ollama_setup",
+      "domain": "ollama",
+      "line": 1067
+    },
+    {
+      "name": "on_stage",
+      "domain": "other",
+      "line": 1127
+    },
+    {
+      "name": "runner",
+      "domain": "other",
+      "line": 1150
+    },
+    {
+      "name": "get_local_ollama_setup_status",
+      "domain": "ollama",
+      "line": 1170
+    },
+    {
+      "name": "cancel_local_ollama_setup",
+      "domain": "ollama",
+      "line": 1175
+    },
+    {
+      "name": "on_stage",
+      "domain": "other",
+      "line": 1251
+    },
+    {
+      "name": "runner",
+      "domain": "other",
+      "line": 1274
+    },
+    {
+      "name": "pull_ollama_models",
+      "domain": "ollama",
+      "line": 1294
+    },
+    {
+      "name": "delete_ollama_model",
+      "domain": "ollama",
+      "line": 1300
+    },
+    {
+      "name": "fetch_ollama_catalog_metadata",
+      "domain": "ollama",
+      "line": 1336
+    },
+    {
+      "name": "fetch_pull_model_catalog",
+      "domain": "ollama",
+      "line": 1354
+    },
+    {
+      "name": "list_recent_screenshots",
+      "domain": "screenshots",
+      "line": 1389
+    },
+    {
+      "name": "append_desktop_debug_note",
+      "domain": "debug",
+      "line": 1421
+    },
+    {
+      "name": "append_desktop_chat_event",
+      "domain": "debug",
+      "line": 1450
+    },
+    {
+      "name": "append_app_log",
+      "domain": "debug",
+      "line": 1484
+    },
+    {
+      "name": "get_input_transparency",
+      "domain": "ask",
+      "line": 1649
+    },
+    {
+      "name": "save_ask_feedback",
+      "domain": "ask",
+      "line": 1663
+    },
+    {
+      "name": "read_host_clipboard_text",
+      "domain": "capabilities",
+      "line": 1677
+    },
+    {
+      "name": "capture_screenshot",
+      "domain": "screenshots",
+      "line": 1683
+    },
+    {
+      "name": "ask_game_ai",
+      "domain": "ask",
+      "line": 1724
+    },
+    {
+      "name": "start_background_game_ai",
+      "domain": "ask",
+      "line": 1830
+    },
+    {
+      "name": "dbg_fe_log",
+      "domain": "debug",
+      "line": 2037
+    },
+    {
+      "name": "get_background_game_ai_status",
+      "domain": "ask",
+      "line": 2050
+    },
+    {
+      "name": "abort_background_game_ai",
+      "domain": "ask",
+      "line": 2075
+    },
+    {
+      "name": "ask_ollama",
+      "domain": "ollama",
+      "line": 2158
+    },
+    {
+      "name": "get_voice_engine_status",
+      "domain": "voice",
+      "line": 2503
+    },
+    {
+      "name": "install_voice_engine",
+      "domain": "voice",
+      "line": 2512
+    },
+    {
+      "name": "runner",
+      "domain": "other",
+      "line": 2539
+    },
+    {
+      "name": "get_voice_install_status",
+      "domain": "voice",
+      "line": 2568
+    },
+    {
+      "name": "start_voice_transcription",
+      "domain": "voice",
+      "line": 2573
+    },
+    {
+      "name": "stop_voice_transcription",
+      "domain": "voice",
+      "line": 2646
+    },
+    {
+      "name": "get_voice_transcription_status",
+      "domain": "voice",
+      "line": 2667
+    }
+  ]
+}

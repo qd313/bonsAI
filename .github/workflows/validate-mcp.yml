@@ -1,0 +1,51 @@
+# Validate bonsai-mcp knowledge and generated architecture snapshots.
+name: Validate MCP knowledge
+
+on:
+  push:
+    paths:
+      - "packages/bonsai-mcp/**"
+      - "main.py"
+      - "src/**"
+      - "tests/preview-suite/**"
+      - ".env.example"
+  pull_request:
+    paths:
+      - "packages/bonsai-mcp/**"
+      - "main.py"
+      - "src/**"
+      - "tests/preview-suite/**"
+      - ".env.example"
+
+jobs:
+  validate-mcp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install MCP package dependencies
+        run: npm ci
+        working-directory: packages/bonsai-mcp
+
+      - name: Regenerate architecture snapshots
+        run: node scripts/generate-architecture.mjs
+        working-directory: packages/bonsai-mcp
+
+      - name: Check generated files are committed
+        run: |
+          git diff --exit-code packages/bonsai-mcp/knowledge/architecture/ || (
+            echo "Stale architecture JSON — run: pnpm run mcp:generate"
+            exit 1
+          )
+
+      - name: Validate knowledge frontmatter
+        run: node scripts/validate-knowledge.mjs
+        working-directory: packages/bonsai-mcp
+
+      - name: Build MCP server
+        run: npm run build
+        working-directory: packages/bonsai-mcp

@@ -1,14 +1,39 @@
-# Decky Plugin Development — Agent Guide
+# Agent guide (IDE-neutral)
 
-This repository is configured for **Decky Plugin Studio**. Use the bundled MCP tools and subagent personas in `.cursor/agents/` when working on this plugin.
+This repository uses **two MCP servers** for agent-assisted development.
 
-## Platform contract (read first)
+## 1. bonsAI knowledge (`bonsai`)
 
-- **Focus-graph first:** D-pad navigation uses Decky `Focusable` callbacks (`onMoveLeft`, `onMoveRight`, `onOKButton`, etc.), not DOM `keydown`.
-- **Build parity:** After changes to `src/`, `main.py`, or `plugin.json`, run `plugin.build` (MCP) or `./scripts/build.ps1` / `./scripts/build.sh` before on-device QA.
-- **Preview vs on-device:** Use `preview.start` for fast iteration; use `deck.deploy` + on-device QA for focus/layout bugs the preview cannot reproduce faithfully.
+In-repo server: [`packages/bonsai-mcp/`](packages/bonsai-mcp/). Setup: [docs/mcp-setup.md](docs/mcp-setup.md).
 
-## MCP tools (Decky Plugin Studio)
+**Session start:** `bonsai.session.bootstrap`
+
+| Tool | Purpose |
+|------|---------|
+| `bonsai.session.bootstrap` | Always-on policies + index |
+| `bonsai.policy.list` / `bonsai.policy.get` | Policy slices (git, focus, deploy, …) |
+| `bonsai.workflow.get` | Deck dev loop, tier QA, preview, screenshot ingest |
+| `bonsai.docs.search` / `bonsai.docs.get` | Search or read `docs/` |
+| `bonsai.arch.rpcMap` | RPC methods from `main.py` |
+| `bonsai.arch.hotspots` | Change-risk hotspots + test inventory |
+| `bonsai.arch.previewTiers` | Preview suite tier manifest |
+| `bonsai.report.archive` | Append to `.cursor/agents/SUBAGENT_REPORTS.md` |
+
+| Prompt | Purpose |
+|--------|---------|
+| `bonsai/persona/master-debugger` | Decky focus, layout, log capture |
+| `bonsai/persona/security-auditor` | Security / PII review |
+| `bonsai/persona/foss-advocate` | FOSS / transparency |
+| `bonsai/persona/refactor-specialist` | Maintainability sweeps |
+| `bonsai/persona/red-team` / `bonsai/persona/blue-team` | Ship / scope counsel |
+| `bonsai/triage/focus-bug` | Short focus triage |
+| `bonsai/triage/empty-ai-reply` | AI envelope debugging |
+
+Resources: `bonsai://policy/{id}`, `bonsai://workflow/{id}`, `bonsai://persona/{id}`, `bonsai://architecture/{name}`, `bonsai://index`.
+
+## 2. Decky Plugin Studio (`decky-plugin-studio`)
+
+Operational Deck preview and deploy. Requires the [Decky Plugin Studio](https://github.com/SteamDeckHomebrew/decky-plugin-studio) VSIX.
 
 | Tool | Purpose |
 |------|---------|
@@ -16,50 +41,30 @@ This repository is configured for **Decky Plugin Studio**. Use the bundled MCP t
 | `deck.startTunnel` / `deck.stopTunnel` | Reverse SSH tunnel for NDJSON ingest |
 | `deck.probeIngest` / `deck.tailIngest` | Debug log capture from Deck |
 | `deck.captureScreenshot` | Pull Deck UI screenshot |
-| `deck.deploy` | Build + deploy (local SteamOS/Bazzite or remote SSH) |
+| `deck.deploy` | Build + deploy to Deck |
 | `plugin.detect` / `plugin.build` / `plugin.verifyZip` | Workspace validation and build |
 | `preview.start` / `preview.stop` / `preview.status` | In-IDE QAM preview |
 | `preview.injectFocusEvent` | Simulate D-pad input |
-| `preview.setHardware` | Drive hardware simulator (temps, battery, fans) |
-| `preview.runSequence` | Replay input sequence + return DOM snapshot |
+| `preview.setHardware` | Hardware simulator |
+| `preview.runSequence` | Input sequence + DOM snapshot |
 | `preview.callRpc` / `preview.readLog` | Backend RPC and log tail |
-| `preview.snapshotDom` / `preview.captureScreenshot` | Idle DOM inspect + preview PNG under `screenshots/preview/` |
+| `preview.snapshotDom` / `preview.captureScreenshot` | DOM inspect + preview PNG |
 
-## Preview test suite (bonsAI)
-
-From repo root (preview panel must be open — **Decky: Open Preview**):
+## Preview test suite
 
 ```bash
 pnpm run test:preview:tier -- --tier=tier0 --evidence --write
 pnpm run test:preview -- --filter=SMOKE-A
 ```
 
-PASS → `docs/testing.md`; FAIL → `docs/testing.md#failures-and-retries`. Agent loop: `.cursor/skills/bonsai-tier-qa/SKILL.md`.
+Workflow: `bonsai.workflow.get` with `id=tier-qa`. Deck-only E-bucket: `tests/preview-suite/deck-only-e-bucket.json`.
 
-Deck-only bucket **E** scenarios are documented in `tests/preview-suite/deck-only-e-bucket.json` — use `deck.deploy` + device runbook.
+## Git policy
 
-## Subagents
-
-Invoke personas from `.cursor/agents/` for specialized reviews:
-
-- **master-debugger** — Decky/Steam focus, layout, ingest/tunnel workflow
-- **refactor-specialist** — maintainability sweeps
-- **security-auditor** — RPC, logging, permissions
-- **foss-advocate** — FOSS/transparency
-- **bonsai-tier-qa** — tier-by-tier preview QA, evidence writeback, E-bucket Deck path
-- **red-team** / **blue-team** — scope and ship decisions
-
-Archive substantive runs in `.cursor/agents/SUBAGENT_REPORTS.md`.
-
-## Git & remote branches
-
-- **Local agents:** Do not `git push` or publish branches unless the user explicitly asks in the current message.
-- **Never push `cursor/*` branches** — work on `experimental`, `features`, `main`, or a user-named branch; merge locally.
-- **Bugbot / Cloud Agents:** Repo policy in `.cursor/BUGBOT.md`. Dashboard: [Bugbot](https://cursor.com/dashboard/bugbot) — keep **Autofix Off** unless you want auto-pushed investigation branches.
+Do not `git push` unless the user explicitly asks. No `cursor/*` branches. See `bonsai://policy/git-branch`.
 
 ## Preview limitations
 
 - Approximate `@decky/ui` mocks (not pixel-perfect Steam CEF)
-- Hardware reads served from simulator; writes logged/mocked
-- Ollama allowed at `127.0.0.1:11434` by default; other HTTP blocked
-- All Decky permissions treated as granted in preview
+- Hardware reads from simulator; Ollama at `127.0.0.1:11434` by default
+- Focus/layout bugs need on-device QA via `deck.deploy`

@@ -1,0 +1,8 @@
+---
+description: Bootstrap pointer to bonsai-mcp knowledge server
+alwaysApply: true
+---
+
+# bonsAI MCP bootstrap
+
+Call **`bonsai.session.bootstrap`** at session start. Policies and workflows live in **`packages/bonsai-mcp/knowledge/`** — see [docs/mcp-setup.md](../../docs/mcp-setup.md).

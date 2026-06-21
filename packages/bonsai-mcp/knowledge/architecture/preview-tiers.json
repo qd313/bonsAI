@@ -1,0 +1,164 @@
+{
+  "generatedAt": "2026-06-21T19:20:07.058Z",
+  "_schema": "bonsAI preview-suite tier batches — see README.md",
+  "_nextPhase": "Rebuild decky-plugin-studio VSIX ≥0.1.2 after html2canvas capture; reload Cursor for sidecar IPC.",
+  "batches": {
+    "preGate": {
+      "runbookTier": null,
+      "description": "Regression §1 shell gates (Vitest + pytest sandbox/capabilities); pyro safety → pnpm run test:py.",
+      "scenarioIds": [
+        "UNIT-A-vitest-gates",
+        "UNIT-B-pytest-sandbox-tdp"
+      ],
+      "sourceFiles": [
+        "unit-gates.json"
+      ]
+    },
+    "tier0": {
+      "runbookTier": 0,
+      "description": "SMOKE-A → SMOKE-C → SMOKE-F (testing.md Device QA runbook Tier 0).",
+      "scenarioIds": [
+        "SMOKE-A-golden-path",
+        "SMOKE-C-perms-gate",
+        "SMOKE-F-disable-sanitize",
+        "SMOKE-F-shortcut-deck",
+        "SMOKE-F-vac-capability-off"
+      ],
+      "sourceFiles": [
+        "tier0-smokes.json"
+      ],
+      "requiresPreview": true
+    },
+    "tier1Core": {
+      "runbookTier": 1,
+      "description": "SMOKE-B, SMOKE-E, SMOKE-H core smokes.",
+      "scenarioIds": [
+        "SMOKE-B-tdp-8w-sandbox",
+        "SMOKE-E-strategy-mode",
+        "BG-ASK-reopen-status"
+      ],
+      "sourceFiles": [
+        "tier1-tdp.json",
+        "tier2-strategy-streaming.json"
+      ],
+      "requiresPreview": true,
+      "requiresOllama": true
+    },
+    "tier1Boundaries": {
+      "runbookTier": 3,
+      "description": "TDP/GPU clamp scenarios (runbook Tier 3 boundaries; split batch if Tier 1 core is slow).",
+      "scenarioIds": [
+        "TDP-15W-clamp",
+        "TDP-3W-clamp",
+        "TDP-1W-clamp-to-3",
+        "TDP-20W-clamp-to-15",
+        "GPU-800-advisory"
+      ],
+      "sourceFiles": [
+        "tier1-tdp.json"
+      ],
+      "requiresPreview": true,
+      "requiresOllama": true
+    },
+    "tier2": {
+      "runbookTier": 2,
+      "description": "Opt-in Tier 2 blocks: char/VAC/streaming/mDNS/desktop/vision/steam jump.",
+      "scenarioIds": [
+        "STREAM-01-flag-off",
+        "MDNS-FIND-rpc",
+        "MODEL-POLICY-load",
+        "CHAR-VOICE-load-settings",
+        "VAC-02-empty-key",
+        "DESKTOP-NOTES-rpc",
+        "VISION-V1-spot-dom",
+        "STEAM-JUMP-shim"
+      ],
+      "sourceFiles": [
+        "tier2-strategy-streaming.json",
+        "tier2-char-vac.json"
+      ],
+      "requiresPreview": true,
+      "requiresOllama": true
+    },
+    "hookSmoke": {
+      "runbookTier": 0,
+      "description": "callTestHook IPC smoke (setTab + getState) before tier3UI hook scenarios.",
+      "scenarioIds": [
+        "HOOK-smoke-setTab"
+      ],
+      "sourceFiles": [
+        "hook-smoke.json"
+      ],
+      "requiresPreview": true
+    },
+    "tier3UI": {
+      "runbookTier": "2-3",
+      "description": "UI navigation via preview hooks + focus-graph sequences (tab tour, settings, permissions).",
+      "scenarioIds": [
+        "UI-A-beta-modal",
+        "UI-A-tab-tour",
+        "UI-A-ollama-conn",
+        "UI-A-permissions-ui",
+        "UI-A-mode-menu",
+        "UI-A-transparency-expand",
+        "UI-A-debug-tab",
+        "UI-A-presets-visible"
+      ],
+      "sourceFiles": [
+        "tier3-ui-navigation.json"
+      ],
+      "requiresPreview": true,
+      "requiresOllama": true
+    },
+    "tier2Deep": {
+      "runbookTier": "2-3",
+      "description": "Deep Tier 2: streaming flags, VAC matrix, BG-ASK lifecycle, sysfs TDP apply + clamp asserts.",
+      "scenarioIds": [
+        "STREAM-02-flag-on-speed",
+        "STREAM-03-strategy-spoiler",
+        "STREAM-04-stop-mid-stream",
+        "STREAM-05-transparency-terminal",
+        "VAC-03-valid-key-steamid",
+        "VAC-04-profile-url",
+        "VAC-05-vanity-url",
+        "VAC-06-perm-off-after-key",
+        "BG-ASK-lifecycle",
+        "SMOKE-B-apply-with-perms",
+        "TDP-boundary-clamps-assert",
+        "THINKING-01-pending-phases",
+        "STREAM-06-smooth-reveal",
+        "FEEDBACK-01-reply-action-chrome"
+      ],
+      "sourceFiles": [
+        "tier2-deep.json"
+      ],
+      "requiresPreview": true,
+      "requiresOllama": true
+    },
+    "deckOnly": {
+      "runbookTier": "3-4",
+      "description": "E-bucket — deck.deploy + on-device QA; not runnable in preview.",
+      "scenarioIds": [
+        "E-QAMP-DECK-01",
+        "E-CEF-CORS-ollama-pc",
+        "E-CLEAN-INSTALL"
+      ],
+      "sourceFiles": [
+        "deck-only-e-bucket.json"
+      ],
+      "requiresPreview": false,
+      "requiresDeck": true
+    }
+  },
+  "executionOrder": [
+    "preGate",
+    "tier0",
+    "tier1Core",
+    "tier1Boundaries",
+    "tier2",
+    "hookSmoke",
+    "tier3UI",
+    "tier2Deep",
+    "deckOnly"
+  ]
+}

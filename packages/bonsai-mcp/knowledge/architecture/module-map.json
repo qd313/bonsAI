@@ -1,0 +1,205 @@
+{
+  "generatedAt": "2026-06-21T19:20:07.050Z",
+  "hotspots": [
+    {
+      "path": "main.py",
+      "lines": 2693,
+      "role": "Decky RPC entrypoints and orchestration"
+    },
+    {
+      "path": "src/components/MainTab.tsx",
+      "lines": 1888,
+      "role": "Unified ask/search surface, chunks, suggestion UI"
+    },
+    {
+      "path": "src/index.tsx",
+      "lines": 1871,
+      "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
+    },
+    {
+      "path": "src/styles/bonsaiScopeStylesheet.ts",
+      "lines": 1868,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/voice_transcription_service.py",
+      "lines": 1062,
+      "role": ""
+    },
+    {
+      "path": "src/components/characterPlaceholderEmoticonGrids.ts",
+      "lines": 1024,
+      "role": ""
+    },
+    {
+      "path": "src/components/OllamaWhereAiRunsSection.tsx",
+      "lines": 986,
+      "role": ""
+    },
+    {
+      "path": "src/components/PullModelsModal.tsx",
+      "lines": 982,
+      "role": ""
+    },
+    {
+      "path": "src/hooks/useBonsaiAskOrchestration.ts",
+      "lines": 794,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/local_ollama_setup_service.py",
+      "lines": 774,
+      "role": ""
+    },
+    {
+      "path": "src/v0-drafts/ui/sidebar.tsx",
+      "lines": 727,
+      "role": ""
+    },
+    {
+      "path": "src/utils/settingsAndResponse.ts",
+      "lines": 688,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/ollama_prompts.py",
+      "lines": 674,
+      "role": ""
+    },
+    {
+      "path": "src/components/CharacterPickerModal.tsx",
+      "lines": 665,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/ollama_service.py",
+      "lines": 607,
+      "role": "Prompt build, Ollama HTTP, streaming"
+    },
+    {
+      "path": "src/v0-drafts/page.tsx",
+      "lines": 512,
+      "role": ""
+    },
+    {
+      "path": "src/components/SettingsTab.tsx",
+      "lines": 493,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/game_ai_request.py",
+      "lines": 479,
+      "role": ""
+    },
+    {
+      "path": "src/components/SettingsTabConnectionTimeoutSlider.tsx",
+      "lines": 478,
+      "role": ""
+    },
+    {
+      "path": "src/hooks/usePluginSettings.ts",
+      "lines": 471,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/settings_service.py",
+      "lines": 462,
+      "role": "Load/save/merge settings.json"
+    },
+    {
+      "path": "src/components/MainTabPresetAnimatedChips.tsx",
+      "lines": 446,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/desktop_note_service.py",
+      "lines": 432,
+      "role": ""
+    },
+    {
+      "path": "refactor_helpers.py",
+      "lines": 426,
+      "role": "Model selection, TDP parse helpers, URLs"
+    },
+    {
+      "path": "src/v0-drafts/tab-icons.tsx",
+      "lines": 401,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/ai_character_service.py",
+      "lines": 398,
+      "role": ""
+    },
+    {
+      "path": "src/utils/settingsAndResponse.test.ts",
+      "lines": 367,
+      "role": ""
+    },
+    {
+      "path": "src/data/pullModelCatalog.ts",
+      "lines": 357,
+      "role": ""
+    },
+    {
+      "path": "src/v0-drafts/ui/chart.tsx",
+      "lines": 352,
+      "role": ""
+    },
+    {
+      "path": "src/components/SettingsTabOllamaKeepAliveSlider.tsx",
+      "lines": 348,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/screenshot_media.py",
+      "lines": 340,
+      "role": ""
+    },
+    {
+      "path": "src/components/icons.tsx",
+      "lines": 331,
+      "role": ""
+    },
+    {
+      "path": "src/components/DeveloperTab.tsx",
+      "lines": 320,
+      "role": ""
+    },
+    {
+      "path": "src/v0-drafts/ui/menubar.tsx",
+      "lines": 277,
+      "role": ""
+    },
+    {
+      "path": "src/v0-drafts/ui/dropdown-menu.tsx",
+      "lines": 258,
+      "role": ""
+    },
+    {
+      "path": "src/data/settingsDatabase.ts",
+      "lines": 254,
+      "role": ""
+    },
+    {
+      "path": "src/v0-drafts/ui/context-menu.tsx",
+      "lines": 253,
+      "role": ""
+    },
+    {
+      "path": "src/components/OllamaTab.tsx",
+      "lines": 245,
+      "role": ""
+    },
+    {
+      "path": "src/v0-drafts/ui/field.tsx",
+      "lines": 245,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/steam_vac_service.py",
+      "lines": 245,
+      "role": ""
+    }
+  ]
+}

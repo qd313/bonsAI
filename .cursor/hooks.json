@@ -1,9 +1,14 @@
 {
   "version": 1,
   "hooks": {
+    "sessionStart": [
+      {
+        "command": "node .cursor/hooks/session-bootstrap.mjs"
+      }
+    ],
     "afterFileEdit": [
       {
-        "matcher": "src/**/*.{ts,tsx}|main.py|plugin.json",
+        "matcher": "src\\/.*\\.(ts|tsx)|main\\.py|plugin\\.json",
         "command": "echo After Deck-facing edits: run pnpm run test:preview (requires Decky: Open Preview) or pnpm run build",
         "enabled": false
       }

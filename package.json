@@ -16,7 +16,11 @@
     "test:preview:tier": "node scripts/run-preview-suite.mjs --evidence",
     "build:preview": "node scripts/build-preview.mjs",
     "version:sync": "node scripts/sync-version-from-plugin.mjs",
-    "version:bump": "node scripts/bump-version.mjs"
+    "version:bump": "node scripts/bump-version.mjs",
+    "mcp:install": "npm install --prefix packages/bonsai-mcp",
+    "mcp:generate": "node packages/bonsai-mcp/scripts/generate-architecture.mjs",
+    "mcp:build": "npm run build --prefix packages/bonsai-mcp",
+    "mcp:validate": "node packages/bonsai-mcp/scripts/validate-knowledge.mjs"
   },
   "repository": {
     "type": "git",

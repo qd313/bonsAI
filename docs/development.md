@@ -33,6 +33,17 @@ cd bonsAI
 
 Open the `~/bonsAI` folder in Cursor.
 
+## Agent / IDE MCP setup
+
+IDE agents use the in-repo **bonsai-mcp** knowledge server plus **Decky Plugin Studio** for deploy/preview. See [mcp-setup.md](mcp-setup.md) and [AGENTS.md](../AGENTS.md).
+
+```bash
+pnpm run mcp:install
+pnpm run mcp:build
+```
+
+At session start, agents should call MCP tool **`bonsai.session.bootstrap`**.
+
 ## One-time developer setup
 
 From the repo root:

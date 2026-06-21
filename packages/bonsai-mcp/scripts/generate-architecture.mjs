@@ -47,17 +47,26 @@ function generateRpcMap() {
   return { methods };
 }
 
+const SKIP_DIR_NAMES = new Set([
+  "node_modules",
+  "dist",
+  "test-evidence",
+  "v0-drafts",
+]);
+
 function walkDir(dir, base = dir, exts = [".ts", ".tsx", ".py"]) {
   const results = [];
   if (!fs.existsSync(dir)) return results;
   for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (ent.name.startsWith(".") || ent.name === "node_modules" || ent.name === "dist") continue;
+    if (ent.name.startsWith(".") || SKIP_DIR_NAMES.has(ent.name)) continue;
     const full = path.join(dir, ent.name);
     if (ent.isDirectory()) {
       results.push(...walkDir(full, base, exts));
     } else if (exts.some((e) => ent.name.endsWith(e))) {
+      const rel = path.relative(REPO_ROOT, full).replace(/\\/g, "/");
+      if (rel.includes("/v0-drafts/") || rel.startsWith("src/v0-drafts/")) continue;
       results.push({
-        path: path.relative(REPO_ROOT, full).replace(/\\/g, "/"),
+        path: rel,
         lines: fs.readFileSync(full, "utf8").split("\n").length,
       });
     }
@@ -90,7 +99,7 @@ function generateModuleMap() {
     }));
 
   const hotspots = [...topLevel, ...srcFiles.filter((f) => f.lines > 200), ...pyServices]
-    .sort((a, b) => b.lines - a.lines)
+    .sort((a, b) => b.lines - a.lines || a.path.localeCompare(b.path))
     .slice(0, 40)
     .map((f) => ({
       ...f,
@@ -106,8 +115,8 @@ function generateTestInventory() {
     f.path.includes("test_"),
   );
   return {
-    vitest: vitest.map((f) => f.path),
-    pytest: pytest.map((f) => f.path),
+    vitest: vitest.map((f) => f.path).sort(),
+    pytest: pytest.map((f) => f.path).sort(),
   };
 }
 

@@ -51,11 +51,6 @@
       "role": ""
     },
     {
-      "path": "src/v0-drafts/ui/sidebar.tsx",
-      "lines": 727,
-      "role": ""
-    },
-    {
       "path": "src/utils/settingsAndResponse.ts",
       "lines": 688,
       "role": ""
@@ -74,11 +69,6 @@
       "path": "py_modules/backend/services/ollama_service.py",
       "lines": 607,
       "role": "Prompt build, Ollama HTTP, streaming"
-    },
-    {
-      "path": "src/v0-drafts/page.tsx",
-      "lines": 512,
-      "role": ""
     },
     {
       "path": "src/components/SettingsTab.tsx",
@@ -121,11 +111,6 @@
       "role": "Model selection, TDP parse helpers, URLs"
     },
     {
-      "path": "src/v0-drafts/tab-icons.tsx",
-      "lines": 401,
-      "role": ""
-    },
-    {
       "path": "py_modules/backend/services/ai_character_service.py",
       "lines": 398,
       "role": ""
@@ -138,11 +123,6 @@
     {
       "path": "src/data/pullModelCatalog.ts",
       "lines": 357,
-      "role": ""
-    },
-    {
-      "path": "src/v0-drafts/ui/chart.tsx",
-      "lines": 352,
       "role": ""
     },
     {
@@ -166,23 +146,13 @@
       "role": ""
     },
     {
-      "path": "src/v0-drafts/ui/menubar.tsx",
-      "lines": 277,
-      "role": ""
-    },
-    {
-      "path": "src/v0-drafts/ui/dropdown-menu.tsx",
-      "lines": 258,
-      "role": ""
-    },
-    {
       "path": "src/data/settingsDatabase.ts",
       "lines": 254,
       "role": ""
     },
     {
-      "path": "src/v0-drafts/ui/context-menu.tsx",
-      "lines": 253,
+      "path": "py_modules/backend/services/steam_vac_service.py",
+      "lines": 245,
       "role": ""
     },
     {
@@ -191,13 +161,43 @@
       "role": ""
     },
     {
-      "path": "src/v0-drafts/ui/field.tsx",
-      "lines": 245,
+      "path": "py_modules/backend/services/ollama_mdns_discovery_service.py",
+      "lines": 240,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/steam_vac_service.py",
-      "lines": 245,
+      "path": "src/components/MainTabAskModeMenuPopover.tsx",
+      "lines": 230,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/pull_model_catalog_service.py",
+      "lines": 217,
+      "role": ""
+    },
+    {
+      "path": "src/components/VoiceInputSettingsSection.tsx",
+      "lines": 217,
+      "role": ""
+    },
+    {
+      "path": "src/data/presets.ts",
+      "lines": 215,
+      "role": ""
+    },
+    {
+      "path": "src/components/OllamaModelsHubModal.tsx",
+      "lines": 210,
+      "role": ""
+    },
+    {
+      "path": "src/data/characterCatalog.ts",
+      "lines": 206,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/model_policy.py",
+      "lines": 200,
       "role": ""
     }
   ]

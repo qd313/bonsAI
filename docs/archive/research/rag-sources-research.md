@@ -1,3 +1,5 @@
+> **Archived** — see [archive README](README.md). Active doc: [roadmap.md](../roadmap.md) or [development.md](../development.md)
+
 # RAG knowledge sources (research)
 
 This note supports the roadmap item **RAG knowledge base (PC-hosted ingest + Deck query)**. It is **planning only** until the ingest service and Deck integration are implemented.

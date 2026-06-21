@@ -5,7 +5,7 @@ This document is the advanced/power-user guide for bonsAI.
 For first-time setup, use `README.md` first (simple self-hosted install flow, Ollama setup, and starter model pulls).
 For contributor workflows, use [development.md](development.md) (Windows/Bazzite build and deploy paths).
 
-Roadmap and future features: [roadmap.md](roadmap.md). Steam Input search/jump and deep-link feasibility notes: [steam-input-research.md](steam-input-research.md). Opt-in character voice preset planning: [voice-character-catalog.md](voice-character-catalog.md).
+Roadmap and future features: [roadmap.md](roadmap.md). Steam Input search/jump and deep-link feasibility notes: [archive/research/steam-input-research.md](archive/research/steam-input-research.md). Opt-in character voice preset planning: [archive/research/voice-character-catalog.md](archive/research/voice-character-catalog.md).
 
 This file tracks resolved issues, hardware-specific overrides, and architectural constraints for the bonsAI (Backend Ollama Node for Steam A.I.) project.
 
@@ -360,7 +360,7 @@ Then `sudo systemctl restart avahi-daemon` and ensure `OLLAMA_HOST=0.0.0.0` and 
 
 Because Decky Loader acts as a secure container for plugins, we cannot force a custom QAM tile for BonsAI. On standard SteamOS or a Bazzite Gamescope session, you can use a native **Steam Input** chord macro to open BonsAI from almost anywhere (in-game or the Home screen) with one combination after setup.
 
-**Short path in the main README:** [README.md](../README.md) (section *Open bonsAI quickly*). This section is the full recipe, delay ladder, and maintainer checks. For default plugin-shell smoke, see [regression-and-smoke.md](regression-and-smoke.md) §3 (Plugin shell), including the optional **Guide-chord / macro** row.
+**Short path in the main README:** [README.md](../README.md) (section *Open bonsAI quickly*). This section is the full recipe, delay ladder, and maintainer checks. For default plugin-shell smoke, see [testing.md](testing.md#regression-gates) §3 (Plugin shell), including the optional **Guide-chord / macro** row.
 
 **In-app help (no Ollama):** In the main tab Ask field, send exactly `bonsai:shortcut-setup-deck` or `bonsai:shortcut-setup-stadia` (optional leading `/`, trim + casefold) for a **fixed** reply, **Open Controller settings** when Permissions allow, and a pointer here. bonsAI **cannot** auto-create the chord; you still build the macro in **Controller → Guide Button Chord Layout**.
 
@@ -411,7 +411,7 @@ Hold **Steam** and press your chord button (e.g. **R4**). You should see QAM ope
 
 #### Verification checklist (maintainers / release QA)
 
-Run with a build that also satisfies [regression-and-smoke.md](regression-and-smoke.md) §3 *Plugin shell* when you touch QAM, Decky, or first paint.
+Run with a build that also satisfies [testing.md](testing.md#regression-gates) §3 *Plugin shell* when you touch QAM, Decky, or first paint.
 
 - [ ] Chord triggers from the **Home** shell and with a **game focused** (at least one title).
 - [ ] QAM opens reliably; the rail moves until **Decky** is selected, then **Decky** opens.
@@ -434,5 +434,5 @@ Phase 1 is the **completed** scope for this feature; full search + catalog (Phas
 
 1. **MainRunningApp:** The jump uses `Router.MainRunningApp` from Decky. A title should be running or focused in a way Steam reports to the client. If you are only on the Steam shell with no game, start or focus a game and retry.
 2. **steam:// behavior:** Phase 1 uses `steam://controllerconfig/<appId>` via `SteamClient.URL.ExecuteSteamURL` (same family as Settings search `steam://open/settings/...`). If nothing happens, confirm Steam handled other `steam://` links from bonsAI recently; restart Steam if the client URL dispatcher is stuck.
-3. **After a Steam update:** Big Picture routes and `steam://` targets can change. Follow the smoke-test and changelog discipline in [steam-input-research.md](steam-input-research.md) and update `src/data/steam-input-lexicon.ts` if needed.
+3. **After a Steam update:** Big Picture routes and `steam://` targets can change. Follow the smoke-test and changelog discipline in [archive/research/steam-input-research.md](archive/research/steam-input-research.md) and update `src/data/steam-input-lexicon.ts` if needed.
 4. **Wrong tab inside controller UI:** Sub-tabs may be local React state without distinct URLs. Use breadcrumb hints in the lexicon entry and optional `primaryPathTemplate` once you have verified paths from CEF sniffing.

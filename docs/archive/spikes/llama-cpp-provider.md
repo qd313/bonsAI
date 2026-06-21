@@ -1,3 +1,5 @@
+> **Archived** — see [archive README](README.md). Active doc: [development.md](../development.md)
+
 # Llama.cpp provider spike (POC)
 
 **Status:** **POC scaffold shipped** (2026-05-20) — maintainer env-gated only.  

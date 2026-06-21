@@ -1,3 +1,5 @@
+> **Archived** — see [archive README](README.md). Active doc: [roadmap.md](../roadmap.md)
+
 # Post-P0 feature backlog & model truth plan
 
 **Status:** Implemented (2026-05-20) — see repo changelog / roadmap mirrors; SteamOS share path remains user-owned out of scope.
@@ -79,7 +81,7 @@ Based on `refactor_helpers.py` chains, `pullModelCatalog.ts`, and Deck ~16GB VRA
 
 ### Cursor visibility automation — ★★★★
 
-- **Files:** `docs/spikes/cursor-deck-visibility.md`, CI or maintainer scripts (not Deck runtime).
+- **Files:** `docs/archive/spikes/cursor-deck-visibility.md`, CI or maintainer scripts (not Deck runtime).
 - **Acceptance:** Documented workflow for agent log capture; no hardcoded dev IPs in repo.
 
 ---

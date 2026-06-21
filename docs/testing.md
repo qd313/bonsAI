@@ -1,11 +1,311 @@
+# bonsAI testing
+
+**Purpose:** PR regression gates, Deck QA run order, shipped-feature coverage, Test Results, and failure retries.
+
+Related: [roadmap.md](roadmap.md) (planning), [development.md](development.md) (build/deploy), [troubleshooting.md](troubleshooting.md) (setup). Evidence artifacts: [test-evidence/](test-evidence/).
+
+---
+
+## Regression gates
+
+# Regression matrix and device smoke (standing gate)
+
+**Purpose:** Default checklist for **every PR** and **every Deck-facing change** before merge or release. Manual Deck work runs from **[testing.md](testing.md#device-qa-runbook)** (Tier 0–1 first). Scenario detail and coverage index: **[testing.md](testing.md#shipped-feature-coverage)**. Hotspots: **[development.md](development.md#change-risk-hotspots)**.
+
+**Contract:** Run **§1** always. Add **§2** rows that match touched paths. Run **§3** when `src/`, `main.py`, `plugin.json`, or Deck RPC contracts change (per [.cursorrules](../.cursorrules)).
+
+---
+
+### 1. Automated gates (every change set)
+
+Run from repo root (Windows or Linux shell as appropriate):
+
+| Step | Command | When |
+|------|---------|------|
+| Typecheck | `pnpm exec tsc --noEmit` | Any TS change or dependency bump |
+| Frontend unit tests | `pnpm test` | Any `src/` change (includes Vitest headless Decky harness under `src/test-harness/`) |
+| Backend unit tests | `pnpm run test:py` | Any `main.py`, `py_modules/backend/`, `refactor_helpers.py`, or `tests/` change |
+| Bundle | `pnpm run build` | Any `src/` or build config change |
+| Preview suite | `pnpm run test:preview:tier -- --tier=<batch> --write` | Tier QA batches; requires **Decky: Open Preview** for C/D buckets; evidence → `docs/test-evidence/` |
+| Deck deploy build | `.\scripts\build.ps1` or `./scripts/build.sh` | Any `src/`, `main.py`, `plugin.json`, or Deck-facing asset change |
+| Plugin zip CI | Run **Build plugin zip** in Actions (or `bash scripts/verify-decky-plugin-zip.sh` on a local `out/*.zip`) | Changes to [`.github/workflows/build-plugin-zip.yml`](../.github/workflows/build-plugin-zip.yml) or [`scripts/verify-decky-plugin-zip.sh`](../scripts/verify-decky-plugin-zip.sh) |
+
+If a step does not apply (e.g. docs-only), state **N/A** in the PR description and still run the steps that do apply.
+
+---
+
+### 2. PR-scoped matrix (add focused checks)
+
+Use the **Touched area** column to extend §1; prefer the narrowest tests first.
+
+| Touched area | Extra automated focus | Manual / runbook tier |
+|--------------|----------------------|------------------------|
+| `backend/services/settings_service.py`, `settingsAndResponse.ts`, Settings UI | `tests/test_settings_service.py`, `src/utils/settingsAndResponse.test.ts` | Tier 0 **SMOKE-A** + setting persist spot-check |
+| `backend/services/ollama_service.py`, `refactor_helpers.py` | `tests/test_ollama_service.py`, `tests/test_refactor_helpers.py` | Tier 1 one Ask per changed mode ([testing.md](testing.md#shipped-feature-coverage)) |
+| `backend/services/desktop_note_service.py` | `tests/test_desktop_note_service.py` | Tier 2 desktop notes block |
+| `backend/services/ai_character_service.py`, character UI | `tests/test_ai_character_service.py`, `tests/test_pyro_asshole_safety.py`, catalog/accent tests under `src/data/` | Tier 2 character / Pyro ([testing.md](testing.md#shipped-feature-coverage) PYRO-EGG) |
+| `backend/services/capabilities.py`, Permissions UI | `tests/test_capabilities.py` | Tier 0 **SMOKE-C** |
+| `src/components/MainTab.tsx`, unified input | `pnpm test` (utils/data) | Tier 0 **SMOKE-A** |
+| `src/index.tsx` tabs, CSS, RPC wiring | Full §1 + §3 | Tier 0 **SMOKE-A** |
+| `ollama_mdns_discovery_service.py`, Connection **Find LAN** | `tests/test_ollama_mdns_discovery_service.py` | Tier 2 mDNS block; N/A without publish |
+
+---
+
+### 3. Device smoke (Deck-facing PRs)
+
+Run after **`scripts/build.ps1`** or **`scripts/build.sh`** succeeds. Use **[testing.md](testing.md#device-qa-runbook)** — do not duplicate the full matrix here.
+
+### Required: Runbook Tier 0 (~15 min, BPM)
+
+Complete **SMOKE-A → SMOKE-C → SMOKE-F** and check off runbook + linked [testing.md](testing.md#shipped-feature-coverage) rows. State **Pass / Partial / Fail / N/A** in the PR.
+
+| Smoke | When N/A |
+|-------|----------|
+| **SMOKE-A** Golden path | Never for Deck-facing UI/RPC changes |
+| **SMOKE-C** Permission gate | Never when Permissions or gated actions touched |
+| **SMOKE-F** Deterministic commands | Docs-only with no sanitizer/shortcut/VAC path changes |
+
+### Add Tier 1 when touching Ask / TDP / strategy / game context
+
+| Smoke | Trigger |
+|-------|---------|
+| **SMOKE-B** TDP apply 8W | TDP, hardware permission, QAMP banner, `apply_tdp` |
+| **SMOKE-E** Strategy one-shot | Strategy mode, spoilers, `ask_mode: strategy` |
+| **SMOKE-H** Background reopen | Background Ask / pending restore |
+| **SMOKE-D / G** | Preset or vision changes — spot-check if already Verified |
+
+Full Tier 2–4 blocks (VAC matrix, Proton logs, QAMP reboot, clean install): see runbook; required before **release tag**, not every PR.
+
+---
+
+### 4. Prompt-testing and coverage
+
+Qualitative scenarios, **Shipped feature coverage** table, and Test Results log: **[testing.md](testing.md#shipped-feature-coverage)**.  
+Execution order: **[testing.md](testing.md#device-qa-runbook)**.
+
+After prompt/routing changes, add or update scenario rows and run the matching runbook tier.
+
+---
+
+### 5. Release / clean install proof (Runbook Tier 4)
+
+**Purpose:** Prove a **new user** can succeed using only **[README.md](../README.md)** plus **[development.md](development.md) → Release (plugin zip)** for where the `.zip` comes from—no unstated maintainer shortcuts.
+
+**Prep:** Start from a target where **Ollama is not installed yet** on the path you are testing (**PC on LAN** or **Deck**). Decky Loader is installed.
+
+**Steps (checklist):**
+
+1. Install Ollama per README **Detailed setup** / **Quick start** (official installer or install script on the Ollama host).
+2. Obtain the plugin `.zip`: **GitHub Release** asset and/or **Actions** artifact from workflow **Build plugin zip** (see [development.md](development.md)).
+3. Install the zip in Decky (developer / local ZIP path; wording varies by Loader version).
+4. In bonsAI **Settings**, set the Ollama base URL; pull at least one text model (README **Quick start**, step 4).
+5. Send one **text** Ask and confirm a normal reply (no import/traceback errors).
+
+**Log (append a row after each full pass):**
+
+| Date | Git SHA or tag | Workflow run ID (if CI zip) | Result | SteamOS / Decky | Ollama host (PC LAN / Deck) | Notes |
+|------|----------------|-------------------------------|--------|-----------------|-----------------------------|-------|
+| *(example)* | | | Pass / Partial / Fail | | | |
+
+---
+
+---
+
+## Device QA runbook
+
+# bonsAI device QA runbook
+
+**Purpose:** What to run on Steam Deck **next**, in priority order. Quick wins first; heavy setup last.
+
+
+Record **build id / git SHA** and **SteamOS** in [testing.md](testing.md#shipped-feature-coverage) when marking Pass / Partial / Fail.
+
+---
+
+## Tags
+
+| Tag | Meaning |
+|-----|---------|
+| **P0–P3** | Importance — P0 = core product; P3 = polish / easter eggs |
+| **S0–S3** | Setup cost — S0 = BPM + Ollama up; S3 = reboot / clean install / multi-game |
+| **Tier 0–4** | Run order — complete lower tiers before higher unless PR-scoped |
+
+---
+
+## Cross-cutting smokes
+
+One smoke run can check off many coverage rows. After each smoke, update [testing.md](testing.md#shipped-feature-coverage) **Shipped feature coverage** and linked scenario checkboxes.
+
+| ID | Name | Tier | Setup | Importance | Covers (feature IDs) |
+|----|------|------|-------|------------|----------------------|
+| **SMOKE-A** | Golden path | 0 | S0, BPM | P0 | Plugin shell, tabs, Connection Ask, D-pad chunks, transparency opens, presets visible |
+| **SMOKE-C** | Permission gate | 0 | S0 | P0 | Capability center — blocked-action toast pattern |
+| **SMOKE-F** | Deterministic commands | 0 | S0, no model | P2 | Input sanitizer commands, shortcut-setup-deck, vac-check capability-off |
+| **SMOKE-B** | TDP apply 8W | 1 | S1, game + Hardware on | P0 | TDP JSON, sysfs, game context, QAMP banner, permissions hardware |
+| **SMOKE-E** | Strategy one-shot | 1 | S1 | P1 | Mode selector, strategy placeholder, spoiler tap-to-reveal, Spoilers OK |
+| **SMOKE-D** | Frozen carousel triple | 1 | S1, optional flag | P0 | Presets, game-name append, troubleshooting prompts — **verified** (see coverage) |
+| **SMOKE-G** | Vision attach once | 1 | S1, Media on | P1 | Attach browser, multimodal Ask — **verified** (vision sweep 2026-04) |
+| **SMOKE-H** | Background Ask reopen | 1 | S1 | P1 | Close QAM while pending → reopen restores Thinking… or final reply |
+
+**Tier 0 order (~15 min):** SMOKE-A → SMOKE-C → SMOKE-F  
+**Tier 1 order (~20 min):** SMOKE-B → SMOKE-E → confirm SMOKE-D / SMOKE-G if not already marked → SMOKE-H
+
+---
+
+## Tier 0 — Quick wins (S0)
+
+Run in BPM (Desktop → Big Picture → QAM → bonsAI). Ollama reachable; default permissions OK unless smoke says otherwise.
+
+### SMOKE-A — Golden path (P0)
+
+- [ ] Open plugin from QAM; no crash on first paint.
+- [ ] LB/RB cycles **Main → Settings → Permissions → (Debug if enabled) → About**.
+- [ ] **Settings → Connection → Test** — success or stable unreachable message (no traceback).
+- [ ] Main tab: type a short question; **Ask**; reply appears in focusable chunks.
+- [ ] D-pad down through chunks; last chunk readable.
+- [ ] Expand **Input handling (last Ask)** — raw input, model name, system/user snapshot present.
+- [ ] Three preset chips visible on Main.
+
+**Links:** [testing.md](testing.md#shipped-feature-coverage) → Tier 0 scenarios; coverage rows `CORE-ASK`, `CORE-UI`, `CONN-TEST`, `TRANSPARENCY`.
+
+### SMOKE-C — Permission gate (P0)
+
+- [ ] **Permissions:** turn **Hardware control** (or another) **off**.
+- [ ] Trigger blocked action (e.g. Ask that would apply TDP, or attach screenshot if Media off).
+- [ ] Toast directs to Permissions; no crash.
+- [ ] Turn capability back **on** before Tier 1.
+
+**Links:** coverage `PERMS-GATE`.
+
+### SMOKE-F — Deterministic commands (P2)
+
+No Ollama call for these paths.
+
+- [ ] Ask exactly `bonsai:disable-sanitize` → confirmation; **Input handling** shows no Ollama text.
+- [ ] Ask exactly `bonsai:enable-sanitize` → confirmation.
+- [ ] Ask exactly `bonsai:shortcut-setup-deck` → Guide/QAM/Decky copy; no model call.
+- [ ] Ask `bonsai:vac-check 76561198000000000` with **Steam Web API** off → capability message only; no network.
+
+**Links:** [testing.md](testing.md#shipped-feature-coverage) → Tier 0 deterministic; coverage `SANITIZER`, `SHORTCUT-KW`, `VAC-01`.
+
+---
+
+## Tier 1 — Core shipped (S1)
+
+Requires a **game running** for some steps (Track B — Gaming Mode or BPM with game focused). Enable **Permissions → Hardware control** for TDP apply.
+
+### SMOKE-B — TDP apply 8W (P0)
+
+- [ ] With game running: Ask `Set my TDP to 8 watts`.
+- [ ] Response includes `[Applied: TDP: 8W]` (or equivalent banner).
+- [ ] QAM re-open guidance in transcript (**Note** about Performance tab).
+- [ ] **Input handling** shows TDP route / JSON parse path.
+
+**Links:** Test Results #3–4; coverage `TDP-APPLY`, `QAMP-BANNER`; [testing.md](testing.md#shipped-feature-coverage) → QAMP on-Deck (first two rows).
+
+### SMOKE-E — Strategy one-shot (P1)
+
+- [ ] Main tab mode → **Strategy**; placeholder changes to strategy copy.
+- [ ] Ask `How do I beat this level` (no spoilers permission).
+- [ ] Reply uses tap-to-reveal spoiler blocks where applicable.
+- [ ] Enable **Spoilers OK for this Ask**; follow-up allows fuller guidance.
+
+**Links:** coverage `STRATEGY-CORE`, `STRATEGY-SPOILER`; [testing.md](testing.md#shipped-feature-coverage) → Tier 2 Strategy depth (partial — expand in Tier 2).
+
+### SMOKE-D — Frozen carousel triple (P0) — verified
+
+Optional: set `TEMP_PRESET_CAROUSEL_FROZEN` in [`src/data/presets.ts`](../src/data/presets.ts). Three chips: crashing / stuttering / Proton. **Already verified** — spot-check only if presets change.
+
+**Links:** coverage `PRESETS-CAROUSEL`, `TROUBLESHOOT-3`.
+
+### SMOKE-G — Vision attach once (P1) — verified
+
+Attach one screenshot + one Ask. **Already verified** (vision sweep 2026-04) — spot-check if attach/RPC changes.
+
+**Links:** coverage `VISION-V1`.
+
+### SMOKE-H — Background Ask reopen (P1)
+
+- [ ] Start a slow Ask; close QAM before completion; reopen → **Thinking…** or restored pending state.
+- [ ] Repeat: close QAM; reopen after completion → full reply restored.
+
+**Links:** coverage `BG-ASK-V1`; [testing.md](testing.md#shipped-feature-coverage) → Appendix Tier 4 background matrix for full lifecycle.
+
+### Tier 1 extras (single Ask each)
+
+- [ ] **Session restore:** close and reopen plugin — last Q&A still visible (`PERSIST-QA`, P0).
+- [ ] **Mode Speed vs Deep:** one Ask each; model disclosure or routing differs (`MODE-SELECTOR`, P1).
+- [ ] **What game am I playing?** with game focused — names title (`GAME-CTX`, P0).
+
+---
+
+## Tier 2 — Opt-in features (S2)
+
+Run when touching related code or before a release candidate.
+
+| Block | Setup | Importance | Detail in testing.md |
+|-------|-------|------------|----------------------------|
+| **VAC full matrix** | Steam Web API key + permission | P2 | VAC-01 … VAC-06 |
+| **Proton log attach** | `PROTON_LOG=1`, game, log read permission | P2 | PROTON-LOG-01 … 03 |
+| **Token streaming** | Developer tab + flag | P2 | STREAM-01 … 05 |
+| **Strategy depth** | Strategy mode + screenshots optional | P1 | Strategy spoiler, checklist, cheat gating, regression subset |
+| **Character voice** | AI character on, one preset Ask | P2 | CHAR-VOICE |
+| **Pyro easter egg** | Pyro or Random → Pyro; Balanced + Nightmare spot | P3 | PYRO-EGG |
+| **Beta presets** | Main tab chips with `[beta]` tag | P3 | BETA-PRESET |
+| **mDNS Find LAN** | Avahi/Bonjour on Ollama host | P2 | MDNS-FIND |
+| **Desktop notes** | Filesystem permission on | P2 | DESKTOP-NOTES |
+| **Model policy** | Change tier; confirm disclosure on reply | P1 | MODEL-POLICY |
+
+---
+
+## Tier 3 — Heavy manual (S3)
+
+Defer until Tier 0–2 pass or release window.
+
+| Block | Why heavy | Detail |
+|-------|-----------|--------|
+| **QAMP on-Deck matrix** | Per-game profile, QAM reopen, Steam restart, reboot | [testing.md](testing.md#shipped-feature-coverage) → QAMP on-Deck |
+| **TDP boundary clamps** | Multiple watt asks with verification | TDP-15W, TDP-3W, TDP-1W, TDP-20W, GPU-800 |
+| **Background Ask full lifecycle** | Timeout, error, busy guard, session boundary | Appendix Tier 4 |
+| **Multi-game matrix** | Title-specific behavior | Games to test with |
+| **Guide-chord macro** | User-specific QAM rail depth | [troubleshooting.md](troubleshooting.md) §5 |
+| **Preset carousel timing (ms)** | Cosmetic animation | Appendix Tier 3 cosmetic |
+
+---
+
+## Tier 4 — Release gate (S3)
+
+| Block | When |
+|-------|------|
+| **Clean install proof** | Before tagging a release — [testing.md](testing.md#regression-gates) §5 |
+| **Environment matrix** | Record Decky / SteamOS / Ollama in [testing.md](testing.md#shipped-feature-coverage) before Tier 1+ runs |
+
+---
+
+## Progress tracker
+
+Update after each maintainer pass:
+
+| Tier | Status | Last run (date / SHA) | Notes |
+|------|--------|------------------------|-------|
+| 0 | Pass | 2026-05-26 / 9e20a82 | preview 5/5 PASS; [evidence](test-evidence/tier0/2026-05-26-9e20a82) |
+| 1 | Pass | 2026-05-26 / 9e20a82 | preview 3/3 PASS; [evidence](test-evidence/tier1Core/2026-05-26-9e20a82) |
+| 2 | Partial | 2026-06-09 / 9e20a82 | preview 7/11 PASS; [evidence](test-evidence/tier2Deep/2026-06-09-9e20a82) |
+| 3 | Open | 2026-06-09 / a9237e4 | preview 0/0 PASS; [evidence](test-evidence/deckOnly/2026-06-09-a9237e4) |
+| 4 | Deferred | | Clean install |
+
+**Roadmap target:** Tier **0–1** complete for routine PRs; Tier **2+** ongoing before release.
+
+---
+
+---
+
 # bonsAI prompt testing tracker
 
-**Run order (what to do next):** [device-qa-runbook.md](device-qa-runbook.md) — Tier 0 quick wins first, heavy setup in Tier 3–4.  
-**PR automated gates:** [regression-and-smoke.md](regression-and-smoke.md) §1.
 
 This file holds the **shipped-feature coverage index**, **Test Results log**, and **detailed scenario checkboxes** linked from the runbook.
 
-Related planning (not yet implemented): [roadmap.md](roadmap.md) **Planned** section. Research notes: [steam-input-research.md](steam-input-research.md), [voice-character-catalog.md](voice-character-catalog.md).
+Related planning (not yet implemented): [roadmap.md](roadmap.md) **Planned** section. Research notes: [archive/research/steam-input-research.md](archive/research/steam-input-research.md), [archive/research/voice-character-catalog.md](archive/research/voice-character-catalog.md).
 
 ---
 
@@ -16,7 +316,7 @@ Mark `- [x]` when:
 1. **On-device PASS** recorded in Test Results (with build / date when known), or  
 2. **Documented verified sweep** — e.g. vision V1 manual run (2026-04), QAMP banner unit tests (2026-04-26), frozen-carousel troubleshooting pass.
 
-Historical **FAIL** rows live in [prompt-testing-failures.md](prompt-testing-failures.md). Standardize on `- [x]` / `- [ ]` only.
+Historical **FAIL** rows live in [testing.md](testing.md#failures-and-retries). Standardize on `- [x]` / `- [ ]` only.
 
 Preview-suite runs with `--write` upsert Test Results (PASS only) and the failures doc (FAIL), deduped by scenario ID. Artifacts: [test-evidence/](test-evidence/). Consolidate duplicate rows manually if needed after debug iterations; RPC/log dumps are redacted before commit.
 
@@ -37,7 +337,7 @@ Coverage table: **Verified** / **Partial** / **Open** / **N/A (unit-only)**.
 
 ## Shipped feature coverage
 
-Maps [roadmap.md](roadmap.md) **Completed** items to test IDs. Update **Status** when runbook smokes or scenario rows pass.
+Maps [roadmap.md](roadmap.md) **Completed** summary and [archive/roadmap-completed.md](archive/roadmap-completed.md) detail to test IDs. Update **Status** when runbook smokes or scenario rows pass.
 
 ### Release and first-run
 
@@ -153,7 +453,7 @@ Maps [roadmap.md](roadmap.md) **Completed** items to test IDs. Update **Status**
 
 ## Test Results
 
-On-Deck and preview-suite **PASS** rows only. FAIL / retry queue: [prompt-testing-failures.md](prompt-testing-failures.md).
+On-Deck and preview-suite **PASS** rows only. FAIL / retry queue: [testing.md](testing.md#failures-and-retries).
 
 | # | Build / date | Game | Prompt | Expected | Model | Status | Notes |
 |---|--------------|------|--------|----------|-------|--------|-------|
@@ -201,7 +501,7 @@ On-Deck and preview-suite **PASS** rows only. FAIL / retry queue: [prompt-testin
 
 ## Tier 0 scenarios (S0)
 
-Linked from [device-qa-runbook.md](device-qa-runbook.md) **Tier 0**. Prefer smokes over individual rows.
+Linked from [testing.md](testing.md#device-qa-runbook) **Tier 0**. Prefer smokes over individual rows.
 
 ### Deterministic commands (SMOKE-F)
 
@@ -489,11 +789,69 @@ Turn **off** before release builds. `vitest` asserts frozen triple when flag on.
 
 ---
 
+---
+
+## Failures and retries
+
+# bonsAI prompt testing — failures & retries
+
+Open FAIL rows, superseded preview attempts, and optional on-Deck retests. **PASS** results live in [testing.md](testing.md#shipped-feature-coverage).
+
+**Retry:** `pnpm run test:preview:tier -- --tier=<batch> --filter=<id> --evidence --write`
+
+---
+
+## On-Deck FAIL (historical)
+
+| # | Build / date | Game | Prompt | Expected | Model | Status | Notes |
+|---|--------------|------|--------|----------|-------|--------|-------|
+| 2 | — | Elden Ring | "What TDP should I use?" | 8–12W + JSON | llama3:latest | FAIL | Pre–system-prompt fix; **optional retest** |
+| 5 | — | L4D2 | "Optimize for battery life" | Low TDP JSON | llama3:latest | FAIL | Pre–game context; superseded by Tier 1 with-game pass — retest optional |
+
+---
+
+## Preview FAIL log
+
+Runner `--write` upserts here on FAIL (deduped by scenario ID). Superseded rows from 2026-05-26 debug iterations are summarized below; per-attempt artifacts remain under [test-evidence/](test-evidence/).
+
+### Superseded tier0 attempts (2026-05-26 / 9e20a82)
+
+Sidecar / assertion tuning before final **5/5 PASS**. Evidence folders may contain both fail and pass manifests from the same date folder.
+
+| Scenario | Attempts | Root cause (final) | Resolution |
+|----------|----------|-------------------|------------|
+| SMOKE-A-golden-path | 6+ | `domContains "bonsAI"`; IPC `callTestHook` timeout | Dismiss modal via focus; assert shell selectors |
+| SMOKE-C-perms-gate | 5+ | Sidecar `fetch failed`; DOM `"Permissions"`; `callTestHook` timeout | RPC `load_settings` + `hardware_control` assert |
+| SMOKE-F-disable-sanitize | 4+ | Sidecar down; RPC `"sanitizer"` vs `"sanitiz"` | Sidecar path fix; substring assert |
+| SMOKE-F-shortcut-deck | 3+ | Sidecar `fetch failed` | Sidecar auto-start / manual start |
+| SMOKE-F-vac-capability-off | 4+ | Sidecar down; assert `"capability"` vs message text | Assert `"Steam Web API is off"` |
+| VISION-V1-spot-dom | 1 | `domContains "Ask"` — label not in preview DOM | Assert `bonsai-decky-tabs-root` / askbar classes |
+
+**Final PASS batch:** [test-evidence/tier0/2026-05-26-9e20a82/](test-evidence/tier0/2026-05-26-9e20a82/) · **tier2 (8/8):** [test-evidence/tier2/2026-05-26-9e20a82/](test-evidence/tier2/2026-05-26-9e20a82/)
+
+---
+
+## Preview FAIL table (auto-updated)
+
+<!-- preview-fail-results:start -->
+| 2026-06-09 / a9237e4 | tier3UI | UI-A-beta-modal | FAIL | [manifest](test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-beta-modal/manifest.json) — Error: IPC timeout for callTestHook |
+| 2026-06-09 / a9237e4 | tier3UI | UI-A-tab-tour | FAIL | [manifest](test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-tab-tour/manifest.json) — Error: IPC timeout for callTestHook |
+| 2026-06-09 / a9237e4 | tier3UI | UI-A-settings-conn | FAIL | [manifest](test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-settings-conn/manifest.json) — Error: IPC timeout for callTestHook |
+| 2026-06-09 / a9237e4 | tier3UI | UI-A-permissions-ui | FAIL | [manifest](test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-permissions-ui/manifest.json) — Error: IPC timeout for callTestHook |
+| 2026-06-09 / a9237e4 | tier3UI | UI-A-mode-menu | FAIL | [manifest](test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-mode-menu/manifest.json) — Error: IPC timeout for callTestHook |
+| 2026-06-09 / a9237e4 | tier3UI | UI-A-transparency-expand | FAIL | [manifest](test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-transparency-expand/manifest.json) — Error: IPC timeout for callTestHook |
+| 2026-06-09 / a9237e4 | tier3UI | UI-A-debug-tab | FAIL | [manifest](test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-debug-tab/manifest.json) — Error: IPC timeout for callTestHook |
+| 2026-06-09 / a9237e4 | tier3UI | UI-A-presets-visible | FAIL | [manifest](test-evidence/tier3UI/2026-06-09-a9237e4/UI-A-presets-visible/manifest.json) — Error: IPC timeout for callTestHook |
+<!-- preview-fail-results:end -->
+
+---
+
+---
+
 ## Revision log
 
 | Date | Change |
 |------|--------|
-| 2026-05-26 | FAIL rows → prompt-testing-failures.md; --write dedupe; bonsai-tier-qa skill |
-| 2026-05-26 | Preview suite tier0/preGate PASS (`9e20a82`); consolidated Test Results; coverage evidence cleanup |
-| 2026-05-24 | Refactor: coverage matrix, tier-linked scenarios, dedupe, runbook split; audit ✓/x → [x] |
-| *(prior)* | MVP matrices, vision sweep, QAMP unit verification |
+| 2026-06-21 | Consolidated regression-and-smoke, device-qa-runbook, prompt-testing, prompt-testing-failures into testing.md |
+| 2026-05-26 | FAIL rows split; preview --write dedupe |
+| 2026-05-24 | Refactor: coverage matrix, tier-linked scenarios, runbook split |

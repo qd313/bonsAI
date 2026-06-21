@@ -174,7 +174,7 @@ No session archived
 
 **foss-advocate** — N/A (no new runtime/provider).
 
-**master-debugger** — Deferred to on-device QA ([prompt-testing.md](../docs/prompt-testing.md) § Token streaming (experimental)); escalate if D-pad focus drops on preview→chunk finalize.
+**master-debugger** — Deferred to on-device QA ([testing.md](../docs/testing.md) § Token streaming (experimental)); escalate if D-pad focus drops on preview→chunk finalize.
 
 ### 2026-06-11 - Living Pull Models catalog (overlay merge + refresh triggers)
 
@@ -201,7 +201,7 @@ Deploy: ./scripts/build.sh local — frontend build OK; plugin_loader restart bl
 
 ```text
 Scope: Remove duplicate Ollama helpers under src/, root build.ps1 (hardcoded DECK_IP/PC_IP/$Pass), and Decky-template .vscode/ deploy tasks (${config:deckpass}).
-Agents: security-auditor — triaged by deletion; canonical paths scripts/build.ps1 and scripts/build.sh load .env. refactor-specialist — closes asymmetric Ollama scripts finding in docs/refactor-specialist-sweep.md.
+Agents: security-auditor — triaged by deletion; canonical paths scripts/build.ps1 and scripts/build.sh load .env. refactor-specialist — closes asymmetric Ollama scripts finding in docs/archive/refactor/refactor-specialist-sweep.md.
 Red-team / blue-team: N/A.
 ```
 
@@ -224,14 +224,14 @@ Scope: microphone_access capability, voice_transcription_service.py, main.py voi
 Agents: security-auditor, foss-advocate, master-debugger — triaged in implementation session (no separate subagent spawn); recorded here per plan accountability.
 Security (triaged): microphone_access default off, not legacy-grandfathered; backend RPCs deny when off; save_settings revokes active session; audio buffer in-memory only; transient WAV for whisper-cli deleted immediately; errors surfaced without raw PCM in logs. Deferred: formal security-auditor re-run on device with ingest logs.
 FOSS (triaged): whisper.cpp (MIT) + GGUF from Hugging Face; no cloud STT path; transparency route voice.transcribe documents local-only + no audio persistence. Deferred: ship bundled whisper-cli binary license file in bin/.
-Master-debugger (triaged): mic button keeps existing focus-graph (mode ← → mic); recording state swaps to stop affordance without new focus nodes. Deferred: on-Deck QA for PipeWire capture chain (VOICE-01…04 in prompt-testing.md).
+Master-debugger (triaged): mic button keeps existing focus-graph (mode ← → mic); recording state swaps to stop affordance without new focus nodes. Deferred: on-Deck QA for PipeWire capture chain (VOICE-01…04 in testing.md).
 Follow-up: complete VOICE-01…04 on hardware; bundle bin/whisper-cli x86_64 for SteamOS.
 ```
 
 ### 2026-04-21 - Judge ruling handoff (red-blue-fight)
 
 ```text
-Source: docs/red-blue-fight-2026-04-21.md — Week work list (after the bell) populated from Accept rulings.
+Source: docs/archive/red-blue-fight-2026-04-21.md — Week work list (after the bell) populated from Accept rulings.
 Execution this session: per-chunk Focusable for AI reply stack (D-pad reaches last chunk); buildResponseText appends QAM Performance verification when sysfs apply succeeds without errors; README quick-launch pointer to troubleshooting §5; roadmap Up next blockquote links fight doc week list.
 Deferred per judge: Strategy Guide (beta) path, Pyro easter egg, most Planned candidates (unchanged).
 ```

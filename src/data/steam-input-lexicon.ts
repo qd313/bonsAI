@@ -1,6 +1,6 @@
 /**
  * Versioned catalog for Steam Input jump targets. Routes and URIs are volatile across
- * Steam client builds; see docs/steam-input-research.md for CEF verification and update process.
+ * Steam client builds; see docs/archive/research/steam-input-research.md for CEF verification and update process.
  */
 export const STEAM_INPUT_LEXICON_VERSION = 1;
 
@@ -17,7 +17,7 @@ export type SteamInputLexiconEntry = {
   breadcrumb: string[];
   /**
    * React Router path template for Navigation.Navigate; `{appId}` is replaced for per-game entries.
-   * Leave unset until verified via CEF (see docs/steam-input-research.md); when set, attempted before steam URL.
+   * Leave unset until verified via CEF (see docs/archive/research/steam-input-research.md); when set, attempted before steam URL.
    */
   primaryPathTemplate?: string;
   /** steam:// template; `{appId}` replaced for per-game entries. */

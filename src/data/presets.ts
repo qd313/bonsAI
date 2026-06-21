@@ -16,7 +16,7 @@ export type PresetPrompt = {
  * **Prompt-testing helper (default off):** When `true`, the main-tab preset carousel uses the
  * three fixed strings in `TEMP_CAROUSEL_FROZEN_TEXTS` (order preserved) instead of random or
  * contextual sampling — stable chips for repeatable Deck / model checks. Shipped builds keep
- * this `false`; set to `true` locally while working through matrices in `docs/prompt-testing.md`.
+ * this `false`; set to `true` locally while working through matrices in `docs/testing.md`.
  */
 export const TEMP_PRESET_CAROUSEL_FROZEN = false;
 

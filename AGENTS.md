@@ -34,7 +34,7 @@ pnpm run test:preview:tier -- --tier=tier0 --evidence --write
 pnpm run test:preview -- --filter=SMOKE-A
 ```
 
-PASS → `docs/prompt-testing.md`; FAIL → `docs/prompt-testing-failures.md`. Agent loop: `.cursor/skills/bonsai-tier-qa/SKILL.md`.
+PASS → `docs/testing.md`; FAIL → `docs/testing.md#failures-and-retries`. Agent loop: `.cursor/skills/bonsai-tier-qa/SKILL.md`.
 
 Deck-only bucket **E** scenarios are documented in `tests/preview-suite/deck-only-e-bucket.json` — use `deck.deploy` + device runbook.
 

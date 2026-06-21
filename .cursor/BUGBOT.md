@@ -14,7 +14,7 @@
 
 - Flag critical correctness issues (RPC contracts, settings persistence, token-stream request_id isolation, focus-graph regressions) with file/line references.
 - Suggest running `pnpm test` and `pnpm run test:py` when `src/` or `py_modules/` change.
-- Defer Deck-only layout/focus QA to on-device runbook (`docs/device-qa-runbook.md`) when preview cannot reproduce.
+- Defer Deck-only layout/focus QA to on-device runbook (`docs/testing.md`) when preview cannot reproduce.
 
 ## Dashboard settings (required for enforcement)
 

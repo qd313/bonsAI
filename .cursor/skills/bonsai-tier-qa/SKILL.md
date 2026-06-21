@@ -2,8 +2,8 @@
 name: bonsai-tier-qa
 description: >-
   Agentic tier-by-tier QA for bonsAI: preGate → Tier 0 → Tier 1+ preview batches,
-  evidence under docs/test-evidence/, doc writeback to prompt-testing.md and
-  prompt-testing-failures.md. Pivot to single-scenario runs when a batch is flaky;
+  evidence under docs/test-evidence/, doc writeback to testing.md
+  (Test Results and failures sections). Pivot to single-scenario runs when a batch is flaky;
   use deck.deploy for E-bucket deck-only scenarios.
 ---
 
@@ -11,7 +11,7 @@ description: >-
 
 ## When to use
 
-- Closing a runbook tier ([device-qa-runbook.md](../../docs/device-qa-runbook.md))
+- Closing a runbook tier ([testing.md](../../docs/testing.md))
 - After changes to `src/`, `main.py`, preview scenarios, or RPC paths
 - User asks for preview-suite / tier QA / evidence writeback
 
@@ -33,7 +33,7 @@ Companion skills: [decky-preview](../decky-preview/SKILL.md), [bonsai-deck-dev-l
 4. **Ollama** — Required for `tier1Core`, `tier1Boundaries`, `tier2` (`requiresOllama` in [tier-manifest.json](../../tests/preview-suite/tier-manifest.json)).
 5. **Build parity** — After `src/` / `main.py` / `plugin.json` edits: `plugin.build` or `./scripts/build.ps1` before on-device QA.
 
-Record environment in [prompt-testing.md](../../docs/prompt-testing.md) **Environment matrix** before Tier 1+.
+Record environment in [testing.md](../../docs/testing.md) **Environment matrix** before Tier 1+.
 
 ---
 
@@ -42,7 +42,7 @@ Record environment in [prompt-testing.md](../../docs/prompt-testing.md) **Enviro
 Batches and order: [tests/preview-suite/tier-manifest.json](../../tests/preview-suite/tier-manifest.json) → `executionOrder`.
 
 ```bash
-# Full tier with evidence + doc writeback (PASS → prompt-testing, FAIL → prompt-testing-failures)
+# Full tier with evidence + doc writeback (PASS/FAIL → testing.md)
 pnpm run test:preview:tier -- --tier=tier0 --write
 
 # Evidence only (no doc mutation)
@@ -61,8 +61,8 @@ pnpm run test:preview:tier -- --tier=tier0 --evidence
 After each batch:
 
 1. Read `docs/test-evidence/<batch>/<date>-<sha>/batch-summary.json`
-2. Review FAIL rows in [prompt-testing-failures.md](../../docs/prompt-testing-failures.md)
-3. Update [device-qa-runbook.md](../../docs/device-qa-runbook.md) progress tracker (auto via `--write`)
+2. Review FAIL rows in [testing.md](../../docs/testing.md#failures-and-retries)
+3. Update [testing.md](../../docs/testing.md) progress tracker (auto via `--write`)
 4. **Do not proceed** to next tier if core smokes FAIL without triage
 
 ---
@@ -97,7 +97,7 @@ Scenarios in [deck-only-e-bucket.json](../../tests/preview-suite/deck-only-e-buc
 2. `plugin.build` → `deck.deploy`
 3. Optional: `deck.startTunnel` → `deck.probeIngest` / `deck.tailIngest`
 4. Manual runbook steps for **QAMP-DECK-***, CEF/CORS, clean install
-5. Record PASS/FAIL in [prompt-testing.md](../../docs/prompt-testing.md) or failures doc with build + SteamOS version
+5. Record PASS/FAIL in [testing.md](../../docs/testing.md) with build + SteamOS version
 
 Use [decky-screenshot-ingest](../decky-screenshot-ingest/SKILL.md) for layout/focus evidence.
 
@@ -105,9 +105,9 @@ Use [decky-screenshot-ingest](../decky-screenshot-ingest/SKILL.md) for layout/fo
 
 ## Doc writeback rules (`--write`)
 
-- **PASS** → upsert row in `prompt-testing.md` Test Results (dedupe by preview scenario ID)
-- **FAIL** → upsert row in `prompt-testing-failures.md` Preview FAIL table
-- Checkboxes ticked **PASS only** when `checkboxIds` match list items in prompt-testing
+- **PASS** → upsert row in `testing.md` **Test Results** (dedupe by preview scenario ID)
+- **FAIL** → upsert row in `testing.md` **Preview FAIL table**
+- Checkboxes ticked **PASS only** when `checkboxIds` match list items in testing.md
 - Notes are short: `[manifest](test-evidence/.../manifest.json)` (+ truncated error on FAIL)
 
 ---

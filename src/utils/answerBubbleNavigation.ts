@@ -3,7 +3,6 @@ import {
   panelScrollMax,
   scrollTabContentsByStep,
 } from "./chatPanelScroll";
-import { debugSessionLog } from "./debugSessionLog";
 import { resetAnswerBubbleChunkIndex } from "./answerBubbleNavRegistry";
 import {
   getRegisteredAnswerBubble,
@@ -51,25 +50,9 @@ export function focusFirstAnswerChunk(answerKey: string): boolean {
     resolveFocusedAnswerBubble() ??
     getRegisteredAnswerBubble(answerKey) ??
     findAnswerBubbleByKey(answerKey);
-  if (!el) {
-    // #region agent log
-    debugSessionLog("answerBubbleNavigation", "focus answer missing", "H11", {
-      answerKey,
-      runId: "post-fix-14",
-    });
-    // #endregion
-    return false;
-  }
+  if (!el) return false;
   registerAnswerBubbleEl(answerKey, el);
-  const focused = focusPanelEl(el);
-  // #region agent log
-  debugSessionLog("answerBubbleNavigation", "focus answer bubble", "H11", {
-    answerKey,
-    focused,
-    runId: "post-fix-14",
-  });
-  // #endregion
-  return focused;
+  return focusPanelEl(el);
 }
 
 export function resolveAnswerBubbleEl(
@@ -98,15 +81,7 @@ export function focusAnswerBubbleAfterHeader(
     if (bubble) {
       registerAnswerBubbleEl(turnId ?? "", bubble);
       resetAnswerBubbleChunkIndex();
-      const focused = focusPanelEl(bubble);
-      // #region agent log
-      debugSessionLog("answerBubbleNavigation", "focus answer from header slot", "H11", {
-        focused,
-        answerKey: turnId ?? null,
-        runId: "post-fix-14",
-      });
-      // #endregion
-      return focused;
+      return focusPanelEl(bubble);
     }
   }
   if (turnId) return focusFirstAnswerChunk(turnId);
@@ -148,59 +123,19 @@ export function handleAnswerBubbleMoveDown(
   answerKey?: string
 ): boolean {
   const bubble = resolveAnswerBubbleEl(answerKey, bubbleEl);
-  if (!bubble || chunkTotal <= 0) {
-    // #region agent log
-    debugSessionLog("answerBubbleNavigation", "answer onMoveDown no bubble", "H10", {
-      answerKey,
-      chunkTotal,
-      hadHint: Boolean(bubbleEl),
-      hadRegistry: Boolean(answerKey && getRegisteredAnswerBubble(answerKey)),
-      hadFocused: Boolean(resolveFocusedAnswerBubble()),
-      runId: "post-fix-14",
-    });
-    // #endregion
-    return false;
-  }
+  if (!bubble || chunkTotal <= 0) return false;
   if (answerKey) registerAnswerBubbleEl(answerKey, bubble);
 
   const scroll = findScrollablePanel(bubble);
-  if (!scroll) {
-    // #region agent log
-    debugSessionLog("answerBubbleNavigation", "answer onMoveDown no scroll parent", "H10", {
-      answerKey,
-      chunkTotal,
-      runId: "post-fix-14",
-    });
-    // #endregion
-    return false;
-  }
+  if (!scroll) return false;
 
   const max = panelScrollMax(scroll);
   const before = scroll.scrollTop;
 
   if (before < max - 2 && panelStepDown(bubble)) {
-    // #region agent log
-    debugSessionLog("answerBubbleNavigation", "answer onMoveDown panel scroll", "H1", {
-      answerKey,
-      chunkTotal,
-      scrollTopBefore: before,
-      scrollTopAfter: scroll.scrollTop,
-      scrollMax: max,
-      runId: "post-fix-14",
-    });
-    // #endregion
     return true;
   }
 
-  // #region agent log
-  debugSessionLog("answerBubbleNavigation", "answer onMoveDown yield to reply", "H4", {
-    answerKey,
-    chunkTotal,
-    scrollTop: scroll.scrollTop,
-    scrollMax: max,
-    runId: "post-fix-14",
-  });
-  // #endregion
   return false;
 }
 
@@ -216,17 +151,7 @@ export function handleAnswerBubbleMoveUp(
   const scroll = findScrollablePanel(bubble);
   if (!scroll || scroll.scrollTop <= 0) return false;
 
-  const before = scroll.scrollTop;
   if (panelStepUp(bubble)) {
-    // #region agent log
-    debugSessionLog("answerBubbleNavigation", "answer onMoveUp panel scroll", "H1", {
-      answerKey,
-      chunkTotal,
-      scrollTopBefore: before,
-      scrollTopAfter: scroll.scrollTop,
-      runId: "post-fix-14",
-    });
-    // #endregion
     return true;
   }
 

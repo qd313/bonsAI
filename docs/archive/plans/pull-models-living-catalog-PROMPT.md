@@ -1,3 +1,5 @@
+> **Archived** — see [archive README](README.md). Active doc: [roadmap.md](../roadmap.md)
+
 # Copy-paste prompt: Pull Models living catalog plan
 
 Use this in a **new Cursor chat** (Agent or Plan mode). Do not implement until the plan is agreed.

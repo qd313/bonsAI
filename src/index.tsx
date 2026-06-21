@@ -40,7 +40,6 @@ import {
   peekBonsaiSessionPendingRestore,
 } from "./utils/bonsaiSessionSurvival";
 import { bonsaiDebugLog, bumpContentMountCount } from "./utils/bonsaiDebugIngest";
-import { debugSessionLog } from "./utils/debugSessionLog";
 import {
   captureSettingsTabLocalSnapshot,
   clearSettingsTabLocalSurvival,
@@ -278,12 +277,6 @@ const Content: React.FC = () => {
       pendingPeek: !!peekBonsaiSessionPendingRestore(),
       tab: resolveInitialTab(),
     });
-    // #region agent log
-    debugSessionLog("index.tsx:Content", "content mounted dbg_fe_log probe", "H0", {
-      mount,
-      runId: "post-fix-12",
-    });
-    // #endregion
   }, []);
 
   const [currentTab, setCurrentTab] = useState(resolveInitialTab);

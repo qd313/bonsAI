@@ -6,7 +6,6 @@ import {
   registerAnswerBubbleEl,
   resolveFocusedAnswerBubble,
 } from "./answerBubbleElRegistry";
-import { debugSessionLog } from "./debugSessionLog";
 import {
   handleAnswerBubbleMoveDown,
   handleAnswerBubbleMoveUp,
@@ -58,31 +57,12 @@ export function buildAnswerBubbleElement(
 
   const navHandlers = {
     onFocus: () => {
-      const bubble = captureBubble(answerKey);
+      captureBubble(answerKey);
       registerAnswerBubbleNav({ moveDown, moveUp, resetChunkIndex: () => {} });
-      // #region agent log
-      debugSessionLog("buildAnswerBubbleElement", "answer bubble focused", "H6", {
-        answerKey,
-        chunkTotal,
-        streaming,
-        captured: Boolean(bubble),
-        runId: "post-fix-14",
-      });
-      // #endregion
     },
     onMoveDown: () => {
       const bubble = captureBubble(answerKey);
-      const handled = handleAnswerBubbleMoveDown(bubble, noopChunkRef, chunkTotal, answerKey);
-      // #region agent log
-      debugSessionLog("buildAnswerBubbleElement", "onMoveDown", "H7", {
-        answerKey,
-        handled,
-        captured: Boolean(bubble),
-        streaming,
-        runId: "post-fix-14",
-      });
-      // #endregion
-      return handled;
+      return handleAnswerBubbleMoveDown(bubble, noopChunkRef, chunkTotal, answerKey);
     },
     onMoveUp: () => moveUp(),
     onActivate: () => {

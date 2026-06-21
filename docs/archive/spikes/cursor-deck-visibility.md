@@ -1,3 +1,5 @@
+> **Archived** — see [archive README](README.md). Active doc: [development.md](../development.md)
+
 # Cursor ↔ Deck UI visibility (maintainer workflow)
 
 **Status:** Documented workflow — automation is opt-in via repo scripts and `.env`, not Deck runtime.

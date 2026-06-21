@@ -1,6 +1,6 @@
 """Proof-of-concept llama.cpp HTTP provider (maintainer / dev-gated only).
 
-Not a shippable Ollama replacement. See ``docs/spikes/llama-cpp-provider.md``.
+Not a shippable Ollama replacement. See ``docs/archive/spikes/llama-cpp-provider.md``.
 """
 
 from __future__ import annotations

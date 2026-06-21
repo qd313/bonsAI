@@ -56,8 +56,6 @@ import { buildAnswerBubbleElement } from "../utils/buildAnswerBubbleElement";
 import { buildTurnHeaderElement } from "../utils/buildTurnHeaderElement";
 import { buildCollapsedTurnTitle } from "../utils/chatTurnTitle";
 import type { AskThreadExpandedTurnKey } from "../types/bonsaiUi";
-import { debugSessionLog } from "../utils/debugSessionLog";
-import { describeFocusTarget } from "../utils/focusTrace";
 import { useStreamScrollPin } from "../hooks/useStreamScrollPin";
 import {
   invokeAnswerBubbleMoveDown,
@@ -364,21 +362,6 @@ export function MainTab(props: MainTabProps) {
   useEffect(() => {
     const col = chatMainColumnRef.current;
     if (!col) return;
-    const onFocusIn = (ev: FocusEvent) => {
-      const target = ev.target as HTMLElement | null;
-      if (!target?.closest(".bonsai-chat-main-column")) return;
-      const scroll = col.closest('[class*="TabContentsScroll"]') as HTMLElement | null;
-      const focus = describeFocusTarget(target);
-      // #region agent log
-      debugSessionLog("MainTab.tsx:focusin", "focus", "H4", {
-        ...focus,
-        scrollTop: scroll?.scrollTop ?? null,
-        runId: "post-fix-14",
-      });
-      // #endregion
-    };
-    col.addEventListener("focusin", onFocusIn, true);
-
     const onKeyDown = (ev: KeyboardEvent) => {
       if (!col.contains(document.activeElement)) return;
       const active = document.activeElement as HTMLElement | null;
@@ -393,13 +376,6 @@ export function MainTab(props: MainTabProps) {
             active?.closest(".bonsai-chat-turn-row-header") as HTMLElement | null,
             turnId ?? undefined
           );
-          // #region agent log
-          debugSessionLog("MainTab.tsx:keydown", "header keydown down fallback", "H20", {
-            handled,
-            turnId,
-            runId: "post-fix-14",
-          });
-          // #endregion
           if (handled) {
             ev.preventDefault();
             ev.stopPropagation();
@@ -408,14 +384,6 @@ export function MainTab(props: MainTabProps) {
         }
         if (!onAnswer) return;
         const handled = invokeAnswerBubbleMoveDown();
-        // #region agent log
-        debugSessionLog("MainTab.tsx:keydown", "answer keydown down fallback", "H9", {
-          handled,
-          key: ev.key,
-          code: ev.code,
-          runId: "post-fix-14",
-        });
-        // #endregion
         if (handled) {
           ev.preventDefault();
           ev.stopPropagation();
@@ -423,14 +391,6 @@ export function MainTab(props: MainTabProps) {
       } else if (isUpNavigationEvent(ev)) {
         if (!onAnswer) return;
         const handled = invokeAnswerBubbleMoveUp();
-        // #region agent log
-        debugSessionLog("MainTab.tsx:keydown", "answer keydown up fallback", "H9", {
-          handled,
-          key: ev.key,
-          code: ev.code,
-          runId: "post-fix-14",
-        });
-        // #endregion
         if (handled) {
           ev.preventDefault();
           ev.stopPropagation();
@@ -440,7 +400,6 @@ export function MainTab(props: MainTabProps) {
     col.addEventListener("keydown", onKeyDown, true);
 
     return () => {
-      col.removeEventListener("focusin", onFocusIn, true);
       col.removeEventListener("keydown", onKeyDown, true);
     };
   }, [askThreadCollapsed.length, expandedTurnKey]);

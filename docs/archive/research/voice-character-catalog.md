@@ -1,3 +1,5 @@
+> **Archived** — see [archive README](README.md). Active doc: [roadmap.md](../roadmap.md) or [development.md](../development.md)
+
 # Voice Character Catalog
 
 This file tracks curated roleplay voice/accent presets for **Character Voice Roleplay Mode** (see `docs/roadmap.md`).

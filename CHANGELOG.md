@@ -4,6 +4,8 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- **Documentation consolidation:** Active docs are now `README.md`, `docs/development.md`, `docs/troubleshooting.md`, `docs/roadmap.md`, and `docs/testing.md` (merged PR gates, device QA runbook, prompt testing, and failures). Historical research, plans, sweeps, and the full completed-feature checklist moved to `docs/archive/`. Removed stale root `TODO.md`.
 ## [0.4.1] - 2026-06-15
 
 ### Added
@@ -71,15 +73,15 @@ All notable changes to this project are documented in this file.
 - **Desktop Mode Debug Note Save (V1):** After a successful ask, **Save to Desktop note…** opens a consent dialog and writes append-only markdown to `~/Desktop/BonsAI_notes/<name>.md` (UTC timestamps, question + answer). Backend: `append_desktop_debug_note`, `backend/services/desktop_note_service.py`. UI: `DesktopNoteSaveModal`, `MainTab`, `src/index.tsx`.
 - **Search Surface Glass Pass:** Unified search `TextField` and ask bar use a shared glass surface (`rgba` ~25% fill, `backdrop-filter` blur, light border); attach/mic/stop/clear icons render at 50% opacity; input height follows wrapped text (min/max clamp); AI response chunks use the same glass family instead of near-black fills (`src/index.tsx`).
 - **Built on Ollama** About tab link to upstream `https://github.com/ollama/ollama` (`OLLAMA_UPSTREAM_REPO_URL`, `AboutTab`).
-- Phase 1 experimental **Steam Input jump** (Debug tab): per-game `steam://controllerconfig/{appId}` via `SteamClient.URL.ExecuteSteamURL`, `Navigation.CloseSideMenus`, and a versioned lexicon in `src/data/steam-input-lexicon.ts` with CEF route-discovery and update-discipline notes in `docs/steam-input-research.md`.
-- Background prompt completion flow so requests can finish while QAM is closed and recover state on reopen (marked complete in `docs/roadmap.md`; verification matrix in `docs/prompt-testing.md` under `Background Prompt Completion (V1)`).
+- Phase 1 experimental **Steam Input jump** (Debug tab): per-game `steam://controllerconfig/{appId}` via `SteamClient.URL.ExecuteSteamURL`, `Navigation.CloseSideMenus`, and a versioned lexicon in `src/data/steam-input-lexicon.ts` with CEF route-discovery and update-discipline notes in `docs/archive/research/steam-input-research.md`.
+- Background prompt completion flow so requests can finish while QAM is closed and recover state on reopen (marked complete in `docs/roadmap.md`; verification matrix in `docs/testing.md` under `Background Prompt Completion (V1)`).
 - Local/dev workflow support and deployment-oriented setup scripting for Linux and Bazzite-focused environments.
 - Expanded prompt test coverage and strategy-mode ideation notes for upcoming tuning work.
 - Added backend service modules under `backend/services/` and extracted frontend tab/data modules for milestone refactor decomposition.
 - Added baseline service/data tests: `tests/test_settings_service.py`, `tests/test_ollama_service.py`, `src/data/presets.test.ts`, and `src/data/steam-input-lexicon.test.ts`.
 
 ### Changed
-- **Preset chip refresh (advice-first):** [src/data/presets.ts](src/data/presets.ts) `PRESET_PROMPTS` rephrased so battery / TDP / performance chips ask questions (e.g. "Optimize for battery life" → "How can I optimize for battery life?"), letting bonsAI advise first and apply only when the user asks during chat. Action wording kept only for strong shipped surfaces (Steam Input jump → `Open Steam Input config`; vision V1 → `Describe what you see in this screenshot`). Dropped `Reduce fan noise` and `Best thermal settings for long play sessions` because the fan's job is cooling and bonsAI cannot meaningfully change Deck thermals without trading performance. Added bonsAI-feature chips: `Diagnose a slow Ollama response`, `What does my model policy tier mean?`, `Which Ollama model fits my Deck setup?`, `Why is my Deck running hot?`. Eight `beta: true` chips preview roadmap items: quiet fan profile (QAMP), Proton log analysis, Steam Input layout analysis, `Which Ollama models do I need for bonsAI?`, `How do I use strategy mode?`, spoiler-safe tips, `VAC bans on opponents?`, and restored `Suggest mods or tweaks for this game`. Maintainer approved 2026-04-24 as freeze-week-compatible content tuning; no logic, schema, RPC, or runtime change. See [docs/red-blue-fight-2026-04-21.md](docs/red-blue-fight-2026-04-21.md) § _Content tuning approvals_.
+- **Preset chip refresh (advice-first):** [src/data/presets.ts](src/data/presets.ts) `PRESET_PROMPTS` rephrased so battery / TDP / performance chips ask questions (e.g. "Optimize for battery life" → "How can I optimize for battery life?"), letting bonsAI advise first and apply only when the user asks during chat. Action wording kept only for strong shipped surfaces (Steam Input jump → `Open Steam Input config`; vision V1 → `Describe what you see in this screenshot`). Dropped `Reduce fan noise` and `Best thermal settings for long play sessions` because the fan's job is cooling and bonsAI cannot meaningfully change Deck thermals without trading performance. Added bonsAI-feature chips: `Diagnose a slow Ollama response`, `What does my model policy tier mean?`, `Which Ollama model fits my Deck setup?`, `Why is my Deck running hot?`. Eight `beta: true` chips preview roadmap items: quiet fan profile (QAMP), Proton log analysis, Steam Input layout analysis, `Which Ollama models do I need for bonsAI?`, `How do I use strategy mode?`, spoiler-safe tips, `VAC bans on opponents?`, and restored `Suggest mods or tweaks for this game`. Maintainer approved 2026-04-24 as freeze-week-compatible content tuning; no logic, schema, RPC, or runtime change. See [docs/archive/red-blue-fight-2026-04-21.md](docs/archive/red-blue-fight-2026-04-21.md) § _Content tuning approvals_.
 - **AI character avatars (higher resolution):** Roleplay avatars render from a unified 16×16 cell SVG grid: each preset’s 8×8 art is pixel-doubled (`expand8To16`), with hand-tuned 16×16 overrides for the full catalog cast (GTA V leads, TF2 mercs + graphic-novel Announcer bonsai tree, Random/Custom dice and custom tile, Portal/BG3/Fallout/Zelda/RDR/Cyberpunk/Hades/Other busts). `src/components/characterPlaceholderEmoticonGrids.ts`, `src/components/CharacterRoleplayEmoticon.tsx`.
 - **Settings (Connection):** Hard timeout uses one Steam `SliderField` in `ConnectionTimeoutSlider.tsx` (10s steps, max 300s), while soft warning remains visible as a readout and is auto-reconciled to stay before timeout. Ordering is enforced when loading settings via `reconcileLatencyWarningAndTimeout` in `src/utils/settingsAndResponse.ts` and matching logic in `backend/services/settings_service.py`.
 - **Refactor (unified input / main tab):** `UNIFIED_*` / Ask label color and `splitResponseIntoChunks` live under `src/features/unified-input/constants.ts` and `src/utils/splitResponseIntoChunks.ts`; Deck layout measurement and refs are in `useUnifiedInputSurface`; the main tab body is `src/components/MainTab.tsx` (behavior parity; `src/index.tsx` composes hooks + tabs).
@@ -96,7 +98,7 @@ All notable changes to this project are documented in this file.
 - Reorganized documentation under `docs/` (`development.md`, `troubleshooting.md`, `prompt-testing.md`, `roadmap.md`, `refactor-specialist-sweep.md`) and moved dev automation scripts under `scripts/` with repository-root resolution for `.env`, builds, and Decky CLI paths.
 - Refined frontend request state handling and response UX behavior in `src/index.tsx`.
 - Updated backend request lifecycle and orchestration paths in `main.py` for more resilient local AI interactions.
-- Updated roadmap and prioritization details in `docs/roadmap.md` (consolidates former root `TODO.md` and `FUTURE_FEATURES.md` planning), including moving completed items into `Implemented Baseline` where applicable.
+- Updated roadmap and prioritization details in `docs/roadmap.md` (consolidates former root `roadmap.md` and `FUTURE_FEATURES.md` planning), including moving completed items into `Implemented Baseline` where applicable.
 - `main.py` now delegates settings/TDP/Ollama internals to service-layer helpers to keep plugin RPC methods focused on orchestration.
 - `src/index.tsx` now delegates debug/about tab rendering and prompt preset logic to extracted modules.
 
@@ -111,20 +113,20 @@ All notable changes to this project are documented in this file.
 
 ### Docs
 - Documented **Input handling transparency** (main tab + verbose Desktop trace) in `README.md`, `docs/troubleshooting.md`, `docs/roadmap.md`, `docs/development.md`, and this changelog.
-- Documented **Input sanitizer lane** in `README.md`, `docs/prompt-testing.md`, `docs/troubleshooting.md`, `docs/roadmap.md`, and `docs/development.md` (field names).
-- Documented **Character Voice Roleplay Mode** in `docs/roadmap.md`, `docs/voice-character-catalog.md`, `docs/prompt-testing.md`, `docs/troubleshooting.md`, and this changelog.
+- Documented **Input sanitizer lane** in `README.md`, `docs/testing.md`, `docs/troubleshooting.md`, `docs/roadmap.md`, and `docs/development.md` (field names).
+- Documented **Character Voice Roleplay Mode** in `docs/roadmap.md`, `docs/archive/research/voice-character-catalog.md`, `docs/testing.md`, `docs/troubleshooting.md`, and this changelog.
 - Documented single hard-timeout slider + visible soft-warning readout in `docs/troubleshooting.md` and this changelog.
-- Documented **Preset carousel (Phase 1)** in `docs/roadmap.md`, `docs/prompt-testing.md`, `docs/development.md`, and this changelog.
+- Documented **Preset carousel (Phase 1)** in `docs/roadmap.md`, `docs/testing.md`, `docs/development.md`, and this changelog.
 
 - Documented **Desktop daily chat auto-save (V2)** in `docs/roadmap.md`, `docs/troubleshooting.md`, and this changelog.
 - Documented **Capability Permission Center** in `docs/roadmap.md` (Completed + Implemented Baseline + candidate status), `docs/troubleshooting.md` (permissions section), and `docs/foss-advocate-report.md`.
 - Marked **Search Surface Glass Pass** complete in `docs/roadmap.md` (Completed + Implemented Baseline); noted glass tokens and layout in `docs/development.md`.
 - Marked **Built on Ollama Link (About Tab)** complete in `docs/roadmap.md` (Completed + Implemented Baseline).
-- Marked **Steam Input Jump Phase 1** complete in `docs/roadmap.md` and noted Phase 2+ (search + full catalog) as deferred; aligned `docs/steam-input-research.md` and `docs/prompt-testing.md` status language.
-- Expanded `docs/steam-input-research.md` with CEF debugging steps, History API console snippet, verified-route log template, and Steam client update smoke-test discipline.
+- Marked **Steam Input Jump Phase 1** complete in `docs/roadmap.md` and noted Phase 2+ (search + full catalog) as deferred; aligned `docs/archive/research/steam-input-research.md` and `docs/testing.md` status language.
+- Expanded `docs/archive/research/steam-input-research.md` with CEF debugging steps, History API console snippet, verified-route log template, and Steam client update smoke-test discipline.
 - Expanded troubleshooting guidance in `docs/troubleshooting.md`.
-- Updated prompt testing notes in `docs/prompt-testing.md`.
+- Updated prompt testing notes in `docs/testing.md`.
 - Refined project rules and planning notes in `.cursorrules`.
 
-- **Documentation refresh:** README recommended multimodal models (`llava` default, library link); expanded developer doc map table; network troubleshooting TODOs replaced with numbered steps (Ollama listen address, `ollama pull`); roadmap cross-links to troubleshooting and prompt-testing; `docs/development.md` adds `characterUiAccent`, ask-mode pointers, and release doc checklist; `docs/refactor-specialist-sweep.md` historical banner; `docs/security-audit-report.md` line refs and Open status re-verified (2026-04-19); `docs/foss-advocate-report.md` dependency and license snapshot.
+- **Documentation refresh:** README recommended multimodal models (`llava` default, library link); expanded developer doc map table; network troubleshooting TODOs replaced with numbered steps (Ollama listen address, `ollama pull`); roadmap cross-links to troubleshooting and prompt-testing; `docs/development.md` adds `characterUiAccent`, ask-mode pointers, and release doc checklist; `docs/archive/refactor/refactor-specialist-sweep.md` historical banner; `docs/security-audit-report.md` line refs and Open status re-verified (2026-04-19); `docs/foss-advocate-report.md` dependency and license snapshot.
 

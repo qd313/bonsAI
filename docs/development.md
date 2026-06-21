@@ -114,7 +114,7 @@ Frontend tests use a fake `@decky/api` registry under `src/test-harness/` (jsdom
 
 ## Test bonsAI after deploy (two tracks)
 
-Decky injects into Steam's **gamepadui** layer — the same React/CEF surface as **Gaming Mode** and **Big Picture Mode (BPM)**. The classic Desktop Steam window does **not** load QAM or Decky. See [steam-input-research.md](steam-input-research.md) § "Game Mode / Big Picture".
+Decky injects into Steam's **gamepadui** layer — the same React/CEF surface as **Gaming Mode** and **Big Picture Mode (BPM)**. The classic Desktop Steam window does **not** load QAM or Decky. See [archive/research/steam-input-research.md](archive/research/steam-input-research.md) § "Game Mode / Big Picture".
 
 ### Track A — Fast loop (recommended; stay in Desktop Mode)
 
@@ -229,7 +229,7 @@ Decky loads `py_modules` on `sys.path`; keep the `backend` package name for impo
 
 ### Deep-dive pointers (preserved for agents and contributors)
 
-- **Unified input refactor (complete):** [refactor-specialist-sweep.md § Unified input refactor](refactor-specialist-sweep.md#unified-input-refactor-completed) — [`useUnifiedInputSurface.ts`](../src/features/unified-input/useUnifiedInputSurface.ts), [`MainTab.tsx`](../src/components/MainTab.tsx).
+- **Unified input refactor (complete):** [archive/refactor/refactor-specialist-sweep.md § Unified input refactor](archive/refactor/refactor-specialist-sweep.md#unified-input-refactor-completed) — [`useUnifiedInputSurface.ts`](../src/features/unified-input/useUnifiedInputSurface.ts), [`MainTab.tsx`](../src/components/MainTab.tsx).
 - **AI character roleplay:** [`characterCatalog.ts`](../src/data/characterCatalog.ts), [`CharacterPickerModal.tsx`](../src/components/CharacterPickerModal.tsx), [`ai_character_service.py`](../py_modules/backend/services/ai_character_service.py).
 - **Input sanitizer:** [`inputSanitizerCommands.ts`](../src/data/inputSanitizerCommands.ts) (must match Python); `input_sanitizer_user_disabled` in settings.
 - **Input transparency:** RPC `get_input_transparency`; optional Desktop trace via `desktop_note_service.py`.
@@ -250,7 +250,7 @@ pnpm test          # Vitest (frontend)
 pnpm run test:py   # Python unit tests
 ```
 
-Regression gates: [regression-and-smoke.md](regression-and-smoke.md) §1. On-device run order: [device-qa-runbook.md](device-qa-runbook.md) (Tier 0–1 first); coverage and scenarios: [prompt-testing.md](prompt-testing.md).
+Regression gates and Deck QA: [testing.md](testing.md) — **Regression gates** §1, **Device QA runbook** (Tier 0–1 first), **Shipped feature coverage**, and scenario checkboxes.
 
 If Decky UI packages drift:
 
@@ -291,21 +291,64 @@ Then edit CHANGELOG bullets and commit to **`main`**. CI builds the zip and publ
 
 Output under **`out/*.zip`**.
 
+## Change-risk hotspots
+
+Prioritize refactors and reviews by **change risk** — large surfaces, branching logic, and **how much automated test signal** exists before edits. Use alongside [roadmap.md](roadmap.md) (**[In Progress](roadmap.md#in-progress)**, **[Planned](roadmap.md#planned)**).
+
+**How to use:** Before a non-trivial edit, find the row for the file you touch; run the listed tests plus `pnpm test`, `pnpm run test:py`, and `pnpm run build` (and `scripts/build.ps1` / `scripts/build.sh` when Deck UI or RPC changes). Full standing gate + Deck smoke: [testing.md](testing.md#regression-gates). After **Settings** is acceptably calm (see **Completed** in [roadmap.md](roadmap.md)), pull the **next extraction** items from the bottom queue — one slice per PR.
+
+### Line counts (approximate, 2026-04-21)
+
+| Lines | Path | Role |
+|------:|------|------|
+| ~3425 | [`src/index.tsx`](../src/index.tsx) | Plugin root: tabs, scoped CSS, Decky RPC wiring, much of **Settings** as inline `settingsTab`, globals |
+| ~1660 | [`src/components/MainTab.tsx`](../src/components/MainTab.tsx) | Unified ask/search surface, chunks, suggestion UI |
+| ~1508 | [`main.py`](../main.py) | Decky RPC entrypoints, orchestration, many `call` handlers |
+| ~761 | [`src/components/CharacterPickerModal.tsx`](../src/components/CharacterPickerModal.tsx) | Character picker UX + async suggestions |
+| ~449 | [`src/components/ConnectionTimeoutSlider.tsx`](../src/components/ConnectionTimeoutSlider.tsx) | Connection timeout / warning slider |
+| ~300 | [`backend/services/ollama_service.py`](../py_modules/backend/services/ollama_service.py) | Prompt build, Ollama HTTP, streaming paths |
+| ~249 | [`backend/services/desktop_note_service.py`](../py_modules/backend/services/desktop_note_service.py) | Desktop notes / chat append, paths |
+| ~239 | [`backend/services/settings_service.py`](../py_modules/backend/services/settings_service.py) | Load/save/merge `settings.json` |
+| ~228 | [`refactor_helpers.py`](../refactor_helpers.py) | Model selection, TDP parse helpers, URLs |
+| ~207 | [`backend/services/ai_character_service.py`](../py_modules/backend/services/ai_character_service.py) | Roleplay suffix, accent intensity |
+| ≤170 | Other `backend/services/*.py` | See repo; smaller blast radius per file |
+
+### Prioritized hotspots (edit order vs risk)
+
+| Priority | Hotspot | Why it hurts change | Automated test signal | Suggested next extraction / mitigation |
+|----------|---------|---------------------|------------------------|----------------------------------------|
+| 1 | `src/index.tsx` | Single file mixes layout, CSS, RPC, tab assembly, and **large Settings JSX**; any edit can ripple focus/CSS/RPC. | **Low** for the file as a whole — Vitest covers [`src/utils/*.test.ts`](../src/utils/settingsAndResponse.test.ts), [`src/data/*.test.ts`](../src/data/), not the root component tree. | **After Settings UX trim:** extract **Settings** subtree to e.g. `src/components/SettingsTabPanel.tsx` (props in, no new persistence keys); then consider smaller hooks for repeated RPC patterns. |
+| 2 | `main.py` | Many RPC branches; easy to break one handler while fixing another; logging/error shapes affect UI. | **Partial** — services are unit-tested; `main.py` itself has **no** dedicated `test_main.py`; regressions surface in integration/manual. | Prefer **new logic in services** with tests; keep `main.py` thin wrappers; when touching errors, align with [security-audit-report.md](security-audit-report.md) (user-safe messages). |
+| 3 | `src/components/MainTab.tsx` | Long controller-first UI; focus graph and measurement logic intertwined. | **Partial** — unified-input phases extracted helpers; Vitest on data/utils, not full MainTab mount. | Further extractions only when needed; follow [archive/refactor/refactor-specialist-sweep.md § Unified input](archive/refactor/refactor-specialist-sweep.md#unified-input-refactor-completed); always device-check D-pad + overlay after edits. |
+| 4 | `backend/services/ollama_service.py` | Prompt and transport changes affect every Ask; HTTP error paths touch disclosure. | **Good** — [`tests/test_ollama_service.py`](../tests/test_ollama_service.py). | Keep behavioral changes paired with test updates; redact user-facing error bodies per security audit. |
+| 5 | `backend/services/settings_service.py` | Schema merge bugs affect entire plugin. | **Good** — [`tests/test_settings_service.py`](../tests/test_settings_service.py). | Add tests for any new keys; avoid silent defaults that bypass capability gating. |
+| 6 | `backend/services/desktop_note_service.py` | Filesystem paths and consent boundaries. | **Good** — [`tests/test_desktop_note_service.py`](../tests/test_desktop_note_service.py). | Keep path logic in service; gate in `main.py` + capabilities. |
+| 7 | `refactor_helpers.py` | Model routing / TDP parse shared across Ask paths. | **Good** — [`tests/test_refactor_helpers.py`](../tests/test_refactor_helpers.py). | Extend tests when adding branches; avoid duplicating policy in `main.py`. |
+| 8 | `src/components/CharacterPickerModal.tsx` | Async + catalog + focus; easy Deck regressions. | **Partial** — catalog parity / accent tests in Python; TS [`characterCatalog.test.ts`](../src/data/characterCatalog.test.ts), [`runningGameCharacterSuggestions.test.ts`](../src/utils/runningGameCharacterSuggestions.test.ts). | Extract pure suggestion sorting/filtering only with tests; UI changes need device smoke. |
+| 9 | Other services (`ai_character`, `input_sanitizer`, `capabilities`, `model_policy`, `strategy_guide_parse`, `tdp_service`) | Smaller files but security/behavior sensitive. | **Good** per matching `tests/test_*.py`. | Edit with corresponding test file open. |
+
+### Ordered refactor queue (after Settings is calm)
+
+1. **Settings** — UX trim in place, then **`SettingsTabPanel` (or equivalent)** extracted from [`src/index.tsx`](../src/index.tsx); add Vitest only for new pure helpers.
+2. **`main.py`** — Move new/changed RPC logic into `backend/services/` with tests; reduce duplicate error formatting.
+3. **MainTab** — Only targeted extractions with device proof (focus, overlay, scroll).
+4. **CharacterPickerModal** — Pure TS helpers first; UI second.
+
 ## Documentation maintenance (releases)
 
 When you mark a feature **complete**, update the same change set (see [`.cursorrules`](../.cursorrules)):
 
 - [roadmap.md](roadmap.md)
-- [prompt-testing.md](prompt-testing.md) and [device-qa-runbook.md](device-qa-runbook.md) — when behavior is user-visible
+- [testing.md](testing.md) — when behavior is user-visible (coverage, runbook, scenarios)
 - [troubleshooting.md](troubleshooting.md) — new setup steps or FAQs
 - [CHANGELOG.md](../CHANGELOG.md)
 
 ## Docs and references
 
-- Doc index: [DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md)
-- Power-user troubleshooting: [troubleshooting.md](troubleshooting.md)
-- [device-qa-runbook.md](device-qa-runbook.md) — Deck QA run order (Tier 0–4)
-- [prompt-testing.md](prompt-testing.md) — shipped-feature coverage + scenario detail
-- RAG research (not implemented): [rag-sources-research.md](rag-sources-research.md)
+- [README.md](../README.md) — install and documentation map
+- [troubleshooting.md](troubleshooting.md) — power-user setup and fixes
+- [testing.md](testing.md) — PR gates, Deck QA, prompt testing
+- [roadmap.md](roadmap.md) — planning and status
+- [archive/](archive/) — historical research, plans, and completed-feature detail
 - [Decky frontend library](https://github.com/SteamDeckHomebrew/decky-frontend-lib)
 - [Decky wiki](https://wiki.deckbrew.xyz/)

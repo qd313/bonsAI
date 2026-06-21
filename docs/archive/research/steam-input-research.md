@@ -1,3 +1,5 @@
+> **Archived** — see [archive README](README.md). Active doc: [roadmap.md](../roadmap.md) or [development.md](../development.md)
+
 # Steam Input Search + Jump Research Brief
 
 Planning artifact for roadmap item **Steam Input Settings Search + Jump (Research-First)** in `docs/roadmap.md`.

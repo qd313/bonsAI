@@ -67,7 +67,19 @@ Prompts and responses stay on hardware you control. Models can still hallucinate
 
 Want to develop on your Steam Deck (Cursor + Ollama + Decky on one machine)? See **[docs/development.md](docs/development.md)** — step-by-step setup, BPM fast-test loop, and architecture diagram.
 
-More docs: [docs/DOCUMENTATION_INDEX.md](docs/DOCUMENTATION_INDEX.md) · [CHANGELOG.md](CHANGELOG.md)
+More docs: [development.md](docs/development.md) · [testing.md](docs/testing.md) · [roadmap.md](docs/roadmap.md) · [CHANGELOG.md](CHANGELOG.md)
+
+## Documentation
+
+| Doc | Audience | What it is |
+|-----|----------|------------|
+| [troubleshooting.md](docs/troubleshooting.md) | Power users | GPU, network, vision, permissions, QAM, deploy edge cases |
+| [development.md](docs/development.md) | Contributors | Deck-first setup, build/deploy, architecture, change-risk hotspots |
+| [testing.md](docs/testing.md) | QA / contributors | PR gates, Deck QA runbook, shipped-feature coverage, Test Results |
+| [roadmap.md](docs/roadmap.md) | Planning | In progress, planned backlog, completed summary |
+| [security-audit-report.md](docs/security-audit-report.md) | Maintainers | RPC/log/UI disclosure review |
+| [foss-advocate-report.md](docs/foss-advocate-report.md) | Maintainers | FOSS/transparency review |
+| [archive/](docs/archive/) | — | Historical research, plans, and completed-feature detail |
 
 ## Buy me a beer
 

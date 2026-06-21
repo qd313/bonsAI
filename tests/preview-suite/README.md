@@ -1,6 +1,6 @@
 # Preview suite — tier batches
 
-Scenario JSON files in this directory are driven by [scripts/run-preview-suite.mjs](../../scripts/run-preview-suite.mjs) and mapped to [docs/device-qa-runbook.md](../../docs/device-qa-runbook.md) tiers via [tier-manifest.json](./tier-manifest.json).
+Scenario JSON files in this directory are driven by [scripts/run-preview-suite.mjs](../../scripts/run-preview-suite.mjs) and mapped to [docs/testing.md](../../docs/testing.md) tiers via [tier-manifest.json](./tier-manifest.json).
 
 ## Running
 
@@ -21,7 +21,7 @@ pnpm run test:preview -- --tier=tier0 --filter=SMOKE-A --evidence --write
 
 Evidence lands in `docs/test-evidence/<batch>/<date>-<sha>/<scenario-id>/`.
 
-**Doc writeback (`--write`):** PASS → [prompt-testing.md](../../docs/prompt-testing.md); FAIL → [prompt-testing-failures.md](../../docs/prompt-testing-failures.md). Rows dedupe by scenario ID.
+**Doc writeback (`--write`):** PASS → [testing.md](../../docs/testing.md#test-results); FAIL → [testing.md](../../docs/testing.md#failures-and-retries). Rows dedupe by scenario ID.
 
 Agent loop: [.cursor/skills/bonsai-tier-qa/SKILL.md](../../.cursor/skills/bonsai-tier-qa/SKILL.md).
 

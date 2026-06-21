@@ -1,3 +1,5 @@
+> **Archived** — see [archive README](README.md). Active doc: [development.md](../development.md)
+
 # Deck screen recording (composited QAM + bonsAI)
 
 **Status:** v1 maintainer scripts shipped — on-device QA required before sign-off.

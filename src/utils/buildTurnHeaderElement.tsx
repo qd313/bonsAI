@@ -1,7 +1,6 @@
 import React from "react";
 import { Focusable } from "@decky/ui";
 import { focusFirstAnswerChunk } from "./answerBubbleNavigation";
-import { debugSessionLog } from "./debugSessionLog";
 import { isDownDeckButtonEvent } from "./focusNavigation";
 
 export type BuildTurnHeaderElementArgs = {
@@ -35,15 +34,7 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
 
   const focusAnswer = () => {
     if (!expanded) return false;
-    const focused = focusFirstAnswerChunk(turnId);
-    // #region agent log
-    debugSessionLog("buildTurnHeaderElement", "header focus answer", "H21", {
-      turnId,
-      focused,
-      runId: "post-fix-14",
-    });
-    // #endregion
-    return focused;
+    return focusFirstAnswerChunk(turnId);
   };
 
   const headerNavHandlers = {

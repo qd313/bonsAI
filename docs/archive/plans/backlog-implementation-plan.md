@@ -1,3 +1,5 @@
+> **Archived** — see [archive README](README.md). Active doc: [roadmap.md](../roadmap.md)
+
 # Backlog implementation plan
 
 **Status:** Planning document for deferred features — do **not** implement from this doc during bugfix-only passes unless a row is explicitly promoted.

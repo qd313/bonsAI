@@ -8,7 +8,7 @@
       "evidenceProfile": "deck-only",
       "tags": ["QAMP-DECK-01", "QAMP-ONDECK"],
       "deckOnly": true,
-      "runbook": "docs/device-qa-runbook.md Tier 3",
+      "runbook": "docs/testing.md Tier 3",
       "checkboxIds": ["**QAMP-DECK-01**"],
       "captureSteps": [],
       "steps": []
@@ -32,7 +32,7 @@
       "evidenceProfile": "deck-only",
       "tags": ["ZIP-CI"],
       "deckOnly": true,
-      "runbook": "docs/regression-and-smoke.md §5",
+      "runbook": "docs/testing.md §5",
       "checkboxIds": [],
       "captureSteps": [],
       "steps": []

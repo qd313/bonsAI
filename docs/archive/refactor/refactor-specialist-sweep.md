@@ -1,3 +1,5 @@
+> **Archived** — see [archive README](README.md). Active doc: [development.md](../development.md)
+
 # Refactor-specialist sweep — bonsAI repository
 
 > **Historical note:** This file records a **past** documentation and script-layout reorg (moving guides under `docs/` and automation under `scripts/`). Current canonical paths are [README.md](../README.md) and the other markdown guides in this `docs/` directory. Do not treat the “before this reorg” tables below as the live layout.
@@ -17,14 +19,14 @@ Report format follows `.cursor/agents/refactor-specialist.md` (Sweep / Planning 
 | `DEVELOPMENT.md` | Contributors: toolchain, env, build/deploy, architecture notes |
 | `INSTALL_STEPS_TROUBLESHOOTING.md` | Power users: GPU, network, vision, deploy edge cases |
 | `PROMPT_TESTING.md` | Prompt QA matrix and release notes for model behavior |
-| `TODO.md` | Active roadmap, bugs, short “future” bullets |
+| `roadmap.md` | Active roadmap, bugs, short “future” bullets |
 | `FUTURE_FEATURES.md` | Long-form candidate features, dependency graph, implementation notes |
 
 **Automation roles:** PowerShell and bash scripts at repo root (and Ollama helpers under `src/`) load `.env`, run `pnpm` builds, SSH-deploy to a Deck, or install Decky CLI / Ollama. Paths assumed the script lived at repo root (`PSScriptRoot` / `SCRIPT_DIR` = root).
 
 ## Hotspots
 
-- **Split roadmap:** `TODO.md` duplicated themes from `FUTURE_FEATURES.md` (checkbox list vs deep specs), increasing the chance one file drifts from the other.
+- **Split roadmap:** `roadmap.md` duplicated themes from `FUTURE_FEATURES.md` (checkbox list vs deep specs), increasing the chance one file drifts from the other.
 - **Asymmetric Ollama scripts:** ~~Windows path pointed to `src/setup_ollama.ps1`, Linux to root `setup-ollama.sh`, plus an extra `src/setup_ollama.sh` variant — three entrypoints for similar intent.~~ **Done (2026-05-19):** consolidated under `scripts/setup_ollama.ps1` and `scripts/setup-ollama.sh`; removed `src/setup_ollama.ps1` and `src/setup_ollama.sh`.
 - **Long troubleshooting KB:** Single large file mixed GPU tuning, CORS, vision, sudoers/deploy debugging, and QAM strategy — acceptable as one KB but sat at root with a long filename.
 - **Deploy scripts coupled to cwd:** After any move to `scripts/`, scripts must resolve **repository root** for `.env`, `pnpm`, `cli/decky`, and Decky `plugin build` (not the `scripts/` directory).
@@ -32,7 +34,7 @@ Report format follows `.cursor/agents/refactor-specialist.md` (Sweep / Planning 
 ## Problems (individual findings)
 
 **Finding:** Roadmap split across two files  
-**File:** `TODO.md:1`, `FUTURE_FEATURES.md:1`  
+**File:** `roadmap.md:1`, `FUTURE_FEATURES.md:1`  
 **Severity:** ★★  
 **Clarity tax:** Contributors must guess whether to update short bullets or long-form specs; links between them can stale.  
 **Specific refactor:** Merge into `docs/roadmap.md` with a clear “active / in progress” section and a fenced “detailed future (do not implement yet)” section preserving the existing warning.
@@ -55,8 +57,8 @@ Report format follows `.cursor/agents/refactor-specialist.md` (Sweep / Planning 
 
 ## Refactor plan (executed in this change set)
 
-1. Add `docs/refactor-specialist-sweep.md` (this file) as the sweep record.
-2. Move contributor/power-user markdown into `docs/` with stable names: `development.md`, `troubleshooting.md`, `prompt-testing.md`, `roadmap.md` (merge `TODO.md` + `FUTURE_FEATURES.md`).
+1. Add `docs/archive/refactor/refactor-specialist-sweep.md` (this file) as the sweep record.
+2. Move contributor/power-user markdown into `docs/` with stable names: `development.md`, `troubleshooting.md`, `prompt-testing.md`, `roadmap.md` (merge `roadmap.md` + `FUTURE_FEATURES.md`).
 3. Leave `README.md` and `CHANGELOG.md` at repo root; update `README` doc links and script paths to `docs/…` and `scripts/…`.
 4. Move shell/PowerShell automation into `scripts/`; fix root resolution; update `.cursorrules` and `CHANGELOG` references.
 5. Verify: `pnpm run build`, `pnpm test`, `python -m unittest discover -s tests -p "test_*.py"`.
@@ -81,7 +83,7 @@ Report format follows `.cursor/agents/refactor-specialist.md` (Sweep / Planning 
 
 ## Unified input refactor (completed)
 
-> **Former tracker:** Progress lived in `docs/refactor-unified-input-tracker.md` (now a one-line redirect). This section is the archived snapshot.
+> **Former tracker:** Progress lived in `docs/archive/refactor/refactor-unified-input-tracker.md` (now a one-line redirect). This section is the archived snapshot.
 
 Phased work backed plans under `.cursor/plans` (unified input / main tab scope). **All phases A–C and doc hooks are done** (as of 2026-04-14). **Phase D** (optional `.bonsai-scope` CSS extract) remains **not started** if layout pain returns.
 

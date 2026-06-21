@@ -13,7 +13,7 @@
     },
     "tier0": {
       "runbookTier": 0,
-      "description": "SMOKE-A → SMOKE-C → SMOKE-F (device-qa-runbook Tier 0).",
+      "description": "SMOKE-A → SMOKE-C → SMOKE-F (testing.md Device QA runbook Tier 0).",
       "scenarioIds": [
         "SMOKE-A-golden-path",
         "SMOKE-C-perms-gate",

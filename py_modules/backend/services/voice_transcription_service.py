@@ -807,42 +807,45 @@ class VoiceTranscriptionSession:
     def _append_pcm(self, chunk: bytes) -> None:
         if not chunk:
             return
-        rms = _pcm_rms(chunk)
-        if rms >= SILENCE_RMS_THRESHOLD:
-            self._last_voice_monotonic = time.monotonic()
-        self._pcm_buffer.append(chunk)
-        self._buffer_bytes += len(chunk)
-        while self._buffer_bytes > self._max_buffer_bytes and self._pcm_buffer:
-            dropped = self._pcm_buffer.popleft()
-            self._buffer_bytes -= len(dropped)
+        with self._lock:
+            rms = _pcm_rms(chunk)
+            if rms >= SILENCE_RMS_THRESHOLD:
+                self._last_voice_monotonic = time.monotonic()
+            self._pcm_buffer.append(chunk)
+            self._buffer_bytes += len(chunk)
+            while self._buffer_bytes > self._max_buffer_bytes and self._pcm_buffer:
+                dropped = self._pcm_buffer.popleft()
+                self._buffer_bytes -= len(dropped)
 
     def _window_pcm(self, seconds: float) -> bytes:
         need = int(seconds * BYTES_PER_SECOND)
         if need <= 0:
             return b""
-        chunks: list[bytes] = []
-        total = 0
-        for chunk in reversed(self._pcm_buffer):
-            chunks.append(chunk)
-            total += len(chunk)
-            if total >= need:
-                break
-        chunks.reverse()
-        data = b"".join(chunks)
+        with self._lock:
+            chunks: list[bytes] = []
+            total = 0
+            for chunk in reversed(self._pcm_buffer):
+                chunks.append(chunk)
+                total += len(chunk)
+                if total >= need:
+                    break
+            chunks.reverse()
+            data = b"".join(chunks)
         return data[-need:] if len(data) > need else data
 
     def _drop_pcm_before(self, seconds: float) -> None:
         drop_bytes = int(seconds * BYTES_PER_SECOND)
-        while drop_bytes > 0 and self._pcm_buffer:
-            chunk = self._pcm_buffer.popleft()
-            if len(chunk) <= drop_bytes:
-                drop_bytes -= len(chunk)
-                self._buffer_bytes -= len(chunk)
-            else:
-                keep = chunk[drop_bytes:]
-                self._pcm_buffer.appendleft(keep)
-                self._buffer_bytes -= drop_bytes
-                drop_bytes = 0
+        with self._lock:
+            while drop_bytes > 0 and self._pcm_buffer:
+                chunk = self._pcm_buffer.popleft()
+                if len(chunk) <= drop_bytes:
+                    drop_bytes -= len(chunk)
+                    self._buffer_bytes -= len(chunk)
+                else:
+                    keep = chunk[drop_bytes:]
+                    self._pcm_buffer.appendleft(keep)
+                    self._buffer_bytes -= drop_bytes
+                    drop_bytes = 0
 
     def start(self) -> dict[str, Any]:
         ready = engine_readiness(self.plugin_root, self.settings_dir, self.model_id)
@@ -862,8 +865,9 @@ class VoiceTranscriptionSession:
             return {"accepted": True, "status": self.status()}
 
         self._stop_event.clear()
-        self._pcm_buffer.clear()
-        self._buffer_bytes = 0
+        with self._lock:
+            self._pcm_buffer.clear()
+            self._buffer_bytes = 0
         self._last_partial = ""
         self._finalized = ""
         self._last_voice_monotonic = time.monotonic()

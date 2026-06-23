@@ -271,6 +271,22 @@ export function usePluginSettings() {
     }
   }, [hydrateFromSettings, pauseDebouncedSettingsSave]);
 
+  /** Cancel/wait debounced saves, then persist an explicit payload (hub tier, permissions, character). */
+  const saveSettingsImmediately = useCallback(
+    async (payload: BonsaiSettings) => {
+      await pauseDebouncedSettingsSave();
+      settingsSaveInFlightRef.current += 1;
+      try {
+        const saved = await call<[BonsaiSettings], BonsaiSettings>("save_settings", payload);
+        hydrateFromSettings(saved);
+        return saved;
+      } finally {
+        settingsSaveInFlightRef.current -= 1;
+      }
+    },
+    [hydrateFromSettings, pauseDebouncedSettingsSave]
+  );
+
   const syncSettingsFromDisk = useCallback(async () => {
     await pauseDebouncedSettingsSave();
     const saved = await call<[], BonsaiSettings>("load_settings");
@@ -465,6 +481,7 @@ export function usePluginSettings() {
     hydrateFromSettings,
     pauseDebouncedSettingsSave,
     flushSettingsSnapshotNow,
+    saveSettingsImmediately,
     syncSettingsFromDisk,
   };
 }

@@ -5,6 +5,7 @@ import { usePluginSettings } from "./usePluginSettings";
 import { defaultSettingsFixture } from "../test-harness/rpcFixtures";
 import { dispatchFakeRpc, getRpcCallLog, resetFakeDeckyRpc, setRpcHandler } from "../test-harness/fakeDeckyRpc";
 import { DEFAULT_LATENCY_WARNING_SECONDS } from "../utils/settingsAndResponse";
+import type { BonsaiSettings } from "../utils/settingsAndResponse";
 
 describe("usePluginSettings", () => {
   beforeEach(() => {
@@ -102,5 +103,38 @@ describe("usePluginSettings", () => {
     });
 
     expect(saved?.latency_warning_seconds).toBe(60);
+  });
+
+  it("saveSettingsImmediately wins over a pending debounced save", async () => {
+    let disk: BonsaiSettings = { ...defaultSettingsFixture() };
+    setRpcHandler("load_settings", () => ({ ...disk }));
+    setRpcHandler("save_settings", (payload: unknown) => {
+      disk = { ...disk, ...(payload as BonsaiSettings) };
+      return { ...disk };
+    });
+
+    const { result } = renderHook(() => usePluginSettings());
+    await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 500));
+    });
+
+    act(() => {
+      result.current.setLatencyWarningSeconds(42);
+    });
+
+    await act(async () => {
+      await result.current.saveSettingsImmediately({
+        ...defaultSettingsFixture(),
+        latency_warning_seconds: 42,
+        model_policy_tier: "open_weight",
+      });
+    });
+
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 450));
+    });
+
+    expect(disk.model_policy_tier).toBe("open_weight");
   });
 });

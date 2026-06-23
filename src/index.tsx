@@ -430,6 +430,7 @@ const Content: React.FC = () => {
     hydrateFromSettings,
     pauseDebouncedSettingsSave,
     flushSettingsSnapshotNow,
+    saveSettingsImmediately,
     syncSettingsFromDisk,
   } = usePluginSettings();
 
@@ -1234,15 +1235,13 @@ const Content: React.FC = () => {
           setAiCharacterPresetId(pid);
           setAiCharacterCustomText(ctxt);
           try {
-            const saved = await call<[BonsaiSettings], BonsaiSettings>(
-              "save_settings",
+            await saveSettingsImmediately(
               buildSettingsPayload({
                 ai_character_random: next.random,
                 ai_character_preset_id: pid,
                 ai_character_custom_text: ctxt,
               })
             );
-            hydrateFromSettings(saved);
             finalizeShowModalAndRestoreActiveTab(() => handle.Close());
           } catch (err: unknown) {
             console.error("save_settings failed (character picker OK)", err);
@@ -1278,7 +1277,7 @@ const Content: React.FC = () => {
     setAiCharacterPresetId,
     setAiCharacterCustomText,
     buildSettingsPayload,
-    hydrateFromSettings,
+    saveSettingsImmediately,
     finalizeShowModalAndRestoreActiveTab,
     askMode,
     ollamaKeepAlive,
@@ -1308,17 +1307,15 @@ const Content: React.FC = () => {
       setModelPolicyTier(patch.modelPolicyTier);
       setModelPolicyNonFossUnlocked(patch.modelPolicyNonFossUnlocked);
       setModelAllowHighVramFallbacks(patch.modelAllowHighVramFallbacks);
-      const saved = await call<[BonsaiSettings], BonsaiSettings>(
-        "save_settings",
+      await saveSettingsImmediately(
         buildSettingsPayload({
           model_policy_tier: patch.modelPolicyTier,
           model_policy_non_foss_unlocked: patch.modelPolicyNonFossUnlocked,
           model_allow_high_vram_fallbacks: patch.modelAllowHighVramFallbacks,
         })
       );
-      hydrateFromSettings(saved);
     },
-    [buildSettingsPayload, hydrateFromSettings, setModelPolicyTier, setModelPolicyNonFossUnlocked, setModelAllowHighVramFallbacks, goToOllamaTab]
+    [buildSettingsPayload, saveSettingsImmediately, setModelPolicyTier, setModelPolicyNonFossUnlocked, setModelAllowHighVramFallbacks, goToOllamaTab]
   );
 
   const openOllamaModelsHub = useCallback(
@@ -1579,12 +1576,8 @@ const Content: React.FC = () => {
 
   const onApplyTier2MultimodalPolicy = useCallback(async () => {
     setModelPolicyTier("open_weight");
-    const saved = await call<[BonsaiSettings], BonsaiSettings>(
-      "save_settings",
-      buildSettingsPayload({ model_policy_tier: "open_weight" })
-    );
-    hydrateFromSettings(saved);
-  }, [buildSettingsPayload, hydrateFromSettings, setModelPolicyTier]);
+    await saveSettingsImmediately(buildSettingsPayload({ model_policy_tier: "open_weight" }));
+  }, [buildSettingsPayload, saveSettingsImmediately, setModelPolicyTier]);
 
   const ollamaTab = useMemo(
     () => (
@@ -1643,14 +1636,12 @@ const Content: React.FC = () => {
   const onConfirmEnableHardwareControl = useCallback(() => {
     setCapabilities((prev) => {
       const next = { ...prev, hardware_control: true };
-      void call<[BonsaiSettings], BonsaiSettings>("save_settings", buildSettingsPayload({ capabilities: next }))
-        .then((saved) => hydrateFromSettings(saved))
-        .catch((err) => {
-          console.error("save_settings failed (hardware control confirm)", err);
-        });
+      void saveSettingsImmediately(buildSettingsPayload({ capabilities: next })).catch((err) => {
+        console.error("save_settings failed (hardware control confirm)", err);
+      });
       return next;
     });
-  }, [buildSettingsPayload, hydrateFromSettings, setCapabilities]);
+  }, [buildSettingsPayload, saveSettingsImmediately, setCapabilities]);
 
   const permissionsTab = useMemo(
     () => (

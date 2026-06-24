@@ -3,9 +3,13 @@ import tempfile
 import unittest
 import struct
 import sys
+import threading
+import time
+from types import SimpleNamespace
 
 from backend.services.voice_transcription_service import (
     DEFAULT_VOICE_STT_MODEL,
+    VoiceTranscriptionSession,
     _link_versioned_sonames,
     _parse_whisper_stdout,
     _pcm_rms,
@@ -151,6 +155,30 @@ class VoiceTranscriptionServiceTests(unittest.TestCase):
         )
         self.assertEqual(fin, "Testing, one two,")
         self.assertEqual(partial, "three, four.")
+
+    def test_pcm_buffer_survives_concurrent_append_and_window(self):
+        session = VoiceTranscriptionSession("/tmp", "/tmp", DEFAULT_VOICE_STT_MODEL, SimpleNamespace())
+        chunk = struct.pack("<256h", *([100] * 256))
+        stop = threading.Event()
+        errors: list[BaseException] = []
+
+        def writer() -> None:
+            try:
+                while not stop.is_set():
+                    session._append_pcm(chunk)
+            except BaseException as exc:
+                errors.append(exc)
+
+        t = threading.Thread(target=writer, daemon=True)
+        t.start()
+        try:
+            for _ in range(500):
+                session._window_pcm(1.0)
+                session._drop_pcm_before(0.25)
+        finally:
+            stop.set()
+            t.join(timeout=2.0)
+        self.assertEqual(errors, [])
 
 
 if __name__ == "__main__":

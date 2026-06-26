@@ -62,6 +62,14 @@ Within this section: ascending stars (★★ → ★★★ → ★★★★). Br
   - **Depends on:** shipped Ask routing + vision fallback behavior (reference implementation).
   - **Not in scope:** distinct embedding-tier routing unrelated to tag chains.
 
+- ★★ **Screenshot attach button** (Ask bar)
+
+  - **Goal:** A clear, controller-friendly **Screenshot** control on the Ask bar — one tap to attach the **latest** Steam capture or open the recent-screenshot browser. Today’s tiny corner icon is easy to miss in QAM.
+  - **Primary work:** Dedicated button/chip UX (label + icon), optional **Attach latest** shortcut, focus order and disabled states while Ask is in flight.
+  - **Files:** `src/components/MainTab.tsx`, `src/index.tsx`.
+  - **Depends on:** shipped **Media library access** capability and screenshot list RPC.
+  - **Not in scope:** in-plugin framebuffer capture (SteamOS owns capture); **SteamOS Share path** (★★★★) remains the deep-link spike.
+
 - ★★★ **10-foot readability slider** (handheld vs couch, J)
 
   - **Goal:** Single **font/size/step spacing** control for markdown chunks and chrome — narrow carve-out from ecosystem **F** (see Medium-term).
@@ -103,6 +111,14 @@ Within this section: ascending stars (★★ → ★★★ → ★★★★). Br
   - **Not in scope:** per-game/per-model fine-grained profile matrix.
 
 - ★★★ **Per-turn local feedback** (thumbs / flags, S) — **polish shipped 2026-06-14:** compact feedback row under AI bubble; shared `.bonsai-chat-secondary-btn` with Retry and Show details toggles.
+
+- ★★★ **Playful thinking status lines** (prompt-aware pending copy)
+
+  - **Goal:** One-line pending status — not another **“Building context…”** on loop. Pull a phrase from the user’s prompt, game, or attachments; match **Character voice** when on (dry wit / deadpan, still helpful).
+  - **Primary work:** Short template pools + keyword pick in [`format_thinking_phase`](../py_modules/backend/services/bonsai_stream_tags.py); character tone from [`ai_character_service.py`](../py_modules/backend/services/ai_character_service.py); safe fallback to today’s deterministic lines.
+  - **Files:** `py_modules/backend/services/bonsai_stream_tags.py`, `py_modules/backend/services/game_ai_request.py`, `py_modules/backend/services/ai_character_service.py`, `src/components/MainTab.tsx` (spinner row).
+  - **Depends on:** shipped thinking-phase pipeline; **Character voice roleplay** (shipped).
+  - **Not in scope:** multi-sentence blurbs, raw model “thinking” channel text, or LLM-generated status every poll tick.
 
 - ★★★ **QAMP verification checklist** (profiles / GPU / reboot matrix)
 
@@ -362,6 +378,8 @@ Dependency graph and implementation notes that are not feature checklist items.
 - **Character voice roleplay** + avatar mapping → **Higher-resolution character avatars (GTA-style art pass)**.
 - **Character voice roleplay (shipped)** → **Character-derived UI accent theme (preset-selected)** (shipped — see **Completed**); **Random character “?” avatar** (shipped — see **Completed**); **Running-game character suggestions (AI picker)** (shipped — see **Completed**).
 - **Character voice roleplay (shipped)** → **Local reply TTS** (Phase 2 — preset→voice mapping; legal research gate before ship).
+- **Character voice roleplay (shipped)** → **Playful thinking status lines** (persona tone when roleplay on).
+- **Media library access (shipped)** → **Screenshot attach button** (Ask bar); complements **Global screenshots and vision**.
 - **Input sanitizer (shipped)** + **Input handling transparency (shipped)** → future sanitizer extensions should keep user-visible auditability.
 - **Strategy Ask mode (`strategy`; Strategy Guide in prompts)** (shipped) → **Strategy Guide safety and spoilers** (shipped — on-device QA: [testing.md](testing.md) § Spoiler Policy and Consent), **Strategy checklist workflow (chat-scoped)** (planned).
 - **Global screenshots and vision** → richer strategy + screenshot context.

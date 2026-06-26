@@ -55,23 +55,6 @@ const TRIAGE_PROMPTS: Record<string, string> = {
 4. One runtime probe naming the owner beats stacked speculative fixes.
 5. See policy: \`bonsai://policy/runtime-ownership\`.
 `,
-  "bonsai/plan/ship-review": `# Ship review template (bonsAI)
-
-Invoke **red-team** and **blue-team** personas via MCP prompts.
-
-## Red team lens
-- Defer non-blocking scope; prioritize bugfixes and regression risk.
-- Cite hidden coupling (RPC, focus, sysfs, settings).
-
-## Blue team lens
-- Trust, consent, and honest first-run UX cannot ship misleading.
-- Document any veto or cut-the-line requests for human judge.
-
-## Required plan sections
-- GTA star ratings per \`docs/roadmap.md\`
-- Subagent reports and follow-ups
-- Triage vs deferred for risky surfaces
-`,
 };
 
 export function createServer(): McpServer {

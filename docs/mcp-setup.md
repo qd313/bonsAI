@@ -90,9 +90,10 @@ Edit `claude_desktop_config.json`:
 |--------|------|
 | `bonsai/persona/master-debugger` | Focus, layout, log capture |
 | `bonsai/persona/security-auditor` | RPC, logging, permissions review |
-| `bonsai/persona/red-team` / `bonsai/persona/blue-team` | Ship / scope decisions |
 | `bonsai/triage/focus-bug` | Short focus triage checklist |
 | `bonsai/triage/empty-ai-reply` | Silent/truncated AI replies |
+
+**Archived:** Red/Blue ship counsel and `bonsai/plan/ship-review` → [docs/archive/red-blue-counsel/](../docs/archive/red-blue-counsel/README.md).
 
 ## Knowledge without MCP
 

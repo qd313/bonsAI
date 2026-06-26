@@ -2,23 +2,23 @@
   "hotspots": [
     {
       "path": "main.py",
-      "lines": 2693,
+      "lines": 2715,
       "role": "Decky RPC entrypoints and orchestration"
     },
     {
+      "path": "src/styles/bonsaiScopeStylesheet.ts",
+      "lines": 1989,
+      "role": ""
+    },
+    {
       "path": "src/components/MainTab.tsx",
-      "lines": 1888,
+      "lines": 1948,
       "role": "Unified ask/search surface, chunks, suggestion UI"
     },
     {
       "path": "src/index.tsx",
-      "lines": 1871,
+      "lines": 1915,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
-    },
-    {
-      "path": "src/styles/bonsaiScopeStylesheet.ts",
-      "lines": 1868,
-      "role": ""
     },
     {
       "path": "py_modules/backend/services/voice_transcription_service.py",
@@ -51,13 +51,13 @@
       "role": ""
     },
     {
-      "path": "src/utils/settingsAndResponse.ts",
-      "lines": 688,
+      "path": "py_modules/backend/services/ollama_prompts.py",
+      "lines": 710,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/ollama_prompts.py",
-      "lines": 674,
+      "path": "src/utils/settingsAndResponse.ts",
+      "lines": 703,
       "role": ""
     },
     {
@@ -71,13 +71,18 @@
       "role": "Prompt build, Ollama HTTP, streaming"
     },
     {
+      "path": "py_modules/backend/services/game_ai_request.py",
+      "lines": 493,
+      "role": ""
+    },
+    {
       "path": "src/components/SettingsTab.tsx",
       "lines": 493,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/game_ai_request.py",
-      "lines": 479,
+      "path": "src/hooks/usePluginSettings.ts",
+      "lines": 482,
       "role": ""
     },
     {
@@ -86,13 +91,8 @@
       "role": ""
     },
     {
-      "path": "src/hooks/usePluginSettings.ts",
-      "lines": 471,
-      "role": ""
-    },
-    {
       "path": "py_modules/backend/services/settings_service.py",
-      "lines": 462,
+      "lines": 472,
       "role": "Load/save/merge settings.json"
     },
     {
@@ -107,22 +107,22 @@
     },
     {
       "path": "refactor_helpers.py",
-      "lines": 426,
+      "lines": 427,
       "role": "Model selection, TDP parse helpers, URLs"
     },
     {
       "path": "py_modules/backend/services/ai_character_service.py",
-      "lines": 398,
-      "role": ""
-    },
-    {
-      "path": "src/utils/settingsAndResponse.test.ts",
-      "lines": 367,
+      "lines": 420,
       "role": ""
     },
     {
       "path": "src/data/pullModelCatalog.ts",
-      "lines": 357,
+      "lines": 370,
+      "role": ""
+    },
+    {
+      "path": "src/utils/settingsAndResponse.test.ts",
+      "lines": 370,
       "role": ""
     },
     {
@@ -136,13 +136,13 @@
       "role": ""
     },
     {
-      "path": "src/components/icons.tsx",
-      "lines": 331,
+      "path": "src/components/DeveloperTab.tsx",
+      "lines": 334,
       "role": ""
     },
     {
-      "path": "src/components/DeveloperTab.tsx",
-      "lines": 320,
+      "path": "src/components/icons.tsx",
+      "lines": 331,
       "role": ""
     },
     {
@@ -166,8 +166,23 @@
       "role": ""
     },
     {
+      "path": "py_modules/backend/services/bonsai_stream_tags.py",
+      "lines": 233,
+      "role": ""
+    },
+    {
       "path": "src/components/MainTabAskModeMenuPopover.tsx",
       "lines": 230,
+      "role": ""
+    },
+    {
+      "path": "src/components/MainTabAttachMenuPopover.tsx",
+      "lines": 228,
+      "role": ""
+    },
+    {
+      "path": "src/data/presets.ts",
+      "lines": 225,
       "role": ""
     },
     {
@@ -181,23 +196,8 @@
       "role": ""
     },
     {
-      "path": "src/data/presets.ts",
-      "lines": 215,
-      "role": ""
-    },
-    {
       "path": "src/components/OllamaModelsHubModal.tsx",
       "lines": 210,
-      "role": ""
-    },
-    {
-      "path": "src/data/characterCatalog.ts",
-      "lines": 206,
-      "role": ""
-    },
-    {
-      "path": "py_modules/backend/services/model_policy.py",
-      "lines": 200,
       "role": ""
     }
   ]

@@ -1,5 +1,7 @@
 # Subagent review reports
 
+> **Red Team / Blue Team counsel retired 2026-06-26.** Historical entries below preserved. Active scope: [docs/roadmap.md](../../docs/roadmap.md). Archived bundle: [docs/archive/red-blue-counsel](../../docs/archive/red-blue-counsel/README.md).
+
 Structured findings from Cursor subagents in this folder (for example `foss-advocate.md`, `security-auditor.md`, `master-debugger.md`). Paste or summarize each run here so results live next to the agent definitions and survive chat context.
 
 ## How to use

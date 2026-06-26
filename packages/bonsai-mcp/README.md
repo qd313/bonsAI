@@ -35,9 +35,10 @@ BONSAI_REPO_ROOT=/path/to/bonsAI node dist/index.js
 
 ## Prompts
 
-- `bonsai/persona/{id}` — full specialist prompts
+- `bonsai/persona/{id}` — specialist prompts (security, FOSS, refactor, master-debugger)
 - `bonsai/triage/focus-bug` / `bonsai/triage/empty-ai-reply`
-- `bonsai/plan/ship-review`
+
+**Archived:** Red/Blue counsel and ship-review template → [docs/archive/red-blue-counsel/](../../docs/archive/red-blue-counsel/README.md).
 
 ## Scripts
 

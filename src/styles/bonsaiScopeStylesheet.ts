@@ -649,6 +649,27 @@ export function buildBonsaiScopeStylesheet(): string {
           border: 1px solid rgba(255, 255, 255, 0.07) !important;
         }
 
+        @keyframes bonsai-ask-input-breathe {
+          0%, 100% {
+            border-color: color-mix(in srgb, var(--bonsai-ask-mode-accent, #4ade80) 38%, transparent);
+            box-shadow: 0 0 0 0 color-mix(in srgb, var(--bonsai-ask-mode-accent, #4ade80) 10%, transparent);
+          }
+          50% {
+            border-color: var(--bonsai-ask-mode-accent, #4ade80);
+            box-shadow: 0 0 14px 3px color-mix(in srgb, var(--bonsai-ask-mode-accent, #4ade80) 38%, transparent);
+          }
+        }
+        .bonsai-scope .bonsai-unified-input-host.bonsai-unified-input--asking.bonsai-glass-panel {
+          animation: bonsai-ask-input-breathe 2s ease-in-out infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .bonsai-scope .bonsai-unified-input-host.bonsai-unified-input--asking.bonsai-glass-panel {
+            animation: none;
+            border-color: var(--bonsai-ask-mode-accent, #4ade80) !important;
+            box-shadow: 0 0 0 1px color-mix(in srgb, var(--bonsai-ask-mode-accent, #4ade80) 45%, transparent);
+          }
+        }
+
         .bonsai-scope .bonsai-preset-glass {
           background: rgba(18, 26, 34, 0.22) !important;
           border: 1px solid rgba(255, 255, 255, 0.07) !important;
@@ -1451,6 +1472,15 @@ export function buildBonsaiScopeStylesheet(): string {
         }
         .bonsai-scope .bonsai-unified-input-bottom-actions .bonsai-ask-mode-trigger.bonsai-askbar-target {
           min-width: unset !important;
+        }
+        /* Mode chip: beat section-7 transparency flattening on .bonsai-askbar-target */
+        .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions .bonsai-ask-mode-trigger.bonsai-askbar-target,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions .bonsai-ask-mode-trigger.bonsai-askbar-target > div,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions .bonsai-ask-mode-trigger.bonsai-askbar-target > span {
+          background-color: var(--bonsai-ask-mode-fill) !important;
+          border: 1px solid var(--bonsai-ask-mode-accent) !important;
+          color: var(--bonsai-ask-mode-accent) !important;
+          border-radius: 3px !important;
         }
         .bonsai-scope .bonsai-unified-input-bottom-actions .bonsai-askbar-target > span { padding: 0 !important; margin: 0 !important; }
 

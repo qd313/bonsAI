@@ -5,7 +5,6 @@ import type { PresetPrompt } from "../data/presets";
 import { MainTabPresetAnimatedChips } from "./MainTabPresetAnimatedChips";
 import {
   ASK_BAR_PRIMARY_MIN_HEIGHT_PX,
-  ASK_LABEL_COLOR_50,
   BONSAI_CHAT_AI_BUBBLE_MAX_FRAC,
   UNIFIED_INPUT_ICON_STRIP_PX,
   UNIFIED_TEXT_BODY_MAX_PX,
@@ -42,7 +41,7 @@ import type { TransparencySnapshot } from "../utils/inputTransparency";
 import { readClipboardText, sanitizeClipboardStashText } from "../utils/clipboardStash";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import { formatAppliedTuningBannerText } from "../utils/settingsAndResponse";
-import { ASK_MODE_LABELS, ASK_MODE_OUTLINE, type AskModeId } from "../data/askMode";
+import { ASK_MODE_ACCENT, ASK_MODE_FILL, ASK_MODE_LABELS, type AskModeId } from "../data/askMode";
 import {
   disclosureSummaryForSourceClass,
   type ModelPolicyDisclosurePayload,
@@ -656,10 +655,15 @@ export function MainTab(props: MainTabProps) {
             className={
               "bonsai-unified-input-host bonsai-glass-panel bonsai-full-bleed-row" +
               (aiCharacterPadClass ? " bonsai-unified-input--ai-character" : "") +
+              (isAsking ? " bonsai-unified-input--asking" : "") +
               (askModeMenuOpen ? " bonsai-ask-mode-menu-open" : "") +
               (attachMenuOpen ? " bonsai-attach-menu-open" : "")
             }
-            style={fullBleedRowStyle}
+            style={{
+              ...fullBleedRowStyle,
+              "--bonsai-ask-mode-accent": ASK_MODE_ACCENT[askMode],
+              "--bonsai-ask-mode-fill": ASK_MODE_FILL[askMode],
+            } as React.CSSProperties}
           >
             <div
               ref={unifiedInputFieldLayerRef}
@@ -999,10 +1003,6 @@ export function MainTab(props: MainTabProps) {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        borderRadius: 3,
-                        border: `1px solid ${ASK_MODE_OUTLINE[askMode]}`,
-                        background: "transparent",
-                        color: ASK_LABEL_COLOR_50,
                         flexShrink: 0,
                         fontSize: 10,
                         fontWeight: 600,

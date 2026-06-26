@@ -25,11 +25,12 @@ In-repo server: [`packages/bonsai-mcp/`](packages/bonsai-mcp/). Setup: [docs/mcp
 | `bonsai/persona/security-auditor` | Security / PII review |
 | `bonsai/persona/foss-advocate` | FOSS / transparency |
 | `bonsai/persona/refactor-specialist` | Maintainability sweeps |
-| `bonsai/persona/red-team` / `bonsai/persona/blue-team` | Ship / scope counsel |
 | `bonsai/triage/focus-bug` | Short focus triage |
 | `bonsai/triage/empty-ai-reply` | AI envelope debugging |
 
 Resources: `bonsai://policy/{id}`, `bonsai://workflow/{id}`, `bonsai://persona/{id}`, `bonsai://architecture/{name}`, `bonsai://index`.
+
+**Archived:** Red/Blue ship counsel → [docs/archive/red-blue-counsel/](docs/archive/red-blue-counsel/README.md).
 
 ## 2. Decky Plugin Studio (`decky-plugin-studio`)
 

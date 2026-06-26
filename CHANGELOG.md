@@ -4,8 +4,14 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [0.4.3] - 2026-06-26
+
+### Added
+- **Ask mode visual indicators:** Speed / Strategy / Expert mode chip shows a colored fill and border (green / yellow / red) on the unified Ask bar, similar to Cursor’s mode affordance. `ASK_MODE_ACCENT` / `ASK_MODE_FILL` in [`src/data/askMode.ts`](src/data/askMode.ts); paint via [`src/styles/bonsaiScopeStylesheet.ts`](src/styles/bonsaiScopeStylesheet.ts) (beats Decky transparency flattening on `.bonsai-askbar-target`).
+- **Thinking outline on Ask input:** While an Ask is in progress, the unified input host gets a mode-colored border glow with a breathing animation (`bonsai-unified-input--asking`, `bonsai-ask-input-breathe`); static accent border when `prefers-reduced-motion: reduce`. [`src/components/MainTab.tsx`](src/components/MainTab.tsx).
+
 ### Changed
-- **Preset chip refresh (2026-06-26):** [`src/data/presets.ts`](src/data/presets.ts) — LAN/Ollama connection chips, Expert/voice setup prompts, Steam Input advice chip; graduated strategy/VAC/essentials chips off `[beta]`; removed fan-noise/long-session thermal and redundant GPU/battery dupes; rephrased model-policy tier chip.
+- **Preset chip refresh:** [`src/data/presets.ts`](src/data/presets.ts) — LAN/Ollama connection chips, Expert/voice setup prompts, Steam Input advice chip; graduated strategy/VAC/essentials chips off `[beta]`; removed fan-noise/long-session thermal and redundant GPU/battery dupes; rephrased model-policy tier chip.
 - **Ask mode id rename (soft migration):** Persisted/RPC `ask_mode` **`deep`** renamed **`expert`** to match UI label **Expert**. Legacy `"deep"` in settings coerces to `"expert"` on load (`normalizeAskMode`, `sanitize_ask_mode`).
 
 ## [0.4.2] - 2026-06-21

@@ -16,7 +16,7 @@ Short guide to markdown under `docs/`. Repo root **[README.md](../README.md)** s
 | [security-audit-report.md](security-audit-report.md) | Maintainers | RPC/log/UI disclosure review and status |
 | [archive/refactor/refactor-specialist-sweep.md](archive/refactor/refactor-specialist-sweep.md) | Contributors | Past doc/script reorg + **completed** unified-input refactor section |
 | [refactor-unified-input-tracker.md](refactor-unified-input-tracker.md) | — | **Redirect** to the sweep doc (tracker merged) |
-| [archive/red-blue-fight-2026-04-21.md](archive/red-blue-fight-2026-04-21.md) | Maintainer (judge) | Historical (2026-04-21) Red vs Blue bout / legal-report template |
+| [archive/red-blue-counsel/README.md](archive/red-blue-counsel/README.md) | Maintainers | Retired Red/Blue counsel bundle (2026-04-21 bout, personas, ship-review); legacy redirect at [red-blue-fight-2026-04-21.md](archive/red-blue-fight-2026-04-21.md) |
 | [archive/research/steam-input-research.md](archive/research/steam-input-research.md) | Contributors | Steam Input jump / lexicon research |
 | [archive/research/voice-character-catalog.md](archive/research/voice-character-catalog.md) | Contributors / lore | Character roleplay catalog notes |
 | [archive/research/rag-sources-research.md](archive/research/rag-sources-research.md) | Contributors | RAG / KB research (not implemented) |

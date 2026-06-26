@@ -114,6 +114,6 @@ Use `bonsai://workflow/screenshot-ingest` for layout/focus evidence.
 |-------|---------|
 | Focus / layout / ingest | **master-debugger** |
 | RPC / logging / permissions | **security-auditor** |
-| Ship scope / tier priority | **red-team** / **blue-team** |
+| Ship scope / tier priority | Maintainer + [roadmap.md](../../../docs/roadmap.md) priority; escalate domain specialists as needed |
 
 Archive substantive runs via **`bonsai.report.archive`** or [SUBAGENT_REPORTS.md](../../../.cursor/agents/SUBAGENT_REPORTS.md).

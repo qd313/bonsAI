@@ -24,7 +24,7 @@ def _dedupe_preserve_order(tags: list[str]) -> list[str]:
 
 
 # --- Essentials routing: one FOSS multimodal default, short tails for legacy + Tier 2 open-weight.
-# Ask mode (speed/strategy/deep) differs by prompt and token budget only — not separate tag lists.
+# Ask mode (speed/strategy/expert) differs by prompt and token budget only — not separate tag lists.
 _TEXT_FOSS_ESSENTIALS = [
     "qwen2.5vl:3b",
     "qwen2.5:3b",
@@ -196,7 +196,7 @@ def _text_high_vram_tail(mode: str) -> list[str]:
         return list(_TEXT_HIGH_VRAM_SPEED)
     if mode == "strategy":
         return list(_TEXT_HIGH_VRAM_STRATEGY)
-    if mode == "deep":
+    if mode == "expert":
         return list(_TEXT_HIGH_VRAM_DEEP)
     return []
 
@@ -211,7 +211,7 @@ def _vision_high_vram_tail(mode: str) -> list[str]:
         return list(_VISION_HIGH_VRAM_SPEED)
     if mode == "strategy":
         return list(_VISION_HIGH_VRAM_STRATEGY)
-    if mode == "deep":
+    if mode == "expert":
         return list(_VISION_HIGH_VRAM_DEEP)
     return []
 
@@ -219,12 +219,12 @@ def _vision_high_vram_tail(mode: str) -> list[str]:
 TEXT_MODELS_BY_MODE = {
     "speed": _text_safe_chain("speed"),
     "strategy": _text_safe_chain("strategy"),
-    "deep": _text_safe_chain("deep"),
+    "expert": _text_safe_chain("expert"),
 }
 VISION_MODELS_BY_MODE = {
     "speed": _vision_safe_chain("speed"),
     "strategy": _vision_safe_chain("strategy"),
-    "deep": _vision_safe_chain("deep"),
+    "expert": _vision_safe_chain("expert"),
 }
 _VALID_ASK_MODES = frozenset(TEXT_MODELS_BY_MODE.keys())
 

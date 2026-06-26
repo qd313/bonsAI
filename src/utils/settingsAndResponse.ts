@@ -511,6 +511,9 @@ export function normalizeSteamWebApiKey(value: unknown): string {
 const _askModeSet = new Set<string>(ASK_MODE_IDS);
 
 export function normalizeAskMode(value: unknown): AskModeId {
+  if (value === "deep") {
+    return "expert";
+  }
   if (typeof value === "string" && _askModeSet.has(value)) {
     return value as AskModeId;
   }

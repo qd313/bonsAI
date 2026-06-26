@@ -100,6 +100,7 @@ Specific fix: Document operational risk; rely on user Permissions toggle + key h
 
 | Date       | Summary                                                                 |
 | ---------- | ----------------------------------------------------------------------- |
+| 2026-06-26 | Ask mode id rename (`deep` → `expert`) with legacy coercion in `normalizeAskMode` / `sanitize_ask_mode`; `VALID_ASK_MODES` and model-routing keys updated; preset chip content refresh (`presets.ts`, including graduated `bonsai:vac-check` chip). Reviewed RPC `ask_mode` sanitization (`main.py` `_parse_ask_payload` → `sanitize_ask_mode`) and existing `steam_web_api` capability gate on `bonsai:vac-check`. **No new confirmed findings.** |
 | 2026-05-19 | Pull Models picker: reviewed `pull_ollama_models`, `delete_ollama_model`, `fetch_ollama_catalog_metadata`, `ollama_catalog_service.py` tag regex + registry allowlist; no new confirmed findings. |
 | 2026-04-30 | Full pass; refreshed mitigations; fixed background-task exception leak. |
 | 2026-04-21 | Phase 2 triage (prior snapshot superseded by this document).            |

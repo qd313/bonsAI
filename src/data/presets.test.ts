@@ -20,6 +20,8 @@ describe("presets", () => {
     expect(detectPromptCategory("Please help with battery optimization")).toBe("battery");
     expect(detectPromptCategory("How do I fix stuttering?")).toBe("troubleshooting");
     expect(detectPromptCategory("Diagnose a slow Ollama response")).toBe("ollama");
+    expect(detectPromptCategory("How do I find Ollama on my LAN?")).toBe("ollama");
+    expect(detectPromptCategory("What should I do if Ask times out?")).toBe("ollama");
   });
 
   it("returns contextual presets with requested length", () => {

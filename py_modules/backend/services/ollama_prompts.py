@@ -127,8 +127,8 @@ GRAPHICS_RESOLUTION_STRATEGY = (
     "Save detailed per-target advice for after they pick a, b, or c, or after they send a follow-up with a custom resolution from **d**.\n"
 )
 
-GRAPHICS_RESOLUTION_DEEP = (
-    "\n\nDISPLAY TARGETS (Expert / Deep mode): Give **concrete recommendations for all three** outputs—**1280×800**, **1080p**, and **4K**—in separate labeled sections. "
+GRAPHICS_RESOLUTION_EXPERT = (
+    "\n\nDISPLAY TARGETS (Expert mode): Give **concrete recommendations for all three** outputs—**1280×800**, **1080p**, and **4K**—in separate labeled sections. "
     "Then **end** with a follow-up that lists **(1) 1280×800 (2) 1080p (3) 4K (4) Enter your own** — for (4) tell the user they can describe their exact display in the next message, "
     "starting with **My resolution is:** … (Strategy mode on Deck also exposes this as a branch button **d**). "
     "Ask which target to refine next, or to send their custom line.\n"
@@ -310,7 +310,7 @@ OLLAMA_BONSAI_SETUP_LINE = (
     "Answer as **LLM/host/network** guidance — **not** Steam **Performance / TDP / FPS / QAM game sliders** unless they explicitly tie slowness to those.\n"
     "Cover, in plain steps: **bonsAI Settings → Connection** — base URL / host (Deck-local `http://127.0.0.1:11434` vs Ollama on a **PC** on the LAN), **hard timeout** and warning threshold, **Ollama keep-alive** (how long models stay loaded vs VRAM).\n"
     "Cover **host reachability**: on the PC running Ollama, `OLLAMA_HOST` / bind address, OS firewall allowing **11434**, same subnet as the Deck, and correcting typos in the URL.\n"
-    "Cover **model load**: large or heavy tags are slower on Deck; suggest smaller or better-quantized models; **Ask mode** (Speed / Strategy / Deep) changes fallback chains; **model policy tier** can limit which tags run.\n"
+    "Cover **model load**: large or heavy tags are slower on Deck; suggest smaller or better-quantized models; **Ask mode** (Speed / Strategy / Expert) changes fallback chains; **model policy tier** can limit which tags run.\n"
     "Cover **telling network vs compute delay**: first-token wait vs steady tokens/s; if the host is remote, mention Wi‑Fi vs Ethernet and distance to the PC.\n"
     "Point to **docs/troubleshooting.md** themes (firewall, `OLLAMA_HOST`, LAN) when relevant. "
     "Do **not** output the ```json``` TDP/GPU recommendation block for this topic.\n"
@@ -545,7 +545,7 @@ def build_system_prompt(
         sweet = _user_asks_sweet_spot_tuning(question)
         gfx = ""
         if _user_asks_resolution_relevant_performance(question):
-            gfx = GRAPHICS_RESOLUTION_DEEP if ask_mode == "deep" else GRAPHICS_RESOLUTION_SPEED
+            gfx = GRAPHICS_RESOLUTION_EXPERT if ask_mode == "expert" else GRAPHICS_RESOLUTION_SPEED
         troubleshoot = (
             app_name.strip()
             and _user_asks_deck_troubleshooting_or_compat_line(question)

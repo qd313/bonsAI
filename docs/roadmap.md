@@ -46,14 +46,6 @@ Within this section: ascending stars (★★ → ★★★ → ★★★★). Br
 
   - **Goal:** Broader systematic validation and tuning beyond the shipped doc MVP (see **Completed** → Prompt-testing MVP; working matrices in [testing.md](testing.md)).
 
-- ★★ **Regenerate same prompt** (B)
-
-  - **Goal:** Let the user request another model reply from the **same** sanitized user input without retyping (bounded UX; respects transparency / sanitizer path).
-  - **Primary work:** UI affordance + orchestration hook to re-submit stored payload; optional model rotation policy.
-  - **Files:** `src/index.tsx`, `main.py`, ask orchestration hooks.
-  - **Depends on:** unified Ask pipeline and input transparency behavior.
-  - **Not in scope:** automatic multi-model tournaments or silent retries without user intent.
-
 - ★★ **Text model chains** (user-configurable text fallbacks)
 
   - **Goal:** Vision Ask paths already use ordered fallback lists per mode via `[refactor_helpers.py](../refactor_helpers.py)` (`select_ollama_models(..., requires_vision=True)`). **Text-only** paths still use fixed lists today. Add Settings (or import/export JSON) so users define **ordered text model tags per mode** (Speed / Strategy / Expert), with validation, sane defaults matching shipped lists, and try-next-on-`model not found` parity with vision.
@@ -78,13 +70,14 @@ Within this section: ascending stars (★★ → ★★★ → ★★★★). Br
   - **Depends on:** stable markdown chunk layout.
   - **Not in scope:** Per-monitor EDID detection.
 
-- ★★★ **Curated preset chips** (streaming / LAN / Steam Input, N)
+- ★★ **Preset chip expansion** (streaming / LAN / Steam Input — incremental, N)
 
-  - **Goal:** High-value Ask starters in [`src/data/presets.ts`](../src/data/presets.ts).
-  - **Primary work:** preset strings + categories aligned with ecosystem / Connection docs.
+  - **Baseline shipped:** `PRESET_PROMPTS` in [`src/data/presets.ts`](../src/data/presets.ts) drives the main-tab carousel (advice-first strings, strategy mode switches, honest `beta: true` previews). See **Completed** → First-run and prompts — not a separate ship milestone.
+  - **Goal:** Add or refresh preset strings as related features land (streaming perf, LAN/Ollama, Steam Input troubleshooting) — content tuning only.
+  - **Primary work:** New/edited `PRESET_PROMPTS` entries + category alignment; no new carousel mechanics.
   - **Files:** `src/data/presets.ts`, optional docs cross-links.
-  - **Depends on:** preset carousel behavior (shipped baseline).
-  - **Not in scope:** model-generated dynamic chips.
+  - **Depends on:** shipped preset carousel + category routing.
+  - **Not in scope:** model-generated dynamic chips; treating each string batch as a versioned feature ship.
 
 - ★★★ **Multi-language replies** (Steam locale + optional override)
 
@@ -94,14 +87,6 @@ Within this section: ascending stars (★★ → ★★★ → ★★★★). Br
   - **Depends on:** settings persistence already present.
   - **Not in scope:** full UI localization of plugin labels.
 
-- ★★★ **Named Ollama hosts** (quick switch, K)
-
-  - **Goal:** Save **2–4 labeled base URLs** with one-tap switch.
-  - **Primary work:** settings schema + Connection UI row.
-  - **Files:** `settings_service.py`, Connection UI, `settingsAndResponse.ts`.
-  - **Depends on:** shipped Connection settings.
-  - **Not in scope:** subnet IP scanning (shipped alternative: opt-in **mDNS** browse — see Completed → Connection).
-
 - ★★★ **Per-mode latency timeouts** (warn vs hard limit profiles)
 
   - **Goal:** Separate warning and timeout values per selected mode.
@@ -109,8 +94,6 @@ Within this section: ascending stars (★★ → ★★★ → ★★★★). Br
   - **Files:** `main.py`, `src/index.tsx`.
   - **Depends on:** **Mode selector (main screen)** (shipped).
   - **Not in scope:** per-game/per-model fine-grained profile matrix.
-
-- ★★★ **Per-turn local feedback** (thumbs / flags, S) — **polish shipped 2026-06-14:** compact feedback row under AI bubble; shared `.bonsai-chat-secondary-btn` with Retry and Show details toggles.
 
 - ★★★ **Playful thinking status lines** (prompt-aware pending copy)
 
@@ -196,7 +179,7 @@ Within this section: ascending stars (★★★★ → ★★★★★ → ★�
   - **Not in scope:** cross-device merge or server-backed sync.
 
 - ★★★★ **Offline intent packs** (local JSON import/export)
-b
+
   - **Goal:** Import/export user-created offline search intent packs (aliases, synonyms, expansions) without cloud dependence.
   - **Primary work:** local JSON schema, add/edit/export/import, merge conflict rules.
   - **Files:** `src/index.tsx`, `main.py`, docs/usage references.
@@ -350,7 +333,13 @@ Within this section: ★★★★★ items first (ascending stars), then ★★�
   - **Related:** **Global quick-launch macro** (Medium-term); when a native entry exists, refresh the macro sequence in [troubleshooting.md](troubleshooting.md).
   - **Not in scope:** Shipping a forked Steam client or undocumented UI injection as the default approach.
 
-- ★★★★★★ **Token stream replies** (live markdown; U) — **incremental 2026-06-14:** `useSmoothStreamReveal` RAF reveal, 150 ms stream poll, plain-text preview chunk during stream.
+- ★★★★★★ **Token stream replies** (live markdown; U)
+
+  - **Goal:** Stream **markdown-formatted** reply chunks during generation (not only a plain-text preview). **Baseline shipped (experimental):** Developer tab **Token streaming** toggle, `partial_response` on background poll, `useSmoothStreamReveal` RAF smoothing — see [Completed](archive/roadmap-completed.md) → Tabs and [CHANGELOG.md](../CHANGELOG.md) **0.4.0**.
+  - **Primary work:** Progressive markdown chunk layout during stream; parity with terminal D-pad chunk split and strategy/TDP branches.
+  - **Files:** `useBonsaiAskOrchestration.ts`, `MainTab.tsx`, `ollama_service.py`, `main.py`.
+  - **Depends on:** shipped experimental token preview path.
+  - **Not in scope:** exposing raw model “thinking” channel text.
 
 ### Reference — vision model fallback order
 
@@ -372,14 +361,15 @@ Dependency graph and implementation notes that are not feature checklist items.
 
 ### Cross-feature dependency summary
 
-- **Mode selector (main screen)** (shipped: Speed / Strategy / Deep + model fallbacks) → **Per-mode latency/timeout profiles**; **Strategy Guide prompt path (beta)** is shipped as **`strategy`** Ask mode — see **[Completed](#tabs-icons-and-unified-ask-flow)**.
+- **Mode selector (main screen)** (shipped: Speed / Strategy / Expert + model fallbacks; persisted id `expert`) → **Per-mode latency/timeout profiles**; **Strategy Guide prompt path (beta)** is shipped as **`strategy`** Ask mode — see **[Completed](#tabs-icons-and-unified-ask-flow)**.
 - **Character voice roleplay (shipped)** → baseline for **Character accent intensity (shipped)**; presets in [archive/research/voice-character-catalog.md](archive/research/voice-character-catalog.md), [src/data/characterCatalog.ts](../src/data/characterCatalog.ts).
 - **Character voice roleplay (shipped)** → **Pyro talent-manager easter egg (hidden preset)** (shipped — see **Completed** → Character voice roleplay; on-device QA: [testing.md](testing.md#regression-gates) §2 / §3).
 - **Character voice roleplay** + avatar mapping → **Higher-resolution character avatars (GTA-style art pass)**.
 - **Character voice roleplay (shipped)** → **Character-derived UI accent theme (preset-selected)** (shipped — see **Completed**); **Random character “?” avatar** (shipped — see **Completed**); **Running-game character suggestions (AI picker)** (shipped — see **Completed**).
 - **Character voice roleplay (shipped)** → **Local reply TTS** (Phase 2 — preset→voice mapping; legal research gate before ship).
 - **Character voice roleplay (shipped)** → **Playful thinking status lines** (persona tone when roleplay on).
-- **Media library access (shipped)** → **Screenshot attach button** (Ask bar); complements **Global screenshots and vision**.
+- **Unified Ask pipeline and input transparency (shipped)** → **Text model chains** (user-configurable text fallbacks); **Retry same prompt** (shipped — see **Completed** → Tabs).
+- **Media library access (shipped)** → **Screenshot attach button** (Ask bar dedicated control); complements **Global screenshots and vision**.
 - **Input sanitizer (shipped)** + **Input handling transparency (shipped)** → future sanitizer extensions should keep user-visible auditability.
 - **Strategy Ask mode (`strategy`; Strategy Guide in prompts)** (shipped) → **Strategy Guide safety and spoilers** (shipped — on-device QA: [testing.md](testing.md) § Spoiler Policy and Consent), **Strategy checklist workflow (chat-scoped)** (planned).
 - **Global screenshots and vision** → richer strategy + screenshot context.
@@ -391,7 +381,7 @@ Dependency graph and implementation notes that are not feature checklist items.
 - **Built on Ollama link** → shipped in About.
 - **SteamOS Media screenshot share button** → possible fast path into **Global screenshots and vision** if APIs allow.
 - **Reset session cache (shipped)** → in-memory unified-input / reply state only; see **Completed** → Tabs.
-- **Preset carousel (Phase 1 shipped)** → extends presentation without changing category routing; **Pyro talent-manager easter egg (shipped)** adds a separate inject chip outside the trio’s `PRESET_CAROUSEL_ACTIVE_MS` window.
+- **Preset carousel (Phase 1 shipped)** → extends presentation without changing category routing; **`PRESET_PROMPTS` baseline (shipped)** → incremental preset string expansion (streaming / LAN / Steam Input themes) as features land — content tuning, not a distinct ship line; **Pyro talent-manager easter egg (shipped)** adds a separate inject chip outside the trio’s `PRESET_CAROUSEL_ACTIVE_MS` window.
 - **Global quick-launch macro** ↔ **Native QAM shortcut tile** (shorter macro once a direct QAM tile exists).
 - **Bundled VDF parsing** → **Steam Input layout parse** (and optional deeper parsing).
 - **Steam Input settings search + jump** → Phase 1 shipped; broader catalog deferred.

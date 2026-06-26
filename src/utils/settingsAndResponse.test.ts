@@ -112,7 +112,8 @@ describe("settingsAndResponse", () => {
   });
 
   it("normalizes ask_mode to allowed ids", () => {
-    expect(normalizeSettings({ ask_mode: "deep" }).ask_mode).toBe("deep");
+    expect(normalizeSettings({ ask_mode: "expert" }).ask_mode).toBe("expert");
+    expect(normalizeSettings({ ask_mode: "deep" }).ask_mode).toBe("expert");
     expect(normalizeSettings({ ask_mode: "bogus" as unknown as string }).ask_mode).toBe(DEFAULT_ASK_MODE);
   });
 
@@ -210,7 +211,7 @@ describe("settingsAndResponse", () => {
       aiCharacterPresetId: "preset-a",
       aiCharacterCustomText: "hi",
       aiCharacterAccentIntensity: "balanced",
-      askMode: "deep",
+      askMode: "expert",
       ollamaKeepAlive: "30s",
       showDeveloperTab: true,
       modelPolicyTier: "open_weight",
@@ -232,7 +233,7 @@ describe("settingsAndResponse", () => {
     expect(p.unified_input_persistence_mode).toBe("no_persist");
     expect(p.screenshot_attachment_preset).toBe("mid");
     expect(p.ai_character_preset_id).toBe("preset-a");
-    expect(p.ask_mode).toBe("deep");
+    expect(p.ask_mode).toBe("expert");
     expect(p.ollama_keep_alive).toBe("30s");
     expect(p.model_allow_high_vram_fallbacks).toBe(true);
     expect(p.ollama_local_on_deck).toBe(true);

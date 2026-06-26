@@ -234,7 +234,7 @@ Attach one screenshot + one Ask. **Already verified** (vision sweep 2026-04) —
 ### Tier 1 extras (single Ask each)
 
 - [ ] **Session restore:** close and reopen plugin — last Q&A still visible (`PERSIST-QA`, P0).
-- [ ] **Mode Speed vs Deep:** one Ask each; model disclosure or routing differs (`MODE-SELECTOR`, P1).
+- [ ] **Mode Speed vs Expert:** one Ask each; model disclosure or routing differs (`MODE-SELECTOR`, P1).
 - [ ] **What game am I playing?** with game focused — names title (`GAME-CTX`, P0).
 
 ---
@@ -344,7 +344,7 @@ Maps [roadmap.md](roadmap.md) **Completed** summary and [archive/roadmap-complet
 | Feature ID | Shipped feature | Test ID(s) | Status | Evidence |
 |------------|-----------------|------------|--------|----------|
 | BETA-MODAL | Beta disclaimer modal | SMOKE-A | Open | First paint |
-| PRESETS-CAROUSEL | Suggested AI prompts + carousel | SMOKE-A, SMOKE-D | Partial | Troubleshooting triple verified; animation ms → Tier 3 |
+| PRESETS-CAROUSEL | Suggested AI prompts + carousel | SMOKE-A, SMOKE-D | Partial | `PRESET_PROMPTS` baseline shipped; troubleshooting triple verified; string expansion incremental |
 | PROMPT-TEST-MVP | Prompt-testing MVP (this doc) | — | Partial | Matrices shipped; Tier 0–1 open |
 | SANITIZER | Input sanitizer lane | SMOKE-F | Partial | [SMOKE-F-disable-sanitize](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-F-disable-sanitize/manifest.json); [preview 2026-05-26](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-F-disable-sanitize/manifest.json) |
 | TRANSPARENCY | Input handling transparency panel | SMOKE-A | Partial | Expand panel in golden path (on-Deck); [preview 2026-05-26](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-A-golden-path/manifest.json) |
@@ -358,6 +358,7 @@ Maps [roadmap.md](roadmap.md) **Completed** summary and [archive/roadmap-complet
 | KEEP-ALIVE | Ollama keep_alive presets | — | Open | Settings persist |
 | LOCAL-RUNTIME | Local Ollama on Deck default-off + onboarding | — | Open | Tier 2 |
 | MDNS-FIND | LAN mDNS Find LAN | — | Open | Tier 2; needs Avahi; [preview 2026-05-26](test-evidence/tier2/2026-05-26-9e20a82/MDNS-FIND-rpc/manifest.json) |
+| NAMED-HOSTS | Named Ollama hosts (quick switch) | — | Open | Ollama tab; up to 4 labeled LAN URLs |
 | MAINT-HARNESS | Vitest Deck harness, watch-deploy | N/A (unit-only) | N/A | CI; [preGate](test-evidence/preGate/2026-05-26-9e20a82/batch-summary.json); [preview 2026-05-26](test-evidence/preGate/2026-05-26-9e20a82/UNIT-A-vitest-gates/manifest.json) |
 | OLLAMA-UPDATE | Update Ollama & Models on Deck | — | Open | Tier 2 |
 
@@ -371,13 +372,15 @@ Maps [roadmap.md](roadmap.md) **Completed** summary and [archive/roadmap-complet
 | PRESET-FADE-OPT | Preset chip fade opt-out | — | Open | Tier 3 cosmetic |
 | CAROUSEL-SLIDE | Carousel slide + history (2026-05-20) | — | Open | Tier 3 cosmetic |
 | GEMMA-PULL | Gemma pull models + routing | — | Partial | Unit tests |
-| MODE-SELECTOR | Speed / Strategy / Deep | SMOKE-E, Tier 1 | Open | |
+| MODE-SELECTOR | Speed / Strategy / Expert | SMOKE-E, Tier 1 | Open | Persisted id `expert` |
 | VOICE-STT | Whisper voice Ask (local STT) | VOICE-01…04 | Open | Permissions + Settings model download; on-Deck mic required |
 | STRATEGY-CORE | Strategy Guide prompt path | SMOKE-E | Open | |
 | STRATEGY-SPOILER | Strategy spoiler policy + consent | SMOKE-E, STRAT-01…05 | Partial | Unit green 2026-04-30; [preview 2026-05-26](test-evidence/tier1Core/2026-05-26-9e20a82/SMOKE-E-strategy-mode/manifest.json) |
 | DEBUG-TAB | Debug tab opt-in | SMOKE-A | Open | Tab strip when enabled |
 | SETTINGS-TRIM | Settings tab trim | SMOKE-A | Open | |
 | RESET-SESSION | Reset session cache | — | Open | Tier 2 |
+| RETRY-PROMPT | Retry same prompt (regenerate) | FEEDBACK-01 | Open | `BonsaiChatReplyActions.tsx`; on-Deck |
+| ASK-FEEDBACK | Per-turn local feedback (thumbs) | FEEDBACK-01 | Open | `save_ask_feedback` RPC; on-Deck |
 
 ### AI-assisted power and UX
 
@@ -517,7 +520,7 @@ Linked from [testing.md](testing.md#device-qa-runbook) **Tier 0**. Prefer smokes
 Requires **Settings → Data → Show Developer tab** → **Token streaming (experimental)**.
 
 - [x] **STREAM-01** Flag off: **Thinking…** until full reply; normal chunks after
-- [x] **STREAM-02** Flag on, Speed/Deep: single preview bubble; terminal split + banners
+- [x] **STREAM-02** Flag on, Speed/Expert: single preview bubble; terminal split + banners
 - [x] **STREAM-03** Flag on, Strategy + spoiler masking, no Spoilers OK: no unmasked mid-stream flash
 - [x] **STREAM-04** Stop mid-stream: cancelled copy; no stale overwrite
 - [x] **STREAM-05** Transparency populates only after terminal

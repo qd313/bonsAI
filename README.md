@@ -9,7 +9,7 @@
 1. Install **[Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader)** on your Steam Deck.
 2. Install **bonsAI** from **[GitHub Releases](https://github.com/cantcurecancer/bonsAI/releases)** — open **Decky** from QAM → install from local ZIP.
 3. Install **[Ollama](https://ollama.com/download)** on the machine that will run models, then pull the Deck essentials model: `ollama pull qwen2.5vl:3b` (one FOSS model for chat and screenshots). Optional Tier 2: `ollama pull gemma4:e2b-it-qat`.
-4. Open **bonsAI** → **Settings** → set **Ollama host** to `http://127.0.0.1:11434` (same device) or `http://<PC-IP>:11434` (PC on your LAN) → **Main** → send a test message.
+4. Open **bonsAI** → **Ollama** → set **Where AI runs** to `http://127.0.0.1:11434` (same device) or `http://<PC-IP>:11434` (PC on your LAN) → **Main** → send a test message.
 
 Unfamiliar with **QAM**, **LAN**, or **Ollama**? See [Glossary](#glossary-quick). Network and vision setup: [docs/troubleshooting.md](docs/troubleshooting.md).
 
@@ -24,17 +24,27 @@ Unfamiliar with **QAM**, **LAN**, or **Ollama**? See [Glossary](#glossary-quick)
 | **LAN** | Your home network. Required when Ollama runs on a separate PC. |
 | **Base URL** | Address bonsAI uses for Ollama, usually `http://127.0.0.1:11434` or `http://<PC-IP>:11434`. |
 
-## What bonsAI does
+## What bonsAI does (shipped today)
 
-- **Ask (chat)** — Prompts go through the Python backend to Ollama; replies show as markdown-style chunks.
-- **Ask modes: Speed, Strategy, Expert** — Different model fallback chains; Strategy adds gameplay-coaching prompts.
+- **Ask (chat)** — Prompts go through the Python backend to Ollama; replies render as markdown-style chunks in collapsible turn rows.
+- **Ask modes: Speed, Strategy, Expert** — Different model fallback chains; Strategy adds gameplay-coaching prompts and spoiler controls.
 - **Game context** — Active game included when available.
 - **Presets** — Reusable prompt chips and a unified ask bar.
-- **Screenshot attachments** — Vision asks with a Steam screenshot; needs a vision model and Permissions. See [troubleshooting](docs/troubleshooting.md#25-screenshot-vision-setup-v1).
-- **TDP / power** — With Permissions, suggested TDP changes can be applied on the Deck.
-- **AI character (roleplay)** — Optional tone via the in-app picker.
+- **Screenshot attachments** — Vision asks with a Steam screenshot (attach icon on the Ask bar); needs a vision model and **Permissions → Media library access**. See [troubleshooting](docs/troubleshooting.md#25-screenshot-vision-setup-v1).
+- **Voice input** — Local speech-to-text into the Ask field (mic button); requires **Permissions → Voice input** and a whisper.cpp model in **Settings → Voice input**.
+- **TDP / power** — With **Permissions → Hardware control**, suggested TDP changes can be applied on the Deck; QAM Performance guidance after apply.
+- **AI character (roleplay)** — Optional tone via the in-app picker; accent intensity in Settings.
+- **Ollama tab** — Where AI runs, connection test, **Find LAN** (mDNS), saved LAN hosts, model pulls, and model-policy tiers.
+- **Permissions** — User-controlled gates for filesystem writes, hardware, media/screenshots, Steam Web API (VAC check), and external links.
+- **Background Ask** — Requests can finish while QAM is closed and restore on reopen.
+- **Reply actions** — **Retry same prompt**, thumbs feedback, and optional input-transparency details per turn.
+- **Magic Ask commands** — `bonsai:disable-sanitize` / `bonsai:enable-sanitize`, shortcut setup, and optional `bonsai:vac-check` (no Ollama required).
 
-**Tabs:** **Main**, **Settings**, **Permissions**, **About**, **Debug**.
+**Tabs:** **Main**, **Ollama**, **Settings**, **Permissions**, **About**, and optional **Developer** (Settings → **Show Developer tab** — advanced logging, token streaming experiment, Steam Input jump).
+
+## What's planned
+
+Backlog and in-progress work (RAG, couch 10-foot UI, native QAM tile, strategy checklists, and more) live in **[docs/roadmap.md](docs/roadmap.md)**. Shipped feature detail and QA cross-links: [archive/roadmap-completed.md](docs/archive/roadmap-completed.md).
 
 ## Requirements
 

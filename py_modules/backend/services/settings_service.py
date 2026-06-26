@@ -47,6 +47,8 @@ def sanitize_ask_mode(
     default_mode: str,
 ) -> str:
     """Validate main-tab Ask mode strings and fall back to the configured default."""
+    if value == "deep":
+        value = "expert"
     if isinstance(value, str) and value in valid_modes:
         return value
     return default_mode

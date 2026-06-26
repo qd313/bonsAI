@@ -25,7 +25,7 @@ def _sanitize(data):
         max_request_timeout_seconds=600,
         valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
         default_persistence_mode="no_persist",
-        valid_ask_modes={"speed", "strategy", "deep"},
+        valid_ask_modes={"speed", "strategy", "expert"},
         default_ask_mode="speed",
     )
 

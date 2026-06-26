@@ -4,6 +4,10 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- **Preset chip refresh (2026-06-26):** [`src/data/presets.ts`](src/data/presets.ts) — LAN/Ollama connection chips, Expert/voice setup prompts, Steam Input advice chip; graduated strategy/VAC/essentials chips off `[beta]`; removed fan-noise/long-session thermal and redundant GPU/battery dupes; rephrased model-policy tier chip.
+- **Ask mode id rename (soft migration):** Persisted/RPC `ask_mode` **`deep`** renamed **`expert`** to match UI label **Expert**. Legacy `"deep"` in settings coerces to `"expert"` on load (`normalizeAskMode`, `sanitize_ask_mode`).
+
 ## [0.4.2] - 2026-06-21
 
 ### Added
@@ -18,6 +22,7 @@ All notable changes to this project are documented in this file.
 ### Added
 - **Tier 2 one-model multimodal preset:** Connection → **Install Tier 2 one-model multimodal** pulls `gemma4:e2b-it-qat` (falls back to `gemma4:e2b`) with open-weight license disclosure and auto Tier 2 policy.
 - **Clear all data — local Ollama teardown:** When **Ollama on this Deck** was enabled, clearing plugin data removes downloaded models, user-prefix Ollama binary, `~/.ollama`, and `~/.bonsai/cache`.
+- **Living Pull Models catalog:** Bundled `pullModelCatalog.ts` merged with remote overlay on catalog refresh; disk cache under `~/.bonsai/cache` (`pull_model_catalog_service.py`, `PullModelsModal.tsx`).
 
 ### Changed
 - **Deck essentials model simplification:** Tier 1 default is one pull (`qwen2.5vl:3b`); shortened Ask routing chains; Pull Models defaults to **Essentials only**; removed 11-model “full Tier-1” and dual-model starter presets.
@@ -26,10 +31,16 @@ All notable changes to this project are documented in this file.
 ## [0.4.0] - 2026-06-14
 
 ### Added
+- **Ollama tab + models hub:** Dedicated **Ollama** tab (between Main and Settings) for where AI runs, connection test, timeouts/keep-alive, **Find LAN** (mDNS), saved LAN hosts, and **Models & routing** hub (policy tiers, browse/pull, advanced routing). `OllamaTab.tsx`, `OllamaWhereAiRunsSection.tsx`, `OllamaModelsHubModal.tsx`, `ModelPolicyTierPanel.tsx`.
+- **Ask thread accordion:** Main tab shows one collapsible row per turn; expand to read the full answer inline (`expandedTurnKey`, `BonsaiChatTurnRow.tsx`, `useBonsaiAskOrchestration.ts`).
+- **Thinking status during Ask:** Deterministic phase lines via `format_thinking_phase` plus optional model `<bonsai-status>` while pending (`bonsai_stream_tags.py`, `game_ai_request.py`, `MainTab.tsx`).
+- **Retry same prompt:** **Retry same prompt** on completed replies re-runs the last sanitized Ask without retyping (`onRetryLastResponse`, `BonsaiChatReplyActions.tsx`).
+- **Per-turn reply feedback:** Thumbs up/down under AI replies (`save_ask_feedback` RPC, `BonsaiChatReplyActions.tsx`).
+- **Named Ollama hosts:** Save and quick-switch up to four labeled LAN Ollama base URLs on the Ollama tab (`named_ollama_hosts`, `OllamaWhereAiRunsSection.tsx`).
 - **Voice input (local STT):** Mic button on the unified Ask bar records via backend PipeWire/Pulse/ALSA capture and streams interim whisper.cpp transcription into the text field. **Permissions → Voice input (microphone)** (default off). **Settings → Voice input** for `tiny.en` / `base.en` model download. RPCs: `start_voice_transcription`, `stop_voice_transcription`, `get_voice_transcription_status`, `install_voice_engine`. `voice_transcription_service.py`, `useVoiceTranscription.ts`, `VoiceInputSettingsSection.tsx`.
-- **LAN Ollama discovery (mDNS):** Settings → Connection **Find LAN** — user-triggered browse for `_ollama._tcp` only (no subnet scan). `ollama_mdns_discovery_service.py`, `discover_mdns_ollama_hosts` RPC, `SettingsTab.tsx`.
+- **LAN Ollama discovery (mDNS):** **Ollama** tab **Find LAN** — user-triggered browse for `_ollama._tcp` only (no subnet scan). `ollama_mdns_discovery_service.py`, `discover_mdns_ollama_hosts` RPC, `OllamaWhereAiRunsSection.tsx`.
 - **Maintainer automation:** Vitest headless Decky harness (`src/test-harness/`, `vitest.config.ts`); `scripts/watch-deploy.sh` / `.ps1`; prepare-only `pnpm run version:bump`; Cursor skill `.cursor/skills/bonsai-deck-dev-loop/`.
-- **Token streaming (experimental, Developer tab):** When **Token streaming (experimental)** is enabled (`bonsai_token_streaming_enabled`), Main shows a single growing preview chunk while Ollama NDJSON deltas arrive (`partial_response` on background status poll at 350ms); terminal replies still run strategy branches, TDP apply, model-policy disclosure, and normal D-pad chunk splitting. `main.py`, `ollama_service.py`, `useBonsaiAskOrchestration.ts`, `MainTab.tsx`, `DeveloperTab.tsx`.
+- **Token streaming (experimental, Developer tab):** When **Token streaming (experimental)** is enabled (`bonsai_token_streaming_enabled`), Main shows a single growing preview chunk while Ollama NDJSON deltas arrive (`partial_response` on background status poll at 350ms); `useSmoothStreamReveal` RAF smoothing. Terminal replies still run strategy branches, TDP apply, model-policy disclosure, and normal D-pad chunk splitting. `main.py`, `ollama_service.py`, `useBonsaiAskOrchestration.ts`, `MainTab.tsx`, `DeveloperTab.tsx`.
 - **Developer tab (opt-in):** Settings → Data → **Show Developer tab** (`show_developer_tab`; migrates legacy `show_debug_tab`). Merges former Debug diagnostics with advanced logging, connection tuning, Steam Web API key, and model-policy advanced controls. `DeveloperTab.tsx`, `index.tsx`, `settings_service.py`, `settingsAndResponse.ts`.
 
 ### Changed
@@ -68,7 +79,7 @@ All notable changes to this project are documented in this file.
 
 ### Added
 - **Running-game character suggestions (AI picker):** `CharacterPickerModal` shows a **Playing:** strip with up to three catalog presets when Steam reports a running game (`Router.MainRunningApp`); matching uses `src/utils/runningGameCharacterSuggestions.ts` (AppID map, normalized title hints, TF2 merge). Async resolve after first paint with a delayed spinner; D-pad links Random, suggestions, catalog column 0, and custom character field.
-- **Mode selector (main screen):** Persisted `ask_mode` (`speed` / `strategy` / `deep`) with UI labels Speed, Strategy, Deep; outline button (green / bronze / gold) left of mic/stop opens an anchored popover menu (no layout reflow); D-pad order text → mode → mic/stop. Backend `refactor_helpers.select_ollama_models` maps each mode to ordered Ollama fallbacks; `start_background_game_ai` sends `ask_mode`. `src/data/askMode.ts`, `AskModeMenuPopover.tsx`, `MainTab.tsx`, `index.tsx`, `settingsAndResponse.ts`, `settings_service.py`, `main.py`.
+- **Mode selector (main screen):** Persisted `ask_mode` (`speed` / `strategy` / `deep`) with UI labels Speed, Strategy, Expert; outline button (green / bronze / gold) left of mic/stop opens an anchored popover menu (no layout reflow); D-pad order text → mode → mic/stop. Backend `refactor_helpers.select_ollama_models` maps each mode to ordered Ollama fallbacks; `start_background_game_ai` sends `ask_mode`. `src/data/askMode.ts`, `AskModeMenuPopover.tsx`, `MainTab.tsx`, `index.tsx`, `settingsAndResponse.ts`, `settings_service.py`, `main.py`.
 - **Character accent intensity:** When **AI characters** is on, Settings includes **Accent intensity** (four levels: subtle / balanced / heavy / unleashed, default balanced) with short Doom-difficulty–style chip labels. Persisted `ai_character_accent_intensity`; `backend/services/ai_character_service.py` modulates roleplay dialect strength for preset, random, and custom character paths; TDP/JSON policy unchanged. `src/data/aiCharacterAccentIntensity.ts`, `src/index.tsx`, `src/utils/settingsAndResponse.ts`, `backend/services/settings_service.py`.
 - **Input handling transparency:** Main tab **Input handling (last Ask)** shows raw Ask text, sanitizer output, system/user messages sent to Ollama, model id, and responses; **Run original in Ask** and **Copy JSON**. RPC `get_input_transparency`; optional Settings **Verbose Ask logging to Desktop notes** (`desktop_ask_verbose_logging`) appends traces to `~/Desktop/BonsAI_notes/bonsai-ask-trace-YYYY-MM-DD.md` when filesystem writes are allowed. `main.py`, `backend/services/desktop_note_service.py`, `src/components/MainTab.tsx`, `src/utils/inputTransparency.ts`, `src/utils/settingsAndResponse.ts`, `backend/services/settings_service.py`.
 - **Input sanitizer lane (hybrid):** Default-on deterministic Ask sanitization before Ollama (NUL/control cleanup, length cap, empty/junk block). No Settings-tab controls; disable/re-enable with exact Ask-only phrases `bonsai:disable-sanitize` and `bonsai:enable-sanitize` (persisted `input_sanitizer_user_disabled`, confirmation without model call). `backend/services/input_sanitizer_service.py`, `main.py`, `src/index.tsx`, `src/data/inputSanitizerCommands.ts`, `src/utils/settingsAndResponse.ts`, `backend/services/settings_service.py`.

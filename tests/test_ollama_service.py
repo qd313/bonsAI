@@ -361,7 +361,7 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertIn("1080p", prompt)
         self.assertIn("4K", prompt)
 
-    def test_build_system_prompt_deep_includes_triple_resolution_then_followup(self):
+    def test_build_system_prompt_expert_includes_triple_resolution_then_followup(self):
         def lookup_app_name(_app_id: str) -> str:
             return ""
 
@@ -376,9 +376,9 @@ class OllamaServiceTests(unittest.TestCase):
             prepared_images=[],
             lookup_app_name=lookup_app_name,
             lookup_screenshot_vdf_metadata=lookup_vdf,
-            ask_mode="deep",
+            ask_mode="expert",
         )
-        self.assertIn("DISPLAY TARGETS (Expert / Deep mode)", prompt)
+        self.assertIn("DISPLAY TARGETS (Expert mode)", prompt)
         self.assertIn("(1) 1280×800 (2) 1080p (3) 4K (4) Enter your own", prompt)
 
     def test_build_system_prompt_includes_deck_troubleshoot_game_gotchas_with_title(self):

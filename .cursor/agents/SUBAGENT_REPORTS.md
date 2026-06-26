@@ -154,6 +154,15 @@ No session archived
 
 <!-- Newest entries first. -->
 
+### 2026-06-26 - foss-advocate + security-auditor (preset chip refresh, ask_mode deep→expert)
+
+```text
+Scope: Uncommitted changes — src/data/presets.ts (LAN/Ollama/Expert/voice/Steam Input chips, graduated bonsai:vac-check), ask_mode id rename deep→expert with legacy coercion (askMode.ts, settingsAndResponse.ts, settings_service.py, refactor_helpers.py, ollama_prompts.py, main.py), docs/README/roadmap/testing updates.
+foss-advocate: 1 finding (★★) — OLLAMA_BONSAI_SETUP_LINE still cites Settings → Connection while Ollama tab ships Find LAN / named hosts; docs/foss-advocate-report.md updated. Fix: prompt string edit in ollama_prompts.py (low cost).
+security-auditor: No new confirmed findings; ask_mode sanitization and steam_web_api gate on bonsai:vac-check re-verified; docs/security-audit-report.md revision log 2026-06-26.
+Red-team / blue-team: N/A.
+```
+
 ### 2026-06-14 - Ask thread accordion UX
 
 **master-debugger** — Triaged. Static review found transcript `flow-children` broken by non-Focusable row wrapper and missing header→body vertical link; fixed in `BonsaiChatTurnRow.tsx` (row + body as nested `Focusable flow-children="vertical"`). Deferred: nested spoiler `Focusable` inside chunk wrappers (pre-existing pattern); model-policy Read more native button.

@@ -42,7 +42,7 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="no_persist",
-            valid_ask_modes={"speed", "strategy", "deep"},
+            valid_ask_modes={"speed", "strategy", "expert"},
             default_ask_mode="speed",
         )
         self.assertEqual(sanitized["latency_warning_seconds"], 295)
@@ -86,7 +86,7 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="no_persist",
-            valid_ask_modes={"speed", "strategy", "deep"},
+            valid_ask_modes={"speed", "strategy", "expert"},
             default_ask_mode="speed",
         )
         self.assertTrue(
@@ -111,7 +111,7 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="no_persist",
-            valid_ask_modes={"speed", "strategy", "deep"},
+            valid_ask_modes={"speed", "strategy", "expert"},
             default_ask_mode="speed",
         )
         self.assertTrue(sanitize_settings(data={"show_debug_tab": True}, **kwargs)["show_developer_tab"])
@@ -132,7 +132,7 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
-            valid_ask_modes={"speed", "strategy", "deep"},
+            valid_ask_modes={"speed", "strategy", "expert"},
             default_ask_mode="speed",
         )
         self.assertEqual(sanitized["model_policy_tier"], "open_weight")
@@ -150,7 +150,7 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
-            valid_ask_modes={"speed", "strategy", "deep"},
+            valid_ask_modes={"speed", "strategy", "expert"},
             default_ask_mode="speed",
         )
         self.assertEqual(good["ollama_keep_alive"], "15s")
@@ -164,14 +164,14 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
-            valid_ask_modes={"speed", "strategy", "deep"},
+            valid_ask_modes={"speed", "strategy", "expert"},
             default_ask_mode="speed",
         )
         self.assertEqual(bad["ollama_keep_alive"], "5m")
 
-    def test_sanitize_ask_mode_accepts_speed_strategy_deep(self):
+    def test_sanitize_ask_mode_accepts_speed_strategy_expert(self):
         """Ask mode persists only the three known inference modes."""
-        for mode in ("speed", "strategy", "deep"):
+        for mode in ("speed", "strategy", "expert"):
             sanitized = sanitize_settings(
                 data={"ask_mode": mode},
                 default_latency_warning_seconds=15,
@@ -182,10 +182,27 @@ class SettingsServiceTests(unittest.TestCase):
                 max_request_timeout_seconds=300,
                 valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
                 default_persistence_mode="persist_all",
-                valid_ask_modes={"speed", "strategy", "deep"},
+                valid_ask_modes={"speed", "strategy", "expert"},
                 default_ask_mode="speed",
             )
             self.assertEqual(sanitized["ask_mode"], mode)
+
+    def test_sanitize_ask_mode_migrates_legacy_deep_to_expert(self):
+        """Legacy persisted ask_mode deep coerces to expert on load."""
+        sanitized = sanitize_settings(
+            data={"ask_mode": "deep"},
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="persist_all",
+            valid_ask_modes={"speed", "strategy", "expert"},
+            default_ask_mode="speed",
+        )
+        self.assertEqual(sanitized["ask_mode"], "expert")
 
     def test_sanitize_preset_chip_fade_animation_enabled_false_only_for_literal_false(self):
         """Preset chip fades stay enabled unless JSON false is stored."""
@@ -199,7 +216,7 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
-            valid_ask_modes={"speed", "strategy", "deep"},
+            valid_ask_modes={"speed", "strategy", "expert"},
             default_ask_mode="speed",
         )
         self.assertFalse(off["preset_chip_fade_animation_enabled"])
@@ -213,7 +230,7 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
-            valid_ask_modes={"speed", "strategy", "deep"},
+            valid_ask_modes={"speed", "strategy", "expert"},
             default_ask_mode="speed",
         )
         self.assertTrue(garbled["preset_chip_fade_animation_enabled"])
@@ -233,7 +250,7 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
-            valid_ask_modes={"speed", "strategy", "deep"},
+            valid_ask_modes={"speed", "strategy", "expert"},
             default_ask_mode="speed",
         )
         self.assertEqual(sanitized["latency_warning_seconds"], 200)
@@ -252,7 +269,7 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
-            valid_ask_modes={"speed", "strategy", "deep"},
+            valid_ask_modes={"speed", "strategy", "expert"},
             default_ask_mode="speed",
         )
         self.assertTrue(on["desktop_debug_note_auto_save"])
@@ -269,7 +286,7 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
-            valid_ask_modes={"speed", "strategy", "deep"},
+            valid_ask_modes={"speed", "strategy", "expert"},
             default_ask_mode="speed",
         )
         self.assertTrue(on["desktop_ask_verbose_logging"])
@@ -283,7 +300,7 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
-            valid_ask_modes={"speed", "strategy", "deep"},
+            valid_ask_modes={"speed", "strategy", "expert"},
             default_ask_mode="speed",
         )
         self.assertFalse(garbled["desktop_ask_verbose_logging"])
@@ -298,7 +315,7 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
-            valid_ask_modes={"speed", "strategy", "deep"},
+            valid_ask_modes={"speed", "strategy", "expert"},
             default_ask_mode="speed",
         )
         self.assertEqual(sanitize_settings(data={"desktop_app_log_level": "default"}, **kwargs)["desktop_app_log_level"], "default")
@@ -319,7 +336,7 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
-            valid_ask_modes={"speed", "strategy", "deep"},
+            valid_ask_modes={"speed", "strategy", "expert"},
             default_ask_mode="speed",
         )
         self.assertTrue(off["input_sanitizer_user_disabled"])
@@ -333,7 +350,7 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
-            valid_ask_modes={"speed", "strategy", "deep"},
+            valid_ask_modes={"speed", "strategy", "expert"},
             default_ask_mode="speed",
         )
         self.assertFalse(garbled["input_sanitizer_user_disabled"])
@@ -349,7 +366,7 @@ class SettingsServiceTests(unittest.TestCase):
             max_request_timeout_seconds=300,
             valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
             default_persistence_mode="persist_all",
-            valid_ask_modes={"speed", "strategy", "deep"},
+            valid_ask_modes={"speed", "strategy", "expert"},
             default_ask_mode="speed",
         )
         missing = sanitize_settings(data={}, **base_kwargs)
@@ -378,7 +395,7 @@ class SettingsServiceTests(unittest.TestCase):
                 max_request_timeout_seconds=300,
                 valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
                 default_persistence_mode="persist_all",
-                valid_ask_modes={"speed", "strategy", "deep"},
+                valid_ask_modes={"speed", "strategy", "expert"},
                 default_ask_mode="speed",
             )
 
@@ -411,7 +428,7 @@ class SettingsServiceTests(unittest.TestCase):
                 max_request_timeout_seconds=300,
                 valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
                 default_persistence_mode="persist_all",
-                valid_ask_modes={"speed", "strategy", "deep"},
+                valid_ask_modes={"speed", "strategy", "expert"},
                 default_ask_mode="speed",
             )
 
@@ -458,7 +475,7 @@ class SettingsServiceTests(unittest.TestCase):
                 max_request_timeout_seconds=300,
                 valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
                 default_persistence_mode="persist_all",
-                valid_ask_modes={"speed", "strategy", "deep"},
+                valid_ask_modes={"speed", "strategy", "expert"},
                 default_ask_mode="speed",
             )
 

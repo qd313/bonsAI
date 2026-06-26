@@ -159,7 +159,7 @@ class Plugin:
         "no_persist",
     }
     DEFAULT_ASK_MODE = "speed"
-    VALID_ASK_MODES = {"speed", "strategy", "deep"}
+    VALID_ASK_MODES = {"speed", "strategy", "expert"}
     MIN_LATENCY_WARNING_SECONDS = 5
     MAX_LATENCY_WARNING_SECONDS = 300
     MIN_REQUEST_TIMEOUT_SECONDS = 10

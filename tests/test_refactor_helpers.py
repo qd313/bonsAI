@@ -72,7 +72,7 @@ class RefactorHelperTests(unittest.TestCase):
         self.assertIn("gemma4:e2b-it-qat", text)
         self.assertIn("gemma4:latest", text)
         self.assertEqual(select_ollama_models(False, "strategy")[0], "qwen2.5vl:3b")
-        self.assertEqual(select_ollama_models(False, "deep")[0], "qwen2.5vl:3b")
+        self.assertEqual(select_ollama_models(False, "expert")[0], "qwen2.5vl:3b")
 
         vision = select_ollama_models(True, "speed")
         self.assertEqual(vision[0], "qwen2.5vl:3b")
@@ -87,8 +87,8 @@ class RefactorHelperTests(unittest.TestCase):
         self.assertLess(len(safe_speed), len(hi_speed))
         self.assertIn("qwen2.5:32b", hi_speed)
 
-        safe_vis = select_ollama_models(True, "deep", False)
-        hi_vis = select_ollama_models(True, "deep", True)
+        safe_vis = select_ollama_models(True, "expert", False)
+        hi_vis = select_ollama_models(True, "expert", True)
         self.assertLess(len(safe_vis), len(hi_vis))
         self.assertIn("internvl3.5:38b", hi_vis)
 

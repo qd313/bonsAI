@@ -368,21 +368,49 @@ BONSAI_STATUS_STREAM_INSTRUCTION = (
 )
 
 
+def extract_question_snippet_for_prompt(question: str, max_len: int = 56) -> str:
+    """Short user-topic snippet for status-line instructions (avoid circular import with stream tags)."""
+    raw = re.sub(r"\s+", " ", (question or "").strip())
+    if not raw:
+        return ""
+    for sep in (". ", "? ", "! ", "; ", " — ", " - "):
+        if sep in raw:
+            raw = raw.split(sep, 1)[0].strip()
+            break
+    if len(raw) > max_len:
+        return raw[: max_len - 1].rstrip() + "…"
+    return raw
+
+
 def build_bonsai_status_stream_instruction(
     app_name: str = "",
     ask_mode: str = "speed",
     has_images: bool = False,
+    question_snippet: str = "",
+    character_roleplay_on: bool = False,
 ) -> str:
     """Dynamic guidance for model-emitted ``<bonsai-status>`` tags during streaming."""
     game = (app_name or "").strip()
     game_hint = f" for {game}" if game else ""
     example_game = game or "your game"
+    snippet = (question_snippet or "").strip()
+    topic_bit = f' about "{snippet}"' if snippet else ""
     image_hint = (
         " When screenshots are attached, mention what you are reviewing in the image "
         "(e.g. HUD, puzzle, boss arena) without inventing details you cannot see."
         if has_images
         else ""
     )
+    tone_hint = ""
+    if character_roleplay_on:
+        tone_hint = (
+            " Match the active character voice: dry wit is fine; stay helpful and under ~120 characters. "
+            "Do not spoil strategy secrets.\n"
+        )
+    else:
+        tone_hint = (
+            " Keep the line lightly playful and plain — weave the user's topic words; no sarcasm.\n"
+        )
     strategy_hint = ""
     if ask_mode == "strategy":
         strategy_hint = (
@@ -390,17 +418,22 @@ def build_bonsai_status_stream_instruction(
             "puzzle solutions, or hidden secrets — describe your investigative focus only "
             "(e.g. 'Reviewing the shrine layout in your screenshot').\n"
         )
-    example = (
-        f"<bonsai-status>Reviewing your {example_game} screenshot for the shrine puzzle</bonsai-status>"
-        if has_images
-        else f"<bonsai-status>Checking Deck context{game_hint} for your question</bonsai-status>"
-    )
+    if has_images:
+        example = (
+            f"<bonsai-status>Reviewing your {example_game} screenshot{topic_bit}</bonsai-status>"
+        )
+    else:
+        example = (
+            f"<bonsai-status>Checking {example_game or 'your question'}{topic_bit}</bonsai-status>"
+        )
     return (
         "STATUS LINE (required): As the very first characters of your assistant reply, emit exactly one line "
         "<bonsai-status>short plain-English status for the user</bonsai-status> "
-        "(under ~120 characters; no markdown inside the tag). Then continue with your normal answer on the following lines. "
+        "(under ~120 characters; no markdown inside the tag). Reference the user's topic when possible. "
+        "Then continue with your normal answer on the following lines. "
         "The status tag is stripped before the user sees the final reply.\n"
         f"Example: {example}\n"
+        f"{tone_hint}"
         f"{strategy_hint}"
         f"{image_hint}\n\n"
     )
@@ -424,6 +457,7 @@ def build_system_prompt(
     ask_mode: str = "speed",
     early_context_suffix: str = "",
     strategy_spoiler_consent: bool = False,
+    character_roleplay_on: bool = False,
 ) -> str:
     """Build the system message used for Ollama requests from game and attachment context.
 
@@ -524,6 +558,8 @@ def build_system_prompt(
             app_name=app_name,
             ask_mode=ask_mode,
             has_images=bool(prepared_images),
+            question_snippet=extract_question_snippet_for_prompt(question),
+            character_roleplay_on=character_roleplay_on,
         )
     )
     early_stripped = (early_context_suffix or "").strip()

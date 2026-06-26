@@ -81,6 +81,8 @@ export type BonsaiSettings = {
   desktop_app_log_level: DesktopAppLogLevel;
   /** When true (with Permissions → Steam/Proton log read), troubleshooting-style Asks attach bounded local log excerpts. */
   attach_proton_logs_when_troubleshooting: boolean;
+  /** When true, fire-and-forget tiny-model thinking blurbs (Developer opt-in; default off). */
+  thinking_status_tiny_model_enabled: boolean;
   /** @deprecated Prefer `preset_chip_animation`; kept for migration from older settings.json. */
   preset_chip_fade_animation_enabled: boolean;
   /** Main-tab preset chips: crossfade cycle, vertical carousel, or static rotation without opacity animation. */
@@ -143,6 +145,7 @@ export type BonsaiSettingsSnapshotInput = {
   desktopAskVerboseLogging: boolean;
   desktopAppLogLevel: DesktopAppLogLevel;
   attachProtonLogsWhenTroubleshooting: boolean;
+  thinkingStatusTinyModelEnabled: boolean;
   presetChipFadeAnimationEnabled: boolean;
   presetChipAnimation: PresetChipAnimation;
   inputSanitizerUserDisabled: boolean;
@@ -185,6 +188,7 @@ export function toBonsaiSettingsPayload(
     desktop_ask_verbose_logging: input.desktopAskVerboseLogging,
     desktop_app_log_level: input.desktopAppLogLevel,
     attach_proton_logs_when_troubleshooting: input.attachProtonLogsWhenTroubleshooting,
+    thinking_status_tiny_model_enabled: input.thinkingStatusTinyModelEnabled,
     preset_chip_fade_animation_enabled: input.presetChipAnimation === "fade",
     preset_chip_animation: input.presetChipAnimation,
     input_sanitizer_user_disabled: input.inputSanitizerUserDisabled,
@@ -246,6 +250,7 @@ export const MAX_NAMED_OLLAMA_HOSTS = 4;
 export const DEFAULT_DESKTOP_APP_LOG_LEVEL: DesktopAppLogLevel = "off";
 export const DESKTOP_APP_LOG_LEVEL_OPTIONS: DesktopAppLogLevel[] = ["off", "default", "verbose"];
 export const DEFAULT_ATTACH_PROTON_LOGS_WHEN_TROUBLESHOOTING = false;
+export const DEFAULT_THINKING_STATUS_TINY_MODEL_ENABLED = false;
 export const DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED = true;
 export const DEFAULT_PRESET_CHIP_ANIMATION: PresetChipAnimation = "fade";
 export const PRESET_CHIP_ANIMATION_OPTIONS: PresetChipAnimation[] = ["fade", "carousel", "static"];
@@ -455,6 +460,10 @@ export function normalizeAttachProtonLogsWhenTroubleshooting(value: unknown): bo
   return value === true;
 }
 
+export function normalizeThinkingStatusTinyModelEnabled(value: unknown): boolean {
+  return value === true;
+}
+
 export function normalizePresetChipFadeAnimationEnabled(value: unknown): boolean {
   if (value === false) return false;
   return DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED;
@@ -604,6 +613,9 @@ export function normalizeSettings(data: unknown): BonsaiSettings {
     desktop_app_log_level: normalizeDesktopAppLogLevel(raw.desktop_app_log_level),
     attach_proton_logs_when_troubleshooting: normalizeAttachProtonLogsWhenTroubleshooting(
       raw.attach_proton_logs_when_troubleshooting
+    ),
+    thinking_status_tiny_model_enabled: normalizeThinkingStatusTinyModelEnabled(
+      raw.thinking_status_tiny_model_enabled
     ),
     preset_chip_animation: normalizePresetChipAnimation(
       raw.preset_chip_animation,

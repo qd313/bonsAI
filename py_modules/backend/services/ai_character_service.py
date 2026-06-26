@@ -200,6 +200,28 @@ def pyro_asshole_mode_active(settings: dict[str, Any], resolved_preset_id: str |
     return is_pyro_asshole_mode(intensity)
 
 
+_DEADPAN_PRESET_IDS = frozenset(
+    {
+        "gta5_lester",
+        "tf2_sniper",
+        "tf2_spy",
+        "mgs_otacon",
+        "fo4_nick_valentine",
+        "portal_glados",
+    }
+)
+
+
+def thinking_status_tone_for_preset(preset_id: str | None) -> str:
+    """Map catalog preset id to thinking-line delivery tone."""
+    pid = (preset_id or "").strip()
+    if not pid:
+        return "witty"
+    if pid in _DEADPAN_PRESET_IDS:
+        return "deadpan"
+    return "witty"
+
+
 def _preset_or_random_body(work: str, char: str, hint: str, intensity: str) -> str:
     """Build preset/random roleplay body for catalog row fields."""
     if intensity == "subtle":

@@ -15,6 +15,7 @@ import {
   DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE,
   DEFAULT_DESKTOP_APP_LOG_LEVEL,
   DEFAULT_ATTACH_PROTON_LOGS_WHEN_TROUBLESHOOTING,
+  DEFAULT_THINKING_STATUS_TINY_MODEL_ENABLED,
   DEFAULT_INPUT_SANITIZER_USER_DISABLED,
   DEFAULT_LATENCY_WARNING_SECONDS,
   DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS,
@@ -62,6 +63,7 @@ function snapshotFromBonsaiSettings(normalized: BonsaiSettings): BonsaiSettingsS
     desktopAskVerboseLogging: normalized.desktop_ask_verbose_logging,
     desktopAppLogLevel: normalized.desktop_app_log_level,
     attachProtonLogsWhenTroubleshooting: normalized.attach_proton_logs_when_troubleshooting,
+    thinkingStatusTinyModelEnabled: normalized.thinking_status_tiny_model_enabled,
     presetChipFadeAnimationEnabled: normalized.preset_chip_fade_animation_enabled,
     presetChipAnimation: normalized.preset_chip_animation,
     inputSanitizerUserDisabled: normalized.input_sanitizer_user_disabled,
@@ -124,6 +126,9 @@ export function usePluginSettings() {
   const [attachProtonLogsWhenTroubleshooting, setAttachProtonLogsWhenTroubleshooting] = useState<boolean>(
     DEFAULT_ATTACH_PROTON_LOGS_WHEN_TROUBLESHOOTING
   );
+  const [thinkingStatusTinyModelEnabled, setThinkingStatusTinyModelEnabled] = useState<boolean>(
+    DEFAULT_THINKING_STATUS_TINY_MODEL_ENABLED
+  );
   const [presetChipFadeAnimationEnabled, setPresetChipFadeAnimationEnabled] = useState<boolean>(
     DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED
   );
@@ -181,6 +186,7 @@ export function usePluginSettings() {
     desktopAskVerboseLogging,
     desktopAppLogLevel,
     attachProtonLogsWhenTroubleshooting,
+    thinkingStatusTinyModelEnabled,
     presetChipFadeAnimationEnabled,
     presetChipAnimation,
     inputSanitizerUserDisabled,
@@ -219,6 +225,7 @@ export function usePluginSettings() {
     setDesktopAskVerboseLogging(normalized.desktop_ask_verbose_logging);
     setDesktopAppLogLevel(normalized.desktop_app_log_level);
     setAttachProtonLogsWhenTroubleshooting(normalized.attach_proton_logs_when_troubleshooting);
+    setThinkingStatusTinyModelEnabled(normalized.thinking_status_tiny_model_enabled);
     setPresetChipAnimation(normalized.preset_chip_animation);
     setPresetChipFadeAnimationEnabled(normalized.preset_chip_fade_animation_enabled);
     setInputSanitizerUserDisabled(normalized.input_sanitizer_user_disabled);
@@ -302,6 +309,7 @@ export function usePluginSettings() {
         setDesktopAskVerboseLogging(DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING);
         setDesktopAppLogLevel(DEFAULT_DESKTOP_APP_LOG_LEVEL);
         setAttachProtonLogsWhenTroubleshooting(DEFAULT_ATTACH_PROTON_LOGS_WHEN_TROUBLESHOOTING);
+        setThinkingStatusTinyModelEnabled(DEFAULT_THINKING_STATUS_TINY_MODEL_ENABLED);
         setPresetChipAnimation(DEFAULT_PRESET_CHIP_ANIMATION);
         setPresetChipFadeAnimationEnabled(DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED);
         setInputSanitizerUserDisabled(DEFAULT_INPUT_SANITIZER_USER_DISABLED);
@@ -364,6 +372,7 @@ export function usePluginSettings() {
     desktopAskVerboseLogging,
     desktopAppLogLevel,
     attachProtonLogsWhenTroubleshooting,
+    thinkingStatusTinyModelEnabled,
     presetChipFadeAnimationEnabled,
     presetChipAnimation,
     inputSanitizerUserDisabled,
@@ -402,6 +411,7 @@ export function usePluginSettings() {
     desktopAskVerboseLogging,
     desktopAppLogLevel,
     attachProtonLogsWhenTroubleshooting,
+    thinkingStatusTinyModelEnabled,
     presetChipFadeAnimationEnabled,
     setPresetChipFadeAnimationEnabled,
     presetChipAnimation,
@@ -459,6 +469,7 @@ export function usePluginSettings() {
     setDesktopAskVerboseLogging,
     setDesktopAppLogLevel,
     setAttachProtonLogsWhenTroubleshooting,
+    setThinkingStatusTinyModelEnabled,
     setInputSanitizerUserDisabled,
     setLatencyTimeoutsCustomEnabled,
     setScreenshotAttachmentPreset,

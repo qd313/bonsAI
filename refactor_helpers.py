@@ -56,6 +56,7 @@ _TEXT_HIGH_VRAM_DEEP: list[str] = [
 
 _VISION_FOSS_ESSENTIALS = [
     "qwen2.5vl:3b",
+    "qwen3.5:4b",
     "llava:7b",
 ]
 

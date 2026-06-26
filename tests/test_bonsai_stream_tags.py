@@ -3,9 +3,12 @@
 import unittest
 
 from backend.services.bonsai_stream_tags import (
+    compose_thinking_blurb,
     deterministic_thinking_phase_fallback,
     extract_bonsai_status,
+    extract_question_snippet,
     format_thinking_phase,
+    sarcasm_roll,
 )
 
 
@@ -72,6 +75,28 @@ class BonsaiStreamTagsTests(unittest.TestCase):
         out = format_thinking_phase("building_context", app_name=long_name)
         self.assertLessEqual(len(out), 240)
         self.assertIn("Building context for", out)
+
+    def test_building_context_short_vs_long_elapsed(self):
+        self.assertIn(
+            "Building context",
+            format_thinking_phase("building_context", elapsed_seconds=0),
+        )
+        self.assertEqual(
+            format_thinking_phase("building_context", elapsed_seconds=2),
+            "Still preparing…",
+        )
+
+    def test_extract_question_snippet(self):
+        self.assertIn("shrine", extract_question_snippet("stuck on the shrine puzzle? help"))
+        self.assertEqual(extract_question_snippet(""), "")
+
+    def test_compose_thinking_blurb_weaves_question(self):
+        out = compose_thinking_blurb("why is my fps low in elden ring", app_name="Elden Ring", request_id=7)
+        self.assertIn("fps", out.lower())
+        self.assertLessEqual(len(out), 240)
+
+    def test_sarcasm_roll_off_without_character(self):
+        self.assertFalse(sarcasm_roll(1, enabled=False))
 
 
 if __name__ == "__main__":

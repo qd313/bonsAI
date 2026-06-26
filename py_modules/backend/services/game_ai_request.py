@@ -14,6 +14,9 @@ from typing import Any, Optional
 import decky
 
 from backend.services.capabilities import capability_enabled
+from backend.services.bonsai_stream_tags import compose_thinking_blurb
+from backend.services.thinking_tiny_model_service import spawn_tiny_thinking_blurb
+from backend.services.ai_character_service import build_roleplay_system_suffix_meta
 from backend.services.input_sanitizer_service import apply_input_sanitizer_lane
 from backend.services.ollama_service import (
     question_matches_troubleshooting_log_context,
@@ -204,6 +207,26 @@ async def run_game_ai_request(
         question_for_model = lane.text
 
         active_rid = plugin._active_request_id() if hasattr(plugin, "_active_request_id") else None
+        if isinstance(active_rid, int) and hasattr(plugin, "_publish_thinking_phase"):
+            rp_meta = build_roleplay_system_suffix_meta(settings, ask_mode)
+            blurb = compose_thinking_blurb(
+                question_for_model,
+                app_name=app_name,
+                attachment_count=len(atts),
+                ask_mode=ask_mode,
+                request_id=active_rid,
+                character_enabled=bool(settings.get("ai_character_enabled")),
+                character_preset_id=rp_meta.resolved_preset_id,
+            )
+            plugin._publish_thinking_phase(active_rid, blurb)
+            if settings.get("thinking_status_tiny_model_enabled") is True:
+                spawn_tiny_thinking_blurb(
+                    plugin,
+                    active_rid,
+                    question=question_for_model,
+                    app_name=app_name,
+                    pc_ip=pc_ip,
+                )
 
         proton_attachment_text = ""
         proton_sources: list = []
@@ -260,15 +283,6 @@ async def run_game_ai_request(
         if ask_mode == "strategy":
             strategy_spoiler_consent_effective = bool(spoiler_consent) or user_consents_strategy_spoilers(
                 question_for_model
-            )
-
-        if isinstance(active_rid, int) and hasattr(plugin, "_publish_thinking_phase_key"):
-            plugin._publish_thinking_phase_key(
-                active_rid,
-                "building_context",
-                app_name=app_name,
-                attachment_count=len(atts),
-                ask_mode=ask_mode,
             )
 
         ollama_result = await plugin.ask_ollama(

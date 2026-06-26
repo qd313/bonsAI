@@ -48,6 +48,10 @@ import {
   type ModelPolicyDisclosurePayload,
 } from "../data/modelPolicy";
 import { MainTabAskModeMenuPopover } from "./MainTabAskModeMenuPopover";
+import {
+  MainTabAttachMenuPopover,
+  type AttachMenuActionId,
+} from "./MainTabAttachMenuPopover";
 import { joinPresetWithRunningGame } from "../utils/joinPresetWithRunningGame";
 import { isPendingPlaceholderResponse } from "../utils/askThinkingPhases";
 import { buildReplyActionsElement } from "../utils/buildReplyActionsElement";
@@ -103,6 +107,7 @@ export type MainTabProps = {
   ollamaIp: string;
   onAskOllama: (overrideQuestion?: string, opts?: { threadQuestionDisplay?: string }) => void | Promise<void>;
   onOpenScreenshotBrowser: () => void | Promise<void>;
+  onTakeScreenshot: () => void | Promise<void>;
   onCancelAsk: () => void;
   onMicInput: () => void;
   voiceRecording?: boolean;
@@ -213,6 +218,7 @@ export function MainTab(props: MainTabProps) {
     ollamaIp,
     onAskOllama,
     onOpenScreenshotBrowser,
+    onTakeScreenshot,
     onCancelAsk,
     onMicInput,
     voiceRecording = false,
@@ -453,12 +459,17 @@ export function MainTab(props: MainTabProps) {
   const presetCarouselHostRef = React.useRef<HTMLDivElement | null>(null);
   const askModeMenuAnchorRef = React.useRef<HTMLDivElement | null>(null);
   const askModeMenuFirstItemRef = React.useRef<HTMLElement | null>(null);
+  const attachMenuAnchorRef = React.useRef<HTMLDivElement | null>(null);
+  const attachMenuFirstItemRef = React.useRef<HTMLElement | null>(null);
   const [askModeMenuOpen, setAskModeMenuOpen] = useState(false);
+  const [attachMenuOpen, setAttachMenuOpen] = useState(false);
   /** Deck delivers many OK/click events per physical tap; collapse to one toggle per gesture. */
   const askModeToggleOnceRef = React.useRef(false);
+  const attachMenuToggleOnceRef = React.useRef(false);
   const toggleAskModeMenu = React.useCallback(() => {
     if (askModeToggleOnceRef.current) return;
     askModeToggleOnceRef.current = true;
+    setAttachMenuOpen(false);
     setAskModeMenuOpen((o) => !o);
     queueMicrotask(() => {
       askModeToggleOnceRef.current = false;
@@ -467,6 +478,28 @@ export function MainTab(props: MainTabProps) {
   const closeAskModeMenu = React.useCallback(() => {
     setAskModeMenuOpen(false);
   }, []);
+  const toggleAttachMenu = React.useCallback(() => {
+    if (attachMenuToggleOnceRef.current) return;
+    attachMenuToggleOnceRef.current = true;
+    setAskModeMenuOpen(false);
+    setAttachMenuOpen((o) => !o);
+    queueMicrotask(() => {
+      attachMenuToggleOnceRef.current = false;
+    });
+  }, []);
+  const closeAttachMenu = React.useCallback(() => {
+    setAttachMenuOpen(false);
+  }, []);
+  const onAttachMenuSelect = React.useCallback(
+    (action: AttachMenuActionId) => {
+      if (action === "take_screenshot") {
+        void onTakeScreenshot();
+      } else {
+        void onOpenScreenshotBrowser();
+      }
+    },
+    [onTakeScreenshot, onOpenScreenshotBrowser],
+  );
   /*
    * Deck CEF (Chromium < 105) does not support :has(), so the stylesheet cannot key ancestor
    * unclip/z-order rules off the open menu. Toggle an explicit class on the scope root instead.
@@ -478,9 +511,9 @@ export function MainTab(props: MainTabProps) {
         : null;
     const scope = hostEl?.closest(".bonsai-scope");
     if (!scope) return;
-    scope.classList.toggle("bonsai-ask-menu-open-scope", askModeMenuOpen);
+    scope.classList.toggle("bonsai-ask-menu-open-scope", askModeMenuOpen || attachMenuOpen);
     return () => scope.classList.remove("bonsai-ask-menu-open-scope");
-  }, [askModeMenuOpen, unifiedInputHostRef]);
+  }, [askModeMenuOpen, attachMenuOpen, unifiedInputHostRef]);
   const focusFirstPresetChip = React.useCallback((): boolean => {
     const host = presetCarouselHostRef.current;
     const help = host?.querySelector<HTMLElement>("button.bonsai-preset-help-chip");
@@ -623,7 +656,8 @@ export function MainTab(props: MainTabProps) {
             className={
               "bonsai-unified-input-host bonsai-glass-panel bonsai-full-bleed-row" +
               (aiCharacterPadClass ? " bonsai-unified-input--ai-character" : "") +
-              (askModeMenuOpen ? " bonsai-ask-mode-menu-open" : "")
+              (askModeMenuOpen ? " bonsai-ask-mode-menu-open" : "") +
+              (attachMenuOpen ? " bonsai-attach-menu-open" : "")
             }
             style={fullBleedRowStyle}
           >
@@ -633,7 +667,7 @@ export function MainTab(props: MainTabProps) {
                 position: "relative",
                 width: "100%",
                 minHeight: unifiedInputSurfacePx + UNIFIED_INPUT_ICON_STRIP_PX,
-                overflow: askModeMenuOpen ? "visible" : undefined,
+                overflow: askModeMenuOpen || attachMenuOpen ? "visible" : undefined,
               }}
             >
               <div
@@ -848,14 +882,29 @@ export function MainTab(props: MainTabProps) {
                   }}
                 >
                   <Button
+                    ref={attachMenuAnchorRef}
                     className="bonsai-askbar-target bonsai-unified-input-corner-left"
                     {...({
                       onMoveRight: () => focusAskModeButton(),
                       ...(showAiCharacterChrome ? { onMoveUp: () => focusAiCharacterAvatar() } : {}),
+                      ...(attachMenuOpen
+                        ? {
+                            onMoveDown: () => {
+                              attachMenuFirstItemRef.current?.focus();
+                              return true;
+                            },
+                          }
+                        : {}),
+                      onOKButton: (evt: { stopPropagation: () => void }) => {
+                        evt.stopPropagation();
+                        toggleAttachMenu();
+                      },
                     } as Record<string, unknown>)}
-                    onClick={onOpenScreenshotBrowser}
+                    onClick={toggleAttachMenu}
                     disabled={isAsking}
-                    aria-label="Attach screenshot or paste from clipboard"
+                    aria-expanded={attachMenuOpen}
+                    aria-haspopup="menu"
+                    aria-label="Attach screenshot or media"
                     style={{
                       minWidth: 20,
                       width: 20,
@@ -1078,6 +1127,17 @@ export function MainTab(props: MainTabProps) {
                 onSelect={onAskModeChange}
                 onRequestClose={closeAskModeMenu}
                 onFocusModeChip={focusAskModeButton}
+              />
+              <MainTabAttachMenuPopover
+                open={attachMenuOpen}
+                anchorRef={attachMenuAnchorRef}
+                hostRef={unifiedInputHostRef as React.RefObject<HTMLElement | null>}
+                firstMenuItemRef={attachMenuFirstItemRef}
+                onSelect={onAttachMenuSelect}
+                onRequestClose={closeAttachMenu}
+                onFocusPaperclip={focusAttachPaperclip}
+                takeScreenshotDisabled={isAsking || !mediaLibraryEnabled}
+                browseDisabled={isAsking || !mediaLibraryEnabled}
               />
             </div>
           </div>

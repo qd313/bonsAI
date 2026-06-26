@@ -343,7 +343,7 @@ Within this section: ★★★★★ items first (ascending stars), then ★★�
 
 ### Reference — vision model fallback order
 
-When a screenshot is attached, `select_ollama_models(..., requires_vision=True)` in `[refactor_helpers.py](../refactor_helpers.py)` tries **`qwen2.5vl:3b` first**, then legacy `llava:7b`, then Tier 2 **`gemma4:e2b-it-qat`** / **`gemma4:e2b`**. Ask mode differences are prompt-only on the same short chain. **Settings → Model policy → Allow high-VRAM model fallbacks** appends large tags after the essentials chain.
+When a screenshot is attached, `select_ollama_models(..., requires_vision=True)` in `[refactor_helpers.py](../refactor_helpers.py)` tries **`qwen2.5vl:3b` first**, then **`qwen3.5:4b`**, then legacy `llava:7b`, then Tier 2 **`gemma4:e2b-it-qat`** / **`gemma4:e2b`**. The fullscreen **Pull Models** picker lists `qwen3.5:4b` in Deck essentials (vision/chat/ocr/strategy). Ask mode differences are prompt-only on the same short chain. **Settings → Model policy → Allow high-VRAM model fallbacks** appends large tags after the essentials chain.
 
 ---
 

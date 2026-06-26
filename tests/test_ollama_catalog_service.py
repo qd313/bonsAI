@@ -13,6 +13,7 @@ class TestOllamaCatalogService(unittest.TestCase):
     def test_valid_tags(self):
         self.assertTrue(is_valid_ollama_pull_tag("llama3.2:3b"))
         self.assertTrue(is_valid_ollama_pull_tag("qwen2.5vl:3b"))
+        self.assertTrue(is_valid_ollama_pull_tag("qwen3.5:4b"))
         self.assertTrue(is_valid_ollama_pull_tag("moondream"))
 
     def test_rejects_shell_metacharacters(self):

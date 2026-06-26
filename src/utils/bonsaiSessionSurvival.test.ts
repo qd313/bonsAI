@@ -33,6 +33,7 @@ function minimalSnapshot(overrides: Partial<BonsaiSessionSurvivalSnapshot> = {})
       desktopAskVerboseLogging: false,
       desktopAppLogLevel: DEFAULT_DESKTOP_APP_LOG_LEVEL,
       attachProtonLogsWhenTroubleshooting: false,
+      thinkingStatusTinyModelEnabled: false,
       presetChipFadeAnimationEnabled: true,
       presetChipAnimation: "fade",
       inputSanitizerUserDisabled: false,

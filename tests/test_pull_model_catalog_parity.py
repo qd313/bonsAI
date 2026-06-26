@@ -9,6 +9,7 @@ from backend.services.model_policy import classify_ollama_model_name
 # Keep in sync with src/data/pullModelCatalog.ts PULL_MODEL_CATALOG tags + licenseClass.
 CATALOG_POLICY_PARITY: dict[str, str] = {
     "qwen2.5vl:3b": "foss",
+    "qwen3.5:4b": "foss",
     "gemma4:e2b-it-qat": "open_weight",
     "qwen3:4b": "foss",
     "qwen2.5:7b": "foss",

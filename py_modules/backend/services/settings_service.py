@@ -89,6 +89,11 @@ def sanitize_attach_proton_logs_when_troubleshooting(value: Any) -> bool:
     return value is True
 
 
+def sanitize_thinking_status_tiny_model_enabled(value: Any) -> bool:
+    """Optional tiny-model thinking blurbs (Developer); off unless explicitly enabled."""
+    return value is True
+
+
 def sanitize_preset_chip_fade_animation_enabled(value: Any) -> bool:
     """Staggered preset-chip fades are on unless the user explicitly saves ``false``."""
     return value is not False
@@ -363,6 +368,9 @@ def sanitize_settings(
         "desktop_app_log_level": sanitize_desktop_app_log_level(raw.get("desktop_app_log_level")),
         "attach_proton_logs_when_troubleshooting": sanitize_attach_proton_logs_when_troubleshooting(
             raw.get("attach_proton_logs_when_troubleshooting")
+        ),
+        "thinking_status_tiny_model_enabled": sanitize_thinking_status_tiny_model_enabled(
+            raw.get("thinking_status_tiny_model_enabled")
         ),
         "preset_chip_fade_animation_enabled": sanitize_preset_chip_fade_animation_enabled(
             raw.get("preset_chip_fade_animation_enabled")

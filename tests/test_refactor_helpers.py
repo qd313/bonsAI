@@ -76,6 +76,7 @@ class RefactorHelperTests(unittest.TestCase):
 
         vision = select_ollama_models(True, "speed")
         self.assertEqual(vision[0], "qwen2.5vl:3b")
+        self.assertEqual(vision[1], "qwen3.5:4b")
         self.assertIn("gemma4:e2b-it-qat", vision)
         self.assertIn("llava:7b", vision)
         self.assertLess(vision.index("gemma4:e2b-it-qat"), vision.index("llava:7b"))

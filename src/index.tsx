@@ -367,6 +367,7 @@ const Content: React.FC = () => {
     desktopDebugNoteAutoSave,
     desktopAskVerboseLogging,
     attachProtonLogsWhenTroubleshooting,
+    thinkingStatusTinyModelEnabled,
     inputSanitizerUserDisabled,
     capabilities,
     setCapabilities,
@@ -390,6 +391,7 @@ const Content: React.FC = () => {
     desktopAppLogLevel,
     setDesktopAppLogLevel,
     setAttachProtonLogsWhenTroubleshooting,
+    setThinkingStatusTinyModelEnabled,
     presetChipFadeAnimationEnabled,
     presetChipAnimation,
     setPresetChipAnimation,
@@ -624,6 +626,7 @@ const Content: React.FC = () => {
       desktopAskVerboseLogging,
       desktopAppLogLevel,
       attachProtonLogsWhenTroubleshooting,
+      thinkingStatusTinyModelEnabled,
       presetChipFadeAnimationEnabled,
       presetChipAnimation,
       inputSanitizerUserDisabled,
@@ -660,6 +663,7 @@ const Content: React.FC = () => {
       desktopAskVerboseLogging,
       desktopAppLogLevel,
       attachProtonLogsWhenTroubleshooting,
+      thinkingStatusTinyModelEnabled,
       presetChipFadeAnimationEnabled,
       presetChipAnimation,
       inputSanitizerUserDisabled,
@@ -1070,6 +1074,39 @@ const Content: React.FC = () => {
     }
   };
 
+  const onTakeScreenshot = async () => {
+    if (isAsking) return;
+    setMediaError("");
+    if (!capabilities.media_library_access && !capabilities.filesystem_write) {
+      setMediaError(
+        "Enable Read game & screenshot context in Permissions to take or attach screenshots.",
+      );
+      return;
+    }
+    try {
+      const response = await call<
+        [{ include_overlay: boolean }],
+        { success?: boolean; item?: ScreenshotItem; error?: string }
+      >("capture_screenshot", { include_overlay: false });
+      if (!response?.success || !response.item?.path) {
+        setMediaError(response?.error ?? "Screenshot capture failed.");
+        return;
+      }
+      const item = response.item;
+      setSelectedAttachment({
+        path: item.path,
+        name: item.name || "capture.png",
+        source: "capture",
+        preview_data_uri: item.preview_data_uri,
+        size_bytes: item.size_bytes,
+        app_id: item.app_id,
+      });
+      toaster.toast({ title: "Screenshot captured", body: "Attached for your next Ask.", duration: 1800 });
+    } catch (e: unknown) {
+      setMediaError(formatDeckyRpcError(e));
+    }
+  };
+
   const onOpenScreenshotBrowser = async () => {
     if (isAsking) return;
     setIsScreenshotBrowserOpen(true);
@@ -1424,6 +1461,7 @@ const Content: React.FC = () => {
       ollamaIp={effectiveOllamaPcIp}
       onAskOllama={onAskOllama}
       onOpenScreenshotBrowser={onOpenScreenshotBrowser}
+      onTakeScreenshot={onTakeScreenshot}
       onCancelAsk={onCancelAsk}
       onMicInput={onMicInput}
       voiceRecording={voiceRecording}
@@ -1531,6 +1569,8 @@ const Content: React.FC = () => {
       onRetryLastResponse,
       voiceRecording,
       onMicInput,
+      onOpenScreenshotBrowser,
+      onTakeScreenshot,
     ]
   );
 
@@ -1722,6 +1762,8 @@ const Content: React.FC = () => {
       setSteamWebApiKey={setSteamWebApiKey}
       bonsaiTokenStreamingEnabled={bonsaiTokenStreamingEnabled}
       setBonsaiTokenStreamingEnabled={setBonsaiTokenStreamingEnabled}
+      thinkingStatusTinyModelEnabled={thinkingStatusTinyModelEnabled}
+      setThinkingStatusTinyModelEnabled={setThinkingStatusTinyModelEnabled}
       showOnscreenDebugHud={showOnscreenDebugHud}
       setShowOnscreenDebugHud={setShowOnscreenDebugHud}
       />
@@ -1735,10 +1777,12 @@ const Content: React.FC = () => {
       desktopAppLogLevel,
       capabilities.filesystem_write,
       attachProtonLogsWhenTroubleshooting,
+      thinkingStatusTinyModelEnabled,
       presetChipFadeAnimationEnabled,
       presetChipAnimation,
       steamWebApiKey,
       bonsaiTokenStreamingEnabled,
+      thinkingStatusTinyModelEnabled,
       showOnscreenDebugHud,
     ]
   );

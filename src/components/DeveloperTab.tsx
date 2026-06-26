@@ -54,6 +54,8 @@ export type DeveloperTabProps = {
   filesystemWrite: boolean;
   attachProtonLogsWhenTroubleshooting: boolean;
   setAttachProtonLogsWhenTroubleshooting: (v: boolean) => void;
+  thinkingStatusTinyModelEnabled: boolean;
+  setThinkingStatusTinyModelEnabled: (v: boolean) => void;
 
   presetChipFadeAnimationEnabled: boolean;
   setPresetChipFadeAnimationEnabled: (v: boolean) => void;
@@ -91,6 +93,8 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
   setSteamWebApiKey,
   bonsaiTokenStreamingEnabled,
   setBonsaiTokenStreamingEnabled,
+  thinkingStatusTinyModelEnabled,
+  setThinkingStatusTinyModelEnabled,
   showOnscreenDebugHud,
   setShowOnscreenDebugHud,
 }) => {
@@ -282,6 +286,16 @@ export const DeveloperTab: React.FC<DeveloperTabProps> = ({
                 </Button>
               ))}
             </Focusable>
+          </div>
+        </PanelSectionRow>
+        <PanelSectionRow>
+          <div className="bonsai-settings-bleed" style={{ width: "100%" }}>
+            <ToggleField
+              label="Tiny-model thinking blurbs"
+              description="Fire-and-forget qwen2.5:1.5b status lines while waiting (experimental). Off by default; does not block the main Ask."
+              checked={thinkingStatusTinyModelEnabled}
+              onChange={(checked) => setThinkingStatusTinyModelEnabled(checked)}
+            />
           </div>
         </PanelSectionRow>
         <PanelSectionRow>

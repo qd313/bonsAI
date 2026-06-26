@@ -1684,17 +1684,36 @@ class Plugin:
         """Capture a screenshot using available gamescope commands and return attachment metadata."""
         plugin = Plugin._coerce_instance(self)
         settings = await plugin.load_settings()
-        if not capability_enabled(settings, "filesystem_write"):
+        from backend.services.capabilities import capability_enabled
+
+        if not (
+            capability_enabled(settings, "media_library_access")
+            or capability_enabled(settings, "filesystem_write")
+        ):
             return {
                 "success": False,
-                "error": "Filesystem writes are disabled. Enable them in the Permissions tab.",
+                "error": (
+                    "Screenshot capture is disabled. Enable Read game & screenshot context "
+                    "in the Permissions tab."
+                ),
             }
         runtime_dir = os.path.join(decky.DECKY_PLUGIN_RUNTIME_DIR, "captures")
         os.makedirs(runtime_dir, exist_ok=True)
         timestamp = time.strftime("%Y%m%d-%H%M%S")
         output_path = os.path.join(runtime_dir, f"bonsai-capture-{timestamp}.png")
         clean_env = Plugin._clean_env()
-        return try_gamescope_screenshot_capture(output_path, include_overlay, clean_env)
+        result = try_gamescope_screenshot_capture(output_path, include_overlay, clean_env)
+        if result.get("success") and isinstance(result.get("item"), dict):
+            item = dict(result["item"])
+            try:
+                item["size_bytes"] = os.path.getsize(output_path)
+            except OSError:
+                item["size_bytes"] = 0
+            preview = build_screenshot_preview_data_uri(output_path)
+            if preview:
+                item["preview_data_uri"] = preview
+            result["item"] = item
+        return result
 
     async def _execute_game_ai_request(
         self,
@@ -2133,6 +2152,7 @@ class Plugin:
         tdp_cap_w: Optional[int] = None,
         proton_log_attachment: Optional[str] = None,
         strategy_spoiler_consent: bool = False,
+        character_roleplay_on: bool = False,
     ) -> str:
         """Build the system prompt using plugin-local metadata lookups and attachment context."""
         proton = (proton_log_attachment or "").strip()
@@ -2147,6 +2167,7 @@ class Plugin:
             ask_mode=ask_mode,
             early_context_suffix=proton,
             strategy_spoiler_consent=strategy_spoiler_consent,
+            character_roleplay_on=character_roleplay_on,
         )
         return append_deck_tdp_sysfs_grounding(
             base,
@@ -2213,6 +2234,7 @@ class Plugin:
             tdp_cap_w=tdp_cap_w,
             proton_log_attachment=proton_log_attachment,
             strategy_spoiler_consent=strategy_spoiler_consent,
+            character_roleplay_on=bool(settings.get("ai_character_enabled")),
         )
         rp_meta = build_roleplay_system_suffix_meta(settings, ask_mode)
         roleplay = rp_meta.suffix

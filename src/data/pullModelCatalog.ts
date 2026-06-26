@@ -73,6 +73,19 @@ export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
     blurb: "Tier 1 default — one FOSS pull for chat, screenshots, OCR, and Strategy mode.",
   },
   {
+    tag: "qwen3.5:4b",
+    params: "4B",
+    sizeGb: 3.4,
+    releasedYm: "2026-02",
+    license: "Apache 2.0",
+    licenseClass: "foss",
+    group: "essentials",
+    tags: ["chat", "vision", "ocr", "strategy"],
+    rating: 6,
+    blurb:
+      "FOSS native multimodal — vision fallback after qwen2.5vl; open-source-tier alternative to gemma4:e2b.",
+  },
+  {
     tag: "gemma4:e2b-it-qat",
     params: "E2B",
     sizeGb: 4.3,

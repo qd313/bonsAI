@@ -1205,6 +1205,48 @@ export function buildBonsaiScopeStylesheet(): string {
           background-color: rgb(40, 50, 62) !important;
         }
 
+        /* Attach menu: same solid-stack paint model as ask-mode (opens downward below paperclip). */
+        .bonsai-scope .bonsai-unified-input-host .bonsai-attach-menu-floater,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-attach-menu-floater div,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-attach-menu-floater .Panel.Focusable,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-attach-menu-floater .Panel.Focusable > div {
+          background-image: none !important;
+          background-color: rgb(28, 36, 44) !important;
+          box-shadow: none !important;
+          opacity: 1 !important;
+          filter: none !important;
+          -webkit-backdrop-filter: none !important;
+          backdrop-filter: none !important;
+        }
+        .bonsai-scope .bonsai-unified-input-host .bonsai-attach-menu-floater .bonsai-attach-menu-surface div {
+          background-color: rgb(28, 36, 44) !important;
+        }
+        .bonsai-scope .bonsai-unified-input-host .bonsai-attach-menu-floater .bonsai-attach-menu-surface,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-attach-menu-floater .bonsai-attach-menu-surface > .Panel.Focusable {
+          background-color: rgb(28, 36, 44) !important;
+        }
+        .bonsai-scope .bonsai-unified-input-host .bonsai-attach-menu-floater .bonsai-attach-menu-item {
+          background-color: rgb(28, 36, 44) !important;
+        }
+        .bonsai-scope .bonsai-unified-input-host .bonsai-attach-menu-floater .bonsai-attach-menu-item,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-attach-menu-floater .bonsai-attach-menu-item.Panel.Focusable {
+          border-top: none !important;
+          border-bottom: none !important;
+        }
+        .bonsai-scope .bonsai-unified-input-host .bonsai-attach-menu-floater button.bonsai-attach-menu-item-btn,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-attach-menu-floater button.bonsai-attach-menu-item-btn.DialogButton,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-attach-menu-floater button.bonsai-attach-menu-item-btn > div,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-attach-menu-floater button.bonsai-attach-menu-item-btn > span {
+          background-color: rgb(28, 36, 44) !important;
+          background-image: none !important;
+          box-shadow: none !important;
+          opacity: 1 !important;
+          mix-blend-mode: normal !important;
+          width: 100% !important;
+          max-width: 100% !important;
+          box-sizing: border-box !important;
+        }
+
         /* ==========================================================================
            8. ASKBAR INTERACTIONS & ICONS
            Handles focus states, layout of bottom action icons, and opacity.
@@ -1215,7 +1257,8 @@ export function buildBonsaiScopeStylesheet(): string {
          * The ASK row is a later PanelSectionRow, so it paints on top of this host by default;
          * the menu extends over the ASK bar and looked like a vertical fade (ASK ::before gradient on top of rows).
          */
-        .bonsai-scope .bonsai-unified-input-host.bonsai-ask-mode-menu-open {
+        .bonsai-scope .bonsai-unified-input-host.bonsai-ask-mode-menu-open,
+        .bonsai-scope .bonsai-unified-input-host.bonsai-attach-menu-open {
           /*
             !important required: with an AI character active the host also carries
             .bonsai-unified-input--ai-character which sets overflow: hidden !important (sec. earlier),
@@ -1229,7 +1272,9 @@ export function buildBonsaiScopeStylesheet(): string {
         }
         /* Dropdown opens upward from the bottom icon strip — keep field layer + icon row from clipping it. */
         .bonsai-scope .bonsai-unified-input-host.bonsai-ask-mode-menu-open .bonsai-unified-input-bottom-actions,
-        .bonsai-scope .bonsai-unified-input-host.bonsai-ask-mode-menu-open .bonsai-unified-input-actions-right {
+        .bonsai-scope .bonsai-unified-input-host.bonsai-ask-mode-menu-open .bonsai-unified-input-actions-right,
+        .bonsai-scope .bonsai-unified-input-host.bonsai-attach-menu-open .bonsai-unified-input-bottom-actions,
+        .bonsai-scope .bonsai-unified-input-host.bonsai-attach-menu-open .bonsai-unified-input-actions-right {
           overflow: visible !important;
         }
         /*
@@ -1249,8 +1294,38 @@ export function buildBonsaiScopeStylesheet(): string {
           position: relative !important;
         }
         /* Anything after the input host in the tab flow must paint under the open menu. */
-        .bonsai-scope.bonsai-ask-menu-open-scope .bonsai-unified-input-host.bonsai-ask-mode-menu-open {
+        .bonsai-scope.bonsai-ask-menu-open-scope .bonsai-unified-input-host.bonsai-ask-mode-menu-open,
+        .bonsai-scope.bonsai-ask-menu-open-scope .bonsai-unified-input-host.bonsai-attach-menu-open {
           z-index: 60 !important;
+        }
+
+        .bonsai-scope .bonsai-attach-menu-floater {
+          opacity: 1 !important;
+          filter: none !important;
+          backdrop-filter: none !important;
+        }
+        .bonsai-scope .bonsai-attach-menu-surface,
+        .bonsai-scope .bonsai-attach-menu-surface > .Panel.Focusable {
+          background-color: rgb(28, 36, 44) !important;
+          opacity: 1 !important;
+        }
+        .bonsai-scope .bonsai-attach-menu-surface .Panel.Focusable {
+          opacity: 1 !important;
+        }
+        .bonsai-scope .bonsai-attach-menu-surface .bonsai-attach-menu-item {
+          background-color: rgb(28, 36, 44) !important;
+          opacity: 1 !important;
+          mix-blend-mode: normal !important;
+        }
+        .bonsai-scope .bonsai-attach-menu-surface .bonsai-attach-menu-item,
+        .bonsai-scope .bonsai-attach-menu-surface .bonsai-attach-menu-item.Panel.Focusable {
+          border-top: none !important;
+          border-bottom: none !important;
+        }
+        .bonsai-scope .bonsai-attach-menu-surface .bonsai-attach-menu-item:focus,
+        .bonsai-scope .bonsai-attach-menu-surface .bonsai-attach-menu-item:focus-visible {
+          outline: 2px solid rgba(255, 255, 255, 0.38) !important;
+          outline-offset: -2px !important;
         }
 
         /* Ask mode menu: solid stack (Decky sometimes composites menus semi-transparent over glass). */
@@ -1292,7 +1367,7 @@ export function buildBonsaiScopeStylesheet(): string {
          * on menu classes raised specificity above .bonsai-unified-input-bottom-actions / .bonsai-unified-input-actions-right,
          * so flex-direction:column here won the cascade and stacked the paperclip above the mode chip + mic row.
          */
-        .bonsai-scope .bonsai-unified-input-host .Panel.Focusable:not(.bonsai-ask-mode-menu-list) {
+        .bonsai-scope .bonsai-unified-input-host .Panel.Focusable:not(.bonsai-ask-mode-menu-list):not(.bonsai-attach-menu-list) {
           padding: 0 !important; margin: 0 !important; min-width: 0 !important;
           display: flex !important; flex-direction: column !important;
           align-items: stretch !important; justify-content: flex-start !important;
@@ -1316,6 +1391,22 @@ export function buildBonsaiScopeStylesheet(): string {
           flex: 0 0 auto !important;
           align-self: stretch !important;
         }
+        .bonsai-scope .bonsai-unified-input-host .bonsai-attach-menu-floater .bonsai-attach-menu-surface > .bonsai-attach-menu-list.Panel.Focusable {
+          padding-top: var(--bonsai-attach-menu-list-pad-y, 0px) !important;
+          padding-bottom: var(--bonsai-attach-menu-list-pad-y, 0px) !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          flex-direction: column !important;
+        }
+        .bonsai-scope .bonsai-unified-input-host .bonsai-attach-menu-floater .bonsai-attach-menu-surface .bonsai-attach-menu-item.Panel.Focusable {
+          padding: var(--bonsai-attach-menu-pad-y, 10px) var(--bonsai-attach-menu-pad-x, 13px) !important;
+          flex-direction: row !important;
+          align-items: center !important;
+        }
+        .bonsai-scope .bonsai-unified-input-host .bonsai-attach-menu-floater .bonsai-attach-menu-list .DialogButton.bonsai-attach-menu-item-btn {
+          flex: 0 0 auto !important;
+          align-self: stretch !important;
+        }
 
         /* Bottom icon strip: hug left/right corners (independent of ai-character text indent). */
         .bonsai-scope .bonsai-unified-input-bottom-actions {
@@ -1326,7 +1417,7 @@ export function buildBonsaiScopeStylesheet(): string {
 
         /* Only the outer actions row is full-width; nested Focusable (mode + mic) stays end-aligned.
          * Must include .bonsai-unified-input-host — the section-8 column reset on
-         * .bonsai-unified-input-host .Panel.Focusable:not(.bonsai-ask-mode-menu-list) has higher
+         * .bonsai-unified-input-host .Panel.Focusable:not(.bonsai-ask-mode-menu-list):not(.bonsai-attach-menu-list) has higher
          * specificity than .bonsai-unified-input-bottom-actions alone and was stacking paperclip /
          * mode / mic vertically (see DeckCapture_20260611_201557). */
         .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions > .Panel.Focusable,

@@ -7,6 +7,7 @@ import {
   useModelRoutingAdvancedDraft,
 } from "./ModelRoutingAdvancedPanel";
 import { PullModelsModal, type PullModelsFooterState } from "./PullModelsModal";
+import { BonsaiModalScope } from "./BonsaiModalScope";
 
 export type OllamaModelsHubSection = "policy" | "browse" | "advanced";
 
@@ -117,6 +118,7 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
     <ConfirmModal
       strTitle="AI models"
       strDescription={
+        <BonsaiModalScope className="bonsai-models-hub-shell bonsai-prose">
         <div
           style={{
             display: "flex",
@@ -135,6 +137,7 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
               return (
                 <Button
                   key={chip.id}
+                  className="bonsai-models-hub-chip"
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
@@ -196,6 +199,7 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
             />
           ) : null}
         </div>
+        </BonsaiModalScope>
       }
       strOKButtonText={okButtonText}
       strCancelButtonText="Cancel"

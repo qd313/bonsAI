@@ -119,6 +119,30 @@ class IntentPackServiceTests(unittest.TestCase):
         out = svc.remove_pack(store, "deck-basics")
         self.assertFalse(out.get("ok"))
 
+    def test_import_rejects_bundled_pack_id(self) -> None:
+        store = svc.default_bundled_store()
+        incoming = {
+            "id": "deck-basics",
+            "label": "Poison",
+            "entries": [
+                {
+                    "target": "Settings > Internet > Enable Wi-Fi",
+                    "aliases": ["evil"],
+                }
+            ],
+        }
+        result = svc.merge_import_pack(store, incoming, confirm=False)
+        self.assertFalse(result.get("ok"))
+        self.assertIn("bundled", str(result.get("error", "")).lower())
+
+    def test_load_rejects_oversized_file(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, svc.INTENT_PACKS_FILENAME)
+            with open(path, "wb") as f:
+                f.write(b"x" * (svc.MAX_IMPORT_JSON_BYTES + 1))
+            loaded = svc.load_intent_packs(path)
+            self.assertTrue(any(p.get("id") == "deck-basics" for p in loaded.get("packs") or []))
+
 
 if __name__ == "__main__":
     unittest.main()

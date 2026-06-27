@@ -453,6 +453,10 @@ export function buildBonsaiScopeStylesheet(): string {
           padding-right: 0 !important;
         }
 
+        .bonsai-scope .bonsai-unified-input-host.bonsai-full-bleed-row {
+          margin-bottom: 2px !important;
+        }
+
         .bonsai-scope .bonsai-preset-row-host {
           min-width: 0 !important;
           overflow: hidden !important;
@@ -651,22 +655,24 @@ export function buildBonsaiScopeStylesheet(): string {
 
         @keyframes bonsai-ask-input-breathe {
           0%, 100% {
-            border-color: color-mix(in srgb, var(--bonsai-ask-mode-accent, #4ade80) 38%, transparent);
-            box-shadow: 0 0 0 0 color-mix(in srgb, var(--bonsai-ask-mode-accent, #4ade80) 10%, transparent);
+            border-color: var(--bonsai-ask-breathe-low, rgba(74, 222, 128, 0.28));
+            box-shadow: 0 0 0 0 var(--bonsai-ask-glow-low, rgba(74, 222, 128, 0.05));
           }
           50% {
-            border-color: var(--bonsai-ask-mode-accent, #4ade80);
-            box-shadow: 0 0 14px 3px color-mix(in srgb, var(--bonsai-ask-mode-accent, #4ade80) 38%, transparent);
+            border-color: var(--bonsai-ask-breathe-high, rgba(74, 222, 128, 0.72));
+            box-shadow: 0 0 10px 2px var(--bonsai-ask-glow-high, rgba(74, 222, 128, 0.16));
           }
         }
-        .bonsai-scope .bonsai-unified-input-host.bonsai-unified-input--asking.bonsai-glass-panel {
-          animation: bonsai-ask-input-breathe 2s ease-in-out infinite;
+        .bonsai-scope .bonsai-unified-input-host.bonsai-unified-input--asking.bonsai-glass-panel,
+        .bonsai-scope .bonsai-unified-input-host.bonsai-unified-input--capturing.bonsai-glass-panel {
+          animation: bonsai-ask-input-breathe 3.4s ease-in-out infinite;
         }
         @media (prefers-reduced-motion: reduce) {
-          .bonsai-scope .bonsai-unified-input-host.bonsai-unified-input--asking.bonsai-glass-panel {
+          .bonsai-scope .bonsai-unified-input-host.bonsai-unified-input--asking.bonsai-glass-panel,
+          .bonsai-scope .bonsai-unified-input-host.bonsai-unified-input--capturing.bonsai-glass-panel {
             animation: none;
-            border-color: var(--bonsai-ask-mode-accent, #4ade80) !important;
-            box-shadow: 0 0 0 1px color-mix(in srgb, var(--bonsai-ask-mode-accent, #4ade80) 45%, transparent);
+            border-color: var(--bonsai-ask-breathe-high, var(--bonsai-ask-mode-accent, #4ade80)) !important;
+            box-shadow: 0 0 0 1px var(--bonsai-ask-glow-high, rgba(74, 222, 128, 0.2));
           }
         }
 
@@ -1648,7 +1654,81 @@ export function buildBonsaiScopeStylesheet(): string {
         .bonsai-scope [class*="SliderControlPanelGroup"] > div,
         .bonsai-scope [class*="SliderControlAndNotches"] > div { min-width: 0 !important; }
 
+        ${buildGamepadFocusRingStylesheet()}
         ${buildPullModelsStylesheet()}`;
+}
+
+/**
+ * D-pad focus rings for custom DialogButtons. Deck uses `.gpfocus` (not only `:focus-visible`);
+ * section 7 transparency flattening strips Steam's default box-shadow rings.
+ */
+export function buildGamepadFocusRingStylesheet(): string {
+  const ring = `
+          outline: 2px solid var(--bonsai-ui-tab-focus-1, rgba(255, 255, 255, 0.9)) !important;
+          outline-offset: 2px !important;
+          box-shadow:
+            0 0 0 2px var(--bonsai-ui-tab-focus-1, rgba(255, 255, 255, 0.92)),
+            0 0 0 5px var(--bonsai-ui-tab-focus-2, rgba(255, 255, 255, 0.2)) !important;
+  `;
+  const ringInset = `
+          outline: 2px solid rgba(255, 255, 255, 0.85) !important;
+          outline-offset: -2px !important;
+          box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55) !important;
+  `;
+  return `
+        /* ==========================================================================
+           GAMEPAD FOCUS RINGS (.gpfocus)
+           ========================================================================== */
+        .bonsai-scope .bonsai-attach-menu-surface .bonsai-attach-menu-item.gpfocus,
+        .bonsai-scope .bonsai-attach-menu-surface .bonsai-attach-menu-item:focus-visible,
+        .bonsai-scope .bonsai-ask-mode-menu-surface .bonsai-ask-mode-menu-item.gpfocus,
+        .bonsai-scope .bonsai-ask-mode-menu-surface .bonsai-ask-mode-menu-item:focus-visible {
+          ${ringInset}
+        }
+        .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater button.bonsai-ask-mode-menu-item-btn.gpfocus,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-ask-mode-menu-floater button.bonsai-ask-mode-menu-item-btn:focus-visible,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-attach-menu-floater button.bonsai-attach-menu-item-btn.gpfocus,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-attach-menu-floater button.bonsai-attach-menu-item-btn:focus-visible {
+          ${ringInset}
+        }
+        .bonsai-scope button.bonsai-chat-secondary-btn.gpfocus,
+        .bonsai-scope button.bonsai-chat-secondary-btn:focus-visible,
+        .bonsai-scope button.bonsai-preset-glass.gpfocus,
+        .bonsai-scope button.bonsai-preset-glass:focus-visible,
+        .bonsai-scope button.bonsai-preset-help-chip.gpfocus,
+        .bonsai-scope button.bonsai-preset-help-chip:focus-visible,
+        .bonsai-scope .bonsai-askbar-merged .bonsai-ask-primary.gpfocus,
+        .bonsai-scope .bonsai-askbar-merged .bonsai-ask-primary:focus-visible,
+        .bonsai-scope .bonsai-askbar-target.gpfocus,
+        .bonsai-scope .bonsai-askbar-target:focus-visible,
+        .bonsai-scope .bonsai-attachment-preview-target.gpfocus,
+        .bonsai-scope .bonsai-attachment-preview-target:focus-visible,
+        .bonsai-scope .bonsai-attachment-remove-target.gpfocus,
+        .bonsai-scope .bonsai-attachment-remove-target:focus-visible,
+        .bonsai-scope button.bonsai-model-policy-tier-btn.gpfocus,
+        .bonsai-scope button.bonsai-model-policy-tier-btn:focus-visible,
+        .bonsai-scope button.bonsai-models-hub-chip.gpfocus,
+        .bonsai-scope button.bonsai-models-hub-chip:focus-visible,
+        .bonsai-scope button.bonsai-pullmodels-chip.gpfocus,
+        .bonsai-scope button.bonsai-pullmodels-chip:focus-visible,
+        .bonsai-scope button.bonsai-pullmodels-slot.gpfocus,
+        .bonsai-scope button.bonsai-pullmodels-slot:focus-visible,
+        .bonsai-scope button.bonsai-pullmodels-delete-btn.gpfocus,
+        .bonsai-scope button.bonsai-pullmodels-delete-btn:focus-visible,
+        .bonsai-scope button.bonsai-pullmodels-refresh-btn.gpfocus,
+        .bonsai-scope button.bonsai-pullmodels-refresh-btn:focus-visible {
+          ${ring}
+        }
+        .bonsai-scope .bonsai-preset-carousel-vertical .bonsai-preset-carousel-slot--focus .bonsai-preset-glass,
+        .bonsai-scope button.bonsai-preset-glass.gpfocus {
+          border-color: rgba(56, 189, 248, 0.72) !important;
+        }
+  `;
+}
+
+/** Modal portal CSS (showModal outside QAM tree): gamepad rings + pull models table. */
+export function buildModalPortalStylesheet(): string {
+  return `${buildGamepadFocusRingStylesheet()}${buildPullModelsStylesheet()}`;
 }
 
 /** Pull Models modal table CSS — also injected under `.bonsai-scope` in `showModal()` portals. */

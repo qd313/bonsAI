@@ -41,7 +41,16 @@ import type { TransparencySnapshot } from "../utils/inputTransparency";
 import { readClipboardText, sanitizeClipboardStashText } from "../utils/clipboardStash";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import { formatAppliedTuningBannerText } from "../utils/settingsAndResponse";
-import { ASK_MODE_ACCENT, ASK_MODE_FILL, ASK_MODE_LABELS, type AskModeId } from "../data/askMode";
+import {
+  ASK_MODE_ACCENT,
+  ASK_MODE_ACCENT_BREATHE_HIGH,
+  ASK_MODE_ACCENT_BREATHE_LOW,
+  ASK_MODE_ACCENT_GLOW_HIGH,
+  ASK_MODE_ACCENT_GLOW_LOW,
+  ASK_MODE_FILL,
+  ASK_MODE_LABELS,
+  type AskModeId,
+} from "../data/askMode";
 import {
   disclosureSummaryForSourceClass,
   type ModelPolicyDisclosurePayload,
@@ -118,6 +127,7 @@ export type MainTabProps = {
   onCloseScreenshotBrowser: () => void;
   loadRecentScreenshots: (limit?: number) => Promise<void>;
   mediaError: string;
+  isCapturingScreenshot?: boolean;
   recentScreenshots: ScreenshotItem[];
   isLoadingRecentScreenshots: boolean;
   onSelectRecentScreenshot: (item: ScreenshotItem) => void;
@@ -229,6 +239,7 @@ export function MainTab(props: MainTabProps) {
     onCloseScreenshotBrowser,
     loadRecentScreenshots,
     mediaError,
+    isCapturingScreenshot = false,
     recentScreenshots,
     isLoadingRecentScreenshots,
     onSelectRecentScreenshot,
@@ -657,6 +668,7 @@ export function MainTab(props: MainTabProps) {
               "bonsai-unified-input-host bonsai-glass-panel bonsai-full-bleed-row" +
               (aiCharacterPadClass ? " bonsai-unified-input--ai-character" : "") +
               (isAsking ? " bonsai-unified-input--asking" : "") +
+              (isCapturingScreenshot ? " bonsai-unified-input--capturing" : "") +
               (askModeMenuOpen ? " bonsai-ask-mode-menu-open" : "") +
               (attachMenuOpen ? " bonsai-attach-menu-open" : "")
             }
@@ -664,6 +676,10 @@ export function MainTab(props: MainTabProps) {
               ...fullBleedRowStyle,
               "--bonsai-ask-mode-accent": ASK_MODE_ACCENT[askMode],
               "--bonsai-ask-mode-fill": ASK_MODE_FILL[askMode],
+              "--bonsai-ask-breathe-low": ASK_MODE_ACCENT_BREATHE_LOW[askMode],
+              "--bonsai-ask-breathe-high": ASK_MODE_ACCENT_BREATHE_HIGH[askMode],
+              "--bonsai-ask-glow-low": ASK_MODE_ACCENT_GLOW_LOW[askMode],
+              "--bonsai-ask-glow-high": ASK_MODE_ACCENT_GLOW_HIGH[askMode],
             } as React.CSSProperties}
           >
             <div
@@ -909,7 +925,7 @@ export function MainTab(props: MainTabProps) {
                     disabled={isAsking}
                     aria-expanded={attachMenuOpen}
                     aria-haspopup="menu"
-                    aria-label="Attach screenshot or media"
+                    aria-label="Attach screenshot to Ask"
                     style={{
                       minWidth: 20,
                       width: 20,
@@ -1137,12 +1153,31 @@ export function MainTab(props: MainTabProps) {
                 onSelect={onAttachMenuSelect}
                 onRequestClose={closeAttachMenu}
                 onFocusPaperclip={focusAttachPaperclip}
-                takeScreenshotDisabled={isAsking || !mediaLibraryEnabled}
+                takeScreenshotDisabled={isAsking || isCapturingScreenshot || !mediaLibraryEnabled}
                 browseDisabled={isAsking || !mediaLibraryEnabled}
               />
             </div>
           </div>
         </PanelSectionRow>
+        {(isCapturingScreenshot || mediaError) && (
+          <PanelSectionRow>
+            <div
+              className="bonsai-full-bleed-row"
+              role="status"
+              aria-live="polite"
+              style={{
+                ...fullBleedRowStyle,
+                fontSize: 11,
+                lineHeight: 1.4,
+                color: isCapturingScreenshot ? "#9cb0c6" : "#f09a8d",
+              }}
+            >
+              {isCapturingScreenshot
+                ? "Closing this menu and capturing a game screenshot…"
+                : mediaError}
+            </div>
+          </PanelSectionRow>
+        )}
         {selectedAttachment && (
           <PanelSectionRow>
             <div
@@ -1264,7 +1299,7 @@ export function MainTab(props: MainTabProps) {
         <PanelSectionRow>
           <div
             className="bonsai-full-bleed-row bonsai-ask-bleed-wrap"
-            style={{ ...fullBleedRowStyle, marginTop: 1 }}
+            style={{ ...fullBleedRowStyle }}
           >
             <div
               ref={askBarHostRef}
@@ -1711,7 +1746,7 @@ export function MainTab(props: MainTabProps) {
                 fontStyle: "italic",
               }}
             >
-              No game detected — attach a screenshot or name the game for sharper answers.
+              No game detected — capture & attach a screenshot or name the game for sharper answers.
             </div>
           </PanelSectionRow>
         ) : null}

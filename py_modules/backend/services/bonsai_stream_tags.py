@@ -177,6 +177,45 @@ def compose_thinking_blurb(
     return text[:_PHASE_MAX_LEN]
 
 
+def _thinking_weave_bits(question: str, app_name: str) -> tuple[str, str, str]:
+    """Return (quote, game_bit, game_clause) for woven status lines."""
+    snippet = extract_question_snippet(question)
+    game = _sanitize_app_name(app_name)
+    quote = f'"{snippet}"' if snippet else "your question"
+    game_bit = f" in {game}" if game else ""
+    game_clause = f" for {game}" if game else ""
+    return quote, game_bit, game_clause
+
+
+def _apply_character_phase_variants(
+    pool: list[str],
+    *,
+    quote: str,
+    game_bit: str,
+    request_id: int,
+    character_enabled: bool,
+    character_preset_id: Optional[str],
+    elapsed_seconds: float,
+) -> str:
+    """Pick a template and optionally append witty/deadpan variants."""
+    from backend.services.ai_character_service import thinking_status_tone_for_preset
+
+    tone: _THINKING_TONE = "neutral"
+    sarcastic = False
+    if character_enabled:
+        tone = thinking_status_tone_for_preset(character_preset_id)
+        sarcastic = sarcasm_roll(request_id, enabled=True)
+    if character_enabled and sarcastic and tone in ("witty", "deadpan"):
+        if tone == "deadpan":
+            pool = [f"Fine. {t}" for t in pool] + [f"Sure. {quote}. Working{game_bit}."]
+        else:
+            pool = pool + [
+                f"Oh joy — {quote}{game_bit}. One sec.",
+                f"Another crisis: {quote}. Give me a moment{game_bit}.",
+            ]
+    return _pick_template(pool, request_id, elapsed_seconds)
+
+
 def format_thinking_phase(
     phase: AskThinkingPhase,
     *,
@@ -184,9 +223,85 @@ def format_thinking_phase(
     attachment_count: int = 0,
     ask_mode: str = "speed",
     elapsed_seconds: float = 0.0,
+    question: str = "",
+    request_id: int = 0,
+    character_enabled: bool = False,
+    character_preset_id: Optional[str] = None,
 ) -> str:
     """Build a deterministic, context-aware status line for pending Ask phases."""
-    _ = ask_mode  # reserved for future mode-specific copy
+    woven_q = (question or "").strip()
+    if woven_q:
+        if phase == "starting":
+            return compose_thinking_blurb(
+                woven_q,
+                app_name=app_name,
+                attachment_count=attachment_count,
+                ask_mode=ask_mode,
+                request_id=request_id,
+                character_enabled=character_enabled,
+                character_preset_id=character_preset_id,
+                elapsed_seconds=elapsed_seconds,
+            )
+        quote, game_bit, game_clause = _thinking_weave_bits(woven_q, app_name)
+        if phase == "building_context" and elapsed_seconds > _BUILDING_CONTEXT_MAX_SECONDS:
+            pool = [f"Still working on {quote}{game_bit}…", f"Still preparing {quote}…"]
+            text = _apply_character_phase_variants(
+                pool,
+                quote=quote,
+                game_bit=game_bit,
+                request_id=request_id,
+                character_enabled=character_enabled,
+                character_preset_id=character_preset_id,
+                elapsed_seconds=elapsed_seconds,
+            )
+            return text[:_PHASE_MAX_LEN]
+        if phase == "proton_logs":
+            pool = [
+                f"Checking logs for {quote}{game_bit}…",
+                f"Reading Proton logs for {quote}{game_bit}…",
+            ]
+        elif phase == "tdp_read":
+            pool = [
+                f"Pulling power context for {quote}…",
+                f"Checking TDP for {quote}{game_bit}…",
+            ]
+        elif phase == "screenshot_prep":
+            n = max(0, int(attachment_count or 0))
+            if n <= 1:
+                pool = [
+                    f"Preparing screenshot for {quote}{game_bit}…",
+                    f"Pairing the capture with {quote}{game_bit}…",
+                ]
+            else:
+                pool = [
+                    f"Preparing {n} screenshots for {quote}…",
+                    f"Pairing {n} captures with {quote}{game_bit}…",
+                ]
+        elif phase == "building_context":
+            pool = [
+                f"Getting context for {quote}{game_bit}…",
+                f"Building context for {quote}…",
+            ]
+        elif phase == "connecting_model":
+            pool = [f"Connecting for {quote}{game_bit}…", f"Connecting to model for {quote}…"]
+        elif phase == "model_retry":
+            pool = [
+                f"Trying another model for {quote}…",
+                f"Switching models for {quote}{game_bit}…",
+            ]
+        else:
+            pool = [f"Working on {quote}{game_bit}…"]
+        text = _apply_character_phase_variants(
+            pool,
+            quote=quote,
+            game_bit=game_bit,
+            request_id=request_id,
+            character_enabled=character_enabled,
+            character_preset_id=character_preset_id,
+            elapsed_seconds=elapsed_seconds,
+        )
+        return text[:_PHASE_MAX_LEN]
+
     if phase == "building_context" and elapsed_seconds > _BUILDING_CONTEXT_MAX_SECONDS:
         return "Still preparing…"[:_PHASE_MAX_LEN]
     game = _sanitize_app_name(app_name)

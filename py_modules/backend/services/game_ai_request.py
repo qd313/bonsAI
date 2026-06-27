@@ -207,8 +207,8 @@ async def run_game_ai_request(
         question_for_model = lane.text
 
         active_rid = plugin._active_request_id() if hasattr(plugin, "_active_request_id") else None
+        rp_meta = build_roleplay_system_suffix_meta(settings, ask_mode)
         if isinstance(active_rid, int) and hasattr(plugin, "_publish_thinking_phase"):
-            rp_meta = build_roleplay_system_suffix_meta(settings, ask_mode)
             blurb = compose_thinking_blurb(
                 question_for_model,
                 app_name=app_name,
@@ -239,7 +239,13 @@ async def run_game_ai_request(
         if want_proton_logs:
             if isinstance(active_rid, int) and hasattr(plugin, "_publish_thinking_phase_key"):
                 plugin._publish_thinking_phase_key(
-                    active_rid, "proton_logs", app_name=app_name, ask_mode=ask_mode
+                    active_rid,
+                    "proton_logs",
+                    app_name=app_name,
+                    ask_mode=ask_mode,
+                    question=question_for_model,
+                    character_enabled=bool(settings.get("ai_character_enabled")),
+                    character_preset_id=rp_meta.resolved_preset_id,
                 )
             if not capability_enabled(settings, "steam_logs_read"):
                 proton_notes_parts.append(
@@ -271,7 +277,15 @@ async def run_game_ai_request(
         pre_cap: Optional[int] = None
         if tdp_grounding_requested:
             if isinstance(active_rid, int) and hasattr(plugin, "_publish_thinking_phase_key"):
-                plugin._publish_thinking_phase_key(active_rid, "tdp_read", ask_mode=ask_mode)
+                plugin._publish_thinking_phase_key(
+                    active_rid,
+                    "tdp_read",
+                    app_name=app_name,
+                    ask_mode=ask_mode,
+                    question=question_for_model,
+                    character_enabled=bool(settings.get("ai_character_enabled")),
+                    character_preset_id=rp_meta.resolved_preset_id,
+                )
             _loop = asyncio.get_running_loop()
 
             def _read_cap():

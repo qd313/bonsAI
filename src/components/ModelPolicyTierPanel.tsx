@@ -89,6 +89,7 @@ export function ModelPolicyTierPanel({
           return (
             <Button
               key={id}
+              className="bonsai-model-policy-tier-btn"
               disabled={tier3Disabled}
               focusable={!tier3Disabled}
               onClick={(e) => {

@@ -23,5 +23,30 @@ export const ASK_MODE_FILL: Record<AskModeId, string> = {
   expert: "rgba(248, 113, 113, 0.06)",
 };
 
+/** Low/high accent stops for ask-bar breathe (no color-mix — Deck CEF safe). */
+export const ASK_MODE_ACCENT_BREATHE_LOW: Record<AskModeId, string> = {
+  speed: "rgba(74, 222, 128, 0.24)",
+  strategy: "rgba(250, 204, 21, 0.22)",
+  expert: "rgba(248, 113, 113, 0.24)",
+};
+
+export const ASK_MODE_ACCENT_BREATHE_HIGH: Record<AskModeId, string> = {
+  speed: "rgba(74, 222, 128, 0.62)",
+  strategy: "rgba(250, 204, 21, 0.58)",
+  expert: "rgba(248, 113, 113, 0.62)",
+};
+
+export const ASK_MODE_ACCENT_GLOW_LOW: Record<AskModeId, string> = {
+  speed: "rgba(74, 222, 128, 0.04)",
+  strategy: "rgba(250, 204, 21, 0.04)",
+  expert: "rgba(248, 113, 113, 0.04)",
+};
+
+export const ASK_MODE_ACCENT_GLOW_HIGH: Record<AskModeId, string> = {
+  speed: "rgba(74, 222, 128, 0.14)",
+  strategy: "rgba(250, 204, 21, 0.12)",
+  expert: "rgba(248, 113, 113, 0.14)",
+};
+
 /** @deprecated Use ASK_MODE_ACCENT */
 export const ASK_MODE_OUTLINE: Record<AskModeId, string> = ASK_MODE_ACCENT;

@@ -21,6 +21,7 @@ export type ScreenshotItem = {
   source: string;
   app_id?: string;
   preview_data_uri?: string;
+  capture_method?: string;
 };
 
 export type OllamaContextUi = { app_id: string; app_context: "active" | "none" } | null;

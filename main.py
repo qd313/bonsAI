@@ -101,9 +101,13 @@ from backend.services.screenshot_media import (
     lookup_steam_app_name,
     prepare_attachment_images,
     resolve_recent_screenshot_paths,
+    resolve_plugin_capture_paths,
+    merge_recent_screenshot_paths,
+    take_steam_game_screenshot,
     try_gamescope_screenshot_capture,
 )
 from backend.services.game_ai_request import run_game_ai_request
+from backend.services.tdp_service import clean_env, find_amdgpu_hwmon, write_sysfs, STEAMOS_PRIV_WRITE
 from backend.services.local_ollama_setup_service import (
     is_loopback_ollama_host,
     list_installed_ollama_tags,
@@ -397,6 +401,10 @@ class Plugin:
         app_name: str = "",
         attachment_count: int = 0,
         ask_mode: str = "speed",
+        elapsed_seconds: float = 0.0,
+        question: str = "",
+        character_enabled: bool = False,
+        character_preset_id: Optional[str] = None,
     ) -> None:
         from backend.services.bonsai_stream_tags import format_thinking_phase
 
@@ -407,6 +415,11 @@ class Plugin:
                 app_name=app_name,
                 attachment_count=attachment_count,
                 ask_mode=ask_mode,
+                elapsed_seconds=elapsed_seconds,
+                question=question,
+                request_id=request_id,
+                character_enabled=character_enabled,
+                character_preset_id=character_preset_id,
             ),
         )
 
@@ -1494,18 +1507,23 @@ class Plugin:
                     "error": "Media library access is disabled. Enable it in the Permissions tab.",
                 }
             items = []
-            for path in resolve_recent_screenshot_paths(app_id, limit):
+            runtime_dir = decky.DECKY_PLUGIN_RUNTIME_DIR
+            plugin_paths = resolve_plugin_capture_paths(runtime_dir, limit)
+            steam_paths = resolve_recent_screenshot_paths(app_id, limit)
+            merged_paths = merge_recent_screenshot_paths(steam_paths, plugin_paths, limit)
+            for path in merged_paths:
                 try:
                     mtime = os.path.getmtime(path)
                 except OSError:
                     mtime = 0
+                is_plugin_capture = path in plugin_paths or "/captures/" in path.replace("\\", "/")
                 items.append(
                     {
                         "path": path,
                         "name": os.path.basename(path),
                         "mtime": mtime,
                         "size_bytes": os.path.getsize(path) if os.path.isfile(path) else 0,
-                        "source": "steam_recent",
+                        "source": "capture" if is_plugin_capture else "steam_recent",
                         "app_id": extract_app_id_from_screenshot_path(path),
                         "preview_data_uri": build_screenshot_preview_data_uri(path),
                     }
@@ -1779,38 +1797,88 @@ class Plugin:
 
     async def capture_screenshot(self, include_overlay: bool = True):
         """Capture a screenshot using available gamescope commands and return attachment metadata."""
-        plugin = Plugin._coerce_instance(self)
-        settings = await plugin.load_settings()
-        from backend.services.capabilities import capability_enabled
+        if isinstance(include_overlay, dict):
+            include_overlay = include_overlay.get("include_overlay", True) is not False
+        elif not isinstance(include_overlay, bool):
+            include_overlay = bool(include_overlay)
+        try:
+            plugin = Plugin._coerce_instance(self)
+            settings = await plugin.load_settings()
+            from backend.services.capabilities import capability_enabled
 
-        if not (
-            capability_enabled(settings, "media_library_access")
-            or capability_enabled(settings, "filesystem_write")
-        ):
-            return {
-                "success": False,
-                "error": (
-                    "Screenshot capture is disabled. Enable Read game & screenshot context "
-                    "in the Permissions tab."
-                ),
-            }
-        runtime_dir = os.path.join(decky.DECKY_PLUGIN_RUNTIME_DIR, "captures")
-        os.makedirs(runtime_dir, exist_ok=True)
-        timestamp = time.strftime("%Y%m%d-%H%M%S")
-        output_path = os.path.join(runtime_dir, f"bonsai-capture-{timestamp}.png")
-        clean_env = Plugin._clean_env()
-        result = try_gamescope_screenshot_capture(output_path, include_overlay, clean_env)
-        if result.get("success") and isinstance(result.get("item"), dict):
-            item = dict(result["item"])
-            try:
-                item["size_bytes"] = os.path.getsize(output_path)
-            except OSError:
-                item["size_bytes"] = 0
-            preview = build_screenshot_preview_data_uri(output_path)
-            if preview:
-                item["preview_data_uri"] = preview
-            result["item"] = item
-        return result
+            if not (
+                capability_enabled(settings, "media_library_access")
+                or capability_enabled(settings, "filesystem_write")
+            ):
+                return {
+                    "success": False,
+                    "error": (
+                        "Screenshot capture is disabled. Enable Read game & screenshot context "
+                        "in the Permissions tab."
+                    ),
+                }
+            runtime_dir = os.path.join(decky.DECKY_PLUGIN_RUNTIME_DIR, "captures")
+            os.makedirs(runtime_dir, exist_ok=True)
+            timestamp = time.strftime("%Y%m%d-%H%M%S")
+            output_path = os.path.join(runtime_dir, f"bonsai-capture-{timestamp}.png")
+            clean_env = Plugin._clean_env()
+            result = try_gamescope_screenshot_capture(output_path, include_overlay, clean_env)
+            if result.get("success") and isinstance(result.get("item"), dict):
+                item = dict(result["item"])
+                try:
+                    item["size_bytes"] = os.path.getsize(output_path)
+                except OSError:
+                    item["size_bytes"] = 0
+                preview = build_screenshot_preview_data_uri(output_path)
+                if preview:
+                    item["preview_data_uri"] = preview
+                result["item"] = item
+            return result
+        except Exception:
+            logger.exception("capture_screenshot failed")
+            raise
+
+    async def take_steam_screenshot(self, app_id: str = ""):
+        """Close-QAM flow: capture game into Steam screenshots (not auto-attached to Ask)."""
+        try:
+            plugin = Plugin._coerce_instance(self)
+            settings = await plugin.load_settings()
+            from backend.services.capabilities import capability_enabled
+
+            if not (
+                capability_enabled(settings, "media_library_access")
+                or capability_enabled(settings, "filesystem_write")
+            ):
+                return {
+                    "success": False,
+                    "error": (
+                        "Screenshot capture is disabled. Enable Read game & screenshot context "
+                        "in the Permissions tab."
+                    ),
+                }
+            clean_env = Plugin._clean_env()
+            runtime_dir = str(getattr(decky, "DECKY_PLUGIN_RUNTIME_DIR", "") or "")
+            loop = asyncio.get_running_loop()
+            result = await loop.run_in_executor(
+                None,
+                lambda: take_steam_game_screenshot(str(app_id or ""), clean_env, runtime_dir),
+            )
+            if result.get("success") and isinstance(result.get("item"), dict):
+                item = dict(result["item"])
+                path = str(item.get("path", ""))
+                if path:
+                    try:
+                        item["size_bytes"] = os.path.getsize(path)
+                    except OSError:
+                        item["size_bytes"] = 0
+                    preview = build_screenshot_preview_data_uri(path)
+                    if preview:
+                        item["preview_data_uri"] = preview
+                result["item"] = item
+            return result
+        except Exception:
+            logger.exception("take_steam_screenshot failed")
+            raise
 
     async def _execute_game_ai_request(
         self,
@@ -2085,7 +2153,6 @@ class Plugin:
             plugin._background_request_seq += 1
             request_id = plugin._background_request_seq
             plugin._reset_partial_stream_snapshot(request_id)
-            plugin._publish_thinking_phase_key(request_id, "starting", ask_mode=ask_mode)
             plugin._background_state = {
                 "status": "pending",
                 "request_id": request_id,
@@ -2297,6 +2364,7 @@ class Plugin:
         active_request_id = plugin_inst._active_request_id()
 
         url = self._build_ollama_chat_url(PcIp)
+        settings = await self.load_settings()
         normalized_attachments = Plugin._sanitize_attachments(attachments or [])
         attachment_paths = [
             str(a.get("path", "") or "").strip()
@@ -2304,13 +2372,17 @@ class Plugin:
             if isinstance(a, dict) and str(a.get("path", "") or "").strip()
         ]
         if normalized_attachments and isinstance(active_request_id, int):
+            rp_meta_prep = build_roleplay_system_suffix_meta(settings, ask_mode)
             plugin_inst._publish_thinking_phase_key(
                 active_request_id,
                 "screenshot_prep",
+                app_name=app_name,
                 attachment_count=len(normalized_attachments),
                 ask_mode=ask_mode,
+                question=question,
+                character_enabled=bool(settings.get("ai_character_enabled")),
+                character_preset_id=rp_meta_prep.resolved_preset_id,
             )
-        settings = await self.load_settings()
         keep_alive = sanitize_ollama_keep_alive(settings.get("ollama_keep_alive"))
         apreset = str(settings.get("screenshot_attachment_preset") or "low")
         if apreset not in ("low", "mid", "max"):
@@ -2500,7 +2572,15 @@ class Plugin:
 
             for model_idx, model_name in enumerate(models_to_try):
                 if isinstance(active_request_id, int) and model_idx > 0:
-                    plugin_inst._publish_thinking_phase_key(active_request_id, "model_retry", ask_mode=ask_mode)
+                    plugin_inst._publish_thinking_phase_key(
+                        active_request_id,
+                        "model_retry",
+                        app_name=app_name,
+                        ask_mode=ask_mode,
+                        question=question,
+                        character_enabled=bool(settings.get("ai_character_enabled")),
+                        character_preset_id=rp_meta.resolved_preset_id,
+                    )
                 ask_diagnostics["models_attempted"].append(model_name)
                 plugin_inst._chat_resp_ready_evt = threading.Event()
                 plugin_inst._active_ollama_chat_pc_ip = str(PcIp or "").strip()

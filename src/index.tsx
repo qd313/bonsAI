@@ -187,17 +187,32 @@ function saveIp(ip: string): void {
   try { window.localStorage.setItem(IP_STORAGE_KEY, ip); } catch {}
 }
 
-// De-duplicate screenshot rows by path while preserving original ordering.
+// De-duplicate screenshot rows: prefer Steam folder entries over plugin capture mirrors.
 function dedupeScreenshotItems(items: ScreenshotItem[]): ScreenshotItem[] {
-  const seen = new Set<string>();
-  const deduped: ScreenshotItem[] = [];
+  const captureTimestampKey = (item: ScreenshotItem): string => {
+    const fromName = /(\d{8}-\d{6})/.exec(item.name)?.[1];
+    if (fromName) return fromName;
+    const fromPath = /(\d{8}-\d{6})/.exec(item.path)?.[1];
+    return fromPath ?? `${item.path}|${item.mtime}|${item.size_bytes ?? 0}`;
+  };
+  const byKey = new Map<string, ScreenshotItem>();
+  const order: string[] = [];
   for (const item of items) {
-    const key = `${item.path}|${item.mtime}|${item.size_bytes ?? 0}`;
-    if (seen.has(key)) continue;
-    seen.add(key);
-    deduped.push(item);
+    const key = captureTimestampKey(item);
+    const existing = byKey.get(key);
+    if (!existing) {
+      byKey.set(key, item);
+      order.push(key);
+      continue;
+    }
+    const preferNew =
+      (existing.source !== "steam_recent" && item.source === "steam_recent") ||
+      (existing.name.startsWith("bonsai-game-") && !item.name.startsWith("bonsai-game-"));
+    if (preferNew) {
+      byKey.set(key, item);
+    }
   }
-  return deduped;
+  return order.map((key) => byKey.get(key)!);
 }
 
 const DISCLAIMER_STORAGE_KEY = "bonsai:disclaimer-accepted";
@@ -353,6 +368,7 @@ const Content: React.FC = () => {
   const [isLoadingRecentScreenshots, setIsLoadingRecentScreenshots] = useState(
     () => peekBonsaiSessionPendingRestore()?.isLoadingRecentScreenshots ?? false
   );
+  const [isCapturingScreenshot, setIsCapturingScreenshot] = useState(false);
   const [selectedAttachment, setSelectedAttachment] = useState<AskAttachment | null>(
     () => peekBonsaiSessionPendingRestore()?.selectedAttachment ?? null
   );
@@ -1077,35 +1093,53 @@ const Content: React.FC = () => {
   };
 
   const onTakeScreenshot = async () => {
-    if (isAsking) return;
+    if (isAsking || isCapturingScreenshot) return;
     setMediaError("");
     if (!capabilities.media_library_access && !capabilities.filesystem_write) {
-      setMediaError(
-        "Enable Read game & screenshot context in Permissions to take or attach screenshots.",
-      );
+      const permissionMsg =
+        "Enable Read game & screenshot context in Permissions to save game screenshots.";
+      setMediaError(permissionMsg);
+      toaster.toast({ title: "Screenshot not saved", body: permissionMsg, duration: 4500 });
       return;
     }
+    const runningApp = Router.MainRunningApp;
+    const appId = runningApp?.appid?.toString() ?? "";
+    setIsCapturingScreenshot(true);
     try {
-      const response = await call<
-        [{ include_overlay: boolean }],
+      // Dispatch RPC before closing QAM so the backend request survives menu teardown.
+      const rpcPromise = call<
+        [string],
         { success?: boolean; item?: ScreenshotItem; error?: string }
-      >("capture_screenshot", { include_overlay: false });
+      >("take_steam_screenshot", appId);
+      Navigation.CloseSideMenus();
+      const response = await rpcPromise;
       if (!response?.success || !response.item?.path) {
-        setMediaError(response?.error ?? "Screenshot capture failed.");
+        const failMsg = response?.error ?? "Could not save a game screenshot.";
+        setMediaError(failMsg);
+        toaster.toast({
+          title: "Screenshot not saved",
+          body: failMsg,
+          duration: 5500,
+        });
         return;
       }
-      const item = response.item;
-      setSelectedAttachment({
-        path: item.path,
-        name: item.name || "capture.png",
-        source: "capture",
-        preview_data_uri: item.preview_data_uri,
-        size_bytes: item.size_bytes,
-        app_id: item.app_id,
+      setMediaError("");
+      toaster.toast({
+        title: "Screenshot saved",
+        body: "Find it under Attach → Attach recent screenshot.",
+        duration: 3200,
       });
-      toaster.toast({ title: "Screenshot captured", body: "Attached for your next Ask.", duration: 1800 });
+      await loadRecentScreenshots(24);
     } catch (e: unknown) {
-      setMediaError(formatDeckyRpcError(e));
+      const errMsg = formatDeckyRpcError(e);
+      setMediaError(errMsg);
+      toaster.toast({
+        title: "Screenshot not saved",
+        body: errMsg,
+        duration: 5500,
+      });
+    } finally {
+      setIsCapturingScreenshot(false);
     }
   };
 
@@ -1117,9 +1151,7 @@ const Content: React.FC = () => {
       setMediaError("Enable Media library access in Permissions to attach screenshots.");
       return;
     }
-    if (recentScreenshots.length === 0) {
-      await loadRecentScreenshots(24);
-    }
+    await loadRecentScreenshots(24);
   };
 
   const onCloseScreenshotBrowser = () => {
@@ -1138,7 +1170,7 @@ const Content: React.FC = () => {
     });
     setIsScreenshotBrowserOpen(false);
     setMediaError("");
-    toaster.toast({ title: "Media attached", body: "Recent screenshot attached.", duration: 1800 });
+    toaster.toast({ title: "Screenshot attached", body: "Recent screenshot ready for your next Ask.", duration: 2800 });
   };
 
   const showSearchClearButton = Boolean(unifiedInput.trim());
@@ -1475,6 +1507,7 @@ const Content: React.FC = () => {
       onCloseScreenshotBrowser={onCloseScreenshotBrowser}
       loadRecentScreenshots={loadRecentScreenshots}
       mediaError={mediaError}
+      isCapturingScreenshot={isCapturingScreenshot}
       recentScreenshots={recentScreenshots}
       isLoadingRecentScreenshots={isLoadingRecentScreenshots}
       onSelectRecentScreenshot={onSelectRecentScreenshot}
@@ -1544,6 +1577,7 @@ const Content: React.FC = () => {
       showSearchClearButton,
       isScreenshotBrowserOpen,
       mediaError,
+      isCapturingScreenshot,
       recentScreenshots,
       isLoadingRecentScreenshots,
       navigationMessage,

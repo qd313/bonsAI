@@ -54,22 +54,6 @@ Within this section: ascending stars (★★ → ★★★ → ★★★★). Br
   - **Depends on:** shipped Ask routing + vision fallback behavior (reference implementation).
   - **Not in scope:** distinct embedding-tier routing unrelated to tag chains.
 
-- ★★ **Screenshot attach button** (Ask bar)
-
-  - **Goal:** A clear, controller-friendly **Screenshot** control on the Ask bar — one tap to attach the **latest** Steam capture or open the recent-screenshot browser. Today’s tiny corner icon is easy to miss in QAM.
-  - **Primary work:** Dedicated button/chip UX (label + icon), optional **Attach latest** shortcut, focus order and disabled states while Ask is in flight.
-  - **Files:** `src/components/MainTab.tsx`, `src/index.tsx`.
-  - **Depends on:** shipped **Media library access** capability and screenshot list RPC.
-  - **Not in scope:** in-plugin framebuffer capture (SteamOS owns capture); **SteamOS Share path** (★★★★) remains the deep-link spike.
-
-- ★★ **Thinking phase copy polish** (mid-Ask status lines)
-
-  - **Goal:** Mid-Ask updates from `_publish_thinking_phase_key` / [`format_thinking_phase`](../py_modules/backend/services/bonsai_stream_tags.py) should stay prompt-aware like the shipped **Playful thinking status lines** opener (`compose_thinking_blurb`) — avoid overwriting the woven line with generic **“Building context…”** loops where a topic-specific phrase fits.
-  - **Primary work:** Reuse or delegate to `compose_thinking_blurb` pools for proton/TDP/screenshot/build phases; preserve game name + question snippet when phases advance.
-  - **Files:** `bonsai_stream_tags.py`, `main.py`, `game_ai_request.py`.
-  - **Depends on:** shipped **Thinking blurb during reply** and **Playful thinking status lines** (see **Completed**).
-  - **Not in scope:** multi-sentence blurbs, raw model “thinking” channel text, or LLM-generated status every poll tick.
-
 - ★★★ **10-foot readability slider** (handheld vs couch, J)
 
   - **Goal:** Single **font/size/step spacing** control for markdown chunks and chrome — narrow carve-out from ecosystem **F** (see Medium-term).
@@ -368,9 +352,8 @@ Dependency graph and implementation notes that are not feature checklist items.
 - **Character voice roleplay** + avatar mapping → **Higher-resolution character avatars (GTA-style art pass)**.
 - **Character voice roleplay (shipped)** → **Character-derived UI accent theme (preset-selected)** (shipped — see **Completed**); **Random character “?” avatar** (shipped — see **Completed**); **Running-game character suggestions (AI picker)** (shipped — see **Completed**).
 - **Character voice roleplay (shipped)** → **Local reply TTS** (Phase 2 — preset→voice mapping; legal research gate before ship).
-- **Character voice roleplay (shipped)** → **Playful thinking status lines (shipped)** — persona tone in `compose_thinking_blurb`; optional **Thinking phase copy polish** for mid-Ask `format_thinking_phase` lines.
+- **Character voice roleplay (shipped)** → **Playful thinking status lines (shipped)** — persona tone in `compose_thinking_blurb`; **Thinking phase copy polish (shipped)** keeps mid-Ask `format_thinking_phase` lines prompt-woven.
 - **Unified Ask pipeline and input transparency (shipped)** → **Text model chains** (user-configurable text fallbacks); **Retry same prompt** (shipped — see **Completed** → Tabs).
-- **Media library access (shipped)** → **Screenshot attach button** (Ask bar dedicated control); complements **Global screenshots and vision**.
 - **Input sanitizer (shipped)** + **Input handling transparency (shipped)** → future sanitizer extensions should keep user-visible auditability.
 - **Strategy Ask mode (`strategy`; Strategy Guide in prompts)** (shipped) → **Strategy Guide safety and spoilers** (shipped — on-device QA: [testing.md](testing.md) § Spoiler Policy and Consent), **Strategy checklist workflow (chat-scoped)** (planned).
 - **Global screenshots and vision** → richer strategy + screenshot context.

@@ -391,6 +391,7 @@ Maps [roadmap.md](roadmap.md) **Completed** summary and [archive/roadmap-complet
 | QAMP-ONDECK | QAMP manual (profile/reboot) | QAMP-DECK-01…05 | Open | Tier 3 |
 | D-PAD-CHUNKS | D-pad response scrolling | SMOKE-A | Partial | [SMOKE-A focus path](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-A-golden-path/manifest.json); [preview 2026-05-26](test-evidence/tier0/2026-05-26-9e20a82/SMOKE-A-golden-path/manifest.json) |
 | BG-ASK-V1 | Background prompt completion V1 | SMOKE-H, BG-* | Partial | SMOKE-H Tier 1; full matrix Tier 4; [preview 2026-05-26](test-evidence/tier1Core/2026-05-26-9e20a82/BG-ASK-reopen-status/manifest.json) |
+| THINKING-PHASE | Thinking phase copy polish (mid-Ask woven status) | THINKING-01, THINKING-02 | Open | `tests/test_bonsai_stream_tags.py`; on-Deck proton/TDP/screenshot paths |
 | SYS-PROMPT-LAYERS | System prompt layer order | SMOKE-A transparency | Partial | `tests/test_ollama_service.py` only |
 
 ### Steam Input
@@ -525,7 +526,8 @@ Requires **Settings → Data → Show Developer tab** → **Token streaming (exp
 - [x] **STREAM-04** Stop mid-stream: cancelled copy; no stale overwrite
 - [x] **STREAM-05** Transparency populates only after terminal
 - [ ] **STREAM-06** Smooth reveal: pending stream polls without text regression (preview RPC)
-- [ ] **THINKING-01** Pending: `thinking_summary` line visible; no placeholder AI bubble before partial
+- [ ] **THINKING-01** Pending: `thinking_summary` line visible; no placeholder AI bubble before partial; opener woven via `compose_thinking_blurb`
+- [ ] **THINKING-02** Mid-Ask prep phases (Proton logs, TDP read, screenshot prep, model retry): `thinking_summary` keeps question snippet + game — no generic downgrade to e.g. **Building context…** alone
 - [ ] **FEEDBACK-01** Reply-action chrome: `.bonsai-chat-secondary-btn` on feedback/retry/details
 
 ---

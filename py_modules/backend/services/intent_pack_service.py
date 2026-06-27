@@ -218,6 +218,16 @@ def load_intent_packs(path: str, logger: Any = None) -> dict[str, Any]:
     """Read intent packs from disk; seed bundled defaults when missing."""
     try:
         if os.path.isfile(path):
+            size = os.path.getsize(path)
+            if size > MAX_IMPORT_JSON_BYTES:
+                if logger is not None:
+                    logger.warning(
+                        "load_intent_packs: %s exceeds %d bytes (%d); re-seeding bundled defaults",
+                        path,
+                        MAX_IMPORT_JSON_BYTES,
+                        size,
+                    )
+                raise ValueError("intent pack store too large")
             with open(path, encoding="utf-8") as f:
                 raw = json.load(f)
             store = ensure_bundled_intent_packs(raw)
@@ -441,10 +451,15 @@ def merge_import_pack(
     if not incoming:
         return {"ok": False, "error": "No valid entries after validation (check targets and terms)"}
     incoming = {**incoming, "source": "imported"}
+    pack_id = incoming["id"]
+    if pack_id in BUNDLED_PACK_IDS:
+        return {
+            "ok": False,
+            "error": f"Cannot import into bundled pack id {pack_id!r}; choose a different id",
+        }
     base = sanitize_intent_pack_store(store)
     conflicts: list[dict[str, str]] = []
     stats = {"added_entries": 0, "merged_entries": 0, "conflicts": 0}
-    pack_id = incoming["id"]
     existing_idx = next(
         (i for i, p in enumerate(base.get("packs") or []) if isinstance(p, dict) and p.get("id") == pack_id),
         None,

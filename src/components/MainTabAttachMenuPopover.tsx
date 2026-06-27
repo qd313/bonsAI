@@ -17,8 +17,8 @@ export type MainTabAttachMenuPopoverProps = {
 };
 
 const ATTACH_MENU_ITEMS: { id: AttachMenuActionId; label: string }[] = [
-  { id: "take_screenshot", label: "Take screenshot" },
-  { id: "browse_recent", label: "Browse recent screenshots" },
+  { id: "take_screenshot", label: "Close menu & take screenshot" },
+  { id: "browse_recent", label: "Attach recent screenshot" },
 ];
 
 const MENU_GAP_PX = 6;
@@ -138,7 +138,7 @@ export function MainTabAttachMenuPopover(props: MainTabAttachMenuPopoverProps) {
         <div
           className="bonsai-attach-menu-list"
           role="menu"
-          aria-label="Attach media"
+          aria-label="Attach screenshot to Ask"
           style={{
             width: "100%",
             margin: 0,

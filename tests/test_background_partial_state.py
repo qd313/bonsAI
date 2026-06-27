@@ -107,6 +107,21 @@ class BackgroundPartialStateTests(unittest.TestCase):
         )
         self.assertEqual(merged.get("thinking_summary"), "Starting…")
 
+    def test_publish_thinking_phase_key_woven(self) -> None:
+        self.plugin._reset_partial_stream_snapshot(13)
+        self.plugin._publish_thinking_phase_key(
+            13,
+            "proton_logs",
+            app_name="Elden Ring",
+            question="why crash on launch",
+        )
+        merged = self.plugin._merge_partial_into_background_status(
+            {"status": "pending", "request_id": 13, "response": "Thinking...", "started_at": 0.0}
+        )
+        summary = merged.get("thinking_summary") or ""
+        self.assertIn("crash", summary.lower())
+        self.assertIn("Elden Ring", summary)
+
     def test_merge_uses_fallback_after_prep_without_sticky_connect(self) -> None:
         """Prep phases publish thinking; Ollama wait without publish uses elapsed fallback."""
         import time

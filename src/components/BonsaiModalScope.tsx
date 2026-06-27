@@ -1,6 +1,6 @@
 import React from "react";
 
-import { buildPullModelsStylesheet } from "../styles/bonsaiScopeStylesheet";
+import { buildModalPortalStylesheet } from "../styles/bonsaiScopeStylesheet";
 
 export type BonsaiModalScopeProps = {
   children: React.ReactNode;
@@ -13,7 +13,7 @@ export function BonsaiModalScope({ children, className, shellRef }: BonsaiModalS
   const mergedClass = ["bonsai-scope", className].filter(Boolean).join(" ");
   return (
     <div ref={shellRef} className={mergedClass}>
-      <style>{buildPullModelsStylesheet()}</style>
+      <style>{buildModalPortalStylesheet()}</style>
       {children}
     </div>
   );

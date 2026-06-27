@@ -81,11 +81,13 @@ export function SettingsTabIntentPacksSection(props: SettingsTabIntentPacksSecti
         return;
       }
       const packLabel = preview.pack?.label ?? preview.pack?.id ?? "pack";
+      const packId = preview.pack?.id ?? "";
       const added = preview.stats?.added_entries ?? 0;
       const merged = preview.stats?.merged_entries ?? 0;
       const conflicts = preview.stats?.conflicts ?? preview.conflicts?.length ?? 0;
       const description = [
-        `Pack: ${packLabel}`,
+        packId ? `Id: ${packId} (imported — not from Valve)` : null,
+        `Label: ${packLabel}`,
         `+${added} new entries, ${merged} merged.`,
         conflicts > 0 ? `${conflicts} term conflict(s) will be skipped.` : "No term conflicts.",
         "Import merges offline search aliases only — settings navigation targets are validated.",

@@ -95,6 +95,63 @@ class BonsaiStreamTagsTests(unittest.TestCase):
         self.assertIn("fps", out.lower())
         self.assertLessEqual(len(out), 240)
 
+    def test_format_thinking_phase_woven_proton_logs(self):
+        out = format_thinking_phase(
+            "proton_logs",
+            question="why crash on launch",
+            app_name="Elden Ring",
+            request_id=3,
+        )
+        self.assertIn("crash", out.lower())
+        self.assertIn("Elden Ring", out)
+
+    def test_format_thinking_phase_woven_tdp_read(self):
+        out = format_thinking_phase(
+            "tdp_read",
+            question="what is my current tdp",
+            request_id=5,
+        )
+        self.assertIn("tdp", out.lower())
+
+    def test_format_thinking_phase_woven_screenshot_prep(self):
+        out = format_thinking_phase(
+            "screenshot_prep",
+            question="what is this UI element",
+            app_name="Zelda",
+            attachment_count=1,
+            request_id=9,
+        )
+        self.assertTrue("screenshot" in out.lower() or "capture" in out.lower())
+        self.assertIn("UI element", out)
+
+    def test_format_thinking_phase_woven_model_retry(self):
+        out = format_thinking_phase(
+            "model_retry",
+            question="help with stuttering",
+            request_id=11,
+        )
+        self.assertIn("stuttering", out.lower())
+        self.assertIn("model", out.lower())
+
+    def test_format_thinking_phase_woven_building_context_elapsed(self):
+        out = format_thinking_phase(
+            "building_context",
+            question="optimize settings",
+            app_name="Zelda",
+            elapsed_seconds=2,
+            request_id=13,
+        )
+        self.assertIn("optimize", out.lower())
+
+    def test_format_thinking_phase_starting_delegates_to_blurb(self):
+        out = format_thinking_phase(
+            "starting",
+            question="why is my fps low",
+            app_name="Elden Ring",
+            request_id=17,
+        )
+        self.assertIn("fps", out.lower())
+
     def test_sarcasm_roll_off_without_character(self):
         self.assertFalse(sarcasm_roll(1, enabled=False))
 

@@ -45,6 +45,7 @@ export function ModelRoutingAdvancedPanel({
         onChange={onModelAllowHighVramFallbacksChange}
       />
       <Button
+        className="bonsai-chat-secondary-btn"
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();

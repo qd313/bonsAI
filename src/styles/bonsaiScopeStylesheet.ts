@@ -1466,21 +1466,63 @@ export function buildBonsaiScopeStylesheet(): string {
         }
 
         .bonsai-scope .bonsai-unified-input-bottom-actions .bonsai-askbar-target.DialogButton,
-        .bonsai-scope .bonsai-unified-input-bottom-actions .bonsai-askbar-target {
+        .bonsai-scope .bonsai-unified-input-bottom-actions .bonsai-askbar-target:not(.bonsai-ask-mode-trigger) {
           padding: 0 !important; margin: 0 !important;
           min-width: 20px !important; min-height: 20px !important; border-radius: 0 !important;
         }
         .bonsai-scope .bonsai-unified-input-bottom-actions .bonsai-ask-mode-trigger.bonsai-askbar-target {
           min-width: unset !important;
+          position: relative !important;
         }
-        /* Mode chip: beat section-7 transparency flattening on .bonsai-askbar-target */
+        /* Mode chip tint via ::before so it can be nudged independently of Decky inner wrappers. */
+        .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions .bonsai-ask-mode-trigger.bonsai-askbar-target::before {
+          content: "" !important;
+          position: absolute !important;
+          z-index: 0 !important;
+          pointer-events: none !important;
+          left: -1px !important;
+          top: 1px !important;
+          right: 1px !important;
+          bottom: -1px !important;
+          background-color: var(--bonsai-ask-mode-fill) !important;
+          border-radius: 5px !important;
+        }
         .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions .bonsai-ask-mode-trigger.bonsai-askbar-target,
         .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions .bonsai-ask-mode-trigger.bonsai-askbar-target > div,
         .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions .bonsai-ask-mode-trigger.bonsai-askbar-target > span {
-          background-color: var(--bonsai-ask-mode-fill) !important;
-          border: 1px solid var(--bonsai-ask-mode-accent) !important;
-          color: var(--bonsai-ask-mode-accent) !important;
-          border-radius: 3px !important;
+          background-color: transparent !important;
+          background-image: none !important;
+          border: none !important;
+          box-shadow: none !important;
+          overflow: visible !important;
+          color: color-mix(in srgb, var(--bonsai-ask-mode-accent) 62%, #8fa8c4) !important;
+        }
+        .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions .bonsai-ask-mode-trigger.bonsai-askbar-target > div,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions .bonsai-ask-mode-trigger.bonsai-askbar-target > span {
+          position: relative !important;
+          z-index: 1 !important;
+        }
+        .bonsai-scope .bonsai-unified-input-bottom-actions .bonsai-ask-mode-trigger.bonsai-askbar-target:focus-visible,
+        .bonsai-scope .bonsai-unified-input-bottom-actions .bonsai-ask-mode-trigger.bonsai-askbar-target.gpfocus {
+          background-color: transparent !important;
+          border: none !important;
+          box-shadow: none !important;
+          outline: none !important;
+        }
+        .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions .bonsai-ask-mode-trigger.bonsai-askbar-target:focus-visible::before,
+        .bonsai-scope .bonsai-unified-input-host .bonsai-unified-input-bottom-actions .bonsai-ask-mode-trigger.bonsai-askbar-target.gpfocus::before {
+          background-color: color-mix(in srgb, var(--bonsai-ask-mode-fill) 55%, rgba(160, 189, 220, 0.2)) !important;
+          box-shadow: inset 0 0 0 1px rgba(200, 223, 245, 0.8) !important;
+        }
+        .bonsai-scope .bonsai-unified-input-bottom-actions .bonsai-ask-mode-trigger.bonsai-askbar-target:focus-visible > div,
+        .bonsai-scope .bonsai-unified-input-bottom-actions .bonsai-ask-mode-trigger.bonsai-askbar-target.gpfocus > div,
+        .bonsai-scope .bonsai-unified-input-bottom-actions .bonsai-ask-mode-trigger.bonsai-askbar-target:focus-visible > span,
+        .bonsai-scope .bonsai-unified-input-bottom-actions .bonsai-ask-mode-trigger.bonsai-askbar-target.gpfocus > span {
+          background-color: transparent !important;
+          border: none !important;
+          box-shadow: none !important;
+          outline: none !important;
+          color: color-mix(in srgb, var(--bonsai-ask-mode-accent) 78%, #b8c8d8) !important;
         }
         .bonsai-scope .bonsai-unified-input-bottom-actions .bonsai-askbar-target > span { padding: 0 !important; margin: 0 !important; }
 

@@ -513,6 +513,7 @@ export function MainTab(props: MainTabProps) {
     scope.classList.toggle("bonsai-ask-menu-open-scope", askModeMenuOpen || attachMenuOpen);
     return () => scope.classList.remove("bonsai-ask-menu-open-scope");
   }, [askModeMenuOpen, attachMenuOpen, unifiedInputHostRef]);
+
   const focusFirstPresetChip = React.useCallback((): boolean => {
     const host = presetCarouselHostRef.current;
     const help = host?.querySelector<HTMLElement>("button.bonsai-preset-help-chip");

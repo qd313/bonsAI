@@ -16,11 +16,11 @@ export const ASK_MODE_ACCENT: Record<AskModeId, string> = {
   expert: "#f87171",
 };
 
-/** Semi-transparent fill for the mode trigger chip background. */
+/** Very subtle tint for the mode chip (blends with ask-bar glass; borderless). */
 export const ASK_MODE_FILL: Record<AskModeId, string> = {
-  speed: "rgba(74, 222, 128, 0.22)",
-  strategy: "rgba(250, 204, 21, 0.20)",
-  expert: "rgba(248, 113, 113, 0.22)",
+  speed: "rgba(74, 222, 128, 0.06)",
+  strategy: "rgba(250, 204, 21, 0.05)",
+  expert: "rgba(248, 113, 113, 0.06)",
 };
 
 /** @deprecated Use ASK_MODE_ACCENT */

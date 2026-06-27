@@ -134,13 +134,13 @@ Within this section: ascending stars (★★ → ★★★ → ★★★★). Br
   - **Depends on:** optional Input transparency surfaces.
   - **Not in scope:** telemetry upload.
 
-- ★★★★ **Local text stash inject** (non-RAG snippets, C)
+- ★★★★ **Session context and user stash** (deck-first context; C)
 
-  - **Goal:** User-editable **small** plain-text snippets (notes, build URLs, aliases) injected into system context on demand — not full RAG.
-  - **Primary work:** storage schema, Settings editor, prompt inject toggle per Ask.
-  - **Files:** `main.py`, `src/index.tsx`, `settings_service.py`.
-  - **Depends on:** prompt assembly hooks.
-  - **Not in scope:** embeddings, vector DBs, or multi-MB corpora (see **RAG** Medium-term).
+  - **Goal:** Unified, **deck-first** context for Ask — no embeddings, no LAN companion, no cloud. Two lanes injected into the system prompt before mode/TDP tail: **(1) Live session context** — deterministic facts for *this turn* (running game/AppID, screenshot attachments, Proton/troubleshooting log excerpts when gated + relevant, TDP/sysfs snapshot when hardware topic applies); **(2) User stash** — user-editable plain-text notes (build URLs, ProtonDB tips, aliases) persisted on-device, optionally scoped per AppID, included when the user opts in or when a per-game stash matches the active title. Primary answer-quality path for **deck-only** and LAN users alike; explicit alternative to **RAG Deck query**.
+  - **Primary work:** **Phase 1 — User stash:** storage schema + size caps; Settings editor; per-Ask include toggle; inject via `early_context_suffix` / dedicated block in [`build_system_prompt`](../py_modules/backend/services/ollama_prompts.py) (same splice documented for future RAG). **Phase 2 — Session bundle:** single assembly helper (e.g. `context_bundle_service.py`) that gathers live session slices from existing paths ([`game_ai_request.py`](../py_modules/backend/services/game_ai_request.py), [`proton_troubleshooting_logs.py`](../py_modules/backend/services/proton_troubleshooting_logs.py), attachment prep in [`main.py`](../main.py)); token/byte budget + truncation rules; **Input transparency** and optional Main-tab **context chip** listing what was attached (stash vs live).
+  - **Files:** `py_modules/backend/services/ollama_prompts.py`, `game_ai_request.py`, `settings_service.py`, `main.py`; `src/utils/settingsAndResponse.ts`, Settings UI, `MainTab.tsx` / input transparency utils.
+  - **Depends on:** shipped **Input handling transparency**; **Capability Permission Center** (media, filesystem/log reads); [`build_system_prompt`](../py_modules/backend/services/ollama_prompts.py) layer order.
+  - **Not in scope:** embeddings, vector DBs, Chroma, outbound corpus ingest, multi-MB stash, cloud sync, auto web fetch (see **RAG Deck query**). Clipboard-only “append to Ask field” without system inject remains optional polish, not a separate ship line.
 
 - ★★★★ **Llama.cpp provider spike** (compat evaluation)
 
@@ -230,15 +230,16 @@ Within this section: ascending stars (★★★★ → ★★★★★ → ★�
 - ★★★★★ **RAG Deck query** (PC-hosted ingest + Chroma)
 
   - **GitHub (tracking placeholder):** [bonsAI Issues](https://github.com/cantcurecancer/bonsAI/issues) — dedicated issue TBD.
-  - **Status:** Planned — see [archive/research/rag-sources-research.md](archive/research/rag-sources-research.md).
+  - **Status:** Planned — see [archive/research/rag-sources-research.md](archive/research/rag-sources-research.md). Deck parity for retrieval without a PC companion is covered by **Session context and user stash** (Near-term), not v1 RAG.
   - **Goal:** RAG with ChromaDB + `nomic-embed-text` (Ollama `/api/embed`) over a curated corpus; heavy work on user's PC beside Ollama; Deck queries over LAN.
   - **Architecture:** Ollama does not run ingestion — small PC companion (e.g. `bonsai-rag`), Chroma under `~/.bonsai/rag/chroma`, endpoints `POST /v1/refresh`, `POST /v1/query`; inject context **before** hardware + JSON tail in system prompt.
   - **Developer tooling:** e.g. `scripts/build_rag_db.py` on dev PC; same embedding contract as runtime.
   - **Settings:** plain-language disclosure; **Update knowledge on PC** after confirm; requires `**network_web_access`** when added.
   - **Files (expected):** `ollama_service.py`, `main.py`, `capabilities.py`, `settings_service.py`, `settingsAndResponse.ts`, `PermissionsTab`, `pc/` or `scripts/`, `docs/development.md`, [archive/research/rag-sources-research.md](archive/research/rag-sources-research.md).
   - **Depends on:** Ollama on PC; `nomic-embed-text` pulled on host; optional Reddit API on PC only.
+  - **Related:** **Session context and user stash** — deck-first, no vector DB; preferred path for deck-only users and for personalized notes RAG cannot replace.
   - **Legal:** respect ToS, robots, rate limits; no scraped corpora in git.
-  - **Not in scope (v1):** Deck-side scrapers, multi-GB DBs in-repo, automatic refresh without user action.
+  - **Not in scope (v1):** Deck-side scrapers, multi-GB DBs in-repo, automatic refresh without user action; replacing user stash or live session slices; deck-only users should not require RAG for basic compat guidance.
 
 - ★★★★★ **Kids master lock** (Steam parental restricted)
 
@@ -386,6 +387,8 @@ Dependency graph and implementation notes that are not feature checklist items.
 - **Bundled VDF parsing** → **Steam Input layout parse** (and optional deeper parsing).
 - **Steam Input settings search + jump** → Phase 1 shipped; broader catalog deferred.
 - **Offline intent pack exchange** → offline-first search quality.
+- **Session context and user stash** → deck-first Ask quality; complements shipped game/vision/Proton/TDP injects; **alternative to RAG Deck query** for deck-only and minimal-infra users.
+- **User stash (Phase 1)** → **Input handling transparency** (show injected stash bytes and sources).
 - **Settings persistence** → mode profiles, language override, background completion metadata; **Debug tab opt-in (Settings)** (shipped — see **Completed** → Tabs).
 - **Brainstorm letters (ecosystem E–H, companion J–N, chat R–V)** are indexed in [roadmap_feature_ideas plan](../.cursor/plans/roadmap_feature_ideas_f5560e15.plan.md); **Planned** above is canonical for horizon ordering.
 

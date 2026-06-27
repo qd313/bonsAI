@@ -65,7 +65,6 @@ import { SETTINGS_DATABASE } from "./data/settingsDatabase";
 import {
   ASK_LABEL_COLOR_50,
   BONSAI_FOREST_GREEN,
-  SETTINGS_SEARCH_MIN_QUERY_LENGTH,
   TAB_TITLE_DEBUG_TAB_ICON_PX,
   TAB_TITLE_ICON_PX,
   TAB_TITLE_MAIN_TAB_ICON_PX,
@@ -73,6 +72,8 @@ import {
 import { useUnifiedInputSurface } from "./features/unified-input/useUnifiedInputSurface";
 import { formatDeckyRpcError } from "./utils/deckyCall";
 import { usePluginSettings } from "./hooks/usePluginSettings";
+import { useIntentPacks } from "./hooks/useIntentPacks";
+import { searchSettingsWithIntentPacks } from "./utils/intentPackSearch";
 import { useVoiceTranscription } from "./hooks/useVoiceTranscription";
 import { useBonsaiAskOrchestration } from "./hooks/useBonsaiAskOrchestration";
 import { useDisclaimerAndLocalRuntimeGates } from "./hooks/useDisclaimerAndLocalRuntimeGates";
@@ -434,6 +435,8 @@ const Content: React.FC = () => {
     flushSettingsSnapshotNow,
     syncSettingsFromDisk,
   } = usePluginSettings();
+
+  const intentPacks = useIntentPacks();
 
   const [voiceRecording, setVoiceRecording] = useState(false);
 
@@ -895,11 +898,8 @@ const Content: React.FC = () => {
   }, [isAsking, isStreamingPreview, effectiveLatencyWarningSeconds]);
 
   const filteredSettings = useMemo(() => {
-    const q = unifiedInput.trim();
-    if (q.length < SETTINGS_SEARCH_MIN_QUERY_LENGTH) return [];
-    const lower = q.toLowerCase();
-    return SETTINGS_DATABASE.filter((setting) => setting.toLowerCase().includes(lower));
-  }, [unifiedInput]);
+    return searchSettingsWithIntentPacks(unifiedInput, SETTINGS_DATABASE, intentPacks.index);
+  }, [unifiedInput, intentPacks.index]);
 
   useEffect(() => {
     if (unifiedInputPersistenceMode === "persist_all") {
@@ -991,6 +991,7 @@ const Content: React.FC = () => {
       clearSettingsTabLocalSurvival();
       clearOllamaTabLocalSurvival();
       resetPluginSession();
+      await intentPacks.refresh();
       showDisclaimerModalAgain();
       toaster.toast({
         title: "Plugin data cleared",
@@ -1010,6 +1011,7 @@ const Content: React.FC = () => {
     pauseDebouncedSettingsSave,
     resetPluginSession,
     showDisclaimerModalAgain,
+    intentPacks.refresh,
   ]);
 
   const onMicInput = useCallback(() => {
@@ -1600,6 +1602,13 @@ const Content: React.FC = () => {
       onCompleteDeckyModalClose={finalizeShowModalAndRestoreActiveTab}
       onResetSession={resetPluginSession}
       onClearAllPluginData={onClearAllPluginData}
+      intentPackSummaries={intentPacks.summaries}
+      intentPacksLoading={intentPacks.loading}
+      intentPacksError={intentPacks.error}
+      onIntentPackEnabledChange={intentPacks.setPackEnabled}
+      onIntentPackExport={intentPacks.exportPack}
+      onIntentPackImport={intentPacks.importPack}
+      onIntentPackRemove={intentPacks.removePack}
     />
   ),
     [
@@ -1614,6 +1623,13 @@ const Content: React.FC = () => {
       strategySpoilerMaskingEnabled,
       voiceSttModel,
       capabilities.microphone_access,
+      intentPacks.summaries,
+      intentPacks.loading,
+      intentPacks.error,
+      intentPacks.setPackEnabled,
+      intentPacks.exportPack,
+      intentPacks.importPack,
+      intentPacks.removePack,
     ]
   );
 

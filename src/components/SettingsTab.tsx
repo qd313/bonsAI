@@ -27,6 +27,8 @@ import {
   unregisterSettingsTabLocalGetter,
 } from "../utils/settingsTabLocalSurvival";
 import { VoiceInputSettingsSection } from "./VoiceInputSettingsSection";
+import { SettingsTabIntentPacksSection } from "./SettingsTabIntentPacksSection";
+import type { IntentPackSummary } from "../hooks/useIntentPacks";
 import type { VoiceSttModelId } from "../utils/settingsAndResponse";
 
 const persistenceModeLabel: Record<UnifiedInputPersistenceMode, string> = {
@@ -92,6 +94,23 @@ export type SettingsTabProps = {
   onCompleteDeckyModalClose: (close: () => void) => void;
   onResetSession: () => void;
   onClearAllPluginData: () => void | Promise<void>;
+
+  intentPackSummaries?: IntentPackSummary[];
+  intentPacksLoading?: boolean;
+  intentPacksError?: string | null;
+  onIntentPackEnabledChange?: (packId: string, enabled: boolean) => Promise<boolean>;
+  onIntentPackExport?: (packId: string) => Promise<{ ok: boolean; json?: string; error?: string }>;
+  onIntentPackImport?: (
+    json: string,
+    confirm: boolean
+  ) => Promise<{
+    ok: boolean;
+    error?: string;
+    conflicts?: Array<{ term: string; existing_target: string; incoming_target: string }>;
+    stats?: { added_entries?: number; merged_entries?: number; conflicts?: number };
+    pack?: { id?: string; label?: string };
+  }>;
+  onIntentPackRemove?: (packId: string) => Promise<boolean>;
 };
 
 export const SettingsTab: React.FC<SettingsTabProps> = ({
@@ -118,6 +137,13 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   onCompleteDeckyModalClose,
   onResetSession,
   onClearAllPluginData,
+  intentPackSummaries = [],
+  intentPacksLoading = false,
+  intentPacksError = null,
+  onIntentPackEnabledChange,
+  onIntentPackExport,
+  onIntentPackImport,
+  onIntentPackRemove,
 }) => {
   const [accentIntensityMenuOpen, setAccentIntensityMenuOpen] = useState(
     () => peekSettingsTabLocalPending()?.accentIntensityMenuOpen ?? false
@@ -401,6 +427,19 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
           </div>
         </PanelSectionRow>
       </PanelSection>
+      {onIntentPackEnabledChange && onIntentPackExport && onIntentPackImport && onIntentPackRemove ? (
+        <SettingsTabIntentPacksSection
+          summaries={intentPackSummaries}
+          loading={intentPacksLoading}
+          error={intentPacksError}
+          onEnabledChange={onIntentPackEnabledChange}
+          onExport={onIntentPackExport}
+          onImport={onIntentPackImport}
+          onRemove={onIntentPackRemove}
+          onBeforeDeckyModal={onBeforeDeckyModal}
+          onCompleteDeckyModalClose={onCompleteDeckyModalClose}
+        />
+      ) : null}
       <Focusable
         className="bonsai-settings-cache-row"
         flow-children="horizontal"

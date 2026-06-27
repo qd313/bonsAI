@@ -436,3 +436,53 @@ Phase 1 is the **completed** scope for this feature; full search + catalog (Phas
 2. **steam:// behavior:** Phase 1 uses `steam://controllerconfig/<appId>` via `SteamClient.URL.ExecuteSteamURL` (same family as Settings search `steam://open/settings/...`). If nothing happens, confirm Steam handled other `steam://` links from bonsAI recently; restart Steam if the client URL dispatcher is stuck.
 3. **After a Steam update:** Big Picture routes and `steam://` targets can change. Follow the smoke-test and changelog discipline in [archive/research/steam-input-research.md](archive/research/steam-input-research.md) and update `src/data/steam-input-lexicon.ts` if needed.
 4. **Wrong tab inside controller UI:** Sub-tabs may be local React state without distinct URLs. Use breadcrumb hints in the lexicon entry and optional `primaryPathTemplate` once you have verified paths from CEF sniffing.
+
+---
+
+## Search intent packs (offline JSON)
+
+**Settings → Search intent packs** manages offline alias packs for the main-tab unified search field (Steam / QAM settings navigation — not Ask model prompts).
+
+### What they do
+
+- Map short terms (e.g. `wifi`, `tdp`) to canonical settings paths such as `Settings > Internet > Enable Wi-Fi`.
+- Ship with a bundled **Deck basics** pack (`data/intent-packs/deck-basics.json` in the repo).
+- User packs are edited as JSON on a PC, copied to the Deck clipboard, then imported with an explicit confirm step.
+
+### Pack JSON shape (schema_version 1)
+
+```json
+{
+  "id": "my-pack",
+  "label": "My aliases",
+  "enabled": true,
+  "source": "imported",
+  "updated_at": "2026-06-27",
+  "entries": [
+    {
+      "target": "Settings > Internet > Enable Wi-Fi",
+      "aliases": ["wifi", "wireless"],
+      "synonyms": ["wi-fi"],
+      "expansions": ["network"]
+    }
+  ]
+}
+```
+
+- **`target`** must exactly match a path from the shipped settings catalog (`src/data/settingsDatabase.ts` / `data/settings-search-targets.json`). Unknown targets are rejected on import.
+- **`aliases` / `synonyms`:** direct match when the search text contains the term (min 2 characters).
+- **`expansions`:** weaker match tier (surfaced after native and alias/synonym hits).
+- **Merge:** importing a pack with the same `id` merges entries; alias/synonym terms already owned by another target are skipped and listed in the confirm dialog.
+
+### Storage
+
+- Persisted as `intent_packs.json` under Decky plugin settings (not inside `settings.json`).
+- **Clear all plugin data** resets packs to bundled defaults.
+
+### Example workflow
+
+1. Export **Deck basics** from Settings to see the format.
+2. Edit on PC; copy JSON to clipboard.
+3. **Import from clipboard** on the Deck → review summary → confirm.
+4. On the **Main** tab, type `wifi` — unified search should list Wi-Fi settings even if the literal path text does not contain `wifi`.
+

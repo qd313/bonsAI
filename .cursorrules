@@ -5,3 +5,4 @@
 - For Deck UI/RPC edits: call **`bonsai.workflow.get`** with `id=deck-dev-loop`; use **decky-plugin-studio** for deploy/preview.
 - Specialist reviews: MCP prompt **`bonsai/persona/{name}`** (`security-auditor`, `master-debugger`, `foss-advocate`, `refactor-specialist`).
 - Full policies, workflows, and personas live in **`packages/bonsai-mcp/knowledge/`** — do not duplicate here.
+- Before marking feature/bugfix work done: update `docs/roadmap.md` + `docs/testing.md` in the same change set (see [.cursor/rules/docs-on-ship.mdc](.cursor/rules/docs-on-ship.mdc) or MCP policy `documentation`).

@@ -1,0 +1,24 @@
+---
+description: Update roadmap and testing docs when shipping features or fixing bugs
+alwaysApply: true
+---
+
+# Docs on ship / bugfix
+
+Before marking Deck-facing work **done** (feature implementation, plan execution, or bug fix):
+
+1. **`docs/roadmap.md`**
+   - **Feature shipped:** remove from **Planned** / **In Progress**; add a line to **`docs/archive/roadmap-completed.md`**; update **Appendix** dependency bullets if needed.
+   - **Bug fixed:** remove or resolve the **In Progress → Bugs** row; note fix in completed archive if user-visible.
+   - **Partial ship:** move completed scope to **Completed**; leave a smaller **Planned** follow-up.
+
+2. **`docs/testing.md`**
+   - Add or update a row in **Shipped feature coverage** (Feature ID, Test ID(s), Status **Open** until on-Deck QA).
+   - Add or extend scenario checkboxes / runbook tier when the change needs new QA steps.
+   - For bug fixes: note which smoke/scenario now passes or add a regression row.
+
+3. **Same change set** as the code — not a follow-up PR. Docs-only plans (roadmap edits with no code) are exempt.
+
+4. Also update **`docs/troubleshooting.md`** when setup, permissions, or user-facing behavior changes.
+
+Full policy: MCP `bonsai.policy.get` id=`documentation` or [packages/bonsai-mcp/knowledge/policies/documentation.md](../../packages/bonsai-mcp/knowledge/policies/documentation.md).

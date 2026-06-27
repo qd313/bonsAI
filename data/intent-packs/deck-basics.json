@@ -1,0 +1,141 @@
+{
+  "id": "deck-basics",
+  "label": "Deck basics",
+  "enabled": true,
+  "source": "bundled",
+  "updated_at": "2026-06-27",
+  "entries": [
+    {
+      "target": "Settings > Internet > Enable Wi-Fi",
+      "aliases": ["wifi", "wireless"],
+      "synonyms": ["wi-fi", "wlan"],
+      "expansions": ["network", "internet"]
+    },
+    {
+      "target": "Settings > Internet > Offline Mode",
+      "aliases": ["offline", "airplane"],
+      "synonyms": ["no internet"],
+      "expansions": ["disconnect"]
+    },
+    {
+      "target": "QAM > Quick Settings > Wi-Fi",
+      "aliases": ["qam wifi", "quick wifi"],
+      "synonyms": ["qam wireless"],
+      "expansions": []
+    },
+    {
+      "target": "Settings > Display > Brightness",
+      "aliases": ["brightness", "screen brightness"],
+      "synonyms": ["dim", "backlight"],
+      "expansions": ["display"]
+    },
+    {
+      "target": "QAM > Quick Settings > Brightness",
+      "aliases": ["qam brightness"],
+      "synonyms": [],
+      "expansions": ["quick brightness"]
+    },
+    {
+      "target": "Settings > Display > Schedule Night Mode",
+      "aliases": ["night mode", "blue light"],
+      "synonyms": ["night shift"],
+      "expansions": ["display tint"]
+    },
+    {
+      "target": "QAM > Quick Settings > Night mode",
+      "aliases": ["qam night"],
+      "synonyms": [],
+      "expansions": []
+    },
+    {
+      "target": "QAM > Performance > TDP Limit",
+      "aliases": ["tdp", "power limit", "watt limit"],
+      "synonyms": ["thermal", "power cap"],
+      "expansions": ["performance", "battery"]
+    },
+    {
+      "target": "QAM > Performance > Frame Limit",
+      "aliases": ["fps cap", "frame cap", "fps limit"],
+      "synonyms": ["framerate limit"],
+      "expansions": ["performance"]
+    },
+    {
+      "target": "QAM > Performance > Manual GPU Clock",
+      "aliases": ["gpu clock", "overclock gpu"],
+      "synonyms": ["gpu frequency"],
+      "expansions": ["performance"]
+    },
+    {
+      "target": "Settings > Bluetooth > Bluetooth",
+      "aliases": ["bluetooth", "bt"],
+      "synonyms": ["pair controller", "pair device"],
+      "expansions": ["wireless"]
+    },
+    {
+      "target": "QAM > Quick Settings > Bluetooth",
+      "aliases": ["qam bluetooth", "qam bt"],
+      "synonyms": [],
+      "expansions": []
+    },
+    {
+      "target": "Settings > Storage > MicroSD Card",
+      "aliases": ["sd card", "microsd", "memory card"],
+      "synonyms": ["format sd"],
+      "expansions": ["storage"]
+    },
+    {
+      "target": "Settings > Storage > Default Storage Drive",
+      "aliases": ["install location", "default drive"],
+      "synonyms": ["where games install"],
+      "expansions": ["storage"]
+    },
+    {
+      "target": "Settings > System > Enable Developer Mode",
+      "aliases": ["developer mode", "dev mode"],
+      "synonyms": ["enable developer"],
+      "expansions": ["system"]
+    },
+    {
+      "target": "Settings > Developer > CEF Remote Debugging",
+      "aliases": ["cef debug", "remote debugging", "cef"],
+      "synonyms": ["chrome debug"],
+      "expansions": ["developer"]
+    },
+    {
+      "target": "Settings > Audio > Microphone Volume",
+      "aliases": ["mic volume", "microphone"],
+      "synonyms": ["input volume"],
+      "expansions": ["audio"]
+    },
+    {
+      "target": "QAM > Quick Settings > Microphone Volume",
+      "aliases": ["qam mic", "qam microphone"],
+      "synonyms": [],
+      "expansions": []
+    },
+    {
+      "target": "Settings > Power > Enable battery charging limit",
+      "aliases": ["charge limit", "battery limit", "80 percent"],
+      "synonyms": ["charging cap"],
+      "expansions": ["battery health"]
+    },
+    {
+      "target": "Settings > Controller > Calibration & Advanced Settings",
+      "aliases": ["controller calibration", "stick drift"],
+      "synonyms": ["calibrate sticks"],
+      "expansions": ["controller"]
+    },
+    {
+      "target": "Settings > Downloads > Allow downloads during gameplay",
+      "aliases": ["download while playing", "background downloads"],
+      "synonyms": [],
+      "expansions": ["downloads"]
+    },
+    {
+      "target": "Settings > Remote Play > Enable Remote Play",
+      "aliases": ["remote play", "stream deck"],
+      "synonyms": ["moonlight alternative"],
+      "expansions": ["streaming"]
+    }
+  ]
+}

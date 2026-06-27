@@ -48,6 +48,18 @@ from backend.services.ollama_service import (
 )
 from backend.services.plugin_data_reset import reset_plugin_disk_and_defaults
 from backend.services.local_ollama_teardown_service import teardown_local_ollama_for_plugin_reset
+from backend.services.intent_pack_service import (
+    export_pack,
+    intent_packs_path,
+    load_intent_packs,
+    merge_import_pack,
+    pack_summaries,
+    parse_import_payload,
+    remove_pack,
+    reset_intent_packs_file,
+    save_intent_packs,
+    set_pack_enabled,
+)
 from backend.services.settings_service import (
     clamp_int,
     load_settings as load_settings_from_disk,
@@ -211,6 +223,21 @@ class Plugin:
     @staticmethod
     def _settings_path() -> str:
         return os.path.join(decky.DECKY_PLUGIN_SETTINGS_DIR, Plugin.SETTINGS_FILENAME)
+
+    @staticmethod
+    def _intent_packs_path() -> str:
+        return intent_packs_path(decky.DECKY_PLUGIN_SETTINGS_DIR)
+
+    def _load_intent_pack_store(self) -> dict:
+        return load_intent_packs(Plugin._intent_packs_path(), logger)
+
+    def _save_intent_pack_store(self, store: dict) -> dict:
+        return save_intent_packs(
+            Plugin._intent_packs_path(),
+            store,
+            settings_dir=decky.DECKY_PLUGIN_SETTINGS_DIR,
+            logger=logger,
+        )
 
     @staticmethod
     def _clamp_int(value: Any, default: int, minimum: int, maximum: int) -> int:
@@ -721,7 +748,77 @@ class Plugin:
             save_settings=save_settings_to_disk,
             logger=logger,
         )
+        reset_intent_packs_file(
+            Plugin._intent_packs_path(),
+            decky.DECKY_PLUGIN_SETTINGS_DIR,
+            logger=logger,
+        )
         return defaults
+
+    async def get_intent_packs(self):
+        """Return intent pack summaries and full entries for unified search indexing."""
+        plugin = Plugin._coerce_instance(self)
+        store = plugin._load_intent_pack_store()
+        return {
+            "schema_version": store.get("schema_version"),
+            "summaries": pack_summaries(store),
+            "packs": store.get("packs") or [],
+        }
+
+    async def set_intent_pack_enabled(self, pack_id: str = "", enabled: bool = True):
+        """Enable or disable a search intent pack."""
+        plugin = Plugin._coerce_instance(self)
+        store = plugin._load_intent_pack_store()
+        result = set_pack_enabled(store, pack_id, enabled)
+        if not result.get("ok"):
+            return result
+        saved = plugin._save_intent_pack_store(result["store"])
+        return {
+            "ok": True,
+            "summaries": pack_summaries(saved),
+            "packs": saved.get("packs") or [],
+        }
+
+    async def export_intent_pack(self, pack_id: str = ""):
+        """Export one intent pack as formatted JSON."""
+        plugin = Plugin._coerce_instance(self)
+        store = plugin._load_intent_pack_store()
+        return export_pack(store, pack_id)
+
+    async def import_intent_pack(self, payload: Any = None):
+        """Dry-run or confirm-merge import of a single intent pack from JSON."""
+        plugin = Plugin._coerce_instance(self)
+        data = payload if isinstance(payload, dict) else {}
+        raw_json = data.get("json")
+        confirm = data.get("confirm") is True
+        if not isinstance(raw_json, str) or not raw_json.strip():
+            return {"ok": False, "error": "json string required"}
+        incoming, parse_error = parse_import_payload(raw_json)
+        if parse_error:
+            return {"ok": False, "error": parse_error}
+        store = plugin._load_intent_pack_store()
+        result = merge_import_pack(store, incoming or {}, confirm=confirm)
+        if not result.get("ok"):
+            return result
+        if confirm and isinstance(result.get("store"), dict):
+            saved = plugin._save_intent_pack_store(result["store"])
+            result["summaries"] = pack_summaries(saved)
+            result["packs"] = saved.get("packs") or []
+        return result
+
+    async def remove_intent_pack(self, pack_id: str = ""):
+        """Remove a user/imported intent pack (bundled packs cannot be removed)."""
+        plugin = Plugin._coerce_instance(self)
+        store = plugin._load_intent_pack_store()
+        result = remove_pack(store, pack_id)
+        if not result.get("ok"):
+            return result
+        saved = plugin._save_intent_pack_store(result["store"])
+        return {
+            "ok": True,
+            "summaries": pack_summaries(saved),
+            "packs": saved.get("packs") or [],
+        }
 
     @staticmethod
     def _find_amdgpu_hwmon() -> Optional[str]:

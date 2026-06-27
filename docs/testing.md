@@ -12,7 +12,7 @@ Related: [roadmap.md](roadmap.md) (planning), [development.md](development.md) (
 
 **Purpose:** Default checklist for **every PR** and **every Deck-facing change** before merge or release. Manual Deck work runs from **[testing.md](testing.md#device-qa-runbook)** (Tier 0–1 first). Scenario detail and coverage index: **[testing.md](testing.md#shipped-feature-coverage)**. Hotspots: **[development.md](development.md#change-risk-hotspots)**.
 
-**Contract:** Run **§1** always. Add **§2** rows that match touched paths. Run **§3** when `src/`, `main.py`, `plugin.json`, or Deck RPC contracts change (per [.cursorrules](../.cursorrules)).
+**Contract:** Run **§1** always. Add **§2** rows that match touched paths. Run **§3** when `src/`, `main.py`, `plugin.json`, or Deck RPC contracts change (per [.cursor/rules/docs-on-ship.mdc](../.cursor/rules/docs-on-ship.mdc)).
 
 ---
 

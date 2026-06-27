@@ -62,6 +62,14 @@ Within this section: ascending stars (★★ → ★★★ → ★★★★). Br
   - **Depends on:** shipped **Media library access** capability and screenshot list RPC.
   - **Not in scope:** in-plugin framebuffer capture (SteamOS owns capture); **SteamOS Share path** (★★★★) remains the deep-link spike.
 
+- ★★ **Thinking phase copy polish** (mid-Ask status lines)
+
+  - **Goal:** Mid-Ask updates from `_publish_thinking_phase_key` / [`format_thinking_phase`](../py_modules/backend/services/bonsai_stream_tags.py) should stay prompt-aware like the shipped **Playful thinking status lines** opener (`compose_thinking_blurb`) — avoid overwriting the woven line with generic **“Building context…”** loops where a topic-specific phrase fits.
+  - **Primary work:** Reuse or delegate to `compose_thinking_blurb` pools for proton/TDP/screenshot/build phases; preserve game name + question snippet when phases advance.
+  - **Files:** `bonsai_stream_tags.py`, `main.py`, `game_ai_request.py`.
+  - **Depends on:** shipped **Thinking blurb during reply** and **Playful thinking status lines** (see **Completed**).
+  - **Not in scope:** multi-sentence blurbs, raw model “thinking” channel text, or LLM-generated status every poll tick.
+
 - ★★★ **10-foot readability slider** (handheld vs couch, J)
 
   - **Goal:** Single **font/size/step spacing** control for markdown chunks and chrome — narrow carve-out from ecosystem **F** (see Medium-term).
@@ -94,14 +102,6 @@ Within this section: ascending stars (★★ → ★★★ → ★★★★). Br
   - **Files:** `main.py`, `src/index.tsx`.
   - **Depends on:** **Mode selector (main screen)** (shipped).
   - **Not in scope:** per-game/per-model fine-grained profile matrix.
-
-- ★★★ **Playful thinking status lines** (prompt-aware pending copy)
-
-  - **Goal:** One-line pending status — not another **“Building context…”** on loop. Pull a phrase from the user’s prompt, game, or attachments; match **Character voice** when on (dry wit / deadpan, still helpful).
-  - **Primary work:** Short template pools + keyword pick in [`format_thinking_phase`](../py_modules/backend/services/bonsai_stream_tags.py); character tone from [`ai_character_service.py`](../py_modules/backend/services/ai_character_service.py); safe fallback to today’s deterministic lines.
-  - **Files:** `py_modules/backend/services/bonsai_stream_tags.py`, `py_modules/backend/services/game_ai_request.py`, `py_modules/backend/services/ai_character_service.py`, `src/components/MainTab.tsx` (spinner row).
-  - **Depends on:** shipped thinking-phase pipeline; **Character voice roleplay** (shipped).
-  - **Not in scope:** multi-sentence blurbs, raw model “thinking” channel text, or LLM-generated status every poll tick.
 
 - ★★★ **QAMP verification checklist** (profiles / GPU / reboot matrix)
 
@@ -368,7 +368,7 @@ Dependency graph and implementation notes that are not feature checklist items.
 - **Character voice roleplay** + avatar mapping → **Higher-resolution character avatars (GTA-style art pass)**.
 - **Character voice roleplay (shipped)** → **Character-derived UI accent theme (preset-selected)** (shipped — see **Completed**); **Random character “?” avatar** (shipped — see **Completed**); **Running-game character suggestions (AI picker)** (shipped — see **Completed**).
 - **Character voice roleplay (shipped)** → **Local reply TTS** (Phase 2 — preset→voice mapping; legal research gate before ship).
-- **Character voice roleplay (shipped)** → **Playful thinking status lines** (persona tone when roleplay on).
+- **Character voice roleplay (shipped)** → **Playful thinking status lines (shipped)** — persona tone in `compose_thinking_blurb`; optional **Thinking phase copy polish** for mid-Ask `format_thinking_phase` lines.
 - **Unified Ask pipeline and input transparency (shipped)** → **Text model chains** (user-configurable text fallbacks); **Retry same prompt** (shipped — see **Completed** → Tabs).
 - **Media library access (shipped)** → **Screenshot attach button** (Ask bar dedicated control); complements **Global screenshots and vision**.
 - **Input sanitizer (shipped)** + **Input handling transparency (shipped)** → future sanitizer extensions should keep user-visible auditability.

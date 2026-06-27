@@ -58,7 +58,7 @@ export const AboutTab: React.FC<Props> = ({
       </div>
     </PanelSectionRow>
     <PanelSectionRow>
-      <div style={{ fontSize: 12, color: BONSAI_FOREST_GREEN, lineHeight: "1.2", fontWeight: 600 }}>
+      <div style={{ fontSize: 12, color: BONSAI_FOREST_GREEN, lineHeight: "1.2", fontWeight: 600, marginTop: "1.2em" }}>
         This plugin is in beta. AI-generated recommendations — especially TDP
         and performance changes — should be verified before relying on them.
         bonsAI modifies system hardware settings based on AI suggestions. Use

@@ -8,6 +8,7 @@ from typing import Callable, Optional
 
 from backend.services.strategy_guide_parse import (
     STRATEGY_FOLLOWUP_PREFIX,
+    format_strategy_checklist_state_block,
     is_strategy_followup_question,
 )
 
@@ -458,6 +459,7 @@ def build_system_prompt(
     early_context_suffix: str = "",
     strategy_spoiler_consent: bool = False,
     character_roleplay_on: bool = False,
+    strategy_checklist_state: Optional[dict] = None,
 ) -> str:
     """Build the system message used for Ollama requests from game and attachment context.
 
@@ -609,6 +611,14 @@ def build_system_prompt(
             "The user's message begins with the plugin's branch selection prefix. They already chose where they are stuck.\n"
             "Give direct, controller-first coaching for that exact beat on a Steam Deck (gamepad; short steps; pause-friendly; no PC keyboard assumptions).\n"
             "Do NOT output a ```bonsai-strategy-branches block on this turn.\n"
+            "After coaching prose, emit exactly one ```bonsai-strategy-checklist fenced block with valid JSON "
+            "(2–8 short actionable steps; each item needs \"id\" and \"label\") placed **before** the cheat section below. "
+            "Use this exact opening fence line (no language tag on the fence name):\n"
+            "```bonsai-strategy-checklist\n"
+            '{"title":"…","items":[{"id":"1","label":"…"},{"id":"2","label":"…"}]}\n'
+            "```\n"
+            "The visible coaching text above the checklist should already explain the steps; the JSON title must match that beat.\n"
+            f"{format_strategy_checklist_state_block(strategy_checklist_state)}"
             "End your reply with a clearly marked section using this exact markdown heading on its own line:\n"
             "**If you want to cheat…**\n"
             "Under it, give 2–5 CONCRETE solo-player examples (name the glitch, skip, or trick; say roughly how to do it in "
@@ -616,6 +626,7 @@ def build_system_prompt(
             "states, rewind, fast-forward, practice tools) where that fits—mention Steam Input remaps or emulator menus "
             "when relevant. Do not hand-wave with 'look up cheats online'; each bullet must be actionable. "
             "Do not encourage cheating in multiplayer, competitive, or anti-cheat contexts; no piracy or illegal ROM talk.\n"
+            "The **If you want to cheat…** heading and its bullets must be the last characters of your reply — nothing after them.\n"
         )
     else:
         strategy_block = (
@@ -656,6 +667,10 @@ def build_system_prompt(
             )
 
     middle = strategy_block + strategy_tdp_prose
+    if ask_mode == "strategy" and not followup:
+        progress_block = format_strategy_checklist_state_block(strategy_checklist_state)
+        if progress_block:
+            middle += progress_block
 
     if ask_mode == "strategy" and _user_asks_resolution_relevant_performance(question):
         middle += GRAPHICS_RESOLUTION_STRATEGY

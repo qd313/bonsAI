@@ -511,6 +511,7 @@ const Content: React.FC = () => {
     ollamaContext,
     lastExchange,
     strategyGuideBranches,
+    strategyChecklist,
     modelPolicyDisclosure,
     presetCarouselInject,
     shortcutSetupVariant,
@@ -534,6 +535,7 @@ const Content: React.FC = () => {
     onAskOllama,
     onRetryLastResponse,
     onStrategyBranchPick,
+    onStrategyChecklistToggle,
     resetAskSessionSlice,
     setStrategyGuideBranches,
     setSuggestedPrompts,
@@ -743,6 +745,7 @@ const Content: React.FC = () => {
       lastTransparency,
       modelPolicyDisclosure,
       strategyGuideBranches,
+      strategyChecklist,
       elapsedSeconds,
       lastApplied,
       shortcutSetupVariant,
@@ -781,6 +784,7 @@ const Content: React.FC = () => {
     lastTransparency,
     modelPolicyDisclosure,
     strategyGuideBranches,
+    strategyChecklist,
     elapsedSeconds,
     lastApplied,
     shortcutSetupVariant,
@@ -976,7 +980,7 @@ const Content: React.FC = () => {
     setSuggestedPrompts(getRandomPresets(3));
     toaster.toast({
       title: "Session cleared",
-      body: "Unified search, reply, thread, transparency, and attachments were reset.",
+      body: "Unified search, reply, thread, checklist, transparency, and attachments were reset.",
       duration: 3800,
     });
   }, [resetAskSessionSlice, setSuggestedPrompts]);
@@ -1538,6 +1542,8 @@ const Content: React.FC = () => {
       askMode={askMode}
       onAskModeChange={setAskMode}
       strategyGuideBranches={strategyGuideBranches}
+      strategyChecklist={strategyChecklist}
+      onStrategyChecklistToggle={onStrategyChecklistToggle}
       onStrategyBranchPick={onStrategyBranchPick}
       onPresetPreferAskMode={setAskMode}
       askThreadCollapsed={askThreadCollapsed}
@@ -1595,6 +1601,7 @@ const Content: React.FC = () => {
       lastTransparency,
       askMode,
       strategyGuideBranches,
+      strategyChecklist,
       askThreadCollapsed,
       askThreadDisplayQuestion,
       expandedTurnKey,

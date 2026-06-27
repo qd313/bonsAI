@@ -83,5 +83,47 @@ class StrategyGuideParseTests(unittest.TestCase):
         self.assertNotIn("[BonsAI", visible, msg=visible)
 
 
+# Strategy checklist tests
+
+    def test_extract_checklist_strips_valid_fence(self):
+        from backend.services.strategy_guide_parse import extract_strategy_checklist
+
+        raw = (
+            "Step one: equip boots.\n\n"
+            "```bonsai-strategy-checklist\n"
+            '{"title":"Water Temple","items":[{"id":"1","label":"Equip boots"},{"id":"2","label":"Drain room"}]}\n'
+            "```\n\n"
+            "**If you want to cheat…**\n"
+            "- Skip with glitch X\n"
+        )
+        visible, payload = extract_strategy_checklist(raw)
+        self.assertEqual(payload["title"], "Water Temple")
+        self.assertEqual(len(payload["items"]), 2)
+        self.assertNotIn("bonsai-strategy-checklist", visible)
+        self.assertIn("cheat", visible)
+
+    def test_extract_checklist_malformed_returns_original(self):
+        from backend.services.strategy_guide_parse import extract_strategy_checklist
+
+        raw = "text ```bonsai-strategy-checklist\nbad\n```"
+        visible, payload = extract_strategy_checklist(raw)
+        self.assertIsNone(payload)
+        self.assertEqual(visible, raw)
+
+    def test_format_strategy_checklist_state_block(self):
+        from backend.services.strategy_guide_parse import format_strategy_checklist_state_block
+
+        block = format_strategy_checklist_state_block(
+            {
+                "title": "Boss",
+                "items": [{"id": "a", "label": "Phase 1"}, {"id": "b", "label": "Phase 2"}],
+                "checked_ids": ["a"],
+            }
+        )
+        self.assertIn("PLUGIN CHECKLIST STATE", block)
+        self.assertIn("Phase 1", block)
+        self.assertIn("Phase 2", block)
+
+
 if __name__ == "__main__":
     unittest.main()

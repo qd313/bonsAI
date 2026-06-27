@@ -263,8 +263,37 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertIn("If you want to cheat", prompt)
         self.assertIn("CONCRETE solo-player examples", prompt)
         self.assertIn("Do NOT output a", prompt)
+        self.assertIn("bonsai-strategy-checklist", prompt)
         self.assertIn("DECK POWER / TDP (strategy follow-up)", prompt)
         self.assertNotIn("IMPORTANT: When you recommend or apply a TDP or GPU clock change", prompt)
+
+    def test_build_system_prompt_strategy_followup_includes_checklist_state(self):
+        from backend.services.strategy_guide_parse import STRATEGY_FOLLOWUP_PREFIX
+
+        def lookup_app_name(_app_id: str) -> str:
+            return ""
+
+        def lookup_vdf(_path: str) -> dict:
+            return {}
+
+        prompt = build_system_prompt(
+            question=f"{STRATEGY_FOLLOWUP_PREFIX} I'm at: mid.",
+            app_id="",
+            app_name="",
+            normalized_attachments=[],
+            prepared_images=[],
+            lookup_app_name=lookup_app_name,
+            lookup_screenshot_vdf_metadata=lookup_vdf,
+            ask_mode="strategy",
+            strategy_checklist_state={
+                "title": "Mid dungeon",
+                "items": [{"id": "1", "label": "Get key"}, {"id": "2", "label": "Open door"}],
+                "checked_ids": ["1"],
+            },
+        )
+        self.assertIn("PLUGIN CHECKLIST STATE", prompt)
+        self.assertIn("Get key", prompt)
+        self.assertIn("Open door", prompt)
 
     def test_build_system_prompt_strategy_first_turn_includes_tdp_when_power_asked(self):
         def lookup_app_name(_app_id: str) -> str:

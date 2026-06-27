@@ -47,6 +47,17 @@ from backend.services.ollama_service import (
     post_ollama_chat,
 )
 from backend.services.plugin_data_reset import reset_plugin_disk_and_defaults
+from backend.services.strategy_checklist_session_service import (
+    clear_session_entry,
+    get_session_entry,
+    load_session_store,
+    normalize_ask_checklist_state,
+    reset_session_file,
+    rpc_entry_to_store_payload,
+    save_session_store,
+    session_path,
+    upsert_session_entry,
+)
 from backend.services.local_ollama_teardown_service import teardown_local_ollama_for_plugin_reset
 from backend.services.intent_pack_service import (
     export_pack,
@@ -558,13 +569,24 @@ class Plugin:
         return False
 
     @staticmethod
-    def _parse_ask_payload(question: Any, PcIp: str) -> Tuple[str, str, str, str, list, str, bool]:
+    def _strategy_checklist_session_path() -> str:
+        return session_path(decky.DECKY_PLUGIN_SETTINGS_DIR)
+
+    @staticmethod
+    def _load_strategy_checklist_store() -> dict:
+        return load_session_store(Plugin._strategy_checklist_session_path(), logger)
+
+    @staticmethod
+    def _parse_ask_payload(
+        question: Any, PcIp: str
+    ) -> Tuple[str, str, str, str, list, str, bool, Optional[dict]]:
         """Normalize ask payload variants into canonical question/ip/context values."""
         app_id = ""
         app_name = ""
         attachments: list = []
         ask_mode_raw: Any = None
         spoiler_consent_raw: Any = None
+        checklist_state_raw: Any = None
         if isinstance(question, dict):
             payload = question
             question = payload.get("question", "")
@@ -574,11 +596,24 @@ class Plugin:
             attachments = Plugin._sanitize_attachments(payload.get("attachments", []))
             ask_mode_raw = payload.get("askMode", payload.get("ask_mode", ask_mode_raw))
             spoiler_consent_raw = payload.get("spoiler_consent", payload.get("spoilerConsent", spoiler_consent_raw))
+            checklist_state_raw = payload.get(
+                "strategy_checklist_state", payload.get("strategyChecklistState", checklist_state_raw)
+            )
         normalized_question = str(question or "").strip()
         normalized_pc_ip = str(PcIp or "").strip()
         ask_mode = sanitize_ask_mode(ask_mode_raw, Plugin.VALID_ASK_MODES, Plugin.DEFAULT_ASK_MODE)
         spoiler_consent = Plugin._coerce_payload_bool(spoiler_consent_raw)
-        return normalized_question, normalized_pc_ip, app_id, app_name, attachments, ask_mode, spoiler_consent
+        strategy_checklist_state = normalize_ask_checklist_state(checklist_state_raw)
+        return (
+            normalized_question,
+            normalized_pc_ip,
+            app_id,
+            app_name,
+            attachments,
+            ask_mode,
+            spoiler_consent,
+            strategy_checklist_state,
+        )
 
     @staticmethod
     def _sanitize_attachments(raw_attachments: Any) -> list:
@@ -766,7 +801,64 @@ class Plugin:
             decky.DECKY_PLUGIN_SETTINGS_DIR,
             logger=logger,
         )
+        reset_session_file(
+            Plugin._strategy_checklist_session_path(),
+            decky.DECKY_PLUGIN_SETTINGS_DIR,
+            logger=logger,
+        )
         return defaults
+
+    async def get_strategy_checklist_session(self, app_id: str = ""):
+        """Return persisted checklist for the given game AppID (or generic bucket when empty)."""
+        store = Plugin._load_strategy_checklist_store()
+        entry = get_session_entry(store, app_id)
+        if entry is None:
+            return None
+        return {
+            "app_id": str(app_id or "").strip(),
+            "app_name": entry.get("app_name", ""),
+            "title": entry.get("title", ""),
+            "items": entry.get("items") or [],
+            "checked_ids": entry.get("checked_ids") or [],
+            "updated_at": entry.get("updated_at"),
+        }
+
+    async def save_strategy_checklist_session(self, payload: Any = None):
+        """Persist checklist + checked state for one game bucket."""
+        if not isinstance(payload, dict):
+            return {"ok": False, "error": "Invalid payload"}
+        app_id = str(payload.get("app_id") or payload.get("appId") or "").strip()
+        frag = rpc_entry_to_store_payload(payload)
+        if frag is None:
+            return {"ok": False, "error": "Invalid checklist payload"}
+        store = Plugin._load_strategy_checklist_store()
+        merged = upsert_session_entry(
+            store,
+            app_id=app_id,
+            app_name=str(payload.get("app_name") or payload.get("appName") or frag.get("app_name") or ""),
+            title=frag["title"],
+            items=frag["items"],
+            checked_ids=frag.get("checked_ids"),
+        )
+        save_session_store(
+            Plugin._strategy_checklist_session_path(),
+            merged,
+            settings_dir=decky.DECKY_PLUGIN_SETTINGS_DIR,
+            logger=logger,
+        )
+        entry = get_session_entry(merged, app_id)
+        return {"ok": True, "entry": entry}
+
+    async def clear_strategy_checklist_session(self, app_id: str = ""):
+        """Remove persisted checklist for one game or entire file when app_id omitted."""
+        path = Plugin._strategy_checklist_session_path()
+        store = Plugin._load_strategy_checklist_store()
+        if str(app_id or "").strip():
+            merged = clear_session_entry(store, app_id)
+        else:
+            merged = clear_session_entry(store, None)
+        save_session_store(path, merged, settings_dir=decky.DECKY_PLUGIN_SETTINGS_DIR, logger=logger)
+        return {"ok": True}
 
     async def get_intent_packs(self):
         """Return intent pack summaries and full entries for unified search indexing."""
@@ -1890,6 +1982,7 @@ class Plugin:
         ask_mode: str = "speed",
         spoiler_consent: bool = False,
         token_stream_request_id: Optional[int] = None,
+        strategy_checklist_state: Optional[dict] = None,
     ) -> dict:
         """Run one full ask lifecycle, including Ollama call timing and optional TDP application."""
         plugin = Plugin._coerce_instance(self)
@@ -1903,12 +1996,13 @@ class Plugin:
             ask_mode=ask_mode,
             spoiler_consent=spoiler_consent,
             token_stream_request_id=token_stream_request_id,
+            strategy_checklist_state=strategy_checklist_state,
         )
 
     async def ask_game_ai(self, question: Any = "", PcIp: str = ""):
         """Handle foreground ask RPCs and validate required inputs before execution."""
         logger.info("ask_game_ai: RPC entry (arg type=%s)", type(question).__name__)
-        parsed_question, pc_ip, app_id, app_name, attachments, ask_mode, spoiler_consent = (
+        parsed_question, pc_ip, app_id, app_name, attachments, ask_mode, spoiler_consent, strategy_checklist_state = (
             Plugin._parse_ask_payload(question, PcIp)
         )
         if not parsed_question:
@@ -1936,6 +2030,7 @@ class Plugin:
             attachments=attachments,
             ask_mode=ask_mode,
             spoiler_consent=spoiler_consent,
+            strategy_checklist_state=strategy_checklist_state,
         )
 
     async def _run_background_request(
@@ -1948,6 +2043,7 @@ class Plugin:
         attachments: Optional[list] = None,
         ask_mode: str = "speed",
         spoiler_consent: bool = False,
+        strategy_checklist_state: Optional[dict] = None,
     ) -> None:
         """Execute a queued background request and publish terminal status for polling clients."""
         result = await self._execute_game_ai_request(
@@ -1959,6 +2055,7 @@ class Plugin:
             ask_mode=ask_mode,
             spoiler_consent=spoiler_consent,
             token_stream_request_id=request_id,
+            strategy_checklist_state=strategy_checklist_state,
         )
         self._ensure_background_state()
         plugin_bg = Plugin._coerce_instance(self)
@@ -1988,6 +2085,7 @@ class Plugin:
                 "error": None if (success or cancelled_rq) else response_text,
                 "completed_at": time.time(),
                 "strategy_guide_branches": result.get("strategy_guide_branches"),
+                "strategy_checklist": result.get("strategy_checklist"),
                 "model_policy_disclosure": result.get("model_policy_disclosure"),
                 "strategy_spoiler_consent_effective": result.get("strategy_spoiler_consent_effective"),
                 "shortcut_setup": result.get("shortcut_setup"),
@@ -2017,7 +2115,7 @@ class Plugin:
         plugin._ensure_background_state()
 
         logger.info("start_background_game_ai: RPC entry (arg type=%s)", type(question).__name__)
-        parsed_question, pc_ip, app_id, app_name, attachments, ask_mode, spoiler_consent = (
+        parsed_question, pc_ip, app_id, app_name, attachments, ask_mode, spoiler_consent, strategy_checklist_state = (
             Plugin._parse_ask_payload(question, PcIp)
         )
         app_context = "active" if app_id else "none"
@@ -2183,6 +2281,7 @@ class Plugin:
                     attachments=attachments,
                     ask_mode=ask_mode,
                     spoiler_consent=spoiler_consent,
+                    strategy_checklist_state=strategy_checklist_state,
                 )
             )
             await plugin._maybe_app_log(
@@ -2317,6 +2416,7 @@ class Plugin:
         proton_log_attachment: Optional[str] = None,
         strategy_spoiler_consent: bool = False,
         character_roleplay_on: bool = False,
+        strategy_checklist_state: Optional[dict] = None,
     ) -> str:
         """Build the system prompt using plugin-local metadata lookups and attachment context."""
         proton = (proton_log_attachment or "").strip()
@@ -2332,6 +2432,7 @@ class Plugin:
             early_context_suffix=proton,
             strategy_spoiler_consent=strategy_spoiler_consent,
             character_roleplay_on=character_roleplay_on,
+            strategy_checklist_state=strategy_checklist_state,
         )
         return append_deck_tdp_sysfs_grounding(
             base,
@@ -2357,6 +2458,7 @@ class Plugin:
         proton_log_transparency: Optional[dict] = None,
         strategy_spoiler_consent: bool = False,
         token_stream_request_id: Optional[int] = None,
+        strategy_checklist_state: Optional[dict] = None,
     ):
         """Orchestrate attachment prep, prompt assembly, and model fallback request execution."""
         plugin_inst = Plugin._coerce_instance(self)
@@ -2404,6 +2506,7 @@ class Plugin:
             proton_log_attachment=proton_log_attachment,
             strategy_spoiler_consent=strategy_spoiler_consent,
             character_roleplay_on=bool(settings.get("ai_character_enabled")),
+            strategy_checklist_state=strategy_checklist_state,
         )
         rp_meta = build_roleplay_system_suffix_meta(settings, ask_mode)
         roleplay = rp_meta.suffix

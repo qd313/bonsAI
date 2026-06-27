@@ -1,5 +1,5 @@
 import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
-import type { AppliedResult, StrategyGuideBranchesPayload } from "./bonsaiUi";
+import type { AppliedResult, StrategyGuideBranchesPayload, StrategyChecklistPayload } from "./bonsaiUi";
 
 /** Shortcut-setup keyword replies surface this so the UI can deep-link Controller settings. */
 export type ShortcutSetupKind = "deck" | "stadia";
@@ -34,6 +34,7 @@ export type BackgroundRequestStatus = {
   started_at: number | null;
   completed_at: number | null;
   strategy_guide_branches?: StrategyGuideBranchesPayload | null;
+  strategy_checklist?: StrategyChecklistPayload | null;
   model_policy_disclosure?: ModelPolicyDisclosurePayload | null;
   /** True when this Ask had explicit spoiler consent (toggle and/or backend phrase match). */
   strategy_spoiler_consent_effective?: boolean;

@@ -32,6 +32,18 @@ export type StrategyGuideBranchesPayload = {
   options: { id: string; label: string }[];
 };
 
+/** Parsed from Strategy follow-up replies (`bonsai-strategy-checklist` fence). */
+export type StrategyChecklistPayload = {
+  title: string;
+  items: { id: string; label: string }[];
+};
+
+export type StrategyChecklistState = StrategyChecklistPayload & {
+  checkedIds: string[];
+  appId?: string;
+  appName?: string;
+};
+
 /** One completed Ask round shown in the session thread (client-only; not persisted across reloads). */
 export type AskThreadCollapsedTurn = {
   id: string;

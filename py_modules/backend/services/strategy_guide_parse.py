@@ -14,10 +14,13 @@ from urllib.parse import unquote
 STRATEGY_FOLLOWUP_PREFIX = "[Strategy follow-up]"
 
 _FENCE_OPEN = "```bonsai-strategy-branches"
+_CHECKLIST_FENCE_OPEN = "```bonsai-strategy-checklist"
 # Some models emit this tag with parenthesized JSON (often URL-encoded) instead of a markdown fence.
 _BRACKET_TAG_RE = re.compile(r"\[bonsai-strategy-branches\]\s*\(", re.IGNORECASE)
 _MAX_OPTIONS = 8
 _MIN_OPTIONS = 2
+_MAX_CHECKLIST_ITEMS = 12
+_MIN_CHECKLIST_ITEMS = 2
 
 
 def is_strategy_followup_question(question: str) -> bool:
@@ -168,6 +171,116 @@ def _extract_bracket_paren(raw_text: str) -> tuple[str, dict[str, Any] | None]:
         return visible, payload
 
     return text, None
+
+
+def _normalize_checklist_payload(data: dict[str, Any] | None) -> dict[str, Any] | None:
+    if data is None:
+        return None
+    title = data.get("title")
+    if not isinstance(title, str) or not title.strip():
+        return None
+    items_raw = data.get("items")
+    if not isinstance(items_raw, list):
+        return None
+
+    normalized: list[dict[str, str]] = []
+    for i, o in enumerate(items_raw[:_MAX_CHECKLIST_ITEMS]):
+        if not isinstance(o, dict):
+            continue
+        oid = str(o.get("id", "") or "").strip()
+        lab = str(o.get("label", "") or "").strip()
+        if not lab:
+            continue
+        if not oid:
+            oid = str(i + 1)
+        normalized.append({"id": oid, "label": lab})
+
+    if len(normalized) < _MIN_CHECKLIST_ITEMS:
+        return None
+    return {"title": title.strip(), "items": normalized}
+
+
+def _extract_checklist_fence(raw_text: str) -> tuple[str, dict[str, Any] | None]:
+    """Markdown ```bonsai-strategy-checklist ... ``` form."""
+    text = raw_text or ""
+    if _CHECKLIST_FENCE_OPEN not in text:
+        return text, None
+
+    idx = text.find(_CHECKLIST_FENCE_OPEN)
+    head = text[:idx]
+    tail_from_fence = text[idx + len(_CHECKLIST_FENCE_OPEN) :]
+    tail_from_fence = tail_from_fence.lstrip()
+    if tail_from_fence.startswith("\n"):
+        tail_from_fence = tail_from_fence[1:]
+
+    close_idx = tail_from_fence.find("```")
+    if close_idx < 0:
+        return text, None
+
+    json_blob = tail_from_fence[:close_idx].strip()
+    after_close = tail_from_fence[close_idx + 3 :].lstrip("\n")
+
+    data = _parse_strategy_json_blob(json_blob)
+    payload = _normalize_checklist_payload(data)
+    if payload is None:
+        return text, None
+
+    head_stripped = head.rstrip()
+    if after_close:
+        visible = (head_stripped + "\n\n" + after_close).strip() if head_stripped else after_close.strip()
+    else:
+        visible = head_stripped.strip()
+
+    visible = re.sub(r"\n{3,}", "\n\n", visible).strip()
+    return visible, payload
+
+
+def extract_strategy_checklist(raw_text: str) -> tuple[str, dict[str, Any] | None]:
+    """
+    Remove a strategy checklist marker from raw_text and return
+    (visible_text, payload) where payload is {"title": str, "items": [{"id","label"}, ...]} or None.
+    """
+    return _extract_checklist_fence(raw_text or "")
+
+
+def format_strategy_checklist_state_block(state: dict[str, Any] | None) -> str:
+    """Compact plugin-owned checklist progress for strategy follow-up system prompts."""
+    if not isinstance(state, dict):
+        return ""
+    title = str(state.get("title", "") or "").strip()
+    items = state.get("items")
+    checked = state.get("checked_ids")
+    if not title or not isinstance(items, list) or not items:
+        return ""
+    checked_set = {str(x).strip() for x in checked} if isinstance(checked, list) else set()
+    done_labels: list[str] = []
+    pending_labels: list[str] = []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        iid = str(item.get("id", "") or "").strip()
+        lab = str(item.get("label", "") or "").strip()
+        if not lab:
+            continue
+        if iid and iid in checked_set:
+            done_labels.append(lab)
+        else:
+            pending_labels.append(lab)
+    if not done_labels and not pending_labels:
+        return ""
+    lines = [
+        "\n\nPLUGIN CHECKLIST STATE (user-tracked in the Deck UI — honor this; do not mark steps done unless listed under done):\n",
+        f"title={title}\n",
+    ]
+    if done_labels:
+        lines.append("done: " + "; ".join(done_labels) + "\n")
+    if pending_labels:
+        lines.append("pending: " + "; ".join(pending_labels) + "\n")
+    lines.append(
+        "Revise the ```bonsai-strategy-checklist fence on this reply: drop completed steps, add next steps if stuck, "
+        "never mark items done the user did not complete.\n"
+    )
+    return "".join(lines)
 
 
 def extract_strategy_guide_branches(raw_text: str) -> tuple[str, dict[str, Any] | None]:

@@ -244,15 +244,6 @@ Within this section: ascending stars (★★★★ → ★★★★★ → ★�
   - **Depends on:** Permissions for Steam navigation where relevant.
   - **Not in scope:** Writing controller configs (see **Steam Input layout parse**).
 
-- ★★★★★ **Strategy checklist** (Strategy Guide chats)
-
-  - **GitHub (tracking placeholder):** [bonsAI Issues](https://github.com/cantcurecancer/bonsAI/issues) — dedicated issue TBD.
-  - **Goal:** Strategy Guide responses with actionable checklists for the current chat.
-  - **Primary work:** checklist format, interactive check/uncheck, follow-up sync when user reports progress in text.
-  - **Files:** `src/index.tsx`, `main.py`, `testing.md`.
-  - **Depends on:** **Strategy Ask mode (`strategy`; Strategy Guide in prompts)** — shipped; see **[Completed](#tabs-icons-and-unified-ask-flow)**.
-  - **Not in scope:** long-term persistence across sessions.
-
 - ★★★★★★ **Remote Play diagnostics layer** (streaming host/client, E)
 
   - **GitHub (tracking placeholder):** [bonsAI Issues](https://github.com/cantcurecancer/bonsAI/issues) — dedicated issue TBD.
@@ -355,7 +346,7 @@ Dependency graph and implementation notes that are not feature checklist items.
 - **Character voice roleplay (shipped)** → **Playful thinking status lines (shipped)** — persona tone in `compose_thinking_blurb`; **Thinking phase copy polish (shipped)** keeps mid-Ask `format_thinking_phase` lines prompt-woven.
 - **Unified Ask pipeline and input transparency (shipped)** → **Text model chains** (user-configurable text fallbacks); **Retry same prompt** (shipped — see **Completed** → Tabs).
 - **Input sanitizer (shipped)** + **Input handling transparency (shipped)** → future sanitizer extensions should keep user-visible auditability.
-- **Strategy Ask mode (`strategy`; Strategy Guide in prompts)** (shipped) → **Strategy Guide safety and spoilers** (shipped — on-device QA: [testing.md](testing.md) § Spoiler Policy and Consent), **Strategy checklist workflow (chat-scoped)** (planned).
+- **Strategy Ask mode (`strategy`; Strategy Guide in prompts)** (shipped) → **Strategy Guide safety and spoilers** (shipped — on-device QA: [testing.md](testing.md) § Spoiler Policy and Consent), **Strategy checklist** (shipped — per-game persistence; on-device QA: [testing.md](testing.md) § Strategy depth / `STRATEGY-CHECKLIST`).
 - **Global screenshots and vision** → richer strategy + screenshot context.
 - **Capability Permission Center** → gates filesystem, elevated tasks, hardware, Steam/Proton log reads for troubleshooting excerpts, and (future) web/search calls.
 - **Model policy tiers + disclosure UX (shipped)** → layered on **Capability Permission Center**; tiered routing + per-reply disclosure — see **Completed** → Permissions.

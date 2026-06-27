@@ -41,6 +41,9 @@ export const FRONTEND_RPC_METHODS = [
   "export_intent_pack",
   "import_intent_pack",
   "remove_intent_pack",
+  "get_strategy_checklist_session",
+  "save_strategy_checklist_session",
+  "clear_strategy_checklist_session",
 ] as const;
 
 export type FrontendRpcMethod = (typeof FRONTEND_RPC_METHODS)[number];
@@ -201,6 +204,9 @@ function defaultHandlers(): Record<string, RpcHandler> {
       };
     },
     remove_intent_pack: () => ({ ok: false, error: "Bundled packs cannot be removed (disable instead)" }),
+    get_strategy_checklist_session: () => null,
+    save_strategy_checklist_session: () => ({ ok: true }),
+    clear_strategy_checklist_session: () => ({ ok: true }),
   };
 }
 

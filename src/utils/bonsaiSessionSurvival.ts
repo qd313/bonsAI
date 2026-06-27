@@ -26,6 +26,8 @@ import type {
 
   StrategyGuideBranchesPayload,
 
+  StrategyChecklistState,
+
 } from "../types/bonsaiUi";
 
 import type { BonsaiSettingsSnapshotInput } from "./settingsAndResponse";
@@ -89,6 +91,8 @@ export type BonsaiSessionSurvivalSnapshot = {
   modelPolicyDisclosure: ModelPolicyDisclosurePayload | null;
 
   strategyGuideBranches: StrategyGuideBranchesPayload | null;
+
+  strategyChecklist: StrategyChecklistState | null;
 
   elapsedSeconds: number | null;
 

@@ -55,6 +55,7 @@ async def run_game_ai_request(
     ask_mode: str = "speed",
     spoiler_consent: bool = False,
     token_stream_request_id: Optional[int] = None,
+    strategy_checklist_state: Optional[dict] = None,
 ) -> dict:
     """Run one full ask lifecycle, including Ollama call timing and optional TDP application."""
     start = time.time()
@@ -110,7 +111,7 @@ async def run_game_ai_request(
                     "proton_log_notes": "",
                 }
             )
-            return {**out, "model_policy_disclosure": None, "strategy_guide_branches": None, "strategy_spoiler_consent_effective": False}
+            return {**out, "model_policy_disclosure": None, "strategy_guide_branches": None, "strategy_checklist": None, "strategy_spoiler_consent_effective": False}
 
         atts = attachments or []
         if atts and not capability_enabled(settings, "media_library_access"):
@@ -155,6 +156,7 @@ async def run_game_ai_request(
                 "applied": None,
                 "elapsed_seconds": elapsed,
                 "strategy_guide_branches": None,
+                "strategy_checklist": None,
                 "model_policy_disclosure": None,
                 "strategy_spoiler_consent_effective": False,
             }
@@ -201,6 +203,7 @@ async def run_game_ai_request(
                 "applied": None,
                 "elapsed_seconds": elapsed,
                 "strategy_guide_branches": None,
+                "strategy_checklist": None,
                 "model_policy_disclosure": None,
                 "strategy_spoiler_consent_effective": False,
             }
@@ -314,6 +317,7 @@ async def run_game_ai_request(
             proton_log_transparency=proton_log_transparency,
             strategy_spoiler_consent=strategy_spoiler_consent_effective,
             token_stream_request_id=token_stream_request_id,
+            strategy_checklist_state=strategy_checklist_state,
         )
         elapsed = round(time.time() - start, 1)
         base_response_text = str(ollama_result.get("response", "") or "No response text.")
@@ -450,6 +454,7 @@ async def run_game_ai_request(
             "applied": applied,
             "elapsed_seconds": elapsed,
             "strategy_guide_branches": ollama_result.get("strategy_guide_branches"),
+            "strategy_checklist": ollama_result.get("strategy_checklist"),
             "model_policy_disclosure": ollama_result.get("model_policy_disclosure"),
             "strategy_spoiler_consent_effective": bool(
                 ollama_result.get("strategy_spoiler_consent_effective", False)
@@ -501,6 +506,7 @@ async def run_game_ai_request(
             "applied": None,
             "elapsed_seconds": elapsed,
             "strategy_guide_branches": None,
+            "strategy_checklist": None,
             "model_policy_disclosure": None,
             "strategy_spoiler_consent_effective": False,
         }

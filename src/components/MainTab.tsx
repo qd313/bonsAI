@@ -3,6 +3,7 @@ import { toaster } from "@decky/api";
 import { PanelSection, PanelSectionRow, TextField, Button, Focusable, Router } from "@decky/ui";
 import type { PresetPrompt } from "../data/presets";
 import { MainTabPresetAnimatedChips } from "./MainTabPresetAnimatedChips";
+import { StrategyChecklistPanel } from "./StrategyChecklistPanel";
 import {
   ASK_BAR_PRIMARY_MIN_HEIGHT_PX,
   BONSAI_CHAT_AI_BUBBLE_MAX_FRAC,
@@ -25,6 +26,7 @@ import type {
   OllamaContextUi,
   ScreenshotItem,
   StrategyGuideBranchesPayload,
+  StrategyChecklistState,
 } from "../types/bonsaiUi";
 import {
   AskMicIcon,
@@ -166,6 +168,8 @@ export type MainTabProps = {
   /** When set, show branch buttons below the last Strategy Guide response. */
   strategyGuideBranches?: StrategyGuideBranchesPayload | null;
   onStrategyBranchPick?: (opt: { id: string; label: string }) => void;
+  strategyChecklist?: StrategyChecklistState | null;
+  onStrategyChecklistToggle?: (itemId: string, checked: boolean) => void;
   /** When a preset chip requests an Ask mode (e.g. Strategy Guide), apply it here. */
   onPresetPreferAskMode?: (mode: AskModeId) => void;
   /** Session thread: prior completed Q/A pairs (client-only). */
@@ -266,6 +270,8 @@ export function MainTab(props: MainTabProps) {
     onAskModeChange,
     strategyGuideBranches = null,
     onStrategyBranchPick,
+    strategyChecklist = null,
+    onStrategyChecklistToggle,
     onPresetPreferAskMode,
     askThreadCollapsed = [],
     askThreadDisplayQuestion = "",
@@ -1804,6 +1810,16 @@ export function MainTab(props: MainTabProps) {
                 </Button>
               ))}
             </div>
+          </PanelSectionRow>
+        )}
+        {strategyChecklist &&
+          strategyChecklist.items.length > 0 &&
+          !isAsking &&
+          expandedTurnKey === "live" &&
+          askMode === "strategy" &&
+          onStrategyChecklistToggle && (
+          <PanelSectionRow>
+            <StrategyChecklistPanel checklist={strategyChecklist} onToggle={onStrategyChecklistToggle} />
           </PanelSectionRow>
         )}
         {!isAsking && elapsedSeconds != null && elapsedSeconds > latencyWarningSeconds && (

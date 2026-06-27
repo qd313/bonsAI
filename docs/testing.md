@@ -376,6 +376,7 @@ Maps [roadmap.md](roadmap.md) **Completed** summary and [archive/roadmap-complet
 | VOICE-STT | Whisper voice Ask (local STT) | VOICE-01…04 | Open | Permissions + Settings model download; on-Deck mic required |
 | STRATEGY-CORE | Strategy Guide prompt path | SMOKE-E | Open | |
 | STRATEGY-SPOILER | Strategy spoiler policy + consent | SMOKE-E, STRAT-01…05 | Partial | Unit green 2026-04-30; [preview 2026-05-26](test-evidence/tier1Core/2026-05-26-9e20a82/SMOKE-E-strategy-mode/manifest.json) |
+| STRATEGY-CHECKLIST | Strategy checklist (follow-up, persisted per game) | Tier 2 § Strategy depth | Open | Unit + preview; on-Deck: check/uncheck, QAM reopen |
 | DEBUG-TAB | Debug tab opt-in | SMOKE-A | Open | Tab strip when enabled |
 | SETTINGS-TRIM | Settings tab trim | SMOKE-A | Open | |
 | RESET-SESSION | Reset session cache | — | Open | Tier 2 |
@@ -639,7 +640,9 @@ Run after **SMOKE-E**. Unit coverage green 2026-04-30.
 ### Steam Input coaching / checklist / cheat
 
 - [ ] Headshots / control-specific Deck advice
-- [ ] Checklist check/uncheck + follow-up progress
+- [ ] Checklist check/uncheck + follow-up progress (Strategy follow-up turn; `bonsai-strategy-checklist` fence)
+- [ ] Checklist persists after QAM close / plugin reload (same game AppID)
+- [ ] Reset session cache clears checklist
 - [ ] Cheat / Fast Pass gating only when user asks to rush
 
 ### Strategy regression subset

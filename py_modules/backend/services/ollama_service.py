@@ -19,7 +19,7 @@ from urllib.parse import urlparse
 from refactor_helpers import normalize_ollama_base
 
 from backend.services.bonsai_stream_tags import extract_bonsai_status
-from backend.services.strategy_guide_parse import extract_strategy_guide_branches
+from backend.services.strategy_guide_parse import extract_strategy_guide_branches, extract_strategy_checklist
 from backend.services.ollama_prompts import (
     append_deck_tdp_sysfs_grounding,
     build_system_prompt,
@@ -522,8 +522,11 @@ def post_ollama_chat(
                     }
                 text = visible_raw.strip() or "No response text."
                 strategy_guide_branches = None
+                strategy_checklist = None
                 if ask_mode == "strategy":
                     visible, strategy_guide_branches = extract_strategy_guide_branches(text)
+                    text = visible
+                    visible, strategy_checklist = extract_strategy_checklist(text)
                     text = visible
                 text = format_ai_response(
                     text,
@@ -541,6 +544,7 @@ def post_ollama_chat(
                     "assistant_raw": assistant_raw,
                     "thinking_summary": thinking_summary,
                     "strategy_guide_branches": strategy_guide_branches,
+                    "strategy_checklist": strategy_checklist,
                 }
             finally:
                 if on_http_response_done:

@@ -19,6 +19,16 @@ import {
   STRATEGY_FOLLOWUP_PREFIX,
 } from "../data/strategyGuideFollowup";
 import { normalizeStrategyGuideBranches } from "../utils/strategyGuideBranches";
+import {
+  mergeStrategyChecklistState,
+  normalizeStrategyChecklist,
+  strategyChecklistToAskPayload,
+} from "../utils/strategyChecklist";
+import {
+  clearStrategyChecklistSession,
+  loadStrategyChecklistSession,
+  scheduleStrategyChecklistSessionSave,
+} from "../utils/strategyChecklistPersistence";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import { useBackgroundGameAi } from "./useBackgroundGameAi";
 import type {
@@ -34,6 +44,7 @@ import type {
   OllamaContextUi,
   AppliedResult,
   StrategyGuideBranchesPayload,
+  StrategyChecklistState,
   AskThreadCollapsedTurn,
   AskThreadExpandedTurnKey,
 } from "../types/bonsaiUi";
@@ -99,6 +110,13 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
   const [strategyGuideBranches, setStrategyGuideBranches] = useState<StrategyGuideBranchesPayload | null>(
     () => survivalPeek?.strategyGuideBranches ?? null
   );
+  const [strategyChecklist, setStrategyChecklist] = useState<StrategyChecklistState | null>(
+    () => survivalPeek?.strategyChecklist ?? null
+  );
+  const strategyChecklistRef = useRef<StrategyChecklistState | null>(strategyChecklist);
+  useEffect(() => {
+    strategyChecklistRef.current = strategyChecklist;
+  }, [strategyChecklist]);
   const [modelPolicyDisclosure, setModelPolicyDisclosure] = useState<ModelPolicyDisclosurePayload | null>(
     () => survivalPeek?.modelPolicyDisclosure ?? null
   );
@@ -109,6 +127,35 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     BackgroundRequestStatus["shortcut_setup"]
   > | null>(() => survivalPeek?.shortcutSetupVariant ?? null);
   const lastStrategyAskQuestionRef = useRef<string>("");
+  const runningAppIdRef = useRef<string>("");
+
+  const hydrateStrategyChecklistFromDisk = useCallback(async (appId: string) => {
+    runningAppIdRef.current = appId;
+    try {
+      const loaded = await loadStrategyChecklistSession(appId);
+      if (runningAppIdRef.current !== appId) return;
+      setStrategyChecklist(loaded);
+    } catch {
+      if (runningAppIdRef.current === appId) setStrategyChecklist(null);
+    }
+  }, []);
+
+  useEffect(() => {
+    const runningApp = Router.MainRunningApp;
+    const appId = runningApp?.appid?.toString() ?? "";
+    void hydrateStrategyChecklistFromDisk(appId);
+  }, [hydrateStrategyChecklistFromDisk]);
+
+  const prevAskModeRef = useRef(a.askMode);
+  useEffect(() => {
+    const prev = prevAskModeRef.current;
+    prevAskModeRef.current = a.askMode;
+    if (prev === "strategy" && a.askMode !== "strategy") {
+      const appId = Router.MainRunningApp?.appid?.toString() ?? "";
+      setStrategyChecklist(null);
+      void clearStrategyChecklistSession(appId).catch(() => {});
+    }
+  }, [a.askMode]);
   const pendingArchiveTurnRef = useRef<{ question: string; answer: string } | null>(null);
   const pendingThreadQuestionDisplayRef = useRef<string | null>(null);
   /** Last request_id whose completion already re-seeded suggested prompts (reseed is randomized). */
@@ -286,6 +333,16 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
             setLastExchange({ question: displayQ, answer });
             lastStrategyAskQuestionRef.current = q;
             setStrategyGuideBranches(normalizeStrategyGuideBranches(status.strategy_guide_branches));
+            const checklistPayload = normalizeStrategyChecklist(status.strategy_checklist);
+            if (checklistPayload && a.askMode === "strategy") {
+              const appId = status.app_id ?? "";
+              const merged = mergeStrategyChecklistState(strategyChecklistRef.current, checklistPayload, {
+                appId,
+                appName: Router.MainRunningApp?.display_name ?? "",
+              });
+              setStrategyChecklist(merged);
+              scheduleStrategyChecklistSessionSave(merged);
+            }
 
             const { autoSave, fsWrite } = desktopAutoSavePrefsRef.current;
             const rid = status.request_id;
@@ -480,6 +537,13 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
       const appId = runningApp?.appid?.toString() ?? "";
       const appName = runningApp?.display_name ?? "";
 
+      const isStrategyFirstTurn =
+        a.askMode === "strategy" && !q.trim().startsWith(STRATEGY_FOLLOWUP_PREFIX);
+      if (isStrategyFirstTurn) {
+        setStrategyChecklist(null);
+        void clearStrategyChecklistSession(appId).catch(() => {});
+      }
+
       setIsAsking(true);
       setThinkingSummary(ASK_THINKING_STARTING_DISPLAY);
       setPresetCarouselInject(null);
@@ -506,6 +570,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
               attachments: AskAttachment[];
               ask_mode: AskModeId;
               spoiler_consent: boolean;
+              strategy_checklist_state?: ReturnType<typeof strategyChecklistToAskPayload>;
             },
           ],
           BackgroundStartResponse
@@ -517,6 +582,9 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
           attachments,
           ask_mode: a.askMode,
           spoiler_consent: false,
+          ...(a.askMode === "strategy" && strategyChecklistRef.current
+            ? { strategy_checklist_state: strategyChecklistToAskPayload(strategyChecklistRef.current) }
+            : {}),
         });
 
         if (!isRequestActive(seq)) return;
@@ -693,6 +761,18 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     [a, lastExchange, onAskOllama],
   );
 
+  const onStrategyChecklistToggle = useCallback((itemId: string, checked: boolean) => {
+    setStrategyChecklist((prev) => {
+      if (!prev) return prev;
+      const set = new Set(prev.checkedIds);
+      if (checked) set.add(itemId);
+      else set.delete(itemId);
+      const next: StrategyChecklistState = { ...prev, checkedIds: [...set] };
+      scheduleStrategyChecklistSessionSave(next);
+      return next;
+    });
+  }, []);
+
   const onRetryLastResponse = useCallback(() => {
     const q = (lastExchange?.question || a.unifiedInput || askThreadDisplayQuestion).trim();
     if (!q) {
@@ -717,6 +797,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     setLastTransparency(snap.lastTransparency);
     setModelPolicyDisclosure(snap.modelPolicyDisclosure);
     setStrategyGuideBranches(snap.strategyGuideBranches);
+    setStrategyChecklist(snap.strategyChecklist ?? null);
     setElapsedSeconds(snap.elapsedSeconds);
     setLastApplied(snap.lastApplied);
     setShortcutSetupVariant(snap.shortcutSetupVariant);
@@ -731,11 +812,14 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
       invalidateRequests();
       setIsAsking(false);
     }
+    const appId = Router.MainRunningApp?.appid?.toString() ?? "";
     setOllamaResponse("");
     setOllamaContext(null);
     setLastApplied(null);
     setLastExchange(null);
     setStrategyGuideBranches(null);
+    setStrategyChecklist(null);
+    void clearStrategyChecklistSession(appId).catch(() => {});
     setElapsedSeconds(null);
     setShowSlowWarning(false);
     setAskThreadCollapsed([]);
@@ -755,6 +839,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     ollamaContext,
     lastExchange,
     strategyGuideBranches,
+    strategyChecklist,
     modelPolicyDisclosure,
     presetCarouselInject,
     shortcutSetupVariant,
@@ -785,6 +870,8 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     onAskOllama,
     onRetryLastResponse,
     onStrategyBranchPick,
+    onStrategyChecklistToggle,
+    hydrateStrategyChecklistFromDisk,
     restoreSessionSnapshot,
     resetAskSessionSlice,
     setStrategyGuideBranches,

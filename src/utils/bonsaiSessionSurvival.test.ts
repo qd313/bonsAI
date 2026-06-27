@@ -70,6 +70,7 @@ function minimalSnapshot(overrides: Partial<BonsaiSessionSurvivalSnapshot> = {})
     lastTransparency: null,
     modelPolicyDisclosure: null,
     strategyGuideBranches: null,
+    strategyChecklist: null,
     elapsedSeconds: 12,
     lastApplied: null,
     shortcutSetupVariant: null,

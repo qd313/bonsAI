@@ -154,9 +154,13 @@ jobs:
         shell: bash
         run: |
           VERSION="${{ steps.release_meta.outputs.version }}"
-          PREV_TAG=""
-          if git rev-parse "v${VERSION}" >/dev/null 2>&1; then
-            PREV_TAG=$(git tag --sort=-v:refname | awk -v cur="v${VERSION}" '$0 == cur { getline; print; exit }')
+          TAG="v${VERSION}"
+          PREV_TAG=$(git tag --sort=-v:refname | awk -v cur="${TAG}" '$0 == cur { getline; print; exit }')
+          if [[ -z "$PREV_TAG" ]]; then
+            PREV_TAG=$(git tag --sort=-v:refname | head -1)
+            if [[ "$PREV_TAG" == "$TAG" ]]; then
+              PREV_TAG=""
+            fi
           fi
           NOTES_FILE="${RUNNER_TEMP}/release-notes.md"
           awk -v ver="${VERSION}" '

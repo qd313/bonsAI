@@ -524,7 +524,7 @@ Requires **Settings → Data → Show Developer tab** → **Token streaming (exp
 - [x] **STREAM-01** Flag off: **Thinking…** until full reply; normal chunks after
 - [x] **STREAM-02** Flag on, Speed/Expert: single preview bubble; terminal split + banners
 - [x] **STREAM-03** Flag on, Strategy + spoiler masking, no Spoilers OK: no unmasked mid-stream flash
-- [x] **STREAM-04** Stop mid-stream: cancelled copy; no stale overwrite
+- [x] **STREAM-04** Stop mid-stream: cancelled copy; no stale overwrite (unit: `tests/test_background_abort_busy.py` — abort releases busy gate for next Ask)
 - [x] **STREAM-05** Transparency populates only after terminal
 - [ ] **STREAM-06** Smooth reveal: pending stream polls without text regression (preview RPC)
 - [ ] **THINKING-01** Pending: `thinking_summary` line visible; no placeholder AI bubble before partial; opener woven via `compose_thinking_blurb`
@@ -642,6 +642,8 @@ Run after **SMOKE-E**. Unit coverage green 2026-04-30.
 - [ ] Headshots / control-specific Deck advice
 - [ ] Checklist check/uncheck + follow-up progress (Strategy follow-up turn; `bonsai-strategy-checklist` fence)
 - [ ] Checklist persists after QAM close / plugin reload (same game AppID)
+- [ ] New first-turn Strategy ask does not attach a prior game's or prior thread's checklist (`strategyChecklistRef` cleared before RPC)
+- [ ] Switching running game while QAM stays mounted rehydrates checklist for the new AppID
 - [ ] Reset session cache clears checklist
 - [ ] Cheat / Fast Pass gating only when user asks to rush
 

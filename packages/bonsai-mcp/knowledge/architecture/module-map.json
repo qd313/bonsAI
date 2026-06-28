@@ -2,27 +2,32 @@
   "hotspots": [
     {
       "path": "main.py",
-      "lines": 2715,
+      "lines": 2995,
       "role": "Decky RPC entrypoints and orchestration"
     },
     {
       "path": "src/styles/bonsaiScopeStylesheet.ts",
-      "lines": 1989,
+      "lines": 2111,
       "role": ""
     },
     {
       "path": "src/components/MainTab.tsx",
-      "lines": 1948,
+      "lines": 2000,
       "role": "Unified ask/search surface, chunks, suggestion UI"
     },
     {
       "path": "src/index.tsx",
-      "lines": 1915,
+      "lines": 1972,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
       "path": "py_modules/backend/services/voice_transcription_service.py",
       "lines": 1062,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/screenshot_media.py",
+      "lines": 1025,
       "role": ""
     },
     {
@@ -42,7 +47,7 @@
     },
     {
       "path": "src/hooks/useBonsaiAskOrchestration.ts",
-      "lines": 794,
+      "lines": 881,
       "role": ""
     },
     {
@@ -52,7 +57,7 @@
     },
     {
       "path": "py_modules/backend/services/ollama_prompts.py",
-      "lines": 710,
+      "lines": 725,
       "role": ""
     },
     {
@@ -67,17 +72,22 @@
     },
     {
       "path": "py_modules/backend/services/ollama_service.py",
-      "lines": 607,
+      "lines": 611,
       "role": "Prompt build, Ollama HTTP, streaming"
     },
     {
-      "path": "py_modules/backend/services/game_ai_request.py",
-      "lines": 493,
+      "path": "py_modules/backend/services/intent_pack_service.py",
+      "lines": 570,
       "role": ""
     },
     {
       "path": "src/components/SettingsTab.tsx",
-      "lines": 493,
+      "lines": 532,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/game_ai_request.py",
+      "lines": 513,
       "role": ""
     },
     {
@@ -126,13 +136,13 @@
       "role": ""
     },
     {
-      "path": "src/components/SettingsTabOllamaKeepAliveSlider.tsx",
+      "path": "py_modules/backend/services/bonsai_stream_tags.py",
       "lines": 348,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/screenshot_media.py",
-      "lines": 340,
+      "path": "src/components/SettingsTabOllamaKeepAliveSlider.tsx",
+      "lines": 348,
       "role": ""
     },
     {
@@ -146,8 +156,18 @@
       "role": ""
     },
     {
+      "path": "py_modules/backend/services/strategy_guide_parse.py",
+      "lines": 303,
+      "role": ""
+    },
+    {
       "path": "src/data/settingsDatabase.ts",
       "lines": 254,
+      "role": ""
+    },
+    {
+      "path": "src/test-harness/fakeDeckyRpc.ts",
+      "lines": 248,
       "role": ""
     },
     {
@@ -166,11 +186,6 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/bonsai_stream_tags.py",
-      "lines": 233,
-      "role": ""
-    },
-    {
       "path": "src/components/MainTabAskModeMenuPopover.tsx",
       "lines": 230,
       "role": ""
@@ -181,23 +196,8 @@
       "role": ""
     },
     {
-      "path": "src/data/presets.ts",
-      "lines": 225,
-      "role": ""
-    },
-    {
-      "path": "py_modules/backend/services/pull_model_catalog_service.py",
-      "lines": 217,
-      "role": ""
-    },
-    {
-      "path": "src/components/VoiceInputSettingsSection.tsx",
-      "lines": 217,
-      "role": ""
-    },
-    {
-      "path": "src/components/OllamaModelsHubModal.tsx",
-      "lines": 210,
+      "path": "py_modules/backend/services/strategy_checklist_session_service.py",
+      "lines": 227,
       "role": ""
     }
   ]

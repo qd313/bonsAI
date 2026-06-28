@@ -17,6 +17,7 @@
     "src/utils/chatPanelScroll.test.ts",
     "src/utils/chatTurnTitle.test.ts",
     "src/utils/deckyCall.test.ts",
+    "src/utils/intentPackSearch.test.ts",
     "src/utils/joinPresetWithRunningGame.test.ts",
     "src/utils/localOnlyAskCommands.test.ts",
     "src/utils/mergePullModelCatalog.test.ts",
@@ -25,6 +26,7 @@
     "src/utils/runningGameCharacterSuggestions.test.ts",
     "src/utils/settingsAndResponse.test.ts",
     "src/utils/splitResponseIntoChunks.test.ts",
+    "src/utils/strategyChecklist.test.ts",
     "src/utils/unifiedInputPersistenceMode.test.ts"
   ],
   "pytest": [
@@ -36,6 +38,7 @@
     "tests/test_character_catalog_parity.py",
     "tests/test_desktop_note_service.py",
     "tests/test_input_sanitizer_service.py",
+    "tests/test_intent_pack_service.py",
     "tests/test_local_ollama_loopback.py",
     "tests/test_local_ollama_setup_service.py",
     "tests/test_local_ollama_teardown.py",
@@ -56,6 +59,7 @@
     "tests/test_settings_service.py",
     "tests/test_shortcut_setup_commands.py",
     "tests/test_steam_vac_service.py",
+    "tests/test_strategy_checklist_session_service.py",
     "tests/test_strategy_guide_parse.py",
     "tests/test_tdp_sandbox_sysfs.py",
     "tests/test_token_stream_request_id_wiring.py",

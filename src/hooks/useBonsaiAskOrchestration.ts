@@ -140,11 +140,22 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
     }
   }, []);
 
+  const [trackedRunningAppId, setTrackedRunningAppId] = useState(
+    () => Router.MainRunningApp?.appid?.toString() ?? "",
+  );
   useEffect(() => {
-    const runningApp = Router.MainRunningApp;
-    const appId = runningApp?.appid?.toString() ?? "";
-    void hydrateStrategyChecklistFromDisk(appId);
-  }, [hydrateStrategyChecklistFromDisk]);
+    const poll = () => {
+      const next = Router.MainRunningApp?.appid?.toString() ?? "";
+      setTrackedRunningAppId((prev) => (prev !== next ? next : prev));
+    };
+    poll();
+    const id = window.setInterval(poll, 1500);
+    return () => window.clearInterval(id);
+  }, []);
+
+  useEffect(() => {
+    void hydrateStrategyChecklistFromDisk(trackedRunningAppId);
+  }, [hydrateStrategyChecklistFromDisk, trackedRunningAppId]);
 
   const prevAskModeRef = useRef(a.askMode);
   useEffect(() => {
@@ -541,6 +552,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
         a.askMode === "strategy" && !q.trim().startsWith(STRATEGY_FOLLOWUP_PREFIX);
       if (isStrategyFirstTurn) {
         setStrategyChecklist(null);
+        strategyChecklistRef.current = null;
         void clearStrategyChecklistSession(appId).catch(() => {});
       }
 
@@ -582,7 +594,7 @@ export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
           attachments,
           ask_mode: a.askMode,
           spoiler_consent: false,
-          ...(a.askMode === "strategy" && strategyChecklistRef.current
+          ...(a.askMode === "strategy" && !isStrategyFirstTurn && strategyChecklistRef.current
             ? { strategy_checklist_state: strategyChecklistToAskPayload(strategyChecklistRef.current) }
             : {}),
         });

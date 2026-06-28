@@ -148,6 +148,44 @@ jobs:
           fi
           echo "tag_name=${T}" >> "$GITHUB_OUTPUT"
 
+      - name: Extract CHANGELOG section for release notes
+        if: steps.publish_release.outputs.publish == 'true'
+        id: changelog_body
+        shell: bash
+        run: |
+          VERSION="${{ steps.release_meta.outputs.version }}"
+          PREV_TAG=""
+          if git rev-parse "v${VERSION}" >/dev/null 2>&1; then
+            PREV_TAG=$(git tag --sort=-v:refname | awk -v cur="v${VERSION}" '$0 == cur { getline; print; exit }')
+          fi
+          NOTES_FILE="${RUNNER_TEMP}/release-notes.md"
+          awk -v ver="${VERSION}" '
+            /^## \[/ {
+              if (found) exit
+              if ($0 ~ "^## \\[" ver "\\]") { found=1; next }
+            }
+            found { print }
+          ' CHANGELOG.md > "$NOTES_FILE"
+          if [[ -s "$NOTES_FILE" ]]; then
+            {
+              cat "$NOTES_FILE"
+              echo ""
+              echo "---"
+              echo ""
+              if [[ -n "$PREV_TAG" ]]; then
+                echo "**Full Changelog**: https://github.com/${{ github.repository }}/compare/${PREV_TAG}...v${VERSION}"
+              else
+                echo "**Full Changelog**: https://github.com/${{ github.repository }}/compare/v${VERSION}^...v${VERSION}"
+              fi
+            } > "${NOTES_FILE}.final"
+            mv "${NOTES_FILE}.final" "$NOTES_FILE"
+            echo "has_body=true" >> "$GITHUB_OUTPUT"
+            echo "path=${NOTES_FILE}" >> "$GITHUB_OUTPUT"
+          else
+            echo "No CHANGELOG section for v${VERSION}; falling back to auto-generated release notes."
+            echo "has_body=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Publish GitHub Release
         if: steps.publish_release.outputs.publish == 'true'
         uses: softprops/action-gh-release@v2
@@ -155,4 +193,5 @@ jobs:
           tag_name: ${{ steps.gh_release_tag.outputs.tag_name }}
           name: bonsAI ${{ steps.gh_release_tag.outputs.tag_name }}
           files: out/*.zip
-          generate_release_notes: true
+          body_path: ${{ steps.changelog_body.outputs.has_body == 'true' && steps.changelog_body.outputs.path || '' }}
+          generate_release_notes: ${{ steps.changelog_body.outputs.has_body != 'true' }}

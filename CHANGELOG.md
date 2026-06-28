@@ -4,6 +4,21 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [0.4.4] - 2026-06-27
+
+### Added
+- **Offline intent packs:** Bundled offline Q&A for common Deck setup questions (`data/intent-packs/deck-basics.json`); Settings → **Offline help packs** with install/update and search integration (`intent_pack_service.py`, `SettingsTabIntentPacksSection.tsx`, `useIntentPacks.ts`).
+- **Strategy checklist (Strategy Guide follow-ups):** Model emits `bonsai-strategy-checklist` JSON; interactive `ToggleField` rows in `StrategyChecklistPanel.tsx`; progress synced into subsequent Strategy asks and persisted per game in `strategy_checklist_session.json` (`strategy_checklist_session_service.py`, `strategy_guide_parse.py`).
+- **Take screenshot (attach menu):** Capture the running game screen into the Ask attachment flow from the attach paperclip menu; expanded `screenshot_media.py` with game-focus capture paths and tests.
+
+### Changed
+- **Ask mode styling:** Refined Speed / Strategy / Expert chip fills, borders, and asking-state glow on the unified input bar (`askMode.ts`, `bonsaiScopeStylesheet.ts`, `MainTab.tsx`).
+- **Thinking blurb polish:** Mid-Ask phase lines weave question snippet + game context; character voice variants preserved; redundant background `starting` publish removed (`bonsai_stream_tags.py`, `game_ai_request.py`, `main.py`).
+- **README and About tab:** End-user README refresh with hero image, clearer quick start and feature overview; About tab quick-start wording and spacing (`README.md`, `AboutTab.tsx`, `pluginQuickStartInstructions.tsx`).
+
+### Fixed
+- **Screenshot attach UX:** Attach menu and modal focus/layout fixes for screenshot capture on Deck (`MainTabAttachMenuPopover.tsx`, `BonsaiModalScope.tsx`, `bonsaiScopeStylesheet.ts`).
+
 ## [0.4.3] - 2026-06-26
 
 ### Added

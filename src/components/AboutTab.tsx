@@ -53,8 +53,8 @@ export const AboutTab: React.FC<Props> = ({
       <div style={{ fontSize: 12, color: "#c8c8c8", lineHeight: "1.2" }}>
         Backend Ollama Node for Steam (A.I.) - An AI assistant embedded in the
         Steam Deck Quick Access Menu. Ask questions, search settings, get game-specific
-        performance recommendations and apply TDP/GPU changes directly from
-        the QAM
+        performance recommendations and apply TDP changes from the QAM (GPU
+        clock suggestions are recommendations only)
       </div>
     </PanelSectionRow>
     <PanelSectionRow>

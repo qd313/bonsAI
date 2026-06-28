@@ -22,14 +22,16 @@ export function PluginQuickStartInstructionsBody() {
         }}
       >
         <strong style={{ display: "block", marginBottom: 6, color: "#fff" }}>
-          Set your gaming PC&apos;s IP in Settings first
+          Set where Ollama runs on the Ollama tab first
         </strong>
-        Ollama usually runs on your <strong>main rig</strong> (not only on the Deck). In <strong>Settings</strong>, under
-        Connection, enter that PC&apos;s <strong>LAN IP</strong> in the <strong>Ollama IP address</strong> field (for example{" "}
+        Ollama usually runs on your <strong>main rig</strong> (not only on the Deck). On the{" "}
+        <strong>Ollama</strong> tab, under <strong>Where AI runs</strong>, enter that PC&apos;s{" "}
+        <strong>LAN IP</strong> (for example{" "}
         <code style={{ fontSize: 12, color: "#b8dcc8" }}>
           192.168.1.50
         </code>
-        ). <strong>You must do this — if it is empty or wrong, every ask will fail with a connection error.</strong>
+        ) or enable <strong>Ollama on this Deck</strong> for local inference.{" "}
+        <strong>You must do this — if the address is empty or wrong, every ask will fail with a connection error.</strong>
       </p>
     <ul
       style={{
@@ -42,12 +44,12 @@ export function PluginQuickStartInstructionsBody() {
       }}
     >
       <li style={itemStyle}>
-        <strong>Ask</strong> from the main tab: type in the bar and send; the plugin talks to <strong>Ollama</strong> on your
-        LAN using the URL you set in <strong>Settings</strong>.
+        <strong>Ask</strong> from the main tab: type in the bar and send; the plugin talks to{" "}
+        <strong>Ollama</strong> using the base URL on the <strong>Ollama</strong> tab.
       </li>
       <li style={itemStyle}>
         <strong>Speed / Strategy / Expert</strong> pick different model fallbacks; <strong>Strategy</strong> is tuned for
-        gameplay coaching (spoilers-aware).
+        gameplay coaching (spoilers-aware, checklist, branch choices).
       </li>
       <li style={itemStyle}>
         <strong>Preset chips</strong> above the bar suggest common prompts; tap one to fill the bar (game context is added when
@@ -58,12 +60,12 @@ export function PluginQuickStartInstructionsBody() {
         blocked. Pick attachment quality under Settings.
       </li>
       <li style={itemStyle}>
-        <strong>TDP / power</strong> tips are read-only by default; enable <strong>Hardware control</strong> in Permissions if
-        you want the plugin to apply changes on the Deck.
+        <strong>TDP / power</strong> tips are read-only by default; enable <strong>Adjust power limits</strong> in Permissions if
+        you want the plugin to apply TDP on the Deck (GPU clock lines are recommendations only).
       </li>
       <li style={{ marginBottom: 0 }}>
-        Other tabs: <strong>Settings</strong> (URL, policy, timing), <strong>Permissions</strong> (gates), <strong>About</strong>{" "}
-        (links).
+        Other tabs: <strong>Ollama</strong> (connection, models, timing), <strong>Settings</strong> (voice, character, intent
+        packs), <strong>Permissions</strong> (gates), <strong>About</strong> (links).
       </li>
     </ul>
     </>

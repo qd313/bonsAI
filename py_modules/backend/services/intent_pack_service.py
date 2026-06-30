@@ -215,29 +215,34 @@ def ensure_bundled_intent_packs(store: dict[str, Any]) -> dict[str, Any]:
 
 
 def load_intent_packs(path: str, logger: Any = None) -> dict[str, Any]:
-    """Read intent packs from disk; seed bundled defaults when missing."""
+    """Read intent packs from disk; seed bundled defaults only when the file is missing."""
+    if not os.path.isfile(path):
+        store = default_bundled_store()
+        save_intent_packs(path, store, settings_dir=os.path.dirname(path), logger=logger)
+        return store
     try:
-        if os.path.isfile(path):
-            size = os.path.getsize(path)
-            if size > MAX_IMPORT_JSON_BYTES:
-                if logger is not None:
-                    logger.warning(
-                        "load_intent_packs: %s exceeds %d bytes (%d); re-seeding bundled defaults",
-                        path,
-                        MAX_IMPORT_JSON_BYTES,
-                        size,
-                    )
-                raise ValueError("intent pack store too large")
-            with open(path, encoding="utf-8") as f:
-                raw = json.load(f)
-            store = ensure_bundled_intent_packs(raw)
-            return sanitize_intent_pack_store(store)
+        size = os.path.getsize(path)
+        if size > MAX_IMPORT_JSON_BYTES:
+            if logger is not None:
+                logger.warning(
+                    "load_intent_packs: %s exceeds %d bytes (%d); using bundled defaults in memory (file preserved)",
+                    path,
+                    MAX_IMPORT_JSON_BYTES,
+                    size,
+                )
+            return ensure_bundled_intent_packs(default_bundled_store())
+        with open(path, encoding="utf-8") as f:
+            raw = json.load(f)
+        store = ensure_bundled_intent_packs(raw)
+        return sanitize_intent_pack_store(store)
     except (OSError, json.JSONDecodeError, ValueError) as exc:
         if logger is not None:
-            logger.warning("load_intent_packs: failed to read %s: %s", path, exc)
-    store = default_bundled_store()
-    save_intent_packs(path, store, settings_dir=os.path.dirname(path), logger=logger)
-    return store
+            logger.warning(
+                "load_intent_packs: failed to read %s: %s; using bundled defaults in memory (file preserved)",
+                path,
+                exc,
+            )
+        return ensure_bundled_intent_packs(default_bundled_store())
 
 
 def save_intent_packs(

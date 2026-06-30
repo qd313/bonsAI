@@ -935,39 +935,42 @@ def encode_image_with_pillow(
     except Exception:
         return None, None, ["Pillow is unavailable; sent original image bytes."]
 
-    with Image.open(path) as image:
-        image.load()
-        width, height = image.size
-        longest_edge = max(width, height)
-        if attachment_preset == "low":
-            max_dim = 800
-            quality = 62
-        elif attachment_preset == "mid":
-            max_dim = 1080
-            quality = 75
-        else:
-            max_dim = 16384
-            quality = 94
+    try:
+        with Image.open(path) as image:
+            image.load()
+            width, height = image.size
+            longest_edge = max(width, height)
+            if attachment_preset == "low":
+                max_dim = 800
+                quality = 62
+            elif attachment_preset == "mid":
+                max_dim = 1080
+                quality = 75
+            else:
+                max_dim = 16384
+                quality = 94
 
-        if attachment_preset == "mid" and longest_edge > 1080:
-            ratio = 1080 / float(longest_edge)
-            resized = image.resize((max(1, int(width * ratio)), max(1, int(height * ratio))), Image.LANCZOS)
-        elif attachment_preset == "mid":
-            resized = image.copy()
-        elif longest_edge > max_dim:
-            ratio = max_dim / float(longest_edge)
-            resized = image.resize((max(1, int(width * ratio)), max(1, int(height * ratio))), Image.LANCZOS)
-        else:
-            resized = image.copy()
-        if resized.mode not in ("RGB", "L"):
-            resized = resized.convert("RGB")
-        elif resized.mode == "L":
-            resized = resized.convert("RGB")
+            if attachment_preset == "mid" and longest_edge > 1080:
+                ratio = 1080 / float(longest_edge)
+                resized = image.resize((max(1, int(width * ratio)), max(1, int(height * ratio))), Image.LANCZOS)
+            elif attachment_preset == "mid":
+                resized = image.copy()
+            elif longest_edge > max_dim:
+                ratio = max_dim / float(longest_edge)
+                resized = image.resize((max(1, int(width * ratio)), max(1, int(height * ratio))), Image.LANCZOS)
+            else:
+                resized = image.copy()
+            if resized.mode not in ("RGB", "L"):
+                resized = resized.convert("RGB")
+            elif resized.mode == "L":
+                resized = resized.convert("RGB")
 
-        output = io.BytesIO()
-        resized.save(output, format="JPEG", quality=quality, optimize=True)
-        data = output.getvalue()
-        return base64.b64encode(data).decode("ascii"), "image/jpeg", warnings
+            output = io.BytesIO()
+            resized.save(output, format="JPEG", quality=quality, optimize=True)
+            data = output.getvalue()
+            return base64.b64encode(data).decode("ascii"), "image/jpeg", warnings
+    except Exception as exc:  # noqa: BLE001 — corrupt/huge images must not crash Ask RPC
+        return None, None, [f"Pillow could not process image: {exc}"]
 
 
 def prepare_image_attachment(attachment: dict, attachment_preset: str) -> dict:

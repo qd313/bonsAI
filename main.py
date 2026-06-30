@@ -224,6 +224,7 @@ class Plugin:
         self._voice_install_task: Optional[asyncio.Task] = None
         self._voice_install_cancel = threading.Event()
         self._voice_install_state: dict = new_voice_install_state()
+        self._settings_save_lock = asyncio.Lock()
 
     def _abort_ollama_chat_check(self) -> bool:
         """True when frontend requested Stop mid-generation (closes HTTP quickly; executor thread exits)."""
@@ -714,31 +715,34 @@ class Plugin:
 
     async def save_settings(self, data: Any = None):
         """Persist plugin settings to Decky's settings directory."""
-        current = await self.load_settings()
-        path = Plugin._settings_path()
-        saved = save_settings_to_disk(
-            path=path,
-            settings_dir=decky.DECKY_PLUGIN_SETTINGS_DIR,
-            incoming=data,
-            current=current,
-            sanitize_func=Plugin._sanitize_settings,
-            logger=logger,
-        )
-        changed = Plugin._settings_change_keys_for_log(current, saved)
-        if changed:
-            await self._maybe_app_log(
-                "settings.save",
-                "settings updated",
-                fields={"changed": ",".join(changed)},
-            )
         plugin = Plugin._coerce_instance(self)
-        prev_caps = current.get("capabilities") if isinstance(current.get("capabilities"), dict) else {}
-        next_caps = saved.get("capabilities") if isinstance(saved.get("capabilities"), dict) else {}
-        prev_mic = prev_caps.get("microphone_access") is True
-        next_mic = next_caps.get("microphone_access") is True
-        if prev_mic and not next_mic:
-            await plugin._stop_voice_transcription_internal()
-        return saved
+        if not hasattr(plugin, "_settings_save_lock"):
+            plugin._settings_save_lock = asyncio.Lock()
+        async with plugin._settings_save_lock:
+            current = await self.load_settings()
+            path = Plugin._settings_path()
+            saved = save_settings_to_disk(
+                path=path,
+                settings_dir=decky.DECKY_PLUGIN_SETTINGS_DIR,
+                incoming=data,
+                current=current,
+                sanitize_func=Plugin._sanitize_settings,
+                logger=logger,
+            )
+            changed = Plugin._settings_change_keys_for_log(current, saved)
+            if changed:
+                await self._maybe_app_log(
+                    "settings.save",
+                    "settings updated",
+                    fields={"changed": ",".join(changed)},
+                )
+            prev_caps = current.get("capabilities") if isinstance(current.get("capabilities"), dict) else {}
+            next_caps = saved.get("capabilities") if isinstance(saved.get("capabilities"), dict) else {}
+            prev_mic = prev_caps.get("microphone_access") is True
+            next_mic = next_caps.get("microphone_access") is True
+            if prev_mic and not next_mic:
+                await plugin._stop_voice_transcription_internal()
+            return saved
 
     async def clear_plugin_data(self):
         """Remove persisted settings/runtime/logs and return fresh defaults (new-install behavior)."""
@@ -2046,17 +2050,20 @@ class Plugin:
         strategy_checklist_state: Optional[dict] = None,
     ) -> None:
         """Execute a queued background request and publish terminal status for polling clients."""
-        result = await self._execute_game_ai_request(
-            question,
-            pc_ip,
-            app_id,
-            app_name,
-            attachments=attachments or [],
-            ask_mode=ask_mode,
-            spoiler_consent=spoiler_consent,
-            token_stream_request_id=request_id,
-            strategy_checklist_state=strategy_checklist_state,
-        )
+        try:
+            result = await self._execute_game_ai_request(
+                question,
+                pc_ip,
+                app_id,
+                app_name,
+                attachments=attachments or [],
+                ask_mode=ask_mode,
+                spoiler_consent=spoiler_consent,
+                token_stream_request_id=request_id,
+                strategy_checklist_state=strategy_checklist_state,
+            )
+        except asyncio.CancelledError:
+            return
         self._ensure_background_state()
         plugin_bg = Plugin._coerce_instance(self)
         bg_abort = getattr(plugin_bg, "_abort_current_ollama_chat", None)
@@ -2065,6 +2072,8 @@ class Plugin:
         async with self._background_lock:
             active_request_id = self._background_state.get("request_id")
             if active_request_id != request_id:
+                return
+            if self._background_state.get("status") != "pending":
                 return
             cancelled_rq = bool(result.get("cancelled"))
             success = bool(result.get("success", False)) and not cancelled_rq
@@ -2179,7 +2188,11 @@ class Plugin:
                     }
 
         async with plugin._background_lock:
-            if plugin._background_task and not plugin._background_task.done():
+            if (
+                plugin._background_state.get("status") == "pending"
+                and plugin._background_task is not None
+                and not plugin._background_task.done()
+            ):
                 state = dict(plugin._background_state)
                 return {
                     "accepted": False,
@@ -2189,6 +2202,11 @@ class Plugin:
                     "app_context": state.get("app_context", "none"),
                     "response": "A request is already in progress.",
                 }
+
+            lingering = plugin._background_task
+            if lingering is not None and not lingering.done():
+                lingering.cancel()
+            plugin._background_task = None
 
             if is_sanitizer_command:
                 handled = await plugin._try_handle_sanitizer_keyword_command(parsed_question, app_id)
@@ -2337,6 +2355,8 @@ class Plugin:
             if plugin._background_task and plugin._background_task.done():
                 try:
                     plugin._background_task.result()
+                except asyncio.CancelledError:
+                    pass
                 except Exception as exc:
                     logger.exception("get_background_game_ai_status: background task failed: %s", exc)
                     plugin._background_state = {
@@ -2398,6 +2418,23 @@ class Plugin:
             snap = plugin._partial_stream_snapshot
             if snap.get("request_id") == plugin._background_state.get("request_id"):
                 snap["streaming"] = False
+        async with plugin._background_lock:
+            task = plugin._background_task
+            if task is not None and not task.done():
+                task.cancel()
+            plugin._background_task = None
+            rid = plugin._background_state.get("request_id")
+            if rid is not None and plugin._background_state.get("status") == "pending":
+                plugin._background_state = {
+                    **plugin._background_state,
+                    "status": "cancelled",
+                    "success": False,
+                    "response": "Request cancelled.",
+                    "cancelled": True,
+                    "completed_at": time.time(),
+                    "partial_response": None,
+                    "streaming": False,
+                }
         await plugin._maybe_app_log("ask.abort", "background ask abort requested")
         return {"ok": True}
 

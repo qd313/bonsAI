@@ -138,10 +138,23 @@ class IntentPackServiceTests(unittest.TestCase):
     def test_load_rejects_oversized_file(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             path = os.path.join(tmp, svc.INTENT_PACKS_FILENAME)
+            oversized = b"x" * (svc.MAX_IMPORT_JSON_BYTES + 1)
             with open(path, "wb") as f:
-                f.write(b"x" * (svc.MAX_IMPORT_JSON_BYTES + 1))
+                f.write(oversized)
             loaded = svc.load_intent_packs(path)
             self.assertTrue(any(p.get("id") == "deck-basics" for p in loaded.get("packs") or []))
+            self.assertGreater(os.path.getsize(path), svc.MAX_IMPORT_JSON_BYTES)
+
+    def test_load_preserves_corrupt_file(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, svc.INTENT_PACKS_FILENAME)
+            corrupt = b"{not valid json"
+            with open(path, "wb") as f:
+                f.write(corrupt)
+            loaded = svc.load_intent_packs(path)
+            self.assertTrue(any(p.get("id") == "deck-basics" for p in loaded.get("packs") or []))
+            with open(path, "rb") as f:
+                self.assertEqual(f.read(), corrupt)
 
 
 if __name__ == "__main__":

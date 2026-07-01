@@ -225,6 +225,8 @@ class Plugin:
         self._voice_install_cancel = threading.Event()
         self._voice_install_state: dict = new_voice_install_state()
         self._settings_save_lock = asyncio.Lock()
+        self._intent_pack_store_lock = asyncio.Lock()
+        self._strategy_checklist_store_lock = asyncio.Lock()
 
     def _abort_ollama_chat_check(self) -> bool:
         """True when frontend requested Stop mid-generation (closes HTTP quickly; executor thread exits)."""
@@ -835,33 +837,41 @@ class Plugin:
         frag = rpc_entry_to_store_payload(payload)
         if frag is None:
             return {"ok": False, "error": "Invalid checklist payload"}
-        store = Plugin._load_strategy_checklist_store()
-        merged = upsert_session_entry(
-            store,
-            app_id=app_id,
-            app_name=str(payload.get("app_name") or payload.get("appName") or frag.get("app_name") or ""),
-            title=frag["title"],
-            items=frag["items"],
-            checked_ids=frag.get("checked_ids"),
-        )
-        save_session_store(
-            Plugin._strategy_checklist_session_path(),
-            merged,
-            settings_dir=decky.DECKY_PLUGIN_SETTINGS_DIR,
-            logger=logger,
-        )
-        entry = get_session_entry(merged, app_id)
+        plugin = Plugin._coerce_instance(self)
+        if not hasattr(plugin, "_strategy_checklist_store_lock"):
+            plugin._strategy_checklist_store_lock = asyncio.Lock()
+        async with plugin._strategy_checklist_store_lock:
+            store = Plugin._load_strategy_checklist_store()
+            merged = upsert_session_entry(
+                store,
+                app_id=app_id,
+                app_name=str(payload.get("app_name") or payload.get("appName") or frag.get("app_name") or ""),
+                title=frag["title"],
+                items=frag["items"],
+                checked_ids=frag.get("checked_ids"),
+            )
+            save_session_store(
+                Plugin._strategy_checklist_session_path(),
+                merged,
+                settings_dir=decky.DECKY_PLUGIN_SETTINGS_DIR,
+                logger=logger,
+            )
+            entry = get_session_entry(merged, app_id)
         return {"ok": True, "entry": entry}
 
     async def clear_strategy_checklist_session(self, app_id: str = ""):
         """Remove persisted checklist for one game or entire file when app_id omitted."""
-        path = Plugin._strategy_checklist_session_path()
-        store = Plugin._load_strategy_checklist_store()
-        if str(app_id or "").strip():
-            merged = clear_session_entry(store, app_id)
-        else:
-            merged = clear_session_entry(store, None)
-        save_session_store(path, merged, settings_dir=decky.DECKY_PLUGIN_SETTINGS_DIR, logger=logger)
+        plugin = Plugin._coerce_instance(self)
+        if not hasattr(plugin, "_strategy_checklist_store_lock"):
+            plugin._strategy_checklist_store_lock = asyncio.Lock()
+        async with plugin._strategy_checklist_store_lock:
+            path = Plugin._strategy_checklist_session_path()
+            store = Plugin._load_strategy_checklist_store()
+            if str(app_id or "").strip():
+                merged = clear_session_entry(store, app_id)
+            else:
+                merged = clear_session_entry(store, None)
+            save_session_store(path, merged, settings_dir=decky.DECKY_PLUGIN_SETTINGS_DIR, logger=logger)
         return {"ok": True}
 
     async def get_intent_packs(self):
@@ -877,11 +887,14 @@ class Plugin:
     async def set_intent_pack_enabled(self, pack_id: str = "", enabled: bool = True):
         """Enable or disable a search intent pack."""
         plugin = Plugin._coerce_instance(self)
-        store = plugin._load_intent_pack_store()
-        result = set_pack_enabled(store, pack_id, enabled)
-        if not result.get("ok"):
-            return result
-        saved = plugin._save_intent_pack_store(result["store"])
+        if not hasattr(plugin, "_intent_pack_store_lock"):
+            plugin._intent_pack_store_lock = asyncio.Lock()
+        async with plugin._intent_pack_store_lock:
+            store = plugin._load_intent_pack_store()
+            result = set_pack_enabled(store, pack_id, enabled)
+            if not result.get("ok"):
+                return result
+            saved = plugin._save_intent_pack_store(result["store"])
         return {
             "ok": True,
             "summaries": pack_summaries(saved),
@@ -905,24 +918,30 @@ class Plugin:
         incoming, parse_error = parse_import_payload(raw_json)
         if parse_error:
             return {"ok": False, "error": parse_error}
-        store = plugin._load_intent_pack_store()
-        result = merge_import_pack(store, incoming or {}, confirm=confirm)
-        if not result.get("ok"):
-            return result
-        if confirm and isinstance(result.get("store"), dict):
-            saved = plugin._save_intent_pack_store(result["store"])
-            result["summaries"] = pack_summaries(saved)
-            result["packs"] = saved.get("packs") or []
+        if not hasattr(plugin, "_intent_pack_store_lock"):
+            plugin._intent_pack_store_lock = asyncio.Lock()
+        async with plugin._intent_pack_store_lock:
+            store = plugin._load_intent_pack_store()
+            result = merge_import_pack(store, incoming or {}, confirm=confirm)
+            if not result.get("ok"):
+                return result
+            if confirm and isinstance(result.get("store"), dict):
+                saved = plugin._save_intent_pack_store(result["store"])
+                result["summaries"] = pack_summaries(saved)
+                result["packs"] = saved.get("packs") or []
         return result
 
     async def remove_intent_pack(self, pack_id: str = ""):
         """Remove a user/imported intent pack (bundled packs cannot be removed)."""
         plugin = Plugin._coerce_instance(self)
-        store = plugin._load_intent_pack_store()
-        result = remove_pack(store, pack_id)
-        if not result.get("ok"):
-            return result
-        saved = plugin._save_intent_pack_store(result["store"])
+        if not hasattr(plugin, "_intent_pack_store_lock"):
+            plugin._intent_pack_store_lock = asyncio.Lock()
+        async with plugin._intent_pack_store_lock:
+            store = plugin._load_intent_pack_store()
+            result = remove_pack(store, pack_id)
+            if not result.get("ok"):
+                return result
+            saved = plugin._save_intent_pack_store(result["store"])
         return {
             "ok": True,
             "summaries": pack_summaries(saved),

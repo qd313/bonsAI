@@ -48,6 +48,7 @@ Use the **Touched area** column to extend §1; prefer the narrowest tests first.
 | `src/components/MainTab.tsx`, unified input | `pnpm test` (utils/data) | Tier 0 **SMOKE-A** |
 | `src/index.tsx` tabs, CSS, RPC wiring | Full §1 + §3 | Tier 0 **SMOKE-A** |
 | `ollama_mdns_discovery_service.py`, Connection **Find LAN** | `tests/test_ollama_mdns_discovery_service.py` | Tier 2 mDNS block; N/A without publish |
+| `main.py` save RPCs (`save_settings`, intent packs, strategy checklist session) | `tests/test_settings_save_lock.py`, `tests/test_intent_pack_store_lock.py`, `tests/test_strategy_checklist_store_lock.py` | Tier 0 settings persist + Strategy checklist game switch |
 
 ---
 
@@ -376,7 +377,7 @@ Maps [roadmap.md](roadmap.md) **Completed** summary and [archive/roadmap-complet
 | VOICE-STT | Whisper voice Ask (local STT) | VOICE-01…04 | Open | Permissions + Settings model download; on-Deck mic required |
 | STRATEGY-CORE | Strategy Guide prompt path | SMOKE-E | Open | |
 | STRATEGY-SPOILER | Strategy spoiler policy + consent | SMOKE-E, STRAT-01…05 | Partial | Unit green 2026-04-30; [preview 2026-05-26](test-evidence/tier1Core/2026-05-26-9e20a82/SMOKE-E-strategy-mode/manifest.json) |
-| STRATEGY-CHECKLIST | Strategy checklist (follow-up, persisted per game) | Tier 2 § Strategy depth | Open | Unit + preview; on-Deck: check/uncheck, QAM reopen |
+| STRATEGY-CHECKLIST | Strategy checklist (follow-up, persisted per game) | Tier 2 § Strategy depth | Open | Unit: `tests/test_strategy_checklist_store_lock.py`; on-Deck: check/uncheck, QAM reopen |
 | DEBUG-TAB | Debug tab opt-in | SMOKE-A | Open | Tab strip when enabled |
 | SETTINGS-TRIM | Settings tab trim | SMOKE-A | Open | |
 | RESET-SESSION | Reset session cache | — | Open | Tier 2 |

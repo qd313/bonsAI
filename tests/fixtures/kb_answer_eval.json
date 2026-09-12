@@ -1710,5 +1710,106 @@
    "expect_branches": true,
    "note": "How-it-works card. 2026-09-06 write-up."
   }
+ ],
+ "followup_pairs": [
+  {
+   "id": "P-DRG-PHASE-01",
+   "app_id": "2321470",
+   "app_name": "Deep Rock Galactic: Survivor",
+   "ask_mode": "strategy",
+   "turns": [
+    {
+     "question": "how do i beat the glyphid dreadnought",
+     "expect_card": "Glyphid Dreadnought",
+     "must_mention": [
+      ["kite", "kiting", "keep moving", "stay mobile", "distance", "keep away", "back off"],
+      ["weak point", "weak points", "armor plate", "armour plate", "plates", "armor"]
+     ],
+     "must_not_say": [],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    },
+    {
+     "question": "what about its second phase",
+     "expect_card": "Glyphid Dreadnought",
+     "must_mention": [],
+     "must_not_say": [
+      ["health bars drift apart", "both turn immune", "heal the gap closed", "healing never starts"],
+      ["lacerator chases", "arbalest hangs back", "fireball spreads", "two smaller dreadnoughts"]
+     ],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    }
+   ],
+   "note": "D98's known-failing pair, device row W3-R4: the search now attaches the Glyphid Dreadnought note first, but the Dreadnought Twins note (two smaller dreadnoughts that heal while both turn immune) still attaches second and reads more like a real second phase, so the model wrote about the Twins. must_not_say on turn 2 flags Dreadnought Twins content leaking into the reply."
+  },
+  {
+   "id": "P-DOOME-PHASE-01",
+   "app_id": "782330",
+   "app_name": "DOOM Eternal",
+   "ask_mode": "strategy",
+   "turns": [
+    {
+     "question": "how do i beat the doom hunter",
+     "expect_card": "Doom Hunter",
+     "must_mention": [
+      ["plasma rifle", "heat blast", "microwave beam"],
+      ["blood punch"]
+     ],
+     "must_not_say": [],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    },
+    {
+     "question": "what about its second phase",
+     "expect_card": "Doom Hunter",
+     "must_mention": [],
+     "must_not_say": [
+      ["two phases", "phase one strips the armour", "phase two the flesh", "eight targets"],
+      ["swings the flail", "glory kill the shield off", "phase two starts faster", "sentinel prime"]
+     ],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    }
+   ],
+   "note": "Second pair for D98's measurement: DOOM Eternal has four boss cards. Doom Hunter's own card never uses the word 'phase' (it says 'first health bar' / 'second bar'), while Icon of Sin and Gladiator both use 'phase' prominently -- the same shape of confound as the Dreadnought Twins pair, chosen from a game with several bosses per the brief. must_not_say on turn 2 flags either rival's content."
+  },
+  {
+   "id": "P-OOT-PHASE-01",
+   "app_id": "",
+   "app_name": "The Legend of Zelda: Ocarina of Time",
+   "ask_mode": "strategy",
+   "turns": [
+    {
+     "question": "how do i beat morpha",
+     "expect_card": "Morpha",
+     "must_mention": [
+      ["nucleus", "red nucleus"],
+      ["hookshot"]
+     ],
+     "must_not_say": [],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    },
+    {
+     "question": "what about its second phase",
+     "expect_card": "Morpha",
+     "must_mention": [],
+     "must_not_say": [
+      ["mirror shield reflects", "first phase, the mirror shield", "once they merge", "two witches"],
+      ["only one of the two riders is real", "forest temple boss", "rides out of the wall paintings"]
+     ],
+     "expect_fence": false,
+     "expect_branches": true,
+     "expect_attached": true
+    }
+   ],
+   "note": "Third pair for D98's measurement: Ocarina of Time has six boss cards. Morpha's card has no phase language at all (a single-stage fight), while Twinrova ('First phase...') and Phantom Ganon ('Phases: only one of the two riders is real') both do. app_id \"\" mimics an EmuDeck shortcut, same convention as A-OOT-01/02."
+  }
  ]
 }

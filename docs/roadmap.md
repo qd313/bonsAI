@@ -139,12 +139,13 @@ hook gives a gentle heads-up when a session starts work outside this.
   copy of it stays on top of the suggestion chips: pale round tab icons and the plugin's name show through the chip text, with a
   faint row of dots under them. It does not go away on its own and it makes the chip labels hard to read. Reported before and
   still there. Evidence: Deck capture `DeckCapture_20260907_234345_game.png`.
-- ★★ `[ui]` **The copy button sits on top of the code box instead of beside it** — **OPEN, found on the Deck
-  2026-09-12.** A reply that ends in a box of computer text draws the small copy icon over the bottom-right corner
-  of that box, so the icon and the box's own edge sit on top of one another. It looks like a mistake and the icon is
-  harder to aim at. Seen with a game running, Strategy mode, in a reply about the power limit. Measurement on the
-  device is owed before anything moves — a picture cannot say which of the two is in the wrong place. Evidence
-  `screenshots/DeckCapture_20260912_183855_game.png`; row **REPLY-COPY-01**.
+- ★★ `[ui]` **The copy button sits on top of the code box instead of beside it** — **OPEN, measured on the Deck
+  2026-09-12.** The icon overlaps the code box's bottom-right corner by 16 pixels across and 9 down, so about two
+  fifths of it sits on the box. **The cause:** the icon is meant to sit in the answer bubble's corner, and that
+  reads fine when the answer ends in ordinary text, because the bubble behind it is one flat surface. A code box
+  has its own background, so the icon lands on that box's painted corner instead. Room is already reserved for the
+  icon at the end of the last line, but that does not move the box's edge. Evidence
+  `runs/plan48-deck-evening-2026-09-12.json`, `screenshots/DeckCapture_20260912_183855_game.png`.
 - ★★★ `[focus]` **The panel can get into a state where pressing Down stops half way and the Ask button is out of reach** —
   **OPEN, found 2026-09-05.** After leaving the panel with B and opening it again from the Decky list, Down walked as far as the
   answer and then stopped dead: ten presses, no movement, Left and Right dead too, only Up escaping. The answer's own buttons, the
@@ -678,18 +679,17 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   rule no longer holding — are not covered by that rule and still need answering if this is ever revisited. Weights
   stay even for now. (D68, D82) [Detail](roadmap-details.md#the-shipping-retrieval-arm-loses-to-the-vector-half-alone-on-rows-nobody-tuned-against).
 
-- ★★ `[KB]` **The follow-up menu can name a different game from the one asked about** — **OPEN, found
-  2026-09-07.** Asked *"how do i cross the flooded rooms in black mesa without getting shocked"* with nothing
-  running. The answer was correct and used the Black Mesa note, and the panel's own line confirmed it had
-  resolved the game from the question as black mesa. The menu underneath then asked **"Where are you at in
-  Half-Life 2?"**, offering the train station and Ravenholm — locations from a different game. A person asking
-  about one game is asked to place themselves in another. This chat carried nineteen earlier turns from an
-  unrelated session, which may have contributed; not yet retried in a fresh chat. Evidence
-  `runs/plan48-R5-blackmesa-corrected-note.json`.
-- ★★ `[KB]` **A pinned test batch is not badged** — **OPEN, found 2026-09-07.** Chips pinned for testing are
-  supposed to carry an amber Test badge, so it is obvious the carousel is showing a fixed set rather than what
-  the plugin would have picked on its own. With the chip-decode animation switched on, the badge never draws, so
-  a pinned batch looks like ordinary chips. Evidence `runs/plan47-frozen-chip-findings.json`.
+- ★★ `[KB]` **The follow-up menu keeps offering Half-Life 2 whatever game you asked about** — **OPEN, seen twice,
+  widened 2026-09-12.** First on a Black Mesa question, now on a **Portal 2** one: the answer was right and used the
+  right note, then the menu underneath asked *"Where are you at in Half-Life 2?"* and offered the train station and
+  Ravenholm. Both times it named the same game, so it is not picking a random wrong one. Both chats carried about
+  twenty earlier turns, which is the strongest remaining suspect and the reason a fresh-chat run is now owed.
+  Evidence `runs/plan48-deck-evening-2026-09-12.json`, `runs/plan48-R5-blackmesa-corrected-note.json`.
+- ★★ `[KB]` **A pinned test batch is not badged** — **OPEN, seen again 2026-09-12.** Chips pinned for testing are
+  supposed to carry an amber Test badge, so it is obvious the carousel is showing a fixed set rather than what the
+  plugin would have picked. Three chips pinned this evening and no badge appeared anywhere on screen. Everything
+  else about them works: they replace the carousel, and pressing A fills the Ask field word for word without
+  sending. Evidence `runs/plan48-deck-evening-2026-09-12.json`, `runs/plan47-frozen-chip-findings.json`.
 - ★★★ `[KB]` **The panel only learns which game is running when it starts, and never again** — **OPEN, cause
   found 2026-09-07.** Two failures, one cause. **It keeps naming a game that has closed:** Hades was exited with
   the panel open and the line still named it straight afterwards, 31 seconds later, about four minutes later, and
@@ -721,12 +721,13 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   Portal 2, where the keyword search really did rank a card, so it is not the meaning-only case. Measured by
   `scripts/measure_kb_thin_match.py`, evidence `runs/plan48-thin-match.json`. **The wording is settled**, chosen by you on 2026-09-07: *"No close match in my notes, this answer leans on the model's own knowledge."*
   The comma rather than a dash is deliberate, and is noted in the code so nobody tidies it away.
-- ★★★ `[KB]` **Every question waits about a second while the note search loads** — **OPEN, cause narrowed
-  2026-09-12.** On the Deck the same three questions took 793 to 900 milliseconds in August and 1103 to 1230 by
-  September, and three asked back to back were all equally slow — so it is not a one-off warm-up. Measured on the
-  build machine: that search takes 14 thousandths of a second when the model is already in memory and 1.34 seconds
-  when it has to load. The Deck pays the loading number on every single question.
-  [Detail, including what the PC could and could not reproduce](roadmap-details.md#every-question-waits-about-a-second-while-the-note-search-loads).
+- ★★★ `[KB]` **Every question waits about a second because only one model fits in memory at a time** — **CAUSE
+  FOUND on the Deck 2026-09-12, and the fix measured.** The Deck is set to hold one model at a time, so writing an
+  answer pushes the note-searching model out and the next question spends about seven tenths of a second loading it
+  back. Measured with that limit raised to two: the search after a reply costs 24 thousandths of a second instead of
+  732, and both models sit in memory together with room to spare. **This is a setting on the Deck, not plugin code**,
+  and where it is set could not be found from the running system, so changing it for good needs that answered first.
+  Your call. [Detail](roadmap-details.md#every-question-waits-about-a-second-while-the-note-search-loads)
 - ★ `[KB]` **A Hades boss's note is spelled wrong, so spelling it right gets you told the plugin is guessing** —
   **OPEN, found 2026-09-12.** The note is titled *Megara*; the boss is *Megaera*. Type it correctly and the note
   still attaches, but the reply now carries the "no close match in my notes" line — so a person is told the plugin
@@ -757,22 +758,11 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   format gate, the relevance floor, follow-ups searching the user's words, transparency matching what the model got, and
   the Developer kill-switch. Either one evening with pinned test chips, or close them as superseded by the rows that
   passed this week. Rows **KB-VARIANT-01**, **KB-FLOOR-01**, **KB-FOLLOWUP-01**, **KB-TRANSPARENCY-01**, **KB-KILLSWITCH-01**.
-- ★★ `[KB]` **The speed check needs one run on the Deck now that it is honest** — **FIXED 2026-09-12.** The old
-  check reported 23 to 38 thousandths of a second and printed pass while a real question on the same Deck took
-  1.07 seconds for that same step; it never ran the chat model and a real question always has. It now runs one
-  throwaway reply first when asked to, and otherwise says it cannot clear the device rather than passing. Run it
-  both ways on the Deck and confirm the honest run reports over budget. Row **KB-SPEED-01**.
-- ★★ `[KB]` **Read what the Deck is holding in memory around one question** — **OPEN, five minutes of device
-  time.** This settles why every question waits about a second. Read the loaded-model list at three moments:
-  before a question, after the notes are searched, and after the answer finishes. If the search model is gone
-  after the answer, memory pressure is the cause and the fix is likely a Deck setting rather than plugin code.
-  No pinned questions needed. Row **KB-SPEED-02**.
-- ★★ `[KB]` **The new answer shape needs a read on the device** — **VERIFY, shipped 2026-09-07.** A Strategy
-  answer about a named thing now gives the note's advice first and the menu after, instead of a short bit of
-  orientation first. Measured off the device only: it keeps more of what its note said and hides spoilers
-  far more reliably, and is twelve words shorter at the same speed —
-  [numbers](roadmap-details.md#the-answer-shape-advice-first-menu-after). Three sentences are drafted and
-  checked against the library; they need the maintainer's word before pinning. Row **KB-ANSWER-03**.
+- ★★ `[KB]` **The new answer shape needs a read on the device** — **VERIFY, one of three read 2026-09-12.** The
+  Portal 2 one came back clean: the note's advice starts straight after the character's opening line, 111 words, no
+  warning line. Whether that reads as advice-first is your judgement, which is what this row is for. The Hades and
+  Black Mesa sentences **are pinned on the Deck now** — press A on each and read them. The Hades one needs Hades
+  running. Row **KB-ANSWER-03**; evidence `runs/plan48-deck-evening-2026-09-12.json`.
 - ★★★ `[KB]` **DRG Survivor glossary terms** — **VERIFY, one touch tap owed.** Shipped 2026-08-28 and walked on device:
   underline, popup, D-pad reachability, B, one-press Up. Rows **DRG-GLOSSARY-01…04**.
   [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).

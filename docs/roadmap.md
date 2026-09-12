@@ -139,6 +139,12 @@ hook gives a gentle heads-up when a session starts work outside this.
   copy of it stays on top of the suggestion chips: pale round tab icons and the plugin's name show through the chip text, with a
   faint row of dots under them. It does not go away on its own and it makes the chip labels hard to read. Reported before and
   still there. Evidence: Deck capture `DeckCapture_20260907_234345_game.png`.
+- ★★ `[ui]` **The copy button sits on top of the code box instead of beside it** — **OPEN, found on the Deck
+  2026-09-12.** A reply that ends in a box of computer text draws the small copy icon over the bottom-right corner
+  of that box, so the icon and the box's own edge sit on top of one another. It looks like a mistake and the icon is
+  harder to aim at. Seen with a game running, Strategy mode, in a reply about the power limit. Measurement on the
+  device is owed before anything moves — a picture cannot say which of the two is in the wrong place. Evidence
+  `screenshots/DeckCapture_20260912_183855_game.png`; row **REPLY-COPY-01**.
 - ★★★ `[focus]` **The panel can get into a state where pressing Down stops half way and the Ask button is out of reach** —
   **OPEN, found 2026-09-05.** After leaving the panel with B and opening it again from the Decky list, Down walked as far as the
   answer and then stopped dead: ten presses, no movement, Left and Right dead too, only Up escaping. The answer's own buttons, the

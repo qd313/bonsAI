@@ -339,6 +339,12 @@ async def run_game_ai_request(
         kb_ask_mode = (ask_mode or "speed").strip().lower()
         kb_memory_eligible = kb_ask_mode in ("strategy", "expert")
         question_for_kb_search = question_for_retrieval
+        # D98: the model still answered about a different, better-matching note even once the
+        # right one was ranked first, so the exact turn this augments the search words on is
+        # also the only turn the built prompt gets told which thing the question is carrying on
+        # from -- see ollama_prompts.build_system_prompt's `followup_subject`. Blank everywhere
+        # else, including the question the person and the model see, which never changes here.
+        followup_subject_for_prompt = ""
         if settings.get("use_local_knowledge_base") is not True:
             kb_followup_memory.forget()
         elif kb_domain == "compat":
@@ -351,6 +357,7 @@ async def run_game_ai_request(
                 question_for_kb_search = kb_followup_memory.augment_search_words(
                     question_for_retrieval, remembered_subject=remembered_subject
                 )
+                followup_subject_for_prompt = remembered_subject
 
         if should_kb:
             if isinstance(active_rid, int) and hasattr(plugin, "_publish_thinking_phase_key"):
@@ -511,6 +518,7 @@ async def run_game_ai_request(
             tdp_cap_w=pre_cap,
             proton_log_attachment=early_context_combined or None,
             proton_log_transparency=proton_log_transparency,
+            followup_subject=followup_subject_for_prompt,
             strategy_spoiler_consent=strategy_spoiler_consent_effective,
             strategy_spoiler_asked_entity=strategy_spoiler_asked_entity,
             strategy_spoiler_kb_entity_match=strategy_spoiler_kb_entity_match,

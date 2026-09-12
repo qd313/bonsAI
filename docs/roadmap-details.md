@@ -1211,3 +1211,74 @@ flowchart TD
 
 Decky sizes icons via CSS `font-size`. Font Awesome works because it renders `<svg width="1em">`. An `<img>` with fixed pixels is ignored. Fix: inline SVG into `<svg width="1em" height="1em" fill="currentColor">` (`BonsaiSvgIcon`). Source SVG needs `viewBox` for scaling.
 
+
+
+## The answer shape: advice first, menu after
+
+Shipped 2026-09-07 after the maintainer read the numbers below. A device read is still owed, so the
+roadmap entry sits in the knowledge base section's **Deck check owed** list, not in Done.
+
+**What changed for a person.** Ask a Strategy question that names a thing the library has a note
+about — a boss, an item, a mechanic. The reply used to open with a short bit of orientation and then
+offer the menu of what to do next. It now gives the note's own advice first and offers the same menu
+after.
+
+**How it was measured.** The same 61 questions, three runs each, on the same build, with the same
+checks. Only the instruction that decides the opening differed, so the comparison is the shape and
+nothing else.
+
+| | Orientation first | Advice first |
+|---|---|---|
+| Keeps the facts its note gave it | 76.6% | **79.5%** |
+| Never contradicts its own note | **94.4%** | 90.7% |
+| Hid a spoiler when it should have | 77.8% | **88.9%** |
+| Never hid something it should not have | 98.8% | **99.4%** |
+| Offered the menu when it was due | **98.6%** | 97.1% |
+| Attached a note whenever one was due | 100% | 100% |
+| Clean on all three runs | 60.7% | **67.2%** |
+| Words per reply | 103 | **91** |
+| Seconds per reply | 1.3 | **1.2** |
+
+**The one thing that got worse, read honestly.** Replies that contradict their own note went from
+94.4% clean to 90.7%. That is one extra question, not a spread. Both failing questions are the same
+topic — the Pikmin 2 day limit — which the model already gets wrong on either shape and which is an
+open problem in its own right. So the fair reading is "worse on the one topic it already fails", not
+"contradicts notes more often".
+
+**The old shape can still be re-run.** The measuring switch in the answer test was reversed rather
+than deleted, so this comparison can be repeated by anyone who doubts it.
+
+## Every question waits about a second while the note search loads
+
+Filed 2026-09-07 as "the note search has got about thirty per cent slower since August"; narrowed 2026-09-12.
+
+**The device readings.** The same three questions, on the Deck: 793 to 900 milliseconds in August, 1078 to 1094
+one September evening, 1103 to 1230 the next. The explanation offered at the time — that only the first question
+after a quiet spell is slow — does not hold there: three questions asked back to back came back within 16
+milliseconds of each other, no faster on the third than the first. A real question measured on 7 September took
+1067 milliseconds for the same step.
+
+**What the build machine says the two states cost** (`runs/plan48-embed-eviction-pc.json`, 2026-09-12): searching
+the notes costs **1336 milliseconds when the model has to be loaded** and **14 milliseconds when it is already
+there**. The Deck's per-question number sits on top of the loading figure, not the resident one. So the Deck
+behaves as though the model is loaded from scratch for every question.
+
+**What the build machine could not reproduce, and why that is still useful.** The leading idea was that writing an
+answer pushes the search model out of memory. On this PC it does not: after a reply, both models were still
+resident and the next search took 24 milliseconds. But this PC has far more memory than a Deck, so the honest
+reading is that it never gets low enough to push anything out — which is itself why repeat questions are fast here
+and slow there. A negative result here does not clear the Deck.
+
+**What would settle it**, and it is cheap: read what the Deck is holding in memory at three moments — before a
+question, after the notes are searched, and after the answer finishes. If the search model is gone after the
+answer, the cause is settled. Row **KB-SPEED-02**.
+
+**Two things ruled out.** A fresh process is not the difference (two separate runs of the check both read fast).
+And nothing in the plugin throws the search model away: the answering model is asked to stay in memory for five
+minutes, and the search model gets Ollama's own five-minute default because the request says nothing
+(`ollama_embed_service.py:137`).
+
+**A related risk, not yet a bug.** The search gives up after three seconds and falls back to word matching only,
+silently (`knowledge_base_service.py:1620-1624`). A load takes 1.34 seconds on a strong PC. Today's Deck readings
+are well under three seconds, but not so far under that a busy moment could not cross it, and a person would get
+worse answers with nothing on screen to say why.

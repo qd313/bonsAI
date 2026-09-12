@@ -715,23 +715,27 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   Portal 2, where the keyword search really did rank a card, so it is not the meaning-only case. Measured by
   `scripts/measure_kb_thin_match.py`, evidence `runs/plan48-thin-match.json`. **The wording is settled**, chosen by you on 2026-09-07: *"No close match in my notes, this answer leans on the model's own knowledge."*
   The comma rather than a dash is deliberate, and is noted in the code so nobody tidies it away.
-- ★★★ `[KB]` **The note search has got about thirty per cent slower since August** — **OPEN, found
-  2026-09-07.** The same three questions took 793 to 900 milliseconds in August, 1078 to 1094 one
-  September evening, and 1103 to 1230 the next. The explanation given at the time — that only the first
-  question after a quiet spell is slow — does not hold on the device: three questions asked back to back
-  came back within 16 milliseconds of each other, no faster on the third than the first. Nobody knows why
-  yet. There is now a written budget of one second and a check that prints over-budget, so it cannot
-  creep up again unnoticed.
-  **The check itself was tried on the Deck 2026-09-07 (row W3-R6) and it fails.** It reports 23 to 38
-  thousandths of a second for the search, comfortably under budget, and prints pass — but a real question,
-  asked on the same Deck in the same sitting minutes apart, took 1.07 seconds for that same step and would
-  have printed over budget. Run twice more in separate processes, the check read about 25 thousandths both
-  times, so this is not a one-off warm-up. What differs is that the check never runs the chat model and a
-  real question does. So today the check would call a slow device healthy, which is worse than no check at
-  all. **A fix is in progress this session.** One idea for the cause, **untested**: the chat model and the
-  meaning-search model may be competing for memory on the Deck, so writing an answer pushes the
-  meaning-search model out and the next question has to load it back in. Evidence
-  `runs/plan48-R6-time-budget.json`.
+- ★★★ `[KB]` **Every question waits about a second while the note search loads** — **OPEN, cause narrowed
+  2026-09-12.** On the Deck the same three questions took 793 to 900 milliseconds in August and 1103 to 1230 by
+  September, and three asked back to back were all equally slow — so it is not a one-off warm-up. Measured on the
+  build machine: that search takes 14 thousandths of a second when the model is already in memory and 1.34 seconds
+  when it has to load. The Deck pays the loading number on every single question.
+  [Detail, including what the PC could and could not reproduce](roadmap-details.md#every-question-waits-about-a-second-while-the-note-search-loads).
+- ★ `[KB]` **A Hades boss's note is spelled wrong, so spelling it right gets you told the plugin is guessing** —
+  **OPEN, found 2026-09-12.** The note is titled *Megara*; the boss is *Megaera*. Type it correctly and the note
+  still attaches, but the reply now carries the "no close match in my notes" line — so a person is told the plugin
+  is guessing when it is not. One title and a library rebuild. Wave two's own test sentences were written around
+  the misspelling. Evidence `runs/plan48-deck-batch-verification.json`.
+- ★★ `[KB]` **Neither honesty line can appear when the game is only named in the question** — **OPEN, found
+  2026-09-12.** Both lines only run when a game is actually running or picked from the menu. Ask *"black mesa how
+  do i tame a horse"* with nothing running and a wrong note attaches with no line at all, because the coverage
+  check is never told about a game the question named. The one case where a person is most likely leaning on the
+  model's memory is the one where they are never told. Evidence `runs/plan48-deck-batch-verification.json`.
+- ★★ `[KB]` **The "No tip for this" line has no question that can make it appear** — **OPEN, measured off the
+  device 2026-09-12.** Against the library that ships, on every sentence anyone has tried: the five hardest problem
+  sentences still get a tip in every mode, meaning search on or off; the twelve junk phrases attach nothing, which
+  routes nowhere, so no line. The floor this wave added changed nothing on the tip side — 14 right, 1 wrong, 2
+  nothing, before and after. Either the floor bites on tips or the line is decoration.
 - ★★ `[KB]` **Four questions still get notes about the wrong subject** — **OPEN, three of the four now say so,
   found 2026-09-07.** Asking Black Mesa how to tame a horse, asking Portal 2 where to buy a house, and asking about
   a Hades boss that does not exist all still attach a note. The floor added this wave cannot catch these without
@@ -747,11 +751,22 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   format gate, the relevance floor, follow-ups searching the user's words, transparency matching what the model got, and
   the Developer kill-switch. Either one evening with pinned test chips, or close them as superseded by the rows that
   passed this week. Rows **KB-VARIANT-01**, **KB-FLOOR-01**, **KB-FOLLOWUP-01**, **KB-TRANSPARENCY-01**, **KB-KILLSWITCH-01**.
+- ★★ `[KB]` **The speed check needs one run on the Deck now that it is honest** — **FIXED 2026-09-12.** The old
+  check reported 23 to 38 thousandths of a second and printed pass while a real question on the same Deck took
+  1.07 seconds for that same step; it never ran the chat model and a real question always has. It now runs one
+  throwaway reply first when asked to, and otherwise says it cannot clear the device rather than passing. Run it
+  both ways on the Deck and confirm the honest run reports over budget. Row **KB-SPEED-01**.
+- ★★ `[KB]` **Read what the Deck is holding in memory around one question** — **OPEN, five minutes of device
+  time.** This settles why every question waits about a second. Read the loaded-model list at three moments:
+  before a question, after the notes are searched, and after the answer finishes. If the search model is gone
+  after the answer, memory pressure is the cause and the fix is likely a Deck setting rather than plugin code.
+  No pinned questions needed. Row **KB-SPEED-02**.
 - ★★ `[KB]` **The new answer shape needs a read on the device** — **VERIFY, shipped 2026-09-07.** A Strategy
   answer about a named thing now gives the note's advice first and the menu after, instead of a short bit of
-  orientation first. Measured off the device only, on the PC — see [Done](#done-for-v050) for the numbers.
-  Pin the sentences drafted for the row (confirm wording first) and read how the shipped shape sounds on the
-  narrow column. Row **KB-ANSWER-03** in [testing.md](testing.md).
+  orientation first. Measured off the device only: it keeps more of what its note said and hides spoilers
+  far more reliably, and is twelve words shorter at the same speed —
+  [numbers](roadmap-details.md#the-answer-shape-advice-first-menu-after). Three sentences are drafted and
+  checked against the library; they need the maintainer's word before pinning. Row **KB-ANSWER-03**.
 - ★★★ `[KB]` **DRG Survivor glossary terms** — **VERIFY, one touch tap owed.** Shipped 2026-08-28 and walked on device:
   underline, popup, D-pad reachability, B, one-press Up. Rows **DRG-GLOSSARY-01…04**.
   [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).
@@ -760,9 +775,6 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
 
 ### Next
 
-- `[KB]` **How often the "No tip for this" line actually appears is unmeasured on the device** — no stars,
-  added 2026-09-07. The line could not fire at all before this wave's floor landed; now it can, but nobody
-  has watched it happen on the Deck yet.
 - ★ `[KB]` **Measure answers with the character voice on** — **OPEN, switch already built.** The answer test's voice
   switch landed 6 September. What's still owed is one run with it turned on, which wave three's main measurement
   run includes — planned as wave three ([48](planning/48-kb-wave-three-session.md)).
@@ -888,18 +900,6 @@ the plugin itself, so nothing here needs a Deck check):**
   reply that said "thin the crowd" used to fail a check looking for the exact words "keep the crowd thin",
   and the same for "kill the mother" against "killing the mother". Answers that mean the same thing now
   count as right.
-
-**Shipped 2026-09-07 (knowledge base, wave three — the reply shape, taken after the maintainer read the
-numbers; a device read is still owed, see Deck check owed):**
-- ★★ `[KB]` **A Strategy answer about a named thing now gives the note's advice first, then the menu** —
-  before, a reply like this opened with a short bit of orientation and then offered the menu; now it gives
-  the note's own advice first and offers the same menu after. Measured on 61 questions, three runs each,
-  both shapes on the same build with the same checks: the answer keeps more of what its note said (76.6%
-  to 79.5%), hides spoilers when it should far more often (77.8% to 88.9%), comes out clean on all three
-  runs more often (60.7% to 67.2%), and is twelve words shorter (103 to 91) at the same speed. One thing
-  got worse — replies that contradict their own note, 94.4% down to 90.7% — but that is one extra
-  question, not a spread, and both failing questions are the Pikmin 2 day limit, already an open problem
-  either way. Row **KB-ANSWER-03**.
 
 **Accepted, not fixed, 2026-09-07:**
 - ★ `[focus]` **ACCEPTED 2026-09-07 — the ring can land on a spot half hidden behind the Copy or Retry icon** —

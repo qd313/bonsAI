@@ -805,13 +805,12 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   screen when I start the game"*. The word "crash" is deliberately classed as too weak to route a question on its own;
   that holds with a game running and not with nothing running. Next step: a floor under the tip search so it can say
   none fit, plus a "no tip for this" line. (D81, D85) Planned as wave three ([48](planning/48-kb-wave-three-session.md)).
-- ★★★ `[KB]` **Follow-ups remember** — **PARTIAL, step one shipped 2026-09-07 and read on the device the same
-  evening.** *"What about the second phase?"* now carries the thing you were just asking about into the search. **The
-  search half works**: on the device, the right boss's note moved from third place to first once the memory was in.
-  **The answer half does not**: the reply named a different boss, because a note that reads more like an answer to
-  "second phase" was still attached one place below it. Ranking the right note first is not enough on its own. A call
-  is waiting for the maintainer on how to finish this, and it is being written up. Carrying chat history, trimmed to
-  the window, is still the second step. (D47) Evidence `runs/plan48-R4-followup-memory.json`.
+- ★★★ `[KB]` **Follow-ups remember, but the answer is still about the wrong boss** — **PARTIAL, measured
+  2026-09-12, a call is waiting for you.** Ask about a boss, then *"what about its second phase"*. The looking-up
+  half works and is confirmed on the Deck. The answering half does not: across three games and nine tries it named
+  the right boss **not once**. Telling the model which boss the question follows on from gets it right 4 times in 9,
+  and never on DOOM Eternal, where the small model fails even when handed only the correct note. Options, numbers
+  and a recommendation are in the decisions file under D98. Evidence `runs/plan48-followup-shapes.json`. (D47)
 - ★★★ `[KB]` **Spoiler coverage as a tiered setting** — **OPEN, tiers confirmed 2026-09-01.** Strict fences bosses, endings
   and chapters; default fences only named story beats and endings; open fences nothing you asked about. Naming a boss still
   unlocks it in every tier. Needs the settings plumbing, a prompt per tier measured on the answer test, a control with a

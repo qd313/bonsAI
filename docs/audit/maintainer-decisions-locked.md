@@ -4902,7 +4902,7 @@ when it comes back.
 - A confirmation step before a spoken "go on" reveals a spoiler. The word is the confirmation.
 - Buying a headset now. Nothing in the next two steps needs one.
 
-### D98 — OPEN, raised 2026-09-12 — Follow-up questions: the right note is found and the wrong one is still answered
+### D98 — OPEN, raised and measured 2026-09-12 — Follow-up questions: the right note is found and the wrong one is still answered
 
 **Raised** by the device check on 2026-09-07 that closed out wave three's follow-up work
 ([planning/48-kb-wave-three-session.md](../planning/48-kb-wave-three-session.md) § 8, row W3-R4).
@@ -4962,10 +4962,60 @@ about the right boss. The answer test cannot do two-turn questions today, so thi
 day of work before any of the options above are started, and it is the only way to avoid shipping a
 guess to a device row that already half-failed once.
 
-#### The lean, if the maintainer wants one
+#### Measured 2026-09-12, off the device, on the maintainer's "measure it" instruction
 
-**Measure first, then option 1.** Telling the model what the question is about is the smaller change
-of the two real fixes, it cannot thin an answer out, and it leaves spoilers exactly as they are.
-Option 2 trades one failure for a quieter one — a reply about the right boss that does not have the
-material to answer the question. But the device already showed a guess here can be wrong, so the
-measuring day is worth it before either.
+Three boss-then-follow-up pairs from three games, three runs each, with the Deck's own answering model
+and the library that ships. Every one of the 27 replies was read and judged by hand, and they are all
+in `runs/plan48-followup-shapes.json` so the calls can be checked.
+
+| | Answered about the right boss | Words per reply | Seconds |
+|---|---|---|---|
+| Today, as it ships | **0 of 9** | 87 | 1.24 |
+| Tell the model the subject | **4 of 9** | 44 | 0.94 |
+| Narrow the notes to that subject | 2 of 9, and neither named the boss | 65 | 1.06 |
+
+**The first row is the finding nobody expected.** Today this does not "often" get the wrong boss. Across
+three games and nine tries it got the right one **not once**. The feature that shipped puts the right
+note first and the reply is still about something else, every time.
+
+**Broken down by game, telling the model the subject:**
+
+| Game | Right, out of 3 |
+|---|---|
+| Deep Rock Galactic: Survivor | 2 |
+| Ocarina of Time | 2 |
+| DOOM Eternal | 0 |
+
+**DOOM Eternal is its own finding, and it limits what any of this can buy.** It failed every way that was
+tried — including being handed only the one correct note and nothing else to be confused by. The small
+model simply never connected "second phase" to that boss's note. No amount of better searching or better
+wording fixes that one; it is the model reading the note.
+
+**Set DOOM Eternal aside and telling the model the subject gets it right 4 times in 6** on the games where
+the model can do the job at all. Against never.
+
+**One side effect worth knowing before deciding:** telling the model the subject **halves the reply**, 87
+words down to 44, and it comes back a little faster. Shorter is usually better on a 300-pixel column, but
+it is a visible change to every follow-up answer, not just the wrong ones.
+
+**Narrowing the notes is out.** It scored worse, and its two near-misses got the facts right without ever
+naming the boss, which is not what a person asked for. The idea that the rival note was the problem turns
+out to be only half true: with the rival gone the model still did not reliably answer about the right one.
+
+**One thing that never failed:** in all 27 tries, under every approach, the right note was attached and
+available to the model. The searching half of this feature works. The reading half is where it goes wrong.
+
+#### The lean, now that it is measured
+
+**Ship "tell the model the subject", and say plainly that it is a partial fix.** It takes a feature that is
+wrong every single time to right about two times in three where the model is capable at all, it costs
+nothing extra, it never removes a usable note, and it leaves spoilers exactly as they are. It is also the
+smaller of the two changes.
+
+**But do not call it fixed.** Four in nine is not a feature a person can rely on, and one game in three is
+beyond reach of anything on the search side. If the standard is "a follow-up answers about the thing you
+just asked about", that standard needs a bigger answering model, not more work here.
+
+**Untried, if neither is taken:** put the remembered name into the words the model reads, so it sees "what
+about the glyphid dreadnought's second phase" while the person still sees what they typed. That is a
+stronger version of telling it the subject and was not measured.

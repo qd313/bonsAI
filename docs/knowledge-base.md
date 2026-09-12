@@ -534,8 +534,9 @@ Nobody had ever written down how long a game question is allowed to take. So whe
 it only got noticed because one QA row happened to have a number written next to it to compare
 against. This section writes two numbers down, with a game running: how long it takes to search
 the notes, and how long until the first word of an answer appears — so the next slowdown fails a
-check instead of being caught by luck. `scripts/probe_deck_kb_retrieval.py` prints pass or
-over-budget against both.
+check instead of being caught by luck. `scripts/probe_deck_kb_retrieval.py` prints pass, over
+budget, or not verified against the search-time number (see below for what that third state
+means); it prints pass or over-budget against the first-word number, timed by hand.
 
 **Searching the notes.** In Strategy or Expert mode, where the meaning search runs, this has been
 measured twice on the Deck, both times with Deep Rock Galactic: Survivor running and the same
@@ -562,6 +563,23 @@ milliseconds of each other, the third no faster than the first. In the second, t
 of the three. Two separate readings, on two different evenings, both without a fast later
 question, is enough to say the Deck pays this cost on every search — the budget is written for
 that, not for a warm-up that only shows up on a different machine.
+
+**The check itself passed while a real question failed (2026-09-07).** Run on the device right
+after the readings above, the probe read 23–38 milliseconds for the same search and printed PASS;
+a real question, minutes apart on the same Deck, took 1067 milliseconds for that same step and
+would have printed OVER BUDGET (`runs/plan48-R6-time-budget.json`). The cause was the order the
+reading was taken in. A real question always has the chat model finish answering the *previous*
+question right before the notes are searched for this one; the probe never asked the chat model
+anything, so its reading skipped whatever that leaves behind. **The fix is not a fresh process per
+reading** — the same evidence file shows two separate probe runs both reading fast, so a fresh
+process was never the difference. Instead, `scripts/probe_deck_kb_retrieval.py --with-chat-before-search`
+now runs one short, throwaway reply from the chat model — the one named first in the Deck's own
+saved model order — immediately before it times the search, so the reading pays the same cost a
+real question does. That costs real time and memory on the Deck, so it is off by default. **A
+reading taken without that flag can no longer print a bare PASS**: it prints NOT VERIFIED instead,
+saying plainly that it did not reproduce a real question's order and cannot be read as the device
+being within budget. An OVER BUDGET reading is left alone either way, with or without the flag,
+because it is already the worse news.
 
 **Time to the first word of an answer.** This figure is not pinned down the way the search time
 is. The only whole-reply reading with a game running is 69 seconds, which tripped the app's own

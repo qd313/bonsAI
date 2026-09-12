@@ -92,6 +92,80 @@ class SearchTimeVerdictTests(unittest.TestCase):
         )
 
 
+class RealAskSearchVerdictTests(unittest.TestCase):
+    """runs/plan48-R6-time-budget.json: the probe read 23-38 ms and printed PASS while a real Ask
+    on the same Deck, minutes apart, read 1067 ms for the same step. The fault was order: a real
+    Ask always runs the chat model for the previous question right before the embedding call for
+    the next one, and the probe never did. `real_ask_search_verdict` is the wrapper that refuses
+    to print a bare PASS for a reading that did not reproduce that order."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.probe = _load_probe_module()
+
+    def test_verified_pass_stays_a_plain_pass(self):
+        # Same 850.0 ms reading as the plain PASS test above, but taken with a chat call first.
+        verdict = self.probe.real_ask_search_verdict(850.0, "strategy", chat_ran_first=True)
+        self.assertTrue(verdict.startswith("PASS"), verdict)
+        self.assertNotIn("NOT VERIFIED", verdict)
+
+    def test_unverified_pass_is_downgraded_to_not_verified(self):
+        # The exact fault in the evidence file: a fast reading with no chat call first must not
+        # read as a bare PASS.
+        verdict = self.probe.real_ask_search_verdict(25.0, "strategy", chat_ran_first=False)
+        self.assertTrue(verdict.startswith("NOT VERIFIED"), verdict)
+        self.assertIn("cannot clear the device", verdict)
+
+    def test_unverified_over_budget_is_not_softened(self):
+        # An unverified reading that is already OVER BUDGET is still the worse news either way —
+        # it must not be relabelled as merely unverified.
+        verdict = self.probe.real_ask_search_verdict(1230.22, "strategy", chat_ran_first=False)
+        self.assertTrue(verdict.startswith("OVER BUDGET"), verdict)
+
+    def test_no_search_ran_stays_plain_pass_regardless_of_chat_ran_first(self):
+        # Whether the meaning search ran at all is a fact about this reading, not about what ran
+        # before it, so it is never downgraded.
+        verdict = self.probe.real_ask_search_verdict(0.0, "strategy", chat_ran_first=False)
+        self.assertEqual(verdict, self.probe.search_time_verdict(0.0, "strategy"))
+
+    def test_speed_mode_over_budget_is_unaffected_by_chat_ran_first(self):
+        verdict_a = self.probe.real_ask_search_verdict(1140.40, "speed", chat_ran_first=False)
+        verdict_b = self.probe.real_ask_search_verdict(1140.40, "speed", chat_ran_first=True)
+        self.assertEqual(verdict_a, verdict_b)
+        self.assertTrue(verdict_a.startswith("OVER BUDGET"), verdict_a)
+
+
+class AskModelFromSettingsTests(unittest.TestCase):
+    """The chat call `--with-chat-before-search` makes must use the model a real Ask would try
+    first, read from the Deck's own settings — never a hard-coded tag."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.probe = _load_probe_module()
+
+    def test_reads_first_entry_of_the_saved_try_order(self):
+        settings = {"text_model_routing_order": ["qwen2.5:7b", "gemma4:e2b-it-qat"]}
+        self.assertEqual(self.probe.ask_model_from_settings(settings), "qwen2.5:7b")
+
+    def test_skips_blank_entries(self):
+        settings = {"text_model_routing_order": ["  ", "gemma4:e2b-it-qat"]}
+        self.assertEqual(self.probe.ask_model_from_settings(settings), "gemma4:e2b-it-qat")
+
+    def test_falls_back_when_no_saved_order_exists(self):
+        # A fresh install has no saved try order yet.
+        self.assertEqual(
+            self.probe.ask_model_from_settings({}),
+            self.probe.DEFAULT_ASK_MODEL_FALLBACK,
+        )
+
+    def test_falls_back_when_saved_order_is_not_a_list(self):
+        settings = {"text_model_routing_order": "gemma4:e2b-it-qat"}
+        self.assertEqual(
+            self.probe.ask_model_from_settings(settings),
+            self.probe.DEFAULT_ASK_MODEL_FALLBACK,
+        )
+
+
 class FirstWordVerdictTests(unittest.TestCase):
     """No clean on-device reading of just this figure exists yet (see the doc section) — the
     budget borrows the app's own existing slow-reply warning, 60 seconds, as a stand-in."""

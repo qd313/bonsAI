@@ -17,11 +17,22 @@ Does not: Judge with a second model, touch the Deck, or write settings anywhere 
           work directory. Sampling is stochastic at the shipped temperature, so it runs each case
           several times and reports rates, never a single verdict.
 
+Two-turn pairs (plan 48, D98): ``--pairs`` runs the fixture's ``followup_pairs`` instead of
+``cases`` -- a first question, then a bare follow-up, asked in order against the same process, so
+the follow-up sees whatever the plugin's own follow-up memory (kb_followup_memory) remembered from
+the turn before. ``--followup-shape`` selects a measurement-only fix for the bug that memory alone
+does not close (the right note ranks first, but a better-matching wrong note is still in the pile
+and the model writes about that instead): ``tell_subject`` adds one sentence to the prompt naming
+the carried-over subject; ``narrow_notes`` drops every attached card but that subject's own.
+Neither is shipped -- ``baseline`` (the default) is exactly today's code and is the third column
+either shape is measured against.
+
 Usage:
   python scripts/eval_kb_answers.py                          # every case, 3 samples, baseline prompt
   python scripts/eval_kb_answers.py --only A-DRG-01 --samples 1
   python scripts/eval_kb_answers.py --label after-w4         # report suffix for a before/after pair
   python scripts/eval_kb_answers.py --no-write-report        # console only
+  python scripts/eval_kb_answers.py --pairs --followup-shape tell_subject --samples 3
 
 Needs: Ollama on this PC with the Deck's chat model and ``nomic-embed-text`` pulled, and a built
 corpus at --corpus (``python scripts/build_rag_db.py --seed --out ./build/knowledge-base``).
@@ -40,7 +51,7 @@ import time
 import types
 import urllib.error
 import urllib.request
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from datetime import date
 from pathlib import Path
 from typing import Any, Callable, Optional
@@ -388,6 +399,85 @@ def load_fixture(path: Path, only: Optional[set[str]]) -> list[Case]:
     return cases
 
 
+# --- follow-up pairs: a first question, then a bare follow-up (plan 48 D98) --------------------
+#
+# The fixture's ``cases`` list is one question each, scored in isolation -- nothing before this
+# carried a second, dependent turn against the same session. A follow-up bug can only be measured
+# with two turns asked in order: name a boss, then ask a bare "what about its second phase" and
+# see what the *second* reply is about. ``FollowupPair`` is that: an ordered list of turns run
+# against the same process (module-level follow-up memory, kb_followup_memory, is what carries
+# state between them -- exactly what a real two-turn Ask does; nothing here re-implements it).
+#
+# Deliberately a separate top-level fixture key (``followup_pairs``) and a separate dataclass from
+# ``Case`` rather than folding "turns" into ``Case`` itself: ``Case`` is depended on by its own
+# shape (id/app_id/.../note, one turn) by both ``load_fixture`` and the harness plumbing tests in
+# tests/test_eval_kb_answers.py, and changing it would touch code this lane's brief does not list.
+# The existing 61 single-question cases run through the untouched ``Case``/``load_fixture``/
+# ``run_sample`` path and are unaffected by anything below.
+
+
+@dataclass
+class FollowupTurn:
+    question: str
+    expect_card: Optional[str]
+    must_mention: list[list[str]]
+    must_not_say: list[list[str]]
+    expect_fence: Optional[bool]
+    expect_branches: Optional[bool]
+    expect_attached: Optional[bool]
+    note: str = ""
+
+
+@dataclass
+class FollowupPair:
+    id: str
+    app_id: str
+    app_name: str
+    ask_mode: str
+    turns: list[FollowupTurn]
+    note: str = ""
+
+
+def _parse_followup_turn(row: dict) -> FollowupTurn:
+    return FollowupTurn(
+        question=str(row.get("question") or ""),
+        expect_card=row.get("expect_card") or None,
+        must_mention=[[str(a) for a in group] for group in (row.get("must_mention") or [])],
+        must_not_say=_parse_must_not_say(row.get("must_not_say")),
+        expect_fence=row.get("expect_fence"),
+        expect_branches=row.get("expect_branches"),
+        expect_attached=row.get("expect_attached"),
+        note=str(row.get("note") or ""),
+    )
+
+
+def load_followup_pairs(path: Path, only: Optional[set[str]]) -> list[FollowupPair]:
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    pairs: list[FollowupPair] = []
+    for row in raw.get("followup_pairs") or []:
+        pid = str(row.get("id") or "")
+        if only and pid not in only:
+            continue
+        turns_raw = list(row.get("turns") or [])
+        if len(turns_raw) < 2:
+            raise SystemExit(f"followup pair {pid!r} needs at least 2 turns, has {len(turns_raw)}")
+        pairs.append(
+            FollowupPair(
+                id=pid,
+                app_id=str(row.get("app_id") or ""),
+                app_name=str(row.get("app_name") or ""),
+                ask_mode=str(row.get("ask_mode") or "strategy"),
+                turns=[_parse_followup_turn(t) for t in turns_raw],
+                note=str(row.get("note") or ""),
+            )
+        )
+    if only:
+        missing = only - {p.id for p in pairs}
+        if missing:
+            raise SystemExit(f"unknown followup pair id(s): {', '.join(sorted(missing))}")
+    return pairs
+
+
 # --- tolerant fact/claim matching (plan 48, D86/D88) ------------------------------------------
 #
 # The old check passed a must_mention/must_not_say alternative only when it appeared as an exact
@@ -629,6 +719,11 @@ class SampleResult:
     judge_all_facts_stated: Optional[bool] = None
     judge_error: str = ""
     judge_elapsed_s: Optional[float] = None
+    # Follow-up pairs only (plan 48, D98 measurement): whether kb_followup_memory actually added
+    # the remembered subject to this turn's search words, and what that subject was. False/"" on
+    # every ordinary single-question case -- these are never read by any check or by all_ok.
+    followup_used: bool = False
+    followup_subject: str = ""
 
     @property
     def all_ok(self) -> bool:
@@ -654,10 +749,20 @@ def _card_short_names(headers: list[str]) -> list[str]:
     return out
 
 
-async def run_sample(
+async def run_turn(
     plugin: Any,
-    case: Case,
     *,
+    case_id: str,
+    app_id: str,
+    app_name: str,
+    ask_mode: str,
+    question: str,
+    expect_card: Optional[str],
+    must_mention: list[list[str]],
+    must_not_say: list[list[str]],
+    expect_fence: Optional[bool],
+    expect_branches: Optional[bool],
+    expect_attached: Optional[bool],
     sample_idx: int,
     ollama_base: str,
     retrieval_log: list[Any],
@@ -666,6 +771,15 @@ async def run_sample(
     run_game_ai_request: Callable[..., Any],
     judge_model: str = "",
 ) -> SampleResult:
+    """Run one Ask turn through the real pipeline and score it against its own expectations.
+
+    This is the primitive both a single-question ``Case`` (via ``run_sample`` below) and one turn
+    of a ``FollowupPair`` (via ``run_followup_pair``) go through -- the same pipeline call, the
+    same six checks, the same judge hook. A pair's second turn runs in the same process right
+    after its first with nothing reset in between (unless the caller resets it), so module-level
+    state such as ``kb_followup_memory`` carries forward exactly as it does across two real Asks
+    in one chat session.
+    """
     del retrieval_log[:]
     log_start = len(capture.records)
     snapshots: list[dict] = []
@@ -680,12 +794,12 @@ async def run_sample(
     try:
         result = await run_game_ai_request(
             plugin,
-            case.question,
+            question,
             ollama_base,
-            case.app_id,
-            case.app_name,
+            app_id,
+            app_name,
             None,
-            case.ask_mode,
+            ask_mode,
         )
         error = ""
     except Exception as exc:  # the pipeline swallows its own errors; this is harness breakage
@@ -706,22 +820,22 @@ async def run_sample(
         cards = _card_short_names(kb_card_names(note_text))
 
     card_ok: Optional[bool] = None
-    if case.expect_card:
-        want = _norm(case.expect_card)
+    if expect_card:
+        want = _norm(expect_card)
         card_ok = any(want == _norm(c) for c in cards)
     attached_ok: Optional[bool] = None
-    if case.expect_attached is not None:
-        attached_ok = kb_attached == bool(case.expect_attached)
+    if expect_attached is not None:
+        attached_ok = kb_attached == bool(expect_attached)
 
-    mention_hits = [fact_group_hit(reply, group) for group in case.must_mention]
-    mention_ok = all(mention_hits) if case.must_mention else None
-    notsay_hits = [" / ".join(group) for group in case.must_not_say if claim_group_hit(reply, group)]
-    notsay_ok = (not notsay_hits) if case.must_not_say else None
+    mention_hits = [fact_group_hit(reply, group) for group in must_mention]
+    mention_ok = all(mention_hits) if must_mention else None
+    notsay_hits = [" / ".join(group) for group in must_not_say if claim_group_hit(reply, group)]
+    notsay_ok = (not notsay_hits) if must_not_say else None
 
     fence_present = bool(SPOILER_FENCE_RE.search(reply))
-    fence_ok = None if case.expect_fence is None else (fence_present == bool(case.expect_fence))
+    fence_ok = None if expect_fence is None else (fence_present == bool(expect_fence))
     branches_present = isinstance(result.get("strategy_guide_branches"), dict)
-    branches_ok = None if case.expect_branches is None else (branches_present == bool(case.expect_branches))
+    branches_ok = None if expect_branches is None else (branches_present == bool(expect_branches))
 
     if not success:
         mention_ok = notsay_ok = fence_ok = branches_ok = None
@@ -766,7 +880,7 @@ async def run_sample(
         # No warning fired: estimate from the same messages shape ollama_service scores, so the
         # column still means something on a run that comfortably fits the window.
         prompt_tokens_est = estimate_prompt_tokens(
-            [{"role": "system", "content": system_prompt}, {"role": "user", "content": case.question}]
+            [{"role": "system", "content": system_prompt}, {"role": "user", "content": question}]
         )
 
     judge_contradicts: Optional[bool] = None
@@ -776,17 +890,17 @@ async def run_sample(
     if judge_model and success and note_text:
         jt0 = time.perf_counter()
         try:
-            judged = call_judge(ollama_base, judge_model, note_text, reply, case.must_mention)
+            judged = call_judge(ollama_base, judge_model, note_text, reply, must_mention)
             judge_contradicts = judged["contradicts_note"]
             facts = judged["facts_stated"]
-            if case.must_mention and len(facts) == len(case.must_mention):
+            if must_mention and len(facts) == len(must_mention):
                 judge_all_facts_stated = all(facts)
         except Exception as exc:  # a judge hiccup is reported, never scored
             judge_error = f"{type(exc).__name__}: {exc}"
         judge_elapsed_s = round(time.perf_counter() - jt0, 2)
 
     return SampleResult(
-        case_id=case.id,
+        case_id=case_id,
         sample=sample_idx,
         success=success,
         elapsed_s=elapsed,
@@ -816,6 +930,215 @@ async def run_sample(
         judge_error=judge_error,
         judge_elapsed_s=judge_elapsed_s,
     )
+
+
+async def run_sample(
+    plugin: Any,
+    case: Case,
+    *,
+    sample_idx: int,
+    ollama_base: str,
+    retrieval_log: list[Any],
+    capture: _ListHandler,
+    kb_card_names: Callable[[str], list[str]],
+    run_game_ai_request: Callable[..., Any],
+    judge_model: str = "",
+) -> SampleResult:
+    """Unchanged signature and behaviour: a thin call-through to ``run_turn`` with this case's own
+    fields. Existing single-question cases run this exact path, byte-identically to before
+    ``run_turn`` was split out."""
+    return await run_turn(
+        plugin,
+        case_id=case.id,
+        app_id=case.app_id,
+        app_name=case.app_name,
+        ask_mode=case.ask_mode,
+        question=case.question,
+        expect_card=case.expect_card,
+        must_mention=case.must_mention,
+        must_not_say=case.must_not_say,
+        expect_fence=case.expect_fence,
+        expect_branches=case.expect_branches,
+        expect_attached=case.expect_attached,
+        sample_idx=sample_idx,
+        ollama_base=ollama_base,
+        retrieval_log=retrieval_log,
+        capture=capture,
+        kb_card_names=kb_card_names,
+        run_game_ai_request=run_game_ai_request,
+        judge_model=judge_model,
+    )
+
+
+# --- follow-up shape experiments: measurement-only, never shipped (plan 48, D98) ---------------
+#
+# D98 found that ranking the right note first is not enough while a better-matching *wrong* note
+# is still in the pile -- the search half of follow-up memory (kb_followup_memory, shipped) fixed
+# the ranking, but the model still sometimes writes about the sibling note that reads more like
+# what was asked. Two candidate fixes, both measured here, neither shipped:
+#
+#   - "tell_subject" (option 1): the built prompt gets one added sentence naming which thing the
+#     question is carrying on from. The notes attached are exactly what today's shipped code
+#     attaches -- nothing about retrieval changes.
+#   - "narrow_notes" (option 2): the attached notes are narrowed, after retrieval, to only the
+#     cards whose title matches the remembered subject -- so a rival note is never in the prompt
+#     to begin with. "Only that subject" is defined as an exact (case-insensitive) title match; a
+#     subject with no matching card in this turn's pool gets nothing, not a fallback to the
+#     unfiltered set, because attaching an unrelated card is the failure this shape exists to rule
+#     out. That is also this shape's cost: a genuinely two-card subject or a near-miss title loses
+#     everything instead of keeping the close note.
+#
+# Both are wired through the same monkeypatch machinery the ``--variant``/``--kb-placement`` hooks
+# already use above -- neither touches a production file. Selected by ``--followup-shape``;
+# "baseline" (the default) installs nothing extra and is exactly today's shipped code, which is
+# the third column this flag exists to measure against.
+
+_KB_BLOCK_SENTINEL_MARKER = "--- End local knowledge base ---"  # knowledge_base_service._BLOCK_SENTINEL
+
+
+@dataclass
+class _FollowupCapture:
+    """What the shipped follow-up memory (kb_followup_memory) actually did on the turn just run,
+    captured mid-call so the shape hooks -- which only ever see the finished prompt text or the
+    retrieval result -- know whether to act. Reset before every turn; see ``_reset_followup_capture``.
+    """
+
+    remembered_subject: str = ""
+    is_followup_turn: bool = False
+
+
+_followup_capture = _FollowupCapture()
+
+
+def _reset_followup_capture() -> None:
+    _followup_capture.remembered_subject = ""
+    _followup_capture.is_followup_turn = False
+
+
+def _wrap_augment_search_words_for_capture(real_fn: Callable[..., str]) -> Callable[..., str]:
+    """Records what the real ``kb_followup_memory.augment_search_words`` did, for the other shape
+    hooks to read -- never changes what it returns. Installed for every ``--followup-shape``,
+    including "baseline", purely as a diagnostic: it is how a report can say whether a given turn
+    actually used the remembered subject at all, independent of which shape (if any) acts on it.
+    """
+
+    def _wrapped(question_for_retrieval: str, *, remembered_subject: str) -> str:
+        out = real_fn(question_for_retrieval, remembered_subject=remembered_subject)
+        if out != question_for_retrieval:
+            _followup_capture.remembered_subject = str(remembered_subject or "").strip()
+            _followup_capture.is_followup_turn = True
+        return out
+
+    return _wrapped
+
+
+_FOLLOWUP_SUBJECT_NOTE_TEMPLATE = (
+    "\nFOLLOW-UP CONTEXT (a system reminder, not something the user typed): this question "
+    'carries on from the previous one, which was about "{subject}". Answer this one about '
+    "{subject} specifically. This reminder alone is not the user naming {subject} themselves.\n"
+)
+
+
+def _variant_tell_followup_subject(prompt: str) -> str:
+    """Shape A ("tell_subject"): add one sentence naming the carried-over subject, right after the
+    knowledge-base block header, on a turn ``_wrap_augment_search_words_for_capture`` actually saw
+    use the remembered subject. A no-op on any other turn, including every turn under every other
+    ``--followup-shape`` value, since only "tell_subject" installs this as a variant."""
+    if not _followup_capture.is_followup_turn or not _followup_capture.remembered_subject:
+        return prompt
+    if _KB_BLOCK_HEADER_MARKER not in prompt:
+        return prompt
+    note = _FOLLOWUP_SUBJECT_NOTE_TEMPLATE.format(subject=_followup_capture.remembered_subject)
+    return prompt.replace(_KB_BLOCK_HEADER_MARKER, _KB_BLOCK_HEADER_MARKER + note, 1)
+
+
+def _narrow_text_block_to_subject(text_block: str, subject: str) -> tuple[str, list[str]]:
+    """Shape B ("narrow_notes"): keep only the card(s) in ``text_block`` whose title equals
+    ``subject`` (case-insensitive), dropping every other card. Returns the rebuilt block and the
+    list of card titles kept.
+
+    Unchanged when ``subject`` is blank or the block has no card headers at all (a fallback/genre
+    card, which is not "about" anything to narrow to). Collapses to ``("", [])`` -- attach nothing
+    -- when the block has cards but none of them match: that is the shape's whole point (a rival
+    note must never survive), and the cost is explicit in the module docstring above.
+    """
+    subj = (subject or "").strip().lower()
+    if not subj:
+        return text_block, []
+    header_re = re.compile(r"\n(\[[^/\]]+/\s*[^:\]]+:\s*([^\]]+)\]\s*\(trust:[^)]*\))")
+    matches = list(header_re.finditer(text_block))
+    if not matches:
+        return text_block, []
+    sentinel_idx = text_block.find("\n" + _KB_BLOCK_SENTINEL_MARKER)
+    end_of_cards = sentinel_idx if sentinel_idx != -1 else len(text_block)
+    chunks: list[tuple[str, str]] = []
+    for i, m in enumerate(matches):
+        name = m.group(2).strip()
+        start = m.start()
+        stop = matches[i + 1].start() if i + 1 < len(matches) else end_of_cards
+        chunks.append((name, text_block[start:stop]))
+    kept = [(name, body) for name, body in chunks if name.strip().lower() == subj]
+    if not kept:
+        return "", []
+    preamble = text_block[: matches[0].start()]  # "--- Local knowledge base ... ---\nDomain: ..."
+    rebuilt = preamble + "".join(body for _, body in kept) + "\n" + _KB_BLOCK_SENTINEL_MARKER
+    return rebuilt, [name for name, _ in kept]
+
+
+async def run_followup_pair(
+    plugin: Any,
+    pair: FollowupPair,
+    *,
+    sample_idx: int,
+    ollama_base: str,
+    retrieval_log: list[Any],
+    capture: _ListHandler,
+    kb_card_names: Callable[[str], list[str]],
+    run_game_ai_request: Callable[..., Any],
+    judge_model: str = "",
+) -> list[SampleResult]:
+    """Run every turn of one follow-up pair in order, in this process, against ``run_turn`` --
+    the same call a real two-turn Ask makes. Nothing here carries state between turns itself;
+    ``kb_followup_memory``'s own module-level memory is what does that, exactly as it does for two
+    real Asks in the same chat session. Memory is cleared before the first turn so one pair's
+    result never depends on what a previous pair, or a previous sample of this same pair, left
+    behind.
+
+    Two extra fields are stapled onto each returned ``SampleResult`` (``followup_used`` and
+    ``followup_subject``, both default off) so a report can tell "the memory fired on this turn"
+    apart from "it did not" without re-deriving it from the reply.
+    """
+    from backend.services import kb_followup_memory
+
+    kb_followup_memory.forget()
+    results: list[SampleResult] = []
+    for i, turn in enumerate(pair.turns, start=1):
+        _reset_followup_capture()
+        r = await run_turn(
+            plugin,
+            case_id=f"{pair.id}-T{i}",
+            app_id=pair.app_id,
+            app_name=pair.app_name,
+            ask_mode=pair.ask_mode,
+            question=turn.question,
+            expect_card=turn.expect_card,
+            must_mention=turn.must_mention,
+            must_not_say=turn.must_not_say,
+            expect_fence=turn.expect_fence,
+            expect_branches=turn.expect_branches,
+            expect_attached=turn.expect_attached,
+            sample_idx=sample_idx,
+            ollama_base=ollama_base,
+            retrieval_log=retrieval_log,
+            capture=capture,
+            kb_card_names=kb_card_names,
+            run_game_ai_request=run_game_ai_request,
+            judge_model=judge_model,
+        )
+        r.followup_used = _followup_capture.is_followup_turn
+        r.followup_subject = _followup_capture.remembered_subject
+        results.append(r)
+    return results
 
 
 # --- aggregation -----------------------------------------------------------------------------
@@ -1157,6 +1480,21 @@ def main() -> int:
     parser.add_argument("--label", default="", help="suffix for the report filename, e.g. after-w4")
     parser.add_argument("--write-report", action="store_true", default=True)
     parser.add_argument("--no-write-report", action="store_false", dest="write_report")
+    parser.add_argument(
+        "--pairs",
+        action="store_true",
+        help="run the fixture's followup_pairs instead of cases -- each pair's turns run in "
+        "order against the same session, so a bare follow-up sees whatever the turn before it "
+        "left remembered. See FollowupPair / run_followup_pair.",
+    )
+    parser.add_argument(
+        "--followup-shape",
+        default="baseline",
+        choices=("baseline", "tell_subject", "narrow_notes"),
+        help="D98 measurement only, never shipped: which follow-up fix (if any) is active on a "
+        "turn that uses the remembered subject. 'baseline' installs nothing extra and is exactly "
+        "today's shipped code.",
+    )
     args = parser.parse_args()
 
     try:
@@ -1172,6 +1510,17 @@ def main() -> int:
         return 2
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     corpus_version = str(manifest.get("version") or "?")
+
+    # Section count for the report header: same query the embed eval uses. Computed here (before
+    # both the cases and the --pairs path need it) rather than after loading cases, since --pairs
+    # skips that load entirely.
+    import sqlite3  # noqa: E402
+
+    with sqlite3.connect(str(db)) as conn:
+        try:
+            corpus_sections = conn.execute("SELECT COUNT(*) FROM sections").fetchone()[0]
+        except sqlite3.Error:
+            corpus_sections = "?"
 
     work_dir = args.work_dir.resolve()
     _decky, capture = install_fake_decky(work_dir)
@@ -1196,12 +1545,48 @@ def main() -> int:
 
     def _recording_retrieve(*a: Any, **kw: Any) -> Any:
         out = real_retrieve(*a, **kw)
+        # D98 measurement only (shape "narrow_notes"): drop every card but the remembered
+        # subject's own from a turn that actually used it. See _narrow_text_block_to_subject's
+        # docstring for what "only that subject" means and what it costs.
+        if (
+            args.followup_shape == "narrow_notes"
+            and _followup_capture.is_followup_turn
+            and _followup_capture.remembered_subject
+        ):
+            narrowed_text, kept_names = _narrow_text_block_to_subject(
+                out.text_block, _followup_capture.remembered_subject
+            )
+            if narrowed_text != out.text_block:
+                out = replace(
+                    out,
+                    text_block=narrowed_text,
+                    attached=bool(kept_names),
+                    notes=(f"{out.notes} narrowed_to_subject" if out.notes else "narrowed_to_subject"),
+                )
         retrieval_log.append(out)
         return out
 
     gar.retrieve_knowledge_context = _recording_retrieve
 
+    # Diagnostic only, every --followup-shape including "baseline": records whether a turn's own
+    # search words actually got the remembered subject appended, without ever changing them. See
+    # _wrap_augment_search_words_for_capture.
+    from backend.services import kb_followup_memory  # noqa: E402
+
+    kb_followup_memory.augment_search_words = _wrap_augment_search_words_for_capture(
+        kb_followup_memory.augment_search_words
+    )
+
     variant_fn = VARIANTS[args.variant] if args.variant != "baseline" else None
+    if args.followup_shape == "tell_subject":
+        # D98 measurement only (shape "tell_subject"): composed after any --variant, the same
+        # order --kb-placement's kwarg and --variant already run in (placement, then variant,
+        # then this).
+        _base_variant = variant_fn
+
+        def variant_fn(prompt: str, _base=_base_variant) -> str:  # type: ignore[no-redef]
+            return _variant_tell_followup_subject(_base(prompt) if _base is not None else prompt)
+
     if args.kb_placement != "early" or variant_fn is not None:
         plugin_main.build_system_prompt = _build_prompt_wrapper(
             plugin_main.build_system_prompt,
@@ -1209,20 +1594,75 @@ def main() -> int:
             variant_fn=variant_fn,
         )
 
+    if args.pairs:
+        only = {s.strip() for s in args.only.split(",") if s.strip()} or None
+        pairs = load_followup_pairs(args.fixture, only)
+        if not pairs:
+            print("no followup pairs selected", file=sys.stderr)
+            return 2
+        print(
+            f"corpus {corpus_version} ({corpus_sections} sections) · model {args.model} · "
+            f"followup-shape {args.followup_shape} · {len(pairs)} pairs × {args.samples} runs"
+        )
+        t_run = time.perf_counter()
+        pair_results: list[SampleResult] = []
+        for pi, pair in enumerate(pairs, 1):
+            for si in range(1, args.samples + 1):
+                turn_results = asyncio.run(
+                    run_followup_pair(
+                        plugin,
+                        pair,
+                        sample_idx=si,
+                        ollama_base=args.ollama,
+                        retrieval_log=retrieval_log,
+                        capture=capture,
+                        kb_card_names=kb_card_names,
+                        run_game_ai_request=gar.run_game_ai_request,
+                        judge_model=args.judge,
+                    )
+                )
+                pair_results.extend(turn_results)
+                for ti, r in enumerate(turn_results, 1):
+                    words = len(r.reply.split())
+                    print(
+                        f"[{pi:>2}/{len(pairs)}] {pair.id:<24} s{si} T{ti} {r.elapsed_s:>6.1f}s "
+                        f"cards={','.join(r.cards) or 'none'} words={words} "
+                        f"followup_used={r.followup_used} subject={r.followup_subject or '-'}"
+                    )
+        run_minutes = round((time.perf_counter() - t_run) / 60.0, 1)
+        print(f"\n{len(pairs)} pairs × {args.samples} runs, {run_minutes} min")
+
+        if args.write_report:
+            JSON_DIR.mkdir(parents=True, exist_ok=True)
+            stamp = date.today().isoformat()
+            suffix = f"-{args.label}" if args.label else ""
+            json_path = JSON_DIR / f"kb-followup-pairs-{stamp}{suffix}.json"
+            payload = {
+                "meta": {
+                    "date": stamp,
+                    "label": args.label,
+                    "model": args.model,
+                    "ollama": args.ollama,
+                    "corpus_version": corpus_version,
+                    "corpus_sections": corpus_sections,
+                    "followup_shape": args.followup_shape,
+                    "samples_per_pair": args.samples,
+                    "pairs": len(pairs),
+                    "run_minutes": run_minutes,
+                },
+                "turns": [
+                    {k: v for k, v in r.__dict__.items() if k != "system_prompt"} for r in pair_results
+                ],
+            }
+            json_path.write_text(json.dumps(payload, indent=1, ensure_ascii=False), encoding="utf-8")
+            print(f"Wrote {json_path}")
+        return 0
+
     only = {s.strip() for s in args.only.split(",") if s.strip()} or None
     cases = load_fixture(args.fixture, only)
     if not cases:
         print("no cases selected", file=sys.stderr)
         return 2
-
-    # Section count for the report header: same query the embed eval uses.
-    import sqlite3  # noqa: E402
-
-    with sqlite3.connect(str(db)) as conn:
-        try:
-            corpus_sections = conn.execute("SELECT COUNT(*) FROM sections").fetchone()[0]
-        except sqlite3.Error:
-            corpus_sections = "?"
 
     print(
         f"corpus {corpus_version} ({corpus_sections} sections) · model {args.model} · variant {args.variant} · "

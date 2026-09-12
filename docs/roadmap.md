@@ -560,18 +560,21 @@ wording someone imagined and miss the neighbour.
 
 *(Rewritten 2026-09-07 after wave two landed — [47](planning/47-kb-wave-two-session.md).)*
 
-**Wave three is planned as [48](planning/48-kb-wave-three-session.md) and waits for you to say "go".
-Wave two's own Deck evening runs first, now that the Deck is free.**
+**Wave three ran on 2026-09-07** ([48](planning/48-kb-wave-three-session.md)), after wave two's own Deck
+evening ran the same evening, once the Deck was free.
 
-1. **Fix the two ways the answer test lies.** Both filed below. One hid a reply that told someone the opposite of its
-   own note; the other counts a right answer wrong when it uses different words. Every answer number this project has
-   quoted rests on them, so nothing else should be decided from those numbers until this is done. Cheap.
-2. **Make the search test rebuild its copy of the library.** Filed below. Until then no search number can be trusted,
-   including the ones the held weight decision rests on.
-3. **Reaching the troubleshooting tips, properly this time.** Widening the words bought two questions out of 24. What is
-   missing is a way for the search to say *"none of these tips fit"* — without it, opening the gate wider attaches a
-   wrong tip, which is worse than nothing. That is now measured, not guessed; see the held entry below.
-4. **Then Next from the top** — answer-first tested both ways, spoiler tiers, follow-ups remembering.
+1. **Finish the device evening.** Three of wave three's checks never ran on the Deck at all, and two that
+   did run need doing again — one showed a reply naming the wrong boss, the other showed a speed check
+   that gives a false all-clear. [Plan 48](planning/48-kb-wave-three-session.md) § 8.
+2. **Fix the speed check.** It reports a healthy device on a fast reading it takes without ever writing an
+   answer, while a real question comes in well over the written budget. That is worse than no check, and
+   a fix is in progress.
+3. **A call is waiting for you, on follow-ups.** The search half now works on the device — it looks up the
+   right thing you were just asking about — but the answer can still be about something else. The options
+   for finishing it are being written up.
+4. **Work out why the note search has been getting slower since August.** About thirty per cent slower and
+   still climbing, with no explanation yet.
+5. **Then wave four** — writing more notes.
 
 **Wave two's own evening ran 2026-09-07** (rows **W2-R1** to **W2-R7** in
 [plan 47](planning/47-kb-wave-two-session.md) § 8; full results and bug write-ups above and below). **The last owed
@@ -744,6 +747,11 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   format gate, the relevance floor, follow-ups searching the user's words, transparency matching what the model got, and
   the Developer kill-switch. Either one evening with pinned test chips, or close them as superseded by the rows that
   passed this week. Rows **KB-VARIANT-01**, **KB-FLOOR-01**, **KB-FOLLOWUP-01**, **KB-TRANSPARENCY-01**, **KB-KILLSWITCH-01**.
+- ★★ `[KB]` **The new answer shape needs a read on the device** — **VERIFY, shipped 2026-09-07.** A Strategy
+  answer about a named thing now gives the note's advice first and the menu after, instead of a short bit of
+  orientation first. Measured off the device only, on the PC — see [Done](#done-for-v050) for the numbers.
+  Pin the sentences drafted for the row (confirm wording first) and read how the shipped shape sounds on the
+  narrow column. Row **KB-ANSWER-03** in [testing.md](testing.md).
 - ★★★ `[KB]` **DRG Survivor glossary terms** — **VERIFY, one touch tap owed.** Shipped 2026-08-28 and walked on device:
   underline, popup, D-pad reachability, B, one-press Up. Rows **DRG-GLOSSARY-01…04**.
   [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).
@@ -761,11 +769,6 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
 - ★★ `[KB]` **Prompt diet** — **OPEN, agreed 2026-09-01.** The model reads about nine tokens of rules for every token of
   knowledge. Drop the citation instruction (obeyed once in 89 asks, and the UI cannot show it), send screenshot rules only
   when an image is attached, put the cards next to the question. About a day, measured before and after on the answer test.
-- ★★ `[KB]` **Answer first, then the menu: test both shapes before deciding** — **OPEN, test decided 2026-09-05.** Today
-  a named question with a matching card gets a short orientation and the menu; the other shape gives the card's tactics
-  first and the same menu. PC first: an "answer first" variant on the answer test, the named-thing cases twice each way,
-  comparing facts kept, menu present and length. Then three pinned sentences on the Deck in both shapes for you to read.
-  Row **KB-ANSWER-03**. (D66) — planned as wave three ([48](planning/48-kb-wave-three-session.md)).
 - ★★ `[KB]` **"Not in my notes" line** — **OPEN, agreed 2026-09-01.** When a game question matches no card, one muted line
   built by code says the answer is general knowledge, so a person can tell notes from memory. Only on Strategy and Expert
   asks for a covered game; never when the library is off or the game is uncovered. **Wording settled 2026-09-07:**
@@ -885,6 +888,18 @@ the plugin itself, so nothing here needs a Deck check):**
   reply that said "thin the crowd" used to fail a check looking for the exact words "keep the crowd thin",
   and the same for "kill the mother" against "killing the mother". Answers that mean the same thing now
   count as right.
+
+**Shipped 2026-09-07 (knowledge base, wave three — the reply shape, taken after the maintainer read the
+numbers; a device read is still owed, see Deck check owed):**
+- ★★ `[KB]` **A Strategy answer about a named thing now gives the note's advice first, then the menu** —
+  before, a reply like this opened with a short bit of orientation and then offered the menu; now it gives
+  the note's own advice first and offers the same menu after. Measured on 61 questions, three runs each,
+  both shapes on the same build with the same checks: the answer keeps more of what its note said (76.6%
+  to 79.5%), hides spoilers when it should far more often (77.8% to 88.9%), comes out clean on all three
+  runs more often (60.7% to 67.2%), and is twelve words shorter (103 to 91) at the same speed. One thing
+  got worse — replies that contradict their own note, 94.4% down to 90.7% — but that is one extra
+  question, not a spread, and both failing questions are the Pikmin 2 day limit, already an open problem
+  either way. Row **KB-ANSWER-03**.
 
 **Accepted, not fixed, 2026-09-07:**
 - ★ `[focus]` **ACCEPTED 2026-09-07 — the ring can land on a spot half hidden behind the Copy or Retry icon** —

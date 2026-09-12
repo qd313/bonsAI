@@ -721,3 +721,22 @@ model already gets wrong". That topic is the same one the whole contradiction ch
 **Recommendation: take it, and fix the Pikmin notes either way.** The gain is broad and the loss is
 one known-bad topic that is already an open problem. But this is the maintainer's call, and nothing
 about the reply shape changes until they make it.
+
+### The late sitting, 2026-09-07
+
+The maintainer read the table above and took tactics-first the same evening; it shipped. Four of
+§ 8's device rows ran late that evening, before the rest of the Deck evening could be finished.
+
+- **W3-R1, install the point release: passed.** The corrected library installed from the plugin's
+  own button, and a Black Mesa question named the new version.
+- **W3-R4, follow-ups remember: half pass.** The pair actually asked was Deep Rock Galactic:
+  Survivor's Glyphid Dreadnought. The looking-up half works — the right boss's note moved from third
+  place to first once the memory was in. The answering half fails — the reply named a different
+  boss, because a better-matching wrong note was still attached one place below the right one.
+- **W3-R5, the corrected Black Mesa note: passed.** The reply said the current is constant, told the
+  player not to try to time it, and pointed at the wall switch that cuts the power.
+- **W3-R6, the time budget: failed.** The check itself gives a false all-clear — it read 23 to 38
+  thousandths of a second for the search and printed pass, while a real question on the same Deck in
+  the same sitting took 1.07 seconds for that same step and would have printed over budget.
+
+The rest of § 8 — W3-R2, W3-R3 and W3-R7 — did not run this evening.

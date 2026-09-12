@@ -719,6 +719,16 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   came back within 16 milliseconds of each other, no faster on the third than the first. Nobody knows why
   yet. There is now a written budget of one second and a check that prints over-budget, so it cannot
   creep up again unnoticed.
+  **The check itself was tried on the Deck 2026-09-07 (row W3-R6) and it fails.** It reports 23 to 38
+  thousandths of a second for the search, comfortably under budget, and prints pass — but a real question,
+  asked on the same Deck in the same sitting minutes apart, took 1.07 seconds for that same step and would
+  have printed over budget. Run twice more in separate processes, the check read about 25 thousandths both
+  times, so this is not a one-off warm-up. What differs is that the check never runs the chat model and a
+  real question does. So today the check would call a slow device healthy, which is worse than no check at
+  all. **A fix is in progress this session.** One idea for the cause, **untested**: the chat model and the
+  meaning-search model may be competing for memory on the Deck, so writing an answer pushes the
+  meaning-search model out and the next question has to load it back in. Evidence
+  `runs/plan48-R6-time-budget.json`.
 - ★★ `[KB]` **Four questions still get notes about the wrong subject** — **OPEN, three of the four now say so,
   found 2026-09-07.** Asking Black Mesa how to tame a horse, asking Portal 2 where to buy a house, and asking about
   a Hades boss that does not exist all still attach a note. The floor added this wave cannot catch these without
@@ -784,10 +794,13 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   screen when I start the game"*. The word "crash" is deliberately classed as too weak to route a question on its own;
   that holds with a game running and not with nothing running. Next step: a floor under the tip search so it can say
   none fit, plus a "no tip for this" line. (D81, D85) Planned as wave three ([48](planning/48-kb-wave-three-session.md)).
-- ★★★ `[KB]` **Follow-ups remember** — **OPEN, agreed 2026-09-01.** *"What about the second phase?"* should answer about the
-  boss you were just asking about; today the model gets only the newest message and the follow-up searches nothing. First
-  carry the previous turn's named thing into the search (a day); then chat history trimmed to the window (two more). (D47)
-  Step one — carrying the named thing into the search — is planned as wave three ([48](planning/48-kb-wave-three-session.md)).
+- ★★★ `[KB]` **Follow-ups remember** — **PARTIAL, step one shipped 2026-09-07 and read on the device the same
+  evening.** *"What about the second phase?"* now carries the thing you were just asking about into the search. **The
+  search half works**: on the device, the right boss's note moved from third place to first once the memory was in.
+  **The answer half does not**: the reply named a different boss, because a note that reads more like an answer to
+  "second phase" was still attached one place below it. Ranking the right note first is not enough on its own. A call
+  is waiting for the maintainer on how to finish this, and it is being written up. Carrying chat history, trimmed to
+  the window, is still the second step. (D47) Evidence `runs/plan48-R4-followup-memory.json`.
 - ★★★ `[KB]` **Spoiler coverage as a tiered setting** — **OPEN, tiers confirmed 2026-09-01.** Strict fences bosses, endings
   and chapters; default fences only named story beats and endings; open fences nothing you asked about. Naming a boss still
   unlocks it in every tier. Needs the settings plumbing, a prompt per tier measured on the answer test, a control with a

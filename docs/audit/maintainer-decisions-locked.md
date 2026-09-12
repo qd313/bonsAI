@@ -4901,3 +4901,71 @@ when it comes back.
 - A settings switch for each sound cue. One switch for the feature is enough; the tones are the feature.
 - A confirmation step before a spoken "go on" reveals a spoiler. The word is the confirmation.
 - Buying a headset now. Nothing in the next two steps needs one.
+
+### D98 — OPEN, raised 2026-09-12 — Follow-up questions: the right note is found and the wrong one is still answered
+
+**Raised** by the device check on 2026-09-07 that closed out wave three's follow-up work
+([planning/48-kb-wave-three-session.md](../planning/48-kb-wave-three-session.md) § 8, row W3-R4).
+Evidence `runs/plan48-R4-followup-memory.json`. This entry needs the maintainer's answer before the
+second half can be built; nothing is being built in the meantime.
+
+#### What happens today
+
+Deep Rock Galactic: Survivor running. Ask *"how do i beat the glyphid dreadnought"*, then ask
+*"what about its second phase"*.
+
+The looking-up half works, and works on the device: the right boss's note moves from third place to
+first once the plugin remembers what you just asked about. That is exactly what shipped and it holds.
+
+The answering half does not. The reply was about the Dreadnought Twins — a different boss. The
+plugin still hands the model three notes, and the wrong boss's note is second in the pile. Its
+content reads far more like a second phase than the right one does: health bars drifting apart, both
+bosses turning immune while they heal. So the model picked it and wrote about that.
+
+**The lesson, which decides the shape of any fix:** putting the right note first is not enough while
+a better-matching wrong note is still in the pile. More ranking will not fix this.
+
+#### One thing to know before reading the options
+
+The remembered subject is not always something the person typed. When a question names nothing the
+plugin remembers the name of the top note it attached instead. So any option that tells the model
+*"they are asking about X"* can be telling it about something the person never said out loud. That
+matters for spoilers: naming a boss is what unlocks that boss's spoilers today, so a remembered name
+must not count as naming it unless you want that too. Each option below says what it does about that.
+
+#### The options
+
+1. **Tell the model the subject, leave the notes alone.** The follow-up's instructions say which
+   thing the question is carrying on from. The person's question on screen is untouched, as it is
+   today. Cheapest of the three, about half a day. The remembered name would **not** count as
+   naming anything for spoiler purposes, so nothing gets unfenced that is not unfenced today.
+   The risk: when the memory is wrong, the model is now confidently wrong instead of
+   accidentally right — today a bare follow-up can still stumble onto the right note.
+2. **Narrow the notes.** A bare follow-up with a remembered subject attaches only that subject's
+   notes, so no rival note can win. About a day, because "only that subject" has to be defined —
+   a boss can have more than one note and a person's follow-up sometimes genuinely needs a
+   neighbouring one. The risk: a thinner answer. If the remembered note does not cover what was
+   asked, there is nothing else in the pile to fall back on.
+3. **Both.** Most likely to answer about the right thing, and the one shape where a failure cannot
+   be traced to which half caused it. About a day and a half. Against the repo's own rule of one
+   change at a time.
+4. **Leave it as it is.** The search half already helps on its own: the right note is at least
+   present and first, which it was not before. Costs nothing. The device row stays a half-pass and
+   the entry stays open.
+
+#### Measuring it rather than guessing
+
+None of the above can be settled by argument — it depends on which note the small model on the Deck
+reaches for. It **can** be measured off the device: the build machine has the Deck's own answering
+model, so three boss-then-follow-up pairs run twice under each option would say which shape answers
+about the right boss. The answer test cannot do two-turn questions today, so this costs roughly a
+day of work before any of the options above are started, and it is the only way to avoid shipping a
+guess to a device row that already half-failed once.
+
+#### The lean, if the maintainer wants one
+
+**Measure first, then option 1.** Telling the model what the question is about is the smaller change
+of the two real fixes, it cannot thin an answer out, and it leaves spoilers exactly as they are.
+Option 2 trades one failure for a quieter one — a reply about the right boss that does not have the
+material to answer the question. But the device already showed a guess here can be wrong, so the
+measuring day is worth it before either.

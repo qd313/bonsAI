@@ -1,0 +1,57 @@
+{
+  "probe": "probe_pc_embed_eviction.py",
+  "when": "2026-09-12T08:51:59+00:00",
+  "machine": "maintainer PC (Windows) -- NOT the Deck; see what_this_means",
+  "ollama_host": "http://127.0.0.1:11434",
+  "embed_model": "nomic-embed-text",
+  "ask_model": "gemma4:e2b-it-qat",
+  "steps": [
+    {
+      "step": "1. embed (cold)",
+      "loaded_before": [],
+      "ms": 1336.54,
+      "error": null,
+      "loaded_after": [
+        "nomic-embed-text:latest"
+      ]
+    },
+    {
+      "step": "2. embed (no chat between)",
+      "loaded_before": [
+        "nomic-embed-text:latest"
+      ],
+      "ms": 14.17,
+      "error": null,
+      "loaded_after": [
+        "nomic-embed-text:latest"
+      ]
+    },
+    {
+      "step": "3. chat generation",
+      "loaded_before": [
+        "nomic-embed-text:latest"
+      ],
+      "ms": 5963.23,
+      "error": null,
+      "loaded_after": [
+        "gemma4:e2b-it-qat",
+        "nomic-embed-text:latest"
+      ]
+    },
+    {
+      "step": "4. embed (after chat)",
+      "loaded_before": [
+        "gemma4:e2b-it-qat",
+        "nomic-embed-text:latest"
+      ],
+      "ms": 24.13,
+      "error": null,
+      "loaded_after": [
+        "nomic-embed-text:latest",
+        "gemma4:e2b-it-qat"
+      ]
+    }
+  ],
+  "looks_like_eviction_on_this_machine": false,
+  "what_this_means": "This checks one guess for why a Deck search is slow right after a question is answered: that answering pushes the note-search model out of memory, so the next search has to reload it. On this PC, step 2 (a repeat search with no answer in between) and step 4 (a search right after an answer) came out close together, so nothing here got pushed out of memory. This machine has far more memory than a Deck. A clean result here does not clear the Deck -- it likely just means this PC never runs low enough on memory to push anything out, which would itself explain why repeat questions are fast here and slow on the Deck. Nothing about the Deck is decided by this reading alone."
+}

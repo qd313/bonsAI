@@ -4902,7 +4902,7 @@ when it comes back.
 - A confirmation step before a spoken "go on" reveals a spoiler. The word is the confirmation.
 - Buying a headset now. Nothing in the next two steps needs one.
 
-### D98 — OPEN, raised and measured 2026-09-12 — Follow-up questions: the right note is found and the wrong one is still answered
+### D98 — LOCKED 2026-09-12 — Follow-up questions: tell the model the subject, and call it a partial fix
 
 **Raised** by the device check on 2026-09-07 that closed out wave three's follow-up work
 ([planning/48-kb-wave-three-session.md](../planning/48-kb-wave-three-session.md) § 8, row W3-R4).
@@ -5019,3 +5019,25 @@ just asked about", that standard needs a bigger answering model, not more work h
 **Untried, if neither is taken:** put the remembered name into the words the model reads, so it sees "what
 about the glyphid dreadnought's second phase" while the person still sees what they typed. That is a
 stronger version of telling it the subject and was not measured.
+
+#### Locked 2026-09-12
+
+The maintainer read the measurement above and approved the recommendation in the maintainer's own
+words: *"i approve your recommendation"*.
+
+- **Ship "tell the model the subject."** One sentence in the prompt, on a bare follow-up that used the
+  remembered subject, naming the thing the question carries on from. The wording and its position are
+  exactly what was measured, including the closing line saying the reminder is not the user naming that
+  thing themselves — which is the spoiler safeguard and stays in plain sight in the prompt.
+- **Narrowing the notes to the remembered subject is rejected.** It scored worse (2 of 9 against 4),
+  and neither of its two near-misses named the boss at all.
+- **It ships described as a partial fix, with its numbers**, in the code and in the roadmap. Wrong every
+  time before, right four times in nine after. Nobody is to read this entry later and think it was fixed.
+- **DOOM Eternal stays broken and that is accepted for now.** The small model failed there every way
+  tried, including being handed only the correct note. Closing that needs a bigger answering model, not
+  more work on the search. If the standard is "a follow-up always answers about the thing you just asked
+  about", this does not reach it and no amount of search work will.
+- **A device check is owed** before this counts as done, and the shorter replies are part of what gets
+  looked at: telling the model the subject roughly halves the answer, 87 words down to 44.
+- **The untried idea stays untried** unless someone asks for it: putting the remembered name into the
+  words the model reads, rather than adding a reminder beside them.

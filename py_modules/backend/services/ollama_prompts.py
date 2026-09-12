@@ -1037,6 +1037,46 @@ def build_reply_verbosity_block(
 _STRUCTURED_CARD_LABELS = ("Weak points:", "Uses:", "Phases:", "Summary:")
 
 
+# Matches knowledge_base_service._BLOCK_HEADER exactly. Duplicated rather than imported for the
+# same reason as _STRUCTURED_CARD_LABELS above -- only used to find where to splice the
+# follow-up subject note below (D98).
+_KB_BLOCK_HEADER = "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---"
+
+# D98 (docs/audit/maintainer-decisions-locked.md): what a bare follow-up gets told when
+# game_ai_request.py's follow-up memory actually supplied a remembered subject for this turn --
+# see build_system_prompt's `followup_subject` parameter below for the gate. Measured
+# 2026-09-12 off the device (runs/plan48-followup-shapes.json), three boss-then-follow-up pairs
+# from three games, three runs each, every reply read by hand:
+#
+#   Today, before this shipped ......... right boss 0 of 9
+#   This one sentence added ............ right boss 4 of 9 (2/3 Deep Rock Galactic: Survivor,
+#                                         2/3 Ocarina of Time, 0/3 DOOM Eternal)
+#   Notes narrowed to the subject instead right boss 2 of 9, and neither of those two named the
+#                                         boss even when right -- rejected, not shipped
+#
+# So: a real fix, not a full one. Putting the right note first (already shipped) was not enough
+# on its own -- a better-matching *wrong* note was still in the pile and the small model wrote
+# about that instead. Telling it which thing to answer about fixes that on the games where the
+# model can do the job at all (4 of 6, DOOM Eternal set aside). DOOM Eternal got it right zero
+# times under every shape tried, including being handed only the correct note and nothing else
+# to be confused by -- that is the model failing to connect "second phase" to the note's own
+# text, and nothing on the searching side can close it. Side effect worth knowing: the reply
+# comes back about half as long, 87 words down to 44.
+#
+# Wording is fixed by the measurement, not by taste -- do not reword or reposition this without
+# re-measuring. In particular, "This reminder alone is not the user naming {subject} themselves"
+# is the one line stopping a remembered subject (which is sometimes just the top attached note's
+# own title, never anything the person typed) from ever unfencing that subject's spoilers on its
+# own. Public (no leading underscore) so scripts/eval_kb_answers.py imports this exact constant
+# to keep measuring the shape that shipped, instead of keeping a hand-copied duplicate that could
+# quietly drift from it.
+FOLLOWUP_SUBJECT_NOTE_TEMPLATE = (
+    "\nFOLLOW-UP CONTEXT (a system reminder, not something the user typed): this question "
+    'carries on from the previous one, which was about "{subject}". Answer this one about '
+    "{subject} specifically. This reminder alone is not the user naming {subject} themselves.\n"
+)
+
+
 # DRG Survivor jargon glossary (roadmap: tap-to-define jargon). AppID matches the game row at
 # data/kb/strategy_seed.json:4. Terms match the frontend's curated list at
 # src/data/drgGlossaryTerms.ts -- keep the two in sync by hand; there is no shared source yet
@@ -1083,6 +1123,7 @@ def build_system_prompt(
     lookup_screenshot_vdf_metadata: Callable[[str], dict],
     ask_mode: str = "speed",
     early_context_suffix: str = "",
+    followup_subject: str = "",
     strategy_spoiler_consent: bool = False,
     strategy_spoiler_asked_entity: str = "",
     strategy_spoiler_kb_entity_match: bool = False,
@@ -1104,6 +1145,13 @@ def build_system_prompt(
     always spliced in, right after identity. ``"late"`` moves it to immediately before the hardware
     appendix tail instead, so on a prompt that overflows the model's window and loses its start,
     the attached cards are the part nearest the end that survives (D46).
+
+    ``followup_subject``: non-empty only on the exact turn game_ai_request.py's follow-up memory
+    used a remembered subject (a bare follow-up naming nothing of its own). Splices
+    ``FOLLOWUP_SUBJECT_NOTE_TEMPLATE`` right after the knowledge-base block header line -- see that
+    constant's comment for why the wording and position are fixed, and for the partial-fix numbers
+    (D98). A no-op when blank, or when ``early_context_suffix`` never attached a knowledge-base
+    block at all.
     """
     attachment_app_ids = sorted(
         {
@@ -1214,6 +1262,9 @@ def build_system_prompt(
         asked_entity=strategy_spoiler_asked_entity,
     )
     early_stripped = (early_context_suffix or "").strip()
+    if followup_subject and _KB_BLOCK_HEADER in early_stripped:
+        followup_note = FOLLOWUP_SUBJECT_NOTE_TEMPLATE.format(subject=followup_subject)
+        early_stripped = early_stripped.replace(_KB_BLOCK_HEADER, _KB_BLOCK_HEADER + followup_note, 1)
     early_block = f"\n\n{early_stripped}" if early_stripped else ""
     if early_stripped and "Local knowledge base" in early_stripped:
         early_block += (

@@ -254,5 +254,135 @@ class FollowupMemorySearchWordsWiringTests(unittest.TestCase):
         )
 
 
+class FollowupMemoryPromptSubjectWiringTests(unittest.TestCase):
+    """D98's second half: the exact turn the search-words augmentation fires on is also the only
+    turn ``ask_ollama`` is told a follow-up subject, via the `followup_subject` kwarg it forwards
+    to the prompt builder (ollama_prompts.build_system_prompt). Checked here the same way
+    FollowupMemorySearchWordsWiringTests checks the search words -- by reading what a real
+    run_game_ai_request call actually passed, not by re-deriving the gate.
+    """
+
+    def setUp(self):
+        kb_followup_memory.forget()
+
+    def tearDown(self):
+        kb_followup_memory.forget()
+
+    def _settings(self) -> dict:
+        return {
+            "latency_timeouts_custom_enabled": False,
+            "input_sanitizer_user_disabled": False,
+            "capabilities": {},
+            "use_local_knowledge_base": True,
+        }
+
+    def _drg_dreadnought_result(self) -> KnowledgeRetrievalResult:
+        return KnowledgeRetrievalResult(
+            attached=True,
+            text_block=(
+                f"[{_DRG_APP_NAME} / boss: Glyphid Dreadnought]\n"
+                "Break the glowing plates, then focus the head."
+            ),
+            sources=[],
+        )
+
+    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    def test_a_bare_followup_using_memory_carries_the_subject_to_the_prompt_builder(
+        self, mock_retrieve
+    ):
+        mock_retrieve.return_value = self._drg_dreadnought_result()
+        plugin = _FakePlugin(self._settings())
+        plugin._ollama_result = _ok_result()
+
+        _run(plugin, "how do i beat the glyphid dreadnought")
+        self.assertEqual(plugin.ask_ollama_calls[-1]["followup_subject"], "")
+
+        _run(plugin, "what about its second phase")
+        self.assertEqual(
+            plugin.ask_ollama_calls[-1]["followup_subject"], "Glyphid Dreadnought"
+        )
+
+    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    def test_a_fresh_named_question_carries_no_subject_even_with_one_remembered(
+        self, mock_retrieve
+    ):
+        mock_retrieve.return_value = self._drg_dreadnought_result()
+        plugin = _FakePlugin(self._settings())
+        plugin._ollama_result = _ok_result()
+
+        _run(plugin, "how do i beat the glyphid dreadnought")
+
+        mock_retrieve.reset_mock()
+        mock_retrieve.return_value = KnowledgeRetrievalResult(
+            attached=True,
+            text_block=f"[{_DRG_APP_NAME} / boss: Dreadnought Twins]\nSplit fire between them.",
+            sources=[],
+        )
+        _run(plugin, "how do i beat the dreadnought twins")
+
+        self.assertEqual(plugin.ask_ollama_calls[-1]["followup_subject"], "")
+
+    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    def test_speed_mode_never_carries_a_subject_even_with_one_remembered(self, mock_retrieve):
+        mock_retrieve.return_value = self._drg_dreadnought_result()
+        plugin = _FakePlugin(self._settings())
+        plugin._ollama_result = _ok_result()
+
+        _run(plugin, "how do i beat the glyphid dreadnought")
+
+        mock_retrieve.reset_mock()
+        mock_retrieve.return_value = KnowledgeRetrievalResult(attached=False)
+        _run(plugin, "what about its second phase", ask_mode="speed")
+
+        self.assertEqual(plugin.ask_ollama_calls[-1]["followup_subject"], "")
+
+    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    def test_a_troubleshooting_question_never_carries_a_subject(
+        self, mock_should_retrieve, mock_retrieve
+    ):
+        mock_should_retrieve.return_value = (True, "strategy")
+        mock_retrieve.return_value = self._drg_dreadnought_result()
+        plugin = _FakePlugin(self._settings())
+        plugin._ollama_result = _ok_result()
+
+        _run(plugin, "how do i beat the glyphid dreadnought")
+
+        # Force the domain a real crash/troubleshooting question routes to, rather than guessing
+        # a sentence the router's own keyword rules would classify that way -- kb_domain
+        # "compat" forgets the memory outright (see the module docstring's table), so it must
+        # not carry a subject either, even phrased as a short "what about" follow-up.
+        mock_should_retrieve.return_value = (True, "compat")
+        mock_retrieve.reset_mock()
+        mock_retrieve.return_value = KnowledgeRetrievalResult(attached=False)
+        _run(plugin, "what about the crash on the second level")
+
+        self.assertEqual(plugin.ask_ollama_calls[-1]["followup_subject"], "")
+
+    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    def test_the_remembered_subject_never_reaches_the_spoiler_consent_kwargs(self, mock_retrieve):
+        """The safety half of D98: a remembered subject is sometimes just the top attached
+        note's own title, not anything the person typed. If it ever counted as the person naming
+        that thing, it would unfence that thing's spoilers on a turn nobody asked to unfence
+        them. `strategy_spoiler_asked_entity`/`strategy_spoiler_consent` must stay exactly what
+        the bare follow-up's own words would produce -- nothing named, no consent -- even though
+        `followup_subject` on the same call is not blank.
+        """
+        mock_retrieve.return_value = self._drg_dreadnought_result()
+        plugin = _FakePlugin(self._settings())
+        plugin._ollama_result = _ok_result()
+
+        _run(plugin, "how do i beat the glyphid dreadnought")
+
+        mock_retrieve.reset_mock()
+        mock_retrieve.return_value = self._drg_dreadnought_result()
+        _run(plugin, "what about its second phase")
+
+        kwargs = plugin.ask_ollama_calls[-1]
+        self.assertEqual(kwargs["followup_subject"], "Glyphid Dreadnought")
+        self.assertEqual(kwargs["strategy_spoiler_asked_entity"], "")
+        self.assertFalse(kwargs["strategy_spoiler_consent"])
+
+
 if __name__ == "__main__":
     unittest.main()

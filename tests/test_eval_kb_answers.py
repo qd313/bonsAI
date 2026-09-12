@@ -784,32 +784,34 @@ class EvalKbAnswersFollowupPairTests(unittest.TestCase):
             wrapped("q", remembered_subject="Subject"), real("q", remembered_subject="Subject")
         )
 
-    # --- _variant_tell_followup_subject (shape A, "tell_subject") -------------------------------
+    # --- _variant_no_subject_note (shape: strips the now-shipped sentence back out) -------------
 
-    def test_tell_subject_inserts_a_note_after_the_kb_header_when_followup_used(self):
+    def test_no_subject_note_strips_the_shipped_sentence_when_followup_used(self):
         mod = self.mod
-        prompt = f"Intro text.\n{mod._KB_BLOCK_HEADER_MARKER}\nDomain: strategy\nbody"
+        note = mod.FOLLOWUP_SUBJECT_NOTE_TEMPLATE.format(subject="Glyphid Dreadnought")
+        prompt = f"Intro text.\n{mod._KB_BLOCK_HEADER_MARKER}{note}Domain: strategy\nbody"
         mod._followup_capture.is_followup_turn = True
         mod._followup_capture.remembered_subject = "Glyphid Dreadnought"
-        out = mod._variant_tell_followup_subject(prompt)
+        out = mod._variant_no_subject_note(prompt)
         self.assertNotEqual(out, prompt)
-        self.assertIn("Glyphid Dreadnought", out)
-        self.assertIn("FOLLOW-UP CONTEXT", out)
+        self.assertNotIn("FOLLOW-UP CONTEXT", out)
+        self.assertNotIn("Glyphid Dreadnought", out)
         self.assertIn(mod._KB_BLOCK_HEADER_MARKER, out)
 
-    def test_tell_subject_noop_when_not_a_followup_turn(self):
+    def test_no_subject_note_noop_when_not_a_followup_turn(self):
         mod = self.mod
-        prompt = f"Intro.\n{mod._KB_BLOCK_HEADER_MARKER}\nbody"
+        note = mod.FOLLOWUP_SUBJECT_NOTE_TEMPLATE.format(subject="Glyphid Dreadnought")
+        prompt = f"Intro.\n{mod._KB_BLOCK_HEADER_MARKER}{note}body"
         mod._followup_capture.is_followup_turn = False
         mod._followup_capture.remembered_subject = ""
-        self.assertEqual(mod._variant_tell_followup_subject(prompt), prompt)
+        self.assertEqual(mod._variant_no_subject_note(prompt), prompt)
 
-    def test_tell_subject_noop_when_no_kb_block_attached(self):
+    def test_no_subject_note_noop_when_the_sentence_was_never_inserted(self):
         mod = self.mod
-        prompt = "No kb block here at all."
+        prompt = f"Intro.\n{mod._KB_BLOCK_HEADER_MARKER}\nbody -- no follow-up sentence here"
         mod._followup_capture.is_followup_turn = True
         mod._followup_capture.remembered_subject = "Glyphid Dreadnought"
-        self.assertEqual(mod._variant_tell_followup_subject(prompt), prompt)
+        self.assertEqual(mod._variant_no_subject_note(prompt), prompt)
 
     # --- run_sample still delegates to run_turn with this case's own fields ---------------------
 

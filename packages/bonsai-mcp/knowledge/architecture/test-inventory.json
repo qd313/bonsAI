@@ -188,6 +188,7 @@
     "tests/test_ollama_preload.py",
     "tests/test_ollama_prompts_branch_example.py",
     "tests/test_ollama_prompts_drg_glossary.py",
+    "tests/test_ollama_prompts_followup_subject.py",
     "tests/test_ollama_prompts_stream_instruction.py",
     "tests/test_ollama_pull_registry.py",
     "tests/test_ollama_service.py",

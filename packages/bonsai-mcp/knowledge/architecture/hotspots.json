@@ -2,7 +2,7 @@
   "hotspots": [
     {
       "path": "main.py",
-      "lines": 3256,
+      "lines": 3260,
       "role": "Decky RPC entrypoints and orchestration"
     },
     {
@@ -21,13 +21,13 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/voice_transcription_service.py",
-      "lines": 1524,
+      "path": "py_modules/backend/services/ollama_prompts.py",
+      "lines": 1573,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/ollama_prompts.py",
-      "lines": 1522,
+      "path": "py_modules/backend/services/voice_transcription_service.py",
+      "lines": 1524,
       "role": ""
     },
     {
@@ -107,7 +107,7 @@
     },
     {
       "path": "py_modules/backend/services/game_ai_request.py",
-      "lines": 718,
+      "lines": 726,
       "role": ""
     },
     {

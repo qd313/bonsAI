@@ -763,6 +763,14 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   warning line. Whether that reads as advice-first is your judgement, which is what this row is for. The Hades and
   Black Mesa sentences **are pinned on the Deck now** — press A on each and read them. The Hades one needs Hades
   running. Row **KB-ANSWER-03**; evidence `runs/plan48-deck-evening-2026-09-12.json`.
+- ★★★ `[KB]` **A follow-up now tells the model which boss you meant — needs a read on the device** —
+  **SHIPPED 2026-09-12 as a partial fix, VERIFY.** Ask about a boss, then *"what about its second phase"*.
+  Before this, the answer was about a different boss **every time** — nine tries, three games, right not
+  once. Now the model is told in plain words which boss the question follows on from: right 4 times in 9.
+  Better on two games, no help at all on DOOM Eternal, where the small model fails even when handed only
+  the correct note — accepted, and no search work closes it. **Not a fixed feature**, and replies on these
+  turns come back about half as long (87 words to 44), which is part of what the device read is looking at.
+  Spoilers are unchanged and a test proves it. Row **W3-R4**. (D98)
 - ★★★ `[KB]` **DRG Survivor glossary terms** — **VERIFY, one touch tap owed.** Shipped 2026-08-28 and walked on device:
   underline, popup, D-pad reachability, B, one-press Up. Rows **DRG-GLOSSARY-01…04**.
   [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).
@@ -805,12 +813,6 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   screen when I start the game"*. The word "crash" is deliberately classed as too weak to route a question on its own;
   that holds with a game running and not with nothing running. Next step: a floor under the tip search so it can say
   none fit, plus a "no tip for this" line. (D81, D85) Planned as wave three ([48](planning/48-kb-wave-three-session.md)).
-- ★★★ `[KB]` **Follow-ups remember, but the answer is still about the wrong boss** — **PARTIAL, measured
-  2026-09-12, a call is waiting for you.** Ask about a boss, then *"what about its second phase"*. The looking-up
-  half works and is confirmed on the Deck. The answering half does not: across three games and nine tries it named
-  the right boss **not once**. Telling the model which boss the question follows on from gets it right 4 times in 9,
-  and never on DOOM Eternal, where the small model fails even when handed only the correct note. Options, numbers
-  and a recommendation are in the decisions file under D98. Evidence `runs/plan48-followup-shapes.json`. (D47)
 - ★★★ `[KB]` **Spoiler coverage as a tiered setting** — **OPEN, tiers confirmed 2026-09-01.** Strict fences bosses, endings
   and chapters; default fences only named story beats and endings; open fences nothing you asked about. Naming a boss still
   unlocks it in every tier. Needs the settings plumbing, a prompt per tier measured on the answer test, a control with a

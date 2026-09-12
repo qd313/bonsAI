@@ -20,19 +20,25 @@ Does not: Judge with a second model, touch the Deck, or write settings anywhere 
 Two-turn pairs (plan 48, D98): ``--pairs`` runs the fixture's ``followup_pairs`` instead of
 ``cases`` -- a first question, then a bare follow-up, asked in order against the same process, so
 the follow-up sees whatever the plugin's own follow-up memory (kb_followup_memory) remembered from
-the turn before. ``--followup-shape`` selects a measurement-only fix for the bug that memory alone
-does not close (the right note ranks first, but a better-matching wrong note is still in the pile
-and the model writes about that instead): ``tell_subject`` adds one sentence to the prompt naming
-the carried-over subject; ``narrow_notes`` drops every attached card but that subject's own.
-Neither is shipped -- ``baseline`` (the default) is exactly today's code and is the third column
-either shape is measured against.
+the turn before. The right note ranking first was not enough on its own (a better-matching wrong
+note was still in the pile and the model wrote about that instead), so the built prompt now also
+tells the model, in plain words, which thing a bare follow-up is carrying on from -- shipped in
+ollama_prompts.build_system_prompt's ``followup_subject`` parameter, gated in game_ai_request.py.
+``--followup-shape`` selects what this script measures that shipped behaviour against:
+``shipped`` (the default) changes nothing -- it is exactly today's code, sentence included.
+``no_subject_note`` strips that sentence back out of the built prompt, reproducing the old,
+pre-fix behaviour (right boss 0 of 9 tries) for comparison. ``narrow_notes`` is the rejected
+alternative (drop every attached card but the remembered subject's own) -- never shipped, kept
+measurable because a before-and-after nobody can re-run is a number nobody can check; it also
+strips the shipped sentence, so it stays an isolated measurement of narrowing alone rather than
+narrowing-plus-the-sentence.
 
 Usage:
   python scripts/eval_kb_answers.py                          # every case, 3 samples, baseline prompt
   python scripts/eval_kb_answers.py --only A-DRG-01 --samples 1
   python scripts/eval_kb_answers.py --label after-w4         # report suffix for a before/after pair
   python scripts/eval_kb_answers.py --no-write-report        # console only
-  python scripts/eval_kb_answers.py --pairs --followup-shape tell_subject --samples 3
+  python scripts/eval_kb_answers.py --pairs --followup-shape no_subject_note --samples 3
 
 Needs: Ollama on this PC with the Deck's chat model and ``nomic-embed-text`` pulled, and a built
 corpus at --corpus (``python scripts/build_rag_db.py --seed --out ./build/knowledge-base``).
@@ -61,9 +67,13 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "py_modules"))
 
 # Neither module touches `decky` at import time (confirmed 2026-09-06), so these are safe to
-# import eagerly, unlike `main` / `game_ai_request` / `ollama_prompts` below which are deferred
-# until after install_fake_decky() runs.
+# import eagerly, unlike `main` / `game_ai_request` below which are deferred until after
+# install_fake_decky() runs. ollama_prompts is imported here too (also decky-free, confirmed the
+# same way) rather than only from inside main(), because the module-level `_variant_no_subject_note`
+# below needs FOLLOWUP_SUBJECT_NOTE_TEMPLATE at call time and this file's tests call it directly,
+# without ever running main() or install_fake_decky() first.
 from backend.services.ai_character_service import VALID_PRESET_IDS  # noqa: E402
+from backend.services.ollama_prompts import FOLLOWUP_SUBJECT_NOTE_TEMPLATE  # noqa: E402
 from backend.services.ollama_service import estimate_prompt_tokens  # noqa: E402
 
 DEFAULT_OLLAMA = "http://127.0.0.1:11434"
@@ -970,28 +980,41 @@ async def run_sample(
     )
 
 
-# --- follow-up shape experiments: measurement-only, never shipped (plan 48, D98) ---------------
+# --- follow-up shape comparison (plan 48, D98) --------------------------------------------------
 #
 # D98 found that ranking the right note first is not enough while a better-matching *wrong* note
 # is still in the pile -- the search half of follow-up memory (kb_followup_memory, shipped) fixed
 # the ranking, but the model still sometimes writes about the sibling note that reads more like
-# what was asked. Two candidate fixes, both measured here, neither shipped:
+# what was asked. Two candidate fixes were measured; one shipped:
 #
-#   - "tell_subject" (option 1): the built prompt gets one added sentence naming which thing the
-#     question is carrying on from. The notes attached are exactly what today's shipped code
-#     attaches -- nothing about retrieval changes.
-#   - "narrow_notes" (option 2): the attached notes are narrowed, after retrieval, to only the
-#     cards whose title matches the remembered subject -- so a rival note is never in the prompt
-#     to begin with. "Only that subject" is defined as an exact (case-insensitive) title match; a
-#     subject with no matching card in this turn's pool gets nothing, not a fallback to the
-#     unfiltered set, because attaching an unrelated card is the failure this shape exists to rule
-#     out. That is also this shape's cost: a genuinely two-card subject or a near-miss title loses
-#     everything instead of keeping the close note.
+#   - "tell the model the subject" (option 1) SHIPPED 2026-09-12: the built prompt gets one added
+#     sentence naming which thing the question is carrying on from
+#     (ollama_prompts.FOLLOWUP_SUBJECT_NOTE_TEMPLATE, spliced in by build_system_prompt's
+#     `followup_subject` parameter, gated in game_ai_request.py). This is now what every real
+#     run through run_game_ai_request does on a bare follow-up that used the memory --
+#     ``--followup-shape`` no longer installs it; there is nothing left to install.
+#   - "narrow the notes" (option 2), NOT SHIPPED, scored worse: the attached notes are narrowed,
+#     after retrieval, to only the cards whose title matches the remembered subject -- so a rival
+#     note is never in the prompt to begin with. "Only that subject" is defined as an exact
+#     (case-insensitive) title match; a subject with no matching card in this turn's pool gets
+#     nothing, not a fallback to the unfiltered set, because attaching an unrelated card is the
+#     failure this shape exists to rule out. That is also this shape's cost: a genuinely two-card
+#     subject or a near-miss title loses everything instead of keeping the close note.
 #
-# Both are wired through the same monkeypatch machinery the ``--variant``/``--kb-placement`` hooks
-# already use above -- neither touches a production file. Selected by ``--followup-shape``;
-# "baseline" (the default) installs nothing extra and is exactly today's shipped code, which is
-# the third column this flag exists to measure against.
+# Because option 1 is now baked into the real code path this script runs (run_game_ai_request,
+# unmodified), the only thing left for ``--followup-shape`` to install is the *removal* of that
+# sentence -- the only way left to see the old, pre-fix prompt for comparison. Selected values:
+#
+#   "shipped" (the default): installs nothing. What ships is already active in the real code, so
+#     this reproduces it exactly.
+#   "no_subject_note": strips the shipped sentence back out of the built prompt, reproducing the
+#     pre-fix behaviour (D98's "today, as it ships" row -- right boss 0 of 9) for comparison.
+#   "narrow_notes": the rejected shape above. Also strips the shipped sentence first, so this
+#     measures narrowing *alone* rather than narrowing plus the sentence -- the "Both" option
+#     D98 explicitly did not choose.
+#
+# All wired through the same monkeypatch machinery the ``--variant``/``--kb-placement`` hooks
+# already use above -- neither touches a production file.
 
 _KB_BLOCK_SENTINEL_MARKER = "--- End local knowledge base ---"  # knowledge_base_service._BLOCK_SENTINEL
 
@@ -1032,24 +1055,19 @@ def _wrap_augment_search_words_for_capture(real_fn: Callable[..., str]) -> Calla
     return _wrapped
 
 
-_FOLLOWUP_SUBJECT_NOTE_TEMPLATE = (
-    "\nFOLLOW-UP CONTEXT (a system reminder, not something the user typed): this question "
-    'carries on from the previous one, which was about "{subject}". Answer this one about '
-    "{subject} specifically. This reminder alone is not the user naming {subject} themselves.\n"
-)
-
-
-def _variant_tell_followup_subject(prompt: str) -> str:
-    """Shape A ("tell_subject"): add one sentence naming the carried-over subject, right after the
-    knowledge-base block header, on a turn ``_wrap_augment_search_words_for_capture`` actually saw
-    use the remembered subject. A no-op on any other turn, including every turn under every other
-    ``--followup-shape`` value, since only "tell_subject" installs this as a variant."""
+def _variant_no_subject_note(prompt: str) -> str:
+    """The "no_subject_note" shape: strips the shipped follow-up sentence back out of the built
+    prompt, on a turn ``_wrap_augment_search_words_for_capture`` actually saw use the remembered
+    subject. This is a removal, not an addition -- game_ai_request.py's real gate already put the
+    sentence in (ollama_prompts.FOLLOWUP_SUBJECT_NOTE_TEMPLATE) before this script's own hooks
+    ever see the prompt, on every real run through the unmodified ``run_game_ai_request``.
+    Imports the same constant production uses rather than a hand-copied duplicate, so this can
+    never drift from what actually shipped. A no-op on any turn the sentence was not inserted on.
+    """
     if not _followup_capture.is_followup_turn or not _followup_capture.remembered_subject:
         return prompt
-    if _KB_BLOCK_HEADER_MARKER not in prompt:
-        return prompt
-    note = _FOLLOWUP_SUBJECT_NOTE_TEMPLATE.format(subject=_followup_capture.remembered_subject)
-    return prompt.replace(_KB_BLOCK_HEADER_MARKER, _KB_BLOCK_HEADER_MARKER + note, 1)
+    note = FOLLOWUP_SUBJECT_NOTE_TEMPLATE.format(subject=_followup_capture.remembered_subject)
+    return prompt.replace(note, "", 1)
 
 
 def _narrow_text_block_to_subject(text_block: str, subject: str) -> tuple[str, list[str]]:
@@ -1489,11 +1507,13 @@ def main() -> int:
     )
     parser.add_argument(
         "--followup-shape",
-        default="baseline",
-        choices=("baseline", "tell_subject", "narrow_notes"),
-        help="D98 measurement only, never shipped: which follow-up fix (if any) is active on a "
-        "turn that uses the remembered subject. 'baseline' installs nothing extra and is exactly "
-        "today's shipped code.",
+        default="shipped",
+        choices=("shipped", "no_subject_note", "narrow_notes"),
+        help="D98: what to measure against the shipped follow-up-subject sentence, on a turn "
+        "that used the remembered subject. 'shipped' (default) changes nothing -- it is exactly "
+        "today's code. 'no_subject_note' strips the shipped sentence back out, reproducing the "
+        "pre-fix prompt. 'narrow_notes' is the rejected, never-shipped alternative (also with "
+        "the shipped sentence stripped, so it stays an isolated measurement).",
     )
     args = parser.parse_args()
 
@@ -1568,7 +1588,7 @@ def main() -> int:
 
     gar.retrieve_knowledge_context = _recording_retrieve
 
-    # Diagnostic only, every --followup-shape including "baseline": records whether a turn's own
+    # Diagnostic only, every --followup-shape including "shipped": records whether a turn's own
     # search words actually got the remembered subject appended, without ever changing them. See
     # _wrap_augment_search_words_for_capture.
     from backend.services import kb_followup_memory  # noqa: E402
@@ -1578,14 +1598,19 @@ def main() -> int:
     )
 
     variant_fn = VARIANTS[args.variant] if args.variant != "baseline" else None
-    if args.followup_shape == "tell_subject":
-        # D98 measurement only (shape "tell_subject"): composed after any --variant, the same
-        # order --kb-placement's kwarg and --variant already run in (placement, then variant,
-        # then this).
+    if args.followup_shape in ("no_subject_note", "narrow_notes"):
+        # D98: game_ai_request.py's real gate already put the shipped sentence into the prompt
+        # by the time it reaches here (this script never installs it -- there is nothing left
+        # to install). Both non-default shapes need it stripped back out: "no_subject_note" to
+        # reproduce the pre-fix prompt, "narrow_notes" so its own effect (narrowing, done above
+        # in _recording_retrieve) is measured in isolation rather than combined with the
+        # sentence -- the "Both" option D98 explicitly did not choose. Composed after any
+        # --variant, the same order --kb-placement's kwarg and --variant already run in
+        # (placement, then variant, then this).
         _base_variant = variant_fn
 
         def variant_fn(prompt: str, _base=_base_variant) -> str:  # type: ignore[no-redef]
-            return _variant_tell_followup_subject(_base(prompt) if _base is not None else prompt)
+            return _variant_no_subject_note(_base(prompt) if _base is not None else prompt)
 
     if args.kb_placement != "early" or variant_fn is not None:
         plugin_main.build_system_prompt = _build_prompt_wrapper(

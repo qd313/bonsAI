@@ -1,0 +1,1012 @@
+{
+ "measurement": "Plan 48, D98: which follow-up fix answers about the right boss",
+ "when": "2026-09-12",
+ "model": "gemma4:e2b-it-qat (the Deck's own answering model), run on the maintainer PC's Ollama at 127.0.0.1:11434",
+ "corpus": "build/knowledge-base, version 2026.09.12, built fresh for this measurement",
+ "how": "scripts/eval_kb_answers.py --pairs --samples 3 --followup-shape <shape>, once per shape. Each of 3 pairs asks a first question naming a boss, then the bare follow-up \"what about its second phase\", in order, against the same process -- the same way a real two-turn chat works. 3 runs per pair per shape = 27 follow-up replies total, plus their matching first replies.",
+ "shapes": {
+  "baseline": "Today's shipped code, unchanged. The search already remembers the last boss asked about and re-ranks its note first; nothing tells the model which boss the follow-up means, and every note that was already going to attach still attaches.",
+  "tell_subject": "Measurement-only: the built prompt gets one added sentence naming the carried-over boss, e.g. \"this question carries on from the previous one, which was about X\". The notes attached are byte-identical to baseline. The added sentence is explicitly marked as a system reminder, not the player naming the boss, so it does not unlock that boss's spoilers on its own.",
+  "narrow_notes": "Measurement-only: after retrieval runs exactly as today, every attached note but the remembered boss's own is dropped before the prompt is built. \"Only that subject\" is an exact (case-insensitive) title match; in this corpus every boss has exactly one card, so this always narrowed to exactly one note."
+ },
+ "pairs_chosen": [
+  {
+   "id": "P-DRG-PHASE-01",
+   "game": "Deep Rock Galactic: Survivor",
+   "first_question": "how do i beat the glyphid dreadnought",
+   "right_boss": "Glyphid Dreadnought",
+   "rival_boss": "Dreadnought Twins",
+   "why_chosen": "The device's own known-failing pair (D98). Several boss cards in this game; the rival's card explicitly reads like a second phase (health bars drift apart, both turn immune while healing)."
+  },
+  {
+   "id": "P-DOOME-PHASE-01",
+   "game": "DOOM Eternal",
+   "first_question": "how do i beat the doom hunter",
+   "right_boss": "Doom Hunter",
+   "rival_boss": "Icon of Sin / Gladiator (both use the word \"phase\" prominently)",
+   "why_chosen": "DOOM Eternal has four boss cards. Doom Hunter's own card never uses the word \"phase\" (it says \"first health bar\" / \"second bar\"), while two other bosses in the same game do -- the same shape of confound as the Deep Rock pair, from a different game with several bosses."
+  },
+  {
+   "id": "P-OOT-PHASE-01",
+   "game": "The Legend of Zelda: Ocarina of Time",
+   "first_question": "how do i beat morpha",
+   "right_boss": "Morpha",
+   "rival_boss": "Twinrova",
+   "why_chosen": "Ocarina of Time has six boss cards. Morpha's card is a single-stage fight with no phase language at all, while Twinrova's card explicitly says \"First phase, the Mirror Shield...\" -- again the same confound shape, a third game."
+  }
+ ],
+ "results": {
+  "baseline": {
+   "meta": {
+    "date": "2026-09-12",
+    "label": "shapes-baseline",
+    "model": "gemma4:e2b-it-qat",
+    "ollama": "http://127.0.0.1:11434",
+    "corpus_version": "2026.09.12",
+    "corpus_sections": 293,
+    "followup_shape": "baseline",
+    "samples_per_pair": 3,
+    "pairs": 3,
+    "run_minutes": 0.4
+   },
+   "pairs": [
+    {
+     "id": "P-DRG-PHASE-01",
+     "game": "Deep Rock Galactic: Survivor",
+     "first_question": "how do i beat the glyphid dreadnought",
+     "right_boss": "Glyphid Dreadnought",
+     "rival_boss": "Dreadnought Twins",
+     "why_chosen": "The device's own known-failing pair (D98). Several boss cards in this game; the rival's card explicitly reads like a second phase (health bars drift apart, both turn immune while healing).",
+     "runs": [
+      {
+       "sample": 1,
+       "turn1": {
+        "question": "how do i beat the glyphid dreadnought",
+        "cards_attached": [
+         "Glyphid Dreadnought",
+         "Dreadnought Twins",
+         "Exploder"
+        ],
+        "right_note_attached": true,
+        "words": 36,
+        "seconds": 0.9
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Glyphid Dreadnought",
+         "Dreadnought Twins",
+         "Praetorian"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Glyphid Dreadnought",
+        "words": 77,
+        "seconds": 1.09,
+        "reply": "Since I don't have a screenshot or specific context on which boss you are referring to, I can only give you general advice. If you are fighting a boss, focus on identifying its mechanics in the second phase. Usually, this means looking for a new pattern, a change in enemy behavior, or a shift in the boss's attack priority.\n\nIf you can tell me which boss you are currently facing, I can give you more specific tips.",
+        "judgement": "wrong",
+        "why": "Does not answer -- asks the player which boss they mean instead of using the attached Glyphid Dreadnought note."
+       }
+      },
+      {
+       "sample": 2,
+       "turn1": {
+        "question": "how do i beat the glyphid dreadnought",
+        "cards_attached": [
+         "Glyphid Dreadnought",
+         "Dreadnought Twins",
+         "Exploder"
+        ],
+        "right_note_attached": true,
+        "words": 36,
+        "seconds": 0.84
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Glyphid Dreadnought",
+         "Dreadnought Twins",
+         "Praetorian"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Glyphid Dreadnought",
+        "words": 27,
+        "seconds": 0.78,
+        "reply": "I need to know what you are referring to specifically. Are you asking about the second phase of a particular boss, or perhaps a specific enemy wave?",
+        "judgement": "wrong",
+        "why": "Does not answer -- asks which boss or enemy wave the player means."
+       }
+      },
+      {
+       "sample": 3,
+       "turn1": {
+        "question": "how do i beat the glyphid dreadnought",
+        "cards_attached": [
+         "Glyphid Dreadnought",
+         "Dreadnought Twins",
+         "Exploder"
+        ],
+        "right_note_attached": true,
+        "words": 35,
+        "seconds": 0.84
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Glyphid Dreadnought",
+         "Dreadnought Twins",
+         "Praetorian"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Glyphid Dreadnought",
+        "words": 68,
+        "seconds": 1.11,
+        "reply": "Reviewing the strategy for the second phase of the Glyphid Dreadnought boss. In the second phase, the key is to manage the health bars so they drift apart. Both Dreadnoughts will turn immune while they heal the gap between them. Focus on splitting your fire evenly between them instead of trying to burn one down quickly. The healing mechanic won't start, so keep applying pressure to both simultaneously.",
+        "judgement": "wrong",
+        "why": "Names \"Glyphid Dreadnought\" but every fact given (health bars drift apart, both turn immune, split fire evenly) belongs to the Dreadnought Twins card, not this boss's own card."
+       }
+      }
+     ],
+     "right_of_3": 0
+    },
+    {
+     "id": "P-DOOME-PHASE-01",
+     "game": "DOOM Eternal",
+     "first_question": "how do i beat the doom hunter",
+     "right_boss": "Doom Hunter",
+     "rival_boss": "Icon of Sin / Gladiator (both use the word \"phase\" prominently)",
+     "why_chosen": "DOOM Eternal has four boss cards. Doom Hunter's own card never uses the word \"phase\" (it says \"first health bar\" / \"second bar\"), while two other bosses in the same game do -- the same shape of confound as the Deep Rock pair, from a different game with several bosses.",
+     "runs": [
+      {
+       "sample": 1,
+       "turn1": {
+        "question": "how do i beat the doom hunter",
+        "cards_attached": [
+         "Doom Hunter",
+         "The Crucible",
+         "Starting out in DOOM Eternal: the combat loop"
+        ],
+        "right_note_attached": true,
+        "words": 110,
+        "seconds": 1.58
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Doom Hunter",
+         "The Crucible",
+         "Starting out in DOOM Eternal: the combat loop"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Doom Hunter",
+        "words": 148,
+        "seconds": 1.8,
+        "reply": "You're asking about the second phase of DOOM Eternal. Since I don't have any context on where you are specifically, I'll give you a general overview of what usually defines the second phase: it generally involves facing tougher enemies and more complex encounters. The game shifts from the initial learning curve to sustained high-intensity combat where managing your resources—ammo, fuel, and health—becomes critical.\n\nThe key is maintaining that combat loop: shoot weak enemies for health, glory kill them for ammo, chainsaw fodder for fuel, and use flame belch for armor. Don't stand still; keep moving, dash twice, jump twice, and swap weapons constantly. If you run dry, you'll need to use the chainsaw for a fodder kill to get fuel back.\n\nThe specific challenges in the second phase will depend entirely on which area you are in. Are you struggling with a particular boss or type of demon?",
+        "judgement": "wrong",
+        "why": "Generic DOOM Eternal combat-loop advice (glory kill, chainsaw, flame belch); never mentions Doom Hunter, the sled, the shield, or the blood punch that its own attached card describes."
+       }
+      },
+      {
+       "sample": 2,
+       "turn1": {
+        "question": "how do i beat the doom hunter",
+        "cards_attached": [
+         "Doom Hunter",
+         "The Crucible",
+         "Starting out in DOOM Eternal: the combat loop"
+        ],
+        "right_note_attached": true,
+        "words": 88,
+        "seconds": 1.16
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Doom Hunter",
+         "The Crucible",
+         "Starting out in DOOM Eternal: the combat loop"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Doom Hunter",
+        "words": 162,
+        "seconds": 1.78,
+        "reply": "You are asking about the second phase of DOOM Eternal. Since you haven't specified which part you are referring to, I will give you a general overview of what happens as you progress through the game.\n\nThe game is structured around escalating difficulty. Early levels focus on mastering the core combat loop: shooting weak enemies until they flash, glory killing them for health, and using the chainsaw on fodder demons to generate fuel. You need to learn to keep moving—dash twice, jump twice, and swap weapons constantly.\n\nAs you move into later stages, the enemies get tougher, and the fights become more intense. You will encounter specialized demons, and the game will introduce mechanics that require more strategic use of your resources, like managing your ammo and fuel efficiently between different enemy types.\n\nThe later parts of the game involve facing significantly stronger foes, which will require you to utilize all the mechanics you've learned—including using the Crucible strategically for high-impact kills.",
+        "judgement": "wrong",
+        "why": "Same as sample 1: generic difficulty-curve talk, no Doom Hunter-specific fact stated."
+       }
+      },
+      {
+       "sample": 3,
+       "turn1": {
+        "question": "how do i beat the doom hunter",
+        "cards_attached": [
+         "Doom Hunter",
+         "The Crucible",
+         "Starting out in DOOM Eternal: the combat loop"
+        ],
+        "right_note_attached": true,
+        "words": 76,
+        "seconds": 1.04
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Doom Hunter",
+         "The Crucible",
+         "Starting out in DOOM Eternal: the combat loop"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Doom Hunter",
+        "words": 164,
+        "seconds": 1.78,
+        "reply": "The second phase of DOOM Eternal generally involves adapting your combat style to handle tougher enemies and more demanding encounters. Since you didn't specify which part you're referring to, I'll focus on general tips for surviving tougher fights.\n\nThe core loop remains: manage your resources—ammo, fuel for the chainsaw, and health—while constantly moving. When you encounter stronger demons, prioritize using the correct weapons for maximum efficiency. For instance, if you see enemies that are resistant to your current weapon, try switching to something that exploits their weaknesses. Always remember the combat loop: shoot weak enemies until they flash, glory kill for health, then use the chainsaw on fodder for ammo.\n\nWhen dealing with larger threats, like the super heavies mentioned in the guide, you need to be strategic about when you commit your fuel. Don't waste fuel on enemies you can easily dispatch with a single shot. Use your movement options—dash twice, jump twice, and swap weapons mid-fight—to keep distance and control the engagement.",
+        "judgement": "wrong",
+        "why": "Generic resource-management advice; no mention of Doom Hunter, its sled, or its two health bars."
+       }
+      }
+     ],
+     "right_of_3": 0
+    },
+    {
+     "id": "P-OOT-PHASE-01",
+     "game": "The Legend of Zelda: Ocarina of Time",
+     "first_question": "how do i beat morpha",
+     "right_boss": "Morpha",
+     "rival_boss": "Twinrova",
+     "why_chosen": "Ocarina of Time has six boss cards. Morpha's card is a single-stage fight with no phase language at all, while Twinrova's card explicitly says \"First phase, the Mirror Shield...\" -- again the same confound shape, a third game.",
+     "runs": [
+      {
+       "sample": 1,
+       "turn1": {
+        "question": "how do i beat morpha",
+        "cards_attached": [
+         "Morpha",
+         "Volvagia",
+         "Dark Link"
+        ],
+        "right_note_attached": true,
+        "words": 67,
+        "seconds": 1.27
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Morpha",
+         "Twinrova",
+         "Adult dungeon order"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Morpha",
+        "words": 72,
+        "seconds": 1.25,
+        "reply": "```bonsai-spoiler\nThe second phase of the Twinrova fight involves the Mirror Shield. You need to aim at the witch who did not cast the element you just fired. Once they merge, the shield will absorb your attacks, so wait for the charge to build up. You need to take three of the same element to fire back at them. Mixing the elements will reset the charge, so patience is key here.\n```",
+        "judgement": "wrong",
+        "why": "Describes Twinrova's mirror-shield fight (a sibling boss) inside a spoiler fence; never mentions Morpha."
+       }
+      },
+      {
+       "sample": 2,
+       "turn1": {
+        "question": "how do i beat morpha",
+        "cards_attached": [
+         "Morpha",
+         "Volvagia",
+         "Dark Link"
+        ],
+        "right_note_attached": true,
+        "words": 116,
+        "seconds": 1.42
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Morpha",
+         "Twinrova",
+         "Adult dungeon order"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Morpha",
+        "words": 6,
+        "seconds": 0.58,
+        "reply": "Choose where you are stuck below.",
+        "judgement": "wrong",
+        "why": "Degenerate non-answer: \"Choose where you are stuck below.\""
+       }
+      },
+      {
+       "sample": 3,
+       "turn1": {
+        "question": "how do i beat morpha",
+        "cards_attached": [
+         "Morpha",
+         "Volvagia",
+         "Dark Link"
+        ],
+        "right_note_attached": true,
+        "words": 89,
+        "seconds": 1.26
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Morpha",
+         "Twinrova",
+         "Adult dungeon order"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Morpha",
+        "words": 62,
+        "seconds": 1.03,
+        "reply": "Since you haven't specified which game you're referring to, I can't give you specific details. Are you asking about a boss, a specific dungeon, or a mechanic in The Legend of Zelda: Ocarina of Time?\n\nIf you are referring to a boss, let me know the name. For example, if you are fighting Twinrova, I can tell you about the second phase.",
+        "judgement": "wrong",
+        "why": "Does not answer -- asks which boss, and offers Twinrova as its example rather than naming Morpha."
+       }
+      }
+     ],
+     "right_of_3": 0
+    }
+   ],
+   "right_of_9": 0,
+   "mean_words_turn2": 87.3,
+   "mean_seconds_turn2": 1.24,
+   "right_note_attached_every_time": true
+  },
+  "tell_subject": {
+   "meta": {
+    "date": "2026-09-12",
+    "label": "shapes-tell-subject",
+    "model": "gemma4:e2b-it-qat",
+    "ollama": "http://127.0.0.1:11434",
+    "corpus_version": "2026.09.12",
+    "corpus_sections": 293,
+    "followup_shape": "tell_subject",
+    "samples_per_pair": 3,
+    "pairs": 3,
+    "run_minutes": 0.3
+   },
+   "pairs": [
+    {
+     "id": "P-DRG-PHASE-01",
+     "game": "Deep Rock Galactic: Survivor",
+     "first_question": "how do i beat the glyphid dreadnought",
+     "right_boss": "Glyphid Dreadnought",
+     "rival_boss": "Dreadnought Twins",
+     "why_chosen": "The device's own known-failing pair (D98). Several boss cards in this game; the rival's card explicitly reads like a second phase (health bars drift apart, both turn immune while healing).",
+     "runs": [
+      {
+       "sample": 1,
+       "turn1": {
+        "question": "how do i beat the glyphid dreadnought",
+        "cards_attached": [
+         "Glyphid Dreadnought",
+         "Dreadnought Twins",
+         "Exploder"
+        ],
+        "right_note_attached": true,
+        "words": 34,
+        "seconds": 0.89
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Glyphid Dreadnought",
+         "Dreadnought Twins",
+         "Praetorian"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Glyphid Dreadnought",
+        "words": 63,
+        "seconds": 1.19,
+        "reply": "When dealing with Glyphid Dreadnought, the key is to manage the waves and focus on exploiting the armor plates when they open up.\n\nFor the second phase, focus on kiting between waves. Make sure you are targeting the weak-point armor plates as soon as they become exposed. Save your overclock and nuke abilities for when you see windows to break through the armor.",
+        "judgement": "right",
+        "why": "Names Glyphid Dreadnought and states its own facts: kiting between waves, weak-point armor plates, saving overclock/nuke for armor-break windows."
+       }
+      },
+      {
+       "sample": 2,
+       "turn1": {
+        "question": "how do i beat the glyphid dreadnought",
+        "cards_attached": [
+         "Glyphid Dreadnought",
+         "Dreadnought Twins",
+         "Exploder"
+        ],
+        "right_note_attached": true,
+        "words": 39,
+        "seconds": 0.88
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Glyphid Dreadnought",
+         "Dreadnought Twins",
+         "Praetorian"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Glyphid Dreadnought",
+        "words": 34,
+        "seconds": 0.94,
+        "reply": "Since you haven't specified which boss or enemy you are referring to, I can't give you specific advice yet. Are you asking about a particular boss fight or enemy type you are currently facing?",
+        "judgement": "wrong",
+        "why": "Does not answer -- asks which boss the player means, ignoring the added reminder."
+       }
+      },
+      {
+       "sample": 3,
+       "turn1": {
+        "question": "how do i beat the glyphid dreadnought",
+        "cards_attached": [
+         "Glyphid Dreadnought",
+         "Dreadnought Twins",
+         "Exploder"
+        ],
+        "right_note_attached": true,
+        "words": 37,
+        "seconds": 0.84
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Glyphid Dreadnought",
+         "Dreadnought Twins",
+         "Praetorian"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Glyphid Dreadnought",
+        "words": 48,
+        "seconds": 0.96,
+        "reply": "For Glyphid Dreadnought, the second phase generally involves focusing on exploiting the openings you create. Since you are likely kiting the waves, focus on targeting the weak-point armor plates as they open up. Save your powerful weapons, like the overclock or nuke, for those specific armor break windows.",
+        "judgement": "right",
+        "why": "Names Glyphid Dreadnought and repeats its own facts (kiting, weak-point armor plates, overclock/nuke)."
+       }
+      }
+     ],
+     "right_of_3": 2
+    },
+    {
+     "id": "P-DOOME-PHASE-01",
+     "game": "DOOM Eternal",
+     "first_question": "how do i beat the doom hunter",
+     "right_boss": "Doom Hunter",
+     "rival_boss": "Icon of Sin / Gladiator (both use the word \"phase\" prominently)",
+     "why_chosen": "DOOM Eternal has four boss cards. Doom Hunter's own card never uses the word \"phase\" (it says \"first health bar\" / \"second bar\"), while two other bosses in the same game do -- the same shape of confound as the Deep Rock pair, from a different game with several bosses.",
+     "runs": [
+      {
+       "sample": 1,
+       "turn1": {
+        "question": "how do i beat the doom hunter",
+        "cards_attached": [
+         "Doom Hunter",
+         "The Crucible",
+         "Starting out in DOOM Eternal: the combat loop"
+        ],
+        "right_note_attached": true,
+        "words": 149,
+        "seconds": 1.57
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Doom Hunter",
+         "The Crucible",
+         "Starting out in DOOM Eternal: the combat loop"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Doom Hunter",
+        "words": 35,
+        "seconds": 1.0,
+        "reply": "I need to know what you are currently doing in the game to give you useful advice. Are you struggling with a specific area, or are you asking about a particular part of the game?",
+        "judgement": "wrong",
+        "why": "Does not answer -- asks what the player is currently doing; no Doom Hunter fact stated."
+       }
+      },
+      {
+       "sample": 2,
+       "turn1": {
+        "question": "how do i beat the doom hunter",
+        "cards_attached": [
+         "Doom Hunter",
+         "The Crucible",
+         "Starting out in DOOM Eternal: the combat loop"
+        ],
+        "right_note_attached": true,
+        "words": 161,
+        "seconds": 1.64
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Doom Hunter",
+         "The Crucible",
+         "Starting out in DOOM Eternal: the combat loop"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Doom Hunter",
+        "words": 33,
+        "seconds": 0.7,
+        "reply": "I need to know what game you are referring to. Since you mentioned \"its second phase,\" I need to know what game you are currently playing so I can give you relevant advice.",
+        "judgement": "wrong",
+        "why": "Does not answer -- asks which game the player means, even though the reminder named Doom Hunter and the game was passed as running."
+       }
+      },
+      {
+       "sample": 3,
+       "turn1": {
+        "question": "how do i beat the doom hunter",
+        "cards_attached": [
+         "Doom Hunter",
+         "The Crucible",
+         "Starting out in DOOM Eternal: the combat loop"
+        ],
+        "right_note_attached": true,
+        "words": 87,
+        "seconds": 1.19
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Doom Hunter",
+         "The Crucible",
+         "Starting out in DOOM Eternal: the combat loop"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Doom Hunter",
+        "words": 24,
+        "seconds": 0.61,
+        "reply": "Since you asked about the second phase, I need to know what game you are referring to. Are you asking about a specific game?",
+        "judgement": "wrong",
+        "why": "Same failure: asks which game, no Doom Hunter fact stated."
+       }
+      }
+     ],
+     "right_of_3": 0
+    },
+    {
+     "id": "P-OOT-PHASE-01",
+     "game": "The Legend of Zelda: Ocarina of Time",
+     "first_question": "how do i beat morpha",
+     "right_boss": "Morpha",
+     "rival_boss": "Twinrova",
+     "why_chosen": "Ocarina of Time has six boss cards. Morpha's card is a single-stage fight with no phase language at all, while Twinrova's card explicitly says \"First phase, the Mirror Shield...\" -- again the same confound shape, a third game.",
+     "runs": [
+      {
+       "sample": 1,
+       "turn1": {
+        "question": "how do i beat morpha",
+        "cards_attached": [
+         "Morpha",
+         "Volvagia",
+         "Dark Link"
+        ],
+        "right_note_attached": true,
+        "words": 60,
+        "seconds": 1.16
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Morpha",
+         "Twinrova",
+         "Adult dungeon order"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Morpha",
+        "words": 39,
+        "seconds": 0.93,
+        "reply": "```bonsai-spoiler\nFor the boss you are referring to, the second phase involves a specific mechanic where you need to manage the incoming attacks. You must wait for the enemy's attack pattern to complete before attempting your next move.\n```",
+        "judgement": "wrong",
+        "why": "Generic boss-fight advice (\"wait for the attack pattern to complete\") inside a spoiler fence; never names Morpha or states its actual mechanic (the nucleus, the hookshot)."
+       }
+      },
+      {
+       "sample": 2,
+       "turn1": {
+        "question": "how do i beat morpha",
+        "cards_attached": [
+         "Morpha",
+         "Volvagia",
+         "Dark Link"
+        ],
+        "right_note_attached": true,
+        "words": 87,
+        "seconds": 1.3
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Morpha",
+         "Twinrova",
+         "Adult dungeon order"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Morpha",
+        "words": 60,
+        "seconds": 1.02,
+        "reply": "Strategy Guide mode is active. I will keep the coaching spoiler-minimized.\n\n```bonsai-spoiler\nMorpha is a Water Temple boss. The second phase involves dealing with the nucleus, which is the only part you can hurt. The tip is to pull it in, slash it while it is beached, and fight from a corner so the tentacles come from one side.\n```",
+        "judgement": "right",
+        "why": "Names Morpha and states its own facts: the nucleus is the only vulnerable part, pull it in, slash while beached, fight from a corner."
+       }
+      },
+      {
+       "sample": 3,
+       "turn1": {
+        "question": "how do i beat morpha",
+        "cards_attached": [
+         "Morpha",
+         "Volvagia",
+         "Dark Link"
+        ],
+        "right_note_attached": true,
+        "words": 68,
+        "seconds": 1.15
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Morpha",
+         "Twinrova",
+         "Adult dungeon order"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Morpha",
+        "words": 59,
+        "seconds": 1.08,
+        "reply": "Strategy guide mode is active. I will keep the coaching spoiler-minimized.\n\n```bonsai-spoiler\nMorpha is a boss where the red nucleus is the only part you can hurt. Use the hookshot to drag it onto the floor, then slash it while it is beached. Fighting from a corner is also recommended to keep the tentacles coming from one side.\n```",
+        "judgement": "right",
+        "why": "Names Morpha (\"a boss where the red nucleus...\") and states the same real facts: hookshot, slash while beached, fight from a corner."
+       }
+      }
+     ],
+     "right_of_3": 2
+    }
+   ],
+   "right_of_9": 4,
+   "mean_words_turn2": 43.9,
+   "mean_seconds_turn2": 0.94,
+   "right_note_attached_every_time": true
+  },
+  "narrow_notes": {
+   "meta": {
+    "date": "2026-09-12",
+    "label": "shapes-narrow-notes",
+    "model": "gemma4:e2b-it-qat",
+    "ollama": "http://127.0.0.1:11434",
+    "corpus_version": "2026.09.12",
+    "corpus_sections": 293,
+    "followup_shape": "narrow_notes",
+    "samples_per_pair": 3,
+    "pairs": 3,
+    "run_minutes": 0.3
+   },
+   "pairs": [
+    {
+     "id": "P-DRG-PHASE-01",
+     "game": "Deep Rock Galactic: Survivor",
+     "first_question": "how do i beat the glyphid dreadnought",
+     "right_boss": "Glyphid Dreadnought",
+     "rival_boss": "Dreadnought Twins",
+     "why_chosen": "The device's own known-failing pair (D98). Several boss cards in this game; the rival's card explicitly reads like a second phase (health bars drift apart, both turn immune while healing).",
+     "runs": [
+      {
+       "sample": 1,
+       "turn1": {
+        "question": "how do i beat the glyphid dreadnought",
+        "cards_attached": [
+         "Glyphid Dreadnought",
+         "Dreadnought Twins",
+         "Exploder"
+        ],
+        "right_note_attached": true,
+        "words": 46,
+        "seconds": 1.05
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Glyphid Dreadnought"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Glyphid Dreadnought",
+        "words": 62,
+        "seconds": 1.14,
+        "reply": "When you ask about the second phase, I'll focus on managing the waves and utilizing your abilities. Generally, in survivor-style games, the second phase often introduces tougher enemies or different environmental challenges. Focus on keeping your movement efficient, using kiting to manage incoming damage, and saving any powerful abilities like overclock or nuke for those moments when you can break enemy armor.",
+        "judgement": "right",
+        "why": "Borderline: never says \"Glyphid Dreadnought\" by name (talks generically about \"survivor-style games\"), but every tactic given -- kiting, weak-point armor, overclock/nuke for armor breaks -- is this boss's own card and nothing else's, because only its card was in the pool."
+       }
+      },
+      {
+       "sample": 2,
+       "turn1": {
+        "question": "how do i beat the glyphid dreadnought",
+        "cards_attached": [
+         "Glyphid Dreadnought",
+         "Dreadnought Twins",
+         "Exploder"
+        ],
+        "right_note_attached": true,
+        "words": 34,
+        "seconds": 0.9
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Glyphid Dreadnought"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Glyphid Dreadnought",
+        "words": 92,
+        "seconds": 1.32,
+        "reply": "I'm not sure exactly what \"second phase\" you are referring to, as I don't have context on your current progress or the specific gameplay you are in. If you can tell me what stage or area you are currently in, I can give you some advice.\n\nIf you are referring to general survival tactics, the key is usually managing your resources and prioritizing targets. For example, if you are facing a tough encounter, you might want to focus on kiting the enemies while saving your powerful abilities for when they are vulnerable.",
+        "judgement": "wrong",
+        "why": "Leads with \"I'm not sure what second phase you're referring to\" -- a refusal, even though the trailing generic tip reuses the right vocabulary."
+       }
+      },
+      {
+       "sample": 3,
+       "turn1": {
+        "question": "how do i beat the glyphid dreadnought",
+        "cards_attached": [
+         "Glyphid Dreadnought",
+         "Dreadnought Twins",
+         "Exploder"
+        ],
+        "right_note_attached": true,
+        "words": 40,
+        "seconds": 0.94
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Glyphid Dreadnought"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Glyphid Dreadnought",
+        "words": 83,
+        "seconds": 1.13,
+        "reply": "I am focusing on the general mechanics of the second phase. Since I don't have a specific screenshot or context about where you are in the game, I'll give you some general advice for surviving tougher sections. Focus on kiting the enemies—that means moving back and forth between them to keep them away from you while you aim at their weak points. Save your powerful abilities, like the overclock or nuke, for when you see a good window to break through heavy armor.",
+        "judgement": "right",
+        "why": "Borderline, same reasoning as sample 1: no boss named, but the tactics given (kiting, weak points, overclock/nuke on armor) are Glyphid Dreadnought's own and only its own."
+       }
+      }
+     ],
+     "right_of_3": 2
+    },
+    {
+     "id": "P-DOOME-PHASE-01",
+     "game": "DOOM Eternal",
+     "first_question": "how do i beat the doom hunter",
+     "right_boss": "Doom Hunter",
+     "rival_boss": "Icon of Sin / Gladiator (both use the word \"phase\" prominently)",
+     "why_chosen": "DOOM Eternal has four boss cards. Doom Hunter's own card never uses the word \"phase\" (it says \"first health bar\" / \"second bar\"), while two other bosses in the same game do -- the same shape of confound as the Deep Rock pair, from a different game with several bosses.",
+     "runs": [
+      {
+       "sample": 1,
+       "turn1": {
+        "question": "how do i beat the doom hunter",
+        "cards_attached": [
+         "Doom Hunter",
+         "The Crucible",
+         "Starting out in DOOM Eternal: the combat loop"
+        ],
+        "right_note_attached": true,
+        "words": 117,
+        "seconds": 1.36
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Doom Hunter"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Doom Hunter",
+        "words": 127,
+        "seconds": 1.58,
+        "reply": "I can give you some general advice on moving through the game. Since you asked about the \"second phase,\" I'll focus on the general mechanics you'll encounter as you progress.\n\nThe game is structured in distinct phases, and each one introduces new types of threats and mechanics. Generally, you'll be dealing with increasingly difficult enemies and environmental challenges. Pay attention to how you manage your resources, especially your health and ammo, as the fights get more intense. A key aspect of the game is mastering the movement and combat style—learning when to use your different weapons and abilities effectively is crucial for surviving the tougher encounters.\n\nIf you are referring to a specific section or boss, let me know so I can give you more targeted advice.",
+        "judgement": "wrong",
+        "why": "Generic \"phases get harder\" overview; no Doom Hunter-specific fact, even though Doom Hunter's card was the only thing attached."
+       }
+      },
+      {
+       "sample": 2,
+       "turn1": {
+        "question": "how do i beat the doom hunter",
+        "cards_attached": [
+         "Doom Hunter",
+         "The Crucible",
+         "Starting out in DOOM Eternal: the combat loop"
+        ],
+        "right_note_attached": true,
+        "words": 85,
+        "seconds": 1.2
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Doom Hunter"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Doom Hunter",
+        "words": 59,
+        "seconds": 0.87,
+        "reply": "I'm not sure what \"second phase\" you are referring to, as I don't have context on your current progress in DOOM Eternal. Are you asking about a specific boss, a weapon upgrade, or perhaps a new area?\n\n```bonsai_strategy_branches\n{\"question\":\"Where are you at in DOOM Eternal?\",\"options\":[{\"id\":\"a\",\"label\":\"Just starting the game\"},{\"id\":\"b\",\"label\":\"Fighting through the first major area\"},{\"id\":\"c\",\"label\":\"Trying to beat a specific boss\"}]}\n```",
+        "judgement": "wrong",
+        "why": "Does not answer -- asks which boss, and opens an unrelated branch-menu prompt."
+       }
+      },
+      {
+       "sample": 3,
+       "turn1": {
+        "question": "how do i beat the doom hunter",
+        "cards_attached": [
+         "Doom Hunter",
+         "The Crucible",
+         "Starting out in DOOM Eternal: the combat loop"
+        ],
+        "right_note_attached": true,
+        "words": 169,
+        "seconds": 1.82
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Doom Hunter"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Doom Hunter",
+        "words": 77,
+        "seconds": 1.09,
+        "reply": "You're asking about the second phase of the game. Since I don't have a screenshot or specific context about where you are right now, I can only give you general advice on how the game progresses. The game generally involves moving through distinct areas, and the challenges scale up significantly as you progress. Focus on managing your resources—ammo, health, and energy—efficiently. Pay attention to enemy patterns; learning their attack timings is key to surviving the tougher encounters.",
+        "judgement": "wrong",
+        "why": "Generic resource/pattern advice; no Doom Hunter fact stated despite it being the only card in the prompt."
+       }
+      }
+     ],
+     "right_of_3": 0
+    },
+    {
+     "id": "P-OOT-PHASE-01",
+     "game": "The Legend of Zelda: Ocarina of Time",
+     "first_question": "how do i beat morpha",
+     "right_boss": "Morpha",
+     "rival_boss": "Twinrova",
+     "why_chosen": "Ocarina of Time has six boss cards. Morpha's card is a single-stage fight with no phase language at all, while Twinrova's card explicitly says \"First phase, the Mirror Shield...\" -- again the same confound shape, a third game.",
+     "runs": [
+      {
+       "sample": 1,
+       "turn1": {
+        "question": "how do i beat morpha",
+        "cards_attached": [
+         "Morpha",
+         "Volvagia",
+         "Dark Link"
+        ],
+        "right_note_attached": true,
+        "words": 53,
+        "seconds": 1.03
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Morpha"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Morpha",
+        "words": 6,
+        "seconds": 0.68,
+        "reply": "Choose where you are stuck below.",
+        "judgement": "wrong",
+        "why": "Degenerate non-answer: \"Choose where you are stuck below.\""
+       }
+      },
+      {
+       "sample": 2,
+       "turn1": {
+        "question": "how do i beat morpha",
+        "cards_attached": [
+         "Morpha",
+         "Volvagia",
+         "Dark Link"
+        ],
+        "right_note_attached": true,
+        "words": 51,
+        "seconds": 1.05
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Morpha"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Morpha",
+        "words": 32,
+        "seconds": 0.76,
+        "reply": "Since you haven't specified which game you are playing or what phase you are asking about, I cannot give you specific advice. I need to know which game you are referring to.",
+        "judgement": "wrong",
+        "why": "Does not answer -- asks which game, despite Morpha's card being the only thing attached."
+       }
+      },
+      {
+       "sample": 3,
+       "turn1": {
+        "question": "how do i beat morpha",
+        "cards_attached": [
+         "Morpha",
+         "Volvagia",
+         "Dark Link"
+        ],
+        "right_note_attached": true,
+        "words": 66,
+        "seconds": 1.21
+       },
+       "turn2_followup": {
+        "question": "what about its second phase",
+        "cards_attached": [
+         "Morpha"
+        ],
+        "right_note_attached": true,
+        "followup_memory_used": true,
+        "remembered_subject": "Morpha",
+        "words": 44,
+        "seconds": 0.95,
+        "reply": "Since you haven't specified which part of the game you are referring to, I will focus on general progression advice. I need to know what you are currently trying to do or what specific area you are stuck in to give you useful coaching.",
+        "judgement": "wrong",
+        "why": "Does not answer -- asks what area the player is stuck in; no Morpha fact stated."
+       }
+      }
+     ],
+     "right_of_3": 0
+    }
+   ],
+   "right_of_9": 2,
+   "mean_words_turn2": 64.7,
+   "mean_seconds_turn2": 1.06,
+   "right_note_attached_every_time": true
+  }
+ },
+ "attachment_failures": "None. The right boss's note attached, at the top of the pile, on every one of the 27 follow-up turns under every shape -- the failure measured here is entirely about what the model wrote, never about the note going missing.",
+ "summary_table": {
+  "baseline (today, shipped)": {
+   "answered_about_the_right_boss": "0 of 9",
+   "mean_words": 87.3,
+   "mean_seconds": 1.24
+  },
+  "shape_a_tell_subject": {
+   "answered_about_the_right_boss": "4 of 9",
+   "mean_words": 43.9,
+   "mean_seconds": 0.94
+  },
+  "shape_b_narrow_notes": {
+   "answered_about_the_right_boss": "2 of 9 (both borderline -- right facts, boss never named)",
+   "mean_words": 64.7,
+   "mean_seconds": 1.06
+  }
+ },
+ "what_this_means": "Today, right after the plugin remembers which boss you were just asking about, it still gets the follow-up wrong every single time in this test -- none of the nine tries answered about the right boss. Telling the model in plain words which boss the question is carrying on from fixed about four in nine tries -- still not reliable, but a real improvement, and it never made an answer thinner. Only keeping that one boss's own note and throwing the rest away worked less often -- about two in nine, and even those two never actually named the boss, they just happened to repeat its facts without confusing them with a different one. One game, DOOM Eternal, failed under every single approach: the model simply never connected \"second phase\" to that boss's note, even when it was the only thing in front of it, so this is not just a search or a wording problem -- sometimes the small model on the Deck cannot make the connection at all. In every single try, under every approach, the right boss's note was in front of the model at the top of the pile -- it was never simply missing. So the fixes are not about finding the right note anymore; they are about getting the model to actually use it.",
+ "recommendation": "Telling the model which thing the question is about (shape A) is the one worth shipping if either is shipped: it did better than doing nothing, never made a reply thinner or removed a usable note, and it cannot unlock a boss's spoilers by itself because the reminder is not treated as the player naming anything. It is also the cheaper change. Throwing away every other note (shape B) did not pay for its downside here -- answers got shorter without getting more often correct, and it can leave nothing at all if the remembered boss turns out to be the wrong guess. Neither fix reaches \"reliable\" on its own -- four right out of nine is still worse than a coin flip -- and the DOOM Eternal result says some of this gap is the small model's own reading of the note, not something a prompt tweak can close. If this ships, it should ship as a small gain worth having, not as the fix for the bug, and the DOOM Eternal case is worth another look on its own before anyone calls this closed.",
+ "not_shipped": "Both shapes ran only behind the --followup-shape switch in scripts/eval_kb_answers.py, off by default. Nothing about what the plugin sends to the model changed during this measurement."
+}

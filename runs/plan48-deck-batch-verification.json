@@ -1,0 +1,765 @@
+{
+ "library_measured": {
+  "path": "build\\knowledge-base\\corpus.db",
+  "mtime": 1789202779.3190756,
+  "games": 25,
+  "strategy_sections": 293,
+  "troubleshooting_tips": 159
+ },
+ "group_1_tips_find_nothing_that_fits": {
+  "what_this_means": "These five questions used to reach the tip sheet but come back with a tip that did not answer them. The idea was that this wave's change would now leave them with nothing attached and a line saying no tip fit -- not silence, and not a wrong tip. Measured here: on today's library, none of the five reach that state. A tip still attaches every time, in every mode, and the tips are mostly still not about what was actually asked -- see each row's attached tip text.",
+  "rows": [
+   {
+    "question": "the trackpad haptics buzz constantly in proton games",
+    "chars": 52,
+    "in_speed_mode_the_apps_default": {
+     "question": "the trackpad haptics buzz constantly in proton games",
+     "chars": 52,
+     "ask_mode": "speed",
+     "app_id": "",
+     "app_name": "",
+     "gate": true,
+     "domain": "compat",
+     "routed_to": "tips",
+     "text_resolved_title": "",
+     "kb_coverage_status": "no_app",
+     "attached": true,
+     "attaches": [
+      "proton"
+     ],
+     "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: compat\n\n[Tip: proton] (trust: fallback_no_source)\nDeck sleep with Proton games: if resume fails, exit to Gaming Mode home and relaunch.\n\n--- End local knowledge base ---",
+     "kb_notes": "compat_tips",
+     "kb_unavailable_reason": "",
+     "kb_best_meaning": null,
+     "kb_top_card_keyword_score": 4.022731757892689,
+     "line": "none"
+    },
+    "in_strategy_mode_meaning_search_on": {
+     "question": "the trackpad haptics buzz constantly in proton games",
+     "chars": 52,
+     "ask_mode": "strategy",
+     "app_id": "",
+     "app_name": "",
+     "gate": true,
+     "domain": "compat",
+     "routed_to": "tips",
+     "text_resolved_title": "",
+     "kb_coverage_status": "no_app",
+     "attached": true,
+     "attaches": [
+      "proton"
+     ],
+     "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: compat\n\n[Tip: proton] (trust: fallback_no_source)\nDeck sleep with Proton games: if resume fails, exit to Gaming Mode home and relaunch.\n\n[Tip: proton] (trust: fallback_no_source)\nIf audio crackles under Proton, try gamescope -e or disable RT audio in game settings.\n\n[Tip: proton] (trust: fallback_no_source)\nForce Proton 8.x or Experimental from game Properties when default fails after title update.\n\n--- End local knowledge base ---",
+     "kb_notes": "compat_tips",
+     "kb_unavailable_reason": "",
+     "kb_best_meaning": 0.7036757169181321,
+     "kb_top_card_keyword_score": 4.022731757892689,
+     "line": "none"
+    },
+    "floor_rejects_it_even_with_meaning_search_on": false
+   },
+   {
+    "question": "proton games launch upside down on my external monitor",
+    "chars": 54,
+    "in_speed_mode_the_apps_default": {
+     "question": "proton games launch upside down on my external monitor",
+     "chars": 54,
+     "ask_mode": "speed",
+     "app_id": "",
+     "app_name": "",
+     "gate": true,
+     "domain": "compat",
+     "routed_to": "tips",
+     "text_resolved_title": "",
+     "kb_coverage_status": "no_app",
+     "attached": true,
+     "attaches": [
+      "display"
+     ],
+     "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: compat\n\n[Tip: display] (trust: fallback_no_source)\nExternal monitor blank: try HDMI direct, 1080p60, disable overscan.\n\n--- End local knowledge base ---",
+     "kb_notes": "compat_tips",
+     "kb_unavailable_reason": "",
+     "kb_best_meaning": null,
+     "kb_top_card_keyword_score": 8.934896703177873,
+     "line": "none"
+    },
+    "in_strategy_mode_meaning_search_on": {
+     "question": "proton games launch upside down on my external monitor",
+     "chars": 54,
+     "ask_mode": "strategy",
+     "app_id": "",
+     "app_name": "",
+     "gate": true,
+     "domain": "compat",
+     "routed_to": "tips",
+     "text_resolved_title": "",
+     "kb_coverage_status": "no_app",
+     "attached": true,
+     "attaches": [
+      "proton"
+     ],
+     "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: compat\n\n[Tip: proton] (trust: fallback_no_source)\nDeck sleep with Proton games: if resume fails, exit to Gaming Mode home and relaunch.\n\n[Tip: proton] (trust: fallback_no_source)\nWinetricks/dotnet installs are last resort; prefer official Proton or game-specific fixes.\n\n[Tip: proton] (trust: fallback_no_source)\nIf audio crackles under Proton, try gamescope -e or disable RT audio in game settings.\n\n--- End local knowledge base ---",
+     "kb_notes": "compat_tips",
+     "kb_unavailable_reason": "",
+     "kb_best_meaning": 0.6597630495202788,
+     "kb_top_card_keyword_score": 4.022731757892689,
+     "line": "none"
+    },
+    "floor_rejects_it_even_with_meaning_search_on": false
+   },
+   {
+    "question": "shader download stalls at 99 percent every single time",
+    "chars": 54,
+    "in_speed_mode_the_apps_default": {
+     "question": "shader download stalls at 99 percent every single time",
+     "chars": 54,
+     "ask_mode": "speed",
+     "app_id": "",
+     "app_name": "",
+     "gate": true,
+     "domain": "compat",
+     "routed_to": "tips",
+     "text_resolved_title": "",
+     "kb_coverage_status": "no_app",
+     "attached": true,
+     "attaches": [
+      "shader"
+     ],
+     "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: compat\n\n[Tip: shader] (trust: fallback_no_source)\nShader pre-cache missing: first launch stutters until cache builds.\n\n--- End local knowledge base ---",
+     "kb_notes": "compat_tips",
+     "kb_unavailable_reason": "",
+     "kb_best_meaning": null,
+     "kb_top_card_keyword_score": 0.0,
+     "line": "none"
+    },
+    "in_strategy_mode_meaning_search_on": {
+     "question": "shader download stalls at 99 percent every single time",
+     "chars": 54,
+     "ask_mode": "strategy",
+     "app_id": "",
+     "app_name": "",
+     "gate": true,
+     "domain": "compat",
+     "routed_to": "tips",
+     "text_resolved_title": "",
+     "kb_coverage_status": "no_app",
+     "attached": true,
+     "attaches": [
+      "shader",
+      "performance",
+      "crash"
+     ],
+     "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: compat\n\n[Tip: shader] (trust: fallback_no_source)\nShader pre-cache missing: first launch stutters until cache builds.\n\n[Tip: performance] (trust: fallback_no_source)\nGive the game a minute after launch -- shaders compiling for the first time cause stutter that goes away.\n\n[Tip: crash] (trust: fallback_no_source)\nClear the shader cache under ~/.steam/steam/steamapps/shadercache/<appid> and let it rebuild.\n\n--- End local knowledge base ---",
+     "kb_notes": "compat_tips",
+     "kb_unavailable_reason": "",
+     "kb_best_meaning": 0.6685080446357804,
+     "kb_top_card_keyword_score": 5.41983563412182,
+     "line": "none"
+    },
+    "floor_rejects_it_even_with_meaning_search_on": false
+   },
+   {
+    "question": "the deck wakes from sleep with no wifi until i reboot",
+    "chars": 53,
+    "in_speed_mode_the_apps_default": {
+     "question": "the deck wakes from sleep with no wifi until i reboot",
+     "chars": 53,
+     "ask_mode": "speed",
+     "app_id": "",
+     "app_name": "",
+     "gate": true,
+     "domain": "compat",
+     "routed_to": "tips",
+     "text_resolved_title": "",
+     "kb_coverage_status": "no_app",
+     "attached": true,
+     "attaches": [
+      "deck"
+     ],
+     "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: compat\n\n[Tip: deck] (trust: fallback_no_source)\nVerify AC adapter wattage; weak USB-C hubs can throttle charge and TDP during play.\n\n--- End local knowledge base ---",
+     "kb_notes": "compat_tips",
+     "kb_unavailable_reason": "",
+     "kb_best_meaning": null,
+     "kb_top_card_keyword_score": 0.0,
+     "line": "none"
+    },
+    "in_strategy_mode_meaning_search_on": {
+     "question": "the deck wakes from sleep with no wifi until i reboot",
+     "chars": 53,
+     "ask_mode": "strategy",
+     "app_id": "",
+     "app_name": "",
+     "gate": true,
+     "domain": "compat",
+     "routed_to": "tips",
+     "text_resolved_title": "",
+     "kb_coverage_status": "no_app",
+     "attached": true,
+     "attaches": [
+      "deck"
+     ],
+     "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: compat\n\n[Tip: deck] (trust: fallback_no_source)\nReboot clears stuck GPU/audio states after failed game exit or suspend bugs.\n\n[Tip: deck] (trust: fallback_no_source)\nAfter long sessions, check fan noise and surface temp; pause and lower TDP if throttling.\n\n[Tip: deck] (trust: fallback_no_source)\nVerify AC adapter wattage; weak USB-C hubs can throttle charge and TDP during play.\n\n--- End local knowledge base ---",
+     "kb_notes": "compat_tips",
+     "kb_unavailable_reason": "",
+     "kb_best_meaning": 0.7070259386135278,
+     "kb_top_card_keyword_score": 3.5516511355747626,
+     "line": "none"
+    },
+    "floor_rejects_it_even_with_meaning_search_on": false
+   },
+   {
+    "question": "my sd card randomly unmounts while a game is running",
+    "chars": 52,
+    "in_speed_mode_the_apps_default": {
+     "question": "my sd card randomly unmounts while a game is running",
+     "chars": 52,
+     "ask_mode": "speed",
+     "app_id": "",
+     "app_name": "",
+     "gate": true,
+     "domain": "compat",
+     "routed_to": "tips",
+     "text_resolved_title": "",
+     "kb_coverage_status": "no_app",
+     "attached": true,
+     "attaches": [
+      "storage"
+     ],
+     "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: compat\n\n[Tip: storage] (trust: fallback_no_source)\nMove library to SD: Steam Settings > Storage; move per game.\n\n--- End local knowledge base ---",
+     "kb_notes": "compat_tips",
+     "kb_unavailable_reason": "",
+     "kb_best_meaning": null,
+     "kb_top_card_keyword_score": 0.0,
+     "line": "none"
+    },
+    "in_strategy_mode_meaning_search_on": {
+     "question": "my sd card randomly unmounts while a game is running",
+     "chars": 52,
+     "ask_mode": "strategy",
+     "app_id": "",
+     "app_name": "",
+     "gate": true,
+     "domain": "compat",
+     "routed_to": "tips",
+     "text_resolved_title": "",
+     "kb_coverage_status": "no_app",
+     "attached": true,
+     "attaches": [
+      "storage"
+     ],
+     "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: compat\n\n[Tip: storage] (trust: fallback_no_source)\nRepair library folder permissions if games fail to update after SD remount.\n\n[Tip: storage] (trust: fallback_no_source)\ncompatdata on SD moves with game if selected; shaders may need regen.\n\n[Tip: storage] (trust: fallback_no_source)\next4 on SD: SteamOS formats SD; do not reformat to NTFS for library.\n\n--- End local knowledge base ---",
+     "kb_notes": "compat_tips",
+     "kb_unavailable_reason": "",
+     "kb_best_meaning": 0.6873015570575494,
+     "kb_top_card_keyword_score": 3.9501171673965,
+     "line": "none"
+    },
+    "floor_rejects_it_even_with_meaning_search_on": false
+   }
+  ]
+ },
+ "group_2_tips_should_attach_the_right_one": {
+  "what_this_means": "The first eight questions are meant to bring back a tip about the right problem. The last one, a plain thank-you, is meant to bring back nothing at all -- if it attached a tip, that would be a mistake worth flagging on its own. The television one is a known exception: the roadmap already records it coming back with a tip about Big Picture Mode versus Desktop Mode, which does not answer a question about a screen plugged into a TV. Measured again here on the fresh library: it still does, in every mode, so it still does not belong in the 'attaches the right tip' bucket.",
+  "rows": [
+   {
+    "question": "the game is really stuttering and skipping around the whole time I'm trying to play it",
+    "chars": 86,
+    "ask_mode": "speed",
+    "app_id": "",
+    "app_name": "",
+    "gate": true,
+    "domain": "compat",
+    "routed_to": "tips",
+    "text_resolved_title": "",
+    "kb_coverage_status": "no_app",
+    "attached": true,
+    "attaches": [
+     "performance"
+    ],
+    "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: compat\n\n[Tip: performance] (trust: fallback_no_source)\nGive the game a minute after launch -- shaders compiling for the first time cause stutter that goes away.\n\n--- End local knowledge base ---",
+    "kb_notes": "compat_tips",
+    "kb_unavailable_reason": "",
+    "kb_best_meaning": null,
+    "kb_top_card_keyword_score": 6.534525432466915,
+    "line": "none"
+   },
+   {
+    "question": "no sound at all coming out",
+    "chars": 26,
+    "ask_mode": "speed",
+    "app_id": "",
+    "app_name": "",
+    "gate": true,
+    "domain": "compat",
+    "routed_to": "tips",
+    "text_resolved_title": "",
+    "kb_coverage_status": "no_app",
+    "attached": true,
+    "attaches": [
+     "audio"
+    ],
+    "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: compat\n\n[Tip: audio] (trust: fallback_no_source)\nIf there is no sound at all, check the in-game audio settings too, not just the Deck's.\n\n--- End local knowledge base ---",
+    "kb_notes": "compat_tips",
+    "kb_unavailable_reason": "",
+    "kb_best_meaning": null,
+    "kb_top_card_keyword_score": 10.185437128523482,
+    "line": "none"
+   },
+   {
+    "question": "storage full cant install anything else",
+    "chars": 39,
+    "ask_mode": "speed",
+    "app_id": "",
+    "app_name": "",
+    "gate": true,
+    "domain": "compat",
+    "routed_to": "tips",
+    "text_resolved_title": "",
+    "kb_coverage_status": "no_app",
+    "attached": true,
+    "attaches": [
+     "storage"
+    ],
+    "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: compat\n\n[Tip: storage] (trust: fallback_no_source)\nInternal storage full: uninstall large shaders and unused games first.\n\n--- End local knowledge base ---",
+    "kb_notes": "compat_tips",
+    "kb_unavailable_reason": "",
+    "kb_best_meaning": null,
+    "kb_top_card_keyword_score": 8.864100129616869,
+    "line": "none"
+   },
+   {
+    "question": "screen looks torn and glitchy",
+    "chars": 29,
+    "ask_mode": "speed",
+    "app_id": "",
+    "app_name": "",
+    "gate": true,
+    "domain": "compat",
+    "routed_to": "tips",
+    "text_resolved_title": "",
+    "kb_coverage_status": "no_app",
+    "attached": true,
+    "attaches": [
+     "display"
+    ],
+    "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: compat\n\n[Tip: display] (trust: fallback_no_source)\nIf the screen looks torn while moving the camera, turn on V-Sync in the game's display settings.\n\n--- End local knowledge base ---",
+    "kb_notes": "compat_tips",
+    "kb_unavailable_reason": "",
+    "kb_best_meaning": null,
+    "kb_top_card_keyword_score": 9.889898427717398,
+    "line": "none"
+   },
+   {
+    "question": "it gets really hot and battery drains so fast",
+    "chars": 45,
+    "ask_mode": "speed",
+    "app_id": "",
+    "app_name": "",
+    "gate": true,
+    "domain": "compat",
+    "routed_to": "tips",
+    "text_resolved_title": "",
+    "kb_coverage_status": "no_app",
+    "attached": true,
+    "attaches": [
+     "performance"
+    ],
+    "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: compat\n\n[Tip: performance] (trust: fallback_no_source)\nLower the TDP limit in Quick Settings if the Deck feels hot or the fan is loud.\n\n--- End local knowledge base ---",
+    "kb_notes": "compat_tips",
+    "kb_unavailable_reason": "",
+    "kb_best_meaning": null,
+    "kb_top_card_keyword_score": 4.214206182997555,
+    "line": "none"
+   },
+   {
+    "question": "it gets uncomfortably warm in my hands after a little while and the battery seems to drain a lot quicker than it used to",
+    "chars": 120,
+    "ask_mode": "speed",
+    "app_id": "",
+    "app_name": "",
+    "gate": true,
+    "domain": "compat",
+    "routed_to": "tips",
+    "text_resolved_title": "",
+    "kb_coverage_status": "no_app",
+    "attached": true,
+    "attaches": [
+     "performance"
+    ],
+    "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: compat\n\n[Tip: performance] (trust: fallback_no_source)\nTDP cap in QAM affects CPU/GPU together; lowering reduces heat.\n\n--- End local knowledge base ---",
+    "kb_notes": "compat_tips",
+    "kb_unavailable_reason": "",
+    "kb_best_meaning": null,
+    "kb_top_card_keyword_score": 0.0,
+    "line": "none"
+   },
+   {
+    "question": "update stuck wont finish installing",
+    "chars": 35,
+    "ask_mode": "speed",
+    "app_id": "",
+    "app_name": "",
+    "gate": true,
+    "domain": "compat",
+    "routed_to": "tips",
+    "text_resolved_title": "",
+    "kb_coverage_status": "no_app",
+    "attached": true,
+    "attaches": [
+     "updates"
+    ],
+    "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: compat\n\n[Tip: updates] (trust: fallback_no_source)\nSteamOS update stuck: reboot and retry; recovery image if boot loop.\n\n--- End local knowledge base ---",
+    "kb_notes": "compat_tips",
+    "kb_unavailable_reason": "",
+    "kb_best_meaning": null,
+    "kb_top_card_keyword_score": 8.3050747393618,
+    "line": "none"
+   },
+   {
+    "question": "when I plug it into the television the menus show up in the wrong spot on the screen and are hard to read",
+    "chars": 105,
+    "ask_mode": "speed",
+    "app_id": "",
+    "app_name": "",
+    "gate": true,
+    "domain": "compat",
+    "routed_to": "tips",
+    "text_resolved_title": "",
+    "kb_coverage_status": "no_app",
+    "attached": true,
+    "attaches": [
+     "bpm"
+    ],
+    "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: compat\n\n[Tip: bpm] (trust: fallback_no_source)\nBig Picture Mode is default on Deck; Desktop Mode for Konsole and file fixes.\n\n--- End local knowledge base ---",
+    "kb_notes": "compat_tips",
+    "kb_unavailable_reason": "",
+    "kb_best_meaning": null,
+    "kb_top_card_keyword_score": 0.0,
+    "line": "none"
+   },
+   {
+    "question": "thank you very much",
+    "chars": 19,
+    "ask_mode": "speed",
+    "app_id": "",
+    "app_name": "",
+    "gate": false,
+    "domain": "",
+    "routed_to": "neither",
+    "text_resolved_title": "",
+    "kb_coverage_status": "no_app",
+    "attached": false,
+    "attaches": [],
+    "card_text": "",
+    "kb_notes": "",
+    "kb_unavailable_reason": "",
+    "kb_best_meaning": null,
+    "kb_top_card_keyword_score": 0.0,
+    "line": "none"
+   }
+  ]
+ },
+ "group_3_no_close_match_line": {
+  "what_this_means": "This line only shows up when a note DID attach but was a weak match for the question. Measured here: with a game actually running (the two Hades questions), it does. But with nothing running and the game only named in the question (the Black Mesa horse question), the line can never show up no matter how badly the question misses -- the app only checks whether a game's notes are covered against a running or launched game, never against a game a question merely names, so a text-named game always reads as 'no game to check coverage for' even while a note from it is attaching. See the report for the file and line this comes from; it is not something this lane changed or fixed.",
+  "how_do_i_tame_a_horse_black_mesa_named_nothing_running": {
+   "question": "how do i tame a horse in black mesa",
+   "chars": 35,
+   "ask_mode": "strategy",
+   "app_id": "",
+   "app_name": "",
+   "gate": true,
+   "domain": "strategy",
+   "routed_to": "notes",
+   "text_resolved_title": "Black Mesa",
+   "kb_coverage_status": "no_app",
+   "attached": true,
+   "attaches": [
+    "Starting out in Black Mesa",
+    "The opening tram ride and where it leads",
+    "Houndeye"
+   ],
+   "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: strategy\n\n[Black Mesa / mechanic: Starting out in Black Mesa] (trust: wiki_no_patch)\nBlack Mesa is Half-Life rebuilt from the ground up on the Source engine, with new art, sound and voice work but the original's chapters, weapons and enemies kept on purpose rather than added to. The one exception is Xen: those chapters are mostly new work and far longer than the 1998 originals, so budget more time for the alien world than veterans remember. Expect the same shape of game throughout: no cutscenes, scripted scenes you walk through, a crowbar for crates and vents, and fights that go better from a doorway than from the middle of a room. There are 25 achievements, Workshop support and a separate deathmatch mode; the campaign itself is single-player only.\n\n[Black Mesa / mechanic: The opening tram ride and where it leads] (trust: wiki_no_patch)\nBlack Mesa opens with a long tram ride that needs no input beyond looking around; it carries you from the surface entrance through checkpoints and cargo bays into the underground facility, and doubles as an unskippable loading screen for the level ahead. Step off at the platform, badge through the checkpoint, and follow the corridor signs to the locker room, where you change into the orange HEV suit before the day's work — the path there is linear, so a door that will not open yet is one you have not reached the switch for. Anomalous Materials, the lab down the following hall, is where the real gameplay opens up: once things go wrong there, the crowbar on the floor nearby is the first weapon in the game, and from then on every locked vent or wooden crate is worth swinging at before hunting for another way around.\n\n[Black Mesa / enemy: Houndeye] (trust: wiki_no_patch)\nThree-legged with one big compound eye, and always in a pack of up to four. Alone one is timid; together they charge a sonic shockwave that hurts you and smashes crates and glass, and the damage rises with the size of the pack. Kill the leader and the rest lose the ability to charge the wave and fall back to a weak bark, so pick out the one the others follow. A resting pack dozes and wakes to noise, which is your chance to line up the first shot. Bullsquids leave them alone, so a room with both is not a three-way fight.\n\n--- End local knowledge base ---",
+   "kb_notes": "text:black mesa",
+   "kb_unavailable_reason": "",
+   "kb_best_meaning": 0.6942141865959033,
+   "kb_top_card_keyword_score": 16.003356832037234,
+   "line": "none"
+  },
+  "qqqq_zzzz_wwww_hades_running": {
+   "question": "qqqq zzzz wwww",
+   "chars": 14,
+   "ask_mode": "strategy",
+   "app_id": "1145360",
+   "app_name": "Hades",
+   "gate": true,
+   "domain": "strategy",
+   "routed_to": "notes",
+   "text_resolved_title": "",
+   "kb_coverage_status": "sections",
+   "attached": true,
+   "attaches": [
+    "Mirror of Night",
+    "Darkness, keys and gems"
+   ],
+   "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: strategy\n\n[Hades / mechanic: Mirror of Night] (trust: fallback_no_source)\nThe permanent upgrades, bought with Darkness in your room. Each row has two alternatives and you can switch between them for a small cost at any time, so nothing is locked in. Death Defiance is the one that changes early runs most: each rank is another free revive mid-run.\n\n[Hades / mechanic: Darkness, keys and gems] (trust: fallback_no_source)\nThey are different currencies for different things: Darkness feeds the Mirror, Chthonic Keys unlock new weapons and new Mirror rows, and gems pay for the house contractor. Early on, keys and Darkness are both bottlenecks — take whichever you have fewer of, and stop taking gems once the contractor jobs you want are bought.\n\n--- End local knowledge base ---",
+   "kb_notes": "app_id:1145360",
+   "kb_unavailable_reason": "",
+   "kb_best_meaning": 0.5325856370544452,
+   "kb_top_card_keyword_score": 0.0,
+   "line": "no_close_match"
+  },
+  "qqqq_zzzz_wwww_black_mesa_running_sanity_check_only": {
+   "question": "qqqq zzzz wwww",
+   "chars": 14,
+   "ask_mode": "strategy",
+   "app_id": "362890",
+   "app_name": "Black Mesa",
+   "gate": true,
+   "domain": "strategy",
+   "routed_to": "notes",
+   "text_resolved_title": "",
+   "kb_coverage_status": "sections",
+   "attached": true,
+   "attaches": [
+    "Gonarch"
+   ],
+   "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: strategy\n\n[Black Mesa / boss: Gonarch] (trust: wiki_no_patch)\nThe giant four-legged headcrab mother in the caverns of Xen. Its shell shrugs off almost everything; the pale egg sac swinging under its body is the only part that takes damage, so any shot not at the sac is wasted. At range it lobs white acid mortars from its back, up close its front legs slash for huge damage, and whenever it sees you it births baby headcrabs in pairs, up to twenty alive at once: weak and fast, there to distract you from the sac. It walks the webbing over the pits that you and its children fall straight through, so watch your footing more than its feet. When it dies the sac bursts and releases one last brood, so back away before the pop.\n\n--- End local knowledge base ---",
+   "kb_notes": "app_id:362890",
+   "kb_unavailable_reason": "",
+   "kb_best_meaning": 0.5294839630761456,
+   "kb_top_card_keyword_score": 0.0,
+   "line": "no_close_match"
+  },
+  "how_do_i_beat_the_bone_hydra_in_hades_hades_running": {
+   "question": "how do i beat the bone hydra in hades",
+   "chars": 37,
+   "ask_mode": "strategy",
+   "app_id": "1145360",
+   "app_name": "Hades",
+   "gate": true,
+   "domain": "strategy",
+   "routed_to": "notes",
+   "text_resolved_title": "",
+   "kb_coverage_status": "sections",
+   "attached": true,
+   "attaches": [
+    "Weapon choice",
+    "Theseus and Asterius",
+    "Heat and the Pact of Punishment"
+   ],
+   "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: strategy\n\n[Hades / mechanic: Weapon choice] (trust: fallback_no_source)\nTake the Stygian Blade first: it is the most forgiving of the six and asks the least of you. The Shield of Chaos is the next easiest, because holding block turns a mistake into nothing. Of the rest, the Eternal Spear is the safest, since its reach keeps you out of trouble. Leave the Twin Fists of Malphon until later — they are the fastest, but they need you standing inside everything. The Heart-Seeking Bow and the Adamant Rail both want range and punish standing still, and the Rail can leave you reloading at the worst possible moment.\n\n[Hades / boss: Theseus and Asterius] (trust: fallback_no_source)\nTwo at once, which is the actual difficulty. Asterius, the bull, telegraphs a long charge — sidestep it and he is briefly stuck. Theseus throws his spear and periodically calls down a god's power, which is marked on the ground before it lands. Most runs go better killing Asterius first, because Theseus alone is predictable.\n\n[Hades / mechanic: Heat and the Pact of Punishment] (trust: fallback_no_source)\nBeating the game once is the middle of the story, not the end — the runs continue and the ending needs several more. The Pact of Punishment unlocks then too: Heat is optional difficulty you add yourself, in exchange for rewards that only come from raising it.\n\n--- End local knowledge base ---",
+   "kb_notes": "app_id:1145360",
+   "kb_unavailable_reason": "",
+   "kb_best_meaning": 0.6368776884560913,
+   "kb_top_card_keyword_score": 0.0,
+   "line": "no_close_match"
+  },
+  "well_covered_control_glyphid_dreadnought_drg_running": {
+   "question": "how do i beat the glyphid dreadnought",
+   "chars": 37,
+   "ask_mode": "strategy",
+   "app_id": "2321470",
+   "app_name": "Deep Rock Galactic: Survivor",
+   "gate": true,
+   "domain": "strategy",
+   "routed_to": "notes",
+   "text_resolved_title": "",
+   "kb_coverage_status": "sections",
+   "attached": true,
+   "attaches": [
+    "Glyphid Dreadnought",
+    "Dreadnought Twins",
+    "Exploder"
+   ],
+   "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: strategy\n\n[Deep Rock Galactic: Survivor / boss: Glyphid Dreadnought] (trust: fallback_no_source)\nKite between waves; focus weak-point armor plates as they open. Save overclock/nuke for armor break windows.\n\n[Deep Rock Galactic: Survivor / boss: Dreadnought Twins] (trust: fallback_no_source)\nSummary: Two smaller Dreadnoughts at once - the Lacerator chases and leaps, the Arbalest hangs back firing fireball spreads.\nWeak points: Neither is as tough as a full Dreadnought on its own.\nPhases: Let their health bars drift apart and both turn immune while they heal the gap closed.\nTips: Split fire evenly rather than burning one down, and the healing never starts.\n\n[Deep Rock Galactic: Survivor / enemy: Exploder] (trust: fallback_no_source)\nSummary: Large orange glyphids that walk into you and detonate in a wide blast.\nWeak points: Fragile, and the blasts chain, so one popped early clears the group behind it.\nTips: Weapons fire themselves, so it dies where you stand - keep distance and the blast lands in the swarm instead.\n\n--- End local knowledge base ---",
+   "kb_notes": "app_id:2321470",
+   "kb_unavailable_reason": "",
+   "kb_best_meaning": 0.7379443292695929,
+   "kb_top_card_keyword_score": 18.70118892690899,
+   "line": "none"
+  }
+ },
+ "group_4_followup_pair": {
+  "what_this_means": "This checks a two-question exchange about the Glyphid Dreadnought boss in Deep Rock Galactic: Survivor. The first question should bring back the right boss's note. The short follow-up after it, 'what about its second phase', has no boss name of its own, so this checks which notes come back for it with the new memory feature on and with it switched off, on this machine, against what the device saw.",
+  "measured_here": {
+   "remembered_subject": "Glyphid Dreadnought",
+   "first_question": {
+    "question": "how do i beat the glyphid dreadnought",
+    "chars": 37,
+    "ask_mode": "strategy",
+    "app_id": "2321470",
+    "app_name": "Deep Rock Galactic: Survivor",
+    "gate": true,
+    "domain": "strategy",
+    "routed_to": "notes",
+    "text_resolved_title": "",
+    "kb_coverage_status": "sections",
+    "attached": true,
+    "attaches": [
+     "Glyphid Dreadnought",
+     "Dreadnought Twins",
+     "Exploder"
+    ],
+    "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: strategy\n\n[Deep Rock Galactic: Survivor / boss: Glyphid Dreadnought] (trust: fallback_no_source)\nKite between waves; focus weak-point armor plates as they open. Save overclock/nuke for armor break windows.\n\n[Deep Rock Galactic: Survivor / boss: Dreadnought Twins] (trust: fallback_no_source)\nSummary: Two smaller Dreadnoughts at once - the Lacerator chases and leaps, the Arbalest hangs back firing fireball spreads.\nWeak points: Neither is as tough as a full Dreadnought on its own.\nPhases: Let their health bars drift apart and both turn immune while they heal the gap closed.\nTips: Split fire evenly rather than burning one down, and the healing never starts.\n\n[Deep Rock Galactic: Survivor / enemy: Exploder] (trust: fallback_no_source)\nSummary: Large orange glyphids that walk into you and detonate in a wide blast.\nWeak points: Fragile, and the blasts chain, so one popped early clears the group behind it.\nTips: Weapons fire themselves, so it dies where you stand - keep distance and the blast lands in the swarm instead.\n\n--- End local knowledge base ---",
+    "kb_notes": "app_id:2321470",
+    "kb_unavailable_reason": "",
+    "kb_best_meaning": 0.7379443292695929,
+    "kb_top_card_keyword_score": 18.70118892690899,
+    "line": "none"
+   },
+   "follow_up_without_memory": {
+    "question": "what about its second phase",
+    "chars": 27,
+    "ask_mode": "strategy",
+    "app_id": "2321470",
+    "app_name": "Deep Rock Galactic: Survivor",
+    "gate": true,
+    "domain": "strategy",
+    "routed_to": "notes",
+    "text_resolved_title": "",
+    "kb_coverage_status": "sections",
+    "attached": true,
+    "attaches": [
+     "Dreadnought Twins",
+     "Praetorian",
+     "Glyphid Dreadnought"
+    ],
+    "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: strategy\n\n[Deep Rock Galactic: Survivor / boss: Dreadnought Twins] (trust: fallback_no_source)\nSummary: Two smaller Dreadnoughts at once - the Lacerator chases and leaps, the Arbalest hangs back firing fireball spreads.\nWeak points: Neither is as tough as a full Dreadnought on its own.\nPhases: Let their health bars drift apart and both turn immune while they heal the gap closed.\nTips: Split fire evenly rather than burning one down, and the healing never starts.\n\n[Deep Rock Galactic: Survivor / enemy: Praetorian] (trust: fallback_no_source)\nSummary: A large melee glyphid with far more health than anything else in the wave.\nWeak points: Slow enough to kite indefinitely while the rest of the swarm is cleared.\nTips: It digs through terrain to reach you, so rock is not a wall - pick the exit lane before it arrives.\n\n[Deep Rock Galactic: Survivor / boss: Glyphid Dreadnought] (trust: fallback_no_source)\nKite between waves; focus weak-point armor plates as they open. Save overclock/nuke for armor break windows.\n\n--- End local knowledge base ---",
+    "kb_notes": "app_id:2321470",
+    "kb_unavailable_reason": "",
+    "kb_best_meaning": 0.5746537425075472,
+    "kb_top_card_keyword_score": 3.8756448397861734,
+    "line": "none"
+   },
+   "follow_up_with_memory": {
+    "question": "what about its second phase Glyphid Dreadnought",
+    "chars": 47,
+    "ask_mode": "strategy",
+    "app_id": "2321470",
+    "app_name": "Deep Rock Galactic: Survivor",
+    "gate": true,
+    "domain": "strategy",
+    "routed_to": "notes",
+    "text_resolved_title": "",
+    "kb_coverage_status": "sections",
+    "attached": true,
+    "attaches": [
+     "Glyphid Dreadnought",
+     "Dreadnought Twins",
+     "Praetorian"
+    ],
+    "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: strategy\n\n[Deep Rock Galactic: Survivor / boss: Glyphid Dreadnought] (trust: fallback_no_source)\nKite between waves; focus weak-point armor plates as they open. Save overclock/nuke for armor break windows.\n\n[Deep Rock Galactic: Survivor / boss: Dreadnought Twins] (trust: fallback_no_source)\nSummary: Two smaller Dreadnoughts at once - the Lacerator chases and leaps, the Arbalest hangs back firing fireball spreads.\nWeak points: Neither is as tough as a full Dreadnought on its own.\nPhases: Let their health bars drift apart and both turn immune while they heal the gap closed.\nTips: Split fire evenly rather than burning one down, and the healing never starts.\n\n[Deep Rock Galactic: Survivor / enemy: Praetorian] (trust: fallback_no_source)\nSummary: A large melee glyphid with far more health than anything else in the wave.\nWeak points: Slow enough to kite indefinitely while the rest of the swarm is cleared.\nTips: It digs through terrain to reach you, so rock is not a wall - pick the exit lane before it arrives.\n\n--- End local knowledge base ---",
+    "kb_notes": "app_id:2321470",
+    "kb_unavailable_reason": "",
+    "kb_best_meaning": 0.7283515161824036,
+    "kb_top_card_keyword_score": 18.70118892690899,
+    "line": "none",
+    "question_as_typed": "what about its second phase",
+    "question_sent_to_search": "what about its second phase Glyphid Dreadnought"
+   }
+  },
+  "device_evidence_file": "runs/plan48-R4-followup-memory.json",
+  "device_evidence_search_half": {
+   "verdict": "PASS",
+   "measured_on_device": {
+    "first_question": {
+     "q": "how do i beat the glyphid dreadnought",
+     "attached": [
+      "Glyphid Dreadnought",
+      "Dreadnought Twins",
+      "Exploder"
+     ]
+    },
+    "remembered_subject": "Glyphid Dreadnought",
+    "follow_up_without_memory": [
+     "Dreadnought Twins",
+     "Praetorian",
+     "Glyphid Dreadnought"
+    ],
+    "follow_up_with_memory": [
+     "Glyphid Dreadnought",
+     "Dreadnought Twins",
+     "Praetorian"
+    ]
+   },
+   "note": "The right boss's note moves from third to first. That is what the lane claimed and it holds on the device."
+  }
+ },
+ "group_5_new_answer_shape_candidates": {
+  "what_this_means": "A Strategy answer about a named boss or thing now leads with the note's advice first, instead of a short scene-setting sentence before it. Nobody has read one of these on the device yet. These three questions each name something the library has a note for, so pinning them would show the new shape off.",
+  "candidates": [
+   {
+    "question": "how do i beat theseus and asterius",
+    "chars": 34,
+    "ask_mode": "strategy",
+    "app_id": "1145360",
+    "app_name": "Hades",
+    "gate": true,
+    "domain": "strategy",
+    "routed_to": "notes",
+    "text_resolved_title": "",
+    "kb_coverage_status": "sections",
+    "attached": true,
+    "attaches": [
+     "Theseus and Asterius",
+     "Heat and the Pact of Punishment",
+     "Weapon choice"
+    ],
+    "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: strategy\n\n[Hades / boss: Theseus and Asterius] (trust: fallback_no_source)\nTwo at once, which is the actual difficulty. Asterius, the bull, telegraphs a long charge — sidestep it and he is briefly stuck. Theseus throws his spear and periodically calls down a god's power, which is marked on the ground before it lands. Most runs go better killing Asterius first, because Theseus alone is predictable.\n\n[Hades / mechanic: Heat and the Pact of Punishment] (trust: fallback_no_source)\nBeating the game once is the middle of the story, not the end — the runs continue and the ending needs several more. The Pact of Punishment unlocks then too: Heat is optional difficulty you add yourself, in exchange for rewards that only come from raising it.\n\n[Hades / mechanic: Weapon choice] (trust: fallback_no_source)\nTake the Stygian Blade first: it is the most forgiving of the six and asks the least of you. The Shield of Chaos is the next easiest, because holding block turns a mistake into nothing. Of the rest, the Eternal Spear is the safest, since its reach keeps you out of trouble. Leave the Twin Fists of Malphon until later — they are the fastest, but they need you standing inside everything. The Heart-Seeking Bow and the Adamant Rail both want range and punish standing still, and the Rail can leave you reloading at the worst possible moment.\n\n--- End local knowledge base ---",
+    "kb_notes": "app_id:1145360",
+    "kb_unavailable_reason": "",
+    "kb_best_meaning": 0.7999724723934226,
+    "kb_top_card_keyword_score": 21.631723763573866,
+    "line": "none"
+   },
+   {
+    "question": "how does the excursion funnel work in portal 2",
+    "chars": 46,
+    "ask_mode": "strategy",
+    "app_id": "620",
+    "app_name": "Portal 2",
+    "gate": true,
+    "domain": "strategy",
+    "routed_to": "notes",
+    "text_resolved_title": "",
+    "kb_coverage_status": "sections",
+    "attached": true,
+    "attaches": [
+     "Excursion Funnel",
+     "Co-op portals and pinging",
+     "Wheatley"
+    ],
+    "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: strategy\n\n[Portal 2 / mechanic: Excursion Funnel] (trust: wiki_no_patch)\nWeightless travel along the beam. If it is carrying you the wrong way, look for the button that reverses it before assuming the route is shut. It passes through portals, so it can cross the whole chamber, and it ferries gel and cubes as well as you.\n\n[Portal 2 / mechanic: Co-op portals and pinging] (trust: wiki_no_patch)\nTwo players, two guns, four portals — and a portal one of you places links with the other's, which is the whole puzzle most of the time. Ping to point at a spot or to count down a timed jump; it carries without voice chat. Dying costs nothing but seconds.\n\n[Portal 2 / boss: Wheatley] (trust: wiki_no_patch)\nHe strips the portal surfaces, shields himself and throws bombs. Let a bomb break the conversion gel pipe, paint a wall with what spills, and portal his own bombs back into him. Every stun buys time to attach one corrupted core; three of them force the transfer.\n\n--- End local knowledge base ---",
+    "kb_notes": "app_id:620",
+    "kb_unavailable_reason": "",
+    "kb_best_meaning": 0.7710027101083405,
+    "kb_top_card_keyword_score": 23.75791982588376,
+    "line": "none"
+   },
+   {
+    "question": "how do i beat the gonarch in black mesa",
+    "chars": 39,
+    "ask_mode": "strategy",
+    "app_id": "362890",
+    "app_name": "Black Mesa",
+    "gate": true,
+    "domain": "strategy",
+    "routed_to": "notes",
+    "text_resolved_title": "",
+    "kb_coverage_status": "sections",
+    "attached": true,
+    "attaches": [
+     "Gonarch",
+     "Starting out in Black Mesa",
+     "The opening tram ride and where it leads"
+    ],
+    "card_text": "--- Local knowledge base (bonsAI; offline corpus; may be truncated) ---\nDomain: strategy\n\n[Black Mesa / boss: Gonarch] (trust: wiki_no_patch)\nThe giant four-legged headcrab mother in the caverns of Xen. Its shell shrugs off almost everything; the pale egg sac swinging under its body is the only part that takes damage, so any shot not at the sac is wasted. At range it lobs white acid mortars from its back, up close its front legs slash for huge damage, and whenever it sees you it births baby headcrabs in pairs, up to twenty alive at once: weak and fast, there to distract you from the sac. It walks the webbing over the pits that you and its children fall straight through, so watch your footing more than its feet. When it dies the sac bursts and releases one last brood, so back away before the pop.\n\n[Black Mesa / mechanic: Starting out in Black Mesa] (trust: wiki_no_patch)\nBlack Mesa is Half-Life rebuilt from the ground up on the Source engine, with new art, sound and voice work but the original's chapters, weapons and enemies kept on purpose rather than added to. The one exception is Xen: those chapters are mostly new work and far longer than the 1998 originals, so budget more time for the alien world than veterans remember. Expect the same shape of game throughout: no cutscenes, scripted scenes you walk through, a crowbar for crates and vents, and fights that go better from a doorway than from the middle of a room. There are 25 achievements, Workshop support and a separate deathmatch mode; the campaign itself is single-player only.\n\n[Black Mesa / mechanic: The opening tram ride and where it leads] (trust: wiki_no_patch)\nBlack Mesa opens with a long tram ride that needs no input beyond looking around; it carries you from the surface entrance through checkpoints and cargo bays into the underground facility, and doubles as an unskippable loading screen for the level ahead. Step off at the platform, badge through the checkpoint, and follow the corridor signs to the locker room, where you change into the orange HEV suit before the day's work — the path there is linear, so a door that will not open yet is one you have not reached the switch for. Anomalous Materials, the lab down the following hall, is where the real gameplay opens up: once things go wrong there, the crowbar on the floor nearby is the first weapon in the game, and from then on every locked vent or wooden crate is worth swinging at before hunting for another way around.\n\n--- End local knowledge base ---",
+    "kb_notes": "app_id:362890",
+    "kb_unavailable_reason": "",
+    "kb_best_meaning": 0.685182402776714,
+    "kb_top_card_keyword_score": 10.0356683189788,
+    "line": "none"
+   }
+  ]
+ }
+}

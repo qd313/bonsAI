@@ -28,8 +28,9 @@ bower_components
 .idea
 *.iml
 
-# Agent / IDE local instruction files (not part of the plugin bundle)
-AGENTS.md
+# Agent / IDE instruction files. AGENTS.md is kept: it is the guide any AI tool reads, and a
+# fresh clone needs it. None of these reach the plugin package - the build copies an explicit
+# list (package.json, plugin.json, main.py, py_modules, data, dist) and never a stray file.
 .claude/*
 !.claude/hooks/
 .claude/hooks/*

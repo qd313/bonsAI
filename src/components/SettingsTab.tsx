@@ -15,7 +15,7 @@ import {
   showModal,
   ConfirmModal,
 } from "@decky/ui";
-import { SCREENSHOT_ATTACHMENT_PRESET_OPTIONS, type ScreenshotAttachmentPreset, type UnifiedInputPersistenceMode } from "../data/bonsaiSettingsSchema";
+import { SCREENSHOT_ATTACHMENT_PRESET_OPTIONS, VOICE_REPLY_MODE_OPTIONS, type ScreenshotAttachmentPreset, type UnifiedInputPersistenceMode, type VoiceReplyMode } from "../data/bonsaiSettingsSchema";
 import {
   AI_CHARACTER_ACCENT_INTENSITY_OPTIONS,
   type AiCharacterAccentIntensityId,
@@ -58,6 +58,22 @@ const persistenceModeDescription: Record<UnifiedInputPersistenceMode, string> = 
   persist_search_only: "Restore only text from Steam settings search.",
   no_persist: "Never restore typed text on reopen.",
 };
+const voiceReplyModeLabel: Record<VoiceReplyMode, string> = {
+  off: "Off",
+  voice_only: "When I asked by voice",
+  always: "Always",
+};
+const voiceReplyModeShortLabel: Record<VoiceReplyMode, string> = {
+  off: "Off",
+  voice_only: "By voice",
+  always: "Always",
+};
+const voiceReplyModeDescription: Record<VoiceReplyMode, string> = {
+  off: "Answers are read only when you press Read aloud.",
+  voice_only: "An answer to a question you asked by voice is read out on its own.",
+  always: "Every answer is read out on its own.",
+};
+
 const screenshotPresetLabel: Record<ScreenshotAttachmentPreset, string> = {
   low: "Save memory",
   mid: "Balanced",
@@ -77,6 +93,10 @@ export type SettingsTabProps = {
 
   unifiedInputPersistenceMode: UnifiedInputPersistenceMode;
   setUnifiedInputPersistenceMode: (v: UnifiedInputPersistenceMode) => void;
+
+  /** When a finished answer is read aloud on its own, without a Read aloud press (D99 call 3). */
+  voiceReplyMode: VoiceReplyMode;
+  setVoiceReplyMode: (v: VoiceReplyMode) => void;
 
   aiCharacterEnabled: boolean;
   setAiCharacterEnabled: (v: boolean) => void;
@@ -120,6 +140,8 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
   setScreenshotAttachmentPreset,
   unifiedInputPersistenceMode,
   setUnifiedInputPersistenceMode,
+  voiceReplyMode,
+  setVoiceReplyMode,
   aiCharacterEnabled,
   setAiCharacterEnabled,
   aiCharacterRandom,
@@ -341,6 +363,48 @@ export const SettingsTab: React.FC<SettingsTabProps> = ({
         microphoneAccessEnabled={microphoneAccessEnabled}
         onJumpToPermission={onJumpToPermission}
       />
+      <PanelSection title="Voice replies">
+        <PanelSectionRow>
+          <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
+            <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
+              {voiceReplyModeDescription[voiceReplyMode]}
+            </div>
+            <Focusable
+              flow-children="horizontal"
+              style={{ display: "flex", gap: 6, width: "100%", minWidth: 0, maxWidth: "100%", alignItems: "stretch" }}
+            >
+              {VOICE_REPLY_MODE_OPTIONS.map((mode) => {
+                const active = mode === voiceReplyMode;
+                return (
+                  <Button
+                    key={mode}
+                    onClick={() => {
+                      setVoiceReplyMode(mode);
+                    }}
+                    style={{
+                      flex: 1,
+                      minHeight: 36,
+                      fontSize: 12,
+                      fontWeight: 600,
+                      padding: "4px 4px",
+                      borderRadius: 4,
+                      border: active ? "1px solid rgba(255,255,255,0.45)" : "1px solid rgba(255,255,255,0.12)",
+                      background: active
+                        ? "linear-gradient(180deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.1) 100%)"
+                        : "rgba(255,255,255,0.04)",
+                      color: active ? "#f0f4f8" : "#9fb0c0",
+                      boxShadow: active ? "inset 0 1px 0 rgba(255,255,255,0.15)" : "none",
+                    }}
+                    aria-label={`${voiceReplyModeLabel[mode]}: ${voiceReplyModeDescription[mode]}`}
+                  >
+                    {voiceReplyModeShortLabel[mode]}
+                  </Button>
+                );
+              })}
+            </Focusable>
+          </div>
+        </PanelSectionRow>
+      </PanelSection>
       <PanelSection title="AI voice & personality">
         <PanelSectionRow>
           <div

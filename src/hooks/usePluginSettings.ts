@@ -15,7 +15,7 @@ import {
   shouldIgnoreRestoredSettingsSnapshot,
   takeRestoredSettingsSnapshot,
 } from "../utils/bonsaiSessionSurvival";
-import { DEFAULT_AI_CHARACTER_ACCENT_INTENSITY, DEFAULT_AI_CHARACTER_CUSTOM_TEXT, DEFAULT_AI_CHARACTER_ENABLED, DEFAULT_AI_CHARACTER_PRESET_ID, DEFAULT_AI_CHARACTER_RANDOM, DEFAULT_ASK_MODE, DEFAULT_CAPABILITIES, DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING, DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE, DEFAULT_DESKTOP_APP_LOG_LEVEL, DEFAULT_INPUT_SANITIZER_USER_DISABLED, DEFAULT_LATENCY_WARNING_SECONDS, DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS, DEFAULT_MODEL_POLICY_TIER, DEFAULT_OLLAMA_KEEP_ALIVE, DEFAULT_REPLY_VERBOSITY, DEFAULT_ASK_THINK_EFFORT, type AskThinkEffortId, DEFAULT_REPLY_LANGUAGE, DEFAULT_OLLAMA_LOCAL_ON_DECK, DEFAULT_PRESET_CHIP_ANIMATION, DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED, DEFAULT_PRESET_SINGLE_CHIP, DEFAULT_REQUEST_TIMEOUT_SECONDS, DEFAULT_SCREENSHOT_ATTACHMENT_PRESET, DEFAULT_SHOW_DEVELOPER_TAB, DEFAULT_SHOW_ONSCREEN_DEBUG_HUD, DEFAULT_DEV_FORCE_SESSION_RAG_CHIPS, DEFAULT_DEV_PRELOAD_ASK_MODEL, DEFAULT_TAB_RESUME_MODE, type TabResumeMode, type NamedOllamaHost, DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED, DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT, DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE, DEFAULT_VOICE_STT_MODEL, type AskModeId, type BonsaiCapabilities, type BonsaiSettings, type BonsaiSettingsSnapshotInput, type DesktopAppLogLevel, type OllamaKeepAliveDuration, type ReplyVerbosityId, type ReplyLanguageId, type PresetChipAnimation, type ScreenshotAttachmentPreset, type UnifiedInputPersistenceMode, type VoiceSttModelId, type UiScaleProfileId, DEFAULT_UI_SCALE_AUTO_ENABLED, DEFAULT_UI_SCALE_MANUAL_PROFILE, DEFAULT_USE_LOCAL_KNOWLEDGE_BASE, DEFAULT_RAG_HYBRID_RETRIEVAL_ENABLED, DEFAULT_RAG_CORPUS_PATH, DEFAULT_RAG_CORPUS_VERSION } from "../data/bonsaiSettingsSchema";
+import { DEFAULT_AI_CHARACTER_ACCENT_INTENSITY, DEFAULT_AI_CHARACTER_CUSTOM_TEXT, DEFAULT_AI_CHARACTER_ENABLED, DEFAULT_AI_CHARACTER_PRESET_ID, DEFAULT_AI_CHARACTER_RANDOM, DEFAULT_ASK_MODE, DEFAULT_CAPABILITIES, DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING, DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE, DEFAULT_DESKTOP_APP_LOG_LEVEL, DEFAULT_INPUT_SANITIZER_USER_DISABLED, DEFAULT_LATENCY_WARNING_SECONDS, DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS, DEFAULT_MODEL_POLICY_TIER, DEFAULT_OLLAMA_KEEP_ALIVE, DEFAULT_REPLY_VERBOSITY, DEFAULT_ASK_THINK_EFFORT, type AskThinkEffortId, DEFAULT_REPLY_LANGUAGE, DEFAULT_OLLAMA_LOCAL_ON_DECK, DEFAULT_PRESET_CHIP_ANIMATION, DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED, DEFAULT_PRESET_SINGLE_CHIP, DEFAULT_REQUEST_TIMEOUT_SECONDS, DEFAULT_SCREENSHOT_ATTACHMENT_PRESET, DEFAULT_SHOW_DEVELOPER_TAB, DEFAULT_SHOW_ONSCREEN_DEBUG_HUD, DEFAULT_DEV_FORCE_SESSION_RAG_CHIPS, DEFAULT_DEV_PRELOAD_ASK_MODEL, DEFAULT_TAB_RESUME_MODE, type TabResumeMode, type NamedOllamaHost, DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED, DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT, DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE, DEFAULT_VOICE_REPLY_MODE, DEFAULT_VOICE_STT_MODEL, type AskModeId, type BonsaiCapabilities, type BonsaiSettings, type BonsaiSettingsSnapshotInput, type DesktopAppLogLevel, type OllamaKeepAliveDuration, type ReplyVerbosityId, type ReplyLanguageId, type PresetChipAnimation, type ScreenshotAttachmentPreset, type UnifiedInputPersistenceMode, type VoiceReplyMode, type VoiceSttModelId, type UiScaleProfileId, DEFAULT_UI_SCALE_AUTO_ENABLED, DEFAULT_UI_SCALE_MANUAL_PROFILE, DEFAULT_USE_LOCAL_KNOWLEDGE_BASE, DEFAULT_RAG_HYBRID_RETRIEVAL_ENABLED, DEFAULT_RAG_CORPUS_PATH, DEFAULT_RAG_CORPUS_VERSION } from "../data/bonsaiSettingsSchema";
 import { normalizeLatencyWarningSeconds, normalizeRequestTimeoutSeconds, normalizeSettings } from "../data/bonsaiSettingsNormalizers";
 import { toBonsaiSettingsPayload } from "../utils/settingsPayload";
 import { saveTabResumeMode } from "../features/plugin-shell/pluginStorage";
@@ -25,6 +25,7 @@ function snapshotFromBonsaiSettings(normalized: BonsaiSettings): BonsaiSettingsS
     requestTimeoutSeconds: normalized.request_timeout_seconds,
     latencyTimeoutsCustomEnabled: normalized.latency_timeouts_custom_enabled,
     unifiedInputPersistenceMode: normalized.unified_input_persistence_mode,
+    voiceReplyMode: normalized.voice_reply_mode,
     screenshotAttachmentPreset: normalized.screenshot_attachment_preset,
     desktopDebugNoteAutoSave: normalized.desktop_debug_note_auto_save,
     desktopAskVerboseLogging: normalized.desktop_ask_verbose_logging,
@@ -89,6 +90,7 @@ export function usePluginSettings() {
   const [unifiedInputPersistenceMode, setUnifiedInputPersistenceMode] = useState<UnifiedInputPersistenceMode>(
     DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE
   );
+  const [voiceReplyMode, setVoiceReplyMode] = useState<VoiceReplyMode>(DEFAULT_VOICE_REPLY_MODE);
   const [screenshotAttachmentPreset, setScreenshotAttachmentPreset] = useState<ScreenshotAttachmentPreset>(
     DEFAULT_SCREENSHOT_ATTACHMENT_PRESET
   );
@@ -175,6 +177,7 @@ export function usePluginSettings() {
     requestTimeoutSeconds,
     latencyTimeoutsCustomEnabled,
     unifiedInputPersistenceMode,
+    voiceReplyMode,
     screenshotAttachmentPreset,
     desktopDebugNoteAutoSave,
     desktopAskVerboseLogging,
@@ -236,6 +239,7 @@ export function usePluginSettings() {
     setRequestTimeoutSeconds(normalized.request_timeout_seconds);
     setLatencyTimeoutsCustomEnabled(normalized.latency_timeouts_custom_enabled);
     setUnifiedInputPersistenceMode(normalized.unified_input_persistence_mode);
+    setVoiceReplyMode(normalized.voice_reply_mode);
     setScreenshotAttachmentPreset(normalized.screenshot_attachment_preset);
     setDesktopDebugNoteAutoSave(normalized.desktop_debug_note_auto_save);
     setDesktopAskVerboseLogging(normalized.desktop_ask_verbose_logging);
@@ -350,6 +354,7 @@ export function usePluginSettings() {
         setLatencyWarningSeconds(DEFAULT_LATENCY_WARNING_SECONDS);
         setRequestTimeoutSeconds(DEFAULT_REQUEST_TIMEOUT_SECONDS);
         setUnifiedInputPersistenceMode(DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE);
+        setVoiceReplyMode(DEFAULT_VOICE_REPLY_MODE);
         setLatencyTimeoutsCustomEnabled(false);
         setScreenshotAttachmentPreset(DEFAULT_SCREENSHOT_ATTACHMENT_PRESET);
         setDesktopDebugNoteAutoSave(DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE);
@@ -426,6 +431,7 @@ export function usePluginSettings() {
     requestTimeoutSeconds,
     latencyTimeoutsCustomEnabled,
     unifiedInputPersistenceMode,
+    voiceReplyMode,
     screenshotAttachmentPreset,
     desktopDebugNoteAutoSave,
     desktopAskVerboseLogging,
@@ -559,6 +565,8 @@ export function usePluginSettings() {
     setLatencyWarningSeconds,
     setRequestTimeoutSeconds,
     setUnifiedInputPersistenceMode,
+    voiceReplyMode,
+    setVoiceReplyMode,
     setDesktopDebugNoteAutoSave,
     setDesktopAskVerboseLogging,
     setDesktopAppLogLevel,

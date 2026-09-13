@@ -1,0 +1,85 @@
+{
+ "check": "phase3-delete-round",
+ "what": "Smoke walk plus one real question, after the clean-up's deleting round removed about 600 lines of source across 71 files.",
+ "when": "2026-09-13 17:22-17:31 EDT",
+ "deck": {
+  "build_verified": "sha256 of main.py, dist/index.js, voice_transcription_service.py and screenshot_media.py matched local exactly",
+  "stale_file_removed": "py_modules/backend/json_store.py was still installed from a previous deploy; deploy copies but never deletes. Removed before the run so the Deck ran the real build."
+ },
+ "smoke_walk": {
+  "result": "pass",
+  "controls_reached": 16,
+  "presses": 30,
+  "legs": 2,
+  "cycles": 0,
+  "stalls": 0,
+  "tabs_present": [
+   "MAIN",
+   "OLLAMA",
+   "SETTINGS",
+   "PERMS",
+   "DEV",
+   "ABOUT"
+  ],
+  "controls_seen": [
+   "chat slot bar",
+   "33 earlier",
+   "Retry same prompt",
+   "question bubble",
+   "reply bubble",
+   "Copy reply text",
+   "Read aloud",
+   "Show details",
+   "Session context (32 turns)",
+   "suggested question chip",
+   "Choose AI character",
+   "Attach screenshot to Ask",
+   "Inference mode: Strategy",
+   "Voice input",
+   "ask"
+  ],
+  "partially_covered": [
+   {
+    "what": "the question bubble",
+    "visible_percent": 67,
+    "covered_by": "the Retry same prompt corner button"
+   },
+   {
+    "what": "the reply bubble",
+    "visible_percent": 89,
+    "covered_by": "the Copy reply text corner button"
+   }
+  ],
+  "partially_covered_verdict": "By design, not a regression. Both corner buttons are themselves 100% visible and reachable; docs/design-tokens.md describes the copy control as sitting over the answer's own text at half opacity.",
+  "saved_as": "checks/phase3-delete-round-smoke-walk.json"
+ },
+ "real_question": {
+  "asked": "how does the excursion funnel work in portal 2",
+  "how": "picked the suggested question chip with A, then the ask button with A - controller only, no scripted input",
+  "mode": "Strategy",
+  "game_running": "none",
+  "answered": true,
+  "seconds": 42.6,
+  "model": "gemma4:e2b-it-qat",
+  "answer_correct": true,
+  "answer_note": "Described the funnel as a beam that carries the player, gel and cubes through portals, and named the reverse-direction button. Both correct.",
+  "turn_count": "32 -> 33",
+  "after_reply_present": [
+   "Was this helpful? Helpful / Not really",
+   "Read aloud",
+   "Show details",
+   "Session context (33 turns)",
+   "Save chat to Desktop"
+  ],
+  "log": "clean - no traceback, no error, no import failure"
+ },
+ "confirms_two_earlier_claims": [
+  "ask_ollama IS called by the back end itself (log line 'ask_ollama: url=...' inside run_game_ai_request), so keeping it was right.",
+  "The 'asked for a power-tuning block and did not get one' condition is already detected and logged today: 'ask_game_ai: no TDP recommendation found in response'. That was the baseline for the held answer-checker decision."
+ ],
+ "separate_finding": {
+  "what": "The follow-up question offered 'B. Fighting through Ravenholm' as a place in Portal 2. Ravenholm is Half-Life 2.",
+  "verdict": "Nothing to do with the deleting round - the model invented it. Filed separately."
+ },
+ "verdict": "PASS. Nothing a person using the plugin would notice has changed."
+}

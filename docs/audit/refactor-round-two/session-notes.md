@@ -52,9 +52,32 @@ happen again to anyone using these tools:
 **Held on purpose and not touched:** the older way of asking the AI, the answer checker, and all
 four unused packages.
 
-**Owed: a check on the Deck.** The plan asks for a short walk through the plugin and one real
-question at the end of this phase. Nothing here should be visible, which is exactly why it is worth
-five minutes on the device. Nothing else in phase 3 is outstanding.
+**The Deck check is done and it passed** (2026-09-13 evening). Sixteen controls reached with the
+D-pad in thirty presses, no dead ends, all six tabs there. One real question asked with the
+controller — how the excursion funnel works in Portal 2 — answered correctly in 42.6 seconds, log
+completely clean: no crash, no error, nothing failing to load. **Nothing a person using the plugin
+would notice has changed.** Evidence saved under the test-evidence folder; the walk itself is saved
+as a check that can be re-run.
+
+Three things worth carrying forward from that evening:
+
+- **Sending a build to the Deck copies files but never removes them.** A file deleted in this phase
+  was still sitting installed on the device from an earlier send. Nothing used it, so nothing broke,
+  but it meant the Deck was not running what was actually built. Worth checking before any run that
+  is meant to prove a deletion is safe — the compare that the tools offer counts the Deck's own
+  compiled leftovers too, so it can never match; compare the real files by hand instead.
+- **The run confirmed two things this clean-up had claimed on paper.** The back end really does call
+  its own answering step itself, so keeping it was right. And the "asked the AI for a power setting
+  and did not get one" case really is already noticed and written to the log today — which was the
+  whole basis for holding the answer-checker decision.
+- **Two spots in the chat are partly covered by the small buttons in their corner** — a question
+  67% visible behind Retry, a reply 89% behind Copy. Both buttons are fully visible and reachable
+  themselves, and the design notes describe the copy control as deliberately sitting over the
+  answer's own text. Recorded so a later reader does not mistake it for damage.
+
+**One unrelated bug found and filed.** Asked about Portal 2, the answer was right, but the follow-up
+offered "Fighting through Ravenholm" as a place in Portal 2. Ravenholm is Half-Life 2. Nothing to do
+with the clean-up — the small local model invented it.
 
 ---
 

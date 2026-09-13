@@ -1,0 +1,857 @@
+{
+  "formatVersion": 2,
+  "name": "phase3-delete-round-smoke-walk",
+  "tool": "deck_sweep",
+  "savedAt": "2026-09-13T21:27:14.194Z",
+  "buildHash": "sha256:704c729060006cb4cac65dd9fa17da4065bf8c8c52b072c5ff8e991bd2a326dc",
+  "buildHashInputs": [
+    "assets/logo.png",
+    "assets/named-chat-slot-idea.png",
+    "assets/qrcode.png",
+    "assets/readme-hero.png",
+    "bin/README.md",
+    "defaults/defaults.txt",
+    "dist/assets/bonsai-logo-2615d0ec.svg",
+    "dist/assets/qrcode-05e4d5b7.png",
+    "dist/index.js",
+    "dist/index.js.map",
+    "main.py",
+    "package.json",
+    "plugin.json",
+    "py_modules/backend/__init__.py",
+    "py_modules/backend/__pycache__/__init__.cpython-312.pyc",
+    "py_modules/backend/__pycache__/constants.cpython-312.pyc",
+    "py_modules/backend/__pycache__/ollama_connectivity.cpython-312.pyc",
+    "py_modules/backend/__pycache__/ollama_routing.cpython-312.pyc",
+    "py_modules/backend/__pycache__/ollama_urls.cpython-312.pyc",
+    "py_modules/backend/__pycache__/tdp_intent.cpython-312.pyc",
+    "py_modules/backend/__pycache__/tls_ca_fallback.cpython-312.pyc",
+    "py_modules/backend/constants.py",
+    "py_modules/backend/ollama_connectivity.py",
+    "py_modules/backend/ollama_routing.py",
+    "py_modules/backend/ollama_urls.py",
+    "py_modules/backend/scripts/read_host_clipboard.sh",
+    "py_modules/backend/scripts/write_host_clipboard.sh",
+    "py_modules/backend/services/__init__.py",
+    "py_modules/backend/services/__pycache__/__init__.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ai_character_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ask_local_commands.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/async_background_job.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/async_task_lifecycle.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/background_request_state.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/bonsai_stream_tags.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/capabilities.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/chat_slot_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/chat_threads_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/clipboard_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/compat_topic_router.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/desktop_note_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/destructive_advice_guard.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/feedback_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/game_ai_request.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/input_sanitizer_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/intent_pack_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/kb_followup_memory.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/kb_not_in_notes_notice.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/knowledge_base_schema.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/knowledge_base_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/local_ollama_setup_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/local_ollama_teardown_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/model_policy.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/network_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ollama_ask_budgets.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ollama_ask_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ollama_catalog_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ollama_embed_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ollama_local_autostart_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ollama_mdns_discovery_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ollama_prompts.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/ollama_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/plugin_data_reset.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/proton_experiment_journal_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/proton_troubleshooting_logs.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/pull_model_catalog_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/rag_corpus_download_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/reply_language_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/response_verify.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/screenshot_media.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/settings_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/shortcut_setup_commands.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/spoiler_risk_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/spoiler_title_profiles.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/steam_vac_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/strategy_checklist_session_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/strategy_guide_parse.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/tdp_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/thinking_tiny_model_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/transparency_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/vac_check_commands.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/voice_capture.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/voice_read_aloud_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/voice_transcription_service.cpython-312.pyc",
+    "py_modules/backend/services/__pycache__/voice_whisper_daemon.cpython-312.pyc",
+    "py_modules/backend/services/ai_character_service.py",
+    "py_modules/backend/services/ask_local_commands.py",
+    "py_modules/backend/services/async_background_job.py",
+    "py_modules/backend/services/async_task_lifecycle.py",
+    "py_modules/backend/services/background_request_state.py",
+    "py_modules/backend/services/bonsai_stream_tags.py",
+    "py_modules/backend/services/capabilities.py",
+    "py_modules/backend/services/chat_slot_service.py",
+    "py_modules/backend/services/clipboard_service.py",
+    "py_modules/backend/services/compat_topic_router.py",
+    "py_modules/backend/services/desktop_note_service.py",
+    "py_modules/backend/services/destructive_advice_guard.py",
+    "py_modules/backend/services/feedback_service.py",
+    "py_modules/backend/services/game_ai_request.py",
+    "py_modules/backend/services/input_sanitizer_service.py",
+    "py_modules/backend/services/intent_pack_service.py",
+    "py_modules/backend/services/kb_followup_memory.py",
+    "py_modules/backend/services/kb_not_in_notes_notice.py",
+    "py_modules/backend/services/knowledge_base_schema.py",
+    "py_modules/backend/services/knowledge_base_service.py",
+    "py_modules/backend/services/local_ollama_setup_service.py",
+    "py_modules/backend/services/local_ollama_teardown_service.py",
+    "py_modules/backend/services/model_policy.py",
+    "py_modules/backend/services/network_service.py",
+    "py_modules/backend/services/ollama_ask_budgets.py",
+    "py_modules/backend/services/ollama_ask_service.py",
+    "py_modules/backend/services/ollama_catalog_service.py",
+    "py_modules/backend/services/ollama_embed_service.py",
+    "py_modules/backend/services/ollama_local_autostart_service.py",
+    "py_modules/backend/services/ollama_mdns_discovery_service.py",
+    "py_modules/backend/services/ollama_prompts.py",
+    "py_modules/backend/services/ollama_service.py",
+    "py_modules/backend/services/plugin_data_reset.py",
+    "py_modules/backend/services/proton_troubleshooting_logs.py",
+    "py_modules/backend/services/pull_model_catalog_service.py",
+    "py_modules/backend/services/rag_corpus_download_service.py",
+    "py_modules/backend/services/reply_language_service.py",
+    "py_modules/backend/services/response_verify.py",
+    "py_modules/backend/services/screenshot_media.py",
+    "py_modules/backend/services/settings_service.py",
+    "py_modules/backend/services/shortcut_setup_commands.py",
+    "py_modules/backend/services/spoiler_risk_service.py",
+    "py_modules/backend/services/spoiler_title_profiles.py",
+    "py_modules/backend/services/steam_vac_service.py",
+    "py_modules/backend/services/strategy_checklist_session_service.py",
+    "py_modules/backend/services/strategy_guide_parse.py",
+    "py_modules/backend/services/tdp_service.py",
+    "py_modules/backend/services/transparency_service.py",
+    "py_modules/backend/services/vac_check_commands.py",
+    "py_modules/backend/services/voice_read_aloud_service.py",
+    "py_modules/backend/services/voice_transcription_service.py",
+    "py_modules/backend/services/voice_whisper_daemon.py",
+    "py_modules/backend/tdp_intent.py",
+    "py_modules/backend/tls_ca_fallback.py"
+  ],
+  "runOptions": {
+    "direction": "DOWN",
+    "returnTrip": true,
+    "lanes": 0,
+    "laneButton": "RB",
+    "budget": 60,
+    "stallLimit": 2,
+    "acquireFocus": true
+  },
+  "expected": {
+    "pattern": {
+      "direction": "DOWN",
+      "returnTrip": true,
+      "lanes": 0,
+      "laneButton": "RB",
+      "budget": 60,
+      "stallLimit": 2
+    },
+    "ok": true,
+    "stopped": false,
+    "totals": {
+      "stopsRecorded": 27,
+      "stopsVisited": 16,
+      "unlabeledStops": 1,
+      "cycles": 0,
+      "stopsFocusedButNotVisible": 4,
+      "presses": 30,
+      "legs": 2
+    },
+    "notVisible": [
+      {
+        "index": 5,
+        "lane": 0,
+        "leg": "DOWN",
+        "label": "what about its second phase",
+        "verdict": "partial",
+        "coveredBy": "div.bonsai-turn-retry-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.Focusable",
+        "clippedBy": null
+      },
+      {
+        "index": 6,
+        "lane": 0,
+        "leg": "DOWN",
+        "label": "",
+        "verdict": "partial",
+        "coveredBy": "div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable",
+        "clippedBy": null
+      },
+      {
+        "index": 20,
+        "lane": 0,
+        "leg": "UP",
+        "label": "",
+        "verdict": "partial",
+        "coveredBy": "div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable",
+        "clippedBy": null
+      },
+      {
+        "index": 21,
+        "lane": 0,
+        "leg": "UP",
+        "label": "what about its second phase",
+        "verdict": "partial",
+        "coveredBy": "div.bonsai-turn-retry-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.Focusable",
+        "clippedBy": null
+      }
+    ],
+    "legs": [
+      {
+        "lane": 0,
+        "direction": "DOWN",
+        "presses": 15,
+        "stops": 13,
+        "endedBy": "stall",
+        "cycle": null
+      },
+      {
+        "lane": 0,
+        "direction": "UP",
+        "presses": 15,
+        "stops": 13,
+        "endedBy": "stall",
+        "cycle": null
+      }
+    ],
+    "stops": [
+      {
+        "index": 0,
+        "lane": 0,
+        "leg": "start",
+        "press": null,
+        "tag": "BUTTON",
+        "label": "bonsAIv0.5.0",
+        "labelSource": "ancestor-text",
+        "selector": "#quickaccess_content_999 > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > button.DialogButton._DialogLayout.Secondary:nth-child(1)",
+        "rect": {
+          "x": 64,
+          "y": 20,
+          "w": 40,
+          "h": 28
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:#quickaccess_content_999 > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > button.DialogButton._DialogLayout.Secondary:nth-child(1)"
+      },
+      {
+        "index": 1,
+        "lane": 0,
+        "leg": "DOWN",
+        "press": "DOWN",
+        "tag": "DIV",
+        "label": "Main tab",
+        "labelSource": "aria-label",
+        "selector": "#quickaccess_content_999 > div.Panel.Focusable:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+        "rect": {
+          "x": 48,
+          "y": 64,
+          "w": 300,
+          "h": 20
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:#quickaccess_content_999 > div.Panel.Focusable:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div.Panel.Focusable:nth-child(2)"
+      },
+      {
+        "index": 2,
+        "lane": 0,
+        "leg": "DOWN",
+        "press": "DOWN",
+        "tag": "DIV",
+        "label": "LB[+]How do I balance FPS and battery?×bonsai:disable-sanitize+RB",
+        "labelSource": "text",
+        "selector": "div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+        "rect": {
+          "x": 48,
+          "y": 88,
+          "w": 300,
+          "h": 59
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)"
+      },
+      {
+        "index": 3,
+        "lane": 0,
+        "leg": "DOWN",
+        "press": "DOWN",
+        "tag": "DIV",
+        "label": "33 earlier",
+        "labelSource": "text",
+        "selector": "div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+        "rect": {
+          "x": 52,
+          "y": 156,
+          "w": 290,
+          "h": 22
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)"
+      },
+      {
+        "index": 4,
+        "lane": 0,
+        "leg": "DOWN",
+        "press": "DOWN",
+        "tag": "BUTTON",
+        "label": "Retry same prompt",
+        "labelSource": "aria-label",
+        "selector": "div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+        "rect": {
+          "x": 156,
+          "y": 197,
+          "w": 20,
+          "h": 20
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)"
+      },
+      {
+        "index": 5,
+        "lane": 0,
+        "leg": "DOWN",
+        "press": "DOWN",
+        "tag": "DIV",
+        "label": "what about its second phase",
+        "labelSource": "text",
+        "selector": "div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+        "rect": {
+          "x": 160,
+          "y": 200,
+          "w": 172,
+          "h": 14
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "partial",
+          "coveredBy": "div.bonsai-turn-retry-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.Focusable",
+          "clippedBy": null
+        },
+        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2)"
+      },
+      {
+        "index": 6,
+        "lane": 0,
+        "leg": "DOWN",
+        "press": "DOWN",
+        "tag": "DIV",
+        "label": "",
+        "labelSource": null,
+        "selector": "div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+        "rect": {
+          "x": 63,
+          "y": 235,
+          "w": 245,
+          "h": 208
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "partial",
+          "coveredBy": "div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable",
+          "clippedBy": null
+        },
+        "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)"
+      },
+      {
+        "index": 7,
+        "lane": 0,
+        "leg": "DOWN",
+        "press": "DOWN",
+        "tag": "BUTTON",
+        "label": "Copy reply text",
+        "labelSource": "aria-label",
+        "selector": "div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(3) > button.Focusable:nth-child(1)",
+        "rect": {
+          "x": 292,
+          "y": 428,
+          "w": 20,
+          "h": 20
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(3) > button.Focusable:nth-child(1)"
+      },
+      {
+        "index": 8,
+        "lane": 0,
+        "leg": "DOWN",
+        "press": "DOWN",
+        "tag": "DIV",
+        "label": "Read aloud",
+        "labelSource": "aria-label",
+        "selector": "div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(4) > div.Panel.Focusable:nth-child(1)",
+        "rect": {
+          "x": 52,
+          "y": 480,
+          "w": 267,
+          "h": 15
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(4) > div.Panel.Focusable:nth-child(1)"
+      },
+      {
+        "index": 9,
+        "lane": 0,
+        "leg": "DOWN",
+        "press": "DOWN",
+        "tag": "DIV",
+        "label": "Show details",
+        "labelSource": "aria-label",
+        "selector": "div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(4) > div.Panel.Focusable:nth-child(2)",
+        "rect": {
+          "x": 52,
+          "y": 509,
+          "w": 267,
+          "h": 15
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(4) > div.Panel.Focusable:nth-child(2)"
+      },
+      {
+        "index": 10,
+        "lane": 0,
+        "leg": "DOWN",
+        "press": "DOWN",
+        "tag": "DIV",
+        "label": "Session context (32 turns) ▸",
+        "labelSource": "text",
+        "selector": "div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+        "rect": {
+          "x": 61,
+          "y": 548,
+          "w": 274,
+          "h": 23
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)"
+      },
+      {
+        "index": 11,
+        "lane": 0,
+        "leg": "DOWN",
+        "press": "DOWN",
+        "tag": "BUTTON",
+        "label": "how does the excursion funnel work in portal 2",
+        "labelSource": "text",
+        "selector": "div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(1)",
+        "rect": {
+          "x": 48,
+          "y": 608,
+          "w": 300,
+          "h": 30
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(1)"
+      },
+      {
+        "index": 12,
+        "lane": 0,
+        "leg": "DOWN",
+        "press": "DOWN",
+        "tag": "INPUT",
+        "label": "Describe the level, boss, or puzzle you're stuck on.|",
+        "labelSource": "ancestor-text",
+        "selector": "div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div._DialogLayout.Panel.Focusable:nth-child(2) > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase:nth-child(1)",
+        "rect": {
+          "x": 73,
+          "y": 639,
+          "w": 274,
+          "h": 44
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div._DialogLayout.Panel.Focusable:nth-child(2) > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase:nth-child(1)"
+      },
+      {
+        "index": 13,
+        "lane": 0,
+        "leg": "DOWN",
+        "press": "DOWN",
+        "tag": "BUTTON",
+        "label": "ask",
+        "labelSource": "text",
+        "selector": "div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+        "rect": {
+          "x": 49,
+          "y": 711,
+          "w": 298,
+          "h": 36
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)"
+      },
+      {
+        "index": 14,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "BUTTON",
+        "label": "Attach screenshot to Ask",
+        "labelSource": "aria-label",
+        "selector": "div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+        "rect": {
+          "x": 51,
+          "y": 687,
+          "w": 20,
+          "h": 20
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)"
+      },
+      {
+        "index": 15,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "DIV",
+        "label": "Choose AI character, A",
+        "labelSource": "aria-label",
+        "selector": "div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+        "rect": {
+          "x": 51,
+          "y": 641,
+          "w": 18,
+          "h": 18
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)"
+      },
+      {
+        "index": 16,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "BUTTON",
+        "label": "how does the excursion funnel work in portal 2",
+        "labelSource": "text",
+        "selector": "div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(1)",
+        "rect": {
+          "x": 48,
+          "y": 608,
+          "w": 300,
+          "h": 30
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(1)"
+      },
+      {
+        "index": 17,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "DIV",
+        "label": "Session context (32 turns) ▸",
+        "labelSource": "text",
+        "selector": "div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+        "rect": {
+          "x": 61,
+          "y": 548,
+          "w": 274,
+          "h": 23
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)"
+      },
+      {
+        "index": 18,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "DIV",
+        "label": "Show details",
+        "labelSource": "aria-label",
+        "selector": "div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(4) > div.Panel.Focusable:nth-child(2)",
+        "rect": {
+          "x": 52,
+          "y": 509,
+          "w": 267,
+          "h": 15
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(4) > div.Panel.Focusable:nth-child(2)"
+      },
+      {
+        "index": 19,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "DIV",
+        "label": "Read aloud",
+        "labelSource": "aria-label",
+        "selector": "div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(4) > div.Panel.Focusable:nth-child(1)",
+        "rect": {
+          "x": 52,
+          "y": 480,
+          "w": 267,
+          "h": 15
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(4) > div.Panel.Focusable:nth-child(1)"
+      },
+      {
+        "index": 20,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "DIV",
+        "label": "",
+        "labelSource": null,
+        "selector": "div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+        "rect": {
+          "x": 63,
+          "y": 235,
+          "w": 245,
+          "h": 208
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "partial",
+          "coveredBy": "div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable",
+          "clippedBy": null
+        },
+        "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)"
+      },
+      {
+        "index": 21,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "DIV",
+        "label": "what about its second phase",
+        "labelSource": "text",
+        "selector": "div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+        "rect": {
+          "x": 160,
+          "y": 200,
+          "w": 172,
+          "h": 14
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "partial",
+          "coveredBy": "div.bonsai-turn-retry-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.Focusable",
+          "clippedBy": null
+        },
+        "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2)"
+      },
+      {
+        "index": 22,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "BUTTON",
+        "label": "Retry same prompt",
+        "labelSource": "aria-label",
+        "selector": "div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+        "rect": {
+          "x": 156,
+          "y": 197,
+          "w": 20,
+          "h": 20
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)"
+      },
+      {
+        "index": 23,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "DIV",
+        "label": "33 earlier",
+        "labelSource": "text",
+        "selector": "div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+        "rect": {
+          "x": 52,
+          "y": 156,
+          "w": 290,
+          "h": 22
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)"
+      },
+      {
+        "index": 24,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "DIV",
+        "label": "LB[+]How do I balance FPS and battery?×bonsai:disable-sanitize+RB",
+        "labelSource": "text",
+        "selector": "div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+        "rect": {
+          "x": 48,
+          "y": 88,
+          "w": 300,
+          "h": 59
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)"
+      },
+      {
+        "index": 25,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "DIV",
+        "label": "Main tab",
+        "labelSource": "aria-label",
+        "selector": "#quickaccess_content_999 > div.Panel.Focusable:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+        "rect": {
+          "x": 48,
+          "y": 64,
+          "w": 300,
+          "h": 20
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:#quickaccess_content_999 > div.Panel.Focusable:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div.Panel.Focusable:nth-child(2)"
+      },
+      {
+        "index": 26,
+        "lane": 0,
+        "leg": "UP",
+        "press": "UP",
+        "tag": "BUTTON",
+        "label": "bonsAIv0.5.0",
+        "labelSource": "ancestor-text",
+        "selector": "#quickaccess_content_999 > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > button.DialogButton._DialogLayout.Secondary:nth-child(1)",
+        "rect": {
+          "x": 64,
+          "y": 20,
+          "w": 40,
+          "h": 28
+        },
+        "scrollTop": null,
+        "visibility": {
+          "verdict": "visible",
+          "coveredBy": null,
+          "clippedBy": null
+        },
+        "focusKey": "sel:#quickaccess_content_999 > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > button.DialogButton._DialogLayout.Secondary:nth-child(1)"
+      }
+    ]
+  }
+}

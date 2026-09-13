@@ -8,6 +8,14 @@ Everything shipped since v0.4.9 (2026-07-08), one line each, newest first. Detai
 [archive/roadmap-completed.md](roadmap-completed.md), [archive/roadmap-bugs-fixed.md](roadmap-bugs-fixed.md).
 
 **Landed 2026-09-13 (nothing a person using the plugin can see):**
+- ★★ `[platform]` **Refactor round two, phase 3: the deleting** — landed 2026-09-13, checked on the
+  maintainer's Deck the same evening. About 600 lines of source removed across 71 files: the names the screen code offered
+  that nobody wanted went from 126 to 21, back-end code nothing calls from 18 to 2 (both of those held on purpose), and a
+  whole superseded way of getting the voice engine onto the Deck. Four commits, one per group, so a fault could be traced.
+  On the Deck: sixteen controls reached with the D-pad in thirty presses with no dead ends, all six tabs present, and one
+  real question — how the excursion funnel works in Portal 2 — asked with the controller and answered correctly in
+  42.6 seconds with a clean log. **Nothing a person using the plugin would notice has changed.**
+  [Evidence](../test-evidence/phase3-delete-round-deck-check.json), [notes](../audit/refactor-round-two/session-notes.md).
 - ★★★ `[platform]` **Refactor round two, phase 0: the tools** — landed 2026-09-13. One check command every
   worker runs before saving (26 seconds, or 51 for the fuller merge check), a list of eighteen numbers that may only get
   better, a map of what the back-end depends on, a checker that every file explains itself, three safety rails, a helper

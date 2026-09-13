@@ -65,6 +65,13 @@ hook gives a gentle heads-up when a session starts work outside this.
 ## Bugs
 
 
+- ★ `[ask]` **A follow-up offered a place from a different game** — **OPEN, seen on the Deck 2026-09-13.**
+  Asked how the excursion funnel works in Portal 2, the reply was right, then the follow-up asked *"Where are you at in
+  Portal 2?"* and offered **A. Just arrived at the train station** and **B. Fighting through Ravenholm**. Ravenholm is
+  Half-Life 2, not Portal 2. The answer itself was correct; only the two choices under it were invented. Spotted during the
+  clean-up's Deck check and nothing to do with it — no game was running, Strategy mode, the small local model.
+  [Evidence](test-evidence/phase3-delete-round-deck-check.json).
+
 - ★ `[chat]` **A short question fades out at its right edge as if there were more to read** — **OPEN, seen on the
   Deck 2026-09-13.** The fade is meant to hint that a long question has been cut short. It is drawn on every open question,
   so a one-line one like *what about its second phase* fades too and looks cut when nothing is missing. It should only fade
@@ -469,15 +476,6 @@ replace it with a specific issue when one exists.
 Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row named in each entry; full evidence in
 [testing.md](testing.md) / [testing-manual.md](testing-manual.md). Once a Deck run confirms one, move it in the same commit: a line into
 [Done](#done-for-v050), the full entry into the matching archive file, drop it from here.
-
-### The clean-up's deleting round
-- ★ `[refactor]` **Check the plugin still behaves after about 1,800 lines were deleted** — **OPEN, owed since
-  2026-09-13.** The clean-up's deleting round removed 126 names the screen code offered that nobody wanted (down to 21),
-  everything in the back end that nothing called, and a whole superseded way of getting the voice engine onto the Deck.
-  Every automatic check passes and none of it should be visible. That is exactly why it wants five minutes on the device:
-  a short walk through the plugin and one real question asked and answered. If anything is wrong it will be something that
-  was reached by name at runtime, which no automatic check can see. Four commits, one per group, so a fault can be traced
-  to which group caused it. [Detail](audit/refactor-round-two/session-notes.md).
 
 ### Checks whose evidence never existed
 - ★★ `[QA]` **Twelve checks read as proven with nothing behind them** — **VERIFY, found 2026-09-13 during the

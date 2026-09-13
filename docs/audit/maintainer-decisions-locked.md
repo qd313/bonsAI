@@ -5104,3 +5104,28 @@ question, always. Also add a feature to roadmap: clear session context button in
 - A fourth position, "only when the menu is closed" (D74's old switch). Folded into Always.
 - A per-answer "do not read this one". Stop is the button for that.
 - Building the second way to run or Headline first "since the bench is warm". Both are the maintainer's to start.
+
+---
+
+### D100 — LOCKED 2026-09-13 — The maintainer watches the budget by hand; the automatic stop does not hold up the work
+
+Raised on the first day of the clean-up. Nothing on this machine can read the usage figure the
+usage screen shows, so the automatic stop that was meant to refuse new workers past three
+quarters of the five-hour window has nothing to read. The maintainer's call: **they watch usage
+themselves and say when to stop.** The work does not wait for the automatic stop to be made to
+work.
+
+This narrows D94 rather than replacing it. What still holds from D94: the three-quarters line
+is still the line, the number still lives in one place, and the maintainer can still move it by
+saying so. What changes:
+
+- The stop is still built and still refuses to start a worker when it *can* read a figure. When
+  it cannot, it allows the worker and says once that the budget is unknown.
+- Nobody has to read the usage screen and type a number in to unblock a phase. Item 8 on the
+  maintainer's list in the plan is dropped for now.
+- The rule that a phase only starts below half the line becomes the maintainer's judgement
+  instead of a check.
+- Sessions keep the habits that make an early stop cheap anyway: each worker saves its work in
+  its own copy of the project, and every stopping point gets a handover note.
+
+Revisit if a way to read the figure turns up.

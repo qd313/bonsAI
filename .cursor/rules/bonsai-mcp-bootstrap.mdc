@@ -1,8 +1,0 @@
----
-description: Bootstrap pointer to bonsai-mcp knowledge server
-alwaysApply: true
----
-
-# bonsAI MCP bootstrap
-
-Call **`bonsai.session.bootstrap`** at session start (slim: policy ids + fetch hints). Fetch full policies with **`bonsai.policy.get`** only when the task needs them. Knowledge lives in **`packages/bonsai-mcp/knowledge/`** — see [docs/mcp-setup.md](../../docs/mcp-setup.md).

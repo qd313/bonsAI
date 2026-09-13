@@ -19,15 +19,18 @@ bonsAI uses **two complementary MCP servers**:
 
 Do **not** permanently fork DPS behavior into bonsAI. Product-specific MCP (`bonsai`) and app code stay here; studio ops stay in DPS.
 
-**Which file your client reads.** Three clients, three files, and they are not interchangeable:
-`mcp.json` (repo root) is Cursor's and the DPS extension's; `.cursor/mcp.json` is Cursor's
-workspace copy; **`.mcp.json` — with the leading dot — is Claude Code's**, and it was missing
-entirely until 2026-08-27, so Claude Code sessions had *no* MCP servers while `mcp.json` sat in
-the root looking authoritative. The failure is silent: tools are simply absent, with no error and
-nothing in the transcript to say a server was expected. If tools are missing, check which file
-your client actually reads before debugging the server. Keep the two in step.
+**Which file your client reads.** `mcp.json` (repo root, no leading dot) is a generic config that
+any MCP client can point at, or that some auto-load by convention; **`.mcp.json` — with the
+leading dot — is Claude Code's**, and it was missing entirely until 2026-08-27, so Claude Code
+sessions had *no* MCP servers while `mcp.json` sat in the root looking authoritative. The failure
+is silent: tools are simply absent, with no error and nothing in the transcript to say a server
+was expected. If tools are missing, check which file your client actually reads before debugging
+the server. Keep the two in step.
 
-**Installed version:** pin `mcp.json` / `.cursor/mcp.json` to the installed VSIX path under `~/.cursor/extensions/decky-plugin-studio.decky-plugin-studio-extension-<version>/`. After upgrading the VSIX, update those paths and **Developer: Reload Window**.
+**Installed version:** pin `mcp.json` to the installed VSIX path under your editor's extensions
+folder (for example `~/.cursor/extensions/decky-plugin-studio.decky-plugin-studio-extension-<version>/`
+on a VS Code-family editor that uses that layout). After upgrading the VSIX, update the path and
+reload the MCP client.
 
 ### DPS findings log (bonsAI)
 
@@ -81,13 +84,14 @@ From repo root you can also run:
 pnpm run mcp:build
 ```
 
-## Cursor
+## Root `mcp.json`
 
-Primary config: [`.cursor/mcp.json`](../.cursor/mcp.json) (Cursor loads this on project open).
+Some MCP clients auto-load [`mcp.json`](../mcp.json) at the repo root on project open; check your
+client's own docs for whether it does. It carries both servers — `bonsai` and
+`decky-plugin-studio` — pinned to local paths. Keep **decky-plugin-studio** configured in the same
+file (see [AGENTS.md](../AGENTS.md)).
 
-Root [`mcp.json`](../mcp.json) mirrors the same servers for other MCP clients.
-
-Add to project MCP settings (if not using `.cursor/mcp.json`):
+Add to your MCP client's own settings if it does not read `mcp.json` automatically:
 
 ```json
 {
@@ -103,9 +107,8 @@ Add to project MCP settings (if not using `.cursor/mcp.json`):
 }
 ```
 
-Keep **decky-plugin-studio** configured in the same file (see [AGENTS.md](../AGENTS.md)).
-
-**After first clone or MCP changes:** run `pnpm run mcp:install && pnpm run mcp:build`, then **Developer: Reload Window** (or restart Cursor). Confirm **bonsai** shows green in **Cursor Settings → MCP**.
+**After first clone or MCP changes:** run `pnpm run mcp:install && pnpm run mcp:build`, then
+restart or reload your MCP client. Confirm **bonsai** shows as connected in its MCP settings view.
 
 **Session start:** a `sessionStart` hook auto-injects a **slim** bootstrap (always-on policy ids + when to fetch). Agents may also call `bonsai.session.bootstrap`. Full policy bodies: `bonsai.policy.get` only when the task needs them (avoids triple-injecting focus/layout walls every chat).
 
@@ -171,10 +174,9 @@ Commit any changes under `packages/bonsai-mcp/knowledge/architecture/` in the **
 
 ### Prevent stale CI failures locally
 
-1. **Git hooks (recommended):** `pnpm run mcp:install-hooks` (also runs via `pnpm install` / `prepare`).  
-   - **pre-commit** regenerates and stages `packages/bonsai-mcp/knowledge/architecture/*.json` automatically.  
-   - **pre-push** runs `mcp:validate` and blocks the push if snapshots are still stale.
-2. **Cursor:** editing `main.py` / `src/` / preview suite / `.env.example` auto-runs `mcp:generate`; `git push` is denied while snapshots are stale.
+**Git hooks (recommended):** `pnpm run mcp:install-hooks` (also runs via `pnpm install` / `prepare`).  
+- **pre-commit** regenerates and stages `packages/bonsai-mcp/knowledge/architecture/*.json` automatically.  
+- **pre-push** runs `mcp:validate` and blocks the push if snapshots are still stale.
 
 Manual check:
 

@@ -18,10 +18,10 @@ Short guide to markdown under `docs/`. Repo root **[README.md](../README.md)** s
 | [code-clarity.md](code-clarity.md) | Contributors / agents | Module header convention and its exclusions |
 | [design-language.md](design-language.md) | Contributors / agents | **Read before adding UI.** Eight layout rules, each earned by a specific bug — starting with using every pixel of the 300px QAM column |
 | [design-tokens.md](design-tokens.md) | Contributors / agents | Palette, surfaces, focus rings, type scale, layout constants |
-| [major-redesign.md](major-redesign.md) | Planning / maintainers | Named chat slots v2 — mockup spec, decisions R1–R5, phased path |
+| [major-redesign.md](archive/major-redesign.md) | Planning / maintainers | Named chat slots v2 — mockup spec, decisions R1–R5, phased path |
 | [glossary.md](glossary.md) | Everyone | Terms used in file headers and maintainer docs |
-| [rag-retrieval-quality-remediation-implementation-plan.md](rag-retrieval-quality-remediation-implementation-plan.md) | Maintainers | **Active** RAG hybrid-retrieval fix plan (PR1/PR2) |
-| [planning/](planning/) | Maintainers / agents | Planning prompts ([roadmap-planning-questions.md](planning/roadmap-planning-questions.md)), answers (Q1–Q13), [web-permission-discovery.md](planning/web-permission-discovery.md) |
+| [rag-retrieval-quality-remediation-implementation-plan.md](archive/rag-retrieval-quality-remediation-implementation-plan.md) | Maintainers | **Active** RAG hybrid-retrieval fix plan (PR1/PR2) |
+| [planning/](planning/) | Maintainers / agents | Planning prompts ([roadmap-planning-questions.md](archive/roadmap-planning-questions.md)), answers (Q1–Q13), [web-permission-discovery.md](planning/web-permission-discovery.md) |
 | [audit/](audit/) | Contributors / agents | Refactor recon — read before re-deriving anything |
 | [archive/reports/](archive/reports/) | Maintainers | Security / FOSS review snapshots |
 | [archive/](archive/) | — | Historical research, plans, completed features, old testing dumps |

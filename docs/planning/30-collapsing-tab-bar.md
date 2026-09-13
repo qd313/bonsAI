@@ -57,7 +57,7 @@ Every claim below carries a `file:line` checked 2026-09-01. Where the code canno
   presses. The bar's own classes are build-hashed and change with Steam updates
   ([audit/decky-tab-strip-classes.md](../audit/decky-tab-strip-classes.md)).
 - The carousel window is about 188px wide against 362px of content
-  ([03-lbrb-tab-flicker.md § 10.2](03-lbrb-tab-flicker.md)), so roughly three of the six icons show at
+  ([03-lbrb-tab-flicker.md § 10.2](../archive/03-lbrb-tab-flicker.md)), so roughly three of the six icons show at
   once and the active tab can scroll out of sight entirely (noted on **TAB-MARKER-01**,
   [testing.md:275](../testing.md)).
 
@@ -129,10 +129,10 @@ the tabs root is `overflow: clip` on both axes, which is the LB/RB flicker fix a
 
 ### 2.5 Prior decisions this plan touches
 
-- **R5** ([major-redesign.md:340](../major-redesign.md), re-confirmed at [:357-358](../major-redesign.md)):
+- **R5** ([major-redesign.md:340](../archive/major-redesign.md), re-confirmed at [:357-358](../archive/major-redesign.md)):
   filled active glyph only, no micro labels, no width change, no height cost. Its consequences are at
-  [:360-368](../major-redesign.md). Reopened here as **D44**.
-- **Track D** of the flicker recon ([03-lbrb-tab-flicker.md § 5](03-lbrb-tab-flicker.md)) rejected
+  [:360-368](../archive/major-redesign.md). Reopened here as **D44**.
+- **Track D** of the flicker recon ([03-lbrb-tab-flicker.md § 5](../archive/03-lbrb-tab-flicker.md)) rejected
   replacing Steam's `Tabs` with a custom strip as high risk. **This plan is not Track D.** Steam's `Tabs`
   stays mounted and keeps owning LB/RB and the tab bodies. Only its bar is hidden.
 
@@ -236,7 +236,7 @@ Drawn at the real 300px width. Heights are CSS px before `--bonsai-ui-scale`.
   [constants.ts:61, 89, 94](../../src/features/unified-input/constants.ts)), in a 36px box, so the
   glyphs look the same as they do now.
 - **Active cell:** `rgba(255,255,255,.10)` fill plus a 2px accent ring, the fill R5's own board 2b
-  specified ([major-redesign.md:66-80](../major-redesign.md)). Inactive glyphs `rgba(168,182,198,.62)`,
+  specified ([major-redesign.md:66-80](../archive/major-redesign.md)). Inactive glyphs `rgba(168,182,198,.62)`,
   inactive labels `rgba(168,182,198,.5)`, from the same table.
 
 ### 4.3 Behaviour, state by state
@@ -271,7 +271,7 @@ spurious. `onTabsShowTab` keeps handling Steam's shoulder switches unchanged.
 - The header row is hidden by **one structural rule** scoped under `.bonsai-decky-tabs-root`. The exact
   selector is **UNKNOWN until W0 runs the probe**, because the row's own class is hashed. The probe
   prints the full ancestor chain of every icon
-  ([probe_deck_tab_strip.py](../../scripts/probe_deck_tab_strip.py)); the rule targets the shallowest
+  ([probe_deck_tab_strip.py](../../scripts/archive/probe_deck_tab_strip.py)); the rule targets the shallowest
   ancestor that contains all six leaves and both `img[aria-label]` hints and does not contain
   `TabContentsScroll`, written as `:has()` on our own leaf class, never as a hash. Prior art for that
   shape is the shoulder-hint rule at [section-6.ts:675-677](../../src/styles/sections/section-6.ts).
@@ -689,7 +689,7 @@ current tab's first stop, Up from each first stop to the bar), through `navFocus
 the ghost is not a concern: the bar claims Left/Right itself, and a shoulder press from anywhere in the
 body lands the ring inside the new tab's body (measured in (a)), never on a ghost.
 
-How W0 was measured (2026-09-02): [scripts/probe_deck_tab_bar.py](../../scripts/probe_deck_tab_bar.py), new
+How W0 was measured (2026-09-02): [scripts/probe_deck_tab_bar.py](../../scripts/archive/probe_deck_tab_bar.py), new
 in W0, run over SSH with the QAM open, cross-checked against `deck_readPage` on the same DOM. Scope and tabs
 root both 300 × 701 at y=64. The chain from a leaf up to the tabs root is eleven levels: leaf → Steam's tab
 button → the 188px carousel window (nine children) → two wrappers → the 252px header row (three children:

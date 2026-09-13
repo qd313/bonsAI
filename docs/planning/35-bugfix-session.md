@@ -6,7 +6,7 @@ The decisions are **D62** in [maintainer-decisions-locked.md](../audit/maintaine
 Nothing in § 4 starts until they are answered.
 
 Read first: [CLAUDE.md](../../CLAUDE.md); the ground rules and the focus law at the top of
-[26-thursday-bugfix-sesh.md](26-thursday-bugfix-sesh.md); [32-bugfix-session.md](32-bugfix-session.md),
+[26-thursday-bugfix-sesh.md](../archive/26-thursday-bugfix-sesh.md); [32-bugfix-session.md](../archive/32-bugfix-session.md),
 which is the same shape and worked; [34-feature-verification-round.md](34-feature-verification-round.md)
 § 8 for what the device proved last night and how it was left.
 

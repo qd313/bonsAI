@@ -28,6 +28,7 @@ import json
 import os
 import platform
 import shutil
+import stat
 import subprocess
 import sys
 from pathlib import Path
@@ -112,6 +113,24 @@ def cmd_create(args):
 
 
 def _install_dependencies(dest, root):
+    # Never run an install inside a copy that lives under the main checkout. This repo
+    # declares itself a pnpm workspace rooted at the repo, so pnpm run from a copy at
+    # .claude/worktrees/<name> walks up, finds that root, and manages the MAIN checkout's
+    # node_modules as well as the copy's. Measured 2026-09-13: three copies made this way
+    # left the main checkout's node_modules/.bin completely empty, so vitest and rollup
+    # vanished and the whole test suite failed with "not recognized as a command" -- and
+    # pnpm then reported "already up to date", so it could not repair itself either. The
+    # link costs nothing and cannot do that.
+    try:
+        inside_repo = Path(dest).resolve().is_relative_to(Path(root).resolve())
+    except AttributeError:  # Python < 3.9
+        inside_repo = str(Path(dest).resolve()).startswith(str(Path(root).resolve()))
+    if inside_repo:
+        return _link_node_modules(
+            dest, root,
+            why="this copy sits inside the main checkout, so an install here would damage it",
+        )
+
     pnpm = shutil.which("pnpm") or shutil.which("pnpm.cmd")
     if pnpm:
         result = subprocess.run(
@@ -127,7 +146,92 @@ def _install_dependencies(dest, root):
     return _link_node_modules(dest, root)
 
 
-def _link_node_modules(dest, root):
+def _is_link(path):
+    """True for anything that points somewhere else, junctions included.
+
+    `os.path.islink` is not enough on Windows. Measured 2026-09-13 on a real junction: it
+    reports False, and so does `os.path.ismount`; only the reparse-point flag on the entry
+    itself says yes. Getting this wrong is what let a recursive delete walk through a
+    junction and empty the main checkout's node_modules.
+    """
+    if os.path.islink(path):
+        return True
+    try:
+        attrs = getattr(os.lstat(path), "st_file_attributes", 0)
+    except OSError:
+        return False
+    return bool(attrs & getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0))
+
+
+def _strip_links(path):
+    """Remove every link inside a folder, leaving real files alone.
+
+    Must run BEFORE `git worktree remove`. Measured 2026-09-13: git deletes the worktree
+    folder itself, walks straight through the node_modules junction while doing it, and
+    empties the MAIN checkout's node_modules -- then fails with "Directory not empty" and
+    leaves the copy half-removed. By the time any cleanup of ours runs, the damage is done.
+    """
+    removed = 0
+    for dirpath, dirnames, filenames in os.walk(path, topdown=True):
+        for name in list(dirnames):
+            full = os.path.join(dirpath, name)
+            if _is_link(full):
+                try:
+                    os.rmdir(full)
+                    removed += 1
+                except OSError:
+                    try:
+                        os.unlink(full)
+                        removed += 1
+                    except OSError:
+                        pass
+                dirnames.remove(name)
+        for name in filenames:
+            full = os.path.join(dirpath, name)
+            if _is_link(full):
+                try:
+                    os.unlink(full)
+                    removed += 1
+                except OSError:
+                    pass
+    return removed
+
+
+def _remove_tree_safely(path):
+    """Delete a folder without ever following a link out of it.
+
+    This matters more than it sounds. A copy of the repo usually has its node_modules as a
+    Windows junction pointing at the main checkout's. Windows treats a junction as a
+    directory, so anything that deletes recursively -- shutil.rmtree, `rm -r`, Explorer --
+    walks straight through it and empties the MAIN checkout instead of removing the link.
+    Measured 2026-09-13: it wiped the main node_modules twice, and the second time the test
+    suite failed with "vitest is not recognized" while node_modules still looked present.
+    So: strip every link first, each one removed as a link, then delete what is genuinely
+    left.
+    """
+    for dirpath, dirnames, filenames in os.walk(path, topdown=True):
+        for name in list(dirnames):
+            full = os.path.join(dirpath, name)
+            if _is_link(full):
+                try:
+                    os.rmdir(full)      # a junction or directory symlink: removes the link only
+                except OSError:
+                    try:
+                        os.unlink(full)
+                    except OSError:
+                        pass
+                dirnames.remove(name)
+        for name in filenames:
+            full = os.path.join(dirpath, name)
+            if _is_link(full):
+                try:
+                    os.unlink(full)
+                except OSError:
+                    pass
+    shutil.rmtree(path, ignore_errors=True)
+
+
+def _link_node_modules(dest, root, why="pnpm install --offline failed"):
     src = root / "node_modules"
     link = dest / "node_modules"
     if not src.exists():
@@ -137,7 +241,7 @@ def _link_node_modules(dest, root):
         )
     if link.exists():
         if link.is_dir() and not link.is_symlink():
-            shutil.rmtree(link, ignore_errors=True)
+            _remove_tree_safely(link)
         else:
             try:
                 link.unlink()
@@ -154,9 +258,9 @@ def _link_node_modules(dest, root):
         else:
             os.symlink(src, link, target_is_directory=True)
     except OSError as exc:
-        return f"Dependencies: pnpm install failed and the node_modules link could not be made either ({exc})."
+        return f"Dependencies: {why}, and the node_modules link could not be made either ({exc})."
     kind = "junction" if platform.system() == "Windows" else "symlink"
-    return f"Dependencies: pnpm install --offline failed; made a node_modules {kind} to the main checkout instead."
+    return f"Dependencies: {why}; made a node_modules {kind} to the main checkout instead."
 
 
 # ---------------------------------------------------------------------------
@@ -364,6 +468,7 @@ def cmd_prune(args):
             (Path(path) / BASE_FILE).unlink()
         except OSError:
             pass
+        _strip_links(path)
         result = run(["git", "worktree", "remove", path], cwd=root, check=False)
         if result.returncode != 0:
             # "Directory not empty" means git dropped its registration but could not delete
@@ -378,7 +483,7 @@ def cmd_prune(args):
             if still_registered:
                 print(f"  failed: {result.stderr.strip()}")
                 continue
-            shutil.rmtree(path, ignore_errors=True)
+            _remove_tree_safely(path)
             run(["git", "worktree", "prune"], cwd=root, check=False)
             if Path(path).exists():
                 print(f"  git let go of it but the folder could not be deleted: {path}")

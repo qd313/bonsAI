@@ -139,7 +139,7 @@ green does not mean focus works on the Deck — it means what was true yesterday
 true today.
 
 Closing the *absence* gap is Track B (static focus checks, wired into this same job) and
-Track C (the rig). See [22-xinput-near-miss-and-button-map.md](22-xinput-near-miss-and-button-map.md)
+Track C (the rig). See [22-xinput-near-miss-and-button-map.md](../archive/22-xinput-near-miss-and-button-map.md)
 for how confidently a wrong answer can present itself when the only oracle is inference.
 
 ---
@@ -159,7 +159,7 @@ Error [ERR_UNKNOWN_BUILTIN_MODULE]: No such built-in module: node:sqlite
 pinned Node 20 and pnpm 11.23.0 together, which cannot work.
 
 The reasoning error is worth naming, because it is the same shape as the XInput near-miss in
-[22](22-xinput-near-miss-and-button-map.md): **a compatibility check that surveyed the wrong
+[22](../archive/22-xinput-near-miss-and-button-map.md): **a compatibility check that surveyed the wrong
 set.** I verified Node 20 against vitest, rollup, typescript and jsdom — every *test* dependency —
 and concluded 20 was safe. pnpm was never in the list, because it reads as infrastructure rather
 than as a dependency. It is a dependency. It runs on Node like everything else.

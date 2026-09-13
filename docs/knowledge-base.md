@@ -140,7 +140,7 @@ rules and is discharged in the separately downloaded corpus package (not the plu
 | Zip guard | `scripts/plugin_zip_corpus_guard.py` (via `verify-decky-plugin-zip.sh`) fails release if `corpus.db` / related files are bundled |
 
 Plan (all executable stages done 2026-08-09):
-[15-corpus-licensing-attribution-plan.md](planning/15-corpus-licensing-attribution-plan.md).
+[15-corpus-licensing-attribution-plan.md](archive/15-corpus-licensing-attribution-plan.md).
 **D20** (2026-08-14, supersedes D19b): the published corpus ships as one **CC BY-SA 4.0** work,
 including ShareAlike sources; only GFDL and NonCommercial sources are excluded (they don't mix
 with CC BY-SA). Per-card `source_license` stays authoritative for individual reuse.
@@ -432,7 +432,7 @@ corpus content with no way to reach it fails rather than ships.
 
 ## Retrieval quality remediation (PR1, 2026-08-05)
 
-Plan: [rag-retrieval-quality-remediation-implementation-plan.md](rag-retrieval-quality-remediation-implementation-plan.md).
+Plan: [rag-retrieval-quality-remediation-implementation-plan.md](archive/rag-retrieval-quality-remediation-implementation-plan.md).
 PR1 (Stages 1–5) and **PR2 (Stage 6 + D16) are closed 2026-08-09** — see
 [archive/research/kb-retrieval-pr2-bakeoff-2026-08-09.md](archive/research/kb-retrieval-pr2-bakeoff-2026-08-09.md).
 Equal RRF weights and a loose BM25 floor are locked; holdout could not separate keyword from RRF.
@@ -525,7 +525,7 @@ hits.
 
 **Effect** on `kb_eval_v2` (98 labeled strategy rows, paired, one query embedding per case):
 top-3 **95.9% → 100.0%**, top-1 unchanged, **zero** regressions. Full measurement:
-[audit/rag-vector-recall-floor-2026-08-18.md](audit/rag-vector-recall-floor-2026-08-18.md).
+[audit/rag-vector-recall-floor-2026-08-18.md](archive/rag-vector-recall-floor-2026-08-18.md).
 On-Deck QA owed: **KB-RECALL-01**.
 
 ## Time budget for a game question (2026-09-07)

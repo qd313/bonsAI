@@ -130,4 +130,4 @@ be re-argued. What follows from it, so it is handled rather than forgotten:
   card's `name` *is* its topic — so the eval currently cannot tell a per-game tip from a shared
   one on the same topic. Track 3 needs a label that distinguishes them, or it ships unmeasured.
   This is the same blind spot recorded for the recall slice; see
-  [rag-compat-topic-preference-2026-08-18.md](../audit/rag-compat-topic-preference-2026-08-18.md) § 6.
+  [rag-compat-topic-preference-2026-08-18.md](../archive/rag-compat-topic-preference-2026-08-18.md) § 6.

@@ -53,5 +53,5 @@ sources and answers redistribution questions for that package.
 If you are auditing this plugin zip for CC BY-SA / GFDL material: it should not
 contain those corpus files. Look for attributions in the separately installed
 corpus package's `ATTRIBUTIONS.md`, and for the architectural separation in
-`docs/planning/15-corpus-licensing-attribution-plan.md` and
+`docs/archive/15-corpus-licensing-attribution-plan.md` and
 `docs/knowledge-base.md` (Source attribution / Phase 6).

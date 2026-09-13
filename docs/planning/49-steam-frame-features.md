@@ -6,7 +6,7 @@ the maintainer asked for every entry: **would this honestly benefit from testing
 regular PC before the Frame is out?** The setup for that PC is in
 [50-steamvr-pc-setup.md](50-steamvr-pc-setup.md).
 
-Read first: [09-steam-frame-companion-feasibility.md](09-steam-frame-companion-feasibility.md), the
+Read first: [09-steam-frame-companion-feasibility.md](../archive/09-steam-frame-companion-feasibility.md), the
 study everything here rests on; [38-toast-answer-lines.md](38-toast-answer-lines.md), the popup that
 shows an answer's first lines; [42-read-aloud-feasibility.md](42-read-aloud-feasibility.md), reading
 answers aloud; [10-wake-word-listening-feasibility.md](10-wake-word-listening-feasibility.md), the wake

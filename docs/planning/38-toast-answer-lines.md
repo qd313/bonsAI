@@ -7,8 +7,8 @@ have to decide, how it is built, and how it is proved on the Deck. The decisions
 they are answered and § 3 has run.
 
 Read first: [CLAUDE.md](../../CLAUDE.md); the model and effort table in [AGENTS.md](../../AGENTS.md) § 3;
-[13-roadmap-feature-ideas.md](13-roadmap-feature-ideas.md) § C3, where this slice was first drawn;
-[35-bugfix-session.md](35-bugfix-session.md) and [36-feature-session.md](36-feature-session.md), the two
+[13-roadmap-feature-ideas.md](../archive/13-roadmap-feature-ideas.md) § C3, where this slice was first drawn;
+[35-bugfix-session.md](35-bugfix-session.md) and [36-feature-session.md](../archive/36-feature-session.md), the two
 sessions running today, for what they own and who holds the Deck.
 
 **One sentence:** when an answer finishes while the menu is closed, the small notification that today

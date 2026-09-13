@@ -72,7 +72,7 @@ the plugin itself, so nothing here needs a Deck check):**
   Pikmin 2 — brought back notes about the right game. The 21 notes written this wave to fill in blank spots, and the
   filled-out weakest four games, were all found among the top three results, most of them first. Fallout: New Vegas
   is still not installed on the device, so it was asked about by name only, which the check allows.
-  [Plan](../planning/40-new-titles-from-the-library.md). (D69, D83, D85)
+  [Plan](40-new-titles-from-the-library.md). (D69, D83, D85)
 
 **Verified on the Deck 2026-09-06 (knowledge base, wave one):**
 - ★★★ `[KB]` **A long Strategy question no longer throws away its game notes** — when a question would send more to the

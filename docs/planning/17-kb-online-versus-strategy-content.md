@@ -3,7 +3,7 @@
 **Status:** `NOT STARTED` — discovery locked 2026-08-09 (maintainer chat).
 **Overall effort:** ★★★★ (matches [roadmap.md](../roadmap.md) Backlog § Knowledge base).
 **Roadmap:** [KB online / versus strategy content](../roadmap.md#knowledge-base) · related [KB visual maps](../roadmap.md#knowledge-base) (later wave in this plan).
-**Adjacent:** [knowledge-base.md](../knowledge-base.md) · [15-corpus-licensing-attribution-plan.md](15-corpus-licensing-attribution-plan.md) · [spoiler-constitution.md](spoiler-constitution.md) · [rag-eval-query-style.md](../audit/rag-eval-query-style.md) · eval fixture `tests/fixtures/kb_eval_v2.json`.
+**Adjacent:** [knowledge-base.md](../knowledge-base.md) · [15-corpus-licensing-attribution-plan.md](../archive/15-corpus-licensing-attribution-plan.md) · [spoiler-constitution.md](spoiler-constitution.md) · [rag-eval-query-style.md](../audit/rag-eval-query-style.md) · eval fixture `tests/fixtures/kb_eval_v2.json`.
 
 ## How to use this file
 

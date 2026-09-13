@@ -9,7 +9,7 @@ descope now, on purpose, and keeps the ranking parked behind data the readout wi
 The decisions are **D75** in [maintainer-decisions-locked.md](../audit/maintainer-decisions-locked.md).
 
 Read first: [CLAUDE.md](../../CLAUDE.md); the model and effort table in [AGENTS.md](../../AGENTS.md) § 3;
-[13-roadmap-feature-ideas.md](13-roadmap-feature-ideas.md) § C1, where the benchmark and its gate were
+[13-roadmap-feature-ideas.md](../archive/13-roadmap-feature-ideas.md) § C1, where the benchmark and its gate were
 drawn; [41-deck-model-survey.md](41-deck-model-survey.md) § 8, whose Deck half wants exactly the numbers
 this readout produces.
 

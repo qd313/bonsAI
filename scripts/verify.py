@@ -385,6 +385,15 @@ def render_json(mode: str, steps: list[StepResult], total_seconds: float) -> int
 
 
 def main(argv: list[str] | None = None) -> int:
+    # A Windows console defaults to an encoding that cannot print an arrow or a curly quote,
+    # and plenty of this repo's test names and assertion text contain both. Without this the
+    # script dies while printing the very failure it was run to show -- and the crash looks
+    # like the failure, which sends the reader after the wrong thing entirely.
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8", errors="replace")
+        except (AttributeError, ValueError):
+            pass
     parser = argparse.ArgumentParser(description="Run the refactor's shared verify gate.")
     mode_group = parser.add_mutually_exclusive_group(required=True)
     mode_group.add_argument("--quick", action="store_true", help="typecheck, impacted tests, header/ratchet checks")

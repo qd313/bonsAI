@@ -15,7 +15,7 @@ Ground rules, all of them non-negotiable:
 2. Then `pnpm install --frozen-lockfile` in the worktree and confirm the baseline is green before you
    change anything: `npx tsc --noEmit`, `npm test`, `npm run test:py`, `npm run build`,
    `node scripts/check-focus-patterns.mjs`.
-3. Read `CLAUDE.md`, the ground rules at the top of `docs/planning/26-thursday-bugfix-sesh.md`, and
+3. Read `CLAUDE.md`, the ground rules at the top of `docs/archive/26-thursday-bugfix-sesh.md`, and
    `AGENTS.md (Decky focus graph)` if the fix touches focus. Read each bug's roadmap entry, its
    testing row, and the `runs/` evidence file the entry names.
 4. One fix per commit. Write the failing test first. Stay inside the files your task lists; if the fix

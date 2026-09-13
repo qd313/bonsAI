@@ -8,7 +8,7 @@ in [maintainer-decisions-locked.md](../audit/maintainer-decisions-locked.md). §
 is picked up.
 
 Read first: [CLAUDE.md](../../CLAUDE.md); the model and effort table in [AGENTS.md](../../AGENTS.md) § 3;
-[13-roadmap-feature-ideas.md](13-roadmap-feature-ideas.md) § B3, where the doctor was first drawn;
+[13-roadmap-feature-ideas.md](../archive/13-roadmap-feature-ideas.md) § B3, where the doctor was first drawn;
 [38-toast-answer-lines.md](38-toast-answer-lines.md) for how these plans are shaped.
 
 **One sentence:** when an Ask fails, a **Fix this** button runs the checks the plugin already has, shows

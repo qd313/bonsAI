@@ -247,20 +247,11 @@ replace it with a specific issue when one exists.
   strategy question, which today survives a clear until the game changes or the plugin restarts — Clear cache gets
   the same fix in the same change. **Open, with a lean:** clear the whole session, not just what the model sees.
   Needs a focus-graph entry and the modal return-focus hookup.
-- ★★ `[voice]` **Read answers aloud** — **OPEN, planned 2026-09-05, calls locked (D74).** A Read aloud button under the answer.
-  The Deck's own voice, which SteamOS has shipped since June 2025, so nothing to download; it keeps reading with the menu closed and
-  stops on a second press or a new question. A Settings choice, Voice replies, picks when an answer reads on its own: Off (default),
-  When I asked by voice, or Always; on the middle position, an answer to a question asked through the mic reads out on its own, and
-  on Always every answer does, menu open or closed. A hidden spoiler block is skipped with a short spoken phrase. **Build started
-  2026-09-12 (D99); the two Deck checks that gate Phase 1 passed the same evening**, run as root the way the plugin runs: the
-  Deck's own voice made a five-second sentence in about 25 milliseconds, and a program with no session of its own found the Deck's
-  sound sockets the way the microphone does and played it on the speaker. Still owed to the maintainer's ear: heard over a
-  running game, on headphones and on Bluetooth. [Memo](planning/42-read-aloud-feasibility.md).
-- ★★ `[voice]` **Spoilers by voice** — **OPEN, filed 2026-09-08; waits on Read answers aloud and Voice follow-ups.** When a spoken
-  answer reaches a hidden spoiler it says "there is a spoiler here, say go on to hear it" and waits; "go on" unhides and reads it,
-  anything else skips it. The block on screen unhides with the spoken one, so the two never disagree. The Deck alone is enough to
-  test. [Plan](planning/49-steam-frame-features.md).
-- ★★ `[voice]` **Voice follow-ups** — **OPEN, filed 2026-09-08; waits on Read answers aloud.** For a few seconds after a spoken
+- ★★ `[voice]` **Spoilers by voice** — **OPEN, filed 2026-09-08; Read answers aloud shipped 2026-09-12, still waits on Voice
+  follow-ups.** When a spoken answer reaches a hidden spoiler it says "there is a spoiler here, say go on to hear it" and waits;
+  "go on" unhides and reads it, anything else skips it. The block on screen unhides with the spoken one, so the two never
+  disagree. The Deck alone is enough to test. [Plan](planning/49-steam-frame-features.md).
+- ★★ `[voice]` **Voice follow-ups** — **OPEN, filed 2026-09-08; Read answers aloud shipped 2026-09-12.** For a few seconds after a spoken
   answer ends, the mic listens for a handful of words: again, go on, stop, next tip. No wake word needed, since the mic opens only
   in that window and closes on silence. The words a person needs when they cannot reach the Deck or scroll. The Deck alone is
   enough to test. **The maintainer set the exact shape 2026-09-11:** a short rising tone when the mic opens right after a spoken
@@ -882,6 +873,18 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
 
 Everything shipped since v0.4.9 (2026-07-08), one line each, newest first. Detail: [CHANGELOG.md](../CHANGELOG.md),
 [archive/roadmap-completed.md](archive/roadmap-completed.md), [archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md).
+
+**Shipped 2026-09-12, Phase 1 (checked on the maintainer's Deck the same evening):**
+- ★★ `[voice]` **Read answers aloud** — shipped 2026-09-12, Phase 1: the Deck's own built-in voice, nothing to download. A
+  Read aloud line under a finished answer speaks it one sentence at a time, starting in about a second; the line changes to
+  Stop, and pressing it again, or asking a new question, stops the speech. It keeps reading with the menu closed. A hidden
+  spoiler is announced as "a spoiler is hidden here", a table as "there is a table on screen", code as "there is code on
+  screen". Settings gained a three-way **Voice replies** choice: Off (default), When I asked by voice, Always. On the Deck:
+  the D-pad reaches Read aloud from the answer's Copy corner and the Settings row saves its choice, both **PASS**; pressing
+  Read aloud starts and stops the speech with a sound stream confirmed on the speaker, and Always read a fresh answer with
+  no press, both **PASS by machine, hearing it is still owed to the maintainer's ear**. Still owed: hearing it for real
+  (speakers, headphones, Bluetooth, over a running game), whether a spoken question reads itself while a typed one does
+  not, and whether asking something new stops a reading already playing. [Memo](planning/42-read-aloud-feasibility.md).
 
 **Closed 2026-09-12 (the maintainer closed this research entry; its remaining work lives in the plan it started):**
 - ★★★★★★ `[platform]` **Steam Frame companion UX** — closed as done 2026-09-12 (D97 call 1). The study's own first step

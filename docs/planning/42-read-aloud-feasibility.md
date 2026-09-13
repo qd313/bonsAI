@@ -567,3 +567,19 @@ eye. The middle position is the signal Voice follow-ups (D97) hangs off.
   one playback stream on the built-in speaker. What a machine cannot check is owed to the maintainer's ear:
   heard on speakers, headphones and Bluetooth, and over a running game (row 02's second half, row 05). Row
   03 is Phase 2's gate and did not run. Build lanes for steps 1 to 3 launched the same evening.
+- **2026-09-12, night** — Phase 1 shipped: the Python speak service and its three bridge methods (`3ba8011`,
+  `4255738`, merged as `1eee964`); the readable-text helper, the Voice replies setting end to end, and the
+  Read aloud line (`2b67c76`, `7604cd8`, `09464bc`, merged as `0c3f520`); a fix so a question only counts as
+  asked by voice when the words sent are what the mic actually wrote (`1b54bbb`); the D-pad reaching Read
+  aloud from the answer's Copy corner (`a951b00`); and the line saying Stop while an answer reads itself on
+  its own (`9ac3ed3`, `bf6530b`). Checked on the maintainer's Deck the same night: the D-pad order is right,
+  the Settings row saves its choice, pressing Read aloud starts and stops the speech with a stream confirmed
+  on the speaker, and Always read a fresh answer with no press. Two lessons the Deck taught that the desk
+  did not: by the time an answer starts reading itself, it has usually already moved from the "live" block
+  into history, so the line has to be found by the newest answer's own key rather than by "the live one"; and
+  the on-screen line must not say Stop until the backend confirms it actually started speaking, or an early
+  status check can still read idle and get the label wrong. Still owed: hearing it by ear (speakers,
+  headphones, Bluetooth, over a running game), whether a spoken question reads itself while a typed one does
+  not, and whether a new question stops a reading already playing — the last two are unit-tested, not yet
+  run on the Deck. Roadmap: Read answers aloud moved to Done; Spoilers by voice and Voice follow-ups updated
+  to say it shipped.

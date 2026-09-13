@@ -1,0 +1,74 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PROJECT_DIR:-.}/.claude/hooks/model-routing-check.py\"",
+            "timeout": 10,
+            "statusMessage": "Plain language and model routing check"
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PROJECT_DIR:-.}/.claude/hooks/model-routing-check.py\"",
+            "timeout": 10,
+            "statusMessage": "Plain-language rule for the lane"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PROJECT_DIR:-.}/.claude/hooks/bookkeeper-guard.py\"",
+            "timeout": 10,
+            "statusMessage": "Bookkeeper guard"
+          }
+        ]
+      },
+      {
+        "matcher": "Agent|Workflow",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PROJECT_DIR:-.}/.claude/hooks/spawn-line.py\"",
+            "timeout": 10,
+            "statusMessage": "Spawn line check"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PROJECT_DIR:-.}/.claude/hooks/no-push.py\"",
+            "timeout": 10,
+            "statusMessage": "No-push guard"
+          }
+        ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python \"${CLAUDE_PROJECT_DIR:-.}/.claude/hooks/read-range.py\"",
+            "timeout": 10,
+            "statusMessage": "Read-range reminder"
+          }
+        ]
+      }
+    ]
+  }
+}

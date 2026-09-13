@@ -5,6 +5,57 @@ pick up without rereading anything but this file.
 
 ---
 
+## 2026-09-13, phase 1 mostly done, waiting on the maintainer
+
+**What landed.** The two enormous documents are split: the roadmap drops from 118 KB to 90, the
+testing document from 318 to 135. What was finished moves to an archive file beside each, word for
+word, proved by a checker written before the split that shows every line is accounted for. The
+Cursor editor setup is gone: eighteen files deleted, and everything worth keeping moved first. There
+is now one guide for a person or any AI tool; the Claude-only file drops from 13 KB to 3 and keeps
+only what is specific to that one tool. The D-pad focus rule moved across with its two known errors
+corrected on the way.
+
+**Neither big document hit the size the plan asked for** (40 KB and 60 KB; they reached 90 and 135).
+Only the finished sections could move without rewriting content, and rewriting was off-limits by
+design. Getting further means archiving closed checks and older knowledge-base entries too, which is
+a decision, not a move.
+
+**Two things had to be fixed by hand after the lanes finished.**
+
+- Removing the editor left live things pointing at deleted files. Three mattered: the instructions
+  every worker reads at the start of a session, the tool that saves review notes, and the three
+  worker descriptions. All now point at the one guide.
+- Document sizes were counted in raw bytes, so the same unchanged file measured differently in a
+  fresh copy than in the main one, purely because of line endings. Two workers failed their check
+  today for a reason that had nothing to do with their work. Sizes are now counted the same way
+  everywhere.
+
+**The two big documents now have a ceiling instead of a may-only-shrink rule.** Open work is added
+to them every time something lands, so demanding they only ever get smaller would block the
+bookkeeping every landing owes. The roadmap must stay under 100 KB and the testing document under
+145. That is the rule that stops them ballooning back.
+
+**The old copies of the project were investigated and none hold work worth saving.** Six were
+chasing bugs since fixed, several confirmed by pressing real buttons on the Deck. Two contain a way
+of moving the model order list with the D-pad that was tried, tested on the device, found to rewrite
+the list while someone was only scrolling, and ruled out in writing. One small idea was genuinely
+missing and is now filed on the roadmap so it survives the copies being cleared.
+
+**WAITING ON THE MAINTAINER, and phase 1 is not finished until they answer:**
+
+1. The sorting list at docs/audit/refactor-round-two/docs-triage-proposal.md. It proposes 125 to
+   keep, 52 finished, 9 replaced, 3 abandoned, and 6 it would not guess at. Approving it removes
+   about 943 KB of reading. Nothing has been moved.
+2. Whether to clear the old copies of the project. The recommendation is yes, all seven.
+3. Only 154 of the 464 saved device runs are actually cited by a test row. The rest came from a bug
+   that saved one on every run. They leave the project once the list is approved.
+
+**Still to do in phase 1 after those answers:** move the archived documents and write the archive
+index with a delete-after date, sort the helper scripts the same way, and take the leftover device
+runs out. Then phase 2, mapping and measuring.
+
+---
+
 ## 2026-09-13, phase 0 finished
 
 **Phase 0 is done and landed on experimental.** Everything the later phases lean on now exists:

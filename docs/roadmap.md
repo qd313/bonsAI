@@ -190,6 +190,11 @@ replace it with a specific issue when one exists.
   the bundled Deck basics list ships switched on and is the *only* reason a whole sentence ever matches a setting — its 88 words
   match when your sentence contains one of them, so *can you help me with performance* returns three results. The maintainer folded
   that finding into this entry. [Detail](planning/45-settings-shortcut-card.md#5-two-things-about-the-search-that-are-not-obvious).
+- ★ `[focus]` **The models hub's own buttons should pass the D-pad to each other at their edges** — **OPEN, filed
+  2026-09-13.** Inside the AI models hub, pressing up at the top of the tier choices, or down at the bottom of the advanced
+  switches, does nothing. It should hop to the neighbouring group instead. Found as unfinished work in an old copy of the
+  project during the clean-up; the copy is being cleared, and the idea is small enough to rebuild fresh rather than rescue.
+
 - ★★ `[chat]` **A quiet cue that a cut question can be opened** — **OPEN, filed 2026-09-05 by the maintainer.** When the ring lands on
   a question bubble that has been cut short, nothing on screen says the rest is there. Chosen 2026-09-05 from four drawn options: the
   text fades out at the right-hand edge instead of ending in three dots, only while the ring is on it, nothing for a finger. Nothing

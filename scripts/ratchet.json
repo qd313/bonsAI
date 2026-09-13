@@ -32,35 +32,35 @@
   },
   "duplicate_lines_app": {
     "label": "Copy-pasted lines, app code",
-    "best": null,
+    "best": 1847,
     "target": 350,
     "start_2026_09_09": 717,
     "direction": "lower_is_better",
-    "measured_by": "jscpd, min-tokens 50 (not measured yet -- jscpd is not installed in this checkout)"
+    "measured_by": "jscpd, min-tokens 50"
   },
   "duplicate_lines_be_tests": {
     "label": "Copy-pasted lines, back-end tests",
-    "best": null,
+    "best": 2286,
     "target": 700,
     "start_2026_09_09": 1372,
     "direction": "lower_is_better",
-    "measured_by": "jscpd, min-tokens 50, over tests/**/*.py (not measured yet -- jscpd is not installed in this checkout)"
+    "measured_by": "jscpd, min-tokens 50, over tests/**/*.py"
   },
   "unused_exports_fe": {
     "label": "Unused exports, front end",
-    "best": null,
+    "best": 126,
     "target": 0,
     "start_2026_09_09": null,
     "direction": "lower_is_better",
-    "measured_by": "knip (not measured yet -- knip is not installed in this checkout)"
+    "measured_by": "knip"
   },
   "import_cycles_be": {
     "label": "Import cycles, back end",
-    "best": null,
+    "best": 2,
     "target": 0,
     "start_2026_09_09": 2,
     "direction": "lower_is_better",
-    "measured_by": "packages/bonsai-mcp/knowledge/architecture/py-import-graph.json (not measured yet -- that file does not exist in this checkout)"
+    "measured_by": "packages/bonsai-mcp/knowledge/architecture/py-import-graph.json"
   },
   "import_cycles_fe": {
     "label": "Import cycles, front end",
@@ -80,11 +80,11 @@
   },
   "files_without_purpose_header": {
     "label": "Files without a purpose header",
-    "best": null,
+    "best": 20,
     "target": 0,
     "start_2026_09_09": 20,
     "direction": "lower_is_better",
-    "measured_by": "python scripts/check_headers.py --json, the missing_purpose list (not measured yet -- check_headers.py does not exist in this checkout)"
+    "measured_by": "python scripts/check_headers.py --json, the missing_purpose list"
   },
   "fe_calls_with_no_be_method": {
     "label": "Front-end call names with no back-end method",
@@ -112,7 +112,7 @@
   },
   "doc_size_kb_roadmap": {
     "label": "Living doc size: roadmap",
-    "best": 118.56,
+    "best": 117.44,
     "target": 40,
     "start_2026_09_09": 109,
     "direction": "lower_is_better",
@@ -128,7 +128,7 @@
   },
   "doc_size_kb_claude": {
     "label": "Living doc size: orientation (CLAUDE.md)",
-    "best": 13.26,
+    "best": 13.04,
     "target": 8,
     "start_2026_09_09": 13,
     "direction": "lower_is_better",
@@ -136,11 +136,11 @@
   },
   "doc_size_kb_agents": {
     "label": "Living doc size: neutral guide (AGENTS.md)",
-    "best": null,
+    "best": 9.2,
     "target": 12,
     "start_2026_09_09": 9,
     "direction": "higher_is_better",
-    "measured_by": "byte count of AGENTS.md, divided by 1024 (not measured yet -- AGENTS.md is gitignored and local-only, not present in every checkout)"
+    "measured_by": "byte count of AGENTS.md, divided by 1024"
   },
   "live_docs_mentioning_cursor": {
     "label": "Live docs mentioning Cursor",

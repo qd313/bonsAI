@@ -49,6 +49,7 @@ from __future__ import annotations
 import argparse
 import ast
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -141,7 +142,15 @@ def _bin_exists(name: str) -> Optional[Path]:
     point of this check is "did this repo actually add the dependency yet".
     """
     bin_dir = ROOT / "node_modules" / ".bin"
-    for candidate in (name, f"{name}.cmd", f"{name}.CMD", f"{name}.ps1"):
+    # Order matters on Windows. The extension-less file in .bin is a Unix shell
+    # script; handing it to CreateProcess fails with "not a valid Win32
+    # application". The .cmd wrapper next to it is the one Windows can run, so
+    # try that first there and the plain name first everywhere else.
+    if os.name == "nt":
+        candidates = (f"{name}.cmd", f"{name}.CMD", name)
+    else:
+        candidates = (name, f"{name}.cmd", f"{name}.CMD")
+    for candidate in candidates:
         p = bin_dir / candidate
         if p.exists():
             return p
@@ -272,8 +281,11 @@ def _run_jscpd(paths: list[Path]) -> tuple[Optional[int], Optional[str]]:
                     "--output",
                     tmp,
                     "--silent",
-                    "--gitignore",
-                    "false",
+                    # jscpd 5 is a rewrite with a different command line: there is no
+                    # --gitignore switch any more, so the paths we never want counted
+                    # have to be named here instead.
+                    "--ignore",
+                    "**/node_modules/**,**/dist/**,**/.claude/worktrees/**,**/docs/archive/**",
                 ],
                 cwd=ROOT,
                 capture_output=True,

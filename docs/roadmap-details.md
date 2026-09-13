@@ -1,5 +1,16 @@
 # Roadmap details
 
+> **Clean-up task — trim this file.** ★★ · about 45 minutes with one worker · Sonnet 5 at high effort.
+>
+> Reading this costs roughly **39,000 tokens**. It holds the long version of roadmap entries that
+> outgrew five lines. Many of those entries have since shipped, and their detail belongs in the
+> archive with them. Getting it to about 50 KB would save roughly **26,000 tokens** per read.
+>
+> The work is a move, not a rewrite: match each block here against its roadmap entry, and archive
+> the blocks whose entry is finished.
+>
+> Not started. Filed 2026-09-13 during the clean-up.
+
 Long-form notes for **open** roadmap entries. The roadmap itself keeps each item to a few plain
 sentences; everything that would otherwise have to be re-measured lives here — what was tried,
 what it cost, which leads were ruled out, and the exact steps to reproduce.

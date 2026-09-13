@@ -150,7 +150,7 @@
   },
   "live_docs_mentioning_cursor": {
     "label": "Live docs mentioning Cursor",
-    "best": 2,
+    "best": 0,
     "target": 0,
     "start_2026_09_09": 6,
     "direction": "lower_is_better",

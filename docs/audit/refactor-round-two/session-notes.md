@@ -5,6 +5,54 @@ pick up without rereading anything but this file.
 
 ---
 
+## 2026-09-13, phase 1 finished
+
+**The maintainer approved both open calls, and everything is carried out.** The seven old copies of
+the project are gone; 26 copies on this machine are now 19. The sorting list was approved as it
+stood: 55 write-ups and 11 helper scripts are in the archive with an index saying what each is, and
+the three that describe work never done carry a delete-after date of 2026-12-12. Nothing else has a
+delete date; archived is not deleted.
+
+**The saved Deck recordings are sorted.** 187 that a test row actually cites are kept as evidence;
+281 are out of the project. The folder they lived in is no longer part of the project, so runs will
+not pile up again. More were cited than first counted, because some rows name a whole family of
+recordings in one line rather than listing each; one such line stood for 39 files on its own.
+
+**A dozen test rows cite evidence that never existed.** Checked against the project's whole history:
+those recordings were never saved. The rows read as proven and nothing backs them. Not caused by the
+clear-out. Worth someone's attention.
+
+**Three real faults in today's own tooling, all found by using it:**
+
+- The copy helper installed libraries inside copies that sit under the main checkout. Because the
+  project declares itself one workspace rooted at the repo, that install reached up and emptied the
+  main checkout's tool launchers. The whole test suite failed with "vitest is not recognized" while
+  the folder still looked present, and the installer then reported everything up to date, so it could
+  not repair itself. Copies inside the checkout now share the main libraries by link.
+- Worse, removing such a copy destroyed those libraries outright. Windows treats one of these links
+  as an ordinary folder, so git walked through it while deleting the copy and emptied what it pointed
+  at. Links are now taken out before git is asked to remove anything. Detecting them needed care: the
+  obvious check reports false for this kind of link and only the underlying flag says yes, which is
+  why the first fix did not work. Proved by making a copy and removing it with the launchers counted
+  before and after.
+- The check command died while printing its own output, because a Windows console cannot render an
+  arrow and plenty of test names contain one. The crash looked like the failure.
+
+**Where the numbers stand.** The roadmap 118 KB to 91, the testing rows 318 to 135, the orientation
+file 13 to 3, the one guide 9 to 31 because everything factual moved into it. Live documents still
+naming the dropped editor: 12 down to 2, and both of those are legitimate.
+
+**Five documents are still big and now each carries a trim task at the top**, with its own star
+rating, rough time and which model to use. Together about 815 KB. The biggest is the locked decisions
+file at 89,000 tokens a read — bigger than the testing rows ever were, and hidden until the two
+obvious giants shrank. One roadmap entry covers the set.
+
+**Next: phase 2, map and measure.** No Deck needed. Scripts produce the lists — unused code, exact
+duplicates, long functions with nothing explaining them — and one session reads only the summaries
+and writes the delete-and-merge list for the maintainer to confirm.
+
+---
+
 ## 2026-09-13, phase 1 mostly done, waiting on the maintainer
 
 **What landed.** The two enormous documents are split: the roadmap drops from 118 KB to 90, the

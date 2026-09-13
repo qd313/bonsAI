@@ -1,5 +1,18 @@
 # bonsAI testing
 
+> **Clean-up task — trim this file.** ★★ · about 45 minutes with one worker · Sonnet 5 at high effort.
+>
+> Reading this costs roughly **34,000 tokens**, and the house rules say it is read before any work is
+> marked done — so that cost lands on every single piece of work. Getting it to 60 KB would save
+> roughly **19,000 tokens** every time.
+>
+> The closed rows already moved to the archive on 2026-09-13; what is left is long because the rows
+> still open are wordy, not because there are many. So this one needs judgement, not just moving:
+> shorten each row to what a person actually has to do and see. Take care — a row's wording is what
+> is under test, and several are worded deliberately around words they must avoid.
+>
+> Not started. Filed 2026-09-13 during the clean-up.
+
 **Purpose:** Where to test, what to run, and how coverage is tracked — without dumping every historical checkbox into one file.
 
 | Doc | Audience | Contents |

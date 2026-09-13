@@ -1,5 +1,18 @@
 # Maintainer decisions locked (refactor / handoff)
 
+> **Clean-up task — trim this file.** ★★★ · about an hour with one worker, plus a second pass to
+> check it · Sonnet 5 at high effort, reviewed by Opus at extra-high.
+>
+> This is now the biggest file in the project. Reading it costs roughly **89,000 tokens**. Splitting
+> the settled decisions into an archive beside it and keeping only the recent and still-open ones
+> would bring it to about 60 KB and save roughly **74,000 tokens** every time somebody reads it.
+>
+> Three stars, not two, because every decision here is referred to by its number from all over the
+> project. Losing one, or renumbering one, is expensive and quiet. The split must be a move: nothing
+> reworded, every number still resolving, proved by a checker before and after.
+>
+> Not started. Filed 2026-09-13 during the clean-up.
+
 > **Moved from** [roadmap.md](../roadmap.md) **2026-08-04.** Full decision record for D1–D15, execution order, and cleanup candidates. Active index: [roadmap.md](../roadmap.md). Reorg commit: `ba2e5c5` (`git show ba2e5c5`).
 
 Evidence lives in this audit folder — especially [05-plan.md](../archive/05-plan.md).

@@ -1,5 +1,18 @@
 # bonsAI Roadmap
 
+> **Clean-up task — trim this file.** ★★ · about 30 minutes with one worker · Sonnet 5 at high effort.
+>
+> Reading this costs roughly **23,000 tokens**, and the house rules say it is read before any work is
+> marked done — so that cost lands on every single piece of work. Getting it to 40 KB would save
+> roughly **13,000 tokens** every time. Together with the testing rows, trimming both saves about
+> **31,000 tokens per landing**.
+>
+> The finished list already moved to the archive on 2026-09-13. Going further means archiving the
+> older knowledge-base entries and the checks that are closed but still sitting here — which is a
+> decision about what stays visible, not a straight move, so it needs asking rather than assuming.
+>
+> Not started. Filed 2026-09-13 during the clean-up.
+
 Open bugs, work fixed but not yet confirmed on the Deck, planned features, and what shipped for v0.5.0. Four lists plus one
 section for the knowledge base, each sorted from one star to six.
 
@@ -284,6 +297,13 @@ replace it with a specific issue when one exists.
   give-up values per Ask mode. It was the sixth candidate in round 36 and was dropped on purpose, said in advance rather than
   discovered late: it is the largest of that set — the two existing values already run through sixteen files each and going per mode
   triples them — and the least of them for a person, since it changes when a warning appears rather than what the plugin can do.
+- ★★★ `[platform]` **Trim the five documents that are still big** — **OPEN, filed 2026-09-13 during the
+  clean-up.** Nothing a person using the plugin would notice; this is about what every piece of work costs before it starts.
+  Five files carry a trim task at the top of each, with its own star rating, time and model. Together they are about 815 KB.
+  The two that matter most are this file and the testing rows, because the house rules say both are read before anything is
+  marked done — trimming just those two saves about 31,000 tokens on every landing. The biggest single win is the locked
+  decisions file at 89,000 tokens a read. Do them one at a time; each is its own small job.
+
 - ★★★ `[reply]` **Spy: a character who lies to you on purpose** — **OPEN, filed 2026-09-06 by the maintainer.** A new
   Team Fortress 2 character. Pyro's Heavy setting already gives bad advice because he is a stubborn arse; the Spy gives bad advice
   because he is clever and working for the other side. Sometimes he opens by claiming to be a different character instead. Same hard

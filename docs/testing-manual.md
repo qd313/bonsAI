@@ -1,5 +1,16 @@
 # bonsAI testing — manual (Deck / maintainer)
 
+> **Clean-up task — trim this file.** ★★ · about 30 minutes with one worker · Sonnet 5 at high effort.
+>
+> Reading this costs roughly **20,000 tokens**. Getting it to 35 KB would save roughly **11,000** per
+> read. Same shape of work as the other testing file: the checks that are done and will not run again
+> move to the archive, and the ones that stay get shortened to what a person has to do and see.
+>
+> Same care applies — a check's wording is what is being tested. Do not tidy the words of a check
+> that is still live.
+>
+> Not started. Filed 2026-09-13 during the clean-up.
+
 On-device QA only. Automated gates: [testing-automated.md](testing-automated.md). Hub + slim coverage: [testing.md](testing.md). Roadmap: [roadmap.md](roadmap.md) (items fixed but not Deck-confirmed sit in its Verify section).
 
 Record **build id / git SHA** and **SteamOS** when marking Pass / Partial / Fail.

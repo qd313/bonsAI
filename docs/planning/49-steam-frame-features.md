@@ -25,6 +25,11 @@ and a good first line.
   would run, and it would work on every SteamVR headset, not only the Frame.
 - **Nothing of ours can run on the headset itself.** Decky Loader only ships for the Deck's kind of
   chip. Not ours to fix. The one sign to watch for is Decky publishing a build for ARM chips.
+  **The maintainer's read (2026-09-13) is more hopeful:** Decky says "Deck only", but in practice it
+  runs on anything that runs SteamOS or the Steam gaming session, so a Frame with Decky and the
+  bonsAI plugin inside it may well be possible. If it is, the in-headset menu is the same kind of web
+  page Decky already hooks into and the plugin would run there as it does on the Deck, with the
+  model on the PC. Nobody can check this until the Frame is out. See § 8.
 - **Voice in and voice out are one feature with a visor on.** You cannot read a screen. A wake word
   without spoken answers leaves a person in VR with an answer they cannot receive.
 - **The study's cheap first step shipped 2026-09-12.** The four thin Frame tips in the knowledge base
@@ -216,6 +221,8 @@ three of these, and the decisions file entry D97 for where they are filed.
 3. **The one decision in 2.9.** Whether bonsAI grows a second way to run. Everything above four stars
    on this list waits on it. **Decided 2026-09-12: the PC bench checks how far running the same Python
    side on the PC too really is, before the decision is made; llama.cpp stays closed.** See D97 call 2.
+   **Parked 2026-09-13 until the Frame is in the house**, and widened: it is the same question as
+   Desktop Mode and phone access, so all three are decided together. See § 8.
 4. **Which headset for the tests.** None, a Quest with Steam Link, or wait for the Frame. **Decided
    2026-09-12: none for now; the Frame later.** See D97 call 3.
 
@@ -266,3 +273,96 @@ Steam profile, VR comfort notes per game in the knowledge base, streaming health
 Remote Play diagnostics), a spoken break timer, the large-display layout, screenshot attach by voice
 from the PC, small models on the headset's idle chip, and "keep reading in popups". They stay here so
 the reason they are absent is on record.
+
+## 8. Calls from 2026-09-13: park it, and decide the door once
+
+From a chat with the maintainer on 2026-09-13, after reading plans 49, 52 and 53 and the D97 entry.
+Nothing here is built. The roadmap was being reworked in another session that day, so these calls
+are recorded here first and reach the roadmap and the decisions file afterwards.
+
+### 8.1 The "second way to run" decision is parked
+
+The maintainer's words: "Park it." Nothing needs the answer now. There is no headset in the house,
+the four things a headset needs first (reading aloud, the wake word, voice follow-ups, headset mode)
+are all Deck-side, and the bench already answered the test questions with no decision needed. The
+call comes back when the Frame arrives and shows what it can run. Two things to check on day one:
+
+1. Does Decky install and run on it? If it does, bonsAI runs inside the headset as a normal plugin
+   with the model on the PC, and most of this section is moot for the Frame.
+2. If it does not, the SteamVR panel path in § 2.8 is the way in, and the door question below decides
+   where its brain lives.
+
+### 8.2 One door, three customers: Desktop Mode, a phone, and the VR panel
+
+Plan 52 § 5 asked where a VR panel's brain would live, because today the only way anything talks to
+bonsAI's Python side is through Decky on the Deck. That same gap was studied before under another
+name: **bonsAI in Desktop Mode**, a brainstorm from 2026-08-06 written up in
+[audit/desktop-mode-discovery.md](../audit/desktop-mode-discovery.md). Its shape: the plugin's
+Python side runs a small web server; a browser on the Deck's desktop, or later a phone on the home
+network, opens an Ask box and reads answers, with no game context. It was never filed on the roadmap
+and never got a decision number.
+
+The two are one question. The Desktop Mode write-up's "door on the Deck" is option (b) of plan 52
+§ 5; its "pull the brain out into a standalone service later" is option (c), the one the bench priced
+in plan 53 § 3. So there are three customers for one door:
+
+| Customer | What they need | Where it is written up |
+|---|---|---|
+| Desktop Mode on the Deck | A browser page on the same machine | [audit/desktop-mode-discovery.md](../audit/desktop-mode-discovery.md) |
+| A phone on the home network | The same page, reachable from another device, with pairing | same, "Exposure" row |
+| The VR panel on the PC | A brain the PC program can reach | plan 52 § 5, plan 53 § 3 |
+
+**The maintainer's call: park these together so they are decided once.** When the decision is
+taken, the options are the three in plan 52 § 5, and the Desktop Mode write-up's open questions
+(one shared answer slot that a second client could interrupt, an unchecked PC address field, what the
+page holds beyond the Ask box) apply to every customer.
+
+**Revisit decoupling bonsAI from Decky as part of this.** The maintainer asked for this to be on
+record here. Two earlier studies touch it and should be read together when the decision comes back:
+[11-native-qam-tile-feasibility.md](11-native-qam-tile-feasibility.md) § 2, which looked at a
+non-Decky path and judged that leaving the quick menu means leaving the product, and the Desktop Mode
+write-up's "Hosting" section, which prices pulling the Python side out into its own service and names
+the one real cost: the plugin that works today would then depend on that service being up.
+
+### 8.3 The native tile entry reopens: someone else built it
+
+The six-star **Native QAM shortcut tile** entry was blocked on Decky's maintainers. On 2026-09-13
+the maintainer pointed at [decky-quick-tab](https://github.com/moi952/decky-quick-tab), a Decky
+plugin that gives every installed plugin its own icon in the quick menu, lets tabs be reordered, and
+can hide Steam's own. BSD licence, young (14 stars, 3 commits when checked), not yet tried on a Deck
+by us. Two ways to use it, cheapest first:
+
+1. Point people at it in the README and troubleshooting as the way to get a bonsAI icon.
+2. Read how it reaches the part of Decky that plan 11 called private, and copy the trick. Fragile in
+   the same way Decky itself is: it patches Steam's own menu and breaks when Steam changes.
+
+The entry reopens on the roadmap with step 1 as its first step, once the roadmap is free.
+
+### 8.4 Headline first is paused
+
+The count said build it (plan 53 § 4). The maintainer's call on 2026-09-13: "not yet, I'm skittish
+about changing the prompt layout right now." Nothing is written, including the second count of the
+answer-first run. The entry stays open at two stars with that note.
+
+### 8.5 Voice follow-ups: three calls and a new feature
+
+On plan 52 § 3.7's open questions:
+
+1. **"Go on" with nothing left to go on to does nothing.** Just the closing tone.
+2. **The closing tone stays, quieter than the opening one.** Agreed.
+3. **The maintainer approves the two sounds before they ship.** A worker generates them and shows
+   them; nothing ships on a worker's own ear.
+
+**A new feature, filed separately and needing its own plan:** the answer ends with an offer, in the
+model's own words, such as "want me to explain the mechanic I glossed over?", and saying "go on"
+in the listening window sends that as a follow-up question. It is a better "go on" than the planned
+one, but it changes the shape of every answer, so it waits on the same comfort with prompt changes
+as § 8.4 and is not part of the first Voice follow-ups build.
+
+### 8.6 A bug to file on its own: the clipboard read has no permission check
+
+The Desktop Mode write-up flagged it on 2026-08-06 and it is still true on 2026-09-13: the plugin's
+"read the clipboard" call has no capability check and no settings check, unlike the screenshot and
+Desktop-note calls beside it. Not a Frame item. The maintainer asked for it to go on the roadmap as a
+bug or feature once the roadmap is free.
+

@@ -17,10 +17,15 @@ from unittest import mock
 
 from backend.services import voice_read_aloud_service as ra
 from backend.services.voice_read_aloud_service import (
+
     SessionAudioPlayer,
     VoiceReadAloudService,
     split_into_sentences,
 )
+
+
+# Slack for comparing two timestamps taken on different threads (see the read-ahead test).
+THREAD_CLOCK_SLACK_S = 0.005
 
 
 # --- Sentence splitting ---
@@ -245,7 +250,11 @@ class VoiceReadAloudServiceTests(unittest.TestCase):
         self.assertGreaterEqual(len(player.play_starts), 1)
         self.assertGreater(len(player.play_ends), 0)
         self.assertLess(maker.starts[1], player.play_ends[0])
-        self.assertGreaterEqual(maker.starts[1], player.play_starts[0])
+        # Two threads and one clock: "started after" can read a few microseconds early
+        # when the timestamps are taken either side of a thread hand-off. The build
+        # server saw 49 microseconds of it. The point of the check is the ordering, so
+        # allow a slack far smaller than any real overlap and far larger than clock noise.
+        self.assertGreaterEqual(maker.starts[1], player.play_starts[0] - THREAD_CLOCK_SLACK_S)
 
     def test_status_transitions_idle_speaking_done(self):
         maker = FakeMaker(self.tmp_dir, delay=0.0)

@@ -17,6 +17,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 from backend.services.transparency_service import source_display_name
+from corpus_build_support import build_corpus_or_skip
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
@@ -192,12 +193,13 @@ class SeedCorpusAttributionsDriftTests(unittest.TestCase):
 
 
 class SeedCorpusAttributionsIntegrationTests(unittest.TestCase):
-    """Optional: full --seed build when the script is cheap enough (no Ollama required)."""
+    """Optional: full --seed build. Skips where there is no embedding model -- the
+    build refuses to finish when a card would ship with no meaning-search vector."""
 
     def test_seed_build_attributions_match_manifest(self):
         with tempfile.TemporaryDirectory() as tmp:
             out = Path(tmp) / "kb"
-            manifest = build_rag_db.build_corpus(out, seed=True)
+            manifest = build_corpus_or_skip(build_rag_db, out, seed=True)
             path = out / "ATTRIBUTIONS.md"
             self.assertTrue(path.is_file())
             on_disk = path.read_text(encoding="utf-8")

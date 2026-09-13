@@ -32,19 +32,21 @@
   },
   "duplicate_lines_app": {
     "label": "Copy-pasted lines, app code",
-    "best": 1847,
+    "best": 877,
     "target": 350,
     "start_2026_09_09": 717,
     "direction": "lower_is_better",
-    "measured_by": "jscpd, min-tokens 50"
+    "measured_by": "jscpd, min-tokens 50",
+    "definition_corrected_2026_09_13": "Re-recorded 2026-09-13: the definition was corrected, not the code. See docs/audit/refactor-round-two/phase2-decisions.md B2-3."
   },
   "duplicate_lines_be_tests": {
     "label": "Copy-pasted lines, back-end tests",
-    "best": 2286,
+    "best": 2076,
     "target": 700,
     "start_2026_09_09": 1372,
     "direction": "lower_is_better",
-    "measured_by": "jscpd, min-tokens 50, over tests/**/*.py"
+    "measured_by": "jscpd, min-tokens 50, over tests/**/*.py",
+    "definition_corrected_2026_09_13": "Re-recorded 2026-09-13: the definition was corrected, not the code. See docs/audit/refactor-round-two/phase2-decisions.md B2-3."
   },
   "unused_exports_fe": {
     "label": "Unused exports, front end",
@@ -96,11 +98,12 @@
   },
   "be_methods_with_no_caller": {
     "label": "Back-end methods with no caller",
-    "best": 3,
+    "best": 1,
     "target": 0,
     "start_2026_09_09": 1,
     "direction": "lower_is_better",
-    "measured_by": "rpc-map.json method names compared against call()/callDeckyWithTimeout( names grepped from front-end app code"
+    "measured_by": "rpc-map.json method names compared against call()/callDeckyWithTimeout( names grepped from front-end app code",
+    "definition_corrected_2026_09_13": "Re-recorded 2026-09-13: the definition was corrected, not the code. See docs/audit/refactor-round-two/phase2-decisions.md B2-3."
   },
   "settings_field_list_repeats": {
     "label": "Places the settings field list is repeated in the settings hook",

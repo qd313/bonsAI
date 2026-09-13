@@ -48,6 +48,7 @@ from backend.services.knowledge_base_service import (
 )
 from backend.services.compat_topic_router import match_compat_corpus_topics
 from backend.services.ollama_embed_service import OllamaEmbedError
+from corpus_build_support import run_seed_build_or_skip
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 # Under build/, not dist/: `npm run build` clears dist/, so the test corpus was being deleted
@@ -57,11 +58,7 @@ SEED_DB = REPO_ROOT / "build" / "knowledge-base-test" / "corpus.db"
 
 def _ensure_seed_db() -> None:
     SEED_DB.parent.mkdir(parents=True, exist_ok=True)
-    subprocess.run(
-        [sys.executable, str(REPO_ROOT / "scripts" / "build_rag_db.py"), "--seed", "--out", str(SEED_DB.parent)],
-        check=True,
-        cwd=str(REPO_ROOT),
-    )
+    run_seed_build_or_skip(REPO_ROOT, SEED_DB.parent)
 
 
 class KnowledgeBaseServiceTests(unittest.TestCase):

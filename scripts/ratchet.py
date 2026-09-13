@@ -76,6 +76,23 @@ ALLOWED_RAW_CALL_METHODS = {
 
 EXCLUDED_DIR_NAMES = {"node_modules", "dist", ".git", "__pycache__"}
 
+# Never counted as duplication anywhere: installed packages, build output, old
+# copies of the repo, and archived write-ups.
+BASE_JSCPD_IGNORE = "**/node_modules/**,**/dist/**,**/.claude/worktrees/**,**/docs/archive/**"
+
+# Backend methods that have no frontend caller ON PURPOSE. Without these the
+# "nothing calls this" number reads 3 when only one is a real finding.
+#   ask_ollama   - the backend calls it itself, from game_ai_request.py. Deleting
+#                  it stops the AI answering anything.
+#   dbg_fe_log   - a logging hook used when testing on the Deck and the Deck
+#                  cannot reach the PC. Having no caller is the point of it.
+# ask_game_ai is deliberately NOT here: it is the older foreground ask path and a
+# real finding, held for now by the 2026-09-13 decision.
+RPC_METHODS_WITHOUT_A_FRONTEND_CALLER_BY_DESIGN = {
+    "ask_ollama",
+    "dbg_fe_log",
+}
+
 
 # --------------------------------------------------------------------------- #
 # Small helpers shared by more than one metric
@@ -261,13 +278,14 @@ def metric_be_long_functions_no_docstring():
 # --------------------------------------------------------------------------- #
 
 
-def _run_jscpd(paths: list[Path]) -> tuple[Optional[int], Optional[str]]:
+def _run_jscpd(paths: list[Path], extra_ignore: str = "") -> tuple[Optional[int], Optional[str]]:
     jscpd_bin = _bin_exists("jscpd")
     if jscpd_bin is None:
         return None, "jscpd is not installed yet (planned as a dev dependency, see docs/planning/51-refactor-round-two.md B3)"
     existing = [str(p) for p in paths if p.exists()]
     if not existing:
         return None, "jscpd: none of the target paths exist"
+    ignore = BASE_JSCPD_IGNORE + ("," + extra_ignore if extra_ignore else "")
     with tempfile.TemporaryDirectory(prefix="bonsai-jscpd-") as tmp:
         try:
             proc = subprocess.run(
@@ -285,7 +303,7 @@ def _run_jscpd(paths: list[Path]) -> tuple[Optional[int], Optional[str]]:
                     # --gitignore switch any more, so the paths we never want counted
                     # have to be named here instead.
                     "--ignore",
-                    "**/node_modules/**,**/dist/**,**/.claude/worktrees/**,**/docs/archive/**",
+                    ignore,
                 ],
                 cwd=ROOT,
                 capture_output=True,
@@ -312,13 +330,22 @@ def _run_jscpd(paths: list[Path]) -> tuple[Optional[int], Optional[str]]:
 
 
 def metric_duplicate_lines_app():
-    return _run_jscpd([ROOT / "src", ROOT / "main.py", ROOT / "py_modules"])
+    # App code means app code. src/ also holds the frontend tests (*.test.ts and
+    # the test harness), and counting those here was hiding what this number is
+    # for: before 2026-09-13 it read 1847, of which only 877 was the app. Frontend
+    # test duplication is real but it is a different job with a different risk, so
+    # it does not belong in the app figure.
+    return _run_jscpd(
+        [ROOT / "src", ROOT / "main.py", ROOT / "py_modules"],
+        "**/*.test.ts,**/*.test.tsx,**/test-harness/**",
+    )
 
 
 def metric_duplicate_lines_be_tests():
-    # "Back-end tests" = tests/**/*.py. jscpd is pointed at the directory (not an
-    # explicit file list) so it can apply its own default exclusions consistently.
-    return _run_jscpd([ROOT / "tests"])
+    # "Back-end tests" = the Python test files. tests/ also holds JSON fixtures
+    # (the saved preview-suite runs), and repeated blocks in those are data, not
+    # code anybody would hand-edit. Counting them read 2286 where the Python is 2076.
+    return _run_jscpd([ROOT / "tests"], "**/*.json")
 
 
 # --------------------------------------------------------------------------- #
@@ -455,10 +482,13 @@ def metric_fe_calls_with_no_be_method():
 
 
 def metric_be_methods_with_no_caller():
+    """Backend methods the frontend never asks for, minus the ones that are like
+    that on purpose (see RPC_METHODS_WITHOUT_A_FRONTEND_CALLER_BY_DESIGN)."""
     fe_called, _raw_sites, be_methods, note = _rpc_analysis()
     if be_methods is None:
         return None, note
-    return len(be_methods - fe_called), None
+    stranded = be_methods - fe_called - RPC_METHODS_WITHOUT_A_FRONTEND_CALLER_BY_DESIGN
+    return len(stranded), None
 
 
 # --------------------------------------------------------------------------- #

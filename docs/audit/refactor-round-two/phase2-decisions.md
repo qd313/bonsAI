@@ -281,10 +281,8 @@ quietly done, and that is what this paragraph is.
 on A5 until a build test. What the looking found is in the section above. None of the three blocks
 the delete phase — each simply drops out of it and comes back as its own small job later.
 
-Still open, and the only thing now standing between here and the delete phase:
-
-- **Correcting the three measures** so the targets mean what they say. It changes saved numbers,
-  which is why it is asked rather than done.
+**Nothing is open.** The three measures were corrected on 2026-09-13 with the maintainer's approval;
+see Part B. The delete phase can start on the word go.
 
 ---
 
@@ -327,24 +325,26 @@ Four of these eight have no contract written down at all. Writing those four is 
 must happen before any lane moves code behind them. The ask hook is the urgent one: 52 keys is the
 widest unfrozen seam in the project, and it is also the file phase 4 step 4 splits.
 
-### B2-3. Measure definitions to correct before phase 3
+### B2-3. Measure definitions corrected — DONE 2026-09-13
 
-Three entries in `scripts/ratchet.json` are named after something other than what they measure.
-Each needs the definition corrected and the `best` value re-recorded in the same commit, with the
-reason in the commit message:
+**Applied**, approved by the maintainer the same day. Three entries in `scripts/ratchet.json` were
+named after something other than what they measured. Each had its definition corrected and its
+`best` value re-recorded in one commit, and each carries a `definition_corrected_2026_09_13` note
+in the file pointing back here. Nothing about the code changed — only what gets counted:
 
-| Metric | Measures now | Should measure | Value now → corrected |
+| Metric | Measured before | Measures now | Value |
 |---|---|---|---|
-| `duplicate_lines_app` | `src/` + backend, which includes `src/**/*.test.ts(x)` | app code only | 1,847 → 877 |
-| `duplicate_lines_be_tests` | all of `tests/`, including JSON fixtures | Python test files | 2,286 → 2,076 |
-| `be_methods_with_no_caller` | RPC names minus front-end call sites | the same, minus methods the back end calls itself and the debug hooks | 3 → 1 |
+| `duplicate_lines_app` | `src/` + backend, which includes `src/**/*.test.ts(x)` and the harness | app code only | 1,847 → **877** |
+| `duplicate_lines_be_tests` | all of `tests/`, including JSON fixtures | Python test files | 2,286 → **2,076** |
+| `be_methods_with_no_caller` | RPC names minus front-end call sites | the same, minus methods that have no front-end caller by design | 3 → **1** |
 
-For the third, add `ask_ollama` (called by `game_ai_request.py`) and `dbg_fe_log` (a deliberate
-device-debug hook) to an allowlist in the metric, with a comment saying why each is there. Do not
-allowlist `ask_game_ai` — that one is a real finding, and decision A3 settles it.
+For the third, `RPC_METHODS_WITHOUT_A_FRONTEND_CALLER_BY_DESIGN` in `ratchet.py` holds `ask_ollama`
+(the back end calls it itself, from `game_ai_request.py`) and `dbg_fe_log` (a device-debug hook that
+is supposed to have no caller), each with a comment saying why. `ask_game_ai` is deliberately NOT in
+that set — it is a real finding, held by decision A3, and the metric should keep reporting it.
 
-The `target` values stay as they are. `duplicate_lines_app`'s target of 350 turns out to be a
-sensible goal against the corrected 877, not the impossible one it looked like against 1,847.
+The `target` values were left alone. `duplicate_lines_app`'s target of 350 turns out to be a sensible
+goal against the corrected 877, not the impossible one it looked like against 1,847.
 
 ### B2-4. Work packages for phase 3
 

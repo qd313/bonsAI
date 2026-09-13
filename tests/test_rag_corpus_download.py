@@ -26,6 +26,7 @@ from backend.services.rag_corpus_download_service import (
     fetch_remote_manifest,
     install_corpus_from_manifest,
 )
+from corpus_build_support import build_corpus_or_skip
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 MODULE_PATH = "backend.services.rag_corpus_download_service"
@@ -98,7 +99,7 @@ class RagCorpusDownloadRoundTripTests(unittest.TestCase):
         build_rag_db = _load_build_rag_db()
         with tempfile.TemporaryDirectory() as build_tmp, tempfile.TemporaryDirectory() as home_tmp:
             build_dir = Path(build_tmp) / "kb"
-            manifest = build_rag_db.build_corpus(build_dir, seed=True)
+            manifest = build_corpus_or_skip(build_rag_db, build_dir, seed=True)
             chunk_filename = manifest["chunks"][0]["filename"]
             chunk_bytes = (build_dir / chunk_filename).read_bytes()
 

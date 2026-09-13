@@ -2,7 +2,7 @@
   "hotspots": [
     {
       "path": "main.py",
-      "lines": 3260,
+      "lines": 3290,
       "role": "Decky RPC entrypoints and orchestration"
     },
     {
@@ -191,13 +191,13 @@
       "role": ""
     },
     {
-      "path": "src/features/preset-carousel/sessionRagComposer.test.ts",
-      "lines": 457,
+      "path": "py_modules/backend/services/voice_read_aloud_service.py",
+      "lines": 466,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/desktop_note_service.py",
-      "lines": 432,
+      "path": "src/features/preset-carousel/sessionRagComposer.test.ts",
+      "lines": 457,
       "role": ""
     }
   ]

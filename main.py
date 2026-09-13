@@ -166,6 +166,7 @@ from backend.services.voice_transcription_service import (
     new_voice_transcription_state,
     sanitize_voice_stt_model,
 )
+from backend.services.voice_read_aloud_service import VoiceReadAloudService
 from backend.services.rag_corpus_download_service import (
     fetch_remote_manifest,
     install_corpus_from_manifest,
@@ -272,6 +273,9 @@ class Plugin:
         self._rag_corpus_download_state: dict = new_rag_corpus_download_state()
         self._chat_slots_store_lock = asyncio.Lock()
         self._chat_slot_by_request: dict[int, str] = {}
+        self._read_aloud_service = VoiceReadAloudService(
+            os.path.join(decky.DECKY_PLUGIN_SETTINGS_DIR, "read_aloud_tmp")
+        )
 
     def _abort_ollama_chat_check(self) -> bool:
         """True when frontend requested Stop mid-generation (closes HTTP quickly; executor thread exits)."""
@@ -386,6 +390,7 @@ class Plugin:
             ce.set()
         await cancel_and_await(getattr(self, "_local_ollama_setup_task", None))
         await self._stop_voice_transcription_internal()
+        await asyncio.to_thread(self._read_aloud_service.stop)
         vit = getattr(self, "_voice_install_task", None)
         if vit is not None and not vit.done():
             ce_voice = getattr(self, "_voice_install_cancel", None)
@@ -2961,6 +2966,8 @@ class Plugin:
         if was_running:
             await self.abort_background_game_ai()
         await cancel_and_await(task)
+        # A cleared session must go silent: a reading of the old answer must not keep playing.
+        await asyncio.to_thread(self._read_aloud_service.stop)
 
         await self._maybe_app_log(
             "ask.forget",
@@ -3253,6 +3260,29 @@ class Plugin:
             bool(st.get("partial_transcript")) or bool(st.get("finalized_transcript"))
         )
         return st
+
+    async def start_voice_read_aloud(self, text: str):
+        """Feature: read an answer's text aloud in the Deck's own voice.
+
+        Input: plain text, already stripped of markdown and hidden spoiler blocks by the frontend
+        (see plan 42 § 5, § 8 step 1 for the shared text helper). Output: {"ok", "sentence_count",
+        "error"}. Returns at once — the reading itself runs in the background so no call here can
+        outrun the RPC deadline. Starting while a previous reading is still going stops it first.
+        """
+        return await asyncio.to_thread(self._read_aloud_service.start, text)
+
+    async def stop_voice_read_aloud(self):
+        """Feature: stop reading aloud. Output: {"ok", "stopped"} — stopped is True only when a
+        reading was actually in progress. Safe to call when nothing is playing."""
+        return await asyncio.to_thread(self._read_aloud_service.stop)
+
+    async def get_voice_read_aloud_status(self):
+        """Feature: poll the read-aloud state while it plays in the background.
+
+        Output: {"state": "idle"|"speaking"|"done"|"error", "sentence_index", "sentence_count",
+        "error", "started_at"}.
+        """
+        return await asyncio.to_thread(self._read_aloud_service.status)
 
     def _build_ollama_chat_url(self, pc_ip: str) -> str:
         """Build the Ollama chat endpoint URL from current connection input."""

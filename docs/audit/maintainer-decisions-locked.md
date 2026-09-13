@@ -5129,3 +5129,38 @@ saying so. What changes:
   its own copy of the project, and every stopping point gets a handover note.
 
 Revisit if a way to read the figure turns up.
+
+---
+
+### D101 — LOCKED 2026-09-13 — Clear the seven old copies; the sorting list is approved
+
+Two calls made together on the first day of the clean-up.
+
+**The seven old copies of the project go.** Each held edits that were never saved anywhere, from
+late August. All seven were checked against the plugin as it is today before anything was touched.
+Six were chasing bugs that have since been fixed, several of those confirmed by pressing real
+buttons on the Deck, which is stronger proof than the copies ever had. Two of the seven contain a
+way of moving the model order list with the D-pad that was tried, tested on the device, found to
+rewrite a person's list while they were only scrolling to read it, and ruled out in writing at the
+time. Rescuing that would have quietly undone a decision already made on the device.
+
+One idea in them was genuinely missing from the plugin: inside the models hub, pressing up at the
+top of the tier choices or down at the bottom of the advanced switches does nothing instead of
+hopping to the neighbouring group. It is filed on the roadmap so it survives the copies going.
+
+**The sorting list is approved as it stands.** Of 121 write-ups: 66 stay, 44 are finished and go to
+the archive, 9 were replaced by something newer and go to the archive, and 2 never happened and go
+to the archive with a date to delete them after. Of the helper scripts: 63 stay, 10 are finished, 1
+was abandoned. Of the 464 saved device runs, the 154 that a test row actually cites are kept as
+evidence and the other 310 leave the project; they came from a bug that saved one on every run.
+
+Six of the list's entries could not be judged by reading them and were settled against the project
+itself rather than put to the maintainer. Two proved finished: the big main-screen redesign, whose
+second half did ship, and the list of planning questions, every one of which already has a written
+answer. Four stay open: the bugs in the Deck tooling this project does not own are all still
+unfixed, per-game troubleshooting tips are still stuck on the plugin having no way to tie a tip to
+one game, the list of testing jobs that need a person is a list of kinds of work rather than tasks,
+and the automatic checks on pushed code really do still only warn rather than block.
+
+Nothing here is deleted outright today except the seven copies. Everything archived keeps its
+delete-after date in the archive index, and deleting any of it is a separate yes.

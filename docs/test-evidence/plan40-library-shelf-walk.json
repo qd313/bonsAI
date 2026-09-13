@@ -1,0 +1,724 @@
+{
+  "ok": true,
+  "fidelity": "steam-routed",
+  "steps": [
+    {
+      "index": 1,
+      "label": "shelf 1",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Deep Rock Galactic: Survivor\"",
+      "to": "<DIV> \"Ship of Harkinian\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1571,
+      "diagnosis": "press routed, focus moved <DIV> \"Deep Rock Galactic: Survivor\" -> <DIV> \"Ship of Harkinian\""
+    },
+    {
+      "index": 2,
+      "label": "shelf 2",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Ship of Harkinian\"",
+      "to": "<DIV> \"Sifu\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(3) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1635,
+      "diagnosis": "press routed, focus moved <DIV> \"Ship of Harkinian\" -> <DIV> \"Sifu\""
+    },
+    {
+      "index": 3,
+      "label": "shelf 3",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Sifu\"",
+      "to": "<DIV> \"Half-Life 2\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(4) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1636,
+      "diagnosis": "press routed, focus moved <DIV> \"Sifu\" -> <DIV> \"Half-Life 2\""
+    },
+    {
+      "index": 4,
+      "label": "shelf 4",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Half-Life 2\"",
+      "to": "<DIV> \"Left 4 Dead 2\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(5) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1564,
+      "diagnosis": "press routed, focus moved <DIV> \"Half-Life 2\" -> <DIV> \"Left 4 Dead 2\""
+    },
+    {
+      "index": 5,
+      "label": "shelf 5",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Left 4 Dead 2\"",
+      "to": "<DIV> \"Fallout 4\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(6) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1602,
+      "diagnosis": "press routed, focus moved <DIV> \"Left 4 Dead 2\" -> <DIV> \"Fallout 4\""
+    },
+    {
+      "index": 6,
+      "label": "shelf 6",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Fallout 4\"",
+      "to": "<DIV> \"Portal 2\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(7) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1651,
+      "diagnosis": "press routed, focus moved <DIV> \"Fallout 4\" -> <DIV> \"Portal 2\""
+    },
+    {
+      "index": 7,
+      "label": "shelf 7",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Portal 2\"",
+      "to": "<DIV> \"Baldur's Gate 3\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(8) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1604,
+      "diagnosis": "press routed, focus moved <DIV> \"Portal 2\" -> <DIV> \"Baldur's Gate 3\""
+    },
+    {
+      "index": 8,
+      "label": "shelf 8",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Baldur's Gate 3\"",
+      "to": "<DIV> \"State of Emergency\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(9) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1621,
+      "diagnosis": "press routed, focus moved <DIV> \"Baldur's Gate 3\" -> <DIV> \"State of Emergency\""
+    },
+    {
+      "index": 9,
+      "label": "shelf 9",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"State of Emergency\"",
+      "to": "<DIV> \"Cyberpunk 2077\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(10) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1542,
+      "diagnosis": "press routed, focus moved <DIV> \"State of Emergency\" -> <DIV> \"Cyberpunk 2077\""
+    },
+    {
+      "index": 10,
+      "label": "shelf 10",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Cyberpunk 2077\"",
+      "to": "<DIV> \"Marvel’s Spider-Man Remastered\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(11) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1576,
+      "diagnosis": "press routed, focus moved <DIV> \"Cyberpunk 2077\" -> <DIV> \"Marvel’s Spider-Man Remastered\""
+    },
+    {
+      "index": 11,
+      "label": "shelf 11",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Marvel’s Spider-Man Remastered\"",
+      "to": "<DIV> \"Wreckfest\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(12) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1561,
+      "diagnosis": "press routed, focus moved <DIV> \"Marvel’s Spider-Man Remastered\" -> <DIV> \"Wreckfest\""
+    },
+    {
+      "index": 12,
+      "label": "shelf 12",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Wreckfest\"",
+      "to": "<DIV> \"Dead Space\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(13) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1517,
+      "diagnosis": "press routed, focus moved <DIV> \"Wreckfest\" -> <DIV> \"Dead Space\""
+    },
+    {
+      "index": 13,
+      "label": "shelf 13",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Dead Space\"",
+      "to": "<DIV> \"Grand Theft Auto: San Andreas - The Definitive Edition\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(14) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1589,
+      "diagnosis": "press routed, focus moved <DIV> \"Dead Space\" -> <DIV> \"Grand Theft Auto: San Andreas - The Definitive Edition\""
+    },
+    {
+      "index": 14,
+      "label": "shelf 14",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Grand Theft Auto: San Andreas - The Definitive Edition\"",
+      "to": "<DIV> \"Hades\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(15) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1631,
+      "diagnosis": "press routed, focus moved <DIV> \"Grand Theft Auto: San Andreas - The Definitive Edition\" -> <DIV> \"Hades\""
+    },
+    {
+      "index": 15,
+      "label": "shelf 15",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Hades\"",
+      "to": "<DIV> \"Team Fortress 2\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(16) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1591,
+      "diagnosis": "press routed, focus moved <DIV> \"Hades\" -> <DIV> \"Team Fortress 2\""
+    },
+    {
+      "index": 16,
+      "label": "shelf 16",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Team Fortress 2\"",
+      "to": "<DIV> \"The Invincible\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(17) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1574,
+      "diagnosis": "press routed, focus moved <DIV> \"Team Fortress 2\" -> <DIV> \"The Invincible\""
+    },
+    {
+      "index": 17,
+      "label": "shelf 17",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"The Invincible\"",
+      "to": "<DIV> \"The Red Strings Club\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(18) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1551,
+      "diagnosis": "press routed, focus moved <DIV> \"The Invincible\" -> <DIV> \"The Red Strings Club\""
+    },
+    {
+      "index": 18,
+      "label": "shelf 18",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"The Red Strings Club\"",
+      "to": "<DIV> \"7 Days to Die\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(19) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1588,
+      "diagnosis": "press routed, focus moved <DIV> \"The Red Strings Club\" -> <DIV> \"7 Days to Die\""
+    },
+    {
+      "index": 19,
+      "label": "shelf 19",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"7 Days to Die\"",
+      "to": "<DIV> \"Demolition Man\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(20) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1620,
+      "diagnosis": "press routed, focus moved <DIV> \"7 Days to Die\" -> <DIV> \"Demolition Man\""
+    },
+    {
+      "index": 20,
+      "label": "shelf 20",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Demolition Man\"",
+      "to": "<DIV> \"View more in your Library\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(21) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1604,
+      "diagnosis": "press routed, focus moved <DIV> \"Demolition Man\" -> <DIV> \"View more in your Library\""
+    },
+    {
+      "index": 21,
+      "label": "shelf 21",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": false,
+      "matched": null,
+      "from": "<DIV> \"View more in your Library\"",
+      "to": "<DIV> \"View more in your Library\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(21) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 2393,
+      "diagnosis": "press routed, focus did not move - still <DIV> \"View more in your Library\". either no handler is wired for this direction, or it ran and moved nothing"
+    },
+    {
+      "index": 22,
+      "label": "shelf 22",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": false,
+      "matched": null,
+      "from": "<DIV> \"View more in your Library\"",
+      "to": "<DIV> \"View more in your Library\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(21) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 2369,
+      "diagnosis": "press routed, focus did not move - still <DIV> \"View more in your Library\". either no handler is wired for this direction, or it ran and moved nothing"
+    }
+  ],
+  "ranSteps": 22,
+  "totalSteps": 22,
+  "passed": 22,
+  "failed": 0,
+  "visited": [
+    "<DIV> \"Deep Rock Galactic: Survivor\"",
+    "<DIV> \"Ship of Harkinian\"",
+    "<DIV> \"Sifu\"",
+    "<DIV> \"Half-Life 2\"",
+    "<DIV> \"Left 4 Dead 2\"",
+    "<DIV> \"Fallout 4\"",
+    "<DIV> \"Portal 2\"",
+    "<DIV> \"Baldur's Gate 3\"",
+    "<DIV> \"State of Emergency\"",
+    "<DIV> \"Cyberpunk 2077\"",
+    "<DIV> \"Marvel’s Spider-Man Remastered\"",
+    "<DIV> \"Wreckfest\"",
+    "<DIV> \"Dead Space\"",
+    "<DIV> \"Grand Theft Auto: San Andreas - The Definitive Edition\"",
+    "<DIV> \"Hades\"",
+    "<DIV> \"Team Fortress 2\"",
+    "<DIV> \"The Invincible\"",
+    "<DIV> \"The Red Strings Club\"",
+    "<DIV> \"7 Days to Die\"",
+    "<DIV> \"Demolition Man\"",
+    "<DIV> \"View more in your Library\""
+  ],
+  "cycle": null,
+  "neverReached": [],
+  "stopsFocusedButNotVisible": 0,
+  "notVisibleStops": [],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 59955,
+  "acquired": false,
+  "summary": "22/22 steps passed"
+}

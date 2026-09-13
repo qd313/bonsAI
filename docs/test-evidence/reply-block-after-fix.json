@@ -1,0 +1,446 @@
+{
+  "tool": "deck_sweep",
+  "pattern": {
+    "direction": "DOWN",
+    "returnTrip": true,
+    "lanes": 0,
+    "laneButton": "RB",
+    "budget": 40,
+    "stallLimit": 2
+  },
+  "ok": true,
+  "stopped": false,
+  "totals": {
+    "stopsRecorded": 13,
+    "stopsVisited": 7,
+    "unlabeledStops": 1,
+    "cycles": 1,
+    "stopsFocusedButNotVisible": 0,
+    "presses": 15,
+    "legs": 2
+  },
+  "notVisible": [],
+  "legs": [
+    {
+      "lane": 0,
+      "direction": "DOWN",
+      "presses": 7,
+      "stops": 7,
+      "endedBy": "cycle",
+      "cycle": {
+        "key": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+        "seenAt": [
+          5,
+          7
+        ],
+        "loop": [
+          "<DIV>",
+          "Copy reply text",
+          "<DIV>"
+        ],
+        "escaped": false,
+        "stepsAfterLoop": 0
+      }
+    },
+    {
+      "lane": 0,
+      "direction": "UP",
+      "presses": 7,
+      "stops": 5,
+      "endedBy": "stall",
+      "cycle": null
+    }
+  ],
+  "stops": [
+    {
+      "index": 0,
+      "lane": 0,
+      "leg": "start",
+      "press": null,
+      "tag": "BUTTON",
+      "label": "bonsAIv0.5.0",
+      "labelSource": "ancestor-text",
+      "selector": "#quickaccess_content_999 > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > button.DialogButton._DialogLayout.Secondary:nth-child(1)",
+      "rect": {
+        "x": 64,
+        "y": 20,
+        "w": 40,
+        "h": 28
+      },
+      "scrollTop": null,
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "focusKey": "sel:#quickaccess_content_999 > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > button.DialogButton._DialogLayout.Secondary:nth-child(1)"
+    },
+    {
+      "index": 1,
+      "lane": 0,
+      "leg": "DOWN",
+      "press": "DOWN",
+      "tag": "DIV",
+      "label": "Main tab",
+      "labelSource": "aria-label",
+      "selector": "#quickaccess_content_999 > div.Panel.Focusable:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+      "rect": {
+        "x": 48,
+        "y": 64,
+        "w": 300,
+        "h": 20
+      },
+      "scrollTop": null,
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "focusKey": "sel:#quickaccess_content_999 > div.Panel.Focusable:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div.Panel.Focusable:nth-child(2)"
+    },
+    {
+      "index": 2,
+      "lane": 0,
+      "leg": "DOWN",
+      "press": "DOWN",
+      "tag": "DIV",
+      "label": "LBbonsai:disable-sanitizeHow do I balance FPS and battery?×Ship of Harkinian+RB",
+      "labelSource": "text",
+      "selector": "div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "rect": {
+        "x": 48,
+        "y": 88,
+        "w": 300,
+        "h": 59
+      },
+      "scrollTop": null,
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)"
+    },
+    {
+      "index": 3,
+      "lane": 0,
+      "leg": "DOWN",
+      "press": "DOWN",
+      "tag": "DIV",
+      "label": "How do I balance FPS and battery?",
+      "labelSource": "text",
+      "selector": "div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "rect": {
+        "x": 139,
+        "y": 154,
+        "w": 203,
+        "h": 28
+      },
+      "scrollTop": null,
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)"
+    },
+    {
+      "index": 4,
+      "lane": 0,
+      "leg": "DOWN",
+      "press": "DOWN",
+      "tag": "BUTTON",
+      "label": "Retry same prompt",
+      "labelSource": "aria-label",
+      "selector": "div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+      "rect": {
+        "x": 123,
+        "y": 197,
+        "w": 20,
+        "h": 20
+      },
+      "scrollTop": null,
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)"
+    },
+    {
+      "index": 5,
+      "lane": 0,
+      "leg": "DOWN",
+      "press": "DOWN",
+      "tag": "DIV",
+      "label": "",
+      "labelSource": null,
+      "selector": "div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "rect": {
+        "x": 63,
+        "y": 239,
+        "w": 245,
+        "h": 191
+      },
+      "scrollTop": null,
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)"
+    },
+    {
+      "index": 6,
+      "lane": 0,
+      "leg": "DOWN",
+      "press": "DOWN",
+      "tag": "BUTTON",
+      "label": "Copy reply text",
+      "labelSource": "aria-label",
+      "selector": "div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > button.Focusable:nth-child(1)",
+      "rect": {
+        "x": 288,
+        "y": 431,
+        "w": 20,
+        "h": 20
+      },
+      "scrollTop": null,
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "focusKey": "sel:div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > button.Focusable:nth-child(1)"
+    },
+    {
+      "index": 7,
+      "lane": 0,
+      "leg": "DOWN",
+      "press": "DOWN",
+      "tag": "DIV",
+      "label": "",
+      "labelSource": null,
+      "selector": "div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "rect": {
+        "x": 63,
+        "y": 239,
+        "w": 245,
+        "h": 191
+      },
+      "scrollTop": null,
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)"
+    },
+    {
+      "index": 8,
+      "lane": 0,
+      "leg": "UP",
+      "press": "UP",
+      "tag": "BUTTON",
+      "label": "Retry same prompt",
+      "labelSource": "aria-label",
+      "selector": "div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+      "rect": {
+        "x": 123,
+        "y": 197,
+        "w": 20,
+        "h": 20
+      },
+      "scrollTop": null,
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)"
+    },
+    {
+      "index": 9,
+      "lane": 0,
+      "leg": "UP",
+      "press": "UP",
+      "tag": "DIV",
+      "label": "How do I balance FPS and battery?",
+      "labelSource": "text",
+      "selector": "div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "rect": {
+        "x": 139,
+        "y": 154,
+        "w": 203,
+        "h": 28
+      },
+      "scrollTop": null,
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)"
+    },
+    {
+      "index": 10,
+      "lane": 0,
+      "leg": "UP",
+      "press": "UP",
+      "tag": "DIV",
+      "label": "LBbonsai:disable-sanitizeHow do I balance FPS and battery?×Ship of Harkinian+RB",
+      "labelSource": "text",
+      "selector": "div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "rect": {
+        "x": 48,
+        "y": 88,
+        "w": 300,
+        "h": 59
+      },
+      "scrollTop": null,
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)"
+    },
+    {
+      "index": 11,
+      "lane": 0,
+      "leg": "UP",
+      "press": "UP",
+      "tag": "DIV",
+      "label": "Main tab",
+      "labelSource": "aria-label",
+      "selector": "#quickaccess_content_999 > div.Panel.Focusable:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+      "rect": {
+        "x": 48,
+        "y": 64,
+        "w": 300,
+        "h": 20
+      },
+      "scrollTop": null,
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "focusKey": "sel:#quickaccess_content_999 > div.Panel.Focusable:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div.Panel.Focusable:nth-child(2)"
+    },
+    {
+      "index": 12,
+      "lane": 0,
+      "leg": "UP",
+      "press": "UP",
+      "tag": "BUTTON",
+      "label": "bonsAIv0.5.0",
+      "labelSource": "ancestor-text",
+      "selector": "#quickaccess_content_999 > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > button.DialogButton._DialogLayout.Secondary:nth-child(1)",
+      "rect": {
+        "x": 64,
+        "y": 20,
+        "w": 40,
+        "h": 28
+      },
+      "scrollTop": null,
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "focusKey": "sel:#quickaccess_content_999 > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > button.DialogButton._DialogLayout.Secondary:nth-child(1)"
+    }
+  ]
+}

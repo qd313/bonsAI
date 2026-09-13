@@ -1,0 +1,134 @@
+{
+  "ok": true,
+  "fidelity": "steam-routed",
+  "steps": [
+    {
+      "index": 1,
+      "label": "right from the last section onto Copy",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": ".bonsai-reply-copy-corner",
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": true,
+      "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "to": "<BUTTON> \"Copy reply text\"",
+      "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(3) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 887,
+      "diagnosis": "press routed, focus moved <DIV> (unnamed - the only text around it is a container's, not a label) -> <BUTTON> \"Copy reply text\", matching expect"
+    },
+    {
+      "index": 2,
+      "label": "press Copy",
+      "press": [
+        "A"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": false,
+      "matched": null,
+      "from": "<BUTTON> \"Copy reply text\"",
+      "to": "<BUTTON> \"Reply copied to clipboard\"",
+      "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(3) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1485,
+      "diagnosis": "press routed, focus did not move - still <BUTTON> \"Reply copied to clipboard\". either no handler is wired for this direction, or it ran and moved nothing"
+    },
+    {
+      "index": 3,
+      "label": "left back into the answer",
+      "press": [
+        "LEFT"
+      ],
+      "expect": ".bonsai-answer-stop",
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": true,
+      "from": "<BUTTON> \"Copy reply text\"",
+      "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(3)",
+      "visibility": {
+        "verdict": "partial",
+        "visiblePercent": 67,
+        "coveredBy": "div.bonsai-unified-input-text-row > div.bonsai-unified-input-text-box > div.Panel.Focusable > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase",
+        "clippedBy": null,
+        "points": {
+          "visible": 6,
+          "covered": 3,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": false,
+      "settled": true,
+      "settleMs": 905,
+      "diagnosis": "press routed, focus moved <BUTTON> \"Copy reply text\" -> <DIV> (unnamed - the only text around it is a container's, not a label), matching expect; FOCUSED BUT only PARTIALLY visible (67%), covered by div.bonsai-unified-input-text-row > div.bonsai-unified-input-text-box > div.Panel.Focusable > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase -- the ring is on it and a person could not see it"
+    }
+  ],
+  "ranSteps": 3,
+  "totalSteps": 3,
+  "passed": 3,
+  "failed": 0,
+  "visited": [
+    "<DIV> (unnamed - the only text around it is a container's, not a label)",
+    "<BUTTON> \"Copy reply text\"",
+    "<BUTTON> \"Reply copied to clipboard\""
+  ],
+  "cycle": {
+    "key": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(3)",
+    "seenAt": [
+      0,
+      3
+    ],
+    "loop": [
+      "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "<BUTTON> \"Copy reply text\"",
+      "<BUTTON> \"Reply copied to clipboard\"",
+      "<DIV> (unnamed - the only text around it is a container's, not a label)"
+    ],
+    "escaped": false,
+    "stepsAfterLoop": 0
+  },
+  "neverReached": [],
+  "stopsFocusedButNotVisible": 2,
+  "notVisibleStops": [
+    "step 0: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (67%), covered by div.bonsai-unified-input-text-row > div.bonsai-unified-input-text-box > div.Panel.Focusable > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase",
+    "step 3: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (67%), covered by div.bonsai-unified-input-text-row > div.bonsai-unified-input-text-box > div.Panel.Focusable > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase"
+  ],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 6085,
+  "acquired": false,
+  "summary": "3/3 steps passed; focus returned to <DIV> (unnamed - the only text around it is a container's, not a label) at steps 0 and 3 (the run ended there, so whether the ring could have escaped is untested); 2 stop(s) FOCUSED BUT NOT VISIBLE: step 0: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (67%), covered by div.bonsai-unified-input-text-row > div.bonsai-unified-input-text-box > div.Panel.Focusable > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase; step 3: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (67%), covered by div.bonsai-unified-input-text-row > div.bonsai-unified-input-text-box > div.Panel.Focusable > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase (report-only -- pass requireVisible to fail on this)"
+}

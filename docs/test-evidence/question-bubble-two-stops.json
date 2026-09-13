@@ -1,0 +1,225 @@
+{
+  "ok": true,
+  "fidelity": "steam-routed",
+  "steps": [
+    {
+      "index": 1,
+      "label": "1",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> in \"bonsAIv0.5.0\"",
+      "to": "<DIV> \"Main tab\"",
+      "focusKey": "sel:#quickaccess_content_999 > div.Panel.Focusable:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 960,
+      "diagnosis": "press routed, focus moved <BUTTON> in \"bonsAIv0.5.0\" -> <DIV> \"Main tab\""
+    },
+    {
+      "index": 2,
+      "label": "2",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Main tab\"",
+      "to": "<DIV> \"LBbonsai:disable-sanitizeHow do I balance FPS and battery?×Ship of Harkinian+RB\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 932,
+      "diagnosis": "press routed, focus moved <DIV> \"Main tab\" -> <DIV> \"LBbonsai:disable-sanitizeHow do I balance FPS and battery?×Ship of Harkinian+RB\""
+    },
+    {
+      "index": 3,
+      "label": "3",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"LBbonsai:disable-sanitizeHow do I balance FPS and battery?×Ship of Harkinian+RB\"",
+      "to": "<DIV> \"How do I balance FPS and battery?\"",
+      "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 919,
+      "diagnosis": "press routed, focus moved <DIV> \"LBbonsai:disable-sanitizeHow do I balance FPS and battery?×Ship of Harkinian+RB\" -> <DIV> \"How do I balance FPS and battery?\""
+    },
+    {
+      "index": 4,
+      "label": "4 - expect the Retry icon",
+      "press": [
+        "DOWN"
+      ],
+      "expect": ".bonsai-turn-retry-corner",
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": true,
+      "from": "<DIV> \"How do I balance FPS and battery?\"",
+      "to": "<BUTTON> \"Retry same prompt\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 918,
+      "diagnosis": "press routed, focus moved <DIV> \"How do I balance FPS and battery?\" -> <BUTTON> \"Retry same prompt\", matching expect"
+    },
+    {
+      "index": 5,
+      "label": "right from Retry - expect the question text",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": ".bonsai-chat-turn-row-body",
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": true,
+      "from": "<BUTTON> \"Retry same prompt\"",
+      "to": "<DIV> \"How do I balance FPS and battery?\"",
+      "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 952,
+      "diagnosis": "press routed, focus moved <BUTTON> \"Retry same prompt\" -> <DIV> \"How do I balance FPS and battery?\", matching expect"
+    },
+    {
+      "index": 6,
+      "label": "left back - expect the Retry icon",
+      "press": [
+        "LEFT"
+      ],
+      "expect": ".bonsai-turn-retry-corner",
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": true,
+      "from": "<DIV> \"How do I balance FPS and battery?\"",
+      "to": "<BUTTON> \"Retry same prompt\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 954,
+      "diagnosis": "press routed, focus moved <DIV> \"How do I balance FPS and battery?\" -> <BUTTON> \"Retry same prompt\", matching expect"
+    }
+  ],
+  "ranSteps": 6,
+  "totalSteps": 6,
+  "passed": 6,
+  "failed": 0,
+  "visited": [
+    "<BUTTON> in \"bonsAIv0.5.0\"",
+    "<DIV> \"Main tab\"",
+    "<DIV> \"LBbonsai:disable-sanitizeHow do I balance FPS and battery?×Ship of Harkinian+RB\"",
+    "<DIV> \"How do I balance FPS and battery?\"",
+    "<BUTTON> \"Retry same prompt\""
+  ],
+  "cycle": {
+    "key": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+    "seenAt": [
+      4,
+      6
+    ],
+    "loop": [
+      "<BUTTON> \"Retry same prompt\"",
+      "<DIV> \"How do I balance FPS and battery?\"",
+      "<BUTTON> \"Retry same prompt\""
+    ],
+    "escaped": false,
+    "stepsAfterLoop": 0
+  },
+  "neverReached": [],
+  "stopsFocusedButNotVisible": 0,
+  "notVisibleStops": [],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 10637,
+  "acquired": false,
+  "summary": "6/6 steps passed; focus returned to <BUTTON> \"Retry same prompt\" at steps 4 and 6 (the run ended there, so whether the ring could have escaped is untested)"
+}

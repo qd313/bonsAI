@@ -159,7 +159,7 @@ hook gives a gentle heads-up when a session starts work outside this.
   reads fine when the answer ends in ordinary text, because the bubble behind it is one flat surface. A code box
   has its own background, so the icon lands on that box's painted corner instead. Room is already reserved for the
   icon at the end of the last line, but that does not move the box's edge. Evidence
-  `docs/test-evidence/plan48-deck-evening-2026-09-12.json`, `screenshots/DeckCapture_20260912_183855_game.png`.
+  `docs/test-evidence/plan48-deck-evening-2026-09-12.json` **[no evidence — re-run, batch QA-EVIDENCE-GAP-01]**, `screenshots/DeckCapture_20260912_183855_game.png`.
 - ★★★ `[focus]` **The panel can get into a state where pressing Down stops half way and the Ask button is out of reach** —
   **OPEN, found 2026-09-05.** After leaving the panel with B and opening it again from the Decky list, Down walked as far as the
   answer and then stopped dead: ten presses, no movement, Left and Right dead too, only Up escaping. The answer's own buttons, the
@@ -449,6 +449,14 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 [testing.md](testing.md) / [testing-manual.md](testing-manual.md). Once a Deck run confirms one, move it in the same commit: a line into
 [Done](#done-for-v050), the full entry into the matching archive file, drop it from here.
 
+### Checks whose evidence never existed
+- ★★ `[QA]` **Twelve checks read as proven with nothing behind them** — **VERIFY, found 2026-09-13 during the
+  clean-up.** Twelve checks name a saved Deck recording as their proof. None of those recordings exists, and the project's whole
+  history shows none ever did — they were never written, not lost. So twelve results were written down as passing on the
+  strength of a file nobody can open, and whether they really passed is unknown. Nothing here says the plugin is broken; it says
+  we do not know. Re-run all twelve together in the next automated testing session. Batch **QA-EVIDENCE-GAP-01**, listed with
+  each row in [testing.md](testing.md). Until a run produces real evidence, treat all twelve as unknown rather than as a pass.
+
 ### Bugs that need verification
 - ★ `[platform]` **Clear all plugin data left three things behind** — **VERIFY.** Found 2026-09-05 when the maintainer
   asked for the wipe to be best-effort. Three flags remembering that the plugin had already warned about a knowledge base problem
@@ -719,12 +727,12 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   right note, then the menu underneath asked *"Where are you at in Half-Life 2?"* and offered the train station and
   Ravenholm. Both times it named the same game, so it is not picking a random wrong one. Both chats carried about
   twenty earlier turns, which is the strongest remaining suspect and the reason a fresh-chat run is now owed.
-  Evidence `docs/test-evidence/plan48-deck-evening-2026-09-12.json`, `docs/test-evidence/plan48-R5-blackmesa-corrected-note.json`.
+  Evidence `docs/test-evidence/plan48-deck-evening-2026-09-12.json` **[no evidence — re-run, batch QA-EVIDENCE-GAP-01]**, `docs/test-evidence/plan48-R5-blackmesa-corrected-note.json`.
 - ★★ `[KB]` **A pinned test batch is not badged** — **OPEN, seen again 2026-09-12.** Chips pinned for testing are
   supposed to carry an amber Test badge, so it is obvious the carousel is showing a fixed set rather than what the
   plugin would have picked. Three chips pinned this evening and no badge appeared anywhere on screen. Everything
   else about them works: they replace the carousel, and pressing A fills the Ask field word for word without
-  sending. Evidence `docs/test-evidence/plan48-deck-evening-2026-09-12.json`, `docs/test-evidence/plan47-frozen-chip-findings.json`.
+  sending. Evidence `docs/test-evidence/plan48-deck-evening-2026-09-12.json` **[no evidence — re-run, batch QA-EVIDENCE-GAP-01]**, `docs/test-evidence/plan47-frozen-chip-findings.json`.
 - ★★★ `[KB]` **The panel only learns which game is running when it starts, and never again** — **OPEN, cause
   found 2026-09-07.** Two failures, one cause. **It keeps naming a game that has closed:** Hades was exited with
   the panel open and the line still named it straight afterwards, 31 seconds later, about four minutes later, and
@@ -790,7 +798,7 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   Portal 2 one came back clean: the note's advice starts straight after the character's opening line, 111 words, no
   warning line. Whether that reads as advice-first is your judgement, which is what this row is for. The Hades and
   Black Mesa sentences **are pinned on the Deck now** — press A on each and read them. The Hades one needs Hades
-  running. Row **KB-ANSWER-03**; evidence `docs/test-evidence/plan48-deck-evening-2026-09-12.json`.
+  running. Row **KB-ANSWER-03**; evidence `docs/test-evidence/plan48-deck-evening-2026-09-12.json` **[no evidence — re-run, batch QA-EVIDENCE-GAP-01]**.
 - ★★★ `[KB]` **A follow-up now answers about the boss you meant, two times in three** — **SHIPPED and checked on
   the Deck 2026-09-12.** Ask about a boss, then *"what about its second phase"*. It used to answer about a different
   boss **every time**. Three pairs on the device: right, right, then the old failure. That matches what was measured

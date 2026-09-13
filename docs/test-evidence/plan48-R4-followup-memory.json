@@ -1,0 +1,46 @@
+{
+ "row": "W3-R4 Follow-ups remember",
+ "when": "2026-09-07 ~20:55-21:05 EDT",
+ "setup": "Deep Rock Galactic: Survivor running (2321470), Strategy, library 2026.09.07, build 6266665",
+ "how": "Both sentences put into the Ask field verbatim with scripts/deck_send_ask.py and the Ask pressed separately with the bridge board. Then the memory was exercised directly on the device to separate the search from the answer.",
+ "search_half": {
+  "verdict": "PASS",
+  "measured_on_device": {
+   "first_question": {
+    "q": "how do i beat the glyphid dreadnought",
+    "attached": [
+     "Glyphid Dreadnought",
+     "Dreadnought Twins",
+     "Exploder"
+    ]
+   },
+   "remembered_subject": "Glyphid Dreadnought",
+   "follow_up_without_memory": [
+    "Dreadnought Twins",
+    "Praetorian",
+    "Glyphid Dreadnought"
+   ],
+   "follow_up_with_memory": [
+    "Glyphid Dreadnought",
+    "Dreadnought Twins",
+    "Praetorian"
+   ]
+  },
+  "note": "The right boss's note moves from third to first. That is what the lane claimed and it holds on the device."
+ },
+ "answer_half": {
+  "verdict": "FAIL",
+  "what_happened": "The reply to 'what about its second phase' was about the Dreadnought Twins, not the Glyphid Dreadnought just asked about.",
+  "reply": "Alright, listen up, you wanna know about the second phase? Well, if you're talking about those Dreadnought Twins, it's a proper show, see? You gotta let their health bars drift apart. That's the trick. Both of 'em turn immune while they're busy healing the gap you're trying to close.",
+  "why": "The wrong boss's note is still attached at number two, and its content reads more like a 'second phase' than the right note does - health bars, an immune stage, a phase change. Ranking the right note first is not enough while a better-matching wrong note is still in the pack.",
+  "what_would_fix_it": "Not more ranking. Either the remembered subject reaches the model as well as the search - which this lane deliberately did not do - or a follow-up with a remembered subject attaches only that subject's note."
+ },
+ "also_seen": {
+  "search_time": "Embed 1067.34 ms on this reply, read off Show details. That is over the one-second budget written down this wave, and an independent confirmation of the slowdown lane G found in the older evidence.",
+  "reply_time": "67.4 s end to end, which tripped the over-60s notice."
+ },
+ "verdict": "PARTIAL - the search half passes, the answer half fails.",
+ "evidence": [
+  "runs/plan48-R4-launch-drgs.json"
+ ]
+}

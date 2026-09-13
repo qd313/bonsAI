@@ -5,6 +5,32 @@ pick up without rereading anything but this file.
 
 ---
 
+## 2026-09-13, after phase 1: a mistake found and undone, and twelve checks flagged
+
+**Sixteen saved Deck recordings were deleted that write-ups do point at, and they are restored.**
+My own instructions caused it: the worker sorting the recordings was told to look for citations in
+four places, and that list was short. It missed the planning write-ups and the decisions record.
+Worse, the other worker was moving write-ups into the archive at the same time, so some documents
+were not where either of them expected. All sixteen came back out of the project's history and are
+in the evidence folder.
+
+The lesson is the one the retention rule already states in the testing write-up: a recording cited
+by any write-up is never deleted, because deleting a cited recording turns a link into a lie. The
+rule was right; the search that fed it was too narrow. Any future pass of this kind searches every
+write-up in the project, and does not run while another worker is moving write-ups around.
+
+**Twelve checks are flagged as having no evidence at all.** Separately from the mistake above,
+twelve checks name a recording that never existed — checked against the whole history, they were
+never written. Twelve results were recorded as passing on the strength of a file nobody can open.
+Each row now carries a flag where it makes the claim, they are listed as one batch in the testing
+write-up, and there is a roadmap entry saying to re-run all twelve in the next automated testing
+session and to treat them as unknown until then.
+
+**Neither of these says the plugin is broken.** They say twelve things we believed were checked may
+not have been.
+
+---
+
 ## 2026-09-13, phase 1 finished
 
 **The maintainer approved both open calls, and everything is carried out.** The seven old copies of

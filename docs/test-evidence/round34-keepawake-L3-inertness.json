@@ -1,0 +1,84 @@
+{
+  "ok": true,
+  "fidelity": "steam-routed",
+  "steps": [
+    {
+      "index": 1,
+      "label": "stick click 1 - should change nothing",
+      "press": [
+        "L3"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": false,
+      "matched": null,
+      "from": "<DIV> \"Main tab\"",
+      "to": "<DIV> \"Main tab\"",
+      "focusKey": "sel:#quickaccess_content_999 > div.Panel.Focusable:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 959,
+      "diagnosis": "press routed, focus did not move - still <DIV> \"Main tab\". either no handler is wired for this direction, or it ran and moved nothing"
+    },
+    {
+      "index": 2,
+      "label": "stick click 2 - should change nothing",
+      "press": [
+        "L3"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": false,
+      "matched": null,
+      "from": "<DIV> \"Main tab\"",
+      "to": "<DIV> \"Main tab\"",
+      "focusKey": "sel:#quickaccess_content_999 > div.Panel.Focusable:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 901,
+      "diagnosis": "press routed, focus did not move - still <DIV> \"Main tab\". either no handler is wired for this direction, or it ran and moved nothing"
+    }
+  ],
+  "ranSteps": 2,
+  "totalSteps": 2,
+  "passed": 2,
+  "failed": 0,
+  "visited": [
+    "<DIV> \"Main tab\""
+  ],
+  "cycle": null,
+  "neverReached": [],
+  "stopsFocusedButNotVisible": 0,
+  "notVisibleStops": [],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 3613,
+  "acquired": false,
+  "summary": "2/2 steps passed"
+}

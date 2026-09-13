@@ -1,0 +1,576 @@
+[
+ {
+  "id": "V2-C-01",
+  "kind": "tuning",
+  "query": "proton crash on launch after update",
+  "expect_topic": "proton",
+  "routed_topics": [
+   "crash",
+   "proton"
+  ],
+  "pool": 34,
+  "right_bm25": 7.413775954499404,
+  "wrong_bm25": 7.632612673382597,
+  "right_cos": 0.6774356286373086,
+  "wrong_cos": 0.6611060074250821
+ },
+ {
+  "id": "V2-C-02",
+  "kind": "tuning",
+  "query": "my windows game shuts itself the moment the loading screen appears",
+  "expect_topic": "proton",
+  "routed_topics": [
+   "crash",
+   "proton"
+  ],
+  "pool": 32,
+  "right_bm25": 3.2029349400324163,
+  "wrong_bm25": 4.856177847208344,
+  "right_cos": 0.5789797455908903,
+  "wrong_cos": 0.6298641630221264
+ },
+ {
+  "id": "V2-C-03",
+  "kind": "tuning",
+  "query": "deck sleep resume black screen proton",
+  "expect_topic": "proton",
+  "routed_topics": [
+   "crash",
+   "deck",
+   "proton"
+  ],
+  "pool": 34,
+  "right_bm25": 11.556719398865548,
+  "wrong_bm25": 7.9445712584503765,
+  "right_cos": 0.7349066505868926,
+  "wrong_cos": 0.6378309752276445
+ },
+ {
+  "id": "V2-C-04",
+  "kind": "tuning",
+  "query": "waking the handheld leaves me staring at nothing but the game is still running",
+  "expect_topic": "proton",
+  "routed_topics": [],
+  "pool": 6,
+  "right_bm25": null,
+  "wrong_bm25": 5.4525104855439555,
+  "right_cos": null,
+  "wrong_cos": 0.5446657174263535
+ },
+ {
+  "id": "V2-C-05",
+  "kind": "tuning",
+  "query": "shader cache download stuck deck",
+  "expect_topic": "shader",
+  "routed_topics": [
+   "deck",
+   "shader"
+  ],
+  "pool": 20,
+  "right_bm25": 9.926812258418883,
+  "wrong_bm25": 10.323421930854874,
+  "right_cos": 0.6563754057011295,
+  "wrong_cos": 0.6764485020328711
+ },
+ {
+  "id": "V2-C-06",
+  "kind": "tuning",
+  "query": "it says processing something before every single launch and takes ages",
+  "expect_topic": "shader",
+  "routed_topics": [
+   "shader"
+  ],
+  "pool": 23,
+  "right_bm25": 2.851931211419064,
+  "wrong_bm25": 6.709388395840608,
+  "right_cos": 0.6345507355592532,
+  "wrong_cos": 0.7031683850326089
+ },
+ {
+  "id": "V2-C-07",
+  "kind": "tuning",
+  "query": "anti cheat blocked multiplayer linux",
+  "expect_topic": "anticheat",
+  "routed_topics": [
+   "anticheat",
+   "linux"
+  ],
+  "pool": 31,
+  "right_bm25": 12.895509553027756,
+  "wrong_bm25": 4.747644452653461,
+  "right_cos": 0.7430526214348936,
+  "wrong_cos": 0.5708655534536895
+ },
+ {
+  "id": "V2-C-08",
+  "kind": "tuning",
+  "query": "I can play alone but online kicks me out straight away",
+  "expect_topic": "anticheat",
+  "routed_topics": [
+   "anticheat"
+  ],
+  "pool": 16,
+  "right_bm25": 4.209328861171493,
+  "wrong_bm25": 4.209328861171493,
+  "right_cos": 0.5803630149974698,
+  "wrong_cos": 0.5631930673694883
+ },
+ {
+  "id": "V2-C-09",
+  "kind": "tuning",
+  "query": "gamescope fsr scaling blurry deck",
+  "expect_topic": "gamescope",
+  "routed_topics": [
+   "deck",
+   "gamescope"
+  ],
+  "pool": 18,
+  "right_bm25": 13.306653376179755,
+  "wrong_bm25": 4.366037706614261,
+  "right_cos": 0.785851564511078,
+  "wrong_cos": 0.5983287355260005
+ },
+ {
+  "id": "V2-C-10",
+  "kind": "tuning",
+  "query": "everything looks smeared when I drop the resolution to save battery",
+  "expect_topic": "gamescope",
+  "routed_topics": [
+   "gamescope"
+  ],
+  "pool": 22,
+  "right_bm25": 4.381604932528444,
+  "wrong_bm25": 6.51267478062217,
+  "right_cos": 0.5649460160477826,
+  "wrong_cos": 0.6645681043134963
+ },
+ {
+  "id": "V2-C-11",
+  "kind": "tuning",
+  "query": "steam input controller not detected in game",
+  "expect_topic": "steam_input",
+  "routed_topics": [
+   "steam_input"
+  ],
+  "pool": 30,
+  "right_bm25": 9.421673987789166,
+  "wrong_bm25": 8.66927176308279,
+  "right_cos": 0.7060856019853753,
+  "wrong_cos": 0.7299830800873013
+ },
+ {
+  "id": "V2-C-12",
+  "kind": "tuning",
+  "query": "the game only responds to the touchpad and ignores the sticks",
+  "expect_topic": "steam_input",
+  "routed_topics": [
+   "steam_input"
+  ],
+  "pool": 16,
+  "right_bm25": 0.0,
+  "wrong_bm25": 5.463874462522565,
+  "right_cos": 0.6232397218596561,
+  "wrong_cos": 0.6789126320234814
+ },
+ {
+  "id": "V2-C-13",
+  "kind": "tuning",
+  "query": "move steam library to sd card",
+  "expect_topic": "storage",
+  "routed_topics": [
+   "storage"
+  ],
+  "pool": 33,
+  "right_bm25": 12.75536042875143,
+  "wrong_bm25": 10.712245011519757,
+  "right_cos": 0.7838867711823746,
+  "wrong_cos": 0.6543400150352856
+ },
+ {
+  "id": "V2-C-14",
+  "kind": "tuning",
+  "query": "I'm out of room and want my installs on the memory card instead",
+  "expect_topic": "storage",
+  "routed_topics": [
+   "storage"
+  ],
+  "pool": 18,
+  "right_bm25": 0.0,
+  "wrong_bm25": 4.87552523796344,
+  "right_cos": 0.6184213796671265,
+  "wrong_cos": 0.596327579052573
+ },
+ {
+  "id": "V2-C-15",
+  "kind": "tuning",
+  "query": "remote play stutter deck network",
+  "expect_topic": "streaming",
+  "routed_topics": [
+   "deck",
+   "performance",
+   "streaming"
+  ],
+  "pool": 19,
+  "right_bm25": 10.3988230000094,
+  "wrong_bm25": 6.857859528934335,
+  "right_cos": 0.7080839427300872,
+  "wrong_cos": 0.5963365153880834
+ },
+ {
+  "id": "V2-C-16",
+  "kind": "tuning",
+  "query": "playing from my desktop over wifi keeps hitching every few seconds",
+  "expect_topic": "streaming",
+  "routed_topics": [
+   "streaming"
+  ],
+  "pool": 22,
+  "right_bm25": 3.652204540322097,
+  "wrong_bm25": 4.439363593519728,
+  "right_cos": 0.5936513357496479,
+  "wrong_cos": 0.6246194005329889
+ },
+ {
+  "id": "V2-C-17",
+  "kind": "tuning",
+  "query": "steamos update stuck reboot loop",
+  "expect_topic": "updates",
+  "routed_topics": [
+   "linux",
+   "updates"
+  ],
+  "pool": 24,
+  "right_bm25": 19.539838906601034,
+  "wrong_bm25": 7.590239426319913,
+  "right_cos": 0.836671164042908,
+  "wrong_cos": 0.6847756779102017
+ },
+ {
+  "id": "V2-C-18",
+  "kind": "tuning",
+  "query": "it restarted three times and still says the same version",
+  "expect_topic": "updates",
+  "routed_topics": [
+   "updates"
+  ],
+  "pool": 18,
+  "right_bm25": 4.332129379001457,
+  "wrong_bm25": 4.209328861171493,
+  "right_cos": 0.6127488540678652,
+  "wrong_cos": 0.607135099243237
+ },
+ {
+  "id": "V2-C-19",
+  "kind": "tuning",
+  "query": "gyro aim not working steam input",
+  "expect_topic": "gyro",
+  "routed_topics": [
+   "gyro",
+   "steam_input"
+  ],
+  "pool": 30,
+  "right_bm25": 11.406266894711756,
+  "wrong_bm25": 14.89291645607883,
+  "right_cos": 0.6579842925203808,
+  "wrong_cos": 0.8152160060222633
+ },
+ {
+  "id": "V2-C-20",
+  "kind": "tuning",
+  "query": "tilting the handheld does nothing when I aim",
+  "expect_topic": "gyro",
+  "routed_topics": [
+   "gyro"
+  ],
+  "pool": 4,
+  "right_bm25": 4.600557361177106,
+  "wrong_bm25": 4.254878460853525,
+  "right_cos": 0.6282226402899754,
+  "wrong_cos": 0.624707337594595
+ },
+ {
+  "id": "V2-C-21",
+  "kind": "tuning",
+  "query": "wine prefix reset windows game",
+  "expect_topic": "wine",
+  "routed_topics": [
+   "wine"
+  ],
+  "pool": 25,
+  "right_bm25": 10.722019177414278,
+  "wrong_bm25": 4.676882087610217,
+  "right_cos": 0.7320287066893926,
+  "wrong_cos": 0.6616524158698498
+ },
+ {
+  "id": "V2-C-22",
+  "kind": "tuning",
+  "query": "how do I wipe just one game's compatibility files without reinstalling",
+  "expect_topic": "wine",
+  "routed_topics": [
+   "wine"
+  ],
+  "pool": 35,
+  "right_bm25": 3.859258655993901,
+  "wrong_bm25": 8.180283580291013,
+  "right_cos": 0.5816042831201169,
+  "wrong_cos": 0.646989771655999
+ },
+ {
+  "id": "V2-C-23",
+  "kind": "tuning",
+  "query": "emudeck pcsx2 settings deck",
+  "expect_topic": "emudeck",
+  "routed_topics": [
+   "deck",
+   "emudeck"
+  ],
+  "pool": 23,
+  "right_bm25": 15.5333670891173,
+  "wrong_bm25": 2.723079918051993,
+  "right_cos": 0.7781986079574644,
+  "wrong_cos": 0.5882122855112852
+ },
+ {
+  "id": "V2-C-24",
+  "kind": "tuning",
+  "query": "my playstation 2 games run at half speed on the handheld",
+  "expect_topic": "emudeck",
+  "routed_topics": [
+   "emudeck"
+  ],
+  "pool": 5,
+  "right_bm25": 0.0,
+  "wrong_bm25": 4.0425995527023035,
+  "right_cos": 0.5748561058677393,
+  "wrong_cos": 0.6108875018490699
+ },
+ {
+  "id": "V2-C-25",
+  "kind": "tuning",
+  "query": "steamvr usb bandwidth headset",
+  "expect_topic": "steamvr",
+  "routed_topics": [
+   "steamvr"
+  ],
+  "pool": 16,
+  "right_bm25": 17.802648474517024,
+  "wrong_bm25": 4.600557361177106,
+  "right_cos": 0.8089473019978295,
+  "wrong_cos": 0.5919662916342343
+ },
+ {
+  "id": "V2-C-26",
+  "kind": "tuning",
+  "query": "my headset disconnects whenever anything else is plugged in",
+  "expect_topic": "steamvr",
+  "routed_topics": [
+   "steamvr"
+  ],
+  "pool": 14,
+  "right_bm25": 4.600557361177106,
+  "wrong_bm25": 7.75885000535239,
+  "right_cos": 0.5697239930141088,
+  "wrong_cos": 0.6472620175274372
+ },
+ {
+  "id": "V2-C-27",
+  "kind": "tuning",
+  "query": "desktop mode audio no output device",
+  "expect_topic": "desktop_mode",
+  "routed_topics": [
+   "audio",
+   "desktop_mode"
+  ],
+  "pool": 30,
+  "right_bm25": 8.204561679305332,
+  "wrong_bm25": 12.56649007499492,
+  "right_cos": 0.581559123400807,
+  "wrong_cos": 0.6263512345747533
+ },
+ {
+  "id": "V2-PARA-C01",
+  "kind": "tuning",
+  "query": "linux game keeps closing right after launch compatibility layer",
+  "expect_topic": "proton",
+  "routed_topics": [
+   "linux",
+   "proton"
+  ],
+  "pool": 34,
+  "right_bm25": 7.053570045305891,
+  "wrong_bm25": 6.694170120622343,
+  "right_cos": 0.6440705722299072,
+  "wrong_cos": 0.6581912908996238
+ },
+ {
+  "id": "V2-PARA-C02",
+  "kind": "tuning",
+  "query": "after suspend handheld display stays black when launching windows title",
+  "expect_topic": "proton",
+  "routed_topics": [
+   "proton"
+  ],
+  "pool": 36,
+  "right_bm25": 5.268983612828011,
+  "wrong_bm25": 9.038362048354733,
+  "right_cos": 0.6104798626807054,
+  "wrong_cos": 0.6181131626589967
+ },
+ {
+  "id": "V2-PARA-C03",
+  "kind": "tuning",
+  "query": "vr headset connection quality usb port warning",
+  "expect_topic": "steamvr",
+  "routed_topics": [
+   "steamvr"
+  ],
+  "pool": 18,
+  "right_bm25": 17.40757016739804,
+  "wrong_bm25": 4.559639465641514,
+  "right_cos": 0.6956876702359364,
+  "wrong_cos": 0.5878502722828519
+ },
+ {
+  "id": "V2-PARA-C04",
+  "kind": "tuning",
+  "query": "upscaling sharpness handheld display scaling layer",
+  "expect_topic": "gamescope",
+  "routed_topics": [
+   "gamescope"
+  ],
+  "pool": 19,
+  "right_bm25": 4.737321372950301,
+  "wrong_bm25": 5.177623187303687,
+  "right_cos": 0.6710239518596708,
+  "wrong_cos": 0.5845143697705713
+ },
+ {
+  "id": "V2-PARA-C05",
+  "kind": "tuning",
+  "query": "multiplayer won't start blocked by kernel anti cheat",
+  "expect_topic": "anticheat",
+  "routed_topics": [
+   "anticheat"
+  ],
+  "pool": 10,
+  "right_bm25": 11.7340824374877,
+  "wrong_bm25": 4.747644452653461,
+  "right_cos": 0.7127478861371465,
+  "wrong_cos": 0.6001588279107205
+ },
+ {
+  "id": "V2-PARA-C06",
+  "kind": "tuning",
+  "query": "streaming from desktop to handheld has frame drops",
+  "expect_topic": "streaming",
+  "routed_topics": [
+   "streaming"
+  ],
+  "pool": 28,
+  "right_bm25": 9.23617891931729,
+  "wrong_bm25": 8.143748351304815,
+  "right_cos": 0.6817627824067353,
+  "wrong_cos": 0.6496824457666114
+ },
+ {
+  "id": "V2-PARA-C07",
+  "kind": "tuning",
+  "query": "relocate installed titles to microsd storage",
+  "expect_topic": "storage",
+  "routed_topics": [
+   "storage"
+  ],
+  "pool": 17,
+  "right_bm25": 5.079013914996055,
+  "wrong_bm25": 8.05024486960236,
+  "right_cos": 0.6366751528582475,
+  "wrong_cos": 0.5991872328689873
+ },
+ {
+  "id": "V2-PARA-C08",
+  "kind": "tuning",
+  "query": "motion aiming controller profile night city shooter",
+  "expect_topic": "steam_input",
+  "routed_topics": [
+   "steam_input"
+  ],
+  "pool": 23,
+  "right_bm25": 11.132865101582677,
+  "wrong_bm25": 4.600557361177106,
+  "right_cos": 0.5833200918367337,
+  "wrong_cos": 0.5562505270131124
+ },
+ {
+  "id": "JUNK-please-repeat-that",
+  "kind": "junk",
+  "query": "please repeat that",
+  "expect_topic": null,
+  "routed_topics": [],
+  "pool": 0,
+  "right_bm25": null,
+  "wrong_bm25": null,
+  "right_cos": null,
+  "wrong_cos": null
+ },
+ {
+  "id": "JUNK-one-sentence",
+  "kind": "junk",
+  "query": "one sentence",
+  "expect_topic": null,
+  "routed_topics": [],
+  "pool": 30,
+  "right_bm25": null,
+  "wrong_bm25": 1.436693507044899,
+  "right_cos": null,
+  "wrong_cos": 0.48211197124603766
+ },
+ {
+  "id": "JUNK-thank-you-very-much",
+  "kind": "junk",
+  "query": "thank you very much",
+  "expect_topic": null,
+  "routed_topics": [],
+  "pool": 0,
+  "right_bm25": null,
+  "wrong_bm25": null,
+  "right_cos": null,
+  "wrong_cos": null
+ },
+ {
+  "id": "JUNK-four-hours",
+  "kind": "junk",
+  "query": "four hours",
+  "expect_topic": null,
+  "routed_topics": [],
+  "pool": 0,
+  "right_bm25": null,
+  "wrong_bm25": null,
+  "right_cos": null,
+  "wrong_cos": null
+ },
+ {
+  "id": "JUNK-what-time-is-it",
+  "kind": "junk",
+  "query": "what time is it",
+  "expect_topic": null,
+  "routed_topics": [],
+  "pool": 2,
+  "right_bm25": null,
+  "wrong_bm25": 4.209328861171493,
+  "right_cos": null,
+  "wrong_cos": 0.5043982269528052
+ },
+ {
+  "id": "JUNK-our-team",
+  "kind": "junk",
+  "query": "our team",
+  "expect_topic": null,
+  "routed_topics": [],
+  "pool": 0,
+  "right_bm25": null,
+  "wrong_bm25": null,
+  "right_cos": null,
+  "wrong_cos": null
+ }
+]

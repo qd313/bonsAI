@@ -1,0 +1,225 @@
+{
+  "ok": true,
+  "fidelity": "steam-routed",
+  "steps": [
+    {
+      "index": 1,
+      "label": "down 1 from Copy",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"Copy reply text\"",
+      "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "partial",
+        "visiblePercent": 89,
+        "coveredBy": "div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable",
+        "clippedBy": null,
+        "points": {
+          "visible": 8,
+          "covered": 1,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": false,
+      "settled": true,
+      "settleMs": 938,
+      "diagnosis": "press routed, focus moved <BUTTON> \"Copy reply text\" -> <DIV> (unnamed - the only text around it is a container's, not a label); FOCUSED BUT only PARTIALLY visible (89%), covered by div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable -- the ring is on it and a person could not see it"
+    },
+    {
+      "index": 2,
+      "label": "down 2",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "to": "<BUTTON> \"Copy reply text\"",
+      "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 905,
+      "diagnosis": "press routed, focus moved <DIV> (unnamed - the only text around it is a container's, not a label) -> <BUTTON> \"Copy reply text\""
+    },
+    {
+      "index": 3,
+      "label": "down 3",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"Copy reply text\"",
+      "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "partial",
+        "visiblePercent": 89,
+        "coveredBy": "div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable",
+        "clippedBy": null,
+        "points": {
+          "visible": 8,
+          "covered": 1,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": false,
+      "settled": true,
+      "settleMs": 949,
+      "diagnosis": "press routed, focus moved <BUTTON> \"Copy reply text\" -> <DIV> (unnamed - the only text around it is a container's, not a label); FOCUSED BUT only PARTIALLY visible (89%), covered by div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable -- the ring is on it and a person could not see it"
+    },
+    {
+      "index": 4,
+      "label": "left back into the answer",
+      "press": [
+        "LEFT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "focusKey": "sel:#quickaccess_tab_999",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1002,
+      "diagnosis": "press routed, focus moved <DIV> (unnamed - the only text around it is a container's, not a label) -> <DIV> (unnamed - the only text around it is a container's, not a label)"
+    },
+    {
+      "index": 5,
+      "label": "down from the answer",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": false,
+      "matched": null,
+      "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "focusKey": "sel:#quickaccess_tab_999",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1398,
+      "diagnosis": "press routed, focus did not move - still <DIV> (unnamed - the only text around it is a container's, not a label). either no handler is wired for this direction, or it ran and moved nothing"
+    },
+    {
+      "index": 6,
+      "label": "down again",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": false,
+      "matched": null,
+      "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "focusKey": "sel:#quickaccess_tab_999",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1402,
+      "diagnosis": "press routed, focus did not move - still <DIV> (unnamed - the only text around it is a container's, not a label). either no handler is wired for this direction, or it ran and moved nothing"
+    }
+  ],
+  "ranSteps": 6,
+  "totalSteps": 6,
+  "passed": 6,
+  "failed": 0,
+  "visited": [
+    "<BUTTON> \"Copy reply text\"",
+    "<DIV> (unnamed - the only text around it is a container's, not a label)"
+  ],
+  "cycle": {
+    "key": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > button.Focusable:nth-child(1)",
+    "seenAt": [
+      0,
+      2
+    ],
+    "loop": [
+      "<BUTTON> \"Copy reply text\"",
+      "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "<BUTTON> \"Copy reply text\""
+    ],
+    "escaped": true,
+    "stepsAfterLoop": 4
+  },
+  "neverReached": [],
+  "stopsFocusedButNotVisible": 2,
+  "notVisibleStops": [
+    "step 1: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (89%), covered by div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable",
+    "step 3: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (89%), covered by div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable"
+  ],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 11803,
+  "acquired": false,
+  "summary": "6/6 steps passed; focus returned to <BUTTON> \"Copy reply text\" at steps 0 and 2 and escaped afterwards; 2 stop(s) FOCUSED BUT NOT VISIBLE: step 1: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (89%), covered by div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable; step 3: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (89%), covered by div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable (report-only -- pass requireVisible to fail on this)"
+}

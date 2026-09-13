@@ -1,0 +1,75 @@
+{
+  "ok": true,
+  "fidelity": "steam-routed",
+  "steps": [
+    {
+      "index": 1,
+      "label": "onto the question text",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": ".bonsai-chat-turn-row-body",
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": true,
+      "from": "<BUTTON> \"Retry same prompt\"",
+      "to": "<DIV> \"How do I balance FPS and battery?\"",
+      "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 878,
+      "diagnosis": "press routed, focus moved <BUTTON> \"Retry same prompt\" -> <DIV> \"How do I balance FPS and battery?\", matching expect"
+    },
+    {
+      "index": 2,
+      "label": "press the question",
+      "press": [
+        "A"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"How do I balance FPS and battery?\"",
+      "to": "nothing",
+      "focusKey": null,
+      "visibility": null,
+      "visible": null,
+      "settled": true,
+      "settleMs": 979,
+      "diagnosis": "press routed, focus moved <DIV> \"How do I balance FPS and battery?\" -> nothing"
+    }
+  ],
+  "ranSteps": 2,
+  "totalSteps": 2,
+  "passed": 2,
+  "failed": 0,
+  "visited": [
+    "<BUTTON> \"Retry same prompt\"",
+    "<DIV> \"How do I balance FPS and battery?\"",
+    "nothing"
+  ],
+  "cycle": null,
+  "neverReached": [],
+  "stopsFocusedButNotVisible": 0,
+  "notVisibleStops": [],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 3954,
+  "acquired": false,
+  "summary": "2/2 steps passed"
+}

@@ -65,6 +65,12 @@ hook gives a gentle heads-up when a session starts work outside this.
 ## Bugs
 
 
+- ★ `[chat]` **A short question fades out at its right edge as if there were more to read** — **OPEN, seen on the
+  Deck 2026-09-13.** The fade is meant to hint that a long question has been cut short. It is drawn on every open question,
+  so a one-line one like *what about its second phase* fades too and looks cut when nothing is missing. It should only fade
+  when the text really is longer than the room it has. Screenshots `screenshots/DeckCapture_20260913_125644_game.png` and
+  `screenshots/DeckCapture_20260913_125707_game.png`.
+
 - ★ `[focus]` **Pressing A on an open question closes it and drops the highlight** — the answer folds away and the ring
   lands nowhere; the next D-pad press places it fresh instead of moving it. Seen on the Deck 2026-09-06 while checking the
   corner icons, and the earlier run that pressed the question recorded the same landing ("nothing"), so it is not new to
@@ -215,6 +221,11 @@ replace it with a specific issue when one exists.
   One check owed first: the question bubble turns its own outline off and gets no ring rule, so look on the Deck at what focus shows.
 - ★★ `[chat]` **First-run ghost "New chat" label at the create position** — **OPEN, parked by decision.** The create position is the
   literal `[+]`, re-confirmed on board 8f and again in the v3 rows. Reopen that decision before building it.
+- ★★ `[chips]` **Make the preset chips look more like chips** — **OPEN, asked for by the maintainer 2026-09-13.** Four
+  small changes, and all of them subtle — nothing that reads as a redesign: about half a pixel of space between the chip and
+  the text box beside it, so the two stop touching; the chip's surface shaded more like a raised button; the accent colour
+  toned down, because today it is too loud; and the label in italics, worth trying. The point is that a chip should read as a
+  pressable thing rather than part of the input. Drawn in a separate Claude Design session; the maintainer judges it by eye.
 - ★★ `[ollama]` **Expert offers the stronger Deck-run models first, and the licence list learns the Sept 2026 models** —
   **OPEN, planned 2026-09-05, calls locked (D73).** In the model picker's Expert group, the models that beat today's Gemma 4 on the
   answer test come first, in bake-off order. The plugin's licence list is behind: Gemma 4 has been Apache 2.0 since April and is

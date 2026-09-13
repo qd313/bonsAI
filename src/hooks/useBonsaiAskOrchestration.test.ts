@@ -71,6 +71,7 @@ function minimalSurvivalSnapshot(
       modelPolicyNonFossUnlocked: false,
       modelAllowHighVramFallbacks: false,
       ollamaLocalOnDeck: true,
+      ollamaLocalAutostart: false,
       strategySpoilerMaskingEnabled: true,
       strategySpoilerAutoRevealAfterConsent: false,
       steamWebApiKey: "",

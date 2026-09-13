@@ -366,6 +366,8 @@ _SIMPLE_FIELDS: dict[str, Any] = {
     "ollama_keep_alive": _ollama_keep_alive_field,
     # ``None`` means "never saved", which is off -- same result as any other non-``True``.
     "ollama_local_on_deck": _bool_default_false,
+    # Off unless the person turns it on -- it changes how the Deck starts.
+    "ollama_local_autostart": _bool_default_false,
     "model_allow_high_vram_fallbacks": _bool_default_false,
     # Presentation, defaulting on: only an explicit ``False`` turns these off.
     "strategy_spoiler_masking_enabled": _bool_default_true,

@@ -133,6 +133,12 @@ export type BonsaiSettings = {
   vision_model_routing_order: string[];
   /** When true, route Ollama to this device only (fixed 127.0.0.1:11434); LAN PC IP field ignored for Ask/Test. */
   ollama_local_on_deck: boolean;
+  /**
+   * When true, a per-user Deck startup entry starts local Ollama at boot with the loaded-model
+   * limit raised to two. Off by default -- it changes how the Deck starts, so it only happens
+   * when the person turns it on. See `apply_ollama_local_autostart` (main.py).
+   */
+  ollama_local_autostart: boolean;
   /** When false, Strategy ```bonsai-spoiler``` blocks render as visible text (no tap-to-reveal). Default on. */
   strategy_spoiler_masking_enabled: boolean;
   /** When true, spoiler blocks start expanded after the user consented on that Ask (still collapsible). */
@@ -209,6 +215,7 @@ export type BonsaiSettingsSnapshotInput = {
   textModelRoutingOrder: string[];
   visionModelRoutingOrder: string[];
   ollamaLocalOnDeck: boolean;
+  ollamaLocalAutostart: boolean;
   strategySpoilerMaskingEnabled: boolean;
   strategySpoilerAutoRevealAfterConsent: boolean;
   steamWebApiKey: string;
@@ -277,6 +284,8 @@ export const DEFAULT_INPUT_SANITIZER_USER_DISABLED = false;
 export const DEFAULT_SHOW_DEVELOPER_TAB = false;
 /** Persisted routing: off = LAN PC IP text field applies; when on, Ask uses localhost Ollama on the Deck only. */
 export const DEFAULT_OLLAMA_LOCAL_ON_DECK = false;
+/** Off by default (2026-09-12): changes how the Deck starts, so only an explicit opt-in turns it on. */
+export const DEFAULT_OLLAMA_LOCAL_AUTOSTART = false;
 /** Fixed host:port for on-device Ollama (matches `refactor_helpers.DEFAULT_OLLAMA_*`). */
 export const OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP = "127.0.0.1:11434";
 export const DEFAULT_MODEL_POLICY_NON_FOSS_UNLOCKED = false;

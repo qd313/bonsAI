@@ -417,6 +417,29 @@
     }
   },
   {
+    "name": "an old settings file predating the startup-entry switch loads it off and leaves everything else untouched",
+    "input": {
+      "reply_verbosity": "detailed",
+      "desktop_app_log_level": "verbose",
+      "preset_chip_animation": "carousel"
+    },
+    "expected": {
+      "ollama_local_autostart": false,
+      "reply_verbosity": "detailed",
+      "desktop_app_log_level": "verbose",
+      "preset_chip_animation": "carousel"
+    }
+  },
+  {
+    "name": "the startup-entry switch needs an explicit true, a truthy string does not enable it",
+    "input": {
+      "ollama_local_autostart": "yes"
+    },
+    "expected": {
+      "ollama_local_autostart": false
+    }
+  },
+  {
     "name": "an unknown voice reply mode falls back to off, never to reading on its own",
     "input": {
       "voice_reply_mode": "whenever"

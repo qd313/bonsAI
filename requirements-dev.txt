@@ -1,0 +1,7 @@
+# Development-only tooling for the refactor (code-quality checks). These packages are never
+# shipped to the Steam Deck: the plugin zip is built from plugin.json + main.py + py_modules
+# (scripts/build.sh do_release / deploy_remote / deploy_local), which never reads this file, and
+# scripts/plugin_zip_corpus_guard.py only checks for knowledge-base corpus artifacts, not this
+# list. Install with: pip install -r requirements-dev.txt
+ruff==0.16.7
+vulture==2.16

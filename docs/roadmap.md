@@ -772,14 +772,12 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   warning line. Whether that reads as advice-first is your judgement, which is what this row is for. The Hades and
   Black Mesa sentences **are pinned on the Deck now** — press A on each and read them. The Hades one needs Hades
   running. Row **KB-ANSWER-03**; evidence `runs/plan48-deck-evening-2026-09-12.json`.
-- ★★★ `[KB]` **A follow-up now tells the model which boss you meant — needs a read on the device** —
-  **SHIPPED 2026-09-12 as a partial fix, VERIFY.** Ask about a boss, then *"what about its second phase"*.
-  Before this, the answer was about a different boss **every time** — nine tries, three games, right not
-  once. Now the model is told in plain words which boss the question follows on from: right 4 times in 9.
-  Better on two games, no help at all on DOOM Eternal, where the small model fails even when handed only
-  the correct note — accepted, and no search work closes it. **Not a fixed feature**, and replies on these
-  turns come back about half as long (87 words to 44), which is part of what the device read is looking at.
-  Spoilers are unchanged and a test proves it. Row **W3-R4**. (D98)
+- ★★★ `[KB]` **A follow-up now answers about the boss you meant, two times in three** — **SHIPPED and checked on
+  the Deck 2026-09-12.** Ask about a boss, then *"what about its second phase"*. It used to answer about a different
+  boss **every time**. Three pairs on the device: right, right, then the old failure. That matches what was measured
+  off the device for this game exactly, so the number holds on the real thing. **Not a fixed feature** — one run in
+  three still names the rival boss — and DOOM Eternal fails every time, which no search work can close. Replies on
+  these turns are about half as long. Row **W3-R4**. (D98) [Numbers](planning/48-kb-wave-three-session.md)
 - ★★★ `[KB]` **DRG Survivor glossary terms** — **VERIFY, one touch tap owed.** Shipped 2026-08-28 and walked on device:
   underline, popup, D-pad reachability, B, one-press Up. Rows **DRG-GLOSSARY-01…04**.
   [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).

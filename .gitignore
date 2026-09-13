@@ -86,3 +86,6 @@ src/v0-drafts/
 
 # Deck walk evidence written by the plugin-studio tools; keep what a testing row cites in docs/test-evidence instead
 runs/
+
+# Shared "who is driving the Deck right now" queue (scripts/deck_queue.py) — local coordination state, not plugin content
+.decky/deck-queue.json

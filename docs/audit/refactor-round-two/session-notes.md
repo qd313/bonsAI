@@ -5,6 +5,41 @@ pick up without rereading anything but this file.
 
 ---
 
+## 2026-09-13, after phase 2: the red builds fixed, the three measures corrected
+
+**Every push had been failing since 2026-09-07 and it was not the plugin.** The maintainer was
+getting a notification on every change saying tests failed. Four tests were failing on the build
+server and nowhere else.
+
+Three of them build a real knowledge base, which needs an AI model on the machine. The build server
+has none. On 2026-09-07 a rule was added stopping the knowledge base from being built with cards
+that meaning-search cannot find — so the build correctly refused, and the tests read that refusal as
+a failure. **The rule was right and the tests were never told about it.** One of them still carried
+a note saying no AI model was needed, which had been true when it was written.
+
+Those three now skip where there is no model, with a message saying so, and still run for real
+before anything lands. They still fail loudly if the build breaks for any other reason — that was
+checked both ways on purpose, because a skip that swallows real failures is worse than a red build.
+The fourth was a timing check comparing two clocks across threads; it missed by fifty millionths of
+a second and now allows a small slack.
+
+**The general lesson: a new safety rule needs its tests updated in the same change.** This one held
+for six days across every push, and the notification only ever said "tests failed", so nobody could
+see it was one cause and not a growing pile.
+
+**The three measures were corrected** with the maintainer's approval, and the phase 2 write-up now
+records them as done. Copy-pasted app code reads 877 instead of 1,847, back-end test duplication
+2,076 instead of 2,286, and back-end methods with no caller 1 instead of 3. Nothing about the code
+changed — only what gets counted. The saved best numbers were re-recorded in the same change and
+each one carries a note in the file pointing at the reason.
+
+**Not pushed.** These fixes only stop the notifications once they reach the server, and pushing is
+never done without being asked. Two commits are waiting.
+
+**Phase 2 has nothing open.** Phase 3 starts on the word go.
+
+---
+
 ## 2026-09-13, phase 2 done: everything measured, twelve decisions written
 
 **Phase 2 is finished and needs three answers from the maintainer.** They are in

@@ -140,7 +140,9 @@
   "src/data/bonsaiSettingsNormalizers.ts",
   "src/data/bonsaiSettingsSchema.ts",
   "src/hooks/usePluginSettings.ts",
-  "src/utils/settingsPayload.ts",
+  "src/utils/settingsPayload.ts"
+ ],
+ "files_that_know_about_a_quarter_or_more": [
   "main.py"
  ],
  "per_setting": {

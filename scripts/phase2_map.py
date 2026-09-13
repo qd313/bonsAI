@@ -654,7 +654,10 @@ def list_settings_spread() -> dict:
     # A file that mentions most of the settings is a place every new setting has
     # to be edited -- that is the cost the reshape phase is trying to remove.
     spread = sorted(touched.items(), key=lambda kv: -kv[1])
-    widely = [f for f, n in spread if n >= max(3, len(names) // 4)]
+    # "Knows about every setting" means exactly that: the file names all of them.
+    # These are the files a new setting always has to be added to.
+    knows_all = [f for f, n in spread if n == len(names)]
+    knows_many = [f for f, n in spread if len(names) > n >= max(3, len(names) // 4)]
     counts = sorted((len(v) for v in per_setting.values()))
     median = counts[len(counts) // 2] if counts else 0
     point_counts = sorted(edit_points.values())
@@ -667,7 +670,8 @@ def list_settings_spread() -> dict:
         "lines_per_setting": dict(sorted(edit_points.items(), key=lambda kv: -kv[1])),
         "most_touched_setting": max(per_setting.items(), key=lambda kv: len(kv[1]))[0] if per_setting else None,
         "files_that_know_about_many_settings": [{"file": f, "settings": n} for f, n in spread[:20]],
-        "files_every_new_setting_must_be_edited_in": widely,
+        "files_every_new_setting_must_be_edited_in": knows_all,
+        "files_that_know_about_a_quarter_or_more": knows_many,
         "per_setting": per_setting,
     }
 
@@ -739,8 +743,10 @@ def _summary_lines(results: dict) -> list[str]:
         for kind, items in ue.get("by_fix", {}).items():
             out.append(f"- {len(items)}: {kind}")
         out += [f"- {len(ue.get('nothing_imports_this_file_and_no_export_is_referenced', []))} whole files can go.",
-                f"- {len(ue.get('unused_files', []))} files are never imported by the app; "
-                f"{len(ue.get('unused_packages', []))} declared packages are never used.",
+                f"- {len(ue.get('unused_files', []))} files are never imported and "
+                f"{len(ue.get('unused_packages', []))} declared packages are never imported -- "
+                "check both by hand: a script run as a command, or a package with its own entry "
+                "point, looks unused to a tool that only follows imports.",
                 "- Detail: unused-exports.json", ""]
 
     ub = results.get("unused-backend")
@@ -787,7 +793,9 @@ def _summary_lines(results: dict) -> list[str]:
         out += [f"## One setting is spread over many files",
                 f"- {ss.get('settings_counted', 0)} settings. A typical one is named on "
                 f"{ss.get('lines_a_typical_setting_touches', 0)} lines across {ss.get('files_a_typical_setting_touches', 0)} files.",
-                f"- {len(ss.get('files_every_new_setting_must_be_edited_in', []))} files know about every single setting, so a new setting means editing all of them.",
+                f"- {len(ss.get('files_every_new_setting_must_be_edited_in', []))} files name all "
+                f"{ss.get('settings_counted', 0)} settings, so a new setting means editing every one of them; "
+                f"{len(ss.get('files_that_know_about_a_quarter_or_more', []))} more name at least a quarter.",
                 "- Detail: settings-spread.json", ""]
 
     sc = results.get("seam-candidates")

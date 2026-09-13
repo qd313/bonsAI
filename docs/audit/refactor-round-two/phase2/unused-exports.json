@@ -1309,30 +1309,6 @@
    "namespaceMembers": [],
    "duplicates": []
   },
-  "src/features/preset-carousel/presetRowLayout.ts": {
-   "exports": [
-    {
-     "name": "PRESET_MARQUEE_END_PAUSE_MS",
-     "line": 55,
-     "referenced_by_harness": [],
-     "kind": "used inside its own file",
-     "fix": "drop the export word, keep the code",
-     "internal_uses": 1
-    },
-    {
-     "name": "marqueeHoldFloorMs",
-     "line": 69,
-     "referenced_by_harness": [],
-     "kind": "used inside its own file",
-     "fix": "drop the export word, keep the code",
-     "internal_uses": 1
-    }
-   ],
-   "types": [],
-   "enumMembers": [],
-   "namespaceMembers": [],
-   "duplicates": []
-  },
   "src/data/spoilerTitleProfiles.ts": {
    "exports": [
     {
@@ -1346,6 +1322,30 @@
     {
      "name": "PROTECT_PROGRESSION_TITLES",
      "line": 58,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/features/preset-carousel/presetRowLayout.ts": {
+   "exports": [
+    {
+     "name": "PRESET_MARQUEE_END_PAUSE_MS",
+     "line": 55,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "marqueeHoldFloorMs",
+     "line": 69,
      "referenced_by_harness": [],
      "kind": "used inside its own file",
      "fix": "drop the export word, keep the code",

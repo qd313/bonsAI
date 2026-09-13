@@ -22,7 +22,7 @@ what each file says and whether anything still points at it, not on how old it i
 
 | | Keep (still current, or work unfinished) | Put away (work finished) | Put away (a newer write-up replaced it) | Put away, then delete later (never happened, or dropped) | Needs a quick answer |
 |---|---|---|---|---|---|
-| **Write-ups** (121) | 62 | 42 | 9 | 2 | 6 |
+| **Write-ups** (121) | 66 | 44 | 9 | 2 | 0 |
 | **Scripts** (74) | 63 | 10 | 0 | 1 | 0 |
 
 Putting away the "work finished," "replaced," and "dropped" groups removes about **943 KB** of
@@ -289,14 +289,32 @@ Recommendation: keep the 154 that a row still cites, and remove the other 310.
 
 ---
 
-## Not sure
+## The six that needed an answer — all settled
 
-Six write-ups where the table and a read of the file were not enough to call it confidently. A
-wrong guess here costs the maintainer real work later, so these are questions instead of guesses.
+These six could not be called from reading them alone, so each was checked against the project
+itself rather than put to the maintainer. All six are answered; the counts above include them.
+Two turned out to be finished and can be put away. Four describe work that is genuinely still
+open and stay where they are.
 
-- `major-redesign.md` — a big mockup for reworking the main screen. One half of it (named chat slots) shipped. **Question: did the other half — flipping the whole main screen's layout — ever ship, or was it dropped?**
-- `planning/02-dps-upstream-findings.md` — a list of bugs found in a tool this project depends on but does not control. **Question: have those bugs since been fixed by that tool's own maintainers, or are they still open?**
-- `planning/18-phase4-track3-per-game-compat-tips.md` — a per-game troubleshooting-tips feature that was blocked on a database change. **Question: did that database change happen since, or is this still stuck?**
-- `planning/23-what-still-needs-a-human.md` — a list, from a few weeks ago, of testing jobs that still needed a person. A lot of automation has been built since. **Question: is this list still accurate, or has automation since covered most of it?**
-- `planning/24-track-a-ci-baseline.md` — says the automatic checks on every code change only warn, they do not block a change from going through. **Question: is that still true, or do failing checks block changes now?**
-- `planning/roadmap-planning-questions.md` — a long list of questions meant to kick off new planning write-ups. Many of its questions already have a matching plan written. **Question: is anything in here still unanswered, or can the whole file be archived?**
+**Put away — the work is finished:**
+
+- The big main-screen redesign. Both halves shipped, not just the chat slots: the screen was
+  flipped so the conversation sits above the quick-reply buttons and the typing box, and that is
+  how the code builds it today. A few on-device checks for it are still open, but those live on
+  the roadmap, not here.
+- The list of planning questions. Every one of its thirteen questions already has a written
+  answer linked beside it. Four of those answers were only partly acted on, but that is
+  unfinished follow-through, tracked elsewhere — not a question still waiting.
+
+**Keep — still true, or the work is still stuck:**
+
+- The bugs found in the Deck tooling this project uses but does not own. None of them have been
+  fixed. Some later, different bugs in the same tooling were fixed and confirmed working, which
+  is easy to mistake for these being done. They are not.
+- Per-game troubleshooting tips. Still stuck on the same thing: what the plugin stores has no way
+  to say a tip belongs to one particular game, and that has not changed.
+- The list of testing jobs that still need a person. It holds up, because it is a list of kinds
+  of work rather than tasks — buying and installing a game, judging whether an answer about a
+  game is actually right, deciding what to build next. None of those became automatic.
+- The note that the automatic checks only warn. Still true. When code is pushed the tests run and
+  report red or green, but a red result does not stop the change going in.

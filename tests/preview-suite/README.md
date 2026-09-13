@@ -23,7 +23,7 @@ Evidence lands in `docs/test-evidence/<batch>/<date>-<sha>/<scenario-id>/`.
 
 **Doc writeback (`--write`):** PASS → [testing-results-2026.md](../../docs/archive/testing-results-2026.md); FAIL → [testing-failures-2026.md](../../docs/archive/testing-failures-2026.md); progress → [testing-manual.md](../../docs/testing-manual.md). Rows dedupe by scenario ID.
 
-Agent loop: [.cursor/skills/bonsai-tier-qa/SKILL.md](../../.cursor/skills/bonsai-tier-qa/SKILL.md).
+Agent loop: `bonsai.workflow.get` id=`tier-qa`.
 
 ## Batch keys
 

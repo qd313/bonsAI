@@ -1,7 +1,7 @@
 
 # bonsAI Development Guide
 
-This guide is for contributors building and deploying bonsAI from source. **Primary target:** one Steam Deck runs everything — Cursor, the git repo, Ollama, Decky, and bonsAI on the same machine. A separate PC on the LAN still works; see [Other-machine LAN workflow](#other-machine-lan-workflow).
+This guide is for contributors building and deploying bonsAI from source. **Primary target:** one Steam Deck runs everything — the git repo, Ollama, Decky, and bonsAI on the same machine. A separate PC on the LAN still works; see [Other-machine LAN workflow](#other-machine-lan-workflow).
 
 ## What you'll have when done
 
@@ -21,9 +21,7 @@ This guide is for contributors building and deploying bonsAI from source. **Prim
 
 4. Install **[Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader)** if it is not already on the Deck (Stable channel is a good default).
 
-## Install Cursor and clone the repo
-
-Install Cursor on the Deck (Flatpak or AppImage from [cursor.com](https://cursor.com)). Then:
+## Clone the repo
 
 ```bash
 cd ~
@@ -31,7 +29,8 @@ git clone https://github.com/qd313/bonsAI.git
 cd bonsAI
 ```
 
-Open the `~/bonsAI` folder in Cursor.
+Open the `~/bonsAI` folder in your editor of choice, and read [AGENTS.md](../AGENTS.md) for how
+agents work in this repo.
 
 ## Agent / IDE MCP setup
 
@@ -115,11 +114,11 @@ What this does:
 
 Windows equivalent: `.\scripts\build.ps1` (remote deploy only; loads `.env`). Watch deploy: `.\scripts\watch-deploy.ps1`.
 
-### Maintainer dev loop (Cursor)
+### Maintainer dev loop
 
-- Skill: [`.cursor/skills/bonsai-deck-dev-loop/SKILL.md`](../.cursor/skills/bonsai-deck-dev-loop/SKILL.md) — build/deploy, BPM vs Gaming Mode, screenshots, optional log tunnel.
-- Screenshots: [`.cursor/skills/decky-screenshot-ingest/SKILL.md`](../.cursor/skills/decky-screenshot-ingest/SKILL.md).
-- Visibility workflow: [archive/spikes/cursor-deck-visibility.md](archive/spikes/cursor-deck-visibility.md).
+- Workflow: `bonsai.workflow.get` id=`deck-dev-loop` — build/deploy, BPM vs Gaming Mode, screenshots, optional log tunnel.
+- Screenshots: `bonsai.workflow.get` id=`screenshot-ingest`.
+- Visibility workflow (historical): [archive/spikes/cursor-deck-visibility.md](archive/spikes/cursor-deck-visibility.md).
 
 ### Headless Decky harness (Vitest)
 
@@ -136,17 +135,17 @@ Use this for daily UI, Settings, Permissions, Ask flow, Ollama RPC, and QAM focu
 1. After `./scripts/build.sh local`, if Steam was already running, **fully exit Steam and relaunch** (or use Decky **Reload** in QAM after the first open) so the new bundle loads.
 2. Open Steam in Desktop Mode → **Steam menu → View → Big Picture Mode** (or the BPM icon, top-right).
 3. Press **`...` (Quick Access)** on the controller (or click the QAM glyph) → **Decky plug icon** → **bonsAI**.
-4. Exit BPM via **Exit Big Picture** or `Alt+Tab` back to Konsole/Cursor — no Gaming Mode switch required.
+4. Exit BPM via **Exit Big Picture** or `Alt+Tab` back to Konsole — no Gaming Mode switch required.
 
 **Iterating:** run `pnpm run watch` in Konsole, then **Reload** the plugin in Decky QAM for a near-HMR loop.
 
-**Screenshots for Cursor (BPM / QAM UI):** After reproducing UI in BPM (or with BPM still running in the background), Alt+Tab to Cursor and run:
+**Screenshots (BPM / QAM UI):** After reproducing UI in BPM (or with BPM still running in the background), Alt+Tab back to the desktop and run:
 
 ```bash
 ./scripts/screenshot-deck.sh
 ```
 
-With `DECK_IP=127.0.0.1` in `.env` (recommended for same-machine Deck), or `steamdeck.local` while running on the Deck, the script captures **locally** (no SSH). Saves `screenshots/DeckCapture_<timestamp>.png` for agents using the [decky-screenshot-ingest](../.cursor/skills/decky-screenshot-ingest/SKILL.md) skill. Keep Steam/BPM running for composited QAM captures; fully quitting Steam may fall back to KMS grab (game plane only). If a run hangs on `deck@steamdeck.local's password:`, press Ctrl+C and retry (auto-local should apply) or run `./scripts/screenshot-deck.sh --local`. Windows remote deploy: `.\scripts\screenshot-deck.ps1`.
+With `DECK_IP=127.0.0.1` in `.env` (recommended for same-machine Deck), or `steamdeck.local` while running on the Deck, the script captures **locally** (no SSH). Saves `screenshots/DeckCapture_<timestamp>.png` for agents using the `bonsai.workflow.get` id=`screenshot-ingest` workflow. Keep Steam/BPM running for composited QAM captures; fully quitting Steam may fall back to KMS grab (game plane only). If a run hangs on `deck@steamdeck.local's password:`, press Ctrl+C and retry (auto-local should apply) or run `./scripts/screenshot-deck.sh --local`. Windows remote deploy: `.\scripts\screenshot-deck.ps1`.
 
 **What BPM proves:** Main tab UI, Settings, Permissions, Ask flow, backend RPC, D-pad focus in QAM overlays.
 
@@ -300,8 +299,6 @@ Then edit CHANGELOG bullets and commit to **`main`**. CI builds the zip and publ
 
 **CI:** [`.github/workflows/build-plugin-zip.yml`](../.github/workflows/build-plugin-zip.yml) — triggers on **`main`** pushes that change **`plugin.json`**, **`v*` tags**, and **workflow_dispatch**. Artifact: `bonsai-plugin-*`; verified by [`scripts/verify-decky-plugin-zip.sh`](../scripts/verify-decky-plugin-zip.sh).
 
-**Cursor / Bugbot branch hygiene:** Repo rules cannot block the Cursor GitHub App from pushing `cursor/*` branches. After merging investigation fixes locally, turn off **Autofix** and delete or disable the daily critical-bug **Automation** in the [Bugbot dashboard](https://cursor.com/dashboard/bugbot) (see [.cursor/BUGBOT.md](../.cursor/BUGBOT.md)). Close duplicate draft PRs and delete stale `cursor/*` remote branches.
-
 **Local release:**
 
 ```bash
@@ -352,7 +349,7 @@ Prioritize refactors and reviews by **change risk** — large surfaces, branchin
 
 ## Documentation maintenance (releases)
 
-When you mark a feature **complete**, update the same change set (see [`.cursorrules`](../.cursorrules)):
+When you mark a feature **complete**, update the same change set (see [AGENTS.md § Before marking work done](../AGENTS.md#before-marking-work-done)):
 
 - [roadmap.md](roadmap.md)
 - [testing.md](testing.md) — when behavior is user-visible (coverage, runbook, scenarios)

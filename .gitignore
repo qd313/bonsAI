@@ -36,6 +36,9 @@ bower_components
 .claude/hooks/*
 !.claude/hooks/*.py
 !.claude/settings.json
+!.claude/agents/
+.claude/agents/*
+!.claude/agents/*.md
 .cursorrules
 
 # Session-only SSH helper — prints deck_pass from .env; never commit

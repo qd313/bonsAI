@@ -490,8 +490,13 @@ def _discover_session_runtime_dir() -> str:
     return default if os.path.isdir(default) else ""
 
 
-def _env_for_audio_capture() -> dict[str, str]:
-    """Child env with the Deck user's PipeWire/Pulse session sockets (plugin_loader often lacks these)."""
+def env_for_audio_capture() -> dict[str, str]:
+    """Child env with the Deck user's PipeWire/Pulse session sockets (plugin_loader often lacks these).
+
+    Public (renamed from ``_env_for_audio_capture`` 2026-09-12): the read-aloud service reuses this
+    same session-socket discovery for playback rather than duplicating it — see
+    voice_read_aloud_service.py.
+    """
     env = dict(_env_for_host_system_tools())
     rd = _discover_session_runtime_dir()
     if rd:
@@ -504,7 +509,7 @@ def _env_for_audio_capture() -> dict[str, str]:
 
 def _resolve_pipewire_mic_target(env: Optional[dict[str, str]] = None) -> str:
     """Best-effort default PipeWire/Pulse capture source (Deck internal mic)."""
-    capture_env = env or _env_for_audio_capture()
+    capture_env = env or env_for_audio_capture()
     try:
         proc = subprocess.run(
             ["pactl", "list", "sources", "short"],
@@ -534,7 +539,7 @@ def _resolve_pipewire_mic_target(env: Optional[dict[str, str]] = None) -> str:
 
 
 def _resolve_capture_command() -> tuple[list[str], str, dict[str, str]]:
-    capture_env = _env_for_audio_capture()
+    capture_env = env_for_audio_capture()
     mic_target = _resolve_pipewire_mic_target(capture_env)
     if shutil.which("pw-record"):
         cmd = [

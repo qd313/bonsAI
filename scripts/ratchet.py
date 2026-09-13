@@ -663,7 +663,12 @@ def metric_live_docs_mentioning_cursor():
         if not entry.is_file():
             continue
         rel_parts = entry.relative_to(docs).parts
-        if rel_parts and rel_parts[0] == "archive":
+        # What this metric is for: no LIVE guidance should still tell anyone to use the
+        # editor that was dropped. The archive, the audit folder and the planning folder are
+        # dated records of what happened and why -- including the removal itself -- so a
+        # mention there is the record working, not a leftover. Counting them means the
+        # handover note describing the removal makes the check fail.
+        if rel_parts and rel_parts[0] in ("archive", "audit", "planning"):
             continue
         if "changelog" in entry.name.lower():
             continue

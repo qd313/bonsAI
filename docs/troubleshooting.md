@@ -405,7 +405,7 @@ All Desktop writes now land in **`~/Desktop/bonsAI_logs/`** (was `BonsAI_notes`)
 **Fixes:**
 1. **Host listening:** On the machine running Ollama, set `OLLAMA_HOST=0.0.0.0` (or use the Ollama app’s **Listen / expose on network** option when the platform provides it) so the Deck can reach TCP **11434**. Restart Ollama after changing this.
 2. **Firewall:** Open Windows Defender Firewall -> Inbound Rules -> New Rule -> Port -> **TCP 11434** -> Allow.
-3. **Verify via SSH:** Run this from the Cursor terminal while connected to the Deck:
+3. **Verify via SSH:** Run this from a terminal while connected to the Deck:
    ```bash
    curl -sS -m 5 http://[PC_IP]:11434/api/tags
    ```

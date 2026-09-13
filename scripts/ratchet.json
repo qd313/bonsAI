@@ -123,7 +123,7 @@
   },
   "doc_size_kb_testing": {
     "label": "Living doc size: testing",
-    "best": 134.6,
+    "best": 134.46,
     "target": 60,
     "start_2026_09_09": 315,
     "direction": "lower_is_better",
@@ -150,7 +150,7 @@
   },
   "live_docs_mentioning_cursor": {
     "label": "Live docs mentioning Cursor",
-    "best": 9,
+    "best": 2,
     "target": 0,
     "start_2026_09_09": 6,
     "direction": "lower_is_better",

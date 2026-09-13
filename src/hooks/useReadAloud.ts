@@ -53,10 +53,14 @@ export function stopReadAloudFireAndForget(): void {
   );
 }
 
-function startReadAloudFireAndForget(text: string): void {
+function startReadAloudFireAndForget(text: string, onStarted?: () => void): void {
   void callDeckyWithTimeout<[string], StartVoiceReadAloudResult>("start_voice_read_aloud", [
     text,
-  ]).catch(() => undefined);
+  ])
+    .then((res) => {
+      if (res.ok) onStarted?.();
+    })
+    .catch(() => undefined);
 }
 
 /**
@@ -320,9 +324,18 @@ export function handleAskTerminalForReadAloud(status: BackgroundRequestStatus): 
   });
 
   if (shouldRead) {
-    startReadAloudFireAndForget(readableText);
-    // The just-finished answer is always the live turn.
-    autoReadListeners.forEach((fn) => fn("live"));
+    /*
+     * Tell the hook only once the backend has said it is speaking. Notifying before the start
+     * call resolved made the hook poll status at once, and that poll could land while the
+     * backend was still stopping the previous reading and had not yet flipped to "speaking":
+     * it read "idle", the hook reset itself, and the line said Read aloud while the Deck was
+     * talking (measured on the Deck 2026-09-12, second attempt at this fix). With the notify
+     * behind the start result, the first poll always sees "speaking".
+     */
+    startReadAloudFireAndForget(readableText, () => {
+      // The just-finished answer is the newest one; the transcript maps "live" onto it.
+      autoReadListeners.forEach((fn) => fn("live"));
+    });
   }
 }
 

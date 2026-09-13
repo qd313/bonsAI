@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 380,
-  "edgeCount": 943,
+  "edgeCount": 946,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -338,8 +338,11 @@
     "src/components/MainTabChatTranscript.readAloud.test.tsx": {
       "imports": [
         "src/components/MainTabChatTranscript.tsx",
+        "src/hooks/useReadAloud.ts",
         "src/test-harness/fakeDeckyRpc.ts",
-        "src/test-harness/fakeDeckyUi.tsx"
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/test-harness/rpcFixtures.ts",
+        "src/types/bonsaiUi.ts"
       ],
       "importedBy": []
     },
@@ -2149,6 +2152,7 @@
         "src/utils/deckyCall.ts"
       ],
       "importedBy": [
+        "src/components/MainTabChatTranscript.readAloud.test.tsx",
         "src/components/MainTabChatTranscript.tsx",
         "src/hooks/useBackgroundGameAi.ts",
         "src/hooks/useReadAloud.test.ts",
@@ -2618,6 +2622,7 @@
         "src/types/backgroundAsk.ts"
       ],
       "importedBy": [
+        "src/components/MainTabChatTranscript.readAloud.test.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/hooks/useBackgroundGameAi.test.ts",
         "src/hooks/useBonsaiAskOrchestration.test.ts",
@@ -2672,6 +2677,7 @@
         "src/components/MainTab.tsx",
         "src/components/MainTabChatTranscript.earlierPill.test.tsx",
         "src/components/MainTabChatTranscript.emptySlotPreview.test.tsx",
+        "src/components/MainTabChatTranscript.readAloud.test.tsx",
         "src/components/MainTabChatTranscript.replyBlock.test.tsx",
         "src/components/MainTabChatTranscript.stoppedNotice.test.tsx",
         "src/components/MainTabChatTranscript.strategyPanels.test.tsx",

@@ -260,7 +260,18 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     appId: string | null,
     spoilerConsentEffective = false
   ) => {
-    const isReadingThis = readAloud.speakingKey === key && readAloud.state === "speaking";
+    /*
+     * A reading that started on its own (Voice replies set to Always or By voice) is keyed "live"
+     * by the hook, because the hook cannot know which block will draw the newest answer. Measured
+     * on the Deck 2026-09-12: by the time the reading starts, the finished answer is already
+     * drawn as the newest *archived* turn (its key is the turn id), so a plain key match left the
+     * line saying Read aloud while the Deck was talking, and a press restarted it instead of
+     * stopping it. "live" therefore matches whichever block is drawing the newest answer.
+     */
+    const newestAnswerKey = showLiveTurn ? "live" : askThreadCollapsed[askThreadCollapsed.length - 1]?.id;
+    const isReadingThis =
+      readAloud.state === "speaking" &&
+      (readAloud.speakingKey === key || (readAloud.speakingKey === "live" && key === newestAnswerKey));
     return {
       readAloudLabel: isReadingThis ? "Stop" : "Read aloud",
       onReadAloudToggle: () => {

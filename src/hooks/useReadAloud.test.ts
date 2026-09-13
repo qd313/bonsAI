@@ -118,13 +118,28 @@ describe("an answer that starts reading itself with no press", () => {
     resetReadAloudCompletionState();
     setReadAloudCompletionContext("always", true);
     const { result } = renderHook(() => useReadAloud());
-    // Let the hook's own mount-time status check (idle by default) settle first.
+    // Let the hook's own mount-time status check (idle by default) settle before wiring the
+    // handler below, so the mount check itself does not also pick up "speaking".
     await act(async () => {
       await Promise.resolve();
     });
 
-    act(() => {
+    // The notify now waits for the start call to resolve ok (measured on the Deck 2026-09-12: a
+    // synchronous notify let the hook poll before the backend had actually started speaking), and
+    // that notify's own first poll follows straight after — give it a real reading in progress to
+    // find, the same way "returns to idle" below does, so the assertion holds however many
+    // microtask ticks that chain actually takes rather than guessing a tick count.
+    setRpcHandler("get_voice_read_aloud_status", () => ({
+      state: "speaking",
+      sentence_index: 0,
+      sentence_count: 2,
+      error: null,
+      started_at: 0,
+    }));
+
+    await act(async () => {
       handleAskTerminalForReadAloud(completedStatus({ request_id: 50 }));
+      await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
     expect(result.current.speakingKey).toBe("live");
@@ -154,8 +169,9 @@ describe("an answer that starts reading itself with no press", () => {
       };
     });
 
-    act(() => {
+    await act(async () => {
       handleAskTerminalForReadAloud(completedStatus({ request_id: 51 }));
+      await vi.advanceTimersByTimeAsync(0);
     });
     expect(result.current.speakingKey).toBe("live");
     expect(result.current.state).toBe("speaking");
@@ -166,6 +182,29 @@ describe("an answer that starts reading itself with no press", () => {
     expect(result.current.state).toBe("done");
     expect(result.current.speakingKey).toBeNull();
     vi.useRealTimers();
+  });
+
+  it("does not notify when the start call reports it never started speaking", async () => {
+    resetReadAloudCompletionState();
+    setReadAloudCompletionContext("always", true);
+    setRpcHandler("start_voice_read_aloud", () => ({
+      ok: false,
+      sentence_count: 0,
+      error: "No speech engine on this Deck.",
+    }));
+    const { result } = renderHook(() => useReadAloud());
+    // Let the hook's own mount-time status check settle first, same as the two tests above.
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    await act(async () => {
+      handleAskTerminalForReadAloud(completedStatus({ request_id: 52 }));
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+
+    expect(result.current.speakingKey).toBeNull();
+    expect(result.current.state).not.toBe("speaking");
   });
 
   it("comes up already speaking on live when the backend reports a reading in progress at mount", async () => {

@@ -34,6 +34,7 @@ from pathlib import Path
 
 DEFAULT_BASE = "experimental"
 UNTOUCHED_HOURS = 24
+BASE_FILE = ".base"
 
 
 class GitError(RuntimeError):
@@ -102,7 +103,7 @@ def cmd_create(args):
     print(f"Creating {dest} on new branch {branch}, from {args.base} at {base_sha[:9]}...")
     git("worktree", "add", "-b", branch, str(dest), base_sha, cwd=root)
 
-    (dest / ".base").write_text(base_sha + "\n", encoding="utf-8")
+    (dest / BASE_FILE).write_text(base_sha + "\n", encoding="utf-8")
 
     installed = _install_dependencies(dest, root)
     print(installed)
@@ -193,7 +194,7 @@ def porcelain_worktrees(root):
 
 
 def read_base(path):
-    base_file = Path(path) / ".base"
+    base_file = Path(path) / BASE_FILE
     try:
         return base_file.read_text(encoding="utf-8").strip() or None
     except OSError:
@@ -205,6 +206,10 @@ def is_clean(path):
     if result.returncode != 0:
         return None, []
     dirty_files = [line[3:] for line in result.stdout.splitlines() if line.strip()]
+    # `.base` is this tool's own note of which commit the copy started from. It is untracked
+    # by design, so counting it as a change meant every copy this tool made looked dirty for
+    # ever and could never be pruned -- the tool blocking itself.
+    dirty_files = [f for f in dirty_files if f.strip().strip('"') != BASE_FILE]
     return (len(dirty_files) == 0), dirty_files
 
 
@@ -350,10 +355,35 @@ def cmd_prune(args):
         path = row["path"]
         branch = row["branch"]
         print(f"Removing {path} ...")
+        # Clear our own note first. Git refuses to remove a worktree holding untracked
+        # files, and `.base` -- which this tool wrote itself when it made the copy -- is
+        # exactly such a file, so without this the tool can never remove its own copies.
+        # Deliberately not `--force`: everything else untracked is somebody's work, and git
+        # refusing is the right answer then.
+        try:
+            (Path(path) / BASE_FILE).unlink()
+        except OSError:
+            pass
         result = run(["git", "worktree", "remove", path], cwd=root, check=False)
         if result.returncode != 0:
-            print(f"  failed: {result.stderr.strip()}")
-            continue
+            # "Directory not empty" means git dropped its registration but could not delete
+            # the folder, because an installed node_modules sits inside it. Git leaves the
+            # copy half-removed at that point, so finish the job rather than leaving a
+            # folder nothing knows about. Only when git has already let go of it: if the
+            # registration survived, the refusal was about real work and must stand.
+            still_registered = any(
+                str(Path(e["path"]).resolve()) == str(Path(path).resolve())
+                for e in porcelain_worktrees(root)
+            )
+            if still_registered:
+                print(f"  failed: {result.stderr.strip()}")
+                continue
+            shutil.rmtree(path, ignore_errors=True)
+            run(["git", "worktree", "prune"], cwd=root, check=False)
+            if Path(path).exists():
+                print(f"  git let go of it but the folder could not be deleted: {path}")
+                continue
+            print("  (removed the leftover folder git could not delete)")
         if branch and branch != "(detached)":
             branch_result = run(["git", "branch", "-d", branch], cwd=root, check=False)
             if branch_result.returncode != 0:

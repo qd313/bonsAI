@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 380,
-  "edgeCount": 942,
+  "edgeCount": 943,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1835,6 +1835,7 @@
     "src/features/voice/useVoiceAskInput.test.ts": {
       "imports": [
         "src/features/voice/useVoiceAskInput.ts",
+        "src/hooks/useVoiceTranscription.ts",
         "src/test-harness/fakeDeckyRpc.ts"
       ],
       "importedBy": []
@@ -2250,6 +2251,7 @@
         "src/utils/deckyCall.ts"
       ],
       "importedBy": [
+        "src/features/voice/useVoiceAskInput.test.ts",
         "src/features/voice/useVoiceAskInput.ts"
       ]
     },

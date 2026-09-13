@@ -32,7 +32,7 @@ import {
   type BonsaiSessionSurvivalSnapshot,
 } from "./utils/bonsaiSessionSurvival";
 import { consumePendingFocusMainTab, setReplySurfaceVisible } from "./utils/bonsaiReplySurface";
-import { rememberAskCameFromMic, setReadAloudCompletionContext } from "./hooks/useReadAloud";
+import { questionCameFromMic, rememberAskCameFromMic, setReadAloudCompletionContext } from "./hooks/useReadAloud";
 import { clearBonsaiBrowserStorage } from "./utils/clearBonsaiBrowserStorage";
 import { bonsaiDebugLog } from "./utils/bonsaiDebugIngest";
 import { clearOllamaTabLocalSurvival } from "./utils/ollamaTabLocalSurvival";
@@ -1110,6 +1110,7 @@ const Content: React.FC = () => {
     dismissMicPermissionDeny,
     askCameFromMic,
     clearAskCameFromMic,
+    lastVoiceText,
   } = useVoiceAskInput({
     setUnifiedInput,
     unifiedInput,
@@ -1135,14 +1136,20 @@ const Content: React.FC = () => {
    * response, including the first, so this lands well before the request can complete. Only one
    * Ask is ever in flight, so a single pending slot (rather than something keyed up front, before
    * the id exists) is enough.
+   *
+   * The flag alone over-counts: it stays set after dictation until a settings-driven reset, a
+   * session clear, or reusing an old question, so typing over the dictated text or picking a
+   * suggestion chip before pressing Ask leaves it on for words never spoken. `questionCameFromMic`
+   * also checks that the text actually being asked still matches what the mic last wrote.
    */
   const pendingAskCameFromMicRef = useRef(false);
   const onAskOllamaWithReadAloud = useCallback(
     (overrideQuestion?: string, opts?: { threadQuestionDisplay?: string }) => {
-      pendingAskCameFromMicRef.current = askCameFromMic;
+      const asked = overrideQuestion ?? unifiedInput;
+      pendingAskCameFromMicRef.current = questionCameFromMic(askCameFromMic, asked, lastVoiceText);
       return onAskOllama(overrideQuestion, opts);
     },
-    [onAskOllama, askCameFromMic],
+    [onAskOllama, askCameFromMic, unifiedInput, lastVoiceText],
   );
   useEffect(() => {
     if (lastRequestId != null) {

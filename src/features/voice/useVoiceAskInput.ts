@@ -31,15 +31,30 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
   const [micPermissionDenied, setMicPermissionDenied] = useState(false);
   /**
    * "The field's text came from the mic" (D99 call 3, the middle Voice replies position). Set the
-   * moment a transcription is written into the field; the caller (index.tsx, which owns the field's
-   * other writers) clears it on a manual edit or a clear, since those never go through this hook.
+   * moment a transcription is written into the field, and cleared by the caller (index.tsx, which
+   * owns the field's other writers) on a settings-driven reset, a session clear, or reusing an old
+   * question. Typing over the text or picking a suggestion chip does not clear it — those writers
+   * never go through this hook — so Ask time compares the text being asked against `lastVoiceText`
+   * below rather than trusting the flag alone.
    */
   const [askCameFromMic, setAskCameFromMic] = useState(false);
+  /** The exact text the mic last wrote into the field, kept so Ask time can tell a hand edit apart
+   * from an unmodified dictation even though the flag above stays set either way. */
+  const [lastVoiceText, setLastVoiceText] = useState("");
 
   const setUnifiedInputFromVoice = useCallback<Dispatch<SetStateAction<string>>>(
     (value) => {
       setAskCameFromMic(true);
-      a.setUnifiedInput(value);
+      if (typeof value === "function") {
+        a.setUnifiedInput((prev) => {
+          const next = value(prev);
+          setLastVoiceText(next);
+          return next;
+        });
+      } else {
+        setLastVoiceText(value);
+        a.setUnifiedInput(value);
+      }
     },
     [a.setUnifiedInput],
   );
@@ -129,5 +144,6 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
     dismissMicPermissionDeny,
     askCameFromMic,
     clearAskCameFromMic,
+    lastVoiceText,
   };
 }

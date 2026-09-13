@@ -4,6 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import {
   handleAskTerminalForReadAloud,
+  questionCameFromMic,
   rememberAskCameFromMic,
   resetReadAloudCompletionState,
   setReadAloudCompletionContext,
@@ -156,6 +157,24 @@ describe("shouldReadAloudOnCompletion", () => {
     expect(
       shouldReadAloudOnCompletion({ ...base, mode: "always", cameFromMic: false, readableText: "   " })
     ).toBe(false);
+  });
+});
+
+describe("questionCameFromMic", () => {
+  it("is false outright when the flag was never set, no matter the text", () => {
+    expect(questionCameFromMic(false, "how do i beat the boss", "how do i beat the boss")).toBe(false);
+  });
+
+  it("is true when the flag is set and the question asked is exactly what the mic wrote", () => {
+    expect(questionCameFromMic(true, "how do i beat the boss", "how do i beat the boss")).toBe(true);
+  });
+
+  it("is false when the flag is set but the field text was replaced before Ask was pressed", () => {
+    expect(questionCameFromMic(true, "what is the best build", "how do i beat the boss")).toBe(false);
+  });
+
+  it("still counts as spoken across leading, trailing, or doubled-up spacing", () => {
+    expect(questionCameFromMic(true, "  how do i beat  the boss ", "how do i beat the boss")).toBe(true);
   });
 });
 

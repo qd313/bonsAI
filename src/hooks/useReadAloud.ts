@@ -192,6 +192,24 @@ function takeAskCameFromMic(requestId: number | null): boolean {
 }
 
 /**
+ * Whether the question just asked really came from the mic. The flag alone is not enough: it stays
+ * set after dictation until a settings-driven reset, a session clear, or reusing an old question, so
+ * typing over the dictated text or picking a suggestion chip before pressing Ask leaves it on even
+ * though the words actually sent were never spoken. Comparing the asked text against the text the
+ * mic last wrote (both trimmed and with runs of whitespace collapsed to one space) catches that.
+ * Pure: no RPC, no module state.
+ */
+export function questionCameFromMic(
+  askCameFromMic: boolean,
+  asked: string,
+  lastVoiceText: string
+): boolean {
+  if (!askCameFromMic) return false;
+  const normalise = (s: string) => s.trim().replace(/\s+/g, " ");
+  return normalise(asked) === normalise(lastVoiceText);
+}
+
+/**
  * Whether a just-completed answer should be read aloud without a press. Pure: no RPC, no module
  * state. "off" never reads on its own; "voice_only" only when the question came in through the
  * mic; "always" every time — but only for an answer that actually finished (status "completed",

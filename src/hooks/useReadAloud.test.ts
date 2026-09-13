@@ -20,10 +20,14 @@ describe("useReadAloud", () => {
   it("starts speaking, polls status, and flips the label back to idle when done", async () => {
     vi.useFakeTimers();
     let polls = 0;
+    // The hook's own mount-time recovery check (see "an answer that starts reading itself with no
+    // press" below) makes one status call before `start` ever runs, so "speaking" has to hold for
+    // one call longer than the two this test actually cares about (the press's own poll, then the
+    // one after the backend finishes).
     setRpcHandler("get_voice_read_aloud_status", () => {
       polls += 1;
       return {
-        state: polls < 2 ? "speaking" : "done",
+        state: polls < 3 ? "speaking" : "done",
         sentence_index: polls,
         sentence_count: 3,
         error: null,
@@ -106,6 +110,81 @@ describe("useReadAloud", () => {
       await Promise.resolve();
     });
     expect(getRpcCallLog().some((c) => c.method === "stop_voice_read_aloud")).toBe(true);
+  });
+});
+
+describe("an answer that starts reading itself with no press", () => {
+  it("a completed status under always notifies subscribers with live", async () => {
+    resetReadAloudCompletionState();
+    setReadAloudCompletionContext("always", true);
+    const { result } = renderHook(() => useReadAloud());
+    // Let the hook's own mount-time status check (idle by default) settle first.
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    act(() => {
+      handleAskTerminalForReadAloud(completedStatus({ request_id: 50 }));
+    });
+
+    expect(result.current.speakingKey).toBe("live");
+    expect(result.current.state).toBe("speaking");
+  });
+
+  it("returns to idle once the poll it starts reports done", async () => {
+    resetReadAloudCompletionState();
+    setReadAloudCompletionContext("always", true);
+    const { result } = renderHook(() => useReadAloud());
+    // Let the hook's own mount-time status check (idle by default) settle before wiring the
+    // counter-based handler below, so it does not eat one of the two calls this test counts on.
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    vi.useFakeTimers();
+    let polls = 0;
+    setRpcHandler("get_voice_read_aloud_status", () => {
+      polls += 1;
+      return {
+        state: polls < 2 ? "speaking" : "done",
+        sentence_index: polls,
+        sentence_count: 2,
+        error: null,
+        started_at: 0,
+      };
+    });
+
+    act(() => {
+      handleAskTerminalForReadAloud(completedStatus({ request_id: 51 }));
+    });
+    expect(result.current.speakingKey).toBe("live");
+    expect(result.current.state).toBe("speaking");
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(2500);
+    });
+    expect(result.current.state).toBe("done");
+    expect(result.current.speakingKey).toBeNull();
+    vi.useRealTimers();
+  });
+
+  it("comes up already speaking on live when the backend reports a reading in progress at mount", async () => {
+    resetReadAloudCompletionState();
+    setRpcHandler("get_voice_read_aloud_status", () => ({
+      state: "speaking",
+      sentence_index: 0,
+      sentence_count: 2,
+      error: null,
+      started_at: 0,
+    }));
+
+    const { result } = renderHook(() => useReadAloud());
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    expect(result.current.speakingKey).toBe("live");
+    expect(result.current.state).toBe("speaking");
   });
 });
 

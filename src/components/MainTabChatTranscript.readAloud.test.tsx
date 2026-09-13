@@ -73,10 +73,13 @@ describe("MainTabChatTranscript Read aloud", () => {
   it("flips to Stop while speaking, and back once the backend reports done", async () => {
     vi.useFakeTimers();
     let polls = 0;
+    // The hook's own mount-time recovery check (useReadAloud.ts) makes one status call before the
+    // click ever happens, so "speaking" has to hold for one call longer than the two this test
+    // actually cares about (the click's own poll, then the one after the backend finishes).
     setRpcHandler("get_voice_read_aloud_status", () => {
       polls += 1;
       return {
-        state: polls < 2 ? "speaking" : "done",
+        state: polls < 3 ? "speaking" : "done",
         sentence_index: polls,
         sentence_count: 2,
         error: null,

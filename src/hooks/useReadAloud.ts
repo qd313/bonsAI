@@ -6,7 +6,11 @@
  *   two places a completed Ask is observed, useBackgroundGameAi.ts and bonsaiAskCompletionWatch.ts.
  * Solves: One background reader can only speak one answer at a time; this is where that state, the
  *   on-its-own decision, and the fire-and-forget stop the button and a new Ask both need all live
- *   in one place, so they cannot disagree about what is currently speaking.
+ *   in one place, so they cannot disagree about what is currently speaking. The hook also mirrors a
+ *   reading that started on its own (voice replies set to Always) — `handleAskTerminalForReadAloud`
+ *   fires the read at module level with no hook instance in earshot, so without this the Read aloud
+ *   line kept saying "Read aloud" while the Deck was already speaking, and pressing it restarted the
+ *   reading instead of stopping it. Measured on the Deck 2026-09-12.
  * Does not: Split text into sentences (Python does), or turn markdown into words (answerReadableText.ts
  *   does that). Does not read settings itself — index.tsx keeps this module's completion-time context
  *   in sync via setReadAloudCompletionContext, the same pattern bonsaiReplySurface.ts uses.
@@ -53,6 +57,23 @@ function startReadAloudFireAndForget(text: string): void {
   void callDeckyWithTimeout<[string], StartVoiceReadAloudResult>("start_voice_read_aloud", [
     text,
   ]).catch(() => undefined);
+}
+
+/**
+ * Told when a reading starts with no press behind it (`handleAskTerminalForReadAloud`, "always" mode).
+ *
+ * That function runs at module level — it is called from useBackgroundGameAi.ts's poll and
+ * bonsaiAskCompletionWatch.ts's watch, neither of which is guaranteed to have a `useReadAloud`
+ * instance mounted nearby — so it cannot just call a hook's setter. Each mounted hook subscribes here
+ * instead, the same "module fires, hook mirrors" shape `setReadAloudCompletionContext` already uses.
+ */
+const autoReadListeners = new Set<(key: string) => void>();
+
+function subscribeAutoReadStarted(fn: (key: string) => void): () => void {
+  autoReadListeners.add(fn);
+  return () => {
+    autoReadListeners.delete(fn);
+  };
 }
 
 /**
@@ -148,6 +169,44 @@ export function useReadAloud() {
       clearPollTimer();
     };
   }, [clearPollTimer]);
+
+  /* A reading that started on its own (no press) — mirror it the same way a pressed `start` does,
+     so the label flips to Stop and the poll loop notices when it ends. The just-finished answer is
+     always the live turn, so the key is always "live". */
+  useEffect(() => {
+    return subscribeAutoReadStarted((key) => {
+      seqRef.current += 1;
+      const seq = seqRef.current;
+      clearPollTimer();
+      setSpeakingKey(key);
+      setState("speaking");
+      pollOnce(seq);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clearPollTimer, pollOnce]);
+
+  /*
+   * Reopening the menu (or the whole panel) while a reading that started on its own is still going:
+   * there is no press and no auto-read notification to catch, so the only way to notice is asking
+   * the backend directly, once, right after mount. Guarded by the same mounted-ref and seq check as
+   * every other update here, so a `start`/`stop` that happens to land first wins instead of this
+   * stale read clobbering it.
+   */
+  useEffect(() => {
+    seqRef.current += 1;
+    const seq = seqRef.current;
+    callDeckyWithTimeout<[], VoiceReadAloudStatus>("get_voice_read_aloud_status", [])
+      .then((status) => {
+        if (!isMountedRef.current || seq !== seqRef.current) return;
+        if (status.state === "speaking") {
+          setSpeakingKey("live");
+          setState("speaking");
+          pollOnce(seq);
+        }
+      })
+      .catch(() => undefined);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return { speakingKey, state, start, stop };
 }
@@ -260,7 +319,11 @@ export function handleAskTerminalForReadAloud(status: BackgroundRequestStatus): 
     readableText,
   });
 
-  if (shouldRead) startReadAloudFireAndForget(readableText);
+  if (shouldRead) {
+    startReadAloudFireAndForget(readableText);
+    // The just-finished answer is always the live turn.
+    autoReadListeners.forEach((fn) => fn("live"));
+  }
 }
 
 /** Test-only reset. */

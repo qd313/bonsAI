@@ -2,7 +2,7 @@
   "hotspots": [
     {
       "path": "main.py",
-      "lines": 3290,
+      "lines": 3309,
       "role": "Decky RPC entrypoints and orchestration"
     },
     {
@@ -12,7 +12,7 @@
     },
     {
       "path": "src/index.tsx",
-      "lines": 1704,
+      "lines": 1710,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
@@ -32,7 +32,7 @@
     },
     {
       "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
-      "lines": 1437,
+      "lines": 1438,
       "role": ""
     },
     {
@@ -43,6 +43,11 @@
     {
       "path": "src/styles/sections/section-6.ts",
       "lines": 1345,
+      "role": ""
+    },
+    {
+      "path": "src/components/OllamaWhereAiRunsSection.tsx",
+      "lines": 1311,
       "role": ""
     },
     {
@@ -58,11 +63,6 @@
     {
       "path": "src/components/MainTabChatTranscript.tsx",
       "lines": 1222,
-      "role": ""
-    },
-    {
-      "path": "src/components/OllamaWhereAiRunsSection.tsx",
-      "lines": 1174,
       "role": ""
     },
     {
@@ -122,7 +122,7 @@
     },
     {
       "path": "src/hooks/usePluginSettings.ts",
-      "lines": 582,
+      "lines": 590,
       "role": ""
     },
     {
@@ -137,11 +137,16 @@
     },
     {
       "path": "py_modules/backend/services/settings_service.py",
-      "lines": 544,
+      "lines": 546,
       "role": "Load/save/merge settings.json"
     },
     {
       "path": "src/utils/buildAnswerBubbleElement.test.tsx",
+      "lines": 524,
+      "role": ""
+    },
+    {
+      "path": "src/utils/settingsContracts.test.ts",
       "lines": 524,
       "role": ""
     },
@@ -166,13 +171,8 @@
       "role": ""
     },
     {
-      "path": "src/utils/settingsContracts.test.ts",
-      "lines": 511,
-      "role": ""
-    },
-    {
       "path": "src/data/bonsaiSettingsNormalizers.ts",
-      "lines": 506,
+      "lines": 508,
       "role": ""
     },
     {

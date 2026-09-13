@@ -73,6 +73,7 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertFalse(sanitized["model_policy_non_foss_unlocked"])
         self.assertFalse(sanitized["model_allow_high_vram_fallbacks"])
         self.assertFalse(sanitized["ollama_local_on_deck"])
+        self.assertFalse(sanitized["ollama_local_autostart"])
         self.assertTrue(sanitized["strategy_spoiler_masking_enabled"])
         self.assertFalse(sanitized["strategy_spoiler_auto_reveal_after_consent"])
 
@@ -476,6 +477,31 @@ class SettingsServiceTests(unittest.TestCase):
         self.assertTrue(on["ollama_local_on_deck"])
         garbled = sanitize_settings(data={"ollama_local_on_deck": "yes"}, **base_kwargs)
         self.assertFalse(garbled["ollama_local_on_deck"])
+
+    def test_sanitize_ollama_local_autostart_default_off_explicit_true_enables(self):
+        """Omitted key defaults off (no startup entry); literal JSON ``true`` enables it."""
+        base_kwargs = dict(
+            default_latency_warning_seconds=15,
+            default_request_timeout_seconds=120,
+            min_latency_warning_seconds=5,
+            max_latency_warning_seconds=300,
+            min_request_timeout_seconds=10,
+            max_request_timeout_seconds=300,
+            valid_persistence_modes={"persist_all", "persist_search_only", "no_persist"},
+            default_persistence_mode="persist_all",
+            valid_ask_modes={"speed", "strategy", "expert"},
+            default_ask_mode="speed",
+        )
+        missing = sanitize_settings(data={}, **base_kwargs)
+        self.assertFalse(missing["ollama_local_autostart"])
+
+        explicit_false = sanitize_settings(data={"ollama_local_autostart": False}, **base_kwargs)
+        self.assertFalse(explicit_false["ollama_local_autostart"])
+
+        on = sanitize_settings(data={"ollama_local_autostart": True}, **base_kwargs)
+        self.assertTrue(on["ollama_local_autostart"])
+        garbled = sanitize_settings(data={"ollama_local_autostart": "yes"}, **base_kwargs)
+        self.assertFalse(garbled["ollama_local_autostart"])
 
     def test_load_settings_grandfathers_capabilities_when_block_missing(self):
         """Legacy settings files without a capabilities object get known scopes enabled except Steam Web API."""

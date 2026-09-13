@@ -24,6 +24,8 @@ export function useOllamaTabPayload({
   onOllamaIpChange,
   ollamaLocalOnDeck,
   setOllamaLocalOnDeck,
+  ollamaLocalAutostart,
+  setOllamaLocalAutostart,
   onLastConnectionStatus,
   lastConnectionStatus,
   namedOllamaHosts,
@@ -62,6 +64,8 @@ export function useOllamaTabPayload({
         onPersistOllamaIp={saveIp}
         ollamaLocalOnDeck={ollamaLocalOnDeck}
         setOllamaLocalOnDeck={setOllamaLocalOnDeck}
+        ollamaLocalAutostart={ollamaLocalAutostart}
+        setOllamaLocalAutostart={setOllamaLocalAutostart}
         onLastConnectionStatus={onLastConnectionStatus}
         lastConnectionStatus={lastConnectionStatus}
         namedOllamaHosts={namedOllamaHosts}
@@ -93,6 +97,7 @@ export function useOllamaTabPayload({
       ollamaIp,
       effectiveOllamaPcIp,
       ollamaLocalOnDeck,
+      ollamaLocalAutostart,
       ollamaTabResetKey,
       lastConnectionStatus,
       namedOllamaHosts,

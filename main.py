@@ -148,6 +148,10 @@ from backend.services.local_ollama_setup_service import (
     run_local_setup,
     run_ollama_rm_async,
 )
+from backend.services.ollama_local_autostart_service import (
+    apply_ollama_local_autostart as apply_ollama_local_autostart_entry,
+    get_ollama_local_autostart_status as get_ollama_local_autostart_status_report,
+)
 from backend.services.ollama_mdns_discovery_service import (
     discover_mdns_ollama_hosts as run_mdns_ollama_discovery,
 )
@@ -1571,6 +1575,21 @@ class Plugin:
         if isinstance(ce, asyncio.Event):
             ce.set()
         return {"cancel_requested": True}
+
+    async def apply_ollama_local_autostart(self, enabled: bool = False) -> dict:
+        """RPC: turn the Deck's per-user Ollama startup entry on or off.
+
+        Backs the Ollama tab's "Start the AI with the Deck" toggle. Writing the
+        unit file and shelling out to ``systemctl`` are blocking, so this runs off
+        the event loop; see ``ollama_local_autostart_service`` for the rules
+        (never sudo, never a system-wide unit, never touches an already-running
+        Ollama in either direction).
+        """
+        return await asyncio.to_thread(apply_ollama_local_autostart_entry, bool(enabled))
+
+    async def get_ollama_local_autostart_status(self) -> dict:
+        """RPC: installed/enabled/running plus a plain reason, for the autostart row."""
+        return await asyncio.to_thread(get_ollama_local_autostart_status_report)
 
     # --- Knowledge base (RAG corpus) RPC ---
 

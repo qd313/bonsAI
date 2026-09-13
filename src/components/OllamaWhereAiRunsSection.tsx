@@ -94,12 +94,23 @@ type LocalOllamaSetupStatus = {
   done?: boolean;
 };
 
+/** Mirrors `get_ollama_local_autostart_status` (main.py) — the Deck startup entry's real state. */
+type OllamaLocalAutostartStatus = {
+  installed?: boolean;
+  enabled?: boolean;
+  running?: boolean;
+  reason?: string;
+};
+
 export type OllamaWhereAiRunsSectionProps = {
   ollamaIp: string;
   onOllamaIpChange: (ip: string) => void;
   onPersistOllamaIp: (ip: string) => void;
   ollamaLocalOnDeck: boolean;
   setOllamaLocalOnDeck: (v: boolean) => void;
+  /** "Start the AI with the Deck" — a per-user Deck startup entry for local Ollama, off by default (2026-09-12). */
+  ollamaLocalAutostart: boolean;
+  setOllamaLocalAutostart: (v: boolean) => void;
   onLastConnectionStatus?: (status: DeveloperConnectionStatus | null) => void;
   namedOllamaHosts: NamedOllamaHost[];
   setNamedOllamaHosts: React.Dispatch<React.SetStateAction<NamedOllamaHost[]>>;
@@ -122,6 +133,8 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   onPersistOllamaIp,
   ollamaLocalOnDeck,
   setOllamaLocalOnDeck,
+  ollamaLocalAutostart,
+  setOllamaLocalAutostart,
   onLastConnectionStatus,
   namedOllamaHosts,
   setNamedOllamaHosts,
@@ -154,9 +167,12 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
   const autoProbeRanRef = useRef(
     peekOllamaTabLocalPending()?.connectionStatus != null
   );
+  const [autostartStatus, setAutostartStatus] = useState<OllamaLocalAutostartStatus | null>(null);
+  const [autostartBusy, setAutostartBusy] = useState(false);
 
   const ollamaIpConnectionNavRef = useRef<HTMLDivElement>(null);
   const ollamaLocalToggleNavRef = useRef<HTMLDivElement>(null);
+  const ollamaAutostartToggleNavRef = useRef<HTMLDivElement>(null);
   const installUpdateBtnRef = useRef<HTMLButtonElement | null>(null);
   const browseModelsBtnRef = useRef<HTMLButtonElement | null>(null);
   const installOptionsBtnRef = useRef<HTMLButtonElement | null>(null);
@@ -165,6 +181,15 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
 
   const focusLocalToggle = useCallback((): boolean => {
     const host = ollamaLocalToggleNavRef.current;
+    const target = host?.querySelector<HTMLElement>("[tabindex], button, input");
+    if (!target) return false;
+    target.focus();
+    return true;
+  }, []);
+
+  const focusAutostartToggle = useCallback((): boolean => {
+    const host = ollamaAutostartToggleNavRef.current;
+    // focus-patterns-allow: element-scoped query on this component's own wrapper ref, same sanctioned pattern as focusLocalToggle two blocks above.
     const target = host?.querySelector<HTMLElement>("[tabindex], button, input");
     if (!target) return false;
     target.focus();
@@ -201,20 +226,33 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     return Boolean(connectionTestBtnRef?.current);
   }, [connectionTestBtnRef]);
 
-  /** Local Deck setup vertical chain: toggle → Install/Update → Browse → Install options → Test. */
+  /**
+   * Local Deck setup vertical chain: toggle → Start-at-boot toggle → Install/Update → Browse →
+   * Install options → Test. The startup-entry toggle sits right under "Run AI on this Deck" in
+   * both branches (local install UI shown or not), so both the "on" install-menu fallback and the
+   * "off" plain fallback land on it rather than back on the first toggle.
+   */
   const handleMoveUpFromConnection = useCallback((): boolean => {
     if (ollamaLocalOnDeck) {
       if (localInstallMenuOpen && focusTier2Btn()) return true;
       if (focusInstallOptionsBtn()) return true;
     }
-    return tryMoveUpWithPanelScroll(ollamaIpConnectionNavRef.current, focusLocalToggle);
-  }, [focusInstallOptionsBtn, focusLocalToggle, focusTier2Btn, localInstallMenuOpen, ollamaLocalOnDeck]);
+    return tryMoveUpWithPanelScroll(ollamaIpConnectionNavRef.current, focusAutostartToggle);
+  }, [focusAutostartToggle, focusInstallOptionsBtn, focusTier2Btn, localInstallMenuOpen, ollamaLocalOnDeck]);
 
   const handleMoveUpFromLocalToggle = useCallback((): boolean => {
     return tryMoveUpWithPanelScroll(ollamaLocalToggleNavRef.current);
   }, []);
 
   const handleMoveDownFromLocalToggle = useCallback((): boolean => {
+    return focusAutostartToggle();
+  }, [focusAutostartToggle]);
+
+  const handleMoveUpFromAutostartToggle = useCallback((): boolean => {
+    return focusLocalToggle();
+  }, [focusLocalToggle]);
+
+  const handleMoveDownFromAutostartToggle = useCallback((): boolean => {
     if (ollamaLocalOnDeck && focusInstallUpdateBtn()) return true;
     return focusConnectionTestBtn();
   }, [focusConnectionTestBtn, focusInstallUpdateBtn, ollamaLocalOnDeck]);
@@ -593,6 +631,56 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
     }
   }, [ollamaLocalOnDeck, localSetupStatus]);
 
+  const refreshAutostartStatus = useCallback(() => {
+    callDeckyWithTimeout<[], OllamaLocalAutostartStatus>(
+      "get_ollama_local_autostart_status",
+      [],
+      DECKY_RPC_TIMEOUT_MS
+    )
+      .then(setAutostartStatus)
+      .catch(() => {
+        // Best-effort: the toggle itself still reflects the saved setting either way.
+      });
+  }, []);
+
+  // Mount-once: shows the real state (installed/enabled/running) under the toggle without
+  // waiting for the person to flip it first.
+  useEffect(() => {
+    refreshAutostartStatus();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional one-shot on section mount
+  }, []);
+
+  const handleToggleAutostart = useCallback(
+    (next: boolean) => {
+      setOllamaLocalAutostart(next);
+      setAutostartBusy(true);
+      callDeckyWithTimeout<[boolean], { ok?: boolean; changed?: boolean; message?: string; reason?: string }>(
+        "apply_ollama_local_autostart",
+        [next],
+        DECKY_RPC_TIMEOUT_MS
+      )
+        .then((out) => {
+          toaster.toast({
+            title: next ? "Start the AI with the Deck" : "Startup entry turned off",
+            body: out?.message ?? out?.reason ?? "Done.",
+            duration: 5000,
+          });
+        })
+        .catch((e: unknown) => {
+          toaster.toast({
+            title: "Could not change the startup entry",
+            body: formatDeckyRpcError(e),
+            duration: 6000,
+          });
+        })
+        .finally(() => {
+          setAutostartBusy(false);
+          refreshAutostartStatus();
+        });
+    },
+    [refreshAutostartStatus, setOllamaLocalAutostart]
+  );
+
   return (
       <PanelSection title="Where AI runs">
         <PanelSectionRow>
@@ -622,6 +710,55 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
             >
               Off: use a PC on your home network. On: AI runs on this device.
             </div>
+          </div>
+        </PanelSectionRow>
+        <PanelSectionRow>
+          <div
+            ref={ollamaAutostartToggleNavRef}
+            className="bonsai-settings-bleed"
+            style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}
+          >
+            <ToggleField
+              label="Start the AI with the Deck"
+              checked={ollamaLocalAutostart}
+              disabled={autostartBusy}
+              onChange={(c) => handleToggleAutostart(c)}
+              {...({
+                onMoveUp: () => handleMoveUpFromAutostartToggle(),
+                onMoveDown: () => handleMoveDownFromAutostartToggle(),
+              } as unknown as Record<string, unknown>)}
+            />
+            <div
+              className="bonsai-prose"
+              style={{
+                fontSize: 10,
+                color: "#9fb7d5",
+                lineHeight: 1.35,
+                marginTop: 4,
+                userSelect: "none",
+              }}
+            >
+              Starts the local AI when the Deck starts, and lets it keep the answering part and
+              the note-searching part in memory at once — so questions come back about seven
+              tenths of a second sooner.
+            </div>
+            {autostartStatus?.reason ? (
+              <div
+                className="bonsai-prose"
+                style={{ fontSize: 10, color: "#8fa0b4", lineHeight: 1.35, marginTop: 4, userSelect: "none" }}
+                aria-live="polite"
+              >
+                {autostartStatus.reason}
+              </div>
+            ) : autostartStatus?.installed ? (
+              <div
+                className="bonsai-prose"
+                style={{ fontSize: 10, color: "#8fa0b4", lineHeight: 1.35, marginTop: 4, userSelect: "none" }}
+                aria-live="polite"
+              >
+                Set up and answering questions.
+              </div>
+            ) : null}
           </div>
         </PanelSectionRow>
         {ollamaLocalOnDeck ? (
@@ -658,7 +795,7 @@ export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> =
                   disabled={localSetupBusy}
                   onClick={() => openLocalSetupConfirm(LOCAL_OLLAMA_SETUP_PROFILE_UPDATE_INSTALLED)}
                   {...({
-                    onMoveUp: () => focusLocalToggle(),
+                    onMoveUp: () => focusAutostartToggle(),
                     onMoveDown: () => focusBrowseModelsBtn(),
                   } as unknown as Record<string, unknown>)}
                   style={{

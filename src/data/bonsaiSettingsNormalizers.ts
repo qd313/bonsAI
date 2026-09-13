@@ -424,6 +424,8 @@ const SIMPLE_FIELDS = {
   ollama_keep_alive: normalizeOllamaKeepAlive,
   // `undefined`/`null` mean "never saved", which is off — same as any other non-`true`.
   ollama_local_on_deck: boolDefaultFalse,
+  // Off unless the person turns it on — it changes how the Deck starts.
+  ollama_local_autostart: boolDefaultFalse,
   model_allow_high_vram_fallbacks: boolDefaultFalse,
   // Presentation, defaulting on: only an explicit `false` turns these off.
   strategy_spoiler_masking_enabled: boolDefaultTrue,

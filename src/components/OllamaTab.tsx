@@ -35,6 +35,8 @@ export type OllamaTabProps = {
   onPersistOllamaIp: (ip: string) => void;
   ollamaLocalOnDeck: boolean;
   setOllamaLocalOnDeck: (v: boolean) => void;
+  ollamaLocalAutostart: boolean;
+  setOllamaLocalAutostart: (v: boolean) => void;
   onLastConnectionStatus?: (status: DeveloperConnectionStatus | null) => void;
   lastConnectionStatus?: DeveloperConnectionStatus | null;
   namedOllamaHosts: NamedOllamaHost[];
@@ -74,6 +76,8 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
   onPersistOllamaIp,
   ollamaLocalOnDeck,
   setOllamaLocalOnDeck,
+  ollamaLocalAutostart,
+  setOllamaLocalAutostart,
   onLastConnectionStatus,
   lastConnectionStatus,
   namedOllamaHosts,
@@ -197,6 +201,8 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
         onPersistOllamaIp={onPersistOllamaIp}
         ollamaLocalOnDeck={ollamaLocalOnDeck}
         setOllamaLocalOnDeck={setOllamaLocalOnDeck}
+        ollamaLocalAutostart={ollamaLocalAutostart}
+        setOllamaLocalAutostart={setOllamaLocalAutostart}
         onLastConnectionStatus={onLastConnectionStatus}
         namedOllamaHosts={namedOllamaHosts}
         setNamedOllamaHosts={setNamedOllamaHosts}

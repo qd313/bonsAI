@@ -27,6 +27,7 @@
   "model_policy_tier": "open_source_only",
   "named_ollama_hosts": [],
   "ollama_keep_alive": "5m",
+  "ollama_local_autostart": false,
   "ollama_local_on_deck": false,
   "preset_chip_animation": "fade",
   "preset_chip_fade_animation_enabled": true,

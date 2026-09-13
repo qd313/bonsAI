@@ -94,6 +94,7 @@ describe("settings contracts", () => {
     expect(settings.model_policy_non_foss_unlocked).toBe(false);
     expect(settings.model_allow_high_vram_fallbacks).toBe(false);
     expect(settings.ollama_local_on_deck).toBe(false);
+    expect(settings.ollama_local_autostart).toBe(false);
   });
 
   it("normalizes model_allow_high_vram_fallbacks: only explicit true enables", () => {
@@ -110,6 +111,15 @@ describe("settings contracts", () => {
     expect(normalizeSettings({ ollama_local_on_deck: false }).ollama_local_on_deck).toBe(false);
     expect(normalizeSettings({}).ollama_local_on_deck).toBe(false);
     expect(normalizeSettings({ ollama_local_on_deck: "yes" as unknown as boolean }).ollama_local_on_deck).toBe(false);
+  });
+
+  it("normalizes ollama_local_autostart: missing key defaults off; explicit true enables", () => {
+    expect(normalizeSettings({ ollama_local_autostart: true }).ollama_local_autostart).toBe(true);
+    expect(normalizeSettings({ ollama_local_autostart: false }).ollama_local_autostart).toBe(false);
+    expect(normalizeSettings({}).ollama_local_autostart).toBe(false);
+    expect(
+      normalizeSettings({ ollama_local_autostart: "yes" as unknown as boolean }).ollama_local_autostart
+    ).toBe(false);
   });
 
   it("downgrades non_foss tier without unlock to open_weight", () => {
@@ -274,6 +284,7 @@ describe("settings contracts", () => {
       modelPolicyNonFossUnlocked: false,
       modelAllowHighVramFallbacks: true,
       ollamaLocalOnDeck: true,
+      ollamaLocalAutostart: false,
       strategySpoilerMaskingEnabled: false,
       strategySpoilerAutoRevealAfterConsent: false,
       steamWebApiKey: "abc",
@@ -338,6 +349,7 @@ describe("settings contracts", () => {
       modelPolicyNonFossUnlocked: false,
       modelAllowHighVramFallbacks: false,
       ollamaLocalOnDeck: false,
+      ollamaLocalAutostart: false,
       strategySpoilerMaskingEnabled: DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED,
       strategySpoilerAutoRevealAfterConsent: false,
       steamWebApiKey: "",
@@ -482,6 +494,7 @@ describe("settings contracts", () => {
       modelPolicyNonFossUnlocked: normalized.model_policy_non_foss_unlocked,
       modelAllowHighVramFallbacks: normalized.model_allow_high_vram_fallbacks,
       ollamaLocalOnDeck: normalized.ollama_local_on_deck,
+      ollamaLocalAutostart: normalized.ollama_local_autostart,
       strategySpoilerMaskingEnabled: normalized.strategy_spoiler_masking_enabled,
       strategySpoilerAutoRevealAfterConsent: normalized.strategy_spoiler_auto_reveal_after_consent,
       steamWebApiKey: normalized.steam_web_api_key,

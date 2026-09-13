@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 380,
-  "edgeCount": 946,
+  "fileCount": 381,
+  "edgeCount": 948,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -616,6 +616,13 @@
         "src/components/OllamaTab.tsx"
       ]
     },
+    "src/components/OllamaWhereAiRunsSection.test.tsx": {
+      "imports": [
+        "src/components/OllamaWhereAiRunsSection.tsx",
+        "src/test-harness/fakeDeckyRpc.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/OllamaWhereAiRunsSection.tsx": {
       "imports": [
         "src/components/DeveloperTab.tsx",
@@ -629,7 +636,8 @@
         "src/utils/settingsPanelScroll.ts"
       ],
       "importedBy": [
-        "src/components/OllamaTab.tsx"
+        "src/components/OllamaTab.tsx",
+        "src/components/OllamaWhereAiRunsSection.test.tsx"
       ]
     },
     "src/components/PermissionDenyAction.test.tsx": {
@@ -2569,6 +2577,7 @@
         "src/components/MainTabPresetAnimatedChips.test.tsx",
         "src/components/MainTabPresetRow.askRestart.test.tsx",
         "src/components/MainTabPresetRow.test.tsx",
+        "src/components/OllamaWhereAiRunsSection.test.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/components/SettingsTab.mdns.test.ts",
         "src/components/VoiceInputSettingsSection.test.tsx",

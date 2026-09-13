@@ -5,6 +5,59 @@ pick up without rereading anything but this file.
 
 ---
 
+## 2026-09-13, phase 3 done: the deleting, and two tools that had to be fixed mid-job
+
+**Phase 3 landed in four commits. Nothing a person using the plugin can see has changed** — every
+line removed was one that nothing anywhere called. All 1,244 back-end tests still pass and every
+gate is green.
+
+What went, and what the numbers say:
+
+| | Before | After |
+|---|---|---|
+| Names the screen code offers that nobody wants | 126 | **21** |
+| Back-end code nothing calls | 18 | **2** (both held on purpose) |
+| Copy-pasted app code | 877 | **871** |
+
+Roughly 1,800 lines of code are gone. The biggest single piece was not stray mess: whisper used to
+be obtained by copying a ready-made file out of a container image, and that was replaced long ago by
+building it inside the image. The old way was still sitting there with nothing calling it. Removing
+it unrolled a chain of six things over four passes, each one only visible once the one above it went.
+
+**The most useful thing to know from this phase: my own measuring tool was wrong twice, and both
+times the fix mattered more than the deleting.**
+
+- **It never checked whether other files use a name before calling it file-local.** A name can
+  obviously be both used at home and imported elsewhere. Acting on that list stopped eight files
+  from being able to import what they import. The type checker caught it and the whole pass was
+  thrown away before anything was saved. The check now looks outward first, and it looks at the
+  tests and the preview harness too, not just app code.
+- **It counted a name written in a comment as a use.** One icon was kept alive by a note next to a
+  different icon saying "distinct from this one". Comments are now ignored when counting.
+- **It never searched the helper scripts.** A version marker was on the delete list and is imported
+  by the script that builds the knowledge base, which writes it into every knowledge base it makes.
+  Deleting it would have broken building. The whole-project sweep caught that, not the tool.
+
+**Two more things I broke and fixed in the same sitting**, both worth knowing because they will
+happen again to anyone using these tools:
+
+- Removing a file's first import took the file's own description with it, because the tool that
+  edits code counts a comment as belonging to whatever is below it. One file lost its description
+  before the count of missing ones caught it.
+- The same rule bit on the back-end side, and worse: deleting a constant took away a hard-won note
+  saying **"do not float on the main tag — upstream churn caused a crash on the Deck"**. That note
+  was about the line above it, not the line below. Restored. The tool now shouts about every comment
+  line it is about to take, whether or not you asked for a preview.
+
+**Held on purpose and not touched:** the older way of asking the AI, the answer checker, and all
+four unused packages.
+
+**Owed: a check on the Deck.** The plan asks for a short walk through the plugin and one real
+question at the end of this phase. Nothing here should be visible, which is exactly why it is worth
+five minutes on the device. Nothing else in phase 3 is outstanding.
+
+---
+
 ## 2026-09-13, after phase 2: the red builds fixed, the three measures corrected
 
 **Every push had been failing since 2026-09-07 and it was not the plugin.** The maintainer was

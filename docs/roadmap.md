@@ -470,6 +470,15 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 [testing.md](testing.md) / [testing-manual.md](testing-manual.md). Once a Deck run confirms one, move it in the same commit: a line into
 [Done](#done-for-v050), the full entry into the matching archive file, drop it from here.
 
+### The clean-up's deleting round
+- ★ `[refactor]` **Check the plugin still behaves after about 1,800 lines were deleted** — **OPEN, owed since
+  2026-09-13.** The clean-up's deleting round removed 126 names the screen code offered that nobody wanted (down to 21),
+  everything in the back end that nothing called, and a whole superseded way of getting the voice engine onto the Deck.
+  Every automatic check passes and none of it should be visible. That is exactly why it wants five minutes on the device:
+  a short walk through the plugin and one real question asked and answered. If anything is wrong it will be something that
+  was reached by name at runtime, which no automatic check can see. Four commits, one per group, so a fault can be traced
+  to which group caused it. [Detail](audit/refactor-round-two/session-notes.md).
+
 ### Checks whose evidence never existed
 - ★★ `[QA]` **Twelve checks read as proven with nothing behind them** — **VERIFY, found 2026-09-13 during the
   clean-up.** Twelve checks name a saved Deck recording as their proof. None of those recordings exists, and the project's whole

@@ -32,7 +32,7 @@
   },
   "duplicate_lines_app": {
     "label": "Copy-pasted lines, app code",
-    "best": 877,
+    "best": 871,
     "target": 350,
     "start_2026_09_09": 717,
     "direction": "lower_is_better",
@@ -50,7 +50,7 @@
   },
   "unused_exports_fe": {
     "label": "Unused exports, front end",
-    "best": 126,
+    "best": 21,
     "target": 0,
     "start_2026_09_09": null,
     "direction": "lower_is_better",

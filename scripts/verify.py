@@ -311,7 +311,10 @@ def run(mode: str) -> tuple[list[StepResult], float]:
     steps: list[StepResult] = []
     steps.append(step_typecheck())
     steps.append(step_vitest_related(ts_changed))
-    steps.append(step_python_tests(py_changed, script="scripts/run_python_tests.py", label="python_tests"))
+    if mode != "full":
+        # Full mode runs the whole Python suite below as `npm run test:py`. Running it here
+        # as well costs another 30 seconds and can only give the same answer.
+        steps.append(step_python_tests(py_changed, script="scripts/run_python_tests.py", label="python_tests"))
     steps.append(step_optional_script("scripts/check_headers.py", ["--json"], "check_headers"))
     steps.append(step_optional_script("scripts/ratchet.py", ["check", "--json"], "ratchet"))
 

@@ -30,7 +30,11 @@ bower_components
 
 # Agent / IDE local instruction files (not part of the plugin bundle)
 AGENTS.md
-.claude/
+.claude/*
+!.claude/hooks/
+.claude/hooks/*
+!.claude/hooks/*.py
+!.claude/settings.json
 .cursorrules
 
 # Session-only SSH helper — prints deck_pass from .env; never commit

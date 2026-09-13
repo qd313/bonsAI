@@ -68,13 +68,13 @@ hook gives a gentle heads-up when a session starts work outside this.
   highlight still lands on it. It is not one button — it is how greyed buttons behave here, so it now also applies to the
   Helpful and Not really buttons that were greyed on a stopped reply the same day. The greyed *Clear frozen test chips*
   button had the same problem and was fixed by removing it; that is not open here, because the maintainer asked for greyed
-  rather than gone. So the fix is to step over them with the D-pad instead. Evidence `runs/round35-CHECK-stop-press.json`.
+  rather than gone. So the fix is to step over them with the D-pad instead. Evidence `docs/test-evidence/round35-CHECK-stop-press.json`.
 - ★ `[focus]` **Left on the collapsed-history row throws the highlight out of the plugin** — **OPEN, found 2026-09-05,
   confirmed twice.** With the highlight on the *N earlier* row above a chat, Left hands it to Steam's Quick Access rail and
   the person is out of bonsAI entirely. Right brings it back, but nothing says so. Same shape as the Ollama sliders fixed on
   2026-09-04: the row does not claim the press, so Steam's own idea of "past the edge" fires. Left should either walk the
-  history or hold still. Evidence `runs/round35-BUG-left-from-earlier-pill-leaves-plugin.json`,
-  `runs/round35-BUG-left-from-earlier-pill-retry.json`.
+  history or hold still. Evidence `docs/test-evidence/round35-BUG-left-from-earlier-pill-leaves-plugin.json`,
+  `docs/test-evidence/round35-BUG-left-from-earlier-pill-retry.json`.
 - ★ `[focus]` **Pressing Ask drops the highlight** — **OPEN, found 2026-09-05, widened the same day.** Filed first as an
   empty-box problem; it is not. **Every** press of the Ask button leaves nothing highlighted — with a real question and with an
   empty box alike, measured four times. The page's own focus falls back to the document body, so the next press has to place the
@@ -85,13 +85,13 @@ hook gives a gentle heads-up when a session starts work outside this.
   Red Dead ending reply with a real hidden block on screen: **Down left it normally**, straight onto the branch picker's first
   button, and every stop on the walk was fully visible. So the hidden state does not trap on its own. Most likely the same
   underlying fault as the stuck panel below — both are a hop that dies only sometimes — and best closed with it rather than
-  chased separately. Evidence `runs/round35-spoiler-block-down-and-up.json`.
+  chased separately. Evidence `docs/test-evidence/round35-spoiler-block-down-and-up.json`.
 - ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **OPEN, found 2026-09-05.** On one reply,
   Down went question, hidden spoiler block, branch A, branch B, Helpful — never stopping on either paragraph of the answer. Up
   from Helpful went both paragraphs, then the question — never stopping on the spoiler block or the branch buttons. So a person
   who walks past something and presses Up to go back does not return to it; they land somewhere they never visited. Related to the
   two-star entry about Up skipping sections, but sharper: the two directions disagree about what the reply's stops are.
-  Evidence `runs/round35-spoiler-block-down-and-up.json`.
+  Evidence `docs/test-evidence/round35-spoiler-block-down-and-up.json`.
 > - ★ `[platform]` `[shelved]` **In-IDE preview never gets past its loading screen** *— **OPEN, shelved 2026-09-11
 >   (D93): not a gate for anything.** On the maintainer's machine the preview stops on its loading screen and never
 >   moves past it; its command channel takes commands but never answers, and it produced no screenshot. Sorted with
@@ -106,7 +106,7 @@ hook gives a gentle heads-up when a session starts work outside this.
   highlighted when the panel opens), so the fix is to place the ring on mount rather than to move it off a bad element.
   **Measured again 2026-09-05 on a fresh open, and it is worse than written:** nothing owned the highlight, and the first Down put
   it on **Decky's own back arrow at the top of the panel, outside bonsAI entirely**. So opening the plugin costs two presses before
-  a person is anywhere useful, and the first one moves them away from the chat. Evidence `runs/round35-trap-attempt-1-after-b-reopen.json`.
+  a person is anywhere useful, and the first one moves them away from the chat. Evidence `docs/test-evidence/round35-trap-attempt-1-after-b-reopen.json`.
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a
   blanket rule was tried and reverted in favour of Steam's native outline.
 - ★★ `[focus]` **Up skips the answer sections and the chat slot row** — **OPEN, found 2026-09-04.** Down walks a reply chunk by
@@ -129,7 +129,7 @@ hook gives a gentle heads-up when a session starts work outside this.
   rather than inferred. The seven tests that shipped with the fix all pass; every one of them tests the shape the
   plugin does not ask for. **Two ways out:** stop asking for a code box and ask for a plain line, or teach the
   cleanup to remove a code box whose entire contents are the power block and nothing else — the second is safer,
-  because a real code example is never exactly that one thing. Evidence `runs/plan47-R6-stray-computer-text.json`.
+  because a real code example is never exactly that one thing. Evidence `docs/test-evidence/plan47-R6-stray-computer-text.json`.
   (D85)
 - ★★ `[reply]` **Token streaming reveals text in bursts while a game is running** — **ACCEPTED 2026-09-04 (D58 #4).** Measured 2026-08-28 with
   a game running: tokens arrive in bursts, and during a burst the overlay drops to 47 fps; between bursts it is a flat 60. Delivery
@@ -146,7 +146,7 @@ hook gives a gentle heads-up when a session starts work outside this.
   reads fine when the answer ends in ordinary text, because the bubble behind it is one flat surface. A code box
   has its own background, so the icon lands on that box's painted corner instead. Room is already reserved for the
   icon at the end of the last line, but that does not move the box's edge. Evidence
-  `runs/plan48-deck-evening-2026-09-12.json`, `screenshots/DeckCapture_20260912_183855_game.png`.
+  `docs/test-evidence/plan48-deck-evening-2026-09-12.json`, `screenshots/DeckCapture_20260912_183855_game.png`.
 - ★★★ `[focus]` **The panel can get into a state where pressing Down stops half way and the Ask button is out of reach** —
   **OPEN, found 2026-09-05.** After leaving the panel with B and opening it again from the Decky list, Down walked as far as the
   answer and then stopped dead: ten presses, no movement, Left and Right dead too, only Up escaping. The answer's own buttons, the
@@ -159,17 +159,17 @@ hook gives a gentle heads-up when a session starts work outside this.
   panel reopen does not clear**, not a permanently trapping control. At the moment of the trap Steam's ring and the page's own
   focus were on different elements every time (the answer bubble versus a highlighted word; the question box versus the Ask
   button), which is the signature to chase. How a person gets into the state is not yet pinned down — it followed a game launch
-  and several panel reopens. Evidence, in order: `runs/round34-BUG-down-cannot-reach-ask-bar.json` (trapped, 10 presses),
-  `runs/round34-BUG-down-walk-strategy-mode-control.json` (trapped, other mode), `runs/round34-BUG-empty-chat-input-trap.json`
-  (trapped, empty chat), `runs/round34-BUG-down-walk-after-loader-restart.json` and
-  `runs/round34-BUG-input-to-ask-final-check.json` (clean after the restart).
+  and several panel reopens. Evidence, in order: `docs/test-evidence/round34-BUG-down-cannot-reach-ask-bar.json` (trapped, 10 presses),
+  `docs/test-evidence/round34-BUG-down-walk-strategy-mode-control.json` (trapped, other mode), `docs/test-evidence/round34-BUG-empty-chat-input-trap.json`
+  (trapped, empty chat), `docs/test-evidence/round34-BUG-down-walk-after-loader-restart.json` and
+  `docs/test-evidence/round34-BUG-input-to-ask-final-check.json` (clean after the restart).
   **2026-09-05, three deliberate attempts, not reproduced:** leaving with B and reopening from the Decky list; a button-then-cancel
   around the question box; and switching through all six tabs and back six times before walking the panel top to bottom. Every walk
   reached the Ask button. **A mechanism was found by reading instead.** The table that hands the highlight between the panel's parts
   lives outside the panel and is keyed by fixed names, not by which copy of the panel is on screen; it is only emptied when the
   plugin's code loads fresh. A stale entry therefore survives a panel reopen, and the handler that asks it to move the highlight
   gets back something that still looks alive, reports the press as handled, and moves nothing. That matches every symptom on record,
-  including why only a loader restart clears it. Evidence `runs/round35-trap-*.json`,
+  including why only a loader restart clears it. Evidence `docs/test-evidence/round35-trap-*.json`,
   [plan 35](planning/35-bugfix-session.md) § 7.
   **A fix for that mechanism landed 2026-09-05** — a departing part of the panel can no longer unregister the one on
   screen — but **the entry stays here, not in Verify**, because the fault never reproduced on demand, so nothing proved
@@ -609,7 +609,7 @@ note and nothing else. 293 notes, 156 tips, 25 games, unchanged. Published to bo
 maintainer's approval, installed on the Deck from the plugin's own *Update knowledge base* button, and checked by
 asking about the flooded rooms: the reply now says the current is constant, says not to try to time it, and points
 at the wall switch that cuts the power. The old advice to wait for a gap is gone. Evidence
-`runs/plan48-R5-blackmesa-corrected-note.json`.
+`docs/test-evidence/plan48-R5-blackmesa-corrected-note.json`.
 
 ### Calls waiting on you
 
@@ -668,7 +668,7 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   [Detail](roadmap-details.md#a-troubleshooting-question-that-only-describes-the-symptom-reaches-no-tips).
   **One more wrong tip, found on the device 2026-09-07 (R4):** on the routing already shipped, *"when I plug it into
   the television the menus show up in the wrong spot on the screen and are hard to read"* comes back with a tip about
-  Big Picture Mode versus Desktop Mode, which does not answer it. Evidence `runs/plan47-R4-problems-reach-tips.json`.
+  Big Picture Mode versus Desktop Mode, which does not answer it. Evidence `docs/test-evidence/plan47-R4-problems-reach-tips.json`.
 - ★★ `[KB]` **The panel keeps naming a game after you have closed it** — **FIXED 2026-09-07, VERIFY on the Deck
   (W2-R6).** After exiting a game the line under the question box still named it, so a question that does not name its
   own game could pick up the wrong game's notes. **The cause written into this entry yesterday was wrong**, which is
@@ -684,8 +684,8 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   an answer that then takes tens of seconds to write out is not something a person would notice. **The one-second
   target this was measured against is retired.** The related finding still stands: the idea that only the first
   question after a quiet spell is slow holds on a PC, where a repeat came back in 0.05 seconds, but not on the Deck,
-  where the third question here was no faster than the first. (D84) Evidence `runs/round34-drg-q*.json`,
-  `runs/plan46-R2-strategy-half.json`.
+  where the third question here was no faster than the first. (D84) Evidence `docs/test-evidence/round34-drg-q*.json`,
+  `docs/test-evidence/plan46-R2-strategy-half.json`.
 - ★★★★ `[KB]` **What ships loses to its own meaning half on questions nobody tuned against** — **ACCEPTED, decided
   2026-09-06.** The weight sweep ran: leaning the search toward meaning gets the right note first about four to six
   points more often, but it also buries a brand-new note whose meaning index has not been built yet, which the current
@@ -699,12 +699,12 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   right note, then the menu underneath asked *"Where are you at in Half-Life 2?"* and offered the train station and
   Ravenholm. Both times it named the same game, so it is not picking a random wrong one. Both chats carried about
   twenty earlier turns, which is the strongest remaining suspect and the reason a fresh-chat run is now owed.
-  Evidence `runs/plan48-deck-evening-2026-09-12.json`, `runs/plan48-R5-blackmesa-corrected-note.json`.
+  Evidence `docs/test-evidence/plan48-deck-evening-2026-09-12.json`, `docs/test-evidence/plan48-R5-blackmesa-corrected-note.json`.
 - ★★ `[KB]` **A pinned test batch is not badged** — **OPEN, seen again 2026-09-12.** Chips pinned for testing are
   supposed to carry an amber Test badge, so it is obvious the carousel is showing a fixed set rather than what the
   plugin would have picked. Three chips pinned this evening and no badge appeared anywhere on screen. Everything
   else about them works: they replace the carousel, and pressing A fills the Ask field word for word without
-  sending. Evidence `runs/plan48-deck-evening-2026-09-12.json`, `runs/plan47-frozen-chip-findings.json`.
+  sending. Evidence `docs/test-evidence/plan48-deck-evening-2026-09-12.json`, `docs/test-evidence/plan47-frozen-chip-findings.json`.
 - ★★★ `[KB]` **The panel only learns which game is running when it starts, and never again** — **OPEN, cause
   found 2026-09-07.** Two failures, one cause. **It keeps naming a game that has closed:** Hades was exited with
   the panel open and the line still named it straight afterwards, 31 seconds later, about four minutes later, and
@@ -713,15 +713,15 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   seconds and through a close and reopen of the Quick Access Menu, while Steam's own list of running apps had the
   game the whole time. Restarting the plugin made the line correct at once, both times and in both directions —
   which is what says the panel reads this once at start-up and never listens for a change. Reopening the menu is
-  not enough; only a restart is. Evidence `runs/plan47-R6-bug-fixes.json`,
-  `runs/plan47-R6-stray-computer-text.json`.
+  not enough; only a restart is. Evidence `docs/test-evidence/plan47-R6-bug-fixes.json`,
+  `docs/test-evidence/plan47-R6-stray-computer-text.json`.
 - ★★★ `[KB]` **The "not in my notes" line never appears** — **CLOSED 2026-09-07 (D88). A second line was added, and
   you chose its wording.** The line was built to tell someone an answer came from
   the model's own memory rather than their notes, but it only shows when the library covers the game and nothing in
   it matched — and the note search always finds something to attach, so the line never shows. Ten questions about
   games the library covers, including "how do i tame a horse" in Black Mesa and a nonsense question in Hades, all
   attached a note anyway. On the device, asking about a boss that does not exist in Hades got a confident answer
-  about weapons, and no line. Evidence `runs/plan47-R5-not-in-notes.json`, `runs/plan47-probe-notinnotes.json`.
+  about weapons, and no line. Evidence `docs/test-evidence/plan47-R5-not-in-notes.json`, `docs/test-evidence/plan47-probe-notinnotes.json`.
   **Wave three put a floor under both searches**, which made the line fire more often but could not reach the four
   questions that caused it — catching those by raising the floor would have thrown away twenty or more answers that
   are right today.
@@ -734,18 +734,18 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   *"how to have a baby"* with one about raising a skill. Nothing is taken away from anyone — the note still reaches
   the model, the answer still comes, and a sentence is added. The one miss is *"where do i buy a house"* in
   Portal 2, where the keyword search really did rank a card, so it is not the meaning-only case. Measured by
-  `scripts/measure_kb_thin_match.py`, evidence `runs/plan48-thin-match.json`. **The wording is settled**, chosen by you on 2026-09-07: *"No close match in my notes, this answer leans on the model's own knowledge."*
+  `scripts/measure_kb_thin_match.py`, evidence `docs/test-evidence/plan48-thin-match.json`. **The wording is settled**, chosen by you on 2026-09-07: *"No close match in my notes, this answer leans on the model's own knowledge."*
   The comma rather than a dash is deliberate, and is noted in the code so nobody tidies it away.
 - ★ `[KB]` **A Hades boss's note is spelled wrong, so spelling it right gets you told the plugin is guessing** —
   **OPEN, found 2026-09-12.** The note is titled *Megara*; the boss is *Megaera*. Type it correctly and the note
   still attaches, but the reply now carries the "no close match in my notes" line — so a person is told the plugin
   is guessing when it is not. One title and a library rebuild. Wave two's own test sentences were written around
-  the misspelling. Evidence `runs/plan48-deck-batch-verification.json`.
+  the misspelling. Evidence `docs/test-evidence/plan48-deck-batch-verification.json`.
 - ★★ `[KB]` **Neither honesty line can appear when the game is only named in the question** — **OPEN, found
   2026-09-12.** Both lines only run when a game is actually running or picked from the menu. Ask *"black mesa how
   do i tame a horse"* with nothing running and a wrong note attaches with no line at all, because the coverage
   check is never told about a game the question named. The one case where a person is most likely leaning on the
-  model's memory is the one where they are never told. Evidence `runs/plan48-deck-batch-verification.json`.
+  model's memory is the one where they are never told. Evidence `docs/test-evidence/plan48-deck-batch-verification.json`.
 - ★★ `[KB]` **The "No tip for this" line has no question that can make it appear** — **OPEN, measured off the
   device 2026-09-12.** Against the library that ships, on every sentence anyone has tried: the five hardest problem
   sentences still get a tip in every mode, meaning search on or off; the twelve junk phrases attach nothing, which
@@ -770,7 +770,7 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   Portal 2 one came back clean: the note's advice starts straight after the character's opening line, 111 words, no
   warning line. Whether that reads as advice-first is your judgement, which is what this row is for. The Hades and
   Black Mesa sentences **are pinned on the Deck now** — press A on each and read them. The Hades one needs Hades
-  running. Row **KB-ANSWER-03**; evidence `runs/plan48-deck-evening-2026-09-12.json`.
+  running. Row **KB-ANSWER-03**; evidence `docs/test-evidence/plan48-deck-evening-2026-09-12.json`.
 - ★★★ `[KB]` **A follow-up now answers about the boss you meant, two times in three** — **SHIPPED and checked on
   the Deck 2026-09-12.** Ask about a boss, then *"what about its second phase"*. It used to answer about a different
   boss **every time**. Three pairs on the device: right, right, then the old failure. That matches what was measured

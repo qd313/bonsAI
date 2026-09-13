@@ -293,7 +293,7 @@ All of these are **Verified on device** in testing.md. They were still sitting i
 was outstanding that had in fact been signed off. Kept in full for the reasoning.
 
 - ★ **You cannot ask for "the boss"** — a card's type was not searchable, so *"how do i beat the boss"* found nothing on a game whose boss card was right there. Fixed 2026-08-19 by pulling that game's cards of the named kind into the pool, only when the keyword half found none of that kind. **KB-TYPE-01** owed on device. The reversible option was taken over a schema change; [why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way) has the trade-off and a standing maintainer question.
-- ★★ **D-pad reaches the spoiler reveal, and A opens it** — fixed 2026-08-27, already confirmed on device **by script** (`runs/SPOILER-REVEAL-AFTER-onmove-fix.json`: ask → header → the fence takes the ring; A reveals it, masked 1→0). **SPOILER-DPAD-01** — by-hand residue only: B over a masked fence must not reveal; expect one absorbed Down press on the fence before the walk moves on (offered-once diversion, cosmetic). The *tap to hide* control is a separate open bug (it never takes the ring — see Bugs). Writeup: [archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md).
+- ★★ **D-pad reaches the spoiler reveal, and A opens it** — fixed 2026-08-27, already confirmed on device **by script** (`docs/test-evidence/SPOILER-REVEAL-AFTER-onmove-fix.json`: ask → header → the fence takes the ring; A reveals it, masked 1→0). **SPOILER-DPAD-01** — by-hand residue only: B over a masked fence must not reveal; expect one absorbed Down press on the fence before the walk moves on (offered-once diversion, cosmetic). The *tap to hide* control is a separate open bug (it never takes the ring — see Bugs). Writeup: [archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md).
 - ★★ **You cannot ask about a game unless it is running** — fixed 2026-08-19 (**D19**); **KB-NEWTITLE-01** owed on device. The question is matched against the alias table as a last resort, only when Steam supplies no AppID. [why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way)
 - ★★ **Compat retrieval returned a tip from the wrong topic** — fixed 2026-08-18 (**D22**); **KB-ROUTER-02** owed on device. The router worked the topic out and retrieval threw it away. The report's premise was half wrong and the fix changed as a result — [why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way)
 - ★★ **Session context counts the newest turn twice** — fixed 2026-08-27, **confirmed on-Deck the same day by the rig with real controller presses**; **SESSION-CONTEXT-DEDUPE-01 Verified.** After a completed Ask, `liveTurn` and the newest `askThreadCollapsed` entry were the same turn shown twice; the strip now drops the live row when its question matches the newest archived one — see [testing.md](testing.md). Writeup: [archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md).
@@ -530,7 +530,7 @@ Shipped features moved out of the roadmap in the 2026-09-02 cleanup, verbatim. S
   maintainer asks and proved them on hardware under **DRG-GLOSSARY-02**: full underline (skip-ink off, computed style read on device),
   tap → temporary plain-language popup (peek 4s / full 10s, unit-tested; the tap itself needs one manual finger check), and consistent
   D-pad reachability — the visited-once flag replaced with reading-order geometry, proven by a `deck_runSequence` that landed the ring on
-  the chip three passes running (`runs/DRG-GLOSSARY-02-dpad-consistency.json`). Two small D-pad warts found and filed above (B backs out
+  the chip three passes running (`docs/test-evidence/DRG-GLOSSARY-02-dpad-consistency.json`). Two small D-pad warts found and filed above (B backs out
   of the pane; from-below is Up-then-Down). Remaining: one touch tap, and the Explain-further auto-send on device.
   - Two curated terms, "kiting" and "overclock," both read undefined in the shipped DRG Survivor cards. A DRG Survivor reply that uses one renders it as a tappable inline chip; a floating tooltip (not inline-push) shows a short peek on focus alone, the full definition on A, and an **explain further** chip that auto-sends a new Ask turn. Frontend-only data (`src/data/drgGlossaryTerms.ts`) — no Python retrieval needed for a two-term DRG-only list; the model prompt separately gets a small clause telling it the terms are tap-to-define so it doesn't stop to explain them.
   - **Not in scope:** general jargon-detection across every game's KB content — DRG Survivor only, as planned.
@@ -559,9 +559,9 @@ Verify entries that passed on the Deck during [plan 31](../planning/31-deck-veri
 
 - ★★ `[tabs]` **Your tab is remembered when you leave and reopen** — **VERIFY.** Shipped 2026-08-04 with a three-way Developer choice
   (D15). Rows **TAB-RESUME-01** (Partial), **TAB-RESUME-MODE-01**, **TAB-RESUME-FOCUS-01**.
-  - **Evidence, 2026-09-03 on build `3b0e9d7`:** `runs/TAB-RESUME-FOCUS-01.json`,
-    `runs/TAB-RESUME-MODE-01-a-select-main-and-close.json`, `runs/TAB-RESUME-MODE-01-c-select-5min-and-close.json`,
-    `runs/TAB-RESUME-MODE-01-f-select-resume-and-close.json`. The first-press-snaps-to-top focus gap is unchanged and stays
+  - **Evidence, 2026-09-03 on build `3b0e9d7`:** `docs/test-evidence/TAB-RESUME-FOCUS-01.json`,
+    `docs/test-evidence/TAB-RESUME-MODE-01-a-select-main-and-close.json`, `docs/test-evidence/TAB-RESUME-MODE-01-c-select-5min-and-close.json`,
+    `docs/test-evidence/TAB-RESUME-MODE-01-f-select-resume-and-close.json`. The first-press-snaps-to-top focus gap is unchanged and stays
     tracked with the picker focus-restore item.
 
 - ★ `[chips]` **The static seed stops telling you to enable the knowledge base when it is already on** — **VERIFY.** Fixed 2026-08-07.
@@ -647,7 +647,7 @@ visibility-oracle plan (decky-plugin-studio planning/06) will turn it into one t
 - ★★ `[KB]` **Compat routing widened to word-boundary topics (D16)** — **VERIFY.** Fixed 2026-08-06. Row **KB-ROUTER-01**.
   - Verified on the Deck 2026-09-04, Speed mode, no game running. All four KB-ROUTER-01 sentences routed to `compat_tips`
     with `Source: shared troubleshooting tips`: the memory-card one, the online-kick one, the touchpad one and the
-    PlayStation 2 one (whose answer names EmuDeck). Evidence `runs/KB-ROUTER-01-q*.json`.
+    PlayStation 2 one (whose answer names EmuDeck). Evidence `docs/test-evidence/KB-ROUTER-01-q*.json`.
 
 - ★★★ `[KB]` **Source attribution on knowledge chips** — **VERIFY.** Shipped 2026-08-09. Both sub-checks closed on device; the
   2026-08-14 capture-date check is still owed. Row **KB-ATTRIB-01**.
@@ -671,7 +671,7 @@ Both owed Deck checks had in fact passed before this entry was moved; nobody had
 
 - **THINK-EFFORT-05 — PASS 2026-09-03.** Down from the Reply style slider reaches the row at *Off*; Right walks
   Off → Brief → Balanced → Deep and stops; Left walks back; Down leaves to *Custom timeouts*; Up returns. No button
-  acted on a direction press. `runs/ONBUTTONDOWN-AUDIT-01-and-THINK-EFFORT-05-b.json`.
+  acted on a direction press. `docs/test-evidence/ONBUTTONDOWN-AUDIT-01-and-THINK-EFFORT-05-b.json`.
 - **THINK-EFFORT-04 — PASS 2026-09-04.** `qwen3.5:4b` forced first in the try order with Thinking on **Deep**: a 212 s
   answer arrived, Show details read `Routed qwen3.5:4b`, and no reasoning leaked into the reply body. All four segments
   took the ring, which re-confirmed the D-pad row.

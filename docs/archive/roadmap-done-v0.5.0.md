@@ -63,7 +63,7 @@ the plugin itself, so nothing here needs a Deck check):**
 - ★ `[focus]` **ACCEPTED 2026-09-07 — the ring can land on a spot half hidden behind the Copy or Retry icon** —
   measured on the Deck: the only fix is a taller question bubble, which costs 18 pixels on every short
   question. No text is ever hidden either way. The maintainer looked at that trade and chose to leave it as
-  it is. Evidence `runs/plan47-R7-walk-into-reply.json`, `runs/plan47-R7-back-to-question.json`. (D86)
+  it is. Evidence `docs/test-evidence/plan47-R7-walk-into-reply.json`, `docs/test-evidence/plan47-R7-back-to-question.json`. (D86)
 
 **Verified on the Deck 2026-09-07 (knowledge base, wave two evening):**
 - ★★★★ `[KB]` **A first tranche of new titles from your Steam library** — checked on the Deck 2026-09-07
@@ -89,7 +89,7 @@ the plugin itself, so nothing here needs a Deck check):**
   Deep Rock Galactic: Survivor running, on a fresh build. All three of the row's sentences were asked in Speed: two read
   *Keyword search*, the third read *Knowledge base (skipped)* because the word search found nothing on its own — none of
   them spent any time on the meaning search. Fixed on the shared branch 2026-09-05 (`c72310a`). Row **KB-RECALL-01**'s
-  Speed half closes. Evidence `runs/plan46-R2-speed-half.json`.
+  Speed half closes. Evidence `docs/test-evidence/plan46-R2-speed-half.json`.
 - ★★★ `[KB]` **The meaning search searches on its own instead of re-ordering keyword hits, and about a second is an
   accepted cost** — confirmed again on the Deck 2026-09-06: three Strategy questions all read *Keyword + meaning*, and
   the same three in Speed read *Keyword search* with no embed time. The remaining question was the clock: the meaning

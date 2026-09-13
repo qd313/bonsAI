@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 374,
-  "edgeCount": 920,
+  "fileCount": 376,
+  "edgeCount": 923,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2705,6 +2705,21 @@
         "src/utils/answerCopyText.test.ts"
       ]
     },
+    "src/utils/answerReadableText.test.ts": {
+      "imports": [
+        "src/utils/answerReadableText.ts"
+      ],
+      "importedBy": []
+    },
+    "src/utils/answerReadableText.ts": {
+      "imports": [
+        "src/utils/stripAssistantDisplayTags.ts",
+        "src/utils/unwrapAskedEntitySpoilerFences.ts"
+      ],
+      "importedBy": [
+        "src/utils/answerReadableText.test.ts"
+      ]
+    },
     "src/utils/answerStopRegistry.test.ts": {
       "imports": [
         "src/utils/answerStopRegistry.ts",
@@ -3768,6 +3783,7 @@
       "imports": [],
       "importedBy": [
         "src/utils/answerCopyText.ts",
+        "src/utils/answerReadableText.ts",
         "src/utils/buildAnswerBubbleElement.tsx",
         "src/utils/stripAssistantDisplayTags.test.ts"
       ]
@@ -3893,6 +3909,7 @@
       ],
       "importedBy": [
         "src/utils/answerCopyText.ts",
+        "src/utils/answerReadableText.ts",
         "src/utils/buildAnswerBubbleElement.tsx",
         "src/utils/unwrapAskedEntitySpoilerFences.test.ts"
       ]

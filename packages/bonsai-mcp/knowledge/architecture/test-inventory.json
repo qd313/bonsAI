@@ -81,6 +81,7 @@
     "src/utils/answerBubbleElRegistry.test.ts",
     "src/utils/answerBubbleNavigation.test.ts",
     "src/utils/answerCopyText.test.ts",
+    "src/utils/answerReadableText.test.ts",
     "src/utils/answerStopRegistry.test.ts",
     "src/utils/appDesktopLog.test.ts",
     "src/utils/archivedTurnTransparency.test.ts",

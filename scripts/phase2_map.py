@@ -132,6 +132,16 @@ def _files_mentioning(name: str, files: list[Path]) -> list[str]:
 _IMPORT_BLOCK = re.compile(r"^[ \t]*(?:import|export)\b[\s\S]*?from\s*['\"][^'\"]+['\"]", re.M)
 _BARE_EXPORT_LIST = re.compile(r"^[ \t]*export\s*\{[^}]*\}[ \t]*;?[ \t]*$", re.M)
 
+# A name written in a comment is not a use of it. icons.tsx carried a note saying
+# one icon is "distinct from PasteClipboardIcon above"; that single mention was
+# enough to score the icon as still in use, and it was dead. Comments are blanked
+# rather than deleted so every character position still lines up with the real file.
+_COMMENT = re.compile(r"/\*[\s\S]*?\*/|//[^\n]*")
+
+
+def _blank_comments(text: str) -> str:
+    return _COMMENT.sub(lambda m: re.sub(r"[^\n]", " ", m.group(0)), text)
+
 
 def _classify_export(name: str, rel_file: str, decl_line, other_files: list[Path]) -> dict:
     """Why is this export unused, and what does that mean for deleting it?
@@ -146,6 +156,7 @@ def _classify_export(name: str, rel_file: str, decl_line, other_files: list[Path
     if text is None:
         return {"kind": "unreadable", "fix": "could not read the file"}
 
+    text = _blank_comments(text)
     moving_spans = [m.span() for m in _IMPORT_BLOCK.finditer(text)]
     moving_spans += [m.span() for m in _BARE_EXPORT_LIST.finditer(text)]
 
@@ -177,6 +188,18 @@ def _classify_export(name: str, rel_file: str, decl_line, other_files: list[Path
             continue
         internal_uses += 1
 
+    # Check other files FIRST. Getting this order wrong is not a small mistake: an
+    # earlier version returned "used inside its own file" as soon as the name was
+    # used locally, without ever looking outward, and a name can easily be both
+    # used at home and imported elsewhere. Acting on that list took the export word
+    # off names that eight other files import, and the type check caught it. The
+    # outward check is the one that decides whether the export is needed at all.
+    elsewhere = [f for f in _files_mentioning(name, other_files) if f != rel_file]
+    if elsewhere:
+        return {"kind": "named somewhere else after all",
+                "fix": "check by hand before deleting",
+                "seen_in": elsewhere[:4]}
+
     if internal_uses:
         return {"kind": "used inside its own file",
                 "fix": "drop the export word, keep the code",
@@ -185,11 +208,6 @@ def _classify_export(name: str, rel_file: str, decl_line, other_files: list[Path
         return {"kind": "handed straight back out",
                 "fix": "drop the re-export; callers already import it from where it is defined"}
 
-    elsewhere = [f for f in _files_mentioning(name, other_files) if f != rel_file]
-    if elsewhere:
-        return {"kind": "named somewhere else after all",
-                "fix": "check by hand before deleting",
-                "seen_in": elsewhere[:4]}
     return {"kind": "nothing mentions it", "fix": "delete it"}
 
 
@@ -223,7 +241,10 @@ def list_unused_exports() -> dict:
     # Test files that live next to the code they test count as harness too.
     for f in _searchable_files((".test.ts", ".test.tsx")):
         harness_files.append(f)
-    app_files = list(ratchet.fe_app_files())
+    # Everything that could import a frontend name: app code, tests, the harness,
+    # the preview code and the tooling. A name only a test imports still needs its
+    # export, so the outward check cannot be limited to app code.
+    app_files = list(ratchet.fe_app_files()) + harness_files
 
     # knip reports one object per file; every category inside it is a list of
     # {name, line, col, pos} objects (a "duplicates" entry is a list of those).

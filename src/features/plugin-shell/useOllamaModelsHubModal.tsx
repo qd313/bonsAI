@@ -19,7 +19,7 @@ import { patchPendingSessionSettingsSnapshot } from "../../utils/bonsaiSessionSu
 import type { BonsaiSettings } from "../../data/bonsaiSettingsSchema";
 import type { ModelPolicyTierId } from "../../data/modelPolicy";
 
-export type ModelPolicyPatch = {
+type ModelPolicyPatch = {
   modelPolicyTier: ModelPolicyTierId;
   modelPolicyNonFossUnlocked: boolean;
   modelAllowHighVramFallbacks: boolean;

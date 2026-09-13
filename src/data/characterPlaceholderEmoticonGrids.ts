@@ -67,7 +67,7 @@ function expand8To16(grid8: string): string {
   return out;
 }
 
-export const CHARACTER_EMOTICON_PLACEHOLDER_GRIDS: Record<string, string> = {
+const CHARACTER_EMOTICON_PLACEHOLDER_GRIDS: Record<string, string> = {
   __random__: g8(
     "........",
     "..bb....",

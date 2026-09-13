@@ -115,12 +115,12 @@ function branchButtons(liveSlot: HTMLElement | null): HTMLElement[] {
   );
 }
 
-export function focusLiveAnswerBubble(liveSlot: HTMLElement | null): boolean {
+function focusLiveAnswerBubble(liveSlot: HTMLElement | null): boolean {
   const bubble = liveSlot?.querySelector<HTMLElement>(".bonsai-chat-ai-bubble");
   return focusDeckOwner(bubble);
 }
 
-export function focusStrategyBranchButton(
+function focusStrategyBranchButton(
   liveSlot: HTMLElement | null,
   which: "first" | "last" | number
 ): boolean {
@@ -135,7 +135,7 @@ export function focusStrategyBranchButton(
   return focusDeckOwner(target);
 }
 
-export function focusStrategyChecklistToggle(liveSlot: HTMLElement | null, which: "first" | "last"): boolean {
+function focusStrategyChecklistToggle(liveSlot: HTMLElement | null, which: "first" | "last"): boolean {
   const panel = liveSlot?.querySelector(".bonsai-strategy-checklist-panel");
   if (!panel) return false;
   const toggles = focusablesIn(panel);
@@ -143,7 +143,7 @@ export function focusStrategyChecklistToggle(liveSlot: HTMLElement | null, which
   return focusDeckOwner(target);
 }
 
-export function focusReplyThumbsRow(liveSlot: HTMLElement | null): boolean {
+function focusReplyThumbsRow(liveSlot: HTMLElement | null): boolean {
   return focusReplyHelpful(liveSlot);
 }
 
@@ -152,7 +152,7 @@ export function focusReplyThumbsRow(liveSlot: HTMLElement | null): boolean {
  * `document.querySelector` returns null on Deck for these nodes (proven ok/found:false);
  * registered Button refs are the reliable focus targets.
  */
-export function focusReplyStop(
+function focusReplyStop(
   _liveSlot: HTMLElement | null,
   stop: "helpful" | "not-really" | "retry" | "show-details" | "copy" | "read-aloud",
 ): boolean {
@@ -180,7 +180,7 @@ export function focusReplyReadAloud(liveSlot: HTMLElement | null): boolean {
   return focusReplyStop(liveSlot, "read-aloud");
 }
 
-export function focusReplyCopy(liveSlot: HTMLElement | null): boolean {
+function focusReplyCopy(liveSlot: HTMLElement | null): boolean {
   return focusReplyStop(liveSlot, "copy");
 }
 

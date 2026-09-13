@@ -335,8 +335,6 @@ export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
   },
 ] as const;
 
-export const PULL_MODEL_CATALOG_TAGS: readonly string[] = PULL_MODEL_CATALOG.map((e) => e.tag);
-
 /** Sort catalog entries newest-first within a group. */
 export function comparePullModelEntriesNewestFirst(a: PullModelEntry, b: PullModelEntry): number {
   const byDate = b.releasedYm.localeCompare(a.releasedYm);

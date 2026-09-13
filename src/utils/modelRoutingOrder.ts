@@ -26,8 +26,8 @@ export const DEFAULT_VISION_ROUTING_SEED: readonly string[] = [
   "gemma3:4b",
 ];
 
-export const HIGH_VRAM_SIZE_GB_THRESHOLD = 15;
-export const MAX_MODEL_ROUTING_ORDER_LEN = 16;
+const HIGH_VRAM_SIZE_GB_THRESHOLD = 15;
+const MAX_MODEL_ROUTING_ORDER_LEN = 16;
 
 const KNOWN_HIGH_VRAM_TAGS = new Set([
   "qwen2.5:32b",

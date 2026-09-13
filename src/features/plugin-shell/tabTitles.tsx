@@ -108,8 +108,8 @@ export function bonsaiTabStripLabel(id: BonsaiTabId, useShortForms: boolean): st
  * one size for the four ordinary tabs and a larger one for the tree and the bug, whose glyphs
  * are drawn lighter. Sized for the strip's 32px icon box rather than the 36px title cell.
  */
-export const BONSAI_TAB_STRIP_ICON_PX = 24;
-export const BONSAI_TAB_STRIP_LARGE_ICON_PX = 30;
+const BONSAI_TAB_STRIP_ICON_PX = 24;
+const BONSAI_TAB_STRIP_LARGE_ICON_PX = 30;
 export function bonsaiTabStripIcon(id: BonsaiTabId): React.ReactElement {
   switch (id) {
     case "main":

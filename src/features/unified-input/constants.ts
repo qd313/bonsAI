@@ -6,7 +6,7 @@
  * Does not: Apply styles — components consume these values in CSS vars and inline layout.
  */
 /** Max height (px) of the whole glass card (text body + bottom icon strip). */
-export const UNIFIED_INPUT_HEIGHT_MAX_PX = 200;
+const UNIFIED_INPUT_HEIGHT_MAX_PX = 200;
 /** Reserved height (px) for attach + mic strip inside the glass host (below the text body). */
 export const UNIFIED_INPUT_ICON_STRIP_PX = 24;
 /** Horizontal inset (px) for bottom icon strip — matches avatar top-left (2px), not text body indent. */
@@ -67,8 +67,6 @@ export const SETTINGS_SEARCH_MIN_QUERY_LENGTH = 2;
 export const BONSAI_FOREST_GREEN = "#2e8753";
 /** Single size for all Decky `Tabs` title icons (SVG). Keep ~22–28px for QAM strip — larger values blow out LB/RB layout (shell width tracks this). */
 export const TAB_TITLE_ICON_PX = 26;
-/** Square shell around each tab icon; hit target / highlight alignment (slightly larger than icon). */
-export const TAB_TITLE_TAB_CELL_PX = 32;
 /** Space between the LB/RB tab strip and the scrollable tab panel below (QAM). */
 export const TAB_STRIP_BODY_GAP_PX = 4;
 /**

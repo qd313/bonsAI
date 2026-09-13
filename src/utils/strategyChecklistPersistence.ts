@@ -13,7 +13,7 @@ import { strategyChecklistToSavePayload } from "./strategyChecklist";
 let saveTimer: ReturnType<typeof setTimeout> | null = null;
 let pendingSave: StrategyChecklistState | null = null;
 
-export async function saveStrategyChecklistSessionNow(state: StrategyChecklistState): Promise<void> {
+async function saveStrategyChecklistSessionNow(state: StrategyChecklistState): Promise<void> {
   await callDeckyWithTimeout("save_strategy_checklist_session", [
     strategyChecklistToSavePayload(state),
   ]);

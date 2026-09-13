@@ -9,7 +9,7 @@ import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
 import type { AppliedResult, StrategyGuideBranchesPayload, StrategyChecklistPayload } from "./bonsaiUi";
 
 /** Shortcut-setup keyword replies surface this so the UI can deep-link Controller settings. */
-export type ShortcutSetupKind = "deck" | "stadia";
+type ShortcutSetupKind = "deck" | "stadia";
 
 export type BackgroundStartResponse = {
   accepted?: boolean;

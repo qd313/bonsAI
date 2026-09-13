@@ -21,7 +21,7 @@ type AppendDesktopNoteResult = {
 };
 
 /** Only the fields the note needs, so the hook does not depend on the Ask slice's shape. */
-export type DesktopNoteExchange = {
+type DesktopNoteExchange = {
   question: string;
   answer: string;
 };

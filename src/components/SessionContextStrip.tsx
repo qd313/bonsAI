@@ -15,7 +15,7 @@ import { registerNavFocus, unregisterNavFocus, type NavRefHolder } from "../util
 import { isDeckDirectionUpEvent, isOkDeckButtonEvent } from "../utils/focusNavigation";
 import { focusLastSessionContextRow } from "../utils/liveTurnFocusGraph";
 
-export type SessionContextTurn = {
+type SessionContextTurn = {
   id: string;
   label: string;
   /** Full trimmed question text, used only to detect the live/archived duplicate below — not displayed. */

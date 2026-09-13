@@ -159,7 +159,7 @@ export function reconcileLatencyWarningAndTimeout(
   return { latency_warning_seconds: w, request_timeout_seconds: t };
 }
 
-export function normalizeScreenshotAttachmentPreset(
+function normalizeScreenshotAttachmentPreset(
   data: Record<string, unknown> | null | undefined,
 ): ScreenshotAttachmentPreset {
   if (!data) {
@@ -219,7 +219,7 @@ function boundedString(maxLength: number): (value: unknown) => string {
  * `sanitize_frozen_test_chips`. Free text by design — the older compile-time freeze resolved
  * entries against the built-in preset list, which is why it could never hold a real QA question.
  */
-export function normalizeFrozenTestChips(value: unknown): string[] {
+function normalizeFrozenTestChips(value: unknown): string[] {
   if (!Array.isArray(value)) return [];
   const out: string[] = [];
   const seen = new Set<string>();
@@ -234,7 +234,7 @@ export function normalizeFrozenTestChips(value: unknown): string[] {
   return out;
 }
 
-export function normalizeNamedOllamaHosts(value: unknown): NamedOllamaHost[] {
+function normalizeNamedOllamaHosts(value: unknown): NamedOllamaHost[] {
   if (!Array.isArray(value)) return [];
   const out: NamedOllamaHost[] = [];
   for (const item of value) {
@@ -266,14 +266,14 @@ function coerceScalarToTrimmedString(value: unknown): string {
 }
 
 /** D13: matches Python, which rejects traversal outright rather than storing it. */
-export function normalizeRagCorpusPath(value: unknown): string {
+function normalizeRagCorpusPath(value: unknown): string {
   const raw = coerceScalarToTrimmedString(value);
   if (!raw) return "";
   if (raw.replace(/\\/g, "/").includes("..")) return "";
   return raw.slice(0, 512);
 }
 
-export function normalizePresetChipAnimation(
+function normalizePresetChipAnimation(
   value: unknown,
   legacyFadeEnabled: unknown,
 ): PresetChipAnimation {
@@ -290,7 +290,7 @@ export function normalizePresetChipAnimation(
   return DEFAULT_PRESET_CHIP_ANIMATION;
 }
 
-export function normalizeShowDeveloperTab(value: unknown, legacyShowDebugTab?: unknown): boolean {
+function normalizeShowDeveloperTab(value: unknown, legacyShowDebugTab?: unknown): boolean {
   if (value === true) return true;
   if (legacyShowDebugTab === true) return true;
   return false;
@@ -298,7 +298,7 @@ export function normalizeShowDeveloperTab(value: unknown, legacyShowDebugTab?: u
 
 const _askModeSet = new Set<string>(ASK_MODE_IDS);
 
-export function normalizeAskMode(value: unknown): AskModeId {
+function normalizeAskMode(value: unknown): AskModeId {
   if (value === "deep") {
     return "expert";
   }
@@ -308,14 +308,14 @@ export function normalizeAskMode(value: unknown): AskModeId {
   return DEFAULT_ASK_MODE;
 }
 
-export function normalizeOllamaKeepAlive(value: unknown): OllamaKeepAliveDuration {
+function normalizeOllamaKeepAlive(value: unknown): OllamaKeepAliveDuration {
   if (typeof value === "string" && isOllamaKeepAliveDuration(value)) {
     return value;
   }
   return DEFAULT_OLLAMA_KEEP_ALIVE;
 }
 
-export function normalizeReplyVerbosity(value: unknown): ReplyVerbosityId {
+function normalizeReplyVerbosity(value: unknown): ReplyVerbosityId {
   if (typeof value === "string") {
     // Legacy Short (pre-Caveman rename) → caveman.
     const raw = value.trim().toLowerCase() === "short" ? "caveman" : value;
@@ -342,7 +342,7 @@ export function normalizeAiCharacterCustomText(value: unknown): string {
 }
 
 
-export function normalizeCapabilities(value: unknown): BonsaiCapabilities {
+function normalizeCapabilities(value: unknown): BonsaiCapabilities {
   const raw =
     typeof value === "object" && value !== null ? (value as Partial<BonsaiCapabilities>) : {};
   return {
@@ -354,7 +354,7 @@ export function normalizeCapabilities(value: unknown): BonsaiCapabilities {
   };
 }
 
-export function normalizeModelRoutingOrder(raw: unknown): string[] {
+function normalizeModelRoutingOrder(raw: unknown): string[] {
   if (!Array.isArray(raw)) return [];
   const out: string[] = [];
   const seen = new Set<string>();

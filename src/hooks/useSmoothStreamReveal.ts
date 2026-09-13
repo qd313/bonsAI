@@ -154,4 +154,4 @@ export function useSmoothStreamReveal({
   return displayText;
 }
 
-export { FENCE_BURST_RATE_MULTIPLIER, proseRevealRate };
+export { FENCE_BURST_RATE_MULTIPLIER };

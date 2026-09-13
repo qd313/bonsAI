@@ -13,7 +13,7 @@ import {
   type IntentPackSearchIndex,
 } from "../utils/intentPackSearch";
 
-export type IntentPackSummary = {
+type IntentPackSummary = {
   id: string;
   label: string;
   enabled: boolean;

@@ -9,9 +9,9 @@
 export const SPOILER_STREAM_MASK_LABEL = "Spoiler hidden until complete…";
 export const FENCE_STREAM_WAIT_LABEL = "Code block incoming…";
 
-export type StreamWaitKind = "fence" | "spoiler";
+type StreamWaitKind = "fence" | "spoiler";
 
-export type StreamWaitChip = {
+type StreamWaitChip = {
   kind: StreamWaitKind;
   label: string;
 };

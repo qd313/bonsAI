@@ -7,7 +7,7 @@
  */
 import type { UiStringKey } from "./keys";
 
-export type UiStringCatalog = Partial<Record<UiStringKey, string>>;
+type UiStringCatalog = Partial<Record<UiStringKey, string>>;
 
 const EN: Record<UiStringKey, string> = {
   "ask.starting": "Starting…",
@@ -59,7 +59,7 @@ const DE: UiStringCatalog = {
   "about.replyLanguage.systemDetected": "Steam-Client-Sprache: {name}",
 };
 
-export const UI_STRING_CATALOG: Record<string, UiStringCatalog> = {
+const UI_STRING_CATALOG: Record<string, UiStringCatalog> = {
   english: EN,
   japanese: JA,
   german: DE,
@@ -69,7 +69,7 @@ export function englishUiString(key: UiStringKey): string {
   return EN[key];
 }
 
-export function catalogLangForCode(code: string): string {
+function catalogLangForCode(code: string): string {
   const c = (code || "english").trim().toLowerCase();
   if (c in UI_STRING_CATALOG) return c;
   return "english";
@@ -77,7 +77,7 @@ export function catalogLangForCode(code: string): string {
 
 export type UiStringVars = Record<string, string | number>;
 
-export function formatUiString(template: string, vars?: UiStringVars): string {
+function formatUiString(template: string, vars?: UiStringVars): string {
   if (!vars) return template;
   return template.replace(/\{(\w+)\}/g, (_match, name: string) => {
     const v = vars[name];

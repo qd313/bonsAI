@@ -80,7 +80,7 @@ export function revealBelowDock(el: HTMLElement, scroll: HTMLElement): boolean {
 }
 
 /** Walk turn slots. Must query the UI document, not SharedJSContext's shell — see uiDocument.ts. */
-export function findAnswerBubbleByKey(answerKey: string): HTMLElement | null {
+function findAnswerBubbleByKey(answerKey: string): HTMLElement | null {
   const registered = getRegisteredAnswerBubble(answerKey);
   if (registered) return registered;
 
@@ -205,7 +205,7 @@ export function resolveAnswerBubbleEl(
 }
 
 /** Scroll QAM panel down; true only when scrollTop increases. */
-export function panelStepDown(bubbleEl: HTMLElement): boolean {
+function panelStepDown(bubbleEl: HTMLElement): boolean {
   const scroll = findScrollablePanel(bubbleEl);
   if (!scroll) return false;
   const before = scroll.scrollTop;
@@ -223,7 +223,7 @@ export function panelStepDown(bubbleEl: HTMLElement): boolean {
 }
 
 /** Scroll QAM panel up; true only when scrollTop decreases. */
-export function panelStepUp(bubbleEl: HTMLElement): boolean {
+function panelStepUp(bubbleEl: HTMLElement): boolean {
   const scroll = findScrollablePanel(bubbleEl);
   if (!scroll) return false;
   const before = scroll.scrollTop;

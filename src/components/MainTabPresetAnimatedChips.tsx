@@ -62,9 +62,9 @@ import { elementHasFocus } from "../utils/uiDocument";
  * cycle; restored 2026-09-01 with the second chip.
  */
 /** Fade-in duration (ms); must match the slot wrapper transition when opacity increases. */
-export const PRESET_CAROUSEL_FADE_IN_MS = 1000;
+const PRESET_CAROUSEL_FADE_IN_MS = 1000;
 /** Fade-out duration (ms); must match the slot wrapper transition when opacity decreases. */
-export const PRESET_CAROUSEL_FADE_OUT_MS = 2000;
+const PRESET_CAROUSEL_FADE_OUT_MS = 2000;
 /** Carousel schedules new preset cycles for this long after mount/re-seed; in-flight fades still complete, then no more swaps until remount. */
 export const PRESET_CAROUSEL_ACTIVE_MS = 60_000;
 /** Stagger each slot's first appearance so the chips never move in lockstep. */
@@ -74,7 +74,7 @@ function slotStaggerMs(slotIndex: number): number {
 }
 
 /** Milliseconds between locked characters in decode mode (must feel close to live answer streaming). */
-export const PRESET_DECODE_CHAR_MS = 42;
+const PRESET_DECODE_CHAR_MS = 42;
 /**
  * How often the still-churning glyphs reshuffle, ms. Throttled well below frame rate on purpose:
  * the reveal loop runs one shared `requestAnimationFrame` per tick across the slots, but only
@@ -161,7 +161,7 @@ function normalizeThreeSeeds(
   ];
 }
 
-export type PresetChipAnimationMode = "fade" | "carousel" | "static" | "decode";
+type PresetChipAnimationMode = "fade" | "carousel" | "static" | "decode";
 
 export type MainTabPresetAnimatedChipsProps = {
   /** When upstream presets change (e.g. after ask), carousel re-seeds from this list. */

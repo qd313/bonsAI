@@ -14,7 +14,7 @@ import { call } from "@decky/api";
 import { callDeckyWithTimeout } from "../utils/deckyCall";
 
 /** Poll interval while voice transcription is active (interim streaming). */
-export const VOICE_TRANSCRIPTION_POLL_MS = 150;
+const VOICE_TRANSCRIPTION_POLL_MS = 150;
 
 export type VoiceTranscriptionStatus = {
   status: string;

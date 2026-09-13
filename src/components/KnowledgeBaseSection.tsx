@@ -12,7 +12,7 @@ import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from 
 import { tryMoveUpWithPanelScroll } from "../utils/settingsPanelScroll";
 import { SETTINGS_GLASS_BTN, SETTINGS_GLASS_BTN_DANGER } from "../styles/settingsGlassButton";
 
-export type RagStorageOption = {
+type RagStorageOption = {
   id?: string;
   label?: string;
   install_path?: string;
@@ -20,7 +20,7 @@ export type RagStorageOption = {
   free_bytes?: number;
 };
 
-export type RagCorpusStatus = {
+type RagCorpusStatus = {
   phase?: string;
   stage?: string;
   progress_pct?: number;

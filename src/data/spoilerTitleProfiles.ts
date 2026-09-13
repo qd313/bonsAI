@@ -41,7 +41,7 @@ export const PROTECT_PROGRESSION_APP_IDS = new Set([
  * _PROTECT_PROGRESSION_TITLES in spoiler_title_profiles.py — tests/contracts/spoiler-title-profiles.json
  * asserts both languages against the same cases.
  */
-export const LOW_NARRATIVE_TITLES = [
+const LOW_NARRATIVE_TITLES = [
   "state of emergency",
   "deep rock galactic",
   "left 4 dead 2",
@@ -55,7 +55,7 @@ export const LOW_NARRATIVE_TITLES = [
   "pikmin 2",
 ];
 
-export const PROTECT_PROGRESSION_TITLES = [
+const PROTECT_PROGRESSION_TITLES = [
   "ocarina of time",
   "ship of harkinian",
   "baldur's gate 3",

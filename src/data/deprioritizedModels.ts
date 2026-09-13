@@ -5,7 +5,7 @@
  * Solves: Frontend mirror of refactor_helpers deprioritized/blocked tag lists in Python.
  * Does not: Delete installed models or change backend routing — classification happens server-side.
  */
-export const DEPRIORITIZED_OLLAMA_TAGS = new Set(
+const DEPRIORITIZED_OLLAMA_TAGS = new Set(
   [
     "qwen2.5:1.5b",
     "qwen2.5:7b",
@@ -35,7 +35,7 @@ export const DEPRIORITIZED_OLLAMA_TAGS = new Set(
   ].map((t) => t.toLowerCase())
 );
 
-export const DEPRIORITIZED_OLLAMA_BASES = new Set(["tinyllama", "orca-mini", "vicuna", "phi"]);
+const DEPRIORITIZED_OLLAMA_BASES = new Set(["tinyllama", "orca-mini", "vicuna", "phi"]);
 
 export const BLOCKED_PULL_CATALOG_TAGS = new Set(
   ["qwen3-vl:30b-a3b", "internvl3.5:38b", "internvl2.5:38b"].map((t) => t.toLowerCase())

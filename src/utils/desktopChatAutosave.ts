@@ -5,9 +5,9 @@
  * Solves: Avoid duplicate append_desktop_chat RPC for the same completed response.
  * Does not: Write files — backend append_desktop_chat and filesystem permissions.
  */
-export const AUTO_SAVED_RESPONSE_IDS_KEY = "bonsai:auto-desktop-chat-response-ids";
+const AUTO_SAVED_RESPONSE_IDS_KEY = "bonsai:auto-desktop-chat-response-ids";
 
-export function loadAutosavedResponseIds(): number[] {
+function loadAutosavedResponseIds(): number[] {
   try {
     const raw = sessionStorage.getItem(AUTO_SAVED_RESPONSE_IDS_KEY);
     if (!raw) return [];

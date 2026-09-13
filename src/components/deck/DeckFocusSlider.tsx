@@ -22,7 +22,7 @@ export type DeckFocusSliderThumbNavProps = {
 };
 
 /** Merge internal thumb wrapper ref with an optional external host ref. */
-export function assignDeckSliderThumbHostRef(
+function assignDeckSliderThumbHostRef(
   el: HTMLDivElement | null,
   internalRef: React.MutableRefObject<HTMLDivElement | null>,
   externalRef?: React.Ref<HTMLDivElement>,

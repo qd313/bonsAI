@@ -19,7 +19,7 @@ export type ReplyMicroActionDef = {
   transparencyLabel: string;
 };
 
-export const REPLY_MICRO_ACTIONS: ReplyMicroActionDef[] = [
+const REPLY_MICRO_ACTIONS: ReplyMicroActionDef[] = [
   {
     id: "bad_information",
     label: "Bad information",

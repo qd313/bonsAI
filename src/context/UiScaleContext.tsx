@@ -27,7 +27,7 @@ export function UiScaleProvider({
   return <UiScaleContext.Provider value={value}>{children}</UiScaleContext.Provider>;
 }
 
-export function useUiScaleContext(): UiScaleContextValue | null {
+function useUiScaleContext(): UiScaleContextValue | null {
   return useContext(UiScaleContext);
 }
 

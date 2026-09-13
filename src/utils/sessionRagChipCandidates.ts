@@ -8,7 +8,7 @@
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "./deckyCall";
 import type { SessionRagChipCandidate } from "../features/preset-carousel/sessionRagComposer";
 
-export type SessionRagChipCandidatesRpcResult = {
+type SessionRagChipCandidatesRpcResult = {
   ok?: boolean;
   reason?: string;
   candidates?: Array<{

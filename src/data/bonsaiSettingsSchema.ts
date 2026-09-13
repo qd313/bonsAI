@@ -51,8 +51,6 @@ export type DesktopAppLogLevel = "off" | "default" | "verbose";
  */
 export type TabResumeMode = "always_main" | "resume" | "resume_recent";
 export type PresetChipAnimation = "fade" | "carousel" | "static" | "decode";
-/** Legacy; migration maps to ScreenshotAttachmentPreset. */
-export type ScreenshotMaxDimension = 1280 | 1920 | 3160;
 export type ScreenshotAttachmentPreset = "low" | "mid" | "max";
 
 /** High-impact capability toggles; keep keys aligned with backend `capabilities` and Permission Center UI. */

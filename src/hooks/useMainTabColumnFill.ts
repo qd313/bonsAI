@@ -24,7 +24,7 @@ const MIN_FILL_PX = 120;
  */
 const MAX_CHROME_BELOW_PX = 200;
 
-export const MAIN_COLUMN_MIN_HEIGHT_VAR = "--bonsai-main-column-min-height";
+const MAIN_COLUMN_MIN_HEIGHT_VAR = "--bonsai-main-column-min-height";
 
 /**
  * Space below the column that still belongs to the scroll content: every wrapper's bottom margin

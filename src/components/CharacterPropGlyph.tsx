@@ -17,7 +17,7 @@ import React from "react";
  * All art is inline SVG on a 32x32 viewBox; no raster assets.
  */
 
-export type PropName =
+type PropName =
   | "bat"
   | "launcher"
   | "flame"
@@ -52,14 +52,14 @@ export type PropName =
   | "crate"
   | "pencil";
 
-export interface CharacterPropEntry {
+interface CharacterPropEntry {
   letter: string;
   prop: PropName;
   tint: string;
 }
 
 /** Keyed by the character keys in src/data/characterPlaceholderEmoticonGrids.ts */
-export const CHARACTER_PROPS: Record<string, CharacterPropEntry> = {
+const CHARACTER_PROPS: Record<string, CharacterPropEntry> = {
   tf2_scout: { letter: "SC", prop: "bat", tint: "#4ecdc4" },
   tf2_soldier: { letter: "SO", prop: "launcher", tint: "#7a9e6a" },
   tf2_pyro: { letter: "P", prop: "flame", tint: "#ff9f43" },
@@ -96,7 +96,7 @@ export const CHARACTER_PROPS: Record<string, CharacterPropEntry> = {
 };
 
 /** WCAG-ish pick between dark and light ink for a background colour. */
-export function inkFor(tint: string): string {
+function inkFor(tint: string): string {
   const n = parseInt(tint.slice(1), 16);
   const f = (v: number) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
   const L = 0.2126 * f((n >> 16) & 255) + 0.7152 * f((n >> 8) & 255) + 0.0722 * f(n & 255);
@@ -107,7 +107,7 @@ export function inkFor(tint: string): string {
  * Ink for art sitting on the tinted disc: the disc gradient is the tint at 50%
  * alpha over #0f1620, so contrast is measured against that blend, not the raw tint.
  */
-export function inkForDisc(tint: string): string {
+function inkForDisc(tint: string): string {
   const n = parseInt(tint.slice(1), 16);
   const mix = (a: number, b: number) => Math.round(a * 0.5 + b * 0.5);
   const r = mix((n >> 16) & 255, 15), g = mix((n >> 8) & 255, 22), b = mix(n & 255, 32);
@@ -447,10 +447,4 @@ export function CharacterPropGlyph({
       title ? h("title", null, title) : null,
       inner,
     );
-}
-
-export interface CharacterAvatarProps extends CharacterPropGlyphProps {
-  selected?: boolean;
-  /** Background the badge ring is knocked out against. */
-  surface?: string;
 }

@@ -52,7 +52,7 @@ export const PRESET_MARQUEE_SPEED = 25;
 export const PRESET_MARQUEE_DELAY_S = 1.5;
 export const PRESET_MARQUEE_FADE_LENGTH = 8;
 /** Pause after a label has scrolled to its end before a chip may rotate out. */
-export const PRESET_MARQUEE_END_PAUSE_MS = 1500;
+const PRESET_MARQUEE_END_PAUSE_MS = 1500;
 
 /**
  * Device-measured 6.45 px per character at 12 px (PHASE4-CHIPS-01, 2026-08-29: 219.2 px for 34
@@ -66,7 +66,7 @@ const PRESET_LABEL_ROOM_PX =
   2 * PRESET_CHIP_SIDE_PADDING_PX;
 
 /** How long a scrolling label needs to be read through once: delay, one crawl, a pause. */
-export function marqueeHoldFloorMs(text: string): number {
+function marqueeHoldFloorMs(text: string): number {
   const overflowPx = Math.max(0, text.length * PRESET_LABEL_PX_PER_CHAR - PRESET_LABEL_ROOM_PX);
   if (overflowPx === 0) return 0;
   return (

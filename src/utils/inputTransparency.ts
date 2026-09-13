@@ -17,7 +17,7 @@ export type ContextChipAttribution = {
   captured?: string;
 };
 
-export type ContextChipBody = {
+type ContextChipBody = {
   title: string;
   paths: string[];
   bullets: string[];

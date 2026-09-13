@@ -9,7 +9,7 @@ export const REPLY_LANGUAGE_FOLLOW_SYSTEM = "follow_system" as const;
 export const REPLY_LANGUAGE_ALWAYS_ENGLISH = "en" as const;
 export const DEFAULT_REPLY_LANGUAGE = REPLY_LANGUAGE_FOLLOW_SYSTEM;
 
-export type ReplyLanguageSpecialId = typeof REPLY_LANGUAGE_FOLLOW_SYSTEM | typeof REPLY_LANGUAGE_ALWAYS_ENGLISH;
+type ReplyLanguageSpecialId = typeof REPLY_LANGUAGE_FOLLOW_SYSTEM | typeof REPLY_LANGUAGE_ALWAYS_ENGLISH;
 
 /** Steam client ``config.vdf`` language codes (canonical lowercase). */
 export const STEAM_LANGUAGE_CODES = [
@@ -85,7 +85,7 @@ export const STEAM_LANGUAGE_LABELS: Record<SteamLanguageCode, string> = {
   indonesian: "Indonesian",
 };
 
-export function isSteamLanguageCode(value: string): value is SteamLanguageCode {
+function isSteamLanguageCode(value: string): value is SteamLanguageCode {
   return steamSet.has(value);
 }
 

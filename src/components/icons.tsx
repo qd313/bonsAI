@@ -230,21 +230,10 @@ export const ClearIcon: React.FC<{ size?: number }> = ({ size = 30 }) => (
     </svg>
   </IconShell>
 );
-
-/** Paste-from-clipboard control in the unified input strip (lower-left). */
-export const PasteClipboardIcon: React.FC<{ size?: number }> = ({ size = 15 }) => (
-  <IconShell size={size}>
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <rect x="7.5" y="4.5" width="11" height="14" rx="1.6" stroke="currentColor" strokeWidth="1.45" />
-      <path d="M9.25 4.5h7.5a1.6 1.6 0 0 1 1.6 1.6V7H7.65V6.1a1.6 1.6 0 0 1 1.6-1.6Z" stroke="currentColor" strokeWidth="1.45" />
-    </svg>
-  </IconShell>
-);
-
 /**
  * This two-overlapping-rounded-squares icon is the Copy control in the answer bubble's corner.
  *
- * Distinct from PasteClipboardIcon above, which is a clipboard with a lid and means paste. Drawn
+ * Two overlapping squares, not a clipboard with a lid: a lidded clipboard reads as paste. Drawn
  * small and thin because it sits over the answer's own text at half opacity.
  */
 export const CopyGlyphIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (

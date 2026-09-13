@@ -18,7 +18,7 @@ import {
 } from "../../data/presets";
 
 /** How many just-shown prompts stay out of the random draw, so a short pool does not stutter. */
-export const SLOT_ROTATION_RECENT_MAX = 3;
+const SLOT_ROTATION_RECENT_MAX = 3;
 
 export type SlotRotation = {
   /** Contextual seeds not yet shown since the last seeding, in the order they were given. */

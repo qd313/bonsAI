@@ -55,7 +55,7 @@ function entryCoversRole(entry: PullModelEntry, role: PullCoverageRole): boolean
   return tags.some((t) => entry.tags.includes(t));
 }
 
-export function installedCoversRole(
+function installedCoversRole(
   installedTags: Set<string>,
   role: PullCoverageRole,
   catalog: readonly PullModelEntry[] = PULL_MODEL_CATALOG

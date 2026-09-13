@@ -11,7 +11,7 @@ import { interpolateSteamInputTemplate } from "../data/steam-input-lexicon";
 
 type SteamUrlApi = { ExecuteSteamURL(url: string): void };
 
-export type SteamInputJumpMethod = "react-router" | "steam-url";
+type SteamInputJumpMethod = "react-router" | "steam-url";
 
 export type SteamInputJumpResult =
   | { ok: true; method: SteamInputJumpMethod; detail: string; confidenceLabel: string }

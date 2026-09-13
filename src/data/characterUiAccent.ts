@@ -11,7 +11,7 @@ import { isValidPresetId } from "./characterCatalog";
 import { BONSAI_FOREST_GREEN } from "../features/unified-input/constants";
 
 /** Default forest main for accent fallbacks and chat bubble theming when no catalog accent applies. */
-export const BONSAI_UI_ACCENT_MAIN_FALLBACK = BONSAI_FOREST_GREEN;
+const BONSAI_UI_ACCENT_MAIN_FALLBACK = BONSAI_FOREST_GREEN;
 
 export type UiAccentPair = { main: string; subtle: string };
 

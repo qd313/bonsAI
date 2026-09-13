@@ -43,14 +43,14 @@ export const UI_SCALE_PROFILE_DESCRIPTION: Record<UiScaleProfileId, string> = {
 };
 
 /** Readability multipliers per profile (layout recipe stays proportional). */
-export const UI_SCALE_PROFILE_MULTIPLIER: Record<UiScaleProfileId, number> = {
+const UI_SCALE_PROFILE_MULTIPLIER: Record<UiScaleProfileId, number> = {
   handheld: 1,
   desktop: 1,
   couch: 1.18,
   immersive: 1.22,
 };
 
-export const UI_SCALE_IMMERSIVE_MAX_MULTIPLIER = 1.28;
+const UI_SCALE_IMMERSIVE_MAX_MULTIPLIER = 1.28;
 
 export type DisplayContext = "internal" | "external";
 

@@ -7,10 +7,10 @@
  */
 export const STEAM_INPUT_LEXICON_VERSION = 1;
 
-export type SteamInputScope = "per-game" | "global" | "unknown";
+type SteamInputScope = "per-game" | "global" | "unknown";
 
 /** Per research brief: Exact only after on-Deck verification; Near/Manual otherwise. */
-export type RouteConfidence = "Exact" | "Near" | "Manual only";
+type RouteConfidence = "Exact" | "Near" | "Manual only";
 
 export type SteamInputLexiconEntry = {
   id: string;
@@ -28,7 +28,7 @@ export type SteamInputLexiconEntry = {
   routeConfidence: RouteConfidence;
 };
 
-export const STEAM_INPUT_LEXICON: SteamInputLexiconEntry[] = [
+const STEAM_INPUT_LEXICON: SteamInputLexiconEntry[] = [
   {
     id: "phase1_per_game_controller_config",
     canonical: "Per-game controller configuration",

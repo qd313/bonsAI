@@ -127,7 +127,7 @@ export function saveLastTab(tabId: string): void {
 }
 
 /** Epoch ms `saveLastTab` last ran, or null when absent or unparseable. */
-export function loadLastTabSavedAt(): number | null {
+function loadLastTabSavedAt(): number | null {
   if (typeof window === "undefined") return null;
   try {
     const raw = window.localStorage.getItem(LAST_TAB_AT_STORAGE_KEY);

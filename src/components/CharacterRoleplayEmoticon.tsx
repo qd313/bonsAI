@@ -17,7 +17,7 @@ import { CharacterPropGlyph } from "./CharacterPropGlyph";
  * switch is opt-in rather than a silent change to anything added later, and because it is still
  * the fallback art for a preset with no prop. See docs/planning/25-ai-character-avatars-handoff.md.
  */
-export type CharacterRoleplayEmoticonArt = "grid" | "prop";
+type CharacterRoleplayEmoticonArt = "grid" | "prop";
 
 export type CharacterRoleplayEmoticonProps = {
   /** Preset catalog id, or `__random__` / `__custom__` for synthetic avatars. */

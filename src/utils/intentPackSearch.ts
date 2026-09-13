@@ -9,7 +9,7 @@
 
 import { SETTINGS_SEARCH_MIN_QUERY_LENGTH } from "../features/unified-input/constants";
 
-export type IntentPackEntry = {
+type IntentPackEntry = {
   target: string;
   aliases?: string[];
   synonyms?: string[];

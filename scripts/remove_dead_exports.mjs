@@ -26,9 +26,13 @@ import { Project } from "ts-morph";
 
 const args = process.argv.slice(2);
 const dry = args.includes("--dry");
+// --unexport keeps the code and only takes the `export` word off. That is the
+// right fix when a name is used inside its own file: the code is alive, it just
+// was not offering anything anyone wanted.
+const unexportOnly = args.includes("--unexport");
 const listPath = args.find((a) => !a.startsWith("--"));
 if (!listPath) {
-  console.error("usage: node scripts/remove_dead_exports.mjs <list.json> [--dry]");
+  console.error("usage: node scripts/remove_dead_exports.mjs <list.json> [--dry] [--unexport]");
   process.exit(2);
 }
 
@@ -71,6 +75,70 @@ for (const { file, name } of targets) {
   const alias = source.getTypeAlias(name);
   const enumDecl = source.getEnum(name);
   const classDecl = source.getClass(name);
+
+  if (unexportOnly) {
+    const statement = variable?.getVariableStatement();
+    const target = statement ?? func ?? iface ?? alias ?? enumDecl ?? classDecl;
+    if (!target) {
+      // Not declared here: the file imports the name, uses it, and also lists it in
+      // an `export { ... }` of its own. Taking it out of that list is the same fix --
+      // the name stays and is still used, it just stops being offered onward.
+      let listed = false;
+      for (const decl of source.getExportDeclarations()) {
+        const spec = decl.getNamedExports().find((s) => s.getName() === name);
+        if (!spec) continue;
+        spec.remove();
+        if (decl.getNamedExports().length === 0) decl.remove();
+        listed = true;
+        break;
+      }
+      if (listed) {
+        removed += 1;
+        console.log(`  removed ${name} from an export list in ${file} (import and use kept)`);
+      } else {
+        missing.push(`${file}: no declaration named ${name}`);
+      }
+      continue;
+    }
+    // A statement can declare several names at once (`export const A = 1, B = 2`).
+    // Unexporting it would silently take the others with it, so leave those for a
+    // person rather than guessing.
+    if (statement && statement.getDeclarations().length > 1) {
+      missing.push(`${file}: ${name} shares a statement with other names — unexport it by hand`);
+      continue;
+    }
+    if (target.isDefaultExport?.()) {
+      missing.push(`${file}: ${name} is the default export — not touching it`);
+      continue;
+    }
+
+    // A name can be offered onward two ways at once: the `export` word on its
+    // declaration, and a separate `export { ... }` list further down. Taking off
+    // only the first leaves it still exported, which is how proseRevealRate slipped
+    // through the first pass. Clear both.
+    let changed = false;
+    if (target.isExported()) {
+      target.setIsExported(false);
+      changed = true;
+    }
+    for (const decl of source.getExportDeclarations()) {
+      if (decl.getModuleSpecifier()) continue; // `export { x } from "..."` is a re-export
+      const spec = decl.getNamedExports().find((s) => s.getName() === name);
+      if (!spec) continue;
+      spec.remove();
+      if (decl.getNamedExports().length === 0) decl.remove();
+      changed = true;
+      console.log(`    (also taken out of an export list)`);
+    }
+
+    if (!changed) {
+      console.log(`  ${name} in ${file} was already not exported`);
+      continue;
+    }
+    removed += 1;
+    console.log(`  unexported ${name} in ${file}`);
+    continue;
+  }
 
   let done = false;
   if (variable) {

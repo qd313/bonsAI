@@ -29,11 +29,11 @@ export function isLeftNavigationEvent(ev: Pick<KeyboardEvent, "key" | "code">): 
   return c === "ArrowLeft" || c === "Numpad4";
 }
 
-export function isDownNavigationKey(key: string): boolean {
+function isDownNavigationKey(key: string): boolean {
   return key === "ArrowDown" || key === "Down" || key === "DPadDown" || key === "GamepadDPadDown";
 }
 
-export function isUpNavigationKey(key: string): boolean {
+function isUpNavigationKey(key: string): boolean {
   return key === "ArrowUp" || key === "Up" || key === "DPadUp" || key === "GamepadDPadUp";
 }
 

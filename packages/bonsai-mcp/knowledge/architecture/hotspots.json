@@ -196,7 +196,7 @@
       "role": ""
     },
     {
-      "path": "src/components/CharacterPropGlyph.tsx",
+      "path": "src/features/preset-carousel/sessionRagComposer.test.ts",
       "lines": 457,
       "role": ""
     }

@@ -32,6 +32,7 @@ import {
   type BonsaiSessionSurvivalSnapshot,
 } from "./utils/bonsaiSessionSurvival";
 import { consumePendingFocusMainTab, setReplySurfaceVisible } from "./utils/bonsaiReplySurface";
+import { rememberAskCameFromMic, setReadAloudCompletionContext } from "./hooks/useReadAloud";
 import { clearBonsaiBrowserStorage } from "./utils/clearBonsaiBrowserStorage";
 import { bonsaiDebugLog } from "./utils/bonsaiDebugIngest";
 import { clearOllamaTabLocalSurvival } from "./utils/ollamaTabLocalSurvival";
@@ -205,6 +206,12 @@ const Content: React.FC = () => {
 
   const pendingSessionRestoreFinalizeRef = useRef(false);
   const pluginDataClearSeenRef = useRef(getPluginDataClearedGeneration());
+  /*
+   * "The field's text came from the mic" (D99 call 3) is cleared here too, ahead of where
+   * useVoiceAskInput is called below — a ref so the clear points that run earlier in this function
+   * do not have to wait on hook declaration order. Populated once useVoiceAskInput mounts.
+   */
+  const clearAskCameFromMicRef = useRef<() => void>(() => {});
 
   // --- Unified input/search state ---
   const [unifiedInput, setUnifiedInput] = useState(() => {
@@ -247,6 +254,8 @@ const Content: React.FC = () => {
     requestTimeoutSeconds,
     latencyTimeoutsCustomEnabled,
     unifiedInputPersistenceMode,
+    voiceReplyMode,
+    setVoiceReplyMode,
     screenshotAttachmentPreset,
     desktopDebugNoteAutoSave,
     desktopAskVerboseLogging,
@@ -659,6 +668,7 @@ const Content: React.FC = () => {
       requestTimeoutSeconds,
       latencyTimeoutsCustomEnabled,
       unifiedInputPersistenceMode,
+      voiceReplyMode,
       screenshotAttachmentPreset,
       desktopDebugNoteAutoSave,
       desktopAskVerboseLogging,
@@ -707,6 +717,7 @@ const Content: React.FC = () => {
       requestTimeoutSeconds,
       latencyTimeoutsCustomEnabled,
       unifiedInputPersistenceMode,
+      voiceReplyMode,
       screenshotAttachmentPreset,
       desktopDebugNoteAutoSave,
       desktopAskVerboseLogging,
@@ -960,6 +971,7 @@ const Content: React.FC = () => {
     unifiedInputPersistenceModePrevRef.current = unifiedInputPersistenceMode;
     if (shouldClearUnifiedInputForPersistenceMode(prev, unifiedInputPersistenceMode)) {
       setUnifiedInput("");
+      clearAskCameFromMicRef.current();
     }
   }, [unifiedInputPersistenceMode]);
 
@@ -1037,6 +1049,7 @@ const Content: React.FC = () => {
     clearBonsaiSessionSurvival();
     persistSearchQuery("");
     setUnifiedInput("");
+    clearAskCameFromMicRef.current();
     setSelectedIndex(-1);
     setNavigationMessage("");
     setSelectedAttachment(null);
@@ -1090,13 +1103,52 @@ const Content: React.FC = () => {
     uiT,
   ]);
 
-  const { voiceRecording, onMicInput, micPermissionDenied, dismissMicPermissionDeny } = useVoiceAskInput({
+  const {
+    voiceRecording,
+    onMicInput,
+    micPermissionDenied,
+    dismissMicPermissionDeny,
+    askCameFromMic,
+    clearAskCameFromMic,
+  } = useVoiceAskInput({
     setUnifiedInput,
     unifiedInput,
     microphoneAccess: gatedCapabilities.microphone_access,
     isAsking,
     uiT,
   });
+
+  useEffect(() => {
+    clearAskCameFromMicRef.current = clearAskCameFromMic;
+  }, [clearAskCameFromMic]);
+
+  /* Keeps the two completion watchers (useBackgroundGameAi's poll, bonsaiAskCompletionWatch's
+     module-level loop for when the Main tab is not mounted) in sync with the live setting — see
+     useReadAloud.ts, which mirrors bonsaiReplySurface.ts's pattern for exactly this reason. */
+  useEffect(() => {
+    setReadAloudCompletionContext(voiceReplyMode, strategySpoilerMaskingEnabled);
+  }, [voiceReplyMode, strategySpoilerMaskingEnabled]);
+
+  /*
+   * "Came from the mic", captured the moment Ask is pressed (D99 call 3) and paired with the
+   * request_id as soon as the backend hands one back — `lastRequestId` is set from every poll
+   * response, including the first, so this lands well before the request can complete. Only one
+   * Ask is ever in flight, so a single pending slot (rather than something keyed up front, before
+   * the id exists) is enough.
+   */
+  const pendingAskCameFromMicRef = useRef(false);
+  const onAskOllamaWithReadAloud = useCallback(
+    (overrideQuestion?: string, opts?: { threadQuestionDisplay?: string }) => {
+      pendingAskCameFromMicRef.current = askCameFromMic;
+      return onAskOllama(overrideQuestion, opts);
+    },
+    [onAskOllama, askCameFromMic],
+  );
+  useEffect(() => {
+    if (lastRequestId != null) {
+      rememberAskCameFromMic(lastRequestId, pendingAskCameFromMicRef.current);
+    }
+  }, [lastRequestId]);
 
   const showSearchClearButton = Boolean(unifiedInput.trim());
 
@@ -1200,7 +1252,7 @@ const Content: React.FC = () => {
     onSettingClick,
     isAsking,
     ollamaIp: effectiveOllamaPcIp,
-    onAskOllama,
+    onAskOllama: onAskOllamaWithReadAloud,
     onOpenScreenshotBrowser,
     onTakeScreenshot,
     onCancelAsk,
@@ -1242,6 +1294,7 @@ const Content: React.FC = () => {
     transparencySnapshot: lastTransparency,
     onRunOriginalAsk: (text) => {
       setUnifiedInput(text);
+      clearAskCameFromMic();
       if (unifiedInputPersistenceMode === "persist_all") {
         persistSearchQuery(text);
       }
@@ -1290,6 +1343,8 @@ const Content: React.FC = () => {
     setScreenshotAttachmentPreset,
     unifiedInputPersistenceMode,
     setUnifiedInputPersistenceMode,
+    voiceReplyMode,
+    setVoiceReplyMode,
     aiCharacterEnabled,
     setAiCharacterEnabled,
     aiCharacterRandom,

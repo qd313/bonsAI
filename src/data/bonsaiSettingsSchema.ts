@@ -38,6 +38,11 @@ export { ASK_THINK_EFFORT_IDS, DEFAULT_ASK_THINK_EFFORT };
 export { DEFAULT_MODEL_POLICY_TIER };
 
 export type UnifiedInputPersistenceMode = "persist_all" | "persist_search_only" | "no_persist";
+/**
+ * Whether a finished answer is read aloud without a press (D99 call 3): never, only when the
+ * question that produced it came in through the mic, or every time. Off is the shipped default.
+ */
+export type VoiceReplyMode = "off" | "voice_only" | "always";
 export type DesktopAppLogLevel = "off" | "default" | "verbose";
 /**
  * Which tab a reopen lands on. One stop per option in roadmap **D15**, so the three can be
@@ -74,6 +79,8 @@ export type BonsaiSettings = {
   /** When true, stored warning/timeout apply; when false, defaults (60s / 180s) for Ask + Ollama. */
   latency_timeouts_custom_enabled: boolean;
   unified_input_persistence_mode: UnifiedInputPersistenceMode;
+  /** When a finished answer is read aloud on its own, without a Read aloud press (D99 call 3). */
+  voice_reply_mode: VoiceReplyMode;
   /** Vision attachment downscale and JPEG quality preset. */
   screenshot_attachment_preset: ScreenshotAttachmentPreset;
   /** When true, append Ask and AI response lines to daily chat files under Desktop/bonsAI_logs (requires filesystem_write). */
@@ -175,6 +182,7 @@ export type BonsaiSettingsSnapshotInput = {
   requestTimeoutSeconds: number;
   latencyTimeoutsCustomEnabled: boolean;
   unifiedInputPersistenceMode: UnifiedInputPersistenceMode;
+  voiceReplyMode: VoiceReplyMode;
   screenshotAttachmentPreset: ScreenshotAttachmentPreset;
   desktopDebugNoteAutoSave: boolean;
   desktopAskVerboseLogging: boolean;
@@ -234,6 +242,8 @@ export const MAX_REQUEST_TIMEOUT_SECONDS = 600;
 export const LATENCY_WARNING_STEP_SECONDS = 5;
 export const REQUEST_TIMEOUT_STEP_SECONDS = 10;
 export const DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE: UnifiedInputPersistenceMode = "no_persist";
+export const DEFAULT_VOICE_REPLY_MODE: VoiceReplyMode = "off";
+export const VOICE_REPLY_MODE_OPTIONS: VoiceReplyMode[] = ["off", "voice_only", "always"];
 export const SCREENSHOT_ATTACHMENT_PRESET_OPTIONS: ScreenshotAttachmentPreset[] = ["low", "mid", "max"];
 export const DEFAULT_SCREENSHOT_ATTACHMENT_PRESET: ScreenshotAttachmentPreset = "low";
 /** @deprecated use DEFAULT_SCREENSHOT_ATTACHMENT_PRESET; kept for tests/migration. */

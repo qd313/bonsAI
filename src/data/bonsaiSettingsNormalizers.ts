@@ -44,6 +44,8 @@ import {
   DEFAULT_REQUEST_TIMEOUT_SECONDS,
   DEFAULT_SCREENSHOT_ATTACHMENT_PRESET,
   DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
+  DEFAULT_VOICE_REPLY_MODE,
+  VOICE_REPLY_MODE_OPTIONS,
   DEFAULT_VOICE_STT_MODEL,
   LATENCY_WARNING_STEP_SECONDS,
   MAX_LATENCY_WARNING_SECONDS,
@@ -67,6 +69,7 @@ import {
   type ScreenshotAttachmentPreset,
   type TabResumeMode,
   type UnifiedInputPersistenceMode,
+  type VoiceReplyMode,
   type VoiceSttModelId,
 } from "./bonsaiSettingsSchema";
 
@@ -404,6 +407,11 @@ const SIMPLE_FIELDS = {
     ["persist_all", "persist_search_only", "no_persist"],
     DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
   ),
+  // Off unless the person turns it on; an unrecognised value must not start reading answers
+  // out loud on its own.
+  voice_reply_mode: enumOf<VoiceReplyMode>(VOICE_REPLY_MODE_OPTIONS, DEFAULT_VOICE_REPLY_MODE, {
+    trim: true,
+  }),
   reply_verbosity: normalizeReplyVerbosity,
   // Trimmed before matching, case-sensitive, and an unknown value falls back to `off` —
   // an unrecognised effort must not silently turn thinking on.

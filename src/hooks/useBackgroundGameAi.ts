@@ -8,6 +8,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { callDeckyWithTimeout } from "../utils/deckyCall";
 import type { BackgroundRequestStatus } from "../types/backgroundAsk";
+import { handleAskTerminalForReadAloud } from "./useReadAloud";
 
 /** Poll interval while backend ``status`` stays ``pending`` (matches Steam Deck cadence vs RPC load). */
 export const BACKGROUND_STATUS_POLL_MS = 1200;
@@ -60,6 +61,15 @@ export function useBackgroundGameAi(
           );
           if (!isRequestActive(seq)) return;
           applyBackgroundStatusToUi(status, fallbackQuestion);
+          /*
+           * Read on its own (D99 call 3), when the Main tab is the one watching this poll rather
+           * than bonsaiAskCompletionWatch's module-level loop (that runs only once the person has
+           * left the tab). Deduped by request_id inside the handler, so whichever path sees a given
+           * request's terminal status first is the one that fires it.
+           */
+          if (status.status === "completed" || status.status === "failed") {
+            handleAskTerminalForReadAloud(status);
+          }
 
           if (status.status === "pending") {
             /*

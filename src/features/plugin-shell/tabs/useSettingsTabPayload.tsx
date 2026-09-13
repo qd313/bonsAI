@@ -16,6 +16,8 @@ export function useSettingsTabPayload({
   setScreenshotAttachmentPreset,
   unifiedInputPersistenceMode,
   setUnifiedInputPersistenceMode,
+  voiceReplyMode,
+  setVoiceReplyMode,
   aiCharacterEnabled,
   setAiCharacterEnabled,
   aiCharacterRandom,
@@ -52,6 +54,8 @@ export function useSettingsTabPayload({
         setScreenshotAttachmentPreset={setScreenshotAttachmentPreset}
         unifiedInputPersistenceMode={unifiedInputPersistenceMode}
         setUnifiedInputPersistenceMode={setUnifiedInputPersistenceMode}
+        voiceReplyMode={voiceReplyMode}
+        setVoiceReplyMode={setVoiceReplyMode}
         aiCharacterEnabled={aiCharacterEnabled}
         setAiCharacterEnabled={setAiCharacterEnabled}
         aiCharacterRandom={aiCharacterRandom}
@@ -83,6 +87,7 @@ export function useSettingsTabPayload({
     [
       screenshotAttachmentPreset,
       unifiedInputPersistenceMode,
+      voiceReplyMode,
       aiCharacterEnabled,
       aiCharacterRandom,
       aiCharacterPresetId,

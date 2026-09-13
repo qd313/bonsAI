@@ -15,6 +15,7 @@ import {
   focusDownFromReplyUtilityRow,
   focusLastReplyChip,
   focusReplyHelpful,
+  focusReplyReadAloud,
   focusReplyShowDetails,
   queryLiveTurnSlot,
 } from "./liveTurnFocusGraph";
@@ -59,6 +60,14 @@ export type BuildReplyActionsElementArgs = {
   chipError?: string | null;
   onChip?: (chipId: ReplyMicroActionId) => void;
   askInFlight?: boolean;
+  /**
+   * When set, a Read aloud / Stop line renders between the thumbs (or refinement chips, when
+   * shown) and the Show details line — same shape as Show details, one row up. `readAloudLabel`
+   * is the whole line's text ("Read aloud" or "Stop"); the caller decides which by tracking which
+   * answer is currently speaking.
+   */
+  onReadAloudToggle?: () => void;
+  readAloudLabel?: string;
   /** When set, D-pad Up from reply actions focuses strategy chrome before the answer bubble. */
   onMoveUpFromReply?: () => boolean;
   /** D-pad Up from utility row (Retry / Show details) when no chip rows are visible. */
@@ -122,12 +131,15 @@ export function buildReplyActionsElement(
     chipError = null,
     onChip,
     askInFlight = false,
+    onReadAloudToggle,
+    readAloudLabel = "Read aloud",
     onMoveUpFromReply,
     onMoveUpFromChips,
     onMoveDownFromUtility,
   } = args;
 
   const showChipRows = Boolean(onChip) && rating === "down";
+  const showReadAloudRow = Boolean(onReadAloudToggle);
   /*
    * The row of buttons under a reply is gone (D76, D77): Show details became the line below,
    * Copy moved into the answer bubble's corner and Retry onto the question bubble's. What is left
@@ -175,6 +187,7 @@ export function buildReplyActionsElement(
    * render is the ref equivalent here — there are no hooks to use.
    */
   const thumbsRowEl: { current: HTMLElement | null } = { current: null };
+  const readAloudEl: { current: HTMLElement | null } = { current: null };
   const dividerEl: { current: HTMLElement | null } = { current: null };
   /*
    * Steam's nav node for the utility row. Thumbs and utility are separate navigation containers, so
@@ -226,9 +239,13 @@ export function buildReplyActionsElement(
    * "Helpful → Down" look correct only because Retry is where Steam was going to land anyway.
    * Once focus is inside the row, a plain `focus()` moves between its two buttons (same container).
    */
-  /* Below the thumbs sits the Show details line — the button row that used to be here is gone. */
+  /*
+   * Below the thumbs sits Read aloud (when it renders) and then the Show details line — the
+   * button row that used to be here is gone.
+   */
   const downFromThumbs = () => {
     if (showChipRows) return false;
+    if (showReadAloudRow && focusReplyReadAloud(liveSlot())) return true;
     if (showDetailsDivider && focusReplyShowDetails(liveSlot())) return true;
     return downFromDivider();
   };
@@ -274,10 +291,21 @@ export function buildReplyActionsElement(
     return focusLastAnswerChunk(replyKey);
   };
 
-  /* Nothing between the line and the thumbs any more, so Up goes straight to the row above. */
-  const upFromDivider = () => upFromRetry();
+  /* Read aloud, when it renders, sits directly above Show details; otherwise Up goes to the thumbs. */
+  const upFromDivider = () => {
+    if (showReadAloudRow && focusReplyReadAloud(liveSlot())) return true;
+    return upFromRetry();
+  };
 
-  if (!showFeedback && !showDetailsDivider && !showChipRows && rating === null) {
+  /* Read aloud's own Up/Down: same "up to thumbs" fallback as Show details used to use alone, and
+     down to Show details when it renders, else straight to whatever sits below the utility row. */
+  const upFromReadAloud = () => upFromRetry();
+  const downFromReadAloud = () => {
+    if (showDetailsDivider && focusReplyShowDetails(liveSlot())) return true;
+    return downFromDivider();
+  };
+
+  if (!showFeedback && !showDetailsDivider && !showChipRows && !showReadAloudRow && rating === null) {
     return null;
   }
 
@@ -357,6 +385,32 @@ export function buildReplyActionsElement(
         >
           {chipError}
         </div>
+      ) : null}
+      {showReadAloudRow ? (
+        /*
+         * Read aloud / Stop, one line, same shape as Show details below it (plan 42 step 3). A
+         * line rather than a button because the answer bubble's own action row is gone (D76, D77)
+         * and this is the surviving shape a single reply-level control takes here.
+         */
+        <Focusable
+          className="bonsai-chat-details-divider"
+          ref={(el: HTMLElement | null) => {
+            readAloudEl.current = el;
+            registerReplyStop("read-aloud", el);
+          }}
+          onOKButton={onReadAloudToggle}
+          onClick={onReadAloudToggle}
+          aria-label={readAloudLabel}
+          {...({
+            onMoveUp: upFromReadAloud,
+            onMoveDown: downFromReadAloud,
+            onButtonDown: pressHandler(readAloudEl, downFromReadAloud, upFromReadAloud),
+          } as Record<string, unknown>)}
+        >
+          <span className="bonsai-chat-details-divider-rule" />
+          <span className="bonsai-chat-details-divider-label">{readAloudLabel}</span>
+          <span className="bonsai-chat-details-divider-rule" />
+        </Focusable>
       ) : null}
       {showDetailsDivider ? (
         /*

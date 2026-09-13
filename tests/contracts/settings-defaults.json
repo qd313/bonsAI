@@ -50,5 +50,6 @@
   "unified_input_persistence_mode": "no_persist",
   "use_local_knowledge_base": false,
   "vision_model_routing_order": [],
+  "voice_reply_mode": "off",
   "voice_stt_model": "tiny.en"
 }

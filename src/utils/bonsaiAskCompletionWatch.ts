@@ -12,6 +12,7 @@ import {
   BACKGROUND_STREAM_POLL_MS,
 } from "../hooks/useBackgroundGameAi";
 import { handleAskPollErrorForToast, handleAskTerminalForToast } from "./bonsaiReplyReadyToast";
+import { handleAskTerminalForReadAloud } from "../hooks/useReadAloud";
 
 let watchSeq = 0;
 let pollTimer: number | null = null;
@@ -38,6 +39,7 @@ async function pollOnce(seq: number): Promise<void> {
 
     if (status.status === "completed" || status.status === "failed") {
       handleAskTerminalForToast(status);
+      handleAskTerminalForReadAloud(status);
       stopAskCompletionWatch();
       return;
     }

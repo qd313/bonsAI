@@ -12,7 +12,7 @@
     },
     {
       "path": "src/index.tsx",
-      "lines": 1642,
+      "lines": 1697,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
@@ -32,7 +32,7 @@
     },
     {
       "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
-      "lines": 1436,
+      "lines": 1437,
       "role": ""
     },
     {
@@ -56,13 +56,13 @@
       "role": ""
     },
     {
-      "path": "src/components/OllamaWhereAiRunsSection.tsx",
-      "lines": 1174,
+      "path": "src/components/MainTabChatTranscript.tsx",
+      "lines": 1211,
       "role": ""
     },
     {
-      "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1133,
+      "path": "src/components/OllamaWhereAiRunsSection.tsx",
+      "lines": 1174,
       "role": ""
     },
     {
@@ -111,23 +111,23 @@
       "role": ""
     },
     {
+      "path": "src/components/SettingsTab.tsx",
+      "lines": 636,
+      "role": ""
+    },
+    {
       "path": "src/components/MainTabPresetAnimatedChips.test.tsx",
       "lines": 635,
       "role": ""
     },
     {
+      "path": "src/hooks/usePluginSettings.ts",
+      "lines": 582,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/intent_pack_service.py",
       "lines": 581,
-      "role": ""
-    },
-    {
-      "path": "src/hooks/usePluginSettings.ts",
-      "lines": 574,
-      "role": ""
-    },
-    {
-      "path": "src/components/SettingsTab.tsx",
-      "lines": 572,
       "role": ""
     },
     {
@@ -137,7 +137,7 @@
     },
     {
       "path": "py_modules/backend/services/settings_service.py",
-      "lines": 541,
+      "lines": 544,
       "role": "Load/save/merge settings.json"
     },
     {
@@ -162,12 +162,12 @@
     },
     {
       "path": "src/utils/settingsContracts.test.ts",
-      "lines": 508,
+      "lines": 511,
       "role": ""
     },
     {
       "path": "src/data/bonsaiSettingsNormalizers.ts",
-      "lines": 498,
+      "lines": 506,
       "role": ""
     },
     {
@@ -196,8 +196,8 @@
       "role": ""
     },
     {
-      "path": "src/features/preset-carousel/sessionRagComposer.test.ts",
-      "lines": 457,
+      "path": "src/utils/buildReplyActionsElement.tsx",
+      "lines": 462,
       "role": ""
     }
   ]

@@ -380,6 +380,9 @@ _SIMPLE_FIELDS: dict[str, Any] = {
     # turns it off, and turning it off leaves keyword search fully working.
     "rag_hybrid_retrieval_enabled": _bool_default_true,
     "rag_corpus_version": _coerced_str(64),
+    # Voice. Off unless the person turns it on -- an unrecognised value must not start reading
+    # answers out loud on its own (D99 call 3).
+    "voice_reply_mode": _enum(frozenset({"off", "voice_only", "always"}), "off", strip=True),
     # Credentials.
     "steam_web_api_key": _bounded_str(STEAM_WEB_API_KEY_MAX_LEN),
 }

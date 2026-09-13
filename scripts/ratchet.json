@@ -1,0 +1,153 @@
+{
+  "_meta": {
+    "Title": "Refactor ratchet data",
+    "Purpose": "Hold the best-ever-measured value, the goal, and the plan's 2026-09-09 starting point for every number the phase 0 refactor is only allowed to improve.",
+    "Used for": "scripts/ratchet.py measure|check|update reads and writes this file. Nothing else should hand-edit the \"best\" numbers.",
+    "Solves": "Gives \"did the refactor make this worse\" one saved number to compare against instead of a guess.",
+    "Does not": "Enforce the target on its own -- scripts/ratchet.py check only fails when a number is worse than the recorded best, not when it is merely short of the target."
+  },
+  "files_over_400_lines": {
+    "label": "Files over 400 lines (app code, both sides)",
+    "best": 42,
+    "target": 30,
+    "start_2026_09_09": 41,
+    "direction": "lower_is_better",
+    "measured_by": "line count over src/**/*.ts(x) (excluding tests) plus main.py and py_modules/**/*.py"
+  },
+  "fe_long_functions_uncommented": {
+    "label": "Outermost front-end functions over 60 lines with no leading comment",
+    "best": 56,
+    "target": 0,
+    "start_2026_09_09": 53,
+    "direction": "lower_is_better",
+    "measured_by": "scripts/ts_long_functions.mjs (TypeScript compiler API)"
+  },
+  "be_long_functions_no_docstring": {
+    "label": "Back-end functions over 60 lines with no docstring",
+    "best": 7,
+    "target": 0,
+    "start_2026_09_09": 6,
+    "direction": "lower_is_better",
+    "measured_by": "Python ast, over main.py and py_modules/**/*.py"
+  },
+  "duplicate_lines_app": {
+    "label": "Copy-pasted lines, app code",
+    "best": null,
+    "target": 350,
+    "start_2026_09_09": 717,
+    "direction": "lower_is_better",
+    "measured_by": "jscpd, min-tokens 50 (not measured yet -- jscpd is not installed in this checkout)"
+  },
+  "duplicate_lines_be_tests": {
+    "label": "Copy-pasted lines, back-end tests",
+    "best": null,
+    "target": 700,
+    "start_2026_09_09": 1372,
+    "direction": "lower_is_better",
+    "measured_by": "jscpd, min-tokens 50, over tests/**/*.py (not measured yet -- jscpd is not installed in this checkout)"
+  },
+  "unused_exports_fe": {
+    "label": "Unused exports, front end",
+    "best": null,
+    "target": 0,
+    "start_2026_09_09": null,
+    "direction": "lower_is_better",
+    "measured_by": "knip (not measured yet -- knip is not installed in this checkout)"
+  },
+  "import_cycles_be": {
+    "label": "Import cycles, back end",
+    "best": null,
+    "target": 0,
+    "start_2026_09_09": 2,
+    "direction": "lower_is_better",
+    "measured_by": "packages/bonsai-mcp/knowledge/architecture/py-import-graph.json (not measured yet -- that file does not exist in this checkout)"
+  },
+  "import_cycles_fe": {
+    "label": "Import cycles, front end",
+    "best": 0,
+    "target": 0,
+    "start_2026_09_09": 0,
+    "direction": "lower_is_better",
+    "measured_by": "packages/bonsai-mcp/knowledge/architecture/import-graph.json"
+  },
+  "raw_call_sites": {
+    "label": "Raw call() sites outside the four allowed",
+    "best": 0,
+    "target": 0,
+    "start_2026_09_09": 0,
+    "direction": "lower_is_better",
+    "measured_by": "grep for call( and callDeckyWithTimeout( in front-end app code, minus clear_plugin_data / install_rag_corpus_local / start_voice_transcription / stop_voice_transcription"
+  },
+  "files_without_purpose_header": {
+    "label": "Files without a purpose header",
+    "best": null,
+    "target": 0,
+    "start_2026_09_09": 20,
+    "direction": "lower_is_better",
+    "measured_by": "python scripts/check_headers.py --json, the missing_purpose list (not measured yet -- check_headers.py does not exist in this checkout)"
+  },
+  "fe_calls_with_no_be_method": {
+    "label": "Front-end call names with no back-end method",
+    "best": 0,
+    "target": 0,
+    "start_2026_09_09": 0,
+    "direction": "lower_is_better",
+    "measured_by": "rpc-map.json method names compared against call()/callDeckyWithTimeout( names grepped from front-end app code"
+  },
+  "be_methods_with_no_caller": {
+    "label": "Back-end methods with no caller",
+    "best": 3,
+    "target": 0,
+    "start_2026_09_09": 1,
+    "direction": "lower_is_better",
+    "measured_by": "rpc-map.json method names compared against call()/callDeckyWithTimeout( names grepped from front-end app code"
+  },
+  "settings_field_list_repeats": {
+    "label": "Places the settings field list is repeated in the settings hook",
+    "best": 7,
+    "target": 1,
+    "start_2026_09_09": 7,
+    "direction": "lower_is_better",
+    "measured_by": "scripts/ratchet.py, a line-run rule over src/hooks/usePluginSettings.ts (see the comment above metric_settings_field_list_repeats)"
+  },
+  "doc_size_kb_roadmap": {
+    "label": "Living doc size: roadmap",
+    "best": 118.56,
+    "target": 40,
+    "start_2026_09_09": 109,
+    "direction": "lower_is_better",
+    "measured_by": "byte count of docs/roadmap.md, divided by 1024"
+  },
+  "doc_size_kb_testing": {
+    "label": "Living doc size: testing",
+    "best": 317.73,
+    "target": 60,
+    "start_2026_09_09": 315,
+    "direction": "lower_is_better",
+    "measured_by": "byte count of docs/testing.md, divided by 1024"
+  },
+  "doc_size_kb_claude": {
+    "label": "Living doc size: orientation (CLAUDE.md)",
+    "best": 13.26,
+    "target": 8,
+    "start_2026_09_09": 13,
+    "direction": "lower_is_better",
+    "measured_by": "byte count of CLAUDE.md, divided by 1024"
+  },
+  "doc_size_kb_agents": {
+    "label": "Living doc size: neutral guide (AGENTS.md)",
+    "best": null,
+    "target": 12,
+    "start_2026_09_09": 9,
+    "direction": "higher_is_better",
+    "measured_by": "byte count of AGENTS.md, divided by 1024 (not measured yet -- AGENTS.md is gitignored and local-only, not present in every checkout)"
+  },
+  "live_docs_mentioning_cursor": {
+    "label": "Live docs mentioning Cursor",
+    "best": 12,
+    "target": 0,
+    "start_2026_09_09": 6,
+    "direction": "lower_is_better",
+    "measured_by": "grep over docs/ (excluding docs/archive/ and anything named changelog) for .cursorrules, cursor/*, or Cursor as a proper noun"
+  }
+}

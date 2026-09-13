@@ -6,7 +6,7 @@ file is a bug.
 
 Written 2026-08-09 while designing the chat-slots redesign, because the same values kept
 getting re-derived by grep. Companion to [code-clarity.md](code-clarity.md) (file headers)
-and `.cursor/rules/decky-focus-graph.mdc` (D-pad wiring).
+and `AGENTS.md (Decky focus graph)` (D-pad wiring).
 
 **This file is the *what*. [design-language.md](design-language.md) is the *why*** — the layout
 rules these values serve, starting with using every pixel of a 300px column. Read it before

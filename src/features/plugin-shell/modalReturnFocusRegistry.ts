@@ -5,7 +5,7 @@
  * Solves: Closing a picker restored the tab but not the focused control, so the user re-walked the panel.
  * Does not: Own the tab restore (useBonsaiPluginShell) or general D-pad graphs (focus-graph rules).
  *
- * Registry rather than a DOM query on purpose: `.cursor/rules/decky-focus-graph.mdc` forbids
+ * Registry rather than a DOM query on purpose: `AGENTS.md (Decky focus graph)` forbids
  * reaching for focus targets with `querySelector` / `document.activeElement`, because those miss
  * under Decky and land focus somewhere wrong. A control registers itself while mounted; if it is
  * not mounted when the modal closes, focus is left exactly where it is — today's behavior.
@@ -107,7 +107,7 @@ export function restoreModalReturnFocusWithRetry(
  * this registry landed:
  *
  * 1. **It used to write `tabindex="-1"` onto all three targets, and never put it back.**
- *    `.cursor/rules/decky-focus-graph.mdc`: *"NEVER overwrite an existing `tabindex`... Decky sets
+ *    `AGENTS.md (Decky focus graph)`: *"NEVER overwrite an existing `tabindex`... Decky sets
  *    `tabindex="0"` on the nodes it navigates; replacing it removes them from Steam's graph, so
  *    navigating onto a control is what stops it responding."* So every modal close quietly took
  *    its own opener out of the nav graph. That is the strongest available explanation for the

@@ -92,7 +92,7 @@ export function findNextDrgGlossaryTermChipInView(
  *
  * Same two load-bearing details as `focusSpoilerFence`: never overwrite an existing `tabindex`
  * (Decky already put `0` there), and verify with `elementHasFocus`, which asks the chip's own
- * document rather than SharedJSContext's shell (`.cursor/rules/decky-focus-graph.mdc`).
+ * document rather than SharedJSContext's shell (`AGENTS.md (Decky focus graph)`).
  */
 export function focusDrgGlossaryTermChip(el: HTMLElement | null): boolean {
   if (!el) return false;

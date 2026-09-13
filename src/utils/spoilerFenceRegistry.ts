@@ -31,7 +31,7 @@ export function registerSpoilerFence(id: string, el: HTMLElement | null): void {
  * The first still-masked fence inside `bubble` that is on screen and has not been parked on yet.
  *
  * Containment is checked against registered elements rather than looked up with a selector, per
- * `.cursor/rules/decky-focus-graph.mdc` — a DOM query for a focus target misses under Decky.
+ * `AGENTS.md (Decky focus graph)` — a DOM query for a focus target misses under Decky.
  */
 export function findUnvisitedSpoilerFenceInView(
   bubble: HTMLElement,

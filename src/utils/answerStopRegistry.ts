@@ -18,7 +18,7 @@ import { elementHasFocus, rememberUiDocument, uiGamepadFocusElement } from "./ui
  * One map per answer, keyed by the section's position in the rendered stack.
  *
  * Position comes from the renderer rather than from comparing DOM nodes: the renderer already knows
- * it, and `.cursor/rules/decky-focus-graph.mdc` rules out reaching for the document to answer a
+ * it, and `AGENTS.md (Decky focus graph)` rules out reaching for the document to answer a
  * focus question. Re-registering with the same index simply replaces the element, which is what a
  * re-render does.
  */

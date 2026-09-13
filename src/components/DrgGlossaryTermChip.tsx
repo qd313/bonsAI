@@ -94,7 +94,7 @@ export function DrgGlossaryTermChip(props: DrgGlossaryTermChipProps) {
   /*
    * A opens the full definition; a second A (from full) triggers explain-further and closes.
    * Mirrors BonsaiSpoilerFence's single-Focusable A/direction split: a real button is click-only,
-   * the Focusable owns A and D-pad (`.cursor/rules/decky-focus-graph.mdc`).
+   * the Focusable owns A and D-pad (`AGENTS.md (Decky focus graph)`).
    */
   const activate = () => {
     if (state === "full") {

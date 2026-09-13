@@ -607,13 +607,20 @@ def metric_settings_field_list_repeats():
 
 
 def _doc_size_kb(rel_path: str):
+    """Size of a document in KB, counted with line endings normalised.
+
+    Not `st_size`. Git hands out CRLF line endings on Windows, and whether a given checkout
+    actually has them depends on when the file was last written and by what. That made the
+    same unchanged document measure 13.04 KB in the main checkout and 13.26 KB in a fresh
+    copy -- one byte per line -- so every lane failed this check for a reason that had
+    nothing to do with its work. Counting the text with `\\n` endings gives every checkout
+    the same answer.
+    """
     path = ROOT / rel_path
     if not path.exists():
-        note = f"{rel_path} not found"
-        if rel_path == "AGENTS.md":
-            note = "AGENTS.md is gitignored and local-only -- not present in this checkout"
-        return None, note
-    return round(path.stat().st_size / 1024, 2), None
+        return None, f"{rel_path} not found"
+    raw = path.read_bytes().replace(b"\r\n", b"\n")
+    return round(len(raw) / 1024, 2), None
 
 
 def metric_doc_size_kb_roadmap():
@@ -811,6 +818,24 @@ def cmd_check(as_json: bool) -> int:
             continue
         checked += 1
         direction = entry.get("direction", "lower_is_better")
+        # A ceiling suits a number that legitimately drifts up in normal use but must never
+        # balloon. The roadmap and the testing doc gain a line every time work lands, so
+        # "may only shrink" would block the bookkeeping every landing owes; "must stay under
+        # this" keeps them honest without fighting ordinary use. A breached ceiling is a real
+        # failure even on a metric that is otherwise only advisory.
+        ceiling = entry.get("ceiling")
+        if ceiling is not None and current > ceiling:
+            regressions.append(
+                {
+                    "id": metric_id,
+                    "label": entry.get("label", metric_id),
+                    "current": current,
+                    "best": best,
+                    "direction": direction,
+                    "ceiling": ceiling,
+                }
+            )
+            continue
         if _is_worse(current, best, direction):
             row = {
                 "id": metric_id,
@@ -845,6 +870,9 @@ def cmd_check(as_json: bool) -> int:
         return 1 if regressions else 0
 
     for r in regressions[:40]:
+        if "ceiling" in r:
+            print(f"{r['label']} is over its ceiling: {_fmt(r['current'])} (must stay under {_fmt(r['ceiling'])}).")
+            continue
         word = "dropped to" if r["direction"] == "higher_is_better" else "rose to"
         print(f"{r['label']} got worse: {word} {_fmt(r['current'])} (best so far was {_fmt(r['best'])}).")
     for r in advisories[:10]:

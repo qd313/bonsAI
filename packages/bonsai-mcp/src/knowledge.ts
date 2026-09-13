@@ -237,7 +237,7 @@ export function formatSessionBootstrap(opts?: { autoInjected?: boolean }): strin
     "",
     ...lines,
     "",
-    "Focus checklist (always): `.cursor/rules/decky-focus-graph.mdc`. Patterns: `bonsai://architecture/focus-graph-patterns`.",
-    "Screenshots: skill **decky-screenshot-ingest** when user mentions screenshot/DeckCapture/`screenshots/`.",
+    "Focus checklist (always): `AGENTS.md (Decky focus graph)`. Patterns: `bonsai://architecture/focus-graph-patterns`.",
+    "Screenshots: the Deck capture tools in AGENTS.md when the user mentions screenshot/DeckCapture/`screenshots/`.",
   ].join("\n");
 }

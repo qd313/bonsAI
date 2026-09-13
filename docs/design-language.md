@@ -211,7 +211,7 @@ it and why the limit has to be deliberate.
 ## Rule 8 — A control that cannot be reached does not exist.
 
 Every new Settings or QAM control needs a focus-graph entry **before** it is written —
-`.cursor/rules/decky-focus-graph.mdc`. This is not a new rule; it is listed here because it is the
+`AGENTS.md (Decky focus graph)`. This is not a new rule; it is listed here because it is the
 one most often skipped when a layout change adds an element, and because a D-pad dead end is
 invisible in a screenshot for exactly the same reason a 16px gutter's cause is.
 

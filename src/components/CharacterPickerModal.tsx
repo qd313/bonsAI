@@ -228,7 +228,7 @@ export function CharacterPickerModal(props: CharacterPickerModalProps) {
 
   const focusRandomToggle = useCallback(() => {
     // Scoped to a ref'd container rather than found by class from the shell: a registered mounted
-    // owner is what .cursor/rules/decky-focus-graph.mdc asks for, and the class lookup was one of
+    // owner is what AGENTS.md (Decky focus graph) asks for, and the class lookup was one of
     // the DOM queries that made this screen unnavigable on Deck.
     const box = randomRowRef.current;
     if (!box) return false;

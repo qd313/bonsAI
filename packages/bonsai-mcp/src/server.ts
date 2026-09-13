@@ -278,7 +278,7 @@ export function createServer(): McpServer {
 
   server.tool(
     "bonsai.report.archive",
-    "Append a structured entry to .cursor/agents/SUBAGENT_REPORTS.md",
+    "Append a structured entry to docs/audit/subagent-reports.md",
     {
       agent: z.string(),
       summary: z.string(),

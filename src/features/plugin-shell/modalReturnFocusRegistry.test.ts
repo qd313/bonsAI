@@ -137,7 +137,7 @@ describe("modal return-focus registry", () => {
   });
 
   // Both of these lock in fixes for rule violations that shipped in this file from the start.
-  // See `.cursor/rules/decky-focus-graph.mdc` and the header comment on `focusOwnerById`.
+  // See `AGENTS.md (Decky focus graph)` and the header comment on `focusOwnerById`.
 
   it("does not rewrite the opener's tabindex", () => {
     const el = mountButton();

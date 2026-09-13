@@ -19,10 +19,10 @@ Twelve decisions. Nine of them I have a clear recommendation for, and three need
 |---|---|---|---|
 | A1 | 43 names in the front end that nothing anywhere mentions | Delete | ★ |
 | A2 | 18 pieces of back-end code that nothing calls | Delete | ★★ |
-| A3 | An older, separate way of asking the AI about a game | **Your call** | ★★★ |
-| A3b | An answer-checking feature that was built and never switched on | **Your call** | ★★ |
+| A3 | An older, separate way of asking the AI about a game | **Held** — no use for it turned up | ★★★ |
+| A3b | An answer-checking feature that was built and never switched on | **Held** — worth a log-only trial | ★★ |
 | A4 | Two values passed into a function and never read | Delete | ★ |
-| A5 | Four packages listed as needed that may not be | **Your call** — needs a build test first | ★★ |
+| A5 | Four packages listed as needed that may not be | **Held** — all four wait for a build test | ★★ |
 | A6 | Two menus that share 74 lines of the same code | Merge | ★★ |
 | A7 | One setting has to be written out in five separate places | Merge, but in phase 4, not now | ★★★★ |
 | A8 | Big repeated blocks inside single test files | Merge | ★★ |
@@ -80,18 +80,82 @@ question, it is a "did we mean to finish this?" question. **Worth a look from yo
 It is also the only thing in this phase that could be described as a missing feature rather than
 leftover mess.
 
+**Answered 2026-09-13: hold, and see if it is useful first.** What that turned up is below.
+
+---
+
+### What we found when we looked
+
+Both held decisions got the same instruction: find out whether the thing is useful before deciding.
+Here is what looking turned up. Neither answer is final — the point of each is to say what would
+actually settle it.
+
+#### A3 — is the older ask path useful to anything?
+
+Three places could plausibly want a one-call ask that returns a finished answer instead of starting
+one in the background: the plugin itself, the automated tests, and the tools that drive the Deck
+from the maintainer's PC.
+
+- **The plugin**: no. It uses the background way everywhere, deliberately, so the screen stays
+  responsive while an answer is being written.
+- **The tests**: no. Nothing in the test suite calls it.
+- **The Deck tools**: no, and this is the interesting one. The tool that puts a question on the Deck
+  for testing types it into the box and then deliberately stops — it does not press Ask. Its own
+  notes say why: the submit stays manual so that what is being tested is still the real path a
+  person uses. Reaching past the screen to ask directly is exactly what that tool is written to
+  avoid, so it would not use this even if it existed for that purpose.
+
+**So no use for it turned up.** The one thing that would change this is if you want a way to ask the
+plugin a question from a script — for a nightly check, say, or to compare models without sitting in
+front of the Deck. That is a real thing to want, and this is most of the plumbing for it. But it is
+a feature to build on purpose, not 44 lines to keep on the chance.
+
+#### A3b — would the answer checker catch anything?
+
+It has three rules. Tested against every saved device recording in the project — 412 of them, plus
+the write-ups:
+
+| Rule | What it catches | Times it would have fired |
+|---|---|---|
+| The reply states a store number for a game when no game was attached | an invented game reference | **0** |
+| The reply was asked for a power-tuning block and did not give one | a request the model ignored | already caught today, see below |
+| The reply says "I am certain this is" without a game attached | false confidence | **0** |
+
+The third rule needs that exact phrase, word for word. It appears nowhere in anything the project
+has ever recorded. As written it will essentially never fire.
+
+The second rule is the real one, and there is a twist: **the plugin already detects this.** When the
+AI is asked for a power-tuning suggestion and does not produce one, the live code notices and writes
+it to the log. So the information already exists — what the checker would add is telling the person
+instead of only the log.
+
+There is also a fourth part, separate from the three rules: it can ask a second AI model whether the
+first one's answer looks made up. That is an extra model call for every answer, on a handheld, and
+it is the expensive half of the feature.
+
+**What would settle it:** switch on the three rules so they only write to the log — no note on
+screen, no second model, nothing a person would see — and leave them running through normal use.
+After a couple of weeks of real questions we would know how often any of them fires and whether the
+hits are real. That is a small, safe wiring job and it turns the question from a guess into a count.
+Until then the honest answer is that one rule of three has any chance of mattering, and that one is
+already noticed.
+
 #### A3 — an older, separate way of asking the AI (★★★, your call)
 
 There are two ways in the back end to ask the AI about a game. The one the app uses starts the
 question in the background so the screen stays responsive. The other answers straight away and
 makes the caller wait. Nothing in the app calls the second one.
 
-It is about 150 lines. Deleting it is the single biggest tidy-up available. But it is a whole
-answer path, and if you ever wanted a quick synchronous ask — for a script, or a test rig —
-that is what it is.
+It is 44 lines. (An earlier draft of this document said about 150 — that was measured wrongly, by
+eye, from the gap between two log lines. The real figure is 44.) It is not a second copy of the
+answering logic: both ways parse their arguments, handle the same three keyword shortcuts, and then
+call the same shared piece that does the actual work. The older one is a thin wrapper.
 
-I lean towards deleting it, because two paths that do the same thing drift apart and then one of
-them has a bug nobody notices. But it is a behaviour question, not a tidiness one, so it is yours.
+Keeping it costs 44 lines that have to stay in step with the wrapper the app really uses. If they
+drift, the bug sits in a path nobody runs. That is the whole argument against it, and it is a small
+one.
+
+**Answered 2026-09-13: hold, and see if it is useful first.** What that turned up is below.
 
 #### A4 — two values passed in and never read (★)
 
@@ -213,22 +277,14 @@ quietly done, and that is what this paragraph is.
 
 ### What I need from you
 
-Three real decisions:
+**Answered 2026-09-13.** All three held: look before deleting on A3 and A3b, hold all four packages
+on A5 until a build test. What the looking found is in the section above. None of the three blocks
+the delete phase — each simply drops out of it and comes back as its own small job later.
 
-- **A3**: delete the older, separate way of asking the AI, or keep it?
-- **A3b**: the answer-checking feature that has never run — finish wiring it up, or delete it? If
-  you want it, that is a roadmap entry, not clean-up work, and I would file it rather than do it
-  inside the refactor.
-- **A5**: I remove the two clearly-dead packages now, and we leave the two risky ones until there
-  has been a build and a start-up on the Deck. Agree?
+Still open, and the only thing now standing between here and the delete phase:
 
-And one thing to nod at:
-
-- **Correcting the three measures above** so the targets mean what they say.
-
-Everything else I would just do, in the order the plan already sets out. Nothing here needs the
-Deck. Nothing here changes what a person using the plugin sees — the only two that could are A3
-and A3b, which is exactly why they are yours and not mine.
+- **Correcting the three measures** so the targets mean what they say. It changes saved numbers,
+  which is why it is asked rather than done.
 
 ---
 
@@ -294,19 +350,38 @@ sensible goal against the corrected 877, not the impossible one it looked like a
 
 In the order they should land, one commit each, each independently revertible:
 
+Held by the 2026-09-13 answers and **out of phase 3**: `ask_game_ai` (A3), `response_verify.py`
+(A3b) and all four package removals (A5). Do not touch any of them in this phase.
+
+What is left, in the order it should land, one commit each, each independently revertible:
+
 1. The 43 unreferenced front-end names (A1). Script-findable, no behaviour change.
 2. The 18 uncalled back-end pieces (A2), starting with `py_modules/backend/json_store.py` — the
-   whole file, 69 lines, nothing imports it. Hold `response_verify.py` out of this package: it is
-   decision A3b.
+   whole file, 69 lines, nothing imports it. **Take the three `response_verify.py` entries out of
+   this package**; they are held under A3b.
 3. The two unused arguments (A4), each with its callers in the same commit.
-4. The two clearly-dead packages (A5), with a build in the same commit.
-5. `ask_game_ai` — only if A3 says delete.
-6. `response_verify.py` plus the `verify_result` argument threaded through
-   `transparency_service.build_*` — only if A3b says delete.
-7. The 103 export-word removals (A10) — last, by script, one commit, nothing else in it.
+4. The 103 export-word removals (A10) — last, by script, one commit, nothing else in it.
 
-Packages 1–4 do not touch each other and can run as separate lanes. Package 7 must go last because
+Packages 1–3 do not touch each other and can run as separate lanes. Package 4 must go last because
 it will conflict with any file another package edits.
+
+### B2-5. The two held items, and what would settle each
+
+Neither belongs in the refactor. Both are filed so they survive it.
+
+**A3, the older ask path.** Nothing uses it and nothing wants to; the Deck test tool that might have
+is written to avoid shortcut paths on principle. It stays until either it finds a user or the
+question of asking the plugin from a script is taken up properly as a feature. Re-check at phase 6.
+
+**A3b, the answer checker.** The cheap trial: call `verify_ollama_response` from the finished-reply
+point in `game_ai_request.py`, log the result, and change nothing else — no notice appended, no
+second model pass, nothing on screen. `maybe_append_verifier_notice` and `run_verifier_second_pass`
+stay uncalled during the trial. After a few weeks of real use, count the hits. That is a roadmap
+entry, not refactor work.
+
+Measured baseline for that trial, so the count means something: across 412 saved device recordings
+and every write-up, rule one would have fired 0 times, rule three 0 times, and rule two duplicates a
+condition the live code already logs (`ask_game_ai: no TDP recommendation found in response`).
 
 Not in phase 3: A6 and A8 (merges, they belong with the reshape work), A7 (phase 4 step 5), A11
 (revisit once 1–5 have landed and the neighbours are clearer).

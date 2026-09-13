@@ -5177,3 +5177,52 @@ and the automatic checks on pushed code really do still only warn rather than bl
 
 Nothing here is deleted outright today except the seven copies. Everything archived keeps its
 delete-after date in the archive index, and deleting any of it is a separate yes.
+
+### D102 — LOCKED 2026-09-13 — Look before deleting: the older ask path, the answer checker, and the four packages all held
+
+Three calls from the clean-up's measuring phase. All three are holds, and none of them stops the
+delete phase — each simply drops out of it.
+
+**The older way of asking the AI stays for now, and we looked for a use for it.** There are two ways
+in the back end to ask a question about a game: one answers straight away, one starts the answer in
+the background. The plugin only ever uses the background one. The older one is 44 lines, and it is
+not a second copy of the answering logic — both ways hand off to the same shared piece. Looking for
+anything that might want a one-call ask turned up nothing. The plugin does not. The tests do not.
+The tool that puts a question on the Deck for testing does not, and would not: it types the question
+and then deliberately stops short of pressing Ask, because the point of that tool is that what gets
+tested is the real path a person uses. Reaching past the screen is what it is written to avoid.
+
+So no use for it turned up. The one thing that would change that is wanting to ask the plugin a
+question from a script — a nightly check, or comparing models without sitting in front of the Deck.
+That is a real thing to want and this is most of the plumbing for it, but it would be a feature
+built on purpose, not 44 lines kept on the chance. Re-check at the end of the clean-up.
+
+**The answer checker stays, and the way to find out if it is worth having is to run it quietly.**
+The plugin has a piece of back-end code meant to catch a reply that looks made up. It works, it has
+its own test, and it has never once run: the field it fills is fed by a value nobody supplies. It
+has three rules. Checked against every saved device run in the project — 412 of them — the rule
+about a reply naming a store number for a game that was never attached would have fired zero times,
+and the rule about a reply claiming certainty needs one exact phrase that appears nowhere in
+anything this project has ever recorded. The third rule is the real one: it catches the AI being
+asked for a power-tuning suggestion and not giving one. The plugin already spots that today and
+writes it to the log, so what the checker would add is telling the person rather than only the log.
+
+There is also a fourth part, which asks a second AI model whether the first one's answer looks made
+up. That is an extra model call for every answer, on a handheld, and it is the expensive half.
+
+The cheap way to settle it: switch on the three rules so they only write to the log. Nothing on
+screen, no second model, nothing a person would notice. Leave it through normal use for a couple of
+weeks and count what fires. That turns the question from a guess into a number, and the counts above
+are the baseline it gets compared against. Filed on the roadmap; it is a small feature, not clean-up.
+
+**All four unused packages wait for a build.** The checking tool lists six packages the project says
+it needs but never imports. Two of those it is simply wrong about: our own measuring scripts run them
+as commands rather than importing them, which the tool cannot see. Of the remaining four, two look
+plainly dead — the old name of the Steam Deck interface library, which the project has moved off, and
+type definitions for a bundler this project does not use. The other two are riskier: a helper library
+for older-style compiled output, and the Linux build helper for the machine that actually builds the
+plugin. Nothing imports a build helper by name, so "unused" tells us nothing about it.
+
+Rather than split the four, all of them wait until there has been a build and the plugin has started
+on the Deck. Removing two now and two later means two chances for a build to break instead of one,
+for no gain — the build has to happen either way.

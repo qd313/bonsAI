@@ -204,6 +204,16 @@ hook gives a gentle heads-up when a session starts work outside this.
 `[layout]` entry serves it. Items rated ★★★★★ or above carry a placeholder link to [bonsAI Issues](https://github.com/qd313/bonsAI/issues) in the archive;
 replace it with a specific issue when one exists.
 
+- ★ `[ask]` **Run the answer checker quietly and count what it catches** — **OPEN, filed 2026-09-13 (D102).** The plugin
+  already has a piece of back-end code meant to spot a reply that looks made up. It works, it has a test, and it has never
+  once run — the field it fills is fed by a value nobody supplies. Before deciding whether to finish it or delete it, switch
+  its three rules on so they *only write to the log*: no note on screen, no second AI model, nothing a person would notice.
+  Leave it through normal use for a couple of weeks, then count. Baseline to beat, measured across all 412 saved device runs:
+  the "named a store number for a game that was never attached" rule would have fired **0 times**, the "claimed certainty"
+  rule needs one exact phrase that appears **nowhere** in anything this project has recorded, and the third rule — the AI was
+  asked for a power-tuning suggestion and did not give one — is **already spotted and logged today**, so all it would add is
+  telling the person. Not in scope: appending the on-screen notice, and the second-model pass (an extra model call per answer
+  on a handheld). [Detail](audit/refactor-round-two/phase2-decisions.md).
 - ★ `[ask]` **Intent packs later review** — **OPEN.** Decide whether the quiet intent-pack search aliases are deleted, left quiet, or
   revived under Developer. Not in scope: re-shipping Proton journal inject without a redesign. **New evidence 2026-09-06 (D79):**
   the bundled Deck basics list ships switched on and is the *only* reason a whole sentence ever matches a setting — its 88 words

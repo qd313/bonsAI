@@ -253,8 +253,6 @@ export const DEFAULT_VOICE_REPLY_MODE: VoiceReplyMode = "off";
 export const VOICE_REPLY_MODE_OPTIONS: VoiceReplyMode[] = ["off", "voice_only", "always"];
 export const SCREENSHOT_ATTACHMENT_PRESET_OPTIONS: ScreenshotAttachmentPreset[] = ["low", "mid", "max"];
 export const DEFAULT_SCREENSHOT_ATTACHMENT_PRESET: ScreenshotAttachmentPreset = "low";
-/** @deprecated use DEFAULT_SCREENSHOT_ATTACHMENT_PRESET; kept for tests/migration. */
-export const DEFAULT_SCREENSHOT_MAX_DIMENSION: ScreenshotMaxDimension = 1280;
 export const DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE = false;
 export const DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING = false;
 export const DEFAULT_SHOW_ONSCREEN_DEBUG_HUD = false;
@@ -288,7 +286,6 @@ export const DEFAULT_OLLAMA_LOCAL_ON_DECK = false;
 export const DEFAULT_OLLAMA_LOCAL_AUTOSTART = false;
 /** Fixed host:port for on-device Ollama (matches `refactor_helpers.DEFAULT_OLLAMA_*`). */
 export const OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP = "127.0.0.1:11434";
-export const DEFAULT_MODEL_POLICY_NON_FOSS_UNLOCKED = false;
 export const DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS = false;
 export const DEFAULT_ASK_MODE: AskModeId = "speed";
 export const DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED = true;

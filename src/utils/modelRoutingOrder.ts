@@ -85,25 +85,3 @@ export function buildPickerOrder(
   if (kind === "vision") tail = tail.filter((t) => isVisionCapableTag(t));
   return [...head, ...tail].slice(0, MAX_MODEL_ROUTING_ORDER_LEN);
 }
-
-export function mergePulledTag(
-  order: string[],
-  tag: string,
-  highVramEnabled: boolean,
-  sizeGb?: number,
-): string[] {
-  const t = tag.trim();
-  if (!t) return [...order];
-  const base = order.filter((x) => x !== t);
-  const merged =
-    highVramEnabled && isHighVramTag(t, sizeGb) ? [t, ...base] : [...base, t];
-  const out: string[] = [];
-  const seen = new Set<string>();
-  for (const x of merged) {
-    if (seen.has(x)) continue;
-    seen.add(x);
-    out.push(x);
-    if (out.length >= MAX_MODEL_ROUTING_ORDER_LEN) break;
-  }
-  return out;
-}

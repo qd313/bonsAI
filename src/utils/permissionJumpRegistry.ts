@@ -77,15 +77,6 @@ export function consumePermissionJumpReturnTab(): string | null {
   return tab;
 }
 
-export function clearPermissionJumpFocusTarget(): void {
-  pendingFocusTarget = null;
-}
-
-export function clearPermissionJump(): void {
-  pendingReturnTab = null;
-  pendingFocusTarget = null;
-}
-
 /**
  * Hand Steam's ring to the armed row's registered nav node, and nothing else — no DOM query, no
  * page search, no `.focus()` of any kind. Reports the truth: `takeNavFocus` is false when the row

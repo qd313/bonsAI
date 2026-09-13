@@ -53,6 +53,3 @@ export const ASK_MODE_ACCENT_GLOW_HIGH: Record<AskModeId, string> = {
   strategy: "rgba(250, 204, 21, 0.12)",
   expert: "rgba(248, 113, 113, 0.14)",
 };
-
-/** @deprecated Use ASK_MODE_ACCENT */
-export const ASK_MODE_OUTLINE: Record<AskModeId, string> = ASK_MODE_ACCENT;

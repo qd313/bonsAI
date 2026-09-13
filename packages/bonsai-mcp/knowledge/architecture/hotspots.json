@@ -166,11 +166,6 @@
       "role": ""
     },
     {
-      "path": "src/components/CharacterPropGlyph.tsx",
-      "lines": 511,
-      "role": ""
-    },
-    {
       "path": "src/data/bonsaiSettingsNormalizers.ts",
       "lines": 508,
       "role": ""
@@ -198,6 +193,11 @@
     {
       "path": "src/utils/buildReplyActionsElement.tsx",
       "lines": 462,
+      "role": ""
+    },
+    {
+      "path": "src/components/CharacterPropGlyph.tsx",
+      "lines": 457,
       "role": ""
     }
   ]

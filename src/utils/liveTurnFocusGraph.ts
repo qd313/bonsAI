@@ -226,29 +226,6 @@ export function focusUpFromReplyActions(liveSlot: HTMLElement | null): boolean {
   return focusLiveAnswerBubble(liveSlot);
 }
 
-/** Down from last branch option: checklist → thumbs. */
-export function focusDownFromStrategyBranch(liveSlot: HTMLElement | null): boolean {
-  if (focusStrategyChecklistToggle(liveSlot, "first")) return true;
-  return focusReplyThumbsRow(liveSlot);
-}
-
-/** Up from first checklist row: last branch → answer bubble. */
-export function focusUpFromStrategyChecklist(liveSlot: HTMLElement | null): boolean {
-  if (focusStrategyBranchButton(liveSlot, "last")) return true;
-  return focusLiveAnswerBubble(liveSlot);
-}
-
-/** Up from first branch option: answer bubble. */
-export function focusUpFromStrategyBranch(liveSlot: HTMLElement | null): boolean {
-  return focusLiveAnswerBubble(liveSlot);
-}
-
-/** Up from utility row (Retry): last chip → thumbs → strategy stack. */
-export function focusUpFromReplyUtilityRow(liveSlot: HTMLElement | null): boolean {
-  if (focusLastReplyChip(liveSlot)) return true;
-  return focusUpFromReplyActions(liveSlot);
-}
-
 export function focusContextChipLadder(liveSlot: HTMLElement | null): boolean {
   const ladder = liveSlot?.querySelector<HTMLElement>(".bonsai-chip-ladder");
   return focusDeckOwner(ladder);

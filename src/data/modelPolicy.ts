@@ -39,12 +39,6 @@ export function normalizeModelPolicyNonFossUnlocked(value: unknown): boolean {
   return value === true;
 }
 
-export const MODEL_POLICY_TIER_LABELS: Record<ModelPolicyTierId, string> = {
-  open_source_only: "Tier 1 — Open-source only",
-  open_weight: "Tier 2 — Open-source + open model (open-weight)",
-  non_foss: "Tier 3 — Include non-FOSS + unclassified tags",
-};
-
 /** Plain-language tier labels for Ollama tab / AI models hub. */
 export const MODEL_POLICY_TIER_LABELS_PLAIN: Record<ModelPolicyTierId, string> = {
   open_source_only: "Open source only (recommended)",

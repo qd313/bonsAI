@@ -337,27 +337,11 @@ export const PULL_MODEL_CATALOG: readonly PullModelEntry[] = [
 
 export const PULL_MODEL_CATALOG_TAGS: readonly string[] = PULL_MODEL_CATALOG.map((e) => e.tag);
 
-const catalogTagSet = new Set<string>(PULL_MODEL_CATALOG_TAGS);
-
-export function isCatalogModelTag(tag: string): boolean {
-  return catalogTagSet.has(tag);
-}
-
 /** Sort catalog entries newest-first within a group. */
 export function comparePullModelEntriesNewestFirst(a: PullModelEntry, b: PullModelEntry): number {
   const byDate = b.releasedYm.localeCompare(a.releasedYm);
   if (byDate !== 0) return byDate;
   return a.tag.localeCompare(b.tag);
-}
-
-/** Format YYYY-MM as "Mon YYYY" for the table. */
-export function formatReleasedYm(ym: string): string {
-  const m = /^(\d{4})-(\d{2})$/.exec(ym.trim());
-  if (!m) return ym;
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const idx = parseInt(m[2], 10) - 1;
-  if (idx < 0 || idx > 11) return ym;
-  return `${months[idx]} ${m[1]}`;
 }
 
 /** Compact table date — e.g. May '25 — saves horizontal space in Pull models. */

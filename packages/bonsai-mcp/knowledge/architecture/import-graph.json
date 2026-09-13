@@ -1,17 +1,13 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 381,
-  "edgeCount": 948,
+  "edgeCount": 946,
   "cycles": [],
   "orphans": [],
   "unresolved": [
     {
       "from": "src/components/AboutTab.tsx",
       "spec": "../assets/qrcode.png"
-    },
-    {
-      "from": "src/components/icons.tsx",
-      "spec": "../assets/icons/bonsai-logo.svg"
     },
     {
       "from": "src/components/MainTabChatTranscript.tsx",
@@ -2865,8 +2861,7 @@
     },
     "src/utils/askThinkingPhases.ts": {
       "imports": [
-        "src/i18n/catalog.ts",
-        "src/utils/i18n.ts"
+        "src/i18n/catalog.ts"
       ],
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx",
@@ -3089,9 +3084,7 @@
       "importedBy": []
     },
     "src/utils/chatPanelScroll.ts": {
-      "imports": [
-        "src/utils/uiDocument.ts"
-      ],
+      "imports": [],
       "importedBy": [
         "src/hooks/useDockClearanceOnFocus.ts",
         "src/hooks/useStreamScrollPin.ts",
@@ -3363,7 +3356,6 @@
       "importedBy": [
         "src/components/AboutReplyLanguageSection.tsx",
         "src/hooks/useReplyLanguage.ts",
-        "src/utils/askThinkingPhases.ts",
         "src/utils/i18n.test.ts"
       ]
     },
@@ -3940,7 +3932,6 @@
         "src/utils/buildAnswerBubbleElement.tsx",
         "src/utils/buildReplyActionsElement.test.tsx",
         "src/utils/buildReplyActionsElement.tsx",
-        "src/utils/chatPanelScroll.ts",
         "src/utils/drgGlossaryTermRegistry.ts",
         "src/utils/focusNavigation.test.ts",
         "src/utils/focusNavigation.ts",

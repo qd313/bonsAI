@@ -45,9 +45,6 @@ export const PERMISSION_TOGGLE_LABELS: Record<PermissionFocusTargetId, string> =
   steam_web_api: "Steam ban lookup",
   microphone_access: "Voice input (microphone)",
 };
-
-export const PERMISSION_TAB_ID = "permissions";
-
 const TAB_LABELS: Record<string, string> = {
   main: "Main",
   ollama: "Ollama",

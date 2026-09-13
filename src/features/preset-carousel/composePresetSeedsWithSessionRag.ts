@@ -62,11 +62,6 @@ export function setSessionRagCarouselCandidates(
   sessionRagRotationProbability = options?.ragProbability;
 }
 
-/** The candidates currently available to rotation. */
-export function getSessionRagCarouselCandidates(): SessionRagChipCandidate[] {
-  return sessionRagCandidates;
-}
-
 export type PickCarouselChipArgs = Omit<PickNextCarouselChipArgs, "ragCandidates"> & {
   /** Defaults to the published list; passed explicitly only by tests. */
   ragCandidates?: SessionRagChipCandidate[];

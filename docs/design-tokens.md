@@ -46,7 +46,6 @@ Declared as TypeScript constants in
 | `ASK_LABEL_COLOR_50` | `rgba(168,180,196,0.5)` | Placeholder / dimmed label, same chroma |
 | `ASK_LABEL_READY_COLOR` | `#d0dbe8` | Ask label once the prompt has text |
 | `BONSAI_FOREST_GREEN` | `#2e8753` | `[beta]` tags, latency labels, About warning |
-| `BONSAI_FOREST_GREEN_MUTED` | `rgba(82,216,138,0.88)` | Muted variant of the above |
 | `DECK_MENU_PANEL_BG` | `rgb(28,36,44)` | Inline popover surface |
 | `DECK_MENU_ROW_SELECTED_BG` | `rgb(40,50,62)` | Selected popover row |
 | `DECK_HIGHLIGHT_CYAN` | `#9ce7ff` | Sliders, links, active controls, section labels |
@@ -65,8 +64,6 @@ Three modes, each driving six CSS variables on the input host
 | speed | `#4ade80` | `rgba(74,222,128,0.06)` | `0.24` → `0.62` | `0.04` → `0.14` |
 | strategy | `#facc15` | `rgba(250,204,21,0.05)` | `0.22` → `0.58` | `0.04` → `0.12` |
 | expert | `#f87171` | `rgba(248,113,113,0.06)` | `0.24` → `0.62` | `0.04` → `0.14` |
-
-`ASK_MODE_OUTLINE` is a deprecated alias for `ASK_MODE_ACCENT` — don't use it in new code.
 
 > **`#f87171` is not a reserved danger colour.** It is the **Expert** ask-mode accent *and*
 > the destructive-control colour (`.bonsai-pullmodels-delete-btn` uses
@@ -193,7 +190,7 @@ Two standing prohibitions, both recorded as reverts in the source:
 | Ask primary label | 15, weight 600, small-caps, `letter-spacing: 0.55px` | 1 |
 | Menu rows (`DECK_MENU_FONT_PX`) | 13 | 1.5 |
 | Ask input text (`UNIFIED_TEXT_FONT_PX`) | 12 | 1.2 |
-| Transcript (`BONSAI_CHAT_TRANSCRIPT_FONT_PX`) | 12 | 1.4 |
+| Transcript | 12 | 1.4 |
 | Prose (`.bonsai-prose`) | 12 | 1.4 |
 | Section labels | 10, weight 700, `letter-spacing: 0.03em`, `#9ce7ff` | — |
 | Empty / meta text | 10–11, `#6b7c90` | — |
@@ -262,10 +259,10 @@ only `showModal()` content escapes the column.
 
 ## Known drift
 
-- **`BONSAI_CHAT_USER_BUBBLE_MAX_PX` (260) has no consumer.** The user bubble is actually
-  capped by `max-width: min(88%, 280px)` in
-  [section-6.ts:193](../src/styles/sections/section-6.ts). Two numbers, one of them dead —
-  delete the constant or wire it, but don't trust it as documentation.
-- **`ASK_MODE_OUTLINE`** is a deprecated alias kept for compatibility.
+- The user bubble is capped by `max-width: min(88%, 280px)` in
+  [section-6.ts:193](../src/styles/sections/section-6.ts), and that is now the only place it is
+  set. A `BONSAI_CHAT_USER_BUBBLE_MAX_PX` constant of 260 used to sit beside it with nothing
+  reading it; it was deleted on 2026-09-13, along with the deprecated `ASK_MODE_OUTLINE` alias,
+  a muted forest-green variant, and a transcript font-size constant that nothing read.
 - Neutrals are inline literals, not constants. `#e8eef5`, `#d4dde6`, `#8fa8c4`, `#6b7c90`
   each appear in several section files independently; there is no single source for them.

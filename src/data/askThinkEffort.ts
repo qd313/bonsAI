@@ -32,9 +32,3 @@ export const ASK_THINK_EFFORT_DESCRIPTIONS: Record<AskThinkEffortId, string> = {
   medium: "More reasoning on harder questions.",
   high: "Most reasoning. Noticeably slower on a Deck.",
 };
-
-const _set = new Set<string>(ASK_THINK_EFFORT_IDS);
-
-export function isAskThinkEffortId(value: string): value is AskThinkEffortId {
-  return _set.has(value);
-}

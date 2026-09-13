@@ -24,9 +24,6 @@ export type IntentPack = {
   updated_at?: string;
   entries: IntentPackEntry[];
 };
-
-export type IntentPackSearchHitKind = "native" | "alias" | "synonym" | "expansion";
-
 export type IntentPackSearchIndex = {
   aliasSynonym: Array<{ term: string; target: string; kind: "alias" | "synonym" }>;
   expansion: Array<{ term: string; target: string }>;

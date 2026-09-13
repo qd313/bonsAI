@@ -48,7 +48,3 @@ export function isDeprioritizedOllamaTag(tag: string): boolean {
   const base = t.split(":")[0] ?? t;
   return DEPRIORITIZED_OLLAMA_BASES.has(base);
 }
-
-export function isBlockedPullCatalogTag(tag: string): boolean {
-  return BLOCKED_PULL_CATALOG_TAGS.has((tag || "").trim().toLowerCase());
-}

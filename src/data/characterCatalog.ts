@@ -119,10 +119,6 @@ export const CHARACTER_PICKER_COLUMNS: readonly CharacterCatalogSection[][] = [
 ];
 
 export const CHARACTER_CATALOG_SECTIONS: CharacterCatalogSection[] = CHARACTER_PICKER_COLUMNS.flat();
-
-/** Number of catalog columns in the character picker (D-pad left/right wiring). */
-export const CHARACTER_PICKER_COLUMN_COUNT = CHARACTER_PICKER_COLUMNS.length;
-
 const _allEntries: CharacterCatalogEntry[] = CHARACTER_CATALOG_SECTIONS.flatMap((s) => s.entries);
 
 export const ALL_PRESET_IDS: readonly string[] = _allEntries.map((e) => e.id);

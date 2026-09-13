@@ -7,7 +7,7 @@
  */
 import type { CSSProperties } from "react";
 import type { BonsaiSettings } from "./bonsaiSettingsSchema";
-import { ALL_PRESET_IDS, isValidPresetId } from "./characterCatalog";
+import { isValidPresetId } from "./characterCatalog";
 import { BONSAI_FOREST_GREEN } from "../features/unified-input/constants";
 
 /** Default forest main for accent fallbacks and chat bubble theming when no catalog accent applies. */
@@ -171,13 +171,4 @@ export function buildBonsaiScopeAccentInlineStyle(accent: UiAccentPair | null): 
     ["--bonsai-ui-tab-icon-ds-4" as string]: r(d, 0.62),
     ["--bonsai-ui-tab-icon-ds-5" as string]: r(m, 0.45),
   };
-}
-
-/** Ensures the accent map stays aligned with the catalog (compile-time guard). */
-export function assertCharacterAccentMapComplete(): void {
-  for (const id of ALL_PRESET_IDS) {
-    if (!(id in CHARACTER_UI_ACCENT_MAIN_BY_PRESET)) {
-      throw new Error(`characterUiAccent: missing main color for preset "${id}"`);
-    }
-  }
 }

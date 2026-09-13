@@ -9,8 +9,7 @@ import type {
   ChatSlotTurnTransparency,
   TransparencySnapshot,
   ContextChip,
-  ContextChipAttribution,
-  ContextChipBody,
+  ContextChipAttribution
 } from "./inputTransparency";
 
 export const CONTEXT_CHIP_WINDOW = 2;
@@ -89,5 +88,3 @@ export function tierBackground(tierClass: string): string {
   if (tierClass === "non_foss") return "rgba(48, 20, 24, 0.92)";
   return "rgba(26, 34, 44, 0.88)";
 }
-
-export type ContextChipBodyView = ContextChipBody;

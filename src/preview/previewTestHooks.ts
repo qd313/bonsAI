@@ -56,8 +56,6 @@ export type ReplyLayoutReport = {
   detailsOpen: boolean;
 };
 
-let registered: BonsaiPreviewTestHooks | null = null;
-
 export function isDeckyPreviewRuntime(): boolean {
   if (typeof window === "undefined") return false;
   if ((window as Window & { __DECKY_PREVIEW__?: boolean }).__DECKY_PREVIEW__) return true;
@@ -71,10 +69,5 @@ export function isDeckyPreviewRuntime(): boolean {
 
 export function registerPreviewTestHooks(hooks: BonsaiPreviewTestHooks): void {
   if (!isDeckyPreviewRuntime()) return;
-  registered = hooks;
   (window as Window & { __bonsaiTestHooks?: BonsaiPreviewTestHooks }).__bonsaiTestHooks = hooks;
-}
-
-export function getPreviewTestHooks(): BonsaiPreviewTestHooks | null {
-  return registered;
 }

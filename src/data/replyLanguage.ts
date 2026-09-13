@@ -89,14 +89,6 @@ export function isSteamLanguageCode(value: string): value is SteamLanguageCode {
   return steamSet.has(value);
 }
 
-export function isReplyLanguageId(value: string): value is ReplyLanguageId {
-  return (
-    value === REPLY_LANGUAGE_FOLLOW_SYSTEM ||
-    value === REPLY_LANGUAGE_ALWAYS_ENGLISH ||
-    isSteamLanguageCode(value)
-  );
-}
-
 export function normalizeReplyLanguage(value: unknown): ReplyLanguageId {
   if (typeof value !== "string") return DEFAULT_REPLY_LANGUAGE;
   const raw = value.trim().toLowerCase();

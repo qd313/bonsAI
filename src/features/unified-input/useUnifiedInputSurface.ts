@@ -20,14 +20,6 @@ import {
 } from "./constants";
 import { readUiScaleFromElement } from "../../data/uiScaleProfile";
 
-export type UnifiedInputSurfaceRefs = {
-  bonsaiScopeRef: React.RefObject<HTMLDivElement>;
-  unifiedInputHostRef: React.RefObject<HTMLDivElement>;
-  unifiedInputFieldLayerRef: React.RefObject<HTMLDivElement>;
-  unifiedInputMeasureRef: React.RefObject<HTMLDivElement>;
-  askBarHostRef: React.RefObject<HTMLDivElement>;
-};
-
 /**
  * Measures the hidden overlay + the native field's painted bounds so the caret overlay aligns with typed text.
  */

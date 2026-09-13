@@ -20,8 +20,6 @@ export const UNIFIED_TEXT_LINE_HEIGHT = 1.2;
 export const UNIFIED_TEXT_BODY_MAX_PX = UNIFIED_INPUT_HEIGHT_MAX_PX - UNIFIED_INPUT_ICON_STRIP_PX;
 /** Padding between measured text and text-body height (matches overlay + field chrome). */
 export const UNIFIED_INPUT_HEIGHT_PAD_PX = 7;
-/** Extra text-body height (px) so growth triggers ~one overlay line before text crowds the icon strip. */
-export const UNIFIED_INPUT_EXPAND_AHEAD_PX = Math.ceil(UNIFIED_TEXT_FONT_PX * UNIFIED_TEXT_LINE_HEIGHT);
 /** Left inset (px) for typed-text overlay and measure — top inset kept separate (often looser than L/R/B). */
 export const UNIFIED_TEXT_INSET_LEFT_PX = 8;
 /** Right inset (px) for typed-text overlay and measure. */
@@ -67,8 +65,6 @@ export const SETTINGS_SEARCH_MIN_QUERY_LENGTH = 2;
  * Tuned for contrast on dark QAM panels (readable vs older muted forest).
  */
 export const BONSAI_FOREST_GREEN = "#2e8753";
-export const BONSAI_FOREST_GREEN_MUTED = "rgba(82, 216, 138, 0.88)";
-
 /** Single size for all Decky `Tabs` title icons (SVG). Keep ~22–28px for QAM strip — larger values blow out LB/RB layout (shell width tracks this). */
 export const TAB_TITLE_ICON_PX = 26;
 /** Square shell around each tab icon; hit target / highlight alignment (slightly larger than icon). */
@@ -89,25 +85,12 @@ export const BONSAI_CHAT_INPUT_TO_TRANSCRIPT_GAP_PX = 12;
 export const BONSAI_CHAT_TRANSCRIPT_TO_SAVE_GAP_PX = 14;
 /** Vertical gap (px) above the AI response bubble stack (below status/thinking lines). */
 export const BONSAI_CHAT_RESPONSE_STACK_MARGIN_TOP_PX = 12;
-
-/** Main-tab AIM-style transcript: max width for player-side bubbles (px). */
-export const BONSAI_CHAT_USER_BUBBLE_MAX_PX = 260;
 /** Main-tab AI bubble max width as a fraction of the transcript column (0–1). */
 export const BONSAI_CHAT_AI_BUBBLE_MAX_FRAC = 0.92;
-/** Collapsed bubble body line height / font (matches transcript typography). */
-export const BONSAI_CHAT_TRANSCRIPT_FONT_PX = 12;
-export const BONSAI_CHAT_TRANSCRIPT_LINE_HEIGHT = 1.4;
 /** Main tab tree glyph — same outer cell as other tabs for uniform hit/outline; slightly larger than gear. */
 export const TAB_TITLE_MAIN_TAB_ICON_PX = 36;
-export const TAB_TITLE_MAIN_TAB_CELL_PX = TAB_TITLE_TAB_CELL_PX;
-/** Optical nudge of the main tab tree icon in the LB/RB strip (px, positive = right). */
-export const TAB_TITLE_MAIN_ICON_SHIFT_X_PX = 1;
 /** Debug tab — same outer cell as other tabs so LB/RB strip outlines match. */
 export const TAB_TITLE_DEBUG_TAB_ICON_PX = 36;
-export const TAB_TITLE_DEBUG_TAB_CELL_PX = TAB_TITLE_TAB_CELL_PX;
-/** Horizontal margin on each tab title button (space between LB/RB strip icons). */
-export const TAB_TITLE_TAB_GAP_PX = -6;
-
 /**
  * Plan 30 — the collapsing tab bar (docs/planning/30-collapsing-tab-bar.md § 4.8). CSS px before
  * `--bonsai-ui-scale`; every use goes through `uiScalePx()`. The two heights are the point of the

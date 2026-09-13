@@ -5,10 +5,8 @@
  * Solves: Consistent IconShell sizing and stroke rules so icon tweaks stay in one module.
  * Does not: Define accent colors or focus graphs — consumers pass size and className only.
  */
-import React, { useState } from "react";
+import React from "react";
 import { FiLock, FiSettings, FiThumbsDown, FiThumbsUp } from "react-icons/fi";
-import bonsaiLogo from "../assets/icons/bonsai-logo.svg";
-
 const IconShell: React.FC<{ size: number; children: React.ReactNode }> = ({ size, children }) => (
   <span
     style={{
@@ -295,54 +293,6 @@ export const ImageAttachmentIcon: React.FC<{ size?: number }> = ({ size = 14 }) 
     </svg>
   </IconShell>
 );
-
-/** This fallback icon is shown when the raster bonsai logo fails to load. */
-const BonsaiFallbackIcon: React.FC<{ size?: number }> = ({ size = 18 }) => (
-  <IconShell size={size}>
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M12 6c-1.8 0-3.3 1.2-3.7 2.8A3.2 3.2 0 0 0 5.5 12c0 1.8 1.4 3.2 3.2 3.2c1.2 0 2.2-.5 2.9-1.4c.5.9 1.5 1.4 2.7 1.4c1.8 0 3.2-1.4 3.2-3.2c0-1.6-1.2-3-2.7-3.2A3.8 3.8 0 0 0 12 6Z" fill="currentColor" />
-      <path d="M12 14.5v3.2m-4.8 0h9.6l-1.1 2.3H8.3l-1.1-2.3Z" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  </IconShell>
-);
-
-/**
- * This raster-logo component is used where explicit pixel sizing and offset tuning are needed.
- * It also includes a fallback icon so UI remains stable if the SVG asset is unavailable.
- */
-export const BonsaiLogoIcon: React.FC<{ size?: number; zoom?: number; offsetX?: number; offsetY?: number }> = ({
-  size = 18,
-  zoom = 1.55,
-  offsetX = 0,
-  offsetY = -0.5,
-}) => {
-  const [loadFailed, setLoadFailed] = useState(false);
-
-  if (loadFailed) {
-    return <BonsaiFallbackIcon size={Math.max(14, size - 1)} />;
-  }
-
-  return (
-    <IconShell size={size}>
-      <img
-        src={bonsaiLogo}
-        alt="bonsAI logo"
-        onLoad={() => {}}
-        onError={() => { setLoadFailed(true); }}
-        style={{
-          width: Math.round(size * zoom),
-          height: Math.round(size * zoom),
-          objectFit: "contain",
-          display: "block",
-          filter: "brightness(0) invert(1)",
-          mixBlendMode: "difference",
-          transform: `translate(${offsetX}px, ${offsetY}px)`,
-        }}
-      />
-    </IconShell>
-  );
-};
-
 /**
  * This plugin-list icon uses a resilient vector fallback that obeys Decky font-size scaling.
  * Keeping it independent from the large inline path reduces index.tsx payload and parsing overhead.

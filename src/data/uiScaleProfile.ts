@@ -9,14 +9,6 @@ import type React from "react";
 
 /** User-visible UI scale profiles (Immersive is dev-only until Steam Frame ships). */
 export type UiScaleProfileId = "handheld" | "desktop" | "couch" | "immersive";
-
-export const UI_SCALE_PROFILE_IDS: UiScaleProfileId[] = [
-  "handheld",
-  "desktop",
-  "couch",
-  "immersive",
-];
-
 /** Profiles exposed in Settings manual slider (v1). */
 export const UI_SCALE_MANUAL_PROFILE_IDS: Exclude<UiScaleProfileId, "immersive">[] = [
   "handheld",

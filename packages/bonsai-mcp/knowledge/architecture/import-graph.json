@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 376,
-  "edgeCount": 923,
+  "fileCount": 380,
+  "edgeCount": 942,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -335,6 +335,14 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTabChatTranscript.readAloud.test.tsx": {
+      "imports": [
+        "src/components/MainTabChatTranscript.tsx",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabChatTranscript.replyBlock.test.tsx": {
       "imports": [
         "src/components/MainTabChatTranscript.tsx",
@@ -375,10 +383,12 @@
         "src/data/replyMicroActions.ts",
         "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/features/unified-input/constants.ts",
+        "src/hooks/useReadAloud.ts",
         "src/hooks/useStreamScrollPin.ts",
         "src/types/backgroundAsk.ts",
         "src/types/bonsaiUi.ts",
         "src/utils/answerCopyText.ts",
+        "src/utils/answerReadableText.ts",
         "src/utils/appliedTuningText.ts",
         "src/utils/archivedTurnTransparency.ts",
         "src/utils/askThinkingPhases.ts",
@@ -403,6 +413,7 @@
         "src/components/MainTabChatTranscript.emptySlotPreview.test.tsx",
         "src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx",
         "src/components/MainTabChatTranscript.permissionHintFocus.test.ts",
+        "src/components/MainTabChatTranscript.readAloud.test.tsx",
         "src/components/MainTabChatTranscript.replyBlock.test.tsx",
         "src/components/MainTabChatTranscript.stoppedNotice.test.tsx",
         "src/components/MainTabChatTranscript.strategyPanels.test.tsx",
@@ -1028,6 +1039,7 @@
         "src/hooks/useKidsLock.ts",
         "src/hooks/usePluginSettings.test.ts",
         "src/hooks/usePluginSettings.ts",
+        "src/hooks/useReadAloud.ts",
         "src/hooks/useStrategyChecklistSession.ts",
         "src/index.tsx",
         "src/test-harness/rpcFixtures.ts",
@@ -1820,6 +1832,13 @@
         "src/index.tsx"
       ]
     },
+    "src/features/voice/useVoiceAskInput.test.ts": {
+      "imports": [
+        "src/features/voice/useVoiceAskInput.ts",
+        "src/test-harness/fakeDeckyRpc.ts"
+      ],
+      "importedBy": []
+    },
     "src/features/voice/useVoiceAskInput.ts": {
       "imports": [
         "src/hooks/useVoiceTranscription.ts",
@@ -1828,6 +1847,7 @@
         "src/utils/deckyCall.ts"
       ],
       "importedBy": [
+        "src/features/voice/useVoiceAskInput.test.ts",
         "src/index.tsx"
       ]
     },
@@ -1842,6 +1862,7 @@
     },
     "src/hooks/useBackgroundGameAi.ts": {
       "imports": [
+        "src/hooks/useReadAloud.ts",
         "src/types/backgroundAsk.ts",
         "src/utils/deckyCall.ts"
       ],
@@ -2109,6 +2130,31 @@
         "src/index.tsx"
       ]
     },
+    "src/hooks/useReadAloud.test.ts": {
+      "imports": [
+        "src/hooks/useReadAloud.ts",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/test-harness/rpcFixtures.ts",
+        "src/types/backgroundAsk.ts"
+      ],
+      "importedBy": []
+    },
+    "src/hooks/useReadAloud.ts": {
+      "imports": [
+        "src/data/bonsaiSettingsSchema.ts",
+        "src/types/backgroundAsk.ts",
+        "src/utils/answerReadableText.ts",
+        "src/utils/bonsaiPhaseToast.ts",
+        "src/utils/deckyCall.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabChatTranscript.tsx",
+        "src/hooks/useBackgroundGameAi.ts",
+        "src/hooks/useReadAloud.test.ts",
+        "src/index.tsx",
+        "src/utils/bonsaiAskCompletionWatch.ts"
+      ]
+    },
     "src/hooks/useReplyLanguage.ts": {
       "imports": [
         "src/data/replyLanguage.ts",
@@ -2284,6 +2330,7 @@
         "src/hooks/usePluginSettings.ts",
         "src/hooks/useQamPanelHeightGuard.ts",
         "src/hooks/useQamPanelSideBleed.ts",
+        "src/hooks/useReadAloud.ts",
         "src/hooks/useReplyLanguage.ts",
         "src/hooks/useScreenshotBrowser.ts",
         "src/hooks/useSteamSettingsSearch.ts",
@@ -2512,6 +2559,7 @@
       "importedBy": [
         "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
         "src/components/KnowledgeBaseSection.test.tsx",
+        "src/components/MainTabChatTranscript.readAloud.test.tsx",
         "src/components/MainTabPresetAnimatedChips.test.tsx",
         "src/components/MainTabPresetRow.askRestart.test.tsx",
         "src/components/MainTabPresetRow.test.tsx",
@@ -2519,9 +2567,11 @@
         "src/components/SettingsTab.mdns.test.ts",
         "src/components/VoiceInputSettingsSection.test.tsx",
         "src/features/model-routing/useRoutingOrderModal.test.tsx",
+        "src/features/voice/useVoiceAskInput.test.ts",
         "src/hooks/useBackgroundGameAi.test.ts",
         "src/hooks/useBonsaiAskOrchestration.test.ts",
         "src/hooks/usePluginSettings.test.ts",
+        "src/hooks/useReadAloud.test.ts",
         "src/index.test.tsx",
         "src/test-harness/fakeDeckyRpc.test.ts",
         "src/test-harness/setup.ts",
@@ -2540,6 +2590,7 @@
         "src/components/MainTabChatTranscript.emptySlotPreview.test.tsx",
         "src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx",
         "src/components/MainTabChatTranscript.permissionHintFocus.test.ts",
+        "src/components/MainTabChatTranscript.readAloud.test.tsx",
         "src/components/MainTabChatTranscript.replyBlock.test.tsx",
         "src/components/MainTabChatTranscript.stoppedNotice.test.tsx",
         "src/components/MainTabChatTranscript.strategyPanels.test.tsx",
@@ -2569,6 +2620,7 @@
         "src/hooks/useBackgroundGameAi.test.ts",
         "src/hooks/useBonsaiAskOrchestration.test.ts",
         "src/hooks/usePluginSettings.test.ts",
+        "src/hooks/useReadAloud.test.ts",
         "src/index.test.tsx",
         "src/test-harness/fakeDeckyRpc.ts"
       ]
@@ -2598,6 +2650,8 @@
         "src/hooks/useBackgroundGameAi.test.ts",
         "src/hooks/useBackgroundGameAi.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/hooks/useReadAloud.test.ts",
+        "src/hooks/useReadAloud.ts",
         "src/test-harness/fakeDeckyRpc.ts",
         "src/test-harness/rpcFixtures.ts",
         "src/utils/bonsaiAskCompletionWatch.test.ts",
@@ -2717,6 +2771,8 @@
         "src/utils/unwrapAskedEntitySpoilerFences.ts"
       ],
       "importedBy": [
+        "src/components/MainTabChatTranscript.tsx",
+        "src/hooks/useReadAloud.ts",
         "src/utils/answerReadableText.test.ts"
       ]
     },
@@ -2815,6 +2871,7 @@
     "src/utils/bonsaiAskCompletionWatch.ts": {
       "imports": [
         "src/hooks/useBackgroundGameAi.ts",
+        "src/hooks/useReadAloud.ts",
         "src/types/backgroundAsk.ts",
         "src/utils/bonsaiReplyReadyToast.ts",
         "src/utils/deckyCall.ts"
@@ -2843,6 +2900,7 @@
     "src/utils/bonsaiPhaseToast.ts": {
       "imports": [],
       "importedBy": [
+        "src/hooks/useReadAloud.ts",
         "src/utils/bonsaiAskCompletionWatch.test.ts",
         "src/utils/bonsaiPhaseToast.test.ts",
         "src/utils/bonsaiReplyReadyToast.test.ts",
@@ -3179,6 +3237,7 @@
         "src/hooks/useKidsLock.ts",
         "src/hooks/usePluginSettings.ts",
         "src/hooks/usePullModelCatalog.ts",
+        "src/hooks/useReadAloud.ts",
         "src/hooks/useReplyLanguage.ts",
         "src/hooks/useScreenshotBrowser.ts",
         "src/hooks/useVoiceTranscription.ts",

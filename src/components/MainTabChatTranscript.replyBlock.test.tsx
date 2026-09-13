@@ -91,11 +91,14 @@ describe("a finished reply, all three changes together", () => {
     expect(container.querySelector(".bonsai-chat-turn-row-header--with-retry")).not.toBeNull();
   });
 
-  it("reads top to bottom: question, answer, Was this helpful?, then the line", () => {
+  it("reads top to bottom: question, answer, Was this helpful?, Read aloud, then Show details", () => {
     const { container } = renderReply(SHORT_ANSWER, { transparencySnapshot: TRANSPARENCY });
-    const line = container.querySelector(".bonsai-chat-details-divider");
-    expect(line).not.toBeNull();
-    expect(line!.textContent).toContain("Show details");
+    const lines = container.querySelectorAll(".bonsai-chat-details-divider");
+    /* Read aloud (plan 42 step 3a) now shares this line shape with Show details (D76); it renders
+       first, one row above. */
+    expect(lines.length).toBe(2);
+    expect(lines[0]!.textContent).toMatch(/Read aloud|Stop/);
+    expect(lines[1]!.textContent).toContain("Show details");
 
     const order = [
       ".bonsai-chat-turn-row-header",
@@ -116,11 +119,12 @@ describe("a finished reply, all three changes together", () => {
     }
   });
 
-  it("puts the line last, with nothing between it and the chips it opens", () => {
+  it("puts Show details last, with nothing between it and the chips it opens", () => {
     const { container } = renderReply(SHORT_ANSWER, { transparencySnapshot: TRANSPARENCY });
     const block = container.querySelector(".bonsai-chat-reply-actions")!;
     const last = block.lastElementChild!;
     expect(last.className).toContain("bonsai-chat-details-divider");
+    expect(last.textContent).toContain("Show details");
   });
 
   it("puts Retry in the question bubble and Copy right after the answer", () => {

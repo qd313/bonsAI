@@ -12,7 +12,7 @@
     },
     {
       "path": "src/index.tsx",
-      "lines": 1648,
+      "lines": 1697,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
@@ -56,13 +56,13 @@
       "role": ""
     },
     {
-      "path": "src/components/OllamaWhereAiRunsSection.tsx",
-      "lines": 1174,
+      "path": "src/components/MainTabChatTranscript.tsx",
+      "lines": 1211,
       "role": ""
     },
     {
-      "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1133,
+      "path": "src/components/OllamaWhereAiRunsSection.tsx",
+      "lines": 1174,
       "role": ""
     },
     {
@@ -191,13 +191,13 @@
       "role": ""
     },
     {
-      "path": "src/features/preset-carousel/sessionRagComposer.test.ts",
-      "lines": 457,
+      "path": "src/utils/buildReplyActionsElement.tsx",
+      "lines": 462,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/desktop_note_service.py",
-      "lines": 432,
+      "path": "src/features/preset-carousel/sessionRagComposer.test.ts",
+      "lines": 457,
       "role": ""
     }
   ]

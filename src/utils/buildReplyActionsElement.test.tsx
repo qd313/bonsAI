@@ -51,6 +51,22 @@ function findByClassName(node: React.ReactNode, className: string): React.ReactE
   return findByClassName(props.children as React.ReactNode, className);
 }
 
+/** Every element carrying `className`, in tree order — for when more than one row shares a class. */
+function findAllByClassName(node: React.ReactNode, className: string, out: React.ReactElement[] = []): React.ReactElement[] {
+  if (node == null || typeof node !== "object") return out;
+  if (Array.isArray(node)) {
+    for (const child of node) findAllByClassName(child, className, out);
+    return out;
+  }
+  if (!React.isValidElement(node)) return out;
+  const props = node.props as Record<string, unknown>;
+  if (typeof props.className === "string" && props.className.split(" ").includes(className)) {
+    out.push(node);
+  }
+  findAllByClassName(props.children as React.ReactNode, className, out);
+  return out;
+}
+
 /** A bubble with `count` registered `.bonsai-answer-stop` sections, under answerKey "live". */
 function registerBubbleWithStops(count: number): HTMLElement[] {
   const bubble = document.createElement("div");
@@ -373,6 +389,65 @@ describe("buildReplyActionsElement Show details line", () => {
     const last = children[children.length - 1]!;
     expect(String((last.props as Record<string, unknown>).className)).toContain(
       "bonsai-chat-details-divider"
+    );
+  });
+});
+
+/*
+ * Read aloud / Stop is a line of the same shape as Show details (plan 42 step 3), sitting one row
+ * above it. Only renders when the caller supplies onReadAloudToggle — a turn with nothing to read
+ * gets no line at all.
+ */
+describe("buildReplyActionsElement Read aloud line", () => {
+  const build = (over: Record<string, unknown> = {}) =>
+    buildReplyActionsElement({
+      replyKey: "live",
+      rating: null,
+      onRate: () => {},
+      showFeedback: false,
+      ...over,
+    });
+
+  const findReadAloudLine = (el: React.ReactElement | null) =>
+    findAllByClassName(el, "bonsai-chat-details-divider").find((node) =>
+      String((node.props as Record<string, unknown>)["aria-label"]).match(/Read aloud|Stop/)
+    ) ?? null;
+
+  it("renders nothing when the caller has no toggle to offer", () => {
+    const el = build();
+    expect(findReadAloudLine(el)).toBeNull();
+  });
+
+  it("renders a line reading the given label", () => {
+    const el = build({ onReadAloudToggle: () => {}, readAloudLabel: "Read aloud" });
+    const line = findReadAloudLine(el);
+    expect(line).not.toBeNull();
+    expect(JSON.stringify(line!.props)).toContain("Read aloud");
+  });
+
+  it("reads Stop once the caller says this answer is the one speaking", () => {
+    const el = build({ onReadAloudToggle: () => {}, readAloudLabel: "Stop" });
+    const line = findReadAloudLine(el);
+    expect(JSON.stringify(line!.props)).toContain("Stop");
+  });
+
+  it("presses the toggle once", () => {
+    const onReadAloudToggle = vi.fn();
+    const line = findReadAloudLine(build({ onReadAloudToggle }));
+    const press = (line!.props as Record<string, unknown>).onOKButton as () => void;
+    press();
+    expect(onReadAloudToggle).toHaveBeenCalledTimes(1);
+  });
+
+  it("sits above Show details when both render", () => {
+    const el = build({ onReadAloudToggle: () => {}, onToggleTransparency: () => {} });
+    const lines = findAllByClassName(el, "bonsai-chat-details-divider");
+    expect(lines.length).toBe(2);
+    expect(String((lines[0]!.props as Record<string, unknown>)["aria-label"])).toMatch(
+      /Read aloud|Stop/
+    );
+    expect(String((lines[1]!.props as Record<string, unknown>)["aria-label"])).toMatch(
+      /Show details|Hide details/
     );
   });
 });

@@ -154,7 +154,7 @@ export function focusReplyThumbsRow(liveSlot: HTMLElement | null): boolean {
  */
 export function focusReplyStop(
   _liveSlot: HTMLElement | null,
-  stop: "helpful" | "not-really" | "retry" | "show-details" | "copy",
+  stop: "helpful" | "not-really" | "retry" | "show-details" | "copy" | "read-aloud",
 ): boolean {
   return focusRegisteredReplyStop(stop);
 }
@@ -173,6 +173,11 @@ export function focusReplyRetry(liveSlot: HTMLElement | null): boolean {
 
 export function focusReplyShowDetails(liveSlot: HTMLElement | null): boolean {
   return focusReplyStop(liveSlot, "show-details");
+}
+
+/** The Read aloud / Stop line, one row above Show details (plan 42 step 3). */
+export function focusReplyReadAloud(liveSlot: HTMLElement | null): boolean {
+  return focusReplyStop(liveSlot, "read-aloud");
 }
 
 export function focusReplyCopy(liveSlot: HTMLElement | null): boolean {

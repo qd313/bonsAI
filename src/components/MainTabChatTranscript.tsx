@@ -65,6 +65,8 @@ import {
   registerModalReturnFocusOwner,
   rememberModalReturnFocus,
 } from "../features/plugin-shell/modalReturnFocusRegistry";
+import { buildAnswerReadableText } from "../utils/answerReadableText";
+import { useReadAloud } from "../hooks/useReadAloud";
 
 const BONSAI_CHAT_AI_MAX_WIDTH_CSS = `min(${Math.round(BONSAI_CHAT_AI_BUBBLE_MAX_FRAC * 100)}%, 100%)`;
 
@@ -230,6 +232,61 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
   const [sessionHighlightTurnId, setSessionHighlightTurnId] = useState<string | null>(null);
   const [transparencyDetailsOpen, setTransparencyDetailsOpen] = useState(false);
   const [troubleshootingPermHintDismissed, setTroubleshootingPermHintDismissed] = useState(false);
+
+  /*
+   * Read aloud / Stop (plan 42 step 3a). One instance for the whole transcript — the background
+   * reader can only speak one answer at a time, so "which turn is speaking" lives here rather than
+   * per-turn state.
+   */
+  const readAloud = useReadAloud();
+  const buildTurnReadableText = (
+    body: string,
+    askQuestion: string,
+    appId: string | null,
+    spoilerConsentEffective = false
+  ) =>
+    buildAnswerReadableText({
+      body,
+      spoilerMaskingEnabled: strategySpoilerMaskingEnabled,
+      askQuestion,
+      appId,
+      spoilerConsentEffective,
+    });
+  /** Read aloud props for one turn's reply-actions row: same shape at every call site. */
+  const readAloudRowProps = (
+    key: string,
+    body: string,
+    askQuestion: string,
+    appId: string | null,
+    spoilerConsentEffective = false
+  ) => {
+    const isReadingThis = readAloud.speakingKey === key && readAloud.state === "speaking";
+    return {
+      readAloudLabel: isReadingThis ? "Stop" : "Read aloud",
+      onReadAloudToggle: () => {
+        if (isReadingThis) {
+          readAloud.stop();
+          return;
+        }
+        readAloud.start(key, buildTurnReadableText(body, askQuestion, appId, spoilerConsentEffective));
+      },
+    };
+  };
+
+  /*
+   * A new Ask stops whatever is being read aloud (plan 42 step 3a). Watching `isAsking` here,
+   * rather than wherever an Ask happens to start, catches every path that begins one — the Ask
+   * button, a follow-up chip, "Ask again" — since they all flip this same prop true, and stopping
+   * is idempotent when nothing is speaking.
+   */
+  const wasAskingRef = useRef(false);
+  useEffect(() => {
+    if (isAsking && !wasAskingRef.current) {
+      readAloud.stop();
+    }
+    wasAskingRef.current = isAsking;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAsking]);
 
   /*
    * `expandedTurnKey` is a dependency because the details panel is a single boolean shared by
@@ -751,7 +808,10 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   const transparencyAvailableHere = transparencyUiAvailable(
                     archivedTransparencyFor(turn, turnIndex)
                   );
-                  if (!showFeedbackHere && !transparencyAvailableHere) return null;
+                  const readAloudAvailableHere = Boolean(turn.answer?.trim());
+                  if (!showFeedbackHere && !transparencyAvailableHere && !readAloudAvailableHere) {
+                    return null;
+                  }
                   return buildReplyActionsElement({
                     replyKey: turn.id,
                     rating: showFeedbackHere ? liveReplyFeedbackRating : null,
@@ -771,6 +831,15 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                     chipError: showFeedbackHere ? liveReplyChipError : null,
                     onChip: showFeedbackHere ? onReplyMicroAction : undefined,
                     askInFlight: isAsking,
+                    ...(readAloudAvailableHere
+                      ? readAloudRowProps(
+                          turn.id,
+                          turn.answer,
+                          turn.question,
+                          turn.appId ?? null,
+                          turn.spoilerConsentEffective === true
+                        )
+                      : {}),
                     /* Down must reach this turn's own ladder. Without a handler the Focusable
                        falls through to the next focusable in document order — the session context
                        strip — and the chips become unreachable from above. */
@@ -896,6 +965,15 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   chipError: liveReplyChipError,
                   onChip: onReplyMicroAction,
                   askInFlight: isAsking,
+                  ...(lastExchange?.answer?.trim()
+                    ? readAloudRowProps(
+                        "live",
+                        lastExchange.answer,
+                        liveQuestion || lastExchange?.question || "",
+                        ollamaContext?.app_id ?? null,
+                        lastExchange?.spoilerConsentEffective === true
+                      )
+                    : {}),
                   onMoveDownFromUtility: () =>
                     focusDownFromReplyUtilityRowOrPermHint(queryLiveTurnSlot()),
                 })

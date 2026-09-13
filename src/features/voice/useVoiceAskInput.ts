@@ -29,6 +29,24 @@ export type UseVoiceAskInputArgs = {
 export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
   const [voiceRecording, setVoiceRecording] = useState(false);
   const [micPermissionDenied, setMicPermissionDenied] = useState(false);
+  /**
+   * "The field's text came from the mic" (D99 call 3, the middle Voice replies position). Set the
+   * moment a transcription is written into the field; the caller (index.tsx, which owns the field's
+   * other writers) clears it on a manual edit or a clear, since those never go through this hook.
+   */
+  const [askCameFromMic, setAskCameFromMic] = useState(false);
+
+  const setUnifiedInputFromVoice = useCallback<Dispatch<SetStateAction<string>>>(
+    (value) => {
+      setAskCameFromMic(true);
+      a.setUnifiedInput(value);
+    },
+    [a.setUnifiedInput],
+  );
+
+  const clearAskCameFromMic = useCallback(() => {
+    setAskCameFromMic(false);
+  }, []);
 
   const onVoiceError = useCallback(
     (e: unknown) => {
@@ -43,7 +61,7 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
   );
 
   const { startVoiceTranscription, stopVoiceTranscription, invalidateVoice } = useVoiceTranscription(
-    a.setUnifiedInput,
+    setUnifiedInputFromVoice,
     onVoiceError,
   );
 
@@ -109,5 +127,7 @@ export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
     invalidateVoice,
     micPermissionDenied,
     dismissMicPermissionDeny,
+    askCameFromMic,
+    clearAskCameFromMic,
   };
 }

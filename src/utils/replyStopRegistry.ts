@@ -8,22 +8,24 @@
 
 import { elementHasFocus } from "./uiDocument";
 
-export type ReplyStopId = "helpful" | "not-really" | "retry" | "show-details" | "copy";
+export type ReplyStopId = "helpful" | "not-really" | "retry" | "show-details" | "copy" | "read-aloud";
 
 /**
  * Reading order down the reply, top to bottom.
  *
  * These no longer sit in one grid. After D76 and D77 the button row is gone: `retry` is an icon on
  * the question bubble above the answer, `copy` an icon in the answer bubble's bottom-right corner,
- * `helpful` and `not-really` the two buttons under it, and `show-details` the line below them. The
- * order below is the order a person walks them, which is what the "which stop has focus?" lookups
- * want; it is not a claim about layout.
+ * `helpful` and `not-really` the two buttons under it, and `show-details` the line below them.
+ * `read-aloud` is a line of the same shape as `show-details`, sitting just above it (plan 42 step 3).
+ * The order below is the order a person walks them, which is what the "which stop has focus?"
+ * lookups want; it is not a claim about layout.
  */
 export const REPLY_STOP_ORDER: readonly ReplyStopId[] = [
   "retry",
   "copy",
   "helpful",
   "not-really",
+  "read-aloud",
   "show-details",
 ];
 

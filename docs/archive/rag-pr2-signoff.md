@@ -7,7 +7,7 @@ constants locked, superseding report written.
 Live bake-off: [kb-retrieval-pr2-bakeoff-2026-08-09.md](../archive/research/kb-retrieval-pr2-bakeoff-2026-08-09.md).
 
 This was the R1 gate from
-[rag-retrieval-quality-remediation-implementation-plan.md](../rag-retrieval-quality-remediation-implementation-plan.md).
+[rag-retrieval-quality-remediation-implementation-plan.md](rag-retrieval-quality-remediation-implementation-plan.md).
 
 ---
 
@@ -18,14 +18,14 @@ tune 157 / holdout 64, strategy 181 / compat 40, **140 labeled**. Status:
 `approved_for_rebuild_and_bakeoff`. Blank `expect_*` rows are deliberate content gaps
 (power-user / needs_clarification / no covering card) and are expected misses.
 
-Authoring rules: [rag-eval-query-style.md](rag-eval-query-style.md).
+Authoring rules: [rag-eval-query-style.md](../audit/rag-eval-query-style.md).
 
 ---
 
 ## 2. D16 (compat gate) — closed 2026-08-06
 
 Reachability **3/40 → 39/40**, **13/13** blind holdout, **0/107** strategy false positives.
-Decision record: [maintainer-decisions-locked.md](maintainer-decisions-locked.md) § D16.
+Decision record: [maintainer-decisions-locked.md](../audit/maintainer-decisions-locked.md) § D16.
 
 ---
 

@@ -5,7 +5,7 @@ Recon and provisional decisions from a brainstorming session on 2026-08-06/07:
 
 Nothing here is implemented. Decisions marked *provisional* are the maintainer's
 calls from the session but have not been through
-[maintainer-decisions-locked.md](maintainer-decisions-locked.md) — see
+[maintainer-decisions-locked.md](../audit/maintainer-decisions-locked.md) — see
 [Needs a D-number](#needs-a-d-number).
 
 ---
@@ -253,7 +253,7 @@ the session lookup is generalized first.
 
 ## Needs a D-number
 
-Route through [maintainer-decisions-locked.md](maintainer-decisions-locked.md)
+Route through [maintainer-decisions-locked.md](../audit/maintainer-decisions-locked.md)
 before implementation:
 
 - General mode — **no game context on the web surface**. Makes the two surfaces

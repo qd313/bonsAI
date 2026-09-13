@@ -1,7 +1,7 @@
 # Clipboard write spike — 2026-08-28
 
 Spike for roadmap **A2 — Copy reply to clipboard**
-([13-roadmap-feature-ideas.md](../planning/13-roadmap-feature-ideas.md) A2,
+([13-roadmap-feature-ideas.md](13-roadmap-feature-ideas.md) A2,
 [roadmap.md:191-194](../roadmap.md)). The roadmap calls out one risk by name: *"`wl-copy` has to
 survive as the Wayland selection owner, so a fire-and-forget subprocess loses the clipboard the
 moment it exits. That is the whole risk and it is unverified."* This doc works out what can be

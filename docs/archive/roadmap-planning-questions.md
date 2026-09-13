@@ -11,15 +11,15 @@ Prepared prompts for a future AI planning session. Each section has a short summ
 | 1 | Automating Device QA and prompt testing | [01-qa-automation-plan.md](01-qa-automation-plan.md) |
 | 2 | ~~README.md redo~~ *(partial — only the install-URL fix landed)* | [02-readme-redesign-plan.md](02-readme-redesign-plan.md) · commit `44da1ff` |
 | 3 | LB/RB tab switch flicker when scrolled | [03-lbrb-tab-flicker.md](03-lbrb-tab-flicker.md) |
-| 4 | ~~Strategy spoiler false-positive~~ *(partial — fixes 1+2+4 landed 2026-08-07; on-Deck verification of STRAT-SPOIL-DRG-01 still open)* | [04-strategy-spoiler-false-positive.md](04-strategy-spoiler-false-positive.md) §7 · [spoiler-constitution.md](spoiler-constitution.md) · commits `4bb9ce0`, `f84c6e3`, `a68113d`, `25ff648`, `fe65175`, `87fde2b`, `c74e07e` |
-| 5 | ~~Token streaming evaluation~~ *(partial — Phase A/B UX fixes landed 2026-08-07; Developer-tab flag not graduated)* | [05-token-streaming-review.md](05-token-streaming-review.md) §3.1–3.2 · commits `b0b1bbe`–`db4858a` (Phase A), `8237534`–`30ca6f9` (Phase B) |
-| 6 | Thinking blurbs evaluation | [06-thinking-blurbs-review.md](06-thinking-blurbs-review.md) |
+| 4 | ~~Strategy spoiler false-positive~~ *(partial — fixes 1+2+4 landed 2026-08-07; on-Deck verification of STRAT-SPOIL-DRG-01 still open)* | [04-strategy-spoiler-false-positive.md](../planning/04-strategy-spoiler-false-positive.md) §7 · [spoiler-constitution.md](../planning/spoiler-constitution.md) · commits `4bb9ce0`, `f84c6e3`, `a68113d`, `25ff648`, `fe65175`, `87fde2b`, `c74e07e` |
+| 5 | ~~Token streaming evaluation~~ *(partial — Phase A/B UX fixes landed 2026-08-07; Developer-tab flag not graduated)* | [05-token-streaming-review.md](../planning/05-token-streaming-review.md) §3.1–3.2 · commits `b0b1bbe`–`db4858a` (Phase A), `8237534`–`30ca6f9` (Phase B) |
+| 6 | Thinking blurbs evaluation | [06-thinking-blurbs-review.md](../planning/06-thinking-blurbs-review.md) |
 | 7 | Named chat slots | [07-named-chat-slots-postmortem.md](07-named-chat-slots-postmortem.md) |
 | 8 | Kids master lock feasibility | [08-kids-master-lock-feasibility.md](08-kids-master-lock-feasibility.md) → ship plan [14-kids-master-lock-implementation-plan.md](14-kids-master-lock-implementation-plan.md) |
 | 9 | Steam Frame companion UX feasibility | [09-steam-frame-companion-feasibility.md](09-steam-frame-companion-feasibility.md) |
-| 10 | Wake-word listening feasibility and cost | [10-wake-word-listening-feasibility.md](10-wake-word-listening-feasibility.md) |
-| 11 | Native QAM shortcut tile / decouple from Decky | [11-native-qam-tile-feasibility.md](11-native-qam-tile-feasibility.md) |
-| 12 | Deep mod AI hints feasibility | [12-deep-mod-ai-hints-feasibility.md](12-deep-mod-ai-hints-feasibility.md) |
+| 10 | Wake-word listening feasibility and cost | [10-wake-word-listening-feasibility.md](../planning/10-wake-word-listening-feasibility.md) |
+| 11 | Native QAM shortcut tile / decouple from Decky | [11-native-qam-tile-feasibility.md](../planning/11-native-qam-tile-feasibility.md) |
+| 12 | Deep mod AI hints feasibility | [12-deep-mod-ai-hints-feasibility.md](../planning/12-deep-mod-ai-hints-feasibility.md) |
 | 13 | ~~Feature ideas for roadmap.md (star-rated)~~ *(partial — 4 of 9 stubs added to roadmap; 2 shipped in code)* | [13-roadmap-feature-ideas.md](13-roadmap-feature-ideas.md) · results [roadmap-completed.md](../archive/roadmap-completed.md) · commits `ab90b30`, `b5093d2`, `3ecd9d0`, `60b6d14` |
 
 ---
@@ -190,7 +190,7 @@ In **Strategy mode**, the model sometimes wraps **routine boss/enemy tactics** i
 
 **Your questions:** What is best practice here? Can bonsAI **confidently** eliminate false positives, or only reduce them?
 
-**Related planned work (not shipped):** **Spoiler confidence chip** (transparency estimate only), **user-adjustable spoiler fencing**, **unfenced spoiler feedback** thumb, **Spoiler constitution** (★★★★) — see `docs/roadmap.md` Planned and [spoiler-constitution.md](spoiler-constitution.md). Phase 4 KB track (**S1**) also calls for unfenced replies when the user named the entity. **Recon + maintainer decisions:** [04-strategy-spoiler-false-positive.md](04-strategy-spoiler-false-positive.md) §7.
+**Related planned work (not shipped):** **Spoiler confidence chip** (transparency estimate only), **user-adjustable spoiler fencing**, **unfenced spoiler feedback** thumb, **Spoiler constitution** (★★★★) — see `docs/roadmap.md` Planned and [spoiler-constitution.md](../planning/spoiler-constitution.md). Phase 4 KB track (**S1**) also calls for unfenced replies when the user named the entity. **Recon + maintainer decisions:** [04-strategy-spoiler-false-positive.md](../planning/04-strategy-spoiler-false-positive.md) §7.
 
 ### Prompt for planning agent
 
@@ -423,7 +423,7 @@ You want **research-only** feasibility for **Steam Frame companion UX** — how 
 
 - **LAN Ollama** — Ask from Deck/PC on the same network (`Ollama` tab, mDNS); a companion device could use the same pattern.
 - **UI scale “Immersive” profile** — dev-only placeholder for large close-range displays (`uiScaleProfile.ts`: `SHOW_IMMERSIVE_UI_SCALE = false`; comment: “Steam Frame proxy”).
-- **KB compat stubs** — thin `steam_frame` tips in shared troubleshooting corpus (`scripts/gen_compat_patterns.py`: companion Deck/phone on LAN; comfort; wrong display target; “research-phase — verify Valve docs”).
+- **KB compat stubs** — thin `steam_frame` tips in shared troubleshooting corpus (`scripts/archive/gen_compat_patterns.py`: companion Deck/phone on LAN; comfort; wrong display target; “research-phase — verify Valve docs”).
 - **Decky QAM plugin** — bonsAI runs in Steam’s **gamepadui** layer on Deck/BPM; **no Frame-specific runtime or APIs** in `src/` today.
 
 **Core unknowns:** What is Steam Frame’s software stack, companion-app story, and whether Decky/plugins can run on Frame, on a paired Deck, or only via a separate browser/CEF surface.

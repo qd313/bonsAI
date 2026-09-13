@@ -2,7 +2,7 @@
 
 > **Moved from** [roadmap.md](../roadmap.md) **2026-08-04.** Full decision record for D1–D15, execution order, and cleanup candidates. Active index: [roadmap.md](../roadmap.md). Reorg commit: `ba2e5c5` (`git show ba2e5c5`).
 
-Evidence lives in this audit folder — especially [05-plan.md](05-plan.md).
+Evidence lives in this audit folder — especially [05-plan.md](../archive/05-plan.md).
 
 ---
 
@@ -33,7 +33,7 @@ D1–D31 is locked; **D19 is superseded by D20** (below), and **D31 renumbers th
 D19b**. See the table below for D1–D15 and the sections below for D16, D17, D19–D31.
 
 **Session handoff for the 2026-08-18 to 2026-08-21 RAG work:**
-[session-handoff-2026-08-21.md](session-handoff-2026-08-21.md) — what shipped, what the numbers
+[session-handoff-2026-08-21.md](../archive/session-handoff-2026-08-21.md) — what shipped, what the numbers
 are now, and what is still owed.
 
 > **Numbering collision, flagged 2026-08-18 and resolved by [D31](#d31--which-of-the-two-d19s-keeps-the-number)
@@ -79,7 +79,7 @@ a device pass on the picker: row heights, how many characters fit on one screen,
 props read clearly at 26.
 
 **Original intake, raised 2026-08-26 from the AI character avatars design handoff.** Full detail:
-[25-ai-character-avatars-handoff.md](../planning/25-ai-character-avatars-handoff.md).
+[25-ai-character-avatars-handoff.md](../archive/25-ai-character-avatars-handoff.md).
 
 > **The main tab half is settled (2026-08-26).** The maintainer's instruction was that the Ask bar
 > textarea must not look any different except for better artwork in the corner. A true-size mock-up
@@ -474,7 +474,7 @@ Strategy explicit route's relevance floor of **1.0**, which the new vector recal
 **Why it did not show up before.** Every question in `kb_eval_v2` is a real question about a real
 game. Nothing in the approved set asks *"what time is it"*, so no score moves when this
 misbehaves. It is invisible to the eval and visible immediately on a device — the same shape as
-the four faults in §2 of the [handoff](session-handoff-2026-08-21.md).
+the four faults in §2 of the [handoff](../archive/session-handoff-2026-08-21.md).
 
 **Your options.**
 
@@ -615,7 +615,7 @@ phrasing a question in their own words — which is the exact failure the 2026-0
 was for.
 
 **Choice: fold in.** The fifteen paraphrase questions in
-[rag-vector-recall-floor-2026-08-18.md](rag-vector-recall-floor-2026-08-18.md) — already
+[rag-vector-recall-floor-2026-08-18.md](../archive/rag-vector-recall-floor-2026-08-18.md) — already
 written, measured and labelled with the card each should return, and sitting in
 `tests/fixtures/kb_eval_paraphrase_v0.json` — join the approved set rather than forming a v3 or
 staying a separately reported slice.
@@ -717,7 +717,7 @@ split it cost a case and gained none (27/27 without, 26/27 with), and structural
 help — reaching compat retrieval means the router matched a topic, so topic recall has already
 filled the pool, and a vector pass could only add *off-topic* candidates, which is the opposite
 of this decision. Zero of the 40 compat fixture rows reach retrieval with no routed topic.
-Detail: [rag-compat-topic-preference-2026-08-18.md](rag-compat-topic-preference-2026-08-18.md).
+Detail: [rag-compat-topic-preference-2026-08-18.md](../archive/rag-compat-topic-preference-2026-08-18.md).
 
 **Implemented 2026-08-18.** Weight `RRF_W_TOPIC = 0.30` — the *weakest* setting that fixes all
 four KB-ROUTER-01 sentences, chosen that way because the decision was preference, not score.
@@ -769,7 +769,7 @@ because `ollama_ask_service` does not fall through to the next model on a generi
 > strategy corpus without the game running?* — keeps the number.
 
 **Raised and locked 2026-08-09** (ATTR-1.3 in
-[15-corpus-licensing-attribution-plan.md](../planning/15-corpus-licensing-attribution-plan.md)).
+[15-corpus-licensing-attribution-plan.md](../archive/15-corpus-licensing-attribution-plan.md)).
 
 **Choice: CC BY 4.0 only for the publishable corpus.** ShareAlike sources (CC BY-SA 3.0/4.0)
 are deferred until attribution / ShareAlike redistribution work is ready. Do **not** treat
@@ -783,7 +783,7 @@ publish simpler.
 **Follow-up 2026-08-09:** `zelda.fandom.com` is **GFDL**, not Fandom's usual CC-BY-SA
 (page footer confirmed). Seed `source_license` corrected; still excluded from publish under
 this decision (GFDL ≠ CC BY 4.0). See
-[15-corpus-licensing-attribution-plan.md](../planning/15-corpus-licensing-attribution-plan.md)
+[15-corpus-licensing-attribution-plan.md](../archive/15-corpus-licensing-attribution-plan.md)
 ATTR-1.1.
 
 **Superseded 2026-08-14 by D20** — reopened during Phase 6 publish planning once it was
@@ -807,7 +807,7 @@ requires, not a claim that every card shares one license underneath.
 Still excluded, on grounds D20 does not touch: `zelda.fandom.com` (**GFDL** — a different
 license family that does not mix with Creative Commons; the 2 affected cards are dropped
 from the seed entirely rather than published under the wrong license — see
-[15-corpus-licensing-attribution-plan.md](../planning/15-corpus-licensing-attribution-plan.md)),
+[15-corpus-licensing-attribution-plan.md](../archive/15-corpus-licensing-attribution-plan.md)),
 `hades.fandom.com` and `developer.valvesoftware.com` (NonCommercial), `bg3.wiki`
 (per-contributor licensing is ambiguous — some contributors' text is NC-only and no page says
 which).
@@ -909,11 +909,11 @@ worked; apostrophes are dropped instead. A third test asserts every topic in
 `data/kb/compat_patterns.json` has a routing rule, so shipping content nobody can reach fails
 rather than repeats.
 
-Full measurement and the options as presented: [rag-pr2-signoff.md](rag-pr2-signoff.md) § 2.
+Full measurement and the options as presented: [rag-pr2-signoff.md](../archive/rag-pr2-signoff.md) § 2.
 On-Deck QA: **KB-ROUTER-01**.
 
 Evidence for all of these lives in [docs/audit/](.), especially
-[05-plan.md](05-plan.md).
+[05-plan.md](../archive/05-plan.md).
 
 ---
 
@@ -1083,7 +1083,7 @@ make the simple version unreliable.
 ### D6 — Sequencing: what should I do next?
 
 Not a hard decision, just a checkpoint. The audit produced a ranked plan in
-[05-plan.md](05-plan.md). The first four items are all low-risk, mechanical,
+[05-plan.md](../archive/05-plan.md). The first four items are all low-risk, mechanical,
 and verifiable by the compiler and existing tests:
 
 1. Delete the unused backend code (needs **D2**)
@@ -1157,7 +1157,7 @@ successful while the Deck is running something else:
 plugin files that are no longer in the manifest) — a contained change to
 `build.ps1` (and `watch-deploy.ps1` by inheritance) that removes a whole class
 of false-pass. Or leave them and rely on the manual check now written into
-[05-plan.md](05-plan.md) §1.3, accepting that it depends on someone
+[05-plan.md](../archive/05-plan.md) §1.3, accepting that it depends on someone
 remembering.
 
 The second option is the one Phase 5's prevention pass would reject on
@@ -1180,7 +1180,7 @@ measured). Two bigger files were never in scope for step 8:
   It now has 13 characterization tests, so it is the best-protected large file
   in the repo; it is also where a subtle polling or cancel regression would hurt
   most on-device.
-- **`MainTab.tsx`** — 187 lines, churn 42, and [05-plan.md](05-plan.md)
+- **`MainTab.tsx`** — 187 lines, churn 42, and [05-plan.md](../archive/05-plan.md)
   calls it the cheapest entry point because its churn is pure prop-threading
   tax. It gets cheaper still after the state extractions above.
 
@@ -1219,7 +1219,7 @@ not write focus-graph tests upfront.
 ### D11 — `main.py` carries a compatibility shim for a loader you may never use. Remove it?
 
 **What's going on.** Found during the step 6 inventory
-([07-mainpy-inventory.md](07-mainpy-inventory.md) §3). Every RPC in `main.py` starts
+([07-mainpy-inventory.md](../archive/07-mainpy-inventory.md) §3). Every RPC in `main.py` starts
 by calling `_coerce_instance(self)` — **55 call sites**. Its whole job is to cope with an
 older Decky loader that passes the *class* instead of an instance. `plugin.json:6` declares
 `"api_version": 1`, and that loader passes an instance, so on your Deck this call does
@@ -1652,13 +1652,13 @@ verbatim in commit subjects, and keep one label to one commit series.
 
 1. **Record decisions** — this section; turn accepted work into implementation rows as work ships. *(done — `dcbcccf`, `e2111f9`, plus this amendment)*
 2. **D1 — wire both RPCs** — **done 2026-08-02**, see Bugs § *Fixed*. D1a routing merge (`510139d`) and D1b session RAG adapter, 13 new unit tests between them. On-Deck QA still open: **ROUTING-MERGE-01** and **SESSION-RAG-CHIPS-01** in [testing.md](../testing.md). **This is feature work, not refactor** — separate commits, not labeled behavior-preserving, and it changes what `useBonsaiAskOrchestration.ts` does at runtime. Sequenced before step 5 on purpose so the characterization tests capture intended behavior rather than the silent-fallback bug.
-3. **D2 — targeted cleanup** — **done 2026-08-02** (`309c386`, `ebdc0f2`, `c8ed045`, `45cb0ff`, `d93027b`, `36f34cd`). Removed: 5 Proton-journal RPCs + their service, `thinking_tiny_model_service.py`, `log_navigation`, `capture_screenshot`, and the TDP sysfs write path. Kept per D2: `ask_game_ai`, `ask_ollama`, `dbg_fe_log`, `cancel_rag_corpus_download`. RPC surface 57 → 50. Two things the audit got wrong are recorded in [05-plan.md](05-plan.md) §1.1: the journal service was not dead (`clear_plugin_data` needed its file wipe) and `find_amdgpu_hwmon` was not apply-only (`read_current_tdp_watts` calls it). The kmsgrab orphans this pass left behind were cleared later the same day under **Cleanup candidates** (`4a26cfa`).
+3. **D2 — targeted cleanup** — **done 2026-08-02** (`309c386`, `ebdc0f2`, `c8ed045`, `45cb0ff`, `d93027b`, `36f34cd`). Removed: 5 Proton-journal RPCs + their service, `thinking_tiny_model_service.py`, `log_navigation`, `capture_screenshot`, and the TDP sysfs write path. Kept per D2: `ask_game_ai`, `ask_ollama`, `dbg_fe_log`, `cancel_rag_corpus_download`. RPC surface 57 → 50. Two things the audit got wrong are recorded in [05-plan.md](../archive/05-plan.md) §1.1: the journal service was not dead (`clear_plugin_data` needed its file wipe) and `find_amdgpu_hwmon` was not apply-only (`read_current_tdp_watts` calls it). The kmsgrab orphans this pass left behind were cleared later the same day under **Cleanup candidates** (`4a26cfa`).
 
    **Preview-suite gate — first pass was incomplete.** Grepping `tests/preview-suite/` and `scripts/` for *symbol* names returns zero hits for `proton_experiment`, `apply_tdp`, `log_navigation`, `capture_screenshot`, `dbg_fe_log`, `cancel_rag_corpus_download`, `thinking_tiny`, and 22 hits for `ask_game_ai` across five tiers (keep, per D2). **That grep missed file-level references.** `tests/preview-suite/unit-gates.json:25` runs `tests/test_tdp_sandbox_sysfs.py` by filename under a gate tagged `TDP-APPLY`, and `tier-manifest.json:96` advertises "sysfs TDP apply + clamp asserts" in the Tier 2 description. Only two test files are referenced this way — the other is `test_capabilities.py` — so no other deletion in this pass was affected. **When checking whether a deletion is preview-safe, grep the preview suite for the test filename as well as the symbol.**
 4. **Mechanical refactors** — **done 2026-08-02** (`3813764`, `666e3e3`, `2156441`, `ef65f8e`), one behavior-preserving commit each, all gates green between. Four stale doc claims fixed and the self-declared-archived RAG analysis moved to `archive/`; `refactor_helpers.py` shim deleted and its 9 importers repointed; `settingsAndResponse.ts` barrel deleted and its 22 importers repointed (`tsc --noEmit` is the safety net here); `settingsPayload.ts` split, with reply-text formatting moved to `appliedTuningText.ts`.
 
-   **Deploy gate — passed, and it mattered.** The shim was referenced by `build.sh`, `build.ps1` and `verify-decky-plugin-zip.sh`, none of which any test covers. Deployed to the Deck and confirmed `bonsAI plugin loaded!`. **The first load proved nothing**: the deploy scripts copy without pruning, so the deleted shim was still sitting on the Deck from an earlier deploy and would have satisfied any import that had been missed. Deleting it plus `__pycache__` on-device and restarting `plugin_loader` is what made the check real. See [05-plan.md](05-plan.md) §1.3 — **any future deletion of a Deck-facing Python file needs the same step.**
-5. **D3 — safety net** — **done 2026-08-02.** 22 new tests (suite 217 → 239): `useBonsaiAskOrchestration.test.ts` covers submit guards, request payload, the invalid / blocked / completed / thrown-error branches, polling, cancel, and thread archiving; `index.test.tsx` covers the Decky contract, a real mount, settings wiring, the tab set, and error containment. Both **mutation-checked** — three deliberate breaks in each turn the suite red — because a characterization test that cannot fail is worse than none. Three harness defects had to be fixed first and are recorded in [04-coverage.md](04-coverage.md): vitest collected only `*.test.ts` so **a `.tsx` test could never run**, jsdom lacks `ResizeObserver` so the tree silently rendered the ErrorBoundary fallback, and `globals: false` left renders leaking between tests.
+   **Deploy gate — passed, and it mattered.** The shim was referenced by `build.sh`, `build.ps1` and `verify-decky-plugin-zip.sh`, none of which any test covers. Deployed to the Deck and confirmed `bonsAI plugin loaded!`. **The first load proved nothing**: the deploy scripts copy without pruning, so the deleted shim was still sitting on the Deck from an earlier deploy and would have satisfied any import that had been missed. Deleting it plus `__pycache__` on-device and restarting `plugin_loader` is what made the check real. See [05-plan.md](../archive/05-plan.md) §1.3 — **any future deletion of a Deck-facing Python file needs the same step.**
+5. **D3 — safety net** — **done 2026-08-02.** 22 new tests (suite 217 → 239): `useBonsaiAskOrchestration.test.ts` covers submit guards, request payload, the invalid / blocked / completed / thrown-error branches, polling, cancel, and thread archiving; `index.test.tsx` covers the Decky contract, a real mount, settings wiring, the tab set, and error containment. Both **mutation-checked** — three deliberate breaks in each turn the suite red — because a characterization test that cannot fail is worse than none. Three harness defects had to be fixed first and are recorded in [04-coverage.md](../archive/04-coverage.md): vitest collected only `*.test.ts` so **a `.tsx` test could never run**, jsdom lacks `ResizeObserver` so the tree silently rendered the ErrorBoundary fallback, and `globals: false` left renders leaking between tests.
 5b. **D3 — entry-point split, in progress 2026-08-02.** `index.tsx` 1955 → 1709 across three commits: `984498e` moved the stateless shell pieces (error boundary, localStorage helpers, tab titles) to `src/features/plugin-shell/`; `26c67e6` moved voice Ask input to `src/features/voice/`; `fda8051` moved the try-order modal to `src/features/model-routing/`. Destination follows REFACTOR-PLAN §3.4 (vertical slices), not the type-buckets.
 
    **Measured finding that redirected the work:** extracting the tab JSX — the obvious first move — is a *lateral* change. The six tab payloads thread 94 (`mainTab`), ~30 (`ollamaTab`), 27 (`settingsTab`) and 21 (`developerTab`) props out of `Content`'s scope, so moving one to its own module means declaring those props a second time as an args type. `index.tsx` would shrink while the codebase got worse. The threading is a *symptom* of state living in `Content`; each state extraction deletes props instead of copying them, and the tab JSX becomes cheap to move only afterwards. **Do the state first.**
@@ -1740,7 +1740,7 @@ verbatim in commit subjects, and keep one label to one commit series.
    it belongs with the step-6 `main.py` inventory pass.
 
 6. **2.3 — `main.py` extraction investigation** — **done 2026-08-03**, read-only, no code
-   changed. Inventory: [07-mainpy-inventory.md](07-mainpy-inventory.md).
+   changed. Inventory: [07-mainpy-inventory.md](../archive/07-mainpy-inventory.md).
 
    **Answer to §2.3's question ("thin facade or logic in both layers?"): both, and not where
    the file claims.** By count it reads as a facade — 27 of 96 methods are ≤8 lines. By
@@ -1777,7 +1777,7 @@ verbatim in commit subjects, and keep one label to one commit series.
    53 `plugin = Plugin._coerce_instance(self)` aliases became direct `self` use, not
    `plugin = self`, so no vestigial indirection is left behind.
 
-   **The shim had a service-side half** that [07-mainpy-inventory.md](07-mainpy-inventory.md)
+   **The shim had a service-side half** that [07-mainpy-inventory.md](../archive/07-mainpy-inventory.md)
    had not found: [ollama_ask_service.py:81](../../py_modules/backend/services/ollama_ask_service.py)
    called `plugin_inst._ensure_background_state()` before touching `_active_request_id()`,
    and `tests/test_ollama_ask_service.py` carried a matching no-op on its `_FakePlugin`.
@@ -1797,7 +1797,7 @@ verbatim in commit subjects, and keep one label to one commit series.
 7. **Settings single source of truth — COMPLETE 2026-08-03** — REFACTOR-PLAN §3.1, the highest-value item in the audit and the best-covered by existing tests (`tests/test_settings_service.py` asserts per-setting round-trips). Expect that suite to break on shape, not behavior — rewrite the assertions, do not contort the design. Shipped as **7a–7d** below. *(This header was reconstructed 2026-08-04: the reorg dropped the numbered `7.` entry and left its tail glued to the end of 7d.)*
 
 7a. **2.2 — settings recon + drift guard** — **done 2026-08-03.** The audit deferred this
-   design deliberately ([05-plan.md](05-plan.md) §2.2: *"Do not design the shared-schema
+   design deliberately ([05-plan.md](../archive/05-plan.md) §2.2: *"Do not design the shared-schema
    mechanism from this document"*), so the first move was measuring rather than building.
 
    **Baseline: there is no drift.** Both sides were executed and their outputs diffed —
@@ -2002,7 +2002,7 @@ for the same reason — its RPC probe passed, its UI pass did not run.
 10. **D4 — evidence hygiene — done 2026-08-05.** Link audit first, as D4 required, and it
     **overturned the premise the decision was written on.**
 
-    **The audit ([06-doc-triage.md](06-doc-triage.md) § Prune stale evidence) searched
+    **The audit ([06-doc-triage.md](../archive/06-doc-triage.md) § Prune stale evidence) searched
     `testing.md` only.** The archived QA docs cite evidence heavily, at individual
     case-manifest level. Counting whole **runs** (`tier/date-sha`) rather than tier folders:
     **10 of 13 runs referenced, 0 broken links** — not "96% unreferenced". The unit that is
@@ -2120,12 +2120,12 @@ for the same reason — its RPC probe passed, its UI pass did not run.
     Stop path, item 4 changes plugin unload, and the voice fix changes* Clear all plugin data *— all
     three want a real on-Deck check.*
 
-    Original entry: the ranked list in [07-mainpy-inventory.md](07-mainpy-inventory.md) §8, **identified 2026-08-03**. Item 6 (the D11 shim) was pulled ahead and is done; 1–5 are not: background-request state shape (~60 lines, LOW), `test_ollama_connection` transport → `ollama_service.py` (~70, LOW-MED — the only outright contradiction of `main.py`'s own header), local-command dispatch table (~40, MED), `cancel_and_reset` for `clear_plugin_data` (~45, MED), `abort_background_game_ai` transport (~25, MED). ~240 lines against a 2865-line file that is still the #1 hotspot by nearly 3×.
+    Original entry: the ranked list in [07-mainpy-inventory.md](../archive/07-mainpy-inventory.md) §8, **identified 2026-08-03**. Item 6 (the D11 shim) was pulled ahead and is done; 1–5 are not: background-request state shape (~60 lines, LOW), `test_ollama_connection` transport → `ollama_service.py` (~70, LOW-MED — the only outright contradiction of `main.py`'s own header), local-command dispatch table (~40, MED), `cancel_and_reset` for `clear_plugin_data` (~45, MED), `abort_background_game_ai` transport (~25, MED). ~240 lines against a 2865-line file that is still the #1 hotspot by nearly 3×.
 
     **Sequencing needs a call.** §8 said items 1–2 were *"worth doing before step 7"* — step 7 shipped without them, so that guidance already lapsed once; items 3–5 were gated on *"after step 8"*, which is now. Nothing here is blocked, and nothing above is blocked on it. **Note the coverage cost before starting:** none of the ten largest `main.py` methods has a behavioral test (§9), so unlike step 8 there is no safety net — `test_merge_pulled_tags_rpc.py` and `test_session_rag_chip_candidates_rpc.py` are the only worked examples of testing a `class Plugin` RPC directly and are the pattern to copy. Expect *write the test first* to be most of the work for items 2–5.
 
-**Phase 5 — done 2026-08-07.** [08-postmortem.md](08-postmortem.md) and
-[09-prevention.md](09-prevention.md), written as two passes because folding them together
+**Phase 5 — done 2026-08-07.** [08-postmortem.md](../archive/08-postmortem.md) and
+[09-prevention.md](../archive/09-prevention.md), written as two passes because folding them together
 makes the mechanisms go vague. **Numbered 08/09, not the 07/08 REFACTOR-PLAN specifies** —
 `07-mainpy-inventory.md` already held that ordinal.
 
@@ -2190,10 +2190,10 @@ so they are not rediscovered:
 2. `find_amdgpu_hwmon` was **not** apply-only — `read_current_tdp_watts` calls
    it, so removing it would have killed the current-TDP read Ask uses.
 3. The preview-suite gate grep searched **symbols only**; the suite also names
-   test *files*. Grep both. ([05-plan.md](05-plan.md) §1.1)
+   test *files*. Grep both. ([05-plan.md](../archive/05-plan.md) §1.1)
 4. `vitest.config.ts` collected only `*.test.ts`, so a `.tsx` test **could never
    run**. The 44 untested component files were a tooling gap, not a discipline
-   gap. ([04-coverage.md](04-coverage.md))
+   gap. ([04-coverage.md](../archive/04-coverage.md))
 
 **Outstanding on-Deck QA from this session:** **ROUTING-MERGE-01** in
 [testing.md](../testing.md) — implemented and unit-tested but never exercised on a
@@ -2220,7 +2220,7 @@ Nothing here changed product behavior.
 | 2 | **Delete the orphaned kmsgrab capture sub-tree** | `4a26cfa` — six functions, not the four enumerated. `_build_kmsgrab_argv` was called only by `try_kmsgrab_screenshot`, and `gamescope_session_active` only by `_desktop_session_active`, so stopping at four would have left the same problem one node deeper. Preview gate run on **symbols and filenames** both, per the TDP lesson: clean. Live capture paths untouched |
 | 3 | **Remove the `journal_text` plumbing** | `a029c2d` — parameter dropped from `stack_context_blocks`, caller stopped passing `""`. Its ordering test asserted a three-block arrangement that can no longer occur and was replaced with one covering what the stacker still guarantees. The duplicate roadmap note under Planned is collapsed |
 | 4 | **Remove the `sysfs_writes` reader and field; keep the preview hook empty** | `a9353cc` — `read_sandbox_sysfs_writes` and the `get_input_transparency` field gone; `sandbox_sysfs_root` stays because `find_amdgpu_hwmon` needs it. `getSysfsWrites` kept returning `[]`: the in-repo runner never calls it, but `__bonsaiTestHooks` is consumed by DPS scenarios outside this repo, so the contract stands |
-| 5 | **Defer the `docs/archive/` broken links to D4** | Not actionable here by decision. 272 relative links in historical files point at a `docs/` layout that no longer exists; fixing them is evidence hygiene, not code legibility. Folded into **D4** — see [06-doc-triage.md](06-doc-triage.md) § Link audit. Live docs are already link-clean |
+| 5 | **Defer the `docs/archive/` broken links to D4** | Not actionable here by decision. 272 relative links in historical files point at a `docs/` layout that no longer exists; fixing them is evidence hygiene, not code legibility. Folded into **D4** — see [06-doc-triage.md](../archive/06-doc-triage.md) § Link audit. Live docs are already link-clean |
 
 **Found while executing, deferred to D7 (locked 2026-08-03, executed same day):**
 `_reencode_oversized_capture` and `_mirror_capture_to_plugin_dir` in
@@ -2341,7 +2341,7 @@ that piece of work.
 none `tune`. Eighteen are strategy-domain (spread across 12 of the 13 corpus titles — every title
 except State of Emergency, skipped for lack of confident general knowledge of that game) and two
 are compat-domain (topics `steam_input` and `storage`). Full row list and per-row provenance:
-[kb-blind-holdout-rows-2026-08-28.md](kb-blind-holdout-rows-2026-08-28.md).
+[kb-blind-holdout-rows-2026-08-28.md](../archive/kb-blind-holdout-rows-2026-08-28.md).
 
 **The method, in one paragraph.** Each row was written from the author's own general knowledge of
 the title plus a metadata-only listing (id, title, section_type, game — generated by a throwaway
@@ -2353,7 +2353,7 @@ could not itself satisfy for its own rows.
 
 **What this is not.** Not a re-measurement. The holdout baseline numbers on record (83.3% across
 every arm, as of the last measurement cited in
-[session-handoff-2026-08-21.md](session-handoff-2026-08-21.md)) are from the old 36-row holdout.
+[session-handoff-2026-08-21.md](../archive/session-handoff-2026-08-21.md)) are from the old 36-row holdout.
 Adding 20 rows changes what "holdout" means as a set, so **any number measured against the new
 84-row holdout is a new series and is not comparable to the old 83.3% figures (R4)** — the same
 caveat D23 recorded for its own fold-in. **The first measurement against this new holdout happens
@@ -2369,7 +2369,7 @@ reviewable from the row list in the linked write-up.
 
 **First measurement, 2026-08-28 (after merge, as promised above).** One arms run on the merged
 tree — new rows plus the pool-margin gate from
-[kb-second-signal-2026-08-28.md](kb-second-signal-2026-08-28.md) — with `nomic-embed-text`, seed
+[kb-second-signal-2026-08-28.md](../archive/kb-second-signal-2026-08-28.md) — with `nomic-embed-text`, seed
 corpus at `build/knowledge-base-test`. On the labelled holdout (now n=56): **fusion 85.7%
 [75.0, 94.6] vs keyword 83.9% [73.2, 92.9] top-3.** That is the first time the two arms have
 produced *different* holdout numbers at all — the old 36-row holdout scored every arm identically —
@@ -2389,7 +2389,7 @@ a hole the card-derived rows never could is the method working, not a defect in 
 **Batch 2, added 2026-08-28 — thirty-six more rows, same method, same ask.** `V2-BLIND-H21` …
 `V2-BLIND-H56`: 34 strategy rows across 11 titles and 2 compat rows, every one targeting a card
 that carried no eval row of any kind before. Write-up and full row list:
-[kb-blind-holdout-rows-batch2-2026-08-28.md](kb-blind-holdout-rows-batch2-2026-08-28.md).
+[kb-blind-holdout-rows-batch2-2026-08-28.md](../archive/kb-blind-holdout-rows-batch2-2026-08-28.md).
 
 Why a second batch rather than stopping at the first measurement: the arms differ by under two
 points and the interval half-width at n=56 is about ten, so the overlap above is mostly a
@@ -2462,7 +2462,7 @@ touching a weight:
 
 1. **51 blind rows added to `tune`** (`V2-BLINDT-01`…`51`), 2026-08-29 — the split had **zero**
    before, which is the whole reason it could not see the defect. Labelled tune 117 → 168. Method
-   and disclosures: [kb-blind-tune-rows-2026-08-29.md](kb-blind-tune-rows-2026-08-29.md). **Every
+   and disclosures: [kb-blind-tune-rows-2026-08-29.md](../archive/kb-blind-tune-rows-2026-08-29.md). **Every
    tune figure in the table above is superseded by this (R4)**; holdout is untouched.
 2. **A weight sweep on `tune` only** — measuring whether any keyword/vector ratio looks better than
    equal, which is the legal move under the lock. Result to be recorded here.
@@ -2480,7 +2480,7 @@ number looks like.
 ### D39 — LOCKED (2026-08-29) — Four cards are filed under an arguable kind. Which kind do they take?
 
 **All four answered by the maintainer on the corpus gap sheet, 2026-08-29.** Full answers and
-context: [corpus-gap-answers-2026-08-29.md](corpus-gap-answers-2026-08-29.md).
+context: [corpus-gap-answers-2026-08-29.md](../archive/corpus-gap-answers-2026-08-29.md).
 
 **Why it was asked.** A card's `section_type` is not cosmetic: it decides the wording of the carousel
 chip built from it (*"How do I deal with X?"* for an enemy, *"What should I know about X?"* for a
@@ -2637,7 +2637,7 @@ Worse, the Fandom case is a **trap this project already walked into and marked**
 item for that snapshot advertises **CC BY-SA 3.0**, while the wiki's own `siteinfo` inside the
 snapshot says **CC BY-NC-SA 3.0**. Checked 2026-08-09, resolved in favour of the stricter one, and
 written down in three places — D20, ATTR-1.2 in
-[15-corpus-licensing-attribution-plan.md](../planning/15-corpus-licensing-attribution-plan.md), and
+[15-corpus-licensing-attribution-plan.md](../archive/15-corpus-licensing-attribution-plan.md), and
 the body of commit `ac03617`. Anyone who trusts the item metadata files NC content under a free
 licence. **Read D20 before proposing a source, not after.**
 
@@ -2662,14 +2662,14 @@ four kinds instead of three. `V2-S-HADES-02` (*"which weapon is easiest"*) repoi
 `fallback_no_source`, so nothing external backs them. That is the same standing as the 74 cards
 already in the corpus and is covered by the ATTRIBUTIONS *Accuracy* section — cards are distilled,
 not authoritative, and wrong ones get fixed forward. It also means, per the note closing
-[corpus-gap-answers-2026-08-29.md](corpus-gap-answers-2026-08-29.md), that **whoever wrote them can
+[corpus-gap-answers-2026-08-29.md](../archive/corpus-gap-answers-2026-08-29.md), that **whoever wrote them can
 never write a blind eval row for them.** Six cards' worth of blind-row capacity was spent here.
 
 ### D40 — OPEN (raised 2026-08-31) — The eval allows one right answer per question. The corpus has outgrown that.
 
 > **Resolved by [D51](#d51--locked-2026-09-01--the-eval-may-hold-a-second-right-answer-resolves-the-eval-d40-which-becomes-d40b) on 2026-09-01: option 1, with a written reason per second card.** Numbering collision with the Terse-mode D40 above; this one is **D40b** from here on (D31 precedent).
 
-**Evidence:** [kb-eval-after-depth-2026-08-31.md](kb-eval-after-depth-2026-08-31.md). Adding 13
+**Evidence:** [kb-eval-after-depth-2026-08-31.md](../archive/kb-eval-after-depth-2026-08-31.md). Adding 13
 cards regressed 7 eval cases and improved none. **Five of the seven are cases where more than one
 card is a fair answer**, and the fixture can only name one.
 
@@ -2713,7 +2713,7 @@ are named `Stygian Blade`, `Eternal Spear` and so on. Before the split, one card
 
 **What must not be done:** rewording the Blade card to say *"easiest"*, or renaming `Weapon aspects`
 to dodge the match. Both are fitting the corpus to a test question, and this repo has already
-recorded that failure mode once ([00-phase0.md](00-phase0.md)).
+recorded that failure mode once ([00-phase0.md](../archive/00-phase0.md)).
 
 **The real question:** should a card whose name is a *category* sit in the same pool as cards that
 are *instances* of that category? Options:
@@ -2762,7 +2762,7 @@ from the rotation.
 
 The one-chip preset row (`fc1b245`) is being redone to the drawing: chips side by side in one row,
 long labels scrolling sideways ([planning/29-preset-row-three-thirds-plan.md](../planning/29-preset-row-three-thirds-plan.md)).
-The drawing says **three** ([major-redesign.md:149](../major-redesign.md), "three chips, not four").
+The drawing says **three** ([major-redesign.md:149](../archive/major-redesign.md), "three chips, not four").
 The maintainer asked, 2026-09-01, whether **two** would be better given how narrow the QAM column is.
 
 **Measured, not predicted.** The column is 300 CSS px (docked 1080p; handheld unmeasured). With a
@@ -2800,7 +2800,7 @@ first deploy writes the measured padding and character counts back into that pla
 
 ### D44 — LOCKED 2026-09-02 — Reopen R5: the tab strip collapses to a thin bar and gets names (option 1, the discovery answer)
 
-**R5** ([major-redesign.md § 7](../major-redesign.md), 2026-08-09; re-confirmed in the turn-8 review
+**R5** ([major-redesign.md § 7](../archive/major-redesign.md), 2026-08-09; re-confirmed in the turn-8 review
 2026-08-29/30) locked the tab strip as *filled active glyph only, no micro labels, no width change, no
 height cost*. Two things have moved since. The maintainer set the vertical-space goal on 2026-08-30 and
 filed *the tab names never appear* as a bug the same day. And the collapsing bar was workshopped on
@@ -3096,7 +3096,7 @@ answers get copied here.
 
 ### D58 — LOCKED 2026-09-04 (raised 2026-09-04) — The bug-fixing session: nine calls before "go"
 
-[Plan 32](../planning/32-bugfix-session.md) sorts the roadmap's twenty Bugs entries into thirteen to fix
+[Plan 32](../archive/32-bugfix-session.md) sorts the roadmap's twenty Bugs entries into thirteen to fix
 now, two that need a call, two that are research for another conversation, and three that are
 bookkeeping. It puts the thirteen into five lanes that run at once and one serial Deck phase. Nothing
 in the code blocks it. Checked read-only on 2026-09-04: the Deck already runs this checkout (hashes
@@ -3541,7 +3541,7 @@ D68 may still want.
 library from the Deck (walk the screen with the plugin-studio rig and the controller bridge), pull examples from it, and
 find which of those games have the best wikis we can use. **Not yet** — two other chats are steering the Deck first; the
 maintainer will say when it frees up. The method, the wiki checklist and the games already known to be on the Deck are in
-[planning/40-new-titles-from-the-library.md](../planning/40-new-titles-from-the-library.md). The title list itself is
+[planning/40-new-titles-from-the-library.md](../archive/40-new-titles-from-the-library.md). The title list itself is
 recorded there when the read is done, and the maintainer picks from it.
 
 **Read done 2026-09-05 over SSH (files only, no screen):** 90 Steam games with playtime, 121 non-Steam shortcuts (108
@@ -4087,7 +4087,7 @@ block rework.
 
 ### D80 — LOCKED 2026-09-06 (raised the same day) — Knowledge-base wave one: the Speed-mode symptom search, the voice preset, and running on without stops
 
-Raised while planning wave one of the knowledge-base work, plan [46](../planning/46-kb-wave-one-session.md). Three
+Raised while planning wave one of the knowledge-base work, plan [46](../archive/46-kb-wave-one-session.md). Three
 calls, all given in one message, plus a fourth that was already settled and is restated here so the plan reads whole.
 
 **A troubleshooting question that only describes the problem gets the meaning search in Speed mode too — but only

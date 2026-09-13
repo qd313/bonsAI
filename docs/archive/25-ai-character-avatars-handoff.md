@@ -8,7 +8,7 @@ vignetted disc.
 where the handoff files landed, what was checked against the repo, and the six
 things that do not line up yet. Read it before writing any of the code.
 
-Design source: [README.md](../design/handoffs/ai-character-avatars/README.md).
+Design source: [README.md](design/handoffs/ai-character-avatars/README.md).
 
 ---
 
@@ -17,7 +17,7 @@ Design source: [README.md](../design/handoffs/ai-character-avatars/README.md).
 | File | Landed at | Status |
 |---|---|---|
 | `CharacterPropGlyph.tsx` | [src/components/CharacterPropGlyph.tsx](../../src/components/CharacterPropGlyph.tsx) | **Staged, imported by nothing.** Real port — 33 props, both ink helpers, the avatar wrapper |
-| `README.md` | [docs/design/handoffs/ai-character-avatars/](../design/handoffs/ai-character-avatars/README.md) | Design spec |
+| `README.md` | [docs/design/handoffs/ai-character-avatars/](design/handoffs/ai-character-avatars/README.md) | Design spec |
 | `AI character avatars.dc.html` | same folder | HTML prototype. Turn **5a** is the approved direction; earlier turns are rejected routes |
 | `support.js` | same folder | Prototype runtime only. Never ship it |
 

@@ -1,12 +1,12 @@
 # Twenty blind holdout rows added to `kb_eval_v2`, 2026-08-28
 
 Written so the method can be checked without re-deriving it. Plain language on purpose. Decision:
-[D37](maintainer-decisions-locked.md#d37--locked-endorsed-2026-08-29--blind-holdout-rows-added-to-kb_eval_v2-endorse-them),
+[D37](../audit/maintainer-decisions-locked.md#d37--locked-endorsed-2026-08-29--blind-holdout-rows-added-to-kb_eval_v2-endorse-them),
 **locked 2026-08-29 — the maintainer endorsed the method.**
 
 ## 1. Why blind rows
 
-[D23](maintainer-decisions-locked.md#d23--where-do-the-paraphrase-questions-go) folded 15
+[D23](../audit/maintainer-decisions-locked.md#d23--where-do-the-paraphrase-questions-go) folded 15
 paraphrase rows into `kb_eval_v2` to give the holdout split something to separate on — at the time
 the holdout half (n=36) scored identically on keyword, vector-only and fusion retrieval, so it could
 not tell any of the three approaches apart. D23 could not fix this itself: by its own rule (R1),
@@ -145,6 +145,6 @@ row to route, and `V2-BLIND-H19` (controller symptom, no troubleshooting term) d
 known-miss shape as `V2-C-04`. The pin now names it instead of requiring 100% reach; the row itself
 is unchanged, for the reason recorded in the pin's docstring. First measurement against the new
 holdout is recorded under **D37** in
-[maintainer-decisions-locked.md](maintainer-decisions-locked.md): fusion 85.7% vs keyword 83.9%
+[maintainer-decisions-locked.md](../audit/maintainer-decisions-locked.md): fusion 85.7% vs keyword 83.9%
 top-3 on the labelled holdout (n=56), intervals overlapping — the first run where the arms differ
 at all, still not a separation.

@@ -47,7 +47,7 @@ rate is as close to zero as this list gets.
   1. **Strip a trailing `:NNN` before resolving.** This repo links with line citations
      (`[dev](../development.md:130)`). A naive checker reports every one as broken — my
      first run produced **38 false positives** from a single file
-     (`docs/audit/desktop-mode-discovery.md`) and zero real findings.
+     (`docs/archive/desktop-mode-discovery.md`) and zero real findings.
   2. **Read as UTF-8 explicitly.** Windows PowerShell defaults to CP1252, which mangles
      every em-dash and therefore every anchor containing one.
   3. **Match GitHub's slug rules exactly** — lowercase, strip punctuation, and **each**
@@ -183,4 +183,4 @@ produces every time. Items 3 and 6 are next and are natural extensions of the ge
 that already runs. Item 5 is worth its friction only because its failure mode is
 invisible off-device. Item 7 is small and partial and should not be mistaken for fixing
 postmortem item 1 — **only derivation fixes that**, and it remains unscheduled under
-[D14](maintainer-decisions-locked.md) Option B/C.
+[D14](../audit/maintainer-decisions-locked.md) Option B/C.

@@ -30,7 +30,7 @@ bottom of this file before any on-device step.
   DOM `keydown` events for the D-pad (measured: zero events reach the page), and direction
   presses do not arrive via `onButtonDown`. Anything wired otherwise is dead on device while
   passing vitest. The `keydown-dpad` and `ring-question` linter rules exist to catch this class.
-  Full story: [audit/spoiler-dpad-01-keydown-dead-code-2026-08-27.md](../audit/spoiler-dpad-01-keydown-dead-code-2026-08-27.md).
+  Full story: [audit/spoiler-dpad-01-keydown-dead-code-2026-08-27.md](spoiler-dpad-01-keydown-dead-code-2026-08-27.md).
 
 ---
 

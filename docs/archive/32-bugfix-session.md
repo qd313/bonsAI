@@ -7,7 +7,7 @@ Nothing in § 3 starts until they are answered.
 
 Read first: [CLAUDE.md](../../CLAUDE.md); the ground rules and the focus law at the top of
 [26-thursday-bugfix-sesh.md](26-thursday-bugfix-sesh.md); the rig notes in
-[31-deck-verification-round.md](31-deck-verification-round.md) § 1 and § 11 before touching the Deck.
+[31-deck-verification-round.md](../planning/31-deck-verification-round.md) § 1 and § 11 before touching the Deck.
 
 ## 1. What is true today (checked 2026-09-04 around 17:00, nothing pressed)
 
@@ -68,7 +68,7 @@ Read first: [CLAUDE.md](../../CLAUDE.md); the ground rules and the focus law at 
 ### 2c. Break off into their own conversation (deep research)
 
 - ★★★★ `[KB]` **The shipping retrieval arm loses to the vector half alone.** Deferred under D38; the work is measurement and a decision, not a fix.
-- ★★ `[KB]` **A troubleshooting question that only describes the symptom reaches no tips.** A reach limit of the D16 gate; also a decision. Read [30-kb-answer-quality-plan.md](30-kb-answer-quality-plan.md) first in that conversation.
+- ★★ `[KB]` **A troubleshooting question that only describes the symptom reaches no tips.** A reach limit of the D16 gate; also a decision. Read [30-kb-answer-quality-plan.md](../planning/30-kb-answer-quality-plan.md) first in that conversation.
 
 ### 2d. Nothing to fix, or bookkeeping only
 
@@ -235,7 +235,7 @@ parent. Bug 6 removes the button, which sidesteps it; the finding itself belongs
 2. Run `pnpm install --frozen-lockfile`, then confirm the baseline: `npx tsc --noEmit`, `npm test`,
    `npm run test:py`, `npm run build`, `node scripts/check-focus-patterns.mjs`. All must pass before
    you change anything.
-3. Read `CLAUDE.md`, the ground rules at the top of `docs/planning/26-thursday-bugfix-sesh.md`, and
+3. Read `CLAUDE.md`, the ground rules at the top of `docs/archive/26-thursday-bugfix-sesh.md`, and
    `.cursor/rules/decky-focus-graph.mdc` if the fix touches focus. Read the roadmap entry and its
    testing row for each bug you own. Read the `runs/` evidence file named in the entry.
 4. One fix per commit; write the failing test first; keep the fix to the files your lane owns; do not

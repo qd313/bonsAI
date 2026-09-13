@@ -378,5 +378,5 @@ holding RAG remediation PR1/PR2 docs-locked.
 - No proposal adds a new capability key. **A3** and **B3** only navigate to
   existing toggles; **C2** writes through the existing `filesystem_write` gate.
 - Housekeeping, unrelated to this question:
-  [10-wake-word-listening-feasibility.md](10-wake-word-listening-feasibility.md)
+  [10-wake-word-listening-feasibility.md](../planning/10-wake-word-listening-feasibility.md)
   answers **Q10**.

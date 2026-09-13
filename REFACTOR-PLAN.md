@@ -278,7 +278,7 @@ behavior. Rewrite them against behavior rather than contorting the code to keep 
 passing.
 
 **3.3 — Resolve the `main.py` extraction** — **investigated 2026-08-03**, not yet
-executed. See [docs/audit/07-mainpy-inventory.md](docs/audit/07-mainpy-inventory.md).
+executed. See [docs/audit/07-mainpy-inventory.md](docs/archive/07-mainpy-inventory.md).
 
 > Is `main.py` a thin facade over `py_modules/backend/services/`, or does business
 > logic live in both? Cite `file:line`. If both, list what remains in `main.py` and
@@ -308,7 +308,7 @@ already has the vertical instinct (`useBonsaiAskOrchestration.ts`,
 **3.5 — Redistribute `refactor_helpers.py`** — **done 2026-08-02.** Reframed
 first: the file had no functions, only 65 lines of re-export, so the work was
 repointing its 9 importers at `backend.ollama_routing` / `ollama_urls` /
-`tdp_intent` and deleting it. See [docs/audit/05-plan.md](docs/audit/05-plan.md)
+`tdp_intent` and deleting it. See [docs/audit/05-plan.md](docs/archive/05-plan.md)
 §1.3.
 
 > For every function in `refactor_helpers.py`, list its call sites. Propose relocating

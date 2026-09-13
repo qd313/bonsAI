@@ -158,7 +158,7 @@ This reproduces the "Deck on the desk beside a headset" case today, with nothing
 ## 8. The three things to find out first
 
 These are the questions from the study that a PC answers without a Frame. Note the answers in
-[09-steam-frame-companion-feasibility.md](09-steam-frame-companion-feasibility.md) or in a short file
+[09-steam-frame-companion-feasibility.md](../archive/09-steam-frame-companion-feasibility.md) or in a short file
 under the archive's spikes folder.
 
 1. **Does a panel show over a running game, and how is it pointed at?** Run any VR title or a flat game

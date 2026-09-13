@@ -3,7 +3,7 @@
 Second batch, same method as
 [kb-blind-holdout-rows-2026-08-28.md](kb-blind-holdout-rows-2026-08-28.md) — read that file
 first; this one records only what is different. Plain language on purpose. Falls under the same
-decision, [D37](maintainer-decisions-locked.md#d37--locked-endorsed-2026-08-29--blind-holdout-rows-added-to-kb_eval_v2-endorse-them),
+decision, [D37](../audit/maintainer-decisions-locked.md#d37--locked-endorsed-2026-08-29--blind-holdout-rows-added-to-kb_eval_v2-endorse-them),
 **locked 2026-08-29** — the endorsement covers both batches.
 
 ## 1. Why a second batch
@@ -151,7 +151,7 @@ that is the row's whole purpose. Filed on the roadmap instead.
   a keyword arm, and the first evidence these rows are testing what they were written to test. The
   two findings worth carrying — the holdout starting to separate, and the shipping `rrf` arm losing
   to `vector_only` by 7.6 points of top-1 on holdout while tying it on tune — are recorded under
-  [D37](maintainer-decisions-locked.md#d37--locked-endorsed-2026-08-29--blind-holdout-rows-added-to-kb_eval_v2-endorse-them).
+  [D37](../audit/maintainer-decisions-locked.md#d37--locked-endorsed-2026-08-29--blind-holdout-rows-added-to-kb_eval_v2-endorse-them).
 - **Nothing about tune changed.** No existing row of any split was edited.
 
 ## 7. Tests

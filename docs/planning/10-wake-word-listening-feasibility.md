@@ -109,7 +109,7 @@ reportedly match or beat Porcupine. But:
 - **Its pre-trained models are CC BY-NC-SA 4.0 — NonCommercial.** The *code* is
   Apache-2.0; the shipped models are not. This collides with the repo's model
   policy machinery, whose default tier is `open_source_only`
-  (`src/data/modelPolicy.ts:29`, per [08-kids-master-lock-feasibility.md:132](08-kids-master-lock-feasibility.md)).
+  (`src/data/modelPolicy.ts:29`, per [08-kids-master-lock-feasibility.md:132](../archive/08-kids-master-lock-feasibility.md)).
 - **None of the six pre-trained models is "bonsAI"** (they are `alexa`,
   `hey mycroft`, `hey jarvis`, `hey rhasspy`, `current weather`, `timers`). A
   fixed "bonsAI" keyword requires **training a custom model** — a Colab pipeline,
@@ -324,7 +324,7 @@ RegisterForOnSuspendRequest(callback: () => void): Unregisterable;
 — `@decky/ui` → `dist/globals/steam-client/system/index.d.ts:43-44`.
 
 They are **TS-only**. The Python backend cannot see suspend, exactly as the Kids
-Lock memo found for parental state ([08:99-101](08-kids-master-lock-feasibility.md)),
+Lock memo found for parental state ([08:99-101](../archive/08-kids-master-lock-feasibility.md)),
 so the state must be pushed over RPC. Register at **plugin scope**, not inside
 `Content`, or the hook dies with the QAM.
 
@@ -468,7 +468,7 @@ suites.
 
 If Kids Lock ships as recommended option **A** — all `CAPABILITY_KEYS` forced off
 via a guard inside `capability_enabled()`
-([08:167-190](08-kids-master-lock-feasibility.md)) — then wake is covered
+([08:167-190](../archive/08-kids-master-lock-feasibility.md)) — then wake is covered
 automatically the moment its key joins the tuple. **No additional Kids Lock work,
 provided the key lives in `CAPABILITY_KEYS` rather than as a bare settings
 boolean.** That is a good reason to add it properly rather than shortcutting.

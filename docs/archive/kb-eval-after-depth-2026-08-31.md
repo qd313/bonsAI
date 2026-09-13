@@ -70,7 +70,7 @@ badly converts the ship gate into a mirror. They stay wrong, and the fixture sta
 ## Two questions this raises, both for the maintainer
 
 Written up as **D40** and **D41** in
-[maintainer-decisions-locked.md](maintainer-decisions-locked.md). In short:
+[maintainer-decisions-locked.md](../audit/maintainer-decisions-locked.md). In short:
 
 1. **One right answer per question is now too few.** Five of the seven regressions are cases where
    more than one card is a fair answer. The fixture cannot express that, so growing the corpus

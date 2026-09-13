@@ -37,8 +37,8 @@ No shared files between items — clean composition, no integration defects foun
 UI showed **Install voice engine** "even when `binary_ready` and `model_ready` were both true",
 implying the aggregate `ready` flag disagreed with the two component flags. It cannot: `ready` is
 *defined* as `whisper_bin is not None and model_ready`
-([voice_transcription_service.py:1170](../py_modules/backend/services/voice_transcription_service.py)),
-and `get_voice_engine_status` returns it unchanged ([main.py:2611](../main.py)). The three values are
+([voice_transcription_service.py:1170](../../py_modules/backend/services/voice_transcription_service.py)),
+and `get_voice_engine_status` returns it unchanged ([main.py:2611](../../main.py)). The three values are
 the same by construction, so no divergence between them can have produced the report. The old code
 disabled the button and labelled it *Voice engine ready* when installed — the opposite of an enabled
 Install action.

@@ -1,7 +1,7 @@
 # RAG retrieval quality remediation — implementation plan
 
-**Status:** **CLOSED 2026-08-09.** PR1 (Stages 1–5) shipped 2026-08-05. PR2 (Stage 6) complete: kill-switch, D16 router, `kb_eval_v2` (221 / 140 labeled), 13-title / 119-section seed, schema-v3 rebuild, arms bake-off, equal RRF weights locked on holdout **no separation**. Report: [archive/research/kb-retrieval-pr2-bakeoff-2026-08-09.md](archive/research/kb-retrieval-pr2-bakeoff-2026-08-09.md). Sign-off packet: [audit/rag-pr2-signoff.md](audit/rag-pr2-signoff.md).  
-**Analysis source (do not edit as ship plan):** [archive/rag-retrieval-quality-remediation-plan.md](archive/rag-retrieval-quality-remediation-plan.md)
+**Status:** **CLOSED 2026-08-09.** PR1 (Stages 1–5) shipped 2026-08-05. PR2 (Stage 6) complete: kill-switch, D16 router, `kb_eval_v2` (221 / 140 labeled), 13-title / 119-section seed, schema-v3 rebuild, arms bake-off, equal RRF weights locked on holdout **no separation**. Report: [archive/research/kb-retrieval-pr2-bakeoff-2026-08-09.md](research/kb-retrieval-pr2-bakeoff-2026-08-09.md). Sign-off packet: [audit/rag-pr2-signoff.md](rag-pr2-signoff.md).  
+**Analysis source (do not edit as ship plan):** [archive/rag-retrieval-quality-remediation-plan.md](rag-retrieval-quality-remediation-plan.md)
 
 > **PR2 build notes (running)** — what the work has turned up so far:
 >
@@ -21,7 +21,7 @@
 >    the corpus, so this measures the harness. Deepen first (6d), then read it again.
 
 > **PR1 build notes** — three things found while implementing that this plan did not say, all
-> now in code comments and in [knowledge-base.md](knowledge-base.md) § Retrieval quality remediation:
+> now in code comments and in [knowledge-base.md](../knowledge-base.md) § Retrieval quality remediation:
 >
 > 1. **Naive RRF re-creates the exile it removes.** The formula in Stage 2 is undefined for a
 >    card missing from the vector list, and textbook RRF omits such documents. Omission means
@@ -93,7 +93,7 @@ Troubleshooting KB only ran when `question_matches_troubleshooting_log_context` 
 
 The plan said **defer the product fix** and make the gap visible in eval (R2). R2 shipped in stage 6b, and the number it produced changed the decision: **3 of 40** drafted troubleshooting questions reached retrieval, **0 of 19** phrased naturally, leaving ~24 of 27 corpus topics unreachable. Deferring would have meant tuning fusion with no usable compat evidence at all.
 
-Maintainer locked **D16: widen now.** New `compat_topic_router.py` routes on corpus topics; the phrase gate is untouched because its other four consumers (Proton logs, prompt framing, stream tags, permission hint) must not move. Reachability **3/40 → 39/40**, **13/13** blind holdout, **0/107** strategy false positives. The compat arm of the bake-off now measures cards production would actually fetch. See [audit/maintainer-decisions-locked.md](audit/maintainer-decisions-locked.md) § D16.
+Maintainer locked **D16: widen now.** New `compat_topic_router.py` routes on corpus topics; the phrase gate is untouched because its other four consumers (Proton logs, prompt framing, stream tags, permission hint) must not move. Reachability **3/40 → 39/40**, **13/13** blind holdout, **0/107** strategy false positives. The compat arm of the bake-off now measures cards production would actually fetch. See [audit/maintainer-decisions-locked.md](../audit/maintainer-decisions-locked.md) § D16.
 
 ---
 
@@ -151,10 +151,10 @@ Do **not** compare new hybrid/RRF numbers to the 2026-07-31 keyword 92.5%. Re-ru
 
 ## Maintainer sign-off checklist (PR2)
 
-**Live sign-off packet: [audit/rag-pr2-signoff.md](audit/rag-pr2-signoff.md)** — 147 drafted
+**Live sign-off packet: [audit/rag-pr2-signoff.md](rag-pr2-signoff.md)** — 147 drafted
 intents, the measured Q8 numbers, and the open question that blocks stage 6d.
 
-Before rebuild / bake-off — **all checked 2026-08-09** (see [audit/rag-pr2-signoff.md](audit/rag-pr2-signoff.md)):
+Before rebuild / bake-off — **all checked 2026-08-09** (see [audit/rag-pr2-signoff.md](rag-pr2-signoff.md)):
 
 - [x] Eval query intents drafted **before** (or independently of) card text — not card→query echo
 - [x] No query reuses distinctive noun phrases from its target card verbatim
@@ -235,7 +235,7 @@ Also: `tests/test_ollama_embed_service.py` prefix helpers; `tests/test_settings_
 
 ## Documentation (with each PR’s change set)
 
-- `docs/roadmap.md` — active index; remediation row under [Planned](roadmap.md#planned); fixed-bug detail in [archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md)
+- `docs/roadmap.md` — active index; remediation row under [Planned](../roadmap.md#planned); fixed-bug detail in [archive/roadmap-bugs-fixed.md](roadmap-bugs-fixed.md)
 - `docs/knowledge-base.md` — correct Phase 2/3 hybrid claim; prefixes, variant, schema v3, floor, kill-switch
 - `docs/testing.md` — RRF, floor, follow-up, variant mismatch, KB-EVAL-01 re-run; Deck rows **Open** until on-device
 - `docs/troubleshooting.md` — rebuild after schema bump; Dev toggle

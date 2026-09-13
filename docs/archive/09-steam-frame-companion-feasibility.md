@@ -451,7 +451,7 @@ Second constraint: **no health claims** — comfort settings, not medical advice
 ### The existing stubs, reviewed
 
 Four `steam_frame` tips at
-[scripts/gen_compat_patterns.py:164-168](../../scripts/gen_compat_patterns.py)
+[scripts/gen_compat_patterns.py:164-168](../../scripts/archive/gen_compat_patterns.py)
 (the generator; `data/kb/compat_patterns.json` is output and must not be
 hand-edited).
 

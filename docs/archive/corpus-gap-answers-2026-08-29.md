@@ -59,7 +59,7 @@ Organizer 2) and GTA: San Andreas – DE `%command% -dx12`.
 
 ## 3. The four type calls
 
-All four answered. See [D39](maintainer-decisions-locked.md) for the locked record.
+All four answered. See [D39](../audit/maintainer-decisions-locked.md) for the locked record.
 
 | Cards | Call |
 |---|---|

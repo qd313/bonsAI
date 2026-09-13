@@ -393,7 +393,7 @@ the three scripts under `.cursor/hooks/`, `.cursor/mcp.json`, the three rules un
 `scripts/cursor-deck-log-capture.example.ps1`.
 
 Moves first: the focus-graph rule is rewritten into the neutral guide with the two corrections in
-[the focus-rule review](../audit/focus-rule-review-2026-09-11.md); each skill's content is
+[the focus-rule review](../archive/focus-rule-review-2026-09-11.md); each skill's content is
 compared against the guide and anything missing is folded in; the FOSS advocate and the security
 auditor become neutral bodies at `docs/agents/foss-advocate.md` and
 `docs/agents/security-auditor.md` (sections: Role, Stance, Checklist, Output shape, Never do),
@@ -432,7 +432,7 @@ point.
    named in phase 2, plus the settings contract JSON and the RPC method names, all unchanged from
    then on. Lanes fill in behind the seams without talking to each other.
 3. The main backend file, along the destinations and risk order in
-   [the round-one inventory](../audit/07-mainpy-inventory.md). RPC names do not change.
+   [the round-one inventory](../archive/07-mainpy-inventory.md). RPC names do not change.
 4. The ask hook, along its own seams from phase 2.
 5. The settings registry: one declaration per setting that state, snapshot, hydrate, reset,
    debounce deps, the returned object and the save snapshot all derive from; the two contract

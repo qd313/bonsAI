@@ -5,7 +5,7 @@ Status: **§ 7 items 1–6 and 8 all landed 2026-08-08.** Item 7 was declined; 9
 Everything above § 10 is the original 2026-08-03 analysis and is left unedited except this header —
 where it disagrees with the code now, § 10 is right.
 
-Answers `docs/planning/roadmap-planning-questions.md` § 6.
+Answers `docs/archive/roadmap-planning-questions.md` § 6.
 Written 2026-08-03 from static reading of `main.py`, `py_modules/backend/services/`, `src/`, plus two
 local probe runs against `bonsai_stream_tags.py` (recorded inline where they back a number).
 No on-Deck run backs this document. Every claim is a `file:line` citation or marked **UNKNOWN**.
@@ -182,7 +182,7 @@ predicted 1-in-5. The fix is to mix the phase key into the bucket, not to remove
 
 That is roughly 90 lines of copy (including the `still_building` elapsed variant and its
 `_BUILDING_CONTEXT_MAX_SECONDS` logic) that no user has ever seen, plus four unit tests asserting
-implementation shape rather than behaviour — the failure mode `docs/audit/00-phase0.md` already flagged.
+implementation shape rather than behaviour — the failure mode `docs/archive/00-phase0.md` already flagged.
 
 Separately, `BONSAI_STATUS_STREAM_INSTRUCTION`
 ([ollama_prompts.py:508-515](../../py_modules/backend/services/ollama_prompts.py)) is superseded by
@@ -463,7 +463,7 @@ Two notes worth keeping:
 - **Two tests failed on the item-2 pick and were rewritten, not accommodated.**
   `test_format_thinking_phase_woven_tdp_read` and `..._model_retry` pinned one hardcoded `request_id`
   and asserted a specific template came back — implementation shape, the failure mode
-  [audit/00-phase0.md](../audit/00-phase0.md) flags. They now sample a range of ids and assert what the
+  [audit/00-phase0.md](../archive/00-phase0.md) flags. They now sample a range of ids and assert what the
   pool actually promises: prose lines weave the question snippet, emoji-only lines are allowed.
 
 ### 10.2 Maintainer decisions, 2026-08-08

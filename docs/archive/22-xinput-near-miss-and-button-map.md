@@ -7,8 +7,8 @@ evidence that nearly justified it, and what to do if the symptoms come back.
 impersonate an Xbox 360 controller — a session or two of work — and all three
 were the same wrong lookup table wearing different hats.
 
-Sources: [19-controller-macro-test-rig.md](19-controller-macro-test-rig.md)
-§ 5 (S1, S2), [21-ai-owned-testing-program.md](21-ai-owned-testing-program.md)
+Sources: [19-controller-macro-test-rig.md](../planning/19-controller-macro-test-rig.md)
+§ 5 (S1, S2), [21-ai-owned-testing-program.md](../planning/21-ai-owned-testing-program.md)
 § 2.4 and § 7, and the bring-up work now in DPS at `bridge/` (branch
 `feat/controller-bridge-p0`).
 
@@ -79,7 +79,7 @@ apart.
 Had the by-eye count stood, GUIDE stays "dead" and the XInput rewrite proceeds.
 **The recording did not corroborate the answer, it changed it.** This is the
 concrete version of the argument in
-[21-ai-owned-testing-program.md](21-ai-owned-testing-program.md) § 2.4 about
+[21-ai-owned-testing-program.md](../planning/21-ai-owned-testing-program.md) § 2.4 about
 working from a lying instrument.
 
 Note the method stayed mechanical, per that plan's § 7: frames were differenced

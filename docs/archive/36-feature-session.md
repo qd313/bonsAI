@@ -3,13 +3,13 @@
 Written 2026-09-05, before any code was written. The maintainer asked for a plan first: which features,
 in what order, what runs side by side, how each one is proved on the Deck, and what needs their word.
 
-This session runs **alongside** the second bug-fixing session, [35-bugfix-session.md](35-bugfix-session.md),
+This session runs **alongside** the second bug-fixing session, [35-bugfix-session.md](../planning/35-bugfix-session.md),
 which another chat started the same day and which is holding the Deck. Section 1 is about staying out of
 its way; that is the single biggest risk here.
 
 Read first: [CLAUDE.md](../../CLAUDE.md); the model and effort table in [AGENTS.md](../../AGENTS.md) § 3;
 the ground rules at the top of [26-thursday-bugfix-sesh.md](26-thursday-bugfix-sesh.md);
-[35-bugfix-session.md](35-bugfix-session.md) § 2 and § 4 for what the other session owns.
+[35-bugfix-session.md](../planning/35-bugfix-session.md) § 2 and § 4 for what the other session owns.
 
 ---
 

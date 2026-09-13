@@ -4,7 +4,7 @@ Written 2026-09-06, before any code. **Nothing here runs until the maintainer sa
 answered the same day (D80), and the maintainer's direction is: once a milestone is verifiably complete and as
 intended, keep going without asking. The one stop that stays is the public push of the release (§ 5, wave 3).
 
-This is the first wave picked from the status report ([37](37-rag-status-report.md)) on 2026-09-06: the four
+This is the first wave picked from the status report ([37](../planning/37-rag-status-report.md)) on 2026-09-06: the four
 knowledge-base jobs that need no Deck, followed by one corpus point release, followed by a long verification
 session on the Deck. It is written so that a weaker model can run it: every lane brief names its files, its
 commands, its tests and what "done" means.
@@ -16,7 +16,7 @@ sees; it does not diagnose failures — the routing table gives that job to Opus
 
 Read first: [CLAUDE.md](../../CLAUDE.md); [AGENTS.md](../../AGENTS.md) § 3 (the model table and the lane
 rules); the roadmap's [Knowledge base and RAG](../roadmap.md#knowledge-base-and-rag) section; the status
-report [37](37-rag-status-report.md); the answer-quality plan [30](30-kb-answer-quality-plan.md) § 4.3, § 4.7,
+report [37](../planning/37-rag-status-report.md); the answer-quality plan [30](../planning/30-kb-answer-quality-plan.md) § 4.3, § 4.7,
 § 4.8; the new-titles plan [40](40-new-titles-from-the-library.md) § 7; and the ground rules at the top of
 [36-feature-session.md](36-feature-session.md) § 6, which this session keeps.
 
@@ -191,7 +191,7 @@ Lane C. The numbered list below is the dependency order for those three, not a q
    character-voice fix from the other chat is on the shared branch** (D80); otherwise write "owed" in § 11.
 7. **Bookkeeping, one commit per landing** (lanes never touch these): the roadmap's knowledge-base section
    (each entry moves to *Deck check owed* or *Done* as the rules say), `docs/testing.md` rows, `CHANGELOG.md`,
-   and the status report [37](37-rag-status-report.md) § 3 numbers and § 4 lists. Also close the slowdown
+   and the status report [37](../planning/37-rag-status-report.md) § 3 numbers and § 4 lists. Also close the slowdown
    bug's entry with the warm-up finding, and fix "eleven" to "twelve" where the list has twelve.
 
 ### Wave 3 — the release, orchestrator with the maintainer's second "go"

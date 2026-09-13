@@ -134,7 +134,7 @@ Guarded at 12 call sites in `main.py` (`:529`, `:687`, `:1789`, `:1825`, `:1853`
 
 **Recommended v1: option A, described to users as D.** Kids Lock forces all five
 current capabilities to deny, and forces the future Web capability to deny — which
-[web-permission-discovery.md](web-permission-discovery.md) already locked in as a discovery decision
+[web-permission-discovery.md](../planning/web-permission-discovery.md) already locked in as a discovery decision
 ("Kids Master Lock → Web **forced off** (cannot enable)") and which the appendix
 graph encodes at `:1269-1270`.
 
@@ -263,7 +263,7 @@ That last sentence is the important one and should not be cut for length.
 
 ### Blocker relationship with Web permission
 
-[web-permission-discovery.md](web-permission-discovery.md) already commits to "Web **forced off**
+[web-permission-discovery.md](../planning/web-permission-discovery.md) already commits to "Web **forced off**
 (cannot enable)" under Kids Lock, and `:1130` lists Kids Master Lock as a
 dependency of the Web item. So **Kids Lock is a hard predecessor for shipping
 Web** — ship Web first and that roadmap line becomes an unenforced claim in a

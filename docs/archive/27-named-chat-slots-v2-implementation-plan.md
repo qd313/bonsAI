@@ -1,7 +1,7 @@
 # Named chat slots v2 — implementation plan
 
 > **SUPERSEDED 2026-08-30 by
-> [28-named-chat-slots-v3-implementation-plan.md](28-named-chat-slots-v3-implementation-plan.md).**
+> [28-named-chat-slots-v3-implementation-plan.md](../planning/28-named-chat-slots-v3-implementation-plan.md).**
 > The turn-8 design review closed every A/B board and reversed two decisions locked here
 > (Q6 reserved pill gutters → pills fully removed at rest; Q1 wash colour → accent lifted
 > 40% toward white). Do not implement from this file.
@@ -160,7 +160,7 @@ Every canonical mock (5a, 5b, 7a–7d) draws: header → tab strip → **slot ro
 preset chips → Ask bar**. The code today is **slot row → preset chips → Ask bar → transcript**
 ([MainTab.tsx:150-238](../../src/components/MainTab.tsx#L150-L238)).
 
-That inversion is decision **R4 / step P-7** in [major-redesign.md](../major-redesign.md), it was
+That inversion is decision **R4 / step P-7** in [major-redesign.md](major-redesign.md), it was
 already approved, and its prerequisite (the Ask-bar width bug) is fixed — it was simply missing
 from the zip's work-item list. The maintainer confirmed the mock order is the wanted order, so it
 lands **before** W1 and everything after it is built on the new geometry.
@@ -245,7 +245,7 @@ such in `major-redesign.md` § 7 so the next reader does not think it was missed
 ## 3. Non-blocking, but know them
 
 1. **Geometry.** Mocks are 450 × 660. The real column is **300 × 752**, and Steam caps every QAM
-   pane at 300px ([audit/upstream-steam-qam-width-2026-08-12.md](../audit/upstream-steam-qam-width-2026-08-12.md)).
+   pane at 300px ([audit/upstream-steam-qam-width-2026-08-12.md](upstream-steam-qam-width-2026-08-12.md)).
    Treat the mocks as proportions and tokens. At 300px, with 8px row padding, two 38px pills and
    two 8px gaps, the centre block is **192px**; the focused title at 55% of that is ~105px, which
    at 700/19px is about eight characters before it ellipsizes. Expected, not a bug.

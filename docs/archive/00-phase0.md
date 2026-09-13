@@ -110,7 +110,7 @@ generated, and says to write a generator plus a pre-commit hook if hand-maintain
   which regenerates and stages the architecture snapshots (`rpc-map.json`,
   `hotspots.json`, `import-graph.json`, `test-inventory.json`,
   `preview-tiers.json`, `env-vars.json` — the first three renamed/added later on
-  2026-08-02; see [phase1-map-verification.md](phase1-map-verification.md)).
+  2026-08-02; see [phase1-map-verification.md](../audit/phase1-map-verification.md)).
 - Installed per clone by `pnpm run mcp:install-hooks`, wired to npm `prepare`
   (`package.json:24-25`) so it self-installs on `pnpm install`.
 - `npm run mcp:validate` exists with a `--check-generated` drift flag.

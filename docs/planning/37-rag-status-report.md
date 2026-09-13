@@ -340,8 +340,8 @@ carrying the same stars they carry here.
 - [maintainer-decisions-locked.md](../audit/maintainer-decisions-locked.md) — D27, D38, D40b, D41, D45–D54, D65–D69
 - [kb-embed-bakeoff-2026-09-06-arms.md](../archive/research/kb-embed-bakeoff-2026-09-06-arms.md) — latest search numbers, on all 266 cards
 - [kb-answer-eval-2026-09-06-before-wave1.md](../archive/research/kb-answer-eval-2026-09-06-before-wave1.md) and [kb-answer-eval-2026-09-06-after-wave1-landed.md](../archive/research/kb-answer-eval-2026-09-06-after-wave1-landed.md) — answer numbers either side of the prompt work
-- [46-kb-wave-one-session.md](46-kb-wave-one-session.md) — the wave that produced everything dated 6 September, with its progress log
+- [46-kb-wave-one-session.md](../archive/46-kb-wave-one-session.md) — the wave that produced everything dated 6 September, with its progress log
 - [47-kb-wave-two-session.md](47-kb-wave-two-session.md) — wave two, landed: the 27 gap-filling notes, the troubleshooting path widened, two bugs fixed, the index guarantee shipped, the "not in my notes" line, and the `2026.09.07` release
 - `runs/plan46-*.json` — the device evidence behind the 6 September Deck readings
-- [34-feature-verification-round.md](34-feature-verification-round.md), [35-bugfix-session.md](35-bugfix-session.md), [36-feature-session.md](36-feature-session.md) — this week's Deck findings and who owns which files
+- [34-feature-verification-round.md](34-feature-verification-round.md), [35-bugfix-session.md](35-bugfix-session.md), [36-feature-session.md](../archive/36-feature-session.md) — this week's Deck findings and who owns which files
 - `data/kb/strategy_seed.json`, `tests/fixtures/kb_eval_v2.json`, `tests/fixtures/kb_answer_eval.json` — counted directly

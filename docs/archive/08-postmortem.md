@@ -3,7 +3,7 @@
 Written 2026-08-07, after the execution order closed. **Numbered 08, not 07 as
 REFACTOR-PLAN says** — `07-mainpy-inventory.md` already holds that ordinal, and the
 repo has hit this collision before (see the 09→10 rename noted in
-[maintainer-decisions-locked.md](maintainer-decisions-locked.md) § Step labels).
+[maintainer-decisions-locked.md](../audit/maintainer-decisions-locked.md) § Step labels).
 Prevention is [09-prevention.md](09-prevention.md), a deliberately separate pass.
 
 **Scope of evidence.** 338 commits, 2026-03-24 → 2026-08-07 (~4.5 months): 1 commit
@@ -40,7 +40,7 @@ behavior is a plumbing file, and plumbing that churns is duplication.
 
 **Cost to fix is highest and the failure is silent** — that combination is why it is
 first. Confirmed independently by two of three cold readers in
-[03-friction.md](03-friction.md) as the largest cost a newcomer pays.
+[03-friction.md](../audit/03-friction.md) as the largest cost a newcomer pays.
 
 ### 2. Frontend shipped calling backend methods that were never written
 
@@ -114,7 +114,7 @@ wrong ([04-coverage.md](04-coverage.md)).
 **The problem.** Plugin JS runs in SharedJSContext while the UI renders into the QAM
 popup document, so a global `document` lookup finds a 14-element shell. Every focus or
 scroll helper written that way is a no-op **on device only** — it works in preview and
-in jsdom. Documented in [decky-realms.md](decky-realms.md); eight sites were still
+in jsdom. Documented in [decky-realms.md](../audit/decky-realms.md); eight sites were still
 open at last count.
 
 **What created it.** A platform assumption no test environment can falsify. jsdom has
@@ -128,7 +128,7 @@ What *was* available and unused: `getUiDocument()` / `elementHasFocus()` existed
 
 **The problem.** Everything user-facing says **knowledge base**; everything
 machine-facing says **`rag_corpus`**. A cold reader grepped the human name, got 60
-files, and missed all five RPCs that manage the corpus ([03-friction.md](03-friction.md) § 4).
+files, and missed all five RPCs that manage the corpus ([03-friction.md](../audit/03-friction.md) § 4).
 Three of three friction runs lost time to a misleading name — a different one each
 time, which is what makes it a class rather than three incidents.
 

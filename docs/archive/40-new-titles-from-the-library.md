@@ -275,8 +275,8 @@ answer fixtures; then one corpus release; then the device check, row **KB-TRANCH
 
 - [maintainer-decisions-locked.md](../audit/maintainer-decisions-locked.md) — D69, D38, D68; the licence lessons under D19b and D20
 - [15-corpus-licensing-attribution-plan.md](15-corpus-licensing-attribution-plan.md) — the licence gate and the wikis checked so far
-- [17-kb-online-versus-strategy-content.md](17-kb-online-versus-strategy-content.md) — the source rule for multiplayer content
-- [37-rag-status-report.md](37-rag-status-report.md) — the zoomed-out picture
+- [17-kb-online-versus-strategy-content.md](../planning/17-kb-online-versus-strategy-content.md) — the source rule for multiplayer content
+- [37-rag-status-report.md](../planning/37-rag-status-report.md) — the zoomed-out picture
 - `scripts/probe_deck_steam_library.py` — the file-read path; `build/deck-library.json` — today's read
 - `scripts/fetch_wiki_live_pages.py` — reading pages live off a wiki with the revision, date and licence (used for every card here)
 - `scripts/fetch_wiki_dump_pages.py` — pulling pages and the declared licence out of an archive.org dump

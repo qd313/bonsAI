@@ -1,4 +1,4 @@
-> **Archived analysis** - active ship plan: [rag-retrieval-quality-remediation-implementation-plan.md](../rag-retrieval-quality-remediation-implementation-plan.md). Do not implement from this doc; locked decisions and PR split live in the implementation plan.
+> **Archived analysis** - active ship plan: [rag-retrieval-quality-remediation-implementation-plan.md](rag-retrieval-quality-remediation-implementation-plan.md). Do not implement from this doc; locked decisions and PR split live in the implementation plan.
 
 # RAG retrieval quality remediation
 

@@ -2,7 +2,7 @@
 
 Drawn 2026-09-11 for the roadmap entry **Glance view: the answer alone, in big text** (two stars).
 The brief, the values behind every measurement and the open questions are in
-[docs/planning/52-frame-features-second-look.md § 6](../../../planning/52-frame-features-second-look.md).
+[docs/planning/52-frame-features-second-look.md § 6](../../../../planning/52-frame-features-second-look.md).
 
 The canvas: https://claude.ai/code/artifact/c48fb3e2-38ef-4c91-997c-c515353eec96
 

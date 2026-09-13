@@ -82,7 +82,7 @@ agent reading and remembering them at the right moment.
 
 ### 2.4 Nothing can press a button on the Deck
 
-Finding **F1** in [01-qa-automation-plan.md](01-qa-automation-plan.md) § 0, unchanged. And
+Finding **F1** in [01-qa-automation-plan.md](../archive/01-qa-automation-plan.md) § 0, unchanged. And
 per findings-log **P1-5**, the one check that *was* available (`activeElement`) is a false
 oracle — bonsAI shipped three "fixes" that passed it while gamepad focus never moved. An
 agent debugging focus today is not merely slow; it is working from a lying instrument.
@@ -244,7 +244,7 @@ A press is useless without a truthful answer to "what happened?" Three signals:
 ### Track E — The unattended loop ★★★ (2 sessions)
 
 Nightly: gates → preview suite → device smokes → evidence written, findings summarized.
-Per [01-qa-automation-plan.md](01-qa-automation-plan.md) § A5 this is **gated on A0** (the
+Per [01-qa-automation-plan.md](../archive/01-qa-automation-plan.md) § A5 this is **gated on A0** (the
 preview harness passes unknown assert types silently) — *"do this first or the rest is
 theatre."* A0 is not yet done and belongs at the front of this track, not the end.
 
@@ -313,13 +313,13 @@ politeness — an agent should refuse to pass them even when it could:
 4. **Physical world.** A game must be owned, installed and running; the Deck awake, docked,
    networked. The rig presses buttons; it does not buy games or plug in cables.
 5. **Ground truth about games.** Whether an answer about Deep Rock is *correct*.
-   [01-qa-automation-plan.md](01-qa-automation-plan.md) § 4 already settles this: a judge
+   [01-qa-automation-plan.md](../archive/01-qa-automation-plan.md) § 4 already settles this: a judge
    model has no ground truth for a game it does not know.
 6. **Priority.** An agent can say what is broken. What is *worth* fixing next encodes what
    you care about.
 
 **On proposing features:** an agent can, and there is precedent
-([13-roadmap-feature-ideas.md](13-roadmap-feature-ideas.md)). But the backlog already runs to
+([13-roadmap-feature-ideas.md](../archive/13-roadmap-feature-ideas.md)). But the backlog already runs to
 roughly sixty items across nine themes. Proposals are cheap; deciding what *not* to build is
 the scarce thing. Autonomy is better spent closing items than opening them — treat a new
 proposal as needing to justify itself against that.
@@ -333,7 +333,7 @@ proposal as needing to justify itself against that.
   change much; attempts per hour change enormously, and each one gets checked.
 - **Track B catches new mistakes only.** Existing focus bugs still need C+D to observe.
 - **Video corroborates, it does not adjudicate.** Per
-  [01-qa-automation-plan.md](01-qa-automation-plan.md) § 3, a vision judge is agreeable by
+  [01-qa-automation-plan.md](../archive/01-qa-automation-plan.md) § 3, a vision judge is agreeable by
   default and non-reproducible; keep verdicts mechanical. Streaming smoothness is *decided*
   by the timestamp instrumentation in Track D, not by watching the stream.
 - **Permanently manual regardless** (QA plan § 5): voice/mic hardware, the physical display

@@ -518,7 +518,7 @@ only what genuinely needs hardware stays manual.
 | `useChatThreads` against `fakeDeckyRpc` | list / create / rename / delete / select |
 
 Mutation-check the first two, per the standard set at step 5
-([04-coverage.md](../audit/04-coverage.md)) — *a characterization test that cannot fail is
+([04-coverage.md](04-coverage.md)) — *a characterization test that cannot fail is
 worse than none*.
 
 ### On-Deck (`docs/testing.md`) — four rows, down from eleven

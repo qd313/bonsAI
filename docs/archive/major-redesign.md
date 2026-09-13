@@ -2,9 +2,9 @@
 
 Captured 2026-08-09 from the Claude Design project
 [Named chat slots](https://claude.ai/design/p/01f22010-2448-4be9-89ad-209c25aa3b77?file=Named+chat+slots.dc.html).
-Companion to [design-tokens.md](design-tokens.md) (the visual language the mockup
+Companion to [design-tokens.md](../design-tokens.md) (the visual language the mockup
 was drawn against) and
-[planning/07-named-chat-slots-postmortem.md](planning/07-named-chat-slots-postmortem.md)
+[planning/07-named-chat-slots-postmortem.md](07-named-chat-slots-postmortem.md)
 (why v1 of this feature was pulled after six hours).
 
 This document does not implement anything. Scope is: what the mockup specifies,
@@ -21,7 +21,7 @@ code and no tokens**; nobody needs to read it again.
 ## 0. The headline
 
 The mockup is **option C from the postmortem** — the LB/RB slot carousel — which
-[§ 3 of that document rejected outright](planning/07-named-chat-slots-postmortem.md).
+[§ 3 of that document rejected outright](07-named-chat-slots-postmortem.md).
 It also puts a permanent slot row on Main, against the postmortem's rule 10
 (*zero new always-present Main focus stops*).
 
@@ -69,8 +69,8 @@ All values below are read from the mockup markup, at the 400 × 800 QAM column.
 
 The mockup's stated strip geometry — 40px cells, −6px gap, 44px min-height — is
 **exactly** what `.bonsai-tab-title-leaf` already emits
-([section-1.ts:155-170](../src/styles/sections/section-1.ts)) with
-`TAB_TITLE_TAB_GAP_PX = -6` ([constants.ts:94](../src/features/unified-input/constants.ts)).
+([section-1.ts:155-170](../../src/styles/sections/section-1.ts)) with
+`TAB_TITLE_TAB_GAP_PX = -6` ([constants.ts:94](../../src/features/unified-input/constants.ts)).
 The mockup was drawn from the code, not guessed.
 
 Changes it asks for:
@@ -86,7 +86,7 @@ Changes it asks for:
 Width check: 96 + 4 × 44 = 272px of 400. With the Developer tab mounted, 316px.
 Both fit.
 
-`bonsaiTabIconTitle` ([tabTitles.tsx:39-47](../src/features/plugin-shell/tabTitles.tsx))
+`bonsaiTabIconTitle` ([tabTitles.tsx:39-47](../../src/features/plugin-shell/tabTitles.tsx))
 already takes arbitrary React children, so the label is a markup change there
 plus an `.Active`-keyed width rule in `section-1.ts`. Note the standing warning in
 that file at `:150-154` — a prior `:has(.bonsai-tab-title-shell)` + `width:40px`
@@ -125,9 +125,9 @@ LB │  ‹ghost prev›   Elden Ring build  ×   ‹ghost next›  │ RB
 Title is a single line: `white-space: nowrap; overflow: hidden; text-overflow: ellipsis`.
 
 The accent is `DECK_HIGHLIGHT_CYAN` `#9ce7ff`
-([design-tokens.md § Palette](design-tokens.md)) — the existing "active control"
+([design-tokens.md § Palette](../design-tokens.md)) — the existing "active control"
 colour, not a new one. Focus here is **state**, not the focus ring; the white ring
-([design-tokens.md § Focus rings](design-tokens.md)) still applies on top and must
+([design-tokens.md § Focus rings](../design-tokens.md)) still applies on top and must
 not be replaced by the cyan.
 
 ### 2.3 The Main-tab layout inversion
@@ -144,7 +144,7 @@ ask bar             36px, anchored to the bottom edge
 ```
 
 Today it is the reverse order — preset row, Ask bar, then transcript
-([MainTab.tsx:143-212](../src/components/MainTab.tsx)).
+([MainTab.tsx:143-212](../../src/components/MainTab.tsx)).
 
 Preset row specifics: **three** chips, not four; `flex: 1 1 0` thirds; 30px tall;
 r4; first chip carries the KB/help green fill
@@ -166,13 +166,13 @@ marquee-scrolls when it overflows its third.
 
 | Fact | Evidence |
 |---|---|
-| The tab strip is **Steam's own `Tabs`**, found by webpack export sniffing. There is no Decky-side implementation to patch. | [03-lbrb-tab-flicker.md § 1 F1](planning/03-lbrb-tab-flicker.md); [index.tsx:1282-1285](../src/index.tsx) |
-| LB/RB tab switching is Steam's native carousel. The plugin only observes the result via `onShowTab`. | [useBonsaiPluginShell.ts:131](../src/hooks/useBonsaiPluginShell.ts); [section-3.ts:72-74](../src/styles/sections/section-3.ts) |
-| Decky exposes bumpers as `GamepadButton.BUMPER_LEFT = 5` / `BUMPER_RIGHT = 6`, and `onButtonDown` fires for **every** button on a focused `Focusable`. | [FooterLegend.d.ts:8-9](../node_modules/@decky/ui/dist/components/FooterLegend.d.ts); [focusNavigation.ts:95-101](../src/utils/focusNavigation.ts) |
-| Main-tab order is preset row → Ask bar → screenshot browser → transcript. | [MainTab.tsx:143-212](../src/components/MainTab.tsx) |
-| **There is no chat persistence of any kind.** `bonsaiSessionSurvival` is module-level memory that survives `showModal` remounts only — *"Does not: Persist across plugin restarts"*. | [bonsaiSessionSurvival.ts:1-6](../src/utils/bonsaiSessionSurvival.ts) |
+| The tab strip is **Steam's own `Tabs`**, found by webpack export sniffing. There is no Decky-side implementation to patch. | [03-lbrb-tab-flicker.md § 1 F1](03-lbrb-tab-flicker.md); [index.tsx:1282-1285](../../src/index.tsx) |
+| LB/RB tab switching is Steam's native carousel. The plugin only observes the result via `onShowTab`. | [useBonsaiPluginShell.ts:131](../../src/hooks/useBonsaiPluginShell.ts); [section-3.ts:72-74](../../src/styles/sections/section-3.ts) |
+| Decky exposes bumpers as `GamepadButton.BUMPER_LEFT = 5` / `BUMPER_RIGHT = 6`, and `onButtonDown` fires for **every** button on a focused `Focusable`. | [FooterLegend.d.ts:8-9](../../node_modules/@decky/ui/dist/components/FooterLegend.d.ts); [focusNavigation.ts:95-101](../../src/utils/focusNavigation.ts) |
+| Main-tab order is preset row → Ask bar → screenshot browser → transcript. | [MainTab.tsx:143-212](../../src/components/MainTab.tsx) |
+| **There is no chat persistence of any kind.** `bonsaiSessionSurvival` is module-level memory that survives `showModal` remounts only — *"Does not: Persist across plugin restarts"*. | [bonsaiSessionSurvival.ts:1-6](../../src/utils/bonsaiSessionSurvival.ts) |
 | No Python service owns conversations. `py_modules/backend/services/` has 43 modules; none is a thread/session store. | `ls py_modules/backend/services/` |
-| The v1 store existed and was good. Recover with `git show 247a9c9:py_modules/backend/services/chat_threads_service.py` (494 lines, atomic writes, bounded, tested). | [07-postmortem § 0, § 4](planning/07-named-chat-slots-postmortem.md) |
+| The v1 store existed and was good. Recover with `git show 247a9c9:py_modules/backend/services/chat_threads_service.py` (494 lines, atomic writes, bounded, tested). | [07-postmortem § 0, § 4](07-named-chat-slots-postmortem.md) |
 
 So the slot row is the **cheap half**. The expensive half — a persisted store, an
 RPC surface, and request→slot ownership that does not race — is the part the
@@ -190,10 +190,10 @@ slots instead of tabs, and releasing them on blur.
 What is known:
 
 - Decky hands bumper presses to `onButtonDown` on the focused `Focusable`
-  ([FooterLegend.d.ts:8-9](../node_modules/@decky/ui/dist/components/FooterLegend.d.ts)).
+  ([FooterLegend.d.ts:8-9](../../node_modules/@decky/ui/dist/components/FooterLegend.d.ts)).
 - `Tabs` is Steam's component, not Decky's, and is reached by export sniffing —
   there is nothing to intercept inside it
-  ([03-lbrb-tab-flicker.md § 1 F1](planning/03-lbrb-tab-flicker.md)).
+  ([03-lbrb-tab-flicker.md § 1 F1](03-lbrb-tab-flicker.md)).
 - **UNKNOWN:** whether the plugin's handler runs *before* Steam's tab carousel,
   and whether `preventDefault()` / `stopPropagation()` on that event suppresses
   the tab switch. Steam's handler may be attached above the plugin's subtree, in
@@ -209,7 +209,7 @@ feature.** If bumpers cannot be suppressed, the design falls back to 2b/**g** �
 sixth *Chats* tab — which needs no interception at all.
 
 The precedent for probing before ranking hypotheses is
-[03-lbrb-tab-flicker.md](planning/03-lbrb-tab-flicker.md) itself: eight sections
+[03-lbrb-tab-flicker.md](03-lbrb-tab-flicker.md) itself: eight sections
 of static reasoning about these exact buttons were falsified by one device run.
 
 ### 4.2 One permanent Main focus stop
@@ -252,10 +252,10 @@ on the other.
 
 Note the specific hazard: the Ask row already re-measures on tab change with a
 double-rAF deferral because mid-carousel geometry is garbage
-([03-lbrb-tab-flicker.md § 1 F4-F5](planning/03-lbrb-tab-flicker.md)). Moving that
+([03-lbrb-tab-flicker.md § 1 F4-F5](03-lbrb-tab-flicker.md)). Moving that
 row to the bottom of a `flex: 1` column changes what it measures against, and the
 open bug *Unified input + Ask bar no longer span QAM width*
-([roadmap § Bugs](roadmap.md#bugs)) is in that same code. **Fix that bug first;
+([roadmap § Bugs](../roadmap.md#bugs)) is in that same code. **Fix that bug first;
 re-laying out on top of a known-bad measurement will make both undiagnosable.**
 
 ### 4.5 Tab-strip treatment
@@ -296,9 +296,9 @@ when 34 files landed in one commit and came out in one commit six hours later.
 | Phase | Contents | Gate |
 |---|---|---|
 | **P-0** | **Bumper spike** (§ 4.1). Throwaway `Focusable` on Main, log `detail.button`, test suppression. Delete before merging; record the result in this file. | A written yes/no on device. Everything below assumes yes. |
-| **P-0b** | Fix *Unified input + Ask bar no longer span QAM width* ([roadmap § Bugs](roadmap.md#bugs)) — prerequisite for § 4.4 only. | On-Deck |
-| **P-1** | Restore `chat_threads_service.py` from `247a9c9`, minus `pending_request_id`, `set_thread_pending_request`, `find_thread_by_pending_request`, `parse_bundled_thread_title` and `strategy_checklist`. Cap per § 4.3. No UI. | `npm run test:py` + the five Python rows in [postmortem § 7](planning/07-named-chat-slots-postmortem.md) |
-| **P-2** | RPC surface: `list` / `get` / `create` / `delete` / `rename`. In-memory `request_id → slot_id` map on the `Plugin` instance. **Record the user turn, then launch the background task** — ordering inverted from v1. A miss logs a fault, never returns silently. No UI. | `npm run test:py`; names must contain an existing `DOMAIN_KEYWORDS` substring or they file under `other` in the generated map ([CLAUDE.md § The TS ↔ Python boundary](../CLAUDE.md)) |
+| **P-0b** | Fix *Unified input + Ask bar no longer span QAM width* ([roadmap § Bugs](../roadmap.md#bugs)) — prerequisite for § 4.4 only. | On-Deck |
+| **P-1** | Restore `chat_threads_service.py` from `247a9c9`, minus `pending_request_id`, `set_thread_pending_request`, `find_thread_by_pending_request`, `parse_bundled_thread_title` and `strategy_checklist`. Cap per § 4.3. No UI. | `npm run test:py` + the five Python rows in [postmortem § 7](07-named-chat-slots-postmortem.md) |
+| **P-2** | RPC surface: `list` / `get` / `create` / `delete` / `rename`. In-memory `request_id → slot_id` map on the `Plugin` instance. **Record the user turn, then launch the background task** — ordering inverted from v1. A miss logs a fault, never returns silently. No UI. | `npm run test:py`; names must contain an existing `DOMAIN_KEYWORDS` substring or they file under `other` in the generated map ([CLAUDE.md § The TS ↔ Python boundary](../../CLAUDE.md)) |
 | **P-3** | `chatSlotsApi.ts` on `callDeckyWithTimeout()` — no raw `call()`, no exceptions. Turn mapper that **preserves a trailing unpaired user turn**. `useChatSlots` with a synchronously-updated active id (setter and ref in one call, never a `useEffect`). Still no UI. | `npm test`, `npx tsc --noEmit`; the four TS rows in the postmortem, two mutation-checked |
 | **P-4** | The slot row, unfocused + focused (§ 2.2). Focus-graph entry per `AGENTS.md (Decky focus graph)` **before** writing the control. `activeSlotId` added to `bonsaiSessionSurvival` — id only, never turns. | Preview suite + on-Deck focus rows |
 | **P-5** | Rename / delete / create / empty-state — everything in § 5 that is a control. Reuse the nested-modal survival hooks (`onBeforeNestedDeckyModal` / `onCompleteNestedDeckyModalClose`). | On-Deck |
@@ -329,7 +329,7 @@ fix for postmortem § 1.10, and the only one that would have caught v1.
 ## 7. Decisions
 
 Recorded here as they are made; the ones that need a maintainer call also belong
-in [audit/maintainer-decisions-locked.md](audit/maintainer-decisions-locked.md).
+in [audit/maintainer-decisions-locked.md](../audit/maintainer-decisions-locked.md).
 
 | # | Question | Decision (2026-08-09) |
 |---|---|---|
@@ -337,14 +337,14 @@ in [audit/maintainer-decisions-locked.md](audit/maintainer-decisions-locked.md).
 | R2 | Is one permanent Main focus stop acceptable (§ 4.2)? | **OPEN — decide on device at P-4.** Same call the postmortem deferred to its own P4; it cannot be made on paper. |
 | R3 | Slot cap (§ 4.3) | **Small cap, no pinning.** 5–8 slots. Dots stay dots — no numeric counter, no pinning, no hold-to-jump-5, no warning line. 1d is out of scope. |
 | R4 | Does the layout inversion ship, and separately (§ 4.4)? | **Yes, separately — after the width bug.** P-0b then P-7. Slots do not wait on it, and it can be dropped without touching P-1…P-6. |
-| R5 | Tab-strip treatment (§ 4.5) | **Filled active only (2b/b).** No micro labels, no width change, no 6px height cost. One CSS rule. **Reopened 2026-09-01 and superseded by D44 (locked 2026-09-02):** Steam's strip is hidden and replaced by bonsAI's own 20px bar with the active tab's name, opening to a labelled strip only while the ring is on it — [planning/30-collapsing-tab-bar.md](planning/30-collapsing-tab-bar.md). |
+| R5 | Tab-strip treatment (§ 4.5) | **Filled active only (2b/b).** No micro labels, no width change, no 6px height cost. One CSS rule. **Reopened 2026-09-01 and superseded by D44 (locked 2026-09-02):** Steam's strip is hidden and replaced by bonsAI's own 20px bar with the active tab's name, opening to a labelled strip only while the ring is on it — [planning/30-collapsing-tab-bar.md](../planning/30-collapsing-tab-bar.md). |
 
 ### The preset row (§ 2.3) — decided 2026-09-01
 
 - **Two chips across, not three — D43.** § 2.3 draws three thirds. Measured against the real 300px
   column, three chips leave ~12 characters of label each (no built-in suggestion is recognisable
   until it scrolls); two leave ~20. The maintainer chose two. The research is in
-  [planning/29-preset-row-three-thirds-plan.md § 3b](planning/29-preset-row-three-thirds-plan.md).
+  [planning/29-preset-row-three-thirds-plan.md § 3b](../planning/29-preset-row-three-thirds-plan.md).
 - **The help chip owns the row** until dismissed, then the suggestions take it — rather than the
   green first third the drawing shows beside two suggestions.
 - **Marquee (§ 5) is built** with Steam's own `Marquee`, on every chip, slow and calm; 30px chips,
@@ -354,7 +354,7 @@ in [audit/maintainer-decisions-locked.md](audit/maintainer-decisions-locked.md).
 ### Turn-8 review (2026-08-29/30) — what it confirmed
 
 The turn-8 design review closed every open A/B board. Implementation plan:
-[planning/28-named-chat-slots-v3-implementation-plan.md](planning/28-named-chat-slots-v3-implementation-plan.md),
+[planning/28-named-chat-slots-v3-implementation-plan.md](../planning/28-named-chat-slots-v3-implementation-plan.md),
 which supersedes plan 27 and wins wherever the two disagree.
 
 - **R3** — the cap is **8**, the top of R3's 5–8 range. Dots cover all 8; nothing from § 2.4 comes

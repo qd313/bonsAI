@@ -237,6 +237,6 @@ unusable costs nothing today and costs a rewrite later.
 2. **Attribution for the L4D2 dump.** **Locked 2026-08-09 (hybrid):** Deck chip stays
    short (wiki · licence · as-of date); WikiTeam / archive.org snapshot line lives in
    generated `ATTRIBUTIONS.md`. See
-   [17-kb-online-versus-strategy-content.md](17-kb-online-versus-strategy-content.md).
+   [17-kb-online-versus-strategy-content.md](../planning/17-kb-online-versus-strategy-content.md).
    *(L4D2 is BY-SA — included in first publish under D20 (no longer deferred); the hybrid
    attribution shape applies as designed.)*

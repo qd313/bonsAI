@@ -116,7 +116,9 @@
     "target": 40,
     "start_2026_09_09": 109,
     "direction": "lower_is_better",
-    "measured_by": "byte count of docs/roadmap.md, divided by 1024"
+    "measured_by": "byte count of docs/roadmap.md, divided by 1024",
+    "advisory": true,
+    "advisory_reason": "the roadmap and the testing doc gain a line every time work lands; phase 1 splits them and clears this flag"
   },
   "doc_size_kb_testing": {
     "label": "Living doc size: testing",
@@ -124,7 +126,9 @@
     "target": 60,
     "start_2026_09_09": 315,
     "direction": "lower_is_better",
-    "measured_by": "byte count of docs/testing.md, divided by 1024"
+    "measured_by": "byte count of docs/testing.md, divided by 1024",
+    "advisory": true,
+    "advisory_reason": "the roadmap and the testing doc gain a line every time work lands; phase 1 splits them and clears this flag"
   },
   "doc_size_kb_claude": {
     "label": "Living doc size: orientation (CLAUDE.md)",

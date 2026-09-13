@@ -800,6 +800,7 @@ def cmd_check(as_json: bool) -> int:
     values, _notes = measure_all()
     ratchet_data = load_ratchet_file()
     regressions = []
+    advisories = []
     checked = 0
     skipped = 0
     for metric_id, entry in _metric_entries(ratchet_data):
@@ -811,23 +812,44 @@ def cmd_check(as_json: bool) -> int:
         checked += 1
         direction = entry.get("direction", "lower_is_better")
         if _is_worse(current, best, direction):
-            regressions.append(
-                {
-                    "id": metric_id,
-                    "label": entry.get("label", metric_id),
-                    "current": current,
-                    "best": best,
-                    "direction": direction,
-                }
-            )
+            row = {
+                "id": metric_id,
+                "label": entry.get("label", metric_id),
+                "current": current,
+                "best": best,
+                "direction": direction,
+            }
+            # An advisory metric is one that is allowed to get worse for now, for a written
+            # reason, and is reported rather than enforced. The roadmap and the testing doc
+            # grow by a line every time work lands; they only start shrinking when phase 1
+            # splits them, and until then blocking on their size would block the bookkeeping
+            # that every landing owes. Phase 1 clears the flag.
+            if entry.get("advisory"):
+                row["why_allowed"] = entry.get("advisory_reason", "allowed to grow for now")
+                advisories.append(row)
+            else:
+                regressions.append(row)
 
     if as_json:
-        print(json.dumps({"regressions": regressions, "checked": checked, "skipped": skipped}, indent=2))
+        print(
+            json.dumps(
+                {
+                    "regressions": regressions,
+                    "advisories": advisories,
+                    "checked": checked,
+                    "skipped": skipped,
+                },
+                indent=2,
+            )
+        )
         return 1 if regressions else 0
 
     for r in regressions[:40]:
         word = "dropped to" if r["direction"] == "higher_is_better" else "rose to"
         print(f"{r['label']} got worse: {word} {_fmt(r['current'])} (best so far was {_fmt(r['best'])}).")
+    for r in advisories[:10]:
+        word = "dropped to" if r["direction"] == "higher_is_better" else "rose to"
+        print(f"note only: {r['label']} {word} {_fmt(r['current'])} (best {_fmt(r['best'])}) - {r['why_allowed']}.")
     return 1 if regressions else 0
 
 

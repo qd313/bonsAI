@@ -112,7 +112,8 @@ gets built** after all. Two things to do first: a run from the same evening alre
 answer-first opening on purpose; count that run the same way before writing a new prompt, since it may
 already be the change. And keep the rule that no first sentence may leak, which today's answers meet.
 The table with every sentence is in
-[53-headline-count-2026-09-12.md](assets/53-headline-count-2026-09-12.md).
+[53-headline-count-2026-09-12.md](assets/53-headline-count-2026-09-12.md). The maintainer read this
+count on 2026-09-12 and said not yet (D99); the build waits for its own go.
 
 ## 5. Corrections to earlier plans
 
@@ -129,6 +130,7 @@ The table with every sentence is in
 | Pointing and typing at a panel | Any SteamVR headset with tracked controllers. No purchase now (D97 call 3); the Frame when it comes |
 | Whether the notification card is drawn | The same, or a second pass with the mirror window kept awake |
 | The panel program itself | The "second way to run" decision, now priced in § 3 |
+| The second way to run | The maintainer said not yet on 2026-09-12 (D99); the price stands in § 3 |
 
 ## 7. Running it again
 

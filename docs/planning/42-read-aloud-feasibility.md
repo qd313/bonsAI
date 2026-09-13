@@ -67,9 +67,12 @@ measurement, not a guess. § 7 is that measurement.
   shows the Stop button.
 - It reads what is on screen, and only that: hidden spoiler blocks are left out (§ 5), formatting is not
   read as symbols, the branch menu of a Strategy answer is not read.
-- When enabled in Settings (off by default; the maintainer's call, D74): when an answer finishes with the
-  menu closed, read it without a press. That is the in-game case the toast preview in plan 38 serves for
-  short answers; reading serves it for long ones.
+- A Settings choice, **Voice replies**, with three positions (the maintainer's call, D99, 2026-09-12): **Off**,
+  the default, reads only on a press of the button; **When I asked by voice** reads out, on its own, any
+  answer to a question that came in through the mic, and leaves typed questions alone; **Always** reads
+  every answer out on its own. "On its own" means as soon as the answer finishes, menu open or closed.
+  That is the in-game case the toast preview in plan 38 serves for short answers; reading serves it for
+  long ones. (This replaced D74's single on/off switch, which only covered the menu-closed case.)
 - One voice in Phase 1: the Deck's own, which works the moment the plugin is installed (the maintainer's
   call, D74). The natural voice, a one-time download of about 90 MB from the Settings tab the way the
   listening engine installs today, moves to Phase 2 with the character voices.
@@ -426,14 +429,16 @@ half an hour; a probe script (§ 8, step 0) runs them in one go.
 
 ## 8. Build steps, when this is picked up
 
-Only after D74 is answered and rows 01 to 03 have passed.
+Only after D74 is answered and rows 01 to 03 have passed. **Rows 01 and 02 passed on 2026-09-12** (§ 11); row 03
+gates Phase 2 only, since Phase 1 uses the Deck's own voice, so the Phase 1 build started the same evening (D99).
+Step 0 is `scripts/probe_deck_read_aloud.py`, which runs rows 01 and 02 as root over SSH, the plugin's real situation.
 
 | # | Step | Who | Depends on |
 |---|---|---|---|
 | 0 | A probe script for rows 01 to 04 over SSH, in the shape of the existing Deck probes. Writes what it finds to a run file. | Opus xhigh writes it; anyone runs it | the Deck being free |
 | 1 | The text helper shared with plan 38 (if plan 38 has not built it yet), plus sentence splitting. Tests: the plan 38 list, and sentences split on full stops, question marks and line breaks but not on decimals or abbreviations. | Sonnet 5 high lane | nothing |
 | 2 | Background: a speak service. Takes text, splits it, makes each sentence with the Deck's own voice into a sound file, plays them in order through the session's sound system, stops on request. The engine is behind one small interface so Phase 2 adds the natural voice without touching the rest. Three bridge methods: start, stop, status. Start returns at once and the screen polls status, so no call outruns the 15-second deadline. Tests with a fake engine and a fake player. | Sonnet 5 high lane | 1 |
-| 3 | Screen: the Read aloud / Stop button under the answer with a focus-graph entry, and the Settings row for reading new answers on their own when the menu is closed, off by default. Plumbing budget from the settings note in CLAUDE.md: a boolean is about eighteen files. | Sonnet 5 high lane; Opus xhigh reviews the focus entry | 2 |
+| 3 | Screen: the Read aloud / Stop button under the answer with a focus-graph entry, and the Settings row **Voice replies** with three positions, Off (default) / When I asked by voice / Always, in the same three-button row the input persistence setting uses (D99). Plumbing budget from the settings note in CLAUDE.md: about eighteen files, the same for a three-valued setting as for a boolean. | Sonnet 5 high lane; Opus xhigh reviews the focus entry | 2 |
 | 4 | Docs: roadmap, testing rows, changelog. | Sonnet 5 high | 3 |
 | 5 | Phase 2, the natural voice: download the runner and one voice, smoke-test once, write the ready marker; progress shown in Settings the way the listening engine's is. Reuse that code's download, progress and cancel pieces rather than copy them. A Settings row picks the voice. | Sonnet 5 high lane | Phase 1 shipped; row 03 passed |
 | 6 | Phase 2, the character voices: the character-to-voice table (a stock speaker number, or a five-second clip) and passing the choice through; the clip path only if row 04 passed. | Sonnet 5 high lane | 5 |
@@ -493,6 +498,12 @@ Still open, raised 2026-09-08:
 a legal check and a character sweep; § 6.4 has the reason and the order. Call 11 stays open. The plain reader
 is unaffected.
 
+**Locked 2026-09-12 (D99): the go, and the setting's shape.** The maintainer's "yes" to starting Phase 1. Call 2's on/off
+switch becomes one three-position choice, **Voice replies**: Off (default) / When I asked by voice / Always. "On its own"
+means when the answer finishes, menu open or closed. The control is the three-button row the input persistence setting
+already uses; the maintainer's word was "slider", and a real three-notch slider can replace the row if they prefer it by
+eye. The middle position is the signal Voice follow-ups (D97) hangs off.
+
 ## 10. Sources
 
 - SteamOS 3.7.13 notes, Orca and espeak-ng added: [Steam Deck HQ](https://steamdeckhq.com/news/steamos-3-7-13-released-with-wifi-regressions-fixes-for-steam-deck-oled-and-better-support-for-rog-ally/), [Steam news](https://store.steampowered.com/news/app/1675200/view/529850584204838038)
@@ -548,3 +559,11 @@ is unaffected.
   character is a named character voiced by a real actor, and Ali G is a living performer's own persona.
   § 6.4 has the summary and what unshelving needs: a character sweep (new two-star roadmap item), a legal
   check, and call 11. Roadmap: the three character-voice entries marked shelved; the plain reader unchanged.
+- **2026-09-12** — The go. After the Frame bench recap the maintainer said yes to starting Phase 1 and changed
+  the setting's shape (D99): one three-position choice, Voice replies, Off / When I asked by voice / Always,
+  off by default, in place of the on/off switch. Rows 01 and 02 ran the same evening as root over SSH with the
+  new probe (§ 8, step 0): the Deck's own voice made a 5.4-second sentence in 23 ms, and a root program found
+  the session's sound sockets the microphone's way, played the file, and the session's sound server showed
+  one playback stream on the built-in speaker. What a machine cannot check is owed to the maintainer's ear:
+  heard on speakers, headphones and Bluetooth, and over a running game (row 02's second half, row 05). Row
+  03 is Phase 2's gate and did not run. Build lanes for steps 1 to 3 launched the same evening.

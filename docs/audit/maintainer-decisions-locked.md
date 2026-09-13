@@ -5041,3 +5041,66 @@ words: *"i approve your recommendation"*.
   looked at: telling the model the subject roughly halves the answer, 87 words down to 44.
 - **The untried idea stays untried** unless someone asks for it: putting the remembered name into the
   words the model reads, rather than adding a reminder beside them.
+
+### D99 — LOCKED 2026-09-12 — After the Frame bench: two "not yet", reading aloud goes with a three-way setting, and a Clear button in the session context strip
+
+**Raised** by the recap of the SteamVR bench ([planning/53-steamvr-bench-findings.md](../planning/53-steamvr-bench-findings.md))
+on 2026-09-12, which put three things in front of the maintainer. Their answers, in their own words: *"1. not yet 2. not yet
+either 3. yes, add this to the feature: a slider for default voice replies: off by default, only when the user uses voice for a
+question, always. Also add a feature to roadmap: clear session context button in the session context strip."*
+
+#### The calls
+
+1. **The second way to run: not yet.** D97 call 2 is now priced (plan 53 § 3: the plugin's Python side already starts and answers
+   on a PC; what is missing is a small starter program, a way for a panel to reach it on the same machine, and PC-shaped answers
+   for three edges). The lean stays "the same Python side on the PC too". Nothing is built. The six-star roadmap entry stays open
+   with the price on it.
+2. **Headline first: not yet.** The count stands (2 of 10 first sentences stand alone, 0 of 10 give anything away; poor, so the
+   D97 rule says build). The build waits for a separate go. When it comes, the first step is still to count the 2026-09-07
+   answer-first run the same way, since it may already be the change.
+3. **Reading answers aloud goes.** Phase 1 as locked in D74: the Deck's own voice, no download, the Read aloud button, the spoken
+   spoiler phrase. Build order is plan 42 § 8; the first two Deck checks (rows 01 and 02) ran the same evening, results in plan 42
+   § 11 and the testing doc.
+
+   **The setting changes shape.** D74 call 2's on/off switch ("read new answers on their own when the menu is closed, off by
+   default") is replaced by one three-position choice, **Voice replies**:
+
+   | Position | What a person gets |
+   |---|---|
+   | **Off** (default) | An answer is read only when the Read aloud button is pressed. |
+   | **When I asked by voice** | An answer to a question that came in through the mic is read out on its own. Typed questions are not. |
+   | **Always** | Every answer is read out on its own. |
+
+   Two things taken as read, each one line to change if wrong. *"On its own" means as soon as the answer finishes, whether the
+   menu is open or closed*: D74's "when the menu is closed" wording is dropped, because the middle position covers the person
+   who is not looking at the screen, and "always" is taken at its word. *The control is the three-button row the input
+   persistence setting already uses* (three short labels side by side, a description under the chosen one), not a Steam slider:
+   nothing in the plugin uses a real slider today, and that row already has its D-pad handling. The maintainer's word was
+   "slider"; a three-position slider reads the same to a person and can replace the row later if they prefer it.
+
+   This is the signal Voice follow-ups (D97) hangs off: the middle position is exactly the case where the mic should reopen
+   after the answer is read. A three-valued setting costs the same plumbing as a boolean, about eighteen files (CLAUDE.md).
+
+4. **A Clear button in the session context strip, filed as a two-star feature.** What a person notices: the **Session context
+   (N turns)** bar under the chat gets a small **Clear** at its right end. Pressing it asks once, the same box the Settings tab's
+   *Clear cache* uses, then the chat, the strip and the plugin's stored answer are cleared and the next question starts a new
+   session. It only shows when there is something to clear, because the strip itself only appears once a turn has context.
+
+   **One thing it must do that the Settings button does not do today.** The plugin remembers the subject of the last strategy
+   question so a bare follow-up ("what about its second phase") can carry it forward (D98). That memory lives in the Python
+   side and is dropped only when the game changes or the plugin restarts; the clear-session call never touches it. So after a
+   clear, the first follow-up could still be about a boss from the cleared chat. Both Clear buttons get that forget in the same
+   change.
+
+   **Open, with a lean:** whether Clear here means the whole session (chat and all, as *Clear cache* does) or only the context
+   handed to the model while the chat stays on screen. *Lean: the whole session.* One meaning for "clear" everywhere, and D32
+   already settled that a cleared session is a new session. The lighter one is written only if the maintainer asks for it.
+
+   Why it goes in the strip: the strip is where a person sees what the model was given; the way to reset it belongs beside it,
+   not two tabs away in Settings. It needs a focus-graph entry and the modal return-focus registration the Settings button has.
+
+#### Passed over
+
+- A fourth position, "only when the menu is closed" (D74's old switch). Folded into Always.
+- A per-answer "do not read this one". Stop is the button for that.
+- Building the second way to run or Headline first "since the bench is warm". Both are the maintainer's to start.

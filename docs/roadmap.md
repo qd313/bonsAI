@@ -212,7 +212,9 @@ replace it with a specific issue when one exists.
   locked rule this gets built.** Stars stay at two. Before writing a new prompt, one more thing to count: an answer-first
   opening was already tried on purpose the same evening as the count's source answers, and that run may already be the
   change, so it gets counted the same way first. This entry is no longer "count first"; it is "build, after counting that
-  earlier answer-first run". [Plan](planning/49-steam-frame-features.md) · [Second look
+  earlier answer-first run". **Not yet (D99, 2026-09-12).** The maintainer read the count and said not yet. It waits for
+  its own go; when that comes, the first step is still to count the 2026-09-07 answer-first run the same way.
+  [Plan](planning/49-steam-frame-features.md) · [Second look
   § 2](planning/52-frame-features-second-look.md#2-headline-first-the-weakest-one-and-what-to-do-instead) ·
   [Bench findings § 4](planning/53-steamvr-bench-findings.md#4-the-headline-first-count-run-the-same-morning) ·
   [The count, sentence by sentence](planning/assets/53-headline-count-2026-09-12.md).
@@ -238,10 +240,22 @@ replace it with a specific issue when one exists.
   maintainer has said they do not want to supply one. So whoever builds it proposes a shape and the maintainer approves it by
   eye — a shape is not something to settle from a description or by reaching for a stronger model. It has to be an inline SVG
   path rather than the PNG so it takes the colour around it. Update the icon geometry test in the same change.
+- ★★ `[ui]` `[ask]` **Clear button in the session context strip** — **OPEN, filed 2026-09-12 (D99).** A small Clear
+  sits at the right end of the Session context (N turns) bar under the chat, and only shows once that bar does. One
+  press opens the same confirm box Settings' Clear cache uses, then the chat, the strip and the stored answer are
+  cleared and the next question starts a new session. It must also make the plugin forget the subject of the last
+  strategy question, which today survives a clear until the game changes or the plugin restarts — Clear cache gets
+  the same fix in the same change. **Open, with a lean:** clear the whole session, not just what the model sees.
+  Needs a focus-graph entry and the modal return-focus hookup.
 - ★★ `[voice]` **Read answers aloud** — **OPEN, planned 2026-09-05, calls locked (D74).** A Read aloud button under the answer.
   The Deck's own voice, which SteamOS has shipped since June 2025, so nothing to download; it keeps reading with the menu closed and
-  stops on a second press or a new question. A setting reads new answers on its own when the menu is closed, off by default. A
-  hidden spoiler block is skipped with a short spoken phrase. Three Deck checks run before the build. [Memo](planning/42-read-aloud-feasibility.md).
+  stops on a second press or a new question. A Settings choice, Voice replies, picks when an answer reads on its own: Off (default),
+  When I asked by voice, or Always; on the middle position, an answer to a question asked through the mic reads out on its own, and
+  on Always every answer does, menu open or closed. A hidden spoiler block is skipped with a short spoken phrase. **Build started
+  2026-09-12 (D99); the two Deck checks that gate Phase 1 passed the same evening**, run as root the way the plugin runs: the
+  Deck's own voice made a five-second sentence in about 25 milliseconds, and a program with no session of its own found the Deck's
+  sound sockets the way the microphone does and played it on the speaker. Still owed to the maintainer's ear: heard over a
+  running game, on headphones and on Bluetooth. [Memo](planning/42-read-aloud-feasibility.md).
 - ★★ `[voice]` **Spoilers by voice** — **OPEN, filed 2026-09-08; waits on Read answers aloud and Voice follow-ups.** When a spoken
   answer reaches a hidden spoiler it says "there is a spoiler here, say go on to hear it" and waits; "go on" unhides and reads it,
   anything else skips it. The block on screen unhides with the spoken one, so the two never disagree. The Deck alone is enough to
@@ -251,7 +265,8 @@ replace it with a specific issue when one exists.
   in that window and closes on silence. The words a person needs when they cannot reach the Deck or scroll. The Deck alone is
   enough to test. **The maintainer set the exact shape 2026-09-11:** a short rising tone when the mic opens right after a spoken
   answer, the mic keeps listening as long as it hears something, and a short falling tone when it closes. Four words: again, go
-  on, stop, next. One setting, off by default. [Plan](planning/49-steam-frame-features.md) ·
+  on, stop, next. One setting, off by default. The middle position of the Voice replies setting (D99) is the signal this
+  hangs off: an answer to a spoken question is read out, then the mic reopens. [Plan](planning/49-steam-frame-features.md) ·
   [Second look § 3](planning/52-frame-features-second-look.md#3-voice-follow-ups-a-sound-a-short-listen-a-few-words).
 - ★★★ `[ask]` `[focus]` **Steam settings shortcuts float above the question box** — **OPEN, planned 2026-09-06, all calls locked
   (D79).** Today the list of matching Steam settings appears under the box and pushes the box, the chips and the whole
@@ -393,6 +408,9 @@ replace it with a specific issue when one exists.
   Windows PC, using a fifty-line stand-in for Decky. Nine calls the frontend normally makes all came back with a working
   answer, and it reached Ollama on that PC. The "run the same Python side on the PC too" choice is now a priced decision
   instead of a guess. **This does not decide it — that call is still the maintainer's to make.**
+  **Not yet (D99, 2026-09-12).** The price is now known: what is missing is a small starter program, a way for a panel
+  to reach it on the same machine, and PC-shaped answers for which game is running, the speaker, and the screenshot
+  folder. Nothing is built until the maintainer says.
   [Plan](planning/49-steam-frame-features.md) ·
   [Second look § 5](planning/52-frame-features-second-look.md#5-the-second-way-to-run-the-gap-plan-49-underplayed) ·
   [Bench findings § 3](planning/53-steamvr-bench-findings.md#3-the-plugins-python-side-on-this-pc-it-runs).

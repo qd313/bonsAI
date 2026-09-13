@@ -4,3 +4,5 @@
 set -e
 cd "$(dirname "$0")/.."
 node packages/bonsai-mcp/scripts/sync-architecture-for-commit.mjs
+python scripts/py_import_graph.py
+git add -- packages/bonsai-mcp/knowledge/architecture/py-import-graph.json

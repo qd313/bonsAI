@@ -93,29 +93,11 @@ VOICE_STT_MODEL_SPECS: dict[str, dict[str, str]] = {
     },
 }
 
+# Do not float on :main — upstream image churn caused SIGILL on Deck when copying prebuilt binaries.
+# Bump digest only after podman pull + CPU-safe compile + inference smoke on hardware. See docs/voice-input-follow-up.md.
 WHISPER_CPP_IMAGE = (
     "ghcr.io/ggml-org/whisper.cpp"
     "@sha256:c0b535add76d7ff7613c70f32a7a4c794985f94238501e1b5b3b7f0eb56e9685"
-)
-# Do not float on :main — upstream image churn caused SIGILL on Deck when copying prebuilt binaries.
-# Bump digest only after podman pull + CPU-safe compile + inference smoke on hardware. See docs/voice-input-follow-up.md.
-WHISPER_CLI_IN_IMAGE = "/app/build/bin/whisper-cli"
-# CMake sets CMAKE_LIBRARY_OUTPUT_DIRECTORY to ${CMAKE_BINARY_DIR}/bin (whisper.cpp 1.9+).
-# Older images may still place .so files under build/src or build/ggml/src — try all.
-WHISPER_LIB_DIRS_IN_IMAGE = (
-    "/app/build/bin",
-    "/app/build/src",
-    "/app/build/ggml/src",
-)
-WHISPER_LIBS_IN_IMAGE = (
-    "/app/build/bin/libwhisper.so.1",
-    "/app/build/bin/libggml.so.0",
-    "/app/build/bin/libggml-base.so.0",
-    "/app/build/bin/libggml-cpu.so.0",
-    "/app/build/src/libwhisper.so.1",
-    "/app/build/ggml/src/libggml.so.0",
-    "/app/build/ggml/src/libggml-base.so.0",
-    "/app/build/ggml/src/libggml-cpu.so.0",
 )
 WHISPER_REQUIRED_SONAMES = (
     "libwhisper.so.1",
@@ -857,58 +839,6 @@ def _prune_voice_bin_non_libs(bin_dir: str, keep_paths: Optional[set[str]] = Non
             pass
 
 
-def _missing_required_sonames(bin_dir: str) -> list[str]:
-    missing: list[str] = []
-    for lib in WHISPER_REQUIRED_SONAMES:
-        lib_path = os.path.join(bin_dir, lib)
-        if not os.path.isfile(lib_path) and not os.path.islink(lib_path):
-            missing.append(lib)
-    return missing
-
-
-def _copy_whisper_libs_from_container(
-    podman: str,
-    cid: str,
-    bin_dir: str,
-    env: dict[str, str],
-) -> None:
-    """Copy required whisper.cpp shared objects from the image (build/bin first)."""
-    for lib_dir in WHISPER_LIB_DIRS_IN_IMAGE:
-        subprocess.run(
-            [podman, "cp", f"{cid}:{lib_dir}/.", bin_dir],
-            capture_output=True,
-            text=True,
-            timeout=120,
-            env=env,
-        )
-        _link_versioned_sonames(bin_dir)
-        if not _missing_required_sonames(bin_dir):
-            return
-
-    for lib_src in WHISPER_LIBS_IN_IMAGE:
-        lib_name = os.path.basename(lib_src)
-        lib_dest = os.path.join(bin_dir, lib_name)
-        if os.path.isfile(lib_dest) or os.path.islink(lib_dest):
-            continue
-        cp_lib = subprocess.run(
-            [podman, "cp", f"{cid}:{lib_src}", lib_dest],
-            capture_output=True,
-            text=True,
-            timeout=120,
-            env=env,
-        )
-        if cp_lib.returncode == 0:
-            os.chmod(lib_dest, 0o755)
-
-    _link_versioned_sonames(bin_dir)
-    missing = _missing_required_sonames(bin_dir)
-    if missing:
-        raise RuntimeError(
-            f"podman cp whisper shared libraries failed (missing: {', '.join(missing)}). "
-            f"Tried {', '.join(WHISPER_LIB_DIRS_IN_IMAGE)}."
-        )
-
-
 _WHISPER_CONTAINER_CMAKE = r"""
 cmake -S /app -B /tmp/bonsai-whisper-build -DCMAKE_BUILD_TYPE=Release \
   -DGGML_NATIVE=OFF \
@@ -1039,52 +969,6 @@ cp /tmp/bonsai-whisper-build/bin/whisper-server /out/
 
     _finalize_voice_bin(plugin_root, settings_dir)
     return server_dest
-
-
-def _extract_whisper_from_container(
-    podman: str,
-    env: dict[str, str],
-    plugin_root: str,
-    settings_dir: str,
-) -> str:
-    """Copy whisper-cli + shared libraries from podman image into voice_bin."""
-    dest = voice_whisper_cli_path(plugin_root, settings_dir)
-    bin_dir = voice_bin_dir(plugin_root, settings_dir)
-    os.makedirs(bin_dir, exist_ok=True)
-
-    create = subprocess.run(
-        [podman, "create", "--entrypoint", "/usr/bin/true", WHISPER_CPP_IMAGE],
-        capture_output=True,
-        text=True,
-        timeout=120,
-        env=env,
-    )
-    cid = (create.stdout or "").strip()
-    if create.returncode != 0 or not cid:
-        raise RuntimeError((create.stderr or create.stdout or "podman create failed")[:500])
-    try:
-        cp_bin = subprocess.run(
-            [podman, "cp", f"{cid}:{WHISPER_CLI_IN_IMAGE}", dest],
-            capture_output=True,
-            text=True,
-            timeout=120,
-            env=env,
-        )
-        if cp_bin.returncode != 0:
-            raise RuntimeError((cp_bin.stderr or cp_bin.stdout or "podman cp whisper-cli failed")[:500])
-        os.chmod(dest, 0o755)
-        _copy_whisper_libs_from_container(podman, cid, bin_dir, env)
-        _prune_voice_bin_non_libs(bin_dir, {dest})
-        _link_versioned_sonames(bin_dir)
-    finally:
-        subprocess.run([podman, "rm", cid], capture_output=True, text=True, timeout=60, env=env)
-
-    if not whisper_binary_usable(plugin_root, settings_dir):
-        raise RuntimeError(
-            "whisper-cli was extracted but failed to run (missing libraries). "
-            "Try Install voice engine again or restart the plugin."
-        )
-    return dest
 
 
 def install_whisper_cli(

@@ -91,34 +91,6 @@ class VoiceTranscriptionServiceTests(unittest.TestCase):
                 _voice_bin_mark_cpu_safe(voice_bin_dir(plugin_root, settings_dir))
                 self.assertEqual(_voice_binary_ready_for_inference(plugin_root, settings_dir), dest)
 
-    @unittest.skipIf(os.name == "nt", "symlinks require elevated privileges on Windows")
-    def test_copy_whisper_libs_from_container_uses_build_bin(self):
-        from backend.services.voice_transcription_service import (
-            _copy_whisper_libs_from_container,
-            _missing_required_sonames,
-        )
-
-        with tempfile.TemporaryDirectory() as bin_dir:
-            bin_dir_path = bin_dir
-
-            def fake_run(cmd, *args, **kwargs):
-                if cmd[0:3] == ["podman", "cp", f"cid:/app/build/bin/."]:
-                    for name in (
-                        "libwhisper.so.1.9.1",
-                        "libggml.so.0.9.0",
-                        "libggml-base.so.0.9.0",
-                        "libggml-cpu.so.0.9.0",
-                    ):
-                        with open(os.path.join(bin_dir_path, name), "wb") as f:
-                            f.write(b"\x7fELF")
-                    return Mock(returncode=0, stdout="", stderr="")
-                return Mock(returncode=1, stdout="", stderr="missing")
-
-            with patch("backend.services.voice_transcription_service.subprocess.run", side_effect=fake_run):
-                _copy_whisper_libs_from_container("podman", "cid", bin_dir_path, {})
-            _link_versioned_sonames(bin_dir_path)
-            self.assertEqual(_missing_required_sonames(bin_dir_path), [])
-
     @unittest.skipUnless(sys.platform.startswith("linux"), "linux session paths only")
     def test_runtime_dir_usable_false_for_missing(self):
         self.assertFalse(_runtime_dir_usable(""))

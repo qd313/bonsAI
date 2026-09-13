@@ -211,8 +211,6 @@ class WhisperEngine:
         self._model_path = ""
         self._plugin_root = ""
         self._settings_dir = ""
-        self._in_flight = False
-
     def daemon_available(self) -> bool:
         with self._lock:
             return self._daemon_ready

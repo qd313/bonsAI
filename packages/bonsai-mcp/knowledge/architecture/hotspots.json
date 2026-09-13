@@ -2,7 +2,7 @@
   "hotspots": [
     {
       "path": "main.py",
-      "lines": 3309,
+      "lines": 3294,
       "role": "Decky RPC entrypoints and orchestration"
     },
     {
@@ -26,13 +26,13 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/voice_transcription_service.py",
-      "lines": 1529,
+      "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
+      "lines": 1438,
       "role": ""
     },
     {
-      "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
-      "lines": 1438,
+      "path": "py_modules/backend/services/voice_transcription_service.py",
+      "lines": 1413,
       "role": ""
     },
     {
@@ -92,7 +92,7 @@
     },
     {
       "path": "py_modules/backend/services/transparency_service.py",
-      "lines": 801,
+      "lines": 788,
       "role": ""
     },
     {
@@ -137,7 +137,7 @@
     },
     {
       "path": "py_modules/backend/services/settings_service.py",
-      "lines": 546,
+      "lines": 545,
       "role": "Load/save/merge settings.json"
     },
     {

@@ -24,7 +24,6 @@ from backend.services.reply_language_service import sanitize_reply_language
 from backend.services.voice_transcription_service import sanitize_voice_stt_model
 
 UI_SCALE_PROFILE_IDS = frozenset({"handheld", "desktop", "couch", "immersive"})
-DEFAULT_UI_SCALE_AUTO_ENABLED = True
 DEFAULT_UI_SCALE_MANUAL_PROFILE = "handheld"
 
 

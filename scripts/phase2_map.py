@@ -339,12 +339,13 @@ LIBRARY_OWNED_NAMES = {
 
 
 def _classify_backend_name(name: str, rel_file: str, line: int,
-                           be_files: list[Path], test_files: list[Path]) -> dict:
+                           be_files: list[Path], test_files: list[Path],
+                           script_files: list[Path]) -> dict:
     """Why did the dead-code tool report this, and is it really dead?
 
-    The tool reports a name it never saw read. That covers three very different
-    things: code nothing calls, code only the tests call, and names a library
-    reads for us. Only the first is dead.
+    The tool reports a name it never saw read. That covers four very different
+    things: code nothing calls, code only the tests call, code only a helper
+    script calls, and names a library reads for us. Only the first is dead.
     """
     if name in LIBRARY_OWNED_NAMES:
         return {"kind": "a name a library owns", "fix": "leave it"}
@@ -353,6 +354,15 @@ def _classify_backend_name(name: str, rel_file: str, line: int,
     if elsewhere:
         return {"kind": "another back-end file uses it", "fix": "leave it",
                 "seen_in": elsewhere[:4]}
+
+    # The dead-code tool is only pointed at main.py and py_modules, so a name a
+    # helper script imports looks unused to it. CORPUS_SCHEMA_VERSION was reported
+    # dead on 2026-09-13 and is imported by scripts/build_rag_db.py, which writes it
+    # into every corpus it builds. Deleting it would have broken corpus building.
+    in_scripts = [f for f in _files_mentioning(name, script_files) if f != rel_file]
+    if in_scripts:
+        return {"kind": "a helper script uses it", "fix": "leave it",
+                "seen_in": in_scripts[:4]}
 
     # Used further down its own file? Then the tool is pointing at a definition
     # that is reached some way it cannot follow, and a person has to look.
@@ -380,6 +390,8 @@ def list_unused_backend() -> dict:
     # still a live decision ("is this test worth keeping"), not dead code.
     test_files = [p for p in _searchable_files((".py",))
                   if _rel(p).startswith("tests/") or "/tests/" in _rel(p)]
+    script_files = [p for p in _searchable_files((".py", ".mjs"))
+                    if _rel(p).startswith("scripts/")]
     be_files = list(ratchet.be_app_files())
 
     try:
@@ -412,8 +424,8 @@ def list_unused_backend() -> dict:
             rec["why_kept"] = "on the RPC surface or called by the loader"
             allowlisted.append(rec)
             continue
-        rec.update(_classify_backend_name(name, rec["file"], rec["line"], be_files, test_files))
-        if rec["kind"] in ("a name a library owns", "another back-end file uses it"):
+        rec.update(_classify_backend_name(name, rec["file"], rec["line"], be_files, test_files, script_files))
+        if rec["kind"] in ("a name a library owns", "another back-end file uses it", "a helper script uses it"):
             allowlisted.append(rec)
             continue
         findings.append(rec)

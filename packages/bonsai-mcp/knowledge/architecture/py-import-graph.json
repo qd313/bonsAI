@@ -1,6 +1,6 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 62,
+  "fileCount": 61,
   "edgeCount": 137,
   "cycles": [
     [
@@ -17,7 +17,6 @@
   "leaves": [
     "py_modules/backend/__init__.py",
     "py_modules/backend/constants.py",
-    "py_modules/backend/json_store.py",
     "py_modules/backend/services/__init__.py",
     "py_modules/backend/services/ai_character_service.py",
     "py_modules/backend/services/async_background_job.py",
@@ -48,7 +47,6 @@
   ],
   "orphans": [
     "py_modules/backend/__init__.py",
-    "py_modules/backend/json_store.py",
     "py_modules/backend/services/__init__.py",
     "py_modules/backend/services/response_verify.py"
   ],
@@ -290,10 +288,6 @@
       "count": 0
     },
     {
-      "path": "py_modules/backend/json_store.py",
-      "count": 0
-    },
-    {
       "path": "py_modules/backend/services/__init__.py",
       "count": 0
     },
@@ -367,10 +361,6 @@
         "py_modules/backend/services/ollama_service.py",
         "py_modules/backend/services/vac_check_commands.py"
       ]
-    },
-    "py_modules/backend/json_store.py": {
-      "imports": [],
-      "importedBy": []
     },
     "py_modules/backend/ollama_connectivity.py": {
       "imports": [

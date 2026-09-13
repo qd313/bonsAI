@@ -50,6 +50,3 @@ def detect_local_ask_commands(text: str) -> LocalAskCommandKinds:
         vac=parse_vac_check_command(text) is not None,
     )
 
-
-def is_local_ask_command(text: str) -> bool:
-    return detect_local_ask_commands(text).any

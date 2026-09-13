@@ -305,10 +305,6 @@ class Plugin:
         )
 
     @staticmethod
-    def _clamp_int(value: Any, default: int, minimum: int, maximum: int) -> int:
-        return clamp_int(value, default, minimum, maximum)
-
-    @staticmethod
     def _sanitize_settings(data: Any) -> dict:
         return sanitize_settings(
             data=data,
@@ -322,14 +318,6 @@ class Plugin:
             default_persistence_mode=Plugin.DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
             valid_ask_modes=Plugin.VALID_ASK_MODES,
             default_ask_mode=Plugin.DEFAULT_ASK_MODE,
-        )
-
-    @staticmethod
-    def _sanitize_unified_input_persistence_mode(value: Any) -> str:
-        return sanitize_unified_input_persistence_mode(
-            value,
-            Plugin.VALID_UNIFIED_INPUT_PERSISTENCE_MODES,
-            Plugin.DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE,
         )
 
     async def _main(self):
@@ -406,9 +394,6 @@ class Plugin:
     def _new_background_state(self) -> dict:
         """Build a default background request state payload used by status polling paths."""
         return new_background_state()
-
-    def _new_partial_stream_snapshot(self, request_id: int) -> dict:
-        return new_partial_stream_snapshot(request_id)
 
     def _reset_partial_stream_snapshot(self, request_id: int) -> None:
         with self._partial_response_lock:

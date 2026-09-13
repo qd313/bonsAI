@@ -191,40 +191,15 @@ def _text_safe_chain(mode: str) -> list[str]:
     return _dedupe_preserve_order(_TEXT_FOSS_ESSENTIALS + _TEXT_OPEN_WEIGHT_ESSENTIALS)
 
 
-def _text_high_vram_tail(mode: str) -> list[str]:
-    if mode == "speed":
-        return list(_TEXT_HIGH_VRAM_SPEED)
-    if mode == "strategy":
-        return list(_TEXT_HIGH_VRAM_STRATEGY)
-    if mode == "expert":
-        return list(_TEXT_HIGH_VRAM_DEEP)
-    return []
-
-
 def _vision_safe_chain(mode: str) -> list[str]:
     del mode
     return _dedupe_preserve_order(_VISION_FOSS_ESSENTIALS + _VISION_OPEN_WEIGHT_ESSENTIALS)
-
-
-def _vision_high_vram_tail(mode: str) -> list[str]:
-    if mode == "speed":
-        return list(_VISION_HIGH_VRAM_SPEED)
-    if mode == "strategy":
-        return list(_VISION_HIGH_VRAM_STRATEGY)
-    if mode == "expert":
-        return list(_VISION_HIGH_VRAM_DEEP)
-    return []
 
 
 TEXT_MODELS_BY_MODE = {
     "speed": _text_safe_chain("speed"),
     "strategy": _text_safe_chain("strategy"),
     "expert": _text_safe_chain("expert"),
-}
-VISION_MODELS_BY_MODE = {
-    "speed": _vision_safe_chain("speed"),
-    "strategy": _vision_safe_chain("strategy"),
-    "expert": _vision_safe_chain("expert"),
 }
 _VALID_ASK_MODES = frozenset(TEXT_MODELS_BY_MODE.keys())
 

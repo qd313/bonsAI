@@ -266,19 +266,6 @@ def build_proton_log_transparency(
     }
 
 
-def build_proton_journal_transparency(
-    *,
-    attached: bool,
-    entry_count: int,
-    notes: str = "",
-) -> dict[str, Any]:
-    return {
-        "proton_journal_attached": attached,
-        "proton_journal_entry_count": int(entry_count or 0),
-        "proton_journal_notes": str(notes or ""),
-    }
-
-
 def _developer_chip_snapshot_summary(snapshot: dict[str, Any]) -> dict[str, Any]:
     """Lightweight dev chip payload — avoids duplicating full prompts in RPC responses."""
     return {

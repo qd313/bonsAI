@@ -1,11 +1,11 @@
 {
  "totals": {
-  "reported": 96,
-  "needs_a_decision": 37,
-  "ruled_out": 59,
+  "reported": 81,
+  "needs_a_decision": 18,
+  "ruled_out": 63,
   "rpc_methods_no_frontend_caller": 3,
-  "nothing calls it": 18,
-  "only the tests call it": 17,
+  "nothing calls it": 2,
+  "only the tests call it": 14,
   "an unused argument": 2
  },
  "rpc_methods_no_frontend_caller": [
@@ -14,114 +14,6 @@
   "dbg_fe_log"
  ],
  "needs_a_decision": [
-  {
-   "file": "main.py",
-   "line": 307,
-   "kind": "nothing calls it",
-   "name": "_clamp_int",
-   "confidence": 60,
-   "fix": "delete it",
-   "own_file_uses": 0
-  },
-  {
-   "file": "main.py",
-   "line": 327,
-   "kind": "nothing calls it",
-   "name": "_sanitize_unified_input_persistence_mode",
-   "confidence": 60,
-   "fix": "delete it",
-   "own_file_uses": 0
-  },
-  {
-   "file": "main.py",
-   "line": 410,
-   "kind": "nothing calls it",
-   "name": "_new_partial_stream_snapshot",
-   "confidence": 60,
-   "fix": "delete it",
-   "own_file_uses": 0
-  },
-  {
-   "file": "py_modules/backend/json_store.py",
-   "line": 14,
-   "kind": "nothing calls it",
-   "name": "load_json_store",
-   "confidence": 60,
-   "fix": "delete it",
-   "own_file_uses": 1
-  },
-  {
-   "file": "py_modules/backend/json_store.py",
-   "line": 56,
-   "kind": "nothing calls it",
-   "name": "save_json_store",
-   "confidence": 60,
-   "fix": "delete it",
-   "own_file_uses": 1
-  },
-  {
-   "file": "py_modules/backend/ollama_routing.py",
-   "line": 194,
-   "kind": "nothing calls it",
-   "name": "_text_high_vram_tail",
-   "confidence": 60,
-   "fix": "delete it",
-   "own_file_uses": 0
-  },
-  {
-   "file": "py_modules/backend/ollama_routing.py",
-   "line": 209,
-   "kind": "nothing calls it",
-   "name": "_vision_high_vram_tail",
-   "confidence": 60,
-   "fix": "delete it",
-   "own_file_uses": 0
-  },
-  {
-   "file": "py_modules/backend/ollama_routing.py",
-   "line": 224,
-   "kind": "nothing calls it",
-   "name": "VISION_MODELS_BY_MODE",
-   "confidence": 60,
-   "fix": "delete it",
-   "own_file_uses": 0
-  },
-  {
-   "file": "py_modules/backend/services/ask_local_commands.py",
-   "line": 54,
-   "kind": "nothing calls it",
-   "name": "is_local_ask_command",
-   "confidence": 60,
-   "fix": "delete it",
-   "own_file_uses": 0
-  },
-  {
-   "file": "py_modules/backend/services/knowledge_base_schema.py",
-   "line": 18,
-   "kind": "nothing calls it",
-   "name": "CORPUS_SCHEMA_VERSION",
-   "confidence": 60,
-   "fix": "delete it",
-   "own_file_uses": 0
-  },
-  {
-   "file": "py_modules/backend/services/model_policy.py",
-   "line": 15,
-   "kind": "nothing calls it",
-   "name": "ModelPolicyTier",
-   "confidence": 60,
-   "fix": "delete it",
-   "own_file_uses": 0
-  },
-  {
-   "file": "py_modules/backend/services/model_policy.py",
-   "line": 18,
-   "kind": "nothing calls it",
-   "name": "DEFAULT_MODEL_POLICY_NON_FOSS_UNLOCKED",
-   "confidence": 60,
-   "fix": "delete it",
-   "own_file_uses": 0
-  },
   {
    "file": "py_modules/backend/services/response_verify.py",
    "line": 70,
@@ -141,42 +33,6 @@
    "own_file_uses": 0
   },
   {
-   "file": "py_modules/backend/services/settings_service.py",
-   "line": 27,
-   "kind": "nothing calls it",
-   "name": "DEFAULT_UI_SCALE_AUTO_ENABLED",
-   "confidence": 60,
-   "fix": "delete it",
-   "own_file_uses": 0
-  },
-  {
-   "file": "py_modules/backend/services/transparency_service.py",
-   "line": 269,
-   "kind": "nothing calls it",
-   "name": "build_proton_journal_transparency",
-   "confidence": 60,
-   "fix": "delete it",
-   "own_file_uses": 0
-  },
-  {
-   "file": "py_modules/backend/services/voice_transcription_service.py",
-   "line": 1044,
-   "kind": "nothing calls it",
-   "name": "_extract_whisper_from_container",
-   "confidence": 60,
-   "fix": "delete it",
-   "own_file_uses": 0
-  },
-  {
-   "file": "py_modules/backend/services/voice_whisper_daemon.py",
-   "line": 214,
-   "kind": "nothing calls it",
-   "name": "_in_flight",
-   "confidence": 60,
-   "fix": "delete it",
-   "own_file_uses": 0
-  },
-  {
    "file": "py_modules/backend/ollama_routing.py",
    "line": 130,
    "kind": "only the tests call it",
@@ -190,7 +46,7 @@
   },
   {
    "file": "py_modules/backend/ollama_routing.py",
-   "line": 232,
+   "line": 207,
    "kind": "only the tests call it",
    "name": "select_ollama_models",
    "confidence": 60,
@@ -203,7 +59,7 @@
   },
   {
    "file": "py_modules/backend/ollama_routing.py",
-   "line": 401,
+   "line": 376,
    "kind": "only the tests call it",
    "name": "remove_tag_from_routing_orders",
    "confidence": 60,
@@ -246,45 +102,6 @@
    "fix": "delete both, or keep both",
    "seen_in": [
     "tests/test_desktop_note_service.py"
-   ],
-   "own_file_uses": 0
-  },
-  {
-   "file": "py_modules/backend/services/knowledge_base_schema.py",
-   "line": 23,
-   "kind": "only the tests call it",
-   "name": "DEFAULT_EMBEDDING_DIM",
-   "confidence": 60,
-   "fix": "delete both, or keep both",
-   "seen_in": [
-    "tests/test_build_rag_embedding_guarantee.py",
-    "tests/test_publish_corpus_embedding_guarantee.py"
-   ],
-   "own_file_uses": 0
-  },
-  {
-   "file": "py_modules/backend/services/knowledge_base_schema.py",
-   "line": 356,
-   "kind": "only the tests call it",
-   "name": "apply_schema",
-   "confidence": 60,
-   "fix": "delete both, or keep both",
-   "seen_in": [
-    "tests/test_build_rag_attributions.py",
-    "tests/test_build_rag_reproducible.py"
-   ],
-   "own_file_uses": 0
-  },
-  {
-   "file": "py_modules/backend/services/knowledge_base_schema.py",
-   "line": 363,
-   "kind": "only the tests call it",
-   "name": "pack_embedding_vector",
-   "confidence": 60,
-   "fix": "delete both, or keep both",
-   "seen_in": [
-    "tests/test_knowledge_base_schema.py",
-    "tests/test_knowledge_base_service.py"
    ],
    "own_file_uses": 0
   },
@@ -405,7 +222,7 @@
  "ruled_out": [
   {
    "file": "main.py",
-   "line": 335,
+   "line": 323,
    "kind": "method",
    "name": "_main",
    "confidence": 60,
@@ -413,7 +230,7 @@
   },
   {
    "file": "main.py",
-   "line": 389,
+   "line": 377,
    "kind": "method",
    "name": "_unload",
    "confidence": 60,
@@ -421,7 +238,7 @@
   },
   {
    "file": "main.py",
-   "line": 890,
+   "line": 875,
    "kind": "method",
    "name": "clear_plugin_data",
    "confidence": 60,
@@ -429,7 +246,7 @@
   },
   {
    "file": "main.py",
-   "line": 1071,
+   "line": 1056,
    "kind": "method",
    "name": "list_chat_slots",
    "confidence": 60,
@@ -437,7 +254,7 @@
   },
   {
    "file": "main.py",
-   "line": 1082,
+   "line": 1067,
    "kind": "method",
    "name": "get_chat_slot",
    "confidence": 60,
@@ -445,7 +262,7 @@
   },
   {
    "file": "main.py",
-   "line": 1098,
+   "line": 1083,
    "kind": "method",
    "name": "create_chat_slot",
    "confidence": 60,
@@ -453,7 +270,7 @@
   },
   {
    "file": "main.py",
-   "line": 1121,
+   "line": 1106,
    "kind": "method",
    "name": "delete_chat_slot",
    "confidence": 60,
@@ -461,7 +278,7 @@
   },
   {
    "file": "main.py",
-   "line": 1136,
+   "line": 1121,
    "kind": "method",
    "name": "rename_chat_slot",
    "confidence": 60,
@@ -469,7 +286,7 @@
   },
   {
    "file": "main.py",
-   "line": 1159,
+   "line": 1144,
    "kind": "method",
    "name": "get_strategy_checklist_session",
    "confidence": 60,
@@ -477,7 +294,7 @@
   },
   {
    "file": "main.py",
-   "line": 1174,
+   "line": 1159,
    "kind": "method",
    "name": "save_strategy_checklist_session",
    "confidence": 60,
@@ -485,7 +302,7 @@
   },
   {
    "file": "main.py",
-   "line": 1203,
+   "line": 1188,
    "kind": "method",
    "name": "clear_strategy_checklist_session",
    "confidence": 60,
@@ -493,7 +310,7 @@
   },
   {
    "file": "main.py",
-   "line": 1219,
+   "line": 1204,
    "kind": "method",
    "name": "get_intent_packs",
    "confidence": 60,
@@ -501,7 +318,7 @@
   },
   {
    "file": "main.py",
-   "line": 1228,
+   "line": 1213,
    "kind": "method",
    "name": "set_intent_pack_enabled",
    "confidence": 60,
@@ -509,7 +326,7 @@
   },
   {
    "file": "main.py",
-   "line": 1244,
+   "line": 1229,
    "kind": "method",
    "name": "set_kids_lock_state",
    "confidence": 60,
@@ -517,7 +334,7 @@
   },
   {
    "file": "main.py",
-   "line": 1249,
+   "line": 1234,
    "kind": "method",
    "name": "export_intent_pack",
    "confidence": 60,
@@ -525,7 +342,7 @@
   },
   {
    "file": "main.py",
-   "line": 1254,
+   "line": 1239,
    "kind": "method",
    "name": "import_intent_pack",
    "confidence": 60,
@@ -533,7 +350,7 @@
   },
   {
    "file": "main.py",
-   "line": 1277,
+   "line": 1262,
    "kind": "method",
    "name": "remove_intent_pack",
    "confidence": 60,
@@ -541,7 +358,7 @@
   },
   {
    "file": "main.py",
-   "line": 1298,
+   "line": 1283,
    "kind": "method",
    "name": "get_deck_ip",
    "confidence": 60,
@@ -549,7 +366,7 @@
   },
   {
    "file": "main.py",
-   "line": 1304,
+   "line": 1289,
    "kind": "method",
    "name": "test_ollama_connection",
    "confidence": 60,
@@ -557,7 +374,7 @@
   },
   {
    "file": "main.py",
-   "line": 1490,
+   "line": 1475,
    "kind": "method",
    "name": "start_local_ollama_setup",
    "confidence": 60,
@@ -565,7 +382,7 @@
   },
   {
    "file": "main.py",
-   "line": 1568,
+   "line": 1553,
    "kind": "method",
    "name": "get_local_ollama_setup_status",
    "confidence": 60,
@@ -573,7 +390,7 @@
   },
   {
    "file": "main.py",
-   "line": 1572,
+   "line": 1557,
    "kind": "method",
    "name": "cancel_local_ollama_setup",
    "confidence": 60,
@@ -581,7 +398,7 @@
   },
   {
    "file": "main.py",
-   "line": 1596,
+   "line": 1581,
    "kind": "method",
    "name": "get_rag_corpus_status",
    "confidence": 60,
@@ -589,7 +406,7 @@
   },
   {
    "file": "main.py",
-   "line": 1715,
+   "line": 1700,
    "kind": "method",
    "name": "cancel_rag_corpus_download",
    "confidence": 60,
@@ -597,7 +414,7 @@
   },
   {
    "file": "main.py",
-   "line": 1728,
+   "line": 1713,
    "kind": "method",
    "name": "update_rag_corpus",
    "confidence": 60,
@@ -605,7 +422,7 @@
   },
   {
    "file": "main.py",
-   "line": 1744,
+   "line": 1729,
    "kind": "method",
    "name": "remove_rag_corpus",
    "confidence": 60,
@@ -613,7 +430,7 @@
   },
   {
    "file": "main.py",
-   "line": 1760,
+   "line": 1745,
    "kind": "method",
    "name": "install_rag_corpus_local",
    "confidence": 60,
@@ -621,7 +438,7 @@
   },
   {
    "file": "main.py",
-   "line": 1820,
+   "line": 1805,
    "kind": "method",
    "name": "get_session_rag_chip_candidates",
    "confidence": 60,
@@ -629,7 +446,7 @@
   },
   {
    "file": "main.py",
-   "line": 1938,
+   "line": 1923,
    "kind": "method",
    "name": "pull_ollama_models",
    "confidence": 60,
@@ -637,7 +454,7 @@
   },
   {
    "file": "main.py",
-   "line": 1943,
+   "line": 1928,
    "kind": "method",
    "name": "merge_pulled_tags_into_routing_orders",
    "confidence": 60,
@@ -645,7 +462,7 @@
   },
   {
    "file": "main.py",
-   "line": 2002,
+   "line": 1987,
    "kind": "method",
    "name": "delete_ollama_model",
    "confidence": 60,
@@ -653,7 +470,7 @@
   },
   {
    "file": "main.py",
-   "line": 2037,
+   "line": 2022,
    "kind": "method",
    "name": "fetch_ollama_catalog_metadata",
    "confidence": 60,
@@ -661,7 +478,7 @@
   },
   {
    "file": "main.py",
-   "line": 2090,
+   "line": 2075,
    "kind": "method",
    "name": "list_recent_screenshots",
    "confidence": 60,
@@ -669,7 +486,7 @@
   },
   {
    "file": "main.py",
-   "line": 2127,
+   "line": 2112,
    "kind": "method",
    "name": "append_desktop_debug_note",
    "confidence": 60,
@@ -677,7 +494,7 @@
   },
   {
    "file": "main.py",
-   "line": 2155,
+   "line": 2140,
    "kind": "method",
    "name": "append_desktop_chat_event",
    "confidence": 60,
@@ -685,7 +502,7 @@
   },
   {
    "file": "main.py",
-   "line": 2188,
+   "line": 2173,
    "kind": "method",
    "name": "append_app_log",
    "confidence": 60,
@@ -693,7 +510,7 @@
   },
   {
    "file": "main.py",
-   "line": 2347,
+   "line": 2332,
    "kind": "method",
    "name": "get_input_transparency",
    "confidence": 60,
@@ -701,7 +518,7 @@
   },
   {
    "file": "main.py",
-   "line": 2357,
+   "line": 2342,
    "kind": "method",
    "name": "get_reply_language_snapshot",
    "confidence": 60,
@@ -709,7 +526,7 @@
   },
   {
    "file": "main.py",
-   "line": 2362,
+   "line": 2347,
    "kind": "method",
    "name": "save_ask_feedback",
    "confidence": 60,
@@ -717,7 +534,7 @@
   },
   {
    "file": "main.py",
-   "line": 2396,
+   "line": 2381,
    "kind": "method",
    "name": "take_steam_screenshot",
    "confidence": 60,
@@ -725,7 +542,7 @@
   },
   {
    "file": "main.py",
-   "line": 2469,
+   "line": 2454,
    "kind": "method",
    "name": "ask_game_ai",
    "confidence": 60,
@@ -733,7 +550,7 @@
   },
   {
    "file": "main.py",
-   "line": 2621,
+   "line": 2606,
    "kind": "method",
    "name": "start_background_game_ai",
    "confidence": 60,
@@ -741,7 +558,7 @@
   },
   {
    "file": "main.py",
-   "line": 2854,
+   "line": 2839,
    "kind": "method",
    "name": "dbg_fe_log",
    "confidence": 60,
@@ -749,7 +566,7 @@
   },
   {
    "file": "main.py",
-   "line": 2867,
+   "line": 2852,
    "kind": "method",
    "name": "get_background_game_ai_status",
    "confidence": 60,
@@ -757,7 +574,7 @@
   },
   {
    "file": "main.py",
-   "line": 2951,
+   "line": 2936,
    "kind": "method",
    "name": "forget_background_game_ai",
    "confidence": 60,
@@ -765,7 +582,7 @@
   },
   {
    "file": "main.py",
-   "line": 3119,
+   "line": 3104,
    "kind": "method",
    "name": "get_voice_engine_status",
    "confidence": 60,
@@ -773,7 +590,7 @@
   },
   {
    "file": "main.py",
-   "line": 3127,
+   "line": 3112,
    "kind": "method",
    "name": "install_voice_engine",
    "confidence": 60,
@@ -781,7 +598,7 @@
   },
   {
    "file": "main.py",
-   "line": 3177,
+   "line": 3162,
    "kind": "method",
    "name": "get_voice_install_status",
    "confidence": 60,
@@ -789,7 +606,7 @@
   },
   {
    "file": "main.py",
-   "line": 3181,
+   "line": 3166,
    "kind": "method",
    "name": "start_voice_transcription",
    "confidence": 60,
@@ -797,7 +614,7 @@
   },
   {
    "file": "main.py",
-   "line": 3240,
+   "line": 3225,
    "kind": "method",
    "name": "stop_voice_transcription",
    "confidence": 60,
@@ -805,7 +622,7 @@
   },
   {
    "file": "main.py",
-   "line": 3260,
+   "line": 3245,
    "kind": "method",
    "name": "get_voice_transcription_status",
    "confidence": 60,
@@ -813,7 +630,7 @@
   },
   {
    "file": "main.py",
-   "line": 3283,
+   "line": 3268,
    "kind": "method",
    "name": "start_voice_read_aloud",
    "confidence": 60,
@@ -821,7 +638,7 @@
   },
   {
    "file": "main.py",
-   "line": 3293,
+   "line": 3278,
    "kind": "method",
    "name": "stop_voice_read_aloud",
    "confidence": 60,
@@ -829,7 +646,7 @@
   },
   {
    "file": "main.py",
-   "line": 3298,
+   "line": 3283,
    "kind": "method",
    "name": "get_voice_read_aloud_status",
    "confidence": 60,
@@ -844,6 +661,51 @@
    "fix": "leave it",
    "seen_in": [
     "py_modules/backend/services/local_ollama_setup_service.py"
+   ]
+  },
+  {
+   "file": "py_modules/backend/services/knowledge_base_schema.py",
+   "line": 18,
+   "kind": "a helper script uses it",
+   "name": "CORPUS_SCHEMA_VERSION",
+   "confidence": 60,
+   "fix": "leave it",
+   "seen_in": [
+    "scripts/build_rag_db.py",
+    "scripts/phase2_map.py"
+   ]
+  },
+  {
+   "file": "py_modules/backend/services/knowledge_base_schema.py",
+   "line": 23,
+   "kind": "a helper script uses it",
+   "name": "DEFAULT_EMBEDDING_DIM",
+   "confidence": 60,
+   "fix": "leave it",
+   "seen_in": [
+    "scripts/build_rag_db.py"
+   ]
+  },
+  {
+   "file": "py_modules/backend/services/knowledge_base_schema.py",
+   "line": 356,
+   "kind": "a helper script uses it",
+   "name": "apply_schema",
+   "confidence": 60,
+   "fix": "leave it",
+   "seen_in": [
+    "scripts/build_rag_db.py"
+   ]
+  },
+  {
+   "file": "py_modules/backend/services/knowledge_base_schema.py",
+   "line": 363,
+   "kind": "a helper script uses it",
+   "name": "pack_embedding_vector",
+   "confidence": 60,
+   "fix": "leave it",
+   "seen_in": [
+    "scripts/build_rag_db.py"
    ]
   },
   {

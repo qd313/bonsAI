@@ -12,11 +12,7 @@ from typing import Final, Literal
 
 ModelSourceClass = Literal["foss", "open_weight", "non_foss", "unknown"]
 
-ModelPolicyTier = Literal["open_source_only", "open_weight", "non_foss"]
-
 DEFAULT_MODEL_POLICY_TIER: Final[str] = "open_source_only"
-DEFAULT_MODEL_POLICY_NON_FOSS_UNLOCKED: Final[bool] = False
-
 _VALID_TIERS: frozenset[str] = frozenset(("open_source_only", "open_weight", "non_foss"))
 
 def _normalize_base_model(name: str) -> str:

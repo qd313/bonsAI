@@ -471,4 +471,53 @@ describe("Copy in the answer bubble's corner", () => {
     const sections = collectByClassName(build(false, false)!, "bonsai-answer-stop");
     expect(sections.some((n) => (n.props as Record<string, unknown>).onMoveRight)).toBe(false);
   });
+
+  /*
+   * Measured on the Deck 2026-09-12: on a restored answer with no thumbs row, Down from the Copy
+   * corner went straight to Show details and the Read aloud line above it could not be reached from
+   * above at all. `downOutOfCopy` now tries the thumbs, then Read aloud, then Show details.
+   */
+  it("Down from the icon reaches the Read aloud line when there is no thumbs row to stop at first", () => {
+    const readAloud = document.createElement("div");
+    readAloud.tabIndex = 0;
+    document.body.appendChild(readAloud);
+    const showDetails = document.createElement("div");
+    showDetails.tabIndex = 0;
+    document.body.appendChild(showDetails);
+    registerReplyStop("read-aloud", readAloud);
+    registerReplyStop("show-details", showDetails);
+    try {
+      const slot = collectByClassName(build(false)!, "bonsai-reply-copy-corner-slot");
+      const onMoveDown = (slot[0]!.props as Record<string, unknown>).onMoveDown as () => boolean;
+      expect(onMoveDown()).toBe(true);
+      expect(document.activeElement).toBe(readAloud);
+    } finally {
+      registerReplyStop("read-aloud", null);
+      registerReplyStop("show-details", null);
+      readAloud.remove();
+      showDetails.remove();
+    }
+  });
+
+  it("Down from the icon still goes to the thumbs row when it is mounted", () => {
+    const helpful = document.createElement("div");
+    helpful.tabIndex = 0;
+    document.body.appendChild(helpful);
+    const readAloud = document.createElement("div");
+    readAloud.tabIndex = 0;
+    document.body.appendChild(readAloud);
+    registerReplyStop("helpful", helpful);
+    registerReplyStop("read-aloud", readAloud);
+    try {
+      const slot = collectByClassName(build(false)!, "bonsai-reply-copy-corner-slot");
+      const onMoveDown = (slot[0]!.props as Record<string, unknown>).onMoveDown as () => boolean;
+      expect(onMoveDown()).toBe(true);
+      expect(document.activeElement).toBe(helpful);
+    } finally {
+      registerReplyStop("helpful", null);
+      registerReplyStop("read-aloud", null);
+      helpful.remove();
+      readAloud.remove();
+    }
+  });
 });

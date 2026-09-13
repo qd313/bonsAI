@@ -141,6 +141,11 @@
       "role": "Load/save/merge settings.json"
     },
     {
+      "path": "src/utils/buildAnswerBubbleElement.test.tsx",
+      "lines": 524,
+      "role": ""
+    },
+    {
       "path": "src/components/DeveloperTab.tsx",
       "lines": 522,
       "role": ""
@@ -171,18 +176,13 @@
       "role": ""
     },
     {
+      "path": "src/utils/buildAnswerBubbleElement.tsx",
+      "lines": 491,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/strategy_guide_parse.py",
       "lines": 488,
-      "role": ""
-    },
-    {
-      "path": "src/utils/buildAnswerBubbleElement.tsx",
-      "lines": 483,
-      "role": ""
-    },
-    {
-      "path": "src/utils/buildAnswerBubbleElement.test.tsx",
-      "lines": 475,
       "role": ""
     },
     {

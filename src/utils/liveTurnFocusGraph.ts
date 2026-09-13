@@ -205,12 +205,18 @@ export function focusLastReplyChip(liveSlot: HTMLElement | null): boolean {
   return focusDeckOwner(last);
 }
 
-/** After answer bubble scroll is exhausted: branch → checklist → thumbs. */
+/**
+ * After answer bubble scroll is exhausted: branch → checklist → thumbs → Retry/Copy → the Read
+ * aloud line → Show details. The last two are the fallback for an answer with no thumbs and no
+ * corner buttons, so the ring never falls through to Steam's geometry guess past the new line.
+ */
 export function focusDownFromLiveAnswerBubble(liveSlot: HTMLElement | null): boolean {
   if (focusStrategyBranchButton(liveSlot, "first")) return true;
   if (focusStrategyChecklistToggle(liveSlot, "first")) return true;
   if (focusReplyThumbsRow(liveSlot)) return true;
-  return focusReplyUtilityRow(liveSlot);
+  if (focusReplyUtilityRow(liveSlot)) return true;
+  if (focusReplyReadAloud(liveSlot)) return true;
+  return focusReplyShowDetails(liveSlot);
 }
 
 /** Up from thumbs / reply chrome: checklist → branch → answer bubble. */

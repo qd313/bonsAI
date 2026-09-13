@@ -318,8 +318,16 @@ export function buildAnswerBubbleElement(
    * pixels — and an overlap is exactly what made Steam treat two boxes as each below the other in
    * runs/reply-block-copy-trap.json. Naming the next stop removes the guess.
    */
+  /*
+   * Down out of the Copy corner: the thumbs when they render, else the Read aloud line, else Show
+   * details. Read aloud was missing here when it shipped, so on an answer with no thumbs (a
+   * restored one) the D-pad went from Copy straight to Show details and the new line could not be
+   * reached from above at all — measured on the Deck 2026-09-12, first walk after the deploy.
+   */
   const downOutOfCopy = () =>
-    focusRegisteredReplyStop("helpful") || focusRegisteredReplyStop("show-details");
+    focusRegisteredReplyStop("helpful") ||
+    focusRegisteredReplyStop("read-aloud") ||
+    focusRegisteredReplyStop("show-details");
 
   /*
    * Steam's nav node for this bubble, so the reply-actions row below can hand the ring in (Up onto

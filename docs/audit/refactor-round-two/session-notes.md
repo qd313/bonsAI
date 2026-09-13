@@ -5,6 +5,61 @@ pick up without rereading anything but this file.
 
 ---
 
+## 2026-09-13, phase 2 done: everything measured, twelve decisions written
+
+**Phase 2 is finished and needs three answers from the maintainer.** They are in
+[phase2-decisions.md](phase2-decisions.md), which is the output of this phase. No code changed.
+
+**One new script does all the measuring.** `python scripts/phase2_map.py` runs every inspection
+tool and writes seven lists to `docs/audit/refactor-round-two/phase2/`, plus a short summary. Run
+it again after every landing in phases 3 and 4 — the counts are how you check a step did what it
+claimed. It reuses the file-walking and tool-finding code from the numbers script rather than
+copying it.
+
+**The single most useful thing this phase did was take the headline numbers apart.** Raw tool
+counts turned out to bundle very different situations together, and the fixes are different in
+each case. Three numbers were wrong in a way that mattered:
+
+- Copy-pasted app code is **877 lines, not 1,847**. The measure points at the folder holding the
+  screen code, and the front-end tests live in that same folder. So over half of what was reported
+  as duplicated app code is duplicated test code. This also overturns a phase 0 conclusion: the
+  plan's target of 350 was called unreachable because the real figure looked two and a half times
+  the estimate. Measured properly, the target is fine.
+- Copy-pasted back-end test code is **2,076 lines of Python, not 2,286**. The rest is repeated
+  blocks in saved test-run data files.
+- Back-end methods nothing calls is **one, not three**. One of the three is called by the back end
+  itself — deleting it would stop the AI answering anything. The other is a device-debug hook that
+  is meant to have no caller.
+
+**And the count of unused front-end names is not what it looks like.** Of 153 reported, only 43 are
+dead code. 103 are names used inside their own file that just do not need to be shared out, 7 are
+pointless pass-throughs, 5 are used only by a test, 2 need a human. **Not one whole file can be
+deleted** — every file the tool pointed at is live and merely carries an extra unused name. The
+delete phase is trimming, not demolition.
+
+**One finding is not clean-up at all.** There is a 153-line answer-checking feature in the back end
+— it catches things like an invented game name before an answer is shown. It works, it has a test,
+and it has never once run: the field it was meant to fill is fed by a value nobody supplies. That
+is a "did we mean to finish this?" question, and it is one of the three waiting on the maintainer.
+
+**The seams for phase 4 are named**, in Part B of the decisions write-up. Eight of them; four have
+no written contract at all. The urgent one is the ask hook: it hands back **52 separate things**
+from a 1,639-line file, and phase 4 is the phase that splits that file. That contract must be
+written down before any lane touches it.
+
+**Measured, so phase 4 does not have to guess:** 48 settings, and **five files each name all 48**,
+so a new setting means editing at least five files and about nine lines.
+
+**Three measure definitions want correcting before phase 3** (listed in Part B). That changes saved
+"best" numbers, which the rules rightly treat as suspicious, so it is written down as a decision
+rather than quietly done. It is waiting on a nod.
+
+**Next session: phase 3, delete** — but not until the maintainer answers the three questions. The
+work packages and their order are in Part B of the decisions write-up. No Deck needed except for
+the package removals, which want a build and a start-up.
+
+---
+
 ## 2026-09-13, after phase 1: a mistake found and undone, and twelve checks flagged
 
 **Sixteen saved Deck recordings were deleted that write-ups do point at, and they are restored.**

@@ -1,0 +1,271 @@
+{
+ "files_over_400_lines": 42,
+ "total_lines_in_them": 37677,
+ "cycles_backend": [
+  [
+   "py_modules/backend/services/ask_local_commands.py",
+   "py_modules/backend/services/input_sanitizer_service.py",
+   "py_modules/backend/services/shortcut_setup_commands.py",
+   "py_modules/backend/services/vac_check_commands.py"
+  ],
+  [
+   "py_modules/backend/services/voice_transcription_service.py",
+   "py_modules/backend/services/voice_whisper_daemon.py"
+  ]
+ ],
+ "cycles_frontend": [],
+ "rows": [
+  {
+   "file": "main.py",
+   "lines": 3308,
+   "imported_by": 0,
+   "imports": 43
+  },
+  {
+   "file": "py_modules/backend/services/knowledge_base_service.py",
+   "lines": 2092,
+   "imported_by": 3,
+   "imports": 4
+  },
+  {
+   "file": "src/index.tsx",
+   "lines": 1709,
+   "imported_by": 1,
+   "imports": 67
+  },
+  {
+   "file": "src/hooks/useBonsaiAskOrchestration.ts",
+   "lines": 1639,
+   "imported_by": 2,
+   "imports": 28
+  },
+  {
+   "file": "py_modules/backend/services/ollama_prompts.py",
+   "lines": 1572,
+   "imported_by": 6,
+   "imports": 5
+  },
+  {
+   "file": "py_modules/backend/services/voice_transcription_service.py",
+   "lines": 1528,
+   "imported_by": 4,
+   "imports": 3
+  },
+  {
+   "file": "src/components/PullModelsModal.tsx",
+   "lines": 1385,
+   "imported_by": 2,
+   "imports": 10
+  },
+  {
+   "file": "src/styles/sections/section-6.ts",
+   "lines": 1344,
+   "imported_by": 1,
+   "imports": 2
+  },
+  {
+   "file": "src/components/OllamaWhereAiRunsSection.tsx",
+   "lines": 1310,
+   "imported_by": 2,
+   "imports": 9
+  },
+  {
+   "file": "py_modules/backend/services/ollama_service.py",
+   "lines": 1270,
+   "imported_by": 3,
+   "imports": 9
+  },
+  {
+   "file": "src/components/MainTabPresetAnimatedChips.tsx",
+   "lines": 1232,
+   "imported_by": 2,
+   "imports": 11
+  },
+  {
+   "file": "src/components/MainTabChatTranscript.tsx",
+   "lines": 1221,
+   "imported_by": 11,
+   "imports": 34
+  },
+  {
+   "file": "src/components/MainTabUnifiedAskBar.tsx",
+   "lines": 1079,
+   "imported_by": 1,
+   "imports": 14
+  },
+  {
+   "file": "src/data/characterPlaceholderEmoticonGrids.ts",
+   "lines": 1023,
+   "imported_by": 1,
+   "imports": 0
+  },
+  {
+   "file": "py_modules/backend/services/local_ollama_setup_service.py",
+   "lines": 945,
+   "imported_by": 8,
+   "imports": 4
+  },
+  {
+   "file": "py_modules/backend/services/bonsai_stream_tags.py",
+   "lines": 857,
+   "imported_by": 2,
+   "imports": 3
+  },
+  {
+   "file": "py_modules/backend/services/screenshot_media.py",
+   "lines": 803,
+   "imported_by": 3,
+   "imports": 0
+  },
+  {
+   "file": "py_modules/backend/services/transparency_service.py",
+   "lines": 800,
+   "imported_by": 2,
+   "imports": 1
+  },
+  {
+   "file": "src/components/KnowledgeBaseSection.tsx",
+   "lines": 768,
+   "imported_by": 3,
+   "imports": 3
+  },
+  {
+   "file": "src/components/CharacterPickerModal.tsx",
+   "lines": 767,
+   "imported_by": 2,
+   "imports": 4
+  },
+  {
+   "file": "py_modules/backend/services/game_ai_request.py",
+   "lines": 725,
+   "imported_by": 1,
+   "imports": 16
+  },
+  {
+   "file": "src/components/SettingsTab.tsx",
+   "lines": 636,
+   "imported_by": 3,
+   "imports": 11
+  },
+  {
+   "file": "src/hooks/usePluginSettings.ts",
+   "lines": 589,
+   "imported_by": 2,
+   "imports": 8
+  },
+  {
+   "file": "py_modules/backend/services/intent_pack_service.py",
+   "lines": 580,
+   "imported_by": 1,
+   "imports": 0
+  },
+  {
+   "file": "src/styles/sections/gamepadAndPullModels.ts",
+   "lines": 550,
+   "imported_by": 2,
+   "imports": 1
+  },
+  {
+   "file": "py_modules/backend/services/settings_service.py",
+   "lines": 545,
+   "imported_by": 2,
+   "imports": 7
+  },
+  {
+   "file": "src/components/DeveloperTab.tsx",
+   "lines": 522,
+   "imported_by": 7,
+   "imports": 4
+  },
+  {
+   "file": "py_modules/backend/services/knowledge_base_schema.py",
+   "lines": 519,
+   "imported_by": 4,
+   "imports": 0
+  },
+  {
+   "file": "src/components/CharacterPropGlyph.tsx",
+   "lines": 510,
+   "imported_by": 1,
+   "imports": 0
+  },
+  {
+   "file": "src/data/bonsaiSettingsNormalizers.ts",
+   "lines": 507,
+   "imported_by": 7,
+   "imports": 10
+  },
+  {
+   "file": "src/utils/buildAnswerBubbleElement.tsx",
+   "lines": 490,
+   "imported_by": 2,
+   "imports": 14
+  },
+  {
+   "file": "py_modules/backend/services/strategy_guide_parse.py",
+   "lines": 487,
+   "imported_by": 2,
+   "imports": 0
+  },
+  {
+   "file": "py_modules/backend/services/chat_slot_service.py",
+   "lines": 467,
+   "imported_by": 1,
+   "imports": 0
+  },
+  {
+   "file": "py_modules/backend/services/voice_read_aloud_service.py",
+   "lines": 465,
+   "imported_by": 1,
+   "imports": 1
+  },
+  {
+   "file": "py_modules/backend/ollama_routing.py",
+   "lines": 463,
+   "imported_by": 5,
+   "imports": 1
+  },
+  {
+   "file": "src/utils/buildReplyActionsElement.tsx",
+   "lines": 461,
+   "imported_by": 2,
+   "imports": 11
+  },
+  {
+   "file": "py_modules/backend/services/desktop_note_service.py",
+   "lines": 431,
+   "imported_by": 1,
+   "imports": 0
+  },
+  {
+   "file": "py_modules/backend/services/ai_character_service.py",
+   "lines": 425,
+   "imported_by": 5,
+   "imports": 0
+  },
+  {
+   "file": "py_modules/backend/services/ollama_ask_service.py",
+   "lines": 421,
+   "imported_by": 1,
+   "imports": 9
+  },
+  {
+   "file": "src/components/deck/DeckFocusSlider.tsx",
+   "lines": 417,
+   "imported_by": 5,
+   "imports": 0
+  },
+  {
+   "file": "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
+   "lines": 410,
+   "imported_by": 2,
+   "imports": 5
+  },
+  {
+   "file": "src/features/plugin-shell/tabs/useMainTabPayload.tsx",
+   "lines": 405,
+   "imported_by": 1,
+   "imports": 4
+  }
+ ]
+}

@@ -1,0 +1,595 @@
+{
+ "settings_counted": 48,
+ "files_a_typical_setting_touches": 6,
+ "lines_a_typical_setting_touches": 9,
+ "lines_per_setting": {
+  "ask_mode": 115,
+  "capabilities": 57,
+  "request_timeout_seconds": 30,
+  "reply_verbosity": 24,
+  "ai_character_enabled": 19,
+  "rag_corpus_path": 19,
+  "use_local_knowledge_base": 19,
+  "text_model_routing_order": 18,
+  "vision_model_routing_order": 18,
+  "reply_language": 17,
+  "model_policy_tier": 15,
+  "ai_character_random": 14,
+  "latency_warning_seconds": 14,
+  "model_policy_non_foss_unlocked": 14,
+  "ollama_local_on_deck": 14,
+  "ai_character_custom_text": 12,
+  "preset_chip_animation": 12,
+  "rag_corpus_version": 12,
+  "ai_character_preset_id": 11,
+  "screenshot_attachment_preset": 10,
+  "ai_character_accent_intensity": 9,
+  "input_sanitizer_user_disabled": 9,
+  "model_allow_high_vram_fallbacks": 9,
+  "preset_chip_fade_animation_enabled": 9,
+  "tab_resume_mode": 9,
+  "voice_stt_model": 9,
+  "ask_think_effort": 8,
+  "dev_preload_ask_model": 8,
+  "named_ollama_hosts": 8,
+  "show_developer_tab": 8,
+  "steam_web_api_key": 8,
+  "ui_scale_auto_enabled": 8,
+  "ui_scale_manual_profile": 8,
+  "desktop_app_log_level": 7,
+  "desktop_ask_verbose_logging": 7,
+  "dev_frozen_test_chips": 7,
+  "latency_timeouts_custom_enabled": 7,
+  "ollama_keep_alive": 7,
+  "rag_hybrid_retrieval_enabled": 7,
+  "unified_input_persistence_mode": 7,
+  "voice_reply_mode": 7,
+  "desktop_debug_note_auto_save": 6,
+  "dev_force_session_rag_chips": 6,
+  "ollama_local_autostart": 6,
+  "preset_single_chip": 6,
+  "show_onscreen_debug_hud": 6,
+  "strategy_spoiler_auto_reveal_after_consent": 6,
+  "strategy_spoiler_masking_enabled": 6
+ },
+ "most_touched_setting": "ask_mode",
+ "files_that_know_about_many_settings": [
+  {
+   "file": "py_modules/backend/services/settings_service.py",
+   "settings": 48
+  },
+  {
+   "file": "src/data/bonsaiSettingsNormalizers.ts",
+   "settings": 48
+  },
+  {
+   "file": "src/data/bonsaiSettingsSchema.ts",
+   "settings": 48
+  },
+  {
+   "file": "src/hooks/usePluginSettings.ts",
+   "settings": 48
+  },
+  {
+   "file": "src/utils/settingsPayload.ts",
+   "settings": 48
+  },
+  {
+   "file": "main.py",
+   "settings": 22
+  },
+  {
+   "file": "py_modules/backend/services/ollama_ask_service.py",
+   "settings": 11
+  },
+  {
+   "file": "py_modules/backend/services/game_ai_request.py",
+   "settings": 8
+  },
+  {
+   "file": "src/index.tsx",
+   "settings": 7
+  },
+  {
+   "file": "py_modules/backend/services/ai_character_service.py",
+   "settings": 6
+  },
+  {
+   "file": "src/data/characterUiAccent.ts",
+   "settings": 4
+  },
+  {
+   "file": "py_modules/backend/ollama_routing.py",
+   "settings": 4
+  },
+  {
+   "file": "py_modules/backend/services/knowledge_base_service.py",
+   "settings": 4
+  },
+  {
+   "file": "src/features/plugin-shell/useCharacterPickerModal.tsx",
+   "settings": 3
+  },
+  {
+   "file": "py_modules/backend/services/ollama_prompts.py",
+   "settings": 3
+  },
+  {
+   "file": "py_modules/backend/services/ollama_service.py",
+   "settings": 3
+  },
+  {
+   "file": "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
+   "settings": 3
+  },
+  {
+   "file": "py_modules/backend/services/ollama_ask_budgets.py",
+   "settings": 2
+  },
+  {
+   "file": "py_modules/backend/services/transparency_service.py",
+   "settings": 2
+  },
+  {
+   "file": "src/utils/inputTransparency.ts",
+   "settings": 2
+  }
+ ],
+ "files_every_new_setting_must_be_edited_in": [
+  "py_modules/backend/services/settings_service.py",
+  "src/data/bonsaiSettingsNormalizers.ts",
+  "src/data/bonsaiSettingsSchema.ts",
+  "src/hooks/usePluginSettings.ts",
+  "src/utils/settingsPayload.ts",
+  "main.py"
+ ],
+ "per_setting": {
+  "ai_character_accent_intensity": [
+   "py_modules/backend/services/ai_character_service.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "ai_character_custom_text": [
+   "py_modules/backend/services/ai_character_service.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/data/characterUiAccent.ts",
+   "src/features/plugin-shell/useCharacterPickerModal.tsx",
+   "src/hooks/usePluginSettings.ts",
+   "src/index.tsx",
+   "src/utils/settingsPayload.ts"
+  ],
+  "ai_character_enabled": [
+   "main.py",
+   "py_modules/backend/services/ai_character_service.py",
+   "py_modules/backend/services/game_ai_request.py",
+   "py_modules/backend/services/ollama_ask_service.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/data/characterUiAccent.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/index.tsx",
+   "src/utils/settingsPayload.ts"
+  ],
+  "ai_character_preset_id": [
+   "py_modules/backend/services/ai_character_service.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/data/characterUiAccent.ts",
+   "src/features/plugin-shell/useCharacterPickerModal.tsx",
+   "src/hooks/usePluginSettings.ts",
+   "src/index.tsx",
+   "src/utils/settingsPayload.ts"
+  ],
+  "ai_character_random": [
+   "main.py",
+   "py_modules/backend/services/ai_character_service.py",
+   "py_modules/backend/services/game_ai_request.py",
+   "py_modules/backend/services/ollama_ask_service.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/data/characterUiAccent.ts",
+   "src/features/plugin-shell/useCharacterPickerModal.tsx",
+   "src/hooks/usePluginSettings.ts",
+   "src/index.tsx",
+   "src/utils/settingsPayload.ts"
+  ],
+  "ask_mode": [
+   "main.py",
+   "py_modules/backend/ollama_routing.py",
+   "py_modules/backend/services/ai_character_service.py",
+   "py_modules/backend/services/bonsai_stream_tags.py",
+   "py_modules/backend/services/game_ai_request.py",
+   "py_modules/backend/services/kb_not_in_notes_notice.py",
+   "py_modules/backend/services/knowledge_base_service.py",
+   "py_modules/backend/services/ollama_ask_budgets.py",
+   "py_modules/backend/services/ollama_ask_service.py",
+   "py_modules/backend/services/ollama_prompts.py",
+   "py_modules/backend/services/ollama_service.py",
+   "py_modules/backend/services/settings_service.py",
+   "py_modules/backend/services/spoiler_risk_service.py",
+   "py_modules/backend/services/transparency_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/useBonsaiAskOrchestration.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/inputTransparency.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "ask_think_effort": [
+   "py_modules/backend/services/ollama_ask_budgets.py",
+   "py_modules/backend/services/ollama_ask_service.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "capabilities": [
+   "main.py",
+   "py_modules/backend/services/capabilities.py",
+   "py_modules/backend/services/game_ai_request.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/components/DeveloperTab.tsx",
+   "src/components/MainTabScreenshotBrowser.tsx",
+   "src/components/PermissionsTab.tsx",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/features/plugin-shell/tabs/usePermissionsTabPayload.tsx",
+   "src/hooks/usePluginSettings.ts",
+   "src/index.tsx",
+   "src/utils/appDesktopLog.ts",
+   "src/utils/permissionDeepLink.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "desktop_app_log_level": [
+   "main.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "desktop_ask_verbose_logging": [
+   "main.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "desktop_debug_note_auto_save": [
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "dev_force_session_rag_chips": [
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "dev_frozen_test_chips": [
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/data/presets.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "dev_preload_ask_model": [
+   "main.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "input_sanitizer_user_disabled": [
+   "main.py",
+   "py_modules/backend/services/game_ai_request.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "latency_timeouts_custom_enabled": [
+   "py_modules/backend/services/game_ai_request.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "latency_warning_seconds": [
+   "py_modules/backend/services/settings_service.py",
+   "src/components/SettingsTabConnectionTimeoutSlider.tsx",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "model_allow_high_vram_fallbacks": [
+   "main.py",
+   "py_modules/backend/ollama_routing.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "model_policy_non_foss_unlocked": [
+   "py_modules/backend/services/ollama_ask_service.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "model_policy_tier": [
+   "py_modules/backend/services/ollama_ask_service.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "named_ollama_hosts": [
+   "main.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "ollama_keep_alive": [
+   "py_modules/backend/services/ollama_ask_service.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "ollama_local_autostart": [
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "ollama_local_on_deck": [
+   "main.py",
+   "py_modules/backend/services/local_ollama_teardown_service.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "preset_chip_animation": [
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "preset_chip_fade_animation_enabled": [
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "preset_single_chip": [
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "rag_corpus_path": [
+   "main.py",
+   "py_modules/backend/services/knowledge_base_schema.py",
+   "py_modules/backend/services/knowledge_base_service.py",
+   "py_modules/backend/services/plugin_data_reset.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "rag_corpus_version": [
+   "main.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "rag_hybrid_retrieval_enabled": [
+   "py_modules/backend/services/knowledge_base_service.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "reply_language": [
+   "main.py",
+   "py_modules/backend/services/ollama_ask_service.py",
+   "py_modules/backend/services/ollama_prompts.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "reply_verbosity": [
+   "main.py",
+   "py_modules/backend/services/ollama_ask_service.py",
+   "py_modules/backend/services/ollama_prompts.py",
+   "py_modules/backend/services/settings_service.py",
+   "py_modules/backend/services/transparency_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/inputTransparency.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "request_timeout_seconds": [
+   "main.py",
+   "py_modules/backend/services/game_ai_request.py",
+   "py_modules/backend/services/ollama_ask_service.py",
+   "py_modules/backend/services/ollama_service.py",
+   "py_modules/backend/services/response_verify.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/components/SettingsTabConnectionTimeoutSlider.tsx",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "screenshot_attachment_preset": [
+   "py_modules/backend/services/ollama_ask_service.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "show_developer_tab": [
+   "main.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "show_onscreen_debug_hud": [
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "steam_web_api_key": [
+   "main.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "strategy_spoiler_auto_reveal_after_consent": [
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "strategy_spoiler_masking_enabled": [
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "tab_resume_mode": [
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/data/storageKeys.ts",
+   "src/features/plugin-shell/pluginStorage.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "text_model_routing_order": [
+   "main.py",
+   "py_modules/backend/ollama_routing.py",
+   "py_modules/backend/services/ollama_service.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/components/PullModelsModal.tsx",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/features/model-routing/useRoutingOrderModal.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "ui_scale_auto_enabled": [
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/index.tsx",
+   "src/utils/settingsPayload.ts"
+  ],
+  "ui_scale_manual_profile": [
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/index.tsx",
+   "src/utils/settingsPayload.ts"
+  ],
+  "unified_input_persistence_mode": [
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "use_local_knowledge_base": [
+   "main.py",
+   "py_modules/backend/services/game_ai_request.py",
+   "py_modules/backend/services/knowledge_base_service.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/components/KnowledgeBaseSection.tsx",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/data/presets.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "vision_model_routing_order": [
+   "main.py",
+   "py_modules/backend/ollama_routing.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/components/PullModelsModal.tsx",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/features/model-routing/useRoutingOrderModal.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "voice_reply_mode": [
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/hooks/useReadAloud.ts",
+   "src/utils/settingsPayload.ts"
+  ],
+  "voice_stt_model": [
+   "main.py",
+   "py_modules/backend/services/settings_service.py",
+   "src/data/bonsaiSettingsNormalizers.ts",
+   "src/data/bonsaiSettingsSchema.ts",
+   "src/hooks/usePluginSettings.ts",
+   "src/utils/settingsPayload.ts"
+  ]
+ }
+}

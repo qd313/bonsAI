@@ -1,0 +1,891 @@
+{
+ "totals": {
+  "reported": 96,
+  "needs_a_decision": 37,
+  "ruled_out": 59,
+  "rpc_methods_no_frontend_caller": 3,
+  "nothing calls it": 18,
+  "only the tests call it": 17,
+  "an unused argument": 2
+ },
+ "rpc_methods_no_frontend_caller": [
+  "ask_game_ai",
+  "ask_ollama",
+  "dbg_fe_log"
+ ],
+ "needs_a_decision": [
+  {
+   "file": "main.py",
+   "line": 307,
+   "kind": "nothing calls it",
+   "name": "_clamp_int",
+   "confidence": 60,
+   "fix": "delete it",
+   "own_file_uses": 0
+  },
+  {
+   "file": "main.py",
+   "line": 327,
+   "kind": "nothing calls it",
+   "name": "_sanitize_unified_input_persistence_mode",
+   "confidence": 60,
+   "fix": "delete it",
+   "own_file_uses": 0
+  },
+  {
+   "file": "main.py",
+   "line": 410,
+   "kind": "nothing calls it",
+   "name": "_new_partial_stream_snapshot",
+   "confidence": 60,
+   "fix": "delete it",
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/json_store.py",
+   "line": 14,
+   "kind": "nothing calls it",
+   "name": "load_json_store",
+   "confidence": 60,
+   "fix": "delete it",
+   "own_file_uses": 1
+  },
+  {
+   "file": "py_modules/backend/json_store.py",
+   "line": 56,
+   "kind": "nothing calls it",
+   "name": "save_json_store",
+   "confidence": 60,
+   "fix": "delete it",
+   "own_file_uses": 1
+  },
+  {
+   "file": "py_modules/backend/ollama_routing.py",
+   "line": 194,
+   "kind": "nothing calls it",
+   "name": "_text_high_vram_tail",
+   "confidence": 60,
+   "fix": "delete it",
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/ollama_routing.py",
+   "line": 209,
+   "kind": "nothing calls it",
+   "name": "_vision_high_vram_tail",
+   "confidence": 60,
+   "fix": "delete it",
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/ollama_routing.py",
+   "line": 224,
+   "kind": "nothing calls it",
+   "name": "VISION_MODELS_BY_MODE",
+   "confidence": 60,
+   "fix": "delete it",
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/services/ask_local_commands.py",
+   "line": 54,
+   "kind": "nothing calls it",
+   "name": "is_local_ask_command",
+   "confidence": 60,
+   "fix": "delete it",
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/services/knowledge_base_schema.py",
+   "line": 18,
+   "kind": "nothing calls it",
+   "name": "CORPUS_SCHEMA_VERSION",
+   "confidence": 60,
+   "fix": "delete it",
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/services/model_policy.py",
+   "line": 15,
+   "kind": "nothing calls it",
+   "name": "ModelPolicyTier",
+   "confidence": 60,
+   "fix": "delete it",
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/services/model_policy.py",
+   "line": 18,
+   "kind": "nothing calls it",
+   "name": "DEFAULT_MODEL_POLICY_NON_FOSS_UNLOCKED",
+   "confidence": 60,
+   "fix": "delete it",
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/services/response_verify.py",
+   "line": 70,
+   "kind": "nothing calls it",
+   "name": "run_verifier_second_pass",
+   "confidence": 60,
+   "fix": "delete it",
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/services/response_verify.py",
+   "line": 142,
+   "kind": "nothing calls it",
+   "name": "maybe_append_verifier_notice",
+   "confidence": 60,
+   "fix": "delete it",
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/services/settings_service.py",
+   "line": 27,
+   "kind": "nothing calls it",
+   "name": "DEFAULT_UI_SCALE_AUTO_ENABLED",
+   "confidence": 60,
+   "fix": "delete it",
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/services/transparency_service.py",
+   "line": 269,
+   "kind": "nothing calls it",
+   "name": "build_proton_journal_transparency",
+   "confidence": 60,
+   "fix": "delete it",
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/services/voice_transcription_service.py",
+   "line": 1044,
+   "kind": "nothing calls it",
+   "name": "_extract_whisper_from_container",
+   "confidence": 60,
+   "fix": "delete it",
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/services/voice_whisper_daemon.py",
+   "line": 214,
+   "kind": "nothing calls it",
+   "name": "_in_flight",
+   "confidence": 60,
+   "fix": "delete it",
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/ollama_routing.py",
+   "line": 130,
+   "kind": "only the tests call it",
+   "name": "BLOCKED_PULL_CATALOG_TAGS",
+   "confidence": 60,
+   "fix": "delete both, or keep both",
+   "seen_in": [
+    "tests/test_model_selection.py"
+   ],
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/ollama_routing.py",
+   "line": 232,
+   "kind": "only the tests call it",
+   "name": "select_ollama_models",
+   "confidence": 60,
+   "fix": "delete both, or keep both",
+   "seen_in": [
+    "tests/test_backend_helpers.py",
+    "tests/test_model_selection.py"
+   ],
+   "own_file_uses": 1
+  },
+  {
+   "file": "py_modules/backend/ollama_routing.py",
+   "line": 401,
+   "kind": "only the tests call it",
+   "name": "remove_tag_from_routing_orders",
+   "confidence": 60,
+   "fix": "delete both, or keep both",
+   "seen_in": [
+    "tests/test_model_routing_order.py"
+   ],
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/services/ai_character_service.py",
+   "line": 423,
+   "kind": "only the tests call it",
+   "name": "build_roleplay_system_suffix",
+   "confidence": 60,
+   "fix": "delete both, or keep both",
+   "seen_in": [
+    "tests/test_ai_character_service.py"
+   ],
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/services/compat_topic_router.py",
+   "line": 337,
+   "kind": "only the tests call it",
+   "name": "known_compat_topics",
+   "confidence": 60,
+   "fix": "delete both, or keep both",
+   "seen_in": [
+    "tests/test_compat_topic_router.py"
+   ],
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/services/desktop_note_service.py",
+   "line": 78,
+   "kind": "only the tests call it",
+   "name": "resolve_bonsai_notes_dir",
+   "confidence": 60,
+   "fix": "delete both, or keep both",
+   "seen_in": [
+    "tests/test_desktop_note_service.py"
+   ],
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/services/knowledge_base_schema.py",
+   "line": 23,
+   "kind": "only the tests call it",
+   "name": "DEFAULT_EMBEDDING_DIM",
+   "confidence": 60,
+   "fix": "delete both, or keep both",
+   "seen_in": [
+    "tests/test_build_rag_embedding_guarantee.py",
+    "tests/test_publish_corpus_embedding_guarantee.py"
+   ],
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/services/knowledge_base_schema.py",
+   "line": 356,
+   "kind": "only the tests call it",
+   "name": "apply_schema",
+   "confidence": 60,
+   "fix": "delete both, or keep both",
+   "seen_in": [
+    "tests/test_build_rag_attributions.py",
+    "tests/test_build_rag_reproducible.py"
+   ],
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/services/knowledge_base_schema.py",
+   "line": 363,
+   "kind": "only the tests call it",
+   "name": "pack_embedding_vector",
+   "confidence": 60,
+   "fix": "delete both, or keep both",
+   "seen_in": [
+    "tests/test_knowledge_base_schema.py",
+    "tests/test_knowledge_base_service.py"
+   ],
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/services/knowledge_base_schema.py",
+   "line": 448,
+   "kind": "only the tests call it",
+   "name": "corpus_section_vectors_fully_indexed",
+   "confidence": 60,
+   "fix": "delete both, or keep both",
+   "seen_in": [
+    "tests/test_knowledge_base_schema.py"
+   ],
+   "own_file_uses": 1
+  },
+  {
+   "file": "py_modules/backend/services/knowledge_base_schema.py",
+   "line": 469,
+   "kind": "only the tests call it",
+   "name": "corpus_compat_vectors_fully_indexed",
+   "confidence": 60,
+   "fix": "delete both, or keep both",
+   "seen_in": [
+    "tests/test_knowledge_base_schema.py"
+   ],
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/services/knowledge_base_schema.py",
+   "line": 513,
+   "kind": "only the tests call it",
+   "name": "corpus_has_usable_vectors",
+   "confidence": 60,
+   "fix": "delete both, or keep both",
+   "seen_in": [
+    "tests/test_knowledge_base_schema.py"
+   ],
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/services/knowledge_base_service.py",
+   "line": 2047,
+   "kind": "only the tests call it",
+   "name": "proton_attached",
+   "confidence": 60,
+   "fix": "delete both, or keep both",
+   "seen_in": [
+    "tests/test_knowledge_base_service.py"
+   ],
+   "own_file_uses": 1
+  },
+  {
+   "file": "py_modules/backend/services/knowledge_base_service.py",
+   "line": 2086,
+   "kind": "only the tests call it",
+   "name": "proton_attached",
+   "confidence": 60,
+   "fix": "delete both, or keep both",
+   "seen_in": [
+    "tests/test_knowledge_base_service.py"
+   ],
+   "own_file_uses": 1
+  },
+  {
+   "file": "py_modules/backend/services/ollama_ask_budgets.py",
+   "line": 118,
+   "kind": "only the tests call it",
+   "name": "reset_thinking_support_cache",
+   "confidence": 60,
+   "fix": "delete both, or keep both",
+   "seen_in": [
+    "tests/test_ollama_ask_budgets.py",
+    "tests/test_ollama_service.py"
+   ],
+   "own_file_uses": 1
+  },
+  {
+   "file": "py_modules/backend/services/ollama_embed_service.py",
+   "line": 95,
+   "kind": "only the tests call it",
+   "name": "reset_embed_availability_cache",
+   "confidence": 60,
+   "fix": "delete both, or keep both",
+   "seen_in": [
+    "tests/test_ollama_embed_service.py"
+   ],
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/services/response_verify.py",
+   "line": 27,
+   "kind": "only the tests call it",
+   "name": "verify_ollama_response",
+   "confidence": 60,
+   "fix": "delete both, or keep both",
+   "seen_in": [
+    "tests/test_response_verify.py"
+   ],
+   "own_file_uses": 0
+  },
+  {
+   "file": "py_modules/backend/services/ollama_prompts.py",
+   "line": 863,
+   "kind": "an unused argument",
+   "name": "game_hint",
+   "confidence": 60,
+   "fix": "drop the argument and its callers' use of it"
+  },
+  {
+   "file": "py_modules/backend/services/screenshot_media.py",
+   "line": 324,
+   "kind": "an unused argument",
+   "name": "plugin_runtime_dir",
+   "confidence": 100,
+   "fix": "drop the argument and its callers' use of it"
+  }
+ ],
+ "ruled_out": [
+  {
+   "file": "main.py",
+   "line": 335,
+   "kind": "method",
+   "name": "_main",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 389,
+   "kind": "method",
+   "name": "_unload",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 890,
+   "kind": "method",
+   "name": "clear_plugin_data",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1071,
+   "kind": "method",
+   "name": "list_chat_slots",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1082,
+   "kind": "method",
+   "name": "get_chat_slot",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1098,
+   "kind": "method",
+   "name": "create_chat_slot",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1121,
+   "kind": "method",
+   "name": "delete_chat_slot",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1136,
+   "kind": "method",
+   "name": "rename_chat_slot",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1159,
+   "kind": "method",
+   "name": "get_strategy_checklist_session",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1174,
+   "kind": "method",
+   "name": "save_strategy_checklist_session",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1203,
+   "kind": "method",
+   "name": "clear_strategy_checklist_session",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1219,
+   "kind": "method",
+   "name": "get_intent_packs",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1228,
+   "kind": "method",
+   "name": "set_intent_pack_enabled",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1244,
+   "kind": "method",
+   "name": "set_kids_lock_state",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1249,
+   "kind": "method",
+   "name": "export_intent_pack",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1254,
+   "kind": "method",
+   "name": "import_intent_pack",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1277,
+   "kind": "method",
+   "name": "remove_intent_pack",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1298,
+   "kind": "method",
+   "name": "get_deck_ip",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1304,
+   "kind": "method",
+   "name": "test_ollama_connection",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1490,
+   "kind": "method",
+   "name": "start_local_ollama_setup",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1568,
+   "kind": "method",
+   "name": "get_local_ollama_setup_status",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1572,
+   "kind": "method",
+   "name": "cancel_local_ollama_setup",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1596,
+   "kind": "method",
+   "name": "get_rag_corpus_status",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1715,
+   "kind": "method",
+   "name": "cancel_rag_corpus_download",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1728,
+   "kind": "method",
+   "name": "update_rag_corpus",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1744,
+   "kind": "method",
+   "name": "remove_rag_corpus",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1760,
+   "kind": "method",
+   "name": "install_rag_corpus_local",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1820,
+   "kind": "method",
+   "name": "get_session_rag_chip_candidates",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1938,
+   "kind": "method",
+   "name": "pull_ollama_models",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 1943,
+   "kind": "method",
+   "name": "merge_pulled_tags_into_routing_orders",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 2002,
+   "kind": "method",
+   "name": "delete_ollama_model",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 2037,
+   "kind": "method",
+   "name": "fetch_ollama_catalog_metadata",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 2090,
+   "kind": "method",
+   "name": "list_recent_screenshots",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 2127,
+   "kind": "method",
+   "name": "append_desktop_debug_note",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 2155,
+   "kind": "method",
+   "name": "append_desktop_chat_event",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 2188,
+   "kind": "method",
+   "name": "append_app_log",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 2347,
+   "kind": "method",
+   "name": "get_input_transparency",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 2357,
+   "kind": "method",
+   "name": "get_reply_language_snapshot",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 2362,
+   "kind": "method",
+   "name": "save_ask_feedback",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 2396,
+   "kind": "method",
+   "name": "take_steam_screenshot",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 2469,
+   "kind": "method",
+   "name": "ask_game_ai",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 2621,
+   "kind": "method",
+   "name": "start_background_game_ai",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 2854,
+   "kind": "method",
+   "name": "dbg_fe_log",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 2867,
+   "kind": "method",
+   "name": "get_background_game_ai_status",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 2951,
+   "kind": "method",
+   "name": "forget_background_game_ai",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 3119,
+   "kind": "method",
+   "name": "get_voice_engine_status",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 3127,
+   "kind": "method",
+   "name": "install_voice_engine",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 3177,
+   "kind": "method",
+   "name": "get_voice_install_status",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 3181,
+   "kind": "method",
+   "name": "start_voice_transcription",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 3240,
+   "kind": "method",
+   "name": "stop_voice_transcription",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 3260,
+   "kind": "method",
+   "name": "get_voice_transcription_status",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 3283,
+   "kind": "method",
+   "name": "start_voice_read_aloud",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 3293,
+   "kind": "method",
+   "name": "stop_voice_read_aloud",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "main.py",
+   "line": 3298,
+   "kind": "method",
+   "name": "get_voice_read_aloud_status",
+   "confidence": 60,
+   "why_kept": "on the RPC surface or called by the loader"
+  },
+  {
+   "file": "py_modules/backend/ollama_routing.py",
+   "line": 179,
+   "kind": "another back-end file uses it",
+   "name": "tier1_foss_recommended_pull_tags",
+   "confidence": 60,
+   "fix": "leave it",
+   "seen_in": [
+    "py_modules/backend/services/local_ollama_setup_service.py"
+   ]
+  },
+  {
+   "file": "py_modules/backend/services/knowledge_base_service.py",
+   "line": 348,
+   "kind": "another back-end file uses it",
+   "name": "source_version",
+   "confidence": 60,
+   "fix": "leave it",
+   "seen_in": [
+    "py_modules/backend/services/knowledge_base_schema.py"
+   ]
+  },
+  {
+   "file": "py_modules/backend/services/knowledge_base_service.py",
+   "line": 526,
+   "kind": "a name a library owns",
+   "name": "row_factory",
+   "confidence": 60,
+   "fix": "leave it"
+  },
+  {
+   "file": "py_modules/backend/services/local_ollama_setup_service.py",
+   "line": 405,
+   "kind": "another back-end file uses it",
+   "name": "tier1_foss_recommended_pull_tags",
+   "confidence": 60,
+   "fix": "leave it",
+   "seen_in": [
+    "py_modules/backend/ollama_routing.py"
+   ]
+  },
+  {
+   "file": "py_modules/backend/services/ollama_embed_service.py",
+   "line": 61,
+   "kind": "another back-end file uses it",
+   "name": "format_embed_document",
+   "confidence": 60,
+   "fix": "leave it",
+   "seen_in": [
+    "py_modules/backend/services/knowledge_base_service.py"
+   ]
+  }
+ ]
+}

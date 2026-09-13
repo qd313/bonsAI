@@ -1,0 +1,453 @@
+{
+ "frontend": {
+  "count": 56,
+  "error": null,
+  "worst_files": [
+   [
+    "src/components/ContextChipLadder.tsx",
+    2
+   ],
+   [
+    "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
+    2
+   ],
+   [
+    "src/index.tsx",
+    1
+   ],
+   [
+    "src/hooks/useBonsaiAskOrchestration.ts",
+    1
+   ],
+   [
+    "src/styles/sections/section-6.ts",
+    1
+   ],
+   [
+    "src/components/OllamaWhereAiRunsSection.tsx",
+    1
+   ],
+   [
+    "src/components/MainTabChatTranscript.tsx",
+    1
+   ],
+   [
+    "src/components/MainTabUnifiedAskBar.tsx",
+    1
+   ],
+   [
+    "src/components/KnowledgeBaseSection.tsx",
+    1
+   ],
+   [
+    "src/components/SettingsTab.tsx",
+    1
+   ],
+   [
+    "src/components/DeveloperTab.tsx",
+    1
+   ],
+   [
+    "src/styles/sections/section-8.ts",
+    1
+   ],
+   [
+    "src/features/plugin-shell/tabs/useMainTabPayload.tsx",
+    1
+   ],
+   [
+    "src/styles/sections/section-4.ts",
+    1
+   ],
+   [
+    "src/features/chat-slots/ChatSlotRow.tsx",
+    1
+   ]
+  ],
+  "violations": [
+   {
+    "file": "src/index.tsx",
+    "name": "Content",
+    "line": 108,
+    "length": 1549
+   },
+   {
+    "file": "src/hooks/useBonsaiAskOrchestration.ts",
+    "name": "useBonsaiAskOrchestration",
+    "line": 176,
+    "length": 1464
+   },
+   {
+    "file": "src/styles/sections/section-6.ts",
+    "name": "buildSection6Section",
+    "line": 4,
+    "length": 1341
+   },
+   {
+    "file": "src/components/OllamaWhereAiRunsSection.tsx",
+    "name": "OllamaWhereAiRunsSection",
+    "line": 130,
+    "length": 1181
+   },
+   {
+    "file": "src/components/MainTabChatTranscript.tsx",
+    "name": "MainTabChatTranscript",
+    "line": 184,
+    "length": 1038
+   },
+   {
+    "file": "src/components/MainTabUnifiedAskBar.tsx",
+    "name": "MainTabUnifiedAskBar",
+    "line": 104,
+    "length": 976
+   },
+   {
+    "file": "src/components/KnowledgeBaseSection.tsx",
+    "name": "KnowledgeBaseSection",
+    "line": 143,
+    "length": 626
+   },
+   {
+    "file": "src/components/SettingsTab.tsx",
+    "name": "SettingsTab",
+    "line": 138,
+    "length": 499
+   },
+   {
+    "file": "src/components/DeveloperTab.tsx",
+    "name": "DeveloperTab",
+    "line": 116,
+    "length": 407
+   },
+   {
+    "file": "src/styles/sections/section-8.ts",
+    "name": "buildSection8Section",
+    "line": 8,
+    "length": 375
+   },
+   {
+    "file": "src/features/plugin-shell/tabs/useMainTabPayload.tsx",
+    "name": "useMainTabPayload",
+    "line": 58,
+    "length": 348
+   },
+   {
+    "file": "src/styles/sections/section-4.ts",
+    "name": "buildSection4Section",
+    "line": 11,
+    "length": 326
+   },
+   {
+    "file": "src/features/chat-slots/ChatSlotRow.tsx",
+    "name": "ChatSlotRow",
+    "line": 51,
+    "length": 319
+   },
+   {
+    "file": "src/components/CharacterPropGlyph.tsx",
+    "name": "CharacterPropGlyph",
+    "line": 133,
+    "length": 318
+   },
+   {
+    "file": "src/components/OllamaTab.tsx",
+    "name": "OllamaTab",
+    "line": 72,
+    "length": 308
+   },
+   {
+    "file": "src/components/DrgGlossaryTermChip.tsx",
+    "name": "DrgGlossaryTermChip",
+    "line": 58,
+    "length": 236
+   },
+   {
+    "file": "src/components/ModelRoutingOrderModal.tsx",
+    "name": "ModelRoutingOrderModal",
+    "line": 98,
+    "length": 233
+   },
+   {
+    "file": "src/components/VoiceInputSettingsSection.tsx",
+    "name": "VoiceInputSettingsSection",
+    "line": 42,
+    "length": 210
+   },
+   {
+    "file": "src/hooks/useChatSlots.ts",
+    "name": "useChatSlots",
+    "line": 34,
+    "length": 200
+   },
+   {
+    "file": "src/components/SettingsTabUiScaleSection.tsx",
+    "name": "SettingsTabUiScaleSection",
+    "line": 69,
+    "length": 196
+   },
+   {
+    "file": "src/components/ContextChipLadder.tsx",
+    "name": "ContextChipLadder",
+    "line": 73,
+    "length": 194
+   },
+   {
+    "file": "src/components/SessionContextStrip.tsx",
+    "name": "SessionContextStrip",
+    "line": 35,
+    "length": 192
+   },
+   {
+    "file": "src/styles/sections/tabIndicatorBar.ts",
+    "name": "buildTabIndicatorBarSection",
+    "line": 33,
+    "length": 183
+   },
+   {
+    "file": "src/styles/sections/section-5.ts",
+    "name": "buildSection5Section",
+    "line": 14,
+    "length": 177
+   },
+   {
+    "file": "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
+    "name": "BonsaiSpoilerFence",
+    "line": 204,
+    "length": 175
+   },
+   {
+    "file": "src/hooks/useScreenshotBrowser.ts",
+    "name": "useScreenshotBrowser",
+    "line": 55,
+    "length": 167
+   },
+   {
+    "file": "src/components/MainTabScreenshotBrowser.tsx",
+    "name": "MainTabScreenshotBrowser",
+    "line": 34,
+    "length": 166
+   },
+   {
+    "file": "src/hooks/useMainTabAskBarFocus.ts",
+    "name": "useMainTabAskBarFocus",
+    "line": 20,
+    "length": 160
+   },
+   {
+    "file": "src/features/plugin-shell/TabIndicatorBar.tsx",
+    "name": "TabIndicatorBar",
+    "line": 56,
+    "length": 157
+   },
+   {
+    "file": "src/hooks/useBonsaiPluginShell.ts",
+    "name": "useBonsaiPluginShell",
+    "line": 48,
+    "length": 151
+   },
+   {
+    "file": "src/components/MainTab.tsx",
+    "name": "MainTab",
+    "line": 155,
+    "length": 147
+   },
+   {
+    "file": "src/styles/sections/scopeBase.ts",
+    "name": "buildScopebaseSection",
+    "line": 4,
+    "length": 143
+   },
+   {
+    "file": "src/styles/sections/section-7.ts",
+    "name": "buildSection7Section",
+    "line": 1,
+    "length": 128
+   },
+   {
+    "file": "src/components/ContextChipLadder.tsx",
+    "name": "ChipExpandedBody",
+    "line": 268,
+    "length": 127
+   },
+   {
+    "file": "src/components/MainTabPresetRow.tsx",
+    "name": "MainTabPresetRow",
+    "line": 40,
+    "length": 126
+   },
+   {
+    "file": "src/styles/sections/section-3.ts",
+    "name": "buildSection3Section",
+    "line": 4,
+    "length": 123
+   },
+   {
+    "file": "src/features/voice/useVoiceAskInput.ts",
+    "name": "useVoiceAskInput",
+    "line": 29,
+    "length": 121
+   },
+   {
+    "file": "src/components/AboutTab.tsx",
+    "name": "AboutTab",
+    "line": 42,
+    "length": 115
+   },
+   {
+    "file": "src/features/model-routing/useRoutingOrderModal.ts",
+    "name": "useRoutingOrderModal",
+    "line": 45,
+    "length": 115
+   },
+   {
+    "file": "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
+    "name": "buildMdComponents",
+    "line": 89,
+    "length": 114
+   },
+   {
+    "file": "src/hooks/useIntentPacks.ts",
+    "name": "useIntentPacks",
+    "line": 78,
+    "length": 114
+   },
+   {
+    "file": "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
+    "name": "useOllamaModelsHubModal",
+    "line": 53,
+    "length": 109
+   },
+   {
+    "file": "src/features/plugin-shell/tabs/useOllamaTabPayload.tsx",
+    "name": "useOllamaTabPayload",
+    "line": 20,
+    "length": 101
+   },
+   {
+    "file": "src/features/plugin-shell/tabs/useSettingsTabPayload.tsx",
+    "name": "useSettingsTabPayload",
+    "line": 14,
+    "length": 100
+   },
+   {
+    "file": "src/styles/sections/gamepadAndPullModels.ts",
+    "name": "buildGamepadFocusRingStylesheet",
+    "line": 3,
+    "length": 98
+   },
+   {
+    "file": "src/styles/sections/section-1.ts",
+    "name": "buildSection1Section",
+    "line": 2,
+    "length": 98
+   },
+   {
+    "file": "src/features/plugin-shell/tabs/useDeveloperTabPayload.tsx",
+    "name": "useDeveloperTabPayload",
+    "line": 25,
+    "length": 95
+   },
+   {
+    "file": "src/utils/answerBubbleNavigation.ts",
+    "name": "handleAnswerBubbleMoveDown",
+    "line": 245,
+    "length": 91
+   },
+   {
+    "file": "src/components/PermissionsTab.tsx",
+    "name": "PermissionsTab",
+    "line": 106,
+    "length": 85
+   },
+   {
+    "file": "src/features/plugin-shell/useCharacterPickerModal.tsx",
+    "name": "useCharacterPickerModal",
+    "line": 39,
+    "length": 80
+   },
+   {
+    "file": "src/features/plugin-shell/useDesktopNoteSaveModal.tsx",
+    "name": "useDesktopNoteSaveModal",
+    "line": 40,
+    "length": 74
+   },
+   {
+    "file": "src/components/ReplyCopyButton.tsx",
+    "name": "ReplyCopyButton",
+    "line": 54,
+    "length": 72
+   },
+   {
+    "file": "src/utils/buildAnswerBubbleElement.tsx",
+    "name": "renderStreamMarkdownStack",
+    "line": 146,
+    "length": 70
+   },
+   {
+    "file": "src/data/pluginQuickStartInstructions.tsx",
+    "name": "PluginQuickStartInstructionsBody",
+    "line": 10,
+    "length": 67
+   },
+   {
+    "file": "src/components/OllamaThinkingEffortRow.tsx",
+    "name": "OllamaThinkingEffortRow",
+    "line": 27,
+    "length": 65
+   },
+   {
+    "file": "src/components/AboutReplyLanguageSection.tsx",
+    "name": "AboutReplyLanguageSection",
+    "line": 31,
+    "length": 61
+   }
+  ]
+ },
+ "backend": {
+  "count": 7,
+  "violations": [
+   {
+    "file": "py_modules/backend/services/bonsai_stream_tags.py",
+    "name": "_phase_pool",
+    "line": 422,
+    "length": 191
+   },
+   {
+    "file": "py_modules/backend/services/transparency_service.py",
+    "name": "build_ollama_route_snapshot",
+    "line": 678,
+    "length": 76
+   },
+   {
+    "file": "main.py",
+    "name": "_start_custom_ollama_pull",
+    "line": 1862,
+    "length": 73
+   },
+   {
+    "file": "py_modules/backend/services/voice_whisper_daemon.py",
+    "name": "acquire",
+    "line": 220,
+    "length": 68
+   },
+   {
+    "file": "py_modules/backend/services/voice_transcription_service.py",
+    "name": "start",
+    "line": 1285,
+    "length": 66
+   },
+   {
+    "file": "py_modules/backend/services/ollama_local_autostart_service.py",
+    "name": "_install_autostart",
+    "line": 251,
+    "length": 65
+   },
+   {
+    "file": "py_modules/backend/services/voice_transcription_service.py",
+    "name": "_transcribe_loop",
+    "line": 1388,
+    "length": 62
+   }
+  ]
+ }
+}

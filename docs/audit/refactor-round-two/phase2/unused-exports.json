@@ -1,0 +1,2002 @@
+{
+ "totals": {
+  "exports": 123,
+  "handed straight back out": 7,
+  "nothing mentions it": 43,
+  "types": 30,
+  "used inside its own file": 103,
+  "duplicates": 7,
+  "named somewhere else after all": 2,
+  "only a test or the harness names it": 5
+ },
+ "unused_files": [
+  "docs/design/handoffs/ai-character-avatars/support.js",
+  "packages/bonsai-mcp/scripts/sync-architecture-for-commit.mjs",
+  "packages/bonsai-mcp/src/index.ts",
+  "packages/bonsai-mcp/src/knowledge.ts",
+  "packages/bonsai-mcp/src/paths.ts",
+  "packages/bonsai-mcp/src/server.ts",
+  "scripts/sync-versions.mjs",
+  "scripts/ts_long_functions.mjs",
+  "src/test-harness/renderWithHarness.tsx"
+ ],
+ "unused_packages": [
+  {
+   "package": "tslib",
+   "kind": "dependencies",
+   "declared_in": "package.json"
+  },
+  {
+   "package": "@rollup/rollup-linux-x64-musl",
+   "kind": "devDependencies",
+   "declared_in": "package.json"
+  },
+  {
+   "package": "@types/webpack",
+   "kind": "devDependencies",
+   "declared_in": "package.json"
+  },
+  {
+   "package": "decky-frontend-lib",
+   "kind": "devDependencies",
+   "declared_in": "package.json"
+  },
+  {
+   "package": "jscpd",
+   "kind": "devDependencies",
+   "declared_in": "package.json"
+  },
+  {
+   "package": "ts-morph",
+   "kind": "devDependencies",
+   "declared_in": "package.json"
+  }
+ ],
+ "nothing_imports_this_file_and_no_export_is_referenced": [],
+ "by_fix": {
+  "used inside its own file": [
+   "src/components/CharacterPropGlyph.tsx:110 inkForDisc",
+   "src/components/CharacterPropGlyph.tsx:20 PropName",
+   "src/components/CharacterPropGlyph.tsx:452 CharacterAvatarProps",
+   "src/components/CharacterPropGlyph.tsx:55 CharacterPropEntry",
+   "src/components/CharacterPropGlyph.tsx:62 CHARACTER_PROPS",
+   "src/components/CharacterPropGlyph.tsx:99 inkFor",
+   "src/components/CharacterRoleplayEmoticon.tsx:20 CharacterRoleplayEmoticonArt",
+   "src/components/KnowledgeBaseSection.tsx:15 RagStorageOption",
+   "src/components/KnowledgeBaseSection.tsx:23 RagCorpusStatus",
+   "src/components/MainTabPresetAnimatedChips.tsx:164 PresetChipAnimationMode",
+   "src/components/MainTabPresetAnimatedChips.tsx:65 PRESET_CAROUSEL_FADE_IN_MS",
+   "src/components/MainTabPresetAnimatedChips.tsx:67 PRESET_CAROUSEL_FADE_OUT_MS",
+   "src/components/MainTabPresetAnimatedChips.tsx:77 PRESET_DECODE_CHAR_MS",
+   "src/components/SessionContextStrip.tsx:18 SessionContextTurn",
+   "src/components/deck/DeckFocusSlider.tsx:25 assignDeckSliderThumbHostRef",
+   "src/components/icons.tsx:237 PasteClipboardIcon",
+   "src/context/UiScaleContext.tsx:30 useUiScaleContext",
+   "src/data/askMode.ts:19 ASK_MODE_ACCENT",
+   "src/data/bonsaiSettingsNormalizers.ts:162 normalizeScreenshotAttachmentPreset",
+   "src/data/bonsaiSettingsNormalizers.ts:222 normalizeFrozenTestChips",
+   "src/data/bonsaiSettingsNormalizers.ts:237 normalizeNamedOllamaHosts",
+   "src/data/bonsaiSettingsNormalizers.ts:269 normalizeRagCorpusPath",
+   "src/data/bonsaiSettingsNormalizers.ts:276 normalizePresetChipAnimation",
+   "src/data/bonsaiSettingsNormalizers.ts:293 normalizeShowDeveloperTab",
+   "src/data/bonsaiSettingsNormalizers.ts:301 normalizeAskMode",
+   "src/data/bonsaiSettingsNormalizers.ts:311 normalizeOllamaKeepAlive",
+   "src/data/bonsaiSettingsNormalizers.ts:318 normalizeReplyVerbosity",
+   "src/data/bonsaiSettingsNormalizers.ts:345 normalizeCapabilities",
+   "src/data/bonsaiSettingsNormalizers.ts:357 normalizeModelRoutingOrder",
+   "src/data/bonsaiSettingsSchema.ts:34 ModelPolicyTierId",
+   "src/data/bonsaiSettingsSchema.ts:55 ScreenshotMaxDimension",
+   "src/data/characterPlaceholderEmoticonGrids.ts:70 CHARACTER_EMOTICON_PLACEHOLDER_GRIDS",
+   "src/data/characterUiAccent.ts:14 BONSAI_UI_ACCENT_MAIN_FALLBACK",
+   "src/data/deprioritizedModels.ts:38 DEPRIORITIZED_OLLAMA_BASES",
+   "src/data/deprioritizedModels.ts:40 BLOCKED_PULL_CATALOG_TAGS",
+   "src/data/deprioritizedModels.ts:8 DEPRIORITIZED_OLLAMA_TAGS",
+   "src/data/pullModelCatalog.ts:338 PULL_MODEL_CATALOG_TAGS",
+   "src/data/replyLanguage.ts:10 DEFAULT_REPLY_LANGUAGE",
+   "src/data/replyLanguage.ts:12 ReplyLanguageSpecialId",
+   "src/data/replyLanguage.ts:15 STEAM_LANGUAGE_CODES",
+   "src/data/replyLanguage.ts:48 SteamLanguageCode",
+   "src/data/replyLanguage.ts:55 STEAM_LANGUAGE_LABELS",
+   "src/data/replyLanguage.ts:8 REPLY_LANGUAGE_FOLLOW_SYSTEM",
+   "src/data/replyLanguage.ts:88 isSteamLanguageCode",
+   "src/data/replyLanguage.ts:9 REPLY_LANGUAGE_ALWAYS_ENGLISH",
+   "src/data/replyMicroActions.ts:22 REPLY_MICRO_ACTIONS",
+   "src/data/spoilerTitleProfiles.ts:44 LOW_NARRATIVE_TITLES",
+   "src/data/spoilerTitleProfiles.ts:58 PROTECT_PROGRESSION_TITLES",
+   "src/data/steam-input-lexicon.ts:10 SteamInputScope",
+   "src/data/steam-input-lexicon.ts:13 RouteConfidence",
+   "src/data/steam-input-lexicon.ts:31 STEAM_INPUT_LEXICON",
+   "src/data/uiScaleProfile.ts:37 SHOW_IMMERSIVE_UI_SCALE",
+   "src/data/uiScaleProfile.ts:54 UI_SCALE_PROFILE_MULTIPLIER",
+   "src/data/uiScaleProfile.ts:61 UI_SCALE_IMMERSIVE_MAX_MULTIPLIER",
+   "src/features/plugin-shell/pluginStorage.ts:130 loadLastTabSavedAt",
+   "src/features/plugin-shell/tabTitles.tsx:111 BONSAI_TAB_STRIP_ICON_PX",
+   "src/features/plugin-shell/tabTitles.tsx:112 BONSAI_TAB_STRIP_LARGE_ICON_PX",
+   "src/features/plugin-shell/useDesktopNoteSaveModal.tsx:24 DesktopNoteExchange",
+   "src/features/plugin-shell/useOllamaModelsHubModal.tsx:22 ModelPolicyPatch",
+   "src/features/preset-carousel/presetRowLayout.ts:55 PRESET_MARQUEE_END_PAUSE_MS",
+   "src/features/preset-carousel/presetRowLayout.ts:69 marqueeHoldFloorMs",
+   "src/features/preset-carousel/presetSlotRotation.ts:21 SLOT_ROTATION_RECENT_MAX",
+   "src/features/unified-input/constants.ts:75 TAB_TITLE_TAB_CELL_PX",
+   "src/features/unified-input/constants.ts:75 TAB_TITLE_TAB_CELL_PX",
+   "src/features/unified-input/constants.ts:9 UNIFIED_INPUT_HEIGHT_MAX_PX",
+   "src/hooks/useIntentPacks.ts:16 IntentPackSummary",
+   "src/hooks/useMainTabColumnFill.ts:27 MAIN_COLUMN_MIN_HEIGHT_VAR",
+   "src/hooks/useSmoothStreamReveal.ts:157 proseRevealRate",
+   "src/hooks/useVoiceTranscription.ts:17 VOICE_TRANSCRIPTION_POLL_MS",
+   "src/i18n/catalog.ts:10 UiStringCatalog",
+   "src/i18n/catalog.ts:62 UI_STRING_CATALOG",
+   "src/i18n/catalog.ts:72 catalogLangForCode",
+   "src/i18n/catalog.ts:80 formatUiString",
+   "src/styles/bonsaiScopeStylesheet.ts:44 buildGamepadFocusRingStylesheet",
+   "src/styles/bonsaiScopeStylesheet.ts:44 buildPullModelsStylesheet",
+   "src/types/backgroundAsk.ts:12 ShortcutSetupKind",
+   "src/utils/answerBubbleNavigation.ts:192 resolveAnswerBubbleEl",
+   "src/utils/answerBubbleNavigation.ts:208 panelStepDown",
+   "src/utils/answerBubbleNavigation.ts:226 panelStepUp",
+   "src/utils/answerBubbleNavigation.ts:83 findAnswerBubbleByKey",
+   "src/utils/contextChipsFromSnapshot.ts:16 CONTEXT_CHIP_WINDOW",
+   "src/utils/desktopChatAutosave.ts:10 loadAutosavedResponseIds",
+   "src/utils/desktopChatAutosave.ts:8 AUTO_SAVED_RESPONSE_IDS_KEY",
+   "src/utils/focusNavigation.ts:32 isDownNavigationKey",
+   "src/utils/focusNavigation.ts:36 isUpNavigationKey",
+   "src/utils/intentPackSearch.ts:12 IntentPackEntry",
+   "src/utils/liveTurnFocusGraph.ts:118 focusLiveAnswerBubble",
+   "src/utils/liveTurnFocusGraph.ts:123 focusStrategyBranchButton",
+   "src/utils/liveTurnFocusGraph.ts:138 focusStrategyChecklistToggle",
+   "src/utils/liveTurnFocusGraph.ts:146 focusReplyThumbsRow",
+   "src/utils/liveTurnFocusGraph.ts:155 focusReplyStop",
+   "src/utils/liveTurnFocusGraph.ts:183 focusReplyCopy",
+   "src/utils/modelRoutingOrder.ts:29 HIGH_VRAM_SIZE_GB_THRESHOLD",
+   "src/utils/modelRoutingOrder.ts:30 MAX_MODEL_ROUTING_ORDER_LEN",
+   "src/utils/pullModelRecommendations.ts:58 installedCoversRole",
+   "src/utils/sessionRagChipCandidates.ts:11 SessionRagChipCandidatesRpcResult",
+   "src/utils/settingsPanelScroll.ts:12 tryScrollPanelToTop",
+   "src/utils/settingsPanelScroll.ts:21 tryFocusActiveTabStrip",
+   "src/utils/steamInputJump.ts:14 SteamInputJumpMethod",
+   "src/utils/strategyChecklistPersistence.ts:16 saveStrategyChecklistSessionNow",
+   "src/utils/streamMarkdownPrepare.ts:12 StreamWaitKind",
+   "src/utils/streamMarkdownPrepare.ts:14 StreamWaitChip",
+   "src/utils/streamMarkdownPrepare.ts:61 hasBalancedFences"
+  ],
+  "nothing mentions it": [
+   "src/components/CharacterPropGlyph.tsx:463 CharacterAvatar",
+   "src/components/icons.tsx:313 BonsaiLogoIcon",
+   "src/data/askMode.ts:58 ASK_MODE_OUTLINE",
+   "src/data/askMode.ts:58 ASK_MODE_OUTLINE",
+   "src/data/askThinkEffort.ts:38 isAskThinkEffortId",
+   "src/data/bonsaiSettingsSchema.ts:257 DEFAULT_SCREENSHOT_MAX_DIMENSION",
+   "src/data/bonsaiSettingsSchema.ts:291 DEFAULT_MODEL_POLICY_NON_FOSS_UNLOCKED",
+   "src/data/characterCatalog.ts:124 CHARACTER_PICKER_COLUMN_COUNT",
+   "src/data/characterUiAccent.ts:177 assertCharacterAccentMapComplete",
+   "src/data/deckEssentialsTags.ts:14 TIER2_MULTIMODAL_PULL_FALLBACK_TAG",
+   "src/data/deprioritizedModels.ts:52 isBlockedPullCatalogTag",
+   "src/data/modelPolicy.ts:42 MODEL_POLICY_TIER_LABELS",
+   "src/data/pullModelCatalog.ts:342 isCatalogModelTag",
+   "src/data/pullModelCatalog.ts:354 formatReleasedYm",
+   "src/data/replyLanguage.ts:92 isReplyLanguageId",
+   "src/data/uiScaleProfile.ts:13 UI_SCALE_PROFILE_IDS",
+   "src/features/preset-carousel/composePresetSeedsWithSessionRag.ts:66 getSessionRagCarouselCandidates",
+   "src/features/unified-input/constants.ts:102 TAB_TITLE_MAIN_TAB_CELL_PX",
+   "src/features/unified-input/constants.ts:102 TAB_TITLE_MAIN_TAB_CELL_PX",
+   "src/features/unified-input/constants.ts:104 TAB_TITLE_MAIN_ICON_SHIFT_X_PX",
+   "src/features/unified-input/constants.ts:107 TAB_TITLE_DEBUG_TAB_CELL_PX",
+   "src/features/unified-input/constants.ts:107 TAB_TITLE_DEBUG_TAB_CELL_PX",
+   "src/features/unified-input/constants.ts:109 TAB_TITLE_TAB_GAP_PX",
+   "src/features/unified-input/constants.ts:24 UNIFIED_INPUT_EXPAND_AHEAD_PX",
+   "src/features/unified-input/constants.ts:70 BONSAI_FOREST_GREEN_MUTED",
+   "src/features/unified-input/constants.ts:94 BONSAI_CHAT_USER_BUBBLE_MAX_PX",
+   "src/features/unified-input/constants.ts:98 BONSAI_CHAT_TRANSCRIPT_FONT_PX",
+   "src/features/unified-input/constants.ts:99 BONSAI_CHAT_TRANSCRIPT_LINE_HEIGHT",
+   "src/features/unified-input/useUnifiedInputSurface.ts:23 UnifiedInputSurfaceRefs",
+   "src/i18n/keys.ts:24 UI_STRING_KEYS",
+   "src/preview/previewTestHooks.ts:78 getPreviewTestHooks",
+   "src/utils/askThinkingPhases.ts:15 askThinkingStartingDisplay",
+   "src/utils/chatPanelScroll.ts:80 tryScrollPanelFromFocus",
+   "src/utils/contextChipsFromSnapshot.ts:93 ContextChipBodyView",
+   "src/utils/intentPackSearch.ts:28 IntentPackSearchHitKind",
+   "src/utils/liveTurnFocusGraph.ts:230 focusDownFromStrategyBranch",
+   "src/utils/liveTurnFocusGraph.ts:236 focusUpFromStrategyChecklist",
+   "src/utils/liveTurnFocusGraph.ts:242 focusUpFromStrategyBranch",
+   "src/utils/liveTurnFocusGraph.ts:247 focusUpFromReplyUtilityRow",
+   "src/utils/modelRoutingOrder.ts:89 mergePulledTag",
+   "src/utils/permissionDeepLink.ts:49 PERMISSION_TAB_ID",
+   "src/utils/permissionJumpRegistry.ts:80 clearPermissionJumpFocusTarget",
+   "src/utils/permissionJumpRegistry.ts:84 clearPermissionJump"
+  ],
+  "handed straight back out": [
+   "src/data/bonsaiSettingsSchema.ts:37 ASK_THINK_EFFORT_IDS",
+   "src/data/steamLanguages.ts:11 STEAM_LANGUAGE_CODES",
+   "src/data/steamLanguages.ts:12 STEAM_LANGUAGE_LABELS",
+   "src/data/steamLanguages.ts:14 effectiveLangCatalogKey",
+   "src/data/steamLanguages.ts:16 ReplyLanguageDropdownOption",
+   "src/data/steamLanguages.ts:18 SteamLanguageCode",
+   "src/data/steamLanguages.ts:9 REPLY_LANGUAGE_ALWAYS_ENGLISH"
+  ],
+  "only a test or the harness names it": [
+   "src/data/deckEssentialsTags.ts:10 TIER1_ESSENTIALS_PULL_TAGS",
+   "src/data/deckEssentialsTags.ts:16 TIER2_MULTIMODAL_PULL_TAGS",
+   "src/test-harness/fakeDeckyRpc.ts:76 FrontendRpcMethod",
+   "src/utils/focusNavigation.ts:40 isDownNavigationEvent",
+   "src/utils/focusNavigation.ts:46 isUpNavigationEvent"
+  ],
+  "named somewhere else after all": [
+   "src/data/storageKeys.ts:11 DISCLAIMER_STORAGE_KEY",
+   "src/data/storageKeys.ts:22 LOCAL_RUNTIME_BETA_DISMISSED_STORAGE_KEY"
+  ]
+ },
+ "by_file": {
+  "src/features/unified-input/constants.ts": {
+   "exports": [
+    {
+     "name": "UNIFIED_INPUT_HEIGHT_MAX_PX",
+     "line": 9,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "UNIFIED_INPUT_EXPAND_AHEAD_PX",
+     "line": 24,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    },
+    {
+     "name": "BONSAI_FOREST_GREEN_MUTED",
+     "line": 70,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    },
+    {
+     "name": "TAB_TITLE_TAB_CELL_PX",
+     "line": 75,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 2
+    },
+    {
+     "name": "BONSAI_CHAT_USER_BUBBLE_MAX_PX",
+     "line": 94,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    },
+    {
+     "name": "BONSAI_CHAT_TRANSCRIPT_FONT_PX",
+     "line": 98,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    },
+    {
+     "name": "BONSAI_CHAT_TRANSCRIPT_LINE_HEIGHT",
+     "line": 99,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    },
+    {
+     "name": "TAB_TITLE_MAIN_TAB_CELL_PX",
+     "line": 102,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    },
+    {
+     "name": "TAB_TITLE_MAIN_ICON_SHIFT_X_PX",
+     "line": 104,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    },
+    {
+     "name": "TAB_TITLE_DEBUG_TAB_CELL_PX",
+     "line": 107,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    },
+    {
+     "name": "TAB_TITLE_TAB_GAP_PX",
+     "line": 109,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": [
+    {
+     "name": "TAB_TITLE_TAB_CELL_PX",
+     "line": 75,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 2
+    },
+    {
+     "name": "TAB_TITLE_MAIN_TAB_CELL_PX",
+     "line": 102,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    },
+    {
+     "name": "TAB_TITLE_DEBUG_TAB_CELL_PX",
+     "line": 107,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ]
+  },
+  "src/data/bonsaiSettingsNormalizers.ts": {
+   "exports": [
+    {
+     "name": "normalizeScreenshotAttachmentPreset",
+     "line": 162,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "normalizeFrozenTestChips",
+     "line": 222,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "normalizeNamedOllamaHosts",
+     "line": 237,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "normalizeRagCorpusPath",
+     "line": 269,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "normalizePresetChipAnimation",
+     "line": 276,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "normalizeShowDeveloperTab",
+     "line": 293,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "normalizeAskMode",
+     "line": 301,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "normalizeOllamaKeepAlive",
+     "line": 311,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "normalizeReplyVerbosity",
+     "line": 318,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "normalizeCapabilities",
+     "line": 345,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "normalizeModelRoutingOrder",
+     "line": 357,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 2
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/utils/liveTurnFocusGraph.ts": {
+   "exports": [
+    {
+     "name": "focusLiveAnswerBubble",
+     "line": 118,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 3
+    },
+    {
+     "name": "focusStrategyBranchButton",
+     "line": 123,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 3
+    },
+    {
+     "name": "focusStrategyChecklistToggle",
+     "line": 138,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 3
+    },
+    {
+     "name": "focusReplyThumbsRow",
+     "line": 146,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 2
+    },
+    {
+     "name": "focusReplyStop",
+     "line": 155,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 6
+    },
+    {
+     "name": "focusReplyCopy",
+     "line": 183,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "focusDownFromStrategyBranch",
+     "line": 230,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    },
+    {
+     "name": "focusUpFromStrategyChecklist",
+     "line": 236,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    },
+    {
+     "name": "focusUpFromStrategyBranch",
+     "line": 242,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    },
+    {
+     "name": "focusUpFromReplyUtilityRow",
+     "line": 247,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/data/replyLanguage.ts": {
+   "exports": [
+    {
+     "name": "REPLY_LANGUAGE_ALWAYS_ENGLISH",
+     "line": 9,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 6
+    },
+    {
+     "name": "STEAM_LANGUAGE_CODES",
+     "line": 15,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 3
+    },
+    {
+     "name": "STEAM_LANGUAGE_LABELS",
+     "line": 55,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 2
+    },
+    {
+     "name": "isSteamLanguageCode",
+     "line": 88,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 3
+    },
+    {
+     "name": "isReplyLanguageId",
+     "line": 92,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ],
+   "types": [
+    {
+     "name": "ReplyLanguageSpecialId",
+     "line": 12,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "SteamLanguageCode",
+     "line": 48,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 3
+    }
+   ],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": [
+    {
+     "name": "REPLY_LANGUAGE_FOLLOW_SYSTEM",
+     "line": 8,
+     "referenced_by_harness": [
+      "src/data/replyLanguage.test.ts",
+      "src/utils/settingsContracts.test.ts"
+     ],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 7
+    },
+    {
+     "name": "DEFAULT_REPLY_LANGUAGE",
+     "line": 10,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 3
+    }
+   ]
+  },
+  "src/components/CharacterPropGlyph.tsx": {
+   "exports": [
+    {
+     "name": "CHARACTER_PROPS",
+     "line": 62,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 2
+    },
+    {
+     "name": "inkFor",
+     "line": 99,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 2
+    },
+    {
+     "name": "inkForDisc",
+     "line": 110,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "CharacterAvatar",
+     "line": 463,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ],
+   "types": [
+    {
+     "name": "PropName",
+     "line": 20,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 3
+    },
+    {
+     "name": "CharacterPropEntry",
+     "line": 55,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "CharacterAvatarProps",
+     "line": 452,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/data/steamLanguages.ts": {
+   "exports": [
+    {
+     "name": "REPLY_LANGUAGE_ALWAYS_ENGLISH",
+     "line": 9,
+     "referenced_by_harness": [],
+     "kind": "handed straight back out",
+     "fix": "drop the re-export; callers already import it from where it is defined"
+    },
+    {
+     "name": "STEAM_LANGUAGE_CODES",
+     "line": 11,
+     "referenced_by_harness": [],
+     "kind": "handed straight back out",
+     "fix": "drop the re-export; callers already import it from where it is defined"
+    },
+    {
+     "name": "STEAM_LANGUAGE_LABELS",
+     "line": 12,
+     "referenced_by_harness": [],
+     "kind": "handed straight back out",
+     "fix": "drop the re-export; callers already import it from where it is defined"
+    },
+    {
+     "name": "effectiveLangCatalogKey",
+     "line": 14,
+     "referenced_by_harness": [],
+     "kind": "handed straight back out",
+     "fix": "drop the re-export; callers already import it from where it is defined"
+    }
+   ],
+   "types": [
+    {
+     "name": "ReplyLanguageDropdownOption",
+     "line": 16,
+     "referenced_by_harness": [],
+     "kind": "handed straight back out",
+     "fix": "drop the re-export; callers already import it from where it is defined"
+    },
+    {
+     "name": "SteamLanguageCode",
+     "line": 18,
+     "referenced_by_harness": [],
+     "kind": "handed straight back out",
+     "fix": "drop the re-export; callers already import it from where it is defined"
+    }
+   ],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/data/bonsaiSettingsSchema.ts": {
+   "exports": [
+    {
+     "name": "ASK_THINK_EFFORT_IDS",
+     "line": 37,
+     "referenced_by_harness": [],
+     "kind": "handed straight back out",
+     "fix": "drop the re-export; callers already import it from where it is defined"
+    },
+    {
+     "name": "DEFAULT_SCREENSHOT_MAX_DIMENSION",
+     "line": 257,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    },
+    {
+     "name": "DEFAULT_MODEL_POLICY_NON_FOSS_UNLOCKED",
+     "line": 291,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ],
+   "types": [
+    {
+     "name": "ModelPolicyTierId",
+     "line": 34,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 2
+    },
+    {
+     "name": "ScreenshotMaxDimension",
+     "line": 55,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/data/uiScaleProfile.ts": {
+   "exports": [
+    {
+     "name": "UI_SCALE_PROFILE_IDS",
+     "line": 13,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    },
+    {
+     "name": "SHOW_IMMERSIVE_UI_SCALE",
+     "line": 37,
+     "referenced_by_harness": [
+      "src/data/bonsaiSettingsHostileContract.test.ts",
+      "tests/contracts/README.md"
+     ],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "UI_SCALE_PROFILE_MULTIPLIER",
+     "line": 54,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "UI_SCALE_IMMERSIVE_MAX_MULTIPLIER",
+     "line": 61,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/components/MainTabPresetAnimatedChips.tsx": {
+   "exports": [
+    {
+     "name": "PRESET_CAROUSEL_FADE_IN_MS",
+     "line": 65,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 5
+    },
+    {
+     "name": "PRESET_CAROUSEL_FADE_OUT_MS",
+     "line": 67,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 3
+    },
+    {
+     "name": "PRESET_DECODE_CHAR_MS",
+     "line": 77,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "types": [
+    {
+     "name": "PresetChipAnimationMode",
+     "line": 164,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/utils/answerBubbleNavigation.ts": {
+   "exports": [
+    {
+     "name": "findAnswerBubbleByKey",
+     "line": 83,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 3
+    },
+    {
+     "name": "resolveAnswerBubbleEl",
+     "line": 192,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 2
+    },
+    {
+     "name": "panelStepDown",
+     "line": 208,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "panelStepUp",
+     "line": 226,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/utils/focusNavigation.ts": {
+   "exports": [
+    {
+     "name": "isDownNavigationKey",
+     "line": 32,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 2
+    },
+    {
+     "name": "isUpNavigationKey",
+     "line": 36,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 2
+    },
+    {
+     "name": "isDownNavigationEvent",
+     "line": 40,
+     "referenced_by_harness": [
+      "scripts/check-focus-patterns.mjs"
+     ],
+     "kind": "only a test or the harness names it",
+     "fix": "keep, or delete the test with it",
+     "seen_in": [
+      "scripts/check-focus-patterns.mjs"
+     ]
+    },
+    {
+     "name": "isUpNavigationEvent",
+     "line": 46,
+     "referenced_by_harness": [
+      "scripts/check-focus-patterns.mjs"
+     ],
+     "kind": "only a test or the harness names it",
+     "fix": "keep, or delete the test with it",
+     "seen_in": [
+      "scripts/check-focus-patterns.mjs"
+     ]
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/i18n/catalog.ts": {
+   "exports": [
+    {
+     "name": "UI_STRING_CATALOG",
+     "line": 62,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 2
+    },
+    {
+     "name": "catalogLangForCode",
+     "line": 72,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "formatUiString",
+     "line": 80,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "types": [
+    {
+     "name": "UiStringCatalog",
+     "line": 10,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 3
+    }
+   ],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/data/deprioritizedModels.ts": {
+   "exports": [
+    {
+     "name": "DEPRIORITIZED_OLLAMA_TAGS",
+     "line": 8,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "DEPRIORITIZED_OLLAMA_BASES",
+     "line": 38,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "BLOCKED_PULL_CATALOG_TAGS",
+     "line": 40,
+     "referenced_by_harness": [
+      "tests/test_model_selection.py"
+     ],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "isBlockedPullCatalogTag",
+     "line": 52,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/data/pullModelCatalog.ts": {
+   "exports": [
+    {
+     "name": "PULL_MODEL_CATALOG_TAGS",
+     "line": 338,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "isCatalogModelTag",
+     "line": 342,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    },
+    {
+     "name": "formatReleasedYm",
+     "line": 354,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/data/steam-input-lexicon.ts": {
+   "exports": [
+    {
+     "name": "STEAM_INPUT_LEXICON",
+     "line": 31,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "types": [
+    {
+     "name": "SteamInputScope",
+     "line": 10,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "RouteConfidence",
+     "line": 13,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/utils/streamMarkdownPrepare.ts": {
+   "exports": [
+    {
+     "name": "hasBalancedFences",
+     "line": 61,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 2
+    }
+   ],
+   "types": [
+    {
+     "name": "StreamWaitKind",
+     "line": 12,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "StreamWaitChip",
+     "line": 14,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/data/askMode.ts": {
+   "exports": [
+    {
+     "name": "ASK_MODE_OUTLINE",
+     "line": 58,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": [
+    {
+     "name": "ASK_MODE_ACCENT",
+     "line": 19,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 2
+    },
+    {
+     "name": "ASK_MODE_OUTLINE",
+     "line": 58,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ]
+  },
+  "src/data/deckEssentialsTags.ts": {
+   "exports": [
+    {
+     "name": "TIER1_ESSENTIALS_PULL_TAGS",
+     "line": 10,
+     "referenced_by_harness": [
+      "tests/test_backend_helpers.py"
+     ],
+     "kind": "only a test or the harness names it",
+     "fix": "keep, or delete the test with it",
+     "seen_in": [
+      "tests/test_backend_helpers.py"
+     ]
+    },
+    {
+     "name": "TIER2_MULTIMODAL_PULL_FALLBACK_TAG",
+     "line": 14,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    },
+    {
+     "name": "TIER2_MULTIMODAL_PULL_TAGS",
+     "line": 16,
+     "referenced_by_harness": [
+      "tests/test_backend_helpers.py"
+     ],
+     "kind": "only a test or the harness names it",
+     "fix": "keep, or delete the test with it",
+     "seen_in": [
+      "tests/test_backend_helpers.py"
+     ]
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/utils/modelRoutingOrder.ts": {
+   "exports": [
+    {
+     "name": "HIGH_VRAM_SIZE_GB_THRESHOLD",
+     "line": 29,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "MAX_MODEL_ROUTING_ORDER_LEN",
+     "line": 30,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 2
+    },
+    {
+     "name": "mergePulledTag",
+     "line": 89,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/data/characterUiAccent.ts": {
+   "exports": [
+    {
+     "name": "BONSAI_UI_ACCENT_MAIN_FALLBACK",
+     "line": 14,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "assertCharacterAccentMapComplete",
+     "line": 177,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/components/icons.tsx": {
+   "exports": [
+    {
+     "name": "PasteClipboardIcon",
+     "line": 237,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "BonsaiLogoIcon",
+     "line": 313,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/features/plugin-shell/tabTitles.tsx": {
+   "exports": [
+    {
+     "name": "BONSAI_TAB_STRIP_ICON_PX",
+     "line": 111,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 4
+    },
+    {
+     "name": "BONSAI_TAB_STRIP_LARGE_ICON_PX",
+     "line": 112,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 2
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/data/storageKeys.ts": {
+   "exports": [
+    {
+     "name": "DISCLAIMER_STORAGE_KEY",
+     "line": 11,
+     "referenced_by_harness": [],
+     "kind": "named somewhere else after all",
+     "fix": "check by hand before deleting",
+     "seen_in": [
+      "src/hooks/useDisclaimerAndLocalRuntimeGates.tsx"
+     ]
+    },
+    {
+     "name": "LOCAL_RUNTIME_BETA_DISMISSED_STORAGE_KEY",
+     "line": 22,
+     "referenced_by_harness": [],
+     "kind": "named somewhere else after all",
+     "fix": "check by hand before deleting",
+     "seen_in": [
+      "src/hooks/useDisclaimerAndLocalRuntimeGates.tsx"
+     ]
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/features/preset-carousel/presetRowLayout.ts": {
+   "exports": [
+    {
+     "name": "PRESET_MARQUEE_END_PAUSE_MS",
+     "line": 55,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "marqueeHoldFloorMs",
+     "line": 69,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/data/spoilerTitleProfiles.ts": {
+   "exports": [
+    {
+     "name": "LOW_NARRATIVE_TITLES",
+     "line": 44,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "PROTECT_PROGRESSION_TITLES",
+     "line": 58,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/utils/permissionJumpRegistry.ts": {
+   "exports": [
+    {
+     "name": "clearPermissionJumpFocusTarget",
+     "line": 80,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    },
+    {
+     "name": "clearPermissionJump",
+     "line": 84,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/utils/contextChipsFromSnapshot.ts": {
+   "exports": [
+    {
+     "name": "CONTEXT_CHIP_WINDOW",
+     "line": 16,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "types": [
+    {
+     "name": "ContextChipBodyView",
+     "line": 93,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/styles/bonsaiScopeStylesheet.ts": {
+   "exports": [
+    {
+     "name": "buildGamepadFocusRingStylesheet",
+     "line": 44,
+     "referenced_by_harness": [
+      "src/styles/presetChipFocusRing.test.ts"
+     ],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "buildPullModelsStylesheet",
+     "line": 44,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/utils/desktopChatAutosave.ts": {
+   "exports": [
+    {
+     "name": "AUTO_SAVED_RESPONSE_IDS_KEY",
+     "line": 8,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 2
+    },
+    {
+     "name": "loadAutosavedResponseIds",
+     "line": 10,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 2
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/utils/settingsPanelScroll.ts": {
+   "exports": [
+    {
+     "name": "tryScrollPanelToTop",
+     "line": 12,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "tryFocusActiveTabStrip",
+     "line": 21,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/components/KnowledgeBaseSection.tsx": {
+   "exports": [],
+   "types": [
+    {
+     "name": "RagStorageOption",
+     "line": 15,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 4
+    },
+    {
+     "name": "RagCorpusStatus",
+     "line": 23,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 3
+    }
+   ],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/utils/intentPackSearch.ts": {
+   "exports": [],
+   "types": [
+    {
+     "name": "IntentPackEntry",
+     "line": 12,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    },
+    {
+     "name": "IntentPackSearchHitKind",
+     "line": 28,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/data/modelPolicy.ts": {
+   "exports": [
+    {
+     "name": "MODEL_POLICY_TIER_LABELS",
+     "line": 42,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/features/plugin-shell/pluginStorage.ts": {
+   "exports": [
+    {
+     "name": "loadLastTabSavedAt",
+     "line": 130,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/context/UiScaleContext.tsx": {
+   "exports": [
+    {
+     "name": "useUiScaleContext",
+     "line": 30,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/preview/previewTestHooks.ts": {
+   "exports": [
+    {
+     "name": "getPreviewTestHooks",
+     "line": 78,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/data/characterCatalog.ts": {
+   "exports": [
+    {
+     "name": "CHARACTER_PICKER_COLUMN_COUNT",
+     "line": 124,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/data/replyMicroActions.ts": {
+   "exports": [
+    {
+     "name": "REPLY_MICRO_ACTIONS",
+     "line": 22,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/hooks/useSmoothStreamReveal.ts": {
+   "exports": [
+    {
+     "name": "proseRevealRate",
+     "line": 157,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 2
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/utils/askThinkingPhases.ts": {
+   "exports": [
+    {
+     "name": "askThinkingStartingDisplay",
+     "line": 15,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/utils/chatPanelScroll.ts": {
+   "exports": [
+    {
+     "name": "tryScrollPanelFromFocus",
+     "line": 80,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/utils/permissionDeepLink.ts": {
+   "exports": [
+    {
+     "name": "PERMISSION_TAB_ID",
+     "line": 49,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/utils/pullModelRecommendations.ts": {
+   "exports": [
+    {
+     "name": "installedCoversRole",
+     "line": 58,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/features/preset-carousel/presetSlotRotation.ts": {
+   "exports": [
+    {
+     "name": "SLOT_ROTATION_RECENT_MAX",
+     "line": 21,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/features/preset-carousel/composePresetSeedsWithSessionRag.ts": {
+   "exports": [
+    {
+     "name": "getSessionRagCarouselCandidates",
+     "line": 66,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/hooks/useVoiceTranscription.ts": {
+   "exports": [
+    {
+     "name": "VOICE_TRANSCRIPTION_POLL_MS",
+     "line": 17,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/components/deck/DeckFocusSlider.tsx": {
+   "exports": [
+    {
+     "name": "assignDeckSliderThumbHostRef",
+     "line": 25,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/data/askThinkEffort.ts": {
+   "exports": [
+    {
+     "name": "isAskThinkEffortId",
+     "line": 38,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/i18n/keys.ts": {
+   "exports": [
+    {
+     "name": "UI_STRING_KEYS",
+     "line": 24,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/utils/strategyChecklistPersistence.ts": {
+   "exports": [
+    {
+     "name": "saveStrategyChecklistSessionNow",
+     "line": 16,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/data/characterPlaceholderEmoticonGrids.ts": {
+   "exports": [
+    {
+     "name": "CHARACTER_EMOTICON_PLACEHOLDER_GRIDS",
+     "line": 70,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 2
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/hooks/useMainTabColumnFill.ts": {
+   "exports": [
+    {
+     "name": "MAIN_COLUMN_MIN_HEIGHT_VAR",
+     "line": 27,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 4
+    }
+   ],
+   "types": [],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/test-harness/fakeDeckyRpc.ts": {
+   "exports": [],
+   "types": [
+    {
+     "name": "FrontendRpcMethod",
+     "line": 76,
+     "referenced_by_harness": [
+      "src/test-harness/fakeDeckyRpc.ts"
+     ],
+     "kind": "only a test or the harness names it",
+     "fix": "keep, or delete the test with it",
+     "seen_in": [
+      "src/test-harness/fakeDeckyRpc.ts"
+     ]
+    }
+   ],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/utils/steamInputJump.ts": {
+   "exports": [],
+   "types": [
+    {
+     "name": "SteamInputJumpMethod",
+     "line": 14,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/features/unified-input/useUnifiedInputSurface.ts": {
+   "exports": [],
+   "types": [
+    {
+     "name": "UnifiedInputSurfaceRefs",
+     "line": 23,
+     "referenced_by_harness": [],
+     "kind": "nothing mentions it",
+     "fix": "delete it"
+    }
+   ],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/hooks/useIntentPacks.ts": {
+   "exports": [],
+   "types": [
+    {
+     "name": "IntentPackSummary",
+     "line": 16,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 5
+    }
+   ],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/features/plugin-shell/useOllamaModelsHubModal.tsx": {
+   "exports": [],
+   "types": [
+    {
+     "name": "ModelPolicyPatch",
+     "line": 22,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/features/plugin-shell/useDesktopNoteSaveModal.tsx": {
+   "exports": [],
+   "types": [
+    {
+     "name": "DesktopNoteExchange",
+     "line": 24,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/components/CharacterRoleplayEmoticon.tsx": {
+   "exports": [],
+   "types": [
+    {
+     "name": "CharacterRoleplayEmoticonArt",
+     "line": 20,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/types/backgroundAsk.ts": {
+   "exports": [],
+   "types": [
+    {
+     "name": "ShortcutSetupKind",
+     "line": 12,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 2
+    }
+   ],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/components/SessionContextStrip.tsx": {
+   "exports": [],
+   "types": [
+    {
+     "name": "SessionContextTurn",
+     "line": 18,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 3
+    }
+   ],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/utils/sessionRagChipCandidates.ts": {
+   "exports": [],
+   "types": [
+    {
+     "name": "SessionRagChipCandidatesRpcResult",
+     "line": 11,
+     "referenced_by_harness": [],
+     "kind": "used inside its own file",
+     "fix": "drop the export word, keep the code",
+     "internal_uses": 1
+    }
+   ],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  }
+ }
+}

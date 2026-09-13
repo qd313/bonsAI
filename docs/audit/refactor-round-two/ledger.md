@@ -19,6 +19,7 @@ roughly how many tokens it used, and how it finished.
 | 2026-09-13 | 1 Docs diet | Settle the six open sorting questions | Sonnet high | 38 | 144,000 | done |
 | 2026-09-13 | 1 Docs diet | Archive the approved list | Sonnet high | 81 | 321,000 | done |
 | 2026-09-13 | 1 Docs diet | Sort the saved Deck recordings | Sonnet high | 75 | 183,000 | done |
+| 2026-09-13 | 2 Map and measure | The whole phase, no workers | Opus xhigh | 41 | 118,000 | done |
 
 ## Running total
 
@@ -26,3 +27,9 @@ roughly how many tokens it used, and how it finished.
 |---|---|---|---|
 | 0 Tools | 4 | 279 | 693,000 |
 | 1 Docs diet | 7 | 576 | 1,551,000 |
+| 2 Map and measure | 0 | 41 | 118,000 |
+
+Phase 2 is the cheapest phase so far by a wide margin — about a thirteenth of the docs diet. It
+spawned no workers at all: a script did the measuring, and the one session read only the summaries
+it produced. That is the "cheap before expensive" rule paying off, and it is worth remembering when
+sizing the phases that are left.

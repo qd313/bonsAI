@@ -1,0 +1,41 @@
+{
+ "count": 20,
+ "checked": 302,
+ "by_folder": {
+  "src/styles/sections": [
+   "src/styles/sections/gamepadAndPullModels.ts",
+   "src/styles/sections/scopeBase.ts",
+   "src/styles/sections/section-1.ts",
+   "src/styles/sections/section-2.ts",
+   "src/styles/sections/section-3.ts",
+   "src/styles/sections/section-4.ts",
+   "src/styles/sections/section-5.ts",
+   "src/styles/sections/section-6.ts",
+   "src/styles/sections/section-7.ts",
+   "src/styles/sections/section-8.ts",
+   "src/styles/sections/section-9.ts",
+   "src/styles/sections/uiScalePx.ts"
+  ],
+  "py_modules/backend/services": [
+   "py_modules/backend/services/__init__.py",
+   "py_modules/backend/services/desktop_note_service.py"
+  ],
+  "src": [
+   "src/pluginVersion.ts",
+   "src/types.d.ts"
+  ],
+  "py_modules/backend": [
+   "py_modules/backend/__init__.py"
+  ],
+  "src/data": [
+   "src/data/characterPlaceholderEmoticonGrids.ts"
+  ],
+  "src/types": [
+   "src/types/bonsaiUi.ts"
+  ],
+  "src/utils": [
+   "src/utils/runningGameCharacterSuggestions.ts"
+  ]
+ },
+ "other_problems": {}
+}

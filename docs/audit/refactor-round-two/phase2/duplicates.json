@@ -1,0 +1,910 @@
+{
+ "app": {
+  "error": null,
+  "duplicated_lines": 1847,
+  "duplicated_lines_excluding_front_end_tests": 877,
+  "file_pairs": 83,
+  "lines_across_pairs": 2008,
+  "within_one_file": [
+   "hooks/useBonsaiAskOrchestration.test.ts",
+   "features/preset-carousel/presetRowNav.test.ts",
+   "components/MainTabPresetAnimatedChips.tsx",
+   "utils/answerBubbleNavigation.test.ts",
+   "features/voice/useVoiceAskInput.test.ts",
+   "components/icons.tsx",
+   "hooks/usePluginSettings.ts",
+   "index.tsx",
+   "hooks/useDockClearanceOnFocus.test.ts",
+   "components/MainTabChatTranscript.readAloud.test.tsx",
+   "features/unified-input/useUnifiedInputSurface.test.ts",
+   "components/SettingsTab.tsx",
+   "components/CharacterPickerModal.tsx",
+   "py_modules/backend/services/strategy_guide_parse.py",
+   "py_modules/backend/services/voice_transcription_service.py",
+   "hooks/useReadAloud.test.ts",
+   "main.py",
+   "components/MainTabUnifiedAskBar.tsx",
+   "components/OllamaWhereAiRunsSection.tsx",
+   "components/VoiceInputSettingsSection.test.tsx",
+   "hooks/useChatSlots.test.ts",
+   "hooks/useStreamScrollPin.test.ts",
+   "utils/buildAnswerBubbleElement.test.tsx",
+   "py_modules/backend/services/desktop_note_service.py",
+   "hooks/useMainTabAskBarFocus.ts",
+   "components/DeveloperTab.tsx",
+   "components/PullModelsModal.tsx",
+   "components/KnowledgeBaseSection.tsx",
+   "components/PullModelsModal.test.tsx",
+   "components/MainTabPresetAnimatedChips.test.tsx",
+   "utils/steamInputJump.ts",
+   "hooks/useIntentPacks.ts",
+   "utils/buildAnswerBubbleElement.tsx",
+   "utils/buildReplyActionsElement.test.tsx",
+   "hooks/useSmoothStreamReveal.test.ts",
+   "utils/answerStopRegistry.test.ts",
+   "components/MainTabChatTranscript.permissionHintFocus.test.ts",
+   "data/pullModelCatalog.ts",
+   "hooks/useKidsLock.test.ts",
+   "utils/answerBubbleElRegistry.test.ts",
+   "components/ContextChipLadder.test.tsx",
+   "features/preset-carousel/carouselState.test.ts",
+   "utils/chatSlotTurns.test.ts"
+  ],
+  "top_pairs": [
+   {
+    "files": [
+     "hooks/useBonsaiAskOrchestration.test.ts",
+     "hooks/useBonsaiAskOrchestration.test.ts"
+    ],
+    "fragments": 18,
+    "lines": 193,
+    "biggest": {
+     "lines": 20,
+     "at": "hooks/useBonsaiAskOrchestration.test.ts:948-967",
+     "and": "hooks/useBonsaiAskOrchestration.test.ts:992-1009"
+    }
+   },
+   {
+    "files": [
+     "features/preset-carousel/presetRowNav.test.ts",
+     "features/preset-carousel/presetRowNav.test.ts"
+    ],
+    "fragments": 9,
+    "lines": 82,
+    "biggest": {
+     "lines": 12,
+     "at": "features/preset-carousel/presetRowNav.test.ts:121-132",
+     "and": "features/preset-carousel/presetRowNav.test.ts:158-170"
+    }
+   },
+   {
+    "files": [
+     "components/MainTabAskModeMenuPopover.tsx",
+     "components/MainTabAttachMenuPopover.tsx"
+    ],
+    "fragments": 6,
+    "lines": 74,
+    "biggest": {
+     "lines": 20,
+     "at": "components/MainTabAskModeMenuPopover.tsx:89-108",
+     "and": "components/MainTabAttachMenuPopover.tsx:100-119"
+    }
+   },
+   {
+    "files": [
+     "components/MainTabPresetAnimatedChips.tsx",
+     "components/MainTabPresetAnimatedChips.tsx"
+    ],
+    "fragments": 6,
+    "lines": 69,
+    "biggest": {
+     "lines": 16,
+     "at": "components/MainTabPresetAnimatedChips.tsx:574-589",
+     "and": "components/MainTabPresetAnimatedChips.tsx:782-797"
+    }
+   },
+   {
+    "files": [
+     "utils/answerBubbleNavigation.test.ts",
+     "utils/answerBubbleNavigation.test.ts"
+    ],
+    "fragments": 5,
+    "lines": 57,
+    "biggest": {
+     "lines": 16,
+     "at": "utils/answerBubbleNavigation.test.ts:257-272",
+     "and": "utils/answerBubbleNavigation.test.ts:308-322"
+    }
+   },
+   {
+    "files": [
+     "features/voice/useVoiceAskInput.test.ts",
+     "features/voice/useVoiceAskInput.test.ts"
+    ],
+    "fragments": 3,
+    "lines": 53,
+    "biggest": {
+     "lines": 30,
+     "at": "features/voice/useVoiceAskInput.test.ts:35-64",
+     "and": "features/voice/useVoiceAskInput.test.ts:102-131"
+    }
+   },
+   {
+    "files": [
+     "hooks/useBonsaiAskOrchestration.test.ts",
+     "utils/bonsaiSessionSurvival.test.ts"
+    ],
+    "fragments": 1,
+    "lines": 52,
+    "biggest": {
+     "lines": 52,
+     "at": "hooks/useBonsaiAskOrchestration.test.ts:43-94",
+     "and": "utils/bonsaiSessionSurvival.test.ts:29-77"
+    }
+   },
+   {
+    "files": [
+     "components/icons.tsx",
+     "components/icons.tsx"
+    ],
+    "fragments": 5,
+    "lines": 49,
+    "biggest": {
+     "lines": 10,
+     "at": "components/icons.tsx:61-70",
+     "and": "components/icons.tsx:252-255"
+    }
+   },
+   {
+    "files": [
+     "hooks/usePluginSettings.ts",
+     "utils/settingsContracts.test.ts"
+    ],
+    "fragments": 2,
+    "lines": 48,
+    "biggest": {
+     "lines": 29,
+     "at": "hooks/usePluginSettings.ts:23-51",
+     "and": "utils/settingsContracts.test.ts:467-495"
+    }
+   },
+   {
+    "files": [
+     "hooks/usePluginSettings.ts",
+     "hooks/usePluginSettings.ts"
+    ],
+    "fragments": 1,
+    "lines": 48,
+    "biggest": {
+     "lines": 48,
+     "at": "hooks/usePluginSettings.ts:178-225",
+     "and": "hooks/usePluginSettings.ts:435-482"
+    }
+   },
+   {
+    "files": [
+     "index.tsx",
+     "index.tsx"
+    ],
+    "fragments": 1,
+    "lines": 48,
+    "biggest": {
+     "lines": 48,
+     "at": "index.tsx:669-716",
+     "and": "index.tsx:719-766"
+    }
+   },
+   {
+    "files": [
+     "hooks/useDockClearanceOnFocus.test.ts",
+     "hooks/useDockClearanceOnFocus.test.ts"
+    ],
+    "fragments": 3,
+    "lines": 43,
+    "biggest": {
+     "lines": 18,
+     "at": "hooks/useDockClearanceOnFocus.test.ts:230-247",
+     "and": "hooks/useDockClearanceOnFocus.test.ts:239-254"
+    }
+   },
+   {
+    "files": [
+     "components/MainTabAskModeMenuPopover.tsx",
+     "components/SettingsTabAccentIntensityMenuPopover.tsx"
+    ],
+    "fragments": 3,
+    "lines": 39,
+    "biggest": {
+     "lines": 20,
+     "at": "components/MainTabAskModeMenuPopover.tsx:89-108",
+     "and": "components/SettingsTabAccentIntensityMenuPopover.tsx:48-67"
+    }
+   },
+   {
+    "files": [
+     "components/MainTabChatTranscript.readAloud.test.tsx",
+     "components/MainTabChatTranscript.readAloud.test.tsx"
+    ],
+    "fragments": 2,
+    "lines": 38,
+    "biggest": {
+     "lines": 23,
+     "at": "components/MainTabChatTranscript.readAloud.test.tsx:198-220",
+     "and": "components/MainTabChatTranscript.readAloud.test.tsx:234-251"
+    }
+   },
+   {
+    "files": [
+     "components/SettingsTab.modalReturnFocus.test.tsx",
+     "components/SettingsTabPresetSingleChip.test.tsx"
+    ],
+    "fragments": 1,
+    "lines": 38,
+    "biggest": {
+     "lines": 38,
+     "at": "components/SettingsTab.modalReturnFocus.test.tsx:22-59",
+     "and": "components/SettingsTabPresetSingleChip.test.tsx:13-50"
+    }
+   },
+   {
+    "files": [
+     "features/unified-input/useUnifiedInputSurface.test.ts",
+     "features/unified-input/useUnifiedInputSurface.test.ts"
+    ],
+    "fragments": 3,
+    "lines": 38,
+    "biggest": {
+     "lines": 17,
+     "at": "features/unified-input/useUnifiedInputSurface.test.ts:118-134",
+     "and": "features/unified-input/useUnifiedInputSurface.test.ts:139-153"
+    }
+   },
+   {
+    "files": [
+     "components/SettingsTab.tsx",
+     "components/SettingsTab.tsx"
+    ],
+    "fragments": 2,
+    "lines": 37,
+    "biggest": {
+     "lines": 20,
+     "at": "components/SettingsTab.tsx:570-589",
+     "and": "components/SettingsTab.tsx:611-630"
+    }
+   },
+   {
+    "files": [
+     "components/OllamaThinkingEffortRow.tsx",
+     "components/SettingsTab.tsx"
+    ],
+    "fragments": 2,
+    "lines": 36,
+    "biggest": {
+     "lines": 18,
+     "at": "components/OllamaThinkingEffortRow.tsx:65-82",
+     "and": "components/SettingsTab.tsx:273-288"
+    }
+   },
+   {
+    "files": [
+     "components/OllamaReplyVerbositySlider.tsx",
+     "components/SettingsTabOllamaKeepAliveSlider.tsx"
+    ],
+    "fragments": 3,
+    "lines": 35,
+    "biggest": {
+     "lines": 17,
+     "at": "components/OllamaReplyVerbositySlider.tsx:40-56",
+     "and": "components/SettingsTabOllamaKeepAliveSlider.tsx:41-57"
+    }
+   },
+   {
+    "files": [
+     "components/MainTabChatTranscript.stoppedNotice.test.tsx",
+     "components/MainTabChatTranscript.turnTitle.test.tsx"
+    ],
+    "fragments": 2,
+    "lines": 34,
+    "biggest": {
+     "lines": 18,
+     "at": "components/MainTabChatTranscript.stoppedNotice.test.tsx:26-43",
+     "and": "components/MainTabChatTranscript.turnTitle.test.tsx:29-46"
+    }
+   },
+   {
+    "files": [
+     "components/CharacterPickerModal.tsx",
+     "components/CharacterPickerModal.tsx"
+    ],
+    "fragments": 2,
+    "lines": 32,
+    "biggest": {
+     "lines": 18,
+     "at": "components/CharacterPickerModal.tsx:424-441",
+     "and": "components/CharacterPickerModal.tsx:631-648"
+    }
+   },
+   {
+    "files": [
+     "py_modules/backend/services/strategy_guide_parse.py",
+     "py_modules/backend/services/strategy_guide_parse.py"
+    ],
+    "fragments": 3,
+    "lines": 31,
+    "biggest": {
+     "lines": 11,
+     "at": "py_modules/backend/services/strategy_guide_parse.py:253-263",
+     "and": "py_modules/backend/services/strategy_guide_parse.py:405-415"
+    }
+   },
+   {
+    "files": [
+     "py_modules/backend/services/voice_transcription_service.py",
+     "py_modules/backend/services/voice_transcription_service.py"
+    ],
+    "fragments": 2,
+    "lines": 31,
+    "biggest": {
+     "lines": 17,
+     "at": "py_modules/backend/services/voice_transcription_service.py:186-202",
+     "and": "py_modules/backend/services/voice_transcription_service.py:260-276"
+    }
+   },
+   {
+    "files": [
+     "utils/answerBubbleNavigation.ts",
+     "utils/liveTurnFocusGraph.ts"
+    ],
+    "fragments": 1,
+    "lines": 26,
+    "biggest": {
+     "lines": 26,
+     "at": "utils/answerBubbleNavigation.ts:118-143",
+     "and": "utils/liveTurnFocusGraph.ts:62-71"
+    }
+   },
+   {
+    "files": [
+     "components/MainTab.tsx",
+     "components/MainTabChatTranscript.tsx"
+    ],
+    "fragments": 3,
+    "lines": 24,
+    "biggest": {
+     "lines": 11,
+     "at": "components/MainTab.tsx:115-125",
+     "and": "components/MainTabChatTranscript.tsx:92-102"
+    }
+   },
+   {
+    "files": [
+     "hooks/useReadAloud.test.ts",
+     "hooks/useReadAloud.test.ts"
+    ],
+    "fragments": 2,
+    "lines": 24,
+    "biggest": {
+     "lines": 15,
+     "at": "hooks/useReadAloud.test.ts:44-58",
+     "and": "hooks/useReadAloud.test.ts:174-187"
+    }
+   },
+   {
+    "files": [
+     "main.py",
+     "main.py"
+    ],
+    "fragments": 3,
+    "lines": 23,
+    "biggest": {
+     "lines": 9,
+     "at": "main.py:2180-2188",
+     "and": "main.py:2213-2221"
+    }
+   },
+   {
+    "files": [
+     "components/MainTabUnifiedAskBar.tsx",
+     "components/MainTabUnifiedAskBar.tsx"
+    ],
+    "fragments": 2,
+    "lines": 22,
+    "biggest": {
+     "lines": 13,
+     "at": "components/MainTabUnifiedAskBar.tsx:524-536",
+     "and": "components/MainTabUnifiedAskBar.tsx:709-721"
+    }
+   },
+   {
+    "files": [
+     "main.py",
+     "py_modules/backend/services/ollama_ask_service.py"
+    ],
+    "fragments": 1,
+    "lines": 21,
+    "biggest": {
+     "lines": 21,
+     "at": "main.py:3053-3073",
+     "and": "py_modules/backend/services/ollama_ask_service.py:59-79"
+    }
+   },
+   {
+    "files": [
+     "components/OllamaWhereAiRunsSection.tsx",
+     "components/OllamaWhereAiRunsSection.tsx"
+    ],
+    "fragments": 2,
+    "lines": 19,
+    "biggest": {
+     "lines": 13,
+     "at": "components/OllamaWhereAiRunsSection.tsx:698-710",
+     "and": "components/OllamaWhereAiRunsSection.tsx:728-740"
+    }
+   },
+   {
+    "files": [
+     "py_modules/backend/scripts/read_host_clipboard.sh",
+     "py_modules/backend/scripts/write_host_clipboard.sh"
+    ],
+    "fragments": 1,
+    "lines": 18,
+    "biggest": {
+     "lines": 18,
+     "at": "py_modules/backend/scripts/read_host_clipboard.sh:8-25",
+     "and": "py_modules/backend/scripts/write_host_clipboard.sh:10-27"
+    }
+   },
+   {
+    "files": [
+     "components/MainTabChatTranscript.emptySlotPreview.test.tsx",
+     "components/MainTabChatTranscript.permHintNavRegistration.test.tsx"
+    ],
+    "fragments": 1,
+    "lines": 18,
+    "biggest": {
+     "lines": 18,
+     "at": "components/MainTabChatTranscript.emptySlotPreview.test.tsx:25-42",
+     "and": "components/MainTabChatTranscript.permHintNavRegistration.test.tsx:27-44"
+    }
+   },
+   {
+    "files": [
+     "components/VoiceInputSettingsSection.test.tsx",
+     "components/VoiceInputSettingsSection.test.tsx"
+    ],
+    "fragments": 2,
+    "lines": 18,
+    "biggest": {
+     "lines": 9,
+     "at": "components/VoiceInputSettingsSection.test.tsx:27-35",
+     "and": "components/VoiceInputSettingsSection.test.tsx:105-113"
+    }
+   },
+   {
+    "files": [
+     "hooks/useChatSlots.test.ts",
+     "hooks/useChatSlots.test.ts"
+    ],
+    "fragments": 2,
+    "lines": 18,
+    "biggest": {
+     "lines": 11,
+     "at": "hooks/useChatSlots.test.ts:24-34",
+     "and": "hooks/useChatSlots.test.ts:59-70"
+    }
+   },
+   {
+    "files": [
+     "hooks/useStreamScrollPin.test.ts",
+     "hooks/useStreamScrollPin.test.ts"
+    ],
+    "fragments": 3,
+    "lines": 18,
+    "biggest": {
+     "lines": 6,
+     "at": "hooks/useStreamScrollPin.test.ts:168-173",
+     "and": "hooks/useStreamScrollPin.test.ts:184-189"
+    }
+   },
+   {
+    "files": [
+     "utils/buildAnswerBubbleElement.test.tsx",
+     "utils/buildAnswerBubbleElement.test.tsx"
+    ],
+    "fragments": 3,
+    "lines": 18,
+    "biggest": {
+     "lines": 6,
+     "at": "utils/buildAnswerBubbleElement.test.tsx:178-183",
+     "and": "utils/buildAnswerBubbleElement.test.tsx:198-203"
+    }
+   },
+   {
+    "files": [
+     "py_modules/backend/services/desktop_note_service.py",
+     "py_modules/backend/services/desktop_note_service.py"
+    ],
+    "fragments": 1,
+    "lines": 17,
+    "biggest": {
+     "lines": 17,
+     "at": "py_modules/backend/services/desktop_note_service.py:318-334",
+     "and": "py_modules/backend/services/desktop_note_service.py:415-431"
+    }
+   },
+   {
+    "files": [
+     "components/MainTab.tsx",
+     "components/MainTabUnifiedAskBar.tsx"
+    ],
+    "fragments": 1,
+    "lines": 17,
+    "biggest": {
+     "lines": 17,
+     "at": "components/MainTab.tsx:65-81",
+     "and": "components/MainTabUnifiedAskBar.tsx:67-83"
+    }
+   },
+   {
+    "files": [
+     "hooks/useBonsaiAskOrchestration.test.ts",
+     "utils/settingsContracts.test.ts"
+    ],
+    "fragments": 1,
+    "lines": 17,
+    "biggest": {
+     "lines": 17,
+     "at": "hooks/useBonsaiAskOrchestration.test.ts:77-93",
+     "and": "utils/settingsContracts.test.ts:290-303"
+    }
+   },
+   {
+    "files": [
+     "utils/answerStopRegistry.ts",
+     "utils/drgGlossaryTermRegistry.ts"
+    ],
+    "fragments": 1,
+    "lines": 17,
+    "biggest": {
+     "lines": 17,
+     "at": "utils/answerStopRegistry.ts:96-112",
+     "and": "utils/drgGlossaryTermRegistry.ts:97-113"
+    }
+   }
+  ]
+ },
+ "backend_tests": {
+  "error": null,
+  "duplicated_lines": 2286,
+  "duplicated_lines_python_only": 2076,
+  "file_pairs": 59,
+  "lines_across_pairs": 2444,
+  "top_pairs": [
+   {
+    "files": [
+     "test_knowledge_base_service.py",
+     "test_knowledge_base_service.py"
+    ],
+    "fragments": 26,
+    "lines": 387,
+    "biggest": {
+     "lines": 28,
+     "at": "test_knowledge_base_service.py:835-862",
+     "and": "test_knowledge_base_service.py:898-923"
+    }
+   },
+   {
+    "files": [
+     "test_settings_service.py",
+     "test_settings_service.py"
+    ],
+    "fragments": 28,
+    "lines": 385,
+    "biggest": {
+     "lines": 23,
+     "at": "test_settings_service.py:507-529",
+     "and": "test_settings_service.py:645-666"
+    }
+   },
+   {
+    "files": [
+     "test_ollama_service.py",
+     "test_ollama_service.py"
+    ],
+    "fragments": 10,
+    "lines": 164,
+    "biggest": {
+     "lines": 21,
+     "at": "test_ollama_service.py:88-108",
+     "and": "test_ollama_service.py:760-779"
+    }
+   },
+   {
+    "files": [
+     "preview-suite/tier2-deep.json",
+     "preview-suite/tier2-deep.json"
+    ],
+    "fragments": 5,
+    "lines": 116,
+    "biggest": {
+     "lines": 29,
+     "at": "preview-suite/tier2-deep.json:222-250",
+     "and": "preview-suite/tier2-deep.json:272-300"
+    }
+   },
+   {
+    "files": [
+     "test_ollama_ask_service.py",
+     "test_ollama_ask_service.py"
+    ],
+    "fragments": 4,
+    "lines": 88,
+    "biggest": {
+     "lines": 31,
+     "at": "test_ollama_ask_service.py:246-276",
+     "and": "test_ollama_ask_service.py:291-321"
+    }
+   },
+   {
+    "files": [
+     "preview-suite/tier3-ui-navigation.json",
+     "preview-suite/tier3-ui-navigation.json"
+    ],
+    "fragments": 3,
+    "lines": 79,
+    "biggest": {
+     "lines": 29,
+     "at": "preview-suite/tier3-ui-navigation.json:616-644",
+     "and": "preview-suite/tier3-ui-navigation.json:683-711"
+    }
+   },
+   {
+    "files": [
+     "test_plugin_data_reset.py",
+     "test_plugin_data_reset.py"
+    ],
+    "fragments": 6,
+    "lines": 63,
+    "biggest": {
+     "lines": 14,
+     "at": "test_plugin_data_reset.py:74-87",
+     "and": "test_plugin_data_reset.py:145-158"
+    }
+   },
+   {
+    "files": [
+     "test_eval_kb_answers.py",
+     "test_eval_kb_answers.py"
+    ],
+    "fragments": 5,
+    "lines": 59,
+    "biggest": {
+     "lines": 14,
+     "at": "test_eval_kb_answers.py:85-98",
+     "and": "test_eval_kb_answers.py:820-824"
+    }
+   },
+   {
+    "files": [
+     "test_build_rag_embedding_guarantee.py",
+     "test_publish_corpus_embedding_guarantee.py"
+    ],
+    "fragments": 2,
+    "lines": 57,
+    "biggest": {
+     "lines": 50,
+     "at": "test_build_rag_embedding_guarantee.py:28-77",
+     "and": "test_publish_corpus_embedding_guarantee.py:27-76"
+    }
+   },
+   {
+    "files": [
+     "test_background_abort_busy.py",
+     "test_background_forget_on_clear.py"
+    ],
+    "fragments": 3,
+    "lines": 55,
+    "biggest": {
+     "lines": 28,
+     "at": "test_background_abort_busy.py:1-28",
+     "and": "test_background_forget_on_clear.py:1-28"
+    }
+   },
+   {
+    "files": [
+     "test_ollama_local_autostart_service.py",
+     "test_ollama_local_autostart_service.py"
+    ],
+    "fragments": 7,
+    "lines": 54,
+    "biggest": {
+     "lines": 10,
+     "at": "test_ollama_local_autostart_service.py:265-274",
+     "and": "test_ollama_local_autostart_service.py:296-305"
+    }
+   },
+   {
+    "files": [
+     "test_eval_kb_arms.py",
+     "test_eval_kb_arms.py"
+    ],
+    "fragments": 4,
+    "lines": 44,
+    "biggest": {
+     "lines": 16,
+     "at": "test_eval_kb_arms.py:629-644",
+     "and": "test_eval_kb_arms.py:665-680"
+    }
+   },
+   {
+    "files": [
+     "test_background_abort_busy.py",
+     "test_background_abort_busy.py"
+    ],
+    "fragments": 2,
+    "lines": 42,
+    "biggest": {
+     "lines": 24,
+     "at": "test_background_abort_busy.py:38-61",
+     "and": "test_background_abort_busy.py:141-162"
+    }
+   },
+   {
+    "files": [
+     "test_game_ai_request_followup_memory.py",
+     "test_game_ai_request_followup_memory.py"
+    ],
+    "fragments": 2,
+    "lines": 40,
+    "biggest": {
+     "lines": 28,
+     "at": "test_game_ai_request_followup_memory.py:157-184",
+     "and": "test_game_ai_request_followup_memory.py:262-290"
+    }
+   },
+   {
+    "files": [
+     "test_intent_pack_store_lock.py",
+     "test_settings_save_lock.py"
+    ],
+    "fragments": 1,
+    "lines": 31,
+    "biggest": {
+     "lines": 31,
+     "at": "test_intent_pack_store_lock.py:1-31",
+     "and": "test_settings_save_lock.py:1-34"
+    }
+   },
+   {
+    "files": [
+     "test_intent_pack_store_lock.py",
+     "test_strategy_checklist_store_lock.py"
+    ],
+    "fragments": 1,
+    "lines": 31,
+    "biggest": {
+     "lines": 31,
+     "at": "test_intent_pack_store_lock.py:1-31",
+     "and": "test_strategy_checklist_store_lock.py:1-34"
+    }
+   },
+   {
+    "files": [
+     "test_rag_corpus_cancel_state.py",
+     "test_voice_read_aloud_rpc.py"
+    ],
+    "fragments": 1,
+    "lines": 31,
+    "biggest": {
+     "lines": 31,
+     "at": "test_rag_corpus_cancel_state.py:8-38",
+     "and": "test_voice_read_aloud_rpc.py:6-36"
+    }
+   },
+   {
+    "files": [
+     "test_chat_slot_ownership.py",
+     "test_chat_slot_ownership.py"
+    ],
+    "fragments": 2,
+    "lines": 30,
+    "biggest": {
+     "lines": 15,
+     "at": "test_chat_slot_ownership.py:91-105",
+     "and": "test_chat_slot_ownership.py:174-189"
+    }
+   },
+   {
+    "files": [
+     "test_background_abort_busy.py",
+     "test_ollama_local_autostart_rpc.py"
+    ],
+    "fragments": 1,
+    "lines": 28,
+    "biggest": {
+     "lines": 28,
+     "at": "test_background_abort_busy.py:4-31",
+     "and": "test_ollama_local_autostart_rpc.py:8-35"
+    }
+   },
+   {
+    "files": [
+     "test_intent_pack_store_lock.py",
+     "test_merge_pulled_tags_rpc.py"
+    ],
+    "fragments": 1,
+    "lines": 28,
+    "biggest": {
+     "lines": 28,
+     "at": "test_intent_pack_store_lock.py:4-31",
+     "and": "test_merge_pulled_tags_rpc.py:3-33"
+    }
+   },
+   {
+    "files": [
+     "test_kb_not_in_notes_wiring.py",
+     "test_kb_not_in_notes_wiring.py"
+    ],
+    "fragments": 2,
+    "lines": 28,
+    "biggest": {
+     "lines": 17,
+     "at": "test_kb_not_in_notes_wiring.py:382-398",
+     "and": "test_kb_not_in_notes_wiring.py:400-416"
+    }
+   },
+   {
+    "files": [
+     "test_background_partial_state.py",
+     "test_clear_plugin_data_voice_reset.py"
+    ],
+    "fragments": 1,
+    "lines": 27,
+    "biggest": {
+     "lines": 27,
+     "at": "test_background_partial_state.py:4-30",
+     "and": "test_clear_plugin_data_voice_reset.py:12-38"
+    }
+   },
+   {
+    "files": [
+     "test_bonsai_stream_tags.py",
+     "test_bonsai_stream_tags.py"
+    ],
+    "fragments": 2,
+    "lines": 26,
+    "biggest": {
+     "lines": 17,
+     "at": "test_bonsai_stream_tags.py:323-339",
+     "and": "test_bonsai_stream_tags.py:635-651"
+    }
+   },
+   {
+    "files": [
+     "test_chat_slot_ownership.py",
+     "test_intent_pack_store_lock.py"
+    ],
+    "fragments": 1,
+    "lines": 26,
+    "biggest": {
+     "lines": 26,
+     "at": "test_chat_slot_ownership.py:4-29",
+     "and": "test_intent_pack_store_lock.py:6-31"
+    }
+   },
+   {
+    "files": [
+     "test_chat_slot_ownership.py",
+     "test_session_rag_chip_candidates_rpc.py"
+    ],
+    "fragments": 1,
+    "lines": 26,
+    "biggest": {
+     "lines": 26,
+     "at": "test_chat_slot_ownership.py:4-29",
+     "and": "test_session_rag_chip_candidates_rpc.py:6-31"
+    }
+   }
+  ]
+ }
+}

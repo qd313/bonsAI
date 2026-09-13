@@ -8,13 +8,13 @@ roughly how many tokens it used, and how it finished.
 
 | Date | Phase | Worker | Model | Tool calls | Tokens | Result |
 |---|---|---|---|---|---|---|
-| 2026-09-13 | 0 Tools | Lane A, the list of numbers | Sonnet high | | | |
-| 2026-09-13 | 0 Tools | Lane B, maps and headers | Sonnet high | | | |
-| 2026-09-13 | 0 Tools | Lane C, the verify command | Sonnet high | | | |
-| 2026-09-13 | 0 Tools | Lane D, hooks, copies and the Deck queue | Sonnet high | | | |
+| 2026-09-13 | 0 Tools | Lane A, the list of numbers | Sonnet high | 98 | 247,000 | done |
+| 2026-09-13 | 0 Tools | Lane B, maps and headers | Sonnet high | 70 | 167,000 | done |
+| 2026-09-13 | 0 Tools | Lane C, the verify command | Sonnet high | 55 | 126,000 | done |
+| 2026-09-13 | 0 Tools | Lane D, hooks, copies and the Deck queue | Sonnet high | 56 | 153,000 | done |
 
 ## Running total
 
 | Phase | Workers | Tool calls | Tokens |
 |---|---|---|---|
-| 0 Tools | 4 | | |
+| 0 Tools | 4 | 279 | 693,000 |

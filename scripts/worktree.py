@@ -307,6 +307,10 @@ def cmd_prune(args):
     root = repo_root()
     against = branch_tip(root, args.against)
     rows = [describe(root, args.against, e) for e in porcelain_worktrees(root)]
+    # The 24-hour default protects a copy someone is still using. A landing session clearing
+    # away the lanes it just merged itself does not need that protection and would otherwise
+    # have to wait a day to tidy up, so it can lower the bar deliberately.
+    min_age = UNTOUCHED_HOURS if args.min_age_hours is None else args.min_age_hours
 
     candidates = []
     for row in rows:
@@ -320,15 +324,15 @@ def cmd_prune(args):
         if when is None:
             continue
         age_hours = (datetime.datetime.now(datetime.timezone.utc) - when).total_seconds() / 3600
-        if age_hours < UNTOUCHED_HOURS:
+        if age_hours < min_age:
             continue
         candidates.append(row)
 
     if not candidates:
-        print("Nothing to prune: no worktree is merged, clean, and untouched for 24 hours.")
+        print(f"Nothing to prune: no worktree is merged, clean, and untouched for {min_age:g} hours.")
         return 0
 
-    print(f"Would remove {len(candidates)} worktree(s) (merged into {args.against}, clean, untouched 24h+):")
+    print(f"Would remove {len(candidates)} worktree(s) (merged into {args.against}, clean, untouched {min_age:g}h+):")
     for row in candidates:
         print(f"  {row['path']}  branch={row['branch']}  base={row['base']}  last touched={row['last_touched']}")
 
@@ -377,6 +381,12 @@ def main():
     p_prune.add_argument("--against", default=DEFAULT_BASE)
     p_prune.add_argument("--dry-run", action="store_true")
     p_prune.add_argument("--yes", action="store_true")
+    p_prune.add_argument(
+        "--min-age-hours",
+        type=float,
+        default=None,
+        help=f"how long a copy must have sat untouched before it can go (default {UNTOUCHED_HOURS})",
+    )
     p_prune.set_defaults(func=cmd_prune)
 
     args = parser.parse_args()

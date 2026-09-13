@@ -253,6 +253,9 @@ the session lookup is generalized first.
 
 ## Needs a D-number
 
+**Filed 2026-09-13 as D99 in [maintainer-decisions-locked.md](maintainer-decisions-locked.md), parked until the
+Steam Frame arrives, together with phone access and the VR panel.**
+
 Route through [maintainer-decisions-locked.md](maintainer-decisions-locked.md)
 before implementation:
 

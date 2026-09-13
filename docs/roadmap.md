@@ -91,6 +91,10 @@ hook gives a gentle heads-up when a session starts work outside this.
   who walks past something and presses Up to go back does not return to it; they land somewhere they never visited. Related to the
   two-star entry about Up skipping sections, but sharper: the two directions disagree about what the reply's stops are.
   Evidence `runs/round35-spoiler-block-down-and-up.json`.
+- ★ `[perms]` **Reading the clipboard asks no permission** — **OPEN, filed 2026-09-13.** The plugin's "read what was
+  last copied" call has no permission check and no settings check, unlike the screenshot and Desktop-note calls beside
+  it. Flagged in the Desktop Mode write-up on 2026-08-06 and still true. One check, in line with the other gated calls.
+  [Write-up](audit/desktop-mode-discovery.md#needs-a-gate).
 > - ★ `[platform]` `[shelved]` **In-IDE preview never gets past its loading screen** *— **OPEN, shelved 2026-09-11
 >   (D93): not a gate for anything.** On the maintainer's machine the preview stops on its loading screen and never
 >   moves past it; its command channel takes commands but never answers, and it produced no screenshot. Sorted with
@@ -205,7 +209,8 @@ replace it with a specific issue when one exists.
   locked rule this gets built.** Stars stay at two. Before writing a new prompt, one more thing to count: an answer-first
   opening was already tried on purpose the same evening as the count's source answers, and that run may already be the
   change, so it gets counted the same way first. This entry is no longer "count first"; it is "build, after counting that
-  earlier answer-first run". [Plan](planning/49-steam-frame-features.md) · [Second look
+  earlier answer-first run". **Paused 2026-09-13 by the maintainer: "not yet, I'm skittish about changing the prompt
+  layout right now." Nothing is written, and the second count is not run either.** [Plan](planning/49-steam-frame-features.md) · [Second look
   § 2](planning/52-frame-features-second-look.md#2-headline-first-the-weakest-one-and-what-to-do-instead) ·
   [Bench findings § 4](planning/53-steamvr-bench-findings.md#4-the-headline-first-count-run-the-same-morning) ·
   [The count, sentence by sentence](planning/assets/53-headline-count-2026-09-12.md).
@@ -244,7 +249,10 @@ replace it with a specific issue when one exists.
   in that window and closes on silence. The words a person needs when they cannot reach the Deck or scroll. The Deck alone is
   enough to test. **The maintainer set the exact shape 2026-09-11:** a short rising tone when the mic opens right after a spoken
   answer, the mic keeps listening as long as it hears something, and a short falling tone when it closes. Four words: again, go
-  on, stop, next. One setting, off by default. [Plan](planning/49-steam-frame-features.md) ·
+  on, stop, next. One setting, off by default. **Three calls 2026-09-13:** "go on" with nothing left does nothing, just
+  the closing tone; the closing tone stays, quieter than the opening one; the maintainer approves both sounds before
+  they ship. [Plan](planning/49-steam-frame-features.md) ·
+  [Plan 49 § 8.5](planning/49-steam-frame-features.md#85-voice-follow-ups-three-calls-and-a-new-feature) ·
   [Second look § 3](planning/52-frame-features-second-look.md#3-voice-follow-ups-a-sound-a-short-listen-a-few-words).
 - ★★★ `[ask]` `[focus]` **Steam settings shortcuts float above the question box** — **OPEN, planned 2026-09-06, all calls locked
   (D79).** Today the list of matching Steam settings appears under the box and pushes the box, the chips and the whole
@@ -298,6 +306,11 @@ replace it with a specific issue when one exists.
   sentences, no lists. Made for a visor on your face and a Deck across the room. A PC with SteamVR and any headset helps with one
   question only: whether the headset's mic reaches the PC during a streamed game. **No headset is being bought for now (D97 call
   3); this waits for the Frame.** [Plan](planning/49-steam-frame-features.md).
+- ★★★ `[voice]` **The answer ends with an offer, and "go on" asks it** — **OPEN, filed 2026-09-13; needs its own plan.**
+  A spoken answer ends with an offer in the model's own words, such as "want me to explain the mechanic I glossed
+  over?", and saying "go on" in the listening window sends it as a follow-up question. Waits on Voice follow-ups, and
+  on the maintainer being comfortable changing the shape of every answer, which they are not yet (see Headline first).
+  [Plan 49 § 8.5](planning/49-steam-frame-features.md#85-voice-follow-ups-three-calls-and-a-new-feature).
 - ★★★ `[ollama]` **How fast is this model on this Deck** — **OPEN, planned 2026-09-06, calls open (D75).** Next to each installed
   model, how fast it answered on this Deck the last time it was used, and a button to time it now with one fixed question. The
   numbers already exist on every answer; the plugin keeps a last-ten record per model with the game that was running, shows a
@@ -372,8 +385,12 @@ replace it with a specific issue when one exists.
   [Feasibility](planning/10-wake-word-listening-feasibility.md).
 - ★★★★★★ `[platform]` **Deep mod AI hints** — **OPEN.** Detect mod frameworks and files; mod-aware guidance.
   [Feasibility](planning/12-deep-mod-ai-hints-feasibility.md).
-- ★★★★★★ `[platform]` **Native QAM shortcut tile** — **OPEN, upstream research.** A separate left-rail entry beneath the Decky icon.
-  [Feasibility](planning/11-native-qam-tile-feasibility.md).
+- ★★★★★★ `[platform]` **Native QAM shortcut tile** — **OPEN, reopened 2026-09-13; first step ★.** A separate left-rail
+  entry beneath the Decky icon. Was blocked on Decky's maintainers; then the maintainer found
+  [decky-quick-tab](https://github.com/moi952/decky-quick-tab), a Decky plugin that gives every installed plugin its
+  own icon in the quick menu. First step: point people at it in the README and troubleshooting, and try it on a Deck.
+  Not yet tried by us. [Feasibility](planning/11-native-qam-tile-feasibility.md) ·
+  [Plan 49 § 8.3](planning/49-steam-frame-features.md#83-the-native-tile-entry-reopens-someone-else-built-it).
 - ★★★★★★ `[platform]` **One decision for three items: the SteamVR panel, leaving Decky, and reopening llama.cpp** — **OPEN, filed
   2026-09-08.** The floating panel needs bonsAI to run outside Decky, which is what the Native QAM shortcut tile research keeps
   circling, and any model on the Frame itself runs through llama.cpp, not Ollama. Three entries, one question: does bonsAI grow a
@@ -386,6 +403,11 @@ replace it with a specific issue when one exists.
   Windows PC, using a fifty-line stand-in for Decky. Nine calls the frontend normally makes all came back with a working
   answer, and it reached Ollama on that PC. The "run the same Python side on the PC too" choice is now a priced decision
   instead of a guess. **This does not decide it — that call is still the maintainer's to make.**
+  **Parked 2026-09-13 until the Frame is in the house (D99), and widened:** it is the same question as bonsAI in
+  Desktop Mode and on a phone, three customers for one door, decided once. Decoupling bonsAI from Decky is revisited
+  as part of it. Day one with the Frame: check whether Decky runs on it; if it does, bonsAI runs inside the headset
+  as a normal plugin. [Plan 49 § 8](planning/49-steam-frame-features.md#8-calls-from-2026-09-13-park-it-and-decide-the-door-once) ·
+  [Desktop Mode write-up](audit/desktop-mode-discovery.md).
   [Plan](planning/49-steam-frame-features.md) ·
   [Second look § 5](planning/52-frame-features-second-look.md#5-the-second-way-to-run-the-gap-plan-49-underplayed) ·
   [Bench findings § 3](planning/53-steamvr-bench-findings.md#3-the-plugins-python-side-on-this-pc-it-runs).

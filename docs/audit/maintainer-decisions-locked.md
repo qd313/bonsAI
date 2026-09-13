@@ -4896,6 +4896,23 @@ The maintainer's own words: "go with your leans on the 4 items."
 It's too much UI change and we're not ready for it yet." The drawing and plan 52 § 6 stay as the record for
 when it comes back.
 
+#### Addendum 2026-09-13
+
+- **Headline first stays paused.** The maintainer's own words: "not yet, I'm skittish about changing the
+  prompt layout right now." Nothing is built, and the second count of the answer-first run is not run
+  either. The entry stays open at two stars.
+- **Voice follow-ups, the three calls on plan 52 § 3.7's open questions:** "go on" with nothing left to go
+  on to does nothing — just the closing tone; the closing tone stays, quieter than the opening one; the
+  maintainer approves the two sounds before they ship, nothing ships on a worker's own ear.
+- **A new feature, filed separately and needing its own plan:** the answer ends with an offer in the
+  model's own words ("want me to explain the mechanic I glossed over?"), and saying "go on" in the
+  listening window sends it as a follow-up question. Not part of the first Voice follow-ups build; it
+  waits on the same comfort with prompt changes as Headline first.
+- **The native tile entry reopens.** [decky-quick-tab](https://github.com/moi952/decky-quick-tab) is a
+  Decky plugin that gives every plugin its own icon in the quick menu. First step is to point people at it
+  in the README and troubleshooting and try it on a Deck. Not yet tried by us.
+- **Call 2 of this entry (the second way to run) is parked and widened; see D99.**
+
 #### Passed over
 
 - A settings switch for each sound cue. One switch for the feature is enough; the tones are the feature.
@@ -4969,3 +4986,62 @@ of the two real fixes, it cannot thin an answer out, and it leaves spoilers exac
 Option 2 trades one failure for a quieter one — a reply about the right boss that does not have the
 material to answer the question. But the device already showed a guess here can be wrong, so the
 measuring day is worth it before either.
+
+### D99 — PARKED 2026-09-13 — One door outside the Deck's menu: Desktop Mode, a phone and the VR panel are decided once
+
+**Raised** 2026-09-13 from the maintainer's read of
+[planning/49-steam-frame-features.md](../planning/49-steam-frame-features.md) § 8,
+[planning/52-frame-features-second-look.md](../planning/52-frame-features-second-look.md) § 5, and
+[planning/53-steamvr-bench-findings.md](../planning/53-steamvr-bench-findings.md) § 3, together with
+[desktop-mode-discovery.md](desktop-mode-discovery.md).
+
+#### The problem
+
+Today the only way anything talks to bonsAI's Python side is through Decky on the Deck. Three things
+want a door from outside that:
+
+| Customer | What they need | Where it is written up |
+|---|---|---|
+| Desktop Mode on the Deck | A browser page on the same machine | [desktop-mode-discovery.md](desktop-mode-discovery.md), a brainstorm from 2026-08-06 that never got a decision number or a roadmap entry |
+| A phone on the home network | The same page, reachable from another device, with pairing | same, "Exposure" row |
+| The VR panel on the PC | A brain the PC program can reach | plan 52 § 5, plan 53 § 3 |
+
+#### The options
+
+The three from plan 52 § 5:
+
+(a) The PC program carries its own copy of the brain — a second implementation that would drift.
+
+(b) A network door on the Deck — the Deck must be awake, and the door is a port that needs securing.
+
+(c) The same Python side runs on the PC too. The bench on 2026-09-12 showed it starts outside Decky
+and answers nine calls with no changes. Three edges still need PC-shaped answers: which game is
+running, the sound system, and the screenshot folder.
+
+The Desktop Mode write-up's own open questions apply to every customer, not just Desktop Mode: one
+shared answer slot that a second client could interrupt, an unchecked PC address field, and what the
+page holds beyond the Ask box.
+
+**Decoupling bonsAI from Decky is revisited as part of this** — read
+[11-native-qam-tile-feasibility.md](../planning/11-native-qam-tile-feasibility.md) § 2 and the Desktop
+Mode write-up's "Hosting" section together when the decision comes back. The one real cost either of
+them names: the plugin that works today would then depend on a service being up.
+
+#### What unparks it
+
+**Maintainer's call: "Park it."** Decided once, not three times. What unparks it: the Frame arriving.
+Day-one checks:
+
+1. **Does Decky install and run on the Frame?** The maintainer's read is that Decky runs on anything
+   running SteamOS or the Steam gaming session, so it may. The study's read is that Decky ships only
+   for the Deck's own chip. Nobody can check until the Frame is out.
+2. **If it does,** bonsAI runs inside the headset as a normal plugin, with the model on the PC, and
+   this decision is largely moot for the Frame.
+3. **If it does not,** the SteamVR panel path is the way in, and this decision picks its door.
+
+**llama.cpp stays closed** (D97 call 2).
+
+#### Passed over
+
+- Deciding now, with no headset in the house.
+- Buying a headset now (D97 call 3).

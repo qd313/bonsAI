@@ -188,6 +188,7 @@
     "tests/test_ollama_catalog_service.py",
     "tests/test_ollama_embed_service.py",
     "tests/test_ollama_health_probe.py",
+    "tests/test_ollama_local_autostart_rpc.py",
     "tests/test_ollama_local_autostart_service.py",
     "tests/test_ollama_mdns_discovery_service.py",
     "tests/test_ollama_preload.py",

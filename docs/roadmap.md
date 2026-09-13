@@ -730,13 +730,6 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   Portal 2, where the keyword search really did rank a card, so it is not the meaning-only case. Measured by
   `scripts/measure_kb_thin_match.py`, evidence `runs/plan48-thin-match.json`. **The wording is settled**, chosen by you on 2026-09-07: *"No close match in my notes, this answer leans on the model's own knowledge."*
   The comma rather than a dash is deliberate, and is noted in the code so nobody tidies it away.
-- ★★★ `[KB]` **Every question waits about a second because only one model fits in memory at a time** — **CAUSE
-  FOUND on the Deck 2026-09-12, and the fix measured.** The Deck is set to hold one model at a time, so writing an
-  answer pushes the note-searching model out and the next question spends about seven tenths of a second loading it
-  back. Measured with that limit raised to two: the search after a reply costs 24 thousandths of a second instead of
-  732, and both models sit in memory together with room to spare. **This is a setting on the Deck, not plugin code**,
-  and where it is set could not be found from the running system, so changing it for good needs that answered first.
-  Your call. [Detail](roadmap-details.md#every-question-waits-about-a-second-while-the-note-search-loads)
 - ★ `[KB]` **A Hades boss's note is spelled wrong, so spelling it right gets you told the plugin is guessing** —
   **OPEN, found 2026-09-12.** The note is titled *Megara*; the boss is *Megaera*. Type it correctly and the note
   still attaches, but the reply now carries the "no close match in my notes" line — so a person is told the plugin
@@ -778,6 +771,13 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   off the device for this game exactly, so the number holds on the real thing. **Not a fixed feature** — one run in
   three still names the rival boss — and DOOM Eternal fails every time, which no search work can close. Replies on
   these turns are about half as long. Row **W3-R4**. (D98) [Numbers](planning/48-kb-wave-three-session.md)
+- ★★★ `[KB]` **Every question no longer waits a second for the notes to be searched** — **FIXED and checked on the
+  Deck 2026-09-12.** The Deck was set to hold one model at a time, so writing an answer pushed the note-searching
+  part out and the next question spent about seven tenths of a second loading it back. A new switch, **Start the AI
+  with the Deck** on the Ollama tab, adds a startup entry that keeps both in memory: **24 thousandths of a second
+  instead of 732**, measured on the device. It also fixes something nobody had noticed — nothing started the AI at
+  all, so a restart left the plugin with no AI until someone started it by hand. Off by default. Row
+  **KB-AUTOSTART-01**.
 - ★★★ `[KB]` **DRG Survivor glossary terms** — **VERIFY, one touch tap owed.** Shipped 2026-08-28 and walked on device:
   underline, popup, D-pad reachability, B, one-press Up. Rows **DRG-GLOSSARY-01…04**.
   [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).

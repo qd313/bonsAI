@@ -127,10 +127,57 @@ class ApplyInstallTests(unittest.TestCase):
             self.assertIn('Environment="OLLAMA_MAX_LOADED_MODELS=2"', unit_text)
             self.assertNotIn("OLLAMA_MAX_LOADED_MODELS=1", unit_text)
 
+            # Not "was a command issued" -- that assertion is what let the real defect
+            # through on 2026-09-12, when the enable command was issued, failed, and was
+            # reported as success. Assert the thing that decides whether it starts with
+            # the Deck: the start-at-login link exists and points at the entry.
+            # A symlink where the platform allows one, a plain copy where it does not --
+            # systemd honours either. What matters is that systemd will find the entry
+            # here at login and that it carries the right contents.
+            link = home / ".config" / "systemd" / "user" / "default.target.wants" / UNIT_NAME
+            self.assertTrue(link.is_symlink() or link.is_file(),
+                            "nothing in default.target.wants: it would not start with the Deck")
+            self.assertIn("OLLAMA_MAX_LOADED_MODELS=2", link.read_text(encoding="utf-8"))
             called_args = [call.args[0] for call in systemctl.call_args_list]
-            self.assertIn(["daemon-reload"], called_args)
-            self.assertIn(["enable", UNIT_NAME], called_args)
             self.assertIn(["start", UNIT_NAME], called_args)
+
+    def test_reports_failure_when_the_startup_link_cannot_be_made(self):
+        """The defect found on the Deck 2026-09-12, in test form.
+
+        The entry file was written, switching it on failed, and the old code reported
+        success -- so the tab said it was set up and it would not have started with the
+        Deck. Turning a silent failure into a false all-clear is the one outcome this
+        must never have."""
+        with tempfile.TemporaryDirectory() as tmp:
+            home = _fake_home(tmp)
+            _write_ollama_binary(home)
+            with patch.object(Path, "home", staticmethod(lambda: home)):
+                with patch(f"{_MODULE}._systemctl_available", return_value=True):
+                    with patch(f"{_MODULE}._run_systemctl", MagicMock()):
+                        with patch(f"{_MODULE}._ollama_answering", return_value=False):
+                            with patch(f"{_MODULE}._link_unit_into_default_target",
+                                       return_value="Could not switch the startup entry on: denied"):
+                                out = apply_ollama_local_autostart(True)
+
+            self.assertFalse(out["ok"], "a failed switch-on must not report success")
+            self.assertIn("Could not switch the startup entry on", out["reason"])
+
+    def test_switching_on_twice_is_safe(self):
+        """Turning it on when it is already on replaces the link rather than failing."""
+        with tempfile.TemporaryDirectory() as tmp:
+            home = _fake_home(tmp)
+            _write_ollama_binary(home)
+            with patch.object(Path, "home", staticmethod(lambda: home)):
+                with patch(f"{_MODULE}._systemctl_available", return_value=True):
+                    with patch(f"{_MODULE}._run_systemctl", MagicMock()):
+                        with patch(f"{_MODULE}._ollama_answering", return_value=False):
+                            first = apply_ollama_local_autostart(True)
+                            second = apply_ollama_local_autostart(True)
+
+            self.assertTrue(first["ok"])
+            self.assertTrue(second["ok"])
+            link = home / ".config" / "systemd" / "user" / "default.target.wants" / UNIT_NAME
+            self.assertTrue(link.is_symlink() or link.is_file())
 
     def test_leaves_already_running_ollama_alone(self):
         """Something is already answering -- must not be started or touched, and the entry still installs."""
@@ -149,7 +196,9 @@ class ApplyInstallTests(unittest.TestCase):
             self.assertTrue(_unit_path(home).is_file())
 
             called_args = [call.args[0] for call in systemctl.call_args_list]
-            self.assertIn(["enable", UNIT_NAME], called_args)
+            link = home / ".config" / "systemd" / "user" / "default.target.wants" / UNIT_NAME
+            self.assertTrue(link.is_symlink() or link.is_file(),
+                            "nothing in default.target.wants: it would not start with the Deck")
             # The point of this test: no "start" call when something already answers.
             self.assertNotIn(["start", UNIT_NAME], called_args)
 
@@ -180,6 +229,9 @@ class ApplyRemoveTests(unittest.TestCase):
             self.assertTrue(out["changed"])
             self.assertFalse(unit_path.exists())
             called_args = [call.args[0] for call in systemctl.call_args_list]
+            link = home / ".config" / "systemd" / "user" / "default.target.wants" / UNIT_NAME
+            self.assertFalse(link.is_symlink() or link.exists(),
+                             "start-at-login link still there: it would still start with the Deck")
             self.assertIn(["disable", UNIT_NAME], called_args)
             self.assertIn(["daemon-reload"], called_args)
             # The point of this test: turning the entry off never stops anything.

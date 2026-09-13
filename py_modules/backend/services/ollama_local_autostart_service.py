@@ -113,14 +113,69 @@ def _dir_writable(path: Path) -> bool:
         return False
 
 
+def _wants_link_path(home: Path) -> Path:
+    """Where systemd looks for units to start at login, for a unit that says
+    ``WantedBy=default.target``. ``systemctl enable`` creates exactly this symlink."""
+    return home / _SYSTEMD_USER_DIR_RELATIVE / "default.target.wants" / UNIT_NAME
+
+
 def _unit_enabled(home: Path) -> bool:
-    if not _systemctl_available():
-        return False
+    """Whether this unit really will start at login.
+
+    Read off the filesystem, not from ``systemctl is-enabled``. Measured on the Deck
+    2026-09-12: the plugin's backend runs without DBUS_SESSION_BUS_ADDRESS or
+    XDG_RUNTIME_DIR, so every ``systemctl --user`` call from here cannot reach the user
+    bus -- ``is-enabled`` answers "not-found" for a unit sitting right there on disk.
+    The symlink is what systemd actually acts on at login, so the symlink is what this
+    reports."""
+    link = _wants_link_path(home)
+    return link.is_symlink() or link.is_file()
+
+
+def _link_unit_into_default_target(home: Path) -> str:
+    """Create the start-at-login symlink directly. Returns "" on success, else a plain
+    reason.
+
+    Why by hand rather than ``systemctl --user enable``: that needs a user session bus
+    this process does not have (see ``_unit_enabled``). Creating the symlink is the whole
+    of what ``enable`` does for a ``WantedBy=`` unit, needs no bus, and is a plain file
+    operation inside the user's own home."""
+    link = _wants_link_path(home)
+    if not _path_within_home(link, home):
+        return "Refused: the startup link would be outside the home folder."
     try:
-        result = _run_systemctl(["is-enabled", UNIT_NAME])
-    except Exception:
-        return False
-    return result.stdout.strip() == "enabled"
+        link.parent.mkdir(parents=True, exist_ok=True)
+        if link.is_symlink() or link.exists():
+            link.unlink()
+    except OSError as exc:
+        return "Could not switch the startup entry on: %s" % exc
+
+    unit_path = _unit_path(home)
+    try:
+        link.symlink_to(unit_path)
+    except OSError:
+        # A symlink is what systemd itself writes, but it is not always allowed to make
+        # one -- Windows refuses without developer mode, which is where this project's
+        # tests run. systemd honours a plain copy in this folder just the same, so fall
+        # back rather than reporting a failure the Deck would never have hit.
+        try:
+            link.write_text(unit_path.read_text(encoding="utf-8"), encoding="utf-8")
+        except OSError as exc:
+            return "Could not switch the startup entry on: %s" % exc
+    if not _unit_enabled(home):
+        return "The startup entry was written but did not switch on, so it would not start with the Deck."
+    return ""
+
+
+def _unlink_unit_from_default_target(home: Path) -> None:
+    """Undo ``_link_unit_into_default_target``. Already missing is success -- what
+    matters is that it is not there afterwards."""
+    link = _wants_link_path(home)
+    try:
+        if link.is_symlink() or link.exists():
+            link.unlink()
+    except OSError:
+        pass
 
 
 def _ollama_answering() -> bool:
@@ -169,6 +224,9 @@ def _remove_autostart(home: Path) -> dict[str, Any]:
         # is the rule a test proves rather than trusts.
         return {"ok": False, "changed": False, "reason": "Refused: the startup entry was outside the home folder."}
 
+    # Same reasoning as the install path: the link is what systemd acts on, so remove it
+    # directly rather than trusting a systemctl call that cannot reach the bus.
+    _unlink_unit_from_default_target(home)
     if _systemctl_available():
         try:
             _run_systemctl(["disable", UNIT_NAME])
@@ -218,11 +276,21 @@ def _install_autostart(home: Path) -> dict[str, Any]:
     except OSError as exc:
         return {"ok": False, "changed": False, "reason": f"Could not write the startup entry: {exc}"}
 
-    try:
-        _run_systemctl(["daemon-reload"])
-        _run_systemctl(["enable", UNIT_NAME])
-    except Exception as exc:
-        return {"ok": False, "changed": False, "reason": f"Could not turn the startup entry on: {exc}"}
+    # systemctl's return code was ignored here, so a failed enable reported success and
+    # the entry never started with the Deck -- found on the device 2026-09-12: the file
+    # written, and no start-at-login link beside it. The link is now made directly and
+    # read back, so what is reported is what is actually on disk.
+    link_problem = _link_unit_into_default_target(home)
+    if link_problem:
+        return {"ok": False, "changed": True, "reason": link_problem}
+    if _systemctl_available():
+        # Best effort only: this cannot reach the user bus from here and nothing above
+        # depends on it. It is here so a session that DOES have the bus notices the new
+        # unit without waiting for a restart.
+        try:
+            _run_systemctl(["daemon-reload"])
+        except Exception:
+            pass
 
     if _ollama_answering():
         # Something is already using the AI's port -- may be mid-question. Leave it

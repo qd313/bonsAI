@@ -2396,11 +2396,10 @@ class Plugin:
                     ),
                 }
             clean_env = Plugin._clean_env()
-            runtime_dir = str(getattr(decky, "DECKY_PLUGIN_RUNTIME_DIR", "") or "")
             loop = asyncio.get_running_loop()
             result = await loop.run_in_executor(
                 None,
-                lambda: take_steam_game_screenshot(str(app_id or ""), clean_env, runtime_dir),
+                lambda: take_steam_game_screenshot(str(app_id or ""), clean_env),
             )
             if result.get("success") and isinstance(result.get("item"), dict):
                 item = dict(result["item"])

@@ -238,82 +238,82 @@
     {
       "name": "ask_game_ai",
       "domain": "ask",
-      "line": 2454
+      "line": 2453
     },
     {
       "name": "start_background_game_ai",
       "domain": "ask",
-      "line": 2606
+      "line": 2605
     },
     {
       "name": "dbg_fe_log",
       "domain": "debug",
-      "line": 2839
+      "line": 2838
     },
     {
       "name": "get_background_game_ai_status",
       "domain": "ask",
-      "line": 2852
+      "line": 2851
     },
     {
       "name": "abort_background_game_ai",
       "domain": "ask",
-      "line": 2877
+      "line": 2876
     },
     {
       "name": "forget_background_game_ai",
       "domain": "ask",
-      "line": 2936
+      "line": 2935
     },
     {
       "name": "ask_ollama",
       "domain": "ollama",
-      "line": 3035
+      "line": 3034
     },
     {
       "name": "get_voice_engine_status",
       "domain": "voice",
-      "line": 3104
+      "line": 3103
     },
     {
       "name": "install_voice_engine",
       "domain": "voice",
-      "line": 3112
+      "line": 3111
     },
     {
       "name": "get_voice_install_status",
       "domain": "voice",
-      "line": 3162
+      "line": 3161
     },
     {
       "name": "start_voice_transcription",
       "domain": "voice",
-      "line": 3166
+      "line": 3165
     },
     {
       "name": "stop_voice_transcription",
       "domain": "voice",
-      "line": 3225
+      "line": 3224
     },
     {
       "name": "get_voice_transcription_status",
       "domain": "voice",
-      "line": 3245
+      "line": 3244
     },
     {
       "name": "start_voice_read_aloud",
       "domain": "voice",
-      "line": 3268
+      "line": 3267
     },
     {
       "name": "stop_voice_read_aloud",
       "domain": "voice",
-      "line": 3278
+      "line": 3277
     },
     {
       "name": "get_voice_read_aloud_status",
       "domain": "voice",
-      "line": 3283
+      "line": 3282
     }
   ]
 }

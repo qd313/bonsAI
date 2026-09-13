@@ -860,7 +860,6 @@ def build_bonsai_status_stream_instruction(
 ) -> str:
     """Dynamic guidance for model-emitted ``<bonsai-status>`` tags during streaming."""
     game = (app_name or "").strip()
-    game_hint = f" for {game}" if game else ""
     example_game = game or "your game"
     snippet = (question_snippet or "").strip()
     topic_bit = f' about "{snippet}"' if snippet else ""

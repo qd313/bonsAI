@@ -321,7 +321,6 @@ def try_qam_closed_compositor_capture(
 def take_steam_game_screenshot(
     app_id: str,
     clean_env: dict,
-    plugin_runtime_dir: str = "",
     qam_settle_seconds: float = 1.0,
 ) -> dict:
     """

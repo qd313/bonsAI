@@ -872,6 +872,13 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
 Everything shipped since v0.4.9 (2026-07-08), one line each, newest first. Detail: [CHANGELOG.md](../CHANGELOG.md),
 [archive/roadmap-completed.md](archive/roadmap-completed.md), [archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md).
 
+**Landed 2026-09-13 (nothing a person using the plugin can see):**
+- ★★★ `[platform]` **Refactor round two, phase 0: the tools** — landed 2026-09-13. One check command every
+  worker runs before saving (26 seconds, or 51 for the fuller merge check), a list of eighteen numbers that may only get
+  better, a map of what the back-end depends on, a checker that every file explains itself, three safety rails, a helper
+  that lists and clears away copies of the project, and a queue so two workers cannot drive the Deck at once. Built by four
+  workers at once for about 693,000 tokens. [Plan](planning/51-refactor-round-two.md), [notes](audit/refactor-round-two/session-notes.md).
+
 **Shipped 2026-09-12, Phase 1 (checked on the maintainer's Deck the same evening):**
 - ★★ `[voice]` **Read answers aloud** — shipped 2026-09-12, Phase 1: the Deck's own built-in voice, nothing to download. A
   Read aloud line under a finished answer speaks it one sentence at a time, starting in about a second; the line changes to

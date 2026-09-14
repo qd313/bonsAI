@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 382,
-  "edgeCount": 954,
+  "fileCount": 383,
+  "edgeCount": 955,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2726,6 +2726,12 @@
         "src/utils/strategyGuideBranches.ts"
       ]
     },
+    "src/types/rpcMethods.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/utils/deckyCall.ts"
+      ]
+    },
     "src/utils/answerBubbleElRegistry.test.ts": {
       "imports": [
         "src/utils/answerBubbleElRegistry.ts",
@@ -3248,7 +3254,9 @@
       "importedBy": []
     },
     "src/utils/deckyCall.ts": {
-      "imports": [],
+      "imports": [
+        "src/types/rpcMethods.ts"
+      ],
       "importedBy": [
         "src/components/DeveloperTab.tsx",
         "src/components/KnowledgeBaseSection.tsx",

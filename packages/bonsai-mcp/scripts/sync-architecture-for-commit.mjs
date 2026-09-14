@@ -9,13 +9,18 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, "..", "..", "..");
-const ARCH_FILES = [
+// Everything generate-architecture.mjs writes. This list was written out twice in
+// this file and only one copy was used, so adding a generated file here did nothing.
+// One list now, used below.
+const GENERATED_FILES = [
   "packages/bonsai-mcp/knowledge/architecture/rpc-map.json",
   "packages/bonsai-mcp/knowledge/architecture/hotspots.json",
   "packages/bonsai-mcp/knowledge/architecture/import-graph.json",
   "packages/bonsai-mcp/knowledge/architecture/test-inventory.json",
   "packages/bonsai-mcp/knowledge/architecture/preview-tiers.json",
   "packages/bonsai-mcp/knowledge/architecture/env-vars.json",
+  // Not a snapshot: the back-end method names as a type the screen code is held to.
+  "src/types/rpcMethods.ts",
 ];
 
 function run(cmd, args, opts = {}) {
@@ -37,15 +42,6 @@ run(process.execPath, [
   path.join(REPO_ROOT, "packages", "bonsai-mcp", "scripts", "generate-architecture.mjs"),
 ], { stdio: "inherit" });
 
-run("git", [
-  "add",
-  "--",
-  "packages/bonsai-mcp/knowledge/architecture/rpc-map.json",
-  "packages/bonsai-mcp/knowledge/architecture/hotspots.json",
-  "packages/bonsai-mcp/knowledge/architecture/import-graph.json",
-  "packages/bonsai-mcp/knowledge/architecture/test-inventory.json",
-  "packages/bonsai-mcp/knowledge/architecture/preview-tiers.json",
-  "packages/bonsai-mcp/knowledge/architecture/env-vars.json",
-]);
+run("git", ["add", "--", ...GENERATED_FILES]);
 
-console.log("mcp architecture snapshots regenerated and staged");
+console.log(`regenerated and staged ${GENERATED_FILES.length} generated files`);

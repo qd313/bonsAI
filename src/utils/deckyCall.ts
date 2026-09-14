@@ -7,6 +7,8 @@
  */
 import { call } from "@decky/api";
 
+import type { BonsaiRpcMethod } from "../types/rpcMethods";
+
 /** Default RPC deadline (ms) before the UI treats the call as failed. */
 export const DECKY_RPC_TIMEOUT_MS = 15000;
 
@@ -15,7 +17,7 @@ export const DECKY_RPC_TIMEOUT_MS = 15000;
  * Input: method name, args, optional timeout ms. Output: RPC result or timeout Error.
  */
 export async function callDeckyWithTimeout<Args extends unknown[], Result>(
-  method: string,
+  method: BonsaiRpcMethod,
   args: Args,
   timeoutMs: number = DECKY_RPC_TIMEOUT_MS
 ): Promise<Result> {

@@ -400,6 +400,37 @@ def _cycle_count_from(path: Path) -> tuple[Optional[int], Optional[str]]:
     return len(cycles), None
 
 
+def metric_be_names_defined_twice():
+    """Back-end names written out twice in the same file or the same class.
+
+    Python keeps the last one and drops the first without a word. Nothing else we
+    run catches it: the dead-code tools see a name that is used, there is no type
+    checker on this side, and the duplicate-line tool ignores fragments this small.
+    Found for real on 2026-09-14 -- sanitize_voice_stt_model appeared twice in
+    voice_transcription_service.py, byte for byte the same both times. Splitting a
+    file is exactly when a second copy gets left behind, so this stays at zero.
+    """
+    duplicates = 0
+    for path in be_app_files():
+        text = _read_text(path)
+        if text is None:
+            continue
+        try:
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", SyntaxWarning)
+                tree = ast.parse(text, filename=str(path))
+        except SyntaxError:
+            continue
+        scopes = [tree.body] + [n.body for n in ast.walk(tree) if isinstance(n, ast.ClassDef)]
+        for body in scopes:
+            seen: dict[str, int] = {}
+            for node in body:
+                if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                    seen[node.name] = seen.get(node.name, 0) + 1
+            duplicates += sum(count - 1 for count in seen.values() if count > 1)
+    return duplicates, None
+
+
 def metric_import_cycles_be():
     return _cycle_count_from(ROOT / "packages/bonsai-mcp/knowledge/architecture/py-import-graph.json")
 
@@ -721,6 +752,7 @@ MEASURERS: dict[str, Callable[[], tuple[Optional[int | float], Optional[str]]]] 
     "duplicate_lines_app": metric_duplicate_lines_app,
     "duplicate_lines_be_tests": metric_duplicate_lines_be_tests,
     "unused_exports_fe": metric_unused_exports_fe,
+    "be_names_defined_twice": metric_be_names_defined_twice,
     "import_cycles_be": metric_import_cycles_be,
     "import_cycles_fe": metric_import_cycles_fe,
     "raw_call_sites": metric_raw_call_sites,

@@ -56,9 +56,17 @@
     "direction": "lower_is_better",
     "measured_by": "knip"
   },
+  "be_names_defined_twice": {
+    "label": "Back-end names written out twice in one file or class",
+    "best": 0,
+    "target": 0,
+    "added_2026_09_14": "Found one real case (sanitize_voice_stt_model, identical twice). Python keeps the last and drops the first silently; no other check we run sees it.",
+    "direction": "lower_is_better",
+    "measured_by": "scripts/ratchet.py, Python AST over main.py and py_modules"
+  },
   "import_cycles_be": {
     "label": "Import cycles, back end",
-    "best": 2,
+    "best": 0,
     "target": 0,
     "start_2026_09_09": 2,
     "direction": "lower_is_better",

@@ -11,6 +11,7 @@ import { toaster } from "@decky/api";
 import { Router } from "@decky/ui";
 
 import type { AskAttachment } from "../types/bonsaiUi";
+import type { BonsaiAskOrchestration } from "../types/askOrchestration";
 import { type AskModeId, type UnifiedInputPersistenceMode } from "../data/bonsaiSettingsSchema";
 import { buildResponseText } from "../utils/appliedTuningText";
 import { detectPromptCategory, getContextualPresets, getRandomPresets, type PresetPrompt } from "../data/presets";
@@ -173,7 +174,9 @@ export type UseBonsaiAskOrchestrationArgs = {
   onSlotAnswerFinished?: (slotId: string) => void;
 };
 
-export function useBonsaiAskOrchestration(a: UseBonsaiAskOrchestrationArgs) {
+export function useBonsaiAskOrchestration(
+  a: UseBonsaiAskOrchestrationArgs,
+): BonsaiAskOrchestration {
   const survivalPeek = peekBonsaiSessionPendingRestore();
 
   // --- Strategy checklist session (per-game disk sync) ---

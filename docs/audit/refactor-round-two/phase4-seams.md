@@ -1,0 +1,99 @@
+# Phase 4: the seams, and what now holds each one still
+
+Written 2026-09-14, at the start of phase 4. A dated record, not a living doc.
+
+## The short version
+
+Phase 4 is the part of the clean-up that moves code around. Moving code is only safe if the
+places where one piece hands work to another stay exactly the same while the move happens.
+Those places are the seams. This file says, for each one, what is written down and what
+fails if someone changes it by accident.
+
+Before this session, four of the eight seams had nothing written down at all. Three of those
+four now do, and the checks that hold them are real: each was tested by deliberately breaking
+it and watching the build or the test run fail.
+
+**Still open: one.** What the plugin's main screen hands down to its tabs. Nothing moves
+behind that one until it is written down, which is the first job of the next session.
+
+## Why this matters more on one side than the other
+
+The screen code is checked by a compiler. If a piece changes shape, the build stops. The
+back end has no compiler, so a renamed argument or a dropped function is only found when
+someone uses the plugin. That is why the back-end seams are held by a test that reads the
+code's own shape and compares it against a written record, and the screen seam is held by a
+type the compiler enforces.
+
+## The eight seams
+
+| Seam | Size today | What holds it | Proven by |
+|---|---|---|---|
+| The back-end method list | `main.py`, 3,292 lines, 63 methods | `rpc-map.json`, regenerated on every commit; the number list fails if a name the screen calls has no method behind it | already in place |
+| The settings shape | 48 settings named in 5 files | `tests/contracts/settings-defaults.json`, asserted from both languages | already in place |
+| **The Ask hook** | 1,642 lines, **52 things handed back** | `src/types/askOrchestration.ts` — an explicit written shape the hook must match | **new**: adding a stray key and dropping a real key were both tried; the build failed both times |
+| **The knowledge base** | 2,092 lines, 4 files outside it import from it | `tests/test_seam_contracts.py` pins 22 names and their call shapes | **new**: renaming an argument was tried; the test run failed |
+| **Prompt building** | 1,571 lines, 7 files import from it | same test, 14 names pinned | **new**, same proof |
+| Voice | capture 1,294 lines, server 364, shared basics 144 | same test, 22 names pinned across the three files, plus a check that the shared file never imports the two that import it | **new**; the loop it prevents was real until this session |
+| Local Ask commands | five small files | same test, 3 names pinned, plus the same never-import-back check | **new**; same |
+| **The plugin's main screen** | `src/index.tsx`, 1,709 lines, `Content` alone is 1,549 | **nothing yet** | — |
+
+61 back-end names are pinned in total.
+
+## The rule for anyone working behind a seam
+
+Work behind the seam, not on it. Adding something new to one of these files is fine and
+needs no change to any of the records above. Renaming, removing, or changing how something
+is called is a change to a contract other files depend on — do it on purpose, update the
+record in the same commit, and say so in the commit message.
+
+If a seam has nothing holding it, nothing moves behind it yet. That is the whole point of
+doing this before the moving starts.
+
+## Names that only a test reaches
+
+Recorded here, deliberately not pinned. Pinning them would make rewriting a test look like
+breaking a contract. A later split still needs to know they exist, because a test importing
+them will break if they move:
+
+- The knowledge base: `KbCoverageSummary`, `KnowledgeRetrievalResult`, `SessionRagChipCandidate`,
+  `SessionRagChipCandidatesResult`. The first two are what pinned functions return, so they
+  are part of the real shape even though only tests name them directly.
+- Prompt building: `DRG_SURVIVOR_APP_ID`, `REPLY_FOLLOWUP_PARENT_ANSWER_MAX_CHARS`,
+  `_KB_BLOCK_HEADER`, `_strategy_spoiler_policy_block`, `build_bonsai_status_stream_instruction`,
+  `build_reply_language_block`, `build_reply_verbosity_block`, `user_asks_for_detail_depth`.
+- Whisper runtime basics: `resolve_whisper_cli`.
+
+## Eleven names marked private are used from other files anyway
+
+An underscore at the front of a name means "private, do not use this from another file".
+Eleven such names cross the line today. Checked one by one, because who reaches in matters
+more than the count:
+
+- **Eight of them belong to the knowledge base, and one single helper script reaches for
+  all eight**: the script that compares one meaning-search model against another. Nothing
+  in the plugin itself touches them. So splitting that file will break that script and
+  nothing a person would notice — but it will break it silently, because a helper script
+  is not covered by the type check or the tests. That is now pinned, so it fails loudly.
+- One belongs to prompt building and is used by the file that reads the status tags.
+- Two belong to the whisper basics, and are used by both voice files. Those two crossed
+  the module line before this session too — the names were kept exactly as they were so
+  the move changed nothing else.
+
+Renaming any of them is a separate job with its own risk. It is not part of freezing and
+not part of the moving. Noted so it stays a decision rather than an oversight.
+
+## What changed in the code to make this possible
+
+Both back-end import loops were broken first, in two commits, because a loop is not a seam —
+it is two files that cannot be separated at all:
+
+- The four Ask command files formed a ring. Two small text rules (trim, fold case, drop one
+  leading slash) lived in the same file as the thing that calls all three matchers, so every
+  matcher had to import the file that imports it. The two rules moved to a file of their own
+  with no imports at all.
+- Voice capture and the whisper server imported each other, and the capture side hid it by
+  importing inside three function bodies. Everything the server needed from capture was
+  low-level and belonged to neither, so it moved to a third file both can import.
+
+The number that counts import loops in the back end has gone 2 to 0 and is recorded there, so
+it can never rise again without failing the gate.

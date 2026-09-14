@@ -216,6 +216,7 @@
     "tests/test_response_verify.py",
     "tests/test_save_ask_feedback_rpc.py",
     "tests/test_screenshot_media.py",
+    "tests/test_seam_contracts.py",
     "tests/test_session_rag_chip_candidates_rpc.py",
     "tests/test_settings_contract.py",
     "tests/test_settings_hostile_contract.py",

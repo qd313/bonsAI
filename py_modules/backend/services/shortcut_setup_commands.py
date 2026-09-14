@@ -10,6 +10,8 @@ from __future__ import annotations
 
 from typing import Literal, Optional
 
+from backend.services.ask_command_text import normalize_ask_command_input
+
 # Match sanitizer: trim + casefold, plus one optional leading / (e.g. paste from chat)
 COMMAND_SHORTCUT_DECK = "bonsai:shortcut-setup-deck"
 COMMAND_SHORTCUT_STADIA = "bonsai:shortcut-setup-stadia"
@@ -19,8 +21,6 @@ TROUBLESHOOTING_S5 = "docs/troubleshooting.md — **§5. bonsai shortcut setup**
 
 def normalize_command_input_with_slash(text: str) -> str:
     """Trim, casefold, and strip a single leading slash for paste-friendly matching."""
-    from backend.services.ask_local_commands import normalize_ask_command_input
-
     return normalize_ask_command_input(text, allow_leading_slash=True)
 
 

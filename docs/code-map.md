@@ -12,7 +12,6 @@ One entry per app file: the Title and Purpose lines from its header, grouped by 
 
 - **__init__.py** (py_modules/backend/__init__.py) — no header found.
 - **constants.py** (py_modules/backend/constants.py) — *Backend runtime constants*: Centralize shared defaults and path literals for the Decky plugin backend.
-- **json_store.py** (py_modules/backend/json_store.py) — *JSON store helpers*: Load, sanitize, and save JSON files for plugin-persisted data stores.
 - **ollama_connectivity.py** (py_modules/backend/ollama_connectivity.py) — *Ollama connectivity helpers*: Resolve Ollama HTTP bases, loopback hosts, and CLI executable paths.
 - **ollama_routing.py** (py_modules/backend/ollama_routing.py) — *Ollama model routing*: Select Ollama model tags and fallback chains from settings and policy tiers.
 - **ollama_urls.py** (py_modules/backend/ollama_urls.py) — *Ollama URL builders*: Normalize user host/port input and build Ollama API endpoint URLs.
@@ -23,7 +22,8 @@ One entry per app file: the Title and Purpose lines from its header, grouped by 
 
 - **__init__.py** (py_modules/backend/services/__init__.py) — no header found.
 - **ai_character_service.py** (py_modules/backend/services/ai_character_service.py) — *AI character presets*: Sanitize settings and build optional roleplay system-prompt suffixes for Ask.
-- **ask_local_commands.py** (py_modules/backend/services/ask_local_commands.py) — *Ask local command detection*: Normalize Ask input and detect local-only command kinds before Ollama runs.
+- **ask_command_text.py** (py_modules/backend/services/ask_command_text.py) — *Ask command text rules*: The trim/casefold/leading-slash rules every local Ask command matcher shares.
+- **ask_local_commands.py** (py_modules/backend/services/ask_local_commands.py) — *Ask local command detection*: Detect local-only command kinds before Ollama runs.
 - **async_background_job.py** (py_modules/backend/services/async_background_job.py) — *Async background job helpers*: Shared cancellation events and deduplicated stage logging for long-running jobs.
 - **async_task_lifecycle.py** (py_modules/backend/services/async_task_lifecycle.py) — *Async task teardown*: Cancel a background asyncio task and wait for it to actually stop.
 - **background_request_state.py** (py_modules/backend/services/background_request_state.py) — *Background request state shape*: Own the background-request status dict and the partial-stream snapshot the poller reads.

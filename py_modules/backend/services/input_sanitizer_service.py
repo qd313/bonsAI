@@ -13,6 +13,8 @@ import unicodedata
 from dataclasses import dataclass, field
 from typing import Literal, Optional
 
+from backend.services.ask_command_text import normalize_ask_command_input
+
 # Documented in README / docs; match is trim + casefold, exact equality.
 COMMAND_DISABLE_SANITIZE = "bonsai:disable-sanitize"
 COMMAND_ENABLE_SANITIZE = "bonsai:enable-sanitize"
@@ -23,8 +25,6 @@ MAX_USER_QUESTION_CHARS = 16_000
 
 def normalize_command_input(text: str) -> str:
     """Normalize text for sanitizer command comparison (trim + casefold)."""
-    from backend.services.ask_local_commands import normalize_ask_command_input
-
     return normalize_ask_command_input(text, allow_leading_slash=False)
 
 

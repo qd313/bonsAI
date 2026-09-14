@@ -11,7 +11,7 @@ from __future__ import annotations
 from typing import Any, Optional
 
 from backend.constants import DEVELOPER_TAB_INTEGRATIONS
-from backend.services.ask_local_commands import strip_optional_leading_slash
+from backend.services.ask_command_text import strip_optional_leading_slash
 from backend.services.steam_vac_service import (
     extract_steamid64_from_token,
     format_vac_report_markdown,

@@ -56,6 +56,14 @@
     "direction": "lower_is_better",
     "measured_by": "knip"
   },
+  "shell_props_to_tabs": {
+    "label": "Things the main screen hands down to its tabs",
+    "best": 215,
+    "target": 150,
+    "added_2026_09_14": "The screen file is the largest piece of screen code and its job is passing things along, so this is the size of that job. 108 of the 215 go to the Ask tab alone. Each tab's argument list is derived from the tab itself, so the compiler catches a missing one but nothing notices the list growing.",
+    "direction": "lower_is_better",
+    "measured_by": "scripts/shell_seam.mjs, read by scripts/ratchet.py"
+  },
   "be_names_defined_twice": {
     "label": "Back-end names written out twice in one file or class",
     "best": 0,

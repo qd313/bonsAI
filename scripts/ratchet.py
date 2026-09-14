@@ -400,6 +400,40 @@ def _cycle_count_from(path: Path) -> tuple[Optional[int], Optional[str]]:
     return len(cycles), None
 
 
+def metric_shell_props_to_tabs():
+    """How many separate things the plugin's main screen hands down to its six tabs.
+
+    The screen file is the biggest piece of screen code in the project and its job is
+    to pass things along, so this number is the size of that job. Each tab's argument
+    list is declared as a type derived from the tab itself, which means the compiler
+    catches a missing one but nothing notices the list quietly growing. Measured 215 on
+    2026-09-14, 108 of them to the Ask tab alone.
+    """
+    script = ROOT / "scripts" / "shell_seam.mjs"
+    if not script.exists():
+        return None, "scripts/shell_seam.mjs is missing"
+    try:
+        proc = subprocess.run(
+            ["node", str(script)],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            timeout=180,
+        )
+    except (OSError, subprocess.TimeoutExpired) as e:
+        return None, f"the shell seam counter did not run: {e}"
+    if proc.returncode != 0:
+        return None, f"the shell seam counter failed: {(proc.stderr or '').strip()[:200]}"
+    try:
+        data = json.loads(proc.stdout)
+    except json.JSONDecodeError:
+        return None, "the shell seam counter printed something that was not JSON"
+    total = data.get("total")
+    if not isinstance(total, int):
+        return None, "the shell seam counter did not report a total"
+    return total, None
+
+
 def metric_be_names_defined_twice():
     """Back-end names written out twice in the same file or the same class.
 
@@ -752,6 +786,7 @@ MEASURERS: dict[str, Callable[[], tuple[Optional[int | float], Optional[str]]]] 
     "duplicate_lines_app": metric_duplicate_lines_app,
     "duplicate_lines_be_tests": metric_duplicate_lines_be_tests,
     "unused_exports_fe": metric_unused_exports_fe,
+    "shell_props_to_tabs": metric_shell_props_to_tabs,
     "be_names_defined_twice": metric_be_names_defined_twice,
     "import_cycles_be": metric_import_cycles_be,
     "import_cycles_fe": metric_import_cycles_fe,

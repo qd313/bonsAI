@@ -5,6 +5,57 @@ pick up without rereading anything but this file.
 
 ---
 
+## 2026-09-14, phase 4 session 2: the last seam, then code starts moving
+
+**Nothing a person using the plugin can see has changed.** 1,277 back-end tests and 1,187
+screen tests pass, the full gate is green including the build. Four commits.
+
+**All eight seams are now held.** The last one was what the plugin's main screen hands down to
+its tabs, and reading it corrected something the first pass got wrong. That seam was not
+undocumented: all six tabs do have a written argument list. But each is *derived* from the tab
+it feeds, so it follows the tab rather than holding it still. The compiler still stops a build
+when a tab needs something new; nothing noticed the list getting longer. So it is held by a
+number instead: **215 things cross that boundary, 108 of them to the Ask tab alone.** That
+number is now recorded as the best ever and can only go down. Proven by pretending it was one
+lower and watching the check fail.
+
+That 108 is the finding worth keeping. One tab takes half of everything the screen passes
+along, and it is fed by the hook whose 52 returned things were frozen yesterday. Same problem
+from both ends.
+
+**The entry point is 241 lines smaller: 3,292 to 3,051.** Three things left it, each in its own
+commit, each checked by parsing both versions rather than by reading them:
+
+- **Deciding whether the AI is reachable** — 140 lines whose only tie to the plugin was two log
+  lines. The method left behind is 15.
+- **Reading what the screen sent** — the payload reader, the attachment tidier and the
+  true/false coercion. This also removed a back-reference that should not have existed: the ask
+  service was taking the plugin class as an argument purely to borrow its attachment tidier.
+- **The knowledge base's status answer** — 53 lines, now 6.
+
+**Two of those three had no test at all**, which round one's inventory had already flagged.
+They have 30 between them now, and the tests are real ones: the network probe, the
+"is it installed" check and the storage lookup are all handed in, so every answer is asserted
+without a running Ollama and without a corpus on disk.
+
+**Also: three files each held their own idea of what an ask mode is**, and the comment on one
+of them said outright that nothing enforced the match — naming what it cost, which was Expert
+silently answering on Speed's shorter budget for seven weeks. Moving the third list to derive
+from the first was the obvious fix and the wrong one: it touches the path that picks which
+model answers, to save a three-line table. A test gives the same protection for none of the
+risk. Proven by adding a fourth mode and watching two tests name the files that had drifted.
+
+**A mistake worth not repeating: `git add -A` swept another session's unfinished design work
+into one of my commits.** Caught it in the same minute, undid that part, and their files are
+untouched on disk. In this shared checkout, stage named paths, never everything.
+
+**Left to do in phase 4:** split the Ask hook behind its new written shape; declare each
+setting once instead of in five files; keep going on the entry point, where the four biggest
+things left are all tangled up with the locking that keeps two asks from running at once — and
+that locking is the part round one said must stay. Then the Deck check for the whole phase.
+
+---
+
 ## 2026-09-14, phase 4 session 1: untangle the knots, then write the shapes down
 
 **Nothing a person using the plugin can see has changed.** All 1,246 back-end tests and 1,187

@@ -22,6 +22,7 @@ roughly how many tokens it used, and how it finished.
 | 2026-09-13 | 2 Map and measure | The whole phase, no workers | Opus xhigh | 41 | 118,000 | done |
 | 2026-09-13 | 3 Delete | The whole phase, no workers | Opus xhigh | 78 | 205,000 | done |
 | 2026-09-14 | 4 Reshape | Session 1: untangle and freeze, no workers | Opus xhigh | 82 | 235,000 | done |
+| 2026-09-14 | 4 Reshape | Session 2: last seam, three moves out of main.py | Opus xhigh | 74 | 215,000 | done |
 
 ## Running total
 
@@ -31,7 +32,7 @@ roughly how many tokens it used, and how it finished.
 | 1 Docs diet | 7 | 576 | 1,551,000 |
 | 2 Map and measure | 0 | 41 | 118,000 |
 | 3 Delete | 0 | 78 | 205,000 |
-| 4 Reshape (1 of 3-4) | 0 | 82 | 235,000 |
+| 4 Reshape (2 of 3-4) | 0 | 156 | 450,000 |
 
 Phases 2 and 3 together cost 323,000 — about a fifth of the docs diet, and neither spawned a single
 worker. A script did the measuring and the deleting; the one session read only the summaries and

@@ -74,6 +74,15 @@ along, and it is fed by the hook whose 52 returned things were frozen earlier th
 two numbers are the same problem seen from both ends, and the step that splits the hook is the
 step that should move them.
 
+## What has moved since this was written
+
+Sizes in the table above are as of the freeze. Kept here so the table stays a record of the
+moment the seams were fixed, rather than being rewritten each time something moves.
+
+- `main.py` 3,292 → 3,051 (2026-09-14): the connection test, the ask-payload reader and the
+  knowledge base's status answer moved to services of their own. The back-end method list is
+  unchanged at 63, which is the point — the seam held while the code behind it moved.
+
 ## The rule for anyone working behind a seam
 
 Work behind the seam, not on it. Adding something new to one of these files is fine and

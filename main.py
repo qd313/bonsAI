@@ -142,6 +142,12 @@ from backend.services.ollama_connection_test import (
     run_ollama_connection_test,
     summarize_for_log,
 )
+from backend.services import ask_payload
+from backend.services.ask_payload import (
+    coerce_payload_bool,
+    parse_ask_payload,
+    sanitize_attachments,
+)
 from backend.services.tdp_service import clean_env
 from backend.services.local_ollama_setup_service import (
     new_local_ollama_setup_state,
@@ -229,8 +235,10 @@ class Plugin:
         "persist_search_only",
         "no_persist",
     }
-    DEFAULT_ASK_MODE = "speed"
-    VALID_ASK_MODES = {"speed", "strategy", "expert"}
+    # Declared once in ask_payload.py; mirrored here because two other files and a test
+    # read them off the class. Do not give either a second value here.
+    DEFAULT_ASK_MODE = ask_payload.DEFAULT_ASK_MODE
+    VALID_ASK_MODES = ask_payload.VALID_ASK_MODES
     MIN_LATENCY_WARNING_SECONDS = 5
     MAX_LATENCY_WARNING_SECONDS = 300
     MIN_REQUEST_TIMEOUT_SECONDS = 10
@@ -665,13 +673,6 @@ class Plugin:
         except Exception:
             logger.exception("_maybe_app_log failed")
 
-    @staticmethod
-    def _coerce_payload_bool(value: Any) -> bool:
-        if value is True:
-            return True
-        if isinstance(value, str) and value.strip().lower() in ("true", "1", "yes"):
-            return True
-        return False
 
     @staticmethod
     def _strategy_checklist_session_path() -> str:
@@ -681,75 +682,7 @@ class Plugin:
     def _load_strategy_checklist_store() -> dict:
         return load_session_store(Plugin._strategy_checklist_session_path(), logger)
 
-    @staticmethod
-    def _parse_ask_payload(
-        question: Any, PcIp: str
-    ) -> Tuple[str, str, str, str, list, str, bool, Optional[dict], Optional[dict]]:
-        """Normalize ask payload variants into canonical question/ip/context values."""
-        app_id = ""
-        app_name = ""
-        attachments: list = []
-        ask_mode_raw: Any = None
-        spoiler_consent_raw: Any = None
-        checklist_state_raw: Any = None
-        reply_followup_raw: Any = None
-        if isinstance(question, dict):
-            payload = question
-            question = payload.get("question", "")
-            PcIp = payload.get("PcIp", payload.get("pcIp", payload.get("pc_ip", PcIp)))
-            app_id = str(payload.get("appId", "") or "").strip()
-            app_name = str(payload.get("appName", "") or "").strip()
-            attachments = Plugin._sanitize_attachments(payload.get("attachments", []))
-            ask_mode_raw = payload.get("askMode", payload.get("ask_mode", ask_mode_raw))
-            spoiler_consent_raw = payload.get("spoiler_consent", payload.get("spoilerConsent", spoiler_consent_raw))
-            checklist_state_raw = payload.get(
-                "strategy_checklist_state", payload.get("strategyChecklistState", checklist_state_raw)
-            )
-            reply_followup_raw = payload.get("reply_followup", payload.get("replyFollowup", reply_followup_raw))
-        normalized_question = str(question or "").strip()
-        normalized_pc_ip = str(PcIp or "").strip()
-        ask_mode = sanitize_ask_mode(ask_mode_raw, Plugin.VALID_ASK_MODES, Plugin.DEFAULT_ASK_MODE)
-        spoiler_consent = Plugin._coerce_payload_bool(spoiler_consent_raw)
-        strategy_checklist_state = normalize_ask_checklist_state(checklist_state_raw)
-        from backend.services.ollama_prompts import sanitize_reply_followup
 
-        reply_followup = sanitize_reply_followup(reply_followup_raw)
-        return (
-            normalized_question,
-            normalized_pc_ip,
-            app_id,
-            app_name,
-            attachments,
-            ask_mode,
-            spoiler_consent,
-            strategy_checklist_state,
-            reply_followup,
-        )
-
-    @staticmethod
-    def _sanitize_attachments(raw_attachments: Any) -> list:
-        """Keep only valid attachment fields and discard malformed entries."""
-        if not isinstance(raw_attachments, list):
-            return []
-        sanitized: list = []
-        for raw in raw_attachments:
-            if not isinstance(raw, dict):
-                continue
-            path = str(raw.get("path", "") or "").strip()
-            if not path:
-                continue
-            name = str(raw.get("name", "") or "").strip()
-            source = str(raw.get("source", "unknown") or "unknown").strip().lower()
-            app_id = str(raw.get("app_id", "") or "").strip()
-            sanitized.append(
-                {
-                    "path": path,
-                    "name": name or os.path.basename(path),
-                    "source": source,
-                    "app_id": app_id,
-                }
-            )
-        return sanitized
 
     @staticmethod
     def _reject_ask_request(response_text: str, app_id: str = "") -> dict:
@@ -2338,7 +2271,7 @@ class Plugin:
             spoiler_consent,
             strategy_checklist_state,
             reply_followup,
-        ) = Plugin._parse_ask_payload(question, PcIp)
+        ) = parse_ask_payload(question, PcIp)
         if not parsed_question:
             logger.info("ask_game_ai: rejected (empty question)")
             return Plugin._reject_ask_request("Question is required.", app_id=app_id)
@@ -2491,7 +2424,7 @@ class Plugin:
             spoiler_consent,
             strategy_checklist_state,
             reply_followup,
-        ) = Plugin._parse_ask_payload(question, PcIp)
+        ) = parse_ask_payload(question, PcIp)
         app_context = "active" if app_id else "none"
         if not parsed_question:
             return {

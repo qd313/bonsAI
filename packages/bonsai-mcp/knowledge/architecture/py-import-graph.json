@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 64,
-  "edgeCount": 143,
+  "fileCount": 65,
+  "edgeCount": 147,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -110,6 +110,10 @@
       "count": 3
     },
     {
+      "path": "py_modules/backend/services/settings_service.py",
+      "count": 3
+    },
+    {
       "path": "py_modules/backend/services/spoiler_title_profiles.py",
       "count": 3
     },
@@ -124,6 +128,10 @@
     {
       "path": "py_modules/backend/tdp_intent.py",
       "count": 3
+    },
+    {
+      "path": "py_modules/backend/services/ask_payload.py",
+      "count": 2
     },
     {
       "path": "py_modules/backend/services/bonsai_stream_tags.py",
@@ -146,15 +154,15 @@
       "count": 2
     },
     {
-      "path": "py_modules/backend/services/settings_service.py",
-      "count": 2
-    },
-    {
       "path": "py_modules/backend/services/shortcut_setup_commands.py",
       "count": 2
     },
     {
       "path": "py_modules/backend/services/spoiler_risk_service.py",
+      "count": 2
+    },
+    {
+      "path": "py_modules/backend/services/strategy_checklist_session_service.py",
       "count": 2
     },
     {
@@ -274,10 +282,6 @@
       "count": 1
     },
     {
-      "path": "py_modules/backend/services/strategy_checklist_session_service.py",
-      "count": 1
-    },
-    {
       "path": "py_modules/backend/services/voice_read_aloud_service.py",
       "count": 1
     },
@@ -307,6 +311,7 @@
         "py_modules/backend/ollama_urls.py",
         "py_modules/backend/services/ai_character_service.py",
         "py_modules/backend/services/ask_local_commands.py",
+        "py_modules/backend/services/ask_payload.py",
         "py_modules/backend/services/async_background_job.py",
         "py_modules/backend/services/async_task_lifecycle.py",
         "py_modules/backend/services/background_request_state.py",
@@ -330,7 +335,6 @@
         "py_modules/backend/services/ollama_embed_service.py",
         "py_modules/backend/services/ollama_local_autostart_service.py",
         "py_modules/backend/services/ollama_mdns_discovery_service.py",
-        "py_modules/backend/services/ollama_prompts.py",
         "py_modules/backend/services/ollama_service.py",
         "py_modules/backend/services/plugin_data_reset.py",
         "py_modules/backend/services/pull_model_catalog_service.py",
@@ -432,6 +436,17 @@
       ],
       "importedBy": [
         "main.py"
+      ]
+    },
+    "py_modules/backend/services/ask_payload.py": {
+      "imports": [
+        "py_modules/backend/services/ollama_prompts.py",
+        "py_modules/backend/services/settings_service.py",
+        "py_modules/backend/services/strategy_checklist_session_service.py"
+      ],
+      "importedBy": [
+        "main.py",
+        "py_modules/backend/services/ollama_ask_service.py"
       ]
     },
     "py_modules/backend/services/async_background_job.py": {
@@ -634,6 +649,7 @@
         "py_modules/backend/ollama_routing.py",
         "py_modules/backend/ollama_urls.py",
         "py_modules/backend/services/ai_character_service.py",
+        "py_modules/backend/services/ask_payload.py",
         "py_modules/backend/services/local_ollama_setup_service.py",
         "py_modules/backend/services/model_policy.py",
         "py_modules/backend/services/ollama_service.py",
@@ -703,7 +719,7 @@
         "py_modules/backend/tdp_intent.py"
       ],
       "importedBy": [
-        "main.py",
+        "py_modules/backend/services/ask_payload.py",
         "py_modules/backend/services/bonsai_stream_tags.py",
         "py_modules/backend/services/game_ai_request.py",
         "py_modules/backend/services/knowledge_base_service.py",
@@ -800,6 +816,7 @@
       ],
       "importedBy": [
         "main.py",
+        "py_modules/backend/services/ask_payload.py",
         "py_modules/backend/services/ollama_ask_service.py"
       ]
     },
@@ -841,7 +858,8 @@
     "py_modules/backend/services/strategy_checklist_session_service.py": {
       "imports": [],
       "importedBy": [
-        "main.py"
+        "main.py",
+        "py_modules/backend/services/ask_payload.py"
       ]
     },
     "py_modules/backend/services/strategy_guide_parse.py": {

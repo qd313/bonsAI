@@ -38,6 +38,7 @@ from backend.services.model_policy import (
     empty_filter_user_message,
     filter_model_list,
 )
+from backend.services.ask_payload import sanitize_attachments
 from backend.services.ollama_service import post_ollama_chat
 from backend.services.settings_service import sanitize_ollama_keep_alive, sanitize_reply_verbosity
 from backend.services.reply_language_service import resolve_effective_reply_language
@@ -83,12 +84,11 @@ async def run_ask_ollama(
 
     url = plugin_inst._build_ollama_chat_url(pc_ip)
     settings = await plugin_inst.load_settings()
-    pcls = type(plugin_inst)
     # Resolved once, before anything reads it. ai_character_random defaults *on* and calls
     # random.choice, so a second call here would roll a different character -- and this function
     # used to make two, one for the screenshot_prep blurb and one for the reply's actual voice.
     rp_meta = build_roleplay_system_suffix_meta(settings, ask_mode)
-    normalized_attachments = pcls._sanitize_attachments(attachments or [])
+    normalized_attachments = sanitize_attachments(attachments or [])
     attachment_paths = [
         str(a.get("path", "") or "").strip()
         for a in normalized_attachments

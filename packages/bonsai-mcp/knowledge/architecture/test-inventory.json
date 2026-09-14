@@ -187,6 +187,7 @@
     "tests/test_ollama_ask_budgets.py",
     "tests/test_ollama_ask_service.py",
     "tests/test_ollama_catalog_service.py",
+    "tests/test_ollama_connection_test.py",
     "tests/test_ollama_embed_service.py",
     "tests/test_ollama_health_probe.py",
     "tests/test_ollama_local_autostart_rpc.py",

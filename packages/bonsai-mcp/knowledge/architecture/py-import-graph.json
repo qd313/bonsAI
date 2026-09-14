@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 63,
-  "edgeCount": 139,
+  "fileCount": 64,
+  "edgeCount": 143,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -43,7 +43,7 @@
   "fanIn": [
     {
       "path": "py_modules/backend/services/local_ollama_setup_service.py",
-      "count": 9
+      "count": 10
     },
     {
       "path": "py_modules/backend/constants.py",
@@ -51,7 +51,7 @@
     },
     {
       "path": "py_modules/backend/ollama_urls.py",
-      "count": 6
+      "count": 7
     },
     {
       "path": "py_modules/backend/services/ollama_prompts.py",
@@ -78,6 +78,10 @@
       "count": 4
     },
     {
+      "path": "py_modules/backend/services/ollama_service.py",
+      "count": 4
+    },
+    {
       "path": "py_modules/backend/services/reply_language_service.py",
       "count": 4
     },
@@ -99,10 +103,6 @@
     },
     {
       "path": "py_modules/backend/services/knowledge_base_service.py",
-      "count": 3
-    },
-    {
-      "path": "py_modules/backend/services/ollama_service.py",
       "count": 3
     },
     {
@@ -250,6 +250,10 @@
       "count": 1
     },
     {
+      "path": "py_modules/backend/services/ollama_connection_test.py",
+      "count": 1
+    },
+    {
       "path": "py_modules/backend/services/ollama_local_autostart_service.py",
       "count": 1
     },
@@ -322,6 +326,7 @@
         "py_modules/backend/services/network_service.py",
         "py_modules/backend/services/ollama_ask_service.py",
         "py_modules/backend/services/ollama_catalog_service.py",
+        "py_modules/backend/services/ollama_connection_test.py",
         "py_modules/backend/services/ollama_embed_service.py",
         "py_modules/backend/services/ollama_local_autostart_service.py",
         "py_modules/backend/services/ollama_mdns_discovery_service.py",
@@ -392,6 +397,7 @@
         "py_modules/backend/ollama_connectivity.py",
         "py_modules/backend/services/local_ollama_setup_service.py",
         "py_modules/backend/services/ollama_ask_service.py",
+        "py_modules/backend/services/ollama_connection_test.py",
         "py_modules/backend/services/ollama_embed_service.py",
         "py_modules/backend/services/ollama_service.py"
       ]
@@ -587,6 +593,7 @@
         "main.py",
         "py_modules/backend/services/local_ollama_teardown_service.py",
         "py_modules/backend/services/ollama_ask_service.py",
+        "py_modules/backend/services/ollama_connection_test.py",
         "py_modules/backend/services/ollama_embed_service.py",
         "py_modules/backend/services/ollama_local_autostart_service.py",
         "py_modules/backend/services/ollama_mdns_discovery_service.py",
@@ -649,6 +656,16 @@
         "py_modules/backend/services/settings_service.py"
       ]
     },
+    "py_modules/backend/services/ollama_connection_test.py": {
+      "imports": [
+        "py_modules/backend/ollama_urls.py",
+        "py_modules/backend/services/local_ollama_setup_service.py",
+        "py_modules/backend/services/ollama_service.py"
+      ],
+      "importedBy": [
+        "main.py"
+      ]
+    },
     "py_modules/backend/services/ollama_embed_service.py": {
       "imports": [
         "py_modules/backend/ollama_connectivity.py",
@@ -709,7 +726,8 @@
       "importedBy": [
         "main.py",
         "py_modules/backend/services/game_ai_request.py",
-        "py_modules/backend/services/ollama_ask_service.py"
+        "py_modules/backend/services/ollama_ask_service.py",
+        "py_modules/backend/services/ollama_connection_test.py"
       ]
     },
     "py_modules/backend/services/plugin_data_reset.py": {

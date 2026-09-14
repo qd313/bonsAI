@@ -30,7 +30,6 @@ from backend.services.ollama_service import (
     build_system_prompt,
     close_ollama_chat_response,
     preload_ask_model_sync,
-    probe_ollama_health,
     spawn_ollama_stop_thread,
 )
 from backend.services.async_task_lifecycle import cancel_and_await
@@ -139,12 +138,13 @@ from backend.services.transparency_service import (
     build_voice_transcribe_snapshot,
     transparency_snapshot_for_chat_slot,
 )
+from backend.services.ollama_connection_test import (
+    run_ollama_connection_test,
+    summarize_for_log,
+)
 from backend.services.tdp_service import clean_env
 from backend.services.local_ollama_setup_service import (
-    is_loopback_ollama_host,
-    local_ollama_cli_home_ready,
     new_local_ollama_setup_state,
-    recover_loopback_ollama_listening,
     run_local_setup,
     run_ollama_rm_async,
 )
@@ -1288,144 +1288,19 @@ class Plugin:
 
     async def test_ollama_connection(self, pc_ip: str = "", timeout_seconds: int = 10):
         """Ping Ollama's /api/version and /api/tags to verify reachability."""
-        started_at = time.time()
-        safe_timeout_seconds = max(1, min(120, int(timeout_seconds or 5)))
-        raw = (pc_ip or "").strip()
-
-        async def _finish(out: dict[str, Any]) -> dict[str, Any]:
-            reachable = bool(out.get("reachable"))
-            fields: dict[str, Any] = {
-                "reachable": reachable,
-                "recovery_attempted": bool(out.get("recovery_attempted")),
-            }
-            if reachable:
-                fields["version"] = str(out.get("version", "unknown"))
-                fields["model_count"] = len(out.get("models") or [])
-            else:
-                fields["error"] = str(out.get("error") or "")[:160]
-            await self._maybe_app_log("connection.test", "ollama connection test", fields=fields)
-            await self._maybe_app_log(
-                "connection.test",
-                "RPC test_ollama_connection",
-                level="verbose",
-                fields={"host": raw, "timeout_seconds": safe_timeout_seconds},
-            )
-            return out
-
-        if not raw:
-            return await _finish({"reachable": False, "error": "No PC IP provided."})
-        host, _port, base = normalize_ollama_base(raw)
-        loopback = is_loopback_ollama_host(host)
-
-        def _loopback_not_installed_out(extra: dict[str, Any] | None = None) -> dict[str, Any]:
-            out: dict[str, Any] = {
-                "reachable": False,
-                "error": "Ollama is not set up on this Deck yet. Tap Install Ollama.",
-            }
-            if extra:
-                out.update(extra)
-            return out
-
-        def _test_connection_sync() -> dict:
-            return probe_ollama_health(base, started_at + safe_timeout_seconds)
-
-        recovery_attempted = False
-        recovery_succeeded_before_retry: bool | None = None
-
-        tested: Optional[dict[str, Any]] = None
-        try:
-            tested = await asyncio.wait_for(
-                asyncio.to_thread(_test_connection_sync),
-                timeout=float(safe_timeout_seconds) + 1.0,
-            )
-        except Exception:
-            if not loopback:
-                logger.exception("test_ollama_connection failed (non-loopback)")
-                return await _finish(
-                    {
-                        "reachable": False,
-                        "error": "Could not reach Ollama. Check PC IP, firewall, and that Ollama is running on the host.",
-                    }
-                )
-
-            if not local_ollama_cli_home_ready():
-                return await _finish(_loopback_not_installed_out())
-
-            recovery_attempted = True
-
-            def _recover_log(line: str) -> None:
-                try:
-                    logger.info(line)
-                except Exception:
-                    pass
-
-            try:
-                recovered = await asyncio.wait_for(
-                    asyncio.to_thread(lambda: recover_loopback_ollama_listening(_recover_log)),
-                    timeout=float(safe_timeout_seconds) + 35.0,
-                )
-            except Exception:
-                logger.exception("recover_loopback_ollama_listening raised")
-                recovered = False
-
-            recovery_succeeded_before_retry = bool(recovered)
-
-            if not recovered:
-                return await _finish(
-                    {
-                        "reachable": False,
-                        "recovery_attempted": recovery_attempted,
-                        "recovery_succeeded_before_retry": False,
-                        "error": (
-                            "Could not start or reach Ollama on this device. Try Starter setup in Connection, "
-                            "or run ``ollama serve`` from Desktop Konsole."
-                        ),
-                    }
-                )
-
-            try:
-                tested = await asyncio.wait_for(
-                    asyncio.to_thread(_test_connection_sync),
-                    timeout=float(safe_timeout_seconds) + 1.0,
-                )
-            except Exception:
-                logger.exception("test_ollama_connection failed after loopback recovery")
-                return await _finish(
-                    {
-                        "reachable": False,
-                        "recovery_attempted": recovery_attempted,
-                        "recovery_succeeded_before_retry": True,
-                        "error": (
-                            "Ollama was started but the health check still failed. Retry the test or check "
-                            "~/.ollama and disk space."
-                        ),
-                    }
-                )
-
-        version = str(tested.get("version", "unknown"))
-        models = list(tested.get("models", []))
-        ps_loaded = list(tested.get("ps_loaded", []))
-
-        if loopback and not local_ollama_cli_home_ready():
-            return await _finish(
-                _loopback_not_installed_out(
-                    {
-                        "recovery_attempted": recovery_attempted,
-                        "recovery_succeeded_before_retry": recovery_succeeded_before_retry,
-                    }
-                )
-            )
-
-        base_out: dict[str, Any] = {
-            "reachable": True,
-            "version": version,
-            "models": models,
-            "ps_loaded": ps_loaded,
-        }
-        if recovery_attempted:
-            base_out["recovery_attempted"] = True
-            base_out["recovery_succeeded_before_retry"] = recovery_succeeded_before_retry
-        return await _finish(base_out)
+        tested = await run_ollama_connection_test(pc_ip, timeout_seconds)
+        await self._maybe_app_log(
+            "connection.test",
+            "ollama connection test",
+            fields=summarize_for_log(tested.result),
+        )
+        await self._maybe_app_log(
+            "connection.test",
+            "RPC test_ollama_connection",
+            level="verbose",
+            fields={"host": tested.host, "timeout_seconds": tested.timeout_seconds},
+        )
+        return tested.result
 
     async def discover_mdns_ollama_hosts(self, timeout_seconds: int = 8):
         """User-triggered mDNS browse for ``_ollama._tcp.local`` only (no subnet scan)."""

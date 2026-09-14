@@ -100,12 +100,6 @@ WHISPER_CPP_IMAGE = (
 )
 
 
-def sanitize_voice_stt_model(value: Any) -> str:
-    if isinstance(value, str) and value.strip() in VALID_VOICE_STT_MODELS:
-        return value.strip()
-    return DEFAULT_VOICE_STT_MODEL
-
-
 def new_voice_install_state() -> dict[str, Any]:
     return {
         "phase": "idle",

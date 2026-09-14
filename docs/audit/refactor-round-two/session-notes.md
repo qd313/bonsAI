@@ -5,6 +5,65 @@ pick up without rereading anything but this file.
 
 ---
 
+## 2026-09-14, phase 4 session 1: untangle the knots, then write the shapes down
+
+**Nothing a person using the plugin can see has changed.** All 1,246 back-end tests and 1,187
+screen tests pass, the full gate is green, and the build works. Six commits.
+
+This session did almost no moving of code, on purpose. Phase 4's own rule is that nothing moves
+until the places where code hands work to other code are written down. So the session untangled
+the two knots that made writing them down impossible, wrote them down, and then built guards that
+fail when one of them changes by accident.
+
+**Both back-end knots are untied. That number has gone from two to zero and can never rise again
+without failing the gate.**
+
+- The four Ask command files formed a ring: each one had to import the file that imports it, and
+  two hid that by importing halfway down a function. Two small text rules (trim, fold case, drop
+  one leading slash) moved into a file of their own that imports nothing at all.
+- Voice capture and the whisper server imported each other. Everything the server needed from
+  capture was low-level and belonged to neither, so 143 lines moved into a third file both can
+  import. Capture went from 1,413 lines to 1,307.
+
+**Seven of the eight seams now have something holding them still.** Each guard was proven by
+deliberately breaking it and watching the failure, not by assuming:
+
+- The Ask hook hands back 52 things and is the file a later step splits. Those 52 are now written
+  out with their real types. Adding a stray one fails the build; dropping a real one fails the
+  build. Both tried.
+- The back end has no compiler, so 61 names across seven files are pinned in a test, with the
+  exact way each is called. Renaming one argument fails the test run with a message naming it.
+- A call to a back-end method that does not exist now fails the build. Every call site already
+  used a real name, which is the proof nothing changed. Tried a typo; the build stopped.
+
+**Still open, and the first job of next session:** what the plugin's main screen hands down to its
+tabs. It needs real reading of a 1,709-line file before it can be written down honestly, and
+nothing moves behind it until then.
+
+**Two things found by accident, both now guarded:**
+
+- One function was written out twice in the same file, byte for byte identical, so the second
+  quietly replaced the first every time the file loaded. Nothing we run looks for that. It is now
+  a number that must stay at zero, and the whole back end was swept first: 213 files, no other
+  case, no duplicate method in any class either.
+- The script that stages generated files wrote its file list out twice and used only one copy, so
+  adding a file to the obvious list would have done nothing.
+
+**Three lessons for whoever moves code next:**
+
+- Parse-check before writing, not after. A text replace matched an eight-space indent inside a
+  twelve-space line and broke the block below it; the script had already written the file.
+- Run the tests immediately after an extraction. The new file was missing one import and eight
+  tests said so by name within a minute.
+- The gates are worth more than the plan. The unused-export gate refused a generated file that
+  exported a count nothing imports, and it was right.
+
+**Left to do in phase 4:** split the big back-end file along the lines round one already mapped;
+split the Ask hook behind its new written shape; declare each setting once instead of in five
+files; anything else left over. Then the Deck check for the whole phase.
+
+---
+
 ## 2026-09-13, phase 3 done: the deleting, and two tools that had to be fixed mid-job
 
 **Phase 3 landed in four commits. Nothing a person using the plugin can see has changed** — every

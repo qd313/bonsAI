@@ -71,6 +71,34 @@ class OllamaAskBudgetsTests(unittest.TestCase):
                 self.assertIn(mode, ASK_VISIBLE_NUM_PREDICT)
                 self.assertEqual(resolve_ask_token_budgets(mode)["ask_mode"], mode)
 
+    def test_every_place_that_knows_the_ask_modes_agrees(self) -> None:
+        """Three files hold their own copy of what an ask mode is. They must match.
+
+        The one definition is ``VALID_ASK_MODES`` in ask_payload.py. The reply-length
+        table here keys off the same names, and model routing keeps a third list because
+        each mode names its own chain of models. A mode missing from any of them fails
+        quietly -- that is exactly how Expert ran on Speed's 800-token cap for seven weeks
+        in 2026. Nothing checks this at import time, so it is checked here.
+        """
+        from backend.ollama_routing import TEXT_MODELS_BY_MODE
+        from backend.services.ask_payload import DEFAULT_ASK_MODE, VALID_ASK_MODES
+
+        self.assertEqual(
+            set(VALID_ASK_MODES),
+            set(ASK_VISIBLE_NUM_PREDICT),
+            "the reply-length table and the list of ask modes have drifted apart",
+        )
+        self.assertEqual(
+            set(VALID_ASK_MODES),
+            set(TEXT_MODELS_BY_MODE),
+            "model routing and the list of ask modes have drifted apart",
+        )
+        self.assertIn(
+            DEFAULT_ASK_MODE,
+            VALID_ASK_MODES,
+            "the mode everything falls back to is not itself a valid mode",
+        )
+
     def test_default_effort_keeps_think_false_and_visible_only_budget(self) -> None:
         for mode, visible in ASK_VISIBLE_NUM_PREDICT.items():
             budgets = resolve_ask_token_budgets(mode)

@@ -14,12 +14,14 @@ from __future__ import annotations
 from typing import Any, Optional, Union
 
 # Visible reply budgets on the wire as ``options.num_predict`` when thinking is off.
-# Keys MUST match ``Plugin.VALID_ASK_MODES`` in main.py. Nothing enforces that at import
-# time, and a mismatch fails silently: ``normalize_ask_mode`` falls back to "speed", so the
-# mode quietly runs on the Speed cap. This table shipped keyed "deep" -- the mode's pre-
-# 2026-06-26 name -- so Expert ran on 800 instead of 1200 until 2026-08-15. Settings coerce
-# legacy "deep" to "expert" on load (settings_service._sanitize_ask_mode), so "deep" never
-# reaches here. Guarded by test_every_valid_ask_mode_has_its_own_cap.
+# Keys MUST match ``VALID_ASK_MODES`` in backend/services/ask_payload.py, which is where
+# the one definition lives (it was on the Plugin class until 2026-09-14). Nothing enforces
+# that at import time, and a mismatch fails silently: ``normalize_ask_mode`` falls back to
+# "speed", so the mode quietly runs on the Speed cap. This table shipped keyed "deep" --
+# the mode's pre-2026-06-26 name -- so Expert ran on 800 instead of 1200 until 2026-08-15.
+# Settings coerce legacy "deep" to "expert" on load (settings_service._sanitize_ask_mode),
+# so "deep" never reaches here. Guarded by test_every_valid_ask_mode_has_its_own_cap and
+# test_every_place_that_knows_the_ask_modes_agrees, which also covers model routing.
 ASK_VISIBLE_NUM_PREDICT: dict[str, int] = {
     "speed": 800,
     "expert": 1200,

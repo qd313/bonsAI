@@ -1,6 +1,6 @@
 {
  "files_over_400_lines": 42,
- "total_lines_in_them": 37677,
+ "total_lines_in_them": 37444,
  "cycles_backend": [
   [
    "py_modules/backend/services/ask_local_commands.py",
@@ -17,7 +17,7 @@
  "rows": [
   {
    "file": "main.py",
-   "lines": 3308,
+   "lines": 3292,
    "imported_by": 0,
    "imports": 43
   },
@@ -41,13 +41,13 @@
   },
   {
    "file": "py_modules/backend/services/ollama_prompts.py",
-   "lines": 1572,
+   "lines": 1571,
    "imported_by": 6,
    "imports": 5
   },
   {
    "file": "py_modules/backend/services/voice_transcription_service.py",
-   "lines": 1528,
+   "lines": 1412,
    "imported_by": 4,
    "imports": 3
   },
@@ -113,13 +113,13 @@
   },
   {
    "file": "py_modules/backend/services/screenshot_media.py",
-   "lines": 803,
+   "lines": 802,
    "imported_by": 3,
    "imports": 0
   },
   {
    "file": "py_modules/backend/services/transparency_service.py",
-   "lines": 800,
+   "lines": 787,
    "imported_by": 2,
    "imports": 1
   },
@@ -167,7 +167,7 @@
   },
   {
    "file": "py_modules/backend/services/settings_service.py",
-   "lines": 545,
+   "lines": 544,
    "imported_by": 2,
    "imports": 7
   },
@@ -181,12 +181,6 @@
    "file": "py_modules/backend/services/knowledge_base_schema.py",
    "lines": 519,
    "imported_by": 4,
-   "imports": 0
-  },
-  {
-   "file": "src/components/CharacterPropGlyph.tsx",
-   "lines": 510,
-   "imported_by": 1,
    "imports": 0
   },
   {
@@ -220,16 +214,22 @@
    "imports": 1
   },
   {
-   "file": "py_modules/backend/ollama_routing.py",
-   "lines": 463,
-   "imported_by": 5,
-   "imports": 1
-  },
-  {
    "file": "src/utils/buildReplyActionsElement.tsx",
    "lines": 461,
    "imported_by": 2,
    "imports": 11
+  },
+  {
+   "file": "src/components/CharacterPropGlyph.tsx",
+   "lines": 450,
+   "imported_by": 1,
+   "imports": 0
+  },
+  {
+   "file": "py_modules/backend/ollama_routing.py",
+   "lines": 438,
+   "imported_by": 5,
+   "imports": 1
   },
   {
    "file": "py_modules/backend/services/desktop_note_service.py",

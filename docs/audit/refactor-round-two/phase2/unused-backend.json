@@ -1,12 +1,11 @@
 {
  "totals": {
-  "reported": 81,
-  "needs_a_decision": 18,
+  "reported": 79,
+  "needs_a_decision": 16,
   "ruled_out": 63,
   "rpc_methods_no_frontend_caller": 3,
   "nothing calls it": 2,
-  "only the tests call it": 14,
-  "an unused argument": 2
+  "only the tests call it": 14
  },
  "rpc_methods_no_frontend_caller": [
   "ask_game_ai",
@@ -201,22 +200,6 @@
     "tests/test_response_verify.py"
    ],
    "own_file_uses": 0
-  },
-  {
-   "file": "py_modules/backend/services/ollama_prompts.py",
-   "line": 863,
-   "kind": "an unused argument",
-   "name": "game_hint",
-   "confidence": 60,
-   "fix": "drop the argument and its callers' use of it"
-  },
-  {
-   "file": "py_modules/backend/services/screenshot_media.py",
-   "line": 324,
-   "kind": "an unused argument",
-   "name": "plugin_runtime_dir",
-   "confidence": 100,
-   "fix": "drop the argument and its callers' use of it"
   }
  ],
  "ruled_out": [
@@ -542,7 +525,7 @@
   },
   {
    "file": "main.py",
-   "line": 2454,
+   "line": 2453,
    "kind": "method",
    "name": "ask_game_ai",
    "confidence": 60,
@@ -550,7 +533,7 @@
   },
   {
    "file": "main.py",
-   "line": 2606,
+   "line": 2605,
    "kind": "method",
    "name": "start_background_game_ai",
    "confidence": 60,
@@ -558,7 +541,7 @@
   },
   {
    "file": "main.py",
-   "line": 2839,
+   "line": 2838,
    "kind": "method",
    "name": "dbg_fe_log",
    "confidence": 60,
@@ -566,7 +549,7 @@
   },
   {
    "file": "main.py",
-   "line": 2852,
+   "line": 2851,
    "kind": "method",
    "name": "get_background_game_ai_status",
    "confidence": 60,
@@ -574,7 +557,7 @@
   },
   {
    "file": "main.py",
-   "line": 2936,
+   "line": 2935,
    "kind": "method",
    "name": "forget_background_game_ai",
    "confidence": 60,
@@ -582,7 +565,7 @@
   },
   {
    "file": "main.py",
-   "line": 3104,
+   "line": 3103,
    "kind": "method",
    "name": "get_voice_engine_status",
    "confidence": 60,
@@ -590,7 +573,7 @@
   },
   {
    "file": "main.py",
-   "line": 3112,
+   "line": 3111,
    "kind": "method",
    "name": "install_voice_engine",
    "confidence": 60,
@@ -598,7 +581,7 @@
   },
   {
    "file": "main.py",
-   "line": 3162,
+   "line": 3161,
    "kind": "method",
    "name": "get_voice_install_status",
    "confidence": 60,
@@ -606,7 +589,7 @@
   },
   {
    "file": "main.py",
-   "line": 3166,
+   "line": 3165,
    "kind": "method",
    "name": "start_voice_transcription",
    "confidence": 60,
@@ -614,7 +597,7 @@
   },
   {
    "file": "main.py",
-   "line": 3225,
+   "line": 3224,
    "kind": "method",
    "name": "stop_voice_transcription",
    "confidence": 60,
@@ -622,7 +605,7 @@
   },
   {
    "file": "main.py",
-   "line": 3245,
+   "line": 3244,
    "kind": "method",
    "name": "get_voice_transcription_status",
    "confidence": 60,
@@ -630,7 +613,7 @@
   },
   {
    "file": "main.py",
-   "line": 3268,
+   "line": 3267,
    "kind": "method",
    "name": "start_voice_read_aloud",
    "confidence": 60,
@@ -638,7 +621,7 @@
   },
   {
    "file": "main.py",
-   "line": 3278,
+   "line": 3277,
    "kind": "method",
    "name": "stop_voice_read_aloud",
    "confidence": 60,
@@ -646,7 +629,7 @@
   },
   {
    "file": "main.py",
-   "line": 3283,
+   "line": 3282,
    "kind": "method",
    "name": "get_voice_read_aloud_status",
    "confidence": 60,

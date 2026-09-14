@@ -415,25 +415,25 @@
    {
     "file": "py_modules/backend/services/transparency_service.py",
     "name": "build_ollama_route_snapshot",
-    "line": 678,
+    "line": 665,
     "length": 76
    },
    {
     "file": "main.py",
     "name": "_start_custom_ollama_pull",
-    "line": 1862,
+    "line": 1847,
     "length": 73
    },
    {
     "file": "py_modules/backend/services/voice_whisper_daemon.py",
     "name": "acquire",
-    "line": 220,
+    "line": 218,
     "length": 68
    },
    {
     "file": "py_modules/backend/services/voice_transcription_service.py",
     "name": "start",
-    "line": 1285,
+    "line": 1169,
     "length": 66
    },
    {
@@ -445,7 +445,7 @@
    {
     "file": "py_modules/backend/services/voice_transcription_service.py",
     "name": "_transcribe_loop",
-    "line": 1388,
+    "line": 1272,
     "length": 62
    }
   ]

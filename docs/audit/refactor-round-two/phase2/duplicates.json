@@ -1,10 +1,10 @@
 {
  "app": {
   "error": null,
-  "duplicated_lines": 1847,
-  "duplicated_lines_excluding_front_end_tests": 877,
-  "file_pairs": 83,
-  "lines_across_pairs": 2008,
+  "duplicated_lines": 1841,
+  "duplicated_lines_excluding_front_end_tests": 871,
+  "file_pairs": 82,
+  "lines_across_pairs": 2001,
   "within_one_file": [
    "hooks/useBonsaiAskOrchestration.test.ts",
    "features/preset-carousel/presetRowNav.test.ts",
@@ -43,7 +43,6 @@
    "hooks/useSmoothStreamReveal.test.ts",
    "utils/answerStopRegistry.test.ts",
    "components/MainTabChatTranscript.permissionHintFocus.test.ts",
-   "data/pullModelCatalog.ts",
    "hooks/useKidsLock.test.ts",
    "utils/answerBubbleElRegistry.test.ts",
    "components/ContextChipLadder.test.tsx",
@@ -151,8 +150,8 @@
     "lines": 49,
     "biggest": {
      "lines": 10,
-     "at": "components/icons.tsx:61-70",
-     "and": "components/icons.tsx:252-255"
+     "at": "components/icons.tsx:59-68",
+     "and": "components/icons.tsx:239-242"
     }
    },
    {
@@ -346,8 +345,8 @@
     "lines": 31,
     "biggest": {
      "lines": 17,
-     "at": "py_modules/backend/services/voice_transcription_service.py:186-202",
-     "and": "py_modules/backend/services/voice_transcription_service.py:260-276"
+     "at": "py_modules/backend/services/voice_transcription_service.py:168-184",
+     "and": "py_modules/backend/services/voice_transcription_service.py:242-258"
     }
    },
    {
@@ -398,8 +397,8 @@
     "lines": 23,
     "biggest": {
      "lines": 9,
-     "at": "main.py:2180-2188",
-     "and": "main.py:2213-2221"
+     "at": "main.py:2165-2173",
+     "and": "main.py:2198-2206"
     }
    },
    {
@@ -424,7 +423,7 @@
     "lines": 21,
     "biggest": {
      "lines": 21,
-     "at": "main.py:3053-3073",
+     "at": "main.py:3037-3057",
      "and": "py_modules/backend/services/ollama_ask_service.py:59-79"
     }
    },
@@ -589,8 +588,8 @@
     "lines": 387,
     "biggest": {
      "lines": 28,
-     "at": "test_knowledge_base_service.py:835-862",
-     "and": "test_knowledge_base_service.py:898-923"
+     "at": "test_knowledge_base_service.py:832-859",
+     "and": "test_knowledge_base_service.py:895-920"
     }
    },
    {

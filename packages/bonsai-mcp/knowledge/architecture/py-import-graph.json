@@ -1,14 +1,8 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 61,
+  "fileCount": 62,
   "edgeCount": 137,
   "cycles": [
-    [
-      "py_modules/backend/services/ask_local_commands.py",
-      "py_modules/backend/services/input_sanitizer_service.py",
-      "py_modules/backend/services/shortcut_setup_commands.py",
-      "py_modules/backend/services/vac_check_commands.py"
-    ],
     [
       "py_modules/backend/services/voice_transcription_service.py",
       "py_modules/backend/services/voice_whisper_daemon.py"
@@ -19,6 +13,7 @@
     "py_modules/backend/constants.py",
     "py_modules/backend/services/__init__.py",
     "py_modules/backend/services/ai_character_service.py",
+    "py_modules/backend/services/ask_command_text.py",
     "py_modules/backend/services/async_background_job.py",
     "py_modules/backend/services/async_task_lifecycle.py",
     "py_modules/backend/services/background_request_state.py",
@@ -80,10 +75,6 @@
       "count": 5
     },
     {
-      "path": "py_modules/backend/services/ask_local_commands.py",
-      "count": 4
-    },
-    {
       "path": "py_modules/backend/services/knowledge_base_schema.py",
       "count": 4
     },
@@ -101,6 +92,10 @@
     },
     {
       "path": "py_modules/backend/ollama_connectivity.py",
+      "count": 3
+    },
+    {
+      "path": "py_modules/backend/services/ask_command_text.py",
       "count": 3
     },
     {
@@ -182,6 +177,10 @@
     {
       "path": "py_modules/backend/services/voice_whisper_daemon.py",
       "count": 2
+    },
+    {
+      "path": "py_modules/backend/services/ask_local_commands.py",
+      "count": 1
     },
     {
       "path": "py_modules/backend/services/async_background_job.py",
@@ -412,6 +411,14 @@
         "py_modules/backend/services/settings_service.py"
       ]
     },
+    "py_modules/backend/services/ask_command_text.py": {
+      "imports": [],
+      "importedBy": [
+        "py_modules/backend/services/input_sanitizer_service.py",
+        "py_modules/backend/services/shortcut_setup_commands.py",
+        "py_modules/backend/services/vac_check_commands.py"
+      ]
+    },
     "py_modules/backend/services/ask_local_commands.py": {
       "imports": [
         "py_modules/backend/services/input_sanitizer_service.py",
@@ -419,10 +426,7 @@
         "py_modules/backend/services/vac_check_commands.py"
       ],
       "importedBy": [
-        "main.py",
-        "py_modules/backend/services/input_sanitizer_service.py",
-        "py_modules/backend/services/shortcut_setup_commands.py",
-        "py_modules/backend/services/vac_check_commands.py"
+        "main.py"
       ]
     },
     "py_modules/backend/services/async_background_job.py": {
@@ -525,7 +529,7 @@
     },
     "py_modules/backend/services/input_sanitizer_service.py": {
       "imports": [
-        "py_modules/backend/services/ask_local_commands.py"
+        "py_modules/backend/services/ask_command_text.py"
       ],
       "importedBy": [
         "main.py",
@@ -783,7 +787,7 @@
     },
     "py_modules/backend/services/shortcut_setup_commands.py": {
       "imports": [
-        "py_modules/backend/services/ask_local_commands.py"
+        "py_modules/backend/services/ask_command_text.py"
       ],
       "importedBy": [
         "main.py",
@@ -849,7 +853,7 @@
     "py_modules/backend/services/vac_check_commands.py": {
       "imports": [
         "py_modules/backend/constants.py",
-        "py_modules/backend/services/ask_local_commands.py",
+        "py_modules/backend/services/ask_command_text.py",
         "py_modules/backend/services/steam_vac_service.py"
       ],
       "importedBy": [

@@ -1,6 +1,6 @@
 {
  "count": 20,
- "checked": 302,
+ "checked": 301,
  "by_folder": {
   "src/styles/sections": [
    "src/styles/sections/gamepadAndPullModels.ts",

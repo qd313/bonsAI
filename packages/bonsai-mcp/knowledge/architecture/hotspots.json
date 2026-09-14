@@ -31,11 +31,6 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/voice_transcription_service.py",
-      "lines": 1413,
-      "role": ""
-    },
-    {
       "path": "src/components/PullModelsModal.tsx",
       "lines": 1386,
       "role": ""
@@ -48,6 +43,11 @@
     {
       "path": "src/components/OllamaWhereAiRunsSection.tsx",
       "lines": 1311,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/voice_transcription_service.py",
+      "lines": 1301,
       "role": ""
     },
     {

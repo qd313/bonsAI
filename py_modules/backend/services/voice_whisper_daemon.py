@@ -19,7 +19,7 @@ import urllib.request
 import uuid
 from typing import Any, Optional
 
-from backend.services.voice_transcription_service import (
+from backend.services.voice_whisper_runtime import (
     WHISPER_THREADS,
     _pcm_to_wav_bytes,
     _sanitize_whisper_transcript,

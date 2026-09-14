@@ -13,13 +13,15 @@ from backend.services.voice_transcription_service import (
     _link_versioned_sonames,
     _parse_whisper_stdout,
     _pcm_rms,
-    _pcm_to_wav_bytes,
     _runtime_dir_usable,
-    _sanitize_whisper_transcript,
     _whisper_decode_usable,
     merge_sliding_window_transcript,
-    resolve_whisper_cli,
     sanitize_voice_stt_model,
+)
+from backend.services.voice_whisper_runtime import (
+    _pcm_to_wav_bytes,
+    _sanitize_whisper_transcript,
+    resolve_whisper_cli,
     voice_whisper_cli_path,
     whisper_binary_usable,
 )

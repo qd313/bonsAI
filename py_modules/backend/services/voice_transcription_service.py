@@ -9,7 +9,6 @@ Does not: Send audio to cloud STT or run wake-word detection — see voice_whisp
 from __future__ import annotations
 
 import asyncio
-import io
 import math
 import os
 import re
@@ -26,17 +25,28 @@ from typing import Any, Callable, Optional
 
 from backend.services.local_ollama_setup_service import _env_for_host_system_tools
 from backend.tls_ca_fallback import urlopen_with_ca_fallback
+from backend.services.voice_whisper_runtime import (
+    CHANNELS,
+    SAMPLE_RATE,
+    SAMPLE_WIDTH,
+    WHISPER_THREADS,
+    _pcm_to_wav_bytes,
+    _sanitize_whisper_transcript,
+    voice_bin_dir,
+    voice_whisper_cli_path,
+    voice_whisper_runtime_env,
+    voice_whisper_server_path,
+    whisper_binary_usable,
+    whisper_server_binary_usable,
+)
+from backend.services.voice_whisper_daemon import get_whisper_engine
 
-SAMPLE_RATE = 16000
-CHANNELS = 1
-SAMPLE_WIDTH = 2
 BYTES_PER_SECOND = SAMPLE_RATE * CHANNELS * SAMPLE_WIDTH
 ROLLING_BUFFER_MAX_SECONDS = 30
 # Tier 1 latency tuning (2026-07-07): see docs/voice-input-follow-up.md for tradeoffs and Tier 2 options.
 TRANSCRIBE_INTERVAL_S = 0.4
 WINDOW_SECONDS = 3
 WHISPER_MIN_DECODE_PCM_BYTES = BYTES_PER_SECOND // 4  # 0.25 s before first decode pass
-WHISPER_THREADS = 4
 # Deck internal mic in Gaming Mode often peaks ~150–250 RMS; 350 blocked all whisper passes.
 VOICE_RMS_THRESHOLD = 120.0
 # Keep high bar for whisper filler hallucinations on noise (was SILENCE_RMS_THRESHOLD * 2.5).
@@ -59,17 +69,6 @@ def _is_whisper_non_speech_tag(text: str) -> bool:
     if inner in WHISPER_NON_SPEECH_TAGS:
         return True
     return inner.startswith("BLANK")
-
-
-def _sanitize_whisper_transcript(text: str) -> str:
-    """Drop subtitle-style junk (>>, [INAUDIBLE]) from whisper-cli stdout."""
-    if not (text or "").strip():
-        return ""
-    out = text.strip()
-    out = re.sub(r"^>+\s*", "", out)
-    out = re.sub(r"\[(?:INAUDIBLE|BLANK_AUDIO|MUSIC|APPLAUSE|SILENCE|NOISE)[^\]]*\]", "", out, flags=re.IGNORECASE)
-    out = re.sub(r"\s+", " ", out).strip()
-    return out
 
 
 VALID_VOICE_STT_MODELS = frozenset({"tiny.en", "base.en"})
@@ -98,12 +97,6 @@ VOICE_STT_MODEL_SPECS: dict[str, dict[str, str]] = {
 WHISPER_CPP_IMAGE = (
     "ghcr.io/ggml-org/whisper.cpp"
     "@sha256:c0b535add76d7ff7613c70f32a7a4c794985f94238501e1b5b3b7f0eb56e9685"
-)
-WHISPER_REQUIRED_SONAMES = (
-    "libwhisper.so.1",
-    "libggml.so.0",
-    "libggml-base.so.0",
-    "libggml-cpu.so.0",
 )
 
 
@@ -148,63 +141,9 @@ def voice_models_dir(plugin_root: str, settings_dir: str) -> str:
     return os.path.join(base, "voice_models")
 
 
-def voice_bin_dir(plugin_root: str, settings_dir: str) -> str:
-    base = settings_dir or os.path.join(plugin_root, "data")
-    return os.path.join(base, "voice_bin")
-
-
-def voice_whisper_cli_path(plugin_root: str, settings_dir: str) -> str:
-    return os.path.join(voice_bin_dir(plugin_root, settings_dir), "whisper-cli")
-
-
-def voice_whisper_server_path(plugin_root: str, settings_dir: str) -> str:
-    return os.path.join(voice_bin_dir(plugin_root, settings_dir), "whisper-server")
-
-
-def whisper_server_binary_usable(plugin_root: str, settings_dir: str) -> Optional[str]:
-    path = voice_whisper_server_path(plugin_root, settings_dir)
-    if not os.path.isfile(path) or not os.access(path, os.X_OK):
-        return None
-    if not whisper_binary_usable(plugin_root, settings_dir):
-        return None
-    env = voice_whisper_runtime_env(plugin_root, settings_dir)
-    try:
-        proc = subprocess.run(
-            [path, "-h"],
-            capture_output=True,
-            text=True,
-            timeout=15,
-            env=env,
-        )
-        out = (proc.stdout or "") + (proc.stderr or "")
-        if proc.returncode != 0 and "usage:" not in out:
-            return None
-    except Exception:
-        return None
-    return path
-
-
 def voice_model_path(plugin_root: str, settings_dir: str, model_id: str) -> str:
     spec = VOICE_STT_MODEL_SPECS.get(model_id, VOICE_STT_MODEL_SPECS[DEFAULT_VOICE_STT_MODEL])
     return os.path.join(voice_models_dir(plugin_root, settings_dir), spec["filename"])
-
-
-def resolve_whisper_cli(plugin_root: str, settings_dir: str = "") -> Optional[str]:
-    candidates = [
-        voice_whisper_cli_path(plugin_root, settings_dir) if settings_dir else "",
-        os.path.join(plugin_root, "bin", "whisper-cli"),
-        os.path.join(plugin_root, "bin", "main"),
-        shutil.which("whisper-cli"),
-        shutil.which("whisper-cpp"),
-        "/usr/bin/whisper-cli",
-        "/usr/local/bin/whisper-cli",
-    ]
-    for cand in candidates:
-        if not cand:
-            continue
-        if os.path.isfile(cand) and os.access(cand, os.X_OK):
-            return cand
-    return None
 
 
 def _link_versioned_sonames(bin_dir: str) -> None:
@@ -221,41 +160,6 @@ def _link_versioned_sonames(bin_dir: str) -> None:
         link_path = os.path.join(bin_dir, link_name)
         if not os.path.exists(link_path):
             os.symlink(name, link_path)
-
-
-def voice_whisper_runtime_env(plugin_root: str, settings_dir: str) -> dict[str, str]:
-    env = dict(_env_for_host_system_tools())
-    bin_dir = voice_bin_dir(plugin_root, settings_dir)
-    if os.path.isdir(bin_dir):
-        prev = env.get("LD_LIBRARY_PATH", "")
-        env["LD_LIBRARY_PATH"] = bin_dir + (f":{prev}" if prev else "")
-    return env
-
-
-def whisper_binary_usable(plugin_root: str, settings_dir: str) -> Optional[str]:
-    path = resolve_whisper_cli(plugin_root, settings_dir)
-    if not path:
-        return None
-    bin_dir = voice_bin_dir(plugin_root, settings_dir)
-    for lib in WHISPER_REQUIRED_SONAMES:
-        lib_path = os.path.join(bin_dir, lib)
-        if not os.path.isfile(lib_path) and not os.path.islink(lib_path):
-            return None
-    env = voice_whisper_runtime_env(plugin_root, settings_dir)
-    try:
-        proc = subprocess.run(
-            [path, "-h"],
-            capture_output=True,
-            text=True,
-            timeout=15,
-            env=env,
-        )
-        out = (proc.stdout or "") + (proc.stderr or "")
-        if proc.returncode != 0 and "usage:" not in out:
-            return None
-    except Exception:
-        return None
-    return path
 
 
 WHISPER_CLI_INFERENCE_ARGS = ("-ng", "-nfa")
@@ -397,16 +301,6 @@ def _is_stale_word_fragment(fragment: str, continuation: str) -> bool:
     if not frag_norm or not first_norm or len(frag_norm) < 3:
         return False
     return first_norm.startswith(frag_norm) and len(first_norm) > len(frag_norm)
-
-
-def _pcm_to_wav_bytes(pcm: bytes) -> bytes:
-    buf = io.BytesIO()
-    with wave.open(buf, "wb") as wf:
-        wf.setnchannels(CHANNELS)
-        wf.setsampwidth(SAMPLE_WIDTH)
-        wf.setframerate(SAMPLE_RATE)
-        wf.writeframes(pcm)
-    return buf.getvalue()
 
 
 def _parse_proc_environ(pid: int) -> dict[str, str]:
@@ -1099,8 +993,6 @@ class VoiceTranscriptionSession:
         pcm: bytes,
     ) -> str:
         if self._use_daemon:
-            from backend.services.voice_whisper_daemon import get_whisper_engine
-
             text = get_whisper_engine().transcribe(pcm)
             if text:
                 return text
@@ -1192,8 +1084,6 @@ class VoiceTranscriptionSession:
         self._last_voice_monotonic = time.monotonic()
 
         model_path = voice_model_path(self.plugin_root, self.settings_dir, self.model_id)
-        from backend.services.voice_whisper_daemon import get_whisper_engine
-
         engine = get_whisper_engine()
         engine.acquire("mic", model_path, self.plugin_root, self.settings_dir)
         self._use_daemon = engine.daemon_available()
@@ -1396,8 +1286,6 @@ class VoiceTranscriptionSession:
         for thread in (self._reader_thread, self._worker_thread):
             if thread is not None and thread.is_alive():
                 thread.join(timeout=3.0)
-        from backend.services.voice_whisper_daemon import get_whisper_engine
-
         get_whisper_engine().release("mic")
         st = self.status()
         return {

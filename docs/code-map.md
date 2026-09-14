@@ -74,6 +74,7 @@ One entry per app file: the Title and Purpose lines from its header, grouped by 
 - **voice_read_aloud_service.py** (py_modules/backend/services/voice_read_aloud_service.py) — *Voice read-aloud service*: Speak an answer's text out loud in the Deck's own built-in voice (espeak-ng), one sentence at a time, over the Deck's session sound system.
 - **voice_transcription_service.py** (py_modules/backend/services/voice_transcription_service.py) — *Voice transcription service*: Local mic capture and whisper.cpp interim speech-to-text for the Ask bar.
 - **voice_whisper_daemon.py** (py_modules/backend/services/voice_whisper_daemon.py) — *Whisper server daemon*: Session-scoped whisper-server process facade for mic and future wake-word STT.
+- **voice_whisper_runtime.py** (py_modules/backend/services/voice_whisper_runtime.py) — *Whisper runtime basics*: Where the whisper files live, whether the binaries run, and the two small audio/text helpers both whisper callers need.
 
 ## src
 

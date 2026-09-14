@@ -16,7 +16,7 @@ from backend.services.voice_whisper_daemon import (
     get_whisper_engine,
     parse_whisper_server_json,
 )
-from backend.services.voice_transcription_service import (
+from backend.services.voice_whisper_runtime import (
     _pcm_to_wav_bytes,
     voice_whisper_cli_path,
     voice_whisper_server_path,

@@ -148,6 +148,7 @@ from backend.services.ask_payload import (
     parse_ask_payload,
     sanitize_attachments,
 )
+from backend.services.rag_corpus_status import build_rag_corpus_status
 from backend.services.tdp_service import clean_env
 from backend.services.local_ollama_setup_service import (
     new_local_ollama_setup_state,
@@ -190,15 +191,12 @@ from backend.services.knowledge_base_service import (
 )
 from backend.services.knowledge_base_schema import (
     CORPUS_MANIFEST_FILENAME,
-    corpus_manifest_path,
     default_corpus_dir_internal,
     default_seed_corpus_source_dir,
-    list_rag_storage_options,
     load_manifest_from_path,
     resolve_corpus_db_path,
     sanitize_corpus_install_dir,
 )
-from backend.services.ollama_embed_service import nomic_embed_available
 from backend.constants import DEFAULT_OLLAMA_PCIP
 from backend.ollama_routing import (
     is_valid_setup_pull_profile,
@@ -1389,56 +1387,9 @@ class Plugin:
     async def get_rag_corpus_status(self, data: Any = None):
         """Return knowledge-base download state and whether a corpus is installed."""
         settings = await self.load_settings()
-        db_path = resolve_corpus_db_path(settings)
-        pc_ip = ""
-        if isinstance(data, dict):
-            pc_ip = str(data.get("pc_ip") or data.get("PcIp") or "").strip()
-        if not pc_ip:
-            if settings.get("ollama_local_on_deck") is True:
-                pc_ip = DEFAULT_OLLAMA_PCIP
-            else:
-                named = settings.get("named_ollama_hosts") or []
-                if isinstance(named, list) and named:
-                    first = named[0]
-                    if isinstance(first, dict):
-                        pc_ip = str(first.get("host") or first.get("ip") or "").strip()
-        embeddings_populated = False
-        corpus_path = str(settings.get("rag_corpus_path") or "").strip()
-        manifest_path = corpus_manifest_path(corpus_path) if corpus_path else None
-        if manifest_path:
-            try:
-                manifest = load_manifest_from_path(manifest_path)
-                embeddings_populated = manifest.get("embeddings_populated") is True
-            except Exception:
-                embeddings_populated = False
-        embed_model_available = bool(pc_ip) and nomic_embed_available(pc_ip)
-        storage_options: dict[str, Any] = {}
-        try:
-            storage_options = list_rag_storage_options()
-        except Exception as exc:
-            try:
-                logger.warning("get_rag_corpus_status: storage_options failed: %s", exc)
-            except Exception:
-                pass
-            storage_options = {
-                "internal": {
-                    "id": "internal",
-                    "label": "Internal storage",
-                    "install_path": default_corpus_dir_internal(),
-                    "free_bytes": 0,
-                },
-                "sd_card": None,
-            }
-        return {
-            **dict(self._rag_corpus_download_state),
-            "installed": bool(db_path),
-            "corpus_path": corpus_path,
-            "corpus_version": str(settings.get("rag_corpus_version") or ""),
-            "use_local_knowledge_base": settings.get("use_local_knowledge_base") is True,
-            "embeddings_populated": embeddings_populated,
-            "embed_model_available": embed_model_available,
-            "storage_options": storage_options,
-        }
+        return build_rag_corpus_status(
+            settings, data, dict(self._rag_corpus_download_state)
+        )
 
     async def start_rag_corpus_download(self, data: Any = None):
         """Download and install the knowledge base corpus (user-initiated; Model A consent)."""

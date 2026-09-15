@@ -20,14 +20,17 @@ assertion, nothing else.
 
 Does not: Fix anything, install anything, or decide what the tests should assert. Does not talk
 to the Steam Deck. Does not replace `scripts/check_headers.py` or `scripts/ratchet.py` - it only
-calls them, and skips them gracefully while they do not exist yet.
+calls them. Both exist and both now fail the run rather than warning; the code still skips a
+missing one gracefully, which is left in place only because it costs nothing, not because either
+is optional.
 
 How it works:
     1. Work out what changed (`git diff --name-only HEAD` plus untracked files), once, up front.
     2. Quick steps, in order: typecheck (`npx tsc --noEmit`); vitest for the changed TypeScript
        under `src/` only, skipped when none changed; the whole Python suite, whenever any `.py`
-       file changed; the header check; the ratchet check. The last two are skipped with a short
-       note when their script does not exist yet.
+       file changed; the header check, at its strict level, which fails on a file with no
+       description, a large file with no walkthrough, or a header naming something that is not
+       there; the ratchet check.
     3. Full mode runs all of the above, then the whole JS test suite, the whole Python suite
        again (matching the documented `npm run test:py`), the production build, and the
        architecture-snapshot check.

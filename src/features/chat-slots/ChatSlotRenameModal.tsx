@@ -1,9 +1,19 @@
 /**
- * Title: Chat slot rename modal
- * Purpose: Rename modal for a chat slot title (A on focused title).
- * Used for: useChatSlotRenameModal from ChatSlotRow.
- * Solves: Text entry with ConfirmModal shell matching other bonsAI modals.
- * Does not: Persist — parent calls renameChatSlot RPC on confirm.
+ * Title: Renaming a saved chat
+ *
+ * Purpose: The small popup that appears when a person renames one of their
+ * saved chats. It is a text box with the current name already filled in,
+ * plus Save and Cancel buttons, built with the same popup shell every
+ * other bonsAI popup uses.
+ *
+ * Used for: Opened from a chat's own row, when renaming it is requested.
+ *
+ * Solves: A consistent-looking way to type a new name, without every place
+ * that renames something building its own text-entry popup from scratch.
+ *
+ * Does not: Actually save the new name. This file only collects the typed
+ * text and hands it to whoever opened the popup; saving it is that
+ * caller's job.
  */
 import React, { useState } from "react";
 import { ConfirmModal, TextField } from "@decky/ui";

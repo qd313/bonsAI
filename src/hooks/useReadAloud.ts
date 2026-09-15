@@ -1,19 +1,30 @@
 /**
- * Title: Read aloud hook
- * Purpose: Own the Read aloud / Stop button's RPC calls and status polling, and decide when a
- *   finished answer should read itself with no press (D74, D99 call 3).
- * Used for: MainTabChatTranscript (button label and per-turn "is this one speaking" state) and the
- *   two places a completed Ask is observed, useBackgroundGameAi.ts and bonsaiAskCompletionWatch.ts.
- * Solves: One background reader can only speak one answer at a time; this is where that state, the
- *   on-its-own decision, and the fire-and-forget stop the button and a new Ask both need all live
- *   in one place, so they cannot disagree about what is currently speaking. The hook also mirrors a
- *   reading that started on its own (voice replies set to Always) — `handleAskTerminalForReadAloud`
- *   fires the read at module level with no hook instance in earshot, so without this the Read aloud
- *   line kept saying "Read aloud" while the Deck was already speaking, and pressing it restarted the
- *   reading instead of stopping it. Measured on the Deck 2026-09-12.
- * Does not: Split text into sentences (Python does), or turn markdown into words (answerReadableText.ts
- *   does that). Does not read settings itself — index.tsx keeps this module's completion-time context
- *   in sync via setReadAloudCompletionContext, the same pattern bonsaiReplySurface.ts uses.
+ * Title: Read aloud — the button, and reading a finished answer on its own
+ *
+ * Purpose: Owns the Read aloud / Stop button — the two calls it makes to
+ * the back end, and checking in on how the reading is going, several times
+ * a second while something is being spoken. It also decides when a
+ * finished answer should start reading itself with nobody having pressed
+ * anything, for the "always read replies" setting.
+ *
+ * Used for: The chat transcript (the button's label, and which turn shows
+ * as currently speaking), and the two places that notice an answer has
+ * finished — the background answer poll and the module that watches for
+ * one after the person has left the tab.
+ *
+ * Solves: Only one answer can be read aloud at a time, so the button's
+ * state, the decision to start reading on its own, and the "stop whatever
+ * is speaking" call that both the button and a brand new question need all
+ * have to live in one place — otherwise they could disagree about what is
+ * currently speaking. This file also catches a reading that started with
+ * no button press: without it, the Read aloud line kept saying "Read
+ * aloud" while the Deck was already talking, and pressing it restarted the
+ * reading instead of stopping it (found on the Deck).
+ *
+ * Does not: Split the answer into sentences — the back end does that — or
+ * turn its markdown into plain words to speak — a separate file does that.
+ * Does not read the voice-reply setting itself; the plugin's main screen
+ * keeps this file told about it whenever it changes.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { callDeckyWithTimeout, formatDeckyRpcError } from "../utils/deckyCall";

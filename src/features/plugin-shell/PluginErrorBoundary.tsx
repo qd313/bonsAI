@@ -1,10 +1,23 @@
 /**
- * Title: Plugin error boundary
- * Purpose: Turn a render-time failure into a readable panel so Decky keeps the plugin alive.
- * Used for: Wrapping the whole bonsAI content tree in index.tsx.
- * Solves: A throwing component blanking the QAM with no on-screen explanation.
- * Does not: Catch errors from event handlers, effects, or RPC rejections — React boundaries
- *   only see render, and those paths report through toasts and the app log instead.
+ * Title: Catching a crash while the screen is being drawn
+ *
+ * Purpose: If something goes wrong while a piece of the plugin's screen is
+ * being drawn — not a button press or a background call, but the actual
+ * drawing — this shows a plain "Plugin error" panel with the error message
+ * instead of the whole Quick Access Menu going blank with no explanation.
+ * It is what React calls an error boundary: a wrapper that can catch a
+ * drawing failure in anything inside it.
+ *
+ * Used for: Wraps the whole of bonsAI's content in index.tsx.
+ *
+ * Solves: Before this existed, a bug in drawing any one part of the screen
+ * could blank the entire plugin panel, with nothing on screen to say why.
+ *
+ * Does not: Catch a failure in a button press, a background call to the AI
+ * or to Steam, or anything that happens after the screen has already been
+ * drawn — React's error boundaries only see drawing itself. Those other
+ * kinds of failure are reported through toast pop-ups and the app log
+ * instead.
  */
 import React from "react";
 

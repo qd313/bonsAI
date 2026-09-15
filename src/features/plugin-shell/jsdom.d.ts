@@ -1,14 +1,29 @@
 /**
- * Title: Minimal jsdom module declaration
- * Purpose: `jsdom` ships no bundled types, and this repo has no `@types/jsdom`; this covers only the
- *          `JSDOM` constructor shape the realm-crossing focus tests actually use.
- * Used for: useHiddenTabHeaderTrap.test.tsx, TabIndicatorBar.test.tsx (plan 32 bug 4 follow-up, the
- *           2026-09-04 device finding that `instanceof` checks against DOM globals fail across a
- *           realm boundary -- these tests build a genuinely separate document to reproduce that).
- * Solves: `tsc --noEmit` TS7016 ("Could not find a declaration file for module 'jsdom'") on
- *         `import { JSDOM } from "jsdom"` with no ambient declaration and no `@types/jsdom` package.
- * Does not: Describe the rest of the `jsdom` package's surface. Extend this only as more of it is
- *           used from a test; do not widen it to `any` for convenience.
+ * Title: Just enough types for the "jsdom" test package
+ *
+ * Purpose: Two tests build a second, separate web page in memory (using the
+ * "jsdom" package) to reproduce a bug that only shows up when checking a
+ * focused element with `instanceof` across two different documents. The
+ * "jsdom" package does not ship its own type information, and this project
+ * has not installed the separate types package for it either, so without
+ * this file TypeScript cannot check the one piece of "jsdom" those tests
+ * actually use — the `JSDOM` constructor. This file writes out just that
+ * one shape.
+ *
+ * Used for: useHiddenTabHeaderTrap.test.tsx and TabIndicatorBar.test.tsx,
+ * which both build one of these separate documents to reproduce a device
+ * finding: a focus check written as `instanceof` against the browser's own
+ * built-in element type quietly fails when the element came from a
+ * different document than the one running the check.
+ *
+ * Solves: Without this file, TypeScript's own check (`tsc --noEmit`) fails
+ * with "Could not find a declaration file for module 'jsdom'" wherever a
+ * test imports it.
+ *
+ * Does not: Describe anything else the "jsdom" package can do — only the
+ * one constructor these two tests use. Add to this only as more of the
+ * package gets used from a test; do not widen it to accept anything, for
+ * convenience, instead.
  */
 declare module "jsdom" {
   export class JSDOM {

@@ -1,15 +1,44 @@
 /**
  * Title: Answer bubble navigation
  *
- * Purpose: What Up and Down do inside one AI answer, cut into sections (see the reply-bubble file for why) — step to the next section, scroll to reveal one that is off-screen, stop on a hidden spoiler or glossary chip in the way, or hand off to Steam.
+ * Purpose: Decides what Up and Down do while the ring is sitting inside one
+ * AI answer. An answer is cut into sections — stops the D-pad can walk down
+ * one at a time (see the reply-bubble file for why) — and this file works
+ * out whether a press should move to the next section, scroll the panel to
+ * bring an off-screen section into view, stop on a hidden spoiler or a
+ * glossary-term chip that happens to be in the way, or give up and let Steam
+ * move the ring on to whatever sits outside the bubble entirely.
  *
- * Used for: the answer bubble's own Up/Down handlers, and cross-turn movement in the chat screen.
+ *     Pressing Down, in order:
+ *       1. an unrevealed spoiler already on screen  -> offer it
+ *       2. a glossary-term chip already on screen   -> offer it
+ *       3. the next section, but only if it is already on screen
+ *       4. otherwise, scroll the panel and try again on the next press
  *
- * Solves: Works out section movement and panel scrolling together, since moving to the next section is not enough on its own if it is still off-screen.
+ * Used for: the answer bubble's own Up/Down handlers, and the wider chat
+ * screen's movement between turns.
  *
- * Does not: Move between the buttons below a reply — see buildReplyActionsElement and replyStopRegistry.
+ * Solves: One place that works out section movement and panel scrolling
+ * together, since an answer taller than the screen needs both — moving to
+ * the next section is not enough on its own if that section is still
+ * off-screen afterwards.
  *
- * Gotchas: focusFirstAnswerChunk(), focusLastAnswerChunk() and focusPanelEl() take Steam's own focus transfer before touching focus directly, and check whether the ring actually followed — a plain focus() only moves the browser's idea of focus, and this repo has lost fixes to that exact disagreement before.
+ * Does not: Move between the buttons below a reply — Copy, Retry, the
+ * thumbs row — see buildReplyActionsElement and replyStopRegistry for that.
+ *
+ * Gotchas:
+ * - Several functions here go out of their way not to move focus with a
+ *   plain call. A plain focus() only moves the browser's own idea of what is
+ *   focused; Steam's own ring can be left behind, disagreeing with it — the
+ *   exact trap this repo has lost fixes to before. That is why
+ *   focusFirstAnswerChunk(), focusLastAnswerChunk(), and focusPanelEl() ask
+ *   for Steam's own focus transfer first, and check whether the ring
+ *   actually followed, rather than assuming a successful DOM call means it
+ *   did.
+ * - The order in the drawing above is deliberate, and only a section that is
+ *   already visible is allowed to take focus next. See the comments inside
+ *   handleAnswerBubbleMoveDown() for the on-device bugs each of those rules
+ *   was added to fix.
  */
 import {
   chunkHasContentAboveViewport,
@@ -248,7 +277,27 @@ function panelStepUp(bubbleEl: HTMLElement): boolean {
   return scroll.scrollTop < before;
 }
 
-/* In: the bubble element (or null — this file looks it up itself), the section count, and the answer's own key. Out: true when this press was handled and should stop here; false lets Steam fall through to its own move. What can go wrong: an unrevealed spoiler or glossary chip on screen is offered before the next section, and the next section only counts if it is already visible — see the inline comments below for the on-device bugs each rule fixed. */
+/*
+ * In: the answer bubble element (or null, if the caller has to ask this file
+ * to find it), how many sections the answer has, and the answer's own key.
+ * Out: true when this press was handled and should stop here, false to let
+ * Steam fall through to whatever move it would have made on its own.
+ *
+ * The order this checks things in matters and is deliberate: first, whether a
+ * spoiler that is still hidden is sitting on screen — press Down again to
+ * scroll past it, or A to reveal it. Then the same idea for a glossary-term
+ * chip. Then the next section, but only if it is already visible; jumping to
+ * one further down would skip the reader past text they have not scrolled to
+ * yet. Only after all of that does it scroll the panel, and even then, only
+ * while this particular bubble still has more content below.
+ *
+ * What can go wrong: a spoiler or glossary chip below the fold is correctly
+ * skipped here — it becomes reachable once scrolling brings it into view on a
+ * later press. Two real bugs already found through this exact path are noted
+ * inline below: a masked spoiler that a touchless Deck could never reach at
+ * all, and a whole branch of this function that ran against the wrong
+ * document and did nothing, silently, until that was found and fixed.
+ */
 export function handleAnswerBubbleMoveDown(
   bubbleEl: HTMLElement | null,
   _focusedChunkRef: { current: number },

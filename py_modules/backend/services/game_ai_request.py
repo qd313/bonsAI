@@ -1,12 +1,84 @@
-"""Title: Game Ask orchestration
+"""Title: Running one Ask question, start to finish
 
-Purpose: Run a foreground game Ask (Ollama + optional TDP) without importing main.
-Used for: RPC handlers and background workers that need the full Ask pipeline.
-Solves: Keeps main.py thin while preserving one orchestration owner for context, KB, sanitizer, and Ollama.
-Does not: Define Decky RPC method names or poll state — those live in main.py and async_background_job.
+Purpose: This file is the whole journey of one Ask question, from the moment it arrives to the
+moment a reply is ready to show. It decides whether the question can be answered instantly by a
+local shortcut, or must be refused outright (no permission, blocked by the safety filter); if
+neither, it gathers everything the AI might need — Proton/Steam log excerpts for a troubleshooting
+question, a search of the local knowledge base, the Deck's current power setting — packs that into
+a budget, sends the question and its gathered context to the AI, and then cleans up the reply
+(pulls out any power-setting suggestion, runs a safety check, appends a short footer noting when
+the knowledge base had nothing useful). Along the way it also builds the Show details record for
+whichever path the question actually took.
 
-Return dict keys must stay aligned with execute_game_ai RPC consumers and frontend parsers
-(success, response, applied, disclosure flags, etc.).
+Used for: Called for every game Ask, by the same-tab flow and by the background flow that keeps
+answering while a person has moved to a different tab.
+
+Solves: One place that owns the full question-to-answer journey — the local shortcuts, the
+knowledge-base search, the safety checks, the power-setting reading — so main.py just calls this
+and does not have to know the shape of any of it.
+
+Does not: Decide what a Decky RPC method is named, or manage the background poll loop that keeps
+an Ask alive after the person switches tabs — both live in main.py and the background-job file.
+
+How it works:
+
+    question in
+       |
+       +-- a fast local command? ------------> answered right away, no AI call
+       |
+       +-- a screenshot with no permission? -> refused, no AI call
+       |
+       +-- blocked by the safety filter? ----> refused, no AI call
+       |
+       v
+    gather what the AI might need
+    (Proton/Steam logs, a knowledge-base search, the Deck's current power setting)
+       |
+       v
+    send the question, with that context attached, to the AI
+       |
+       v
+    clean up the reply
+    (pull out any power-setting suggestion, run the safety check,
+     add a short footer if the knowledge base had nothing useful)
+       |
+       v
+    answer back, with a Show details record attached
+
+1. Three shortcuts are checked first, each one able to end the whole thing early: a fast local
+   command the safety filter already recognised, a screenshot attached without the right
+   permission turned on, or a question the safety filter blocks outright. Any of the three
+   returns straight away without ever reaching the AI.
+2. If none of those apply, the roleplay character voice is resolved (or reused, if the caller
+   already resolved it, so the "surprise me" pick is never rolled twice for one question — see
+   the note on `run_game_ai_request()` itself for why that matters).
+3. Proton/Steam log excerpts are collected when the question reads as troubleshooting and the
+   permission is on. The local knowledge base is searched when it looks worth searching,
+   including carrying over the subject of a very recent Strategy or Expert question so a bare
+   follow-up like "what about her second phase" still finds the right note.
+4. Everything gathered is packed into one context block against a size budget — Proton logs get
+   first claim on the budget, so a large log excerpt can crowd out a knowledge-base note. Whether
+   the knowledge base counts as "attached" for Show details is only decided after this packing
+   step, not before, so a note that got crowded out is never shown as having reached the AI.
+5. Whether this question is about the Deck's current power setting is worked out, and if so the
+   current setting is read before the question goes out, so the AI can answer using the real
+   number instead of guessing.
+6. The question, with everything gathered, is sent to the AI. Once a reply comes back: any
+   power-setting suggestion in it is pulled out and the raw text describing it is removed from
+   what the person reads (the suggestion is never applied automatically — Ask only ever
+   suggests); the finished reply is run through the safety check for dangerous advice; and up to
+   one of three short footers may be appended noting that the knowledge base had nothing for this
+   question (the three are mutually exclusive by construction — see D88 in the comments where
+   they are appended for exactly why).
+7. A Show details record is built for this turn and saved, and the final answer is handed back.
+
+Gotchas:
+- The whole thing is wrapped in one try/except. Anything unexpected inside still returns a
+  normal-shaped reply — a plain "something went wrong" message plus its own Show details record
+  — rather than an exception a caller has to guard against separately.
+- The dict this returns has to keep the same field names (success, response, applied, the
+  disclosure fields, and so on) that the RPC layer and the frontend already expect — a renamed or
+  dropped field here breaks a reader on the other end of the RPC boundary, not just this file.
 """
 
 from __future__ import annotations

@@ -86,13 +86,13 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/screenshot_media.py",
-      "lines": 803,
+      "path": "py_modules/backend/services/transparency_service.py",
+      "lines": 838,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/transparency_service.py",
-      "lines": 788,
+      "path": "py_modules/backend/services/screenshot_media.py",
+      "lines": 803,
       "role": ""
     },
     {
@@ -196,8 +196,8 @@
       "role": ""
     },
     {
-      "path": "src/features/preset-carousel/sessionRagComposer.test.ts",
-      "lines": 457,
+      "path": "py_modules/backend/services/ai_character_service.py",
+      "lines": 460,
       "role": ""
     }
   ]

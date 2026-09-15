@@ -1,9 +1,48 @@
-"""Title: Ask transparency builders
+"""Title: What "Show details" knows about one answer
 
-Purpose: Build Ask transparency snapshot dicts shared across RPC and background paths.
-Used for: Show details UI, immediate local-command rows, and post-Ollama context chip enrichment.
-Solves: Consistent snapshot field shapes for routes, sanitizer actions, and model disclosure.
-Does not: Persist snapshots to disk or render frontend UI — returns plain dicts for callers.
+Purpose: Every Ask reply carries a "Show details" panel that lets a person see what actually
+happened behind the answer — was a screenshot sent, did it check the local knowledge base, which
+model answered, and so on. This file is where that record gets built, whichever path the
+question took. A question can be answered several different ways (a normal trip to Ollama, an
+instant local shortcut, blocked by the safety filter, an outright error), and each of those paths
+builds its own version of the record here, but they all end up the same shape. This file then
+turns that raw record into the small, ordered list of "chips" — Screenshot attached, Knowledge
+base used, Routed to such-and-such model, and so on — that the panel actually displays, plus a
+catch-all "Developer details" chip with the whole raw record for anyone who wants it.
+Used for: Called at the end of every Ask question, whichever path it took, to build what Show
+details displays; also used when trimming a turn down to the handful of fields worth keeping in
+saved chat history.
+Solves: One shared shape for this record, so every path through Ask (a real model call, a
+blocked question, an instant shortcut, an error) produces a Show details panel that looks and
+behaves the same way, instead of each path inventing its own fields.
+Does not: Save anything to disk, or draw the panel itself — everything here is a plain dict of
+facts; the frontend is what turns it into the on-screen panel.
+
+How it works:
+1. One of several snapshot-building functions builds the raw record first, depending on which
+   path answered the question: `build_ollama_route_snapshot()` for a normal trip to Ollama (by
+   far the most detailed one — see the note on that function below), `build_immediate_command_snapshot()`
+   and `build_sanitizer_command_snapshot()` for the fast local shortcuts that never call Ollama at
+   all, `build_sanitizer_block_snapshot()` and `build_capability_denied_snapshot()` for a question
+   that got refused before it went anywhere, `build_error_route_snapshot()` for an outright
+   failure, and `build_voice_transcribe_snapshot()` for a voice question.
+2. `build_context_chips_manifest()` turns that raw record into the ordered list of chips Show
+   details actually displays — one chip per fact worth surfacing (a screenshot, the knowledge
+   base, which model answered, and so on), each numbered in display order, ending with a
+   "Developer details" chip that carries the whole raw record as JSON via
+   `_developer_chip_snapshot_summary()`. A handful of small helpers format the text inside
+   individual chips — `kb_retrieval_chip_label()`, `kb_coverage_chip_label()`,
+   `source_display_name()` (turns a source URL into the wiki name a reader would recognise), and
+   `build_attribution_entries()` (groups knowledge-base credits so the same wiki is not printed
+   three times in a row).
+3. `ensure_context_chips_on_snapshot()` is a safety net: three of the snapshot builders above
+   build their chips lazily, only when something later reads them, rather than up front. This
+   function fills the chips in on demand for those, so nothing downstream has to know which
+   builders were lazy about it.
+4. `transparency_snapshot_for_chat_slot()` trims a full record down to the few fields worth
+   keeping in saved chat history — a stored turn only ever needs its route, whether it succeeded,
+   and its chips; keeping the rest (the full prompt text, the raw model reply) would make every
+   saved chat many times bigger for fields nothing re-reads later.
 """
 
 from __future__ import annotations
@@ -662,6 +701,17 @@ def build_context_chips_manifest(
     return {"context_chips": chips, "overflow_skips": skips}
 
 
+# In: the question as asked, what the safety sanitizer did to it, the full dict `run_ask_ollama`
+# returned from its trip to Ollama, the reply text before and after any attachment formatting,
+# and the app/timing details around the call. `verify_result` and `reply_followup` are optional
+# extras — a background fact-check result, and which "reply follow-up" chip (if any) triggered
+# this turn.
+# Out: the full Show details record for a normal, successful-or-not Ollama turn, with its
+# context chips already attached (this is the one snapshot builder that is not lazy about that
+# — see `ensure_context_chips_on_snapshot` above).
+# Watch out for: when `reply_followup` carries a chip id, the route name changes from the plain
+# "ollama" to "reply_followup:<chip id>" — code elsewhere that checks for the route being
+# exactly "ollama" will miss those turns.
 def build_ollama_route_snapshot(
     *,
     raw_question: str,

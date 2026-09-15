@@ -1,9 +1,44 @@
-"""Title: Ollama Ask service
+"""Title: Sending one Ask question to Ollama
 
-Purpose: HTTP chat/stream calls to Ollama for game Ask (extracted from Plugin.ask_ollama).
-Used for: game_ai_request and direct ask_ollama RPC paths.
-Solves: Keeps Ollama HTTP, model routing, and roleplay addons out of main.py.
-Does not: Build full game context or run KB retrieval — callers assemble prompts first.
+Purpose: This is the file that actually sends a person's question to the AI and streams
+the reply back. By the time it runs, the question and any screenshots are already
+gathered — this file's job is to add the roleplay character voice if one is on, work out
+which model to try and in what order, and then walk down that list of models, trying each
+one until one answers, retrying on errors that are worth retrying and giving up cleanly on
+ones that are not.
+Used for: Called for every Ask question, both from the game overlay's Ask flow and from the
+direct ask_ollama command.
+Solves: Keeps the HTTP call to Ollama, the model try-order logic, and the roleplay text all in
+one place, out of the main plugin file.
+Does not: Build the full game context that goes into the question, or search the local
+knowledge base — the caller assembles the question and its background material first and
+hands this file a finished prompt to send.
+
+How it works:
+1. Load settings and work out the roleplay character voice, if any, with one call to
+   `build_roleplay_system_suffix_meta()`. This only happens once per question on purpose: the
+   "surprise me" random character rolls a dice, and calling it twice used to pick two different
+   characters for the same reply — one for an early status message, one for the real answer.
+2. Prepare any attached screenshots and build the system prompt (the instructions sent to the
+   model along with the question), then, if a character voice was chosen, append it with
+   `apply_roleplay_to_system_content()`. For the Pyro easter egg specifically, there is a chance
+   of also adding a short "try this next" suggestion via `pyro_manager_carousel_tip_addon()`.
+3. Make sure Ollama is actually reachable, then work out the list of models to try, in order:
+   `resolve_routing_order()` for the person's saved order, a policy/tier filter on top, then
+   `build_effective_models_to_try()` to cross-check the result against what Ollama actually has
+   installed right now. If nothing is left to try, a plain-language explanation is returned
+   instead of an error code.
+4. Walk the model list in order. For each model, call Ollama through `post_ollama_chat()` and
+   wait for the reply (or the streamed words, if this question wants a live stream). Progress
+   messages ("the AI is waking up", "trying the next model") are published as this goes, so the
+   person is never staring at a silent screen.
+5. Decide what a failure means: a timeout or a "not installed" error tries the next model in the
+   list via `is_ollama_model_missing_error()`; for a question with a screenshot, an
+   out-of-memory-shaped error also tries the next model, since a smaller model may still manage
+   it. Any other kind of failure stops the list right there and reports it, rather than silently
+   trying five more models a person did not ask for.
+6. On success, hand back the reply plus which model actually answered and why (the model policy
+   disclosure), so the rest of the app can show that in Show details.
 """
 
 from __future__ import annotations

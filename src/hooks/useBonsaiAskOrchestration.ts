@@ -63,14 +63,11 @@ import {
   peekBonsaiSessionPendingRestore,
   type BonsaiSessionSurvivalSnapshot,
 } from "../utils/bonsaiSessionSurvival";
-import {
-  composeChipAutofillPrefix,
-  replyMicroActionById,
-  type ReplyMicroActionId,
-} from "../data/replyMicroActions";
+import { type ReplyMicroActionId } from "../data/replyMicroActions";
 import { startAskCompletionWatch, stopAskCompletionWatch } from "../utils/bonsaiAskCompletionWatch";
 import { useStrategyChecklistSession } from "./useStrategyChecklistSession";
 import { useSuggestedPromptChips } from "./useSuggestedPromptChips";
+import { useReplyFeedbackChips } from "./useReplyFeedbackChips";
 
 export type { AskThreadExpandedTurnKey } from "../types/bonsaiUi";
 
@@ -223,16 +220,6 @@ export function useBonsaiAskOrchestration(
     askMode: AskModeId;
     rawQuestion: string;
   }>({ attachments: [], askMode: "speed", rawQuestion: "" });
-
-  const [liveReplyFeedbackRating, setLiveReplyFeedbackRating] = useState<"up" | "down" | null>(null);
-  const [liveReplyChipUsed, setLiveReplyChipUsed] = useState(false);
-  const [liveReplyChipError, setLiveReplyChipError] = useState<string | null>(null);
-
-  useEffect(() => {
-    setLiveReplyFeedbackRating(null);
-    setLiveReplyChipUsed(false);
-    setLiveReplyChipError(null);
-  }, [lastExchange?.question, lastExchange?.answer]);
 
   // --- Ask thread archive refs ---
   const pendingArchiveTurnRef = useRef<{
@@ -786,6 +773,29 @@ export function useBonsaiAskOrchestration(
       });
   }, []);
 
+  // --- Reply rating + follow-up chips ---
+  /*
+   * Lifted into useReplyFeedbackChips. Two things fix it to exactly this point in the list, and
+   * React matches hooks by the order they run rather than by name: it needs `lastRequestId`,
+   * declared above, and `clearUnifiedInput` just below wipes the chip error, so the setter has to
+   * be in scope before that callback is written. Retry stays behind because it asks again.
+   */
+  const {
+    onReplyFeedback,
+    onReplyMicroAction,
+    liveReplyFeedbackRating,
+    liveReplyChipUsed,
+    liveReplyChipError,
+    setLiveReplyChipError,
+    resetReplyFeedback,
+  } = useReplyFeedbackChips({
+    lastExchange,
+    lastRequestId,
+    setUnifiedInput: a.setUnifiedInput,
+    askMode: a.askMode,
+    pendingReplyFollowUpRef,
+  });
+
   // --- Submit, cancel, clear Ask field ---
   const clearUnifiedInput = useCallback(() => {
     if (isAsking) {
@@ -1303,7 +1313,7 @@ export function useBonsaiAskOrchestration(
     });
   }, []);
 
-  // --- Reply feedback + micro-action chips ---
+  // --- Retry the last reply (rating and the chips live in useReplyFeedbackChips) ---
   const onRetryLastResponse = useCallback(() => {
     pendingReplyFollowUpRef.current = null;
     setLiveReplyChipError(null);
@@ -1318,69 +1328,6 @@ export function useBonsaiAskOrchestration(
     }
     void onAskOllama(q, { threadQuestionDisplay: q });
   }, [lastExchange?.question, a.unifiedInput, askThreadDisplayQuestion, onAskOllama]);
-
-  const onReplyFeedback = useCallback(
-    async (rating: "up" | "down") => {
-      setLiveReplyFeedbackRating(rating);
-      setLiveReplyChipError(null);
-      try {
-        await callDeckyWithTimeout<[string, number, number, boolean, string], { ok?: boolean }>(
-          "save_ask_feedback",
-          [rating, lastRequestId ?? 0, lastExchange?.question?.length ?? 0, true, ""],
-          DECKY_RPC_TIMEOUT_MS
-        );
-        toaster.toast({
-          title:
-            rating === "up"
-              ? "Feedback saved on this Deck"
-              : "Feedback saved — use a chip to refine and resend",
-          body: "",
-          duration: 3000,
-        });
-      } catch (e: unknown) {
-        toaster.toast({ title: "Feedback not saved", body: formatDeckyRpcError(e), duration: 4000 });
-      }
-    },
-    [lastExchange?.question, lastRequestId]
-  );
-
-  const onReplyMicroAction = useCallback(
-    async (chipId: ReplyMicroActionId) => {
-      const action = replyMicroActionById(chipId);
-      if (!action || !lastExchange?.answer?.trim()) return;
-      const originalQ = (lastExchange.originalQuestion || lastExchange.question).trim();
-      if (!originalQ) return;
-
-      pendingReplyFollowUpRef.current = {
-        chipId,
-        parentQuestion: originalQ,
-        parentAnswer: lastExchange.answer,
-        preferredModel: lastExchange.model ?? null,
-        attachments: lastExchange.attachments ?? [],
-        spoilerConsentEffective: lastExchange.spoilerConsentEffective ?? false,
-        askMode: lastExchange.askMode ?? a.askMode,
-      };
-      setLiveReplyChipUsed(true);
-      setLiveReplyChipError(null);
-      a.setUnifiedInput(composeChipAutofillPrefix(action, originalQ));
-
-      try {
-        await callDeckyWithTimeout<[string, number, number, boolean, string], { ok?: boolean }>(
-          "save_ask_feedback",
-          ["down", lastRequestId ?? 0, originalQ.length, true, chipId],
-          DECKY_RPC_TIMEOUT_MS
-        );
-        toaster.toast({
-          title: "Prompt updated — edit and send when ready",
-          body: "",
-          duration: 3500,
-        });
-      } catch (e: unknown) {
-        setLiveReplyChipError(formatDeckyRpcError(e));
-      }
-    },
-    [a, lastExchange, lastRequestId]
-  );
 
   // --- Session survival snapshot restore / reset ---
   const restoreSessionSnapshot = useCallback((snap: BonsaiSessionSurvivalSnapshot) => {
@@ -1445,10 +1392,8 @@ export function useBonsaiAskOrchestration(
     pendingThreadQuestionDisplayRef.current = null;
     pendingReplyFollowUpRef.current = null;
     lastFlushedExchangeQuestionRef.current = "";
-    setLiveReplyFeedbackRating(null);
-    setLiveReplyChipUsed(false);
-    setLiveReplyChipError(null);
-  }, [invalidateRequests, isAsking, syncOllamaContextFromRunningApp]);
+    resetReplyFeedback();
+  }, [invalidateRequests, isAsking, syncOllamaContextFromRunningApp, resetReplyFeedback]);
 
   /*
    * The read-side half of CHAT-SLOTS-V3-05a's fix: hide the branch block the instant its owning

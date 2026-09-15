@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 384,
-  "edgeCount": 959,
+  "fileCount": 386,
+  "edgeCount": 967,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1047,6 +1047,7 @@
         "src/hooks/usePluginSettings.test.ts",
         "src/hooks/usePluginSettings.ts",
         "src/hooks/useReadAloud.ts",
+        "src/hooks/useReplyFeedbackChips.ts",
         "src/hooks/useStrategyChecklistSession.ts",
         "src/index.tsx",
         "src/test-harness/rpcFixtures.ts",
@@ -1265,6 +1266,7 @@
         "src/components/MainTabChatTranscript.tsx",
         "src/data/replyMicroActions.test.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/hooks/useReplyFeedbackChips.ts",
         "src/types/askOrchestration.ts",
         "src/types/backgroundAsk.ts",
         "src/utils/buildReplyActionsElement.tsx"
@@ -1903,6 +1905,7 @@
         "src/data/replyMicroActions.ts",
         "src/data/strategyGuideFollowup.ts",
         "src/hooks/useBackgroundGameAi.ts",
+        "src/hooks/useReplyFeedbackChips.ts",
         "src/hooks/useSmoothStreamReveal.ts",
         "src/hooks/useStrategyChecklistSession.ts",
         "src/hooks/useSuggestedPromptChips.ts",
@@ -2165,6 +2168,26 @@
         "src/hooks/useReadAloud.test.ts",
         "src/index.tsx",
         "src/utils/bonsaiAskCompletionWatch.ts"
+      ]
+    },
+    "src/hooks/useReplyFeedbackChips.test.ts": {
+      "imports": [
+        "src/hooks/useReplyFeedbackChips.ts",
+        "src/test-harness/fakeDeckyRpc.ts",
+        "src/types/backgroundAsk.ts"
+      ],
+      "importedBy": []
+    },
+    "src/hooks/useReplyFeedbackChips.ts": {
+      "imports": [
+        "src/data/bonsaiSettingsSchema.ts",
+        "src/data/replyMicroActions.ts",
+        "src/types/backgroundAsk.ts",
+        "src/utils/deckyCall.ts"
+      ],
+      "importedBy": [
+        "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/hooks/useReplyFeedbackChips.test.ts"
       ]
     },
     "src/hooks/useReplyLanguage.ts": {
@@ -2599,6 +2622,7 @@
         "src/hooks/useBonsaiAskOrchestration.test.ts",
         "src/hooks/usePluginSettings.test.ts",
         "src/hooks/useReadAloud.test.ts",
+        "src/hooks/useReplyFeedbackChips.test.ts",
         "src/index.test.tsx",
         "src/test-harness/fakeDeckyRpc.test.ts",
         "src/test-harness/setup.ts",
@@ -2694,6 +2718,8 @@
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/hooks/useReadAloud.test.ts",
         "src/hooks/useReadAloud.ts",
+        "src/hooks/useReplyFeedbackChips.test.ts",
+        "src/hooks/useReplyFeedbackChips.ts",
         "src/test-harness/fakeDeckyRpc.ts",
         "src/test-harness/rpcFixtures.ts",
         "src/types/askOrchestration.ts",
@@ -3291,6 +3317,7 @@
         "src/hooks/usePluginSettings.ts",
         "src/hooks/usePullModelCatalog.ts",
         "src/hooks/useReadAloud.ts",
+        "src/hooks/useReplyFeedbackChips.ts",
         "src/hooks/useReplyLanguage.ts",
         "src/hooks/useScreenshotBrowser.ts",
         "src/hooks/useVoiceTranscription.ts",

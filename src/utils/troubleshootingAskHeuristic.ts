@@ -1,13 +1,26 @@
 /**
- * Title: Troubleshooting Ask permission heuristic (client)
- * Purpose: Mirror backend troubleshooting phrase gate for the dismissible game-context permission hint.
- * Used for: MainTabChatTranscript when Ask text looks like Proton/compat troubleshooting.
- * Solves: Hint users to enable Read game & screenshot context without auto-enabling it.
- * Does not: Replace backend `question_matches_troubleshooting_log_context` — keep phrases aligned.
- * Does not: Decide whether the knowledge base runs. That moved to `compat_topic_router.py`
- *           under decision D16 and is deliberately much wider than this. This gate is about
- *           reading Proton logs, which needs a permission; matching it to KB routing would
- *           show the permission hint on every troubleshooting-shaped Ask.
+ * Title: Noticing a question that sounds like game troubleshooting
+ *
+ * Purpose: When a question looks like it is about getting a game running well on the Deck —
+ * crashing, stuttering, a black screen, Proton issues — the plugin can offer to turn on the
+ * permission that lets it read that game's own compatibility logs, rather than turning it on
+ * automatically. This file is the plain word-matching rule that decides whether a question looks
+ * like that kind of troubleshooting question.
+ *
+ * Used for: `MainTabChatTranscript`, to decide whether to show the "read game & screenshot
+ * context" permission hint under a reply.
+ *
+ * Solves: offers the permission at the moment it would actually help, instead of showing it on
+ * every reply or never at all.
+ *
+ * Does not: replace the back end's own version of this same check
+ * (`question_matches_troubleshooting_log_context`). The two lists of phrases have to be kept in
+ * step with each other by hand — there is no shared code between them.
+ *
+ * Does not: decide whether the plugin's knowledge base runs for this question at all. A
+ * separate, deliberately much wider rule (`compat_topic_router.py`) owns that decision. Matching
+ * this file's narrower wording list to that one would turn on the permission hint for every
+ * troubleshooting-shaped question, not only the ones where reading logs would actually help.
  */
 export function questionLooksLikeTroubleshootingAsk(question: string): boolean {
   const s = (question || "").toLowerCase();

@@ -1,9 +1,34 @@
 /**
- * Title: Reply stop registry
- * Purpose: Keep a live map of Main-tab reply feedback buttons so D-pad navigation can focus them by id.
- * Used for: Strategy/Ask reply chrome focus graphs on Steam Deck.
- * Solves: Focus targets miss when looked up with document.querySelector under Decky.
- * Does not: Own button layout, styling, or feedback RPC — only register and focus mounted nodes.
+ * Title: Moving the controller's highlight between a reply's small buttons
+ *
+ * Purpose: An Ask or Strategy reply on the Main tab has several small controls around it — Retry,
+ * Copy, the Helpful / Not really buttons, Read aloud, and Show details — and a person using a
+ * controller needs to move the highlight between them with the D-pad. This file keeps a live map
+ * from each control's name to the actual on-screen element currently mounted for it, and can move
+ * the controller's highlight to any of them by name.
+ *
+ * Used for: the Ask and Strategy reply D-pad controls on the Main tab, Steam Deck only.
+ *
+ * Solves: looking a control up with a page-wide element search (`document.querySelector`)
+ * sometimes misses it under this plugin's panel setup; registering the real element when it
+ * mounts is reliable where a page search is not.
+ *
+ * Does not: decide where these controls sit on screen, how they look, or send the actual
+ * helpful / not-really feedback to the back end. It only remembers which element is which and
+ * moves the highlight.
+ *
+ * Gotchas:
+ *   - The order in `REPLY_STOP_ORDER` is the order a person walks the controls with the D-pad,
+ *     not a description of where they sit on screen. After two earlier redesigns the controls are
+ *     no longer in one row: Retry sits on the question above the answer, Copy sits in the corner
+ *     of the answer itself, Helpful and Not really are two buttons below that, and Read aloud and
+ *     Show details are two lines under those.
+ *   - `ensureFocusable()` only marks an element as reachable by the D-pad (`tabindex="-1"`) when
+ *     it actually needs it — a plain button already works without this. Measured on device
+ *     2026-08-04: an earlier version stamped that attribute onto every target including the Retry
+ *     button itself, and that attribute is what made Retry stop responding to the D-pad in the
+ *     first place, because it takes a button out of Steam's own list of controller-reachable
+ *     things.
  */
 
 import { elementHasFocus } from "./uiDocument";

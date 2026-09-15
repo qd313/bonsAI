@@ -1,9 +1,23 @@
 /**
- * Title: Settings tab local survival
- * Purpose: Register and restore Settings tab UI snapshot across Decky modal unmount cycles.
- * Used for: SettingsTab accent intensity menu open state.
- * Solves: Preserve dropdown/menu state when a modal closes and reopens the QAM panel.
- * Does not: Persist settings values — see usePluginSettings RPC save path.
+ * Title: Remembering the Settings tab's open menu across a panel close and reopen
+ *
+ * Purpose: Opening certain modals closes and reopens the quick-access panel, which would
+ * normally reset the Settings tab. This file remembers one thing about it — whether the AI
+ * character's accent-intensity menu was left open — so it looks the same when the panel reopens
+ * instead of resetting closed.
+ *
+ * Used for: the Settings tab's accent-intensity dropdown.
+ *
+ * Solves: without this, opening a modal from Settings (or the panel closing and reopening on its
+ * own) would close a menu the person had left open.
+ *
+ * Does not: save any actual setting value — those are saved permanently through
+ * `usePluginSettings`'s own save path. This file only remembers whether one menu was open, and
+ * only for as long as the panel stays open.
+ *
+ * How it works: `createTabLocalSurvival()` does the actual remembering; this file only gives it
+ * the Settings tab's own snapshot shape (just the one on/off flag) and exports tab-specific
+ * names for it.
  */
 import { createTabLocalSurvival } from "./createTabLocalSurvival";
 

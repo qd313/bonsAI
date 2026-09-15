@@ -1,9 +1,27 @@
 /**
- * Title: Response chunk splitter
- * Purpose: Split assistant markdown into scrollable chunks respecting code-fence boundaries.
- * Used for: buildAnswerBubbleElement and answer bubble D-pad vertical navigation.
- * Solves: Per-chunk focus and scroll without breaking open or closed GFM fences.
- * Does not: Strip model control tags — see stripAssistantDisplayTags.
+ * Title: Breaking a long reply into D-pad-sized pieces
+ *
+ * Purpose: A finished Ask or Strategy reply can be long. Showing it as one solid block would
+ * mean a single D-pad press scrolls through all of it with no stopping point along the way, so
+ * this file breaks a reply up into a few pieces first, each becoming its own stop the D-pad can
+ * land on. It never cuts a piece of code in the middle — a fenced code block (a part of a reply
+ * wrapped in three backticks) always stays whole in one piece.
+ *
+ * Used for: `buildAnswerBubbleElement` and the answer bubble's up/down D-pad navigation.
+ *
+ * Solves: without this, a reply is either one long scroll with no stopping point, or, if split
+ * too finely, a string of D-pad presses for what reads as a handful of short paragraphs.
+ *
+ * Does not: remove the model's own control tags from the text first — see
+ * `stripAssistantDisplayTags.ts`, a separate cleanup step that runs before this one.
+ *
+ * How it works: paragraphs (chunks separated by a blank line) are the first split, as long as
+ * doing so never cuts a fence in half. Paragraphs that are individually short are then merged
+ * back together, up to about 900 characters — roughly half a screen's worth of the reply column
+ * on the Deck — so a finished answer becomes a handful of D-pad stops rather than one per
+ * paragraph. A single long paragraph with no natural breaks falls back to a length-based split
+ * that looks for a natural place to cut — the end of a sentence, or else a gap between two words
+ * — rather than cutting through the middle of one, again never cutting inside a fence.
  */
 /**
  * True when a line starts a GFM/Markdown code fence (``` or ```json).

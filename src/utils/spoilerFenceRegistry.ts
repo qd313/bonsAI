@@ -1,10 +1,36 @@
 /**
- * Title: Spoiler fence registry
- * Purpose: Track mounted, still-masked spoiler fences so D-pad Down can focus one instead of scrolling past it.
- * Used for: MainTabBonsaiAiMarkdownChunk (registration) and answerBubbleNavigation (the diversion).
- * Solves: A masked spoiler was unreachable without a touchscreen — the reply bubble is a single
- *         Focusable that owns vertical movement, so the fence's own Focusable never received focus.
- * Does not: Decide what is masked, or reveal it — the fence owns its open state.
+ * Title: Letting the D-pad land on a hidden spoiler instead of scrolling past it
+ *
+ * Purpose: Reply text can contain a "spoiler" that starts out hidden until a person chooses to
+ * reveal it. Normally the whole reply is one connected area for the controller's Down button to
+ * scroll through, so a hidden spoiler inside it never gets its own stop — Down just scrolls past
+ * it, and with no touchscreen there is no other way to reach it. This file keeps a live list of
+ * every hidden spoiler currently on screen, so Down can check that list and land the controller's
+ * highlight on one of them instead of scrolling past.
+ *
+ * Used for: `MainTabBonsaiAiMarkdownChunk` (registers each spoiler when it mounts) and
+ * `answerBubbleNavigation` (decides that Down should land there instead of scrolling on).
+ *
+ * Solves: a hidden spoiler had no way to be reached at all without a touchscreen, because the
+ * whole reply is one connected area for focus purposes and the spoiler's own element never
+ * received the controller's highlight on its own.
+ *
+ * Does not: decide what counts as hidden, or reveal it — the spoiler element itself owns whether
+ * it is open.
+ *
+ * Gotchas:
+ *   - Unlike the cross-area jumps elsewhere in this project (see `navFocusRegistry.ts`), a plain
+ *     `.focus()` call here does move Steam's own highlight, not just the browser's idea of what
+ *     is focused — confirmed on device 2026-08-04. That is because the spoiler sits inside the
+ *     same connected area as the rest of the reply, rather than in a separate one; the
+ *     cross-area trick that other file exists for is not needed here. This code never overwrites
+ *     an existing `tabindex` for the same reason that trick's target rows have to be handled with
+ *     care: this element already carries `tabindex="0"` from how the screen is built, and forcing
+ *     it to `-1` would take it back out of Steam's list of controller-reachable things.
+ *   - A spoiler is only marked as "already offered" (`markSpoilerFenceVisited`) once the highlight
+ *     actually lands there, confirmed with `elementHasFocus`. Marking it earlier meant a single
+ *     failed attempt permanently skipped that spoiler for the rest of the reply's time on screen,
+ *     with no way to reach it afterward.
  */
 
 import { elementHasFocus, rememberUiDocument } from "./uiDocument";

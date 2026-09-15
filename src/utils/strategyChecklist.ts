@@ -1,9 +1,30 @@
 /**
- * Title: Strategy checklist helpers
- * Purpose: Normalize RPC strategy_checklist payloads and merge toggle state for Ask submit.
- * Used for: useBonsaiAskOrchestration Strategy mode checklist panel and start_background_game_ai payload.
- * Solves: Shared shape validation between backend response and frontend checklist UI.
- * Does not: Persist per-game session — see strategyChecklistPersistence and useStrategyChecklistSession.
+ * Title: Turning a model's checklist into something the screen can trust
+ *
+ * Purpose: In Strategy mode, the model can hand back a checklist — a title and a list of steps —
+ * instead of only prose, and the person can tick items off as they go. This file turns whatever
+ * the back end sends for that checklist into a shape the screen can trust, keeps a person's
+ * ticked-off items when the model sends a revised list of steps on the next reply (matching by
+ * wording when the ids themselves changed), and builds the two request shapes that go back to
+ * the back end: one for continuing the conversation, one for saving progress.
+ *
+ * Used for: `useBonsaiAskOrchestration`'s Strategy-mode checklist panel, and the
+ * `start_background_game_ai` request that continues the conversation.
+ *
+ * Solves: without this, the checklist panel would have to trust whatever shape the back end
+ * sends without checking it, and a revised list of steps would silently reset every ticked box,
+ * since a step's id is not guaranteed to stay the same between replies.
+ *
+ * Does not: save checklist progress between sessions — see `strategyChecklistPersistence.ts` and
+ * `useStrategyChecklistSession`.
+ *
+ * Gotchas:
+ *   - Ticked-off steps are carried across a revised list by two matches tried in order: the same
+ *     step id if it is still used, and otherwise the same wording, compared with case and
+ *     surrounding spaces ignored. A step whose wording and id both changed is treated as a new,
+ *     unticked step — there is no way to tell at that point that it is meant to be the same step.
+ *   - A checklist with fewer than two usable steps, or no usable title, is rejected outright
+ *     (`normalizeStrategyChecklist` returns `null`) rather than shown half-built.
  */
 import type { StrategyChecklistPayload, StrategyChecklistState } from "../types/bonsaiUi";
 

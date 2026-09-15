@@ -1,9 +1,32 @@
 /**
- * Title: Pull model catalog merger
- * Purpose: Merge bundled pull-model catalog with live/cached overlay entries, overrides, and removals.
- * Used for: usePullModelCatalog and PullModelsModal tag lists.
- * Solves: Fresh model metadata without replacing the shipped fallback catalog entirely.
- * Does not: Fetch catalog from Ollama — see backend fetch_pull_model_catalog RPC.
+ * Title: Combining the built-in model list with an update from the back end
+ *
+ * Purpose: The Pull Models screen shows a list of AI models a person can download. That list
+ * ships with the plugin (the "bundled" list) so it works even with no internet, but the project
+ * also publishes updates to it — new models, models that got pulled, corrected details — and
+ * this file combines the two: it starts from the bundled list, then lays a downloaded update on
+ * top of it one model at a time, throwing out anything in the update that does not look like a
+ * real model entry.
+ *
+ * Used for: usePullModelCatalog and the Pull Models screen's list of downloadable models and
+ * their tags.
+ *
+ * Solves: without this, an update would have to replace the whole shipped list, so every future
+ * model choice would depend on that fetch succeeding. This way a failed or missing update just
+ * leaves the shipped list showing, and a partial update can still improve a few entries without
+ * replacing the rest.
+ *
+ * Does not: fetch the update itself — that is a separate request to the back end
+ * (`fetch_pull_model_catalog`). This file only combines what it is handed.
+ *
+ * Gotchas:
+ *   - A model named in the update's "removed" list wins over everything else: even if the
+ *     bundled list or the rest of the update still mentions it, it will not appear.
+ *   - `isPlausibleOllamaPullTag()` only checks that a typed-in model name is shaped like a real
+ *     one — right characters, not too long, not empty. It mirrors the back end's own
+ *     `is_valid_ollama_pull_tag` check (`ollama_catalog_service.py`). It cannot tell whether that
+ *     model actually exists; only the back end can look that up
+ *     (`partition_pull_tags_by_registry`).
  */
 import type {
   PullModelEntry,

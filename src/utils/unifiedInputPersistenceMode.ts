@@ -1,9 +1,22 @@
 /**
- * Title: Unified input persistence guard
- * Purpose: Decide when switching into no_persist mode should clear the Ask field once.
- * Used for: usePluginSettings and unified input mount after Decky modal remount.
- * Solves: Avoid wiping restored input on every remount while already in no_persist.
- * Does not: Persist input text — session survival and settings mode own storage behavior.
+ * Title: Deciding the one moment to clear the Ask box for "do not remember"
+ *
+ * Purpose: The Ask box can be set to remember what was typed in it between openings, or to
+ * always start empty ("do not remember"). This file decides the one moment that starting-empty
+ * setting should actually clear whatever is currently typed: only right when the person switches
+ * into it, never on every reopening of the panel while already in that mode.
+ *
+ * Used for: `usePluginSettings`, and the Ask box's own mount handling after the panel is torn
+ * down and rebuilt.
+ *
+ * Solves: without this check, every panel reopen while already set to "do not remember" would
+ * also wipe text that a completely different feature (restoring the last session) had just put
+ * back into the box — even though the person never actually asked for that setting to do
+ * anything at that moment.
+ *
+ * Does not: remember or save the actual text typed. That belongs to session-restore and to the
+ * setting's own save path, not to this file, which only answers the single "should I clear it
+ * right now" question.
  */
 import type { UnifiedInputPersistenceMode } from "../data/bonsaiSettingsSchema";
 /**

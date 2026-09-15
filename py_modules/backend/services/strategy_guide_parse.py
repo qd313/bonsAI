@@ -1,9 +1,71 @@
-"""Title: Strategy guide parser
+"""Title: Reading branch pickers and checklists out of an answer
 
-Purpose: Extract branch-picker and checklist payloads from model replies and streaming text.
-Used for: Main tab strategy follow-ups prefixed with STRATEGY_FOLLOWUP_PREFIX and live streaming UI.
-Solves: Fence/tag parsing, incomplete fence hiding during stream, and checklist state blocks.
-Does not: Call Ollama or persist session state — see strategy_checklist_session_service for that.
+Purpose: When you ask a strategy question, the AI can end its answer with a
+special block asking which part you are stuck on, or a checklist tracking
+steps for a longer strategy. This file finds that block inside whatever text
+the model sends back, however messily it is formatted, turns it into a clean
+payload the screen can draw as buttons or checkboxes, and strips it back out
+of the text you actually read so you never see the raw block.
+
+Used for: Every reply where the model was asked for a strategy follow-up --
+questions the Deck itself marks with the STRATEGY_FOLLOWUP_PREFIX text -- and
+the text shown on screen while an answer is still streaming in.
+
+Solves: Real model output is messy. The block can come back in the exact
+shape asked for, or fenced with the wrong language tag, or missing its
+closing fence entirely, or URL-encoded inside brackets, or cut off mid-write
+with unclosed braces. This file tries each shape in turn, and can repair JSON
+a model has truncated. It also hides an unfinished block from the streaming
+text while an answer is still arriving, since a half-written block is not
+something anyone should have to read.
+
+Does not: Talk to the AI, or remember checklist progress between messages --
+that lives in strategy_checklist_session_service.
+
+How it works:
+
+Branch picker, through `extract_strategy_guide_branches()`:
+ 1. `_extract_fence()` looks first for the exact fence the model is asked
+    for, opened with the text `bonsai-strategy-branches`.
+ 2. If that is not there, `_extract_jsonish_branch_fence()` tries a plain
+    `json`-tagged fence instead -- something models reach for more often than
+    the exact name asked for.
+ 3. If neither fence shape is there, `_extract_bracket_paren()` tries the
+    alternate [bonsai-strategy-branches] (...) shape, including JSON that has
+    been URL-encoded.
+ 4. Whichever shape is found, its JSON body goes through
+    `_parse_strategy_json_blob()`, which tolerates a wrong language tag and
+    trailing commas, and calls `_repair_truncated_json()` to close off braces
+    and quotes a model cut off mid-write.
+ 5. `_normalize_branch_payload()` then checks the result actually has a real
+    question and at least two real options, throwing the whole block away
+    rather than showing something broken -- including a question or option
+    that is still just the worked example's placeholder dots
+    (`_is_ellipsis_placeholder()`).
+
+Checklist, through `extract_strategy_checklist()` calling
+`_extract_checklist_fence()`: a single fixed fence shape, parsed the same
+way, checked by `_normalize_checklist_payload()` for a title and at least two
+items.
+
+While an answer is still streaming in, `hide_incomplete_strategy_branch_fence()`
+and `hide_incomplete_strategy_checklist_fence()` cut an in-progress block out
+of the visible text, so a half-written fence or a raw block of JSON never
+flashes on screen before the final parse replaces it with the real picker or
+checklist.
+
+Gotchas:
+ - `hide_incomplete_strategy_checklist_fence()` keeps whatever text follows
+   the fence's closing marker, while the branch version throws it away -- that
+   is not an inconsistency. The checklist is asked for after the coaching
+   text in the prompt, so anything after it is more of that text, not
+   leftover payload; a branch picker is asked for last, so anything after it
+   is model drift worth dropping.
+ - A rejected block is simply dropped, exact wording included, rather than
+   shown as-is. That is deliberate: the comment inside
+   `hide_incomplete_strategy_checklist_fence()` records a real case where a
+   broken checklist left the player looking at raw JSON that was also, in the
+   UI, a dead button.
 """
 
 from __future__ import annotations

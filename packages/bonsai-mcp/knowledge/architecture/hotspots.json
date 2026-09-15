@@ -141,6 +141,11 @@
       "role": ""
     },
     {
+      "path": "py_modules/backend/services/strategy_guide_parse.py",
+      "lines": 550,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/settings_service.py",
       "lines": 545,
       "role": "Load/save/merge settings.json"
@@ -166,6 +171,11 @@
       "role": ""
     },
     {
+      "path": "py_modules/backend/services/chat_slot_service.py",
+      "lines": 513,
+      "role": ""
+    },
+    {
       "path": "src/utils/answerBubbleNavigation.test.ts",
       "lines": 512,
       "role": ""
@@ -176,28 +186,18 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/strategy_guide_parse.py",
-      "lines": 488,
-      "role": ""
-    },
-    {
-      "path": "py_modules/backend/services/chat_slot_service.py",
-      "lines": 468,
-      "role": ""
-    },
-    {
       "path": "py_modules/backend/services/voice_read_aloud_service.py",
-      "lines": 466,
+      "lines": 506,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/desktop_note_service.py",
+      "lines": 488,
       "role": ""
     },
     {
       "path": "src/utils/buildReplyActionsElement.tsx",
       "lines": 462,
-      "role": ""
-    },
-    {
-      "path": "py_modules/backend/services/ai_character_service.py",
-      "lines": 460,
       "role": ""
     }
   ]

@@ -5,6 +5,62 @@ pick up without rereading anything but this file.
 
 ---
 
+## 2026-09-14, phase 4 finished: one more block out, and the leftovers closed off
+
+**Phase 4 is done.** Three commits. Nothing a person using the plugin would notice; checked on the
+Deck at the end, because the change was to the screen and the earlier Deck evening no longer
+covered it.
+
+**Rating a reply is now its own piece.** Thumbs up or down, and the five chips that reword your
+question for you, came out of the Ask file. It is down to 1,469 lines from 1,524.
+
+Where that piece is called from was not a free choice, and both reasons were checked before
+moving anything: it needs the request number, which is worked out further up, and the Ask bar's ✕
+wipes one of its values, so it has to exist before that button is written. That puts it
+immediately before the submit block. Nothing in between touches any of it.
+
+**Retry deliberately stayed behind.** It asks again straight away, so it belongs with the code that
+asks — and leaving it there means the new piece never sends anything at all, which is a much
+simpler thing to reason about.
+
+**The order-of-hooks record did its job twice.** First it failed and named the exact spot when the
+order changed, which is what it is for. Then, after I added the new file to it, the count went from
+77 to 78 — and the important part is what the list shows: **nothing left it.** Every one still
+exists, just further down. The single addition is one new clear-everything function replacing three
+repeated lines.
+
+Then I checked the record actually covers the new file, rather than assuming: swapped two
+same-kind entries inside it and watched the check fail naming both. A check that compared names
+only would have passed that.
+
+**The tests were the real gap.** Nothing in the whole suite mentioned either of these two buttons
+before today, so a green run said nothing about the code being moved. Nine tests now cover them,
+and I proved they bite by breaking the rule about which reply style a chip remembers and watching
+the right one fail.
+
+**On the Deck**, with a fresh question answered in 35 seconds: "Not really" saved a rating and
+brought up the five chips; "Too long" filled the Ask box with "Give a shorter answer — key points
+only" plus the original question, saved a second line naming which chip, and **sent nothing**; the
+✕ cleared the box, the rating row and the chips together. That last one was worth doing on purpose
+— it is the one place the new piece is reached from outside, and the reason it sits where it does.
+Log: 12 lines, no errors.
+
+**The leftovers are closed off rather than left hanging.** The plan promised the long files would
+get a "split later" entry each; they had none, so there is one now, naming all eleven with today's
+sizes. Two things were deliberately NOT done, both on the plan's own rules: the two popover menus
+that share 74 lines are a near-copy, not an exact one, and near-copies need a written decision; and
+nothing else got split, because the plan puts that out of scope this round and the phase is already
+checked on hardware.
+
+**Watch the roadmap size.** It is 98.74 KB against a 100 KB ceiling. The next landing or two will
+cross it, and there is already an entry about trimming the big documents.
+
+**Two small things I got wrong and caught:** a probe that guessed at wording flagged errors on
+screen that were only words inside the panel's own stylesheet, and my first sketch of the split put
+the new piece where it could not see what it needed. Reading the real thing fixed both.
+
+---
+
 ## 2026-09-14, phase 4 on the Deck: three days of moved code, checked on real hardware
 
 **The plugin behaves the same on the Deck.** The log for the whole evening is twelve lines

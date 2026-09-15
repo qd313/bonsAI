@@ -25,6 +25,7 @@ roughly how many tokens it used, and how it finished.
 | 2026-09-14 | 4 Reshape | Session 2: last seam, three moves out of main.py | Opus xhigh | 74 | 215,000 | done |
 | 2026-09-14 | 4 Reshape | Session 3: split the Ask hook, one more move, settings measured | Opus xhigh | 62 | 175,000 | done |
 | 2026-09-14 | 4 Reshape | Session 4: the whole phase checked on the Deck | Opus xhigh | 44 | 120,000 | done |
+| 2026-09-14 | 4 Reshape | Session 5: rating a reply splits out, leftovers closed, Deck-checked | Opus xhigh | 58 | 155,000 | done |
 
 ## Running total
 
@@ -34,7 +35,7 @@ roughly how many tokens it used, and how it finished.
 | 1 Docs diet | 7 | 576 | 1,551,000 |
 | 2 Map and measure | 0 | 41 | 118,000 |
 | 3 Delete | 0 | 78 | 205,000 |
-| 4 Reshape (4 of 3-4, Deck-checked) | 0 | 262 | 745,000 |
+| 4 Reshape (5 sessions, DONE, Deck-checked) | 0 | 320 | 900,000 |
 
 Phases 2 and 3 together cost 323,000 — about a fifth of the docs diet, and neither spawned a single
 worker. A script did the measuring and the deleting; the one session read only the summaries and

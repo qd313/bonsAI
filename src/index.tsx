@@ -1,9 +1,87 @@
 /**
  * Title: Plugin root
- * Purpose: Decky plugin entry — tabs, scoped CSS, settings load/save, and hook wiring into Main/Settings/Ollama.
- * Used for: definePlugin export; mounts BonsaiPluginShell and useBonsaiAskOrchestration.
- * Solves: Single composition root for QAM UI without embedding Ask logic inline.
- * Does not: Implement Ask orchestration or RPC handlers — see useBonsaiAskOrchestration and main.py.
+ *
+ * Purpose: The file Decky loads to build bonsAI's whole panel — the one a
+ * person opens from the Quick Access Menu. `definePlugin()` at the very
+ * bottom hands Decky the plugin's name, icon, and its whole React tree;
+ * everything above that builds the tree. `Content` is that tree: it wires
+ * together every setting and every tab — Main, Ollama, Settings,
+ * Permissions, Developer, About — and the many hooks each one needs, then
+ * draws the tab strip and whichever tab is open.
+ *
+ *     Decky Quick Access Menu
+ *          │ opens the panel
+ *          ▼
+ *     definePlugin()  ──►  { content: <Root/> }
+ *          │
+ *          ▼
+ *     <Root>  (an error boundary — a crash in one tab does not take the
+ *              whole panel down silently)
+ *          │
+ *          ▼
+ *     <Content>
+ *          │
+ *          ├─ usePluginSettings() and friends: load settings, watch for
+ *          │    changes, and save them back
+ *          ├─ useBonsaiAskOrchestration(): the whole Ask flow — see its own
+ *          │    header for how a question travels from press to answer
+ *          ├─ useChatSlots(), useIntentPacks(), useKidsLock(), and a dozen
+ *          │    more: one hook per self-contained piece of behavior
+ *          │
+ *          ▼
+ *     one useXxxTabPayload() per tab, each turning the state above into the
+ *     exact props that tab's components need
+ *          │
+ *          ▼
+ *     <Tabs> draws the tab strip and whichever tab's payload is on screen
+ *
+ * Used for: mounted once by Decky when the panel opens.
+ *
+ * Solves: One composition root, so the plugin's actual behavior — settings,
+ * the Ask flow, chat slots, and the rest — lives in hooks and feature files
+ * instead of being written inline in the file Decky happens to load first.
+ *
+ * Does not: Run the Ask flow itself — useBonsaiAskOrchestration does that,
+ * and this file only wires its returned state into the Main tab's props.
+ * Does not talk to the backend for anything routine either; the handful of
+ * direct calls left here (clearing all plugin data, for instance) are the
+ * ones too one-off to belong in any more specific hook. See main.py for the
+ * backend side of everything this file wires up.
+ *
+ * How it works:
+ * 1. Load every hook Content depends on: settings, the disclaimer and
+ *    local-runtime gates, kids-lock, UI scale, chat slots, intent packs,
+ *    voice input, and, centrally, useBonsaiAskOrchestration for the whole
+ *    Ask flow.
+ * 2. Track the handful of pieces of state that belong to Content itself
+ *    rather than to any one hook: which tab is open, which chat slot is
+ *    currently generating an answer, and a few refs used to survive a
+ *    re-render or a remount without losing track of an in-flight question.
+ * 3. Wire up session survival: a snapshot function that can describe the
+ *    whole screen well enough to restore it, for when the panel closes and
+ *    reopens mid-question — and, the deliberate opposite of that,
+ *    resetPluginSession and onClearAllPluginData, the two ways a session can
+ *    be thrown away on purpose.
+ * 4. Build one useXxxTabPayload() call per tab — useMainTabPayload,
+ *    useSettingsTabPayload, useOllamaTabPayload, usePermissionsTabPayload,
+ *    useDeveloperTabPayload, useAboutTabPayload — each one turning the state
+ *    gathered above into exactly the props that tab's own components need.
+ * 5. Assemble deckyTabs, the list Steam's own Tabs component draws from, and
+ *    render the tab strip above it.
+ * 6. definePlugin(), at the very end, is the actual handoff to Decky: the
+ *    plugin's name, its title and icon, and content: <Root />.
+ *
+ * Gotchas:
+ * - The order these hooks are declared in matters. Several are declared
+ *   after another one specifically because they need a value or a setter
+ *   that earlier hook produced — useChatSlots, for instance, needs the Ask
+ *   flow's own thread setters. Reordering risks a hook reading a ref that
+ *   has not been filled in yet.
+ * - Several refs exist purely so a stable callback can read a later render's
+ *   value without changing identity itself on every render. Passing a
+ *   freshly created function directly instead of going through a ref was
+ *   measured, in one case documented inline, to re-arm an effect on every
+ *   render and produce an update loop.
  */
 import React, { useCallback, useState, useMemo, useEffect, useLayoutEffect, useRef } from "react";
 import { definePlugin, toaster, call, useQuickAccessVisible } from "@decky/api";
@@ -100,10 +178,27 @@ type SteamUrlApi = {
   ExecuteSteamURL(url: string): void;
 };
 
-/**
- * Primary plugin shell: tabs plus Ask/settings wiring. Heavy logic lives in hooks under `src/hooks/`
- * (`usePluginSettings`, `useBackgroundGameAi`, `useDisclaimerAndLocalRuntimeGates`, `useBonsaiAskOrchestration`,
- * `useCapturedFrontendErrors`) and feature modules under `src/features/` so this file stays a composer.
+/*
+ * In: nothing — no props. Every value Content needs, it reads from settings,
+ * from Router.MainRunningApp, or from its own hooks.
+ * Out: the whole panel's JSX, as drawn in the file header above.
+ * What can go wrong: heavy logic lives in the hooks under src/hooks/
+ * (`usePluginSettings`, `useBackgroundGameAi`, `useDisclaimerAndLocalRuntimeGates`,
+ * `useBonsaiAskOrchestration`, `useCapturedFrontendErrors`) and the feature
+ * modules under src/features/, on purpose, so a fault in one of them is a
+ * fault in a small, separately readable file rather than in this one — and
+ * Root wraps this whole component in an error boundary, so a fault that does
+ * happen here shows a recoverable error instead of a blank panel.
+ *
+ * See the file header's How it works for the full step order; in short:
+ * 1. Load every hook this component depends on.
+ * 2. Track the state that belongs to Content itself.
+ * 3. Wire up session survival, and the two ways to deliberately throw one
+ *    away.
+ * 4. Build one useXxxTabPayload() call per tab.
+ * 5. Assemble the tab list and render the tab strip.
+ * 6. (Outside this function) definePlugin() hands the finished tree to
+ *    Decky.
  */
 const Content: React.FC = () => {
   const sessionSnapshotRef = useRef<() => BonsaiSessionSurvivalSnapshot>(() => {

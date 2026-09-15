@@ -1,10 +1,79 @@
 /**
- * Title: Ask orchestration hook
- * Purpose: Own Main-tab Ask lifecycle — submit, background poll bridge, thread/archive, stream reveal, session restore.
- * Used for: index.tsx wires this into MainTab (onAskOllama, transcript state, reply actions).
- * Solves: One orchestration owner between UI and Decky RPC; pairs with useBackgroundGameAi polling.
- * Does not: Render Ask UI, define RPC handlers, or run Ollama — see MainTab* and game_ai_request.
- * Caution: Reordering hooks risks stale poll callbacks after unmount.
+ * Title: The Ask flow
+ *
+ * Purpose: Runs the whole life of one question, from the moment Ask is
+ * pressed to the moment an answer — or a refusal — is on screen. It also
+ * owns everything else about the chat around that question: the history of
+ * older turns, Strategy Guide's branch picker and checklist, the
+ * reply-feedback chips, and picking a half-finished question back up after
+ * the plugin panel was closed and reopened while it was still running.
+ *
+ *     onAskOllama(question)
+ *          │
+ *          ▼
+ *     start_background_game_ai  ───────►  usually: "pending" — the answer
+ *          │                               is now being worked on
+ *          │                                    │
+ *          │                                    ▼
+ *          │                          startBackgroundStatusPolling() asks
+ *          │                          get_background_game_ai_status roughly
+ *          │                          once a second
+ *          │                                    │
+ *          │                                    ▼
+ *          │                          applyBackgroundStatusToUi() turns each
+ *          │                          reply into what the screen shows: the
+ *          │                          thinking line, the text streaming in
+ *          │                          so far, or, once the status turns
+ *          │                          "completed", "failed" or "cancelled",
+ *          │                          the finished answer
+ *          │
+ *          └── sometimes instead: "completed" right away (a local command
+ *               bonsAI answers itself, never touching the AI), "busy"
+ *               (another question is already running), or "invalid" /
+ *               "blocked" (refused before it ever reached the AI)
+ *
+ * Used for: index.tsx builds one of these per mount and hands its whole
+ * returned bundle of state and callbacks down through MainTab into the
+ * transcript and the Ask bar.
+ *
+ * Solves: One place that owns everything about asking a question, so the
+ * screen files that actually draw the chat only ever show state — they never
+ * decide it themselves.
+ *
+ * Does not: Run the AI, or decide what a question is allowed to say — that
+ * happens on the PC or Deck side, in main.py and the services beside it.
+ * Does not draw any of the chat itself — see MainTabChatTranscript.
+ *
+ * How it works:
+ * 1. onAskOllama() is the whole submit path: it validates the question, asks
+ *    the backend to start work with start_background_game_ai(), and reads
+ *    what came back — an immediate answer, a refusal, "busy", or the normal
+ *    case, where it hands off to polling.
+ * 2. useBackgroundGameAi() is the actual polling engine underneath this
+ *    hook; startBackgroundStatusPolling() and startNextRequest() are how
+ *    this file drives it, and applyBackgroundStatusToUi() is the one
+ *    function every poll result passes through on its way to becoming what
+ *    the screen shows.
+ * 3. onCancelAsk() stops a question without throwing away whatever text has
+ *    already streamed in — it waits, with a bounded grace period, for the
+ *    backend's own confirmation of what was kept.
+ * 4. A mount-time effect resumes a question that was still running when the
+ *    plugin last closed, by asking get_background_game_ai_status once and
+ *    resuming polling if it is still pending.
+ * 5. Everything else here — the archived-turn history, the strategy branch
+ *    and checklist state, the reply-feedback chips (lifted into
+ *    useReplyFeedbackChips), and session restore — is state this hook keeps
+ *    so the screen files can stay simple.
+ *
+ * Gotchas:
+ * - The mount-time restore effect runs exactly once (an empty dependency
+ *   list) on purpose. The callbacks it needs change identity on every
+ *   render, and depending on them directly re-ran the whole restore on every
+ *   render — status RPC, re-apply, a state change, another render — a loop
+ *   this file's own comments say was measured directly.
+ * - Reordering the hooks in this file risks a poll callback that is stale by
+ *   the time it fires, if that reordering changes which render's closures a
+ *   callback captures.
  */
 import { useCallback, useEffect, useRef, useState, type Dispatch, type RefObject, type SetStateAction } from "react";
 import { toaster } from "@decky/api";
@@ -165,6 +234,44 @@ export type UseBonsaiAskOrchestrationArgs = {
   onSlotAnswerFinished?: (slotId: string) => void;
 };
 
+/*
+ * In: UseBonsaiAskOrchestrationArgs — the current settings this needs to ask
+ * correctly (which AI mode, spoiler masking, the Ollama PC address, whether
+ * a local knowledge base is on), the question box's own state and setter,
+ * and a long list of smaller callbacks for saving settings, persisting the
+ * search text, and reporting failures.
+ * Out: BonsaiAskOrchestration — every piece of Ask-related state the screen
+ * needs to draw (the current answer, the turn history, whether a question is
+ * running, the strategy panels) and every callback that changes it
+ * (onAskOllama, onCancelAsk, clearUnifiedInput, and the rest returned at the
+ * bottom of this function).
+ * What can go wrong: a question that never gets a reply at all (backend
+ * unreachable, or the plugin panel closed before start_background_game_ai
+ * answered) is caught by the try/catch inside the submit path and shown as
+ * plain error text rather than left spinning forever. A poll that keeps
+ * returning "pending" past the plugin's own patience shows the slow-answer
+ * warning rather than doing anything to the request itself.
+ *
+ * 1. Pull apart the args and set up every piece of local Ask state — the
+ *    current answer text, the turn history, which turn is expanded, the
+ *    strategy panels, and a handful of refs used to survive a re-render or a
+ *    remount without losing track of an in-flight question.
+ * 2. Build applyBackgroundStatusToUi, the function every poll result passes
+ *    through: it reads a status object's `status` field and writes the
+ *    matching React state for pending, cancelled, completed or failed.
+ * 3. Wire up useBackgroundGameAi, the polling engine, feeding it
+ *    applyBackgroundStatusToUi as the callback it drives.
+ * 4. On mount, try once to resume a question that was already running
+ *    before this component existed, and start polling again if it still is.
+ * 5. Build clearUnifiedInput and onCancelAsk, the two ways a question in
+ *    flight can be stopped from the screen.
+ * 6. Build onAskOllama, the submit path: validate, archive the previous
+ *    turn if one is waiting to be, call start_background_game_ai, and branch
+ *    on what came back.
+ * 7. Build the smaller pieces — strategy branch and checklist handling,
+ *    session restore, and the reset used when a chat slot is cleared.
+ * 8. Return the whole bundle described in Out above.
+ */
 export function useBonsaiAskOrchestration(
   a: UseBonsaiAskOrchestrationArgs,
 ): BonsaiAskOrchestration {

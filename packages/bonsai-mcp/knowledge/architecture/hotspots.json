@@ -12,17 +12,17 @@
     },
     {
       "path": "src/index.tsx",
-      "lines": 1710,
+      "lines": 1805,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
+    },
+    {
+      "path": "src/hooks/useBonsaiAskOrchestration.ts",
+      "lines": 1577,
+      "role": ""
     },
     {
       "path": "py_modules/backend/services/ollama_prompts.py",
       "lines": 1572,
-      "role": ""
-    },
-    {
-      "path": "src/hooks/useBonsaiAskOrchestration.ts",
-      "lines": 1470,
       "role": ""
     },
     {

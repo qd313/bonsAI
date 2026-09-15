@@ -1,10 +1,46 @@
 /**
- * Title: Answer bubble element registry
- * Purpose: Register mounted answer bubble DOM nodes by answer key for focus graph navigation.
- * Used for: buildAnswerBubbleElement, answerBubbleNavigation, and liveTurnFocusGraph.
- * Solves: Focus hops without asking the global `document`, which under Decky is the wrong
- *         document entirely — see uiDocument.ts.
- * Does not: Own the walk between stops — see answerBubbleNavigation.
+ * Title: Finding an answer bubble's box on screen
+ *
+ * Purpose: Every reply the AI gives is drawn on screen as its own box, called a bubble. When the
+ * D-pad walk between parts of a long reply needs to jump into a bubble, or needs to know which
+ * bubble the player is currently looking at, it needs the real on-screen box for that reply, not
+ * just its text. This file is the one place that keeps a note of "this reply's key points to this
+ * box," so nothing else has to go looking for it on the page. Going looking would not work anyway:
+ * the plugin's own window is a different page than the one Steam draws the chat into, so a normal
+ * search of "the page" always comes back empty (see uiDocument.ts).
+ *
+ * Used for: buildAnswerBubbleElement, which notes the box down as it draws it; answerBubbleNavigation,
+ * which walks between bubbles using that note; and liveTurnFocusGraph.
+ *
+ * Solves: without a shared note like this, the D-pad walk would have no way to get from "the reply
+ * with this key" to "the box for it on screen."
+ *
+ * Does not: decide where the walk should land next — that is answerBubbleNavigation's job. This file
+ * only remembers boxes and answers "where is this one."
+ *
+ * Gotchas:
+ *   - Steam draws its own highlight ring around whatever the player is controlling with the D-pad or
+ *     stick. That ring is Steam's own idea of where the player is, and it is not the same thing as
+ *     the browser's ordinary idea of "the focused element" — the two can point at different places at
+ *     once. Handing the ring from one part of the screen into a different part (for example, from the
+ *     row of reply actions up into a glossary term chip inside a bubble) cannot be done by calling a
+ *     plain `.focus()` — that only changes the browser's idea, and Steam keeps sending presses to
+ *     wherever its own ring still is. `takeAnswerBubbleNavFocus` is the one call this project trusts
+ *     to actually move Steam's ring across that kind of boundary, by calling `TakeFocus(true)` on the
+ *     bubble's own navigation container. It is best-effort: the caller still has to land focus on a
+ *     real element afterwards and check that it landed.
+ *   - `resolveFocusedAnswerBubble` reads Steam's ring rather than the browser's `activeElement`, and
+ *     that choice fixed a real bug. Two callers (`captureBubble` and `resolveAnswerBubbleEl`) use `??`
+ *     to fall back when this returns nothing — but that fallback only catches an empty answer.
+ *     Reading `activeElement` on the Steam Deck does not come back empty when it is wrong: it comes
+ *     back pointing at a real box, often one left over from an earlier reply, so the fallback never
+ *     fires and the wrong bubble gets noted down under the new reply's key. Everything downstream
+ *     trusts that wrong note — a hidden-spoiler fence that is genuinely on screen is never found
+ *     inside it, so pressing Down walks straight past the hidden text to the row of reply actions
+ *     instead of revealing it. Measured on device 2026-08-26 (`runs/SPOILER-REVEAL-reachability.json`):
+ *     a ten-step walk went bubble -> Helpful -> Retry -> ... and never reached a fence that should
+ *     have been reachable. Turned out to be the same underlying bug as one already being tracked
+ *     (MICRO-04), just one file further up the chain than first guessed.
  */
 import { rememberUiDocument, uiGamepadFocusElement } from "./uiDocument";
 

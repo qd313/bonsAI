@@ -1,9 +1,28 @@
 /**
- * Title: Ask completion watcher
- * Purpose: Background poll loop for terminal Ask status when user leaves Main tab during a request.
- * Used for: index.tsx after background Ask start when reply surface may be hidden.
- * Solves: Ready/error toasts and completion handling without keeping MainTab mounted.
- * Does not: Start Ask or stream tokens — see useBackgroundGameAi.
+ * Title: Watching a background question for when it finishes
+ *
+ * Purpose: The player can ask the AI a question, then close the plugin's own panel (or switch to a
+ * different Steam tab) while the answer is still being written. This file is what keeps checking, in
+ * the background, whether that answer has finished, failed, or been cancelled — even while none of
+ * the plugin's own screen is showing. When it notices the answer is done, it is what triggers the
+ * "your reply is ready" notification and read-aloud, if either is turned on.
+ *
+ * Used for: index.tsx, started right after a question is sent in the background, for the case where
+ * the part of the screen that would normally show the answer arriving might not be visible to check
+ * on its own.
+ *
+ * Solves: the ready/failed notification and the handling that follows it would not run at all if
+ * something had to keep the main tab mounted on screen the whole time an answer was being written.
+ *
+ * Does not: start the question, or receive the answer's text as it streams in — that is
+ * useBackgroundGameAi's job. This file only checks in periodically and reacts once the question is
+ * fully done.
+ *
+ * How it works: starting a watch bumps a counter and begins checking in on a timer, waiting longer
+ * between checks for an ordinary answer and shorter while text is actively streaming in. Every check
+ * first confirms its own counter still matches the current one — starting a new watch, or stopping
+ * the current one, bumps the counter and makes any check already in flight for the old one a no-op,
+ * so an old watch can never act after a newer one has taken over.
  */
 import { callDeckyWithTimeout } from "./deckyCall";
 import type { BackgroundRequestStatus } from "../types/backgroundAsk";

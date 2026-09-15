@@ -1,14 +1,30 @@
 /**
- * Title: Archived turn transparency resolver
- * Purpose: Decide which transparency snapshot an expanded archived turn should show.
- * Used for: MainTabChatTranscript's Show details row on slot-restored turns.
- * Solves: A slot-restored turn now carries its own (trimmed) snapshot — chat_slot_service.py
- *         persists one alongside each assistant turn — but slots written before that fix, or a
- *         turn some other path never attached one to, still carry `transparency: null`. This
- *         keeps the one-turn live-snapshot fallback for exactly that gap instead of assuming
- *         every archived turn now has its own.
- * Does not: Fetch or persist snapshots — get_input_transparency owns the live one,
- *         chat_slot_service.py owns the persisted one.
+ * Title: Which "what went into this answer" details to show for an old reply
+ *
+ * Purpose: The Show details panel tells the player what went into a particular AI answer — which
+ * files it read, what game it thought it was answering about, and so on. A reply still on screen
+ * always has this information close at hand. A reply reopened from an earlier saved chat should
+ * carry its own copy of it, saved alongside the reply itself — but some saved chats were written
+ * before that copy started being saved, and a turn written by some other path may never have gotten
+ * one attached. This file decides what Show details displays for exactly that gap: a reopened reply
+ * with no details of its own.
+ *
+ * Used for: the Show details row in the main chat view, for a reply reopened from an earlier saved
+ * chat (MainTabChatTranscript).
+ *
+ * Solves: without this, an old saved reply missing its own details would show a blank Show details
+ * panel, or every caller would have to work out the same fallback for itself.
+ *
+ * Does not: fetch the details from the back end, or save them to disk — a separate RPC call fetches
+ * the current ones, and the chat-slot saving code is what attaches a copy to a saved turn going
+ * forward.
+ *
+ * How it works: if the reopened turn has its own saved details, use those. Otherwise, only the very
+ * newest turn in the reopened chat may borrow the details of the most recently finished live answer
+ * — because that is the one turn those details could actually describe. Any older turn in the same
+ * chat gets nothing rather than someone else's details: showing one reply's "what went into this"
+ * information under a different reply's answer would be worse than showing none, since the whole
+ * point of the panel is to say what *that* reply was built from.
  */
 import type { AskThreadCollapsedTurn } from "../types/bonsaiUi";
 import type { ChatSlotTurnTransparency, TransparencySnapshot } from "./inputTransparency";

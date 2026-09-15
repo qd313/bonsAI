@@ -1,6 +1,70 @@
+/**
+ * Title: Root scope, QAM host, and Settings-tab spacing
+ *
+ * Purpose: Styles the plugin's outermost box — the `.bonsai-scope` element
+ * every other rule in the stylesheet lives inside — plus Decky's own
+ * wrapper around it, so the plugin's column fills the Quick Access Menu
+ * instead of being crushed down to the height of the tab strip. The rest
+ * of the file is a handful of Settings-tab specific fixes: the connection
+ * row, wrapping blocks of help text ("prose"), full-width rows, and the
+ * focus ring drawn around a Settings button when the D-pad lands on it.
+ *
+ *     ┌─ Quick Access Menu ────────────────────┐
+ *     │ ┌─ .bonsai-scope (this file) ─────────┐ │
+ *     │ │  [Ask] [Chats] [Settings] ...        │ │  <- tab strip, section-2
+ *     │ │  ───────────────────────────────     │ │
+ *     │ │  tab body fills the rest of the box  │ │
+ *     │ │  instead of shrinking to the strip's │ │
+ *     │ │  own height                          │ │
+ *     │ └──────────────────────────────────────┘ │
+ *     └─────────────────────────────────────────┘
+ *
+ * Used for: Folded into the plugin's one combined stylesheet by
+ * bonsaiScopeStylesheet.ts — first, before every other numbered section,
+ * so later sections can rely on the box shape this one sets up.
+ *
+ * Does not: Style the tab strip itself (section-2.ts) or the general
+ * width resets for the scroll area underneath (section-3.ts).
+ */
 import { BONSAI_PLUGIN_SIDE_PAD_PX } from "../../features/unified-input/constants";
 import { uiScalePx } from "./uiScalePx";
 
+/**
+ * In: nothing — every value here is a fixed string or read from a CSS
+ * variable that some other part of the plugin sets.
+ * Out: a block of CSS text.
+ * Can go wrong: this function itself cannot fail — it always returns the
+ * same fixed string.
+ *
+ * 1. `.bonsai-scope` itself: full width, a top-to-bottom flex column that
+ *    stretches to fill the space Decky gives it, no side padding, and
+ *    hidden overflow so content cannot spill out sideways.
+ * 2. `.bonsai-scope.bonsai-qam-height-locked`: forces an explicit height
+ *    from a shared size variable. Needed because a plain inline height set
+ *    on the scope gets wiped out every time React re-renders it.
+ * 3. `.decky-qam-scope:has(> .bonsai-scope)`: stretches Decky's own
+ *    wrapper around the plugin, because on some Deck setups touching the
+ *    menu can collapse that wrapper down to the height of the tab strip;
+ *    also strips its side padding, which would otherwise inset every row.
+ * 4. The Settings connection row and its host input: kept from growing
+ *    wider than the row that contains them.
+ * 5. `.bonsai-tab-panel-shell--tight`: clips sideways overflow, but only
+ *    on tabs other than Main, so Main's own edge-to-edge layout is left
+ *    alone.
+ * 6. `.bonsai-settings-bleed`: pulls a row out to the left and right by
+ *    negative margins, then pads it back in by the same amount, so its
+ *    content lines up flush with a panel section's title instead of
+ *    sitting indented from it.
+ * 7. `.bonsai-settings-section-stack`: the gap between stacked blocks in
+ *    Settings, and their text size, both scaled by the UI scale setting.
+ * 8. `.bonsai-prose-host` / `.bonsai-prose`: makes blocks of wrapped text
+ *    (such as help text) actually wrap on the Deck's browser engine,
+ *    which does not always inherit ordinary wrap settings on its own.
+ * 9. The Settings focus-button rules: shrinks the focusable wrapper around
+ *    a button down to the size of the button itself, draws a visible ring
+ *    around it once the D-pad or keyboard lands on it, and turns off the
+ *    default ring on the outer wrapper so only one ring ever shows.
+ */
 export function buildScopebaseSection(): string {
   return `
 /* ==========================================================================

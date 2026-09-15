@@ -31,6 +31,11 @@
       "role": ""
     },
     {
+      "path": "src/styles/sections/section-6.ts",
+      "lines": 1434,
+      "role": ""
+    },
+    {
       "path": "src/components/PullModelsModal.tsx",
       "lines": 1386,
       "role": ""
@@ -39,11 +44,6 @@
       "path": "py_modules/backend/services/ollama_service.py",
       "lines": 1357,
       "role": "Prompt build, Ollama HTTP, streaming"
-    },
-    {
-      "path": "src/styles/sections/section-6.ts",
-      "lines": 1345,
-      "role": ""
     },
     {
       "path": "src/components/OllamaWhereAiRunsSection.tsx",
@@ -121,6 +121,11 @@
       "role": ""
     },
     {
+      "path": "src/styles/sections/gamepadAndPullModels.ts",
+      "lines": 622,
+      "role": ""
+    },
+    {
       "path": "src/hooks/usePluginSettings.ts",
       "lines": 590,
       "role": ""
@@ -133,11 +138,6 @@
     {
       "path": "src/utils/buildAnswerBubbleElement.tsx",
       "lines": 564,
-      "role": ""
-    },
-    {
-      "path": "src/styles/sections/gamepadAndPullModels.ts",
-      "lines": 551,
       "role": ""
     },
     {

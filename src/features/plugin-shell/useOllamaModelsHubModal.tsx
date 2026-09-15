@@ -1,10 +1,20 @@
 /**
- * Title: Ollama models hub modal
- * Purpose: Own the models hub modal plus the two model-policy writes it can commit.
- * Used for: index.tsx — the Ollama tab hub entry point and the Tier 2 multimodal shortcut.
- * Solves: Keeps a policy guard, two save_settings round-trips, and nested-modal lifecycle
- *         plumbing out of the shell component.
- * Does not: Render the hub's contents — see components/OllamaModelsHubModal.
+ * Title: Models hub popup
+ *
+ * Purpose: Opens the popup where a person browses, picks, and installs the
+ * AI models the plugin is allowed to use, and saves the policy choices
+ * made there (which tier of model is allowed, and whether bigger models
+ * are allowed on lower-memory hardware).
+ *
+ * Used for: The Ollama tab's models hub button, and a one-tap shortcut
+ * elsewhere on that tab that turns on picture-capable models directly.
+ *
+ * Solves: Refuses to save "any installed model" as a choice unless its
+ * separate unlock switch is already on, so a person cannot end up with a
+ * setting that looks chosen but was never actually allowed.
+ *
+ * Does not: Draw the hub's contents — see the OllamaModelsHubModal
+ * component for that. This hook only opens it and saves what it returns.
  */
 import { useCallback } from "react";
 import { showModal } from "@decky/ui";
@@ -50,6 +60,16 @@ export type OllamaModelsHubController = {
   onApplyTier2MultimodalPolicy: () => Promise<void>;
 };
 
+/**
+ * In: the current model policy settings, the setters and save plumbing
+ * for them, and the tab-restore functions every popup uses.
+ * Out: `openOllamaModelsHub()` to open the popup, and
+ * `onApplyTier2MultimodalPolicy()`, a shortcut that turns on picture-aware
+ * models without opening the popup at all.
+ * Can go wrong: choosing "any installed model" without its own unlock
+ * switch on is refused with a toast and a jump to the Ollama tab, rather
+ * than being saved in a half-allowed state.
+ */
 export function useOllamaModelsHubModal({
   modelPolicyTier,
   modelPolicyNonFossUnlocked,

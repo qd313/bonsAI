@@ -1,9 +1,17 @@
 /**
- * Title: Chat slot rename modal hook
- * Purpose: Open rename modal with session survival and return-focus registration.
- * Used for: ChatSlotRow title activation.
- * Solves: Nested modal pattern matching useCharacterPickerModal survival hooks.
- * Does not: Own slot list state — caller refreshes summaries after rename.
+ * Title: Rename-a-chat popup
+ *
+ * Purpose: Opens the small popup a person types a new name into when they
+ * tap a saved chat's title, and remembers which button opened it so focus
+ * can jump back there once it closes.
+ *
+ * Used for: Tapping a chat's title in the saved-chats row.
+ *
+ * Solves: Nothing else here — this hook only opens the popup and wires up
+ * its Cancel and Confirm buttons.
+ *
+ * Does not: Update the chat list on screen after a rename — the caller is
+ * expected to refresh it once `onRename` finishes.
  */
 import { useCallback } from "react";
 import { showModal } from "@decky/ui";
@@ -20,6 +28,14 @@ export type UseChatSlotRenameModalArgs = {
   onRename: (slotId: string, label: string) => Promise<boolean>;
 };
 
+/**
+ * In: two optional callbacks for a popup opened from inside another popup,
+ * and the function that actually saves the new name.
+ * Out: one function, `openRenameModal()`, that a chat row calls with the
+ * chat's id, its current name, and the button to return focus to.
+ * Can go wrong: if the caller does not pass a return-focus element,
+ * nothing focuses back anywhere when the popup closes.
+ */
 export function useChatSlotRenameModal({
   onBeforeNestedDeckyModal,
   onCompleteNestedDeckyModalClose,

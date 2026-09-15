@@ -1,9 +1,17 @@
 /**
- * Title: Settings tab payload
- * Purpose: Build the memoized Settings tab element for the shell's tab list.
- * Used for: index.tsx — the always-present "Settings" tab row.
- * Solves: Keeps a 22-prop element and its memo dependency list out of the composition root.
- * Does not: Own settings state or save them — usePluginSettings does, through the caller.
+ * Title: What draws the Settings tab
+ *
+ * Purpose: Runs while a person has the Settings tab open — screenshot
+ * behavior, the AI's on-screen character, voice replies, UI scale, and
+ * more. It builds that screen from the current settings it is handed.
+ *
+ * Used for: The tab bar's always-present Settings tab.
+ *
+ * Solves: Keeps this large list of values and its rebuild list out of the
+ * main plugin screen's own code.
+ *
+ * Does not: Own any setting or save it — those live elsewhere and are
+ * only passed through here to display and change.
  */
 import React, { useMemo } from "react";
 
@@ -11,6 +19,15 @@ import { SettingsTab } from "../../../components/SettingsTab";
 
 export type UseSettingsTabPayloadArgs = React.ComponentProps<typeof SettingsTab>;
 
+/**
+ * In: around thirty separate values and their setters — every setting
+ * this tab shows or can change — bundled into one argument object.
+ * Out: the finished Settings tab element, rebuilt only when one of the
+ * listed values changes.
+ * Can go wrong: the rebuild list at the bottom of this function is written
+ * by hand; a value added above that is not also added there will not fail
+ * any check, it will just quietly stop updating on screen.
+ */
 export function useSettingsTabPayload({
   screenshotAttachmentPreset,
   setScreenshotAttachmentPreset,

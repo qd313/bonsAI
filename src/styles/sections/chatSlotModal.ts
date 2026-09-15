@@ -1,14 +1,35 @@
 /**
- * Title: Chat slot modal stylesheet
- * Purpose: Body styling for the chat-slot rename modal inside Steam's stock ConfirmModal shell.
- * Used for: buildModalPortalStylesheet — injected under `.bonsai-scope` in showModal portals.
- * Solves: A readable, on-brand slot-name field without touching Steam's dialog chrome.
- * Does not: Style the modal shell, footer or buttons — decision 8d keeps those stock.
+ * Title: Rename-a-chat popup styling
+ *
+ * Purpose: Styles the name field a person types into when renaming a saved
+ * chat — the label above it and the text box itself — while leaving the
+ * popup's outer frame, footer and buttons drawn by Steam's own stock
+ * confirm-popup look.
+ *
+ *     ┌─ Steam's own popup frame ───────────┐
+ *     │  RENAME CHAT          <- this file  │
+ *     │  ┌────────────────────────────────┐ │
+ *     │  │ My saved chat name             │ │  <- this file
+ *     │  └────────────────────────────────┘ │
+ *     │            [Cancel]  [Save]         │  <- Steam's own buttons
+ *     └──────────────────────────────────────┘
+ *
+ * Used for: Folded into buildModalPortalStylesheet, which every popup
+ * opened outside the main plugin screen loads.
+ *
+ * Does not: Style the popup's frame, footer, or its Cancel/Save buttons —
+ * those stay Steam's own look on purpose.
  */
 
 /**
- * Plain px, not `uiScalePx`: the modal portal renders in Steam's dialog at Steam's own scale,
- * outside the QAM column, and `BonsaiModalScope` handles the UI-scale vars itself.
+ * In: nothing.
+ * Out: a block of CSS text.
+ * Can go wrong: nothing — this always returns the same fixed string.
+ *
+ * Uses plain pixel sizes rather than the usual UI-scale helper: this popup
+ * renders inside Steam's own dialog, at Steam's own scale, outside the
+ * plugin's normal column — `BonsaiModalScope` is what carries the UI-scale
+ * setting into a popup like this one, not this file.
  */
 export function buildChatSlotModalStylesheet(): string {
   return `

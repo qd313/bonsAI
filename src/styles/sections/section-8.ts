@@ -1,3 +1,13 @@
+/**
+ * Title: The icon row under the Ask box, and its dropdown menus
+ * Purpose: Styles the small icon row under the question box (Ask mode,
+ * attach), the two dropdown menus it opens (choosing an Ask mode, and
+ * choosing what to attach), and the Ask button's own color change once
+ * there is something ready to send.
+ * Used for: Folded into the plugin's one combined stylesheet by
+ * bonsaiScopeStylesheet.ts, alongside the other numbered section files.
+ * Does not: Style the typing field above the icon row — see section-5.ts.
+ */
 import {
   ASK_LABEL_COLOR,
   ASK_LABEL_READY_COLOR,
@@ -5,6 +15,13 @@ import {
   UNIFIED_INPUT_ICON_STRIP_PAD_X_PX,
 } from "../../features/unified-input/constants";
 
+/**
+ * In: nothing. Out: a block of CSS text. Can go wrong: nothing — always
+ * the same fixed string, but two Deck-only quirks are worth knowing: the
+ * CSS engine here predates `:has()`, so a menu's open state is toggled by
+ * a plain class instead of that selector; and `z-index` is set by hand in
+ * a couple of spots so an open dropdown paints above the Ask row.
+ */
 export function buildSection8Section(): string {
   return `
 /* ==========================================================================

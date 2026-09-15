@@ -1,10 +1,22 @@
 /**
- * Title: Plugin help modal
- * Purpose: Own the plugin-help chip's dismissed state and the modal that opening it shows.
- * Used for: index.tsx — the Main tab help chip and the Clear-all-plugin-data reset path.
- * Solves: Keeps the dismissal's three storage layers (React state, module global, localStorage)
- *         in one place instead of spread across the shell component.
- * Does not: Render the chip — MainTab owns that; this only opens the modal and tracks dismissal.
+ * Title: Help popup and its "seen it" chip
+ *
+ * Purpose: Opens the plugin's help popup, and remembers whether a person
+ * has already opened it, so the help chip on the Main tab only offers
+ * itself once. That "already seen" flag survives a popup throwing the
+ * plugin's screen away and rebuilding it, which plain React state alone
+ * would not.
+ *
+ * Used for: The Main tab's help chip, and the Clear all plugin data reset,
+ * which needs to make the chip reappear.
+ *
+ * Solves: The same "already seen" flag used to live in three different
+ * places (on-screen state, a value kept alive between screen rebuilds, and
+ * permanent storage); this hook is the one place that keeps all three in
+ * step instead of each caller doing it by hand.
+ *
+ * Does not: Draw the help chip itself — the Main tab does that; this only
+ * opens the popup and tracks whether it has been seen.
  */
 import { useCallback, useEffect, useState } from "react";
 import { showModal } from "@decky/ui";
@@ -42,6 +54,15 @@ export type PluginHelpModalController = {
   resetPluginHelpDismissed: () => void;
 };
 
+/**
+ * In: the current tab (to return to after the popup closes) and the
+ * shared tab-restore functions every popup uses.
+ * Out: whether help has been dismissed, a function to open the popup, and
+ * two functions to restore or reset that dismissed flag.
+ * Can go wrong: nothing — every source of the flag (a saved session,
+ * permanent storage, or the in-memory fallback) has the same shape, so
+ * there is no state that could disagree with itself.
+ */
 export function usePluginHelpModal({
   currentTab,
   captureSessionBeforeModal,

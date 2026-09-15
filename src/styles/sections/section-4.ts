@@ -1,3 +1,25 @@
+/**
+ * Title: The Ask box and the row of suggestion chips under it
+ *
+ * Purpose: Styles two things that both need to span edge to edge, with no
+ * side gutter: the Ask bar (the typing box and its Ask button), and the
+ * sideways-scrolling row of suggested-prompt chips above it. It also
+ * draws each chip itself — its size, its text, and the small sliding
+ * animation that reveals the next batch of suggestions.
+ *
+ *     ┌────────────────────────────────────────┐
+ *     │  [chip]  [chip]        <- suggestions   │
+ *     ├────────────────────────────────────────┤
+ *     │  Ask something...            [ Ask ]    │  <- the Ask bar
+ *     └────────────────────────────────────────┘
+ *
+ * Used for: Folded into the plugin's one combined stylesheet by
+ * bonsaiScopeStylesheet.ts, alongside the other numbered section files.
+ *
+ * Does not: Style the text actually typed into the box — see section-5.ts
+ * for the typing field itself, or the icon row underneath it — see
+ * section-8.ts.
+ */
 import { BONSAI_CHAT_RESPONSE_STACK_MARGIN_TOP_PX, BONSAI_FOREST_GREEN } from "../../features/unified-input/constants";
 import {
   PRESET_CHIP_BLOCKED_EDGE_FLASH_MS,
@@ -8,6 +30,13 @@ import {
 } from "../../features/preset-carousel/presetRowLayout";
 import { uiScalePx } from "./uiScalePx";
 
+/**
+ * In: nothing.
+ * Out: a block of CSS text.
+ * Can go wrong: nothing — this always returns the same fixed string, but
+ * see the comment above the PanelSection rule inside it for a case where
+ * a selector here can look correct and still match nothing on a real Deck.
+ */
 export function buildSection4Section(): string {
   return `
 /* ==========================================================================

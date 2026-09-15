@@ -1,5 +1,60 @@
+/**
+ * Title: Focus rings, popup style bundle, and the Pull Models table
+ *
+ * Purpose: A grab-bag file holding three things that each needed a home
+ * and did not fit anywhere else:
+ *   1. The white ring drawn around a button when the D-pad lands on it,
+ *      shared by many separate buttons across the plugin (the AI
+ *      character picker, the Ask bar, the models hub, and more).
+ *   2. One small function that bundles every stylesheet a Steam popup
+ *      needs into a single string, since a popup renders outside the
+ *      plugin's normal styling and has to carry its own.
+ *   3. The entire look of the Pull Models popup — the table listing every
+ *      downloadable AI model, its filter chips, and its buttons — plus a
+ *      small on-screen debug overlay tacked onto the very end of the file.
+ *
+ *     ┌─ Pull Models popup ─────────────────────────────┐
+ *     │ [All] [Installed] [FOSS]      <- filter chips    │
+ *     │ ┌────┬──────────┬──────┬──────┬────┬──────┐      │
+ *     │ │icon│ model     │ size │ date │... │ pull │      │  <- the table
+ *     │ ├────┼──────────┼──────┼──────┼────┼──────┤      │
+ *     │ │ ●  │ llama3    │ 4.7GB│ ...  │... │  ✓   │      │
+ *     │ └────┴──────────┴──────┴──────┴────┴──────┘      │
+ *     └───────────────────────────────────────────────────┘
+ *
+ * Used for: The main plugin stylesheet (the focus rings), and separately
+ * every popup opened with Decky's showModal (the bundle and the table).
+ *
+ * Does not: Style the tab strip's own colored ring, which keeps the AI
+ * character's accent color on purpose instead of turning white — see
+ * section-1.ts.
+ *
+ * How it works: in file order —
+ * 1. `buildGamepadFocusRingStylesheet()` — the shared white ring, grouped
+ *    by which controls get it: menu items get a thinner ring drawn
+ *    inside their own edge, most buttons get the fuller outer ring, and
+ *    the preset carousel's "current chip" border is its own separate
+ *    rule further down (it is a position marker, not a focus ring, and
+ *    must never look like one).
+ * 2. `buildModalPortalStylesheet()` — joins the ring rules, the Pull
+ *    Models table, and the rename-a-chat popup styling into one string
+ *    for a Steam popup to carry with it.
+ * 3. `buildPullModelsStylesheet()` — color variables, the popup's outer
+ *    shell and header, the filter chips, the model table itself (its
+ *    header row and each model's row of columns), the pull/install/
+ *    delete buttons, and, tacked onto the very end and unrelated to
+ *    everything above it, a small on-screen debug overlay.
+ */
 import { buildChatSlotModalStylesheet } from "./chatSlotModal";
 
+/**
+ * In: nothing.
+ * Out: the CSS text for every white focus ring in the plugin.
+ * Can go wrong: nothing — always returns the same fixed string. The
+ * gotcha here is a past attempt, not a live bug: see the comment on the
+ * "Reverted" rule just below, which explains why a catch-all ring rule
+ * must not be re-added.
+ */
 export function buildGamepadFocusRingStylesheet(): string {
   /*
    * White, not the character accent — the maintainer's ask is "white focus rings everywhere, make
@@ -99,13 +154,29 @@ export function buildGamepadFocusRingStylesheet(): string {
   `;
 }
 
-/** Modal portal CSS (showModal outside QAM tree): gamepad rings + pull models table + slot rename. */
+/**
+ * In: nothing.
+ * Out: one combined CSS string — the focus rings, the Pull Models table,
+ * and the rename-a-chat popup styling, joined together.
+ * Can go wrong: nothing — always returns the same fixed string.
+ *
+ * Every popup opened with Decky's showModal renders outside the plugin's
+ * normal box on screen, so none of the plugin's usual stylesheet reaches
+ * it. This is the one function that gathers everything a popup might
+ * need into a single string it can carry with it.
+ */
 export function buildModalPortalStylesheet(): string {
   return `${buildGamepadFocusRingStylesheet()}${buildPullModelsStylesheet()}${buildChatSlotModalStylesheet()}`;
 }
 
 
-/** Pull Models modal table CSS — also injected under `.bonsai-scope` in `showModal()` portals. */
+/**
+ * In: nothing.
+ * Out: the CSS text for the whole Pull Models popup — the model table,
+ * its filter chips, its buttons, and (tacked onto the very end) a small
+ * debug overlay unrelated to the rest of the file.
+ * Can go wrong: nothing — always returns the same fixed string.
+ */
 export function buildPullModelsStylesheet(): string {
   return `
         /* ==========================================================================

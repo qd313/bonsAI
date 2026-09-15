@@ -1,16 +1,27 @@
 /**
- * Title: Main tab column fill
- * Purpose: Give the Main tab column a measured min-height that reaches the QAM scroll viewport's
- *          bottom edge, so the preset/Ask dock can pin to the panel bottom via `margin-top: auto`.
- * Used for: MainTab's `.bonsai-main-tab-column` wrapper.
- * Solves: A short transcript left dead space under the Ask bar (the mockups draw it bottom-pinned).
- *         The dock is sticky as well, so this only matters while the content does NOT overflow —
- *         which is exactly the case the old scrollHeight-based measurement got wrong.
- *         The offset between the scroll viewport and the column cannot be a CSS constant: it
- *         crosses Steam wrappers whose classes are hashed (design-language.md Rule 5), so like
- *         tabBodyViewport.ts this measures the real chain instead of guessing.
- * Does not: Size the scroll viewport itself — tabBodyViewport.ts owns --bonsai-tab-body-height;
- *           or touch width (design-language.md Rule 6: width comes from CSS).
+ * Title: Stretching the Main tab so the Ask bar sits at the bottom
+ *
+ * Purpose: The mockups draw the question box and preset row pinned to the
+ * bottom of the panel. On a short conversation, without this file, they
+ * would float partway up instead, leaving empty space underneath. This
+ * measures the real gap between the Main tab's column and the bottom of
+ * the visible panel, and sets that gap as the column's minimum height, so
+ * the bottom-pinning has somewhere to pin to.
+ *
+ * Used for: The Main tab's own column element.
+ *
+ * Solves: The Ask bar and preset row are already set to stick to the
+ * bottom once there is enough height to stick within — the case this file
+ * solves only shows up when the conversation is short enough that the
+ * content does not fill the panel on its own. The gap cannot be written as
+ * a fixed number in the stylesheet: it crosses several of Steam's own
+ * layers whose class names change from build to build (see rule 5 in the
+ * design notes), so, the same as tabBodyViewport.ts, this measures the
+ * real chain of elements on screen instead of guessing a number.
+ *
+ * Does not: Decide the height of the scrolling panel itself — that is
+ * owned by tabBodyViewport.ts. Does not touch width — width always comes
+ * from the stylesheet (see rule 6 in the design notes).
  */
 import { useLayoutEffect } from "react";
 

@@ -1,9 +1,22 @@
 /**
- * Title: Captured frontend errors hook
- * Purpose: Collect uncaught errors and unhandled rejections for the Debug tab and optional desktop log.
- * Used for: index.tsx — global window listeners for plugin lifetime.
- * Solves: Surface front-end faults without crashing the Decky QAM shell.
- * Does not: Capture Python backend logs — see DeveloperTab RPC tail helpers.
+ * Title: Catching screen crashes before they take the plugin down
+ *
+ * Purpose: When something on screen throws an error the plugin was not
+ * expecting to handle, this file catches it — both an outright crash and a
+ * promise that failed with nobody watching for it — and keeps a running
+ * list so the Debug tab can show what went wrong. If the person has turned
+ * on the optional desktop log, it writes each one there too.
+ *
+ * Used for: index.tsx, which sets this listening up once, for as long as
+ * the plugin is open.
+ *
+ * Solves: Without this, an error on screen could go unnoticed — nothing
+ * else in the plugin watches for these two kinds of failure — and there
+ * would be nowhere to look afterward to find out what happened.
+ *
+ * Does not: Catch anything that goes wrong on the back end (the Python side
+ * that actually talks to the AI and to Steam). Those errors are collected
+ * separately — see the Developer tab's own log tail.
  */
 import { useEffect, useRef, useState, type Dispatch, type SetStateAction } from "react";
 import { appendAppDesktopLogWithPrefs, type AppDesktopLogPrefs } from "../utils/appDesktopLog";

@@ -1,9 +1,25 @@
 /**
- * Title: Background Ask polling
- * Purpose: Poll get_background_game_ai_status until a terminal state and fan out to the UI bridge.
- * Used for: useBonsaiAskOrchestration after start_background_game_ai.
- * Solves: Stale poll callbacks when the user submits again or unmounts (sequence invalidation).
- * Does not: Map status payloads to presentation state — caller supplies applyBackgroundStatusToUi.
+ * Title: Checking in on an answer that is still being worked on
+ *
+ * Purpose: Once a question has been handed to the back end, the answer does
+ * not arrive all at once — it comes together over the next while. This file
+ * checks in on it, about once a second (faster, several times a second,
+ * while the answer's text is actively streaming in), until it is finished
+ * or has failed. Each check hands what it learned to a function the caller
+ * supplies, which turns it into what the screen actually shows. It also
+ * tells the read-aloud feature the moment an answer finishes or fails, so a
+ * reply set to read itself out loud can start without anyone pressing play.
+ *
+ * Used for: useBonsaiAskOrchestration, right after it hands a question to
+ * the back end.
+ *
+ * Solves: If the person asks a new question, or leaves the tab, while an
+ * older check-in is still waiting to fire, that old one has to be thrown
+ * away rather than allowed to write a stale answer over a newer one. This
+ * file is what keeps track of which check-in is still the current one.
+ *
+ * Does not: Decide what the screen shows for a given answer — that is the
+ * function the caller passes in.
  */
 import { useCallback, useEffect, useRef } from "react";
 import { callDeckyWithTimeout } from "../utils/deckyCall";

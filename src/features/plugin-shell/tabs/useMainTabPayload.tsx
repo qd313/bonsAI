@@ -1,9 +1,40 @@
 /**
- * Title: Main tab payload
- * Purpose: Build the memoized Main tab element, including the AI-character avatar values it displays.
- * Used for: index.tsx — the default "Ask" tab row.
- * Solves: Keeps the shell's largest element, its 50-entry memo dependency list and two layout constants out of the composition root.
- * Does not: Own Ask state, input state or screenshots — every value comes from the caller's hooks.
+ * Title: What draws the Ask tab
+ *
+ * Purpose: Runs while a person has the Ask tab open — the plugin's
+ * default, always-open tab, and its busiest one. It builds that whole
+ * screen: the question box, the running conversation, screenshot attach,
+ * and, when the AI-character feature is on, the small avatar shown in the
+ * corner. It is one of six "tab payload" hooks that each build one tab's
+ * screen and avoid rebuilding it unless something it actually shows has
+ * changed.
+ *
+ * Used for: The tab bar's default Ask tab.
+ *
+ * Solves: This one hook carries the plugin's single largest piece of
+ * wiring — around a hundred separate values. Keeping it in its own file,
+ * with its own rebuild list, keeps the main plugin screen's own code from
+ * drowning in it.
+ *
+ * Does not: Own the Ask conversation, the question box's text, or the
+ * screenshot list — every one of those values is worked out elsewhere and
+ * simply passed through here.
+ *
+ * How it works:
+ * 1. Works out the small AI-character avatar shown in the corner — which
+ *    preset it uses, what letter badge to show, and, only when a hidden
+ *    debug flag is on, a one-line summary for troubleshooting.
+ * 2. Unpacks the rest of the roughly hundred incoming values under their
+ *    own names, so the next step can spread them onto the tab component
+ *    and list them individually for the rebuild check.
+ * 3. Builds the tab element from all of it, wrapped so it only rebuilds
+ *    when something it actually shows has changed. Two layout style
+ *    objects and one settings-search helper are passed in as fixed values
+ *    rather than props, since they never change.
+ * 4. Lists every value from steps 1–2 that should cause a rebuild if it
+ *    changes. This list is written by hand, and nothing checks it against
+ *    what is actually drawn above — a new value left off it will not fail
+ *    any check, it will just quietly stop updating on screen.
  */
 import React, { useMemo } from "react";
 
@@ -55,6 +86,30 @@ export type UseMainTabPayloadArgs = Omit<
   openCharacterPickerModal: () => void;
 };
 
+/**
+ * In: around a hundred separate values bundled into one argument object —
+ * every visible and functional piece of the Ask tab, plus the raw
+ * AI-character settings and the function that opens its picker popup.
+ * Out: one finished tab element, rebuilt only when something it actually
+ * shows changes.
+ * Can go wrong: the rebuild list near the end of this function is written
+ * by hand; a value added above that is not also added there will build
+ * correctly today, then silently stop updating on screen the next time
+ * only it changes — nothing checks the list against the JSX above it.
+ *
+ * 1. Works out the AI-character avatar's preset, its badge letter, and,
+ *    only with a hidden debug flag on, a one-line debug summary — the
+ *    only real computation in this function; everything else below is
+ *    passed straight through.
+ * 2. Pulls the rest of the roughly hundred incoming values out into
+ *    local names, so each one can be listed individually further down.
+ * 3. Builds the Ask tab's element with all of them spread onto it, plus
+ *    the two fixed layout constants and the AI-character values from
+ *    step 1.
+ * 4. Lists everything from steps 1–3 that should cause a rebuild when it
+ *    changes — by hand, with a warning comment above it that nothing
+ *    checks this list against the JSX itself.
+ */
 export function useMainTabPayload({
   aiCharacterEnabled,
   aiCharacterRandom,

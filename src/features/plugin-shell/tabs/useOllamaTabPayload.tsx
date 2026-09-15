@@ -1,9 +1,19 @@
 /**
- * Title: Ollama tab payload
- * Purpose: Build the memoized Ollama tab element, keyed so a data clear remounts it.
- * Used for: index.tsx — the always-present "Ollama" tab row.
- * Solves: Keeps a 24-prop element, its reset key and its memo dependency list out of the composition root.
- * Does not: Own the host state — useOllamaConnectionState does, through the caller.
+ * Title: What draws the Ollama tab
+ *
+ * Purpose: Runs while a person has the Ollama tab open — where they point
+ * the plugin at the computer running the AI, and adjust how it connects
+ * and behaves. It builds that screen from the connection state, timing
+ * settings, and model choices it is handed.
+ *
+ * Used for: The tab bar's always-present Ollama tab.
+ *
+ * Solves: Keeps this large list of values, and the reset key that makes
+ * "Clear all plugin data" throw the tab's own state away and rebuild it
+ * from scratch, out of the main plugin screen's own code.
+ *
+ * Does not: Own the connection itself — that lives elsewhere and is only
+ * handed to this hook to display and pass along.
  */
 import React, { useMemo } from "react";
 
@@ -17,6 +27,17 @@ export type UseOllamaTabPayloadArgs = Omit<OllamaTabProps, "onPersistOllamaIp"> 
   ollamaTabResetKey: number;
 };
 
+/**
+ * In: around two dozen values covering the connection, timing settings,
+ * and model choices, plus a reset key that forces a full rebuild when
+ * bumped.
+ * Out: the finished Ollama tab element, rebuilt only when one of the
+ * listed values changes (or the reset key is bumped, which remounts the
+ * whole tab and throws away anything it was in the middle of).
+ * Can go wrong: the rebuild list at the bottom is written by hand; a value
+ * added above that is not also added there will not fail any check, it
+ * will just quietly stop updating on screen.
+ */
 export function useOllamaTabPayload({
   ollamaTabResetKey,
   ollamaIp,

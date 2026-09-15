@@ -1,9 +1,18 @@
 /**
- * Title: About tab payload
- * Purpose: Build the memoized About tab element, including the three fixed project links it shows.
- * Used for: index.tsx — the always-present "About" tab row.
- * Solves: Keeps link constants and reply-language wiring out of the composition root.
- * Does not: Own the reply language — the caller supplies the value and its setter.
+ * Title: What draws the About tab
+ *
+ * Purpose: Runs while a person has the About tab open. It builds that
+ * screen: the project's links (its code, its issue tracker, and the
+ * upstream Ollama project it depends on) and the reply-language picker,
+ * and it only rebuilds the screen when something on it actually changes.
+ *
+ * Used for: The tab bar's always-present About tab.
+ *
+ * Solves: Keeps the three fixed project links defined in one place
+ * instead of scattered through the main plugin screen's own code.
+ *
+ * Does not: Own which reply language is chosen — the caller supplies both
+ * the current choice and what happens when it changes.
  */
 import React, { useMemo } from "react";
 
@@ -19,6 +28,13 @@ export type UseAboutTabPayloadArgs = Omit<
   "githubRepoUrl" | "ollamaRepoUrl" | "githubIssuesUrl"
 >;
 
+/**
+ * In: the reply-language value and its setter, plus a couple of display
+ * strings for the language picker.
+ * Out: the finished About tab element, rebuilt only when one of those
+ * values changes.
+ * Can go wrong: nothing — this only wires values into the tab component.
+ */
 export function useAboutTabPayload({
   replyLanguage,
   onReplyLanguageChange,

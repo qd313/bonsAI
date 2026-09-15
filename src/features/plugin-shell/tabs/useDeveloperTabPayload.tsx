@@ -1,9 +1,18 @@
 /**
- * Title: Developer tab payload
- * Purpose: Build the memoized Developer tab element for the shell's tab list.
- * Used for: index.tsx — the "Debug" tab row, present only while showDeveloperTab is on.
- * Solves: Keeps a 25-prop element and its memo dependency list out of the composition root.
- * Does not: Own any of the state it passes — every value is supplied by the caller.
+ * Title: What draws the Debug tab
+ *
+ * Purpose: Runs while a person has the Debug tab open — a tab meant for
+ * troubleshooting and experiments, only shown once a setting turns it on.
+ * It builds that screen: captured crash messages, connection status,
+ * logging levels, and a long list of experimental switches.
+ *
+ * Used for: The tab bar's Debug tab, present only while that setting is on.
+ *
+ * Solves: Keeps this one very large list of values — about two dozen —
+ * and its rebuild list out of the main plugin screen's own code.
+ *
+ * Does not: Own any of the values it displays — every one is supplied by
+ * the caller and simply passed through to the Debug tab itself.
  */
 import React, { useMemo } from "react";
 import type { Dispatch, SetStateAction } from "react";
@@ -22,6 +31,15 @@ export type UseDeveloperTabPayloadArgs = Omit<
   showDeveloperTab: boolean;
 };
 
+/**
+ * In: about two dozen separate values and their setters — everything the
+ * Debug tab shows or can toggle — bundled into one argument object.
+ * Out: the finished Debug tab element, rebuilt only when one of the listed
+ * values changes.
+ * Can go wrong: the rebuild list at the bottom of this function is written
+ * by hand; a value added above that is not also added there will not fail
+ * any check, it will just quietly stop updating on screen.
+ */
 export function useDeveloperTabPayload({
   capturedErrors,
   setCapturedErrors,

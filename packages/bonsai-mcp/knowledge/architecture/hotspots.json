@@ -196,8 +196,8 @@
       "role": ""
     },
     {
-      "path": "src/features/preset-carousel/sessionRagComposer.test.ts",
-      "lines": 457,
+      "path": "src/features/plugin-shell/tabs/useMainTabPayload.tsx",
+      "lines": 461,
       "role": ""
     }
   ]

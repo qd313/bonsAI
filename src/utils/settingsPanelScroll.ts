@@ -1,9 +1,26 @@
 /**
- * Title: Settings panel scroll helpers
- * Purpose: Scroll settings tab panel to top and coordinate up-navigation with tab strip focus.
- * Used for: SettingsTab and OllamaTab D-pad onMoveUp chains at panel boundaries.
- * Solves: Escape clipped settings content and return focus to LB/RB tab titles at scroll top.
- * Does not: Define per-row focus graphs — section parents list explicit focus stops.
+ * Title: What "Up" should do at the top of a scrolled Settings section
+ *
+ * Purpose: On the Settings and Ollama tabs, some sections are taller than the screen and scroll.
+ * When a person moving the controller's highlight upward reaches the top control in a scrolled
+ * section, pressing Up should not do nothing — it should first reveal more of the section above,
+ * and once there is nothing left to reveal, hand the highlight to the tab strip along the top.
+ * This file is that chain of fallbacks.
+ *
+ * Used for: the Settings and Ollama tabs' upward D-pad handling at the top of a scrolled section.
+ *
+ * Solves: without this, reaching "up" at the top of a long scrolled section either does nothing
+ * (the content above stays hidden) or jumps straight past the tab strip.
+ *
+ * Does not: decide which control is "previous" within one section — each section lists its own
+ * explicit chain of stops and hands this file a `focusPrev` callback for that. This file only
+ * adds what happens once that chain runs out.
+ *
+ * How it works: `tryMoveUpWithPanelScroll()` tries, in order: scroll the section up a little; if
+ * that does not move it (it was already effectively at the top), snap it fully to the top as a
+ * fallback, in case it was still very slightly scrolled; if there was nowhere left to scroll at
+ * all, try the section's own `focusPrev` chain; and only if none of those apply, move the
+ * highlight to the currently active tab title in the LB/RB strip.
  */
 import { findScrollablePanel, tryScrollPanelFromAnchor } from "./chatPanelScroll";
 import { getUiDocument } from "./uiDocument";

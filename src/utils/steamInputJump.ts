@@ -1,9 +1,27 @@
 /**
- * Title: Steam Input jump helper
- * Purpose: Navigate to Steam Input surfaces using lexicon entry router paths or steam:// URLs.
- * Used for: Permissions and shortcut-setup deep links from Ask keyword replies.
- * Solves: Best-effort jumps with confidence labels when React Router or Steam URL succeeds.
- * Does not: Edit controller bindings — Steam client owns configuration UI.
+ * Title: Jumping straight to Steam's own controller-setup screens
+ *
+ * Purpose: A few Ask replies about controller setup can offer a direct jump to Steam's own Input
+ * configuration screens instead of only describing where to find them — for example "map a
+ * button" or "open the controller layout for this game". This file makes that jump happen: it
+ * tries Steam's own in-app screens first, and falls back to a `steam://` link if that fails or
+ * is not available for that particular target.
+ *
+ * Used for: permission and controller-setup jump links shown in Ask's keyword replies.
+ *
+ * Solves: without this, a reply could tell a person where to go, but not take them there.
+ *
+ * Does not: change any controller binding — the jump only opens a screen. Steam's own client
+ * owns everything that happens after.
+ *
+ * How it works: for something tied to a specific running game, it first checks that a game is
+ * actually running (Steam has to report one, or the jump is refused with an explanation). If
+ * Steam's own in-app navigation has a path for this target, it tries that first, and only falls
+ * back to a `steam://` link if that either fails or was never configured for this target. A
+ * global target (not tied to a running game) works the same way but skips the running-game
+ * check, using only a `steam://` link when one is available. A target with neither kind of link
+ * configured, or a per-game target with no game running, reports back why it could not happen
+ * rather than silently doing nothing.
  */
 import { Navigation, Router } from "@decky/ui";
 import type { SteamInputLexiconEntry } from "../data/steam-input-lexicon";

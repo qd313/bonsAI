@@ -1,9 +1,28 @@
 /**
- * Title: Session RAG chip candidates RPC
- * Purpose: Fetch and normalize session-scoped RAG preset chip candidates from backend RPC.
- * Used for: Preset carousel session RAG composition on MainTab.
- * Solves: Typed candidate list for composeSessionPresets without duplicating RPC parsing.
- * Does not: Score or rank candidates — see sessionRagComposer probability mix.
+ * Title: Asking for chip suggestions drawn from this game's own notes
+ *
+ * Purpose: Before showing the row of suggested-question chips for the game currently being
+ * played, the plugin can ask the back end for chip text drawn from that game's own notes (its
+ * entry in the plugin's knowledge base), rather than only the fixed set built into the plugin.
+ * This file makes that request and turns whatever comes back into a clean list of chips the
+ * carousel can use, dropping anything that arrives without real text or a category.
+ *
+ * Used for: the preset carousel's per-session suggestions on the Main tab.
+ *
+ * Solves: without this, the carousel could either break on an unexpected shape from the back
+ * end, or show duplicate or blank chips when the notes for a game overlap or are incomplete.
+ *
+ * Does not: decide which chips actually get shown or in what order — that is
+ * `sessionRagComposer`'s own mixing logic. This file only fetches and cleans the list of
+ * candidates it chooses from.
+ *
+ * Gotchas:
+ *   - A request that fails outright (a timeout, the back end being unreachable) and a request
+ *     that succeeds but says "not available right now" (the knowledge base being off, a game
+ *     with no notes, a notes file that failed to read) are handled differently on purpose: the
+ *     second is only logged quietly as a warning, since it is an expected, common case; the
+ *     first is logged as an error, since something actually failed. Either way, the carousel
+ *     falls back to its fixed set of chips.
  */
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "./deckyCall";
 import type { SessionRagChipCandidate } from "../features/preset-carousel/sessionRagComposer";

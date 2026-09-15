@@ -1,12 +1,34 @@
 /**
- * Title: Steam parental settings probe
- * Purpose: Long-lived subscription over `SteamClient.Parental` for Kids master lock.
- * Used for: useKidsLock — session lock/unlock without persisting to settings.json.
- * Solves: Sync-fire register, missing API, throw-after-fire, and never-fire → UNKNOWN.
- * Does not: Decode the parental protobuf blob; treat UNKNOWN as locked (callers fail open).
+ * Title: Watching Steam's own Kids lock
  *
- * `undefined` delivered to the callback means UNKNOWN — never "unlocked". Callers that
- * want fail-open map UNKNOWN → unlocked themselves (see useKidsLock).
+ * Purpose: Steam has its own "Kids" parental lock, and this file watches it for as long as the
+ * plugin is open, so the rest of the plugin can lock itself down to match — without ever writing
+ * the lock state to the plugin's own saved settings. It exists because Steam's own subscription
+ * for this can behave in a few different unhelpful ways depending on the Deck, and this file has
+ * to work correctly no matter which one happens.
+ *
+ * Used for: `useKidsLock` — locking and unlocking the current session to match Steam's own Kids
+ * lock, without saving anything to the plugin's settings file.
+ *
+ * Solves: Steam's subscription for this can fire immediately during setup, throw right after
+ * firing with no way to unsubscribe, or never fire at all on a Deck with no such API. This file
+ * handles all three so callers always get an answer, or an honest "don't know yet", instead of
+ * hanging.
+ *
+ * Does not: read what the lock actually restricts — the details are stored in a format Steam
+ * does not document, so this file only reports whether the lock is on. It also does not decide
+ * what "don't know yet" should mean for the caller; see the gotcha below.
+ *
+ * Gotchas:
+ *   - `undefined` handed to a caller's callback specifically means "we do not know yet" — never
+ *     "unlocked". Treating it as unlocked would fail open on a Deck this check has not actually
+ *     reported on, which is exactly the Deck a person setting up parental controls would be
+ *     using. A caller that wants to fail open decides that for itself (see `useKidsLock`); this
+ *     file never makes that substitution on its own.
+ *   - The two-second default wait before deciding "don't know"
+ *     (`STEAM_PARENTAL_INITIAL_TIMEOUT_MS`) is a starting guess, not a measured value — it is
+ *     flagged in the code as a placeholder until someone checks how long Steam actually takes to
+ *     answer on a real Deck.
  */
 
 export type SteamParentalSnapshot = {

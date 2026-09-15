@@ -1,9 +1,27 @@
 /**
- * Title: Pull model recommendations
- * Purpose: Score and rank pull-model catalog entries by role (speed/strategy/expert/vision) heuristics.
- * Used for: PullModelsModal coverage hints and Ollama essentials recommendations UI.
- * Solves: Performance-per-GB ranking and Swiss-army multimodal detection for pull suggestions.
- * Does not: Install models — see backend pull RPC and Pull Models modal actions.
+ * Title: Suggesting which model to download next
+ *
+ * Purpose: The Pull Models screen can suggest a model to download based on what is missing from
+ * what is already installed. This file works out what is missing — a fast small model, a
+ * strategy-guide model, an "expert"-level model, or a model that can read pictures — and scores
+ * the catalog entries by roughly how good the answer is for how much the download costs in
+ * space, so the best fit for the gap gets suggested first.
+ *
+ * Used for: the Pull Models screen's coverage hints, and the essentials recommendations shown on
+ * the Ollama tab.
+ *
+ * Solves: without this, "should I download this" would be a judgement call made by eye each
+ * time, rather than a suggestion tied to what is actually installed already.
+ *
+ * Does not: install anything — pulling a model is a separate request to the back end and the
+ * Pull Models screen's own actions.
+ *
+ * Gotchas:
+ *   - A single installed model that can chat, read pictures, and either do strategy or read text
+ *     out of images all at once is treated as covering every gap by itself
+ *     (`installedSwissArmyEntry`), which skips the rest of the check entirely. Such an installed
+ *     all-rounder model means no gaps are reported at all, even if, say, no dedicated fast model
+ *     is installed.
  */
 import {
   PULL_MODEL_CATALOG,

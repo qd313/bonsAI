@@ -5,6 +5,65 @@ pick up without rereading anything but this file.
 
 ---
 
+## 2026-09-14, phase 4 on the Deck: three days of moved code, checked on real hardware
+
+**The plugin behaves the same on the Deck.** The log for the whole evening is twelve lines
+long with no error, no warning and nothing failing to load. Hades was running throughout, so
+the game-aware parts were exercised rather than skipped.
+
+What was checked, and what proved each one:
+
+- **The back end still loads.** "plugin loaded", no import failure. All six files added or
+  split this phase import on the Deck's own Python, which is a newer version than the one
+  the tests run on here.
+- **One real question, start to finish.** The same question as yesterday's check, so the two
+  are comparable: answered in 40.4 seconds against 42.6 yesterday. The log shows every step
+  in order -- read the request, built the prompt, called the model, parsed it, ran the safety
+  check -- and the chat was saved to the Desktop folder as usual.
+- **The three question chips above the Ask box**, which is the biggest screen-side change this
+  phase. They rotate through their seeds, one of the seeds was drawn from the running game,
+  and pressing one fills the Ask box. Caught mid-animation twice, which is the decode effect
+  working.
+- **Testing the connection to the AI.** Proved by the AI server's own log: the button produced
+  a matching pair of requests at that second and both answered 200.
+- **The knowledge base status** drew on screen: installed, version 2026.09.08.
+- **Voice, all the way through, with no microphone.** The Deck's own speech tool spoke a
+  sentence, it was converted to exactly the sound format the plugin records in, and handed to
+  the plugin's own transcription step -- which runs through every piece lifted out today. It
+  came back word perfect, 8 of 8. The binary and the model are both found at their real paths.
+- **The shared text rules behind the typed commands**, checked directly on the Deck rather than
+  through the screen, because typing needs the on-screen keyboard.
+- **A full walk of the main screen:** 18 controls in 32 presses, no dead ends, no loops. The
+  only partly covered spots are the same two recorded yesterday -- a question 78% visible behind
+  Retry, a reply 89% behind Copy. Unchanged, so not new damage.
+
+Three things worth carrying forward:
+
+- **The Deck's screensaver pauses the chip animation.** A chip that has not changed in ninety
+  seconds is not a fault; it means the screen has gone dark. Waking it made the chip rotate
+  within thirteen seconds. Holding the Deck awake stops it sleeping but does not stop the
+  screen dimming, so wake it before judging anything that moves on its own.
+- **The plugin's activity log is switched off by default**, so a quiet log proves nothing about
+  whether a button did its job. The independent witness is whatever the button talks to -- for
+  the connection test, the AI server's own request log.
+- **My probe script guessed two names wrong and raised a false alarm each time.** Once on how
+  the voice paths are asked for, once on the two names the screen actually sends for the mode
+  and the game. Both looked like a fault in moved code and neither was. Read the real signature
+  before believing a probe.
+
+**One difference from yesterday that is not ours.** Asked the Portal 2 question with Hades
+running, the AI declined it and offered Hades help instead. Yesterday, with nothing running, it
+answered the Portal 2 question. That is the AI reacting to which game is open, not the clean-up.
+
+**One pre-existing behaviour noticed, not introduced.** A reply style spelled in capitals falls
+back to the default instead of being recognised. The screen only ever sends it in lower case, so
+nobody can hit it, and the part that checks it was not touched in this phase.
+
+**Phase 4 is now checked.** What is left in it is optional: more of the Ask hook if it is wanted.
+The remaining blocks are tangled with each other, so each needs reading rather than lifting.
+
+---
+
 ## 2026-09-14, phase 4 session 3: the Ask hook starts coming apart, and one step gets cancelled
 
 **Nothing a person using the plugin can see has changed.** 1,289 back-end tests and 1,187

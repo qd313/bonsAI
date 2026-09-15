@@ -412,7 +412,12 @@ replace it with a specific issue when one exists.
 - ★★★★★ `[platform]` **Refactor round two (plan 51)** — **OPEN, planned 2026-09-11, calls locked (D89 to D96).** A
   seven-phase clean-up touching the code, the tests, the build scripts, the docs and how agent sessions work here,
   with nothing about how the plugin behaves changing for a person using it. Work starts only when the maintainer
-  says the exact words "start refactor implementation now." [Plan](planning/51-refactor-round-two.md).
+  says the exact words "start refactor implementation now." **Progress, 2026-09-14:** phases 0 to 4 are done and
+  checked on the Deck. Phase 4 moved the most code — the entry point is under three thousand lines for the first
+  time, both back-end import loops are gone, and the Ask screen code has started coming apart. Its Deck evening
+  found nothing a person would notice: one real question answered in 40.4 seconds against 42.6 the night before,
+  voice word perfect, 18 controls reachable with no dead ends, and a log with no errors in it.
+  [Plan](planning/51-refactor-round-two.md), [notes](audit/refactor-round-two/session-notes.md).
 - ★★★★★ `[platform]` **Steam Controller copilot (Ibex gen-2)** — **OPEN.** AI copy tuned to gen-2 hardware.
 - ★★★★★ `[platform]` **The floating panel inside SteamVR** — **OPEN, filed 2026-09-08; the first step is a ★★ test to find out.**
   bonsAI's panel floating over any VR game, drawn by a small program on the PC that runs SteamVR, so it serves every SteamVR

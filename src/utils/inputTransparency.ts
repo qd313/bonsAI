@@ -20,7 +20,7 @@
  * narrower shapes: `ChatSlotTurnTransparency` is the smaller, trimmed set of fields saved alongside a
  * turn in a saved chat (route, whether it succeeded, and the chips — not the full raw prompts or
  * developer-only details), and `InputTransparencyRpcResult` is the "is there anything to show at all"
- * wrapper the back-end call itself returns.
+ * shape the back-end call itself returns.
  */
 import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
 

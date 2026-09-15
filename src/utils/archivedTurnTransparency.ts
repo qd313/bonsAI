@@ -15,9 +15,9 @@
  * Solves: without this, an old saved reply missing its own details would show a blank Show details
  * panel, or every caller would have to work out the same fallback for itself.
  *
- * Does not: fetch the details from the back end, or save them to disk — a separate RPC call fetches
- * the current ones, and the chat-slot saving code is what attaches a copy to a saved turn going
- * forward.
+ * Does not: fetch the details from the back end, or save them to disk — a separate call to the back
+ * end fetches the current ones, and the chat-slot saving code is what attaches a copy to a saved turn
+ * going forward.
  *
  * How it works: if the reopened turn has its own saved details, use those. Otherwise, only the very
  * newest turn in the reopened chat may borrow the details of the most recently finished live answer

@@ -26,7 +26,7 @@
  *     row of reply actions up into a glossary term chip inside a bubble) cannot be done by calling a
  *     plain `.focus()` — that only changes the browser's idea, and Steam keeps sending presses to
  *     wherever its own ring still is. `takeAnswerBubbleNavFocus` is the one call this project trusts
- *     to actually move Steam's ring across that kind of boundary, by calling `TakeFocus(true)` on the
+ *     to actually move Steam's ring from one navigation area into another, by calling `TakeFocus(true)` on the
  *     bubble's own navigation container. It is best-effort: the caller still has to land focus on a
  *     real element afterwards and check that it landed.
  *   - `resolveFocusedAnswerBubble` reads Steam's ring rather than the browser's `activeElement`, and

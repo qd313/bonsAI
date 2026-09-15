@@ -40,8 +40,9 @@
  *     out by hand here instead of imported from the UI library's own copy of them. That is deliberate:
  *     these numbers come from Steam's own input protocol, not from the library, so this file does not
  *     need to depend on the library just to know them.
- *   - `isOkDeckButtonEvent` and `isCancelDeckButtonEvent` are the only two checks here meant to gate
- *     something that actually changes state. `onButtonDown` fires for every button on the controller,
+ *   - `isOkDeckButtonEvent` and `isCancelDeckButtonEvent` are the only two checks here meant to
+ *     control whether something that actually changes state is allowed to run. `onButtonDown` fires
+ *     for every button on the controller,
  *     not just OK and Cancel — a handler that reacts to "not a direction" instead of asking one of
  *     these two specifically will also fire for B, the bumpers, and the stick clicks.
  */

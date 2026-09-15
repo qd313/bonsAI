@@ -14,9 +14,9 @@
  * without making anything on screen wait for a disk write to finish.
  *
  * Does not: read the log back or show it anywhere in the plugin — see the Developer tab and the
- * back end's own log RPC for that. Two things gate every write here, checked before anything is
- * sent: the player must have already granted the "write files" permission, and the chosen log level
- * (off, normal, or extra detail) must allow this particular line.
+ * back end's own way of reading its logs back for that. Two things must both allow it before
+ * anything is sent: the player must have already granted the "write files" permission, and the
+ * chosen log level (off, normal, or extra detail) must allow this particular line.
  */
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS } from "./deckyCall";
 import type { BonsaiCapabilities, DesktopAppLogLevel } from "../data/bonsaiSettingsSchema";

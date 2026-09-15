@@ -1,9 +1,29 @@
 /**
- * Title: Ollama models hub modal
- * Purpose: Tabbed fullscreen modal for model policy, browse/pull, and advanced routing settings.
- * Used for: Ollama tab “Manage models” entry via showModal() with nested PullModelsModal.
- * Solves: Groups tier panel, catalog browser, and advanced toggles with draft commit on save.
- * Does not: Install Ollama or run pulls — delegates to PullModelsModal and parent RPC handlers.
+ * Title: The AI models screen
+ *
+ * Purpose: The full-screen popup for everything about which AI models this
+ * plugin can use: choosing how open the model policy is, browsing and
+ * downloading models, and a set of advanced routing switches. It opens with
+ * one of three sections showing — Policy, Browse & pull, or Advanced — with
+ * chips across the top to switch between them, and it keeps a change to any
+ * of them as a draft until the person presses Done, at which point every
+ * pending change is saved together.
+ *
+ * Used for: The Ollama tab's "Manage models" entry.
+ *
+ * Solves: Puts policy, the download catalog, and the advanced switches
+ * behind one Done button instead of three separate popups each with their
+ * own save step, so switching sections does not lose an unsaved change.
+ *
+ * Does not: Install Ollama itself, or actually download a model — the
+ * browse-and-pull section is a separate component (PullModelsModal) that
+ * this file only hosts and asks to save on Done.
+ *
+ * Gotchas: While the Browse & pull section is open, the Done button's own
+ * label and whether it can be pressed come from that section, not from this
+ * file — PullModelsModal reports back what its own button should say and
+ * whether it should be enabled, through onFooterStateChange, and this modal
+ * just repaints its Done button to match.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button, ConfirmModal, Focusable } from "@decky/ui";

@@ -1,9 +1,24 @@
 /**
- * Title: Stream fence wait chip
- * Purpose: Show a pulsing status chip while streaming markdown is inside an open code fence or spoiler mask.
- * Used for: MainTabChatTranscript during in-flight assistant replies (F2 fence / S1 spoiler variants).
- * Solves: Gives visible feedback that the model is still writing inside a fenced or masked block.
- * Does not: Parse markdown, close fences, or manage stream state — parent owns streaming lifecycle.
+ * Title: "Still writing…" chip
+ *
+ * Purpose: A small pulsing status chip shown while an answer is still
+ * arriving and the AI is in the middle of something that should not be
+ * shown half-finished — a code block that has not been closed yet, or a
+ * spoiler-hidden section. Without this chip, a code block still being
+ * written would flicker as it grows; this chip stands in its place until
+ * the block is finished.
+ *
+ * Used for: The chat transcript, only while an answer is still streaming
+ * in.
+ *
+ * Solves: Gives a visible sign that the AI is still working, for the two
+ * moments where showing the raw, unfinished text underneath would look
+ * broken or give away a spoiler early.
+ *
+ * Does not: Read the markdown itself, decide when a code block or spoiler
+ * has actually finished, or track anything about the ongoing reply — the
+ * caller decides when to show this chip and when to swap it for the real
+ * content.
  */
 export type StreamFenceWaitChipProps = {
   label: string;

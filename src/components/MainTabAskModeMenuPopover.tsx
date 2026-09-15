@@ -1,9 +1,32 @@
 /**
- * Title: Ask mode menu popover
- * Purpose: Paint the Speed / Strategy / Expert mode picker anchored to the unified Ask bar chip.
- * Used for: MainTabUnifiedAskBar when the user opens the mode selector on Deck or desktop.
- * Solves: Keeps the menu outside the 24px icon strip with explicit positioning to avoid QAM focus scatter.
- * Does not: Persist Ask mode or submit requests — parent handles selection and RPC orchestration.
+ * Title: The Speed / Strategy / Expert menu
+ *
+ * Purpose: The small pop-up list that opens when someone taps the mode chip
+ * next to the Ask bar, letting them pick how the AI should answer: Speed,
+ * Strategy, or Expert. It draws itself just above that chip, sized to fit
+ * its own text, and moves the D-pad ring onto its first row the moment it
+ * opens.
+ *
+ * Used for: The unified Ask bar, wherever the mode chip lives, on both the
+ * Steam Deck and desktop.
+ *
+ * Solves: This menu has to float above everything else and land in exactly
+ * the right spot next to a chip that itself sits inside a cramped icon row.
+ * Keeping it as its own small popover, positioned by reading the chip's own
+ * on-screen position, means it never has to squeeze inside that row or rely
+ * on Steam's own menu positioning, which did not fit reliably.
+ *
+ * Does not: Remember the chosen mode, or send anything to the AI. It only
+ * reports back which mode was picked; the caller decides what to do with
+ * that and where the choice is saved.
+ *
+ * Gotchas: The math that places the menu is worked out by hand from the
+ * chip's and the menu's own on-screen positions, rather than left to the
+ * browser. The menu opens upward, above the chip, so its vertical position
+ * can come out negative relative to its container — that is intentional and
+ * must not be clamped to zero: an earlier version did clamp it, and the menu
+ * ended up drawn overlapping the text box instead of floating above the
+ * chip.
  */
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { Button } from "@decky/ui";

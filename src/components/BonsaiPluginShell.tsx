@@ -1,9 +1,32 @@
 /**
- * Title: Plugin shell wrapper
- * Purpose: Root layout container that injects scoped bonsAI stylesheet and hosts the plugin subtree.
- * Used for: index.tsx as the outermost Deck/QAM wrapper around all tab panels.
- * Solves: Centralizes scope ref, CSS variables, and global bonsai-scope rules in one place.
- * Does not: Own tab routing, settings persistence, or focus graphs — see useBonsaiPluginShell.
+ * Title: The plugin's outermost box
+ *
+ * Purpose: The very first element the plugin draws — every tab (Main,
+ * Settings, Permissions, and the rest) is drawn inside this one box. It
+ * carries the plugin's whole stylesheet with it, so nothing drawn inside
+ * has to bring its own copy. Because this box exists before any tab does,
+ * it is also the first place in the plugin that can learn which real,
+ * on-screen document the plugin ended up drawn into — see the gotcha below.
+ *
+ * Used for: index.tsx, wrapping every tab the plugin has.
+ *
+ * Solves: Without one shared outer box, each tab would have to inject the
+ * plugin's stylesheet for itself and work out its own on-screen document.
+ *
+ * Does not: Decide which tab is showing, save any settings, or wire up
+ * D-pad movement between rows — those all live elsewhere (see
+ * useBonsaiPluginShell).
+ *
+ * Gotchas: Decky runs the plugin's own JavaScript inside a near-empty
+ * background page (called SharedJSContext in the Decky SDK), not the popup
+ * window a person actually sees on screen. This box's ref callback is what
+ * tells the rest of the plugin which document is the real one, by calling
+ * rememberUiDocument() the moment it mounts — before any tab has drawn
+ * anything. Three other places call that same function, but only once an AI
+ * answer exists, so this box's own call is what covers everything before
+ * the first reply — including the blur-on-submit that runs the moment the
+ * very first question is sent, which by definition happens before any
+ * answer exists yet.
  */
 import React from "react";
 

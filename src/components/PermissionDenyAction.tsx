@@ -1,9 +1,31 @@
 /**
- * Title: Permission deny action
- * Purpose: Inline deny copy plus a focusable Open Permissions control for capability blocks.
- * Used for: Screenshot browser, chat hints, mic banner, Developer tab, and similar deny surfaces.
- * Solves: One reusable jump affordance instead of toast-only dead ends.
- * Does not: Navigate by itself — parent supplies jumpToPermission from usePermissionJump.
+ * Title: "You need to turn this on" message and button
+ *
+ * Purpose: The small message and Open Permissions button that appears
+ * wherever something is blocked because a permission is off — trying to
+ * browse screenshots, use the microphone, or read game logs, say. It shows
+ * why the action is blocked and gives a button that jumps straight to the
+ * Permissions tab and highlights the right switch, instead of leaving a
+ * person to hunt for it themselves.
+ *
+ * Used for: The screenshot browser, chat hints, the microphone banner, the
+ * Developer tab, and anywhere else a blocked action needs to explain itself.
+ *
+ * Solves: Before this existed, a blocked action could only say so in a
+ * passing toast message, with no way to act on it. One reusable message and
+ * button means every blocked action can send someone straight to the fix.
+ *
+ * Does not: Do the jump itself — the caller passes in the function that
+ * actually moves to the Permissions tab (see usePermissionJump); this file
+ * only shows the message and the button that calls it.
+ *
+ * Gotchas: The button has to be reachable from more than one place — a
+ * caller elsewhere in the reply row can hand the D-pad ring to this button
+ * directly, from a different container entirely. That kind of hand-off
+ * cannot be done by asking the browser to focus a queried element; it needs
+ * Steam's own transfer mechanism (see navFocusRegistry.ts's navRef and
+ * takeNavFocus), which is why this component does not forward a ref of its
+ * own — one would not have worked for that case anyway.
  */
 import { Button } from "@decky/ui";
 

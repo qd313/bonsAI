@@ -1,9 +1,23 @@
 /**
  * Title: Main tab shell
- * Purpose: Compose preset row, unified Ask bar, screenshot browser, and chat transcript on the Main tab.
- * Used for: index.tsx Main tab panel — receives orchestration props from useBonsaiAskOrchestration.
- * Solves: Keeps Main-tab layout thin; Ask logic stays in hooks and child components.
- * Does not: Submit Asks, poll RPC, or own focus graphs — see MainTabUnifiedAskBar and MainTabChatTranscript.
+ *
+ * Purpose: This is the Main tab a person sees when they open bonsAI: the chat
+ * history above, and a dock below it holding the suggestion chips and the
+ * question box. This file only arranges those pieces — the row of chat tabs
+ * across the top, the transcript, the suggestion row, the Ask bar, the
+ * screenshot picker when it is open, and a couple of status lines. It does
+ * not ask a question or produce an answer itself.
+ *
+ * Used for: index.tsx's Main tab panel, fed by the large bundle of state and
+ * callbacks the Ask logic builds elsewhere.
+ *
+ * Solves: Keeps the Main tab's layout in one place, separate from the logic
+ * of asking a question and tracking where the D-pad's ring should go, which
+ * live in hooks and the child pieces instead.
+ *
+ * Does not: Submit a question, poll for the answer, or manage the D-pad's
+ * path between controls — see MainTabUnifiedAskBar and MainTabChatTranscript
+ * for those.
  */
 import React, { useCallback, useRef, useState } from "react";
 import { PanelSection, PanelSectionRow, Button } from "@decky/ui";
@@ -152,6 +166,35 @@ export type MainTabProps = {
   unreadSlotIds?: ReadonlySet<string>;
 };
 
+/*
+ * In: MainTabProps — essentially every piece of state and callback the Main
+ * tab's pieces need: the chat history, the focus refs, the current question
+ * text, whether an Ask is running, the screenshot browser's state, and so on.
+ * Out: the assembled screen — an optional row of chat tabs, the transcript,
+ * then a dock holding the suggestion row and the Ask bar, and, depending on
+ * what the props say, a mic-permission notice, the screenshot browser, a
+ * plain navigation message, and a footnote naming the game in context.
+ * What can go wrong: almost nothing is computed here — one wrapped callback
+ * aside, this file only arranges props into JSX. A missing optional prop
+ * (say, no onChatSlotCreate) just hides the piece that needed it rather than
+ * breaking the rest of the screen.
+ *
+ * 1. Set up what this file itself needs to track: which function currently
+ *    focuses the question box, whether the chat-tab row is sitting at its
+ *    "+" (new chat) position, and the ref used to stretch the dock down to
+ *    the bottom of the screen.
+ * 2. Wrap the real onAskOllama in one that creates a new chat slot first when
+ *    asking from the "+" position, so the answer plays out on the new tab
+ *    instead of landing behind the tab the person started on — see the
+ *    comment on this wrapper for the bug it fixes.
+ * 3. Draw the row of chat tabs, when all four chat-slot callbacks are given.
+ * 4. Draw the chat transcript.
+ * 5. Draw the dock: the suggestion row, the Ask bar (which hands its own
+ *    focus-jump functions back up through onFocusHandlersReady), a
+ *    mic-permission notice if the microphone was refused, the screenshot
+ *    browser if it is open, a plain navigation message, and a footnote
+ *    naming the game bonsAI thinks it is talking about.
+ */
 export function MainTab(props: MainTabProps) {
   const presetCarouselHostRef = useRef<HTMLDivElement | null>(null);
   const [focusUnifiedTextField, setFocusUnifiedTextField] = useState(() => () => false);

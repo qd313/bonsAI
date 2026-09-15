@@ -1,9 +1,15 @@
 /**
  * Title: Answer bubble navigation
- * Purpose: D-pad up/down scroll and focus moves between answer markdown chunks within a bubble.
- * Used for: buildAnswerBubbleElement Focusable onMove handlers and liveTurnFocusGraph.
- * Solves: Chunk-level navigation with panel scroll geometry when content exceeds viewport.
- * Does not: Hop between reply action buttons — see buildReplyActionsElement and replyStopRegistry.
+ *
+ * Purpose: What Up and Down do inside one AI answer, cut into sections (see the reply-bubble file for why) — step to the next section, scroll to reveal one that is off-screen, stop on a hidden spoiler or glossary chip in the way, or hand off to Steam.
+ *
+ * Used for: the answer bubble's own Up/Down handlers, and cross-turn movement in the chat screen.
+ *
+ * Solves: Works out section movement and panel scrolling together, since moving to the next section is not enough on its own if it is still off-screen.
+ *
+ * Does not: Move between the buttons below a reply — see buildReplyActionsElement and replyStopRegistry.
+ *
+ * Gotchas: focusFirstAnswerChunk(), focusLastAnswerChunk() and focusPanelEl() take Steam's own focus transfer before touching focus directly, and check whether the ring actually followed — a plain focus() only moves the browser's idea of focus, and this repo has lost fixes to that exact disagreement before.
  */
 import {
   chunkHasContentAboveViewport,
@@ -242,6 +248,7 @@ function panelStepUp(bubbleEl: HTMLElement): boolean {
   return scroll.scrollTop < before;
 }
 
+/* In: the bubble element (or null — this file looks it up itself), the section count, and the answer's own key. Out: true when this press was handled and should stop here; false lets Steam fall through to its own move. What can go wrong: an unrevealed spoiler or glossary chip on screen is offered before the next section, and the next section only counts if it is already visible — see the inline comments below for the on-device bugs each rule fixed. */
 export function handleAnswerBubbleMoveDown(
   bubbleEl: HTMLElement | null,
   _focusedChunkRef: { current: number },

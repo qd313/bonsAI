@@ -1,11 +1,22 @@
 /**
  * Title: Reply copy button
- * Purpose: Copy a reply's visible answer text to the host clipboard, as a labelled button or a corner icon.
- * Used for: the answer bubble's bottom-right corner (D77); the reply utility row before that.
- * Solves: Self-contained press -> clipboard -> feedback state, so buildReplyActionsElement stays
- *   a plain function (no hooks available there — see its own header comment).
- * Does not: Decide what text is "visible" — see answerCopyText.ts. Does not write the clipboard
- *   itself — see clipboardWrite.ts.
+ *
+ * Purpose: This is the Copy button under a finished reply, or the small icon in
+ * the answer bubble's own corner. Press it and the answer's visible text goes
+ * to the clipboard. The button's own label reports what happened — Copy, then
+ * Copied, or Copy failed if the write did not work — and settles back to Copy
+ * on its own a couple of seconds later.
+ *
+ * Used for: The row of action buttons under a finished reply, and the small
+ * corner icon drawn on the answer bubble itself.
+ *
+ * Solves: Keeps "press it, copy the text, show what happened" in one place, so
+ * the file that lays out a reply's row of buttons does not have to manage
+ * clipboard state itself.
+ *
+ * Does not: Decide what counts as the answer's "visible" text — see
+ * answerCopyText.ts. Does not touch the clipboard directly either — see
+ * clipboardWrite.ts.
  */
 import React, { useEffect, useRef, useState } from "react";
 import { BonsaiChatSecondaryButton } from "./BonsaiChatSecondaryButton";
@@ -51,6 +62,19 @@ const CORNER_ICON: Record<CopyStatus, React.FC<{ size?: number }>> = {
   error: CopyFailedIcon,
 };
 
+/*
+ * In: `getCopyText`, called fresh at the moment of the press rather than once
+ * when the button first appears, so an answer still streaming in copies
+ * whatever text has arrived by the time you actually press the button. Also
+ * whether the button is disabled, the D-pad handlers passed down to it, and
+ * whether to draw as the small corner icon instead of a full labelled button.
+ * Out: the button element, in one of its two looks.
+ * What can go wrong: nothing to copy — an empty answer, or a press before any
+ * text has arrived — shows Copy failed right away, the same as a clipboard
+ * write the host rejects. Either way the label resets to Copy on its own a
+ * couple of seconds later, and a press that arrives while a copy is already
+ * running is ignored, so two presses in a row cannot race each other.
+ */
 export function ReplyCopyButton(props: ReplyCopyButtonProps) {
   const { getCopyText, disabled = false, deckNav, corner = false } = props;
   const [status, setStatus] = useState<CopyStatus>("idle");

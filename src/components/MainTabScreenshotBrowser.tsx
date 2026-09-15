@@ -1,9 +1,22 @@
 /**
  * Title: Screenshot browser panel
- * Purpose: Full-bleed recent-screenshot picker with refresh, clipboard paste, and attach actions.
- * Used for: MainTab when the user opens attach → browse recent from the unified Ask bar.
- * Solves: Deck-focusable list of media-library screenshots with error and loading states.
- * Does not: Capture screenshots or enable media library — parent RPC and capabilities gate access.
+ *
+ * Purpose: The screen that opens when someone picks "browse recent" from the
+ * attach menu next to the question box. It shows a grid of recent screenshots
+ * to tap and attach, a "Paste clipboard" button that drops whatever is on the
+ * clipboard into the question instead, and a refresh button. If screenshot
+ * access is not allowed, or there is nothing to show yet, it explains why
+ * instead of showing an empty grid, and offers a way to turn access on.
+ *
+ * Used for: MainTab, once a person opens the attach menu and chooses "browse
+ * recent".
+ *
+ * Solves: Gives the picker its own self-contained, D-pad-friendly grid, with
+ * its own loading, empty, and permission-denied states, instead of MainTab
+ * having to hold all of that itself.
+ *
+ * Does not: Take the screenshot, or turn on the media-library permission —
+ * both happen elsewhere. This file is only told whether they are allowed.
  */
 import React, { useCallback } from "react";
 import { toaster } from "@decky/api";
@@ -31,6 +44,33 @@ export type MainTabScreenshotBrowserProps = {
   onNavigateToPermissions?: (capability: BonsaiCapabilityKey) => void;
 };
 
+/*
+ * In: the current list of recent screenshots, whether the list is still
+ * loading, any error text, whether media-library access is turned on, and
+ * the callbacks for closing the panel, refreshing, picking a screenshot, and
+ * pasting the clipboard.
+ * Out: the panel — a small toolbar (back, paste clipboard, refresh), then
+ * either an error, an explanation of why the grid is empty, or the grid of
+ * screenshot buttons itself.
+ * What can go wrong: a permission problem shows its own "turn this on"
+ * prompt rather than a raw error message when there is somewhere to send the
+ * person; pasting an empty clipboard shows a toast instead of pasting
+ * nothing; a load or paste failure is shown as readable text, not thrown.
+ *
+ * 1. onPasteClipboardStash() reads the clipboard, cleans up what it finds,
+ *    warns if it was empty, otherwise adds it to the question box and closes
+ *    this panel.
+ * 2. The panel itself: Escape or Backspace closes it.
+ * 3. A small toolbar: Back, Paste clipboard, and Refresh (the last one
+ *    disabled while already loading or while media-library access is off).
+ * 4. An error, if there is one — as a permission prompt when the caller can
+ *    jump the person to Permissions, or as plain text otherwise.
+ * 5. If there are no screenshots yet and nothing is loading: a permission
+ *    prompt when access is off, or an explanation of why the grid is empty
+ *    when access is on but nothing has been found.
+ * 6. Otherwise: the grid itself, one button per screenshot, each showing a
+ *    thumbnail, its name, when it was taken, and its file size.
+ */
 export function MainTabScreenshotBrowser({
   fullBleedRowStyle,
   presetButtonSurface,

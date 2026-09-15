@@ -1,9 +1,22 @@
 /**
- * Title: Strategy guide branches normalizer
- * Purpose: Coerce RPC strategy_guide_branches payloads into typed StrategyGuideBranchesPayload or null.
- * Used for: useBackgroundGameAi status handling and MainTab strategy branch UI.
- * Solves: Defensive parsing when backend shape drifts or partial options arrive.
- * Does not: Render branch buttons — see MainTab strategy guide components.
+ * Title: Turning a model's fork in the conversation into something the screen can trust
+ *
+ * Purpose: A Strategy reply can offer the person a fork in the conversation — "want the
+ * early-game plan, or the boss fight?" — as a set of labelled choices instead of plain prose.
+ * This file turns whatever the back end sends for that fork into a shape the screen can trust,
+ * or nothing at all if the shape does not hold up.
+ *
+ * Used for: `useBackgroundGameAi`'s handling of a Strategy reply, and the Main tab's branch
+ * buttons.
+ *
+ * Solves: without this check, a malformed or partial message from the back end could reach the
+ * screen as broken buttons — one with no real label, or a fork offering only a single choice.
+ *
+ * Does not: draw the branch buttons — see the Main tab's Strategy guide components.
+ *
+ * Gotchas:
+ *   - A fork needs at least two real, labelled choices to be shown at all; fewer than that and
+ *     this returns nothing usable rather than a one-button "choice".
  */
 import type { StrategyGuideBranchesPayload } from "../types/bonsaiUi";
 

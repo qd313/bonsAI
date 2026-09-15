@@ -1,9 +1,29 @@
 /**
- * Title: Assistant display tag stripper
- * Purpose: Remove model-emitted bonsai-status and strategy bracket tags from chat display text.
- * Used for: buildAnswerBubbleElement and transcript rendering safety net.
- * Solves: Leaked control tags in UI when backend extraction misses a follow-up turn.
- * Does not: Parse structured status for logic — backend should strip before persistence.
+ * Title: Catching any control tag the back end missed before it reaches the screen
+ *
+ * Purpose: The model writes a couple of tags into its own reply that are only meant for the
+ * plugin to read — a status line wrapped in `<bonsai-status>`, and a strategy-branch marker —
+ * and those are supposed to be removed by the back end before the reply is ever shown. This file
+ * is the safety net for when that removal is missed, most often on a reply that continues across
+ * more than one turn: it strips both kinds of tag from whatever text is about to be displayed,
+ * including a tag that is still only half-written because the reply was cut off mid-stream.
+ *
+ * Used for: `buildAnswerBubbleElement` and transcript rendering, as a last check before text
+ * reaches the screen.
+ *
+ * Solves: without this, an interrupted or missed removal on the back end could show raw tag text
+ * like `<bonsai-status>` in the middle of an otherwise normal-looking reply.
+ *
+ * Does not: read these tags for anything. Acting on the status tag is the back end's job, and it
+ * is supposed to happen before the reply is even saved; by the time this file sees the text, the
+ * tag is only ever being thrown away.
+ *
+ * Gotchas:
+ *   - A half-typed opening tag — the reply was cut off right in the middle of writing
+ *     `<bonsai-status>` — is caught by matching what has arrived so far against that word,
+ *     letter by letter, starting from the last `<` in the text. It only counts as a tag in
+ *     progress once at least 4 of those letters match, so an unrelated `<` earlier in the text is
+ *     not mistaken for the start of one.
  */
 
 const BONSAI_STATUS_RE = /<bonsai-status>\s*[\s\S]*?<\/bonsai-status>/gi;

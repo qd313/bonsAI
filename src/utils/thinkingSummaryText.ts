@@ -1,18 +1,38 @@
 /**
- * Title: Thinking summary text helpers
- * Purpose: Sanitize backend-authored thinking copy and supply the pre-response placeholder.
- * Used for: useBonsaiAskOrchestration — the live Ask thinking line.
- * Solves: Lazy model openers reaching the UI, and an empty line during the submit round trip.
- * Does not: Compose blurb copy. Python owns every word — see bonsai_stream_tags.py.
+ * Title: Cleaning up the "thinking" line shown while an Ask is running
  *
- * This file used to mirror `compose_thinking_blurb`: six intent pools in two tones, four
- * hand-copied intent predicates, and a template picker. All of it is gone. Two composers keyed on
- * two different request-id spaces meant the opening line rewrote itself within the first poll, and
- * the hand-mirrored predicates had already drifted — `Why does Elden Ring crash on launch?`
- * classified as troubleshooting here and generic in Python, so the line could change intent pool
- * as well as template. The backend now returns the composed opener in the
- * `start_background_game_ai` response and the client renders it.
- * See docs/planning/06-thinking-blurbs-review.md § 2.1, § 2.2.
+ * Purpose: While an Ask is being answered, the screen shows a short line describing what the
+ * model is doing — "Thinking…", or something more specific once the back end sends it. This file
+ * cleans up that line if the model starts it with a throwaway filler word ("Yeah,", "Sure,",
+ * "Fine.") instead of getting straight to the point, and supplies the fixed placeholder text
+ * shown for the brief moment before the back end's own line arrives.
+ *
+ * Used for: `useBonsaiAskOrchestration` — the live "thinking" line shown while an Ask is running.
+ *
+ * Solves: a filler opener reaching the screen unedited reads as the model being flippant rather
+ * than helpful; and without a placeholder, the line would sit empty for the moment between
+ * pressing Ask and the back end's response arriving.
+ *
+ * Does not: decide what the line actually says. Every word of the real line is written by the
+ * back end (see `bonsai_stream_tags.py`); this file only cleans it up on arrival and fills the
+ * gap before it arrives.
+ *
+ * Gotchas:
+ *   - `THINKING_BLURB_PLACEHOLDER` is deliberately one fixed line ("Thinking…"), not one of
+ *     several picked at random. An earlier version picked a random opener for the placeholder
+ *     that could differ from the real line that replaced it, which read as the line changing its
+ *     mind rather than a placeholder finishing its job.
+ *   - `sanitizeThinkingSummary()` mirrors `sanitize_thinking_summary` in `bonsai_stream_tags.py`
+ *     and has to keep agreeing with it exactly, because the model's own status tag reaches the
+ *     screen as plain text and both run on that same text, one after the other.
+ *   - If cleaning up the line would leave nothing at all — the model's entire line was a filler
+ *     word with nothing after it — this shows the original, uncleaned line instead of a blank
+ *     one. A flippant-sounding line beats no line at all while an Ask is still running.
+ *   - This file used to also write the actual wording of that line itself, with several pools of
+ *     phrasing and hand-copied rules for choosing between them. That was removed after the
+ *     wording it guessed sometimes disagreed with the back end's own separate guess about the
+ *     same question, which could change the line's wording partway through a single reply. See
+ *     `docs/planning/06-thinking-blurbs-review.md` for the full account.
  */
 
 /**

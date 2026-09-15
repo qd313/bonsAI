@@ -5,6 +5,58 @@ pick up without rereading anything but this file.
 
 ---
 
+## 2026-09-14, phase 4 session 3: the Ask hook starts coming apart, and one step gets cancelled
+
+**Nothing a person using the plugin can see has changed.** 1,289 back-end tests and 1,187
+screen tests pass, the full gate is green including the build. Four commits.
+
+**The frozen shape paid for itself.** The Ask code hands back 52 things and now declares
+them. Lifting 129 lines of it into a hook of its own compiled first time, and that compiling
+*is* the proof all 52 survived. That was the whole reason for freezing it a day earlier.
+
+What came out: choosing the three question chips above the Ask box. It re-rolls on four
+different triggers that are not interchangeable, and none of it has anything to do with
+asking a question. The Ask file is 1,643 to 1,531 lines.
+
+**Splitting a hook has a second risk and it is now checked, not assumed.** The screen
+library matches these by the order they run in, not by name, so a block lifted out is only
+safe if the new one is called from exactly the spot the old block sat in. All 77 are now
+recorded and asserted.
+
+**The tool that checks that was wrong twice before it was right.** Both would have given a
+clean pass on a broken split:
+
+- It compared names only. Swapping two of the same kind leaves the name list identical while
+  changing which one holds which value. It now records what each one feeds as well.
+- Its pattern required the bracket to come straight after the name, so every one written with
+  a type in between was skipped in silence. It was reading 50 of 77 and reporting success on a
+  file it had not seen.
+
+**Step 5 is cancelled, and the reasoning is written up.** It was going to collapse the 48
+settings into one declaration, because adding a setting means editing five files. The five
+files are real; the danger they were assumed to carry is not. I added a made-up setting to
+one file and followed what complained: the build named the next missing file four times over,
+ending with the settings screen and a test, and then adding a key to the shared defaults file
+that neither language knew about failed three tests on each side. They are not five chances to
+get it wrong -- they are five steps in a queue, and the build hands you the next one.
+Collapsing them would remove that, and the repetition that costs most cannot be collapsed
+without making every settings screen redraw whenever any setting changes.
+
+**The entry point is under three thousand lines for the first time** (2,995, from 3,292 at the
+start of yesterday). Installing the knowledge base from a folder was the fourth thing to leave,
+and it split cleanly: every refusal now happens before a single file is touched, so its ten new
+tests never write anything.
+
+**The gate caught me twice this session and was right both times** -- a new function over sixty
+lines with no comment above it, and a new test file repeating its own setup. Fixed both rather
+than moving the baseline.
+
+**Left to do in phase 4:** more of the Ask hook if it is wanted -- the remaining blocks are
+tangled with each other, so each needs reading rather than lifting -- and the Deck check for
+the whole phase, which is the thing that actually matters now.
+
+---
+
 ## 2026-09-14, phase 4 session 2: the last seam, then code starts moving
 
 **Nothing a person using the plugin can see has changed.** 1,277 back-end tests and 1,187

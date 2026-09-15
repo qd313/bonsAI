@@ -1,9 +1,24 @@
 /**
- * Title: Ask mode definitions
- * Purpose: Speed / Strategy / Expert mode ids, labels, and accent color tokens for the Ask bar.
- * Used for: MainTabAskModeMenuPopover, unified Ask bar chip, and settings normalizers.
- * Solves: Shared visual and persisted vocabulary for inference mode selection.
- * Does not: Map modes to Ollama model lists — backend ask routing owns fallback chains per mode.
+ * Title: The three Ask modes: Speed, Strategy, Expert
+ *
+ * Purpose: Every question typed into the Ask bar goes out in one of three
+ * modes, picked from the small menu above the bar: Speed for a fast plain
+ * answer, Strategy for a walkthrough with branching choices, and Expert for
+ * the most thorough (and slowest) answer. This file holds the three mode
+ * names, and the colors used to tint the Ask bar, its chip, and the
+ * "thinking" outline so each mode has its own look.
+ *
+ * Used for: the Ask mode menu, the mode chip on the Ask bar, and the
+ * settings clean-up file that reads a saved mode back.
+ *
+ * Solves: one shared list of the three modes and their colors, so the menu,
+ * the chip, and the glow around the bar while it is thinking all agree on
+ * what color Speed (or Strategy, or Expert) is.
+ *
+ * Does not: decide which AI model actually answers a Speed vs. an Expert
+ * question, or how many models are tried before giving up. That list of
+ * fallback models lives on the computer or Deck running the AI, not here —
+ * this file only carries the mode's name and its color.
  */
 export type AskModeId = "speed" | "strategy" | "expert";
 

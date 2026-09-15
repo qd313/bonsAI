@@ -1,9 +1,27 @@
 /**
- * Title: Storage key constants
- * Purpose: localStorage keys and shared external URLs for plugin shell persistence.
- * Used for: index.tsx hydration, disclaimer/help dismissal flags, and default PC IP placeholder.
- * Solves: Prevents scattered magic strings for client-side persistence and support links.
- * Does not: Read or write storage — consumers own get/set and migration logic.
+ * Title: Names the plugin remembers things under, on this device
+ *
+ * Purpose: Some things the plugin remembers are kept on the device itself
+ * (in the browser storage Steam's panel runs on) rather than saved to the
+ * settings file — the last question typed, whether the welcome disclaimer
+ * has been dismissed, which tab to reopen on, which saved chat was open
+ * last. Each of those needs an exact, unchanging name to be stored and
+ * found again under. This file is that list of names, plus a couple of
+ * outside web addresses (the GitHub issues page, the Ollama project) used
+ * in more than one place.
+ *
+ * Used for: every place in the plugin that reads or writes one of these
+ * remembered values, and the plugin's own startup code, which reads several
+ * of them the moment the panel opens.
+ *
+ * Solves: a name used in two places has to be spelled identically in both,
+ * or the plugin would write under one name and read from another. Keeping
+ * every name in this one file instead of typing it fresh wherever it is
+ * needed is what keeps that from happening.
+ *
+ * Does not: actually read or write anything. Every name here is inert until
+ * some other file's own get/set code uses it — see the comment on each name
+ * for which feature it belongs to.
  */
 export const UNIFIED_INPUT_STORAGE_KEY = "bonsai:last-query";
 export const IP_STORAGE_KEY = "bonsai:pc-ip";

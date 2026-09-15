@@ -1,9 +1,28 @@
 /**
- * Title: Background Ask types
- * Purpose: TypeScript contracts for background Ask start/status payloads and related reply snapshots.
- * Used for: useBackgroundGameAi, bonsaiReplyReadyToast, and MainTab transcript state.
- * Solves: Shared typing between frontend polling and backend RPC response shapes.
- * Does not: Implement polling or RPC — see hooks and deckyCall utilities.
+ * Title: The shapes behind asking a question in the background
+ *
+ * Purpose: Asking bonsAI a question does not block the screen while the AI
+ * is thinking — the question is handed to the computer or Deck side to run
+ * in the background, and the panel checks back on it every so often until
+ * it is done, even if the panel was closed and reopened in the meantime.
+ * This file is the exact shape of the message that starts a question
+ * running (`BackgroundStartResponse`) and the shape of each check-back
+ * (`BackgroundRequestStatus`), plus a few related shapes: what a finished
+ * exchange looked like, an attachment that went with a question, and a
+ * follow-up chip waiting to be sent.
+ *
+ * Used for: the hook that starts a question and polls for its answer, the
+ * toast notification that tells the user their answer is ready if they have
+ * navigated away, and the Main tab's own record of the conversation.
+ *
+ * Solves: the code that starts a question and the code that polls for its
+ * answer are both describing the same two messages the computer or Deck
+ * side sends back — writing the shape once here means both sides of that
+ * back-and-forth agree on what fields exist.
+ *
+ * Does not: send anything, or poll for anything itself. These are just
+ * shapes; the hooks and call utilities elsewhere do the actual asking and
+ * checking.
  */
 import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
 import type { AppliedResult, StrategyGuideBranchesPayload, StrategyChecklistPayload } from "./bonsaiUi";

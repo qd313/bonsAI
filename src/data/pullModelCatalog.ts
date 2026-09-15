@@ -1,9 +1,28 @@
 /**
- * Title: Pull model catalog
- * Purpose: Curated Ollama model metadata for the fullscreen Pull Models picker and routing UI.
- * Used for: PullModelsModal, ModelRoutingOrderModal, and runtime overlay merge from JSON.
- * Solves: Offline fallback catalog with license class, use tags, groups, and human blurbs.
- * Does not: Query Ollama registry live — overlay JSON and installed tags refine availability at runtime.
+ * Title: The list of models the Pull Models screen can offer
+ *
+ * Purpose: The Pull Models screen lets the user browse and download AI
+ * models to run on their own computer or Deck. This file is the built-in
+ * list behind that screen: for every model, its Ollama download name, how
+ * big the download is, when it was released, its license and license class
+ * (open-source, open-weight, or neither), which group it belongs in ("Deck
+ * essentials", "More models", "Expert (large)", "Specialist"), what it is
+ * good at (chat, vision, OCR, strategy, coding), a 1-6 star Deck-fit rating,
+ * and a one-line description.
+ *
+ * Used for: the Pull Models screen itself, the model-order screen used to
+ * pick which model is tried first, and anywhere else that needs to know
+ * what a given Ollama tag is or what it is good for.
+ *
+ * Solves: one shipped, offline-safe list built into the plugin, so Pull
+ * Models still has something to show with no internet connection, or before
+ * a fresher list has ever been downloaded.
+ *
+ * Does not: fetch anything live, or stay perfectly current forever. A newer
+ * list can be downloaded from the computer or Deck side and laid over this
+ * one — adding, removing, or overriding individual entries — by
+ * `mergePullModelCatalog.ts`; this file is only the starting point that
+ * merge begins from.
  */
 export type PullModelLicenseClass = "foss" | "open_weight" | "non_foss" | "unknown";
 

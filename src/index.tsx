@@ -33,7 +33,7 @@
  *     exact props that tab's components need
  *          │
  *          ▼
- *     <Tabs> draws the tab strip and whichever tab's payload is on screen
+ *     <Tabs> draws the tab strip and whichever tab's props are on screen
  *
  * Used for: mounted once by Decky when the panel opens.
  *
@@ -49,16 +49,16 @@
  * backend side of everything this file wires up.
  *
  * How it works:
- * 1. Load every hook Content depends on: settings, the disclaimer and
- *    local-runtime gates, kids-lock, UI scale, chat slots, intent packs,
- *    voice input, and, centrally, useBonsaiAskOrchestration for the whole
- *    Ask flow.
+ * 1. Load every hook Content depends on: settings, the one-time disclaimer
+ *    and local-AI warning pop-ups, kids-lock, UI scale, chat slots, intent
+ *    packs, voice input, and, centrally, useBonsaiAskOrchestration for the
+ *    whole Ask flow.
  * 2. Track the handful of pieces of state that belong to Content itself
  *    rather than to any one hook: which tab is open, which chat slot is
  *    currently generating an answer, and a few refs used to survive a
  *    re-render or a remount without losing track of an in-flight question.
- * 3. Wire up session survival: a snapshot function that can describe the
- *    whole screen well enough to restore it, for when the panel closes and
+ * 3. Wire up session survival: a function that takes a copy of the whole
+ *    screen, detailed enough to rebuild it, for when the panel closes and
  *    reopens mid-question — and, the deliberate opposite of that,
  *    resetPluginSession and onClearAllPluginData, the two ways a session can
  *    be thrown away on purpose.

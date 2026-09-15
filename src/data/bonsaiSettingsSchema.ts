@@ -1,9 +1,35 @@
 /**
- * Title: Bonsai settings schema
- * Purpose: TypeScript types and default constants for persisted plugin settings shape.
- * Used for: usePluginSettings, RPC get/set settings, and bonsaiSettingsNormalizers coercion.
- * Solves: Single schema for capabilities, Ollama options, UI preferences, and character fields.
- * Does not: Validate at runtime alone — normalizers coerce unknown RPC payloads into this shape.
+ * Title: Every setting the plugin has, in one place
+ *
+ * Purpose: Everything a person can change in Settings, Permissions, and the
+ * Ollama tab — around fifty settings in all — is listed here exactly once,
+ * with its starting value and, for anything with limits (a slider, a number
+ * field), the smallest and largest value it can hold. Each setting appears
+ * under two names: the name the screen code uses (camelCase, e.g.
+ * `latencyWarningSeconds`) in `BonsaiSettingsSnapshotInput`, and the name the
+ * saved settings file on disk uses (snake_case, e.g.
+ * `latency_warning_seconds`) in `BonsaiSettings`. `settingsPayload.ts`
+ * translates one into the other.
+ *
+ * Used for: every place that reads or writes a setting — the settings hook
+ * that holds the current values while the plugin is open, saving and
+ * loading over the connection to the computer or Deck side, and the
+ * clean-up file (`bonsaiSettingsNormalizers.ts`) that makes sense of
+ * whatever a saved file actually contains.
+ *
+ * Solves: one list that both spellings, the default, and the legal range
+ * (if any) come from, instead of each of those living in whichever file
+ * happens to need it. Adding a new setting means adding one field here, and
+ * nowhere else has to duplicate its default or its limits.
+ *
+ * Does not: check that a value it is handed is actually legal.
+ * `BonsaiSettings` and `BonsaiSettingsSnapshotInput` are just shapes —
+ * TypeScript enforces that every field is present when a value is built, but
+ * nothing here stops a slider's default from being set past its own
+ * declared maximum, and nothing here cleans up a value that arrived from an
+ * old or hand-edited settings file. That clean-up is
+ * `bonsaiSettingsNormalizers.ts`'s job, done after a settings file is read,
+ * not while it is being described here.
  */
 import {
   DEFAULT_AI_CHARACTER_ACCENT_INTENSITY,

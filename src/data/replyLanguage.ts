@@ -1,9 +1,28 @@
 /**
- * Title: Reply language options
- * Purpose: Steam language codes, reply-language override ids, and dropdown builder helpers.
- * Used for: AboutReplyLanguageSection, i18n effective-lang resolution, and settings persistence.
- * Solves: Canonical locale list with follow-system and always-English special cases.
- * Does not: Translate plugin UI strings — see i18n keys and steamLanguages re-export barrel.
+ * Title: Which language the AI replies in
+ *
+ * Purpose: The About tab has a setting for which language the AI writes its
+ * answers in: "Follow system" (whatever language Steam itself is set to),
+ * "Always English", or one fixed language picked from a list of every
+ * language Steam supports. This file holds that list of Steam's languages,
+ * the two special choices, the English label shown for each in the
+ * dropdown, and the code that builds the dropdown itself (the two specials
+ * first, then every language sorted A to Z by its label).
+ *
+ * Used for: the reply-language dropdown in the About tab, working out which
+ * language a reply should actually come back in once "Follow system" is
+ * resolved to a real language, and the settings clean-up file that reads a
+ * saved choice back.
+ *
+ * Solves: one place holding every language code Steam itself uses, spelled
+ * exactly the way Steam spells them (lowercase, e.g. "schinese" for
+ * Simplified Chinese) — so a saved choice always matches a code Steam
+ * recognises.
+ *
+ * Does not: translate anything in the plugin's own screens — the plugin's
+ * own menus and labels stay in whatever language they are already written
+ * in. This only controls the language the AI is asked to write its reply
+ * in.
  */
 export const REPLY_LANGUAGE_FOLLOW_SYSTEM = "follow_system" as const;
 export const REPLY_LANGUAGE_ALWAYS_ENGLISH = "en" as const;

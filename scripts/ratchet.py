@@ -59,6 +59,9 @@ import warnings
 from pathlib import Path
 from typing import Callable, Optional
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from code_line_count import code_line_count  # noqa: E402 -- needs the path line above
+
 ROOT = Path(__file__).resolve().parent.parent
 SCRIPTS_DIR = ROOT / "scripts"
 RATCHET_JSON = SCRIPTS_DIR / "ratchet.json"
@@ -187,9 +190,27 @@ def _load_json(path: Path):
 
 
 def metric_files_over_400_lines():
+    """Files with more than 400 lines of actual code.
+
+    Counts code, not scroll length. The point of this number is "how much is
+    going on in this file, and should it be split up" -- and a file does not
+    become harder to understand because someone explained it well at the top.
+    Measuring it by total lines meant the opposite: on 2026-09-14 a worker
+    writing a header pushed a 364-line file over the limit and cut its own
+    explanation twice to get back under, with sixteen more files close enough to
+    the line to hit the same wall.
+
+    The total-line figure is still measured and reported as a note, because a
+    genuinely enormous file is worth knowing about whatever is filling it.
+    """
     files = fe_app_files() + be_app_files()
-    over = [f for f in files if _count_lines(f) > 400]
-    return len(over), None
+    over = [f for f in files if code_line_count(f) > 400]
+    over_raw = [f for f in files if _count_lines(f) > 400]
+    note = (
+        f"counting code only; counting every line including explanations it would be "
+        f"{len(over_raw)}"
+    )
+    return len(over), note
 
 
 # --------------------------------------------------------------------------- #

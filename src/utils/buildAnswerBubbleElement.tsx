@@ -1,9 +1,61 @@
 /**
- * Title: Answer bubble element builder
- * Purpose: Build the Focusable answer bubble React tree with chunks, streaming prep, and nav registration.
- * Used for: MainTabChatTranscript live and history turn rendering.
- * Solves: Unified markdown chunk layout, spoiler unwrap, and D-pad bubble navigation hooks.
- * Does not: Poll Ask status — see useBackgroundGameAi and buildTurnHeaderElement.
+ * Title: The reply bubble
+ *
+ * Purpose: Builds the bubble holding one answer from the AI — either one still
+ * arriving word by word, or a finished one read back from history. An answer is
+ * not drawn as a single block of text. It is cut into sections, and each section
+ * is a place the D-pad can stop, so a person can walk down a long answer instead
+ * of jumping past it. This file decides where those stops are, and what happens
+ * when someone presses past the top or bottom edge of the bubble.
+ *
+ * Used for: Every turn in the chat, live and from history, drawn by the transcript.
+ *
+ * Solves: One place that decides how an answer is cut up, so the live version and
+ * the history version cannot drift apart and leave the D-pad stopping in different
+ * places depending on when you look at the same answer.
+ *
+ * Does not: Ask anything, or wait for an answer to finish. It is handed the text —
+ * all of it, or as much as has arrived — and only draws it.
+ *
+ * How it works:
+ *
+ *     ┌─ the bubble ─────────────────────────────────┐
+ *     │  section 1                    <- a stop      │
+ *     │  section 2                    <- a stop      │
+ *     │  ...                                         │
+ *     │  last section                     [ copy ]   │
+ *     └──────────────────────────────────────────────┘
+ *            │ down                         ▲ right, from the last section
+ *            ▼                              │
+ *       the thumbs row, which is somebody else's file
+ *
+ * 1. `stripAssistantDisplayTags()` removes the marks meant for the program
+ *    rather than the reader.
+ * 2. Spoilers. If the person asked about the very thing being hidden, or has
+ *    said yes to spoilers, the covers come off: `unwrapAskedEntitySpoilerFences()`
+ *    for text that has finished arriving, and `shouldUnwrapSpoilerFence()` for a
+ *    cover still open mid-stream. Both are asked the same question on purpose, so
+ *    a spoiler is never masked while it arrives and then revealed the instant it
+ *    finishes — which looks like a flicker and gives the answer away anyway.
+ * 3. Cutting into stops. Finished text goes to `splitResponseIntoChunks()`.
+ *    Text still arriving goes to `renderStreamMarkdownStack()`, a different job
+ *    with its own note below.
+ * 4. Every stop registers itself by number through `registerAnswerStop()`, which
+ *    is how the D-pad finds it again later.
+ * 5. The edges. `moveDown()` and `moveUp()` handle movement inside the bubble and
+ *    then answer "not mine" at the ends, letting Steam move on to the next thing.
+ *    They deliberately do not move focus themselves — see the gotcha below.
+ *
+ * Gotchas:
+ * - The copy button lives outside the bubble and only draws inside it. In the tree
+ *   it is the bubble's next-door neighbour, so Steam scrolls it and steps onto it
+ *   like anything else; the stylesheet then pulls it up into the bottom-right
+ *   corner, and a spacer keeps the last line of text clear of it. Anyone reading
+ *   the picture above and expecting to find it nested inside will not.
+ * - Never move focus by hand here. Calling focus() straight from a section moves
+ *   the browser's idea of what is focused while Steam's own idea stays behind, and
+ *   the two disagreeing is the exact shape of bug this repo has lost three fixes
+ *   to. Return false and let Steam do the moving.
  */
 import React from "react";
 import { Focusable } from "@decky/ui";
@@ -143,6 +195,27 @@ function stopAttrs(
   } as Record<string, unknown>;
 }
 
+/*
+ * Cuts an answer that is still arriving into D-pad stops.
+ *
+ * In: the text so far, the two spoiler settings, the answer's key, and the
+ * movement handlers every stop shares.
+ * Out: a list of React nodes, one per stop, in the order they are drawn.
+ *
+ * Text arriving live cannot be cut the same way finished text is, because the
+ * last paragraph is still growing and a half-written code fence or table is not
+ * yet something that can be drawn. So the text splits three ways:
+ *
+ *     closed blocks   -> drawn normally, they are finished and will not change
+ *     a wait chip     -> shown when something is half-written, e.g. a code fence
+ *                        that has opened and not yet closed
+ *     the live tail   -> the last, still-growing paragraph
+ *
+ * What can go wrong: the stop numbers have to run 0, 1, 2 with no gaps, because
+ * the D-pad walks them by counting. The wait chip and the live tail never appear
+ * together today, and the numbering here still allows for both so that a change
+ * upstream cannot silently punch a hole in the middle of the sequence.
+ */
 function renderStreamMarkdownStack(
   body: string,
   spoilerMaskingEnabled: boolean,

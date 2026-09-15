@@ -131,6 +131,11 @@
       "role": ""
     },
     {
+      "path": "src/utils/buildAnswerBubbleElement.tsx",
+      "lines": 564,
+      "role": ""
+    },
+    {
       "path": "src/styles/sections/gamepadAndPullModels.ts",
       "lines": 551,
       "role": ""
@@ -168,11 +173,6 @@
     {
       "path": "src/data/bonsaiSettingsNormalizers.ts",
       "lines": 508,
-      "role": ""
-    },
-    {
-      "path": "src/utils/buildAnswerBubbleElement.tsx",
-      "lines": 491,
       "role": ""
     },
     {

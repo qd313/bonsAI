@@ -1,12 +1,76 @@
-"""Title: Decky plugin entrypoint
+"""Title: The plugin's front door
 
-Purpose: RPC surface, capability gates, and Ask orchestration entry for the bonsAI plugin.
-Used for: All React call() methods — settings, Ask, Ollama setup, media, capabilities.
-Solves: Single Decky Plugin class the loader discovers; delegates heavy work to py_modules services.
-Does not: Own Ollama HTTP or full Ask prompt assembly — see game_ai_request and ollama_ask_service.
+Purpose: This is the file Decky loads when the plugin starts, and the only
+back-end file the screen is able to talk to directly. Everything the plugin can
+do is a method on the single class here, and the screen calls those methods by
+name: read your settings, ask the AI a question, download a model, take a
+screenshot, start listening to the microphone. Very little of the real work
+happens in this file. Its job is to take whatever the screen sent, check it is
+allowed and makes sense, hand the work to a service next door, and turn what
+comes back into something the screen can read.
 
-Some Ask branches (sanitizer keywords, shortcut guidance, VAC check) finalize inside the RPC
-handler so the UI polling loop can observe ``completed`` immediately without a worker task.
+Used for: Every single thing the screen asks the back end to do.
+
+Solves: Decky needs exactly one class it can find and load. Keeping that class
+thin, with the real work in the services beside it, is what stops this one file
+turning into the whole program.
+
+Does not: Talk to the AI itself, or build the words sent to it -- that is the
+Ollama and game-request services. It does not store your settings either; it
+reads and writes them through the settings service.
+
+How it works:
+
+There are two ways to ask the AI a question, and the difference between them is
+the most important thing in this file:
+
+    the screen                        this file                    a service
+    ----------                        ---------                    ---------
+    ask_game_ai() ..................> wait for the whole     .....> run the
+      <---------- the answer <------- answer, then reply            request
+
+    start_background_game_ai() .....> start a task and       .....> run the
+      <---------- "started" <-------- answer straight away          request,
+                                                                    taking its
+    get_background_game_ai_status()                                 time
+      ......................> "still thinking"                        |
+      (asked again about once a second)                               |
+      <-------- the answer, once there is one <------------------------+
+
+The second one is what the plugin actually uses. An answer can take most of a
+minute, and a call that sat there that long would freeze the screen while it
+waited. So the question is accepted, a background task runs it, and the screen
+keeps asking whether it is done yet.
+
+One question at a time. The background state is shared, so a lock guards it and
+a second question arriving while one is in flight is turned away as busy.
+
+The path a question takes:
+
+ 1. `parse_ask_payload()` turns whatever shape the screen sent into plain values.
+ 2. Obvious refusals first: no question, or no address for the PC running the AI.
+ 3. Some questions never reach the AI at all. A few are commands the Deck
+    answers itself -- setting up a shortcut, checking an anti-cheat, a keyword
+    the safety check recognises. These finish here, inside the handler.
+ 4. The safety check reads the question and may block it outright, in which case
+    what happened is recorded so the Transparency screen can show it.
+ 5. Everything else goes to `run_game_ai_request()`, which is where the prompt is
+    built, the AI is called, and the reply is checked over.
+ 6. The answer is stored, and the next poll from the screen picks it up.
+
+Gotchas:
+ - The names of the public methods on this class ARE the contract with the
+   screen. The front end calls them as strings, so renaming one used to break
+   the plugin silently, with nothing failing until someone pressed the button.
+   That is why the method names are now generated into a type the front end has
+   to match: a typo fails the build instead of failing on the Deck.
+ - The commands that finish inside the handler (step 3) never start a background
+   task. They write a finished result straight into the shared state, so the
+   very next poll sees a completed answer. Without that they would look like a
+   question that was accepted and then never answered.
+ - Stopping a reply does not cancel anything directly. It sets a flag that
+   unblocks the network read that is sat waiting on the AI; the AI itself only
+   stops once that connection closes.
 """
 
 import asyncio
@@ -1548,6 +1612,29 @@ class Plugin:
         return True, None
 
     async def _start_custom_ollama_pull(self, pull_tags: list[str]) -> dict[str, Any]:
+        """Start downloading AI models onto the Deck itself.
+
+        In: the list of model names the person picked. Out: a small dictionary
+        saying whether the download was started, or why it was not.
+
+        "Accepted" means started, not finished. Downloads are gigabytes and take
+        many minutes, so this answers immediately and the screen watches the
+        progress separately. The steps:
+
+         1. Refuse unless running the AI on this Deck is switched on, since
+            there is nowhere to put the models otherwise.
+         2. Tidy the names, and refuse if nothing usable is left.
+         3. Ask Ollama's library which of the names really exist. If none do,
+            refuse and name a couple that would have worked -- a typed model
+            name is the usual reason to be here.
+         4. Only one download at a time: refuse as busy if one is running.
+         5. Start it in the background and answer straight away.
+
+        What can go wrong: if only SOME of the names are real, the bad ones are
+        dropped, a note is written to the log, and the rest download anyway. The
+        person is not told, so someone who mistypes one name of several gets a
+        successful-looking download that quietly skips it.
+        """
         ok_gate, gate_out = await self._require_local_ollama_on_deck()
         if not ok_gate:
             return gate_out or {"accepted": False, "reason": "local_off"}

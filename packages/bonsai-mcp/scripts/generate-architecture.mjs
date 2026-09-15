@@ -133,6 +133,75 @@ const FROM_RE = /\bfrom\s*["']([^"']+)["']/g;
 const DYNAMIC_RE = /\bimport\s*\(\s*["']([^"']+)["']\s*\)/g;
 const BARE_RE = /^\s*import\s+["']([^"']+)["']/gm;
 
+/**
+ * Blank out every comment, so an import line quoted inside one is not mistaken
+ * for a real import.
+ *
+ * A file header that explains what the file is for often needs to show an
+ * example -- `import icon from "./icon.svg"` -- and before this, the graph
+ * recorded that example as a real dependency on a file that does not exist.
+ * A made-up edge is not harmless: this graph is what the refactor checks for
+ * import loops, so a quoted example could in principle invent a loop and fail a
+ * check nobody could explain.
+ *
+ * Comments are replaced with spaces rather than deleted, so every character
+ * that is left keeps the position it had. That matters for BARE_RE, which
+ * anchors to the start of a line.
+ *
+ * This walks the text one character at a time instead of using a regex, because
+ * the thing that makes it correct is knowing when it is inside a string: a URL
+ * in quotes contains "//" and must not be treated as the start of a comment.
+ * Deliberately hand-rolled and dependency-free -- this file runs from the
+ * pre-commit hook and may not assume anything is installed.
+ */
+function blankOutComments(text) {
+  let out = "";
+  let i = 0;
+  while (i < text.length) {
+    const here = text[i];
+    const next = text[i + 1];
+
+    if (here === "/" && next === "/") {
+      while (i < text.length && text[i] !== "\n") {
+        out += " ";
+        i += 1;
+      }
+      continue;
+    }
+
+    if (here === "/" && next === "*") {
+      while (i < text.length && !(text[i] === "*" && text[i + 1] === "/")) {
+        /* Keep newlines: line numbers and line starts must not shift. */
+        out += text[i] === "\n" ? "\n" : " ";
+        i += 1;
+      }
+      out += i < text.length ? "  " : "";
+      i += 2;
+      continue;
+    }
+
+    if (here === '"' || here === "'" || here === "`") {
+      out += here;
+      i += 1;
+      while (i < text.length) {
+        if (text[i] === "\\") {
+          out += text[i] + (text[i + 1] ?? "");
+          i += 2;
+          continue;
+        }
+        out += text[i];
+        i += 1;
+        if (text[i - 1] === here) break;
+      }
+      continue;
+    }
+
+    out += here;
+    i += 1;
+  }
+  return out;
+}
+
 function resolveImport(spec, fromFile) {
   if (!spec.startsWith(".")) return null; // external package, not a graph node
   const base = path.resolve(path.dirname(fromFile), spec);
@@ -178,7 +247,7 @@ function generateImportGraph() {
   const unresolved = [];
 
   for (const file of files) {
-    const text = fs.readFileSync(path.join(REPO_ROOT, file), "utf8");
+    const text = blankOutComments(fs.readFileSync(path.join(REPO_ROOT, file), "utf8"));
     const specs = new Set();
     for (const re of [FROM_RE, DYNAMIC_RE, BARE_RE]) {
       re.lastIndex = 0;

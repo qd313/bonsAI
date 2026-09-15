@@ -1,9 +1,86 @@
 /**
  * Title: Pull models modal
- * Purpose: Full-screen picker to browse, filter, and pull Ollama models from the catalog.
- * Used for: Ollama / Settings flows via showModal — decky-plugin-studio preview and on-Deck QA.
- * Solves: Large catalog UI with D-pad focus graph separate from inline Settings rows.
- * Does not: Persist routing try-order — see ModelRoutingOrderModal.
+ *
+ * Purpose: The full-screen model catalog, reached from the Ollama tab's
+ * "Browse models…" button (or embedded inline inside the AI models hub).
+ * It lists every known model as a table you can filter, shows what is
+ * already installed and how much space it uses, lets you queue several
+ * models to download at once or type in any tag by hand, mark one as the
+ * model Ask actually uses, and remove an installed one.
+ *
+ * Used for: Opened from Ollama / Settings flows via showModal, and reused
+ * inline inside the AI models hub.
+ *
+ * Solves: A catalog too big to browse as a flat settings list gets a
+ * dedicated screen with a table, filters, and its own fully wired D-pad
+ * path through every row.
+ *
+ * Does not: Decide the order bonsAI tries installed models in when
+ * answering — see ModelRoutingOrderModal for that. This screen only
+ * installs and removes models, and can mark one as the current pick.
+ *
+ * How it works:
+ *
+ *     ┌─ Pull models ──────────────────────────────────────────┐
+ *     │ Installed N · X GB   Queue N · X GB   catalog/size src ↻ │
+ *     │ Custom model tag [______________]  [Pull]                │
+ *     │ Suggested    [chip] [chip] [chip] [chip]                 │
+ *     │ Filters:  [All] [Speed] [Vision] [Strategy] [Expert] …   │
+ *     │           [Installed only] [FOSS only] [Essentials only] │
+ *     │ ┌ table ───────────────────────────────────────────┐     │
+ *     │ │ Pull│Model      │Size│Date│Modes│Rating │Del      │     │
+ *     │ │  ✔  │tag…       │2GB │'24 │chat │★★★☆☆  │  X      │     │
+ *     │ │  ☆  │tag…       │…   │…   │…    │…      │         │     │
+ *     │ └────────────────────────────────────────────────────┘     │
+ *     │        Cancel                    Pull selected (N) · X GB  │
+ *     └──────────────────────────────────────────────────────────────┘
+ *
+ * 1. refreshInstalledAndMeta() runs on mount: refreshes the merged catalog,
+ *    tests the connection to this Deck's own Ollama to learn which tags
+ *    are already installed, and fetches live size metadata for every
+ *    catalog tag — all three in parallel, falling back to offline data on
+ *    any failure.
+ * 2. Tags are matched against the catalog (isTagInstalled(),
+ *    isCatalogModelTagInList()) and filtered — by fossOnly, the active
+ *    filter chip (entryMatchesFilter()), installedOnly, essentialsOnly —
+ *    into the grouped, sectioned table built by tableSections.
+ * 3. Pressing a row's star/checkmark either queues an uninstalled model
+ *    with toggleSelected() (confirming first for a large "stretch"
+ *    download, and for switching to Tier 2 if it is open-weight), or, for
+ *    an already-installed model, calls pinModelForAsk() to move it to the
+ *    front of the Ask try-order.
+ * 4. Its own X button calls confirmDelete(), which refuses to remove
+ *    whichever tag is actively answering Ask right now.
+ * 5. onPullSelected() sends every queued tag in one request, after the
+ *    same Tier 2 confirmation if the queue holds an open-weight model
+ *    under Tier 1; onPullCustomTag() is a separate one-off path for typing
+ *    in any tag by hand, validated before it is ever sent.
+ * 6. Every button on the table and the filter row wires its own
+ *    Up/Down/Left/Right by hand (rowNavHandlers() for table cells) so the
+ *    D-pad walks the grid in a fixed, predictable order instead of
+ *    Steam's automatic guess.
+ * 7. The whole panel renders two ways: as its own modal by default
+ *    (wrapped in ConfirmModal, with Pull selected/Cancel as its footer),
+ *    or, when embedded is true, as a bare panel inside another modal (the
+ *    AI models hub), reporting its own footer state up through
+ *    onFooterStateChange() instead of drawing one.
+ *
+ * Gotchas:
+ * - The "New" badge is tracked entirely in the browser's own storage,
+ *   since nothing on the backend ever records when a model was pulled.
+ *   The first time it ever runs it has to treat every already-installed
+ *   model as old rather than "just pulled," or a fresh install would badge
+ *   everything New for a month — see the long comment above
+ *   computeUpdatedPullRecord for exactly how that is avoided and what went
+ *   wrong on the Deck before it was.
+ * - A row's delete (X) button is deliberately kept out of Steam's normal
+ *   tab order (focusable={false}, tabIndex -1) and reached only by moving
+ *   Right off that row's select/star button, so pressing Down through the
+ *   list can never land on a destructive action by accident.
+ * - Cancel and Pull selected are Steam's own footer buttons in the
+ *   non-embedded modal, rendered outside this component's own DOM
+ *   entirely, so they are found by searching the page for a button with a
+ *   matching label (findModalFooterButton()) rather than by a ref.
  */
 import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type RefCallback } from "react";
 import { Button, ConfirmModal, Focusable, TextField, showModal } from "@decky/ui";
@@ -184,7 +261,23 @@ function entryMatchesFilter(entry: PullModelEntry, filter: PullModelFilterId): b
 }
 
 /**
- * Pass only to `showModal()` — `ConfirmModal` supplies Steam modal chrome.
+ * The whole screen. See "How it works" above for the flow. Pass to
+ * `showModal()` when embedded is false or omitted — ConfirmModal supplies
+ * Steam's modal chrome then. When embedded is true, render this directly
+ * inside a parent's own modal body instead, and read onFooterStateChange
+ * for what its footer should say and do.
+ *
+ * In: the tag Ask is actively using right now (so it can't be deleted),
+ * the current model policy tier and a callback to raise it to Tier 2,
+ * callbacks for nested-modal focus handoff, cancel, and "a pull was just
+ * accepted," and, in embedded mode, a callback that reports this screen's
+ * own footer state up to whatever is drawing the real footer.
+ * Out: the catalog table and its controls, either as a full modal or as a
+ * bare panel.
+ *
+ * What can go wrong: every backend call here (connection test, catalog
+ * metadata, pull, delete, pin) is wrapped so a failure shows a toast and
+ * clears its own busy flag rather than leaving a row stuck.
  */
 export function PullModelsModal(props: PullModelsModalProps) {
   const {

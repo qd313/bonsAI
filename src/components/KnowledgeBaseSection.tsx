@@ -1,9 +1,65 @@
 /**
  * Title: Knowledge base section
- * Purpose: Ollama tab UI for KB toggle, download/update/remove, and storage picker.
- * Used for: OllamaTab — offline RAG corpus management on Deck.
- * Solves: Isolates KB RPC calls and D-pad focus chain from other Ollama settings.
- * Does not: Run retrieval at Ask time — see knowledge_base_service on the Python side.
+ *
+ * Purpose: The "Knowledge base (offline)" panel on the Ollama tab. A
+ * toggle turns on grounding Strategy and troubleshooting answers with a
+ * downloaded set of offline strategy cards; below it, a status line and a
+ * button that reads Download, Update, or Downloading… depending on what is
+ * already installed, next to Cancel (while a download runs) or Remove
+ * (once something is installed). Starting a fresh download first opens a
+ * small picker for internal storage or an SD card.
+ *
+ * Used for: OllamaTab, directly below the connection section.
+ *
+ * Solves: One place for every knowledge-base action — download, update,
+ * cancel, remove, and picking where it lives on disk — with its own D-pad
+ * path in and out.
+ *
+ * Does not: Actually use the knowledge base when answering a question —
+ * that is knowledge_base_service on the Python side. This file only
+ * installs, updates, and removes the corpus on disk.
+ *
+ * How it works:
+ *
+ *     ┌─ Knowledge base (offline) ────────────────────┐
+ *     │ [ Use local knowledge base ]  toggle            │
+ *     │ status: Installed vX / Not installed             │
+ *     │   (+ nomic-embed-text hint/button when needed)   │
+ *     │ [ Download / Update ]   [ Cancel / Remove ]      │  <- two-button row
+ *     └────────────────────────────────────────────────────┘
+ *
+ * 1. refreshStatus() polls the backend for corpus status once on mount and
+ *    whenever ragCorpusVersion changes, then again every 1.5 seconds while
+ *    a download is running, stopping itself once the backend reports
+ *    done, failed, or cancelled.
+ * 2. Toggling "Use local knowledge base" only flips the setting — it does
+ *    not start a download by itself.
+ * 3. Pressing the primary button calls openStoragePicker() when nothing is
+ *    installed yet (choose internal storage or an SD card, then
+ *    startDownload()), or runUpdate() once a corpus is already installed.
+ * 4. The second button slot is whichever of three things fits the current
+ *    state: Cancel (cancelDownload()) while a download runs, Remove
+ *    (confirmRemove(), which asks first) once something is installed, or
+ *    nothing at all otherwise — deliberately, so the row always has at
+ *    least one focusable stop while a download is in progress.
+ * 5. An optional nomic-embed-text hint appears once the corpus is
+ *    installed and vectorized but the embedding model is not yet on the
+ *    Ask host; pullNomicEmbed() only offers a one-press fix when Ask is
+ *    routed to this Deck's own Ollama, since the pull command always
+ *    targets this Deck.
+ *
+ * Gotchas:
+ * - The version shown prefers whatever the status poll just reported over
+ *   the version this component mounted with, because nothing re-reads
+ *   settings.json into the frontend after an update finishes — the
+ *   ragCorpusVersion prop alone would go stale the moment Update succeeds.
+ * - A cancelled download still leaves the backend's error field set (it is
+ *   just the text of the exception that unwound the transfer), so a
+ *   cancellation gets its own neutral message instead of showing red as if
+ *   something failed.
+ * - Down from the toggle has to check whether the nomic hint's button is
+ *   showing before falling through to the action row — otherwise the
+ *   D-pad would skip straight over that button to Download/Update.
  */
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button, ConfirmModal, Focusable, PanelSection, PanelSectionRow, ToggleField, showModal } from "@decky/ui";
@@ -140,6 +196,20 @@ const RagCorpusStoragePickerModal: React.FC<StoragePickerModalProps> = ({
   />
 );
 
+/**
+ * The whole panel. See "How it works" above for the flow.
+ *
+ * In: whether the knowledge base is on and a setter for it, the corpus
+ * version the caller last knew about, the Ollama host address and whether
+ * it is this Deck's own local Ollama, callbacks for nested-modal focus
+ * handoff, and a handful of optional refs/Up-Down callbacks so neighbouring
+ * sections can hand the D-pad in and out cleanly.
+ * Out: the panel section described above.
+ *
+ * What can go wrong: every backend call here (download, update, cancel,
+ * remove, the nomic pull) is wrapped so a failure shows a toast and clears
+ * its own busy flag rather than leaving a button stuck disabled forever.
+ */
 export const KnowledgeBaseSection: React.FC<Props> = ({
   useLocalKnowledgeBase,
   setUseLocalKnowledgeBase,

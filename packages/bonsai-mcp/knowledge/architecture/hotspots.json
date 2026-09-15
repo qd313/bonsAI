@@ -21,6 +21,11 @@
       "role": ""
     },
     {
+      "path": "src/components/PullModelsModal.tsx",
+      "lines": 1479,
+      "role": ""
+    },
+    {
       "path": "src/hooks/useBonsaiAskOrchestration.ts",
       "lines": 1470,
       "role": ""
@@ -31,18 +36,13 @@
       "role": ""
     },
     {
-      "path": "src/components/PullModelsModal.tsx",
-      "lines": 1386,
+      "path": "src/components/OllamaWhereAiRunsSection.tsx",
+      "lines": 1397,
       "role": ""
     },
     {
       "path": "src/styles/sections/section-6.ts",
       "lines": 1345,
-      "role": ""
-    },
-    {
-      "path": "src/components/OllamaWhereAiRunsSection.tsx",
-      "lines": 1311,
       "role": ""
     },
     {
@@ -91,6 +91,11 @@
       "role": ""
     },
     {
+      "path": "src/components/KnowledgeBaseSection.tsx",
+      "lines": 839,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/screenshot_media.py",
       "lines": 803,
       "role": ""
@@ -101,18 +106,13 @@
       "role": ""
     },
     {
-      "path": "src/components/KnowledgeBaseSection.tsx",
-      "lines": 769,
-      "role": ""
-    },
-    {
       "path": "py_modules/backend/services/game_ai_request.py",
       "lines": 726,
       "role": ""
     },
     {
       "path": "src/components/SettingsTab.tsx",
-      "lines": 636,
+      "lines": 707,
       "role": ""
     },
     {
@@ -128,6 +128,11 @@
     {
       "path": "py_modules/backend/services/intent_pack_service.py",
       "lines": 581,
+      "role": ""
+    },
+    {
+      "path": "src/components/DeveloperTab.tsx",
+      "lines": 579,
       "role": ""
     },
     {
@@ -158,11 +163,6 @@
     {
       "path": "src/utils/settingsContracts.test.ts",
       "lines": 524,
-      "role": ""
-    },
-    {
-      "path": "src/components/DeveloperTab.tsx",
-      "lines": 522,
       "role": ""
     },
     {

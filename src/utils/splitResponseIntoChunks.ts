@@ -20,7 +20,8 @@
  * back together, up to about 900 characters — roughly half a screen's worth of the reply column
  * on the Deck — so a finished answer becomes a handful of D-pad stops rather than one per
  * paragraph. A single long paragraph with no natural breaks falls back to a length-based split
- * that looks for a sentence or word boundary to cut on, again never cutting inside a fence.
+ * that looks for a natural place to cut — the end of a sentence, or else a gap between two words
+ * — rather than cutting through the middle of one, again never cutting inside a fence.
  */
 /**
  * True when a line starts a GFM/Markdown code fence (``` or ```json).

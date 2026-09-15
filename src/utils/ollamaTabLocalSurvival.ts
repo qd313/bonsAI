@@ -1,7 +1,7 @@
 /**
  * Title: Remembering the Ollama tab across a panel close and reopen
  *
- * Purpose: Opening certain modals tears down and rebuilds the quick-access panel, which would
+ * Purpose: Opening certain modals closes and reopens the quick-access panel, which would
  * normally reset the Ollama tab to its starting state. This file remembers what that tab looked
  * like right before the panel closes — the connection status, the list of hosts found on the
  * local network, any discovery message, and whether the "install Ollama locally" menu was open —

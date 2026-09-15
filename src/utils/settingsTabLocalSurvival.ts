@@ -1,7 +1,7 @@
 /**
  * Title: Remembering the Settings tab's open menu across a panel close and reopen
  *
- * Purpose: Opening certain modals tears down and rebuilds the quick-access panel, which would
+ * Purpose: Opening certain modals closes and reopens the quick-access panel, which would
  * normally reset the Settings tab. This file remembers one thing about it — whether the AI
  * character's accent-intensity menu was left open — so it looks the same when the panel reopens
  * instead of resetting closed.
@@ -15,8 +15,9 @@
  * `usePluginSettings`'s own save path. This file only remembers whether one menu was open, and
  * only for as long as the panel stays open.
  *
- * How it works: this is a thin wrapper around `createTabLocalSurvival()`, giving it the Settings
- * tab's own snapshot shape (just the one on/off flag) and exporting tab-specific names for it.
+ * How it works: `createTabLocalSurvival()` does the actual remembering; this file only gives it
+ * the Settings tab's own snapshot shape (just the one on/off flag) and exports tab-specific
+ * names for it.
  */
 import { createTabLocalSurvival } from "./createTabLocalSurvival";
 

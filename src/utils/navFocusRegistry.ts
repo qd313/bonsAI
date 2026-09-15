@@ -28,7 +28,7 @@
  *     reply row, and each one was logged as a successful move.
  *   - 2026-09-04 (build 49241e7): the same mistake reappeared in a different row — the
  *     permission-hint row above the vac-check chat feature used a plain `.focus()` call
- *     (`focusDeckOwner`) instead of this registry, and hit a second problem at the same time: on
+ *     (`focusDeckOwner`) instead of this file, and hit a second problem at the same time: on
  *     a real Deck, none of these rows carry the `tabindex` attribute Steam is supposed to look
  *     for, so `focusDeckOwner`'s safety check — "add `tabindex="-1"` if the row does not already
  *     have one" — stamped it onto the wrong element and removed that whole row from Steam's list
@@ -51,8 +51,8 @@
  *     development-only double-render — and if a newer copy registers first and an older copy's
  *     cleanup then deletes unconditionally, the newer, still-visible copy loses its registration
  *     and nothing can move the highlight to it any more. When that happened, the code that hit it
- *     fell back to a plain `.focus()` across the same area boundary described above, which fails
- *     in exactly the way this file exists to prevent: the press is reported as handled, but
+ *     fell back to a plain `.focus()` to cross into a different area, the same failure described
+ *     above: the press is reported as handled, but
  *     nothing visibly moves.
  */
 

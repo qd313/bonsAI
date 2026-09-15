@@ -7,8 +7,8 @@
  * does. This file is a small shared shelf: the main panel publishes its current size choice here,
  * and a pop-up window reads it back so its own text and spacing match.
  *
- * Used for: `useUiScaleProfile` and `BonsaiModalScope`, the wrapper pop-up windows use to pick up
- * the current size.
+ * Used for: `useUiScaleProfile` and `BonsaiModalScope`, which pop-up windows use to pick up the
+ * current size.
  *
  * Solves: without a shared place to read the current size from, a pop-up window would show its
  * own text and spacing at the wrong size compared to the panel it was opened from.

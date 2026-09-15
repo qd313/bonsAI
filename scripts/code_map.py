@@ -1,20 +1,29 @@
 #!/usr/bin/env python3
 """Title: Code map generator
 
-Purpose: Write docs/code-map.md, one line per app file with its Title and
-Purpose header text, grouped by folder, so a reader can scan what every file
-is for without opening each one.
-Used for: `python scripts/code_map.py`, run by hand when headers change; not
-wired into the pre-commit hook (that only regenerates the import graph).
-Solves: There was no single place listing what every src/ and py_modules/
-file is for — only the headers themselves, spread across 300 files.
+Purpose: Write docs/code-map.md, one line per app file with its Title and the
+opening of its Purpose, grouped by folder, so somebody can find the file they
+want by scanning one page instead of opening three hundred.
+Used for: runs on its own in the pre-commit hook, so the map cannot fall behind
+the headers. `python scripts/code_map.py` refreshes it by hand.
+Solves: There was no single place listing what every file is for — only the
+headers themselves, spread across three hundred files.
 Does not: Check whether a header is missing or wrong — see
-scripts/check_headers.py for that. This script only reports what it finds.
+scripts/check_headers.py for that, which fails the build. This only reports
+what it finds.
+
+Gotchas: entries are trimmed to their opening sentences (`opening_of()`), and
+an entry ending in […] has more in the file. That trimming is the whole reason
+the map stays usable: headers are deliberately written at whatever length the
+file needs, and pasting all of them onto one page produced something nobody
+would read. If the map ever feels too thin, raise the two numbers above it —
+do not shorten a single header to fit this page.
 """
 
 from __future__ import annotations
 
 import os
+import re
 import sys
 import warnings
 
@@ -141,6 +150,47 @@ def escape_pipes(text: str) -> str:
     return text.replace("|", "\\|")
 
 
+# Where one entry in the map stops. A Purpose line is written for somebody
+# reading that file and can run to a full paragraph; an entry here is written
+# for somebody scanning 311 of them at once, and those are different jobs.
+SUMMARY_MIN_CHARS = 110
+SUMMARY_MAX_CHARS = 280
+
+# A full stop that ends a sentence: followed by a space and a capital letter, a
+# digit or an opening quote. This skips "e.g." and "i.e." because the letter
+# after the space is lower case, and skips a decimal point because there is no
+# space.
+_SENTENCE_END = re.compile(r"(?<=[.!?])\s+(?=[A-Z0-9\"'*])")
+
+
+def opening_of(purpose: str) -> str:
+    """The first sentence or two of a Purpose line, for the map entry.
+
+    Takes sentences until there are at least SUMMARY_MIN_CHARS, so a very short
+    opening sentence ("The plugin has two halves.") is not the whole entry, then
+    stops. Anything still over SUMMARY_MAX_CHARS is cut at the last space and
+    given an ellipsis. Returns the whole thing unchanged when it is already
+    short, and never returns an empty string for a non-empty input.
+    """
+    text = purpose.strip()
+    if len(text) <= SUMMARY_MIN_CHARS:
+        return text
+
+    out = ""
+    for sentence in _SENTENCE_END.split(text):
+        out = f"{out} {sentence}".strip() if out else sentence
+        if len(out) >= SUMMARY_MIN_CHARS:
+            break
+
+    if len(out) > SUMMARY_MAX_CHARS:
+        cut = out[:SUMMARY_MAX_CHARS].rsplit(" ", 1)[0]
+        return cut.rstrip(",;:-") + "…"
+
+    # Say so when there is more in the file, so a reader scanning the map knows
+    # this entry is an opening and not the whole of what the header says.
+    return out + (" […]" if len(out) < len(text) else "")
+
+
 def group_key(path: str) -> str:
     d = os.path.dirname(path)
     return d if d else "."
@@ -157,9 +207,11 @@ def render(files: list) -> str:
     lines.append("# Code map")
     lines.append("")
     lines.append(
-        "One entry per app file: the Title and Purpose lines from its header, grouped by "
-        "folder. A file with no entry under Purpose is missing a header line — "
-        "see `scripts/check_headers.py`."
+        "One entry per app file, grouped by folder: its Title, then the opening of its "
+        "Purpose. Headers are written at whatever length the file needs, so an entry "
+        "ending in […] has more in the file itself — open it rather than assuming this "
+        "is all it says. A file with no entry under Purpose is missing a header line; "
+        "see `scripts/check_headers.py`, which fails the build on one."
     )
     lines.append("")
 
@@ -173,7 +225,7 @@ def render(files: list) -> str:
                 lines.append(f"- **{name}** ({path}) — no header found.")
             else:
                 title_text = escape_pipes(title) if title else name
-                purpose_text = escape_pipes(purpose) if purpose else "(no Purpose line found)"
+                purpose_text = escape_pipes(opening_of(purpose)) if purpose else "(no Purpose line found)"
                 lines.append(f"- **{name}** ({path}) — *{title_text}*: {purpose_text}")
         lines.append("")
 

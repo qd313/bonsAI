@@ -1,0 +1,39 @@
+{
+  "artboards": [
+    {
+      "file": "Today.dc.html",
+      "x": 0,
+      "y": 0,
+      "w": 300,
+      "h": 360,
+      "title": "Today: the chip row in the dock, true size"
+    },
+    {
+      "file": "States.dc.html",
+      "x": 400,
+      "y": 0,
+      "w": 300,
+      "h": 620,
+      "title": "Today: every chip state"
+    }
+  ],
+  "annotations": [
+    {
+      "id": "note-today",
+      "x": 0,
+      "y": -270,
+      "w": 300,
+      "text": "The bottom of the Main tab as built, at true size. The column is 300 pixels wide.\n\nTwo chips side by side, 148 by 30 each, 4 pixels apart. Under them 12 pixels of space, then the question box, then the Ask button.\n\nEvery colour and size here was read out of the stylesheet on 2026-09-14. The answer above, the chip wording and the placeholder are made up to show shape."
+    },
+    {
+      "id": "note-states",
+      "x": 400,
+      "y": -270,
+      "w": 300,
+      "text": "Every state a chip can be in today, each at its real width.\n\nThe thing to notice: at rest a chip is a nearly invisible box. Its fill is 22 percent dark and its outline is white at 7 percent. Against the panel it barely separates, which is the whole reason for this piece of work.\n\nThe green is the default character colour. It changes with the chosen character, so anything drawn in green has to work in the other colours too."
+    }
+  ],
+  "launch": {
+    "view": "canvas"
+  }
+}

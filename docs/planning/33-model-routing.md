@@ -1,7 +1,7 @@
 # Plan 33: which model and effort to use for what
 
 **Status: POLICY since 2026-09-05 (D59, all five calls locked; Haiku is on a measured trial, § 4a).** The short form lives in
-[AGENTS.md § 3](../../AGENTS.md); this file is the evidence and the long form. A prompt-time hook hands every
+[AGENTS.md, 'Which model does which work'](../../AGENTS.md); this file is the evidence and the long form. A prompt-time hook hands every
 implementation kickoff the short table and asks for a gentle heads-up when the session is outside it; it never blocks.
 
 ## Executive summary (plain language)
@@ -26,7 +26,7 @@ Checklist for this plan:
 - ✅ Prompt-time reminder hook installed (§ 6)
 - ✅ Roadmap maintainer note added
 - ✅ Maintainer review (D59, 2026-09-05: table, orchestrator, lane scope and AGENTS.md placement locked)
-- ✅ Short form copied into AGENTS.md § 3
+- ✅ Short form copied into AGENTS.md, 'Which model does which work'
 - ✅ Bookkeeper helper and guard installed (2026-09-06, § 6)
 - ⬜ Haiku trial: ten lookups logged in § 4a, then keep or drop
 
@@ -256,6 +256,6 @@ by the main model running the session; the guard cannot move that.
 ## 8. Calls for the maintainer (D59)
 
 Answered in chat 2026-09-05: § 2 adopted as written (#1); Opus xhigh orchestrates bug and feature lane
-sessions (#2); lanes return code, tests and a report only (#3); the short form lives in AGENTS.md § 3 with
+sessions (#2); lanes return code, tests and a report only (#3); the short form lives in AGENTS.md, 'Which model does which work', with
 this file as the evidence (#5); Haiku 4.5 goes on a measured trial for read-only lookups, dropped if Sonnet
 has to step in (#4, § 4a).

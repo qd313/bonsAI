@@ -165,11 +165,15 @@
   },
   "doc_size_kb_agents": {
     "label": "Living doc size: neutral guide (AGENTS.md)",
-    "best": 31.36,
+    "best": 21.12,
     "target": 12,
     "start_2026_09_09": 9,
-    "direction": "higher_is_better",
-    "measured_by": "byte count of AGENTS.md, divided by 1024"
+    "direction": "lower_is_better",
+    "measured_by": "byte count of AGENTS.md, divided by 1024",
+    "advisory": true,
+    "advisory_reason": "the guide gains a paragraph whenever a new trap is learned, so it may drift up; the ceiling is what stops it ballooning back",
+    "ceiling": 24,
+    "definition_corrected_2026_09_15": "THE DIRECTION WAS BACKWARDS AND HAD TO BE FIXED. It read higher_is_better, because the guide started at 9 KB as a stub and the plan asked it to GROW to 12 KB when it absorbed the rules from the removed editor. It then grew to 31.36 KB and the check recorded that as the best-ever value, so from then on the guide was only allowed to get BIGGER -- the check would have failed the phase 6 rewrite for trimming it, which is the opposite of what anyone wanted. Same failure as the files-over-400-lines number: a measure that fights the work wins quietly. Now: lower is better, with a ceiling, like the roadmap and testing documents. THE TARGET OF 12 IS LEFT AS IT WAS AND IS NOT MET at 21.12, and it is a maintainer call whether to keep it: 12 was set when this file was a stub and before it carried the Steam Deck focus rules, the model routing table and the settings warning, every line of which was earned by a bug. Reaching 12 now means deleting some of that. The session that rewrote it recommends 20 as the honest target."
   },
   "live_docs_mentioning_cursor": {
     "label": "Live docs mentioning Cursor",

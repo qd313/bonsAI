@@ -35,7 +35,7 @@ KICKOFF = re.compile(
 )
 
 TABLE = (
-    "Routing table (AGENTS.md section 3; evidence in docs/planning/33-model-routing.md): "
+    "Routing table (AGENTS.md, 'Which model does which work'; evidence in docs/planning/33-model-routing.md): "
     "5-6 stars: Fable 5.1 max plans (decisions and lane briefs only), Sonnet 5 high lanes implement, Opus xhigh lands. "
     "3-4 stars: Opus xhigh plans and lands, Sonnet 5 high lanes implement when the cause is known. "
     "1-2 stars: Sonnet 5 high straight through, Opus xhigh reviews only if it touches focus or settings plumbing. "

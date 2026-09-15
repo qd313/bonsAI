@@ -1,163 +1,209 @@
 # bonsAI
 
-**bonsAI** is a [Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader) plugin that brings **self-hosted** AI chat to your Steam Deck Quick Access Menu (QAM). It talks to **Ollama** on your Deck or another machine on your home network. No paid cloud AI API is required for the main workflow: prompts and responses stay on hardware you control. Models can still hallucinate: treat answers as assistant output, not authority.
+**AI help on your Steam Deck, running on hardware you own.**
 
-> **Beta software!** AI answers can be wrong or incomplete and features may break with Steam/Decky/plugin updates. Verify anything important yourself. Review **Permissions** before enabling. **Strategy** spoiler hiding and **VAC** results are best-effort but not foolproof. When Steam reports parental controls locked, bonsAI turns high-impact **Permissions** off (Kids master lock) — **we do not filter what the AI says.** **Ollama on this Deck** can tax the system during games. **Power tips:** TDP suggestions are optional; applying limits via **Permissions → Adjust power limits (beta)** is advanced and may change in a future update. GPU clock lines are recommendations only. Check **QAM → Performance** before you change settings.
+bonsAI is a [Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader) plugin that puts an AI
+assistant in the Quick Access Menu — the panel that opens with the `...` button. It talks to
+[Ollama](https://ollama.com), which you run either on the Deck itself or on a PC on your home
+network. Your questions and the answers stay on your own machines. No paid cloud service is needed.
 
-**Kids master lock — cannot promise:** we do not filter AI output; this is a guardrail not a security boundary; we only know what Steam reports; if the signal fails, permissions stay as you set them; not a playtime/content/game blocker; no bonsAI PIN; only covers bonsAI.
+AI models make things up. Treat every answer as a suggestion, not a fact.
 
-![bonsAI v0.5.0 on Steam Deck — Main tab with preset chips and unified Ask bar](assets/readme-hero.png)
+![bonsAI on a Steam Deck — the Main tab, with preset chips and the Ask bar](assets/readme-hero.png)
+
+## Before you start: what this is and is not
+
+**This is beta software.** Answers can be wrong or incomplete, and a Steam, Decky or plugin update
+can break things. Check anything that matters yourself.
+
+**Read the Permissions tab before you switch anything on.** Everything that reaches outside the
+chat — your screenshots, your files, your microphone, your power settings — is off until you turn
+it on there.
+
+**Spoiler hiding and Steam ban lookups do their best and will sometimes be wrong.** Do not rely on
+either one.
+
+**Running the AI on the Deck itself will slow your games down.** It is sharing the same chip.
+
+**Power tips are suggestions.** The plugin can suggest a power limit, and can apply one if you allow
+it under Permissions, but that is an advanced feature that may change. Graphics clock speeds in
+replies are advice only — nothing is written to your hardware. Check QAM → Performance before you
+change anything.
+
+**About the kids' lock.** When Steam reports that parental controls are on, bonsAI switches its
+higher-impact permissions off. Be clear about what that does not do: **it does not filter what the
+AI says.** It is a guard rail, not a security boundary. It knows only what Steam tells it, and if
+that signal fails, your permissions stay exactly as you set them. It is not a playtime limiter, a
+content filter or a game blocker, it has no PIN of its own, and it covers bonsAI only.
 
 ## Quick start
 
-1. Install **[Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader)** on your Steam Deck
-2. Install **bonsAI** from the **[latest GitHub Release](https://github.com/qd313/bonsAI/releases)** — open **Decky** from QAM → Settings → Developer → install plugin from URL: [https://github.com/qd313/bonsAI/releases/latest/download/bonsAI.zip](https://github.com/qd313/bonsAI/releases/latest/download/bonsAI.zip)
-3. **Install Ollama and a model**
-  - **Deck**: **bonsAI → Ollama** → enable **Ollama on this Deck** → **Install Tier 1 essentials** `qwen2.5vl:3b` for chat + screenshots). Optional: **Install Tier 2 one-model multimodal** `gemma4:e2b-it-qat`)
-  - **LAN PC:** Install **[Ollama](https://ollama.com/download)**, then `ollama pull qwen2.5vl:3b` (optional: `ollama pull gemma4:e2b-it-qat`)
-4. Open **bonsAI** → **Ollama** → set **Where AI runs** to `http://127.0.0.1:11434` (same device) or `http://<PC-IP>:11434` (PC on your LAN) → **Main** → send a test message
+1. Install **[Decky Loader](https://github.com/SteamDeckHomebrew/decky-loader)** on your Steam Deck.
+2. Install bonsAI from the
+   **[latest release](https://github.com/qd313/bonsAI/releases)**: open **Decky** from the Quick
+   Access Menu → Settings → Developer → install plugin from URL, and paste
+   [the release zip link](https://github.com/qd313/bonsAI/releases/latest/download/bonsAI.zip).
+3. Get Ollama and a model running, whichever way suits you:
+   - **On the Deck:** open **bonsAI → Ollama**, switch on **Ollama on this Deck**, then
+     **Install Tier 1 essentials** (`qwen2.5vl:3b` — handles chat and screenshots). Optionally add
+     Tier 2 (`gemma4:e2b-it-qat`).
+   - **On a PC on your network:** install [Ollama](https://ollama.com/download), then run
+     `ollama pull qwen2.5vl:3b`.
+4. In **bonsAI → Ollama**, set **Where AI runs** to `http://127.0.0.1:11434` for the Deck, or
+   `http://<your-PC-IP>:11434` for a PC. Then open **Main** and ask something.
 
-**Uninstall note:** Removing bonsAI from Decky does **not** erase saved settings or permissions. Run **Settings → Advanced → Clear all data…** before uninstalling for a fresh install, or see [troubleshooting § Uninstall vs Clear all data](docs/troubleshooting.md#1b-uninstall-vs-clear-all-data-settings).
+Stuck on the words? There is a [short glossary](#glossary) below. For network, screenshot and
+permission problems, see [troubleshooting](docs/troubleshooting.md).
 
-Unfamiliar with **QAM**, **LAN**, or **Ollama**? See [Glossary](#glossary-quick) below. Network, vision, and permission setup: [docs/troubleshooting.md](docs/troubleshooting.md)
+**If you uninstall:** removing bonsAI from Decky leaves your settings and permissions on the device.
+To start completely fresh, run **Settings → Advanced → Clear all data** *before* uninstalling.
+[More on the difference](docs/troubleshooting.md#1b-uninstall-vs-clear-all-data-settings).
 
-## Glossary (quick)
+## Glossary
 
+| Word | What it means |
+|---|---|
+| **Ollama** | A free app that runs AI models on your own machine, on port `11434` |
+| **Model** | The thing that actually writes the answers. You download one with `ollama pull <name>` |
+| **Decky Loader** | The framework that puts plugins like bonsAI into Steam's menu |
+| **QAM** | Quick Access Menu — the panel the `...` button opens. Decky lives here |
+| **LAN** | Your home network. You need one if Ollama runs on a separate PC |
+| **Base URL** | The address bonsAI uses to reach Ollama, usually `http://127.0.0.1:11434` or `http://<PC-IP>:11434` |
 
-| Term             | Meaning                                                                                    |
-| ---------------- | ------------------------------------------------------------------------------------------ |
-| **Ollama**       | Free app that runs **LLMs** locally on port **11434** (default)                            |
-| **LLM**          | The model that generates text, pull with `ollama pull <name>`                              |
-| **Decky Loader** | Framework that injects **bonsAI** into Steam's **Quick Access Menu (QAM)**                 |
-| **QAM**          | **Quick Access Menu** — overlay opened with the `...` button, Decky lives here             |
-| **LAN**          | Your home network. Required when Ollama runs on a separate PC                              |
-| **Base URL**     | Address bonsAI uses for Ollama, usually `http://127.0.0.1:11434` or `http://<PC-IP>:11434` |
+## What you can do with it
 
+### Ask about the game you are playing
 
+Ask from the **Main** tab. Pick how it answers with the mode chip: **Speed** for a short answer,
+**Strategy** for game help, **Expert** for detail.
 
+- **Strategy mode** answers "how do I get past this" questions while holding spoilers back, offers
+  follow-up choices, and keeps a per-game checklist that remembers where you got to.
+- **Preset chips** above the Ask bar suggest common questions — battery, performance, controls,
+  things that have gone wrong. Tapping one fills in the question for you.
+- **It knows what you are playing.** The game's name is included with your question while a game is
+  running.
+- **Screenshots.** Attach one with the paperclip. Needs a model that can see images, and the
+  **Read game & screenshot context** permission.
+  [Setup](docs/troubleshooting.md#25-screenshot-vision-setup-v1).
+- **Talk instead of typing.** Voice input runs on the Deck itself. Switch on the microphone
+  permission, then install a voice model under **Settings → Voice input**.
+- **Give it a personality.** Optional character voices change the tone of the replies, with an
+  intensity dial in Settings.
+- **Your conversation is kept.** Past questions collapse into rows you can reopen. You can retry a
+  question, and rate an answer for your own reference. An answer keeps generating in the background
+  if you close the menu.
 
-## What you can do
+### Find a setting without hunting for it
 
+Type in the Ask bar to search Steam's and Decky's own settings, and jump straight to the screen you
+want. This needs no AI model at all.
 
+### Power and performance
 
-### Chat and game help
+The AI can suggest a power limit. If you allow it under **Permissions → Adjust power limits**, it
+can apply one — this is an advanced, beta feature. Graphics clock lines in replies are advice only.
+Always check QAM → Performance yourself.
 
-- **Ask** from the **Main** tab. Pick **Speed**, **Strategy**, or **Expert** on the mode chip
-- **Strategy mode**: "How do I beat this level?" type questions with spoiler-safe tips, multiple choice branching, and a per-game **checklist** that remembers progress
-- **Preset chips** above the Ask bar suggest common prompts (battery, performance, controls, troubleshooting, and more). Tap a preset to copy the question to the text area
-- **Game context**: The game title and Steam appID is included in your prompt when a game is running
-- **Screenshots**: Attach to your prompt (attach paperclip icon in the text area). Needs a vision model and **Permissions → Read game & screenshot context**. See [troubleshooting § Screenshot vision](docs/troubleshooting.md#25-screenshot-vision-setup-v1)
-- **Voice input**: Local voice-to-text via the mic button. To enable go to **Permissions → Voice input (microphone)** and install a whisper model under **Settings → Voice input**
-- **Character tone**: You can choose an optional character voice/tone that the AI will respond with. Adjust accent intensity in **Settings**
-- **Conversation history**: collapsible chat rows. **Retry same prompt** and thumbs feedback (local use only). AI reponses will **finish in the background** when you close QAM
+### Set up and manage models (the Ollama tab)
 
+- **Where AI runs** — the Deck, or a PC on your network.
+- **An install helper** for putting Ollama and a starter model on the Deck.
+- **Find PCs on your network** automatically, save them by name, test the connection, and tune how
+  long to wait before warning you about a slow reply.
+- **The models hub** — browse, download and delete models, choose how permissive the model policy
+  is, and see which model answered.
 
+Some networks need extra setup before the automatic search finds anything —
+[details](docs/troubleshooting.md#find-ollama-on-lan-mdns--optional).
 
-### Find settings faster
+### What it is allowed to do
 
-- Type in the Ask bar to **search Steam and QAM settings** and jump straight to a matching screen, no AI model required
-- Advanced: Settings may still show **Search intent packs** (offline alias import) — planned for simplification or removal
+Everything below is off until you allow it under **Permissions**: reading game and screenshot
+context, saving chats to the Desktop, applying power limits, voice input, and Steam ban lookups.
 
+- **Show details** on any reply shows what was sent and which model answered.
+- **Typed commands** work without any AI model: turning input cleaning off and on again, setting up
+  the controller shortcut, and the ban lookup.
+- **Saving to Desktop** writes questions and answers to `~/Desktop/bonsAI_logs/` when you allow it.
 
+**Tabs:** Main, Ollama, Settings, Permissions, About — plus an optional Developer tab you can switch
+on in Settings.
 
-### Power and performance (beta)
+### Rough edges
 
-- AI can suggest **TDP** limits. Optional **Permissions → Adjust power limits** lets the plugin apply TDP (advanced; may become suggestion-only later). Always verify in **QAM → Performance**
-- **GPU clock** lines in replies are **recommendations only**, not written to hardware
+A few controls are advanced, lightly used, and may be simplified or removed: the search alias packs
+in Settings, the reply-checking rules on the Ollama tab, and some of the finer permission toggles.
+They are listed here so their disappearing later is not a surprise.
 
+## What is coming
 
+Personal notes, easier reading from couch distance, a shortcut tile in the menu, and a knowledge
+base that runs on a PC. See the [roadmap](docs/roadmap.md#features). What has already shipped is in
+[the completed archive](docs/archive/roadmap-completed.md).
 
-### Setup and models (Ollama tab)
+## What you need
 
-- **Where AI runs** — Ollama on the Deck (`127.0.0.1:11434`) or a PC on your LAN
-- **Install Ollama on this Deck** wizard with Tier 1 / Tier 2 essentials pulls when you want local inference
-- **Find LAN** (mDNS) —  save **named hosts**, run a **connection test**, and tune slow-reply warnings and timeouts
-- **AI models** hub — policy tiers (FOSS-first default), browse/pull/delete models, and a short **model source** note on replies
-- Advanced: optional **Response verification** rules on the Ollama tab may be removed in a future cleanup
+- A Steam device running **Decky Loader**.
+- **Ollama**, reachable from the Deck — on the Deck, or on a PC on your network. bonsAI can install
+  and update it and its models for you.
+- At least one **text** model. A model that can see images is optional, and only needed for
+  screenshot questions.
 
-For **Find LAN**, the Ollama host may need **Avahi/Bonjour** publishing — see [troubleshooting § Find Ollama on LAN](docs/troubleshooting.md#find-ollama-on-lan-mdns--optional).
+## Where to run Ollama
 
-### Trust and control
+| Where | When it suits |
+|---|---|
+| **On the Steam Deck** | Works anywhere, no PC needed. Use `http://127.0.0.1:11434`. It shares the Deck's chip with your game, so both get slower |
+| **On a PC on your network** | Much faster, especially with a graphics card. Point bonsAI at `http://<PC-IP>:11434`. The PC has to accept connections from the network — set `OLLAMA_HOST=0.0.0.0` and open port 11434. [Details](docs/troubleshooting.md#2-network--communication-the-bridge) |
 
-- **Permissions** gated: read game & screenshot context, save chat/logs to Desktop, optional power-limit apply, voice input, and (beta) Steam ban lookup (`bonsai:vac-check`). Some toggles (e.g. open web links) may be simplified later. Steam Web API key lives under **Developer → Integrations** when the Developer tab is enabled
-- **Show details** on a reply: see what context and model path were used for that Ask
-- **Magic Ask commands** (no Ollama required for these): `bonsai:disable-sanitize` / `bonsai:enable-sanitize`, `bonsai:shortcut-setup-deck`, `bonsai:shortcut-setup-stadia`, and `bonsai:vac-check`
-- **Save to Desktop note**: Export Q&A to `~/Desktop/bonsAI_logs/` when **Permissions → Save files to Desktop** is on
+bonsAI does not run on the Steam Frame headset. To use it alongside one, run bonsAI on a Steam Deck
+on the same network and point it at the PC that streams your Frame games.
 
-**Tabs:** **Main · Ollama · Settings · Permissions · About** (+ optional **Developer** via Settings → **Show Developer tab** — logging, token streaming experiment, Steam Input jump).
+## Model policy
 
-## What's planned
+The **Ollama tab → AI models → Policy** setting decides how far bonsAI will fall back when the model
+you asked for is not there.
 
-Upcoming work includes user notes stash, couch-distance readability, native QAM shortcut tile, RAG on a LAN PC, and more — see **[docs/roadmap.md](docs/roadmap.md#features)**. Shipped feature detail: [docs/archive/roadmap-completed.md](docs/archive/roadmap-completed.md).
+| Tier | What it allows |
+|---|---|
+| **Tier 1** | Free and open models only. The default, and the recommended one |
+| **Tier 2** | Adds open-weight models such as the Gemma family |
+| **Tier 3** | Unlocks everything else on Ollama, after you explicitly unlock it |
 
-## Requirements
+Each reply can say which model wrote it. Licensing detail is in
+[troubleshooting](docs/troubleshooting.md).
 
-- Steam device with **Decky Loader**
-- **Ollama** reachable from the Deck (on the Deck or a PC on the LAN). You can locally install and update Ollama and its models from bonsAI
-- Download at least one **text** model. A **vision** model is optional (needed for screenshot asks)
+## A couple of things worth knowing
 
+**Input cleaning** is on by default and tidies your question before it reaches the model. You can
+turn it off with an exact typed command, but it is not recommended.
+[Why](docs/troubleshooting.md).
 
+**Open bonsAI faster** with a controller shortcut —
+[how to set it up](docs/troubleshooting.md#5-bonsai-shortcut-setup).
 
-## Where Ollama runs
+**The Developer tab**, switched on in Settings, adds detailed logging, an experiment that shows the
+answer as it is written, and a jump to the running game's controller settings.
 
+## Building it yourself
 
-| Where                 | When to use                                                                                                                                                                                                                                    |
-| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **On the Steam Deck** | Portable; use `http://127.0.0.1:11434`. Heavier CPU/VRAM load — may affect game performance                                                                                                                                                    |
-| **PC on the LAN**     | Much faster on a GPU. Point bonsAI at `http://<PC-IP>:11434`. PC must listen on the network (`OLLAMA_HOST=0.0.0.0`, firewall **TCP 11434**). Details: [troubleshooting § Network](docs/troubleshooting.md#2-network--communication-the-bridge) |
+Start with the [development guide](docs/development.md) — setup, the build and deploy scripts, and
+how the plugin is put together. If you are working on the code with an AI tool, read
+[AGENTS.md](AGENTS.md) first.
 
-bonsAI does not run on the Steam Frame headset itself. To use it alongside a Frame, run bonsAI on a Steam Deck on the same home network and point it at the PC that streams your Frame games (Base URL `http://<PC-IP>:11434`).
-
-
-
-
-## Go deeper
-
-**Model policy tiers** — **Ollama tab → AI models** controls how permissive model fallbacks are (Tier 1 FOSS-first default through Tier 3 beta unlock). Each reply can include a short model-source disclosure. See [Model policy tiers](#model-policy-tiers) below and [troubleshooting](docs/troubleshooting.md)
-
-**Input sanitization** — On by default; cleans Ask text before Ollama. Disable only via exact phrases `bonsai:disable-sanitize` / `bonsai:enable-sanitize` in the Ask field (not recommended). Details: [troubleshooting](docs/troubleshooting.md)
-
-**Input handling and logs** — After each Ask, Main can show what was sent vs sanitized. Optional verbose traces go to `~/Desktop/bonsAI_logs/` when **Permissions → Save files to Desktop** is enabled
-
-**Open bonsAI faster (beta)** — Controller Guide chord macro: [troubleshooting § Shortcut](docs/troubleshooting.md#5-bonsai-shortcut-setup)
-
-**Developer tab** — Opt-in under Settings for advanced logging, experimental token streaming, and Steam Input jump to the running game's controller config
-
-### Model policy tiers
-
-
-| Tier       | Default stance                                                                                   |
-| ---------- | ------------------------------------------------------------------------------------------------ |
-| **Tier 1** | FOSS-first model fallbacks (recommended default)                                                 |
-| **Tier 2** | Adds open-weight models (e.g. Gemma-class tags)                                                  |
-| **Tier 3** | Unlocks non-FOSS / beta AI models available on Ollama after explicit unlock in the AI models hub |
-
-
-Change tier on **Ollama tab → AI models → Policy**. Licensing and tag-level detail: [troubleshooting](docs/troubleshooting.md) and [development guide § Architecture](docs/development.md#architecture-at-a-glance)
-
-## Build from source
-
-Contributors: see **[docs/development.md](docs/development.md)** — Deck-first setup, build/deploy scripts, and architecture overview.
-
-More docs: [development.md](docs/development.md) · [testing.md](docs/testing.md) · [roadmap.md](docs/roadmap.md) · [CHANGELOG.md](CHANGELOG.md)
-
-## Documentation
-
-
-| Doc                                                       | Audience          | What it is                                                         |
-| --------------------------------------------------------- | ----------------- | ------------------------------------------------------------------ |
-| [troubleshooting.md](docs/troubleshooting.md) | Power users | GPU, network, vision, permissions, QAM, deploy edge cases |
-| [development.md](docs/development.md) | Contributors | Deck-first setup, build/deploy, architecture, hotspots |
-| [testing.md](docs/testing.md) | QA / contributors | Testing hub — automated vs manual Deck QA |
-| [roadmap.md](docs/roadmap.md) | Planning | Bugs, Verify, Features, Done (sorted by stars) |
-| [archive/reports/](docs/archive/reports/) | Maintainers | Security / FOSS review snapshots |
-| [archive/](docs/archive/) | — | Historical research, plans, completed-feature detail |
-
-
-
+| Document | Who it is for | What it covers |
+|---|---|---|
+| [troubleshooting.md](docs/troubleshooting.md) | Anyone stuck | Network, screenshots, permissions, the menu, deploy problems |
+| [development.md](docs/development.md) | Contributors | Setup, build and deploy, how it is put together |
+| [AGENTS.md](AGENTS.md) | Contributors and AI tools | How to work in this repo without breaking things |
+| [lessons-learned.md](docs/lessons-learned.md) | Contributors and AI tools | Traps this project has already fallen into |
+| [testing.md](docs/testing.md) | Testers | What is tested automatically, and what needs a real Deck |
+| [roadmap.md](docs/roadmap.md) | Anyone curious | Bugs, planned features, what is waiting to be checked |
+| [CHANGELOG.md](CHANGELOG.md) | Anyone | What changed in each release |
 
 ## Buy me a beer
 
-Support my Steam Sale habit — scan or tap:
+Supporting my Steam sale habit — scan or tap:
 
 [![Donate via PayPal](assets/qrcode.png)](https://paypal.me/quentind313)

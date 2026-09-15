@@ -1,9 +1,97 @@
-"""Title: Knowledge base service
+"""Title: Finding the right game notes for a question
 
-Purpose: On-Deck knowledge base retrieval (FTS5 + optional per-game vector recall, RRF-fused).
-Used for: game_ai_request when use_local_knowledge_base is enabled.
-Solves: Offline RAG context blocks without cloud dependencies.
-Does not: Build UI or manage KB download UI — see KnowledgeBaseSection and rag_corpus_download_service.
+Purpose: The knowledge base is a set of game notes kept on the Deck so the
+AI can answer from them instead of guessing -- a short write-up on a boss, a
+system, or a common problem, stored offline so it works without the
+internet. This file searches those notes for the ones that actually answer
+the question in front of it, works out which game they should even be
+searched within, and decides when nothing found is a good enough match to
+hand to the AI at all.
+
+Used for: Every Ask, when the knowledge base is turned on -- game_ai_request
+calls `retrieve_knowledge_context()` to get the block of notes to add before
+the question goes to the AI. `suggest_chip_candidates()` also reads this
+same corpus to build the suggested-question chips shown for the running
+game.
+
+Solves: A plain word search over a pile of notes finds a wrong-game boss
+with the same name, misses a paraphrase that shares no words with the note
+that actually answers it, and cannot tell "found something" from "found
+something that actually fits." This file layers a second, meaning-based
+search on top of plain keyword search, blends the two rankings together,
+and -- the part measured hardest and most recently -- refuses to attach a
+note at all when nothing in the pool is a real match, rather than stapling
+the closest wrong answer onto the reply.
+
+Does not: Draw the knowledge base screens, or manage downloading and
+installing the notes onto the Deck -- see KnowledgeBaseSection and
+rag_corpus_download_service. This file only searches a copy already
+installed.
+
+How it works:
+
+    your question, plus whichever game is running (or one you named)
+                                 |
+                                 v
+             should this search the notes at all, and about what kind of
+             thing -- strategy notes, or troubleshooting tips?
+             (`should_retrieve_knowledge()`)
+                                 |
+                +----------------+----------------+
+                |                                 |
+          strategy notes                   troubleshooting tips
+     (`_search_sections()`, scoped        (`_search_compat_patterns()`,
+      to the resolved game --              plus extra tips for whatever
+      `_resolve_game_id()`)                 topic the question is about)
+                |                                 |
+                +----------------+----------------+
+                                 |
+                    keyword search result: which notes
+                    share actual words with the question?
+                                 |
+                    meaning search, when it can run: which
+                    notes MEAN the same thing, even sharing
+                    no words at all? (`_vector_recall_sections()`)
+                                 |
+                                 v
+             the two rankings are blended into one
+             (`_fuse_cards_by_rrf()`)
+                                 |
+                                 v
+             does the strongest match actually clear the
+             "does this genuinely fit" floor?
+                    |                          |
+                   no                         yes
+                    |                          |
+            attach nothing,             trim to fit the size
+            say so plainly              budget (`_format_block()`),
+                                         hand to the AI
+
+Which game a note is searched within matters as much as the search itself:
+`_resolve_game_id()` tries, in order, the game Steam is actually running,
+then a name or nickname the corpus already knows for it, then, only as a
+last resort, a title the question itself names -- so an unrelated game
+running in the background can never win over one you actually named.
+
+Gotchas:
+ - The single most important thing this file does is know when to say
+   nothing. Early measurement found that a keyword search over a pile of
+   notes nearly always finds *something* -- ten strategy questions asked
+   about real games, including gibberish, attached a note to every single
+   one, among them three weapon notes offered up for a boss that does not
+   exist in that game. The floor comments on STRATEGY_MEANING_FLOOR and
+   COMPAT_MEANING_FLOOR record exactly how that number was chosen and what
+   it still lets through -- read them before changing either constant.
+ - Almost every constant near the top of this file (RRF_K, the relevance and
+   meaning floors, the vector recall settings) carries a long comment
+   explaining a real measurement behind its value, not a guess. Change one
+   only against a fresh measurement of its own, not a hunch -- the comments
+   say, in more than one place, why retuning one on instinct broke something
+   else last time.
+ - A note found only through meaning search, not keyword search, is not
+   automatically trusted more or less than one found by keyword -- the two
+   rankings are fused together (`_fuse_cards_by_rrf()`) rather than one
+   overriding the other.
 """
 
 from __future__ import annotations

@@ -1,9 +1,27 @@
-"""Title: Pull model catalog overlay
+"""Title: Downloading fresh hints for the Pull Models screen
 
-Purpose: Fetch and cache the living Pull Models recommendation overlay from upstream JSON.
-Used for: Pull Models UI grouping, license tags, and maintainer-published model hints.
-Solves: TTL disk cache, host allowlist, schema validation, and merge with local tag checks.
-Does not: Pull models or talk to Ollama directly — overlay metadata only.
+Purpose: The Pull Models screen groups AI models, shows their license, and
+gives a short blurb about each one. Those details go stale over time -- a new
+model comes out, a rating turns out to be wrong, a license changes -- so on
+top of what ships bundled with the plugin, this file also checks a small file
+the developers publish and update online, and folds anything new into what
+the screen shows. It is only fetched at most once a week and then kept in a
+cache, so most times the screen opens, no network call is needed at all.
+Used for: building the extra grouping, license and blurb information shown on
+the Pull Models screen, layered on top of whatever came bundled with the
+plugin.
+Solves: without this, fixing a wrong rating or adding a newly released model
+to the right group would need a whole new version of the plugin, instead of a
+small published file anyone can review.
+Does not: download or install an AI model itself, or talk to Ollama at all --
+this only fetches descriptive information about the models, never a model's
+own files. It also refuses anything that does not come from the one web
+address it expects, and anything larger than about 256 KB, so a tampered-with
+or broken file cannot smuggle in something unexpected.
+Gotchas: if the download fails for any reason -- offline, a bad reply,
+anything -- and there is no usable saved copy from a previous fetch either,
+the screen still gets a real answer back, just an empty one. A failed fetch
+never turns into an error shown on screen.
 """
 
 from __future__ import annotations

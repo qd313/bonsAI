@@ -1,9 +1,19 @@
-"""Title: Ollama connectivity helpers
+"""Title: Telling local Ollama from a network one
 
-Purpose: Resolve Ollama HTTP bases, loopback hosts, and CLI executable paths.
-Used for: Routing, embed/chat URL construction, and local-vs-remote Ollama detection.
-Solves: Normalized reachability checks shared across services and main RPC handlers.
-Does not: Perform HTTP requests or manage Ollama process lifecycle.
+Purpose: Ollama can run right on the Deck, or on another computer the Deck
+reaches over the network. This file answers the two questions that come up
+because of that: does a given address mean "this same machine", and if the
+plugin ever needs to run the `ollama` program itself, where on disk is it.
+Used for: deciding, before a request goes out, whether Ollama is local or
+remote -- which changes how a connection problem is worded to the user; and
+finding the `ollama` program on the Deck's disk when Decky's own list of
+program folders does not include the place it is usually installed.
+Solves: without this, "is this address the same machine" would be answered by
+copied-and-pasted comparisons wherever it came up, and the Deck's usual
+install location for `ollama` would need to be remembered in every place that
+looks for it.
+Does not: send anything over the network itself, or start or stop the Ollama
+program -- it only works out which address to use and where the program is.
 """
 
 import ipaddress

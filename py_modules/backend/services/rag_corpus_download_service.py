@@ -1,9 +1,36 @@
-"""Title: RAG corpus downloader
+"""Title: Downloading the knowledge base and putting it on disk
 
-Purpose: Download, verify checksums, and install the on-Deck knowledge base corpus.
-Used for: Knowledge Base settings download job and corpus install RPC progress reporting.
-Solves: Manifest fetch, threaded download with cancel, SQLite install, and log tail state.
-Does not: Run hybrid retrieval queries — see knowledge_base_service after install completes.
+Purpose: When someone chooses to install the offline knowledge base, this file
+does the actual work: it looks up where to download from, fetches a small
+manifest file listing what to download and the checksum each piece must
+match, downloads the pieces with progress reported back and a way to cancel
+partway through, decompresses them, checks every checksum along the way, and
+only then writes the result into place as the real installed knowledge base.
+Used for: the Knowledge base section's download button. The same install step
+is also reused by rag_corpus_local_install.py, for installing from a folder
+that is already on the Deck once a manifest is already sitting on disk.
+Solves: without a checksum checked at every step, a download that is cut off
+partway through, or damaged in transit, could still be installed, and would
+only show up as broken later -- deep inside a search that quietly finds
+nothing useful, with no clue why.
+Does not: run an actual knowledge base search once installed -- see
+knowledge_base_service for that. This file's whole job ends once the data is
+correctly on disk.
+
+How it works:
+  1. `fetch_remote_manifest()` downloads a small file listing what to fetch and
+     the checksum each piece must match, trying a second mirror if the first
+     is unreachable.
+  2. `install_corpus_from_manifest()` checks there is enough free disk space,
+     downloads each listed piece (skipping one already on disk whose checksum
+     still matches), decompresses the pieces into the real database file, and
+     checks that file's own checksum too before calling it done.
+  3. `run_rag_corpus_download()` is the version the download button actually
+     calls. It runs the two steps above in a background thread, so the
+     plugin's screen never freezes while a download is in progress, and keeps
+     writing progress -- a running log, a percentage, and whether it has been
+     asked to cancel -- into a shared dictionary that the screen checks
+     periodically.
 """
 
 from __future__ import annotations

@@ -1,12 +1,21 @@
-"""Title: Knowledge base install from a folder
+"""Title: Installing the knowledge base from a folder already on the Deck
 
-Purpose: Install a knowledge base from a folder already on the Deck, with no network.
-Used for: The Developer tab's local install, through one RPC method.
-Solves: Four ways this can be refused before any file is touched -- the Developer tab is
-        off, no notes file in the folder, a folder that is not allowed to be installed
-        into, and the install itself failing -- each with a message that says which.
-Does not: Download anything, or save settings. It says what should be saved; the caller
-          saves it, because settings belong to the plugin object.
+Purpose: The knowledge base can be installed without downloading anything, by
+pointing at a folder that is already sitting on the Deck's own disk. Given
+that folder, this file checks that it really holds a knowledge base (it has
+the notes file every real one carries) and that the place it would be
+installed to is allowed, and if both check out, puts it in place the same way
+a download would.
+Used for: the Developer tab's local-install button, through the one question
+the screen can ask the back end to do it.
+Solves: four different ways this can be refused before a single file is
+touched -- the Developer tab itself is off, the chosen folder has no notes
+file in it, the place it would install to is not allowed, or the install
+fails partway through -- and each one comes back with a message saying which.
+Does not: download anything over the network, or save the setting that
+remembers where it installed to. It works out what should be saved and hands
+that back; the caller actually saves it, because settings belong to the
+plugin, not to this file.
 
 Lifted out of main.py on 2026-09-14 with the decisions unchanged. It had no test of its
 own before the move; the part that decides has one now.

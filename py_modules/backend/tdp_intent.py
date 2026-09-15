@@ -1,9 +1,26 @@
-"""Title: TDP intent detection
+"""Title: Spotting "what's my power limit right now" questions
 
-Purpose: Classify Ask questions about TDP reads, changes, and recommendation parsing.
-Used for: Routing TDP-related local commands before or alongside Ollama Ask handling.
-Solves: Distinguish "what is my TDP" from set/recommend intents and parse JSON caps.
-Does not: Write sysfs or invoke steamos-priv-write — see tdp_service for hardware I/O.
+Purpose: The Ask box gets power-related questions in several shapes: "what's my
+TDP right now", "set my TDP to 12 watts", "what TDP should I use for this
+game". This file spots the first kind -- a plain question about the current
+power cap -- so the plugin can answer it directly from the Deck's own numbers
+instead of waiting on the AI model to reply. It also reads a proposed new power
+cap and clock speed back out of the model's own reply, and can remove that
+proposal from the words a person actually sees.
+Used for: deciding, before a question reaches the model, whether it is a
+"what is it right now" question the plugin can answer itself; reading a
+proposed new power cap out of the model's reply and keeping it inside the
+Deck's real limits; and cleaning that same proposal out of a reply's visible
+text once it has been used, so a person is not shown raw computer-readable
+text in the middle of a sentence.
+Solves: a plain "what's my TDP" question used to wait on a full model reply
+just to report a number the plugin already had. And without the last part, the
+model's raw suggestion -- a line that looks like `{"tdp_watts": 12, ...}` --
+could show up in the middle of a reply meant for a person to read.
+Does not: change the power cap itself or talk to the hardware -- see
+tdp_service for that. Recognizing a "what is it now" question is done by
+matching the wording, not by asking the model, so an unusually worded question
+may fall through to the model instead of being answered directly.
 """
 
 import json

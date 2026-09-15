@@ -1,9 +1,38 @@
 /**
  * Title: Main tab Ask bar focus helpers
- * Purpose: Programmatic focus hops between unified input, attach, avatar, preset chips, Ask, and mic controls.
- * Used for: MainTab D-pad graph and liveTurnFocusGraph cross-row navigation.
- * Solves: Reliable focus targets without document.querySelector across shadow roots.
- * Does not: Register Decky onMove* handlers — callers wire graph edges with these helpers.
+ *
+ * Purpose: A set of "jump the ring to this control" functions for the parts
+ * around the Ask bar: the question box, the paperclip, the character picture,
+ * the row of suggestion chips, the Ask button, the mic, and the Ask-mode
+ * button. Each one moves the D-pad's highlight to the named control and
+ * reports back whether it actually landed there.
+ *
+ *     preset chip row
+ *            ▲
+ *            │ Up
+ *            │
+ *     avatar ─Right─► question box ─Right─► Ask-mode button
+ *       │                  │
+ *       │ Down             │ Down
+ *       ▼                  ▼
+ *     paperclip        Ask (primary) button
+ *       ▲
+ *       │ Left
+ *       │
+ *     question box
+ *
+ * (The mic button also has a jump function here, but it is not one of the
+ * edges this file wires up itself — it is handed back for another file to
+ * connect where it needs it.)
+ *
+ * Used for: MainTab's D-pad wiring, and cross-row navigation elsewhere in the
+ * chat screen.
+ *
+ * Solves: Gives every caller one shared, tested way to find these controls,
+ * instead of each one writing its own search through the page for them.
+ *
+ * Does not: Wire up the D-pad's own move handlers on each control — callers
+ * take these functions and connect them to their own onMoveUp/onMoveDown/etc.
  */
 import React, { useCallback, useMemo } from "react";
 
@@ -17,6 +46,34 @@ export type MainTabAskBarFocusRefs = {
   presetCarouselHostRef: React.RefObject<HTMLDivElement | null>;
 };
 
+/*
+ * In: the refs pointing at the Ask bar's controls, and whether the AI
+ * character picture is even showing right now.
+ * Out: one jump function per control, plus two ready-made bundles of them
+ * (unifiedInputDeckNavHandlers, avatarDeckNavHandlers) that a caller can hand
+ * straight to a control's own onMoveUp/onMoveDown/onMoveLeft/onMoveRight.
+ * What can go wrong: a jump can simply fail to find its target — the control
+ * is not mounted yet, or not showing — in which case the function returns
+ * false and whoever asked for the jump falls back to its own next move.
+ *
+ * 1. focusUnifiedTextField() — into the question box. Tries Steam's own
+ *    focus transfer first, then falls back to a plain DOM search for the
+ *    frames before that transfer is ready, or for mouse and touch. See the
+ *    Gotchas note above this comment for why the DOM path is a fallback and
+ *    not the first choice.
+ * 2. focusAttachPaperclip() — the paperclip button in the corner of the
+ *    input.
+ * 3. focusAiCharacterAvatar() — the character picture, when it is showing.
+ * 4. focusFirstPresetChip() — up into the suggestion row above the Ask bar:
+ *    the still-open help chip if there is one, otherwise the first suggestion
+ *    chip, with the same take-Steam's-transfer-first approach as step 1.
+ * 5. focusAskPrimary() — the Ask button itself.
+ * 6. focusMicOrStop() — the mic / stop button in the input's other corner.
+ * 7. focusAskModeButton() — the button that opens the Ask-mode picker.
+ * 8. Bundle the question box's four directions and the avatar's two
+ *    directions into the two handler objects this hook returns, so a caller
+ *    can wire a whole control's D-pad moves in one step.
+ */
 export function useMainTabAskBarFocus(
   refs: MainTabAskBarFocusRefs,
   showAiCharacterChrome: boolean,

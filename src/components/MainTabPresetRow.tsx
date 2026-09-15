@@ -1,12 +1,22 @@
 /**
  * Title: Main tab preset row
- * Purpose: The suggestion row above the Ask bar: the help chip until it is dismissed, then the
- *          animated preset chips, plus the running-game join hints and the agent-suggestion chip.
- * Used for: MainTab, in the bottom dock, for quick prompt seeding.
- * Solves: Wires preset animation modes and Ask-mode preference without bloating MainTab shell, and
- *         gives the help chip the whole row (maintainer, 2026-09-01) instead of stacking it above
- *         the chips — one row of height either way.
- * Does not: Own carousel timing math — see MainTabPresetAnimatedChips and presets data module.
+ *
+ * Purpose: The row of suggestion chips sitting right above the Ask bar. Tap
+ * one and its text drops straight into the question box. Until a person
+ * dismisses it, this row shows a single "How to use bonsAI" help chip instead
+ * of suggestions; after that it hands over to the animated preset chips, and
+ * it can also show one extra chip: a hint offering to fold the running game
+ * into the question, or a suggestion the AI itself put forward.
+ *
+ * Used for: MainTab, in the row directly above the Ask bar.
+ *
+ * Solves: Keeps which preset animation is picked and which Ask mode is
+ * preferred wired up in one place instead of crowding the main screen file,
+ * and gives the help chip the whole row to itself rather than stacking it
+ * above the chips — the row stays the same height either way.
+ *
+ * Does not: Own the chips' own animation timing — see MainTabPresetAnimatedChips().
+ * The suggestion text itself comes from the presets data file, not from here.
  */
 import React, { useEffect, useRef, useState } from "react";
 import { Button } from "@decky/ui";
@@ -37,6 +47,30 @@ export type MainTabPresetRowProps = {
   presetSingleChip?: boolean;
 };
 
+/*
+ * In: the current list of suggested prompts, whether the help chip should
+ * still be showing, which animation style is chosen for the chips, whether an
+ * Ask is in flight, and the callbacks that fill in the question box and move
+ * focus into it.
+ * Out: the row itself — either the help chip, or the animated chips — plus,
+ * when the game surfaced one, an extra chip for a running-game hint or an AI
+ * suggestion.
+ * What can go wrong: see the long comment on askRestartToken below for a bug
+ * this file already worked around once, where a repeated set of suggestions
+ * left several chips unreachable.
+ *
+ * 1. Remember whether an agent-suggestion chip was recently on screen, so a
+ *    placeholder can hold its spot while a new answer is still arriving and
+ *    the layout does not jump around underneath it.
+ * 2. Track a restart token that bumps every time asking finishes, so the
+ *    chips' rotation timer restarts even when the new suggestions happen to
+ *    read exactly the same as the old ones.
+ * 3. Draw the row's host element. Inside it: the help chip while it has not
+ *    been dismissed, otherwise MainTabPresetAnimatedChips() with the current
+ *    suggestions and animation settings.
+ * 4. After that: an extra chip if the game handed one in, a same-sized blank
+ *    placeholder while one is expected but not here yet, or nothing.
+ */
 export function MainTabPresetRow({
   suggestedPrompts,
   showPluginHelpChip,

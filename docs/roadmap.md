@@ -332,6 +332,20 @@ replace it with a specific issue when one exists.
   marked done — trimming just those two saves about 31,000 tokens on every landing. The biggest single win is the locked
   decisions file at 89,000 tokens a read. Do them one at a time; each is its own small job.
 
+- ★★★ `[platform]` **The eleven long files, left long on purpose** — **OPEN, filed 2026-09-15 at the end of the
+  clean-up's reshape phase.** Nothing a person using the plugin would notice. The clean-up decided up front not to split
+  the plugin's main screen file or the big screen pieces this round, because each one is a day's careful work on code
+  that draws things, and a mistake there is visible. This entry is the promise that they were left on purpose rather
+  than missed, with today's sizes so nobody has to measure again. Screen side: the plugin's main file (1,709 lines),
+  the model download window (1,385), the where-the-AI-runs settings section (1,310), one style sheet (1,344), the
+  animated chips row (1,232), the chat transcript (1,221), the Ask bar (1,079), and a list of emoticons that is just a
+  list (1,023 — splitting that one would gain nothing). Back-end side, which the clean-up's plan did not name and which
+  is a judgement call worth a decision before anyone starts: the knowledge base service (2,092), the prompt builder
+  (1,571), voice transcription (1,294) and the AI service (1,270). **Two worked examples already exist** from this
+  phase: the question chips above the Ask box and the reply rating both came out of the Ask file as their own pieces,
+  each with a test written at the same time, and the order-of-hooks record is what made both safe. Do them one at a
+  time, each with its own Deck check. [Plan](planning/51-refactor-round-two.md).
+
 - ★★★ `[reply]` **Spy: a character who lies to you on purpose** — **OPEN, filed 2026-09-06 by the maintainer.** A new
   Team Fortress 2 character. Pyro's Heavy setting already gives bad advice because he is a stubborn arse; the Spy gives bad advice
   because he is clever and working for the other side. Sometimes he opens by claiming to be a different character instead. Same hard

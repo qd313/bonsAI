@@ -90,21 +90,21 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 
 - **AboutReplyLanguageSection.tsx** (src/components/AboutReplyLanguageSection.tsx) — *Reply language picker*: The dropdown on the About tab where you choose what language the AI writes its replies in. This is separate from Steam's own display language — you can run Steam in English and still have the AI answer in Spanish, or leave it on "follow system" so it always matches whatever…
 - **AboutTab.tsx** (src/components/AboutTab.tsx) — *About tab*: The About tab — what bonsAI is, a beta warning, the reply-language dropdown (its own file, AboutReplyLanguageSection), and links out to GitHub, the Ollama project, the bug tracker, and support. […]
-- **BonsaiChatSecondaryButton.tsx** (src/components/BonsaiChatSecondaryButton.tsx) — *Chat secondary button*: Decky Button wrapper for reply action rows with optional reply-stop focus registry.
+- **BonsaiChatSecondaryButton.tsx** (src/components/BonsaiChatSecondaryButton.tsx) — *The small button under an AI reply*: One of the small controls that sit under an AI answer — Helpful, Not really, Read aloud, Show details. This file draws the button itself: Steam's own button, made into a real D-pad stop, so a person can reach it with the controller and not just a mouse or touch. […]
 - **BonsaiDebugOverlay.tsx** (src/components/BonsaiDebugOverlay.tsx) — *Debug overlay HUD*: On-screen ring buffer of recent bonsAI debug ingest lines and mount counters.
 - **BonsaiModalScope.tsx** (src/components/BonsaiModalScope.tsx) — *Plugin look-and-feel wrapper for popups*: When the plugin opens one of Steam's own full-screen popups — the models hub, the pull-models list, and others — that popup is drawn outside the plugin's normal box on screen, so none of the plugin's usual styling reaches it on its own. […]
-- **BonsaiPluginShell.tsx** (src/components/BonsaiPluginShell.tsx) — *Plugin shell wrapper*: Root layout container that injects scoped bonsAI stylesheet and hosts the plugin subtree.
+- **BonsaiPluginShell.tsx** (src/components/BonsaiPluginShell.tsx) — *The plugin's outermost box*: The very first element the plugin draws — every tab (Main, Settings, Permissions, and the rest) is drawn inside this one box. […]
 - **CharacterPickerModal.tsx** (src/components/CharacterPickerModal.tsx) — *Character picker modal*: The full-screen picker for choosing your AI's roleplay character, reached from wherever "AI character" is opened in Settings or the Main tab. […]
 - **CharacterPropGlyph.tsx** (src/components/CharacterPropGlyph.tsx) — *Character prop glyph*: One small icon — a bat, a fedora, a sandwich, and so on — used as the picture for an AI character. It shows up tiny next to the Ask bar, as the avatar for whoever you are currently talking to, and a little bigger in the character picker where you choose who to talk to next. […]
 - **CharacterRoleplayEmoticon.tsx** (src/components/CharacterRoleplayEmoticon.tsx) — *Character roleplay emoticon*: Render preset or synthetic character avatars, as pixel grids or prop emblems, with an optional badge letter.
 - **ContextChipLadder.tsx** (src/components/ContextChipLadder.tsx) — *Context chip ladder*: The row of small colored chips that appears once you open Session context" above the chat, or inside a turn's own "Show details" panel — one chip per kind of extra material attached to a question (files read, a screenshot, remembered notes, developer info…). […]
-- **DesktopNoteSaveModal.tsx** (src/components/DesktopNoteSaveModal.tsx) — *Desktop note save modal*: ConfirmModal flow to name and save the last Q&A turn to ~/Desktop/bonsAI_logs.
+- **DesktopNoteSaveModal.tsx** (src/components/DesktopNoteSaveModal.tsx) — *Save this exchange to a Desktop note*: The popup that appears when someone chooses to save the current question and answer to a file. It asks for a file name, shows where the note will be saved and that new saves are added to the end of the file rather than overwriting it, and hands the name back once the person…
 - **DeveloperTab.tsx** (src/components/DeveloperTab.tsx) — *Developer tab*: The Developer tab, only visible once Developer Mode is turned on. It is for troubleshooting and testing bonsAI itself, not for changing how the AI answers: captured crash logs, which tab reopens the plugin, whether app activity gets written to Desktop as a log file, a Steam Web…
 - **DrgGlossaryTermChip.tsx** (src/components/DrgGlossaryTermChip.tsx) — *DRG glossary term chip*: One underlined word inside an AI reply, for a Deep Rock Galactic Survivor term the game does not explain well on its own (like "kiting"). […]
 - **KnowledgeBaseSection.tsx** (src/components/KnowledgeBaseSection.tsx) — *Knowledge base section*: The "Knowledge base (offline)" panel on the Ollama tab. A toggle turns on grounding Strategy and troubleshooting answers with a downloaded set of offline strategy cards; below it, a status line and a button that reads Download, Update, or Downloading… depending on what is…
 - **MainTab.tsx** (src/components/MainTab.tsx) — *Main tab shell*: This is the Main tab a person sees when they open bonsAI: the chat history above, and a dock below it holding the suggestion chips and the question box. […]
-- **MainTabAskModeMenuPopover.tsx** (src/components/MainTabAskModeMenuPopover.tsx) — *Ask mode menu popover*: Paint the Speed / Strategy / Expert mode picker anchored to the unified Ask bar chip.
-- **MainTabAttachMenuPopover.tsx** (src/components/MainTabAttachMenuPopover.tsx) — *Attach menu popover*: Paperclip menu offering screenshot capture or recent-screenshot attach actions.
+- **MainTabAskModeMenuPopover.tsx** (src/components/MainTabAskModeMenuPopover.tsx) — *The Speed / Strategy / Expert menu*: The small pop-up list that opens when someone taps the mode chip next to the Ask bar, letting them pick how the AI should answer: Speed, Strategy, or Expert. […]
+- **MainTabAttachMenuPopover.tsx** (src/components/MainTabAttachMenuPopover.tsx) — *The attach menu*: The small pop-up list that opens when someone taps the paperclip next to the Ask bar. It offers two things: close the menu and take a new screenshot, or attach a screenshot already on the system. […]
 - **MainTabBonsaiAiMarkdownChunk.tsx** (src/components/MainTabBonsaiAiMarkdownChunk.tsx) — *AI reply markdown renderer*: Turns one chunk of an AI answer's raw markdown text into the actual page — paragraphs, lists, code blocks, links — and handles two special cases along the way: a spoiler fence that a Strategy Guide answer can hide until it is tapped open, and, on DRG Survivor, turning a curated…
 - **MainTabChatTranscript.tsx** (src/components/MainTabChatTranscript.tsx) — *The chat transcript*: Everything below the Ask bar: the whole conversation in this chat — the finished questions and answers from before, and the one being asked right now or just finished — plus, underneath all of that, a short strip listing every turn and a button to save the chat to the desktop.
 - **MainTabPresetAnimatedChips.tsx** (src/components/MainTabPresetAnimatedChips.tsx) — *Preset animated chips*: Draws the row of suggestion chips above the Ask bar, in whichever of four styles the settings picked: fade (one chip fades out as the next fades in), carousel (chips slide in sideways from the right, like a ticker), static (a plain swap, no animation), or decode (each new chip's…
@@ -114,27 +114,27 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 - **ModelPolicyTierPanel.tsx** (src/components/ModelPolicyTierPanel.tsx) — *Model policy tier panel*: Three-button tier picker (open-source / open-weight / non-FOSS) with draft state hook.
 - **ModelRoutingAdvancedPanel.tsx** (src/components/ModelRoutingAdvancedPanel.tsx) — *Model routing advanced panel*: Advanced toggles for non-FOSS unlock and high-VRAM fallback routing in the models hub.
 - **ModelRoutingOrderModal.tsx** (src/components/ModelRoutingOrderModal.tsx) — *Model routing order modal*: The full-screen list reached from the Ollama tab's "Set text model try order" and "Set vision model try order" buttons. […]
-- **OllamaModelsHubModal.tsx** (src/components/OllamaModelsHubModal.tsx) — *Ollama models hub modal*: Tabbed fullscreen modal for model policy, browse/pull, and advanced routing settings.
+- **OllamaModelsHubModal.tsx** (src/components/OllamaModelsHubModal.tsx) — *The AI models screen*: The full-screen popup for everything about which AI models this plugin can use: choosing how open the model policy is, browsing and downloading models, and a set of advanced routing switches. […]
 - **OllamaReplyVerbositySlider.tsx** (src/components/OllamaReplyVerbositySlider.tsx) — *Reply verbosity slider*: Three-stop Deck slider for Caveman / Balanced / Detailed reply prose style.
 - **OllamaTab.tsx** (src/components/OllamaTab.tsx) — *Ollama settings tab*: The whole Ollama tab in Settings — where the AI's address lives, how it decides which model to use, and everything about how it replies. […]
 - **OllamaThinkingEffortRow.tsx** (src/components/OllamaThinkingEffortRow.tsx) — *Thinking effort row*: The row on the Ollama tab labeled "Thinking," where you choose how hard the AI reasons before it answers: Off, Brief, Balanced, or Deep. […]
 - **OllamaWhereAiRunsSection.tsx** (src/components/OllamaWhereAiRunsSection.tsx) — *Where AI runs section*: The "Where AI runs" panel at the top of the Ollama tab, where you choose whether the AI runs on this Deck itself or on a PC somewhere on your home network — and everything involved in setting that up: installing or updating Ollama on the Deck, picking a starting model bundle to…
-- **PermissionDenyAction.tsx** (src/components/PermissionDenyAction.tsx) — *Permission deny action*: Inline deny copy plus a focusable Open Permissions control for capability blocks.
+- **PermissionDenyAction.tsx** (src/components/PermissionDenyAction.tsx) — *"You need to turn this on" message and button*: The small message and Open Permissions button that appears wherever something is blocked because a permission is off — trying to browse screenshots, use the microphone, or read game logs, say. […]
 - **PermissionsTab.tsx** (src/components/PermissionsTab.tsx) — *Permissions tab*: The Permissions tab — the screen where you turn on the things the AI is allowed to touch: saving files to your desktop, looking up your Steam ban status, using the microphone, and reading game screenshots and Proton logs to help with troubleshooting. […]
-- **PluginHelpModal.tsx** (src/components/PluginHelpModal.tsx) — *Plugin help modal*: ConfirmModal wrapper showing quick-start instructions for new bonsAI users.
+- **PluginHelpModal.tsx** (src/components/PluginHelpModal.tsx) — *"Using bonsAI" popup*: The quick-start popup someone sees the first time they open bonsAI, or whenever they tap the "How to use bonsAI" suggestion chip. […]
 - **PullModelsModal.tsx** (src/components/PullModelsModal.tsx) — *Pull models modal*: The full-screen model catalog, reached from the Ollama tab's Browse models…" button (or embedded inline inside the AI models hub). […]
 - **ReplyCopyButton.tsx** (src/components/ReplyCopyButton.tsx) — *Reply copy button*: This is the Copy button under a finished reply, or the small icon in the answer bubble's own corner. Press it and the answer's visible text goes to the clipboard. […]
 - **SessionContextStrip.tsx** (src/components/SessionContextStrip.tsx) — *Session context strip*: The collapsed line above the chat transcript that reads "Session context (N turns) ▸". Pressing it opens a list with one row per turn that attached anything extra to what was actually sent to the AI — a screenshot, a log excerpt, a memory note. […]
 - **SettingsTab.tsx** (src/components/SettingsTab.tsx) — *Settings tab*: The Settings tab — screen size, whether the Ask bar remembers what you typed, story spoiler masking, how many suggestion chips show, voice input and voice reply settings, the AI's voice & personality picker, whether the Developer tab is visible, and two buttons for clearing…
 - **SettingsTabAccentIntensityMenuPopover.tsx** (src/components/SettingsTabAccentIntensityMenuPopover.tsx) — *Accent intensity menu popover*: Inline popover for AI character accent intensity (Light / Default / Strong / Unleashed).
-- **SettingsTabConnectionTimeoutSlider.tsx** (src/components/SettingsTabConnectionTimeoutSlider.tsx) — *Connection timeout slider*: Dual-thumb slider for latency warning and hard request timeout seconds.
-- **SettingsTabOllamaKeepAliveSlider.tsx** (src/components/SettingsTabOllamaKeepAliveSlider.tsx) — *Ollama keep-alive slider*: Discrete Deck slider for Ollama model unload delay (keep_alive duration presets).
+- **SettingsTabConnectionTimeoutSlider.tsx** (src/components/SettingsTabConnectionTimeoutSlider.tsx) — *Warning and timeout slider*: One slider track with two handles that set how long bonsAI waits on a slow AI request. The left, amber handle is the soft warning — past this many seconds, a "this is taking a while" hint appears while the question keeps waiting. […]
+- **SettingsTabOllamaKeepAliveSlider.tsx** (src/components/SettingsTabOllamaKeepAliveSlider.tsx) — *"Keep models loaded" slider*: A one-handle slider that sets how long an AI model stays loaded in memory after the last question, before it is unloaded to free up space for other things. […]
 - **SettingsTabUiScaleSection.tsx** (src/components/SettingsTabUiScaleSection.tsx) — *UI scale settings section*: The "UI scale" section on the Settings tab. Auto is on by default and quietly picks Handheld, Desktop, or Couch sizing based on your screen; turning it off reveals a slider so you can pick one of four sizes yourself, plus a button to jump back to automatic. […]
 - **SettingsTabUiScaleSlider.tsx** (src/components/SettingsTabUiScaleSlider.tsx) — *UI scale slider*: Three-stop Deck slider for Handheld / Desktop / Couch manual UI scale profiles.
 - **StrategyChecklistPanel.tsx** (src/components/StrategyChecklistPanel.tsx) — *Strategy checklist panel*: Toggle list for per-game strategy guide checklist items during a live turn.
-- **StreamFenceWaitChip.tsx** (src/components/StreamFenceWaitChip.tsx) — *Stream fence wait chip*: Show a pulsing status chip while streaming markdown is inside an open code fence or spoiler mask.
+- **StreamFenceWaitChip.tsx** (src/components/StreamFenceWaitChip.tsx) — *"Still writing…" chip*: A small pulsing status chip shown while an answer is still arriving and the AI is in the middle of something that should not be shown half-finished — a code block that has not been closed yet, or a spoiler-hidden section. […]
 - **VoiceInputSettingsSection.tsx** (src/components/VoiceInputSettingsSection.tsx) — *Voice input settings section*: The "Voice input" section on the Settings tab. Lets you choose which speech-to-text model powers the microphone button on the Ask bar (a faster, less accurate one, or a slower, more accurate one), shows whether the voice engine is installed and ready, and has a button to install…
-- **icons.tsx** (src/components/icons.tsx) — *Shared icon components*: Centralized custom SVG and react-icons wrappers sized for Decky tab and inline UI.
+- **icons.tsx** (src/components/icons.tsx) — *The plugin's icon set*: Every small icon drawn anywhere in the plugin, gathered in one file: the tab-title icons (a lock for Permissions, a gear for Settings, a bonsai tree for Main, a bug for Developer, the Ollama mark, a lowercase i" for About), the thumbs-up/down and copy icons on a reply, and a…
 
 ## src/components/deck
 
@@ -142,7 +142,7 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 
 ## src/context
 
-- **UiScaleContext.tsx** (src/context/UiScaleContext.tsx) — *UI scale React context*: Provide active UI scale profile, scope inline styles, and Apply remeasure token to descendants.
+- **UiScaleContext.tsx** (src/context/UiScaleContext.tsx) — *Passing the UI scale setting down to popups*: bonsAI has a UI scale setting that makes its own text and controls bigger or smaller. Every tab picks that setting up automatically because it is drawn inside the plugin's main box. […]
 
 ## src/data
 
@@ -265,7 +265,7 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 ## src/i18n
 
 - **catalog.ts** (src/i18n/catalog.ts) — *UI string catalog*: Per-language UI string tables with English defaults and partial translation fallback.
-- **keys.ts** (src/i18n/keys.ts) — *UI string keys*: Typed union and registry of bounded v1 UI localization keys.
+- **keys.ts** (src/i18n/keys.ts) — *The list of text bonsAI can show in another language*: bonsAI can show a handful of its own interface messages — "Ask is starting", a couple of toast titles, the reply-language picker's own labels — in the language a person has chosen, separately from whatever language the AI itself answers in. […]
 
 ## src/preview
 
@@ -275,7 +275,7 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 ## src/styles
 
 - **bonsaiScopeStylesheet.ts** (src/styles/bonsaiScopeStylesheet.ts) — *Scoped stylesheet builder*: Concatenate all bonsAI scope CSS sections into one injectable string for `.bonsai-scope`.
-- **settingsGlassButton.ts** (src/styles/settingsGlassButton.ts) — *Settings glass button tokens*: Shared React.CSSProperties for SteamOS-style glass row buttons in Settings/Ollama tabs.
+- **settingsGlassButton.ts** (src/styles/settingsGlassButton.ts) — *The frosted-glass button look*: The style two kinds of button share across the Settings and Ollama tabs — a soft, semi-transparent gradient with a thin light border, matching SteamOS's own look for a secondary action. […]
 
 ## src/styles/sections
 

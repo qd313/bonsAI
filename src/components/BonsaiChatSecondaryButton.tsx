@@ -1,9 +1,28 @@
 /**
- * Title: Chat secondary button
- * Purpose: Decky Button wrapper for reply action rows with optional reply-stop focus registry.
- * Used for: MainTabChatTranscript helpful/retry/details buttons in the 2×2 reply action grid.
- * Solves: Registers focus owners for column D-pad hops per replyStopRegistry policy.
- * Does not: Submit follow-up asks or stop streaming — parent onClick handlers own behavior.
+ * Title: The small button under an AI reply
+ *
+ * Purpose: One of the small controls that sit under an AI answer — Helpful,
+ * Not really, Read aloud, Show details. This file draws the button itself:
+ * Steam's own button, made into a real D-pad stop, so a person can reach it
+ * with the controller and not just a mouse or touch. When a caller passes
+ * an id, the button also adds itself to a shared list (replyStopRegistry) so
+ * other code can tell the D-pad to jump straight to "Helpful" or "Copy" by
+ * name, from anywhere else in the reply.
+ *
+ * Used for: The chat transcript's per-reply controls, drawn by
+ * MainTabChatTranscript.
+ *
+ * Solves: A plain HTML button placed inside a Focusable is not something the
+ * D-pad can land on directly. Every one of these reply controls needs the
+ * same fix, so it lives here once instead of being repeated at each call
+ * site.
+ *
+ * Does not: Decide what pressing the button does — the caller's own onClick
+ * owns that. Also does not lay the controls out as a grid: an older version
+ * of this header said the buttons sat in a "2x2 grid", which is no longer
+ * true — Retry now sits on the question bubble and Copy in the corner of the
+ * answer bubble; see replyStopRegistry.ts for where each control actually
+ * lives today.
  */
 import type { ReactNode } from "react";
 import { Button } from "@decky/ui";

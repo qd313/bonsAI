@@ -1,9 +1,23 @@
 /**
- * Title: Attach menu popover
- * Purpose: Paperclip menu offering screenshot capture or recent-screenshot attach actions.
- * Used for: MainTabUnifiedAskBar attach chip with anchor positioning on the unified input host.
- * Solves: Keeps attach actions out of the icon strip with explicit focus return to the paperclip.
- * Does not: Run media RPC or open the screenshot browser — parent handles selected action ids.
+ * Title: The attach menu
+ *
+ * Purpose: The small pop-up list that opens when someone taps the paperclip
+ * next to the Ask bar. It offers two things: close the menu and take a new
+ * screenshot, or attach a screenshot already on the system. It draws itself
+ * just below the paperclip and moves the D-pad ring onto its first row —
+ * skipping whichever one is greyed out — the moment it opens.
+ *
+ * Used for: The unified Ask bar, wherever the paperclip sits, on both the
+ * Steam Deck and desktop.
+ *
+ * Solves: Like the mode menu next to it, this has to float in exactly the
+ * right spot below a small icon inside a cramped row, so it is its own
+ * small popover, positioned by reading the paperclip's own on-screen
+ * position rather than relying on Steam's own menu placement.
+ *
+ * Does not: Take the screenshot or open the screenshot browser itself, and
+ * does not talk to the backend at all. It only reports which of the two
+ * actions was picked; the caller does the actual work.
  */
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { Button } from "@decky/ui";

@@ -1,9 +1,32 @@
 /**
- * Title: Connection timeout slider
- * Purpose: Dual-thumb slider for latency warning and hard request timeout seconds.
- * Used for: SettingsTab connection section with Deck D-pad focus wiring to adjacent rows.
- * Solves: Keeps warning and timeout reconciled while exposing both thresholds on one track.
- * Does not: Perform health checks or cancel in-flight RPC — only edits settings values.
+ * Title: Warning and timeout slider
+ *
+ * Purpose: One slider track with two handles that set how long bonsAI
+ * waits on a slow AI request. The left, amber handle is the soft warning —
+ * past this many seconds, a "this is taking a while" hint appears while the
+ * question keeps waiting. The right, blue handle is the hard timeout — past
+ * this many seconds, the question is given up on. The two handles cannot
+ * cross: moving one close enough to the other pushes the other one along
+ * with it, so the warning always fires before the timeout, never after.
+ *
+ * Used for: The Settings tab's connection section.
+ *
+ * Solves: Puts both thresholds on one shared scale instead of two separate
+ * number fields, so it is visible at a glance how close the warning sits to
+ * the actual cutoff.
+ *
+ * Does not: Check the connection or cancel a question that is already
+ * running — moving a handle only changes the two saved numbers; something
+ * else reads them the next time a question is asked.
+ *
+ * Gotchas: A handle does nothing with Left/Right by itself — press A first
+ * to put it into "editing" (its ring turns green), and only then do
+ * Left/Right nudge its value one step at a time. Without pressing A, Right
+ * on the warning handle and Left on the timeout handle instead jump the
+ * D-pad ring across to the other handle, so a person can reach either one
+ * without a dedicated row of its own. Dragging a handle with a mouse or
+ * touch always moves it straight to wherever it is dragged, regardless of
+ * that editing state.
  */
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { LATENCY_WARNING_STEP_SECONDS, MAX_REQUEST_TIMEOUT_SECONDS, MIN_LATENCY_WARNING_SECONDS, MIN_REQUEST_TIMEOUT_SECONDS, REQUEST_TIMEOUT_STEP_SECONDS } from "../data/bonsaiSettingsSchema";

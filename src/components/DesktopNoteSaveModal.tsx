@@ -1,9 +1,22 @@
 /**
- * Title: Desktop note save modal
- * Purpose: ConfirmModal flow to name and save the last Q&A turn to ~/Desktop/bonsAI_logs.
- * Used for: Main tab reply actions when the user exports a chat snippet to a Desktop markdown note.
- * Solves: Permission-gated filename entry with append-only path description copy.
- * Does not: Write files directly — parent RPC handles filesystem capability and append.
+ * Title: Save this exchange to a Desktop note
+ *
+ * Purpose: The popup that appears when someone chooses to save the current
+ * question and answer to a file. It asks for a file name, shows where the
+ * note will be saved and that new saves are added to the end of the file
+ * rather than overwriting it, and hands the name back once the person
+ * confirms.
+ *
+ * Used for: The chat transcript's reply actions, when someone exports one
+ * question-and-answer pair to a note on the Desktop.
+ *
+ * Solves: A small, single-purpose popup for the one piece of information
+ * this action actually needs — a file name — instead of folding it into a
+ * bigger settings screen.
+ *
+ * Does not: Write the file itself, or check whether saving to the Desktop is
+ * allowed. The caller does both: it owns the permission check and the
+ * actual save, and only tells this popup what to show above the name field.
  */
 import React, { useState } from "react";
 import { ConfirmModal, TextField } from "@decky/ui";

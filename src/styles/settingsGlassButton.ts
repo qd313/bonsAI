@@ -1,9 +1,23 @@
 /**
- * Title: Settings glass button tokens
- * Purpose: Shared React.CSSProperties for SteamOS-style glass row buttons in Settings/Ollama tabs.
- * Used for: Test connection, Browse models, KB actions, and other secondary controls.
- * Solves: One visual spec instead of duplicating gradient/border styles per component.
- * Does not: Own focus graphs or click handlers — consumers apply these style objects to Button.
+ * Title: The frosted-glass button look
+ *
+ * Purpose: The style two kinds of button share across the Settings and
+ * Ollama tabs — a soft, semi-transparent gradient with a thin light border,
+ * matching SteamOS's own look for a secondary action. There is also a red
+ * variant of the same look for a destructive action. Both are plain style
+ * objects, not components: whatever button uses them still owns its own
+ * click handling.
+ *
+ * Used for: Buttons like Test connection and Browse models, and other
+ * secondary actions on those two tabs.
+ *
+ * Solves: One shared look, defined once, instead of every button that wants
+ * this style copying the same gradient and border values and drifting apart
+ * over time.
+ *
+ * Does not: Decide what a button does when pressed, or how the D-pad reaches
+ * it — a caller applies one of these two style objects to its own Button and
+ * keeps everything else about that button as it already was.
  */
 import type React from "react";
 

@@ -1,9 +1,22 @@
 /**
- * Title: Ollama keep-alive slider
- * Purpose: Discrete Deck slider for Ollama model unload delay (keep_alive duration presets).
- * Used for: SettingsTab Ollama section with parent thumb ref for cross-row D-pad focus.
- * Solves: Maps ordered duration chips to a single-thumb DeckFocusSlider track.
- * Does not: Call Ollama or hot-reload models — value is persisted and sent on next request.
+ * Title: "Keep models loaded" slider
+ *
+ * Purpose: A one-handle slider that sets how long an AI model stays loaded
+ * in memory after the last question, before it is unloaded to free up space
+ * for other things. The handle snaps between a fixed set of preset lengths
+ * (instant, several minutes, hours, and so on) rather than any number in
+ * between — there is no in-between value to land on.
+ *
+ * Used for: The Settings tab's Ollama section.
+ *
+ * Solves: One shared slider control (DeckFocusSlider) reused here with a
+ * fixed list of duration presets instead of a free-form number field, since
+ * the value actually sent to the AI only ever takes one of those preset
+ * shapes anyway.
+ *
+ * Does not: Talk to the AI, or change what is currently loaded. Moving the
+ * handle only changes the saved setting; the new delay applies starting
+ * with the next question asked, not to anything already running.
  */
 import React, { useCallback, useMemo, useRef } from "react";
 import {

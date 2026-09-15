@@ -730,6 +730,12 @@ ones from this month are D81 to D88.
   format gate, the relevance floor, follow-ups searching the user's words, transparency matching what the model got, and
   the Developer kill-switch. Either one evening with pinned test chips, or close them as superseded by the rows that
   passed this week. Rows **KB-VARIANT-01**, **KB-FLOOR-01**, **KB-FOLLOWUP-01**, **KB-TRANSPARENCY-01**, **KB-KILLSWITCH-01**.
+- ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **VERIFY,
+  landed 2026-09-15, four commits, unit-tested, Deck rows owed.** A game known only by name now opens its box;
+  naming the boss first opens it on screen, in copied text and in read-aloud; a no-story game named in the question
+  gets the same relaxed prompt its risk chip already assumed; all three are plain text from the first streamed word.
+  Rows **STRAT-SPOIL-NAME-01**, **STRAT-SPOIL-FIRST-01**, **STRAT-SPOIL-TEXT-01**, plus the older **STRAT-SPOIL-DRG-01**
+  block. [Plan 54](planning/54-spoiler-rules-gaps.md).
 - ★★ `[KB]` **The new answer shape needs a read on the device** — **VERIFY, one of three read 2026-09-12.** The
   Portal 2 one came back clean: the note's advice starts straight after the character's opening line, 111 words, no
   warning line. Whether that reads as advice-first is your judgement, which is what this row is for. The Hades and
@@ -771,7 +777,6 @@ ones from this month are D81 to D88.
   Deck's model runs with a 4,096-token window and a Strategy question with cards already goes over it (now trimmed
   instead of dropped, see Done). Try 8,192 as a Developer experiment with a game running, recording memory and time to
   first token, before it becomes a setting. Agreed as "later, its own call". (D46)
-- ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **OPEN, found 2026-09-14, nothing built.** On an emulator shortcut like Doom 64, or when you type the boss name first ("wheatley fight"), the prompt is told not to fence — but if the model fences anyway the box stays shut, because the screen side only knows games by Steam ID and only understands two ways of naming a boss. The backend already works out both and just does not send them to the screen. Four gaps and the order to close them: [Plan 54](planning/54-spoiler-rules-gaps.md).
 - ★★★ `[KB]` **A troubleshooting question mostly never reaches the tips** — **OPEN, widened 2026-09-07.** Filed as
   "the tips don't use the words people type", which is true and is the smaller half. Measured 2026-09-07: **nine of ten
   ordinary problem sentences reach nothing at all** — *"my game keeps crashing"*, *"my game won't launch"*, *"black

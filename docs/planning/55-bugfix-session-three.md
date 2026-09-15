@@ -4,8 +4,8 @@ Written 2026-09-15, before any fix was started. The maintainer asked for a plan 
 what order, what runs side by side, how each fix is proven on the Deck, and what needs their decision.
 
 **Status 2026-09-15: answered, waiting for the maintainer's "go".** The answers are in § 8 and locked
-as **D104** in [maintainer-decisions-locked.md](../audit/maintainer-decisions-locked.md). One is still
-open: whether anyone else will be driving the Deck (unknown until the plan 54 session finishes).
+as **D104** in [maintainer-decisions-locked.md](../audit/maintainer-decisions-locked.md). All answered;
+plan 54 landed 2026-09-15.
 **Nothing in § 5 starts until the maintainer says go**, in a fresh session that reads this file and
 begins at block 0. **The maintainer has chosen to run it on Fable 5.1 at extra-high effort**, knowing
 the routing table asks for Opus here; § 4 says what follows from that.
@@ -31,10 +31,8 @@ Anything this session finds that needs their eyes or their finger goes on it.
   own screenshot tool is broken, so those two are the way. A recording is the only way to catch anything
   that moves for less than a round trip — the chip glow lasted a third of a second and a plain read
   missed it.
-- **Another session is finishing plan 54 in its own copy of the repo.** It has not committed yet: ten
-  files are changed in that copy. Four of them are files this session's fixes also need — the chat
-  transcript, the ask orchestration hook, the answer bubble builder and the Python request file. Lanes
-  that touch those wait for plan 54 to land (§ 5, wave 2).
+- **Plan 54 landed on experimental on 2026-09-15, in four commits.** The four files it shared with this
+  session's lanes are free again, so wave 2 can cut from the tip.
 - **Twenty-three entries sit in the bug list, plus nine open bugs in the knowledge-base section.**
   Three are accepted, two are design or measurement calls, two cannot be fixed by code, one is
   future-proofing, and two pairs share a cause. That leaves fourteen fixes that can be made this
@@ -219,7 +217,8 @@ The order:
    and **the five August knowledge-base rows** the roadmap says to verify or retire — run each, and say
    in its row whether it is still a real check or stale, so the maintainer can retire the stale ones.
 6. **Plan 54's rows**, if it has landed and deployed by then and they are still open (decided yes): the
-   three required Deep Rock rows, the streaming one, the two Hades guards, and its two new rows.
+   three required Deep Rock rows, the streaming one, the two Hades guards, and its three new rows
+   (**STRAT-SPOIL-NAME-01**, **STRAT-SPOIL-FIRST-01**, **STRAT-SPOIL-TEXT-01**).
 7. **The free-play sweep** on the Main tab with a long reply on screen: every stop highlighted and
    visible, both directions, using the rig's sweep tool if it does the job and a hand-walk if not.
 8. **The wipe**, last. **Pre-authorised (D104).** Back up the settings file, the saved chats and the
@@ -281,7 +280,7 @@ small.
 | 7 | **The Megaera fix needs a library rebuild and a point release installed on the Deck.** | **Yes.** One title and nothing else, the way the 7 September release did. |
 | 8 | **Games.** Several rows need the rig to launch and exit a game. Fine unattended? Which are installed? | **Fine, launch as needed.** Hades, Deep Rock Galactic: Survivor, Portal 2 and Black Mesa are all believed installed. Confirm each on the Deck before a row relies on it. |
 | 9 | **The five August knowledge-base rows** the roadmap says to verify or retire. | **Run them**, and say in each row whether it is stale. The maintainer retires the stale ones. |
-| 10 | **Is anyone else going to drive the Deck** while this runs? | **Not known yet.** Waits until plan 54's session has finished. The pass needs the Deck to itself; block 0 asks before the first press. |
+| 10 | **Is anyone else going to drive the Deck** while this runs? | **No.** Plan 54's session finished without touching the Deck. The pass has the device to itself unless the maintainer says otherwise; block 0 still asks before the first press. |
 | 11 | **Which session runs this?** | **A fresh session on Fable 5.1 at extra-high, by the maintainer's choice.** The table says Opus for this; the maintainer knows and chose Fable anyway. It reads this file and starts at block 0 when they say go. What follows from the choice is in § 4. |
 
 ## 9. Things to bring to your attention
@@ -289,8 +288,7 @@ small.
 - **The guide and the roadmap contradict each other** about the ring being unowned when the panel opens.
   Decided: the device settles it (question 3). Whichever wins, the other document has to change, and
   that edit is part of landing lane C.
-- **Plan 54's copy has ten changed files and no commits.** "Finishing up" means mid-work. Nothing here
-  touches that copy. Wave 2 depends on it, and the whole session waits for the maintainer's go.
+- **Plan 54 landed 2026-09-15; wave 2 is unblocked.**
 - **A new lesson landed in the lessons file today from another session:** removing old copies of the
   repo with the git command deleted part of the main checkout's packages, because each copy links to
   them. Rule 11 in § 7 carries it. Whoever runs this session must not clear up copies on the way out.
@@ -313,6 +311,8 @@ Written as work lands.
   locked as D104; only the exclusive Deck window is still open. The settings-list refactor is out for
   now, and the session will run on Fable at extra-high by the maintainer's choice. Nothing built, nothing
   pressed, nothing deployed. Plan 54's session was still mid-work in its own copy.
+- **2026-09-15 — plan 54 landed, wave 2 unblocked.** The exclusive-Deck question is answered too: plan
+  54 finished without touching the device, so this pass has it to itself. Nothing else changed.
 
 ---
 

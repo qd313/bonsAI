@@ -62,6 +62,7 @@ was meant to have an answer now has one.
 | 7 Sep | ★★ | The "not in my notes" line | On a Strategy or Expert question about a covered game where nothing matched, one quiet line under the reply now says the answer is the model's own knowledge, not the notes |
 | 7 Sep | ★★ | Two bug fixes: raw computer text stopped appearing in a reply, and the panel stopped naming a game after you close it | An answer no longer ends with a line of code; the line under the question box catches up within a couple of seconds of exiting a game |
 | 7 Sep | ★★★ | Corpus release `2026.09.07` published (293 notes, 156 tips) | Nothing yet on the Deck — the release is live on both channels but the maintainer's device still runs the 6 September build |
+| 15 Sep | ★★ | The spoiler box now opens on a game known only by name and on a name-first boss question, and the prompt matches the risk chip for a game named in the question | Fewer harmless boss tips hidden behind a box, and no more chip saying low over a fenced answer |
 
 Chip work that touches the knowledge base also shipped in this window: corpus chips no longer vanish
 after 21 seconds, the rotation no longer favours the top three, and the pinned test-chip batches exist

@@ -159,4 +159,23 @@ plumbing.
   Send it. One guess to maintain, and the two sides cannot drift.
 - **C. Go on the lane?** Yes. One Sonnet lane, about a day, then one Deck evening.
 
-Filed as D103 in the decisions file. The lane has not started; nothing in code has changed.
+Filed as D103. Landed 2026-09-15 — see § 6.
+
+## 6. What landed (2026-09-15)
+
+| Commit | What a person notices |
+|---|---|
+| `f705cfd` | On a game the plugin knows only by name (an emulator shortcut such as Doom 64, no Steam ID), a spoiler box the model draws around routine boss tactics now opens as plain text instead of staying shut. The game's name is also saved with each turn, so a reopened chat shows the same thing. |
+| `7657f17` | When you name the boss the way people type it ("wheatley fight", "how do I deal with the exploders"), a box the model draws around that boss's tactics opens, on screen, in the copied text and in read-aloud, because the screen now uses the back end's own reading of what you named. Other story detail stays boxed. |
+| `9d2a590` | With nothing running, a question that names a no-story game ("drg survivor what class") gets the relaxed prompt the risk chip already assumed, so the answer is no longer fenced while the chip says low. The prompt still never says the game is running. Story games unchanged. |
+| `cd5db91` | With streaming on, the two cases above are plain text from the first streamed word, with no "Spoiler hidden until complete…" chip, the same as a Deep Rock question already is. |
+
+**What the plan missed.** A saved chat gets its game from the back end's own chat store, not from the
+screen. That meant the game's name, and the boss name it worked out, both had to be saved there too — or
+a reopened chat would shut the box again even after the live turn opened it. The streaming bubble also
+needed the back end to publish the named boss before the model call started, not after; otherwise the box
+showed the "hidden until complete" chip until the answer finished, even though the finished answer would
+have opened it.
+
+Gap 4's rows are owed and run in plan 55's Deck pass: three new rows, plus the six older rows already in
+the STRAT-SPOIL-DRG-01 block.

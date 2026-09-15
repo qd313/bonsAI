@@ -129,6 +129,16 @@ starts work outside this.
   a line goes to a log nobody reads, and the rest download normally. The screen says the download started and never
   mentions the one that went missing, so it looks like it worked — until that model is needed and is not there. It should
   say which name it could not find.
+- ★ `[ollama]` **A model too big for the Deck can be picked with no warning if the download list does not say how big it
+  is** — **OPEN, found while explaining the code 2026-09-15.** A model is only treated as too large when its name is on a
+  short hand-written list, or when the download list gives a size of 15 GB or more. A big model that is on neither — a new
+  one, or any whose size is missing from the list — reads as a safe choice. The person picks it and finds out by watching
+  it fail or crawl.
+- ★ `[reply]` **Attaching a screenshot puts a line of technical text at the bottom of the answer** — **OPEN, found while
+  explaining the code 2026-09-15.** Every answer to a question that carried an attachment ends with a line like
+  `[AttachDebug: requested=1, prepared=1, errors=0]`. It is added whether or not anything went wrong, nothing on screen
+  removes it, and no setting turns it off — the safety net that strips the model's own internal tags does not know about
+  this one. It should be behind the verbose-logging setting, or gone.
 - ★ `[ui]` **A new setting can quietly stop working in one place, because the list of settings is written out by hand
   several times over** — **OPEN, found while explaining the code 2026-09-14.** The settings code repeats its fifty-odd
   setting names in several separate places in the same file. Miss one and nothing breaks visibly; that setting just stops

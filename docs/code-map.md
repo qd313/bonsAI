@@ -299,7 +299,7 @@ One entry per app file: the Title and Purpose lines from its header, grouped by 
 - **askOrchestration.ts** (src/types/askOrchestration.ts) — *Ask orchestration contract*: The exact shape the Ask hook hands back, written down so it cannot drift.
 - **backgroundAsk.ts** (src/types/backgroundAsk.ts) — *Background Ask types*: TypeScript contracts for background Ask start/status payloads and related reply snapshots.
 - **bonsaiUi.ts** (src/types/bonsaiUi.ts) — *Shapes of things on the Ask screen*: Names the shape of several pieces of data the Ask screen passes around — an attached screenshot, a game-context marker, a branch picker or checklist parsed out of a Strategy answer, and, the largest one, a single finished question-and-answer pair as it is kept in the on-screen conversation history.
-- **rpcMethods.ts** (src/types/rpcMethods.ts) — *Back-end method names*: Every method the back end answers to, as a type, so a name that does not exist stops the build instead of failing on the Deck.
+- **rpcMethods.ts** (src/types/rpcMethods.ts) — *The list of things the screen is allowed to ask the back end for*: The plugin has two halves. The screen half runs in Steam's own interface; the back end half runs as a separate program and does the work that needs a real computer -- talking to the AI, reading files, running commands. The screen asks the back end for something by naming it, and this is the complete list of names it may use. Writing a name that is not on this list stops the build straight away.
 
 ## src/utils
 

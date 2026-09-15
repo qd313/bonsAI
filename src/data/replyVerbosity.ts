@@ -1,9 +1,23 @@
 /**
- * Title: Reply verbosity presets
- * Purpose: Caveman / Balanced / Detailed reply style ids, labels, and slider index helpers.
- * Used for: OllamaReplyVerbositySlider and bonsaiSettingsNormalizers persistence.
- * Solves: Typed verbosity enum with ordered chip labels for the three-stop settings slider.
- * Does not: Modify system prompts — backend injects verbosity guidance on ask requests.
+ * Title: How long the AI's replies are
+ *
+ * Purpose: A three-stop slider in the Ollama tab controls how long-winded
+ * the AI's answers are: Caveman (short, blunt, key points only), Balanced
+ * (the default, no particular instruction either way), and Detailed (more
+ * explanation, examples, and steps). This file holds the three stops, their
+ * labels, and the math that turns a slider position into one of the three
+ * (and back).
+ *
+ * Used for: the verbosity slider in the Ollama tab, and the settings
+ * clean-up file that reads a saved choice back.
+ *
+ * Solves: one shared list of the three stops and their order, so the slider
+ * and the settings clean-up file agree on what "Balanced" is and which
+ * direction the slider moves in.
+ *
+ * Does not: change the wording the AI is actually given. Choosing Caveman or
+ * Detailed only saves that choice; turning it into an instruction the AI
+ * follows happens on the computer or Deck side, when a question is sent.
  */
 export type ReplyVerbosityId = "caveman" | "balanced" | "detailed";
 

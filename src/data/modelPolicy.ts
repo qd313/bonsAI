@@ -1,9 +1,26 @@
 /**
- * Title: Model policy tiers
- * Purpose: FOSS / open-weight / non-FOSS tier ids, labels, and disclosure copy for model routing.
- * Used for: ModelPolicyTierPanel, Permissions tab, and settings normalizers.
- * Solves: Shared frontend vocabulary aligned with backend model source classification.
- * Does not: Classify individual Ollama tags — backend model policy service returns source_class.
+ * Title: The three model policy tiers
+ *
+ * Purpose: bonsAI limits which AI models it will fall back to, controlled by
+ * a three-step tier picker: Tier 1 "Open source only" (the safe default),
+ * Tier 2 "Also try open-weight models", and Tier 3 "Any installed model"
+ * (locked behind an extra confirmation). This file holds the three tier ids,
+ * their on-screen labels, and the paragraph shown under a reply explaining
+ * what kind of model answered it and what that license class means.
+ *
+ * Used for: the tier panel in Permissions, and the small disclosure line
+ * shown under a reply when the model that answered was not Tier 1.
+ *
+ * Solves: the tier panel, the short intro text shown on two different tabs,
+ * and the disclosure line under a reply all need to agree on what the three
+ * tiers are called and what each one promises — this is the one place that
+ * wording is written.
+ *
+ * Does not: decide which license class a given Ollama tag actually belongs
+ * to. That classification (foss / open_weight / non_foss / unknown) is
+ * worked out on the computer or Deck running the AI, in
+ * `py_modules/backend/services/model_policy.py`; this file only turns
+ * whichever class comes back into words for the screen.
  */
 const GITHUB_REPO_BASE = "https://github.com/qd313/bonsAI";
 

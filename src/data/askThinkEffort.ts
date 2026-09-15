@@ -1,10 +1,25 @@
 /**
- * Title: Ask thinking effort levels
- * Purpose: Off / Brief / Balanced / Deep thinking effort ids, labels, and descriptions.
- * Used for: OllamaThinkingEffortRow and bonsaiSettingsNormalizers persistence.
- * Solves: Typed effort enum for the four-stop control that enables model thinking.
- * Does not: Decide the wire value or token budgets — backend `ollama_ask_budgets`
- *   owns both, and sends `think` as a boolean regardless of level (decision D21).
+ * Title: How much the AI thinks before answering
+ *
+ * Purpose: A row in the Ollama tab lets the user choose how much hidden
+ * reasoning the AI does before it writes a reply: Off, Brief, Balanced, or
+ * Deep. More thinking can give a better answer to a hard question, but Deep
+ * is noticeably slower on a Deck. This file holds the four choices, their
+ * labels, and the one-line description shown under each.
+ *
+ * Used for: the thinking-effort row in the Ollama tab, and the settings
+ * clean-up file that reads a saved choice back.
+ *
+ * Solves: one shared list of the four choices and their wording, so the row
+ * and the settings clean-up file agree on what "Balanced" means.
+ *
+ * Does not: decide exactly how long the AI reasons for. Off tells the AI not
+ * to think at all; Brief, Balanced, and Deep all send the same plain "think
+ * first" instruction, but each reserves a bigger separate allowance of extra
+ * room for that thinking on top of the normal reply length — that reserved
+ * room, not a different instruction, is what actually makes Deep slower.
+ * That is a deliberate choice, recorded as decision D21, not a gap in this
+ * file.
  */
 export type AskThinkEffortId = "off" | "low" | "medium" | "high";
 

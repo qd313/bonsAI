@@ -1,9 +1,24 @@
 /**
- * Title: Ollama keep-alive presets
- * Purpose: Ordered keep_alive duration strings and helpers for the Settings Ollama slider.
- * Used for: SettingsTabOllamaKeepAliveSlider and bonsaiSettingsNormalizers persistence.
- * Solves: Single source for valid Go-style duration tokens, chip labels, and index math.
- * Does not: Call Ollama unload APIs — value is sent per-request from backend ask service.
+ * Title: How long a model stays loaded after answering
+ *
+ * Purpose: A slider in Settings controls how long the AI model stays loaded
+ * in memory on the computer or Deck after it answers a question, before
+ * Ollama unloads it to free that memory back up. The slider has thirteen
+ * stops, from 0 (unload right away) up to 4 hours, with 5 minutes as the
+ * default. This file holds the thirteen stops in order, the short label
+ * shown on each, and the math that turns a slider position into one of the
+ * thirteen values (and back).
+ *
+ * Used for: the keep-alive slider in Settings, and the settings clean-up
+ * file that reads a saved value back.
+ *
+ * Solves: the slider, its chip labels, and the settings clean-up file all
+ * need the exact same thirteen values, spelled the way Ollama itself expects
+ * ("5m", "30m", and so on) — this is the one place that list is written.
+ *
+ * Does not: tell Ollama to unload a model early, or do anything with the
+ * chosen value beyond saving it. The value is sent along with every question
+ * asked, on the computer or Deck side, not from here.
  */
 export type OllamaKeepAliveDuration =
   | "0s"

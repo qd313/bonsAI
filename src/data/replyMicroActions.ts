@@ -1,9 +1,25 @@
 /**
- * Title: Reply micro-action definitions
- * Purpose: Follow-up chip ids, labels, and composer prefixes for quick reply corrections.
- * Used for: MainTabChatTranscript reply action rows and transparency chip labels.
- * Solves: Consistent user-facing copy when re-asking with too long / too short / bad info feedback.
- * Does not: Submit asks or track analytics — parent orchestration prepends prefix and re-submits.
+ * Title: The quick fix-it chips under a reply
+ *
+ * Purpose: Under a finished answer, a row of small chips lets the user ask
+ * for a quick correction with one tap instead of typing it out: Bad
+ * information, Too long, Too short, Misidentified game/problem, and
+ * Unfenced spoiler. This file names the five chips, and, for each one, the
+ * label shown on the chip and the sentence quietly added in front of the
+ * original question when it is re-asked.
+ *
+ * Used for: the row of chips shown under a reply in the chat, and the log of
+ * what was actually sent that a person can open to double-check the AI's
+ * work (the same sentence is labelled there too).
+ *
+ * Solves: one shared wording for each of the five corrections, so the chip
+ * label, the sentence added to the re-ask, and the label shown in the log
+ * all say the same thing rather than three different phrasings of "too
+ * long."
+ *
+ * Does not: actually send the re-ask, or keep a record that it happened.
+ * Tapping a chip hands the composed sentence back to the code that runs the
+ * whole Ask flow, which is what sends it and keeps track of it.
  */
 export type ReplyMicroActionId =
   | "bad_information"

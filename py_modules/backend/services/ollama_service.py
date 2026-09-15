@@ -1,11 +1,97 @@
-"""Title: Ollama HTTP transport
+"""Title: Talking to the AI over the network
 
-Purpose: Streaming /api/chat (with soft continue), unload/stop helpers, and Ollama process cleanup.
-Used for: All Ollama HTTP I/O from Ask and background jobs; re-exports ollama_prompts helpers.
-Solves: Central transport, streaming tag extraction, soft ``num_predict`` continue, and stable
-import surface for prompt builders.
-Does not: Own prompt/policy string logic — see ollama_prompts; budget constants live in
-ollama_ask_budgets.
+Purpose: This is the file that actually opens the connection to Ollama and reads an answer back,
+word by word, as it is written. It sends the request, watches the words arrive, and if the AI
+stops early because it hit its own length limit before finishing a thought, it quietly asks it to
+keep going and stitches the pieces into one answer, rather than handing back something cut off
+mid-sentence. It is also what actually stops the AI when a person presses Stop, checks whether an
+Ollama host is reachable and what it has loaded, and warms up a small model at startup so the
+first question of a session is not the slow one.
+
+Used for: Every live call to Ollama from an Ask question or a background job. Other files also
+import several prompt-building helpers through this file rather than reaching into
+ollama_prompts directly, so there is one shared door for both.
+
+Solves: One place owns the actual wire conversation with Ollama — opening the streamed
+connection, stitching a cut-off answer back together, and shutting it down cleanly on Stop — so
+that logic exists exactly once instead of being copied wherever an Ask is sent.
+
+Does not: Decide the wording of a prompt or which rules go into it — that is ollama_prompts.
+Decide how many words a reply is allowed, or how much of that is reasoning versus the visible
+answer — those budgets live in ollama_ask_budgets. This file only carries the budget it is given
+out to Ollama and back.
+
+How it works:
+
+    post_ollama_chat()
+       |
+       v
+    one streamed request to Ollama  (_stream_ollama_chat_once)
+       |
+       +-- the AI stopped because it hit its own length limit,
+       |   not because it was finished, and there are tries left?
+       |      yes -> quietly ask it to keep going, stitch the new
+       |             words onto the end, and go around again
+       |      no  -> the answer is finished
+       |
+       +-- the AI refused to "think" about this one at all?
+       |      first time only -> retry once with thinking off,
+       |                         and remember that for next time
+       v
+    finished answer (raw text + what should actually be shown)
+       |
+       v
+    Strategy mode: pull out any branch-picker / checklist blocks
+       |
+       v
+    format_ai_response()  (final cleanup, from ollama_prompts)
+       |
+       v
+    the reply a person actually sees
+
+Stopping an in-progress answer follows its own chain, each step only tried because the one
+before it is not reliable enough on its own:
+
+    Stop pressed
+       |
+       v
+    ask Ollama over the network to unload the model  (request_ollama_stop_model_via_api)
+       |
+       v   (local AI only — a network "unload" can report success while
+       |    work already running on the processor keeps going)
+    run the AI program's own stop command directly    (try_ollama_cli_stop_model)
+       |
+       v   (still local; last resort, when the above still leaves something running)
+    end any leftover AI worker process by hand         (try_sigterm_linux_ollama_runner_procs)
+
+1. `post_ollama_chat()` is the entry point. It works out the reply-length and thinking budget for
+   the question's mode, then drives the loop above: one streamed call per attempt
+   (`_stream_ollama_chat_once()`), automatically continuing a cut-off answer up to a set number of
+   times, and retrying once, silently, if the model turns out not to support "thinking" at all —
+   remembered afterward via `mark_model_without_thinking()` so later questions on that model skip
+   straight to asking without it.
+2. `_stream_ollama_chat_once()` is the one raw HTTP call. It sends the request, reads the AI's
+   answer as a stream of small pieces, periodically publishes what has arrived so far to whoever
+   is showing the live-typing effect, and checks constantly whether the person has pressed Stop so
+   a long answer can be interrupted promptly rather than only at the very end.
+3. Before it sends anything, `clamp_num_predict_to_window()` checks whether the question plus its
+   reply budget would be too big for what the model can actually hold in mind at once. If so, it
+   shrinks the reply's allowance — never the thinking allowance, since a person who asked for
+   extra reasoning gets to keep it — so the AI answers a bit shorter rather than silently losing
+   the start of its own instructions, which is a worse failure that looks like a fine, confident
+   answer with nothing behind it.
+4. Once a full answer is in hand, and only in Strategy mode, any branch-picker or checklist blocks
+   the model wrote are pulled out for the UI to render as buttons rather than as raw text.
+   `format_ai_response()` (from ollama_prompts) does the final cleanup pass before the reply goes
+   back to the caller.
+5. Stopping a question in progress is handled separately, by `best_effort_abort_ollama_inference()`,
+   which runs the three-step chain drawn above. Only the network step runs against a remote
+   Ollama host; the other two only make sense against the AI running on the Deck itself.
+6. Two smaller, unrelated jobs also live here: `probe_ollama_health()` reads whether an Ollama
+   host is reachable and what it currently has loaded, for the Connection panel; and
+   `preload_ask_model_sync()` warms one small, already-installed model into memory once at
+   startup — picked by `pick_preload_model()` to match the model Ask would actually reach for —
+   so the very first question of a session is not the one paying to load a model from disk.
 """
 
 import json

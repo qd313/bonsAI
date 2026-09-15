@@ -1,20 +1,32 @@
-"""Title: Ollama local autostart
+"""Title: Starting the local AI when the Deck starts
 
-Purpose: Write, turn on/off, and report a per-user startup entry that starts the
-    Deck's local Ollama when the Deck starts, with the loaded-model limit raised to
-    two so the answering model and the note-searching model can both stay in memory.
-Used for: ``apply_ollama_local_autostart`` / ``get_ollama_local_autostart_status``
-    RPCs (main.py), called from the Ollama tab's "Start the AI with the Deck" toggle.
-Solves: The Deck had no startup entry for Ollama at all -- it only kept running
-    because someone started it by hand on 30 August. This makes turning the setting
-    on actually add one, and turning it off actually remove it.
+Purpose: This file is what "Start the AI with the Deck" in the Ollama tab actually does. It
+    writes (or removes) a small startup entry so the Deck's own copy of Ollama, the local AI,
+    turns on by itself every time the Deck boots, instead of needing to be started by hand. When
+    it writes that entry, it also raises how many models Ollama is allowed to keep in memory at
+    once from one to two, so the model that answers questions and the model that searches notes
+    can both stay loaded together — without that, the Deck had to swap one out for the other on
+    almost every question, which is slow.
+Used for: The two calls behind the Ollama tab's "Start the AI with the Deck" toggle — one turns
+    the entry on or off, the other reports whether it is installed, switched on, and actually
+    running, for the tab to show.
+Solves: Before this, the Deck had no startup entry for the local AI at all — it only kept
+    answering questions because someone had started it by hand once. This makes the toggle
+    genuinely do something: turning it on adds a real startup entry, turning it off removes it.
 Does not:
-    - Never uses sudo and never touches a system-wide (``/etc``) unit -- per-user
-      (``systemctl --user``) only.
-    - Never writes outside the caller's own home folder -- refuses instead
-      (see ``_path_within_home``, proven by a test with a fake home).
-    - Never stops, kills, or restarts an Ollama process the plugin did not start
-      itself, in either direction (turning the entry on or off).
+    - Never uses admin/root privileges and never touches a machine-wide startup entry — only a
+      per-user one, the kind a person's own login can create without special permission.
+    - Never writes outside the person's own home folder. If a path would land outside it, this
+      refuses instead of writing anywhere near there (see `_path_within_home()`, checked by a
+      test using a fake home folder).
+    - Never stops, kills, or restarts an Ollama that is already running and that the plugin did
+      not start itself — true whether the toggle is being switched on or off.
+Gotchas: The normal way to switch on a per-user startup entry (asking systemd to "enable" it)
+    needs a live login session that this plugin's backend does not have, so every call to ask
+    systemd to do it silently fails to reach anything and would wrongly report success. Instead
+    this file makes the file that "enable" would have made by hand, and reads that same file
+    back to check the entry is really live — see the notes on `_unit_enabled()` and
+    `_link_unit_into_default_target()`.
 """
 
 from __future__ import annotations
@@ -248,6 +260,17 @@ def _remove_autostart(home: Path) -> dict[str, Any]:
     }
 
 
+# In: the person's home folder.
+# Out: a dict with "ok" (did this succeed), "changed" (did it actually do anything), and either
+# "message" (plain-language success text for the tab) or "reason" (plain-language refusal text).
+# What can go wrong, in the order this checks for it: the local AI is not installed at all; the
+# AI's own program somehow is not under the home folder (refused, never written); the Deck has no
+# per-user startup services to hook into; the startup folder cannot be created or written to; the
+# startup entry file itself cannot be written; or the entry gets written but the start-at-login
+# link cannot be made (see the header's note on why the usual systemd "enable" call does not
+# work here). If writing succeeds and something is already answering questions on that port, this
+# leaves it alone rather than restarting it — the raised model limit only takes effect from the
+# next time the Deck actually boots.
 def _install_autostart(home: Path) -> dict[str, Any]:
     ollama_bin = _ollama_bin_path(home)
     if not ollama_bin.is_file():

@@ -1,9 +1,46 @@
-"""Title: Ollama model routing
+"""Title: Which AI model to ask, and in what order
 
-Purpose: Select Ollama model tags and fallback chains from settings and policy tiers.
-Used for: Ask mode routing, essentials lists, and high-VRAM optional tails in main and services.
-Solves: Centralized tag deduplication and tier-aware model pick logic for chat requests.
-Does not: Call Ollama HTTP APIs or build prompts — see ollama_service and ollama_prompts.
+Purpose: Before bonsAI can answer a question, it has to pick which downloaded AI model to
+send it to, and know what to try next if that one is not on the Deck. This file is where that
+decision gets made. It starts from a safe built-in list (picked by the maintainer, good on a
+fresh install), blends in whatever the person has actually downloaded, drops anything too big
+for the Deck's memory unless the person has switched on "try big models too", and checks the
+result one more time against what Ollama actually reports as installed right before a question
+goes out. It also holds the tag lists Settings shows for a first-time setup, and the small
+rules — like which old models count as "legacy" and should sort to the back — that keep those
+lists consistent everywhere they are used.
+Used for: The Ask flow, whenever bonsAI needs to know what model to try; the Settings screen,
+whenever it needs to show or update the ordered list of models a person can drag around.
+Solves: One place that works out "what model, in what order", so a question never gets sent to
+a model that was quietly removed from the Deck, and a heavy model is never tried automatically
+unless the person opted in.
+Does not: Call Ollama itself or build the actual question sent to it — see ollama_service and
+ollama_prompts for that.
+
+How it works:
+1. `resolve_routing_order()` builds the list of models to try. It starts from whatever order the
+   person saved in Settings, or, if there is none yet, builds one with
+   `build_initial_routing_order()` from the safe defaults plus whatever is already installed.
+   Either way, it then drops any large model if the "high VRAM fallbacks" setting is off.
+2. The caller applies its own tier/policy filter on top of that list (not in this file).
+3. `build_effective_models_to_try()` takes that filtered list and checks it once more against the
+   models Ollama actually reports as installed, preferring an exact match. If none of the list is
+   installed, it falls back to `build_host_fallback_tail()` — whatever else is installed,
+   least-safe tags last, capped at five.
+4. If nothing usable is left even after that, `no_installed_routing_models_message()` writes the
+   plain-language explanation shown to the person, naming what is installed and what to pull instead.
+5. Whenever a model is pulled or removed, `merge_pulled_tag()` and
+   `remove_tag_from_routing_orders()` keep the order saved in Settings in sync with reality.
+
+Gotchas:
+- `select_ollama_models()` reads like the main entry point from its name, but it is the older,
+  fixed-list version kept for tests and any caller that has not moved to a saved-per-person order.
+  The real order a person sees comes from `resolve_routing_order()` instead.
+- `tier1_foss_recommended_pull_tags()` only exists so an old caller does not break; new code should
+  call `setup_recommended_pull_tags()` instead.
+- `is_ollama_model_missing_error()` reads Ollama's own error text (there is no single clean status
+  code for "that model isn't installed") to decide whether it is worth trying the next model in
+  the chain rather than giving up.
 """
 
 from typing import Any

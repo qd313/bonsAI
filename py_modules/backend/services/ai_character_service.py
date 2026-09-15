@@ -1,9 +1,43 @@
-"""Title: AI character presets
+"""Title: AI character voices for Ask replies
 
-Purpose: Sanitize settings and build optional roleplay system-prompt suffixes for Ask.
-Used for: Character picker UI, preset catalog ids, and Pyro easter-egg tip injection.
-Solves: Opt-in personality accents without altering core safety or routing policy.
-Does not: Call Ollama or persist chat history — only prompt augmentation helpers.
+Purpose: When someone turns on the AI character feature, this file is what makes the reply
+sound like a chosen game character instead of a plain assistant. It holds the catalog of
+characters (a person, their game, and a short style hint for each), and turns a person's choice
+— a specific character, "surprise me" random, or their own typed description — into extra
+instructions appended to the system prompt, at the accent strength they picked (subtle, balanced,
+heavy, or unleashed). It also holds the Pyro easter egg: a joke "talent manager" voice that gets
+sillier and, at the two strongest settings, deliberately gives comically bad advice — while a
+hard-coded safety footer stops it from ever claiming it actually changed a setting.
+Used for: Called once per Ask question, from ollama_ask_service, to build the extra text added
+to the system prompt before the question goes to the model. Also backs the character picker in
+Settings by listing and checking preset ids.
+Solves: Lets people ask for a personality accent on replies without touching the safety rules or
+which model gets picked — this file only ever adds text to the prompt, nothing else.
+Does not: Call Ollama, decide which model answers, or remember chat history — it only builds a
+block of text for someone else to attach.
+
+How it works:
+1. `build_roleplay_system_suffix()` is the entry point; it just calls
+   `build_roleplay_system_suffix_meta()` and returns its text.
+2. `build_roleplay_system_suffix_meta()` first checks whether the character feature is even on.
+   If it is, it works out the wanted accent strength with
+   `sanitize_ai_character_accent_intensity()`, then picks one of three sources, in order: a
+   random catalog character (when `sanitize_ai_character_random()` says so), the person's own
+   typed description (cleaned by `sanitize_ai_character_custom_text()`), or a specific chosen
+   preset (`sanitize_ai_character_preset_id()`).
+3. For an ordinary character, `_preset_or_random_body()` or `_custom_body()` writes the "speak
+   like this" instructions, worded differently for each accent strength.
+4. For the Pyro preset specifically, `_pyro_body_for_intensity()` instead picks between the two
+   Pyro voices — `is_pyro_asshole_mode()` decides whether the accent strength is one of the two
+   "deliberately bad advice" levels, and hands off to `_pyro_talent_manager_body()` (normal) or
+   `_pyro_asshole_manager_body()` (the joke-bad-advice version, which carries its own extra
+   safety footer forbidding any claim of a real system change).
+5. In Strategy mode, a short audiobook-style addition is appended; then the whole block has
+   stray control characters stripped and is returned as the suffix, along with which preset (if
+   any) was resolved.
+6. The caller appends the finished suffix to the system prompt with
+   `apply_roleplay_to_system_content()`, placed after bonsAI's own instructions so the character
+   voice is the most recent thing the model read.
 """
 
 from __future__ import annotations

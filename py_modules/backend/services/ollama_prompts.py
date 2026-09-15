@@ -1,9 +1,74 @@
-"""Title: Ollama prompt builders
+"""Title: Writing the instructions the AI reads before answering
 
-Purpose: Prompt construction, intent detectors, and response formatting for Ollama Ask.
-Used for: game_ai_request and ollama_ask_service before HTTP chat calls.
-Solves: Pure string/policy logic separated from transport in ollama_service.
-Does not: Post HTTP to Ollama — see post_ollama_chat in ollama_service.
+Purpose: Before every Ask question goes to the AI, it needs a full set of written instructions
+— who bonsAI is, what game is running, what it should and should not talk about, how it should
+handle spoilers, how long the reply should be, and so on. This file writes that whole instruction
+sheet. It is also where this project keeps its "does this question look like X" checks — does it
+sound like a power-tuning question, a troubleshooting question, a question about Ollama itself —
+because those checks decide which extra instructions get added. Nothing here ever talks to
+Ollama directly; it only produces the text that goes into the request, and does one light pass
+of cleanup on the text that comes back.
+
+Used for: Called by the Ask flow to build the instructions for a question before it is sent, and
+by a couple of the same "does this question look like X" checks elsewhere in the Ask pipeline so
+a question is classified the same way everywhere it matters.
+
+Solves: Keeps every fixed and conditional piece of instruction text in one file, so what the AI
+is told does not end up scattered across the files that actually make the network call.
+
+Does not: Send anything to Ollama or read anything back over the network — see ollama_service for
+that. Decide the reply's word-count or reasoning budget — those live in ollama_ask_budgets.
+
+How it works:
+
+    the instructions, stacked top to bottom:
+
+    +- what's on screen right now (game, screenshot hints)........ always present
+    +- who bonsAI is, plus the required "thinking out loud" line... always present
+    +- (Deep Rock Galactic: Survivor only) a small jargon note..... one specific game
+    +- background material: Proton log excerpts, knowledge-base
+    |  notes -- spliced in early, UNLESS the prompt is at risk of
+    |  overflowing, in which case it moves to just above the last
+    |  section instead, so it is the part nearest the end that
+    |  survives if anything gets cut off
+    +- whichever topic call-outs this question matched: help with
+    |  Ollama itself, explaining model policy tiers, power/TDP
+    |  tuning, display-resolution guidance, troubleshooting tips,
+    |  or (in Strategy Guide mode) that mode's own coaching rules
+    |  and spoiler policy
+    +- reply length/style and reply language, if changed from the
+    |  defaults
+    +- the power/TDP rules, always last
+
+1. `build_system_prompt()` is the one function that assembles all of this into the final text.
+   Everything else in the file exists to feed it: a fixed block of instruction text, a check that
+   decides whether a block is needed this turn, or a smaller function that fills in one variable
+   piece (the current game, the measured power cap, the player's chosen reply style).
+2. A family of small "does this question look like X" checks decide which topic instructions get
+   added — things like `user_wants_power_or_performance_topic()`,
+   `user_asks_ollama_bonsai_host_or_latency()`, `question_matches_troubleshooting_log_context()`,
+   and several more. Each one only adds its block when it actually matches, so a question about,
+   say, TDP tuning does not also carry unrelated instructions about troubleshooting Proton.
+3. In Strategy Guide mode specifically, `extract_strategy_asked_entity()` works out whether the
+   player named a specific boss or enemy by name. It prefers a title the knowledge base already
+   knows about (`kb_card_names()`, `_match_known_entity()`) over guessing from phrasing, because a
+   guess that is wrong could unfence a spoiler the player never asked for. That result feeds
+   `_strategy_spoiler_policy_block()`, which writes the actual spoiler rule for this turn — keep
+   this one entity in the clear because the player asked about it by name, keep everything else
+   wrapped, or, for a game whose own profile treats bosses as routine gameplay rather than story,
+   relax the rule further still.
+4. Once the AI has answered, `format_ai_response()` does one light pass over the reply — it does
+   not touch the wording, only appends a short debug note when a screenshot attachment had
+   trouble.
+5. Separately, `build_reply_followup_context_block()` handles the "this was wrong / too long /
+   spoiled something" chips: when a person taps one and asks a refinement, this pastes the
+   previous question and answer (trimmed to a safe length) ahead of their new message, so the
+   model knows what is being refined.
+
+Gotchas: Several of the fixed instruction blocks and the exact wording inside them were tuned
+against measured answers on real questions, not just written once and left — a comment sits next
+to each one that was, explaining what changed and what the numbers were. Changing that wording
+without re-measuring can undo a fix that took real testing to find.
 """
 
 import re

@@ -1,9 +1,70 @@
-"""Title: Local Ollama setup service
+"""Title: Installing the local AI on the Deck
 
-Purpose: Install, update, probe, and tear down Ollama on the Steam Deck (loopback).
-Used for: Ollama tab Install/Update flows and background readiness checks.
-Solves: Shell/script orchestration for Tier-1 model pulls without bloating main.py.
-Does not: Run game Ask or build chat prompts — see local_ollama_setup callers in main.py.
+Purpose: This file is what actually runs when a person taps Install or Update on the Ollama
+tab. It downloads and installs Ollama (the program that runs the local AI) if it is not there
+yet, gets it running and ready to accept downloads, then pulls down the model files for whichever
+starter pack or single model the person picked — streaming progress back the whole time so the
+tab is never just sitting frozen. It also holds the smaller jobs around that: checking whether
+Ollama is reachable at all, listing what is already downloaded, removing a model, and trying to
+wake a stopped local Ollama back up before giving up on a connection test.
+
+Used for: The Ollama tab's Install and Update buttons, and the background checks that keep the
+tab's "is it ready" status accurate.
+
+Solves: All of the shell commands and install steps needed to get a working local AI onto the
+Deck live in one file, instead of scattered through the main plugin file.
+
+Does not: Answer a question or build a chat prompt — this file only ever gets the AI installed
+and running; asking it something is a different file's job (see ollama_service and
+ollama_ask_service).
+
+How it works:
+
+    Install / Update, in stages:
+
+    check -> install -> service -> pull -> complete
+                |            |         |
+                |            |         +- one model at a time, streaming
+                |            |            progress; a failure here is turned
+                |            |            into one plain-language sentence
+                |            |            by `_format_ollama_pull_failure()`
+                |            |
+                |            +- make sure `ollama serve` is actually
+                |               listening, and that its key files exist,
+                |               starting it by hand if needed
+                |
+                +- is the normal install location writable?
+                   no -> install into the person's own home folder instead
+
+1. `run_local_setup()` is the function behind both Install and Update. It works out what to do
+   from the chosen profile (a starter pack, a single model, or "update everything already
+   installed"), and reports its stage as it goes so the tab can show real progress instead of a
+   spinner with no detail.
+2. It first makes sure the `ollama` program itself is present, installing it with
+   `_install_or_update_ollama_binary()` if not — which normally runs Ollama's own official
+   installer via `run_official_linux_install()`, but on the Deck's locked-down system folders
+   falls back to `run_tarball_user_local_install()`, unpacking Ollama into the person's own home
+   folder instead. `_prefer_user_prefix_ollama_install_linux()` is what checks, ahead of time,
+   whether the normal location can even be written to, so this never wastes time trying the
+   locked path first.
+3. Next it makes sure the local Ollama server is actually listening
+   (`ensure_ollama_server_listening_before_pull()`) and that its key files exist
+   (`ensure_ollama_cli_home_ready()`). Both matter because the Deck's install does not register
+   as an always-on system service the way a desktop Linux install would, so this starts `ollama
+   serve` by hand and waits for it whenever it finds it not already running.
+4. It then works out which model tags the chosen profile needs, and downloads each one in turn
+   with `run_ollama_pull()`, which streams the AI download's own progress lines back to the tab
+   as they arrive. If a pull fails, `_format_ollama_pull_failure()` cleans up the raw output —
+   Ollama's progress display redraws the same line over and over with a spinner, which is noise
+   for a person reading it — and puts the one useful sentence first.
+5. Cancelling is checked constantly throughout every stage, and anything that goes wrong, or gets
+   cancelled, is caught by one wrapping try/except and turned into a plain status a person can
+   read on the tab, rather than an unhandled error.
+
+Gotchas: The normal system install locations on the Deck cannot be written to, and the Deck's
+Ollama does not run as an always-on background service the ordinary way — both of those are
+worked around here rather than being edge cases, so a fair amount of this file exists purely to
+compensate for the Deck being a locked-down, non-desktop Linux system underneath.
 """
 
 from __future__ import annotations

@@ -1,9 +1,23 @@
 /**
  * Title: UI scale settings section
- * Purpose: Auto/manual UI scale profile controls with Focusable bridge for the manual slider thumb.
- * Used for: SettingsTab; canonical reference for Deck focus-graph Pattern B (slider bridge).
- * Solves: Wires toggle → slider bridge → Apply button with verified vertical D-pad hops.
- * Does not: Measure viewport or apply CSS variables — see uiScaleProfile and UiScaleContext.
+ *
+ * Purpose: The "UI scale" section on the Settings tab. Auto is on by
+ * default and quietly picks Handheld, Desktop, or Couch sizing based on
+ * your screen; turning it off reveals a slider so you can pick one of four
+ * sizes yourself, plus a button to jump back to automatic. Nothing takes
+ * effect until you press Apply. This file also serves as the reference
+ * example for how a slider row should hand the D-pad to its neighbours in
+ * this plugin — other sections copy its shape.
+ *
+ * Used for: SettingsTab.
+ *
+ * Solves: Wires the auto/manual toggle to the slider and the Apply button
+ * with a D-pad path between all three that has been checked step by step
+ * on the Deck.
+ *
+ * Does not: Actually measure your screen or change the CSS scale — see
+ * uiScaleProfile and UiScaleContext for that. This file only decides what
+ * to ask them for, and sends it once you press Apply.
  */
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button, Focusable, PanelSection, PanelSectionRow, ToggleField } from "@decky/ui";
@@ -66,6 +80,37 @@ export function buildUiScaleBridgeNav(deps: UiScaleBridgeNavDeps): Record<string
   };
 }
 
+/**
+ * The whole section: the auto/manual toggle, the manual slider (only shown
+ * when auto is off), the reset-to-automatic button, and Apply.
+ *
+ * In: the currently saved auto/manual settings and the profile actually
+ * applied right now, a callback to apply a new choice, and (for the
+ * section below this one) a ref and a Down handler so this row's Apply
+ * button can hand the D-pad onward.
+ * Out: the panel section with its toggle, slider, and buttons.
+ *
+ * What can go wrong: choices made here are only "pending" until Apply is
+ * pressed — pendingAuto/pendingManual can disagree with the saved settings
+ * for as long as someone is still adjusting them, and an effect resyncs
+ * both back to the saved values if those change from outside this section
+ * (Steam's own display settings, say).
+ *
+ * 1. Two pieces of local state, pendingAuto and pendingManual, track what
+ *    is about to be applied; an effect keeps them in sync with the real
+ *    saved settings whenever those change underneath this section.
+ * 2. The auto toggle's own Down handler decides whether to hand off to the
+ *    manual slider or straight to Apply, depending on whether auto is on.
+ * 3. When auto is off, the manual slider is wrapped in its own Focusable
+ *    bridge (built by buildUiScaleBridgeNav()) so Left/Right step the
+ *    value and Up/Down leave the bridge for the toggle above or the
+ *    buttons below.
+ * 4. Reset to automatic just flips pendingAuto back to true — it does not
+ *    touch pendingManual, so the manual slider remembers its last
+ *    position.
+ * 5. Apply calls onApply() with both pending values and shows "Applying…"
+ *    while it is in flight.
+ */
 export const SettingsTabUiScaleSection: React.FC<SettingsTabUiScaleSectionProps> = ({
   uiScaleAutoEnabled,
   uiScaleManualProfile,

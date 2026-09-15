@@ -1,12 +1,35 @@
 /**
  * Title: DRG glossary term chip
- * Purpose: Render one curated DRG Survivor jargon term as a tappable inline element with a floating
- *          peek/full definition tooltip and an "explain further" action.
- * Used for: MainTabBonsaiAiMarkdownChunk, wherever it inlines a matched glossary term into reply prose.
- * Solves: "kiting" (roadmap: DRG Survivor glossary) reads undefined in the game's own KB card text;
- *         this lets a player look it up without the reply stopping to explain itself.
- * Does not: Decide which terms exist (data/drgGlossaryTerms.ts) or find them in text
- *           (drgGlossaryTermMatch.ts) — this only renders one already-matched term.
+ *
+ * Purpose: One underlined word inside an AI reply, for a Deep Rock Galactic
+ * Survivor term the game does not explain well on its own (like "kiting").
+ * Tapping or pressing A on it opens a small floating definition — a short
+ * one-line peek first, then the full explanation — with a button to ask the
+ * AI to explain further. It closes itself again after a few seconds, or
+ * when dismissed.
+ *
+ * Used for: Drawn by MainTabBonsaiAiMarkdownChunk wherever it finds one of
+ * these known terms inside a reply.
+ *
+ * Solves: The game's own glossary leaves some terms undefined; this lets a
+ * player look one up without derailing the conversation to ask about it.
+ *
+ * Does not: Decide which words count as glossary terms, or find them inside
+ * the reply text — that is data/drgGlossaryTerms.ts and
+ * drgGlossaryTermMatch.ts. This file only draws one term that has already
+ * been matched.
+ *
+ * Gotchas:
+ * - Touch and the D-pad behave differently on purpose. A tap shows the
+ *   short peek first and dismisses itself on a timer; pressing A instead
+ *   goes straight to the full definition, and a second A asks the AI to
+ *   explain further. See the note on the touch path below for why they are
+ *   split this way.
+ * - Closing the popup with B has to use `onCancelButton`, not the ordinary
+ *   button handler — a plain handler let the press close the popup and
+ *   still back the D-pad out of the whole reply at the same time.
+ *   `onCancelButton` is the one that actually stops there (measured on the
+ *   Deck).
  */
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
@@ -55,6 +78,36 @@ function isAnyDirectionEvent(evt: unknown): boolean {
   );
 }
 
+/**
+ * The chip itself: the underlined word, plus its popup while open.
+ *
+ * In: the glossary term to show, the exact text matched in the reply
+ * (which may differ in case or tense from the term's own name), and a
+ * callback for when someone asks to explain it further.
+ * Out: the underlined span, plus — while open — a small floating popup
+ * portalled to the very top of the page, so it can escape the reply
+ * bubble's own clipping and blur effects.
+ *
+ * What can go wrong: the popup has to reposition itself against the
+ * current screen every time it opens, since the chip can be anywhere on
+ * screen — see the inline position math below. Nothing here calls the
+ * backend; the only side effect is onExplainFurther, which starts a new Ask
+ * elsewhere.
+ *
+ * 1. Track state as one of idle / peek / full.
+ * 2. Register this chip's DOM node under a per-mount id, so other code
+ *    (the reply stack) can find and clear it without a page-wide search.
+ * 3. On the D-pad: A calls activate(), which opens straight to full and,
+ *    from full, calls onExplainFurther and closes. B or any direction
+ *    press closes the popup.
+ * 4. On touch: a tap calls onTermTap(), which steps
+ *    idle → peek → full → idle one stage at a time, with peek and full
+ *    each dismissing themselves on a timer.
+ * 5. When open, the popup is drawn through a portal to the page body
+ *    rather than inside the chip, with its position computed fresh each
+ *    render from the chip's own on-screen box and the plugin's visible
+ *    column.
+ */
 export function DrgGlossaryTermChip(props: DrgGlossaryTermChipProps) {
   const { term, matchedText, onExplainFurther } = props;
   const [state, setState] = useState<ChipState>("idle");

@@ -1,9 +1,44 @@
 /**
  * Title: Model routing order modal
- * Purpose: Fullscreen picker to reorder text or vision Ollama model fallback chains.
- * Used for: Ollama tab advanced routing when the user customizes installed-model priority.
- * Solves: Drag-free Deck-friendly reorder UI with policy-tier and VRAM filters applied.
- * Does not: Pull models or persist settings — parent supplies catalog and commits saved order.
+ *
+ * Purpose: The full-screen list reached from the Ollama tab's "Set text
+ * model try order" and "Set vision model try order" buttons. It shows every
+ * installed model as a row, each with its own Up and Down buttons, so you
+ * can set the order bonsAI tries them in when it needs an answer — no
+ * dragging, since that does not work well with a D-pad. Rows blocked by
+ * your current policy tier, or by the high-VRAM setting, stay in the list
+ * greyed out rather than disappearing, so you can see why a model is being
+ * skipped instead of wondering where it went.
+ *
+ * Used for: The Ollama tab's advanced model routing, when someone wants to
+ * change which installed model gets tried first, second, and so on.
+ *
+ * Solves: A D-pad-friendly way to reorder a list, in a modal a person can
+ * actually back out of with B.
+ *
+ * Does not: Download models or save the new order itself. The catalog and
+ * installed list are handed in by the caller, and the caller is the one
+ * that saves the order once Done is pressed.
+ *
+ * Gotchas:
+ * - This has to be built on Steam's own ConfirmModal chrome, not a bare
+ *   custom screen — that is what actually lets B back out of it. An
+ *   earlier bare-content version could not be backed out of no matter how
+ *   many times B was pressed.
+ * - Moving a row's focus back onto it after a reorder has to be delayed
+ *   slightly and done in two steps. Doing it immediately, in the same
+ *   press that triggered the reorder, stole part of that very press and
+ *   made it fall through to the modal's own OK instead — closing and
+ *   saving the list by accident.
+ * - Up and Down on the D-pad only step through the rows to read them; they
+ *   were deliberately never wired to reorder anything. That used to be how
+ *   reordering worked, and a person just scrolling down the list to read
+ *   it would silently rewrite the order — three presses moved four models.
+ *   Reordering only happens through each row's own Up/Down buttons.
+ * - Every row button calls preventDefault() on click. The list lives
+ *   inside Steam's modal, which renders as an HTML form, so an unprevented
+ *   click submits that form and closes the whole picker instead of moving
+ *   one row.
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button, ConfirmModal, Focusable } from "@decky/ui";
@@ -95,6 +130,32 @@ type RowMeta = {
   sizeGb?: number;
 };
 
+/**
+ * The whole modal: the instructions line, the reorderable row list, and the
+ * Reset button — Done/Cancel come from ConfirmModal's own footer.
+ *
+ * In: which list this is (text or vision), the installed models and their
+ * catalog entries, the current policy tier and VRAM settings (used only to
+ * decide which rows show as blocked), the saved order to start from, and
+ * callbacks to save the new order or close without saving.
+ * Out: the ConfirmModal with this picker as its body.
+ *
+ * What can go wrong: nothing here talks to the backend — onSave is just
+ * handed the reordered list of tags, and saving it is the caller's job.
+ *
+ * 1. Build the starting order with buildPickerOrder(), then keep it in
+ *    local state (order) until Done is pressed.
+ * 2. For each tag in that order, work out whether it should show as
+ *    blocked — by policy tier, by the high-VRAM setting, or, for the
+ *    vision list, because its vision support is not confirmed.
+ * 3. move() swaps a row with its neighbour; moveAndKeepHighlight() calls it
+ *    and then, after the delay described above, hands the D-pad ring back
+ *    to the row that moved.
+ * 4. onReset() rebuilds the order from the model's own default seed list,
+ *    filtered to only the models actually installed.
+ * 5. Draw the row list, each row's Up/Down buttons wired to move() through
+ *    moveAndKeepHighlight(), and the Reset button below it.
+ */
 export function ModelRoutingOrderModal({
   kind,
   installedTags,

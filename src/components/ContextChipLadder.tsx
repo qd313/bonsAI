@@ -1,9 +1,45 @@
 /**
  * Title: Context chip ladder
- * Purpose: Expandable ladder of transparency chips summarizing what context reached the model.
- * Used for: SessionContextStrip and live-turn debugging when input transparency is enabled.
- * Solves: Tier-colored chips with path bullets and optional dev JSON for audit workflows.
- * Does not: Build TransparencySnapshot objects — see inputTransparency utils and orchestration hooks.
+ *
+ * Purpose: The row of small colored chips that appears once you open
+ * "Session context" above the chat, or inside a turn's own "Show details"
+ * panel — one chip per kind of extra material attached to a question (files
+ * read, a screenshot, remembered notes, developer info…). Stepping between
+ * chips with the D-pad opens a panel below showing exactly what that chip
+ * contains. Collapsed, it is just a small "Context used · tap for details"
+ * link.
+ *
+ * Used for: SessionContextStrip, and the live turn's own "Show details"
+ * panel — anywhere a person can check what the AI actually saw for a
+ * question.
+ *
+ * Solves: One shared chip strip and detail panel, colored by content type,
+ * so a person can read exactly what the AI was given instead of guessing.
+ *
+ * Does not: Decide what belongs on the chips. The list of chips and their
+ * contents comes from a snapshot built elsewhere (the inputTransparency
+ * utils and orchestration hooks); this file only draws them.
+ *
+ * How it works:
+ * 1. ContextChipLadder() builds the chip list from the snapshot with
+ *    chipsFromSnapshot(); if it is empty, nothing renders.
+ * 2. Collapsed, it draws only the "Context used · tap for details" link.
+ * 3. Expanded, it works out which chips are visible — everyone, or a
+ *    window around the active one from windowRange() — and moves the
+ *    active chip on Left/Right/Up/Down, handing the D-pad to
+ *    onMoveUpFromLadder/onMoveDownFromLadder when it falls off either end.
+ * 4. The active chip's full detail — title, credit/attribution, file
+ *    paths, bullet points, and any raw JSON — is drawn below the row by
+ *    ChipExpandedBody().
+ *
+ * Gotchas: The ladder is one single Focusable, so Steam's own D-pad ring
+ * always lands on the whole row, never on one chip by itself — Left/Right
+ * just move which chip is "active" inside it. That active-chip highlight is
+ * a separate, hand-drawn cue (a different color from the real focus ring)
+ * on purpose: an earlier version glowed the active chip in the same color
+ * Steam's own ring uses, and on a row that already had colored borders for
+ * license tier and credits, a real D-pad ring showed up on top of all of it
+ * and was unreadable.
  */
 import { useCallback, useState } from "react";
 import { Focusable } from "@decky/ui";
@@ -70,6 +106,22 @@ export type ContextChipLadderProps = {
   devDiagnostics?: AskDiagnosticsSnapshot | null;
 };
 
+/**
+ * The ladder itself: the collapsed hint link, or — once expanded — the row
+ * of chips plus the detail panel for whichever one is active. See "How it
+ * works" above for the flow.
+ *
+ * In: the transparency snapshot to build chips from, whether to start
+ * collapsed, callbacks for expand/collapse and for handing the D-pad off
+ * the top or bottom edge, and — only for the "Developer details" chip — the
+ * raw diagnostics payload to show inside it.
+ * Out: "No context chips" text, the collapsed hint link, or the full
+ * ladder.
+ *
+ * What can go wrong: nothing here fetches data. chipsFromSnapshot() turns
+ * the snapshot into chips once, synchronously, and everything below just
+ * walks that fixed list.
+ */
 export function ContextChipLadder({
   snapshot,
   collapsedHint = false,
@@ -265,6 +317,20 @@ export function ContextChipLadder({
   );
 }
 
+/**
+ * The panel below the chip row: title, credit/attribution block, file
+ * paths, bullet points, and — for the Developer details chip only — raw
+ * JSON dumps. See "How it works" above for where this fits.
+ *
+ * In: the active chip, plus — only for the "developer" chip — the raw
+ * ask_diagnostics payload to show underneath everything else.
+ * Out: one detail panel. Every section is optional and only renders when
+ * that chip actually has something of that kind to show.
+ *
+ * What can go wrong: none of the helper calls here can fail — chipBodyBullets(),
+ * chipBodyPaths(), chipAttribution(), and chipDevJson() all just read
+ * fields already computed onto the chip and default to empty.
+ */
 function ChipExpandedBody({
   chip,
   devDiagnostics,

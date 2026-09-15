@@ -86,6 +86,11 @@
       "role": ""
     },
     {
+      "path": "src/components/CharacterPickerModal.tsx",
+      "lines": 853,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/screenshot_media.py",
       "lines": 803,
       "role": ""
@@ -98,11 +103,6 @@
     {
       "path": "src/components/KnowledgeBaseSection.tsx",
       "lines": 769,
-      "role": ""
-    },
-    {
-      "path": "src/components/CharacterPickerModal.tsx",
-      "lines": 768,
       "role": ""
     },
     {

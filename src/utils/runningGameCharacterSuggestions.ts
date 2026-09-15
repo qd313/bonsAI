@@ -1,3 +1,25 @@
+/**
+ * Title: Suggesting an AI character based on the game you're playing
+ *
+ * Purpose: When the AI-character feature is on and a person opens the
+ * character picker, this works out up to three characters from the
+ * built-in catalog that fit whatever game is currently running — so
+ * someone playing a game with catalog characters sees them offered first,
+ * instead of having to search a long list by hand.
+ *
+ * Used for: The character picker popup, when it opens while a game is
+ * running.
+ *
+ * Solves: Matches a running game to catalog characters three different
+ * ways, from most to least exact: a curated list of specific games known
+ * to have characters, a special case for Team Fortress 2 (which has many
+ * catalog characters spread across several teams), and, failing both, a
+ * looser match on the game's own name.
+ *
+ * Does not: Decide the full list of playable characters — see
+ * characterCatalog for that. This only narrows it down to a short,
+ * relevant suggestion strip for the game currently running.
+ */
 import {
   CHARACTER_CATALOG_SECTIONS,
   findCatalogEntry,
@@ -13,6 +35,14 @@ export type RunningGameCharacterSuggestions = {
   entries: CharacterCatalogEntry[];
 };
 
+/**
+ * In: a game's display name, in whatever casing and punctuation Steam
+ * gives it.
+ * Out: a plain, lowercase version with accents removed and everything
+ * that is not a letter or digit turned into a single space, so two
+ * spellings of the same title can be compared safely.
+ * Can go wrong: nothing — always produces a string, even an empty one.
+ */
 function normalizeGameTitle(s: string): string {
   return s
     .toLowerCase()
@@ -38,6 +68,13 @@ const STEAM_APP_PRESET_IDS: Readonly<Record<string, readonly string[]>> = {
   "2131630": ["mgs_otacon"],
 };
 
+/**
+ * In: a list of catalog character ids, in preferred order.
+ * Out: the matching catalog entries, in the same order, with duplicates
+ * removed and capped at three.
+ * Can go wrong: an id that no longer exists in the catalog is silently
+ * skipped rather than producing a gap or an error.
+ */
 function entriesFromPresetIds(ids: readonly string[]): CharacterCatalogEntry[] {
   const out: CharacterCatalogEntry[] = [];
   const seen = new Set<string>();
@@ -51,6 +88,17 @@ function entriesFromPresetIds(ids: readonly string[]): CharacterCatalogEntry[] {
   return out;
 }
 
+/**
+ * In: nothing — reads the whole catalog itself.
+ * Out: up to three Team Fortress 2 characters from the catalog.
+ * Can go wrong: nothing — an empty catalog section simply yields no
+ * suggestions.
+ *
+ * Its own function because Team Fortress 2's characters are spread
+ * across more than one catalog section (its classes are grouped
+ * separately), so it needs to gather across all of them instead of
+ * reading one section like the other matches below.
+ */
 function tf2MergedEntries(): CharacterCatalogEntry[] {
   const seen = new Set<string>();
   const out: CharacterCatalogEntry[] = [];
@@ -66,6 +114,15 @@ function tf2MergedEntries(): CharacterCatalogEntry[] {
   return out;
 }
 
+/**
+ * In: a catalog section's own game title, and the running game's name
+ * (already cleaned up by normalizeGameTitle()).
+ * Out: true if the two look like the same game.
+ * Can go wrong: this is a loose match on purpose (one name containing
+ * the other, or every meaningful word of one appearing in the other), so
+ * a coincidental short name could in principle match something it
+ * should not — no case of that has been found in the current catalog.
+ */
 function titleMatchesGame(workTitle: string, gameNorm: string): boolean {
   const w = normalizeGameTitle(workTitle);
   if (!w || !gameNorm) return false;
@@ -75,6 +132,13 @@ function titleMatchesGame(workTitle: string, gameNorm: string): boolean {
   return false;
 }
 
+/**
+ * In: the running game's cleaned-up name.
+ * Out: up to three catalog characters from every section whose game title
+ * matches, or null if nothing matched at all.
+ * Can go wrong: nothing beyond what titleMatchesGame() can — see its own
+ * note above.
+ */
 function collectNameMatchEntries(gameNorm: string): CharacterCatalogEntry[] | null {
   const matchedSections = CHARACTER_CATALOG_SECTIONS.filter((s) => titleMatchesGame(s.workTitle, gameNorm));
   if (matchedSections.length === 0) return null;
@@ -91,6 +155,14 @@ function collectNameMatchEntries(gameNorm: string): CharacterCatalogEntry[] | nu
   return out.length > 0 ? out : null;
 }
 
+/**
+ * In: the game's display name from Steam (if any), its app id, and a
+ * fallback title (the catalog's own name for the matched game).
+ * Out: the one line of text shown after "Playing:" above the suggestion
+ * strip — Steam's own name if there is one (cut short if it runs long),
+ * else the catalog's title, else the raw app id, else a generic label.
+ * Can go wrong: nothing — always returns a usable string.
+ */
 function resolveHeadline(displayName: string | undefined, appId: string, fallbackWorkTitle?: string): string {
   const d = displayName?.trim();
   if (d) return d.length > 48 ? `${d.slice(0, 46)}…` : d;
@@ -100,8 +172,15 @@ function resolveHeadline(displayName: string | undefined, appId: string, fallbac
 }
 
 /**
- * Map Steam’s running app to 1–3 catalog characters for the picker strip.
- * Returns `null` when no game context or no catalog match.
+ * In: the running game's Steam app id and its display name — either can
+ * be missing.
+ * Out: a headline and one to three catalog characters, or null if there
+ * is no game context to work from or nothing in the catalog matches it.
+ * Can go wrong: nothing throws; every branch below falls through to null
+ * rather than guessing. The three ways to match are tried in a fixed
+ * order — Team Fortress 2's special case, then the curated app-id list,
+ * then a looser name match — and the first one that finds something
+ * wins, even if a later one might have found something too.
  */
 export function resolveRunningGameCharacterSuggestions(
   appId: string | undefined,

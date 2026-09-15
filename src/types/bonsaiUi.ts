@@ -1,3 +1,20 @@
+/**
+ * Title: Shapes of things on the Ask screen
+ *
+ * Purpose: Names the shape of several pieces of data the Ask screen
+ * passes around — an attached screenshot, a game-context marker, a
+ * branch picker or checklist parsed out of a Strategy answer, and, the
+ * largest one, a single finished question-and-answer pair as it is kept
+ * in the on-screen conversation history.
+ *
+ * Used for: Wherever the frontend needs to describe one of these shapes —
+ * the Ask screen, the screenshot picker, and the code that keeps the
+ * on-screen conversation in sync with what actually happened.
+ *
+ * Does not: Define anything about how a chat is saved to disk — see the
+ * chat-slot data shapes for that. These are the shapes used while a
+ * conversation is actively on screen.
+ */
 import type { ChatSlotTurnTransparency, TransparencySnapshot } from "../utils/inputTransparency";
 
 export type AppliedResult = {

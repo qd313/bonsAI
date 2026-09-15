@@ -66,13 +66,13 @@
       "role": ""
     },
     {
-      "path": "src/components/MainTabUnifiedAskBar.tsx",
-      "lines": 1080,
+      "path": "src/data/characterPlaceholderEmoticonGrids.ts",
+      "lines": 1102,
       "role": ""
     },
     {
-      "path": "src/data/characterPlaceholderEmoticonGrids.ts",
-      "lines": 1024,
+      "path": "src/components/MainTabUnifiedAskBar.tsx",
+      "lines": 1080,
       "role": ""
     },
     {
@@ -111,6 +111,11 @@
       "role": ""
     },
     {
+      "path": "src/hooks/usePluginSettings.ts",
+      "lines": 672,
+      "role": ""
+    },
+    {
       "path": "src/components/SettingsTab.tsx",
       "lines": 636,
       "role": ""
@@ -123,11 +128,6 @@
     {
       "path": "src/styles/sections/gamepadAndPullModels.ts",
       "lines": 622,
-      "role": ""
-    },
-    {
-      "path": "src/hooks/usePluginSettings.ts",
-      "lines": 590,
       "role": ""
     },
     {
@@ -144,6 +144,11 @@
       "path": "py_modules/backend/services/settings_service.py",
       "lines": 545,
       "role": "Load/save/merge settings.json"
+    },
+    {
+      "path": "src/data/bonsaiSettingsNormalizers.ts",
+      "lines": 531,
+      "role": ""
     },
     {
       "path": "src/utils/buildAnswerBubbleElement.test.tsx",
@@ -168,11 +173,6 @@
     {
       "path": "src/utils/answerBubbleNavigation.test.ts",
       "lines": 512,
-      "role": ""
-    },
-    {
-      "path": "src/data/bonsaiSettingsNormalizers.ts",
-      "lines": 508,
       "role": ""
     },
     {

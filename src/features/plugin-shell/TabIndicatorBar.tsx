@@ -1,18 +1,30 @@
 /**
- * Title: Collapsing tab bar
- * Purpose: The thin bar that replaces Steam's tab strip — one dash per mounted tab with the active
- *          one lit, the active tab's name beside the dashes, LB / RB marks at the two ends — and the
- *          full strip of icons and names that floats over the panel while the bar holds the ring.
- * Used for: index.tsx, mounted above `.bonsai-decky-tabs-root` while Steam's own header row is
- *           hidden by section-1.ts (plan 30, decisions D44 and D55).
- * Solves: Steam's strip cost 80.66px of the 701px column (measured 2026-09-02) and its icons never
- *         showed a name; this is 20px and always names the tab. With the strip hidden its buttons
- *         stayed in Steam's gamepad tree as invisible stops, so this bar takes the ring instead:
- *         Left/Right and LB/RB switch tabs, Down hands the ring to the current body, Up goes to
- *         Decky's Back button, and a trap bounces any landing on a hidden button back here.
- * Does not: Switch tabs through Steam — `selectTab` from the shell owns the switch, and Steam's
- *           `Tabs` keeps owning LB / RB inside the bodies. Nor does it hold the strip open on a
- *           timer: it is open exactly while the bar has the ring, or while a tap opened it.
+ * Title: The plugin's own tab bar
+ *
+ * Purpose: Draws the thin bar that replaced Steam's own tab strip at the
+ * top of the plugin: a small dash per tab with the current one lit, the
+ * current tab's name written out beside them, and shoulder-button marks
+ * at each end. While this bar has the D-pad's focus, it also opens a
+ * fuller strip that floats over the panel showing every tab as an icon
+ * and a label, so a person can see where each shoulder-button press
+ * would take them before pressing it.
+ *
+ * Used for: The plugin's main screen, drawn above the tab body, while
+ * Steam's own original tab row is hidden.
+ *
+ * Solves: Steam's own tab strip took up a lot of vertical room and never
+ * showed a tab's name, only its icon. This bar is much shorter and
+ * always names the current tab. Steam's hidden strip still has its own
+ * buttons sitting invisibly in the D-pad's path, so this bar also takes
+ * over: left and right, or the shoulder buttons, switch tabs; pressing
+ * down hands focus into the tab body; pressing up goes to Decky's own
+ * Back button; and anything that would have landed on one of Steam's
+ * hidden buttons is caught and bounced back here instead.
+ *
+ * Does not: Actually switch which tab is showing — that is the plugin
+ * shell's job; this bar only asks for the switch. It also does not keep
+ * the fuller strip open on a timer — it is open exactly while this bar
+ * holds the D-pad's focus, or while someone has tapped it open by hand.
  */
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Focusable } from "@decky/ui";
@@ -38,6 +50,13 @@ import { isElementLike, useHiddenTabHeaderTrap } from "./useHiddenTabHeaderTrap"
  * `useHiddenTabHeaderTrap.ts`'s `isElementLike`, and for the same reason: `instanceof Node` is false
  * for a node born in a different realm than the one asking.
  */
+/**
+ * In: the bar's own root element, and whatever a pointer press landed on.
+ * Out: true if the press landed inside the bar (or its open strip).
+ * Can go wrong: nothing once the element check above it passes; a target
+ * that is not really an element (rare, but possible for some events)
+ * safely reads as outside rather than throwing.
+ */
 export function isPointerInsideTabBar(root: HTMLElement | null, target: EventTarget | null): boolean {
   return !!root && isElementLike(target) && root.contains(target);
 }
@@ -53,6 +72,46 @@ export type TabIndicatorBarProps = {
   exitDown: () => boolean;
 };
 
+/**
+ * In: the list of tabs actually mounted right now, which one is current,
+ * the function that switches tabs, and a function to hand focus down
+ * into the tab body.
+ * Out: the finished bar, plus the floating strip that opens over it.
+ * Can go wrong: the bar has to be the one D-pad stop for both itself and
+ * the strip together — the strip's own cells are not separate stops, only
+ * plain elements a pointer can tap — so a change that tries to make a
+ * strip cell focusable on its own would conflict with how this component
+ * reads open/closed state.
+ *
+ * 1. Works out which tab is current and its name, and whether the two
+ *    tabs with longer names should show a shortened form instead (only
+ *    once the Debug tab is also mounted, which leaves less room).
+ * 2. Tracks whether the floating strip is open, which can happen two
+ *    ways that both count: the bar has the D-pad's focus, or someone
+ *    tapped it open by hand. Either one is enough; both are watched
+ *    separately and combined.
+ * 3. Registers this bar with two shared registries: one so other code can
+ *    hand it focus by name, and one so it gets focus back after a popup
+ *    closes.
+ * 4. Sets up the trap that catches a D-pad move landing on one of
+ *    Steam's own hidden tab buttons and bounces it back to this bar
+ *    instead — see useHiddenTabHeaderTrap for that half of the fix.
+ * 5. While the strip is open by tap (not by focus), listens for a press
+ *    anywhere else on screen and closes it — but only outside the bar
+ *    and strip themselves, checked by walking the actual element tree
+ *    rather than by name, because elements from Steam's own popup layer
+ *    do not compare equal the normal way.
+ * 6. Builds the actual left/right/up/down and button handlers that do
+ *    the switching, from a shared helper so the rules match whatever
+ *    other code also drives this bar.
+ * 7. A tap on the thin bar itself opens the strip; a tap on one of the
+ *    strip's own cells switches straight to that tab and closes the
+ *    strip again.
+ * 8. Draws the bar (shoulder marks, dashes, the current name) and, after
+ *    it, the floating strip — always present in the markup so opening
+ *    and closing is a fade rather than something mounting and
+ *    unmounting, with the closed strip kept out of hit-testing.
+ */
 export function TabIndicatorBar({ tabIds, currentTab, selectTab, exitDown }: TabIndicatorBarProps): React.ReactElement {
   const current = tabIds.find((id) => id === currentTab);
   const name = current ? BONSAI_TAB_SHORT_NAMES[current] : "";

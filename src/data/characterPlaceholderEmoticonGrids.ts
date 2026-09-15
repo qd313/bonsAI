@@ -1,18 +1,56 @@
 /**
- * PLACEHOLDER pixel grids for AI character roleplay avatars (not final art).
+ * Title: Tiny pixel-art faces for the AI characters
  *
- * Chars: . = transparent, 0–f = palette index in EMOTICON_PALETTE. Base art is 8×8; runtime
- * `expand8To16` pixel-doubles to a unified 16×16 vector grid. `EMOTICON_PLACEHOLDER_GRIDS_16_OVERRIDES`
- * replaces expansion with hand-tuned 16×16 busts (GTA V, TF2, catalog cast).
+ * Purpose: Holds a small pixel-art portrait for every AI character preset
+ * — the little face shown beside the Ask box and in the character picker
+ * when the AI-character feature is on. These are placeholders, not the
+ * final art: simple enough to be typed out as text right here in the
+ * file, one row of characters per row of pixels, instead of needing a
+ * separate image file per character.
  *
- * Final portraits should be higher-detail assets (e.g. raster or vector); preset ids in
- * `characterCatalog` stay stable — swap rendering in `CharacterRoleplayEmoticon` when ready.
+ * Used for: The AI-character feature — the small avatar chip next to the
+ * question box, and the character picker's own tiles.
  *
- * Larger avatar overlay (future): host outside the tiny input chip — e.g. a positioned layer on the
- * main tab (`position` + `z-index` above `.bonsai-chat-transcript`, below modals), `max-height` tied
- * to QAM tab body (`ResizeObserver`), `object-fit: contain`, `min-width: 0` on flex ancestors, and
- * `pointer-events: none` if decorative only. Reserve horizontal margin so transcript text does not
- * run under the bust, or use a column layout with explicit gap.
+ * Solves: Gives every character preset a distinct little face immediately,
+ * without waiting on real artwork, by keeping the whole set as compact
+ * text data in one file rather than as dozens of separate image files.
+ *
+ * Does not: Provide finished art. A future version should replace these
+ * with proper images or vector art; the character ids used here stay the
+ * same either way, so only the drawing code would need to change, not
+ * every caller. Does not decide where or how large a portrait is drawn
+ * on screen either — that is up to whatever component asks for one.
+ *
+ * How it works:
+ * 1. A fixed set of sixteen colors. Each pixel in a portrait is written
+ *    as one character: a single digit or letter picks a color from this
+ *    list, and a period means "no color here, see through to whatever
+ *    is behind it."
+ * 2. Two small helpers glue a stack of text rows into one long string of
+ *    pixels, checking the count comes out exactly right for an 8-by-8 or
+ *    a 16-by-16 grid — so a typo that drops or adds a pixel in a hand-
+ *    drawn row fails loudly instead of quietly warping the picture.
+ * 3. The main table: one entry per character, each a simple picture
+ *    drawn at 8 pixels by 8, written out as eight rows of eight
+ *    characters so it is easy to see the shape while editing it. Most
+ *    characters' portraits live here.
+ * 4. A pixel-doubling step turns every one of those small 8-by-8
+ *    portraits into a 16-by-16 one (each pixel becomes a 2-by-2 block),
+ *    so every character can be shown at the same size on screen without
+ *    the code that draws them needing to know which size a given
+ *    portrait started as.
+ * 5. A second, separate table of hand-drawn 16-by-16 portraits for a
+ *    handful of characters — the GTA V cast, the Team Fortress 2
+ *    characters, and a few others — used instead of the doubled-up
+ *    version wherever someone took the time to draw a proper one at the
+ *    larger size.
+ * 6. The two are combined once, when the plugin starts: every character
+ *    gets its small portrait doubled in size, and then any hand-drawn
+ *    16-by-16 version from the second table overwrites that for the
+ *    characters that have one.
+ * 7. The one function anything outside this file actually calls: given a
+ *    character's id, hands back its finished portrait, or a generic
+ *    placeholder face if the id is not recognized.
  */
 export const EMOTICON_PALETTE: readonly string[] = [
   "#5c6470",
@@ -33,6 +71,13 @@ export const EMOTICON_PALETTE: readonly string[] = [
   "#ff9f43",
 ];
 
+/**
+ * In: eight text rows, each meant to be eight characters of pixel data.
+ * Out: all eight rows joined into one 64-character string.
+ * Can go wrong: throws if the rows do not add up to exactly 64
+ * characters — a missing or extra pixel in a hand-typed row is a mistake
+ * worth stopping on rather than silently drawing a warped picture.
+ */
 function g8(...rows: string[]): string {
   const s = rows.join("");
   if (s.length !== 64) {
@@ -41,6 +86,13 @@ function g8(...rows: string[]): string {
   return s;
 }
 
+/**
+ * In: sixteen text rows, each meant to be sixteen characters of pixel
+ * data.
+ * Out: all sixteen rows joined into one 256-character string.
+ * Can go wrong: throws if the rows do not add up to exactly 256
+ * characters, for the same reason as g8() above.
+ */
 function g16(...rows: string[]): string {
   const s = rows.join("");
   if (s.length !== 256) {
@@ -49,7 +101,17 @@ function g16(...rows: string[]): string {
   return s;
 }
 
-/** Pixel-double each 8×8 cell into a 2×2 block so every preset can share a 16×16 vector grid. */
+/**
+ * In: an 8-by-8 portrait, as one 64-character string.
+ * Out: the same picture at 16 by 16, each original pixel turned into a
+ * 2-by-2 block of the same color.
+ * Can go wrong: throws if the result is not exactly 256 characters,
+ * which would only happen if the input itself were the wrong length.
+ *
+ * Doubling every pixel, rather than smoothing or redrawing, is what
+ * lets every preset share one 16-by-16 size regardless of which table
+ * its art actually came from.
+ */
 function expand8To16(grid8: string): string {
   let out = "";
   for (let y = 0; y < 8; y++) {
@@ -1001,6 +1063,15 @@ const EMOTICON_PLACEHOLDER_GRIDS_16_OVERRIDES: Record<string, string> = {
   ),
 };
 
+/**
+ * In: nothing — reads the two tables defined above it in this file.
+ * Out: one finished 16-by-16 portrait per character id: every small
+ * portrait doubled in size, then overwritten by the matching hand-drawn
+ * one wherever the second table has one.
+ * Can go wrong: nothing beyond what expand8To16() itself can raise. Runs
+ * once, when the plugin starts, rather than every time a portrait is
+ * looked up — the result is kept in the constant defined right after it.
+ */
 function buildEmoticonGrids16(): Record<string, string> {
   const out: Record<string, string> = {};
   for (const [id, grid8] of Object.entries(CHARACTER_EMOTICON_PLACEHOLDER_GRIDS)) {
@@ -1017,6 +1088,13 @@ export type CharacterEmoticonGrid = {
   cellsPerSide: 8 | 16;
 };
 
+/**
+ * In: a character preset id.
+ * Out: that character's finished 16-by-16 portrait, or the generic
+ * "custom character" placeholder face if the id is not recognized.
+ * Can go wrong: nothing — an unrecognized id never produces a missing or
+ * broken picture, only the fallback one.
+ */
 export function resolvePlaceholderCharacterEmoticonGrid(presetId: string): CharacterEmoticonGrid {
   const grid = EMOTICON_PLACEHOLDER_GRIDS_16[presetId] ?? EMOTICON_PLACEHOLDER_GRIDS_16.__custom__;
   return { grid, cellsPerSide: 16 };

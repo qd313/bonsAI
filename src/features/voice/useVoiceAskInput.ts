@@ -1,9 +1,24 @@
 /**
- * Title: Voice Ask input
- * Purpose: Own the mic button's state machine — start, stop, permission gate, and error toasts.
- * Used for: index.tsx, which passes `voiceRecording` and `onMicInput` down to the Main tab.
- * Solves: Keeps recording state and its capability/teardown rules out of the plugin shell.
- * Does not: Transcribe — that is useVoiceTranscription and the backend Whisper daemon.
+ * Title: The microphone button on the Ask bar
+ *
+ * Purpose: Runs while a person taps the microphone icon to speak a
+ * question instead of typing it. Owns whether recording is on, checks
+ * permission before starting, writes the recognized words into the
+ * question box as they arrive, and shows an error message if anything
+ * goes wrong.
+ *
+ * Used for: The plugin's main screen, which hands `voiceRecording` (is
+ * the mic on) and `onMicInput` (what the mic button calls when tapped)
+ * down to the Ask tab.
+ *
+ * Solves: Keeps the mic's on/off state, its permission check, and
+ * cleaning up a recording that has to stop early, all in one place
+ * instead of spread through the main plugin screen's own code.
+ *
+ * Does not: Turn speech into text — that is a separate hook and a
+ * program running in the background that does the actual listening.
+ * This hook only starts and stops that process and reacts to what it
+ * reports back.
  */
 import { useCallback, useEffect, useState, type Dispatch, type SetStateAction } from "react";
 import { toaster } from "@decky/api";
@@ -26,6 +41,47 @@ export type UseVoiceAskInputArgs = {
   uiT: (key: UiStringKey, vars?: UiStringVars) => string;
 };
 
+/**
+ * In: the question box's own text and its setter, whether the microphone
+ * permission is on, whether a question is currently being asked, and a
+ * function to translate a message key into on-screen text.
+ * Out: whether the mic is recording, the mic button's tap handler, the
+ * "permission denied" flag and how to dismiss it, and whether — and
+ * with what text — the question box's current words came from the mic.
+ * Can go wrong: nothing catastrophic — every path that can fail shows a
+ * toast and turns recording back off rather than leaving the button in
+ * an unclear state.
+ *
+ * 1. Four pieces of state: is the mic recording, was permission just
+ *    denied, did the question box's text come from the mic (and if so,
+ *    what exact words did it write — used later to tell a hands-off
+ *    dictation apart from one a person then edited by hand).
+ * 2. `setUnifiedInputFromVoice()` wraps the question box's own setter so
+ *    every word written by the mic also marks where it came from — it
+ *    accepts both a plain new value and an updater function, matching
+ *    how the box's own setter can be called.
+ * 3. `clearAskCameFromMic()` resets that "came from the mic" flag; the
+ *    caller decides when that should happen (a manual edit does not
+ *    clear it on its own — see the flag's own note above).
+ * 4. `onVoiceError()` turns off recording and shows an error toast — the
+ *    one place every failure path below routes through.
+ * 5. Wires up the actual speech-to-text hook, handing it the wrapped
+ *    setter from step 2 and the error handler from step 4.
+ * 6. If microphone permission is taken away while recording is in
+ *    progress, stops the recording rather than leaving it running with
+ *    no permission to be running at all.
+ * 7. Clears the "permission denied" message automatically once
+ *    permission is granted, so it does not linger after the person
+ *    fixes it.
+ * 8. `dismissMicPermissionDeny()` lets the message be dismissed by hand
+ *    as well.
+ * 9. `onMicInput()` is the button's own tap handler: does nothing while
+ *    a question is being asked; stops an already-running recording;
+ *    shows the permission message and stops there if access is not
+ *    granted; otherwise starts recording and shows an error toast if
+ *    starting fails.
+ * 10. Everything above is bundled together and returned.
+ */
 export function useVoiceAskInput(a: UseVoiceAskInputArgs) {
   const [voiceRecording, setVoiceRecording] = useState(false);
   const [micPermissionDenied, setMicPermissionDenied] = useState(false);

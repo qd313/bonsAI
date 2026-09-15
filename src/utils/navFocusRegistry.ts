@@ -1,25 +1,59 @@
 /**
- * Title: Steam nav focus registry
- * Purpose: Move gamepad focus between separate navigation containers using Steam's own API.
- * Used for: liveTurnFocusGraph hops that leave the reply row (session context strip, chat-slot row,
- *           the permission-hint rows below the transcript).
- * Solves: A DOM `.focus()` does NOT transfer Steam's gamepad focus ownership across containers.
- *         Measured on device 2026-08-04: focusing the session context strip from the reply row set
- *         `document.activeElement` to the strip, left `gpfocus` on Retry, and a moment later cleared
- *         the ring entirely — so Steam went on routing every D-pad press to the reply row, which the
- *         probe log confirmed (three presses, all delivered to the utility row, each reporting a
- *         successful "move"). Steam's own transfer is `navRef.current.TakeFocus()`, which calls
- *         `BTakeFocus` on the nav node.
- *         Recurred 2026-09-04 (build 49241e7, PERM-JUMP-01): the vac-check deny row's own
- *         `focusChatPermissionHintRow` used a plain `focusDeckOwner` instead of this registry — same
- *         failure (ring did not follow) plus a second one it introduced: Steam's real Focusables
- *         carry no `tabindex` attribute on device at all (Retry, Copy and Open Permissions every one
- *         read `null`), so `focusDeckOwner`'s "stamp `tabindex="-1"` when none is present" guard
- *         never actually protects anything — it stamped the wrapping `.Panel.Focusable` and removed
- *         the whole row from Steam's nav graph. `focusDeckOwner` and any other plain `focus()` are
- *         therefore off the table for that hop; this registry is the only sanctioned way in.
- * Does not: Replace plain `focus()` for hops *within* one container. Those work — the spoiler fence
- *           is focused that way and Steam's ring follows it — and this registry is not needed there.
+ * Title: Sending the controller's highlight to a different part of the screen
+ *
+ * Purpose: The Steam Deck's controller does not click on things — it moves a highlight ("focus")
+ * from one control to the next, and Steam itself, not the plugin, decides which element that
+ * highlight sits on. Most of the screen is one connected area, so the highlight moves normally
+ * with the D-pad. A few places on the Main tab — the strip that shows what game is running, the
+ * row of chat slots, and the permission-hint rows shown under the transcript — sit in their own
+ * separate areas, and moving the highlight into one of those from the reply row needs a
+ * different trick than an ordinary D-pad move. This file is that trick: each of those areas
+ * registers itself here while it is on screen, and this file's `takeNavFocus()` is the one
+ * approved way to move the controller's highlight into one of them.
+ *
+ * Used for: the handful of places in the Main tab's focus map (`liveTurnFocusGraph`) that jump
+ * out of the reply row into one of those separate areas.
+ *
+ * Solves: the obvious way to move focus in the browser — calling `.focus()` on an element —
+ * changes what the browser itself thinks is focused, but does not move Steam's own highlight.
+ * The two can end up disagreeing: the browser says one control is focused while Steam's ring is
+ * showing on a different one, or showing nowhere at all. When that happens, the highlight looks
+ * stuck (or vanishes) while the player's D-pad presses are actually landing somewhere else that
+ * never moved.
+ *
+ *   This has been measured on the Deck twice, in two different spots, not guessed at:
+ *   - 2026-08-04: moving into the game-context strip with a plain `.focus()` changed the
+ *     browser's own idea of what was focused, but Steam's ring stayed on the Retry button for a
+ *     moment and then disappeared entirely. Three D-pad presses afterward all still went to the
+ *     reply row, and each one was logged as a successful move.
+ *   - 2026-09-04 (build 49241e7): the same mistake reappeared in a different row — the
+ *     permission-hint row above the vac-check chat feature used a plain `.focus()` call
+ *     (`focusDeckOwner`) instead of this registry, and hit a second problem at the same time: on
+ *     a real Deck, none of these rows carry the `tabindex` attribute Steam is supposed to look
+ *     for, so `focusDeckOwner`'s safety check — "add `tabindex="-1"` if the row does not already
+ *     have one" — stamped it onto the wrong element and removed that whole row from Steam's list
+ *     of things the controller can reach at all.
+ *
+ *   The one call that actually moves Steam's own highlight is `navRef.current.TakeFocus()`
+ *   (Steam calls this `BTakeFocus` internally), and that is what this file's `takeNavFocus()`
+ *   calls. A plain `.focus()` is not a smaller or simpler version of the same thing — it moves
+ *   something Steam does not see.
+ *
+ * Does not: replace `.focus()` for moves that stay inside one of these areas. Those already
+ * work, because the highlight only needs this special handling when it crosses from one separate
+ * area into another — the spoiler-text hiding feature is one example of a move that does not
+ * need this file.
+ *
+ * Gotchas:
+ *   - Removing a registration has to check that the thing being removed is still the thing that
+ *     was registered, not just delete whatever is there (`unregisterNavFocus`). Two copies of the
+ *     same screen element can briefly both be alive — reopening a panel, switching tabs, a
+ *     development-only double-render — and if a newer copy registers first and an older copy's
+ *     cleanup then deletes unconditionally, the newer, still-visible copy loses its registration
+ *     and nothing can move the highlight to it any more. When that happened, the code that hit it
+ *     fell back to a plain `.focus()` across the same area boundary described above, which fails
+ *     in exactly the way this file exists to prevent: the press is reported as handled, but
+ *     nothing visibly moves.
  */
 
 export type NavFocusId = "session-context-strip" | "chat-slot-row" | "preset-carousel" | "unified-input"

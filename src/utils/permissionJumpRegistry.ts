@@ -1,9 +1,36 @@
 /**
- * Title: Permission jump registry
- * Purpose: Remember return tab and pending Permissions focus target across tab switches.
- * Used for: usePermissionJump and PermissionsTab focus restore after a deny-site jump.
- * Solves: Return-tab story and focus targeting without global document queries.
- * Does not: Own tab routing — useBonsaiPluginShell / index.tsx call setCurrentTab.
+ * Title: Remembering a jump to the Permissions tab, and finishing it
+ *
+ * Purpose: When a denied permission shows a "go fix this" link — for example from a chat message
+ * explaining that a permission is off — pressing it needs to remember two things across the tab
+ * switch that follows: which tab to come back to, and which row on the Permissions tab the
+ * controller's highlight should land on once it gets there. This file remembers both, and moves
+ * the highlight once the Permissions tab has actually rendered that row.
+ *
+ * Used for: `usePermissionJump`, and the Permissions tab's own focus restore once it mounts
+ * after a jump.
+ *
+ * Solves: without a shared place to remember "go here, then land there", the target row and the
+ * tab to come back to would have to be threaded through props across a tab switch, which the
+ * rest of the tab-switching code was not built to carry.
+ *
+ * Does not: switch tabs itself — `useBonsaiPluginShell` (or `index.tsx`) call `setCurrentTab`.
+ * This file only remembers where the jump is going and finishes its last step.
+ *
+ * Gotchas:
+ *   - Landing the highlight on the right Permissions row uses the same `navFocusRegistry.ts`
+ *     trick used elsewhere on this screen for moving between separate areas (see that file for
+ *     why a plain `.focus()` does not do this) — the target row registers itself there, and this
+ *     file's `restorePermissionJumpFocusWithRetry()` waits for that registration, trying again up
+ *     to three more times over the following third of a second in case the row has not
+ *     registered yet the instant the tab renders.
+ *   - The earlier version of that retry step (`focusOwnerById`) reported success the moment any
+ *     element under the target row was found, whether or not the controller's highlight had
+ *     actually moved there — and it kept trying further elements even after one attempt had
+ *     already "succeeded". Because that always reported success on the very first try, the
+ *     retries described above never actually got a second attempt in practice. Measured on
+ *     device 2026-09-05 (build 4/517804a): the highlight landed on the "Back to Main" button
+ *     instead of the row that was supposed to be armed.
  */
 import type { PermissionFocusTargetId } from "./permissionDeepLink";
 import {

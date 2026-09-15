@@ -1,9 +1,21 @@
 /**
- * Title: Media format helpers
- * Purpose: Format file URIs, screenshot timestamps, and byte sizes for media list UI.
- * Used for: useScreenshotBrowser rows and attachment preview metadata.
- * Solves: Consistent human-readable media metadata across Steam and plugin captures.
- * Does not: Read or write files — backend screenshot RPC and filesystem permissions.
+ * Title: Turning screenshot and file info into words a person can read
+ *
+ * Purpose: When the screenshot browser shows a list of captured files, this file turns raw
+ * computer data into the words shown next to each one: the file's path becomes a link that can
+ * actually be opened as a picture, the moment it was taken becomes something like "8/14/2026,
+ * 3:02 PM" instead of a number of seconds since 1970, and the file's size becomes "2.4 MB"
+ * instead of a large number of bytes.
+ *
+ * Used for: every row of the screenshot list, and the details shown when a screenshot is
+ * attached to an Ask.
+ *
+ * Solves: without this, every place that shows a screenshot would work out its own timestamp
+ * and size wording by hand, and the numbers would not read the same way from one place to
+ * another.
+ *
+ * Does not: read the file, take the screenshot, or ask the back end for anything. It only turns
+ * numbers and paths it is already handed into readable text.
  */
 /** Convert absolute file paths to file:// URIs for image rendering contexts. */
 export function toFileUri(path: string): string {

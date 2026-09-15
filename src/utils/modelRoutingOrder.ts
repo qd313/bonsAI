@@ -1,9 +1,33 @@
 /**
- * Title: Model routing order
- * Purpose: Default text/vision model tag chains and heuristics aligned with backend ollama_routing.py.
- * Used for: OllamaTab routing preview and pull-model recommendation scoring inputs.
- * Solves: Consistent fallback order between frontend display and backend Ask routing.
- * Does not: Probe installed models — see backend list and routing RPC.
+ * Title: Which installed AI model to try first
+ *
+ * Purpose: A person can have more than one AI model installed at once. Ask can use any of them,
+ * but needs a starting order to try them in, and the Ollama tab needs to show that order as a
+ * list. This file holds the built-in starting order — one for a plain question, a separate one
+ * for a question that includes a picture — plus the rules for whether a model looks like it can
+ * handle pictures, whether a model is large enough that it is a bad idea to run on the Deck's
+ * shared graphics memory, and whether a model's licence is allowed under the current Settings
+ * licence tier. It builds the final "try these, in this order" list that both the Ollama tab's
+ * preview and the actual Ask request use.
+ *
+ * Used for: the Ollama tab's routing preview list, and the ranking behind the "which model would
+ * help here" suggestions on the Pull Models screen.
+ *
+ * Solves: without one shared order and one shared set of rules, the list shown on screen could
+ * disagree with the order Ask actually tries models in, and a model could look available in one
+ * place while being blocked by licence rules in another.
+ *
+ * Does not: check which models are actually installed on the Deck right now — that comes from a
+ * separate request to the back end. This file only orders and filters the list it is handed.
+ *
+ * Gotchas:
+ *   - The starting order for both plain and picture questions has to be changed by hand
+ *     alongside `ollama_routing.py` on the back end. There is no code link between the two;
+ *     someone has to remember to update both.
+ *   - A model counts as too large for the shared graphics memory (`isHighVramTag`) either because
+ *     it is named on a fixed list of known large models, or because its listed size in the Pull
+ *     Models catalog is 15 GB or more. A model that is not on that list and has no listed size is
+ *     never flagged, even if it happens to be a large download.
  */
 import type { PullModelEntry, PullModelLicenseClass } from "../data/pullModelCatalog";
 import type { ModelPolicyTierId } from "../data/modelPolicy";

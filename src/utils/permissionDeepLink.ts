@@ -1,9 +1,27 @@
 /**
- * Title: Permission deep-link mapper
- * Purpose: Map capability keys to Permissions-tab focus targets and standard deny copy.
- * Used for: Permission jump from deny surfaces; Connection doctor will reuse the same mechanism.
- * Solves: One shared mapping from backend capability keys to the right Permissions toggle row.
- * Does not: Navigate tabs or move focus — see permissionJumpRegistry and usePermissionJump.
+ * Title: Knowing which Permissions row unblocks which action
+ *
+ * Purpose: When something a person tries to do is blocked because a permission is off — for
+ * example, asking to check a Steam ban when "Steam ban lookup" is off — this file knows which
+ * row on the Permissions tab controls that permission, and the exact sentence to show explaining
+ * what to turn on.
+ *
+ * Used for: the "jump to Permissions" links shown wherever a permission blocks an action, and
+ * planned to be reused by an upcoming connection-troubleshooting feature.
+ *
+ * Solves: without one shared list, each place that shows a permission-denied message would have
+ * to work out on its own which Permissions row to send the person to, and the wording could
+ * drift between places that are supposed to say the same thing.
+ *
+ * Does not: actually move the controller's highlight to that row or switch tabs — that is
+ * `permissionJumpRegistry.ts` and `usePermissionJump`. This file only says where to go.
+ *
+ * Gotchas:
+ *   - Two separate back-end permissions — reading the media library and reading Steam's own logs
+ *     — show as one combined row on the Permissions tab ("Read game & screenshot context"), so
+ *     both keys map to the same `game_context_read` target here.
+ *   - `isVacCheckCapabilityDenyResponse()` recognizes one specific denial reply by matching its
+ *     exact wording. If that sentence ever changes, this check has to change with it.
  */
 import type { BonsaiCapabilities } from "../data/bonsaiSettingsSchema";
 

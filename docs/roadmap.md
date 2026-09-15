@@ -124,6 +124,16 @@ starts work outside this.
   who walks past something and presses Up to go back does not return to it; they land somewhere they never visited. Related to the
   two-star entry about Up skipping sections, but sharper: the two directions disagree about what the reply's stops are.
   Evidence `docs/test-evidence/round35-spoiler-block-down-and-up.json`.
+- ★ `[ollama]` **Mistyping one model name in a several-model download loses it without saying so** — **OPEN, found
+  while explaining the code 2026-09-14.** Ask for several models at once and get one name wrong: the bad one is dropped,
+  a line goes to a log nobody reads, and the rest download normally. The screen says the download started and never
+  mentions the one that went missing, so it looks like it worked — until that model is needed and is not there. It should
+  say which name it could not find.
+- ★ `[ui]` **A new setting can quietly stop working in one place, because the list of settings is written out by hand
+  several times over** — **OPEN, found while explaining the code 2026-09-14.** The settings code repeats its fifty-odd
+  setting names in several separate places in the same file. Miss one and nothing breaks visibly; that setting just stops
+  being saved or loaded in one situation while working fine everywhere else. It has already happened once, to four
+  settings. Tracked as "places the settings field list is repeated", at 7 against a target of 1.
 - ★★ `[focus]` **Opening the panel leaves nothing highlighted** — **OPEN, found 2026-09-04, measured again twice on
   2026-09-05.** Nothing owns the ring on a fresh open, so the first D-pad press has to place it rather than move it — and on
   one measured open that press landed on **Decky's back arrow, above bonsAI entirely**. A person spends two presses before
@@ -167,6 +177,11 @@ starts work outside this.
   has its own background, so the icon lands on that box's painted corner instead. Room is already reserved for the
   icon at the end of the last line, but that does not move the box's edge. Evidence
   `docs/test-evidence/plan48-deck-evening-2026-09-12.json` **[no evidence — re-run, batch QA-EVIDENCE-GAP-01]**, `screenshots/DeckCapture_20260912_183855_game.png`.
+- ★★ `[voice]` **Two things wanting the voice server at once would cut the first one off mid-sentence** — **OPEN,
+  found while explaining the code 2026-09-14.** The speech-to-text server is shared, and it is started for one particular
+  speech model. If a second caller asks for it with a different model, it restarts to suit the second, and the first is
+  never told — it simply finds the server gone. Only one thing uses it today, so nothing is broken now. It becomes real
+  the moment a second listener is added, a wake word for example.
 - ★★★ `[focus]` **The panel can get into a state where pressing Down stops half way and the Ask button is out of reach** —
   **OPEN, found 2026-09-05.** Down walked as far as the answer and stopped dead: ten presses, no movement, Left and Right
   dead too, only Up escaping. The Ask button, the preset chips and the question box were all on screen below and none

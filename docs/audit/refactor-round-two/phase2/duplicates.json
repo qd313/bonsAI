@@ -1,10 +1,10 @@
 {
  "app": {
   "error": null,
-  "duplicated_lines": 1841,
+  "duplicated_lines": 1846,
   "duplicated_lines_excluding_front_end_tests": 871,
-  "file_pairs": 82,
-  "lines_across_pairs": 2001,
+  "file_pairs": 84,
+  "lines_across_pairs": 2007,
   "within_one_file": [
    "hooks/useBonsaiAskOrchestration.test.ts",
    "features/preset-carousel/presetRowNav.test.ts",
@@ -20,7 +20,6 @@
    "components/SettingsTab.tsx",
    "components/CharacterPickerModal.tsx",
    "py_modules/backend/services/strategy_guide_parse.py",
-   "py_modules/backend/services/voice_transcription_service.py",
    "hooks/useReadAloud.test.ts",
    "main.py",
    "components/MainTabUnifiedAskBar.tsx",
@@ -30,9 +29,11 @@
    "hooks/useStreamScrollPin.test.ts",
    "utils/buildAnswerBubbleElement.test.tsx",
    "py_modules/backend/services/desktop_note_service.py",
+   "py_modules/backend/services/voice_whisper_runtime.py",
    "hooks/useMainTabAskBarFocus.ts",
    "components/DeveloperTab.tsx",
    "components/PullModelsModal.tsx",
+   "py_modules/backend/services/voice_transcription_service.py",
    "components/KnowledgeBaseSection.tsx",
    "components/PullModelsModal.test.tsx",
    "components/MainTabPresetAnimatedChips.test.tsx",
@@ -338,19 +339,6 @@
    },
    {
     "files": [
-     "py_modules/backend/services/voice_transcription_service.py",
-     "py_modules/backend/services/voice_transcription_service.py"
-    ],
-    "fragments": 2,
-    "lines": 31,
-    "biggest": {
-     "lines": 17,
-     "at": "py_modules/backend/services/voice_transcription_service.py:168-184",
-     "and": "py_modules/backend/services/voice_transcription_service.py:242-258"
-    }
-   },
-   {
-    "files": [
      "utils/answerBubbleNavigation.ts",
      "utils/liveTurnFocusGraph.ts"
     ],
@@ -397,8 +385,8 @@
     "lines": 23,
     "biggest": {
      "lines": 9,
-     "at": "main.py:2165-2173",
-     "and": "main.py:2198-2206"
+     "at": "main.py:1868-1876",
+     "and": "main.py:1901-1909"
     }
    },
    {
@@ -423,8 +411,8 @@
     "lines": 21,
     "biggest": {
      "lines": 21,
-     "at": "main.py:3037-3057",
-     "and": "py_modules/backend/services/ollama_ask_service.py:59-79"
+     "at": "main.py:2740-2760",
+     "and": "py_modules/backend/services/ollama_ask_service.py:60-80"
     }
    },
    {
@@ -529,6 +517,19 @@
      "lines": 17,
      "at": "py_modules/backend/services/desktop_note_service.py:318-334",
      "and": "py_modules/backend/services/desktop_note_service.py:415-431"
+    }
+   },
+   {
+    "files": [
+     "py_modules/backend/services/voice_whisper_runtime.py",
+     "py_modules/backend/services/voice_whisper_runtime.py"
+    ],
+    "fragments": 1,
+    "lines": 17,
+    "biggest": {
+     "lines": 17,
+     "at": "py_modules/backend/services/voice_whisper_runtime.py:105-121",
+     "and": "py_modules/backend/services/voice_whisper_runtime.py:128-144"
     }
    },
    {

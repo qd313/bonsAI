@@ -3,7 +3,7 @@
  "files_a_typical_setting_touches": 6,
  "lines_a_typical_setting_touches": 9,
  "lines_per_setting": {
-  "ask_mode": 115,
+  "ask_mode": 116,
   "capabilities": 57,
   "request_timeout_seconds": 30,
   "reply_verbosity": 24,
@@ -76,7 +76,7 @@
   },
   {
    "file": "main.py",
-   "settings": 22
+   "settings": 21
   },
   {
    "file": "py_modules/backend/services/ollama_ask_service.py",
@@ -95,6 +95,10 @@
    "settings": 6
   },
   {
+   "file": "py_modules/backend/services/rag_corpus_status.py",
+   "settings": 5
+  },
+  {
    "file": "src/data/characterUiAccent.ts",
    "settings": 4
   },
@@ -104,6 +108,10 @@
   },
   {
    "file": "py_modules/backend/services/knowledge_base_service.py",
+   "settings": 4
+  },
+  {
+   "file": "py_modules/backend/services/rag_corpus_local_install.py",
    "settings": 4
   },
   {
@@ -124,14 +132,6 @@
   },
   {
    "file": "py_modules/backend/services/ollama_ask_budgets.py",
-   "settings": 2
-  },
-  {
-   "file": "py_modules/backend/services/transparency_service.py",
-   "settings": 2
-  },
-  {
-   "file": "src/utils/inputTransparency.ts",
    "settings": 2
   }
  ],
@@ -207,6 +207,7 @@
    "main.py",
    "py_modules/backend/ollama_routing.py",
    "py_modules/backend/services/ai_character_service.py",
+   "py_modules/backend/services/ask_payload.py",
    "py_modules/backend/services/bonsai_stream_tags.py",
    "py_modules/backend/services/game_ai_request.py",
    "py_modules/backend/services/kb_not_in_notes_notice.py",
@@ -352,6 +353,7 @@
   ],
   "named_ollama_hosts": [
    "main.py",
+   "py_modules/backend/services/rag_corpus_status.py",
    "py_modules/backend/services/settings_service.py",
    "src/data/bonsaiSettingsNormalizers.ts",
    "src/data/bonsaiSettingsSchema.ts",
@@ -376,6 +378,7 @@
   "ollama_local_on_deck": [
    "main.py",
    "py_modules/backend/services/local_ollama_teardown_service.py",
+   "py_modules/backend/services/rag_corpus_status.py",
    "py_modules/backend/services/settings_service.py",
    "src/data/bonsaiSettingsNormalizers.ts",
    "src/data/bonsaiSettingsSchema.ts",
@@ -408,6 +411,8 @@
    "py_modules/backend/services/knowledge_base_schema.py",
    "py_modules/backend/services/knowledge_base_service.py",
    "py_modules/backend/services/plugin_data_reset.py",
+   "py_modules/backend/services/rag_corpus_local_install.py",
+   "py_modules/backend/services/rag_corpus_status.py",
    "py_modules/backend/services/settings_service.py",
    "src/data/bonsaiSettingsNormalizers.ts",
    "src/data/bonsaiSettingsSchema.ts",
@@ -416,6 +421,8 @@
   ],
   "rag_corpus_version": [
    "main.py",
+   "py_modules/backend/services/rag_corpus_local_install.py",
+   "py_modules/backend/services/rag_corpus_status.py",
    "py_modules/backend/services/settings_service.py",
    "src/data/bonsaiSettingsNormalizers.ts",
    "src/data/bonsaiSettingsSchema.ts",
@@ -474,7 +481,7 @@
    "src/utils/settingsPayload.ts"
   ],
   "show_developer_tab": [
-   "main.py",
+   "py_modules/backend/services/rag_corpus_local_install.py",
    "py_modules/backend/services/settings_service.py",
    "src/data/bonsaiSettingsNormalizers.ts",
    "src/data/bonsaiSettingsSchema.ts",
@@ -558,6 +565,8 @@
    "main.py",
    "py_modules/backend/services/game_ai_request.py",
    "py_modules/backend/services/knowledge_base_service.py",
+   "py_modules/backend/services/rag_corpus_local_install.py",
+   "py_modules/backend/services/rag_corpus_status.py",
    "py_modules/backend/services/settings_service.py",
    "src/components/KnowledgeBaseSection.tsx",
    "src/data/bonsaiSettingsNormalizers.ts",

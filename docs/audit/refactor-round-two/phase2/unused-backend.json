@@ -166,7 +166,7 @@
   },
   {
    "file": "py_modules/backend/services/ollama_ask_budgets.py",
-   "line": 118,
+   "line": 120,
    "kind": "only the tests call it",
    "name": "reset_thinking_support_cache",
    "confidence": 60,
@@ -205,7 +205,7 @@
  "ruled_out": [
   {
    "file": "main.py",
-   "line": 323,
+   "line": 325,
    "kind": "method",
    "name": "_main",
    "confidence": 60,
@@ -213,7 +213,7 @@
   },
   {
    "file": "main.py",
-   "line": 377,
+   "line": 379,
    "kind": "method",
    "name": "_unload",
    "confidence": 60,
@@ -221,7 +221,7 @@
   },
   {
    "file": "main.py",
-   "line": 875,
+   "line": 802,
    "kind": "method",
    "name": "clear_plugin_data",
    "confidence": 60,
@@ -229,7 +229,7 @@
   },
   {
    "file": "main.py",
-   "line": 1056,
+   "line": 983,
    "kind": "method",
    "name": "list_chat_slots",
    "confidence": 60,
@@ -237,7 +237,7 @@
   },
   {
    "file": "main.py",
-   "line": 1067,
+   "line": 994,
    "kind": "method",
    "name": "get_chat_slot",
    "confidence": 60,
@@ -245,7 +245,7 @@
   },
   {
    "file": "main.py",
-   "line": 1083,
+   "line": 1010,
    "kind": "method",
    "name": "create_chat_slot",
    "confidence": 60,
@@ -253,7 +253,7 @@
   },
   {
    "file": "main.py",
-   "line": 1106,
+   "line": 1033,
    "kind": "method",
    "name": "delete_chat_slot",
    "confidence": 60,
@@ -261,7 +261,7 @@
   },
   {
    "file": "main.py",
-   "line": 1121,
+   "line": 1048,
    "kind": "method",
    "name": "rename_chat_slot",
    "confidence": 60,
@@ -269,7 +269,7 @@
   },
   {
    "file": "main.py",
-   "line": 1144,
+   "line": 1071,
    "kind": "method",
    "name": "get_strategy_checklist_session",
    "confidence": 60,
@@ -277,7 +277,7 @@
   },
   {
    "file": "main.py",
-   "line": 1159,
+   "line": 1086,
    "kind": "method",
    "name": "save_strategy_checklist_session",
    "confidence": 60,
@@ -285,7 +285,7 @@
   },
   {
    "file": "main.py",
-   "line": 1188,
+   "line": 1115,
    "kind": "method",
    "name": "clear_strategy_checklist_session",
    "confidence": 60,
@@ -293,7 +293,7 @@
   },
   {
    "file": "main.py",
-   "line": 1204,
+   "line": 1131,
    "kind": "method",
    "name": "get_intent_packs",
    "confidence": 60,
@@ -301,7 +301,7 @@
   },
   {
    "file": "main.py",
-   "line": 1213,
+   "line": 1140,
    "kind": "method",
    "name": "set_intent_pack_enabled",
    "confidence": 60,
@@ -309,7 +309,7 @@
   },
   {
    "file": "main.py",
-   "line": 1229,
+   "line": 1156,
    "kind": "method",
    "name": "set_kids_lock_state",
    "confidence": 60,
@@ -317,7 +317,7 @@
   },
   {
    "file": "main.py",
-   "line": 1234,
+   "line": 1161,
    "kind": "method",
    "name": "export_intent_pack",
    "confidence": 60,
@@ -325,7 +325,7 @@
   },
   {
    "file": "main.py",
-   "line": 1239,
+   "line": 1166,
    "kind": "method",
    "name": "import_intent_pack",
    "confidence": 60,
@@ -333,7 +333,7 @@
   },
   {
    "file": "main.py",
-   "line": 1262,
+   "line": 1189,
    "kind": "method",
    "name": "remove_intent_pack",
    "confidence": 60,
@@ -341,7 +341,7 @@
   },
   {
    "file": "main.py",
-   "line": 1283,
+   "line": 1210,
    "kind": "method",
    "name": "get_deck_ip",
    "confidence": 60,
@@ -349,7 +349,7 @@
   },
   {
    "file": "main.py",
-   "line": 1289,
+   "line": 1216,
    "kind": "method",
    "name": "test_ollama_connection",
    "confidence": 60,
@@ -357,7 +357,7 @@
   },
   {
    "file": "main.py",
-   "line": 1475,
+   "line": 1277,
    "kind": "method",
    "name": "start_local_ollama_setup",
    "confidence": 60,
@@ -365,7 +365,7 @@
   },
   {
    "file": "main.py",
-   "line": 1553,
+   "line": 1355,
    "kind": "method",
    "name": "get_local_ollama_setup_status",
    "confidence": 60,
@@ -373,7 +373,7 @@
   },
   {
    "file": "main.py",
-   "line": 1557,
+   "line": 1359,
    "kind": "method",
    "name": "cancel_local_ollama_setup",
    "confidence": 60,
@@ -381,7 +381,7 @@
   },
   {
    "file": "main.py",
-   "line": 1581,
+   "line": 1383,
    "kind": "method",
    "name": "get_rag_corpus_status",
    "confidence": 60,
@@ -389,7 +389,7 @@
   },
   {
    "file": "main.py",
-   "line": 1700,
+   "line": 1455,
    "kind": "method",
    "name": "cancel_rag_corpus_download",
    "confidence": 60,
@@ -397,7 +397,7 @@
   },
   {
    "file": "main.py",
-   "line": 1713,
+   "line": 1468,
    "kind": "method",
    "name": "update_rag_corpus",
    "confidence": 60,
@@ -405,7 +405,7 @@
   },
   {
    "file": "main.py",
-   "line": 1729,
+   "line": 1484,
    "kind": "method",
    "name": "remove_rag_corpus",
    "confidence": 60,
@@ -413,7 +413,7 @@
   },
   {
    "file": "main.py",
-   "line": 1745,
+   "line": 1500,
    "kind": "method",
    "name": "install_rag_corpus_local",
    "confidence": 60,
@@ -421,7 +421,7 @@
   },
   {
    "file": "main.py",
-   "line": 1805,
+   "line": 1508,
    "kind": "method",
    "name": "get_session_rag_chip_candidates",
    "confidence": 60,
@@ -429,7 +429,7 @@
   },
   {
    "file": "main.py",
-   "line": 1923,
+   "line": 1626,
    "kind": "method",
    "name": "pull_ollama_models",
    "confidence": 60,
@@ -437,7 +437,7 @@
   },
   {
    "file": "main.py",
-   "line": 1928,
+   "line": 1631,
    "kind": "method",
    "name": "merge_pulled_tags_into_routing_orders",
    "confidence": 60,
@@ -445,7 +445,7 @@
   },
   {
    "file": "main.py",
-   "line": 1987,
+   "line": 1690,
    "kind": "method",
    "name": "delete_ollama_model",
    "confidence": 60,
@@ -453,7 +453,7 @@
   },
   {
    "file": "main.py",
-   "line": 2022,
+   "line": 1725,
    "kind": "method",
    "name": "fetch_ollama_catalog_metadata",
    "confidence": 60,
@@ -461,7 +461,7 @@
   },
   {
    "file": "main.py",
-   "line": 2075,
+   "line": 1778,
    "kind": "method",
    "name": "list_recent_screenshots",
    "confidence": 60,
@@ -469,7 +469,7 @@
   },
   {
    "file": "main.py",
-   "line": 2112,
+   "line": 1815,
    "kind": "method",
    "name": "append_desktop_debug_note",
    "confidence": 60,
@@ -477,7 +477,7 @@
   },
   {
    "file": "main.py",
-   "line": 2140,
+   "line": 1843,
    "kind": "method",
    "name": "append_desktop_chat_event",
    "confidence": 60,
@@ -485,7 +485,7 @@
   },
   {
    "file": "main.py",
-   "line": 2173,
+   "line": 1876,
    "kind": "method",
    "name": "append_app_log",
    "confidence": 60,
@@ -493,7 +493,7 @@
   },
   {
    "file": "main.py",
-   "line": 2332,
+   "line": 2035,
    "kind": "method",
    "name": "get_input_transparency",
    "confidence": 60,
@@ -501,7 +501,7 @@
   },
   {
    "file": "main.py",
-   "line": 2342,
+   "line": 2045,
    "kind": "method",
    "name": "get_reply_language_snapshot",
    "confidence": 60,
@@ -509,7 +509,7 @@
   },
   {
    "file": "main.py",
-   "line": 2347,
+   "line": 2050,
    "kind": "method",
    "name": "save_ask_feedback",
    "confidence": 60,
@@ -517,7 +517,7 @@
   },
   {
    "file": "main.py",
-   "line": 2381,
+   "line": 2084,
    "kind": "method",
    "name": "take_steam_screenshot",
    "confidence": 60,
@@ -525,7 +525,7 @@
   },
   {
    "file": "main.py",
-   "line": 2453,
+   "line": 2156,
    "kind": "method",
    "name": "ask_game_ai",
    "confidence": 60,
@@ -533,7 +533,7 @@
   },
   {
    "file": "main.py",
-   "line": 2605,
+   "line": 2308,
    "kind": "method",
    "name": "start_background_game_ai",
    "confidence": 60,
@@ -541,7 +541,7 @@
   },
   {
    "file": "main.py",
-   "line": 2838,
+   "line": 2541,
    "kind": "method",
    "name": "dbg_fe_log",
    "confidence": 60,
@@ -549,7 +549,7 @@
   },
   {
    "file": "main.py",
-   "line": 2851,
+   "line": 2554,
    "kind": "method",
    "name": "get_background_game_ai_status",
    "confidence": 60,
@@ -557,7 +557,7 @@
   },
   {
    "file": "main.py",
-   "line": 2935,
+   "line": 2638,
    "kind": "method",
    "name": "forget_background_game_ai",
    "confidence": 60,
@@ -565,7 +565,7 @@
   },
   {
    "file": "main.py",
-   "line": 3103,
+   "line": 2806,
    "kind": "method",
    "name": "get_voice_engine_status",
    "confidence": 60,
@@ -573,7 +573,7 @@
   },
   {
    "file": "main.py",
-   "line": 3111,
+   "line": 2814,
    "kind": "method",
    "name": "install_voice_engine",
    "confidence": 60,
@@ -581,7 +581,7 @@
   },
   {
    "file": "main.py",
-   "line": 3161,
+   "line": 2864,
    "kind": "method",
    "name": "get_voice_install_status",
    "confidence": 60,
@@ -589,7 +589,7 @@
   },
   {
    "file": "main.py",
-   "line": 3165,
+   "line": 2868,
    "kind": "method",
    "name": "start_voice_transcription",
    "confidence": 60,
@@ -597,7 +597,7 @@
   },
   {
    "file": "main.py",
-   "line": 3224,
+   "line": 2927,
    "kind": "method",
    "name": "stop_voice_transcription",
    "confidence": 60,
@@ -605,7 +605,7 @@
   },
   {
    "file": "main.py",
-   "line": 3244,
+   "line": 2947,
    "kind": "method",
    "name": "get_voice_transcription_status",
    "confidence": 60,
@@ -613,7 +613,7 @@
   },
   {
    "file": "main.py",
-   "line": 3267,
+   "line": 2970,
    "kind": "method",
    "name": "start_voice_read_aloud",
    "confidence": 60,
@@ -621,7 +621,7 @@
   },
   {
    "file": "main.py",
-   "line": 3277,
+   "line": 2980,
    "kind": "method",
    "name": "stop_voice_read_aloud",
    "confidence": 60,
@@ -629,7 +629,7 @@
   },
   {
    "file": "main.py",
-   "line": 3282,
+   "line": 2985,
    "kind": "method",
    "name": "get_voice_read_aloud_status",
    "confidence": 60,

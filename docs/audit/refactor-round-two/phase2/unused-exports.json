@@ -1,8 +1,8 @@
 {
  "totals": {
   "exports": 20,
-  "named somewhere else after all": 26,
-  "types": 5,
+  "named somewhere else after all": 27,
+  "types": 6,
   "duplicates": 2,
   "only a test or the harness names it": 1
  },
@@ -14,6 +14,8 @@
   "packages/bonsai-mcp/src/paths.ts",
   "packages/bonsai-mcp/src/server.ts",
   "scripts/remove_dead_exports.mjs",
+  "scripts/seam_contract.mjs",
+  "scripts/shell_seam.mjs",
   "scripts/sync-versions.mjs",
   "scripts/ts_long_functions.mjs",
   "src/test-harness/renderWithHarness.tsx"
@@ -73,6 +75,7 @@
    "src/data/storageKeys.ts:11 DISCLAIMER_STORAGE_KEY",
    "src/data/storageKeys.ts:22 LOCAL_RUNTIME_BETA_DISMISSED_STORAGE_KEY",
    "src/data/uiScaleProfile.ts:29 SHOW_IMMERSIVE_UI_SCALE",
+   "src/hooks/useBonsaiAskOrchestration.ts:72 AskThreadExpandedTurnKey",
    "src/styles/bonsaiScopeStylesheet.ts:44 buildGamepadFocusRingStylesheet",
    "src/styles/bonsaiScopeStylesheet.ts:44 buildPullModelsStylesheet",
    "src/utils/answerBubbleNavigation.ts:192 resolveAnswerBubbleEl",
@@ -481,6 +484,27 @@
      "fix": "keep, or delete the test with it",
      "seen_in": [
       "src/test-harness/fakeDeckyRpc.ts"
+     ]
+    }
+   ],
+   "enumMembers": [],
+   "namespaceMembers": [],
+   "duplicates": []
+  },
+  "src/hooks/useBonsaiAskOrchestration.ts": {
+   "exports": [],
+   "types": [
+    {
+     "name": "AskThreadExpandedTurnKey",
+     "line": 72,
+     "referenced_by_harness": [],
+     "kind": "named somewhere else after all",
+     "fix": "check by hand before deleting",
+     "seen_in": [
+      "src/components/MainTab.tsx",
+      "src/components/MainTabChatTranscript.tsx",
+      "src/hooks/useChatSlots.ts",
+      "src/types/askOrchestration.ts"
      ]
     }
    ],

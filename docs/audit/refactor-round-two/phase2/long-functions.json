@@ -16,11 +16,11 @@
     1
    ],
    [
-    "src/hooks/useBonsaiAskOrchestration.ts",
+    "src/styles/sections/section-6.ts",
     1
    ],
    [
-    "src/styles/sections/section-6.ts",
+    "src/hooks/useBonsaiAskOrchestration.ts",
     1
    ],
    [
@@ -72,16 +72,16 @@
     "length": 1549
    },
    {
-    "file": "src/hooks/useBonsaiAskOrchestration.ts",
-    "name": "useBonsaiAskOrchestration",
-    "line": 176,
-    "length": 1464
-   },
-   {
     "file": "src/styles/sections/section-6.ts",
     "name": "buildSection6Section",
     "line": 4,
     "length": 1341
+   },
+   {
+    "file": "src/hooks/useBonsaiAskOrchestration.ts",
+    "name": "useBonsaiAskOrchestration",
+    "line": 168,
+    "length": 1302
    },
    {
     "file": "src/components/OllamaWhereAiRunsSection.tsx",
@@ -421,7 +421,7 @@
    {
     "file": "main.py",
     "name": "_start_custom_ollama_pull",
-    "line": 1847,
+    "line": 1550,
     "length": 73
    },
    {
@@ -431,12 +431,6 @@
     "length": 68
    },
    {
-    "file": "py_modules/backend/services/voice_transcription_service.py",
-    "name": "start",
-    "line": 1169,
-    "length": 66
-   },
-   {
     "file": "py_modules/backend/services/ollama_local_autostart_service.py",
     "name": "_install_autostart",
     "line": 251,
@@ -444,8 +438,14 @@
    },
    {
     "file": "py_modules/backend/services/voice_transcription_service.py",
+    "name": "start",
+    "line": 1055,
+    "length": 64
+   },
+   {
+    "file": "py_modules/backend/services/voice_transcription_service.py",
     "name": "_transcribe_loop",
-    "line": 1272,
+    "line": 1156,
     "length": 62
    }
   ]

@@ -1,25 +1,14 @@
 {
  "files_over_400_lines": 42,
- "total_lines_in_them": 37444,
- "cycles_backend": [
-  [
-   "py_modules/backend/services/ask_local_commands.py",
-   "py_modules/backend/services/input_sanitizer_service.py",
-   "py_modules/backend/services/shortcut_setup_commands.py",
-   "py_modules/backend/services/vac_check_commands.py"
-  ],
-  [
-   "py_modules/backend/services/voice_transcription_service.py",
-   "py_modules/backend/services/voice_whisper_daemon.py"
-  ]
- ],
+ "total_lines_in_them": 36859,
+ "cycles_backend": [],
  "cycles_frontend": [],
  "rows": [
   {
    "file": "main.py",
-   "lines": 3292,
+   "lines": 2995,
    "imported_by": 0,
-   "imports": 43
+   "imports": 45
   },
   {
    "file": "py_modules/backend/services/knowledge_base_service.py",
@@ -34,22 +23,16 @@
    "imports": 67
   },
   {
-   "file": "src/hooks/useBonsaiAskOrchestration.ts",
-   "lines": 1639,
-   "imported_by": 2,
-   "imports": 28
-  },
-  {
    "file": "py_modules/backend/services/ollama_prompts.py",
    "lines": 1571,
    "imported_by": 6,
    "imports": 5
   },
   {
-   "file": "py_modules/backend/services/voice_transcription_service.py",
-   "lines": 1412,
-   "imported_by": 4,
-   "imports": 3
+   "file": "src/hooks/useBonsaiAskOrchestration.ts",
+   "lines": 1469,
+   "imported_by": 2,
+   "imports": 28
   },
   {
    "file": "src/components/PullModelsModal.tsx",
@@ -70,9 +53,15 @@
    "imports": 9
   },
   {
+   "file": "py_modules/backend/services/voice_transcription_service.py",
+   "lines": 1294,
+   "imported_by": 3,
+   "imports": 4
+  },
+  {
    "file": "py_modules/backend/services/ollama_service.py",
    "lines": 1270,
-   "imported_by": 3,
+   "imported_by": 4,
    "imports": 9
   },
   {
@@ -102,7 +91,7 @@
   {
    "file": "py_modules/backend/services/local_ollama_setup_service.py",
    "lines": 945,
-   "imported_by": 8,
+   "imported_by": 10,
    "imports": 4
   },
   {
@@ -168,7 +157,7 @@
   {
    "file": "py_modules/backend/services/settings_service.py",
    "lines": 544,
-   "imported_by": 2,
+   "imported_by": 3,
    "imports": 7
   },
   {
@@ -180,7 +169,7 @@
   {
    "file": "py_modules/backend/services/knowledge_base_schema.py",
    "lines": 519,
-   "imported_by": 4,
+   "imported_by": 6,
    "imports": 0
   },
   {
@@ -247,7 +236,7 @@
    "file": "py_modules/backend/services/ollama_ask_service.py",
    "lines": 421,
    "imported_by": 1,
-   "imports": 9
+   "imports": 10
   },
   {
    "file": "src/components/deck/DeckFocusSlider.tsx",

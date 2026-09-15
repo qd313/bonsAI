@@ -202,6 +202,15 @@ starts work outside this.
   over time and the state does not come back. The unrevealed-spoiler entry above is most likely the same fault and closes
   with it. The mechanism, the signature to chase and every run:
   [detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
+  **Reproduced on demand 2026-09-15, which this entry has been waiting for.** It happened twice in one
+  sitting, both times within seconds of starting a **brand new, empty chat while the panel was showing a
+  Session context row** — that is, while the session still carried turns from another chat. Down, Left and
+  Right all did nothing from the question box and only Up escaped; the character button, the mode chip and
+  the Ask button were all on screen and none could be reached. Emptying the box first made no difference, so
+  it is not the text. Restarting the plugin cleared it both times. Three walks in the same sitting where
+  that row was absent, or the chat already had a reply in it, all reached the Ask button normally. That is
+  five observations, not proof of a cause, but it is a recipe to try. Evidence
+  `docs/test-evidence/plan48-BUG-ask-input-ring-trap-2026-09-15.json`.
 
 ---
 
@@ -589,12 +598,13 @@ wording someone imagined and miss the neighbour.
 **Wave three ran on 2026-09-07** ([48](planning/48-kb-wave-three-session.md)), after wave two's own Deck
 evening ran the same evening, once the Deck was free.
 
-1. **Finish the device evening.** Three of wave three's checks never ran on the Deck at all, and two that
-   did run need doing again — one showed a reply naming the wrong boss, the other showed a speed check
-   that gives a false all-clear. [Plan 48](planning/48-kb-wave-three-session.md) § 8.
-2. **Fix the speed check.** It reports a healthy device on a fast reading it takes without ever writing an
-   answer, while a real question comes in well over the written budget. That is worse than no check, and
-   a fix is in progress.
+1. ~~**Finish the device evening.**~~ **Done 2026-09-15.** The two checks that had never run — the honesty
+   line, and tips still attaching when one fits — both pass on the device. The speed check passes three
+   times with its fix. The one row still blocked is the *No tip for this* line, because no question yet
+   found reaches the tip sheet and comes back empty, so there is nothing for it to fire on.
+2. ~~**Fix the speed check.**~~ **Done.** It now refuses to pass a reading taken without a reply first, and
+   read 547, 23 and 28 thousandths of a second against a one-second budget on 2026-09-15. Read that with
+   the range in mind — the number swings with what is loaded in memory.
 3. **Decide how to finish follow-ups.** The search half works on the device — it looks up the right thing
    you were just asking about — but the answer can still be about something else, and one run in three still
    names the wrong boss (its own bug below). The options for finishing it still need writing up.
@@ -662,7 +672,14 @@ ones from this month are D81 to D88.
   widened 2026-09-12.** First on a Black Mesa question, now on a **Portal 2** one: the answer was right and used the
   right note, then the menu underneath asked *"Where are you at in Half-Life 2?"* and offered the train station and
   Ravenholm. Both times it named the same game, so it is not picking a random wrong one. Both chats carried about
-  twenty earlier turns, which is the strongest remaining suspect and the reason a fresh-chat run is now owed.
+  twenty earlier turns, so a fresh-chat run was owed. **That run happened 2026-09-15 and the cause is now known,
+  and it is not carried-over turns.** It appeared twice more that evening, both in brand new chats — once with
+  the heading right (*Where are you at in Hades?*) and the two choices still the Half-Life 2 ones, and once on
+  the very first question of an empty chat about a different game with the heading wrong too. **The two choices
+  are word for word the worked example in the instructions the model is given**, which show the shape using
+  Half-Life 2, the train station and Ravenholm, and then tell it in as many words never to copy that wording.
+  It copies it anyway. The example is in `py_modules/backend/services/ollama_prompts.py`. Not fixed here — this
+  was a checking session. Evidence `docs/test-evidence/plan48-deck-evening-2026-09-15.json`.
   Evidence `docs/test-evidence/plan48-deck-evening-2026-09-12.json` **[no evidence — re-run, batch QA-EVIDENCE-GAP-01]**, `docs/test-evidence/plan48-R5-blackmesa-corrected-note.json`.
 - ★★★ `[KB]` **A follow-up still names the wrong boss one run in three** — **OPEN, left behind when the follow-up
   fix closed 2026-09-12.** Ask about a boss, then *"what about its second phase"*, and you now get the right boss two
@@ -685,6 +702,13 @@ ones from this month are D81 to D88.
   which is what says the panel reads this once at start-up and never listens for a change. Reopening the menu is
   not enough; only a restart is. Evidence `docs/test-evidence/plan47-R6-bug-fixes.json`,
   `docs/test-evidence/plan47-R6-stray-computer-text.json`.
+  **Still true on 2026-09-15, on the current build, both directions again.** Switching from Hades to Deep Rock
+  Galactic: Survivor left the line naming Hades for several minutes, through a close and reopen of the Quick
+  Access Menu, while the chat slot beside it had already picked up the new game's name correctly and the back
+  end was logging the new game every ten seconds. After exiting a game the line kept naming it for at least 92
+  seconds. Restarting the plugin corrected it at once, as before. One thing worth knowing for whoever fixes it:
+  it does not go wrong every time — after one of the three game exits that evening the line was already right.
+  Evidence `docs/test-evidence/plan48-deck-evening-2026-09-15.json`.
 - ★ `[KB]` **A Hades boss's note is spelled wrong, so spelling it right gets you told the plugin is guessing** —
   **OPEN, found 2026-09-12.** The note is titled *Megara*; the boss is *Megaera*. Type it correctly and the note
   still attaches, but the reply now carries the "no close match in my notes" line — so a person is told the plugin

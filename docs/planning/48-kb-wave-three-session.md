@@ -740,3 +740,45 @@ The maintainer read the table above and took tactics-first the same evening; it 
   the same sitting took 1.07 seconds for that same step and would have printed over budget.
 
 The rest of § 8 — W3-R2, W3-R3 and W3-R7 — did not run this evening.
+
+### The rest of the device evening, 2026-09-15
+
+The maintainer freed the Deck to finish what § 8 left. The build deployed first was the refactor tip
+`2ed236f`, so this doubles as the device check phase 5 of the refactor never had. **The panel mounted, asked
+and answered normally throughout** — twelve questions end to end, no crash, no missing control.
+
+- **W3-R7, the honesty line: PASS.** Three sentences, three fresh chats. *qqqq zzzz wwww* and the bone hydra
+  question with Hades running both carried the line once, worded exactly as agreed, below the answer. The
+  Deep Rock Galactic: Survivor control carried none. The D-pad walk below the line was run in full — fourteen
+  presses, every stop reached, no cycles, nothing under the line stranded.
+- **W3-R3, tips still attach when one fits: PASS.** Seven problem sentences and the control, nothing running,
+  Speed, one fresh chat. Every one of the seven attached a card from the shared tips; the control attached
+  none; the *No tip for this* line appears nowhere in the saved chat. Which tip each got was measured
+  separately with the retrieval probe, because Show details names the shelf and not the card: performance,
+  audio, storage, display, performance, performance, updates.
+- **W3-R6, the time budget: PASS, three runs.** 547, 23 and 28 ms against 1000. The fixed check refuses a
+  reading taken without a reply first. **Read it with the range in mind** — 547 on the first run, 23 and 28
+  after, and 794 on 12 September. The number tracks what is loaded in memory more than anything else.
+- **W3-R2, the *No tip for this* line: still blocked, now with device evidence.** All seven of R3's sentences
+  attached a tip on the Deck, so none of them can show the line. The block is real, not a measuring artefact.
+
+**The wrong-game menu is solved, and the guess in the roadmap was wrong.** It appeared twice more, both times
+in brand new chats — once on the first question of an empty chat — so carried-over turns are not the cause.
+The two options it offers are word for word the worked example in the instructions the model is given, which
+demonstrates the shape using Half-Life 2, the train station and Ravenholm, and then tells the model never to
+copy that wording. It copies it anyway. Filed with the cause; not fixed, because this was a checking session.
+
+**Two other open bugs got fresh device evidence.** The panel still learns the running game only at start-up:
+switching games left the old name under the question box for minutes while the chat slot beside it showed the
+new one correctly. And the highlight trap that this project has never managed to reproduce on demand was
+reproduced twice, both times seconds after starting an empty chat while a Session context row was on screen.
+
+**One cost worth stating plainly: three of the maintainer's older chats were lost.** The list holds eight,
+and starting three new ones for this evening pushed three out with no warning — a vac-check chat, an echo
+test, and a Red Dead Redemption 2 question. All three are in the copy taken before anything was touched, at
+`~/qa-backups/settings-20260915-kb-evening` on the Deck, and can be put back. Settings themselves were
+checked byte-for-byte against that copy at the end and are unchanged, pinned test chips included.
+
+Evidence `docs/test-evidence/plan48-deck-evening-2026-09-15.json`,
+`docs/test-evidence/plan48-W3R7-walk-below-the-line-2026-09-15.json`,
+`docs/test-evidence/plan48-BUG-ask-input-ring-trap-2026-09-15.json`.

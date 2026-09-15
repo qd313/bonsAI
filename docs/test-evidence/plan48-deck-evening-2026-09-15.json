@@ -1,0 +1,355 @@
+{
+  "session": "Knowledge-base Deck evening, 2026-09-15",
+  "why": "Plan 48 section 8 left three rows never run on the device and two needing a re-run. The maintainer freed the Deck for it.",
+  "setup": {
+    "build": "experimental at 2ed236f, deployed at the start of the session",
+    "deployed_code_verified": "main.py and dist/index.js hashed identical on the PC and the Deck; the readiness check's own file-count comparison cannot pass here because Python's compiled cache adds 107 files next to the 88 real ones",
+    "library": "2026.09.08, 293 notes, 156 shared tips",
+    "settings": "left exactly as found; a copy was taken first to ~/qa-backups/settings-20260915-kb-evening on the Deck and the live file was confirmed byte-identical to it at the end",
+    "character_voice": "on (the maintainer's own setting), so replies are in character",
+    "how_questions_were_asked": "each sentence put into the Ask field word for word by scripts/deck_send_ask.py, then Ask pressed with a real controller button through the bridge board. The plan says pin the batch as frozen test chips; the injector was used instead because it guarantees the same thing the chips guarantee -- the exact wording -- and the carousel shows one pinned chip at a time, which makes an eight-sentence batch slow to walk. The chip path itself is a separate row (QA-FROZEN-CHIPS-01) and the three chips the maintainer has pinned were not touched.",
+    "sleep": "held with a logind inhibitor for the run, released at the end, both verified"
+  },
+  "rows": {
+    "W3-R7 first two sentences (Hades running, Strategy)": [
+      {
+        "question": "qqqq zzzz wwww",
+        "reply_first_200": "Alright, listen up! You're in the Underworld, right? This game ain't about sitting around; it's about surviving the chaos. The key right now is managing your resources—those Darkness and Keys. Don't g",
+        "reply_chars": 491,
+        "carries_no_close_match_line": true,
+        "carries_no_tip_line": false,
+        "knowledge_base_chips": [
+          {
+            "id": "kb",
+            "attached": true,
+            "label": "Keyword + meaning",
+            "bullets": [
+              "Retrieval: Keyword + meaning",
+              "Trust tier: fallback_no_source",
+              "app_id:1145360",
+              "Embed: 537.5 ms",
+              "Re-rank: 1.91 ms"
+            ]
+          },
+          {
+            "id": "kb_coverage",
+            "attached": true,
+            "label": "KB: 15 sections",
+            "bullets": [
+              "15 strategy sections in corpus for this game."
+            ]
+          }
+        ]
+      },
+      {
+        "question": "how do i beat the bone hydra in hades",
+        "reply_first_200": "Alright, listen up, you wanna know about that bone hydra, eh? Look, when you’re dealing with those things, you gotta keep your head on a swivel. Don't just stand there like a statue; you gotta keep mo",
+        "reply_chars": 1114,
+        "carries_no_close_match_line": true,
+        "carries_no_tip_line": false,
+        "knowledge_base_chips": [
+          {
+            "id": "kb",
+            "attached": true,
+            "label": "Keyword + meaning",
+            "bullets": [
+              "Retrieval: Keyword + meaning",
+              "Trust tier: fallback_no_source",
+              "app_id:1145360",
+              "Embed: 31.22 ms",
+              "Re-rank: 2.57 ms"
+            ]
+          },
+          {
+            "id": "kb_coverage",
+            "attached": true,
+            "label": "KB: 15 sections",
+            "bullets": [
+              "15 strategy sections in corpus for this game."
+            ]
+          }
+        ]
+      }
+    ],
+    "W3-R7 control (Deep Rock Galactic: Survivor running, Strategy)": [
+      {
+        "question": "how do i beat the glyphid dreadnought",
+        "reply_first_200": "Right then, listen up, you want to take on that Glyphid Dreadnought, eh? Don't be a mug and just charge in blind. This ain't no quick job. Here's the skinny: you gotta keep your distance, mate. The ma",
+        "reply_chars": 557,
+        "carries_no_close_match_line": false,
+        "carries_no_tip_line": false,
+        "knowledge_base_chips": [
+          {
+            "id": "kb",
+            "attached": true,
+            "label": "Keyword + meaning",
+            "bullets": [
+              "Retrieval: Keyword + meaning",
+              "Trust tier: fallback_no_source",
+              "app_id:2321470",
+              "Embed: 1355.64 ms",
+              "Re-rank: 15.03 ms"
+            ]
+          },
+          {
+            "id": "kb_coverage",
+            "attached": true,
+            "label": "KB: 13 sections",
+            "bullets": [
+              "13 strategy sections in corpus for this game."
+            ]
+          }
+        ]
+      }
+    ],
+    "W3-R3 seven problems plus the control (nothing running, Speed)": [
+      {
+        "question": "the game is really stuttering and skipping around the whole time I'm trying to play it",
+        "reply_first_200": "Right, so the game is acting like a drunk on a Tuesday, eh? Stuttering and skipping? That's a proper pain in the backside. Listen, don't go blaming the game or anything. Sometimes it's just the graphi",
+        "reply_chars": 533,
+        "carries_no_close_match_line": false,
+        "carries_no_tip_line": false,
+        "knowledge_base_chips": [
+          {
+            "id": "kb",
+            "attached": true,
+            "label": "Keyword search",
+            "bullets": [
+              "Retrieval: Keyword search",
+              "Source: shared troubleshooting tips",
+              "Trust tier: fallback_no_source",
+              "compat_tips"
+            ]
+          },
+          {
+            "id": "kb_coverage",
+            "attached": false,
+            "label": "KB: no game running",
+            "bullets": [
+              "No game is running, so there is nothing to look up."
+            ]
+          }
+        ]
+      },
+      {
+        "question": "no sound at all coming out",
+        "reply_first_200": "Alright, listen up, you got no sound? That's a proper buzzkill, man. Don't panic, we gonna sort this out. This ain't rocket science, but you gotta check the right spots.\n\nFirst thing, check the volume",
+        "reply_chars": 873,
+        "carries_no_close_match_line": false,
+        "carries_no_tip_line": false,
+        "knowledge_base_chips": [
+          {
+            "id": "kb",
+            "attached": true,
+            "label": "Keyword search",
+            "bullets": [
+              "Retrieval: Keyword search",
+              "Source: shared troubleshooting tips",
+              "Trust tier: fallback_no_source",
+              "compat_tips"
+            ]
+          },
+          {
+            "id": "kb_coverage",
+            "attached": false,
+            "label": "KB: no game running",
+            "bullets": [
+              "No game is running, so there is nothing to look up."
+            ]
+          }
+        ]
+      },
+      {
+        "question": "storage full cant install anything else",
+        "reply_first_200": "Alright, listen up! Storage full, eh? Don't get all stressed out like you just got caught stealing a diamond! You gotta clean up the junk, man. Think of it like clearing out the garage before a big pa",
+        "reply_chars": 389,
+        "carries_no_close_match_line": false,
+        "carries_no_tip_line": false,
+        "knowledge_base_chips": [
+          {
+            "id": "kb",
+            "attached": true,
+            "label": "Keyword search",
+            "bullets": [
+              "Retrieval: Keyword search",
+              "Source: shared troubleshooting tips",
+              "Trust tier: fallback_no_source",
+              "compat_tips"
+            ]
+          },
+          {
+            "id": "kb_coverage",
+            "attached": false,
+            "label": "KB: no game running",
+            "bullets": [
+              "No game is running, so there is nothing to look up."
+            ]
+          }
+        ]
+      },
+      {
+        "question": "screen looks torn and glitchy",
+        "reply_first_200": "Listen up, mate! If your screen looks like it's been ripped up and everything's all wonky, you gotta check your settings. The tip is straight from the books: if the screen looks torn while you're movi",
+        "reply_chars": 363,
+        "carries_no_close_match_line": false,
+        "carries_no_tip_line": false,
+        "knowledge_base_chips": [
+          {
+            "id": "kb",
+            "attached": true,
+            "label": "Keyword search",
+            "bullets": [
+              "Retrieval: Keyword search",
+              "Source: shared troubleshooting tips",
+              "Trust tier: fallback_no_source",
+              "compat_tips"
+            ]
+          },
+          {
+            "id": "kb_coverage",
+            "attached": false,
+            "label": "KB: no game running",
+            "bullets": [
+              "No game is running, so there is nothing to look up."
+            ]
+          }
+        ]
+      },
+      {
+        "question": "it gets really hot and battery drains so fast",
+        "reply_first_200": "Listen up, mate. If it's getting too hot and the battery's dying faster than a cheap suit in a fire, you gotta tame that beast. You need to dial back the power draw. Don't let it run wild like a runaw",
+        "reply_chars": 618,
+        "carries_no_close_match_line": false,
+        "carries_no_tip_line": false,
+        "knowledge_base_chips": [
+          {
+            "id": "kb",
+            "attached": true,
+            "label": "Keyword search",
+            "bullets": [
+              "Retrieval: Keyword search",
+              "Source: shared troubleshooting tips",
+              "Trust tier: fallback_no_source",
+              "compat_tips"
+            ]
+          },
+          {
+            "id": "kb_coverage",
+            "attached": false,
+            "label": "KB: no game running",
+            "bullets": [
+              "No game is running, so there is nothing to look up."
+            ]
+          }
+        ]
+      },
+      {
+        "question": "it gets uncomfortably warm in my hands after a little while and the battery seems to drain a lot quicker than it used to",
+        "reply_first_200": "Listen up, mate. That heat and the battery drain? That means the machine is working too hard and cooking itself. You need to tell it to chill out a bit, yeah? The power cap—that's the TDP—is what’s ma",
+        "reply_chars": 791,
+        "carries_no_close_match_line": false,
+        "carries_no_tip_line": false,
+        "knowledge_base_chips": [
+          {
+            "id": "kb",
+            "attached": true,
+            "label": "Keyword search",
+            "bullets": [
+              "Retrieval: Keyword search",
+              "Source: shared troubleshooting tips",
+              "Trust tier: fallback_no_source",
+              "compat_tips"
+            ]
+          },
+          {
+            "id": "kb_coverage",
+            "attached": false,
+            "label": "KB: no game running",
+            "bullets": [
+              "No game is running, so there is nothing to look up."
+            ]
+          }
+        ]
+      },
+      {
+        "question": "update stuck wont finish installing",
+        "reply_first_200": "Alright, listen up. If your SteamOS update is stuck like a right idiot, you gotta do what I say. First thing, just reboot the whole thing and try again. That usually sorts itself out, yeah? If that ai",
+        "reply_chars": 365,
+        "carries_no_close_match_line": false,
+        "carries_no_tip_line": false,
+        "knowledge_base_chips": [
+          {
+            "id": "kb",
+            "attached": true,
+            "label": "Keyword search",
+            "bullets": [
+              "Retrieval: Keyword search",
+              "Source: shared troubleshooting tips",
+              "Trust tier: fallback_no_source",
+              "compat_tips"
+            ]
+          },
+          {
+            "id": "kb_coverage",
+            "attached": false,
+            "label": "KB: no game running",
+            "bullets": [
+              "No game is running, so there is nothing to look up."
+            ]
+          }
+        ]
+      },
+      {
+        "question": "thank you very much",
+        "reply_first_200": "Alright, listen up! You say \"thank you very much\"? Well, you're welcome, innit? But don't just sit there like a statue, yeah? You got a question, you got a problem, or you wanna know how to get that S",
+        "reply_chars": 301,
+        "carries_no_close_match_line": false,
+        "carries_no_tip_line": false,
+        "knowledge_base_chips": [
+          {
+            "id": "kb_coverage",
+            "attached": false,
+            "label": "KB: no game running",
+            "bullets": [
+              "No game is running, so there is nothing to look up."
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "probe_W3_R3_tip_subjects": {
+    "what_this_is": "scripts/probe_deck_kb_retrieval.py run on the Deck against the installed library, Speed mode, no game running. The Show details ladder says which shelf a card came from; the probe names the card.",
+    "results": {
+      "the game is really stuttering and skipping around the whole time I'm trying to play it": "performance",
+      "no sound at all coming out": "audio",
+      "storage full cant install anything else": "storage",
+      "screen looks torn and glitchy": "display",
+      "it gets really hot and battery drains so fast": "performance",
+      "it gets uncomfortably warm in my hands after a little while and the battery seems to drain a lot quicker than it used to": "performance",
+      "update stuck wont finish installing": "updates",
+      "thank you very much": "nothing attached - domain routing declined"
+    }
+  },
+  "probe_W3_R6_time_budget": {
+    "setup": "Hades running, Strategy, --with-chat-before-search, three separate runs",
+    "budget_ms": 1000,
+    "readings_ms": [
+      547,
+      23,
+      28
+    ],
+    "chat_warm_up_ms": [
+      1162,
+      638,
+      654
+    ],
+    "verdict": "PASS on all three",
+    "caveat": "the reading swings widely with what is already loaded in memory: 547 ms on the first run and 23-28 ms after. The honest run on 2026-09-12 read 794 ms. All four readings are inside the budget, but a single pass is weaker evidence than it looks."
+  },
+  "chats_saved_on_the_deck": {
+    "W3-R7 first two sentences (Hades running, Strategy)": "1392ca1b-c051-4bc9-ae63-e4b9f08f1367.json",
+    "W3-R7 control (Deep Rock Galactic: Survivor running, Strategy)": "0d37c065-eae4-43f7-89a1-6b1d3ae48214.json",
+    "W3-R3 seven problems plus the control (nothing running, Speed)": "1200a7e9-0590-45c7-9dc0-b9153dd4adc2.json"
+  }
+}

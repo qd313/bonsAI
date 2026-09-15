@@ -5226,3 +5226,27 @@ plugin. Nothing imports a build helper by name, so "unused" tells us nothing abo
 Rather than split the four, all of them wait until there has been a build and the plugin has started
 on the Deck. Removing two now and two later means two chances for a build to break instead of one,
 for no gain — the build has to happen either way.
+
+### D103 — LOCKED 2026-09-14 — Spoiler rules: close the four gaps, one lane, send the screen what the back end already knows
+
+Three calls from plan 54, all yes. The rulebook is in the code and working; the four gaps are at
+the edges, and this settles how to close them.
+
+**A no-story game named only in the question gets the relaxed prompt.** With nothing running, a
+question like "drg survivor what class" already gets the right risk chip, because the plugin worked
+out the game from the words. The answer was still fenced, because the prompt was written as if the
+game were unknown. Now the prompt is handed the same profile the chip already has. It is still never
+handed the name, so the answer never claims a game is running when none is. Story games change
+nothing, since unknown and story get the same careful wording.
+
+**The screen gets the boss name from the back end instead of guessing again.** The back end works
+out what the player named on every turn, and understands the ways people actually type it on a
+controller. The screen had its own smaller guess and never saw the back end's. From now on the ask
+result carries the named thing next to the "spoilers were okay" flag it already carries, and the
+screen uses that first, falling back to its own guess only for chats saved before the change. One
+guess to maintain, and the two sides cannot drift. Copying the back end's guess into the screen's
+language was the other option and is rejected for that reason.
+
+**Go on the lane.** One Sonnet lane at high, both screen-side gaps in it since they touch the same
+files, the prompt gap in the same lane, then the bookkeeper's docs sweep, then one Deck evening for
+the rows that have sat unticked since August plus the two new ones in plan 54. About a day of code.

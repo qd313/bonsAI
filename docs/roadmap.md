@@ -895,6 +895,7 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   Deck's model runs with a 4,096-token window and a Strategy question with cards already goes over it (now trimmed
   instead of dropped, see Done). Try 8,192 as a Developer experiment with a game running, recording memory and time to
   first token, before it becomes a setting. Agreed as "later, its own call". (D46)
+- ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **OPEN, found 2026-09-14, nothing built.** On an emulator shortcut like Doom 64, or when you type the boss name first ("wheatley fight"), the prompt is told not to fence — but if the model fences anyway the box stays shut, because the screen side only knows games by Steam ID and only understands two ways of naming a boss. The backend already works out both and just does not send them to the screen. Four gaps and the order to close them: [Plan 54](planning/54-spoiler-rules-gaps.md).
 - ★★★ `[KB]` **A troubleshooting question mostly never reaches the tips** — **OPEN, widened 2026-09-07.** Filed as
   "the tips don't use the words people type", which is true and is the smaller half. Measured 2026-09-07: **nine of ten
   ordinary problem sentences reach nothing at all** — *"my game keeps crashing"*, *"my game won't launch"*, *"black

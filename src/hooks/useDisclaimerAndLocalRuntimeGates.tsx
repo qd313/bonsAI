@@ -20,8 +20,8 @@
  *
  * Does not: Turn anything off by itself. This file only shows the warnings
  * and remembers that they were seen; it is the Permissions tab and the
- * back end's own checks that actually stop a permission-gated action
- * from running.
+ * back end's own checks that actually stop an action needing a permission
+ * from running when that permission is off.
  */
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { showModal, ConfirmModal } from "@decky/ui";

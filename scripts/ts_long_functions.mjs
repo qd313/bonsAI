@@ -116,6 +116,15 @@ function docAnchor(node) {
     const p = n.parent;
     if (
       ts.isVariableDeclaration(p) ||
+      /*
+       * The list is the step between `const X = () => {}`'s declaration and the
+       * statement the comment is actually written above. Without it the walk
+       * stopped one short, looked for a comment just after the `=`, found none,
+       * and reported every arrow-function component as unexplained however
+       * carefully it had been written up. That style -- `const X: React.FC =
+       * (...) => {}` -- is most of the screens in this project.
+       */
+      ts.isVariableDeclarationList(p) ||
       ts.isParenthesizedExpression(p) ||
       ts.isAsExpression(p) ||
       ts.isCallExpression(p) ||

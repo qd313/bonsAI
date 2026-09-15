@@ -260,18 +260,28 @@ def _remove_autostart(home: Path) -> dict[str, Any]:
     }
 
 
-# In: the person's home folder.
-# Out: a dict with "ok" (did this succeed), "changed" (did it actually do anything), and either
-# "message" (plain-language success text for the tab) or "reason" (plain-language refusal text).
-# What can go wrong, in the order this checks for it: the local AI is not installed at all; the
-# AI's own program somehow is not under the home folder (refused, never written); the Deck has no
-# per-user startup services to hook into; the startup folder cannot be created or written to; the
-# startup entry file itself cannot be written; or the entry gets written but the start-at-login
-# link cannot be made (see the header's note on why the usual systemd "enable" call does not
-# work here). If writing succeeds and something is already answering questions on that port, this
-# leaves it alone rather than restarting it — the raised model limit only takes effect from the
-# next time the Deck actually boots.
 def _install_autostart(home: Path) -> dict[str, Any]:
+    """Set the Deck up to start its own AI whenever the Deck starts.
+
+    In: the person's home folder.
+
+    Out: whether it worked, whether it actually changed anything, and either a
+    success line or a refusal line for the tab to show. Both are already in
+    plain words, ready to put on screen.
+
+    What can go wrong, in the order this checks for it: the local AI is not
+    installed at all; the AI's own program is somehow not under the home folder,
+    which is refused and never written; the Deck has no per-user startup
+    services to hook into; the startup folder cannot be created or written to;
+    the entry file itself cannot be written; or the entry is written but the
+    start-at-login link cannot be made -- the header explains why the usual way
+    of doing that does not work here.
+
+    One thing that is deliberately not done: if this succeeds while something is
+    already answering questions on that port, it is left running rather than
+    restarted. That means the raised limit on how many models can stay in memory
+    does not take effect until the Deck is next actually switched on.
+    """
     ollama_bin = _ollama_bin_path(home)
     if not ollama_bin.is_file():
         return {"ok": False, "changed": False, "reason": "The local AI isn't installed on this Deck yet."}

@@ -701,17 +701,6 @@ def build_context_chips_manifest(
     return {"context_chips": chips, "overflow_skips": skips}
 
 
-# In: the question as asked, what the safety sanitizer did to it, the full dict `run_ask_ollama`
-# returned from its trip to Ollama, the reply text before and after any attachment formatting,
-# and the app/timing details around the call. `verify_result` and `reply_followup` are optional
-# extras — a background fact-check result, and which "reply follow-up" chip (if any) triggered
-# this turn.
-# Out: the full Show details record for a normal, successful-or-not Ollama turn, with its
-# context chips already attached (this is the one snapshot builder that is not lazy about that
-# — see `ensure_context_chips_on_snapshot` above).
-# Watch out for: when `reply_followup` carries a chip id, the route name changes from the plain
-# "ollama" to "reply_followup:<chip id>" — code elsewhere that checks for the route being
-# exactly "ollama" will miss those turns.
 def build_ollama_route_snapshot(
     *,
     raw_question: str,
@@ -730,6 +719,23 @@ def build_ollama_route_snapshot(
     verify_result: Optional[dict] = None,
     reply_followup: Optional[dict] = None,
 ) -> dict[str, Any]:
+    """Build the Show details record for an ordinary trip to the AI.
+
+    In: the question as asked, what the safety check did to it, the full result
+    of the trip to Ollama, the reply text before and after attachments were
+    formatted in, and the app and timing details around the call. A background
+    fact-check result and the follow-up chip that started this turn are both
+    optional extras.
+
+    Out: the whole Show details record for a normal turn, successful or not,
+    with its chips already worked out. This is the one builder here that does
+    not leave its chips until something asks for them.
+
+    Watch out for: when this turn was started by a follow-up chip, the route
+    name stops being plain "ollama" and becomes the chip's own name instead.
+    Anything elsewhere that checks for the route being exactly "ollama" will
+    not see those turns.
+    """
     route = "ollama"
     if isinstance(reply_followup, dict):
         chip_id = str(reply_followup.get("chip_id") or "").strip()

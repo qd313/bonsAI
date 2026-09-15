@@ -1,9 +1,18 @@
 /**
- * Title: Decky tab titles
- * Purpose: Build the icon-only title element Decky renders for each bonsAI tab.
- * Used for: index.tsx tab assembly — one entry per tab id.
- * Solves: Keeps the shared title/icon wrapper markup in one place instead of per tab.
- * Does not: Decide which tabs exist or which is active — that is the shell's job.
+ * Title: The tab icons Decky actually draws
+ *
+ * Purpose: Builds the small icon-only element Decky shows for each of
+ * bonsAI's tabs, plus every other piece of wording those tabs need: the
+ * name read out for accessibility, the short word shown on the collapsed
+ * tab bar, and the label shown on the open strip.
+ *
+ * Used for: index.tsx, once per tab, when the tabs are put together.
+ *
+ * Solves: Keeps the markup every tab's title is built from in one place,
+ * instead of each tab repeating it.
+ *
+ * Does not: Decide which tabs exist, or which one is currently open — that
+ * is the plugin shell's job.
  */
 import React from "react";
 

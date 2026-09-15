@@ -1,9 +1,28 @@
 /**
- * Title: Unified input surface hook
- * Purpose: Measure the native field's painted bounds so the caret overlay sits on it, and grow the text body to fit.
- * Used for: MainTab unified input glass card and caret overlay alignment.
- * Solves: Overlay/caret drift on Deck where the Decky TextField wrapper does not start where the host does.
- * Does not: Size the Ask row or the glass card — both are plain `width: 100%` in section-4.ts. Handle Ask submit — see useBonsaiAskOrchestration.
+ * Title: Lining up the fake caret with the real question box
+ *
+ * Purpose: The Main tab's question box is drawn as two layers: an
+ * invisible native text field that the Deck's own on-screen keyboard and
+ * text handling actually type into, and a visible copy of the typed text
+ * with a blinking caret drawn on top of it, positioned to sit exactly over
+ * the real field. This file measures where the real field actually landed
+ * on screen — because the layer Decky wraps it in does not always start in
+ * the same place the field itself does — and moves the visible copy to
+ * match. It also grows the box taller as the typed question wraps onto
+ * more lines.
+ *
+ * Used for: The Main tab's question box and the caret drawn over it.
+ *
+ * Solves: On the Deck, the drawn caret and the drawn text used to drift
+ * away from where the real, invisible field actually was, because the
+ * wrapping layer Decky puts around the native field does not always start
+ * at the same point the field itself does. Measuring the real field
+ * directly, every time it might have moved, is what keeps the two in
+ * sync.
+ *
+ * Does not: Decide the width of the Ask row or the card around it — both
+ * simply fill their container; see section-4.ts. Does not handle
+ * submitting the question — see useBonsaiAskOrchestration.
  */
 /** Main-tab unified input geometry: the overlay must land on the native field, which Decky's wrapper can offset. */
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";

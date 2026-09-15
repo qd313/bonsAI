@@ -1,46 +1,73 @@
 /**
- * Title: Hidden tab header trap
- * Purpose: When Steam's ring lands on one of its hidden tab buttons, hand it to the collapsing tab
- *          bar at once, so the hidden button never shows as a stop.
- * Used for: TabIndicatorBar (plan 30 W4).
- * Solves: Steam's `Tabs` keeps its header buttons in the gamepad tree even at `display: none` —
- *         measured 2026-09-02 under both hiding properties (runs/TAB-BAR-W1c-*.json): the second
- *         Down from a fresh open landed on the invisible Main tab button, and Up from the top of a
- *         tab landed on it too. No prop removes them. The explicit hops (the bar's Down, each body's
- *         Up, B routed through `onCancelFromTabHeader`) cover the paths we know; this covers the
- *         ones we do not, such as a modal's return-focus miss or a future Steam change.
+ * Title: Catching the ring when it lands on an invisible tab button
  *
- *         Two more paths found 2026-09-03, both landing on a hidden button with no `attributes`
- *         mutation for the old watch to see (`runs/CLEAR-CACHE-01-b-after-modal-back-to-main.json`,
- *         `runs/CLEAR-CACHE-01-c-close-panel-for-remount.json`):
- *         - Closing the *Clear cache* confirmation remounts the whole plugin (the `onBeforeDeckyModal`
- *           comment in index.tsx). The fresh header can arrive already carrying `gpfocus`, before this
- *           effect has attached at all.
- *         - `TabIndicatorBar` and `.bonsai-decky-tabs-root` share one fragment key that only changes on
- *           a UI-scale Apply (`index.tsx:1537`, the `bonsai-tabs-gen-` key) — verified by reading that
- *           file, not measured on device — so a QAM chord close/reopen does not remount either one and
- *           this effect stays attached throughout. The leading theory, UNKNOWN until measured on
- *           device, is that Steam's own `Tabs` still rebuilds its header's child nodes on the
- *           visibility change: a node born already carrying `gpfocus` produces a `childList` record,
- *           never an `attributes` one, which the old config (attributes-only) had no way to catch.
- *         Fixed by checking what already holds the ring the instant the trap turns on, and by watching
- *         insertions as well as class changes on nodes already in the tree — this covers the childList
- *         theory above and any other way a hidden button could arrive already focused, without needing
- *         the theory to be the confirmed mechanism.
- * Does not: Decide where the ring should be; it only bounces a landing on the ghost to the bar,
- *           and only when the bar's nav node is registered. Nothing here calls DOM `focus()`.
+ * Purpose: When Steam's own highlight ring lands on one of the tab bar's
+ * hidden header buttons — buttons that still exist on the page but are not
+ * shown — this hands the ring straight to the collapsed tab bar instead,
+ * so the invisible button is never where the ring comes to rest.
  *
- * Realm bug found on device 2026-09-04 (runs/TAB-BAR-11-a-after-suspend-resume-hidden-button.json):
- * after a suspend/resume remount, a RIGHT press moved `gpfocus` from the hidden Main button to the
- * already-existing hidden Ollama button and nothing bounced it, even though a DOM read at that moment
- * showed every condition the matcher needs was true. The observer callback brand-checked
- * `record.target` / added nodes with `instanceof Element`, and every node this observer is ever
- * handed comes from the QuickAccess popup document while this module runs in SharedJSContext — two
- * different realms, each with its own `Element`/`Node` constructor (uiDocument.ts: "Never brand-check
- * a node that crossed a realm boundary"). `instanceof` is false for a node born in the other one, so
- * the guard silently dropped every record it was ever handed; the passes recorded for TAB-BAR-05/09
- * came entirely from the explicit hops (the bar's Down, each body's Up, `onCancelFromTabHeader`), not
- * from this trap. Fixed by duck-typing instead: `nodeType` plus the two methods actually called.
+ * Used for: The collapsing tab bar (plan 30, week 4).
+ *
+ * Solves: Steam's own tab-header component keeps its buttons reachable by
+ * the ring even while they are hidden from view — measured on the Deck on
+ * 2026-09-02, under both ways of hiding them (see the two
+ * runs/TAB-BAR-W1c-*.json recordings): pressing Down twice from a fresh
+ * open landed the ring on the invisible Main tab button, and so did
+ * pressing Up from the top of a tab. No setting on the component removes
+ * them from being reachable. The already-known ways this can happen (Down
+ * from the bar, Up from the top of a tab body, B routed through the cancel
+ * handler) are each handled directly at their own spot; this file exists
+ * to catch every way we do not already know about — a missed focus return
+ * after a popup closes, or some future change on Steam's side.
+ *
+ * Two more ways were found on the Deck on 2026-09-03, both landing on a
+ * hidden button without the one kind of change the earlier version of this
+ * watcher looked for (see runs/CLEAR-CACHE-01-b-after-modal-back-to-main.json
+ * and runs/CLEAR-CACHE-01-c-close-panel-for-remount.json):
+ * - Closing the *Clear cache* confirmation rebuilds the whole plugin from
+ *   scratch (see the onBeforeDeckyModal comment in index.tsx). The freshly
+ *   built header can arrive already holding the ring, before this file's
+ *   own watcher has even attached.
+ * - The tab bar and its container share one identity that only changes
+ *   when Settings' Apply changes the UI scale (verified by reading
+ *   index.tsx around line 1537, not measured directly on device), so
+ *   closing and reopening the Quick Access Menu does not rebuild either
+ *   one, and this file's watcher stays attached the whole time. The
+ *   leading idea, not yet confirmed on device, is that Steam's own
+ *   tab-header component still rebuilds its buttons on a visibility
+ *   change: a button born already holding the ring shows up to the
+ *   watcher as "a new node appeared," never as "a property changed" — the
+ *   only kind the older version looked for.
+ * Fixed by checking, the instant this file's watcher turns on, whether
+ * something already holds the ring, and by watching for new nodes
+ * appearing as well as for class changes on nodes already there — this
+ * covers the idea above and any other way a hidden button could arrive
+ * already holding the ring, without needing that idea to be the confirmed
+ * explanation.
+ *
+ * Does not: Decide where the ring should go. It only sends a landing on an
+ * invisible button back to the bar, and only once the bar has registered
+ * itself as ready to receive it. Nothing in this file calls the browser's
+ * own `focus()` directly.
+ *
+ * A second bug, found on device 2026-09-04 (see
+ * runs/TAB-BAR-11-a-after-suspend-resume-hidden-button.json): after the
+ * Deck slept and woke back up, rebuilding the plugin, pressing Right moved
+ * the ring from one hidden button to another and this file did not catch
+ * it — even though checking the page directly at that moment showed every
+ * condition it looks for was true. The cause was how the watcher checked
+ * whether something was a real page element: it used a check,
+ * `instanceof Element`, that only works for an element built in the same
+ * realm (the same running copy of the page's scripting engine) as the
+ * check itself. Every element this watcher is ever handed is built in the
+ * Quick Access popup's own realm, while this file runs in a different one
+ * — so that check was false for every single element it was ever handed,
+ * and the watcher had quietly been doing nothing since it was written.
+ * The passes recorded earlier came entirely from the already-known hops
+ * (the bar's Down, each tab's Up, the cancel handler), never from this
+ * file. Fixed by checking the shape of the thing instead of what built
+ * it: whether it has the one property and the two methods this file
+ * actually uses.
  */
 import { useEffect } from "react";
 

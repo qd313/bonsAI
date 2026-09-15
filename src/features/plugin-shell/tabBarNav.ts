@@ -1,15 +1,26 @@
 /**
- * Title: Tab bar D-pad and bumper handlers
- * Purpose: The handlers the collapsing tab bar's `Focusable` carries: Left/Right and LB/RB switch
- *          tabs (wrapping at the ends), Down hands the ring to the current tab's body, Up lets
- *          Steam go to Decky's Back button.
- * Used for: TabIndicatorBar (plan 30 W4).
- * Solves: Two measured facts. LB and RB wrap on the device (runs/TAB-BAR-W3-shoulder-wrap.json:
- *         LB on Main lands on About), so Left/Right wrap the same way or the two pairs disagree.
- *         And the bar sits outside Steam's `Tabs`, so Steam never sees a bumper pressed while the
- *         ring is on the bar — the bar has to switch tabs itself.
- * Does not: Move Steam's ring across containers itself; Down calls the handover the caller
- *           supplies (`takeNavFocus` through the registry), the same shape presetRowNav.ts uses.
+ * Title: The tab bar's own D-pad and shoulder-button handling
+ *
+ * Purpose: The tab bar, when collapsed to its thin strip, handles its own
+ * Left/Right and shoulder-button (LB/RB) presses to switch tabs, wrapping
+ * around at the first and last tab either way. Down hands the highlight
+ * ring off to whatever the current tab shows first; Up is deliberately let
+ * through rather than handled, so Steam sends it to Decky's own Back
+ * button, the same as it did before the bar collapsed.
+ *
+ * Used for: The collapsing tab bar (plan 30, week 4).
+ *
+ * Solves: Two things found by testing on a real Deck. First, the shoulder
+ * buttons wrap around at the ends (see runs/TAB-BAR-W3-shoulder-wrap.json:
+ * pressing LB while on Main lands on About), so Left/Right have to wrap
+ * the same way or the two ways of switching tabs would disagree with each
+ * other. Second, the bar sits outside Steam's own tab container, so Steam
+ * never even sees a shoulder button press while the ring is sitting on the
+ * bar — the bar has to switch tabs itself rather than letting Steam do it.
+ *
+ * Does not: Move the highlight ring between different parts of the screen
+ * itself. For Down, it calls a handover function the caller supplies, the
+ * same way presetRowNav.ts hands a ring off elsewhere.
  */
 import { isBumperLeftDeckEvent, isBumperRightDeckEvent } from "../../utils/focusNavigation";
 

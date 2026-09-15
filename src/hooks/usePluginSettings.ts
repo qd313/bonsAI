@@ -60,6 +60,25 @@
  *    disk cannot both fire for the same change.
  * 8. Everything is handed back together at the end: every setting, every
  *    function that changes one, and the loading/saving controls above.
+ *
+ * Gotchas:
+ * - The list of every setting is written out by hand in about six separate
+ *   places in this one file: the starting value for each setting, the
+ *   snapshot object copied into a ref, the function that writes a freshly
+ *   loaded settings object into state, the reset that runs when a load
+ *   fails, the automatic save's own list of what to watch for changes, and
+ *   the object this hook hands back at the end. Nothing checks that a
+ *   setting added to one of those lists was added to all the others — the
+ *   project still builds and runs correctly with one missing from one
+ *   list. This has already happened once, quietly, to four settings (reply
+ *   language, both model routing orders, and the spoiler auto-reveal
+ *   flag): they were left out of the failed-load reset, so a load that
+ *   failed right after an earlier successful one left those four still
+ *   showing values the plugin had just admitted it could not read, while
+ *   every other setting correctly snapped back to its default. See the
+ *   comment on the failed-load branch further down in this file for the
+ *   full story. A test now guards that one list from drifting again, but
+ *   the same kind of miss is still possible in any of the others.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { callDeckyWithTimeout } from "../utils/deckyCall";

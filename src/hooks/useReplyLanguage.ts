@@ -1,9 +1,23 @@
 /**
- * Title: Reply language hook
- * Purpose: Load effective Ask reply language snapshot from backend and expose localized t() helper.
- * Used for: index.tsx and About/Settings reply-language rows.
- * Solves: UI strings follow user language preference with English per-key fallback.
- * Does not: Translate model system prompts — backend owns reply-language routing.
+ * Title: Which language the screen's own text is shown in
+ *
+ * Purpose: Asks the back end what language Ask replies and the screen's
+ * own wording should use — the person's chosen override if they set one,
+ * or Steam's own language otherwise — and hands back a small helper,
+ * called `t`, that every piece of on-screen text is passed through to be
+ * translated. A phrase with no translation yet always falls back to
+ * English rather than showing a blank or a broken key.
+ *
+ * Used for: The plugin's main screen, and the reply-language rows on the
+ * About and Settings tabs.
+ *
+ * Solves: Keeps every piece of on-screen wording following the person's
+ * language choice, worked out in one place, rather than each screen file
+ * figuring out the current language for itself.
+ *
+ * Does not: Decide what language the AI itself replies in, or how that
+ * choice reaches the AI — both live on the back end. This file only reads
+ * what the back end has already decided, for the screen's own text.
  */
 import { useCallback, useEffect, useState } from "react";
 import { callDeckyWithTimeout } from "../utils/deckyCall";

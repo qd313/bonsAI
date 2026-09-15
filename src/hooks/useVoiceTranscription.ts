@@ -1,9 +1,20 @@
 /**
- * Title: Voice transcription hook
- * Purpose: Start/stop voice Ask RPC, poll status, and stream partial transcripts into unified input.
- * Used for: MainTab unified Ask bar mic control.
- * Solves: Live dictation lifecycle without blocking the plugin shell.
- * Does not: Render mic UI or request microphone permissions — see MainTab and PermissionsTab.
+ * Title: Dictating a question with the microphone
+ *
+ * Purpose: Starts and stops microphone dictation on the back end, checks
+ * in several times a second while it is recording, and writes the words
+ * heard so far into the question box as they come in — first the words
+ * already settled, then whatever is still being worked out.
+ *
+ * Used for: The mic button on the plugin's main question box.
+ *
+ * Solves: Keeps a recording in progress, and the live words appearing in
+ * the question box, going the whole time someone is talking, without
+ * blocking the rest of the plugin while that happens.
+ *
+ * Does not: Draw the mic button itself, or ask the person to grant
+ * microphone access — see the plugin's main screen and the Permissions
+ * tab for both.
  */
 import { useCallback, useEffect, useRef } from "react";
 // NOTE: start/stop_voice_transcription deliberately use raw call() with no

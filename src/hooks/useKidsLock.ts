@@ -1,9 +1,29 @@
 /**
- * Title: Kids master lock hook
- * Purpose: Map Steam parental `locked` onto session UI/backend capability deny.
- * Used for: index.tsx effectiveCapabilities + Permissions tab banner; pushes RPC.
- * Solves: Fail-open UNKNOWN, latch once locked until explicit unlock, mid-session unlock.
- * Does not: Persist lock in settings.json; filter AI output; decode parental protobuf.
+ * Title: The Kids lock — following Steam's own parental control for this session
+ *
+ * Purpose: Watches Steam's own parental lock and, for as long as it is on,
+ * turns off every one of the plugin's five permissions for this session —
+ * writing files, the screenshot and video library, Steam's logs, talking
+ * to Steam's own servers, and the microphone — no matter what the person
+ * had actually granted. It does not touch the saved permissions
+ * themselves, only what they are allowed to do while the lock is active.
+ *
+ * Used for: The plugin's main screen, to work out which permissions are
+ * actually in effect, and the banner on the Permissions tab; also tells
+ * the back end whenever the lock's state changes.
+ *
+ * Solves: Deciding safely when Steam has not actually said whether the
+ * lock is on. If Steam's answer is momentarily unclear, this treats the
+ * lock as off — unless it has already seen the lock turned on this
+ * session, in which case it stays locked until Steam explicitly reports it
+ * as off again. A dropped connection, a timeout, or an unrelated error can
+ * never quietly turn the lock back off on its own.
+ *
+ * Does not: Save the lock's state to the settings file — it is not a saved
+ * setting, only a live read of Steam's own state for as long as the plugin
+ * is open. Does not filter or change anything the AI says, and does not
+ * read Steam's parental-control data directly; it goes through whatever
+ * already decodes that elsewhere.
  */
 import { useEffect, useRef, useState } from "react";
 

@@ -1,9 +1,27 @@
 /**
- * Title: Disclaimer and local-runtime gates
- * Purpose: Show first-run beta disclaimer and one-time Ollama-on-Deck warning modals with localStorage gates.
- * Used for: index.tsx — couples disclaimer ack version to local-runtime beta prompt timing.
- * Solves: Informed consent before privileged AI/hardware features without re-prompting every session.
- * Does not: Enforce backend capability checks — see PermissionsTab and main.py RPC guards.
+ * Title: The two one-time warnings — beta notice and running AI on the Deck itself
+ *
+ * Purpose: Shows two popups, each only until the person has clicked past
+ * it once. The first, on the very first time the plugin is opened, says
+ * this is beta software and that AI suggestions should be checked before
+ * being trusted. The second appears the first time someone turns on
+ * running the AI on the Deck's own hardware rather than a separate
+ * computer, and warns that a game already using a lot of the Deck's memory
+ * and graphics power could crash or misbehave while the AI is also
+ * running. Both are remembered in the browser's local storage, so once
+ * clicked past they do not come back.
+ *
+ * Used for: index.tsx, on first mount and whenever the on-Deck AI setting
+ * is turned on.
+ *
+ * Solves: The person should see and accept both warnings once, and never
+ * be shown them again after that — and the second one should not appear
+ * before the first has been accepted, so the two do not race each other.
+ *
+ * Does not: Turn anything off by itself. This file only shows the warnings
+ * and remembers that they were seen; it is the Permissions tab and the
+ * back end's own checks that actually stop an action needing a permission
+ * from running when that permission is off.
  */
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { showModal, ConfirmModal } from "@decky/ui";

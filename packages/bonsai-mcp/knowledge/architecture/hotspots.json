@@ -22,7 +22,7 @@
     },
     {
       "path": "src/hooks/useBonsaiAskOrchestration.ts",
-      "lines": 1577,
+      "lines": 1578,
       "role": ""
     },
     {
@@ -117,7 +117,7 @@
     },
     {
       "path": "src/hooks/usePluginSettings.ts",
-      "lines": 672,
+      "lines": 691,
       "role": ""
     },
     {

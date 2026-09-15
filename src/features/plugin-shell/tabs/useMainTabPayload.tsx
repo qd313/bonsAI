@@ -5,9 +5,9 @@
  * default, always-open tab, and its busiest one. It builds that whole
  * screen: the question box, the running conversation, screenshot attach,
  * and, when the AI-character feature is on, the small avatar shown in the
- * corner. It is one of six "tab payload" hooks that each build one tab's
- * screen and avoid rebuilding it unless something it actually shows has
- * changed.
+ * corner. It is one of six hooks, one per tab, that each build that one
+ * tab's whole screen and avoid rebuilding it unless something it actually
+ * shows has changed.
  *
  * Used for: The tab bar's default Ask tab.
  *

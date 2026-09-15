@@ -1,11 +1,25 @@
 /**
- * Title: Preset seeds with session RAG
- * Purpose: Compose carousel seeds, and pick rotation chips, with session RAG unless a frozen QA
- *          batch is active.
- * Used for: MainTab preset carousel initialization hook and the carousel's auto-advance tick.
- * Solves: Gate RAG mixing behind a frozen QA batch (settings-driven or the compile-time
- *         constant) so a deterministic run is not reseeded out from under the tester.
- * Does not: Advance carousel focus — see carouselState and MainTab carousel UI.
+ * Title: Mixing knowledge-base suggestion chips into the preset carousel
+ *
+ * Purpose: The row of suggested-question chips on the Main tab can either
+ * be built purely from static preset text, or have some of its chips
+ * swapped for ones pulled from the current game's own knowledge base. This
+ * file does that swap — for both the chips the carousel starts with and
+ * the ones it rotates in afterward — unless a tester has frozen the
+ * carousel to an exact, repeatable set of chips for testing, in which case
+ * it leaves the frozen set alone.
+ *
+ * Used for: The Main tab's preset carousel, both when it is first built
+ * and on every rotation tick afterward.
+ *
+ * Solves: A tester who has frozen the carousel to a known set of chips
+ * (through a setting or a build-time flag) needs that exact set to stay
+ * put — a knowledge-base chip getting mixed in partway through would end
+ * the test run without saying so. This is where that is checked and
+ * respected.
+ *
+ * Does not: Move the carousel's own highlight — see carouselState and the
+ * Main tab's carousel screen for that.
  */
 import { TEMP_PRESET_CAROUSEL_FROZEN, frozenTestChipsActive } from "../../data/presets";
 import type { PresetPrompt } from "../../data/presets";

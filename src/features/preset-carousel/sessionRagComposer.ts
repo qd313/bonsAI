@@ -1,9 +1,25 @@
 /**
- * Title: Session RAG preset composer
- * Purpose: Probabilistically mix static preset seeds with session RAG chip candidates.
- * Used for: composePresetSeedsWithSessionRag and MainTab preset carousel seed list.
- * Solves: Contextual preset variety without replacing the full static carousel each render.
- * Does not: Call backend for candidates — see sessionRagChipCandidates RPC helper.
+ * Title: Deciding which suggestion chips come from the game's own knowledge base
+ *
+ * Purpose: Given the row of static preset chips and a list of chips pulled
+ * from the running game's own knowledge base, decides which of the row's
+ * slots actually show a knowledge-base chip instead of the static one —
+ * both when the row is first built, and each time the carousel rotates in
+ * a new chip afterward. A chip actually about this game is always tried
+ * before a chip about Steam Deck compatibility in general, and if any
+ * knowledge-base chip is available at all, this guarantees at least one is
+ * visible on screen rather than leaving it possible for none to ever show.
+ *
+ * Used for: composePresetSeedsWithSessionRag, and the Main tab's preset
+ * carousel seed list.
+ *
+ * Solves: Some variety in the suggested questions without replacing the
+ * whole static row every time the screen redraws, and without the row
+ * ever silently having zero knowledge-base chips in it when the game is
+ * actually covered by the knowledge base.
+ *
+ * Does not: Ask the back end for the candidate chips in the first place —
+ * see the helper that fetches them for that.
  */
 import type { AskModeId } from "../../data/askMode";
 import type { PresetPrompt } from "../../data/presets";

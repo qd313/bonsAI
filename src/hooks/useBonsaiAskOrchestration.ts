@@ -69,8 +69,9 @@
  * - The mount-time restore effect runs exactly once (an empty dependency
  *   list) on purpose. The callbacks it needs change identity on every
  *   render, and depending on them directly re-ran the whole restore on every
- *   render — status RPC, re-apply, a state change, another render — a loop
- *   this file's own comments say was measured directly.
+ *   render — a status check to the back end, re-apply, a state change,
+ *   another render — a loop this file's own comments say was measured
+ *   directly.
  * - Reordering the hooks in this file risks a poll callback that is stale by
  *   the time it fires, if that reordering changes which render's closures a
  *   callback captures.

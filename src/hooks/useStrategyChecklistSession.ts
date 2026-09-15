@@ -1,9 +1,23 @@
 /**
- * Title: Strategy checklist session sync
- * Purpose: Load, persist, and clear per-game Strategy checklist state across Ask mode changes.
- * Used for: useBonsaiAskOrchestration Strategy mode checklist UI.
- * Solves: Checklist survives game switches and disk reload without entangling submit/poll logic.
- * Does not: Render checklist UI or build Ask payloads — see strategyChecklist utils.
+ * Title: Keeping the Strategy checklist in step with the running game
+ *
+ * Purpose: Strategy mode's checklist belongs to whichever game is running,
+ * not to the plugin session as a whole. This file notices when the running
+ * game changes (checked about every second and a half) and loads that
+ * game's own saved checklist from disk. If the person switches out of
+ * Strategy mode, it clears the checklist, both on screen and on disk, so
+ * an old game's checklist cannot bleed into a different mode.
+ *
+ * Used for: useBonsaiAskOrchestration, for the checklist shown under
+ * Strategy mode.
+ *
+ * Solves: Keeps the checklist correct across switching games and
+ * reopening the plugin, without tangling that bookkeeping into the code
+ * that actually sends and checks on Ask answers.
+ *
+ * Does not: Draw the checklist on screen, or build what gets sent to the
+ * back end when a box is checked — see the shared checklist helpers for
+ * both.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Router } from "@decky/ui";

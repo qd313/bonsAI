@@ -6,9 +6,9 @@
  * on top of the plugin (a picker, a confirm dialog) throws the plugin's
  * whole screen away and rebuilds it once the popup closes. Without this
  * hook, that rebuild would always land back on the Ask tab, no matter
- * which tab a person was actually on. It saves a snapshot before the
- * popup opens and puts the right tab — and the focus ring — back once it
- * closes.
+ * which tab a person was actually on. It saves a snapshot — a copy of
+ * the conversation and which tab was open, taken right before the popup —
+ * and puts the right tab, and the focus ring, back once the popup closes.
  *
  * Used for: The plugin's main screen, and every place that opens one of
  * Steam's popups (the character picker, the models hub, and others).

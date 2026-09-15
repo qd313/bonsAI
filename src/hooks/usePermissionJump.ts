@@ -1,9 +1,24 @@
 /**
- * Title: Permission jump hook
- * Purpose: Navigate from a capability denial to the matching Permissions toggle with return-tab support.
- * Used for: index.tsx — replaces bare setCurrentTab("permissions") at deny sites.
- * Solves: Return-tab memory and focus targeting that coexist with modal tab-restore locks.
- * Does not: Render deny UI — see PermissionDenyAction and per-site wiring.
+ * Title: Jumping straight to the permission that was just denied
+ *
+ * Purpose: When something is blocked because a permission is off, this is
+ * what takes the person straight to the matching switch on the Permissions
+ * tab — instead of just dropping them on that tab and leaving them to find
+ * the right row themselves — and remembers which tab to bring them back to
+ * afterward.
+ *
+ * Used for: index.tsx, everywhere a denied permission needs to send the
+ * person to turn it on.
+ *
+ * Solves: Two things that have to work together without interfering with
+ * each other: remembering which tab to return to, and putting the focus
+ * ring on the right switch once the Permissions tab is showing — both
+ * while the tab bar's own after-popup-close protections are still in
+ * effect.
+ *
+ * Does not: Draw the "this needs a permission" message itself — see
+ * PermissionDenyAction and wherever each individual feature wires this
+ * hook in.
  */
 import { useCallback, useState } from "react";
 

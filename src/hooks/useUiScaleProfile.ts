@@ -1,9 +1,22 @@
 /**
- * Title: UI scale profile hook
- * Purpose: Measure QAM viewport width, classify handheld/docked profile, and expose scope CSS variables.
- * Used for: index.tsx and UiScaleContext — Settings Apply triggers remeasure via applyToken.
- * Solves: Readable typography and spacing across Deck resolutions without manual per-panel tuning.
- * Does not: Persist profile choice — see usePluginSettings and SettingsTab UI scale section.
+ * Title: Sizing the panel for a handheld Deck versus a docked, bigger screen
+ *
+ * Purpose: Measures how wide the plugin's own panel actually is, and from
+ * that (together with the screen's real size) works out whether this
+ * counts as a small handheld view or a larger docked one. It turns that
+ * choice into the values the rest of the panel scales its text and
+ * spacing from, so nothing has to be sized by hand for each case.
+ *
+ * Used for: The plugin's main screen and the UI-scale setting; pressing
+ * Apply in Settings tells this file to remeasure and reapply right away.
+ *
+ * Solves: Text and spacing that stay readable whether the Deck is in a
+ * person's hands or docked to a bigger screen, without each individual
+ * panel having to be tuned for both sizes on its own.
+ *
+ * Does not: Remember which profile was chosen between openings — that is
+ * saved as a setting; see usePluginSettings and the UI-scale section of
+ * Settings.
  */
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {

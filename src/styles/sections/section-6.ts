@@ -1,6 +1,95 @@
+/**
+ * Title: Chat bubbles, the bottom dock, and the saved-chats strip
+ *
+ * Purpose: This file started as one thing — the frosted-glass look shared
+ * by panels across the plugin — and grew into the largest single piece of
+ * styling in the plugin as the conversation screen grew around it. It now
+ * covers most of what a person actually looks at while reading a
+ * conversation: the question and answer bubbles, the row of saved chats
+ * above them, and the Ask bar pinned to the bottom of the screen.
+ *
+ *     ┌─ tab strip / saved-chats row ────────────┐
+ *     ├───────────────────────────────────────────┤
+ *     │            you: a question          [bubble, right-aligned]
+ *     │  [bubble] the AI's answer, in sections     │
+ *     │           [retry] [copy] [Show details]    │
+ *     ├─ bottom dock, pinned in place ─────────────┤
+ *     │  [suggestion chips]                        │
+ *     │  Ask something...              [ Ask ]     │
+ *     └─────────────────────────────────────────────┘
+ *
+ * Used for: Folded into the plugin's one combined stylesheet by
+ * bonsaiScopeStylesheet.ts, alongside the other numbered section files.
+ *
+ * Does not: Style the tab strip above the saved-chats row (section-1.ts)
+ * or the plugin's own tab bar (tabIndicatorBar.ts).
+ *
+ * How it works: roughly top to bottom of the file —
+ * 1. The shared frosted-glass look (blurred, semi-transparent background)
+ *    used by several panels, plus the Ask box's pulsing border while
+ *    waiting on an answer.
+ * 2. How answer text itself is formatted — paragraphs, lists, quotes,
+ *    links, and code blocks.
+ * 3. The question and answer bubbles in the conversation: their shape,
+ *    their small corner icons (retry on a question, copy on an answer),
+ *    and the streaming look (a pulsing border and blinking cursor) while
+ *    an answer is still arriving.
+ * 4. The buttons below an answer (retry, copy, and so on) and the "Show
+ *    details" divider line.
+ * 5. The bottom dock: the suggestion chips and Ask bar, pinned to the
+ *    bottom of the screen no matter how long the conversation above them
+ *    grows, with a soft fade hinting that more text is scrollable above.
+ * 6. The row of saved chats above the conversation: its bumper pills, the
+ *    current chat's name, faint "ghost" previews of the chats on either
+ *    side, and the small dots marking every chat plus the one that
+ *    creates a new one.
+ */
 import { BONSAI_CHAT_INPUT_TO_TRANSCRIPT_GAP_PX, BONSAI_CHAT_TRANSCRIPT_TO_SAVE_GAP_PX } from "../../features/unified-input/constants";
 import { uiScalePx } from "./uiScalePx";
 
+/**
+ * In: nothing — every value here is a fixed string or read from a CSS
+ * variable that some other part of the plugin sets.
+ * Out: a block of CSS text — the largest one this plugin builds.
+ * Can go wrong: this function itself cannot fail, but several rules
+ * inside it exist only to win a specificity fight with another rule
+ * elsewhere in the stylesheet (each one says so in its own comment) — a
+ * change to the order sections are combined in, in bonsaiScopeStylesheet.ts,
+ * could quietly flip one of those fights.
+ *
+ * 1. The shared glass-panel background and border, plus the pulsing glow
+ *    the Ask box gets while a question is mid-flight.
+ * 2. Formatting for the text inside an answer: paragraphs, lists, quotes,
+ *    links, inline code, and fenced code blocks.
+ * 3. The question bubble: right-aligned, its own background, and the
+ *    small Retry icon tucked into its bottom-left corner — positioned by
+ *    hand rather than reserving space in the layout, so a short question
+ *    is not left with an empty gap beside it.
+ * 4. The answer bubble: its glass background, the pulsing border and
+ *    blinking-cursor look while text is still streaming in, and the
+ *    dashed "waiting on a code block to finish" chip.
+ * 5. The Copy icon tucked into an answer's bottom-right corner, drawn as
+ *    a sibling of the bubble rather than nested inside it (explained
+ *    inline — nesting it caused the D-pad to bounce between the icon and
+ *    the last line of text), plus the trick that keeps the answer's very
+ *    last line of text from running underneath it.
+ * 6. Each answer section's own D-pad outline, used when stepping through
+ *    a long answer piece by piece.
+ * 7. The row of buttons under an answer (retry, copy feedback, and so
+ *    on) and the "Show details" hairline divider.
+ * 8. The Main tab's bottom dock — the suggestion chips and Ask bar,
+ *    pinned to the bottom of the screen by sticky positioning rather
+ *    than simple bottom alignment, so a long conversation cannot push
+ *    them off screen; plus the soft fade above it and two Deck-only
+ *    spacing fixes noted inline.
+ * 9. The "N earlier" pill that stands in for archived older turns, and
+ *    the empty-conversation placeholder shown on a brand new chat.
+ * 10. The row of saved chats above the conversation: the bumper pills,
+ *     the current chat's name (including the marquee scroll for a name
+ *     too long to fit), faint "ghost" previews of neighboring chats, the
+ *     delete button, and the small dots marking every chat's position
+ *     plus which ones are mid-answer or hold an unread reply.
+ */
 export function buildSection6Section(): string {
   return `
 /* ==========================================================================

@@ -1,3 +1,32 @@
+/**
+ * Title: The question typing box itself
+ *
+ * Purpose: Styles the actual field a person types their question into.
+ * The real native field is made invisible on purpose — its text is drawn
+ * by a separate overlay on top, which is how the plugin gets a custom
+ * blinking caret and (when the AI-character feature is on) a small avatar
+ * beside the text. This file makes sure the invisible field and the
+ * overlay drawn on top of it line up exactly.
+ *
+ *     ┌─ Ask box ──────────────────────────────┐
+ *     │ 🙂 What should I upgrade first? |       │  <- overlay text + caret
+ *     │    (real field is invisible, same spot) │  <- this file's job
+ *     └──────────────────────────────────────────┘
+ *
+ * Used for: Folded into the plugin's one combined stylesheet by
+ * bonsaiScopeStylesheet.ts, alongside the other numbered section files.
+ *
+ * Does not: Style the icon row below the box, or the Ask button — see
+ * section-8.ts for those.
+ *
+ * Gotchas: The overlay's padding and font have to match the real field's
+ * exactly — a mismatch wraps a long line one character sooner than the
+ * real field does, and the caret drifts off the text it is supposed to
+ * sit on. Another part of the plugin measures the real field on screen and
+ * writes what it finds into CSS variables the overlay reads; the plain
+ * numbers in this file are only the fallback used before that first
+ * measurement has run.
+ */
 import {
   UNIFIED_TEXT_FONT_PX,
   UNIFIED_TEXT_INSET_BOTTOM_PX,
@@ -11,6 +40,11 @@ import {
 } from "../../features/unified-input/constants";
 import { uiScalePx } from "./uiScalePx";
 
+/**
+ * In: nothing.
+ * Out: a block of CSS text.
+ * Can go wrong: nothing — this always returns the same fixed string.
+ */
 export function buildSection5Section(): string {
   return `
 /* ==========================================================================

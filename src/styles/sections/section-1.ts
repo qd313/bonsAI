@@ -1,4 +1,32 @@
+/**
+ * Title: Tab area frame, and stopping the tab-switch flicker
+ *
+ * Purpose: Styles the box that holds the whole tab area — everything
+ * below the top of the plugin's window: the strip that used to show
+ * Steam's own tab icons (now hidden; the plugin draws its own bar
+ * instead, see tabIndicatorBar.ts) and the scrollable body underneath it.
+ * Also fixes a flicker seen when switching tabs with the shoulder
+ * buttons, where the tab strip visibly dragged sideways for a moment.
+ *
+ *     ┌─ this file's box ─────────────────────┐
+ *     │  (Steam's own tab strip: hidden here)  │
+ *     │  ┌───────────────────────────────────┐ │
+ *     │  │        scrollable tab body         │ │
+ *     │  └───────────────────────────────────┘ │
+ *     └─────────────────────────────────────────┘
+ *
+ * Used for: Folded into the plugin's one combined stylesheet by
+ * bonsaiScopeStylesheet.ts, alongside the other numbered section files.
+ *
+ * Does not: Draw the plugin's own tab bar that replaced Steam's — see
+ * tabIndicatorBar.ts for that.
+ */
 
+/**
+ * In: nothing.
+ * Out: a block of CSS text.
+ * Can go wrong: nothing — this always returns the same fixed string.
+ */
 export function buildSection1Section(): string {
   return `
 /* ==========================================================================

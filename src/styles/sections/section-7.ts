@@ -1,3 +1,29 @@
+/**
+ * Title: Stripping Steam's own backgrounds so the plugin's show through
+ *
+ * Purpose: Steam's building blocks stack several backgrounds and shadows
+ * of their own on top of each other. This file strips all of that off a
+ * handful of spots — the suggestion chips, the Ask box, and the Ask-mode
+ * and Attach dropdown menus — so the plugin's own custom backgrounds are
+ * what a person actually sees, instead of Steam's default look showing
+ * through underneath or on top of it.
+ *
+ * Used for: Folded into the plugin's one combined stylesheet by
+ * bonsaiScopeStylesheet.ts, alongside the other numbered section files.
+ *
+ * Does not: Draw the plugin's own backgrounds — this only clears Steam's
+ * away so they are not fighting with whatever is drawn elsewhere.
+ */
+
+/**
+ * In: nothing.
+ * Out: a block of CSS text.
+ * Can go wrong: nothing — this always returns the same fixed string, but
+ * see the comment inside it about the Ask-mode menu — stripping
+ * backgrounds this broadly once made a dropdown menu see-through by
+ * accident, which is why the menu's own rules below have to explicitly
+ * undo part of this file's work.
+ */
 export function buildSection7Section(): string {
   return `
 /* ==========================================================================

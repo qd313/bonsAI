@@ -1,11 +1,23 @@
 /**
- * Title: Collapsing tab bar stylesheet
- * Purpose: The CSS for `TabIndicatorBar` — the 20px bar at rest (dashes, name, LB/RB marks).
- * Used for: bonsaiScopeStylesheet.ts, one section among the others under `.bonsai-scope`.
- * Solves: Plan 30 § 4.1 — the bar spans the column edge to edge (design-language Rule 1) with the
- *         slot row's 8px inner edges (Rule 3), and every size goes through `uiScalePx()`.
- * Does not: Hide Steam's header (section-1.ts) or hide the marks while the slot row is focused
- *           (section-6.ts, beside the rule that hides Steam's own hints). The open strip is W5.
+ * Title: The plugin's own tab bar, at the very top of the screen
+ *
+ * Purpose: Styles the thin bar that replaced Steam's own tab strip: a
+ * small row of dashes and the current tab's name, sitting at a fixed
+ * height so nothing around it jumps when a person switches tabs. Also
+ * styles the fuller strip that floats open over the top of it — showing
+ * every tab as an icon and label — while that bar has the D-pad's focus.
+ *
+ *     at rest:        - - - -   ASK              LB  RB
+ *     focused, open:  ┌─────────────────────────────────┐
+ *                     │ [Ask] [Chats] [Settings] [...]   │
+ *                     └─────────────────────────────────┘
+ *
+ * Used for: Folded into the plugin's one combined stylesheet by
+ * bonsaiScopeStylesheet.ts, alongside the other numbered section files.
+ *
+ * Does not: Hide Steam's own original tab header — that is section-1.ts.
+ * Does not hide the bar's own marks while something else has focus either
+ * — that lives elsewhere. This file only draws the bar in its two states.
  */
 import {
   TAB_BAR_CELL_GAP_PX,
@@ -30,6 +42,40 @@ const DASH_COLOR = "rgba(168, 182, 198, 0.35)";
 /** The same character accent the active icon used to take; the fallback is the forest green default. */
 const ACCENT = "var(--bonsai-ui-tab-focus-1, rgba(82, 216, 138, 0.92))";
 
+/**
+ * In: nothing — every value here is a fixed string or read from a CSS
+ * variable that some other part of the plugin sets.
+ * Out: a block of CSS text.
+ * Can go wrong: this function itself cannot fail, but its rules lean on
+ * exact specificity fights with other section files (noted inline) — a
+ * change elsewhere that reorders the sections could quietly break one.
+ *
+ * 1. Locks the bar's height to one fixed size in every state, so the two
+ *    hooks that measure "how much room does the tab area need" never see
+ *    it change — the open strip below floats over the top instead of
+ *    pushing anything down.
+ * 2. Sets the small gap under the bar as a plain CSS value too, not only
+ *    the one a hook writes inline — needed because changing the UI scale
+ *    rebuilds the tab area and can leave the inline value stale.
+ * 3. Lays out the bar itself: a row with the left/right shoulder-button
+ *    marks at each end and the row of dashes in the middle.
+ * 4. Styles the shoulder marks and the dashes, including which dash is
+ *    lit up for the current tab.
+ * 5. Turns off Steam's own focus ring on the bar — the open strip further
+ *    down is what stands in for a ring here, showing exactly when the
+ *    bar holds the D-pad's focus.
+ * 6. Positions the open strip absolutely, in its own rule with a
+ *    specificity carefully chosen to beat a conflicting reset elsewhere
+ *    (explained inline) — without it the strip pushed the rest of the
+ *    screen down instead of floating over it.
+ * 7. Styles the open strip's look: fades in and out, and is not clickable
+ *    or reachable by the D-pad while closed.
+ * 8. Styles each tab cell inside the open strip (icon, label, and the
+ *    highlighted look for whichever tab is current).
+ * 9. Styles the current tab's name, shown at rest next to the dashes,
+ *    capped to the same size as other small pill labels elsewhere in the
+ *    plugin.
+ */
 export function buildTabIndicatorBarSection(): string {
   const activeDashH = TAB_BAR_DASH_H_PX + TAB_BAR_DASH_ACTIVE_EXTRA_H_PX;
   return `

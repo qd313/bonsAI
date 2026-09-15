@@ -23,24 +23,6 @@
  * passes callbacks through to the sections that need to check live
  * connection status.
  *
- * How it works:
- * 1. A handful of focusXThumb()/focusXToggle() helpers, one per slider or
- *    toggle, each finding that control's own focusable element inside a
- *    ref'd container so the D-pad can be handed to it from a neighbouring
- *    section.
- * 2. OllamaWhereAiRunsSection draws first — the host address and
- *    local-Deck controls — with its own Down wired to focusKbToggle().
- * 3. KnowledgeBaseSection draws next, its Up wired back to the connection
- *    test button and its Down to the reply-verbosity slider.
- * 4. The Reply style panel: a verbosity slider then the Thinking effort
- *    row, each one's Up/Down pointed at its neighbour.
- * 5. Connection tuning: a custom-timeouts toggle that swaps in either a
- *    default-values line or the warning/timeout slider, followed by the
- *    keep-models-loaded slider.
- * 6. Models & routing: the installed-model count (read straight off the
- *    last connection status) and the three buttons that open the models
- *    hub and the two try-order modals.
- *
  * Gotchas: Every "find the first focusable thing in this row" helper below
  * searches inside a ref'd container, never the whole page. A plain
  * page-wide query looks inside Decky's outer shell rather than just this
@@ -112,7 +94,7 @@ export type OllamaTabProps = {
 
 /**
  * The whole tab: renders each Ollama-related section in order and wires
- * the D-pad handoff between them. See "How it works" above for the flow.
+ * the D-pad handoff between them.
  *
  * In: every current Ollama setting (host address, local-on-Deck, knowledge
  * base, reply style, connection tuning, model policy) plus a setter for
@@ -125,6 +107,23 @@ export type OllamaTabProps = {
  * setting change and every "open X" button just calls the callback it was
  * handed; OllamaWhereAiRunsSection and KnowledgeBaseSection own their own
  * connection checks.
+ *
+ * 1. A handful of focusXThumb()/focusXToggle() helpers, one per slider or
+ *    toggle, each finding that control's own focusable element inside a
+ *    ref'd container so the D-pad can be handed to it from a neighbouring
+ *    section.
+ * 2. OllamaWhereAiRunsSection draws first — the host address and
+ *    local-Deck controls — with its own Down wired to focusKbToggle().
+ * 3. KnowledgeBaseSection draws next, its Up wired back to the connection
+ *    test button and its Down to the reply-verbosity slider.
+ * 4. The Reply style panel: a verbosity slider then the Thinking effort
+ *    row, each one's Up/Down pointed at its neighbour.
+ * 5. Connection tuning: a custom-timeouts toggle that swaps in either a
+ *    default-values line or the warning/timeout slider, followed by the
+ *    keep-models-loaded slider.
+ * 6. Models & routing: the installed-model count (read straight off the
+ *    last connection status) and the three buttons that open the models
+ *    hub and the two try-order modals.
  */
 export const OllamaTab: React.FC<OllamaTabProps> = ({
   ollamaIp,

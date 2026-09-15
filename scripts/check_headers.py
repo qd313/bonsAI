@@ -30,6 +30,9 @@ warnings.filterwarnings("ignore", category=SyntaxWarning)
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from code_line_count import code_line_count  # noqa: E402 -- needs the path line above
+
 # A header claims a function reference only when it writes the trailing "()":
 # `` `run_game_ai_request()` ``. A bare backticked word (`` `kb_domain` ``,
 # `` `childList` ``, `` `python3` ``) is prose -- a setting name, a DOM
@@ -246,7 +249,10 @@ def scan(level: str):
             missing_purpose.append(path)
 
         if level == "full":
-            if len(lines) > 400 and not has_how_it_works_line(lines):
+            # Code lines, not total lines. Otherwise writing a good header for a
+            # 390-line file tips it over the limit and immediately demands a
+            # walkthrough as well -- the header creating its own next obligation.
+            if code_line_count(abs_path) > 400 and not has_how_it_works_line(lines):
                 missing_how_it_works.append(path)
 
             header_text = extract_header_text(path, lines)

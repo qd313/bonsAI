@@ -20,18 +20,6 @@
  * contents comes from a snapshot built elsewhere (the inputTransparency
  * utils and orchestration hooks); this file only draws them.
  *
- * How it works:
- * 1. ContextChipLadder() builds the chip list from the snapshot with
- *    chipsFromSnapshot(); if it is empty, nothing renders.
- * 2. Collapsed, it draws only the "Context used · tap for details" link.
- * 3. Expanded, it works out which chips are visible — everyone, or a
- *    window around the active one from windowRange() — and moves the
- *    active chip on Left/Right/Up/Down, handing the D-pad to
- *    onMoveUpFromLadder/onMoveDownFromLadder when it falls off either end.
- * 4. The active chip's full detail — title, credit/attribution, file
- *    paths, bullet points, and any raw JSON — is drawn below the row by
- *    ChipExpandedBody().
- *
  * Gotchas: The ladder is one single Focusable, so Steam's own D-pad ring
  * always lands on the whole row, never on one chip by itself — Left/Right
  * just move which chip is "active" inside it. That active-chip highlight is
@@ -108,8 +96,7 @@ export type ContextChipLadderProps = {
 
 /**
  * The ladder itself: the collapsed hint link, or — once expanded — the row
- * of chips plus the detail panel for whichever one is active. See "How it
- * works" above for the flow.
+ * of chips plus the detail panel for whichever one is active.
  *
  * In: the transparency snapshot to build chips from, whether to start
  * collapsed, callbacks for expand/collapse and for handing the D-pad off
@@ -121,6 +108,20 @@ export type ContextChipLadderProps = {
  * What can go wrong: nothing here fetches data. chipsFromSnapshot() turns
  * the snapshot into chips once, synchronously, and everything below just
  * walks that fixed list.
+ *
+ * 1. Build the chip list with chipsFromSnapshot(); if it is empty, say so
+ *    and stop.
+ * 2. While collapsed, render just the "Context used · tap for details"
+ *    link; tapping it or pressing A expands the ladder.
+ * 3. Once expanded, work out which chips are actually visible: everyone,
+ *    if there are few enough (CONTEXT_CHIP_SHOW_ALL_MAX), otherwise a
+ *    window around the active one from windowRange().
+ * 4. Left/Right and Up/Down all move the same active chip. Moving right or
+ *    down off the last chip, or left/up off the first, falls through to
+ *    onMoveDownFromLadder/onMoveUpFromLadder so the D-pad can leave the
+ *    ladder entirely.
+ * 5. Draw the chip row, dimming chips further from the active one, then
+ *    hand the active chip to ChipExpandedBody() to draw its details below.
  */
 export function ContextChipLadder({
   snapshot,
@@ -320,7 +321,7 @@ export function ContextChipLadder({
 /**
  * The panel below the chip row: title, credit/attribution block, file
  * paths, bullet points, and — for the Developer details chip only — raw
- * JSON dumps. See "How it works" above for where this fits.
+ * JSON dumps.
  *
  * In: the active chip, plus — only for the "developer" chip — the raw
  * ask_diagnostics payload to show underneath everything else.
@@ -330,6 +331,18 @@ export function ContextChipLadder({
  * What can go wrong: none of the helper calls here can fail — chipBodyBullets(),
  * chipBodyPaths(), chipAttribution(), and chipDevJson() all just read
  * fields already computed onto the chip and default to empty.
+ *
+ * 1. Pull the possible sections off the chip: bullets, paths, attribution
+ *    entries, and any raw JSON blob.
+ * 2. Always show the title from chipBodyTitle().
+ * 3. If there is attribution, show it first, as a highlighted block with
+ *    source, license, and capture date.
+ * 4. Then any file paths, one per line.
+ * 5. Then bullet points, if there are any.
+ * 6. Then the chip's own JSON dump, if it carries one.
+ * 7. Finally, only on the developer chip, the separate ask_diagnostics
+ *    dump — folded in here so "Show details" is the one place raw
+ *    diagnostics live, instead of a second button next to it.
  */
 function ChipExpandedBody({
   chip,

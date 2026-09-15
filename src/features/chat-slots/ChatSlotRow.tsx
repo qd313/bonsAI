@@ -18,19 +18,18 @@
  * Does not: Actually send or receive Ask messages. This only switches which
  * saved chat is showing; useBonsaiAskOrchestration owns talking to the AI.
  *
- * How it works:
- * 1. carouselIndex tracks the on-screen position — 0 is always "[+] new
- *    chat", 1..N are the saved chats — and an effect keeps it in sync with
- *    the real active chat.
- * 2. LB/RB (useChatSlotBumpers) or a D-pad Left/Right step move
- *    carouselIndex and, unless it lands on [+], call onSelectSlot.
- * 3. Pressing A creates a chat from [+], opens the rename modal, or opens
- *    the delete confirmation, depending on where the D-pad currently sits.
- * 4. A layout effect measures whether the title text is wider than its box
- *    and, only while focused, publishes the overflow as a CSS variable so
- *    long titles scroll into view.
- *
  * Gotchas:
+ * - A control in this plugin can look completely normal on screen and
+ *   still be invisible to the D-pad, because Steam guesses what a
+ *   Focusable connects to next from its position on screen, and that
+ *   guess is not always right. This row hit that twice, in two different
+ *   ways: Steam's automatic guess skipped the whole row in both
+ *   directions (see the focusable: true note below), and separately,
+ *   Steam's own idea of "what's above this row" was a hidden tab-strip
+ *   button nobody could see or reach any other way (see the Up note
+ *   below). Both times the fix was the same one this plugin reaches for
+ *   whenever the guess is wrong: stop letting Steam guess, and name the
+ *   exact next stop by hand.
  * - Recent chats are ordered newest first, with [+] sitting right next to
  *   whichever chat you were just in. It used to be ordered the other way,
  *   which put "start a new chat" next to your OLDEST chat — so leaving your
@@ -89,8 +88,7 @@ const CREATE_LABEL = "[+]";
 
 /**
  * The whole slot row: the LB/RB carousel, its center label, the activity
- * dots, and the rename/delete controls. See "How it works" above for the
- * flow.
+ * dots, and the rename/delete controls.
  *
  * In: the list of saved chats (newest first), which one is active, and
  * callbacks for creating, selecting, renaming and deleting a chat, plus
@@ -103,6 +101,19 @@ const CREATE_LABEL = "[+]";
  * briefly disagree right after a rename or delete finishes elsewhere — the
  * effect that re-syncs carouselIndex from activeSlotId is what catches that
  * back up.
+ *
+ * 1. Track carouselIndex, the on-screen position — 0 is always "[+] new
+ *    chat", 1..N are the saved chats.
+ * 2. Work out what is visible at the current position and its two
+ *    neighbours, for the ghost previews to either side.
+ * 3. On LB/RB (handled by useChatSlotBumpers) or a D-pad Left/Right step,
+ *    move carouselIndex and, unless it landed on [+], call onSelectSlot.
+ * 4. Pressing A: on [+], calls onCreateSlot; otherwise opens the rename
+ *    modal (useChatSlotRenameModal), or, if focus is on the × stop, the
+ *    delete confirmation.
+ * 5. A layout effect measures whether the title text is wider than its box
+ *    and, only while focused, publishes the overflow amount as a CSS
+ *    variable so the stylesheet can scroll long titles into view.
  */
 export function ChatSlotRow({
   summaries,

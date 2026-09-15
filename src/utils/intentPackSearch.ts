@@ -1,11 +1,21 @@
 /**
- * Title: Intent pack search
- * Purpose: Build search index and match SETTINGS_DATABASE rows with offline intent pack aliases.
- * Used for: useIntentPacks, useSteamSettingsSearch, and Settings search mode.
- * Solves: Synonym/alias/expansion hits without changing native settings result shape.
- * Does not: Persist packs — see useIntentPacks RPC import/export.
+ * Title: Finding a setting by a word that is not its actual name
+ *
+ * Purpose: Searching Settings normally matches the setting's own name against what was typed. That
+ * misses a player typing a word they know instead — "temperature" instead of "thermal", say. An
+ * "intent pack" is a small, offline list mapping words like that to the real setting name. This file
+ * builds a fast lookup out of a loaded pack, and uses it to widen a search: it first checks for a
+ * plain, ordinary match against the setting names themselves, then adds any extra settings the intent
+ * pack's alternate words point to.
+ *
+ * Used for: useIntentPacks, useSteamSettingsSearch, and the Settings tab's own search box.
+ *
+ * Solves: lets a player find a setting by a word they actually think of, in addition to the setting's
+ * own name, without changing the shape of what a search normally returns.
+ *
+ * Does not: save or load intent packs from disk — see useIntentPacks for the back-end calls that
+ * import and export them. This file only searches with whatever pack it is handed.
  */
-/** Offline intent pack search — extends SETTINGS_DATABASE substring matching without changing result shape. */
 
 import { SETTINGS_SEARCH_MIN_QUERY_LENGTH } from "../features/unified-input/constants";
 

@@ -1,9 +1,22 @@
 /**
- * Title: Decky RPC helpers
- * Purpose: Wrap Decky `call()` with deadlines and normalize error payloads for UI toasts.
- * Used for: Any frontend RPC that must not hang forever (Ask submit, feedback, settings).
- * Solves: Python RPC strands leave the Ask overlay stuck; inconsistent error shapes confuse users.
- * Does not: Define RPC methods — those live in main.py.
+ * Title: Asking the Python side a question, with a deadline
+ *
+ * Purpose: The screen and the Python back end talk to each other through Decky, the framework this
+ * plugin runs inside — the screen asks a named question ("save these settings", "start this AI
+ * question") and waits for an answer. Decky's own way of asking has no time limit built in, so if the
+ * back end never replies, the screen would wait forever with no way to know something went wrong.
+ * This file wraps every one of those questions with a deadline, and also cleans up the different
+ * shapes an error can come back in from Python into one plain message a toast can show the player.
+ *
+ * Used for: every question the screen asks the back end that must not be allowed to hang forever —
+ * sending a question to the AI, sending feedback, saving settings, and more.
+ *
+ * Solves: a Python back end that never answers used to leave the screen stuck waiting with no way
+ * out; and different kinds of failure used to come back shaped differently, which made showing the
+ * player a clear error message harder than it needed to be.
+ *
+ * Does not: decide which questions exist to ask, or what each one does on the back end's side — see
+ * main.py for the full list.
  */
 import { call } from "@decky/api";
 

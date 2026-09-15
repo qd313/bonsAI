@@ -1,9 +1,18 @@
 /**
- * Title: Desktop chat autosave tracker
- * Purpose: Track which Ask request_ids were auto-saved to desktop chat notes in sessionStorage.
- * Used for: MainTab desktop debug note flow when desktopDebugNoteAutoSave is enabled.
- * Solves: Avoid duplicate append_desktop_chat RPC for the same completed response.
- * Does not: Write files — backend append_desktop_chat and filesystem permissions.
+ * Title: Which finished answers already got saved to the desktop note file
+ *
+ * Purpose: When the "auto-save chat notes to desktop" setting is on, every finished AI answer gets
+ * appended to a note file on the player's own computer. This file remembers which answers have
+ * already been saved that way during the current session, so the same answer is never appended
+ * twice.
+ *
+ * Used for: the main tab's desktop note flow, while the auto-save setting is turned on.
+ *
+ * Solves: without this, a reply that briefly re-renders after it was already saved could trigger a
+ * second save of the exact same answer.
+ *
+ * Does not: write the note file itself — the back end's own save call and the "write files"
+ * permission own that. This file only keeps track of which answers already went through it.
  */
 const AUTO_SAVED_RESPONSE_IDS_KEY = "bonsai:auto-desktop-chat-response-ids";
 

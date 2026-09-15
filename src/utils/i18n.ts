@@ -1,9 +1,19 @@
 /**
- * Title: UI string translator
- * Purpose: Resolve localized UI strings for the effective Ask reply language with English fallback.
- * Used for: useReplyLanguage t() helper and askThinkingPhases display copy.
- * Solves: Thin wrapper over i18n/catalog lookup keyed by effectiveLangCatalogKey.
- * Does not: Own string tables — see i18n/keys and i18n/catalog.
+ * Title: Looking up one on-screen label in the player's language
+ *
+ * Purpose: Small one-function file that looks up a single piece of on-screen text in whichever
+ * language the player has chosen for AI replies, falling back to English for anything not yet
+ * translated into that language.
+ *
+ * Used for: the `t()` helper used throughout the screen (useReplyLanguage) and the "thinking..."
+ * status text (askThinkingPhases).
+ *
+ * Solves: nothing on its own beyond picking the right language variant of a lookup that already
+ * exists — see below.
+ *
+ * Does not: hold the actual text for each label, or the list of which labels exist — those live in
+ * i18n/keys and i18n/catalog. This file only picks the right language before handing the lookup off
+ * to them.
  */
 import { effectiveLangCatalogKey } from "../data/replyLanguage";
 import { lookupUiString, type UiStringVars } from "../i18n/catalog";

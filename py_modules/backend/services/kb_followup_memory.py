@@ -12,9 +12,10 @@ several -- measured on Deep Rock Galactic: Survivor, where "what about its secon
 the wrong boss first. Adding the remembered name to the search words fixes the ranking, not the
 recall: it was already finding the right note's kind, just not ordering it first.
 Does not: Touch the question the model is shown or the person sees -- only ever feeds the search
-words. Touch Speed mode. Persist across a process restart. Decide whether a question names its
-own subject -- callers pass that in, typically via extract_strategy_asked_entity in
-ollama_prompts.py, the same detector the spoiler-consent check already uses.
+words. Touch Speed mode. Remember anything once the plugin restarts -- this lives in memory only,
+for as long as the plugin keeps running. Decide whether a question names its own subject --
+callers pass that in, typically via extract_strategy_asked_entity in ollama_prompts.py, the same
+detector the spoiler-consent check already uses.
 """
 
 from __future__ import annotations

@@ -1,7 +1,8 @@
 """Title: Ollama connection test
 
 Purpose: Decide whether the AI is reachable, and on this Deck try once to start it.
-Used for: The Test connection button on the Connection tab, through one RPC method.
+Used for: The Test connection button on the Connection tab -- the one thing the screen
+        asks the back end to check for this.
 Solves: The whole decision -- bad address, unreachable host, not installed here, started
         it and it worked, started it and it still failed -- in one place that can be
         tested without a running Ollama and without the plugin object.

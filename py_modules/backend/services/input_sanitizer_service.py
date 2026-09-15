@@ -1,9 +1,18 @@
-"""Title: Ask input sanitizer
+"""Title: Cleaning up what you type before it reaches the AI
 
-Purpose: Deterministic sanitization, size limits, and magic-phrase toggles for Ask payloads.
-Used for: Pre-Ollama lane checks that drive transparency sanitizer_action and reason_codes.
-Solves: Block or trim unsafe user text and honor documented bonsai:enable/disable-sanitize commands.
-Does not: Call Ollama or perform network I/O — returns lane results for callers to act on.
+Purpose: Every question is checked and tidied up before it goes anywhere near the AI:
+stray control characters are stripped out, runs of extra whitespace are collapsed, and a
+question that is empty after cleanup, absurdly long, or reads as random keyboard-mashing
+rather than a real question is refused with a plain message instead of being sent on.
+There is also a typed command, documented in the README, that turns this checking off or
+back on for a Deck.
+Used for: The one step every question passes through right before the rest of the Ask
+code decides what to do with it.
+Solves: Keeping unsafe or nonsense text from ever reaching the AI, and giving a clear,
+consistent reason each time something is trimmed or blocked, rather than each caller
+inventing its own rules.
+Does not: Talk to the AI or the network at all -- it only decides pass, clean, or block,
+and hands that decision back for the caller to act on.
 """
 
 from __future__ import annotations

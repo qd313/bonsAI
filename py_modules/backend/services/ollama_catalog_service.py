@@ -1,9 +1,20 @@
-"""Title: Ollama catalog validation
+"""Title: Checking a model name before downloading it
 
-Purpose: Validate pull tags and fetch registry metadata for the Pull Models UI.
-Used for: Custom tag entry checks and manifest lookups against registry.ollama.ai.
-Solves: Regex validation, byte-limited registry fetches, and normalized tag list helpers.
-Does not: Run ollama pull or manage installed tags — see pull_model_catalog_service overlay.
+Purpose: On the Pull Models screen you can type the name of any Ollama model to download,
+not just pick from the list the plugin already knows about. Before that download starts,
+this file checks two things: does the name you typed even look like a valid model name,
+and does a model by that name actually exist on Ollama's own public catalog. Both checks
+happen before any real download begins, so a typo or a model that does not exist fails
+fast with a clear reason instead of starting a download that can only fail later.
+Used for: Checking a custom model name you type into Pull Models, and, before either an
+automatic or a manual model download starts, splitting the requested names into the ones
+the catalog confirms exist and the ones it does not recognise.
+Solves: Doing this check safely -- a short timeout per name and an overall time limit, and
+never reading more of the catalog's reply than a small fixed amount -- and falling back to
+"assume it is fine" only when the catalog cannot be reached at all, rather than blocking a
+download just because the network is briefly down.
+Does not: Actually download or install a model, or manage the models already installed --
+see pull_model_catalog_service for the list the Pull Models screen shows by default.
 """
 
 from __future__ import annotations

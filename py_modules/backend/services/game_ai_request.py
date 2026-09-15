@@ -17,8 +17,9 @@ Solves: One place that owns the full question-to-answer journey — the local sh
 knowledge-base search, the safety checks, the power-setting reading — so main.py just calls this
 and does not have to know the shape of any of it.
 
-Does not: Decide what a Decky RPC method is named, or manage the background poll loop that keeps
-an Ask alive after the person switches tabs — both live in main.py and the background-job file.
+Does not: Decide what a question the screen can ask is named, or manage the background poll loop
+that keeps an Ask alive after the person switches tabs — both live in main.py and the background-job
+file.
 
 How it works:
 
@@ -77,8 +78,8 @@ Gotchas:
   normal-shaped reply — a plain "something went wrong" message plus its own Show details record
   — rather than an exception a caller has to guard against separately.
 - The dict this returns has to keep the same field names (success, response, applied, the
-  disclosure fields, and so on) that the RPC layer and the frontend already expect — a renamed or
-  dropped field here breaks a reader on the other end of the RPC boundary, not just this file.
+  disclosure fields, and so on) that main.py and the screen already expect — a renamed or
+  dropped field here breaks a reader on the other side of that boundary, not just this file.
 """
 
 from __future__ import annotations

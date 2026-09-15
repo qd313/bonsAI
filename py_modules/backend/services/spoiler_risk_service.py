@@ -1,9 +1,27 @@
-"""Title: Spoiler risk transparency scoring
+"""Title: Guessing how spoiler-heavy a reply's topic is, for the "Show details" chip
 
-Purpose: Estimate spoiler likelihood bands for Show details context chips.
-Used for: transparency_service.build_context_chips_manifest and game_ai_request signal capture.
-Solves: Heuristic + optional model-tag blend into low/med/high bands without changing fencing.
-Does not: Mask replies, run a parallel rater Ask, or expose calibrated probabilities.
+Purpose: Some replies touch things a player might not want to know yet -- a
+boss's weak point, how a story ends. This file works out a rough low / medium
+/ high guess at how likely a reply's topic is to spoil something, purely so
+the "Show details" chip under a reply can show it. It is only ever a
+read-only guess shown after the fact -- see Does not, below, for the actual
+system that decides what a reply says or hides.
+Used for: building the spoiler-risk line inside every reply's "Show details"
+chip, and captured as part of the record kept about how a reply was put
+together.
+Solves: without one shared way to work this out, the number shown to a person
+could be guessed differently in different places, and could drift out of
+step with the real masking decision made elsewhere when the reply was
+written.
+Does not: hide or change any part of a reply -- see the real spoiler-masking
+system for that. It is also not fully wired up yet: this file can blend its
+own guess with a short tag the AI model would add to its own reply
+(`<bonsai-spoiler-risk>`), but no prompt today ever asks the model to add
+that tag, so in the shipped product this blend never actually happens --
+every band shown today comes from the guess alone. The blending code is
+real, tested, and ready for the day a prompt asks for the tag; it is simply
+not connected to one yet, which was confirmed by reading `ollama_prompts.py`,
+not assumed.
 """
 
 from __future__ import annotations

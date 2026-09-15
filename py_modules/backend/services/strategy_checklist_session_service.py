@@ -1,9 +1,24 @@
-"""Title: Strategy checklist session
+"""Title: Remembering which strategy checklist boxes were ticked
 
-Purpose: Persist per-game strategy checklist checked state across QAM close and reload.
-Used for: Main tab checklist UI sync and RPC load/save of in-progress strategy sessions.
-Solves: Bounded JSON store keyed by app id with item normalization and schema versioning.
-Does not: Generate checklist items from models — only stores user toggle state from the UI.
+Purpose: When Strategy mode builds a checklist for a game -- what to bring,
+what to do in order -- the boxes someone ticks off should still be ticked
+the next time they open that same game's checklist, even after closing the
+overlay or leaving and coming back later. This file is what saves and loads
+that ticked state: one small file on disk, one entry per game.
+Used for: keeping the Main tab's checklist in step with what is saved to
+disk, on every check, uncheck and reopen; and, in a trimmed form, feeding the
+currently-checked items back into a new question so the AI knows what has
+already been done.
+Solves: without saving this, closing the on-screen overlay would lose every
+checked box, and a person would have to remember for themselves which steps
+of a longer guide they had already done.
+Does not: come up with the checklist items in the first place -- that is the
+AI model's job, done elsewhere. This file only remembers which of the items
+it was given have been ticked.
+Gotchas: only the 32 most recently updated games are kept; once a 33rd game
+gets a checklist, the oldest saved one is silently dropped to make room. A
+checklist with fewer than two items is never saved at all -- it is treated
+as not really a checklist.
 """
 
 from __future__ import annotations

@@ -31,6 +31,11 @@
       "role": ""
     },
     {
+      "path": "py_modules/backend/services/voice_transcription_service.py",
+      "lines": 1422,
+      "role": ""
+    },
+    {
       "path": "src/components/PullModelsModal.tsx",
       "lines": 1386,
       "role": ""
@@ -43,11 +48,6 @@
     {
       "path": "src/components/OllamaWhereAiRunsSection.tsx",
       "lines": 1311,
-      "role": ""
-    },
-    {
-      "path": "py_modules/backend/services/voice_transcription_service.py",
-      "lines": 1295,
       "role": ""
     },
     {
@@ -76,18 +76,18 @@
       "role": ""
     },
     {
+      "path": "py_modules/backend/services/bonsai_stream_tags.py",
+      "lines": 967,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/local_ollama_setup_service.py",
       "lines": 946,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/bonsai_stream_tags.py",
-      "lines": 858,
-      "role": ""
-    },
-    {
       "path": "py_modules/backend/services/screenshot_media.py",
-      "lines": 803,
+      "lines": 873,
       "role": ""
     },
     {
@@ -121,13 +121,23 @@
       "role": ""
     },
     {
+      "path": "py_modules/backend/services/intent_pack_service.py",
+      "lines": 630,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/settings_service.py",
+      "lines": 602,
+      "role": "Load/save/merge settings.json"
+    },
+    {
       "path": "src/hooks/usePluginSettings.ts",
       "lines": 590,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/intent_pack_service.py",
-      "lines": 581,
+      "path": "py_modules/backend/services/knowledge_base_schema.py",
+      "lines": 572,
       "role": ""
     },
     {
@@ -146,11 +156,6 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/settings_service.py",
-      "lines": 545,
-      "role": "Load/save/merge settings.json"
-    },
-    {
       "path": "src/utils/buildAnswerBubbleElement.test.tsx",
       "lines": 524,
       "role": ""
@@ -163,11 +168,6 @@
     {
       "path": "src/components/DeveloperTab.tsx",
       "lines": 522,
-      "role": ""
-    },
-    {
-      "path": "py_modules/backend/services/knowledge_base_schema.py",
-      "lines": 520,
       "role": ""
     },
     {

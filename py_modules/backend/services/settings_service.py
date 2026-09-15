@@ -1,9 +1,66 @@
-"""Title: Plugin settings service
+"""Title: Reading and cleaning up your saved settings
 
-Purpose: Load, sanitize, and save persisted settings.json for the Decky plugin.
-Used for: RPC handlers, tests, and migrations that need the canonical settings shape.
-Solves: Frontend-aligned defaults, capability and character sanitizers, and atomic save helpers.
-Does not: Render UI or push settings to the frontend — only disk persistence and normalization.
+Purpose: Every toggle and choice you make on the plugin's settings screens --
+Permissions, Ask behavior, voice, the knowledge base, and the rest -- lives in
+one file on disk, settings.json. This is what reads that file, and the one
+place that decides what a saved value is allowed to be: a switch that was
+never explicitly turned on stays off, a choice that no longer exists falls
+back to its default, and a setting from an older version of the plugin is
+carried forward to its new name instead of quietly vanishing.
+
+Used for: main.py's settings RPC handlers, on every load and every save.
+Also read directly by ollama_ask_service for two settings -- reply style and
+keep-alive -- that are checked often enough to skip going through the whole
+settings object.
+
+Solves: Turning whatever is actually sitting in settings.json -- which could
+be missing, from an older version, or hand-edited into something invalid --
+into a settings object every other file in the plugin can trust completely,
+and writing it back to disk without risking a half-written file if the
+plugin closes mid-save.
+
+Does not: Show the settings screens, or push a changed setting to the screen
+after it is saved -- that is the frontend's job. This file only cleans up and
+stores.
+
+How it works:
+ 1. Most settings are one of a few repeating shapes -- an on/off switch, a
+    pick from a fixed list, a bounded piece of text -- built by
+    `_bool_default_false()`, `_bool_default_true()`, `_enum()`,
+    `_bounded_str()` and `_coerced_str()`. Each setting that fits one of
+    these shapes is one row in the `_SIMPLE_FIELDS` table rather than its
+    own function.
+ 2. A setting whose rule needs something more -- another setting's value, an
+    old name it migrated from, a nested structure, or a caller-supplied list
+    of valid choices -- gets its own function instead
+    (`sanitize_preset_chip_animation()`, `sanitize_show_developer_tab()`,
+    `sanitize_named_ollama_hosts()`, and others), and is applied by hand
+    rather than through the table.
+ 3. `sanitize_settings()` runs every simple field through its table entry,
+    then layers the special-case settings on top, including pairs that
+    depend on each other -- the latency warning must stay below the request
+    timeout (`_reconcile_latency_warning_before_timeout()`), and the model
+    tier and its unlock flag are reconciled together
+    (`reconcile_model_policy_tier()`).
+ 4. `load_settings()` reads settings.json and runs it through
+    `sanitize_settings()`. For an install from before the Permissions tab
+    existed, it grants every permission by default rather than silently
+    switching them all off.
+ 5. `save_settings()` merges an incoming change into what is already saved,
+    cleans up the result the same way, and writes it to a temporary file
+    that is only swapped into place once the write has finished, so a crash
+    mid-save cannot leave settings.json half-written.
+
+Gotchas:
+ - `preset_chip_fade_animation_enabled` is kept only because the screen
+   still reads it. It is worked out from `preset_chip_animation` rather than
+   saved on its own, because saving it independently could disagree with the
+   setting it is meant to describe.
+ - A setting removed or renamed in a newer version does not vanish silently.
+   `sanitize_preset_chip_animation()` and `sanitize_show_developer_tab()` are
+   two examples of a value from an older install being carried forward to
+   its replacement, rather than falling back to the default -- which would
+   otherwise look to the person like the setting had reset itself.
 """
 
 import json

@@ -1,9 +1,61 @@
-"""Title: Knowledge base schema
+"""Title: The knowledge base's table layout and install rules
 
-Purpose: Shared corpus manifest, SQLite schema, paths, and trust-tier constants.
-Used for: RAG corpus install, download verification, and knowledge_base_service queries.
-Solves: One canonical schema version, allowed install paths, and manifest parsing helpers.
-Does not: Download corpus assets or run hybrid retrieval — see rag and KB services.
+Purpose: The knowledge base is a set of game notes kept on the Deck so the AI
+can answer from them instead of guessing. This file describes the shape that
+download takes once it lands on your Deck: the database table layout (games,
+their other names, strategy write-ups, compatibility tips, and the search
+indexes over them), the file names involved, and the rules for where it is
+allowed to live on disk -- your home folder, or an SD card plugged into the
+Deck.
+
+Used for: The services that download and install the knowledge base
+(rag_corpus_local_install, rag_corpus_download_service, rag_corpus_status)
+build its database with `apply_schema()` and check install paths with
+`sanitize_corpus_install_dir()`. knowledge_base_service reads through these
+tables when it answers a question.
+
+Solves: Keeping one schema version everyone agrees on, refusing to install
+the knowledge base somewhere it should not go, and telling whether a
+downloaded copy actually has the extra vectors baked in that meaning-based
+search needs, since an older download may not.
+
+Does not: Download the knowledge base itself, or search it for an answer --
+those are the rag services and knowledge_base_service.
+
+How it works:
+ 1. `CREATE_SCHEMA_SQL` and `apply_schema()` create the tables a knowledge
+    base needs: games, their alternate names, strategy write-ups, genre-wide
+    and compatibility tips, a fast keyword-search index kept in sync by the
+    triggers in `FTS_SYNC_TRIGGERS_SQL`, and, when the download includes
+    them, a table of vectors for meaning-based search.
+ 2. `list_rag_storage_options()`, `default_corpus_dir_internal()` and
+    `default_corpus_dir_sd()` work out where the knowledge base can be
+    installed -- inside your home folder, or on a plugged-in SD card -- and
+    how much room is free there. `sanitize_corpus_install_dir()` and
+    `is_allowed_corpus_install_path()` then refuse anywhere else, so a bad
+    install path can never write somewhere outside those two places.
+ 3. `load_manifest_from_path()` and `parse_manifest_json()` read the small
+    JSON file (corpus-manifest.json) that ships beside the download,
+    describing what is in it.
+ 4. `corpus_has_usable_section_vectors()`, `corpus_has_usable_compat_vectors()`,
+    and the "fully indexed" pair (`corpus_section_vectors_fully_indexed()`,
+    `corpus_compat_vectors_fully_indexed()`) answer whether meaning-based
+    search actually has anything to search: first from counts the manifest
+    already recorded, falling back to checking the database itself when it
+    did not.
+ 5. `corpus_embedding_compatible()` checks a downloaded copy's vectors were
+    baked with a matching model and format before anything tries to search
+    them with today's model, since mixing the two returns confident-looking
+    nonsense rather than an error.
+
+Gotchas:
+ - `_vector_table_has_rows()` is deliberately a "does even one exist" check,
+   not a count -- its own comment explains that counting scanned every row of
+   a large table on every single question asked.
+ - A downloaded knowledge base whose vectors do not match today's embedding
+   model or format is not repaired or migrated -- `corpus_embedding_compatible()`
+   just says no, and search falls back to plain keyword matching. Getting the
+   newer format means downloading the knowledge base again.
 """
 
 from __future__ import annotations

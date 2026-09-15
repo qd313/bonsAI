@@ -1,9 +1,88 @@
-"""Title: Voice transcription service
+"""Title: Turning your spoken question into text, live
 
-Purpose: Local mic capture and whisper.cpp interim speech-to-text for the Ask bar.
-Used for: Voice input RPC, model install jobs, and rolling-buffer decode loops on Deck.
-Solves: PCM capture, RMS gating, whisper binary lifecycle, and sanitized transcript streaming.
-Does not: Send audio to cloud STT or run wake-word detection — see voice_whisper_daemon for server mode.
+Purpose: This is what happens between pressing the mic button and seeing
+your words appear as you talk: it records your microphone, feeds short
+slices of that recording to a local speech-to-text engine (whisper.cpp)
+again and again as you keep talking, and stitches those overlapping slices
+into one growing line of text. It is also what installs that engine in the
+first place -- SteamOS ships without it, so this file builds it from source
+inside a container the first time voice input is turned on, and downloads
+the speech model that engine reads from.
+
+Used for: The mic button on the Ask bar. main.py creates one
+VoiceTranscriptionSession per recording and polls `status()` a few times a
+second while you are talking; the Settings screen's "Install voice engine"
+button drives `download_voice_model()` and `install_whisper_cli()`.
+
+Solves: Whisper only ever sees a few seconds of audio at a time, not your
+whole sentence, so a straightforward "decode and show" approach would repeat
+or drop words at the seams between one pass and the next. This file also
+copes with a Deck whose CPU does not support every instruction the built
+whisper binary assumes, and with a background plugin process that cannot
+simply "open the microphone" the way a normal desktop app can.
+
+Does not: Talk to a cloud speech service, or listen for a wake word -- both
+are out of scope today. When the always-on background engine from
+voice_whisper_daemon is available, this file prefers it over spawning its
+own whisper-cli process for every decode pass; see that file for how that
+shared engine is started and stopped.
+
+How it works:
+
+How a few seconds of audio become one growing line of text:
+
+    mic --(pw-record / parecord / arecord)--> rolling buffer, last 30s
+                                                        |
+                               every 0.4s: grab the newest 3s of it
+                                                        |
+                                                        v
+                                 whisper decodes that slice alone
+                                                        |
+                        merge_sliding_window_transcript() stitches it onto
+                        what came before, using the words the two slices
+                        share in common so nothing doubles up or vanishes
+                                                        |
+                          2 seconds of silence? ---- no --> screen shows the
+                                  |                          growing partial
+                                 yes                              line
+                                  |
+                                  v
+                    partial line is folded into the finalized transcript,
+                    the partial clears, and listening continues
+
+    stop(), or silence past the limit -----> `_flush_final()` decodes
+    whatever audio is left over and appends it, so the last word spoken is
+    never lost to a boundary that happened to fall between two decode passes
+
+Installing the engine, the first time voice input is turned on:
+ 1. `download_voice_model()` fetches the chosen speech model file
+    (VOICE_STT_MODEL_SPECS lists the choices) with a resumable download.
+ 2. `install_whisper_cli()` builds the actual whisper.cpp program from
+    source inside a podman container, since SteamOS does not ship it and its
+    read-only system cannot simply have a package installed onto it, then
+    copies the finished binaries out to the plugin's own folder
+    (`_finalize_voice_bin()`).
+ 3. `engine_readiness()` reports whether both pieces are in place before a
+    recording is allowed to start, backed by
+    `_voice_binary_ready_for_inference()`, which checks a real, short test
+    decode (`_whisper_inference_ok()`) the first time that binary is used --
+    catching a build that crashes on this particular Deck's CPU before it
+    can crash mid-recording.
+
+Gotchas:
+ - The built whisper binary is compiled for a specific set of CPU
+   instructions. `_whisper_inference_ok()` runs one real decode on a silent
+   test file before the binary is ever trusted, and
+   `_voice_bin_mark_cpu_safe()` remembers a pass so that check is not
+   repeated on every single recording.
+ - `status()` carries a comment recording a real bug: a past edit left its
+   body unreachable behind another method's return, and every voice request
+   failed with a missing-attribute error until it was restored. Worth
+   reading if this method is ever touched again.
+ - This runs as a background plugin process, not inside the normal desktop
+   session, so it cannot simply assume where the microphone's audio socket
+   lives -- `env_for_audio_capture()` and `_discover_session_runtime_dir()`
+   go find it.
 """
 
 from __future__ import annotations
@@ -1053,6 +1132,32 @@ class VoiceTranscriptionSession:
                     drop_bytes = 0
 
     def start(self) -> dict[str, Any]:
+        """Start one recording: check the engine is ready, open the
+        microphone, and launch the two background threads that do the
+        ongoing work.
+
+        In: nothing beyond what was already given to `__init__()` -- the
+        model to use, and where the plugin and its settings live.
+
+        Out: `{"accepted": True}` once recording has actually begun, or
+        `{"accepted": False, "error": ...}` when it could not. Whether the
+        recording is using the shared background engine or a plain per-call
+        one is decided here too (`self._use_daemon`), read by
+        `_transcribe_pcm()` on every decode pass.
+
+        What can go wrong, in the order this checks for it: the speech
+        engine or model is not installed yet (`engine_readiness()` catches
+        both); a recording is already running, in which case this simply
+        returns the existing one rather than starting a second; or no
+        microphone capture tool could be started at all
+        (`_resolve_capture_command()` raises), in which case the shared
+        engine that was just claimed is released again before returning, so
+        a failed start does not leave it held forever.
+
+        Once capture is underway, `_capture_reader_loop()` and
+        `_transcribe_loop()` run on their own threads and this method
+        returns immediately -- it does not wait for any words to appear.
+        """
         ready = engine_readiness(self.plugin_root, self.settings_dir, self.model_id)
         if not ready["binary_ready"]:
             err = (
@@ -1154,6 +1259,28 @@ class VoiceTranscriptionSession:
                 )
 
     def _transcribe_loop(self) -> None:
+        """The background thread that keeps turning recorded audio into
+        text while a recording is running.
+
+        In: nothing directly -- it reads the audio `_capture_reader_loop()`
+        is appending to the shared buffer, roughly five times a second, and
+        keeps running until `stop()` sets the stop flag.
+
+        Out: nothing returned. Instead it repeatedly calls `_set_state()`
+        so the plugin's own RPC can hand `status()` the latest partial and
+        finalized text on every poll, and finishes by calling
+        `_flush_final()` once, after the loop ends, to catch whatever last
+        few words never made it through a full decode pass.
+
+        What can go wrong: the speech engine or model files went missing
+        after `start()` already checked them, in which case this ends the
+        session in an error state immediately rather than looping forever;
+        or one single decode pass raises, which is logged and skipped
+        rather than ending the whole recording over one bad pass. A window
+        that is too short, too quiet, or whose words whisper is not
+        confident about is quietly skipped rather than shown, so a burst of
+        room noise does not get typed out as a word.
+        """
         whisper_bin = whisper_binary_usable(self.plugin_root, self.settings_dir)
         model_path = voice_model_path(self.plugin_root, self.settings_dir, self.model_id)
         env = voice_whisper_runtime_env(self.plugin_root, self.settings_dir)

@@ -567,6 +567,16 @@ async def run_game_ai_request(
                 question_for_model
             )
 
+        # D19 locks this: a title recognised from the question gets that title's spoiler
+        # profile, so asking about Ocarina of Time by name is fenced like Ocarina of Time
+        # even with nothing running. `app_name` stays empty everywhere else on purpose --
+        # the reply must not start claiming a game is running when none is. Computed once and
+        # reused for the prompt below (plan 54 gap 3) so the chip and the prompt can never
+        # disagree about which game this is.
+        strategy_title_profile = resolve_title_spoiler_profile(
+            app_id, app_name or text_resolved_title
+        )
+
         spoiler_risk_signals = build_spoiler_risk_signals(
             ask_mode=ask_mode,
             app_id=app_id,
@@ -575,13 +585,7 @@ async def run_game_ai_request(
             kb_text=kb_text,
             asked_entity=strategy_spoiler_asked_entity,
             kb_entity_match=strategy_spoiler_kb_entity_match,
-            # D19 locks this: a title recognised from the question gets that title's spoiler
-            # profile, so asking about Ocarina of Time by name is fenced like Ocarina of Time
-            # even with nothing running. `app_name` stays empty everywhere else on purpose --
-            # the reply must not start claiming a game is running when none is.
-            title_profile=resolve_title_spoiler_profile(
-                app_id, app_name or text_resolved_title
-            ),
+            title_profile=strategy_title_profile,
         )
 
         ollama_result = await plugin.ask_ollama(
@@ -602,6 +606,7 @@ async def run_game_ai_request(
             strategy_spoiler_asked_entity=strategy_spoiler_asked_entity,
             strategy_spoiler_kb_entity_match=strategy_spoiler_kb_entity_match,
             strategy_domain_guidance=strategy_domain_guidance,
+            strategy_title_profile=strategy_title_profile,
             token_stream_request_id=token_stream_request_id,
             strategy_checklist_state=strategy_checklist_state,
             preferred_model=preferred_model,

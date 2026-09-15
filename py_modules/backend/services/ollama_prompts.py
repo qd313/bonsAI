@@ -118,8 +118,17 @@ def _strategy_title_is_low_spoiler_risk(
     *,
     app_id: str = "",
     app_name: str = "",
+    title_profile: str = "",
 ) -> bool:
-    """True when this title treats named bosses/enemies as routine gameplay, not story spoilers."""
+    """True when this title treats named bosses/enemies as routine gameplay, not story spoilers.
+
+    ``title_profile``, when set, is the profile already resolved for the risk chip on this same
+    turn (plan 54 gap 3) -- a game recognised only from the question, with nothing running, has
+    no ``app_id``/``app_name`` to look up here otherwise. When absent (every call before this
+    change), falls back to the id/name lookup exactly as before.
+    """
+    if title_profile:
+        return title_profile == "low_narrative"
     return title_profile_is_low_narrative(app_id, app_name=app_name)
 
 
@@ -128,9 +137,15 @@ def _strategy_kb_spoiler_clause_suppressed(
     app_id: str = "",
     app_name: str = "",
     asked_entity: str = "",
+    title_profile: str = "",
 ) -> bool:
     """True when the KB spoiler clause should be dropped for this turn."""
-    return title_profile_is_low_narrative(app_id, app_name=app_name) or bool((asked_entity or "").strip())
+    low_risk = (
+        title_profile == "low_narrative"
+        if title_profile
+        else title_profile_is_low_narrative(app_id, app_name=app_name)
+    )
+    return low_risk or bool((asked_entity or "").strip())
 
 
 # A real entity name is short. Anything longer is a sentence that happened to follow a verb.
@@ -389,9 +404,12 @@ def _strategy_spoiler_low_risk_addendum(
     kb_entity_match: bool,
     app_id: str = "",
     app_name: str = "",
+    title_profile: str = "",
 ) -> str:
     """Extra policy when boss/enemy tactics are routine gameplay, not narrative spoilers."""
-    title_low_risk = _strategy_title_is_low_spoiler_risk(app_id=app_id, app_name=app_name)
+    title_low_risk = _strategy_title_is_low_spoiler_risk(
+        app_id=app_id, app_name=app_name, title_profile=title_profile
+    )
     entity = (asked_entity or "").strip()
     if not title_low_risk and not entity:
         return ""
@@ -441,6 +459,7 @@ def _strategy_spoiler_policy_block(
     kb_entity_match: bool = False,
     app_id: str = "",
     app_name: str = "",
+    title_profile: str = "",
     include_strategy_ui_fences: bool = True,
 ) -> str:
     """Injected after STRATEGY GUIDE MODE header; defines ```bonsai-spoiler fences and ordering."""
@@ -449,6 +468,7 @@ def _strategy_spoiler_policy_block(
         kb_entity_match=kb_entity_match,
         app_id=app_id,
         app_name=app_name,
+        title_profile=title_profile,
     )
     # Subtractive, not additive: when the addendum fires it must REPLACE the boss-name
     # prohibition rather than argue with it in the same block. A 2B-class local model
@@ -458,7 +478,9 @@ def _strategy_spoiler_policy_block(
     # Three states, not two. Named-entity consent on a *story* title must carve out only the
     # entity the user named; dropping the boss clause wholesale there would relax every other
     # boss in the game, which is the over-relax failure the Hades row guards against.
-    title_low_risk = _strategy_title_is_low_spoiler_risk(app_id=app_id, app_name=app_name)
+    title_low_risk = _strategy_title_is_low_spoiler_risk(
+        app_id=app_id, app_name=app_name, title_profile=title_profile
+    )
     entity = (asked_entity or "").strip()
     if title_low_risk:
         followup_avoid = "Avoid story endings, major twists, and precise puzzle solutions in plain text. "
@@ -560,6 +582,7 @@ def _strategy_spoiler_constitution_compact_block(
     kb_entity_match: bool = False,
     app_id: str = "",
     app_name: str = "",
+    title_profile: str = "",
 ) -> str:
     """Short constitution inject for Speed/Expert turns with strategy KB cards attached."""
     policy = _strategy_spoiler_policy_block(
@@ -569,6 +592,7 @@ def _strategy_spoiler_constitution_compact_block(
         kb_entity_match=kb_entity_match,
         app_id=app_id,
         app_name=app_name,
+        title_profile=title_profile,
         include_strategy_ui_fences=False,
     )
     return (
@@ -1193,6 +1217,7 @@ def build_system_prompt(
     strategy_spoiler_asked_entity: str = "",
     strategy_spoiler_kb_entity_match: bool = False,
     strategy_domain_guidance: bool = False,
+    strategy_title_profile: str = "",
     character_roleplay_on: bool = False,
     strategy_checklist_state: Optional[dict] = None,
     reply_verbosity: str = "balanced",
@@ -1325,6 +1350,7 @@ def build_system_prompt(
         app_id=app_id,
         app_name=app_name,
         asked_entity=strategy_spoiler_asked_entity,
+        title_profile=strategy_title_profile,
     )
     early_stripped = (early_context_suffix or "").strip()
     if followup_subject and _KB_BLOCK_HEADER in early_stripped:
@@ -1419,6 +1445,7 @@ def build_system_prompt(
                 kb_entity_match=strategy_spoiler_kb_entity_match,
                 app_id=app_id,
                 app_name=app_name,
+                title_profile=strategy_title_profile,
             )
         return _assemble(
             dynamic_block + general_block + drg_glossary_block,
@@ -1437,6 +1464,7 @@ def build_system_prompt(
         kb_entity_match=strategy_spoiler_kb_entity_match,
         app_id=app_id,
         app_name=app_name,
+        title_profile=strategy_title_profile,
     )
     if followup:
         strategy_block = (

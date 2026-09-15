@@ -1437,6 +1437,59 @@ class OllamaServiceTests(unittest.TestCase):
         prompt = self._strategy_prompt_with_kb("413150")
         self.assertIn("Put spoilery walkthrough detail inside", prompt)
 
+    # Gap 3 (plan 54): a game recognised only from the question (nothing running, no app_id/
+    # app_name) still gets the relaxed prompt when the chip's own resolved profile says
+    # low_narrative — one argument, reusing the profile already computed for the chip.
+    def test_build_system_prompt_low_risk_title_profile_relaxes_with_nothing_running(self):
+        prompt = build_system_prompt(
+            question="what class should I play",
+            app_id="",
+            app_name="",
+            normalized_attachments=[],
+            prepared_images=[],
+            lookup_app_name=lambda _app_id: "",
+            lookup_screenshot_vdf_metadata=lambda _path: {},
+            ask_mode="strategy",
+            early_context_suffix="--- Local knowledge base ---\nSurvivor class notes.",
+            strategy_title_profile="low_narrative",
+        )
+        self.assertIn("LOW-SPOILER-RISK CONTEXT", prompt)
+        self.assertNotIn("Put spoilery walkthrough detail inside", prompt)
+
+    def test_build_system_prompt_protect_progression_title_profile_does_not_relax(self):
+        prompt = build_system_prompt(
+            question="what should I do next",
+            app_id="",
+            app_name="",
+            normalized_attachments=[],
+            prepared_images=[],
+            lookup_app_name=lambda _app_id: "",
+            lookup_screenshot_vdf_metadata=lambda _path: {},
+            ask_mode="strategy",
+            early_context_suffix="--- Local knowledge base ---\nStory notes.",
+            strategy_title_profile="protect_progression",
+        )
+        self.assertNotIn("LOW-SPOILER-RISK CONTEXT", prompt)
+        self.assertIn("Put spoilery walkthrough detail inside", prompt)
+
+    def test_build_system_prompt_title_profile_never_changes_the_game_line(self):
+        """The wording still must not claim a game is running when nothing is -- only the
+        spoiler policy relaxes, never the identity block naming the game."""
+        kwargs = dict(
+            question="what class should I play",
+            app_id="",
+            app_name="",
+            normalized_attachments=[],
+            prepared_images=[],
+            lookup_app_name=lambda _app_id: "",
+            lookup_screenshot_vdf_metadata=lambda _path: {},
+            ask_mode="strategy",
+        )
+        baseline = build_system_prompt(**kwargs)
+        relaxed = build_system_prompt(**kwargs, strategy_title_profile="low_narrative")
+        game_line_end = baseline.index("\n\n")
+        self.assertEqual(baseline[:game_line_end], relaxed[:game_line_end])
+
     def test_build_system_prompt_kb_clause_drops_citation_fence_instruction(self):
         """The citation fence was obeyed once in 89 recorded asks and nothing reads it — gone.
 

@@ -11,6 +11,7 @@ import asyncio
 import sys
 import types
 import unittest
+from unittest.mock import patch
 
 from backend.tdp_intent import strip_tdp_recommendation_block
 
@@ -196,6 +197,53 @@ class StrategySpoilerAskedEntityWiringTests(unittest.TestCase):
         result = _run(plugin, question="what class should I play", ask_mode="strategy")
 
         self.assertEqual(result.get("strategy_spoiler_asked_entity"), "")
+
+
+class StrategyTitleProfileWiringTests(unittest.TestCase):
+    """Plan 54 gap 3: nothing running, a game named only in the question -- the prompt must get
+    the same resolved profile the risk chip does, so the two never disagree.
+
+    ``resolve_title_from_question`` needs a real corpus database to look the title up, which
+    this fake plugin cannot supply. Monkeypatched in the ``game_ai_request`` module namespace
+    (where it is imported by name) to stand in for that lookup -- noted here and in the report,
+    per the brief, rather than building a real corpus fixture for one call.
+    """
+
+    def _base_settings(self) -> dict:
+        return {
+            "latency_timeouts_custom_enabled": False,
+            "input_sanitizer_user_disabled": False,
+            "capabilities": {},
+            "use_local_knowledge_base": False,
+        }
+
+    def test_no_story_game_named_in_the_question_gets_the_low_narrative_profile(self):
+        plugin = _FakePlugin(self._base_settings())
+        plugin._ollama_result = {"success": True, "response": "Pick whichever class you like."}
+
+        with patch(
+            "backend.services.game_ai_request.resolve_title_from_question",
+            return_value="Deep Rock Galactic: Survivor",
+        ):
+            _run(plugin, question="drg survivor what class", ask_mode="strategy")
+
+        self.assertEqual(
+            plugin.ask_ollama_kwargs.get("strategy_title_profile"), "low_narrative"
+        )
+
+    def test_story_game_named_in_the_question_gets_the_protect_progression_profile(self):
+        plugin = _FakePlugin(self._base_settings())
+        plugin._ollama_result = {"success": True, "response": "General advice."}
+
+        with patch(
+            "backend.services.game_ai_request.resolve_title_from_question",
+            return_value="Fallout: New Vegas",
+        ):
+            _run(plugin, question="what should I do next", ask_mode="strategy")
+
+        self.assertEqual(
+            plugin.ask_ollama_kwargs.get("strategy_title_profile"), "protect_progression"
+        )
 
 
 if __name__ == "__main__":

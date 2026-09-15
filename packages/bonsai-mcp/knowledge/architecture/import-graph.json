@@ -12,6 +12,10 @@
     {
       "from": "src/components/MainTabChatTranscript.tsx",
       "spec": "../assets/icons/bonsai-logo.svg"
+    },
+    {
+      "from": "src/types.d.ts",
+      "spec": "./icon.svg"
     }
   ],
   "modules": {

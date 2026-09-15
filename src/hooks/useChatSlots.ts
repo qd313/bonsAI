@@ -1,9 +1,22 @@
 /**
- * Title: Chat slots hook
- * Purpose: List, select, and mutate named chat slots; sync active id ref synchronously.
- * Used for: index.tsx, ChatSlotRow.
- * Solves: Single owner for slot CRUD and active selection without useEffect ref lag.
- * Does not: Submit Asks or poll background status — orchestration hook owns that.
+ * Title: Saved chats list and switching
+ *
+ * Purpose: Owns the list of a person's saved chats — creating a new one,
+ * switching to a different one, renaming, and deleting — and keeps the
+ * "which chat is open right now" pointer in sync everywhere at once. It
+ * also quietly deletes a chat that was opened and never used, so the chat
+ * list does not fill up with empty "New chat" entries.
+ *
+ * Used for: The plugin's main screen, and the row of saved chats a person
+ * picks a chat from.
+ *
+ * Solves: Before this, more than one place could change which chat was
+ * open, and a plain ref meant to track that could lag a render behind the
+ * screen state driving it. This hook is the one place that changes it, so
+ * the two can no longer disagree.
+ *
+ * Does not: Send a question to the AI, or check on an answer that is
+ * still being written — a separate hook owns that.
  */
 import { useCallback, useRef, useState, type Dispatch, type RefObject, type SetStateAction } from "react";
 import { Router } from "@decky/ui";
@@ -31,6 +44,51 @@ export type UseChatSlotsArgs = {
   isSlotGenerating?: (slotId: string) => boolean;
 };
 
+/**
+ * In: refs and setters the caller owns — the ref tracking which chat is
+ * open, the screen-state setters that redraw the current chat's turns, and
+ * two optional callbacks (one to reset the live-answer view, one to ask
+ * whether a given chat is still receiving an answer right now).
+ * Out: the current chat list, which one is open, and every function that
+ * changes either — one bundle the screen reads from and calls into.
+ * Can go wrong: the "delete an unused chat" sweep only checks a chat's
+ * turn count and its name at the moment it is left; it skips a chat that
+ * is mid-answer only when the caller supplies the isSlotGenerating check,
+ * so a caller that omits it could see a mid-answer chat swept.
+ *
+ * 1. Two pieces of state hold the chat list (`summaries`) and which chat
+ *    is open (`activeSlotId`); two refs mirror them for callbacks that
+ *    must always see the latest value, not the one from when they were
+ *    created.
+ * 2. `setActiveSlot()` is the only place the open chat changes: it updates
+ *    the ref, saves the choice to disk, and updates the state that
+ *    redraws the screen, all in one place.
+ * 3. `applySlotTranscript()` turns a chat's raw list of turns into what
+ *    the screen actually draws, and remembers how many turns that chat
+ *    has — used later to tell whether it was ever used.
+ * 4. `refreshSummaries()` reloads the chat list from the backend.
+ * 5. `sweepIfNeverUsed()` quietly deletes a chat that was opened, still
+ *    has no turns, was never renamed away from "New chat", and is not
+ *    currently receiving an answer — so the chat list does not fill up
+ *    with empty entries nobody meant to keep.
+ * 6. `reloadActiveSlotTranscript()` refreshes the chat list and reloads
+ *    the currently open chat's transcript, or clears the screen if no
+ *    chat is open.
+ * 7. `selectSlot()` switches to a different chat: it loads the new chat's
+ *    transcript (or clears the screen for "no chat"), then sweeps the
+ *    chat just left if it turned out to be unused.
+ * 8. `createSlot()` makes a new chat tagged with whichever game is
+ *    currently running, then switches to it.
+ * 9. `renameSlot()` and `deleteSlot()` rename or remove a chat and refresh
+ *    the list; deleting the currently open chat falls back to whichever
+ *    chat is now first in the list.
+ * 10. `ensureActiveSlotForAsk()` is for typing a question with no chat
+ *     open yet — it creates one first, seeded with that question, so
+ *     there is always a chat for the answer to land in.
+ * 11. The hook hands all of the above back together at the end, so the
+ *     screen has one bundle: the chat list, which one is open, and every
+ *     action that can change either.
+ */
 export function useChatSlots({
   activeSlotIdRef,
   initialActiveSlotId = null,

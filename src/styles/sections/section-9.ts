@@ -1,3 +1,24 @@
+/**
+ * Title: Slider and carousel width fixes
+ *
+ * Purpose: A short grab-bag of leftover width fixes. It stops slider
+ * controls — like the sliders on the Settings tab — from refusing to
+ * shrink inside a narrow Quick Access Menu column, and keeps the strip
+ * that holds the preset chips at full width instead of collapsing down
+ * to the width of its own content.
+ *
+ * Used for: Folded into the plugin's one combined stylesheet by
+ * bonsaiScopeStylesheet.ts, alongside the other numbered section files.
+ *
+ * Does not: Style a slider's color or its thumb — only its width and the
+ * width of the row wrapped around it.
+ */
+
+/**
+ * In: nothing.
+ * Out: a block of CSS text.
+ * Can go wrong: nothing — this always returns the same fixed string.
+ */
 export function buildSection9Section(): string {
   return `
 /* ==========================================================================

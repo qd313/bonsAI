@@ -1,9 +1,79 @@
 /**
- * Title: Main tab chat transcript
- * Purpose: Render live and collapsed Ask turns, strategy branches/checklist, reply actions, and context chips.
- * Used for: MainTab below the Ask bar — displays ollamaResponse and thread history from orchestration.
- * Solves: Separates transcript layout/focus from Ask submit and poll logic.
- * Does not: Submit Asks or poll background status — receives props from useBonsaiAskOrchestration.
+ * Title: The chat transcript
+ *
+ * Purpose: Everything below the Ask bar: the whole conversation in this chat
+ * — the finished questions and answers from before, and the one being asked
+ * right now or just finished — plus, underneath all of that, a short strip
+ * listing every turn and a button to save the chat to the desktop.
+ *
+ *     (empty-state logo, only when this chat has nothing in it yet)
+ *
+ *     [ N earlier ]                    <- only once there are 2+ old turns
+ *     ── older question ──
+ *        (its answer, only while that turn is the one expanded)
+ *     ── older question ──
+ *     ...
+ *     ── newest / live question ──
+ *        the answer
+ *        (a Strategy Guide branch picker or checklist, if one applies)
+ *        Helpful / Not really, chips, Read aloud, Show details
+ *        context chips (Developer details, and so on)
+ *
+ *     (situational hints: no game detected, a troubleshooting-shaped
+ *      question with game-reading off, a permission denial)
+ *     (slow-answer and applied-tuning banners)
+ *     Session context strip — one row per turn, tap one to inspect it
+ *     [ Save chat to Desktop ]
+ *
+ * Used for: MainTab, filling the space above the dock that holds the
+ * suggestion row and the Ask bar.
+ *
+ * Solves: Keeps the transcript's own layout and D-pad wiring apart from the
+ * actual asking and polling logic, so this file only ever draws what it is
+ * told — never decides on its own whether a question is still running.
+ *
+ * Does not: Submit a question or check whether one has finished — see
+ * useBonsaiAskOrchestration for that. Does not decide what one answer's own
+ * text looks like — the reply bubble and its markdown renderer do that
+ * (buildAnswerBubbleElement, MainTabBonsaiAiMarkdownChunk).
+ *
+ * How it works:
+ * 1. Work out whether there is a "live" turn to show at all — not just
+ *    whether there is a live answer, but whether it should currently be the
+ *    one on screen. A leftover answer still sitting in state after the real
+ *    history has already archived it should not summon a stray extra turn.
+ * 2. Work out how many of the older, finished turns to actually draw. Once
+ *    there are two or more, they collapse behind an "N earlier" pill and
+ *    stay collapsed until someone taps it; the newest turn is never one of
+ *    the ones hidden behind it.
+ * 3. For every turn shown — older or live — draw the same three pieces in
+ *    the same order: its question header (buildTurnHeaderElement()), its
+ *    answer (buildAnswerBubbleElement(), through the shared
+ *    renderAnswerBubble helper below), and, once the turn is finished, its
+ *    row of actions (buildReplyActionsElement()) plus its own context chips.
+ * 4. When Strategy Guide has more to offer on the newest answer — a branch
+ *    to pick, or a checklist — draw one of renderStrategyBranchPicker() or
+ *    renderStrategyChecklist() between the answer and the reply actions.
+ * 5. Below all of the turns: a handful of situational hint rows (no game
+ *    detected, a troubleshooting-shaped question with game-reading
+ *    permission off, a VAC-check permission denial), then the slow-answer
+ *    and applied-tuning banners.
+ * 6. Finally, the session context strip — one row per turn, letting a
+ *    person jump straight to any of them — and, when this chat can be
+ *    saved, the Save chat to Desktop button.
+ *
+ * Gotchas:
+ * - There is deliberately no raw keyboard listener in this file for D-pad
+ *   routing. A real controller press dispatches no DOM keyboard events at
+ *   all (measured on device), so every hand-off lives on the elements
+ *   themselves instead — buildTurnHeaderElement()'s own move into the
+ *   answer, and buildAnswerBubbleElement()'s own walk through it.
+ * - The permission-hint rows below the transcript register themselves as
+ *   Steam navigation targets (the navRef pattern) rather than being found by
+ *   a plain button and a focus() call, because a DOM focus() alone does not
+ *   carry the gamepad ring across a container boundary — the same trap
+ *   other files in this phase describe. focusChatPermissionHintRow() is how
+ *   a caller reaches them.
  */
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { PanelSectionRow, Button, Focusable } from "@decky/ui";
@@ -181,6 +251,29 @@ export function focusDownFromReplyUtilityRowOrPermHint(liveSlot: HTMLElement | n
   return focusSessionContextStrip();
 }
 
+/*
+ * In: MainTabChatTranscriptProps — the live question and answer text (or the
+ * streaming preview of it), the finished-turn history, which turn is
+ * currently expanded, the Strategy Guide branch/checklist state, and a long
+ * list of smaller flags and callbacks for feedback, permissions, and the
+ * desktop-save button.
+ * Out: the whole transcript, as drawn in the file header above.
+ * What can go wrong: almost nothing is computed here beyond working out
+ * which turns and panels should currently be visible — this function mostly
+ * arranges props and derived flags into JSX. See the file header's Gotchas
+ * for the two focus traps this file specifically works around.
+ *
+ * See the file header's How it works for the full step order; in short:
+ * 1. Work out whether a live turn should show at all.
+ * 2. Work out which older turns are visible versus collapsed behind the
+ *    "N earlier" pill.
+ * 3. Draw every visible turn's header, answer, and (once finished) its
+ *    reply actions and context chips, through the shared helpers defined
+ *    just above this function.
+ * 4. Fold in a Strategy Guide branch picker or checklist where one applies.
+ * 5. Draw the situational hint rows and warning banners below the turns.
+ * 6. Draw the session context strip and the Save chat to Desktop button.
+ */
 export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
   const {
     fullBleedRowStyle,

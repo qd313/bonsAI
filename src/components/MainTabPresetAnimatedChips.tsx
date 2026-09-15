@@ -1,15 +1,63 @@
 /**
  * Title: Preset animated chips
- * Purpose: Fade, carousel, static or decode the preset prompt chips — PRESET_VISIBLE_SLOTS side by
- *          side on one row — with running-game contextual seeding and Steam's scrolling label for
- *          prompts longer than their chip.
- * Used for: MainTabPresetRow when presetChipAnimation is fade, carousel, static, or decode.
- * Solves: Timed slot swaps, sideways carousel motion, and Deck-focusable chip buttons in one module,
- *         on a single row. The block used to be three stacked rows and the largest piece of the
- *         bottom dock (118px of 245px, measured 2026-08-31); the one-row height stays, and the chips
- *         sit side by side per the redesign drawing (major-redesign.md § 2.3) — two of them, not the
- *         drawing's three, by decision D43 (2026-09-01).
- * Does not: Persist selected presets or submit asks — parent setUnifiedInput handles composer text.
+ *
+ * Purpose: Draws the row of suggestion chips above the Ask bar, in whichever
+ * of four styles the settings picked: fade (one chip fades out as the next
+ * fades in), carousel (chips slide in sideways from the right, like a
+ * ticker), static (a plain swap, no animation), or decode (each new chip's
+ * text scrambles into place, letter by letter). Every mode ends up drawing
+ * the same row of chip buttons — only how a new chip arrives differs. A
+ * prompt too long for its chip also scrolls sideways on its own, through
+ * Steam's own Marquee, independently of which of the four styles is active.
+ *
+ * Used for: MainTabPresetRow, whenever the chip-animation setting is not
+ * showing the plain "How to use bonsAI" help chip instead.
+ *
+ * Solves: Keeps four fairly involved animation systems sharing the same
+ * D-pad wiring and the same chip button, so a change to how a chip looks or
+ * behaves is one change, not four.
+ *
+ * Does not: Decide what the suggested prompts actually say, or remember
+ * which one was picked — the caller's setUnifiedInput fills the question box,
+ * and the presets data file supplies the text.
+ *
+ * How it works:
+ * 1. Every mode shares two building blocks: PresetRowFocusRoot, the focus
+ *    container Steam treats as this row's own navigation boundary, and
+ *    usePresetRowNav(), the D-pad graph for whichever chips are showing —
+ *    Left and Right move between chips in the row with a plain focus() call
+ *    since that is a same-container move, while Up and Down hand the ring
+ *    across the row's own boundary through a registered handover.
+ * 2. Fade and static modes swap each slot's chip on its own timer, staggered
+ *    per slot so the chips do not all change at once — fade eases the old
+ *    chip out and the new one in, static swaps instantly.
+ * 3. Carousel mode keeps a running history of chips and slides a
+ *    several-chips-wide window across it, appending a new one from the right
+ *    as it advances (the state machine for this lives in carouselState.ts).
+ * 4. Decode mode reveals a new chip's text character by character, with the
+ *    not-yet-revealed tail showing scrambling placeholder glyphs and a
+ *    blinking caret at the boundary. Its reveal loop runs on a single shared
+ *    animation frame rather than React state, so a churning chip does not
+ *    force a re-render on every frame.
+ * 5. Whatever mode is running, all of them stop scheduling new cycles a
+ *    fixed time after mounting or after the prompts are reseeded — an
+ *    animation already in progress still finishes, then the row simply
+ *    rests until it remounts.
+ * 6. MainTabPresetAnimatedChipsInner is the actual component: it reads which
+ *    mode is active and runs the matching logic above, wrapped in
+ *    React.memo with a hand-written comparator instead of the default one —
+ *    see the Gotchas below for why that comparator needs care.
+ *
+ * Gotchas:
+ * - presetChipsPropsEqual() is a hand-maintained list of every prop this
+ *   component reads. A new prop added to this component without also adding
+ *   it there does not fail the build and does not fail a test — the
+ *   component would simply keep ignoring that prop's changes, exactly as
+ *   the warning comment above that function says.
+ * - The shared focus container needs both the flow-children="horizontal"
+ *   hint and its own registered Up/Down handovers: Steam treats a Focusable
+ *   as a column by default, and the hint alone was not enough to change that
+ *   on its own, measured on device.
  */
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button, Focusable, Marquee, type MarqueeProps } from "@decky/ui";

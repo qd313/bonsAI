@@ -41,6 +41,11 @@
       "role": ""
     },
     {
+      "path": "src/components/MainTabChatTranscript.tsx",
+      "lines": 1315,
+      "role": ""
+    },
+    {
       "path": "src/components/OllamaWhereAiRunsSection.tsx",
       "lines": 1311,
       "role": ""
@@ -51,23 +56,18 @@
       "role": ""
     },
     {
+      "path": "src/components/MainTabPresetAnimatedChips.tsx",
+      "lines": 1281,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/ollama_service.py",
       "lines": 1271,
       "role": "Prompt build, Ollama HTTP, streaming"
     },
     {
-      "path": "src/components/MainTabPresetAnimatedChips.tsx",
-      "lines": 1233,
-      "role": ""
-    },
-    {
-      "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1222,
-      "role": ""
-    },
-    {
       "path": "src/components/MainTabUnifiedAskBar.tsx",
-      "lines": 1080,
+      "lines": 1179,
       "role": ""
     },
     {

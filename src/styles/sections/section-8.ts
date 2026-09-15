@@ -1,12 +1,27 @@
 /**
  * Title: The icon row under the Ask box, and its dropdown menus
- * Purpose: Styles the small icon row under the question box (Ask mode,
- * attach), the two dropdown menus it opens (choosing an Ask mode, and
- * choosing what to attach), and the Ask button's own color change once
- * there is something ready to send.
+ *
+ * Purpose: Styles the small row of icons under the question box (Ask
+ * mode, attach, and so on), the two dropdown menus that open from that
+ * row (choosing an Ask mode, and choosing what to attach), and the Ask
+ * button itself — including the color change it gets once there is
+ * something to send.
+ *
+ *     ┌─ Ask box ──────────────────────────────┐
+ *     │  What should I upgrade first?           │
+ *     ├──────────────────────────────────────────┤
+ *     │  [mode ▾] [📎]                 [ Ask ]  │  <- this file
+ *     └────────┬───────────────────────────────┘
+ *              ▼
+ *         ┌─────────────┐
+ *         │ Ask mode menu│  <- this file, opens upward from the row
+ *         └─────────────┘
+ *
  * Used for: Folded into the plugin's one combined stylesheet by
  * bonsaiScopeStylesheet.ts, alongside the other numbered section files.
- * Does not: Style the typing field above the icon row — see section-5.ts.
+ *
+ * Does not: Style the typing field above the icon row — see section-5.ts
+ * for that.
  */
 import {
   ASK_LABEL_COLOR,
@@ -16,11 +31,15 @@ import {
 } from "../../features/unified-input/constants";
 
 /**
- * In: nothing. Out: a block of CSS text. Can go wrong: nothing — always
- * the same fixed string, but two Deck-only quirks are worth knowing: the
- * CSS engine here predates `:has()`, so a menu's open state is toggled by
- * a plain class instead of that selector; and `z-index` is set by hand in
- * a couple of spots so an open dropdown paints above the Ask row.
+ * In: nothing.
+ * Out: a block of CSS text.
+ * Can go wrong: nothing — this always returns the same fixed string, but
+ * the comments inside it explain two Deck-only quirks worth knowing before
+ * touching it: the CSS engine here predates support for the `:has()`
+ * selector, so a menu's open/closed state is toggled by a plain class
+ * instead; and stacking order (`z-index`) has to be set by hand in a
+ * couple of spots so an open dropdown paints above the Ask row rather than
+ * being hidden behind it.
  */
 export function buildSection8Section(): string {
   return `

@@ -12,7 +12,7 @@
     },
     {
       "path": "src/index.tsx",
-      "lines": 1710,
+      "lines": 1805,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
@@ -21,13 +21,13 @@
       "role": ""
     },
     {
-      "path": "src/components/PullModelsModal.tsx",
-      "lines": 1479,
+      "path": "src/hooks/useBonsaiAskOrchestration.ts",
+      "lines": 1577,
       "role": ""
     },
     {
-      "path": "src/hooks/useBonsaiAskOrchestration.ts",
-      "lines": 1470,
+      "path": "src/components/PullModelsModal.tsx",
+      "lines": 1479,
       "role": ""
     },
     {
@@ -56,18 +56,18 @@
       "role": "Prompt build, Ollama HTTP, streaming"
     },
     {
-      "path": "src/components/MainTabPresetAnimatedChips.tsx",
-      "lines": 1233,
+      "path": "src/components/MainTabChatTranscript.tsx",
+      "lines": 1315,
       "role": ""
     },
     {
-      "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1222,
+      "path": "src/components/MainTabPresetAnimatedChips.tsx",
+      "lines": 1281,
       "role": ""
     },
     {
       "path": "src/components/MainTabUnifiedAskBar.tsx",
-      "lines": 1080,
+      "lines": 1179,
       "role": ""
     },
     {
@@ -161,6 +161,11 @@
       "role": ""
     },
     {
+      "path": "src/utils/buildReplyActionsElement.tsx",
+      "lines": 546,
+      "role": ""
+    },
+    {
       "path": "src/components/CharacterPropGlyph.tsx",
       "lines": 525,
       "role": ""
@@ -193,11 +198,6 @@
     {
       "path": "py_modules/backend/services/voice_read_aloud_service.py",
       "lines": 506,
-      "role": ""
-    },
-    {
-      "path": "py_modules/backend/services/desktop_note_service.py",
-      "lines": 488,
       "role": ""
     }
   ]

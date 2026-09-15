@@ -1,9 +1,63 @@
 /**
- * Title: Reply actions element builder
- * Purpose: Build the Helpful/Not really row, the refinement chips and the Show details line.
- * Used for: MainTabChatTranscript reply micro-actions and liveTurnFocusGraph sibling hops.
- * Solves: Registered Deck focus owners for D-pad navigation between reply action buttons.
- * Does not: Submit follow-up Ask — see useBonsaiAskOrchestration reply chip handlers.
+ * Title: Reply actions row builder
+ *
+ * Purpose: Builds everything that can sit under one AI reply, below the
+ * answer itself: the Helpful / Not really thumbs, the "what went wrong"
+ * chips that appear once someone picks Not really, an optional Read aloud
+ * line, and the Show details line. Not every reply shows all of them — one
+ * still arriving, or one already rated, shows fewer.
+ *
+ *     ┌─ reply actions ─────────────────────┐
+ *     │   Helpful        Not really         │  <- thumbs
+ *     │   (only once Not really is picked)  │
+ *     │   [chip] [chip] [chip]              │  <- what went wrong
+ *     │   [chip] [chip]                     │  <- too long / too short
+ *     │   (chip error text, if a chip failed)│
+ *     │  ──────── Read aloud ────────       │  <- optional
+ *     │  ──────── Show details ↓ ───        │
+ *     └───────────────────────────────────────┘
+ *
+ * Used for: MainTabChatTranscript, once per reply, and the wider chat
+ * screen's D-pad wiring that connects this row to the reply above it and
+ * whatever comes after it.
+ *
+ * Solves: This is a plain function, not a component, so the row it returns
+ * plugs straight into the chat screen's own D-pad graph as a sibling of the
+ * transcript, rather than living in an isolated component tree of its own.
+ *
+ * Does not: Send the follow-up question itself when a chip is pressed — see
+ * useBonsaiAskOrchestration's reply-chip handling.
+ *
+ * How it works:
+ * 1. Work out which pieces even show. Chips only appear once someone picks
+ *    Not really; the Read aloud line only when a caller supplied a handler
+ *    for it; the Show details line only when a caller supplied its toggle.
+ *    If none of that applies and there is no rating yet either, the whole
+ *    row renders nothing.
+ * 2. renderChipRow() draws one row of "what went wrong" chips from a list of
+ *    chip ids, and is called twice — once for the three reasons about the
+ *    answer itself, once for "too long" / "too short".
+ * 3. Wire D-pad Up and Down between whichever pieces are showing, in the
+ *    order drawn above — a piece that is missing is skipped, so its
+ *    neighbours reach past it (thumbs down to Read aloud when there is no
+ *    Show details line, and so on).
+ * 4. Each row answers presses two ways — its own onMoveUp/onMoveDown, and a
+ *    shared pressHandler() wired to onButtonDown — because Decky delivers a
+ *    directional press through onButtonDown in practice, though onMoveUp and
+ *    onMoveDown are the documented way and are kept as a backup. A focus
+ *    check in pressHandler() stops the two from double-handling one press.
+ * 5. Assemble the whole row's JSX in the same top-to-bottom order.
+ *
+ * Gotchas:
+ * - Every hand-off between rows here that crosses into a different Deck
+ *   navigation container — into the answer bubble, or into a glossary-term
+ *   chip inside it — asks Steam for its own focus transfer first
+ *   (takeAnswerBubbleNavFocus()) instead of calling focus() directly. A
+ *   plain focus() only moves the browser's own idea of what is focused, and
+ *   this repo has lost fixes to Steam's ring disagreeing with that before.
+ * - This file has no hooks available to it (see Solves above), so the row
+ *   elements it needs to remember between a render and a later key press are
+ *   held in plain objects created fresh each render, not refs.
  */
 import React from "react";
 import { Focusable } from "@decky/ui";
@@ -114,7 +168,37 @@ function renderChipRow(
   );
 }
 
-/** Plain function so reply row is a direct transcript focus-graph sibling. */
+/*
+ * A plain function, not a component, so the row it returns is a direct
+ * sibling of the transcript in the D-pad graph rather than sitting inside
+ * its own React tree — see the file header's Solves note.
+ *
+ * In: BuildReplyActionsElementArgs — the reply's own key, its current rating,
+ * whether feedback and the chip rows should show, the Read aloud and Show
+ * details callbacks, and the handful of D-pad hand-off functions a caller
+ * can supply for the row's own Up and Down edges.
+ * Out: the finished row, or null when nothing in it would show.
+ * What can go wrong: a caller that forgets to supply onChip simply gets no
+ * chip rows, even if rating is "down" — renderChipRow() returns null rather
+ * than throwing. The 2026-09-05 rule that a half-written reply cannot be
+ * rated (see ratingUnavailable above) is enforced by greying the thumbs out,
+ * not by hiding them, so a reply stopped partway through still shows Retry
+ * as the button a person actually wants next.
+ *
+ * 1. Read the args apart and work out which optional pieces are showing:
+ *    the chip rows, the Read aloud line, the Show details divider.
+ * 2. Work out whether feedback is currently allowed to be given at all
+ *    (feedbackDisabled) and whether it has already been given (thumbsLocked).
+ * 3. Build every D-pad hand-off this row can be asked for — moveUpFromReply,
+ *    downFromThumbs, upIntoGlossaryChip, upFromRetry, upFromDivider,
+ *    upFromReadAloud, downFromReadAloud, downFromDivider — each one trying
+ *    its own neighbours first and falling back outward only once they all
+ *    decline. See the file header's How it works for the order they chain in.
+ * 4. If nothing would show at all, return null.
+ * 5. Otherwise render the pieces top to bottom: thumbs, the chip rows and
+ *    any chip error, the Read aloud line, then the Show details line —
+ *    each wired to the hand-offs built in step 3.
+ */
 export function buildReplyActionsElement(
   args: BuildReplyActionsElementArgs
 ): React.ReactElement | null {

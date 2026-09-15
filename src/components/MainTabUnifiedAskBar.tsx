@@ -1,9 +1,87 @@
 /**
- * Title: Unified Ask bar
- * Purpose: Main-tab Ask field, mode menu, attach/mic/cancel controls, and submit affordances.
- * Used for: MainTab — user types or picks presets then triggers onAskOllama.
- * Solves: One controller-first input surface with Deck focus wiring for the Ask chain.
- * Does not: Run orchestration or RPC — parent passes onAskOllama and state from useBonsaiAskOrchestration.
+ * Title: The Ask bar
+ *
+ * Purpose: The box a person types their question into, and every button
+ * around it: the paperclip that attaches a screenshot, the button that picks
+ * which AI mode to ask in, the microphone (which turns into a Stop button
+ * while a recording or an answer is running), and the big Ask button itself.
+ * This file also draws the two small menus those buttons open, and the
+ * preview strip that shows an attached screenshot with a way to remove it.
+ *
+ *     ┌─ input host ────────────────────────────────────┐
+ *     │ [avatar]  the question box (multi-line)         │
+ *     │           ......................................│
+ *     │  [paperclip]                [mode ▾] [mic/stop] │  <- bottom strip
+ *     └───────────────────────────────────────────────────┘
+ *        (the attach menu opens under the paperclip;
+ *         the mode menu opens under [mode ▾])
+ *
+ *     (attached screenshot, only while one is attached)
+ *     [ thumbnail + name ......................... ] [ x ]
+ *
+ *     ┌─ ask row ───────────────────────────────────────┐
+ *     │                       ask                [clear]│  <- clear only while
+ *     └───────────────────────────────────────────────────┘     a setting search
+ *                                                                 is showing
+ *     (matching settings, only while what was typed
+ *      also matches one of the plugin's own settings)
+ *
+ * The same question box doubles as a search box for the plugin's own
+ * settings: typing something that matches a setting's name shows a list of
+ * matches below the Ask button, and Up, Down and Enter move through that
+ * list instead of the box's own text. That search feature is unrelated to
+ * asking the AI anything — it rides along on the same box because the box
+ * was already there.
+ *
+ * Used for: MainTab, as the Ask bar sitting in the dock at the bottom of the
+ * screen.
+ *
+ * Solves: One D-pad-safe home for the whole bar and its two popover menus,
+ * so opening one menu closes the other, and every button's Up, Down, Left
+ * and Right hand-offs live in one place instead of scattered across files.
+ *
+ * Does not: Submit the question or track whether one is already running —
+ * onAskOllama and isAsking are both handed in by the caller. Does not decide
+ * where each button's focus jump actually lands — see useMainTabAskBarFocus
+ * for that.
+ *
+ * How it works:
+ * 1. Work out whether the AI-character avatar shows at all, and whether the
+ *    Ask button should look "ready" (there is text typed, and nothing is
+ *    currently being asked).
+ * 2. Get every focus-jump function this bar needs from
+ *    useMainTabAskBarFocus(), and hand the "focus the question box" one back
+ *    up to MainTab through onFocusHandlersReady once it exists.
+ * 3. Register the question box's own Steam navigation handle, so a hop into
+ *    it from outside the bar can use Steam's own transfer instead of a plain
+ *    focus() call — see the Gotchas below for why that matters.
+ * 4. Build the two menu-toggle functions, one for the mode menu and one for
+ *    the attach menu. Each closes the other menu first, and each guards
+ *    against running twice for a single press.
+ * 5. Assemble the question box itself: the visible field, a hidden "measure"
+ *    copy used to size it, and, on the Deck skins that cannot show a real
+ *    multiline field, a text overlay that mirrors what the field holds.
+ *    Enter either submits the question, or, while the settings-search
+ *    results are showing, activates whichever result is highlighted.
+ * 6. Render everything top to bottom, matching the drawing above: the input
+ *    host, the two popovers anchored to their buttons, a status row for a
+ *    screenshot capture or a media error, the attached-screenshot preview
+ *    when there is one, the Ask row with its Ask and Clear buttons, and
+ *    finally the settings-search results list.
+ *
+ * Gotchas:
+ * - Every focus hand-off that crosses from one button or menu into another
+ *   asks Steam for its own transfer (the navRef pattern, or takeNavFocus
+ *   inside useMainTabAskBarFocus) rather than calling focus() directly. A
+ *   plain focus() only moves the browser's own idea of what is focused, and
+ *   this repo has lost fixes to Steam's ring disagreeing with that before.
+ *   `navRef` itself is a real Steam Focusable prop that Decky's own types do
+ *   not list, which is why it and the onMove* handlers ride in through an
+ *   `as Record<string, unknown>` cast rather than a typed prop.
+ * - Opening the mode menu or the attach menu adds a class to the nearest
+ *   `.bonsai-scope` ancestor rather than something local to this file, since
+ *   the menu itself renders as a popover that needs to sit above other Main
+ *   tab content, not just above this bar.
  */
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { PanelSectionRow, TextField, Button, Focusable } from "@decky/ui";
@@ -101,6 +179,27 @@ function screenshotMediaErrorCapability(message: string): BonsaiCapabilityKey {
   return "media_library_access";
 }
 
+/*
+ * In: MainTabUnifiedAskBarProps — the question text and its setter, whether
+ * an Ask or a screenshot capture is running, the attached screenshot (if
+ * any), the current AI mode, the settings-search results, and every host ref
+ * and callback the bar and its menus need.
+ * Out: the whole Ask bar, as drawn in the file header above.
+ * What can go wrong: almost nothing is computed here beyond the ready flag
+ * and the two menu-toggle guards — this function mostly arranges props and
+ * local UI state into JSX. A missing optional prop hides the piece that
+ * needed it (no onOpenCharacterPicker means no avatar) rather than breaking
+ * the rest of the bar.
+ *
+ * See the file header's How it works for the full step order; in short:
+ * 1. Work out the avatar and "ready" flags.
+ * 2. Pull in the focus-jump functions and hand one back up to the caller.
+ * 3. Register the question box's own Steam navigation handle.
+ * 4. Build the mode-menu and attach-menu toggle functions.
+ * 5. Assemble the question box's own body (field, measure copy, overlay).
+ * 6. Render the bar, its menus, its status rows, and the settings-search
+ *    results list.
+ */
 export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
   const {
     fullBleedRowStyle,

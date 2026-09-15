@@ -1,9 +1,54 @@
 /**
- * Title: AI markdown chunk renderer
- * Purpose: Render one assistant markdown bubble with spoiler masking and Deck Focusable routing.
- * Used for: MainTabChatTranscript for streaming and completed assistant reply bodies.
- * Solves: Nested ReactMarkdown for bonsai-spoiler fences without breaking collapse UX on Deck.
- * Does not: Stream tokens or parse strategy branches — parent supplies source string and mask flags.
+ * Title: AI reply markdown renderer
+ *
+ * Purpose: Turns one chunk of an AI answer's raw markdown text into the
+ * actual page — paragraphs, lists, code blocks, links — and handles two
+ * special cases along the way: a spoiler fence that a Strategy Guide answer
+ * can hide until it is tapped open, and, on DRG Survivor, turning a curated
+ * glossary word inside the text into a tappable chip that can ask a
+ * follow-up question about it.
+ *
+ * Used for: MainTabChatTranscript, for both a reply still streaming in and
+ * one already finished.
+ *
+ * Solves: One shared, memoised place to turn markdown into Deck-safe
+ * elements, so a spoiler fence's own show/hide state and D-pad wiring do not
+ * have to be built again everywhere an answer might contain one.
+ *
+ * Does not: Decide where an answer is cut into pieces for the D-pad to stop
+ * on — that split happens before this file ever sees the text (the
+ * reply-bubble file). Does not decide whether a spoiler should start already
+ * open — a caller passes that in already decided.
+ *
+ * How it works:
+ * 1. MainTabBonsaiAiMarkdownChunk, the exported component, builds one set of
+ *    rendering rules through buildMdComponents(), kept memoised so a chunk of
+ *    text that has not changed is not re-parsed on every animation frame
+ *    while the rest of the reply is still streaming in.
+ * 2. buildMdComponents() replaces react-markdown's usual element for several
+ *    markdown tags — a paragraph becomes a div instead of a p once a
+ *    glossary chip might land inside it, since a Focusable chip cannot
+ *    legally sit inside a p — and intercepts one special fenced-code
+ *    language, bonsai-spoiler.
+ * 3. A spoiler fence, when spoiler hiding is turned on, is not drawn as a
+ *    code block at all: it is handed to BonsaiSpoilerFence(), which draws
+ *    either a "tap to show" cover or the revealed text, and holds its own
+ *    open/closed state.
+ * 4. Where DRG Survivor glossary terms are turned on for the current game,
+ *    ordinary text passes through linkifyDrgGlossaryNode(), which finds a
+ *    curated term already parsed (or one level into bold or italic text)
+ *    and wraps it in a tappable DrgGlossaryTermChip.
+ *
+ * Gotchas:
+ * - Revealing or hiding a spoiler unmounts the Focusable the D-pad ring was
+ *   sitting on. Steam then leaves the ring unowned, or drops it somewhere
+ *   unrelated, unless something hands it back — see focusSpoilerFence() and
+ *   the restoreRingRef note inside BonsaiSpoilerFence for how this file
+ *   catches that.
+ * - The expanded spoiler's own B-button handling goes through
+ *   onCancelButton, not onButtonDown: returning true from onButtonDown does
+ *   not stop Steam's own back-out, so a bare press there could not make B
+ *   re-hide the spoiler instead of leaving the whole reply.
  */
 import type { Components } from "react-markdown";
 import type { ReactNode } from "react";
@@ -86,6 +131,21 @@ function linkifyDrgGlossaryNode(
   return node;
 }
 
+/*
+ * In: whether spoiler hiding is on, whether a spoiler should start open,
+ * how deep inside a nested spoiler this call is (a spoiler's own revealed
+ * text can itself contain markdown, rendered through a second, nested
+ * ReactMarkdown — depth stops that from masking a spoiler inside a spoiler),
+ * whether DRG Survivor glossary terms are turned on, and the callback a
+ * glossary chip uses to ask a follow-up question.
+ * Out: a react-markdown Components table — one rendering function per
+ * markdown tag this file cares about; every tag it does not mention falls
+ * back to react-markdown's own default.
+ * What can go wrong: a spoiler fence nested inside another spoiler fence is
+ * rendered as plain text rather than a second collapsible cover — depth > 0
+ * turns masking off on purpose, since a spoiler inside a spoiler was judged
+ * not worth the added complexity.
+ */
 function buildMdComponents(args: MdArgs): Components {
   const { spoilerMaskingEnabled, spoilerDefaultExpanded, depth, drgGlossaryEnabled, onDrgGlossaryExplainFurther } =
     args;
@@ -201,6 +261,35 @@ function buildMdComponents(args: MdArgs): Components {
   return base;
 }
 
+/*
+ * The "Spoiler — tap to show" cover, and what is underneath it once tapped.
+ *
+ * In: the spoiler's own hidden text, whether it should start already open,
+ * and the set of rendering rules to use for the text once it is revealed
+ * (its own nested buildMdComponents() call, one depth deeper).
+ * Out: either the closed cover, or the open panel with the text rendered
+ * inside it and a "tap to hide" control above it.
+ * What can go wrong: toggling open or closed unmounts whichever Focusable
+ * currently holds the D-pad ring, since the cover and the open panel are two
+ * different elements, not one that changes appearance — see the file's
+ * Gotchas for how this is caught and fixed.
+ *
+ * 1. Give this fence a stable id, made once on first render, so it can be
+ *    found again later without searching the page.
+ * 2. Track two things beyond open/closed: the two elements the ring might
+ *    need handing back to (the cover and the open panel's own button), and a
+ *    flag set only when a D-pad press caused the toggle — a mouse or touch
+ *    tap needs no help, since nothing about a click depends on the ring.
+ * 3. After a D-pad toggle actually renders, hand the ring to whichever
+ *    element just mounted, with focusSpoilerFence().
+ * 4. gamepadReveal() and gamepadCollapse() both set that flag before
+ *    changing the open state, so step 3 knows to run.
+ * 5. While closed: a Focusable cover. A button press (A) reveals it; every
+ *    other button falls through so the D-pad can still move past a spoiler
+ *    without opening it.
+ * 6. While open: the revealed text, a "tap to hide" control above it, and B
+ *    wired to collapse it again rather than backing out of the whole panel.
+ */
 function BonsaiSpoilerFence(props: {
   body: string;
   defaultExpanded: boolean;

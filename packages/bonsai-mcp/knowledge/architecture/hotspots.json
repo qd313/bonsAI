@@ -141,6 +141,11 @@
       "role": ""
     },
     {
+      "path": "src/utils/buildReplyActionsElement.tsx",
+      "lines": 546,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/settings_service.py",
       "lines": 545,
       "role": "Load/save/merge settings.json"
@@ -176,6 +181,11 @@
       "role": ""
     },
     {
+      "path": "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
+      "lines": 500,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/strategy_guide_parse.py",
       "lines": 488,
       "role": ""
@@ -188,16 +198,6 @@
     {
       "path": "py_modules/backend/services/voice_read_aloud_service.py",
       "lines": 466,
-      "role": ""
-    },
-    {
-      "path": "src/utils/buildReplyActionsElement.tsx",
-      "lines": 462,
-      "role": ""
-    },
-    {
-      "path": "src/features/preset-carousel/sessionRagComposer.test.ts",
-      "lines": 457,
       "role": ""
     }
   ]

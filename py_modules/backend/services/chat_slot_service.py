@@ -8,9 +8,9 @@ switcher can show titles without opening every chat. A chat only exists here
 once main.py calls `create_slot()` or `ensure_slot()`, when you start a new
 chat or open a stored one for the first time in a session.
 
-Used for: main.py's chat-slot RPC handlers (new chat, switch chat, rename,
-delete), and the code that records each question and answer as it happens,
-through `append_turn()`.
+Used for: the handful of things the screen can ask the back end to do with a
+chat -- start a new one, switch to one, rename it, delete it -- and the code
+that records each question and answer as it happens, through `append_turn()`.
 
 Solves: Keeping a bounded, disk-backed set of chats -- eight at most, two
 hundred questions-and-answers at most in each -- written so a crash mid-save

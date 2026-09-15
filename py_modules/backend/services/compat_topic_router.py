@@ -1,25 +1,63 @@
 """
-Title: Compat corpus topic router
-Purpose: Decide whether an Ask is about a troubleshooting topic the shared compat corpus covers.
-Used for: knowledge_base_service.should_retrieve_knowledge — routing an Ask to the compat KB.
-Solves: The prompt-side phrase gate needs the literal word "deck" or "proton" in the question,
-        so 24 of the corpus's 27 topics could not be reached by anything a user would type.
-Does not: Change prompt construction, Proton log attachment, stream tags, or the frontend
-          permission hint. Those keep the narrower phrase gate they were written for.
+Title: Deciding whether a question is a troubleshooting question at all
 
-Locked as decision D16 (2026-08-06). See docs/audit/rag-pr2-signoff.md.
+Purpose: The plugin keeps a set of troubleshooting tips -- for things like Proton, a
+controller not pairing, a stuck update -- separate from its game-strategy notes. Before it
+will search that tip sheet, it has to decide whether the question sounds like a
+troubleshooting question in the first place. This file makes that call by matching the
+question's wording against a list of known problem topics.
+Used for: The one moment, in the knowledge-base search code, that decides whether to
+search the troubleshooting tips at all for this question.
+Solves: The check this file replaced only recognised a question as troubleshooting if it
+literally contained the word "deck" or "proton". Most of the tip sheet's topics -- stick
+drift, a stuck download, no sound -- have nothing to do with either word, so 24 of the tip
+sheet's 27 topics could never be reached by anything a real person would type.
+Does not: Change how the question is phrased to the AI, whether a Proton log gets
+attached, what the reply is tagged with, or the message about permissions shown on
+screen. All four of those keep the older, narrower word check they were already using.
 
-Why this is a separate predicate rather than a wider
-``question_matches_troubleshooting_log_context``: that function has five consumers. Widening it
-would also attach Proton logs, re-frame the system prompt, change stream tags, and move the
-client-side permission hint -- four behaviour changes nobody asked for, to fix one. This
-predicate is additive and only the knowledge base reads it.
+Locked as decision D16 (2026-08-06). See docs/archive/rag-pr2-signoff.md.
 
-**Precision is deliberately traded for reach**, because the two failures are not symmetric.
-A missed topic is silent: the user gets no tip and no sign one existed. A false positive is
-caught downstream -- retrieval still has to clear ``BM25_RELEVANCE_FLOOR``, and a question
-with no real match attaches nothing. So a rule here that fires slightly too often costs an
-FTS query; one that fires too rarely costs the feature.
+Why this is its own separate check rather than widening the older one
+(``question_matches_troubleshooting_log_context``, which several other things already
+depend on): widening that one would also start attaching Proton logs, changing how the
+question is framed to the AI, changing what the reply is tagged with, and changing the
+on-screen permission message -- four side effects nobody asked for, to fix one thing. This
+file only adds a new way to decide "search the tips or not"; nothing else reads it.
+
+**Missing a real match matters more than one false alarm.** If this file fails to
+recognise a genuine troubleshooting question, the person gets no tip and no sign one ever
+existed. If it wrongly guesses a strategy question is troubleshooting, the search still
+has to find something that actually matches closely enough, so nothing is attached anyway
+-- it just costs one extra, invisible search. That is why the rules below lean toward
+catching more questions rather than being precise about it.
+
+How the weaker topics are told apart from the confident ones:
+
+    does the question match ANY topic's word list?  -- no --> not troubleshooting
+                 |
+                yes
+                 v
+    is EVERY matching topic one of the three weak ones
+    ("deck", "linux", "crash" -- words that show up in
+    ordinary strategy questions too)?                -- no --> troubleshooting
+                 |
+                yes
+                 v
+    is a game currently running, or named
+    in the question?                                 -- yes --> not troubleshooting
+                 |                                              (too likely to be a
+                 no                                              strategy question)
+                 v
+    is the matching topic "crash" or "linux"?         -- yes --> troubleshooting
+                 |                                              (with nothing running,
+                 no                                              these two stop being
+                 v                                               ambiguous)
+        not troubleshooting
+        ("deck" alone never routes, even with
+        nothing running -- "how do I beat the
+        boss on my deck" is still a real
+        strategy question)
 """
 
 from __future__ import annotations

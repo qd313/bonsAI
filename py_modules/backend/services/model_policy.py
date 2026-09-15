@@ -1,9 +1,21 @@
-"""Title: Ollama model policy
+"""Title: Which AI models you are allowed to use, by how open they are
 
-Purpose: Heuristic model source classes and policy tiers for routing and disclosure copy.
-Used for: Settings tier reconciliation, Pull Models filtering, and UX policy messaging.
-Solves: FOSS/open-weight/non-FOSS classification from Ollama tag names for app policy.
-Does not: Provide legal advice or enforce licenses — classifications support UX only.
+Purpose: The Model policy setting lets you choose how open-source an AI model has to be
+before the plugin will use it: only fully open-source models, open-source plus models
+whose weights are published under looser terms, or (once you flip an extra unlock) almost
+anything installed. This file is what sorts a model's name into one of those groups by
+matching it against known name families -- the Qwen family reads as fully open-source, the
+Llama and Gemma families as the looser "open weight" kind, and so on -- and then narrows
+the list of models the plugin is willing to try down to whatever your chosen setting
+allows.
+Used for: The moment an Ask actually needs to pick which installed model to answer with,
+and keeping the Model policy setting itself internally consistent (the strictest unlock
+option cannot be on while a looser tier is chosen, and vice versa).
+Solves: One shared, named list of which model families count as which kind of open, so
+that decision is not made slightly differently in Settings and at Ask time.
+Does not: Give legal advice about any model's licence, or actually stop a model from
+running anywhere else -- this only decides which models the plugin itself will offer to
+use.
 """
 
 from __future__ import annotations

@@ -1,10 +1,19 @@
-"""Title: Ask command text rules
+"""Title: Cleaning up what you typed before checking it against a built-in command
 
-Purpose: The trim/casefold/leading-slash rules every local Ask command matcher shares.
-Used for: Sanitizer, shortcut-setup and VAC-check keyword matching before Ollama runs.
-Solves: One place for the matching rules, with no imports, so the command modules do not
-        have to import the dispatcher that imports them.
-Does not: Classify or execute anything — see ask_local_commands and the *_commands services.
+Purpose: A few things you can type in the Ask box are not questions at all — they are
+commands, like turning word-filtering off, or the anti-cheat safety check. Before the
+plugin can tell whether what you typed matches one of those, everyone doing the checking
+needs to compare against the same tidied-up text. This file holds the two small cleanup
+steps: trim the spaces off both ends and lower-case everything, and, when asked, drop one
+leading slash, so a command still matches whether or not you typed it with a "/" in front.
+Used for: The three places that check for a built-in command before a question ever
+reaches the AI: the word-filter on/off switch, the shortcut-setup helper, and the
+anti-cheat (VAC) keyword check.
+Solves: Without one shared place for this, those three checks could tidy up the typed
+text slightly differently from each other, and a command typed with different spacing or
+capital letters might match in one place and silently fail to match in another.
+Does not: Decide whether the tidied-up text actually matches a command, or do anything
+once it does — that is each caller's own job.
 """
 
 from __future__ import annotations

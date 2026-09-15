@@ -14,8 +14,9 @@ build its database with `apply_schema()` and check install paths with
 `sanitize_corpus_install_dir()`. knowledge_base_service reads through these
 tables when it answers a question.
 
-Solves: Keeping one schema version everyone agrees on, refusing to install
-the knowledge base somewhere it should not go, and telling whether a
+Solves: Keeping one agreed table layout that every version of the plugin
+builds the same way, refusing to install the knowledge base somewhere it
+should not go, and telling whether a
 downloaded copy actually has the extra vectors baked in that meaning-based
 search needs, since an older download may not.
 

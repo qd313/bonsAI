@@ -1,9 +1,15 @@
-"""Title: Ask feedback log
+"""Title: Saving your thumbs up or thumbs down on a reply
 
-Purpose: Append per-turn thumbs up/down feedback lines to a local JSONL file.
-Used for: Main tab feedback chips after Ask replies complete.
-Solves: Offline, no-network feedback capture with validated rating and chip ids.
-Does not: Upload telemetry or mutate chat transcripts — append-only local logging.
+Purpose: After an Ask finishes, you can rate the reply thumbs up or thumbs down, and on
+a thumbs-down pick a short reason -- wrong information, too long, too short, guessed the
+wrong game, or an unmarked spoiler. This file writes that rating to a small local file, one
+line per rating, so it can be looked at later.
+Used for: The thumbs up / thumbs down buttons under a reply on the main screen.
+Solves: Keeping this rating entirely on the Deck -- nothing about it is sent anywhere --
+while still checking that the rating and the reason, if given, are ones the screen
+actually offers, so a bad or made-up value can never end up in the file.
+Does not: Send this anywhere over the network, or change the saved chat itself -- rating a
+reply never edits the reply's own text, it only adds a line to a separate file.
 """
 
 from __future__ import annotations

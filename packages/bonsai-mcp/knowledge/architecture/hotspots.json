@@ -107,7 +107,7 @@
     },
     {
       "path": "py_modules/backend/services/game_ai_request.py",
-      "lines": 798,
+      "lines": 799,
       "role": ""
     },
     {
@@ -147,7 +147,7 @@
     },
     {
       "path": "py_modules/backend/services/knowledge_base_schema.py",
-      "lines": 572,
+      "lines": 573,
       "role": ""
     },
     {

@@ -1,9 +1,19 @@
-"""Title: Local Ollama teardown
+"""Title: Removing the AI engine the plugin installed on your Deck
 
-Purpose: Remove local Ollama models and user-prefix install when clearing plugin data.
-Used for: plugin_data_reset when ollama_local_on_deck or local Ollama artifacts are present.
-Solves: Coordinated rm tags, stop serve, and directory cleanup on Deck clear-data flows.
-Does not: Install or configure Ollama — see local_ollama_setup_service for setup paths.
+Purpose: When the AI engine (Ollama) is installed and running right on the Deck itself
+rather than on a separate PC, and you use Clear all plugin data, this is what actually
+removes it: every downloaded model, the engine program itself, and its cache -- so the
+Deck is left clean rather than still carrying gigabytes of files the plugin can no longer
+see.
+Used for: The Clear all plugin data action, and only when this Deck actually has a local
+install to remove -- checked first by asking whether the setting says so, and, failing
+that, by checking whether the usual install locations exist on disk.
+Solves: Doing the cleanup in the right order -- stop the engine, then remove each
+downloaded model one at a time, then remove the program and its cache directories -- and
+skipping it cleanly on Windows and on any Deck where nothing was installed this way.
+Does not: Install or set up the AI engine -- that is a different file
+(local_ollama_setup_service). It also never removes a system-wide Ollama install (one
+under /usr) -- only the kind this plugin itself installed under the home folder.
 """
 
 from __future__ import annotations

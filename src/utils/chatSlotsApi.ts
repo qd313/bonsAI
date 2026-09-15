@@ -1,9 +1,18 @@
 /**
- * Title: Chat slots RPC client
- * Purpose: Thin wrappers for chat slot list/get/create/delete/rename RPCs.
- * Used for: useChatSlots and tests.
- * Solves: Typed Decky calls with timeout — no raw call() on the Ask path.
- * Does not: Map turns to UI transcript — see chatSlotTurns.ts.
+ * Title: Asking the back end for saved chats
+ *
+ * Purpose: The player can keep more than one saved chat with the AI at once, switch between them, and
+ * rename or delete the ones they no longer want. This file is what actually asks the back end to do
+ * each of those five things — list the saved chats, load one, start a new one, delete one, rename one
+ * — and describes the shape of what comes back.
+ *
+ * Used for: useChatSlots, and this file's own tests.
+ *
+ * Solves: every one of these calls to the back end gets the same timeout handling and the same typed
+ * shape, instead of every caller making the raw call itself and guessing at what comes back.
+ *
+ * Does not: turn the raw list of turns a loaded chat comes back with into the paired
+ * question-and-answer rows the screen shows — see chatSlotTurns.ts for that.
  */
 import { callDeckyWithTimeout } from "./deckyCall";
 import type { ChatSlotTurnTransparency } from "./inputTransparency";

@@ -1,9 +1,21 @@
 /**
- * Title: Ask thinking phase copy
- * Purpose: Localized display strings and pending-placeholder detection for in-flight Ask status.
- * Used for: MainTab thinking indicator and useSmoothStreamReveal gating.
- * Solves: Consistent starting/working labels per reply language before backend phase arrives.
- * Does not: Poll thinking_summary — backend status poll remains authoritative after first update.
+ * Title: "Thinking..." status text, and telling a real answer from a status message
+ *
+ * Purpose: While the AI is working on a reply, the screen shows a short "starting..." or
+ * "thinking..." message in the player's chosen language. This file holds that wording, and also
+ * answers two small yes/no questions used elsewhere: is this text actually just a placeholder and
+ * not a real answer yet, and is this text a message about the request being stopped rather than a
+ * kept partial answer.
+ *
+ * Used for: the thinking indicator on the main tab, and the code that decides how quickly to reveal
+ * streaming text as it arrives (useSmoothStreamReveal).
+ *
+ * Solves: keeps the wording for "still working on it" consistent across languages, and gives one
+ * place to check for placeholder or stopped-request text instead of every caller matching it by hand.
+ *
+ * Does not: track the AI's actual progress. The back end's own status updates remain the source of
+ * truth for what stage a request is in once the first one arrives — this file only supplies display
+ * text and a couple of pattern checks.
  */
 /** Display-only thinking phase copy; backend remains source of truth after first poll. */
 import { englishUiString } from "../i18n/catalog";

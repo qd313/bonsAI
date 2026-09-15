@@ -1,9 +1,50 @@
 /**
- * Title: Focus navigation key helpers
- * Purpose: Normalize Deck/keyboard D-pad and stick direction keys for onMove and key handlers.
- * Used for: deckSliderMath, buildReplyActionsElement, and slider/button focus bridges.
- * Solves: Reliable left/right/up/down detection when Steam CEF leaves key empty or Unidentified.
- * Does not: Implement focus graphs — section parents wire onMove* using these predicates.
+ * Title: Recognizing which D-pad, stick, or button press just happened
+ *
+ * Purpose: A Steam Deck press can arrive at this plugin's code in more than one shape, depending on
+ * which part of the screen it lands on — sometimes as a keyboard-style key name, sometimes as a
+ * Steam-specific numeric button code. This file is a set of small yes/no checks that answer "was that
+ * Right / Left / Up / Down / OK / Cancel / a bumper", regardless of which shape the press arrived in.
+ * Every place in the plugin that reacts to the D-pad, the sticks, or the A/B buttons asks one of these
+ * checks rather than comparing key names or button codes for itself. A small unrelated helper at the
+ * bottom of the file, `getFocusableWithin`, finds the first control inside a given area that could
+ * take focus — used so a keyboard press can jump straight to a usable control without a mouse.
+ *
+ * Used for: the slider math behind D-pad-controlled sliders (deckSliderMath), the row of action
+ * buttons under a reply (buildReplyActionsElement), and other places that wire up which way focus
+ * should move next.
+ *
+ * Solves: without one shared set of checks, "was that Right?" would be answered slightly differently
+ * in different files — and the Steam Deck's habit of leaving the ordinary `key` field empty or
+ * "Unidentified" for D-pad presses, which means the checks also have to fall back to reading `code`,
+ * would need to be worked around separately everywhere it came up.
+ *
+ * Does not: move focus, or decide what happens next. This file is nothing but yes/no checks — every
+ * actual decision about where to go belongs to whichever section is asking the question.
+ *
+ * Gotchas:
+ *   - Two separate families of direction check exist here, and they are not interchangeable.
+ *     `isDownNavigationEvent` / `isUpNavigationEvent` and their Left/Right counterparts read a
+ *     keyboard-style `key` and `code`. `isDeckDirectionDownEvent` and its counterparts instead read a
+ *     Steam `onButtonDown` event, whose `detail.button` is a plain number with no key name attached at
+ *     all — turning that whole event into a string produces the literal text "[object CustomEvent]",
+ *     which matches nothing in the first family. Wiring a direction using the wrong family for how a
+ *     control is actually listening caused a real bug: a masked spoiler fence's own handler checked
+ *     for a direction using the key/code family while being driven by `onButtonDown`, always got "no,
+ *     not a direction," and fell through to treat *every* button — including Down — as "reveal me
+ *     now" instead of "let this press walk past me" (found on device 2026-08-04). Use the key/code
+ *     family where `onButtonDown` is not also wired up for the same direction on the same control; use
+ *     the `isDeckDirection*` family where it is — never both for the same press, or a control can end
+ *     up reacting to itself twice.
+ *   - The Deck's own button-id numbers (`DECK_BUTTON_OK`, `DECK_BUTTON_DIR_UP`, and so on) are written
+ *     out by hand here instead of imported from the UI library's own copy of them. That is deliberate:
+ *     these numbers come from Steam's own input protocol, not from the library, so this file does not
+ *     need to depend on the library just to know them.
+ *   - `isOkDeckButtonEvent` and `isCancelDeckButtonEvent` are the only two checks here meant to
+ *     control whether something that actually changes state is allowed to run. `onButtonDown` fires
+ *     for every button on the controller,
+ *     not just OK and Cancel — a handler that reacts to "not a direction" instead of asking one of
+ *     these two specifically will also fire for B, the bumpers, and the stick clicks.
  */
 import { getUiDocument } from "./uiDocument";
 export function isRightNavigationKey(key: string): boolean {

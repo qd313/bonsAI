@@ -1,11 +1,19 @@
 /**
- * Title: Clipboard stash sanitizer
- * Purpose: Read host clipboard via RPC and sanitize text before attaching to Ask input.
- * Used for: MainTab attach-from-clipboard flow before backend input sanitizer runs.
- * Solves: Safe length limits and control-character stripping for pasted context.
- * Does not: Replace backend sanitizer — server still validates on submit.
+ * Title: Reading the clipboard for "attach from clipboard"
+ *
+ * Purpose: The player can attach whatever text they last copied to their AI question with one tap.
+ * This file is what reads that copied text off the computer's clipboard, and does a first, light
+ * clean-up pass on it before it is attached — trimming stray control characters, collapsing repeated
+ * whitespace, and cutting it off if it is unreasonably long.
+ *
+ * Used for: the "attach from clipboard" action on the main tab, before the question is sent.
+ *
+ * Solves: keeps an oversized or messy clipboard paste from bloating the question or carrying odd
+ * characters into it.
+ *
+ * Does not: replace the back end's own check on the text — that still runs again when the question is
+ * actually sent. This is only a first pass on the client side.
  */
-/** Client-side clipboard text prep before Ask (backend sanitizer still runs on submit). */
 
 import { callDeckyWithTimeout } from "./deckyCall";
 

@@ -1,10 +1,23 @@
 /**
- * Title: Applied tuning text
- * Purpose: Format the main-tab banner and answer suffix describing tuning an Ask reported as applied.
- * Used for: MainTabChatTranscript banner and useBonsaiAskOrchestration terminal answer text.
- * Solves: Keeps assistant-facing wording about TDP / GPU clock out of the settings payload builder.
- * Does not: Apply anything — bonsAI stopped writing sysfs on 2026-07-30, so this only renders
- *   `applied` metadata that a reply still carries.
+ * Title: Wording for "here is what got tuned"
+ *
+ * Purpose: An older version of this plugin could change the Steam Deck's power limit (called TDP)
+ * directly and would show the player a short banner confirming what it had just changed. It could
+ * also suggest a graphics clock speed, but never actually applied that one — that number was always
+ * just a recommendation. This file builds both pieces of text: the banner, and a closing note added
+ * to the end of a reply.
+ *
+ * Used for: the banner shown on the main tab (MainTabChatTranscript) and the closing note added to a
+ * finished AI answer (useBonsaiAskOrchestration).
+ *
+ * Solves: keeps the specific wording about power limits and clock speed out of the file that builds
+ * the message sent to save settings, so that file does not also have to know how to phrase this.
+ *
+ * Does not: change anything on the Deck itself. This plugin stopped changing the power limit on
+ * 2026-07-30 — the "apply" feature this file describes no longer runs for new replies. The banner and
+ * note are kept only because a reply saved from before that date can still carry the old information
+ * about what was changed, and if one ever does, this is what displays it. The graphics clock number
+ * was never applied by this plugin and still is not — it has only ever been a suggestion.
  */
 import { type AppliedResultLike } from "../data/bonsaiSettingsSchema";
 

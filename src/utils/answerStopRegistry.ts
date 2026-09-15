@@ -1,15 +1,52 @@
 /**
- * Title: Answer stop registry
- * Purpose: Track the focusable sections inside one answer bubble, in order, so D-pad Down/Up can walk them.
- * Used for: buildAnswerBubbleElement (registration) and answerBubbleNavigation (the walk).
- * Solves: The bubble is a single Focusable, so a long reply was one stop — Down scrolled the panel by
- *         a fixed step and there was no way to land on a section, which is what reading a strategy
- *         answer on a controller needs.
- * Does not: Decide what a section is (see prepareStreamMarkdown / splitResponseIntoChunks), or own
- *           the masked-spoiler diversion, which stays in spoilerFenceRegistry and runs first.
+ * Title: The stops inside one reply, in order
  *
- * Named for the answer rather than the stream on purpose: history turns register here too, so that
- * navigation is identical whether or not a turn streamed.
+ * Purpose: A long AI reply is broken into sections on screen — separate headings, paragraphs, code
+ * blocks. Before this file existed, the whole reply was one single thing the D-pad could land on, so
+ * Down just scrolled the box by a fixed amount and there was no way to land the ring on a particular
+ * section. This file keeps an ordered note of every section inside one reply — called a "stop" — so
+ * pressing Down or Up can walk from one section to the next, the way reading a strategy answer on a
+ * controller needs.
+ *
+ * Used for: buildAnswerBubbleElement, which notes each section down as it draws it, and
+ * answerBubbleNavigation, which walks between them.
+ *
+ * Solves: without this, a long reply had no way to be read section by section with a controller —
+ * Down just scrolled by a fixed step.
+ *
+ * Does not: decide where one section ends and the next begins — that is decided elsewhere, by
+ * whatever splits the reply into chunks as it renders. Nor does it own the separate diversion that
+ * lets Down stop briefly on a hidden ("masked") spoiler — that lives in its own file and runs first.
+ *
+ * Named after the reply rather than the stream of text on purpose: a reply loaded back from an
+ * earlier saved chat registers its sections here too, so walking through it with the D-pad works
+ * exactly the same whether the reply just streamed in live or was reopened from history.
+ *
+ * Gotchas:
+ *   - Section order comes from whichever part of the screen is drawing the sections, not by comparing
+ *     on-screen boxes to each other — the drawing code already knows the order, and the project's
+ *     rule for D-pad walks is to avoid asking the page itself a question like that (see AGENTS.md's
+ *     Decky focus graph section). Re-noting a section under the same position just replaces the old
+ *     box with the new one, which is what happens on every re-draw.
+ *   - `orderedAnswerStops` double-checks that every section it returns is still actually inside the
+ *     bubble it was asked about. That check is not just caution: a reply can get a new internal id
+ *     partway through (when a live, still-streaming reply becomes a finished one saved to history),
+ *     and for one moment the old bubble's sections can still be noted down. Trying to focus one of
+ *     those leftover sections fails silently — the press just does nothing.
+ *   - `focusedAnswerStopIndex` asks where Steam's own highlight ring is, not the browser's ordinary
+ *     "focused element." Nothing calls `.focus()` before this runs — it is a plain "where is the
+ *     player right now" question — and on the Steam Deck the browser's answer to that question is a
+ *     different, often wrong one. Asking it the wrong way found a real bug (tracked as MICRO-04): the
+ *     browser's idea of what was focused pointed at some other, stale section, so Down moved to the
+ *     section *after* that stale one — not the one next to where the player actually was — or fell
+ *     off the end of the list entirely and let Steam handle the press on its own.
+ *   - `focusAnswerStop` is allowed to use a plain `.focus()` call, unlike the cross-bubble jump in
+ *     answerBubbleElRegistry.ts — because a stop sits inside the same navigation area the ring is
+ *     already in. Moving *within* one area works with a plain `.focus()`; only moving *into* a
+ *     different area needs the special hand-off call. It also never overwrites a `tabindex` Decky
+ *     already put on the element, and it checks that focus actually landed by asking the section's
+ *     own page for its focused element, not the browser's global one — the same two details
+ *     `focusSpoilerFence` relies on, for the same reason.
  */
 
 import { elementHasFocus, rememberUiDocument, uiGamepadFocusElement } from "./uiDocument";

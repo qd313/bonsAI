@@ -1,9 +1,26 @@
 /**
- * Title: Input transparency types
- * Purpose: Types and helpers for Show details context-chip ladder snapshots from RPC.
- * Used for: MainTabChatTranscript ContextChipLadder and useBonsaiAskOrchestration refreshInputTransparency.
- * Solves: Typed bridge between get_input_transparency RPC and UI chip rendering.
- * Does not: Build transparency on the backend — see transparency_service.py.
+ * Title: The shape of "what went into this answer"
+ *
+ * Purpose: The Show details panel tells the player what went into a particular AI answer — the exact
+ * question sent to the model, which files or notes it read, whether anything was blocked by the
+ * content filter, and more. This file describes the shape of that information exactly as the back
+ * end sends it, so the screen code that draws the panel and its chips knows what fields it can rely
+ * on.
+ *
+ * Used for: the Show details panel and its row of chips on the main tab (MainTabChatTranscript), and
+ * the code that asks the back end for a fresh copy after each answer finishes
+ * (useBonsaiAskOrchestration's refreshInputTransparency).
+ *
+ * Solves: gives one agreed shape for "what went into this answer" that both the back-end call and the
+ * screen code that draws it from can check against, instead of the screen code guessing at field
+ * names.
+ *
+ * Does not: work out what went into an answer in the first place — that happens on the back end, in
+ * transparency_service.py. This file only describes the shape of what comes back, plus a couple of
+ * narrower shapes: `ChatSlotTurnTransparency` is the smaller, trimmed set of fields saved alongside a
+ * turn in a saved chat (route, whether it succeeded, and the chips — not the full raw prompts or
+ * developer-only details), and `InputTransparencyRpcResult` is the "is there anything to show at all"
+ * shape the back-end call itself returns.
  */
 import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
 

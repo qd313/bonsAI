@@ -1,10 +1,21 @@
 /**
- * Title: DRG Survivor glossary term matching
- * Purpose: Find curated DRG Survivor jargon terms inside reply text so they can be marked up as tappable.
- * Used for: MainTabBonsaiAiMarkdownChunk inline term rendering, and this module's own tests.
- * Solves: Word-boundary, case-insensitive matching of a small curated list without an NLP dependency.
- * Does not: Decide whether the current game is DRG Survivor — the caller checks the AppID first
- *           (see isDrgSurvivorAppId) and only calls this when it matches.
+ * Title: Spotting DRG Survivor game terms inside a reply
+ *
+ * Purpose: For the game DRG Survivor, this plugin keeps a short hand-picked list of the game's own
+ * jargon — words a new player might not know. This file finds every occurrence of one of those words
+ * inside an AI reply's text, so the reply can be redrawn with those words turned into tappable chips
+ * the player can open for a definition. It also has a small helper that recognizes DRG Survivor by
+ * its Steam ID.
+ *
+ * Used for: the AI reply text renderer (MainTabBonsaiAiMarkdownChunk), which asks this file to split a
+ * reply into plain text and matched-term pieces before drawing it, and this file's own tests.
+ *
+ * Solves: gives whole-word, spelling-case-insensitive matching against a small hand-picked list,
+ * without needing any language-understanding library to do it.
+ *
+ * Does not: decide whether the current game is DRG Survivor in the first place — the caller checks
+ * the running game's Steam ID first (using this file's own `isDrgSurvivorAppId`) and only calls the
+ * matching functions here once that check has already passed.
  */
 import { DRG_SURVIVOR_GLOSSARY_TERMS, DRG_SURVIVOR_APP_ID, type DrgGlossaryTerm } from "../data/drgGlossaryTerms";
 

@@ -113,7 +113,14 @@ def strip_docstrings(tree: ast.AST) -> ast.AST:
         first = body[0]
         if isinstance(first, ast.Expr) and isinstance(first.value, ast.Constant):
             if isinstance(first.value.value, str):
-                node.body = body[1:] or [ast.Pass()]
+                # No placeholder statement when nothing is left. An empty file
+                # and a file holding only a new docstring must compare equal,
+                # and standing a `pass` in for the removed docstring made them
+                # differ -- which reported the two one-line package files as
+                # having had their code changed when all they gained was a
+                # description. Nothing here is ever run, only compared, so a
+                # body with no statements in it is fine.
+                node.body = body[1:]
     return tree
 
 

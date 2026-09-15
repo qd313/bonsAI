@@ -1,12 +1,28 @@
 /**
- * Title: Plugin quick-start copy
- * Purpose: JSX body for the “How to use bonsAI” help modal quick-start instructions.
- * Used for: PluginHelpModal via showModal(); kept separate from README for QAM-friendly brevity.
- * Solves: Single maintained copy block aligned with README tone without duplicating the full doc.
- * Does not: Configure Ollama or run setup RPC — instructs users to visit the Ollama tab first.
+ * Title: The help popup's quick-start text
+ *
+ * Purpose: The actual words shown inside the plugin's "How to use bonsAI"
+ * help popup: first, a highlighted box telling a person they must set
+ * where the AI runs before anything works, then a short bulleted list
+ * covering the rest of the plugin at a glance.
+ *
+ * Used for: The plugin's help popup.
+ *
+ * Solves: Keeps one short, up-to-date summary written for this popup,
+ * separate from the full project readme, which is too long to read
+ * comfortably inside the Quick Access Menu.
+ *
+ * Does not: Actually set up a connection to the AI, or check whether one
+ * is already working — it only tells a person to go do that themselves,
+ * on the Ollama tab.
  */
 import React from "react";
 
+/**
+ * In: nothing — every word here is fixed.
+ * Out: the finished block of help text.
+ * Can go wrong: nothing — this always returns the same content.
+ */
 export function PluginQuickStartInstructionsBody() {
   const itemStyle: React.CSSProperties = { marginBottom: "0.45em" };
   return (

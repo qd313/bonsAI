@@ -72,7 +72,7 @@
     },
     {
       "path": "src/data/characterPlaceholderEmoticonGrids.ts",
-      "lines": 1024,
+      "lines": 1102,
       "role": ""
     },
     {
@@ -116,6 +116,11 @@
       "role": ""
     },
     {
+      "path": "src/hooks/usePluginSettings.ts",
+      "lines": 672,
+      "role": ""
+    },
+    {
       "path": "src/components/MainTabPresetAnimatedChips.test.tsx",
       "lines": 635,
       "role": ""
@@ -134,11 +139,6 @@
       "path": "py_modules/backend/services/settings_service.py",
       "lines": 602,
       "role": "Load/save/merge settings.json"
-    },
-    {
-      "path": "src/hooks/usePluginSettings.ts",
-      "lines": 590,
-      "role": ""
     },
     {
       "path": "src/components/DeveloperTab.tsx",
@@ -166,6 +166,11 @@
       "role": ""
     },
     {
+      "path": "src/data/bonsaiSettingsNormalizers.ts",
+      "lines": 531,
+      "role": ""
+    },
+    {
       "path": "src/components/CharacterPropGlyph.tsx",
       "lines": 525,
       "role": ""
@@ -188,11 +193,6 @@
     {
       "path": "src/utils/answerBubbleNavigation.test.ts",
       "lines": 512,
-      "role": ""
-    },
-    {
-      "path": "src/data/bonsaiSettingsNormalizers.ts",
-      "lines": 508,
       "role": ""
     },
     {

@@ -1,9 +1,32 @@
 /**
- * Title: Settings value normalizers
- * Purpose: Coerce raw RPC/localStorage settings payloads into typed BonsaiSettings fields.
- * Used for: usePluginSettings, session survival snapshots, and settings hydration on plugin load.
- * Solves: Central validation for enums, booleans, strings, and nested capability toggles.
- * Does not: Define default schema shape — see bonsaiSettingsSchema for type definitions and defaults.
+ * Title: Making sense of a settings file that might say anything
+ *
+ * Purpose: A saved settings file can hold almost anything — an old value
+ * from a version of the plugin that worked differently, a value someone
+ * edited by hand, or nothing at all for a setting that did not exist yet
+ * when the file was written. This file is where every one of those cases
+ * gets turned into a safe, known value the rest of the plugin can trust
+ * without checking again. Most settings are simple — a toggle, or a
+ * choice from a short list — and share one of a handful of common rules
+ * defined once near the bottom of the file. A few need their own
+ * function: a legacy name to read as well as the current one, two
+ * settings that have to agree with each other, or a value built from
+ * more than one saved field.
+ *
+ * Used for: Every time settings are loaded — when the plugin opens, after
+ * a save round-trip, and when restoring a snapshot taken before a popup
+ * closed the plugin's screen.
+ *
+ * Solves: Puts every one of these safety rules in one place, so a
+ * question like "what happens if this setting is missing" or "what
+ * happens if someone typed something odd into the settings file by hand"
+ * has exactly one answer instead of a different guess in every place
+ * that reads a setting.
+ *
+ * Does not: Decide what a setting's default should be, or what type it
+ * is — see bonsaiSettingsSchema for the list of settings and their
+ * starting values. This file only cleans up whatever value already
+ * arrived.
  */
 import {
   AI_CHARACTER_ACCENT_INTENSITY_IDS,

@@ -1,9 +1,65 @@
 /**
- * Title: Plugin settings hook
- * Purpose: Load, persist, and expose bonsAI settings from Decky RPC and local survival snapshots.
- * Used for: index.tsx — feeds caps, Ask mode, Ollama host, and feature toggles to child tabs.
- * Solves: One settings owner with debounced save and modal-remount restore.
- * Does not: Render Settings UI — see SettingsTab and OllamaTab.
+ * Title: Every setting in the plugin — loaded, saved, and kept in step
+ *
+ * Purpose: This is the one place that owns every setting a person can
+ * change anywhere in the plugin — permissions, the Ask model, voice
+ * replies, the AI character, timing, and dozens more. It loads them when
+ * the plugin opens, hands each one to whichever tab shows it, saves a
+ * change back to disk automatically a short moment after it happens, and
+ * puts everything back the way it was if Steam throws the plugin's
+ * screen away and rebuilds it (which happens every time a popup opens).
+ *
+ * Used for: The plugin's main screen, which hands each setting and its
+ * matching change-function down to the tab that shows it.
+ *
+ * Solves: Without one owner, two different tabs could each keep their own
+ * copy of the same setting and drift apart, or a save from one place
+ * could overwrite a save from another. This hook is the only code in the
+ * plugin that talks to the backend's load and save calls directly.
+ *
+ * Does not: Draw any settings screen — see SettingsTab, OllamaTab,
+ * PermissionsTab, and DeveloperTab for that. This hook only holds the
+ * values and the functions that change them.
+ *
+ * How it works:
+ * 1. One saved value per setting (around fifty of them), each starting
+ *    at its own documented default — the same defaults the backend uses,
+ *    so a plugin that has never saved anything still behaves correctly.
+ * 2. A few pieces of bookkeeping alongside the settings themselves: a
+ *    "settings have loaded" flag, a "saving is currently safe" flag (off
+ *    at first, so a failed very first load can never overwrite a good
+ *    save file with blank defaults), and a couple of counters used to
+ *    know whether a save is in flight or has been superseded.
+ * 3. Every time this hook runs, it copies the very latest value of every
+ *    setting into one plain object kept in a ref. The automatic save
+ *    below reads from that ref rather than from the settings themselves,
+ *    so it always sends the newest values without needing to be told
+ *    about every single one of them by name.
+ * 4. A function called `hydrateFromSettings` is the one place that takes
+ *    a settings object — freshly loaded, just saved, or restored from a
+ *    snapshot — and writes every field into its own saved value.
+ *    Everything else in this file that changes settings in bulk funnels
+ *    through it.
+ * 5. Two more functions, `pauseDebouncedSettingsSave` and
+ *    `flushSettingsSnapshotNow`, are for a caller that needs to save
+ *    immediately and be sure of the result — such as a settings popup —
+ *    rather than waiting for the automatic save below. Pausing first
+ *    stops the automatic save from
+ *    firing in the middle of an explicit one and racing it.
+ * 6. On first open, settings are loaded from the backend. If the plugin
+ *    is being rebuilt after a popup closed and has a snapshot waiting to
+ *    be restored, that snapshot is used instead of the fresh load — it
+ *    holds whatever was being typed or chosen right before the popup
+ *    opened. If the load fails outright, every single setting resets to
+ *    its default, deliberately and completely, rather than leaving some
+ *    fields showing values the plugin just admitted it could not read.
+ * 7. Any change to a tracked setting starts a short wait (well under a
+ *    second); if nothing else changes before the wait ends, the whole
+ *    current snapshot is saved. A change elsewhere that calls the pause
+ *    function first cancels a wait already running, so the two paths to
+ *    disk cannot both fire for the same change.
+ * 8. Everything is handed back together at the end: every setting, every
+ *    function that changes one, and the loading/saving controls above.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { callDeckyWithTimeout } from "../utils/deckyCall";
@@ -19,6 +75,16 @@ import { DEFAULT_AI_CHARACTER_ACCENT_INTENSITY, DEFAULT_AI_CHARACTER_CUSTOM_TEXT
 import { normalizeLatencyWarningSeconds, normalizeRequestTimeoutSeconds, normalizeSettings } from "../data/bonsaiSettingsNormalizers";
 import { toBonsaiSettingsPayload } from "../utils/settingsPayload";
 import { saveTabResumeMode } from "../features/plugin-shell/pluginStorage";
+
+/**
+ * In: a normalized settings object, in the backend's own field names
+ * (`snake_case`, matching settings.json).
+ * Out: the same values, renamed to the `camelCase` shape the rest of the
+ * frontend — and the session-survival snapshot in particular — expects.
+ * Can go wrong: nothing checks that every field made the trip; a setting
+ * added to one shape and not the other would simply be missing from the
+ * snapshot, silently.
+ */
 function snapshotFromBonsaiSettings(normalized: BonsaiSettings): BonsaiSettingsSnapshotInput {
   return {
     latencyWarningSeconds: normalized.latency_warning_seconds,
@@ -72,13 +138,29 @@ function snapshotFromBonsaiSettings(normalized: BonsaiSettings): BonsaiSettingsS
   };
 }
 
+/**
+ * In: nothing.
+ * Out: what every setting's snapshot value would be if none had ever
+ * been saved — every default, run through the same normalizing and
+ * renaming as a real settings load.
+ * Can go wrong: nothing — always returns the same values.
+ */
 function defaultSettingsSnapshot(): BonsaiSettingsSnapshotInput {
   return snapshotFromBonsaiSettings(normalizeSettings({}));
 }
 
 /**
- * Frontend settings load, normalization, and debounced persistence.
- * Keeps RPC out of the main plugin shell component.
+ * In: nothing — this hook loads its own data from the backend as soon
+ * as it mounts.
+ * Out: every setting's current value, every function that changes one,
+ * and the loading/saving controls described in the file header above.
+ * Can go wrong: the field list above is written out by hand in several
+ * places in this file (the saved values, the snapshot ref, the hydrate
+ * function, the failed-load reset, and the save's own dependency list);
+ * a setting added to one and missed in another will not fail to build,
+ * it will just quietly behave wrong in one specific way — see the
+ * comment on the failed-load branch further down for a real case of
+ * exactly that happening.
  */
 export function usePluginSettings() {
   const [latencyWarningSeconds, setLatencyWarningSeconds] = useState<number>(

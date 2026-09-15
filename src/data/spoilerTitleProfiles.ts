@@ -1,9 +1,39 @@
 /**
- * Title: Spoiler title profiles (constitution runtime)
- * Purpose: Built-in per-title spoiler sensitivity for display-time unwrap.
- * Used for: unwrapAskedEntitySpoilerFences before markdown render.
- * Solves: Title-level open vs protect without genre substring heuristics.
- * Does not: Prompt policy — see py_modules/backend/services/spoiler_title_profiles.py.
+ * Title: Which games get extra spoiler protection
+ *
+ * Purpose: When the AI's answer wraps something in a spoiler fence, the
+ * screen normally hides it behind a tap-to-reveal. For some games that tap
+ * is pointless — the AI's answers about, say, Deep Rock Galactic almost
+ * never contain a real story spoiler, so hiding routine tips behind a tap
+ * only adds friction. This file is the fixed list of which games fall into
+ * each of two groups: "low narrative" games where a spoiler fence opens on
+ * its own, and "protect progression" games (Baldur's Gate 3, Hades, and
+ * other story-heavy titles) where it stays hidden until tapped, because
+ * getting that judgment wrong the other way — showing a real story spoiler
+ * by mistake — cannot be taken back. A game in neither list behaves the same
+ * as "protect progression": it stays hidden until tapped.
+ *
+ * Used for: deciding, right before an answer is drawn on screen, whether a
+ * spoiler fence in it should already be open.
+ *
+ * Solves: this decision needs to work for two different situations — a game
+ * that is currently running, which has a Steam App ID, and a game named in
+ * the question itself with no App ID to look up (an emulated game, for
+ * instance) — so games are listed twice over, once by App ID and once by
+ * name.
+ *
+ * Does not: decide anything about the AI's own answer, or about what counts
+ * as a spoiler in the first place — the AI is told to wrap possible spoilers
+ * as it writes, on the computer or Deck side
+ * (`py_modules/backend/services/spoiler_title_profiles.py`, which keeps its
+ * own copy of this same list). This file only decides, after the answer
+ * already has its fences, whether one of them should start open or closed.
+ *
+ * Gotchas:
+ *   - If a game's name happens to match an entry in both lists, "protect
+ *     progression" wins. That is the conservative answer on purpose: an
+ *     unnecessary tap can just be tapped, but a spoiler shown by mistake
+ *     cannot be un-shown.
  */
 
 export type SpoilerTitleProfile = "low_narrative" | "protect_progression" | "unknown";

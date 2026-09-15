@@ -1,9 +1,52 @@
 /**
- * Title: Preset prompt catalog
- * Purpose: Suggested Ask composer prompts, category heuristics, and carousel sampling helpers.
- * Used for: MainTabPresetRow chips, contextual carousel seeds, and QA frozen-carousel testing.
- * Solves: Isolates conversational UX tuning data from view-layer components.
- * Does not: Submit asks or join running-game titles — see joinPresetWithRunningGame util.
+ * Title: The suggested-question chips on the Main tab
+ *
+ * Purpose: The Main tab shows a small row of suggested questions — "Why is
+ * my Deck running hot?", "How do I fix stuttering?", and so on — that the
+ * user can tap to fill the Ask bar instead of typing. This file is the
+ * whole list of those questions, which topic each belongs to (battery,
+ * thermal, performance, controls, troubleshooting, Ollama, general,
+ * strategy), and the code that picks which ones show: at random, or leaning
+ * toward questions related to whatever topic the last question was about.
+ *
+ * Used for: the suggested-question row on the Main tab, and picking which
+ * Ask mode a chip should switch to when tapped — some, like "How do I get
+ * past this part?", switch the Ask bar into Strategy mode on their own.
+ *
+ * Solves: one list of questions, their topics, and the picking rules, so
+ * "which question comes up next" is decided in one place instead of being
+ * scattered across the Main tab's own view code.
+ *
+ * Does not: actually send a question once a chip is tapped, or decide
+ * whether a chip should be swapped out for the name of the game currently
+ * running — that swap is `joinPresetWithRunningGame.ts`'s job, done after a
+ * question is picked from here.
+ *
+ * How the row decides what to show, in order:
+ *   1. Is a pinned QA batch of exact questions currently in force (set from
+ *      a hidden developer setting, `dev_frozen_test_chips`, no rebuild
+ *      needed)? If three or more are pinned, show those, in the order they
+ *      were pinned, and nothing below this runs. This exists so a tester can
+ *      ask the exact same handful of questions on every run, which random or
+ *      topic-based picking cannot promise.
+ *   2. Otherwise, if the developer-only, shipped-off `TEMP_PRESET_CAROUSEL_FROZEN`
+ *      flag is on and at least three of its fixed question list match real
+ *      questions in the list below, show those instead — a lighter version
+ *      of step 1 for local testing, at the cost of needing a rebuild to
+ *      change the batch.
+ *   3. Otherwise, show real suggestions: either random questions from the
+ *      full list, or, when the previous question's topic is known, more
+ *      questions from a handful of related topics first, topped up with
+ *      random ones if that is not enough to fill the row.
+ *
+ * Gotchas:
+ *   - Freezing the row (steps 1 or 2) also stops it from mixing in a
+ *     knowledge-base tip chip, so a test that expects to see one cannot pass
+ *     while either freeze is on.
+ *   - Fewer than three pinned questions is treated as "no freeze" on
+ *     purpose: a short pinned batch would otherwise mix pinned and random
+ *     chips in the same row, which defeats the point of pinning for a
+ *     repeatable test.
  */
 import type { AskModeId } from "./askMode";
 

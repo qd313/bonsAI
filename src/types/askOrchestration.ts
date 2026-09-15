@@ -1,14 +1,32 @@
 /**
- * Title: Ask orchestration contract
- * Purpose: The exact shape the Ask hook hands back, written down so it cannot drift.
- * Used for: useBonsaiAskOrchestration declares this as its return type; index.tsx and the
- *           Main tab read the pieces out of it.
- * Solves: The widest seam in the project. 52 things come out of one hook, and the refactor
- *         splits the file behind it. Without a written shape a split can quietly drop,
- *         rename or retype one of them and nothing fails until someone uses the plugin.
- * Does not: Add behaviour or wrap anything. It is a type; it costs nothing at run time.
- * Caution: FROZEN for the phase 4 reshape. Changing a name or a type here is a change to
- *          the contract, not a refactor. Work behind the seam, not on it.
+ * Title: Everything the Ask flow hands back, in one list
+ *
+ * Purpose: One hook, `useBonsaiAskOrchestration`, runs the whole flow behind
+ * asking a question and getting an answer — 52 separate pieces of state and
+ * functions come out of it: the answer itself, what it came with, the
+ * thread of earlier turns, what is happening right now, and the things a
+ * person can do with a reply once it has arrived. This file writes down the
+ * exact shape of those 52 pieces, once, so nothing reading them can drift
+ * out of step with what the hook actually returns.
+ *
+ * Used for: `useBonsaiAskOrchestration` declares this as its own return
+ * type, and `index.tsx` and the Main tab read the pieces they need out of
+ * it.
+ *
+ * Solves: this is the widest single handoff point in the project — the
+ * ongoing split of the Ask hook into smaller files happens entirely behind
+ * this list. Without a shape written down separately from the hook's own
+ * code, a split could quietly drop, rename, or change the type of one of
+ * the 52 pieces, and nothing would fail until somebody actually used the
+ * plugin and hit the missing piece.
+ *
+ * Does not: run any of the Ask flow itself, or cost anything while the
+ * plugin runs. This file is only a type — a description of a shape —
+ * checked while the plugin is built and erased before the code ever runs.
+ *
+ * Caution: frozen for the ongoing reshape of the Ask hook. Changing a name
+ * or a type here changes what every caller can rely on — it is not a small
+ * tidy-up. Work behind this list, not on it, until that reshape is done.
  */
 import type { Dispatch, SetStateAction } from "react";
 

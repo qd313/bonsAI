@@ -1,9 +1,25 @@
 /**
- * Title: Steam settings path database
- * Purpose: Searchable catalog of Steam Settings and QAM navigation breadcrumb strings.
- * Used for: In-plugin settings search, Steam Input jumps, and AI navigation suggestions.
- * Solves: Keeps long settings path lists out of UI orchestration files for easier maintenance.
- * Does not: Open Steam URLs directly — see steamSettingsNavigation for route resolution.
+ * Title: Every Steam settings page, by name
+ *
+ * Purpose: Typing into the Main tab's search can jump straight to a Steam
+ * settings page instead of asking the AI a question — typing "brightness",
+ * for instance, can jump straight to Settings > Display > Brightness. This
+ * file is the full list of Steam and Quick Access Menu settings pages that
+ * search can match against, written as breadcrumb paths ("Settings > System
+ * > Enable Developer Mode").
+ *
+ * Used for: the Main tab's search, matching what was typed against this
+ * list (helped along by a second list of common alternate names, so "auto
+ * sleep" can still find "On battery power, sleep after").
+ *
+ * Solves: one list of every jumpable Steam settings page, kept separate from
+ * the search code itself and from the code that actually opens a page once
+ * one is picked, so the (long, mostly unchanging) list of paths does not
+ * clutter either.
+ *
+ * Does not: decide how to actually open a path once it is picked, or turn a
+ * path into a Quick Access Menu tab number or a `steam://` address — see
+ * `steamSettingsNavigation.ts` for that.
  */
 export const SETTINGS_DATABASE = [
   // System

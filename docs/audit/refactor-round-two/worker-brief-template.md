@@ -72,3 +72,17 @@ COST: <tool calls> calls, <tokens> tokens
 - When a worker reports that a check and its instructions disagree, check the tool before
   believing the worker got it wrong. Of the four measuring tools questioned by workers during
   phase 5, four were wrong.
+- **Tell the worker what is allowed to stay.** A tool that finds work is not a target to be driven
+  to zero, and a worker will treat it as one unless told otherwise. On 2026-09-15 seven workers were
+  handed a report listing every term of art in the headers they owned. The brief said in as many
+  words that keeping one because it is genuinely the clearest word is a fine answer, and that a
+  header reading well while still tripping the report is a pass. All seven came back having kept
+  words on purpose and said which and why — every reason good, including three that were not really
+  jargon at all but a game's title and a command people type. Without that sentence the same list
+  invites seven workers to reach for a thesaurus and make the writing worse to clear a number.
+- **Check your own worked example against the code before handing it to anybody.** The two examples
+  for that session were written by the session itself and both stated something confidently false on
+  the first pass, each an assumption carried from the area's reputation rather than read. Both were
+  caught, and the rule that caught them went into the brief — where it then found nine wrong claims
+  in old headers that had been sitting there being believed. An example is copied by every worker,
+  so an error in one is an error in twenty files.

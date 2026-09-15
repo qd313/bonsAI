@@ -32,6 +32,14 @@ roughly how many tokens it used, and how it finished.
 | 2026-09-14 | 5 Explain | Lane D, knowledge base, voice and media, 14 files | Sonnet high | 132 | 348,000 | done |
 | 2026-09-14 | 5 Explain | Lane E, settings and the other tabs, 20 files | Sonnet high | 142 | 446,000 | done |
 | 2026-09-14 | 5 Explain | Session 1: the worked example, main.py, five tool fixes, all merges | Opus xhigh | 95 | 300,000 | done |
+| 2026-09-15 | 5 Explain | Lane A, back-end services first half, 18 files | Sonnet high | 107 | 219,000 | done |
+| 2026-09-15 | 5 Explain | Lane B, back-end services second half and main.py, 23 files | Sonnet high | 110 | 216,000 | done |
+| 2026-09-15 | 5 Explain | Lane C, screen-side helpers first half, 28 files | Sonnet high | 103 | 193,000 | done |
+| 2026-09-15 | 5 Explain | Lane D, screen-side helpers second half, 27 files | Sonnet high | 102 | 203,000 | done |
+| 2026-09-15 | 5 Explain | Lane E, the things on screen and the stylesheets, 25 files | Sonnet high | 79 | 228,000 | done |
+| 2026-09-15 | 5 Explain | Lane F, the lists of choices and the types, 21 files | Sonnet high | 112 | 203,000 | done |
+| 2026-09-15 | 5 Explain | Lane G, the hooks and the feature folders, 25 files | Sonnet high | 104 | 239,000 | done |
+| 2026-09-15 | 5 Explain | Session 2: two worked examples, the word report, the map fix, all merges | Opus xhigh | 100 | 330,000 | done |
 
 Phase 5's first session is the most worker-heavy of the refactor so far: five workers, about
 1.96 million tokens between them, for 100 files explained and roughly 5,500 lines of explanation.
@@ -46,6 +54,22 @@ wanted. Both are briefing failures by the session, not worker failures, and both
 into the worker brief template. The tool fixes themselves were cheap; the wasted worker time was
 not.
 
+Session 2 is the cheaper half and was expected to be: seven workers, about 1.50 million tokens
+between them, for 157 files. That is **9,600 tokens a file against session 1's 19,600** — a little
+under half, on twice as many files in one sitting. The reason is worth remembering when sizing this
+kind of work: session 1 had to read whole files to explain what was missing, while session 2 mostly
+needed the header and enough of the file to check each claim in it.
+
+Nothing was wasted this time. No worker fought a measuring tool, none invented its own file list,
+and every one came back inside both caps. The difference between the two sessions is entirely in
+the brief -- the same document, with three lessons added to it after session 1 and a fourth after
+this one.
+
+Both sessions together: twelve workers, about 3.46 million tokens, 257 files explained. That is
+more than phases 0 through 4 put together, and it is the right shape of spending. The work is
+genuinely per-file, no script can do any of it, and the files were split so no two workers could
+ever touch the same one.
+
 ## Running total
 
 | Phase | Workers | Tool calls | Tokens |
@@ -55,6 +79,7 @@ not.
 | 2 Map and measure | 0 | 41 | 118,000 |
 | 3 Delete | 0 | 78 | 205,000 |
 | 4 Reshape (5 sessions, DONE, Deck-checked) | 0 | 320 | 900,000 |
+| 5 Explain (2 sessions, file work DONE) | 12 | 1,684 | 4,090,000 |
 
 Phases 2 and 3 together cost 323,000 — about a fifth of the docs diet, and neither spawned a single
 worker. A script did the measuring and the deleting; the one session read only the summaries and

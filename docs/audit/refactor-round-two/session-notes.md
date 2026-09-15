@@ -5,6 +5,148 @@ pick up without rereading anything but this file.
 
 ---
 
+## 2026-09-15, phase 5 session 2: the headers now talk to someone who has never seen the code
+
+**Phase 5 is finished except for one decision, which is yours** — see the Deck question below.
+
+**157 more files rewritten, and again not one line of the program changed.** Proved the same way
+as last time: strip the comments out of the before and after of every file and compare what is
+left. All 157 identical. The only code that changed anywhere this session is one of our own
+scripts, and that is named in the proof rather than waved through.
+
+**The job this time was different from last time.** Session 1 filled in what was missing. These
+files were not missing anything — every label was filled in, just filled in for somebody who
+already knew the system. The real example that started it:
+
+> Purpose: Map frontend settings snapshot input into the backend BonsaiSettings RPC payload shape.
+
+Accurate. Useless to anybody else. It now opens: *"The Settings tab holds every setting under a
+screen-side name. The back end that writes them to disk knows the same settings under different
+names. This file is the translation between the two."*
+
+**Files whose header still leans on terms of art: 170 down to 26.** Every one of the 26 was
+checked and left on purpose. Some are the product's own vocabulary — the code says "capabilities",
+the screen says permissions, and the header explains that once. Some are the real name of a thing
+in the code. Some are not words at all: one is the game title *Baldur's Gate*, another is a command
+a person literally types. A word list cannot tell those apart, which is the point below.
+
+### The new rule: check every claim before writing it into a header
+
+**This is the thing to carry forward.** A header that says something false with confidence is
+worse than one that says nothing, because the next person believes it.
+
+I wrote the two worked examples the seven workers copied, and **both contained a confident
+falsehood on the first pass** — I claimed a missing setting would fail silently when the type check
+catches it immediately, and I said old settings files are granted four permissions when it is
+three. Both were assumptions carried from the area's reputation, and both were caught only by going
+and reading the code. That went into the brief as a rule, and it paid for itself:
+
+- A back-end file said it was used for downloading AI models. It is not used for that at all.
+- Another said it filters the download screen. It has nothing to do with the download screen — it
+  runs at question time.
+- One said an old settings file gets every permission. It gets three of five.
+- One said its two magic phrases were a developer thing. They are a documented feature for people.
+- One promised to stay in step with a file that does not exist anywhere in the project.
+- One described a row of four buttons that was removed some time ago.
+- Two pointed at documents that had since moved.
+
+**Every one of those had been sitting there being believed.** None would have been found by a test.
+
+### Two of our own tools needed work, and one number was wrong before we got here
+
+**The map of the code would have become unreadable, and the fix was not to write less.** That page
+pastes every file's description onto one screen. Three long headers took it from 91 KB to 94.5 KB;
+the other 157 would have made it something nobody opens. Entries are now trimmed to their opening
+sentences with a mark showing there is more in the file. Headers stay whatever length they need —
+that is your ruling from last session and it was not going to be quietly walked back to save a page.
+The script says so in its own text, so the next person who finds the map thin raises the limit
+rather than cutting a header.
+
+**A third file turned out to be rewritten on every commit**, like the version file last session, so
+a header typed into it vanishes. Its description now lives in the thing that writes it. All three
+such files are listed in one place now.
+
+**The copy-paste number had been failing the checks and it was not this phase's doing.** Worth
+reading carefully, because it looks bad at a glance: the recorded figure was 871 and the tool
+reports 891. I measured a clean copy of the project at the final commit of phase 4 and at every
+commit since — **891 every time, before any of phase 5 existed.** So it has been 891 for a while and
+nobody recorded it; the likeliest cause is phase 4 moving code between files. It is written down
+now as 891 with a note saying in capitals that it is twenty lines *worse*, not progress, and that
+the goal of 350 is what to judge it against. Also written down, because it is the obvious next
+question: **comments do not count towards it.** 257 files gained explanations across the whole of
+phase 5 and that number did not move by one line.
+
+**A real hole in the comments-only proof, now written down.** Comments are stripped from both
+sides before comparing — so deleting a comment that *does* something (one that switches off a
+warning, one that silences a type complaint) looks exactly like deleting an ordinary sentence.
+Rather than assume it was fine, I counted: there are no type-suppressing comments in the app at all,
+nothing on the back end reads its own descriptions, and the only seven comments that do anything
+were all still there, unchanged, at the end. The hole is real but nothing fell through it.
+
+### The house style now lives somewhere it outlives the plan
+
+`docs/code-clarity.md` is what a newcomer finds. It was written in early August and had drifted: it
+did not mention two things the checks now fail the build on, did not carry the plain-words rule at
+all, and pointed at two files that no longer exist. Rewritten around who you are writing for, with
+the before-and-after pair, the no-length-limit ruling, the check-your-claims rule, what is actually
+enforced, and the three generated files. When the plan is archived, that document is what is left.
+
+### Five things for you, none of them fixed
+
+Three were owed from last session and were blocked because another session was mid-edit in the
+roadmap. That work has landed, so all five are in the roadmap now:
+
+- Mistyping one model name in a several-model download loses it without saying so.
+- The settings list is written out by hand in several places in one file, so a new setting can
+  quietly stop working in one situation. It has already happened once, to four settings.
+- Two things wanting the shared voice server at once would cut the first one off.
+- **New:** attaching a screenshot puts a line of technical text at the bottom of the answer —
+  `[AttachDebug: requested=1, prepared=1, errors=0]` — every time, whether or not anything went
+  wrong. Nothing on screen removes it and no setting turns it off. Checked properly: the safety net
+  that strips the model's own internal tags does not know about this one.
+- **New:** a model too big for the Deck reads as a safe choice whenever the download list does not
+  say how big it is. Only a short hand-written list and a 15 GB size catch the rest.
+
+Two smaller things a worker noticed that I have left as code comments rather than roadmap entries:
+the two-second wait before giving up on Steam's parental answer is a placeholder nobody ever
+measured on a real Deck, and it is flagged as such in the code.
+
+### The Deck question, which is now the only thing standing between you and phase 6
+
+I have recommended skipping it twice and this is the third time, with better evidence than before:
+
+- No app file had a line of code changed across the whole of phase 5 — 257 files, all proved.
+- Nothing on the back end reads its own descriptions, so rewriting them cannot change behaviour.
+- There are no type-suppressing comments in the app, and the seven comments that do anything are
+  all still there and unchanged.
+- The full check passes.
+
+There is no route I can find by which this phase reaches a running plugin. The Deck evening that is
+genuinely owed is the knowledge-base one. **Say the word and I will queue a short check anyway** —
+it is cheap, and it is your call, not mine.
+
+### What is left
+
+Phase 5's file work is done. Phase 6 is the handoff: the README and the neutral guide in plain
+words, the lessons that live only in one tool's memory moved into the repo, a postmortem with the
+real cost per phase from the ledger, and the old plan archived.
+
+**Twelve copies of the repo from these two sessions are merged and idle**, and there are eighteen
+older ones behind them. The notes from phase 0 say clearing those needs your say-so, so
+they are all still sitting there.
+
+### For whoever briefs workers next
+
+The three lessons from last session held. One to add:
+
+- **Tell the worker what is allowed to stay.** Handing over a word list without saying "keeping a
+  word because it is genuinely the clearest one is a fine answer" invites seven workers to reach
+  for a thesaurus. Saying it plainly got back exactly the opposite: every worker reported the words
+  it kept and why, and each reason was good. A tool that finds work is not a target to be driven to
+  zero, and a worker will treat it as one unless told otherwise.
+
+---
+
 ## 2026-09-14, phase 5 session 1: every file and every long function now explains itself
 
 **Nothing a person using the plugin would notice has changed, and that is proved rather than

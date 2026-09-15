@@ -21,6 +21,35 @@ stopped being readable as a list. **Fixed** items are not here; they go to
 
 Each heading below matches a roadmap item's title, and the roadmap item links here.
 
+## The panel stops half way down and the Ask button is out of reach
+
+Long version of the roadmap entry. Moved here 2026-09-15; the roadmap keeps the symptom, what clears it and why the
+entry is still open.
+
+**The mechanism, found by reading after three deliberate attempts failed to reproduce it (2026-09-05).** The table that
+hands the highlight between the panel's parts lives outside the panel and is keyed by fixed names, not by which copy of
+the panel is on screen; it is only emptied when the plugin's code loads fresh. A stale entry therefore survives a panel
+reopen, and the handler that asks it to move the highlight gets back something that still looks alive, reports the press
+as handled, and moves nothing. That matches every symptom on record, including why only a loader restart clears it.
+
+**The signature to chase.** At the moment of the trap Steam's ring and the page's own focus were on different elements
+every time — the answer bubble versus a highlighted word, the question box versus the Ask button.
+
+**A fix for that mechanism landed 2026-09-05** — a departing part of the panel can no longer unregister the one on
+screen. Nothing proved it against the fault, because the fault never reproduced on demand. Three deliberate attempts
+that day all failed to bring it back: leaving with B and reopening from the Decky list; a button-then-cancel around the
+question box; and switching through all six tabs and back six times before walking the panel top to bottom. Every walk
+reached the Ask button. How a person gets into the state is still not pinned down — it followed a game launch and
+several panel reopens.
+
+**Evidence, in order.** `round34-BUG-down-cannot-reach-ask-bar.json` (trapped, 10 presses),
+`round34-BUG-down-walk-strategy-mode-control.json` (trapped, other Ask mode),
+`round34-BUG-empty-chat-input-trap.json` (trapped, empty chat), then
+`round34-BUG-down-walk-after-loader-restart.json` and `round34-BUG-input-to-ask-final-check.json` (both clean after the
+restart). All under `docs/test-evidence/`. Also `docs/test-evidence/round35-trap-*.json` and
+[plan 35](planning/35-bugfix-session.md) § 7.
+
+
 ## Ordinary phrases attach game cards
 
   - **Implemented 2026-08-23:** `VECTOR_RECALL_FLOOR` raised `py_modules/backend/services/knowledge_base_service.py:148` from 0.50 to 0.515, against a fresh local repro (real `nomic-embed-text` via a local Ollama, real seed cards for the six phrases and the seven `V2-PARA-*` strategy rows in `kb_eval_v2.json` — script not committed). The two ranges overlap (noise up to 0.5308, a genuine paraphrase hit as low as 0.4302), so no single floor separates them cleanly; 0.515 was chosen to sit just above "one sentence"'s noise score (0.5034) and just below the lowest genuine score this change must not break (Mind Flayer / `V2-PARA-S04`, 0.5169).
@@ -626,6 +655,26 @@ a person describes a crash to how the crash tips are written; that is a fact abo
 code. Held, not shipped. The branch `lane/kb-symptom-search` is kept. The follow-up work — rewriting the tips to use
 the words people actually type — is its own roadmap entry now. Full write-up: D81 in
 [audit/maintainer-decisions-locked.md](audit/maintainer-decisions-locked.md).
+
+
+**Re-measured 2026-09-07 with the tips rewritten and the routing widened, and it stays held.** The held branch does
+reach further: with nothing running, all 24 of the fresh plainly-worded problem sentences get into the search, against
+8 without it, and *"thank you very much"* still attaches nothing. **But what comes back is wrong.** *"game wont even
+open"* and *"screen goes black when i open it"* both attach a tip about the on-screen keyboard; *"game keeps quiting to
+the home screen"* attaches one about waking from sleep; *"buttons not working right half the time"* attaches one about a
+PlayStation pad over Bluetooth; *"cant find my pc on the network"* attaches one about hotel Wi-Fi. **That is the same
+objection that held it in the first place** — a wrong tip is worse than none.
+
+**And the cause is now clear, which is the useful part.** The branch's meaning search is written to run *only when
+nothing else finds anything*, and that almost never happens: a plain word search across 156 tips nearly always finds
+something by shared words, so it wins first with a poor match and the meaning search never gets a turn. Every one of
+those five came back by word search, not by meaning. **What is missing is not a wider gate — it is a way to say "none
+of these tips fit."** Until there is one, opening the gate makes things worse.
+
+**One more wrong tip, found on the device 2026-09-07 (R4):** on the routing already shipped, *"when I plug it into the
+television the menus show up in the wrong spot on the screen and are hard to read"* comes back with a tip about Big
+Picture Mode versus Desktop Mode, which does not answer it. Evidence
+`docs/test-evidence/plan47-R4-problems-reach-tips.json`.
 
 
 ## Unrelated questions still get game cards stapled on (2026-09-02 wording)

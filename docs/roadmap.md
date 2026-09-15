@@ -1,17 +1,21 @@
 # bonsAI Roadmap
 
-> **Clean-up task — trim this file.** ★★ · Sonnet 5 at high effort.
+> **Clean-up task — trim this file. Done 2026-09-15.** The other four big documents each carry their own trim
+> task at the top; the roadmap entry that tracks all five is under Features.
 >
-> Reading this costs roughly **19,500 tokens**, and the house rules say it is read before any work is marked
+> Reading this now costs roughly **19,000 tokens**, and the house rules say it is read before any work is marked
 > done, so that cost lands on every piece of work. Together with the testing rows, trimming both saves about
 > **31,000 tokens per landing**.
 >
-> **In progress — 100 KB down to 86 KB so far.** 2026-09-13: the finished list moved to the archive. 2026-09-14:
-> the parked entries moved to their own file, the old decisions under *Calls waiting on you* dropped to a pointer,
-> the nine longest entries reworded, and six finished items moved to Done and archived — the last of
-> them the chip animation, judged good by eye on the day. What is left needs asking
-> first, because it changes what stays visible: the six paragraphs of measurements that open the knowledge-base
-> section, where each one corrects the one above it, and the thirty-odd entries still over the five-line rule.
+> **100 KB down to 83 KB.** 2026-09-13: the finished list moved to the archive. 2026-09-14: the parked entries moved
+> to their own file, the old decisions under *Calls waiting on you* dropped to a pointer, the longest entries reworded,
+> and six finished items moved to Done and archived. 2026-09-15: a seventh finished item split so the part that still
+> fails stays visible, the knowledge-base opening stopped quoting numbers it then retracts, and the three longest
+> entries sent their reference detail to the details file.
+>
+> **What is left is not worth taking.** Thirty-four entries still run past five lines, but most by only a line or
+> two, and the ones that run long are long because the work is. Grinding those down would cost more in understanding
+> than it saves in tokens. The bigger wins are now in the other four files, each with its own trim task at the top.
 
 Open bugs, work fixed but not yet confirmed on the Deck, planned features, parked work, and what shipped for v0.5.0. Five
 lists plus one section for the knowledge base, each sorted from one star to six.
@@ -165,21 +169,14 @@ starts work outside this.
   `docs/test-evidence/plan48-deck-evening-2026-09-12.json` **[no evidence — re-run, batch QA-EVIDENCE-GAP-01]**, `screenshots/DeckCapture_20260912_183855_game.png`.
 - ★★★ `[focus]` **The panel can get into a state where pressing Down stops half way and the Ask button is out of reach** —
   **OPEN, found 2026-09-05.** Down walked as far as the answer and stopped dead: ten presses, no movement, Left and Right
-  dead too, only Up escaping. The answer's own buttons, the preset chips, the question box and the **Ask button** were all on
-  screen below and none could be reached. It happened on a chat with history and again on a brand new empty chat, and in both
-  Ask modes, so the mode is not the cause. **Only a Decky loader restart clears it**, not a panel reopen — so this is stale
-  navigation state, not a permanently trapping control. At the moment of the trap Steam's ring and the page's own focus were
-  on different elements every time, which is the signature to chase.
-  **The mechanism was found by reading, after three deliberate attempts failed to reproduce it.** The table that hands the
-  highlight between the panel's parts lives outside the panel and is keyed by fixed names, not by which copy of the panel is
-  on screen; only a fresh code load empties it. A stale entry therefore survives a panel reopen, and the handler that asks it
-  to move the highlight gets back something that still looks alive, reports the press as handled, and moves nothing. That
-  matches every symptom on record, including why only a restart clears it.
-  **A fix landed 2026-09-05** — a departing part of the panel can no longer unregister the one on screen — **but the entry
-  stays here, not in Verify**, because the fault never reproduced on demand, so nothing proved the fix against it. It closes
-  only when the panel is driven hard over time and the state does not come back. The unrevealed-spoiler entry above is most
-  likely the same fault and closes with it. Evidence `docs/test-evidence/round34-BUG-*.json` (five runs: three trapped, two
-  clean after the restart), `docs/test-evidence/round35-trap-*.json`, [plan 35](planning/35-bugfix-session.md) § 7.
+  dead too, only Up escaping. The Ask button, the preset chips and the question box were all on screen below and none
+  could be reached. It happened on a chat with history and on a brand new empty one, in both Ask modes, so the mode is
+  not the cause. **Only a Decky loader restart clears it**, not a panel reopen — so this is stale navigation state, not a
+  permanently trapping control. **A fix landed 2026-09-05, but the entry stays here rather than in Verify**, because the
+  fault never reproduced on demand, so nothing proved the fix against it. It closes only when the panel is driven hard
+  over time and the state does not come back. The unrevealed-spoiler entry above is most likely the same fault and closes
+  with it. The mechanism, the signature to chase and every run:
+  [detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
 
 ---
 
@@ -190,16 +187,14 @@ starts work outside this.
 `[layout]` entry serves it. Items rated ★★★★★ or above carry a placeholder link to [bonsAI Issues](https://github.com/qd313/bonsAI/issues) in the archive;
 replace it with a specific issue when one exists.
 
-- ★ `[ask]` **Run the answer checker quietly and count what it catches** — **OPEN, filed 2026-09-13 (D102).** The plugin has
-  a piece of back-end code meant to spot a reply that looks made up. It works, it has a test, and it has never once run — the
-  field it reads is fed by a value nobody supplies. Before deciding whether to finish it or delete it, switch its three rules
-  on so they **only write to the log**: no note on screen, no second AI model, nothing a person would notice. Leave it through
-  normal use for a couple of weeks, then count. Baseline to beat, measured across all 412 saved device runs: the "named a
-  store number for a game that was never attached" rule would have fired **0 times**; the "claimed certainty" rule needs one
-  exact phrase that appears **nowhere** in anything this project has recorded; and the third — asked for a power-tuning
-  suggestion and did not give one — is **already spotted and logged today**, so all it would add is telling the person. Not in
-  scope: the on-screen notice, and the second-model pass (an extra model call per answer on a handheld).
-  [Detail](audit/refactor-round-two/phase2-decisions.md).
+- ★ `[ask]` **Run the answer checker quietly and count what it catches** — **OPEN, filed 2026-09-13 (D102).** The plugin
+  has a piece of back-end code meant to spot a reply that looks made up. It works, it has a test, and it has never once
+  run — the field it reads is fed by a value nobody supplies. Before deciding whether to finish it or delete it, switch
+  its three rules on so they **only write to the log**: no note on screen, no second AI model, nothing a person would
+  notice. Leave it through normal use for a couple of weeks, then count. **Measured against all 412 saved device runs,
+  two of its three rules would never have fired once**, and the third already gets logged today — so expect it to catch
+  almost nothing. Not in scope: the on-screen notice, and the second-model pass (an extra model call per answer on a
+  handheld). [The three rules, counted](audit/refactor-round-two/phase2-decisions.md).
 - ★ `[ask]` **Intent packs later review** — **OPEN.** Decide whether the quiet intent-pack search aliases are deleted, left quiet, or
   revived under Developer. Not in scope: re-shipping Proton journal inject without a redesign. **New evidence 2026-09-06 (D79):**
   the bundled Deck basics list ships switched on and is the *only* reason a whole sentence ever matches a setting — its 88 words
@@ -289,12 +284,12 @@ replace it with a specific issue when one exists.
   give-up values per Ask mode. It was the sixth candidate in round 36 and was dropped on purpose, said in advance rather than
   discovered late: it is the largest of that set — the two existing values already run through sixteen files each and going per mode
   triples them — and the least of them for a person, since it changes when a warning appears rather than what the plugin can do.
-- ★★★ `[platform]` **Trim the five documents that are still big** — **OPEN, filed 2026-09-13 during the
-  clean-up.** Nothing a person using the plugin would notice; this is about what every piece of work costs before it starts.
-  Five files carry a trim task at the top of each, with its own star rating, time and model. Together they are about 815 KB.
-  The two that matter most are this file and the testing rows, because the house rules say both are read before anything is
-  marked done — trimming just those two saves about 31,000 tokens on every landing. The biggest single win is the locked
-  decisions file at 89,000 tokens a read. Do them one at a time; each is its own small job.
+- ★★★ `[platform]` **Trim the five documents that are still big** — **PARTIAL: one of five done 2026-09-15.**
+  Nothing a person using the plugin would notice; this is about what every piece of work costs before it starts. Five files
+  carry a trim task at the top of each, with its own star rating, time and model. **This file is done (2026-09-14 and 15) — 100 KB to 83 KB,
+  about 3,700 tokens off every landing.** Four left. The next one that matters is the testing rows, because the house rules
+  say those are read before anything is marked done too. The biggest single win is the locked decisions file at 89,000
+  tokens a read. Do them one at a time; each is its own small job.
 
 - ★★★ `[platform]` **The eleven long files, left long on purpose** — **OPEN, filed 2026-09-15 at the end of the clean-up's
   reshape phase.** Nothing a person using the plugin would notice. The clean-up decided up front not to split the plugin's main
@@ -538,33 +533,25 @@ Same rules as the lists above: five lines an entry, stars ascending in each list
 then to [Done](#done-for-v050) in the same commit. The one difference is that the knowledge base keeps its bugs, its owed
 checks and its plans together here instead of spread over three lists.
 
-**Where things stand (2026-09-07, after wave two).** **293 notes over 25 games, plus 156 Deck tips.** Wave two added
-27 notes and 32 tips. **Of the 72 questions a player might plainly ask about the twelve games added this month, 64 now
-have a note** — the other eight were written on purpose to have none, so every question that was meant to have an
-answer has one.
+**Where things stand (2026-09-07, after wave three).** **293 notes over 25 games, plus 156 Deck tips.** Wave two
+added 27 notes and 32 tips. **Of the 72 questions a player might plainly ask about the twelve games added this
+month, 64 now have a note** — the other eight were written on purpose to have none, so every question that was
+meant to have an answer has one.
 
-On the questions nobody tuned against, the search that ships puts the right note in the top three **84 times in a
-hundred, up from 80**. Every one of the 21 notes written this evening is found in the top three for its own question,
-and 12 come first. Across all 72 questions about the new games, **58 find their note in the top three where 38 did**.
-Two rows out of 413 got worse against 24 better.
+**Finding the right note.** On questions nobody tuned against, the search puts the right note in the top three
+**84 times in a hundred, up from 80**. Every one of the 21 notes written in wave two is found in the top three for
+its own question, and 12 come first. Across all 72 questions about the new games, **58 find their note in the top
+three where 38 did**. Two rows out of 413 got worse against 24 better.
 
-The Deck's own model: answers clean on all three runs went from **55.7 to 62.3 in a hundred**, and the spoiler line
-appeared when it was due **88.9 times in a hundred against 77.8**. It keeps the note's facts about seven times in ten
-— **but that score is measured wrong** and is really higher; see the bug about the answer test below.
+**The answer the Deck's own model writes**, over 61 questions with the corrected checks: it keeps the note's facts
+**76.6 times in a hundred**, never contradicts its note **94.4**, attaches a note whenever one is due **100**,
+shows the branch menu when due **98.6**, and comes out clean on all three runs **60.7**.
 
-**Every number above was re-measured on the library that actually ships.** The search test had been reading a copy from
-31 August with 161 notes in it, and had been for weeks. That is filed as its own bug and it makes the earlier search
-figures in this section, and in wave one's reports, void.
-
-**The answer numbers in the paragraph above are marked here, not deleted, because they turn out not to be
-comparable either.** The check behind them had two faults of its own, both fixed in wave three: it could
-mark a right answer wrong for using different words than expected, and it could miss a reply that flatly
-said the opposite of its own note. Measured again on the same 61 questions with the fixed checks, on the
-library that ships: facts kept **76.6%**, never contradicts its note **94.4%**, a note attached whenever
-one was due **100%**, branch menu shown when due **98.6%**, clean on all three runs **60.7%**. **Every
-answer number this file has ever quoted before this wave, including the 55.7-to-62.3 and 88.9-against-77.8
-figures just above, was taken with those two faults still in the check and should not be read as a real
-comparison against these new ones.**
+**Do not compare those against any older figure in this project.** Two faults were found and fixed in wave three:
+the check could mark a right answer wrong for using different words than it expected, and it could miss a reply
+that flatly said the opposite of its own note. The search test had also been reading a copy of the library from
+31 August for weeks. Every answer and search number quoted before wave three carries one of those faults. The full
+before and after is in [wave three's report](planning/48-kb-wave-three-session.md).
 
 **Getting to the troubleshooting tips is where the wave fell short.** The tips themselves are much better — crash went
 from 2 to 9, sound 1 to 8, picture 1 to 8, performance 2 to 10, controller 6 to 10, and the top crash tip no longer
@@ -573,8 +560,6 @@ seen the rules, **6 reached the tips before and 8 after**. The rules are still p
 wording someone imagined and miss the neighbour.
 
 **Pick up here, in order.**
-
-*(Rewritten 2026-09-07 after wave two landed — [47](planning/47-kb-wave-two-session.md).)*
 
 **Wave three ran on 2026-09-07** ([48](planning/48-kb-wave-three-session.md)), after wave two's own Deck
 evening ran the same evening, once the Deck was free.
@@ -585,25 +570,21 @@ evening ran the same evening, once the Deck was free.
 2. **Fix the speed check.** It reports a healthy device on a fast reading it takes without ever writing an
    answer, while a real question comes in well over the written budget. That is worse than no check, and
    a fix is in progress.
-3. **A call is waiting for you, on follow-ups.** The search half now works on the device — it looks up the
-   right thing you were just asking about — but the answer can still be about something else. The options
-   for finishing it are being written up.
+3. **Decide how to finish follow-ups.** The search half works on the device — it looks up the right thing
+   you were just asking about — but the answer can still be about something else, and one run in three still
+   names the wrong boss (its own bug below). The options for finishing it still need writing up.
 4. **Work out why the note search has been getting slower since August.** About thirty per cent slower and
    still climbing, with no explanation yet.
 5. **Then wave four** — writing more notes.
 
-**Wave two's own evening ran 2026-09-07** (rows **W2-R1** to **W2-R7** in
-[plan 47](planning/47-kb-wave-two-session.md) § 8; full results and bug write-ups above and below). **The last owed
-row, the stray-computer-text half of W2-R6, ran late the same evening and failed** — the fix does not cover the
-case the bug came from, and the cause is written up under Bugs. **W2-R8**, the five August rows, is optional and
-was not run. Fallout: New Vegas still is not installed.
+**Wave two's own evening ran 2026-09-07** and wave three ran the same day; the results and the bug write-ups are
+in [wave two's report](planning/47-kb-wave-two-session.md) § 8 and [wave three's](planning/48-kb-wave-three-session.md).
+The five optional August rows were not run, and New Vegas still is not installed.
 
-**The library point release went out 2026-09-07 as version 2026.09.08**, carrying the corrected Black Mesa water
-note and nothing else. 293 notes, 156 tips, 25 games, unchanged. Published to both download hosts with the
-maintainer's approval, installed on the Deck from the plugin's own *Update knowledge base* button, and checked by
-asking about the flooded rooms: the reply now says the current is constant, says not to try to time it, and points
-at the wall switch that cuts the power. The old advice to wait for a gap is gone. Evidence
-`docs/test-evidence/plan48-R5-blackmesa-corrected-note.json`.
+**A library point release went out 2026-09-07** carrying the corrected Black Mesa water note and nothing else — 293
+notes, 156 tips, 25 games, unchanged. Installed on the Deck and checked: asked about the flooded rooms, the reply now
+says the current is constant, says not to try to time it, and points at the wall switch that cuts the power. The old
+advice to wait for a gap is gone. Evidence `docs/test-evidence/plan48-R5-blackmesa-corrected-note.json`.
 
 ### Calls waiting on you
 
@@ -617,22 +598,16 @@ ones from this month are D81 to D88.
   you very much"* still attaches a card. Raising the keyword floor costs real matches, and the model mostly ignores an
   irrelevant card. [Detail](roadmap-details.md#ordinary-phrases-attach-game-cards).
 - ★★ `[KB]` **A troubleshooting question that only describes the symptom reaches no tips** — **ACCEPTED, held back
-  2026-09-06, re-measured 2026-09-07 and still held (D52, D81).** The fix was built and measured twice. It does reach further:
-  with nothing running, all 24 fresh plainly-worded problem sentences get into the search, against 8 without it, and *"thank you
-  very much"* still attaches nothing. **But what comes back is wrong.** *"game wont even open"* and *"screen goes black when i
-  open it"* both attach a tip about the on-screen keyboard; *"game keeps quiting to the home screen"* attaches one about waking
-  from sleep; *"buttons not working right half the time"* attaches one about a PlayStation pad over Bluetooth; *"cant find my pc
-  on the network"* attaches one about hotel Wi-Fi. A wrong tip is worse than none, which is the same objection that held it the
-  first time.
-  **The cause is now clear, and it is the useful part.** The branch's meaning search is written to run *only when nothing else
-  finds anything*, and that almost never happens: a plain word search across 156 tips nearly always finds something by shared
-  words, so it wins first with a poor match and the meaning search never gets a turn. Every one of those five came back by word
-  search. **What is missing is not a wider gate — it is a way to say "none of these tips fit."** Until there is one, opening the
-  gate makes things worse. The real fix is rewriting the tips, filed as its own entry below.
-  **One more wrong tip, found on the device 2026-09-07 (R4):** on the routing already shipped, *"when I plug it into the
-  television the menus show up in the wrong spot on the screen and are hard to read"* comes back with a tip about Big Picture
-  Mode versus Desktop Mode, which does not answer it. Evidence `docs/test-evidence/plan47-R4-problems-reach-tips.json`.
-  [Detail](roadmap-details.md#a-troubleshooting-question-that-only-describes-the-symptom-reaches-no-tips).
+  2026-09-06, re-measured 2026-09-07 and still held (D52, D81).** The fix does reach further: with nothing running, all 24
+  fresh plainly-worded problem sentences get into the search, against 8 without it, and *"thank you very much"* still
+  attaches nothing. **But what comes back is wrong** — six measured examples, each attaching a tip about something else
+  entirely, such as the on-screen keyboard for *"game wont even open"*. A wrong tip is worse than none, which is the same
+  objection that held it the first time. **The cause is now clear, and it is the useful part.** The meaning search only
+  runs when nothing else finds anything, and that almost never happens: a plain word search across 156 tips nearly always
+  finds something by shared words, so it wins first with a poor match and the meaning search never gets a turn. **What is
+  missing is not a wider gate — it is a way to say "none of these tips fit."** Until there is one, opening the gate makes
+  things worse. The real fix is rewriting the tips, filed as its own entry below. All six wrong tips:
+  [detail](roadmap-details.md#a-troubleshooting-question-that-only-describes-the-symptom-reaches-no-tips).
 - ★★ `[KB]` **The panel keeps naming a game after you have closed it** — **FIXED 2026-09-07, VERIFY on the Deck
   (W2-R6).** After exiting a game the line under the question box still named it, so a question that does not name its
   own game could pick up the wrong game's notes. **The cause written into this entry yesterday was wrong**, which is
@@ -664,6 +639,12 @@ ones from this month are D81 to D88.
   Ravenholm. Both times it named the same game, so it is not picking a random wrong one. Both chats carried about
   twenty earlier turns, which is the strongest remaining suspect and the reason a fresh-chat run is now owed.
   Evidence `docs/test-evidence/plan48-deck-evening-2026-09-12.json` **[no evidence — re-run, batch QA-EVIDENCE-GAP-01]**, `docs/test-evidence/plan48-R5-blackmesa-corrected-note.json`.
+- ★★★ `[KB]` **A follow-up still names the wrong boss one run in three** — **OPEN, left behind when the follow-up
+  fix closed 2026-09-12.** Ask about a boss, then *"what about its second phase"*, and you now get the right boss two
+  times in three, where it used to be wrong every time. The remaining third still names the rival boss. DOOM Eternal
+  is wrong every time, and no amount of work on the search can close that one. This is the half the shipped fix did
+  not cover, kept visible on purpose rather than archived with it. [Numbers](planning/48-kb-wave-three-session.md).
+  (D98)
 - ★★ `[KB]` **A pinned test batch is not badged** — **OPEN, seen again 2026-09-12.** Chips pinned for testing are
   supposed to carry an amber Test badge, so it is obvious the carousel is showing a fixed set rather than what the
   plugin would have picked. Three chips pinned this evening and no badge appeared anywhere on screen. Everything
@@ -714,12 +695,6 @@ ones from this month are D81 to D88.
   warning line. Whether that reads as advice-first is your judgement, which is what this row is for. The Hades and
   Black Mesa sentences **are pinned on the Deck now** — press A on each and read them. The Hades one needs Hades
   running. Row **KB-ANSWER-03**; evidence `docs/test-evidence/plan48-deck-evening-2026-09-12.json` **[no evidence — re-run, batch QA-EVIDENCE-GAP-01]**.
-- ★★★ `[KB]` **A follow-up now answers about the boss you meant, two times in three** — **SHIPPED and checked on
-  the Deck 2026-09-12.** Ask about a boss, then *"what about its second phase"*. It used to answer about a different
-  boss **every time**. Three pairs on the device: right, right, then the old failure. That matches what was measured
-  off the device for this game exactly, so the number holds on the real thing. **Not a fixed feature** — one run in
-  three still names the rival boss — and DOOM Eternal fails every time, which no search work can close. Replies on
-  these turns are about half as long. Row **W3-R4**. (D98) [Numbers](planning/48-kb-wave-three-session.md)
 - ★★★ `[KB]` **DRG Survivor glossary terms** — **VERIFY, one touch tap owed.** Shipped 2026-08-28 and walked on device:
   underline, popup, D-pad reachability, B, one-press Up. Rows **DRG-GLOSSARY-01…04**.
   [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).

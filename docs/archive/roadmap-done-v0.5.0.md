@@ -7,7 +7,11 @@ _Moved out of [roadmap.md](../roadmap.md) on 2026-09-13 during the phase 1 docum
 Everything shipped since v0.4.9 (2026-07-08), one line each, newest first. Detail: [CHANGELOG.md](../../CHANGELOG.md),
 [archive/roadmap-completed.md](roadmap-completed.md), [archive/roadmap-bugs-fixed.md](roadmap-bugs-fixed.md).
 
-**Checked on the Deck and closed 2026-09-14:**
+**Checked on the Deck, closed in the roadmap 2026-09-14 and 15:**
+- ★★★ `[KB]` **A follow-up looks up the thing you were just asking about** — ask about a boss, then "what about
+  its second phase", and you get the right boss two times in three. It used to be wrong every time. Checked on the
+  Deck 2026-09-12; replies on these turns are about half as long. The third that still fails stayed in the roadmap
+  as its own bug. [Detail](roadmap-bugs-fixed.md#the-follow-up-that-looks-up-what-you-were-just-asking-about-2026-09-12).
 - ★★★ `[chips]` **Decode preset chip animation** — the preset chips arrive as scrambled green blocks and lock into
   the real prompt left to right behind a blinking caret. Measured on the Deck 2026-08-28 at a flat 60 frames a second
   with every chip decoding, and the ring stays clean while they churn. Whether it reads well was the one thing left, and

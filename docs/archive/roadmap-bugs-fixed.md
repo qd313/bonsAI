@@ -6,6 +6,18 @@ Strikeout titles match the original roadmap bug list. Items awaiting on-Deck QA 
 
 ---
 
+### The follow-up that looks up what you were just asking about (2026-09-12)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-15. It shipped and was checked; the third of runs that
+still names the wrong boss stayed behind in the roadmap as its own bug. Copied line for line, nothing reworded._
+
+- ★★★ `[KB]` **A follow-up now answers about the boss you meant, two times in three** — **SHIPPED and checked on
+  the Deck 2026-09-12.** Ask about a boss, then *"what about its second phase"*. It used to answer about a different
+  boss **every time**. Three pairs on the device: right, right, then the old failure. That matches what was measured
+  off the device for this game exactly, so the number holds on the real thing. **Not a fixed feature** — one run in
+  three still names the rival boss — and DOOM Eternal fails every time, which no search work can close. Replies on
+  these turns are about half as long. Row **W3-R4**. (D98) [Numbers](planning/48-kb-wave-three-session.md)
+
 ### Two knowledge-base fixes, checked on the Deck (2026-09-07 and 2026-09-12)
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-14 — copied line for line, nothing reworded._

@@ -146,6 +146,11 @@
       "role": "Load/save/merge settings.json"
     },
     {
+      "path": "src/components/CharacterPropGlyph.tsx",
+      "lines": 525,
+      "role": ""
+    },
+    {
       "path": "src/utils/buildAnswerBubbleElement.test.tsx",
       "lines": 524,
       "role": ""
@@ -193,11 +198,6 @@
     {
       "path": "src/utils/buildReplyActionsElement.tsx",
       "lines": 462,
-      "role": ""
-    },
-    {
-      "path": "src/features/preset-carousel/sessionRagComposer.test.ts",
-      "lines": 457,
       "role": ""
     }
   ]

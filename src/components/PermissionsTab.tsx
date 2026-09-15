@@ -1,9 +1,35 @@
 /**
  * Title: Permissions tab
- * Purpose: Capability toggles (filesystem, game context, Steam Web API, microphone).
- * Used for: index.tsx Permissions tab — gates privileged RPC paths on the Python side.
- * Solves: User-consent surface for sensitive operations before Ask or settings use them.
- * Does not: Enforce capabilities server-side — main.py capabilities service is authoritative.
+ *
+ * Purpose: The Permissions tab — the screen where you turn on the things the
+ * AI is allowed to touch: saving files to your desktop, looking up your
+ * Steam ban status, using the microphone, and reading game screenshots and
+ * Proton logs to help with troubleshooting. Every one of these starts off
+ * for a new install. Turning a toggle on here is what lets the Python side
+ * of the plugin do that thing at all when Ask needs it; leaving it off
+ * blocks the request outright, not just hides a button. The screen also
+ * shows a Back button when you arrived here by tapping a "why is this off"
+ * link from somewhere else, and a banner that greys out every switch when
+ * Steam's parental controls are locked.
+ *
+ * Used for: The Permissions tab in index.tsx.
+ *
+ * Solves: One screen where a person agrees to each sensitive capability
+ * before Ask or settings can use it, instead of the plugin doing these
+ * things silently.
+ *
+ * Does not: Actually enforce these toggles. What happens here only decides
+ * what gets saved; the Python side's capabilities service is what checks a
+ * toggle before it lets a request through.
+ *
+ * Gotchas: A permission row can also be the destination of a jump from a
+ * different tab (a "why is voice off" link, say). Landing there has to move
+ * Steam's own idea of what is focused, not just call a DOM `.focus()` on the
+ * toggle — a plain focus() left the ring on the button the user jumped from
+ * while the browser's own idea of focus moved to the toggle, so the next
+ * D-pad press went nowhere useful. See the comment on PermissionToggleHost
+ * below for how that jump is wired and what it looked like broken on the
+ * Deck.
  */
 import React, { useEffect, useRef } from "react";
 import { Focusable, PanelSection, PanelSectionRow, ToggleField, Button } from "@decky/ui";
@@ -100,8 +126,24 @@ function PermissionToggleHost({
 }
 
 /**
- * Central place for capability toggles. Uses Decky `ToggleField` for Steam QAM-style switches.
- * Defaults for new installs are off; legacy settings without this block are grandfathered on the backend until saved here.
+ * The whole Permissions screen: the optional Back button, the parental-controls
+ * banner, and one row per toggle.
+ *
+ * In: the capabilities object read from settings, a setter to update it, and
+ * — only when the user arrived here through a "go check permissions" link
+ * from another tab — which tab to return to and a callback that jumps back
+ * there. Also whether Steam's parental controls are currently locked.
+ * Out: the tab's rows: one combined "read game & screenshot context" toggle
+ * that actually sets two capabilities at once, plus one row per entry in
+ * ROWS.
+ *
+ * What can go wrong: none of these toggles do anything by themselves —
+ * turning one on only changes what gets saved. Enforcement happens later,
+ * wherever a specific request checks whether its capability is on. New
+ * installs start with everything off; a settings file saved before these
+ * toggles existed is treated by the backend as fully allowed until this tab
+ * is opened and saved once, after which only what is actually set here
+ * applies.
  */
 export const PermissionsTab: React.FC<Props> = ({
   capabilities,

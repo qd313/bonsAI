@@ -1,9 +1,50 @@
 /**
  * Title: Deck focus slider
- * Purpose: Reusable single- or dual-thumb slider with one Deck-focusable thumb for D-pad editing.
- * Used for: Settings and Ollama sliders (UI scale, keep-alive, reply verbosity, connection timeout).
- * Solves: Shared track math, thumb visuals, and horizontal Deck button stepping across settings rows.
- * Does not: Join the vertical focus graph alone — parent sections must wire a Focusable bridge per decky-ui-focus policy.
+ *
+ * Purpose: The slider control drawn on several rows in Settings and the
+ * Ollama tab — UI scale, how long to keep the model warm, how long to wait
+ * for a reply before giving up, how detailed replies should be. It draws a
+ * horizontal track with a fill bar and, sometimes, tick marks, plus one
+ * round thumb: drag it with a finger or mouse, or grab it with the D-pad and
+ * step it left and right. This file is the one place that owns the track
+ * math, the thumb's look, and how D-pad stepping works, so every slider row
+ * in the plugin drags and steps the same way.
+ *
+ * Used for: Settings and Ollama sliders (UI scale, keep-alive, reply
+ * verbosity, connection timeout) — any row that needs a drag-or-step number
+ * picker.
+ *
+ * Solves: Shared track math, thumb visuals, and horizontal D-pad stepping,
+ * so a new slider row does not have to reinvent any of it.
+ *
+ * Does not: Join the vertical focus graph on its own. Whatever screen uses
+ * this slider still has to wire a Focusable bridge above it — see the
+ * repo's decky-ui-focus policy — or D-pad Up/Down here will not lead
+ * anywhere.
+ *
+ * How it works:
+ * 1. `DeckFocusSlider()` draws the track shell, the rail, the fill bar, and
+ *    any tick marks, then renders one `DeckFocusSliderThumb()` positioned by
+ *    `thumbPct`.
+ * 2. A pointer drag on the track itself (`onTrackPointerDown`/`onTrackPointerMove`)
+ *    calls `onSelectClientX`, so tapping or dragging anywhere on the track
+ *    jumps the thumb straight there.
+ * 3. The thumb's D-pad handlers are built once by `buildDeckThumbNavHandlers()`,
+ *    which turns `onStepLeft`/`onStepRight` into Left/Right presses that
+ *    always claim the move, and passes `onMoveUp`/`onMoveDown` straight
+ *    through so a parent section can bridge the slider into its own
+ *    vertical flow.
+ * 4. `DeckFocusSliderThumb()` wraps the visible dot in its own Focusable,
+ *    tracks whether it is focused, dragging, or being edited, and forwards
+ *    pointer drags on the dot itself back through `onPointerSelect` — the
+ *    same callback the track uses, so dragging the dot and dragging the
+ *    track do the same thing.
+ * 5. An optional "edit" mode: when `editToggle` is set, pressing A on the
+ *    thumb flips a local editing flag, which the caller can use to show
+ *    something like a numeric readout while it is true.
+ * 6. Visual state (focused / dragging / editing) is handed to the caller's
+ *    own `getThumbDotStyle`, so every slider can look slightly different
+ *    while sharing this file's math and behavior.
  */
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import { Focusable } from "@decky/ui";

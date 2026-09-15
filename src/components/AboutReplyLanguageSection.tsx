@@ -1,9 +1,23 @@
 /**
- * Title: Reply language section
- * Purpose: About-tab dropdown for overriding the AI reply language independent of Steam UI locale.
- * Used for: AboutTab below support links; pairs with backend reply-language prompt injection.
- * Solves: Exposes follow-system vs fixed-language choices with live effective-language helper text.
- * Does not: Translate plugin chrome — see i18n keys and steamLanguages re-exports.
+ * Title: Reply language picker
+ *
+ * Purpose: The dropdown on the About tab where you choose what language the AI
+ * writes its replies in. This is separate from Steam's own display language —
+ * you can run Steam in English and still have the AI answer in Spanish, or
+ * leave it on "follow system" so it always matches whatever language Steam is
+ * set to. Underneath the dropdown, a line of hint text spells out which
+ * language is actually in effect right now, so "follow system" is never a
+ * guess.
+ *
+ * Used for: Drawn by the About tab, below the support links.
+ *
+ * Solves: One place that owns both the dropdown's choices and the "here's
+ * what that means right now" hint text, so the two can never end up saying
+ * different things.
+ *
+ * Does not: Change the language of the plugin's own menus and buttons — that
+ * follows Steam's own display language and is handled elsewhere (the i18n
+ * keys and steamLanguages).
  */
 import React, { useMemo } from "react";
 import { Dropdown, Focusable, PanelSection, PanelSectionRow } from "@decky/ui";
@@ -28,6 +42,20 @@ type Props = {
   dropdownHostRef?: React.Ref<HTMLDivElement>;
 };
 
+/**
+ * The dropdown itself, plus the two lines of hint text drawn above it.
+ *
+ * In: the language currently chosen, a callback to run when the user picks a
+ * different one, the language currently in effect (used to translate the
+ * hint text itself), and the label Steam reports for its own display
+ * language (shown only when "follow system" is the current choice).
+ * Out: the About tab section — its title, the hint lines, and the dropdown.
+ *
+ * What can go wrong: nothing talks to the backend from here. The list of
+ * choices is fixed and built once by buildReplyLanguageDropdownOptions(), and
+ * picking one only calls onReplyLanguageChange — saving the choice happens
+ * wherever that callback leads, not in this file.
+ */
 export const AboutReplyLanguageSection: React.FC<Props> = ({
   replyLanguage,
   onReplyLanguageChange,

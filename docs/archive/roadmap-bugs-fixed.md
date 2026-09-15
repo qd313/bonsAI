@@ -6,6 +6,40 @@ Strikeout titles match the original roadmap bug list. Items awaiting on-Deck QA 
 
 ---
 
+### Two knowledge-base fixes, checked on the Deck (2026-09-07 and 2026-09-12)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-14 — copied line for line, nothing reworded._
+
+- ★★★ `[KB]` **The "not in my notes" line never appears** — **CLOSED 2026-09-07 (D88). A second line was added, and
+  you chose its wording.** The line was built to tell someone an answer came from
+  the model's own memory rather than their notes, but it only shows when the library covers the game and nothing in
+  it matched — and the note search always finds something to attach, so the line never shows. Ten questions about
+  games the library covers, including "how do i tame a horse" in Black Mesa and a nonsense question in Hades, all
+  attached a note anyway. On the device, asking about a boss that does not exist in Hades got a confident answer
+  about weapons, and no line. Evidence `docs/test-evidence/plan47-R5-not-in-notes.json`, `docs/test-evidence/plan47-probe-notinnotes.json`.
+  **Wave three put a floor under both searches**, which made the line fire more often but could not reach the four
+  questions that caused it — catching those by raising the floor would have thrown away twenty or more answers that
+  are right today.
+  **So a second line was built instead, on your call: keep the note, and say the match was thin.** It appears when
+  a note reached the model but no word in the question pointed at it — only the meaning search found it — and even
+  then it scored below 0.65. On the whole question set that warns on 11 of 188 right answers, about one in
+  seventeen, against 15 catches, and it catches three of the four questions that started this. **Twelve of those
+  fifteen are on questions the test set records no right answer for**, which is the whole point and is invisible to
+  any count of right and wrong: *"how to save the game"* was being answered with a note about girlfriends,
+  *"how to have a baby"* with one about raising a skill. Nothing is taken away from anyone — the note still reaches
+  the model, the answer still comes, and a sentence is added. The one miss is *"where do i buy a house"* in
+  Portal 2, where the keyword search really did rank a card, so it is not the meaning-only case. Measured by
+  `scripts/measure_kb_thin_match.py`, evidence `docs/test-evidence/plan48-thin-match.json`. **The wording is settled**, chosen by you on 2026-09-07: *"No close match in my notes, this answer leans on the model's own knowledge."*
+  The comma rather than a dash is deliberate, and is noted in the code so nobody tidies it away.
+
+- ★★★ `[KB]` **Every question no longer waits a second for the notes to be searched** — **FIXED and checked on the
+  Deck 2026-09-12.** The Deck was set to hold one model at a time, so writing an answer pushed the note-searching
+  part out and the next question spent about seven tenths of a second loading it back. A new switch, **Start the AI
+  with the Deck** on the Ollama tab, adds a startup entry that keeps both in memory: **24 thousandths of a second
+  instead of 732**, measured on the device. It also fixes something nobody had noticed — nothing started the AI at
+  all, so a restart left the plugin with no AI until someone started it by hand. Off by default. Row
+  **KB-AUTOSTART-01**.
+
 ### Retry on a restored reply sent nothing
 
 - ~~★ `[reply]` **Retry on a reply that came back after a restart did nothing**~~ — **found and fixed 2026-09-06, device-confirmed the same day.** Found while checking an unrelated report about the character voice: after a plugin restart the panel redraws the last conversation from the saved chat, question expanded, Retry badge live beside it. Pressing it produced no request at all — a *Nothing to retry* toast and nothing else.

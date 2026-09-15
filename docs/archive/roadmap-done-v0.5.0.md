@@ -7,6 +7,32 @@ _Moved out of [roadmap.md](../roadmap.md) on 2026-09-13 during the phase 1 docum
 Everything shipped since v0.4.9 (2026-07-08), one line each, newest first. Detail: [CHANGELOG.md](../../CHANGELOG.md),
 [archive/roadmap-completed.md](roadmap-completed.md), [archive/roadmap-bugs-fixed.md](roadmap-bugs-fixed.md).
 
+**Checked on the Deck and closed 2026-09-14:**
+- ★★★ `[chips]` **Decode preset chip animation** — the preset chips arrive as scrambled green blocks and lock into
+  the real prompt left to right behind a blinking caret. Measured on the Deck 2026-08-28 at a flat 60 frames a second
+  with every chip decoding, and the ring stays clean while they churn. Whether it reads well was the one thing left, and
+  the maintainer judged the look good on 2026-09-14. [Detail](roadmap-completed.md#the-decode-animation-on-the-preset-chips-judged-by-eye-2026-09-14).
+- ★★★ `[layout]` **Copy sits in the answer's corner, not in a button row** — the row of buttons under a reply is
+  gone. Copy is a faded icon at the answer's bottom right, Retry a faded arrow on the newest question. Walking the
+  reply down and back up visits every control once, and Copy put all 1,834 characters on the clipboard. Verified on
+  the Deck 2026-09-06. [Detail](roadmap-completed.md#the-reply-block-rework-checked-on-the-deck-2026-09-06).
+- ★★ `[layout]` **Show details becomes a divider, not a chip** — a thin line across the reply with **Show details ↓**
+  in the middle, sharing both edges with the answer bubble above it. One press opens, one press closes. Verified on the
+  Deck 2026-09-06. [Detail](roadmap-completed.md#the-reply-block-rework-checked-on-the-deck-2026-09-06).
+- ★★ `[focus]` **Fewer D-pad stops on a finished reply** — an answer of about 1,800 characters used to take six
+  presses to walk; it takes three now, and a short one is a single stop. Nothing is skipped. Verified on the Deck
+  2026-09-06. [Detail](roadmap-completed.md#the-reply-block-rework-checked-on-the-deck-2026-09-06).
+- ★★★ `[KB]` **You are told when an answer leans on the model's memory rather than your notes** — the first line
+  never appeared, because the note search always found something to attach. A second line was built instead, on the
+  maintainer's call: it says the match was thin, and it catches three of the four questions that started this. Closed
+  2026-09-07. [Detail](roadmap-bugs-fixed.md#two-knowledge-base-fixes-checked-on-the-deck-2026-09-07-and-2026-09-12).
+- ★★★ `[KB]` **Every question no longer waits a second for the notes to be searched** — the Deck held one model at a
+  time, so writing an answer pushed the note-searching part out and the next question spent about seven tenths of a
+  second loading it back. A new **Start the AI with the Deck** switch keeps both in memory: 24 thousandths of a second
+  instead of 732. It also fixed something nobody had noticed — nothing started the AI at all, so a restart left the
+  plugin with no AI until someone started it by hand. Off by default. Checked on the Deck 2026-09-12.
+  [Detail](roadmap-bugs-fixed.md#two-knowledge-base-fixes-checked-on-the-deck-2026-09-07-and-2026-09-12).
+
 **Landed 2026-09-13 (nothing a person using the plugin can see):**
 - ★★ `[platform]` **Refactor round two, phase 3: the deleting** — landed 2026-09-13, checked on the
   maintainer's Deck the same evening. About 600 lines of source removed across 71 files: the names the screen code offered

@@ -1,25 +1,26 @@
 # bonsAI Roadmap
 
-> **Clean-up task — trim this file.** ★★ · about 30 minutes with one worker · Sonnet 5 at high effort.
+> **Clean-up task — trim this file.** ★★ · Sonnet 5 at high effort.
 >
-> Reading this costs roughly **23,000 tokens**, and the house rules say it is read before any work is
-> marked done — so that cost lands on every single piece of work. Getting it to 40 KB would save
-> roughly **13,000 tokens** every time. Together with the testing rows, trimming both saves about
+> Reading this costs roughly **19,500 tokens**, and the house rules say it is read before any work is marked
+> done, so that cost lands on every piece of work. Together with the testing rows, trimming both saves about
 > **31,000 tokens per landing**.
 >
-> The finished list already moved to the archive on 2026-09-13. Going further means archiving the
-> older knowledge-base entries and the checks that are closed but still sitting here — which is a
-> decision about what stays visible, not a straight move, so it needs asking rather than assuming.
->
-> Not started. Filed 2026-09-13 during the clean-up.
+> **In progress — 100 KB down to 86 KB so far.** 2026-09-13: the finished list moved to the archive. 2026-09-14:
+> the parked entries moved to their own file, the old decisions under *Calls waiting on you* dropped to a pointer,
+> the nine longest entries reworded, and six finished items moved to Done and archived — the last of
+> them the chip animation, judged good by eye on the day. What is left needs asking
+> first, because it changes what stays visible: the six paragraphs of measurements that open the knowledge-base
+> section, where each one corrects the one above it, and the thirty-odd entries still over the five-line rule.
 
-Open bugs, work fixed but not yet confirmed on the Deck, planned features, and what shipped for v0.5.0. Four lists plus one
-section for the knowledge base, each sorted from one star to six.
+Open bugs, work fixed but not yet confirmed on the Deck, planned features, parked work, and what shipped for v0.5.0. Five
+lists plus one section for the knowledge base, each sorted from one star to six.
 
 - **Knowledge base and RAG, all in one place:** [its own section](#knowledge-base-and-rag) — bugs, owed checks, next steps
   and the calls waiting on the maintainer, with [a status report](planning/37-rag-status-report.md) kept in step with it.
 - **Long notes for open items:** [roadmap-details.md](roadmap-details.md)
 - **Shipped features, full detail:** [archive/roadmap-completed.md](archive/roadmap-completed.md) · **Fixed bugs, full detail:** [archive/roadmap-bugs-fixed.md](archive/roadmap-bugs-fixed.md)
+- **Parked work, full detail:** [archive/roadmap-shelved.md](archive/roadmap-shelved.md) — one line each in [Shelved](#shelved).
 - **What shipped for v0.5.0, one line each:** moved out to its own file to keep this one small — [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md).
 - **Maintainer decisions (D1 onward):** [audit/maintainer-decisions-locked.md](audit/maintainer-decisions-locked.md)
 - **QA rows and device evidence:** [testing.md](testing.md), [testing-manual.md](testing-manual.md) · **Release notes:** [CHANGELOG.md](../CHANGELOG.md)
@@ -46,19 +47,20 @@ section for the knowledge base, each sorted from one star to six.
 6. **Tags:** `[ask]` Ask bar and input · `[chat]` chat slots · `[chips]` preset chips · `[focus]` D-pad and focus ring ·
    `[KB]` knowledge base · `[layout]` Main tab layout and vertical space · `[ollama]` models and routing · `[perms]` permissions ·
    `[platform]` build, deploy, tooling, upstream · `[QA]` testing · `[reply]` the answer itself · `[tabs]` the tab bar ·
-   `[ui]` everything else on screen · `[voice]` voice · `[shelved]` parked on purpose; the entry says why and what unshelves it.
+   `[ui]` everything else on screen · `[voice]` voice.
+7. **Parked work lives in [Shelved](#shelved)**, not in Bugs or Features: one line saying what unshelves it, with the
+   full entry in [archive/roadmap-shelved.md](archive/roadmap-shelved.md). Move the whole block back when it restarts.
 
 **Every Main-tab UI change also owes the free-play sweep** (standing row **QA-FREE-PLAY-01** in
 [testing-manual.md](testing-manual.md)): walk the pane like a user and require every focused stop to also be visible.
 
-**Maintainer note (2026-09-05): pick the model before you pick up an item.** Rough guide, details and evidence in
-[planning/33-model-routing.md](planning/33-model-routing.md), policy in [AGENTS.md § 3](../AGENTS.md):
-★–★★ Sonnet 5 high · ★★★–★★★★ Opus xhigh plans, Sonnet lanes implement when the cause is known · ★★★★★+ Fable max
-plans only, Sonnet lanes build, Opus xhigh lands · `[focus]` `[layout]` `[ui]` measure on the Deck first, then Opus xhigh,
-never a lane without the measurement · docs and bookkeeping Sonnet or Opus medium (the bookkeeper helper; a guard
-refuses Fable's own edits to the roadmap, testing docs, changelog and test files) · escalate a tier only after two device
-failures with a measurement · Haiku 4.5 on trial for read-only lookups, log each use in plan 33 § 4a. A prompt-time
-hook gives a gentle heads-up when a session starts work outside this.
+**Maintainer note (2026-09-05): pick the model before you pick up an item.** ★–★★ Sonnet 5 high · ★★★–★★★★
+Opus xhigh plans, Sonnet lanes implement when the cause is known · ★★★★★+ Fable max plans only, Sonnet lanes build,
+Opus xhigh lands · `[focus]` `[layout]` `[ui]` measure on the Deck first, then Opus xhigh, never a lane without the
+measurement · docs and bookkeeping Sonnet or Opus medium. The full policy — the bookkeeper guard, the escalation rule,
+the Haiku trial — is in [AGENTS.md § 3](../AGENTS.md), the evidence in
+[planning/33-model-routing.md](planning/33-model-routing.md). A prompt-time hook gives a gentle heads-up when a session
+starts work outside this.
 
 ---
 
@@ -118,21 +120,12 @@ hook gives a gentle heads-up when a session starts work outside this.
   who walks past something and presses Up to go back does not return to it; they land somewhere they never visited. Related to the
   two-star entry about Up skipping sections, but sharper: the two directions disagree about what the reply's stops are.
   Evidence `docs/test-evidence/round35-spoiler-block-down-and-up.json`.
-> - ★ `[platform]` `[shelved]` **In-IDE preview never gets past its loading screen** *— **OPEN, shelved 2026-09-11
->   (D93): not a gate for anything.** On the maintainer's machine the preview stops on its loading screen and never
->   moves past it; its command channel takes commands but never answers, and it produced no screenshot. Sorted with
->   the other tooling in plan 51's docs phase. It unshelves when the preview loads the plugin on the maintainer's
->   machine. [Plan](planning/51-refactor-round-two.md).*
-- ★★ `[focus]` **After the panel remounts the ring parks on a zero-size container** — **OPEN, found 2026-09-04.** On a fresh mount
-  the ring lands on "Ask bonsAI" (Main) or "Where AI runs" (Ollama), both 0x0 rects that the visibility oracle calls OFFSCREEN, so
-  the panel opens with nothing highlighted until the first press.
-  **Measured again 2026-09-05** on builds 3 and 4 (four fresh mounts, two of them after a Decky loader restart): the reading was
-  not a 0x0 stop but **no ring at all** — the rig's own report each time was *the ring is unowned, so the first D-pad press will
-  place it rather than move it*, and that press then landed on the tab bar, visible. Same thing to look at (nothing is
-  highlighted when the panel opens), so the fix is to place the ring on mount rather than to move it off a bad element.
-  **Measured again 2026-09-05 on a fresh open, and it is worse than written:** nothing owned the highlight, and the first Down put
-  it on **Decky's own back arrow at the top of the panel, outside bonsAI entirely**. So opening the plugin costs two presses before
-  a person is anywhere useful, and the first one moves them away from the chat. Evidence `docs/test-evidence/round35-trap-attempt-1-after-b-reopen.json`.
+- ★★ `[focus]` **Opening the panel leaves nothing highlighted** — **OPEN, found 2026-09-04, measured again twice on
+  2026-09-05.** Nothing owns the ring on a fresh open, so the first D-pad press has to place it rather than move it — and on
+  one measured open that press landed on **Decky's back arrow, above bonsAI entirely**. A person spends two presses before
+  they are anywhere useful, and the first takes them away from the chat. Filed first as the ring parking on a zero-size
+  element ("Ask bonsAI", "Where AI runs"); the later measurements found no ring at all, so the fix is to place it on mount
+  rather than move it off a bad one. Evidence `docs/test-evidence/round35-trap-attempt-1-after-b-reopen.json`.
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a
   blanket rule was tried and reverted in favour of Steam's native outline.
 - ★★ `[focus]` **Up skips the answer sections and the chat slot row** — **OPEN, found 2026-09-04.** Down walks a reply chunk by
@@ -143,20 +136,17 @@ hook gives a gentle heads-up when a session starts work outside this.
   to the bubble (measured, CHAT-REPLY-ENTRY-01). What is still open is the archived-header half — Up from the first archived
   header runs to the tab bar without the chat slot row ever taking the ring.
 - ★★★ `[reply]` **An answer can end with a block of raw computer text where a power tip should be** — **REOPENED
-  2026-09-07 on the Deck (W2-R6). The fix does not cover the case the bug was reported from.** In Speed mode with
-  Deep Rock Galactic: Survivor running and the character voice on, a reply ended with the literal line
-  `{"tdp_watts": 5, "gpu_clock_mhz": 1200}` sitting in the words a person reads. The plugin reads that line to work
-  out a power suggestion and never took it out of the text on screen. A cleanup step was added on 2026-09-07 that
-  removes the line but deliberately leaves alone anything inside a code box, so that a code example someone actually
-  asked for survives. **The cause of the miss: the plugin's own instruction tells the model to put the power block
-  inside a code box.** So the one block the plugin asks for is the exact case the cleanup can never remove. Measured
-  on the device twice in a row, both replies ending in a code box holding nothing but the power line —
-  `{"tdp_watts": 7, "gpu_clock_mhz": null}` and `{"tdp_watts": 13, "gpu_clock_mhz": null}`, read out of the page
-  rather than inferred. The seven tests that shipped with the fix all pass; every one of them tests the shape the
-  plugin does not ask for. **Two ways out:** stop asking for a code box and ask for a plain line, or teach the
-  cleanup to remove a code box whose entire contents are the power block and nothing else — the second is safer,
-  because a real code example is never exactly that one thing. Evidence `docs/test-evidence/plan47-R6-stray-computer-text.json`.
-  (D85)
+  2026-09-07 on the Deck (W2-R6): the fix does not cover the case the bug was reported from.** In Speed mode with Deep Rock
+  Galactic: Survivor running and the character voice on, a reply ended with the literal line
+  `{"tdp_watts": 5, "gpu_clock_mhz": 1200}` sitting in the words a person reads. The plugin reads that line to work out a
+  power suggestion and never took it out of the text on screen. A cleanup step added 2026-09-07 removes the line but leaves
+  anything inside a code box alone, so a code example someone asked for survives. **The miss: the plugin's own instruction
+  tells the model to put the power block inside a code box** — so the one block it asks for is the exact case the cleanup can
+  never remove. Measured on the device twice in a row, both replies ending in a code box holding nothing but the power line,
+  read out of the page rather than inferred. The seven tests that shipped with the fix all pass; every one tests the shape
+  the plugin does not ask for. **Two ways out:** ask for a plain line instead of a code box, or teach the cleanup to remove a
+  code box whose whole contents are the power block — the second is safer, because a real code example is never exactly
+  that. Evidence `docs/test-evidence/plan47-R6-stray-computer-text.json`. (D85)
 - ★★ `[reply]` **Token streaming reveals text in bursts while a game is running** — **ACCEPTED 2026-09-04 (D58 #4).** Measured 2026-08-28 with
   a game running: tokens arrive in bursts, and during a burst the overlay drops to 47 fps; between bursts it is a flat 60. Delivery
   is bursty, painting is not slow. The game's own frame rate is unmeasured. Accepted as a nice-to-have; reopen only if the game's own frame rate is measured
@@ -174,33 +164,22 @@ hook gives a gentle heads-up when a session starts work outside this.
   icon at the end of the last line, but that does not move the box's edge. Evidence
   `docs/test-evidence/plan48-deck-evening-2026-09-12.json` **[no evidence — re-run, batch QA-EVIDENCE-GAP-01]**, `screenshots/DeckCapture_20260912_183855_game.png`.
 - ★★★ `[focus]` **The panel can get into a state where pressing Down stops half way and the Ask button is out of reach** —
-  **OPEN, found 2026-09-05.** After leaving the panel with B and opening it again from the Decky list, Down walked as far as the
-  answer and then stopped dead: ten presses, no movement, Left and Right dead too, only Up escaping. The answer's own buttons, the
-  preset chips, the question box and the **Ask button** were all on screen below and none could be reached. It happened on a chat
-  with history and again on a brand new empty chat, where the ring stuck in the question box instead. Same in Speed and in
-  Strategy, with the mode written while the panel was closed, so the mode is not the cause.
-  **What clears it: restarting the Decky loader, not reopening the panel.** After a loader restart the identical walk on the
-  identical chat went all the way down — through the answer, its highlighted words, the settings block, Show details, the session
-  strip, a chip, the question box — and reached the Ask button on the next press. So this is a **stale navigation state that a
-  panel reopen does not clear**, not a permanently trapping control. At the moment of the trap Steam's ring and the page's own
-  focus were on different elements every time (the answer bubble versus a highlighted word; the question box versus the Ask
-  button), which is the signature to chase. How a person gets into the state is not yet pinned down — it followed a game launch
-  and several panel reopens. Evidence, in order: `docs/test-evidence/round34-BUG-down-cannot-reach-ask-bar.json` (trapped, 10 presses),
-  `docs/test-evidence/round34-BUG-down-walk-strategy-mode-control.json` (trapped, other mode), `docs/test-evidence/round34-BUG-empty-chat-input-trap.json`
-  (trapped, empty chat), `docs/test-evidence/round34-BUG-down-walk-after-loader-restart.json` and
-  `docs/test-evidence/round34-BUG-input-to-ask-final-check.json` (clean after the restart).
-  **2026-09-05, three deliberate attempts, not reproduced:** leaving with B and reopening from the Decky list; a button-then-cancel
-  around the question box; and switching through all six tabs and back six times before walking the panel top to bottom. Every walk
-  reached the Ask button. **A mechanism was found by reading instead.** The table that hands the highlight between the panel's parts
-  lives outside the panel and is keyed by fixed names, not by which copy of the panel is on screen; it is only emptied when the
-  plugin's code loads fresh. A stale entry therefore survives a panel reopen, and the handler that asks it to move the highlight
-  gets back something that still looks alive, reports the press as handled, and moves nothing. That matches every symptom on record,
-  including why only a loader restart clears it. Evidence `docs/test-evidence/round35-trap-*.json`,
-  [plan 35](planning/35-bugfix-session.md) § 7.
-  **A fix for that mechanism landed 2026-09-05** — a departing part of the panel can no longer unregister the one on
-  screen — but **the entry stays here, not in Verify**, because the fault never reproduced on demand, so nothing proved
-  the fix against it. It closes only when the panel is driven hard over time and the state does not come back. The
-  unrevealed-spoiler entry above is most likely the same fault and closes with it.
+  **OPEN, found 2026-09-05.** Down walked as far as the answer and stopped dead: ten presses, no movement, Left and Right
+  dead too, only Up escaping. The answer's own buttons, the preset chips, the question box and the **Ask button** were all on
+  screen below and none could be reached. It happened on a chat with history and again on a brand new empty chat, and in both
+  Ask modes, so the mode is not the cause. **Only a Decky loader restart clears it**, not a panel reopen — so this is stale
+  navigation state, not a permanently trapping control. At the moment of the trap Steam's ring and the page's own focus were
+  on different elements every time, which is the signature to chase.
+  **The mechanism was found by reading, after three deliberate attempts failed to reproduce it.** The table that hands the
+  highlight between the panel's parts lives outside the panel and is keyed by fixed names, not by which copy of the panel is
+  on screen; only a fresh code load empties it. A stale entry therefore survives a panel reopen, and the handler that asks it
+  to move the highlight gets back something that still looks alive, reports the press as handled, and moves nothing. That
+  matches every symptom on record, including why only a restart clears it.
+  **A fix landed 2026-09-05** — a departing part of the panel can no longer unregister the one on screen — **but the entry
+  stays here, not in Verify**, because the fault never reproduced on demand, so nothing proved the fix against it. It closes
+  only when the panel is driven hard over time and the state does not come back. The unrevealed-spoiler entry above is most
+  likely the same fault and closes with it. Evidence `docs/test-evidence/round34-BUG-*.json` (five runs: three trapped, two
+  clean after the restart), `docs/test-evidence/round35-trap-*.json`, [plan 35](planning/35-bugfix-session.md) § 7.
 
 ---
 
@@ -211,16 +190,16 @@ hook gives a gentle heads-up when a session starts work outside this.
 `[layout]` entry serves it. Items rated ★★★★★ or above carry a placeholder link to [bonsAI Issues](https://github.com/qd313/bonsAI/issues) in the archive;
 replace it with a specific issue when one exists.
 
-- ★ `[ask]` **Run the answer checker quietly and count what it catches** — **OPEN, filed 2026-09-13 (D102).** The plugin
-  already has a piece of back-end code meant to spot a reply that looks made up. It works, it has a test, and it has never
-  once run — the field it fills is fed by a value nobody supplies. Before deciding whether to finish it or delete it, switch
-  its three rules on so they *only write to the log*: no note on screen, no second AI model, nothing a person would notice.
-  Leave it through normal use for a couple of weeks, then count. Baseline to beat, measured across all 412 saved device runs:
-  the "named a store number for a game that was never attached" rule would have fired **0 times**, the "claimed certainty"
-  rule needs one exact phrase that appears **nowhere** in anything this project has recorded, and the third rule — the AI was
-  asked for a power-tuning suggestion and did not give one — is **already spotted and logged today**, so all it would add is
-  telling the person. Not in scope: appending the on-screen notice, and the second-model pass (an extra model call per answer
-  on a handheld). [Detail](audit/refactor-round-two/phase2-decisions.md).
+- ★ `[ask]` **Run the answer checker quietly and count what it catches** — **OPEN, filed 2026-09-13 (D102).** The plugin has
+  a piece of back-end code meant to spot a reply that looks made up. It works, it has a test, and it has never once run — the
+  field it reads is fed by a value nobody supplies. Before deciding whether to finish it or delete it, switch its three rules
+  on so they **only write to the log**: no note on screen, no second AI model, nothing a person would notice. Leave it through
+  normal use for a couple of weeks, then count. Baseline to beat, measured across all 412 saved device runs: the "named a
+  store number for a game that was never attached" rule would have fired **0 times**; the "claimed certainty" rule needs one
+  exact phrase that appears **nowhere** in anything this project has recorded; and the third — asked for a power-tuning
+  suggestion and did not give one — is **already spotted and logged today**, so all it would add is telling the person. Not in
+  scope: the on-screen notice, and the second-model pass (an extra model call per answer on a handheld).
+  [Detail](audit/refactor-round-two/phase2-decisions.md).
 - ★ `[ask]` **Intent packs later review** — **OPEN.** Decide whether the quiet intent-pack search aliases are deleted, left quiet, or
   revived under Developer. Not in scope: re-shipping Proton journal inject without a redesign. **New evidence 2026-09-06 (D79):**
   the bundled Deck basics list ships switched on and is the *only* reason a whole sentence ever matches a setting — its 88 words
@@ -248,21 +227,15 @@ replace it with a specific issue when one exists.
   answer test come first, in bake-off order. The plugin's licence list is behind: Gemma 4 has been Apache 2.0 since April and is
   still filed as open-weight; Granite and Liquid are unknown to it, so the default open-source-only tier would not route to them.
   One change to the list, the picker's catalogue and the Expert group. [Bake-off](planning/41-deck-model-survey.md).
-- ★★ `[reply]` **Headline first: every answer opens with one line that stands alone** — **OPEN, filed 2026-09-08.** The model is
-  asked to start every answer with one short sentence that carries the point and gives nothing away. The reply-ready popup, a
-  spoken answer and any headset card then always have a good first line to show, instead of whatever the answer happens to begin
-  with. Sits beside Terse mode without replacing it. No headset or PC test needed. **The maintainer called this the weakest of
-  the nine Frame features on 2026-09-11 and asked for a count before a build:** how many of ten first sentences already stand
-  alone on their own, and how many give something away. Build the change only if that count comes back poor. **The maintainer
-  locked count-first on 2026-09-12 (D97 call 4), and the count started the same day.** **The count ran 2026-09-12: 2 of 10
-  answers already opened with a sentence that stands alone, and 0 of 10 gave anything away. That is a poor score, so by the
-  locked rule this gets built.** Stars stay at two. Before writing a new prompt, one more thing to count: an answer-first
-  opening was already tried on purpose the same evening as the count's source answers, and that run may already be the
-  change, so it gets counted the same way first. This entry is no longer "count first"; it is "build, after counting that
-  earlier answer-first run". **Not yet (D99, 2026-09-12).** The maintainer read the count and said not yet. It waits for
-  its own go; when that comes, the first step is still to count the 2026-09-07 answer-first run the same way.
-  [Plan](planning/49-steam-frame-features.md) · [Second look
-  § 2](planning/52-frame-features-second-look.md#2-headline-first-the-weakest-one-and-what-to-do-instead) ·
+- ★★ `[reply]` **Headline first: every answer opens with one line that stands alone** — **OPEN, filed 2026-09-08. Not yet
+  (D99, 2026-09-12): it waits for its own go.** The model would be asked to start every answer with one short sentence that
+  carries the point and gives nothing away, so the reply-ready popup, a spoken answer and any headset card always have a good
+  first line to show. Sits beside Terse mode without replacing it. No headset or PC test needed.
+  **The count that decided it ran 2026-09-12:** 2 of 10 answers already opened with a sentence that stands alone, and 0 of 10
+  gave anything away. By the rule the maintainer locked (D97 call 4), that poor score means build it — then they read the
+  count and said not yet. **When the go comes, the first step is still to count the 2026-09-07 answer-first run the same
+  way**, because that run may already be the change. Stars stay at two. [Plan](planning/49-steam-frame-features.md) ·
+  [Second look § 2](planning/52-frame-features-second-look.md#2-headline-first-the-weakest-one-and-what-to-do-instead) ·
   [Bench findings § 4](planning/53-steamvr-bench-findings.md#4-the-headline-first-count-run-the-same-morning) ·
   [The count, sentence by sentence](planning/assets/53-headline-count-2026-09-12.md).
 - ★★ `[reply]` **The answer's first lines in the reply-ready toast** — **OPEN, planned 2026-09-05, calls locked (D63).** When an
@@ -275,13 +248,6 @@ replace it with a specific issue when one exists.
   comedian's own persona. A written sweep, one line per character: who owns the character, whose voice it is, and whether a voice for
   it could be made as a type rather than a copy. Text roleplay sits on the first layer today; any voice would sit on all of them. No
   code; a document the legal check reads. [Memo](planning/42-read-aloud-feasibility.md).
-> - ★★ `[ui]` `[shelved]` **Glance view: the answer alone, in big text** *— **OPEN, shelved 2026-09-12: too much UI change, and
->   we're not ready for it yet, in the maintainer's own words.** Opening the menu from the popup would have shown only the
->   answer, large, with the chips, the question box and the tab bar out of the way, so a person opens, reads and closes in a
->   couple of seconds; B would return to the full panel. The mockup and the press list are kept in
->   [plan 52 § 6](planning/52-frame-features-second-look.md#6-glance-view-the-brief-and-the-mockup) and the design handoff
->   folder, for when it comes back. [Plan](planning/49-steam-frame-features.md) ·
->   [Drawing](https://claude.ai/code/artifact/c48fb3e2-38ef-4c91-997c-c515353eec96).*
 - ★★ `[ui]` **Replace the bonsAI tab icon with the redesign's** — **OPEN, and no longer waiting on a drawing.** Flatter,
   more silhouette, because it renders at 14px. **Checked 2026-09-05: the redesign document never actually draws one**, and the
   maintainer has said they do not want to supply one. So whoever builds it proposes a shape and the maintainer approves it by
@@ -311,8 +277,6 @@ replace it with a specific issue when one exists.
   conversation up the screen; two letters can match 71 settings and throw the box off the top. It moves to a card above the box
   that holds the best eight and never moves anything. Up walks into it, Down walks out, B closes it and keeps your words.
   [Plan](planning/45-settings-shortcut-card.md) · [Mockups](https://claude.ai/code/artifact/1ab2a570-2ae5-45cd-b12b-332694f96fd5).
-- ★★★ `[chips]` **Decode preset chip animation** — **VERIFY, feel only.** Shipped 2026-08-28. Measured on device: a flat 60 fps with
-  all chips decoding. Whether it feels right is a person's call. Row **PRESET-STREAM-ANIM-01**.
 - ★★★ `[layout]` **Give the reclaimed height to the transcript** — **OPEN, next step under the vertical-space goal.** The collapsing
   tab bar freed 61px, but the transcript is still 412px: the room went into Main's overflow and the gap above the dock. What caps
   the transcript is a Main-tab layout question, worked out in [planning/30-collapsing-tab-bar.md](planning/30-collapsing-tab-bar.md) § 8.
@@ -332,19 +296,18 @@ replace it with a specific issue when one exists.
   marked done — trimming just those two saves about 31,000 tokens on every landing. The biggest single win is the locked
   decisions file at 89,000 tokens a read. Do them one at a time; each is its own small job.
 
-- ★★★ `[platform]` **The eleven long files, left long on purpose** — **OPEN, filed 2026-09-15 at the end of the
-  clean-up's reshape phase.** Nothing a person using the plugin would notice. The clean-up decided up front not to split
-  the plugin's main screen file or the big screen pieces this round, because each one is a day's careful work on code
-  that draws things, and a mistake there is visible. This entry is the promise that they were left on purpose rather
-  than missed, with today's sizes so nobody has to measure again. Screen side: the plugin's main file (1,709 lines),
-  the model download window (1,385), the where-the-AI-runs settings section (1,310), one style sheet (1,344), the
-  animated chips row (1,232), the chat transcript (1,221), the Ask bar (1,079), and a list of emoticons that is just a
-  list (1,023 — splitting that one would gain nothing). Back-end side, which the clean-up's plan did not name and which
-  is a judgement call worth a decision before anyone starts: the knowledge base service (2,092), the prompt builder
-  (1,571), voice transcription (1,294) and the AI service (1,270). **Two worked examples already exist** from this
-  phase: the question chips above the Ask box and the reply rating both came out of the Ask file as their own pieces,
-  each with a test written at the same time, and the order-of-hooks record is what made both safe. Do them one at a
-  time, each with its own Deck check. [Plan](planning/51-refactor-round-two.md).
+- ★★★ `[platform]` **The eleven long files, left long on purpose** — **OPEN, filed 2026-09-15 at the end of the clean-up's
+  reshape phase.** Nothing a person using the plugin would notice. The clean-up decided up front not to split the plugin's main
+  screen file or the big screen pieces this round: each is a day's careful work on code that draws things, and a mistake there
+  is visible. This entry is the promise that they were left on purpose rather than missed, with today's sizes so nobody has to
+  measure again. **Screen side:** the plugin's main file (1,709 lines), the model download window (1,385), one style sheet
+  (1,344), the where-the-AI-runs settings section (1,310), the animated chips row (1,232), the chat transcript (1,221), the Ask
+  bar (1,079), and a list of emoticons that is just a list (1,023 — splitting it would gain nothing). **Back-end side**, which
+  the clean-up's plan did not name and which is worth its own decision before anyone starts: the knowledge base service (2,092),
+  the prompt builder (1,571), voice transcription (1,294) and the AI service (1,270). **Two worked examples already exist** from
+  this phase — the question chips and the reply rating both came out of the Ask file as their own pieces, each with a test
+  written at the same time, and the order-of-hooks record is what made both safe. Do them one at a time, each with its own Deck
+  check. [Plan](planning/51-refactor-round-two.md).
 
 - ★★★ `[reply]` **Spy: a character who lies to you on purpose** — **OPEN, filed 2026-09-06 by the maintainer.** A new
   Team Fortress 2 character. Pyro's Heavy setting already gives bad advice because he is a stubborn arse; the Spy gives bad advice
@@ -358,15 +321,6 @@ replace it with a specific issue when one exists.
 - ★★★ `[ui]` **Adjustable text size in Settings** — **OPEN.** `uiScalePx()` already runs through the stylesheet; the work is exposing it,
   deciding what must not scale (icons, the 300px column), and paying the settings plumbing. [Detail](roadmap-details.md#adjustable-text-size-in-settings).
 - ★★★ `[ui]` **Search density** — **OPEN.** Tighter, more scannable results with highlighted match tokens.
-> - ★★★ `[voice]` `[shelved]` **Voices for the bundled characters** *— **OPEN, shelved 2026-09-08 (D74): possible, but a legal check first.** Each
->   bundled character would get a voice invented once on the maintainer's PC with OmniVoice, shipped as a five to ten second clip and
->   read on the device by a small copying model. Shelved because a voice is not covered by fair use, every character here is voiced by a
->   real actor, and "free" is not a defence under the newer AI-voice laws. Unshelving needs the character sweep, a legal check, and the
->   open licence call. [Memo](planning/42-read-aloud-feasibility.md).*
-> - ★★★ `[voice]` `[shelved]` **Trained voices for the bundled characters** *— **OPEN, shelved with the clip route 2026-09-08 (D74).** The fallback
->   if the copying model is too slow beside a game: a small trained voice file per character, about 60 MB, made once on the maintainer's
->   PC from OmniVoice speech and downloaded on demand; the fastest way to read. Same legal gate as the clip route, plus the plugin
->   hosting its own voice files for the first time. [Memo](planning/42-read-aloud-feasibility.md).*
 - ★★★ `[voice]` **Full-quality reading from a LAN PC** — **OPEN, deliberately not built 2026-09-08 (D74); reopened only if the
   local port fails its Deck test.** For a person whose Ollama already runs on a PC in the house, that PC could also run OmniVoice as
   a speech server and read every answer in the full character voice, five to forty times faster than real time on its graphics card.
@@ -409,11 +363,6 @@ replace it with a specific issue when one exists.
   being bought for now (D97 call 3); this waits for the Frame.** [Plan](planning/49-steam-frame-features.md).
 - ★★★★ `[ui]` **SteamOS Share path** — **OPEN.** Faster path from Share and capture flows into screenshot attach where APIs allow.
 - ★★★★ `[ui]` **SteamOS spin hint card** — **OPEN.** Detect immutable spins and deep-link to troubleshooting.
-> - ★★★★ `[voice]` `[shelved]` **A voice for a custom character** *— **OPEN, shelved with the bundled voices 2026-09-08 (D74).** Type a name, press
->   **Generate voice**, wait minutes once while the device invents a voice; from then on the small copying model reads that character in
->   it. Needs OmniVoice on the device as an optional download of about one gigabyte, with the warning "minutes on a Steam Deck, seconds
->   on a stronger machine"; no LAN server. Phase 0 is a half-day Deck test of the port. Waits on the same legal gate as the bundled
->   voices. [Memo](planning/42-read-aloud-feasibility.md).*
 - ★★★★★ `[ollama]` **On-Deck model benchmark** — **OPEN, descoped on 2026-09-06, one call open (D75).** Rank installed models by measured
   speed and completion; offer as try order with confirmation. Its own gate said: if timings do not hold still, descope to a
   one-shot readout. That readout is now its own three-star entry, [plan 43](planning/43-model-speed-readout.md), and its record
@@ -433,22 +382,19 @@ replace it with a specific issue when one exists.
   voice word perfect, 18 controls reachable with no dead ends, and a log with no errors in it.
   [Plan](planning/51-refactor-round-two.md), [notes](audit/refactor-round-two/session-notes.md).
 - ★★★★★ `[platform]` **Steam Controller copilot (Ibex gen-2)** — **OPEN.** AI copy tuned to gen-2 hardware.
-- ★★★★★ `[platform]` **The floating panel inside SteamVR** — **OPEN, filed 2026-09-08; the first step is a ★★ test to find out.**
-  bonsAI's panel floating over any VR game, drawn by a small program on the PC that runs SteamVR, so it serves every SteamVR
-  headset and the Frame comes along. Not a Decky plugin. The in-game answer surface that is blocked on the Deck is open here. The
-  test runs today on a PC with SteamVR and no headset at all: does a panel show over a game, how does pointing work, can the
-  answer be read at arm's length. **Locked rule (D97):** the panel goes only through SteamVR's own panel door and never touches
-  the game itself, in file, in memory or in input — anything else risks an anti-cheat ban for someone playing online with bonsAI
-  open. Best effort: each game's anti-cheat sets its own policy, and the README will say so once the panel ships. **Bench result,
-  2026-09-12:** a panel showing a sample bonsAI answer appeared inside the headset view over a running SteamVR scene, with no
-  plugin code at all — drawn entirely through SteamVR's own panel door. The in-headset menu is confirmed to be a web page, the
-  same way the Deck's menu is. Pointing at the panel could not be tested: the pretend headset used for the bench has no
-  controllers, so a real headset is needed for that part. SteamVR did accept the call to post a small notification card, but
-  whether the card actually drew on screen was not seen and needs another pass. [Plan](planning/49-steam-frame-features.md) ·
-  [PC setup](planning/50-steamvr-pc-setup.md) ·
+- ★★★★★ `[platform]` **The floating panel inside SteamVR** — **OPEN, filed 2026-09-08; the first step is a ★★ test to find
+  out.** bonsAI's panel floating over any VR game, drawn by a small program on the PC that runs SteamVR, so it serves every
+  SteamVR headset and the Frame comes along. Not a Decky plugin. The in-game answer surface that is blocked on the Deck is open
+  here. **Locked rule (D97):** the panel goes only through SteamVR's own panel door and never touches the game itself — in file,
+  in memory or in input — because anything else risks an anti-cheat ban for someone playing online with bonsAI open. Best
+  effort: each game's anti-cheat sets its own policy, and the README will say so once the panel ships.
+  **Bench result, 2026-09-12: the panel works.** A panel showing a sample bonsAI answer appeared inside the headset view over a
+  running SteamVR scene, with no plugin code at all, drawn entirely through SteamVR's own door. The in-headset menu is confirmed
+  to be a web page, the same way the Deck's menu is. **Two things still unknown:** pointing at the panel, because the pretend
+  headset has no controllers and a real one is needed; and whether the small notification card SteamVR accepted actually drew on
+  screen. [Plan](planning/49-steam-frame-features.md) · [PC setup](planning/50-steamvr-pc-setup.md) ·
   [The anti-cheat rule in full](planning/52-frame-features-second-look.md#4-the-floating-panel-and-anti-cheat) ·
-  [Bench findings](planning/53-steamvr-bench-findings.md) ·
-  [The picture](planning/assets/53-panel-in-headset-2026-09-12.jpg).
+  [Bench findings](planning/53-steamvr-bench-findings.md) · [The picture](planning/assets/53-panel-in-headset-2026-09-12.jpg).
 - ★★★★★ `[reply]` **Reasoning display** — **OPEN, planned 2026-09-05, calls locked (D70, D71).** The plugin asks a
   thinking model to think and throws the thinking away; the line under your question shows a stock phrase for the whole wait.
   Planned: three lines at the answer's size show the model's own newest sentences, fold to one line with the seconds when the
@@ -460,21 +406,17 @@ replace it with a specific issue when one exists.
   [Feasibility](planning/12-deep-mod-ai-hints-feasibility.md).
 - ★★★★★★ `[platform]` **Native QAM shortcut tile** — **OPEN, upstream research.** A separate left-rail entry beneath the Decky icon.
   [Feasibility](planning/11-native-qam-tile-feasibility.md).
-- ★★★★★★ `[platform]` **One decision for three items: the SteamVR panel, leaving Decky, and reopening llama.cpp** — **OPEN, filed
-  2026-09-08.** The floating panel needs bonsAI to run outside Decky, which is what the Native QAM shortcut tile research keeps
-  circling, and any model on the Frame itself runs through llama.cpp, not Ollama. Three entries, one question: does bonsAI grow a
-  second way to run. Decide it once. The panel half benefits from a PC with SteamVR now; the llama.cpp half is a Deck question.
-  **The gap underneath this: there is no network door into bonsAI's Python side today** — nothing on another machine can reach
-  it — so a panel on the PC would have a screen and no brain until this is decided. Three options and a recommendation to find
-  out how far the "run the same Python side on the PC too" option really is from true, before choosing, are in plan 52 § 5.
-  **Locked 2026-09-12 (D97 call 2): the PC bench checks how far that option is from true before the decision is made; llama.cpp
-  stays closed.** **The check passed 2026-09-12:** the plugin's Python side was started outside Decky on the maintainer's
-  Windows PC, using a fifty-line stand-in for Decky. Nine calls the frontend normally makes all came back with a working
-  answer, and it reached Ollama on that PC. The "run the same Python side on the PC too" choice is now a priced decision
-  instead of a guess. **This does not decide it — that call is still the maintainer's to make.**
-  **Not yet (D99, 2026-09-12).** The price is now known: what is missing is a small starter program, a way for a panel
-  to reach it on the same machine, and PC-shaped answers for which game is running, the speaker, and the screenshot
-  folder. Nothing is built until the maintainer says.
+- ★★★★★★ `[platform]` **One decision for three items: the SteamVR panel, leaving Decky, and reopening llama.cpp** —
+  **OPEN, filed 2026-09-08. Not yet (D99, 2026-09-12): nothing is built until the maintainer says.** The floating panel needs
+  bonsAI to run outside Decky, which is what the Native QAM shortcut tile research keeps circling, and any model on the Frame
+  itself runs through llama.cpp, not Ollama. Three entries, one question: **does bonsAI grow a second way to run.** Decide it
+  once. **The gap underneath it: there is no network door into bonsAI's Python side today**, so a panel on the PC would have a
+  screen and no brain.
+  **The price is now known, which is what D97 call 2 asked for.** The check ran 2026-09-12: the plugin's Python side started
+  outside Decky on the maintainer's Windows PC behind a fifty-line stand-in for Decky, nine calls the frontend normally makes
+  all came back with a working answer, and it reached Ollama on that PC. So "run the same Python side on the PC too" is a
+  priced decision rather than a guess. What is missing: a small starter program, a way for a panel to reach it on the same
+  machine, and PC-shaped answers for which game is running, the speaker, and the screenshot folder. llama.cpp stays closed.
   [Plan](planning/49-steam-frame-features.md) ·
   [Second look § 5](planning/52-frame-features-second-look.md#5-the-second-way-to-run-the-gap-plan-49-underplayed) ·
   [Bench findings § 3](planning/53-steamvr-bench-findings.md#3-the-plugins-python-side-on-this-pc-it-runs).
@@ -488,7 +430,6 @@ replace it with a specific issue when one exists.
 ---
 
 
-<a id="done-for-v050"></a>
 
 ## Verify
 
@@ -522,28 +463,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   being written (unit-tested, not reproducible by hand yet). Row **CLEAR-CACHE-01**. [Why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way).
 
 ### Features that need verification
-
-- ★★★ `[layout]` **Copy sits in the answer's corner, not in a button row** — **VERIFIED on the Deck 2026-09-06.** The row of
-  buttons under a reply is gone. **Copy** is a small faded icon tucked to the answer's bottom right — press Right from the last
-  part of the answer to reach it, Left to come back. **Retry** is a faded circular arrow on the newest question's bubble, on its
-  left — press Left from the question, Right to come back. **What the runs show:** walking the whole reply down and back up
-  again visits every control once, in order, with no loop and nothing hidden, and pressing Copy put all 1,834 characters of the
-  answer on the clipboard. Pressing the question still opens and closes it and does not start a Retry. An older question shows
-  no arrow. Two problems were found and fixed on the device before this closed — see the notes on the entry below and the
-  planning file. Runs: `reply-block-final-walk`, `copy-right-from-answer`, `press-question-not-retry`,
-  `question-bubble-two-stops`. Rows **COPY-REPLY-01**, **COPY-REPLY-02**, **RETRY-CORNER-01**, **CHAT-REPLY-ENTRY-01**.
-
-- ★★ `[layout]` **Show details becomes a divider, not a chip** — **VERIFIED on the Deck 2026-09-06.** Under a finished answer
-  there is a thin line across the reply with **Show details ↓** in the middle. **What the runs show:** the line is 267 pixels
-  wide starting at the same left edge as the answer bubble above it, so the two share both edges exactly. One press opens the
-  chips and turns the label into **Hide details ↑**; one more press closes it — the double-toggle worry did not happen. The
-  ring reaches it walking down and walking up, and it is fully on screen, not behind the input bar. Nothing overflows sideways.
-  Run: `reply-block-final-walk`. Row **SHOW-DETAILS-01**.
-
-- ★★ `[focus]` **Fewer D-pad stops on a finished reply** — **VERIFIED on the Deck 2026-09-06.** **What a person notices:** an
-  answer of about 1,800 characters used to be one stop per paragraph — six of them. It is three now, and each press either moves
-  the ring to a part of the answer already on screen or scrolls the panel; nothing is skipped. A short answer of 400 characters
-  is a single stop. Code blocks still stand alone. Runs: `reply-block-final-walk`. Rows **D-PAD-SCROLL-02**, **STREAM-09**.
 
 - ★★ `[chips]` **A glow when the chip row runs out of chips** — **VERIFY.** Built at the desk 2026-09-05 under D62 #3: press Left or Right past the first or last suggestion chip and that chip glows briefly, the way a phone lights up the end of a list. Nothing about the row’s existing edge behaviour changes. Reduced motion keeps the cue and drops the movement. **No measurement closes this one** — whether it reads as *end of list* rather than *error* is the maintainer’s call from a recording, and it is on their checklist.
 
@@ -688,34 +607,9 @@ at the wall switch that cuts the power. The old advice to wait for a gap is gone
 
 ### Calls waiting on you
 
-**Nothing waiting.** **Decided 2026-09-07 (D88):** the "not in my notes" line keys off how good the match was, not just whether a note
-attached — keep the note, add a sentence, take nothing away. Three of the four questions that started this now say
-so. **Decided 2026-09-07, same evening:** the library point release ships with the corrected Black Mesa note, and
-went out. **Decided 2026-09-07 (D86):** the Black Mesa water note was wrong — the current is
-constant, not on a cycle — and it is rewritten from the maintainer's own account of the game, shipping in a
-library point release alongside wave three. The rest of the same evening's call: wave two's own Deck evening
-runs before wave three starts; there is no plugin release out of this wave, only the library point release;
-the answer test's scoring moves to word-lists that notice "not" and other negatives, plus a second model's
-opinion added as a read-only extra column; the search test rebuilds its own copy of the library automatically
-instead of trusting an old one; a "No tip for this" line appears when nothing fits a problem question; the
-held meaning search for problem questions gets one more try and is retired for good if it is still wrong;
-the reworked reply order is measured on the PC first, before any change; follow-up questions are remembered
-only on Strategy and Expert asks; no new notes are written this wave; and the ring landing behind the corner
-icons is left as it is. **Decided 2026-09-07 (D85), planning wave two:** fill the 21 real note gaps and top up the four thinnest
-games, keeping the eight deliberate blanks as a control; the "not in my notes" line reads *"Not in my notes — this
-answer is from the model's own knowledge."*; the meaning-index work ships the guarantee and only **measures** the
-tie-break, because guaranteeing the index answers one of D82's three objections and not the other two; and the ring
-bug is fixed by the session running the wave rather than a helper. **Decided 2026-09-06:** the symptom-only search is held and rewriting the tips is the real job (D81);
-leaning the search toward meaning is held until every note is guaranteed to have its meaning index built, and two
-other objections would still need answering if it is ever taken (D82); the twelve new games ship with their coverage
-gap known and accepted (D83); about a second to search on the Deck is fine and the one-second target is retired
-(D84). **Decided 2026-09-05:** "starting out" cards get their own kind (D65); answer-first is tested both ways before
-a decision (D66, the test entry under Next); structured cards stay prose (D67); the blend-weight sweep runs now and the
-weights change if it agrees (D68); a first tranche of new titles comes from your own Steam library (D69, the read waits
-for the Deck to be free). **Decided 2026-09-06:** ship the twelve-game release now and treat the thin coverage as later
-work (D83); hold the symptom-only troubleshooting search and rewrite the tips instead (D81); hold leaning the search
-toward meaning until every note is guaranteed to have its index (D82); about a second to search the notes on the Deck
-is fine, the one-second target is retired (D84). Anything new goes here, one line each, with what it decides.
+**Nothing waiting.** A new call lands here, one line, with what it decides. Every call already made is
+written up in full in [the locked decisions file](audit/maintainer-decisions-locked.md); the knowledge-base
+ones from this month are D81 to D88.
 
 ### Bugs
 
@@ -723,27 +617,22 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   you very much"* still attaches a card. Raising the keyword floor costs real matches, and the model mostly ignores an
   irrelevant card. [Detail](roadmap-details.md#ordinary-phrases-attach-game-cards).
 - ★★ `[KB]` **A troubleshooting question that only describes the symptom reaches no tips** — **ACCEPTED, held back
-  2026-09-06.** The fix was built and measured on four plainly-worded questions: one that used to get nothing now
-  reaches the right tips, two already worked, but the crash one still fails — it now attaches a tip about desktop mode
-  instead of nothing, which is worse for the person reading it. Matching by meaning does not connect the words a person
-  uses to describe a crash to the way the crash tips are written; the real fix is rewriting the tips, filed as its own
-  entry below. Held rather than shipped (D52, D81).
-  **Re-measured 2026-09-07 with the tips rewritten and the routing widened, and it stays held.** The held branch does
-  reach further: with nothing running, all 24 of the fresh plainly-worded problem sentences get into the search, against
-  8 without it, and *"thank you very much"* still attaches nothing. **But what comes back is wrong.** *"game wont even
-  open"* and *"screen goes black when i open it"* both attach a tip about the on-screen keyboard; *"game keeps quiting to
-  the home screen"* attaches one about waking from sleep; *"buttons not working right half the time"* attaches one about
-  a PlayStation pad over Bluetooth; *"cant find my pc on the network"* attaches one about hotel Wi-Fi. **That is the same
-  objection that held it in the first place** — a wrong tip is worse than none.
-  **And the cause is now clear, which is the useful part.** The branch's meaning search is written to run *only when
-  nothing else finds anything*, and that almost never happens: a plain word search across 156 tips nearly always finds
-  something by shared words, so it wins first with a poor match and the meaning search never gets a turn. Every one of
-  those five came back by word search, not by meaning. **What is missing is not a wider gate — it is a way to say "none
-  of these tips fit."** Until there is one, opening the gate makes things worse.
+  2026-09-06, re-measured 2026-09-07 and still held (D52, D81).** The fix was built and measured twice. It does reach further:
+  with nothing running, all 24 fresh plainly-worded problem sentences get into the search, against 8 without it, and *"thank you
+  very much"* still attaches nothing. **But what comes back is wrong.** *"game wont even open"* and *"screen goes black when i
+  open it"* both attach a tip about the on-screen keyboard; *"game keeps quiting to the home screen"* attaches one about waking
+  from sleep; *"buttons not working right half the time"* attaches one about a PlayStation pad over Bluetooth; *"cant find my pc
+  on the network"* attaches one about hotel Wi-Fi. A wrong tip is worse than none, which is the same objection that held it the
+  first time.
+  **The cause is now clear, and it is the useful part.** The branch's meaning search is written to run *only when nothing else
+  finds anything*, and that almost never happens: a plain word search across 156 tips nearly always finds something by shared
+  words, so it wins first with a poor match and the meaning search never gets a turn. Every one of those five came back by word
+  search. **What is missing is not a wider gate — it is a way to say "none of these tips fit."** Until there is one, opening the
+  gate makes things worse. The real fix is rewriting the tips, filed as its own entry below.
+  **One more wrong tip, found on the device 2026-09-07 (R4):** on the routing already shipped, *"when I plug it into the
+  television the menus show up in the wrong spot on the screen and are hard to read"* comes back with a tip about Big Picture
+  Mode versus Desktop Mode, which does not answer it. Evidence `docs/test-evidence/plan47-R4-problems-reach-tips.json`.
   [Detail](roadmap-details.md#a-troubleshooting-question-that-only-describes-the-symptom-reaches-no-tips).
-  **One more wrong tip, found on the device 2026-09-07 (R4):** on the routing already shipped, *"when I plug it into
-  the television the menus show up in the wrong spot on the screen and are hard to read"* comes back with a tip about
-  Big Picture Mode versus Desktop Mode, which does not answer it. Evidence `docs/test-evidence/plan47-R4-problems-reach-tips.json`.
 - ★★ `[KB]` **The panel keeps naming a game after you have closed it** — **FIXED 2026-09-07, VERIFY on the Deck
   (W2-R6).** After exiting a game the line under the question box still named it, so a question that does not name its
   own game could pick up the wrong game's notes. **The cause written into this entry yesterday was wrong**, which is
@@ -790,27 +679,6 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   which is what says the panel reads this once at start-up and never listens for a change. Reopening the menu is
   not enough; only a restart is. Evidence `docs/test-evidence/plan47-R6-bug-fixes.json`,
   `docs/test-evidence/plan47-R6-stray-computer-text.json`.
-- ★★★ `[KB]` **The "not in my notes" line never appears** — **CLOSED 2026-09-07 (D88). A second line was added, and
-  you chose its wording.** The line was built to tell someone an answer came from
-  the model's own memory rather than their notes, but it only shows when the library covers the game and nothing in
-  it matched — and the note search always finds something to attach, so the line never shows. Ten questions about
-  games the library covers, including "how do i tame a horse" in Black Mesa and a nonsense question in Hades, all
-  attached a note anyway. On the device, asking about a boss that does not exist in Hades got a confident answer
-  about weapons, and no line. Evidence `docs/test-evidence/plan47-R5-not-in-notes.json`, `docs/test-evidence/plan47-probe-notinnotes.json`.
-  **Wave three put a floor under both searches**, which made the line fire more often but could not reach the four
-  questions that caused it — catching those by raising the floor would have thrown away twenty or more answers that
-  are right today.
-  **So a second line was built instead, on your call: keep the note, and say the match was thin.** It appears when
-  a note reached the model but no word in the question pointed at it — only the meaning search found it — and even
-  then it scored below 0.65. On the whole question set that warns on 11 of 188 right answers, about one in
-  seventeen, against 15 catches, and it catches three of the four questions that started this. **Twelve of those
-  fifteen are on questions the test set records no right answer for**, which is the whole point and is invisible to
-  any count of right and wrong: *"how to save the game"* was being answered with a note about girlfriends,
-  *"how to have a baby"* with one about raising a skill. Nothing is taken away from anyone — the note still reaches
-  the model, the answer still comes, and a sentence is added. The one miss is *"where do i buy a house"* in
-  Portal 2, where the keyword search really did rank a card, so it is not the meaning-only case. Measured by
-  `scripts/measure_kb_thin_match.py`, evidence `docs/test-evidence/plan48-thin-match.json`. **The wording is settled**, chosen by you on 2026-09-07: *"No close match in my notes, this answer leans on the model's own knowledge."*
-  The comma rather than a dash is deliberate, and is noted in the code so nobody tidies it away.
 - ★ `[KB]` **A Hades boss's note is spelled wrong, so spelling it right gets you told the plugin is guessing** —
   **OPEN, found 2026-09-12.** The note is titled *Megara*; the boss is *Megaera*. Type it correctly and the note
   still attaches, but the reply now carries the "no close match in my notes" line — so a person is told the plugin
@@ -852,13 +720,6 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   off the device for this game exactly, so the number holds on the real thing. **Not a fixed feature** — one run in
   three still names the rival boss — and DOOM Eternal fails every time, which no search work can close. Replies on
   these turns are about half as long. Row **W3-R4**. (D98) [Numbers](planning/48-kb-wave-three-session.md)
-- ★★★ `[KB]` **Every question no longer waits a second for the notes to be searched** — **FIXED and checked on the
-  Deck 2026-09-12.** The Deck was set to hold one model at a time, so writing an answer pushed the note-searching
-  part out and the next question spent about seven tenths of a second loading it back. A new switch, **Start the AI
-  with the Deck** on the Ollama tab, adds a startup entry that keeps both in memory: **24 thousandths of a second
-  instead of 732**, measured on the device. It also fixes something nobody had noticed — nothing started the AI at
-  all, so a restart left the plugin with no AI until someone started it by hand. Off by default. Row
-  **KB-AUTOSTART-01**.
 - ★★★ `[KB]` **DRG Survivor glossary terms** — **VERIFY, one touch tap owed.** Shipped 2026-08-28 and walked on device:
   underline, popup, D-pad reachability, B, one-press Up. Rows **DRG-GLOSSARY-01…04**.
   [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).
@@ -948,6 +809,26 @@ is fine, the one-second target is retired (D84). Anything new goes here, one lin
   licensing, a size budget, packs and the index. [knowledge-base.md](knowledge-base.md) § Phase 8.
 
 ---
+
+## Shelved
+
+Parked on purpose, not dropped. One line each, with what unshelves it; the full entries are in
+[archive/roadmap-shelved.md](archive/roadmap-shelved.md).
+
+- ★ `[platform]` **In-IDE preview never gets past its loading screen** — shelved 2026-09-11 (D93), not a gate
+  for anything. Unshelves when the preview loads the plugin on the maintainer's machine.
+- ★★ `[ui]` **Glance view: the answer alone, in big text** — shelved 2026-09-12: too much UI change, and not
+  ready for it yet. Unshelves on the maintainer's word; the mockup is kept.
+- ★★★ `[voice]` **Voices for the bundled characters** — shelved 2026-09-08 (D74). Unshelves after the
+  character sweep, a legal check and the open licence call.
+- ★★★ `[voice]` **Trained voices for the bundled characters** — shelved with the clip route 2026-09-08 (D74).
+  Same legal gate, plus the plugin hosting voice files for the first time.
+- ★★★★ `[voice]` **A voice for a custom character** — shelved with the bundled voices 2026-09-08 (D74). Same
+  legal gate.
+
+---
+
+<a id="done-for-v050"></a>
 
 ## Done for v0.5.0
 

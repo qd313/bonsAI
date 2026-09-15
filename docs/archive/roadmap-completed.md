@@ -6,6 +6,42 @@
 
 Headings group related work. Star counts match the historical list.
 
+### The decode animation on the preset chips, judged by eye (2026-09-14)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-14. The device measurement was done on
+2026-08-28; the only thing left was whether the reveal reads well, and the maintainer judged it good
+on 2026-09-14. The entry below is copied line for line, nothing reworded._
+
+- ★★★ `[chips]` **Decode preset chip animation** — **VERIFY, feel only.** Shipped 2026-08-28. Measured on device: a flat 60 fps with
+  all chips decoding. Whether it feels right is a person's call. Row **PRESET-STREAM-ANIM-01**.
+
+### The reply block rework, checked on the Deck (2026-09-06)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-14 once the Deck check passed — copied line for
+line, nothing reworded._
+
+- ★★★ `[layout]` **Copy sits in the answer's corner, not in a button row** — **VERIFIED on the Deck 2026-09-06.** The row of
+  buttons under a reply is gone. **Copy** is a small faded icon tucked to the answer's bottom right — press Right from the last
+  part of the answer to reach it, Left to come back. **Retry** is a faded circular arrow on the newest question's bubble, on its
+  left — press Left from the question, Right to come back. **What the runs show:** walking the whole reply down and back up
+  again visits every control once, in order, with no loop and nothing hidden, and pressing Copy put all 1,834 characters of the
+  answer on the clipboard. Pressing the question still opens and closes it and does not start a Retry. An older question shows
+  no arrow. Two problems were found and fixed on the device before this closed — see the notes on the entry below and the
+  planning file. Runs: `reply-block-final-walk`, `copy-right-from-answer`, `press-question-not-retry`,
+  `question-bubble-two-stops`. Rows **COPY-REPLY-01**, **COPY-REPLY-02**, **RETRY-CORNER-01**, **CHAT-REPLY-ENTRY-01**.
+
+- ★★ `[layout]` **Show details becomes a divider, not a chip** — **VERIFIED on the Deck 2026-09-06.** Under a finished answer
+  there is a thin line across the reply with **Show details ↓** in the middle. **What the runs show:** the line is 267 pixels
+  wide starting at the same left edge as the answer bubble above it, so the two share both edges exactly. One press opens the
+  chips and turns the label into **Hide details ↑**; one more press closes it — the double-toggle worry did not happen. The
+  ring reaches it walking down and walking up, and it is fully on screen, not behind the input bar. Nothing overflows sideways.
+  Run: `reply-block-final-walk`. Row **SHOW-DETAILS-01**.
+
+- ★★ `[focus]` **Fewer D-pad stops on a finished reply** — **VERIFIED on the Deck 2026-09-06.** **What a person notices:** an
+  answer of about 1,800 characters used to be one stop per paragraph — six of them. It is three now, and each press either moves
+  the ring to a part of the answer already on screen or scrolls the panel; nothing is skipped. A short answer of 400 characters
+  is a single stop. Code blocks still stand alone. Runs: `reply-block-final-walk`. Rows **D-PAD-SCROLL-02**, **STREAM-09**.
+
 ### Round 34 continued (2026-09-06)
 
 - ★★★ `[platform]` **Legacy-loader shim removal (D11)** — the old compatibility layer that every Ask used to pass through was

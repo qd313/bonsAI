@@ -235,10 +235,14 @@ suggestions → **decode**.
       whatever is on screen mid-churn)
 - [ ] After hold, chip clears and samples a new prompt
 - [ ] With OS **prefers-reduced-motion: reduce**, chips swap instantly (no scramble, no caret)
-- [ ] **Frame-rate feel:** while the chip churns, the QAM column does not stutter — watch for
+- [x] **Frame-rate feel:** while the chip churns, the QAM column does not stutter — watch for
       dropped frames/jank on real Deck hardware specifically, since the desk can only confirm the
       loop is throttled, not how it actually performs (one chip since 2026-08-31; this used to
       be three churning at once, so a regression here would be a surprise)
+
+**Judged good by the maintainer 2026-09-14**, which is what this row was waiting on. The boxes above that
+are still empty were never walked one by one; the measurement on 2026-08-28 covered the frame rate and the
+ring during churn. See the row in [testing.md](testing.md).
 
 ### SMOKE-F — Deterministic commands (P2)
 

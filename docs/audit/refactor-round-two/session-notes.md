@@ -34,9 +34,24 @@ if the folders went away.
   like an arcade one — already on the main line. The rest is one file that is rewritten on every
   commit anyway.
 
-**Nothing was deleted.** Removing thirty folders needs your say-so, and the tool asked for it. When
-you are ready: the folders can all go, and **no branch should be deleted** — a folder is a working
-copy, a branch is where the commits live. That is what keeps the held-back symptom-search work.
+**Done, on your word the same day: fifty-one folders removed, not one branch touched.** All 57
+branches are still here, including every one of the seven that holds work not on the main line.
+
+**Twenty-one more copies turned up that the earlier count missed**, because they were no longer
+registered and so never appeared in any list. Each was checked the hard way — every file in them
+hashed and looked up against every object the project has ever stored — and only one held anything
+that exists nowhere else. **That one is live work belonging to another session**, which created it
+partway through this clear-out; it was left alone and is untouched. The other twenty were husks,
+3.5 GB between them.
+
+**Clearing them broke this checkout's dependencies, and it is worth knowing why.** Every copy's
+dependency folder is a Windows link pointing at this one's, and git's own folder removal follows
+those links on the way out. Removing the first batch quietly deleted the command shims and part of
+the package store from the *main* folder. Nothing complained at the time; the next type check just
+failed with an odd message about the wrong compiler. Repaired by deleting the dependency folder the
+link-safe way and reinstalling from the lockfile — it is rebuilt from a file, not tracked by git, so
+nothing was at risk once the cause was found. The full check passes again in 62.8 seconds. The
+lesson, and the safe way to remove a copy, are now written into the lessons file.
 
 ### What this session wrote
 

@@ -39,6 +39,28 @@ cheap to remove and easy to remake, branches are the thing to be careful with. T
 copy sitting on no branch at all — remove that folder and its commits become unreachable, so check
 before removing one.
 
+**Clearing an old copy can gut the main checkout's dependencies, and it did.** Every copy's
+`node_modules` is a Windows junction pointing straight at the main repo's. `git worktree remove`
+follows those links on the way out, so removing twenty-four old copies deleted the command shims and
+part of the package store inside the *main* folder. Nothing said so at the time — the next type
+check simply failed with a message about the wrong `tsc`. Before deleting a copy: unlink every
+junction inside it first (`rmdir <path>` with no `/s` removes the link and never the target), then
+delete what is left, and count the main `node_modules` before and after as a canary. The repair is
+easy once you know — delete `node_modules` the same junction-safe way and run
+`pnpm install --frozen-lockfile` — but finding the cause is not.
+
+**Check whether a copy is in use before removing it, and check again afterwards.** Other sessions
+create their own copies while you work. One appeared partway through a clear-out, was removed, and
+the session using it simply recreated it and carried on — it now holds two dozen files of work that
+exist nowhere else. A folder that was not on your list five minutes ago is somebody's live work, not
+a leftover.
+
+**"Not on the main line" is the wrong test for a stale copy.** Comparing an old copy against the
+current code shows thousands of added lines, because its *old* version of every changed file reads
+as an addition. That flags every abandoned folder as if it held treasure. The test that actually
+answers the question: hash every file in the folder and look each hash up among every object the
+repo knows about. Anything not found is genuinely only there.
+
 **Check what a new copy is actually based on.** A helper asked to make its own copy has, in the
 past, started from a point 442 commits behind, quietly, and then reported success on work it did
 against code that no longer existed. Every brief that creates a copy must have the helper print its

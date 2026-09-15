@@ -1,9 +1,24 @@
-"""Title: Steam VAC lookup
+"""Title: Asking Steam directly whether an account has a public ban
 
-Purpose: Parse SteamIDs and call GetPlayerBans for VAC/ban status via the Steam Web API.
-Used for: vac_check_commands and Developer Integrations when steam_web_api capability is on.
-Solves: Token parsing, in-memory TTL cache, and markdown report formatting for Ask replies.
-Does not: Store API keys or bypass capability checks — callers supply key and permission gates.
+Purpose: Does the real work behind checking an anti-cheat ban: turns whatever
+a person pasted in -- a raw 64-bit SteamID, or a profile web address that
+contains one -- into the exact form Steam's own servers expect, calls
+Steam's ban-lookup address with the plugin's saved key, and turns the answer
+into a readable table. Answers are kept for 10 minutes, so asking about the
+same account twice in a row does not call Steam's servers again.
+Used for: the `bonsai:vac-check` Ask command, and the Developer tab's
+Integrations area, whenever the "Steam Web API" permission is turned on.
+Solves: a pasted SteamID can arrive in several different shapes -- a bare
+number, a profile link, extra spaces -- but Steam's own address only accepts
+the raw number. Without one shared place that converts between them, every
+caller would have to handle every shape for itself.
+Does not: save or manage the Steam Web API key itself, or check whether the
+permission for this is turned on -- both are the caller's job. This file
+assumes it has already been handed a key and told it is allowed to use it.
+Gotchas: a "vanity" profile link -- one with a chosen name instead of
+numbers in its address -- cannot be turned into a SteamID here. Steam has a
+separate lookup for that which this build does not call, so a person is
+told to paste the numeric link or ID instead.
 """
 
 from __future__ import annotations

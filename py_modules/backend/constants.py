@@ -1,9 +1,20 @@
-"""Title: Backend runtime constants
+"""Title: The addresses and paths every other file agrees on
 
-Purpose: Centralize shared defaults and path literals for the Decky plugin backend.
-Used for: Ollama host/port defaults, loopback detection, and UI navigation path strings.
-Solves: One source of truth so services and RPC handlers agree on baseline values.
-Does not: Load settings, perform I/O, or encode business logic beyond fixed literals.
+Purpose: A handful of values need to stay the same everywhere in the backend: the
+address to try for Ollama when nobody has set their own, the list of names that
+mean "this same machine" rather than a machine on the network, the folder
+Decky's Python runs from on the Deck, and the wording for two screens that a
+message sometimes needs to point a person at. Any file that needs one of these
+imports it from here instead of typing it out again, so there is exactly one
+place to change if it ever needs to.
+Used for: working out the default place to reach Ollama before a person has set
+their own address; recognizing that an address means "this same device"; and
+building two messages that name a real screen by its tab labels.
+Solves: without one shared copy, a typo in a hand-copied address or folder path
+would only show up on the one screen or command that has it wrong, and nobody
+would notice until that one thing broke.
+Does not: read a settings file, make a network call, or decide anything on its
+own -- everything here is a fixed value, never a check or a calculation.
 """
 
 DEFAULT_OLLAMA_HOST = "127.0.0.1"

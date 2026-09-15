@@ -1,9 +1,46 @@
-"""Title: Proton troubleshooting logs
+"""Title: Pulling in a few lines of Steam and Proton's own logs
 
-Purpose: Discover and read bounded Proton/Steam log excerpts for Ask attachments.
-Used for: Troubleshooting Ask when settings opt in and steam_logs_read capability is enabled.
-Solves: Path allowlisting, tail reads, line filtering, and total payload budget enforcement.
-Does not: Attach logs without explicit opt-in or escape allowed Steam log roots via symlinks.
+Purpose: When someone asks the Ask box for help with a game that runs through
+Proton, Steam and Proton keep their own log files about what went wrong, and a
+few relevant lines from those logs make a far better answer than guessing
+blind. This file finds the right log files for the one game being asked
+about, reads a limited amount from the end of each, keeps the lines that look
+like errors, and hands back a small chunk of text -- short enough to fit
+alongside everything else already going into that reply.
+Used for: a troubleshooting question in the Ask box, and only when a person
+has opted in to reading local files and the "read Steam's logs" permission is
+turned on.
+Solves: without limits on both what is read (under 96 KB scanned) and what is
+attached (under 4 KB), a large Steam log file could push other, more
+important text -- including the AI's own instructions -- out of what the AI
+model actually reads, silently and without anyone being told.
+Does not: read Proton or Steam logs from just anywhere on disk. Only a small,
+fixed set of real Steam log locations for the one game being asked about are
+allowed, checked by following exactly where a file actually points rather
+than trusting its name, so a symbolic link cannot be used to sneak in some
+other file.
+
+How it works:
+  1. `steam_roots_for_home()` lists the folders where Steam normally lives,
+     and `path_allowed_for_proton_log()` checks a candidate file's real,
+     followed-through location against those exact folders before anything is
+     read from it.
+  2. `collect_proton_troubleshooting_logs()` gathers candidate log files for
+     the one game being asked about, newest first, and scans up to 96 KB
+     total across all of them -- generous, because scanning is cheap and this
+     step is not what gets sent anywhere.
+  3. `_maybe_filter_and_truncate()` then squeezes that down to the much
+     smaller amount actually attached to a reply (4 KB): if the scanned text
+     is too big, lines that look like errors are kept first; if it is still
+     too big after that, only the newest part survives.
+
+Gotchas: the amount attached is small on purpose. The AI model this plugin
+runs on the Deck only reads roughly the first 4,096 tokens of a prompt, and
+anything past that point -- including the model's own rules, written earlier
+in the same prompt -- is silently dropped rather than trimmed politely from
+the end. A prompt that runs too long does not fail with an error; it just
+quietly loses its beginning, which is why the budget here is kept small
+enough to never risk that.
 """
 
 from __future__ import annotations

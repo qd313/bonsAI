@@ -1,9 +1,23 @@
-"""Title: Plugin data reset
+"""Title: Clearing all of the plugin's own data
 
-Purpose: Wipe Decky-persisted plugin files and restore sanitized default settings.
-Used for: Clear plugin data RPC and new-install-equivalent recovery flows.
-Solves: Safe settings_dir wipe, optional local Ollama teardown hook, and default reload/save.
-Does not: Uninstall the Decky plugin binary or remove unrelated Steam user data.
+Purpose: When someone presses "Clear all data" in Settings, this is what
+actually does the work. It wipes every saved setting, the local search-
+knowledge folder if one was installed, the plugin's own temporary and log
+files, and a leftover file from an old removed feature, then writes a fresh
+set of default settings back in their place -- the same state a brand-new
+install would be in.
+Used for: the "Clear all data" action, and any other recovery path that needs
+to put the plugin back to its just-installed state.
+Solves: without one place that does the whole job, a "clear data" action could
+wipe the settings file but leave the search-knowledge folder or old log files
+behind, and a person would believe their data was fully cleared when it was
+not.
+Does not: remove the plugin itself from Decky, or touch anything outside the
+plugin's own folders -- none of the user's other Steam data is touched.
+Gotchas: one of the things this removes -- a leftover journal file -- is from
+a feature (Proton experiment tracking) that was removed from the plugin back
+in 2026-07. A Deck that never ran that old version has nothing there to
+remove, which is expected, not a sign anything is wrong.
 """
 
 from __future__ import annotations

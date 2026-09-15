@@ -1,18 +1,29 @@
-"""Title: TLS certificate fallback for urllib
+"""Title: Fixing "can't verify this secure site" on the Deck's own Python
 
-Purpose: Retry a urllib.request.urlopen() HTTPS call with an explicit CA bundle when the
-interpreter's default SSL context has no root certificates loaded.
-Used for: every module that calls urllib.request.urlopen() against an external https host
-(RAG corpus download, Pull Models overlay, Ollama installer/registry, Whisper model
-download, Steam VAC lookups).
-Solves: CERTIFICATE_VERIFY_FAILED: unable to get local issuer certificate — observed live
-on a Deck running Decky Loader's PyInstaller-frozen Python (SteamOS holo 3.8.25). The
-plugin backend runs inside that frozen interpreter, confirmed via /proc/<pid>/environ: no
-SSL_CERT_FILE, no SSL_CERT_DIR, only a PyInstaller LD_LIBRARY_PATH pointing at its own
-extracted /tmp/_MEI* bundle. That bundled OpenSSL cannot find root certificates even though
-the OS has a perfectly good bundle on disk at /etc/ssl/certs/ca-certificates.crt — a plain
-`python3` process on the same Deck is unaffected, since it resolves the OS path by default.
-Does not: touch http:// (non-TLS) calls — those are unaffected (Ollama/LAN daemons).
+Purpose: The copy of Python that Decky Loader runs the plugin's backend inside
+is a self-contained bundle, and on a real Deck that bundle never picks up the
+operating system's list of trusted certificate authorities -- the list every
+secure (https) address is checked against. Without this file, every secure
+download the plugin makes fails with a message about a certificate, even
+though nothing is actually wrong with the connection or the download itself.
+This file tries the normal way first, and only on exactly that failure,
+retries once using one of a few file locations where SteamOS keeps its own
+trusted-certificate list on disk.
+Used for: wrapping every secure download the plugin makes -- the search-
+knowledge download, the Pull Models list, installing Ollama, downloading a
+speech-to-text model, and checking Steam's anti-cheat status -- so each of
+them gets the retry without writing it out for themselves.
+Solves: a real error, seen on the Deck itself: "CERTIFICATE_VERIFY_FAILED:
+unable to get local issuer certificate". It happens only inside Decky's
+bundled Python (SteamOS holo 3.8.25, confirmed by reading that process's own
+environment: no certificate location is set, and the bundle's OpenSSL cannot
+find one on its own). A plain, ordinary `python3` on the very same Deck does
+not have this problem, because it finds the operating system's list without
+being told where it is.
+Does not: change how plain, unencrypted (http, not https) addresses are
+handled -- those were never affected. And on any computer that is not hitting
+this specific problem, nothing changes: the normal way is always tried first,
+and succeeds there.
 """
 
 from __future__ import annotations

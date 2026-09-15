@@ -1,9 +1,38 @@
-"""Title: Spoiler title profiles (constitution runtime)
+"""Title: Deciding which games get extra spoiler caution, game by game
 
-Purpose: Built-in per-title spoiler sensitivity profiles for prompts, risk chip, and display unwrap.
-Used for: ollama_prompts, spoiler_risk_service; mirrored in src/data/spoilerTitleProfiles.ts.
-Solves: Title-level open vs protect decisions without genre substring or KB entity match.
-Does not: Runtime mask/omit behavior, corpus schema flags, or user-adjustable fencing settings.
+Purpose: Very different games get asked about in the Ask box. Some, like Deep
+Rock Galactic or DOOM Eternal, barely have "spoilers" in the way most people
+mean it -- knowing a boss's attack pattern is not really ruining anything.
+Others, like Baldur's Gate 3 or a Zelda game, are built around discovering a
+story, and telling someone how it ends is exactly the kind of thing this
+plugin tries to avoid doing by accident. This file is a fixed, hand-kept
+list that sorts known games into those two groups: by Steam's own game ID
+where a game has one, and by name where it does not -- an emulated game
+launched through a Steam shortcut has no Steam game ID at all.
+Used for: deciding, before a reply is even written, how cautious the AI's
+instructions and the spoiler-risk guess (see spoiler_risk_service) should be
+for the specific game being asked about. The same two lists are kept in step
+with the settings screen's own copy (src/data/spoilerTitleProfiles.ts), so a
+game is treated the same in both places.
+Solves: without a per-game list, every game would get the same one-size-
+fits-all level of caution -- either annoyingly over-careful about games that
+do not need it, or not careful enough about games that do.
+Does not: hide or change any part of a reply itself -- this file only
+answers "how careful should we be about this game," never the hiding.
+Unlisted games are not guessed at either: an unrecognized game reports
+"unknown" and falls back to the plugin's regular, game-blind spoiler rules
+elsewhere.
+
+Gotchas:
+ - A known mistake elsewhere in the project is worth knowing here: the Steam
+   game ID recorded for Ocarina of Time in the separate knowledge-base seed
+   data is actually Stardew Valley's ID. This file's name-matching list for
+   game titles is deliberately its own table, not built from the game-ID
+   lists above it, specifically so it can never inherit that mistake.
+ - When a game matches both lists (unusual, but possible for a title that is
+   only in the name lists), the cautious answer wins -- being too careful
+   about a game that did not need it is a smaller cost than not being
+   careful enough about one that did.
 """
 
 from __future__ import annotations

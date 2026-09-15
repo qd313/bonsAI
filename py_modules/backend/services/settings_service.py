@@ -8,8 +8,9 @@ never explicitly turned on stays off, a choice that no longer exists falls
 back to its default, and a setting from an older version of the plugin is
 carried forward to its new name instead of quietly vanishing.
 
-Used for: main.py's settings RPC handlers, on every load and every save.
-Also read directly by ollama_ask_service for two settings -- reply style and
+Used for: main.py's settings handlers -- the questions the screen can ask to
+load or save your settings -- on every load and every save. Also read
+directly by ollama_ask_service for two settings -- reply style and
 keep-alive -- that are checked often enough to skip going through the whole
 settings object.
 
@@ -44,8 +45,11 @@ How it works:
     (`reconcile_model_policy_tier()`).
  4. `load_settings()` reads settings.json and runs it through
     `sanitize_settings()`. For an install from before the Permissions tab
-    existed, it grants every permission by default rather than silently
-    switching them all off.
+    existed, it grants the three permissions the plugin was already using at
+    the time (writing files, reading the screenshot library, reading Steam's
+    logs) rather than silently switching everything off -- but not the other
+    two, Steam Web API and the microphone, which stay off even for an old
+    install (see capabilities.py for why).
  5. `save_settings()` merges an incoming change into what is already saved,
     cleans up the result the same way, and writes it to a temporary file
     that is only swapped into place once the write has finished, so a crash

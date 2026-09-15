@@ -1,9 +1,19 @@
-"""Title: VAC check commands
+"""Title: Answering "is this account banned" without asking the AI at all
 
-Purpose: Handle bonsai:vac-check Ask keyword with Steam Web API GetPlayerBans (no Ollama).
-Used for: Local Ask path when steam_web_api capability and stored API key are available.
-Solves: Command parsing, capability gating, and deterministic markdown VAC report responses.
-Does not: Look up bans without user-provided SteamID tokens or an configured Web API key.
+Purpose: Typing a command like `bonsai:vac-check 76561198000000000` into the
+Ask box checks one or more Steam accounts for a public anti-cheat ban flag,
+straight from Valve's own servers -- no AI model involved, no guessing. This
+file recognizes that command, checks that the needed permission and Steam Web
+API key are in place, and builds the plain-language report shown back.
+Used for: the `bonsai:vac-check` command in the Ask box, when the "Steam Web
+API" permission is turned on and a Steam Web API key has been saved.
+Solves: without a direct command like this, checking a ban status would mean
+asking the AI model, which cannot actually reach Valve's servers and could
+only guess or make something up.
+Does not: look anything up when the permission is off or no key is saved -- in
+both cases it hands back instructions for turning the feature on, rather than
+making a network call. It also never resolves a "vanity" profile link (one
+with a chosen name in the address instead of numbers), only a numeric one.
 """
 
 from __future__ import annotations

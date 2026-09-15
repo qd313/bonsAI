@@ -1,10 +1,17 @@
-"""Title: Knowledge base status
+"""Title: Answering "what is the knowledge base doing right now"
 
-Purpose: Say what the knowledge base is doing: installed or not, where it lives, whether
-         its meaning-search vectors are filled in, and where there is room to put it.
-Used for: The Knowledge base section on the Connection tab, through one RPC method.
-Solves: Gathering that answer is not the entry point's job, and it was 53 lines of it.
-Does not: Download, install or remove anything -- see rag_corpus_download_service.
+Purpose: The Knowledge base section of the Connection tab needs one full
+answer every time it is shown: is a knowledge base installed, where does it
+live, has meaning search finished being set up for it yet, and how much room
+is there to put one. This file is the one place that works out that whole
+answer.
+Used for: the Knowledge base section, through the one question the screen can
+ask the back end for it.
+Solves: gathering this answer used to live inside the same file that answers
+every other question the screen can ask, as 53 lines sitting in the middle of
+it. Pulling it out into its own file gives it its own tests, without changing
+what it answers.
+Does not: download, install or remove anything -- see rag_corpus_download_service.
 
 Lifted out of main.py on 2026-09-14 with the answers unchanged. It had no test of its
 own before the move; it has one now.

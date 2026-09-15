@@ -3,9 +3,9 @@
 Purpose: When you ask a strategy question, the AI can end its answer with a
 special block asking which part you are stuck on, or a checklist tracking
 steps for a longer strategy. This file finds that block inside whatever text
-the model sends back, however messily it is formatted, turns it into a clean
-payload the screen can draw as buttons or checkboxes, and strips it back out
-of the text you actually read so you never see the raw block.
+the model sends back, however messily it is formatted, turns it into the
+clean shape the screen can draw as buttons or checkboxes, and strips it back
+out of the text you actually read so you never see the raw block.
 
 Used for: Every reply where the model was asked for a strategy follow-up --
 questions the Deck itself marks with the STRATEGY_FOLLOWUP_PREFIX text -- and
@@ -58,9 +58,9 @@ Gotchas:
  - `hide_incomplete_strategy_checklist_fence()` keeps whatever text follows
    the fence's closing marker, while the branch version throws it away -- that
    is not an inconsistency. The checklist is asked for after the coaching
-   text in the prompt, so anything after it is more of that text, not
-   leftover payload; a branch picker is asked for last, so anything after it
-   is model drift worth dropping.
+   text in the prompt, so anything after it is more of that text, not a
+   leftover piece of the block; a branch picker is asked for last, so
+   anything after it is model drift worth dropping.
  - A rejected block is simply dropped, exact wording included, rather than
    shown as-is. That is deliberate: the comment inside
    `hide_incomplete_strategy_checklist_fence()` records a real case where a

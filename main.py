@@ -59,11 +59,12 @@ The path a question takes:
  6. The answer is stored, and the next poll from the screen picks it up.
 
 Gotchas:
- - The names of the public methods on this class ARE the contract with the
-   screen. The front end calls them as strings, so renaming one used to break
-   the plugin silently, with nothing failing until someone pressed the button.
-   That is why the method names are now generated into a type the front end has
-   to match: a typo fails the build instead of failing on the Deck.
+ - The names of the public methods on this class ARE the promise this file
+   makes to the screen. The front end calls them as strings, so renaming one
+   used to break the plugin silently, with nothing failing until someone
+   pressed the button. That is why the method names are now generated into a
+   type the front end has to match: a typo fails the build instead of failing
+   on the Deck.
  - The commands that finish inside the handler (step 3) never start a background
    task. They write a finished result straight into the shared state, so the
    very next poll sees a completed answer. Without that they would look like a

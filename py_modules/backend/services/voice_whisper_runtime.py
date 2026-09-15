@@ -1,12 +1,35 @@
-"""Title: Whisper runtime basics
+"""Title: Where the speech-to-text program lives, and two things both of its callers need
 
-Purpose: Where the whisper files live, whether the binaries run, and the two small
-         audio/text helpers both whisper callers need.
-Used for: voice_transcription_service (mic capture) and voice_whisper_daemon (server mode).
-Solves: One leaf both of them can import, so neither has to import the other. Before this
-        existed the two files imported each other and the daemon hid it with function-level
-        imports.
-Does not: Capture audio, run inference, or own any process lifecycle -- see the two callers.
+Purpose: Two different files turn recorded audio into text using the
+whisper.cpp program: one runs it fresh for a few seconds at a time while you
+are speaking (voice_transcription_service), the other runs it as one
+long-lived background server that several recordings can share without
+restarting it each time (voice_whisper_daemon). Both need the same handful of
+things -- where the program and its model files are saved on disk, whether
+the installed copy actually works on this Deck's processor, and two small
+conversions between raw recorded sound and the text/audio shapes whisper
+expects. This file holds those shared pieces once, so the two callers agree
+with each other without needing to import one another directly.
+Used for: voice_transcription_service, for capturing from the microphone, and
+voice_whisper_daemon, for running the shared background server.
+Solves: before this file existed, the two callers imported each other
+directly for these shared pieces, and the background-server file had to hide
+that behind imports written inside a function instead of at the top, just to
+avoid the two files trying to load each other at the same time. Moving the
+shared parts out to their own file removes the reason for that.
+Does not: capture audio, run a decode, or start or stop the whisper program
+itself -- this only says where things are and whether a copy can be trusted;
+running it is left to the two files that use this one.
+
+Gotchas:
+ - The shared background server's real limit lives one level up, in
+   voice_whisper_daemon, not here: if a recording asks for a speech model
+   while the server is already running a different one, the server is
+   stopped and restarted for the new model, and whichever recording was
+   already using the old one is never told -- it just finds the server gone
+   the next time it tries to use it. This is a known, already-reported gap;
+   this file only supplies the pieces the server is built from, so it cannot
+   fix that on its own.
 """
 
 from __future__ import annotations

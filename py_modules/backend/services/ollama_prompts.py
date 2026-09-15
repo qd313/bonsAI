@@ -10,7 +10,7 @@ Ollama directly; it only produces the text that goes into the request, and does 
 of cleanup on the text that comes back.
 
 Used for: Called by the Ask flow to build the instructions for a question before it is sent, and
-by a couple of the same "does this question look like X" checks elsewhere in the Ask pipeline so
+by a couple of the same "does this question look like X" checks elsewhere in that same Ask flow so
 a question is classified the same way everywhere it matters.
 
 Solves: Keeps every fixed and conditional piece of instruction text in one file, so what the AI
@@ -57,9 +57,10 @@ How it works:
    this one entity in the clear because the player asked about it by name, keep everything else
    wrapped, or, for a game whose own profile treats bosses as routine gameplay rather than story,
    relax the rule further still.
-4. Once the AI has answered, `format_ai_response()` does one light pass over the reply — it does
-   not touch the wording, only appends a short debug note when a screenshot attachment had
-   trouble.
+4. Once the AI has answered, `format_ai_response()` does one light pass over the reply — it never
+   touches the wording, but it does append a short `[AttachDebug: ...]` note to the visible answer
+   any time the question carried an attachment at all, whether or not anything actually went
+   wrong with it; a second note spelling out the actual problem is added only when there was one.
 5. Separately, `build_reply_followup_context_block()` handles the "this was wrong / too long /
    spoiled something" chips: when a person taps one and asks a refinement, this pastes the
    previous question and answer (trimmed to a safe length) ahead of their new message, so the

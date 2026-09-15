@@ -275,10 +275,14 @@ def step_optional_script(
     without counting as a failure, when the file is absent.
 
     An advisory step reports what it found but never fails the run. That is for a check whose
-    backlog is real, known and scheduled: the header check has 20 files to fix in phase 5, so
-    hard-failing on them from day one would mean every run is red and nobody reads it. The
-    ratchet is what stops the number growing in the meantime. Phase 5 flips this off once the
-    count reaches zero."""
+    backlog is real, known and scheduled: hard-failing on a known backlog from day one means
+    every run is red and nobody reads it, and the list of numbers that may only improve is what
+    stops the backlog growing in the meantime.
+
+    The header check used this while it had 20 files with no description waiting on phase 5.
+    Phase 5 finished them on 2026-09-14 and the check became a real gate the same day, which was
+    always the plan. Nothing is advisory right now; the argument is kept for the next check that
+    lands ahead of the work it describes."""
     result = StepResult(label)
     script_path = ROOT / script_relpath
     if not script_path.exists():
@@ -328,7 +332,12 @@ def run(mode: str) -> tuple[list[StepResult], float]:
         # Full mode runs the whole Python suite below as `npm run test:py`. Running it here
         # as well costs another 30 seconds and can only give the same answer.
         steps.append(step_python_tests(py_changed, script="scripts/run_python_tests.py", label="python_tests"))
-    steps.append(step_optional_script("scripts/check_headers.py", ["--json"], "check_headers", advisory=True))
+    # A real gate since 2026-09-14, at the strict level, because the backlog it was waiting on
+    # is gone: every file has a description, every big file has a walkthrough, and every function
+    # name written into a header is a name that exists. From here it fails the run, which is the
+    # point -- a new file that ships with nothing explaining it is caught on the way in, while the
+    # person adding it still remembers what it is for.
+    steps.append(step_optional_script("scripts/check_headers.py", ["--level", "full", "--json"], "check_headers"))
     steps.append(step_optional_script("scripts/ratchet.py", ["check", "--json"], "ratchet"))
 
     if mode == "full":

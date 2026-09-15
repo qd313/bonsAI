@@ -8,23 +8,25 @@
   },
   "files_over_400_lines": {
     "label": "Files over 400 lines (app code, both sides)",
-    "best": 42,
+    "best": 27,
     "target": 30,
     "start_2026_09_09": 41,
     "direction": "lower_is_better",
-    "measured_by": "line count over src/**/*.ts(x) (excluding tests) plus main.py and py_modules/**/*.py"
+    "measured_by": "lines of code (blank lines, comments and docstrings excluded, via scripts/code_line_count.py) over src/**/*.ts(x) (excluding tests) plus main.py and py_modules/**/*.py",
+    "definition_corrected_2026_09_14": "Was every line in the file, explanations included. 42 became 27 on exactly the same code -- A CHANGED MEASURING STICK, NOT PROGRESS. The target of 30 now reads as met; it is not met, it is measured differently. Corrected because it was doing harm: during the phase that explained every file, four separate workers cut good explanations short to stay under it, and by the old count the number would have finished the phase at 48 rather than 27. The question this is meant to answer is 'how much is going on in here, should it be split up', and a file does not become harder to understand because someone explained it well. The every-line figure is still measured and reported beside it."
   },
   "fe_long_functions_uncommented": {
     "label": "Outermost front-end functions over 60 lines with no leading comment",
-    "best": 56,
+    "best": 0,
     "target": 0,
     "start_2026_09_09": 53,
     "direction": "lower_is_better",
-    "measured_by": "scripts/ts_long_functions.mjs (TypeScript compiler API)"
+    "measured_by": "scripts/ts_long_functions.mjs (TypeScript compiler API)",
+    "definition_corrected_2026_09_14": "56 to 0 is mostly real work, but not all of it. The scanner could not see a comment written above `const X = () => {}` -- it walked up to the declaration and stopped one step short of the statement the comment actually sits above, so it looked just after the `=` and found nothing. That style is most of the screens in this project. Correcting it took the same untouched code from 56 to 53; the remaining 53 to 0 is genuine. Found by a worker who reported the tool rather than rewriting its comments to appease it."
   },
   "be_long_functions_no_docstring": {
     "label": "Back-end functions over 60 lines with no docstring",
-    "best": 7,
+    "best": 0,
     "target": 0,
     "start_2026_09_09": 6,
     "direction": "lower_is_better",
@@ -98,7 +100,7 @@
   },
   "files_without_purpose_header": {
     "label": "Files without a purpose header",
-    "best": 20,
+    "best": 0,
     "target": 0,
     "start_2026_09_09": 20,
     "direction": "lower_is_better",

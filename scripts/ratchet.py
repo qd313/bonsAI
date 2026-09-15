@@ -902,14 +902,23 @@ def cmd_measure(as_json: bool) -> int:
         shown = "n/a" if value is None else _fmt(value)
         print(f"{label.ljust(label_width)}  {shown}")
     if notes:
+        # A note travels beside a value, and can mean either of two things: the
+        # number could not be worked out at all, or it was worked out and there
+        # is something worth saying about it. Printing both under "could not be
+        # measured" made a perfectly good number look broken.
         print()
-        print("Some numbers could not be measured this run:")
-        seen = set()
-        for metric_id, note in notes.items():
-            if note in seen:
-                continue
-            seen.add(note)
-            print(f"  - {note}")
+        failed = {m: n for m, n in notes.items() if values.get(m) is None}
+        extra = {m: n for m, n in notes.items() if values.get(m) is not None}
+        if failed:
+            print("Some numbers could not be measured this run:")
+            for note in dict.fromkeys(failed.values()):
+                print(f"  - {note}")
+        if extra:
+            if failed:
+                print()
+            print("Worth knowing about the numbers above:")
+            for metric_id, note in extra.items():
+                print(f"  - {_label_for(ratchet_data, metric_id)}: {note}")
     return 0
 
 

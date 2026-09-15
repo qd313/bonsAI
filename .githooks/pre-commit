@@ -6,3 +6,11 @@ cd "$(dirname "$0")/.."
 node packages/bonsai-mcp/scripts/sync-architecture-for-commit.mjs
 python scripts/py_import_graph.py
 git add -- packages/bonsai-mcp/knowledge/architecture/py-import-graph.json
+
+# The code map: one line per file, taken from the description at the top of each
+# one. Nothing rebuilt it before, so it silently fell behind -- four files added
+# in an earlier phase were simply missing from it, and a map you cannot trust to
+# be complete is worse than no map. Now it cannot drift: it is rebuilt from the
+# headers themselves on every commit.
+python scripts/code_map.py
+git add -- docs/code-map.md

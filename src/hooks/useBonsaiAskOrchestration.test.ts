@@ -665,6 +665,34 @@ describe("useBonsaiAskOrchestration", () => {
       expect(result.current.askThreadDisplayQuestion).toBe("where do i find the reactor core");
       vi.useRealTimers();
     });
+
+    /**
+     * Plan 54 gap 2, streaming: `lastExchange` stays empty until the answer completes, so the
+     * live spoiler box has to read the name and the named thing from `ollamaContext` while a
+     * pending poll is still streaming. Before this fix, a pending status never copied either
+     * value onto `ollamaContext`.
+     */
+    it("carries the running game's name and the backend's named thing while still pending", async () => {
+      vi.useFakeTimers();
+      setRpcHandler("get_background_game_ai_status", () => ({
+        ...idleBackgroundStatusFixture(),
+        status: "pending",
+        question: "wheatley fight",
+        request_id: 10,
+        app_name: "Doom 64: Retribution",
+        strategy_spoiler_asked_entity: "Wheatley",
+      }));
+
+      const { result } = renderHook(() => useBonsaiAskOrchestration(makeArgs()));
+
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(100);
+      });
+
+      expect(result.current.ollamaContext?.app_name).toBe("Doom 64: Retribution");
+      expect(result.current.ollamaContext?.asked_entity).toBe("Wheatley");
+      vi.useRealTimers();
+    });
   });
 
   describe("cancel", () => {

@@ -345,6 +345,50 @@ class BackgroundPartialStateTests(unittest.TestCase):
         self.assertFalse(merged.get("streaming"))
         self.assertIsNone(merged.get("partial_response"))
 
+    def test_publish_asked_entity_reaches_a_pending_merge(self) -> None:
+        """Plan 54 gap 2: the named thing must reach the live poll before completion."""
+        self.plugin._background_state = {
+            "status": "pending",
+            "request_id": 7,
+            "response": "Thinking...",
+            "started_at": 0.0,
+        }
+        self.plugin._reset_partial_stream_snapshot(7)
+        self.plugin._publish_asked_entity(7, "Wheatley")
+        merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
+        self.assertEqual(merged.get("strategy_spoiler_asked_entity"), "Wheatley")
+
+    def test_publish_asked_entity_for_a_stale_request_id_is_ignored(self) -> None:
+        self.plugin._background_state = {
+            "status": "pending",
+            "request_id": 7,
+            "response": "Thinking...",
+            "started_at": 0.0,
+        }
+        self.plugin._reset_partial_stream_snapshot(7)
+        self.plugin._publish_asked_entity(8, "Wrong request")
+        merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
+        self.assertNotIn("strategy_spoiler_asked_entity", merged)
+
+    def test_publish_asked_entity_not_grafted_onto_a_completed_state(self) -> None:
+        self.plugin._background_state = {"status": "completed", "request_id": 7}
+        self.plugin._reset_partial_stream_snapshot(7)
+        self.plugin._publish_asked_entity(7, "Wheatley")
+        merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
+        self.assertNotIn("strategy_spoiler_asked_entity", merged)
+
+    def test_publish_asked_entity_empty_leaves_the_key_absent(self) -> None:
+        self.plugin._background_state = {
+            "status": "pending",
+            "request_id": 7,
+            "response": "Thinking...",
+            "started_at": 0.0,
+        }
+        self.plugin._reset_partial_stream_snapshot(7)
+        self.plugin._publish_asked_entity(7, "")
+        merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
+        self.assertNotIn("strategy_spoiler_asked_entity", merged)
+
 
 if __name__ == "__main__":
     unittest.main()

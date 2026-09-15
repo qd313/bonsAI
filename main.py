@@ -600,6 +600,18 @@ class Plugin:
                 self._partial_stream_snapshot["thinking_tone"] = tone
         return blurb, meta
 
+    def _publish_asked_entity(self, request_id: int, entity: str) -> None:
+        """Publish the Strategy-question's named thing before the model call finishes.
+
+        Read by ``_merge_partial_into_background_status`` so the live streaming bubble can open
+        its spoiler box from the first word, the same way ``app_name`` already does.
+        """
+        with self._partial_response_lock:
+            snap = self._partial_stream_snapshot
+            if snap.get("request_id") != request_id:
+                return
+            snap["asked_entity"] = (entity or "").strip()[:120]
+
     def _publish_thinking_phase_key(
         self,
         request_id: int,
@@ -643,6 +655,8 @@ class Plugin:
         if out.get("status") == "pending" and rid is not None and snap.get("request_id") == rid:
             out["partial_response"] = snap.get("partial_response")
             out["streaming"] = bool(snap.get("streaming"))
+            if snap.get("asked_entity"):
+                out["strategy_spoiler_asked_entity"] = snap["asked_entity"]
             thinking = snap.get("thinking_summary")
             if isinstance(thinking, str) and thinking.strip():
                 # Escalate a line that has gone stale. Once the last prep phase publishes, nothing

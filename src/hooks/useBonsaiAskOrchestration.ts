@@ -545,7 +545,14 @@ export function useBonsaiAskOrchestration(
       );
 
       if (status.status === "pending") {
-        setOllamaContext({ app_id: appId, app_context: appContext });
+        setOllamaContext({
+          app_id: appId,
+          app_context: appContext,
+          // Plan 54 gap 1/2: the pending poll is the only source of these while the answer is
+          // still streaming — lastExchange stays empty until completion.
+          app_name: status.app_name ?? "",
+          asked_entity: status.strategy_spoiler_asked_entity ?? "",
+        });
         setIsAsking(true);
         setIsForeignPendingAsk(paintsForeignSlot);
         a.onGeneratingSlotChange?.(payloadSlotId);
@@ -627,7 +634,12 @@ export function useBonsaiAskOrchestration(
         setIsStreamSettling(false);
         setIsStreamingPreview(false);
         setAskStopped(true);
-        setOllamaContext({ app_id: appId, app_context: appContext });
+        setOllamaContext({
+          app_id: appId,
+          app_context: appContext,
+          app_name: status.app_name ?? "",
+          asked_entity: status.strategy_spoiler_asked_entity ?? "",
+        });
         setIsAsking(false);
         setShortcutSetupVariant(null);
         setOllamaResponse(cancelledBody);
@@ -648,7 +660,12 @@ export function useBonsaiAskOrchestration(
       if (status.status === "completed" || status.status === "failed") {
         const applied = status.applied ?? null;
         const terminalText = buildResponseText(status.response ?? "No response text.", applied);
-        setOllamaContext({ app_id: appId, app_context: appContext });
+        setOllamaContext({
+          app_id: appId,
+          app_context: appContext,
+          app_name: status.app_name ?? "",
+          asked_entity: status.strategy_spoiler_asked_entity ?? "",
+        });
         setIsAsking(false);
         setIsForeignPendingAsk(false);
         a.onGeneratingSlotChange?.(null);
@@ -1235,7 +1252,14 @@ export function useBonsaiAskOrchestration(
           setOllamaResponse(data.response ?? "That input was not sent.");
           setLastApplied(null);
           setElapsedSeconds(null);
-          setOllamaContext({ app_id: appId, app_context: appId ? "active" : "none" });
+          setOllamaContext({
+            app_id: appId,
+            app_context: appId ? "active" : "none",
+            // A blocked submit still starts a new question — clear the previous one's value
+            // rather than let it linger under the new question's bubble.
+            app_name: appName,
+            asked_entity: "",
+          });
           void refreshInputTransparency();
           pendingThreadQuestionDisplayRef.current = null;
           toaster.toast({

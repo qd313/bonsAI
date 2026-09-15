@@ -65,6 +65,10 @@ class _FakePlugin:
         # The kwargs the last ask_ollama call received, so a test can check what actually reached
         # the prompt call rather than only what the result dict reports back.
         self.ask_ollama_kwargs: dict = {}
+        # Records "publish_asked_entity" and "ask_ollama" entries in the order they actually
+        # happened, so a test can prove the publish reaches the live poll before the model call
+        # runs, not just that both eventually carry the same value.
+        self.call_order: list = []
 
     async def load_settings(self):
         return self._settings
@@ -72,8 +76,15 @@ class _FakePlugin:
     async def _try_handle_sanitizer_keyword_command(self, question, app_id):
         return None
 
+    def _active_request_id(self):
+        return 99
+
+    def _publish_asked_entity(self, request_id, entity):
+        self.call_order.append(("publish_asked_entity", request_id, entity))
+
     async def ask_ollama(self, *args, **kwargs):
         self.ask_ollama_kwargs = kwargs
+        self.call_order.append(("ask_ollama", kwargs.get("strategy_spoiler_asked_entity")))
         return self._ollama_result
 
     async def _persist_input_transparency(self, payload):
@@ -197,6 +208,47 @@ class StrategySpoilerAskedEntityWiringTests(unittest.TestCase):
         result = _run(plugin, question="what class should I play", ask_mode="strategy")
 
         self.assertEqual(result.get("strategy_spoiler_asked_entity"), "")
+
+
+class AskedEntityStreamingPublishWiringTests(unittest.TestCase):
+    """Plan 54 gap 2, streaming: the named thing must reach the live poll before the answer
+    completes, not only in the finished result dict -- otherwise the spoiler box on screen still
+    waits for the whole answer before it can open.
+    """
+
+    def _base_settings(self) -> dict:
+        return {
+            "latency_timeouts_custom_enabled": False,
+            "input_sanitizer_user_disabled": False,
+            "capabilities": {},
+            "use_local_knowledge_base": False,
+        }
+
+    def test_publish_fires_once_before_ask_ollama_with_the_same_value(self):
+        plugin = _FakePlugin(self._base_settings())
+        plugin._ollama_result = {"success": True, "response": "Wheatley starts lying immediately."}
+
+        question = "wheatley fight"
+        result = _run(plugin, question=question, ask_mode="strategy")
+
+        publish_calls = [c for c in plugin.call_order if c[0] == "publish_asked_entity"]
+        self.assertEqual(len(publish_calls), 1)
+        _, request_id, published_entity = publish_calls[0]
+        self.assertEqual(request_id, plugin._active_request_id())
+        self.assertEqual(published_entity, result.get("strategy_spoiler_asked_entity"))
+
+        publish_index = plugin.call_order.index(publish_calls[0])
+        ask_index = next(i for i, c in enumerate(plugin.call_order) if c[0] == "ask_ollama")
+        self.assertLess(publish_index, ask_index, "publish must reach the poll before ask_ollama runs")
+
+    def test_no_publish_when_nothing_is_named(self):
+        plugin = _FakePlugin(self._base_settings())
+        plugin._ollama_result = {"success": True, "response": "General advice."}
+
+        _run(plugin, question="what class should I play", ask_mode="strategy")
+
+        publish_calls = [c for c in plugin.call_order if c[0] == "publish_asked_entity"]
+        self.assertEqual(publish_calls, [])
 
 
 class StrategyTitleProfileWiringTests(unittest.TestCase):

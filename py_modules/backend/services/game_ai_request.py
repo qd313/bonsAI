@@ -541,6 +541,15 @@ async def run_game_ai_request(
         strategy_spoiler_asked_entity = extract_strategy_asked_entity(
             question_for_model, known_entities=kb_card_names(kb_text)
         )
+        # Plan 54 gap 2, streaming: hand the named thing to the live poll before ask_ollama runs,
+        # the same guard shape _publish_thinking_phase_key already uses, so the screen can open a
+        # spoiler box on the first streamed word instead of waiting for completion.
+        if (
+            strategy_spoiler_asked_entity
+            and isinstance(active_rid, int)
+            and hasattr(plugin, "_publish_asked_entity")
+        ):
+            plugin._publish_asked_entity(active_rid, strategy_spoiler_asked_entity)
         strategy_spoiler_kb_entity_match = kb_text_covers_asked_entity(
             kb_text, strategy_spoiler_asked_entity
         )

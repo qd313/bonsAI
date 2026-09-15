@@ -43,7 +43,16 @@ export type ScreenshotItem = {
   capture_method?: string;
 };
 
-export type OllamaContextUi = { app_id: string; app_context: "active" | "none" } | null;
+export type OllamaContextUi =
+  | {
+      app_id: string;
+      app_context: "active" | "none";
+      /** The running game's name, so a name-only game can open its spoiler box while streaming. */
+      app_name?: string;
+      /** The backend's own guess at the named boss/thing, published before the answer completes. */
+      asked_entity?: string;
+    }
+  | null;
 
 /** Parsed from Ollama when Ask mode is Strategy Guide and the model emitted a branch picker block. */
 export type StrategyGuideBranchesPayload = {

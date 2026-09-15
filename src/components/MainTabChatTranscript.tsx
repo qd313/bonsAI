@@ -1065,8 +1065,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   "live",
                   liveQuestion || lastExchange?.question || "",
                   ollamaContext?.app_id ?? null,
-                  lastExchange?.appName ?? null,
-                  lastExchange?.askedEntity ?? null,
+                  ollamaContext?.app_name || lastExchange?.appName || null,
+                  ollamaContext?.asked_entity || lastExchange?.askedEntity || null,
                   lastExchange?.spoilerConsentEffective === true
                 )
               : null}
@@ -1096,8 +1096,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                         lastExchange.answer,
                         liveQuestion || lastExchange?.question || "",
                         ollamaContext?.app_id ?? null,
-                        lastExchange?.appName ?? null,
-                        lastExchange?.askedEntity ?? null,
+                        ollamaContext?.app_name || lastExchange?.appName || null,
+                        ollamaContext?.asked_entity || lastExchange?.askedEntity || null,
                         lastExchange?.spoilerConsentEffective === true
                       )
                     : {}),

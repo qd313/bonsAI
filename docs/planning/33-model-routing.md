@@ -102,7 +102,7 @@ for anything ★–★★, or as a session default, because it also forces xhigh
 The August refactor (phase 0 through step 11, 2026-08-02 to 08-05) ran on Opus xhigh at about $7 per
 commit with tests green between commits and every decision written to the roadmap as a D entry. The only
 problems surfaced on the device afterward (a voice install reset, "lost work" in main.py, a focus
-regression), which is the same pattern as everywhere else. The rules in REFACTOR-PLAN.md § Refactor rules
+regression), which is the same pattern as everywhere else. The refactor rules in AGENTS.md
 (one refactor per commit, never mix a move with a rewrite) held up and stay.
 
 Break a refactor into these pieces and route each one:

@@ -5,7 +5,7 @@ Purpose: Measure a fixed list of code-health numbers for the phase 0 refactor an
     the moment one of them gets worse instead of after it quietly slides for weeks.
 Used for: `python scripts/ratchet.py measure|check|update`, called by hand today
     and by the phase 0 verify script once it lands. Every number here is one the
-    refactor is only allowed to improve — see docs/planning/51-refactor-round-two.md
+    refactor is only allowed to improve — see docs/archive/51-refactor-round-two.md
     section B2 for the plan this implements.
 Solves: Without a fixed set of numbers checked on every change, "the refactor made
     things better" is just an opinion. This turns that opinion into a table that
@@ -302,7 +302,7 @@ def metric_be_long_functions_no_docstring():
 def _run_jscpd(paths: list[Path], extra_ignore: str = "") -> tuple[Optional[int], Optional[str]]:
     jscpd_bin = _bin_exists("jscpd")
     if jscpd_bin is None:
-        return None, "jscpd is not installed yet (planned as a dev dependency, see docs/planning/51-refactor-round-two.md B3)"
+        return None, "jscpd is not installed yet (planned as a dev dependency, see docs/archive/51-refactor-round-two.md B3)"
     existing = [str(p) for p in paths if p.exists()]
     if not existing:
         return None, "jscpd: none of the target paths exist"
@@ -377,7 +377,7 @@ def metric_duplicate_lines_be_tests():
 def metric_unused_exports_fe():
     knip_bin = _bin_exists("knip")
     if knip_bin is None:
-        return None, "knip is not installed yet (planned as a dev dependency, see docs/planning/51-refactor-round-two.md B3)"
+        return None, "knip is not installed yet (planned as a dev dependency, see docs/archive/51-refactor-round-two.md B3)"
     try:
         proc = subprocess.run(
             [str(knip_bin), "--reporter", "json"],

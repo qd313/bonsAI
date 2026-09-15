@@ -28,7 +28,7 @@ sides produce the new value — a failure on one side only means the two languag
 which is the bug this exists to catch. Do not update the fixture to match whichever side you
 happened to edit; work out which one is right first.
 
-Adding a setting still touches both languages ([REFACTOR-PLAN.md](../../REFACTOR-PLAN.md)
+Adding a setting still touches both languages ([the round-one refactor plan](../../docs/archive/refactor-plan-round-one.md)
 §3.1 exists to reduce that). This fixture does not reduce the cost — it makes an incomplete
 edit fail loudly instead of shipping a frontend and backend that disagree about a default.
 

@@ -6,6 +6,31 @@
 
 Headings group related work. Star counts match the historical list.
 
+### The seven-phase clean-up, round two (2026-09-15)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-15 when the last phase finished. The entry below is
+copied line for line, nothing reworded, with its closing state added at the end. The plan itself is
+archived at [51-refactor-round-two.md](51-refactor-round-two.md) and the honest account of what it cost
+and what it missed is [the postmortem](../audit/refactor-round-two/postmortem.md)._
+
+- ★★★★★ `[platform]` **Refactor round two (plan 51)** — **OPEN, planned 2026-09-11, calls locked (D89 to D96).** A
+  seven-phase clean-up touching the code, the tests, the build scripts, the docs and how agent sessions work here,
+  with nothing about how the plugin behaves changing for a person using it. Work starts only when the maintainer
+  says the exact words "start refactor implementation now." **Progress, 2026-09-14:** phases 0 to 4 are done and
+  checked on the Deck. Phase 4 moved the most code — the entry point is under three thousand lines for the first
+  time, both back-end import loops are gone, and the Ask screen code has started coming apart. Its Deck evening
+  found nothing a person would notice: one real question answered in 40.4 seconds against 42.6 the night before,
+  voice word perfect, 18 controls reachable with no dead ends, and a log with no errors in it.
+  [Plan](archive/51-refactor-round-two.md), [notes](audit/refactor-round-two/session-notes.md).
+
+**Closed 2026-09-15.** All seven phases ran between 13 and 15 September. Phase 5 explained 257 files with
+no line of program code changed, proved by stripping the comments from before and after and comparing what
+was left. Phase 6 rewrote the README, the one guide and the orientation file in plain words, moved the
+lessons that lived only in one tool's private memory into [lessons-learned.md](../lessons-learned.md), and
+wrote the postmortem. Three things it did not manage — the settings list still written out by hand in seven
+places, both big documents still over target, and duplication slightly worse than when it started — are in
+the postmortem and on the open lists.
+
 ### The decode animation on the preset chips, judged by eye (2026-09-14)
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-14. The device measurement was done on

@@ -1,11 +1,23 @@
 # Plan 51: Refactor round two
 
 Written 2026-09-11 by the planning session (Fable, max effort, decisions only).
-Status: **planned, not started.** Work begins only when the maintainer says the exact words
-"start refactor implementation now". The maintainer's calls are D89 to D96 in
-[the decisions file](../audit/maintainer-decisions-locked.md). This plan replaces the round-one
-refactor plan at the repo root; that file carries a banner from today and moves to the archive in
-phase 1.
+
+> **Status: finished 2026-09-15. Archived — this is a record, not live work.**
+> All seven phases ran between 13 and 15 September 2026. What it cost, what it changed, what it
+> did not manage and what to do differently next time are in
+> [the postmortem](../audit/refactor-round-two/postmortem.md). The handover notes for every
+> session are in [session-notes.md](../audit/refactor-round-two/session-notes.md).
+>
+> **Three things this plan describes did not survive contact and are wrong here.** The
+> file-size number and the size limit on the one guide were both measured in a way that fought
+> the work and were corrected; the duplication figures in the tables below were measured with a
+> tool that has since been replaced, so they do not compare with today's. The postmortem has the
+> honest versions. Do not start new work from this file.
+
+The maintainer's calls are D89 to D96 in
+[the decisions file](../audit/maintainer-decisions-locked.md). This plan replaced the round-one
+refactor plan, now archived alongside it at
+[refactor-plan-round-one.md](refactor-plan-round-one.md).
 
 Part A is for the maintainer and is written in plain words. Part B is for the agents that do the
 work and names files, commands and numbers. Skip Part B unless you are running a session.

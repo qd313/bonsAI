@@ -5,6 +5,89 @@ pick up without rereading anything but this file.
 
 ---
 
+## 2026-09-15, phase 6: the handoff, and the clean-up is finished
+
+**The clean-up is done.** Seven phases, 13 to 15 September. Nothing a person using the plugin can
+see has changed, and that was the point. [The postmortem](postmortem.md) is the honest account:
+what it cost per phase from the ledger, what it changed, the three things it did not manage, and
+what to do differently if there is ever a round three.
+
+### Your question about the old copies of the project: nothing in them is unique
+
+Thirty copies, every one checked rather than assumed. Nothing in any of them would cost re-working
+if the folders went away.
+
+- **Six hold commits that are not on the main line.** Five of those six are already there under a
+  different commit number — the same work, committed again when it landed. Checked by sampling the
+  actual lines of code, not by reading commit titles.
+- **One was rebuilt from scratch under a different name.** The guard against advice that tells you
+  to delete your save data. The version on the main line is the better one: it writes down what it
+  is known to miss.
+- **One is genuinely only in a copy, and it is meant to be.** The three commits that widen the
+  troubleshooting search to questions that only describe a symptom. That work was accepted and then
+  deliberately held back, twice, because what comes back is a tip about something else entirely. The
+  reasoning is written into the roadmap entry. **Its branch keeps the commits**, so the folder can go
+  and the work stays.
+- **The loose uncommitted edits are all superseded.** One copy had a 424-line change to the
+  answer-checking script; the main line's version of that file is 511 lines further on and has every
+  function the copy had. Another had the spoiler fix that stops a story-driven game being treated
+  like an arcade one — already on the main line. The rest is one file that is rewritten on every
+  commit anyway.
+
+**Nothing was deleted.** Removing thirty folders needs your say-so, and the tool asked for it. When
+you are ready: the folders can all go, and **no branch should be deleted** — a folder is a working
+copy, a branch is where the commits live. That is what keeps the held-back symptom-search work.
+
+### What this session wrote
+
+- **[lessons-learned.md](../../lessons-learned.md) is new.** Seven sections of traps this project
+  has already fallen into, each saying what happened before what to do. Until today this only
+  existed in one AI tool's private memory on your machine, which meant a different tool, or a
+  reinstall, started from nothing and repeated the mistakes.
+- **The one guide is rewritten**, 31.4 KB to 21.1. Nothing earned by a bug was cut. What went was
+  duplication: two tool tables that repeat the setup document, the long routing write-up that
+  repeats its own plan, the shelved in-editor preview, and every hand-typed line number.
+- **The README is rewritten** for somebody who has never seen the plugin. The warning block at the
+  top was a wall of capitals and jargon; it is now readable. Internal roadmap chatter that had
+  leaked into the feature list is one honest "rough edges" paragraph.
+- **Both refactor plans are archived**, with every live reference to them updated. The round-two
+  plan carried "planned, not started" at the top for six phases; it now says finished, and names the
+  three places it turned out to be wrong.
+
+### One measure was pointing the wrong way and would have failed this work
+
+The size check on the one guide was set to **bigger is better**. That was right once: the guide
+started as a 9 KB stub and the plan asked it to grow to 12 when it absorbed the rules from the
+editor we dropped. It then grew to 31.4, the check recorded that as the best-ever value, and from
+that moment the guide was only ever allowed to get **bigger** — this session's rewrite would have
+been failed for trimming it.
+
+That is the third time in this clean-up a measure has fought the work: the file-size number pushed
+four workers into writing worse explanations, a word list invited seven workers to reach for a
+thesaurus, and now this. The habit that keeps paying: when a measure and the work disagree, check
+the measure first.
+
+It is now lower-is-better with a ceiling, like the roadmap and the testing document. **The target of
+12 KB is left untouched and is not met at 21.1 — that is your call.** Twelve was set before this
+file carried the Steam Deck focus rules, the routing table and the settings warning, every line of
+which was earned by a bug. Reaching 12 means deleting some of that. Twenty is the honest number.
+
+### What is still open, all of it yours to decide
+
+1. **The thirty folders.** Recommended: remove them all, keep every branch.
+2. **The size target on the one guide**: 12 as written, or 20 as recommended.
+3. **The duplication target of 350** was set against a measuring tool nobody uses any more. Today's
+   tool says 891. The target needs resetting before anyone can say if it is reachable.
+4. **The testing document is at 141 KB against a ceiling of 145.** It will breach on an ordinary
+   landing soon. It is one of the five files with a trimming job already on the roadmap.
+5. **The settings list is still written out by hand in seven places.** This was meant to be phase 4
+   and did not happen. It is the one gap in the clean-up that can actually bite: adding a setting is
+   still about eighteen files, and missing one of the seven spots means it silently stops working in
+   one situation. Already happened once, to four settings. It is on the roadmap at one star, which
+   undersells it.
+
+---
+
 ## 2026-09-15, phase 5 session 2: the headers now talk to someone who has never seen the code
 
 **Phase 5 is finished except for one decision, which is yours** — see the Deck question below.

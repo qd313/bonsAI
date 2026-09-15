@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 66,
-  "edgeCount": 150,
+  "fileCount": 67,
+  "edgeCount": 153,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -54,6 +54,10 @@
       "count": 7
     },
     {
+      "path": "py_modules/backend/services/knowledge_base_schema.py",
+      "count": 6
+    },
+    {
       "path": "py_modules/backend/services/ollama_prompts.py",
       "count": 6
     },
@@ -63,10 +67,6 @@
     },
     {
       "path": "py_modules/backend/services/ai_character_service.py",
-      "count": 5
-    },
-    {
-      "path": "py_modules/backend/services/knowledge_base_schema.py",
       "count": 5
     },
     {
@@ -103,6 +103,10 @@
     },
     {
       "path": "py_modules/backend/services/knowledge_base_service.py",
+      "count": 3
+    },
+    {
+      "path": "py_modules/backend/services/rag_corpus_download_service.py",
       "count": 3
     },
     {
@@ -147,10 +151,6 @@
     },
     {
       "path": "py_modules/backend/services/proton_troubleshooting_logs.py",
-      "count": 2
-    },
-    {
-      "path": "py_modules/backend/services/rag_corpus_download_service.py",
       "count": 2
     },
     {
@@ -278,6 +278,10 @@
       "count": 1
     },
     {
+      "path": "py_modules/backend/services/rag_corpus_local_install.py",
+      "count": 1
+    },
+    {
       "path": "py_modules/backend/services/rag_corpus_status.py",
       "count": 1
     },
@@ -342,6 +346,7 @@
         "py_modules/backend/services/plugin_data_reset.py",
         "py_modules/backend/services/pull_model_catalog_service.py",
         "py_modules/backend/services/rag_corpus_download_service.py",
+        "py_modules/backend/services/rag_corpus_local_install.py",
         "py_modules/backend/services/rag_corpus_status.py",
         "py_modules/backend/services/reply_language_service.py",
         "py_modules/backend/services/screenshot_media.py",
@@ -587,6 +592,7 @@
         "py_modules/backend/services/knowledge_base_service.py",
         "py_modules/backend/services/ollama_embed_service.py",
         "py_modules/backend/services/rag_corpus_download_service.py",
+        "py_modules/backend/services/rag_corpus_local_install.py",
         "py_modules/backend/services/rag_corpus_status.py"
       ]
     },
@@ -784,7 +790,17 @@
       ],
       "importedBy": [
         "main.py",
-        "py_modules/backend/services/plugin_data_reset.py"
+        "py_modules/backend/services/plugin_data_reset.py",
+        "py_modules/backend/services/rag_corpus_local_install.py"
+      ]
+    },
+    "py_modules/backend/services/rag_corpus_local_install.py": {
+      "imports": [
+        "py_modules/backend/services/knowledge_base_schema.py",
+        "py_modules/backend/services/rag_corpus_download_service.py"
+      ],
+      "importedBy": [
+        "main.py"
       ]
     },
     "py_modules/backend/services/rag_corpus_status.py": {

@@ -13,7 +13,6 @@ import asyncio
 import base64
 import json
 import os
-import shutil
 import sys
 import threading
 import time
@@ -149,6 +148,7 @@ from backend.services.ask_payload import (
     sanitize_attachments,
 )
 from backend.services.rag_corpus_status import build_rag_corpus_status
+from backend.services.rag_corpus_local_install import install_rag_corpus_from_local_dir
 from backend.services.tdp_service import clean_env
 from backend.services.local_ollama_setup_service import (
     new_local_ollama_setup_state,
@@ -180,7 +180,6 @@ from backend.services.voice_transcription_service import (
 from backend.services.voice_read_aloud_service import VoiceReadAloudService
 from backend.services.rag_corpus_download_service import (
     fetch_remote_manifest,
-    install_corpus_from_manifest,
     new_rag_corpus_download_state,
     remove_corpus_at_path,
     run_rag_corpus_download,
@@ -190,10 +189,7 @@ from backend.services.knowledge_base_service import (
     suggest_chip_candidates,
 )
 from backend.services.knowledge_base_schema import (
-    CORPUS_MANIFEST_FILENAME,
     default_corpus_dir_internal,
-    default_seed_corpus_source_dir,
-    load_manifest_from_path,
     resolve_corpus_db_path,
     sanitize_corpus_install_dir,
 )
@@ -1504,62 +1500,10 @@ class Plugin:
     async def install_rag_corpus_local(self, data: Any = None):
         """Dev/QA: install corpus from a local manifest directory (no network)."""
         settings = await self.load_settings()
-        if not settings.get("show_developer_tab"):
-            return {"ok": False, "error": "Developer tab must be enabled for local corpus install."}
-        src_dir = ""
-        if isinstance(data, dict):
-            src_dir = str(data.get("source_dir") or data.get("path") or "").strip()
-        if not src_dir:
-            src_dir = default_seed_corpus_source_dir()
-        src_dir = os.path.expanduser(str(src_dir).strip())
-        manifest_path = os.path.join(src_dir, CORPUS_MANIFEST_FILENAME)
-        if not os.path.isfile(manifest_path):
-            return {"ok": False, "error": f"Missing {CORPUS_MANIFEST_FILENAME} at {src_dir}"}
-        install_dir = default_corpus_dir_internal()
-        if isinstance(data, dict) and str(data.get("install_path") or "").strip():
-            install_dir = str(data.get("install_path")).strip()
-        try:
-            install_dir = sanitize_corpus_install_dir(os.path.expanduser(install_dir))
-        except ValueError as exc:
-            return {"ok": False, "error": str(exc)}
-
-        def _install() -> str:
-            manifest = load_manifest_from_path(manifest_path)
-            cancel = threading.Event()
-            logs: list[str] = []
-
-            def log(msg: str) -> None:
-                logs.append(msg)
-
-            # Copy compressed chunk from source_dir if present
-            chunks = manifest.get("chunks") or []
-            if chunks and isinstance(chunks[0], dict):
-                fname = str(chunks[0].get("filename") or "")
-                src_chunk = os.path.join(src_dir, fname)
-                if os.path.isfile(src_chunk):
-                    os.makedirs(install_dir, exist_ok=True)
-                    shutil.copy2(src_chunk, os.path.join(install_dir, fname))
-            return install_corpus_from_manifest(
-                manifest,
-                install_dir,
-                cancel_event=cancel,
-                log=log,
-            )
-
-        try:
-            root = await asyncio.to_thread(_install)
-            manifest = load_manifest_from_path(os.path.join(root, CORPUS_MANIFEST_FILENAME))
-            version = str(manifest.get("version") or "")
-            await self.save_settings(
-                {
-                    "rag_corpus_path": root,
-                    "rag_corpus_version": version,
-                    "use_local_knowledge_base": True,
-                }
-            )
-            return {"ok": True, "install_path": root, "version": version}
-        except Exception as exc:
-            return {"ok": False, "error": str(exc)}
+        outcome = await install_rag_corpus_from_local_dir(settings, data)
+        if outcome.settings_to_save:
+            await self.save_settings(outcome.settings_to_save)
+        return outcome.result
 
     async def get_session_rag_chip_candidates(
         self,

@@ -212,6 +212,7 @@
     "tests/test_pyro_asshole_safety.py",
     "tests/test_rag_corpus_cancel_state.py",
     "tests/test_rag_corpus_download.py",
+    "tests/test_rag_corpus_local_install.py",
     "tests/test_rag_corpus_status.py",
     "tests/test_reply_followup.py",
     "tests/test_reply_language_service.py",

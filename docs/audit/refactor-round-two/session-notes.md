@@ -5,6 +5,119 @@ pick up without rereading anything but this file.
 
 ---
 
+## 2026-09-14, phase 5 session 1: every file and every long function now explains itself
+
+**Nothing a person using the plugin would notice has changed, and that is proved rather than
+promised.** Across 100 files, every single changed line is inside a comment. A script takes the
+comments out of the before and the after of each file and compares what is left; all 100 came back
+identical, with none skipped. That check is new, built at the start of this session, because the
+one way this phase could break the plugin is a worker quietly tidying a line of code while writing
+about it -- which reads as harmless in a diff.
+
+**Five numbers went to zero.** Files with nothing describing them, 20. Big files with no
+walkthrough, 21. Long screen functions with nothing explaining them, 53. Long back-end functions,
+7. Header references pointing at names that do not exist, 80. All nil, across 311 files. About
+5,500 lines of explanation went in.
+
+**The header check is now a real gate**, at its strict level, instead of advisory. Its own note
+always said phase 5 would flip it once the backlog cleared. A new file that ships with nothing
+explaining it now fails the run, while the person adding it still remembers what it is for. Proved
+by breaking it. The generated code map is also rebuilt on every commit now -- nothing rebuilt it
+before, and it had silently fallen four files behind.
+
+### Four of our own measuring tools were wrong, and the workers found them
+
+This is the thing worth carrying forward. **Every tool a worker questioned turned out to be
+broken.** None of these would have been found by reading them.
+
+1. **The header check flagged 80 problems, of which 75 were not problems.** It treated any word in
+   backticks as a claim that a function by that name lived in the file, so ordinary quoting of a
+   setting name or a screen attribute came back as an error. A check that is wrong 94% of the time
+   is one everybody learns to ignore. It now only checks a name written with brackets after it.
+2. **The long-function scanner could not see a comment above the commonest way screens are written
+   here** -- `const X = () => {}`. It walked up to the declaration and stopped one step short of the
+   line the comment actually sits above. It was calling carefully written files unexplained, and no
+   amount of rewriting would have satisfied it. Correcting it took the same untouched code from 56
+   to 53.
+3. **The map of which file uses which read an example import inside a comment as a real import**,
+   inventing a dependency on a file that does not exist. That map is what we check for circular
+   dependencies, so a quoted example could in principle have invented a loop nobody could explain.
+4. **The count of files over 400 lines was counting the explanation as part of the file's size.**
+   See below -- this one did real damage.
+
+A fifth, smaller one: `src/pluginVersion.ts` is rewritten from scratch on every build, so a header
+written into it was wiped and the check went on reporting the file as undescribed however many
+times someone described it. The header now lives in the generator that writes the file.
+
+### The size number was fighting the work, and it won four times before anyone said so
+
+The count of files over 400 lines included comment and docstring lines. During a phase whose entire
+job is explaining files, that is a number that grows as the work is done -- and **four separate
+workers damaged their own writing to satisfy it before any of them raised it.** One shortened a
+header twice. One wrote a header as a single dense paragraph to land at exactly 400 and said so,
+asking whether a person would sign off on crossing the line. One trimmed a header on a file that
+turned out to be 366 lines of code. One compressed three and moved a walkthrough somewhere less
+obvious purely to save lines. Three reported the conflict; all four had already written worse by
+the time they did.
+
+**The maintainer's ruling, on the day:** clear comments matter more than a line count, and a long
+readable explanation beats a cramped one. The number now counts lines of actual code, via
+`scripts/code_line_count.py`, shared by the numbers list and the header check. All four workers were
+sent back to restore what they had cut, and all four did.
+
+**Read the new figure carefully.** 42 files over the limit became 27 on exactly the same code. That
+is a changed measuring stick, not progress. The target of 30 now reads as met and is not met. Had
+the old count stood, this phase would have finished at 48. Both figures are reported side by side
+so neither can be quoted alone.
+
+### What is left of phase 5
+
+Not finished. The plan allows two sessions and this was the first.
+
+**141 files still describe themselves in terms of art.** The 100 files touched here were the ones
+with something missing -- no description, no walkthrough, an unexplained long function. The rest
+have a header, but written for somebody who already knows the code: "RPC surface, capability gates,
+and Ask orchestration entry" was main.py's, and it is representative. That is session 2, and it is
+cheaper per file than this session was: the header is all that needs reading in most cases. The
+most common offenders are the words RPC, persist, normalise, orchestrate, registry, payload and
+snapshot.
+
+**The Deck.** The plan asks for a short check on the device at the end of phase 5. My view, for the
+maintainer to overrule: it would be confirming mechanically what is already proved -- no app file
+had a line of code changed, and the full check passes -- and the Deck evening that is genuinely owed
+is the knowledge-base wave two one. Left undone and flagged rather than quietly dropped.
+
+**Three findings for the roadmap, none fixed here**, per the rule that a refactor commit never
+carries a fix:
+- Ask the Deck to download several AI models and mistype one name: the bad one is silently dropped,
+  a line goes to the log, and the rest download. It looks like it worked.
+- If two things ever want the shared voice server for different speech models at once, the second
+  restarts it and the first is never told -- it just finds the server gone. Only one thing uses it
+  today. It would matter the moment a wake-word listener is added.
+- The settings hook writes its list of about fifty settings out by hand in several places in the
+  same file. A setting added to one list and missed in another does not break visibly; it quietly
+  stops working in one situation. The file already records this happening once, to four settings.
+  This is the same thing the numbers list tracks as "places the settings field list is repeated",
+  still at 7 against a target of 1, and the registry that was meant to fix it did not get built.
+
+### For whoever briefs workers next
+
+Three lessons, now written into the worker brief template as well:
+
+- **Name every file.** A brief that said "the remaining 26 files" and listed categories got back a
+  careful list the worker worked out itself: it overlapped another worker by one file and missed
+  eight. The work was good and none was wasted, but only by luck.
+- **Say which numbers do not constrain the work.** A brief that says "explain this properly" while a
+  check punishes long explanations puts a worker in a bind, and workers resolve it by writing worse
+  rather than by refusing.
+- **When a worker says a check disagrees with its instructions, check the tool first.** Four for
+  four this phase.
+
+One practical note: every lane merge conflicted on the same generated architecture file, every time.
+The resolution is always to regenerate it, never to pick a side. Not worth fixing, worth knowing.
+
+---
+
 ## 2026-09-14, phase 4 finished: one more block out, and the leftovers closed off
 
 **Phase 4 is done.** Three commits. Nothing a person using the plugin would notice; checked on the

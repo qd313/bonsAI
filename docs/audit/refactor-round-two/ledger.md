@@ -26,6 +26,25 @@ roughly how many tokens it used, and how it finished.
 | 2026-09-14 | 4 Reshape | Session 3: split the Ask hook, one more move, settings measured | Opus xhigh | 62 | 175,000 | done |
 | 2026-09-14 | 4 Reshape | Session 4: the whole phase checked on the Deck | Opus xhigh | 44 | 120,000 | done |
 | 2026-09-14 | 4 Reshape | Session 5: rating a reply splits out, leftovers closed, Deck-checked | Opus xhigh | 58 | 155,000 | done |
+| 2026-09-14 | 5 Explain | Lane A, the AI side of the back end, 9 files | Sonnet high | 80 | 285,000 | done |
+| 2026-09-14 | 5 Explain | Lane B, the Ask screen, 13 files incl. the 3 biggest functions | Sonnet high | 190 | 369,000 | done |
+| 2026-09-14 | 5 Explain | Lane C, stylesheets, hooks and small files, 43 files | Sonnet high | 228 | 511,000 | done |
+| 2026-09-14 | 5 Explain | Lane D, knowledge base, voice and media, 14 files | Sonnet high | 132 | 348,000 | done |
+| 2026-09-14 | 5 Explain | Lane E, settings and the other tabs, 20 files | Sonnet high | 142 | 446,000 | done |
+| 2026-09-14 | 5 Explain | Session 1: the worked example, main.py, five tool fixes, all merges | Opus xhigh | 95 | 300,000 | done |
+
+Phase 5's first session is the most worker-heavy of the refactor so far: five workers, about
+1.96 million tokens between them, for 100 files explained and roughly 5,500 lines of explanation.
+That is close to the whole of phases 0 through 4 put together, and it is the right shape of
+spending -- the work is genuinely per-file, a script cannot do any of it, and the files were split
+so no two workers could touch the same one.
+
+Worth setting against that number: four of the five workers spent part of their budget fighting a
+measuring tool that was wrong, and one worked out its own file list because the brief named
+categories instead of files, doing eight files nobody asked for while missing eight that were
+wanted. Both are briefing failures by the session, not worker failures, and both are now written
+into the worker brief template. The tool fixes themselves were cheap; the wasted worker time was
+not.
 
 ## Running total
 

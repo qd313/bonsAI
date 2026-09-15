@@ -75,6 +75,8 @@ maintainer approved (`docs/audit/refactor-round-two/docs-triage-proposal.md`). O
 | wave2.md | Finished | 2026-09-13 | — | A report on two pieces of work landing together, from over a month ago. |
 | wave3.md | Finished | 2026-09-13 | — | A report on three pieces of work landing together, from over a month ago. |
 | wave4.md | Finished | 2026-09-13 | — | A report on one more piece of work landing, from over a month ago. |
+| 51-refactor-round-two.md | Finished | 2026-09-15 | — | The plan for the seven-phase clean-up. All seven phases ran between 13 and 15 September 2026. Kept as the record of what was intended; the postmortem holds what actually happened, including the three places this plan turned out to be wrong. |
+| refactor-plan-round-one.md | Replaced | 2026-09-15 | — | The first clean-up plan, from the repo root. Its finished items are recorded in it; everything still open was carried into round two, which then finished. |
 
 ## Helper scripts
 

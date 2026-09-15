@@ -40,6 +40,7 @@ roughly how many tokens it used, and how it finished.
 | 2026-09-15 | 5 Explain | Lane F, the lists of choices and the types, 21 files | Sonnet high | 112 | 203,000 | done |
 | 2026-09-15 | 5 Explain | Lane G, the hooks and the feature folders, 25 files | Sonnet high | 104 | 239,000 | done |
 | 2026-09-15 | 5 Explain | Session 2: two worked examples, the word report, the map fix, all merges | Opus xhigh | 100 | 330,000 | done |
+| 2026-09-15 | 6 Handoff | The whole phase, no workers | Opus high | ~60 | ~250,000 (estimate) | done |
 
 Phase 5's first session is the most worker-heavy of the refactor so far: five workers, about
 1.96 million tokens between them, for 100 files explained and roughly 5,500 lines of explanation.
@@ -80,6 +81,8 @@ ever touch the same one.
 | 3 Delete | 0 | 78 | 205,000 |
 | 4 Reshape (5 sessions, DONE, Deck-checked) | 0 | 320 | 900,000 |
 | 5 Explain (2 sessions, file work DONE) | 12 | 1,684 | 4,090,000 |
+| 6 Handoff (1 session, DONE) | 0 | ~60 | ~250,000 (estimate) |
+| **Whole clean-up** | **23** | **~3,038** | **~7,807,000** |
 
 Phases 2 and 3 together cost 323,000 — about a fifth of the docs diet, and neither spawned a single
 worker. A script did the measuring and the deleting; the one session read only the summaries and
@@ -96,3 +99,13 @@ it moved almost no code on purpose: it untangled the two knots, wrote down the s
 three guards that did not exist. That is the expensive-looking part of a refactor that makes the
 cheap part safe. The sessions that follow do the actual moving and should be sized against phase 3,
 not against this one.
+
+
+Phase 6 spawned no workers and is an estimate rather than a measured figure, which is worth saying
+plainly: a session cannot read its own token use from the inside. Every other row in this table came
+from a worker's own completion notice and is real. The tool-call count is close; the token figure is
+the session's own estimate and should be read as "about a quarter of a million", not as a measurement.
+
+The whole clean-up, then: **about 7.8 million tokens and 3,000 tool calls across 13 sessions and 23
+workers, over three days.** What that bought, and the three things it did not, are in
+[the postmortem](postmortem.md).

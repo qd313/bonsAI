@@ -5250,3 +5250,53 @@ language was the other option and is rejected for that reason.
 **Go on the lane.** One Sonnet lane at high, both screen-side gaps in it since they touch the same
 files, the prompt gap in the same lane, then the bookkeeper's docs sweep, then one Deck evening for
 the rows that have sat unticked since August plus the two new ones in plan 54. About a day of code.
+
+
+### D104 — LOCKED 2026-09-15 — The third bug-fixing session: what is in, what waits, and the Deck pass that follows
+
+Eleven calls from [plan 55](../planning/55-bugfix-session-three.md), ten answered, one still open.
+The session does not start until the maintainer says go. It runs in a fresh session on **Fable 5.1 at
+extra-high effort, by the maintainer's choice**, with Sonnet 5 lanes at high. The routing table asks
+for Opus here, since nothing in the session is above three stars; the maintainer knows that and chose
+Fable anyway, so it is recorded as their call rather than a slip. Two things follow. The bookkeeper
+guard will refuse the session's own edits to the roadmap, the testing documents, the changelog and test
+files, so all of those go through the bookkeeper helper. And the effort stays at extra-high, not max,
+because max is what ran earlier Fable sessions into the usage limit.
+
+**Wait for plan 54 before anything starts.** Four of the files this session's fixes need are changed
+in plan 54's copy of the repo, and that lane has not committed yet. The maintainer will say when to
+proceed. Nothing here touches that copy.
+
+**Opening the panel with nothing highlighted: the device decides.** The guide says the ring being
+unowned on open is normal Steam behaviour and not ours to fix; the roadmap has it as an open bug. One
+time-boxed try at placing the ring on the chat's first useful stop. If it holds, the guide changes; if
+Steam fights it, the roadmap entry closes as accepted.
+
+**The technical line under screenshot answers goes.** Every answer to a question that carried a
+screenshot ended with a line of computer text. Gone from the reply; the count lives only in a log line
+when verbose logging is on.
+
+**Wiping all plugin data is pre-authorised for the last step of the Deck pass.** Three rows have waited
+on it since 5 September. Backup first, restore after, settings read back off disk and compared to the
+backup. The maintainer will be away for hours, so no message-and-wait this time.
+
+**Plan 54's Deck rows run in this pass** if it has landed and deployed by then and they are still open.
+
+**One library point release is fine**, carrying the Megaera title fix and nothing else.
+
+**Games may be launched and exited by the rig as needed.** Hades, Deep Rock Galactic: Survivor,
+Portal 2 and Black Mesa are believed installed; each is confirmed on the Deck before a row relies on it.
+
+**The five August knowledge-base rows are run, not retired.** Each row says whether it is still a real
+check or stale, and the maintainer retires the stale ones from that.
+
+**A fresh Fable session runs it**, reading plan 55 from block 0.
+
+**The settings-list refactor is out for now.** The screen-side settings code writes out its list of
+fifty-odd setting names seven times, so a new setting can quietly stop working in one place; folding
+that into one table is protection for the next setting anyone adds, not something a person sees today.
+The maintainer read the explanation under question 2 in plan 55 and said no for this session. It stays
+on the roadmap.
+
+**Still open.** Whether anyone else will be driving the Deck: unknown until plan 54's session has
+finished, and the pass needs the Deck to itself.

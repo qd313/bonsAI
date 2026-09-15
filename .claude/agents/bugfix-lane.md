@@ -27,7 +27,7 @@ Ground rules, all of them non-negotiable:
    presses inside `onButtonDown` do not consume the press. A fix built on those is dead on device and
    fails review. A plain `focus()` is only safe between siblings inside one container.
 6. **You do not touch `docs/roadmap.md`, `docs/testing.md`, `docs/testing-manual.md` or `CHANGELOG.md`.**
-   Policy since 2026-09-05 (AGENTS.md § 3): the session driver moves every roadmap, test and changelog
+   Policy since 2026-09-05 (AGENTS.md, 'Which model does which work'): the session driver moves every roadmap, test and changelog
    line itself, one commit per landing. Three lanes editing adjacent roadmap lines is what caused the
    merge clashes in the previous session. Instead, put in your report: which roadmap entry each commit
    fixes, the QA row it owes, and one plain-language sentence of what a person would notice — the driver

@@ -419,7 +419,7 @@ binds each row's `onMoveUp` / `onMoveDown` to *reorder the model*, then calls
   `qwen2.5:1.5b, qwen3.5:4b, nomic, gemma4`. A user scrolling to read the list rewrites it.
 - **The ring then disappears.** After each reorder, `document.querySelectorAll('.gpfocus').length`
   was **0** across every Steam view, with `document.activeElement` back on `BODY`. The `.focus()`
-  call is a DOM focus, which is the thing [AGENTS.md § Decky focus graph](../AGENTS.md#decky-focus-graph)
+  call is a DOM focus, which is the thing [AGENTS.md § The Steam Deck focus graph](../AGENTS.md#the-steam-deck-focus-graph)
   says does not move Steam's ring — so the row moves out from under the ring and nothing picks it up.
 - **B stops working while the ring is gone.** Three B presses in a row did not close the modal;
   the first two went into re-acquiring focus. This is the "picker you cannot leave" case the audit
@@ -506,7 +506,7 @@ trail — `_finalize_immediate_background_local_command` (`main.py:2173`) is the
 guarded by a local-command check.
 
 **4. Both failing return-focus cases now pass.** Two defects, both already forbidden by
-[AGENTS.md § Decky focus graph](../AGENTS.md#decky-focus-graph):
+[AGENTS.md § The Steam Deck focus graph](../AGENTS.md#the-steam-deck-focus-graph):
 
 | | Before | After |
 |---|---|---|
@@ -863,7 +863,7 @@ alphabetical order the rest of the Backlog uses.
     Ask field — drawn as the standard two-overlapping-rounded-squares copy glyph, styled to the SteamOS motif. The button row under the
     reply loses an entry and the transcript gains its height.
   - **The hard part is focus, not paint.** Answer bubbles are not D-pad stops today, so a control inside one needs a way in and back out
-    ([AGENTS.md § Decky focus graph](../AGENTS.md#decky-focus-graph)). Copy must not quietly become touch-only.
+    ([AGENTS.md § The Steam Deck focus graph](../AGENTS.md#the-steam-deck-focus-graph)). Copy must not quietly become touch-only.
 
 ## Session context folds into Show details (roadmap wording)
 

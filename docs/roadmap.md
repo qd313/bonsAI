@@ -336,7 +336,7 @@ replace it with a specific issue when one exists.
   the prompt builder (1,571), voice transcription (1,294) and the AI service (1,270). **Two worked examples already exist** from
   this phase — the question chips and the reply rating both came out of the Ask file as their own pieces, each with a test
   written at the same time, and the order-of-hooks record is what made both safe. Do them one at a time, each with its own Deck
-  check. [Plan](planning/51-refactor-round-two.md).
+  check. [Plan](archive/51-refactor-round-two.md).
 
 - ★★★ `[reply]` **Spy: a character who lies to you on purpose** — **OPEN, filed 2026-09-06 by the maintainer.** A new
   Team Fortress 2 character. Pyro's Heavy setting already gives bad advice because he is a stubborn arse; the Spy gives bad advice
@@ -401,15 +401,6 @@ replace it with a specific issue when one exists.
 - ★★★★★ `[platform]` **Controller macro test rig and live view** — **OPEN, discovery locked 2026-08-23, board ordered.** A bridge board
   the Deck sees as a real controller, a macro runner gated on real UI state, and one recording pipeline. Primitives land upstream in
   decky-plugin-studio. Next: spikes S1 to S3. [Plan](planning/19-controller-macro-test-rig.md), [program](planning/21-ai-owned-testing-program.md).
-- ★★★★★ `[platform]` **Refactor round two (plan 51)** — **OPEN, planned 2026-09-11, calls locked (D89 to D96).** A
-  seven-phase clean-up touching the code, the tests, the build scripts, the docs and how agent sessions work here,
-  with nothing about how the plugin behaves changing for a person using it. Work starts only when the maintainer
-  says the exact words "start refactor implementation now." **Progress, 2026-09-14:** phases 0 to 4 are done and
-  checked on the Deck. Phase 4 moved the most code — the entry point is under three thousand lines for the first
-  time, both back-end import loops are gone, and the Ask screen code has started coming apart. Its Deck evening
-  found nothing a person would notice: one real question answered in 40.4 seconds against 42.6 the night before,
-  voice word perfect, 18 controls reachable with no dead ends, and a log with no errors in it.
-  [Plan](planning/51-refactor-round-two.md), [notes](audit/refactor-round-two/session-notes.md).
 - ★★★★★ `[platform]` **Steam Controller copilot (Ibex gen-2)** — **OPEN.** AI copy tuned to gen-2 hardware.
 - ★★★★★ `[platform]` **The floating panel inside SteamVR** — **OPEN, filed 2026-09-08; the first step is a ★★ test to find
   out.** bonsAI's panel floating over any VR game, drawn by a small program on the PC that runs SteamVR, so it serves every

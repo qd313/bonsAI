@@ -1,6 +1,6 @@
 # BonsAI Refactor Plan
 
-> **Superseded on 2026-09-11 by [Plan 51: Refactor round two](docs/planning/51-refactor-round-two.md).**
+> **Superseded on 2026-09-11 by [Plan 51: Refactor round two](51-refactor-round-two.md).**
 > Round one's finished items (3.1, 3.2, 3.4, 3.5) stay recorded below for history. This file moves to the
 > archive in plan 51's docs phase; do not start new work from it.
 
@@ -14,9 +14,9 @@ generalization, speculative abstraction, architectural purity — is out of scop
 **Repo:** `C:\Users\still\Documents\BonsAI` — Decky plugin, TypeScript frontend
 (`src/`, 281 files) + Python backend (`main.py`, `py_modules/backend/`).
 
-**Planning docs:** active backlog → [docs/roadmap.md](docs/roadmap.md); locked
+**Planning docs:** active backlog → [docs/roadmap.md](../roadmap.md); locked
 maintainer decisions and execution order →
-[docs/audit/maintainer-decisions-locked.md](docs/audit/maintainer-decisions-locked.md).
+[docs/audit/maintainer-decisions-locked.md](../audit/maintainer-decisions-locked.md).
 
 ---
 
@@ -254,7 +254,7 @@ its name?** Twelve honestly-named files beat four named `utils`, `helpers`, `com
 2026-08-03** as execution-order steps 7a–7d. Both languages now declare their
 simple settings as one-row tables and two shared fixtures fail the build on
 drift. See
-[docs/audit/maintainer-decisions-locked.md](docs/audit/maintainer-decisions-locked.md)
+[docs/audit/maintainer-decisions-locked.md](../audit/maintainer-decisions-locked.md)
 **D12** / **D13**. Codegen (one spec generating both sides) was considered and
 deliberately not taken.
 
@@ -278,7 +278,7 @@ behavior. Rewrite them against behavior rather than contorting the code to keep 
 passing.
 
 **3.3 — Resolve the `main.py` extraction** — **investigated 2026-08-03**, not yet
-executed. See [docs/audit/07-mainpy-inventory.md](docs/archive/07-mainpy-inventory.md).
+executed. See [docs/audit/07-mainpy-inventory.md](07-mainpy-inventory.md).
 
 > Is `main.py` a thin facade over `py_modules/backend/services/`, or does business
 > logic live in both? Cite `file:line`. If both, list what remains in `main.py` and
@@ -287,7 +287,7 @@ executed. See [docs/audit/07-mainpy-inventory.md](docs/archive/07-mainpy-invento
 "Some logic here, some there, no rule" is worse for a reader than either extreme.
 
 **Answer: both.** 27 of 96 methods are ≤8 lines, but the six largest public RPCs are 706
-lines — 24% of the file. `test_ollama_connection` ([main.py:1038](main.py)) owns raw
+lines — 24% of the file. `test_ollama_connection` ([main.py:1038](../../main.py)) owns raw
 Ollama HTTP that `main.py:6` explicitly disclaims. The inventory names a destination and
 a risk level for each piece, in a recommended order.
 
@@ -308,7 +308,7 @@ already has the vertical instinct (`useBonsaiAskOrchestration.ts`,
 **3.5 — Redistribute `refactor_helpers.py`** — **done 2026-08-02.** Reframed
 first: the file had no functions, only 65 lines of re-export, so the work was
 repointing its 9 importers at `backend.ollama_routing` / `ollama_urls` /
-`tdp_intent` and deleting it. See [docs/audit/05-plan.md](docs/archive/05-plan.md)
+`tdp_intent` and deleting it. See [docs/audit/05-plan.md](05-plan.md)
 §1.3.
 
 > For every function in `refactor_helpers.py`, list its call sites. Propose relocating

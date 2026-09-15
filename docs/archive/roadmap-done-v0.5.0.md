@@ -8,6 +8,10 @@ Everything shipped since v0.4.9 (2026-07-08), one line each, newest first. Detai
 [archive/roadmap-completed.md](roadmap-completed.md), [archive/roadmap-bugs-fixed.md](roadmap-bugs-fixed.md).
 
 **Checked on the Deck, closed in the roadmap 2026-09-14 and 15:**
+- ★★★★★ `[platform]` **The seven-phase clean-up (round two)** — every file now explains itself in plain
+  words, two knots in the back end are untied, and nothing a person using the plugin can see changed. Ran
+  13 to 15 September 2026. Phases 3 and 4 were checked on the Deck; phase 5 needed no check because no line
+  of program code changed in it. What it cost and what it missed: [the postmortem](../audit/refactor-round-two/postmortem.md).
 - ★★★ `[KB]` **A follow-up looks up the thing you were just asking about** — ask about a boss, then "what about
   its second phase", and you get the right boss two times in three. It used to be wrong every time. Checked on the
   Deck 2026-09-12; replies on these turns are about half as long. The third that still fails stayed in the roadmap

@@ -373,6 +373,14 @@ Neither belongs in the refactor. Both are filed so they survive it.
 is written to avoid shortcut paths on principle. It stays until either it finds a user or the
 question of asking the plugin from a script is taken up properly as a feature. Re-check at phase 6.
 
+> **Re-checked at phase 6, 2026-09-15: it has still found no user, so it stays.** Searched the whole
+> project outside the back end. The only mention anywhere is one step in the in-editor preview's
+> first smoke test, and that preview is itself shelved — it has never got past its loading screen on
+> this machine. So the position is unchanged: nothing calls it, and the thing that might have is
+> both shelved and written to avoid shortcut paths on principle. It is the one entry point the
+> numbers list still counts as having no caller. Removing it is a maintainer call, not a clean-up
+> one, and the clean-up is now finished.
+
 **A3b, the answer checker.** The cheap trial: call `verify_ollama_response` from the finished-reply
 point in `game_ai_request.py`, log the result, and change nothing else — no notice appended, no
 second model pass, nothing on screen. `maybe_append_verifier_notice` and `run_verifier_second_pass`

@@ -4,7 +4,7 @@
  * Used for: Catching a setting added to one language and forgotten in the other.
  * Solves: The TS and Python settings shapes are hand-maintained in parallel with nothing
  *         enforcing agreement; this makes an incomplete two-language edit fail a test.
- * Does not: Reduce the per-setting edit cost — that is REFACTOR-PLAN.md §3.1.
+ * Does not: Reduce the per-setting edit cost — that is docs/archive/refactor-plan-round-one.md section 3.1.
  *
  * The Python half is tests/test_settings_contract.py. Neither test shells out to the other
  * toolchain; both read the same JSON. See tests/contracts/README.md.

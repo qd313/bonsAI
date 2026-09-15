@@ -58,3 +58,17 @@ COST: <tool calls> calls, <tokens> tokens
 - Give a worker eight to twelve files at a time, never one file at a time.
 - To ask a worker for more, send it a message rather than starting a new one.
 - Never open a whole file when a range will do.
+- Name every file. Never describe a set of files by category and expect the right list back. On
+  2026-09-14 a brief said "the remaining 26 files" and named a few; the worker worked out a
+  careful list of its own, which overlapped another worker by one file and missed eight. The work
+  was good and none of it was wasted, but only by luck.
+- Tell a worker which numbers do **not** constrain it. A brief that says "explain this properly"
+  while a check quietly punishes long explanations puts the worker in a bind, and workers resolve
+  it by damaging their own work rather than by complaining. Four separate workers cut good
+  explanations short on 2026-09-14 to stay under a file-length limit that should never have been
+  counting comments. Three said so in their report and one asked for a person to sign it off; all
+  four had already done the damage by then. The maintainer's ruling: clear comments beat any line
+  count, and a long readable explanation beats a cramped short one.
+- When a worker reports that a check and its instructions disagree, check the tool before
+  believing the worker got it wrong. Of the four measuring tools questioned by workers during
+  phase 5, four were wrong.

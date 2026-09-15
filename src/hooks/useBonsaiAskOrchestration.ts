@@ -14,12 +14,7 @@ import type { AskAttachment } from "../types/bonsaiUi";
 import type { BonsaiAskOrchestration } from "../types/askOrchestration";
 import { type AskModeId, type UnifiedInputPersistenceMode } from "../data/bonsaiSettingsSchema";
 import { buildResponseText } from "../utils/appliedTuningText";
-import { detectPromptCategory, getContextualPresets, getRandomPresets, type PresetPrompt } from "../data/presets";
-import {
-  composePresetSeedsWithSessionRag,
-  setSessionRagCarouselCandidates,
-} from "../features/preset-carousel/composePresetSeedsWithSessionRag";
-import type { SessionRagChipCandidate } from "../features/preset-carousel/sessionRagComposer";
+import { detectPromptCategory } from "../data/presets";
 import {
   CUSTOM_RESOLUTION_INPUT_PREFIX,
   isStrategyCustomResolutionBranch,
@@ -52,7 +47,6 @@ import type {
 import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
 import type {
   OllamaContextUi,
-  AppliedResult,
   StrategyGuideBranchesPayload,
   StrategyChecklistState,
   AskThreadCollapsedTurn,
@@ -75,8 +69,8 @@ import {
   type ReplyMicroActionId,
 } from "../data/replyMicroActions";
 import { startAskCompletionWatch, stopAskCompletionWatch } from "../utils/bonsaiAskCompletionWatch";
-import { fetchSessionRagChipCandidates } from "../utils/sessionRagChipCandidates";
 import { useStrategyChecklistSession } from "./useStrategyChecklistSession";
+import { useSuggestedPromptChips } from "./useSuggestedPromptChips";
 
 export type { AskThreadExpandedTurnKey } from "../types/bonsaiUi";
 
@@ -315,133 +309,21 @@ export function useBonsaiAskOrchestration(
   }, [trackedRunningAppId, isAsking, syncOllamaContextFromRunningApp]);
 
   // --- Preset carousel + session RAG chips ---
-  const [lastApplied, setLastApplied] = useState<AppliedResult | null>(
-    () => survivalPeek?.lastApplied ?? null
-  );
-  const [suggestedPrompts, setSuggestedPrompts] = useState<PresetPrompt[]>(
-    () => survivalPeek?.suggestedPrompts ?? getRandomPresets(3, { useLocalKnowledgeBase: a.useLocalKnowledgeBase }),
-  );
-  const ragCandidatesCacheRef = useRef<{ appId: string; candidates: SessionRagChipCandidate[] }>({
-    appId: "",
-    candidates: [],
+  // Lifted into useSuggestedPromptChips. It must stay at exactly this point in the list:
+  // React matches hooks by the order they run, not by name.
+  const {
+    lastApplied,
+    setLastApplied,
+    suggestedPrompts,
+    setSuggestedPrompts,
+    reseedSuggestedPrompts,
+  } = useSuggestedPromptChips({
+    survivalPeek,
+    trackedRunningAppId,
+    useLocalKnowledgeBase: a.useLocalKnowledgeBase,
+    settingsLoaded: a.settingsLoaded,
+    devForceSessionRagChips: a.devForceSessionRagChips,
   });
-  const prevAppIdForPresetReseedRef = useRef<string | undefined>(undefined);
-  // Always reseed on mount, so reopening the QAM draws fresh chips. This used to start as
-  // `!!survivalPeek?.suggestedPrompts?.length`, which meant a restored session skipped the
-  // reseed entirely and kept the same three chips for the rest of the Steam session — the
-  // session RAG roll never re-ran, so RAG chips could never appear after the first seeding.
-  // The ref still guards against re-running when `reseedSuggestedPrompts` changes identity.
-  //
-  // Restored prompts stay on screen until the reseed's RPC resolves, so there is no empty
-  // carousel frame; the survival snapshot is what makes that hand-off seamless.
-  const coldMountPresetReseedDoneRef = useRef(false);
-
-  const loadSessionRagCandidates = useCallback(
-    async (
-      appId: string,
-      appName: string,
-      forceRefresh = false,
-    ): Promise<SessionRagChipCandidate[]> => {
-      if (!a.useLocalKnowledgeBase) {
-        ragCandidatesCacheRef.current = { appId, candidates: [] };
-        setSessionRagCarouselCandidates([]);
-        return [];
-      }
-      if (
-        !forceRefresh &&
-        ragCandidatesCacheRef.current.appId === appId &&
-        ragCandidatesCacheRef.current.candidates.length > 0
-      ) {
-        return ragCandidatesCacheRef.current.candidates;
-      }
-      const candidates = await fetchSessionRagChipCandidates({
-        appId,
-        appName,
-      });
-      ragCandidatesCacheRef.current = { appId, candidates };
-      // The carousel tick draws from these too, or the corpus chip seeded below is carried out of
-      // the window within about four ticks and never returns. The QA override rides along so it
-      // forces the whole carousel rather than only the seeded slots.
-      setSessionRagCarouselCandidates(candidates, {
-        ...(a.devForceSessionRagChips ? { ragProbability: 1 } : {}),
-      });
-      return candidates;
-    },
-    [a.useLocalKnowledgeBase, a.devForceSessionRagChips],
-  );
-
-  const applyComposedSuggestedPrompts = useCallback(
-    (staticSeeds: PresetPrompt[], candidates: SessionRagChipCandidate[]) => {
-      setSuggestedPrompts(
-        composePresetSeedsWithSessionRag({
-          staticSeeds,
-          ragCandidates: candidates,
-          // QA override: every eligible slot takes a RAG chip instead of rolling 0.3, so
-          // SESSION-RAG-CHIPS-01 stops depending on luck. Developer tab only, default off.
-          ...(a.devForceSessionRagChips ? { ragProbability: 1 } : {}),
-        }),
-      );
-    },
-    [a.devForceSessionRagChips],
-  );
-
-  const reseedSuggestedPrompts = useCallback(
-    async (mode: "random" | "contextual", category?: string, forceRefresh = false) => {
-      const appId = Router.MainRunningApp?.appid?.toString() ?? "";
-      const appName = Router.MainRunningApp?.display_name ?? "";
-      const samplerOptions = { useLocalKnowledgeBase: a.useLocalKnowledgeBase };
-      const staticSeeds =
-        mode === "contextual" && category
-          ? getContextualPresets(category, 3, samplerOptions)
-          : getRandomPresets(3, samplerOptions);
-      if (!a.useLocalKnowledgeBase) {
-        setSuggestedPrompts(staticSeeds);
-        return;
-      }
-      const candidates = await loadSessionRagCandidates(appId, appName, forceRefresh);
-      applyComposedSuggestedPrompts(staticSeeds, candidates);
-    },
-    [a.useLocalKnowledgeBase, applyComposedSuggestedPrompts, loadSessionRagCandidates],
-  );
-
-  useEffect(() => {
-    // Wait for load_settings before spending the one-shot reseed. useLocalKnowledgeBase
-    // starts at its UI default of false, so reseeding first takes reseedSuggestedPrompts'
-    // static-only early return AND marks the mount reseed done. The re-run that follows
-    // hydration is then swallowed by the guard below, which is why session RAG chips could
-    // not appear on any open -- reopening only re-ran the same losing race.
-    if (a.settingsLoaded === false) {
-      return;
-    }
-    if (coldMountPresetReseedDoneRef.current) {
-      return;
-    }
-    coldMountPresetReseedDoneRef.current = true;
-    void reseedSuggestedPrompts("random");
-  }, [a.settingsLoaded, reseedSuggestedPrompts]);
-
-  const prevDevForceRagRef = useRef(a.devForceSessionRagChips);
-  useEffect(() => {
-    if (prevDevForceRagRef.current === a.devForceSessionRagChips) {
-      return;
-    }
-    prevDevForceRagRef.current = a.devForceSessionRagChips;
-    // Bypass both the cold-mount guard and the appId guard: the survival snapshot would
-    // otherwise keep the previously composed chips for the rest of the session.
-    void reseedSuggestedPrompts("random", undefined, true);
-  }, [a.devForceSessionRagChips, reseedSuggestedPrompts]);
-
-  useEffect(() => {
-    const prev = prevAppIdForPresetReseedRef.current;
-    prevAppIdForPresetReseedRef.current = trackedRunningAppId;
-    if (prev === undefined) {
-      return;
-    }
-    if (prev === trackedRunningAppId) {
-      return;
-    }
-    void reseedSuggestedPrompts("random");
-  }, [reseedSuggestedPrompts, trackedRunningAppId]);
 
   // --- Stream reveal + slow-warning timers ---
   const [showSlowWarning, setShowSlowWarning] = useState(() => survivalPeek?.showSlowWarning ?? false);

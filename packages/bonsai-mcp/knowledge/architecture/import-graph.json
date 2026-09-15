@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 383,
-  "edgeCount": 955,
+  "fileCount": 384,
+  "edgeCount": 959,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1211,6 +1211,7 @@
         "src/features/preset-carousel/sessionRagComposer.test.ts",
         "src/features/preset-carousel/sessionRagComposer.ts",
         "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/hooks/useSuggestedPromptChips.ts",
         "src/index.tsx",
         "src/types/askOrchestration.ts",
         "src/utils/bonsaiSessionSurvival.ts"
@@ -1723,7 +1724,7 @@
       "importedBy": [
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/features/preset-carousel/sessionRagComposer.test.ts",
-        "src/hooks/useBonsaiAskOrchestration.ts"
+        "src/hooks/useSuggestedPromptChips.ts"
       ]
     },
     "src/features/preset-carousel/presetRowLayout.test.ts": {
@@ -1795,7 +1796,7 @@
       "importedBy": [
         "src/features/preset-carousel/composePresetSeedsWithSessionRag.ts",
         "src/features/preset-carousel/sessionRagComposer.test.ts",
-        "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/hooks/useSuggestedPromptChips.ts",
         "src/utils/sessionRagChipCandidates.ts"
       ]
     },
@@ -1901,11 +1902,10 @@
         "src/data/presets.ts",
         "src/data/replyMicroActions.ts",
         "src/data/strategyGuideFollowup.ts",
-        "src/features/preset-carousel/composePresetSeedsWithSessionRag.ts",
-        "src/features/preset-carousel/sessionRagComposer.ts",
         "src/hooks/useBackgroundGameAi.ts",
         "src/hooks/useSmoothStreamReveal.ts",
         "src/hooks/useStrategyChecklistSession.ts",
+        "src/hooks/useSuggestedPromptChips.ts",
         "src/types/askOrchestration.ts",
         "src/types/backgroundAsk.ts",
         "src/types/bonsaiUi.ts",
@@ -1918,7 +1918,6 @@
         "src/utils/inputTransparency.ts",
         "src/utils/localOnlyAskCommands.ts",
         "src/utils/presetCarouselInject.ts",
-        "src/utils/sessionRagChipCandidates.ts",
         "src/utils/strategyChecklist.ts",
         "src/utils/strategyChecklistPersistence.ts",
         "src/utils/strategyGuideBranches.ts",
@@ -2239,6 +2238,19 @@
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx",
         "src/hooks/useStreamScrollPin.test.ts"
+      ]
+    },
+    "src/hooks/useSuggestedPromptChips.ts": {
+      "imports": [
+        "src/data/presets.ts",
+        "src/features/preset-carousel/composePresetSeedsWithSessionRag.ts",
+        "src/features/preset-carousel/sessionRagComposer.ts",
+        "src/types/bonsaiUi.ts",
+        "src/utils/bonsaiSessionSurvival.ts",
+        "src/utils/sessionRagChipCandidates.ts"
+      ],
+      "importedBy": [
+        "src/hooks/useBonsaiAskOrchestration.ts"
       ]
     },
     "src/hooks/useTabStripBodyOffset.ts": {
@@ -2716,6 +2728,7 @@
         "src/hooks/useChatSlots.ts",
         "src/hooks/useScreenshotBrowser.ts",
         "src/hooks/useStrategyChecklistSession.ts",
+        "src/hooks/useSuggestedPromptChips.ts",
         "src/types/askOrchestration.ts",
         "src/types/backgroundAsk.ts",
         "src/utils/archivedTurnTransparency.ts",
@@ -3007,6 +3020,7 @@
         "src/hooks/usePluginSettings.ts",
         "src/hooks/useScreenshotBrowser.ts",
         "src/hooks/useStrategyChecklistSession.ts",
+        "src/hooks/useSuggestedPromptChips.ts",
         "src/index.tsx",
         "src/types/askOrchestration.ts",
         "src/utils/bonsaiSessionSurvival.test.ts"
@@ -3710,7 +3724,7 @@
         "src/utils/deckyCall.ts"
       ],
       "importedBy": [
-        "src/hooks/useBonsaiAskOrchestration.ts"
+        "src/hooks/useSuggestedPromptChips.ts"
       ]
     },
     "src/utils/settingsContracts.test.ts": {

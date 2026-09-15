@@ -1,9 +1,54 @@
 """
-Title: Chat slot persistence
-Purpose: Persist named chat slots (multi-turn Ask history) under Decky plugin settings.
-Used for: main.py chat slot RPCs, ask turn recording on submit and completion.
-Solves: Disk-backed bounded slot store with atomic writes and index.
-Does not: Correlate in-flight requests — that is an in-memory map on Plugin.
+Title: Saved chats you can switch between
+
+Purpose: Every separate conversation you keep on the Ask screen -- the ones
+you can switch between instead of losing your place -- is stored here as one
+file per chat ("slot"), plus a small index file listing all of them so the
+switcher can show titles without opening every chat. A chat only exists here
+once main.py calls `create_slot()` or `ensure_slot()`, when you start a new
+chat or open a stored one for the first time in a session.
+
+Used for: main.py's chat-slot RPC handlers (new chat, switch chat, rename,
+delete), and the code that records each question and answer as it happens,
+through `append_turn()`.
+
+Solves: Keeping a bounded, disk-backed set of chats -- eight at most, two
+hundred questions-and-answers at most in each -- written so a crash mid-save
+cannot corrupt a chat, and an index kept in step with the chats it lists.
+
+Does not: Decide which chat is currently open on screen, or match an
+in-flight question back up with its answer -- that bookkeeping lives on the
+Plugin class in main.py, in memory, not here.
+
+How it works:
+ 1. Each chat is its own JSON file, named by its id and found through
+    `slot_path()`. A small index file (`index_path()`) lists every chat's id,
+    title and last-updated time, so the switcher can show a list without
+    opening eight files.
+ 2. `create_slot()` makes a new chat: it works out a title with
+    `heuristic_slot_label()` if none was given, writes the chat file with
+    `save_slot()`, then adds it to the index with `_upsert_index_row()`.
+ 3. `ensure_slot()` is what main.py actually calls when a chat may or may not
+    already exist -- it looks the id up first with `load_slot()` and only
+    creates one if that comes back empty.
+ 4. Every question and answer is added with `append_turn()`: it loads the
+    chat, cleans the new turn through `_normalize_turn()`, appends it, trims
+    down to the newest 200 turns if the limit is passed, and saves both the
+    chat file and the index.
+ 5. Both `save_slot()` and `save_index()` write to a temporary file first and
+    only swap it into place once the write has finished, so a crash or power
+    loss mid-write cannot leave a half-written chat behind.
+ 6. When a ninth chat would be created, `_prune_oldest_slot()` deletes the
+    least-recently-updated one first, keeping the count at eight.
+
+Gotchas:
+ - A chat's title comes from the question asked, not the game it was asked
+   in -- `heuristic_slot_label()`'s own notes explain why: naming every chat
+   after the game made the chat list read as a column of near-identical
+   prefixes.
+ - A turn's game id is stored on the turn itself, not just once per chat,
+   because a chat can outlive one play session -- you can keep asking in the
+   same saved chat after closing one game and opening another.
 """
 
 from __future__ import annotations

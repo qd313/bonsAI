@@ -1,9 +1,26 @@
-"""Title: Whisper server daemon
+"""Title: The engine that turns your voice into text
 
-Purpose: Session-scoped whisper-server process facade for mic and future wake-word STT.
-Used for: Long-lived local HTTP inference on 127.0.0.1:18765 instead of per-chunk CLI spawn.
-Solves: Engine singleton, health polling, PID file lifecycle, and PCM-to-WAV inference posts.
-Does not: Capture microphone audio directly — voice_transcription_service owns capture and buffering.
+Purpose: When you press the mic button and speak instead of typing, this file
+turns what you said into text, through a small helper program
+(whisper-server) it keeps running so the next question skips the startup cost.
+
+Used for: Every spoken question -- voice_transcription_service records your
+voice and hands it to `get_whisper_engine()`'s `transcribe()` method.
+
+Solves: Keeping one whisper-server process alive, shared safely between
+whatever wants it, and cleaning up a copy left behind by a session that
+ended badly, found through a PID file on disk.
+
+Does not: Capture the microphone -- voice_transcription_service owns that.
+
+Gotchas:
+ - The server remembers who asked for it ("mic" is the only asker today) and
+   only stops once every asker has let go through `release()`, so it can be
+   shared without one caller stopping it out from under another. See
+   `acquire()` for the rules.
+ - A crash or Deck sleep mid-transcribe can leave the process running after
+   the plugin has stopped. `acquire()` kills that leftover, found through a
+   PID file, before it can fight a new one over the same network port.
 """
 
 from __future__ import annotations
@@ -222,6 +239,24 @@ class WhisperEngine:
         plugin_root: str,
         settings_dir: str,
     ) -> None:
+        """Ask for the shared whisper-server to be running and ready, starting
+        it if it is not.
+
+        In: `reason` is a short label for who is asking ("mic" is the only one
+        today). `model_path`, `plugin_root` and `settings_dir` say which speech
+        model to run and where the server program and PID file live.
+
+        Out: nothing -- check `daemon_available()` afterwards, or try
+        `transcribe()` and get an empty string back on failure.
+
+        Two or more reasons holding the server at once is fine: each is
+        counted, and it stops only once every reason has let go through
+        `release()`. A reason that never releases leaks the server running
+        forever, until `force_whisper_engine_stop()` clears all of them.
+        Asking for a different model while one already runs restarts it, even
+        if another reason still holds the old one -- that holder is not told,
+        it just finds the server gone next time it tries to use it.
+        """
         with self._lock:
             self._reason_refcount[reason] = self._reason_refcount.get(reason, 0) + 1
             if self._daemon_ready and self._model_path == model_path:

@@ -1,15 +1,55 @@
-"""Title: Voice read-aloud service
+"""Title: Reading an answer out loud
 
-Purpose: Speak an answer's text out loud in the Deck's own built-in voice (espeak-ng), one
-sentence at a time, over the Deck's session sound system.
-Used for: The "Read aloud" button and, later, the auto-read Settings option (main.py's
-start_voice_read_aloud / stop_voice_read_aloud / get_voice_read_aloud_status RPCs).
-Solves: Splitting plain text into sentences without breaking on decimals, abbreviations or a
-trailing initial; making sentence audio ahead of playback so the first sound starts fast; playing
-each sentence in order through the session's sound sockets, found the same way the microphone
-finds them (see env_for_audio_capture in voice_transcription_service.py); a clean, idempotent stop.
-Does not: Call Ollama, read settings, or talk to the frontend directly — that is main.py's job.
-Does not: Speak in any voice but the Deck's built-in one — a natural voice is Phase 2 (unbuilt).
+Purpose: This is what happens when you press "Read aloud" on an answer: it
+speaks the text using the Deck's own built-in voice (a program called
+espeak-ng), one sentence at a time, through the same sound system a game
+would play through.
+
+Used for: The "Read aloud" button today, and the planned auto-read setting --
+both through main.py's start_voice_read_aloud, stop_voice_read_aloud and
+get_voice_read_aloud_status RPCs.
+
+Solves: Cutting plain text into sentences without breaking on a decimal
+number, an abbreviation, or a trailing initial; making each sentence's audio
+just ahead of playing it so the first sound starts quickly instead of waiting
+for the whole answer; playing sentences in order on the Deck's own sound
+system; and a stop that is always safe to call, even when nothing is playing.
+
+Does not: Call the AI, read settings, or talk to the screen directly -- that
+is main.py's job. Also does not speak in any voice but the Deck's built-in
+one; a more natural-sounding voice is a later, unbuilt phase.
+
+How it works:
+ 1. `split_into_sentences()` cuts the answer into sentences, careful not to
+    break on a decimal like "2.5", a common abbreviation, or a lone initial
+    like the "J." in "J. K. Rowling" -- `_split_sentence_punctuation()` and
+    `_looks_like_abbreviation_or_initial()` do that work, and
+    `_split_long_sentence()` cuts an overly long sentence again at a comma or
+    semicolon so it does not take too long before the first sound plays.
+ 2. `VoiceReadAloudService.start()` checks that espeak-ng and a sound player
+    are both installed (`espeak_available()`, `player_available()`), then
+    hands the sentence list to a background thread and returns right away --
+    the actual reading happens off to the side so the screen is never blocked
+    waiting on it.
+ 3. Inside that thread, a small producer thread turns sentences into sound
+    files ahead of playback (`EspeakSentenceMaker.make()`, called from
+    `_producer()`), while the main worker (`_run()`) plays each finished file
+    in order (`SessionAudioPlayer.play()`) and deletes it once it has played.
+    Only one file is ever made ahead of the one currently playing, so reading
+    a long answer does not pile up temp files.
+ 4. `stop()` can be called at any point -- it sets a flag every waiting piece
+    of this checks, ends whatever sound is currently playing, and waits for
+    the background thread to notice and exit before returning, so a second
+    "read aloud" started right after a stop cannot collide with the first.
+ 5. `status()` reports which sentence is currently playing, out of how many,
+    so the screen can show progress.
+
+Gotchas:
+ - Sound reaches the Deck's session sound system through the same
+   environment lookup the microphone code uses (`env_for_audio_capture()`),
+   because this runs as part of a background plugin process, outside the
+   normal Steam session where sound sockets would otherwise be found
+   automatically.
 """
 
 from __future__ import annotations

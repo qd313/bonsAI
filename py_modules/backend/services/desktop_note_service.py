@@ -1,4 +1,60 @@
-"""Append-only markdown notes and app activity logs under ~/Desktop/bonsAI_logs/ with path confinement."""
+"""Title: Saving chats and notes to your Desktop
+
+Purpose: This is what writes files onto your Desktop when you ask the plugin
+to remember something on your own computer instead of only in the Deck's own
+storage: a note you saved by hand, the daily chat log that autosaves every
+question and answer, an app activity log for troubleshooting, and the
+detailed trace the Transparency screen can save when you want to see exactly
+what was sent to the AI. Everything lands under ~/Desktop/bonsAI_logs -- one
+file per day for most of these -- and nothing already written is ever
+overwritten, only appended to.
+
+Used for: main.py's RPC handlers, and only once filesystem writes are turned
+on in the Permissions tab: saving a note (`append_desktop_debug_note_sync()`),
+autosaving a chat turn (`append_desktop_chat_event_sync()`), writing an
+app-activity line (`append_app_log_sync()`), and writing a full Ask trace
+(`append_desktop_ask_transparency_sync()`).
+
+Solves: Keeping every write confined to the bonsAI_logs folder no matter what
+name a caller passes in, and keeping sensitive text -- passwords, tokens, full
+prompts and answers -- out of the app-activity log while still writing
+something useful to it.
+
+Does not: Decide whether writing to the Desktop is allowed at all -- that
+permission check happens in main.py before any of these functions are called.
+
+How it works:
+ 1. Every entry point resolves the target folder with `resolve_bonsai_logs_dir()`,
+    always `<home>/Desktop/bonsAI_logs`.
+ 2. A file name is only ever used after `sanitize_note_stem()` strips it down
+    to safe characters, so a note name someone typed cannot become a path.
+ 3. `_is_path_under()` is checked twice, before and after resolving symlinks,
+    before anything is written, so the final path can never end up outside
+    that folder.
+ 4. The four public writers each build one block of text and append it:
+    `append_desktop_debug_note_sync()` for a saved note,
+    `append_desktop_chat_event_sync()` for the daily chat log,
+    `append_app_log_sync()` for one troubleshooting line, and
+    `append_desktop_ask_transparency_sync()` for a full trace.
+ 5. `_redact_log_fields()` strips anything that looks like a secret and
+    shortens or hides full prompt and response text before it reaches the
+    app-activity log, so that log stays safe to read.
+ 6. Any failure comes back through `_desktop_write_failure_result()` as an
+    {ok: False, error} value rather than raising, since these run as a
+    background write started from main.py.
+
+Gotchas:
+ - resolve_bonsai_notes_dir is the old name for `resolve_bonsai_logs_dir()`,
+   kept as a plain alias so nothing still calling the old name breaks. New
+   code should use `resolve_bonsai_logs_dir()`.
+ - The error message shown on a failed write never includes the real file
+   path or the OS's own error text, on purpose -- only a log line does. That
+   keeps a permissions or disk-space problem from leaking folder layout to
+   whatever reads the UI's error text.
+ - Path safety is checked against the resolved (symlink-followed) path, not
+   just the one built from the note name, so a symlink planted inside
+   bonsAI_logs could not be used to write somewhere else on the Deck.
+"""
 
 from __future__ import annotations
 

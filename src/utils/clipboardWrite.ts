@@ -1,13 +1,20 @@
 /**
- * Title: Clipboard write
- * Purpose: Copy text to the host clipboard from the reply Copy action.
+ * Title: Copying a reply to the clipboard
+ *
+ * Purpose: When the player taps Copy on an AI reply, this file is what actually puts that text on
+ * the computer's clipboard so it can be pasted somewhere else. Copying out of the plugin's window is
+ * less reliable than reading in — Steam's browser sometimes blocks or ignores the normal, modern way
+ * of writing to the clipboard — so this file tries three different ways in order and only reports
+ * failure if every one of them does not work.
+ *
  * Used for: ReplyCopyButton.
- * Solves: navigator.clipboard.writeText is the primary path (see
- *   docs/audit/clipboard-spike-2026-08-28.md for why write is likelier to work here than the
- *   read path, which needed a host RPC); execCommand('copy') and a host RPC (wl-copy / xclip)
- *   cover the cases where it is unavailable or rejects.
- * Does not: Decide what text to copy — see answerCopyText.ts. Does not retry — one attempt per
- *   press, caller (ReplyCopyButton) shows the result and lets the user press again.
+ *
+ * Solves: gives one Copy action that keeps working even when the browser's own clipboard permission
+ * is unavailable or refuses the request, instead of the button just silently doing nothing.
+ *
+ * Does not: decide what text a reply's Copy button should send here — see answerCopyText.ts for that.
+ * Also does not retry on its own: each tap is one attempt, and if every one of the three ways fails,
+ * the button shows that and the player can simply press it again.
  */
 import { callDeckyWithTimeout } from "./deckyCall";
 

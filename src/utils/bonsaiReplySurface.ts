@@ -1,9 +1,20 @@
 /**
- * Title: Reply surface visibility state
- * Purpose: Track whether Main tab reply surface is visible and queue QAM open from toast taps.
- * Used for: bonsaiReplyReadyToast gating and MainTab focus-after-toast consumption.
- * Solves: Avoid duplicate ready toasts when user already sees the answer; open QAM from notification.
- * Does not: Poll Ask status — see useBackgroundGameAi and bonsaiAskCompletionWatch.
+ * Title: Is the player already looking at the reply?
+ *
+ * Purpose: This file answers one small question for the rest of the plugin: is the part of the
+ * screen that would show a finished AI answer currently visible to the player? It exists so the
+ * "your reply is ready" notification can check first and skip itself when the player is already
+ * looking right at the answer. It also remembers, for one tap, that a notification asked to bring
+ * the player back to the main tab, so the screen can act on that request the next time it opens.
+ *
+ * Used for: bonsaiReplyReadyToast, to decide whether to show a notification at all, and the main tab
+ * itself, to know whether it should jump to the reply the moment it opens.
+ *
+ * Solves: without this, the "reply is ready" notification could not tell whether the player was
+ * already looking at the answer, and would either notify every time regardless or never at all.
+ *
+ * Does not: check whether a question has finished being answered — see useBackgroundGameAi and
+ * bonsaiAskCompletionWatch for that. This file only tracks whether the screen for it is showing.
  */
 import { Navigation, QuickAccessTab } from "@decky/ui";
 

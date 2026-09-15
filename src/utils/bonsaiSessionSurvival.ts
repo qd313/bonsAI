@@ -1,9 +1,41 @@
 /**
- * Title: Session survival snapshot
- * Purpose: Capture and restore Main-tab Ask state across Decky Content remounts (modals, tab switches).
- * Used for: index.tsx, useBonsaiPluginShell, useBonsaiAskOrchestration on mount restore.
- * Solves: showModal unmount wipes React state; module-level peek/restore keeps Ask thread alive.
- * Does not: Persist across plugin restarts — disk settings use separate storage keys.
+ * Title: Keeping the chat on screen when a popup opens and closes
+ *
+ * Purpose: The plugin's own screen briefly disappears and comes back whenever certain popups open on
+ * top of it — Decky, the framework this plugin runs inside, actually removes the screen from the
+ * page and puts a fresh copy back afterward. A fresh copy has no memory of what it just showed: the
+ * question being typed, the answer being read, which tab was open. This file is what carries all of
+ * that across the gap. Right before the screen disappears, whatever is showing gets written down
+ * here; the moment the new copy of the screen comes back, it reads this note back and looks exactly
+ * as it did a moment before.
+ *
+ * Used for: index.tsx, useBonsaiPluginShell, and the code that manages a running AI question
+ * (useBonsaiAskOrchestration), all of which call in here right around a popup opening or closing.
+ *
+ * Solves: without this, the screen popping in and out for every popup would silently drop the
+ * player's question mid-type, forget the answer they were just reading, and jump back to the wrong
+ * tab.
+ *
+ * Does not: survive the plugin being closed and reopened, or the Deck restarting — none of this is
+ * written to disk. The settings saved to disk use a completely separate storage path.
+ *
+ * Gotchas:
+ *   - The note kept here includes a full copy of the settings the screen was showing, not just the
+ *     chat. That is there for one specific reason: changing a setting on screen does not save it to
+ *     disk immediately — the save is delayed slightly so quick changes are not all written out one at
+ *     a time. If a popup opened and closed inside that short delay, and the screen simply reloaded
+ *     settings from disk when it came back, it could show the value from *before* the change and make
+ *     it look like the change had been lost. Carrying the in-memory copy through the popup avoids
+ *     that.
+ *   - `markPluginDataCleared` and `acknowledgePluginDataClearHandled` guard against a narrower version
+ *     of the same race: if the player clears all plugin data while a popup restore is still in
+ *     flight, that restore must not be allowed to bring the just-cleared settings back from memory.
+ *     Clearing bumps a generation counter and sets a flag that blocks any restore from being used
+ *     until the fresh, empty defaults have been loaded — `shouldIgnoreRestoredSettingsSnapshot`
+ *     checks that flag.
+ *   - `askThreadViewIndex` on the saved shape is marked deprecated. It is read only when the newer
+ *     `expandedTurnKey` field is missing from what is being restored, which happens for a note that
+ *     was written before `expandedTurnKey` existed.
  */
 import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
 import type { PresetPrompt } from "../data/presets";

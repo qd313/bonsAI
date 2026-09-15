@@ -1,23 +1,29 @@
 /**
- * Title: bonsAI browser storage clearer
- * Purpose: Remove every bonsai* key from localStorage and sessionStorage (both the
- *          `bonsai:` and `bonsai_` spellings).
- * Used for: Settings clear plugin data and disclaimer replay flows.
- * Solves: Complete client-side plugin state wipe without touching unrelated site storage.
- * Does not: Clear backend plugin data or Ollama models — see clear_plugin_data RPC.
- */
-/**
- * Every key the plugin has ever written starts with "bonsai", but not all of them use the colon.
+ * Title: Wiping the plugin's own browser storage
  *
- * Three knowledge-base "already warned you" flags use an underscore instead —
- * `bonsai_kb_failure_toast`, `bonsai_kb_nomic_hint_warned` and `bonsai_kb_unavailable_warned` —
- * so a sweep matching only "bonsai:" left them behind and *Clear all plugin data* did not clear
- * all plugin data. The visible cost: after a wipe the plugin still believed it had already
- * warned about a knowledge-base problem, and stayed quiet when it should have spoken up. Found
- * 2026-09-05 when the maintainer asked for the wipe to be best-effort.
+ * Purpose: The browser the plugin runs in has its own small, private storage the plugin uses for
+ * odds and ends that do not belong in the saved settings file — things like "already warned about
+ * this once" flags. When the player chooses to clear all plugin data, or replays the first-run
+ * disclaimer, every one of those browser-storage entries needs to go too. This file is what removes
+ * all of them in one pass.
  *
- * Matching the bare word covers both spellings, and clears the old keys off devices that already
- * have them, which renaming them would not.
+ * Used for: the Settings tab's clear-plugin-data action, and the flow that lets the player see the
+ * first-run disclaimer again.
+ *
+ * Solves: gives one place that wipes every browser-storage entry the plugin has ever written, instead
+ * of each feature that adds a new entry also having to remember to add its own clean-up.
+ *
+ * Does not: clear anything saved by the back end — the settings file on disk, or any downloaded
+ * Ollama model — see the separate clear_plugin_data call to the back end for that. This file only
+ * touches the browser's own storage.
+ *
+ * Gotcha: every key this plugin writes starts with the word "bonsai", but not all of them spell it
+ * the same way after that — most use "bonsai:", three knowledge-base "already warned you" flags use
+ * "bonsai_" instead. A wipe that only matched "bonsai:" left those three behind, so after clearing
+ * all data the plugin still believed it had already warned about a knowledge-base problem and stayed
+ * quiet when it should have spoken up. Found 2026-09-05. Matching the bare word "bonsai" at the start
+ * of a key, regardless of what follows it, catches both spellings and cleans up old keys already
+ * written with either one.
  */
 const BONSAI_STORAGE_PREFIX = "bonsai";
 

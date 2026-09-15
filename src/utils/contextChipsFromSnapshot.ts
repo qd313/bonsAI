@@ -1,9 +1,24 @@
 /**
- * Title: Context chips from snapshot
- * Purpose: Derive sorted context chips and transparency UI availability from input transparency snapshots.
- * Used for: MainTab reply transparency strip and Show details entry points.
- * Solves: Consistent chip ordering, windowing, and gating for route/context disclosure UI.
- * Does not: Fetch transparency data — backend Ask status and inputTransparency types.
+ * Title: Turning "what went into this answer" into the row of chips the player sees
+ *
+ * Purpose: The Show details panel shows what went into an AI answer as a row of small labelled chips
+ * — one for each file, note, or piece of context the AI actually used. The back end hands over that
+ * information as a plain list; this file puts the list in the right reading order, works out which
+ * chips fit in the visible window around the one the player has selected, and decides whether the
+ * Show details entry point should even appear for a given reply (some replies used nothing worth
+ * showing). It also picks the chip's colour based on how the licence for what it used is classed —
+ * free and open, openly available but not fully free, or neither — and flags a chip that carries a
+ * credit to a licensed source so it can be marked with its own distinct colour instead.
+ *
+ * Used for: the reply transparency strip on the main tab, and the Show details entry points that open
+ * it.
+ *
+ * Solves: gives one place that always orders and windows the chips the same way, and always decides
+ * "is there anything worth showing" the same way, instead of every place that displays them working
+ * that out for itself.
+ *
+ * Does not: fetch the "what went into this answer" information from the back end — see the Ask status
+ * call and the input-transparency types for that. This file only reshapes what already came back.
  */
 import type {
   ChatSlotTurnTransparency,

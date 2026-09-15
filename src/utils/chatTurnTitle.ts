@@ -1,16 +1,22 @@
 /**
- * Title: Collapsed/expanded turn title builder
- * Purpose: Build user question labels for Ask thread turn headers — a one-line truncated title
- *          for a closed turn, and the whole question (whitespace-normalized, un-truncated) for an
- *          open one.
- * Used for: MainTabChatTranscript turn headers via buildTurnHeaderElement. The header's own CSS
- *           (`.bonsai-chat-turn-row-header--expanded .bonsai-chat-turn-row-title`) wraps the
- *           expanded title to a five-line cap with a fade on the last line — this module only
- *           decides which string to hand it, not how it lays out.
- * Solves: D60 (docs/audit/maintainer-decisions-locked.md) — the question was cut twice, once here
- *         at 60 letters and again by a one-line CSS rule at ~48, so the 60-letter cap was never
- *         actually seen. A turn being open should show the whole thing.
- * Does not: Persist thread titles — derived from in-memory exchange snapshots.
+ * Title: The question shown at the top of each chat turn
+ *
+ * Purpose: Every question-and-answer pair in the chat has the player's question written above it as
+ * a heading. While that pair is closed, the heading shows a short, one-line version of the question.
+ * Once the player opens it, the heading should show the whole question, not a cut-off version. This
+ * file builds both versions of that text.
+ *
+ * Used for: the turn headers in the main chat view (MainTabChatTranscript, via
+ * buildTurnHeaderElement). The heading's own on-screen styling wraps the open version onto up to five
+ * lines with a fade at the end if it still runs long — this file only decides what text to hand it,
+ * not how that text is laid out.
+ *
+ * Solves: a past version of this cut the question short twice — once here, and a second time by an
+ * unrelated styling rule that cut it even shorter — so the length meant to apply here was never
+ * actually what the player saw. An open turn is now guaranteed to show the whole question.
+ *
+ * Does not: save these headings anywhere. They are worked out fresh each time from whatever question
+ * is currently in memory.
  */
 function normalizeQuestionText(question: string): string {
   return (question || "").trim().replace(/\s+/g, " ");

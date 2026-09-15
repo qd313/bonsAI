@@ -24,6 +24,7 @@ One entry per app file: the Title and Purpose lines from its header, grouped by 
 - **ai_character_service.py** (py_modules/backend/services/ai_character_service.py) — *AI character presets*: Sanitize settings and build optional roleplay system-prompt suffixes for Ask.
 - **ask_command_text.py** (py_modules/backend/services/ask_command_text.py) — *Ask command text rules*: The trim/casefold/leading-slash rules every local Ask command matcher shares.
 - **ask_local_commands.py** (py_modules/backend/services/ask_local_commands.py) — *Ask local command detection*: Detect local-only command kinds before Ollama runs.
+- **ask_payload.py** (py_modules/backend/services/ask_payload.py) — *Ask payload reading*: Turn whatever the screen sent into the plain values the Ask path works with.
 - **async_background_job.py** (py_modules/backend/services/async_background_job.py) — *Async background job helpers*: Shared cancellation events and deduplicated stage logging for long-running jobs.
 - **async_task_lifecycle.py** (py_modules/backend/services/async_task_lifecycle.py) — *Async task teardown*: Cancel a background asyncio task and wait for it to actually stop.
 - **background_request_state.py** (py_modules/backend/services/background_request_state.py) — *Background request state shape*: Own the background-request status dict and the partial-stream snapshot the poller reads.
@@ -49,6 +50,7 @@ One entry per app file: the Title and Purpose lines from its header, grouped by 
 - **ollama_ask_budgets.py** (py_modules/backend/services/ollama_ask_budgets.py) — *Ollama Ask token budgets*: Per-mode visible ``num_predict`` caps, thinking budgets, and the session record of which models reject ``think``.
 - **ollama_ask_service.py** (py_modules/backend/services/ollama_ask_service.py) — *Ollama Ask service*: HTTP chat/stream calls to Ollama for game Ask (extracted from Plugin.ask_ollama).
 - **ollama_catalog_service.py** (py_modules/backend/services/ollama_catalog_service.py) — *Ollama catalog validation*: Validate pull tags and fetch registry metadata for the Pull Models UI.
+- **ollama_connection_test.py** (py_modules/backend/services/ollama_connection_test.py) — *Ollama connection test*: Decide whether the AI is reachable, and on this Deck try once to start it.
 - **ollama_embed_service.py** (py_modules/backend/services/ollama_embed_service.py) — *Ollama embed client*: Call Ollama /api/embed for knowledge-base hybrid retrieval vectors.
 - **ollama_local_autostart_service.py** (py_modules/backend/services/ollama_local_autostart_service.py) — *Ollama local autostart*: Write, turn on/off, and report a per-user startup entry that starts the Deck's local Ollama when the Deck starts, with the loaded-model limit raised to two so the answering model and the note-searching model can both stay in memory.
 - **ollama_mdns_discovery_service.py** (py_modules/backend/services/ollama_mdns_discovery_service.py) — *Ollama mDNS discovery*: User-triggered mDNS browse for _ollama._tcp.local hosts on the LAN.
@@ -58,6 +60,8 @@ One entry per app file: the Title and Purpose lines from its header, grouped by 
 - **proton_troubleshooting_logs.py** (py_modules/backend/services/proton_troubleshooting_logs.py) — *Proton troubleshooting logs*: Discover and read bounded Proton/Steam log excerpts for Ask attachments.
 - **pull_model_catalog_service.py** (py_modules/backend/services/pull_model_catalog_service.py) — *Pull model catalog overlay*: Fetch and cache the living Pull Models recommendation overlay from upstream JSON.
 - **rag_corpus_download_service.py** (py_modules/backend/services/rag_corpus_download_service.py) — *RAG corpus downloader*: Download, verify checksums, and install the on-Deck knowledge base corpus.
+- **rag_corpus_local_install.py** (py_modules/backend/services/rag_corpus_local_install.py) — *Knowledge base install from a folder*: Install a knowledge base from a folder already on the Deck, with no network.
+- **rag_corpus_status.py** (py_modules/backend/services/rag_corpus_status.py) — *Knowledge base status*: Say what the knowledge base is doing: installed or not, where it lives, whether its meaning-search vectors are filled in, and where there is room to put it.
 - **reply_language_service.py** (py_modules/backend/services/reply_language_service.py) — *Reply language resolver*: Detect Steam client language and resolve Ask reply-language settings.
 - **response_verify.py** (py_modules/backend/services/response_verify.py) — *Ollama response verifier*: Rule-based post-check for hallucination-prone patterns in Ollama replies.
 - **screenshot_media.py** (py_modules/backend/services/screenshot_media.py) — *Screenshot media service*: Steam screenshot listing, in-process capture, and image prep for Ollama multimodal requests.
@@ -246,12 +250,14 @@ One entry per app file: the Title and Purpose lines from its header, grouped by 
 - **useQamPanelHeightGuard.ts** (src/hooks/useQamPanelHeightGuard.ts) — *QAM panel height guard*: Pin Steam QAM tab pane height and flex column chain to prevent gamescope panel sag on hover.
 - **useQamPanelSideBleed.ts** (src/hooks/useQamPanelSideBleed.ts) — *QAM panel side bleed*: Zero horizontal padding and fixed side margins on every ancestor between `.bonsai-scope` and the Steam QAM tab pane, so plugin rows reach the panel edges.
 - **useReadAloud.ts** (src/hooks/useReadAloud.ts) — *Read aloud hook*: Own the Read aloud / Stop button's RPC calls and status polling, and decide when a finished answer should read itself with no press (D74, D99 call 3).
+- **useReplyFeedbackChips.ts** (src/hooks/useReplyFeedbackChips.ts) — *Reply rating and follow-up chips*: Own the thumbs up or down on the reply that is on screen, and the small chips that rewrite your question for you so you can send a better one.
 - **useReplyLanguage.ts** (src/hooks/useReplyLanguage.ts) — *Reply language hook*: Load effective Ask reply language snapshot from backend and expose localized t() helper.
 - **useScreenshotBrowser.ts** (src/hooks/useScreenshotBrowser.ts) — *Screenshot browser hook*: List, capture, dedupe, and attach recent game screenshots for Ask with session survival.
 - **useSmoothStreamReveal.ts** (src/hooks/useSmoothStreamReveal.ts) — *Smooth stream reveal hook*: Reveal streamed assistant tokens at a capped prose rate with fence burst after close.
 - **useSteamSettingsSearch.ts** (src/hooks/useSteamSettingsSearch.ts) — *Steam settings search hook*: Filter Steam/QAM settings rows from unified input and deep-link via Router or steam:// URLs.
 - **useStrategyChecklistSession.ts** (src/hooks/useStrategyChecklistSession.ts) — *Strategy checklist session sync*: Load, persist, and clear per-game Strategy checklist state across Ask mode changes.
 - **useStreamScrollPin.ts** (src/hooks/useStreamScrollPin.ts) — *Stream scroll pin hook*: Follow the end of the transcript while tokens arrive, and hold position once the user scrolls up to read something behind it.
+- **useSuggestedPromptChips.ts** (src/hooks/useSuggestedPromptChips.ts) — *Suggested prompt chips*: Own the three question chips above the Ask box — what they say and when they change.
 - **useTabStripBodyOffset.ts** (src/hooks/useTabStripBodyOffset.ts) — *Tab strip body offset hook*: Measure Decky tab strip height and reserve space so tab content is not painted into LB/RB titles.
 - **useUiScaleProfile.ts** (src/hooks/useUiScaleProfile.ts) — *UI scale profile hook*: Measure QAM viewport width, classify handheld/docked profile, and expose scope CSS variables.
 - **useVoiceTranscription.ts** (src/hooks/useVoiceTranscription.ts) — *Voice transcription hook*: Start/stop voice Ask RPC, poll status, and stream partial transcripts into unified input.
@@ -290,8 +296,10 @@ One entry per app file: the Title and Purpose lines from its header, grouped by 
 
 ## src/types
 
+- **askOrchestration.ts** (src/types/askOrchestration.ts) — *Ask orchestration contract*: The exact shape the Ask hook hands back, written down so it cannot drift.
 - **backgroundAsk.ts** (src/types/backgroundAsk.ts) — *Background Ask types*: TypeScript contracts for background Ask start/status payloads and related reply snapshots.
 - **bonsaiUi.ts** (src/types/bonsaiUi.ts) — no header found.
+- **rpcMethods.ts** (src/types/rpcMethods.ts) — *Back-end method names*: Every method the back end answers to, as a type, so a name that does not exist stops the build instead of failing on the Deck.
 
 ## src/utils
 

@@ -1,9 +1,21 @@
 /**
- * Title: Model try-order modal
- * Purpose: Open the text/vision try-order picker — probe the host, list installed models, save the order.
- * Used for: index.tsx, which hands the opener to the Ollama tab.
- * Solves: Keeps host probing and the settings round-trip for routing order out of the plugin shell.
- * Does not: Decide fallback order at Ask time — that is backend.ollama_routing.resolve_routing_order.
+ * Title: "Which model to try first" popup
+ *
+ * Purpose: Opens the popup where a person orders their installed AI models
+ * from most to least preferred — one order for plain questions, another for
+ * questions that include a picture. Before it opens, this checks that the
+ * AI computer can actually be reached and asks it what is installed, so the
+ * popup never offers a model that is not there.
+ *
+ * Used for: The "Change try order" buttons on the Ollama tab, one for text
+ * questions and one for questions with an attached picture.
+ *
+ * Solves: Keeps checking the connection, listing installed models, and
+ * saving the chosen order out of the main plugin screen's own code.
+ *
+ * Does not: Decide which model actually answers a given question — that
+ * happens on the computer running the AI when a question is asked, using
+ * whatever order was saved here.
  */
 import { useCallback } from "react";
 import { toaster } from "@decky/api";
@@ -42,6 +54,20 @@ export type UseRoutingOrderModalArgs = {
   hydrateFromSettings: (saved: BonsaiSettings) => void;
 };
 
+/**
+ * In: the current settings and callbacks bundled together — which kind of
+ * order (text or picture-aware), the saved orders, and every function
+ * needed to save a new one and put the screen back the way it was.
+ * Out: one function that opens the popup for a given kind ("text" or
+ * "vision"). Nothing is returned until it is called.
+ * Can go wrong: a connection test to a home computer over the network can
+ * take much longer than one on the Deck itself, so the wait allowed before
+ * giving up is deliberately longer whenever the target looks like a local
+ * address. Saving the new order also has to write it into the
+ * already-captured session snapshot by hand — Decky rebuilds the plugin's
+ * screen when the popup closes, and that rebuild would otherwise restore
+ * the OLD order over the one that was just saved.
+ */
 export function useRoutingOrderModal(a: UseRoutingOrderModalArgs) {
   return useCallback(
     async (kind: ModelRoutingOrderKind) => {

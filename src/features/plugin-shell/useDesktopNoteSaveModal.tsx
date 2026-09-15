@@ -1,9 +1,18 @@
 /**
- * Title: Desktop note save modal
- * Purpose: Own the Save-to-Desktop confirm modal and its append_desktop_debug_note call.
- * Used for: index.tsx — the Main tab "save this exchange" action.
- * Solves: Keeps a permission gate, a consent modal, and RPC error toasting out of the shell.
- * Does not: Decide the note's contents — the caller supplies the exchange to append.
+ * Title: "Save this answer to the Desktop" popup
+ *
+ * Purpose: Opens the confirm popup for saving the last question and answer
+ * to a text file on the Steam Deck's own Desktop, and does the actual save
+ * once a person confirms a file name.
+ *
+ * Used for: The Main tab's "save this exchange" action.
+ *
+ * Solves: If the plugin has not been allowed to write files, shows a
+ * message explaining that and a shortcut to turn it on, instead of the
+ * save button silently doing nothing.
+ *
+ * Does not: Decide what gets saved — the caller hands over the question
+ * and answer to save; this hook only asks for a file name and writes it.
  */
 import { useCallback } from "react";
 import { showModal } from "@decky/ui";
@@ -37,6 +46,14 @@ export type UseDesktopNoteSaveModalArgs = {
   returnTabRef: React.MutableRefObject<string>;
 };
 
+/**
+ * In: the filesystem-write permission flag, the last question/answer to
+ * save, and the tab-restore plumbing every popup uses.
+ * Out: one function that opens the popup. Nothing until it is called.
+ * Can go wrong: called with no exchange to save (`lastExchange` is null),
+ * it does nothing at all — not even open a popup — so a caller has to
+ * make sure the save button is not shown in that state to begin with.
+ */
 export function useDesktopNoteSaveModal({
   filesystemWrite,
   lastExchange,

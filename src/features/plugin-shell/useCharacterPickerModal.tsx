@@ -1,9 +1,17 @@
 /**
- * Title: Character picker modal
- * Purpose: Own the AI-character picker modal and the save_settings write it commits.
- * Used for: index.tsx — the Main tab character avatar action.
- * Solves: Keeps optimistic local state updates plus a settings round-trip out of the shell.
- * Does not: Own the character catalog — see data/characterCatalog and the modal component.
+ * Title: AI character picker popup
+ *
+ * Purpose: Opens the popup where a person picks the AI's on-screen
+ * character (or lets it be chosen at random), and saves that choice.
+ *
+ * Used for: Tapping the character avatar on the Main tab.
+ *
+ * Solves: Updates the avatar on screen the instant a choice is made,
+ * before waiting to hear back from the save — so picking a character
+ * never feels like it did nothing while the save is still in flight.
+ *
+ * Does not: Own the list of characters to choose from — see
+ * data/characterCatalog and the popup component itself for that.
  */
 import { useCallback } from "react";
 import { showModal } from "@decky/ui";
@@ -36,6 +44,15 @@ export type UseCharacterPickerModalArgs = {
   finalizeShowModalAndRestoreActiveTab: (close: () => void) => void;
 };
 
+/**
+ * In: the current character choice and the setters/save functions to
+ * apply a new one.
+ * Out: one function that opens the popup. Nothing until it is called.
+ * Can go wrong: the choice is applied to the screen before the save to
+ * the backend finishes — if that save then fails, the avatar has
+ * already changed but the failure is only reported as a toast, not
+ * undone.
+ */
 export function useCharacterPickerModal({
   aiCharacterRandom,
   aiCharacterPresetId,

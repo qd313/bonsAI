@@ -1,9 +1,24 @@
 /**
- * Title: Plugin shell hook
- * Purpose: Survive Decky Content remounts — restore active tab and capture session snapshots for modals.
- * Used for: index.tsx via BonsaiPluginShell when showModal unmounts the plugin tree.
- * Solves: Tab and partial UI state reset when modals close on Steam Deck.
- * Does not: Own Ask transcript state — see bonsaiSessionSurvival and useBonsaiAskOrchestration.
+ * Title: Plugin shell — which tab is open, and surviving a popup
+ *
+ * Purpose: Tracks which tab the plugin is showing (Ask, Chats, Settings,
+ * and so on), and fixes a Steam quirk: opening one of Steam's own popups
+ * on top of the plugin (a picker, a confirm dialog) throws the plugin's
+ * whole screen away and rebuilds it once the popup closes. Without this
+ * hook, that rebuild would always land back on the Ask tab, no matter
+ * which tab a person was actually on. It saves a snapshot before the
+ * popup opens and puts the right tab — and the focus ring — back once it
+ * closes.
+ *
+ * Used for: The plugin's main screen, and every place that opens one of
+ * Steam's popups (the character picker, the models hub, and others).
+ *
+ * Solves: A person switching tabs, then opening a picker, used to always
+ * end up back on the Ask tab when the picker closed — this is the one
+ * place that remembers and restores where they actually were.
+ *
+ * Does not: Own the Ask conversation itself, or what is being asked —
+ * see bonsaiSessionSurvival and useBonsaiAskOrchestration for that.
  */
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
@@ -30,6 +45,14 @@ import {
  */
 let __bonsaiTabRestoreAfterModal: string | null = null;
 
+/**
+ * In: nothing.
+ * Out: which tab name to open with, checked in order: a pending restore
+ * left by session survival, a tab queued by a just-closed popup, or
+ * failing both, the person's saved resume preference (defaulting to
+ * Main).
+ * Can go wrong: nothing — every source has a fallback, ending in "main".
+ */
 function resolveInitialTab(): string {
   const snap = peekBonsaiSessionPendingRestore();
   if (snap?.currentTab) return snap.currentTab;
@@ -45,6 +68,56 @@ export type UseBonsaiPluginShellOptions = {
   getSessionSnapshot: () => BonsaiSessionSurvivalSnapshot;
 };
 
+/**
+ * In: a function that builds a full snapshot of the Ask session, called
+ * right before a Steam popup is about to throw the screen away.
+ * Out: which tab is open, the ref popups use to say where to come back
+ * to, and every function a popup-opener or the tab bar needs to call.
+ * Can go wrong: the focus return after a popup closes runs on a fixed
+ * short delay rather than waiting for a real "the tab is ready" signal;
+ * the code already tolerates a miss as a no-op, but on an unusually slow
+ * device the delay could in principle fire too early.
+ *
+ * 1. On first mount, logs a debug line noting the mount count and which
+ *    tab it is about to show — used to catch an unexpected extra
+ *    remount on a real device.
+ * 2. Sets up the "current tab" state, seeded from whichever tab a
+ *    just-closed popup wants to return to, or failing that, the tab the
+ *    person had open last time.
+ * 3. Three refs: which tab to return to after a popup closes, a
+ *    short-lived lock that blocks Steam's own tab-switch signal from
+ *    undoing that return, and a stand-in for "finish closing a popup"
+ *    that always points at the newest version of that function.
+ * 4. A second mount-time effect: if a tab was queued up by a just-closed
+ *    popup, switches to it immediately.
+ * 5. Whenever the current tab changes, saves it, so reopening the plugin
+ *    later resumes on the last tab actually shown.
+ * 6. `armPostPickerTabLock()` arms a short window during which a
+ *    spurious "back to Main" signal from Steam is ignored, unless the
+ *    popup itself is closing back to Main anyway.
+ * 7. `finalizeShowModalAndRestoreActiveTab()` is the one function every
+ *    popup-closer calls: it puts the tab back, closes the popup, and
+ *    after a brief pause puts the tab back again and returns the
+ *    focus ring to whichever button opened the popup — a second pass is
+ *    needed because the tab's own controls are not mounted yet on the
+ *    first one.
+ * 8. Keeps a ref pointed at the newest
+ *    `finalizeShowModalAndRestoreActiveTab`, so a caller that grabbed a
+ *    reference to it earlier still reaches the current version.
+ * 9. `captureSessionBeforeModal()` saves the tab to return to, two
+ *    tab-specific local snapshots, and the whole session, right before a
+ *    popup is about to replace the screen.
+ * 10. `onTabsShowTab()` handles Steam's own tab-switch signal (the
+ *     shoulder buttons), honoring the lock from step 6 so it cannot
+ *     undo a return-to-tab that just happened.
+ * 11. `selectTab()` is for a tab chosen on the plugin's own tab bar
+ *     rather than Steam's — it always wins outright, clearing the lock
+ *     instead of being blocked by it.
+ * 12. `prepareModalWithReturnTab()` captures the session and records
+ *     which tab to come back to, for a popup that wants to return
+ *     somewhere other than the current tab.
+ * 13. Every piece above is bundled together and returned.
+ */
 export function useBonsaiPluginShell({ getSessionSnapshot }: UseBonsaiPluginShellOptions) {
   useLayoutEffect(() => {
     const mount = bumpContentMountCount();

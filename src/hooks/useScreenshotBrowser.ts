@@ -1,9 +1,21 @@
 /**
- * Title: Screenshot browser hook
- * Purpose: List, capture, dedupe, and attach recent game screenshots for Ask with session survival.
- * Used for: MainTab media attach flow and screenshot browser modal.
- * Solves: Screenshot picker state across Decky modal unmount with permission-aware RPC.
- * Does not: Upload or analyze images — backend list_recent_screenshots and Ask attachment pipeline.
+ * Title: Screenshot browser
+ *
+ * Purpose: Runs the "attach a screenshot" panel on the Ask screen — showing
+ * recent game screenshots, taking a new one on the spot, and picking one to
+ * send with the next question. It keeps working correctly even though
+ * opening a Decky panel on top of the plugin throws the plugin's own screen
+ * away and rebuilds it from scratch when the panel closes.
+ *
+ * Used for: The Attach button on the Ask screen and the screenshot browser
+ * panel it opens.
+ *
+ * Solves: Steam's screenshot folder and the plugin's own capture both list
+ * the same picture; this hook is the one place that reads both permissions
+ * and both sources correctly, so callers do not each have to get it right.
+ *
+ * Does not: Send the picture to the AI, or decide whether it is relevant —
+ * it only lists, captures, and marks one as "ready to attach".
  */
 import { useCallback, useRef, useState } from "react";
 import { toaster } from "@decky/api";
@@ -18,7 +30,17 @@ type RecentScreenshotsResponse = {
   error?: string;
 };
 
-/** De-duplicate screenshot rows: prefer Steam folder entries over plugin capture mirrors. */
+/**
+ * In: the raw screenshot list from the backend, which can list the same
+ * picture twice — once from Steam's own screenshot folder, once from a
+ * copy the plugin made of its own capture.
+ * Out: the same list with duplicates collapsed to one entry each,
+ * preferring the Steam folder's copy over the plugin's mirror.
+ * Can go wrong: two screenshots are matched as duplicates by the timestamp
+ * in their file name (or, failing that, their file path); a file whose
+ * name and path both lack that timestamp falls back to a key built from
+ * its own path, so it can only ever match itself.
+ */
 function dedupeScreenshotItems(items: ScreenshotItem[]): ScreenshotItem[] {
   const captureTimestampKey = (item: ScreenshotItem): string => {
     const fromName = /(\d{8}-\d{6})/.exec(item.name)?.[1];
@@ -52,6 +74,36 @@ export type UseScreenshotBrowserOptions = {
   filesystemWrite: boolean;
 };
 
+/**
+ * In: whether a question is currently being asked (so a capture cannot
+ * start mid-Ask), and the two permission flags that gate saving files.
+ * Out: everything the screen needs — the current list, loading and
+ * capturing flags, any error message, the picture chosen to attach, and
+ * every action button's handler.
+ * Can go wrong: none of the steps roll back on a partial failure — if the
+ * panel opens but the list fails to load, it stays open showing the error
+ * instead of closing itself.
+ *
+ * 1. State: is the panel open, any error message, the loaded list, a
+ *    loading flag, a capturing flag, and the chosen attachment — all
+ *    seeded from a saved snapshot if the plugin is being rebuilt after a
+ *    Decky panel closed, so a run in progress is not lost.
+ * 2. `loadRecentScreenshots()` asks the backend for the running game's
+ *    most recent screenshots, then removes duplicates before storing them.
+ * 3. `onTakeScreenshot()` checks permission first, asks Steam to take and
+ *    save a screenshot, closes the side menu so the flash is not hidden
+ *    behind it, shows a toast either way, and reloads the list on success.
+ * 4. `onOpenScreenshotBrowser()` opens the panel and loads the list, but
+ *    only when permission is granted — otherwise it shows an inline
+ *    message instead of calling the backend at all.
+ * 5. `onCloseScreenshotBrowser()` closes the panel and clears any error.
+ * 6. `onSelectRecentScreenshot()` marks a screenshot as the pending
+ *    attachment for the next question, closes the panel, and confirms
+ *    with a toast.
+ * 7. `restoreScreenshotBrowserSnapshot()` puts every piece of this hook's
+ *    state back at once, for the same Decky-remount recovery as step 1.
+ * 8. Every piece above is handed back together as one object.
+ */
 export function useScreenshotBrowser({
   getIsAsking,
   mediaLibraryAccess,

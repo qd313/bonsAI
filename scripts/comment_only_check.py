@@ -38,6 +38,25 @@ Gotchas:
    is reported as a failure. That is deliberate: phase 5 adds no files.
  - A Python file that does not parse is a failure too, not a skip. A worker that
    breaks the syntax of a docstring has broken the file.
+ - **A comment that does something cannot be seen by this check.** Comments are
+   removed from both sides before the comparison, so deleting one that changes
+   how a tool behaves -- `// eslint-disable-next-line`, `// @ts-ignore`, a
+   `# type:` hint -- looks exactly like deleting an ordinary sentence. This is a
+   real hole, not a theoretical one, and it is left open because closing it here
+   would mean teaching this script every tool's comment syntax. It is covered
+   from the other side instead:
+     * type-suppressing comments would be caught by the typecheck in
+       scripts/verify.py, which runs before every commit. As of 2026-09-15 there
+       are none in app code anyway;
+     * the seven `eslint-disable` lines in app code are the only other kind, and
+       a phase that only rewrites file headers should not go near them. Count
+       them before and after a sweep if you want certainty:
+       `grep -rn "eslint-disable" --include=*.ts --include=*.tsx src/`
+   Worth knowing before trusting a pass on a job that edits comments deeper in a
+   file than the header.
+ - Nothing here can tell a true sentence from a false one. A header rewritten to
+   say something confidently wrong passes this check cleanly, and that is the
+   likelier way this phase does damage. Only a person reading it catches that.
 """
 
 from __future__ import annotations

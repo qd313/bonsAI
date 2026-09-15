@@ -1,9 +1,19 @@
-"""Title: Background request state shape
+"""Title: The shape of "how is my Ask coming along"
 
-Purpose: Own the background-request status dict and the partial-stream snapshot the poller reads.
-Used for: main.py — every place that builds or resets `_background_state` / `_partial_stream_snapshot`.
-Solves: One declaration of a shape that was written out by hand in four places, one of which omitted three keys.
-Does not: Own the locks, the task handles or the merge policy — those stay with the Plugin instance.
+Purpose: An Ask that is still thinking runs in the background while the screen checks
+back roughly once a second asking "done yet?". This file is every shape that check can be
+answered with: brand new and idle, just accepted and about to start, finished because a
+quick built-in command answered it directly, and the small in-progress snapshot -- the
+partial reply and the "thinking..." line -- that gets filled in while the AI is still
+replying.
+Used for: Every place the plugin's front-door file starts, finishes, or resets the status
+of a background Ask.
+Solves: Without one shared definition, each of those places would build this status by
+hand, and it is easy for two hand-built copies to end up with slightly different fields --
+one missing something the screen's polling code expects to find.
+Does not: Hold the lock that guards this status, the task handle for the AI call itself,
+or decide how a new snapshot gets merged into the status already published -- those stay
+with the plugin's own class.
 """
 
 from typing import Any, Optional

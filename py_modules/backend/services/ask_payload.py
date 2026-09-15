@@ -1,16 +1,24 @@
-"""Title: Ask payload reading
+"""Title: Reading what the screen sent for one Ask
 
-Purpose: Turn whatever the screen sent into the plain values the Ask path works with.
-Used for: Both ways in -- the foreground ask and the background one -- read their payload
-          through here, and the ask service sanitizes attachments through here.
-Solves: The screen has sent the same field under several names over time (appId, PcIp and
-        pcIp and pc_ip, askMode and ask_mode). Reading those variants is not the entry
-        point's job, and doing it in one place keeps the two ways in identical.
-Does not: Decide anything about the question, or talk to Ollama.
+Purpose: When you type a question and hit Ask, the screen sends it to the back end as a
+small bundle of fields -- the question text, the address of the PC running the AI, which
+game you are asking about, any screenshots you attached, and so on. This file turns that
+bundle into the plain values the rest of the Ask code actually works with. It also holds
+the one list of the three question styles you can pick (fast, strategy, in-depth) and
+which one is used when you have not chosen.
+Used for: Both ways of asking -- the one that waits for a full reply and the one that
+answers in the background while you keep using the Deck -- read the screen's message
+through here, and the checks that clean up screenshot attachments run through here too.
+Solves: Over time the screen has sent the same piece of information under more than one
+name (the PC address has arrived as PcIp, pcIp and pc_ip; the question style as askMode
+and ask_mode). Reading those variants is not something either Ask path should have to do
+for itself, and doing it in one place keeps the two paths reading the message the same
+way.
+Does not: Decide anything about the question itself, or talk to the AI.
 
-Lifted out of main.py on 2026-09-14 with the rules unchanged. It also holds the one
-definition of what an ask mode is, because the reader needs it and two other files used
-to reach back into the plugin class for it.
+Moved out of the plugin's front-door file on 2026-09-14, with the rules unchanged. It also
+holds the one definition of the three question styles, because two other files used to
+reach back into the plugin's own class just to read that list.
 """
 
 from __future__ import annotations

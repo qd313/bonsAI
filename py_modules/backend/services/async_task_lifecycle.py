@@ -1,9 +1,16 @@
-"""Title: Async task teardown
+"""Title: Stopping a background task and waiting for it to actually be gone
 
-Purpose: Cancel a background asyncio task and wait for it to actually stop.
-Used for: main.py — plugin unload and Clear-all-plugin-data, which tear down five long-lived tasks.
-Solves: One correct version of cancel-then-await-then-swallow, instead of five hand-written copies.
-Does not: Own the tasks, the locks, or the state each caller resets afterwards — those stay on Plugin.
+Purpose: Cancel one background task -- an Ask that is still thinking, the AI engine still
+installing, the voice engine still installing -- and wait until it has genuinely finished,
+rather than just asking it to stop and moving on.
+Used for: The handful of places the plugin's front-door file needs to be sure a background
+task has stopped before it does anything else: unloading the plugin, clearing all plugin
+data, and cancelling an Ask that is already in flight.
+Solves: One correct version of "cancel it, then wait for it, then don't complain when the
+cancel shows up as an error", instead of that logic being hand-written again at every one
+of those call sites.
+Does not: Keep track of which tasks exist, or reset whatever state a stopped task leaves
+behind -- both of those stay the caller's job.
 """
 
 import asyncio

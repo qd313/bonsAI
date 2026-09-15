@@ -1,12 +1,19 @@
-"""Title: Host clipboard reader/writer
+"""Title: Reading and writing the Deck's own clipboard
 
-Purpose: Read and write the Steam Deck host clipboard via shell helpers when WebView APIs are
-  unavailable or unreliable.
-Used for: Ask bar paste-from-clipboard RPC (read) and the reply Copy action (write).
-Solves: Bounded, timeout-guarded clipboard access with structured success/error dicts.
-Does not: Access the clipboard without the helper scripts on disk. Retry a failed write — one
-  attempt per call; the frontend already tries navigator.clipboard and execCommand('copy') first,
-  so a write only reaches here as a last resort (see docs/audit/clipboard-spike-2026-08-28.md).
+Purpose: The panel is drawn in a small embedded browser, and that browser's own
+copy-and-paste does not reliably reach the Deck's system-wide clipboard -- reading it back
+in particular is blocked outright. This file is the fallback: two small shell scripts,
+already installed with the plugin, that ask the Deck itself to read or write the
+clipboard, run with a short timeout so a stuck script cannot hang an Ask.
+Used for: Pasting into the Ask box from the clipboard, and the Copy button on a reply.
+Both try the browser's own copy-and-paste first and only call through to here when that
+does not work.
+Solves: Getting text on and off the Deck's real clipboard from inside the plugin's panel,
+in a bounded amount of time, with a plain success-or-error result either caller can show
+on screen.
+Does not: Work if the two helper scripts are missing from disk. Retry a failed write --
+one attempt per call, because a write only reaches this file after the browser's own
+copy-and-paste has already failed once (see docs/archive/clipboard-spike-2026-08-28.md).
 """
 
 from __future__ import annotations

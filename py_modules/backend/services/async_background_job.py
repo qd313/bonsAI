@@ -1,9 +1,19 @@
-"""Title: Async background job helpers
+"""Title: Small shared pieces for the plugin's three long-running downloads
 
-Purpose: Shared cancellation events and deduplicated stage logging for long-running jobs.
-Used for: Ollama setup, model pull, and voice install background tasks in main RPC paths.
-Solves: Consistent cooperative cancel and one-log-per-stage telemetry across job types.
-Does not: Implement job-specific work — callers own the actual install or download logic.
+Purpose: Setting up the AI engine, downloading the knowledge base, and installing the
+voice engine can each take a while and run in the background while you keep using the
+Deck. All three need the same two small things: a flag the screen can raise to say "stop
+this", and a way of writing one log line per stage instead of flooding the log with the
+same "still working" line over and over. This file is those two things, built once and
+handed to whichever of the three is running.
+Used for: Starting the AI engine's own setup (both the first install and the "starter
+setup" path), and installing the voice engine. Downloading the knowledge base uses the
+same stop flag but not the stage logger.
+Solves: Without one shared version of this, each of the three downloads would need its
+own stop flag and its own "did I already log this stage" bookkeeping, and a bug fixed in
+one would still be sitting in the other two.
+Does not: Do any of the actual install or download work -- each caller owns that; this
+file only hands it a stop flag and something to log progress through.
 """
 
 from __future__ import annotations

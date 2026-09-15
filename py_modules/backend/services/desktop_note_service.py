@@ -9,8 +9,9 @@ what was sent to the AI. Everything lands under ~/Desktop/bonsAI_logs -- one
 file per day for most of these -- and nothing already written is ever
 overwritten, only appended to.
 
-Used for: main.py's RPC handlers, and only once filesystem writes are turned
-on in the Permissions tab: saving a note (`append_desktop_debug_note_sync()`),
+Used for: things the screen can ask the back end to do, and only once
+filesystem writes are turned on in the Permissions tab: saving a note
+(`append_desktop_debug_note_sync()`),
 autosaving a chat turn (`append_desktop_chat_event_sync()`), writing an
 app-activity line (`append_app_log_sync()`), and writing a full Ask trace
 (`append_desktop_ask_transparency_sync()`).

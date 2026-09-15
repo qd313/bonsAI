@@ -925,6 +925,34 @@ describe("useBonsaiAskOrchestration", () => {
       });
     });
 
+    // Gap 1 (plan 54): a title reachable only by name (an emulator shortcut with no AppID) needs
+    // its name carried the same way the AppID is, or the display-time unwrap can never reach it.
+    it("stamps the archived turn with the game name it was asked against", async () => {
+      setRpcHandler("start_background_game_ai", () => ({
+        accepted: true,
+        status: "completed",
+        success: true,
+        response: "Circle-strafe and pop the weak point.",
+        request_id: 10,
+        app_id: "",
+        app_name: "Doom 64: Retribution",
+      }));
+
+      const { result } = renderHook(() => useBonsaiAskOrchestration(makeArgs()));
+
+      await act(async () => {
+        await result.current.onAskOllama("How do I beat the boss?");
+      });
+      await act(async () => {
+        await result.current.onAskOllama("second question");
+      });
+
+      expect(result.current.askThreadCollapsed[0]).toMatchObject({
+        question: "How do I beat the boss?",
+        appName: "Doom 64: Retribution",
+      });
+    });
+
     /*
      * The saved-chat reload rebuilds this list from disk after every completed reply, so by the
      * time the next Ask flushes its pending archive the turn is usually already there. Appending

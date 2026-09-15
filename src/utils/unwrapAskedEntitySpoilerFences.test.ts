@@ -76,6 +76,37 @@ describe("unwrapAskedEntitySpoilerFences", () => {
     expect(out).not.toContain("```bonsai-spoiler");
     expect(out).toContain("Hold the choke point and watch the rear.");
   });
+
+  // Gap 1 (plan 54): the screen only ever checked the AppID for a low-narrative title, so an
+  // emulator shortcut with no AppID — reachable only by name — kept its boxes shut even though
+  // the prompt was told to relax for it.
+  it("unwraps all fences for a name-only low-narrative title (no AppID)", () => {
+    const raw = [
+      "```bonsai-spoiler",
+      "Circle-strafe the boss and pop the weak point when it opens.",
+      "```",
+    ].join("\n");
+    const out = unwrapAskedEntitySpoilerFences(raw, {
+      appId: "",
+      appName: "Doom 64: Retribution",
+    });
+    expect(out).not.toContain("```bonsai-spoiler");
+    expect(out).toContain("Circle-strafe the boss and pop the weak point when it opens.");
+  });
+
+  it("keeps fences shut for a name-only story title (no AppID) with no entity named", () => {
+    const raw = [
+      "```bonsai-spoiler",
+      "The Courier's true allegiance is revealed at the dam.",
+      "```",
+    ].join("\n");
+    const out = unwrapAskedEntitySpoilerFences(raw, {
+      question: "What should I do next?",
+      appId: "",
+      appName: "Fallout: New Vegas",
+    });
+    expect(out).toContain("```bonsai-spoiler");
+  });
 });
 
 describe("shouldUnwrapSpoilerFence", () => {
@@ -109,5 +140,17 @@ describe("shouldUnwrapSpoilerFence", () => {
         appId: "1174180",
       })
     ).toBe(false);
+  });
+
+  // Gap 1 (plan 54): the mid-stream gate must agree with the closed-fence unwrap above, or a
+  // fence that opens once finished would still show the "hidden until complete" chip while it
+  // streams in.
+  it("qualifies a name-only low-narrative title with no AppID", () => {
+    expect(
+      shouldUnwrapSpoilerFence("```bonsai-spoiler\nCircle-strafe the boss", {
+        appId: "",
+        appName: "Doom 64: Retribution",
+      })
+    ).toBe(true);
   });
 });

@@ -39,6 +39,12 @@ function entityMentioned(haystack: string, entity: string): boolean {
 export type UnwrapSpoilerOpts = {
   question?: string;
   appId?: string | null;
+  /**
+   * The game's display name, for a title reachable only by name — an emulator shortcut with no
+   * Steam AppID (plan 54 gap 1). Passed straight through to `titleProfileIsLowNarrative`, which
+   * already checks the AppID first and only falls back to the name.
+   */
+  appName?: string | null;
   /** When true, unwrap every spoiler fence for this turn (explicit consent). */
   spoilerConsentEffective?: boolean;
 };
@@ -53,9 +59,10 @@ export type UnwrapSpoilerOpts = {
 export function shouldUnwrapSpoilerFence(fenceText: string, opts: UnwrapSpoilerOpts): boolean {
   const question = opts.question || "";
   const appId = String(opts.appId || "").trim();
+  const appName = opts.appName || "";
   const consent = opts.spoilerConsentEffective === true;
   if (consent) return true;
-  if (titleProfileIsLowNarrative(appId)) return true;
+  if (titleProfileIsLowNarrative(appId, appName)) return true;
   const entity = extractAskedBeatEntity(question);
   if (!entity) return false;
   return entityMentioned(fenceText, entity);
@@ -75,8 +82,9 @@ export function unwrapAskedEntitySpoilerFences(
     typeof questionOrOpts === "string" ? { question: questionOrOpts } : questionOrOpts;
   const question = opts.question || "";
   const appId = String(opts.appId || "").trim();
+  const appName = opts.appName || "";
   const consent = opts.spoilerConsentEffective === true;
-  const lowNarrativeTitle = titleProfileIsLowNarrative(appId);
+  const lowNarrativeTitle = titleProfileIsLowNarrative(appId, appName);
   const entity = extractAskedBeatEntity(question);
   if (!text) return text;
   if (!consent && !lowNarrativeTitle && !entity) return text;

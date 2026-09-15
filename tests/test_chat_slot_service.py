@@ -132,6 +132,52 @@ class ChatSlotServiceTests(unittest.TestCase):
         assert saved is not None
         self.assertEqual(saved["turns"][-1]["app_id"], "9" * 32)
 
+    def test_turns_persist_the_app_name_they_were_asked_under(self):
+        """Plan 54 gap 1: a title reachable only by name (an emulator shortcut with no Steam
+        AppID) needs its name carried the same way the AppID is, or a reopened chat re-fences
+        boss tactics the screen would otherwise show in plain text.
+        """
+        slot = create_slot(self.settings_dir, first_question="boss tips?", app_name="Doom 64")
+        sid = slot["id"]
+        append_turn(
+            self.settings_dir,
+            sid,
+            role="user",
+            text="boss tips?",
+            app_name="Doom 64: Retribution",
+        )
+        saved = append_turn(
+            self.settings_dir,
+            sid,
+            role="assistant",
+            text="Circle-strafe and pop the weak point.",
+            app_name="Doom 64: Retribution",
+        )
+        assert saved is not None
+        self.assertEqual(
+            [t["app_name"] for t in saved["turns"]],
+            ["Doom 64: Retribution", "Doom 64: Retribution"],
+        )
+
+        reloaded = load_slot(self.settings_dir, sid)
+        assert reloaded is not None
+        self.assertEqual(reloaded["turns"][-1]["app_name"], "Doom 64: Retribution")
+
+    def test_turns_saved_before_the_app_name_field_existed_load_with_an_empty_one(self):
+        slot = create_slot(self.settings_dir, origin_app_id="", label="old chat")
+        sid = slot["id"]
+        legacy = {
+            **slot,
+            "turns": [
+                {"id": "u1", "role": "user", "text": "boss tips?"},
+                {"id": "a1", "role": "assistant", "text": "Circle-strafe."},
+            ],
+        }
+        save_slot(self.settings_dir, legacy)
+        reloaded = load_slot(self.settings_dir, sid)
+        assert reloaded is not None
+        self.assertEqual([t["app_name"] for t in reloaded["turns"]], ["", ""])
+
     def test_assistant_turn_persists_transparency_snapshot(self):
         """Regression: assistant turns used to save no transparency at all, so a slot restored
         from disk could never show more than the newest archived turn in SessionContextStrip

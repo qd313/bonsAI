@@ -336,6 +336,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     body: string,
     askQuestion: string,
     appId: string | null,
+    appName: string | null,
     spoilerConsentEffective = false
   ) =>
     buildAnswerReadableText({
@@ -343,6 +344,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
       spoilerMaskingEnabled: strategySpoilerMaskingEnabled,
       askQuestion,
       appId,
+      appName,
       spoilerConsentEffective,
     });
   /** Read aloud props for one turn's reply-actions row: same shape at every call site. */
@@ -351,6 +353,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     body: string,
     askQuestion: string,
     appId: string | null,
+    appName: string | null,
     spoilerConsentEffective = false
   ) => {
     /*
@@ -372,7 +375,10 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
           readAloud.stop();
           return;
         }
-        readAloud.start(key, buildTurnReadableText(body, askQuestion, appId, spoilerConsentEffective));
+        readAloud.start(
+          key,
+          buildTurnReadableText(body, askQuestion, appId, appName, spoilerConsentEffective)
+        );
       },
     };
   };
@@ -582,6 +588,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     answerKey: string,
     askQuestion: string,
     appId: string | null,
+    appName: string | null,
     spoilerConsentEffective = false
   ) =>
     buildAnswerBubbleElement({
@@ -596,6 +603,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
       answerKey,
       askQuestion,
       appId,
+      appName,
       spoilerConsentEffective,
       onDrgGlossaryExplainFurther: onAskOllama ? onDrgGlossaryExplainFurther : undefined,
       /*
@@ -614,6 +622,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                 spoilerMaskingEnabled: strategySpoilerMaskingEnabled,
                 askQuestion,
                 appId,
+                appName,
                 spoilerConsentEffective,
               })
           : undefined,
@@ -875,6 +884,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   turn.id,
                   turn.question,
                   turn.appId ?? null,
+                  turn.appName ?? null,
                   turn.spoilerConsentEffective === true
                 )}
                 {/*
@@ -941,6 +951,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                           turn.answer,
                           turn.question,
                           turn.appId ?? null,
+                          turn.appName ?? null,
                           turn.spoilerConsentEffective === true
                         )
                       : {}),
@@ -1046,6 +1057,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   "live",
                   liveQuestion || lastExchange?.question || "",
                   ollamaContext?.app_id ?? null,
+                  lastExchange?.appName ?? null,
                   lastExchange?.spoilerConsentEffective === true
                 )
               : null}
@@ -1075,6 +1087,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                         lastExchange.answer,
                         liveQuestion || lastExchange?.question || "",
                         ollamaContext?.app_id ?? null,
+                        lastExchange?.appName ?? null,
                         lastExchange?.spoilerConsentEffective === true
                       )
                     : {}),

@@ -103,6 +103,8 @@ export type BuildAnswerBubbleElementArgs = {
   askQuestion?: string;
   /** Active game AppID — used with title spoiler profile for unwrap. */
   appId?: string | null;
+  /** Active game's display name — for a title reachable only by name (plan 54 gap 1). */
+  appName?: string | null;
   /** When true, unwrap every spoiler fence for this turn (explicit consent). */
   spoilerConsentEffective?: boolean;
   /** DRG Survivor glossary "explain further" chip — starts a new Ask turn about the tapped term. */
@@ -303,13 +305,14 @@ export function buildAnswerBubbleElement(
     answerKey,
     askQuestion = "",
     appId = null,
+    appName = null,
     spoilerConsentEffective = false,
     onDrgGlossaryExplainFurther,
     getAnswerCopyText,
   } = args;
   const spoilerUnwrapEligible =
-    spoilerConsentEffective || (spoilerMaskingEnabled && (askQuestion.trim() || appId));
-  const spoilerUnwrapOpts = { question: askQuestion, appId, spoilerConsentEffective };
+    spoilerConsentEffective || (spoilerMaskingEnabled && (askQuestion.trim() || appId || appName));
+  const spoilerUnwrapOpts = { question: askQuestion, appId, appName, spoilerConsentEffective };
   let displayBody = stripAssistantDisplayTags(body);
   if (spoilerUnwrapEligible) {
     displayBody = unwrapAskedEntitySpoilerFences(displayBody, spoilerUnwrapOpts);

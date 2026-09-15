@@ -1010,6 +1010,7 @@ class Plugin:
                 request_id=request_id,
                 attachment_refs=refs,
                 app_id=app_id,
+                app_name=app_name,
                 display_text=display_question,
                 logger=logger,
             )
@@ -1024,6 +1025,7 @@ class Plugin:
         response_text: str,
         transparency: Optional[dict] = None,
         app_id: str = "",
+        app_name: str = "",
     ) -> None:
         sid = str(slot_id or "").strip()
         body = str(response_text or "").strip()
@@ -1039,6 +1041,7 @@ class Plugin:
                 text=body,
                 transparency=transparency,
                 app_id=app_id,
+                app_name=app_name,
                 logger=logger,
             )
 
@@ -2091,6 +2094,7 @@ class Plugin:
                 response_text=resp,
                 transparency=transparency_snapshot_for_chat_slot(snapshot),
                 app_id=app_id,
+                app_name=app_name,
             )
         self._background_state = completed_local_command_state(
             request_id=request_id,
@@ -2100,6 +2104,7 @@ class Plugin:
             response=resp,
             now=now,
             shortcut_setup=shortcut_setup_for_state,
+            app_name=app_name,
         )
         self._background_task = None
         out: dict[str, Any] = {
@@ -2107,6 +2112,7 @@ class Plugin:
             "status": "completed",
             "request_id": request_id,
             "app_id": app_id,
+            "app_name": app_name,
             "app_context": app_context,
             "success": True,
             "response": resp,
@@ -2348,6 +2354,7 @@ class Plugin:
                 "elapsed_seconds": result.get("elapsed_seconds", 0),
                 "error": None if (success or cancelled_rq) else response_text,
                 "completed_at": time.time(),
+                "app_name": result.get("app_name", app_name),
                 "strategy_guide_branches": result.get("strategy_guide_branches"),
                 "strategy_checklist": result.get("strategy_checklist"),
                 "model_policy_disclosure": result.get("model_policy_disclosure"),
@@ -2378,6 +2385,7 @@ class Plugin:
                 response_text=response_text,
                 transparency=None if cancelled_rq else result.get("transparency"),
                 app_id=app_id,
+                app_name=app_name,
             )
         await self._maybe_app_log(
             "ask.background",
@@ -2564,6 +2572,7 @@ class Plugin:
                 app_context=app_context,
                 started_at=time.time(),
                 chat_slot_id=chat_slot_id or None,
+                app_name=app_name,
             )
             if chat_slot_id:
                 await self._chat_slots_record_user_turn(
@@ -2719,6 +2728,7 @@ class Plugin:
                             # method just rewrote (it spreads the pending state, so `app_id`
                             # from `pending_background_state` survives the cancel).
                             app_id=str(self._background_state.get("app_id") or ""),
+                            app_name="",
                         )
         await self._maybe_app_log("ask.abort", "background ask abort requested")
         return {"ok": True}

@@ -67,4 +67,22 @@ describe("buildAnswerCopyText", () => {
     expect(buildAnswerCopyText({ body: "" })).toBe("");
     expect(buildAnswerCopyText({ body: "   \n  " })).toBe("");
   });
+
+  // Gap 1 (plan 54): copy must unwrap the same fences the screen shows unwrapped, including a
+  // name-only low-narrative title with no AppID (an emulator shortcut).
+  it("includes the spoiler body for a name-only low-narrative title with no AppID", () => {
+    const body = [
+      "```bonsai-spoiler",
+      "Circle-strafe the boss and pop the weak point when it opens.",
+      "```",
+    ].join("\n");
+    const out = buildAnswerCopyText({
+      body,
+      spoilerMaskingEnabled: true,
+      appId: "",
+      appName: "Doom 64: Retribution",
+    });
+    expect(out).toContain("Circle-strafe the boss and pop the weak point when it opens.");
+    expect(out).not.toContain(SPOILER_HIDDEN_COPY_PLACEHOLDER);
+  });
 });

@@ -30,6 +30,13 @@ export type ChatSlotTurn = {
    */
   app_id?: string;
   /**
+   * Display name of the game running when this turn happened, alongside `app_id` — needed for a
+   * title reachable only by name, an emulator shortcut with no Steam AppID (plan 54 gap 1).
+   * Optional for the same reason `app_id` is: a turn saved before this field existed comes back
+   * without it.
+   */
+  app_name?: string;
+  /**
    * What the user saw as their question when it differs from `text` (the composed prompt).
    * Display only — reasoning about the turn keeps reading `text`. "" or absent: same as `text`.
    */
@@ -54,6 +61,8 @@ export type ChatSlot = {
   created_at: number;
   updated_at: number;
   origin_app_id?: string;
+  /** Display name of the game the slot was opened under. Absent on slots saved before it was kept. */
+  origin_app_name?: string;
   turns: ChatSlotTurn[];
 };
 

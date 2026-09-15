@@ -144,4 +144,34 @@ describe("turnsToCollapsedTurns", () => {
     ]);
     expect(collapsed[0]?.transparency).toBeNull();
   });
+
+  // Gap 1 (plan 54): a restored turn needs the game's name, not only its AppID, for a title
+  // reachable only by name (an emulator shortcut with no AppID).
+  it("carries the persisted app name onto the collapsed turn", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "boss tips?", app_name: "Doom 64: Retribution" },
+      { id: "a1", role: "assistant", text: "circle-strafe", app_name: "Doom 64: Retribution" },
+    ]);
+    expect(collapsed[0]?.appName).toBe("Doom 64: Retribution");
+  });
+
+  it("falls back to the slot's origin app name for a turn with no app name of its own", () => {
+    const { collapsed } = turnsToCollapsedTurns(
+      [
+        { id: "u1", role: "user", text: "q" },
+        { id: "a1", role: "assistant", text: "a" },
+      ],
+      "",
+      "Doom 64: Retribution",
+    );
+    expect(collapsed[0]?.appName).toBe("Doom 64: Retribution");
+  });
+
+  it("reports an empty app name when neither the turns nor the slot know one", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "q" },
+      { id: "a1", role: "assistant", text: "a" },
+    ]);
+    expect(collapsed[0]?.appName).toBe("");
+  });
 });

@@ -215,6 +215,7 @@ async def run_game_ai_request(
             await plugin._persist_input_transparency(keyword_snapshot)
             return {
                 **out,
+                "app_name": app_name,
                 "model_policy_disclosure": None,
                 "strategy_guide_branches": None,
                 "strategy_checklist": None,
@@ -243,6 +244,7 @@ async def run_game_ai_request(
                 "success": False,
                 "response": msg,
                 "app_id": app_id,
+                "app_name": app_name,
                 "app_context": app_context,
                 "applied": None,
                 "elapsed_seconds": elapsed,
@@ -275,6 +277,7 @@ async def run_game_ai_request(
                 "success": False,
                 "response": um,
                 "app_id": app_id,
+                "app_name": app_name,
                 "app_context": app_context,
                 "applied": None,
                 "elapsed_seconds": elapsed,
@@ -753,6 +756,7 @@ async def run_game_ai_request(
             "cancelled": bool(ollama_result.get("cancelled")),
             "response": response_text,
             "app_id": app_id,
+            "app_name": app_name,
             "app_context": app_context,
             "applied": applied,
             "elapsed_seconds": elapsed,
@@ -787,6 +791,7 @@ async def run_game_ai_request(
                 "If this repeats, check the plugin log on the Deck."
             ),
             "app_id": app_id,
+            "app_name": app_name,
             "app_context": app_context,
             "applied": None,
             "elapsed_seconds": elapsed,

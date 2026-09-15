@@ -56,7 +56,24 @@ function turnAppId(assistant: ChatSlotTurn, question: ChatSlotTurn, fallbackAppI
   return (assistant.app_id || "").trim() || (question.app_id || "").trim() || fallbackAppId.trim();
 }
 
-export function turnsToCollapsedTurns(turns: ChatSlotTurn[], fallbackAppId = ""): CollapsedTurnsResult {
+/** Same best-answer-first order as `turnAppId` above, for the game's display name (plan 54 gap 1). */
+function turnAppName(
+  assistant: ChatSlotTurn,
+  question: ChatSlotTurn,
+  fallbackAppName: string
+): string {
+  return (
+    (assistant.app_name || "").trim() ||
+    (question.app_name || "").trim() ||
+    fallbackAppName.trim()
+  );
+}
+
+export function turnsToCollapsedTurns(
+  turns: ChatSlotTurn[],
+  fallbackAppId = "",
+  fallbackAppName = ""
+): CollapsedTurnsResult {
   const collapsed: AskThreadCollapsedTurn[] = [];
   let pendingQ: ChatSlotTurn | null = null;
 
@@ -73,6 +90,7 @@ export function turnsToCollapsedTurns(turns: ChatSlotTurn[], fallbackAppId = "")
         answer: turn.text,
         transparency: turn.transparency ?? null,
         appId: turnAppId(turn, pendingQ, fallbackAppId),
+        appName: turnAppName(turn, pendingQ, fallbackAppName),
         // Still hardcoded, and deliberately: spoiler consent is a live session decision, not
         // something the backend persists per turn. A restored turn re-fences by default.
         spoilerConsentEffective: false,

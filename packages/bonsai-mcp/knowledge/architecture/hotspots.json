@@ -2,7 +2,7 @@
   "hotspots": [
     {
       "path": "main.py",
-      "lines": 3084,
+      "lines": 3094,
       "role": "Decky RPC entrypoints and orchestration"
     },
     {
@@ -22,7 +22,7 @@
     },
     {
       "path": "src/hooks/useBonsaiAskOrchestration.ts",
-      "lines": 1578,
+      "lines": 1583,
       "role": ""
     },
     {
@@ -32,7 +32,7 @@
     },
     {
       "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
-      "lines": 1438,
+      "lines": 1466,
       "role": ""
     },
     {
@@ -57,7 +57,7 @@
     },
     {
       "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1315,
+      "lines": 1328,
       "role": ""
     },
     {
@@ -107,7 +107,7 @@
     },
     {
       "path": "py_modules/backend/services/game_ai_request.py",
-      "lines": 799,
+      "lines": 804,
       "role": ""
     },
     {
@@ -152,7 +152,7 @@
     },
     {
       "path": "src/utils/buildAnswerBubbleElement.tsx",
-      "lines": 564,
+      "lines": 567,
       "role": ""
     },
     {
@@ -187,7 +187,7 @@
     },
     {
       "path": "py_modules/backend/services/chat_slot_service.py",
-      "lines": 513,
+      "lines": 519,
       "role": ""
     },
     {

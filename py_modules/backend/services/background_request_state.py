@@ -30,6 +30,9 @@ def new_background_state() -> dict[str, Any]:
         "request_id": None,
         "question": "",
         "app_id": "",
+        # Display name of the running game, alongside "app_id" — needed for a title reachable
+        # only by name (an emulator shortcut with no Steam AppID, plan 54 gap 1).
+        "app_name": "",
         "app_context": "none",
         "success": None,
         "response": "",
@@ -63,6 +66,7 @@ def pending_background_state(
     started_at: float,
     response: str = "Thinking...",
     chat_slot_id: Optional[str] = None,
+    app_name: str = "",
 ) -> dict[str, Any]:
     """State published when an Ask is admitted and a background task is about to run."""
     state = new_background_state()
@@ -72,6 +76,7 @@ def pending_background_state(
             "request_id": request_id,
             "question": question,
             "app_id": app_id,
+            "app_name": app_name,
             "app_context": app_context,
             "response": response,
             "started_at": started_at,
@@ -90,6 +95,7 @@ def completed_local_command_state(
     response: str,
     now: float,
     shortcut_setup: Any = OMIT,
+    app_name: str = "",
 ) -> dict[str, Any]:
     """Terminal state for a local keyword branch (sanitizer / shortcut / VAC).
 
@@ -103,6 +109,7 @@ def completed_local_command_state(
             "request_id": request_id,
             "question": question,
             "app_id": app_id,
+            "app_name": app_name,
             "app_context": app_context,
             "success": True,
             "response": response,

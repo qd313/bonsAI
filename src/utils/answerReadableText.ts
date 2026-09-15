@@ -31,6 +31,8 @@ export type BuildAnswerReadableTextArgs = {
   spoilerMaskingEnabled?: boolean;
   askQuestion?: string;
   appId?: string | null;
+  /** Active game's display name — for a title reachable only by name (plan 54 gap 1). */
+  appName?: string | null;
   spoilerConsentEffective?: boolean;
 };
 
@@ -99,13 +101,14 @@ export function buildAnswerReadableText(args: BuildAnswerReadableTextArgs): stri
     spoilerMaskingEnabled = true,
     askQuestion = "",
     appId = null,
+    appName = null,
     spoilerConsentEffective = false,
   } = args;
 
   let text = stripAssistantDisplayTags(body || "");
   if (!text.trim()) return "";
 
-  const opts: UnwrapSpoilerOpts = { question: askQuestion, appId, spoilerConsentEffective };
+  const opts: UnwrapSpoilerOpts = { question: askQuestion, appId, appName, spoilerConsentEffective };
   text = unwrapAskedEntitySpoilerFences(text, opts);
 
   if (!spoilerMaskingEnabled) {

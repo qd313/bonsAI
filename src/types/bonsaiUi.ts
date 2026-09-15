@@ -90,6 +90,13 @@ export type AskThreadCollapsedTurn = {
    * another game's answer after the player switches titles.
    */
   appId?: string;
+  /**
+   * The game's display name for the same turn, alongside `appId` — needed for a title reachable
+   * only by name, an emulator shortcut with no Steam AppID (plan 54 gap 1). Optional for the same
+   * reason `appId` is: older session-survival snapshots and turns saved before this field existed
+   * still parse.
+   */
+  appName?: string;
   /** True when the user consented to spoilers for this turn (unwrap all fences in history). */
   spoilerConsentEffective?: boolean;
 };

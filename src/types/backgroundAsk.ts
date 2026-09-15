@@ -36,6 +36,8 @@ export type BackgroundStartResponse = {
   request_id?: number | null;
   response?: string;
   app_id?: string;
+  /** The running game's display name, for a title reachable only by name (plan 54 gap 1). */
+  app_name?: string;
   app_context?: string;
   success?: boolean;
   applied?: AppliedResult | null;
@@ -61,6 +63,8 @@ export type BackgroundRequestStatus = {
   request_id: number | null;
   question: string;
   app_id: string;
+  /** The running game's display name, for a title reachable only by name (plan 54 gap 1). */
+  app_name?: string;
   app_context: "active" | "none";
   success: boolean | null;
   response: string;
@@ -123,6 +127,8 @@ export type LastExchangeSnapshot = {
   attachments?: AskAttachmentSnapshot[];
   spoilerConsentEffective?: boolean;
   askMode?: import("../data/askMode").AskModeId;
+  /** The game this exchange was asked against, for a title reachable only by name (plan 54 gap 1). */
+  appName?: string;
 };
 
 export type ReplyFollowUpPending = {

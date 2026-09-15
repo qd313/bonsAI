@@ -101,6 +101,24 @@ describe("buildAnswerReadableText", () => {
     expect(out).not.toContain(SPOILER_HIDDEN_SPOKEN_PHRASE);
   });
 
+  // Gap 1 (plan 54): read-aloud must unwrap the same fences the screen shows unwrapped,
+  // including a name-only low-narrative title with no AppID (an emulator shortcut).
+  it("reads the spoiler body for a name-only low-narrative title with no AppID", () => {
+    const body = [
+      "```bonsai-spoiler",
+      "Circle-strafe the boss and pop the weak point when it opens.",
+      "```",
+    ].join("\n");
+    const out = buildAnswerReadableText({
+      body,
+      spoilerMaskingEnabled: true,
+      appId: "",
+      appName: "Doom 64: Retribution",
+    });
+    expect(out).toContain("Circle-strafe the boss and pop the weak point when it opens.");
+    expect(out).not.toContain(SPOILER_HIDDEN_SPOKEN_PHRASE);
+  });
+
   it("says there is a table on screen in place of a markdown table", () => {
     const body = [
       "Here are the settings:",

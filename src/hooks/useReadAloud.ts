@@ -323,6 +323,7 @@ export function handleAskTerminalForReadAloud(status: BackgroundRequestStatus): 
     spoilerMaskingEnabled: currentSpoilerMaskingEnabled,
     askQuestion: status.question,
     appId: status.app_id,
+    appName: status.app_name,
     spoilerConsentEffective: status.strategy_spoiler_consent_effective === true,
   });
 

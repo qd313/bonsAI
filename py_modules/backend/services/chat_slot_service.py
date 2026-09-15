@@ -164,6 +164,10 @@ def _normalize_turn(raw: Any) -> dict[str, Any] | None:
         # for those, which is right in the ordinary one-chat-one-game case and no worse than the
         # "" the frontend used to hardcode in every other case.
         "app_id": str(raw.get("app_id", "") or "").strip()[:32],
+        # Display name of the game running when this turn happened, alongside ``app_id`` above —
+        # needed for a title reachable only by name (an emulator shortcut with no Steam AppID,
+        # plan 54 gap 1). Same "" round-trip for turns saved before this field existed.
+        "app_name": str(raw.get("app_name", "") or "").strip()[:MAX_APP_NAME_LEN],
         # What the user saw as their question, when it differs from ``text`` (the composed prompt
         # actually sent to the model — e.g. a branch pick sends "[Strategy follow-up] I'm at: …"
         # while the header shows "I'm at: …"). Display only: anything that reasons about the turn
@@ -434,6 +438,7 @@ def append_turn(
     attachment_refs: list[dict[str, str]] | None = None,
     transparency: dict[str, Any] | None = None,
     app_id: str = "",
+    app_name: str = "",
     display_text: str = "",
     label: str | None = None,
     logger: Any = None,
@@ -450,6 +455,7 @@ def append_turn(
             "attachment_refs": attachment_refs or [],
             "transparency": transparency,
             "app_id": app_id,
+            "app_name": app_name,
             "display_text": display_text,
             "created_at": int(time.time()),
         }

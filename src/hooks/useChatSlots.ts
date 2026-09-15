@@ -128,8 +128,8 @@ export function useChatSlots({
    * keeps the mapper honest about where the guess comes from.
    */
   const applySlotTranscript = useCallback(
-    (turns: Parameters<typeof turnsToCollapsedTurns>[0], fallbackAppId = "") => {
-      const { collapsed, pendingQuestion } = turnsToCollapsedTurns(turns, fallbackAppId);
+    (turns: Parameters<typeof turnsToCollapsedTurns>[0], fallbackAppId = "", fallbackAppName = "") => {
+      const { collapsed, pendingQuestion } = turnsToCollapsedTurns(turns, fallbackAppId, fallbackAppName);
       /* A pending question counts: a slot whose first answer is still being written is in use. */
       activeSlotTurnCountRef.current = collapsed.length + (pendingQuestion ? 1 : 0);
       setAskThreadCollapsed(collapsed);
@@ -187,7 +187,7 @@ export function useChatSlots({
     }
     const slot = await getChatSlot(sid);
     if (!slot) return;
-    applySlotTranscript(slot.turns, slot.origin_app_id ?? "");
+    applySlotTranscript(slot.turns, slot.origin_app_id ?? "", slot.origin_app_name ?? "");
   }, [applySlotTranscript, refreshSummaries, setAskThreadCollapsed, setAskThreadDisplayQuestion, setExpandedTurnKey]);
 
   const selectSlot = useCallback(
@@ -204,7 +204,7 @@ export function useChatSlots({
         resetLiveAskPresentation?.();
       } else {
         const slot = await getChatSlot(slotId);
-        if (slot) applySlotTranscript(slot.turns, slot.origin_app_id ?? "");
+        if (slot) applySlotTranscript(slot.turns, slot.origin_app_id ?? "", slot.origin_app_name ?? "");
       }
       if (leavingId && leavingId !== slotId) {
         sweepIfNeverUsed(leavingId, leavingTurnCount);

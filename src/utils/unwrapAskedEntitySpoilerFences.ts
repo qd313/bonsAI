@@ -45,6 +45,14 @@ export type UnwrapSpoilerOpts = {
    * already checks the AppID first and only falls back to the name.
    */
   appName?: string | null;
+  /**
+   * The thing the backend worked out the question named — a card title such as "Wheatley" or
+   * "Dreadnought Twins" (plan 54 gap 2). The backend recognises far more ways of naming a boss
+   * than the local regex below does ("wheatley fight", "deal with the exploders", a knowledge-base
+   * card's own title). When set, it wins outright; `extractAskedBeatEntity(question)` is only the
+   * fallback, kept for turns saved before this field existed.
+   */
+  askedEntity?: string | null;
   /** When true, unwrap every spoiler fence for this turn (explicit consent). */
   spoilerConsentEffective?: boolean;
 };
@@ -63,7 +71,7 @@ export function shouldUnwrapSpoilerFence(fenceText: string, opts: UnwrapSpoilerO
   const consent = opts.spoilerConsentEffective === true;
   if (consent) return true;
   if (titleProfileIsLowNarrative(appId, appName)) return true;
-  const entity = extractAskedBeatEntity(question);
+  const entity = (opts.askedEntity || "").trim() || extractAskedBeatEntity(question);
   if (!entity) return false;
   return entityMentioned(fenceText, entity);
 }
@@ -85,7 +93,7 @@ export function unwrapAskedEntitySpoilerFences(
   const appName = opts.appName || "";
   const consent = opts.spoilerConsentEffective === true;
   const lowNarrativeTitle = titleProfileIsLowNarrative(appId, appName);
-  const entity = extractAskedBeatEntity(question);
+  const entity = (opts.askedEntity || "").trim() || extractAskedBeatEntity(question);
   if (!text) return text;
   if (!consent && !lowNarrativeTitle && !entity) return text;
   return text.replace(SPOILER_FENCE_RE, (full, body: string) => {

@@ -97,6 +97,12 @@ export type AskThreadCollapsedTurn = {
    * still parse.
    */
   appName?: string;
+  /**
+   * The thing the backend worked out this question named — a card title such as "Wheatley" or
+   * "Dreadnought Twins" (plan 54 gap 2). Unlike `spoilerConsentEffective`, this is persisted: it
+   * is a fact about the question, not a live decision, so a reopened chat needs it too.
+   */
+  askedEntity?: string;
   /** True when the user consented to spoilers for this turn (unwrap all fences in history). */
   spoilerConsentEffective?: boolean;
 };

@@ -25,6 +25,8 @@ export type BuildAnswerCopyTextArgs = {
   appId?: string | null;
   /** Active game's display name — for a title reachable only by name (plan 54 gap 1). */
   appName?: string | null;
+  /** The thing the backend worked out the question named (plan 54 gap 2). */
+  askedEntity?: string | null;
   spoilerConsentEffective?: boolean;
 };
 
@@ -40,12 +42,19 @@ export function buildAnswerCopyText(args: BuildAnswerCopyTextArgs): string {
     askQuestion = "",
     appId = null,
     appName = null,
+    askedEntity = null,
     spoilerConsentEffective = false,
   } = args;
 
   let text = stripAssistantDisplayTags(body || "");
 
-  const opts: UnwrapSpoilerOpts = { question: askQuestion, appId, appName, spoilerConsentEffective };
+  const opts: UnwrapSpoilerOpts = {
+    question: askQuestion,
+    appId,
+    appName,
+    askedEntity,
+    spoilerConsentEffective,
+  };
   text = unwrapAskedEntitySpoilerFences(text, opts);
 
   if (!spoilerMaskingEnabled) {

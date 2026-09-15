@@ -299,6 +299,42 @@ class ChatSlotServiceTests(unittest.TestCase):
         wipe_all_slots(self.settings_dir)
         self.assertEqual(list_slot_summaries(self.settings_dir), [])
 
+    def test_assistant_turn_persists_the_asked_entity(self):
+        """Plan 54 gap 2: the named thing the backend worked out ("Wheatley" for "wheatley
+        fight") must round-trip, so a reopened chat's boss tactics stay unfenced too.
+        """
+        slot = create_slot(self.settings_dir, first_question="wheatley fight")
+        sid = slot["id"]
+        append_turn(self.settings_dir, sid, role="user", text="wheatley fight")
+        saved = append_turn(
+            self.settings_dir,
+            sid,
+            role="assistant",
+            text="Wheatley starts lying immediately.",
+            asked_entity="Wheatley",
+        )
+        assert saved is not None
+        self.assertEqual(saved["turns"][-1]["asked_entity"], "Wheatley")
+
+        reloaded = load_slot(self.settings_dir, sid)
+        assert reloaded is not None
+        self.assertEqual(reloaded["turns"][-1]["asked_entity"], "Wheatley")
+
+    def test_turns_saved_before_the_asked_entity_field_existed_load_with_an_empty_one(self):
+        slot = create_slot(self.settings_dir, label="old chat")
+        sid = slot["id"]
+        legacy = {
+            **slot,
+            "turns": [
+                {"id": "u1", "role": "user", "text": "wheatley fight"},
+                {"id": "a1", "role": "assistant", "text": "Wheatley starts lying immediately."},
+            ],
+        }
+        save_slot(self.settings_dir, legacy)
+        reloaded = load_slot(self.settings_dir, sid)
+        assert reloaded is not None
+        self.assertEqual([t["asked_entity"] for t in reloaded["turns"]], ["", ""])
+
 
 if __name__ == "__main__":
     unittest.main()

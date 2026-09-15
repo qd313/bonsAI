@@ -37,6 +37,13 @@ export type ChatSlotTurn = {
    */
   app_name?: string;
   /**
+   * The thing the backend worked out this question named — a card title such as "Wheatley" or
+   * "Dreadnought Twins" (plan 54 gap 2). Only ever set on the assistant turn (the fact belongs to
+   * the question, but the backend only knows it once the question has been run). "" or absent:
+   * no entity, or a turn saved before this field existed.
+   */
+  asked_entity?: string;
+  /**
    * What the user saw as their question when it differs from `text` (the composed prompt).
    * Display only — reasoning about the turn keeps reading `text`. "" or absent: same as `text`.
    */

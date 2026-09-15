@@ -2,7 +2,7 @@
   "hotspots": [
     {
       "path": "main.py",
-      "lines": 3094,
+      "lines": 3098,
       "role": "Decky RPC entrypoints and orchestration"
     },
     {
@@ -22,17 +22,17 @@
     },
     {
       "path": "src/hooks/useBonsaiAskOrchestration.ts",
-      "lines": 1583,
+      "lines": 1587,
+      "role": ""
+    },
+    {
+      "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
+      "lines": 1500,
       "role": ""
     },
     {
       "path": "src/components/PullModelsModal.tsx",
       "lines": 1479,
-      "role": ""
-    },
-    {
-      "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
-      "lines": 1466,
       "role": ""
     },
     {
@@ -57,7 +57,7 @@
     },
     {
       "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1328,
+      "lines": 1338,
       "role": ""
     },
     {
@@ -107,7 +107,7 @@
     },
     {
       "path": "py_modules/backend/services/game_ai_request.py",
-      "lines": 804,
+      "lines": 809,
       "role": ""
     },
     {
@@ -146,18 +146,23 @@
       "role": ""
     },
     {
+      "path": "src/utils/buildAnswerBubbleElement.tsx",
+      "lines": 577,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/knowledge_base_schema.py",
       "lines": 573,
       "role": ""
     },
     {
-      "path": "src/utils/buildAnswerBubbleElement.tsx",
-      "lines": 567,
+      "path": "py_modules/backend/services/strategy_guide_parse.py",
+      "lines": 550,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/strategy_guide_parse.py",
-      "lines": 550,
+      "path": "src/utils/buildAnswerBubbleElement.test.tsx",
+      "lines": 548,
       "role": ""
     },
     {
@@ -171,23 +176,18 @@
       "role": ""
     },
     {
+      "path": "py_modules/backend/services/chat_slot_service.py",
+      "lines": 530,
+      "role": ""
+    },
+    {
       "path": "src/components/CharacterPropGlyph.tsx",
       "lines": 525,
       "role": ""
     },
     {
-      "path": "src/utils/buildAnswerBubbleElement.test.tsx",
-      "lines": 524,
-      "role": ""
-    },
-    {
       "path": "src/utils/settingsContracts.test.ts",
       "lines": 524,
-      "role": ""
-    },
-    {
-      "path": "py_modules/backend/services/chat_slot_service.py",
-      "lines": 519,
       "role": ""
     },
     {

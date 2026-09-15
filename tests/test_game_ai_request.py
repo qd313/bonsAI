@@ -26,6 +26,7 @@ if "decky" not in sys.modules:
     sys.modules["decky"] = _decky
 
 from backend.services.game_ai_request import run_game_ai_request
+from backend.services.ollama_prompts import extract_strategy_asked_entity
 
 
 class StripTdpRecommendationBlockTests(unittest.TestCase):
@@ -60,6 +61,9 @@ class _FakePlugin:
         self._settings = settings
         self._ollama_result: dict = {}
         self.persisted_snapshots: list = []
+        # The kwargs the last ask_ollama call received, so a test can check what actually reached
+        # the prompt call rather than only what the result dict reports back.
+        self.ask_ollama_kwargs: dict = {}
 
     async def load_settings(self):
         return self._settings
@@ -68,18 +72,20 @@ class _FakePlugin:
         return None
 
     async def ask_ollama(self, *args, **kwargs):
+        self.ask_ollama_kwargs = kwargs
         return self._ollama_result
 
     async def _persist_input_transparency(self, payload):
         self.persisted_snapshots.append(payload)
 
 
-def _run(plugin: _FakePlugin, question: str = "How do I get better performance in this game?"):
+def _run(plugin: _FakePlugin, question: str = "How do I get better performance in this game?", **kwargs):
     return asyncio.run(
         run_game_ai_request(
             plugin,
             question,
             "127.0.0.1:11434",
+            **kwargs,
         )
     )
 
@@ -140,6 +146,56 @@ class TdpBlockWiringTests(unittest.TestCase):
         self.assertEqual(
             result.get("response"), "This game runs fine at the default power settings."
         )
+
+
+class StrategySpoilerAskedEntityWiringTests(unittest.TestCase):
+    """Plan 54 gap 2: the backend's own guess at the named thing must reach the result dict (so
+    the screen can use it) and the prompt call (so a test can prove it is the same value the
+    prompt was told, not a second, silently-drifted copy).
+    """
+
+    def _base_settings(self) -> dict:
+        return {
+            "latency_timeouts_custom_enabled": False,
+            "input_sanitizer_user_disabled": False,
+            "capabilities": {},
+            "use_local_knowledge_base": False,
+        }
+
+    def test_result_dict_carries_the_named_thing_the_extractor_finds(self):
+        plugin = _FakePlugin(self._base_settings())
+        plugin._ollama_result = {"success": True, "response": "Wheatley starts lying immediately."}
+
+        question = "wheatley fight"
+        expected = extract_strategy_asked_entity(question)
+        self.assertTrue(expected, "fixture question must actually name something")
+
+        result = _run(plugin, question=question, ask_mode="strategy")
+
+        self.assertEqual(result.get("strategy_spoiler_asked_entity"), expected)
+
+    def test_the_same_value_reaches_the_prompt_call(self):
+        plugin = _FakePlugin(self._base_settings())
+        plugin._ollama_result = {"success": True, "response": "Wheatley starts lying immediately."}
+
+        question = "wheatley fight"
+        expected = extract_strategy_asked_entity(question)
+
+        result = _run(plugin, question=question, ask_mode="strategy")
+
+        self.assertEqual(plugin.ask_ollama_kwargs.get("strategy_spoiler_asked_entity"), expected)
+        self.assertEqual(
+            result.get("strategy_spoiler_asked_entity"),
+            plugin.ask_ollama_kwargs.get("strategy_spoiler_asked_entity"),
+        )
+
+    def test_result_dict_carries_an_empty_string_when_nothing_is_named(self):
+        plugin = _FakePlugin(self._base_settings())
+        plugin._ollama_result = {"success": True, "response": "General advice."}
+
+        result = _run(plugin, question="what class should I play", ask_mode="strategy")
+
+        self.assertEqual(result.get("strategy_spoiler_asked_entity"), "")
 
 
 if __name__ == "__main__":

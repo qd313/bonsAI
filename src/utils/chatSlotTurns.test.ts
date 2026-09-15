@@ -174,4 +174,22 @@ describe("turnsToCollapsedTurns", () => {
     ]);
     expect(collapsed[0]?.appName).toBe("");
   });
+
+  // Gap 2 (plan 54): a restored assistant turn carries the named thing the backend worked out,
+  // so a reopened chat's boss tactics stay unfenced too.
+  it("carries the assistant turn's asked entity onto the collapsed turn", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "wheatley fight" },
+      { id: "a1", role: "assistant", text: "answer", asked_entity: "Wheatley" },
+    ]);
+    expect(collapsed[0]?.askedEntity).toBe("Wheatley");
+  });
+
+  it("falls back to an empty asked entity for a turn without one of its own", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "wheatley fight" },
+      { id: "a1", role: "assistant", text: "answer" },
+    ]);
+    expect(collapsed[0]?.askedEntity).toBeUndefined();
+  });
 });

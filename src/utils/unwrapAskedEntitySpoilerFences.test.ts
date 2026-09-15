@@ -107,6 +107,38 @@ describe("unwrapAskedEntitySpoilerFences", () => {
     });
     expect(out).toContain("```bonsai-spoiler");
   });
+
+  // Gap 2 (plan 54): the backend recognises far more ways of naming a boss than the local regex
+  // here does ("wheatley fight" names the boss first — the local patterns only read
+  // "beat/defeat/kill/fight/survive X" and "tips for X"). When the backend already worked out the
+  // named thing, it must win outright so the screen never disagrees with the prompt it was sent.
+  it("unwraps a fence mentioning the backend's named entity even when the local regex cannot read the question", () => {
+    expect(extractAskedBeatEntity("wheatley fight")).toBe("");
+    const raw = [
+      "```bonsai-spoiler",
+      "Wheatley starts lying the moment you reach the surface.",
+      "```",
+    ].join("\n");
+    const out = unwrapAskedEntitySpoilerFences(raw, {
+      question: "wheatley fight",
+      askedEntity: "Wheatley",
+    });
+    expect(out).not.toContain("```bonsai-spoiler");
+    expect(out).toContain("Wheatley starts lying the moment you reach the surface.");
+  });
+
+  it("leaves a fence shut that does not mention the backend's named entity", () => {
+    const raw = [
+      "```bonsai-spoiler",
+      "The other core reveals its own twist much later.",
+      "```",
+    ].join("\n");
+    const out = unwrapAskedEntitySpoilerFences(raw, {
+      question: "wheatley fight",
+      askedEntity: "Wheatley",
+    });
+    expect(out).toContain("```bonsai-spoiler");
+  });
 });
 
 describe("shouldUnwrapSpoilerFence", () => {
@@ -150,6 +182,17 @@ describe("shouldUnwrapSpoilerFence", () => {
       shouldUnwrapSpoilerFence("```bonsai-spoiler\nCircle-strafe the boss", {
         appId: "",
         appName: "Doom 64: Retribution",
+      })
+    ).toBe(true);
+  });
+
+  // Gap 2 (plan 54): the mid-stream gate must use the backend's named entity too, or a name-first
+  // question would stream with the "hidden until complete" chip and then snap open once finished.
+  it("qualifies on the backend's named entity when the local regex cannot read the question", () => {
+    expect(
+      shouldUnwrapSpoilerFence("```bonsai-spoiler\nWheatley starts lying immediately", {
+        question: "wheatley fight",
+        askedEntity: "Wheatley",
       })
     ).toBe(true);
   });

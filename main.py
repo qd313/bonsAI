@@ -1026,6 +1026,7 @@ class Plugin:
         transparency: Optional[dict] = None,
         app_id: str = "",
         app_name: str = "",
+        asked_entity: str = "",
     ) -> None:
         sid = str(slot_id or "").strip()
         body = str(response_text or "").strip()
@@ -1042,6 +1043,7 @@ class Plugin:
                 transparency=transparency,
                 app_id=app_id,
                 app_name=app_name,
+                asked_entity=asked_entity,
                 logger=logger,
             )
 
@@ -2359,6 +2361,7 @@ class Plugin:
                 "strategy_checklist": result.get("strategy_checklist"),
                 "model_policy_disclosure": result.get("model_policy_disclosure"),
                 "strategy_spoiler_consent_effective": result.get("strategy_spoiler_consent_effective"),
+                "strategy_spoiler_asked_entity": result.get("strategy_spoiler_asked_entity", ""),
                 "shortcut_setup": result.get("shortcut_setup"),
                 "cancelled": cancelled_rq,
                 "preset_carousel_inject": result.get("preset_carousel_inject"),
@@ -2386,6 +2389,7 @@ class Plugin:
                 transparency=None if cancelled_rq else result.get("transparency"),
                 app_id=app_id,
                 app_name=app_name,
+                asked_entity=result.get("strategy_spoiler_asked_entity") or "",
             )
         await self._maybe_app_log(
             "ask.background",

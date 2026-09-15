@@ -85,4 +85,22 @@ describe("buildAnswerCopyText", () => {
     expect(out).toContain("Circle-strafe the boss and pop the weak point when it opens.");
     expect(out).not.toContain(SPOILER_HIDDEN_COPY_PLACEHOLDER);
   });
+
+  // Gap 2 (plan 54): copy must use the backend's named entity too, for a name-first question the
+  // local regex cannot read ("wheatley fight").
+  it("includes the spoiler body for a fence mentioning the backend's named entity", () => {
+    const body = [
+      "```bonsai-spoiler",
+      "Wheatley starts lying the moment you reach the surface.",
+      "```",
+    ].join("\n");
+    const out = buildAnswerCopyText({
+      body,
+      spoilerMaskingEnabled: true,
+      askQuestion: "wheatley fight",
+      askedEntity: "Wheatley",
+    });
+    expect(out).toContain("Wheatley starts lying the moment you reach the surface.");
+    expect(out).not.toContain(SPOILER_HIDDEN_COPY_PLACEHOLDER);
+  });
 });

@@ -220,6 +220,7 @@ async def run_game_ai_request(
                 "strategy_guide_branches": None,
                 "strategy_checklist": None,
                 "strategy_spoiler_consent_effective": False,
+                "strategy_spoiler_asked_entity": "",
                 "transparency": transparency_snapshot_for_chat_slot(keyword_snapshot),
             }
 
@@ -252,6 +253,7 @@ async def run_game_ai_request(
                 "strategy_checklist": None,
                 "model_policy_disclosure": None,
                 "strategy_spoiler_consent_effective": False,
+                "strategy_spoiler_asked_entity": "",
                 "transparency": transparency_snapshot_for_chat_slot(capability_denied_snapshot),
             }
 
@@ -285,6 +287,7 @@ async def run_game_ai_request(
                 "strategy_checklist": None,
                 "model_policy_disclosure": None,
                 "strategy_spoiler_consent_effective": False,
+                "strategy_spoiler_asked_entity": "",
                 "transparency": transparency_snapshot_for_chat_slot(sanitizer_block_snapshot),
             }
         question_for_model = lane.text
@@ -766,6 +769,7 @@ async def run_game_ai_request(
             "strategy_spoiler_consent_effective": bool(
                 ollama_result.get("strategy_spoiler_consent_effective", False)
             ),
+            "strategy_spoiler_asked_entity": strategy_spoiler_asked_entity,
             "preset_carousel_inject": ollama_result.get("preset_carousel_inject"),
             "transparency": transparency_snapshot_for_chat_slot(ollama_route_snapshot),
         }
@@ -795,6 +799,7 @@ async def run_game_ai_request(
             "app_context": app_context,
             "applied": None,
             "elapsed_seconds": elapsed,
+            "strategy_spoiler_asked_entity": "",
             "transparency": transparency_snapshot_for_chat_slot(error_route_snapshot),
             "strategy_guide_branches": None,
             "strategy_checklist": None,

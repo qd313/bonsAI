@@ -336,6 +336,7 @@ export function useBonsaiAskOrchestration(
     transparency?: TransparencySnapshot | null;
     appId?: string;
     appName?: string;
+    askedEntity?: string;
     spoilerConsentEffective?: boolean;
   } | null>(null);
   const pendingThreadQuestionDisplayRef = useRef<string | null>(null);
@@ -485,6 +486,7 @@ export function useBonsaiAskOrchestration(
       answer: lastExchange.answer,
       appId: ollamaContext?.app_id || undefined,
       appName: lastExchange.appName || undefined,
+      askedEntity: lastExchange.askedEntity || undefined,
       spoilerConsentEffective: lastExchange.spoilerConsentEffective === true,
     };
   }, [lastExchange, ollamaContext?.app_id]);
@@ -740,6 +742,7 @@ export function useBonsaiAskOrchestration(
                 spoilerConsentEffective: status.strategy_spoiler_consent_effective ?? false,
                 askMode: lastAskContextRef.current.askMode,
                 appName: status.app_name ?? "",
+                askedEntity: status.strategy_spoiler_asked_entity ?? "",
               });
             }
             lastStrategyAskQuestionRef.current = q;
@@ -1066,6 +1069,7 @@ export function useBonsaiAskOrchestration(
             transparency: arch.transparency ?? null,
             appId: arch.appId,
             appName: arch.appName,
+            askedEntity: arch.askedEntity,
             spoilerConsentEffective: arch.spoilerConsentEffective === true,
           };
           return alreadyReloaded ? [...prev.slice(0, -1), row] : [...prev, row];

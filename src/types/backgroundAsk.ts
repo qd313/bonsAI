@@ -78,6 +78,12 @@ export type BackgroundRequestStatus = {
   model_policy_disclosure?: ModelPolicyDisclosurePayload | null;
   /** True when this Ask had explicit spoiler consent (toggle and/or backend phrase match). */
   strategy_spoiler_consent_effective?: boolean;
+  /**
+   * The thing the backend worked out this question named — a card title such as "Wheatley" or
+   * "Dreadnought Twins" (plan 54 gap 2). The screen's own guess only reads two phrasings; the
+   * backend recognises many more, so this wins when present.
+   */
+  strategy_spoiler_asked_entity?: string;
   /** Pyro talent-manager easter egg: optional inject chip text from last successful Ask (helpful or asshole tip). */
   preset_carousel_inject?: PresetCarouselInjectPayload | null;
   /** Present when the completed Ask was a shortcut-setup keyword. */
@@ -129,6 +135,8 @@ export type LastExchangeSnapshot = {
   askMode?: import("../data/askMode").AskModeId;
   /** The game this exchange was asked against, for a title reachable only by name (plan 54 gap 1). */
   appName?: string;
+  /** The thing the backend worked out this question named (plan 54 gap 2). */
+  askedEntity?: string;
 };
 
 export type ReplyFollowUpPending = {

@@ -91,6 +91,10 @@ export function turnsToCollapsedTurns(
         transparency: turn.transparency ?? null,
         appId: turnAppId(turn, pendingQ, fallbackAppId),
         appName: turnAppName(turn, pendingQ, fallbackAppName),
+        // Unlike appId/appName, no question or slot fallback: the backend only knows the named
+        // thing once the question has been run, so it is only ever recorded on the assistant
+        // turn. "" for a turn saved before this field existed, or one that named nothing.
+        askedEntity: (turn.asked_entity || "").trim() || undefined,
         // Still hardcoded, and deliberately: spoiler consent is a live session decision, not
         // something the backend persists per turn. A restored turn re-fences by default.
         spoilerConsentEffective: false,

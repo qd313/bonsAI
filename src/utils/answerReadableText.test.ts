@@ -119,6 +119,24 @@ describe("buildAnswerReadableText", () => {
     expect(out).not.toContain(SPOILER_HIDDEN_SPOKEN_PHRASE);
   });
 
+  // Gap 2 (plan 54): read-aloud must use the backend's named entity too, for a name-first
+  // question the local regex cannot read ("wheatley fight").
+  it("reads the spoiler body for a fence mentioning the backend's named entity", () => {
+    const body = [
+      "```bonsai-spoiler",
+      "Wheatley starts lying the moment you reach the surface.",
+      "```",
+    ].join("\n");
+    const out = buildAnswerReadableText({
+      body,
+      spoilerMaskingEnabled: true,
+      askQuestion: "wheatley fight",
+      askedEntity: "Wheatley",
+    });
+    expect(out).toContain("Wheatley starts lying the moment you reach the surface.");
+    expect(out).not.toContain(SPOILER_HIDDEN_SPOKEN_PHRASE);
+  });
+
   it("says there is a table on screen in place of a markdown table", () => {
     const body = [
       "Here are the settings:",

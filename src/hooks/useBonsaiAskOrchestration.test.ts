@@ -953,6 +953,40 @@ describe("useBonsaiAskOrchestration", () => {
       });
     });
 
+    // Gap 2 (plan 54): the backend recognises far more ways of naming a boss than the screen's
+    // own guess does ("wheatley fight" — a name-first question). The archived turn must carry
+    // the backend's answer, not just what the screen itself could work out.
+    it("stamps the archived turn with the named thing the backend worked out", async () => {
+      setRpcHandler("start_background_game_ai", () => ({
+        accepted: true,
+        status: "pending",
+        request_id: 11,
+      }));
+      setRpcHandler("get_background_game_ai_status", () => ({
+        ...idleBackgroundStatusFixture(),
+        status: "completed",
+        question: "wheatley fight",
+        request_id: 11,
+        success: true,
+        response: "Wheatley starts lying the moment you reach the surface.",
+        strategy_spoiler_asked_entity: "Wheatley",
+      }));
+
+      const { result } = renderHook(() => useBonsaiAskOrchestration(makeArgs()));
+
+      await act(async () => {
+        await result.current.onAskOllama("wheatley fight");
+      });
+      await act(async () => {
+        await result.current.onAskOllama("second question");
+      });
+
+      expect(result.current.askThreadCollapsed[0]).toMatchObject({
+        question: "wheatley fight",
+        askedEntity: "Wheatley",
+      });
+    });
+
     /*
      * The saved-chat reload rebuilds this list from disk after every completed reply, so by the
      * time the next Ask flushes its pending archive the turn is usually already there. Appending

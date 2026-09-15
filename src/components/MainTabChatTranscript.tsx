@@ -337,6 +337,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     askQuestion: string,
     appId: string | null,
     appName: string | null,
+    askedEntity: string | null,
     spoilerConsentEffective = false
   ) =>
     buildAnswerReadableText({
@@ -345,6 +346,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
       askQuestion,
       appId,
       appName,
+      askedEntity,
       spoilerConsentEffective,
     });
   /** Read aloud props for one turn's reply-actions row: same shape at every call site. */
@@ -354,6 +356,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     askQuestion: string,
     appId: string | null,
     appName: string | null,
+    askedEntity: string | null,
     spoilerConsentEffective = false
   ) => {
     /*
@@ -377,7 +380,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
         }
         readAloud.start(
           key,
-          buildTurnReadableText(body, askQuestion, appId, appName, spoilerConsentEffective)
+          buildTurnReadableText(body, askQuestion, appId, appName, askedEntity, spoilerConsentEffective)
         );
       },
     };
@@ -589,6 +592,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     askQuestion: string,
     appId: string | null,
     appName: string | null,
+    askedEntity: string | null,
     spoilerConsentEffective = false
   ) =>
     buildAnswerBubbleElement({
@@ -604,6 +608,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
       askQuestion,
       appId,
       appName,
+      askedEntity,
       spoilerConsentEffective,
       onDrgGlossaryExplainFurther: onAskOllama ? onDrgGlossaryExplainFurther : undefined,
       /*
@@ -623,6 +628,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                 askQuestion,
                 appId,
                 appName,
+                askedEntity,
                 spoilerConsentEffective,
               })
           : undefined,
@@ -885,6 +891,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   turn.question,
                   turn.appId ?? null,
                   turn.appName ?? null,
+                  turn.askedEntity ?? null,
                   turn.spoilerConsentEffective === true
                 )}
                 {/*
@@ -952,6 +959,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                           turn.question,
                           turn.appId ?? null,
                           turn.appName ?? null,
+                          turn.askedEntity ?? null,
                           turn.spoilerConsentEffective === true
                         )
                       : {}),
@@ -1058,6 +1066,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   liveQuestion || lastExchange?.question || "",
                   ollamaContext?.app_id ?? null,
                   lastExchange?.appName ?? null,
+                  lastExchange?.askedEntity ?? null,
                   lastExchange?.spoilerConsentEffective === true
                 )
               : null}
@@ -1088,6 +1097,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                         liveQuestion || lastExchange?.question || "",
                         ollamaContext?.app_id ?? null,
                         lastExchange?.appName ?? null,
+                        lastExchange?.askedEntity ?? null,
                         lastExchange?.spoilerConsentEffective === true
                       )
                     : {}),

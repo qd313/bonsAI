@@ -69,6 +69,10 @@ MAX_DISPLAY_TEXT_LEN = 300
 # belongs to without a lookup. The id alone cannot be shown to a reader, and resolving it needs the
 # game to be running, which it usually is not by the time you are browsing old chats.
 MAX_APP_NAME_LEN = 48
+# The thing the backend worked out a question named (plan 54 gap 2) — a card title such as
+# "Wheatley" or "Dreadnought Twins". Longer than a game name, since a card title can run longer,
+# but still bounded: this is a display fact, not a place to smuggle a long question in.
+MAX_ASKED_ENTITY_LEN = 120
 SLOTS_SUBDIR = "chat_slots"
 
 
@@ -168,6 +172,11 @@ def _normalize_turn(raw: Any) -> dict[str, Any] | None:
         # needed for a title reachable only by name (an emulator shortcut with no Steam AppID,
         # plan 54 gap 1). Same "" round-trip for turns saved before this field existed.
         "app_name": str(raw.get("app_name", "") or "").strip()[:MAX_APP_NAME_LEN],
+        # The thing the backend worked out this question named (plan 54 gap 2). Only ever set on
+        # the assistant turn — the backend does not know it until the question has been run. ""
+        # round-trips the same way for a turn with nothing named and one saved before this field
+        # existed; the two are indistinguishable and that is fine, both re-fence by default.
+        "asked_entity": str(raw.get("asked_entity", "") or "").strip()[:MAX_ASKED_ENTITY_LEN],
         # What the user saw as their question, when it differs from ``text`` (the composed prompt
         # actually sent to the model — e.g. a branch pick sends "[Strategy follow-up] I'm at: …"
         # while the header shows "I'm at: …"). Display only: anything that reasons about the turn
@@ -439,6 +448,7 @@ def append_turn(
     transparency: dict[str, Any] | None = None,
     app_id: str = "",
     app_name: str = "",
+    asked_entity: str = "",
     display_text: str = "",
     label: str | None = None,
     logger: Any = None,
@@ -456,6 +466,7 @@ def append_turn(
             "transparency": transparency,
             "app_id": app_id,
             "app_name": app_name,
+            "asked_entity": asked_entity,
             "display_text": display_text,
             "created_at": int(time.time()),
         }

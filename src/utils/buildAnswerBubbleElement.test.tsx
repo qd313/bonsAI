@@ -333,6 +333,30 @@ describe("answer bubble section stops", () => {
     expect(container.textContent).not.toContain(SPOILER_STREAM_MASK_LABEL);
   });
 
+  // Gap 2 (plan 54): a name-first question ("wheatley fight") the local regex cannot read must
+  // stream the same way once the backend's named entity is set, or the box would show the mask
+  // chip while streaming and then snap open the instant it finishes.
+  it("streams a fence naming the backend's asked entity as prose instead of a mid-stream mask chip", () => {
+    const body = [
+      "Here is the plan.",
+      "",
+      "```bonsai-spoiler",
+      "Wheatley starts lying the moment you reach the surface",
+    ].join("\n");
+    const el = buildAnswerBubbleElement({
+      body,
+      streaming: true,
+      spoilerMaskingEnabled: true,
+      maxWidthCss: "100%",
+      answerKey: ANSWER_KEY,
+      askQuestion: "wheatley fight",
+      askedEntity: "Wheatley",
+    });
+    const { container } = render(el!);
+    expect(container.textContent).toContain("Wheatley starts lying the moment you reach the surface");
+    expect(container.textContent).not.toContain(SPOILER_STREAM_MASK_LABEL);
+  });
+
   it("still shows the mid-stream mask chip on a narrative title with no entity named", () => {
     const body = [
       "Here is the plan.",

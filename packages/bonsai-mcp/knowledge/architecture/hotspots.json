@@ -7,7 +7,7 @@
     },
     {
       "path": "py_modules/backend/services/knowledge_base_service.py",
-      "lines": 2093,
+      "lines": 2181,
       "role": ""
     },
     {
@@ -41,6 +41,11 @@
       "role": ""
     },
     {
+      "path": "py_modules/backend/services/voice_transcription_service.py",
+      "lines": 1422,
+      "role": ""
+    },
+    {
       "path": "src/components/OllamaWhereAiRunsSection.tsx",
       "lines": 1397,
       "role": ""
@@ -49,11 +54,6 @@
       "path": "py_modules/backend/services/ollama_service.py",
       "lines": 1357,
       "role": "Prompt build, Ollama HTTP, streaming"
-    },
-    {
-      "path": "py_modules/backend/services/voice_transcription_service.py",
-      "lines": 1295,
-      "role": ""
     },
     {
       "path": "src/components/MainTabPresetAnimatedChips.tsx",
@@ -82,7 +82,12 @@
     },
     {
       "path": "py_modules/backend/services/bonsai_stream_tags.py",
-      "lines": 858,
+      "lines": 967,
+      "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/screenshot_media.py",
+      "lines": 873,
       "role": ""
     },
     {
@@ -101,11 +106,6 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/screenshot_media.py",
-      "lines": 803,
-      "role": ""
-    },
-    {
       "path": "py_modules/backend/services/game_ai_request.py",
       "lines": 798,
       "role": ""
@@ -121,9 +121,19 @@
       "role": ""
     },
     {
+      "path": "py_modules/backend/services/intent_pack_service.py",
+      "lines": 630,
+      "role": ""
+    },
+    {
       "path": "src/styles/sections/gamepadAndPullModels.ts",
       "lines": 622,
       "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/settings_service.py",
+      "lines": 602,
+      "role": "Load/save/merge settings.json"
     },
     {
       "path": "src/hooks/usePluginSettings.ts",
@@ -131,13 +141,13 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/intent_pack_service.py",
-      "lines": 581,
+      "path": "src/components/DeveloperTab.tsx",
+      "lines": 579,
       "role": ""
     },
     {
-      "path": "src/components/DeveloperTab.tsx",
-      "lines": 579,
+      "path": "py_modules/backend/services/knowledge_base_schema.py",
+      "lines": 572,
       "role": ""
     },
     {
@@ -149,11 +159,6 @@
       "path": "py_modules/backend/services/strategy_guide_parse.py",
       "lines": 550,
       "role": ""
-    },
-    {
-      "path": "py_modules/backend/services/settings_service.py",
-      "lines": 545,
-      "role": "Load/save/merge settings.json"
     },
     {
       "path": "src/components/CharacterPropGlyph.tsx",
@@ -168,11 +173,6 @@
     {
       "path": "src/utils/settingsContracts.test.ts",
       "lines": 524,
-      "role": ""
-    },
-    {
-      "path": "py_modules/backend/services/knowledge_base_schema.py",
-      "lines": 520,
       "role": ""
     },
     {

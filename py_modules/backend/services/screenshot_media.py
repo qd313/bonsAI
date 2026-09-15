@@ -1,9 +1,79 @@
-"""Title: Screenshot media service
+"""Title: Finding, taking, and preparing screenshots
 
-Purpose: Steam screenshot listing, in-process capture, and image prep for Ollama multimodal requests.
-Used for: Ask attachments and game context when screenshot permission is enabled.
-Solves: Heavy media I/O extracted from main.py RPC wiring.
-Does not: Render screenshot browser UI — see MainTabScreenshotBrowser.
+Purpose: This is what handles every screenshot in the plugin: finding the
+ones Steam already saved or the plugin took earlier, taking a new one of
+whatever game is running when you press the screenshot button, and shrinking
+a screenshot down before it is sent to the AI along with your question.
+
+Used for: The screenshot picker on the Ask screen, the in-plugin "take a
+screenshot" button, and every question asked with an image attached --
+`prepare_attachment_images()` is what turns an attached file into the image
+data the AI's vision model expects.
+
+Solves: SteamOS hides a running game's screenshots behind Steam's own
+capture flow, which a background plugin process cannot simply call. This
+file finds another way in -- several fallbacks tried in order, because which
+one works varies by SteamOS version and how the game is running. It also
+resizes and compresses an attached image before sending it, so a
+full-resolution screenshot does not blow past what the AI will accept, or
+make a question take far longer to send.
+
+Does not: Draw the screenshot browser on screen -- see
+MainTabScreenshotBrowser. This file only finds, takes and prepares the files.
+
+How it works:
+
+Finding existing screenshots:
+ 1. `resolve_recent_screenshot_paths()` looks in Steam's own per-game
+    screenshot folders; `resolve_plugin_capture_paths()` looks in the
+    plugin's own capture folder for screenshots taken through the plugin
+    itself rather than through Steam.
+ 2. `merge_recent_screenshot_paths()` combines the two lists, newest first,
+    and drops a plugin capture that is really just a copy of one Steam
+    already has (matched by its timestamp), so the same screenshot does not
+    show up twice.
+ 3. `lookup_steam_app_name()` and `lookup_screenshot_vdf_metadata()` read
+    Steam's own bookkeeping files to attach a game name and caption to a
+    screenshot for display.
+
+Taking a new screenshot, through `take_steam_game_screenshot()`:
+ 1. `try_qam_closed_compositor_capture()` is tried first: a handful of
+    command names and flag spellings (`build_capture_command_candidates()`)
+    covering different SteamOS versions, retried a few times while the Quick
+    Access Menu is still closing, since a capture taken too early can catch
+    the menu itself in the shot.
+ 2. If none of those commands exist, `try_gamescope_atom_screenshot()` asks
+    the game's own display compositor for a screenshot a different way: it
+    sets a marker on the display that gamescope watches for, then waits for
+    gamescope to write the image out on its own.
+    `_discover_x11_sessions()` first finds which display and login session
+    to send that marker to, since the plugin runs outside the normal desktop
+    session and cannot simply assume one.
+ 3. Once a capture file exists, `_finalize_steam_capture_file()` shrinks it
+    to a compact JPEG when it is unusually large or carries transparency
+    Steam's own listing does not expect
+    (`_compress_capture_to_jpeg()`).
+
+Preparing an attached image for the AI, through `prepare_attachment_images()`
+calling `prepare_image_attachment()` for each file:
+ 1. The file is checked to exist, be a supported image type, and not be too
+    large, before anything is opened.
+ 2. `encode_image_with_pillow()` resizes it to fit the attachment quality
+    setting (Low, Mid or Max) and re-encodes it as JPEG, shrinking a
+    full-resolution screenshot down to something reasonable to send.
+ 3. If Pillow itself is not available on the Deck, the original file bytes
+    are sent instead, capped at a smaller size limit, since there is no way
+    to shrink them first.
+
+Gotchas:
+ - Screenshot capture never uses kmsgrab -- the code comment on
+   `try_qam_closed_compositor_capture()` explains it produces huge raw dumps
+   that break the plugin's own previews, so it is deliberately left out of
+   every fallback tried here.
+ - The X11 marker fallback always writes to the same fixed file,
+   /tmp/gamescope.png, since that is where gamescope itself writes it; this
+   file then copies that to wherever the caller actually wants the
+   screenshot saved.
 """
 
 from __future__ import annotations

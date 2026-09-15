@@ -1,9 +1,58 @@
-"""Title: Intent pack service
+"""Title: Making settings search understand more words than the exact label
 
-Purpose: Load, sanitize, merge, and persist offline search intent alias packs.
-Used for: Knowledge-base and Ask routing that maps user terms to search targets.
-Solves: Bundled and user-imported pack storage with schema validation and size limits.
-Does not: Execute web searches or embed queries — only pack data management.
+Purpose: When you use the search box to find a setting, this is what lets a
+search for a word like "mic" find the Voice settings even though the setting
+itself is only labeled "Voice". It stores small lists of extra words --
+other names, related words, and phrases that expand into a search term --
+that each point at a specific place in the settings, both the lists the
+plugin ships with and ones you can export and import between installs. It
+never talks to the AI or the internet; it is a local list to match words
+against.
+
+Used for: The settings-search feature. main.py calls the load, save, import
+and export functions here for the Settings screen's manage-packs panel; the
+screen itself does the actual word matching against these lists at search
+time (src/utils/intentPackSearch.ts).
+
+Solves: Keeping these lists safe to load even if hand-edited or imported from
+somewhere untrusted: a bad or oversized file cannot crash the plugin, an
+unknown target cannot be pointed at, and importing a pack that already
+shares some of the same words does something sensible rather than silently
+overwriting one setting's word with another's.
+
+Does not: Search anything itself, or touch the AI -- the screen does the
+actual matching, reading the packs this file supplies.
+
+How it works:
+ 1. Every list ("pack") is a JSON object mapping which words point at which
+    settings target, kept in intent_packs.json. `load_intent_packs()` reads
+    it, or creates it from the packs the plugin ships with
+    (`default_bundled_store()`) the first time there is no file yet.
+ 2. Every pack passes through `sanitize_intent_pack_store()` before it is
+    trusted: a target has to be one of the allowed navigation targets
+    (`load_valid_search_targets()`, kept in step with the same list the
+    screen uses), and every entry, pack, and store is capped in size so a
+    corrupted or unfriendly file cannot blow up the search index.
+ 3. `ensure_bundled_intent_packs()` re-adds a built-in pack if it is ever
+    missing, without touching any pack the person has added or edited
+    themselves.
+ 4. Importing a pack (`parse_import_payload()`, then `merge_import_pack()`)
+    is a two-step, preview-first flow: it can be checked before being
+    written, and `_merge_pack_entries()` and `_strip_global_term_conflicts()`
+    decide what happens when an imported word already points somewhere else
+    -- the existing mapping wins, and the clash is reported back rather than
+    silently overwritten.
+ 5. `save_intent_packs()` writes the cleaned-up store to a temporary file and
+    only swaps it into place once the write has finished, the same
+    crash-safe pattern used elsewhere in the plugin.
+
+Gotchas:
+ - A pack the plugin ships with cannot be deleted -- `remove_pack()` refuses
+   -- only disabled. `BUNDLED_PACK_IDS` lists which ones those are.
+ - A saved file that has grown past the size limit is not read at all.
+   `load_intent_packs()` falls back to the packs the plugin ships with,
+   kept only in memory, rather than trying to parse an oversized file -- but
+   it leaves the oversized file itself untouched on disk.
 """
 
 from __future__ import annotations

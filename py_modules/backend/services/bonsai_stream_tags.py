@@ -1,9 +1,77 @@
-"""Title: BonsAI stream tags
+"""Title: The "thinking…" line you see while waiting for an answer
 
-Purpose: Extract model-emitted ``<bonsai-status>`` tags from streaming Ollama replies.
-Used for: Token streaming path — thinking summaries and phase toasts during pending Ask.
-Solves: Parse incremental stream metadata without coupling HTTP layer to UI strings.
-Does not: Own smooth stream reveal on the frontend — see useSmoothStreamReveal.
+Purpose: While the AI works on your question, the Deck screen shows a line
+describing what is happening -- "Searching knowledge base…", "Writing your
+answer…" -- instead of a plain, silent spinner. This file both reads that
+line out of the model's own reply, when the model reports it, and writes the
+fallback lines the plugin shows itself the rest of the time, including a
+personality (witty or deadpan) when a character is enabled.
+
+Used for: The pending-Ask screen, on every chunk of a streaming reply.
+main.py's token-streaming path calls `extract_bonsai_status()` on each
+chunk; the frontend calls `format_thinking_phase()` (mirrored client-side by
+composeThinkingBlurb.ts, so the two must always agree) for the phases it
+already knows about before the model has said anything.
+
+Solves: A blank or unchanging wait reads as the plugin having frozen,
+especially on a Deck where a local model can genuinely take a long time.
+Picking a line has to be repeatable -- the same request re-rendering should
+not flash a different joke each time -- while still not staying frozen once
+the work has clearly moved on, or once it has sat still long enough that
+"warming up" is no longer even true.
+
+Does not: Own how the line fades or animates on screen -- see
+useSmoothStreamReveal on the frontend. This file only decides which words
+appear.
+
+How it works:
+
+Reading the model's own status, through `extract_bonsai_status()`: a model
+that supports it can wrap a short status inside a
+<bonsai-status>…</bonsai-status> tag as it streams. This keeps only the last
+*complete* tag seen -- not the first, so the line keeps moving instead of
+freezing the moment the earliest tag closes -- and a tag still being typed
+out is hidden by `_strip_incomplete_bonsai_status_open()` rather than shown
+half-written.
+
+Building the plugin's own line, when the model has not said anything yet:
+ 1. `format_thinking_phase()` is the entry point, given a known phase name
+    (`AskThinkingPhase`, e.g. "searching_kb", "generating") for a step the
+    plugin itself is doing, before the model is even involved.
+ 2. When there is a real question to weave in, it calls `_phase_pool()` for
+    a small set of matching lines for that phase and tone, and
+    `_pick_template()` chooses one of them -- deterministically, from a hash
+    of the request id, so the same request always shows the same line
+    (`_stable_bucket()`).
+ 3. The very first phase, "starting", instead goes through
+    `compose_thinking_blurb()`, which reads the question itself
+    (`_resolve_compose_intent()`) to open with a line about troubleshooting,
+    power, screenshots or strategy specifically, rather than a generic one.
+ 4. Without a question to weave in, `format_thinking_phase()` falls back to
+    a short, plain phrase per phase instead of trying to compose one.
+
+Once the wait runs long, `escalate_static_thinking_line()` notices when a
+line has not changed in a while -- the model went quiet with no new status
+tag -- and rotates in a "still working" line instead, one that gets more
+direct about the wait the longer it goes on (`_still_working_pool()`'s
+tiers). Timing is intentionally irregular so it never ticks on a visible
+metronome, but which line shows next is not random, so two lines never
+repeat back to back.
+
+Gotchas:
+ - `_stable_bucket()` mixes a per-phase "salt" into its hash on purpose:
+   keying every phase of one Ask on the request id alone made the trailing
+   emoji line every pool ends with show up disproportionately often. The
+   salted version keeps that from clustering.
+ - `escalate_static_thinking_line()` is the one place in this file where the
+   line changes on a timer rather than only on a phase change -- its own
+   comment explains why: once the model stops sending status tags, nothing
+   else would ever move the line again, and a truly static line during a
+   long wait reads as broken.
+ - "building_context" and "connecting_model" deliberately read as
+   encouraging rather than sarcastic, unlike the rest of this file's lines --
+   those are the two stretches of an Ask most likely to look stalled to the
+   person watching it, and a joke there reads as a fault report.
 """
 
 from __future__ import annotations
@@ -428,6 +496,47 @@ def _phase_pool(
     attachment_count: int = 0,
     still_building: bool = False,
 ) -> list[str]:
+    """What line to show while the AI is "thinking", for one moment in an Ask.
+
+    In: `phase` is which stage of answering is happening right now
+    (`AskThinkingPhase`, e.g. "searching_kb", "generating"). `tone` picks
+    which personality voice to use, witty or deadpan. `quote`, `game_bit` and
+    `attachment_count` are pre-built bits of text this stitches into the
+    line -- a snippet of the question, a mention of which game, how many
+    screenshots. `still_building` overrides everything else: it is set only
+    when context assembly is taking longer than normal, and needs its own
+    line regardless of which phase is technically active.
+
+    Out: a small list of candidate lines for that exact phase and tone, the
+    last one always a bare emoji. The caller, not this function, picks one of
+    them, and does so the same way for the same question, so the line does
+    not change every time the screen re-renders.
+
+    Nothing here can raise -- an unrecognised phase falls through to a
+    generic "working on it" pair at the very end rather than erroring, so a
+    new phase added to `AskThinkingPhase` without updating this function
+    degrades to something plain instead of crashing the Ask.
+
+    1. `still_building` is checked first and, if set, returns its own pair of
+       lines regardless of `phase` -- this is the one case that is not
+       phase-specific.
+    2. "proton_logs", "tdp_read", "searching_kb" and "screenshot_prep" each
+       return their own pool; "screenshot_prep" also branches on whether more
+       than one screenshot is attached, since "sorting 3 screenshots" reads
+       differently than "sorting a screenshot".
+    3. "building_context" and "connecting_model" are the two stretches where
+       an Ask can look stalled to the person watching it -- a cold model can
+       take real time to load before the first word appears. Their lines are
+       deliberately encouraging rather than sarcastic like the rest of this
+       function, because a sarcastic sigh during a long wait reads as
+       something having broken, not as personality.
+    4. "generating" fires the moment the first word of the actual answer
+       arrives, replacing whatever came before it.
+    5. "model_retry" covers a fallback to a second model after the first one
+       failed.
+    6. Anything else -- an unrecognised or future phase -- falls through to
+       one last plain "working on it" pair.
+    """
     if still_building:
         if tone == "deadpan":
             return [

@@ -1,9 +1,57 @@
 /**
  * Title: Developer tab
- * Purpose: Maintainer-facing diagnostics, logging toggles, Steam Web API key, and debug HUD controls.
- * Used for: Developer QAM tab from index.tsx when Developer Mode surfaces advanced tooling.
- * Solves: Groups connection status, captured errors, preset carousel experiments, and RPC test hooks.
- * Does not: Ship to default user flows — many rows are gated behind developer settings and capabilities.
+ *
+ * Purpose: The Developer tab, only visible once Developer Mode is turned
+ * on. It is for troubleshooting and testing bonsAI itself, not for changing
+ * how the AI answers: captured crash logs, which tab reopens the plugin,
+ * whether app activity gets written to Desktop as a log file, a Steam Web
+ * API key for ban lookups, and a handful of QA-only controls for testing
+ * the preset chip carousel and the knowledge base.
+ *
+ * Used for: The Developer tab in index.tsx, shown only when Developer Mode
+ * is on.
+ *
+ * Solves: Keeps every troubleshooting and QA control in one out-of-the-way
+ * tab that an ordinary user never sees, instead of scattered through the
+ * tabs everyone uses.
+ *
+ * Does not: Change anything about how Ask works for a normal user — most of
+ * these rows exist to test or debug the plugin itself, and several are
+ * gated behind their own developer settings and capabilities on top of
+ * Developer Mode.
+ *
+ * How it works:
+ *
+ *     ┌─ Developer tab ──────────────────────────────────────┐
+ *     │ Knowledge base (dev QA)  <- only when a seed-install  │
+ *     │                             callback was passed in    │
+ *     │ Diagnostics              <- HUD toggle, warm-at-boot, │
+ *     │                             captured errors, loaded   │
+ *     │                             models                    │
+ *     │ Navigation               <- which tab reopens the     │
+ *     │                             plugin (A/B/C buttons)    │
+ *     │ Logging & exports        <- Desktop log level,        │
+ *     │                             auto-save chat, verbose   │
+ *     │                             Ask log, preset animation,│
+ *     │                             QA session-RAG + frozen   │
+ *     │                             test chips                │
+ *     │ Integrations             <- Steam Web API key         │
+ *     └────────────────────────────────────────────────────────┘
+ *
+ * 1. Every row here is a plain panel row; Steam's own default vertical flow
+ *    moves the D-pad between them, since nothing in this file wires a
+ *    custom onMoveUp/onMoveDown.
+ * 2. The "Tab to open on" and "App activity logging" rows are each a
+ *    horizontal row of buttons built from a fixed option list
+ *    (TAB_RESUME_MODE_OPTIONS, DESKTOP_APP_LOG_LEVEL_OPTIONS) — press one
+ *    to select it, styled to show which is active.
+ * 3. runInstallSeedKb() drives the one asynchronous action on this tab: it
+ *    disables its own button while running, calls the passed-in
+ *    onInstallSeedKnowledgeBase, and shows a toast only if that fails.
+ * 4. Everything else here reads and writes one setting directly — a
+ *    toggle, a text field, or a small button row — with no local state of
+ *    its own; every change goes straight back out through the setter it
+ *    was handed.
  */
 import React from "react";
 import {
@@ -111,7 +159,16 @@ export type DeveloperTabProps = {
 };
 
 /**
- * Opt-in power-user tab: diagnostics, logging, and integrations.
+ * The whole tab. See "How it works" above for the layout and flow.
+ *
+ * In: every developer-facing setting this tab shows, plus a setter for
+ * each one, the list of captured runtime errors and a callback to clear
+ * them, and the last connection test's result (used only to list which
+ * models are currently loaded).
+ * Out: the panel sections in the order drawn above.
+ *
+ * What can go wrong: nothing here talks to the backend except
+ * runInstallSeedKb() — every other row is a direct settings read/write.
  */
 export const DeveloperTab: React.FC<DeveloperTabProps> = ({
   capturedErrors,

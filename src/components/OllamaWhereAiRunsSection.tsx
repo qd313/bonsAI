@@ -1,9 +1,79 @@
 /**
  * Title: Where AI runs section
- * Purpose: Ollama tab section for local Deck vs LAN PC host, install options, and test connection.
- * Used for: OllamaTab — first major block in the local-setup vertical focus chain.
- * Solves: Isolates host toggle, install/update labels, and connection probe from the rest of Ollama settings.
- * Does not: Pull models or define routing order — see PullModelsModal and ModelRouting panels.
+ *
+ * Purpose: The "Where AI runs" panel at the top of the Ollama tab, where
+ * you choose whether the AI runs on this Deck itself or on a PC somewhere
+ * on your home network — and everything involved in setting that up:
+ * installing or updating Ollama on the Deck, picking a starting model
+ * bundle to pull, finding a PC's Ollama on the network automatically, and
+ * testing the connection either way.
+ *
+ * Used for: OllamaTab, the first section drawn.
+ *
+ * Solves: One place that owns both halves of "which machine answers" — the
+ * Deck-local install-and-setup flow, and the LAN-host find-and-connect
+ * flow — since only one of the two ever shows at a time, depending on the
+ * toggle.
+ *
+ * Does not: Pull, browse, or manage individual models one at a time, or
+ * decide the try-order between them — that is PullModelsModal and the
+ * model routing panels. This section only offers two starting bundles
+ * (Tier 1 essentials, Tier 2 multimodal) and an update-everything option.
+ *
+ * How it works:
+ *
+ *     ┌─ Where AI runs ──────────────────────────────────┐
+ *     │ [ Run AI on this Deck ]         toggle              │
+ *     │ [ Start the AI with the Deck ]  toggle (autostart)  │
+ *     │  — if Run-on-Deck is ON —                            │
+ *     │ [ Install Ollama / Update AI & models ]              │
+ *     │ [ Browse models… ]                                   │
+ *     │ [ Install options… ] -> Tier 1 / Tier 2 / Cancel     │
+ *     │ setup log / status line                              │
+ *     │  — if Run-on-Deck is OFF —                            │
+ *     │ Saved Ollama hosts (LAN)  <- quick-pick buttons      │
+ *     │ Save current PC address as quick host                │
+ *     │ PC address [______]  [Test connection] [Find LAN]    │
+ *     │ This Deck's IP: …                                    │
+ *     │ Found on LAN (mDNS)  <- Use / Save per host          │
+ *     │ Connected · Ollama vX · N models  /  Unreachable     │
+ *     └────────────────────────────────────────────────────────┘
+ *
+ * 1. onTestConnection() probes whichever host is currently selected — this
+ *    Deck's own loopback address, or the typed PC address — and records
+ *    the result; it auto-runs once, quietly, on mount, so the
+ *    Install/Update button already knows whether Ollama is reachable
+ *    before anyone presses Test.
+ * 2. openLocalSetupConfirm() asks first, then starts one of three setup
+ *    profiles (Tier 1 essentials, Tier 2 multimodal, or Update installed).
+ *    Tier 2 also switches the model policy tier first, since the model it
+ *    installs needs that tier to be usable at Ask time.
+ * 3. While a local setup runs, a poll every 1.5 seconds reads its status
+ *    and fills in the log tail on screen; once it reports done with no
+ *    error, a separate effect runs the connection test again automatically
+ *    and, if this was an update, refreshes the model catalog.
+ * 4. runMdnsDiscovery() searches the local network for other Ollama
+ *    services advertised over mDNS/Bonjour — only offered when Ask is not
+ *    already pointed at this Deck.
+ * 5. Any host found this way, or a manually typed PC address, can be saved
+ *    as one of a short list of named quick-pick buttons (namedOllamaHosts)
+ *    so an address used before never needs retyping.
+ *
+ * Gotchas:
+ * - The Deck-local setup buttons form one fixed vertical chain — toggle →
+ *   Start-at-boot toggle → Install/Update → Browse → Install options →
+ *   Test connection — and Up/Down on every one of them is wired by hand to
+ *   match it, because Steam's own automatic layout guess does not follow
+ *   it correctly here.
+ * - The "Browse models…" button on this panel registers itself as the
+ *   return-focus target for the models hub modal. A second, less-used
+ *   entry point to the same hub exists on the main Ollama tab but is not
+ *   wired the same way — only this one needs to be, since it is the one
+ *   people actually press, and its absence here was invisible until it
+ *   was checked on the Deck.
+ * - A connection test against this Deck's own loopback address gets a much
+ *   longer timeout than a LAN test, because probing it can itself start
+ *   the Ollama service if it was not already running.
  */
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
@@ -127,6 +197,22 @@ export type OllamaWhereAiRunsSectionProps = {
 
 type ConnectionStatus = DeveloperConnectionStatus;
 
+/**
+ * The whole panel. See "How it works" above for the layout and flow.
+ *
+ * In: the current host settings (local-on-Deck, autostart, the typed PC
+ * address, saved LAN hosts), callbacks to change and persist each of them,
+ * a callback reporting the last connection test result up to the parent,
+ * callbacks for opening the models hub and nested-modal focus handoff, and
+ * a couple of optional refs/callbacks so the section above or below can
+ * hand the D-pad in and out cleanly.
+ * Out: the panel section described above.
+ *
+ * What can go wrong: every backend call here (connection test, local
+ * setup, mDNS discovery, autostart toggle) is wrapped so a failure shows a
+ * toast or a status line rather than leaving a button stuck in a busy
+ * state forever.
+ */
 export const OllamaWhereAiRunsSection: React.FC<OllamaWhereAiRunsSectionProps> = ({
   ollamaIp,
   onOllamaIpChange,

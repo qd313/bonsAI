@@ -1,9 +1,50 @@
 /**
  * Title: Ollama settings tab
- * Purpose: Settings tab for Ollama host, models, knowledge base, reply style, and local AI setup.
- * Used for: index.tsx Ollama tab — connection test, install/update, model routing entry points.
- * Solves: Groups all Ollama-adjacent settings in one focus-graph owner (OllamaTab + child sections).
- * Does not: Run Ask or poll game AI — see Main tab and useBonsaiAskOrchestration.
+ *
+ * Purpose: The whole Ollama tab in Settings — where the AI's address lives,
+ * how it decides which model to use, and everything about how it replies.
+ * Top to bottom it holds: Where AI runs (its own section,
+ * OllamaWhereAiRunsSection), the local knowledge base toggle, Reply style
+ * (how detailed replies are and how much thinking happens before
+ * answering), Connection tuning (how long to wait before a warning or a
+ * timeout, and how long to keep a model loaded in memory), and Models &
+ * routing (an Open AI models button, plus buttons to set the try order for
+ * text and vision models). This file also owns handing the D-pad between
+ * every one of those pieces, since each is its own separate file.
+ *
+ * Used for: The Ollama tab in index.tsx.
+ *
+ * Solves: One screen that gathers every Ollama-related setting and wires
+ * its own D-pad path through all the smaller pieces underneath it, so
+ * pressing Down from one section reliably lands on the next.
+ *
+ * Does not: Actually talk to Ollama or run an Ask — see Main tab and
+ * useBonsaiAskOrchestration for that. This tab only edits settings and
+ * passes callbacks through to the sections that need to check live
+ * connection status.
+ *
+ * How it works:
+ * 1. A handful of focusXThumb()/focusXToggle() helpers, one per slider or
+ *    toggle, each finding that control's own focusable element inside a
+ *    ref'd container so the D-pad can be handed to it from a neighbouring
+ *    section.
+ * 2. OllamaWhereAiRunsSection draws first — the host address and
+ *    local-Deck controls — with its own Down wired to focusKbToggle().
+ * 3. KnowledgeBaseSection draws next, its Up wired back to the connection
+ *    test button and its Down to the reply-verbosity slider.
+ * 4. The Reply style panel: a verbosity slider then the Thinking effort
+ *    row, each one's Up/Down pointed at its neighbour.
+ * 5. Connection tuning: a custom-timeouts toggle that swaps in either a
+ *    default-values line or the warning/timeout slider, followed by the
+ *    keep-models-loaded slider.
+ * 6. Models & routing: the installed-model count (read straight off the
+ *    last connection status) and the three buttons that open the models
+ *    hub and the two try-order modals.
+ *
+ * Gotchas: Every "find the first focusable thing in this row" helper below
+ * searches inside a ref'd container, never the whole page. A plain
+ * page-wide query looks inside Decky's outer shell rather than just this
+ * plugin, and can find the wrong element entirely.
  */
 import React, { useCallback, useRef } from "react";
 import { Button, PanelSection, PanelSectionRow, ToggleField } from "@decky/ui";
@@ -69,6 +110,22 @@ export type OllamaTabProps = {
   setAskThinkEffort: (v: AskThinkEffortId) => void;
 };
 
+/**
+ * The whole tab: renders each Ollama-related section in order and wires
+ * the D-pad handoff between them. See "How it works" above for the flow.
+ *
+ * In: every current Ollama setting (host address, local-on-Deck, knowledge
+ * base, reply style, connection tuning, model policy) plus a setter for
+ * each one, and callbacks to open the models hub and the routing-order
+ * modals.
+ * Out: the tab's panel sections, each one a separate component, in a fixed
+ * top-to-bottom order.
+ *
+ * What can go wrong: nothing here calls the backend directly — every
+ * setting change and every "open X" button just calls the callback it was
+ * handed; OllamaWhereAiRunsSection and KnowledgeBaseSection own their own
+ * connection checks.
+ */
 export const OllamaTab: React.FC<OllamaTabProps> = ({
   ollamaIp,
   effectiveOllamaPcIp,

@@ -1,9 +1,40 @@
 /**
  * Title: Session context strip
- * Purpose: Summarize live and archived turn context chips above the chat transcript.
- * Used for: MainTabChatTranscript to surface input-transparency snapshots per conversation turn.
- * Solves: Collapsed hint + expandable ladder so users can audit what context reached the model.
- * Does not: Build snapshots or fetch RPC data — receives turns from orchestration hooks.
+ *
+ * Purpose: The collapsed line above the chat transcript that reads "Session
+ * context (N turns) ▸". Pressing it opens a list with one row per turn that
+ * attached anything extra to what was actually sent to the AI — a
+ * screenshot, a log excerpt, a memory note. Picking a row shows that turn's
+ * chips: exactly what rode along with that question. It exists so a person
+ * can check, after the fact, what the AI actually saw, rather than just
+ * trusting it.
+ *
+ * Used for: Drawn by MainTabChatTranscript, above the transcript itself,
+ * whenever at least one turn has something to show.
+ *
+ * Solves: One place to audit what context reached the model, for both the
+ * turn still on screen and every earlier turn in the conversation, without
+ * scrolling back up and rereading each answer.
+ *
+ * Does not: Build the "what was actually sent" snapshot, or fetch it from
+ * the backend. It is handed already-built snapshots for the live turn and
+ * every archived turn, and only draws them.
+ *
+ * Gotchas:
+ * - The strip registers itself as a Steam nav node (registerNavFocus) rather
+ *   than relying on plain DOM focus, so D-pad Down from the reply row above
+ *   can hand the ring straight to it — a bare `.focus()` moves the browser's
+ *   idea of focus but leaves Steam's own ring behind, and a later press keeps
+ *   going to the row you meant to leave (measured on the Deck).
+ * - The header only opens or closes on the A-button press (`onActivate`). It
+ *   used to also react to the same press in `onButtonDown`, which fired the
+ *   toggle twice and made the header look completely dead — it flipped open
+ *   and shut in the same press. The row Focusables below use the same
+ *   double-handler shape safely, because picking a row is idempotent; only a
+ *   toggle breaks when it fires twice.
+ * - Stepping Up off the row list's first chip has to be wired by hand
+ *   through the chip ladder's own escape hatch, or the D-pad gets stuck once
+ *   it reaches that chip.
  */
 import { useEffect, useRef, useState } from "react";
 import { Focusable } from "@decky/ui";
@@ -32,6 +63,43 @@ export type SessionContextStripProps = {
   onMoveUp?: () => boolean;
 };
 
+/**
+ * The whole strip: the collapsed header, the list of turn rows once it is
+ * open, and the chip ladder for whichever row is currently picked.
+ *
+ * In: the current turn's context snapshot (if it has one and hasn't been
+ * archived yet), the list of already-archived turns, an optional id that
+ * forces one particular turn open from outside the strip, and a callback for
+ * stepping Up out of the strip entirely.
+ * Out: null when there is nothing worth showing; otherwise the header line,
+ * and — once open — the row list plus the active row's chips.
+ *
+ * What can go wrong: the live turn and its own freshly-archived copy can
+ * easily get counted as two rows for one real turn — see the note on
+ * `liveIsNewestArchived` below for why that happens and how it is avoided.
+ *
+ * 1. On mount, registers itself with registerNavFocus() under the key
+ *    "session-context-strip" so the row above can hand D-pad Down straight
+ *    to this strip; unregisters with unregisterNavFocus() on unmount.
+ * 2. Builds the row list: every archived turn with at least one chip from
+ *    chipsFromSnapshot(), plus the still-live turn if it has chips of its
+ *    own and is not the same turn as the newest archived row
+ *    (`liveIsNewestArchived`).
+ * 3. If there are no rows at all, renders nothing.
+ * 4. Works out which row is active — an outside `highlightTurnId` if it
+ *    points at a real row, otherwise whichever row was last tapped — and
+ *    falls back to the newest row.
+ * 5. Pressing A on the header opens or closes the strip. A separate effect
+ *    scrolls the newly revealed rows into view once it opens, since the
+ *    strip sits at the bottom of the panel and an opened list would
+ *    otherwise land below what is visible.
+ * 6. While open, picking a row makes it the active one and clears any
+ *    outside highlight via onHighlightClear.
+ * 7. The active row's chips are drawn by the chip ladder, wired so stepping
+ *    Up off its first chip calls focusLastSessionContextRow() to land back
+ *    on the row list, falling back to this strip's own onMoveUp only if that
+ *    fails.
+ */
 export function SessionContextStrip({
   liveTurn = null,
   archivedTurns = [],

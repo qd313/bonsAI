@@ -1,9 +1,48 @@
 /**
  * Title: Chat slot row
- * Purpose: Always-visible LB/RB slot carousel under the tab strip on Main.
- * Used for: MainTab above preset row.
- * Solves: Named slot switching without a modal picker; explicit focus graph for D-pad.
- * Does not: Submit Asks — orchestration hook owns the Ask path.
+ *
+ * Purpose: The row that always sits at the top of the main tab, above the
+ * preset chips. It is a small carousel of your saved chats: press LB/RB (or
+ * step the D-pad through it) to flip between them, press A on the middle to
+ * rename the current chat, or move onto its × to delete it. Step right past
+ * your newest chat to reach [+] and start a new one. Dots below show your
+ * recent chats at a glance, and a small dot lights up on any chat that is
+ * still generating a reply or has one waiting that you have not read yet.
+ *
+ * Used for: Drawn by MainTab, directly above the preset row.
+ *
+ * Solves: A way to switch between named chats without opening a separate
+ * picker screen, with its own D-pad path in and out that has been checked
+ * on the Deck.
+ *
+ * Does not: Actually send or receive Ask messages. This only switches which
+ * saved chat is showing; useBonsaiAskOrchestration owns talking to the AI.
+ *
+ * How it works:
+ * 1. carouselIndex tracks the on-screen position — 0 is always "[+] new
+ *    chat", 1..N are the saved chats — and an effect keeps it in sync with
+ *    the real active chat.
+ * 2. LB/RB (useChatSlotBumpers) or a D-pad Left/Right step move
+ *    carouselIndex and, unless it lands on [+], call onSelectSlot.
+ * 3. Pressing A creates a chat from [+], opens the rename modal, or opens
+ *    the delete confirmation, depending on where the D-pad currently sits.
+ * 4. A layout effect measures whether the title text is wider than its box
+ *    and, only while focused, publishes the overflow as a CSS variable so
+ *    long titles scroll into view.
+ *
+ * Gotchas:
+ * - Recent chats are ordered newest first, with [+] sitting right next to
+ *   whichever chat you were just in. It used to be ordered the other way,
+ *   which put "start a new chat" next to your OLDEST chat — so leaving your
+ *   current conversation to start a fresh one meant stepping past every
+ *   older chat first.
+ * - This row's own container needs `focusable: true` set by hand. Steam
+ *   skips a row with no plain focusable children inside it, and this row's
+ *   children are all plain text — without that flag the D-pad walked
+ *   straight past the whole row in both directions.
+ * - Up from this row jumps to the tab bar by name rather than letting Steam
+ *   find it on its own, because the tab bar's real target is hidden and
+ *   cannot be discovered by looking.
  */
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ConfirmModal, Focusable, showModal } from "@decky/ui";
@@ -48,6 +87,23 @@ const MAX_DOTS = 8;
 /** What the create position shows, both as the centre label and as the ghost to a slot's left. */
 const CREATE_LABEL = "[+]";
 
+/**
+ * The whole slot row: the LB/RB carousel, its center label, the activity
+ * dots, and the rename/delete controls. See "How it works" above for the
+ * flow.
+ *
+ * In: the list of saved chats (newest first), which one is active, and
+ * callbacks for creating, selecting, renaming and deleting a chat, plus
+ * which chat (if any) is currently generating or has an unread reply.
+ * Out: the row itself — the shoulder-button pills, the center title (with a
+ * small × to delete it), the ghost previews of the chat to either side, and
+ * the row of activity dots.
+ *
+ * What can go wrong: the carousel position and the "active chat" id can
+ * briefly disagree right after a rename or delete finishes elsewhere — the
+ * effect that re-syncs carouselIndex from activeSlotId is what catches that
+ * back up.
+ */
 export function ChatSlotRow({
   summaries,
   activeSlotId,

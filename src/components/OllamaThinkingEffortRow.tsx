@@ -1,10 +1,21 @@
 /**
  * Title: Thinking effort row
- * Purpose: Four-stop Off / Brief / Balanced / Deep control for hidden model reasoning.
- * Used for: OllamaTab, directly below Reply style.
- * Solves: Lets a user trade latency for reasoning depth without editing settings.json.
- * Does not: Decide the wire value or budgets — backend `ollama_ask_budgets` owns both, and
- *   a model that cannot think falls back silently there (decision D21).
+ *
+ * Purpose: The row on the Ollama tab labeled "Thinking," where you choose how
+ * hard the AI reasons before it answers: Off, Brief, Balanced, or Deep. More
+ * thinking can mean a better answer, but it also takes longer, so this lets a
+ * person pick that trade-off for themselves instead of always getting the
+ * slowest, deepest setting.
+ *
+ * Used for: OllamaTab, directly below the Reply style row.
+ *
+ * Solves: Lets a person change how much the AI thinks without editing
+ * settings.json by hand.
+ *
+ * Does not: Decide what each of the four settings actually asks the model to
+ * do, or what happens when the chosen model cannot think at all — both live
+ * in the backend's `ollama_ask_budgets`, which falls back silently in that
+ * case (decision D21).
  */
 import { Focusable, Button } from "@decky/ui";
 
@@ -24,6 +35,22 @@ export type OllamaThinkingEffortRowProps = {
   onMoveDown: () => boolean;
 };
 
+/**
+ * The four buttons, plus the description line above them that explains what
+ * the currently selected one does.
+ *
+ * In: the effort level currently selected, a callback to run when a
+ * different button is pressed, an optional host ref so a neighbouring row
+ * can hand focus straight to the first button, and the Up/Down handlers that
+ * let the D-pad leave this row for whatever sits above or below it.
+ * Out: the "Thinking" label, its description text, and a horizontal row of
+ * four buttons — one per effort level.
+ *
+ * What can go wrong: Up and Down only work when wired on the Focusable that
+ * wraps the buttons, never on the buttons themselves — a Decky Button does
+ * not fire onMoveUp/onMoveDown, so those handlers have to live one level up
+ * (see the comment on the Focusable below).
+ */
 export function OllamaThinkingEffortRow({
   value,
   onChange,

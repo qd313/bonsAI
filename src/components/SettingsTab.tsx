@@ -1,9 +1,67 @@
 /**
  * Title: Settings tab
- * Purpose: General plugin settings — UI scale, voice, permissions shortcuts, developer toggles, and links.
- * Used for: index.tsx Settings tab panel with explicit D-pad focus graph per section.
- * Solves: Groups non-Ollama settings away from OllamaTab while sharing survival snapshots.
- * Does not: Host Ollama connection UI — see OllamaTab.
+ *
+ * Purpose: The Settings tab — screen size, whether the Ask bar remembers
+ * what you typed, story spoiler masking, how many suggestion chips show,
+ * voice input and voice reply settings, the AI's voice & personality
+ * picker, whether the Developer tab is visible, and two buttons for
+ * clearing cached data or wiping everything back to a fresh install.
+ * Nothing about talking to Ollama lives here — that is the whole Ollama tab.
+ *
+ * Used for: The Settings tab in index.tsx.
+ *
+ * Solves: One tab for every general plugin setting that is not about
+ * Ollama itself, each section wired into the next so the D-pad has a
+ * predictable path all the way down.
+ *
+ * Does not: Host anything about the Ollama connection, models, or the
+ * knowledge base — see OllamaTab for that.
+ *
+ * How it works:
+ *
+ *     ┌─ Settings tab ─────────────────────────────────────┐
+ *     │ UI scale               <- its own file, see         │
+ *     │                           SettingsTabUiScaleSection  │
+ *     │ Screenshot quality     <- Save memory / Balanced /   │
+ *     │                           Best detail                │
+ *     │ Remember what I typed  <- All / Search / None        │
+ *     │ Story spoilers         <- hide-until-tap toggle       │
+ *     │ Suggestion chips       <- one chip vs two toggle      │
+ *     │ Voice input            <- its own file, see           │
+ *     │                           VoiceInputSettingsSection   │
+ *     │ Voice replies          <- Off / By voice / Always     │
+ *     │ AI voice & personality <- toggle + character picker   │
+ *     │                           button + accent intensity   │
+ *     │                           popover menu                │
+ *     │ Data                   <- Show Developer tab toggle   │
+ *     │ Clear cache… / Clear all data…  <- two buttons        │
+ *     │                                    side by side       │
+ *     └───────────────────────────────────────────────────────┘
+ *
+ * 1. Most rows here are a plain toggle or a horizontal row of buttons built
+ *    from a fixed option list, each one reading and writing a setting
+ *    directly with no local state of its own.
+ * 2. Two settings sections are big enough to live in their own file and are
+ *    just dropped in here: SettingsTabUiScaleSection and
+ *    VoiceInputSettingsSection.
+ * 3. The AI voice & personality block is the one row with real local state:
+ *    accentIntensityMenuOpen, tracking whether its own popover menu is
+ *    open. toggleAccentIntensityMenu() flips it, guarded against firing
+ *    twice for one press — see the gotcha below.
+ * 4. That popover's open/closed state survives a remount of this whole tab
+ *    (leaving Settings and coming back) through
+ *    registerSettingsTabLocalGetter()/consumeSettingsTabLocalPending(),
+ *    rather than resetting to closed every time.
+ * 5. Clear cache and Clear all data both open a Steam ConfirmModal before
+ *    doing anything, and both remember which button to return focus to
+ *    once that modal closes.
+ *
+ * Gotchas: The accent intensity button carries both an onClick and an
+ * onOKButton handler pointed at the same toggle, because a plain onClick
+ * alone was not enough to catch a gamepad A press reliably elsewhere in
+ * this plugin. Both can fire for a single press, so
+ * accentIntensityMenuToggleOnceRef guards the toggle from running twice in
+ * one press, which would open and immediately close the menu again.
  */
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
@@ -135,6 +193,19 @@ export type SettingsTabProps = {
 
 };
 
+/**
+ * The whole tab. See "How it works" above for the layout and flow.
+ *
+ * In: every setting this tab shows plus a setter for each one, the AI
+ * character's current selection (to preview it on the picker button), and
+ * callbacks to open the character picker, clear the session, wipe all
+ * plugin data, and manage a nested Decky modal's focus handoff.
+ * Out: the panel sections in the order drawn above.
+ *
+ * What can go wrong: nothing here talks to the backend directly except the
+ * two Clear buttons — everything else is a settings read/write handed
+ * straight to the caller.
+ */
 export const SettingsTab: React.FC<SettingsTabProps> = ({
   screenshotAttachmentPreset,
   setScreenshotAttachmentPreset,

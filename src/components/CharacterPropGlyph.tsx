@@ -1,13 +1,56 @@
 /**
  * Title: Character prop glyph
- * Purpose: Render a character as a prop emblem (bat, fedora, sandvich…) in inline SVG on a tinted, vignetted disc.
- * Used for: The main tab Ask bar avatar (18px) and every character picker avatar (26px), via CharacterRoleplayEmoticon's `art="prop"` path.
- * Solves: The 8x8/16x16 pixel grids in CharacterRoleplayEmoticon read as noise at 18px and break up above ~32px.
- * Does not: Render at the 44px the art was reviewed at — D33 locked the picker at 26px instead.
  *
- * DO NOT REDRAW THE SVG PATH DATA. Every coordinate below is the approved design and was
- * ported verbatim from the prototype; several props went through multiple review rounds.
- * Source bundle: docs/design/handoffs/ai-character-avatars/ (README.md + the .dc.html prototype, turn 5a).
+ * Purpose: One small icon — a bat, a fedora, a sandwich, and so on — used as
+ * the picture for an AI character. It shows up tiny next to the Ask bar, as
+ * the avatar for whoever you are currently talking to, and a little bigger
+ * in the character picker where you choose who to talk to next. Each
+ * character has its own prop and its own tint color, sitting on a softly
+ * lit, tinted disc.
+ *
+ * Used for: The main tab's Ask bar avatar (18px) and every character picker
+ * avatar (26px), reached through CharacterRoleplayEmoticon's `art="prop"`
+ * path.
+ *
+ * Solves: The older 8x8/16x16 pixel-grid art (still used elsewhere in
+ * CharacterRoleplayEmoticon) reads as noise at 18px and falls apart once it
+ * is drawn bigger than about 32px. This is smooth vector art instead, so it
+ * stays sharp at any of the sizes the plugin actually uses.
+ *
+ * Does not: Render at the 44px size the art was originally reviewed at —
+ * decision D33 locked the picker down to 26px instead, so nothing in the
+ * plugin currently shows this art at its full reviewed size.
+ *
+ * How it works:
+ * 1. Resolve which prop and tint to draw: look up characterKey in
+ *    CHARACTER_PROPS for defaults, then let explicit prop/tint props
+ *    override them.
+ * 2. Work out a readable line color for that tint with inkForDisc(), which
+ *    checks contrast against the disc's actual background — the tint
+ *    blended halfway with the disc's dark base color — using the WCAG-style
+ *    math in inkFor().
+ * 3. Build the artwork inside CharacterPropGlyph(): a long chain of
+ *    `if (P === "...")` branches, one per named prop, each pushing a
+ *    handful of SVG shapes into a plain array (built with
+ *    `React.createElement` rather than JSX). Every coordinate in every
+ *    branch is hand-placed art ported from the approved design — see the
+ *    warning below.
+ * 4. Backfill a React key onto any shape that did not already get one
+ *    inline, since React needs a key on every array entry and not every
+ *    branch above sets one.
+ * 5. Wrap the art: when framed is true, add a radial-gradient tinted disc
+ *    behind it and a thin ring in front of it; otherwise return the bare
+ *    shapes.
+ * 6. Return the finished `<svg>`, sized to the requested size in pixels on a
+ *    fixed 32x32 drawing canvas, either silently decorative or carrying an
+ *    accessible title.
+ *
+ * Gotchas:
+ * DO NOT REDRAW THE SVG PATH DATA. Every coordinate in every prop branch is
+ * the approved design, ported verbatim from the prototype — several props
+ * went through multiple review rounds to get there. Source bundle:
+ * docs/design/handoffs/ai-character-avatars/ (README.md plus the .dc.html
+ * prototype, turn 5a).
  */
 import React from "react";
 
@@ -130,6 +173,37 @@ export interface CharacterPropGlyphProps {
   title?: string;
 }
 
+/**
+ * The component that actually draws one glyph.
+ *
+ * In: an optional characterKey to look up a default prop/tint pair from
+ * `CHARACTER_PROPS`, explicit prop/tint overrides, the pixel size to render
+ * at, whether to draw the tinted disc behind the art (framed), a className,
+ * and an optional accessible title.
+ * Out: one `<svg>` element — the art, plus (when framed) its disc and ring.
+ *
+ * What can go wrong: an unrecognized characterKey with no explicit prop
+ * override falls back silently to the "crate" question-mark art rather than
+ * throwing or rendering nothing. Two instances on screen at once must not
+ * share a gradient/mask id, or the second one paints with the first one's
+ * tint — see the note on `id` below for how that is avoided.
+ *
+ * 1. Resolve resolvedTint/resolvedProp from characterKey via
+ *    `CHARACTER_PROPS`, then let the explicit prop/tint arguments override
+ *    them.
+ * 2. Mint a per-instance id with `useId` (its colons stripped out) so this
+ *    instance's gradient and mask never collide with another glyph's.
+ * 3. Compute `ink`, the line color for this tint, with inkForDisc().
+ * 4. Walk the `if (P === "...")` chain and push this prop's SVG shapes into
+ *    the array `k`.
+ * 5. Backfill a React key onto any shape in `k` that does not already carry
+ *    one.
+ * 6. Build the inner artwork: the shapes alone, or — when framed — the
+ *    shapes plus the tinted radial-gradient disc behind them and the
+ *    hairline ring in front of them.
+ * 7. Return the `<svg>`, sized from the size prop, marked decorative unless
+ *    a title was given.
+ */
 export function CharacterPropGlyph({
   characterKey,
   prop,

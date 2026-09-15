@@ -1,9 +1,24 @@
 /**
  * Title: Voice input settings section
- * Purpose: STT model picker, engine status display, and install/retry controls for voice asks.
- * Used for: SettingsTab when voice input capability and backend whisper.cpp engine are available.
- * Solves: Surfaces binary/model readiness, download progress, and Deck-focusable model buttons.
- * Does not: Capture microphone audio or run transcription — backend voice service owns the pipeline.
+ *
+ * Purpose: The "Voice input" section on the Settings tab. Lets you choose
+ * which speech-to-text model powers the microphone button on the Ask bar (a
+ * faster, less accurate one, or a slower, more accurate one), shows whether
+ * the voice engine is installed and ready, and has a button to install or
+ * reinstall it, with a progress line while that runs. If the microphone
+ * permission is off, this section shows a prompt to turn it on instead of
+ * letting you install anything.
+ *
+ * Used for: SettingsTab, when voice input is available on this device and
+ * the backend's voice engine (whisper.cpp) exists.
+ *
+ * Solves: One place to see and fix voice-engine readiness — installed or
+ * not, which model, and any install error — instead of it failing silently
+ * the first time someone taps the mic button.
+ *
+ * Does not: Record audio or turn speech into text. That happens in the Ask
+ * bar's mic button and the backend voice service; this section only picks
+ * the model and manages the install.
  */
 import React, { useCallback, useEffect, useState } from "react";
 import { PanelSection, PanelSectionRow, Button, Focusable } from "@decky/ui";
@@ -39,6 +54,35 @@ type Props = {
   onJumpToPermission?: (capability: BonsaiCapabilityKey) => void;
 };
 
+/**
+ * The whole section: the model picker, the engine status line, and the
+ * install/reinstall button.
+ *
+ * In: the currently chosen model, a callback to change it, whether the
+ * microphone permission is on, and a callback to jump to the Permissions
+ * tab when it is not.
+ * Out: the panel section — a permission prompt if needed, the model list,
+ * a status line, and the install button.
+ *
+ * What can go wrong: a failed status or install poll just stops the
+ * install spinner rather than throwing, since a flaky network hiccup
+ * should not be read as "the install failed."
+ *
+ * 1. refreshStatus() asks the backend for the engine's current status
+ *    (binary/model readiness) on mount and whenever the chosen model
+ *    changes.
+ * 2. While installBusy is true, a repeating timer polls install progress
+ *    every 1.2 seconds — polled rather than pushed from the backend — and
+ *    stops itself once the backend reports the install is done or failed.
+ * 3. onDownloadModel() first checks the microphone permission — if it is
+ *    off, it either jumps to the Permissions tab or shows a toast, and
+ *    never starts an install without it. Otherwise it starts the install
+ *    and begins the polling above.
+ * 4. Renders the permission prompt (if needed), the list of model choices
+ *    as buttons, a status line built from the current engine/install
+ *    state, and the install button, labeled Install/Reinstall/Installing…
+ *    to match.
+ */
 export const VoiceInputSettingsSection: React.FC<Props> = ({
   voiceSttModel,
   setVoiceSttModel,

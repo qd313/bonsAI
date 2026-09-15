@@ -1,9 +1,20 @@
 /**
  * Title: About tab
- * Purpose: Credits, support links, reply-language override, and third-party attribution panel.
- * Used for: About QAM tab from index.tsx with GitHub, Ollama, and PayPal support surfaces.
- * Solves: Groups non-settings informational content away from Settings and Ollama configuration tabs.
- * Does not: Change inference settings or model policy — see SettingsTab and OllamaTab for configuration.
+ *
+ * Purpose: The About tab — what bonsAI is, a beta warning, the
+ * reply-language dropdown (its own file, AboutReplyLanguageSection), and
+ * links out to GitHub, the Ollama project, the bug tracker, and support.
+ * Nothing here changes how the AI behaves; it is entirely things to read or
+ * tap through to leave the plugin.
+ *
+ * Used for: The About tab in index.tsx.
+ *
+ * Solves: Keeps project information and outbound links away from the tabs
+ * that actually change settings, so About stays safe to browse without
+ * risking a setting change.
+ *
+ * Does not: Change any AI or inference setting — see SettingsTab and
+ * OllamaTab for that.
  */
 import React from "react";
 import { ButtonItem, Navigation, PanelSection, PanelSectionRow } from "@decky/ui";
@@ -39,6 +50,19 @@ function openExternal(url: string, toastTitle: string) {
   }
 }
 
+/**
+ * The tab body: the about blurb, the beta warning, the reply-language
+ * section, and the Links panel.
+ *
+ * In: the three outbound URLs (GitHub, Ollama, issues), the current reply
+ * language and a callback to change it, and the translation helper for
+ * this tab's own strings.
+ * Out: the tab's panels, in order.
+ *
+ * What can go wrong: openExternal() falls back to a toast with the raw URL
+ * if Steam's own external-navigation call throws, so a link never just
+ * fails silently.
+ */
 export const AboutTab: React.FC<Props> = ({
   githubRepoUrl,
   ollamaRepoUrl,

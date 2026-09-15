@@ -21,6 +21,11 @@
       "role": ""
     },
     {
+      "path": "src/components/PullModelsModal.tsx",
+      "lines": 1479,
+      "role": ""
+    },
+    {
       "path": "src/hooks/useBonsaiAskOrchestration.ts",
       "lines": 1470,
       "role": ""
@@ -36,19 +41,14 @@
       "role": ""
     },
     {
-      "path": "src/components/PullModelsModal.tsx",
-      "lines": 1386,
+      "path": "src/components/OllamaWhereAiRunsSection.tsx",
+      "lines": 1397,
       "role": ""
     },
     {
       "path": "py_modules/backend/services/ollama_service.py",
       "lines": 1357,
       "role": "Prompt build, Ollama HTTP, streaming"
-    },
-    {
-      "path": "src/components/OllamaWhereAiRunsSection.tsx",
-      "lines": 1311,
-      "role": ""
     },
     {
       "path": "py_modules/backend/services/voice_transcription_service.py",
@@ -86,8 +86,18 @@
       "role": ""
     },
     {
+      "path": "src/components/CharacterPickerModal.tsx",
+      "lines": 853,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/transparency_service.py",
       "lines": 844,
+      "role": ""
+    },
+    {
+      "path": "src/components/KnowledgeBaseSection.tsx",
+      "lines": 839,
       "role": ""
     },
     {
@@ -101,18 +111,8 @@
       "role": ""
     },
     {
-      "path": "src/components/KnowledgeBaseSection.tsx",
-      "lines": 769,
-      "role": ""
-    },
-    {
-      "path": "src/components/CharacterPickerModal.tsx",
-      "lines": 768,
-      "role": ""
-    },
-    {
       "path": "src/components/SettingsTab.tsx",
-      "lines": 636,
+      "lines": 707,
       "role": ""
     },
     {
@@ -136,6 +136,11 @@
       "role": ""
     },
     {
+      "path": "src/components/DeveloperTab.tsx",
+      "lines": 579,
+      "role": ""
+    },
+    {
       "path": "src/utils/buildAnswerBubbleElement.tsx",
       "lines": 564,
       "role": ""
@@ -151,6 +156,11 @@
       "role": "Load/save/merge settings.json"
     },
     {
+      "path": "src/components/CharacterPropGlyph.tsx",
+      "lines": 525,
+      "role": ""
+    },
+    {
       "path": "src/utils/buildAnswerBubbleElement.test.tsx",
       "lines": 524,
       "role": ""
@@ -158,11 +168,6 @@
     {
       "path": "src/utils/settingsContracts.test.ts",
       "lines": 524,
-      "role": ""
-    },
-    {
-      "path": "src/components/DeveloperTab.tsx",
-      "lines": 522,
       "role": ""
     },
     {
@@ -193,11 +198,6 @@
     {
       "path": "py_modules/backend/services/desktop_note_service.py",
       "lines": 488,
-      "role": ""
-    },
-    {
-      "path": "src/utils/buildReplyActionsElement.tsx",
-      "lines": 462,
       "role": ""
     }
   ]

@@ -1,9 +1,84 @@
 /**
  * Title: Character picker modal
- * Purpose: Full-screen roleplay character preset picker with four-column D-pad layout.
- * Used for: Settings / Main tab when AI character chrome is enabled.
- * Solves: Large catalog navigation in a modal with its own focus graph owner.
- * Does not: Apply roleplay prompts — backend ai_character_service builds system suffixes.
+ *
+ * Purpose: The full-screen picker for choosing your AI's roleplay
+ * character, reached from wherever "AI character" is opened in Settings or
+ * the Main tab. A Random toggle sits at the top; below it, when a game is
+ * running that has characters written for it, a row of suggested
+ * characters for that game; below that, a four-column grid of every
+ * character, grouped by game; and at the bottom, a text box for typing in
+ * your own custom character instead of picking one. Turning Random on
+ * greys out and disables everything else, since there is nothing left to
+ * configure.
+ *
+ * Used for: Opened from Settings or the Main tab whenever the AI character
+ * feature is turned on.
+ *
+ * Solves: A big catalog of characters needs to be browsable with just a
+ * D-pad, inside a modal a person can actually close with B — a plain
+ * custom screen here could not be backed out of, so everything is built on
+ * Steam's own modal chrome instead.
+ *
+ * Does not: Actually change how the AI talks. This modal only builds a
+ * draft choice (random / one catalog character / custom text) and hands it
+ * back through onOK; applying it to prompts is the backend's
+ * ai_character_service.
+ *
+ * Gotchas:
+ * - The Random toggle is the only thing that can hold focus when Random
+ *   starts already on — every other control in the picker is disabled
+ *   while Random is on. If nothing claimed it, the whole screen read as
+ *   dead: no visible ring, D-pad did nothing. That is why there is a small
+ *   delayed effect that claims it only for that one case, and deliberately
+ *   does nothing when Random starts off — the grid can find its own
+ *   starting focus fine on its own.
+ * - Cancel and OK are Steam's own footer buttons, rendered outside this
+ *   component's DOM entirely, so they are found by searching upward
+ *   through the page for a button with a matching label (findFooterButton())
+ *   rather than by a ref.
+ * - Every avatar size in this picker comes from one shared constant, not
+ *   several separate numbers. It used to be five different numbers, which
+ *   is what let the picker mix two different letter-badge treatments on
+ *   screen at once.
+ *
+ * How it works:
+ *
+ *     ┌────────────────────────────────────────────────────┐
+ *     │ [ Random ]                              (OK preview)│  <- toggle row
+ *     ├────────────────────────────────────────────────────┤
+ *     │ Playing: <game>    [sugg] [sugg] [sugg]              │  <- only if a game is running
+ *     ├───────────────┬───────────────┬───────────────┬─────┤
+ *     │ column 0      │ column 1      │ column 2      │ col3│  <- the catalog grid
+ *     │  entry        │  entry        │  entry        │ ... │
+ *     │  entry        │  entry        │  ...          │     │
+ *     ├────────────────────────────────────────────────────┤
+ *     │ [icon]  Custom character: __________________         │  <- free text
+ *     └────────────────────────────────────────────────────┘
+ *             Cancel                                  OK
+ *
+ * Left/Right step between the four grid columns; off the left edge of
+ * column 0 they reach Random, off the right edge of the last column they
+ * reach Cancel. Up/Down inside a column step between characters; off the
+ * top of column 0 they reach the suggestions row (if any) or Random, off
+ * the bottom of any column they reach the custom text box.
+ *
+ * 1. On mount, resolveRunningGameCharacterSuggestions() looks up whether
+ *    the running game has any suggested characters, after waiting one
+ *    frame for Steam's own running-app data to be ready; the result lands
+ *    in runningStrip.
+ * 2. If Random started on, a delayed effect calls focusRandomToggle() to
+ *    claim the D-pad — see the gotcha above for why.
+ * 3. Renders the Random toggle row, the suggestion strip (if any), the
+ *    four-column catalog grid (via renderColumn() calling renderSection()
+ *    per game section), and the custom-text field, all inside Steam's
+ *    ConfirmModal so B and the Done/Cancel footer work correctly.
+ * 4. Picking any character (selectPreset()) only updates the local draft;
+ *    nothing is sent anywhere until OK is pressed.
+ * 5. Left/Right movement between grid columns is handled by
+ *    handleEntryMove(), which also routes off the left edge to Random and
+ *    off the right edge to the Cancel button.
+ * 6. Pressing OK trims the custom text and hands the finished draft to
+ *    onOK(); pressing Cancel calls onCancel() with no changes made.
  */
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button, ConfirmModal, Focusable, Router, TextField, ToggleField } from "@decky/ui";
@@ -82,7 +157,17 @@ function readToggleOn(raw: unknown): boolean | null {
 }
 
 /**
- * Pass only to `showModal()` — `ConfirmModal` supplies Steam modal chrome; parent must not render this in the QAM tree.
+ * The whole picker. See "How it works" above for the flow; this note covers
+ * only this function's own contract.
+ *
+ * In: the draft to start from (random / catalog id / custom text), and
+ * onCancel/onOK callbacks.
+ * Out: nothing meant to render directly into the plugin's own tree — pass
+ * this to `showModal()` only. ConfirmModal supplies Steam's modal chrome;
+ * rendering this inline instead would skip that chrome entirely.
+ *
+ * What can go wrong: nothing here talks to the backend — onOK is handed a
+ * trimmed draft, and applying it to prompts happens elsewhere.
  */
 export function CharacterPickerModal(props: CharacterPickerModalProps) {
   const { initialDraft, onCancel, onOK } = props;

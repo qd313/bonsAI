@@ -1,9 +1,25 @@
 /**
- * Title: Shared icon components
- * Purpose: Centralized custom SVG and react-icons wrappers sized for Decky tab and inline UI.
- * Used for: Tab titles, reply action buttons, screenshot browser chrome, and branding marks.
- * Solves: Consistent IconShell sizing and stroke rules so icon tweaks stay in one module.
- * Does not: Define accent colors or focus graphs — consumers pass size and className only.
+ * Title: The plugin's icon set
+ *
+ * Purpose: Every small icon drawn anywhere in the plugin, gathered in one
+ * file: the tab-title icons (a lock for Permissions, a gear for Settings, a
+ * bonsai tree for Main, a bug for Developer, the Ollama mark, a lowercase
+ * "i" for About), the thumbs-up/down and copy icons on a reply, and a
+ * handful of smaller marks — a paperclip, a stop square, a back arrow, a
+ * spinner, and so on. Each one is its own small component, and every one of
+ * them accepts just a size in pixels.
+ *
+ * Used for: Tab titles, the buttons under an AI reply, the screenshot
+ * browser, and anywhere else in the plugin a small icon appears.
+ *
+ * Solves: One place for every icon means a size or a stroke thickness only
+ * has to be right once, and a new icon is drawn in the same wrapper as
+ * every existing one instead of reinventing its own sizing box.
+ *
+ * Does not: Choose an icon's colour, or decide where in the layout it sits
+ * — every icon here draws in "currentColor", taking whatever colour its
+ * surrounding text already has, and a caller positions it like any other
+ * piece of inline content.
  */
 import React from "react";
 import { FiLock, FiSettings, FiThumbsDown, FiThumbsUp } from "react-icons/fi";

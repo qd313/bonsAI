@@ -127,14 +127,14 @@ One entry per app file: the Title and Purpose lines from its header, grouped by 
 - **SessionContextStrip.tsx** (src/components/SessionContextStrip.tsx) — *Session context strip*: The collapsed line above the chat transcript that reads "Session context (N turns) ▸". Pressing it opens a list with one row per turn that attached anything extra to what was actually sent to the AI — a screenshot, a log excerpt, a memory note. Picking a row shows that turn's chips: exactly what rode along with that question. It exists so a person can check, after the fact, what the AI actually saw, rather than just trusting it.
 - **SettingsTab.tsx** (src/components/SettingsTab.tsx) — *Settings tab*: The Settings tab — screen size, whether the Ask bar remembers what you typed, story spoiler masking, how many suggestion chips show, voice input and voice reply settings, the AI's voice & personality picker, whether the Developer tab is visible, and two buttons for clearing cached data or wiping everything back to a fresh install. Nothing about talking to Ollama lives here — that is the whole Ollama tab.
 - **SettingsTabAccentIntensityMenuPopover.tsx** (src/components/SettingsTabAccentIntensityMenuPopover.tsx) — *Accent intensity menu popover*: Inline popover for AI character accent intensity (Light / Default / Strong / Unleashed).
-- **SettingsTabConnectionTimeoutSlider.tsx** (src/components/SettingsTabConnectionTimeoutSlider.tsx) — *Connection timeout slider*: Dual-thumb slider for latency warning and hard request timeout seconds.
-- **SettingsTabOllamaKeepAliveSlider.tsx** (src/components/SettingsTabOllamaKeepAliveSlider.tsx) — *Ollama keep-alive slider*: Discrete Deck slider for Ollama model unload delay (keep_alive duration presets).
+- **SettingsTabConnectionTimeoutSlider.tsx** (src/components/SettingsTabConnectionTimeoutSlider.tsx) — *Warning and timeout slider*: One slider track with two handles that set how long bonsAI waits on a slow AI request. The left, amber handle is the soft warning — past this many seconds, a "this is taking a while" hint appears while the question keeps waiting. The right, blue handle is the hard timeout — past this many seconds, the question is given up on. The two handles cannot cross: moving one close enough to the other pushes the other one along with it, so the warning always fires before the timeout, never after.
+- **SettingsTabOllamaKeepAliveSlider.tsx** (src/components/SettingsTabOllamaKeepAliveSlider.tsx) — *"Keep models loaded" slider*: A one-handle slider that sets how long an AI model stays loaded in memory after the last question, before it is unloaded to free up space for other things. The handle snaps between a fixed set of preset lengths (instant, several minutes, hours, and so on) rather than any number in between — there is no in-between value to land on.
 - **SettingsTabUiScaleSection.tsx** (src/components/SettingsTabUiScaleSection.tsx) — *UI scale settings section*: The "UI scale" section on the Settings tab. Auto is on by default and quietly picks Handheld, Desktop, or Couch sizing based on your screen; turning it off reveals a slider so you can pick one of four sizes yourself, plus a button to jump back to automatic. Nothing takes effect until you press Apply. This file also serves as the reference example for how a slider row should hand the D-pad to its neighbours in this plugin — other sections copy its shape.
 - **SettingsTabUiScaleSlider.tsx** (src/components/SettingsTabUiScaleSlider.tsx) — *UI scale slider*: Three-stop Deck slider for Handheld / Desktop / Couch manual UI scale profiles.
 - **StrategyChecklistPanel.tsx** (src/components/StrategyChecklistPanel.tsx) — *Strategy checklist panel*: Toggle list for per-game strategy guide checklist items during a live turn.
 - **StreamFenceWaitChip.tsx** (src/components/StreamFenceWaitChip.tsx) — *"Still writing…" chip*: A small pulsing status chip shown while an answer is still arriving and the AI is in the middle of something that should not be shown half-finished — a code block that has not been closed yet, or a spoiler-hidden section. Without this chip, a code block still being written would flicker as it grows; this chip stands in its place until the block is finished.
 - **VoiceInputSettingsSection.tsx** (src/components/VoiceInputSettingsSection.tsx) — *Voice input settings section*: The "Voice input" section on the Settings tab. Lets you choose which speech-to-text model powers the microphone button on the Ask bar (a faster, less accurate one, or a slower, more accurate one), shows whether the voice engine is installed and ready, and has a button to install or reinstall it, with a progress line while that runs. If the microphone permission is off, this section shows a prompt to turn it on instead of letting you install anything.
-- **icons.tsx** (src/components/icons.tsx) — *Shared icon components*: Centralized custom SVG and react-icons wrappers sized for Decky tab and inline UI.
+- **icons.tsx** (src/components/icons.tsx) — *The plugin's icon set*: Every small icon drawn anywhere in the plugin, gathered in one file: the tab-title icons (a lock for Permissions, a gear for Settings, a bonsai tree for Main, a bug for Developer, the Ollama mark, a lowercase i" for About), the thumbs-up/down and copy icons on a reply, and a handful of smaller marks — a paperclip, a stop square, a back arrow, a spinner, and so on. Each one is its own small component, and every one of them accepts just a size in pixels.
 
 ## src/components/deck
 
@@ -142,7 +142,7 @@ One entry per app file: the Title and Purpose lines from its header, grouped by 
 
 ## src/context
 
-- **UiScaleContext.tsx** (src/context/UiScaleContext.tsx) — *UI scale React context*: Provide active UI scale profile, scope inline styles, and Apply remeasure token to descendants.
+- **UiScaleContext.tsx** (src/context/UiScaleContext.tsx) — *Passing the UI scale setting down to popups*: bonsAI has a UI scale setting that makes its own text and controls bigger or smaller. Every tab picks that setting up automatically because it is drawn inside the plugin's main box. A popup — the AI models screen, the help popup, and others opened with showModal() — is drawn outside that box, so it has no way to reach the setting on its own. This file is how a popup reaches it anyway: a small shared value the main box publishes once, that any popup can read.
 
 ## src/data
 
@@ -265,7 +265,7 @@ One entry per app file: the Title and Purpose lines from its header, grouped by 
 ## src/i18n
 
 - **catalog.ts** (src/i18n/catalog.ts) — *UI string catalog*: Per-language UI string tables with English defaults and partial translation fallback.
-- **keys.ts** (src/i18n/keys.ts) — *UI string keys*: Typed union and registry of bounded v1 UI localization keys.
+- **keys.ts** (src/i18n/keys.ts) — *The list of text bonsAI can show in another language*: bonsAI can show a handful of its own interface messages — "Ask is starting", a couple of toast titles, the reply-language picker's own labels — in the language a person has chosen, separately from whatever language the AI itself answers in. This file is the fixed list of which pieces of text that covers. It is deliberately short: this does not translate the whole plugin, only these few strings.
 
 ## src/preview
 
@@ -275,7 +275,7 @@ One entry per app file: the Title and Purpose lines from its header, grouped by 
 ## src/styles
 
 - **bonsaiScopeStylesheet.ts** (src/styles/bonsaiScopeStylesheet.ts) — *Scoped stylesheet builder*: Concatenate all bonsAI scope CSS sections into one injectable string for `.bonsai-scope`.
-- **settingsGlassButton.ts** (src/styles/settingsGlassButton.ts) — *Settings glass button tokens*: Shared React.CSSProperties for SteamOS-style glass row buttons in Settings/Ollama tabs.
+- **settingsGlassButton.ts** (src/styles/settingsGlassButton.ts) — *The frosted-glass button look*: The style two kinds of button share across the Settings and Ollama tabs — a soft, semi-transparent gradient with a thin light border, matching SteamOS's own look for a secondary action. There is also a red variant of the same look for a destructive action. Both are plain style objects, not components: whatever button uses them still owns its own click handling.
 
 ## src/styles/sections
 

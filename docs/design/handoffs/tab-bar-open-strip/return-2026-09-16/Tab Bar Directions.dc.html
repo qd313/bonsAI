@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+body { margin:0; background:#171b20; font-family:"Motiva Sans","Noto Sans","Segoe UI",system-ui,sans-serif; -webkit-font-smoothing:antialiased; }
+a { color:#9ce7ff; } a:hover { color:#c6f1ff; }
+</style>
+</helmet>
+<svg width="0" height="0" style="position:absolute;">
+  <symbol id="o-tree" viewBox="0 0 24 24">
+    <path d="M12 6c-1.8 0-3.3 1.2-3.7 2.8A3.2 3.2 0 0 0 5.5 12c0 1.8 1.4 3.2 3.2 3.2c1.2 0 2.2-.5 2.9-1.4c.5.9 1.5 1.4 2.7 1.4c1.8 0 3.2-1.4 3.2-3.2c0-1.6-1.2-3-2.7-3.2A3.8 3.8 0 0 0 12 6Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"></path>
+    <path d="M12 14.5v3.2m-4.8 0h9.6l-1.1 2.3H8.3l-1.1-2.3Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"></path>
+  </symbol>
+  <symbol id="o-llama" viewBox="0 0 24 24">
+    <path d="M9.2 5.6 8.6 2.8M14.8 5.6l.6-2.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+    <rect x="7.7" y="5" width="8.6" height="8.6" rx="4.3" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+    <circle cx="10.4" cy="8.7" r="0.95" fill="currentColor"></circle>
+    <circle cx="13.6" cy="8.7" r="0.95" fill="currentColor"></circle>
+    <path d="M6 21c0-3 2.7-4.9 6-4.9s6 1.9 6 4.9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+  </symbol>
+  <symbol id="o-gear" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+  </symbol>
+  <symbol id="o-lock" viewBox="0 0 24 24">
+    <rect x="4.5" y="11" width="15" height="9.5" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"></rect>
+    <path d="M8 11V7.2a4 4 0 0 1 8 0V11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+  </symbol>
+  <symbol id="o-bug" viewBox="0 0 24 24">
+    <path d="M9 8.5A3 3 0 0 1 12 6a3 3 0 0 1 3 2.5M8 10h8v4.3a4 4 0 0 1-8 0V10Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+    <path d="M7 12H4m13 0h3M9 16l-2 2m8-2l2 2M9 8L7 6m8 2l2-2" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"></path>
+  </symbol>
+  <symbol id="o-about" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5"></circle>
+    <path d="M12 11v5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
+    <circle cx="12" cy="7.8" r="1.2" fill="currentColor"></circle>
+  </symbol>
+  <symbol id="t-llama" viewBox="0 0 24 24">
+    <path fill="currentColor" d="M16.361 10.26a.894.894 0 0 0-.558.47l-.072.148.001.207c0 .193.004.217.059.353.076.193.152.312.291.448.24.238.51.3.872.205a.86.86 0 0 0 .517-.436.752.752 0 0 0 .08-.498c-.064-.453-.33-.782-.724-.897a1.06 1.06 0 0 0-.466 0zm-9.203.005c-.305.096-.533.32-.65.639a1.187 1.187 0 0 0-.06.52c.057.309.31.59.598.667.362.095.632.033.872-.205.14-.136.215-.255.291-.448.055-.136.059-.16.059-.353l.001-.207-.072-.148a.894.894 0 0 0-.565-.472 1.02 1.02 0 0 0-.474.007Zm4.184 2c-.131.071-.223.25-.195.383.031.143.157.288.353.407.105.063.112.072.117.136.004.038-.01.146-.029.243-.02.094-.036.194-.036.222.002.074.07.195.143.253.064.052.076.054.255.059.164.005.198.001.264-.03.169-.082.212-.234.15-.525-.052-.243-.042-.28.087-.355.137-.08.281-.219.324-.314a.365.365 0 0 0-.175-.48.394.394 0 0 0-.181-.033c-.126 0-.207.03-.355.124l-.085.053-.053-.032c-.219-.13-.259-.145-.391-.143a.396.396 0 0 0-.193.032zm.39-2.195c-.373.036-.475.05-.654.086-.291.06-.68.195-.951.328-.94.46-1.589 1.226-1.787 2.114-.04.176-.045.234-.045.53 0 .294.005.357.043.524.264 1.16 1.332 2.017 2.714 2.173.3.033 1.596.033 1.896 0 1.11-.125 2.064-.727 2.493-1.571.114-.226.169-.372.22-.602.039-.167.044-.23.044-.523 0-.297-.005-.355-.045-.531-.288-1.29-1.539-2.304-3.072-2.497a6.873 6.873 0 0 0-.855-.031zm.645.937a3.283 3.283 0 0 1 1.44.514c.223.148.537.458.671.662.166.251.26.508.303.82.02.143.01.251-.043.482-.08.345-.332.705-.672.957a3.115 3.115 0 0 1-.689.348c-.382.122-.632.144-1.525.138-.582-.006-.686-.01-.853-.042-.57-.107-1.022-.334-1.35-.68-.264-.28-.385-.535-.45-.946-.03-.192.025-.509.137-.776.136-.326.488-.73.836-.963.403-.269.934-.46 1.422-.512.187-.02.586-.02.773-.002zm-5.503-11a1.653 1.653 0 0 0-.683.298C5.617.74 5.173 1.666 4.985 2.819c-.07.436-.119 1.04-.119 1.503 0 .544.064 1.24.155 1.721.02.107.031.202.023.208a8.12 8.12 0 0 1-.187.152 5.324 5.324 0 0 0-.949 1.02 5.49 5.49 0 0 0-.94 2.339 6.625 6.625 0 0 0-.023 1.357c.091.78.325 1.438.727 2.04l.13.195-.037.064c-.269.452-.498 1.105-.605 1.732-.084.496-.095.629-.095 1.294 0 .67.009.803.088 1.266.095.555.288 1.143.503 1.534.071.128.243.393.264.407.007.003-.014.067-.046.141a7.405 7.405 0 0 0-.548 1.873c-.062.417-.071.552-.071.991 0 .56.031.832.148 1.279l.036.134.02.074h.732c.403 0 .732-.003.732-.009a.845.845 0 0 0-.044-.098c-.29-.571-.312-1.573-.059-2.581.118-.472.25-.819.498-1.296l.148-.29v-.177c0-.165-.003-.184-.057-.293a.916.916 0 0 0-.194-.25 2.096 2.096 0 0 1-.224-.258c-.273-.39-.471-1.082-.533-1.854-.093-1.17.215-2.497.708-3.036.3-.331.3-.731-.001-1.053-.14-.149-.236-.269-.333-.419-.572-.886-.681-2.045-.296-3.153.441-1.264 1.437-2.207 2.581-2.437.336-.069.6-.074.943-.016.217.037.363.023.503-.045.179-.084.269-.189.374-.43.037-.09.098-.21.132-.267.09-.145.371-.493.488-.602a4.07 4.07 0 0 1 1.914-.997c.171-.035.25-.04.569-.04.319 0 .399.005.569.04.468.094.939.291 1.352.561.362.24.588.439.822.729.195.243.267.361.36.576.106.241.195.346.374.431.145.069.286.081.512.041.206-.038.577-.043.776-.01.884.139 1.674.661 2.237 1.475.576.829.83 1.874.69 2.834a3.136 3.136 0 0 1-.817 1.729c-.154.167-.224.327-.224.522 0 .199.072.369.223.531.215.236.42.668.544 1.154.298 1.165.216 2.531-.208 3.451a1.74 1.74 0 0 1-.385.543.915.915 0 0 0-.194.25c-.054.109-.057.128-.057.293v.177l.148.29c.248.477.381.824.498 1.296.257 1.022.229 2.045-.068 2.597l-.05.091h1.478l.048-.185c.117-.447.148-.719.148-1.279 0-.439-.009-.574-.071-.991a7.405 7.405 0 0 0-.548-1.873c-.032-.074-.053-.138-.046-.141.021-.014.193-.279.264-.407.215-.391.408-.979.503-1.534.079-.463.088-.596.088-1.266 0-.665-.011-.798-.095-1.294-.107-.627-.336-1.28-.605-1.732l-.037-.064.13-.195c.402-.602.636-1.26.727-2.04a6.625 6.625 0 0 0-.023-1.357 5.49 5.49 0 0 0-.94-2.339 5.324 5.324 0 0 0-.949-1.02 8.12 8.12 0 0 1-.187-.152c-.008-.006.003-.101.023-.208.091-.481.155-1.177.155-1.721 0-.463-.049-1.067-.119-1.503-.188-1.153-.632-2.079-1.198-2.508a1.653 1.653 0 0 0-.683-.298 2.096 2.096 0 0 0-.585.041c-.877.271-1.537 1.344-1.824 2.967a6.71 6.71 0 0 0-.097.725c0 .036-.007.066-.015.066a.958.958 0 0 1-.148-.078A4.857 4.857 0 0 0 12 3.03c-.832 0-1.687.243-2.456.698a.96.96 0 0 1-.149.078c-.008 0-.015-.03-.015-.066a6.805 6.805 0 0 0-.097-.726C8.967 1.253 8.163.107 7.167.048a2.096 2.096 0 0 0-.293-.041zm.293 1.402c.248.197.523.759.682 1.388.03.113.06.244.069.292.007.047.026.152.041.233.067.365.098.76.102 1.24l.002.475-.12.175-.118.178h-.278c-.324 0-.646.041-.954.124l-.238.06c-.033.007-.038-.003-.057-.144a8.438 8.438 0 0 1 .016-2.323c.124-.788.413-1.501.696-1.711.067-.05.079-.049.157.013zm9.825-.012c.17.126.358.46.498.888.28.854.36 2.028.212 3.145-.019.14-.024.151-.057.144l-.238-.06a3.693 3.693 0 0 0-.954-.124h-.278l-.119-.178-.119-.175.002-.474c.004-.669.066-1.19.214-1.772.157-.623.434-1.185.68-1.382.078-.062.09-.063.159-.012z"></path>
+  </symbol>
+  <symbol id="t-about" viewBox="0 0 24 24">
+    <g fill="currentColor" transform="translate(12 12) skewX(-10) translate(-12 -12)"><circle cx="12" cy="6.2" r="2.35"></circle><rect x="10.15" y="9.9" width="3.7" height="11.6" rx="1.15"></rect></g>
+  </symbol>
+</svg>
+<section ref="{{rootRef}}" style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start;padding:28px;">
+
+  <div id="2a" data-screen-label="Turn 2 label on selected only" style="width:632px;background:#0e141b;border:2px solid #2a3b4d;border-radius:12px;padding:20px;box-sizing:border-box;">
+    <div style="display:flex;align-items:baseline;gap:8px;margin:0 0 4px;"><span style="padding:2px 8px;border-radius:6px;background:#1c2734;color:#8fa8c4;font-size:11px;font-weight:700;font-family:ui-monospace,monospace;">2a</span><h2 style="margin:0;font-size:14px;font-weight:700;color:#e8eef5;">Current layout, label only on the selected tab</h2></div>
+    <p style="margin:0 0 14px;font-size:10.5px;color:#6b7c90;">All icons 22px in equal-width, equidistant cells &mdash; same size and position whether selected or not. Only the selected tab shows its name, in small caps under the icon. Main uses the production bonsai-logo.svg, mask-tinted to the accent.</p>
+    <div style="display:flex;gap:18px;flex-wrap:wrap;">
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">open &middot; 6 tabs &middot; green &middot; over chat row</div>
+          <div style="position:relative;width:300px;height:190px;background:#0e141b;border:1px solid #16202b;box-sizing:border-box;overflow:hidden;">
+            <div style="display:flex;gap:6px;padding:26px 8px 0;">
+              <span style="font-size:10px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.06);color:#8fa8c4;">Battery tips</span>
+              <span style="font-size:10px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.06);color:#8fa8c4;">Improve FPS</span>
+            </div>
+            <div style="display:flex;gap:4px;justify-content:center;padding-top:4px;">
+              <span style="width:4px;height:4px;border-radius:2px;background:#3a4a5c;"></span><span style="width:4px;height:4px;border-radius:2px;background:#3a4a5c;"></span><span style="width:4px;height:4px;border-radius:2px;background:#3a4a5c;"></span>
+            </div>
+            <div style="margin:12px 8px 0;padding:9px 10px;border-radius:10px;border:1px solid rgba(43,77,58,.5);background:linear-gradient(rgba(46,135,83,.10),rgba(23,43,32,.45));color:#d4dde6;font-size:11px;line-height:1.45;">Lower the TDP to 8&thinsp;W in QAM &rarr; Performance, then cap the framerate at 40. Verify the change before a long session.</div>
+            <div style="position:absolute;top:0;left:0;width:300px;height:54px;display:flex;align-items:center;gap:2px;padding:5px 6px;box-sizing:border-box;background:#141c24;border-bottom:1px solid rgba(255,255,255,.08);box-shadow:0 6px 16px rgba(0,0,0,.45);">
+              <span style="width:20px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 4px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">LB</span></span>
+              <div style="flex:1 1 0;min-width:0;height:44px;border-radius:8px;display:flex;flex-direction:column;align-items:center;padding-top:6px;gap:2px;box-sizing:border-box;background:rgba(255,255,255,.08);"><span style="width:22px;height:22px;flex-shrink:0;background:var(--ctxAccB,#52d88a);-webkit-mask:url('./bonsai-logo.svg') center/contain no-repeat;mask:url('./bonsai-logo.svg') center/contain no-repeat;"></span><span style="white-space:nowrap;font-size:9.5px;font-weight:700;font-variant:small-caps;letter-spacing:0;color:var(--ctxAccB,#52d88a);">main</span></div>
+              <div style="flex:1 1 0;min-width:0;height:44px;display:flex;flex-direction:column;align-items:center;padding-top:6px;box-sizing:border-box;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#t-llama"></use></svg></div>
+              <div style="flex:1 1 0;min-width:0;height:44px;display:flex;flex-direction:column;align-items:center;padding-top:6px;box-sizing:border-box;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-gear"></use></svg></div>
+              <div style="flex:1 1 0;min-width:0;height:44px;display:flex;flex-direction:column;align-items:center;padding-top:6px;box-sizing:border-box;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-lock"></use></svg></div>
+              <div style="flex:1 1 0;min-width:0;height:44px;display:flex;flex-direction:column;align-items:center;padding-top:6px;box-sizing:border-box;"><svg width="26" height="26" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);margin:-2px 0;"><use href="#o-bug"></use></svg></div>
+              <div style="flex:1 1 0;min-width:0;height:44px;display:flex;flex-direction:column;align-items:center;padding-top:6px;box-sizing:border-box;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-about"></use></svg></div>
+              <span style="width:20px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 4px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">RB</span></span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">open &middot; 6 tabs &middot; green &middot; longest name selected</div>
+          <div style="width:300px;height:54px;display:flex;align-items:center;gap:2px;padding:5px 6px;box-sizing:border-box;background:#141c24;border-bottom:1px solid rgba(255,255,255,.08);">
+            <span style="width:20px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 4px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">LB</span></span>
+            <div style="flex:1 1 0;min-width:0;height:44px;display:flex;flex-direction:column;align-items:center;padding-top:6px;box-sizing:border-box;"><span style="width:22px;height:22px;flex-shrink:0;background:rgba(168,182,198,.62);-webkit-mask:url('./bonsai-logo.svg') center/contain no-repeat;mask:url('./bonsai-logo.svg') center/contain no-repeat;"></span></div>
+            <div style="flex:1 1 0;min-width:0;height:44px;display:flex;flex-direction:column;align-items:center;padding-top:6px;box-sizing:border-box;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#t-llama"></use></svg></div>
+            <div style="flex:1 1 0;min-width:0;height:44px;border-radius:8px;display:flex;flex-direction:column;align-items:center;padding-top:6px;gap:2px;box-sizing:border-box;background:rgba(255,255,255,.08);"><svg width="22" height="22" viewBox="0 0 24 24" style="color:#52d88a;"><use href="#o-gear"></use></svg><span style="white-space:nowrap;font-size:9.5px;font-weight:700;font-variant:small-caps;letter-spacing:0;color:#52d88a;">settings</span></div>
+            <div style="flex:1 1 0;min-width:0;height:44px;display:flex;flex-direction:column;align-items:center;padding-top:6px;box-sizing:border-box;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-lock"></use></svg></div>
+            <div style="flex:1 1 0;min-width:0;height:44px;display:flex;flex-direction:column;align-items:center;padding-top:6px;box-sizing:border-box;"><svg width="26" height="26" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);margin:-2px 0;"><use href="#o-bug"></use></svg></div>
+            <div style="flex:1 1 0;min-width:0;height:44px;display:flex;flex-direction:column;align-items:center;padding-top:6px;box-sizing:border-box;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-about"></use></svg></div>
+            <span style="width:20px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 4px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">RB</span></span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">open &middot; 5 tabs &middot; gold</div>
+          <div style="width:300px;height:54px;display:flex;align-items:center;gap:2px;padding:5px 6px;box-sizing:border-box;background:#141c24;border-bottom:1px solid rgba(255,255,255,.08);">
+            <span style="width:20px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 4px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">LB</span></span>
+            <div style="flex:1 1 0;min-width:0;height:44px;border-radius:8px;display:flex;flex-direction:column;align-items:center;padding-top:6px;gap:2px;box-sizing:border-box;background:rgba(255,255,255,.08);"><span style="width:22px;height:22px;flex-shrink:0;background:#f1c40f;-webkit-mask:url('./bonsai-logo.svg') center/contain no-repeat;mask:url('./bonsai-logo.svg') center/contain no-repeat;"></span><span style="white-space:nowrap;font-size:9.5px;font-weight:700;font-variant:small-caps;letter-spacing:0;color:#f1c40f;">main</span></div>
+            <div style="flex:1 1 0;min-width:0;height:44px;display:flex;flex-direction:column;align-items:center;padding-top:6px;box-sizing:border-box;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#t-llama"></use></svg></div>
+            <div style="flex:1 1 0;min-width:0;height:44px;display:flex;flex-direction:column;align-items:center;padding-top:6px;box-sizing:border-box;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-gear"></use></svg></div>
+            <div style="flex:1 1 0;min-width:0;height:44px;display:flex;flex-direction:column;align-items:center;padding-top:6px;box-sizing:border-box;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-lock"></use></svg></div>
+            <div style="flex:1 1 0;min-width:0;height:44px;display:flex;flex-direction:column;align-items:center;padding-top:6px;box-sizing:border-box;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-about"></use></svg></div>
+            <span style="width:20px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 4px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">RB</span></span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">rest — unchanged</div>
+          <div style="width:300px;height:20px;display:flex;align-items:center;gap:5px;padding:0 8px;box-sizing:border-box;background:#0e141b;border:1px solid #16202b;">
+            <span style="font-size:9px;font-weight:700;color:#6b7c90;">LB</span>
+            <span style="width:10px;height:3px;border-radius:2px;background:#52d88a;"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="font-size:10px;font-weight:600;color:#52d88a;margin-left:3px;">Main</span>
+            <span style="margin-left:auto;font-size:9px;font-weight:700;color:#6b7c90;">RB</span>
+          </div>
+        </div>
+      </div>
+      <div style="display:var(--specs,block);flex:1;min-width:200px;">
+        <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">spec</div>
+        <p style="margin:0;font-size:10px;line-height:1.75;color:#8fa8c4;font-family:ui-monospace,Menlo,monospace;white-space:pre-line;">strip 300&times;54 &middot; opaque #141c24 &middot; pad 5/6 &middot; gap 2
+cells equal flex &middot; h44 &middot; icons 22 in every state, same y
+selected: cell fill rgba(255,255,255,.08) r8
+  name lowercase small caps 9.5px 700 ls0 under icon &middot; accentB
+  label may overhang cell &asymp;2px (Settings @6 tabs) &mdash; never clips
+  (green #52d88a / gold #f1c40f)
+inactive: icon only &middot; rgba(168,182,198,.62)
+main: production bonsai-logo.svg &middot; mask-tinted &middot; 150% crop
+  (matches app's zoom 1.55 in BonsaiLogoIcon)
+LB/RB pills 9px in fixed 20px slots
+switch anim: fill + name fade 120ms &middot; no width change</p>
+      </div>
+    </div>
+  </div>
+
+  <div data-screen-label="Intro + icon set" style="width:632px;background:#0e141b;border:1px solid #1c2734;border-radius:12px;padding:20px;box-sizing:border-box;">
+    <h1 style="margin:0 0 6px;font-size:17px;font-weight:700;color:#e8eef5;">Open tab bar — six directions at 300&thinsp;px</h1>
+    <p style="margin:0 0 12px;font-size:11.5px;line-height:1.55;color:#8fa8c4;">Your three PNGs never uploaded, so the "today" board is rebuilt from the written values in your brief plus the repo (icons.tsx, characterUiAccent.ts, unified-input constants). Attach the screenshots and I will true it up. The chat-row context behind each strip is approximate for the same reason. Rest bar stays unchanged everywhere. Every strip below is exactly 300&thinsp;px.</p>
+    <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,Menlo,monospace;margin:0 0 8px;">Unified icon family — 24&times;24, one stroke weight 1.5, round caps</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:5px;width:64px;padding:10px 0;background:#131b23;border-radius:8px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:#c6d3e0;"><use href="#o-tree"></use></svg><span style="font-size:9px;color:#6b7c90;font-family:ui-monospace,monospace;">main</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:5px;width:64px;padding:10px 0;background:#131b23;border-radius:8px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:#c6d3e0;"><use href="#o-llama"></use></svg><span style="font-size:9px;color:#6b7c90;font-family:ui-monospace,monospace;">ollama</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:5px;width:64px;padding:10px 0;background:#131b23;border-radius:8px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:#c6d3e0;"><use href="#o-gear"></use></svg><span style="font-size:9px;color:#6b7c90;font-family:ui-monospace,monospace;">settings</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:5px;width:64px;padding:10px 0;background:#131b23;border-radius:8px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:#c6d3e0;"><use href="#o-lock"></use></svg><span style="font-size:9px;color:#6b7c90;font-family:ui-monospace,monospace;">perms</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:5px;width:64px;padding:10px 0;background:#131b23;border-radius:8px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:#c6d3e0;"><use href="#o-bug"></use></svg><span style="font-size:9px;color:#6b7c90;font-family:ui-monospace,monospace;">developer</span></div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:5px;width:64px;padding:10px 0;background:#131b23;border-radius:8px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:#c6d3e0;"><use href="#o-about"></use></svg><span style="font-size:9px;color:#6b7c90;font-family:ui-monospace,monospace;">about</span></div>
+    </div>
+    <p style="margin:12px 0 0;font-size:10px;line-height:1.7;color:#8fa8c4;font-family:ui-monospace,Menlo,monospace;">accent text rule: raw accent (#2e8753) fails contrast on #0e141b, so lit text/icons use a lifted companion — green &rarr; #52d88a (the repo already derives this for the glow vars), gold stays #f1c40f. Same rule keeps grey and pink legible (see stress board <a href="#1h">1h</a>).</p>
+  </div>
+
+  <div id="1a" data-screen-label="Today recreated" style="width:632px;background:#0e141b;border:1px solid #1c2734;border-radius:12px;padding:20px;box-sizing:border-box;">
+    <div style="display:flex;align-items:baseline;gap:8px;margin:0 0 4px;"><span style="padding:2px 8px;border-radius:6px;background:#1c2734;color:#8fa8c4;font-size:11px;font-weight:700;font-family:ui-monospace,monospace;">1a</span><h2 style="margin:0;font-size:14px;font-weight:700;color:#e8eef5;">Today — rebuilt from your written values (reference)</h2></div>
+    <p style="margin:0 0 14px;font-size:10.5px;color:#6b7c90;">Four icon styles, 8px caps, hard accent box, plain LB/RB, 54px over a 55px chat row.</p>
+    <div style="display:flex;gap:18px;flex-wrap:wrap;">
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">rest — unchanged, stays as is</div>
+          <div style="width:300px;height:20px;display:flex;align-items:center;gap:5px;padding:0 8px;box-sizing:border-box;background:#0e141b;border:1px solid #16202b;">
+            <span style="font-size:9px;font-weight:700;color:#6b7c90;">LB</span>
+            <span style="width:10px;height:3px;border-radius:2px;background:#52d88a;"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="font-size:10px;font-weight:600;color:#52d88a;margin-left:3px;">Main</span>
+            <span style="margin-left:auto;font-size:9px;font-weight:700;color:#6b7c90;">RB</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">open &middot; 6 tabs &middot; green &middot; over chat row</div>
+          <div style="position:relative;width:300px;height:190px;background:#0e141b;border:1px solid #16202b;box-sizing:border-box;overflow:hidden;">
+            <div style="width:300px;height:20px;display:flex;align-items:center;gap:5px;padding:0 8px;box-sizing:border-box;">
+              <span style="font-size:9px;font-weight:700;color:#6b7c90;">LB</span><span style="width:10px;height:3px;border-radius:2px;background:#52d88a;"></span><span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span><span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span><span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span><span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span><span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span><span style="font-size:10px;font-weight:600;color:#52d88a;margin-left:3px;">Main</span><span style="margin-left:auto;font-size:9px;font-weight:700;color:#6b7c90;">RB</span>
+            </div>
+            <div style="display:flex;gap:6px;padding:4px 8px;">
+              <span style="font-size:10px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.06);color:#8fa8c4;">Battery tips</span>
+              <span style="font-size:10px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.06);color:#8fa8c4;">Improve FPS</span>
+            </div>
+            <div style="display:flex;gap:4px;justify-content:center;padding-top:4px;">
+              <span style="width:4px;height:4px;border-radius:2px;background:#3a4a5c;"></span><span style="width:4px;height:4px;border-radius:2px;background:#3a4a5c;"></span><span style="width:4px;height:4px;border-radius:2px;background:#3a4a5c;"></span>
+            </div>
+            <div style="margin:12px 8px 0;padding:9px 10px;border-radius:10px;border:1px solid rgba(43,77,58,.5);background:linear-gradient(rgba(46,135,83,.10),rgba(23,43,32,.45));color:#d4dde6;font-size:11px;line-height:1.45;">Lower the TDP to 8&thinsp;W in QAM &rarr; Performance, then cap the framerate at 40. Verify the change before a long session.</div>
+            <div style="position:absolute;top:0;left:0;width:300px;height:54px;display:flex;align-items:center;gap:2px;padding:3px 6px;box-sizing:border-box;background:linear-gradient(rgba(20,28,36,.98),rgba(12,18,24,.96));border-bottom:1px solid rgba(156,231,255,.18);">
+              <span style="font-size:9px;font-weight:700;color:#8fa8c4;flex-shrink:0;">LB</span>
+              <div style="flex:1 1 0;min-width:0;height:46px;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background:rgba(255,255,255,.10);box-shadow:inset 0 0 0 2px #2e8753;"><svg width="28" height="28" viewBox="0 0 24 24" style="color:#2e8753;"><use href="#o-tree"></use></svg><span style="font-size:8px;font-weight:700;letter-spacing:.5px;color:#2e8753;">MAIN</span></div>
+              <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#t-llama"></use></svg><span style="font-size:8px;font-weight:700;letter-spacing:.5px;color:rgba(168,182,198,.5);">OLLAMA</span></div>
+              <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-gear"></use></svg><span style="font-size:8px;font-weight:700;letter-spacing:.5px;color:rgba(168,182,198,.5);">SETTINGS</span></div>
+              <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-lock"></use></svg><span style="font-size:8px;font-weight:700;letter-spacing:.5px;color:rgba(168,182,198,.5);">PERMS</span></div>
+              <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;"><svg width="28" height="28" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-bug"></use></svg><span style="font-size:8px;font-weight:700;letter-spacing:.5px;color:rgba(168,182,198,.5);">DEV</span></div>
+              <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#t-about"></use></svg><span style="font-size:8px;font-weight:700;letter-spacing:.5px;color:rgba(168,182,198,.5);">ABOUT</span></div>
+              <span style="font-size:9px;font-weight:700;color:#8fa8c4;flex-shrink:0;">RB</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="display:var(--specs,block);flex:1;min-width:200px;">
+        <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">values (from your brief)</div>
+        <p style="margin:0;font-size:10px;line-height:1.75;color:#8fa8c4;font-family:ui-monospace,Menlo,monospace;white-space:pre-line;">strip 300&times;54 &middot; pad 6 &middot; gap 2
+cells &ge;38&times;48 &middot; r6 &middot; icons 24 (tree/bug 30... shown 28)
+inactive icon rgba(168,182,198,.62)
+name 8px 700 caps rgba(168,182,198,.5)
+lit: fill rgba(255,255,255,.10) + inset 2px #2e8753 ring
+lit icon/name raw #2e8753 (fails contrast)
+bg rgba(20,28,36,.98)&rarr;rgba(12,18,24,.96)
+bottom line rgba(156,231,255,.18)
+LB/RB plain 9px text
+flaws kept: mixed icon styles, crowding, box ring, 1px dot peek</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="1b" data-screen-label="Direction 1 better craft" style="width:632px;background:#0e141b;border:1px solid #1c2734;border-radius:12px;padding:20px;box-sizing:border-box;">
+    <div style="display:flex;align-items:baseline;gap:8px;margin:0 0 4px;"><span style="padding:2px 8px;border-radius:6px;background:#1c2734;color:#8fa8c4;font-size:11px;font-weight:700;font-family:ui-monospace,monospace;">1b</span><h2 style="margin:0;font-size:14px;font-weight:700;color:#e8eef5;">Direction 1 — same layout, better craft</h2></div>
+    <p style="margin:0 0 14px;font-size:10.5px;color:#6b7c90;">Bends: long names always shorten to PERMS / DEV (both counts) — removes crowding instead of shrinking type.</p>
+    <div style="display:flex;gap:18px;flex-wrap:wrap;">
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">open &middot; 5 tabs &middot; green &middot; over chat row</div>
+          <div style="position:relative;width:300px;height:190px;background:#0e141b;border:1px solid #16202b;box-sizing:border-box;overflow:hidden;">
+            <div style="display:flex;gap:6px;padding:26px 8px 0;">
+              <span style="font-size:10px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.06);color:#8fa8c4;">Battery tips</span>
+              <span style="font-size:10px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.06);color:#8fa8c4;">Improve FPS</span>
+            </div>
+            <div style="display:flex;gap:4px;justify-content:center;padding-top:4px;">
+              <span style="width:4px;height:4px;border-radius:2px;background:#3a4a5c;"></span><span style="width:4px;height:4px;border-radius:2px;background:#3a4a5c;"></span><span style="width:4px;height:4px;border-radius:2px;background:#3a4a5c;"></span>
+            </div>
+            <div style="margin:12px 8px 0;padding:9px 10px;border-radius:10px;border:1px solid rgba(43,77,58,.5);background:linear-gradient(rgba(46,135,83,.10),rgba(23,43,32,.45));color:#d4dde6;font-size:11px;line-height:1.45;">Lower the TDP to 8&thinsp;W in QAM &rarr; Performance, then cap the framerate at 40. Verify the change before a long session.</div>
+            <div style="position:absolute;top:0;left:0;width:300px;height:56px;display:flex;align-items:center;gap:2px;padding:5px 6px;box-sizing:border-box;background:#141c24;border-bottom:1px solid rgba(255,255,255,.08);box-shadow:0 6px 16px rgba(0,0,0,.45);">
+              <span style="width:20px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 4px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">LB</span></span>
+              <div style="flex:1 1 0;min-width:0;height:46px;border-radius:8px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:rgba(255,255,255,.07);"><svg width="22" height="22" viewBox="0 0 24 24" style="color:var(--ctxAccB,#52d88a);"><use href="#o-tree"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:700;letter-spacing:0;color:var(--ctxAccB,#52d88a);">Main</span><span style="position:absolute;left:11px;right:11px;bottom:3px;height:2px;border-radius:1px;background:var(--ctxAccB,#52d88a);"></span></div>
+              <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-llama"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Ollama</span></div>
+              <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-gear"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Settings</span></div>
+              <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-lock"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Perms</span></div>
+              <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-about"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">About</span></div>
+              <span style="width:20px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 4px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">RB</span></span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">open &middot; 6 tabs &middot; green</div>
+          <div style="width:300px;height:56px;display:flex;align-items:center;gap:2px;padding:5px 6px;box-sizing:border-box;background:#141c24;border-bottom:1px solid rgba(255,255,255,.08);">
+            <span style="width:20px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 4px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">LB</span></span>
+            <div style="flex:1 1 0;min-width:0;height:46px;border-radius:8px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:rgba(255,255,255,.07);"><svg width="22" height="22" viewBox="0 0 24 24" style="color:#52d88a;"><use href="#o-tree"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:700;letter-spacing:0;color:#52d88a;">Main</span><span style="position:absolute;left:9px;right:9px;bottom:3px;height:2px;border-radius:1px;background:#52d88a;"></span></div>
+            <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-llama"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Ollama</span></div>
+            <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-gear"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Settings</span></div>
+            <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-lock"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Perms</span></div>
+            <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-bug"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Dev</span></div>
+            <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-about"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">About</span></div>
+            <span style="width:20px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 4px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">RB</span></span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">open &middot; 5 tabs &middot; gold</div>
+          <div style="width:300px;height:56px;display:flex;align-items:center;gap:2px;padding:5px 6px;box-sizing:border-box;background:#141c24;border-bottom:1px solid rgba(255,255,255,.08);">
+            <span style="width:20px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 4px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">LB</span></span>
+            <div style="flex:1 1 0;min-width:0;height:46px;border-radius:8px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:rgba(255,255,255,.07);"><svg width="22" height="22" viewBox="0 0 24 24" style="color:#f1c40f;"><use href="#o-tree"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:700;letter-spacing:0;color:#f1c40f;">Main</span><span style="position:absolute;left:11px;right:11px;bottom:3px;height:2px;border-radius:1px;background:#f1c40f;"></span></div>
+            <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-llama"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Ollama</span></div>
+            <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-gear"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Settings</span></div>
+            <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-lock"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Perms</span></div>
+            <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-about"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">About</span></div>
+            <span style="width:20px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 4px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">RB</span></span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">rest — unchanged</div>
+          <div style="width:300px;height:20px;display:flex;align-items:center;gap:5px;padding:0 8px;box-sizing:border-box;background:#0e141b;border:1px solid #16202b;">
+            <span style="font-size:9px;font-weight:700;color:#6b7c90;">LB</span>
+            <span style="width:10px;height:3px;border-radius:2px;background:#52d88a;"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="font-size:10px;font-weight:600;color:#52d88a;margin-left:3px;">Main</span>
+            <span style="margin-left:auto;font-size:9px;font-weight:700;color:#6b7c90;">RB</span>
+          </div>
+        </div>
+      </div>
+      <div style="display:var(--specs,block);flex:1;min-width:200px;">
+        <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">spec</div>
+        <p style="margin:0;font-size:10px;line-height:1.75;color:#8fa8c4;font-family:ui-monospace,Menlo,monospace;white-space:pre-line;">strip 300&times;56 &middot; opaque #141c24 &middot; pad 5/6 &middot; gap 3
+shadow 0 6 16 rgba(0,0,0,.45) &middot; line rgba(255,255,255,.08)
+cells flex &middot; h46 &middot; r8 (&asymp;47w @5 tabs, &asymp;39w @6)
+icons 22, one family, stroke 1.5
+names 9px sentence case (600; lit 700) &mdash; clip, never collide
+lit: fill rgba(255,255,255,.07) + 2px underline
+lit icon+name accentB (green #52d88a / gold #f1c40f)
+LB/RB pills 9px in fixed 20px slots &rarr; hide = no shift
+56px: dots row still peeks &mdash; see 1e for full cover</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="1c" data-screen-label="Direction 2 icons only" style="width:632px;background:#0e141b;border:1px solid #1c2734;border-radius:12px;padding:20px;box-sizing:border-box;">
+    <div style="display:flex;align-items:baseline;gap:8px;margin:0 0 4px;"><span style="padding:2px 8px;border-radius:6px;background:#1c2734;color:#8fa8c4;font-size:11px;font-weight:700;font-family:ui-monospace,monospace;">1c</span><h2 style="margin:0;font-size:14px;font-weight:700;color:#e8eef5;">Direction 2 — icons only, current name once, large</h2></div>
+    <p style="margin:0 0 14px;font-size:10.5px;color:#6b7c90;">Bends: none. No per-cell names at all; one 12px name line replaces six 8px ones.</p>
+    <div style="display:flex;gap:18px;flex-wrap:wrap;">
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">open &middot; 5 tabs &middot; green &middot; over chat row</div>
+          <div style="position:relative;width:300px;height:190px;background:#0e141b;border:1px solid #16202b;box-sizing:border-box;overflow:hidden;">
+            <div style="display:flex;gap:6px;padding:26px 8px 0;">
+              <span style="font-size:10px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.06);color:#8fa8c4;">Battery tips</span>
+              <span style="font-size:10px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.06);color:#8fa8c4;">Improve FPS</span>
+            </div>
+            <div style="display:flex;gap:4px;justify-content:center;padding-top:4px;">
+              <span style="width:4px;height:4px;border-radius:2px;background:#3a4a5c;"></span><span style="width:4px;height:4px;border-radius:2px;background:#3a4a5c;"></span><span style="width:4px;height:4px;border-radius:2px;background:#3a4a5c;"></span>
+            </div>
+            <div style="margin:12px 8px 0;padding:9px 10px;border-radius:10px;border:1px solid rgba(43,77,58,.5);background:linear-gradient(rgba(46,135,83,.10),rgba(23,43,32,.45));color:#d4dde6;font-size:11px;line-height:1.45;">Lower the TDP to 8&thinsp;W in QAM &rarr; Performance, then cap the framerate at 40. Verify the change before a long session.</div>
+            <div style="position:absolute;top:0;left:0;width:300px;height:58px;display:flex;flex-direction:column;box-sizing:border-box;padding:6px 6px 5px;background:#141c24;border-bottom:1px solid rgba(255,255,255,.08);box-shadow:0 6px 16px rgba(0,0,0,.45);">
+              <div style="display:flex;align-items:center;gap:2px;">
+                <span style="width:24px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 5px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">LB</span></span>
+                <div style="flex:1 1 0;min-width:0;height:32px;position:relative;display:flex;align-items:center;justify-content:center;"><svg width="27" height="27" viewBox="0 0 24 24" style="color:var(--ctxAccB,#52d88a);"><use href="#o-tree"></use></svg><span style="position:absolute;bottom:-1px;left:50%;margin-left:-2px;width:4px;height:4px;border-radius:2px;background:var(--ctxAccB,#52d88a);"></span></div>
+                <div style="flex:1 1 0;min-width:0;height:32px;display:flex;align-items:center;justify-content:center;"><svg width="27" height="27" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-llama"></use></svg></div>
+                <div style="flex:1 1 0;min-width:0;height:32px;display:flex;align-items:center;justify-content:center;"><svg width="27" height="27" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-gear"></use></svg></div>
+                <div style="flex:1 1 0;min-width:0;height:32px;display:flex;align-items:center;justify-content:center;"><svg width="27" height="27" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-lock"></use></svg></div>
+                <div style="flex:1 1 0;min-width:0;height:32px;display:flex;align-items:center;justify-content:center;"><svg width="27" height="27" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-about"></use></svg></div>
+                <span style="width:24px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 5px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">RB</span></span>
+              </div>
+              <div style="text-align:center;font-size:12px;font-weight:700;letter-spacing:.8px;color:var(--ctxAccB,#52d88a);padding-top:3px;">MAIN</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">open &middot; 6 tabs &middot; green</div>
+          <div style="width:300px;height:58px;display:flex;flex-direction:column;box-sizing:border-box;padding:6px 6px 5px;background:#141c24;border-bottom:1px solid rgba(255,255,255,.08);">
+            <div style="display:flex;align-items:center;gap:2px;">
+              <span style="width:24px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 5px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">LB</span></span>
+              <div style="flex:1 1 0;min-width:0;height:32px;position:relative;display:flex;align-items:center;justify-content:center;"><svg width="27" height="27" viewBox="0 0 24 24" style="color:#52d88a;"><use href="#o-tree"></use></svg><span style="position:absolute;bottom:-1px;left:50%;margin-left:-2px;width:4px;height:4px;border-radius:2px;background:#52d88a;"></span></div>
+              <div style="flex:1 1 0;min-width:0;height:32px;display:flex;align-items:center;justify-content:center;"><svg width="27" height="27" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-llama"></use></svg></div>
+              <div style="flex:1 1 0;min-width:0;height:32px;display:flex;align-items:center;justify-content:center;"><svg width="27" height="27" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-gear"></use></svg></div>
+              <div style="flex:1 1 0;min-width:0;height:32px;display:flex;align-items:center;justify-content:center;"><svg width="27" height="27" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-lock"></use></svg></div>
+              <div style="flex:1 1 0;min-width:0;height:32px;display:flex;align-items:center;justify-content:center;"><svg width="27" height="27" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-bug"></use></svg></div>
+              <div style="flex:1 1 0;min-width:0;height:32px;display:flex;align-items:center;justify-content:center;"><svg width="27" height="27" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-about"></use></svg></div>
+              <span style="width:24px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 5px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">RB</span></span>
+            </div>
+            <div style="text-align:center;font-size:12px;font-weight:700;letter-spacing:.8px;color:#52d88a;padding-top:3px;">MAIN</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">open &middot; 5 tabs &middot; gold</div>
+          <div style="width:300px;height:58px;display:flex;flex-direction:column;box-sizing:border-box;padding:6px 6px 5px;background:#141c24;border-bottom:1px solid rgba(255,255,255,.08);">
+            <div style="display:flex;align-items:center;gap:2px;">
+              <span style="width:24px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 5px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">LB</span></span>
+              <div style="flex:1 1 0;min-width:0;height:32px;position:relative;display:flex;align-items:center;justify-content:center;"><svg width="27" height="27" viewBox="0 0 24 24" style="color:#f1c40f;"><use href="#o-tree"></use></svg><span style="position:absolute;bottom:-1px;left:50%;margin-left:-2px;width:4px;height:4px;border-radius:2px;background:#f1c40f;"></span></div>
+              <div style="flex:1 1 0;min-width:0;height:32px;display:flex;align-items:center;justify-content:center;"><svg width="27" height="27" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-llama"></use></svg></div>
+              <div style="flex:1 1 0;min-width:0;height:32px;display:flex;align-items:center;justify-content:center;"><svg width="27" height="27" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-gear"></use></svg></div>
+              <div style="flex:1 1 0;min-width:0;height:32px;display:flex;align-items:center;justify-content:center;"><svg width="27" height="27" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-lock"></use></svg></div>
+              <div style="flex:1 1 0;min-width:0;height:32px;display:flex;align-items:center;justify-content:center;"><svg width="27" height="27" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-about"></use></svg></div>
+              <span style="width:24px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 5px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">RB</span></span>
+            </div>
+            <div style="text-align:center;font-size:12px;font-weight:700;letter-spacing:.8px;color:#f1c40f;padding-top:3px;">MAIN</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">rest — unchanged</div>
+          <div style="width:300px;height:20px;display:flex;align-items:center;gap:5px;padding:0 8px;box-sizing:border-box;background:#0e141b;border:1px solid #16202b;">
+            <span style="font-size:9px;font-weight:700;color:#6b7c90;">LB</span>
+            <span style="width:10px;height:3px;border-radius:2px;background:#52d88a;"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="font-size:10px;font-weight:600;color:#52d88a;margin-left:3px;">Main</span>
+            <span style="margin-left:auto;font-size:9px;font-weight:700;color:#6b7c90;">RB</span>
+          </div>
+        </div>
+      </div>
+      <div style="display:var(--specs,block);flex:1;min-width:200px;">
+        <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">spec</div>
+        <p style="margin:0;font-size:10px;line-height:1.75;color:#8fa8c4;font-family:ui-monospace,Menlo,monospace;white-space:pre-line;">strip 300&times;58 &middot; opaque #141c24 &middot; pad 6/6/5
+icon row h32 &middot; icons 27, stroke 1.5
+current icon accentB + 4px dot under it
+name line 12px 700 caps ls.8 accentB, centered
+inactive rgba(168,182,198,.62) &middot; no cell chrome at all
+LB/RB pills in fixed 24px slots &rarr; hide = no shift
+L/R switches tab &rarr; icon + name change together</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="1d" data-screen-label="Direction 3 names only" style="width:632px;background:#0e141b;border:1px solid #1c2734;border-radius:12px;padding:20px;box-sizing:border-box;">
+    <div style="display:flex;align-items:baseline;gap:8px;margin:0 0 4px;"><span style="padding:2px 8px;border-radius:6px;background:#1c2734;color:#8fa8c4;font-size:11px;font-weight:700;font-family:ui-monospace,monospace;">1d</span><h2 style="margin:0;font-size:14px;font-weight:700;color:#e8eef5;">Direction 3 — names only, segmented control</h2></div>
+    <p style="margin:0 0 14px;font-size:10.5px;color:#6b7c90;">Bends: long names shorten to Perms / Dev at both counts (segments are &asymp;47px at six tabs). Lit segment ink flips dark on light accents (gold) to hold contrast.</p>
+    <div style="display:flex;gap:18px;flex-wrap:wrap;">
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">open &middot; 5 tabs &middot; green &middot; over chat row</div>
+          <div style="position:relative;width:300px;height:190px;background:#0e141b;border:1px solid #16202b;box-sizing:border-box;overflow:hidden;">
+            <div style="display:flex;gap:6px;padding:26px 8px 0;">
+              <span style="font-size:10px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.06);color:#8fa8c4;">Battery tips</span>
+              <span style="font-size:10px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.06);color:#8fa8c4;">Improve FPS</span>
+            </div>
+            <div style="display:flex;gap:4px;justify-content:center;padding-top:4px;">
+              <span style="width:4px;height:4px;border-radius:2px;background:#3a4a5c;"></span><span style="width:4px;height:4px;border-radius:2px;background:#3a4a5c;"></span><span style="width:4px;height:4px;border-radius:2px;background:#3a4a5c;"></span>
+            </div>
+            <div style="margin:12px 8px 0;padding:9px 10px;border-radius:10px;border:1px solid rgba(43,77,58,.5);background:linear-gradient(rgba(46,135,83,.10),rgba(23,43,32,.45));color:#d4dde6;font-size:11px;line-height:1.45;">Lower the TDP to 8&thinsp;W in QAM &rarr; Performance, then cap the framerate at 40. Verify the change before a long session.</div>
+            <div style="position:absolute;top:0;left:0;width:300px;height:48px;display:flex;align-items:center;gap:4px;padding:0 6px;box-sizing:border-box;background:#141c24;border-bottom:1px solid rgba(255,255,255,.08);box-shadow:0 6px 16px rgba(0,0,0,.45);">
+              <span style="width:24px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 5px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">LB</span></span>
+              <div style="flex:1;min-width:0;display:flex;background:rgba(255,255,255,.06);border-radius:9px;padding:3px;gap:2px;">
+                <span style="flex:1;min-width:0;text-align:center;padding:6px 0;border-radius:6px;font-size:10px;font-weight:700;color:var(--ctxInk,#f2fff7);background:var(--ctxAcc,#2e8753);white-space:nowrap;overflow:hidden;">Main</span>
+                <span style="flex:1;min-width:0;text-align:center;padding:6px 0;border-radius:6px;font-size:10px;font-weight:600;color:#8fa8c4;white-space:nowrap;overflow:hidden;">Ollama</span>
+                <span style="flex:1;min-width:0;text-align:center;padding:6px 0;border-radius:6px;font-size:10px;font-weight:600;color:#8fa8c4;white-space:nowrap;overflow:hidden;">Settings</span>
+                <span style="flex:1;min-width:0;text-align:center;padding:6px 0;border-radius:6px;font-size:10px;font-weight:600;color:#8fa8c4;white-space:nowrap;overflow:hidden;">Perms</span>
+                <span style="flex:1;min-width:0;text-align:center;padding:6px 0;border-radius:6px;font-size:10px;font-weight:600;color:#8fa8c4;white-space:nowrap;overflow:hidden;">About</span>
+              </div>
+              <span style="width:24px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 5px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">RB</span></span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">open &middot; 6 tabs &middot; green</div>
+          <div style="width:300px;height:48px;display:flex;align-items:center;gap:4px;padding:0 6px;box-sizing:border-box;background:#141c24;border-bottom:1px solid rgba(255,255,255,.08);">
+            <span style="width:24px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 5px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">LB</span></span>
+            <div style="flex:1;min-width:0;display:flex;background:rgba(255,255,255,.06);border-radius:9px;padding:3px;gap:2px;">
+              <span style="flex:1;min-width:0;text-align:center;padding:6px 0;border-radius:6px;font-size:10px;font-weight:700;color:#f2fff7;background:#2e8753;white-space:nowrap;overflow:hidden;">Main</span>
+              <span style="flex:1;min-width:0;text-align:center;padding:6px 0;border-radius:6px;font-size:10px;font-weight:600;color:#8fa8c4;white-space:nowrap;overflow:hidden;">Ollama</span>
+              <span style="flex:1;min-width:0;text-align:center;padding:6px 0;border-radius:6px;font-size:10px;font-weight:600;color:#8fa8c4;white-space:nowrap;overflow:hidden;">Settings</span>
+              <span style="flex:1;min-width:0;text-align:center;padding:6px 0;border-radius:6px;font-size:10px;font-weight:600;color:#8fa8c4;white-space:nowrap;overflow:hidden;">Perms</span>
+              <span style="flex:1;min-width:0;text-align:center;padding:6px 0;border-radius:6px;font-size:10px;font-weight:600;color:#8fa8c4;white-space:nowrap;overflow:hidden;">Dev</span>
+              <span style="flex:1;min-width:0;text-align:center;padding:6px 0;border-radius:6px;font-size:10px;font-weight:600;color:#8fa8c4;white-space:nowrap;overflow:hidden;">About</span>
+            </div>
+            <span style="width:24px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 5px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">RB</span></span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">open &middot; 5 tabs &middot; gold (dark ink on light accent)</div>
+          <div style="width:300px;height:48px;display:flex;align-items:center;gap:4px;padding:0 6px;box-sizing:border-box;background:#141c24;border-bottom:1px solid rgba(255,255,255,.08);">
+            <span style="width:24px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 5px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">LB</span></span>
+            <div style="flex:1;min-width:0;display:flex;background:rgba(255,255,255,.06);border-radius:9px;padding:3px;gap:2px;">
+              <span style="flex:1;min-width:0;text-align:center;padding:6px 0;border-radius:6px;font-size:10px;font-weight:700;color:#161616;background:#f1c40f;white-space:nowrap;overflow:hidden;">Main</span>
+              <span style="flex:1;min-width:0;text-align:center;padding:6px 0;border-radius:6px;font-size:10px;font-weight:600;color:#8fa8c4;white-space:nowrap;overflow:hidden;">Ollama</span>
+              <span style="flex:1;min-width:0;text-align:center;padding:6px 0;border-radius:6px;font-size:10px;font-weight:600;color:#8fa8c4;white-space:nowrap;overflow:hidden;">Settings</span>
+              <span style="flex:1;min-width:0;text-align:center;padding:6px 0;border-radius:6px;font-size:10px;font-weight:600;color:#8fa8c4;white-space:nowrap;overflow:hidden;">Perms</span>
+              <span style="flex:1;min-width:0;text-align:center;padding:6px 0;border-radius:6px;font-size:10px;font-weight:600;color:#8fa8c4;white-space:nowrap;overflow:hidden;">About</span>
+            </div>
+            <span style="width:24px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 5px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">RB</span></span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">rest — unchanged</div>
+          <div style="width:300px;height:20px;display:flex;align-items:center;gap:5px;padding:0 8px;box-sizing:border-box;background:#0e141b;border:1px solid #16202b;">
+            <span style="font-size:9px;font-weight:700;color:#6b7c90;">LB</span>
+            <span style="width:10px;height:3px;border-radius:2px;background:#52d88a;"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="font-size:10px;font-weight:600;color:#52d88a;margin-left:3px;">Main</span>
+            <span style="margin-left:auto;font-size:9px;font-weight:700;color:#6b7c90;">RB</span>
+          </div>
+        </div>
+      </div>
+      <div style="display:var(--specs,block);flex:1;min-width:200px;">
+        <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">spec</div>
+        <p style="margin:0;font-size:10px;line-height:1.75;color:#8fa8c4;font-family:ui-monospace,Menlo,monospace;white-space:pre-line;">strip 300&times;48 &middot; opaque #141c24 &middot; pad 0/6
+track rgba(255,255,255,.06) r9 pad3 &middot; seg gap 2 r6
+names 10px sentence case (600; lit 700)
+lit: filled raw accent &middot; ink #f2fff7 on dark accents,
+#161616 on light (gold, sky, grey) &mdash; luminance switch
+inactive #8fa8c4 &middot; no icons anywhere
+shortest strip: dots + part of chat row visible below
+LB/RB pills in fixed 24px slots &rarr; hide = no shift</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="1e" data-screen-label="Direction 4 taller card" style="width:632px;background:#0e141b;border:1px solid #1c2734;border-radius:12px;padding:20px;box-sizing:border-box;">
+    <div style="display:flex;align-items:baseline;gap:8px;margin:0 0 4px;"><span style="padding:2px 8px;border-radius:6px;background:#1c2734;color:#8fa8c4;font-size:11px;font-weight:700;font-family:ui-monospace,monospace;">1e</span><h2 style="margin:0;font-size:14px;font-weight:700;color:#e8eef5;">Direction 4 — taller solid card, 62px</h2></div>
+    <p style="margin:0 0 14px;font-size:10.5px;color:#6b7c90;">Bends: none (taller than 54 is allowed; 62 covers the 55px chat row cleanly, stays off the answer bubble).</p>
+    <div style="display:flex;gap:18px;flex-wrap:wrap;">
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">open &middot; 5 tabs &middot; green &middot; over chat row (fully covered)</div>
+          <div style="position:relative;width:300px;height:190px;background:#0e141b;border:1px solid #16202b;box-sizing:border-box;overflow:hidden;">
+            <div style="display:flex;gap:6px;padding:26px 8px 0;">
+              <span style="font-size:10px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.06);color:#8fa8c4;">Battery tips</span>
+              <span style="font-size:10px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.06);color:#8fa8c4;">Improve FPS</span>
+            </div>
+            <div style="display:flex;gap:4px;justify-content:center;padding-top:4px;">
+              <span style="width:4px;height:4px;border-radius:2px;background:#3a4a5c;"></span><span style="width:4px;height:4px;border-radius:2px;background:#3a4a5c;"></span><span style="width:4px;height:4px;border-radius:2px;background:#3a4a5c;"></span>
+            </div>
+            <div style="margin:12px 8px 0;padding:9px 10px;border-radius:10px;border:1px solid rgba(43,77,58,.5);background:linear-gradient(rgba(46,135,83,.10),rgba(23,43,32,.45));color:#d4dde6;font-size:11px;line-height:1.45;">Lower the TDP to 8&thinsp;W in QAM &rarr; Performance, then cap the framerate at 40. Verify the change before a long session.</div>
+            <div style="position:absolute;top:0;left:0;width:300px;height:62px;display:flex;align-items:center;gap:2px;padding:6px;box-sizing:border-box;background:#161f28;border-radius:0 0 12px 12px;box-shadow:0 10px 24px rgba(0,0,0,.55);">
+              <span style="width:20px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 4px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">LB</span></span>
+              <div style="flex:1 1 0;min-width:0;height:50px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:var(--ctxFill,rgba(46,135,83,.18));box-shadow:0 0 14px var(--ctxGlow,rgba(46,135,83,.45));"><svg width="28" height="28" viewBox="0 0 24 24" style="color:var(--ctxAccB,#52d88a);"><use href="#o-tree"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:10px;font-weight:700;letter-spacing:0;color:#e8eef5;">Main</span></div>
+              <div style="flex:1 1 0;min-width:0;height:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="28" height="28" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-llama"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:10px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Ollama</span></div>
+              <div style="flex:1 1 0;min-width:0;height:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="28" height="28" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-gear"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:10px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Settings</span></div>
+              <div style="flex:1 1 0;min-width:0;height:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="28" height="28" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-lock"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:10px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Perms</span></div>
+              <div style="flex:1 1 0;min-width:0;height:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="28" height="28" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-about"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:10px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">About</span></div>
+              <span style="width:20px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 4px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">RB</span></span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">open &middot; 6 tabs &middot; green</div>
+          <div style="width:300px;height:62px;display:flex;align-items:center;gap:2px;padding:6px;box-sizing:border-box;background:#161f28;border-radius:0 0 12px 12px;box-shadow:0 10px 24px rgba(0,0,0,.55);">
+            <span style="width:20px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 4px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">LB</span></span>
+            <div style="flex:1 1 0;min-width:0;height:50px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:rgba(46,135,83,.18);box-shadow:0 0 14px rgba(46,135,83,.45);"><svg width="28" height="28" viewBox="0 0 24 24" style="color:#52d88a;"><use href="#o-tree"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:700;letter-spacing:0;color:#e8eef5;">Main</span></div>
+            <div style="flex:1 1 0;min-width:0;height:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="28" height="28" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-llama"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Ollama</span></div>
+            <div style="flex:1 1 0;min-width:0;height:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="28" height="28" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-gear"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Settings</span></div>
+            <div style="flex:1 1 0;min-width:0;height:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="28" height="28" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-lock"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Perms</span></div>
+            <div style="flex:1 1 0;min-width:0;height:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="28" height="28" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-bug"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Dev</span></div>
+            <div style="flex:1 1 0;min-width:0;height:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="28" height="28" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-about"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">About</span></div>
+            <span style="width:20px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 4px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">RB</span></span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">open &middot; 5 tabs &middot; gold</div>
+          <div style="width:300px;height:62px;display:flex;align-items:center;gap:2px;padding:6px;box-sizing:border-box;background:#161f28;border-radius:0 0 12px 12px;box-shadow:0 10px 24px rgba(0,0,0,.55);">
+            <span style="width:20px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 4px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">LB</span></span>
+            <div style="flex:1 1 0;min-width:0;height:50px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:rgba(241,196,15,.14);box-shadow:0 0 14px rgba(241,196,15,.4);"><svg width="28" height="28" viewBox="0 0 24 24" style="color:#f1c40f;"><use href="#o-tree"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:10px;font-weight:700;letter-spacing:0;color:#e8eef5;">Main</span></div>
+            <div style="flex:1 1 0;min-width:0;height:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="28" height="28" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-llama"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:10px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Ollama</span></div>
+            <div style="flex:1 1 0;min-width:0;height:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="28" height="28" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-gear"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:10px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Settings</span></div>
+            <div style="flex:1 1 0;min-width:0;height:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="28" height="28" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-lock"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:10px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Perms</span></div>
+            <div style="flex:1 1 0;min-width:0;height:50px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="28" height="28" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-about"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:10px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">About</span></div>
+            <span style="width:20px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 4px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">RB</span></span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">rest — unchanged</div>
+          <div style="width:300px;height:20px;display:flex;align-items:center;gap:5px;padding:0 8px;box-sizing:border-box;background:#0e141b;border:1px solid #16202b;">
+            <span style="font-size:9px;font-weight:700;color:#6b7c90;">LB</span>
+            <span style="width:10px;height:3px;border-radius:2px;background:#52d88a;"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="font-size:10px;font-weight:600;color:#52d88a;margin-left:3px;">Main</span>
+            <span style="margin-left:auto;font-size:9px;font-weight:700;color:#6b7c90;">RB</span>
+          </div>
+        </div>
+      </div>
+      <div style="display:var(--specs,block);flex:1;min-width:200px;">
+        <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">spec</div>
+        <p style="margin:0;font-size:10px;line-height:1.75;color:#8fa8c4;font-family:ui-monospace,Menlo,monospace;white-space:pre-line;">strip 300&times;62 &middot; solid #161f28 &middot; r 0 0 12 12
+shadow 0 10 24 rgba(0,0,0,.55) &mdash; card, not veil
+cells h50 r8 &middot; icons 28 &middot; names 10px sentence case (9px at six tabs)
+lit: accent fill 14&ndash;18% + soft outer glow, no ring
+lit icon accentB &middot; lit name #e8eef5 (always readable)
+inactive rgba(168,182,198,.62)/.55
+62 &gt; 55 &rarr; chat row + dots fully hidden while open
+LB/RB pills in fixed 20px slots &rarr; hide = no shift</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="1f" data-screen-label="Direction 5 dashes grow" style="width:632px;background:#0e141b;border:1px solid #1c2734;border-radius:12px;padding:20px;box-sizing:border-box;">
+    <div style="display:flex;align-items:baseline;gap:8px;margin:0 0 4px;"><span style="padding:2px 8px;border-radius:6px;background:#1c2734;color:#8fa8c4;font-size:11px;font-weight:700;font-family:ui-monospace,monospace;">1f</span><h2 style="margin:0;font-size:14px;font-weight:700;color:#e8eef5;">Direction 5 — the dashes grow into cells</h2></div>
+    <p style="margin:0 0 14px;font-size:10.5px;color:#6b7c90;">Bends: none. Inactive cells keep the rest bar's small dash; the current dash grows into a full underline and its name appears. LB/RB stay plain text so rest and open read as one object.</p>
+    <div style="display:flex;gap:18px;flex-wrap:wrap;">
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">rest — unchanged (compare directly below)</div>
+          <div style="width:300px;height:20px;display:flex;align-items:center;gap:5px;padding:0 8px;box-sizing:border-box;background:#0e141b;border:1px solid #16202b;">
+            <span style="font-size:9px;font-weight:700;color:#6b7c90;">LB</span>
+            <span style="width:10px;height:3px;border-radius:2px;background:#52d88a;"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="font-size:10px;font-weight:600;color:#52d88a;margin-left:3px;">Main</span>
+            <span style="margin-left:auto;font-size:9px;font-weight:700;color:#6b7c90;">RB</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">open &middot; 5 tabs &middot; green &middot; over chat row</div>
+          <div style="position:relative;width:300px;height:190px;background:#0e141b;border:1px solid #16202b;box-sizing:border-box;overflow:hidden;">
+            <div style="display:flex;gap:6px;padding:26px 8px 0;">
+              <span style="font-size:10px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.06);color:#8fa8c4;">Battery tips</span>
+              <span style="font-size:10px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.06);color:#8fa8c4;">Improve FPS</span>
+            </div>
+            <div style="display:flex;gap:4px;justify-content:center;padding-top:4px;">
+              <span style="width:4px;height:4px;border-radius:2px;background:#3a4a5c;"></span><span style="width:4px;height:4px;border-radius:2px;background:#3a4a5c;"></span><span style="width:4px;height:4px;border-radius:2px;background:#3a4a5c;"></span>
+            </div>
+            <div style="margin:12px 8px 0;padding:9px 10px;border-radius:10px;border:1px solid rgba(43,77,58,.5);background:linear-gradient(rgba(46,135,83,.10),rgba(23,43,32,.45));color:#d4dde6;font-size:11px;line-height:1.45;">Lower the TDP to 8&thinsp;W in QAM &rarr; Performance, then cap the framerate at 40. Verify the change before a long session.</div>
+            <div style="position:absolute;top:0;left:0;width:300px;height:58px;display:flex;align-items:flex-end;gap:2px;padding:6px 8px;box-sizing:border-box;background:#10171f;border-bottom:1px solid rgba(255,255,255,.08);box-shadow:0 6px 16px rgba(0,0,0,.45);">
+              <span style="width:18px;flex-shrink:0;font-size:9px;font-weight:700;color:#6b7c90;text-align:center;align-self:center;">LB</span>
+              <div style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:var(--ctxAccB,#52d88a);"><use href="#o-tree"></use></svg><span style="height:10px;font-size:9px;font-weight:600;letter-spacing:0;color:var(--ctxAccB,#52d88a);">Main</span><span style="align-self:stretch;height:3px;border-radius:2px;background:var(--ctxAccB,#52d88a);"></span></div>
+              <div style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-llama"></use></svg><span style="height:10px;"></span><span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span></div>
+              <div style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-gear"></use></svg><span style="height:10px;"></span><span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span></div>
+              <div style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-lock"></use></svg><span style="height:10px;"></span><span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span></div>
+              <div style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-about"></use></svg><span style="height:10px;"></span><span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span></div>
+              <span style="width:18px;flex-shrink:0;font-size:9px;font-weight:700;color:#6b7c90;text-align:center;align-self:center;">RB</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">open &middot; 6 tabs &middot; green</div>
+          <div style="width:300px;height:58px;display:flex;align-items:flex-end;gap:2px;padding:6px 8px;box-sizing:border-box;background:#10171f;border-bottom:1px solid rgba(255,255,255,.08);">
+            <span style="width:18px;flex-shrink:0;font-size:9px;font-weight:700;color:#6b7c90;text-align:center;align-self:center;">LB</span>
+            <div style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:#52d88a;"><use href="#o-tree"></use></svg><span style="height:10px;font-size:9px;font-weight:600;letter-spacing:0;color:#52d88a;">Main</span><span style="align-self:stretch;height:3px;border-radius:2px;background:#52d88a;"></span></div>
+            <div style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-llama"></use></svg><span style="height:10px;"></span><span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span></div>
+            <div style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-gear"></use></svg><span style="height:10px;"></span><span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span></div>
+            <div style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-lock"></use></svg><span style="height:10px;"></span><span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span></div>
+            <div style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-bug"></use></svg><span style="height:10px;"></span><span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span></div>
+            <div style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-about"></use></svg><span style="height:10px;"></span><span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span></div>
+            <span style="width:18px;flex-shrink:0;font-size:9px;font-weight:700;color:#6b7c90;text-align:center;align-self:center;">RB</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">open &middot; 5 tabs &middot; gold</div>
+          <div style="width:300px;height:58px;display:flex;align-items:flex-end;gap:2px;padding:6px 8px;box-sizing:border-box;background:#10171f;border-bottom:1px solid rgba(255,255,255,.08);">
+            <span style="width:18px;flex-shrink:0;font-size:9px;font-weight:700;color:#6b7c90;text-align:center;align-self:center;">LB</span>
+            <div style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:#f1c40f;"><use href="#o-tree"></use></svg><span style="height:10px;font-size:9px;font-weight:600;letter-spacing:0;color:#f1c40f;">Main</span><span style="align-self:stretch;height:3px;border-radius:2px;background:#f1c40f;"></span></div>
+            <div style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-llama"></use></svg><span style="height:10px;"></span><span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span></div>
+            <div style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-gear"></use></svg><span style="height:10px;"></span><span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span></div>
+            <div style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-lock"></use></svg><span style="height:10px;"></span><span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span></div>
+            <div style="flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;"><svg width="24" height="24" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-about"></use></svg><span style="height:10px;"></span><span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span></div>
+            <span style="width:18px;flex-shrink:0;font-size:9px;font-weight:700;color:#6b7c90;text-align:center;align-self:center;">RB</span>
+          </div>
+        </div>
+      </div>
+      <div style="display:var(--specs,block);flex:1;min-width:200px;">
+        <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">spec</div>
+        <p style="margin:0;font-size:10px;line-height:1.75;color:#8fa8c4;font-family:ui-monospace,Menlo,monospace;white-space:pre-line;">strip 300&times;58 &middot; opaque #10171f &middot; pad 6/8
+no cell fills, no rings &mdash; dash is the only marker
+inactive: icon 24 + 10&times;3 dash (same as rest bar)
+current: dash grows to cell width &times;3px accentB
++ name 9px 600 accentB (&quot;Main&quot;) between icon and dash
+LB/RB plain 9px text, same slots as rest bar
+open&harr;rest is a fade; dashes stay in place
+LB/RB fixed 18px slots &rarr; hide = no shift</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="1g" data-screen-label="Direction 6 legend strip" style="width:632px;background:#0e141b;border:1px solid #1c2734;border-radius:12px;padding:20px;box-sizing:border-box;">
+    <div style="display:flex;align-items:baseline;gap:8px;margin:0 0 4px;"><span style="padding:2px 8px;border-radius:6px;background:#1c2734;color:#8fa8c4;font-size:11px;font-weight:700;font-family:ui-monospace,monospace;">1g</span><h2 style="margin:0;font-size:14px;font-weight:700;color:#e8eef5;">Direction 6 (wild) — legend strip, 64px</h2></div>
+    <p style="margin:0 0 14px;font-size:10.5px;color:#6b7c90;">Icons on top, a footer line below with the current name and the bumper pills sitting where a button legend would — the pattern Deck players already read at the bottom of every Steam screen. Bends: none (64 covers the chat row, stops short of the bubble).</p>
+    <div style="display:flex;gap:18px;flex-wrap:wrap;">
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">open &middot; 5 tabs &middot; green &middot; over chat row (fully covered)</div>
+          <div style="position:relative;width:300px;height:190px;background:#0e141b;border:1px solid #16202b;box-sizing:border-box;overflow:hidden;">
+            <div style="display:flex;gap:6px;padding:26px 8px 0;">
+              <span style="font-size:10px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.06);color:#8fa8c4;">Battery tips</span>
+              <span style="font-size:10px;padding:4px 8px;border-radius:999px;background:rgba(255,255,255,.06);color:#8fa8c4;">Improve FPS</span>
+            </div>
+            <div style="display:flex;gap:4px;justify-content:center;padding-top:4px;">
+              <span style="width:4px;height:4px;border-radius:2px;background:#3a4a5c;"></span><span style="width:4px;height:4px;border-radius:2px;background:#3a4a5c;"></span><span style="width:4px;height:4px;border-radius:2px;background:#3a4a5c;"></span>
+            </div>
+            <div style="margin:12px 8px 0;padding:9px 10px;border-radius:10px;border:1px solid rgba(43,77,58,.5);background:linear-gradient(rgba(46,135,83,.10),rgba(23,43,32,.45));color:#d4dde6;font-size:11px;line-height:1.45;">Lower the TDP to 8&thinsp;W in QAM &rarr; Performance, then cap the framerate at 40. Verify the change before a long session.</div>
+            <div style="position:absolute;top:0;left:0;width:300px;height:64px;display:flex;flex-direction:column;box-sizing:border-box;background:#131b23;border-bottom:1px solid rgba(255,255,255,.07);box-shadow:0 8px 20px rgba(0,0,0,.5);">
+              <div style="display:flex;align-items:center;height:37px;padding:0 4px;">
+                <div style="flex:1 1 0;min-width:0;height:37px;position:relative;display:flex;align-items:center;justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" style="color:#ffffff;filter:drop-shadow(0 0 6px var(--ctxGlow,rgba(46,135,83,.45)));"><use href="#o-tree"></use></svg><span style="position:absolute;bottom:0;left:50%;margin-left:-12px;width:24px;height:3px;border-radius:2px;background:var(--ctxAccB,#52d88a);"></span></div>
+                <div style="flex:1 1 0;min-width:0;height:37px;display:flex;align-items:center;justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" style="color:rgba(168,182,198,.55);"><use href="#o-llama"></use></svg></div>
+                <div style="flex:1 1 0;min-width:0;height:37px;display:flex;align-items:center;justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" style="color:rgba(168,182,198,.55);"><use href="#o-gear"></use></svg></div>
+                <div style="flex:1 1 0;min-width:0;height:37px;display:flex;align-items:center;justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" style="color:rgba(168,182,198,.55);"><use href="#o-lock"></use></svg></div>
+                <div style="flex:1 1 0;min-width:0;height:37px;display:flex;align-items:center;justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" style="color:rgba(168,182,198,.55);"><use href="#o-about"></use></svg></div>
+              </div>
+              <div style="height:1px;background:rgba(255,255,255,.06);"></div>
+              <div style="display:flex;align-items:center;gap:6px;padding:0 10px;flex:1;">
+                <span style="font-size:11px;font-weight:700;letter-spacing:.5px;color:#e8eef5;">MAIN</span>
+                <span style="flex:1;"></span>
+                <span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">LB</span>
+                <span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">RB</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">open &middot; 6 tabs &middot; green</div>
+          <div style="width:300px;height:64px;display:flex;flex-direction:column;box-sizing:border-box;background:#131b23;border-bottom:1px solid rgba(255,255,255,.07);">
+            <div style="display:flex;align-items:center;height:37px;padding:0 4px;">
+              <div style="flex:1 1 0;min-width:0;height:37px;position:relative;display:flex;align-items:center;justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" style="color:#ffffff;filter:drop-shadow(0 0 6px rgba(46,135,83,.45));"><use href="#o-tree"></use></svg><span style="position:absolute;bottom:0;left:50%;margin-left:-12px;width:24px;height:3px;border-radius:2px;background:#52d88a;"></span></div>
+              <div style="flex:1 1 0;min-width:0;height:37px;display:flex;align-items:center;justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" style="color:rgba(168,182,198,.55);"><use href="#o-llama"></use></svg></div>
+              <div style="flex:1 1 0;min-width:0;height:37px;display:flex;align-items:center;justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" style="color:rgba(168,182,198,.55);"><use href="#o-gear"></use></svg></div>
+              <div style="flex:1 1 0;min-width:0;height:37px;display:flex;align-items:center;justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" style="color:rgba(168,182,198,.55);"><use href="#o-lock"></use></svg></div>
+              <div style="flex:1 1 0;min-width:0;height:37px;display:flex;align-items:center;justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" style="color:rgba(168,182,198,.55);"><use href="#o-bug"></use></svg></div>
+              <div style="flex:1 1 0;min-width:0;height:37px;display:flex;align-items:center;justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" style="color:rgba(168,182,198,.55);"><use href="#o-about"></use></svg></div>
+            </div>
+            <div style="height:1px;background:rgba(255,255,255,.06);"></div>
+            <div style="display:flex;align-items:center;gap:6px;padding:0 10px;flex:1;">
+              <span style="font-size:11px;font-weight:700;letter-spacing:.5px;color:#e8eef5;">MAIN</span>
+              <span style="flex:1;"></span>
+              <span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">LB</span>
+              <span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">RB</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">open &middot; 5 tabs &middot; gold</div>
+          <div style="width:300px;height:64px;display:flex;flex-direction:column;box-sizing:border-box;background:#131b23;border-bottom:1px solid rgba(255,255,255,.07);">
+            <div style="display:flex;align-items:center;height:37px;padding:0 4px;">
+              <div style="flex:1 1 0;min-width:0;height:37px;position:relative;display:flex;align-items:center;justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" style="color:#ffffff;filter:drop-shadow(0 0 6px rgba(241,196,15,.4));"><use href="#o-tree"></use></svg><span style="position:absolute;bottom:0;left:50%;margin-left:-12px;width:24px;height:3px;border-radius:2px;background:#f1c40f;"></span></div>
+              <div style="flex:1 1 0;min-width:0;height:37px;display:flex;align-items:center;justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" style="color:rgba(168,182,198,.55);"><use href="#o-llama"></use></svg></div>
+              <div style="flex:1 1 0;min-width:0;height:37px;display:flex;align-items:center;justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" style="color:rgba(168,182,198,.55);"><use href="#o-gear"></use></svg></div>
+              <div style="flex:1 1 0;min-width:0;height:37px;display:flex;align-items:center;justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" style="color:rgba(168,182,198,.55);"><use href="#o-lock"></use></svg></div>
+              <div style="flex:1 1 0;min-width:0;height:37px;display:flex;align-items:center;justify-content:center;"><svg width="26" height="26" viewBox="0 0 24 24" style="color:rgba(168,182,198,.55);"><use href="#o-about"></use></svg></div>
+            </div>
+            <div style="height:1px;background:rgba(255,255,255,.06);"></div>
+            <div style="display:flex;align-items:center;gap:6px;padding:0 10px;flex:1;">
+              <span style="font-size:11px;font-weight:700;letter-spacing:.5px;color:#e8eef5;">MAIN</span>
+              <span style="flex:1;"></span>
+              <span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">LB</span>
+              <span style="font-size:9px;font-weight:700;padding:2px 6px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">RB</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">rest — unchanged</div>
+          <div style="width:300px;height:20px;display:flex;align-items:center;gap:5px;padding:0 8px;box-sizing:border-box;background:#0e141b;border:1px solid #16202b;">
+            <span style="font-size:9px;font-weight:700;color:#6b7c90;">LB</span>
+            <span style="width:10px;height:3px;border-radius:2px;background:#52d88a;"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="width:10px;height:3px;border-radius:2px;background:rgba(168,182,198,.35);"></span>
+            <span style="font-size:10px;font-weight:600;color:#52d88a;margin-left:3px;">Main</span>
+            <span style="margin-left:auto;font-size:9px;font-weight:700;color:#6b7c90;">RB</span>
+          </div>
+        </div>
+      </div>
+      <div style="display:var(--specs,block);flex:1;min-width:200px;">
+        <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">spec</div>
+        <p style="margin:0;font-size:10px;line-height:1.75;color:#8fa8c4;font-family:ui-monospace,Menlo,monospace;white-space:pre-line;">strip 300&times;64 &middot; solid #131b23 &middot; two decks
+icon deck h37 &middot; icons 26 evenly, no LB/RB up top
+current icon #fff + accent drop-shadow
++ 24&times;3 accent slab under it (accentB)
+divider 1px rgba(255,255,255,.06)
+legend deck: name 11px 700 caps #e8eef5 left,
+LB/RB pills right (whole footer hides = no shift)
+64 &gt; 55 &rarr; chat row fully covered</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="1h" data-screen-label="Accent stress test" style="width:632px;background:#0e141b;border:1px solid #1c2734;border-radius:12px;padding:20px;box-sizing:border-box;">
+    <div style="display:flex;align-items:baseline;gap:8px;margin:0 0 4px;"><span style="padding:2px 8px;border-radius:6px;background:#1c2734;color:#8fa8c4;font-size:11px;font-weight:700;font-family:ui-monospace,monospace;">1h</span><h2 style="margin:0;font-size:14px;font-weight:700;color:#e8eef5;">Accent stress — grey and pink (direction 1 chassis)</h2></div>
+    <p style="margin:0 0 14px;font-size:10.5px;color:#6b7c90;">Underline + neutral fill never depends on the accent for structure, so weak accents (grey) and loud ones (pink) both hold. Lifted companions: grey #95a5a6 &rarr; #c3d0d1, pink #e91e8c &rarr; #f36cb6.</p>
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div>
+        <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">grey #95a5a6</div>
+        <div style="width:300px;height:56px;display:flex;align-items:center;gap:2px;padding:5px 6px;box-sizing:border-box;background:#141c24;border-bottom:1px solid rgba(255,255,255,.08);">
+          <span style="width:20px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 4px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">LB</span></span>
+          <div style="flex:1 1 0;min-width:0;height:46px;border-radius:8px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:rgba(255,255,255,.07);"><svg width="22" height="22" viewBox="0 0 24 24" style="color:#c3d0d1;"><use href="#o-tree"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:700;letter-spacing:0;color:#c3d0d1;">Main</span><span style="position:absolute;left:11px;right:11px;bottom:3px;height:2px;border-radius:1px;background:#c3d0d1;"></span></div>
+          <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-llama"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Ollama</span></div>
+          <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-gear"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Settings</span></div>
+          <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-lock"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Perms</span></div>
+          <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-about"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">About</span></div>
+          <span style="width:20px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 4px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">RB</span></span>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:9px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:#6b7c90;font-family:ui-monospace,monospace;margin:0 0 4px;">pink #e91e8c</div>
+        <div style="width:300px;height:56px;display:flex;align-items:center;gap:2px;padding:5px 6px;box-sizing:border-box;background:#141c24;border-bottom:1px solid rgba(255,255,255,.08);">
+          <span style="width:20px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 4px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">LB</span></span>
+          <div style="flex:1 1 0;min-width:0;height:46px;border-radius:8px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:rgba(255,255,255,.07);"><svg width="22" height="22" viewBox="0 0 24 24" style="color:#f36cb6;"><use href="#o-tree"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:700;letter-spacing:0;color:#f36cb6;">Main</span><span style="position:absolute;left:11px;right:11px;bottom:3px;height:2px;border-radius:1px;background:#f36cb6;"></span></div>
+          <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-llama"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Ollama</span></div>
+          <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-gear"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Settings</span></div>
+          <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-lock"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">Perms</span></div>
+          <div style="flex:1 1 0;min-width:0;height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;"><svg width="22" height="22" viewBox="0 0 24 24" style="color:rgba(168,182,198,.62);"><use href="#o-about"></use></svg><span style="max-width:100%;overflow:hidden;white-space:nowrap;font-size:9px;font-weight:600;letter-spacing:0;color:rgba(168,182,198,.55);">About</span></div>
+          <span style="width:20px;display:flex;justify-content:center;flex-shrink:0;"><span style="font-size:9px;font-weight:700;padding:3px 4px;border-radius:999px;background:rgba(255,255,255,.08);color:#8fa8c4;">RB</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;contextAccent&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#2e8753&quot;, &quot;tsType&quot;: &quot;string&quot;, &quot;options&quot;: [&quot;#2e8753&quot;, &quot;#f1c40f&quot;, &quot;#95a5a6&quot;, &quot;#e91e8c&quot;], &quot;section&quot;: &quot;Demo&quot;}, &quot;showSpecs&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Demo&quot;}}">
+class Component extends DCLogic {
+  applyVars() {
+    const el = this._root; if (!el) return;
+    const m = {
+      "#2e8753": ["#2e8753", "#52d88a", "rgba(46,135,83,.18)", "rgba(46,135,83,.45)", "#f2fff7"],
+      "#f1c40f": ["#f1c40f", "#f1c40f", "rgba(241,196,15,.14)", "rgba(241,196,15,.4)", "#161616"],
+      "#95a5a6": ["#95a5a6", "#c3d0d1", "rgba(149,165,166,.16)", "rgba(149,165,166,.4)", "#101418"],
+      "#e91e8c": ["#e91e8c", "#f36cb6", "rgba(233,30,140,.16)", "rgba(233,30,140,.4)", "#fff5fa"]
+    };
+    const a = m[this.props.contextAccent ?? "#2e8753"] || m["#2e8753"];
+    el.style.setProperty("--ctxAcc", a[0]);
+    el.style.setProperty("--ctxAccB", a[1]);
+    el.style.setProperty("--ctxFill", a[2]);
+    el.style.setProperty("--ctxGlow", a[3]);
+    el.style.setProperty("--ctxInk", a[4]);
+    el.style.setProperty("--specs", (this.props.showSpecs ?? true) ? "block" : "none");
+  }
+  componentDidUpdate() { this.applyVars(); }
+  renderVals() {
+    return { rootRef: (el) => { if (el) { this._root = el; this.applyVars(); } } };
+  }
+}
+</script>
+</body>
+</html>

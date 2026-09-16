@@ -275,11 +275,9 @@ replace it with a specific issue when one exists.
   comedian's own persona. A written sweep, one line per character: who owns the character, whose voice it is, and whether a voice for
   it could be made as a type rather than a copy. Text roleplay sits on the first layer today; any voice would sit on all of them. No
   code; a document the legal check reads. [Memo](planning/42-read-aloud-feasibility.md).
-- ★★ `[ui]` **Replace the bonsAI tab icon with the redesign's** — **OPEN, and no longer waiting on a drawing.** Flatter,
-  more silhouette, because it renders at 14px. **Checked 2026-09-05: the redesign document never actually draws one**, and the
-  maintainer has said they do not want to supply one. So whoever builds it proposes a shape and the maintainer approves it by
-  eye — a shape is not something to settle from a description or by reaching for a stronger model. It has to be an inline SVG
-  path rather than the PNG so it takes the colour around it. Update the icon geometry test in the same change.
+- ★★ `[ui]` **Replace the bonsAI tab icon with the redesign's** — **OPEN, folds into the tab strip redesign below.** The maintainer approved the new
+  strip's shape on 2026-09-16 (D109): the Main cell takes the plugin's real logo, tinted in the accent colour. This entry closes when plan 59's
+  build lands.
 - ★★ `[layout]` `[voice]` `[focus]` **Read aloud is a small speaker button on the Helpful row, not a second dividing
   line** — **OPEN, filed 2026-09-16 by the maintainer (D106).** Today: Read aloud is a full-width dividing line above Show
   details, the same shape as Show details, one row up, drawn by the reply-actions row builder
@@ -367,6 +365,12 @@ replace it with a specific issue when one exists.
   reply-style slider, off by default, capping a Speed answer at three lines. It overrides the slider and the character; destructive
   warnings and the depth phrases escape it. The real work is widening the branch picker (D40). **TERSE-01** passes at 8 of 10.
   [Detail](roadmap-details.md#terse-mode-speed-answers-in-three-lines).
+- ★★★ `[tabs]` `[ui]` **The open tab strip redrawn: six equal cells, one icon family, only the current tab named** — **OPEN, planned 2026-09-16,
+  design approved (D109).** Today, with the bar open: cells of different widths, four icon styles, a tiny capital name under every icon, a hard
+  accent box on the current tab, plain LB/RB text, and a see-through bar. After this build: six equal cells, every icon 22px in one family, only the
+  current tab's name under its icon in small capitals, a soft fill with no box, LB and RB as pills like the chat row's, a solid bar with a shadow.
+  The Main cell takes the plugin's own logo; the thin bar at rest and every behaviour stay the same. Owed on the Deck: **TAB-STRIP-2A-01** through
+  **TAB-STRIP-2A-07**. [Plan](planning/59-tab-strip-redesign-build.md) · [Design](design/handoffs/tab-bar-open-strip/return-2026-09-16/).
 - ★★★ `[ui]` **Adjustable text size in Settings** — **OPEN.** `uiScalePx()` already runs through the stylesheet; the work is exposing it,
   deciding what must not scale (icons, the 300px column), and paying the settings plumbing. [Detail](roadmap-details.md#adjustable-text-size-in-settings).
 - ★★★ `[ui]` **Search density** — **OPEN.** Tighter, more scannable results with highlighted match tokens.

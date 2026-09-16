@@ -5582,3 +5582,75 @@ Deck rows.
 
 **Consequence.** Plan 57 § 7 records the answers; § 3a gains the empty-reply count; the roadmap
 entry is unchanged (still ready to build, calls locked).
+
+---
+
+### D109 — LOCKED 2026-09-16 (raised 2026-09-16) — The open tab strip redesign (Claude Design board 2a): approve the drawing, and three small calls
+
+Raised from [plan 59](../planning/59-tab-strip-redesign-build.md), the build plan for the design
+Claude Design handed back on 16 September, answering the brief of 14 September
+([design/handoffs/tab-bar-open-strip/](../design/handoffs/tab-bar-open-strip/)). The returned files
+are in that folder under `return-2026-09-16/`. Board 2a is the one the design says to build: six
+equal cells, every icon the same 22px size, only the current tab's name shown under its icon in
+small capitals, a soft fill on the lit cell with no box, LB and RB as pills, a solid bar with a
+shadow. The thin bar at rest is unchanged. Nothing about how the bar behaves changes.
+
+None of these stops the build from starting. If unanswered, the build starts on the leans.
+
+1. **Approve board 2a as the design.**
+   - Option 1 (lean): **yes, build 2a as drawn.** A yes also settles the two-star roadmap entry
+     "replace the bonsAI tab icon with the redesign's" for the strip: the design puts the
+     production logo, tinted in the accent, on the Main cell, and that entry asked for a shape the
+     maintainer approves by eye. The board is that shape. The plugin's icon in Decky's own list is
+     not part of this.
+   - Option 2: a different board from the same file (1b to 1g). Each is drawn at 300px with its
+     values; plan 59 would need its § 3 and § 5 rewritten for the chosen one.
+   - Option 3: send it back to Claude Design with notes. The designer's own note says the three
+     Deck photos never uploaded, so its "today" board is a reconstruction; a second round with the
+     photos attached would let it true that up. Board 2a itself was drawn from the code's values
+     and the real icon files, so this is optional, not a defect.
+
+2. **What the name says under Permissions and Developer when they are the lit tab.** The design
+   only ever shows "main" and "settings" lit, and its own note calls "settings" the longest name,
+   which is only true if the two long tabs use short words.
+   - Option 1 (lean): **"perms" and "dev", always**, at five tabs and at six. The thin bar at rest
+     keeps saying Permissions and Developer in full, as it does today. Plan 30's "shorten only at
+     six tabs" rule goes, because there is no longer a row of six names to fit.
+   - Option 2: the full words "permissions" and "developer". At 9.5px bold they run about 10px past
+     each side of their cell, five times the 2px the design allows for "settings". The name sits in
+     the lower band, where the neighbouring cells have no name, so nothing collides; it just looks
+     wider than its cell.
+   - Option 3: today's rule, full words at five tabs and short at six. Keeps the switch between two
+     spellings that the rest bar never makes, for a fit problem that no longer exists.
+
+3. **The strip's height.** The brief allowed a taller strip that covers the whole chat row. The
+   design kept 54px and added a shadow below the bar that darkens the half-pixel of the chat row
+   still showing under it.
+   - Option 1 (lean): **54px as drawn; check on the Deck; if the row's dots still peek out, 56 in
+     the same build.** One number. The design's own board 1b used 56, so the look holds.
+   - Option 2: 56px from the start. Covers the row outright; two more pixels of the answer area
+     hidden while the strip is open, which is only while the D-pad is on the bar.
+
+4. **The fallback if the small capitals look too small on the Deck.** Steam's font most likely has
+   no true small capitals, so the browser makes them by shrinking full capitals. That can land the
+   visible letters near today's 8px, which was the complaint.
+   - Option 1 (lean): **plain capitals at the same 9.5px bold.** One line to change on the device
+     evening, so the by-eye row does not stall waiting for a call.
+   - Option 2: plain lowercase at 9.5px bold. Reads as the word, not a label; the design chose small
+     capitals over this.
+   - Option 3: small capitals at 10.5px. Keeps the look and buys size back; the overhang on
+     "settings" grows to about 4px.
+
+**Answers, 2026-09-16 (the maintainer answered in chat, the same day):**
+
+1. **Option 1.** Board 2a is approved as drawn. The two-star "replace the bonsAI tab icon" entry
+   closes for the strip with this build; the production logo is the shape.
+2. **Option 1.** "perms" and "dev", always.
+3. **Option 1.** 54px as drawn, checked on the Deck, 56 in the same build if the dots still peek
+   out. The maintainer's words: it must not look sloppy.
+4. **Option 1.** Plain capitals at the same 9.5px bold if the small capitals read too small. The
+   maintainer's words: no bigger than they need to be, not ugly, just big enough to be readable and
+   neat.
+
+**Consequence.** Plan 59 § 4 records the answers; the roadmap gains the Features entry for the
+build; the two-star tab-icon entry folds into it. Nothing else in plan 59 changes.

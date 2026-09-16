@@ -28,6 +28,11 @@ import {
   PRESET_CHIP_SIDE_PADDING_PX,
   PRESET_VISIBLE_SLOTS,
 } from "../../features/preset-carousel/presetRowLayout";
+import {
+  SETTINGS_CARD_PAD_BOTTOM_PX,
+  SETTINGS_CARD_PAD_TOP_PX,
+  SETTINGS_CARD_ROW_GAP_PX,
+} from "../../hooks/useSteamSettingsSearch";
 import { uiScalePx } from "./uiScalePx";
 
 /**
@@ -308,14 +313,49 @@ export function buildSection4Section(): string {
           }
         }
 
-        /* Settings search hits — same horizontal track as unified host so results line up under the textarea. */
-        .bonsai-scope .bonsai-main-search-results-pane {
+        /*
+          The settings-results card (plan 45 / plan 56 lane E). Positioned by the component itself
+          (position: absolute; bottom: 100% of the box's own wrapper) — this only draws it, on the
+          same horizontal track as the box so it lines up with the textarea above which it floats.
+          Sized by its own content: MainTabUnifiedAskBar.tsx decides how many rows to render (never
+          more than fit the live-measured room above it), and the card simply stacks whatever it is
+          given. The heading-to-row-1 gap comes from the heading's own padding-bottom below, not
+          from this card's row gap, so the two never double up — see settingsCardHeightForRows in
+          useSteamSettingsSearch.ts, which this file's numbers are read from directly.
+        */
+        .bonsai-scope .bonsai-settings-results-card {
           width: 100% !important;
           max-width: none !important;
           min-width: 0 !important;
           margin-left: 0 !important;
           margin-right: 0 !important;
           box-sizing: border-box !important;
+          display: flex;
+          flex-direction: column;
+          border-radius: 8px;
+          padding: ${SETTINGS_CARD_PAD_TOP_PX}px 6px ${SETTINGS_CARD_PAD_BOTTOM_PX}px;
+          pointer-events: auto;
+          z-index: 5;
+        }
+        /* A card floating over the chat needs its own solid surface — the transcript behind it is
+           not opaque (the same reason the dock itself carries an explicit background, section-6.ts). */
+        .bonsai-scope .bonsai-settings-results-card.bonsai-glass-panel {
+          background: rgba(18, 26, 34, 0.92) !important;
+        }
+        .bonsai-scope .bonsai-settings-results-card-heading {
+          color: #8fa8c4;
+          font-size: 11px;
+          line-height: 16px;
+          padding-bottom: 6px;
+        }
+        .bonsai-scope .bonsai-settings-results-card-heading-count {
+          color: #6b7c90;
+        }
+        .bonsai-scope .bonsai-settings-results-card-row {
+          flex-shrink: 0;
+        }
+        .bonsai-scope .bonsai-settings-results-card-row + .bonsai-settings-results-card-row {
+          margin-top: ${SETTINGS_CARD_ROW_GAP_PX}px;
         }
 
         /*

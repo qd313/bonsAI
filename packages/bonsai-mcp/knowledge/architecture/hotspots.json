@@ -61,13 +61,13 @@
       "role": "Prompt build, Ollama HTTP, streaming"
     },
     {
-      "path": "src/components/MainTabPresetAnimatedChips.tsx",
-      "lines": 1300,
+      "path": "src/components/MainTabUnifiedAskBar.tsx",
+      "lines": 1333,
       "role": ""
     },
     {
-      "path": "src/components/MainTabUnifiedAskBar.tsx",
-      "lines": 1252,
+      "path": "src/components/MainTabPresetAnimatedChips.tsx",
+      "lines": 1300,
       "role": ""
     },
     {

@@ -133,6 +133,12 @@ import {
   unregisterNavFocus,
   type NavRefHolder,
 } from "../utils/navFocusRegistry";
+import {
+  SETTINGS_CARD_ROW_HEIGHT_PX,
+  SETTINGS_CARD_TAB_BAR_GAP_PX,
+  settingsCardRowsThatFit,
+  shouldHideSettingsResultsCard,
+} from "../hooks/useSteamSettingsSearch";
 
 export type MainTabUnifiedAskBarProps = {
   fullBleedRowStyle: React.CSSProperties;
@@ -263,6 +269,15 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
   const showAiCharacterChrome = Boolean(onOpenCharacterPicker && aiCharacterPadClass);
   const askLooksReady = unifiedInput.trim().length > 0 && !isAsking;
 
+  /*
+   * The settings-results card (plan 45 / plan 56 lane E): does what was typed hide it outright
+   * (a long question, unless it is an exact run inside a setting's own name -- see
+   * shouldHideSettingsResultsCard), and if not, how many of the results actually fit above the
+   * question box without reaching the tab bar.
+   */
+  const settingsCardHidden = shouldHideSettingsResultsCard(unifiedInput);
+  const [settingsCardRowsShown, setSettingsCardRowsShown] = useState<number>(filteredSettings.length);
+
   useEffect(() => {
     if (unifiedInput.trim() === "" && /\n/.test(unifiedInput)) setUnifiedInput("");
   }, [unifiedInput, setUnifiedInput]);
@@ -328,6 +343,38 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
     registerNavFocus("unified-input", unifiedInputNavRef);
     return () => unregisterNavFocus("unified-input", unifiedInputNavRef);
   }, []);
+
+  /*
+   * How much room the settings-results card actually has, measured live rather than assumed.
+   * Plan 45 was drawn against a 696px panel; measured on the Deck's own 1280x800 screen the panel
+   * is 454px, so a flat eight-row card would cover the tab bar. The room is the gap between the
+   * question box's own top edge (unifiedInputHostRef -- the card is anchored there, see the render
+   * below) and the tab bar's bottom edge, both read through getBoundingClientRect on the real
+   * elements rather than any assumed pixel count, minus a 6px clearance kept under the tab bar.
+   * Re-measured whenever the result count or the box's own height (it grows as text wraps) could
+   * have changed how much of that room is left. Falls back to showing everything the cap allows
+   * when the tab bar cannot be found (an unmounted card, or a test with no `.bonsai-scope`
+   * wrapper) rather than hiding the card outright.
+   */
+  useLayoutEffect(() => {
+    const boxEl =
+      unifiedInputHostRef && typeof unifiedInputHostRef === "object" && "current" in unifiedInputHostRef
+        ? (unifiedInputHostRef as React.RefObject<HTMLDivElement | null>).current
+        : null;
+    if (!boxEl) return;
+    const scope = boxEl.closest(".bonsai-scope");
+    const tabBar = scope?.querySelector<HTMLElement>(".bonsai-tab-bar") ?? null;
+    if (!tabBar) {
+      setSettingsCardRowsShown(filteredSettings.length);
+      return;
+    }
+    const boxTop = boxEl.getBoundingClientRect().top;
+    const tabBarBottom = tabBar.getBoundingClientRect().bottom;
+    const availableHeightPx = boxTop - tabBarBottom - SETTINGS_CARD_TAB_BAR_GAP_PX;
+    setSettingsCardRowsShown(
+      settingsCardRowsThatFit(availableHeightPx, filteredSettings.length).shown,
+    );
+  }, [filteredSettings.length, unifiedInput, unifiedInputSurfacePx, unifiedInputHostRef]);
 
   /*
    * ATTEMPT at "opening the panel leaves nothing highlighted": on a fresh panel open nothing
@@ -528,8 +575,19 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
     </>
   );
 
+  const settingsCardShownSettings = filteredSettings.slice(0, Math.max(0, settingsCardRowsShown));
+  const settingsCardHiddenCount = Math.max(0, filteredSettings.length - settingsCardShownSettings.length);
+  const showSettingsCard =
+    !settingsCardHidden && filteredSettings.length > 0 && settingsCardShownSettings.length > 0;
+
   return (
     <>
+{/*
+  position: relative purely to anchor the settings-results card below -- see its own comment.
+  Nothing else about the box's own box model changes: this wrapper has no size of its own beyond
+  its one child's, so it never nudges the box.
+*/}
+<div style={{ position: "relative" }}>
 <PanelSectionRow>
   <div
     ref={unifiedInputHostRef}
@@ -926,6 +984,87 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
     </div>
   </div>
 </PanelSectionRow>
+{/*
+  The settings-results card. Anchored to the box's own top edge (bottom: 100% of this wrapper,
+  which is exactly the box's rendered height -- see the position:relative wrapper opened above)
+  so it draws over the chat and takes no layout space of its own: nothing below it ever moves,
+  which is the whole point (plan 45 section 1 -- "the list grows upward and pushes the box... up
+  the screen", fixed by taking the list out of that flow entirely). Rows beyond what
+  settingsCardRowsShown allows are simply not rendered -- see the measuring effect above -- and
+  are folded into the heading's "N more" count instead of being cut off mid-row.
+*/}
+{showSettingsCard && (
+  <div
+    className="bonsai-settings-results-card bonsai-glass-panel"
+    style={{
+      position: "absolute",
+      left: 0,
+      right: 0,
+      bottom: "100%",
+    }}
+  >
+    <div className="bonsai-settings-results-card-heading">
+      Steam settings
+      {settingsCardHiddenCount > 0 && (
+        <span className="bonsai-settings-results-card-heading-count">
+          {` · ${settingsCardHiddenCount} more`}
+        </span>
+      )}
+    </div>
+    {settingsCardShownSettings.map((s, i) => {
+      const isQam = isQamSetting(s);
+      const isSelected = i === selectedIndex;
+      const parts = s.split(">").map((part) => part.trim()).filter(Boolean);
+      const title = parts[parts.length - 1] ?? s;
+      const breadcrumb = parts.slice(0, -1).join(" > ");
+      const compactLine = isQam ? `* QAM > ${title}` : `${title}`;
+      const compactSubline = isQam ? `(${breadcrumb})` : breadcrumb;
+
+      return (
+        <Button
+          key={s}
+          className="bonsai-settings-results-card-row"
+          onClick={() => onSettingClick(s, i)}
+          style={{
+            width: "100%",
+            minHeight: SETTINGS_CARD_ROW_HEIGHT_PX,
+            padding: "2px 6px",
+            borderRadius: 4,
+            border: `1px solid ${isQam ? "rgba(243, 197, 91, 0.3)" : "rgba(255,255,255,0.1)"}`,
+            background: isSelected
+              ? isQam
+                ? "rgba(243, 197, 91, 0.22)"
+                : "rgba(255,255,255,0.14)"
+              : isQam
+                ? "rgba(243, 197, 91, 0.08)"
+                : "rgba(255,255,255,0.02)",
+          }}
+        >
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+            }}
+          >
+            <div style={{ fontSize: 10, fontWeight: 700, color: isSelected ? "white" : isQam ? "#f2cf84" : "#d4dbe2", lineHeight: "1.15" }}>
+              {compactLine}
+            </div>
+            {compactSubline && (
+              <div style={{ fontSize: 9, color: isSelected ? "#dfe8ef" : "#9fafbc", lineHeight: "1.1", marginTop: 1 }}>
+                {compactSubline}
+              </div>
+            )}
+          </div>
+        </Button>
+      );
+    })}
+  </div>
+)}
+</div>
 {(isCapturingScreenshot || mediaError) && (
   <PanelSectionRow>
     {isCapturingScreenshot ? (
@@ -1188,64 +1327,6 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
     </div>
   </div>
 </PanelSectionRow>
-{filteredSettings.length > 0 && (
-  <div className="bonsai-main-search-results-pane">
-    <PanelSectionRow>
-      <div style={{ color: "gray", padding: "6px 0", fontSize: 13 }}>Results</div>
-    </PanelSectionRow>
-    {filteredSettings.map((s, i) => {
-      const isQam = isQamSetting(s);
-      const isSelected = i === selectedIndex;
-      const parts = s.split(">").map((part) => part.trim()).filter(Boolean);
-      const title = parts[parts.length - 1] ?? s;
-      const breadcrumb = parts.slice(0, -1).join(" > ");
-      const compactLine = isQam ? `* QAM > ${title}` : `${title}`;
-      const compactSubline = isQam ? `(${breadcrumb})` : breadcrumb;
-
-      return (
-        <PanelSectionRow key={i}>
-          <Button
-            onClick={() => onSettingClick(s, i)}
-            style={{
-              width: "100%",
-              minHeight: 28,
-              padding: "2px 6px",
-              borderRadius: 4,
-              border: `1px solid ${isQam ? "rgba(243, 197, 91, 0.3)" : "rgba(255,255,255,0.1)"}`,
-              background: isSelected
-                ? isQam
-                  ? "rgba(243, 197, 91, 0.22)"
-                  : "rgba(255,255,255,0.14)"
-                : isQam
-                  ? "rgba(243, 197, 91, 0.08)"
-                  : "rgba(255,255,255,0.02)",
-            }}
-          >
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                textAlign: "center",
-              }}
-            >
-              <div style={{ fontSize: 10, fontWeight: 700, color: isSelected ? "white" : isQam ? "#f2cf84" : "#d4dbe2", lineHeight: "1.15" }}>
-                {compactLine}
-              </div>
-              {compactSubline && (
-                <div style={{ fontSize: 9, color: isSelected ? "#dfe8ef" : "#9fafbc", lineHeight: "1.1", marginTop: 1 }}>
-                  {compactSubline}
-                </div>
-              )}
-            </div>
-          </Button>
-        </PanelSectionRow>
-      );
-    })}
-  </div>
-)}
     </>
   );
 }

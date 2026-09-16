@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 395,
-  "edgeCount": 990,
+  "fileCount": 397,
+  "edgeCount": 997,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -545,6 +545,15 @@
         "src/components/MainTab.tsx"
       ]
     },
+    "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx": {
+      "imports": [
+        "src/components/MainTabUnifiedAskBar.tsx",
+        "src/hooks/useSteamSettingsSearch.ts",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabUnifiedAskBar.test.tsx": {
       "imports": [
         "src/components/MainTabUnifiedAskBar.tsx",
@@ -563,6 +572,7 @@
         "src/data/askMode.ts",
         "src/features/unified-input/constants.ts",
         "src/hooks/useMainTabAskBarFocus.ts",
+        "src/hooks/useSteamSettingsSearch.ts",
         "src/types/bonsaiUi.ts",
         "src/utils/focusNavigation.ts",
         "src/utils/mediaFormat.ts",
@@ -572,6 +582,7 @@
       ],
       "importedBy": [
         "src/components/MainTab.tsx",
+        "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
         "src/components/MainTabUnifiedAskBar.test.tsx"
       ]
     },
@@ -2294,6 +2305,12 @@
         "src/hooks/useSmoothStreamReveal.test.ts"
       ]
     },
+    "src/hooks/useSteamSettingsSearch.test.ts": {
+      "imports": [
+        "src/hooks/useSteamSettingsSearch.ts"
+      ],
+      "importedBy": []
+    },
     "src/hooks/useSteamSettingsSearch.ts": {
       "imports": [
         "src/data/settingsDatabase.ts",
@@ -2301,7 +2318,11 @@
         "src/utils/intentPackSearch.ts"
       ],
       "importedBy": [
-        "src/index.tsx"
+        "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
+        "src/components/MainTabUnifiedAskBar.tsx",
+        "src/hooks/useSteamSettingsSearch.test.ts",
+        "src/index.tsx",
+        "src/styles/sections/section-4.ts"
       ]
     },
     "src/hooks/useStrategyChecklistSession.ts": {
@@ -2588,6 +2609,7 @@
       "imports": [
         "src/features/preset-carousel/presetRowLayout.ts",
         "src/features/unified-input/constants.ts",
+        "src/hooks/useSteamSettingsSearch.ts",
         "src/styles/sections/uiScalePx.ts"
       ],
       "importedBy": [
@@ -2723,6 +2745,7 @@
         "src/components/MainTabChatTranscript.stoppedNotice.test.tsx",
         "src/components/MainTabChatTranscript.strategyPanels.test.tsx",
         "src/components/MainTabChatTranscript.turnTitle.test.tsx",
+        "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
         "src/components/MainTabUnifiedAskBar.test.tsx",
         "src/components/PermissionDenyAction.test.tsx",
         "src/components/ReplyCopyButton.test.tsx",
@@ -3665,6 +3688,7 @@
         "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabPresetAnimatedChips.test.tsx",
         "src/components/MainTabPresetAnimatedChips.tsx",
+        "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
         "src/components/MainTabUnifiedAskBar.test.tsx",
         "src/components/MainTabUnifiedAskBar.tsx",
         "src/components/ModelRoutingOrderModal.test.tsx",

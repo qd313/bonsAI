@@ -119,7 +119,10 @@ from backend.services.ollama_service import (
     user_asks_ollama_bonsai_host_or_latency,
 )
 from backend.services.proton_troubleshooting_logs import collect_proton_troubleshooting_logs
-from backend.services.response_verify import drop_branch_menu_copying_the_worked_example
+from backend.services.response_verify import (
+    drop_branch_menu_copying_the_worked_example,
+    verify_ollama_response,
+)
 from backend.services.knowledge_base_service import (
     kb_coverage_to_transparency,
     lookup_game_genres,
@@ -702,6 +705,28 @@ async def run_game_ai_request(
                     response_text, destructive_advice_check
                 )
 
+        # The rule-based answer checker (response_verify.py) has existed since before this
+        # session but was never actually called from anywhere -- it ran zero times. It looks for
+        # a short list of patterns a hallucinated reply tends to show (an invented AppID when no
+        # game was attached, a promised power-tuning block that never showed up, an
+        # over-confident claim with no game context) and returns which of them fired. Log only,
+        # on purpose: nothing here changes the reply or shows on screen. This is a quiet trial
+        # run so the plugin log can say how often the rules would have fired before anyone
+        # decides whether a screen-visible version is worth building.
+        verify_result: Optional[dict[str, Any]] = None
+        if ollama_result.get("success"):
+            verify_result = verify_ollama_response(
+                response_text=base_response_text,
+                app_id=app_id,
+                app_name=app_name,
+                promised_json=tdp_grounding_requested,
+            )
+            logger.info(
+                "run_game_ai_request: answer checker ran rules_fired=%d warnings=%s",
+                len(verify_result.get("warnings") or []),
+                verify_result.get("warnings") or [],
+            )
+
         # Attribution notes: two footers, each saying which half of the knowledge base this
         # reply did *not* get help from. Appended after the safety notice above so a reply that
         # trips more than one shows the safety warning first.
@@ -770,6 +795,7 @@ async def run_game_ai_request(
             pc_ip=pc_ip,
             err_tail=err_tail,
             elapsed_seconds=elapsed,
+            verify_result=verify_result,
             reply_followup=reply_followup,
         )
         await plugin._persist_input_transparency(ollama_route_snapshot)

@@ -91,6 +91,11 @@
       "role": ""
     },
     {
+      "path": "py_modules/backend/services/game_ai_request.py",
+      "lines": 858,
+      "role": ""
+    },
+    {
       "path": "src/components/CharacterPickerModal.tsx",
       "lines": 853,
       "role": ""
@@ -103,11 +108,6 @@
     {
       "path": "src/components/KnowledgeBaseSection.tsx",
       "lines": 839,
-      "role": ""
-    },
-    {
-      "path": "py_modules/backend/services/game_ai_request.py",
-      "lines": 832,
       "role": ""
     },
     {

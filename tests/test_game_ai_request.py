@@ -326,5 +326,90 @@ class StrategyTitleProfileWiringTests(unittest.TestCase):
         )
 
 
+class AnswerCheckerLoggingTests(unittest.TestCase):
+    """The rule-based answer checker (response_verify.py) had never been called from anywhere.
+
+    It should now run once per successful reply and write exactly one log line naming which
+    rules fired -- nothing appended to the reply, no second model call, nothing on screen.
+    """
+
+    def _base_settings(self) -> dict:
+        return {
+            "latency_timeouts_custom_enabled": False,
+            "input_sanitizer_user_disabled": False,
+            "capabilities": {},
+        }
+
+    def _checker_log_calls(self, mock_logger):
+        return [
+            c
+            for c in mock_logger.info.call_args_list
+            if c.args and "answer checker ran" in str(c.args[0])
+        ]
+
+    def test_logs_the_rule_that_fired_for_a_reply_that_trips_one(self):
+        plugin = _FakePlugin(self._base_settings())
+        plugin._ollama_result = {
+            "success": True,
+            "response": "Try AppID 1234567 for that title.",
+            "model": "test-model",
+        }
+
+        with patch("backend.services.game_ai_request.logger") as mock_logger:
+            result = _run(plugin, question="What should I do next in this game?")
+
+        self.assertTrue(result.get("success"))
+        calls = self._checker_log_calls(mock_logger)
+        self.assertEqual(len(calls), 1)
+        _, rules_fired, warnings = calls[0].args
+        self.assertEqual(rules_fired, 1)
+        self.assertTrue(any("AppID 1234567" in w for w in warnings))
+
+    def test_logs_zero_rules_fired_for_an_ordinary_reply(self):
+        plugin = _FakePlugin(self._base_settings())
+        plugin._ollama_result = {
+            "success": True,
+            "response": "This game runs fine at the default power settings.",
+            "model": "test-model",
+        }
+
+        with patch("backend.services.game_ai_request.logger") as mock_logger:
+            _run(
+                plugin,
+                question="What should I do next in this game?",
+                app_id="1145360",
+                app_name="Hades",
+            )
+
+        calls = self._checker_log_calls(mock_logger)
+        self.assertEqual(len(calls), 1)
+        _, rules_fired, warnings = calls[0].args
+        self.assertEqual(rules_fired, 0)
+        self.assertEqual(warnings, [])
+
+    def test_checker_result_reaches_the_show_details_snapshot(self):
+        plugin = _FakePlugin(self._base_settings())
+        plugin._ollama_result = {
+            "success": True,
+            "response": "Try AppID 1234567 for that title.",
+            "model": "test-model",
+        }
+
+        _run(plugin)
+
+        self.assertEqual(len(plugin.persisted_snapshots), 1)
+        self.assertIsNotNone(plugin.persisted_snapshots[0].get("response_verify"))
+        self.assertFalse(plugin.persisted_snapshots[0]["response_verify"]["passed"])
+
+    def test_checker_does_not_change_the_reply_text(self):
+        plugin = _FakePlugin(self._base_settings())
+        text = "Try AppID 1234567 for that title."
+        plugin._ollama_result = {"success": True, "response": text, "model": "test-model"}
+
+        result = _run(plugin, question="What should I do next in this game?")
+
+        self.assertEqual(result.get("response"), text)
+
+
 if __name__ == "__main__":
     unittest.main()

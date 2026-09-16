@@ -1257,7 +1257,11 @@ describe("ollamaContext on mount (CHIP-ROTATION-01)", () => {
 
     const { result } = renderHook(() => useBonsaiAskOrchestration(makeArgs()));
 
-    expect(result.current.ollamaContext).toEqual({ app_id: "220", app_context: "active" });
+    expect(result.current.ollamaContext).toEqual({
+      app_id: "220",
+      app_context: "active",
+      app_name: "Half-Life 2",
+    });
   });
 
   it("degrades quietly to no active game when nothing is running", () => {
@@ -1302,7 +1306,11 @@ describe("the game context stays right after a game closes", () => {
 
     vi.useFakeTimers();
     const { result } = renderHook(() => useBonsaiAskOrchestration(makeArgs()));
-    expect(result.current.ollamaContext).toEqual({ app_id: "220", app_context: "active" });
+    expect(result.current.ollamaContext).toEqual({
+      app_id: "220",
+      app_context: "active",
+      app_name: "Half-Life 2",
+    });
 
     // The game is exited — Steam stops reporting a running app.
     (Router as { MainRunningApp: typeof Router.MainRunningApp }).MainRunningApp =
@@ -1335,7 +1343,11 @@ describe("the game context stays right after a game closes", () => {
       vi.advanceTimersByTime(2000);
     });
 
-    expect(result.current.ollamaContext).toEqual({ app_id: "620", app_context: "active" });
+    expect(result.current.ollamaContext).toEqual({
+      app_id: "620",
+      app_context: "active",
+      app_name: "Portal 2",
+    });
   });
 
   it("does not resurrect a closed game when the panel is reopened (session restore)", () => {
@@ -1366,7 +1378,11 @@ describe("the game context stays right after a game closes", () => {
     } as unknown as typeof Router.MainRunningApp;
 
     const { result } = renderHook(() => useBonsaiAskOrchestration(makeArgs()));
-    expect(result.current.ollamaContext).toEqual({ app_id: "220", app_context: "active" });
+    expect(result.current.ollamaContext).toEqual({
+      app_id: "220",
+      app_context: "active",
+      app_name: "Half-Life 2",
+    });
 
     act(() => {
       // A stale snapshot naming a different (no longer running) game.
@@ -1375,7 +1391,11 @@ describe("the game context stays right after a game closes", () => {
       );
     });
 
-    expect(result.current.ollamaContext).toEqual({ app_id: "220", app_context: "active" });
+    expect(result.current.ollamaContext).toEqual({
+      app_id: "220",
+      app_context: "active",
+      app_name: "Half-Life 2",
+    });
   });
 
   it("a question that names its own game is unaffected either way", () => {
@@ -1398,8 +1418,83 @@ describe("the game context stays right after a game closes", () => {
       );
     });
 
-    expect(result.current.ollamaContext).toEqual({ app_id: "220", app_context: "active" });
+    expect(result.current.ollamaContext).toEqual({
+      app_id: "220",
+      app_context: "active",
+      app_name: "Half-Life 2",
+    });
     expect(result.current.lastExchange?.question).toBe("how do I beat Ravenholm");
+  });
+});
+
+/*
+ * The footnote used to name a game by its raw AppID ("Context: active game AppID 1145360")
+ * even once the game context carried a name, and it only ever picked up a game change through
+ * `trackedRunningAppId` -- the Strategy checklist's own poll, a different feature. Measured on
+ * the Deck: the line stayed wrong for minutes, in both directions, while the panel stayed open
+ * the whole time. This describes the footnote's own poll, GAME_CONTEXT_POLL_MS, which does not
+ * borrow another feature's timer and carries the game's name along with its id.
+ */
+describe("the footnote's own poll (GAME-CONTEXT-POLL-01)", () => {
+  const originalMainRunningApp = Router.MainRunningApp;
+
+  afterEach(() => {
+    (Router as { MainRunningApp: typeof Router.MainRunningApp }).MainRunningApp =
+      originalMainRunningApp;
+    vi.useRealTimers();
+  });
+
+  it("carries the running game's name, not just its AppID, once it catches up", async () => {
+    resetFakeDeckyRpc();
+    setRpcHandler("get_background_game_ai_status", () => new Promise(() => {}));
+    (Router as { MainRunningApp: typeof Router.MainRunningApp }).MainRunningApp =
+      undefined as unknown as typeof Router.MainRunningApp;
+
+    vi.useFakeTimers();
+    const { result } = renderHook(() => useBonsaiAskOrchestration(makeArgs()));
+
+    // Hades launches while the panel is already open and mounted.
+    (Router as { MainRunningApp: typeof Router.MainRunningApp }).MainRunningApp = {
+      appid: 1145360,
+      display_name: "Hades",
+    } as unknown as typeof Router.MainRunningApp;
+
+    await act(async () => {
+      vi.advanceTimersByTime(2000);
+    });
+
+    expect(result.current.ollamaContext).toEqual({
+      app_id: "1145360",
+      app_context: "active",
+      app_name: "Hades",
+    });
+  });
+
+  it("stops polling once the hook unmounts", async () => {
+    resetFakeDeckyRpc();
+    setRpcHandler("get_background_game_ai_status", () => new Promise(() => {}));
+    (Router as { MainRunningApp: typeof Router.MainRunningApp }).MainRunningApp = {
+      appid: 220,
+      display_name: "Half-Life 2",
+    } as unknown as typeof Router.MainRunningApp;
+
+    vi.useFakeTimers();
+    const clearIntervalSpy = vi.spyOn(window, "clearInterval");
+    const { result, unmount } = renderHook(() => useBonsaiAskOrchestration(makeArgs()));
+    expect(result.current.ollamaContext?.app_id).toBe("220");
+
+    unmount();
+
+    // The game exits after the panel is gone. Nothing is left mounted to update, and the
+    // interval this test is guarding against must not still be ticking (or throwing).
+    (Router as { MainRunningApp: typeof Router.MainRunningApp }).MainRunningApp =
+      undefined as unknown as typeof Router.MainRunningApp;
+    expect(() => {
+      vi.advanceTimersByTime(10000);
+    }).not.toThrow();
+
+    expect(clearIntervalSpy).toHaveBeenCalled();
+    clearIntervalSpy.mockRestore();
   });
 });
 

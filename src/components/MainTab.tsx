@@ -331,7 +331,9 @@ export function MainTab(props: MainTabProps) {
               }}
             >
               {props.ollamaContext.app_context === "active" && props.ollamaContext.app_id
-                ? `Context: active game AppID ${props.ollamaContext.app_id}`
+                ? `Context: active game ${
+                    props.ollamaContext.app_name?.trim() || `AppID ${props.ollamaContext.app_id}`
+                  }`
                 : "Context: no active game detected"}
             </div>
           </PanelSectionRow>

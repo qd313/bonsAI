@@ -43,6 +43,8 @@
     "askThreadDisplayQuestionRef:useRef",
     "syncOllamaContextFromRunningApp:useCallback",
     "(not assigned):useEffect",
+    "isAskingForGameContextPollRef:useRef",
+    "(not assigned):useEffect",
     "[lastApplied, setLastApplied]:useState",
     "[suggestedPrompts, setSuggestedPrompts]:useState",
     "ragCandidatesCacheRef:useRef",

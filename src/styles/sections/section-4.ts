@@ -337,10 +337,25 @@ export function buildSection4Section(): string {
           pointer-events: auto;
           z-index: 5;
         }
-        /* A card floating over the chat needs its own solid surface — the transcript behind it is
-           not opaque (the same reason the dock itself carries an explicit background, section-6.ts). */
+        /*
+          A card floating over the chat needs its own solid surface — the transcript behind it is
+          not opaque (the same reason the dock itself carries an explicit background, section-6.ts).
+          Measured on the Deck 2026-09-16 (build ca12429, screenshots/DeckCapture_20260916_045914_game.png):
+          a chat slot title and a reply's own text both still read straight through the card at the
+          previous 0.92 alpha, over both the heading and rows four and five. Fully opaque now, not
+          just "mostly" — an alpha channel of any size leaves room for a CEF compositing surprise
+          like that one to show through again, and there is nothing behind this card worth blending
+          with. ".bonsai-settings-results-card.bonsai-glass-panel" is three class selectors, one more
+          than the shared ".bonsai-glass-panel" rule above (section-6.ts) that supplies the 0.25
+          fallback every other glass panel uses, so this rule already outranks it on specificity
+          alone (section-4.test.ts pins that count) — the blur is turned off here too, on its own
+          !important rule, since the shared blur rule (section-6.ts) carries none at all and a blur
+          has nothing left to do once the surface behind it can never show through regardless.
+        */
         .bonsai-scope .bonsai-settings-results-card.bonsai-glass-panel {
-          background: rgba(18, 26, 34, 0.92) !important;
+          background: rgb(18, 26, 34) !important;
+          backdrop-filter: none !important;
+          -webkit-backdrop-filter: none !important;
         }
         .bonsai-scope .bonsai-settings-results-card-heading {
           color: #8fa8c4;

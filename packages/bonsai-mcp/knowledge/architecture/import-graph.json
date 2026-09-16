@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 402,
-  "edgeCount": 1016,
+  "edgeCount": 1017,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2651,7 +2651,8 @@
     "src/styles/sections/section-4.test.ts": {
       "imports": [
         "src/features/preset-carousel/presetRowLayout.ts",
-        "src/styles/sections/section-4.ts"
+        "src/styles/sections/section-4.ts",
+        "src/styles/sections/section-6.ts"
       ],
       "importedBy": []
     },
@@ -2690,6 +2691,7 @@
       ],
       "importedBy": [
         "src/styles/bonsaiScopeStylesheet.ts",
+        "src/styles/sections/section-4.test.ts",
         "src/styles/sections/section-6.test.ts"
       ]
     },

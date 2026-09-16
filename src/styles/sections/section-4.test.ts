@@ -12,6 +12,7 @@
  */
 import { describe, expect, it } from "vitest";
 import { buildSection4Section } from "./section-4";
+import { buildSection6Section } from "./section-6";
 import {
   PRESET_CHIP_BLOCKED_EDGE_FLASH_MS,
   PRESET_VISIBLE_SLOTS,
@@ -62,6 +63,55 @@ describe("chip row out-of-chips edge cue (section 4 CSS)", () => {
     const rampMs = Number(match![1]);
     expect(rampMs).toBeGreaterThan(0);
     expect(rampMs).toBeLessThan(PRESET_CHIP_BLOCKED_EDGE_FLASH_MS);
+  });
+});
+
+describe("the settings-results card's surface is fully opaque (section 4 CSS)", () => {
+  const css = buildSection4Section();
+
+  it("declares a solid background with no alpha channel at all", () => {
+    const match = css.match(
+      /\.bonsai-scope \.bonsai-settings-results-card\.bonsai-glass-panel\s*\{([^}]*)\}/,
+    );
+    expect(match).toBeTruthy();
+    const body = match![1]!;
+    // rgb(), not rgba() -- an alpha of even 0.92 still let a chat title and a reply's own text
+    // read straight through on device (2026-09-16, build ca12429); nothing short of "no alpha
+    // channel" rules that class of surprise out for good.
+    expect(body).toMatch(/background:\s*rgb\(18,\s*26,\s*34\)\s*!important/);
+    expect(body).not.toMatch(/background:\s*rgba\(/);
+    // Blur has nothing left to do once nothing behind the card can show through it regardless,
+    // and the shared blur rule below carries no !important of its own to fight anyway.
+    expect(body).toMatch(/backdrop-filter:\s*none\s*!important/);
+  });
+
+  it("declares it on a three-class selector, so it structurally outranks the shared two-class glass-panel rule", () => {
+    // section-6.ts's `.bonsai-scope .bonsai-glass-panel { background: rgba(...) !important; }` is
+    // two class selectors (bonsai-scope, bonsai-glass-panel). Both declarations carry !important,
+    // so the higher-specificity one wins regardless of which file's rule comes later in the
+    // concatenated stylesheet (bonsaiScopeStylesheet.ts orders section 4 before section 6) --
+    // matched here by literally counting the selector's own class segments rather than trusting
+    // that arithmetic to stay true as the rule is edited later.
+    const selectorMatch = css.match(
+      /(\.bonsai-scope \.bonsai-settings-results-card\.bonsai-glass-panel)\s*\{/,
+    );
+    expect(selectorMatch).toBeTruthy();
+    const classCount = (selectorMatch![1]!.match(/\.[\w-]+/g) ?? []).length;
+    expect(classCount).toBe(3);
+
+    // Verified against section-6.ts's own output, not just asserted in a comment: the shared rule
+    // this has to outrank really is only two class selectors, on the exact property this fights
+    // over.
+    const baseCss = buildSection6Section();
+    // Specifically the bare rule (background, no comma-joined selector list) -- section-6.ts also
+    // has an earlier `.bonsai-glass-panel, .bonsai-preset-glass { backdrop-filter: ... }` block
+    // that shares the same leading selector text but is not the one this fight is over.
+    const baseMatch = baseCss.match(/(\.bonsai-scope \.bonsai-glass-panel)\s*\{([^}]*)\}/);
+    expect(baseMatch).toBeTruthy();
+    const baseSelectorClassCount = (baseMatch![1]!.match(/\.[\w-]+/g) ?? []).length;
+    expect(baseSelectorClassCount).toBe(2);
+    expect(baseMatch![2]).toMatch(/background:\s*rgba\([^)]*\)\s*!important/);
+    expect(classCount).toBeGreaterThan(baseSelectorClassCount);
   });
 });
 

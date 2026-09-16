@@ -178,6 +178,7 @@
     "tests/test_eval_kb_arms.py",
     "tests/test_eval_kb_tie_break.py",
     "tests/test_feedback_service.py",
+    "tests/test_forget_game_ai_carried_context.py",
     "tests/test_game_ai_request.py",
     "tests/test_game_ai_request_followup_memory.py",
     "tests/test_input_sanitizer_service.py",

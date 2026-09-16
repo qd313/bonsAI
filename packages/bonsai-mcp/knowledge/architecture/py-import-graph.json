@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
   "fileCount": 67,
-  "edgeCount": 154,
+  "edgeCount": 155,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -141,6 +141,10 @@
       "count": 2
     },
     {
+      "path": "py_modules/backend/services/kb_followup_memory.py",
+      "count": 2
+    },
+    {
       "path": "py_modules/backend/services/model_policy.py",
       "count": 2
     },
@@ -230,10 +234,6 @@
     },
     {
       "path": "py_modules/backend/services/intent_pack_service.py",
-      "count": 1
-    },
-    {
-      "path": "py_modules/backend/services/kb_followup_memory.py",
       "count": 1
     },
     {
@@ -331,6 +331,7 @@
         "py_modules/backend/services/game_ai_request.py",
         "py_modules/backend/services/input_sanitizer_service.py",
         "py_modules/backend/services/intent_pack_service.py",
+        "py_modules/backend/services/kb_followup_memory.py",
         "py_modules/backend/services/knowledge_base_schema.py",
         "py_modules/backend/services/knowledge_base_service.py",
         "py_modules/backend/services/local_ollama_setup_service.py",
@@ -576,6 +577,7 @@
     "py_modules/backend/services/kb_followup_memory.py": {
       "imports": [],
       "importedBy": [
+        "main.py",
         "py_modules/backend/services/game_ai_request.py"
       ]
     },

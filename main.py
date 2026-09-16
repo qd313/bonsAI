@@ -207,6 +207,7 @@ from backend.services.ollama_connection_test import (
     summarize_for_log,
 )
 from backend.services import ask_payload
+from backend.services import kb_followup_memory
 from backend.services.ask_payload import (
     coerce_payload_bool,
     parse_ask_payload,
@@ -2751,6 +2752,65 @@ class Plugin:
         await self._maybe_app_log("ask.abort", "background ask abort requested")
         return {"ok": True}
 
+    async def forget_game_ai_carried_context(self):
+        """Feature: Clear button (Session context strip + Clear cache). Input: none.
+        Output: {"ok", "forgot"} — forgets what the plugin carries into the next question.
+
+        *Clear* here means only what the model is fed on the *next* Strategy/Expert question, not
+        the visible session — the chat, the Session context strip's own rows, and the stored
+        background answer are all left alone; ``forget_background_game_ai`` owns those. D105,
+        locked 2026-09-15: the Session context strip's own Clear button calls this directly, and
+        *Clear cache* in Settings calls it too (see the one added line at the top of
+        ``forget_background_game_ai`` below), because the maintainer's choice was the lighter of
+        two meanings for Clear — only what is carried forward, not a second way to wipe the chat.
+
+        Reading ``py_modules/backend/services/game_ai_request.py`` end to end (done before writing
+        this) turned up exactly two things a question carries into the next one without being
+        re-sent by the screen every time:
+
+        1. **The remembered follow-up subject** — ``kb_followup_memory``, module-level and
+           per-process, keyed by game. Forgotten with its own ``forget()``.
+        2. **The strategy checklist's ticked-box position** for the game a Strategy/Expert
+           question was last asked about. Persisted the same way ``clear_strategy_checklist_session``
+           already clears it, reusing ``clear_session_entry`` / ``save_session_store`` and this
+           class's own ``_strategy_checklist_session_path`` / store lock.
+
+        The running game's AppID is read off ``self._background_state["app_id"]`` — the AppID of
+        whichever question was last asked in this process, the same field
+        ``abort_background_game_ai`` already reads. There is no other server-side notion of "the
+        game that's running": Steam's own running-app fact lives in the screen process and is not
+        sent with this call. Read *before* anything below can have reset that state, which is why
+        ``forget_background_game_ai`` calls this method first, ahead of its own state reset. When
+        nothing has been asked yet this process, the field is blank and the whole checklist store
+        is cleared instead — there is at most one game's position to forget either way — and the
+        return value says which happened, so a caller (or a test) can tell.
+        """
+        forgot: list[str] = []
+
+        kb_followup_memory.forget()
+        forgot.append("followup_subject")
+
+        app_id = str(self._background_state.get("app_id") or "").strip()
+        if not hasattr(self, "_strategy_checklist_store_lock"):
+            self._strategy_checklist_store_lock = asyncio.Lock()
+        async with self._strategy_checklist_store_lock:
+            path = Plugin._strategy_checklist_session_path()
+            store = Plugin._load_strategy_checklist_store()
+            merged = clear_session_entry(store, app_id if app_id else None)
+            save_session_store(
+                path, merged, settings_dir=decky.DECKY_PLUGIN_SETTINGS_DIR, logger=logger
+            )
+        forgot.append(
+            "strategy_checklist_position" if app_id else "strategy_checklist_whole_store"
+        )
+
+        logger.info(
+            "forget_game_ai_carried_context: forgot=%s (app_id=%s)",
+            forgot,
+            app_id or "<unknown>",
+        )
+        return {"ok": True, "forgot": forgot}
+
     async def forget_background_game_ai(self):
         """Feature: Clear session cache. Input: none. Output: {"ok", "stopped"} — drop the stored answer.
 
@@ -2759,20 +2819,26 @@ class Plugin:
         tabbed away from — so switching tabs after a clear painted the cleared thread straight back.
         Measured on the maintainer's Deck 2026-08-27; locked as **D35 option 1**.
 
-        Two jobs, in this order:
+        Three jobs, in this order:
 
-        1. **Forget**, under ``_background_lock`` and before any real suspension point. The lock's
-           uncontended fast path does not yield, so a ``get_background_game_ai_status`` sent right
-           behind this one (the remount that follows the confirmation modal closing) either finds
-           the state already idle or blocks on the lock until it is. That ordering is what makes a
-           fire-and-forget call from the frontend safe.
-        2. **Stop**, if a generation was still running — the maintainer's call on D35's open
+        1. **Forget what carries forward** — ``forget_game_ai_carried_context()``, called first and
+           deliberately ahead of the state reset just below: that method reads the running game's
+           AppID off ``self._background_state``, so calling it after that state is replaced with a
+           fresh one would always see no game at all. D105: Clear cache gets the same forget as the
+           Session context strip's own Clear button, on one code path.
+        2. **Forget the stored answer**, under ``_background_lock`` and before any real suspension
+           point. The lock's uncontended fast path does not yield, so a ``get_background_game_ai_status``
+           sent right behind this one (the remount that follows the confirmation modal closing)
+           either finds the state already idle or blocks on the lock until it is. That ordering is
+           what makes a fire-and-forget call from the frontend safe.
+        3. **Stop**, if a generation was still running — the maintainer's call on D35's open
            sub-question. Cancelling the asyncio task is not enough on its own: the model call is a
            blocking urllib read on a worker thread, and only ``abort_background_game_ai`` owns that
            teardown (abort event -> close the HTTP response -> ask Ollama to stop). Its own state
            write is a no-op by the time it runs here, which is the wanted outcome: a cleared session
            shows nothing at all, not a "Request cancelled." bubble.
         """
+        await self.forget_game_ai_carried_context()
         async with self._background_lock:
             task = self._background_task
             self._background_task = None

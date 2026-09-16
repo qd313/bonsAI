@@ -139,6 +139,60 @@ def run_verifier_second_pass(
     return {"ran": True, "passed": passed, "model": model, "verdict": "NO" if passed else "YES"}
 
 
+# The strategy-branch prompt shows the model a worked example purely to demonstrate the JSON
+# shape it must reply in, then tells it in as many words never to reuse that wording. It
+# sometimes copies the example into a real answer anyway (seen under a Portal 2 and a Hades
+# answer). These are the example's exact words, kept lower-case for a case-insensitive match.
+_WORKED_EXAMPLE_OPTION_LABELS = {
+    "just arrived at the train station",
+    "fighting through ravenholm",
+}
+_WORKED_EXAMPLE_MARKERS = ("ravenholm", "train station")
+
+
+def drop_branch_menu_copying_the_worked_example(
+    branches: Optional[dict[str, Any]], app_name: str
+) -> Optional[dict[str, Any]]:
+    """Drop a follow-up menu whose question or choices are still the prompt's worked example.
+
+    Mirrors the parser's own rule for a broken checklist (strategy_guide_parse.py: "a rejected
+    block is simply dropped ... rather than shown") for a block that parsed fine but still
+    carries the example's wording -- Ravenholm, the train station, or Half-Life 2 when that is
+    not the game actually being asked about.
+    """
+    if not branches:
+        return branches
+    options = branches.get("options")
+    if not isinstance(options, list):
+        return branches
+
+    # Ravenholm, the train station and Half-Life 2 itself are all real, legitimate answers
+    # when Half-Life 2 is actually the game being asked about -- only suspicious when it is not.
+    is_half_life_2 = (app_name or "").strip().lower() == "half-life 2"
+
+    def _copies_the_example(text: str) -> bool:
+        if is_half_life_2:
+            return False
+        low = (text or "").strip().lower()
+        if not low:
+            return False
+        if low in _WORKED_EXAMPLE_OPTION_LABELS:
+            return True
+        if any(marker in low for marker in _WORKED_EXAMPLE_MARKERS):
+            return True
+        if "half-life 2" in low:
+            return True
+        return False
+
+    question = branches.get("question")
+    if _copies_the_example(question if isinstance(question, str) else ""):
+        return None
+    for opt in options:
+        if isinstance(opt, dict) and _copies_the_example(str(opt.get("label", ""))):
+            return None
+    return branches
+
+
 def maybe_append_verifier_notice(response_text: str, verify_result: dict[str, Any]) -> str:
     """Append a short user-visible notice when rules flagged issues (no PII in notice)."""
     if verify_result.get("passed"):

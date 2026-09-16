@@ -1508,13 +1508,14 @@ def build_system_prompt(
             "Do not trail off into unrelated topics before the fence; the branch picker is mandatory on this turn.\n"
             "Use this exact opening fence line (no language tag on the fence name) and valid JSON only inside it (2–8 options, each with \"id\" and short \"label\" the player understands):\n"
             "```bonsai-strategy-branches\n"
-            '{"question":"Where are you at in Half-Life 2?","options":['
-            '{"id":"a","label":"Just arrived at the train station"},'
-            '{"id":"b","label":"Fighting through Ravenholm"}]}\n'
+            '{"question":"Where are you at in <THIS GAME>?","options":['
+            '{"id":"a","label":"<a place early in THIS game>"},'
+            '{"id":"b","label":"<a place later in THIS game>"}]}\n'
             "```\n"
-            "The example above shows the shape only — replace the game title, the question, and both "
-            "option labels with ones that fit the current game and conversation; never copy the example's "
-            "wording into your reply.\n"
+            "The example above shows the shape only, with placeholders standing in for real "
+            "words — it is not itself a real game, place, or question. Replace every placeholder "
+            "with the actual game title, question, and option labels that fit the current game "
+            "and conversation; never copy any placeholder text into your reply.\n"
             "Do not use a literal [bonsai-strategy-branches] line or parenthesized / URL-encoded JSON instead of this fence; "
             "the Deck UI reads the fenced block.\n"
             "The visible part above the fence should already ask the same branching question in natural language; the JSON question string must match that intent.\n"

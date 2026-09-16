@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
   "fileCount": 67,
-  "edgeCount": 153,
+  "edgeCount": 154,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -37,8 +37,7 @@
   ],
   "orphans": [
     "py_modules/backend/__init__.py",
-    "py_modules/backend/services/__init__.py",
-    "py_modules/backend/services/response_verify.py"
+    "py_modules/backend/services/__init__.py"
   ],
   "fanIn": [
     {
@@ -286,6 +285,10 @@
       "count": 1
     },
     {
+      "path": "py_modules/backend/services/response_verify.py",
+      "count": 1
+    },
+    {
       "path": "py_modules/backend/services/steam_vac_service.py",
       "count": 1
     },
@@ -303,10 +306,6 @@
     },
     {
       "path": "py_modules/backend/services/__init__.py",
-      "count": 0
-    },
-    {
-      "path": "py_modules/backend/services/response_verify.py",
       "count": 0
     }
   ],
@@ -546,6 +545,7 @@
         "py_modules/backend/services/ollama_prompts.py",
         "py_modules/backend/services/ollama_service.py",
         "py_modules/backend/services/proton_troubleshooting_logs.py",
+        "py_modules/backend/services/response_verify.py",
         "py_modules/backend/services/screenshot_media.py",
         "py_modules/backend/services/spoiler_risk_service.py",
         "py_modules/backend/services/spoiler_title_profiles.py",
@@ -826,7 +826,9 @@
     },
     "py_modules/backend/services/response_verify.py": {
       "imports": [],
-      "importedBy": []
+      "importedBy": [
+        "py_modules/backend/services/game_ai_request.py"
+      ]
     },
     "py_modules/backend/services/screenshot_media.py": {
       "imports": [],

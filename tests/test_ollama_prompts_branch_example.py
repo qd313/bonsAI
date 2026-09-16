@@ -48,6 +48,31 @@ class StrategyBranchExamplePromptTests(unittest.TestCase):
         self.assertIn('"question":"Where are you at in', example_line)
         self.assertNotIn('"label":"…"', example_line)
 
+    def test_branch_example_no_longer_offers_a_real_game_to_copy(self):
+        """The example must not carry the old Half-Life 2 / Ravenholm / train station wording.
+
+        Roadmap: "The follow-up menu keeps offering Half-Life 2 whatever game you asked
+        about" -- the model copied the worked example's real-sounding words verbatim into
+        answers about other games. The example must now use placeholders no answer would
+        plausibly contain, not a real game's places.
+        """
+        text = build_system_prompt(
+            "how do I get past this part",
+            "",
+            "Portal 2",
+            [],
+            [],
+            _lookup_app_name,
+            _lookup_vdf,
+            ask_mode="strategy",
+        )
+        idx = text.index(self._FENCE_WITH_NEWLINE)
+        json_line_start = idx + len(self._FENCE_WITH_NEWLINE)
+        example_line = text[json_line_start : text.index("\n", json_line_start)]
+        self.assertNotIn("Half-Life 2", example_line)
+        self.assertNotIn("Ravenholm", example_line)
+        self.assertNotIn("train station", example_line)
+
     def test_branch_example_absent_on_followup_turn(self):
         """Follow-up turns don't emit the branch fence at all, so there's nothing to check."""
         text = build_system_prompt(

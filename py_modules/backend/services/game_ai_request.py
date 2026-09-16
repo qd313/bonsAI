@@ -119,6 +119,7 @@ from backend.services.ollama_service import (
     user_asks_ollama_bonsai_host_or_latency,
 )
 from backend.services.proton_troubleshooting_logs import collect_proton_troubleshooting_logs
+from backend.services.response_verify import drop_branch_menu_copying_the_worked_example
 from backend.services.knowledge_base_service import (
     kb_coverage_to_transparency,
     lookup_game_genres,
@@ -777,7 +778,9 @@ async def run_game_ai_request(
             "app_context": app_context,
             "applied": applied,
             "elapsed_seconds": elapsed,
-            "strategy_guide_branches": ollama_result.get("strategy_guide_branches"),
+            "strategy_guide_branches": drop_branch_menu_copying_the_worked_example(
+                ollama_result.get("strategy_guide_branches"), app_name
+            ),
             "strategy_checklist": ollama_result.get("strategy_checklist"),
             "model_policy_disclosure": ollama_result.get("model_policy_disclosure"),
             "strategy_spoiler_consent_effective": bool(

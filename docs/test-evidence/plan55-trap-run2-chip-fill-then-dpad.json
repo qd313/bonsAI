@@ -1,0 +1,257 @@
+{
+  "ok": true,
+  "fidelity": "steam-routed",
+  "steps": [
+    {
+      "index": 1,
+      "label": "up from avatar to the chip",
+      "press": [
+        "UP"
+      ],
+      "expect": "button.bonsai-preset-glass",
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": true,
+      "from": "<DIV> \"Choose AI character, A\"",
+      "to": "<BUTTON> \"how does the excursion funnel work in portal 2\"",
+      "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 960,
+      "diagnosis": "press routed, focus moved <DIV> \"Choose AI character, A\" -> <BUTTON> \"how does the excursion funnel work in portal 2\", matching expect"
+    },
+    {
+      "index": 2,
+      "label": "A on the chip fills the box",
+      "press": [
+        "A"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"how does the excursion funnel work in portal 2\"",
+      "to": "<BUTTON> \"how does the excursion funnel work in portal 2\"",
+      "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 969,
+      "diagnosis": "press routed, focus moved <BUTTON> \"how does the excursion funnel work in portal 2\" -> <BUTTON> \"how does the excursion funnel work in portal 2\""
+    },
+    {
+      "index": 3,
+      "label": "down from the box",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"how does the excursion funnel work in portal 2\"",
+      "to": "<INPUT> (unnamed - the only text around it is a container's, not a label)",
+      "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div._DialogLayout.Panel.Focusable:nth-child(2) > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 945,
+      "diagnosis": "press routed, focus moved <BUTTON> \"how does the excursion funnel work in portal 2\" -> <INPUT> (unnamed - the only text around it is a container's, not a label)"
+    },
+    {
+      "index": 4,
+      "label": "left from the box",
+      "press": [
+        "LEFT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<INPUT> (unnamed - the only text around it is a container's, not a label)",
+      "to": "<BUTTON> \"Attach screenshot to Ask\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 913,
+      "diagnosis": "press routed, focus moved <INPUT> (unnamed - the only text around it is a container's, not a label) -> <BUTTON> \"Attach screenshot to Ask\""
+    },
+    {
+      "index": 5,
+      "label": "right from the box",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"Attach screenshot to Ask\"",
+      "to": "<BUTTON> \"Inference mode: Strategy. Open to change.\"",
+      "focusKey": "sel:div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 928,
+      "diagnosis": "press routed, focus moved <BUTTON> \"Attach screenshot to Ask\" -> <BUTTON> \"Inference mode: Strategy. Open to change.\""
+    },
+    {
+      "index": 6,
+      "label": "down again",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"Inference mode: Strategy. Open to change.\"",
+      "to": "<BUTTON> \"ask\"",
+      "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 866,
+      "diagnosis": "press routed, focus moved <BUTTON> \"Inference mode: Strategy. Open to change.\" -> <BUTTON> \"ask\""
+    },
+    {
+      "index": 7,
+      "label": "up",
+      "press": [
+        "UP"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"ask\"",
+      "to": "<BUTTON> \"Inference mode: Strategy. Open to change.\"",
+      "focusKey": "sel:div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 934,
+      "diagnosis": "press routed, focus moved <BUTTON> \"ask\" -> <BUTTON> \"Inference mode: Strategy. Open to change.\""
+    }
+  ],
+  "ranSteps": 7,
+  "totalSteps": 7,
+  "passed": 7,
+  "failed": 0,
+  "visited": [
+    "<DIV> \"Choose AI character, A\"",
+    "<BUTTON> \"how does the excursion funnel work in portal 2\"",
+    "<INPUT> (unnamed - the only text around it is a container's, not a label)",
+    "<BUTTON> \"Attach screenshot to Ask\"",
+    "<BUTTON> \"Inference mode: Strategy. Open to change.\"",
+    "<BUTTON> \"ask\""
+  ],
+  "cycle": {
+    "key": "sel:div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > button.Focusable:nth-child(1)",
+    "seenAt": [
+      5,
+      7
+    ],
+    "loop": [
+      "<BUTTON> \"Inference mode: Strategy. Open to change.\"",
+      "<BUTTON> \"ask\"",
+      "<BUTTON> \"Inference mode: Strategy. Open to change.\""
+    ],
+    "escaped": false,
+    "stepsAfterLoop": 0
+  },
+  "neverReached": [],
+  "stopsFocusedButNotVisible": 0,
+  "notVisibleStops": [],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 11695,
+  "acquired": false,
+  "summary": "7/7 steps passed; focus returned to <BUTTON> \"Inference mode: Strategy. Open to change.\" at steps 5 and 7 (the run ended there, so whether the ring could have escaped is untested)"
+}

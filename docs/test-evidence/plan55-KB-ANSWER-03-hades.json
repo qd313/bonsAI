@@ -1,0 +1,22 @@
+{
+  "row": "KB-ANSWER-03 (Deck half, Hades sentence)",
+  "plan": 55,
+  "when": "2026-09-16T00:10:27.101608+00:00",
+  "build": "1ac4d7a6fff479a01c48f6a1b6a60d78b360b88a",
+  "setup": "Hades (1145360) running, Strategy mode, character voice on, masking on, the sentence typed with scripts/deck_send_ask.py (VERIFIED) and sent with Ask; the chat also held one earlier turn (a Portal 2 question asked with Hades running).",
+  "question": "how do i beat theseus and asterius",
+  "reply_chars": 558,
+  "reply": "Right, listen up, you want to know how to take down Theseus and Asterius? It's a proper headache, mate, because you got two of 'em trying to mess with ya at once. Here's the skinny: Asterius, that bull, he's gonna try and charge you with a long swing.You gotta sidestep that charge, and he'll be stuck for a bit. Then, Theseus is throwing his spear, and you gotta watch the ground - he'll mark where the god's power is gonna land. The best move, yeah? You gotta try and take Asterius out first.He's the one that's more predictable, so handle him while you can.",
+  "spoiler_fences": 0,
+  "honesty_line": "none",
+  "follow_up_menu": [
+    "A. Focusing on dodging Asterius's charge",
+    "B. Managing Theseus's divine power"
+  ],
+  "context_line_after": "Context: active game AppID 1145360",
+  "screenshot": "screenshots/DeckCapture_20260915_201002_game.png",
+  "runs": [
+    "runs/plan55-KB-ANSWER-03-hades-typed-send.json"
+  ],
+  "verdict": "READ CAPTURED for the maintainer's judgement: the note's advice starts straight after the character's opening line (about 100 words), no warning line, no spoiler box. Whether that reads as advice-first is the maintainer's call, which is what the row is for. Side note: two sentences run together with no space after the full stop ('swing.You', 'first.He'), which is the model's output, not the plugin's."
+}

@@ -1,0 +1,66 @@
+{
+  "row": "ASK-WIDTH-01",
+  "plan": 55,
+  "when": "2026-09-16T00:05:15.575231+00:00",
+  "build": "1ac4d7a6fff479a01c48f6a1b6a60d78b360b88a (dist/index.js sha256 89dfb6b3...)",
+  "method": "deck_readPage getBoundingClientRect on the QuickAccess_uid2 document, Main tab, new empty chat, Hades running, no game context yet",
+  "panel_column": {
+    "x": 48,
+    "w": 300,
+    "right": 348
+  },
+  "rows": {
+    "tab bar": {
+      "x": 48,
+      "w": 300,
+      "right": 348,
+      "h": 20
+    },
+    "chat slot row": {
+      "x": 48,
+      "w": 300,
+      "right": 348,
+      "h": 55
+    },
+    "empty-slot hint": {
+      "x": 48,
+      "w": 300,
+      "right": 348,
+      "h": 120
+    },
+    "session context row": {
+      "x": 48,
+      "w": 300,
+      "right": 348,
+      "h": 56
+    },
+    "dock (chips + ask bar)": {
+      "x": 48,
+      "w": 300,
+      "right": 348,
+      "h": 157
+    },
+    "preset chip": {
+      "x": 48,
+      "w": 300,
+      "right": 348,
+      "h": 30
+    },
+    "question box wrapper": {
+      "x": 73,
+      "w": 274,
+      "right": 347,
+      "h": 44,
+      "note": "inset by the avatar column on the left; the dock itself is full width"
+    },
+    "ask button": {
+      "x": 49,
+      "w": 298,
+      "right": 347,
+      "h": 36,
+      "note": "1px border inset each side"
+    }
+  },
+  "horizontal_overflow": false,
+  "verdict": "PASS by rect: every Main row spans the 300px column (48..348) and nothing overflows sideways. Screenshot for the by-eye half named in the testing row."
+}

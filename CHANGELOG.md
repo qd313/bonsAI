@@ -5,6 +5,13 @@ All notable changes to this project are documented in this file.
 ## [Unreleased]
 
 ### Fixed
+- **The tab bar's pop-up strip no longer leaves a see-through ghost of itself over the suggestion chips:**
+  touching the screen used to close the strip with a fade, and if that fade ever stalled — seen twice with a
+  game running full screen — the strip was left frozen half-visible, with pale tab icons and a faint row of
+  dots showing through the chip text. A plain timer now forces the strip fully hidden a fraction of a second
+  after it closes, whether or not the fade itself finishes. The exact reason the fade stalls was not pinned
+  down — it needs a finger on the screen to reproduce, and the rig has no touch. `TabIndicatorBar.tsx`. On-Deck
+  row owed: **TAB-BAR-GHOST-01** in `docs/testing-manual.md`, and it needs a maintainer's touch.
 - **A spoiler box now opens when the rules already say it should:** on a game the plugin knows only by
   name, such as an emulator shortcut with no Steam ID; when you type a boss's name before asking about
   it, such as "wheatley fight"; and when you name a game with no story to protect while nothing is

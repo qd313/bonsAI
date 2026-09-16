@@ -107,6 +107,13 @@ starts work outside this.
   2026-09-04: the row does not claim the press, so Steam's own idea of "past the edge" fires. Left should either walk the
   history or hold still. Evidence `docs/test-evidence/round35-BUG-left-from-earlier-pill-leaves-plugin.json`,
   `docs/test-evidence/round35-BUG-left-from-earlier-pill-retry.json`.
+- ★ `[focus]` **Left from the Ask button, and from the paperclip, hands the highlight to Steam's Quick Access
+  rail** — **OPEN, measured 2026-09-15 evening.** With the ring on the Ask button, or on the paperclip in the
+  question box's corner, Left moves the ring onto Steam's own Quick Access tab instead of keeping it in the
+  plugin; Right brings it back, but nothing says so. Same shape as the row above: the control does not claim
+  the press, so Steam's own idea of "past the edge" fires. Evidence
+  `docs/test-evidence/plan55-trap-run3-new-chat-with-live-turn.json` (the Ask button, steps 2 and 3),
+  `docs/test-evidence/plan55-trap-run5-empty-chat-session-row-hades-running.json` (the paperclip, steps 3 and 4).
 - ★ `[focus]` **Pressing Ask drops the highlight** — **OPEN, found 2026-09-05, widened the same day.** Filed first as an
   empty-box problem; it is not. **Every** press of the Ask button leaves nothing highlighted — with a real question and with an
   empty box alike, measured four times. The page's own focus falls back to the document body, so the next press has to place the
@@ -144,6 +151,13 @@ starts work outside this.
   setting names in several separate places in the same file. Miss one and nothing breaks visibly; that setting just stops
   being saved or loaded in one situation while working fine everywhere else. It has already happened once, to four
   settings. Tracked as "places the settings field list is repeated", at 7 against a target of 1.
+- ★★ `[chat]` **A new chat shows the previous chat's last reply until the panel is reopened** — **OPEN, seen
+  2026-09-15 evening.** With a reply still on screen in one chat, moving the chat row to the new-chat position
+  and pressing A made the new chat, but the new chat then showed that earlier reply underneath it, with "…"
+  standing in for the question, its Helpful, Not really and Copy buttons all reachable, and a Session context
+  row showing one turn. Closing the panel and reopening it left the new chat empty, the way a new chat should
+  always start. Evidence `docs/test-evidence/plan55-trap-run3-new-chat-with-live-turn.json` (the walk from the
+  chat row visits Retry, the "…" question, Copy reply text and Read aloud under the New chat slot).
 - ★★ `[focus]` **Opening the panel leaves nothing highlighted** — **OPEN, found 2026-09-04, measured again twice on
   2026-09-05.** Nothing owns the ring on a fresh open, so the first D-pad press has to place it rather than move it — and on
   one measured open that press landed on **Decky's back arrow, above bonsAI entirely**. A person spends two presses before
@@ -175,11 +189,6 @@ starts work outside this.
   a game running: tokens arrive in bursts, and during a burst the overlay drops to 47 fps; between bursts it is a flat 60. Delivery
   is bursty, painting is not slow. The game's own frame rate is unmeasured. Accepted as a nice-to-have; reopen only if the game's own frame rate is measured
   and suffers. Making streaming the default stays a separate feature call. Row **STREAM-11**. [Detail](roadmap-details.md#token-streaming-reveals-text-in-chunks-while-a-game-is-running).
-- ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** — **OPEN,
-  seen again on the Deck 2026-09-07 with a game running.** Touch the panel and the opened tab bar fades away, but a see-through
-  copy of it stays on top of the suggestion chips: pale round tab icons and the plugin's name show through the chip text, with a
-  faint row of dots under them. It does not go away on its own and it makes the chip labels hard to read. Reported before and
-  still there. Evidence: Deck capture `DeckCapture_20260907_234345_game.png`.
 - ★★ `[ui]` **The copy button sits on top of the code box instead of beside it** — **OPEN, measured on the Deck
   2026-09-12.** The icon overlaps the code box's bottom-right corner by 16 pixels across and 9 down, so about two
   fifths of it sits on the box. **The cause:** the icon is meant to sit in the answer bubble's corner, and that
@@ -211,6 +220,17 @@ starts work outside this.
   that row was absent, or the chat already had a reply in it, all reached the Ask button normally. That is
   five observations, not proof of a cause, but it is a recipe to try. Evidence
   `docs/test-evidence/plan48-BUG-ask-input-ring-trap-2026-09-15.json`.
+  **Five more runs on 2026-09-15 evening, on build 1ac4d7a, and it did not come back once.** Run 1: a new chat
+  started from a chat with eight turns while the Session context row showed. Run 2: the box filled from a chip
+  press, then every direction. Run 3: a question asked first so the row carried a live turn, then a new chat.
+  Run 4: the same, plus the box filled from a chip. Run 5: an empty new chat with the row still showing one
+  turn, after the plugin was reopened with Hades running. Every Down, Left and Right from the box moved where
+  it should, every time. The entry stays **OPEN**. Evidence
+  `docs/test-evidence/plan55-trap-run1-walk-after-new-chat.json`,
+  `docs/test-evidence/plan55-trap-run2-chip-fill-then-dpad.json`,
+  `docs/test-evidence/plan55-trap-run3-new-chat-with-live-turn.json`,
+  `docs/test-evidence/plan55-trap-run4-chip-fill-with-live-turn-row.json`,
+  `docs/test-evidence/plan55-trap-run5-empty-chat-session-row-hades-running.json`.
 
 ---
 
@@ -477,6 +497,12 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 - ★★ `[focus]` **A checklist the model got wrong was left in the reply as raw JSON**, its own D-pad stop that did nothing — **VERIFY.**
   Fixed 2026-08-28: a rejected checklist block is dropped, as a rejected branch block already was. Owed: one sighting on device of a
   reply where it happens. Row **STRAT-CHECKLIST-JSON-01**.
+- ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —
+  **VERIFY, landed 2026-09-15.** The tab bar's pop-up strip now always ends fully hidden a fraction of a second
+  after it closes, even when its fade is stalled by a game running full screen, so no see-through copy of it
+  can be left sitting over the suggestion chips. The exact reason the fade stalls could not be proven on the
+  rig, which has no touch, so the fix force-finishes the close with a plain timer either way. Row
+  **TAB-BAR-GHOST-01**, needs a finger, and it is on the maintainer's checklist.
 - ★★★ `[chat]` **Clear cache cleared the screen but not the session** — **VERIFY.** Fixed and confirmed 2026-08-27, and again on the
   Deck 2026-09-03. The orphan half is measured: the chat stays behind after a clear, so each clear-and-reask cycle leaves one more
   chat in the rotation — a follow-up, not a regression. Only the mid-generation half is still owed: clearing while a reply is still
@@ -492,8 +518,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   placement: with *Allow high-VRAM model fallbacks* on, a **large** pulled model is supposed to go to the **top** instead.
   That needs a large model on the device and the switch turned on. Row **ROUTING-MERGE-01**.
 
-- ★ `[layout]` **Rows span the QAM panel width** — **VERIFY.** Fixed 2026-08-16 and measured by probe (268 to 300 px); the visual walk
-  was never run. Confirm the Main rows look flush and nothing overflows the column. Row **ASK-WIDTH-01**.
 - ★ `[platform]` **Shell state and tab payload extraction (refactor step 8)** — **VERIFY.** Smoke: six tabs, one Ask, Ollama tab
   after Clear all plugin data. Row **SHELL-PAYLOAD-01**.
 - ★ `[platform]` **VAC check (`bonsai:vac-check`) on-device QA** — **VERIFY.** Implementation complete; run **VAC-02…06** after Tier 0
@@ -700,6 +724,12 @@ ones from this month are D81 to D88.
   seconds. Restarting the plugin corrected it at once, as before. One thing worth knowing for whoever fixes it:
   it does not go wrong every time — after one of the three game exits that evening the line was already right.
   Evidence `docs/test-evidence/plan48-deck-evening-2026-09-15.json`.
+  **Seen again 2026-09-15 evening on build 1ac4d7a.** Hades was launched while the panel was already open, and
+  after the Quick Access Menu was reopened the line still read "Context: no active game detected" (screenshot
+  `screenshots/DeckCapture_20260915_200505_game.png`, launch evidence
+  `docs/test-evidence/plan55-launch-hades-for-trap-run5.json`). After the next question was asked the line
+  changed to "Context: active game AppID 1145360" — the game's number rather than its name, worth a look by
+  whoever fixes this. **A fix is in progress in lane F of plan 55.**
 - ★ `[KB]` **A Hades boss's note is spelled wrong, so spelling it right gets you told the plugin is guessing** —
   **OPEN, found 2026-09-12.** The note is titled *Megara*; the boss is *Megaera*. Type it correctly and the note
   still attaches, but the reply now carries the "no close match in my notes" line — so a person is told the plugin
@@ -736,11 +766,15 @@ ones from this month are D81 to D88.
   gets the same relaxed prompt its risk chip already assumed; all three are plain text from the first streamed word.
   Rows **STRAT-SPOIL-NAME-01**, **STRAT-SPOIL-FIRST-01**, **STRAT-SPOIL-TEXT-01**, plus the older **STRAT-SPOIL-DRG-01**
   block. [Plan 54](planning/54-spoiler-rules-gaps.md).
-- ★★ `[KB]` **The new answer shape needs a read on the device** — **VERIFY, one of three read 2026-09-12.** The
-  Portal 2 one came back clean: the note's advice starts straight after the character's opening line, 111 words, no
-  warning line. Whether that reads as advice-first is your judgement, which is what this row is for. The Hades and
-  Black Mesa sentences **are pinned on the Deck now** — press A on each and read them. The Hades one needs Hades
-  running. Row **KB-ANSWER-03**; evidence `docs/test-evidence/plan48-deck-evening-2026-09-12.json` **[no evidence — re-run, batch QA-EVIDENCE-GAP-01]**.
+- ★★ `[KB]` **The new answer shape needs a read on the device** — **VERIFY, two of three read.** The
+  Portal 2 sentence came back clean 2026-09-12: the note's advice starts straight after the character's
+  opening line, 111 words, no warning line. The Hades sentence came back the same shape 2026-09-15, with
+  Hades running: the advice starts straight after the character's opening line, about 100 words, no warning
+  line, no spoiler box, with a Hades follow-up menu. Whether either reads as advice-first is still your
+  judgement, which is what this row is for. **Only the Black Mesa sentence is left to run**, plus your read of
+  the two replies already captured. Row **KB-ANSWER-03**; evidence
+  `docs/test-evidence/plan48-deck-evening-2026-09-12.json` **[no evidence — re-run, batch QA-EVIDENCE-GAP-01]**,
+  `docs/test-evidence/plan55-KB-ANSWER-03-hades.json`.
 - ★★★ `[KB]` **DRG Survivor glossary terms** — **VERIFY, one touch tap owed.** Shipped 2026-08-28 and walked on device:
   underline, popup, D-pad reachability, B, one-press Up. Rows **DRG-GLOSSARY-01…04**.
   [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).

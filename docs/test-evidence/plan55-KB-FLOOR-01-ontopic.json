@@ -1,0 +1,32 @@
+{
+  "row": "KB-FLOOR-01 (relevance floor), second half: an ordinary on-topic question still attaches",
+  "plan": 55,
+  "when": "2026-09-16T00:41:13.845910+00:00",
+  "build": "1ac4d7a6fff479a01c48f6a1b6a60d78b360b88a",
+  "setup": "Hades (1145360) running, Strategy mode, knowledge base on, hybrid retrieval on; sentence typed with scripts/deck_send_ask.py (VERIFIED), sent with Ask, Show details opened with A.",
+  "question": "how do i beat theseus and asterius",
+  "reply_start": "Alright, listen up, you wanna know how to handle Theseus and Asterius? It's a two-on-one situation, mate... take Asterius down first...",
+  "show_details_chips": [
+    "Keyword + meaning",
+    "KB: 15 sections",
+    "Reply style: balanced",
+    "Spoiler risk: med",
+    "Routed gemma4:e2b-it-qat",
+    "Developer details"
+  ],
+  "show_details_kb_body": [
+    "Local knowledge base",
+    "Retrieval: Keyword + meaning",
+    "Trust tier: fallback_no_source",
+    "app_id:1145360",
+    "Embed: 28.68 ms",
+    "Re-rank: 2.37 ms"
+  ],
+  "honesty_line": "none",
+  "verdict": "PASS for this half: the ordinary question attached the knowledge base (retrieval label shown, no 'skipped', no honesty line) and the advice matches the Theseus and Asterius note. Together with plan55-KB-FLOOR-01-offtopic.json: the row is still a real check on its second half; its first half contradicts the accepted 'unrelated questions still get game cards' decision and should be retired or reworded.",
+  "side_note": "The follow-up menu under this Hades answer read 'Where are you at in Half-Life 2? A. Just arrived at the train station / B. Fighting through Ravenholm' (see plan55-BUG-hl2-menu-hades-running.json).",
+  "runs": [
+    "runs/plan55-KB-FLOOR-01-ontopic-send.json"
+  ],
+  "screenshot": "screenshots/DeckCapture_20260915_204018_game.png"
+}

@@ -1,0 +1,195 @@
+{
+  "ok": true,
+  "fidelity": "wire-sent",
+  "steps": [
+    {
+      "index": 1,
+      "label": "down from the box",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\"",
+      "to": "<BUTTON> \"ask\"",
+      "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 960,
+      "diagnosis": "press routed, focus moved <INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\" -> <BUTTON> \"ask\""
+    },
+    {
+      "index": 2,
+      "label": "left",
+      "press": [
+        "LEFT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"ask\"",
+      "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "focusKey": "sel:#quickaccess_tab_999",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 954,
+      "diagnosis": "press routed, focus moved <BUTTON> \"ask\" -> <DIV> (unnamed - the only text around it is a container's, not a label)"
+    },
+    {
+      "index": 3,
+      "label": "right",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "to": "<BUTTON> \"ask\"",
+      "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 916,
+      "diagnosis": "press routed, focus moved <DIV> (unnamed - the only text around it is a container's, not a label) -> <BUTTON> \"ask\""
+    },
+    {
+      "index": 4,
+      "label": "down again",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": false,
+      "matched": null,
+      "from": "<BUTTON> \"ask\"",
+      "to": "<BUTTON> \"ask\"",
+      "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1378,
+      "diagnosis": "press routed, focus did not move - still <BUTTON> \"ask\". either no handler is wired for this direction, or it ran and moved nothing"
+    },
+    {
+      "index": 5,
+      "label": "up",
+      "press": [
+        "UP"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"ask\"",
+      "to": "<BUTTON> \"Inference mode: Strategy. Open to change.\"",
+      "focusKey": "sel:div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 891,
+      "diagnosis": "press routed, focus moved <BUTTON> \"ask\" -> <BUTTON> \"Inference mode: Strategy. Open to change.\""
+    }
+  ],
+  "ranSteps": 5,
+  "totalSteps": 5,
+  "passed": 5,
+  "failed": 0,
+  "visited": [
+    "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\"",
+    "<BUTTON> \"ask\"",
+    "<DIV> (unnamed - the only text around it is a container's, not a label)",
+    "<BUTTON> \"Inference mode: Strategy. Open to change.\""
+  ],
+  "cycle": {
+    "key": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+    "seenAt": [
+      1,
+      3,
+      4
+    ],
+    "loop": [
+      "<BUTTON> \"ask\"",
+      "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "<BUTTON> \"ask\"",
+      "<BUTTON> \"ask\""
+    ],
+    "escaped": true,
+    "stepsAfterLoop": 1
+  },
+  "neverReached": [],
+  "stopsFocusedButNotVisible": 0,
+  "notVisibleStops": [],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 8816,
+  "acquired": false,
+  "summary": "5/5 steps passed; focus returned to <BUTTON> \"ask\" at steps 1 and 3 and 4 and escaped afterwards"
+}

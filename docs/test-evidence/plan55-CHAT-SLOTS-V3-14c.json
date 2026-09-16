@@ -1,0 +1,20 @@
+{
+  "row": "CHAT-SLOTS-V3-14c (game name above the slot title)",
+  "plan": 55,
+  "when": "2026-09-16T00:33:31.308794+00:00",
+  "build": "1ac4d7a6fff479a01c48f6a1b6a60d78b360b88a",
+  "setup": "Hades (1145360) launched by the rig at about 00:00Z (runs/plan55-launch-hades-for-trap-run5.json); the panel was already mounted; the plugin reopened at 00:02Z; a new chat was created from the [+] position with A at about 00:03Z while Hades was in RunningApps.",
+  "read": "The chat slot row for that chat, after its first question, shows only the title 'how does the excursion funnel work in portal 2' with no game name line above it. The older chat in the same row showed 'Deep Rock Galactic: Survivor' above its title on the same evening (first page read of the session).",
+  "row_leaves": [
+    "[+] (ghost pre)",
+    "title inner: how does the excursion funnel work in portal 2",
+    "delete x",
+    "ghost next: how does the excursion funnel work in portal 2",
+    "create dot"
+  ],
+  "verdict": "FAIL on this build: a chat created with Hades running got no game name. Most likely the same cause as the open game-line bug (the panel did not know Hades was running: the line under the question box still read 'no active game detected' at creation time). Re-run after lane F's fix lands.",
+  "related": [
+    "docs/test-evidence/plan55-launch-hades-for-trap-run5.json",
+    "screenshots/DeckCapture_20260915_200505_game.png"
+  ]
+}

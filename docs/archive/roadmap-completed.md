@@ -6,6 +6,19 @@
 
 Headings group related work. Star counts match the historical list.
 
+### Rows span the QAM panel width, confirmed by eye on the Deck (2026-09-15)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-15 once the visual check passed — copied line for
+line, nothing reworded, with the closing measurement added at the end._
+
+- ★ `[layout]` **Rows span the QAM panel width** — **VERIFY.** Fixed 2026-08-16 and measured by probe (268 to
+  300 px); the visual walk was never run. Confirm the Main rows look flush and nothing overflows the column.
+  Row **ASK-WIDTH-01**.
+
+**Passed on the Deck 2026-09-15.** Every Main row measured by rect spans the full 300-pixel column (48 to
+348), nothing overflows sideways, and the screenshot shows the rows sitting flush by eye. Evidence
+`docs/test-evidence/plan55-ASK-WIDTH-01.json`, screenshot `screenshots/DeckCapture_20260915_200505_game.png`.
+
 ### The seven-phase clean-up, round two (2026-09-15)
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-15 when the last phase finished. The entry below is

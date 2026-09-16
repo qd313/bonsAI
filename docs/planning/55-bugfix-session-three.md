@@ -313,6 +313,25 @@ Written as work lands.
   pressed, nothing deployed. Plan 54's session was still mid-work in its own copy.
 - **2026-09-15 — plan 54 landed, wave 2 unblocked.** The exclusive-Deck question is answered too: plan
   54 finished without touching the device, so this pass has it to itself. Nothing else changed.
+- **2026-09-15 evening — go given, block 0 done, wave 1 running.** The tree was clean at the tip with plan
+  54's four commits on it, all five gates green. The Deck was running a bundle from before plan 54, so the
+  tip was deployed once and proved by hash (bundle, back end, prompt file all match). The rig's own
+  settings-snapshot tool crashed on a buffer error, so the settings and data folders were backed up over
+  SSH instead (`runs/plan55-backups/`, 75 MB, chats and voice models included). The Deck is held awake for
+  eight hours. Three lanes cut from the tip and started: B (models), C (Ask bar), I (tab bar ghost). The
+  panel opened with a Session context row of eight turns already showing, so the stuck-panel recipe
+  started straight away.
+- **2026-09-15 evening — the stuck panel did not come back in five runs.** All five on the deployed tip, each with
+  its evidence file under `runs/plan55-trap-run*.json`. Run 1: new chat from a chat with eight turns and the
+  Session context row showing. Run 2: the box filled from a chip press, then every direction. Run 3: a question
+  asked first so the row carried a live turn, then a new chat; the new chat drew the old reply under it with the
+  row still showing. Run 4: the same plus the box filled from a chip. Run 5: after a plugin reopen with Hades
+  running, an empty new chat with the row still showing one turn. Every Down, Left and Right from the box moved
+  where it should. The recipe from 2026-09-15 afternoon is written as "start a brand new, empty chat while the
+  panel shows a Session context row"; run 5 is exactly that and did not trap. The entry stays open. Three things
+  found on the way: pressing Ask drops the highlight (again); Left from the Ask button and from the paperclip
+  hands the ring to Steam's Quick Access rail, out of the plugin (new, same shape as the *N earlier* row bug); the
+  follow-up menu under a Portal 2 answer offered the Half-Life 2 places (bug 4, still live before lane A).
 
 ---
 

@@ -158,6 +158,27 @@ ranges and one question costs a fraction of that.
 **Script the checkable part first.** A script costs nothing per run. Hand the helper only what a
 script cannot answer.
 
+**Five helpers at once, each in its own copy, while the session drives the Deck.** The shape that
+worked on 2026-09-15 (plan 55), written down because the maintainer asked for it to be kept. The one
+running the session writes no code itself. It makes each helper its own copy of the repo from the tip
+with the copy script, writes one brief per helper — the tip hash and the base check, the files it
+owns, one fix per commit, the five gates, the focus law, and the override that the copy's packages
+folder is a link so the helper must not run an install — and starts up to five in the background. While
+they work, the session uses the Deck, which would otherwise sit idle: the measurement that no helper
+can be given until a cause is named, and the test rows that do not depend on the fixes in flight. A
+read-only lookup helper compiles the test rows the pass needs into one scratch file, so the session
+does not read tens of thousands of words of testing documents itself. A bookkeeping helper does every
+roadmap, testing and changelog edit from a list of results the session hands it; it never invents a
+device result. When a helper finishes, the session reads its diff, lands its commits one at a time
+with the gates after each from a small script in the scratch folder, in the background, and starts
+the next helper in the freed slot so five stay busy. A helper that finds its fix needs a file outside
+its list stops and says so; a follow-up helper owning those files is cut from the new tip only after
+the first one's commits have landed, so the two cannot clash. Two things to know: the usage limit
+kills every running helper at once, mid-work, but their copies keep their commits and edits, and each
+can be resumed after the reset with one short message that keeps its context — cheaper than starting
+over; and while landings run in the shared checkout, tell the bookkeeper to finish its edits and
+report the file list rather than commit, so the two do not fight over the index.
+
 ---
 
 ## 5. Design and screen work

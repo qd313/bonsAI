@@ -1,0 +1,225 @@
+{
+  "ok": true,
+  "fidelity": "steam-routed",
+  "steps": [
+    {
+      "index": 1,
+      "label": "A on the chip fills the box",
+      "press": [
+        "A"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"how does the excursion funnel work in portal 2\"",
+      "to": "<BUTTON> \"how does the excursion funnel work in portal 2\"",
+      "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(6) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 952,
+      "diagnosis": "press routed, focus moved <BUTTON> \"how does the excursion funnel work in portal 2\" -> <BUTTON> \"how does the excursion funnel work in portal 2\""
+    },
+    {
+      "index": 2,
+      "label": "down to the box",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"how does the excursion funnel work in portal 2\"",
+      "to": "<INPUT> (unnamed - the only text around it is a container's, not a label)",
+      "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(6) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div._DialogLayout.Panel.Focusable:nth-child(2) > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 930,
+      "diagnosis": "press routed, focus moved <BUTTON> \"how does the excursion funnel work in portal 2\" -> <INPUT> (unnamed - the only text around it is a container's, not a label)"
+    },
+    {
+      "index": 3,
+      "label": "down from the box",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<INPUT> (unnamed - the only text around it is a container's, not a label)",
+      "to": "<BUTTON> \"ask\"",
+      "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(6) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 942,
+      "diagnosis": "press routed, focus moved <INPUT> (unnamed - the only text around it is a container's, not a label) -> <BUTTON> \"ask\""
+    },
+    {
+      "index": 4,
+      "label": "left",
+      "press": [
+        "LEFT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"ask\"",
+      "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "focusKey": "sel:#quickaccess_tab_999",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 947,
+      "diagnosis": "press routed, focus moved <BUTTON> \"ask\" -> <DIV> (unnamed - the only text around it is a container's, not a label)"
+    },
+    {
+      "index": 5,
+      "label": "right",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "to": "<BUTTON> \"ask\"",
+      "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(6) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 945,
+      "diagnosis": "press routed, focus moved <DIV> (unnamed - the only text around it is a container's, not a label) -> <BUTTON> \"ask\""
+    },
+    {
+      "index": 6,
+      "label": "up",
+      "press": [
+        "UP"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"ask\"",
+      "to": "<BUTTON> \"Inference mode: Strategy. Open to change.\"",
+      "focusKey": "sel:div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(6) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 948,
+      "diagnosis": "press routed, focus moved <BUTTON> \"ask\" -> <BUTTON> \"Inference mode: Strategy. Open to change.\""
+    }
+  ],
+  "ranSteps": 6,
+  "totalSteps": 6,
+  "passed": 6,
+  "failed": 0,
+  "visited": [
+    "<BUTTON> \"how does the excursion funnel work in portal 2\"",
+    "<INPUT> (unnamed - the only text around it is a container's, not a label)",
+    "<BUTTON> \"ask\"",
+    "<DIV> (unnamed - the only text around it is a container's, not a label)",
+    "<BUTTON> \"Inference mode: Strategy. Open to change.\""
+  ],
+  "cycle": {
+    "key": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(6) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+    "seenAt": [
+      3,
+      5
+    ],
+    "loop": [
+      "<BUTTON> \"ask\"",
+      "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "<BUTTON> \"ask\""
+    ],
+    "escaped": true,
+    "stepsAfterLoop": 1
+  },
+  "neverReached": [],
+  "stopsFocusedButNotVisible": 0,
+  "notVisibleStops": [],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 10096,
+  "acquired": false,
+  "summary": "6/6 steps passed; focus returned to <BUTTON> \"ask\" at steps 3 and 5 and escaped afterwards"
+}

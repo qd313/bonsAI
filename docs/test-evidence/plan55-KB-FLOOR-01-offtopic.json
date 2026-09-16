@@ -1,0 +1,30 @@
+{
+  "row": "KB-FLOOR-01 (relevance floor), first half: an off-topic troubleshooting-shaped question",
+  "plan": 55,
+  "when": "2026-09-16T00:39:09.235223+00:00",
+  "build": "1ac4d7a6fff479a01c48f6a1b6a60d78b360b88a",
+  "setup": "Hades (1145360) running, Strategy mode, knowledge base on, hybrid retrieval on (settings.json rag_hybrid_retrieval_enabled=true); sentence typed with scripts/deck_send_ask.py (VERIFIED) and sent with Ask.",
+  "question": "my printer keeps saying it is offline",
+  "reply_start": "Look, I'm an expert on Steam Deck gaming, not plumbing, but I can give you the rundown on why your printer's throwing a tantrum. Since I can't actually look at your setup, here's the standard procedure. First, check the basics...",
+  "show_details_chips": [
+    "Keyword + meaning",
+    "KB: 15 sections",
+    "Reply style: balanced",
+    "Spoiler risk: med",
+    "Routed gemma4:e2b-it-qat",
+    "Developer details"
+  ],
+  "show_details_kb_body": [
+    "Local knowledge base",
+    "Retrieval: Keyword + meaning",
+    "Trust tier: fallback_no_source",
+    "app_id:1145360",
+    "Embed: 546.66 ms",
+    "Re-rank: 2.43 ms"
+  ],
+  "reading": "The knowledge-base chip carries the retrieval label ('Keyword + meaning') rather than 'Knowledge base (skipped)', and its body lists a retrieval method, a trust tier and timings; the code only writes those when the knowledge base was attached (transparency_service.py, the kb chip block). So the off-topic question DID attach knowledge-base content (trust tier fallback_no_source), and the reply itself reads as a generic printer answer with no game tip visible in it. 'KB: 15 sections' is the coverage chip (the library has 15 sections for Hades), not an attachment count.",
+  "verdict": "FAIL as the row is written (it expects 'skipped'). But this is the behaviour the maintainer ACCEPTED on 2026-08-27 in the roadmap entry 'Unrelated questions still get game cards stapled on', so the first half of this row now contradicts an accepted decision and should be retired or reworded; the second half (an ordinary on-topic question still attaches) is the regression guard worth keeping.",
+  "runs": [
+    "runs/plan55-KB-FLOOR-01-offtopic-send.json"
+  ]
+}

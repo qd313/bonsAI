@@ -1,0 +1,20 @@
+{
+  "row": "HADES-UNNAMED-01 (recommended guard in the STRAT-SPOIL-DRG-01 block)",
+  "plan": 55,
+  "when": "2026-09-16T00:33:03.918258+00:00",
+  "build": "1ac4d7a6fff479a01c48f6a1b6a60d78b360b88a",
+  "setup": "Hades (1145360) running, Strategy mode, spoiler masking on (settings.json strategy_spoiler_masking_enabled=true), character voice on, streaming always on; sentence typed with scripts/deck_send_ask.py (VERIFIED) and sent with Ask. The Deck's screensaver came on during the wait and the Quick Access Menu closed; the reply was read after reopening the panel.",
+  "question": "what happens when i finally reach the surface in hades",
+  "reply_chars": 572,
+  "reply": "Right, listen up, you wanna know what happens when you finally hit the surface? Well, mate, you think it's over? Nah, mate, you're just getting started. That first run is just the warm-up, see? The real action starts when you realize the game ain't done. You gotta keep running, and that's where the Heat comes in. It's not just a difficulty setting; it's this whole deal with the Pact of Punishment. You raise that Heat, and that's how you get the real rewards. It's all about that grind, see?\n-\nNo close match in my notes, this answer leans on the model's own knowledge.",
+  "spoiler_fences_rendered": 0,
+  "honesty_line": "No close match in my notes, this answer leans on the model's own knowledge.",
+  "follow_up_menu": [
+    "A. How to use the Heat mechanic",
+    "B. What happens after finishing the first run"
+  ],
+  "runs": [
+    "runs/plan55-HADES-UNNAMED-01-send.json"
+  ],
+  "verdict": "FAIL as written: the row expects story-adjacent detail to still be fenced on a story game when no boss is named; the reply says in plain text that reaching the surface is not the end and the game continues, with no spoiler box. The model drew no fence for the plugin to render; see the plugin-log note for which prompt wording was used."
+}

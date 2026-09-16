@@ -1,0 +1,16 @@
+{
+  "bug": "The follow-up menu keeps offering Half-Life 2 whatever game you asked about (roadmap, Knowledge base Bugs) / A follow-up offered a place from a different game (roadmap, Bugs)",
+  "plan": 55,
+  "when": "2026-09-16T00:41:13.845910+00:00",
+  "build": "1ac4d7a6fff479a01c48f6a1b6a60d78b360b88a",
+  "setup": "Hades (1145360) running, Strategy mode, the small local model (gemma4:e2b-it-qat), chat with four earlier turns.",
+  "question": "how do i beat theseus and asterius",
+  "menu_rendered": {
+    "heading": "Where are you at in Half-Life 2?",
+    "A": "Just arrived at the train station",
+    "B": "Fighting through Ravenholm"
+  },
+  "also_seen_this_evening": "Under a Portal 2 excursion-funnel answer with no game running (panel labels read during a walk, no file); the two Hades answers earlier in the evening got Hades-flavoured menus instead, so it is not every time.",
+  "screenshot": "screenshots/DeckCapture_20260915_204018_game.png",
+  "note": "Reproduced on the build before lane A's fix; lane A replaces the prompt's worked example and drops any menu still carrying its words. Re-run after landing."
+}

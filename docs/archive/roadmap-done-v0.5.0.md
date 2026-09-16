@@ -8,6 +8,9 @@ Everything shipped since v0.4.9 (2026-07-08), one line each, newest first. Detai
 [archive/roadmap-completed.md](roadmap-completed.md), [archive/roadmap-bugs-fixed.md](roadmap-bugs-fixed.md).
 
 **Checked on the Deck, closed in the roadmap 2026-09-14 and 15:**
+- ★ `[layout]` **Rows span the QAM panel width** — every Main row now reaches both edges of the panel with
+  nothing overflowing sideways, confirmed by eye on the Deck 2026-09-15 after being measured by rect back in
+  August. [Detail](roadmap-completed.md#rows-span-the-qam-panel-width-confirmed-by-eye-on-the-deck-2026-09-15).
 - ★★★★★ `[platform]` **The seven-phase clean-up (round two)** — every file now explains itself in plain
   words, two knots in the back end are untied, and nothing a person using the plugin can see changed. Ran
   13 to 15 September 2026. Phases 3 and 4 were checked on the Deck; phase 5 needed no check because no line

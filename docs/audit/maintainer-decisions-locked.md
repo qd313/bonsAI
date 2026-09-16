@@ -5654,3 +5654,42 @@ None of these stops the build from starting. If unanswered, the build starts on 
 
 **Consequence.** Plan 59 § 4 records the answers; the roadmap gains the Features entry for the
 build; the two-star tab-icon entry folds into it. Nothing else in plan 59 changes.
+
+### D110 — LOCKED 2026-09-16 (raised 2026-09-16) — The suggestion chips as real buttons (Claude Design board B): six calls before the build
+
+Raised from [plan 60](../planning/60-chip-button-restyle.md), the build plan for the design Claude
+Design handed back on 16 September, answering the brief of 14 September
+([design/handoffs/preset-chips/](../design/handoffs/preset-chips/)). The returned files are in that
+folder under `return-2026-09-16/`. Board B, "a real button", is the locked direction, with the
+toned-down accent from board A: a top-lit, bottom-dark chip with a hairline on its top edge and a
+soft shadow beneath, the two chips 6 pixels apart instead of 4, the character colour on the badges
+and tags quieter, and the chip the D-pad is on marked by a thin light bar along its bottom edge in
+place of the pale blue outline. Italics were tried on board A and rejected. The maintainer answered
+all six the same day; nothing is built, and the build runs in a later session.
+
+1. **The Tip badge becomes the dot from the boards.** On screen today it is the word "TIP"; the
+   boards drew a 7 by 7 square dot with 2 pixel corners in the character's colour at 80 percent.
+   The plan leaned toward keeping the word; the maintainer chose the dot. The amber Test badge stays
+   a word (a checking-only state that has to be obvious).
+
+2. **Steam's white ring stays. The bar goes under it, and if the two cannot show together on the
+   device, the ring wins and the bar is dropped.** The ring, the hairline, the shadow and the bar
+   are all drawn with the same property and the ring's rule is set to win, so the build merges the
+   lists for the focused chip and a test guards the merge. The maintainer's words: fine to stick with
+   Steam's white ring if the board's look cannot be brought in. The pale blue outline goes either way.
+
+3. **The gap the maintainer asked for is the one to the question box, about half a pixel.** The
+   brief had left the designer to choose, and they widened the gap between the two chips instead.
+   Both happen: the designer's 4 to 6 between the chips stays, and the 12 pixels from the row to the
+   question box become 13 (half a pixel cannot be drawn; one is the smallest step). The maintainer
+   expects the shadow beneath a chip may need tuning so it does not make the row look glued to the
+   box; the board's 2 pixels down and 3 of blur is the ceiling, tuned by eye on the device.
+
+4. **No pressed look.** The board's sunk state (gradient flipped, chip down 1 pixel) is not built,
+   not for touch and not for an A press.
+
+5. **The green help chip and the orange agent suggestion chip get the raised look too**, keeping
+   their own colours.
+
+6. **The decode-mode label is toned** with the same 70 percent accent, 30 percent label-colour mix
+   as the `[beta]` tag.

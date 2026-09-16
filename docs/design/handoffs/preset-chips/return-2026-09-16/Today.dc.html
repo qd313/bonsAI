@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html,body{margin:0;padding:0;background:#0e141b;}
+a{color:#7eb8ff;} a:hover{color:#9ccaff;}
+</style>
+</helmet>
+<div style="min-height:100vh;background:#0e141b;display:flex;flex-direction:column;align-items:center;padding:28px 16px 44px;box-sizing:border-box;font-family:'Motiva Sans','Segoe UI','Noto Sans',sans-serif">
+  <div style="width:300px;display:flex;flex-direction:column">
+    <div style="font-size:13px;font-weight:600;color:#dce6f0">Today — the dock as built</div>
+    <div style="margin-top:2px;font-family:ui-monospace,monospace;font-size:9px;letter-spacing:0.05em;color:#7d90a2;text-transform:uppercase">300px column · drawn from the plugin stylesheet</div>
+    <div style="height:20px"></div>
+    <div style="display:flex;gap:4px">
+      <div style="box-sizing:border-box;width:148px;height:30px;border-radius:4px;padding:0 8px;display:flex;align-items:center;background:rgba(18,26,34,0.22);border:1px solid rgba(255,255,255,0.07);backdrop-filter:blur(10px)">
+        <span style="min-width:0;font-size:12px;color:#c4d3e2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Why is my game crashing?</span>
+      </div>
+      <div style="box-sizing:border-box;width:148px;height:30px;border-radius:4px;padding:0 8px;display:flex;align-items:center;background:rgba(18,26,34,0.22);border:1px solid rgba(255,255,255,0.07);backdrop-filter:blur(10px)">
+        <span style="min-width:0;font-size:12px;color:#c4d3e2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">How do I fix stuttering?</span>
+      </div>
+    </div>
+    <div style="height:12px"></div>
+    <div style="position:relative;height:66px;border-radius:8px;background:rgba(18,26,34,0.25);border:1px solid rgba(255,255,255,0.07);backdrop-filter:blur(10px);box-sizing:border-box">
+      <div style="position:absolute;left:2px;right:2px;bottom:0;height:24px;display:flex;align-items:center">
+        <span style="display:inline-flex;opacity:0.5;color:#dbe6f3">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M8.2 12.2 13.7 6.7a3 3 0 1 1 4.3 4.3l-7.2 7.2a4.7 4.7 0 0 1-6.6-6.6l7.1-7.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </span>
+        <span style="margin-left:auto;display:inline-flex;align-items:center;gap:5px">
+          <span style="height:20px;padding:0 5px;border-radius:5px;background:rgba(74,222,128,0.06);display:inline-flex;align-items:center;font-size:10px;font-weight:600;font-variant:small-caps;letter-spacing:0.15px;color:rgb(100,201,154)">Speed</span>
+          <span style="display:inline-flex;opacity:0.15;color:#dbe6f3">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="6.25" y="3.5" width="11.5" height="15" rx="5.75" stroke="currentColor" stroke-width="1.5"></rect><path d="M12 18.5v2.8M7.75 21.5h8.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path></svg>
+          </span>
+        </span>
+      </div>
+    </div>
+    <div style="height:2px"></div>
+    <div style="height:36px;border-radius:8px;background:rgba(18,26,34,0.25);border:1px solid rgba(255,255,255,0.07);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;box-sizing:border-box">
+      <span style="font-weight:600;font-variant:small-caps;letter-spacing:0.55px;font-size:15px;line-height:1;color:#a8b4c4">ask</span>
+    </div>
+    <div style="height:26px"></div>
+    <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:12px;font-family:ui-monospace,monospace;font-size:10px;line-height:1.7;color:#8fa3b8">
+      <div style="color:#7d90a2;letter-spacing:0.05em;font-size:9px;margin-bottom:4px">SPEC — AS BUILT</div>
+      <div>column 300 · ground #0e141b</div>
+      <div>chip 148×30 · radius 4 · pad 8 · gap 4</div>
+      <div>surface rgba(18,26,34,.22) + blur 10</div>
+      <div>border 1px rgba(255,255,255,.07) · shadow none</div>
+      <div>label 12px #c4d3e2 · long labels scroll, then stop</div>
+      <div>row→box 12 · box→ask 2</div>
+      <div>question box rgba(18,26,34,.25) · r8 · 66 tall</div>
+      <div>ask bar 36 tall · label 15px small-caps #a8b4c4</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:360,&quot;height&quot;:620}}"></script>
+</body>
+</html>

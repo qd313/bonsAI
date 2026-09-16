@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+html,body{margin:0;padding:0;background:#0e141b;}
+a{color:#7eb8ff;} a:hover{color:#9ccaff;}
+</style>
+</helmet>
+<div style="min-height:100vh;background:#0e141b;display:flex;flex-direction:column;align-items:center;padding:28px 16px 44px;box-sizing:border-box;font-family:'Motiva Sans','Segoe UI','Noto Sans',sans-serif">
+  <div style="width:300px;display:flex;flex-direction:column;gap:14px">
+    <div>
+      <div style="font-size:13px;font-weight:600;color:#dce6f0">Every chip state — as built</div>
+      <div style="margin-top:2px;font-family:ui-monospace,monospace;font-size:9px;letter-spacing:0.05em;color:#7d90a2;text-transform:uppercase">true widths · default green #2e8753</div>
+    </div>
+    <div>
+      <div style="font-family:ui-monospace,monospace;font-size:9px;letter-spacing:0.05em;color:#7d90a2;text-transform:uppercase;margin-bottom:4px">at rest</div>
+      <div style="box-sizing:border-box;width:148px;height:30px;border-radius:4px;padding:0 8px;display:flex;align-items:center;background:rgba(18,26,34,0.22);border:1px solid rgba(255,255,255,0.07);backdrop-filter:blur(10px)">
+        <span style="min-width:0;font-size:12px;color:#c4d3e2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Why is my game crashing?</span>
+      </div>
+    </div>
+    <div>
+      <div style="font-family:ui-monospace,monospace;font-size:9px;letter-spacing:0.05em;color:#7d90a2;text-transform:uppercase;margin-bottom:4px">fading out — opacity .55 · scale .96 · #8fa3b8</div>
+      <div style="box-sizing:border-box;width:148px;height:30px;border-radius:4px;padding:0 8px;display:flex;align-items:center;background:rgba(18,26,34,0.22);border:1px solid rgba(255,255,255,0.07);backdrop-filter:blur(10px);opacity:0.55;transform:scale(0.96)">
+        <span style="min-width:0;font-size:12px;color:#8fa3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">How do I fix stuttering?</span>
+      </div>
+    </div>
+    <div>
+      <div style="font-family:ui-monospace,monospace;font-size:9px;letter-spacing:0.05em;color:#7d90a2;text-transform:uppercase;margin-bottom:4px">current — border rgba(56,189,248,.45)</div>
+      <div style="box-sizing:border-box;width:148px;height:30px;border-radius:4px;padding:0 8px;display:flex;align-items:center;background:rgba(18,26,34,0.22);border:1px solid rgba(56,189,248,0.45);backdrop-filter:blur(10px)">
+        <span style="min-width:0;font-size:12px;color:#c4d3e2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Recommended TDP for this game?</span>
+      </div>
+    </div>
+    <div>
+      <div style="font-family:ui-monospace,monospace;font-size:9px;letter-spacing:0.05em;color:#7d90a2;text-transform:uppercase;margin-bottom:4px">out of chips — flash ⅓s · border rgba(56,189,248,.72)</div>
+      <div style="box-sizing:border-box;width:148px;height:30px;border-radius:4px;padding:0 8px;display:flex;align-items:center;background:rgba(18,26,34,0.22);border:1px solid rgba(56,189,248,0.72);box-shadow:0 0 8px rgba(56,189,248,0.35);backdrop-filter:blur(10px)">
+        <span style="min-width:0;font-size:12px;color:#c4d3e2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">What settings should I use?</span>
+      </div>
+    </div>
+    <div>
+      <div style="font-family:ui-monospace,monospace;font-size:9px;letter-spacing:0.05em;color:#7d90a2;text-transform:uppercase;margin-bottom:4px">tip badge — character colour, left</div>
+      <div style="box-sizing:border-box;width:148px;height:30px;border-radius:4px;padding:0 8px;display:flex;align-items:center;background:rgba(18,26,34,0.22);border:1px solid rgba(255,255,255,0.07);backdrop-filter:blur(10px)">
+        <span style="width:7px;height:7px;border-radius:2px;background:#2e8753;margin-right:6px;flex-shrink:0"></span>
+        <span style="min-width:0;font-size:12px;color:#c4d3e2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Help me beat this boss or encounter</span>
+      </div>
+    </div>
+    <div>
+      <div style="font-family:ui-monospace,monospace;font-size:9px;letter-spacing:0.05em;color:#7d90a2;text-transform:uppercase;margin-bottom:4px">test badge — amber, pinned chip set</div>
+      <div style="box-sizing:border-box;width:148px;height:30px;border-radius:4px;padding:0 8px;display:flex;align-items:center;background:rgba(18,26,34,0.22);border:1px solid rgba(255,255,255,0.07);backdrop-filter:blur(10px)">
+        <span style="width:7px;height:7px;border-radius:2px;background:#e6a817;margin-right:6px;flex-shrink:0"></span>
+        <span style="min-width:0;font-size:12px;color:#c4d3e2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Why is my game crashing?</span>
+      </div>
+    </div>
+    <div>
+      <div style="font-family:ui-monospace,monospace;font-size:9px;letter-spacing:0.05em;color:#7d90a2;text-transform:uppercase;margin-bottom:4px">[beta] — 10px italic 600, accent, right</div>
+      <div style="box-sizing:border-box;width:148px;height:30px;border-radius:4px;padding:0 8px;display:flex;align-items:center;background:rgba(18,26,34,0.22);border:1px solid rgba(255,255,255,0.07);backdrop-filter:blur(10px)">
+        <span style="min-width:0;font-size:12px;color:#c4d3e2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Quiet fan profile?<span style="margin-left:6px;font-size:10px;font-style:italic;font-weight:600;color:#2e8753">[beta]</span></span>
+      </div>
+    </div>
+    <div>
+      <div style="font-family:ui-monospace,monospace;font-size:9px;letter-spacing:0.05em;color:#7d90a2;text-transform:uppercase;margin-bottom:4px">decode — whole label in character colour</div>
+      <div style="box-sizing:border-box;width:148px;height:30px;border-radius:4px;padding:0 8px;display:flex;align-items:center;background:rgba(18,26,34,0.22);border:1px solid rgba(255,255,255,0.07);backdrop-filter:blur(10px)">
+        <span style="min-width:0;font-size:12px;color:#2e8753;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">H0w d0 I g&#603;t p&#224;st…</span>
+      </div>
+    </div>
+    <div>
+      <div style="font-family:ui-monospace,monospace;font-size:9px;letter-spacing:0.05em;color:#7d90a2;text-transform:uppercase;margin-bottom:4px">one chip — setting, full row</div>
+      <div style="box-sizing:border-box;width:300px;height:30px;border-radius:4px;padding:0 8px;display:flex;align-items:center;background:rgba(18,26,34,0.22);border:1px solid rgba(255,255,255,0.07);backdrop-filter:blur(10px)">
+        <span style="min-width:0;font-size:12px;color:#c4d3e2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Which Ollama model fits my Deck setup?</span>
+      </div>
+    </div>
+    <div>
+      <div style="font-family:ui-monospace,monospace;font-size:9px;letter-spacing:0.05em;color:#7d90a2;text-transform:uppercase;margin-bottom:4px">help chip — owns the row until dismissed</div>
+      <div style="box-sizing:border-box;width:300px;height:30px;border-radius:4px;padding:0 8px;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,rgba(46,135,83,0.28) 0%,rgba(18,52,34,0.48) 100%);border:1px solid rgba(46,135,83,0.65);backdrop-filter:blur(10px)">
+        <span style="min-width:0;font-size:12px;color:#dff5ea;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">How to use bonsAI</span>
+      </div>
+    </div>
+    <div>
+      <div style="font-family:ui-monospace,monospace;font-size:9px;letter-spacing:0.05em;color:#7d90a2;text-transform:uppercase;margin-bottom:4px">agent suggestion — appears under the row</div>
+      <div style="box-sizing:border-box;width:300px;height:30px;border-radius:4px;padding:0 8px;display:flex;align-items:center;background:rgba(38,22,18,0.38);border:2px solid rgba(255,107,53,0.92);box-shadow:0 0 0 1px rgba(160,45,28,0.5),0 0 12px rgba(255,85,40,0.38);backdrop-filter:blur(10px)">
+        <span style="min-width:0;font-size:12px;color:#f0ddd6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Cap TDP at 12W for this session?</span>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,0.06);padding-top:12px;font-family:ui-monospace,monospace;font-size:10px;line-height:1.7;color:#8fa3b8">
+      <div style="color:#7d90a2;letter-spacing:0.05em;font-size:9px;margin-bottom:4px">SPEC — STATES</div>
+      <div>base: 148×30 · r4 · pad 8 · rgba(18,26,34,.22) + blur 10 · 1px rgba(255,255,255,.07)</div>
+      <div>fading: opacity .55 · scale .96 · label #8fa3b8 · 420ms ease</div>
+      <div>current: border rgba(56,189,248,.45) · d-pad on row only</div>
+      <div>out of chips: rgba(56,189,248,.72) + soft glow · ~330ms</div>
+      <div>tip/test badge: 7×7 r2 · accent / amber #e6a817</div>
+      <div>[beta]: 10px italic 600 accent · ml 6</div>
+      <div>help: grad rgba(46,135,83,.28)→rgba(18,52,34,.48) · 1px rgba(46,135,83,.65) · #dff5ea</div>
+      <div>agent: 2px rgba(255,107,53,.92) + ring 1px rgba(160,45,28,.5) + glow 12px rgba(255,85,40,.38) · bg rgba(38,22,18,.38) · #f0ddd6</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:360,&quot;height&quot;:1050}}"></script>
+</body>
+</html>

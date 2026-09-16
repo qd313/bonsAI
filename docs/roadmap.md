@@ -134,7 +134,10 @@ starts work outside this.
   `docs/test-evidence/plan56-LEFT-HOLDS-01.summary.json`. **Related, seen 2026-09-16:** on this same screen, a
   tall answer chunk swallows the first Up or Down press or two — Steam scrolls the chunk's own view before it
   lets the ring leave — so those presses read as dead rather than moving the highlight. Not a trap, since the
-  next press does leave. Evidence `docs/test-evidence/plan56-QA-FREE-PLAY-02.summary.json`.
+  next press does leave. Evidence `docs/test-evidence/plan56-QA-FREE-PLAY-02.summary.json`. **Not a bug,
+  settled 2026-09-16 (D106):** the Ask bar the maintainer saw cut off on 2026-09-15 was Steam keeping the
+  external monitor's size after the monitor was unplugged; a restart of Steam put it right; the session's own
+  measurement on a fresh open found nothing clipped.
 - ★ `[ollama]` **The vision try-order picker writes settings even when nothing changed** — **OPEN, found
   2026-09-16 during block 0 of session 56.** Opening the vision model try-order picker and pressing Done
   writes the picker's current order into the settings file, even when nobody moved anything. Restored by hand
@@ -255,6 +258,18 @@ replace it with a specific issue when one exists.
   maintainer has said they do not want to supply one. So whoever builds it proposes a shape and the maintainer approves it by
   eye — a shape is not something to settle from a description or by reaching for a stronger model. It has to be an inline SVG
   path rather than the PNG so it takes the colour around it. Update the icon geometry test in the same change.
+- ★★ `[layout]` `[voice]` `[focus]` **Read aloud is a small speaker button on the Helpful row, not a second dividing
+  line** — **OPEN, filed 2026-09-16 by the maintainer (D106).** Today: Read aloud is a full-width dividing line above Show
+  details, the same shape as Show details, one row up, drawn by the reply-actions row builder
+  (`src/utils/buildReplyActionsElement.tsx`); its text flips to Stop while the Deck is talking
+  (`src/hooks/useReadAloud.ts`). Wanted: a small button with a speaker icon on the same row as Helpful and Not really (the
+  Feather icon set the plugin already uses, `react-icons/fi`, has a speaker, `FiVolume2`); the dividing line goes. What it
+  must keep: a real D-pad stop registered under the same name (`read-aloud` in `replyStopRegistry`) so the by-name jumps
+  still work; Left and Right along the row; the flip to Stop in the icon and the spoken label; and it must stay reachable
+  when the thumbs are greyed, because the greyed-thumbs step-over from lane I (commit `e41808d`) skips a greyed Helpful /
+  Not really row, and Read aloud on that row must still be a stop. What changes when it lands: Up from Show details lands
+  on that row; the MICRO-04 testing row's "today's stops" text and READ-ALOUD-02 need rewording; the mockup page drew Read
+  aloud as a line and would change too.
 - ★★ `[voice]` **Spoilers by voice** — **OPEN, filed 2026-09-08; Read answers aloud shipped 2026-09-12, still waits on Voice
   follow-ups.** When a spoken answer reaches a hidden spoiler it says "there is a spoiler here, say go on to hear it" and waits;
   "go on" unhides and reads it, anything else skips it. The block on screen unhides with the spoken one, so the two never
@@ -276,10 +291,14 @@ replace it with a specific issue when one exists.
   rows, which is a design call for the maintainer, not a fix. External-monitor record:
   [planning/30-collapsing-tab-bar.md](planning/30-collapsing-tab-bar.md) § 8 ·
   [plan 56 block 0](planning/56-feature-session-four.md#block-0--hygiene-and-three-measurements-the-session-alone-about-forty-minutes).
-- ★★★ `[layout]` **Session context folds into Show details** — **OPEN, workshop before building.** The **Session context (N turns)**
-  bar stops being its own row, so a settled answer costs one collapsed control instead of two. **Drawn, not built, in session 56
-  (D105, 2026-09-15):** the options go side by side at true size on the same mockup page at the end of [plan
-  56](planning/56-feature-session-four.md), so the open questions are answered by looking.
+- ★★★ `[layout]` **Session context folds into Show details** — **OPEN, shape decided 2026-09-16 (D106): a tab within the
+  Show details panel, option B on the mockup page.** The **Session context (N turns)** bar stops being its own row, so a
+  settled answer costs one collapsed control instead of two. As drawn: the opened Show details panel gets two tabs at its
+  top, *This answer* and *Session · N*; Left and Right switch between them; the chip row and its body stay where they are;
+  only the newest turn shows the Session tab, so it never repeats; the collapsed row still says *Show details*; Up from the
+  tabs goes to Hide details and then Read aloud, Down goes into the chips, and B anywhere inside closes the panel. One
+  thing the page did not draw: where Clear sits inside the Session tab. The builder puts it at the end of that tab's body,
+  the same button and the same confirm box, unless the maintainer says otherwise.
   [Open questions](roadmap-details.md#session-context-folds-into-show-details).
 - ★★★ `[ollama]` **Dynamic keep-alive / smart unload** — **OPEN, research spike.** Hold models loaded, or unload when a game takes
   focus on the Deck APU? The spike decides go or no-go; no production unload before it.
@@ -384,7 +403,7 @@ replace it with a specific issue when one exists.
   screen. [Plan](planning/49-steam-frame-features.md) · [PC setup](planning/50-steamvr-pc-setup.md) ·
   [The anti-cheat rule in full](planning/52-frame-features-second-look.md#4-the-floating-panel-and-anti-cheat) ·
   [Bench findings](planning/53-steamvr-bench-findings.md) · [The picture](planning/assets/53-panel-in-headset-2026-09-12.jpg).
-- ★★★★★ `[reply]` **Reasoning display** — **OPEN, planned 2026-09-05, calls locked (D70, D71).** The plugin asks a
+- ★★★★★ `[reply]` **Reasoning display** — **OPEN, ready to build, calls locked (D70, D71, D106).** The plugin asks a
   thinking model to think and throws the thinking away; the line under your question shows a stock phrase for the whole wait.
   Planned: three lines at the answer's size show the model's own newest sentences, fold to one line with the seconds when the
   answer starts, open to the full text; Show details gets a thinking chip; and the thinking is also spent deciding what counts
@@ -392,8 +411,20 @@ replace it with a specific issue when one exists.
   56 by the maintainer 2026-09-15 (D105): drawn first.** The three live lines, the plain folded line and the folded line in a
   character's voice are drawn at true size on a mockup page at the end of [plan 56](planning/56-feature-session-four.md); every
   build call stands, and nothing is built until the maintainer has looked. **Drawn at true size on the mockup
-  page** https://claude.ai/artifact/2De58qirE34754PEZVPmdb **(2026-09-16); the maintainer's call is owed.**
+  page** https://claude.ai/artifact/2De58qirE34754PEZVPmdb **(2026-09-16). The maintainer's call, 2026-09-16 (D106):** the
+  first version builds with the plain folded line, exactly the shape the 5 September calls describe — three live lines at
+  the answer's size while the model thinks, one folded line with the seconds once the answer starts, and a press on the
+  folded line opens the whole reasoning. The folded line in a character's own voice is split off into its own optional
+  entry, below, and is not built until this first version is in and looked at. The spoiler-verdict second job waits with
+  it, as before.
   [Plan](planning/40-reasoning-display.md).
+- ★★ `[reply]` **The folded reasoning line in the character's own voice** — **OPEN, optional, filed 2026-09-16 (D106).**
+  Builds only after the reasoning display's first version has landed and been looked at. The mockup page showed the same
+  folded line written by the model itself in three characters' voices: Ali G, "See the booyakasha · 41 s"; GLaDOS, "Expose
+  the inefficient calculations · 41 s"; the Spy, "Révéler le raisonnement · 41 s" — the longest of the three still fits the
+  row at the small size. Not decided yet: how the voiced line gets written, a fixed phrase per character or the model asked
+  once each time, and it must fall back to the plain line whenever the character is off or the phrase is missing.
+  [Mockup page](https://claude.ai/artifact/2De58qirE34754PEZVPmdb).
 - ★★★★★ `[voice]` **Wake-word listening** — **OPEN, beta.** Opt-in always-on local wake **bonsAI**, then STT, then a quiet Ask.
   [Feasibility](planning/10-wake-word-listening-feasibility.md).
 - ★★★★★★ `[platform]` **Deep mod AI hints** — **OPEN.** Detect mod frameworks and files; mod-aware guidance.
@@ -535,7 +566,9 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   row does open the Steam setting**, though the highlight lands one toggle above the row that was pressed —
   the same known shape as the Open Permissions bug — and **the typed words are not kept when you come back
   from the jump**, which the row's own text expected; whether they should survive is a question for the
-  maintainer, not decided here. Evidence `docs/test-evidence/plan56-SETTINGS-CARD-01.json`,
+  maintainer, not decided here. The six-row cap on the Deck's own screen is the maintainer's call, looked at
+  and kept (D106); whether the typed words should survive the jump is now logged as an open call in D106,
+  left open on purpose, and this entry does not wait on it. Evidence `docs/test-evidence/plan56-SETTINGS-CARD-01.json`,
   `docs/test-evidence/plan56-SETTINGS-CARD-DPAD-01.summary.json`.
   [Plan](planning/45-settings-shortcut-card.md) ·
   [Mockups](https://claude.ai/code/artifact/1ab2a570-2ae5-45cd-b12b-332694f96fd5). Rows **SETTINGS-CARD-01**
@@ -766,8 +799,12 @@ ones from this month are D81 to D88.
   about 100 words, no warning line, no spoiler box, with a Hades follow-up menu. The Black Mesa sentence came
   back the same shape 2026-09-16: 176 words, the advice starts right after the character's opening line, the
   Gonarch note attached, no warning line. Whether any of the three reads as advice-first is still your
-  judgement, which is what this row is for. Row **KB-ANSWER-03**; evidence
-  `docs/test-evidence/plan48-deck-evening-2026-09-12.json` **[no evidence — re-run, batch QA-EVIDENCE-GAP-01]**,
+  judgement, which is what this row is for. All three replies are now written out in full in
+  `docs/test-evidence/plan56-KB-ANSWER-03-three-replies.md`, copied word for word from the saved chats in the
+  pre-wipe backup, which also fills the Portal 2 reply's missing evidence (that reply: 2026-09-12, 18:54 Deck
+  time, 113 words). You asked where the copy was on 2026-09-16; it is there now. Your read of the three is
+  still what is owed. Row **KB-ANSWER-03**; evidence
+  `docs/test-evidence/plan56-KB-ANSWER-03-three-replies.md`,
   `docs/test-evidence/plan55-KB-ANSWER-03-hades.json`, `docs/test-evidence/plan56-KB-ANSWER-03-blackmesa.json`.
 - ★★★ `[KB]` **DRG Survivor glossary terms** — **VERIFY, one touch tap owed.** Shipped 2026-08-28 and walked on device:
   underline, popup, D-pad reachability, B, one-press Up. Rows **DRG-GLOSSARY-01…04**.

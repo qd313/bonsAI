@@ -263,7 +263,14 @@ Open questions:
 
 **Drawn at true size on the mockup page** https://claude.ai/artifact/2De58qirE34754PEZVPmdb **(2026-09-16):**
 the row, tab and section options sit side by side, each with its collapsed label and the D-pad escape route
-marked, so the four open questions above can be answered by looking. The maintainer's call is owed.
+marked, so the four open questions above can be answered by looking. The maintainer's call is in, below.
+
+**Answered 2026-09-16 (D106).** (a) A tab within the panel. (b) Only the newest turn shows the Session tab,
+so it never repeats. (c) The escape route is as drawn: Up from the tabs goes to Hide details and then Read
+aloud; Down goes into the chips; B anywhere inside the panel closes it. (d) The collapsed row still says
+"Show details". One thing the mockup page did not draw: where Clear sits inside the Session tab. The builder
+puts it at the end of that tab's body, the same button and the same confirm box, unless the maintainer says
+otherwise.
 
 ## The tab icon bar collapses when it is not in use
 

@@ -165,6 +165,10 @@
       "count": 2
     },
     {
+      "path": "py_modules/backend/services/spy_confession_service.py",
+      "count": 2
+    },
+    {
       "path": "py_modules/backend/services/strategy_checklist_session_service.py",
       "count": 2
     },
@@ -286,10 +290,6 @@
     },
     {
       "path": "py_modules/backend/services/response_verify.py",
-      "count": 1
-    },
-    {
-      "path": "py_modules/backend/services/spy_confession_service.py",
       "count": 1
     },
     {
@@ -556,6 +556,7 @@
         "py_modules/backend/services/screenshot_media.py",
         "py_modules/backend/services/spoiler_risk_service.py",
         "py_modules/backend/services/spoiler_title_profiles.py",
+        "py_modules/backend/services/spy_confession_service.py",
         "py_modules/backend/services/tdp_service.py",
         "py_modules/backend/services/transparency_service.py",
         "py_modules/backend/tdp_intent.py"
@@ -892,7 +893,8 @@
     "py_modules/backend/services/spy_confession_service.py": {
       "imports": [],
       "importedBy": [
-        "py_modules/backend/services/ai_character_service.py"
+        "py_modules/backend/services/ai_character_service.py",
+        "py_modules/backend/services/game_ai_request.py"
       ]
     },
     "py_modules/backend/services/steam_vac_service.py": {

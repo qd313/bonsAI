@@ -28,6 +28,7 @@ if "decky" not in sys.modules:
 
 from backend.services.game_ai_request import run_game_ai_request
 from backend.services.ollama_prompts import extract_strategy_asked_entity
+from backend.services.spy_confession_service import SPY_LIES_TAG_CLOSE, SPY_LIES_TAG_OPEN
 
 
 class StripTdpRecommendationBlockTests(unittest.TestCase):
@@ -409,6 +410,106 @@ class AnswerCheckerLoggingTests(unittest.TestCase):
         result = _run(plugin, question="What should I do next in this game?")
 
         self.assertEqual(result.get("response"), text)
+
+
+class SpyLyingWiringTests(unittest.TestCase):
+    """The Spy's confession tag has to be stripped from the reply a person reads, and the lies
+    carried into the ask result -- but only when the Spy is actually resolved at a lying accent
+    level, and without changing what the destructive advice guard sees.
+    """
+
+    def _spy_settings(self, intensity: str = "heavy") -> dict:
+        return {
+            "latency_timeouts_custom_enabled": False,
+            "input_sanitizer_user_disabled": False,
+            "capabilities": {},
+            "ai_character_enabled": True,
+            "ai_character_random": False,
+            "ai_character_preset_id": "tf2_spy",
+            "ai_character_custom_text": "",
+            "ai_character_accent_intensity": intensity,
+        }
+
+    def test_tag_is_stripped_and_lies_reach_the_result_at_a_lying_level(self):
+        plugin = _FakePlugin(self._spy_settings("heavy"))
+        plugin._ollama_result = {
+            "success": True,
+            "response": (
+                "Just drop your TDP to 4 watts, that always helps this game.\n\n"
+                f"{SPY_LIES_TAG_OPEN}\n"
+                "Said 4 watts always helps\n"
+                f"{SPY_LIES_TAG_CLOSE}"
+            ),
+            "model": "test-model",
+        }
+
+        result = _run(plugin, question="What should I do next in this game?")
+
+        self.assertNotIn(SPY_LIES_TAG_OPEN, result.get("response", ""))
+        self.assertIn("Just drop your TDP to 4 watts", result.get("response", ""))
+        self.assertTrue(result.get("spy_lying_active"))
+        self.assertEqual(result.get("spy_lies"), ["Said 4 watts always helps"])
+        # Both fields are also handed to build_ollama_route_snapshot's ollama_result argument
+        # here; whether the Show details record itself stores them is transparency_service.py's
+        # own concern and is tested in test_transparency_service.py.
+
+    def test_tag_is_left_alone_below_a_lying_level(self):
+        plugin = _FakePlugin(self._spy_settings("balanced"))
+        text_with_tag_shaped_text = (
+            f"An honest answer. {SPY_LIES_TAG_OPEN}\nnot a real lie\n{SPY_LIES_TAG_CLOSE}"
+        )
+        plugin._ollama_result = {
+            "success": True,
+            "response": text_with_tag_shaped_text,
+            "model": "test-model",
+        }
+
+        result = _run(plugin, question="What should I do next in this game?")
+
+        self.assertEqual(result.get("response"), text_with_tag_shaped_text)
+        self.assertFalse(result.get("spy_lying_active"))
+        self.assertEqual(result.get("spy_lies"), [])
+
+    def test_non_spy_character_never_sets_spy_lying_active(self):
+        plugin = _FakePlugin(
+            {
+                "latency_timeouts_custom_enabled": False,
+                "input_sanitizer_user_disabled": False,
+                "capabilities": {},
+                "ai_character_enabled": True,
+                "ai_character_random": False,
+                "ai_character_preset_id": "cp2077_jackie",
+                "ai_character_custom_text": "",
+                "ai_character_accent_intensity": "heavy",
+            }
+        )
+        plugin._ollama_result = {"success": True, "response": "Plain advice.", "model": "test-model"}
+
+        result = _run(plugin, question="What should I do next in this game?")
+
+        self.assertFalse(result.get("spy_lying_active"))
+        self.assertEqual(result.get("spy_lies"), [])
+
+    def test_destructive_advice_guard_still_fires_on_a_lying_spy_reply(self):
+        plugin = _FakePlugin(self._spy_settings("unleashed"))
+        plugin._ollama_result = {
+            "success": True,
+            "response": (
+                "Just delete your compatdata folder to fix this crash.\n\n"
+                f"{SPY_LIES_TAG_OPEN}\n"
+                "Said deleting compatdata fixes it\n"
+                f"{SPY_LIES_TAG_CLOSE}"
+            ),
+            "model": "test-model",
+        }
+
+        result = _run(plugin, question="What should I do next in this game?")
+
+        self.assertIn(
+            "bonsAI safety check",
+            result.get("response", ""),
+            "the destructive advice notice must still be appended for a lying Spy reply",
+        )
 
 
 if __name__ == "__main__":

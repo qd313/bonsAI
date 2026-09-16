@@ -91,7 +91,10 @@ from typing import Any, Optional
 import decky
 
 from backend.services.capabilities import capability_enabled
-from backend.services.ai_character_service import build_roleplay_system_suffix_meta
+from backend.services.ai_character_service import (
+    build_roleplay_system_suffix_meta,
+    spy_lying_mode_active,
+)
 from backend.services.destructive_advice_guard import (
     append_destructive_advice_notice,
     check_destructive_advice,
@@ -123,6 +126,7 @@ from backend.services.response_verify import (
     drop_branch_menu_copying_the_worked_example,
     verify_ollama_response,
 )
+from backend.services.spy_confession_service import parse_spy_lies_tag
 from backend.services.knowledge_base_service import (
     kb_coverage_to_transparency,
     lookup_game_genres,
@@ -636,6 +640,18 @@ async def run_game_ai_request(
         applied = None
         pyro_asshole = ollama_result.get("pyro_asshole_mode") is True
 
+        # The Spy's confession tag (spy_confession_service.py) is stripped from response_text --
+        # the copy a person reads -- but base_response_text is left exactly as the model wrote
+        # it, tag included, so the destructive advice guard below still sees the same text it
+        # always has. rp_meta was resolved above (or handed in by the caller) before this Ask
+        # ever reached Ollama, so it names the same preset the prompt was actually built for.
+        spy_lying_active = bool(ollama_result.get("success")) and spy_lying_mode_active(
+            settings, rp_meta.resolved_preset_id
+        )
+        spy_lies: list[str] = []
+        if spy_lying_active:
+            response_text, spy_lies = parse_spy_lies_tag(response_text)
+
         if ollama_result.get("success"):
             loop = asyncio.get_running_loop()
             tmin, tmax, gmin, gmax = TDP_MIN_W, TDP_MAX_W, GPU_CLK_MIN_MHZ, GPU_CLK_MAX_MHZ
@@ -786,6 +802,8 @@ async def run_game_ai_request(
                 "tdp_cap_watts": pre_cap if tdp_grounding_requested else None,
                 "ask_mode": ask_mode,
                 "spoiler_risk_signals": spoiler_risk_signals,
+                "spy_lying_active": spy_lying_active,
+                "spy_lies": spy_lies,
             },
             base_response_text=base_response_text,
             response_text=response_text,
@@ -820,6 +838,8 @@ async def run_game_ai_request(
             ),
             "strategy_spoiler_asked_entity": strategy_spoiler_asked_entity,
             "preset_carousel_inject": ollama_result.get("preset_carousel_inject"),
+            "spy_lying_active": spy_lying_active,
+            "spy_lies": spy_lies,
             "transparency": transparency_snapshot_for_chat_slot(ollama_route_snapshot),
         }
     except Exception as exc:

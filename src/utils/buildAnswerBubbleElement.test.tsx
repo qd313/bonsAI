@@ -297,6 +297,80 @@ describe("answer bubble section stops", () => {
   });
 
   /*
+   * Measured on the Deck 2026-09-16 (plan56-GREYED-STEP-OVER-01-thumbs.json, steps 4 and 5): Left
+   * from an answer paragraph moved the ring onto Steam's own Quick Access rail — out of the plugin
+   * entirely — and Right brought it back onto the reply's container. No paragraph stop wired either
+   * direction, so once Steam's own move handler returned nothing, Steam's default spatial search
+   * took over and found the rail. Nothing inside a paragraph is reached by Left/Right today —
+   * glossary chips and spoiler fences are only ever offered on a Down or Up press (see
+   * handleAnswerBubbleMoveDown/Up above) — so claiming both directions and holding still is safe:
+   * there is nothing here for them to do. The last section's existing Right-into-Copy hand-off
+   * (`rightIntoCopy`, tested below under "Copy in the answer bubble's corner") still overrides this
+   * default, since it is applied after `stopNavProps` in `stopAttrs`.
+   */
+  describe("answer stop Left/Right hold still instead of leaving the bubble", () => {
+    beforeEach(() => {
+      resetAnswerStopRegistry();
+      registerAnswerBubbleEl(ANSWER_KEY, null);
+    });
+    afterEach(() => {
+      cleanup();
+    });
+
+    it("claims Left on every section", () => {
+      const el = buildAnswerBubbleElement({
+        body: FENCED_BODY,
+        streaming: false,
+        spoilerMaskingEnabled: true,
+        maxWidthCss: "100%",
+        answerKey: ANSWER_KEY,
+      });
+      const sections = collectByClassName(el, "bonsai-answer-stop");
+      expect(sections.length).toBeGreaterThan(1);
+      for (const section of sections) {
+        const onMoveLeft = (section.props as Record<string, unknown>).onMoveLeft as () => boolean;
+        expect(onMoveLeft).toBeTypeOf("function");
+        expect(onMoveLeft()).toBe(true);
+      }
+    });
+
+    it("claims Right on every section when there is no copy icon to send it to", () => {
+      const el = buildAnswerBubbleElement({
+        body: FENCED_BODY,
+        streaming: false,
+        spoilerMaskingEnabled: true,
+        maxWidthCss: "100%",
+        answerKey: ANSWER_KEY,
+        // No getAnswerCopyText: showCornerCopy is false, so even the last section gets no
+        // rightIntoCopy override — every section should hold still on Right too.
+      });
+      const sections = collectByClassName(el, "bonsai-answer-stop");
+      for (const section of sections) {
+        const onMoveRight = (section.props as Record<string, unknown>).onMoveRight as () => boolean;
+        expect(onMoveRight).toBeTypeOf("function");
+        expect(onMoveRight()).toBe(true);
+      }
+    });
+
+    it("still lets every section but the last claim Right when a copy icon is offered", () => {
+      const el = buildAnswerBubbleElement({
+        body: FENCED_BODY,
+        streaming: false,
+        spoilerMaskingEnabled: true,
+        maxWidthCss: "100%",
+        answerKey: ANSWER_KEY,
+        getAnswerCopyText: () => "copy text",
+      });
+      const sections = collectByClassName(el, "bonsai-answer-stop");
+      expect(sections.length).toBeGreaterThan(1);
+      for (const section of sections.slice(0, -1)) {
+        const onMoveRight = (section.props as Record<string, unknown>).onMoveRight as () => boolean;
+        expect(onMoveRight()).toBe(true);
+      }
+    });
+  });
+
+  /*
    * Directions ride `onMoveDown`/`onMoveUp` — the handlers Steam actually invokes for a D-pad
    * press on device. Measured 2026-08-27: a real press dispatches no DOM keyboard event into the
    * plugin, and the previous `onButtonDown`-only wiring never moved the ring on hardware, which
@@ -624,17 +698,24 @@ describe("Copy in the answer bubble's corner", () => {
   /*
    * Read off the React tree, not the DOM: the test harness strips every Steam nav prop before it
    * reaches a div (fakeDeckyUi.tsx), so onMoveRight is invisible to a rendered query.
+   *
+   * Every section now claims Right (it holds still rather than leaking to Steam's own rail — see
+   * "answer stop Left/Right hold still" above), so the last section is no longer the only one that
+   * carries the prop. What is still true, and what this checks, is that only the LAST section's
+   * Right actually reaches into the copy icon — every earlier one holds without moving focus.
    */
-  it("offers Right into the icon from the last section, and from no other", () => {
-    const sections = collectByClassName(build(false)!, "bonsai-answer-stop");
+  it("moves into the copy icon on Right from the last section only", () => {
+    const el = build(false)!;
+    render(el); // mounts the copy icon so its replyStop ref actually registers
+    const sections = collectByClassName(el, "bonsai-answer-stop");
     expect(sections.length).toBeGreaterThan(1);
-    const withRight = sections.filter(
-      (node) => (node.props as Record<string, unknown>).onMoveRight
-    );
-    expect(withRight).toHaveLength(1);
-    expect(
-      String((withRight[0]!.props as Record<string, unknown>)["data-bonsai-chunk-index"])
-    ).toBe(String(sections.length - 1));
+    for (const section of sections) {
+      const onMoveRight = (section.props as Record<string, unknown>).onMoveRight as () => boolean;
+      expect(onMoveRight).toBeTypeOf("function");
+    }
+    const last = sections[sections.length - 1]!;
+    expect(((last.props as Record<string, unknown>).onMoveRight as () => boolean)()).toBe(true);
+    expect(document.activeElement?.getAttribute("aria-label")).toBe("Copy reply text");
   });
 
   it("offers Left back out of the icon", () => {
@@ -672,9 +753,16 @@ describe("Copy in the answer bubble's corner", () => {
     }
   });
 
-  it("does not offer Right into an icon that is not there", () => {
+  /*
+   * No copy icon to reach: every section's Right now holds still (claims the press, moves
+   * nothing) rather than being entirely unset — see "answer stop Left/Right hold still" above.
+   */
+  it("holds still on Right when there is no icon to send it to", () => {
     const sections = collectByClassName(build(false, false)!, "bonsai-answer-stop");
-    expect(sections.some((n) => (n.props as Record<string, unknown>).onMoveRight)).toBe(false);
+    for (const section of sections) {
+      const onMoveRight = (section.props as Record<string, unknown>).onMoveRight as () => boolean;
+      expect(onMoveRight()).toBe(true);
+    }
   });
 
   /*

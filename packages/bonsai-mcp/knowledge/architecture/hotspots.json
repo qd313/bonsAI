@@ -112,7 +112,7 @@
     },
     {
       "path": "src/utils/buildAnswerBubbleElement.test.tsx",
-      "lines": 729,
+      "lines": 817,
       "role": ""
     },
     {
@@ -146,13 +146,13 @@
       "role": "Load/save/merge settings.json"
     },
     {
-      "path": "src/utils/buildReplyActionsElement.tsx",
-      "lines": 594,
+      "path": "src/utils/buildAnswerBubbleElement.tsx",
+      "lines": 605,
       "role": ""
     },
     {
-      "path": "src/utils/buildAnswerBubbleElement.tsx",
-      "lines": 587,
+      "path": "src/utils/buildReplyActionsElement.tsx",
+      "lines": 594,
       "role": ""
     },
     {

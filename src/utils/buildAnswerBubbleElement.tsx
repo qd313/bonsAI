@@ -163,6 +163,16 @@ const STOP_CLASS = "bonsai-ai-response-chunk bonsai-ai-response-chunk--in-bubble
  * not early-reveal a masked fence or act on a wait chip) falls out of the DOM shape rather than
  * needing its own check. Reads the ring, not `activeElement`, for the same reason `moveUp` below
  * does: Steam moves `.gpfocus` without moving `activeElement`.
+ *
+ * `onMoveLeft`/`onMoveRight` hold still (claim the press, do nothing) rather than returning
+ * `false`. Measured on the Deck 2026-09-16 (plan56-GREYED-STEP-OVER-01-thumbs.json, steps 4-5):
+ * with neither direction claimed, Left moved the ring onto Steam's own Quick Access rail — out of
+ * the plugin entirely — and Right only brought it back because the rail happened to hand focus
+ * back to the reply's container. Nothing inside a paragraph answers Left or Right today: a
+ * glossary-term chip or a masked spoiler fence is only ever offered on a Down or Up press (see
+ * handleAnswerBubbleMoveDown/handleAnswerBubbleMoveUp above), so there is nothing for either
+ * direction to reach here. The last section's own Right-into-Copy hand-off overrides this default
+ * where it applies — it is spread in after `stopNavProps` in `stopAttrs`, below.
  */
 export function stopNavProps(
   moveDown: () => boolean,
@@ -178,9 +188,13 @@ export function stopNavProps(
     },
     onMoveDown: () => moveDown(),
     onMoveUp: () => moveUp(),
+    onMoveLeft: () => true,
+    onMoveRight: () => true,
     onButtonDown: (button: unknown) => {
       if (isDownDeckButtonEvent(button)) return moveDown();
       if (isUpDeckButtonEvent(button)) return moveUp();
+      if (isDeckDirectionLeftEvent(button)) return true;
+      if (isDeckDirectionRightEvent(button)) return true;
       return false;
     },
   };
@@ -513,9 +527,13 @@ export function buildAnswerBubbleElement(
                        bottom of the bubble, so anywhere else the ring would jump past text. */
                     showCornerCopy && i === displayChunks.length - 1
                       ? {
+                          /* onMoveLeft is left unset here on purpose — it falls through to
+                             stopNav's own "hold still", which is exactly right for the last
+                             section too (there is nothing to its left). */
                           onMoveRight: () => rightIntoCopy(),
                           onButtonDown: (button: unknown) => {
                             if (isDeckDirectionRightEvent(button)) return rightIntoCopy();
+                            if (isDeckDirectionLeftEvent(button)) return true;
                             if (isDownDeckButtonEvent(button)) return moveDown();
                             if (isUpDeckButtonEvent(button)) return moveUp();
                             return false;

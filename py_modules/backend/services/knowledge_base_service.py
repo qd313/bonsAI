@@ -1896,8 +1896,18 @@ def summarize_kb_coverage(
     app_id: str,
     app_name: str,
     shortcut_name: str = "",
+    text_resolved_title: str = "",
 ) -> KbCoverageSummary:
-    """Return how many strategy sections the offline corpus has for this game."""
+    """Return how many strategy sections the offline corpus has for this game.
+
+    ``text_resolved_title`` is the same D19 text-resolved title game_ai_request.py already
+    hands to the prompt and to ``should_retrieve_knowledge`` when nothing is running -- a game
+    named in the question itself. Until this was threaded through here too, a question like
+    "black mesa how do i tame a horse" with nothing running fell straight into the "no_app"
+    branch below, so the honesty lines (kb_not_in_notes_notice.py) could never fire for it even
+    though a note did attach: the one case where a person is most likely leaning on the model's
+    own memory was the one case where they were never told either way.
+    """
     if settings.get("use_local_knowledge_base") is not True:
         return KbCoverageSummary(status="kb_off")
 
@@ -1909,8 +1919,13 @@ def summarize_kb_coverage(
     # but the corpus has no entry for it" -- conflating the two under one status made Show
     # details claim a match failure when there was no game to match against in the first
     # place. Same emptiness test D19 already uses just above this call site (game_ai_request.py)
-    # to decide whether text-resolution from the question is the only path into the corpus.
-    if not str(app_id or "").strip() and not str(app_name or "").strip():
+    # to decide whether text-resolution from the question is the only path into the corpus --
+    # a resolved text title counts as "not nothing" here for the same reason it does there.
+    if (
+        not str(app_id or "").strip()
+        and not str(app_name or "").strip()
+        and not str(text_resolved_title or "").strip()
+    ):
         return KbCoverageSummary(status="no_app")
 
     try:
@@ -1920,6 +1935,7 @@ def summarize_kb_coverage(
             app_id=app_id,
             app_name=app_name,
             shortcut_name=shortcut_name,
+            text_resolved_title=text_resolved_title,
         )
         if game_id is None:
             return KbCoverageSummary(status="app_unresolved")

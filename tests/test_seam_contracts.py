@@ -47,7 +47,7 @@ FROZEN: dict[str, dict[str, str | None]] = {
         "should_retrieve_knowledge": "(*, use_local_knowledge_base: 'bool', ask_mode: 'str', question: 'str', app_id: 'str', app_name: 'str', text_resolved_title: 'str' = '') -> 'tuple[bool, str]'",
         "stack_context_blocks": "(*, proton_text: 'str', knowledge_text: 'str', max_total_bytes: 'int' = 102400) -> 'StackedContext'",
         "suggest_chip_candidates": "(settings: 'dict', *, app_id: 'str', app_name: 'str', shortcut_name: 'str' = '') -> 'SessionRagChipCandidatesResult'",
-        "summarize_kb_coverage": "(settings: 'dict', *, app_id: 'str', app_name: 'str', shortcut_name: 'str' = '') -> 'KbCoverageSummary'",
+        "summarize_kb_coverage": "(settings: 'dict', *, app_id: 'str', app_name: 'str', shortcut_name: 'str' = '', text_resolved_title: 'str' = '') -> 'KbCoverageSummary'",
     },
     # prompt building
     "backend.services.ollama_prompts": {

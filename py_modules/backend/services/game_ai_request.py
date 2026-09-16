@@ -373,12 +373,25 @@ async def run_game_ai_request(
                     shortcut_name = sn
                     break
 
+        # D19: with nothing running, a title the question names is the only way into the
+        # strategy corpus. Resolved only when Steam gives us neither an AppID nor a name, so a
+        # running game always wins -- a question mentioning Portal 2 while Hades is open is
+        # still an Ask about Hades. Resolved before the coverage summary below (not after, as
+        # it used to be): a question-named game has to reach that check too, or the honesty
+        # lines can never fire for the one case where a person is most likely leaning on the
+        # model's own memory instead of a real note -- see summarize_kb_coverage's own comment
+        # on why "nothing running" and "a game only named in the question" are different facts.
+        text_resolved_title = ""
+        if not str(app_id or "").strip() and not str(app_name or "").strip():
+            text_resolved_title = resolve_title_from_question(settings, question_for_retrieval)
+
         kb_coverage_transparency = kb_coverage_to_transparency(
             summarize_kb_coverage(
                 settings,
                 app_id=app_id,
                 app_name=app_name,
                 shortcut_name=shortcut_name,
+                text_resolved_title=text_resolved_title,
             )
         )
 
@@ -393,13 +406,6 @@ async def run_game_ai_request(
         kb_text = ""
         kb_result = None
         kb_survived = False
-        # D19: with nothing running, a title the question names is the only way into the
-        # strategy corpus. Resolved only when Steam gives us neither an AppID nor a name, so a
-        # running game always wins -- a question mentioning Portal 2 while Hades is open is
-        # still an Ask about Hades.
-        text_resolved_title = ""
-        if not str(app_id or "").strip() and not str(app_name or "").strip():
-            text_resolved_title = resolve_title_from_question(settings, question_for_retrieval)
 
         should_kb, kb_domain = should_retrieve_knowledge(
             use_local_knowledge_base=settings.get("use_local_knowledge_base") is True,

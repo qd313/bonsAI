@@ -283,6 +283,120 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     summary = summarize_kb_coverage(settings, app_id="", app_name="")
     self.assertEqual(summary.status, "no_app")
 
+  def test_summarize_kb_coverage_counts_a_question_named_game_as_covered(self):
+    """Roadmap: "Neither honesty line can appear when the game is only named in the question".
+
+    With nothing running, "black mesa how do i tame a horse" resolves a text title
+    (D19), but the coverage summary used to run before that resolution and never saw
+    it -- it read the empty app_id/app_name as "no_app" (desktop, nothing to check), the
+    same status a genuinely idle Deck gets. Threading the resolved title through fixes
+    that: the game named in the question now counts as covered, same as a running one.
+    """
+    settings = {
+      "use_local_knowledge_base": True,
+      "rag_corpus_path": str(SEED_DB.parent),
+    }
+    title = resolve_title_from_question(settings, "black mesa how do i tame a horse")
+    self.assertEqual(title, "Black Mesa")
+    summary = summarize_kb_coverage(
+      settings, app_id="", app_name="", text_resolved_title=title
+    )
+    self.assertEqual(summary.status, "sections")
+    self.assertGreater(summary.section_count, 0)
+
+  def test_summarize_kb_coverage_running_game_is_unaffected_by_a_stray_text_title(self):
+    """A running game's AppID always wins in `_resolve_game_id`; passing a text title too
+
+    (which should not happen in practice -- game_ai_request.py only resolves one when
+    nothing is running) must change nothing.
+    """
+    settings = {
+      "use_local_knowledge_base": True,
+      "rag_corpus_path": str(SEED_DB.parent),
+    }
+    plain = summarize_kb_coverage(
+      settings, app_id="2321470", app_name="Deep Rock Galactic: Survivor"
+    )
+    with_stray_title = summarize_kb_coverage(
+      settings,
+      app_id="2321470",
+      app_name="Deep Rock Galactic: Survivor",
+      text_resolved_title="Portal 2",
+    )
+    self.assertEqual(plain.status, with_stray_title.status)
+    self.assertEqual(plain.section_count, with_stray_title.section_count)
+
+  def test_question_named_game_wrong_note_now_gets_the_no_close_match_line(self):
+    """The wrong-subject example from the same roadmap entry, followed all the way to the
+
+    honesty-line check: "how do i tame a horse" has nothing to do with Black Mesa, a note
+    still attaches (through meaning search alone, no keyword support), and that combination
+    is exactly what `should_show_no_close_match_notice` is for -- but only once the coverage
+    status reads "sections" instead of the pre-fix "no_app".
+    """
+    settings = {
+      "use_local_knowledge_base": True,
+      "rag_corpus_path": str(SEED_DB.parent),
+    }
+    title = resolve_title_from_question(settings, "black mesa how do i tame a horse")
+    coverage = summarize_kb_coverage(
+      settings, app_id="", app_name="", text_resolved_title=title
+    )
+    result = retrieve_knowledge_context(
+      settings,
+      ask_mode="strategy",
+      question="how do i tame a horse",
+      app_id="",
+      app_name="",
+      text_resolved_title=title,
+      domain="strategy",
+      pc_ip="",
+    )
+    self.assertTrue(result.attached)
+    self.assertTrue(
+      should_show_no_close_match_notice(
+        ask_mode="strategy",
+        kb_attached=result.attached,
+        kb_coverage_status=coverage.status,
+        kb_domain="strategy",
+        kb_best_meaning=result.best_meaning,
+        kb_top_card_keyword_score=result.top_card_keyword_score,
+      )
+    )
+
+  def test_question_named_game_right_note_gets_no_honesty_line(self):
+    """Same plumbing, a real Black Mesa topic: no line, because the keyword half backs it up."""
+    settings = {
+      "use_local_knowledge_base": True,
+      "rag_corpus_path": str(SEED_DB.parent),
+    }
+    title = resolve_title_from_question(settings, "black mesa how do i beat the gonarch")
+    coverage = summarize_kb_coverage(
+      settings, app_id="", app_name="", text_resolved_title=title
+    )
+    result = retrieve_knowledge_context(
+      settings,
+      ask_mode="strategy",
+      question="how do i beat the gonarch",
+      app_id="",
+      app_name="",
+      text_resolved_title=title,
+      domain="strategy",
+      pc_ip="",
+    )
+    self.assertTrue(result.attached)
+    self.assertIn("Gonarch", result.text_block)
+    self.assertFalse(
+      should_show_no_close_match_notice(
+        ask_mode="strategy",
+        kb_attached=result.attached,
+        kb_coverage_status=coverage.status,
+        kb_domain="strategy",
+        kb_best_meaning=result.best_meaning,
+        kb_top_card_keyword_score=result.top_card_keyword_score,
+      )
+    )
+
   def test_summarize_kb_coverage_app_unresolved_when_game_running_but_unmatched(self):
     settings = {
       "use_local_knowledge_base": True,

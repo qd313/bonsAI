@@ -71,6 +71,7 @@ import {
   focusReplyHelpful,
   focusReplyReadAloud,
   focusReplyShowDetails,
+  focusUpFromReplyActions,
   queryLiveTurnSlot,
 } from "./liveTurnFocusGraph";
 import { registerReplyStop } from "./replyStopRegistry";
@@ -236,6 +237,16 @@ export function buildReplyActionsElement(
 
   const liveSlot = () => queryLiveTurnSlot();
   /*
+   * True when a strategy branch picker or checklist is mounted between the answer bubble and this
+   * row (MainTabChatTranscript draws them there, not this file). Checked before calling
+   * `focusUpFromReplyActions`: that function's own last resort focuses the whole bubble rather than
+   * its last section, which would undo CHAT-REPLY-ENTRY-01 for the ordinary reply if it ran on
+   * every Up press. Gating on real presence keeps this row's own last-section fallback for the case
+   * neither panel exists, and only adds the new hand-off when one of them does.
+   */
+  const hasStrategyChromeAboveReply = (slot: HTMLElement | null): boolean =>
+    Boolean(slot?.querySelector(".bonsai-strategy-branch-picker, .bonsai-strategy-checklist-panel"));
+  /*
    * Up from the thumbs row (Helpful / Not really) — the outer reply-actions container's own
    * `onMoveUp` falls back to the same handler. Measured on device 2026-09-04 (build f9a4c17,
    * CHAT-REPLY-ENTRY-01): this used to be a bare `() => false`, unconditionally yielding to Steam,
@@ -248,9 +259,20 @@ export function buildReplyActionsElement(
    * 2026-09-04) — kept rather than dropped, since the type already promises "focuses strategy
    * chrome before the answer bubble" and a caller that wants that ahead of the glossary chip and
    * the bubble fallback can still supply it without another signature change.
+   *
+   * Branch buttons and a checklist go ahead of the glossary chip and the bubble fallback, once
+   * they exist, for the same reason `onMoveUpFromReply` is documented that way: measured on the
+   * device 2026-09-05 (round35-spoiler-block-down-and-up), Up from Helpful walked straight past a
+   * two-button branch picker into the answer's own paragraphs, never stopping on either button —
+   * disagreeing with Down, which reaches them (via Steam's own sibling geometry, or now
+   * `focusDownFromLiveAnswerBubble` below) before it ever reaches Helpful. `focusUpFromReplyActions`
+   * (liveTurnFocusGraph.ts) already does exactly this hand-off and is already tested; this just
+   * wires it in ahead of the chain that used to run unconditionally.
    */
   const moveUpFromReply = () => {
     if (onMoveUpFromReply?.()) return true;
+    const slot = liveSlot();
+    if (hasStrategyChromeAboveReply(slot) && focusUpFromReplyActions(slot)) return true;
     if (upIntoGlossaryChip()) return true;
     return focusLastAnswerChunk(replyKey);
   };
@@ -371,6 +393,9 @@ export function buildReplyActionsElement(
     const slot = liveSlot();
     if (showChipRows && focusLastReplyChip(slot)) return true;
     if (focusReplyHelpful(slot)) return true;
+    /* No thumbs row at all (a restored answer, say) — same branch/checklist hand-off as
+       moveUpFromReply above, for the same reason. */
+    if (hasStrategyChromeAboveReply(slot) && focusUpFromReplyActions(slot)) return true;
     if (upIntoGlossaryChip()) return true;
     return focusLastAnswerChunk(replyKey);
   };

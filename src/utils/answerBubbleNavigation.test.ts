@@ -415,6 +415,26 @@ describe("focusFirstAnswerChunk / focusLastAnswerChunk", () => {
     expect(document.activeElement).toBe(reveal);
   });
 
+  /*
+   * The bug this repo measured on device 2026-09-05 (round35-spoiler-block-down-and-up.json): Down
+   * from the question went straight to a hidden spoiler block and never stopped on either paragraph
+   * ahead of it. The old rule grabbed the FIRST `.bonsai-spoiler-reveal-target` anywhere in the
+   * bubble, regardless of which section it was nested in; a spoiler in a later section (its own
+   * chunk, after real paragraphs) was still preferred over stops[0]. Fixed: the spoiler wins only
+   * when it sits inside the first section — a later one is reached in its own turn by the ordinary
+   * per-press walk.
+   */
+  it("focusFirstAnswerChunk enters at the first section when the masked spoiler is a LATER section", () => {
+    const { stops } = threeSections();
+    const reveal = document.createElement("div");
+    reveal.className = "bonsai-spoiler-reveal-target Panel Focusable";
+    stops[1]!.appendChild(reveal); // second section, not the first
+
+    expect(focusFirstAnswerChunk(ANSWER_KEY)).toBe(true);
+    expect(document.activeElement).toBe(stops[0]);
+    expect(document.activeElement).not.toBe(reveal);
+  });
+
   it("focusFirstAnswerChunk falls back to the bubble when it has no registered sections", () => {
     const { bubble } = buildBubble([]);
 

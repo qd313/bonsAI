@@ -76,6 +76,7 @@ import {
   handleAnswerBubbleMoveUp,
 } from "./answerBubbleNavigation";
 import { registerAnswerStop } from "./answerStopRegistry";
+import { focusDownFromLiveAnswerBubble, queryLiveTurnSlot } from "./liveTurnFocusGraph";
 import { uiGamepadFocusElement } from "./uiDocument";
 import {
   isDeckDirectionLeftEvent,
@@ -349,6 +350,15 @@ export function buildAnswerBubbleElement(
      * skipping the answer text between here and there.
      */
     if (handleAnswerBubbleMoveDown(bubble, noopChunkRef, chunkTotal, answerKey)) return true;
+    /*
+     * Nothing left inside the bubble. Name the branch buttons / checklist / reply chrome that comes
+     * next instead of leaving it to Steam's own sibling geometry to guess — the walk needs to reach
+     * the same stops Up retraces (focusUpFromReplyActions in buildReplyActionsElement.tsx), and a
+     * geometry guess is neither guaranteed nor testable off device. `focusDownFromLiveAnswerBubble`
+     * is already shipped and tested for exactly this hand-off (liveTurnFocusGraph.ts). Only wired
+     * for the live turn; an archived turn's Down still yields to Steam as before.
+     */
+    if (focusDownFromLiveAnswerBubble(queryLiveTurnSlot())) return true;
     /*
      * Yield to parent turn-slot flow-children so the next sibling Focusable
      * (branch picker / reply actions) receives focus. Do not programmatic-.focus()

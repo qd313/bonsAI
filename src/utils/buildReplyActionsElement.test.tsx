@@ -335,6 +335,61 @@ describe("buildReplyActionsElement Up from the thumbs row into the answer", () =
     expect(document.activeElement).toBe(chip);
     expect(document.activeElement).not.toBe(stops[stops.length - 1]);
   });
+
+  /*
+   * Measured on device 2026-09-05 (round35-spoiler-block-down-and-up.json): Up from Helpful walked
+   * straight past a two-button branch picker into the answer's own paragraphs, disagreeing with
+   * Down, which reaches the buttons first. `focusUpFromReplyActions` (liveTurnFocusGraph.ts) already
+   * ships this hand-off and is already tested there directly; this proves moveUpFromReply now calls
+   * it ahead of the glossary chip and the bubble fallback whenever a branch picker is mounted.
+   */
+  it("reaches a branch button before the bubble's last section when a branch picker is mounted", () => {
+    registerBubbleWithStops(2);
+    const slot = document.createElement("div");
+    slot.className = "bonsai-chat-turn-slot";
+    document.body.appendChild(slot);
+    const header = document.createElement("div");
+    header.className = "bonsai-chat-turn-row-header--live";
+    slot.appendChild(header);
+    const branchPicker = document.createElement("div");
+    branchPicker.className = "bonsai-strategy-branch-picker";
+    const branchButton = document.createElement("button");
+    branchButton.type = "button";
+    branchButton.textContent = "B. Pick this branch";
+    branchPicker.appendChild(branchButton);
+    slot.appendChild(branchPicker);
+
+    const el = buildReplyActionsElement({
+      replyKey: "live",
+      rating: null,
+      onRate: () => {},
+      showFeedback: true,
+    });
+
+    expect(moveUpFromReplyOf(el)()).toBe(true);
+    expect(document.activeElement).toBe(branchButton);
+  });
+
+  /* No branch picker or checklist mounted at all: CHAT-REPLY-ENTRY-01's shape is unchanged. */
+  it("still lands on the bubble's last section when no branch picker or checklist exists", () => {
+    const stops = registerBubbleWithStops(2);
+    const slot = document.createElement("div");
+    slot.className = "bonsai-chat-turn-slot";
+    document.body.appendChild(slot);
+    const header = document.createElement("div");
+    header.className = "bonsai-chat-turn-row-header--live";
+    slot.appendChild(header);
+
+    const el = buildReplyActionsElement({
+      replyKey: "live",
+      rating: null,
+      onRate: () => {},
+      showFeedback: true,
+    });
+
+    expect(moveUpFromReplyOf(el)()).toBe(true);
+    expect(document.activeElement).toBe(stops[stops.length - 1]);
+  });
 });
 
 /*

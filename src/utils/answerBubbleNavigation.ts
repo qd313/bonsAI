@@ -183,10 +183,22 @@ export function focusFirstAnswerChunk(answerKey: string): boolean {
   if (!el) return false;
   registerAnswerBubbleEl(answerKey, el);
   takeAnswerBubbleNavFocus(answerKey);
-  const spoiler = el.querySelector<HTMLElement>(".bonsai-spoiler-reveal-target");
-  if (spoiler && focusPanelEl(spoiler)) return true;
   // Registered handles, not a page query — same registry the section walk itself reads.
   const stops = orderedAnswerStops(answerKey, el);
+  /*
+   * A masked spoiler wins over the first section only when it sits inside that first section (or
+   * there is no section list yet to compare it against). Grabbing ANY spoiler in the bubble
+   * regardless of position — the previous rule — skipped every paragraph ahead of a spoiler that
+   * rendered as a LATER section: measured on device 2026-09-05
+   * (docs/test-evidence/round35-spoiler-block-down-and-up.json), Down from the question went
+   * straight to a hidden spoiler block and never stopped on either paragraph before it. A spoiler
+   * further down is still reached in its own turn, by the ordinary per-press walk in
+   * handleAnswerBubbleMoveDown below.
+   */
+  const spoiler = el.querySelector<HTMLElement>(".bonsai-spoiler-reveal-target");
+  if (spoiler && (!stops.length || stops[0]!.contains(spoiler)) && focusPanelEl(spoiler)) {
+    return true;
+  }
   if (stops.length && focusAnswerStop(stops[0]!)) return true;
   return focusPanelEl(el);
 }

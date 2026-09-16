@@ -150,6 +150,51 @@ describe("answer bubble section stops", () => {
   });
 
   /*
+   * Down once the bubble itself has nothing left. Measured on device 2026-09-05
+   * (round35-spoiler-block-down-and-up.json): with a branch picker the very next sibling, Down
+   * happened to reach it through Steam's own sibling geometry — but that is neither guaranteed nor
+   * testable off device, and Up from the reply-actions row (buildReplyActionsElement.tsx) now names
+   * the same hand-off explicitly via `focusUpFromReplyActions`. This is the Down-side match:
+   * `focusDownFromLiveAnswerBubble` (liveTurnFocusGraph.ts, already shipped and tested) is tried
+   * before yielding, so both edges of the bubble are named rather than one named and one guessed.
+   */
+  it("Down reaches a branch button once the bubble has nothing left, via focusDownFromLiveAnswerBubble", () => {
+    const slot = document.createElement("div");
+    slot.className = "bonsai-chat-turn-slot";
+    document.body.appendChild(slot);
+    const header = document.createElement("div");
+    header.className = "bonsai-chat-turn-row-header--live";
+    slot.appendChild(header);
+    const bubbleMount = document.createElement("div");
+    slot.appendChild(bubbleMount);
+
+    const el = buildAnswerBubbleElement({
+      body: "Just one short paragraph.",
+      streaming: false,
+      spoilerMaskingEnabled: true,
+      maxWidthCss: "100%",
+      answerKey: ANSWER_KEY,
+    });
+    expect(el).not.toBeNull();
+    render(el!, { container: bubbleMount });
+
+    const branchPicker = document.createElement("div");
+    branchPicker.className = "bonsai-strategy-branch-picker";
+    const branchButton = document.createElement("button");
+    branchButton.type = "button";
+    branchButton.textContent = "A. Pick this branch";
+    branchPicker.appendChild(branchButton);
+    slot.appendChild(branchPicker);
+
+    // No `.TabContentsScroll` ancestor in this fixture, so the in-bubble walk (handleAnswerBubble
+    // MoveDown) finds no scroll container and returns false immediately — exactly the "nothing left
+    // inside the bubble" case this test targets.
+    const onMoveDown = (el!.props as Record<string, unknown>).onMoveDown as () => boolean;
+    expect(onMoveDown()).toBe(true);
+    expect(document.activeElement).toBe(branchButton);
+  });
+
+  /*
    * Directions ride `onMoveDown`/`onMoveUp` — the handlers Steam actually invokes for a D-pad
    * press on device. Measured 2026-08-27: a real press dispatches no DOM keyboard event into the
    * plugin, and the previous `onButtonDown`-only wiring never moved the ring on hardware, which

@@ -141,13 +141,18 @@
       "role": "Load/save/merge settings.json"
     },
     {
-      "path": "src/components/DeveloperTab.tsx",
-      "lines": 579,
+      "path": "src/utils/buildAnswerBubbleElement.test.tsx",
+      "lines": 593,
       "role": ""
     },
     {
       "path": "src/utils/buildAnswerBubbleElement.tsx",
-      "lines": 577,
+      "lines": 587,
+      "role": ""
+    },
+    {
+      "path": "src/components/DeveloperTab.tsx",
+      "lines": 579,
       "role": ""
     },
     {
@@ -156,18 +161,18 @@
       "role": ""
     },
     {
+      "path": "src/utils/buildReplyActionsElement.tsx",
+      "lines": 571,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/strategy_guide_parse.py",
       "lines": 550,
       "role": ""
     },
     {
-      "path": "src/utils/buildAnswerBubbleElement.test.tsx",
-      "lines": 548,
-      "role": ""
-    },
-    {
-      "path": "src/utils/buildReplyActionsElement.tsx",
-      "lines": 546,
+      "path": "src/utils/answerBubbleNavigation.test.ts",
+      "lines": 532,
       "role": ""
     },
     {
@@ -191,13 +196,8 @@
       "role": ""
     },
     {
-      "path": "src/utils/answerBubbleNavigation.test.ts",
-      "lines": 512,
-      "role": ""
-    },
-    {
-      "path": "py_modules/backend/services/voice_read_aloud_service.py",
-      "lines": 506,
+      "path": "src/utils/buildReplyActionsElement.test.tsx",
+      "lines": 509,
       "role": ""
     }
   ]

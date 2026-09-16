@@ -1,0 +1,31 @@
+{
+  "title": "plan 56 block 0, measurement 3: the jumping question box, before the settings card (the 'before' for plan 45's first device row)",
+  "measured": "2026-09-16 about 04:25 local, build 0fbecb6 (hash-matched), Deck built-in screen 1280x800 (454 CSS px panel), Main tab, no game running",
+  "recipe": "Empty question box. Type the two letters 'en' with the repo's typing script (scripts/deck_send_ask.py, verified 'en' in the field). Read the rectangles before and after. Clear the field afterwards.",
+  "before_css_px": {
+    "dock": { "top": 297, "bottom": 454, "height": 157, "note": "sticky, flush with the panel bottom" },
+    "preset_chip_row": { "top": 298, "bottom": 328 },
+    "question_box_host": { "top": 328, "bottom": 397, "height": 69 },
+    "ask_button_row": { "top": 399, "bottom": 437 },
+    "results_pane": null,
+    "main_column": { "top": 88, "bottom": 775, "height": 687 },
+    "visible_chat": "154 to 297, about 143 px"
+  },
+  "after_css_px": {
+    "results_pane": { "top": 227, "bottom": 2615, "height": 2388, "rows": 71 },
+    "dock": { "top": 88, "bottom": 2633, "height": 2545, "note": "the list is part of the dock, so the dock is now taller than the whole panel and sticks to the TOP of the scroll area instead of the bottom" },
+    "preset_chip_row": { "top": 89, "bottom": 119 },
+    "question_box_host": { "top": 119, "bottom": 188, "height": 69 },
+    "ask_button_row": { "top": 190, "bottom": 227 },
+    "main_column": { "top": 88, "bottom": 3190, "height": 3102 },
+    "scroll": { "scrollTop": 0, "scrollHeight": 3102, "clientHeight": 366 }
+  },
+  "what_a_person_sees": [
+    "Typing two letters moves the question box 209 px up the screen, from 328 to 119, so the thing they were typing into jumps from the bottom of the panel to the top.",
+    "The chat disappears entirely: the dock now starts at the top of the panel and covers all of it.",
+    "71 rows of settings run 2,388 px below the box; the panel shows about 366 px of them, so the person scrolls through more than six screens of settings to reach the bottom.",
+    "On the external monitor plan 45 recorded the box being thrown off the top of the panel; on the built-in screen it stops at the top edge instead, because the dock is sticky, but the effect for a person is the same."
+  ],
+  "after_the_card_lands_expect": "the box's rectangle stays at 328 to 397 when the two letters are typed; the card sits above the box; the dock's height stays 157.",
+  "cleared_after": true
+}

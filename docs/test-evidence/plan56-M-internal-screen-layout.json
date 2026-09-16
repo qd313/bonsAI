@@ -1,0 +1,36 @@
+{
+  "title": "plan 56 block 0: the Main tab's layout on the Deck's built-in screen",
+  "measured": "2026-09-16 04:08 local, build 0fbecb6 (bundle, back end and prompt file hash-matched to the tip)",
+  "why": "The maintainer moved the Deck off the external monitor onto its own 1280x800 screen and reported the Ask bar looking cut off. Every earlier layout number in plan 30 and plan 45 was taken on the external monitor, where the panel body was 696 CSS px tall.",
+  "screen": {
+    "physical": "1280x800",
+    "devicePixelRatio": 1.5,
+    "quickAccessViewport_css": { "width": 854, "height": 454 },
+    "note": "The Quick Access page's viewport is 454 CSS px tall (681 physical), between Steam's top bar and its bottom MENU/BACK bar. That is 242 CSS px less than the external monitor."
+  },
+  "state": "Plugin freshly opened by the rig, Main tab, the 42-turn Portal 2 chat with the newest history turn expanded, no game running, ring unowned.",
+  "rects_css_px": {
+    "plugin_root": { "top": 64, "bottom": 454, "height": 390, "width": 300 },
+    "tab_bar": { "top": 64, "bottom": 84, "height": 20 },
+    "decky_tabs_root": { "top": 84, "bottom": 454, "height": 370, "overflow": "clip" },
+    "main_tab_column": { "top": 88, "bottom": 723, "height": 635, "below_viewport": 269 },
+    "chat_slot_row": { "top": 88, "bottom": 142, "height": 54 },
+    "chat_main_column_and_transcript": { "top": 154, "bottom": 509, "height": 355, "marginTop": 12 },
+    "reply_actions": { "top": 460, "bottom": 509 },
+    "session_context_strip": { "top": 521, "bottom": 566, "height": 45, "marginTop": 12, "paddingBottom": 10 },
+    "dock": { "top": 297, "bottom": 454, "height": 157, "position": "sticky", "note": "flush with the viewport bottom; nothing in it is drawn past 454" },
+    "preset_chip_row": { "top": 298, "bottom": 328, "height": 30 },
+    "question_box_host": { "top": 328, "bottom": 397, "height": 69 },
+    "ask_button": { "top": 400, "bottom": 436 },
+    "context_footnote": { "top": 441, "bottom": 454, "text": "Context: no active game detected" }
+  },
+  "findings": [
+    "In this state nothing is clipped: the dock is sticky and its bottom edge lands exactly on the viewport's bottom edge (454). The 'Context: no active game detected' line is the last thing drawn and sits right against Steam's bottom bar, which is why it reads as touching or cut off in the screenshot.",
+    "The visible chat is 143 CSS px (from the transcript's top at 154 to the dock's top at 297): about three lines of a reply plus the turn header. On the external monitor it was 412.",
+    "The dock is 157 px, the tab bar 20, the chat slot row 54 with a 12 px gap under it; together with Steam's own header those take 311 of the 454 px before a single line of chat.",
+    "Plan 45's settings card (288 px anchored to the box top at 328) would reach y=40, above the panel's own top edge at 64: eight rows do not fit on this screen. Lane E is told to cap the card at what fits under the tab bar.",
+    "The 'dead space above the box' measurement (recipe 2) has to be retaken on this screen with a two-turn chat; this state has a long chat so the column scrolls and no dead space exists here."
+  ],
+  "screenshot": "screenshots/DeckCapture_20260916_040852_game.png",
+  "open_question_for_maintainer": "Which part of the Ask bar looked cut off, and in what state (a fresh open, after typing, with the keyboard up, on a different chat)? This measurement found nothing clipped on a fresh open."
+}

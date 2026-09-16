@@ -1,0 +1,181 @@
+{
+  "ok": true,
+  "fidelity": "wire-sent",
+  "steps": [
+    {
+      "index": 1,
+      "label": "open the Advanced section",
+      "press": [
+        "A"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": false,
+      "matched": null,
+      "from": "<BUTTON> \"Advanced\"",
+      "to": "<BUTTON> \"Advanced\"",
+      "focusKey": "sel:#ModalDialogOverlay_Modal_0 > div.Panel.Focusable:nth-child(1) > div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(3)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 2402,
+      "diagnosis": "press routed, focus did not move - still <BUTTON> \"Advanced\". either no handler is wired for this direction, or it ran and moved nothing"
+    },
+    {
+      "index": 2,
+      "label": "down 1",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"Advanced\"",
+      "to": "<DIV> \"Allow non-FOSS and unclassified Ollama tags (Tier 3)\"",
+      "focusKey": "sel:form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div.Panel.Focusable:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1572,
+      "diagnosis": "press routed, focus moved <BUTTON> \"Advanced\" -> <DIV> \"Allow non-FOSS and unclassified Ollama tags (Tier 3)\""
+    },
+    {
+      "index": 3,
+      "label": "down 2",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Allow non-FOSS and unclassified Ollama tags (Tier 3)\"",
+      "to": "<DIV> \"Allow high-VRAM models in routing\"",
+      "focusKey": "sel:form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div.Panel.Focusable:nth-child(3) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1578,
+      "diagnosis": "press routed, focus moved <DIV> \"Allow non-FOSS and unclassified Ollama tags (Tier 3)\" -> <DIV> \"Allow high-VRAM models in routing\""
+    },
+    {
+      "index": 4,
+      "label": "down 3",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Allow high-VRAM models in routing\"",
+      "to": "<BUTTON> \"Read model policy (README)…\"",
+      "focusKey": "sel:#ModalDialogOverlay_Modal_0 > div.Panel.Focusable:nth-child(1) > div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogBodyText:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > button.Focusable:nth-child(4)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1557,
+      "diagnosis": "press routed, focus moved <DIV> \"Allow high-VRAM models in routing\" -> <BUTTON> \"Read model policy (README)…\""
+    },
+    {
+      "index": 5,
+      "label": "down 4: past the last switch",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"Read model policy (README)…\"",
+      "to": "<BUTTON> \"Done\"",
+      "focusKey": "sel:#ModalDialogOverlay_Modal_0 > div.Panel.Focusable:nth-child(1) > div.DialogContent._DialogLayout.GenericDialogBase:nth-child(3) > div.Panel.Focusable:nth-child(1) > form:nth-child(1) > div.DialogBody.Panel.Focusable:nth-child(2) > div.DialogFooter:nth-child(2) > div.DialogTwoColLayout._DialogColLayout.Panel:nth-child(1) > button.DialogButton._DialogLayout.Primary:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1579,
+      "diagnosis": "press routed, focus moved <BUTTON> \"Read model policy (README)…\" -> <BUTTON> \"Done\""
+    }
+  ],
+  "ranSteps": 5,
+  "totalSteps": 5,
+  "passed": 5,
+  "failed": 0,
+  "visited": [
+    "<BUTTON> \"Advanced\"",
+    "<DIV> \"Allow non-FOSS and unclassified Ollama tags (Tier 3)\"",
+    "<DIV> \"Allow high-VRAM models in routing\"",
+    "<BUTTON> \"Read model policy (README)…\"",
+    "<BUTTON> \"Done\""
+  ],
+  "cycle": null,
+  "neverReached": [],
+  "stopsFocusedButNotVisible": 0,
+  "notVisibleStops": [],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 14507,
+  "acquired": false,
+  "summary": "5/5 steps passed"
+}

@@ -1,0 +1,43 @@
+{
+  "ok": true,
+  "fidelity": "steam-routed",
+  "steps": [
+    {
+      "index": 1,
+      "label": "choose Speed in the Ask-mode menu",
+      "press": [
+        "A"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"speed\"",
+      "to": "nothing",
+      "focusKey": null,
+      "visibility": null,
+      "visible": null,
+      "settled": true,
+      "settleMs": 962,
+      "diagnosis": "press routed, focus moved <BUTTON> \"speed\" -> nothing"
+    }
+  ],
+  "ranSteps": 1,
+  "totalSteps": 1,
+  "passed": 1,
+  "failed": 0,
+  "visited": [
+    "<BUTTON> \"speed\"",
+    "nothing"
+  ],
+  "cycle": null,
+  "neverReached": [],
+  "stopsFocusedButNotVisible": 0,
+  "notVisibleStops": [],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 1699,
+  "acquired": false,
+  "summary": "1/1 steps passed"
+}

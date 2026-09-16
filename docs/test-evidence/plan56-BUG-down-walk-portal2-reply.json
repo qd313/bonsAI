@@ -1,0 +1,433 @@
+{
+  "ok": true,
+  "fidelity": "wire-sent",
+  "steps": [
+    {
+      "index": 1,
+      "label": "d1",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": false,
+      "matched": null,
+      "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(3)",
+      "visibility": {
+        "verdict": "partial",
+        "visiblePercent": 89,
+        "coveredBy": "div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable",
+        "clippedBy": null,
+        "points": {
+          "visible": 8,
+          "covered": 1,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": false,
+      "settled": true,
+      "settleMs": 920,
+      "diagnosis": "press routed, focus did not move - still <DIV> (unnamed - the only text around it is a container's, not a label). either no handler is wired for this direction, or it ran and moved nothing; FOCUSED BUT only PARTIALLY visible (89%), covered by div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable -- the ring is on it and a person could not see it"
+    },
+    {
+      "index": 2,
+      "label": "d2",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "to": "<BUTTON> \"Retry same prompt\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 596,
+      "diagnosis": "press routed, focus moved <DIV> (unnamed - the only text around it is a container's, not a label) -> <BUTTON> \"Retry same prompt\""
+    },
+    {
+      "index": 3,
+      "label": "d3",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"Retry same prompt\"",
+      "to": "<DIV> \"how does the excursion funnel work in portal 2\"",
+      "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+      "visibility": {
+        "verdict": "partial",
+        "visiblePercent": 78,
+        "coveredBy": "div.bonsai-turn-retry-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.Focusable",
+        "clippedBy": null,
+        "points": {
+          "visible": 7,
+          "covered": 2,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": false,
+      "settled": true,
+      "settleMs": 573,
+      "diagnosis": "press routed, focus moved <BUTTON> \"Retry same prompt\" -> <DIV> \"how does the excursion funnel work in portal 2\"; FOCUSED BUT only PARTIALLY visible (78%), covered by div.bonsai-turn-retry-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.Focusable -- the ring is on it and a person could not see it"
+    },
+    {
+      "index": 4,
+      "label": "d4",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"how does the excursion funnel work in portal 2\"",
+      "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 625,
+      "diagnosis": "press routed, focus moved <DIV> \"how does the excursion funnel work in portal 2\" -> <DIV> (unnamed - the only text around it is a container's, not a label)"
+    },
+    {
+      "index": 5,
+      "label": "d5",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 583,
+      "diagnosis": "press routed, focus moved <DIV> (unnamed - the only text around it is a container's, not a label) -> <DIV> (unnamed - the only text around it is a container's, not a label)"
+    },
+    {
+      "index": 6,
+      "label": "d6",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(3)",
+      "visibility": {
+        "verdict": "partial",
+        "visiblePercent": 89,
+        "coveredBy": "div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable",
+        "clippedBy": null,
+        "points": {
+          "visible": 8,
+          "covered": 1,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": false,
+      "settled": true,
+      "settleMs": 600,
+      "diagnosis": "press routed, focus moved <DIV> (unnamed - the only text around it is a container's, not a label) -> <DIV> (unnamed - the only text around it is a container's, not a label); FOCUSED BUT only PARTIALLY visible (89%), covered by div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable -- the ring is on it and a person could not see it"
+    },
+    {
+      "index": 7,
+      "label": "d7",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": false,
+      "matched": null,
+      "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(3)",
+      "visibility": {
+        "verdict": "partial",
+        "visiblePercent": 89,
+        "coveredBy": "div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable",
+        "clippedBy": null,
+        "points": {
+          "visible": 8,
+          "covered": 1,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": false,
+      "settled": true,
+      "settleMs": 865,
+      "diagnosis": "press routed, focus did not move - still <DIV> (unnamed - the only text around it is a container's, not a label). either no handler is wired for this direction, or it ran and moved nothing; FOCUSED BUT only PARTIALLY visible (89%), covered by div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable -- the ring is on it and a person could not see it"
+    },
+    {
+      "index": 8,
+      "label": "d8",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "to": "<BUTTON> \"Retry same prompt\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 600,
+      "diagnosis": "press routed, focus moved <DIV> (unnamed - the only text around it is a container's, not a label) -> <BUTTON> \"Retry same prompt\""
+    },
+    {
+      "index": 9,
+      "label": "d9",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"Retry same prompt\"",
+      "to": "<DIV> \"how does the excursion funnel work in portal 2\"",
+      "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+      "visibility": {
+        "verdict": "partial",
+        "visiblePercent": 78,
+        "coveredBy": "div.bonsai-turn-retry-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.Focusable",
+        "clippedBy": null,
+        "points": {
+          "visible": 7,
+          "covered": 2,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": false,
+      "settled": true,
+      "settleMs": 566,
+      "diagnosis": "press routed, focus moved <BUTTON> \"Retry same prompt\" -> <DIV> \"how does the excursion funnel work in portal 2\"; FOCUSED BUT only PARTIALLY visible (78%), covered by div.bonsai-turn-retry-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.Focusable -- the ring is on it and a person could not see it"
+    },
+    {
+      "index": 10,
+      "label": "d10",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"how does the excursion funnel work in portal 2\"",
+      "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 596,
+      "diagnosis": "press routed, focus moved <DIV> \"how does the excursion funnel work in portal 2\" -> <DIV> (unnamed - the only text around it is a container's, not a label)"
+    },
+    {
+      "index": 11,
+      "label": "d11",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 600,
+      "diagnosis": "press routed, focus moved <DIV> (unnamed - the only text around it is a container's, not a label) -> <DIV> (unnamed - the only text around it is a container's, not a label)"
+    },
+    {
+      "index": 12,
+      "label": "d12",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(3)",
+      "visibility": {
+        "verdict": "partial",
+        "visiblePercent": 89,
+        "coveredBy": "div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable",
+        "clippedBy": null,
+        "points": {
+          "visible": 8,
+          "covered": 1,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": false,
+      "settled": true,
+      "settleMs": 609,
+      "diagnosis": "press routed, focus moved <DIV> (unnamed - the only text around it is a container's, not a label) -> <DIV> (unnamed - the only text around it is a container's, not a label); FOCUSED BUT only PARTIALLY visible (89%), covered by div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable -- the ring is on it and a person could not see it"
+    }
+  ],
+  "ranSteps": 12,
+  "totalSteps": 12,
+  "passed": 12,
+  "failed": 0,
+  "visited": [
+    "<DIV> (unnamed - the only text around it is a container's, not a label)",
+    "<BUTTON> \"Retry same prompt\"",
+    "<DIV> \"how does the excursion funnel work in portal 2\""
+  ],
+  "cycle": {
+    "key": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(3)",
+    "seenAt": [
+      0,
+      1,
+      6,
+      7,
+      12
+    ],
+    "loop": [
+      "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "<BUTTON> \"Retry same prompt\"",
+      "<DIV> \"how does the excursion funnel work in portal 2\"",
+      "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "<BUTTON> \"Retry same prompt\"",
+      "<DIV> \"how does the excursion funnel work in portal 2\"",
+      "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "<DIV> (unnamed - the only text around it is a container's, not a label)"
+    ],
+    "escaped": false,
+    "stepsAfterLoop": 0
+  },
+  "neverReached": [
+    "Show details",
+    "ask"
+  ],
+  "stopsFocusedButNotVisible": 7,
+  "notVisibleStops": [
+    "step 0: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (89%), covered by div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable",
+    "step 1: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (89%), covered by div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable",
+    "step 3: <DIV> \"how does the excursion funnel work in portal 2\" only PARTIALLY visible (78%), covered by div.bonsai-turn-retry-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.Focusable",
+    "step 6: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (89%), covered by div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable",
+    "step 7: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (89%), covered by div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable",
+    "step 9: <DIV> \"how does the excursion funnel work in portal 2\" only PARTIALLY visible (78%), covered by div.bonsai-turn-retry-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.Focusable",
+    "step 12: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (89%), covered by div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable"
+  ],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 14156,
+  "acquired": false,
+  "summary": "12/12 steps passed; focus returned to <DIV> (unnamed - the only text around it is a container's, not a label) at steps 0 and 1 and 6 and 7 and 12 (the run ended there, so whether the ring could have escaped is untested); never reached: Show details, ask; 7 stop(s) FOCUSED BUT NOT VISIBLE: step 0: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (89%), covered by div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable; step 1: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (89%), covered by div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable; step 3: <DIV> \"how does the excursion funnel work in portal 2\" only PARTIALLY visible (78%), covered by div.bonsai-turn-retry-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.Focusable; step 6: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (89%), covered by div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable; step 7: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (89%), covered by div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable; step 9: <DIV> \"how does the excursion funnel work in portal 2\" only PARTIALLY visible (78%), covered by div.bonsai-turn-retry-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.Focusable; step 12: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (89%), covered by div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable (report-only -- pass requireVisible to fail on this)"
+}

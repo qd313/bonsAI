@@ -7,6 +7,14 @@ _Moved out of [roadmap.md](../roadmap.md) on 2026-09-13 during the phase 1 docum
 Everything shipped since v0.4.9 (2026-07-08), one line each, newest first. Detail: [CHANGELOG.md](../../CHANGELOG.md),
 [archive/roadmap-completed.md](roadmap-completed.md), [archive/roadmap-bugs-fixed.md](roadmap-bugs-fixed.md).
 
+**Accepted, not fixed, 2026-09-16:**
+- ★ `[focus]` **ACCEPTED 2026-09-16 — the AI models hub's own buttons should pass the D-pad to each other at their
+  edges** — measured on the Deck: pressing Up at the top of the tier choices already lands back on the Policy button,
+  and pressing Down at the bottom of the advanced switches already reaches the README button, then Done. Both edges
+  already hand the highlight to the next group; the bug does not happen on this build, so nothing needed building.
+  Evidence `docs/test-evidence/plan56-M-hub-edges.json`, `docs/test-evidence/plan56-M-hub-edges-policy.json`,
+  `docs/test-evidence/plan56-M-hub-edges-advanced.json` (plan 56 block 0).
+
 **Checked on the Deck, closed in the roadmap 2026-09-14 and 15:**
 - ★★★ `[reply]` **A Speed-mode reply no longer ends with a block of raw computer text where a power tip
   should be** — confirmed on the Deck 2026-09-15: the reply ends in normal sentences, with no leftover

@@ -191,11 +191,6 @@ replace it with a specific issue when one exists.
   the bundled Deck basics list ships switched on and is the *only* reason a whole sentence ever matches a setting — its 88 words
   match when your sentence contains one of them, so *can you help me with performance* returns three results. The maintainer folded
   that finding into this entry. [Detail](planning/45-settings-shortcut-card.md#5-two-things-about-the-search-that-are-not-obvious).
-- ★ `[focus]` **The models hub's own buttons should pass the D-pad to each other at their edges** — **OPEN, filed
-  2026-09-13.** Inside the AI models hub, pressing up at the top of the tier choices, or down at the bottom of the advanced
-  switches, does nothing. It should hop to the neighbouring group instead. Found as unfinished work in an old copy of the
-  project during the clean-up; the copy is being cleared, and the idea is small enough to rebuild fresh rather than rescue.
-
 - ★★ `[chat]` **A quiet cue that a cut question can be opened** — **OPEN, filed 2026-09-05 by the maintainer.** When the ring lands on
   a question bubble that has been cut short, nothing on screen says the rest is there. Chosen 2026-09-05 from four drawn options: the
   text fades out at the right-hand edge instead of ending in three dots, only while the ring is on it, nothing for a finger. Nothing
@@ -263,9 +258,19 @@ replace it with a specific issue when one exists.
   conversation up the screen; two letters can match 71 settings and throw the box off the top. It moves to a card above the box
   that holds the best eight and never moves anything. Up walks into it, Down walks out, B closes it and keeps your words.
   [Plan](planning/45-settings-shortcut-card.md) · [Mockups](https://claude.ai/code/artifact/1ab2a570-2ae5-45cd-b12b-332694f96fd5).
-- ★★★ `[layout]` **Give the reclaimed height to the transcript** — **OPEN, next step under the vertical-space goal.** The collapsing
-  tab bar freed 61px, but the transcript is still 412px: the room went into Main's overflow and the gap above the dock. What caps
-  the transcript is a Main-tab layout question, worked out in [planning/30-collapsing-tab-bar.md](planning/30-collapsing-tab-bar.md) § 8.
+  **Measured before the build, 2026-09-16, on the Deck's built-in screen:** two letters bring back 71 rows, and the box
+  jumps 209 pixels to the top of the panel while the chat disappears under the list
+  (`docs/test-evidence/plan56-M-settings-jump-before.json`). On this screen only about six rows fit above the box, so the
+  card holds up to eight rows but never more than fit under the tab bar (plan 56 block 0, lane E).
+- ★★★ `[layout]` **Give the reclaimed height to the transcript** — **OPEN, measured 2026-09-16 on the Deck's built-in
+  screen, no single cause, not built in plan 56.** On the Deck's own 1280 by 800 screen the panel is 454 pixels tall, not
+  the 696 every earlier number assumed. There is no gap above the dock at all, because even a two-turn chat overflows the
+  panel by 321 pixels and scrolls under the dock: a person sees about 143 pixels of chat, roughly three lines. The fixed
+  rows take 311 of the 454 pixels before any chat: Steam's header (64), the tab bar plus its reserve (24), the chat slot
+  row (54), a 12-pixel gap, and the dock (157). Getting more chat on this screen means shrinking or hiding one of those
+  rows, which is a design call for the maintainer, not a fix. External-monitor record:
+  [planning/30-collapsing-tab-bar.md](planning/30-collapsing-tab-bar.md) § 8 ·
+  [plan 56 block 0](planning/56-feature-session-four.md#block-0--hygiene-and-three-measurements-the-session-alone-about-forty-minutes).
 - ★★★ `[layout]` **Session context folds into Show details** — **OPEN, workshop before building.** The **Session context (N turns)**
   bar stops being its own row, so a settled answer costs one collapsed control instead of two. **Drawn, not built, in session 56
   (D105, 2026-09-15):** the options go side by side at true size on the same mockup page at the end of [plan

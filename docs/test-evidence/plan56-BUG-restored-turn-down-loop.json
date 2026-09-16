@@ -1,0 +1,22 @@
+{
+  "title": "plan 56: Down loops inside an expanded restored turn and never reaches Show details or the Ask bar; collapsing the turn frees it",
+  "measured": "2026-09-16 about 04:35 local, build 0fbecb6 (hash-matched), Deck built-in screen, Main tab, the two-turn Portal 2 chat restored from its saved slot with its one turn expanded, no game running, no glossary words in the reply",
+  "relates_to": "roadmap Bugs, two stars, focus: 'In a Deep Rock reply with glossary words, Down loops inside the reply and never reaches Show details or Ask' (plan 55, docs/test-evidence/plan55-BUG-drg-glossary-down-cycle.json). This run shows the same loop on a plain Portal 2 reply with no glossary words, so the glossary is not the cause.",
+  "run_1_the_loop": {
+    "evidence": "docs/test-evidence/plan56-BUG-down-walk-portal2-reply.json",
+    "steps": "twelve Down presses from the reply's last paragraph",
+    "stops_visited_in_order": ["last paragraph (stall)", "Retry same prompt corner", "the question row", "paragraph 1", "paragraph 2", "paragraph 3 (last)", "stall", "Retry same prompt corner", "the question row", "paragraph 1", "paragraph 2", "paragraph 3"],
+    "never_reached": ["Show details", "Read aloud", "Session context", "the chips", "the question box", "Ask"],
+    "cycle": "five stops, repeated; the rig reports the same stop at presses 0, 1, 6, 7 and 12",
+    "also_seen": "the question row is only 78% visible behind the Retry corner icon and the last paragraph 89% behind the copy icon at every visit (the known partly-visible corner-icon bug, roadmap Bugs, one star, layout)"
+  },
+  "run_2_after_collapse": {
+    "evidence": "docs/test-evidence/plan56-BUG-down-walk-after-collapse.json",
+    "steps": "Up three times to the question row, A to collapse the turn, then Down four times",
+    "stops_visited_in_order": ["paragraph 2", "paragraph 1", "the question row", "the question row (collapsed)", "Session context (1 turn)", "the chip", "the question box", "Ask"],
+    "verdict": "With the turn collapsed, Down leaves the transcript normally and reaches the Ask bar in four presses."
+  },
+  "what_a_person_hits": "Open a saved chat, read the reply, press Down to get to the question box: the ring goes round the reply for ever. The only ways out are Up to the tab bar, or A on the question to fold the reply away first. A fresh open puts the ring on the box, so the trap shows up after reading, not on arrival.",
+  "cause_named_by_the_measurement": "On an expanded restored (history) turn, Down from the last answer paragraph is not handed to the reply's action row (Show details, Read aloud) the way a live turn hands it; the press falls through to Steam's own geometry, which wraps to the top of the turn. Plan 55's fix for the reply walk (Down and Up visit the same stops) was measured on live turns.",
+  "for_lane_I": "Reproduce with a slot-restored expanded turn in the test harness, then make the last answer stop of a restored turn hand Down to the same next stop a live turn uses. Files: the chat transcript component and the turn header builder (plan 56 Appendix A, lane I)."
+}

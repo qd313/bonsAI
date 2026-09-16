@@ -326,6 +326,24 @@ Written as work lands.
 - **2026-09-15 evening — plan written, eight questions answered and locked as D105, waiting for
   "go".** Two features dropped to a mockup page; the Spy's reveal and the lighter Clear decided; the
   wipe pre-authorised; the Deck confirmed free. Nothing built, nothing pressed, nothing deployed.
+- **2026-09-16, early morning — go given, block 0 done, four lanes running.** The tree was clean at `0fbecb6`,
+  but the copy-paste ratchet was already red on the untouched tip for three numbers plan 54 and 55 had
+  raised and never written down; the maintainer authorised a re-record with a dated note (`bc2d756`). The
+  Deck's settings and saved chats were backed up over SSH (`runs/plan56-backups/`), the Deck held awake for
+  eight hours, and the tip deployed and proved by hash (bundle, back end, prompt file). The settings point
+  Ask at the Deck's own Ollama, so the wipe at the end will take Ask down until *Run AI on this Deck* is run
+  again. **The Deck is on its built-in screen now, not the external monitor,** and that changed every
+  layout number: the panel is 454 pixels tall, not 696, and a person sees about 143 pixels of chat. The
+  three measurements: the models hub edges already hop on their own (entry closed as accepted, no lane C);
+  there is no dead space above the box on this screen, because even a two-turn chat overflows and scrolls
+  under the dock, so the entry stays open as measured and no lane H is cut; and two typed letters throw the
+  question box 209 pixels up the screen with 71 rows under it. Lane E is told to keep every plan 45 call but
+  cap the card at what fits under the tab bar (about six rows here, eight on a monitor). Four lanes cut from
+  the tip and started: A (Clear), B (Expert order and licences), E (settings card), G (checker, then Spy).
+  Found on the way, each with its evidence file: choosing any entry in the Ask-mode menu leaves the ring on
+  nothing (cause read from the code, a one-line fix handed to the bookkeeper); and the plan 55 "glossary
+  loop" is really a restored-turn loop, reproduced on a plain Portal 2 reply, freed by collapsing the turn —
+  a named cause for lane I. Plan 55's empty-box half of the Ask highlight row passed.
 
 ---
 

@@ -1,0 +1,27 @@
+{
+  "title": "plan 56 block 0, measurement 1: do the AI models hub's groups pass the D-pad to each other at their edges?",
+  "measured": "2026-09-16 about 04:20 local, build 0fbecb6 (hash-matched), Deck built-in screen, no game running",
+  "roadmap_entry": "one star, focus: 'The models hub's own buttons should pass the D-pad to each other at their edges'",
+  "recipe": "Ollama tab, Open AI models hub. Policy section: Down from the Policy chip onto the first tier choice, then Up once. Advanced section: A on the Advanced chip, then Down until the ring leaves the switches.",
+  "policy_half": {
+    "evidence": "docs/test-evidence/plan56-M-hub-edges-policy.json",
+    "steps": [
+      "Down from the Policy chip lands on 'Open source only (recommended)', the first tier choice",
+      "Up from that first tier choice lands back on the Policy chip"
+    ],
+    "verdict": "Steam already hops it. Up at the top of the tier choices is not a dead press."
+  },
+  "advanced_half": {
+    "evidence": "docs/test-evidence/plan56-M-hub-edges-advanced.json",
+    "steps": [
+      "A on the Advanced chip shows the Advanced section, ring stays on the chip",
+      "Down lands on 'Allow non-FOSS and unclassified Ollama tags (Tier 3)'",
+      "Down lands on 'Allow high-VRAM models in routing', the last switch",
+      "Down lands on 'Read model policy (README)…'",
+      "Down lands on the dialog's Done button"
+    ],
+    "verdict": "Steam already hops it. Down at the bottom of the switches is not a dead press: it reaches the README button, then Done."
+  },
+  "outcome": "Both edges already move the ring to the neighbouring group. The entry as written (both presses do nothing) does not reproduce on this build. Close as accepted with this file as evidence; no lane is cut for it (plan 56 § 2 item 6, lane C).",
+  "every_stop_visible": true
+}

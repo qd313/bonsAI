@@ -1,0 +1,27 @@
+{
+  "title": "plan 56 block 0, measurement 2: the dead space above the question box, on the Deck's built-in screen",
+  "measured": "2026-09-16 about 04:28 local, build 0fbecb6 (hash-matched), Deck built-in screen 1280x800, Main tab, the two-turn Portal 2 chat, no game running, question box empty, ring on the tab bar",
+  "roadmap_entry": "three stars, layout: 'Give the reclaimed height to the transcript'",
+  "recipe": "A chat with two turns, no game. Read the rectangles of the scroll container, the Main column, the chat row, the transcript, the Session context bar, the dock, and each one's computed margins and padding.",
+  "rects_css_px": {
+    "scroll_container": { "top": 88, "bottom": 454, "clientHeight": 366, "scrollHeight": 687, "scrollTop": 0, "paddingBottom": "0px" },
+    "main_column": { "top": 88, "bottom": 775, "height": 687, "min_height_written_by_column_fill": "366px", "overflow_below_viewport": 321 },
+    "chat_slot_row": { "top": 88, "bottom": 142, "height": 54, "margins": "0" },
+    "chat_column_wrapper": { "top": 142, "bottom": 562, "height": 419, "note": "Decky's row wrapper; the chat column inside it carries margin-top 12px" },
+    "transcript": { "top": 154, "bottom": 562, "height": 407, "one_turn_slot_of": 407, "gap_between_turns": "8px" },
+    "session_context_strip": { "top": 574, "bottom": 618, "height": 45, "marginTop": "12px", "padding": "10px top and bottom" },
+    "dock_natural_position": { "top": 618, "bottom": 775, "height": 157 },
+    "dock_on_screen": { "top": 297, "bottom": 454, "height": 157, "position": "sticky, pinned to the viewport bottom" },
+    "visible_chat": { "top": 154, "bottom": 297, "height": 143 }
+  },
+  "gap_above_the_dock": 0,
+  "overflow": 321,
+  "findings": [
+    "There is no gap above the dock on this screen. The strip ends at 618 and the dock starts at 618 in the natural flow; the column's own minimum height (366) is far below its content (687), so the fill that created the 41-pixel gap on the external monitor never applies here.",
+    "The content overflows the viewport by 321 pixels even with two turns, so the chat scrolls under the sticky dock. What a person sees of the chat at rest is 143 pixels: about three lines of an answer.",
+    "The fixed rows cost 311 of the panel's 454 pixels before any chat: Steam's own header above the plugin (64), the tab bar (20), the 4-pixel reserve under it, the chat slot row (54), the 12-pixel gap under the row, and the dock (157: chips 30, question box 69, 2, Ask row 37, the context line 13, and gaps).",
+    "Compared with the external monitor (transcript 412, gap above the dock 41, overflow 15, body 696): the whole picture changes. Those numbers described a panel 242 pixels taller than the one the plugin is actually used on."
+  ],
+  "verdict": "No single cause. Nothing here is dead space that a layout fix can reclaim; the room is taken by rows that are each doing a job. Getting more chat on the built-in screen means shrinking or hiding one of the fixed rows (the chat slot row, the chip row, the context line) which is a design call, not a fix. The entry stays open as measured, and lane H is not cut (plan 56 § 2 item 7).",
+  "screenshot": "screenshots/DeckCapture_20260916_040852_game.png (the 42-turn chat, same geometry)"
+}

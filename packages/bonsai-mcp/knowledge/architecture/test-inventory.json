@@ -84,6 +84,7 @@
     "src/preview/replyLayoutReport.test.ts",
     "src/styles/presetChipFocusRing.test.ts",
     "src/styles/sections/section-4.test.ts",
+    "src/styles/sections/section-6.test.ts",
     "src/test-harness/fakeDeckyRpc.test.ts",
     "src/utils/answerBubbleElRegistry.test.ts",
     "src/utils/answerBubbleNavigation.test.ts",

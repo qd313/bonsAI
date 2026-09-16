@@ -37,7 +37,7 @@
     },
     {
       "path": "src/styles/sections/section-6.ts",
-      "lines": 1434,
+      "lines": 1450,
       "role": ""
     },
     {
@@ -111,13 +111,13 @@
       "role": ""
     },
     {
-      "path": "src/components/SettingsTab.tsx",
-      "lines": 707,
+      "path": "src/utils/buildAnswerBubbleElement.test.tsx",
+      "lines": 729,
       "role": ""
     },
     {
-      "path": "src/utils/buildAnswerBubbleElement.test.tsx",
-      "lines": 695,
+      "path": "src/components/SettingsTab.tsx",
+      "lines": 707,
       "role": ""
     },
     {

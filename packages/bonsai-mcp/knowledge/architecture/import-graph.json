@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 389,
-  "edgeCount": 977,
+  "fileCount": 390,
+  "edgeCount": 978,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2562,13 +2562,20 @@
         "src/styles/bonsaiScopeStylesheet.ts"
       ]
     },
+    "src/styles/sections/section-6.test.ts": {
+      "imports": [
+        "src/styles/sections/section-6.ts"
+      ],
+      "importedBy": []
+    },
     "src/styles/sections/section-6.ts": {
       "imports": [
         "src/features/unified-input/constants.ts",
         "src/styles/sections/uiScalePx.ts"
       ],
       "importedBy": [
-        "src/styles/bonsaiScopeStylesheet.ts"
+        "src/styles/bonsaiScopeStylesheet.ts",
+        "src/styles/sections/section-6.test.ts"
       ]
     },
     "src/styles/sections/section-7.ts": {

@@ -563,6 +563,22 @@ export function buildSection6Section(): string {
           height: 1em !important;
         }
         /*
+         * A code box paints its own background and border, so the end-of-line spacer above does
+         * not help it the way it helps ordinary text: that spacer reserves room at the end of the
+         * last LINE, but a code box has its own edge, not a line the icon can share. When the fence
+         * is the answer's last block, the icon's usual pull-up (margin-top: -38px on the copy slot,
+         * above) lands on the box's own painted corner instead of the bubble's flat one — measured
+         * on the Deck 2026-09-12 (screenshots/DeckCapture_20260912_183855_game.png): the icon
+         * overlapped the box's bottom-right corner by 16px across and 9 down, about two fifths of
+         * it on the box. Fix: give the box itself extra room below — the icon's height (20) plus a
+         * few pixels — so the icon sits below the box instead of on it. Scoped to a fenced block
+         * that is the LAST child of the last section, so an answer ending in ordinary text (any
+         * other shape) keeps today's layout exactly.
+         */
+        .bonsai-scope .bonsai-chat-ai-bubble--with-copy .bonsai-answer-stop:last-child > .bonsai-md-fenced-pre:last-child {
+          margin-bottom: ${uiScalePx(28)} !important;
+        }
+        /*
          * Icon only: no border, no gradient, no minimum height. Overrides the shared secondary
          * button look, which is a labelled pill and would draw a box over the answer's own text.
          */

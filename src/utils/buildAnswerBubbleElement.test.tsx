@@ -560,6 +560,40 @@ describe("Copy in the answer bubble's corner", () => {
     expect(icon!.textContent).toBe("");
   });
 
+  /*
+   * Roadmap "The copy button sits on top of the code box instead of beside it" (measured on the
+   * Deck 2026-09-12): the fix in section-6.ts reserves room below a trailing code box using the
+   * selector `.bonsai-answer-stop:last-child > .bonsai-md-fenced-pre:last-child`. jsdom cannot
+   * check the paint that rule produces (design-language.md rule 6), but it can check the rule
+   * actually targets a shape the bubble renders — proving the fix's selector is not hollow.
+   */
+  it("puts the fenced code block as the last child of the last section when the answer ends in code", () => {
+    const codeTailBody = ["Intro line.", "", "```bash", "echo hi", "```"].join("\n");
+    const el = buildAnswerBubbleElement({
+      body: codeTailBody,
+      streaming: false,
+      spoilerMaskingEnabled: true,
+      maxWidthCss: "100%",
+      answerKey: ANSWER_KEY,
+      getAnswerCopyText: () => "copied text",
+    });
+    const { container } = render(el!);
+    // Same selector shape the section-6.ts copy-icon-room rule targets.
+    const target = container.querySelector(
+      ".bonsai-answer-stop:last-child > .bonsai-md-fenced-pre:last-child"
+    );
+    expect(target).not.toBeNull();
+  });
+
+  it("does not match the code-tail shape when the answer ends in ordinary text", () => {
+    // FENCED_BODY ends in "Tail text" after its fence, so the fence is not the last block.
+    const { container } = render(build(false)!);
+    const target = container.querySelector(
+      ".bonsai-answer-stop:last-child > .bonsai-md-fenced-pre:last-child"
+    );
+    expect(target).toBeNull();
+  });
+
   it("draws nothing while the answer is still arriving", () => {
     const { container } = render(build(true)!);
     expect(container.querySelector(".bonsai-reply-copy-corner")).toBeNull();

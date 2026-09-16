@@ -34,23 +34,25 @@
   },
   "duplicate_lines_app": {
     "label": "Copy-pasted lines, app code",
-    "best": 891,
+    "best": 919,
     "target": 350,
     "start_2026_09_09": 717,
     "direction": "lower_is_better",
     "measured_by": "jscpd, min-tokens 50",
     "definition_corrected_2026_09_13": "Re-recorded 2026-09-13: the definition was corrected, not the code. See docs/audit/refactor-round-two/phase2-decisions.md B2-3.",
     "re_recorded_worse_2026_09_15": "871 became 891 and THIS IS NOT PROGRESS -- it is 20 more copy-pasted lines than the last recorded figure, written down at last. It was not caused by the phase that explained every file: a clean copy of the repo measures 891 at the final commit of phase 4, before any of phase 5 existed, and at every commit since. So it was already 891 and the check had been failing on it unnoticed; the likeliest cause is phase 4 itself, which moved code between files and never re-recorded this number. Left in the 'best' slot only so the check stops blocking unrelated work. The target of 350 is untouched and is what this should be judged against. Whoever picks up the copy-paste work: start here, and treat 891 as the honest starting line, not an achievement.",
-    "note_for_the_next_person_2026_09_15": "Comments do not count towards this number -- jscpd matches code tokens, so writing a long explanation cannot make it worse. Checked on 2026-09-15 by measuring every commit from the end of phase 4 through the whole of phase 5, during which 257 files gained explanations and this number did not move by one line."
+    "note_for_the_next_person_2026_09_15": "Comments do not count towards this number -- jscpd matches code tokens, so writing a long explanation cannot make it worse. Checked on 2026-09-15 by measuring every commit from the end of phase 4 through the whole of phase 5, during which 257 files gained explanations and this number did not move by one line.",
+    "re_recorded_worse_2026_09_16": "Re-recorded 2026-09-16 at the start of plan 56, with the maintainer's say-so, and THIS IS NOT PROGRESS. The 2026-09-15 note measured 891 at every commit through phase 5; the only code commits since are plan 54's five and plan 55's twenty-one landings (9188e72..f34de8a), so the rise to 919 is theirs, and neither session re-recorded it. Written into the best slot only so the plan 56 lanes can run the gate green on the tip; the target stands and 919 is the honest starting line for the copy-paste work."
   },
   "duplicate_lines_be_tests": {
     "label": "Copy-pasted lines, back-end tests",
-    "best": 2076,
+    "best": 2113,
     "target": 700,
     "start_2026_09_09": 1372,
     "direction": "lower_is_better",
     "measured_by": "jscpd, min-tokens 50, over tests/**/*.py",
-    "definition_corrected_2026_09_13": "Re-recorded 2026-09-13: the definition was corrected, not the code. See docs/audit/refactor-round-two/phase2-decisions.md B2-3."
+    "definition_corrected_2026_09_13": "Re-recorded 2026-09-13: the definition was corrected, not the code. See docs/audit/refactor-round-two/phase2-decisions.md B2-3.",
+    "re_recorded_worse_2026_09_16": "Re-recorded 2026-09-16 at the start of plan 56, with the maintainer's say-so, and THIS IS NOT PROGRESS. The 2026-09-15 note measured 2076 at every commit through phase 5; the only code commits since are plan 54's five and plan 55's twenty-one landings (9188e72..f34de8a), so the rise to 2113 is theirs, and neither session re-recorded it. Written into the best slot only so the plan 56 lanes can run the gate green on the tip; the target stands and 2113 is the honest starting line for the copy-paste work."
   },
   "unused_exports_fe": {
     "label": "Unused exports, front end",
@@ -153,7 +155,8 @@
     "measured_by": "byte count of docs/testing.md, divided by 1024",
     "advisory": true,
     "advisory_reason": "open work is added to these every time something lands, so they may drift up; the ceiling is what stops them ballooning back",
-    "ceiling": 145
+    "ceiling": 165,
+    "ceiling_raised_2026_09_16": "145 became 165 at the start of plan 56, with the maintainer's say-so. The testing document grew to 156.5 KB with plan 54 and plan 55's rows and was over the ceiling on the tip before anything in plan 56 started. The honest fix is to archive the rows already passed on the device, a bookkeeping job owed after this session; the ceiling is raised so the gate can run, not because the growth is wanted."
   },
   "doc_size_kb_claude": {
     "label": "Living doc size: orientation (CLAUDE.md)",

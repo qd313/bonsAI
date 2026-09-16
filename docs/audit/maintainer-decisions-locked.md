@@ -5300,3 +5300,76 @@ on the roadmap.
 
 **Still open.** Whether anyone else will be driving the Deck: unknown until plan 54's session has
 finished, and the pass needs the Deck to itself.
+
+
+### D105 — LOCKED 2026-09-15 — The fourth feature session: two features drawn instead of built, the Spy's reveal, the lighter Clear, and the wipe
+
+Eight calls from [plan 56](../planning/56-feature-session-four.md), all answered the same evening.
+The session does not start until the maintainer says go. It runs on **Fable 5.1 at extra-high
+effort, by the maintainer's choice**, with Sonnet 5 lanes at high, five at most at once, the same
+shape as plan 55. With the five-star entry dropped (below), nothing left in the session is above three
+stars, so the routing table would ask for Opus here; the maintainer knows and chose Fable, recorded as
+their call. The bookkeeper guard keeps the session's own hands off the roadmap, the testing documents,
+the changelog and test files; the bookkeeper helper does that typing.
+
+**Session context folding into Show details is drawn, not built.** Its shape was never decided — row,
+tab or section inside Show details; per-turn or newest-only; how the D-pad climbs back out; what the
+collapsed label says — and it shares files with two of the session's lanes. The maintainer chose to
+see the options side by side, at true size, on a mockup page produced at the end of the session, and
+to answer the four questions by looking.
+
+**The reasoning display is dropped from this session and drawn on the same page.** Every build call
+from 5 September still stands (three live lines at the answer's size, the fold with the seconds only,
+live in Strategy mode with one confirm, saved and capped, a chip in Show details, the thinking tips
+entry retired). What the 5 September decision left to the maintainer's eye — whether the folded line
+works in a character's voice — is exactly what the mockup shows: the live lines filled with real
+thinking captured from the Deck's own model on the PC, the plain folded line, and the folded line in
+three characters' voices. Nothing is built until they have looked. The spoiler-verdict second job
+waits with it.
+
+**The Spy's reveal is a line under Show details.** Nothing in the answer itself: no hidden confession
+block at the end (rejected: it puts the joke's answer in the reply), no *Was that true?* button
+(rejected: a second model call on a handheld). Show details gains one chip whenever the Spy was on at
+a lying level; its body says he was on and lists what he lied about, from a closing tag the model is
+told to write. When the model forgets the tag, the chip still appears and says he did not confess, so a
+person always learns he was on even when not what he lied about.
+
+**The Spy lies only at the two heaviest accent levels**, the same gate Pyro's bad advice uses. Below
+that he stays the smooth honest voice he already is. The floor is Pyro's and is not negotiable: nothing
+that can damage the Deck, lose a save, cost money or turn off a protection; wasted time only. The
+destructive-advice guard keeps running on his replies.
+
+**The trick where the Spy opens claiming to be a different character is deferred** and becomes its
+own roadmap entry. A character has no first message today, so the trick needs a greeting feature
+first; that is work in its own right, not a line of prompt text.
+
+**Found on the way, corrected in the roadmap's detail note:** the Spy has been in the character picker
+since June, as an ordinary smooth voice. The note saying he was not there yet was wrong when written.
+The picker does not change; the feature is the lying and the reveal.
+
+**Clear in the Session context strip means only what the model sees.** The 12 September decision
+leaned to the whole session; the maintainer chose the lighter meaning tonight. The plugin sends no chat
+history to the model, so what it carries from one question into the next is the subject of the last
+strategy question (for a bare follow-up) and the strategy checklist position for the running game. The
+button, after the same confirm box Clear cache uses, forgets both and says so with a short toast; the
+chat stays on screen and the bar's rows stay, because they are an honest record of what each past turn
+attached. Clear cache in Settings gets the same forget in the same change, which closes the gap the 12
+September decision named.
+
+**The wipe is pre-authorised for the last step of the Deck pass**, backup first, restore after,
+settings read back off disk and compared. The maintainer was told plainly that it also removes the
+Deck's own Ollama and every model it downloaded, which the restore cannot put back, and said yes. It
+runs after every other Deck check for that reason, and the report says exactly what is gone.
+
+**The Deck is this session's.** The live remote connection from another process seen at 23:44 UTC is
+a leftover.
+
+**The dead space above the question box is measured first, and fixed only if one cause is named.**
+The honest gain is about 56 pixels of gap and overflow, not the 61 the roadmap implies, because the
+chat already scrolls and nothing caps a long reply. If the measurement finds no single cause, the entry
+stays open as measured.
+
+**What follows, in one line each.** Seven of the nine build in this session, in five Sonnet lanes plus
+two measured items; two go to a mockup page; the roadmap entries for the reasoning display, the fold,
+the Spy and the Clear button are reworded to match tonight's calls; a new entry holds the deferred
+Spy trick.

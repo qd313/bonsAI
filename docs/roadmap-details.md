@@ -127,10 +127,17 @@ test is not a Spy line, however good the joke is.
 plan, before writing any of it: what tells you that you were played, when it appears, and how you
 get the honest answer afterwards without having to ask the whole question again.
 
+**Reveal decided 2026-09-15 (D105).** A Spy chip under Show details always says he was on and lists
+what he lied about, from a closing tag the model writes, or says he did not confess when the tag is
+missing; he lies only at the two heaviest accent levels, like Pyro; the opening-as-someone-else trick
+is its own entry on the roadmap now. He is already in the picker as a plain smooth voice; the picker
+does not change.
+
 ### Four things to plan for, found while filing this
 
-  1. **There is no Spy in the character list yet.** Every other Team Fortress 2 name is there; this
-     one is a new entry, not a change to an existing character.
+  1. **Corrected 2026-09-15: the Spy has been in the character list since June**, as an ordinary
+     smooth understated voice. The picker does not change; the work is the lying and the reveal,
+     decided in D105.
   2. **Pyro's bad advice never reaches an answer today.** It is five fixed sentences that only ever
      go into a chip you press yourself, and only on the two heaviest accent settings. The Spy needs
      the lying inside the answer itself. That is a different mechanism and a much bigger job, and

@@ -240,11 +240,11 @@ replace it with a specific issue when one exists.
   eye — a shape is not something to settle from a description or by reaching for a stronger model. It has to be an inline SVG
   path rather than the PNG so it takes the colour around it. Update the icon geometry test in the same change.
 - ★★ `[ui]` `[ask]` **Clear button in the session context strip** — **OPEN, filed 2026-09-12 (D99).** A small Clear
-  sits at the right end of the Session context (N turns) bar under the chat, and only shows once that bar does. One
-  press opens the same confirm box Settings' Clear cache uses, then the chat, the strip and the stored answer are
-  cleared and the next question starts a new session. It must also make the plugin forget the subject of the last
-  strategy question, which today survives a clear until the game changes or the plugin restarts — Clear cache gets
-  the same fix in the same change. **Open, with a lean:** clear the whole session, not just what the model sees.
+  sits at the right end of the Session context (N turns) bar under the chat, and only shows once that bar does. **Decided
+  2026-09-15 (D105): Clear means only what the model sees.** The chat and the bar's rows stay; after the same confirm box as
+  Clear cache, the plugin forgets the last strategy subject and the strategy checklist position for the running game, and a
+  short toast says the next question starts fresh. Clear cache in Settings gets the same forget. Build: [plan
+  56](planning/56-feature-session-four.md), lane A.
   Needs a focus-graph entry and the modal return-focus hookup.
 - ★★ `[voice]` **Spoilers by voice** — **OPEN, filed 2026-09-08; Read answers aloud shipped 2026-09-12, still waits on Voice
   follow-ups.** When a spoken answer reaches a hidden spoiler it says "there is a spoiler here, say go on to hear it" and waits;
@@ -267,7 +267,9 @@ replace it with a specific issue when one exists.
   tab bar freed 61px, but the transcript is still 412px: the room went into Main's overflow and the gap above the dock. What caps
   the transcript is a Main-tab layout question, worked out in [planning/30-collapsing-tab-bar.md](planning/30-collapsing-tab-bar.md) § 8.
 - ★★★ `[layout]` **Session context folds into Show details** — **OPEN, workshop before building.** The **Session context (N turns)**
-  bar stops being its own row, so a settled answer costs one collapsed control instead of two.
+  bar stops being its own row, so a settled answer costs one collapsed control instead of two. **Drawn, not built, in session 56
+  (D105, 2026-09-15):** the options go side by side at true size on the same mockup page at the end of [plan
+  56](planning/56-feature-session-four.md), so the open questions are answered by looking.
   [Open questions](roadmap-details.md#session-context-folds-into-show-details).
 - ★★★ `[ollama]` **Dynamic keep-alive / smart unload** — **OPEN, research spike.** Hold models loaded, or unload when a game takes
   focus on the Deck APU? The spike decides go or no-go; no production unload before it.
@@ -299,7 +301,14 @@ replace it with a specific issue when one exists.
   Team Fortress 2 character. Pyro's Heavy setting already gives bad advice because he is a stubborn arse; the Spy gives bad advice
   because he is clever and working for the other side. Sometimes he opens by claiming to be a different character instead. Same hard
   floor as Pyro's: nothing that can damage the Deck, lose a save, or cost money — wasted time only. And you have to be able to find
-  out, so the reveal is planned before anything is built. [Detail](roadmap-details.md#spy-a-character-who-lies-to-you-on-purpose).
+  out, so the reveal is planned before anything is built. **Reveal decided 2026-09-15 (D105):** a Spy chip under Show details
+  reveals what he lied about, and he only lies at the two heaviest accent levels. Build: [plan
+  56](planning/56-feature-session-four.md), lane G. [Detail](roadmap-details.md#spy-a-character-who-lies-to-you-on-purpose).
+- ★★★ `[reply]` **The Spy opens as somebody else** — **OPEN, split off 2026-09-15 (D105).** On a random chance his first message
+  introduces him as a different character from the list and he keeps it up. A character has no first message today, so this
+  needs a greeting feature first and is its own job, not a line of prompt text. Decide before building: how often, whether the
+  picker still shows Spy while he claims otherwise, and how the reveal reads when the person thought they had picked someone
+  honest.
 - ★★★ `[reply]` **Terse mode: Speed answers in three lines** — **OPEN, planned 2026-08-29, nothing built.** A toggle beside the
   reply-style slider, off by default, capping a Speed answer at three lines. It overrides the slider and the character; destructive
   warnings and the depth phrases escape it. The real work is widening the branch picker (D40). **TERSE-01** passes at 8 of 10.
@@ -376,7 +385,10 @@ replace it with a specific issue when one exists.
   thinking model to think and throws the thinking away; the line under your question shows a stock phrase for the whole wait.
   Planned: three lines at the answer's size show the model's own newest sentences, fold to one line with the seconds when the
   answer starts, open to the full text; Show details gets a thinking chip; and the thinking is also spent deciding what counts
-  as a spoiler for you. The Deck's default model can think. A test runs on the PC first, then the Deck. [Plan](planning/40-reasoning-display.md).
+  as a spoiler for you. The Deck's default model can think. A test runs on the PC first, then the Deck. **Dropped from session
+  56 by the maintainer 2026-09-15 (D105): drawn first.** The three live lines, the plain folded line and the folded line in a
+  character's voice are drawn at true size on a mockup page at the end of [plan 56](planning/56-feature-session-four.md); every
+  build call stands, and nothing is built until the maintainer has looked. [Plan](planning/40-reasoning-display.md).
 - ★★★★★ `[voice]` **Wake-word listening** — **OPEN, beta.** Opt-in always-on local wake **bonsAI**, then STT, then a quiet Ask.
   [Feasibility](planning/10-wake-word-listening-feasibility.md).
 - ★★★★★★ `[platform]` **Deep mod AI hints** — **OPEN.** Detect mod frameworks and files; mod-aware guidance.

@@ -54,6 +54,7 @@ import {
   isHighVramTag,
   isVisionCapableTag,
   licenseClassAllowed,
+  modelSizeWarning,
 } from "../utils/modelRoutingOrder";
 
 type RowMoveDirection = "up" | "down";
@@ -126,6 +127,9 @@ type RowMeta = {
   tag: string;
   tierBlocked: boolean;
   highVramInactive: boolean;
+  /** "unknown" when the model is not on the known-heavy list and has no listed size at all --
+   *  warns without excluding the row, unlike `highVramInactive`. See `modelSizeWarning`. */
+  sizeUnknown: boolean;
   visionUnknown: boolean;
   sizeGb?: number;
 };
@@ -185,9 +189,10 @@ export function ModelRoutingOrderModal({
         );
         const highVramInactive =
           !modelAllowHighVramFallbacks && isHighVramTag(tag, sizeGb);
+        const sizeUnknown = modelSizeWarning(tag, sizeGb) === "unknown";
         const visionUnknown =
           kind === "vision" && !entry?.tags.includes("vision") && isVisionCapableTag(tag, entry);
-        return { tag, tierBlocked, highVramInactive, visionUnknown, sizeGb };
+        return { tag, tierBlocked, highVramInactive, sizeUnknown, visionUnknown, sizeGb };
       }),
     [order, catalogByTag, modelPolicyTier, modelPolicyNonFossUnlocked, modelAllowHighVramFallbacks, kind],
   );
@@ -328,6 +333,9 @@ export function ModelRoutingOrderModal({
                     ) : null}
                     {row.highVramInactive ? (
                       <span style={{ fontSize: 10, color: "#c9b896" }}>High VRAM off</span>
+                    ) : null}
+                    {row.sizeUnknown ? (
+                      <span style={{ fontSize: 10, color: "#c9b896" }}>Size unknown — may be too large</span>
                     ) : null}
                     {row.visionUnknown ? (
                       <span style={{ fontSize: 10, color: "#9fb7d5" }}>Vision unverified</span>

@@ -24,10 +24,13 @@
  *   - The starting order for both plain and picture questions has to be changed by hand
  *     alongside `ollama_routing.py` on the back end. There is no code link between the two;
  *     someone has to remember to update both.
- *   - A model counts as too large for the shared graphics memory (`isHighVramTag`) either because
- *     it is named on a fixed list of known large models, or because its listed size in the Pull
- *     Models catalog is 15 GB or more. A model that is not on that list and has no listed size is
- *     never flagged, even if it happens to be a large download.
+ *   - `isHighVramTag` only answers "is this a *known* large model" — named on a fixed list, or a
+ *     listed size of 15 GB or more. It says nothing about a model that is neither: not on that
+ *     list, and with no listed size. That gap used to read as "safe" everywhere, which is why the
+ *     try-order picker could offer a genuinely huge, uncatalogued model with no warning at all
+ *     (found while explaining the code 2026-09-15). Use `modelSizeWarning` for anything shown to a
+ *     person — it turns that gap into its own "unknown" warning rather than a silent pass, without
+ *     changing what actually gets tried at Ask time.
  */
 import type { PullModelEntry, PullModelLicenseClass } from "../data/pullModelCatalog";
 import type { ModelPolicyTierId } from "../data/modelPolicy";
@@ -76,6 +79,24 @@ export function isHighVramTag(tag: string, sizeGb?: number): boolean {
   const t = tag.trim();
   if (KNOWN_HIGH_VRAM_TAGS.has(t)) return true;
   return typeof sizeGb === "number" && sizeGb >= HIGH_VRAM_SIZE_GB_THRESHOLD;
+}
+
+export type ModelSizeWarning = "none" | "unknown" | "large";
+
+/**
+ * How worried a screen showing this model should be about the Deck's shared graphics memory.
+ *
+ * "large" is the existing check (`isHighVramTag`): the name is on the known-heavy list, or the
+ * listed size is at or above the threshold. "unknown" is what this adds: the model is not on that
+ * list *and* has no listed size, so nothing here says it is safe either — this used to fall
+ * through to "none" and look exactly like a small model. Never excludes anything; a screen using
+ * this still lets the model be picked or downloaded, it just has to say the size could not be
+ * checked.
+ */
+export function modelSizeWarning(tag: string, sizeGb?: number): ModelSizeWarning {
+  if (isHighVramTag(tag, sizeGb)) return "large";
+  if (typeof sizeGb !== "number") return "unknown";
+  return "none";
 }
 
 export function licenseClassAllowed(

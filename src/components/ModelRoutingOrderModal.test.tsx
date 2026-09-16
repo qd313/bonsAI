@@ -36,6 +36,7 @@ import {
 } from "./ModelRoutingOrderModal";
 import { elementHasFocus } from "../utils/uiDocument";
 import type { NavRefHolder } from "../utils/navFocusRegistry";
+import { PULL_MODEL_CATALOG } from "../data/pullModelCatalog";
 
 function baseProps(overrides: Partial<ModelRoutingOrderModalProps> = {}): ModelRoutingOrderModalProps {
   const tags = ["model-a", "model-b", "model-c", "model-d"];
@@ -267,5 +268,42 @@ describe("row and Reset buttons do not submit an enclosing form", () => {
     fireEvent.click(screen.getByText("Reset to defaults"));
 
     expect(onSubmit).not.toHaveBeenCalled();
+  });
+});
+
+// Roadmap bug found while explaining the code 2026-09-15: a model with no catalog entry at all
+// (a custom pull, or one no longer in an updated catalog) was never flagged, known-heavy list or
+// not, and read exactly like a known-small model. See modelSizeWarning (modelRoutingOrder.ts).
+describe("size warning badge", () => {
+  it("warns that the size is unknown for an installed model the catalog does not have", () => {
+    // baseProps' four tags (model-a..model-d) have no catalog entry -- catalogByTag is empty.
+    const { container } = render(<ModelRoutingOrderModal {...baseProps()} />);
+    expect(container.textContent).toContain("Size unknown — may be too large");
+  });
+
+  it("shows no size warning for a model with a known small size", () => {
+    const small = PULL_MODEL_CATALOG.find((e) => e.tag === "qwen2.5:1.5b")!;
+    const catalogByTag = new Map([[small.tag, small]]);
+    const { container } = render(
+      <ModelRoutingOrderModal
+        {...baseProps({ installedTags: [small.tag], savedOrder: [small.tag], catalogByTag })}
+      />,
+    );
+    expect(container.textContent).not.toContain("Size unknown");
+    expect(container.textContent).not.toContain("High VRAM off");
+  });
+
+  it("keeps the existing high-VRAM warning, not the unknown one, for a known large model", () => {
+    const { container } = render(
+      <ModelRoutingOrderModal
+        {...baseProps({
+          installedTags: ["gemma3:27b"],
+          savedOrder: ["gemma3:27b"],
+          modelAllowHighVramFallbacks: false,
+        })}
+      />,
+    );
+    expect(container.textContent).toContain("High VRAM off");
+    expect(container.textContent).not.toContain("Size unknown");
   });
 });

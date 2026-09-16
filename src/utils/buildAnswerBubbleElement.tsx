@@ -76,7 +76,11 @@ import {
   handleAnswerBubbleMoveUp,
 } from "./answerBubbleNavigation";
 import { registerAnswerStop } from "./answerStopRegistry";
-import { focusDownFromLiveAnswerBubble, queryLiveTurnSlot } from "./liveTurnFocusGraph";
+import {
+  focusDownFromLiveAnswerBubble,
+  queryLiveTurnSlot,
+  queryTurnSlot,
+} from "./liveTurnFocusGraph";
 import { uiGamepadFocusElement } from "./uiDocument";
 import {
   isDeckDirectionLeftEvent,
@@ -369,10 +373,32 @@ export function buildAnswerBubbleElement(
      * next instead of leaving it to Steam's own sibling geometry to guess — the walk needs to reach
      * the same stops Up retraces (focusUpFromReplyActions in buildReplyActionsElement.tsx), and a
      * geometry guess is neither guaranteed nor testable off device. `focusDownFromLiveAnswerBubble`
-     * is already shipped and tested for exactly this hand-off (liveTurnFocusGraph.ts). Only wired
-     * for the live turn; an archived turn's Down still yields to Steam as before.
+     * is already shipped and tested for exactly this hand-off (liveTurnFocusGraph.ts) — but its own
+     * next fallback after branches/checklist/thumbs tries this turn's Retry / Copy corner icons
+     * before Read aloud or Show details below them, which is backwards for a Down press: Retry sits
+     * above the answer, in the turn's own header. Measured on the Deck 2026-09-16
+     * (plan56-BUG-restored-turn-down-loop.json): on a turn with no live thumbs row — a chat restored
+     * from its saved slot, with no exchange this session, so the thumbs never mount — Down from the
+     * last paragraph reached Retry and the walk never escaped the turn, looping forever between it,
+     * the question row and the paragraphs. Trying the reply row's own live stops directly first, in
+     * reading order, keeps Down moving forward whenever there is no branch picker or checklist ahead
+     * of them to reach first. `queryTurnSlot` resolves THIS turn's own slot by id — falling back to
+     * `queryLiveTurnSlot` for a caller that never marked it — so this reaches a restored turn's
+     * chrome exactly the way it already reached the live turn's.
      */
-    if (focusDownFromLiveAnswerBubble(queryLiveTurnSlot())) return true;
+    const slot = queryTurnSlot(answerKey) ?? queryLiveTurnSlot();
+    const hasStrategyChrome = Boolean(
+      slot?.querySelector(".bonsai-strategy-branch-picker, .bonsai-strategy-checklist-panel")
+    );
+    if (
+      !hasStrategyChrome &&
+      (focusRegisteredReplyStop("helpful") ||
+        focusRegisteredReplyStop("read-aloud") ||
+        focusRegisteredReplyStop("show-details"))
+    ) {
+      return true;
+    }
+    if (focusDownFromLiveAnswerBubble(slot)) return true;
     /*
      * Yield to parent turn-slot flow-children so the next sibling Focusable
      * (branch picker / reply actions) receives focus. Do not programmatic-.focus()

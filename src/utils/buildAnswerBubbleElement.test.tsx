@@ -297,6 +297,67 @@ describe("answer bubble section stops", () => {
   });
 
   /*
+   * Measured on the Deck 2026-09-16 (plan56-BUG-restored-turn-down-loop.json): a chat restored from
+   * its saved slot, its one turn expanded, no live exchange this session. The thumbs row never
+   * mounts for a turn like this — MainTabChatTranscript's `showFeedbackHere` reads `lastExchange`,
+   * which is empty after a restore — but the Read aloud line does, since it only needs the turn's
+   * own saved answer text. On the device, Down from the last paragraph reached the Retry corner
+   * instead, then the question row, then the paragraphs again, forever: Retry sits above the answer
+   * in the turn's own header, so landing on it from a Down press walks backwards, and nothing ever
+   * reached Read aloud, Show details or the Ask bar below it.
+   *
+   * This turn is not "live" — `queryLiveTurnSlot` finds nothing for it — so this is also what
+   * proves the fix resolves the PRESSED turn's own slot (`queryTurnSlot`, by id) rather than only
+   * ever the live one.
+   */
+  it("Down from a restored turn's last section reaches Read aloud, not Retry, when it has no live thumbs row", () => {
+    const RESTORED_KEY = "turn-portal2";
+    const slot = document.createElement("div");
+    slot.className = "bonsai-chat-turn-slot";
+    document.body.appendChild(slot);
+    const header = document.createElement("div");
+    header.className = "bonsai-chat-turn-row-header--history";
+    header.setAttribute("data-bonsai-turn-id", RESTORED_KEY);
+    slot.appendChild(header);
+    const bubbleMount = document.createElement("div");
+    slot.appendChild(bubbleMount);
+
+    const el = buildAnswerBubbleElement({
+      body: "Just one short paragraph.",
+      streaming: false,
+      spoilerMaskingEnabled: true,
+      maxWidthCss: "100%",
+      answerKey: RESTORED_KEY,
+    });
+    expect(el).not.toBeNull();
+    render(el!, { container: bubbleMount });
+
+    // Retry is mounted (the newest turn's own header offers it) but no thumbs row exists at all —
+    // this restored turn never had a live exchange this session.
+    const retry = document.createElement("button");
+    retry.type = "button";
+    retry.textContent = "Retry same prompt";
+    slot.appendChild(retry);
+    const readAloud = document.createElement("div");
+    readAloud.tabIndex = 0;
+    slot.appendChild(readAloud);
+    registerReplyStop("retry", retry);
+    registerReplyStop("read-aloud", readAloud);
+
+    try {
+      const onMoveDown = (el!.props as Record<string, unknown>).onMoveDown as () => boolean;
+      expect(onMoveDown()).toBe(true);
+      expect(document.activeElement).toBe(readAloud);
+      expect(document.activeElement).not.toBe(retry);
+    } finally {
+      registerReplyStop("retry", null);
+      registerReplyStop("read-aloud", null);
+      registerAnswerBubbleEl(RESTORED_KEY, null);
+      slot.remove();
+    }
+  });
+
+  /*
    * Measured on the Deck 2026-09-16 (plan56-GREYED-STEP-OVER-01-thumbs.json, steps 4 and 5): Left
    * from an answer paragraph moved the ring onto Steam's own Quick Access rail — out of the plugin
    * entirely — and Right brought it back onto the reply's container. No paragraph stop wired either

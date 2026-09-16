@@ -91,6 +91,11 @@
       "role": ""
     },
     {
+      "path": "src/utils/buildAnswerBubbleElement.test.tsx",
+      "lines": 878,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/screenshot_media.py",
       "lines": 873,
       "role": ""
@@ -111,11 +116,6 @@
       "role": ""
     },
     {
-      "path": "src/utils/buildAnswerBubbleElement.test.tsx",
-      "lines": 817,
-      "role": ""
-    },
-    {
       "path": "src/components/SettingsTab.tsx",
       "lines": 707,
       "role": ""
@@ -128,6 +128,11 @@
     {
       "path": "src/components/MainTabPresetAnimatedChips.test.tsx",
       "lines": 660,
+      "role": ""
+    },
+    {
+      "path": "src/utils/buildAnswerBubbleElement.tsx",
+      "lines": 631,
       "role": ""
     },
     {
@@ -144,11 +149,6 @@
       "path": "py_modules/backend/services/settings_service.py",
       "lines": 606,
       "role": "Load/save/merge settings.json"
-    },
-    {
-      "path": "src/utils/buildAnswerBubbleElement.tsx",
-      "lines": 605,
-      "role": ""
     },
     {
       "path": "src/utils/buildReplyActionsElement.tsx",

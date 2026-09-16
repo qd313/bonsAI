@@ -278,6 +278,17 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
   const settingsCardHidden = shouldHideSettingsResultsCard(unifiedInput);
   const [settingsCardRowsShown, setSettingsCardRowsShown] = useState<number>(filteredSettings.length);
 
+  /*
+   * B closes the settings-results card for the rest of this search while keeping what was typed
+   * (plan 45 section 4's "B" row / plan 56 lane E2 step 3). Reset the moment the box is emptied,
+   * since that is what "a new search starts" means here -- the card cannot show again before then
+   * anyway, because showSettingsCard below also requires filteredSettings.length > 0.
+   */
+  const [settingsCardClosedForSearch, setSettingsCardClosedForSearch] = useState(false);
+  useEffect(() => {
+    if (unifiedInput.trim() === "") setSettingsCardClosedForSearch(false);
+  }, [unifiedInput]);
+
   useEffect(() => {
     if (unifiedInput.trim() === "" && /\n/.test(unifiedInput)) setUnifiedInput("");
   }, [unifiedInput, setUnifiedInput]);
@@ -343,6 +354,57 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
     registerNavFocus("unified-input", unifiedInputNavRef);
     return () => unregisterNavFocus("unified-input", unifiedInputNavRef);
   }, []);
+
+  /*
+   * The settings-results card's own row nearest the box (plan 45 step 3 / plan 56 lane E2): Up
+   * from the box has to hand Steam's own ring to it, the same cross-container transfer as
+   * focusUnifiedTextField above -- a plain DOM focus() is only safe between siblings inside one
+   * Focusable container (the focus law), and this file cannot tell from here whether the card and
+   * the box actually share one. Steam's transfer is tried first (registerNavFocus / takeNavFocus,
+   * navFocusRegistry.ts) with a DOM `.focus()` on the last row's own ref as the fallback for the
+   * frames before Decky populates the nav node -- the same ladder every other cross-container jump
+   * in this file uses.
+   *
+   * The "last" row is whichever one is currently drawn nearest the box -- the card grows upward
+   * from the box's own top edge, so that is always the row with the highest index actually shown,
+   * not a fixed DOM node. Only that one Button ever carries the navRef prop (see the row map
+   * below), so this holder always reflects whichever row is current without re-registering by hand
+   * on every keystroke.
+   */
+  const settingsCardLastRowNavRef = useRef<NavRefHolder["current"]>(null);
+  useEffect(() => {
+    registerNavFocus("settings-results-card", settingsCardLastRowNavRef);
+    return () => unregisterNavFocus("settings-results-card", settingsCardLastRowNavRef);
+  }, []);
+  const settingsCardRowRefs = useRef<Array<HTMLElement | null>>([]);
+  const focusSettingsCardLastRow = useCallback((): boolean => {
+    if (takeNavFocus("settings-results-card")) return true;
+    const rows = settingsCardRowRefs.current;
+    const last = rows[rows.length - 1];
+    if (!last) return false;
+    last.focus();
+    return true;
+  }, []);
+
+  /*
+   * Typing while the ring sits in the settings-results card hands it straight back to the box and
+   * lets the list redraw under the new letter (plan 45 section 4's "Typing while the highlight is
+   * in the card" row). `unifiedInput` only changes through the box's own onChange, so a change here
+   * with the ring still inside the card means a key landed on the box while Steam's ring was
+   * visually somewhere else -- the same ring/DOM-focus split navFocusRegistry.ts documents at
+   * length elsewhere in this file, which is exactly why `uiGamepadFocusElement` (Steam's `.gpfocus`
+   * ring, falling back to `activeElement` only when there is no ring at all) is asked rather than a
+   * plain `document.activeElement` check.
+   */
+  const unifiedInputForTypingRedirectRef = useRef(unifiedInput);
+  useEffect(() => {
+    if (unifiedInputForTypingRedirectRef.current === unifiedInput) return;
+    unifiedInputForTypingRedirectRef.current = unifiedInput;
+    const ring = uiGamepadFocusElement();
+    if (ring?.closest(".bonsai-settings-results-card")) {
+      focusUnifiedTextField();
+    }
+  }, [unifiedInput, focusUnifiedTextField]);
 
   /*
    * How much room the settings-results card actually has, measured live rather than assumed.
@@ -455,6 +517,21 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
     return () => scope.classList.remove("bonsai-ask-menu-open-scope");
   }, [askModeMenuOpen, attachMenuOpen, unifiedInputHostRef]);
 
+  /*
+   * Computed here, ahead of the box's own JSX below, because the box's Up handler (onMoveUp on the
+   * TextField) needs to know whether there is a card to send the ring into before it renders --
+   * see the override next to unifiedInputDeckNavHandlers below. Kept as the single source both the
+   * box and the card itself read, rather than two places deciding independently whether the card
+   * is showing.
+   */
+  const settingsCardShownSettings = filteredSettings.slice(0, Math.max(0, settingsCardRowsShown));
+  const settingsCardHiddenCount = Math.max(0, filteredSettings.length - settingsCardShownSettings.length);
+  const showSettingsCard =
+    !settingsCardHidden &&
+    !settingsCardClosedForSearch &&
+    filteredSettings.length > 0 &&
+    settingsCardShownSettings.length > 0;
+
   const unifiedTextFieldBody = (
     <>
       {/*
@@ -488,6 +565,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
             } as Record<string, unknown>)
           : {})}
         {...unifiedInputDeckNavHandlers}
+        {...(showSettingsCard ? { onMoveUp: () => focusSettingsCardLastRow() } : {})}
         {...({ navRef: unifiedInputNavRef } as Record<string, unknown>)}
         style={{
           width: "100%",
@@ -510,27 +588,18 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
           setSelectedIndex(-1);
         }}
         onKeyDown={(ev: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-          if (ev.key === "ArrowDown") {
-            if (filteredSettings.length > 0) {
-              setSelectedIndex((prev) => Math.min(prev + 1, filteredSettings.length - 1));
-              ev.preventDefault();
-            }
-            return;
-          }
-          if (ev.key === "ArrowUp") {
-            if (filteredSettings.length > 0) {
-              setSelectedIndex((prev) => Math.max(prev - 1, 0));
-              ev.preventDefault();
-            }
-            return;
-          }
+          /*
+           * ArrowUp/ArrowDown used to slide a `selectedIndex` marker through the settings list from
+           * a distance, and Enter used to jump straight to whichever row it landed on -- a shape a
+           * real D-pad press never produces (the focus law: Steam invokes a Focusable's own move
+           * handlers directly, never a DOM keydown, and never delivers a direction press through
+           * onButtonDown either). Deleted with the settings-results card's rewiring into real
+           * Focusable stops (plan 45 step 3 / plan 56 lane E2): the rows themselves now own their
+           * own Up/Down/A (see the row map below), so Enter here only has to keep doing the one
+           * thing a physical or on-screen keyboard's Enter key still means -- submit the question.
+           */
           if (ev.key === "Enter") {
             ev.preventDefault();
-            const hasSelectedResult = selectedIndex >= 0 && selectedIndex < filteredSettings.length;
-            if (hasSelectedResult) {
-              onSettingClick(filteredSettings[selectedIndex], selectedIndex);
-              return;
-            }
             if (!isAsking && unifiedInput.trim() && ollamaIp.trim()) {
               (ev.currentTarget as HTMLElement).blur();
               onAskOllama();
@@ -574,11 +643,6 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
       )}
     </>
   );
-
-  const settingsCardShownSettings = filteredSettings.slice(0, Math.max(0, settingsCardRowsShown));
-  const settingsCardHiddenCount = Math.max(0, filteredSettings.length - settingsCardShownSettings.length);
-  const showSettingsCard =
-    !settingsCardHidden && filteredSettings.length > 0 && settingsCardShownSettings.length > 0;
 
   return (
     <>
@@ -1014,6 +1078,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
     {settingsCardShownSettings.map((s, i) => {
       const isQam = isQamSetting(s);
       const isSelected = i === selectedIndex;
+      const isLastRow = i === settingsCardShownSettings.length - 1;
       const parts = s.split(">").map((part) => part.trim()).filter(Boolean);
       const title = parts[parts.length - 1] ?? s;
       const breadcrumb = parts.slice(0, -1).join(" > ");
@@ -1023,7 +1088,45 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
       return (
         <Button
           key={s}
+          ref={(el) => {
+            settingsCardRowRefs.current[i] = el;
+          }}
           className="bonsai-settings-results-card-row"
+          {...({
+            /*
+             * Up walks toward the heading (index 0, nearest the tab bar) and holds still once
+             * there -- nothing above the top row is a stop of its own. Down walks the other way
+             * and, from the row nearest the box, hands the ring back to it (plan 45 section 4's
+             * Up/Down rows / plan 56 lane E2 step 3).
+             */
+            onMoveUp: () => {
+              if (i === 0) return true;
+              settingsCardRowRefs.current[i - 1]?.focus();
+              return true;
+            },
+            onMoveDown: () => {
+              if (isLastRow) return focusUnifiedTextField();
+              settingsCardRowRefs.current[i + 1]?.focus();
+              return true;
+            },
+            // A jumps to the setting exactly as the click does today -- see the Ask bar's other
+            // buttons (e.g. the Ask-mode menu rows) for the same onActivate/onOKButton pairing.
+            onActivate: () => onSettingClick(s, i),
+            onOKButton: (evt: { stopPropagation: () => void }) => {
+              evt.stopPropagation();
+              onSettingClick(s, i);
+            },
+            // B closes the card for the rest of this search and keeps what was typed; the ring
+            // goes back to the box, the same place Down from this row sends it.
+            onCancelButton: () => {
+              setSettingsCardClosedForSearch(true);
+              focusUnifiedTextField();
+              return true;
+            },
+            // Only the row nearest the box carries the shared nav node -- see
+            // focusSettingsCardLastRow's own comment for why it has to be this one row.
+            ...(isLastRow ? { navRef: settingsCardLastRowNavRef } : {}),
+          } as Record<string, unknown>)}
           onClick={() => onSettingClick(s, i)}
           style={{
             width: "100%",

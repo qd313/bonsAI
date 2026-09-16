@@ -28,6 +28,7 @@
     "src/components/MainTabPresetRow.askRestart.test.tsx",
     "src/components/MainTabPresetRow.test.tsx",
     "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
+    "src/components/MainTabUnifiedAskBar.settingsCardDpad.test.tsx",
     "src/components/MainTabUnifiedAskBar.test.tsx",
     "src/components/ModelRoutingOrderModal.test.tsx",
     "src/components/OllamaTab.modalReturnFocus.test.tsx",

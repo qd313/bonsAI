@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 394,
-  "edgeCount": 987,
+  "fileCount": 395,
+  "edgeCount": 990,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -250,12 +250,21 @@
         "src/features/plugin-shell/tabs/useMainTabPayload.tsx"
       ]
     },
+    "src/components/MainTabAskModeMenuPopover.test.tsx": {
+      "imports": [
+        "src/components/MainTabAskModeMenuPopover.tsx",
+        "src/data/askMode.ts",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabAskModeMenuPopover.tsx": {
       "imports": [
         "src/data/askMode.ts",
         "src/features/unified-input/constants.ts"
       ],
       "importedBy": [
+        "src/components/MainTabAskModeMenuPopover.test.tsx",
         "src/components/MainTabUnifiedAskBar.tsx"
       ]
     },
@@ -1006,6 +1015,7 @@
       "imports": [],
       "importedBy": [
         "src/components/MainTab.tsx",
+        "src/components/MainTabAskModeMenuPopover.test.tsx",
         "src/components/MainTabAskModeMenuPopover.tsx",
         "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabPresetAnimatedChips.tsx",
@@ -2699,6 +2709,7 @@
       "imports": [],
       "importedBy": [
         "src/components/DrgGlossaryTermChip.test.tsx",
+        "src/components/MainTabAskModeMenuPopover.test.tsx",
         "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx",
         "src/components/MainTabChatTranscript.collapseKeepsRing.test.tsx",
         "src/components/MainTabChatTranscript.diagnostics.test.tsx",

@@ -205,6 +205,7 @@ export function MainTabAskModeMenuPopover(props: MainTabAskModeMenuPopoverProps)
                     evt.stopPropagation();
                     onSelect(id);
                     onRequestClose();
+                    onFocusModeChip();
                   },
                   onCancelButton: () => {
                     onRequestClose();
@@ -215,6 +216,7 @@ export function MainTabAskModeMenuPopover(props: MainTabAskModeMenuPopoverProps)
                 onClick={() => {
                   onSelect(id);
                   onRequestClose();
+                  onFocusModeChip();
                 }}
                 style={{
                   display: "flex",

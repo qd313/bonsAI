@@ -297,6 +297,20 @@ and are listed in the report.
 | 5 | Which reasoning fold, and which session-fold shape? | **Plain fold for the first version; the fold in the character's voice as a later optional extra; a press on the folded line opens the full reasoning. Session context becomes a tab within the Show details panel (option B).** |
 | 6 | (New, unasked) | **Read aloud becomes a button with a speaker icon on the Helpful row**, not a dividing line like Show details. New roadmap entry. |
 
+**Third round, answered 2026-09-16 in the afternoon, locked as D107.** The two items D106 left open,
+plus five new reports from the maintainer's own hour on the Deck.
+
+| # | Item | Answer |
+|---|---|---|
+| 1 | Your read of the three advice-first replies. | **They look good.** The row closes. |
+| 2 | Should the settings card keep the typed words after a jump? | **Keep it the way it works today** (the box is empty when you come back). |
+| 3 | The honesty line on the Deck's screen, once it had models again. | **Seen, both ways** (`docs/test-evidence/plan56-HONESTY-LINE-03-on-screen.json`). |
+| 4 | (New) "Open AI models…" reads like "OpenAI models". | **Fixed the same afternoon:** it says "Manage AI models…" now (`79b1a0e`). |
+| 5 | (New) The AI models screen shows only one or two rows of the list on the Deck. | **Logged, two stars,** with the cause read in the code: a 520-pixel cap and about 430 pixels of fixed header above the list. |
+| 6 | (New) Tapping outside the AI models screen started the downloads and left the D-pad stuck. | **Logged, two stars,** two candidate causes named, device reproduction owed. |
+| 7 | (New) Retire the policy tiers into the filters; rework the filters; mockups first. | **Logged, three stars,** mockups not drawn yet. |
+| 8 | (New) Download knowledge base needed two taps. | **Logged, one star,** not reproduced. |
+
 ## 9. Things to bring to your attention
 
 - **Two of the nine are drawn, not built.** The reasoning display and the Session context fold go
@@ -456,6 +470,22 @@ Written as work lands.
   `docs/test-evidence/plan56-KB-ANSWER-03-three-replies.md`; the maintainer's read is still owed. The
   bookkeeper's sweep that follows brings the roadmap, its detail note and the testing row into line with
   D106.
+- **2026-09-16, afternoon, later — the third round of answers (D107), the honesty line seen on the
+  Deck, one bug fixed and deployed, four logged.** The maintainer read the three replies and called
+  them good; the settings card keeps clearing the typed words after a jump; and they had put the Deck
+  back together (Ollama with gemma4 and nomic-embed-text, the knowledge base downloaded again), so the
+  owed on-screen check ran at once on build `14a6392`: the horse question ends with the honesty line,
+  the Gonarch question does not, both as the PC measurement said. Along the way the "blank names"
+  footnote bug turned out to be the rig's reader splitting bold words; the screenshot shows the
+  sentence whole. Five new reports from their own hour with the AI models screen: the "Open AI
+  models…" button that read like "OpenAI models" (renamed "Manage AI models…" in `79b1a0e` and
+  deployed); the model list showing about two rows on the Deck's screen (cause read in the code: a
+  520-pixel cap with about 430 pixels of fixed header above the list; an external monitor gets the same
+  cap); a tap outside the screen that started the queued downloads and left the D-pad stuck (two
+  candidate causes named, device reproduction owed); the policy tiers to be rolled into the filters at
+  the top of that screen with mockups first; and Download knowledge base needing two taps. The
+  bookkeeper's sweep that follows carries all of it into the roadmap, the testing rows and the
+  changelog.
 
 ---
 

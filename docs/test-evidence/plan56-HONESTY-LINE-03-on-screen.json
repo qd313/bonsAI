@@ -1,0 +1,34 @@
+{
+  "row": "HONESTY-TEXT-GAME-01, the on-screen half that plan 56 left owed: lane K's fix (commits a6561d7 and 14a6392) seen on the Deck's own screen, once the Deck had a model again",
+  "measured": "2026-09-16 11:53 to 12:02 Deck time, build 14a6392 (the build deployed and hash-matched at the end of plan 56; nothing deployed since), Deck built-in screen, Main tab, Strategy mode, Ali G at heavy, no game running, the Deck's own Ollama with gemma4 and nomic-embed-text (reinstalled by the maintainer that morning after the wipe) and the knowledge base downloaded again by the maintainer",
+  "how": "each question typed exactly with the repo's typing script (VERIFIED both times), the ring walked to Ask and A pressed, the reply polled until it finished, then the page text read",
+  "asks": {
+    "black mesa how do i tame a horse": {
+      "reply_after_seconds": 151,
+      "reply_words": 104,
+      "reply": "Alright, listen up. You're askin' about tamin' a horse in Black Mesa? Now, I ain't got the dirt on that specific move in my books. I got the lowdown on how to get through the tram ride and what to do when you run into those nasty Houndeye packs, but horses? That ain't on the menu for this game. You gotta stick to what the game's got—like using that crowbar on crates and keeping your eyes peeled for those sonic shockwaves.\n\nBut we gotta move this show along, yeah? You gotta pick a direction.",
+      "last_line": "— No close match in my notes, this answer leans on the model's own knowledge.",
+      "then": "the Black Mesa follow-up menu (Where are you at in Black Mesa? A. Starting out in Black Mesa; B. Exploring the underground facility)",
+      "line_shows": true
+    },
+    "how do i beat the gonarch in black mesa": {
+      "reply_after_seconds": "about 200 (the poll timed out at 200 s; the reply was complete on the next read)",
+      "reply_chars": 858,
+      "opens": "Alright, listen up, you wanna take down this Gonarch, yeah? It ain't easy, but we gonna get you through it. This thing is a big, ugly mother, and you gotta know what hits it right. Forget trying to take out the main body; that shell is tough as nails. You gotta focus your fire on that pale egg sac swinging under its belly.",
+      "ends": "Once you finally take it down, get clear, 'cause when that thing pops, it throws a whole brood of 'em at you. Back away before that happens! / So, where are you at in Black Mesa right now?",
+      "last_line": "none; the page held zero copies of the honesty line after this reply",
+      "line_shows": false
+    }
+  },
+  "screenshots": [
+    "screenshots/DeckCapture_20260916_115628_game.png (after the horse reply: the reply itself has scrolled above the panel; the Helpful row, the Read aloud line, Show details and the slow-reply footnote show)",
+    "screenshots/DeckCapture_20260916_120225_game.png (after the Gonarch reply: same rows, Session context now 2 turns)"
+  ],
+  "reading": "The fix falls the right way on the device in both directions, the same as the PC measurement in plan56-HONESTY-LINE-02-pc-corpus.json: a stretch question that only names its game gets the line; a real question about the game does not.",
+  "found_on_the_way": [
+    "The slow-reply footnote under the horse reply reads '150.8s (>60s): prefer GPU for Ollama, not CPU' in full on the screenshot. The rig's label reader lists it as 'prefer  for , not .' with GPU, Ollama and CPU as three separate labels, because those words are bold and sit in their own elements. So the 'blank names' bug logged from plan 56's earlier read was the reader, not the plugin.",
+    "Once a newer turn arrives, the older turn's reply text leaves the page text (the second read found zero copies of the line that the first read had found under the horse reply). A check of an older turn's last line has to read it before the next question is asked."
+  ],
+  "verdict": "PASS on the Deck's own screen, both directions. The honesty-line entry has nothing owed.",
+  "settings_touched": "none; the active chat gained two turns (the horse question and the Gonarch question)"
+}

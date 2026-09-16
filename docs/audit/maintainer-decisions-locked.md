@@ -5427,3 +5427,67 @@ open words-after-jump question; a new entry holds the Read aloud button. The thr
 the maintainer asked to read are written out in full in
 `docs/test-evidence/plan56-KB-ANSWER-03-three-replies.md`, copied from the saved chats in the pre-wipe
 backup; that read is still theirs to give.
+
+### D107 — LOCKED 2026-09-16 — Third round: the three replies read well, the card's words stay cleared, the honesty line seen on screen, and five new entries from the maintainer's own hour with the AI models screen
+
+The maintainer's answers to D106's two open items, given in chat on 2026-09-16 in the afternoon,
+plus five new reports from their own use of the Deck the same day. Before writing, they had put the
+Deck back the way the wipe found it: Ollama installed on the Deck again with gemma4 and
+nomic-embed-text, and the knowledge base downloaded again.
+
+**1. The three advice-first replies read as advice-first.** The maintainer read all three (written
+out in full in `docs/test-evidence/plan56-KB-ANSWER-03-three-replies.md`) and said they look good.
+That closes the read the row had waited for since 12 September. The roadmap entry moves to Done.
+
+**2. The settings card keeps working the way it does today.** The box is empty when a person comes
+back from a Steam setting opened through the card. D106's open item is closed; nothing about the card
+is owed.
+
+**3. The honesty line, seen on the Deck's own screen.** The check D106 said was owed ran the same
+afternoon on the plan 56 build, with nothing running: *black mesa how do i tame a horse* ends with
+"— No close match in my notes, this answer leans on the model's own knowledge." and *how do i beat the
+gonarch in black mesa* ends with the note's advice and the follow-up menu, no line. Lane K's fix is
+confirmed on the device (`docs/test-evidence/plan56-HONESTY-LINE-03-on-screen.json`). The horse reply
+took 151 seconds on the Deck's own model, and the footnote under it reads "150.8s (>60s): prefer GPU
+for Ollama, not CPU" in full, so the "blank names" note plan 56 logged from a page read was the reader
+splitting the bold words, not the plugin. That note closes as not a bug.
+
+**4. New bug, fixed the same afternoon: the Ollama tab's "Open AI models…" button read like "OpenAI
+models."** It now says "Manage AI models…", with the policy tier after the dash as before; the
+button's spoken label, the hint inside the picker and the troubleshooting guide say the same. Commit
+`79b1a0e`, deployed to the Deck the same afternoon.
+
+**5. New bug: the AI models screen shows about two rows of the model list on the Deck's screen.**
+Read in the code, not yet changed: the screen's body is capped at 520 pixels tall (or 72 percent of
+the screen if that is smaller), and the parts above the list that never scroll away — the three
+section buttons, the counts line, the custom tag box, the Suggested chips, two rows of filters and
+the column headers — take about 430 of those, leaving roughly 90 pixels for rows. An external monitor
+taller than about 720 pixels gets the same 520 cap, so it looks the same there, which answers the
+maintainer's question. The popup itself has room: on the Deck's screen it stands 640 pixels tall. The
+fix belongs with item 7's rework of that screen, or before it as a taller list. The maintainer's
+recording is `recordings/DeckRecord_20260916_114238_game.mkv` on their PC (the folder is not in the
+repo). Two stars.
+
+**6. New bug: after the AI models screen was closed by a tap outside it, the queued models started
+downloading and the D-pad could not move in the Ollama tab afterwards.** The maintainer did not
+press Done; they think they tapped outside the screen. Two things read in the code, neither proven
+on the device: a tap outside closes the popup through Steam's own path, which skips the plugin's own
+clean-up (the tab restore and returning the ring to the button that opened the screen), so nothing
+owns the ring afterwards; and the last frame of the recording shows the Pull selected button lit, at
+the popup's bottom edge, so a tap meant for outside may have landed on it and started the queued
+download. Needs a device reproduction with an empty queue, so nothing downloads. Two stars.
+
+**7. New feature: retire the policy tiers as their own section and roll them into the filters at the
+top of the AI models screen, and rework those filters.** Mockups first: the maintainer wants to pick
+and choose what goes up there for people to filter by when they pull models. Not drawn yet; the page
+would be drawn at the Deck's own screen size like the plan 56 page. Three stars.
+
+**8. New bug: Download knowledge base needed two taps; the first did nothing the maintainer could
+see.** Read in the code: the first press should open the storage choice popup (internal or SD card)
+before anything downloads, and the second tap is what ran the download. Not reproduced; needs a run
+with the plugin log on. One star.
+
+**Consequence.** The roadmap: the advice-first read entry and the honesty-line entry move to Done;
+the settings-card entry has nothing left owed; the blank-names note closes as not a bug; four new bug
+entries and one new feature entry; a changelog line for the rename. The testing rows for the
+advice-first read and the honesty line close.

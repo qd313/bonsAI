@@ -27,6 +27,7 @@
     "first_attempt": "the first extract ran from inside ~/homebrew and landed the files one folder too deep (~/homebrew/homebrew/…); that stray folder was removed and the extract redone from the home folder before the loader restart. Nothing else was touched."
   },
   "what_the_restore_cannot_bring_back": [
+    "the downloaded knowledge base on the SD card: settings point rag_corpus_path at /run/media/deck/3506ff22-…/.bonsai/rag (corpus version 2026.09.08), and the wipe emptied that .bonsai folder at 09:50 too. It was not in the backup (the plan's list was settings, chats and flags). The seed copy inside the settings folder (seed-knowledge-base/corpus.db, 2.3 MB, restored) is still there, and the Ollama tab's 'Download knowledge base' button fetches the full one again.",
     "the Deck's own Ollama program (~/.local/bin/ollama) and its user service",
     "the 8.4 GB of downloaded models (gemma4, nomic-embed-text, qwen2.5, qwen3.5); Ask on this Deck is down until 'Run AI on this Deck' is switched on again on the Ollama tab, which installs Ollama and pulls the models afresh (or the PC-address path is used)",
     "the plugin's old log files",

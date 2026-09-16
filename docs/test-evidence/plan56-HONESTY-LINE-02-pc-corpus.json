@@ -1,0 +1,14 @@
+{
+  "row": "HONESTY-TEXT-GAME-01, lane K's fix (commits a6561d7 and 14a6392 on experimental) checked against the Deck's own knowledge base on the PC, because the Deck had no models left after the wipe",
+  "measured": "2026-09-16 10:02 local, on the PC, with the plugin's landed Python (retrieve_knowledge_context and should_show_no_close_match_notice from the shared checkout at 14a6392), the corpus.db copied from the Deck's restored seed-knowledge-base folder (2,289,664 bytes, corpus-manifest.json beside it), the same embed model the Deck used (nomic-embed-text through the PC's Ollama at 127.0.0.1:11434), the maintainer's own settings file from block 0 with only the corpus path and the Ollama address pointed at the PC",
+  "why_not_the_deck": "the pre-authorised wipe (run last, as the plan ordered) removed the Deck's Ollama and every model before lane K landed. The retrieval and the decision are the plugin's own code, so this is the same path a Deck turn takes up to the model call; only the reply itself and the appended line on screen are not shown here.",
+  "results": {
+    "black mesa how do i tame a horse": {"raw_meaning": 0.687, "stripped_meaning": 0.635, "keyword": 16.0, "line_shows": true},
+    "how do i beat the gonarch in black mesa": {"raw_meaning": 0.685, "stripped_meaning": 0.741, "keyword": 10.0, "line_shows": false},
+    "black mesa how do i bake a cake": {"raw_meaning": 0.602, "stripped_meaning": 0.497, "keyword": 16.0, "line_shows": true},
+    "black mesa what is a houndeye": {"raw_meaning": 0.691, "stripped_meaning": 0.741, "keyword": 16.0, "line_shows": false}
+  },
+  "reading": "the numbers match the Deck measurement in plan56-HONESTY-LINE-01.json to the third decimal (same corpus, same model), and the decision now falls the right way on every one: a stretch question that only names its game gets the line, a real question about the game does not.",
+  "verdict": "PASS on the PC for the retrieval and the decision. The on-screen half (the line at the end of the reply on the Deck) is owed until the Deck has a model again: switch on 'Run AI on this Deck' on the Ollama tab, then ask 'black mesa how do i tame a horse' with nothing running.",
+  "settings_touched": "none on the Deck; the PC run used a copy of the settings file in memory"
+}

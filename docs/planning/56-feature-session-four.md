@@ -393,6 +393,43 @@ Written as work lands.
   label and the D-pad escape route. Left to do: land E2 (four commits in its copy, a fifth in the
   gates), deploy wave 2 and run its rows, then the wipe and the report.
 
+- **2026-09-16, by 10:10 — wave 2 finished on the device, the wipe run, the honesty line fixed a second
+  time, Ollama gone from the Deck.** Landed since the last entry: the settings card's D-pad wiring in five
+  commits (`cdc3759` to `42aafe1`: Up from the box enters the card, Up and Down step the rows, Down from
+  the bottom row returns to the box, A opens the setting, B closes the card and keeps the words, the chips
+  stay out of reach while it is open, a tap outside closes it, the card's surface is solid, and Left on
+  the Ask button or the paperclip holds still) and lane K's two (`a6561d7`, `14a6392`, below). Build
+  `42aafe1` was deployed and proved by hash, and every wave-2 row ran on it: the card's five rows pass
+  (two facts for you: after B the card stays closed until the box is emptied and a new search typed, and
+  A on a row opens the right Steam page but lands one toggle above the target — the known PERM-JUMP shape
+  — and the typed words are not kept across the jump); the three Left holds pass; the restored-turn walk
+  reaches Ask in eight presses with no loop; the greyed thumbs on a stopped reply are stepped over from
+  both sides; the free-play sweep found no trap. **The honesty line FAILED on the device** for the row's
+  own example: lane J's keyword half works, but the meaning score for "black mesa how do i tame a horse"
+  sits at 0.687 with the game's name in the text, above the line's 0.65 ceiling, while a real Gonarch
+  question scores 0.685 — the two cannot be told apart. With the game's name stripped from the text the
+  same questions score 0.635 and 0.741, on either side of the ceiling. Lane K built exactly that (the
+  score is measured on the question without the game's name; the ranking is untouched), it landed, and
+  it was checked on the PC against the Deck's own corpus and embed model: the numbers match the Deck's
+  to three decimals, and the line now shows for the horse and cake questions and not for the Gonarch or
+  Houndeye ones (`plan56-HONESTY-LINE-02-pc-corpus.json`). The on-screen half is owed, because of the
+  next paragraph. **The wipe, last of everything, as pre-authorised:** backed up, wiped, the three
+  waiting rows pass (all eight of our browser-storage keys gone, the New labels' record with them, the
+  voice panel reading not installed), and the Ollama tab reads as a fresh Deck. Settings and chats were
+  restored from the backup — the settings file is proven identical to the block-0 copy, which also put
+  the vision try-order back to empty, and all eight saved chats are back. **Gone for good:** the Deck's
+  own Ollama and its 8.4 GB of models (gemma4, nomic-embed-text, qwen2.5, qwen3.5), the plugin's old
+  log files, and — not on the plan's backup list — the downloaded knowledge base on the SD card; the
+  seed copy inside the settings folder is back, and the Ollama tab's *Download knowledge base* button
+  fetches the full one again. Ask on this Deck works again once *Run AI on this Deck* is switched on.
+  Found on the way, each in its evidence file: the slow-reply footnote reads "prefer  for , not ." with
+  blank names; stopping a streaming reply by D-pad has one route (box → Right → Right); a tall answer
+  chunk takes up to three presses before Up or Down leaves it (Steam scrolls it first, not a trap); with
+  an empty box, Up from Ask lands on the paperclip; after a card jump the Quick Access menu is closed
+  and the words are gone. The tip `14a6392` is deployed and proved by hash, the wake hold is released,
+  and the bookkeeper's final sweep (`7857bba`) plus a copy-paste trim of lane K's tests (`957da7e`) are the
+  last commits before this one.
+
 ---
 
 ## Appendix A — files each lane owns (for the briefs, not for reading)

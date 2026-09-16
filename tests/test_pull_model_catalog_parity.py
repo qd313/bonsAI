@@ -10,11 +10,11 @@ from backend.services.model_policy import classify_ollama_model_name
 CATALOG_POLICY_PARITY: dict[str, str] = {
     "qwen2.5vl:3b": "foss",
     "qwen3.5:4b": "foss",
-    "gemma4:e2b-it-qat": "open_weight",
+    "gemma4:e2b-it-qat": "foss",
     "qwen3:4b": "foss",
     "qwen2.5:7b": "foss",
     "llava:7b": "foss",
-    "gemma4:latest": "open_weight",
+    "gemma4:latest": "foss",
     "gemma3:4b": "open_weight",
     "qwen3:1.7b": "foss",
     "gemma3:1b": "open_weight",

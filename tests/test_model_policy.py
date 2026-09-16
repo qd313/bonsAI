@@ -18,11 +18,32 @@ class ModelPolicyTests(unittest.TestCase):
 
     def test_classify_llama_gemma_open_weight(self):
         self.assertEqual(classify_ollama_model_name("llama3:latest"), "open_weight")
-        self.assertEqual(classify_ollama_model_name("gemma4:2b"), "open_weight")
+        self.assertEqual(classify_ollama_model_name("gemma3:2b"), "open_weight")
         self.assertEqual(classify_ollama_model_name("llama3.2-vision:latest"), "open_weight")
 
     def test_classify_internvl_open_weight(self):
         self.assertEqual(classify_ollama_model_name("internvl3.5:38b"), "open_weight")
+
+    def test_classify_gemma4_foss(self):
+        """Sept 2026 licence-list catch-up (docs/planning/41-deck-model-survey.md, D73):
+        Gemma 4 moved to Apache 2.0 in April 2026, so only this generation reads as
+        open-source -- gemma, gemma2 and gemma3 stay open-weight above."""
+        self.assertEqual(classify_ollama_model_name("gemma4:e2b-it-qat"), "foss")
+        self.assertEqual(classify_ollama_model_name("gemma4:e4b-it-qat"), "foss")
+        self.assertEqual(classify_ollama_model_name("gemma4:12b-it-qat"), "foss")
+        self.assertEqual(classify_ollama_model_name("gemma4:latest"), "foss")
+
+    def test_classify_granite_foss(self):
+        self.assertEqual(classify_ollama_model_name("granite4.2:8b"), "foss")
+        self.assertEqual(classify_ollama_model_name("granite4.2:3b"), "foss")
+
+    def test_classify_lfm_and_liquid_open_weight(self):
+        self.assertEqual(classify_ollama_model_name("lfm2.5:8b"), "open_weight")
+        self.assertEqual(classify_ollama_model_name("liquid:8b"), "open_weight")
+
+    def test_classify_unknown_tag_unchanged(self):
+        self.assertEqual(classify_ollama_model_name("mystery-model:7b"), "unknown")
+        self.assertEqual(classify_ollama_model_name(""), "unknown")
 
     def test_filter_tier1_drops_llama(self):
         models = ["llama3:latest", "qwen2.5:latest"]

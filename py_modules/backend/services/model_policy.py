@@ -82,6 +82,11 @@ def classify_ollama_model_name(name: str) -> ModelSourceClass:
         "orca-mini",
         "vicuna",
         "openchat",
+        # Gemma 4 moved to Apache 2.0 in April 2026 (docs/planning/41-deck-model-survey.md);
+        # only this generation -- gemma, gemma2 and gemma3 stay open-weight below.
+        "gemma4",
+        # Granite 4.2 ships under Apache 2.0 (data/model_bakeoff/roster.json).
+        "granite",
     )
     if _family_match(base, foss_prefixes):
         return "foss"
@@ -95,7 +100,6 @@ def classify_ollama_model_name(name: str) -> ModelSourceClass:
         "gemma",
         "gemma2",
         "gemma3",
-        "gemma4",
         "mistral",
         "mixtral",
         "codellama",
@@ -106,6 +110,10 @@ def classify_ollama_model_name(name: str) -> ModelSourceClass:
         "solar",
         "nous-hermes",
         "dolphin",
+        # Liquid's LFM models: weights published under the LFM Open License, not an
+        # OSI-approved licence (data/model_bakeoff/roster.json).
+        "lfm",
+        "liquid",
     )
     if _family_match(base, open_weight_prefixes):
         return "open_weight"

@@ -37,7 +37,10 @@ export type ModalReturnFocusId =
   | "tab-bar"
   /** Settings -> Data's two confirm-modal openers (plan 32 bug 4). */
   | "settings-clear-cache"
-  | "settings-clear-all-data";
+  | "settings-clear-all-data"
+  /** Ollama tab's two "Set ... model try order..." openers (plan 55 bug B2). */
+  | "ollama-text-try-order"
+  | "ollama-vision-try-order";
 
 const owners = new Map<ModalReturnFocusId, HTMLElement>();
 let pendingReturn: ModalReturnFocusId | null = null;

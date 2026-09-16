@@ -43,6 +43,10 @@ import type { AskThinkEffortId } from "../data/askThinkEffort";
 import { OllamaThinkingEffortRow } from "./OllamaThinkingEffortRow";
 import type { NamedOllamaHost } from "../data/bonsaiSettingsSchema";
 import { SETTINGS_GLASS_BTN } from "../styles/settingsGlassButton";
+import {
+  registerModalReturnFocusOwner,
+  rememberModalReturnFocus,
+} from "../features/plugin-shell/modalReturnFocusRegistry";
 
 export type OllamaTabProps = {
   ollamaIp: string;
@@ -407,7 +411,11 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
               Open AI models… — {MODEL_POLICY_TIER_LABELS_PLAIN[modelPolicyTier]}
             </Button>
             <Button
-              onClick={() => onOpenRoutingOrderModal("text")}
+              ref={(el: HTMLElement | null) => registerModalReturnFocusOwner("ollama-text-try-order", el)}
+              onClick={() => {
+                rememberModalReturnFocus("ollama-text-try-order");
+                onOpenRoutingOrderModal("text");
+              }}
               style={{
                 ...SETTINGS_GLASS_BTN,
                 width: "100%",
@@ -418,7 +426,11 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
               Set text model try order…
             </Button>
             <Button
-              onClick={() => onOpenRoutingOrderModal("vision")}
+              ref={(el: HTMLElement | null) => registerModalReturnFocusOwner("ollama-vision-try-order", el)}
+              onClick={() => {
+                rememberModalReturnFocus("ollama-vision-try-order");
+                onOpenRoutingOrderModal("vision");
+              }}
               style={{
                 ...SETTINGS_GLASS_BTN,
                 width: "100%",

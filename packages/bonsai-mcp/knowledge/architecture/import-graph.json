@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 388,
-  "edgeCount": 973,
+  "fileCount": 389,
+  "edgeCount": 976,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -595,6 +595,13 @@
         "src/components/OllamaTab.tsx"
       ]
     },
+    "src/components/OllamaTab.modalReturnFocus.test.tsx": {
+      "imports": [
+        "src/components/OllamaTab.tsx",
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/OllamaTab.tsx": {
       "imports": [
         "src/components/DeveloperTab.tsx",
@@ -608,9 +615,11 @@
         "src/data/bonsaiSettingsSchema.ts",
         "src/data/modelPolicy.ts",
         "src/data/replyVerbosity.ts",
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/styles/settingsGlassButton.ts"
       ],
       "importedBy": [
+        "src/components/OllamaTab.modalReturnFocus.test.tsx",
         "src/features/plugin-shell/tabs/useOllamaTabPayload.tsx"
       ]
     },
@@ -1522,6 +1531,8 @@
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabPresetRow.tsx",
+        "src/components/OllamaTab.modalReturnFocus.test.tsx",
+        "src/components/OllamaTab.tsx",
         "src/components/OllamaWhereAiRunsSection.tsx",
         "src/components/SettingsTab.modalReturnFocus.test.tsx",
         "src/components/SettingsTab.tsx",

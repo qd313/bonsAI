@@ -98,7 +98,7 @@ import {
   isLeftNavigationEvent,
   isRightNavigationEvent,
 } from "../utils/focusNavigation";
-import { uiActiveElement } from "../utils/uiDocument";
+import { getUiDocument, uiActiveElement, uiGamepadFocusElement } from "../utils/uiDocument";
 import { formatBytes, toFileUri } from "../utils/mediaFormat";
 import type { AskAttachment } from "../types/bonsaiUi";
 import {
@@ -327,6 +327,46 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
   useEffect(() => {
     registerNavFocus("unified-input", unifiedInputNavRef);
     return () => unregisterNavFocus("unified-input", unifiedInputNavRef);
+  }, []);
+
+  /*
+   * ATTEMPT at "opening the panel leaves nothing highlighted": on a fresh panel open nothing
+   * owns Steam's ring at all, so the first D-pad press has to place it rather than move it --
+   * measured landing on Decky's own back arrow above the plugin rather than in it
+   * (docs/test-evidence/round35-trap-attempt-1-after-b-reopen.json). AGENTS.md calls this normal
+   * Steam behaviour and not ours to fix; the maintainer asked for an attempt anyway, on the
+   * condition that it can never steal the ring from something that already has it.
+   *
+   * Decky has not populated the text field's own nav node on the first render, so this retries a
+   * few times a beat apart. Every attempt re-checks ownership first: `uiGamepadFocusElement()`
+   * reads Steam's `.gpfocus` ring and falls back to `document.activeElement` only when there is no
+   * ring at all, and `document.activeElement` is `document.body` when nothing has ever been
+   * focused -- so "the gamepad-aware answer is still body" is the one honest way this file has to
+   * ask "is anything home yet". The moment that stops being true -- Steam parked the ring
+   * somewhere, or a person already moved it with a mouse -- this gives up rather than yanking the
+   * ring away. Never a plain `focus()`: this is a hop into a different Steam nav container, the
+   * same reason `focusUnifiedTextField` above uses `takeNavFocus`.
+   */
+  useEffect(() => {
+    let cancelled = false;
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    let attempts = 0;
+    const MAX_ATTEMPTS = 20;
+    const POLL_MS = 50;
+    const tryClaim = () => {
+      if (cancelled) return;
+      attempts += 1;
+      if (uiGamepadFocusElement() !== getUiDocument().body) return; // something already owns it
+      if (takeNavFocus("unified-input")) return; // claimed
+      if (attempts < MAX_ATTEMPTS) {
+        timeoutId = setTimeout(tryClaim, POLL_MS);
+      }
+    };
+    timeoutId = setTimeout(tryClaim, POLL_MS);
+    return () => {
+      cancelled = true;
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, []);
 
   const toggleAskModeMenu = useCallback(() => {

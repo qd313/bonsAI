@@ -128,3 +128,56 @@ describe("Ask button press -> where the ring goes next", () => {
     expect(onAskOllama).not.toHaveBeenCalled();
   });
 });
+
+/**
+ * On a fresh panel open, nothing owns Steam's ring at all (docs/test-evidence/
+ * round35-trap-attempt-1-after-b-reopen.json). The Ask bar tries to claim the question box for it,
+ * but only once Decky populates the box's own nav node, and only while nothing else has grabbed the
+ * ring meanwhile -- see the mount effect's own doc comment in MainTabUnifiedAskBar.tsx.
+ */
+describe("fresh mount -> claiming the question box for the ring", () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    resetNavFocusRegistry();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+    document.body.innerHTML = "";
+    resetNavFocusRegistry();
+  });
+
+  it("claims the question box once its nav node shows up, since nothing owned the ring yet", () => {
+    render(<MainTabUnifiedAskBar {...buildProps()} />);
+
+    // First poll: Decky has not populated the box's nav node yet (nothing registered a working
+    // TakeFocus), so the attempt has nothing to claim with.
+    vi.advanceTimersByTime(50);
+
+    // Decky populates it a beat later, the way it does on device.
+    const takeFocus = vi.fn(() => true);
+    registerNavFocus("unified-input", { current: { TakeFocus: takeFocus } });
+
+    vi.advanceTimersByTime(50);
+
+    expect(takeFocus).toHaveBeenCalledWith(true);
+  });
+
+  it("never steals the ring from something that already owns it", () => {
+    // Stand in for the ring already sitting somewhere else the instant the panel opens.
+    const alreadyFocused = document.createElement("button");
+    document.body.appendChild(alreadyFocused);
+    alreadyFocused.focus();
+    expect(document.activeElement).toBe(alreadyFocused);
+
+    render(<MainTabUnifiedAskBar {...buildProps()} />);
+
+    const takeFocus = vi.fn(() => true);
+    registerNavFocus("unified-input", { current: { TakeFocus: takeFocus } });
+
+    vi.advanceTimersByTime(1200); // well past every scheduled retry
+
+    expect(takeFocus).not.toHaveBeenCalled();
+    expect(document.activeElement).toBe(alreadyFocused);
+  });
+});

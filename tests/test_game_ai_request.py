@@ -44,10 +44,38 @@ class StripTdpRecommendationBlockTests(unittest.TestCase):
         text = "This game runs fine at the default power settings."
         self.assertEqual(strip_tdp_recommendation_block(text), text)
 
-    def test_fenced_code_sample_the_person_asked_for_is_left_alone(self):
+    def test_fenced_block_shaped_like_the_prompt_asks_for_is_removed(self):
+        # ollama_prompts.py tells the model to wrap the power block in exactly this fence
+        # (language tag "json", nothing else in the box) -- the one shape the old fix could
+        # never remove, since it deliberately skipped anything inside a code box.
+        text = (
+            "Dropping your power draw should help with fan noise.\n\n"
+            '```json\n{"tdp_watts": 10, "gpu_clock_mhz": 1000}\n```\n'
+        )
+        result = strip_tdp_recommendation_block(text)
+        self.assertNotIn("tdp_watts", result)
+        self.assertNotIn("```", result)
+        self.assertIn("help with fan noise", result)
+
+    def test_fenced_block_with_no_language_tag_is_also_removed(self):
+        text = "Try this.\n\n" '```\n{"tdp_watts": 8, "gpu_clock_mhz": null}\n```\n'
+        result = strip_tdp_recommendation_block(text)
+        self.assertNotIn("tdp_watts", result)
+        self.assertNotIn("```", result)
+        self.assertIn("Try this.", result)
+
+    def test_fenced_code_sample_with_real_code_is_left_alone(self):
+        text = (
+            "Here is a launch option example:\n\n"
+            "```\nPROTON_LOG=1 %command%\n```\n"
+        )
+        self.assertEqual(strip_tdp_recommendation_block(text), text)
+
+    def test_fenced_block_holding_the_power_block_plus_other_text_survives(self):
         text = (
             "Here is the JSON shape the assistant uses internally:\n\n"
-            '```json\n{"tdp_watts": 10, "gpu_clock_mhz": 1000}\n```\n'
+            '```json\n// example only, not a live suggestion\n'
+            '{"tdp_watts": 10, "gpu_clock_mhz": 1000}\n```\n'
         )
         self.assertEqual(strip_tdp_recommendation_block(text), text)
 

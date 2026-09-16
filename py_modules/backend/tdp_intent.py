@@ -119,25 +119,45 @@ def parse_tdp_recommendation(
 _RAW_TDP_BLOCK_RE = re.compile(r'\{\s*"tdp_watts"\s*:\s*\d+[^}]*\}')
 _FENCE_RE = re.compile(r"```.*?```", re.DOTALL)
 
+# The plugin's own instruction (ollama_prompts.py) tells the model to put the power block
+# inside a fenced code box, e.g. ```json\n{"tdp_watts": 5, "gpu_clock_mhz": 1200}\n```. That is
+# the one shape the plain _FENCE_RE skip above can never remove, so it needs its own pattern:
+# a fence (with or without a language tag) whose entire content, once trimmed, is nothing but
+# the power block. A box holding real code -- or the power block plus anything else -- does not
+# match this and is left untouched by design.
+_FENCED_TDP_ONLY_RE = re.compile(
+    r'```[ \t]*[A-Za-z0-9_+-]*[ \t]*\r?\n\s*(\{\s*"tdp_watts"\s*:\s*\d+[^}]*\})\s*```',
+    re.DOTALL,
+)
+
 
 def strip_tdp_recommendation_block(text: str) -> str:
-    """Remove a bare ``{"tdp_watts": ...}`` block from reply text before it reaches a person.
+    """Remove a ``{"tdp_watts": ...}`` block from reply text before it reaches a person.
 
     ``parse_tdp_recommendation`` reads this block (it is how the power suggestion feature
     works) but never removes it, so on some replies the model's raw JSON ends up sitting in
     the words a person reads. This mirrors the same fallback pattern used to *find* the block
-    so stripping matches parsing exactly, except a block sitting inside a fenced code sample
-    (` ``` ... ``` `) is left alone -- that text was asked for on purpose.
+    so stripping matches parsing exactly. A fenced code box that holds only the power block --
+    the exact shape the prompt instructs the model to use -- is removed as a whole unit; a
+    fenced box holding real code, or the power block alongside other text, is left alone
+    because that text was asked for on purpose.
     """
     if not text or '"tdp_watts"' not in text:
         return text
+
+    changed = False
+
+    def _replace_fenced_tdp_only(match: "re.Match[str]") -> str:
+        nonlocal changed
+        changed = True
+        return ""
+
+    text = _FENCED_TDP_ONLY_RE.sub(_replace_fenced_tdp_only, text)
 
     fenced_spans = [m.span() for m in _FENCE_RE.finditer(text)]
 
     def _in_fenced_span(pos: int) -> bool:
         return any(start <= pos < end for start, end in fenced_spans)
-
-    changed = False
 
     def _replace(match: "re.Match[str]") -> str:
         nonlocal changed

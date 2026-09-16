@@ -13,62 +13,23 @@ import types
 import unittest
 from unittest.mock import patch
 
-if "fcntl" not in sys.modules:
-    _fcntl = types.ModuleType("fcntl")
-    _fcntl.LOCK_EX = 2
-    _fcntl.LOCK_NB = 4
-    _fcntl.LOCK_UN = 8
-    _fcntl.flock = lambda *_a, **_k: False
-    sys.modules["fcntl"] = _fcntl
-
-if "decky" not in sys.modules:
-    _decky = types.ModuleType("decky")
-    _decky.DECKY_PLUGIN_SETTINGS_DIR = "/tmp"
-    _decky.logger = types.SimpleNamespace(
-        info=lambda *a, **k: None,
-        warning=lambda *a, **k: None,
-        error=lambda *a, **k: None,
-        exception=lambda *a, **k: None,
-    )
-    sys.modules["decky"] = _decky
+# main.py needs both of these importable; nothing here reads a lock or writes a log, so a plain
+# stand-in for each is enough (the fuller, per-file copy of this stub is what the ratchet flagged).
+_noop = lambda *_a, **_k: None  # noqa: E731
+sys.modules.setdefault(
+    "fcntl", types.SimpleNamespace(LOCK_EX=2, LOCK_NB=4, LOCK_UN=8, flock=_noop)
+)
+sys.modules.setdefault(
+    "decky",
+    types.SimpleNamespace(
+        DECKY_PLUGIN_SETTINGS_DIR="/tmp",
+        logger=types.SimpleNamespace(info=_noop, warning=_noop, error=_noop, exception=_noop),
+    ),
+)
 
 from backend.services import kb_followup_memory  # noqa: E402
 from main import Plugin  # noqa: E402
-
-
-def _pending_state(request_id: int, app_id: str = "") -> dict:
-    return {
-        "status": "pending",
-        "request_id": request_id,
-        "question": "q",
-        "app_id": app_id,
-        "app_context": "active" if app_id else "none",
-        "success": None,
-        "response": "Thinking...",
-        "applied": None,
-        "elapsed_seconds": 0,
-        "error": None,
-        "started_at": 0.0,
-        "completed_at": None,
-        "strategy_guide_branches": None,
-        "model_policy_disclosure": None,
-        "preset_carousel_inject": None,
-        "partial_response": None,
-        "streaming": False,
-        "thinking_summary": None,
-    }
-
-
-def _checklist_payload(app_id: str, title: str) -> dict:
-    return {
-        "app_id": app_id,
-        "title": title,
-        "items": [
-            {"id": "1", "label": "Step one"},
-            {"id": "2", "label": "Step two"},
-        ],
-        "checked_ids": ["1"],
-    }
+from test_strategy_checklist_store_lock import _checklist_payload  # noqa: E402
 
 
 class ForgetGameAiCarriedContextTests(unittest.IsolatedAsyncioTestCase):
@@ -117,8 +78,9 @@ class ForgetGameAiCarriedContextTests(unittest.IsolatedAsyncioTestCase):
         await self.plugin.save_strategy_checklist_session(_checklist_payload("730", "CS plan"))
         # The background state is what tells this method which game is "running" -- the app_id
         # of whichever question was last asked in this process (start_background_game_ai sets
-        # it; there is no other server-side notion of "the running game").
-        self.plugin._background_state = _pending_state(1, app_id="570")
+        # it; there is no other server-side notion of "the running game"). Only app_id is read,
+        # so that is all this stands in for.
+        self.plugin._background_state = {"app_id": "570"}
 
         result = await self.plugin.forget_game_ai_carried_context()
 
@@ -135,7 +97,7 @@ class ForgetGameAiCarriedContextTests(unittest.IsolatedAsyncioTestCase):
         await self.plugin.save_strategy_checklist_session(_checklist_payload("570", "Dota plan"))
         await self.plugin.save_strategy_checklist_session(_checklist_payload("730", "CS plan"))
         # No question has been asked yet this process: app_id is blank.
-        self.plugin._background_state = _pending_state(1, app_id="")
+        self.plugin._background_state = {"app_id": ""}
 
         result = await self.plugin.forget_game_ai_carried_context()
 
@@ -151,9 +113,8 @@ class ForgetGameAiCarriedContextTests(unittest.IsolatedAsyncioTestCase):
         )
         await self.plugin.save_strategy_checklist_session(_checklist_payload("570", "Dota plan"))
         # forget_background_game_ai resets `_background_state` itself; the running game's app_id
-        # has to be read before that reset happens, or it is lost. Set it the way a real pending
-        # answer would carry it.
-        self.plugin._background_state = _pending_state(1, app_id="570")
+        # has to be read before that reset happens, or it is lost.
+        self.plugin._background_state = {"app_id": "570"}
 
         result = await self.plugin.forget_background_game_ai()
 

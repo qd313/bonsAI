@@ -285,6 +285,18 @@ and are listed in the report.
 | 7 | **Is another chat driving the Deck?** | **No, the Deck is this session's.** |
 | 8 | **The dead space above the box.** About 56 pixels, not 61. | **Measure, and fix only if one cause is named.** |
 
+**Second round, answered 2026-09-16 in chat, locked as D106.** The questions were the closing report's
+(§ 10, entry 4).
+
+| # | Question | Answer |
+|---|---|---|
+| 1 | What looked cut off on the Ask bar? | **Not the plugin.** The panel kept the external monitor's size after the monitor was unplugged; a restart of Steam fixed it. |
+| 2 | Should the settings card keep the typed words after a jump into Steam's settings? | **Not decided yet.** Logged as an open call; the card is done as measured. |
+| 3 | Is a six-row cap on the card right for this screen? | **Yes.** Their call. |
+| 4 | Your read of the three advice-first captures. | **They asked where the copy is.** All three replies are now written out in full in `docs/test-evidence/plan56-KB-ANSWER-03-three-replies.md`; the read is still owed. |
+| 5 | Which reasoning fold, and which session-fold shape? | **Plain fold for the first version; the fold in the character's voice as a later optional extra; a press on the folded line opens the full reasoning. Session context becomes a tab within the Show details panel (option B).** |
+| 6 | (New, unasked) | **Read aloud becomes a button with a speaker icon on the Helpful row**, not a dividing line like Show details. New roadmap entry. |
+
 ## 9. Things to bring to your attention
 
 - **Two of the nine are drawn, not built.** The reasoning display and the Session context fold go
@@ -429,6 +441,21 @@ Written as work lands.
   and the words are gone. The tip `14a6392` is deployed and proved by hash, the wake hold is released,
   and the bookkeeper's final sweep (`7857bba`) plus a copy-paste trim of lane K's tests (`957da7e`) are the
   last commits before this one.
+- **2026-09-16, afternoon — the maintainer's answers, locked as D106; the three replies written out in
+  full.** The closing report went out after `f5a9f24` and the maintainer answered the same day. The Ask
+  bar that looked cut off on 2026-09-15 was Steam keeping the external monitor's size after the monitor
+  was unplugged, fixed by a restart, not the plugin. The six-row cap on the settings card stays; whether
+  the card keeps the typed words after a jump is logged as an open call, on purpose. The reasoning
+  display builds with the plain folded line first, a press on it opening the full reasoning, and the
+  fold in a character's voice becomes a later optional entry. Session context folds into Show details
+  as a tab within the panel, option B on the mockup page. And one new request: Read aloud is to be a
+  small button with a speaker icon on the Helpful row, not a second dividing line above Show details.
+  Asked where the copy of the three advice-first replies was, the answer was that two of the three were
+  never written down in full (the Black Mesa file kept only the opening, the Portal 2 capture had no
+  file), so all three were copied verbatim out of the saved chats in the pre-wipe backup into
+  `docs/test-evidence/plan56-KB-ANSWER-03-three-replies.md`; the maintainer's read is still owed. The
+  bookkeeper's sweep that follows brings the roadmap, its detail note and the testing row into line with
+  D106.
 
 ---
 

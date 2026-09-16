@@ -5373,3 +5373,57 @@ stays open as measured.
 two measured items; two go to a mockup page; the roadmap entries for the reasoning display, the fold,
 the Spy and the Clear button are reworded to match tonight's calls; a new entry holds the deferred
 Spy trick.
+
+### D106 — LOCKED 2026-09-16 — After the fourth feature session: the plain reasoning fold first, the session as a tab, the card's six rows, a Read aloud button, and one call left open
+
+The maintainer's answers to the session's closing report ([plan 56](../planning/56-feature-session-four.md)
+§ 10, entry 4), given in chat on 2026-09-16 with the mockup page open
+(https://claude.ai/artifact/2De58qirE34754PEZVPmdb). Six items; five are calls, one is a question the
+maintainer chose to leave open on purpose.
+
+**1. The Ask bar that looked cut off was not the plugin.** The Deck had been drawing the panel at the
+external monitor's size; when the monitor was unplugged the panel kept that size until Steam was
+restarted, and the restart put it right. The session's own measurement on a fresh open agrees: nothing
+was clipped. No entry, nothing to build; recorded so the next person who sees it knows to restart first.
+
+**2. Whether the settings card keeps the typed words after a jump is left open, on purpose.** Today,
+pressing A on a row opens the Steam setting and the words in the box are gone when the person comes
+back. The maintainer is not sure yet which they want. The roadmap entry says so and does not wait on it:
+the card is done as measured, and nobody builds either behaviour until this is answered.
+
+**3. The card's six-row cap on the built-in screen stays.** The card shows up to eight rows but never
+more than fit under the tab bar, which is six on the Deck's own screen, and names the rest as "N more"
+in its heading. The maintainer looked at it and called it fine.
+
+**4. The reasoning display builds with the plain folded line; the voiced fold comes later, as an
+option.** The first version is what the 5 September calls (D70, D71) already describe, with the fold
+in plain words: three live lines at the answer's size while the model thinks, then one folded line with
+the seconds when the answer starts, and a press on that folded line opens the whole reasoning, the
+"opened" block on the mockup page. The folded line in the character's own voice, which the page showed
+in three voices, is not dropped: it becomes its own later entry, an optional extra on top of the plain
+fold, built only after the first version is in and looked at. The spoiler-verdict second job waits
+with the first version as before.
+
+**5. Session context folds into Show details as a tab within the panel, option B on the page.** As
+drawn: the opened Show details panel gets two tabs at its top, *This answer* and *Session · N*; Left and
+Right switch between them; the chip row and its body stay where they are; only the newest turn shows
+the Session tab, so it never repeats; the collapsed row still says *Show details*; Up from the tabs goes
+to Hide details and then Read aloud, Down goes into the chips, and B anywhere inside closes the panel.
+Those details were part of the drawing the maintainer picked, so they carry with the pick. One thing
+the page did not draw: where Clear sits inside the Session tab. The builder puts it at the end of that
+tab's body, the same button with the same confirm, unless the maintainer says otherwise.
+
+**6. New: Read aloud becomes a button with a speaker icon on the Helpful row.** Today Read aloud is a
+full-width dividing line above Show details, the same shape as Show details. The maintainer does not
+want a second dividing line: Read aloud should be a small button with a speaker icon, on the same row as
+Helpful and Not really. Filed as its own roadmap entry, two stars, with what it must keep: a real D-pad
+stop, Left and Right along the row, the label flipping to Stop while the Deck is talking, and the
+greyed-thumbs step-over from this session must not skip the row once Read aloud lives on it.
+
+**Consequence.** The roadmap's reasoning-display entry moves from "drawn, call owed" to ready to build
+with the plain fold, plus a new entry for the voiced fold; the session-fold entry and its open-questions
+note record option B and the one Clear detail; the settings-card entry records the six-row call and the
+open words-after-jump question; a new entry holds the Read aloud button. The three advice-first replies
+the maintainer asked to read are written out in full in
+`docs/test-evidence/plan56-KB-ANSWER-03-three-replies.md`, copied from the saved chats in the pre-wipe
+backup; that read is still theirs to give.

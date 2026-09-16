@@ -37,7 +37,7 @@
     },
     {
       "path": "src/styles/sections/section-6.ts",
-      "lines": 1450,
+      "lines": 1463,
       "role": ""
     },
     {
@@ -51,14 +51,14 @@
       "role": ""
     },
     {
+      "path": "src/components/MainTabChatTranscript.tsx",
+      "lines": 1360,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/ollama_service.py",
       "lines": 1357,
       "role": "Prompt build, Ollama HTTP, streaming"
-    },
-    {
-      "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1338,
-      "role": ""
     },
     {
       "path": "src/components/MainTabPresetAnimatedChips.tsx",

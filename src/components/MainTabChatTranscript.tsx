@@ -480,6 +480,22 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
   }, [earlierExpanded]);
 
   /*
+   * Whether an OPEN question's title really overflows its five-line cap (roadmap: "A short
+   * question fades out at its right edge as if there were more to read"). CSS alone cannot tell
+   * a short question from a cut one, so the title span's own ref (passed to
+   * buildTurnHeaderElement, one instance per open turn) measures scrollHeight against the
+   * clientHeight the max-height cap enforces — the same shape of check ChatSlotRow.tsx uses for
+   * its own title overflow. Keyed by turn id ("live" for the live turn) so switching which turn
+   * is open never reads a stale measurement left by the one before it.
+   */
+  const [overflowingTitles, setOverflowingTitles] = useState<Record<string, boolean>>({});
+  const measureTitleOverflow = (key: string) => (el: HTMLSpanElement | null) => {
+    if (!el) return;
+    const overflowing = el.scrollHeight - el.clientHeight > 1;
+    setOverflowingTitles((prev) => (prev[key] === overflowing ? prev : { ...prev, [key]: overflowing }));
+  };
+
+  /*
    * Nav targets for the two permission-hint rows below the transcript — see
    * `focusChatPermissionHintRow`'s comment above for why this replaced a registered button handle
    * and `focusDeckOwner`. Registered for the lifetime of this component rather than only while the
@@ -832,6 +848,10 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   ? buildExpandedTurnTitle(turn.questionDisplay || turn.question)
                   : buildCollapsedTurnTitle(turn.questionDisplay || turn.question),
               expanded: expandedTurnKey === turn.id,
+              /* Only the OPEN turn's title can overflow its cap — measuring a closed, single-line
+                 ellipsis title would be meaningless, so no ref is handed to the rest. */
+              titleRef: expandedTurnKey === turn.id ? measureTitleOverflow(turn.id) : undefined,
+              titleOverflowing: overflowingTitles[turn.id] ?? false,
               onActivate: () => onTurnActivate?.(turn.id),
               /*
                * Retry rides on the newest question's bubble now (D77) instead of the row under the
@@ -1017,6 +1037,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   ? buildExpandedTurnTitle(liveQuestion)
                   : buildCollapsedTurnTitle(liveQuestion)) || "…",
               expanded: expandedTurnKey === "live",
+              titleRef: expandedTurnKey === "live" ? measureTitleOverflow("live") : undefined,
+              titleOverflowing: overflowingTitles.live ?? false,
               isStreaming: isStreamingPreview,
               onActivate: () => onTurnActivate?.("live"),
               onRetry: expandedTurnKey === "live" ? onRetryLastResponse : undefined,

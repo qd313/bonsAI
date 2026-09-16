@@ -141,3 +141,52 @@ describe("Retry on the question bubble", () => {
     expect(onMoveLeft()).toBe(false);
   });
 });
+
+/*
+ * Roadmap: "A short question fades out at its right edge as if there were more to read". The
+ * fade lives in CSS keyed off a modifier class, since CSS alone cannot detect overflow — the
+ * caller (MainTabChatTranscript.tsx) measures and hands back a ref + a boolean. This only pins
+ * the plumbing: the title span carries whatever ref it is given, and the class only when told to.
+ */
+describe("title overflow ref and class plumbing", () => {
+  const titleSpanOf = (el: React.ReactElement) => {
+    const props = el.props as { children?: React.ReactNode };
+    return props.children as React.ReactElement;
+  };
+
+  it("attaches the caller's titleRef to the title span", () => {
+    const titleRef = vi.fn();
+    const el = buildTurnHeaderElement({
+      turnId: "turn-1",
+      title: "a question",
+      expanded: true,
+      onActivate: () => {},
+      titleRef,
+    });
+    expect((titleSpanOf(el) as unknown as { ref: unknown }).ref).toBe(titleRef);
+  });
+
+  it("adds the overflowing modifier class only when titleOverflowing is true", () => {
+    const overflowing = buildTurnHeaderElement({
+      turnId: "turn-1",
+      title: "a question",
+      expanded: true,
+      onActivate: () => {},
+      titleOverflowing: true,
+    });
+    expect(String((titleSpanOf(overflowing).props as Record<string, unknown>).className)).toContain(
+      "bonsai-chat-turn-row-title--overflowing"
+    );
+
+    const short = buildTurnHeaderElement({
+      turnId: "turn-1",
+      title: "a question",
+      expanded: true,
+      onActivate: () => {},
+      titleOverflowing: false,
+    });
+    expect(String((titleSpanOf(short).props as Record<string, unknown>).className)).not.toContain(
+      "bonsai-chat-turn-row-title--overflowing"
+    );
+  });
+});

@@ -30,6 +30,20 @@ export type BuildTurnHeaderElementArgs = {
   onRetry?: () => void;
   /** Greys the Retry icon out and disconnects it while an answer is on its way. */
   retryDisabled?: boolean;
+  /**
+   * Attached to the question title span so the caller can measure whether the wrapped text
+   * really overflows the five-line cap (roadmap: "A short question fades out at its right edge
+   * as if there were more to read"). Only meaningful while `expanded` — the caller only passes
+   * one while the turn is open, since the collapsed single-line ellipsis never fades.
+   */
+  titleRef?: (el: HTMLSpanElement | null) => void;
+  /**
+   * True once the caller has measured that the title's content is taller than the box it is
+   * capped to. Adds the modifier class the stylesheet keys the bottom fade off of — without it
+   * the fade drew on every open question, short ones included, because CSS alone cannot tell
+   * whether text was cut.
+   */
+  titleOverflowing?: boolean;
 };
 
 /** Plain function — header Focusable is a child of the turn-slot Focusable group. */
@@ -43,6 +57,8 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
     onActivate,
     onRetry,
     retryDisabled = false,
+    titleRef,
+    titleOverflowing = false,
   } = args;
 
   const headerClass = [
@@ -78,8 +94,15 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
       isDownDeckButtonEvent(button) ? focusAnswer() : false,
   } as Record<string, unknown>;
 
+  const titleClassName = [
+    "bonsai-chat-turn-row-title",
+    titleOverflowing ? "bonsai-chat-turn-row-title--overflowing" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   const titleSpan = (
-    <span className="bonsai-chat-turn-row-title" data-bonsai-turn-id={turnId}>
+    <span className={titleClassName} data-bonsai-turn-id={turnId} ref={titleRef}>
       {title || "…"}
     </span>
   );

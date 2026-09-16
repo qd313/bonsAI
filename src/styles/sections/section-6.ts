@@ -428,16 +428,10 @@ export function buildSection6Section(): string {
           text-overflow: ellipsis !important;
         }
         /*
-         * D60: an OPEN turn shows the whole question, wrapped, capped at five lines, with the
-         * last line fading out — instead of the single-line ellipsis rule above. Scoped off the
-         * header's own --expanded modifier (set by buildTurnHeaderElement.tsx) rather than a
-         * class on the title span itself, so the two files stay decoupled.
-         *
-         * The fade is a plain overflow cue, not the focus-driven cut-question cue from the same
-         * decision (that one is a separate Features entry, still unbuilt). It fades a fixed
-         * one-line-tall band at the bottom via calc(100% - 1.3em) rather than a fixed percentage,
-         * so the fade always covers the LAST line actually shown — 1 through 5 — rather than a
-         * fraction of a box whose height changes with how much text there is.
+         * D60: an OPEN turn shows the whole question, wrapped, capped at five lines — instead of
+         * the single-line ellipsis rule above. Scoped off the header's own --expanded modifier
+         * (set by buildTurnHeaderElement.tsx) rather than a class on the title span itself, so
+         * the two files stay decoupled.
          */
         .bonsai-scope .bonsai-chat-turn-row-header--expanded .bonsai-chat-turn-row-title {
           white-space: normal !important;
@@ -445,6 +439,25 @@ export function buildSection6Section(): string {
           overflow-wrap: anywhere !important;
           text-overflow: clip !important;
           max-height: 6.5em !important;
+        }
+        /*
+         * The last-line fade only belongs on a question that is actually cut short by the
+         * five-line cap above. CSS alone cannot tell a short question from a cut one, so
+         * MainTabChatTranscript.tsx measures the title's real height against that cap (the same
+         * shape of check ChatSlotRow.tsx runs for its own title overflow) and adds this modifier
+         * class only when the text truly overflows. Roadmap: "A short question fades out at its
+         * right edge as if there were more to read" — before this it fired on every open
+         * question, one-liners included, because the mask below used to run unconditionally.
+         *
+         * The fade is a plain overflow cue, not the focus-driven cut-question cue from the same
+         * decision (that one is a separate Features entry, still unbuilt). It fades a fixed
+         * one-line-tall band at the bottom via calc(100% - 1.3em) rather than a fixed percentage,
+         * so the fade always covers the LAST line actually shown — 1 through 5 — rather than a
+         * fraction of a box whose height changes with how much text there is.
+         */
+        .bonsai-scope
+          .bonsai-chat-turn-row-header--expanded
+          .bonsai-chat-turn-row-title--overflowing {
           -webkit-mask-image: linear-gradient(
             to bottom,
             #000 0%,

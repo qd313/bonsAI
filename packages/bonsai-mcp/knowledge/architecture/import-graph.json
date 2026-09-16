@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 398,
-  "edgeCount": 1005,
+  "fileCount": 399,
+  "edgeCount": 1006,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1305,6 +1305,12 @@
         "src/utils/bonsaiSessionSurvival.ts"
       ]
     },
+    "src/data/pullModelCatalog.test.ts": {
+      "imports": [
+        "src/data/pullModelCatalog.ts"
+      ],
+      "importedBy": []
+    },
     "src/data/pullModelCatalog.ts": {
       "imports": [],
       "importedBy": [
@@ -1312,6 +1318,7 @@
         "src/components/ModelRoutingOrderModal.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/components/PullModelsModal.tsx",
+        "src/data/pullModelCatalog.test.ts",
         "src/features/model-routing/useRoutingOrderModal.ts",
         "src/hooks/usePullModelCatalog.ts",
         "src/index.tsx",

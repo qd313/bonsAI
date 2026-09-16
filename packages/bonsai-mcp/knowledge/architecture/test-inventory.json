@@ -51,6 +51,7 @@
     "src/data/characterCatalog.test.ts",
     "src/data/characterUiAccent.test.ts",
     "src/data/presets.test.ts",
+    "src/data/pullModelCatalog.test.ts",
     "src/data/replyLanguage.test.ts",
     "src/data/replyMicroActions.test.ts",
     "src/data/spoilerTitleProfilesContract.test.ts",

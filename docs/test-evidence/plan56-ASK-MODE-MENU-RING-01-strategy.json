@@ -1,0 +1,132 @@
+{
+  "ok": true,
+  "fidelity": "steam-routed",
+  "steps": [
+    {
+      "index": 1,
+      "label": "open the Ask-mode menu again",
+      "press": [
+        "A"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"Inference mode: Speed. Open to change.\"",
+      "to": "<BUTTON> \"speed\"",
+      "focusKey": "sel:div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 947,
+      "diagnosis": "press routed, focus moved <BUTTON> \"Inference mode: Speed. Open to change.\" -> <BUTTON> \"speed\""
+    },
+    {
+      "index": 2,
+      "label": "speed -> strategy",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"speed\"",
+      "to": "<BUTTON> \"strategy\"",
+      "focusKey": "sel:div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > button.Focusable:nth-child(2)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 866,
+      "diagnosis": "press routed, focus moved <BUTTON> \"speed\" -> <BUTTON> \"strategy\""
+    },
+    {
+      "index": 3,
+      "label": "choose Strategy: the ring should land back on the mode button",
+      "press": [
+        "A"
+      ],
+      "expect": ".bonsai-ask-mode-trigger",
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": true,
+      "from": "<BUTTON> \"strategy\"",
+      "to": "<BUTTON> \"Inference mode: Strategy. Open to change.\"",
+      "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 896,
+      "diagnosis": "press routed, focus moved <BUTTON> \"strategy\" -> <BUTTON> \"Inference mode: Strategy. Open to change.\", matching expect"
+    }
+  ],
+  "ranSteps": 3,
+  "totalSteps": 3,
+  "passed": 3,
+  "failed": 0,
+  "visited": [
+    "<BUTTON> \"Inference mode: Speed. Open to change.\"",
+    "<BUTTON> \"speed\"",
+    "<BUTTON> \"strategy\"",
+    "<BUTTON> \"Inference mode: Strategy. Open to change.\""
+  ],
+  "cycle": {
+    "key": "sel:div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > button.Focusable:nth-child(1)",
+    "seenAt": [
+      0,
+      3
+    ],
+    "loop": [
+      "<BUTTON> \"Inference mode: Speed. Open to change.\"",
+      "<BUTTON> \"speed\"",
+      "<BUTTON> \"strategy\"",
+      "<BUTTON> \"Inference mode: Strategy. Open to change.\""
+    ],
+    "escaped": false,
+    "stepsAfterLoop": 0
+  },
+  "neverReached": [],
+  "stopsFocusedButNotVisible": 0,
+  "notVisibleStops": [],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 5107,
+  "acquired": false,
+  "summary": "3/3 steps passed; focus returned to <BUTTON> \"Inference mode: Speed. Open to change.\" at steps 0 and 3 (the run ended there, so whether the ring could have escaped is untested)"
+}

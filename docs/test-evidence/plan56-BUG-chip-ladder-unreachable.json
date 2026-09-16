@@ -1,0 +1,12 @@
+{
+  "title": "With Show details open, the chip row cannot be reached by the D-pad",
+  "measured": "2026-09-16, build 0fbecb6 at 04:55 and build ca12429 at 05:07, Deck built-in screen, Main tab",
+  "evidence": [
+    "docs/test-evidence/plan56-CONTEXT-LADDER-03-caseB-details-open.json (an instant built-in reply: Down from Hide details lands on the Session context bar; the two-chip row is skipped)",
+    "docs/test-evidence/plan56-SPY-REVEAL-01-ladder-walk.json (a model reply with seven chips, 'Chip 1 of 7' on screen: Down from Hide details lands on the Session context bar again; Right from there reaches Clear and stops)"
+  ],
+  "what_a_person_hits": "Open Show details on a reply, press Down to step into the chips and read one: the ring skips past the whole row to the Session context bar. The chips can only be read by whatever chip is drawn first.",
+  "what_used_to_happen": "The closed CONTEXT-LADDER-01…03 row (verified on the Deck 2026-09-05) had Down entering the ladder and Up walking back out; the 2026-08-27 sweep read 'Chip 1 of 6' with Left and Right stepping the chips.",
+  "not_this_session's_change": "seen on 0fbecb6 before any of this session's commits landed",
+  "suggested_next_step": "measure whether the ladder's Focusable still registers as a stop (it reads as a single Focusable with no focusable children in the page read), then compare with the 2026-09-05 build; a one-star focus bug for the roadmap"
+}

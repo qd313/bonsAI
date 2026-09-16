@@ -1,0 +1,20 @@
+{
+  "row": "SESSION-CLEAR-01 — the Clear button in the Session context strip (plan 56 lane A, commits 2eb2142 and d4b077b)",
+  "measured": "2026-09-16 05:24 local, build ca12429 (hash-matched), Deck built-in screen, Main tab, the six-turn Portal 2 chat with its Session context bar showing, no game running",
+  "evidence": [
+    "docs/test-evidence/plan56-SESSION-CLEAR-01.json (Right onto Clear, A, B, A, A)",
+    "docs/test-evidence/plan56-SESSION-CLEAR-01-left.json (Left back to the header)"
+  ],
+  "steps_and_results": [
+    "The bar's header row reads 'Session context (6 turns) ▸' with a small 'Clear' at its right end.",
+    "Right from the header lands on Clear, fully visible.",
+    "A on Clear opens a confirm box; the ring lands on the box's own 'Clear' button.",
+    "B closes the box and the ring is back on Clear in the bar.",
+    "A opens the box again; A on its Clear button closes it and the ring is back on Clear in the bar.",
+    "Left from Clear lands on the header.",
+    "The plugin's own log (homebrew/logs/bonsAI, 2026-09-16 04.57.58.log) then reads: forget_game_ai_carried_context: forgot=['followup_subject', 'strategy_checklist_whole_store'] (app_id=<unknown>). No game was running, so the whole checklist store was cleared rather than one game's position, as the method says it will.",
+    "The chat and the bar's rows stayed on screen; the bar still reads six turns."
+  ],
+  "not_checked": "the toast's text on screen (Steam draws toasts in its own layer the rig does not read); that the next bare follow-up no longer inherits the subject (needs two model questions; the log line is the proof the memory was dropped)",
+  "verdict": "PASS for the button, its focus wiring, the confirm box's return focus, and the forget."
+}

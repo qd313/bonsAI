@@ -1,0 +1,19 @@
+{
+  "rows": "SMOKE-C (permission gate) and PERM-JUMP-01 (the Open Permissions jump and the Back to … return)",
+  "measured": "2026-09-16 05:10 local, build 0fbecb6 (hash-matched), Deck built-in screen. The Steam ban lookup permission was switched off on the Permissions tab for the check and switched back on afterwards; read off the settings file both times (steam_web_api false, then true).",
+  "evidence": [
+    "docs/test-evidence/plan56-SMOKE-C-01-toggle-off.json (the toggle switched off)",
+    "docs/test-evidence/plan56-PERM-JUMP-01-open-permissions.json (A on Open Permissions)",
+    "docs/test-evidence/plan56-SMOKE-C-02-toggle-back-on.json (the toggle switched back on)",
+    "docs/test-evidence/plan56-PERM-JUMP-01-back-to-main.json (A on Back to Main)"
+  ],
+  "steps_and_results": [
+    "With the permission off, bonsai:vac-check answered instantly with the deny surface: 'Steam Web API is off for bonsAI.', the two places to turn it on, and an Open Permissions button. No model call.",
+    "Open Permissions is a real D-pad stop: Up from the question box reached it in three presses (box, Session context, Open Permissions).",
+    "A on Open Permissions switched to the Permissions tab, but the ring landed on 'Save files to Desktop', the toggle one row ABOVE 'Steam ban lookup', the one it was asked for. FAIL for the landing.",
+    "The tab showed a 'Back to Main' button at its top. A on it returned to the Main tab with the ring on the Open Permissions button that started the jump. PASS for the return.",
+    "The permission was switched back on before leaving (A on Steam ban lookup), confirmed on disk."
+  ],
+  "verdict": "The deny half and the return half pass; the jump lands one toggle above the right one. Plan 31's 2026-09-05 recurrence had it landing on Back to Main instead; today it is off by one row. File as a one-star focus bug: the jump's target lookup picks the wrong row.",
+  "settings_left_as_found": true
+}

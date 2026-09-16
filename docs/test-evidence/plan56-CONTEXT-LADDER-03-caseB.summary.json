@@ -1,0 +1,12 @@
+{
+  "row": "CONTEXT-LADDER-03, case B (details open) — batch QA-EVIDENCE-GAP-01, the original file never existed",
+  "measured": "2026-09-16 04:55 local, build 0fbecb6 (hash-matched), Deck built-in screen, on the bonsai:vac-check reply (an instant built-in answer, no model), Show details opened with A",
+  "evidence": "docs/test-evidence/plan56-CONTEXT-LADDER-03-caseB-details-open.json",
+  "what_was_measured": [
+    "A on Show details opened the panel (the control reads Hide details); a chip ladder was mounted with two chips: 'Spoiler risk: med' and 'Developer details', counter 'Chip 1 of 2'",
+    "Down from Hide details went to the Session context strip, then to Save chat to Desktop; the open ladder was never a stop",
+    "Up walked back the same way: strip, Hide details, Read aloud, Helpful. No trap; the rig reports escaped: true"
+  ],
+  "verdict": "No trap, which is what the row exists to prove. But the ladder itself was skipped by the D-pad on this turn, so the old row's 'Down enters the panel' half did not happen here. Not conclusive: this was an instant built-in reply with two chips; re-check on a model reply before calling it a bug.",
+  "left_as_found": "the details were closed again afterwards"
+}

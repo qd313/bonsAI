@@ -1,0 +1,54 @@
+{
+  "ok": true,
+  "fidelity": "steam-routed",
+  "steps": [
+    {
+      "index": 1,
+      "label": "Done on the vision try-order picker",
+      "press": [
+        "A"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"Done\"",
+      "to": "<BUTTON> \"Set vision model try order\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(5) > div:nth-child(2) > div:nth-child(1) > button.Focusable:nth-child(4)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 685,
+      "diagnosis": "press routed, focus moved <BUTTON> \"Done\" -> <BUTTON> \"Set vision model try order\""
+    }
+  ],
+  "ranSteps": 1,
+  "totalSteps": 1,
+  "passed": 1,
+  "failed": 0,
+  "visited": [
+    "<BUTTON> \"Done\"",
+    "<BUTTON> \"Set vision model try order\""
+  ],
+  "cycle": null,
+  "neverReached": [],
+  "stopsFocusedButNotVisible": 0,
+  "notVisibleStops": [],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 2416,
+  "acquired": false,
+  "summary": "1/1 steps passed"
+}

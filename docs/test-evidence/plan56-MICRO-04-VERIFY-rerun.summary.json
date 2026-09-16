@@ -1,0 +1,15 @@
+{
+  "row": "MICRO-04-VERIFY (batch QA-EVIDENCE-GAP-01: the 'after the fix' and 'left column' files never existed)",
+  "measured": "2026-09-16 04:52 local, build 0fbecb6 (hash-matched), Deck built-in screen, a live finished turn (the bonsai:vac-check reply) with Helpful and Not really live, not greyed",
+  "evidence": "docs/test-evidence/plan56-MICRO-04-VERIFY-rerun.json",
+  "the_row_as_written_expected": "a 2 by 2 grid, Helpful / Not really over Retry / Show details: Down from Not really lands on Show details, Up from Show details lands on Not really, the left column unchanged",
+  "what_the_build_has_now": "the grid is gone. Retry is a corner icon at the top of the turn; under the answer sit Helpful and Not really side by side, then Read aloud as its own full-width row, then Show details as its own full-width row",
+  "what_was_measured": [
+    "Right from Helpful lands on Not really",
+    "Down from Not really lands on Read aloud",
+    "Up from Read aloud lands on Helpful (the first of the pair, not Not really)",
+    "Left from Helpful leaves the plugin: the ring lands on Steam's own Quick Access rail (the Decky tab), and the next Up walks the rail to Steam's Help tab; Down on the rail then Right brought it back in"
+  ],
+  "verdict": "The old expectations cannot be re-run because the layout they describe no longer exists; the row should be retired or reworded to today's stops. Down and Up between the pair and Read aloud work. One new sighting of the 'Left leaves the plugin' bug from the Helpful button (roadmap Bugs, one star, focus, the Ask button and paperclip entry).",
+  "note": "the same walk on a stopped reply with the pair greyed is docs/test-evidence/plan56-GREYED-STEP-OVER-01-thumbs.summary.json, where the pair still takes the ring"
+}

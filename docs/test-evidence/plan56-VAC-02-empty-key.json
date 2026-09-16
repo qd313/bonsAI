@@ -1,0 +1,9 @@
+{
+  "row": "VAC-02 — bonsai:vac-check with the Steam Web API permission on and an empty key",
+  "measured": "2026-09-16 04:48 local, build 0fbecb6 (hash-matched), Deck built-in screen, Strategy mode, no game. Settings on disk at the time: the steam_web_api capability true, steam_web_api_key empty.",
+  "command": "bonsai:vac-check (typed exactly with the repo's typing script, VERIFIED; sent with A on the Ask button)",
+  "reply": "No Steam Web API key saved.\nRegister a key at Steam Web API (see README), paste it under Developer → Integrations → Steam Web API key, save, then try again:\nbonsai:vac-check 7656119…",
+  "timing": "instant: the reply was on screen within the press's own settle time (under a second), with no thinking line and no Stop button, so no model call was made",
+  "verdict": "PASS on the Deck. Matches the preview pass: the empty-key message names where to paste the key and shows the command shape with a SteamID.",
+  "note": "the ring went from Ask to the question box after the press, as the plan 55 fix intends"
+}

@@ -1,0 +1,11 @@
+{
+  "row": "ASK-MODE-MENU-RING-01 — choosing an entry in the Ask-mode menu keeps the highlight",
+  "measured": "2026-09-16 05:22 local, build ca12429 (hash-matched), Deck built-in screen, Main tab",
+  "before_the_fix": "docs/test-evidence/plan56-BUG-askmode-menu-drop-speed.json and -strategy.json (build 0fbecb6): after A on an entry the ring was on nothing",
+  "after_the_fix": [
+    "docs/test-evidence/plan56-ASK-MODE-MENU-RING-01-speed.json: Right from the box lands on the mode button; A opens the menu with the ring on 'speed'; A on it closes the menu and the ring lands on the mode button, now reading 'Inference mode: Speed', fully visible",
+    "docs/test-evidence/plan56-ASK-MODE-MENU-RING-01-strategy.json: A opens the menu again, Down to 'strategy', A closes it and the ring lands on the mode button reading 'Inference mode: Strategy', fully visible"
+  ],
+  "verdict": "PASS. Fix commit cb60a5d. The mode setting was left at Strategy, as found.",
+  "settings_left_as_found": true
+}

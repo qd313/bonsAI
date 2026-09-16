@@ -1,0 +1,85 @@
+{
+  "ok": true,
+  "fidelity": "wire-sent",
+  "steps": [
+    {
+      "index": 1,
+      "label": "down to Steam ban lookup",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Save files to Desktop\"",
+      "to": "<DIV> \"Steam ban lookup\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(6) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 895,
+      "diagnosis": "press routed, focus moved <DIV> \"Save files to Desktop\" -> <DIV> \"Steam ban lookup\""
+    },
+    {
+      "index": 2,
+      "label": "turn Steam ban lookup back on",
+      "press": [
+        "A"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": false,
+      "matched": null,
+      "from": "<DIV> \"Steam ban lookup\"",
+      "to": "<DIV> \"Steam ban lookup\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(6) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1446,
+      "diagnosis": "press routed, focus did not move - still <DIV> \"Steam ban lookup\". either no handler is wired for this direction, or it ran and moved nothing"
+    }
+  ],
+  "ranSteps": 2,
+  "totalSteps": 2,
+  "passed": 2,
+  "failed": 0,
+  "visited": [
+    "<DIV> \"Save files to Desktop\"",
+    "<DIV> \"Steam ban lookup\""
+  ],
+  "cycle": null,
+  "neverReached": [],
+  "stopsFocusedButNotVisible": 0,
+  "notVisibleStops": [],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 4076,
+  "acquired": false,
+  "summary": "2/2 steps passed"
+}

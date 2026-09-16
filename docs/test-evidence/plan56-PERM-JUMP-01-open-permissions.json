@@ -1,0 +1,54 @@
+{
+  "ok": true,
+  "fidelity": "steam-routed",
+  "steps": [
+    {
+      "index": 1,
+      "label": "A on Open Permissions: should land on the Steam ban lookup toggle",
+      "press": [
+        "A"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"Open Permissions\"",
+      "to": "<DIV> \"Save files to Desktop\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 943,
+      "diagnosis": "press routed, focus moved <BUTTON> \"Open Permissions\" -> <DIV> \"Save files to Desktop\""
+    }
+  ],
+  "ranSteps": 1,
+  "totalSteps": 1,
+  "passed": 1,
+  "failed": 0,
+  "visited": [
+    "<BUTTON> \"Open Permissions\"",
+    "<DIV> \"Save files to Desktop\""
+  ],
+  "cycle": null,
+  "neverReached": [],
+  "stopsFocusedButNotVisible": 0,
+  "notVisibleStops": [],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 1956,
+  "acquired": false,
+  "summary": "1/1 steps passed"
+}

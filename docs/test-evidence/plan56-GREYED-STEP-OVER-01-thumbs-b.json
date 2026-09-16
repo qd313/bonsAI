@@ -1,0 +1,152 @@
+{
+  "ok": true,
+  "fidelity": "wire-sent",
+  "steps": [
+    {
+      "index": 1,
+      "label": "d1 from the reply container",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(4)",
+      "visibility": {
+        "verdict": "partial",
+        "visiblePercent": 33,
+        "coveredBy": "div.bonsai-tab-bar.Panel.Focusable",
+        "clippedBy": null,
+        "points": {
+          "visible": 3,
+          "covered": 3,
+          "clipped": 0,
+          "offscreen": 3
+        }
+      },
+      "visible": false,
+      "settled": true,
+      "settleMs": 613,
+      "diagnosis": "press routed, focus moved <DIV> (unnamed - the only text around it is a container's, not a label) -> <DIV> (unnamed - the only text around it is a container's, not a label); FOCUSED BUT only PARTIALLY visible (33%), covered by div.bonsai-tab-bar.Panel.Focusable -- the ring is on it and a person could not see it"
+    },
+    {
+      "index": 2,
+      "label": "d2",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(5)",
+      "visibility": {
+        "verdict": "partial",
+        "visiblePercent": 67,
+        "coveredBy": "div.bonsai-unified-input-text-row > div.bonsai-unified-input-text-box > div.Panel.Focusable > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase",
+        "clippedBy": null,
+        "points": {
+          "visible": 6,
+          "covered": 3,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": false,
+      "settled": true,
+      "settleMs": 621,
+      "diagnosis": "press routed, focus moved <DIV> (unnamed - the only text around it is a container's, not a label) -> <DIV> (unnamed - the only text around it is a container's, not a label); FOCUSED BUT only PARTIALLY visible (67%), covered by div.bonsai-unified-input-text-row > div.bonsai-unified-input-text-box > div.Panel.Focusable > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase -- the ring is on it and a person could not see it"
+    },
+    {
+      "index": 3,
+      "label": "d3: past the last answer stop, should skip greyed thumbs",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": false,
+      "matched": null,
+      "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(5)",
+      "visibility": {
+        "verdict": "partial",
+        "visiblePercent": 56,
+        "coveredBy": "div.Panel.Focusable",
+        "clippedBy": null,
+        "points": {
+          "visible": 5,
+          "covered": 4,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": false,
+      "settled": true,
+      "settleMs": 959,
+      "diagnosis": "press routed, focus did not move - still <DIV> (unnamed - the only text around it is a container's, not a label). either no handler is wired for this direction, or it ran and moved nothing; FOCUSED BUT only PARTIALLY visible (56%), covered by div.Panel.Focusable -- the ring is on it and a person could not see it"
+    },
+    {
+      "index": 4,
+      "label": "d4",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "to": "<BUTTON> \"Mark reply helpful\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(5) > div.Panel.Focusable:nth-child(2) > button.Disabled.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 577,
+      "diagnosis": "press routed, focus moved <DIV> (unnamed - the only text around it is a container's, not a label) -> <BUTTON> \"Mark reply helpful\""
+    }
+  ],
+  "ranSteps": 4,
+  "totalSteps": 4,
+  "passed": 4,
+  "failed": 0,
+  "visited": [
+    "<DIV> (unnamed - the only text around it is a container's, not a label)",
+    "<BUTTON> \"Mark reply helpful\""
+  ],
+  "cycle": null,
+  "neverReached": [],
+  "stopsFocusedButNotVisible": 4,
+  "notVisibleStops": [
+    "step 0: <DIV> (unnamed - the only text around it is a container's, not a label) COVERED by div.bonsai-unified-input-text-row > div.bonsai-unified-input-text-box > div.Panel.Focusable > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase",
+    "step 1: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (33%), covered by div.bonsai-tab-bar.Panel.Focusable",
+    "step 2: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (67%), covered by div.bonsai-unified-input-text-row > div.bonsai-unified-input-text-box > div.Panel.Focusable > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase",
+    "step 3: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (56%), covered by div.Panel.Focusable"
+  ],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 5005,
+  "acquired": false,
+  "summary": "4/4 steps passed; 4 stop(s) FOCUSED BUT NOT VISIBLE: step 0: <DIV> (unnamed - the only text around it is a container's, not a label) COVERED by div.bonsai-unified-input-text-row > div.bonsai-unified-input-text-box > div.Panel.Focusable > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase; step 1: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (33%), covered by div.bonsai-tab-bar.Panel.Focusable; step 2: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (67%), covered by div.bonsai-unified-input-text-row > div.bonsai-unified-input-text-box > div.Panel.Focusable > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase; step 3: <DIV> (unnamed - the only text around it is a container's, not a label) only PARTIALLY visible (56%), covered by div.Panel.Focusable (report-only -- pass requireVisible to fail on this)"
+}

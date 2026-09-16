@@ -1,0 +1,259 @@
+{
+  "ok": true,
+  "fidelity": "wire-sent",
+  "steps": [
+    {
+      "index": 1,
+      "label": "Down into the open details",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Hide details\"",
+      "to": "<DIV> \"Session context (5 turns) ▸\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 936,
+      "diagnosis": "press routed, focus moved <DIV> \"Hide details\" -> <DIV> \"Session context (5 turns) ▸\""
+    },
+    {
+      "index": 2,
+      "label": "Down again inside",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Session context (5 turns) ▸\"",
+      "to": "<BUTTON> \"Save chat to Desktop\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 958,
+      "diagnosis": "press routed, focus moved <DIV> \"Session context (5 turns) ▸\" -> <BUTTON> \"Save chat to Desktop\""
+    },
+    {
+      "index": 3,
+      "label": "Right along the chips",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": false,
+      "matched": null,
+      "from": "<BUTTON> \"Save chat to Desktop\"",
+      "to": "<BUTTON> \"Save chat to Desktop\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1356,
+      "diagnosis": "press routed, focus did not move - still <BUTTON> \"Save chat to Desktop\". either no handler is wired for this direction, or it ran and moved nothing"
+    },
+    {
+      "index": 4,
+      "label": "Up 1 back out",
+      "press": [
+        "UP"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"Save chat to Desktop\"",
+      "to": "<DIV> \"Session context (5 turns) ▸\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 953,
+      "diagnosis": "press routed, focus moved <BUTTON> \"Save chat to Desktop\" -> <DIV> \"Session context (5 turns) ▸\""
+    },
+    {
+      "index": 5,
+      "label": "Up 2",
+      "press": [
+        "UP"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Session context (5 turns) ▸\"",
+      "to": "<DIV> \"Hide details\"",
+      "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(4) > div.Panel.Focusable:nth-child(4)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 935,
+      "diagnosis": "press routed, focus moved <DIV> \"Session context (5 turns) ▸\" -> <DIV> \"Hide details\""
+    },
+    {
+      "index": 6,
+      "label": "Up 3",
+      "press": [
+        "UP"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Hide details\"",
+      "to": "<DIV> \"Read aloud\"",
+      "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(4) > div.Panel.Focusable:nth-child(3)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 934,
+      "diagnosis": "press routed, focus moved <DIV> \"Hide details\" -> <DIV> \"Read aloud\""
+    },
+    {
+      "index": 7,
+      "label": "Up 4",
+      "press": [
+        "UP"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Read aloud\"",
+      "to": "<BUTTON> \"Mark reply helpful\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(4) > div.Panel.Focusable:nth-child(2) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 896,
+      "diagnosis": "press routed, focus moved <DIV> \"Read aloud\" -> <BUTTON> \"Mark reply helpful\""
+    }
+  ],
+  "ranSteps": 7,
+  "totalSteps": 7,
+  "passed": 7,
+  "failed": 0,
+  "visited": [
+    "<DIV> \"Hide details\"",
+    "<DIV> \"Session context (5 turns) ▸\"",
+    "<BUTTON> \"Save chat to Desktop\"",
+    "<DIV> \"Read aloud\"",
+    "<BUTTON> \"Mark reply helpful\""
+  ],
+  "cycle": {
+    "key": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(4) > div.Panel.Focusable:nth-child(4)",
+    "seenAt": [
+      0,
+      5
+    ],
+    "loop": [
+      "<DIV> \"Hide details\"",
+      "<DIV> \"Session context (5 turns) ▸\"",
+      "<BUTTON> \"Save chat to Desktop\"",
+      "<BUTTON> \"Save chat to Desktop\"",
+      "<DIV> \"Session context (5 turns) ▸\"",
+      "<DIV> \"Hide details\""
+    ],
+    "escaped": true,
+    "stepsAfterLoop": 2
+  },
+  "neverReached": [],
+  "stopsFocusedButNotVisible": 0,
+  "notVisibleStops": [],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 12136,
+  "acquired": false,
+  "summary": "7/7 steps passed; focus returned to <DIV> \"Hide details\" at steps 0 and 5 and escaped afterwards"
+}

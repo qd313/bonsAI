@@ -1,0 +1,21 @@
+{
+  "row": "GREYED-STEP-OVER-01, the thumbs half",
+  "title": "With the thumbs greyed on a stopped reply, Down from the answer should land on Retry and Left/Right should hold still",
+  "measured": "2026-09-16 about 04:40 local, build 0fbecb6 (hash-matched), Deck built-in screen, Main tab, Strategy mode, no game. A long Deep Rock Survivor guide was asked and stopped after about 500 characters with the Stop generation button; the turn shows 'Stopped — partial answer kept.' with Helpful and Not really greyed.",
+  "evidence": [
+    "docs/test-evidence/plan56-GREYED-STEP-OVER-01-thumbs.json (the walk up into the answer, then Down, Left, Right)",
+    "docs/test-evidence/plan56-GREYED-STEP-OVER-01-thumbs-b.json (Down from the answer's last paragraph, twice)"
+  ],
+  "what_happened": [
+    "Up from Read aloud landed on the greyed Helpful button ('Mark reply helpful', class Disabled). The greyed button takes the ring from below.",
+    "Up from that button reached the answer's last paragraph, then the one before it.",
+    "Down from the answer's last paragraph: the first press moved nothing (a dead press); the second press landed on the greyed Helpful button, not on Retry.",
+    "Left from an answer paragraph moved the ring onto Steam's own Quick Access rail (the Decky tab), out of the plugin; Right brought it back onto the reply's container, fully covered by the dock."
+  ],
+  "verdict": "FAIL on this build for the thumbs half: the greyed thumbs still take the ring from both directions, with a dead press first from above. Plan 55's fix (lane D, 'step over greyed Helpful / Not really') does not fire on a stopped live turn on this build.",
+  "also_found": [
+    "Left from an answer paragraph leaves the plugin for Steam's rail: the same shape as the Ask button and paperclip bug from plan 55 (roadmap Bugs, one star, focus), now seen from inside a reply.",
+    "On the built-in screen the answer's paragraphs are only ever partly visible while the ring is on them: 33% (covered by the tab bar and off the top) and 67% (under the question box). The visible chat is 143 pixels, and a paragraph taller than that can never be shown whole; this is the geometry from plan56-M-internal-screen-layout.json, not a new focus bug."
+  ],
+  "settings_touched": "none; the stopped turn stays in the two-turn Portal 2 chat, which now has three turns"
+}

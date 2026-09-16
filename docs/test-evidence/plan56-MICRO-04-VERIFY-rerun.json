@@ -1,0 +1,228 @@
+{
+  "ok": true,
+  "fidelity": "wire-sent",
+  "steps": [
+    {
+      "index": 1,
+      "label": "Helpful -> Not really",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"Mark reply helpful\"",
+      "to": "<BUTTON> \"Mark reply not helpful\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(4) > div.Panel.Focusable:nth-child(2) > button.Focusable:nth-child(2)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 883,
+      "diagnosis": "press routed, focus moved <BUTTON> \"Mark reply helpful\" -> <BUTTON> \"Mark reply not helpful\""
+    },
+    {
+      "index": 2,
+      "label": "Down from Not really",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"Mark reply not helpful\"",
+      "to": "<DIV> \"Read aloud\"",
+      "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(4) > div.Panel.Focusable:nth-child(3)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 940,
+      "diagnosis": "press routed, focus moved <BUTTON> \"Mark reply not helpful\" -> <DIV> \"Read aloud\""
+    },
+    {
+      "index": 3,
+      "label": "Up from there",
+      "press": [
+        "UP"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Read aloud\"",
+      "to": "<BUTTON> \"Mark reply helpful\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(4) > div.Panel.Focusable:nth-child(2) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 933,
+      "diagnosis": "press routed, focus moved <DIV> \"Read aloud\" -> <BUTTON> \"Mark reply helpful\""
+    },
+    {
+      "index": 4,
+      "label": "Left back to Helpful",
+      "press": [
+        "LEFT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"Mark reply helpful\"",
+      "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "focusKey": "sel:#quickaccess_tab_999",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 952,
+      "diagnosis": "press routed, focus moved <BUTTON> \"Mark reply helpful\" -> <DIV> (unnamed - the only text around it is a container's, not a label)"
+    },
+    {
+      "index": 5,
+      "label": "Down from Helpful",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": false,
+      "matched": null,
+      "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "focusKey": "sel:#quickaccess_tab_999",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1414,
+      "diagnosis": "press routed, focus did not move - still <DIV> (unnamed - the only text around it is a container's, not a label). either no handler is wired for this direction, or it ran and moved nothing"
+    },
+    {
+      "index": 6,
+      "label": "Up from there",
+      "press": [
+        "UP"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "to": "<DIV> \"Help\"",
+      "focusKey": "sel:#quickaccess_tab_6",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 842,
+      "diagnosis": "press routed, focus moved <DIV> (unnamed - the only text around it is a container's, not a label) -> <DIV> \"Help\""
+    }
+  ],
+  "ranSteps": 6,
+  "totalSteps": 6,
+  "passed": 6,
+  "failed": 0,
+  "visited": [
+    "<BUTTON> \"Mark reply helpful\"",
+    "<BUTTON> \"Mark reply not helpful\"",
+    "<DIV> \"Read aloud\"",
+    "<DIV> (unnamed - the only text around it is a container's, not a label)",
+    "<DIV> \"Help\""
+  ],
+  "cycle": {
+    "key": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(4) > div.Panel.Focusable:nth-child(2) > button.Focusable:nth-child(1)",
+    "seenAt": [
+      0,
+      3
+    ],
+    "loop": [
+      "<BUTTON> \"Mark reply helpful\"",
+      "<BUTTON> \"Mark reply not helpful\"",
+      "<DIV> \"Read aloud\"",
+      "<BUTTON> \"Mark reply helpful\""
+    ],
+    "escaped": true,
+    "stepsAfterLoop": 3
+  },
+  "neverReached": [
+    "Not really"
+  ],
+  "stopsFocusedButNotVisible": 0,
+  "notVisibleStops": [],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 10474,
+  "acquired": false,
+  "summary": "6/6 steps passed; focus returned to <BUTTON> \"Mark reply helpful\" at steps 0 and 3 and escaped afterwards; never reached: Not really"
+}

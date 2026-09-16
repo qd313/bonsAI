@@ -1,0 +1,15 @@
+{
+  "rows": "EXPERT-ORDER-01 (the Expert group in the bake-off order) and PULL-EXPERT-VISIBLE-01 (the group can be shown at all)",
+  "measured": "2026-09-16 05:11 local, build ca12429 (hash-matched), Deck built-in screen, Ollama tab → Browse models…, which opens the AI models hub on its Browse & pull section",
+  "evidence": "docs/test-evidence/plan56-EXPERT-ORDER-01-essentials-off.json (A on the Essentials only chip); the group lists below were read off the open picker's page",
+  "before_the_press": "with Essentials only on, the picker showed one group, Deck essentials (gemma4:e2b-it-qat, qwen3.5:4b, qwen2.5vl:3b); no Expert (large) group anywhere on the page",
+  "after_the_press": {
+    "groups_in_order": ["Deck essentials", "More models", "Expert (large)", "Specialist"],
+    "expert_large_in_order": ["gemma4:12b-it-qat", "qwen3.5:9b", "granite4.2:8b", "gemma4:e4b-it-qat", "lfm2.5:8b", "llama3.2-vision:11b", "qwen2.5:14b", "minicpm-v:8b"],
+    "note": "the five bake-off entries come first in the locked order (Gemma 4 12B, Qwen 3.5 9B, Granite 4.2 8B, Gemma 4 E4B, LFM 2.5), then the three older stretch entries"
+  },
+  "d_pad_note": "the Essentials only chip sits at the right end of the filter row (Installed only, FOSS only, Essentials only); a Down walk from the top of the picker skips that row's right-hand chips and lands in the model rows, and Up from the first row lands on Essentials only. Reachable, but not on the straight Down path.",
+  "verdict": "PASS for both rows. Commits 0dbf25c, f812a9e, 19e3396, ca12429 (lane B). The licence half (a Gemma 4 tag reading as allowed at the open-source-only tier in the hub's Policy text) was not read this pass.",
+  "screenshot": "screenshots/DeckCapture_20260916_051150_game.png",
+  "settings_touched": "none: the Essentials only chip is picker state, and the picker was closed with B"
+}

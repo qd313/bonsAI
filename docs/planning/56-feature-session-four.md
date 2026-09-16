@@ -344,6 +344,54 @@ Written as work lands.
   nothing (cause read from the code, a one-line fix handed to the bookkeeper); and the plan 55 "glossary
   loop" is really a restored-turn loop, reproduced on a plain Portal 2 reply, freed by collapsing the turn —
   a named cause for lane I. Plan 55's empty-box half of the Ask highlight row passed.
+- **2026-09-16, by 05:15 — wave 1 landed, thirteen code commits on experimental, wave 2 running.** Every
+  lane came back and every commit was taken onto experimental one at a time with the gates after each:
+  the Ask-mode menu fix (`cb60a5d`, typed by the bookkeeper from the measured cause); the settings card's
+  first half (`2d92240`: the card floats above the box, holds what fits under the tab bar, hides for a
+  real question — lane E stopped before the D-pad wiring because it needed two files outside its list);
+  the Clear button (`2eb2142`, `d4b077b`, and `427d6e8` trimming a copied test that had pushed the
+  copy-paste count over its line); the checker's log line and the Spy in five commits (`cce6bf9` to
+  `1039154`); and the Expert order and licences in four (`0dbf25c` to `ca12429`), the fourth fixing a
+  bug lane B found on the way: the Expert group could never be shown in the download picker at all,
+  since a June change. The dead-space entry and the hub entry took no lane (block 0). Wave 2 is running
+  in three copies cut from the new tips: E2 (the card's D-pad wiring plus Left on Ask and the paperclip),
+  I (the restored-turn loop, the greyed thumbs on a stopped reply, Up from the Retry corner, Left from
+  an answer paragraph), and J (the honesty line). **On the Deck meanwhile, on the old build:** plan 55's
+  owed halves passed for the empty-box Ask press, the vision try-order return and the copy icon beside a
+  code box; the greyed thumbs on a stopped reply FAILED from both directions; the Black Mesa sentence
+  was captured (all three advice-first reads are now the maintainer's); the close-and-reopen smoke and
+  the empty-key ban check passed; the Open Permissions jump reaches the tab but lands one toggle above
+  the right one; the free-play sweep on the built-in screen found no trap on a live turn; and three
+  evidence-gap rows were re-run (two stale, one passing). Not run and why: the missing-name download row
+  starts real downloads onto the Deck; the mirrored-stops row needs a game with a spoiler block; the new
+  chat bug needs a new chat, which deletes the oldest saved one — asked in the check-in. Also found: the
+  vision try-order picker's Done writes the current order into the settings file even when nothing
+  changed (restored at the end of the block).
+
+- **2026-09-16, by 13:30 — most of wave 2 landed, the mockup page published, one lane left.** The
+  usage limit stopped everything for a while in the middle of wave 2: lanes E2 and I and two
+  bookkeepers were killed mid-work. All four were resumed by message rather than restarted and picked
+  up where they stopped. Landed since: the honesty line (`f2e358a`, plus `a568985` trimming its
+  test) and lane I's three D-pad fixes (`b7420f0`: an answer paragraph holds the ring on Left and
+  Right; `bb7fef3`: a reopened saved reply no longer traps Down; `e41808d`: a greyed Helpful or Not
+  really is stepped over from either side). Lane I read the code for the Retry-corner entry and judged
+  it stale, so no change there. The testing document went over its size line after the sweeps, so
+  twelve fully passed rows moved to the archive (`d4b18b8`). **On the Deck, on build `ca12429`:** the
+  settings card holds still (six rows, "Steam settings · 65 more"), but its surface was see-through —
+  sent to E2 and fixed there, not yet landed; the Ask-mode menu keeps the ring both ways; Clear works
+  end to end, with the log line proving the forget; the Spy lies at heavy and the confession chip is
+  stored with the turn (read from the saved chat, see the next sentence); the checker's log line ran
+  for the first time; the Expert group lists in the locked order. Found: with Show details open, the
+  chip row cannot be reached by the D-pad at all — Down from Hide details lands on the Session context
+  bar. It does the same on the old build, so it is not this session's doing; a one-star bug for the
+  roadmap with its evidence file. Not yet checked on the device: lane I's three fixes and the honesty
+  line, which need the wave-2 deploy. **The mockup page is published:**
+  https://claude.ai/artifact/2De58qirE34754PEZVPmdb — the reasoning display (today's waiting line;
+  the three live lines cut from a real Gemma 4 E2B thinking capture; the plain fold; the fold in Ali
+  G's, GLaDOS's and the Spy's voices as the model itself wrote them; and the opened block), and the
+  session fold with the row, tab and section options drawn side by side, each with its collapsed
+  label and the D-pad escape route. Left to do: land E2 (four commits in its copy, a fifth in the
+  gates), deploy wave 2 and run its rows, then the wipe and the report.
 
 ---
 

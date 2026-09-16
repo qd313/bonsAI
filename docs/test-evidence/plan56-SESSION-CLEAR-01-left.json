@@ -1,0 +1,54 @@
+{
+  "ok": true,
+  "fidelity": "steam-routed",
+  "steps": [
+    {
+      "index": 1,
+      "label": "Clear -> header",
+      "press": [
+        "LEFT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Clear\"",
+      "to": "<DIV> \"Session context (6 turns) ▸\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 635,
+      "diagnosis": "press routed, focus moved <DIV> \"Clear\" -> <DIV> \"Session context (6 turns) ▸\""
+    }
+  ],
+  "ranSteps": 1,
+  "totalSteps": 1,
+  "passed": 1,
+  "failed": 0,
+  "visited": [
+    "<DIV> \"Clear\"",
+    "<DIV> \"Session context (6 turns) ▸\""
+  ],
+  "cycle": null,
+  "neverReached": [],
+  "stopsFocusedButNotVisible": 0,
+  "notVisibleStops": [],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 1341,
+  "acquired": false,
+  "summary": "1/1 steps passed"
+}

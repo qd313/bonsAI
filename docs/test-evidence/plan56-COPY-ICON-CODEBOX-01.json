@@ -1,0 +1,17 @@
+{
+  "row": "COPY-ICON-CODEBOX-01",
+  "title": "The copy icon no longer sits on the code box (plan 55, lane D) — exercised at last",
+  "measured": "2026-09-16 04:33 local, build 0fbecb6 (hash-matched), Deck built-in screen, Main tab, Strategy mode, Ali G at heavy, no game running",
+  "question": "Reply with exactly one short bash code block that lists the files in a folder. The code block must be the very last thing in your reply. No words after it.",
+  "typed_with": "scripts/deck_send_ask.py (VERIFIED), sent with A on the Ask button",
+  "reply": "Two paragraphs of character talk, then a fenced code box holding `ls -l`, and nothing after it. The last answer stop's text ends with the code box's text, so the reply genuinely ends in the box this time (plan 55's attempt got a closing sentence).",
+  "rects_css_px": {
+    "last_code_box": { "top": -136, "bottom": -92, "left": 71, "right": 308 },
+    "copy_icon": { "top": -80, "bottom": -60, "left": 292, "right": 312, "label": "Copy reply text" },
+    "note": "read while the transcript was scrolled so the bubble sat above the viewport; only the relative positions matter here"
+  },
+  "gap_between_code_box_bottom_and_icon_top_px": 12,
+  "vertical_overlap_px": 0,
+  "verdict": "PASS. The icon sits 12 pixels below the code box's bottom edge; nothing overlaps.",
+  "screenshot": "screenshots/DeckCapture_20260916_043314_game.png (the box had scrolled above the panel's top when the shot was taken; the rectangles above are the evidence)"
+}

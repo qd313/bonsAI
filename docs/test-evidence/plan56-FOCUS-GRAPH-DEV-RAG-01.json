@@ -1,0 +1,26 @@
+{
+  "row": "FOCUS-GRAPH-DEV-RAG-01 (batch QA-EVIDENCE-GAP-01: the 2026-08-26 file never existed)",
+  "measured": "2026-09-16 04:58 local, build 0fbecb6 (hash-matched), Deck built-in screen, Developer tab, a Down walk from the tab bar to the end of the tab through the rig's walk tool, focus read after every press",
+  "row_as_written": "Down from Token streaming (experimental) reaches Force session RAG chips (QA) and continues to Clear frozen test chips",
+  "what_the_tab_has_now": "there is no Token streaming toggle on the Developer tab any more; the control above the RAG toggle is the preset animation choice",
+  "stops_in_order_every_one_visible": [
+    "Developer tab (the bar)",
+    "Install seed knowledge base",
+    "Hybrid retrieval (meaning search)",
+    "On-screen debug HUD",
+    "Warm the Ask model at boot",
+    "Jump to Steam Input (running game)",
+    "Tab to open on: A · Main",
+    "App activity logging: Off",
+    "Auto-save chat to Desktop notes",
+    "Verbose Ask logging to Desktop notes",
+    "Preset animation: fade",
+    "Force session RAG chips (QA)",
+    "Clear frozen test chips",
+    "Steam Web API key field (the end of the tab; the walk stalled there)"
+  ],
+  "presses": 16,
+  "verdict": "PASS for what the row is for: the Force session RAG chips toggle takes the ring from the control above it and hands Down on to Clear frozen test chips, and every stop on the way was fully visible. The row's wording is stale (Token streaming is gone from the tab) and should name the preset animation control instead.",
+  "also_noted": "the streaming rows (STREAM-*) in the testing document all start with 'Developer → Token streaming on'; that toggle no longer exists, and streaming was seen on for every question asked this morning, so those rows' precondition is stale too",
+  "method": "the rig's walk tool (deck_walkTo), which reads focus after every press but writes no run file; the stop list above is copied from its 'seen' output"
+}

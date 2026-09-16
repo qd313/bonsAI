@@ -1,0 +1,14 @@
+{
+  "row": "QA-FREE-PLAY-01 — the free-play sweep of the Main tab",
+  "measured": "2026-09-16 05:00 local, build 0fbecb6 (hash-matched), Deck built-in screen 1280x800, the five-turn Portal 2 chat with its newest turn (the bonsai:vac-check reply) expanded and the rest folded under '5 earlier', no game running",
+  "evidence": "docs/test-evidence/plan56-QA-FREE-PLAY-01-main-built-in-screen.json (the rig's sweep report: rows, rects, visibility verdicts)",
+  "totals": { "stops_recorded": 28, "distinct_stops": 17, "presses": 31, "cycles": 0, "unlabeled_stops": 2, "focused_but_not_visible": 4 },
+  "down_leg": "tab bar, chat slot row, 5 earlier, Retry corner, the question row, the answer, Helpful, Read aloud, Show details, Session context, Save chat to Desktop, the pinned chip, the question box, Ask",
+  "up_leg": "the paperclip, the character avatar, the chip, Session context, Show details, Read aloud, Helpful, the answer, the question row, Retry corner, 5 earlier, chat slot row, tab bar, then Decky's own Back button",
+  "not_fully_visible": [
+    "the question row at 67%, behind the Retry corner icon (both legs)",
+    "the answer paragraph at 89%, behind the copy icon (both legs)"
+  ],
+  "verdict": "No trap and no cycle on a live turn; Down and Up visit the same stops in reverse. The four partly hidden stops are the known corner-icon bug (roadmap Bugs, one star, layout), seen in plan 55's sweep too. Note the contrast with a restored turn, where Down loops (plan56-BUG-restored-turn-down-loop.json).",
+  "one_press_retry": "the rig retried one press because the serial port was busy; no effect on the stops"
+}

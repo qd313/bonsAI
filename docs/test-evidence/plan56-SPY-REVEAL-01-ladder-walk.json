@@ -1,0 +1,243 @@
+{
+  "ok": true,
+  "fidelity": "wire-sent",
+  "steps": [
+    {
+      "index": 1,
+      "label": "Hide details -> into the ladder?",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Hide details\"",
+      "to": "<DIV> \"Session context (7 turns) ▸\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 616,
+      "diagnosis": "press routed, focus moved <DIV> \"Hide details\" -> <DIV> \"Session context (7 turns) ▸\""
+    },
+    {
+      "index": 2,
+      "label": "r1",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Session context (7 turns) ▸\"",
+      "to": "<DIV> \"Clear\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 626,
+      "diagnosis": "press routed, focus moved <DIV> \"Session context (7 turns) ▸\" -> <DIV> \"Clear\""
+    },
+    {
+      "index": 3,
+      "label": "r2",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": false,
+      "matched": null,
+      "from": "<DIV> \"Clear\"",
+      "to": "<DIV> \"Clear\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 919,
+      "diagnosis": "press routed, focus did not move - still <DIV> \"Clear\". either no handler is wired for this direction, or it ran and moved nothing"
+    },
+    {
+      "index": 4,
+      "label": "r3",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": false,
+      "matched": null,
+      "from": "<DIV> \"Clear\"",
+      "to": "<DIV> \"Clear\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 834,
+      "diagnosis": "press routed, focus did not move - still <DIV> \"Clear\". either no handler is wired for this direction, or it ran and moved nothing"
+    },
+    {
+      "index": 5,
+      "label": "r4",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": false,
+      "matched": null,
+      "from": "<DIV> \"Clear\"",
+      "to": "<DIV> \"Clear\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 929,
+      "diagnosis": "press routed, focus did not move - still <DIV> \"Clear\". either no handler is wired for this direction, or it ran and moved nothing"
+    },
+    {
+      "index": 6,
+      "label": "r5",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": false,
+      "matched": null,
+      "from": "<DIV> \"Clear\"",
+      "to": "<DIV> \"Clear\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 904,
+      "diagnosis": "press routed, focus did not move - still <DIV> \"Clear\". either no handler is wired for this direction, or it ran and moved nothing"
+    },
+    {
+      "index": 7,
+      "label": "r6",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": false,
+      "matched": null,
+      "from": "<DIV> \"Clear\"",
+      "to": "<DIV> \"Clear\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 895,
+      "diagnosis": "press routed, focus did not move - still <DIV> \"Clear\". either no handler is wired for this direction, or it ran and moved nothing"
+    }
+  ],
+  "ranSteps": 7,
+  "totalSteps": 7,
+  "passed": 7,
+  "failed": 0,
+  "visited": [
+    "<DIV> \"Hide details\"",
+    "<DIV> \"Session context (7 turns) ▸\"",
+    "<DIV> \"Clear\""
+  ],
+  "cycle": null,
+  "neverReached": [
+    "Spy"
+  ],
+  "stopsFocusedButNotVisible": 0,
+  "notVisibleStops": [],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 9700,
+  "acquired": false,
+  "summary": "7/7 steps passed; never reached: Spy"
+}

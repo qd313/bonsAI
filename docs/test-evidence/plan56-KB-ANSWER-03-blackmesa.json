@@ -1,0 +1,20 @@
+{
+  "row": "KB-ANSWER-03, the Black Mesa sentence (the last of three)",
+  "measured": "2026-09-16 04:39 local, build 0fbecb6 (hash-matched), Deck built-in screen, Strategy mode, character voice on (Ali G at heavy, as the maintainer uses it), no game running, local knowledge base on",
+  "question": "how do i beat the gonarch in black mesa",
+  "typed_with": "scripts/deck_send_ask.py (VERIFIED, exact text), sent with A on the Ask button; the pinned chip was rotating and did not show this sentence at the time, so the typing script was used as the documented fallback",
+  "reply": {
+    "words": 176,
+    "opens": "Alright, listen up, you wanna take down that big ol' Gonarch? It ain't rocket science, but you gotta keep your eyes peeled. This thing is tough, yeah, its shell shrugs off most stuff, but there's one weak spot, and you gotta aim right for it.",
+    "then": "the note's advice straight away: focus fire on the pale egg sac under its body, deal with the headcrab babies, watch the webbing and pits for footing; keep distance, aim for the sac",
+    "warning_line": "none (no 'no close match', no 'not in my notes')",
+    "spoiler_box": "none",
+    "follow_up_menu": "not read"
+  },
+  "what_attached": {
+    "from_the_session_context_strip": "Local knowledge base, combineoverwiki.net, CC-BY-SA-4.0, as of 2026-09-05; cards: Black Mesa — Gonarch; Black Mesa — Starting out in Black Mesa; Black Mesa — The opening tram ride and where it leads. Retrieval: keyword + meaning; trust tier wiki_no_patch; text match 'black mesa'; embed 31.75 ms, re-rank 3.56 ms. KB: 14 sections. Spoiler risk: med. Routed gemma4:e2b-it-qat."
+  },
+  "verdict": "Captured. The advice starts right after the character's opening line, the right note attached, no warning line. Whether it reads as advice-first is the maintainer's judgement, which is what this row's device half is for. All three sentences are now captured: Portal 2 (2026-09-12), Hades (2026-09-15), Black Mesa (2026-09-16).",
+  "screenshot": "screenshots/DeckCapture_20260916_043925_game.png (the reply had scrolled above the panel's top; the strip and the Helpful row are what it shows)",
+  "for_the_maintainer": "Read the three captured replies (this file, docs/test-evidence/plan55-KB-ANSWER-03-hades.json, and the Portal 2 capture from 2026-09-12) and say whether they land as advice-first."
+}

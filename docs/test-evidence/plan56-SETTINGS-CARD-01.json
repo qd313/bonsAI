@@ -1,0 +1,22 @@
+{
+  "row": "SETTINGS-CARD-01 — the box does not move when results appear (plan 45 § 7, first check), plus the cap and heading (SETTINGS-CARD-06/07 as the testing document numbers them)",
+  "measured": "2026-09-16 05:19 local, build ca12429 (bundle, back end and two lane files hash-matched), Deck built-in screen 1280x800, Main tab, fresh open, box empty",
+  "before_vs_after_typing_en": {
+    "question_box_host": { "before": "328 to 397", "after": "328 to 397" },
+    "preset_chip_row": { "before": "298 to 328", "after": "298 to 328" },
+    "dock": { "before": "297 to 454", "after": "297 to 454" },
+    "the_old_results_pane_in_the_dock": "absent, before and after"
+  },
+  "the_card": {
+    "rect": "103 to 328, 300 wide, 225 tall",
+    "position": "absolute, z-index 5, anchored to the box's top edge, growing upward",
+    "rows_shown": 6,
+    "heading": "Steam settings · 65 more",
+    "gap_to_the_tab_bar": "19 px (the tab bar's bottom edge is at 84)",
+    "what_that_means": "71 settings match 'en' on this build too; the card shows the six that fit above the box on this screen and says how many it left out"
+  },
+  "before_the_change_for_comparison": "docs/test-evidence/plan56-M-settings-jump-before.json: the box jumped 209 px up to 119 and the dock grew to 2545 px",
+  "verdict": "PASS for the box holding still, the cap and the heading. The D-pad rows (Up into the card, Down out, B closing it, the chips blocked, the return from a jump) are not built yet; a follow-up lane is on them.",
+  "screenshot": "screenshots/DeckCapture_20260916_045914_game.png",
+  "cleared_after": true
+}

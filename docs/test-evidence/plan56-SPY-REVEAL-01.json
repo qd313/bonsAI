@@ -1,0 +1,24 @@
+{
+  "rows": "SPY-REVEAL-01 (the Spy lies at the two heaviest accent levels and confesses under Show details) and ANSWER-CHECKER-LOG-01 (the quiet checker's log line)",
+  "measured": "2026-09-16 05:06 local, build ca12429 (hash-matched), Deck built-in screen, Strategy mode, no game running, character switched to Spy through the picker (Settings → the character button → Team Fortress 2 row → Spy → OK; settings file read back: tf2_spy, heavy)",
+  "question": "how do i beat the gonarch in black mesa (typed with the repo's script, VERIFIED; the same question the honest Ali G answered at 04:39)",
+  "the_reply_a_person_reads": {
+    "words": 141,
+    "opens": "Ah, the Gonarch. A rather… robust specimen, isn't he? They always make the big ones look intimidating. Now, most people focus on the brute force, but that's where they waste their time.",
+    "advice": "don't waste ammo on the carapace; focus on the pale egg sac; keep distance; watch the front legs",
+    "confession_tag_visible": false,
+    "note": "the closing tag the prompt asks for was stripped from the visible text, as designed"
+  },
+  "the_reveal": {
+    "where_read": "the saved chat on the Deck's disk (homebrew/settings/bonsAI/chat_slots/77885e1b-….json), which stores the turn's Show details chips",
+    "chip": { "id": "spy", "label": "Spy", "rank": 6, "title": "The Spy was lying", "bullets": ["The Spy was on", "Focus on the shell is a waste", "Targeting the sac is too simple"] },
+    "note": "two lies confessed; the Show details ladder read 'Chip 1 of 7' on screen, so the chip is in the row a person opens"
+  },
+  "the_checker": {
+    "log_line": "[2026-09-16 05:06:21,853][INFO]: run_game_ai_request: answer checker ran rules_fired=0 warnings=[]",
+    "note": "the first time the checker has ever run; nothing on screen, no second model, one line per answer as the roadmap asked. The 34.5 s completion line and the destructive-advice guard line sit beside it."
+  },
+  "not_checked": "the chip's body on screen by D-pad: with Show details open, Down from Hide details skips the chip row entirely (see plan56-BUG-chip-ladder-unreachable.json), so the chip was read from the saved chat instead; the Balanced-level 'no chip' half (the character was put back to Ali G afterwards rather than re-run at Balanced, to keep the settings changes to one); whether the wrong advice sounds right is the maintainer's read",
+  "verdict": "PASS for the Spy at heavy (lies, tag stripped, chip with the confession stored with the turn) and PASS for the checker's log line.",
+  "screenshot": "screenshots/DeckCapture_20260916_050703_game.png (the reply with Show details open, chip row showing 'Chip 1 of 7')"
+}

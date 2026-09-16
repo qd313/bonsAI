@@ -1,0 +1,17 @@
+{
+  "row": "SMOKE-H — Background Ask reopen (P1)",
+  "steps_as_written": "Start Ask; close QAM; reopen → Thinking… or final reply restored",
+  "measured": "2026-09-16 04:45 local, build 0fbecb6 (hash-matched), Deck built-in screen, Strategy mode, no game running",
+  "question": "In three short paragraphs, what should a new player do first in Hades?",
+  "what_was_done": [
+    "Typed with the repo's typing script (VERIFIED), sent with A on the Ask button.",
+    "About two seconds later the Quick Access Menu was closed with the real controller chord (hold Guide, tap A) through the rig.",
+    "Reopened with the rig's open-plugin routine, which read the menu as shut, opened it, and found the panel mounted with the ring on the tab bar."
+  ],
+  "seen_after_reopen": {
+    "first_read": "the Main tab showed the chat with a '4 earlier' pill and the pending turn's line 'Still thinking…' — the pending question was restored, not an empty transcript",
+    "then": "polling until the answer finished: the finished reply appeared in place (913 characters, opening 'Alright, listen up, you want to get into this Hades game?'), the Ask button back to ready, no Stop button"
+  },
+  "verdict": "PASS. Both shapes the row names were seen in one run: the thinking line on reopen, then the final reply restored.",
+  "method": "read over the debugger (page reads), presses through the bridge board; no rig run file, since the reads were page expressions rather than a press sequence"
+}

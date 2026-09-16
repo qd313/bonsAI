@@ -96,6 +96,10 @@ starts work outside this.
   button, and every stop on the walk was fully visible. So the hidden state does not trap on its own. Most likely the same
   underlying fault as the stuck panel below — both are a hop that dies only sometimes — and best closed with it rather than
   chased separately. Evidence `docs/test-evidence/round35-spoiler-block-down-and-up.json`.
+- ★ `[focus]` **Choosing an entry in the Ask-mode menu drops the highlight** — **OPEN, seen 2026-09-15 on
+  build f34de8a while switching modes for the checking pass.** After picking a mode such as Strategy or
+  Speed, the ring is nowhere in the plugin until the D-pad is pressed again. No evidence file yet;
+  reproduce first.
 - ★ `[layout]` **An open question's row is only partly visible behind the Retry corner icon** — **OPEN,
   seen at every visit 2026-09-15 evening.** With the newest turn open, the ring on the question's inner row
   reads 67% visible, covered by the Retry same-prompt icon in the corner. Evidence

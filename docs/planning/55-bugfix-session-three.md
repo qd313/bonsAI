@@ -376,7 +376,10 @@ Written as work lands.
   back the way they were.
   Evidence sits under `docs/test-evidence/plan55-*.json`, screenshots `DeckCapture_20260915_200505`,
   `201002`, `204018`, `211004` and `211546_game.png`, and recordings `DeckRecord_20260915_205114` and
-  `210556_game.mkv` in the rig's capture folder.
+  `210556_game.mkv` in the rig's capture folder. Three more bugs found on the way were filed in the
+  roadmap on the same evening: Left from Ask or the paperclip leaves the plugin, a new chat keeps the
+  old reply on screen until reopen, and the Ask-mode menu drops the highlight after a choice (that one
+  has no evidence file yet).
 
 ---
 

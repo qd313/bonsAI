@@ -1,0 +1,11 @@
+{
+  "row": "the restored-turn Down loop (plan 55 called it the glossary loop; plan 56 block 0 found the real cause, docs/test-evidence/plan56-BUG-restored-turn-down-loop.json), fixed by lane I in commit bb7fef3",
+  "measured": "2026-09-16 about 09:50 local, build 42aafe1 (hash-matched), Deck built-in screen, Main tab, the seven-turn Portal 2 chat restored from its saved slot after the plugin panel was reopened, the newest turn (the Spy's Gonarch reply, 141 words) showing expanded, no game running",
+  "evidence": "runs/plan56-RESTORED-TURN-DOWN-01.json (Up from Copy onto the answer, then twelve Downs)",
+  "stops_visited_in_order": ["the answer body", "the answer body (press moved the view, not the ring)", "the answer body (same again)", "Read aloud", "Show details", "Session context (7 turns)", "the suggestion chip", "the question box", "Ask", "Ask (holds, bottom of the panel)"],
+  "before_the_fix": "on build 0fbecb6 the same twelve presses went round the turn for ever: last paragraph → Retry corner → the question row → paragraphs → last paragraph, and never reached Read aloud, Show details or the box.",
+  "after_the_fix": "Down leaves the reply after two presses that scroll the tall answer inside its stop, then walks Read aloud, Show details, the Session context bar, the chip, the box and Ask, and holds on Ask. No cycle.",
+  "difference_from_the_block_0_run": "that run's Portal 2 reply had three paragraph stops; this reply is one stop for the whole body. The loop was about the last stop of a restored turn handing Down to the reply's action row, which is what this run shows working.",
+  "verdict": "PASS. The twelve-press walk reaches the box and Ask; nothing loops.",
+  "settings_touched": "none"
+}

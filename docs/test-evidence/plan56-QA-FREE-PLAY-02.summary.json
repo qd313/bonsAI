@@ -1,0 +1,15 @@
+{
+  "row": "QA-FREE-PLAY-01, the Main tab sweep after the wave-2 landings (the settings card's D-pad wiring, the Left holds, the restored-turn and greyed-thumb fixes, the honesty line)",
+  "measured": "2026-09-16 about 10:20 local, build 42aafe1 (hash-matched), Deck built-in screen, Main tab, an eleven-turn chat whose newest turn is a stopped Deep Rock Survivor guide reply with greyed thumbs, no game running, empty box",
+  "evidence": "runs/plan56-QA-FREE-PLAY-02-main-wave2.json (the rig's sweep: Down to the bottom, then Up until the ring stops moving)",
+  "stops_down": ["Read aloud", "Show details", "Session context (11 turns)", "the suggestion chip", "the question box", "Ask (bottom, holds)"],
+  "stops_up": ["Ask", "Voice input (the box's right corner)", "the question box", "the suggestion chip", "Session context", "Show details", "Read aloud", "the answer's last chunk", "the answer's chunk above it (the leg ended here: two Ups moved the view, not the ring)"],
+  "cycles": 0,
+  "focused_but_not_fully_visible": [
+    "the answer's last chunk, 67% visible, its lower third under the suggestion chip",
+    "the chunk above it, 33% visible: a 359 px stop in a 366 px window, part above the top, part under the dock"
+  ],
+  "reading": "No trap and no loop anywhere on the walk; every named control is reachable both ways. The only stops a person cannot see whole are the tall answer chunks, which are taller than the chat window on this screen; Steam scrolls a tall stop for a press or two before it lets the ring leave, which is what ended the Up leg. Same shape as the block-0 sweep on the old build (plan56-QA-FREE-PLAY-01.summary.json), so nothing this session landed made the Main tab worse.",
+  "verdict": "PASS: no trap on the Main tab after the wave-2 landings.",
+  "settings_touched": "none"
+}

@@ -1,0 +1,22 @@
+{
+  "rows": "plan 45 § 7 rows 2–6: the Steam-settings card's D-pad wiring (lane E2, commits cdc3759, bc6c668, 7b08acf, 55dbcca on experimental)",
+  "measured": "2026-09-16 about 09:35 local, build 42aafe1 (hash-matched: bundle, main.py and every py_modules file), Deck built-in screen (454 px tall panel), Main tab, the seven-turn Portal 2 chat behind the box, no game running",
+  "evidence": [
+    "runs/plan56-SETTINGS-CARD-DPAD-01.json (Up from Ask, Up/Up/Down/Down inside the card, Up, B)",
+    "runs/plan56-SETTINGS-CARD-DPAD-02-bottom-and-jump.json (the card stayed closed for a search typed on top of the dismissed one; see the rule below)",
+    "runs/plan56-SETTINGS-CARD-DPAD-03-jump.json (Down from a chip to the box, Up into the card, A on a row)"
+  ],
+  "what_a_person_sees": {
+    "the_card": "typing 'en' opens the card at x 48, y 103, 300 by 225 px: the heading 'Steam settings · 65 more' and six rows of 30 px (y 131 to 291), the box under it at y 328. Background rgb(18, 26, 34) with no blur, fully solid: no chat text reads through it any more (the see-through surface from build ca12429 is gone).",
+    "up_into_the_card": "Up from the box lands on the bottom row (the one nearest the box), fully visible. Up steps to the row above; Down steps back down.",
+    "down_out_of_the_card": "Down from the bottom row lands on the question box (run 03, step 1 of run 02 read the other way round: the ring came from the box and went back to it).",
+    "b_on_a_row": "B closes the card and puts the ring on the box; the box still reads 'en'.",
+    "closed_for_that_search": "after B, typing more letters on top of the same words ('ena') does NOT reopen the card; it reopens only once the box has been emptied and a new search typed ('dev'). That is the lane's reading of 'B closes the card for that search': the search is the whole text until it is cleared. Written here for the maintainer's eye; it may or may not be what plan 45 meant.",
+    "a_on_a_row": "A on 'Show all devices · Settings > Bluetooth' closes the Quick Access menu and opens Steam's Settings > Bluetooth page. The ring lands on the page's first toggle (the Bluetooth on/off switch, 38 by 22 px at y 114), one row ABOVE 'Show all devices' (y 167). Same shape as the PERM-JUMP-01 finding on the old build: the page is right, the landing is one toggle above the target. A known one-star bug, not new.",
+    "the_return": "reopening the plugin after the jump lands the ring on the tab bar with the Main tab open, no card, and the box EMPTY: the typed words are not kept across a jump (the panel is built afresh when the menu reopens). Nothing stale on screen; whether the words should survive the jump is a call for the maintainer.",
+    "up_from_ask": "with the card open, Up from the Ask button goes straight into the card's bottom row, skipping the question box (run 01, step 1). Down from the card returns to the box, so nothing is trapped, but a person on Ask who wants to edit their words now needs Up, Down. Noted, not judged."
+  },
+  "chips_while_open": "the walk down from the chat to Ask passed strip → box → Ask with no chip stop while the card was open (run 01's walk); with the card closed, Up from the box lands on the suggestion chip as before (run 02, step 1).",
+  "verdict": "PASS for rows 2, 3, 4 and 5 (box holds still with the card above it; Up/Down walk the rows; chips out of reach; B closes and keeps the words). Row 6 (A jumps and returns cleanly): PASS for the jump and the clean return, with two facts for the maintainer: the landing is one toggle above the target (the known PERM-JUMP-01 bug) and the words are not kept across the jump. The see-through surface (build ca12429) is fixed.",
+  "settings_touched": "none; the Bluetooth page was opened and left without a press; the box was cleared afterwards"
+}

@@ -1,0 +1,22 @@
+{
+  "rows": "Left on the Ask button and on the paperclip holds still (lane E2, commit 42aafe1); Left on an answer paragraph holds still (lane I, commit b7420f0)",
+  "measured": "2026-09-16 about 09:45 local, build 42aafe1 (hash-matched), Deck built-in screen, Main tab, the seven-turn Portal 2 chat whose newest reply is the Spy's Gonarch answer, no game running, empty box",
+  "evidence": [
+    "runs/plan56-LEFT-ASK-PAPERCLIP-01.json (Left, Left on Ask; Up; Left, Left on the paperclip)",
+    "runs/plan56-LEFT-PARAGRAPH-01-walk-up.json (six Ups from the paperclip to the answer)",
+    "runs/plan56-LEFT-PARAGRAPH-01.json (Left, Right, Up, Left, Right on the answer)"
+  ],
+  "ask_and_paperclip": {
+    "left_on_ask": "holds still, twice in a row; the ring never leaves the plugin (before the fix it landed on Steam's Quick Access rail).",
+    "up_from_ask": "with the box empty, Up from Ask lands on the paperclip ('Attach screenshot to Ask'), not the box. Inside the plugin, so not a trap; noted only.",
+    "left_on_paperclip": "holds still, twice in a row."
+  },
+  "answer_paragraph": {
+    "the_walk_up": "paperclip → the character button ('Choose AI character, A') → a suggestion chip → Session context (7 turns) → Show details → Read aloud → the answer body (one stop for the whole reply, an unnamed DIV).",
+    "left_on_the_answer": "holds still, both times (before the fix it leaked to Steam's rail).",
+    "right_on_the_answer": "lands on 'Copy reply text', the copy button at the bubble's edge; Up from there returns to the answer. Inside the plugin, so fine.",
+    "seen_on_the_way": "the answer body, reached by Up from Read aloud, is only a third visible: the rest sits under the question box (the sticky dock). The reply is 141 words, far taller than the 143 px of chat this screen shows, so most of any long reply is under the dock whichever way it is scrolled; but the ring's own stop is not scrolled clear of the dock either. A small one-star note for the roadmap on the built-in screen; not this session's doing."
+  },
+  "verdict": "PASS for all three Left rows (Ask, paperclip, answer paragraph). One note: the answer stop sits mostly under the dock on this screen.",
+  "settings_touched": "none"
+}

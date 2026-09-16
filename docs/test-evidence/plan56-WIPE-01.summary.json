@@ -1,0 +1,37 @@
+{
+  "rows": "CLEAR-ALL-PREFIX-01 (Clear all plugin data leaves nothing behind), PULL-NEW-BADGE-01's owed half (the wipe takes the New labels' record with it), VOICE-CLEAR-01's UI half (the voice panel no longer claims the engine is ready), and the Ollama tab after a wipe",
+  "measured": "2026-09-16 09:49–09:55 Deck time, build 42aafe1 (hash-matched), Deck built-in screen. Pre-authorised by the maintainer as D105 (plan 56 § 8) and run last of everything, as the plan says.",
+  "evidence": [
+    "runs/plan56-WIPE-01-open-confirm.json (Right from Clear cache… to Clear all data…, A opens the 'Clear all plugin data?' box with the ring on its Clear all data button)",
+    "runs/plan56-WIPE-02-confirm.json (A on Clear all data; a 'Got it' box follows)",
+    "runs/plan56-WIPE-03-got-it.json (A on Got it; the plugin comes back on a fresh Main tab)",
+    "runs/plan56-backups/bonsai-plan56-backup-prewipe.tgz (settings and data folders, taken minutes before) and settings-block0.json (the maintainer's original settings file from block 0)"
+  ],
+  "before_the_wipe": {
+    "browser_storage": "eight bonsai: keys (plugin-help-dismissed, pull-model-new-badge-v1 with four models recorded, disclaimer-accepted, last-tab-at, tab-resume-mode, local-runtime-beta-dismissed-v1, active-chat-slot, last-tab); no underscore-spelled knowledge-base 'already warned' flags were present, so that half of CLEAR-ALL-PREFIX-01 had nothing to remove this time",
+    "settings_folder": "21 entries: settings.json and eleven dated backups of it, chat_slots (nine files), chat_threads, intent_packs.json, seed-knowledge-base, voice_bin, voice_models (ggml-tiny.en.bin), read_aloud_tmp, bonsai_feedback.jsonl, strategy_checklist_session.json",
+    "voice_panel": "Engine: whisper-cli ready · Model: tiny.en ready · 'Voice engine is ready for on-device transcription.' · a Reinstall voice engine button",
+    "ollama": "~/.local/bin/ollama (39 MB, Aug 19) and ~/.ollama (8.4 GB: gemma4, nomic-embed-text, qwen2.5, qwen3.5), the user service running; Ask pointed at the Deck's own Ollama"
+  },
+  "after_the_wipe": {
+    "browser_storage": "zero bonsai keys left (28 keys in the Steam page's storage became 20; every one of the eight was ours). PULL-NEW-BADGE-01's owed half: the New labels' record is gone with the rest — PASS.",
+    "settings_folder": "rebuilt with four entries: a fresh settings.json (48 keys, ask_mode speed, no character, Developer tab off, vision try-order empty), intent_packs.json, an empty chat_slots (index.json only), strategy_checklist_session.json. Every backup copy, every chat, the voice engine and its model, the seed knowledge base and the feedback file are gone. The plugin's own log folder was emptied too.",
+    "main_tab": "fresh: the 'How to use bonsAI — open quick start' chip is back (its dismissal flag was one of the eight keys), Ask mode reads Speed, no Developer tab, empty box, no chat. CLEAR-ALL-PREFIX-01: nothing of ours survived — PASS for what was there to remove; the underscore-flag half stays unmeasured because no such flag existed at the time.",
+    "voice_panel": "Engine: whisper-cli not installed · Model: tiny.en not downloaded · 'Tap Install voice engine below' · the microphone permission is off again ('Enable Voice input (microphone) in Permissions'). VOICE-CLEAR-01's UI half — PASS.",
+    "ollama_tab": "'Run AI on this Deck' reads Off with 'The local AI isn't installed on this Deck yet.'; the PC-address test reads 'Unreachable — Could not reach Ollama'; a 'Download knowledge base' button shows. ~/.local/bin/ollama and ~/.ollama are gone from the disk and the ollama user service is inactive.",
+    "got_it_box": "the wipe ends on a 'Got it' box; A on it lands the ring on the Main tab's tab bar"
+  },
+  "the_restore": {
+    "what": "the pre-wipe archive extracted back into the home folder (settings folder: 21 entries again, nine chat-slot files, voice_bin and voice_models back, seed knowledge base back), then the maintainer's original settings.json from block 0 copied over the top (this also puts vision_model_routing_order back to [] — the one key this session's own checks had changed), then the plugin loader restarted.",
+    "proof": "sha256 of settings.json on the Deck = sha256 of runs/plan56-backups/settings-block0.json (4b78e3e64abb25d4…). The loader is active after the restart.",
+    "first_attempt": "the first extract ran from inside ~/homebrew and landed the files one folder too deep (~/homebrew/homebrew/…); that stray folder was removed and the extract redone from the home folder before the loader restart. Nothing else was touched."
+  },
+  "what_the_restore_cannot_bring_back": [
+    "the Deck's own Ollama program (~/.local/bin/ollama) and its user service",
+    "the 8.4 GB of downloaded models (gemma4, nomic-embed-text, qwen2.5, qwen3.5); Ask on this Deck is down until 'Run AI on this Deck' is switched on again on the Ollama tab, which installs Ollama and pulls the models afresh (or the PC-address path is used)",
+    "the plugin's old log files",
+    "the browser-storage flags: the quick-start chip, the safety disclaimer and the local-runtime notice will each show once more, and the New labels' record starts over (so the next opening of the download picker records today's models as already-old, as the row says it should)"
+  ],
+  "verdict": "PASS for CLEAR-ALL-PREFIX-01 (everything present was removed; the underscore half unmeasured), PASS for PULL-NEW-BADGE-01's owed half, PASS for VOICE-CLEAR-01's UI half, and the Ollama tab reads as a fresh Deck. Settings and chats restored and proven; Ollama and the models are gone, as the plan said they would be.",
+  "settings_touched": "everything, then restored from the backup; settings.json proven identical to the block-0 copy"
+}

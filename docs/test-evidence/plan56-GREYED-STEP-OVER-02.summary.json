@@ -1,0 +1,22 @@
+{
+  "row": "GREYED-STEP-OVER-01, the thumbs half, re-run on the fixed build (lane I, commit e41808d: a greyed Helpful/Not really no longer steals the ring from above or below)",
+  "measured": "2026-09-16 about 10:15 local, build 42aafe1 (hash-matched), Deck built-in screen, Main tab, Strategy mode, Ali G heavy, no game. The long Deep Rock Survivor guide question was sent from Ask and stopped with the Stop generation button about 300 characters in; the turn shows 'Stopped — partial answer kept.' with Helpful and Not really greyed (both carry the Disabled class).",
+  "evidence": [
+    "runs/plan56-GREYED-STEP-OVER-02-ask-b.json (A on Ask; the ring lands on the box)",
+    "runs/plan56-GREYED-STEP-OVER-02-stop.json and -stop-b.json (Right from the box lands on the Ask-mode button, Right again on Stop generation, A stops the reply; the corner button then reads Voice input)",
+    "runs/plan56-GREYED-STEP-OVER-02-walk.json (Up from Read aloud, Down, Up, Left, Down, Down)"
+  ],
+  "what_happened": [
+    "Up from Read aloud landed on the answer's last stop, not on the greyed Helpful button (before the fix it landed on 'Mark reply helpful', class Disabled).",
+    "Down from that stop: the first press moved nothing, the second landed on Read aloud, skipping both greyed thumbs (before the fix the second press landed on the greyed Helpful).",
+    "Up from the answer's last stop also moved nothing on its one press; Left on it held still (the lane I paragraph fix).",
+    "The dead first press shows on the restored turn too (plan56-RESTORED-TURN-DOWN-01): on a tall answer the first Down or Up seems to move the view rather than the ring. Not a trap, since the next press leaves; noted for the roadmap as a small one-star oddity to read in the code."
+  ],
+  "found_on_the_way": [
+    "Getting to the Stop button by D-pad while a reply streams is hard: Down from the box stalls (Ask is disabled), Down from the live streaming answer never left it in twenty-five presses (runs/plan56-LIVE-REPLY-DOWN-01 could not even start because the reply finished first), and the only route found is box → Right (Ask-mode button) → Right (Stop generation). Two long replies finished before the ring reached Stop by the other routes. A person who wants to stop a long reply needs to know that route; worth a one-star roadmap note.",
+    "The slow-reply footnote under the finished guide reply reads '61.5s (>60s): prefer  for , not .' with the model and mode names blank. A one-star wording bug, new (or at least newly seen).",
+    "The finished guide reply shows glossary-word stops (works, survive, Driller, Gunner, Scout, Engineer, 'Let's break down the crew, yeah?') as separate D-pad stops inside the reply, so a long reply is a long walk."
+  ],
+  "verdict": "PASS for the greyed-thumbs step-over from above and from below on build 42aafe1, with the dead first press noted.",
+  "settings_touched": "none; the chat gained three guide turns (two finished, one stopped)"
+}

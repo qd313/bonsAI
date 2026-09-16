@@ -1,0 +1,20 @@
+{
+  "row": "HONESTY-TEXT-GAME-01: the line 'No close match in my notes, this answer leans on the model's own knowledge.' for a stretch question that names its game (lane J, commit f2e358a)",
+  "measured": "2026-09-16 09:33–09:34 Deck time, build 42aafe1 (hash-matched), Deck built-in screen, Main tab, Strategy mode, Ali G heavy, no game running; question typed with the repo's script and sent with A on Ask",
+  "evidence": [
+    "runs/plan56-HONESTY-LINE-01-ask.json (the A press)",
+    "the saved turn in homebrew/settings/bonsAI/chat_slots/77885e1b-….json (assistant turn 5d5c508f-…, asked_entity 'Starting out in Black Mesa', three Black Mesa cards attached: Starting out, the opening tram ride, Houndeye; retrieval 'Keyword + meaning', Embed 737.6 ms)",
+    "the plugin log 2026-09-16 09.24.20.log: ask at 09:33:45, question_len=32, completed in 39.7 s, checker rules_fired=0"
+  ],
+  "question": "black mesa how do i tame a horse",
+  "the_reply_a_person_reads": "Right, listen up. You're askin' about tamin' a horse in Black Mesa, eh? Now, look, I ain't got no intel on horses in this game, mate. … You gotta focus on that tram ride first. (523 characters; the model itself says it has nothing on horses)",
+  "the_line": "ABSENT. The reply ends with the model's own words; no honesty line was appended (checked in the panel text and in the saved turn).",
+  "why_measured_on_the_deck": {
+    "how": "retrieve_knowledge_context(settings, ask_mode='strategy', question=…, app_id='', app_name='', text_resolved_title='Black Mesa', domain='strategy') run over SSH with the plugin's own code, corpus and embed model",
+    "with_the_game_name_in_the_question": {"black mesa how do i tame a horse": {"best_meaning": 0.687, "top_keyword": 16.0}, "black mesa how do i bake a cake": {"best_meaning": 0.603, "top_keyword": 16.0}, "black mesa what is a houndeye": {"best_meaning": 0.691, "top_keyword": 16.0}, "how do i beat the gonarch in black mesa": {"best_meaning": 0.685, "top_keyword": 10.0}},
+    "without_the_game_name": {"how do i tame a horse": {"best_meaning": 0.635, "top_keyword": 0.0}, "how do i bake a cake": {"best_meaning": 0.497, "attached": false}, "how do i beat the gonarch": {"best_meaning": 0.737, "top_keyword": 10.0}, "what is a houndeye": {"best_meaning": 0.741, "top_keyword": 10.2}, "how do i get past the tram ride": {"best_meaning": 0.704, "top_keyword": 14.7}},
+    "reading": "lane J's keyword fix works (the real words 'tame', 'horse' match no attached title, so the keyword score is not trusted). But the check's last gate needs the meaning score under 0.65, and with the game's name in the text every Black Mesa card scores about 0.69, stretch or not: the horse (0.687) and the Gonarch (0.685) questions cannot be told apart, and the cake question (0.603) would show the line while the horse one would not. With the game's name stripped from the text, stretches score 0.50–0.64 and real questions 0.70–0.74, on either side of the existing ceiling."
+  },
+  "verdict": "FAIL on the device for the row's own example: the line does not show. The cause is measured and contained (the meaning score must be taken on the question without the game's name when the game is in play only because the question named it). Handed to lane K with the numbers above.",
+  "settings_touched": "none; the chat gained one turn (now eighteen entries in the slot)"
+}

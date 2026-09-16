@@ -74,7 +74,7 @@ import {
   focusUpFromReplyActions,
   queryLiveTurnSlot,
 } from "./liveTurnFocusGraph";
-import { registerReplyStop } from "./replyStopRegistry";
+import { registerReplyStop, setReplyStopUnavailable } from "./replyStopRegistry";
 import { elementHasGamepadFocus } from "./uiDocument";
 import {
   isDeckDirectionDownEvent,
@@ -241,6 +241,20 @@ export function buildReplyActionsElement(
   const thumbsLocked = rating !== null;
   /* Same condition as the `disabled` prop below, on both thumbs — greyed for either reason. */
   const thumbsDisabled = feedbackDisabled || thumbsLocked;
+  /*
+   * "A greyed-out button still takes the highlight" (roadmap), from above and below, not only
+   * sideways. `swallowThumbsSideways` below already stops Left/Right landing on a greyed thumb;
+   * this is the same fix for Up and Down, applied once here rather than at every caller —
+   * `focusRegisteredReplyStop("helpful"/"not-really")` (liveTurnFocusGraph.ts, via
+   * replyStopRegistry.ts) now reports "not available" regardless of which direction reaches it.
+   * Measured on the Deck 2026-09-16 (plan56-GREYED-STEP-OVER-01-thumbs.json/.summary.json): a
+   * greyed button still takes the D-pad ring on this build, so the walk needs to be told to skip it
+   * rather than relying on the button refusing focus the way a native HTML `disabled` control would.
+   * Called on every render, whether or not the row itself renders below — a re-render always
+   * reflects this call's own `thumbsDisabled`, so there is nothing to clean up between renders.
+   */
+  setReplyStopUnavailable("helpful", thumbsDisabled);
+  setReplyStopUnavailable("not-really", thumbsDisabled);
 
   const liveSlot = () => queryLiveTurnSlot();
   /*

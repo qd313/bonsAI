@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 399,
-  "edgeCount": 1006,
+  "edgeCount": 1007,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -3221,6 +3221,7 @@
         "src/utils/answerStopRegistry.ts",
         "src/utils/buildReplyActionsElement.tsx",
         "src/utils/drgGlossaryTermRegistry.ts",
+        "src/utils/replyStopRegistry.ts",
         "src/utils/uiDocument.ts"
       ],
       "importedBy": []
@@ -3866,6 +3867,7 @@
         "src/components/BonsaiChatSecondaryButton.tsx",
         "src/utils/buildAnswerBubbleElement.test.tsx",
         "src/utils/buildAnswerBubbleElement.tsx",
+        "src/utils/buildReplyActionsElement.test.tsx",
         "src/utils/buildReplyActionsElement.tsx",
         "src/utils/buildTurnHeaderElement.tsx",
         "src/utils/liveTurnFocusGraph.test.ts",

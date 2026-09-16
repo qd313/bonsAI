@@ -29,6 +29,14 @@
  *     button itself, and that attribute is what made Retry stop responding to the D-pad in the
  *     first place, because it takes a button out of Steam's own list of controller-reachable
  *     things.
+ *   - A greyed control (Helpful / Not really on a stopped reply) stays mounted and registered —
+ *     hiding it would lose the "still visible, just not ratable" shape the roadmap calls for — so
+ *     `focusRegisteredReplyStop` cannot tell a greyed stop apart from a live one just by trying to
+ *     focus it: on the Deck a "disabled" button still takes the D-pad ring (measured 2026-09-16,
+ *     plan56-GREYED-STEP-OVER-01-thumbs.json), unlike a browser's native `disabled` attribute,
+ *     which refuses focus outright. `setReplyStopUnavailable` is the caller's own answer instead —
+ *     the same shape `buildTurnHeaderElement.tsx`'s `retryDisabled` guard already used for Retry
+ *     alone, generalised here so every caller of `focusRegisteredReplyStop` gets it for free.
  */
 
 import { elementHasFocus } from "./uiDocument";
@@ -55,6 +63,7 @@ export const REPLY_STOP_ORDER: readonly ReplyStopId[] = [
 ];
 
 const stops = new Map<ReplyStopId, HTMLElement>();
+const unavailableStops = new Set<ReplyStopId>();
 
 export function registerReplyStop(id: ReplyStopId, el: HTMLElement | null): void {
   if (el) stops.set(id, el);
@@ -63,6 +72,19 @@ export function registerReplyStop(id: ReplyStopId, el: HTMLElement | null): void
 
 export function getReplyStop(id: ReplyStopId): HTMLElement | null {
   return stops.get(id) ?? null;
+}
+
+/**
+ * Marks a stop temporarily unavailable to the D-pad walk, without unregistering it — see the
+ * "greyed control" gotcha above. `focusRegisteredReplyStop` treats an unavailable stop exactly
+ * like one that was never mounted: it returns `false` and leaves the caller's own fallback chain
+ * to try the next stop. A caller re-renders every time its own disabled state might have changed,
+ * so this is meant to be called unconditionally on every render — passing the same value again is
+ * harmless.
+ */
+export function setReplyStopUnavailable(id: ReplyStopId, unavailable: boolean): void {
+  if (unavailable) unavailableStops.add(id);
+  else unavailableStops.delete(id);
 }
 
 /**
@@ -90,6 +112,7 @@ function ensureFocusable(el: HTMLElement): void {
  * success either way.
  */
 export function focusRegisteredReplyStop(id: ReplyStopId): boolean {
+  if (unavailableStops.has(id)) return false;
   const el = stops.get(id);
   if (!el) return false;
   const button = (el.matches?.("button") ? el : el.querySelector?.("button")) as HTMLElement | null;

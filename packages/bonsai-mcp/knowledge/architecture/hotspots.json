@@ -92,7 +92,7 @@
     },
     {
       "path": "src/utils/buildAnswerBubbleElement.test.tsx",
-      "lines": 878,
+      "lines": 892,
       "role": ""
     },
     {
@@ -146,14 +146,19 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/settings_service.py",
-      "lines": 606,
-      "role": "Load/save/merge settings.json"
+      "path": "src/utils/buildReplyActionsElement.test.tsx",
+      "lines": 611,
+      "role": ""
     },
     {
       "path": "src/utils/buildReplyActionsElement.tsx",
-      "lines": 594,
+      "lines": 608,
       "role": ""
+    },
+    {
+      "path": "py_modules/backend/services/settings_service.py",
+      "lines": 606,
+      "role": "Load/save/merge settings.json"
     },
     {
       "path": "src/components/DeveloperTab.tsx",
@@ -163,11 +168,6 @@
     {
       "path": "py_modules/backend/services/knowledge_base_schema.py",
       "lines": 573,
-      "role": ""
-    },
-    {
-      "path": "src/utils/buildReplyActionsElement.test.tsx",
-      "lines": 560,
       "role": ""
     },
     {

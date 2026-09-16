@@ -5,6 +5,7 @@ import {
   getReplyStop,
   registerReplyStop,
   REPLY_STOP_ORDER,
+  setReplyStopUnavailable,
 } from "./replyStopRegistry";
 
 /** The shape Decky renders for a `Button`: one `<button>` carrying the Focusable class. */
@@ -24,7 +25,10 @@ function mountReplyRow(): { row: HTMLElement; retry: HTMLElement; details: HTMLE
 
 describe("reply stop registry", () => {
   beforeEach(() => {
-    for (const id of REPLY_STOP_ORDER) registerReplyStop(id, null);
+    for (const id of REPLY_STOP_ORDER) {
+      registerReplyStop(id, null);
+      setReplyStopUnavailable(id, false);
+    }
     document.body.innerHTML = "";
   });
 
@@ -85,5 +89,50 @@ describe("reply stop registry", () => {
 
     expect(getReplyStop("retry")).toBeNull();
     expect(focusRegisteredReplyStop("retry")).toBe(false);
+  });
+
+  /*
+   * "A greyed-out button still takes the highlight" (roadmap). Measured on the Deck 2026-09-16
+   * (plan56-GREYED-STEP-OVER-01-thumbs.json): a "disabled" button on this build still accepts
+   * `.focus()` — it is greyed by styling, not by the native HTML `disabled` attribute, which is
+   * what `mountReplyRow`'s plain `<button>` would otherwise rely on browsers to block. A caller
+   * that knows its own control is greyed marks it unavailable instead, and this proves that mark
+   * is what keeps the walk off it even though the button itself would still happily take focus.
+   */
+  describe("setReplyStopUnavailable", () => {
+    it("skips a stop marked unavailable even though the element itself would still take focus", () => {
+      const { retry } = mountReplyRow();
+      registerReplyStop("retry", retry);
+      setReplyStopUnavailable("retry", true);
+
+      expect(focusRegisteredReplyStop("retry")).toBe(false);
+      expect(document.activeElement).not.toBe(retry);
+      // The element itself is still a perfectly normal, focusable button — proving the block came
+      // from the mark, not from anything about the element.
+      retry.focus();
+      expect(document.activeElement).toBe(retry);
+    });
+
+    it("stops skipping a stop once it is marked available again", () => {
+      const { retry } = mountReplyRow();
+      registerReplyStop("retry", retry);
+      setReplyStopUnavailable("retry", true);
+      expect(focusRegisteredReplyStop("retry")).toBe(false);
+
+      setReplyStopUnavailable("retry", false);
+
+      expect(focusRegisteredReplyStop("retry")).toBe(true);
+      expect(document.activeElement).toBe(retry);
+    });
+
+    it("does not affect a different stop", () => {
+      const { retry, details } = mountReplyRow();
+      registerReplyStop("retry", retry);
+      registerReplyStop("show-details", details);
+      setReplyStopUnavailable("retry", true);
+
+      expect(focusRegisteredReplyStop("show-details")).toBe(true);
+      expect(document.activeElement).toBe(details);
+    });
   });
 });

@@ -5,7 +5,7 @@ import { cleanup, render } from "@testing-library/react";
 import { buildAnswerBubbleElement, stopNavProps } from "./buildAnswerBubbleElement";
 import { orderedAnswerStops, resetAnswerStopRegistry } from "./answerStopRegistry";
 import { registerAnswerBubbleEl } from "./answerBubbleElRegistry";
-import { registerReplyStop } from "./replyStopRegistry";
+import { registerReplyStop, setReplyStopUnavailable } from "./replyStopRegistry";
 import { splitResponseIntoChunks } from "./splitResponseIntoChunks";
 import { SPOILER_STREAM_MASK_LABEL } from "./streamMarkdownPrepare";
 
@@ -200,21 +200,24 @@ describe("answer bubble section stops", () => {
 
   /*
    * "A greyed-out button still takes the highlight" — measured on the greyed Ask button 2026-09-05
-   * (round35-CHECK-stop-press.json) and true of every greyed button in this codebase, including the
-   * Helpful / Not really pair on a stopped reply (round35-stopped-notice-and-greyed-buttons.png).
-   * Fix: step over a disabled reply stop instead of landing on it. `focusRegisteredReplyStop`
-   * already reports false when its `.focus()` call does not stick — a disabled `<button>` refuses
-   * focus on device exactly as it does in jsdom (see the comment on the Button stub in
-   * fakeDeckyUi.tsx) — so once Down names its target explicitly (the change above) rather than
-   * leaving it to Steam's own geometry, a disabled Helpful is skipped for free and the chain
-   * continues to Retry, which stays live on a stopped reply.
+   * (round35-CHECK-stop-press.json) and, per plan56-GREYED-STEP-OVER-01-thumbs.json (2026-09-16),
+   * of the Helpful / Not really pair on a stopped reply too. That later measurement corrected an
+   * assumption this test used to make: a "disabled" button on the Deck still takes `.focus()` —
+   * only a browser's native `disabled` HTML attribute refuses it, which is not how Decky greys a
+   * control out. `helpful` below is an ordinary, fully focusable button for exactly that reason;
+   * what keeps Down off it is `setReplyStopUnavailable` (replyStopRegistry.ts), called by
+   * buildReplyActionsElement.tsx whenever its own `thumbsDisabled` is true — the same mark
+   * buildAnswerBubbleElement's `moveDown` now checks before it ever reaches Retry. Retry itself
+   * sits above the answer, in the turn's own header, so it is no longer where Down should land
+   * even once Helpful is skipped — Read aloud, below the thumbs, is.
    */
-  it("Down from the last section lands on Retry when the thumbs are greyed", () => {
+  it("Down from the last section reaches Read aloud, not Retry, when the thumbs are greyed", () => {
     const slot = document.createElement("div");
     slot.className = "bonsai-chat-turn-slot";
     document.body.appendChild(slot);
     const header = document.createElement("div");
     header.className = "bonsai-chat-turn-row-header--live";
+    header.setAttribute("data-bonsai-turn-id", ANSWER_KEY);
     slot.appendChild(header);
     const bubbleMount = document.createElement("div");
     slot.appendChild(bubbleMount);
@@ -231,24 +234,35 @@ describe("answer bubble section stops", () => {
 
     const helpful = document.createElement("button");
     helpful.type = "button";
-    helpful.disabled = true;
     helpful.textContent = "Helpful";
     slot.appendChild(helpful);
     const retry = document.createElement("button");
     retry.type = "button";
     retry.textContent = "Retry same prompt";
     slot.appendChild(retry);
+    const readAloud = document.createElement("div");
+    readAloud.tabIndex = 0;
+    slot.appendChild(readAloud);
     registerReplyStop("helpful", helpful);
     registerReplyStop("retry", retry);
+    registerReplyStop("read-aloud", readAloud);
+    setReplyStopUnavailable("helpful", true);
 
     try {
       const onMoveDown = (el!.props as Record<string, unknown>).onMoveDown as () => boolean;
       expect(onMoveDown()).toBe(true);
-      expect(document.activeElement).toBe(retry);
+      expect(document.activeElement).toBe(readAloud);
       expect(document.activeElement).not.toBe(helpful);
+      expect(document.activeElement).not.toBe(retry);
+      // The button itself is still perfectly capable of taking focus — proving the skip came from
+      // the mark, not from anything about the element (the shape the Deck actually has).
+      helpful.focus();
+      expect(document.activeElement).toBe(helpful);
     } finally {
       registerReplyStop("helpful", null);
       registerReplyStop("retry", null);
+      registerReplyStop("read-aloud", null);
+      setReplyStopUnavailable("helpful", false);
       slot.remove();
     }
   });

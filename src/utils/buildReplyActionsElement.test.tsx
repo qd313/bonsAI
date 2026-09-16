@@ -19,6 +19,7 @@ import {
   registerDrgGlossaryTermChip,
   resetDrgGlossaryTermRegistry,
 } from "./drgGlossaryTermRegistry";
+import { registerReplyStop } from "./replyStopRegistry";
 import { resetUiDocument } from "./uiDocument";
 
 vi.mock("@decky/ui", async () => import("../test-harness/fakeDeckyUi"));
@@ -389,6 +390,56 @@ describe("buildReplyActionsElement Up from the thumbs row into the answer", () =
 
     expect(moveUpFromReplyOf(el)()).toBe(true);
     expect(document.activeElement).toBe(stops[stops.length - 1]);
+  });
+});
+
+/*
+ * "A greyed-out button still takes the highlight" (roadmap), the Up-direction half. Measured on the
+ * Deck 2026-09-16 (plan56-GREYED-STEP-OVER-01-thumbs.summary.json): with Helpful and Not really
+ * greyed on a stopped reply, Up from Read aloud landed on the greyed Helpful button instead of
+ * walking on into the answer. A greyed control still takes the D-pad ring on this build (unlike a
+ * browser's native `disabled` attribute — see replyStopRegistry.ts), so Read aloud's own Up (which
+ * tries the thumbs row first, same as the utility row's Up above it) needs the same skip the
+ * Left/Right guard below already has.
+ */
+describe("buildReplyActionsElement Up skips the greyed thumbs pair", () => {
+  afterEach(() => {
+    resetAnswerStopRegistry();
+    resetUiDocument();
+    registerAnswerBubbleEl("live", null);
+    registerReplyStop("helpful", null);
+    document.body.innerHTML = "";
+  });
+
+  it("lands on the bubble's last section from Read aloud when the thumbs are greyed", () => {
+    const stops = registerBubbleWithStops(2);
+    // A stand-in for the real, mounted Helpful button — registered directly, the same way the
+    // greyed-thumbs test in buildAnswerBubbleElement.test.tsx does, since this describe block
+    // builds the row without rendering it.
+    const helpful = document.createElement("button");
+    helpful.type = "button";
+    helpful.textContent = "Helpful";
+    document.body.appendChild(helpful);
+    registerReplyStop("helpful", helpful);
+
+    const el = buildReplyActionsElement({
+      replyKey: "live",
+      rating: null,
+      onRate: () => {},
+      showFeedback: true,
+      ratingUnavailable: true, // greys Helpful / Not really, same as a stopped reply
+      onReadAloudToggle: () => {},
+    });
+
+    const readAloudLine = findAllByClassName(el, "bonsai-chat-details-divider").find((node) =>
+      String((node.props as Record<string, unknown>)["aria-label"]).match(/Read aloud|Stop/)
+    );
+    expect(readAloudLine).not.toBeUndefined();
+    const onMoveUp = (readAloudLine!.props as Record<string, unknown>).onMoveUp as () => boolean;
+
+    expect(onMoveUp()).toBe(true);
+    expect(document.activeElement).toBe(stops[stops.length - 1]);
+    expect(document.activeElement).not.toBe(helpful);
   });
 });
 

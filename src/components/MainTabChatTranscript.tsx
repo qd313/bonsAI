@@ -98,6 +98,7 @@ import { buildAnswerCopyText } from "../utils/answerCopyText";
 import { buildThinkingBlurbTextElement } from "../utils/buildThinkingBlurbTextElement";
 import { buildTurnHeaderElement } from "../utils/buildTurnHeaderElement";
 import { buildCollapsedTurnTitle, buildExpandedTurnTitle } from "../utils/chatTurnTitle";
+import { isDeckDirectionLeftEvent } from "../utils/focusNavigation";
 import { ContextChipLadder } from "./ContextChipLadder";
 import { SessionContextStrip } from "./SessionContextStrip";
 import { transparencyUiAvailable } from "../utils/contextChipsFromSnapshot";
@@ -249,6 +250,23 @@ export function focusDownFromReplyUtilityRowOrPermHint(liveSlot: HTMLElement | n
   if (focusContextHint(liveSlot)) return true;
   if (focusChatPermissionHintRow()) return true;
   return focusSessionContextStrip();
+}
+
+/**
+ * Roadmap: "Left on the collapsed-history row throws the highlight out of the plugin". With the
+ * ring on the "N earlier" pill, nothing claimed Left, so Steam's own "past the edge" navigation ran
+ * and handed the ring to the Quick Access rail (measured twice,
+ * docs/test-evidence/round35-BUG-left-from-earlier-pill-leaves-plugin.json and the retry file next
+ * to it). There is no sibling to the pill's own left, so Left simply holds still — the same shape
+ * given to the Ollama sliders for the identical escape (DeckFocusSlider.tsx, 2026-09-04): claim the
+ * move on `onMoveLeft` itself, the handler Steam actually invokes, with the `onButtonDown` twin
+ * only for the string-shaped presses tests and desktop keyboards deliver (focusNavigation.ts).
+ */
+export function earlierPillLeftNavHandlers(): Record<string, unknown> {
+  return {
+    onMoveLeft: () => true,
+    onButtonDown: (button: unknown) => (isDeckDirectionLeftEvent(button) ? true : false),
+  };
 }
 
 /*
@@ -808,6 +826,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
             className="bonsai-chat-earlier-pill-row"
             onActivate={() => setEarlierExpanded(true)}
             onOKButton={() => setEarlierExpanded(true)}
+            {...earlierPillLeftNavHandlers()}
           >
             <span className="bonsai-chat-earlier-pill">{earlierCount} earlier</span>
             <span className="bonsai-chat-earlier-rule" />

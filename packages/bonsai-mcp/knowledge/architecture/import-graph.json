@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 391,
-  "edgeCount": 981,
+  "fileCount": 392,
+  "edgeCount": 983,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -305,6 +305,12 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTabChatTranscript.earlierPillLeftNav.test.ts": {
+      "imports": [
+        "src/components/MainTabChatTranscript.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabChatTranscript.emptySlotPreview.test.tsx": {
       "imports": [
         "src/components/MainTabChatTranscript.tsx",
@@ -406,6 +412,7 @@
         "src/utils/chatTurnTitle.ts",
         "src/utils/contextChipsFromSnapshot.ts",
         "src/utils/drgGlossaryAsk.ts",
+        "src/utils/focusNavigation.ts",
         "src/utils/inputTransparency.ts",
         "src/utils/liveTurnFocusGraph.ts",
         "src/utils/navFocusRegistry.ts",
@@ -417,6 +424,7 @@
         "src/components/MainTab.tsx",
         "src/components/MainTabChatTranscript.diagnostics.test.tsx",
         "src/components/MainTabChatTranscript.earlierPill.test.tsx",
+        "src/components/MainTabChatTranscript.earlierPillLeftNav.test.ts",
         "src/components/MainTabChatTranscript.emptySlotPreview.test.tsx",
         "src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx",
         "src/components/MainTabChatTranscript.permissionHintFocus.test.ts",
@@ -3443,6 +3451,7 @@
         "src/components/ContextChipLadder.tsx",
         "src/components/DrgGlossaryTermChip.tsx",
         "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
+        "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabUnifiedAskBar.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/features/chat-slots/ChatSlotRow.tsx",

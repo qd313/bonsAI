@@ -11,6 +11,7 @@
     "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx",
     "src/components/MainTabChatTranscript.diagnostics.test.tsx",
     "src/components/MainTabChatTranscript.earlierPill.test.tsx",
+    "src/components/MainTabChatTranscript.earlierPillLeftNav.test.ts",
     "src/components/MainTabChatTranscript.emptySlotPreview.test.tsx",
     "src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx",
     "src/components/MainTabChatTranscript.permissionHintFocus.test.ts",

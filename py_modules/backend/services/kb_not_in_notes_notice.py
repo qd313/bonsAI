@@ -21,6 +21,8 @@ comment at that call site in game_ai_request.py.
 
 from __future__ import annotations
 
+import re
+
 # Wording decided 1 September, locked 2026-09-07 -- do not reword without the same process.
 _NOT_IN_NOTES_LINE = "Not in my notes — this answer is from the model's own knowledge."
 
@@ -209,6 +211,70 @@ _THIN_MATCH_MEANING_CEILING = 0.65
 # winning card's own BM25 score, and a card the keyword half found always has one above zero.
 _NO_KEYWORD_SUPPORT = 0.0
 
+# --- Question-minus-game-name overlap (HONESTY-TEXT-GAME-01, plan 56 lane J, 2026-09-16) -----
+#
+# Device evening 2026-09-15: nothing running, "black mesa how do i tame a horse". The question
+# names the game, so `_resolve_game_id` (knowledge_base_service.py) scopes the keyword search to
+# Black Mesa's own section rows -- every one of which repeats "Black Mesa" in its own title. That
+# alone was enough for the keyword search to return a nonzero score for three cards, none of them
+# about a horse, because the check above used to treat any nonzero score as proof of a real
+# match. It is not, when the only word the query and the card share is the game's own name.
+#
+# The fix below does not touch retrieval or the score itself -- the three cards still attach
+# exactly as before. It adds one more thing this function checks before trusting a nonzero score:
+# strip the game's own name and a short list of filler words from the question, and see whether
+# anything is left that also shows up in the titles of what attached. "Houndeye" and "the opening
+# tram ride" share nothing with "tame a horse"; a question asking "how do i beat the gonarch"
+# shares that exact word with a card titled "Gonarch". Only the first case may now turn a nonzero
+# score back into "no real support" and let the line through.
+#
+# ``kb_source_titles`` and ``kb_game_name`` both default to empty, and an empty
+# ``kb_source_titles`` always trusts the score outright (see `_keyword_score_reflects_the_question`
+# below) -- every call site and every test that predates this fix keeps its old behaviour
+# unchanged. The call site in game_ai_request.py only fills them in for the one case this was
+# ever about: the game was resolved from the question text because nothing was running, so the
+# game's own name really did just get typed as part of the question.
+_QUESTION_FILLER_WORDS = frozenset(
+    {
+        "a", "an", "the", "i", "my", "me", "do", "does", "did", "is", "are", "was", "were",
+        "to", "of", "for", "in", "on", "at", "and", "or", "it", "its", "this", "that", "you",
+        "your", "how", "what", "when", "where", "why", "which", "who", "can", "could", "would",
+        "should", "with", "about", "from", "into", "get", "got", "out", "up", "down", "will",
+        "so", "if", "then", "there", "am", "be", "been", "being",
+    }
+)
+
+
+def _content_words(text: str) -> set[str]:
+    """Lowercase word tokens with filler words and single characters dropped."""
+    return {
+        word
+        for word in re.findall(r"[a-z0-9']+", (text or "").lower())
+        if word not in _QUESTION_FILLER_WORDS and len(word) > 1
+    }
+
+
+def _keyword_score_reflects_the_question(
+    *, question: str, kb_game_name: str, kb_source_titles: tuple[str, ...]
+) -> bool:
+    """False only when a nonzero keyword score can be explained by the game's name alone.
+
+    True -- trust the score, the behaviour before this fix -- whenever there is nothing to check
+    it against (no titles were passed) or nothing is left of the question once the game's name
+    and the filler words are stripped from it, and whenever what is left DOES turn up in one of
+    the titles. False only when the question has real content and none of it appears anywhere in
+    what actually attached -- the shape of the Black Mesa horse question above.
+    """
+    if not kb_source_titles:
+        return True
+    real_words = _content_words(question) - _content_words(kb_game_name)
+    if not real_words:
+        return True
+    title_words: set[str] = set()
+    for title in kb_source_titles:
+        title_words |= _content_words(title)
+    return bool(real_words & title_words)
+
 
 def should_show_no_close_match_notice(
     *,
@@ -218,6 +284,9 @@ def should_show_no_close_match_notice(
     kb_domain: str,
     kb_best_meaning: float | None,
     kb_top_card_keyword_score: float,
+    question: str = "",
+    kb_game_name: str = "",
+    kb_source_titles: tuple[str, ...] = (),
 ) -> bool:
     """True when a note reached the model but nothing in the notes matched the question closely.
 
@@ -225,6 +294,11 @@ def should_show_no_close_match_notice(
     and whether the notes cover this game -- plus three from the retrieval result:
     ``kb_domain`` (this is the notes path, not the tip sheet, which has its own floor on a
     different scale), ``kb_best_meaning`` and ``kb_top_card_keyword_score``.
+
+    ``question``, ``kb_game_name`` and ``kb_source_titles`` are optional, and only matter when
+    ``kb_top_card_keyword_score`` is nonzero: see `_keyword_score_reflects_the_question` just
+    above for why a nonzero score is not always proof of a real match, and what these three do
+    about it. Leave them blank to trust the score outright, same as before this parameter existed.
 
     **``kb_best_meaning`` of None means "nothing was measured", not "a weak match".** Speed mode,
     no embed model reachable, and a corpus baked without meaning vectors all arrive here with
@@ -243,7 +317,10 @@ def should_show_no_close_match_notice(
         return False
     if (kb_domain or "").strip().lower() == _COMPAT_DOMAIN:
         return False
-    if kb_top_card_keyword_score != _NO_KEYWORD_SUPPORT:
+    has_keyword_support = kb_top_card_keyword_score != _NO_KEYWORD_SUPPORT
+    if has_keyword_support and _keyword_score_reflects_the_question(
+        question=question, kb_game_name=kb_game_name, kb_source_titles=kb_source_titles
+    ):
         return False
     if kb_best_meaning is None:
         return False

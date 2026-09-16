@@ -772,6 +772,24 @@ async def run_game_ai_request(
             # DID come back, and it was a stretch. No tie-break against them is needed or
             # written -- they require nothing to have attached and this requires something to
             # have, so the three are mutually exclusive by construction.
+            #
+            # HONESTY-TEXT-GAME-01 (plan 56 lane J): the three extra arguments below let the
+            # check catch a keyword score that only looks nonzero because the game's own name
+            # was typed as part of the question -- see kb_not_in_notes_notice.py's comment above
+            # should_show_no_close_match_notice. They are filled in only when `text_resolved_title`
+            # is the reason a game is in play at all, i.e. nothing was running and the question
+            # named it (D19, just above) -- a running game's name is not the failure this guards,
+            # so every other turn leaves them blank and gets the old behaviour unchanged.
+            close_match_question = ""
+            close_match_game_name = ""
+            close_match_source_titles: tuple[str, ...] = ()
+            if text_resolved_title:
+                close_match_question = question_for_kb_search
+                close_match_game_name = text_resolved_title
+                close_match_source_titles = tuple(
+                    str(source.get("title") or "")
+                    for source in (kb_transparency.get("kb_sources") or [])
+                )
             show_no_close_match = should_show_no_close_match_notice(
                 ask_mode=ask_mode,
                 kb_attached=bool(kb_transparency.get("kb_attached")),
@@ -781,6 +799,9 @@ async def run_game_ai_request(
                 kb_top_card_keyword_score=float(
                     kb_transparency.get("kb_top_card_keyword_score") or 0.0
                 ),
+                question=close_match_question,
+                kb_game_name=close_match_game_name,
+                kb_source_titles=close_match_source_titles,
             )
             response_text = append_not_in_notes_notice(response_text, show_not_in_notes)
             response_text = append_no_tip_for_this_notice(response_text, show_no_tip_for_this)

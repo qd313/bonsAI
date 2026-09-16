@@ -429,5 +429,100 @@ class NoCloseMatchWiringTests(unittest.TestCase):
         self.assertNotIn(_NO_CLOSE_MATCH_TEXT, _run(plugin, ask_mode="strategy").get("response", ""))
 
 
+class GameNamedOnlyInTheQuestionWiringTests(unittest.TestCase):
+    """HONESTY-TEXT-GAME-01 (plan 56 lane J), end to end: nothing running, the game named only
+    in the question. See docs/test-evidence/plan55-HONESTY-TEXT-GAME-01.json for the device run
+    this reproduces.
+    """
+
+    @patch(
+        "backend.services.game_ai_request.resolve_title_from_question",
+        return_value="Black Mesa",
+    )
+    @patch(
+        "backend.services.game_ai_request.summarize_kb_coverage",
+        return_value=KbCoverageSummary(status="sections", section_count=14),
+    )
+    @patch(
+        "backend.services.game_ai_request.retrieve_knowledge_context",
+        return_value=KnowledgeRetrievalResult(
+            attached=True,
+            text_block="Black Mesa notes.",
+            trust_tier="wiki_no_patch",
+            sources=[
+                {"title": "Black Mesa — Starting out in Black Mesa"},
+                {"title": "Black Mesa — The opening tram ride and where it leads"},
+                {"title": "Black Mesa — Houndeye"},
+            ],
+            best_meaning=0.60,
+            top_card_keyword_score=2.4,
+        ),
+    )
+    def test_horse_question_with_nothing_running_shows_the_line(
+        self, _retrieve, _coverage, _resolve_title
+    ):
+        plugin = _FakePlugin(_base_settings())
+        plugin._ollama_result = {
+            "success": True,
+            "response": "I don't have anything on taming a horse in Black Mesa.",
+            "model": "test-model",
+        }
+
+        result = asyncio.run(
+            run_game_ai_request(
+                plugin,
+                "black mesa how do i tame a horse",
+                "127.0.0.1:11434",
+                app_id="",
+                app_name="",
+                ask_mode="strategy",
+            )
+        )
+
+        self.assertIn(_NO_CLOSE_MATCH_TEXT, result.get("response", ""))
+
+    @patch(
+        "backend.services.game_ai_request.resolve_title_from_question",
+        return_value="Black Mesa",
+    )
+    @patch(
+        "backend.services.game_ai_request.summarize_kb_coverage",
+        return_value=KbCoverageSummary(status="sections", section_count=14),
+    )
+    @patch(
+        "backend.services.game_ai_request.retrieve_knowledge_context",
+        return_value=KnowledgeRetrievalResult(
+            attached=True,
+            text_block="Black Mesa notes.",
+            trust_tier="wiki_no_patch",
+            sources=[{"title": "Black Mesa — Gonarch"}],
+            best_meaning=0.60,
+            top_card_keyword_score=2.4,
+        ),
+    )
+    def test_a_real_question_about_the_game_shows_no_line(
+        self, _retrieve, _coverage, _resolve_title
+    ):
+        plugin = _FakePlugin(_base_settings())
+        plugin._ollama_result = {
+            "success": True,
+            "response": "Circle around and pop the sacs on its back.",
+            "model": "test-model",
+        }
+
+        result = asyncio.run(
+            run_game_ai_request(
+                plugin,
+                "how do i beat the gonarch in black mesa",
+                "127.0.0.1:11434",
+                app_id="",
+                app_name="",
+                ask_mode="strategy",
+            )
+        )
+
+        self.assertNotIn(_NO_CLOSE_MATCH_TEXT, result.get("response", ""))
+
+
 if __name__ == "__main__":
     unittest.main()

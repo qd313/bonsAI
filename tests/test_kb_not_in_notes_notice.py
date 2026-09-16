@@ -293,6 +293,75 @@ class NoCloseMatchDecisionTests(unittest.TestCase):
         self.assertFalse(_thin(kb_coverage_status="kb_off"))
 
 
+class GameNamedOnlyInTheQuestionTests(unittest.TestCase):
+    """HONESTY-TEXT-GAME-01 (plan 56 lane J): the real shape of the device failure on
+    2026-09-15 -- three Black Mesa cards attached to "black mesa how do i tame a horse", none of
+    them about a horse, with a nonzero keyword score because every one of the game's own cards
+    repeats "Black Mesa" in its title. See docs/test-evidence/plan55-HONESTY-TEXT-GAME-01.json
+    for the device run and its attached card titles, copied below.
+    """
+
+    _BLACK_MESA_SOURCE_TITLES = (
+        "Black Mesa — Starting out in Black Mesa",
+        "Black Mesa — The opening tram ride and where it leads",
+        "Black Mesa — Houndeye",
+    )
+
+    def test_the_horse_question_shows_the_notice_once_the_keyword_score_is_checked(self):
+        # Before this fix, any nonzero keyword score short-circuited straight to "no notice" --
+        # this reproduces the device run's own numbers: a real (nonzero) score from the game's
+        # own name, and a meaning score under the thin-match ceiling.
+        self.assertTrue(
+            _thin(
+                kb_top_card_keyword_score=2.4,
+                kb_best_meaning=0.60,
+                question="black mesa how do i tame a horse",
+                kb_game_name="Black Mesa",
+                kb_source_titles=self._BLACK_MESA_SOURCE_TITLES,
+            )
+        )
+
+    def test_the_gonarch_question_still_shows_no_notice(self):
+        # The real question about the game the fix must not break: "gonarch" is a word the
+        # question and the winning card's title both carry, so the nonzero score is trusted.
+        self.assertFalse(
+            _thin(
+                kb_top_card_keyword_score=2.4,
+                kb_best_meaning=0.60,
+                question="how do i beat the gonarch in black mesa",
+                kb_game_name="Black Mesa",
+                kb_source_titles=("Black Mesa — Gonarch",),
+            )
+        )
+
+    def test_a_zero_keyword_score_is_unaffected_by_the_new_arguments(self):
+        # The new arguments only ever act on a nonzero score -- see
+        # `_keyword_score_reflects_the_question`'s early return. A zero score keeps deciding this
+        # purely on the meaning score, exactly as it did before this fix.
+        self.assertTrue(
+            _thin(
+                kb_top_card_keyword_score=0.0,
+                kb_best_meaning=0.60,
+                question="black mesa how do i tame a horse",
+                kb_game_name="Black Mesa",
+                kb_source_titles=self._BLACK_MESA_SOURCE_TITLES,
+            )
+        )
+
+    def test_no_titles_passed_trusts_the_score_same_as_before_the_fix(self):
+        # Backward compatibility: every caller that predates this fix (and the plain _thin()
+        # calls above in this file) never passes kb_source_titles, so a nonzero score must keep
+        # meaning "no notice" on its own, same as before this parameter existed.
+        self.assertFalse(
+            _thin(
+                kb_top_card_keyword_score=2.4,
+                kb_best_meaning=0.60,
+                question="black mesa how do i tame a horse",
+                kb_game_name="Black Mesa",
+            )
+        )
+
+
 class NoCloseMatchAppendTests(unittest.TestCase):
     def test_appends_the_exact_line_below_a_rule(self):
         out = append_no_close_match_notice("Try the left door first.", True)

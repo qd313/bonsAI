@@ -51,14 +51,20 @@ class _FakePlugin:
         self.persisted_snapshots.append(payload)
 
 
-def _run(plugin: _FakePlugin, ask_mode: str, question: str = "How do I beat the third boss?"):
+def _run(
+    plugin: _FakePlugin,
+    ask_mode: str,
+    question: str = "How do I beat the third boss?",
+    app_id: str = "570",
+    app_name: str = "Dota 2",
+):
     return asyncio.run(
         run_game_ai_request(
             plugin,
             question,
             "127.0.0.1:11434",
-            app_id="570",
-            app_name="Dota 2",
+            app_id=app_id,
+            app_name=app_name,
             ask_mode=ask_mode,
         )
     )
@@ -429,33 +435,50 @@ class NoCloseMatchWiringTests(unittest.TestCase):
         self.assertNotIn(_NO_CLOSE_MATCH_TEXT, _run(plugin, ask_mode="strategy").get("response", ""))
 
 
+def _black_mesa_retrieval(sources: list) -> KnowledgeRetrievalResult:
+    """What lane J's device run attached: same corpus text, trust tier, meaning score and
+    keyword score in both cases below -- only the card titles that came back differ.
+    """
+    return KnowledgeRetrievalResult(
+        attached=True,
+        text_block="Black Mesa notes.",
+        trust_tier="wiki_no_patch",
+        sources=sources,
+        best_meaning=0.60,
+        top_card_keyword_score=2.4,
+    )
+
+
+def _resolved_to_black_mesa_with_no_game_running(test_fn):
+    """The two patches every test below needs: nothing running, so the game comes only from
+    the words in the question, against the same corpus size lane J's device run had.
+    """
+    test_fn = patch(
+        "backend.services.game_ai_request.summarize_kb_coverage",
+        return_value=KbCoverageSummary(status="sections", section_count=14),
+    )(test_fn)
+    test_fn = patch(
+        "backend.services.game_ai_request.resolve_title_from_question",
+        return_value="Black Mesa",
+    )(test_fn)
+    return test_fn
+
+
 class GameNamedOnlyInTheQuestionWiringTests(unittest.TestCase):
     """HONESTY-TEXT-GAME-01 (plan 56 lane J), end to end: nothing running, the game named only
     in the question. See docs/test-evidence/plan55-HONESTY-TEXT-GAME-01.json for the device run
     this reproduces.
     """
 
-    @patch(
-        "backend.services.game_ai_request.resolve_title_from_question",
-        return_value="Black Mesa",
-    )
-    @patch(
-        "backend.services.game_ai_request.summarize_kb_coverage",
-        return_value=KbCoverageSummary(status="sections", section_count=14),
-    )
+    @_resolved_to_black_mesa_with_no_game_running
     @patch(
         "backend.services.game_ai_request.retrieve_knowledge_context",
-        return_value=KnowledgeRetrievalResult(
-            attached=True,
-            text_block="Black Mesa notes.",
-            trust_tier="wiki_no_patch",
-            sources=[
+        return_value=_black_mesa_retrieval(
+            [
                 {"title": "Black Mesa — Starting out in Black Mesa"},
                 {"title": "Black Mesa — The opening tram ride and where it leads"},
                 {"title": "Black Mesa — Houndeye"},
-            ],
-            best_meaning=0.60,
-            top_card_keyword_score=2.4,
+            ]
         ),
     )
     def test_horse_question_with_nothing_running_shows_the_line(
@@ -468,37 +491,20 @@ class GameNamedOnlyInTheQuestionWiringTests(unittest.TestCase):
             "model": "test-model",
         }
 
-        result = asyncio.run(
-            run_game_ai_request(
-                plugin,
-                "black mesa how do i tame a horse",
-                "127.0.0.1:11434",
-                app_id="",
-                app_name="",
-                ask_mode="strategy",
-            )
+        result = _run(
+            plugin,
+            ask_mode="strategy",
+            question="black mesa how do i tame a horse",
+            app_id="",
+            app_name="",
         )
 
         self.assertIn(_NO_CLOSE_MATCH_TEXT, result.get("response", ""))
 
-    @patch(
-        "backend.services.game_ai_request.resolve_title_from_question",
-        return_value="Black Mesa",
-    )
-    @patch(
-        "backend.services.game_ai_request.summarize_kb_coverage",
-        return_value=KbCoverageSummary(status="sections", section_count=14),
-    )
+    @_resolved_to_black_mesa_with_no_game_running
     @patch(
         "backend.services.game_ai_request.retrieve_knowledge_context",
-        return_value=KnowledgeRetrievalResult(
-            attached=True,
-            text_block="Black Mesa notes.",
-            trust_tier="wiki_no_patch",
-            sources=[{"title": "Black Mesa — Gonarch"}],
-            best_meaning=0.60,
-            top_card_keyword_score=2.4,
-        ),
+        return_value=_black_mesa_retrieval([{"title": "Black Mesa — Gonarch"}]),
     )
     def test_a_real_question_about_the_game_shows_no_line(
         self, _retrieve, _coverage, _resolve_title
@@ -510,15 +516,12 @@ class GameNamedOnlyInTheQuestionWiringTests(unittest.TestCase):
             "model": "test-model",
         }
 
-        result = asyncio.run(
-            run_game_ai_request(
-                plugin,
-                "how do i beat the gonarch in black mesa",
-                "127.0.0.1:11434",
-                app_id="",
-                app_name="",
-                ask_mode="strategy",
-            )
+        result = _run(
+            plugin,
+            ask_mode="strategy",
+            question="how do i beat the gonarch in black mesa",
+            app_id="",
+            app_name="",
         )
 
         self.assertNotIn(_NO_CLOSE_MATCH_TEXT, result.get("response", ""))

@@ -682,6 +682,26 @@ def build_context_chips_manifest(
         )
         rank += 1
 
+    # Only shown at all when the Spy actually lied this turn (Heavy/Unleashed accent) -- below
+    # that he is the ordinary smooth voice and this chip never appears, the same way the safety
+    # notice above only shows up when the destructive-advice guard actually fired.
+    if snapshot.get("spy_lying_active"):
+        spy_lies = [str(s).strip() for s in (snapshot.get("spy_lies") or []) if str(s).strip()]
+        bullets_spy = ["The Spy was on"] + spy_lies if spy_lies else [
+            "The Spy was on and did not confess"
+        ]
+        chips.append(
+            {
+                "id": "spy",
+                "rank": rank,
+                "label": "Spy",
+                "attached": True,
+                "tier_class": "",
+                "body": _chip_body(title="The Spy was lying", bullets=bullets_spy),
+            }
+        )
+        rank += 1
+
     skips = [str(s) for s in (overflow_skips or []) if str(s).strip()]
     chips.append(
         {
@@ -786,6 +806,8 @@ def build_ollama_route_snapshot(
         "reply_verbosity": str(ollama_result.get("reply_verbosity") or "balanced"),
         "ask_mode": str(ollama_result.get("ask_mode") or "speed"),
         "spoiler_risk_signals": ollama_result.get("spoiler_risk_signals"),
+        "spy_lying_active": bool(ollama_result.get("spy_lying_active")),
+        "spy_lies": list(ollama_result.get("spy_lies") or []),
     }
     chip_manifest = build_context_chips_manifest(
         snapshot=base,

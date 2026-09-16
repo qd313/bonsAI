@@ -254,6 +254,7 @@
     "tests/test_tls_ca_fallback.py",
     "tests/test_token_stream_request_id_wiring.py",
     "tests/test_transparency_kb_retrieval.py",
+    "tests/test_transparency_service.py",
     "tests/test_voice_read_aloud_rpc.py",
     "tests/test_voice_read_aloud_service.py",
     "tests/test_voice_session_status.py",

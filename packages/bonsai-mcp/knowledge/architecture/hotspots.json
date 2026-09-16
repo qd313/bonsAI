@@ -96,13 +96,13 @@
       "role": ""
     },
     {
-      "path": "src/components/CharacterPickerModal.tsx",
-      "lines": 853,
+      "path": "py_modules/backend/services/transparency_service.py",
+      "lines": 866,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/transparency_service.py",
-      "lines": 844,
+      "path": "src/components/CharacterPickerModal.tsx",
+      "lines": 853,
       "role": ""
     },
     {

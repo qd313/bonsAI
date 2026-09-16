@@ -95,6 +95,7 @@ import {
 } from "../features/unified-input/constants";
 import {
   getFocusableWithin,
+  isDeckDirectionLeftEvent,
   isLeftNavigationEvent,
   isRightNavigationEvent,
 } from "../utils/focusNavigation";
@@ -836,6 +837,20 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
             ref={attachMenuAnchorRef}
             className="bonsai-askbar-target bonsai-unified-input-corner-left"
             {...({
+              /*
+               * Roadmap: "Left from the Ask button, and from the paperclip, hands the highlight
+               * to Steam's Quick Access rail" (measured 2026-09-15 evening,
+               * docs/test-evidence/plan55-trap-run5-empty-chat-session-row-hades-running.json
+               * steps 3 and 4). The paperclip is the leftmost stop in this row and has no sibling
+               * further left, so nothing ever claimed Left -- Steam's own "past the edge" nav ran
+               * and handed the ring out of the plugin entirely. Same shape, same fix as the
+               * collapsed-history pill's Left (earlierPillLeftNavHandlers,
+               * MainTabChatTranscript.tsx): claim the move on onMoveLeft itself, the handler
+               * Steam actually invokes on device, with the onButtonDown twin only for the
+               * string-shaped presses tests and desktop keyboards deliver (focusNavigation.ts).
+               */
+              onMoveLeft: () => true,
+              onButtonDown: (button: unknown) => (isDeckDirectionLeftEvent(button) ? true : false),
               onMoveRight: () => focusAskModeButton(),
               ...(showAiCharacterChrome ? { onMoveUp: () => focusAiCharacterAvatar() } : {}),
               ...(attachMenuOpen
@@ -1404,6 +1419,19 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
         <Button
           className={`bonsai-askbar-target bonsai-ask-primary${askLooksReady ? " bonsai-ask-primary--ready" : ""}`}
           {...({
+            /*
+             * Roadmap: "Left from the Ask button, and from the paperclip, hands the highlight to
+             * Steam's Quick Access rail" (measured 2026-09-15 evening,
+             * docs/test-evidence/plan55-trap-run3-new-chat-with-live-turn.json steps 2 and 3).
+             * The Ask button is the leftmost stop in its own row, so nothing ever claimed Left --
+             * Steam's own "past the edge" nav ran and handed the ring out of the plugin entirely.
+             * Same fix as the paperclip's own Left above and the collapsed-history pill's
+             * (earlierPillLeftNavHandlers, MainTabChatTranscript.tsx): claim the move on
+             * onMoveLeft itself, with the onButtonDown twin only for the string-shaped presses
+             * tests and desktop keyboards deliver (focusNavigation.ts).
+             */
+            onMoveLeft: () => true,
+            onButtonDown: (button: unknown) => (isDeckDirectionLeftEvent(button) ? true : false),
             onOKButton: (evt: { stopPropagation: () => void }) => {
               if (isAsking) return;
               evt.stopPropagation();

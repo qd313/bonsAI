@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 402,
-  "edgeCount": 1017,
+  "fileCount": 403,
+  "edgeCount": 1020,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -545,6 +545,14 @@
         "src/components/MainTab.tsx"
       ]
     },
+    "src/components/MainTabUnifiedAskBar.leftHoldsStill.test.tsx": {
+      "imports": [
+        "src/components/MainTabUnifiedAskBar.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx": {
       "imports": [
         "src/components/MainTabUnifiedAskBar.tsx",
@@ -606,6 +614,7 @@
       ],
       "importedBy": [
         "src/components/MainTab.tsx",
+        "src/components/MainTabUnifiedAskBar.leftHoldsStill.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardChipsUnreachable.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardDpad.test.tsx",
@@ -2798,6 +2807,7 @@
         "src/components/MainTabChatTranscript.stoppedNotice.test.tsx",
         "src/components/MainTabChatTranscript.strategyPanels.test.tsx",
         "src/components/MainTabChatTranscript.turnTitle.test.tsx",
+        "src/components/MainTabUnifiedAskBar.leftHoldsStill.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardChipsUnreachable.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardDpad.test.tsx",
@@ -3749,6 +3759,7 @@
         "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabPresetAnimatedChips.test.tsx",
         "src/components/MainTabPresetAnimatedChips.tsx",
+        "src/components/MainTabUnifiedAskBar.leftHoldsStill.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardChipsUnreachable.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardDpad.test.tsx",

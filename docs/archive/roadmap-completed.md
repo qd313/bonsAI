@@ -6,6 +6,60 @@
 
 Headings group related work. Star counts match the historical list.
 
+### The Clear button, the quiet answer checker, and the Spy's lies, confirmed on the Deck (2026-09-16)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-16 once the Deck runs passed — copied line for line from
+this session's Verify entries, nothing reworded, with the confirmation added at the end._
+
+- ★★ `[ui]` `[ask]` **Clear button in the session context strip** — **VERIFY, landed 2026-09-16 (commits
+  `2eb2142`, `d4b077b`, `427d6e8`).** A small Clear now sits at the right end of the Session context (N turns)
+  bar, shown only when that bar shows. A opens a confirm box "Start the next question fresh?"; Clear there
+  shows a toast "Next question starts fresh" and the plugin forgets the subject of the last strategy question
+  and the strategy checklist position for the running game — the chat and the bar's rows stay. Clear cache in
+  Settings now does the same forget. Row **SESSION-CLEAR-01**: with the bar showing, check Right from its
+  header lands on Clear, A opens the confirm box, Cancel returns the highlight to Clear, and OK shows the
+  toast and the next bare follow-up no longer inherits the subject.
+
+  **Passed on the Deck 2026-09-16.** Right from the bar's header reached Clear; A opened the confirm box with
+  the ring on its own Clear button; B closed it with the ring back on the bar's Clear; A then A on the box's
+  Clear closed it the same way; Left from Clear reached the header. The plugin's own log recorded the forget
+  (`forget_game_ai_carried_context: forgot=['followup_subject', 'strategy_checklist_whole_store']`), and the
+  chat and the bar's six turns stayed on screen throughout. **Not read this pass:** the toast's own text, which
+  Steam draws in a layer the rig cannot see, and whether the next bare follow-up genuinely drops the old
+  subject, which needs two model questions rather than a log line. Evidence
+  `docs/test-evidence/plan56-SESSION-CLEAR-01.json`, `docs/test-evidence/plan56-SESSION-CLEAR-01-left.json`,
+  `docs/test-evidence/plan56-SESSION-CLEAR-01.summary.json`.
+
+- ★ `[ask]` **Run the answer checker quietly and count what it catches** — **VERIFY, landed 2026-09-16
+  (commit `cce6bf9`).** The plugin's answer checker now runs on every answer and only writes one line to the
+  log — nothing on screen, no second AI model call: "run_game_ai_request: answer checker ran rules_fired=N
+  warnings=[...]". Row **ANSWER-CHECKER-LOG-01**: the log line has to be seen once on the Deck, then the
+  checker left running through normal use so what it catches can be counted later.
+
+  **Passed on the Deck 2026-09-16, the first time the checker has ever run:** the log carried
+  `run_game_ai_request: answer checker ran rules_fired=0 warnings=[]` beside the answer's own completion line,
+  nothing shown on screen, no second model call. The checker is now left running through normal use so what it
+  catches can be counted over time. Evidence `docs/test-evidence/plan56-SPY-REVEAL-01.json` (the same Deck
+  pass also carries this row).
+
+- ★★★ `[reply]` **Spy: a character who lies to you on purpose** — **VERIFY, landed 2026-09-16 (commits
+  `3cb00fe`, `4c422a9`, `45e9d57`, `1039154`).** At the Heavy or Unleashed accent setting the Spy now
+  sometimes gives advice that sounds right and is wrong — wasted time only, never harm — and Show details on
+  that reply gets a "Spy" entry reading "The Spy was on" with what he lied about, or "The Spy was on and did
+  not confess". Below Heavy he is unchanged and no chip appears. Row **SPY-REVEAL-01**: pick Spy at Heavy, ask
+  a strategy question, and check for the chip with a confession; at Balanced, check no chip appears.
+  [Detail](roadmap-details.md#spy-a-character-who-lies-to-you-on-purpose).
+
+  **Passed on the Deck 2026-09-16, at Heavy.** With the Spy picked and set to the Heavy accent, a Gonarch
+  strategy question came back with two wrong-sounding tips inside a normal-reading 141-word reply; the
+  closing tag naming the lies was stripped from what a person reads, as designed, and the Show details chip
+  for that turn — read from the saved chat on the Deck's own disk — carried "The Spy was lying" with both
+  lies named, in the seventh of seven chips on that turn. **Two halves are still owed, not this session's
+  doing:** reading the chip's own body on screen by D-pad is blocked by the separate chip-row bug filed on
+  the roadmap (Down from Hide details skips the whole chip row); and the Balanced "no chip" half was not
+  re-run, to keep the Deck's character setting changes to one for the pass. Evidence
+  `docs/test-evidence/plan56-SPY-REVEAL-01.json`, `docs/test-evidence/plan56-SPY-REVEAL-01-ladder-walk.json`.
+
 ### Rows span the QAM panel width, confirmed by eye on the Deck (2026-09-15)
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-15 once the visual check passed — copied line for

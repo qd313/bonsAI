@@ -78,26 +78,11 @@ starts work outside this.
   the real text field underneath, whose caret is the cursor a person sees, uses a 12-pixel font with a
   14.4-pixel line — about 2 pixels taller — so the two can never line up while they are two different font
   sizes. Evidence `docs/test-evidence/plan55-BUG-cursor-placeholder-offset.json`.
-- ★ `[focus]` **Up from the Retry icon does not return to the answer** — **OPEN, found while reading the code
-  2026-09-15.** With the thumbs-up/thumbs-down row greyed on a stopped reply, Down from the answer now lands
-  on Retry — but Up from Retry does not go back to the answer's last section the way it should. The one-line
-  fix belongs in the turn header code, not in the files the lane that found it was allowed to touch. No device
-  evidence yet.
-- ★ `[focus]` **Left from the Ask button, the paperclip, or an answer paragraph hands the highlight to Steam's
-  Quick Access rail** — **OPEN, measured 2026-09-15 evening and 2026-09-16.** With the ring on the Ask button,
-  on the paperclip in the question box's corner, or on a paragraph inside a reply, Left moves the ring onto
-  Steam's own Quick Access tab instead of keeping it in the plugin; Right brings it back, but nothing says so.
-  Same shape as the row above: the control does not claim the press, so Steam's own idea of "past the edge"
-  fires. Evidence
-  `docs/test-evidence/plan55-trap-run3-new-chat-with-live-turn.json` (the Ask button, steps 2 and 3),
-  `docs/test-evidence/plan55-trap-run5-empty-chat-session-row-hades-running.json` (the paperclip, steps 3 and
-  4), `docs/test-evidence/plan56-GREYED-STEP-OVER-01-thumbs.json` (an answer paragraph, steps 4 and 5).
-- ★ `[focus]` **With the thumbs greyed on a stopped reply, the ring still lands on them instead of stepping
-  over** — **OPEN, measured 2026-09-16 on build 0fbecb6, both directions.** Plan 55's fix for this (lane D)
-  does not hold: from above, Up from Read aloud still lands on the greyed Helpful button; from below, the
-  first Down from the answer's last paragraph does nothing and the second lands on the greyed Helpful button
-  rather than Retry. Evidence `docs/test-evidence/plan56-GREYED-STEP-OVER-01-thumbs.json`,
-  `docs/test-evidence/plan56-GREYED-STEP-OVER-01-thumbs.summary.json`.
+- ★ `[focus]` **Up from the Retry icon does not return to the answer** — **OPEN, read again 2026-09-16.**
+  With the thumbs-up/thumbs-down row greyed on a stopped reply, Down from the answer now lands on Retry — but
+  Up from Retry does not go back to the answer's last section the way it should. **Read again 2026-09-16:**
+  the lane building the D-pad fixes nearby read this code and judged it stale rather than change anything, so
+  no fix landed. It stays open and awaits a device re-check to say whether it still happens.
 - ★ `[focus]` **Down does not move the ring off an unrevealed spoiler block** — **OPEN, found 2026-09-04, did not reproduce
   2026-09-05.** With the ring on the hidden block, Down reported the press arriving and nothing moving. Retried today on a fresh
   Red Dead ending reply with a real hidden block on screen: **Down left it normally**, straight onto the branch picker's first
@@ -110,7 +95,20 @@ starts work outside this.
   Desktop", one row above the "Steam ban lookup" toggle it was supposed to land on. Evidence
   `docs/test-evidence/plan56-PERM-JUMP-01-open-permissions.json` (the jump itself),
   `docs/test-evidence/plan56-SMOKE-C-01-toggle-off.json`, `docs/test-evidence/plan56-SMOKE-C-02-toggle-back-on.json`
-  (the setup and restore steps around it). The *Back to …* return half is recorded separately and stays owed.
+  (the setup and restore steps around it). **The *Back to …* return half passed 2026-09-16:** pressing it on
+  the Permissions tab returns to the Main tab with the highlight back on the Open Permissions button that
+  started the jump. Evidence `docs/test-evidence/plan56-PERM-JUMP-01-back-to-main.json`,
+  `docs/test-evidence/plan56-PERM-JUMP-01.summary.json`.
+- ★ `[focus]` **With Show details open, the chip row cannot be reached by the D-pad** — **OPEN, measured
+  2026-09-16 on build 0fbecb6 and again on build `ca12429`, so it is not something this session's own commits
+  caused.** Open Show details on a reply and press Down to step into its chips and read one — the ring skips
+  the whole chip row and lands on the Session context bar instead. Seen on an instant built-in reply and on a
+  real model reply with seven chips ("Chip 1 of 7" on screen); either way only the first chip can ever be
+  read, and only by starting there before opening anything else. It worked before: the closed
+  CONTEXT-LADDER-01…03 row (verified on the Deck 2026-09-05) had Down entering the chip row and Up walking
+  back out. Evidence `docs/test-evidence/plan56-BUG-chip-ladder-unreachable.json`,
+  `docs/test-evidence/plan56-CONTEXT-LADDER-03-caseB-details-open.json`,
+  `docs/test-evidence/plan56-SPY-REVEAL-01-ladder-walk.json`.
 - ★ `[layout]` **An open question's row is only partly visible behind the Retry corner icon** — **OPEN,
   seen at every visit 2026-09-15 evening.** With the newest turn open, the ring on the question's inner row
   reads 67% visible, covered by the Retry same-prompt icon in the corner. Evidence
@@ -119,6 +117,16 @@ starts work outside this.
   2026-09-15**, at 78% visible behind the same icon, in both directions of the walk — the plugin's own rule
   counts a focused-but-not-fully-visible stop as a failure regardless of the percentage. Evidence
   `docs/test-evidence/plan55-QA-FREE-PLAY-01-main-long-reply.json`.
+- ★ `[layout]` **On the Deck's built-in screen, the ring's own stop for a whole reply sits mostly under the
+  question box** — **OPEN, found 2026-09-16.** A long reply is one D-pad stop for its whole body on this
+  build; reaching it with Up from Read aloud shows only about a third of it, the rest hidden under the sticky
+  question box. The screen shows about 143 pixels of chat, far less than a typical reply, so most of any long
+  answer sits out of view however it is reached; not something this session built. Evidence
+  `docs/test-evidence/plan56-LEFT-HOLDS-01.summary.json`.
+- ★ `[ollama]` **The vision try-order picker writes settings even when nothing changed** — **OPEN, found
+  2026-09-16 during block 0 of session 56.** Opening the vision model try-order picker and pressing Done
+  writes the picker's current order into the settings file, even when nobody moved anything. Restored by hand
+  at the end of the block; no evidence file yet.
 - ★ `[ui]` **A new setting can quietly stop working in one place, because the list of settings is written out by hand
   several times over** — **OPEN, found while explaining the code 2026-09-14.** The settings code repeats its fifty-odd
   setting names in several separate places in the same file. Miss one and nothing breaks visibly; that setting just stops
@@ -133,19 +141,6 @@ starts work outside this.
   chat row visits Retry, the "…" question, Copy reply text and Read aloud under the New chat slot).
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a
   blanket rule was tried and reverted in favour of Steam's native outline.
-- ★★ `[focus]` **Down loops inside a saved chat's reopened reply and never reaches Show details or Ask** —
-  **OPEN, measured 2026-09-16 on build 0fbecb6, on a plain Portal 2 reply with no glossary words.** The loop
-  is not about glossary words: it happens on any saved chat's expanded reply. Down from the last paragraph
-  walks five stops on repeat — the Retry corner, the question row, and the paragraphs — and never reaches
-  Show details, Read aloud, the chips, the question box or Ask. Folding the reply away first, with A on the
-  question, frees the walk: Down then leaves the transcript normally in four presses. **The cause is the
-  reopened (restored) chat turn, not the glossary** — its last answer stop does not hand Down onward the way
-  a live turn's does, so the press falls through to Steam's own geometry and wraps back to the top. **It
-  comes back every time the tab is switched, because the turn re-expands.** Evidence
-  `docs/test-evidence/plan55-BUG-drg-glossary-down-cycle.json`,
-  `docs/test-evidence/plan56-BUG-restored-turn-down-loop.json`,
-  `docs/test-evidence/plan56-BUG-down-walk-portal2-reply.json`,
-  `docs/test-evidence/plan56-BUG-down-walk-after-collapse.json`.
 - ★★ `[reply]` **Token streaming reveals text in bursts while a game is running** — **ACCEPTED 2026-09-04 (D58 #4).** Measured 2026-08-28 with
   a game running: tokens arrive in bursts, and during a burst the overlay drops to 47 fps; between bursts it is a flat 60. Delivery
   is bursty, painting is not slow. The game's own frame rate is unmeasured. Accepted as a nice-to-have; reopen only if the game's own frame rate is measured
@@ -200,6 +195,11 @@ replace it with a specific issue when one exists.
   the bundled Deck basics list ships switched on and is the *only* reason a whole sentence ever matches a setting — its 88 words
   match when your sentence contains one of them, so *can you help me with performance* returns three results. The maintainer folded
   that finding into this entry. [Detail](planning/45-settings-shortcut-card.md#5-two-things-about-the-search-that-are-not-obvious).
+- ★ `[ui]` **A leftover piece of state from the deleted settings-card keyboard marker** — **OPEN, found
+  2026-09-16 while landing the settings card's real D-pad wiring.** The plugin's main file still keeps a
+  `selectedIndex` value that only the old fake on-screen marker ever read, and two other files still pass it
+  through even though nothing acts on it any more. Nothing a person notices; removing it touches three files
+  (`src/index.tsx`, `src/components/MainTab.tsx`, `src/features/plugin-shell/tabs/useMainTabPayload.tsx`).
 - ★★ `[chat]` **A quiet cue that a cut question can be opened** — **OPEN, filed 2026-09-05 by the maintainer.** When the ring lands on
   a question bubble that has been cut short, nothing on screen says the rest is there. Chosen 2026-09-05 from four drawn options: the
   text fades out at the right-hand edge instead of ending in three dots, only while the ring is on it, nothing for a finger. Nothing
@@ -250,11 +250,6 @@ replace it with a specific issue when one exists.
   on, stop, next. One setting, off by default. The middle position of the Voice replies setting (D99) is the signal this
   hangs off: an answer to a spoken question is read out, then the mic reopens. [Plan](planning/49-steam-frame-features.md) ·
   [Second look § 3](planning/52-frame-features-second-look.md#3-voice-follow-ups-a-sound-a-short-listen-a-few-words).
-- ★★★ `[ask]` `[focus]` **Steam settings shortcuts: D-pad in, chips blocked, tap outside to close** — **OPEN,
-  waits on a follow-up lane (plan 56).** The rest of plan 45 (steps 3, 4 and 6): walking into the settings card
-  with Up and out with Down, the D-pad staying off the suggestion chips while the card is open, and tapping
-  outside the card to close it. [Plan](planning/45-settings-shortcut-card.md) ·
-  [Mockups](https://claude.ai/code/artifact/1ab2a570-2ae5-45cd-b12b-332694f96fd5).
 - ★★★ `[layout]` **Give the reclaimed height to the transcript** — **OPEN, measured 2026-09-16 on the Deck's built-in
   screen, no single cause, not built in plan 56.** On the Deck's own 1280 by 800 screen the panel is 454 pixels tall, not
   the 696 every earlier number assumed. There is no gap above the dock at all, because even a two-turn chat overflows the
@@ -379,7 +374,9 @@ replace it with a specific issue when one exists.
   as a spoiler for you. The Deck's default model can think. A test runs on the PC first, then the Deck. **Dropped from session
   56 by the maintainer 2026-09-15 (D105): drawn first.** The three live lines, the plain folded line and the folded line in a
   character's voice are drawn at true size on a mockup page at the end of [plan 56](planning/56-feature-session-four.md); every
-  build call stands, and nothing is built until the maintainer has looked. [Plan](planning/40-reasoning-display.md).
+  build call stands, and nothing is built until the maintainer has looked. **Drawn at true size on the mockup
+  page** https://claude.ai/artifact/2De58qirE34754PEZVPmdb **(2026-09-16); the maintainer's call is owed.**
+  [Plan](planning/40-reasoning-display.md).
 - ★★★★★ `[voice]` **Wake-word listening** — **OPEN, beta.** Opt-in always-on local wake **bonsAI**, then STT, then a quiet Ask.
   [Feasibility](planning/10-wake-word-listening-feasibility.md).
 - ★★★★★★ `[platform]` **Deep mod AI hints** — **OPEN.** Detect mod frameworks and files; mod-aware guidance.
@@ -436,28 +433,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   has downloaded, whenever Ollama lives in the home folder, which it does on this Deck; a backup of settings
   and chats cannot bring the models back. The session asked the maintainer for a separate yes to wipe this
   Deck and none came during the run, so the row stays owed.
-- ★ `[ollama]` **The Expert group could never be shown, since June** — **VERIFY, fixed 2026-09-16 (commit
-  `ca12429`).** Found while landing the Expert group's new order: with Essentials only switched off, the
-  Expert (large) group in the download picker still stayed hidden — it had been impossible to show at all
-  since a June change. It shows now. Row **PULL-EXPERT-VISIBLE-01**: with Essentials only off, open the Pull
-  Models picker and check the Expert (large) group is visible. Not yet checked on the Deck.
-- ★ `[focus]` **Choosing an entry in the Ask-mode menu drops the highlight** — **VERIFY, fixed 2026-09-16
-  (commit `cb60a5d`).** Picking a mode such as Speed, Strategy or Expert in the small menu under the question
-  box now hands the highlight back to the mode button, the way it already did when backing out with B.
-  Reproduced on the Deck 2026-09-16, before the fix: choosing Speed or Strategy left the highlight nowhere in
-  the plugin until the next press. Evidence `docs/test-evidence/plan56-BUG-askmode-menu-drop-speed.json`,
-  `docs/test-evidence/plan56-BUG-askmode-menu-drop-strategy.json`. Row **ASK-MODE-MENU-RING-01**: open the
-  menu, choose a mode, and check the highlight is on the mode button — still owed on the Deck.
-- ★ `[focus]` **A greyed-out button still takes the highlight, so the D-pad lands on something that does
-  nothing** — **VERIFY, fixed 2026-09-15, the Ask half confirmed on the Deck.** While an answer is being
-  written, Down from the question box now holds still instead of landing on the greyed Ask button. Row
-  **GREYED-STEP-OVER-01**, the Ask half: while an answer is thinking, Down from the question box stays on the
-  box. **Passed on the Deck 2026-09-15**, evidence
-  `docs/test-evidence/plan55-GREYED-STEP-OVER-01-ask-half.json`. **The thumbs half of this row measured FAILED
-  on the Deck 2026-09-16** — with the thumbs greyed on a stopped reply, plan 55's fix does not hold in either
-  direction, so that half is moved back to Bugs as its own entry rather than kept here as owed. Evidence
-  `docs/test-evidence/plan56-GREYED-STEP-OVER-01-thumbs.json`,
-  `docs/test-evidence/plan56-GREYED-STEP-OVER-01-thumbs.summary.json`.
 - ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **VERIFY, fixed
   2026-09-15.** Down and Up through a reply now stop at the same places in both directions. Row
   **REPLY-STOPS-MIRROR-01**: on a reply with two paragraphs, a spoiler block and a two-button menu, check the
@@ -486,28 +461,18 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   being written (unit-tested, not reproducible by hand yet). Row **CLEAR-CACHE-01**. [Why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way).
 ### Features that need verification
 
-- ★★ `[ui]` `[ask]` **Clear button in the session context strip** — **VERIFY, landed 2026-09-16 (commits
-  `2eb2142`, `d4b077b`, `427d6e8`).** A small Clear now sits at the right end of the Session context (N turns)
-  bar, shown only when that bar shows. A opens a confirm box "Start the next question fresh?"; Clear there
-  shows a toast "Next question starts fresh" and the plugin forgets the subject of the last strategy question
-  and the strategy checklist position for the running game — the chat and the bar's rows stay. Clear cache in
-  Settings now does the same forget. Not yet checked on the Deck. Row **SESSION-CLEAR-01**: with the bar
-  showing, check Right from its header lands on Clear, A opens the confirm box, Cancel returns the highlight
-  to Clear, and OK shows the toast and the next bare follow-up no longer inherits the subject.
 - ★★ `[ollama]` **Expert offers the stronger Deck-run models first, and the licence list learns the Sept 2026
   models** — **VERIFY, landed 2026-09-16 (commits `0dbf25c`, `f812a9e`, `19e3396`).** In the download picker's
   Expert (large) group the five stronger Deck models now come first in bake-off order: Gemma 4 12B, Qwen 3.5
   9B, Granite 4.2 8B, Gemma 4 E4B, LFM 2.5. Gemma 4 and Granite now count as open source under the default
-  open-source-only setting, and LFM as open-weight. Not yet checked on the Deck. Row **EXPERT-ORDER-01**: open
-  the picker with Essentials only off and read the Expert group's order; in the AI models hub check a Gemma 4
-  tag reads as allowed at the open-source-only tier. [Bake-off](planning/41-deck-model-survey.md).
+  open-source-only setting, and LFM as open-weight. **The order half passed on the Deck 2026-09-16:** with
+  Essentials only off, the Expert (large) group read in the locked order, the five bake-off models first,
+  then the three older ones. Evidence `docs/test-evidence/plan56-EXPERT-ORDER-01.json`,
+  `docs/test-evidence/plan56-EXPERT-ORDER-01-essentials-off.json`. **Still owed:** the licence half — in the
+  AI models hub, checking a Gemma 4 tag reads as allowed at the open-source-only tier — was not read this
+  pass. Row **EXPERT-ORDER-01**. [Bake-off](planning/41-deck-model-survey.md).
 - ★★ `[chips]` **A glow when the chip row runs out of chips** — **VERIFY.** Built at the desk 2026-09-05 under D62 #3: press Left or Right past the first or last suggestion chip and that chip glows briefly, the way a phone lights up the end of a list. Nothing about the row’s existing edge behaviour changes. Reduced motion keeps the cue and drops the movement. **No measurement closes this one** — whether it reads as *end of list* rather than *error* is the maintainer’s call from a recording, and it is on their checklist.
 
-- ★ `[ask]` **Run the answer checker quietly and count what it catches** — **VERIFY, landed 2026-09-16
-  (commit `cce6bf9`).** The plugin's answer checker now runs on every answer and only writes one line to the
-  log — nothing on screen, no second AI model call: "run_game_ai_request: answer checker ran rules_fired=N
-  warnings=[...]". Not yet checked on the Deck. Row **ANSWER-CHECKER-LOG-01**: the log line has to be seen
-  once on the Deck, then the checker left running through normal use so what it catches can be counted later.
 - ★ `[ollama]` **Pulled models join the model try order** — **MOSTLY VERIFIED on the Deck 2026-09-06, one case left.**
   A model pulled from the picker landed at the **bottom** of the text list, and showed up in the vision list because it can
   read pictures — while a text-only model and the embedding one stayed out of that list. What is still owed is the opposite
@@ -538,25 +503,34 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   **THINKING-SLOW-01**, **THINKING-LIVE-01**, **THINKING-SPOILER-01**. [Log](planning/06-thinking-blurbs-review.md#10-implementation-log).
 - ★★ `[reply]` **Token streaming Phase A/B** — **VERIFY.** Start stutter fixed, sections as D-pad stops, scroll follow. Rows
   **STREAM-REVEAL-01**, **STREAM-09**, **STREAM-FOLLOW-01**. [Review](planning/05-token-streaming-review.md).
-- ★★★ `[reply]` **Spy: a character who lies to you on purpose** — **VERIFY, landed 2026-09-16 (commits
-  `3cb00fe`, `4c422a9`, `45e9d57`, `1039154`).** At the Heavy or Unleashed accent setting the Spy now
-  sometimes gives advice that sounds right and is wrong — wasted time only, never harm — and Show details on
-  that reply gets a "Spy" entry reading "The Spy was on" with what he lied about, or "The Spy was on and did
-  not confess". Below Heavy he is unchanged and no chip appears. Not yet checked on the Deck. Row
-  **SPY-REVEAL-01**: pick Spy at Heavy, ask a strategy question, and check for the chip with a confession; at
-  Balanced, check no chip appears. [Detail](roadmap-details.md#spy-a-character-who-lies-to-you-on-purpose).
-- ★★★ `[ask]` `[focus]` **Steam settings shortcuts float above the question box** — **VERIFY, landed 2026-09-16
-  (commit `2d92240`), plan 45 steps 1, 2 and 5 of six.** Typing into the question box no longer grows a list of
-  Steam settings under the box that shoves the box, the chips and the chat up the screen; the list now floats
-  in a small card above the box instead, holds up to eight rows but never more than fit under the tab bar
-  (about six on the Deck's own screen), names the rest as "N more" in its heading, and hides itself once you
-  are typing a real question — past three words, or a question mark — unless the words are an exact run inside
-  a setting's name. **Measured before the fix, 2026-09-16, on the Deck's built-in screen:** two letters brought
-  back 71 rows and the box jumped 209 pixels to the top of the panel while the chat disappeared under the list
-  (`docs/test-evidence/plan56-M-settings-jump-before.json`). [Plan](planning/45-settings-shortcut-card.md) ·
-  [Mockups](https://claude.ai/code/artifact/1ab2a570-2ae5-45cd-b12b-332694f96fd5). Rows **SETTINGS-CARD-01**,
-  **06**, **07** are landed and owed on the Deck; the remaining steps (D-pad in, chips blocked, tap outside)
-  are a separate Features entry waiting on a follow-up lane.
+- ★★★ `[ask]` `[focus]` **Steam settings shortcuts: the card floats, the D-pad walks in and out, tap outside to
+  close** — **VERIFY, all six steps of plan 45 now landed 2026-09-16 (commits `2d92240`, `cdc3759`,
+  `bc6c668`, `7b08acf`, `55dbcca`).** Typing into the question box no longer grows a list of Steam settings
+  under the box that shoves the box, the chips and the chat up the screen; the list floats in a small card
+  above the box instead, holds up to eight rows but never more than fit under the tab bar (about six on the
+  Deck's own screen), names the rest as "N more" in its heading, and hides itself once you are typing a real
+  question. Up from the question box now walks the real highlight onto the nearest row, Up and Down step
+  between rows, Down from the bottom row returns to the box, A opens that Steam setting, and B — or a tap
+  anywhere outside the card, for a mouse or a finger — closes the card for that search while keeping the
+  typed words; the suggestion chips above the box stay out of reach while the card is open. The old fake
+  on-screen marker and its keyboard-only handling are gone. **Measured before the fix, 2026-09-16, on the
+  Deck's built-in screen:** two letters brought back 71 rows and the box jumped 209 pixels to the top of the
+  panel while the chat disappeared under the list (`docs/test-evidence/plan56-M-settings-jump-before.json`).
+  **Confirmed on the Deck 2026-09-16, build `ca12429`:** the box holds still, the card caps at six rows and
+  reads "Steam settings · 65 more" — but the card's surface let chat text underneath show through it; fixed
+  the same session in commit `55dbcca` and re-checked the same day on a later deploy, confirmed solid. **The
+  D-pad wiring confirmed on the Deck 2026-09-16 too:** Up from the box reaches the nearest row, Up and Down
+  step between rows, Down from the bottom row returns to the box, a chip is out of reach while the card is
+  open, and B (or a tap outside, for a mouse or a finger) closes the card and keeps the typed words. **A on a
+  row does open the Steam setting**, though the highlight lands one toggle above the row that was pressed —
+  the same known shape as the Open Permissions bug — and **the typed words are not kept when you come back
+  from the jump**, which the row's own text expected; whether they should survive is a question for the
+  maintainer, not decided here. Evidence `docs/test-evidence/plan56-SETTINGS-CARD-01.json`,
+  `docs/test-evidence/plan56-SETTINGS-CARD-DPAD-01.summary.json`.
+  [Plan](planning/45-settings-shortcut-card.md) ·
+  [Mockups](https://claude.ai/code/artifact/1ab2a570-2ae5-45cd-b12b-332694f96fd5). Rows **SETTINGS-CARD-01**
+  through **04** have passed; **05** (A opens, the return matches) passed for the jump but not for keeping the
+  words, so it stays open; **06** and **07** are landed and owed on the Deck.
 - ★★★ `[ollama]` **Custom model in the Pull Models picker** — **VERIFY, one check owed and it needs your permission.**
   Shipped and walked on the Deck 2026-09-05. A typed library name that is not in the built-in list pulls and installs; a made-up
   one explains itself; the star pins a model for Ask and reaches the settings file; a freshly pulled model is the only one badged
@@ -735,16 +709,29 @@ ones from this month are D81 to D88.
   **MEGAERA-01**: once the point release is installed from the Ollama tab's Update knowledge base, with Hades
   running, ask "How do I beat Megaera?" and check the note attaches with no "no close match" line. On the library
   still installed today, that line still appears. Evidence `docs/test-evidence/plan55-HADES-NAMED-01.json`.
-- ★★ `[KB]` **Neither honesty line can appear when the game is only named in the question** — **VERIFY, fixed
-  2026-09-15, FAILED as written on the Deck the same evening.** The check that decides whether to show an honesty
-  line is now told about a game that is only named in the question, not just one that is running or picked from a
-  menu, and the coverage chip proves that plumbing landed. Row **HONESTY-TEXT-GAME-01**: with nothing running, ask
-  "black mesa how do i tame a horse" and check the "no close match" line appears; ask a real Black Mesa boss
-  question and check no line appears. **Run 2026-09-15: FAIL for the first half.** Three Black Mesa cards
-  attached to the horse question anyway, and the model's own reply admitted it had no answer for taming a horse
-  — but the "no close match" line still did not appear, because the notice's own closeness rule judged those
-  three keyword-matched cards close enough to count as covering the question. Evidence
-  `docs/test-evidence/plan55-HONESTY-TEXT-GAME-01.json`.
+- ★★ `[KB]` **Neither honesty line can appear when the game is only named in the question** — **OPEN, fixed
+  twice, FAILED on the Deck both times (2026-09-15 and 2026-09-16).** The check that decides whether to show
+  an honesty line is now told about a game that is only named in the question, not just one that is running
+  or picked from a menu, and the coverage chip proves that plumbing landed. Row **HONESTY-TEXT-GAME-01**: with
+  nothing running, ask "black mesa how do i tame a horse" and check the "no close match" line appears; ask a
+  real Black Mesa boss question and check no line appears. **Run 2026-09-15: FAIL.** Three Black Mesa cards
+  attached to the horse question anyway, and the model's own reply admitted it had no answer for taming a
+  horse — but the "no close match" line still did not appear, because the notice's own closeness rule judged
+  those three keyword-matched cards close enough to count as covering the question, since every card of a game
+  repeats the game's own name in its title. Evidence `docs/test-evidence/plan55-HONESTY-TEXT-GAME-01.json`.
+  **Fixed again 2026-09-16 (commit `f2e358a`):** the check now also asks whether the actual words in the
+  question — everything but the game's name and ordinary filler words — show up anywhere in what attached.
+  **Run again 2026-09-16: FAIL, same row, same question.** The new keyword check works on its own, but the
+  line's last gate — a meaning-search score under 0.65 — is measured on the whole question including the
+  game's name, and every Black Mesa card scores about 0.69 once the words "black mesa" are in the text,
+  whether the rest of the question is a real one or not: the horse question scores 0.687 and a real Gonarch
+  question scores 0.685, too close to tell apart, while a bake-a-cake stretch question would score 0.603 and
+  wrongly show the line. Measured with the game's name stripped out of the same questions, stretches score
+  0.50–0.64 and real questions 0.70–0.74, cleanly either side of the existing line — so the fix that is still
+  needed is to score the question's own words alone, without the game's name in them, only for this one case
+  where the game came from the question and nothing is running. Evidence
+  `docs/test-evidence/plan56-HONESTY-LINE-01.json`. Only questions that named a game with nothing running are
+  affected; a game that is actually running is unchanged.
 - ★★ `[KB]` **The follow-up menu offered places from a different game than the one you asked about** — **VERIFY,
   fixed 2026-09-15, one sighting confirmed clean on the Deck.** Two bug entries, one cause: the two choices under a
   follow-up menu were word for word the worked example in the model's own instructions — Half-Life 2's train

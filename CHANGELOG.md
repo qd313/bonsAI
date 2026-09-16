@@ -16,16 +16,54 @@ All notable changes to this project are documented in this file.
   above — with Essentials only switched off, the group still stayed hidden, and it had been impossible to
   show at all since a June change. `PullModelsModal.tsx`. On-Deck row owed: **PULL-EXPERT-VISIBLE-01** in
   `docs/testing.md`.
-- **Typing into the question box no longer pushes it, the chips and the chat up the screen:** the list of
-  matching Steam settings used to grow underneath the box inside the bottom dock, and two letters could match
-  dozens of settings and throw the box off the top of the screen. The list now floats in a small card above the
-  box instead, holding up to eight rows but never more than fit under the tab bar (about six on the Deck's own
-  screen), naming the rest as "N more" in its heading, and it gets out of the way once you are typing a real
-  question — past three words, or a question mark — unless what you typed is the exact name of a setting.
-  `MainTabUnifiedAskBar.tsx`, `useSteamSettingsSearch.ts`, `section-4.ts`. **Not built in this landing:** the
-  D-pad walking into the card from the box, the suggestion chips staying out of reach while the card is open,
-  and tapping outside the card to close it — a follow-up lane is planned. On-Deck rows: **SETTINGS-CARD-01**,
-  **06**, **07** (landed, owed on the Deck) in `docs/testing.md`.
+- **Typing into the question box no longer pushes it, the chips and the chat up the screen, and the whole
+  card now works with the controller and with a finger:** the list of matching Steam settings used to grow
+  underneath the box inside the bottom dock, and two letters could match dozens of settings and throw the box
+  off the top of the screen. The list now floats in a small card above the box instead, holding up to eight
+  rows but never more than fit under the tab bar (about six on the Deck's own screen), naming the rest as "N
+  more" in its heading, and it gets out of the way once you are typing a real question — past three words, or
+  a question mark — unless what you typed is the exact name of a setting. Up from the question box now moves
+  the real highlight onto the nearest row, Up and Down step between rows, Down from the bottom row returns to
+  the box, A opens that Steam setting, and B — or a tap anywhere outside the card, for a mouse or a finger —
+  closes the card for that search while keeping the typed words; the suggestion chips above the box stay out
+  of reach while the card is open. The card's background is now fully solid, after chat text underneath was
+  found showing through it on the Deck, then fixed and re-checked solid the same day. Confirmed on the Deck
+  2026-09-16: the box holds still, the card's background is solid, Up and Down walk into and out of the card,
+  a chip cannot be reached while it is open, and B or a tap outside closes it and keeps the words. **One thing
+  found on the Deck that does not match what this entry set out to do:** pressing A on a result opens the
+  right Steam page, but coming back to the plugin afterwards does not keep what was typed — the box is empty
+  again — which is a question for the maintainer, not decided here. `MainTabUnifiedAskBar.tsx`,
+  `useSteamSettingsSearch.ts`, `section-4.ts`. On-Deck rows: **SETTINGS-CARD-01**–**04** passed on the Deck
+  2026-09-16; **05** passed for opening the setting but not for the return; **06**, **07** landed, owed on the
+  Deck; all in `docs/testing.md`.
+- **Left on the Ask button, the paperclip, or an answer paragraph now stays in the plugin:** it used to hand
+  the highlight to Steam's own Quick Access tab, with nothing on screen saying that had happened; all three
+  now claim Left and hold still, since there is nothing further left to move onto. `MainTabUnifiedAskBar.tsx`,
+  `buildAnswerBubbleElement.tsx`. Confirmed on the Deck 2026-09-16, all three. On-Deck row:
+  **LEFT-HOLDS-STILL-01** in `docs/testing.md`.
+- **Reopening a saved reply no longer traps Down in an endless loop:** a reply with no live Helpful/Not
+  really row — the shape a restored chat turn has — used to send Down back up to the Retry icon instead of
+  forward to Read aloud, so the walk cycled the question and the paragraphs forever and could only be escaped
+  by folding the reply away. Down now tries the reply's own controls in on-screen order first.
+  `buildAnswerBubbleElement.tsx`. Confirmed on the Deck 2026-09-16: a twelve-press walk reaches Read aloud,
+  Show details and the Ask bar with no loop. On-Deck row: **RESTORED-TURN-DOWN-01** in `docs/testing.md`.
+- **A greyed Helpful or Not really no longer steals the highlight:** on a stopped reply, with the thumbs
+  greyed out, Down from the answer used to take two presses and still land on the greyed button instead of
+  Read aloud, and Up from Read aloud landed on it too. The greyed button turned out to still accept the
+  highlight on this build — it is greyed by styling, not disabled the way a web form control is — so a caller
+  now marks it unavailable explicitly and the shared focus helper skips it in both directions. Confirmed on
+  the Deck 2026-09-16, both directions. `buildReplyActionsElement.tsx`, `replyStopRegistry.ts`. On-Deck row:
+  **GREYED-STEP-OVER-01** in `docs/testing.md`.
+- **A step toward showing the honesty line for a horse-taming question about Black Mesa, still not there:**
+  the line that warns a reply leans on the model's own knowledge checked only whether the game's cards scored
+  above a threshold, and every card of a game repeats the game's own name in its title — so cards attached to
+  an unrelated question still scored above zero and the line stayed off. The check now also asks whether the
+  actual words in the question show up anywhere in what attached, which fixes that part on its own — but
+  **checked on the Deck 2026-09-16, the line still does not show,** because the closeness score it also has to
+  clear is measured on the whole question including the game's name, and every card of that game scores about
+  the same whether the question is real or not. Only affects a game that was named purely in the question,
+  with nothing running. `knowledge_base_service.py`. On-Deck row: **HONESTY-TEXT-GAME-01** in
+  `docs/testing.md`, failed both times it has been tried.
 - **Picking a mode in the small menu under the question box no longer leaves the highlight on nothing:**
   choosing Speed, Strategy or Expert now hands the highlight back to the mode button, the same place it already
   went when backing out of the menu. `MainTabAskModeMenuPopover.tsx`. On-Deck row: **ASK-MODE-MENU-RING-01**

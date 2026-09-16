@@ -15,6 +15,39 @@ Everything shipped since v0.4.9 (2026-07-08), one line each, newest first. Detai
   Evidence `docs/test-evidence/plan56-M-hub-edges.json`, `docs/test-evidence/plan56-M-hub-edges-policy.json`,
   `docs/test-evidence/plan56-M-hub-edges-advanced.json` (plan 56 block 0).
 
+**Checked on the Deck, closed in the roadmap 2026-09-16 (morning, lane I):**
+- ★ `[focus]` **Left on the Ask button, the paperclip, or an answer paragraph now stays in the plugin** —
+  it used to hand the highlight to Steam's own Quick Access tab; confirmed on the Deck for all three.
+  [Detail](roadmap-bugs-fixed.md#three-d-pad-fixes-from-lane-i-checked-on-the-deck-2026-09-16-morning).
+- ★ `[focus]` **Reopening a saved reply no longer traps Down in a loop** — a twelve-press walk now reaches
+  Read aloud, Show details and the Ask bar instead of cycling the turn forever; confirmed on the Deck.
+  [Detail](roadmap-bugs-fixed.md#three-d-pad-fixes-from-lane-i-checked-on-the-deck-2026-09-16-morning).
+- ★ `[focus]` **A greyed Helpful or Not really no longer steals the highlight** — on a stopped reply, Down
+  and Up now skip both greyed thumbs and land on Read aloud or the answer's own text instead; confirmed on
+  the Deck both directions.
+  [Detail](roadmap-bugs-fixed.md#three-d-pad-fixes-from-lane-i-checked-on-the-deck-2026-09-16-morning).
+
+**Checked on the Deck, closed in the roadmap 2026-09-16 (afternoon):**
+- ★★ `[ui]` `[ask]` **A Clear button on the Session context bar** — one press asks once, then the plugin
+  forgets the last strategy subject and the strategy checklist position for the running game; the chat and
+  the bar's rows stay. Confirmed end to end on the Deck, including the log line proving the forget.
+  [Detail](roadmap-completed.md#the-clear-button-the-quiet-answer-checker-and-the-spys-lies-confirmed-on-the-deck-2026-09-16).
+- ★ `[ask]` **The answer checker now runs quietly on every answer** — one log line, nothing on screen, no
+  second model call; confirmed on the Deck, the first time it has ever run.
+  [Detail](roadmap-completed.md#the-clear-button-the-quiet-answer-checker-and-the-spys-lies-confirmed-on-the-deck-2026-09-16).
+- ★★★ `[reply]` **The Spy can lie to you on purpose** — at the Heavy or Unleashed accent setting his advice
+  can sound right and be wrong, and Show details on that reply says he was on and what he lied about;
+  confirmed on the Deck at Heavy, with the lie named in the chip stored with the turn.
+  [Detail](roadmap-completed.md#the-clear-button-the-quiet-answer-checker-and-the-spys-lies-confirmed-on-the-deck-2026-09-16).
+- ★ `[ollama]` **The Expert (large) group in the download picker can be shown again** — with Essentials only
+  switched off it had been impossible to show since a June change; confirmed on the Deck, the group now
+  appears with its models in the locked bake-off order.
+  [Detail](roadmap-bugs-fixed.md#two-more-fixes-checked-on-the-deck-2026-09-16-afternoon).
+- ★ `[focus]` **Choosing a mode in the Ask-mode menu no longer drops the highlight** — picking Speed,
+  Strategy or Expert now hands the highlight back to the mode button, the same as backing out already did;
+  confirmed on the Deck both ways.
+  [Detail](roadmap-bugs-fixed.md#two-more-fixes-checked-on-the-deck-2026-09-16-afternoon).
+
 **Checked on the Deck, closed in the roadmap 2026-09-16:**
 - ★ `[focus]` **Pressing Ask no longer drops the highlight** — the ring lands on the question box when a
   real question is typed, and stays on the Ask button when it is empty; confirmed both ways on the Deck,

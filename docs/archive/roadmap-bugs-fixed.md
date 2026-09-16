@@ -6,6 +6,78 @@ Strikeout titles match the original roadmap bug list. Items awaiting on-Deck QA 
 
 ---
 
+### Three D-pad fixes from lane I, checked on the Deck (2026-09-16, morning)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-16 once the Deck runs passed — copied line for line from
+this session's Verify entries, nothing reworded._
+
+- ★ `[focus]` **Left from the Ask button, the paperclip, or an answer paragraph hands the highlight to
+  Steam's Quick Access rail** — **VERIFY, fixed 2026-09-16 (commits `b7420f0`, `42aafe1`).** All three now
+  claim Left themselves and hold still instead of leaking the highlight onto Steam's own tab strip; Right is
+  unaffected. Row **LEFT-HOLDS-STILL-01**: with the highlight on the Ask button, the paperclip, or a
+  paragraph inside a reply, press Left and check the highlight stays in the plugin.
+
+  **Passed on the Deck 2026-09-16, all three:** Left on the Ask button held still twice in a row; Left on the
+  paperclip held still twice; Left on the answer's own body (reached by walking Up from Read aloud) held
+  still both times too — before the fix all three leaked to Steam's own tab. One note, not this fix's doing:
+  on the Deck's built-in screen the answer's own stop is only about a third visible, the rest sitting under
+  the sticky question box, filed as its own one-star roadmap entry. Evidence
+  `docs/test-evidence/plan56-LEFT-HOLDS-01.summary.json`.
+- ★ `[focus]` **Down loops inside a saved chat's reopened reply and never reaches Show details or Ask** —
+  **VERIFY, fixed 2026-09-16 (commit `bb7fef3`).** Reopening a saved chat and reading a reply with no live
+  rating buttons used to send Down back to the Retry corner icon instead of forward to Read aloud, so the
+  walk cycled the question and the paragraphs forever. Down now tries the reply's own controls in on-screen
+  order first, so it reaches Read aloud, Show details and out to the Ask bar normally. Row
+  **RESTORED-TURN-DOWN-01**: open a saved chat, expand a reply with no live thumbs row, and check Down from
+  the last paragraph reaches Read aloud rather than looping back to the top.
+
+  **Passed on the Deck 2026-09-16:** on a restored seven-turn chat with the newest reply expanded, twelve
+  Down presses from the answer walked Read aloud, Show details, the Session context bar, a suggestion chip,
+  the question box, then held on Ask — no loop, where the same walk on the build before the fix cycled the
+  turn forever. Evidence `docs/test-evidence/plan56-RESTORED-TURN-DOWN-01.summary.json`.
+- ★ `[focus]` **A greyed-out button still takes the highlight, so the D-pad lands on something that does
+  nothing** — **VERIFY, fixed 2026-09-15, the Ask half confirmed on the Deck; the thumbs half fixed in code
+  2026-09-16 (commit `e41808d`).** While an answer is being written, Down from the question box now holds
+  still instead of landing on the greyed Ask button. Row **GREYED-STEP-OVER-01**, the Ask half: while an
+  answer is thinking, Down from the question box stays on the box. **Passed on the Deck 2026-09-15**, evidence
+  `docs/test-evidence/plan55-GREYED-STEP-OVER-01-ask-half.json`. **The thumbs half measured FAILED on the Deck
+  2026-09-16** (evidence `docs/test-evidence/plan56-GREYED-STEP-OVER-01-thumbs.json`,
+  `docs/test-evidence/plan56-GREYED-STEP-OVER-01-thumbs.summary.json`) and was fixed in code the same day:
+  with the thumbs greyed on a stopped reply, Down from the answer's last paragraph now lands on Read aloud,
+  not the greyed row, and Up from Read aloud lands back on the paragraph; Left and Right already held still.
+
+  **Passed on the Deck 2026-09-16, both directions, on the fixed build:** Up from Read aloud landed on the
+  answer's last section, not the greyed Helpful button; Down from that section skipped both greyed thumbs and
+  reached Read aloud. One small thing noted, not a trap: the very first Down or Up on a tall answer sometimes
+  only scrolls the view rather than moving the ring, with the next press moving it as normal. Evidence
+  `docs/test-evidence/plan56-GREYED-STEP-OVER-02.summary.json`.
+
+### Two more fixes, checked on the Deck (2026-09-16, afternoon)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-16 once the Deck runs passed — copied line for line from
+this session's Verify entries, nothing reworded._
+
+- ★ `[ollama]` **The Expert group could never be shown, since June** — **VERIFY, fixed 2026-09-16 (commit
+  `ca12429`).** Found while landing the Expert group's new order: with Essentials only switched off, the
+  Expert (large) group in the download picker still stayed hidden — it had been impossible to show at all
+  since a June change. It shows now. Row **PULL-EXPERT-VISIBLE-01**: with Essentials only off, open the Pull
+  Models picker and check the Expert (large) group is visible. **Passed on the Deck 2026-09-16:** with
+  Essentials only switched off, the Expert (large) group appeared with its eight models led by the five
+  bake-off entries; before the press the group was absent altogether. Evidence
+  `docs/test-evidence/plan56-EXPERT-ORDER-01.json`, `docs/test-evidence/plan56-EXPERT-ORDER-01-essentials-off.json`.
+- ★ `[focus]` **Choosing an entry in the Ask-mode menu drops the highlight** — **VERIFY, fixed 2026-09-16
+  (commit `cb60a5d`).** Picking a mode such as Speed, Strategy or Expert in the small menu under the question
+  box now hands the highlight back to the mode button, the way it already did when backing out with B.
+  Reproduced on the Deck 2026-09-16, before the fix: choosing Speed or Strategy left the highlight nowhere in
+  the plugin until the next press. Evidence `docs/test-evidence/plan56-BUG-askmode-menu-drop-speed.json`,
+  `docs/test-evidence/plan56-BUG-askmode-menu-drop-strategy.json`. Row **ASK-MODE-MENU-RING-01**: open the
+  menu, choose a mode, and check the highlight is on the mode button. **Passed on the Deck 2026-09-16, both
+  modes:** choosing Speed closed the menu with the highlight back on the mode button, now reading "Inference
+  mode: Speed", fully visible; choosing Strategy the same way landed on "Inference mode: Strategy", fully
+  visible. Evidence `docs/test-evidence/plan56-ASK-MODE-MENU-RING-01-speed.json`,
+  `docs/test-evidence/plan56-ASK-MODE-MENU-RING-01-strategy.json`,
+  `docs/test-evidence/plan56-ASK-MODE-MENU-RING-01.summary.json`.
+
 ### Three more fixes, checked on the Deck (2026-09-16)
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-16 once the Deck runs passed — copied line for line from

@@ -261,6 +261,10 @@ Open questions:
   out of. Any design that adds a level needs an escape route drawn before it is built.
 - What does the collapsed state say? "Show details" alone under-sells it once it also holds the session's chips.
 
+**Drawn at true size on the mockup page** https://claude.ai/artifact/2De58qirE34754PEZVPmdb **(2026-09-16):**
+the row, tab and section options sit side by side, each with its collapsed label and the D-pad escape route
+marked, so the four open questions above can be answered by looking. The maintainer's call is owed.
+
 ## The tab icon bar collapses when it is not in use
 
 The open questions that lived here (dashes plus a glyph or a word, collapse on idle, the R5 lock, the

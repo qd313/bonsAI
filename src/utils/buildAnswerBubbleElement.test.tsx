@@ -186,12 +186,114 @@ describe("answer bubble section stops", () => {
     branchPicker.appendChild(branchButton);
     slot.appendChild(branchPicker);
 
-    // No `.TabContentsScroll` ancestor in this fixture, so the in-bubble walk (handleAnswerBubble
-    // MoveDown) finds no scroll container and returns false immediately — exactly the "nothing left
-    // inside the bubble" case this test targets.
-    const onMoveDown = (el!.props as Record<string, unknown>).onMoveDown as () => boolean;
-    expect(onMoveDown()).toBe(true);
-    expect(document.activeElement).toBe(branchButton);
+    try {
+      // No `.TabContentsScroll` ancestor in this fixture, so the in-bubble walk
+      // (handleAnswerBubbleMoveDown) finds no scroll container and returns false immediately —
+      // exactly the "nothing left inside the bubble" case this test targets.
+      const onMoveDown = (el!.props as Record<string, unknown>).onMoveDown as () => boolean;
+      expect(onMoveDown()).toBe(true);
+      expect(document.activeElement).toBe(branchButton);
+    } finally {
+      slot.remove();
+    }
+  });
+
+  /*
+   * "A greyed-out button still takes the highlight" — measured on the greyed Ask button 2026-09-05
+   * (round35-CHECK-stop-press.json) and true of every greyed button in this codebase, including the
+   * Helpful / Not really pair on a stopped reply (round35-stopped-notice-and-greyed-buttons.png).
+   * Fix: step over a disabled reply stop instead of landing on it. `focusRegisteredReplyStop`
+   * already reports false when its `.focus()` call does not stick — a disabled `<button>` refuses
+   * focus on device exactly as it does in jsdom (see the comment on the Button stub in
+   * fakeDeckyUi.tsx) — so once Down names its target explicitly (the change above) rather than
+   * leaving it to Steam's own geometry, a disabled Helpful is skipped for free and the chain
+   * continues to Retry, which stays live on a stopped reply.
+   */
+  it("Down from the last section lands on Retry when the thumbs are greyed", () => {
+    const slot = document.createElement("div");
+    slot.className = "bonsai-chat-turn-slot";
+    document.body.appendChild(slot);
+    const header = document.createElement("div");
+    header.className = "bonsai-chat-turn-row-header--live";
+    slot.appendChild(header);
+    const bubbleMount = document.createElement("div");
+    slot.appendChild(bubbleMount);
+
+    const el = buildAnswerBubbleElement({
+      body: "Just one short paragraph.",
+      streaming: false,
+      spoilerMaskingEnabled: true,
+      maxWidthCss: "100%",
+      answerKey: ANSWER_KEY,
+    });
+    expect(el).not.toBeNull();
+    render(el!, { container: bubbleMount });
+
+    const helpful = document.createElement("button");
+    helpful.type = "button";
+    helpful.disabled = true;
+    helpful.textContent = "Helpful";
+    slot.appendChild(helpful);
+    const retry = document.createElement("button");
+    retry.type = "button";
+    retry.textContent = "Retry same prompt";
+    slot.appendChild(retry);
+    registerReplyStop("helpful", helpful);
+    registerReplyStop("retry", retry);
+
+    try {
+      const onMoveDown = (el!.props as Record<string, unknown>).onMoveDown as () => boolean;
+      expect(onMoveDown()).toBe(true);
+      expect(document.activeElement).toBe(retry);
+      expect(document.activeElement).not.toBe(helpful);
+    } finally {
+      registerReplyStop("helpful", null);
+      registerReplyStop("retry", null);
+      slot.remove();
+    }
+  });
+
+  /* Same fixture, thumbs live: unchanged from today, Down lands on Helpful. */
+  it("Down from the last section still lands on Helpful when the thumbs are live", () => {
+    const slot = document.createElement("div");
+    slot.className = "bonsai-chat-turn-slot";
+    document.body.appendChild(slot);
+    const header = document.createElement("div");
+    header.className = "bonsai-chat-turn-row-header--live";
+    slot.appendChild(header);
+    const bubbleMount = document.createElement("div");
+    slot.appendChild(bubbleMount);
+
+    const el = buildAnswerBubbleElement({
+      body: "Just one short paragraph.",
+      streaming: false,
+      spoilerMaskingEnabled: true,
+      maxWidthCss: "100%",
+      answerKey: ANSWER_KEY,
+    });
+    expect(el).not.toBeNull();
+    render(el!, { container: bubbleMount });
+
+    const helpful = document.createElement("button");
+    helpful.type = "button";
+    helpful.textContent = "Helpful";
+    slot.appendChild(helpful);
+    const retry = document.createElement("button");
+    retry.type = "button";
+    retry.textContent = "Retry same prompt";
+    slot.appendChild(retry);
+    registerReplyStop("helpful", helpful);
+    registerReplyStop("retry", retry);
+
+    try {
+      const onMoveDown = (el!.props as Record<string, unknown>).onMoveDown as () => boolean;
+      expect(onMoveDown()).toBe(true);
+      expect(document.activeElement).toBe(helpful);
+    } finally {
+      registerReplyStop("helpful", null);
+      registerReplyStop("retry", null);
+      slot.remove();
+    }
   });
 
   /*

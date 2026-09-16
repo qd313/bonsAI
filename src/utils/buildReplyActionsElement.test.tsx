@@ -393,6 +393,57 @@ describe("buildReplyActionsElement Up from the thumbs row into the answer", () =
 });
 
 /*
+ * "A greyed-out button still takes the highlight": Helpful and Not really always share one disabled
+ * condition, so Left/Right between them never has a live button to land on while the row is greyed.
+ * Claiming the press instead of yielding to Steam's own horizontal flow keeps the ring from hopping
+ * onto — or between — two buttons that do nothing. A live row keeps today's behaviour.
+ */
+describe("buildReplyActionsElement Left/Right in the thumbs row", () => {
+  function thumbsRowOf(el: React.ReactElement | null) {
+    const row = findByClassName(el, "bonsai-chat-reply-actions-row");
+    expect(row).not.toBeNull();
+    return row!.props as Record<string, unknown>;
+  }
+
+  it("swallows Left and Right when the thumbs are greyed on a stopped reply", () => {
+    const el = buildReplyActionsElement({
+      replyKey: "live",
+      rating: null,
+      onRate: () => {},
+      showFeedback: true,
+      ratingUnavailable: true,
+    });
+    const props = thumbsRowOf(el);
+    expect((props.onMoveLeft as () => boolean)()).toBe(true);
+    expect((props.onMoveRight as () => boolean)()).toBe(true);
+  });
+
+  it("swallows Left and Right on an already-rated reply (thumbs locked, same greyed shape)", () => {
+    const el = buildReplyActionsElement({
+      replyKey: "live",
+      rating: "down",
+      onRate: () => {},
+      showFeedback: true,
+    });
+    const props = thumbsRowOf(el);
+    expect((props.onMoveLeft as () => boolean)()).toBe(true);
+    expect((props.onMoveRight as () => boolean)()).toBe(true);
+  });
+
+  it("leaves Left and Right alone on a live, unrated reply", () => {
+    const el = buildReplyActionsElement({
+      replyKey: "live",
+      rating: null,
+      onRate: () => {},
+      showFeedback: true,
+    });
+    const props = thumbsRowOf(el);
+    expect((props.onMoveLeft as () => boolean)()).toBe(false);
+    expect((props.onMoveRight as () => boolean)()).toBe(false);
+  });
+});
+
+/*
  * Show details is a line across the bottom of the reply, not a button in the row (D76). It reads as
  * the end of the answer and gives the row its width back.
  */

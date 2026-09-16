@@ -116,6 +116,11 @@
       "role": ""
     },
     {
+      "path": "src/utils/buildAnswerBubbleElement.test.tsx",
+      "lines": 695,
+      "role": ""
+    },
+    {
       "path": "src/hooks/usePluginSettings.ts",
       "lines": 691,
       "role": ""
@@ -141,8 +146,8 @@
       "role": "Load/save/merge settings.json"
     },
     {
-      "path": "src/utils/buildAnswerBubbleElement.test.tsx",
-      "lines": 593,
+      "path": "src/utils/buildReplyActionsElement.tsx",
+      "lines": 594,
       "role": ""
     },
     {
@@ -161,8 +166,8 @@
       "role": ""
     },
     {
-      "path": "src/utils/buildReplyActionsElement.tsx",
-      "lines": 571,
+      "path": "src/utils/buildReplyActionsElement.test.tsx",
+      "lines": 560,
       "role": ""
     },
     {
@@ -193,11 +198,6 @@
     {
       "path": "src/utils/settingsContracts.test.ts",
       "lines": 524,
-      "role": ""
-    },
-    {
-      "path": "src/utils/buildReplyActionsElement.test.tsx",
-      "lines": 509,
       "role": ""
     }
   ]

@@ -76,7 +76,12 @@ import {
 } from "./liveTurnFocusGraph";
 import { registerReplyStop } from "./replyStopRegistry";
 import { elementHasGamepadFocus } from "./uiDocument";
-import { isDeckDirectionDownEvent, isDeckDirectionUpEvent } from "./focusNavigation";
+import {
+  isDeckDirectionDownEvent,
+  isDeckDirectionLeftEvent,
+  isDeckDirectionRightEvent,
+  isDeckDirectionUpEvent,
+} from "./focusNavigation";
 import {
   getRegisteredAnswerBubble,
   takeAnswerBubbleNavFocus,
@@ -234,6 +239,8 @@ export function buildReplyActionsElement(
   const feedbackDisabled = askInFlight || ratingUnavailable;
   const chipsInactive = chipsDisabled || chipUsed || askInFlight;
   const thumbsLocked = rating !== null;
+  /* Same condition as the `disabled` prop below, on both thumbs — greyed for either reason. */
+  const thumbsDisabled = feedbackDisabled || thumbsLocked;
 
   const liveSlot = () => queryLiveTurnSlot();
   /*
@@ -330,6 +337,15 @@ export function buildReplyActionsElement(
     if (el && !elementHasGamepadFocus(el)) return false;
     return isDown ? onDown() : onUp();
   };
+
+  /*
+   * "A greyed-out button still takes the highlight" (roadmap): Helpful and Not really always share
+   * one disabled condition, so there is never a live sibling for Left/Right to land on inside this
+   * row while it is greyed. Claiming the press (returning true) instead of yielding to Steam's own
+   * horizontal flow keeps the ring from hopping onto — or between — two buttons that do nothing. A
+   * live row is untouched: Steam's own Left/Right between Helpful and Not really is unchanged.
+   */
+  const swallowThumbsSideways = () => thumbsDisabled;
 
   /*
    * Column-preserving vertical hops when thumbs sit directly above utility
@@ -444,7 +460,14 @@ export function buildReplyActionsElement(
             {...({
               onMoveUp: moveUpFromReply,
               onMoveDown: downFromThumbsRow,
-              onButtonDown: pressHandler(thumbsRowEl, downFromThumbsRow, moveUpFromReply),
+              onMoveLeft: swallowThumbsSideways,
+              onMoveRight: swallowThumbsSideways,
+              onButtonDown: (button: unknown) => {
+                if (isDeckDirectionLeftEvent(button) || isDeckDirectionRightEvent(button)) {
+                  return swallowThumbsSideways();
+                }
+                return pressHandler(thumbsRowEl, downFromThumbsRow, moveUpFromReply)(button);
+              },
             } as Record<string, unknown>)}
           >
             <BonsaiChatSecondaryButton

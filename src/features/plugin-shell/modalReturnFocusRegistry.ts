@@ -38,6 +38,8 @@ export type ModalReturnFocusId =
   /** Settings -> Data's two confirm-modal openers (plan 32 bug 4). */
   | "settings-clear-cache"
   | "settings-clear-all-data"
+  /** The Session context strip's own Clear button (plan 56 D105). */
+  | "session-context-clear"
   /** Ollama tab's two "Set ... model try order..." openers (plan 55 bug B2). */
   | "ollama-text-try-order"
   | "ollama-vision-try-order";

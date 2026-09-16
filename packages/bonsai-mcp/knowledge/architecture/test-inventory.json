@@ -37,6 +37,7 @@
     "src/components/PermissionsTab.test.tsx",
     "src/components/PullModelsModal.test.tsx",
     "src/components/ReplyCopyButton.test.tsx",
+    "src/components/SessionContextStrip.clearButton.test.tsx",
     "src/components/SessionContextStrip.test.tsx",
     "src/components/SettingsTab.mdns.test.ts",
     "src/components/SettingsTab.modalReturnFocus.test.tsx",

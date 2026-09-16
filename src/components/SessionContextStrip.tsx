@@ -35,16 +35,38 @@
  * - Stepping Up off the row list's first chip has to be wired by hand
  *   through the chip ladder's own escape hatch, or the D-pad gets stuck once
  *   it reaches that chip.
+ * - The header row's D-pad Right and Left move the ring between the toggle
+ *   and the Clear button. Both stops are siblings inside the same header
+ *   row Focusable, so a plain `.focus()` between them is the sanctioned
+ *   move (AGENTS.md's focus-graph rule: `focus()` is only safe between
+ *   siblings inside one container) — no registry hop needed the way
+ *   crossing OUT of the strip entirely does.
+ * - Clear opens the same kind of confirm box Settings -> Data's two
+ *   buttons use. Opening any Decky modal remounts the whole plugin, which
+ *   is why it goes through `onBeforeDeckyModal` / `onCompleteDeckyModalClose`
+ *   the same way those two do — skipping them would let the remount undo
+ *   whichever turn is currently expanded.
  */
 import { useEffect, useRef, useState } from "react";
-import { Focusable } from "@decky/ui";
+import { Focusable, showModal, ConfirmModal } from "@decky/ui";
+import { toaster } from "@decky/api";
 import type { AskThreadCollapsedTurn } from "../types/bonsaiUi";
 import type { ChatSlotTurnTransparency, TransparencySnapshot } from "../utils/inputTransparency";
 import { ContextChipLadder } from "./ContextChipLadder";
 import { chipsFromSnapshot } from "../utils/contextChipsFromSnapshot";
 import { registerNavFocus, unregisterNavFocus, type NavRefHolder } from "../utils/navFocusRegistry";
-import { isDeckDirectionUpEvent, isOkDeckButtonEvent } from "../utils/focusNavigation";
+import {
+  isDeckDirectionUpEvent,
+  isDeckDirectionLeftEvent,
+  isDeckDirectionRightEvent,
+  isOkDeckButtonEvent,
+} from "../utils/focusNavigation";
 import { focusLastSessionContextRow } from "../utils/liveTurnFocusGraph";
+import { callDeckyWithTimeout } from "../utils/deckyCall";
+import {
+  registerModalReturnFocusOwner,
+  rememberModalReturnFocus,
+} from "../features/plugin-shell/modalReturnFocusRegistry";
 
 type SessionContextTurn = {
   id: string;
@@ -61,6 +83,16 @@ export type SessionContextStripProps = {
   onHighlightClear?: () => void;
   /** D-pad Up from the strip header — e.g. back into the transcript's inline chip ladder. */
   onMoveUp?: () => boolean;
+  /**
+   * Wrap the Clear confirm box this strip opens, the same way Settings' own two confirm boxes
+   * are wrapped — opening a Decky modal remounts the whole plugin, and skipping these would let
+   * the remount undo whichever turn is expanded right now. Already part of MainTabProps and
+   * reaches this component via MainTab's plain `{...props}` spread onto MainTabChatTranscript,
+   * the same route `onAskOllama` documents there; MainTabChatTranscript only needs to type and
+   * forward them, which is what makes them optional here too.
+   */
+  onBeforeDeckyModal?: () => void;
+  onCompleteDeckyModalClose?: (close: () => void) => void;
 };
 
 /**
@@ -106,9 +138,71 @@ export function SessionContextStrip({
   highlightTurnId = null,
   onHighlightClear,
   onMoveUp,
+  onBeforeDeckyModal,
+  onCompleteDeckyModalClose,
 }: SessionContextStripProps) {
   const [open, setOpen] = useState(false);
   const [activeId, setActiveId] = useState<string>("live");
+
+  // The header row's two stops (the toggle, the Clear button) are siblings in one Focusable
+  // container, so a plain `.focus()` between them is the sanctioned move — see the header
+  // comment. Real DOM refs to each Focusable's own node, not React state, because it is Steam's
+  // own focus ring being moved, not anything drawn on screen.
+  const headerToggleElRef = useRef<HTMLElement | null>(null);
+  const clearButtonElRef = useRef<HTMLElement | null>(null);
+
+  const focusHeaderSibling = (el: HTMLElement | null): boolean => {
+    if (!el) return false;
+    try {
+      el.focus({ preventScroll: true });
+    } catch {
+      try {
+        el.focus();
+      } catch {
+        return false;
+      }
+    }
+    return true;
+  };
+  const rightIntoClear = (): boolean => focusHeaderSibling(clearButtonElRef.current);
+  const leftIntoHeaderToggle = (): boolean => focusHeaderSibling(headerToggleElRef.current);
+
+  /**
+   * D105: forgets only what the plugin carries into the *next* Strategy/Expert question — the
+   * last strategy subject, the running game's checklist position. Never the chat, never this
+   * strip's own rows; those stay exactly as they are, because they are the honest record of what
+   * each past turn actually attached. Same confirm-box shape Settings -> Data's two buttons use
+   * (SettingsTab.tsx): remembered return-focus id, registered owner ref, and the before/after
+   * modal hooks because opening any Decky modal remounts the plugin.
+   */
+  const openClearConfirm = () => {
+    rememberModalReturnFocus("session-context-clear");
+    onBeforeDeckyModal?.();
+    const handle = showModal(
+      <ConfirmModal
+        strTitle="Start the next question fresh?"
+        strDescription="The plugin forgets the subject of your last strategy question and the checklist position for the running game. Your chat and this bar stay as they are."
+        strOKButtonText="Clear"
+        onOK={() => {
+          // Fire-and-forget, same shape as forget_background_game_ai in index.tsx's
+          // resetPluginSession: the toast below is the actual promise made to the person, and
+          // it is true from the screen's own side either way — nothing carried is re-sent to
+          // the model without a fresh question triggering it.
+          void callDeckyWithTimeout<[], { ok?: boolean; forgot?: string[] }>(
+            "forget_game_ai_carried_context",
+            []
+          ).catch(() => {});
+          toaster.toast({
+            title: "Next question starts fresh",
+            body: "Forgot the last strategy subject and the running game's checklist position.",
+            duration: 3800,
+          });
+          onCompleteDeckyModalClose?.(() => handle.Close());
+        }}
+        onCancel={() => onCompleteDeckyModalClose?.(() => handle.Close())}
+      />
+    );
+  };
 
   /*
    * Steam populates this with the nav node for the strip. It is how D-pad Down out of the reply row
@@ -211,32 +305,83 @@ export function SessionContextStrip({
         direction press, which is the property the turn headers already rely on.
       */}
       <Focusable
-        onActivate={() => setOpen((o) => !o)}
-        {...(onMoveUp
-          ? ({
-              onMoveUp,
-              onButtonDown: (evt: unknown) => (isDeckDirectionUpEvent(evt) ? onMoveUp() : false),
-            } as Record<string, unknown>)
-          : {})}
+        className="bonsai-session-context-header-row"
+        flow-children="horizontal"
+        style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: 8, width: "100%" }}
       >
-        <button
-          type="button"
-          onClick={() => setOpen((o) => !o)}
-          style={{
-            width: "100%",
-            textAlign: "left",
-            background: "none",
-            border: "none",
-            color: "#b8cce0",
-            fontSize: 12,
-            fontWeight: 700,
-            padding: 0,
-            cursor: "pointer",
-            font: "inherit",
+        <Focusable
+          className="bonsai-session-context-toggle"
+          ref={(el: HTMLElement | null) => {
+            headerToggleElRef.current = el;
           }}
+          onActivate={() => setOpen((o) => !o)}
+          style={{ flex: 1, minWidth: 0 }}
+          {...({
+            onMoveRight: rightIntoClear,
+            ...(onMoveUp ? { onMoveUp } : {}),
+            onButtonDown: (evt: unknown) => {
+              if (isDeckDirectionRightEvent(evt)) return rightIntoClear();
+              if (onMoveUp && isDeckDirectionUpEvent(evt)) return onMoveUp();
+              return false;
+            },
+          } as Record<string, unknown>)}
         >
-          Session context ({rows.length} turn{rows.length === 1 ? "" : "s"}) {open ? "▾" : "▸"}
-        </button>
+          <button
+            type="button"
+            onClick={() => setOpen((o) => !o)}
+            style={{
+              width: "100%",
+              textAlign: "left",
+              background: "none",
+              border: "none",
+              color: "#b8cce0",
+              fontSize: 12,
+              fontWeight: 700,
+              padding: 0,
+              cursor: "pointer",
+              font: "inherit",
+            }}
+          >
+            Session context ({rows.length} turn{rows.length === 1 ? "" : "s"}) {open ? "▾" : "▸"}
+          </button>
+        </Focusable>
+        {/*
+          D105: the strip's own Clear. A opens the confirm box (openClearConfirm above); Left
+          steps back onto the toggle. A proper stop of its own rather than folded into the
+          header's onClick, so it can carry its own return-focus id and its own Left/Right wiring
+          without the toggle's press also reaching it.
+        */}
+        <Focusable
+          className="bonsai-session-context-clear-button"
+          ref={(el: HTMLElement | null) => {
+            clearButtonElRef.current = el;
+            registerModalReturnFocusOwner("session-context-clear", el);
+          }}
+          onActivate={openClearConfirm}
+          {...({
+            onMoveLeft: leftIntoHeaderToggle,
+            onButtonDown: (evt: unknown) =>
+              isDeckDirectionLeftEvent(evt) ? leftIntoHeaderToggle() : false,
+          } as Record<string, unknown>)}
+        >
+          <button
+            type="button"
+            onClick={openClearConfirm}
+            style={{
+              background: "none",
+              border: "none",
+              color: "#8fa8c4",
+              fontSize: 11,
+              fontWeight: 700,
+              padding: "0 2px",
+              cursor: "pointer",
+              font: "inherit",
+              whiteSpace: "nowrap",
+            }}
+          >
+            Clear
+          </button>
+        </Focusable>
       </Focusable>
       {open ? (
         <div

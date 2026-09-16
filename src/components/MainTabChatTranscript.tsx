@@ -197,6 +197,17 @@ export type MainTabChatTranscriptProps = {
    */
   onAskOllama?: (overrideQuestion?: string, opts?: { threadQuestionDisplay?: string }) => void | Promise<void>;
   /**
+   * D105: wrap the Session context strip's own Clear confirm box, the same way Settings' two
+   * confirm boxes are wrapped -- opening any Decky modal remounts the plugin, and skipping these
+   * would let the remount undo whichever turn is expanded right now. Already part of MainTabProps
+   * (as `onBeforeNestedDeckyModal` / `onCompleteNestedDeckyModalClose`, the names the chat-slot
+   * rename modal already uses) and reaches this component via MainTab's plain `{...props}` spread,
+   * the same route `onAskOllama` documents above; only needs declaring here to type it and hand
+   * it on to the strip.
+   */
+  onBeforeNestedDeckyModal?: () => void;
+  onCompleteNestedDeckyModalClose?: (close: () => void) => void;
+  /**
    * The slot row's carousel is sitting on the `[+]` create position. Cycling there deliberately
    * does not change the active slot, so the transcript cannot see it any other way; while it is
    * true the empty-slot preview stands in for the turn column even if the previous slot had
@@ -353,6 +364,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     gameContextReadEnabled = false,
     onNavigateToPermissions,
     onAskOllama,
+    onBeforeNestedDeckyModal,
+    onCompleteNestedDeckyModalClose,
   } = props;
 
   const [sessionHighlightTurnId, setSessionHighlightTurnId] = useState<string | null>(null);
@@ -1404,6 +1417,8 @@ questionLooksLikeTroubleshootingAsk(unifiedInput) ? (
       if (focusChatPermissionHintRow()) return true;
       return focusUpFromBelowContextChipLadder(queryLiveTurnSlot());
     }}
+    onBeforeDeckyModal={onBeforeNestedDeckyModal}
+    onCompleteDeckyModalClose={onCompleteNestedDeckyModalClose}
   />
 </PanelSectionRow>
 )}

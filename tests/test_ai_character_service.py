@@ -3,14 +3,18 @@ from unittest.mock import patch
 
 from backend.services.ai_character_service import (
     PYRO_PRESET_ID,
+    SPY_PRESET_ID,
     RoleplayBuildResult,
     apply_roleplay_to_system_content,
     build_roleplay_system_suffix,
     build_roleplay_system_suffix_meta,
     is_pyro_asshole_mode,
+    is_spy_lying_mode,
     pyro_asshole_mode_active,
     pyro_manager_carousel_tip_addon,
+    spy_lying_mode_active,
 )
+from backend.services.spy_confession_service import SPY_LIES_TAG_CLOSE, SPY_LIES_TAG_OPEN
 
 
 class AiCharacterServiceTests(unittest.TestCase):
@@ -248,6 +252,84 @@ class AiCharacterServiceTests(unittest.TestCase):
         addon = pyro_manager_carousel_tip_addon("Set my TDP to 50 watts", asshole=True)
         self.assertIn("Set my TDP to 50 watts", addon)
         self.assertNotIn("TDP/GPU JSON block", addon)
+
+
+class SpyLyingModeTests(unittest.TestCase):
+    """Below Heavy the Spy is his ordinary smooth voice; at Heavy/Unleashed he lies on purpose
+    and is told to confess what he lied about in a closing tag, mirroring Pyro's own gate.
+    """
+
+    def test_is_spy_lying_mode_at_all_four_levels(self):
+        self.assertFalse(is_spy_lying_mode("subtle"))
+        self.assertFalse(is_spy_lying_mode("balanced"))
+        self.assertTrue(is_spy_lying_mode("heavy"))
+        self.assertTrue(is_spy_lying_mode("unleashed"))
+
+    def test_spy_lying_mode_active_requires_both_spy_and_a_heavy_level(self):
+        settings = {"ai_character_accent_intensity": "unleashed"}
+        self.assertTrue(spy_lying_mode_active(settings, SPY_PRESET_ID))
+        self.assertFalse(spy_lying_mode_active(settings, "cp2077_jackie"))
+        self.assertFalse(
+            spy_lying_mode_active({"ai_character_accent_intensity": "balanced"}, SPY_PRESET_ID)
+        )
+
+    def _spy_settings(self, intensity: str) -> dict:
+        return {
+            "ai_character_enabled": True,
+            "ai_character_random": False,
+            "ai_character_preset_id": SPY_PRESET_ID,
+            "ai_character_custom_text": "",
+            "ai_character_accent_intensity": intensity,
+        }
+
+    def test_subtle_and_balanced_stay_the_ordinary_smooth_voice(self):
+        for intensity in ("subtle", "balanced"):
+            out = build_roleplay_system_suffix(self._spy_settings(intensity))
+            self.assertIn("Spy", out)
+            self.assertIn("Team Fortress 2", out)
+            self.assertNotIn(SPY_LIES_TAG_OPEN, out)
+            self.assertNotIn("working for the other team", out)
+
+    def test_heavy_instructs_lying_advice_and_the_confession_tag(self):
+        out = build_roleplay_system_suffix(self._spy_settings("heavy"))
+        self.assertIn("working for the other team", out)
+        self.assertIn("sounds correct", out)
+        self.assertIn(SPY_LIES_TAG_OPEN, out)
+        self.assertIn(SPY_LIES_TAG_CLOSE, out)
+        self.assertIn("HARD LIMITS", out)
+        self.assertIn("damage the Deck", out)
+
+    def test_unleashed_also_instructs_lying_advice_and_the_confession_tag(self):
+        out = build_roleplay_system_suffix(self._spy_settings("unleashed"))
+        self.assertIn("working for the other team", out)
+        self.assertIn(SPY_LIES_TAG_OPEN, out)
+        self.assertIn(SPY_LIES_TAG_CLOSE, out)
+        self.assertIn("HARD LIMITS", out)
+
+    def test_lying_reply_never_promises_a_real_system_change(self):
+        out = build_roleplay_system_suffix(self._spy_settings("unleashed"))
+        self.assertIn("Never include ```json``` blocks", out)
+        self.assertIn("real safety protection", out)
+        self.assertIn("wasted", out)
+
+    def test_spy_resolves_preset_id_like_any_other_character(self):
+        meta = build_roleplay_system_suffix_meta(self._spy_settings("heavy"))
+        self.assertEqual(meta.resolved_preset_id, SPY_PRESET_ID)
+
+    @patch("backend.services.ai_character_service.random.choice")
+    def test_spy_random_resolves_tf2_spy_id_and_lies_at_heavy(self, mock_choice):
+        mock_choice.return_value = (SPY_PRESET_ID, "Team Fortress 2", "Spy", "smooth understated menace")
+        meta = build_roleplay_system_suffix_meta(
+            {
+                "ai_character_enabled": True,
+                "ai_character_random": True,
+                "ai_character_preset_id": "",
+                "ai_character_custom_text": "",
+                "ai_character_accent_intensity": "heavy",
+            }
+        )
+        self.assertEqual(meta.resolved_preset_id, SPY_PRESET_ID)
+        self.assertIn(SPY_LIES_TAG_OPEN, meta.suffix)
 
 
 if __name__ == "__main__":

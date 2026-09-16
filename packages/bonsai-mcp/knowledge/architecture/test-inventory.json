@@ -245,6 +245,7 @@
     "tests/test_spoiler_risk_service.py",
     "tests/test_spoiler_title_profiles.py",
     "tests/test_spoiler_title_profiles_contract.py",
+    "tests/test_spy_confession_service.py",
     "tests/test_steam_vac_service.py",
     "tests/test_strategy_checklist_session_service.py",
     "tests/test_strategy_checklist_store_lock.py",

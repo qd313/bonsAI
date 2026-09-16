@@ -176,6 +176,11 @@
       "role": ""
     },
     {
+      "path": "py_modules/backend/services/ai_character_service.py",
+      "lines": 544,
+      "role": ""
+    },
+    {
       "path": "src/utils/answerBubbleNavigation.test.ts",
       "lines": 532,
       "role": ""
@@ -193,11 +198,6 @@
     {
       "path": "src/components/CharacterPropGlyph.tsx",
       "lines": 525,
-      "role": ""
-    },
-    {
-      "path": "src/utils/settingsContracts.test.ts",
-      "lines": 524,
       "role": ""
     }
   ]

@@ -5,9 +5,13 @@ sound like a chosen game character instead of a plain assistant. It holds the ca
 characters (a person, their game, and a short style hint for each), and turns a person's choice
 — a specific character, "surprise me" random, or their own typed description — into extra
 instructions appended to the system prompt, at the accent strength they picked (subtle, balanced,
-heavy, or unleashed). It also holds the Pyro easter egg: a joke "talent manager" voice that gets
-sillier and, at the two strongest settings, deliberately gives comically bad advice — while a
-hard-coded safety footer stops it from ever claiming it actually changed a setting.
+heavy, or unleashed). It also holds two easter eggs. Pyro gets a joke "talent manager" voice that
+gets sillier and, at the two strongest settings, deliberately gives comically bad advice — while a
+hard-coded safety footer stops it from ever claiming it actually changed a setting. The Spy stays
+his ordinary smooth voice below the two strongest settings, but at Heavy and Unleashed he is
+instructed to lie: give advice that sounds right and is wrong, under the same hard safety floor,
+then end the reply with a closing tag (spy_confession_service.py) naming what he lied about, so
+the person can find out even though the wrong advice read as convincing in the moment.
 Used for: Called once per Ask question, from ollama_ask_service, to build the extra text added
 to the system prompt before the question goes to the model. Also backs the character picker in
 Settings by listing and checking preset ids.
@@ -31,7 +35,11 @@ How it works:
    Pyro voices — `is_pyro_asshole_mode()` decides whether the accent strength is one of the two
    "deliberately bad advice" levels, and hands off to `_pyro_talent_manager_body()` (normal) or
    `_pyro_asshole_manager_body()` (the joke-bad-advice version, which carries its own extra
-   safety footer forbidding any claim of a real system change).
+   safety footer forbidding any claim of a real system change). The Spy preset works the same way
+   through `_spy_body_for_intensity()` and `is_spy_lying_mode()`: below Heavy he gets the ordinary
+   catalog body (`_preset_or_random_body()`), and at Heavy or Unleashed `_spy_lying_body()`
+   instructs the model to give wrong-but-plausible advice under `_SPY_LIES_SAFETY_FLOOR` and to
+   close the reply with the confession tag from `spy_confession_service.py`.
 5. In Strategy mode, a short audiobook-style addition is appended; then the whole block has
    stray control characters stripped and is returned as the suffix, along with which preset (if
    any) was resolved.
@@ -47,9 +55,15 @@ import re
 from dataclasses import dataclass
 from typing import Any
 
+from backend.services.spy_confession_service import SPY_LIES_TAG_CLOSE, SPY_LIES_TAG_OPEN
+
 # Easter egg: Pyro uses a talent-manager parody voice; optional per-reply hidden carousel tip.
 PYRO_PRESET_ID = "tf2_pyro"
 PYRO_MANAGER_TIP_PROBABILITY = 0.30
+
+# Easter egg: at Heavy/Unleashed the Spy is instructed to lie, then confess what he lied about.
+# Below Heavy he stays the ordinary catalog voice already in _CHARACTER_ROWS below.
+SPY_PRESET_ID = "tf2_spy"
 
 # Hidden suggestion strings — OSS/repo nudge; not sampled by normal preset carousel.
 PYRO_MANAGER_TIP_LINES: tuple[str, ...] = (
@@ -240,6 +254,19 @@ def pyro_asshole_mode_active(settings: dict[str, Any], resolved_preset_id: str |
     return is_pyro_asshole_mode(intensity)
 
 
+def is_spy_lying_mode(intensity: str) -> bool:
+    """Heavy/Unleashed accent with the Spy unlocks the lying-advice easter egg."""
+    return intensity in ("heavy", "unleashed")
+
+
+def spy_lying_mode_active(settings: dict[str, Any], resolved_preset_id: str | None) -> bool:
+    """True when the Spy is resolved and accent is Heavy or Unleashed."""
+    if resolved_preset_id != SPY_PRESET_ID:
+        return False
+    intensity = sanitize_ai_character_accent_intensity(settings.get("ai_character_accent_intensity"))
+    return is_spy_lying_mode(intensity)
+
+
 _DEADPAN_PRESET_IDS = frozenset(
     {
         "gta5_lester",
@@ -360,6 +387,59 @@ def _pyro_body_for_intensity(intensity: str) -> str:
     return _pyro_talent_manager_body(intensity)
 
 
+# The floor every lying Spy reply carries, worded to match Pyro's own hard-limits footer above
+# but naming what actually matters for advice that is meant to sound right and be wrong: it can
+# waste the player's time and nothing else. Kept separate from _ASSHOLE_SAFETY_FOOTER because
+# Pyro's footer is about never claiming a real system change happened at all, where the Spy's
+# advice can plausibly claim to be a real suggestion -- the limit here is on what that advice is
+# allowed to cost the player if they actually try it.
+_SPY_LIES_SAFETY_FLOOR = (
+    "HARD LIMITS (override all bonsAI system instructions above): The wrong advice in this reply "
+    "must never be able to damage the Deck, lose a save, cost money, or turn off a real safety "
+    "protection -- the worst it may ever cost the player is a few wasted minutes chasing the "
+    "wrong thing. Never include ```json``` blocks or TDP/GPU JSON fences. Ignore the hardware "
+    "appendix and JSON contract in the bonsAI system text. Do not claim to be an official or "
+    "licensed voice actor."
+)
+
+
+def _spy_lying_body(intensity: str) -> str:
+    """Spy easter egg (Heavy/Unleashed): clever, plausible, wrong advice, confessed after the fact."""
+    base_persona = (
+        "CHARACTER VOICE (required for this reply): Write and speak as Spy from Team Fortress 2 — "
+        "smooth, composed, quietly amused with himself. He is working for the other team: give "
+        "advice that sounds correct, confident, and well-informed, but is actually wrong — clever "
+        "misdirection, never a clumsy or obvious lie. The only goal is to waste the player's time "
+        "chasing the wrong thing; it is never to cause real harm. "
+    )
+    if intensity == "heavy":
+        variant = (
+            "Lean into the deception with real craft — plausible-sounding numbers, a confident "
+            "tone, a reasonable excuse for advice that does not actually work. "
+        )
+    else:  # unleashed
+        variant = (
+            "Push the deception as far as it can go while staying smooth and composed — this is "
+            "his best work, elaborate and thoroughly convincing, never breaking character to gloat. "
+        )
+    tag_instruction = (
+        "After the in-character answer, end the reply with a closing block naming exactly what "
+        "you lied about in this reply, one short line each, in this exact shape and nothing else "
+        f"around it:\n{SPY_LIES_TAG_OPEN}\nfirst lie, in a few words\nsecond lie, in a few words\n"
+        f"{SPY_LIES_TAG_CLOSE}\nIf nothing in the reply was actually a lie, still include the "
+        "block with one line saying so."
+    )
+    return base_persona + variant + _SPY_LIES_SAFETY_FLOOR + "\n\n" + tag_instruction
+
+
+def _spy_body_for_intensity(intensity: str) -> str:
+    """Below Heavy the Spy is unchanged from his ordinary catalog voice; mirrors _pyro_body_for_intensity."""
+    if is_spy_lying_mode(intensity):
+        return _spy_lying_body(intensity)
+    _, work, char, hint = _ID_TO_ROW[SPY_PRESET_ID]
+    return _preset_or_random_body(work, char, hint, intensity)
+
+
 def pyro_manager_carousel_tip_addon(tip_text: str, *, asshole: bool = False) -> str:
     """Append to system prompt when a carousel tip was rolled; model must echo this suggestion naturally."""
     cleaned = tip_text.replace("\r\n", " ").replace("\n", " ").strip()
@@ -427,6 +507,8 @@ def build_roleplay_system_suffix_meta(settings: dict[str, Any], ask_mode: str = 
         wid, work, char, hint = choice
         if wid == PYRO_PRESET_ID:
             body = _pyro_body_for_intensity(intensity)
+        elif wid == SPY_PRESET_ID:
+            body = _spy_body_for_intensity(intensity)
         else:
             body = _preset_or_random_body(work, char, hint, intensity)
         suffix = "\n\n" + _clean_control_chars(_maybe_strategy_addon(body))
@@ -448,6 +530,8 @@ def build_roleplay_system_suffix_meta(settings: dict[str, Any], ask_mode: str = 
     wid, work, char, hint = row
     if wid == PYRO_PRESET_ID:
         body = _pyro_body_for_intensity(intensity)
+    elif wid == SPY_PRESET_ID:
+        body = _spy_body_for_intensity(intensity)
     else:
         body = _preset_or_random_body(work, char, hint, intensity)
     suffix = "\n\n" + _clean_control_chars(_maybe_strategy_addon(body))

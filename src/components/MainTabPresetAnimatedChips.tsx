@@ -581,6 +581,25 @@ function DecodePresetChipButton(props: {
       }}
     >
       <span className="bonsai-preset-chip-label">
+        {p.testChip ? (
+          // Same badge PresetChipLabel draws for every other animation mode (line ~284) --
+          // decode drew its own label from scratch and never carried this over, so a pinned
+          // QA batch showed no badge at all while the Deck's chip animation was set to decode
+          // (docs/test-evidence/plan47-frozen-chip-findings.json, finding_1).
+          <span
+            className="bonsai-preset-chip-test-badge"
+            style={{
+              marginRight: 6,
+              fontSize: 9,
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+              fontWeight: 700,
+              color: "#f0b232",
+            }}
+          >
+            Test
+          </span>
+        ) : null}
         {resolved ? (
           <PresetChipText text={p.text} scroll={scroll} />
         ) : (

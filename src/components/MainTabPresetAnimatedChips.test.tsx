@@ -90,6 +90,31 @@ describe("MainTabPresetAnimatedChips memo gate", () => {
     expect(slots).toHaveLength(PRESET_VISIBLE_SLOTS);
   });
 
+  /*
+   * Roadmap "A pinned test batch is not badged": PresetChipLabel draws the amber Test badge for
+   * fade / carousel / static, but decode mode draws its own label from scratch
+   * (DecodePresetChipButton) and never carried the badge over -- on the Deck, where the pinned
+   * chip animation setting is decode, a frozen QA batch showed no badge anywhere
+   * (docs/test-evidence/plan47-frozen-chip-findings.json, finding_1).
+   */
+  it("badges a pinned test chip in every animation mode, including decode", () => {
+    for (const mode of ["static", "fade", "carousel", "decode"] as const) {
+      const { container, unmount } = renderChips({
+        animationMode: mode,
+        seeds: [
+          { text: "alpha", category: "testing", testChip: true },
+          seed("bravo"),
+          seed("charlie"),
+        ],
+      });
+      expect(
+        container.querySelector(".bonsai-preset-chip-test-badge"),
+        `${mode}: a pinned test chip should carry the Test badge`,
+      ).toBeTruthy();
+      unmount();
+    }
+  });
+
   /* Two chips side by side since 2026-09-01 (D43). The row was one chip for a day (2026-08-31)
      and three stacked rows before that. */
   it("renders PRESET_VISIBLE_SLOTS chips side by side in fade / static / decode", () => {

@@ -62,7 +62,7 @@
     },
     {
       "path": "src/components/MainTabPresetAnimatedChips.tsx",
-      "lines": 1281,
+      "lines": 1300,
       "role": ""
     },
     {
@@ -122,7 +122,7 @@
     },
     {
       "path": "src/components/MainTabPresetAnimatedChips.test.tsx",
-      "lines": 635,
+      "lines": 660,
       "role": ""
     },
     {

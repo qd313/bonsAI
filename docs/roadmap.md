@@ -118,6 +118,10 @@ starts work outside this.
   replies finished on their own before the ring reached the button by other routes. Not a trap, since Stop can
   still be reached — just not where a person would first look. Evidence
   `docs/test-evidence/plan56-GREYED-STEP-OVER-02.summary.json`.
+- ★ `[kb]` **Download knowledge base needed two taps; the first did nothing visible** — **OPEN, reported
+  2026-09-16, not reproduced.** Read in the code (`src/components/KnowledgeBaseSection.tsx`,
+  `openStoragePicker`): the first press should open the storage-choice popup (internal or SD card) before
+  anything downloads, and the second tap is what ran the download. Needs a run with the plugin log on.
 - ★ `[layout]` **An open question's row is only partly visible behind the Retry corner icon** — **OPEN,
   seen at every visit 2026-09-15 evening.** With the newest turn open, the ring on the question's inner row
   reads 67% visible, covered by the Retry same-prompt icon in the corner. Evidence
@@ -142,11 +146,6 @@ starts work outside this.
   2026-09-16 during block 0 of session 56.** Opening the vision model try-order picker and pressing Done
   writes the picker's current order into the settings file, even when nobody moved anything. Restored by hand
   at the end of the block; no evidence file yet.
-- ★ `[reply]` **The slow-reply footnote reads as a broken sentence** — **OPEN, found 2026-09-16.** Under a
-  reply that took longer than a minute, the footnote reads "61.5s (>60s): prefer for , not ." on screen — the
-  model name and the mode name it should name are both missing. A wording bug, not a functional one: the
-  timing and the suggestion to switch models are otherwise correct. Evidence
-  `docs/test-evidence/plan56-GREYED-STEP-OVER-02.summary.json`.
 - ★ `[ui]` **A new setting can quietly stop working in one place, because the list of settings is written out by hand
   several times over** — **OPEN, found while explaining the code 2026-09-14.** The settings code repeats its fifty-odd
   setting names in several separate places in the same file. Miss one and nothing breaks visibly; that setting just stops
@@ -161,6 +160,29 @@ starts work outside this.
   chat row visits Retry, the "…" question, Copy reply text and Read aloud under the New chat slot).
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a
   blanket rule was tried and reverted in favour of Steam's native outline.
+- ★★ `[ollama]` `[layout]` **The AI models screen shows about two rows of the model list on the Deck's
+  screen** — **OPEN, reported 2026-09-16 by the maintainer, cause read in the code, not yet changed.** The
+  screen's body is capped at 520 pixels tall (or 72 percent of the screen when that is smaller;
+  `src/components/OllamaModelsHubModal.tsx`, the `maxHeight: "min(72vh, 520px)"` box), and the parts above the
+  list that never scroll away (the three section buttons, the counts line, the custom tag box, the Suggested
+  chips, two rows of filters, the column headers; all drawn by `src/components/PullModelsModal.tsx`) take about
+  430 of those, leaving roughly 90 pixels for rows. An external monitor taller than about 720 pixels gets the
+  same 520 cap, so it looks the same there. The popup itself has room: on the Deck's screen it stands 640
+  pixels tall. Fix with the filters rework below, or before it as a taller list. The maintainer's recording is
+  `recordings/DeckRecord_20260916_114238_game.mkv` on their own PC, not in this repo.
+- ★★ `[ollama]` `[focus]` **A tap outside the AI models screen started the queued downloads and left the
+  D-pad stuck in the Ollama tab** — **OPEN, reported 2026-09-16, not reproduced.** The maintainer did not
+  press Done; they think they tapped outside the screen, and afterwards the models started downloading and
+  the D-pad could not move in the Ollama tab, as if the screen were still open. Two things read in the code,
+  neither proven on the device: (a) a tap outside closes the popup through Steam's own path, which never runs
+  the plugin's own close (`onClose` in `src/features/plugin-shell/useOllamaModelsHubModal.tsx` runs only from
+  the screen's own Done and Cancel), so the tab restore and the return of the ring to the opener in
+  `finalizeShowModalAndRestoreActiveTab` (`src/hooks/useBonsaiPluginShell.ts`) are skipped and nothing owns
+  the ring afterwards; the "Manage AI models…" button also never registers itself as the return-focus owner
+  the way the two try-order buttons beside it do (`rememberModalReturnFocus`), so even a clean close returns
+  the ring to whichever opener was remembered last; (b) the last frame of the maintainer's recording shows the
+  Pull selected button lit, at the popup's bottom edge, so a tap meant for outside may have landed on it and
+  started the queued download. Needs a device reproduction with an empty queue, so nothing downloads.
 - ★★ `[reply]` **Token streaming reveals text in bursts while a game is running** — **ACCEPTED 2026-09-04 (D58 #4).** Measured 2026-08-28 with
   a game running: tokens arrive in bursts, and during a burst the overlay drops to 47 fps; between bursts it is a flat 60. Delivery
   is bursty, painting is not slow. The game's own frame rate is unmeasured. Accepted as a nice-to-have; reopen only if the game's own frame rate is measured
@@ -306,6 +328,16 @@ replace it with a specific issue when one exists.
   give-up values per Ask mode. It was the sixth candidate in round 36 and was dropped on purpose, said in advance rather than
   discovered late: it is the largest of that set — the two existing values already run through sixteen files each and going per mode
   triples them — and the least of them for a person, since it changes when a warning appears rather than what the plugin can do.
+- ★★★ `[ollama]` `[ui]` **Retire the policy tiers into the filters at the top of the AI models screen, and
+  rework the filters** — **OPEN, asked 2026-09-16 (D107), mockups first.** Today the screen has three sections
+  (Policy, Browse & pull, Advanced); the Policy section is three tier buttons (open-source only, open-weight,
+  any installed model; `src/components/ModelPolicyTierPanel.tsx`), and the Browse & pull section has two rows
+  of filter chips (All, Speed, Strategy, Expert, Vision, Coding; Installed only, FOSS only, Essentials only;
+  `src/components/PullModelsModal.tsx`). Wanted: the tier choice stops being its own section and becomes a
+  filter among the filters at the top of the list, and the filters themselves are reworked. The maintainer
+  wants a mockup page first, drawn at the Deck's own screen size like the plan 56 page, so they can pick and
+  choose what goes up there for people to filter by when they pull models. Not drawn yet. The two-row list bug
+  above is fixed with this or before it.
 - ★★★ `[platform]` **Trim the five documents that are still big** — **PARTIAL: one of five done 2026-09-15.**
   Nothing a person using the plugin would notice; this is about what every piece of work costs before it starts. Five files
   carry a trim task at the top of each, with its own star rating, time and model. **This file is done (2026-09-14 and 15) — 100 KB to 83 KB,
@@ -544,36 +576,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   **THINKING-SLOW-01**, **THINKING-LIVE-01**, **THINKING-SPOILER-01**. [Log](planning/06-thinking-blurbs-review.md#10-implementation-log).
 - ★★ `[reply]` **Token streaming Phase A/B** — **VERIFY.** Start stutter fixed, sections as D-pad stops, scroll follow. Rows
   **STREAM-REVEAL-01**, **STREAM-09**, **STREAM-FOLLOW-01**. [Review](planning/05-token-streaming-review.md).
-- ★★★ `[ask]` `[focus]` **Steam settings shortcuts: the card floats, the D-pad walks in and out, tap outside to
-  close** — **VERIFY, all six steps of plan 45 now landed 2026-09-16 (commits `2d92240`, `cdc3759`,
-  `bc6c668`, `7b08acf`, `55dbcca`).** Typing into the question box no longer grows a list of Steam settings
-  under the box that shoves the box, the chips and the chat up the screen; the list floats in a small card
-  above the box instead, holds up to eight rows but never more than fit under the tab bar (about six on the
-  Deck's own screen), names the rest as "N more" in its heading, and hides itself once you are typing a real
-  question. Up from the question box now walks the real highlight onto the nearest row, Up and Down step
-  between rows, Down from the bottom row returns to the box, A opens that Steam setting, and B — or a tap
-  anywhere outside the card, for a mouse or a finger — closes the card for that search while keeping the
-  typed words; the suggestion chips above the box stay out of reach while the card is open. The old fake
-  on-screen marker and its keyboard-only handling are gone. **Measured before the fix, 2026-09-16, on the
-  Deck's built-in screen:** two letters brought back 71 rows and the box jumped 209 pixels to the top of the
-  panel while the chat disappeared under the list (`docs/test-evidence/plan56-M-settings-jump-before.json`).
-  **Confirmed on the Deck 2026-09-16, build `ca12429`:** the box holds still, the card caps at six rows and
-  reads "Steam settings · 65 more" — but the card's surface let chat text underneath show through it; fixed
-  the same session in commit `55dbcca` and re-checked the same day on a later deploy, confirmed solid. **The
-  D-pad wiring confirmed on the Deck 2026-09-16 too:** Up from the box reaches the nearest row, Up and Down
-  step between rows, Down from the bottom row returns to the box, a chip is out of reach while the card is
-  open, and B (or a tap outside, for a mouse or a finger) closes the card and keeps the typed words. **A on a
-  row does open the Steam setting**, though the highlight lands one toggle above the row that was pressed —
-  the same known shape as the Open Permissions bug — and **the typed words are not kept when you come back
-  from the jump**, which the row's own text expected; whether they should survive is a question for the
-  maintainer, not decided here. The six-row cap on the Deck's own screen is the maintainer's call, looked at
-  and kept (D106); whether the typed words should survive the jump is now logged as an open call in D106,
-  left open on purpose, and this entry does not wait on it. Evidence `docs/test-evidence/plan56-SETTINGS-CARD-01.json`,
-  `docs/test-evidence/plan56-SETTINGS-CARD-DPAD-01.summary.json`.
-  [Plan](planning/45-settings-shortcut-card.md) ·
-  [Mockups](https://claude.ai/code/artifact/1ab2a570-2ae5-45cd-b12b-332694f96fd5). Rows **SETTINGS-CARD-01**
-  through **04** have passed; **05** (A opens, the return matches) passed for the jump but not for keeping the
-  words, so it stays open; **06** and **07** are landed and owed on the Deck.
 - ★★★ `[perms]` **Kids master lock** — **VERIFY.** Shipped 2026-08-09. Rows **KIDS-LOCK-01**, **KIDS-FOCUS-01**, **KIDS-REGRESS-01**
   (and **KIDS-LOCK-02** with a child account). Live CEF Stage 0 confirmation still owed.
 - ★★★ `[reply]` **Soft reply-length cap and thinking budget** — **VERIFY.** Shipped 2026-08-10. Sub-check 02 verified; 01, 03 and 04
@@ -742,37 +744,6 @@ ones from this month are D81 to D88.
   **MEGAERA-01**: once the point release is installed from the Ollama tab's Update knowledge base, with Hades
   running, ask "How do I beat Megaera?" and check the note attaches with no "no close match" line. On the library
   still installed today, that line still appears. Evidence `docs/test-evidence/plan55-HADES-NAMED-01.json`.
-- ★★ `[KB]` **Neither honesty line can appear when the game is only named in the question** — **VERIFY, fixed
-  in code now for both halves, device check owed.** The check that decides whether to show
-  an honesty line is now told about a game that is only named in the question, not just one that is running
-  or picked from a menu, and the coverage chip proves that plumbing landed. Row **HONESTY-TEXT-GAME-01**: with
-  nothing running, ask "black mesa how do i tame a horse" and check the "no close match" line appears; ask a
-  real Black Mesa boss question and check no line appears. **Run 2026-09-15: FAIL.** Three Black Mesa cards
-  attached to the horse question anyway, and the model's own reply admitted it had no answer for taming a
-  horse — but the "no close match" line still did not appear, because the notice's own closeness rule judged
-  those three keyword-matched cards close enough to count as covering the question, since every card of a game
-  repeats the game's own name in its title. Evidence `docs/test-evidence/plan55-HONESTY-TEXT-GAME-01.json`.
-  **Fixed again 2026-09-16 (commit `f2e358a`):** the check now also asks whether the actual words in the
-  question — everything but the game's name and ordinary filler words — show up anywhere in what attached.
-  **Run again 2026-09-16: FAIL, same row, same question.** The new keyword check works on its own, but the
-  line's last gate — a meaning-search score under 0.65 — is measured on the whole question including the
-  game's name, and every Black Mesa card scores about 0.69 once the words "black mesa" are in the text,
-  whether the rest of the question is a real one or not: the horse question scores 0.687 and a real Gonarch
-  question scores 0.685, too close to tell apart, while a bake-a-cake stretch question would score 0.603 and
-  wrongly show the line. Measured with the game's name stripped out of the same questions, stretches score
-  0.50–0.64 and real questions 0.70–0.74, cleanly either side of the existing line — so the fix that is still
-  needed is to score the question's own words alone, without the game's name in them, only for this one case
-  where the game came from the question and nothing is running. Evidence
-  `docs/test-evidence/plan56-HONESTY-LINE-01.json`. Only questions that named a game with nothing running are
-  affected; a game that is actually running is unchanged. **Fixed again 2026-09-16 (commits `a6561d7`,
-  `14a6392`):** the check can now take a second meaning score, measured with the game's own name taken out of
-  the question first, and uses that one instead of the raw score whenever it was measured — only on turns
-  where the game came from the question's own words, never a running game. With "black mesa" removed from the
-  text, the horse question's score drops from 0.687 to 0.635 (now under the line) and the real Gonarch
-  question's score rises from 0.685 to 0.737 (safely over it), so the two can finally be told apart. **Not yet
-  checked on the Deck: this session's own pre-authorised wipe (D105) ran before this fix landed and removed
-  the Deck's own local AI program and every downloaded model, so no question can be asked on the Deck at all
-  until "Run AI on this Deck" is switched back on.** Six new tests cover the fix.
 - ★★ `[KB]` **The follow-up menu offered places from a different game than the one you asked about** — **VERIFY,
   fixed 2026-09-15, one sighting confirmed clean on the Deck.** Two bug entries, one cause: the two choices under a
   follow-up menu were word for word the worked example in the model's own instructions — Half-Life 2's train
@@ -792,20 +763,6 @@ ones from this month are D81 to D88.
   gets the same relaxed prompt its risk chip already assumed; all three are plain text from the first streamed word.
   Rows **STRAT-SPOIL-NAME-01**, **STRAT-SPOIL-FIRST-01**, **STRAT-SPOIL-TEXT-01**, plus the older **STRAT-SPOIL-DRG-01**
   block. [Plan 54](planning/54-spoiler-rules-gaps.md).
-- ★★ `[KB]` **The new answer shape needs a read on the device** — **VERIFY, all three read; your own read of
-  the three is what is owed now.** The Portal 2 sentence came back clean 2026-09-12: the note's advice starts
-  straight after the character's opening line, 111 words, no warning line. The Hades sentence came back the
-  same shape 2026-09-15, with Hades running: the advice starts straight after the character's opening line,
-  about 100 words, no warning line, no spoiler box, with a Hades follow-up menu. The Black Mesa sentence came
-  back the same shape 2026-09-16: 176 words, the advice starts right after the character's opening line, the
-  Gonarch note attached, no warning line. Whether any of the three reads as advice-first is still your
-  judgement, which is what this row is for. All three replies are now written out in full in
-  `docs/test-evidence/plan56-KB-ANSWER-03-three-replies.md`, copied word for word from the saved chats in the
-  pre-wipe backup, which also fills the Portal 2 reply's missing evidence (that reply: 2026-09-12, 18:54 Deck
-  time, 113 words). You asked where the copy was on 2026-09-16; it is there now. Your read of the three is
-  still what is owed. Row **KB-ANSWER-03**; evidence
-  `docs/test-evidence/plan56-KB-ANSWER-03-three-replies.md`,
-  `docs/test-evidence/plan55-KB-ANSWER-03-hades.json`, `docs/test-evidence/plan56-KB-ANSWER-03-blackmesa.json`.
 - ★★★ `[KB]` **DRG Survivor glossary terms** — **VERIFY, one touch tap owed.** Shipped 2026-08-28 and walked on device:
   underline, popup, D-pad reachability, B, one-press Up. Rows **DRG-GLOSSARY-01…04**.
   [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).
@@ -919,3 +876,33 @@ Parked on purpose, not dropped. One line each, with what unshelves it; the full 
 
 Everything shipped since v0.4.9 (2026-07-08), one line each — moved out to its own file to keep this one small,
 copied line for line, nothing reworded: [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md).
+
+**Closed 2026-09-16 (the maintainer's third round, D107):**
+
+- ★★ `[KB]` **The new answer shape reads as advice-first** — **DONE 2026-09-16 (D107).** All three test
+  sentences — Portal 2, Hades and Black Mesa — came back the same shape: the character's advice starts right
+  after their opening line, no warning line, no spoiler box. The maintainer read all three word for word and
+  called them advice-first, closing the read this row had waited on since 12 September. Row **KB-ANSWER-03**;
+  evidence `docs/test-evidence/plan56-KB-ANSWER-03-three-replies.md`,
+  `docs/test-evidence/plan55-KB-ANSWER-03-hades.json`, `docs/test-evidence/plan56-KB-ANSWER-03-blackmesa.json`.
+- ★★ `[KB]` **The "no close match" line now shows up only when it should, even when the game is only named in
+  the question** — **DONE 2026-09-16 (D107).** Seen live on the Deck's own screen, build `14a6392`, once
+  Ollama and the knowledge base were back on the Deck: a stretch question that only names a game gets the
+  line, and a real question about that game does not, both directions confirmed. Row
+  **HONESTY-TEXT-GAME-01**; evidence `docs/test-evidence/plan56-HONESTY-LINE-03-on-screen.json`.
+- ★★★ `[ask]` `[focus]` **Steam settings shortcuts: the card floats, the D-pad walks in and out, tap outside
+  to close** — **DONE 2026-09-16 (D107).** All six steps of plan 45 are confirmed on the Deck: the floating
+  card, its six-row cap, the D-pad wiring in and out of it, and opening a Steam setting from a row. The one
+  open call left — whether the typed words survive a jump back from Steam — is settled: the card keeps
+  working the way it does today, so the box is left empty when you come back. Nothing about the card is owed
+  any more. Rows **SETTINGS-CARD-01** through **07**. [Plan](planning/45-settings-shortcut-card.md) ·
+  [Mockups](https://claude.ai/code/artifact/1ab2a570-2ae5-45cd-b12b-332694f96fd5).
+- ★ `[reply]` **The slow-reply footnote reads as a broken sentence — not a bug, 2026-09-16 (D107).** The
+  sentence was always whole on screen: "150.8s (>60s): prefer GPU for Ollama, not CPU" reads in full on the
+  screenshot `screenshots/DeckCapture_20260916_115628_game.png`. The earlier blank-looking read came from the
+  test rig's own label reader splitting the bold words GPU, Ollama and CPU into three separate labels, not
+  from the plugin. Evidence `docs/test-evidence/plan56-HONESTY-LINE-03-on-screen.json`.
+- ★ `[ollama]` `[ui]` **"Open AI models…" read like "OpenAI models"** — **FIXED 2026-09-16 (D107, commit
+  `79b1a0e`), deployed the same afternoon.** The Ollama tab's button now says "Manage AI models…", with the
+  policy tier after the dash as before; the button's spoken label, the hint inside the picker and the
+  troubleshooting guide all say the same. Reported by the maintainer from the Deck.

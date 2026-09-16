@@ -1,0 +1,39 @@
+{
+  "row": "KB-SPEED-02 What the Deck is holding in memory around one question",
+  "when": "2026-09-12 ~18:45 EDT",
+  "setup": "Deck, nothing running, plugin build 8d45b8a deployed this session. Ollama on the Deck at 127.0.0.1:11434, started as a bare process (no service file), with OLLAMA_MAX_LOADED_MODELS=1 in its environment.",
+  "the_question": "Why does every game question wait about a second while the notes are searched?",
+
+  "measured_on_the_deck_as_it_is_set_up_today": {
+    "1_search_cold": {"ms": 675.47, "loaded_after": ["nomic-embed-text:latest"]},
+    "2_search_again_no_reply_between": {"ms": 24.37, "loaded_after": ["nomic-embed-text:latest"]},
+    "3_one_reply_from_the_chat_model": {"ms": 6995.40, "loaded_after": ["gemma4:e2b-it-qat"]},
+    "4_search_after_the_reply": {"ms": 732.51, "loaded_after": ["nomic-embed-text:latest"]},
+    "reading": "Step 3 is the finding. After the chat model answers, the search model is GONE from memory, and after step 4 searches again, the chat model is gone in turn. They evict each other, every time."
+  },
+
+  "the_cause": "OLLAMA_MAX_LOADED_MODELS=1 in the environment of the Ollama process on the Deck. Only one model may be resident at a time, so every question loads the search model (about 700 ms), the answer then loads the chat model and pushes the search model out, and the next question pays the 700 ms again. That is the second a person waits.",
+
+  "measured_with_the_setting_raised_to_2": {
+    "how": "A second, temporary Ollama on port 11435 with the same environment except OLLAMA_MAX_LOADED_MODELS=2, started and stopped inside one session. The maintainer's own Ollama on 11434 was not touched, restarted or reconfigured, and was confirmed still running with its original settings afterwards.",
+    "1_search_cold": {"ms": 667.5, "loaded_after": ["nomic-embed-text:latest"]},
+    "2_search_again_no_reply_between": {"ms": 23.2, "loaded_after": ["nomic-embed-text:latest"]},
+    "3_one_reply_from_the_chat_model": {"ms": 6829.7, "loaded_after": ["gemma4:e2b-it-qat", "nomic-embed-text:latest"]},
+    "4_search_after_the_reply": {"ms": 24.1, "loaded_after": ["nomic-embed-text:latest", "gemma4:e2b-it-qat"]},
+    "reading": "Both models stay in memory. The search after a reply costs 24 ms instead of 732 ms."
+  },
+
+  "what_this_means_for_a_person": "Every game question on the Deck currently waits about seven tenths of a second before the answer even starts, purely to load the note-searching model back into memory after the last answer pushed it out. Letting both models stay loaded removes that wait: 732 milliseconds becomes 24. Nothing in the plugin changes.",
+
+  "does_it_fit": "Yes. The Deck's graphics memory reports 9.0 GiB total and 7.9 GiB available; the answering model is about 4.3 GB and the note-searching model about 0.3 GB. Both were resident together during the measurement above with no failure.",
+
+  "what_this_does_not_settle": [
+    "Whether both models resident affects anything else on the Deck under load, for instance with a heavy game running. This was measured with nothing running.",
+    "Where OLLAMA_MAX_LOADED_MODELS=1 is set. The Ollama process has no service file and its parent is gone, so whatever started it could not be found from the running system. Changing it permanently needs that answered first.",
+    "The August-to-September creep. A constant per-question reload does not by itself explain readings getting slower over weeks."
+  ],
+
+  "earlier_belief_corrected": "The PC could not reproduce this (runs/plan48-embed-eviction-pc.json): there both models stayed loaded and the search after a reply took 24 ms. That was read at the time as the PC having more memory. The real difference is this setting, not the memory.",
+
+  "verdict": "Cause found and the fix measured. The decision to change the setting is the maintainer's, because it is their device's configuration and not plugin code."
+}

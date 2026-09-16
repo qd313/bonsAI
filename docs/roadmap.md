@@ -622,7 +622,9 @@ meant to have an answer has one.
 **Finding the right note.** On questions nobody tuned against, the search puts the right note in the top three
 **84 times in a hundred, up from 80**. Every one of the 21 notes written in wave two is found in the top three for
 its own question, and 12 come first. Across all 72 questions about the new games, **58 find their note in the top
-three where 38 did**. Two rows out of 413 got worse against 24 better.
+three where 38 did**. Two rows out of 413 got worse against 24 better. That 84-in-a-hundred count was
+measured before the search gained a floor that can refuse a weak match, and has not been measured
+again since — treat it as owed, not confirmed.
 
 **The answer the Deck's own model writes**, over 61 questions with the corrected checks: it keeps the note's facts
 **76.6 times in a hundred**, never contradicts its note **94.4**, attaches a note whenever one is due **100**,
@@ -655,9 +657,21 @@ evening ran the same evening, once the Deck was free.
 3. **Decide how to finish follow-ups.** The search half works on the device — it looks up the right thing
    you were just asking about — but the answer can still be about something else, and one run in three still
    names the wrong boss (its own bug below). The options for finishing it still need writing up.
-4. **Work out why the note search has been getting slower since August.** About thirty per cent slower and
-   still climbing, with no explanation yet.
-5. **Then wave four** — writing more notes.
+4. **The one-second wait on every question is now explained.** The Deck can only hold one model in
+   memory at a time, so the model that writes the answer and the model that searches the notes keep
+   pushing each other out. A search right after an answer measured 732 thousandths of a second; with
+   the limit raised to two, tried safely on a spare copy of the setting that never touched the
+   maintainer's own, it dropped to 24. Measured 2026-09-12. Evidence
+   `docs/test-evidence/plan48-R6-deck-model-eviction.json`.
+5. **Still open: the drift from August to September, whether keeping two models loaded causes trouble
+   with a game running, and which of those two settings the maintainer's Deck is actually running
+   today.** The plugin disagrees with itself — one of its own starting paths sets the limit to one
+   model, another sets it to two — and the Deck has been wiped and set up again since, so either could
+   be active. Next: read what is actually running, make the two paths agree, and check memory with a
+   game running.
+6. **Then wave four** — writing more notes. [The plan for it](planning/58-kb-session-wave-four.md) is
+   written, for helpers running side by side with device checks alongside, but nothing in it has
+   started or been decided — it is waiting on the maintainer's answers and their go-ahead.
 
 **Wave two's own evening ran 2026-09-07** and wave three ran the same day; the results and the bug write-ups are
 in [wave two's report](planning/47-kb-wave-two-session.md) § 8 and [wave three's](planning/48-kb-wave-three-session.md).
@@ -694,10 +708,11 @@ ones from this month are D81 to D88.
   2026-09-06.** Repeated on the Deck: 1.10, 1.23 and 1.19 seconds across three questions in a row, the same band as
   the first time this was measured. The maintainer looked at the number and said that is fine — about a second before
   an answer that then takes tens of seconds to write out is not something a person would notice. **The one-second
-  target this was measured against is retired.** The related finding still stands: the idea that only the first
-  question after a quiet spell is slow holds on a PC, where a repeat came back in 0.05 seconds, but not on the Deck,
-  where the third question here was no faster than the first. (D84) Evidence `docs/test-evidence/round34-drg-q*.json`,
-  `docs/test-evidence/plan46-R2-strategy-half.json`.
+  target this was measured against is retired.** The related finding still stands: a repeat search is fast on a
+  PC (0.05 seconds) but not on the Deck, where the third question here was no faster than the first. **The cause
+  is now measured** — the two models pushing each other out of memory, see the step above — and removing it reads
+  as cheap; the acceptance above stands until the maintainer says otherwise. (D84) Evidence
+  `docs/test-evidence/round34-drg-q*.json`, `docs/test-evidence/plan46-R2-strategy-half.json`.
 - ★★★★ `[KB]` **What ships loses to its own meaning half on questions nobody tuned against** — **ACCEPTED, decided
   2026-09-06.** The weight sweep ran: leaning the search toward meaning gets the right note first about four to six
   points more often, but it also buries a brand-new note whose meaning index has not been built yet, which the current
@@ -763,6 +778,12 @@ ones from this month are D81 to D88.
   gets the same relaxed prompt its risk chip already assumed; all three are plain text from the first streamed word.
   Rows **STRAT-SPOIL-NAME-01**, **STRAT-SPOIL-FIRST-01**, **STRAT-SPOIL-TEXT-01**, plus the older **STRAT-SPOIL-DRG-01**
   block. [Plan 54](planning/54-spoiler-rules-gaps.md).
+- ★★ `[KB]` **"Not in my notes" line** — **VERIFY, built and shipped 2026-09-07, device check failed the same
+  day.** The line itself is in the code, but on the Deck nothing could make it appear: ten questions asked first
+  all attached a note, so the one question meant to show the line never got the chance. The note search has
+  since gained a floor that can refuse a weak match, so there may be a way to show it now — nobody has checked.
+  Same shape of problem as the "No tip for this" line in the Bugs list above; run both together next time. Row
+  **W2-R5**.
 - ★★★ `[KB]` **DRG Survivor glossary terms** — **VERIFY, one touch tap owed.** Shipped 2026-08-28 and walked on device:
   underline, popup, D-pad reachability, B, one-press Up. Rows **DRG-GLOSSARY-01…04**.
   [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).
@@ -774,13 +795,6 @@ ones from this month are D81 to D88.
 - ★ `[KB]` **Measure answers with the character voice on** — **OPEN, switch already built.** The answer test's voice
   switch landed 6 September. What's still owed is one run with it turned on, which wave three's main measurement
   run includes — planned as wave three ([48](planning/48-kb-wave-three-session.md)).
-- ★★ `[KB]` **Prompt diet** — **OPEN, agreed 2026-09-01.** The model reads about nine tokens of rules for every token of
-  knowledge. Drop the citation instruction (obeyed once in 89 asks, and the UI cannot show it), send screenshot rules only
-  when an image is attached, put the cards next to the question. About a day, measured before and after on the answer test.
-- ★★ `[KB]` **"Not in my notes" line** — **OPEN, agreed 2026-09-01.** When a game question matches no card, one muted line
-  built by code says the answer is general knowledge, so a person can tell notes from memory. Only on Strategy and Expert
-  asks for a covered game; never when the library is off or the game is uncovered. **Wording settled 2026-09-07:**
-  *"Not in my notes — this answer is from the model's own knowledge."* (D48, D85)
 - ★★ `[KB]` **Eval tooling: the weight sweep, per-question results for what ships, a second right answer** — **OPEN,
   agreed 2026-09-01, sweep go-ahead 2026-09-05.** Nothing a user sees. The sweep runs on the tuning questions and decides
   the blend-weights bug above; the rest stops every card batch reading as a regression when two cards are both fair
@@ -906,3 +920,15 @@ copied line for line, nothing reworded: [archive/roadmap-done-v0.5.0.md](archive
   `79b1a0e`), deployed the same afternoon.** The Ollama tab's button now says "Manage AI models…", with the
   policy tier after the dash as before; the button's spoken label, the hint inside the picker and the
   troubleshooting guide all say the same. Reported by the maintainer from the Deck.
+
+**Closed 2026-09-06:**
+
+- ★★ `[KB]` **Prompt diet: the model reads far fewer rules for every fact it knows** — **DONE 2026-09-06.**
+  The instructions sent with every game question fell from 6,930 to 5,682 characters: the model is no longer
+  asked to cite cards in a way the screen cannot show, and screenshot rules only appear when a screenshot is
+  actually attached. A third change — moving the cards next to the question — exists only as a switch that
+  stays off by default, because turning it on made the spoiler warning show up correctly far less often.
+  Measured before and after on the answer test on this PC, and confirmed on the Deck 2026-09-06: a Hades
+  question about a boss with a note came back with that boss's own tactics, the prompt was trimmed to fit,
+  and the old silent-drop warning was gone. The row's three answer-test sentences and its screenshot
+  question were not run on the device. Commits `61975bf`, `0b96405`, `fcfc9a0`.

@@ -106,12 +106,18 @@ now — crash went from 2 to 9, sound 1 to 8, picture 1 to 8, performance 2 to 1
 fit" when its best match is too weak to trust, rather than attaching something wrong.
 
 **The Deck.** The note search has kept getting slower since August — the same three questions took 793 to
-900 milliseconds in August and 1.1 to 1.2 seconds in early September, about thirty per cent slower and
-still unexplained. A written budget of one second now exists with a check, but the check itself was found
-this wave to give a false all-clear: it reads 23 to 38 thousandths of a second when it never has to write
-an answer, while a real question takes over a second for that same step. A fix is in progress. One
-untested idea: the chat model and the meaning-search model may be competing for memory on the Deck, so
-answering a question pushes the meaning-search model out and the next question has to load it back in.
+900 milliseconds in August and 1.1 to 1.2 seconds in early September, about thirty per cent slower — and
+that drift over the weeks is still not explained. A written budget of one second now exists with a check,
+but the check itself was found this wave to give a false all-clear: it reads 23 to 38 thousandths of a
+second when it never has to write an answer, while a real question takes over a second for that same step.
+A fix is in progress. **Tested and confirmed 2026-09-12:** the chat model and the meaning-search model were
+competing for memory on the Deck. The Deck can only hold one model at a time, so answering a question pushed
+the meaning-search model out and the next search paid to load it back in — 732 milliseconds, against 24 when
+nothing had evicted it. Raising the limit to two, tried on a spare copy of the setting that never touched
+the maintainer's own, kept both models loaded and brought that search back down to 24. This explains the
+per-question wait, not the drift over weeks — a constant per-question reload does not by itself explain
+readings getting slower over time, so that part is still open, along with whether two models loaded together
+is fine with a heavy game running.
 
 **The library.** 293 notes over 25 games, 156 shared Deck tips, **every one of them indexed** — the build
 now refuses to finish if any note or tip is missing its meaning index, where it used to only print a
@@ -135,11 +141,15 @@ note. 1.39 MB to download. Schema stays at 3, so nothing already installed goes 
   at once, which is what says the panel reads this only once, at start-up, and never listens for a change.
 - ★★★ **The note search has got about thirty per cent slower since August, and the check meant to catch it
   gives a false all-clear.** The same three questions took 793 to 900 milliseconds in August and 1.1 to 1.2
-  seconds in early September, no explanation yet. A written one-second budget now exists with a check, but
-  the check itself reads 23 to 38 thousandths of a second, because it never has to write an answer, while a
-  real question takes over a second for that same step and would fail the budget. A fix is in progress. One
-  untested idea: the chat model and the meaning-search model may be competing for memory on the Deck, so
-  answering a question pushes the meaning-search model out and the next question has to load it back in.
+  seconds in early September; the drift over those weeks is still not explained. A written one-second budget
+  now exists with a check, but the check itself reads 23 to 38 thousandths of a second, because it never has
+  to write an answer, while a real question takes over a second for that same step and would fail the
+  budget. A fix is in progress. **Tested 2026-09-12: the chat model and the meaning-search model were
+  competing for memory**, because the Deck can only hold one model at a time — answering a question pushed
+  the meaning-search model out, and the next search paid 732 thousandths of a second to load it back, against
+  24 when nothing had evicted it. Raising the limit to two kept both models loaded and brought that cost back
+  to 24. That explains the per-question wait, but not the drift over weeks, and not whether it is fine with a
+  game running — both still open.
 - ★★★ **Follow-ups remember, step one: the search half works on the device, the answer half does not.**
   Asking about a boss, then a bare "what about the second phase," now looks up the right boss first on the
   device, exactly as built. But the reply named a different boss, because a better-matching wrong note was
@@ -283,8 +293,9 @@ them straight; what remains is coverage, follow-up memory, and the things the te
    redoing: follow-up questions now look up the right boss but the reply can still name a different one,
    and the new one-second speed check reports a healthy device while a real question runs over budget.
    Nothing about either is decided until this is done. A call is waiting for the maintainer on how to
-   finish the follow-up half, and why the note search has kept getting slower since August is still
-   unexplained.
+   finish the follow-up half. The per-question wait itself is now explained (section 3) — the Deck can
+   only hold one model at a time — but why the note search has kept getting slower since August, week
+   over week, is still unexplained.
 2. **Fallout: New Vegas is owned but not installed on the Deck**, so its cards cannot be judged in place
    until it is. That is the only thing blocking the last wave-one device row.
 3. **The "no new titles" rule** for Phase 5 is reopened for one tranche only; the catalog stays its own

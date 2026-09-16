@@ -1,0 +1,22 @@
+{
+  "row": "DRG-01 (named boss comes back plain) and DRG-01-STREAM-01 (no mask flash while it streams)",
+  "plan": 55,
+  "when": "2026-09-16T01:08:27.807220+00:00",
+  "build": "1ac4d7a6fff479a01c48f6a1b6a60d78b360b88a",
+  "setup": "Deep Rock Galactic: Survivor (2321470) running (runs/plan55-launch-drgs.json), Strategy mode, masking on, streaming always on, no consent phrase; typed with scripts/deck_send_ask.py (VERIFIED), sent with Ask; the page polled every 0.7 s (74 polls over 62 s) for the words 'hidden until complete'; a 45-second recording ran from just before the send.",
+  "question": "How do I beat Glyphid Dreadnought?",
+  "reply": "Right then, listen up, you want to take down that Glyphid Dreadnought? It ain't rocket science, mate, but you gotta keep your head on a swivel. You gotta kite 'em between the waves, see? Don't just stand there like a statue. Focus your fire on those weak-point armor plates when they open up - that's where the real fun is. And don't be silly, save that big overclock or the nuke for when you've got a proper window to break that armor. Keep it tight, keep it moving!",
+  "spoiler_fences_rendered": 0,
+  "mid_stream_chip_seen": false,
+  "tap_to_reveal": false,
+  "honesty_line": "none",
+  "follow_up_menu": [
+    "A. Just arrived at the start of the mission",
+    "B. Stuck on a tough boss fight"
+  ],
+  "recording": "recordings/DeckRecord_20260915_210556_game.mkv",
+  "verdict": "PASS for DRG-01 (boss tactics in plain text, no tap-to-reveal) and PASS for DRG-01-STREAM-01 (no 'Spoiler hidden until complete' chip seen at any poll; the recording is there for a by-eye confirm). DRG-01d (history does not re-fence) follows after the deploy with a second question.",
+  "runs": [
+    "runs/plan55-DRG-01-send.json"
+  ]
+}

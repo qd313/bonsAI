@@ -1,0 +1,12 @@
+{
+  "row": "GREYED-STEP-OVER-01, the Ask-button half (Down from the box while an answer is in flight) - lane C commit f5f0f79",
+  "plan": 55,
+  "when": "2026-09-16T01:15:23.630522+00:00",
+  "build": "f34de8a",
+  "setup": "Deep Rock Galactic: Survivor running; a question sent with Ask (the ring landed on the box); two Down presses within about three seconds of the send, while no reply text had arrived yet.",
+  "measured": "Both Downs left the ring on the question box (moved: false); the greyed Ask button did not take it. About 40 s later, before the reply text had started, a page read showed the Ask button already enabled again, so how long the in-flight window lasts on this build is worth a closer look; the presses themselves fell inside it.",
+  "verdict": "PASS for the Ask half. The thumbs half (a stopped reply) is still to be pressed.",
+  "runs": [
+    "runs/plan55-GREYED-STEP-OVER-01-ask-half.json"
+  ]
+}

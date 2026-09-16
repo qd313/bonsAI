@@ -1,0 +1,14 @@
+{
+  "row": "GAME-LINE-LIVE-01, the live-update half - lane F commit 55a1e84",
+  "plan": 55,
+  "when": "2026-09-16T01:24:51.926672+00:00",
+  "build": "f34de8a",
+  "setup": "Deep Rock Galactic: Survivor running with the panel open (the line read 'Context: active game Deep Rock Galactic: Survivor'); the game exited through Steam's menu by the rig (runs/plan55-exit-drgs-confirm.json, A on Confirm at about 01:22:50Z; RunningApps empty right after); the Quick Access Menu reopened with the plugin's own open tool, no plugin restart.",
+  "read": {
+    "at": "2026-09-16T01:23:13Z",
+    "line": "Context: no active game detected"
+  },
+  "old_build_for_comparison": "docs/test-evidence/plan55-BUG-game-line-after-exit.json: on 1ac4d7a the line still named the exited game after a reopen more than a minute later.",
+  "verdict": "PASS: the line corrected itself within seconds of the exit with the panel kept mounted, and it shows the game's name while a game runs. Both halves of the row pass.",
+  "note": "The rig's exit path closes the Quick Access Menu, so 'panel open throughout' cannot be literal with the rig; the panel stayed mounted and was not restarted, which is the case the bug was about."
+}

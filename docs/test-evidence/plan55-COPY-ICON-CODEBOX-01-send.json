@@ -1,0 +1,54 @@
+{
+  "ok": true,
+  "fidelity": "steam-routed",
+  "steps": [
+    {
+      "index": 1,
+      "label": "send the code-box question",
+      "press": [
+        "A"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"ask\"",
+      "to": "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\"",
+      "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div._DialogLayout.Panel.Focusable:nth-child(2) > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 601,
+      "diagnosis": "press routed, focus moved <BUTTON> \"ask\" -> <INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\""
+    }
+  ],
+  "ranSteps": 1,
+  "totalSteps": 1,
+  "passed": 1,
+  "failed": 0,
+  "visited": [
+    "<BUTTON> \"ask\"",
+    "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\""
+  ],
+  "cycle": null,
+  "neverReached": [],
+  "stopsFocusedButNotVisible": 0,
+  "notVisibleStops": [],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 1269,
+  "acquired": false,
+  "summary": "1/1 steps passed"
+}

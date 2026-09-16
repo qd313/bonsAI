@@ -1,0 +1,21 @@
+{
+  "row": "HADES-UNNAMED-STREAM-01 (second attempt, with a screen recording) and HADES-UNNAMED-01 (third run)",
+  "plan": 55,
+  "when": "2026-09-16T00:52:35.573427+00:00",
+  "build": "1ac4d7a6fff479a01c48f6a1b6a60d78b360b88a",
+  "setup": "Hades (1145360) running, Strategy mode, masking on, streaming always on; typed with scripts/deck_send_ask.py (VERIFIED); a 45-second recording from scripts/record-deck.ps1 started just before the send; the page polled every 0.7 s (42 polls over 36 s) for the words 'hidden until complete'.",
+  "question": "who is waiting at the end of the game in hades",
+  "reply": "Right then, you wanna know who's waiting at the end of Hades? Listen up, mate, this ain't just about one final fight; it's a whole saga. The game tells you that beating it once is just the warm-up, yeah? The real business, the end of the story, is where things get proper intense. [Spoiler - tap to show / Hidden until you reveal (Strategy Guide)] So, you gotta keep playing, build up that Heat, and keep going...",
+  "fence_rendered": {
+    "class": "bonsai-spoiler-reveal-target",
+    "state": "masked, tap to show",
+    "position": "mid-reply"
+  },
+  "mid_stream_chip_seen_by_poll": false,
+  "recording": "recordings\\DeckRecord_20260915_205114_game.mkv",
+  "verdict_unnamed_01": "PASS: story detail fenced and masked on a no-boss Hades question (third run; two of three fenced, the mild 'reach the surface' one did not).",
+  "verdict_stream_01": "The poll never saw 'hidden until complete' while the reply streamed; whether the chip flashed for less than a poll interval is for the recording to answer. Not claimed as a pass. The maintainer can play the recording; the fence itself was drawn masked by the time the reply settled.",
+  "runs": [
+    "runs/plan55-HADES-UNNAMED-STREAM-01-rec-send.json"
+  ]
+}

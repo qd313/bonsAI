@@ -1,0 +1,20 @@
+{
+  "row": "STRAT-SPOIL-TEXT-01 (game named only in the question), second half: the story-game guard",
+  "plan": 55,
+  "when": "2026-09-16T00:59:46.340461+00:00",
+  "build": "1ac4d7a6fff479a01c48f6a1b6a60d78b360b88a",
+  "setup": "Nothing running, Strategy mode, masking on; typed with scripts/deck_send_ask.py (VERIFIED), sent with Ask, right after the Deep Rock half.",
+  "question": "new vegas best build",
+  "reply_start": "Alright, listen up! You wanna know the best build for New Vegas? ... look at those SPECIAL stats ... tag three skills ... lean into Intelligence early; buy that implant ... The knowledge says start with leather armor. It's got a decent Damage Threshold ...",
+  "spoiler_fences_rendered": 0,
+  "story_content_in_reply": "none: the reply is build advice only (stats, skills, early armor), nothing about the story",
+  "honesty_line": "none (a New Vegas note attached: 'The knowledge says start with leather armor')",
+  "follow_up_menu": [
+    "A. Just arrived at the town tutorial",
+    "B. Fighting through the first major desert area"
+  ],
+  "verdict": "PASS as a careful reply: a story game named only in the question got a gameplay-only answer with no story detail, so there was nothing to fence; the follow-up menu names New Vegas places, not the prompt's old example. Both halves of STRAT-SPOIL-TEXT-01 pass on this build (first half in plan55-STRAT-SPOIL-TEXT-01-drg.json).",
+  "runs": [
+    "runs/plan55-STRAT-SPOIL-TEXT-01-newvegas-send.json"
+  ]
+}

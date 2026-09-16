@@ -1,0 +1,152 @@
+{
+  "ok": true,
+  "fidelity": "steam-routed",
+  "steps": [
+    {
+      "index": 1,
+      "label": "placing press, then down: must be on Ask",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"Retry same prompt\"",
+      "to": "<DIV> \"How do I beat Glyphid Dreadnought?\"",
+      "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2)",
+      "visibility": {
+        "verdict": "partial",
+        "visiblePercent": 67,
+        "coveredBy": "div.bonsai-turn-retry-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.Focusable",
+        "clippedBy": null,
+        "points": {
+          "visible": 6,
+          "covered": 3,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": false,
+      "settled": true,
+      "settleMs": 604,
+      "diagnosis": "press routed, focus moved <BUTTON> \"Retry same prompt\" -> <DIV> \"How do I beat Glyphid Dreadnought?\"; FOCUSED BUT only PARTIALLY visible (67%), covered by div.bonsai-turn-retry-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.Focusable -- the ring is on it and a person could not see it"
+    },
+    {
+      "index": 2,
+      "label": "down again in case the placing press landed higher",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"How do I beat Glyphid Dreadnought?\"",
+      "to": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 632,
+      "diagnosis": "press routed, focus moved <DIV> \"How do I beat Glyphid Dreadnought?\" -> <DIV> (unnamed - the only text around it is a container's, not a label)"
+    },
+    {
+      "index": 3,
+      "label": "down again",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> (unnamed - the only text around it is a container's, not a label)",
+      "to": "<DIV> \"kite\"",
+      "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 635,
+      "diagnosis": "press routed, focus moved <DIV> (unnamed - the only text around it is a container's, not a label) -> <DIV> \"kite\""
+    },
+    {
+      "index": 4,
+      "label": "down again",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"kite\"",
+      "to": "<DIV> \"overclock\"",
+      "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div.Panel.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 611,
+      "diagnosis": "press routed, focus moved <DIV> \"kite\" -> <DIV> \"overclock\""
+    }
+  ],
+  "ranSteps": 4,
+  "totalSteps": 4,
+  "passed": 4,
+  "failed": 0,
+  "visited": [
+    "<BUTTON> \"Retry same prompt\"",
+    "<DIV> \"How do I beat Glyphid Dreadnought?\"",
+    "<DIV> (unnamed - the only text around it is a container's, not a label)",
+    "<DIV> \"kite\"",
+    "<DIV> \"overclock\""
+  ],
+  "cycle": null,
+  "neverReached": [],
+  "stopsFocusedButNotVisible": 1,
+  "notVisibleStops": [
+    "step 1: <DIV> \"How do I beat Glyphid Dreadnought?\" only PARTIALLY visible (67%), covered by div.bonsai-turn-retry-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.Focusable"
+  ],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 6669,
+  "acquired": true,
+  "summary": "4/4 steps passed; 1 stop(s) FOCUSED BUT NOT VISIBLE: step 1: <DIV> \"How do I beat Glyphid Dreadnought?\" only PARTIALLY visible (67%), covered by div.bonsai-turn-retry-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.Focusable (report-only -- pass requireVisible to fail on this)"
+}

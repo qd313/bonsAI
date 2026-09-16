@@ -1,0 +1,16 @@
+{
+  "rows": "EARLIER-LEFT-01 (lane E commit 4cfc874) and ARCHIVED-UP-01 (lane E commit f34de8a)",
+  "plan": 55,
+  "when": "2026-09-16T01:16:11.047334+00:00",
+  "build": "f34de8a",
+  "setup": "Deep Rock Galactic: Survivor running; a chat with 17 archived turns; the ring on the '17 earlier' row.",
+  "measured": [
+    "Left on the '17 earlier' row: the ring stayed on the row (moved: false). On the old build this press handed the ring to Steam's Quick Access rail.",
+    "A on the row expanded the earlier turns and the ring landed on the first revealed header ('how does the excursion funnel work in portal 2').",
+    "Up from that first archived header landed on the chat slot row (fully visible). On the old build it ran past the row to the tab bar and Decky's back button."
+  ],
+  "verdict": "PASS for both rows.",
+  "runs": [
+    "runs/plan55-EARLIER-LEFT-01-and-ARCHIVED-UP-01.json"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "row": "HADES-NAMED-01 (recommended, STRAT-SPOIL-DRG-01 block) + the Megaera misspelling bug before lane A's fix",
+  "plan": 55,
+  "when": "2026-09-16T00:47:21.264020+00:00",
+  "build": "1ac4d7a6fff479a01c48f6a1b6a60d78b360b88a",
+  "setup": "Hades (1145360) running, Strategy mode, masking on; sentence typed with scripts/deck_send_ask.py (VERIFIED) and sent with Ask; hybrid retrieval on.",
+  "question": "How do I beat Megaera?",
+  "reply": "Listen up, you want to take down Megaera? Right then. You gotta learn her moves, see how she dashes, and you gotta punish those recovery windows, yeah? If you can mirror her boons and trap 'em, you'll get that burst damage you need. It's all about timing, mate.\n-\nNo close match in my notes, this answer leans on the model's own knowledge.",
+  "spoiler_fences_rendered": 0,
+  "honesty_line": "No close match in my notes, this answer leans on the model's own knowledge.",
+  "follow_up_menu": [
+    "A. Just starting out and need basic tips",
+    "B. Already deep in the game and need boss tactics"
+  ],
+  "verdict_row": "PASS for HADES-NAMED-01: naming the boss gives plain text, no box.",
+  "verdict_bug": "The roadmap bug 'A Hades boss's note is spelled wrong' reproduced: with the correct spelling the reply carries the 'No close match in my notes' line although the library holds the note under 'Megara'. Re-run after lane A's title fix and the point release.",
+  "runs": [
+    "runs/plan55-HADES-NAMED-01-megaera-send.json"
+  ]
+}

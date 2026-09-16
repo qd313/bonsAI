@@ -1,0 +1,12 @@
+{
+  "row": "ASK-RING-AFTER-PRESS-01 (pressing Ask no longer drops the highlight) - lane C commit 93a5a5f",
+  "plan": 55,
+  "when": "2026-09-16T01:13:43.722584+00:00",
+  "build": "f34de8a",
+  "setup": "Deep Rock Galactic: Survivor running, a real question in the box ('which class is best for a beginner'), the ring on the Ask button.",
+  "measured": "A on Ask sent the question and the ring moved to the question box (fully visible). On the old build tonight every Ask press ended with the ring on nothing (see the 'to: nothing' step in every plan55-*-send.json run before the deploy).",
+  "verdict": "PASS for the real-question half. The empty-box half (ring stays on Ask) is still to be pressed.",
+  "runs": [
+    "runs/plan55-ASK-RING-AFTER-PRESS-01-drg-01d-send.json"
+  ]
+}

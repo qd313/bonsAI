@@ -133,6 +133,13 @@ keyboard with thumbs, once per case, invites a typo that silently changes what i
 There is a way to pin a batch of exact questions into the panel; use it. This is a standing
 instruction from the maintainer.
 
+**The "Clear all plugin data" wipe also removes the Deck's own Ollama install and its downloaded
+models** whenever Ollama lives in the home folder, which is how "Run AI on this Deck" sets it up.
+A backup of the settings file and the saved chats cannot put those models back; they have to be
+downloaded again. A yes to "wipe the plugin data, backup first" does not obviously cover that, so
+ask for it separately, or leave the three wipe rows owed. Found 2026-09-15 by reading the wipe
+method before pressing the button.
+
 **The pretend headset bench has its own quirks.** It takes no mouse input. You can only see a panel
 by bringing the mirror window to the front. The helper that talks to it raises an error even when
 the answer is "fine". The Python side runs on the PC, with a stand-in for the answer service.

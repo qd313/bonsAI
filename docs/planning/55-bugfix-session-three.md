@@ -332,6 +332,51 @@ Written as work lands.
   found on the way: pressing Ask drops the highlight (again); Left from the Ask button and from the paperclip
   hands the ring to Steam's Quick Access rail, out of the plugin (new, same shape as the *N earlier* row bug); the
   follow-up menu under a Portal 2 answer offered the Half-Life 2 places (bug 4, still live before lane A).
+- **2026-09-15, by 21:05 — all seven lanes landed on experimental.** Twenty-one code commits between `9188e72`
+  and `f34de8a`, every one with the five gates green. Each landing's roadmap, testing and changelog updates
+  went through the bookkeeper, batched per lane. The point release carrying the Megaera spelling fix is built
+  and passed its own publish check, but pushing it to the two public download hosts needs the maintainer to run
+  the publish step themselves — it was refused for the session by the tool's own permission.
+- **2026-09-15 — the three wipe rows stay owed.** Reading the wipe's own code before pressing the button showed
+  that *Clear all plugin data* also removes the Deck's own Ollama program and every model it has downloaded,
+  whenever Ollama lives in the home folder, which it does on this Deck. A backup of settings and chats cannot
+  bring the models back, so the session asked the maintainer for a separate yes to wipe this Deck; none came
+  during the run. **CLEAR-ALL-PREFIX-01**, **PULL-NEW-BADGE-01** and **VOICE-CLEAR-01** were not run tonight and
+  stay owed, not failed.
+- **2026-09-15, late evening — the Deck checking pass finished.** The device ran build `f34de8a` for the whole
+  pass, deployed at 21:08, with the bundle and the back end both hash-matched to that build.
+  **Confirmed working on the device:** the question fade, both by measurement and by the maintainer's own eye;
+  the Test badge on a chip; the game line updating live and by name; the highlight staying put after pressing
+  Ask, for the case where there is a real question; the greyed-out Ask button being stepped over instead of
+  landed on; closing an open question no longer losing the highlight; Left on the earlier pill holding in
+  place; Up from the first archived header reaching the chat slot row; the power-tip code box being gone; the
+  try-order picker returning the highlight by name (the by-eye check of exactly where it lands is still owed);
+  the size-unknown warning; and the opening highlight landing right two tries out of three, missing only on
+  the first open after the loader restarts.
+  **Failed on the device:** the honesty line meant to show when a game is only named in the question did not
+  appear — the check counted the game, three Black Mesa cards were attached, but no "No close match" line
+  showed; and the free-play sweep found two corner icons that are only partly visible instead of fully clear.
+  **Not exercised:** the copy icon sitting beside a code box, because no reply with a code box came up during
+  the pass.
+  **Closed on the Deck from checks run before tonight's deploy:** the Ask row's full-width fix, the developer
+  knowledge-base graph, the knowledge-base kill switch, knowledge-base follow-ups, the Megaera boss name check,
+  both halves of the game-named-in-text spoiler check, the Deep Rock Survivor spoiler check and its streaming
+  half, three of the four main smoke checks plus the VAC check, and the stuck-panel recipe, which never
+  trapped across five separate tries. The relevance-floor check passed for an on-topic question and failed for
+  an off-topic one exactly as written, but that failure is the behaviour the maintainer already accepted
+  elsewhere. The Hades no-boss-named check failed once out of three tries.
+  **Two things still need the maintainer:** first, to publish the rebuilt knowledge library by running
+  `python scripts/publish_corpus.py --build-dir .claude/worktrees/lane-a-answers/build/knowledge-base
+  --hf-clone-dir C:/Users/still/Documents/bonsai-knowledge-base --push-hf --push-github` from the repo root,
+  then use Update knowledge base on the Ollama tab on the Deck, then run the Megaera check; second, to say yes
+  or no to wiping the Deck, knowing the wipe also removes the Deck's own Ollama models.
+  **The Deck was handed back clean:** no game left running, the plugin's settings file compared identical to
+  the backup taken before the pass started (all 48 keys, once the try-order picker's saved order was put back
+  to empty), the screen's stay-awake hold released, the remote connection closed, and the power settings put
+  back the way they were.
+  Evidence sits under `docs/test-evidence/plan55-*.json`, screenshots `DeckCapture_20260915_200505`,
+  `201002`, `204018`, `211004` and `211546_game.png`, and recordings `DeckRecord_20260915_205114` and
+  `210556_game.mkv` in the rig's capture folder.
 
 ---
 

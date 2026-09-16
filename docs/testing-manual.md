@@ -86,6 +86,15 @@ session strip, a chip, the character button, the attach button and ask — again
 (`docs/test-evidence/QA-FREE-PLAY-01-build4-strategy-reply-sweep.json`). That reply came back as one section, so the long-reply case the row
 really wants is still owed.
 
+**Run 2026-09-15 evening (plan 55), nothing running, a 1355-character reply on screen with a glossary word
+in it:** 19 stops visited both ways, no dead end, no loop — the walk itself is clean. **But two stops FAIL this
+row's own rule**, focused with part of the control hidden: the open question's row read only 78% visible,
+covered by the Retry same-prompt icon in the turn's corner, on both legs of the walk; and the reply's last
+answer section read 89% visible, covered by the copy icon in the bubble's corner, going down. Both are filed
+as their own roadmap entries (the question row under the new ★ `[layout]` bug about the Retry corner icon; the
+answer section as a further sighting on the existing copy-icon entry). The touch-screen half of this row still
+needs a person. Evidence `docs/test-evidence/plan55-QA-FREE-PLAY-01-main-long-reply.json`.
+
 A stop that is focused but not visible is a **FAIL of this row**, whatever the scripted rows say.
 This is the manual interim for the DPS visibility oracle + `deck_sweep`
 (decky-plugin-studio `docs/planning/06-visibility-oracle-and-free-play-sweep.md`); when that
@@ -246,9 +255,9 @@ ring during churn. See the row in [testing.md](testing.md).
 
 ### SMOKE-F — Deterministic commands (P2)
 
-- [x] `bonsai:disable-sanitize` / `bonsai:enable-sanitize` — confirmation; no Ollama call — **PASS (Deck) 2026-09-05.** *disable* answered *Input sanitization is disabled for future asks. Send bonsai:enable-sanitize (exact line, Ask field) to turn it back on.*; *enable* answered *Input sanitization is enabled again for future asks.* Both instant, no model call.
-- [x] `bonsai:shortcut-setup-deck` — fixed help; points to [troubleshooting.md](troubleshooting.md) §5 — **PASS (Deck) 2026-09-05.** Answered with the fixed recipe: *bonsAI cannot create Steam Input macros automatically (no supported API; your controller stays under your control)*, pointing at troubleshooting §5, followed by the numbered steps. Skips the model. **Note:** the first Ask press after a reply lands did nothing — the ring is briefly unowned, so that press places it instead of acting; the second press submitted. Same family as the known unowned-ring entry.
-- [x] `bonsai:vac-check` with Steam Web API **off** → capability message only (**VAC-01**) — PASS 2026-09-03: answered with the capability message naming Permissions → Steam Web API and Developer → Integrations, no Ollama call in the plugin log (`docs/test-evidence/SMOKE-C-b-press-ask-vac-check-off.json`)
+- [x] `bonsai:disable-sanitize` / `bonsai:enable-sanitize` — confirmation; no Ollama call — **PASS (Deck) 2026-09-05, re-confirmed 2026-09-15.** *disable* answered *Input sanitization is disabled for future asks. Send bonsai:enable-sanitize (exact line, Ask field) to turn it back on.*; *enable* answered *Input sanitization is enabled again for future asks.* Both instant, no model call. Evidence `docs/test-evidence/plan55-SMOKE-F.json`.
+- [x] `bonsai:shortcut-setup-deck` — fixed help; points to [troubleshooting.md](troubleshooting.md) §5 — **PASS (Deck) 2026-09-05, re-confirmed 2026-09-15.** Answered with the fixed recipe: *bonsAI cannot create Steam Input macros automatically (no supported API; your controller stays under your control)*, pointing at troubleshooting §5, followed by the numbered steps. Skips the model. **Note:** the first Ask press after a reply lands did nothing — the ring is briefly unowned, so that press places it instead of acting; the second press submitted. Same family as the known unowned-ring entry. Evidence `docs/test-evidence/plan55-SMOKE-F.json`.
+- [x] `bonsai:vac-check` with Steam Web API **off** → capability message only (**VAC-01**) — PASS 2026-09-03: answered with the capability message naming Permissions → Steam Web API and Developer → Integrations, no Ollama call in the plugin log (`docs/test-evidence/SMOKE-C-b-press-ask-vac-check-off.json`). **Not re-run 2026-09-15** — the ban-lookup permission was on tonight, so this line answered per VAC-02 instead (below); the permission-off case is still owed for a future pass.
 
 ---
 
@@ -318,30 +327,37 @@ Tier 1 now starts at SMOKE-E; the ID stays so older links still resolve.
 - [ ] **MICRO-04** Strategy live-turn D-pad: branches → feedback → utilities
 - [x] **D-PAD-SCROLL-02** Strategy reply: ~one readable step per D-pad Down. **Passed 2026-08-28** — one stop per paragraph
 - [ ] **STRAT-SPOIL-DRG-01** DRG Survivor boss names not false-positive spoilers — ship gate is the three **required** rows below; acceptance is *no spoiler fence rendered for the entity named in the question* (display-level, not a claim about model behavior). Plan 54 landed 2026-09-15; the three new sub-rows below cover it. All rows in this block run in plan 55's Deck pass.
-  - [ ] **DRG-01** `2321470`, *"How do I beat Glyphid Dreadnought?"*, no consent phrase, masking on → boss tactics in plain text, no tap-to-reveal
-  - [ ] **DRG-01d** As DRG-01, **then ask a second question** → the first answer stays unfenced after it leaves the live turn *(the D1 regression: history turns used to re-fence)*
-  - [ ] **DRG-01b/c** As DRG-01 with KB **off**, or corpus **absent** → still plain text *(D2: the low-risk signal used to be reachable only through the corpus)*
-  - [ ] **DRG-01-STREAM-01** — **fixed 2026-08-15 (R4), confirm on-Deck.** As DRG-01 with streaming **on**: no `Spoiler hidden until complete…` chip appears at any point while the answer streams in — the fence renders as plain text from the moment it opens, not only after it closes
-  - [ ] **HADES-UNNAMED-STREAM-01** — companion check for the fix above, so nothing was over-relaxed. Hades `1145360`, a question that does **not** name a boss, streaming on → the mid-stream mask chip **still appears** for story-adjacent detail (Hades shares the `roguelike` genre with DRG Survivor, so this is the case the R4 fix must not touch)
-  - [ ] *(recommended)* **HADES-NAMED-01** Hades `1145360`, *"How do I beat Megaera?"* → plain text. Naming the boss is consent for that boss on any title (spoiler-constitution rule 7)
-  - [ ] *(recommended)* **HADES-UNNAMED-01** Hades, a question that does **not** name a boss → story-adjacent detail **still fenced**. This is the genre over-relax guard: Hades shares the `roguelike` genre with DRG Survivor
+  - [x] **DRG-01** `2321470`, *"How do I beat Glyphid Dreadnought?"*, no consent phrase, masking on → boss tactics in plain text, no tap-to-reveal — **PASS (Deck) 2026-09-15.** Plain text, no fence, no tap-to-reveal. Evidence `docs/test-evidence/plan55-DRG-01.json`, recording `recordings/DeckRecord_20260915_210556_game.mkv`.
+  - [x] **DRG-01d** As DRG-01, **then ask a second question** → the first answer stays unfenced after it leaves the live turn *(the D1 regression: history turns used to re-fence)* — **PASS (Deck) 2026-09-15.** After a second question, the Dreadnought answer stayed plain text once it was history (464 characters, no spoiler fence, no tap-to-reveal). Evidence `docs/test-evidence/plan55-DRG-01d.json`.
+  - [ ] **DRG-01b/c** As DRG-01 with KB **off**, or corpus **absent** → still plain text *(D2: the low-risk signal used to be reachable only through the corpus)* — not run tonight (2026-09-15); still owed, not failed.
+  - [x] **DRG-01-STREAM-01** — **fixed 2026-08-15 (R4), confirm on-Deck.** As DRG-01 with streaming **on**: no `Spoiler hidden until complete…` chip appears at any point while the answer streams in — the fence renders as plain text from the moment it opens, not only after it closes — **PASS (Deck) 2026-09-15.** No mask chip seen in 74 polls over 62 seconds. Evidence `docs/test-evidence/plan55-DRG-01.json`, recording `recordings/DeckRecord_20260915_210556_game.mkv`.
+  - [ ] **HADES-UNNAMED-STREAM-01** — companion check for the fix above, so nothing was over-relaxed. Hades `1145360`, a question that does **not** name a boss, streaming on → the mid-stream mask chip **still appears** for story-adjacent detail (Hades shares the `roguelike` genre with DRG Survivor, so this is the case the R4 fix must not touch) — **Not claimed 2026-09-15**: the fast poll never saw the mid-stream chip. A recording exists (`recordings/DeckRecord_20260915_205114_game.mkv`, untracked) for the maintainer to play back.
+  - [x] *(recommended)* **HADES-NAMED-01** Hades `1145360`, *"How do I beat Megaera?"* → plain text. Naming the boss is consent for that boss on any title (spoiler-constitution rule 7) — **PASS (Deck) 2026-09-15**, plain text; the misspelling bug (Megara vs Megaera) also reproduced on the same run. Evidence `docs/test-evidence/plan55-HADES-NAMED-01.json`.
+  - [x] *(recommended)* **HADES-UNNAMED-01** Hades, a question that does **not** name a boss → story-adjacent detail **still fenced**. This is the genre over-relax guard: Hades shares the `roguelike` genre with DRG Survivor — **Mixed on the Deck 2026-09-15, three runs, all recorded honestly.** *"what happens when i finally reach the surface in hades"* got **no fence** and a mild story spoiler in plain text — **FAIL as written** (`docs/test-evidence/plan55-HADES-UNNAMED-01.json`). *"how does the story of hades end"* and *"who is waiting at the end of the game in hades"* both got a masked fence — **PASS** (`docs/test-evidence/plan55-HADES-UNNAMED-01-run2.json`, `docs/test-evidence/plan55-HADES-UNNAMED-STREAM-01.json`).
   - [ ] **STRAT-SPOIL-NAME-01** game known only by name. Setup: Doom 64 (or another emulated no-story title from
     the list: Super Mario 64, Mario Kart 64, Pikmin 2) running as a non-Steam shortcut, Strategy mode, masking on,
     streaming on. Do: ask a boss question ("how do I beat the mother demon"). Pass when: any spoiler box the model
     draws renders as plain text, from the first streamed word, with no "Spoiler hidden until complete…" chip and
     no tap-to-show block; then ask a second question and confirm the first answer stays plain once it is history;
     then reopen the chat from the chat slot list and confirm it is still plain. Note in the row: if no emulated
-    shortcut is installed on the Deck, the row is blocked, not failed — say so.
+    shortcut is installed on the Deck, the row is blocked, not failed — say so. **BLOCKED 2026-09-15:** no
+    emulated shortcut on this Deck is installed. Doom 64 and Doom 64: Retribution both exist as shortcuts, but
+    both read as not installed, so the setup step cannot run. Blocked, not failed; still owed.
   - [ ] **STRAT-SPOIL-FIRST-01** name-first boss question. Setup: Portal 2 `620` running, Strategy, masking on,
     streaming on. Do: ask *"wheatley fight"*. Pass when: Wheatley's tactics are plain text from the first streamed
     word with no mid-stream chip, and any other story detail the reply touches is still boxed (that half proves
     nothing else was opened; it depends on the model drawing a box for something else, so it may take a few
     asks). Compare with *"how do I beat wheatley"*, which should behave the same. Then reopen the chat from the
-    slot list: still plain.
-  - [ ] **STRAT-SPOIL-TEXT-01** game named only in the question. Setup: nothing running, Strategy, masking on.
+    slot list: still plain. **BLOCKED 2026-09-15:** Portal 2 is not in this Deck's Steam library at all, read
+    from Steam's own app list. Blocked, not failed; still owed.
+  - [x] **STRAT-SPOIL-TEXT-01** game named only in the question. Setup: nothing running, Strategy, masking on.
     Do: ask *"drg survivor what class"*. Pass when: the answer is plain text with no spoiler box, the risk chip
     under Show details reads low, and the reply does not claim the game is running. Then the guard: *"new vegas
-    best build"* with nothing running → still fenced or careful, as a story game.
+    best build"* with nothing running → still fenced or careful, as a story game. — **PASS (Deck) 2026-09-15,
+    both halves.** The Deep Rock half: plain text, spoiler risk chip low, the game resolved from the question
+    text, no claim of the game running (`docs/test-evidence/plan55-STRAT-SPOIL-TEXT-01-drg.json`). The New
+    Vegas guard: a gameplay-only reply about stats and early armour, no story detail, and the follow-up menu
+    named New Vegas places (`docs/test-evidence/plan55-STRAT-SPOIL-TEXT-01-newvegas.json`).
   - [ ] *(extra credit, does not block)* **DRG-01e** Streaming off → plain text; **DRG-01f** `[Strategy follow-up]` turn → plain text
 - [ ] **THINKING-COPY-01** Same Ask, no phase boundary crossed → the italic line does **not** change. Specifically: the opener that appears on submit must be the *only* opener — watch the first ~2s for a rewrite from one generic line to another. That rewrite was the bug; if you see it, the client is composing again
 - [ ] **THINKING-OPENER-01** — **settled 2026-08-08, keep as a regression check.** Submit an Ask: the first line you can actually read should be one quoting your question. The constant *Thinking…* placeholder exists but the maintainer could not perceive it on device, which is the intended outcome — the round trip is imperceptible and the backend-authoritative design stands. If *Thinking…* ever becomes **readable** as its own line, the round trip has regressed
@@ -445,7 +461,10 @@ everything below assumes it passes. Plan:
   slot and nothing did at the create position; the row now reserves the delete box's height whatever is in it.
 - [ ] **CHAT-SLOTS-V3-14c** (the game above the title) A chat created from now on shows its game's name in quiet text above the
   conversation title; a chat created before this shows the line reserved but empty; `[+]` shows it empty. **Needs a slot created after
-  2026-08-30** — the name is only stored at creation, so every existing slot reads empty.
+  2026-08-30** — the name is only stored at creation, so every existing slot reads empty. **FAILED on this build 2026-09-15:** a
+  chat created with Hades running got no game name at all — most likely the same cause as the game-line bug above (the line
+  under the question box still read "no active game detected" at the moment the chat was created). Evidence
+  `docs/test-evidence/plan55-CHAT-SLOTS-V3-14c.json`. Re-run after lane F's fix.
 - [x] **CHAT-SLOTS-V3-14d** (the end of a long reply) After a long answer settles, its end is reachable and does not look cut off: text
   visibly fades under the chips rather than being sliced, and the pane brings the end into view. **Fade PASSES** (18px gradient above the
   dock, measured 2026-08-30). **Auto-scroll PASSES 2026-08-31** — the long proton Ask driven by bridge: tail in view every frame while

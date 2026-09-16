@@ -1,0 +1,50 @@
+{
+  "row": "QA-FREE-PLAY-01 (free-play sweep, Main tab with a long reply)",
+  "plan": 55,
+  "when": "2026-09-16T01:24:51.926672+00:00",
+  "build": "f34de8a",
+  "setup": "Nothing running, Speed mode still set, a 1355-character reply on screen with a glossary word in it; the rig's sweep from the tab bar down to Ask and back, 35 presses.",
+  "totals": {
+    "stopsVisited": 19,
+    "stopsRecorded": 30,
+    "cycles": 0,
+    "deadEnds": 0,
+    "stopsFocusedButNotVisible": 3
+  },
+  "not_visible": [
+    {
+      "stop": "the open question's row ('how do i get better performance and battery life in this game')",
+      "visible_percent": 78,
+      "covered_by": "the Retry same prompt icon in the turn's corner",
+      "legs": "both"
+    },
+    {
+      "stop": "the reply's last answer section",
+      "visible_percent": 89,
+      "covered_by": "the copy icon in the bubble's corner (one of nine sample points)",
+      "legs": "down"
+    }
+  ],
+  "path_down": [
+    "Main tab",
+    "chat slot row",
+    "18 earlier",
+    "Retry same prompt",
+    "the question row",
+    "answer section 1",
+    "kiting (glossary word)",
+    "answer section 2",
+    "Helpful",
+    "Read aloud",
+    "Show details",
+    "Session context",
+    "Save chat to Desktop",
+    "the pinned chip",
+    "the question box",
+    "Ask"
+  ],
+  "verdict": "FAIL by the row's own rule (a focused stop a person cannot fully see), on two stops, both corner icons; otherwise clean: every stop reachable both ways, no loop through the long reply. The touch-screen half of the row still needs a person.",
+  "runs": [
+    "runs/plan55-QA-FREE-PLAY-01-main-long-reply.json"
+  ]
+}

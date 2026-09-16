@@ -1,0 +1,54 @@
+{
+  "ok": false,
+  "fidelity": "steam-routed",
+  "steps": [
+    {
+      "index": 1,
+      "label": "placing press then down: must be on Ask",
+      "press": [
+        "DOWN"
+      ],
+      "expect": "button.bonsai-ask-primary",
+      "ok": true,
+      "pass": false,
+      "moved": true,
+      "matched": false,
+      "from": "<BUTTON> \"ask\"",
+      "to": "<BUTTON> \"* QAM > TDP Limit(QAM > Performance)\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(6) > div:nth-child(4) > div:nth-child(2) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 617,
+      "diagnosis": "press routed, focus moved <BUTTON> \"ask\" -> <BUTTON> \"* QAM > TDP Limit(QAM > Performance)\" - the press arrived and Steam sent focus somewhere else, so the wiring is wrong rather than missing"
+    }
+  ],
+  "ranSteps": 1,
+  "totalSteps": 2,
+  "passed": 0,
+  "failed": 1,
+  "visited": [
+    "<BUTTON> \"ask\"",
+    "<BUTTON> \"* QAM > TDP Limit(QAM > Performance)\""
+  ],
+  "cycle": null,
+  "neverReached": [],
+  "stopsFocusedButNotVisible": 0,
+  "notVisibleStops": [],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 2789,
+  "acquired": true,
+  "summary": "0/2 steps passed; stopped after 1"
+}

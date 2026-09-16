@@ -1,0 +1,12 @@
+{
+  "row": "GAME-LINE-LIVE-01 (first reading) - lane F commit 55a1e84",
+  "plan": 55,
+  "when": "2026-09-16T01:10:37.484348+00:00",
+  "build": "f34de8a",
+  "setup": "Deep Rock Galactic: Survivor launched at about 21:04 on the old build; the new build deployed at 21:08 (loader restart); the panel reopened at 21:09.",
+  "line_read": "Context: active game Deep Rock Galactic: Survivor",
+  "verdict": "The line now shows the game's NAME rather than its number (the name half of the fix). The live-update half (a game starting or exiting while the panel stays open, no restart) is measured next with the exit.",
+  "runs": [
+    "runs/plan55-launch-drgs.json"
+  ]
+}

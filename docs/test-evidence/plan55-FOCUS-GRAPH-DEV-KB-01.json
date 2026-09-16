@@ -1,0 +1,17 @@
+{
+  "row": "FOCUS-GRAPH-DEV-KB-01 (batch QA-EVIDENCE-GAP-01, item 3)",
+  "plan": 55,
+  "when": "2026-09-16T00:42:48.660776+00:00",
+  "build": "1ac4d7a6fff479a01c48f6a1b6a60d78b360b88a",
+  "setup": "Developer tab, Hades running, nothing typed; the ring placed on Install seed knowledge base by a tab switch.",
+  "chain_measured": [
+    "Install seed knowledge base",
+    "Hybrid retrieval (meaning search)",
+    "On-screen debug HUD (first control of Diagnostics)"
+  ],
+  "steps": "Down from Install seed knowledge base landed on the Hybrid retrieval toggle (walkTo, 1 press); Down again landed on On-screen debug HUD; Up went back to Hybrid retrieval; Up again to Install seed knowledge base. Every stop visible.",
+  "verdict": "PASS: the toggle inherits the section's vertical chain and Down continues into the next section, as the row predicted. The ring sits on the toggle's unlabelled inner div (label read from the ancestor), as the row's note warns.",
+  "runs": [
+    "runs/plan55-FOCUS-GRAPH-DEV-KB-01-chain.json"
+  ]
+}

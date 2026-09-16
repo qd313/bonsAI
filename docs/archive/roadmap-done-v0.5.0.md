@@ -8,6 +8,35 @@ Everything shipped since v0.4.9 (2026-07-08), one line each, newest first. Detai
 [archive/roadmap-completed.md](roadmap-completed.md), [archive/roadmap-bugs-fixed.md](roadmap-bugs-fixed.md).
 
 **Checked on the Deck, closed in the roadmap 2026-09-14 and 15:**
+- ★★★ `[reply]` **A Speed-mode reply no longer ends with a block of raw computer text where a power tip
+  should be** — confirmed on the Deck 2026-09-15: the reply ends in normal sentences, with no leftover
+  computer-looking line. [Detail](roadmap-bugs-fixed.md#three-more-fixes-checked-on-the-deck-2026-09-15-evening-plan-55).
+- ★★ `[focus]` **Opening the panel now tries to place the highlight on the question box** — holds on an
+  ordinary fresh open, confirmed twice on the Deck 2026-09-15; the one miss is the very first open right after
+  a fresh deploy's restart, which is now a known and explained case rather than an open bug.
+  [Detail](roadmap-bugs-fixed.md#three-more-fixes-checked-on-the-deck-2026-09-15-evening-plan-55).
+- ★ `[ollama]` **A model with no listed size now warns before you pick it in the try-order picker** —
+  confirmed on the Deck 2026-09-15: it reads "Size unknown - may be too large" and can still be moved.
+  [Detail](roadmap-bugs-fixed.md#three-more-fixes-checked-on-the-deck-2026-09-15-evening-plan-55).
+- ★★★ `[KB]` **The line under the question box now keeps up with the game you are playing** — it updates
+  within seconds of a game starting or closing while the panel stays open, and it now shows the game's name
+  instead of a number; confirmed both ways on the Deck 2026-09-15.
+  [Detail](roadmap-bugs-fixed.md#the-game-line-updates-live-checked-on-the-deck-2026-09-15-evening-plan-55).
+- ★ `[chat]` **A short question no longer fades as if it were cut short** — a one-line question shows no fade;
+  confirmed on the Deck 2026-09-15 by measurement and by the maintainer's own eye.
+  [Detail](roadmap-bugs-fixed.md#five-focus-and-chat-fixes-checked-on-the-deck-2026-09-15-evening-plan-55).
+- ★ `[focus]` **Pressing A on an open question keeps the highlight on that question** — closing a question no
+  longer drops the ring to nothing; confirmed on the Deck 2026-09-15.
+  [Detail](roadmap-bugs-fixed.md#five-focus-and-chat-fixes-checked-on-the-deck-2026-09-15-evening-plan-55).
+- ★ `[focus]` **Left on the collapsed-history row stays in the plugin** — it used to hand the highlight to
+  Steam's own Quick Access rail; confirmed on the Deck 2026-09-15.
+  [Detail](roadmap-bugs-fixed.md#five-focus-and-chat-fixes-checked-on-the-deck-2026-09-15-evening-plan-55).
+- ★★ `[focus]` **Up from the first archived chat header now reaches the chat slot row** — it used to run all
+  the way to the tab bar; confirmed on the Deck 2026-09-15.
+  [Detail](roadmap-bugs-fixed.md#five-focus-and-chat-fixes-checked-on-the-deck-2026-09-15-evening-plan-55).
+- ★★ `[KB]` **Pinned test chips show their amber Test badge** — confirmed by eye on the Deck 2026-09-15 with
+  the chip animation set to decode, the one style that never drew it.
+  [Detail](roadmap-bugs-fixed.md#five-focus-and-chat-fixes-checked-on-the-deck-2026-09-15-evening-plan-55).
 - ★ `[layout]` **Rows span the QAM panel width** — every Main row now reaches both edges of the panel with
   nothing overflowing sideways, confirmed by eye on the Deck 2026-09-15 after being measured by rect back in
   August. [Detail](roadmap-completed.md#rows-span-the-qam-panel-width-confirmed-by-eye-on-the-deck-2026-09-15).

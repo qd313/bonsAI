@@ -1,0 +1,76 @@
+{
+  "tool": "launch-game",
+  "ok": true,
+  "reason": null,
+  "stopped": false,
+  "appid": 2321470,
+  "name": "Deep Rock Galactic: Survivor",
+  "alreadyRunning": false,
+  "nothingRunning": false,
+  "running": {
+    "appid": 2321470,
+    "name": "Deep Rock Galactic: Survivor"
+  },
+  "route": "/library/app/2321470",
+  "stages": [
+    {
+      "stage": "read-running",
+      "ok": true,
+      "detail": "RunningApps is empty",
+      "presses": 0
+    },
+    {
+      "stage": "resolve-app",
+      "ok": true,
+      "detail": "\"Deep Rock Galactic: Survivor\" (appid 2321470) is in the library and installed",
+      "presses": 0
+    },
+    {
+      "stage": "open-main-menu",
+      "ok": true,
+      "detail": "one GUIDE press from no ring readable; ring on <DIV> \"Home\" in the main menu",
+      "presses": 1
+    },
+    {
+      "stage": "go-home",
+      "ok": true,
+      "detail": "A on \"Home\" after 0 UP press(es); route /library/home, ring on <DIV> \"Hades\"",
+      "presses": 1
+    },
+    {
+      "stage": "find-tile",
+      "ok": true,
+      "detail": "appid 2321470 in the focused tile's own image (/assets/2321470/a2ce72a3dbecf702c584b0eac8037f4580e839b6/library_600x900.jpg?c=678422408, 0 level(s) up) after 1 RIGHT press(es)",
+      "presses": 1
+    },
+    {
+      "stage": "open-app-page",
+      "ok": true,
+      "detail": "A on the tile; ring on \"Play\" after 0 DOWN press(es); route /library/app/2321470",
+      "presses": 1
+    },
+    {
+      "stage": "press-play",
+      "ok": true,
+      "detail": "appid 2321470 appeared in RunningApps after 214ms (1 poll(s)); route /library/app/2321470",
+      "presses": 1
+    }
+  ],
+  "seen": [
+    "Home",
+    "Hades (1145360)",
+    "Deep Rock Galactic: Survivor (2321470)",
+    "Play"
+  ],
+  "presses": 5,
+  "fidelity": "steam-routed",
+  "runningBefore": [],
+  "runningAfter": [
+    {
+      "appid": 2321470,
+      "display_name": "Deep Rock Galactic: Survivor"
+    }
+  ],
+  "durationMs": 11852,
+  "summary": "launched \"Deep Rock Galactic: Survivor\" (appid 2321470) - read-running ok, resolve-app ok, open-main-menu ok, go-home ok, find-tile ok, open-app-page ok, press-play ok; reopen the plugin with deck_openPlugin"
+}

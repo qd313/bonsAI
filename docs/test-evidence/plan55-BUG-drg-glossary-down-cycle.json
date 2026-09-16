@@ -1,0 +1,16 @@
+{
+  "bug": "NEW: in a Deep Rock reply with glossary words, Down loops inside the reply and never reaches Show details or Ask",
+  "plan": 55,
+  "when": "2026-09-16T01:13:08.409240+00:00",
+  "build": "f34de8a (the landed build; the walk was on a restored/history turn, so lane D's live-turn Down hand-off did not apply)",
+  "setup": "Deep Rock Galactic: Survivor running; the reply to 'How do I beat Glyphid Dreadnought?' restored as a history turn after the deploy's loader restart; two glossary words in the answer (kite, overclock).",
+  "measured": "Down walked: Retry same prompt -> the question row (67% covered by the Retry corner icon) -> the answer bubble -> 'kite' (glossary word, its popup opens on arrival) -> 'overclock' -> Retry same prompt again. 20 presses in the walk and 6 in the recorded run, the same five stops each time; the rig's cycle detector reports the loop with no escape. Show details, Read aloud, the chips, the question box and Ask are all below and none was reached.",
+  "likely_cause": "A glossary word is its own focus stop inside an answer section; a direction press closes its popup and falls through to Steam's own geometry. On the newest turn that geometry picks the Retry corner icon at the top of the turn (probably because the icon's slot overlaps the reply's column), so the walk wraps; on an older turn, with no corner icon, it continues to the reply actions.",
+  "also": "The open question's row is only two thirds visible behind the Retry corner icon at every visit (focused but not visible).",
+  "runs": [
+    "runs/plan55-BUG-drg-glossary-down-cycle.json",
+    "runs/plan55-DRG-01d-second-question-send.json"
+  ],
+  "star_guess": "\u2605\u2605 [focus]; the DRG glossary rows from 2026-08-28 passed 'D-pad reachability' without walking past the last word.",
+  "second_walk_same_reply_as_an_older_turn": "After a second question made the Dreadnought turn an older archived turn (no Retry corner icon), the same walk went: question, 'kite', 'overclock', Copy reply text, Read aloud, Show details, Session context, Save chat, the question box, Ask \u2014 no loop. So the loop needs the Retry corner icon that only the newest turn carries: Down from the last glossary word lands on that corner icon instead of the reply actions below."
+}

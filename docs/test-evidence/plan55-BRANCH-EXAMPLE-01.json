@@ -1,0 +1,22 @@
+{
+  "row": "BRANCH-EXAMPLE-01 (the follow-up menu no longer copies the Half-Life 2 example) - lane A commit f666b34; first sightings on the new build",
+  "plan": 55,
+  "when": "2026-09-16T01:15:23.630522+00:00",
+  "build": "f34de8a",
+  "sightings": [
+    {
+      "game": "Deep Rock Galactic: Survivor running",
+      "question": "which class is best for a beginner",
+      "menu": [
+        "A. Just starting out and confused about which class...",
+        "B. Already playing and need tips on improving my c..."
+      ],
+      "half_life_words": false
+    }
+  ],
+  "note": "The copying was intermittent before the fix (two of five Hades/Portal answers tonight carried it), so more sightings over the coming days are the real proof; the code now also drops any menu that still carries the example's words.",
+  "verdict": "PASS on one sighting; keep watching.",
+  "runs": [
+    "runs/plan55-ASK-RING-AFTER-PRESS-01-drg-01d-send.json"
+  ]
+}

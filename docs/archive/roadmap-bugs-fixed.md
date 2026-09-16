@@ -6,6 +6,105 @@ Strikeout titles match the original roadmap bug list. Items awaiting on-Deck QA 
 
 ---
 
+### Three more fixes, checked on the Deck (2026-09-15 evening, plan 55)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-15 once the Deck runs passed — copied line for line from
+this session's Verify entries, nothing reworded, with the closing measurement added at the end._
+
+- ★ `[ollama]` **A model too big for the Deck can be picked with no warning if the download list does not say
+  how big it is** — **VERIFY, fixed 2026-09-15.** The try-order picker now shows "Size unknown - may be too
+  large" on a model with no listed size, keeps its warning for a model already known to be large, and never
+  blocks the choice either way. Row **ROUTING-SIZE-UNKNOWN-01**: open Set text model try order… with a model
+  installed outside the catalog in the list, and check its row reads that warning and can still be moved.
+  **Passed on the Deck 2026-09-15.** The catalog models carried no size badge; the one model outside the
+  catalog read "Size unknown — may be too large" and kept its move buttons. Evidence
+  `docs/test-evidence/plan55-ROUTING-SIZE-UNKNOWN-01.json`.
+- ★★ `[focus]` **Opening the panel leaves nothing highlighted** — **VERIFY, changed 2026-09-15.** On a fresh
+  panel open the plugin now tries, for about a second, to place the highlight on the question box, unless
+  something else already owns it. Row **OPEN-RING-01**: close the panel fully, reopen on Main, and press one
+  direction. If the highlight was already on the question box, the guide's paragraph saying this is normal
+  Steam behaviour and not ours to fix needs to change; if not, the entry closes as accepted instead — the
+  device decides, per D104.
+  **Holds on the Deck 2026-09-15 for an ordinary fresh open — two of three tries.** Leaving the panel with
+  Decky's back arrow and re-entering placed the ring on the question box, fully visible, both times. **The one
+  miss was the very first open right after this build's own deploy and loader restart**, when Decky's own
+  navigation node for the field was not ready inside the plugin's one-second try. Per D104 this settles the
+  disagreement between the guide and the roadmap: the guide's paragraph is updated (`AGENTS.md`) to say the
+  plugin places the ring when it can, with the post-restart case named as the one time it still does not.
+  Evidence `docs/test-evidence/plan55-OPEN-RING-01.json`.
+- ★★★ `[reply]` **An answer can end with a block of raw computer text where a power tip should be** —
+  **VERIFY, fixed 2026-09-15.** The cleanup now also removes a code box whose whole content is the power
+  block, the exact shape the plugin's own instruction asks for, and still leaves a real code box someone asked
+  for alone. Row **TDP-CODEBOX-01**: in Speed mode with a game running, ask a performance or battery question
+  — the reply ends in normal sentences, with no code-looking line naming tdp_watts.
+  **Passed on the Deck 2026-09-15.** A performance question in Speed mode with Deep Rock Galactic: Survivor
+  running came back with no raw computer text and no code box at all in the 1,355-character reply. One
+  cosmetic leftover worth a note: the model's own lead-in sentence ("you could try this:") now has nothing
+  after it, since only the box itself was removed. Evidence `docs/test-evidence/plan55-TDP-CODEBOX-01.json`.
+
+### The game line updates live, checked on the Deck (2026-09-15 evening, plan 55)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-15 once both halves passed on the Deck — copied line for
+line from this session's Verify entry, nothing reworded, with the closing measurement added at the end._
+
+- ★★★ `[KB]` **The line under the question box only learns which game is running when the panel starts, and
+  never again** — **VERIFY, fixed 2026-09-15.** Two bug entries, one cause: the line kept naming a game after
+  it closed, and never noticed a game that started, because the panel only read this once at start-up. It now
+  listens for the change the way the chat slot beside it already did, and shows the game's name instead of its
+  number. Row **GAME-LINE-LIVE-01**: with the panel open, launch a game and wait five seconds without touching
+  anything — the line reads "Context: active game <name>"; exit the game and wait five seconds — it reads
+  "Context: no active game detected". Last sighting before the fix:
+  `docs/test-evidence/plan55-BUG-game-line-after-exit.json`.
+  **Both halves passed on the Deck 2026-09-15.** The name half: with Deep Rock Galactic: Survivor running, the
+  line read "Context: active game Deep Rock Galactic: Survivor" (`docs/test-evidence/plan55-GAME-LINE-LIVE-01-name.json`).
+  The live-update half: the game was exited with the panel kept open (no plugin restart), and the line read
+  "Context: no active game detected" within about 23 seconds, where the old build kept naming the closed game
+  for more than a minute. Evidence `docs/test-evidence/plan55-GAME-LINE-LIVE-01.json`.
+
+### Five focus and chat fixes, checked on the Deck (2026-09-15 evening, plan 55)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-15 once the Deck runs passed — copied line for line from
+this session's Verify entries, nothing reworded, with the closing measurement added at the end._
+
+- ★ `[chat]` **A short question fades out at its right edge as if there were more to read** — **VERIFY, fixed
+  2026-09-15.** The fade now only shows when a question's title really overflows its five-line cap. Row
+  **QUESTION-FADE-01**: open a one-line question and check there is no fade; open a long multi-line one and
+  check the fade appears.
+  **Passed on the Deck 2026-09-15.** A one-line open question carried no overflow marker and no fade mask,
+  confirmed both by measurement and by the maintainer's own eye on the new build; the multi-line
+  fade-should-appear half is still to be checked. Evidence `docs/test-evidence/plan55-QUESTION-FADE-01.json`,
+  screenshot `screenshots/DeckCapture_20260915_211004_game.png`.
+- ★ `[focus]` **Pressing A on an open question closes it and drops the highlight** — **VERIFY, fixed
+  2026-09-15.** The highlight now stays on the question's own row after it closes, instead of landing nowhere.
+  Row **QUESTION-COLLAPSE-RING-01**: press A on an open question and check the highlight is still on that
+  question's row. The evidence file this entry used to name, `retry-corner-collapse-question`, does not exist
+  under the evidence folder; only `press-question-not-retry.json` does.
+  **Passed on the Deck 2026-09-15.** A closed the question and the ring stayed on that question's own header
+  row, fully visible, instead of dropping to nothing; Down from there continued normally to Session context,
+  the chip row, the question box and Ask. Evidence `docs/test-evidence/plan55-QUESTION-COLLAPSE-RING-01.json`.
+- ★ `[focus]` **Left on the collapsed-history row throws the highlight out of the plugin** — **VERIFY, fixed
+  2026-09-15.** The row now holds still on Left instead of handing the highlight to Steam's own Quick Access
+  rail. Row **EARLIER-LEFT-01**: with the highlight on the *N earlier* row, press Left and check it stays in
+  the plugin.
+  **Passed on the Deck 2026-09-15.** Left on the row held the ring still, where the old build handed it to
+  Steam's Quick Access rail. Evidence `docs/test-evidence/plan55-EARLIER-LEFT-01-and-ARCHIVED-UP-01.json`.
+- ★★ `[focus]` **Up skips the answer sections and the chat slot row** — **VERIFY, fixed 2026-09-15.** Both
+  halves are now fixed: Up from the feedback buttons lands on the reply's last section instead of skipping
+  past it (fixed 2026-09-05), and Up from the first archived chat header now hands the highlight to the chat
+  slot row instead of running all the way to the tab bar. Row **ARCHIVED-UP-01**: with the chat archive
+  expanded, press Up from the first archived header and check the chat slot row takes the highlight.
+  **Passed on the Deck 2026-09-15.** Up from the first revealed archived header landed on the chat slot row,
+  fully visible, where the old build ran past it to the tab bar and Decky's own back button. Evidence
+  `docs/test-evidence/plan55-EARLIER-LEFT-01-and-ARCHIVED-UP-01.json`.
+- ★★ `[KB]` **A pinned test batch is not badged** — **VERIFY, fixed 2026-09-15.** Pinned test chips now show
+  their amber Test badge when the chip animation is set to decode — the one style that never drew it, and the
+  style this Deck uses. Row **CHIP-TEST-BADGE-01**: pin three chips with the animation set to decode and check
+  each one shows the amber Test label.
+  **Passed on the Deck 2026-09-15, by eye.** The Deck's own pinned batch of three test sentences showed an
+  amber TEST label on the chip in the decode animation style; the same chips carried no badge on the old build
+  earlier the same evening. Evidence `docs/test-evidence/plan55-CHIP-TEST-BADGE-01.json`, screenshot
+  `screenshots/DeckCapture_20260915_211004_game.png`.
+
 ### The follow-up that looks up what you were just asking about (2026-09-12)
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-15. It shipped and was checked; the third of runs that

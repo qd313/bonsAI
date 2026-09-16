@@ -1,0 +1,19 @@
+{
+  "row": "QUESTION-FADE-01 (a short question no longer fades) - lane E commit 585e315",
+  "plan": 55,
+  "when": "2026-09-16T01:10:37.484348+00:00",
+  "build": "f34de8a (dist sha256 eee73d8a..., deployed 21:08 and matched by hash)",
+  "setup": "Deep Rock Galactic: Survivor running, panel reopened after the deploy; the newest turn is open by default.",
+  "open_question": "How do I beat Glyphid Dreadnought?",
+  "measured": {
+    "header_classes": "bonsai-chat-turn-row-header--history --expanded (no --overflowing on the title)",
+    "title_class": "bonsai-chat-turn-row-title",
+    "title_scrollHeight_px": 14,
+    "title_clientHeight_px": 14,
+    "computed_mask_image": "none",
+    "max_height_px": 71.5
+  },
+  "screenshot": "screenshots/DeckCapture_20260915_211004_game.png",
+  "verdict": "PASS by measurement and by the maintainer's eye on the new build: a one-line open question carries no overflow marker and no fade mask. A multi-line overflowing question showing the fade is still to be checked.",
+  "maintainer_confirmation": "2026-09-15 21:14 (local): the maintainer looked at the Deck and confirmed by eye that the fade is fixed on the new build; their earlier sighting was the older build."
+}

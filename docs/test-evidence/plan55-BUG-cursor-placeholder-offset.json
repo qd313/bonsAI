@@ -1,0 +1,35 @@
+{
+  "bug": "NEW (maintainer report 2026-09-15): the blinking cursor in the question box does not line up with the placeholder text; a few px up and a little left",
+  "plan": 55,
+  "when": "2026-09-16T01:18:01.255880+00:00",
+  "build": "f34de8a",
+  "measured_on_deck": {
+    "real_input": {
+      "tag": "INPUT",
+      "text_origin_x": 80.8,
+      "text_origin_y": 645.1,
+      "font_px": 12,
+      "line_height_px": 14.4,
+      "padding": "6px top, 8px left",
+      "text_color": "transparent",
+      "caret_color": "transparent (so the visible caret is whatever the field draws through the mirror layers)"
+    },
+    "placeholder_layer": {
+      "class": "bonsai-unified-input-strategy-placeholder",
+      "x": 80.7,
+      "y": 645.9,
+      "h": 12.5,
+      "font_px": 10,
+      "line_height_px": 12
+    },
+    "mirror_layer": {
+      "class": "bonsai-unified-input-measure",
+      "x": 72.8,
+      "y": 639.1,
+      "font_px": 12,
+      "line_height_px": 14.4
+    }
+  },
+  "reading": "The placeholder is drawn in its own 10-pixel layer while the real field (which owns the cursor) is a 12-pixel, 14.4-pixel-line field. The two text boxes start about 0.8 px apart vertically and the field's line is 2.4 px taller than the placeholder's, so a cursor drawn at the field's line cannot sit on the placeholder's baseline. The horizontal origins are within 0.1 px, so the 'a little left' half is most likely the caret glyph's own width against the placeholder's first letter.",
+  "note": "Empty-box state measured; the '|' caret glyph the panel shows while typing was not on screen at the time of the read."
+}

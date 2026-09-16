@@ -1,0 +1,258 @@
+{
+  "ok": true,
+  "fidelity": "steam-routed",
+  "steps": [
+    {
+      "index": 1,
+      "label": "down from Hybrid retrieval to the next section's first control",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Hybrid retrieval (meaning search)\"",
+      "to": "<DIV> \"On-screen debug HUD\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 594,
+      "diagnosis": "press routed, focus moved <DIV> \"Hybrid retrieval (meaning search)\" -> <DIV> \"On-screen debug HUD\""
+    },
+    {
+      "index": 2,
+      "label": "up back to Hybrid retrieval",
+      "press": [
+        "UP"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"On-screen debug HUD\"",
+      "to": "<DIV> \"Hybrid retrieval (meaning search)\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 636,
+      "diagnosis": "press routed, focus moved <DIV> \"On-screen debug HUD\" -> <DIV> \"Hybrid retrieval (meaning search)\""
+    },
+    {
+      "index": 3,
+      "label": "up to Install seed knowledge base",
+      "press": [
+        "UP"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Hybrid retrieval (meaning search)\"",
+      "to": "<BUTTON> \"Install seed knowledge base\"",
+      "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > button.DialogButton._DialogLayout.Secondary:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 651,
+      "diagnosis": "press routed, focus moved <DIV> \"Hybrid retrieval (meaning search)\" -> <BUTTON> \"Install seed knowledge base\""
+    },
+    {
+      "index": 4,
+      "label": "to Permissions",
+      "press": [
+        "LB"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"Install seed knowledge base\"",
+      "to": "<DIV> \"Read game & screenshot context\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 586,
+      "diagnosis": "press routed, focus moved <BUTTON> \"Install seed knowledge base\" -> <DIV> \"Read game & screenshot context\""
+    },
+    {
+      "index": 5,
+      "label": "to Settings",
+      "press": [
+        "LB"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Read game & screenshot context\"",
+      "to": "<DIV> \"Adjust UI automatically\"",
+      "focusKey": "sel:div._TabContentsScroll.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(3) > div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 633,
+      "diagnosis": "press routed, focus moved <DIV> \"Read game & screenshot context\" -> <DIV> \"Adjust UI automatically\""
+    },
+    {
+      "index": 6,
+      "label": "to Ollama",
+      "press": [
+        "LB"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Adjust UI automatically\"",
+      "to": "<DIV> \"Run AI on this Deck\"",
+      "focusKey": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 597,
+      "diagnosis": "press routed, focus moved <DIV> \"Adjust UI automatically\" -> <DIV> \"Run AI on this Deck\""
+    },
+    {
+      "index": 7,
+      "label": "to Main",
+      "press": [
+        "LB"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<DIV> \"Run AI on this Deck\"",
+      "to": "<DIV> \"Show details\"",
+      "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(2) > div.Panel.Focusable:nth-child(5) > div.Panel.Focusable:nth-child(4)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 653,
+      "diagnosis": "press routed, focus moved <DIV> \"Run AI on this Deck\" -> <DIV> \"Show details\""
+    }
+  ],
+  "ranSteps": 7,
+  "totalSteps": 7,
+  "passed": 7,
+  "failed": 0,
+  "visited": [
+    "<DIV> \"Hybrid retrieval (meaning search)\"",
+    "<DIV> \"On-screen debug HUD\"",
+    "<BUTTON> \"Install seed knowledge base\"",
+    "<DIV> \"Read game & screenshot context\"",
+    "<DIV> \"Adjust UI automatically\"",
+    "<DIV> \"Run AI on this Deck\"",
+    "<DIV> \"Show details\""
+  ],
+  "cycle": {
+    "key": "sel:div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div.Focusable:nth-child(1)",
+    "seenAt": [
+      0,
+      2
+    ],
+    "loop": [
+      "<DIV> \"Hybrid retrieval (meaning search)\"",
+      "<DIV> \"On-screen debug HUD\"",
+      "<DIV> \"Hybrid retrieval (meaning search)\""
+    ],
+    "escaped": true,
+    "stepsAfterLoop": 5
+  },
+  "neverReached": [],
+  "stopsFocusedButNotVisible": 0,
+  "notVisibleStops": [],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 8229,
+  "acquired": false,
+  "summary": "7/7 steps passed; focus returned to <DIV> \"Hybrid retrieval (meaning search)\" at steps 0 and 2 and escaped afterwards"
+}

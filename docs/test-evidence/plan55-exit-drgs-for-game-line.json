@@ -1,0 +1,43 @@
+{
+  "tool": "exit-game",
+  "ok": false,
+  "reason": "GUIDE did not put the ring on a main-menu entry named \"Deep Rock Galactic: Survivor\"; it is on <DIV> \"Home\"",
+  "stopped": false,
+  "appid": 2321470,
+  "name": "Deep Rock Galactic: Survivor",
+  "alreadyRunning": false,
+  "nothingRunning": false,
+  "running": {
+    "appid": 2321470,
+    "name": "Deep Rock Galactic: Survivor"
+  },
+  "route": null,
+  "stages": [
+    {
+      "stage": "read-running",
+      "ok": true,
+      "detail": "\"Deep Rock Galactic: Survivor\" (appid 2321470) is running",
+      "presses": 0
+    },
+    {
+      "stage": "open-main-menu",
+      "ok": false,
+      "detail": "one GUIDE press from ring on <INPUT> in \"|\"; ring on <DIV> \"Home\", not an entry named \"Deep Rock Galactic: Survivor\"",
+      "presses": 1
+    }
+  ],
+  "seen": [
+    "Home"
+  ],
+  "presses": 1,
+  "fidelity": "wire-sent",
+  "runningBefore": [
+    {
+      "appid": 2321470,
+      "display_name": "Deep Rock Galactic: Survivor"
+    }
+  ],
+  "runningAfter": null,
+  "durationMs": 1675,
+  "summary": "the main menu did not open on the running game's entry - nothing else was pressed"
+}

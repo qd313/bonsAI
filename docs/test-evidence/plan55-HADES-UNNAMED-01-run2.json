@@ -1,0 +1,20 @@
+{
+  "row": "HADES-UNNAMED-01 (second run, stronger story question) and HADES-UNNAMED-STREAM-01 (first attempt)",
+  "plan": 55,
+  "when": "2026-09-16T00:50:57.829907+00:00",
+  "build": "1ac4d7a6fff479a01c48f6a1b6a60d78b360b88a",
+  "setup": "Hades (1145360) running, Strategy mode, masking on, streaming always on; typed with scripts/deck_send_ask.py (VERIFIED) and sent with Ask; the page polled every 1.5 s for a spoiler element or the words 'hidden until complete'.",
+  "question": "how does the story of hades end",
+  "reply_start": "Right then, you wanna know how this whole Hades story wraps up? Listen up, mate, the ending ain't just one quick trip down a road. It's a whole marathon, see? ...",
+  "fence_rendered": {
+    "class": "bonsai-spoiler-reveal-target",
+    "text": "Spoiler - tap to show / Hidden until you reveal (Strategy Guide).",
+    "height_px": 57
+  },
+  "screenshot": "screenshots/DeckCapture_20260915_205026_game.png",
+  "verdict_unnamed_01": "PASS with this sentence: story detail is fenced and masked on a Hades question that names no boss. The earlier FAIL (plan55-HADES-UNNAMED-01.json, 'what happens when i finally reach the surface in hades') stands as a case where the model drew no fence for a milder story question.",
+  "verdict_stream_01": "INCONCLUSIVE on this run: the poll first saw the finished masked fence about 20 s after the send and never caught the words 'hidden until complete', so whether the mid-stream chip showed is unknown. A second run with a screen recording follows (plan55-HADES-UNNAMED-STREAM-01-rec).",
+  "runs": [
+    "runs/plan55-HADES-UNNAMED-STREAM-01-send.json"
+  ]
+}

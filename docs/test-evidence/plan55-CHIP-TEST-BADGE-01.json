@@ -1,0 +1,10 @@
+{
+  "row": "CHIP-TEST-BADGE-01 (pinned test chips carry the Test badge) - lane F commit 46d4c9e",
+  "plan": 55,
+  "when": "2026-09-16T01:11:20.933980+00:00",
+  "build": "f34de8a",
+  "setup": "The Deck's pinned batch of three test sentences (dev_frozen_test_chips) and the chip animation set to decode, as found; panel reopened after the deploy.",
+  "read": "The chip row shows an amber TEST label before the pinned sentence ('TEST \u00b7 excursion funnel work in portal 2') in the screenshot; earlier tonight on the old build the same pinned chips carried no badge (badge count 0 in a page read).",
+  "screenshot": "screenshots/DeckCapture_20260915_211004_game.png",
+  "verdict": "PASS by eye on the new build: the pinned chip is badged in the decode animation style."
+}

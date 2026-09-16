@@ -1,0 +1,39 @@
+{
+  "row": "SMOKE-F (deterministic commands) and VAC-02 (ban lookup on, empty key)",
+  "plan": 55,
+  "when": "2026-09-16T01:04:42.383107+00:00",
+  "build": "1ac4d7a6fff479a01c48f6a1b6a60d78b360b88a",
+  "setup": "Nothing running, Strategy mode. Each line typed with scripts/deck_send_ask.py (VERIFIED) and sent with Ask. The Steam ban lookup permission was left as found (ON) and the Developer > Integrations key field is empty on this Deck.",
+  "results": [
+    {
+      "line": "bonsai:disable-sanitize",
+      "reply": "Input sanitization is disabled for future asks. Send bonsai:enable-sanitize (exact line, Ask field) to turn it back on. See README for details.",
+      "instant": true,
+      "menu_or_model_chrome": "none (only Retry, Copy, Helpful, Not really)"
+    },
+    {
+      "line": "bonsai:enable-sanitize",
+      "reply": "Input sanitization is enabled again for future asks. Send bonsai:disable-sanitize (exact line) to disable. See README for details.",
+      "instant": true
+    },
+    {
+      "line": "bonsai:shortcut-setup-deck",
+      "reply_start": "bonsAI cannot create Steam Input macros automatically (no supported API; your controller stays under your control). This message skips the model and points you to the full recipe: docs/troubleshooting.md - section 5. bonsai shortcut setup. Steps (summary): Open Controller settings ... Guide Button Chord Layout ...",
+      "instant": true
+    },
+    {
+      "line": "bonsai:vac-check",
+      "reply": "No Steam Web API key saved. Register a key at Steam Web API (see README), paste it under Developer > Integrations > Steam Web API key, save, then try again: bonsai:vac-check 7656119...",
+      "instant": true,
+      "note": "This is the VAC-02 shape (permission ON, key empty). SMOKE-F's fourth half and VAC-01 expect the permission OFF and the capability message; not run, because the permission was not changed."
+    }
+  ],
+  "log_half": "The plugin's own activity log is switched off on this Deck (journal filter matched nothing), so the 'no model call' half rests on the replies arriving within about a second with no thinking line and no follow-up chrome.",
+  "verdict": "SMOKE-F: three of four lines PASS with their fixed wording; the fourth answered per VAC-02 (PASS for VAC-02: says the key is missing and where to set it). VAC-01 (permission off) still owed. VAC-03/04/05 need the maintainer's key.",
+  "runs": [
+    "runs/plan55-SMOKE-F-disable-sanitize.json",
+    "runs/plan55-SMOKE-F-enable-sanitize.json",
+    "runs/plan55-SMOKE-F-shortcut-setup.json",
+    "runs/plan55-SMOKE-F-vac-check.json"
+  ]
+}

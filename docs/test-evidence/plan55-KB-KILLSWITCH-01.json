@@ -1,0 +1,26 @@
+{
+  "row": "KB-KILLSWITCH-01 (the hybrid kill-switch)",
+  "plan": 55,
+  "when": "2026-09-16T00:44:39.733008+00:00",
+  "build": "1ac4d7a6fff479a01c48f6a1b6a60d78b360b88a",
+  "setup": "Hades (1145360) running, Strategy mode, knowledge base on. Developer tab, Knowledge base (dev QA), Hybrid retrieval (meaning search) toggled OFF with A; settings.json read back over SSH: rag_hybrid_retrieval_enabled = False. Same sentence typed with scripts/deck_send_ask.py (VERIFIED) and sent.",
+  "question": "how do i beat theseus and asterius",
+  "on_state_reading": "From plan55-KB-FLOOR-01-ontopic.json a few minutes earlier with the toggle ON: chip 'Keyword + meaning', body 'Retrieval: Keyword + meaning', 'Embed: 28.68 ms', 'Re-rank: 2.37 ms'.",
+  "off_state_reading": {
+    "chip": "Keyword search",
+    "body": [
+      "Local knowledge base",
+      "Retrieval: Keyword search (hybrid disabled)",
+      "Trust tier: fallback_no_source",
+      "app_id:1145360"
+    ],
+    "embed_line": "absent (zero embed time is not printed)",
+    "honesty_line": "none",
+    "reply_uses_note": "yes, the same Theseus and Asterius tactics as with the toggle on"
+  },
+  "verdict": "PASS: off still attaches cards and reads 'Keyword search (hybrid disabled)' with no embed time; on reads 'Keyword + meaning'. Still a real check (the distinct wording is the point); not stale.",
+  "runs": [
+    "runs/plan55-KB-KILLSWITCH-01-hybrid-off-send.json"
+  ],
+  "restore": "toggle put back ON afterwards and read off disk (see the notes for the confirming read)"
+}

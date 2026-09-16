@@ -5,6 +5,54 @@ All notable changes to this project are documented in this file.
 ## [Unreleased]
 
 ### Fixed
+- **A several-model download now says which name it could not find, and a model with no listed size warns
+  before you pick it:** downloading several models at once used to drop a mistyped name with no notice; it now
+  says which one it could not find and still starts the good ones. The try-order picker used to treat a model
+  as safe whenever its size was missing from the list; it now shows "Size unknown - may be too large" instead,
+  and still lets you pick it. `PullModelsModal.tsx`, `ModelRoutingOrderModal.tsx`, `ollama_service.py`,
+  `ollama_routing.py`. On-Deck rows: **PULL-MISSING-NAME-01** (owed), **ROUTING-SIZE-UNKNOWN-01** (passed on
+  the Deck 2026-09-15) in `docs/testing.md`.
+- **Pressing Ask, or hitting a greyed button, no longer drops the highlight:** after pressing Ask the highlight
+  now lands on the question box when there is a real question, or stays on the Ask button when the box is
+  empty, instead of vanishing either way; while an answer is being written, Down from the question box now
+  holds still instead of landing on the greyed Ask button, and Down from an answer with the thumbs greyed lands
+  on Retry instead. Opening the panel also now tries, for about a second, to place the highlight on the
+  question box. `MainTabUnifiedAskBar.tsx`, `useMainTabAskBarFocus.ts`. On-Deck rows: **ASK-RING-AFTER-PRESS-01**
+  (real-question half passed on the Deck 2026-09-15), **GREYED-STEP-OVER-01** (Ask half passed on the Deck
+  2026-09-15), **OPEN-RING-01** (holds on the Deck for an ordinary fresh open, two of three tries; the one
+  miss is the very first open right after a fresh deploy's restart) in `docs/testing.md`.
+- **Closing the model try-order picker now returns the highlight to the button you opened it from**, instead
+  of leaving it on the tab, about thirteen presses away. `ModelRoutingOrderModal.tsx`, `useRoutingOrderModal.ts`.
+  On-Deck row: **TRY-ORDER-RETURN-01** in `docs/testing.md` — the text picker passed on the Deck 2026-09-15,
+  the vision picker not yet pressed.
+- **The line under the question box now keeps up with the game you are playing, and shows its name instead of
+  a number:** it used to only read the running game once when the panel opened, and never noticed a game
+  closing or starting while the panel stayed open. Confirmed on the Deck 2026-09-15, both directions. Pinned
+  test chips also now show their amber Test badge in the decode animation style, the one style that never drew
+  it — confirmed on the Deck by eye. `useBonsaiAskOrchestration.ts`, `MainTabPresetAnimatedChips.tsx`. Rows
+  **GAME-LINE-LIVE-01**, **CHIP-TEST-BADGE-01** in `docs/testing.md`, both passed.
+- **A Speed-mode reply no longer ends with a block of raw computer text where a power tip should be**, a
+  follow-up menu no longer offers Half-Life 2 places under a different game's answer, a screenshot Ask no
+  longer ends with a line of technical text, a Hades boss's note is spelled correctly (Megaera) pending the
+  maintainer's publish step, and the honesty line can now appear when a game is only named in the question
+  rather than running or picked from a menu. `ollama_prompts.py`, `tdp_intent.py`, `game_ai_request.py`,
+  `response_verify.py`, `knowledge_base_service.py`, `data/kb/`. On-Deck rows: **TDP-CODEBOX-01** (passed on
+  the Deck 2026-09-15), **ATTACH-DEBUG-01**, **MEGAERA-01**,
+  **BRANCH-EXAMPLE-01** (one clean sighting on the Deck 2026-09-15) in `docs/testing.md`. **One thing this
+  landing did not fix, found on the Deck the same evening:** the honesty line still does not appear for a game
+  named only in the question, even though the underlying check now reaches that game correctly — three
+  unrelated cards attached to a Black Mesa question about horses with no line saying so. Row
+  **HONESTY-TEXT-GAME-01**, still open.
+- **Walking down a reply and walking back up now visit the same stops**, Down from an answer with the thumbs
+  greyed lands on Retry instead of doing nothing, and a reply ending in a code box now leaves room for the copy
+  icon instead of sitting on top of it. `buildAnswerBubbleElement.tsx`, `buildReplyActionsElement.tsx`,
+  `answerBubbleNavigation.ts`, `replyStopRegistry.ts`, `ReplyCopyButton.tsx`. On-Deck rows owed:
+  **REPLY-STOPS-MIRROR-01**, **COPY-ICON-CODEBOX-01** in `docs/testing.md`.
+- **A short question no longer fades unless it really runs past its five lines, Left on the collapsed-history
+  row stays in the plugin, closing an open question keeps the highlight on it, and Up from the first archived
+  chat header now reaches the chat slot row instead of running all the way to the tab bar.** All four confirmed
+  on the Deck 2026-09-15. `MainTabChatTranscript.tsx`. Rows **QUESTION-FADE-01**, **EARLIER-LEFT-01**,
+  **QUESTION-COLLAPSE-RING-01**, **ARCHIVED-UP-01** in `docs/testing.md`, all passed.
 - **The tab bar's pop-up strip no longer leaves a see-through ghost of itself over the suggestion chips:**
   touching the screen used to close the strip with a fade, and if that fade ever stalled — seen twice with a
   game running full screen — the strip was left frozen half-visible, with pale tab icons and a faint row of

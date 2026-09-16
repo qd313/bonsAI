@@ -1,0 +1,30 @@
+{
+  "row": "COPY-ICON-CODEBOX-01 (copy icon beside, not on, a trailing code box) - lane D commit a89e071",
+  "plan": 55,
+  "when": "2026-09-16T01:32:43.436666+00:00",
+  "build": "f34de8a",
+  "setup": "Nothing running, Strategy mode; asked 'show me a tiny bash script that lists files, as a code block and nothing after it'.",
+  "measured": {
+    "code_boxes": 1,
+    "reply_ends_with_code_box": false,
+    "code_box_rect": {
+      "x": 70,
+      "y": 156,
+      "w": 238,
+      "h": 32,
+      "bottom": 189
+    },
+    "copy_icon_rect": {
+      "x": 292,
+      "y": 230,
+      "w": 20,
+      "h": 20
+    },
+    "vertical_overlap_px": 0,
+    "tail": "...ls -l / Now, look, I ain't gonna tell ya what to do next in the game, but you gotta pick your path."
+  },
+  "verdict": "NOT EXERCISED: the model added a sentence after the box, so the answer ended in text and the icon sat 41 px below the box with no overlap. The case the row needs (a box as the very last block) did not occur on this try; the row stays owed.",
+  "runs": [
+    "runs/plan55-COPY-ICON-CODEBOX-01-send.json"
+  ]
+}

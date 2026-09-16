@@ -1,0 +1,20 @@
+{
+  "row": "TDP-CODEBOX-01 (a Speed-mode reply no longer ends in a code box of raw power text) - lane A commit 189c561",
+  "plan": 55,
+  "when": "2026-09-16T01:21:43.162611+00:00",
+  "build": "f34de8a",
+  "setup": "Deep Rock Galactic: Survivor running, Speed mode picked from the mode menu, character voice on; typed with scripts/deck_send_ask.py (VERIFIED) and sent with Ask.",
+  "question": "how do i get better performance and battery life in this game",
+  "measured": {
+    "reply_chars": 1355,
+    "contains_tdp_watts_or_gpu_clock": false,
+    "contains_json_braces": false,
+    "code_boxes_in_reply": 0,
+    "text_around_the_removed_box": "...if you want to try a mid-range power setting, you could try this:\nKeep an eye on your temps too, yeah?..."
+  },
+  "verdict": "PASS: no raw computer text and no code box in the words a person reads. Cosmetic leftover worth a note: the model's own lead-in sentence 'you could try this:' stays with nothing after it, because only the box was removed.",
+  "runs": [
+    "runs/plan55-TDP-CODEBOX-01-send.json",
+    "runs/plan55-TDP-CODEBOX-01-send-2.json"
+  ]
+}

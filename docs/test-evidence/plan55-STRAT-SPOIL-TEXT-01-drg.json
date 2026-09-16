@@ -1,0 +1,38 @@
+{
+  "row": "STRAT-SPOIL-TEXT-01 (game named only in the question), first half",
+  "plan": 55,
+  "when": "2026-09-16T00:58:11.371595+00:00",
+  "build": "1ac4d7a6fff479a01c48f6a1b6a60d78b360b88a",
+  "setup": "Nothing running (Hades exited, plugin restarted so the panel's game state was fresh; the line read 'Context: no active game detected'), Strategy mode, masking on; sentence typed with scripts/deck_send_ask.py (VERIFIED) and sent with Ask.",
+  "question": "drg survivor what class",
+  "reply": "Alright, listen up. You wanna know what class to pick? It ain't about just picking the flashiest weapon, see? It's about the whole package. Each of them dwarf classes, man, they got their own weapon pool and their own way of moving. You gotta try one class for a few runs before you start switching around... The upgrades? They only stack right if you stick with what the class already does... pick one, get a feel for how it feels to play that style...",
+  "spoiler_fences_rendered": 0,
+  "claims_game_running": false,
+  "honesty_line": "none",
+  "show_details": {
+    "chips": [
+      "Keyword + meaning",
+      "KB: no game running",
+      "Reply style: balanced",
+      "Spoiler risk: low",
+      "Routed gemma4:e2b-it-qat",
+      "Developer details"
+    ],
+    "kb_body": [
+      "Local knowledge base",
+      "Retrieval: Keyword + meaning",
+      "Trust tier: fallback_no_source",
+      "text:deep rock galactic survivor",
+      "Embed: 26.25 ms",
+      "Re-rank: 14.07 ms"
+    ]
+  },
+  "follow_up_menu": [
+    "A. Focus on maximizing score",
+    "B. Focus on surviving the toughest waves"
+  ],
+  "verdict": "PASS for the first half: plain text with no spoiler box, the risk chip reads low, the game was resolved from the question text ('text:deep rock galactic survivor'), and the reply does not claim the game is running. The guard sentence ('new vegas best build') follows in plan55-STRAT-SPOIL-TEXT-01-newvegas.json.",
+  "runs": [
+    "runs/plan55-STRAT-SPOIL-TEXT-01-drg-send.json"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "row": "OPEN-RING-01 (place the ring on the question box on a fresh panel open) - lane C commit 1e437c6; the device decides between the guide and the roadmap (D104)",
+  "plan": 55,
+  "when": "2026-09-16T01:25:33.239155+00:00",
+  "build": "f34de8a",
+  "tries": [
+    {
+      "n": 1,
+      "how": "first open after the deploy's loader restart, entered from the Decky list at about 21:09",
+      "ring_right_after_activate": "unowned (the rig's own read after 'activate' found no ring; a page read about 30 s later also found none)"
+    },
+    {
+      "n": 2,
+      "how": "left the panel with A on Decky's back arrow, then re-entered from the Decky list at about 21:25 (panel remounted)",
+      "ring_right_after_activate": "on the question box (INPUT), fully visible"
+    },
+    {
+      "n": 3,
+      "how": "left the panel with A on Decky's back arrow, re-entered from the Decky list at about 21:28 (panel remounted), Strategy mode",
+      "ring_right_after_activate": "on the question box (INPUT), fully visible, placeholder text showing"
+    }
+  ],
+  "reading": "Two of three fresh entries placed the ring on the question box right after the panel mounted; the one miss was the first open after the deploy's loader restart, when Decky populates the field's nav node later than the attempt's one-second window.",
+  "runs": [
+    "the two deck_openPlugin results (not written as files by the rig)"
+  ],
+  "verdict": "HOLDS on the device for an ordinary fresh open (2 of 3); does not on the first open after a loader restart. Per D104 the guide's 'nothing owns the ring on open, not ours to fix' paragraph should change to say the plugin places it on the question box when it can, and the roadmap entry can close with the post-restart caveat recorded."
+}

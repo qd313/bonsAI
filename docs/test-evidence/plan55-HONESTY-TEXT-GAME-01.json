@@ -1,0 +1,26 @@
+{
+  "row": "HONESTY-TEXT-GAME-01 (the honesty line when the game is only named in the question) - lane A commit ef830ed",
+  "plan": 55,
+  "when": "2026-09-16T01:31:24.104708+00:00",
+  "build": "f34de8a",
+  "setup": "Nothing running, Strategy mode, knowledge base on, hybrid retrieval on; typed with scripts/deck_send_ask.py (VERIFIED) and sent with Ask.",
+  "question": "black mesa how do i tame a horse",
+  "reply": "Alright, listen up. Now, I ain't got no intel on taming a horse in Black Mesa, see? That ain't what the manual's got. We're talkin' tram rides, HEV suits, and swingin' that crowbar on crates... find those vents, and keep those Houndeye packs from giving you a nasty shockwave.",
+  "honesty_line_rendered": false,
+  "show_details": {
+    "coverage_chip": "KB: 14 sections (the question-named game now counts as covered; before the fix this read 'no game running')",
+    "attached_cards": [
+      "Black Mesa - Starting out in Black Mesa",
+      "Black Mesa - The opening tram ride and where it leads",
+      "Black Mesa - Houndeye"
+    ],
+    "retrieval": "Keyword + meaning",
+    "trust_tier": "wiki_no_patch",
+    "resolved_from": "text:black mesa",
+    "embed_ms": 544.88
+  },
+  "verdict": "FAIL on the device for the line itself: the coverage check is now told about the question-named game (the chip proves the plumbing landed), and three Black Mesa cards attached to a question Black Mesa cannot answer, but the 'No close match in my notes' line did not appear. The model's own words admit it has no intel, which is not the plugin's line. Whoever follows up should look at why the notice's closeness rule judged these three keyword-matched cards close enough; the lane's unit test used a fixture that did trip it.",
+  "runs": [
+    "runs/plan55-HONESTY-TEXT-GAME-01-send.json"
+  ]
+}

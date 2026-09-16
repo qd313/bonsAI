@@ -152,12 +152,16 @@ Full patterns:
 - **To ask which control the ring already owns, use the two gamepad-aware helpers**, not the DOM
   ones. They read Steam's own on-screen ring marker, where the older active-element check can return
   a confident wrong answer. Two shipped bugs came from exactly that.
-- **Nothing owns the ring when the plugin opens, and the first two Downs belong to Steam.** Opening
-  a Decky plugin leaves the ring unowned; the first Down lands on the Back button in the header, the
-  second reaches the tab bar. That is normal Steam behaviour, not a bug and not ours to fix. A test
-  step that opens the plugin and immediately asks where focus is will read *unowned* and must spend
-  a press first. A report of "the first press does nothing" is usually this — reproduce it from a
-  known ring position before believing it.
+- **The plugin now places the ring on the question box when it opens, unless something else already
+  owns it** (fixed 2026-09-15, confirmed on the Deck twice out of three tries). Opening a Decky
+  plugin used to leave the ring unowned, with the first Down landing on the Back button in the
+  header and the second reaching the tab bar; that was normal Steam behaviour and not a bug, but it
+  cost a person two wasted presses. **The one time it still does not hold:** the very first open
+  right after a fresh deploy's loader restart, when Decky's own navigation node for the field is not
+  ready inside the plugin's one-second attempt. A test step that opens the plugin right after a
+  deploy and immediately asks where focus is may still read *unowned* — reproduce a report of "the
+  first press does nothing" from an ordinary fresh open, not a just-deployed one, before treating it
+  as a regression.
 - **Never mark Deck-facing work done without a D-pad row** in [docs/testing.md](docs/testing.md) or
   [docs/testing-manual.md](docs/testing-manual.md) for the new chain.
 

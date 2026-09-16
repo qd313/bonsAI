@@ -1,0 +1,11 @@
+{
+  "bug": "The panel keeps naming a game after you have closed it (roadmap, Knowledge base Bugs) \u2014 the closed-game half of the game-line entry",
+  "plan": 55,
+  "when": "2026-09-16T00:53:53.071010+00:00",
+  "build": "1ac4d7a6fff479a01c48f6a1b6a60d78b360b88a (Deck build before lane F landed)",
+  "read": "Hades exited by the rig at about 00:53Z (runs/plan55-exit-hades.json, RunningApps empty 138 ms after Confirm). The Quick Access Menu was reopened at about 00:54Z and the panel's line still read 'Context: active game AppID 1145360'.",
+  "verdict": "Reproduced on the pre-fix build. Lane F's fix (55a1e84, a two-second running-game check while the panel is open) is landed on experimental and gets its device check after the next deploy.",
+  "runs": [
+    "runs/plan55-exit-hades.json"
+  ]
+}

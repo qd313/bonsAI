@@ -1,0 +1,12 @@
+{
+  "row": "TRY-ORDER-RETURN-01 (Done hands the highlight back to the try-order button) - lane B2 commit 798418d",
+  "plan": 55,
+  "when": "2026-09-16T01:29:06.269435+00:00",
+  "build": "f34de8a",
+  "setup": "Ollama tab, Models & routing; A on 'Set text model try order\u2026' opened the picker (ring landed on a greyed 'Move gemma4:e2b-it-qat up' button); walked Down to Done.",
+  "measured": "A on Done closed the picker and the ring landed on 'Set text model try order' (fully visible), not on the tab's frame.",
+  "verdict": "PASS for the text picker; the vision picker not pressed (same wiring). Side note: inside the picker the ring first lands on a greyed 'Move \u2026 up' button (a disabled control taking the ring, the same family as the greyed-button bug).",
+  "runs": [
+    "runs/plan55-TRY-ORDER-RETURN-01.json"
+  ]
+}

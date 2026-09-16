@@ -71,42 +71,18 @@ starts work outside this.
 ## Bugs
 
 
-- ★ `[ask]` **A follow-up offered a place from a different game** — **OPEN, seen on the Deck 2026-09-13.**
-  Asked how the excursion funnel works in Portal 2, the reply was right, then the follow-up asked *"Where are you at in
-  Portal 2?"* and offered **A. Just arrived at the train station** and **B. Fighting through Ravenholm**. Ravenholm is
-  Half-Life 2, not Portal 2. The answer itself was correct; only the two choices under it were invented. Spotted during the
-  clean-up's Deck check and nothing to do with it — no game was running, Strategy mode, the small local model.
-  [Evidence](test-evidence/phase3-delete-round-deck-check.json).
-
-- ★ `[chat]` **A short question fades out at its right edge as if there were more to read** — **OPEN, seen on the
-  Deck 2026-09-13.** The fade is meant to hint that a long question has been cut short. It is drawn on every open question,
-  so a one-line one like *what about its second phase* fades too and looks cut when nothing is missing. It should only fade
-  when the text really is longer than the room it has. Screenshots `screenshots/DeckCapture_20260913_125644_game.png` and
-  `screenshots/DeckCapture_20260913_125707_game.png`.
-
-- ★ `[focus]` **Pressing A on an open question closes it and drops the highlight** — the answer folds away and the ring
-  lands nowhere; the next D-pad press places it fresh instead of moving it. Seen on the Deck 2026-09-06 while checking the
-  corner icons, and the earlier run that pressed the question recorded the same landing ("nothing"), so it is not new to
-  the corner icons. Runs: `retry-corner-collapse-question`, `press-question-not-retry`.
-
-- ★ `[focus]` **Closing the model try order picker drops the highlight onto the tab rather than the button you opened it from** —
-  **OPEN, seen twice 2026-09-06.** After pressing *Done*, the highlight lands on the Ollama tab's outer frame, not back on
-  *Set text model try order…*. It is not a dead end — the next press moves normally — but it costs about thirteen presses to get
-  back to where you were. The *Clear cache…* and *Clear all data…* buttons were taught to hand the highlight back on
-  2026-09-04; the two try-order buttons were not.
-
-- ★ `[focus]` **A greyed-out button still takes the highlight, so the D-pad lands on something that does nothing** —
-  **OPEN, measured 2026-09-05.** Watched on the device while a question was in flight: the Ask button is greyed and the
-  highlight still lands on it. It is not one button — it is how greyed buttons behave here, so it now also applies to the
-  Helpful and Not really buttons that were greyed on a stopped reply the same day. The greyed *Clear frozen test chips*
-  button had the same problem and was fixed by removing it; that is not open here, because the maintainer asked for greyed
-  rather than gone. So the fix is to step over them with the D-pad instead. Evidence `docs/test-evidence/round35-CHECK-stop-press.json`.
-- ★ `[focus]` **Left on the collapsed-history row throws the highlight out of the plugin** — **OPEN, found 2026-09-05,
-  confirmed twice.** With the highlight on the *N earlier* row above a chat, Left hands it to Steam's Quick Access rail and
-  the person is out of bonsAI entirely. Right brings it back, but nothing says so. Same shape as the Ollama sliders fixed on
-  2026-09-04: the row does not claim the press, so Steam's own idea of "past the edge" fires. Left should either walk the
-  history or hold still. Evidence `docs/test-evidence/round35-BUG-left-from-earlier-pill-leaves-plugin.json`,
-  `docs/test-evidence/round35-BUG-left-from-earlier-pill-retry.json`.
+- ★ `[ask]` **The blinking cursor in the question box does not line up with the placeholder text** — **OPEN,
+  reported by the maintainer 2026-09-15 evening, a recurring sight.** The cursor sits a few pixels up and a
+  little to the left of the greyed "Describe the level, boss, or puzzle you're stuck on." **Measured on the
+  Deck the same evening:** the placeholder is drawn in its own layer at a 10-pixel font with a 12-pixel line;
+  the real text field underneath, whose caret is the cursor a person sees, uses a 12-pixel font with a
+  14.4-pixel line — about 2 pixels taller — so the two can never line up while they are two different font
+  sizes. Evidence `docs/test-evidence/plan55-BUG-cursor-placeholder-offset.json`.
+- ★ `[focus]` **Up from the Retry icon does not return to the answer** — **OPEN, found while reading the code
+  2026-09-15.** With the thumbs-up/thumbs-down row greyed on a stopped reply, Down from the answer now lands
+  on Retry — but Up from Retry does not go back to the answer's last section the way it should. The one-line
+  fix belongs in the turn header code, not in the files the lane that found it was allowed to touch. No device
+  evidence yet.
 - ★ `[focus]` **Left from the Ask button, and from the paperclip, hands the highlight to Steam's Quick Access
   rail** — **OPEN, measured 2026-09-15 evening.** With the ring on the Ask button, or on the paperclip in the
   question box's corner, Left moves the ring onto Steam's own Quick Access tab instead of keeping it in the
@@ -114,38 +90,20 @@ starts work outside this.
   the press, so Steam's own idea of "past the edge" fires. Evidence
   `docs/test-evidence/plan55-trap-run3-new-chat-with-live-turn.json` (the Ask button, steps 2 and 3),
   `docs/test-evidence/plan55-trap-run5-empty-chat-session-row-hades-running.json` (the paperclip, steps 3 and 4).
-- ★ `[focus]` **Pressing Ask drops the highlight** — **OPEN, found 2026-09-05, widened the same day.** Filed first as an
-  empty-box problem; it is not. **Every** press of the Ask button leaves nothing highlighted — with a real question and with an
-  empty box alike, measured four times. The page's own focus falls back to the document body, so the next press has to place the
-  highlight again before it can move it. On a fresh panel that placing press lands on Decky's back arrow, above the plugin. Same
-  family as nothing being highlighted when the panel opens, and likely the same fix.
 - ★ `[focus]` **Down does not move the ring off an unrevealed spoiler block** — **OPEN, found 2026-09-04, did not reproduce
   2026-09-05.** With the ring on the hidden block, Down reported the press arriving and nothing moving. Retried today on a fresh
   Red Dead ending reply with a real hidden block on screen: **Down left it normally**, straight onto the branch picker's first
   button, and every stop on the walk was fully visible. So the hidden state does not trap on its own. Most likely the same
   underlying fault as the stuck panel below — both are a hop that dies only sometimes — and best closed with it rather than
   chased separately. Evidence `docs/test-evidence/round35-spoiler-block-down-and-up.json`.
-- ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **OPEN, found 2026-09-05.** On one reply,
-  Down went question, hidden spoiler block, branch A, branch B, Helpful — never stopping on either paragraph of the answer. Up
-  from Helpful went both paragraphs, then the question — never stopping on the spoiler block or the branch buttons. So a person
-  who walks past something and presses Up to go back does not return to it; they land somewhere they never visited. Related to the
-  two-star entry about Up skipping sections, but sharper: the two directions disagree about what the reply's stops are.
-  Evidence `docs/test-evidence/round35-spoiler-block-down-and-up.json`.
-- ★ `[ollama]` **Mistyping one model name in a several-model download loses it without saying so** — **OPEN, found
-  while explaining the code 2026-09-14.** Ask for several models at once and get one name wrong: the bad one is dropped,
-  a line goes to a log nobody reads, and the rest download normally. The screen says the download started and never
-  mentions the one that went missing, so it looks like it worked — until that model is needed and is not there. It should
-  say which name it could not find.
-- ★ `[ollama]` **A model too big for the Deck can be picked with no warning if the download list does not say how big it
-  is** — **OPEN, found while explaining the code 2026-09-15.** A model is only treated as too large when its name is on a
-  short hand-written list, or when the download list gives a size of 15 GB or more. A big model that is on neither — a new
-  one, or any whose size is missing from the list — reads as a safe choice. The person picks it and finds out by watching
-  it fail or crawl.
-- ★ `[reply]` **Attaching a screenshot puts a line of technical text at the bottom of the answer** — **OPEN, found while
-  explaining the code 2026-09-15.** Every answer to a question that carried an attachment ends with a line like
-  `[AttachDebug: requested=1, prepared=1, errors=0]`. It is added whether or not anything went wrong, nothing on screen
-  removes it, and no setting turns it off — the safety net that strips the model's own internal tags does not know about
-  this one. It should be behind the verbose-logging setting, or gone.
+- ★ `[layout]` **An open question's row is only partly visible behind the Retry corner icon** — **OPEN,
+  seen at every visit 2026-09-15 evening.** With the newest turn open, the ring on the question's inner row
+  reads 67% visible, covered by the Retry same-prompt icon in the corner. Evidence
+  `docs/test-evidence/plan55-QUESTION-COLLAPSE-RING-01.json` (step 1),
+  `docs/test-evidence/plan55-DRG-01d-second-question-send.json` (step 1). **Seen again in the free-play sweep
+  2026-09-15**, at 78% visible behind the same icon, in both directions of the walk — the plugin's own rule
+  counts a focused-but-not-fully-visible stop as a failure regardless of the percentage. Evidence
+  `docs/test-evidence/plan55-QA-FREE-PLAY-01-main-long-reply.json`.
 - ★ `[ui]` **A new setting can quietly stop working in one place, because the list of settings is written out by hand
   several times over** — **OPEN, found while explaining the code 2026-09-14.** The settings code repeats its fifty-odd
   setting names in several separate places in the same file. Miss one and nothing breaks visibly; that setting just stops
@@ -158,44 +116,19 @@ starts work outside this.
   row showing one turn. Closing the panel and reopening it left the new chat empty, the way a new chat should
   always start. Evidence `docs/test-evidence/plan55-trap-run3-new-chat-with-live-turn.json` (the walk from the
   chat row visits Retry, the "…" question, Copy reply text and Read aloud under the New chat slot).
-- ★★ `[focus]` **Opening the panel leaves nothing highlighted** — **OPEN, found 2026-09-04, measured again twice on
-  2026-09-05.** Nothing owns the ring on a fresh open, so the first D-pad press has to place it rather than move it — and on
-  one measured open that press landed on **Decky's back arrow, above bonsAI entirely**. A person spends two presses before
-  they are anywhere useful, and the first takes them away from the chat. Filed first as the ring parking on a zero-size
-  element ("Ask bonsAI", "Where AI runs"); the later measurements found no ring at all, so the fix is to place it on mount
-  rather than move it off a bad one. Evidence `docs/test-evidence/round35-trap-attempt-1-after-b-reopen.json`.
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a
   blanket rule was tried and reverted in favour of Steam's native outline.
-- ★★ `[focus]` **Up skips the answer sections and the chat slot row** — **OPEN, found 2026-09-04.** Down walks a reply chunk by
-  chunk (three `.bonsai-answer-stop` stops on one turn); Up jumps from the feedback buttons straight past them to the bubble and
-  the turn header. With the archive expanded, Up from the first archived header ran 18 presses to the tab bar and Decky's back
-  button without the chat slot row ever taking the ring, though two Downs reach it normally. Same family as **ONBUTTONDOWN-AUDIT-01**.
-  **Half of this moved on 2026-09-05:** Up from the feedback buttons now lands on the reply's last section rather than skipping
-  to the bubble (measured, CHAT-REPLY-ENTRY-01). What is still open is the archived-header half — Up from the first archived
-  header runs to the tab bar without the chat slot row ever taking the ring.
-- ★★★ `[reply]` **An answer can end with a block of raw computer text where a power tip should be** — **REOPENED
-  2026-09-07 on the Deck (W2-R6): the fix does not cover the case the bug was reported from.** In Speed mode with Deep Rock
-  Galactic: Survivor running and the character voice on, a reply ended with the literal line
-  `{"tdp_watts": 5, "gpu_clock_mhz": 1200}` sitting in the words a person reads. The plugin reads that line to work out a
-  power suggestion and never took it out of the text on screen. A cleanup step added 2026-09-07 removes the line but leaves
-  anything inside a code box alone, so a code example someone asked for survives. **The miss: the plugin's own instruction
-  tells the model to put the power block inside a code box** — so the one block it asks for is the exact case the cleanup can
-  never remove. Measured on the device twice in a row, both replies ending in a code box holding nothing but the power line,
-  read out of the page rather than inferred. The seven tests that shipped with the fix all pass; every one tests the shape
-  the plugin does not ask for. **Two ways out:** ask for a plain line instead of a code box, or teach the cleanup to remove a
-  code box whose whole contents are the power block — the second is safer, because a real code example is never exactly
-  that. Evidence `docs/test-evidence/plan47-R6-stray-computer-text.json`. (D85)
+- ★★ `[focus]` **In a Deep Rock reply with glossary words, Down loops inside the reply and never reaches Show
+  details or Ask** — **OPEN, measured 2026-09-15 on build f34de8a, on a restored history turn.** Down walked
+  Retry corner, the question row, the answer, a glossary word, another glossary word, then back to the Retry
+  corner — twenty presses, the same five stops, no escape. Show details, Read aloud, the chips, the question
+  box and Ask are all below and none was reached. **Likely cause:** a glossary word is its own focus stop, and
+  a direction press closes its popup and falls through to Steam's own geometry, which wraps back to the top of
+  the turn instead of moving on. Evidence `docs/test-evidence/plan55-BUG-drg-glossary-down-cycle.json`.
 - ★★ `[reply]` **Token streaming reveals text in bursts while a game is running** — **ACCEPTED 2026-09-04 (D58 #4).** Measured 2026-08-28 with
   a game running: tokens arrive in bursts, and during a burst the overlay drops to 47 fps; between bursts it is a flat 60. Delivery
   is bursty, painting is not slow. The game's own frame rate is unmeasured. Accepted as a nice-to-have; reopen only if the game's own frame rate is measured
   and suffers. Making streaming the default stays a separate feature call. Row **STREAM-11**. [Detail](roadmap-details.md#token-streaming-reveals-text-in-chunks-while-a-game-is-running).
-- ★★ `[ui]` **The copy button sits on top of the code box instead of beside it** — **OPEN, measured on the Deck
-  2026-09-12.** The icon overlaps the code box's bottom-right corner by 16 pixels across and 9 down, so about two
-  fifths of it sits on the box. **The cause:** the icon is meant to sit in the answer bubble's corner, and that
-  reads fine when the answer ends in ordinary text, because the bubble behind it is one flat surface. A code box
-  has its own background, so the icon lands on that box's painted corner instead. Room is already reserved for the
-  icon at the end of the last line, but that does not move the box's edge. Evidence
-  `docs/test-evidence/plan48-deck-evening-2026-09-12.json` **[no evidence — re-run, batch QA-EVIDENCE-GAP-01]**, `screenshots/DeckCapture_20260912_183855_game.png`.
 - ★★ `[voice]` **Two things wanting the voice server at once would cut the first one off mid-sentence** — **OPEN,
   found while explaining the code 2026-09-14.** The speech-to-text server is shared, and it is started for one particular
   speech model. If a second caller asks for it with a different model, it restarts to suit the second, and the first is
@@ -491,9 +424,50 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   are spelled with an underscore where everything else uses a colon, and the wipe only looked for the colon. After wiping
   everything the plugin still believed it had warned you, so it stayed quiet when it should have spoken up. Fixed to match the
   bare word, which catches both spellings and clears the old ones off devices that already carry them. The New labels in the pull
-  picker go with it. Three tests. Row **CLEAR-ALL-PREFIX-01**; **not run on the device**, because doing so destroys the
-  maintainer's chats and settings and that was not asked for.
-
+  picker go with it. Three tests. Row **CLEAR-ALL-PREFIX-01**; **not run on the device tonight (2026-09-15).** Reading the wipe's
+  own code before pressing the button showed it also removes the Deck's own Ollama program and every model it
+  has downloaded, whenever Ollama lives in the home folder, which it does on this Deck; a backup of settings
+  and chats cannot bring the models back. The session asked the maintainer for a separate yes to wipe this
+  Deck and none came during the run, so the row stays owed.
+- ★ `[focus]` **Pressing Ask drops the highlight** — **VERIFY, fixed 2026-09-15, one half confirmed on the
+  Deck.** The real cause turned out to be the code that manages a question, which was clearing the page's own
+  highlight before it even checked whether there was a question to send, so the fix was made at the button
+  instead. Now, after pressing Ask, the highlight lands on the question box when there is a real question, or
+  stays on the Ask button when the box is empty, instead of vanishing either way. Row
+  **ASK-RING-AFTER-PRESS-01**: type a question, press Ask, then press one D-pad direction — the highlight is
+  already on the question box; clear the box and press Ask — the highlight stays on the Ask button. **The
+  real-question half passed on the Deck 2026-09-15**, evidence
+  `docs/test-evidence/plan55-ASK-RING-AFTER-PRESS-01.json`; the empty-box half is still to be pressed.
+- ★ `[focus]` **Closing the model try order picker drops the highlight onto the tab rather than the button you
+  opened it from** — **VERIFY, fixed 2026-09-15, one half confirmed on the Deck.** After pressing Done, the
+  highlight now lands back on the try-order button just used, instead of costing about thirteen presses to get
+  back to it. Row **TRY-ORDER-RETURN-01**: on the Ollama tab, under Models & routing, press Set text model try
+  order…, then press Done — the highlight is on that button; repeat for the vision try-order button. **The text
+  picker passed on the Deck 2026-09-15** — Done landed the highlight on Set text model try order, fully
+  visible, not on the tab (`docs/test-evidence/plan55-TRY-ORDER-RETURN-01.json`). The vision picker was not
+  pressed. **Side note from the same run:** opening the picker itself first lands the ring on a greyed "Move
+  up" button, the same shape as the greyed-button bug above.
+- ★ `[focus]` **A greyed-out button still takes the highlight, so the D-pad lands on something that does
+  nothing** — **VERIFY, fixed 2026-09-15, one half confirmed on the Deck.** While an answer is being written,
+  Down from the question box now holds still instead of landing on the greyed Ask button; and with the
+  thumbs-up/thumbs-down row greyed on a stopped reply, Down from the answer lands on Retry instead, and
+  Left/Right in that greyed row hold still. Row **GREYED-STEP-OVER-01**, covering both: while an answer is
+  thinking, Down from the question box stays on the box; with the thumbs greyed, Down from the answer lands on
+  Retry and Left/Right hold still. **The Ask half passed on the Deck 2026-09-15**, evidence
+  `docs/test-evidence/plan55-GREYED-STEP-OVER-01-ask-half.json`; the thumbs half is still owed.
+- ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **VERIFY, fixed
+  2026-09-15.** Down and Up through a reply now stop at the same places in both directions. Row
+  **REPLY-STOPS-MIRROR-01**: on a reply with two paragraphs, a spoiler block and a two-button menu, check the
+  Down stops and the Up stops are exact mirrors of each other.
+- ★ `[ollama]` **Mistyping one model name in a several-model download loses it without saying so** — **VERIFY,
+  fixed 2026-09-15.** Downloading several models at once now says which name it could not find and still
+  starts the good ones, instead of quietly dropping the bad one. Row **PULL-MISSING-NAME-01**: on the Ollama
+  tab's pull picker, choose two real models plus a name the registry lacks, press Pull selected, and check for
+  a toast that says the download started and names the one it could not find.
+- ★ `[reply]` **Attaching a screenshot puts a line of technical text at the bottom of the answer** — **VERIFY,
+  fixed 2026-09-15.** The line is gone from the reply; the counts it carried now go to the verbose log only.
+  Row **ATTACH-DEBUG-01**: ask with a screenshot attached and check the answer ends with no bracketed debug
+  line.
 - ★★ `[focus]` **A checklist the model got wrong was left in the reply as raw JSON**, its own D-pad stop that did nothing — **VERIFY.**
   Fixed 2026-08-28: a rejected checklist block is dropped, as a rejected branch block already was. Owed: one sighting on device of a
   reply where it happens. Row **STRAT-CHECKLIST-JSON-01**.
@@ -503,11 +477,21 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   can be left sitting over the suggestion chips. The exact reason the fade stalls could not be proven on the
   rig, which has no touch, so the fix force-finishes the close with a plain timer either way. Row
   **TAB-BAR-GHOST-01**, needs a finger, and it is on the maintainer's checklist.
+- ★★ `[ui]` **The copy button sits on top of the code box instead of beside it** — **VERIFY, fixed 2026-09-15.**
+  A reply that ends in a code box now gets room reserved below it, so the copy icon sits under the box instead
+  of overlapping its corner. Row **COPY-ICON-CODEBOX-01**: on a reply ending in a code box, check the box's
+  bottom edge and the icon's top edge do not overlap; a reply ending in plain text is unchanged. **Attempted on
+  the Deck 2026-09-15, not yet exercised:** a question asked for a code block with nothing after it, but the
+  model added a closing sentence anyway, so the reply ended in text and the icon sat 41 pixels clear of the box
+  — the exact case the row needs still has not come up. Evidence
+  `docs/test-evidence/plan55-COPY-ICON-CODEBOX-01.json`. **New sighting the same evening in the free-play
+  sweep, on that same plain-text-ending reply shape:** the last answer section read 89% visible, one of nine
+  sample points sitting under the copy icon's own corner. Evidence
+  `docs/test-evidence/plan55-QA-FREE-PLAY-01-main-long-reply.json`.
 - ★★★ `[chat]` **Clear cache cleared the screen but not the session** — **VERIFY.** Fixed and confirmed 2026-08-27, and again on the
   Deck 2026-09-03. The orphan half is measured: the chat stays behind after a clear, so each clear-and-reask cycle leaves one more
   chat in the rotation — a follow-up, not a regression. Only the mid-generation half is still owed: clearing while a reply is still
   being written (unit-tested, not reproducible by hand yet). Row **CLEAR-CACHE-01**. [Why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way).
-
 ### Features that need verification
 
 - ★★ `[chips]` **A glow when the chip row runs out of chips** — **VERIFY.** Built at the desk 2026-09-05 under D62 #3: press Left or Right past the first or last suggestion chip and that chip glows briefly, the way a phone lights up the end of a list. Nothing about the row’s existing edge behaviour changes. Reduced motion keeps the cue and drops the movement. **No measurement closes this one** — whether it reads as *end of list* rather than *error* is the maintainer’s call from a recording, and it is on their checklist.
@@ -528,6 +512,10 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   2026-09-06**: the button went *Voice input* → *Stop voice input* → *Voice input* with no error. It recorded silence, so
   nothing was transcribed; whether speech comes back as the right words is still owed and needs a person to talk to it.
   Only the *Clear all plugin data* half (**VOICE-CLEAR-01**) is left, and that waits for the final phase.
+  **Not run tonight (2026-09-15):** reading the wipe's own code before pressing the button showed it also
+  removes the Deck's own Ollama program and every model it has downloaded, whenever Ollama lives in the home
+  folder, which it does on this Deck; a backup of settings and chats cannot bring the models back. The session
+  asked the maintainer for a separate yes to wipe this Deck and none came during the run.
 - ★★ `[chat]` **The game a chat belongs to, above its title** — **VERIFY.** Shipped 2026-08-30 in quiet text above the slot title;
   only chats created after that date carry the name. Row **CHAT-SLOTS-V3-14c**. It costs a line of height, which cuts against the
   vertical-space goal; decide whether it shows always or only when the row has focus.
@@ -543,7 +531,11 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   one explains itself; the star pins a model for Ask and reaches the settings file; a freshly pulled model is the only one badged
   **New**. **Three bugs were found on the device and fixed:** every installed model wrongly labelled New, a typing field 50 pixels
   wide, and the embedding model offered as one Ask could use. Owed: whether *Clear all plugin data* takes the New labels with it
-  (**PULL-NEW-BADGE-01**) — not run, because wiping data was not authorised. Rows **PULL-CUSTOM-01**, **02**, **PULL-PIN-01** pass.
+  (**PULL-NEW-BADGE-01**) — **not run tonight (2026-09-15).** Reading the wipe's own code before pressing the
+  button showed it also removes the Deck's own Ollama program and every model it has downloaded, whenever
+  Ollama lives in the home folder, which it does on this Deck; a backup of settings and chats cannot bring the
+  models back. The session asked the maintainer for a separate yes to wipe this Deck and none came during the
+  run. Rows **PULL-CUSTOM-01**, **02**, **PULL-PIN-01** pass.
 - ★★★ `[perms]` **Kids master lock** — **VERIFY.** Shipped 2026-08-09. Rows **KIDS-LOCK-01**, **KIDS-FOCUS-01**, **KIDS-REGRESS-01**
   (and **KIDS-LOCK-02** with a child account). Live CEF Stage 0 confirmation still owed.
 - ★★★ `[reply]` **Soft reply-length cap and thinking budget** — **VERIFY.** Shipped 2026-08-10. Sub-check 02 verified; 01, 03 and 04
@@ -658,15 +650,6 @@ ones from this month are D81 to D88.
   missing is not a wider gate — it is a way to say "none of these tips fit."** Until there is one, opening the gate makes
   things worse. The real fix is rewriting the tips, filed as its own entry below. All six wrong tips:
   [detail](roadmap-details.md#a-troubleshooting-question-that-only-describes-the-symptom-reaches-no-tips).
-- ★★ `[KB]` **The panel keeps naming a game after you have closed it** — **FIXED 2026-09-07, VERIFY on the Deck
-  (W2-R6).** After exiting a game the line under the question box still named it, so a question that does not name its
-  own game could pick up the wrong game's notes. **The cause written into this entry yesterday was wrong**, which is
-  worth keeping: the ordinary keep-in-sync check does correct itself, in about a second and a half. The real hole was
-  **reopening the panel** — after a popup, or leaving the plugin and coming back — which restored whatever game name had
-  been remembered and never checked whether that game was still running. It now checks what is actually running at that
-  moment. Five tests. A plain data change; nothing to do with focus or layout. (D85)
-  **Checked on the Deck 2026-09-07 and this fix does not hold** — see the new bug below about the line still naming a
-  closed game.
 - ★★★ `[KB]` **Searching the notes by meaning costs about a second, every time, on the Deck** — **ACCEPTED
   2026-09-06.** Repeated on the Deck: 1.10, 1.23 and 1.19 seconds across three questions in a row, the same band as
   the first time this was measured. The maintainer looked at the number and said that is fine — about a second before
@@ -683,63 +666,12 @@ ones from this month are D81 to D88.
   rule no longer holding — are not covered by that rule and still need answering if this is ever revisited. Weights
   stay even for now. (D68, D82) [Detail](roadmap-details.md#the-shipping-retrieval-arm-loses-to-the-vector-half-alone-on-rows-nobody-tuned-against).
 
-- ★★ `[KB]` **The follow-up menu keeps offering Half-Life 2 whatever game you asked about** — **OPEN, seen twice,
-  widened 2026-09-12.** First on a Black Mesa question, now on a **Portal 2** one: the answer was right and used the
-  right note, then the menu underneath asked *"Where are you at in Half-Life 2?"* and offered the train station and
-  Ravenholm. Both times it named the same game, so it is not picking a random wrong one. Both chats carried about
-  twenty earlier turns, so a fresh-chat run was owed. **That run happened 2026-09-15 and the cause is now known,
-  and it is not carried-over turns.** It appeared twice more that evening, both in brand new chats — once with
-  the heading right (*Where are you at in Hades?*) and the two choices still the Half-Life 2 ones, and once on
-  the very first question of an empty chat about a different game with the heading wrong too. **The two choices
-  are word for word the worked example in the instructions the model is given**, which show the shape using
-  Half-Life 2, the train station and Ravenholm, and then tell it in as many words never to copy that wording.
-  It copies it anyway. The example is in `py_modules/backend/services/ollama_prompts.py`. Not fixed here — this
-  was a checking session. Evidence `docs/test-evidence/plan48-deck-evening-2026-09-15.json`.
-  Evidence `docs/test-evidence/plan48-deck-evening-2026-09-12.json` **[no evidence — re-run, batch QA-EVIDENCE-GAP-01]**, `docs/test-evidence/plan48-R5-blackmesa-corrected-note.json`.
 - ★★★ `[KB]` **A follow-up still names the wrong boss one run in three** — **OPEN, left behind when the follow-up
   fix closed 2026-09-12.** Ask about a boss, then *"what about its second phase"*, and you now get the right boss two
   times in three, where it used to be wrong every time. The remaining third still names the rival boss. DOOM Eternal
   is wrong every time, and no amount of work on the search can close that one. This is the half the shipped fix did
   not cover, kept visible on purpose rather than archived with it. [Numbers](planning/48-kb-wave-three-session.md).
   (D98)
-- ★★ `[KB]` **A pinned test batch is not badged** — **OPEN, seen again 2026-09-12.** Chips pinned for testing are
-  supposed to carry an amber Test badge, so it is obvious the carousel is showing a fixed set rather than what the
-  plugin would have picked. Three chips pinned this evening and no badge appeared anywhere on screen. Everything
-  else about them works: they replace the carousel, and pressing A fills the Ask field word for word without
-  sending. Evidence `docs/test-evidence/plan48-deck-evening-2026-09-12.json` **[no evidence — re-run, batch QA-EVIDENCE-GAP-01]**, `docs/test-evidence/plan47-frozen-chip-findings.json`.
-- ★★★ `[KB]` **The panel only learns which game is running when it starts, and never again** — **OPEN, cause
-  found 2026-09-07.** Two failures, one cause. **It keeps naming a game that has closed:** Hades was exited with
-  the panel open and the line still named it straight afterwards, 31 seconds later, about four minutes later, and
-  after the Quick Access Menu was closed and reopened. **It also never notices a game that starts:** with the panel
-  already open, Deep Rock Galactic: Survivor was launched and the line read *no active game detected* for 48
-  seconds and through a close and reopen of the Quick Access Menu, while Steam's own list of running apps had the
-  game the whole time. Restarting the plugin made the line correct at once, both times and in both directions —
-  which is what says the panel reads this once at start-up and never listens for a change. Reopening the menu is
-  not enough; only a restart is. Evidence `docs/test-evidence/plan47-R6-bug-fixes.json`,
-  `docs/test-evidence/plan47-R6-stray-computer-text.json`.
-  **Still true on 2026-09-15, on the current build, both directions again.** Switching from Hades to Deep Rock
-  Galactic: Survivor left the line naming Hades for several minutes, through a close and reopen of the Quick
-  Access Menu, while the chat slot beside it had already picked up the new game's name correctly and the back
-  end was logging the new game every ten seconds. After exiting a game the line kept naming it for at least 92
-  seconds. Restarting the plugin corrected it at once, as before. One thing worth knowing for whoever fixes it:
-  it does not go wrong every time — after one of the three game exits that evening the line was already right.
-  Evidence `docs/test-evidence/plan48-deck-evening-2026-09-15.json`.
-  **Seen again 2026-09-15 evening on build 1ac4d7a.** Hades was launched while the panel was already open, and
-  after the Quick Access Menu was reopened the line still read "Context: no active game detected" (screenshot
-  `screenshots/DeckCapture_20260915_200505_game.png`, launch evidence
-  `docs/test-evidence/plan55-launch-hades-for-trap-run5.json`). After the next question was asked the line
-  changed to "Context: active game AppID 1145360" — the game's number rather than its name, worth a look by
-  whoever fixes this. **A fix is in progress in lane F of plan 55.**
-- ★ `[KB]` **A Hades boss's note is spelled wrong, so spelling it right gets you told the plugin is guessing** —
-  **OPEN, found 2026-09-12.** The note is titled *Megara*; the boss is *Megaera*. Type it correctly and the note
-  still attaches, but the reply now carries the "no close match in my notes" line — so a person is told the plugin
-  is guessing when it is not. One title and a library rebuild. Wave two's own test sentences were written around
-  the misspelling. Evidence `docs/test-evidence/plan48-deck-batch-verification.json`.
-- ★★ `[KB]` **Neither honesty line can appear when the game is only named in the question** — **OPEN, found
-  2026-09-12.** Both lines only run when a game is actually running or picked from the menu. Ask *"black mesa how
-  do i tame a horse"* with nothing running and a wrong note attaches with no line at all, because the coverage
-  check is never told about a game the question named. The one case where a person is most likely leaning on the
-  model's memory is the one where they are never told. Evidence `docs/test-evidence/plan48-deck-batch-verification.json`.
 - ★★ `[KB]` **The "No tip for this" line has no question that can make it appear** — **OPEN, measured off the
   device 2026-09-12.** Against the library that ships, on every sentence anyone has tried: the five hardest problem
   sentences still get a tip in every mode, meaning search on or off; the twelve junk phrases attach nothing, which
@@ -759,7 +691,42 @@ ones from this month are D81 to D88.
 - ★ `[KB]` **Five checks from the August retrieval rework were never run on the Deck** — **VERIFY, or retire.** The corpus
   format gate, the relevance floor, follow-ups searching the user's words, transparency matching what the model got, and
   the Developer kill-switch. Either one evening with pinned test chips, or close them as superseded by the rows that
-  passed this week. Rows **KB-VARIANT-01**, **KB-FLOOR-01**, **KB-FOLLOWUP-01**, **KB-TRANSPARENCY-01**, **KB-KILLSWITCH-01**.
+  passed this week. **Run 2026-09-15: the relevance-floor row is really two checks bundled as one, and they point
+  opposite ways.** Its on-topic half is a real regression guard worth keeping. Its off-topic half — an unrelated
+  question should attach nothing — fails as written, but that failure is the behaviour the maintainer already accepted
+  on 2026-08-27 in the "Unrelated questions still get game cards stapled on" entry above; the row and that entry now
+  contradict each other, which is for the maintainer to settle by retiring or rewording one of them. Rows
+  **KB-VARIANT-01**, **KB-FLOOR-01**, **KB-FOLLOWUP-01**, **KB-TRANSPARENCY-01**, **KB-KILLSWITCH-01**.
+- ★ `[KB]` **A Hades boss's note is spelled wrong, so spelling it right gets you told the plugin is guessing** —
+  **VERIFY, fixed 2026-09-15, waiting on the maintainer to publish.** The note is titled Megaera now and the library
+  was rebuilt and passed its own publish check, but pushing it to the two public download hosts was refused for the
+  session by the tool's own permission, so the point release waits for the maintainer to run the publish step. Row
+  **MEGAERA-01**: once the point release is installed from the Ollama tab's Update knowledge base, with Hades
+  running, ask "How do I beat Megaera?" and check the note attaches with no "no close match" line. On the library
+  still installed today, that line still appears. Evidence `docs/test-evidence/plan55-HADES-NAMED-01.json`.
+- ★★ `[KB]` **Neither honesty line can appear when the game is only named in the question** — **VERIFY, fixed
+  2026-09-15, FAILED as written on the Deck the same evening.** The check that decides whether to show an honesty
+  line is now told about a game that is only named in the question, not just one that is running or picked from a
+  menu, and the coverage chip proves that plumbing landed. Row **HONESTY-TEXT-GAME-01**: with nothing running, ask
+  "black mesa how do i tame a horse" and check the "no close match" line appears; ask a real Black Mesa boss
+  question and check no line appears. **Run 2026-09-15: FAIL for the first half.** Three Black Mesa cards
+  attached to the horse question anyway, and the model's own reply admitted it had no answer for taming a horse
+  — but the "no close match" line still did not appear, because the notice's own closeness rule judged those
+  three keyword-matched cards close enough to count as covering the question. Evidence
+  `docs/test-evidence/plan55-HONESTY-TEXT-GAME-01.json`.
+- ★★ `[KB]` **The follow-up menu offered places from a different game than the one you asked about** — **VERIFY,
+  fixed 2026-09-15, one sighting confirmed clean on the Deck.** Two bug entries, one cause: the two choices under a
+  follow-up menu were word for word the worked example in the model's own instructions — Half-Life 2's train
+  station and Ravenholm — which then told the model never to copy them. It copied them anyway, on Portal 2 and
+  Hades questions among others. The example is now written so the model cannot copy it into a real answer, and a
+  menu that still carries the example's words is dropped. Row **BRANCH-EXAMPLE-01**: ask a Strategy question about
+  Portal 2 or Hades and check the menu under the answer names that game's own places. Last sighting before the
+  fix: a Half-Life 2 menu under a Hades answer with Hades running
+  (`docs/test-evidence/plan55-BUG-hl2-menu-hades-running.json`, screenshot
+  `screenshots/DeckCapture_20260915_204018_game.png`). **One clean sighting on the new build 2026-09-15**, a Deep
+  Rock Galactic: Survivor question whose menu named its own classes with no Half-Life 2 words, evidence
+  `docs/test-evidence/plan55-BRANCH-EXAMPLE-01.json` — the copying was intermittent before the fix, so more
+  sightings over the coming days are the real proof.
 - ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **VERIFY,
   landed 2026-09-15, four commits, unit-tested, Deck rows owed.** A game known only by name now opens its box;
   naming the boss first opens it on screen, in copied text and in read-aloud; a no-story game named in the question

@@ -1,0 +1,18 @@
+{
+  "row": "DRG-01d (history does not re-fence)",
+  "plan": 55,
+  "when": "2026-09-16T01:18:01.255880+00:00",
+  "build": "f34de8a",
+  "setup": "Deep Rock Galactic: Survivor running; after 'How do I beat Glyphid Dreadnought?' a second question ('which class is best for a beginner') was asked, then the earlier turns were expanded and the Dreadnought turn opened with A.",
+  "measured": {
+    "expanded": true,
+    "reply_chars": 464,
+    "spoiler_fences": 0,
+    "tap_to_show": false
+  },
+  "verdict": "PASS: the first answer stays plain text once it is history.",
+  "runs": [
+    "runs/plan55-DRG-01d-second-question-send.json",
+    "runs/plan55-DRG-01d-expand-history-turn.json"
+  ]
+}

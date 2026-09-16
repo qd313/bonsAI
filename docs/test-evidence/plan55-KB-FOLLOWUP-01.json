@@ -1,0 +1,26 @@
+{
+  "row": "KB-FOLLOWUP-01 (a follow-up searches the user's words)",
+  "plan": 55,
+  "when": "2026-09-16T00:49:23.282433+00:00",
+  "build": "1ac4d7a6fff479a01c48f6a1b6a60d78b360b88a",
+  "setup": "Hades (1145360) running, Strategy mode, knowledge base on, hybrid retrieval on. Parent turn: 'How do I beat Megaera?' (no close match, honesty line shown). Follow-up typed with scripts/deck_send_ask.py (VERIFIED) and sent as the next question in the same chat.",
+  "follow_up_question": "what about theseus and asterius",
+  "reply_start": "Alright, listen up, you wanna know about Theseus and Asterius? ... Asterius, the bull, telegraphs a long charge, sidestep it ... Theseus throws his spear and calls down a god's power marked on the ground ... go for Asterius first",
+  "show_details": {
+    "chip": "Keyword + meaning",
+    "body": [
+      "Local knowledge base",
+      "Retrieval: Keyword + meaning",
+      "Trust tier: fallback_no_source",
+      "app_id:1145360",
+      "Embed: 26.5 ms",
+      "Re-rank: 2.22 ms"
+    ],
+    "honesty_line": "none"
+  },
+  "reading": "The parent turn found no close match (Megaera, misspelled in the library); the follow-up attached and its advice is the Theseus and Asterius note's content, so retrieval used the follow-up's own words. The details ladder does not list card titles for these notes (they carry no source URL, trust tier fallback_no_source), so the judgement rests on the attach plus the reply matching the note.",
+  "verdict": "PASS; still a real check. Note for whoever retires rows: the ladder cannot name the cited card for source-less notes, so the row's 'Show details cites the entity' wording should say 'the reply uses the follow-up's note'.",
+  "runs": [
+    "runs/plan55-KB-FOLLOWUP-01-send.json"
+  ]
+}

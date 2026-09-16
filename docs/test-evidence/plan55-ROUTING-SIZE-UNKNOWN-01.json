@@ -1,0 +1,29 @@
+{
+  "row": "ROUTING-SIZE-UNKNOWN-01 (a model with no listed size gets a warning in the try-order picker) - lane B commit fb86403",
+  "plan": 55,
+  "when": "2026-09-16T01:29:06.269435+00:00",
+  "build": "f34de8a",
+  "setup": "Ollama tab, 'Set text model try order\u2026' picker open, read in Steam's overlay document.",
+  "rows_read": [
+    {
+      "model": "gemma4:e2b-it-qat",
+      "badges": []
+    },
+    {
+      "model": "qwen3.5:4b",
+      "badges": []
+    },
+    {
+      "model": "qwen2.5:1.5b",
+      "badges": []
+    },
+    {
+      "model": "nomic-embed-text:latest",
+      "badges": [
+        "Tier blocked",
+        "Size unknown \u2014 may be too large"
+      ]
+    }
+  ],
+  "verdict": "PASS: the model with no catalog size reads 'Size unknown \u2014 may be too large' and stays in the list with its move buttons; the catalog models with a listed size carry no size badge."
+}

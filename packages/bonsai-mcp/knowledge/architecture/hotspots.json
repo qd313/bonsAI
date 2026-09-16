@@ -36,6 +36,11 @@
       "role": ""
     },
     {
+      "path": "src/components/MainTabUnifiedAskBar.tsx",
+      "lines": 1478,
+      "role": ""
+    },
+    {
       "path": "src/styles/sections/section-6.ts",
       "lines": 1463,
       "role": ""
@@ -43,11 +48,6 @@
     {
       "path": "src/components/MainTabChatTranscript.tsx",
       "lines": 1451,
-      "role": ""
-    },
-    {
-      "path": "src/components/MainTabUnifiedAskBar.tsx",
-      "lines": 1447,
       "role": ""
     },
     {

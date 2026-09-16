@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 401,
-  "edgeCount": 1013,
+  "fileCount": 402,
+  "edgeCount": 1016,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -570,6 +570,14 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTabUnifiedAskBar.settingsCardTapOutside.test.tsx": {
+      "imports": [
+        "src/components/MainTabUnifiedAskBar.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabUnifiedAskBar.test.tsx": {
       "imports": [
         "src/components/MainTabUnifiedAskBar.tsx",
@@ -601,6 +609,7 @@
         "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardChipsUnreachable.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardDpad.test.tsx",
+        "src/components/MainTabUnifiedAskBar.settingsCardTapOutside.test.tsx",
         "src/components/MainTabUnifiedAskBar.test.tsx"
       ]
     },
@@ -2790,6 +2799,7 @@
         "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardChipsUnreachable.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardDpad.test.tsx",
+        "src/components/MainTabUnifiedAskBar.settingsCardTapOutside.test.tsx",
         "src/components/MainTabUnifiedAskBar.test.tsx",
         "src/components/PermissionDenyAction.test.tsx",
         "src/components/ReplyCopyButton.test.tsx",
@@ -3740,6 +3750,7 @@
         "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardChipsUnreachable.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardDpad.test.tsx",
+        "src/components/MainTabUnifiedAskBar.settingsCardTapOutside.test.tsx",
         "src/components/MainTabUnifiedAskBar.test.tsx",
         "src/components/MainTabUnifiedAskBar.tsx",
         "src/components/ModelRoutingOrderModal.test.tsx",

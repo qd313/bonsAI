@@ -30,6 +30,7 @@
     "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
     "src/components/MainTabUnifiedAskBar.settingsCardChipsUnreachable.test.tsx",
     "src/components/MainTabUnifiedAskBar.settingsCardDpad.test.tsx",
+    "src/components/MainTabUnifiedAskBar.settingsCardTapOutside.test.tsx",
     "src/components/MainTabUnifiedAskBar.test.tsx",
     "src/components/ModelRoutingOrderModal.test.tsx",
     "src/components/OllamaTab.modalReturnFocus.test.tsx",

@@ -377,6 +377,9 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
     return () => unregisterNavFocus("settings-results-card", settingsCardLastRowNavRef);
   }, []);
   const settingsCardRowRefs = useRef<Array<HTMLElement | null>>([]);
+  /** The card's own DOM node -- read by the tap-outside effect below to tell a tap on the card
+   *  apart from a tap anywhere else. */
+  const settingsCardHostRef = useRef<HTMLDivElement | null>(null);
   const focusSettingsCardLastRow = useCallback((): boolean => {
     if (takeNavFocus("settings-results-card")) return true;
     const rows = settingsCardRowRefs.current;
@@ -531,6 +534,33 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
     !settingsCardClosedForSearch &&
     filteredSettings.length > 0 &&
     settingsCardShownSettings.length > 0;
+
+  /*
+   * Tap outside the card behaves as B (plan 45 section 4's "Tap outside" row / plan 56 lane E2
+   * step 6): closes the card for the rest of this search and keeps what was typed. A document-
+   * level listener, not a handler local to one part of the bar, because the card floats above
+   * the whole tab -- a tap on the Ask row below it, or on the chat behind it, both count as
+   * "outside" just as much as a tap on some other tab entirely. A finger has no D-pad ring to
+   * hand back anywhere, so unlike B this only closes the card; it never calls
+   * focusUnifiedTextField(). Capture phase so this only ever decides whether to close the card
+   * and never stops a row's own click from reaching onSettingClick afterward. Checked with
+   * `.contains` against the card's own DOM node, not a class-name search, so a tap anywhere
+   * inside a row (its label, its breadcrumb text) still correctly counts as "on the card".
+   * Pointer/touch only, so this cannot be exercised through a Focusable move handler; it is not
+   * part of the focus-graph the D-pad rig walks -- see the session report.
+   */
+  useEffect(() => {
+    if (!showSettingsCard) return;
+    const onPointerDown = (ev: PointerEvent) => {
+      const cardEl = settingsCardHostRef.current;
+      if (!cardEl) return;
+      if (cardEl.contains(ev.target as Node)) return;
+      setSettingsCardClosedForSearch(true);
+    };
+    const doc = getUiDocument();
+    doc.addEventListener("pointerdown", onPointerDown, true);
+    return () => doc.removeEventListener("pointerdown", onPointerDown, true);
+  }, [showSettingsCard]);
 
   const unifiedTextFieldBody = (
     <>
@@ -1070,6 +1100,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
 */}
 {showSettingsCard && (
   <div
+    ref={settingsCardHostRef}
     className="bonsai-settings-results-card bonsai-glass-panel"
     style={{
       position: "absolute",

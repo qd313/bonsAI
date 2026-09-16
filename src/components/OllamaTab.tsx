@@ -8,7 +8,7 @@
  * (how detailed replies are and how much thinking happens before
  * answering), Connection tuning (how long to wait before a warning or a
  * timeout, and how long to keep a model loaded in memory), and Models &
- * routing (an Open AI models button, plus buttons to set the try order for
+ * routing (a Manage AI models button, plus buttons to set the try order for
  * text and vision models). This file also owns handing the D-pad between
  * every one of those pieces, since each is its own separate file.
  *
@@ -406,9 +406,9 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
                 width: "100%",
                 marginBottom: 8,
               }}
-              aria-label="Open AI models hub"
+              aria-label="Manage AI models"
             >
-              Open AI models… — {MODEL_POLICY_TIER_LABELS_PLAIN[modelPolicyTier]}
+              Manage AI models… — {MODEL_POLICY_TIER_LABELS_PLAIN[modelPolicyTier]}
             </Button>
             <Button
               ref={(el: HTMLElement | null) => registerModalReturnFocusOwner("ollama-text-try-order", el)}

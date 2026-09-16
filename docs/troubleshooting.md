@@ -193,7 +193,7 @@ component ("SD card", "controller layout", "remote play") rather than only the s
 
 ---
 
-**Symptom:** On the **Ollama** tab, **Open AI models…** does not switch policy tiers (e.g. Tier 1 → Tier 2) with the controller, the choice reverts after **Done**, or **Browse & pull** showed **Enable Tier 2** but the bottom row still says Tier 1.
+**Symptom:** On the **Ollama** tab, **Manage AI models…** does not switch policy tiers (e.g. Tier 1 → Tier 2) with the controller, the choice reverts after **Done**, or **Browse & pull** showed **Enable Tier 2** but the bottom row still says Tier 1.
 
 **Cause (fixed 2026-05-19):** Tier buttons only handled mouse `onClick`, not Steam **A/OK** (`onOKButton`). Immediate save on each highlight also raced Decky remount + debounced settings save.
 

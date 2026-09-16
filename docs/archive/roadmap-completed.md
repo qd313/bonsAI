@@ -6,6 +6,42 @@
 
 Headings group related work. Star counts match the historical list.
 
+### Three voice fixes and the custom-model picker, closed by the wipe run (2026-09-16)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-16 once the Deck's pre-authorised wipe (D105) confirmed
+their last owed checks — copied line for line from this session's Verify entries, nothing reworded, with the
+confirmation added at the end._
+
+- ★ `[voice]` **Three voice fixes from early August** — **VERIFY.** A finished install survives *Clear all
+  plugin data* (**VOICE-CLEAR-01**, backend half verified), the install button reads right when the engine is
+  already ready (**VOICE-REINSTALL-01**, done 2026-09-05), and the `status()` fix — a live start/stop
+  recording — **done on the Deck 2026-09-06**: the button went *Voice input* → *Stop voice input* → *Voice
+  input* with no error. It recorded silence, so nothing was transcribed; whether speech comes back as the
+  right words is still owed and needs a person to talk to it. Only the *Clear all plugin data* half
+  (**VOICE-CLEAR-01**) was left, and that waited for the final phase.
+
+  **VOICE-CLEAR-01's UI half passed on the Deck 2026-09-16, as part of the wipe run:** after *Clear all plugin
+  data*, the voice panel read "Engine: whisper-cli not installed · Model: tiny.en not downloaded · Tap Install
+  voice engine below" — it no longer claimed the engine was ready. Together with the backend half already
+  confirmed 2026-08-04, this row is now closed both ways. Evidence
+  `docs/test-evidence/plan56-WIPE-01.summary.json`. **Still open, not a row of this entry:** whether spoken
+  words come back transcribed correctly is unmeasured and needs a person to talk to the plugin; the wipe also
+  removed the Deck's own local AI program and every downloaded model, so voice input cannot be exercised on
+  this Deck until "Run AI on this Deck" is switched back on and the voice engine is reinstalled.
+
+- ★★★ `[ollama]` **Custom model in the Pull Models picker** — **VERIFY, one check owed and it needs your
+  permission.** Shipped and walked on the Deck 2026-09-05. A typed library name that is not in the built-in
+  list pulls and installs; a made-up one explains itself; the star pins a model for Ask and reaches the
+  settings file; a freshly pulled model is the only one badged **New**. **Three bugs were found on the device
+  and fixed:** every installed model wrongly labelled New, a typing field 50 pixels wide, and the embedding
+  model offered as one Ask could use. Owed: whether *Clear all plugin data* takes the New labels with it
+  (**PULL-NEW-BADGE-01**). Rows **PULL-CUSTOM-01**, **02**, **PULL-PIN-01** already pass.
+
+  **PULL-NEW-BADGE-01 passed on the Deck 2026-09-16, as part of the wipe run:** the browser-storage key
+  holding the New labels' record was one of the eight plugin keys the wipe removed; after the wipe nothing
+  was left to badge stale models as New. That was the entry's one owed check, so it is now closed. Evidence
+  `docs/test-evidence/plan56-WIPE-01.summary.json`.
+
 ### The Clear button, the quiet answer checker, and the Spy's lies, confirmed on the Deck (2026-09-16)
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-16 once the Deck runs passed — copied line for line from

@@ -98,7 +98,9 @@ starts work outside this.
   (the setup and restore steps around it). **The *Back to …* return half passed 2026-09-16:** pressing it on
   the Permissions tab returns to the Main tab with the highlight back on the Open Permissions button that
   started the jump. Evidence `docs/test-evidence/plan56-PERM-JUMP-01-back-to-main.json`,
-  `docs/test-evidence/plan56-PERM-JUMP-01.summary.json`.
+  `docs/test-evidence/plan56-PERM-JUMP-01.summary.json`. **Seen again 2026-09-16** on the Steam-settings card:
+  pressing A on a row there also opens the right Steam page with the highlight one toggle above the row that
+  was pressed, the same shape. Evidence `docs/test-evidence/plan56-SETTINGS-CARD-DPAD-01.summary.json`.
 - ★ `[focus]` **With Show details open, the chip row cannot be reached by the D-pad** — **OPEN, measured
   2026-09-16 on build 0fbecb6 and again on build `ca12429`, so it is not something this session's own commits
   caused.** Open Show details on a reply and press Down to step into its chips and read one — the ring skips
@@ -109,6 +111,13 @@ starts work outside this.
   back out. Evidence `docs/test-evidence/plan56-BUG-chip-ladder-unreachable.json`,
   `docs/test-evidence/plan56-CONTEXT-LADDER-03-caseB-details-open.json`,
   `docs/test-evidence/plan56-SPY-REVEAL-01-ladder-walk.json`.
+- ★ `[focus]` **Reaching the Stop generation button by D-pad while a reply is streaming is hard to find** —
+  **OPEN, found 2026-09-16.** With a reply still being written, Down from the question box stalls (Ask is
+  disabled) and Down from the live streaming answer never reaches Stop generation either; the only route found
+  is the question box, then Right onto the Ask-mode button, then Right again onto Stop generation. Two long
+  replies finished on their own before the ring reached the button by other routes. Not a trap, since Stop can
+  still be reached — just not where a person would first look. Evidence
+  `docs/test-evidence/plan56-GREYED-STEP-OVER-02.summary.json`.
 - ★ `[layout]` **An open question's row is only partly visible behind the Retry corner icon** — **OPEN,
   seen at every visit 2026-09-15 evening.** With the newest turn open, the ring on the question's inner row
   reads 67% visible, covered by the Retry same-prompt icon in the corner. Evidence
@@ -122,11 +131,19 @@ starts work outside this.
   build; reaching it with Up from Read aloud shows only about a third of it, the rest hidden under the sticky
   question box. The screen shows about 143 pixels of chat, far less than a typical reply, so most of any long
   answer sits out of view however it is reached; not something this session built. Evidence
-  `docs/test-evidence/plan56-LEFT-HOLDS-01.summary.json`.
+  `docs/test-evidence/plan56-LEFT-HOLDS-01.summary.json`. **Related, seen 2026-09-16:** on this same screen, a
+  tall answer chunk swallows the first Up or Down press or two — Steam scrolls the chunk's own view before it
+  lets the ring leave — so those presses read as dead rather than moving the highlight. Not a trap, since the
+  next press does leave. Evidence `docs/test-evidence/plan56-QA-FREE-PLAY-02.summary.json`.
 - ★ `[ollama]` **The vision try-order picker writes settings even when nothing changed** — **OPEN, found
   2026-09-16 during block 0 of session 56.** Opening the vision model try-order picker and pressing Done
   writes the picker's current order into the settings file, even when nobody moved anything. Restored by hand
   at the end of the block; no evidence file yet.
+- ★ `[reply]` **The slow-reply footnote reads as a broken sentence** — **OPEN, found 2026-09-16.** Under a
+  reply that took longer than a minute, the footnote reads "61.5s (>60s): prefer for , not ." on screen — the
+  model name and the mode name it should name are both missing. A wording bug, not a functional one: the
+  timing and the suggestion to switch models are otherwise correct. Evidence
+  `docs/test-evidence/plan56-GREYED-STEP-OVER-02.summary.json`.
 - ★ `[ui]` **A new setting can quietly stop working in one place, because the list of settings is written out by hand
   several times over** — **OPEN, found while explaining the code 2026-09-14.** The settings code repeats its fifty-odd
   setting names in several separate places in the same file. Miss one and nothing breaks visibly; that setting just stops
@@ -428,11 +445,14 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   are spelled with an underscore where everything else uses a colon, and the wipe only looked for the colon. After wiping
   everything the plugin still believed it had warned you, so it stayed quiet when it should have spoken up. Fixed to match the
   bare word, which catches both spellings and clears the old ones off devices that already carry them. The New labels in the pull
-  picker go with it. Three tests. Row **CLEAR-ALL-PREFIX-01**; **not run on the device tonight (2026-09-15).** Reading the wipe's
-  own code before pressing the button showed it also removes the Deck's own Ollama program and every model it
-  has downloaded, whenever Ollama lives in the home folder, which it does on this Deck; a backup of settings
-  and chats cannot bring the models back. The session asked the maintainer for a separate yes to wipe this
-  Deck and none came during the run, so the row stays owed.
+  picker go with it. Three tests. Row **CLEAR-ALL-PREFIX-01**. **Run on the Deck 2026-09-16, once the
+  maintainer's pre-authorised wipe (D105) went ahead:** every one of the eight plugin keys in the browser's own
+  storage was gone afterwards, the New labels among them — a clean pass for everything the wipe had to remove.
+  **The one thing this row was filed for stays unmeasured:** none of the three underscore-spelled flags this
+  fix targets happened to exist on the Deck at wipe time, so the run could not show whether they, specifically,
+  now go with the rest. Evidence `docs/test-evidence/plan56-WIPE-01.summary.json`. The same wipe also removed
+  the Deck's own local AI program and every model it had downloaded; a backup of settings and chats cannot
+  bring those back, and Ask on this Deck is down until "Run AI on this Deck" is switched back on.
 - ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **VERIFY, fixed
   2026-09-15.** Down and Up through a reply now stop at the same places in both directions. Row
   **REPLY-STOPS-MIRROR-01**: on a reply with two paragraphs, a spoiler block and a two-button menu, check the
@@ -483,16 +503,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   after Clear all plugin data. Row **SHELL-PAYLOAD-01**.
 - ★ `[platform]` **VAC check (`bonsai:vac-check`) on-device QA** — **VERIFY.** Implementation complete; run **VAC-02…06** after Tier 0
   **SMOKE-F** passes.
-- ★ `[voice]` **Three voice fixes from early August** — **VERIFY.** A finished install survives *Clear all plugin data*
-  (**VOICE-CLEAR-01**, backend half verified), the install button reads right when the engine is already ready
-  (**VOICE-REINSTALL-01**, done 2026-09-05), and the `status()` fix — a live start/stop recording — **done on the Deck
-  2026-09-06**: the button went *Voice input* → *Stop voice input* → *Voice input* with no error. It recorded silence, so
-  nothing was transcribed; whether speech comes back as the right words is still owed and needs a person to talk to it.
-  Only the *Clear all plugin data* half (**VOICE-CLEAR-01**) is left, and that waits for the final phase.
-  **Not run tonight (2026-09-15):** reading the wipe's own code before pressing the button showed it also
-  removes the Deck's own Ollama program and every model it has downloaded, whenever Ollama lives in the home
-  folder, which it does on this Deck; a backup of settings and chats cannot bring the models back. The session
-  asked the maintainer for a separate yes to wipe this Deck and none came during the run.
 - ★★ `[chat]` **The game a chat belongs to, above its title** — **VERIFY.** Shipped 2026-08-30 in quiet text above the slot title;
   only chats created after that date carry the name. Row **CHAT-SLOTS-V3-14c**. It costs a line of height, which cuts against the
   vertical-space goal; decide whether it shows always or only when the row has focus.
@@ -531,16 +541,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   [Mockups](https://claude.ai/code/artifact/1ab2a570-2ae5-45cd-b12b-332694f96fd5). Rows **SETTINGS-CARD-01**
   through **04** have passed; **05** (A opens, the return matches) passed for the jump but not for keeping the
   words, so it stays open; **06** and **07** are landed and owed on the Deck.
-- ★★★ `[ollama]` **Custom model in the Pull Models picker** — **VERIFY, one check owed and it needs your permission.**
-  Shipped and walked on the Deck 2026-09-05. A typed library name that is not in the built-in list pulls and installs; a made-up
-  one explains itself; the star pins a model for Ask and reaches the settings file; a freshly pulled model is the only one badged
-  **New**. **Three bugs were found on the device and fixed:** every installed model wrongly labelled New, a typing field 50 pixels
-  wide, and the embedding model offered as one Ask could use. Owed: whether *Clear all plugin data* takes the New labels with it
-  (**PULL-NEW-BADGE-01**) — **not run tonight (2026-09-15).** Reading the wipe's own code before pressing the
-  button showed it also removes the Deck's own Ollama program and every model it has downloaded, whenever
-  Ollama lives in the home folder, which it does on this Deck; a backup of settings and chats cannot bring the
-  models back. The session asked the maintainer for a separate yes to wipe this Deck and none came during the
-  run. Rows **PULL-CUSTOM-01**, **02**, **PULL-PIN-01** pass.
 - ★★★ `[perms]` **Kids master lock** — **VERIFY.** Shipped 2026-08-09. Rows **KIDS-LOCK-01**, **KIDS-FOCUS-01**, **KIDS-REGRESS-01**
   (and **KIDS-LOCK-02** with a child account). Live CEF Stage 0 confirmation still owed.
 - ★★★ `[reply]` **Soft reply-length cap and thinking budget** — **VERIFY.** Shipped 2026-08-10. Sub-check 02 verified; 01, 03 and 04
@@ -709,8 +709,8 @@ ones from this month are D81 to D88.
   **MEGAERA-01**: once the point release is installed from the Ollama tab's Update knowledge base, with Hades
   running, ask "How do I beat Megaera?" and check the note attaches with no "no close match" line. On the library
   still installed today, that line still appears. Evidence `docs/test-evidence/plan55-HADES-NAMED-01.json`.
-- ★★ `[KB]` **Neither honesty line can appear when the game is only named in the question** — **OPEN, fixed
-  twice, FAILED on the Deck both times (2026-09-15 and 2026-09-16).** The check that decides whether to show
+- ★★ `[KB]` **Neither honesty line can appear when the game is only named in the question** — **VERIFY, fixed
+  in code now for both halves, device check owed.** The check that decides whether to show
   an honesty line is now told about a game that is only named in the question, not just one that is running
   or picked from a menu, and the coverage chip proves that plumbing landed. Row **HONESTY-TEXT-GAME-01**: with
   nothing running, ask "black mesa how do i tame a horse" and check the "no close match" line appears; ask a
@@ -731,7 +731,15 @@ ones from this month are D81 to D88.
   needed is to score the question's own words alone, without the game's name in them, only for this one case
   where the game came from the question and nothing is running. Evidence
   `docs/test-evidence/plan56-HONESTY-LINE-01.json`. Only questions that named a game with nothing running are
-  affected; a game that is actually running is unchanged.
+  affected; a game that is actually running is unchanged. **Fixed again 2026-09-16 (commits `a6561d7`,
+  `14a6392`):** the check can now take a second meaning score, measured with the game's own name taken out of
+  the question first, and uses that one instead of the raw score whenever it was measured — only on turns
+  where the game came from the question's own words, never a running game. With "black mesa" removed from the
+  text, the horse question's score drops from 0.687 to 0.635 (now under the line) and the real Gonarch
+  question's score rises from 0.685 to 0.737 (safely over it), so the two can finally be told apart. **Not yet
+  checked on the Deck: this session's own pre-authorised wipe (D105) ran before this fix landed and removed
+  the Deck's own local AI program and every downloaded model, so no question can be asked on the Deck at all
+  until "Run AI on this Deck" is switched back on.** Six new tests cover the fix.
 - ★★ `[KB]` **The follow-up menu offered places from a different game than the one you asked about** — **VERIFY,
   fixed 2026-09-15, one sighting confirmed clean on the Deck.** Two bug entries, one cause: the two choices under a
   follow-up menu were word for word the worked example in the model's own instructions — Half-Life 2's train

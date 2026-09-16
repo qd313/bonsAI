@@ -15,6 +15,16 @@ Everything shipped since v0.4.9 (2026-07-08), one line each, newest first. Detai
   Evidence `docs/test-evidence/plan56-M-hub-edges.json`, `docs/test-evidence/plan56-M-hub-edges-policy.json`,
   `docs/test-evidence/plan56-M-hub-edges-advanced.json` (plan 56 block 0).
 
+**Closed by the wipe run, 2026-09-16:**
+- ★ `[voice]` **A finished voice-engine install survives Clear all plugin data, and the panel says so** —
+  after a wipe the voice panel now reads "not installed" and "not downloaded" instead of still claiming the
+  engine is ready; confirmed on the Deck.
+  [Detail](roadmap-completed.md#three-voice-fixes-and-the-custom-model-picker-closed-by-the-wipe-run-2026-09-16).
+- ★★★ `[ollama]` **Clear all plugin data takes the New model labels with it** — the record that badges a
+  stale model as freshly pulled is gone after a wipe, so nothing wears the New label by mistake; confirmed
+  on the Deck.
+  [Detail](roadmap-completed.md#three-voice-fixes-and-the-custom-model-picker-closed-by-the-wipe-run-2026-09-16).
+
 **Checked on the Deck, closed in the roadmap 2026-09-16 (morning, lane I):**
 - ★ `[focus]` **Left on the Ask button, the paperclip, or an answer paragraph now stays in the plugin** —
   it used to hand the highlight to Steam's own Quick Access tab; confirmed on the Deck for all three.

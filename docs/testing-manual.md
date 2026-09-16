@@ -104,6 +104,19 @@ known corner-icon pair: the question row at 67%, behind the Retry corner icon, a
 89%, behind the copy icon — both on both legs. Passed for this build with that known bug still open. Evidence
 `docs/test-evidence/plan56-QA-FREE-PLAY-01.summary.json`, `docs/test-evidence/plan56-QA-FREE-PLAY-01-main-built-in-screen.json`.
 
+**Run 2026-09-16 about 10:20 local on build `42aafe1`, the built-in screen, after the wave-2 landings (the
+settings card's D-pad wiring, the Left holds, the restored-turn and greyed-thumb fixes, the honesty line):**
+an eleven-turn chat whose newest turn is a stopped Deep Rock Galactic Survivor guide reply with greyed
+thumbs, no game running, empty box. Down leg: Read aloud, Show details, Session context (11 turns), the
+suggestion chip, the question box, Ask, which holds. Up leg: Ask, Voice input (the box's corner), the
+question box, the chip, Session context, Show details, Read aloud, the answer's last chunk, then the chunk
+above it — two Up presses there moved the view rather than the ring, which is what ended that leg. No trap
+and no loop anywhere on the walk; every named control is reachable both ways. The only stops not fully
+visible are the tall answer chunks: the last one 67% visible under the suggestion chip, the one above it 33%
+visible, part above the top of the window and part under the dock — the same shape the block-0 sweep on the
+older build already showed, so nothing landed this session made the Main tab worse. Evidence
+`docs/test-evidence/plan56-QA-FREE-PLAY-02.summary.json`.
+
 A stop that is focused but not visible is a **FAIL of this row**, whatever the scripted rows say.
 This is the manual interim for the DPS visibility oracle + `deck_sweep`
 (decky-plugin-studio `docs/planning/06-visibility-oracle-and-free-play-sweep.md`); when that

@@ -54,16 +54,22 @@ All notable changes to this project are documented in this file.
   now marks it unavailable explicitly and the shared focus helper skips it in both directions. Confirmed on
   the Deck 2026-09-16, both directions. `buildReplyActionsElement.tsx`, `replyStopRegistry.ts`. On-Deck row:
   **GREYED-STEP-OVER-01** in `docs/testing.md`.
-- **A step toward showing the honesty line for a horse-taming question about Black Mesa, still not there:**
-  the line that warns a reply leans on the model's own knowledge checked only whether the game's cards scored
-  above a threshold, and every card of a game repeats the game's own name in its title — so cards attached to
-  an unrelated question still scored above zero and the line stayed off. The check now also asks whether the
-  actual words in the question show up anywhere in what attached, which fixes that part on its own — but
-  **checked on the Deck 2026-09-16, the line still does not show,** because the closeness score it also has to
-  clear is measured on the whole question including the game's name, and every card of that game scores about
-  the same whether the question is real or not. Only affects a game that was named purely in the question,
-  with nothing running. `knowledge_base_service.py`. On-Deck row: **HONESTY-TEXT-GAME-01** in
-  `docs/testing.md`, failed both times it has been tried.
+- **The honesty line for a horse-taming question about Black Mesa now shows, fixed in code, Deck check
+  owed:** the line that warns a reply leans on the model's own knowledge checked only whether the game's
+  cards scored above a threshold, and every card of a game repeats the game's own name in its title — so
+  cards attached to an unrelated question still scored above zero and the line stayed off. The check now
+  also asks whether the actual words in the question show up anywhere in what attached, which fixed that
+  part on its own but was not enough by itself — checked on the Deck 2026-09-16, the line still did not
+  show, because the closeness score it also has to clear was measured on the whole question including the
+  game's name, and every card of that game scored about the same whether the question was real or not. The
+  check can now take a second closeness score, measured with the game's own name taken out of the question
+  first, and uses that one instead whenever it was measured — only for a game that was named purely in the
+  question, with nothing running; a running game is unaffected. With the game's name removed, a stretch
+  question about taming a horse now scores under the line and a real question about the game scores safely
+  over it. `knowledge_base_service.py`, `kb_not_in_notes_notice.py`, `game_ai_request.py`,
+  `transparency_service.py`. **Not yet checked on the Deck:** the plugin's own pre-authorised data wipe ran
+  before this landed and removed the Deck's local AI program and every downloaded model, so no question can
+  be asked there until it is switched back on. On-Deck row: **HONESTY-TEXT-GAME-01** in `docs/testing.md`.
 - **Picking a mode in the small menu under the question box no longer leaves the highlight on nothing:**
   choosing Speed, Strategy or Expert now hands the highlight back to the mode button, the same place it already
   went when backing out of the menu. `MainTabAskModeMenuPopover.tsx`. On-Deck row: **ASK-MODE-MENU-RING-01**

@@ -362,6 +362,48 @@ class GameNamedOnlyInTheQuestionTests(unittest.TestCase):
         )
 
 
+class GameNamedOnlyInTheQuestionMeaningTests(unittest.TestCase):
+    """HONESTY-TEXT-GAME-01, part two (plan 56 lane K, 2026-09-16): the keyword fix above
+    (lane J, `f2e358a`) was not enough on its own -- the notice still did not show on the
+    device for "black mesa how do i tame a horse", because the game's own name in the question
+    also inflates the MEANING score. Numbers below are exactly what the Deck measured
+    (`retrieve_knowledge_context` against the Deck's own corpus and embed model) with and
+    without "black mesa" in the question -- see kb_not_in_notes_notice.py's module comment and
+    knowledge_base_service.py's `_question_without_game_name` for the fuller account.
+
+    All of these pass ``kb_top_card_keyword_score=0.0`` (via ``_thin``'s defaults), i.e. no
+    keyword support at all, so the outcome turns on the meaning check alone -- the same
+    isolation ``NoCloseMatchDecisionTests`` above uses for the ceiling itself.
+    """
+
+    def test_the_horse_question_shows_once_the_stripped_score_is_used(self):
+        # Raw meaning score for "black mesa how do i tame a horse": 0.687, which clears the
+        # 0.65 ceiling and used to print no notice at all -- the gap lane J's fix left open.
+        self.assertFalse(_thin(kb_best_meaning=0.687))
+        # The same question with "black mesa" removed ("how do i tame a horse") scores 0.635,
+        # under the ceiling like every other stretch question measured without the game's name.
+        # Passing it as the stripped score is what makes the notice show.
+        self.assertTrue(_thin(kb_best_meaning=0.687, kb_best_meaning_without_game_name=0.635))
+
+    def test_the_gonarch_question_stays_quiet_either_way(self):
+        # A real question about the game: 0.685 raw, 0.737 with "black mesa" stripped out of
+        # "how do i beat the gonarch in black mesa" -- both sides of the ceiling agree here, so
+        # the fix changes nothing for a question that really is about the game.
+        self.assertFalse(_thin(kb_best_meaning=0.685, kb_best_meaning_without_game_name=0.737))
+
+    def test_no_text_resolved_title_leaves_the_field_unset_and_changes_nothing(self):
+        # A running game (or nothing resolved from the question at all) never fills this field
+        # in -- it arrives here as None, same as "not measured" reads everywhere else in this
+        # file, so the ceiling check falls back to the raw score exactly as it did before this
+        # field existed.
+        self.assertFalse(
+            _thin(kb_best_meaning=0.687, kb_best_meaning_without_game_name=None)
+        )
+        self.assertTrue(
+            _thin(kb_best_meaning=0.60, kb_best_meaning_without_game_name=None)
+        )
+
+
 class NoCloseMatchAppendTests(unittest.TestCase):
     def test_appends_the_exact_line_below_a_rule(self):
         out = append_no_close_match_notice("Try the left door first.", True)

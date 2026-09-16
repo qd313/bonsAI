@@ -287,6 +287,7 @@ def should_show_no_close_match_notice(
     question: str = "",
     kb_game_name: str = "",
     kb_source_titles: tuple[str, ...] = (),
+    kb_best_meaning_without_game_name: float | None = None,
 ) -> bool:
     """True when a note reached the model but nothing in the notes matched the question closely.
 
@@ -305,6 +306,17 @@ def should_show_no_close_match_notice(
     None. Treating that as weak would print this line on every single turn of a Deck with no
     embed model, which is the opposite of what it is for -- so None returns False.
 
+    **``kb_best_meaning_without_game_name`` (HONESTY-TEXT-GAME-01, part two, plan 56 lane K)**
+    is the same meaning score, measured a second time with the game's own name stripped out of
+    the question -- see knowledge_base_service.py's `_question_without_game_name` for how it is
+    built. Fixing the keyword half alone (lane J, `f2e358a`) was not enough: a question naming
+    its own game can also score high on MEANING purely because every one of that game's own
+    cards repeats the game's name, which is exactly the "black mesa how do i tame a horse" case
+    this whole line exists for. When this second score was measured (it is None on every turn
+    that never had a text-resolved title, or where the meaning half did not run), it -- not the
+    raw score -- decides the ceiling check below, because it is the one number a repeated game
+    name cannot inflate.
+
     This can never collide with either line above: both of those require ``kb_attached`` to be
     False and this requires it to be True, so no tie-break is needed and none is written.
     """
@@ -322,9 +334,14 @@ def should_show_no_close_match_notice(
         question=question, kb_game_name=kb_game_name, kb_source_titles=kb_source_titles
     ):
         return False
-    if kb_best_meaning is None:
+    effective_meaning = (
+        kb_best_meaning_without_game_name
+        if kb_best_meaning_without_game_name is not None
+        else kb_best_meaning
+    )
+    if effective_meaning is None:
         return False
-    return kb_best_meaning < _THIN_MATCH_MEANING_CEILING
+    return effective_meaning < _THIN_MATCH_MEANING_CEILING
 
 
 def append_no_close_match_notice(response_text: str, should_show: bool) -> str:

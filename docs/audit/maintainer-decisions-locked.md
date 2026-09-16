@@ -5491,3 +5491,94 @@ with the plugin log on. One star.
 the settings-card entry has nothing left owed; the blank-names note closes as not a bug; four new bug
 entries and one new feature entry; a changelog line for the rename. The testing rows for the
 advice-first read and the honesty line close.
+
+### D108 — LOCKED 2026-09-16 (raised 2026-09-16) — Building the reasoning display: five small calls before the build session
+
+Raised from [plan 57](../planning/57-reasoning-display-build.md) § 7, the build plan for the plain
+first version of the reasoning display (the shape is already locked: D70, D71, D106). The plan had
+six open items with defaults. The maintainer closed the first the same day: the Deck has its Ollama
+and its models back after the plan 56 wipe, so the Deck rows can run on the Deck's own model. One
+thing to check before those rows: the knowledge base on the SD card was wiped too, and two of the
+rows ask a Strategy question that uses its cards, so it needs to be downloaded again first.
+
+The five left, each with the options and the planner's lean. None of them stops the build from
+starting; the defaults are the leans.
+
+1. **What the one-time notice says**, the first time Thinking is moved off Off.
+   - Option 1 (lean): two sentences and a question. *"While the AI thinks, its thinking shows on
+     screen as it happens. It is not checked for spoilers, so it may mention things the answer
+     itself will hide. Show it?"* Buttons: *Show thinking* and *Keep it off*. The spoiler part is
+     said in as many words, which is the whole reason the notice exists.
+   - Option 2: one line. *"Thinking shows on screen as it happens and is not checked for spoilers.
+     Show it?"* Same buttons. Shorter, but "not checked for spoilers" is easy to read past.
+   - Option 3: no confirm; a line of help text under the Thinking row only. This reopens D71,
+     which chose the confirm, so it is listed for completeness, not recommended.
+
+2. **What happens when the person declines the notice.**
+   - Option 1 (lean): Thinking stays Off, nothing else changes, and the notice comes back the next
+     time they move it off Off. Nothing to remember, nothing new to build.
+   - Option 2: Thinking turns on anyway, but the live lines stay hidden; the stock phrases fill the
+     wait and only the folded line shows once the answer starts. The person gets the thinking
+     without the live spoiler risk. It is a fourth state to build and a hidden preference to store,
+     and the fold still opens to unmasked text, so it only half solves what it sets out to.
+   - Option 3: declining means never ask again and stay Off. The person would have to find out on
+     their own that the row is dead. Not recommended.
+
+3. **A turn where the model thinks but writes no answer.** The plugin already asks the model to go
+   on when it runs out of room; if nothing comes, today's error line shows.
+   - Option 1 (lean, for this version): no fold on such a turn. The fold appears only above an
+     answer. Keeps the build to the states already drawn.
+   - Option 2: the fold shows beside the error line, so an empty reply explains itself. Useful, and
+     it answers the maintainer's "paid for and thrown away" point for exactly the turn where the
+     thinking was the only thing paid for. But the fold and the error line have never shared a
+     turn on screen, so it needs its own drawing and its own Deck row. The lean is to file it as a
+     small follow-up entry once the fold exists, not to fold it into this build.
+   - Option 3: show the reasoning as if it were the answer, marked as such. Confusing; a reader
+     would take the model's notes for advice. Not recommended.
+
+4. **How much saved thinking a turn keeps.** D70 said "a few thousand characters". The deepest level
+   reserves about 4,000 characters' worth, and a go-on request can add more.
+   - Option 1 (lean): 6,000 characters. A whole Deep think fits, with room for the go-on. Eight
+     chats of two hundred turns each would add at most a few megabytes on disk, which is fine.
+   - Option 2: 4,000, the number plan 56's contract used. Cuts the tail of a Deep think now and
+     then.
+   - Option 3: 12,000. Never cuts in practice, but an opened block that long is a scroll problem on
+     the Deck's screen, and the live view only ever shows the newest lines anyway.
+   - If a think is cut, the lean is to keep the end, not the start: the last sentences are the
+     ones that led to the answer. A one-line note at the top says the start was cut.
+
+5. **Order against the session-context tab**, the other Show details change from D106. Both change
+   the same transcript file.
+   - Option 1 (lean): the reasoning display first, on its own, this plan; the tab in its own
+     session after it has landed. The reasoning display is the bigger piece, has the desk test and
+     the device measurement in front of it, and the tab would otherwise sit waiting on the shared
+     file the whole time.
+   - Option 2: the tab first. It is three stars and smaller, so it would land sooner; the
+     reasoning display then builds on top of the new panel. Costs the reasoning display another
+     wait, and it has already waited since 5 September.
+   - Option 3: both in one session, one after the other on the shared file. Saves a session start,
+     but makes a long session on the model tier that hits the usage limit most, and a limit hit
+     mid-way leaves the second piece half done.
+
+**Consequence if unanswered.** The build starts on the leans: option 1 for every item. Nothing in
+plan 57 waits on this entry except that the knowledge base check joins the Deck check before the
+Deck rows.
+
+**Answers, 2026-09-16 (the maintainer answered in chat):**
+
+1. **Option 2: the one-line notice.** *"Thinking shows on screen as it happens and is not checked
+   for spoilers. Show it?"* Buttons *Show thinking* and *Keep it off*.
+2. **Option 1.** Declining leaves Thinking Off; the notice comes back the next time.
+3. **Option 1, with a worry attached.** No fold on a turn with no answer in this version. The
+   maintainer is worried about how often a thinking model will think and then write nothing, and
+   does not want turning thinking on to make the plugin worse to use. So the build session measures
+   it before the screen step: the existing answer test runs on the PC with Thinking at Balanced and
+   at Deep, and counts the replies that came back empty. If any level comes back empty more than
+   about one time in twenty, item 3 flips to option 2 inside this build (the fold shows beside the
+   error line, so the person can at least see what the model did), and the cause goes on the
+   roadmap as a bug. Plan 57 § 3a carries this as T5.
+4. **Option 1.** 6,000 characters, the end kept when cut.
+5. **Option 1.** The reasoning display first, alone; the session-context tab after it has landed.
+
+**Consequence.** Plan 57 § 7 records the answers; § 3a gains the empty-reply count; the roadmap
+entry is unchanged (still ready to build, calls locked).

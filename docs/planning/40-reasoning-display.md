@@ -201,3 +201,8 @@ Written as work lands.
   spoiler verdict, with D71 raised for its reach and the fold's wording. Nothing captured, nothing built.
 - **2026-09-05, later still** — D71 locked: *Show reasoning* plain, the character's voice when one is
   selected if it works; verdict to the chip first; a confirm once. Nothing captured, nothing built.
+- **2026-09-15 and 16** — Dropped from feature session four by the maintainer (D105) and drawn at
+  true size on the [mockup page](https://claude.ai/artifact/2De58qirE34754PEZVPmdb) instead. The
+  maintainer's call (D106): the first version builds with the plain fold; the voiced fold is its own
+  optional entry; the second job waits. **The build plan is
+  [plan 57](57-reasoning-display-build.md)**; § 6 here is superseded by it. Nothing built.

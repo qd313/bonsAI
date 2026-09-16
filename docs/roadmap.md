@@ -449,7 +449,7 @@ replace it with a specific issue when one exists.
   folded line opens the whole reasoning. The folded line in a character's own voice is split off into its own optional
   entry, below, and is not built until this first version is in and looked at. The spoiler-verdict second job waits with
   it, as before.
-  [Plan](planning/40-reasoning-display.md).
+  [Plan](planning/40-reasoning-display.md) · [Build plan](planning/57-reasoning-display-build.md).
 - ★★ `[reply]` **The folded reasoning line in the character's own voice** — **OPEN, optional, filed 2026-09-16 (D106).**
   Builds only after the reasoning display's first version has landed and been looked at. The mockup page showed the same
   folded line written by the model itself in three characters' voices: Ali G, "See the booyakasha · 41 s"; GLaDOS, "Expose

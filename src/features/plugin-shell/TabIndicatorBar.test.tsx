@@ -230,6 +230,66 @@ describe("the open strip (plan 30 W5)", () => {
     removeSpy.mockRestore();
     unmount();
   });
+
+  // Closing is a CSS fade (tabIndicatorBar.ts): opacity to 0, then `visibility: hidden` after a
+  // delay. jsdom never runs that fade, so these tests stand in for the one thing jsdom cannot show
+  // -- a fade that never reaches its end, the ghost this bug reports (docs/roadmap.md, "A faded
+  // ghost of the tab bar is left drawn over the chip row after touching the screen"). Without the
+  // fix, nothing here ever forces the strip closed, so it is left exactly as the browser's own
+  // transition last painted it -- a `style` object with no opacity, visibility or pointer-events
+  // set at all, the same as while the strip was open. That is the state a person can see through.
+  describe("the open strip settles fully closed on its own, in case the CSS fade never finishes", () => {
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("forces opacity 0, visibility hidden and pointer-events none after closing, without waiting on the transition to fire an event", () => {
+      vi.useFakeTimers();
+      const { container } = render(bar());
+      const root = container.querySelector(".bonsai-tab-bar") as HTMLElement;
+      const strip = container.querySelector(".bonsai-tab-bar__strip") as HTMLElement;
+
+      fireEvent.focus(root);
+      fireEvent.blur(root);
+      // Not yet -- the real fade (120ms) should still be given the chance to finish on its own.
+      vi.advanceTimersByTime(150);
+      expect(strip.style.opacity).toBe("");
+
+      vi.advanceTimersByTime(100);
+      expect(strip.style.opacity).toBe("0");
+      expect(strip.style.visibility).toBe("hidden");
+      expect(strip.style.pointerEvents).toBe("none");
+    });
+
+    it("clears the forced-closed style the moment it opens again, so the fade-in is not fought", () => {
+      vi.useFakeTimers();
+      const { container } = render(bar());
+      const root = container.querySelector(".bonsai-tab-bar") as HTMLElement;
+      const strip = container.querySelector(".bonsai-tab-bar__strip") as HTMLElement;
+
+      fireEvent.focus(root);
+      fireEvent.blur(root);
+      vi.advanceTimersByTime(300);
+      expect(strip.style.opacity).toBe("0");
+
+      fireEvent.focus(root);
+      expect(strip.style.opacity).toBe("");
+      expect(strip.style.visibility).toBe("");
+      expect(strip.style.pointerEvents).toBe("");
+    });
+
+    it("never forces the closed style while still open, however long the ring sits there", () => {
+      vi.useFakeTimers();
+      const { container } = render(bar());
+      const root = container.querySelector(".bonsai-tab-bar") as HTMLElement;
+      const strip = container.querySelector(".bonsai-tab-bar__strip") as HTMLElement;
+
+      fireEvent.focus(root);
+      vi.advanceTimersByTime(5000);
+      expect(strip.style.opacity).toBe("");
+      expect(strip.classList.contains("bonsai-tab-bar__strip--open")).toBe(true);
+    });
+  });
 });
 
 describe("isPointerInsideTabBar across a genuine realm boundary (2026-09-04 device finding)", () => {

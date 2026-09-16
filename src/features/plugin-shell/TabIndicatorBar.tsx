@@ -136,6 +136,41 @@ export function TabIndicatorBar({ tabIds, currentTab, selectTab, exitDown }: Tab
     return () => unregisterNavFocus("tab-bar", navRef);
   }, []);
 
+  /*
+    Closing is a CSS fade (opacity, then `visibility: hidden` after a delay -- tabIndicatorBar.ts's
+    own transition rule), and that fade is the only thing that ever puts the strip fully out of
+    sight. A CSS transition is driven by the browser's own animation clock, and that clock is
+    exactly the kind of thing a background/occluded frame gets throttled or paused on -- both
+    reported sightings of the ghost (2026-09-07 and once before) were with a game running full
+    screen, which is when the overlay is most likely to be treated as not the visible surface even
+    though it is drawn on top. If the fade is ever paused mid-flight, nothing ever un-pauses it, so
+    the strip sits forever at whatever partial opacity the clock stopped on -- a person can see the
+    chip row through it, which is the ghost this bug reports. A plain timer is not tied to that
+    clock the same way, so it still fires and can force the end state even if the transition never
+    finished on its own. It never fires while `open`, so it never fights the fade in.
+  */
+  const stripRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const strip = stripRef.current;
+    if (!strip) return;
+    if (open) {
+      // Reopening: drop any forced-closed override from a previous close so the CSS classes (the
+      // fade in, and `pointer-events: auto` while open) govern the strip again.
+      strip.style.removeProperty("opacity");
+      strip.style.removeProperty("visibility");
+      strip.style.removeProperty("pointer-events");
+      return;
+    }
+    // 200ms: a margin over the 120ms opacity fade in tabIndicatorBar.ts, generous enough that a
+    // healthy fade always finishes first and this is a no-op in the common case.
+    const settle = window.setTimeout(() => {
+      strip.style.setProperty("opacity", "0");
+      strip.style.setProperty("visibility", "hidden");
+      strip.style.setProperty("pointer-events", "none");
+    }, 200);
+    return () => window.clearTimeout(settle);
+  }, [open]);
+
   useHiddenTabHeaderTrap();
 
   /*
@@ -241,6 +276,7 @@ export function TabIndicatorBar({ tabIds, currentTab, selectTab, exitDown }: Tab
         one stop and the lit cell is state — so they are plain elements for touch only.
       */}
       <div
+        ref={stripRef}
         className={`bonsai-tab-bar__strip${open ? " bonsai-tab-bar__strip--open" : ""}`}
         aria-hidden={!open}
       >

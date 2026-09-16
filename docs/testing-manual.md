@@ -95,6 +95,15 @@ as their own roadmap entries (the question row under the new ★ `[layout]` bug 
 answer section as a further sighting on the existing copy-icon entry). The touch-screen half of this row still
 needs a person. Evidence `docs/test-evidence/plan55-QA-FREE-PLAY-01-main-long-reply.json`.
 
+**Run 2026-09-16 on build 0fbecb6, the built-in screen, a five-turn Portal 2 chat with its newest turn (the
+`bonsai:vac-check` reply) expanded, no game running:** 17 distinct stops walked both ways (28 stops recorded
+over 31 presses), no cycle, and Down and Up visit the same stops in reverse. Down leg: tab bar, chat slot row,
+*5 earlier*, the Retry corner, the question row, the answer, Helpful, Read aloud, Show details, Session
+context, Save chat to Desktop, the pinned chip, the question box, Ask. The only partly hidden stops are the
+known corner-icon pair: the question row at 67%, behind the Retry corner icon, and the answer paragraph at
+89%, behind the copy icon — both on both legs. Passed for this build with that known bug still open. Evidence
+`docs/test-evidence/plan56-QA-FREE-PLAY-01.summary.json`, `docs/test-evidence/plan56-QA-FREE-PLAY-01-main-built-in-screen.json`.
+
 A stop that is focused but not visible is a **FAIL of this row**, whatever the scripted rows say.
 This is the manual interim for the DPS visibility oracle + `deck_sweep`
 (decky-plugin-studio `docs/planning/06-visibility-oracle-and-free-play-sweep.md`); when that
@@ -155,6 +164,8 @@ BPM (Desktop → Big Picture → QAM → bonsAI). Ollama reachable.
 
 **Fixed at the desk 2026-09-04, Deck check owed:** the button is a genuine D-pad stop now and joins the reply row's Down/Up chain — see PERM-JUMP-01 below.
 
+**FAIL (Deck) 2026-09-16, build 0fbecb6:** the button is a real D-pad stop now and A on it does reach the Permissions tab — but the highlight lands one row above the toggle it was asked for: **Save files to Desktop** instead of **Steam ban lookup**. Evidence `docs/test-evidence/plan56-PERM-JUMP-01-open-permissions.json`, with the setup and restore steps in `docs/test-evidence/plan56-SMOKE-C-01-toggle-off.json` and `docs/test-evidence/plan56-SMOKE-C-02-toggle-back-on.json`. The **Back to …** return half is recorded separately and stays owed. Filed as its own one-star focus bug on the roadmap.
+
 - [ ] Turn a capability **off** → blocked action → **Open Permissions** (or troubleshooting hint button) → lands on matching toggle → **Back to …** returns → no crash
 - [ ] Re-enable before Tier 1
 
@@ -165,6 +176,8 @@ Capability off for each row; trigger the deny surface; D-pad to **Open Permissio
 **Blocked 2026-09-03:** the deny surface's *Open Permissions* button is not a D-pad stop (roadmap Bugs, filed 2026-09-03), so no row here can be driven until that is fixed.
 
 **Fixed at the desk 2026-09-04, Deck check owed:** `PermissionDenyAction`'s button and the troubleshooting Ask hint's button are genuine D-pad stops now (`focusable`), and both join the reply row's Down/Up chain — Down from Retry/Show details/Copy reaches whichever is mounted, Down from it reaches the session context strip, and Up returns either way. Expect: Down from Copy lands on **Open Permissions**, visible; the jump and *Back to …* halves below still need a device pass.
+
+**FAIL (Deck) 2026-09-16, build 0fbecb6, Steam ban lookup row:** A on **Open Permissions** does open the Permissions tab, but the highlight lands on **Save files to Desktop**, one row above the **Steam ban lookup** toggle it was asked for (`docs/test-evidence/plan56-PERM-JUMP-01-open-permissions.json`). Setup (toggle off) and restore (toggle back on) steps: `docs/test-evidence/plan56-SMOKE-C-01-toggle-off.json`, `docs/test-evidence/plan56-SMOKE-C-02-toggle-back-on.json`. The **Back to …** return half is recorded separately and stays owed.
 
 | Capability | Deny surface | Expected toggle |
 |------------|--------------|-----------------|
@@ -274,7 +287,7 @@ Tier 1 now starts at SMOKE-E; the ID stays so older links still resolve.
 
 ### SMOKE-H — Background Ask reopen (P1)
 
-- [ ] Start Ask; close QAM; reopen → Thinking… or final reply restored
+- [x] Start Ask; close QAM; reopen → Thinking… or final reply restored — **PASS (Deck) 2026-09-16:** both shapes seen in one run — the reopened panel first showed the pending turn's "Still thinking…" line, and polling on then found the finished reply in place. Evidence `docs/test-evidence/plan56-SMOKE-H-background-ask-reopen.json`.
 
 ### Tier 1 extras
 
@@ -308,7 +321,7 @@ Tier 1 now starts at SMOKE-E; the ID stays so older links still resolve.
 ### VAC / `bonsai:vac-check`
 
 - [x] **VAC-01** Capability off — SMOKE-F — PASS 2026-09-03: answered with the capability message naming Permissions → Steam Web API and Developer → Integrations, no Ollama call in the plugin log (`docs/test-evidence/SMOKE-C-b-press-ask-vac-check-off.json`)
-- [ ] **VAC-02** On, empty key — *preview PASS; confirm on Deck*
+- [x] **VAC-02** On, empty key — **PASS (Deck) 2026-09-16:** the empty-key message named where to paste the key and showed the command shape with a SteamID, instant, no model call. Evidence `docs/test-evidence/plan56-VAC-02-empty-key.json`.
 - [ ] **VAC-03** Valid key + SteamID
 - [ ] **VAC-04** Profile URL
 - [ ] **VAC-05** Vanity `/id/…` unsupported note
@@ -396,7 +409,7 @@ Tier 1 now starts at SMOKE-E; the ID stays so older links still resolve.
 - [ ] **CHAT-SLOTS-V2-01** D-pad **Down** from tab strip (or Ask) reaches the slot row; **Down** from row reaches the transcript (the preset row when the slot is empty — the layout inverted in the v3 redesign, W2); **Up** returns toward tabs; row is quiet at rest; with one slot, ghost neighbours hidden  — **PASS 2026-08-30 (automated),** but only after the row was made a focus stop; before that fix it was unreachable by D-pad in both directions.
 - [x] **CHAT-SLOTS-V2-02** `[+]` creates a slot; **A** on title opens rename; **Right** → **×** → ConfirmModal deletes; focus returns to row after each modal  — **PARTIAL 2026-08-30 (automated).** `[+]` created a slot; **A** on the title opened the rename modal; **Right** moved the inner stop to **×** and turned it red without shifting the row. Return focus after the modal closes **failed at first** (the ring landed on the tab strip) and is **now fixed and re-verified on device**: `gpfocus` is back on the row after Cancel. Actually deleting a slot was not exercised.
 - [x] **CHAT-SLOTS-V2-03** Ask in slot A → **LB/RB** to slot B mid-Ask → reply lands in **A**; reopen A — both Q and A present — PASS (Deck) 2026-09-04: RB to another slot mid-stream and LB back; the reply landed in A with both question and its 5,749-character answer.
-- [ ] **CHAT-SLOTS-V2-04** Close QAM mid-Ask → reopen → pending question visible (not empty transcript)
+- [x] **CHAT-SLOTS-V2-04** Close QAM mid-Ask → reopen → pending question visible (not empty transcript) — **PASS (Deck) 2026-09-16:** the reopened panel showed the pending turn's line rather than an empty transcript. Same run as SMOKE-H above. Evidence `docs/test-evidence/plan56-SMOKE-H-background-ask-reopen.json`.
 - [x] **CHAT-SLOTS-V2-05** With row focused: **LB/RB** cycle slots; blur row → **LB/RB** switch tabs — repeat with a game running and without; record P-0 result in [major-redesign.md](archive/major-redesign.md) § 7 R1  — **PASS 2026-08-30 (automated).** Row focused: LB cycled slot without changing tab (`selectedTabIndex` stayed 0). Row blurred: LB switched tab 0 → 5. **This is the P-0 spike; it passes, so the redesign plan stands and the sixth-*Chats*-tab fallback is not needed.** Evidence `docs/test-evidence/CHAT-SLOTS-V2-05-*.json`. Not yet repeated with a game running.
 - [x] **CHAT-SLOTS-V2-06** Carousel stops at `[+]` and at last slot (no wrap); dots track active slot at cap of 8  — **PASS 2026-08-30 (automated).** LB at `[+]` is a no-op (no wrap); dots tracked the active slot (index 5 → 4) and rendered **6** for 6 slots, so the cap-8 change is live. End boundary observed as a dimmed RB pill on the last slot but not press-tested.
 

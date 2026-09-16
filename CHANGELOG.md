@@ -5,6 +5,17 @@ All notable changes to this project are documented in this file.
 ## [Unreleased]
 
 ### Fixed
+- **The download picker's Expert (large) group now offers the strongest Deck models first, and the
+  open-source list catches up to September's models:** the five models that beat the plugin's default on the
+  bake-off now lead that group in that order — Gemma 4 12B, Qwen 3.5 9B, Granite 4.2 8B, Gemma 4 E4B, LFM
+  2.5 — instead of being sorted by release date. Gemma 4 and Granite now count as open source under the
+  default open-source-only setting, and LFM as open-weight, where before the plugin did not recognise them
+  and would not offer them at that setting. `model_policy.py`, `pullModelCatalog.ts`. On-Deck row owed:
+  **EXPERT-ORDER-01** in `docs/testing.md`.
+- **The Expert (large) group in the download picker can be shown again:** found while landing the reorder
+  above — with Essentials only switched off, the group still stayed hidden, and it had been impossible to
+  show at all since a June change. `PullModelsModal.tsx`. On-Deck row owed: **PULL-EXPERT-VISIBLE-01** in
+  `docs/testing.md`.
 - **Typing into the question box no longer pushes it, the chips and the chat up the screen:** the list of
   matching Steam settings used to grow underneath the box inside the bottom dock, and two letters could match
   dozens of settings and throw the box off the top of the screen. The list now floats in a small card above the
@@ -90,6 +101,22 @@ All notable changes to this project are documented in this file.
 - **The line under the question box stops naming a game you have closed:** exit a game and it used to keep the old name, so a question that does not name its own game could pull in the wrong game's notes. **The cause first written down was wrong and the real one is worth knowing:** the ordinary keep-in-sync check does correct itself within about a second and a half; the hole was **reopening the panel** — after a popup, or leaving and coming back — which restored the remembered name without ever checking whether that game was still running. It now checks what is actually running at that moment. `useBonsaiAskOrchestration.ts`; 5 frontend tests. On-Deck **W2-R6**.
 
 ### Added
+- **A Clear button now sits on the Session context bar, and it means the same thing Clear cache in Settings
+  already means:** with the bar showing under the chat, a small Clear appears at its right end; pressing it
+  opens the same confirm box as Clear cache — "Start the next question fresh?" — and choosing it shows a
+  toast, "Next question starts fresh," and forgets the subject of the last strategy question and the
+  strategy checklist position for the running game. The chat itself and the bar's own rows stay exactly as
+  they are. `SessionContextStrip.tsx`, `MainTabChatTranscript.tsx`, `main.py`. On-Deck row owed:
+  **SESSION-CLEAR-01** in `docs/testing.md`.
+- **The back-end check that looks for a made-up-sounding reply is switched on, quietly:** it writes one line
+  to the log for every answer and changes nothing on screen and calls no second model. `game_ai_request.py`.
+  On-Deck row owed: **ANSWER-CHECKER-LOG-01** in `docs/testing.md`.
+- **The Spy can now lie to you on purpose:** at the Heavy or Unleashed accent setting he sometimes gives
+  advice that sounds right and is wrong — wasted time only, never anything that can hurt your game or your
+  Deck — and Show details on that reply gets a "Spy" line saying "The Spy was on" with what he lied about,
+  or "The Spy was on and did not confess." Below Heavy he is unchanged and nothing new appears.
+  `spy_confession_service.py`, `ai_character_service.py`, `game_ai_request.py`, `transparency_service.py`.
+  On-Deck row owed: **SPY-REVEAL-01** in `docs/testing.md`.
 - **A Read aloud line under a finished answer, in the Deck's own voice:** press it and the Deck speaks the answer one sentence at a time, starting in about a second; the line changes to **Stop**, and pressing it again, or asking a new question, stops the speech. It keeps reading with the menu closed. A hidden spoiler is announced as "a spoiler is hidden here", a table as "there is a table on screen", and code as "there is code on screen", instead of being read out. Clearing the session stops it too. Settings gains a three-way **Voice replies** choice next to the microphone rows — **Off** (default), **When I asked by voice**, **Always** — that decides when an answer reads itself with no press; a dictated question that was then typed over or replaced by a suggestion chip does not count as asked by voice. Checked on the maintainer's Deck 2026-09-12: the D-pad reaches the line, pressing it starts and stops the speech with a sound stream confirmed on the speaker, the Settings row saves its choice, and Always read a fresh answer with no press. Still owed: hearing it by ear, and two checks that need the microphone or timing on the device. `voice_read_aloud_service.py`, `useReadAloud.ts`, `answerReadableText.ts`, `SettingsTab.tsx`; backend tests in `test_voice_read_aloud_service.py`, frontend tests in `useReadAloud.test.ts`. On-Deck **READ-ALOUD-01…06** in `docs/testing.md`.
 - **Follow-up questions remember what you just asked about:** asking about a boss, then "what about the second phase?", used to search on just those last few words, so the game notes for the wrong thing could come back — in Deep Rock Galactic: Survivor it used to answer about a different boss than the one just asked about. The thing you were just asking about is now carried into the search behind a bare follow-up like that, in Strategy or Expert mode. `game_ai_request.py`; backend tests in `test_game_ai_request_followup_memory.py`. On-Deck **W3-R4** in `docs/testing.md`.
 - **A line for when a troubleshooting question gets no tip:** *"No tip for this — this answer is from the model's own knowledge."* now appears under a reply that was sent to the Deck tip sheet and came back with nothing worth attaching, so it is clear the answer is a guess rather than a real Deck tip. Same shape as the existing "not in my notes" line, and the two never appear together on one reply. `kb_not_in_notes_notice.py`, `game_ai_request.py`; backend tests in `test_kb_not_in_notes_notice.py`, `test_kb_not_in_notes_wiring.py`. On-Deck **W3-R2** in `docs/testing.md`.

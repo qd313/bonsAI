@@ -104,6 +104,13 @@ starts work outside this.
   button, and every stop on the walk was fully visible. So the hidden state does not trap on its own. Most likely the same
   underlying fault as the stuck panel below — both are a hop that dies only sometimes — and best closed with it rather than
   chased separately. Evidence `docs/test-evidence/round35-spoiler-block-down-and-up.json`.
+- ★ `[focus]` **The Open Permissions jump lands one toggle above the one it was asked for** — **OPEN,
+  measured 2026-09-16 on build 0fbecb6.** The Open Permissions button under a blocked reply is a real
+  D-pad stop now and A on it does reach the Permissions tab, but the highlight lands on "Save files to
+  Desktop", one row above the "Steam ban lookup" toggle it was supposed to land on. Evidence
+  `docs/test-evidence/plan56-PERM-JUMP-01-open-permissions.json` (the jump itself),
+  `docs/test-evidence/plan56-SMOKE-C-01-toggle-off.json`, `docs/test-evidence/plan56-SMOKE-C-02-toggle-back-on.json`
+  (the setup and restore steps around it). The *Back to …* return half is recorded separately and stays owed.
 - ★ `[layout]` **An open question's row is only partly visible behind the Retry corner icon** — **OPEN,
   seen at every visit 2026-09-15 evening.** With the newest turn open, the ring on the question's inner row
   reads 67% visible, covered by the Retry same-prompt icon in the corner. Evidence
@@ -188,14 +195,6 @@ starts work outside this.
 `[layout]` entry serves it. Items rated ★★★★★ or above carry a placeholder link to [bonsAI Issues](https://github.com/qd313/bonsAI/issues) in the archive;
 replace it with a specific issue when one exists.
 
-- ★ `[ask]` **Run the answer checker quietly and count what it catches** — **OPEN, filed 2026-09-13 (D102).** The plugin
-  has a piece of back-end code meant to spot a reply that looks made up. It works, it has a test, and it has never once
-  run — the field it reads is fed by a value nobody supplies. Before deciding whether to finish it or delete it, switch
-  its three rules on so they **only write to the log**: no note on screen, no second AI model, nothing a person would
-  notice. Leave it through normal use for a couple of weeks, then count. **Measured against all 412 saved device runs,
-  two of its three rules would never have fired once**, and the third already gets logged today — so expect it to catch
-  almost nothing. Not in scope: the on-screen notice, and the second-model pass (an extra model call per answer on a
-  handheld). [The three rules, counted](audit/refactor-round-two/phase2-decisions.md).
 - ★ `[ask]` **Intent packs later review** — **OPEN.** Decide whether the quiet intent-pack search aliases are deleted, left quiet, or
   revived under Developer. Not in scope: re-shipping Proton journal inject without a redesign. **New evidence 2026-09-06 (D79):**
   the bundled Deck basics list ships switched on and is the *only* reason a whole sentence ever matches a setting — its 88 words
@@ -213,11 +212,6 @@ replace it with a specific issue when one exists.
   the text box beside it, so the two stop touching; the chip's surface shaded more like a raised button; the accent colour
   toned down, because today it is too loud; and the label in italics, worth trying. The point is that a chip should read as a
   pressable thing rather than part of the input. Drawn in a separate Claude Design session; the maintainer judges it by eye.
-- ★★ `[ollama]` **Expert offers the stronger Deck-run models first, and the licence list learns the Sept 2026 models** —
-  **OPEN, planned 2026-09-05, calls locked (D73).** In the model picker's Expert group, the models that beat today's Gemma 4 on the
-  answer test come first, in bake-off order. The plugin's licence list is behind: Gemma 4 has been Apache 2.0 since April and is
-  still filed as open-weight; Granite and Liquid are unknown to it, so the default open-source-only tier would not route to them.
-  One change to the list, the picker's catalogue and the Expert group. [Bake-off](planning/41-deck-model-survey.md).
 - ★★ `[reply]` **Headline first: every answer opens with one line that stands alone** — **OPEN, filed 2026-09-08. Not yet
   (D99, 2026-09-12): it waits for its own go.** The model would be asked to start every answer with one short sentence that
   carries the point and gives nothing away, so the reply-ready popup, a spoken answer and any headset card always have a good
@@ -244,13 +238,6 @@ replace it with a specific issue when one exists.
   maintainer has said they do not want to supply one. So whoever builds it proposes a shape and the maintainer approves it by
   eye — a shape is not something to settle from a description or by reaching for a stronger model. It has to be an inline SVG
   path rather than the PNG so it takes the colour around it. Update the icon geometry test in the same change.
-- ★★ `[ui]` `[ask]` **Clear button in the session context strip** — **OPEN, filed 2026-09-12 (D99).** A small Clear
-  sits at the right end of the Session context (N turns) bar under the chat, and only shows once that bar does. **Decided
-  2026-09-15 (D105): Clear means only what the model sees.** The chat and the bar's rows stay; after the same confirm box as
-  Clear cache, the plugin forgets the last strategy subject and the strategy checklist position for the running game, and a
-  short toast says the next question starts fresh. Clear cache in Settings gets the same forget. Build: [plan
-  56](planning/56-feature-session-four.md), lane A.
-  Needs a focus-graph entry and the modal return-focus hookup.
 - ★★ `[voice]` **Spoilers by voice** — **OPEN, filed 2026-09-08; Read answers aloud shipped 2026-09-12, still waits on Voice
   follow-ups.** When a spoken answer reaches a hidden spoiler it says "there is a spoiler here, say go on to hear it" and waits;
   "go on" unhides and reads it, anything else skips it. The block on screen unhides with the spoken one, so the two never
@@ -308,13 +295,6 @@ replace it with a specific issue when one exists.
   written at the same time, and the order-of-hooks record is what made both safe. Do them one at a time, each with its own Deck
   check. [Plan](archive/51-refactor-round-two.md).
 
-- ★★★ `[reply]` **Spy: a character who lies to you on purpose** — **OPEN, filed 2026-09-06 by the maintainer.** A new
-  Team Fortress 2 character. Pyro's Heavy setting already gives bad advice because he is a stubborn arse; the Spy gives bad advice
-  because he is clever and working for the other side. Sometimes he opens by claiming to be a different character instead. Same hard
-  floor as Pyro's: nothing that can damage the Deck, lose a save, or cost money — wasted time only. And you have to be able to find
-  out, so the reveal is planned before anything is built. **Reveal decided 2026-09-15 (D105):** a Spy chip under Show details
-  reveals what he lied about, and he only lies at the two heaviest accent levels. Build: [plan
-  56](planning/56-feature-session-four.md), lane G. [Detail](roadmap-details.md#spy-a-character-who-lies-to-you-on-purpose).
 - ★★★ `[reply]` **The Spy opens as somebody else** — **OPEN, split off 2026-09-15 (D105).** On a random chance his first message
   introduces him as a different character from the list and he keeps it up. A character has no first message today, so this
   needs a greeting feature first and is its own job, not a line of prompt text. Decide before building: how often, whether the
@@ -456,6 +436,11 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   has downloaded, whenever Ollama lives in the home folder, which it does on this Deck; a backup of settings
   and chats cannot bring the models back. The session asked the maintainer for a separate yes to wipe this
   Deck and none came during the run, so the row stays owed.
+- ★ `[ollama]` **The Expert group could never be shown, since June** — **VERIFY, fixed 2026-09-16 (commit
+  `ca12429`).** Found while landing the Expert group's new order: with Essentials only switched off, the
+  Expert (large) group in the download picker still stayed hidden — it had been impossible to show at all
+  since a June change. It shows now. Row **PULL-EXPERT-VISIBLE-01**: with Essentials only off, open the Pull
+  Models picker and check the Expert (large) group is visible. Not yet checked on the Deck.
 - ★ `[focus]` **Choosing an entry in the Ask-mode menu drops the highlight** — **VERIFY, fixed 2026-09-16
   (commit `cb60a5d`).** Picking a mode such as Speed, Strategy or Expert in the small menu under the question
   box now hands the highlight back to the mode button, the way it already did when backing out with B.
@@ -463,29 +448,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   the plugin until the next press. Evidence `docs/test-evidence/plan56-BUG-askmode-menu-drop-speed.json`,
   `docs/test-evidence/plan56-BUG-askmode-menu-drop-strategy.json`. Row **ASK-MODE-MENU-RING-01**: open the
   menu, choose a mode, and check the highlight is on the mode button — still owed on the Deck.
-- ★ `[focus]` **Pressing Ask drops the highlight** — **VERIFY, fixed 2026-09-15, both halves confirmed on the
-  Deck.** The real cause turned out to be the code that manages a question, which was clearing the page's own
-  highlight before it even checked whether there was a question to send, so the fix was made at the button
-  instead. Now, after pressing Ask, the highlight lands on the question box when there is a real question, or
-  stays on the Ask button when the box is empty, instead of vanishing either way. Row
-  **ASK-RING-AFTER-PRESS-01**: type a question, press Ask, then press one D-pad direction — the highlight is
-  already on the question box; clear the box and press Ask — the highlight stays on the Ask button. **The
-  real-question half passed on the Deck 2026-09-15**, evidence
-  `docs/test-evidence/plan55-ASK-RING-AFTER-PRESS-01.json`. **The empty-box half passed on the Deck
-  2026-09-16:** with nothing typed, pressing Ask left the ring on the Ask button, fully visible, and it held
-  there through a Down press too. Evidence `docs/test-evidence/plan56-ASK-RING-AFTER-PRESS-01-empty-box.json`.
-  Both halves now pass; this entry is owed its move to Done and the archive.
-- ★ `[focus]` **Closing the model try order picker drops the highlight onto the tab rather than the button you
-  opened it from** — **VERIFY, fixed 2026-09-15, both halves confirmed on the Deck.** After pressing Done, the
-  highlight now lands back on the try-order button just used, instead of costing about thirteen presses to get
-  back to it. Row **TRY-ORDER-RETURN-01**: on the Ollama tab, under Models & routing, press Set text model try
-  order…, then press Done — the highlight is on that button; repeat for the vision try-order button. **The text
-  picker passed on the Deck 2026-09-15** — Done landed the highlight on Set text model try order, fully
-  visible, not on the tab (`docs/test-evidence/plan55-TRY-ORDER-RETURN-01.json`). **The vision picker passed on
-  the Deck 2026-09-16** — Done landed the highlight on Set vision model try order, fully visible. Evidence
-  `docs/test-evidence/plan56-TRY-ORDER-RETURN-01-vision.json`. Both halves now pass; this entry is owed its
-  move to Done and the archive. **Side note from the same run:** opening the picker itself first lands the ring
-  on a greyed "Move up" button, the same shape as the greyed-button bug above.
 - ★ `[focus]` **A greyed-out button still takes the highlight, so the D-pad lands on something that does
   nothing** — **VERIFY, fixed 2026-09-15, the Ask half confirmed on the Deck.** While an answer is being
   written, Down from the question box now holds still instead of landing on the greyed Ask button. Row
@@ -518,28 +480,34 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   can be left sitting over the suggestion chips. The exact reason the fade stalls could not be proven on the
   rig, which has no touch, so the fix force-finishes the close with a plain timer either way. Row
   **TAB-BAR-GHOST-01**, needs a finger, and it is on the maintainer's checklist.
-- ★★ `[ui]` **The copy button sits on top of the code box instead of beside it** — **VERIFY, fixed 2026-09-15,
-  confirmed on the Deck 2026-09-16.** A reply that ends in a code box now gets room reserved below it, so the
-  copy icon sits under the box instead of overlapping its corner. Row **COPY-ICON-CODEBOX-01**: on a reply
-  ending in a code box, check the box's bottom edge and the icon's top edge do not overlap; a reply ending in
-  plain text is unchanged. **Attempted on the Deck 2026-09-15, not yet exercised:** a question asked for a code
-  block with nothing after it, but the model added a closing sentence anyway, so the reply ended in text and
-  the icon sat 41 pixels clear of the box — the exact case the row needs still has not come up. Evidence
-  `docs/test-evidence/plan55-COPY-ICON-CODEBOX-01.json`. **New sighting the same evening in the free-play
-  sweep, on that same plain-text-ending reply shape:** the last answer section read 89% visible, one of nine
-  sample points sitting under the copy icon's own corner. Evidence
-  `docs/test-evidence/plan55-QA-FREE-PLAY-01-main-long-reply.json`. **Passed on the Deck 2026-09-16:** a reply
-  genuinely ending in a code box left the icon 12 pixels below the box's bottom edge, nothing overlapping.
-  Evidence `docs/test-evidence/plan56-COPY-ICON-CODEBOX-01.json`. This entry is owed its move to Done and the
-  archive.
 - ★★★ `[chat]` **Clear cache cleared the screen but not the session** — **VERIFY.** Fixed and confirmed 2026-08-27, and again on the
   Deck 2026-09-03. The orphan half is measured: the chat stays behind after a clear, so each clear-and-reask cycle leaves one more
   chat in the rotation — a follow-up, not a regression. Only the mid-generation half is still owed: clearing while a reply is still
   being written (unit-tested, not reproducible by hand yet). Row **CLEAR-CACHE-01**. [Why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way).
 ### Features that need verification
 
+- ★★ `[ui]` `[ask]` **Clear button in the session context strip** — **VERIFY, landed 2026-09-16 (commits
+  `2eb2142`, `d4b077b`, `427d6e8`).** A small Clear now sits at the right end of the Session context (N turns)
+  bar, shown only when that bar shows. A opens a confirm box "Start the next question fresh?"; Clear there
+  shows a toast "Next question starts fresh" and the plugin forgets the subject of the last strategy question
+  and the strategy checklist position for the running game — the chat and the bar's rows stay. Clear cache in
+  Settings now does the same forget. Not yet checked on the Deck. Row **SESSION-CLEAR-01**: with the bar
+  showing, check Right from its header lands on Clear, A opens the confirm box, Cancel returns the highlight
+  to Clear, and OK shows the toast and the next bare follow-up no longer inherits the subject.
+- ★★ `[ollama]` **Expert offers the stronger Deck-run models first, and the licence list learns the Sept 2026
+  models** — **VERIFY, landed 2026-09-16 (commits `0dbf25c`, `f812a9e`, `19e3396`).** In the download picker's
+  Expert (large) group the five stronger Deck models now come first in bake-off order: Gemma 4 12B, Qwen 3.5
+  9B, Granite 4.2 8B, Gemma 4 E4B, LFM 2.5. Gemma 4 and Granite now count as open source under the default
+  open-source-only setting, and LFM as open-weight. Not yet checked on the Deck. Row **EXPERT-ORDER-01**: open
+  the picker with Essentials only off and read the Expert group's order; in the AI models hub check a Gemma 4
+  tag reads as allowed at the open-source-only tier. [Bake-off](planning/41-deck-model-survey.md).
 - ★★ `[chips]` **A glow when the chip row runs out of chips** — **VERIFY.** Built at the desk 2026-09-05 under D62 #3: press Left or Right past the first or last suggestion chip and that chip glows briefly, the way a phone lights up the end of a list. Nothing about the row’s existing edge behaviour changes. Reduced motion keeps the cue and drops the movement. **No measurement closes this one** — whether it reads as *end of list* rather than *error* is the maintainer’s call from a recording, and it is on their checklist.
 
+- ★ `[ask]` **Run the answer checker quietly and count what it catches** — **VERIFY, landed 2026-09-16
+  (commit `cce6bf9`).** The plugin's answer checker now runs on every answer and only writes one line to the
+  log — nothing on screen, no second AI model call: "run_game_ai_request: answer checker ran rules_fired=N
+  warnings=[...]". Not yet checked on the Deck. Row **ANSWER-CHECKER-LOG-01**: the log line has to be seen
+  once on the Deck, then the checker left running through normal use so what it catches can be counted later.
 - ★ `[ollama]` **Pulled models join the model try order** — **MOSTLY VERIFIED on the Deck 2026-09-06, one case left.**
   A model pulled from the picker landed at the **bottom** of the text list, and showed up in the vision list because it can
   read pictures — while a text-only model and the embedding one stayed out of that list. What is still owed is the opposite
@@ -570,6 +538,13 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   **THINKING-SLOW-01**, **THINKING-LIVE-01**, **THINKING-SPOILER-01**. [Log](planning/06-thinking-blurbs-review.md#10-implementation-log).
 - ★★ `[reply]` **Token streaming Phase A/B** — **VERIFY.** Start stutter fixed, sections as D-pad stops, scroll follow. Rows
   **STREAM-REVEAL-01**, **STREAM-09**, **STREAM-FOLLOW-01**. [Review](planning/05-token-streaming-review.md).
+- ★★★ `[reply]` **Spy: a character who lies to you on purpose** — **VERIFY, landed 2026-09-16 (commits
+  `3cb00fe`, `4c422a9`, `45e9d57`, `1039154`).** At the Heavy or Unleashed accent setting the Spy now
+  sometimes gives advice that sounds right and is wrong — wasted time only, never harm — and Show details on
+  that reply gets a "Spy" entry reading "The Spy was on" with what he lied about, or "The Spy was on and did
+  not confess". Below Heavy he is unchanged and no chip appears. Not yet checked on the Deck. Row
+  **SPY-REVEAL-01**: pick Spy at Heavy, ask a strategy question, and check for the chip with a confession; at
+  Balanced, check no chip appears. [Detail](roadmap-details.md#spy-a-character-who-lies-to-you-on-purpose).
 - ★★★ `[ask]` `[focus]` **Steam settings shortcuts float above the question box** — **VERIFY, landed 2026-09-16
   (commit `2d92240`), plan 45 steps 1, 2 and 5 of six.** Typing into the question box no longer grows a list of
   Steam settings under the box that shoves the box, the chips and the chat up the screen; the list now floats

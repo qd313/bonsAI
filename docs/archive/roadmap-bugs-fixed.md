@@ -6,6 +6,46 @@ Strikeout titles match the original roadmap bug list. Items awaiting on-Deck QA 
 
 ---
 
+### Three more fixes, checked on the Deck (2026-09-16)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-16 once the Deck runs passed — copied line for line from
+this session's Verify entries, nothing reworded._
+
+- ★ `[focus]` **Pressing Ask drops the highlight** — **VERIFY, fixed 2026-09-15, both halves confirmed on the
+  Deck.** The real cause turned out to be the code that manages a question, which was clearing the page's own
+  highlight before it even checked whether there was a question to send, so the fix was made at the button
+  instead. Now, after pressing Ask, the highlight lands on the question box when there is a real question, or
+  stays on the Ask button when the box is empty, instead of vanishing either way. Row
+  **ASK-RING-AFTER-PRESS-01**: type a question, press Ask, then press one D-pad direction — the highlight is
+  already on the question box; clear the box and press Ask — the highlight stays on the Ask button. **The
+  real-question half passed on the Deck 2026-09-15**, evidence
+  `docs/test-evidence/plan55-ASK-RING-AFTER-PRESS-01.json`. **The empty-box half passed on the Deck
+  2026-09-16:** with nothing typed, pressing Ask left the ring on the Ask button, fully visible, and it held
+  there through a Down press too. Evidence `docs/test-evidence/plan56-ASK-RING-AFTER-PRESS-01-empty-box.json`.
+- ★ `[focus]` **Closing the model try order picker drops the highlight onto the tab rather than the button you
+  opened it from** — **VERIFY, fixed 2026-09-15, both halves confirmed on the Deck.** After pressing Done, the
+  highlight now lands back on the try-order button just used, instead of costing about thirteen presses to get
+  back to it. Row **TRY-ORDER-RETURN-01**: on the Ollama tab, under Models & routing, press Set text model try
+  order…, then press Done — the highlight is on that button; repeat for the vision try-order button. **The text
+  picker passed on the Deck 2026-09-15** — Done landed the highlight on Set text model try order, fully
+  visible, not on the tab (`docs/test-evidence/plan55-TRY-ORDER-RETURN-01.json`). **The vision picker passed on
+  the Deck 2026-09-16** — Done landed the highlight on Set vision model try order, fully visible. Evidence
+  `docs/test-evidence/plan56-TRY-ORDER-RETURN-01-vision.json`. **Side note from the same run:** opening the
+  picker itself first lands the ring on a greyed "Move up" button, the same shape as the greyed-button bug.
+- ★★ `[ui]` **The copy button sits on top of the code box instead of beside it** — **VERIFY, fixed 2026-09-15,
+  confirmed on the Deck 2026-09-16.** A reply that ends in a code box now gets room reserved below it, so the
+  copy icon sits under the box instead of overlapping its corner. Row **COPY-ICON-CODEBOX-01**: on a reply
+  ending in a code box, check the box's bottom edge and the icon's top edge do not overlap; a reply ending in
+  plain text is unchanged. **Attempted on the Deck 2026-09-15, not yet exercised:** a question asked for a code
+  block with nothing after it, but the model added a closing sentence anyway, so the reply ended in text and
+  the icon sat 41 pixels clear of the box — the exact case the row needs still has not come up. Evidence
+  `docs/test-evidence/plan55-COPY-ICON-CODEBOX-01.json`. **New sighting the same evening in the free-play
+  sweep, on that same plain-text-ending reply shape:** the last answer section read 89% visible, one of nine
+  sample points sitting under the copy icon's own corner. Evidence
+  `docs/test-evidence/plan55-QA-FREE-PLAY-01-main-long-reply.json`. **Passed on the Deck 2026-09-16:** a reply
+  genuinely ending in a code box left the icon 12 pixels below the box's bottom edge, nothing overlapping.
+  Evidence `docs/test-evidence/plan56-COPY-ICON-CODEBOX-01.json`.
+
 ### Three more fixes, checked on the Deck (2026-09-15 evening, plan 55)
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-15 once the Deck runs passed — copied line for line from

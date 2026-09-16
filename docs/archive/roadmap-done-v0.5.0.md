@@ -15,6 +15,17 @@ Everything shipped since v0.4.9 (2026-07-08), one line each, newest first. Detai
   Evidence `docs/test-evidence/plan56-M-hub-edges.json`, `docs/test-evidence/plan56-M-hub-edges-policy.json`,
   `docs/test-evidence/plan56-M-hub-edges-advanced.json` (plan 56 block 0).
 
+**Checked on the Deck, closed in the roadmap 2026-09-16:**
+- ★ `[focus]` **Pressing Ask no longer drops the highlight** — the ring lands on the question box when a
+  real question is typed, and stays on the Ask button when it is empty; confirmed both ways on the Deck,
+  2026-09-15 and 16. [Detail](roadmap-bugs-fixed.md#three-more-fixes-checked-on-the-deck-2026-09-16).
+- ★ `[focus]` **Closing the model try-order picker returns the highlight to its own button** — instead of
+  landing about thirteen presses away on the tab; confirmed on the Deck for both the text and vision
+  pickers, 2026-09-15 and 16. [Detail](roadmap-bugs-fixed.md#three-more-fixes-checked-on-the-deck-2026-09-16).
+- ★★ `[ui]` **The copy button no longer sits on top of the code box** — a reply ending in a code box now
+  leaves the copy icon clear below it; confirmed on the Deck 2026-09-16.
+  [Detail](roadmap-bugs-fixed.md#three-more-fixes-checked-on-the-deck-2026-09-16).
+
 **Checked on the Deck, closed in the roadmap 2026-09-14 and 15:**
 - ★★★ `[reply]` **A Speed-mode reply no longer ends with a block of raw computer text where a power tip
   should be** — confirmed on the Deck 2026-09-15: the reply ends in normal sentences, with no leftover

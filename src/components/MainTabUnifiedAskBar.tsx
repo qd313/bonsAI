@@ -284,6 +284,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
       presetCarouselHostRef,
     },
     showAiCharacterChrome,
+    isAsking,
   );
 
   useEffect(() => {

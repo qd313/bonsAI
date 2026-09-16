@@ -175,3 +175,78 @@ describe("focusUnifiedTextField", () => {
     expect(document.activeElement).toBe(field);
   });
 });
+
+/**
+ * The Ask button greys out while a question is in flight, but a greyed control that still takes
+ * the D-pad's highlight does nothing useful when it lands there (docs/test-evidence/
+ * round35-CHECK-stop-press.json: Down from the question box landed the ring on it, then a second
+ * Down lost the ring entirely). Down from the question box must step over it instead.
+ */
+function buildAskBarHost(): { host: HTMLDivElement; askButton: HTMLButtonElement } {
+  const host = document.createElement("div");
+  const askButton = document.createElement("button");
+  askButton.className = "bonsai-ask-primary";
+  host.appendChild(askButton);
+  document.body.appendChild(host);
+  return { host, askButton };
+}
+
+function renderAskBarHandlers(host: HTMLDivElement, isAskInFlight: boolean) {
+  return renderHook(() =>
+    useMainTabAskBarFocus(
+      {
+        unifiedInputFieldLayerRef: { current: null },
+        attachActionHostRef: { current: null },
+        askBarHostRef: { current: host },
+        presetCarouselHostRef: { current: null },
+      },
+      false,
+      isAskInFlight,
+    ),
+  );
+}
+
+describe("Down from the question box while the Ask button is greyed", () => {
+  beforeEach(() => {
+    resetNavFocusRegistry();
+    resetUiDocument();
+  });
+
+  afterEach(() => {
+    document.body.innerHTML = "";
+    resetNavFocusRegistry();
+    resetUiDocument();
+  });
+
+  it("does not land the ring on the greyed Ask button while a question is in flight", () => {
+    const { host, askButton } = buildAskBarHost();
+    const { result } = renderAskBarHandlers(host, true);
+
+    const onMoveDown = result.current.unifiedInputDeckNavHandlers.onMoveDown as () => boolean;
+    const handled = onMoveDown();
+
+    // Reported handled -- the press holds the ring on the box rather than Steam going looking on
+    // its own for the next stop, which is what lost the ring entirely on device.
+    expect(handled).toBe(true);
+    expect(document.activeElement).not.toBe(askButton);
+  });
+
+  it("a greyed Ask button never takes the ring from focusAskPrimary directly", () => {
+    const { host, askButton } = buildAskBarHost();
+    const { result } = renderAskBarHandlers(host, true);
+
+    expect(result.current.focusAskPrimary()).toBe(false);
+    expect(document.activeElement).not.toBe(askButton);
+  });
+
+  it("still lands Down on the Ask button while idle", () => {
+    const { host, askButton } = buildAskBarHost();
+    const { result } = renderAskBarHandlers(host, false);
+
+    const onMoveDown = result.current.unifiedInputDeckNavHandlers.onMoveDown as () => boolean;
+    const handled = onMoveDown();
+
+    expect(handled).toBe(true);
+    expect(document.activeElement).toBe(askButton);
+  });
+});

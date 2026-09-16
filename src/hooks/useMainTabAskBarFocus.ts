@@ -77,6 +77,15 @@ export type MainTabAskBarFocusRefs = {
 export function useMainTabAskBarFocus(
   refs: MainTabAskBarFocusRefs,
   showAiCharacterChrome: boolean,
+  /**
+   * True while a question is in flight. The Ask button greys out for that whole window (the
+   * maintainer wants it visible, not gone), but a greyed control still doing nothing when the
+   * D-pad lands on it is its own bug (measured 2026-09-05,
+   * docs/test-evidence/round35-CHECK-stop-press.json: Down from the question box landed the ring
+   * on it, then a second Down lost the ring entirely). `focusAskPrimary` and the box's own Down
+   * edge both read this so the greyed button never takes the ring from a D-pad move.
+   */
+  isAskInFlight: boolean = false,
 ) {
   /**
    * Into the Ask text field from another container (a preset chip, the help chip, the avatar).
@@ -164,6 +173,8 @@ export function useMainTabAskBarFocus(
   }, [refs.presetCarouselHostRef]);
 
   const focusAskPrimary = useCallback((): boolean => {
+    // Greyed while a question is in flight -- see the isAskInFlight doc comment above.
+    if (isAskInFlight) return false;
     const host =
       refs.askBarHostRef &&
       typeof refs.askBarHostRef === "object" &&
@@ -174,7 +185,7 @@ export function useMainTabAskBarFocus(
     if (!btn) return false;
     btn.focus();
     return true;
-  }, [refs.askBarHostRef]);
+  }, [refs.askBarHostRef, isAskInFlight]);
 
   const focusMicOrStop = useCallback((): boolean => {
     const host =
@@ -207,10 +218,17 @@ export function useMainTabAskBarFocus(
       ({
         onMoveUp: () => focusFirstPresetChip(),
         onMoveLeft: () => focusAttachPaperclip(),
-        onMoveDown: () => focusAskPrimary(),
+        onMoveDown: () => {
+          // The Ask button is greyed out while a question is in flight -- step over it rather
+          // than land the ring on a control that does nothing. Nothing else sits below it that
+          // this hook knows about, so the press holds the ring on the question box (returning
+          // `true` reports the press handled, so Steam does not go looking on its own).
+          if (isAskInFlight) return true;
+          return focusAskPrimary();
+        },
         onMoveRight: () => focusAskModeButton(),
       }) as Record<string, unknown>,
-    [focusAskPrimary, focusAttachPaperclip, focusFirstPresetChip, focusAskModeButton],
+    [focusAskPrimary, focusAttachPaperclip, focusFirstPresetChip, focusAskModeButton, isAskInFlight],
   );
 
   const avatarDeckNavHandlers = useMemo(

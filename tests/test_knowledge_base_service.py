@@ -47,6 +47,7 @@ from backend.services.knowledge_base_service import (
     VECTOR_RECALL_POOL_MARGIN,
 )
 from backend.services.compat_topic_router import match_compat_corpus_topics
+from backend.services.kb_not_in_notes_notice import should_show_no_close_match_notice
 from backend.services.ollama_embed_service import OllamaEmbedError
 from corpus_build_support import run_seed_build_or_skip
 
@@ -1831,6 +1832,50 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       pc_ip="",
     )
     self.assertNotIn("Gels", result.text_block)
+
+  def test_correctly_spelled_hades_boss_attaches_with_no_no_close_match_line(self):
+    """Roadmap: "A Hades boss's note is spelled wrong" -- the card was titled "Megara"
+
+    when the boss is Megaera. Asking about "Megaera" (spelled right) still found the card
+    through meaning search, but the keyword half never matched the misspelled title, and that
+    missing keyword support is exactly what makes `should_show_no_close_match_notice` tell a
+    person the plugin is guessing -- when it attached the right note all along. Once the title
+    itself reads "Megaera", the keyword half matches too and the false notice cannot fire.
+    """
+    settings = {
+      "use_local_knowledge_base": True,
+      "rag_corpus_path": str(SEED_DB.parent),
+    }
+    result = retrieve_knowledge_context(
+      settings,
+      ask_mode="strategy",
+      question="how do i beat Megaera",
+      app_id="1145360",
+      app_name="Hades",
+      text_resolved_title="",
+      domain="strategy",
+      pc_ip="",
+    )
+    self.assertTrue(result.attached)
+    self.assertIn("Megaera", result.text_block)
+    self.assertGreater(
+      result.top_card_keyword_score,
+      0.0,
+      "the keyword half must rank the card now that the title is spelled the way a person asks",
+    )
+
+    coverage = summarize_kb_coverage(settings, app_id="1145360", app_name="Hades")
+    self.assertEqual(coverage.status, "sections")
+    self.assertFalse(
+      should_show_no_close_match_notice(
+        ask_mode="strategy",
+        kb_attached=result.attached,
+        kb_coverage_status=coverage.status,
+        kb_domain="strategy",
+        kb_best_meaning=result.best_meaning,
+        kb_top_card_keyword_score=result.top_card_keyword_score,
+      )
+    )
 
   def test_troubleshooting_still_wins_over_a_title_named_in_the_question(self):
     """"How do I fix proton for portal 2" is a troubleshooting question that names a title."""

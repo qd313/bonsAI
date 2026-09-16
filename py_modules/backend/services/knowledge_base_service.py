@@ -243,7 +243,8 @@ VECTOR_RECALL_K = 3
 #                             Dreadnought Twins      0.5104
 #
 # Re-measuring the seven V2-PARA-* strategy rows from kb_eval_v2.json against their real
-# target cards on the same corpus found genuine hits as low as 0.4302 (Megara, already unrescued
+# target cards on the same corpus found genuine hits as low as 0.4302 (Megaera -- misspelled
+# "Megara" in the corpus at the time this was measured, fixed 2026-09-15 -- already unrescued
 # under 0.50) and as high as 0.6971, with one -- Mind Flayer, V2-PARA-S04 -- at 0.5169, just
 # above "one sentence"'s noise score. **No single floor separates all six noise phrases from
 # all seven genuine hits; the two ranges overlap, same finding as the original 2026-08-18

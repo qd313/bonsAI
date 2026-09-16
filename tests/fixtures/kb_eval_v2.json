@@ -3399,7 +3399,7 @@
       "skill_level": "",
       "input_style": "paraphrase",
       "note": "Folded in from kb_eval_paraphrase_v0.json 2026-08-22 under decision D23. paraphrase EVAL-S07",
-      "expect_section": "Megara"
+      "expect_section": "Megaera"
     },
     {
       "id": "V2-PARA-S08",

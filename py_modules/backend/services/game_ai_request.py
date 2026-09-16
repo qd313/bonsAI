@@ -522,6 +522,7 @@ async def run_game_ai_request(
                 kb_domain=kb_domain,
                 best_meaning=kb_result.best_meaning,
                 top_card_keyword_score=kb_result.top_card_keyword_score,
+                best_meaning_without_game_name=kb_result.best_meaning_without_game_name,
             )
 
         read_tdp = is_current_tdp_read_intent(question_for_model)
@@ -773,9 +774,10 @@ async def run_game_ai_request(
             # written -- they require nothing to have attached and this requires something to
             # have, so the three are mutually exclusive by construction.
             #
-            # HONESTY-TEXT-GAME-01 (plan 56 lane J): the three extra arguments below let the
-            # check catch a keyword score that only looks nonzero because the game's own name
-            # was typed as part of the question -- see kb_not_in_notes_notice.py's comment above
+            # HONESTY-TEXT-GAME-01 (plan 56 lane J, part two lane K): the extra arguments below
+            # let the check catch a keyword score, and separately a meaning score, that only
+            # look like a real match because the game's own name was typed as part of the
+            # question -- see kb_not_in_notes_notice.py's comment above
             # should_show_no_close_match_notice. They are filled in only when `text_resolved_title`
             # is the reason a game is in play at all, i.e. nothing was running and the question
             # named it (D19, just above) -- a running game's name is not the failure this guards,
@@ -802,6 +804,15 @@ async def run_game_ai_request(
                 question=close_match_question,
                 kb_game_name=close_match_game_name,
                 kb_source_titles=close_match_source_titles,
+                # HONESTY-TEXT-GAME-01, part two (plan 56 lane K): the meaning half of the same
+                # fix as the three arguments above. Also blank on every turn but the D19 one --
+                # `kb_best_meaning_without_game_name` is only ever filled in when
+                # `text_resolved_title` was set, so this reads the same None everywhere else and
+                # the ceiling check falls back to the raw score exactly as before this field
+                # existed.
+                kb_best_meaning_without_game_name=kb_transparency.get(
+                    "kb_best_meaning_without_game_name"
+                ),
             )
             response_text = append_not_in_notes_notice(response_text, show_not_in_notes)
             response_text = append_no_tip_for_this_notice(response_text, show_no_tip_for_this)

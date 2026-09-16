@@ -208,6 +208,7 @@ def build_knowledge_base_transparency(
     kb_domain: str = "",
     best_meaning: float | None = None,
     top_card_keyword_score: float = 0.0,
+    best_meaning_without_game_name: float | None = None,
 ) -> dict[str, Any]:
     """Collect one turn's knowledge-base facts into the dict the rest of the turn reads.
 
@@ -216,6 +217,11 @@ def build_knowledge_base_transparency(
     kb_not_in_notes_notice.should_show_no_close_match_notice for the one thing that reads them.
     ``best_meaning`` is None whenever the meaning half never ran, which is a different fact from
     a low score and must stay tellable apart from one.
+
+    ``best_meaning_without_game_name`` (HONESTY-TEXT-GAME-01, part two, plan 56 lane K) is the
+    same meaning score measured again with the resolved game's own name stripped out of the
+    question -- see KnowledgeRetrievalResult.best_meaning_without_game_name for when it is
+    filled in. None on every turn that predates this field, same reading as `best_meaning`.
     """
     return {
         "kb_attached": attached,
@@ -228,6 +234,7 @@ def build_knowledge_base_transparency(
         "kb_domain": str(kb_domain or ""),
         "kb_best_meaning": best_meaning,
         "kb_top_card_keyword_score": float(top_card_keyword_score or 0.0),
+        "kb_best_meaning_without_game_name": best_meaning_without_game_name,
     }
 
 

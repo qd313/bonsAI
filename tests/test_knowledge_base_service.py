@@ -20,6 +20,7 @@ from backend.services.knowledge_base_service import (
     EmbeddingDimensionMismatch,
     KnowledgeCard,
     _best_meaning_score,
+    _question_without_game_name,
     close_connection,
     kb_coverage_to_transparency,
     resolve_title_from_question,
@@ -1648,6 +1649,104 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     vectors = {1: [1.0, 0.0], 2: [0.0, 1.0], 3: [0.6, 0.8]}
     self.assertAlmostEqual(_best_meaning_score(vectors, [1.0, 0.0]), 1.0)
     self.assertIsNone(_best_meaning_score({}, [1.0, 0.0]))
+
+  def test_question_without_game_name_drops_both_words_of_a_two_word_title(self):
+    """HONESTY-TEXT-GAME-01, part two: "Black Mesa" strips both "black" and "mesa", leaving
+    the rest of the question -- filler words included -- in its original order."""
+    self.assertEqual(
+      _question_without_game_name("black mesa how do i tame a horse", "Black Mesa"),
+      "how do i tame a horse",
+    )
+
+  def test_question_without_game_name_is_none_when_nothing_is_left(self):
+    """A question that is only the game's own name has nothing left to measure a second
+    time -- the caller in retrieve_knowledge_context reads "" as "skip this, leave it None"."""
+    self.assertEqual(_question_without_game_name("Black Mesa", "Black Mesa"), "")
+
+  def test_best_meaning_without_game_name_is_measured_separately_from_the_raw_question(self):
+    """HONESTY-TEXT-GAME-01, part two (plan 56 lane K): when the game reached retrieval only
+    because the question named it, retrieve_knowledge_context embeds the question a second
+    time with the game's own name stripped out, against the same candidate pool -- so a game
+    name repeated in every one of its own cards can no longer be the only reason the meaning
+    score looks like a real match. Retrieval and which cards attach are untouched: only the
+    reported score differs between the two calls, controlled here by which text was embedded."""
+    settings = {
+      "use_local_knowledge_base": True,
+      "rag_corpus_path": str(SEED_DB.parent),
+    }
+    conn = _get_connection(str(SEED_DB))
+    ids = [
+      int(r[0])
+      for r in conn.execute("SELECT section_id FROM sections WHERE game_id = 2")
+    ]
+
+    def _fake_embed(pc_ip, texts, **kwargs):
+      # The raw call carries "galactic" (part of the resolved title); the stripped call does
+      # not. Returning a different unit vector for each lets the two best-meaning scores be
+      # told apart deterministically once dotted against the fixed pool below.
+      text = texts[0].lower()
+      if "galactic" in text:
+        return [[1.0, 0.0] + [0.0] * 766]
+      return [[0.0, 1.0] + [0.0] * 766]
+
+    with mock.patch(
+      "backend.services.knowledge_base_service.nomic_embed_available",
+      return_value=True,
+    ), mock.patch(
+      "backend.services.knowledge_base_service.corpus_has_usable_section_vectors",
+      return_value=True,
+    ), mock.patch(
+      "backend.services.knowledge_base_service.embed_texts",
+      side_effect=_fake_embed,
+    ), mock.patch(
+      "backend.services.knowledge_base_service._load_section_vectors",
+      return_value={sid: [0.6, 0.8] + [0.0] * 766 for sid in ids},
+    ):
+      result = retrieve_knowledge_context(
+        settings,
+        ask_mode="strategy",
+        question="Deep Rock Galactic Survivor Dreadnought weak point",
+        app_id="",
+        app_name="",
+        text_resolved_title="Deep Rock Galactic: Survivor",
+        domain="strategy",
+        pc_ip="127.0.0.1:11434",
+      )
+    self.assertTrue(result.attached)
+    self.assertAlmostEqual(result.best_meaning, 0.6)
+    self.assertAlmostEqual(result.best_meaning_without_game_name, 0.8)
+
+  def test_best_meaning_without_game_name_stays_none_without_a_text_resolved_title(self):
+    """A running game never fills this field in -- the raw question already is the real
+    question, there is nothing of the game's own name to strip out of it."""
+    settings = {
+      "use_local_knowledge_base": True,
+      "rag_corpus_path": str(SEED_DB.parent),
+    }
+    with mock.patch(
+      "backend.services.knowledge_base_service.nomic_embed_available",
+      return_value=True,
+    ), mock.patch(
+      "backend.services.knowledge_base_service.corpus_has_usable_section_vectors",
+      return_value=True,
+    ), mock.patch(
+      "backend.services.knowledge_base_service.embed_texts",
+      return_value=[[1.0, 0.0] + [0.0] * 766],
+    ), mock.patch(
+      "backend.services.knowledge_base_service._load_section_vectors",
+      return_value={3: [0.6, 0.8] + [0.0] * 766},
+    ):
+      result = retrieve_knowledge_context(
+        settings,
+        ask_mode="strategy",
+        question="Glyphid Dreadnought weak point",
+        app_id="2321470",
+        app_name="Deep Rock Galactic: Survivor",
+        domain="strategy",
+        pc_ip="127.0.0.1:11434",
+      )
+    self.assertIsNotNone(result.best_meaning)
+    self.assertIsNone(result.best_meaning_without_game_name)
 
   def test_compat_meaning_floor_blocks_a_below_floor_pool_end_to_end(self):
     """D87: a keyword/topic pool whose best meaning score never clears the floor attaches

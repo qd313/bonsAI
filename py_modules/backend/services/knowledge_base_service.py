@@ -128,6 +128,7 @@ from backend.services.compat_topic_router import (
     match_compat_corpus_topics,
     question_targets_compat_corpus,
 )
+from backend.services.kb_not_in_notes_notice import _content_words
 from backend.services.ollama_prompts import question_matches_troubleshooting_log_context
 
 HYBRID_FTS_SHORTLIST_K = 30
@@ -469,6 +470,15 @@ class KnowledgeRetrievalResult:
     # every turn of a Deck with no embed model, which is the opposite of what these are for.
     best_meaning: Optional[float] = None
     top_card_keyword_score: float = 0.0
+    # HONESTY-TEXT-GAME-01, part two (plan 56 lane K, 2026-09-16). Same cosine as
+    # `best_meaning`, measured a second time against the question with the resolved game's own
+    # name stripped out -- see `_question_without_game_name`. Filled in only when a game reached
+    # retrieval because the question named it (`text_resolved_title`, not a running game) and the
+    # meaning half ran; None otherwise, on the same "nothing was measured" reading `best_meaning`
+    # uses. should_show_no_close_match_notice reads this instead of `best_meaning` for its ceiling
+    # check whenever it is present, because a game's own name repeated in every one of its own
+    # cards can inflate the raw score but not this one.
+    best_meaning_without_game_name: Optional[float] = None
 
 
 def _budget_for_mode(ask_mode: str) -> tuple[int, int]:
@@ -905,6 +915,25 @@ def _best_meaning_score(
     if not vectors_by_id:
         return None
     return max(_dot_similarity(query_vector, vec) for vec in vectors_by_id.values())
+
+
+def _question_without_game_name(question: str, game_name: str) -> str:
+    """``question`` with every whole word of ``game_name`` removed, case-insensitively.
+
+    Tokenises with `_content_words` (kb_not_in_notes_notice.py) so "Black Mesa" strips both
+    "black" and "mesa" -- the same split that function already uses to decide whether a keyword
+    score reflects the question. Filler words in the question itself ("how", "do", "i", ...) are
+    left alone: this rebuilds what a person would still be asking if they had never typed the
+    game's name, not just its content words, because that is the sentence
+    `retrieve_knowledge_context` measures below. Returns "" when nothing of the question is left
+    (it was only the game's name), which the caller reads as "nothing to measure a second time".
+    """
+    name_words = _content_words(game_name)
+    if not name_words:
+        return question or ""
+    tokens = re.findall(r"[A-Za-z0-9']+", question or "")
+    remaining = [tok for tok in tokens if tok.lower() not in name_words]
+    return " ".join(remaining)
 
 
 def _load_compat_vectors(conn: sqlite3.Connection, pattern_ids: list[int]) -> dict[int, list[float]]:
@@ -1541,6 +1570,9 @@ def retrieve_knowledge_context(
     # The strongest cosine in the candidate pool for this turn, or None when the meaning half
     # never ran (see KnowledgeRetrievalResult.best_meaning for why the difference matters).
     best_meaning: Optional[float] = None
+    # Same, with the resolved game's own name stripped from the question first -- see
+    # KnowledgeRetrievalResult.best_meaning_without_game_name.
+    best_meaning_without_game_name: Optional[float] = None
     try:
         conn = _get_connection(db_path)
         t_resolve = time.perf_counter()
@@ -1743,6 +1775,31 @@ def retrieve_knowledge_context(
                 # STRATEGY_MEANING_FLOOR's comment for why a note it does not catch (four such
                 # sentences are named there) was left alone rather than pushed higher.
                 best_meaning = _best_meaning_score(vectors_by_id, query_vector)
+
+                # HONESTY-TEXT-GAME-01, part two (plan 56 lane K, 2026-09-16). Only when the
+                # game reached retrieval because the question named it -- a running game's own
+                # name in the question is not the failure this measures, see
+                # `_question_without_game_name` and `KnowledgeRetrievalResult` for the fuller
+                # account. Wrapped in its own try/except so a second embed call that fails
+                # (timeout, dimension mismatch) never touches retrieval or the primary score --
+                # it just leaves this at None, the same "nothing measured" reading everywhere
+                # else here.
+                if text_resolved_title and vectors_by_id:
+                    stripped_question = _question_without_game_name(question, text_resolved_title)
+                    if stripped_question:
+                        try:
+                            stripped_vectors = embed_texts(
+                                pc_ip,
+                                [format_embed_query(stripped_question, model=DEFAULT_EMBEDDING_MODEL)],
+                                model=DEFAULT_EMBEDDING_MODEL,
+                                timeout_s=3.0,
+                            )
+                            best_meaning_without_game_name = _best_meaning_score(
+                                vectors_by_id, stripped_vectors[0]
+                            )
+                        except (OllamaEmbedError, EmbeddingDimensionMismatch, IndexError, ValueError):
+                            best_meaning_without_game_name = None
+
                 meaning_floor = COMPAT_MEANING_FLOOR if domain == "compat" else STRATEGY_MEANING_FLOOR
                 meaning_floor_rejected = best_meaning is not None and best_meaning < meaning_floor
                 if meaning_floor_rejected:
@@ -1800,6 +1857,7 @@ def retrieve_knowledge_context(
                 notes=f"{no_hit_label} ({resolution})",
                 retrieval_method=retrieval_method,
                 best_meaning=best_meaning,
+                best_meaning_without_game_name=best_meaning_without_game_name,
                 timing_ms={
                     "resolve_ms": resolve_ms,
                     "fts_ms": fts_ms,
@@ -1816,6 +1874,7 @@ def retrieve_knowledge_context(
             notes=resolution,
             retrieval_method=retrieval_method,
             best_meaning=best_meaning,
+            best_meaning_without_game_name=best_meaning_without_game_name,
             # cards[0] is the winning card after fusion. Empty only on the fallback-card path,
             # where there is no winning card and so no keyword score to report.
             top_card_keyword_score=cards[0].bm25_score if cards else 0.0,

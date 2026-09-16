@@ -11,7 +11,12 @@ import { Focusable } from "@decky/ui";
 import { BonsaiChatSecondaryButton } from "../components/BonsaiChatSecondaryButton";
 import { RefreshArrowIcon } from "../components/icons";
 import { focusFirstAnswerChunk } from "./answerBubbleNavigation";
-import { isDeckDirectionLeftEvent, isDeckDirectionRightEvent, isDownDeckButtonEvent } from "./focusNavigation";
+import {
+  isDeckDirectionLeftEvent,
+  isDeckDirectionRightEvent,
+  isDownDeckButtonEvent,
+  isUpDeckButtonEvent,
+} from "./focusNavigation";
 import { focusRegisteredReplyStop } from "./replyStopRegistry";
 
 export type BuildTurnHeaderElementArgs = {
@@ -53,6 +58,16 @@ export type BuildTurnHeaderElementArgs = {
    * ring. The outer element never goes away, so the caller can refocus it once that happens.
    */
   headerRef?: (el: HTMLElement | null) => void;
+  /**
+   * Roadmap: "Up skips the answer sections and the chat slot row" — the archived-header half.
+   * With the archive expanded, Up from the FIRST archived header ran all the way to the tab bar
+   * and Decky's back button without the chat slot row ever taking the ring, though two Downs
+   * reach it normally (measured 2026-09-04, 18 presses). Only the caller knows which header is
+   * first, so this is opt-in: most headers get none and keep Steam's own default of moving to
+   * the sibling above. When set, it is tried on a real Up move; a header lower in the list never
+   * receives one, so it keeps landing on the header above it exactly as before.
+   */
+  onMoveUp?: () => boolean;
 };
 
 /** Plain function — header Focusable is a child of the turn-slot Focusable group. */
@@ -69,6 +84,7 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
     titleRef,
     titleOverflowing = false,
     headerRef,
+    onMoveUp,
   } = args;
 
   const headerClass = [
@@ -98,11 +114,19 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
    * deliver, with the string-only predicate so one press can never fire both — the pairing rule
    * documented in focusNavigation.ts.
    */
-  const headerNavHandlers = {
+  const headerNavHandlers: Record<string, unknown> = {
     onMoveDown: () => focusAnswer(),
-    onButtonDown: (button: unknown) =>
-      isDownDeckButtonEvent(button) ? focusAnswer() : false,
-  } as Record<string, unknown>;
+    onButtonDown: (button: unknown) => {
+      if (isDownDeckButtonEvent(button)) return focusAnswer();
+      if (onMoveUp && isUpDeckButtonEvent(button)) return onMoveUp();
+      return false;
+    },
+  };
+  /*
+   * Only handed to the first archived header (MainTabChatTranscript.tsx) — every other header
+   * gets none here and keeps Steam's own default Up, onto the sibling header above it.
+   */
+  if (onMoveUp) headerNavHandlers.onMoveUp = () => onMoveUp();
 
   const titleClassName = [
     "bonsai-chat-turn-row-title",

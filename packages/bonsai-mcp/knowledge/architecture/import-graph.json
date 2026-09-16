@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 393,
-  "edgeCount": 985,
+  "fileCount": 394,
+  "edgeCount": 987,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -327,6 +327,13 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTabChatTranscript.firstArchivedHeaderMoveUp.test.ts": {
+      "imports": [
+        "src/components/MainTabChatTranscript.tsx",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx": {
       "imports": [
         "src/components/MainTabChatTranscript.tsx",
@@ -434,6 +441,7 @@
         "src/components/MainTabChatTranscript.earlierPill.test.tsx",
         "src/components/MainTabChatTranscript.earlierPillLeftNav.test.ts",
         "src/components/MainTabChatTranscript.emptySlotPreview.test.tsx",
+        "src/components/MainTabChatTranscript.firstArchivedHeaderMoveUp.test.ts",
         "src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx",
         "src/components/MainTabChatTranscript.permissionHintFocus.test.ts",
         "src/components/MainTabChatTranscript.questionFade.test.tsx",
@@ -3640,6 +3648,7 @@
     "src/utils/navFocusRegistry.ts": {
       "imports": [],
       "importedBy": [
+        "src/components/MainTabChatTranscript.firstArchivedHeaderMoveUp.test.ts",
         "src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx",
         "src/components/MainTabChatTranscript.permissionHintFocus.test.ts",
         "src/components/MainTabChatTranscript.tsx",

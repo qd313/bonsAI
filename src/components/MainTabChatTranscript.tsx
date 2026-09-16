@@ -269,6 +269,21 @@ export function earlierPillLeftNavHandlers(): Record<string, unknown> {
   };
 }
 
+/**
+ * Roadmap: "Up skips the answer sections and the chat slot row" — the archived-header half. With
+ * the archive expanded, Up from the FIRST archived header ran 18 presses to the tab bar and
+ * Decky's back button without the chat slot row ever taking the ring, though two Downs reach it
+ * normally (measured 2026-09-04). `turnIndex` is only 0 for the header that genuinely has nothing
+ * rendered above it in the transcript — when the "N earlier" pill hides the earlier turns, the
+ * first VISIBLE header's `turnIndex` is `archivedRenderOffset` instead, so this stays undefined
+ * for it and Up keeps its ordinary default there (onto the pill row, its real sibling above).
+ * Every other header also gets undefined, so Up on those still lands on the header above them —
+ * same shape as the preset chips' `exitUp` (MainTabPresetAnimatedChips.tsx).
+ */
+export function firstArchivedHeaderMoveUp(turnIndex: number): (() => boolean) | undefined {
+  return turnIndex === 0 ? () => takeNavFocus("chat-slot-row") : undefined;
+}
+
 /*
  * In: MainTabChatTranscriptProps — the live question and answer text (or the
  * streaming preview of it), the finished-turn history, which turn is
@@ -909,6 +924,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
               headerRef: (el: HTMLElement | null) => {
                 turnHeaderElRefs.current[turn.id] = el;
               },
+              onMoveUp: firstArchivedHeaderMoveUp(turnIndex),
               onActivate: () => onTurnActivate?.(turn.id),
               /*
                * Retry rides on the newest question's bubble now (D77) instead of the row under the

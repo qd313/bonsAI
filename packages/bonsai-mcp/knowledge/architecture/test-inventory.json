@@ -14,6 +14,7 @@
     "src/components/MainTabChatTranscript.earlierPill.test.tsx",
     "src/components/MainTabChatTranscript.earlierPillLeftNav.test.ts",
     "src/components/MainTabChatTranscript.emptySlotPreview.test.tsx",
+    "src/components/MainTabChatTranscript.firstArchivedHeaderMoveUp.test.ts",
     "src/components/MainTabChatTranscript.permHintNavRegistration.test.tsx",
     "src/components/MainTabChatTranscript.permissionHintFocus.test.ts",
     "src/components/MainTabChatTranscript.questionFade.test.tsx",

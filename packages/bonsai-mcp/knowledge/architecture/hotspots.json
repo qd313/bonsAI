@@ -41,13 +41,13 @@
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/voice_transcription_service.py",
-      "lines": 1422,
+      "path": "src/components/MainTabChatTranscript.tsx",
+      "lines": 1436,
       "role": ""
     },
     {
-      "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1420,
+      "path": "py_modules/backend/services/voice_transcription_service.py",
+      "lines": 1422,
       "role": ""
     },
     {

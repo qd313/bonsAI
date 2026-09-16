@@ -19,12 +19,13 @@ vi.mock("./answerBubbleNavigation", () => ({
 
 const mockedFocusFirstAnswerChunk = vi.mocked(focusFirstAnswerChunk);
 
-function headerProps(expanded: boolean) {
+function headerProps(expanded: boolean, over: Record<string, unknown> = {}) {
   const el = buildTurnHeaderElement({
     turnId: "turn-1",
     title: "a question",
     expanded,
     onActivate: () => {},
+    ...over,
   });
   return el.props as Record<string, unknown>;
 }
@@ -63,6 +64,45 @@ describe("turn header D-pad Down", () => {
 
     expect(onButtonDown("ArrowDown")).toBe(true);
     expect(mockedFocusFirstAnswerChunk).toHaveBeenCalledWith("turn-1");
+  });
+});
+
+/*
+ * Roadmap: "Up skips the answer sections and the chat slot row" (archived-header half). Only the
+ * caller (MainTabChatTranscript.tsx) knows which header is first, so `onMoveUp` is opt-in — most
+ * headers get none, and this pins that the plumbing carries whichever one is supplied.
+ */
+describe("turn header D-pad Up (opt-in)", () => {
+  it("carries no onMoveUp prop when the caller supplies none", () => {
+    expect(headerProps(true).onMoveUp).toBeUndefined();
+  });
+
+  it("calls the supplied onMoveUp on a real D-pad move", () => {
+    const onMoveUpImpl = vi.fn(() => true);
+    const onMoveUp = headerProps(true, { onMoveUp: onMoveUpImpl }).onMoveUp as () => boolean;
+
+    expect(onMoveUp()).toBe(true);
+    expect(onMoveUpImpl).toHaveBeenCalledTimes(1);
+  });
+
+  it("still calls it on a string-shaped Up press, which desktop keyboards deliver", () => {
+    const onMoveUpImpl = vi.fn(() => true);
+    const onButtonDown = headerProps(true, { onMoveUp: onMoveUpImpl }).onButtonDown as (
+      b: unknown
+    ) => boolean;
+
+    expect(onButtonDown("ArrowUp")).toBe(true);
+    expect(onMoveUpImpl).toHaveBeenCalledTimes(1);
+  });
+
+  it("does not double-step: a GamepadEvent direction on onButtonDown is a no-op even with onMoveUp set", () => {
+    const onMoveUpImpl = vi.fn(() => true);
+    const onButtonDown = headerProps(true, { onMoveUp: onMoveUpImpl }).onButtonDown as (
+      b: unknown
+    ) => boolean;
+
+    expect(onButtonDown({ type: "gamepadbuttondown", detail: { button: 9 } })).toBe(false);
+    expect(onMoveUpImpl).not.toHaveBeenCalled();
   });
 });
 

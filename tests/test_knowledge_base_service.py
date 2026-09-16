@@ -3,6 +3,7 @@ import os
 import subprocess
 import sys
 import unittest
+from contextlib import contextmanager
 from pathlib import Path
 from unittest import mock
 
@@ -61,6 +62,27 @@ SEED_DB = REPO_ROOT / "build" / "knowledge-base-test" / "corpus.db"
 def _ensure_seed_db() -> None:
     SEED_DB.parent.mkdir(parents=True, exist_ok=True)
     run_seed_build_or_skip(REPO_ROOT, SEED_DB.parent)
+
+
+@contextmanager
+def _hybrid_hooked(embed_texts_kwargs, section_vectors):
+    """The four mock.patch calls that turn retrieve_knowledge_context onto the hybrid path with
+    a fixed vector pool -- shared by the two best-meaning-without-game-name tests below (each
+    only varies how embed_texts responds and what the vector pool looks like)."""
+    with mock.patch(
+        "backend.services.knowledge_base_service.nomic_embed_available",
+        return_value=True,
+    ), mock.patch(
+        "backend.services.knowledge_base_service.corpus_has_usable_section_vectors",
+        return_value=True,
+    ), mock.patch(
+        "backend.services.knowledge_base_service.embed_texts",
+        **embed_texts_kwargs,
+    ), mock.patch(
+        "backend.services.knowledge_base_service._load_section_vectors",
+        return_value=section_vectors,
+    ):
+        yield
 
 
 class KnowledgeBaseServiceTests(unittest.TestCase):
@@ -1689,18 +1711,9 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
         return [[1.0, 0.0] + [0.0] * 766]
       return [[0.0, 1.0] + [0.0] * 766]
 
-    with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
-      return_value=True,
-    ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_section_vectors",
-      return_value=True,
-    ), mock.patch(
-      "backend.services.knowledge_base_service.embed_texts",
-      side_effect=_fake_embed,
-    ), mock.patch(
-      "backend.services.knowledge_base_service._load_section_vectors",
-      return_value={sid: [0.6, 0.8] + [0.0] * 766 for sid in ids},
+    with _hybrid_hooked(
+      {"side_effect": _fake_embed},
+      {sid: [0.6, 0.8] + [0.0] * 766 for sid in ids},
     ):
       result = retrieve_knowledge_context(
         settings,
@@ -1723,18 +1736,9 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
       "use_local_knowledge_base": True,
       "rag_corpus_path": str(SEED_DB.parent),
     }
-    with mock.patch(
-      "backend.services.knowledge_base_service.nomic_embed_available",
-      return_value=True,
-    ), mock.patch(
-      "backend.services.knowledge_base_service.corpus_has_usable_section_vectors",
-      return_value=True,
-    ), mock.patch(
-      "backend.services.knowledge_base_service.embed_texts",
-      return_value=[[1.0, 0.0] + [0.0] * 766],
-    ), mock.patch(
-      "backend.services.knowledge_base_service._load_section_vectors",
-      return_value={3: [0.6, 0.8] + [0.0] * 766},
+    with _hybrid_hooked(
+      {"return_value": [[1.0, 0.0] + [0.0] * 766]},
+      {3: [0.6, 0.8] + [0.0] * 766},
     ):
       result = retrieve_knowledge_context(
         settings,

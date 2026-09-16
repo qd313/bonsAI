@@ -194,6 +194,27 @@ type ConnectionTestResult = {
   error?: string;
 };
 
+/**
+ * Which of the requested tags the Ollama registry does not actually publish.
+ *
+ * `pull_ollama_models` (`main.py:_start_custom_ollama_pull`) already runs this exact check on the
+ * back end before starting anything, but when the request mixes good and bad names it starts the
+ * good ones and only logs the bad ones -- the screen used to say "Pull started" for every name
+ * with no sign one was dropped. Running the same live-registry lookup here first means the queued
+ * "Pull selected" request can leave the bad name out and say so, instead of the person finding out
+ * only when that model is never there to use. Mirrors `partition_pull_tags_by_registry`
+ * (`ollama_catalog_service.py`): a tag missing from the response, or without `exists: true`, counts
+ * as unavailable; an offline check (no live source) cannot tell either way, so nothing is flagged.
+ */
+export function findUnavailableRegistryTags(
+  tags: string[],
+  meta: CatalogMetadataResponse | null | undefined
+): string[] {
+  if (!meta || meta.source !== "live") return [];
+  const tagMeta = meta.tags ?? {};
+  return tags.filter((tag) => tagMeta[tag]?.exists !== true);
+}
+
 type VisibleCatalogRow = { kind: "catalog"; entry: PullModelEntry; group: PullModelGroup };
 type VisibleOtherRow = { kind: "other"; tag: string };
 type VisibleTableRow = VisibleCatalogRow | VisibleOtherRow;
@@ -900,16 +921,45 @@ export function PullModelsModal(props: PullModelsModalProps) {
       setPullBusy(true);
       try {
         const tags = [...selectedTags];
+
+        // Check the registry for the exact names about to be sent, so a bad one (a typo in a
+        // catalog update, most likely -- the checkboxes only ever queue real catalog tags) is
+        // caught and named here rather than dropped silently by the back end. A failed check
+        // must not block a pull that would otherwise work; it just skips the warning.
+        let unavailable: string[] = [];
+        try {
+          const meta = await callDeckyWithTimeout<[string[]], CatalogMetadataResponse>(
+            "fetch_ollama_catalog_metadata",
+            [tags],
+            DECKY_RPC_TIMEOUT_MS
+          );
+          unavailable = findUnavailableRegistryTags(tags, meta);
+        } catch {
+          unavailable = [];
+        }
+        const toPull = unavailable.length ? tags.filter((t) => !unavailable.includes(t)) : tags;
+
+        if (toPull.length === 0) {
+          toaster.toast({
+            title: "Could not find",
+            body: unavailable.join(", "),
+            duration: 6000,
+          });
+          return;
+        }
+
         const res = await callDeckyWithTimeout<[string[]], { accepted?: boolean; reason?: string }>(
           "pull_ollama_models",
-          [tags],
+          [toPull],
           DECKY_RPC_TIMEOUT_MS
         );
         if (res.accepted) {
           toaster.toast({
             title: "Pull started",
-            body: `${tags.length} model(s) — watch progress in Settings.`,
-            duration: 5000,
+            body: unavailable.length
+              ? `${toPull.length} model(s) — watch progress in Settings. Could not find: ${unavailable.join(", ")}`
+              : `${tags.length} model(s) — watch progress in Settings.`,
+            duration: unavailable.length ? 8000 : 5000,
           });
           onPullAccepted();
         } else {

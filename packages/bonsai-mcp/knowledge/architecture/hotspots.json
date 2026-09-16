@@ -26,13 +26,13 @@
       "role": ""
     },
     {
-      "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
-      "lines": 1528,
+      "path": "src/components/PullModelsModal.tsx",
+      "lines": 1529,
       "role": ""
     },
     {
-      "path": "src/components/PullModelsModal.tsx",
-      "lines": 1479,
+      "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
+      "lines": 1528,
       "role": ""
     },
     {

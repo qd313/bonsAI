@@ -15,6 +15,7 @@ import { toaster } from "@decky/api";
 import {
   PullModelsModal,
   computeUpdatedPullRecord,
+  findUnavailableRegistryTags,
   isRecentPullModelTag,
   PULL_MODEL_NEW_BADGE_STORAGE_KEY,
   PULL_MODEL_NEW_BADGE_WINDOW_MS,
@@ -144,6 +145,111 @@ describe("PullModelsModal custom tag entry", () => {
     const btn = container.querySelector('[aria-label="Pull custom model tag"]') as HTMLButtonElement;
     expect(btn).not.toBeNull();
     expect(btn.disabled).toBe(true);
+  });
+});
+
+describe("findUnavailableRegistryTags", () => {
+  it("flags nothing when the check could not reach the registry (offline)", () => {
+    expect(findUnavailableRegistryTags(["qwen2.5vl:3b"], { source: "offline", tags: {} })).toEqual([]);
+    expect(findUnavailableRegistryTags(["qwen2.5vl:3b"], null)).toEqual([]);
+  });
+
+  it("flags a live-checked tag the registry does not publish", () => {
+    const meta = { source: "live" as const, tags: { "made-up-model:latest": { exists: false } } };
+    expect(findUnavailableRegistryTags(["made-up-model:latest"], meta)).toEqual(["made-up-model:latest"]);
+  });
+
+  it("does not flag a live-checked tag the registry confirms exists", () => {
+    const meta = { source: "live" as const, tags: { "qwen2.5vl:3b": { exists: true, size_bytes: 3_200_000_000 } } };
+    expect(findUnavailableRegistryTags(["qwen2.5vl:3b"], meta)).toEqual([]);
+  });
+
+  it("flags a tag missing from the live response entirely, same as the back end's own check", () => {
+    const meta = { source: "live" as const, tags: {} };
+    expect(findUnavailableRegistryTags(["untested-tag"], meta)).toEqual(["untested-tag"]);
+  });
+});
+
+describe("PullModelsModal 'Pull selected' names a tag the registry does not have", () => {
+  function selectByLabel(container: HTMLElement, label: string) {
+    const btn = container.querySelector(`[aria-label="${label}"]`) as HTMLButtonElement;
+    expect(btn).not.toBeNull();
+    fireEvent.click(btn);
+  }
+
+  it("starts the pull without the missing name and says which one it could not find", async () => {
+    setRpcHandler("fetch_ollama_catalog_metadata", () => ({
+      source: "live",
+      tags: {
+        "qwen2.5vl:3b": { exists: true, size_bytes: 3_200_000_000 },
+        "qwen3.5:4b": { exists: false },
+      },
+    }));
+
+    let footerState: { okText: string; onOk: () => void; okDisabled: boolean } | null = null;
+    const { container } = renderModal({
+      onFooterStateChange: (state) => {
+        footerState = state;
+      },
+    });
+
+    selectByLabel(container, "Select qwen2.5vl:3b to pull");
+    selectByLabel(container, "Select qwen3.5:4b to pull");
+
+    await waitFor(() => {
+      expect(footerState?.okDisabled).toBe(false);
+    });
+
+    footerState!.onOk();
+
+    await waitFor(() => {
+      const pullCall = getRpcCallLog().find((c) => c.method === "pull_ollama_models");
+      expect(pullCall).toBeTruthy();
+      expect(pullCall?.args[0]).toEqual(["qwen2.5vl:3b"]);
+    });
+
+    expect(toaster.toast).toHaveBeenCalledWith(
+      expect.objectContaining({
+        title: "Pull started",
+        body: expect.stringContaining("Could not find: qwen3.5:4b"),
+      })
+    );
+  });
+
+  it("pulls every selected tag with no mention of a missing one when the registry confirms them all", async () => {
+    setRpcHandler("fetch_ollama_catalog_metadata", () => ({
+      source: "live",
+      tags: {
+        "qwen2.5vl:3b": { exists: true, size_bytes: 3_200_000_000 },
+        "qwen3.5:4b": { exists: true, size_bytes: 3_400_000_000 },
+      },
+    }));
+
+    let footerState: { okText: string; onOk: () => void; okDisabled: boolean } | null = null;
+    const { container } = renderModal({
+      onFooterStateChange: (state) => {
+        footerState = state;
+      },
+    });
+
+    selectByLabel(container, "Select qwen2.5vl:3b to pull");
+    selectByLabel(container, "Select qwen3.5:4b to pull");
+
+    await waitFor(() => {
+      expect(footerState?.okDisabled).toBe(false);
+    });
+
+    footerState!.onOk();
+
+    await waitFor(() => {
+      const pullCall = getRpcCallLog().find((c) => c.method === "pull_ollama_models");
+      expect(pullCall).toBeTruthy();
+      expect(pullCall?.args[0]).toEqual(["qwen2.5vl:3b", "qwen3.5:4b"]);
+    });
+
+    expect(toaster.toast).not.toHaveBeenCalledWith(
+      expect.objectContaining({ body: expect.stringContaining("Could not find") })
+    );
   });
 });
 

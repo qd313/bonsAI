@@ -115,6 +115,7 @@
     "src/utils/liveTurnFocusGraph.test.ts",
     "src/utils/localOnlyAskCommands.test.ts",
     "src/utils/mergePullModelCatalog.test.ts",
+    "src/utils/modelRoutingOrder.test.ts",
     "src/utils/navFocusRegistry.remount.test.ts",
     "src/utils/navFocusRegistry.test.ts",
     "src/utils/permissionDeepLink.test.ts",

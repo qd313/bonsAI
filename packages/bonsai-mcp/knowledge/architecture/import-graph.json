@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 386,
-  "edgeCount": 968,
+  "fileCount": 387,
+  "edgeCount": 970,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -543,6 +543,7 @@
     "src/components/ModelRoutingOrderModal.test.tsx": {
       "imports": [
         "src/components/ModelRoutingOrderModal.tsx",
+        "src/data/pullModelCatalog.ts",
         "src/utils/navFocusRegistry.ts",
         "src/utils/uiDocument.ts"
       ],
@@ -1221,6 +1222,7 @@
     "src/data/pullModelCatalog.ts": {
       "imports": [],
       "importedBy": [
+        "src/components/ModelRoutingOrderModal.test.tsx",
         "src/components/ModelRoutingOrderModal.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/components/PullModelsModal.tsx",
@@ -3548,13 +3550,20 @@
         "src/utils/mergePullModelCatalog.test.ts"
       ]
     },
+    "src/utils/modelRoutingOrder.test.ts": {
+      "imports": [
+        "src/utils/modelRoutingOrder.ts"
+      ],
+      "importedBy": []
+    },
     "src/utils/modelRoutingOrder.ts": {
       "imports": [
         "src/data/modelPolicy.ts",
         "src/data/pullModelCatalog.ts"
       ],
       "importedBy": [
-        "src/components/ModelRoutingOrderModal.tsx"
+        "src/components/ModelRoutingOrderModal.tsx",
+        "src/utils/modelRoutingOrder.test.ts"
       ]
     },
     "src/utils/navFocusRegistry.remount.test.ts": {

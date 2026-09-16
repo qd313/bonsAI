@@ -453,8 +453,12 @@ export function PullModelsModal(props: PullModelsModalProps) {
       if (fossOnly && entry.licenseClass !== "foss") return false;
       if (!entryMatchesFilter(entry, filterId)) return false;
       if (installedOnly && !isTagInstalled(entry.tag, installedTags)) return false;
+      // Essentials only ON: show just the essentials group. OFF: show everything else,
+      // stretch (Expert large) included -- it used to be dropped here too, through a
+      // second "daily driver" check that excluded it in both toggle states, so the
+      // Expert group could never be shown at all (found while wiring its bake-off order,
+      // docs/planning/41-deck-model-survey.md § 9, D73).
       if (essentialsOnly && !isDeckEssentialsPullModel(entry)) return false;
-      if (!essentialsOnly && !isDeckDailyPullModel(entry)) return false;
       return true;
     });
   }, [filterId, fossOnly, installedOnly, essentialsOnly, installedTags, mergedCatalog]);
@@ -1121,7 +1125,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
       "bonsai-pullmodels-table-row",
       "bonsai-pullmodels-table-row--data",
       installed ? "bonsai-pullmodels-table-row--installed" : "",
-      entry.group === "stretch" ? "bonsai-pullmodels-table-row--stretch" : "",
+      isDeckDailyPullModel(entry) ? "" : "bonsai-pullmodels-table-row--stretch",
     ]
       .filter(Boolean)
       .join(" ");

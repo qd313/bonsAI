@@ -395,3 +395,22 @@ describe("PullModelsModal 'New' badge", () => {
     expect(container.querySelector(".bonsai-pullmodels-new-badge")).toBeNull();
   });
 });
+
+describe("PullModelsModal Expert (large) group visibility", () => {
+  it("shows the Expert (large) group, stretch entries included, once Essentials only is off", async () => {
+    // Found while wiring the Expert group's bake-off order (docs/planning/41-deck-model-survey.md
+    // § 9, D73): filteredCatalog dropped every "stretch" entry no matter how the Essentials-only
+    // toggle was set -- toggle on excluded anything that was not "essentials", toggle off excluded
+    // anything that was not "daily", and "daily" itself meant "not stretch". No setting could ever
+    // show the group at all.
+    setInstalledModels([]);
+    const { container } = renderModal();
+    showAllGroups(container);
+
+    await waitFor(() => {
+      expect(container.textContent).toContain("Expert (large)");
+    });
+    expect(container.querySelector('[aria-label="Select gemma4:12b-it-qat to pull"]')).not.toBeNull();
+    expect(container.querySelector('[aria-label="Select qwen2.5:14b to pull"]')).not.toBeNull();
+  });
+});

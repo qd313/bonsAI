@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 400,
-  "edgeCount": 1010,
+  "fileCount": 401,
+  "edgeCount": 1013,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -554,6 +554,14 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTabUnifiedAskBar.settingsCardChipsUnreachable.test.tsx": {
+      "imports": [
+        "src/components/MainTabUnifiedAskBar.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabUnifiedAskBar.settingsCardDpad.test.tsx": {
       "imports": [
         "src/components/MainTabUnifiedAskBar.tsx",
@@ -591,6 +599,7 @@
       "importedBy": [
         "src/components/MainTab.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
+        "src/components/MainTabUnifiedAskBar.settingsCardChipsUnreachable.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardDpad.test.tsx",
         "src/components/MainTabUnifiedAskBar.test.tsx"
       ]
@@ -2779,6 +2788,7 @@
         "src/components/MainTabChatTranscript.strategyPanels.test.tsx",
         "src/components/MainTabChatTranscript.turnTitle.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
+        "src/components/MainTabUnifiedAskBar.settingsCardChipsUnreachable.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardDpad.test.tsx",
         "src/components/MainTabUnifiedAskBar.test.tsx",
         "src/components/PermissionDenyAction.test.tsx",
@@ -3728,6 +3738,7 @@
         "src/components/MainTabPresetAnimatedChips.test.tsx",
         "src/components/MainTabPresetAnimatedChips.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCard.test.tsx",
+        "src/components/MainTabUnifiedAskBar.settingsCardChipsUnreachable.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardDpad.test.tsx",
         "src/components/MainTabUnifiedAskBar.test.tsx",
         "src/components/MainTabUnifiedAskBar.tsx",

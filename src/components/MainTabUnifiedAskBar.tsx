@@ -694,6 +694,16 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
               focusUnifiedTextField();
             }}
           >
+            {/*
+              avatarDeckNavHandlers never defines its own onMoveUp -- ordinarily Up out of the
+              avatar is left to Steam's own spatial nav, which reaches the preset chip row sitting
+              above the whole Ask bar. That is exactly the escape hatch plan 45 step 4 / plan 56
+              lane E2 closes while the settings-results card is open: without an explicit handler
+              here Up would slip past the card entirely (the box's own Up override next to
+              unifiedInputDeckNavHandlers only catches the OTHER way into the chips). Sends the
+              ring into the card the same way the box does, and only while there is a card to send
+              it into.
+            */}
             <Focusable
               className="bonsai-ai-character-avatar"
               aria-label={
@@ -702,6 +712,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
                   : "Choose AI character"
               }
               {...avatarDeckNavHandlers}
+              {...(showSettingsCard ? { onMoveUp: () => focusSettingsCardLastRow() } : {})}
               onClick={() => onOpenCharacterPicker?.()}
               onActivate={() => {
                 onOpenCharacterPicker?.();

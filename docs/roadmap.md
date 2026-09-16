@@ -83,23 +83,27 @@ starts work outside this.
   on Retry — but Up from Retry does not go back to the answer's last section the way it should. The one-line
   fix belongs in the turn header code, not in the files the lane that found it was allowed to touch. No device
   evidence yet.
-- ★ `[focus]` **Left from the Ask button, and from the paperclip, hands the highlight to Steam's Quick Access
-  rail** — **OPEN, measured 2026-09-15 evening.** With the ring on the Ask button, or on the paperclip in the
-  question box's corner, Left moves the ring onto Steam's own Quick Access tab instead of keeping it in the
-  plugin; Right brings it back, but nothing says so. Same shape as the row above: the control does not claim
-  the press, so Steam's own idea of "past the edge" fires. Evidence
+- ★ `[focus]` **Left from the Ask button, the paperclip, or an answer paragraph hands the highlight to Steam's
+  Quick Access rail** — **OPEN, measured 2026-09-15 evening and 2026-09-16.** With the ring on the Ask button,
+  on the paperclip in the question box's corner, or on a paragraph inside a reply, Left moves the ring onto
+  Steam's own Quick Access tab instead of keeping it in the plugin; Right brings it back, but nothing says so.
+  Same shape as the row above: the control does not claim the press, so Steam's own idea of "past the edge"
+  fires. Evidence
   `docs/test-evidence/plan55-trap-run3-new-chat-with-live-turn.json` (the Ask button, steps 2 and 3),
-  `docs/test-evidence/plan55-trap-run5-empty-chat-session-row-hades-running.json` (the paperclip, steps 3 and 4).
+  `docs/test-evidence/plan55-trap-run5-empty-chat-session-row-hades-running.json` (the paperclip, steps 3 and
+  4), `docs/test-evidence/plan56-GREYED-STEP-OVER-01-thumbs.json` (an answer paragraph, steps 4 and 5).
+- ★ `[focus]` **With the thumbs greyed on a stopped reply, the ring still lands on them instead of stepping
+  over** — **OPEN, measured 2026-09-16 on build 0fbecb6, both directions.** Plan 55's fix for this (lane D)
+  does not hold: from above, Up from Read aloud still lands on the greyed Helpful button; from below, the
+  first Down from the answer's last paragraph does nothing and the second lands on the greyed Helpful button
+  rather than Retry. Evidence `docs/test-evidence/plan56-GREYED-STEP-OVER-01-thumbs.json`,
+  `docs/test-evidence/plan56-GREYED-STEP-OVER-01-thumbs.summary.json`.
 - ★ `[focus]` **Down does not move the ring off an unrevealed spoiler block** — **OPEN, found 2026-09-04, did not reproduce
   2026-09-05.** With the ring on the hidden block, Down reported the press arriving and nothing moving. Retried today on a fresh
   Red Dead ending reply with a real hidden block on screen: **Down left it normally**, straight onto the branch picker's first
   button, and every stop on the walk was fully visible. So the hidden state does not trap on its own. Most likely the same
   underlying fault as the stuck panel below — both are a hop that dies only sometimes — and best closed with it rather than
   chased separately. Evidence `docs/test-evidence/round35-spoiler-block-down-and-up.json`.
-- ★ `[focus]` **Choosing an entry in the Ask-mode menu drops the highlight** — **OPEN, seen 2026-09-15 on
-  build f34de8a while switching modes for the checking pass.** After picking a mode such as Strategy or
-  Speed, the ring is nowhere in the plugin until the D-pad is pressed again. No evidence file yet;
-  reproduce first.
 - ★ `[layout]` **An open question's row is only partly visible behind the Retry corner icon** — **OPEN,
   seen at every visit 2026-09-15 evening.** With the newest turn open, the ring on the question's inner row
   reads 67% visible, covered by the Retry same-prompt icon in the corner. Evidence
@@ -122,13 +126,19 @@ starts work outside this.
   chat row visits Retry, the "…" question, Copy reply text and Read aloud under the New chat slot).
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a
   blanket rule was tried and reverted in favour of Steam's native outline.
-- ★★ `[focus]` **In a Deep Rock reply with glossary words, Down loops inside the reply and never reaches Show
-  details or Ask** — **OPEN, measured 2026-09-15 on build f34de8a, on a restored history turn.** Down walked
-  Retry corner, the question row, the answer, a glossary word, another glossary word, then back to the Retry
-  corner — twenty presses, the same five stops, no escape. Show details, Read aloud, the chips, the question
-  box and Ask are all below and none was reached. **Likely cause:** a glossary word is its own focus stop, and
-  a direction press closes its popup and falls through to Steam's own geometry, which wraps back to the top of
-  the turn instead of moving on. Evidence `docs/test-evidence/plan55-BUG-drg-glossary-down-cycle.json`.
+- ★★ `[focus]` **Down loops inside a saved chat's reopened reply and never reaches Show details or Ask** —
+  **OPEN, measured 2026-09-16 on build 0fbecb6, on a plain Portal 2 reply with no glossary words.** The loop
+  is not about glossary words: it happens on any saved chat's expanded reply. Down from the last paragraph
+  walks five stops on repeat — the Retry corner, the question row, and the paragraphs — and never reaches
+  Show details, Read aloud, the chips, the question box or Ask. Folding the reply away first, with A on the
+  question, frees the walk: Down then leaves the transcript normally in four presses. **The cause is the
+  reopened (restored) chat turn, not the glossary** — its last answer stop does not hand Down onward the way
+  a live turn's does, so the press falls through to Steam's own geometry and wraps back to the top. **It
+  comes back every time the tab is switched, because the turn re-expands.** Evidence
+  `docs/test-evidence/plan55-BUG-drg-glossary-down-cycle.json`,
+  `docs/test-evidence/plan56-BUG-restored-turn-down-loop.json`,
+  `docs/test-evidence/plan56-BUG-down-walk-portal2-reply.json`,
+  `docs/test-evidence/plan56-BUG-down-walk-after-collapse.json`.
 - ★★ `[reply]` **Token streaming reveals text in bursts while a game is running** — **ACCEPTED 2026-09-04 (D58 #4).** Measured 2026-08-28 with
   a game running: tokens arrive in bursts, and during a burst the overlay drops to 47 fps; between bursts it is a flat 60. Delivery
   is bursty, painting is not slow. The game's own frame rate is unmeasured. Accepted as a nice-to-have; reopen only if the game's own frame rate is measured
@@ -253,15 +263,11 @@ replace it with a specific issue when one exists.
   on, stop, next. One setting, off by default. The middle position of the Voice replies setting (D99) is the signal this
   hangs off: an answer to a spoken question is read out, then the mic reopens. [Plan](planning/49-steam-frame-features.md) ·
   [Second look § 3](planning/52-frame-features-second-look.md#3-voice-follow-ups-a-sound-a-short-listen-a-few-words).
-- ★★★ `[ask]` `[focus]` **Steam settings shortcuts float above the question box** — **OPEN, planned 2026-09-06, all calls locked
-  (D79).** Today the list of matching Steam settings appears under the box and pushes the box, the chips and the whole
-  conversation up the screen; two letters can match 71 settings and throw the box off the top. It moves to a card above the box
-  that holds the best eight and never moves anything. Up walks into it, Down walks out, B closes it and keeps your words.
-  [Plan](planning/45-settings-shortcut-card.md) · [Mockups](https://claude.ai/code/artifact/1ab2a570-2ae5-45cd-b12b-332694f96fd5).
-  **Measured before the build, 2026-09-16, on the Deck's built-in screen:** two letters bring back 71 rows, and the box
-  jumps 209 pixels to the top of the panel while the chat disappears under the list
-  (`docs/test-evidence/plan56-M-settings-jump-before.json`). On this screen only about six rows fit above the box, so the
-  card holds up to eight rows but never more than fit under the tab bar (plan 56 block 0, lane E).
+- ★★★ `[ask]` `[focus]` **Steam settings shortcuts: D-pad in, chips blocked, tap outside to close** — **OPEN,
+  waits on a follow-up lane (plan 56).** The rest of plan 45 (steps 3, 4 and 6): walking into the settings card
+  with Up and out with Down, the D-pad staying off the suggestion chips while the card is open, and tapping
+  outside the card to close it. [Plan](planning/45-settings-shortcut-card.md) ·
+  [Mockups](https://claude.ai/code/artifact/1ab2a570-2ae5-45cd-b12b-332694f96fd5).
 - ★★★ `[layout]` **Give the reclaimed height to the transcript** — **OPEN, measured 2026-09-16 on the Deck's built-in
   screen, no single cause, not built in plan 56.** On the Deck's own 1280 by 800 screen the panel is 454 pixels tall, not
   the 696 every earlier number assumed. There is no gap above the dock at all, because even a two-turn chat overflows the
@@ -450,7 +456,14 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   has downloaded, whenever Ollama lives in the home folder, which it does on this Deck; a backup of settings
   and chats cannot bring the models back. The session asked the maintainer for a separate yes to wipe this
   Deck and none came during the run, so the row stays owed.
-- ★ `[focus]` **Pressing Ask drops the highlight** — **VERIFY, fixed 2026-09-15, one half confirmed on the
+- ★ `[focus]` **Choosing an entry in the Ask-mode menu drops the highlight** — **VERIFY, fixed 2026-09-16
+  (commit `cb60a5d`).** Picking a mode such as Speed, Strategy or Expert in the small menu under the question
+  box now hands the highlight back to the mode button, the way it already did when backing out with B.
+  Reproduced on the Deck 2026-09-16, before the fix: choosing Speed or Strategy left the highlight nowhere in
+  the plugin until the next press. Evidence `docs/test-evidence/plan56-BUG-askmode-menu-drop-speed.json`,
+  `docs/test-evidence/plan56-BUG-askmode-menu-drop-strategy.json`. Row **ASK-MODE-MENU-RING-01**: open the
+  menu, choose a mode, and check the highlight is on the mode button — still owed on the Deck.
+- ★ `[focus]` **Pressing Ask drops the highlight** — **VERIFY, fixed 2026-09-15, both halves confirmed on the
   Deck.** The real cause turned out to be the code that manages a question, which was clearing the page's own
   highlight before it even checked whether there was a question to send, so the fix was made at the button
   instead. Now, after pressing Ask, the highlight lands on the question box when there is a real question, or
@@ -458,24 +471,31 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   **ASK-RING-AFTER-PRESS-01**: type a question, press Ask, then press one D-pad direction — the highlight is
   already on the question box; clear the box and press Ask — the highlight stays on the Ask button. **The
   real-question half passed on the Deck 2026-09-15**, evidence
-  `docs/test-evidence/plan55-ASK-RING-AFTER-PRESS-01.json`; the empty-box half is still to be pressed.
+  `docs/test-evidence/plan55-ASK-RING-AFTER-PRESS-01.json`. **The empty-box half passed on the Deck
+  2026-09-16:** with nothing typed, pressing Ask left the ring on the Ask button, fully visible, and it held
+  there through a Down press too. Evidence `docs/test-evidence/plan56-ASK-RING-AFTER-PRESS-01-empty-box.json`.
+  Both halves now pass; this entry is owed its move to Done and the archive.
 - ★ `[focus]` **Closing the model try order picker drops the highlight onto the tab rather than the button you
-  opened it from** — **VERIFY, fixed 2026-09-15, one half confirmed on the Deck.** After pressing Done, the
+  opened it from** — **VERIFY, fixed 2026-09-15, both halves confirmed on the Deck.** After pressing Done, the
   highlight now lands back on the try-order button just used, instead of costing about thirteen presses to get
   back to it. Row **TRY-ORDER-RETURN-01**: on the Ollama tab, under Models & routing, press Set text model try
   order…, then press Done — the highlight is on that button; repeat for the vision try-order button. **The text
   picker passed on the Deck 2026-09-15** — Done landed the highlight on Set text model try order, fully
-  visible, not on the tab (`docs/test-evidence/plan55-TRY-ORDER-RETURN-01.json`). The vision picker was not
-  pressed. **Side note from the same run:** opening the picker itself first lands the ring on a greyed "Move
-  up" button, the same shape as the greyed-button bug above.
+  visible, not on the tab (`docs/test-evidence/plan55-TRY-ORDER-RETURN-01.json`). **The vision picker passed on
+  the Deck 2026-09-16** — Done landed the highlight on Set vision model try order, fully visible. Evidence
+  `docs/test-evidence/plan56-TRY-ORDER-RETURN-01-vision.json`. Both halves now pass; this entry is owed its
+  move to Done and the archive. **Side note from the same run:** opening the picker itself first lands the ring
+  on a greyed "Move up" button, the same shape as the greyed-button bug above.
 - ★ `[focus]` **A greyed-out button still takes the highlight, so the D-pad lands on something that does
-  nothing** — **VERIFY, fixed 2026-09-15, one half confirmed on the Deck.** While an answer is being written,
-  Down from the question box now holds still instead of landing on the greyed Ask button; and with the
-  thumbs-up/thumbs-down row greyed on a stopped reply, Down from the answer lands on Retry instead, and
-  Left/Right in that greyed row hold still. Row **GREYED-STEP-OVER-01**, covering both: while an answer is
-  thinking, Down from the question box stays on the box; with the thumbs greyed, Down from the answer lands on
-  Retry and Left/Right hold still. **The Ask half passed on the Deck 2026-09-15**, evidence
-  `docs/test-evidence/plan55-GREYED-STEP-OVER-01-ask-half.json`; the thumbs half is still owed.
+  nothing** — **VERIFY, fixed 2026-09-15, the Ask half confirmed on the Deck.** While an answer is being
+  written, Down from the question box now holds still instead of landing on the greyed Ask button. Row
+  **GREYED-STEP-OVER-01**, the Ask half: while an answer is thinking, Down from the question box stays on the
+  box. **Passed on the Deck 2026-09-15**, evidence
+  `docs/test-evidence/plan55-GREYED-STEP-OVER-01-ask-half.json`. **The thumbs half of this row measured FAILED
+  on the Deck 2026-09-16** — with the thumbs greyed on a stopped reply, plan 55's fix does not hold in either
+  direction, so that half is moved back to Bugs as its own entry rather than kept here as owed. Evidence
+  `docs/test-evidence/plan56-GREYED-STEP-OVER-01-thumbs.json`,
+  `docs/test-evidence/plan56-GREYED-STEP-OVER-01-thumbs.summary.json`.
 - ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **VERIFY, fixed
   2026-09-15.** Down and Up through a reply now stop at the same places in both directions. Row
   **REPLY-STOPS-MIRROR-01**: on a reply with two paragraphs, a spoiler block and a two-button menu, check the
@@ -498,17 +518,20 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   can be left sitting over the suggestion chips. The exact reason the fade stalls could not be proven on the
   rig, which has no touch, so the fix force-finishes the close with a plain timer either way. Row
   **TAB-BAR-GHOST-01**, needs a finger, and it is on the maintainer's checklist.
-- ★★ `[ui]` **The copy button sits on top of the code box instead of beside it** — **VERIFY, fixed 2026-09-15.**
-  A reply that ends in a code box now gets room reserved below it, so the copy icon sits under the box instead
-  of overlapping its corner. Row **COPY-ICON-CODEBOX-01**: on a reply ending in a code box, check the box's
-  bottom edge and the icon's top edge do not overlap; a reply ending in plain text is unchanged. **Attempted on
-  the Deck 2026-09-15, not yet exercised:** a question asked for a code block with nothing after it, but the
-  model added a closing sentence anyway, so the reply ended in text and the icon sat 41 pixels clear of the box
-  — the exact case the row needs still has not come up. Evidence
+- ★★ `[ui]` **The copy button sits on top of the code box instead of beside it** — **VERIFY, fixed 2026-09-15,
+  confirmed on the Deck 2026-09-16.** A reply that ends in a code box now gets room reserved below it, so the
+  copy icon sits under the box instead of overlapping its corner. Row **COPY-ICON-CODEBOX-01**: on a reply
+  ending in a code box, check the box's bottom edge and the icon's top edge do not overlap; a reply ending in
+  plain text is unchanged. **Attempted on the Deck 2026-09-15, not yet exercised:** a question asked for a code
+  block with nothing after it, but the model added a closing sentence anyway, so the reply ended in text and
+  the icon sat 41 pixels clear of the box — the exact case the row needs still has not come up. Evidence
   `docs/test-evidence/plan55-COPY-ICON-CODEBOX-01.json`. **New sighting the same evening in the free-play
   sweep, on that same plain-text-ending reply shape:** the last answer section read 89% visible, one of nine
   sample points sitting under the copy icon's own corner. Evidence
-  `docs/test-evidence/plan55-QA-FREE-PLAY-01-main-long-reply.json`.
+  `docs/test-evidence/plan55-QA-FREE-PLAY-01-main-long-reply.json`. **Passed on the Deck 2026-09-16:** a reply
+  genuinely ending in a code box left the icon 12 pixels below the box's bottom edge, nothing overlapping.
+  Evidence `docs/test-evidence/plan56-COPY-ICON-CODEBOX-01.json`. This entry is owed its move to Done and the
+  archive.
 - ★★★ `[chat]` **Clear cache cleared the screen but not the session** — **VERIFY.** Fixed and confirmed 2026-08-27, and again on the
   Deck 2026-09-03. The orphan half is measured: the chat stays behind after a clear, so each clear-and-reask cycle leaves one more
   chat in the rotation — a follow-up, not a regression. Only the mid-generation half is still owed: clearing while a reply is still
@@ -547,6 +570,18 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   **THINKING-SLOW-01**, **THINKING-LIVE-01**, **THINKING-SPOILER-01**. [Log](planning/06-thinking-blurbs-review.md#10-implementation-log).
 - ★★ `[reply]` **Token streaming Phase A/B** — **VERIFY.** Start stutter fixed, sections as D-pad stops, scroll follow. Rows
   **STREAM-REVEAL-01**, **STREAM-09**, **STREAM-FOLLOW-01**. [Review](planning/05-token-streaming-review.md).
+- ★★★ `[ask]` `[focus]` **Steam settings shortcuts float above the question box** — **VERIFY, landed 2026-09-16
+  (commit `2d92240`), plan 45 steps 1, 2 and 5 of six.** Typing into the question box no longer grows a list of
+  Steam settings under the box that shoves the box, the chips and the chat up the screen; the list now floats
+  in a small card above the box instead, holds up to eight rows but never more than fit under the tab bar
+  (about six on the Deck's own screen), names the rest as "N more" in its heading, and hides itself once you
+  are typing a real question — past three words, or a question mark — unless the words are an exact run inside
+  a setting's name. **Measured before the fix, 2026-09-16, on the Deck's built-in screen:** two letters brought
+  back 71 rows and the box jumped 209 pixels to the top of the panel while the chat disappeared under the list
+  (`docs/test-evidence/plan56-M-settings-jump-before.json`). [Plan](planning/45-settings-shortcut-card.md) ·
+  [Mockups](https://claude.ai/code/artifact/1ab2a570-2ae5-45cd-b12b-332694f96fd5). Rows **SETTINGS-CARD-01**,
+  **06**, **07** are landed and owed on the Deck; the remaining steps (D-pad in, chips blocked, tap outside)
+  are a separate Features entry waiting on a follow-up lane.
 - ★★★ `[ollama]` **Custom model in the Pull Models picker** — **VERIFY, one check owed and it needs your permission.**
   Shipped and walked on the Deck 2026-09-05. A typed library name that is not in the built-in list pulls and installs; a made-up
   one explains itself; the star pins a model for Ask and reaches the settings file; a freshly pulled model is the only one badged
@@ -754,15 +789,16 @@ ones from this month are D81 to D88.
   gets the same relaxed prompt its risk chip already assumed; all three are plain text from the first streamed word.
   Rows **STRAT-SPOIL-NAME-01**, **STRAT-SPOIL-FIRST-01**, **STRAT-SPOIL-TEXT-01**, plus the older **STRAT-SPOIL-DRG-01**
   block. [Plan 54](planning/54-spoiler-rules-gaps.md).
-- ★★ `[KB]` **The new answer shape needs a read on the device** — **VERIFY, two of three read.** The
-  Portal 2 sentence came back clean 2026-09-12: the note's advice starts straight after the character's
-  opening line, 111 words, no warning line. The Hades sentence came back the same shape 2026-09-15, with
-  Hades running: the advice starts straight after the character's opening line, about 100 words, no warning
-  line, no spoiler box, with a Hades follow-up menu. Whether either reads as advice-first is still your
-  judgement, which is what this row is for. **Only the Black Mesa sentence is left to run**, plus your read of
-  the two replies already captured. Row **KB-ANSWER-03**; evidence
+- ★★ `[KB]` **The new answer shape needs a read on the device** — **VERIFY, all three read; your own read of
+  the three is what is owed now.** The Portal 2 sentence came back clean 2026-09-12: the note's advice starts
+  straight after the character's opening line, 111 words, no warning line. The Hades sentence came back the
+  same shape 2026-09-15, with Hades running: the advice starts straight after the character's opening line,
+  about 100 words, no warning line, no spoiler box, with a Hades follow-up menu. The Black Mesa sentence came
+  back the same shape 2026-09-16: 176 words, the advice starts right after the character's opening line, the
+  Gonarch note attached, no warning line. Whether any of the three reads as advice-first is still your
+  judgement, which is what this row is for. Row **KB-ANSWER-03**; evidence
   `docs/test-evidence/plan48-deck-evening-2026-09-12.json` **[no evidence — re-run, batch QA-EVIDENCE-GAP-01]**,
-  `docs/test-evidence/plan55-KB-ANSWER-03-hades.json`.
+  `docs/test-evidence/plan55-KB-ANSWER-03-hades.json`, `docs/test-evidence/plan56-KB-ANSWER-03-blackmesa.json`.
 - ★★★ `[KB]` **DRG Survivor glossary terms** — **VERIFY, one touch tap owed.** Shipped 2026-08-28 and walked on device:
   underline, popup, D-pad reachability, B, one-press Up. Rows **DRG-GLOSSARY-01…04**.
   [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).

@@ -5,6 +5,20 @@ All notable changes to this project are documented in this file.
 ## [Unreleased]
 
 ### Fixed
+- **Typing into the question box no longer pushes it, the chips and the chat up the screen:** the list of
+  matching Steam settings used to grow underneath the box inside the bottom dock, and two letters could match
+  dozens of settings and throw the box off the top of the screen. The list now floats in a small card above the
+  box instead, holding up to eight rows but never more than fit under the tab bar (about six on the Deck's own
+  screen), naming the rest as "N more" in its heading, and it gets out of the way once you are typing a real
+  question — past three words, or a question mark — unless what you typed is the exact name of a setting.
+  `MainTabUnifiedAskBar.tsx`, `useSteamSettingsSearch.ts`, `section-4.ts`. **Not built in this landing:** the
+  D-pad walking into the card from the box, the suggestion chips staying out of reach while the card is open,
+  and tapping outside the card to close it — a follow-up lane is planned. On-Deck rows: **SETTINGS-CARD-01**,
+  **06**, **07** (landed, owed on the Deck) in `docs/testing.md`.
+- **Picking a mode in the small menu under the question box no longer leaves the highlight on nothing:**
+  choosing Speed, Strategy or Expert now hands the highlight back to the mode button, the same place it already
+  went when backing out of the menu. `MainTabAskModeMenuPopover.tsx`. On-Deck row: **ASK-MODE-MENU-RING-01**
+  (owed) in `docs/testing.md`.
 - **A several-model download now says which name it could not find, and a model with no listed size warns
   before you pick it:** downloading several models at once used to drop a mistyped name with no notice; it now
   says which one it could not find and still starts the good ones. The try-order picker used to treat a model

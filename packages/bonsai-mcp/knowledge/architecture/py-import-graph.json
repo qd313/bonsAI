@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
   "fileCount": 68,
-  "edgeCount": 156,
+  "edgeCount": 157,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",

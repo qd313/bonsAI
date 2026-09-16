@@ -44,6 +44,15 @@ export type BuildTurnHeaderElementArgs = {
    * whether text was cut.
    */
   titleOverflowing?: boolean;
+  /**
+   * Attached to the OUTER header element — the one that keeps the same key (`turn-header-
+   * ${turnId}`) and stays mounted whether or not Retry is offered. Roadmap: "Pressing A on an
+   * open question closes it and drops the highlight" — while expanded and Retry showing,
+   * activation sits on the INNER `.bonsai-chat-turn-row-body` stop; collapsing removes Retry,
+   * which changes the header from two child stops to one and unmounts whichever one held the
+   * ring. The outer element never goes away, so the caller can refocus it once that happens.
+   */
+  headerRef?: (el: HTMLElement | null) => void;
 };
 
 /** Plain function — header Focusable is a child of the turn-slot Focusable group. */
@@ -59,6 +68,7 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
     retryDisabled = false,
     titleRef,
     titleOverflowing = false,
+    headerRef,
   } = args;
 
   const headerClass = [
@@ -116,6 +126,7 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
       <Focusable
         key={`turn-header-${turnId}`}
         className={headerClass}
+        ref={headerRef}
         onActivate={onActivate}
         aria-expanded={expanded}
         data-bonsai-turn-id={turnId}
@@ -155,6 +166,7 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
       key={`turn-header-${turnId}`}
       className={`${headerClass} bonsai-chat-turn-row-header--with-retry`}
       flow-children="horizontal"
+      ref={headerRef}
       data-bonsai-turn-id={turnId}
       {...headerNavHandlers}
     >

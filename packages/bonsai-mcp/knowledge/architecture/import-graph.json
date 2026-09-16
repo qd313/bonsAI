@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 392,
-  "edgeCount": 983,
+  "fileCount": 393,
+  "edgeCount": 985,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -288,6 +288,13 @@
         "src/utils/buildAnswerBubbleElement.tsx"
       ]
     },
+    "src/components/MainTabChatTranscript.collapseKeepsRing.test.tsx": {
+      "imports": [
+        "src/components/MainTabChatTranscript.tsx",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabChatTranscript.diagnostics.test.tsx": {
       "imports": [
         "src/components/MainTabChatTranscript.tsx",
@@ -422,6 +429,7 @@
       ],
       "importedBy": [
         "src/components/MainTab.tsx",
+        "src/components/MainTabChatTranscript.collapseKeepsRing.test.tsx",
         "src/components/MainTabChatTranscript.diagnostics.test.tsx",
         "src/components/MainTabChatTranscript.earlierPill.test.tsx",
         "src/components/MainTabChatTranscript.earlierPillLeftNav.test.ts",
@@ -2684,6 +2692,7 @@
       "importedBy": [
         "src/components/DrgGlossaryTermChip.test.tsx",
         "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx",
+        "src/components/MainTabChatTranscript.collapseKeepsRing.test.tsx",
         "src/components/MainTabChatTranscript.diagnostics.test.tsx",
         "src/components/MainTabChatTranscript.earlierPill.test.tsx",
         "src/components/MainTabChatTranscript.emptySlotPreview.test.tsx",

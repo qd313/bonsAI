@@ -514,6 +514,41 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
   };
 
   /*
+   * Roadmap: "Pressing A on an open question closes it and drops the highlight" — the answer
+   * folds away and the ring lands nowhere, so the next D-pad press has to place it fresh instead
+   * of moving it.
+   *
+   * While a turn is open AND it is the newest one, buildTurnHeaderElement offers Retry (D77), and
+   * activation sits on the INNER `.bonsai-chat-turn-row-body` stop so a press on the icon cannot
+   * also open or close the question. Collapsing that turn drops `onRetry` (only ever passed while
+   * expanded), which changes the header from two child stops to one and unmounts whichever one
+   * held the ring — Steam has nothing left to fall back to. The OUTER header element keeps the
+   * same key and stays mounted through that change, so once a turn collapses this hands the ring
+   * back to its own row (the header, which is still on screen) rather than leaving it to land
+   * wherever Steam defaults to on the next press.
+   *
+   * Plain `focus()` rather than the nav registry: the header never leaves its own container, it
+   * only loses whichever inner stop used to hold the ring, and a plain `focus()` between elements
+   * in one container is the accepted move (AGENTS.md, "The Steam Deck focus graph"). The
+   * `contains` check keeps that promise honest — if the row is ever not still inside this
+   * transcript's own column for some reason, this does nothing rather than reaching outside it.
+   */
+  const turnHeaderElRefs = useRef<Record<string, HTMLElement | null>>({});
+  const prevExpandedTurnKeyRef = useRef<AskThreadExpandedTurnKey>(expandedTurnKey ?? null);
+  useLayoutEffect(() => {
+    const prevKey = prevExpandedTurnKeyRef.current;
+    prevExpandedTurnKeyRef.current = expandedTurnKey ?? null;
+    if (!prevKey || expandedTurnKey) return;
+    const headerEl = turnHeaderElRefs.current[prevKey];
+    if (!headerEl || !chatMainColumnRef.current?.contains(headerEl)) return;
+    try {
+      headerEl.focus({ preventScroll: true });
+    } catch {
+      /* Best effort — nothing else to fall back to for an arbitrary turn header. */
+    }
+  }, [expandedTurnKey]);
+
+  /*
    * Nav targets for the two permission-hint rows below the transcript — see
    * `focusChatPermissionHintRow`'s comment above for why this replaced a registered button handle
    * and `focusDeckOwner`. Registered for the lifetime of this component rather than only while the
@@ -871,6 +906,9 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                  ellipsis title would be meaningless, so no ref is handed to the rest. */
               titleRef: expandedTurnKey === turn.id ? measureTitleOverflow(turn.id) : undefined,
               titleOverflowing: overflowingTitles[turn.id] ?? false,
+              headerRef: (el: HTMLElement | null) => {
+                turnHeaderElRefs.current[turn.id] = el;
+              },
               onActivate: () => onTurnActivate?.(turn.id),
               /*
                * Retry rides on the newest question's bubble now (D77) instead of the row under the
@@ -1058,6 +1096,9 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
               expanded: expandedTurnKey === "live",
               titleRef: expandedTurnKey === "live" ? measureTitleOverflow("live") : undefined,
               titleOverflowing: overflowingTitles.live ?? false,
+              headerRef: (el: HTMLElement | null) => {
+                turnHeaderElRefs.current.live = el;
+              },
               isStreaming: isStreamingPreview,
               onActivate: () => onTurnActivate?.("live"),
               onRetry: expandedTurnKey === "live" ? onRetryLastResponse : undefined,

@@ -9,6 +9,7 @@
     "src/components/KnowledgeBaseSection.nomicPull.test.tsx",
     "src/components/KnowledgeBaseSection.test.tsx",
     "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx",
+    "src/components/MainTabChatTranscript.collapseKeepsRing.test.tsx",
     "src/components/MainTabChatTranscript.diagnostics.test.tsx",
     "src/components/MainTabChatTranscript.earlierPill.test.tsx",
     "src/components/MainTabChatTranscript.earlierPillLeftNav.test.ts",

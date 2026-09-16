@@ -23,6 +23,21 @@
  * one — adding, removing, or overriding individual entries — by
  * `mergePullModelCatalog.ts`; this file is only the starting point that
  * merge begins from.
+ *
+ * How it works: (1) the types and the four group ids come first — essentials,
+ * smallest ("More models"), stretch ("Expert (large)"), specialist; (2) small
+ * lookup helpers used by the Pull Models screen and its recommendation logic
+ * (`isEmbeddingOnlyTag`, `isDeckDailyPullModel`, `isDeckEssentialsPullModel`);
+ * (3) `PULL_MODEL_CATALOG` itself, the flat list of entries, grouped in the
+ * source file the same way the screen groups them even though the screen
+ * re-sorts within each group; (4) two comparators the screen sorts a group
+ * with — `comparePullModelEntriesNewestFirst` for every group except stretch,
+ * and `comparePullModelEntriesStretchOrder` for the stretch ("Expert (large)")
+ * group alone, which orders its five bake-off candidates by a fixed ranking
+ * (docs/planning/41-deck-model-survey.md § 9) instead of by release date, with
+ * anything else in that group falling back to newest-first after them; (5) a
+ * handful of small formatting helpers for the screen (star rating, size, tag
+ * list, short date).
  */
 export type PullModelLicenseClass = "foss" | "open_weight" | "non_foss" | "unknown";
 
@@ -419,6 +434,29 @@ export function comparePullModelEntriesNewestFirst(a: PullModelEntry, b: PullMod
   const byDate = b.releasedYm.localeCompare(a.releasedYm);
   if (byDate !== 0) return byDate;
   return a.tag.localeCompare(b.tag);
+}
+
+/**
+ * Locked order for the Expert (large) group, strongest first: the models that beat
+ * today's Gemma 4 on the September 2026 answer test, in the maintainer's own bake-off
+ * ranking (docs/planning/41-deck-model-survey.md § 9, D73).
+ */
+const PULL_MODEL_STRETCH_BAKEOFF_ORDER: readonly string[] = [
+  "gemma4:12b-it-qat", "qwen3.5:9b", "granite4.2:8b", "gemma4:e4b-it-qat", "lfm2.5:8b",
+];
+
+/**
+ * Sort the Expert (large) group by the bake-off order above. Any stretch-group entry
+ * not in that list (an older stretch pick, or one added later without a measured rank)
+ * sorts after all five, newest first — the same fallback every other group uses.
+ */
+export function comparePullModelEntriesStretchOrder(a: PullModelEntry, b: PullModelEntry): number {
+  const aRank = PULL_MODEL_STRETCH_BAKEOFF_ORDER.indexOf(a.tag);
+  const bRank = PULL_MODEL_STRETCH_BAKEOFF_ORDER.indexOf(b.tag);
+  const aKey = aRank === -1 ? PULL_MODEL_STRETCH_BAKEOFF_ORDER.length : aRank;
+  const bKey = bRank === -1 ? PULL_MODEL_STRETCH_BAKEOFF_ORDER.length : bRank;
+  if (aKey !== bKey) return aKey - bKey;
+  return comparePullModelEntriesNewestFirst(a, b);
 }
 
 /** Compact table date — e.g. May '25 — saves horizontal space in Pull models. */

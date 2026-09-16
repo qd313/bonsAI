@@ -92,6 +92,7 @@ import {
   PULL_MODEL_RATING_COLUMN_LABEL,
   bytesToGb,
   comparePullModelEntriesNewestFirst,
+  comparePullModelEntriesStretchOrder,
   formatGtaStars,
   formatPullModelTags,
   formatReleasedYmShort,
@@ -465,7 +466,10 @@ export function PullModelsModal(props: PullModelsModalProps) {
       map.get(entry.group)?.push(entry);
     }
     for (const g of PULL_MODEL_GROUP_ORDER) {
-      map.get(g)?.sort(comparePullModelEntriesNewestFirst);
+      // Expert (large) sorts by the bake-off's own ranking, strongest first, instead of
+      // newest-first like every other group (docs/planning/41-deck-model-survey.md § 9).
+      const cmp = g === "stretch" ? comparePullModelEntriesStretchOrder : comparePullModelEntriesNewestFirst;
+      map.get(g)?.sort(cmp);
     }
     return map;
   }, [filteredCatalog]);

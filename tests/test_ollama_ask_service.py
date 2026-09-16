@@ -38,6 +38,7 @@ class _FakePlugin:
         self._active_ollama_chat_model = None
         self._active_ollama_chat_http_response = None
         self._chat_resp_ready_evt = None
+        self.app_log_calls: list[tuple[tuple[Any, ...], dict[str, Any]]] = []
         self._settings = {
             "model_policy_tier": "open_source_only",
             "model_policy_non_foss_unlocked": False,
@@ -64,6 +65,10 @@ class _FakePlugin:
         return "system prompt"
 
     async def _maybe_app_log(self, *args: Any, **kwargs: Any) -> None:
+        # Records the call so a test can check it happened (and with what fields) without
+        # re-testing the real gating logic (`Plugin._desktop_app_log_level_allows` in main.py,
+        # not reachable from here) -- that gate is what actually decides verbose-on-or-off.
+        self.app_log_calls.append((args, kwargs))
         return None
 
     def _abort_ollama_chat_check(self) -> bool:
@@ -228,6 +233,95 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
             )
 
         self.assertEqual(spy.call_count, 1)
+
+    async def test_attachment_counts_never_reach_the_reply_but_reach_the_verbose_log(self) -> None:
+        """D104: the reply must never carry the old ``[AttachDebug: ...]`` line.
+
+        The counts still go out through ``_maybe_app_log(level="verbose", ...)`` -- the same
+        gate an already-verbose-only line above it uses -- so a person only sees them if they
+        turned verbose logging on; nobody sees them in the answer itself, ever.
+        """
+        plugin = _FakePlugin(active_request_id=9)
+
+        def fake_post_ollama_chat(*_args: Any, **_kwargs: Any) -> dict[str, Any]:
+            return {
+                "success": True,
+                "status": 200,
+                "model": "qwen2.5:3b",
+                "response": "Here is the answer.",
+                "assistant_raw": "Here is the answer.",
+            }
+
+        with (
+            patch(
+                "backend.services.ollama_ask_service.list_installed_ollama_tags",
+                return_value=["qwen2.5:3b"],
+            ),
+            patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch(
+                "backend.services.screenshot_media.prepare_attachment_images",
+                return_value=([{"image_b64": "abc"}], [], ["one image too large"]),
+            ),
+            patch(
+                "backend.services.ollama_ask_service.post_ollama_chat",
+                side_effect=fake_post_ollama_chat,
+            ),
+        ):
+            out = await run_ask_ollama(
+                plugin,
+                "what is in this screenshot",
+                "127.0.0.1:11434",
+                "",
+                "",
+                attachments=[{"path": "/home/deck/shot.png", "name": "shot.png"}],
+                request_timeout_seconds=30,
+            )
+
+        self.assertNotIn("AttachDebug", str(out.get("response") or ""))
+        verbose_calls = [
+            (args, kwargs)
+            for args, kwargs in plugin.app_log_calls
+            if kwargs.get("level") == "verbose" and args[:1] == ("ask.attach",)
+        ]
+        self.assertEqual(len(verbose_calls), 1)
+        fields = verbose_calls[0][1].get("fields") or {}
+        self.assertEqual(fields.get("requested"), 1)
+        self.assertEqual(fields.get("prepared"), 1)
+        self.assertEqual(fields.get("errors"), 1)
+
+    async def test_no_attachment_counts_logged_when_nothing_was_attached(self) -> None:
+        plugin = _FakePlugin(active_request_id=10)
+
+        def fake_post_ollama_chat(*_args: Any, **_kwargs: Any) -> dict[str, Any]:
+            return {
+                "success": True,
+                "status": 200,
+                "model": "qwen2.5:3b",
+                "response": "ok",
+                "assistant_raw": "ok",
+            }
+
+        with (
+            patch(
+                "backend.services.ollama_ask_service.list_installed_ollama_tags",
+                return_value=["qwen2.5:3b"],
+            ),
+            patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch(
+                "backend.services.screenshot_media.prepare_attachment_images",
+                return_value=([], [], []),
+            ),
+            patch(
+                "backend.services.ollama_ask_service.post_ollama_chat",
+                side_effect=fake_post_ollama_chat,
+            ),
+        ):
+            await run_ask_ollama(plugin, "hello", "127.0.0.1:11434", "", "", request_timeout_seconds=30)
+
+        attach_calls = [
+            (args, kwargs) for args, kwargs in plugin.app_log_calls if args[:1] == ("ask.attach",)
+        ]
+        self.assertEqual(attach_calls, [])
 
     async def test_first_token_retires_the_connecting_line(self) -> None:
         """Reported on device: "Model's warming up…" stayed up for the whole generation.

@@ -795,16 +795,26 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertFalse(out.get("success"))
         self.assertIn("before completion", str(out.get("response") or ""))
 
-    def test_format_ai_response_appends_attachment_metadata(self):
-        """Confirm attachment debug and error blocks are appended for UI diagnostics."""
+    def test_format_ai_response_never_shows_the_attach_debug_line(self):
+        """D104: the debug counts must never reach the reply, whether or not anything failed."""
         output = format_ai_response(
             "Base response",
             normalized_attachments=[{"path": "/tmp/a.png"}],
             prepared_images=[{"image_b64": "abc"}],
             attachment_errors=["too large"],
         )
-        self.assertIn("[AttachDebug: requested=1, prepared=1, errors=1]", output)
+        self.assertNotIn("AttachDebug", output)
         self.assertIn("[Attachment errors: too large]", output)
+
+    def test_format_ai_response_never_shows_the_attach_debug_line_with_no_errors(self):
+        output = format_ai_response(
+            "Base response",
+            normalized_attachments=[{"path": "/tmp/a.png"}],
+            prepared_images=[{"image_b64": "abc"}],
+            attachment_errors=[],
+        )
+        self.assertNotIn("AttachDebug", output)
+        self.assertEqual(output, "Base response")
 
     def test_build_system_prompt_includes_game_and_attachment_context(self):
         """Ensure generated system prompts include game, attachment, and policy context lines."""

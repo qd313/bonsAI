@@ -410,6 +410,21 @@ async def run_ask_ollama(
                 out = {**_strip_ollama_http_body(merged), "model_policy_disclosure": disc}
                 if preset_carousel_inject is not None:
                     out["preset_carousel_inject"] = preset_carousel_inject
+                if normalized_attachments:
+                    # D104: the attachment counts used to be appended to the reply itself
+                    # (`[AttachDebug: ...]`, removed in format_ai_response). They still reach
+                    # the verbose app log, same gating as the "ollama model attempt failed"
+                    # line above -- nothing shows on screen unless verbose logging is on.
+                    await plugin_inst._maybe_app_log(
+                        "ask.attach",
+                        "attachment debug counts",
+                        level="verbose",
+                        fields={
+                            "requested": len(normalized_attachments),
+                            "prepared": len(prepared_images),
+                            "errors": len(attachment_errors),
+                        },
+                    )
                 return out
 
             last_failure = _strip_ollama_http_body(merged)

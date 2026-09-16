@@ -58,9 +58,11 @@ How it works:
    wrapped, or, for a game whose own profile treats bosses as routine gameplay rather than story,
    relax the rule further still.
 4. Once the AI has answered, `format_ai_response()` does one light pass over the reply — it never
-   touches the wording, but it does append a short `[AttachDebug: ...]` note to the visible answer
-   any time the question carried an attachment at all, whether or not anything actually went
-   wrong with it; a second note spelling out the actual problem is added only when there was one.
+   touches the wording. It used to also append a short `[AttachDebug: ...]` note to the visible
+   answer any time the question carried an attachment at all, whether or not anything actually
+   went wrong with it; that note is gone from the reply now (D104) and, where wired by the
+   caller, the same counts go to the verbose app log instead. A separate note spelling out an
+   actual attachment problem is still added, only when there was one.
 5. Separately, `build_reply_followup_context_block()` handles the "this was wrong / too long /
    spoiled something" chips: when a person taps one and asks a refinement, this pastes the
    previous question and answer (trimmed to a safe length) ahead of their new message, so the
@@ -1596,15 +1598,16 @@ def format_ai_response(
     prepared_images: list,
     attachment_errors: list,
 ) -> str:
-    """Append attachment debug/error suffixes so response context is preserved for UI rendering."""
+    """Append an attachment error suffix so a real problem is preserved for UI rendering.
+
+    D104: every answer to a question that carried an attachment used to end with a
+    `[AttachDebug: requested=1, prepared=1, errors=0]` line, whether or not anything went
+    wrong. Nothing on screen removed it and no setting turned it off. That debug line is gone
+    from the reply entirely now -- a caller that wants the counts logs them itself (verbose
+    app log only), rather than showing them to the person asking. A genuine attachment error
+    is still reported in the reply, since that one is not decoration.
+    """
     response_text = text or "No response text."
-    if normalized_attachments:
-        response_text += (
-            "\n\n[AttachDebug: "
-            f"requested={len(normalized_attachments)}, "
-            f"prepared={len(prepared_images)}, "
-            f"errors={len(attachment_errors)}]"
-        )
     if attachment_errors:
         response_text += "\n\n[Attachment errors: " + "; ".join(attachment_errors) + "]"
     return response_text

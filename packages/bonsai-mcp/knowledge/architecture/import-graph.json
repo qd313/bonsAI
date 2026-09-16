@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 387,
-  "edgeCount": 970,
+  "fileCount": 388,
+  "edgeCount": 973,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -503,6 +503,14 @@
         "src/components/MainTab.tsx"
       ]
     },
+    "src/components/MainTabUnifiedAskBar.test.tsx": {
+      "imports": [
+        "src/components/MainTabUnifiedAskBar.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/navFocusRegistry.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabUnifiedAskBar.tsx": {
       "imports": [
         "src/components/CharacterRoleplayEmoticon.tsx",
@@ -521,7 +529,8 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
-        "src/components/MainTab.tsx"
+        "src/components/MainTab.tsx",
+        "src/components/MainTabUnifiedAskBar.test.tsx"
       ]
     },
     "src/components/ModelPolicyTierPanel.tsx": {
@@ -2650,6 +2659,7 @@
         "src/components/MainTabChatTranscript.stoppedNotice.test.tsx",
         "src/components/MainTabChatTranscript.strategyPanels.test.tsx",
         "src/components/MainTabChatTranscript.turnTitle.test.tsx",
+        "src/components/MainTabUnifiedAskBar.test.tsx",
         "src/components/PermissionDenyAction.test.tsx",
         "src/components/ReplyCopyButton.test.tsx",
         "src/components/SessionContextStrip.test.tsx",
@@ -3586,6 +3596,7 @@
         "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabPresetAnimatedChips.test.tsx",
         "src/components/MainTabPresetAnimatedChips.tsx",
+        "src/components/MainTabUnifiedAskBar.test.tsx",
         "src/components/MainTabUnifiedAskBar.tsx",
         "src/components/ModelRoutingOrderModal.test.tsx",
         "src/components/ModelRoutingOrderModal.tsx",

@@ -127,7 +127,12 @@ import {
 import { PermissionDenyAction } from "./PermissionDenyAction";
 import type { BonsaiCapabilityKey } from "../utils/permissionDeepLink";
 import { useMainTabAskBarFocus } from "../hooks/useMainTabAskBarFocus";
-import { registerNavFocus, unregisterNavFocus, type NavRefHolder } from "../utils/navFocusRegistry";
+import {
+  registerNavFocus,
+  takeNavFocus,
+  unregisterNavFocus,
+  type NavRefHolder,
+} from "../utils/navFocusRegistry";
 
 export type MainTabUnifiedAskBarProps = {
   fullBleedRowStyle: React.CSSProperties;
@@ -266,6 +271,7 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
     focusUnifiedTextField,
     focusAttachPaperclip,
     focusAiCharacterAvatar,
+    focusAskPrimary,
     focusMicOrStop,
     focusAskModeButton,
     unifiedInputDeckNavHandlers,
@@ -283,6 +289,32 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
   useEffect(() => {
     onFocusHandlersReady?.({ focusUnifiedTextField });
   }, [onFocusHandlersReady, focusUnifiedTextField]);
+
+  /*
+   * Every press of the Ask button used to leave nothing highlighted, with a real question and an
+   * empty box alike (measured 2026-09-05, four times). The cause lives outside this file: onAskOllama
+   * (useBonsaiAskOrchestration.ts) blurs whatever the page's own focus happens to be sitting on
+   * before it even checks whether there is a question to send -- dismissing the on-screen keyboard
+   * is bound to activeElement, not to whether this press did anything. Nothing downstream then
+   * claims the ring, so it drops to nothing, and the next D-pad press has to place it again -- on a
+   * fresh panel, that placing press lands on Decky's own back arrow above the plugin.
+   *
+   * Fixed at the press itself rather than in the orchestration hook: hand the ring on to somewhere
+   * sensible right after firing the ask, through Steam's own transfer. A send moves it to the
+   * question box, since a person may want to type a follow-up right away. An empty-box press never
+   * sends anything, so the ring simply goes back to this same button -- a plain focus() here is
+   * safe because it is not crossing a container, it is the button reclaiming itself.
+   */
+  const handleAskPress = useCallback(() => {
+    if (isAsking) return;
+    const hadQuestion = unifiedInput.trim().length > 0;
+    void onAskOllama();
+    if (hadQuestion) {
+      takeNavFocus("unified-input");
+    } else {
+      focusAskPrimary();
+    }
+  }, [isAsking, unifiedInput, onAskOllama, focusAskPrimary]);
 
   /*
    * The text field's own Steam nav node, so a hop from another container (a preset chip's Down,
@@ -1050,10 +1082,10 @@ export function MainTabUnifiedAskBar(props: MainTabUnifiedAskBarProps) {
             onOKButton: (evt: { stopPropagation: () => void }) => {
               if (isAsking) return;
               evt.stopPropagation();
-              void onAskOllama();
+              handleAskPress();
             },
           } as Record<string, unknown>)}
-          onClick={() => void onAskOllama()}
+          onClick={handleAskPress}
           disabled={isAsking}
           style={{
             position: "relative",

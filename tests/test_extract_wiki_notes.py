@@ -98,6 +98,104 @@ class SelectSectionTests(unittest.TestCase):
         self.assertNotIn("Fun fact.", choice.body)
 
 
+class SelectSectionHostPreferenceTests(unittest.TestCase):
+    """Second-pass work: on 4 of the 5 sampled wikis, the general heading list never
+    matched anything, and the reader fell back to "first section with real words" -- right
+    for Hollow Knight wiki, wrong often enough elsewhere that each of the other four wikis
+    gets its own ordered preference, seeded from real pages (see
+    docs/test-evidence/plan58p1-B-samples.md)."""
+
+    def test_gta_prefers_mission_over_the_general_list(self):
+        text = (
+            "== Conditions of Mission Failure\nDon't die.\n"
+            "== Mission\nDrive to the dock and blow up the boat.\n"
+            "== Walkthrough\n"
+        )
+        headings = m.extract_headings(text)
+        choice = m.select_section(headings, text, host="gta.fandom.com")
+        self.assertEqual(choice.heading.title, "Mission")
+        self.assertIn("Drive to the dock", choice.body)
+
+    def test_gta_still_falls_back_to_the_general_list_when_no_mission_heading(self):
+        """The Trashmaster vehicle page has no "Mission" heading at all -- the host
+        preference must not swallow every other wiki's page shape."""
+        text = "== Overview\nA large truck used to collect city refuse.\n== Gallery\n"
+        headings = m.extract_headings(text)
+        choice = m.select_section(headings, text, host="gta.fandom.com")
+        self.assertEqual(choice.heading.title, "Overview")
+
+    def test_ssbwiki_prefers_attributes_then_techniques(self):
+        text = (
+            "== Moveset\nA list of moves.\n"
+            "== Attributes\nMario is a balanced character.\n"
+            "== Techniques\nThunderspiking is a named trick.\n"
+        )
+        headings = m.extract_headings(text)
+        choice = m.select_section(headings, text, host="www.ssbwiki.com")
+        self.assertEqual(choice.heading.title, "Attributes")
+
+    def test_ssbwiki_falls_back_to_techniques_when_attributes_is_empty(self):
+        text = "== Attributes\n== Techniques\nThunderspiking is a named trick.\n"
+        headings = m.extract_headings(text)
+        choice = m.select_section(headings, text, host="www.ssbwiki.com")
+        self.assertEqual(choice.heading.title, "Techniques")
+
+    def test_mariowiki_narrows_history_to_the_matching_game_subsection(self):
+        text = (
+            "== History\n"
+            "=== Donkey Kong 64\nArmy Dillo fights Donkey Kong in Jungle Japes.\n"
+            "=== Uho'uho Daishizen Gag: Donkey Kong\nA comic-book cameo.\n"
+            "== Gallery\n"
+        )
+        headings = m.extract_headings(text)
+        choice = m.select_section(headings, text, host="www.mariowiki.com", game_title="Donkey Kong 64")
+        self.assertEqual(choice.heading.title, "Donkey Kong 64")
+        self.assertIn("Jungle Japes", choice.body)
+        self.assertNotIn("comic-book cameo", choice.body)
+
+    def test_mariowiki_falls_back_to_whole_history_when_no_subsection_matches(self):
+        text = "== History\nA general history paragraph with no per-game breakdown.\n== Gallery\n"
+        headings = m.extract_headings(text)
+        choice = m.select_section(headings, text, host="www.mariowiki.com", game_title="Donkey Kong 64")
+        self.assertEqual(choice.heading.title, "History")
+        self.assertIn("general history paragraph", choice.body)
+
+    def test_mariowiki_with_no_game_title_behaves_like_before(self):
+        text = "== History\nSome history text.\n== Gallery\n"
+        headings = m.extract_headings(text)
+        choice = m.select_section(headings, text, host="www.mariowiki.com")
+        self.assertEqual(choice.heading.title, "History")
+
+    def test_strategywiki_prefers_the_boss_name_heading_over_stage(self):
+        text = (
+            "== Stage\nA: hop on the goblin.\nB: fight the flying enemies.\n"
+            "== Metal Man\nMetal Man jumps and throws blades when you fire at him.\n"
+        )
+        headings = m.extract_headings(text)
+        choice = m.select_section(headings, text, host="strategywiki.org")
+        self.assertEqual(choice.heading.title, "Metal Man")
+        self.assertIn("throws blades", choice.body)
+
+    def test_strategywiki_falls_back_to_stage_when_nothing_else_has_content(self):
+        text = "== Stage\nA: hop on the goblin.\n== Metal Man\n"
+        headings = m.extract_headings(text)
+        choice = m.select_section(headings, text, host="strategywiki.org")
+        self.assertEqual(choice.heading.title, "Stage")
+        self.assertIn("only the 'Stage' map key had content", choice.reason)
+
+    def test_strategywiki_skips_a_navigation_heading(self):
+        text = "== Table of Contents\n== Stage\nA: hop on the goblin.\n== Metal Man\nBeat him fast.\n"
+        headings = m.extract_headings(text)
+        choice = m.select_section(headings, text, host="strategywiki.org")
+        self.assertEqual(choice.heading.title, "Metal Man")
+
+    def test_unknown_host_uses_the_plain_general_list(self):
+        text = "== Strategy\nGeneral tactics text.\n"
+        headings = m.extract_headings(text)
+        choice = m.select_section(headings, text, host="some-other-wiki.example")
+        self.assertEqual(choice.heading.title, "Strategy")
+
+
 class BodyToUnitsTests(unittest.TestCase):
     def test_prose_splits_into_sentences_in_order(self):
         units, dropped = m.body_to_units("First sentence. Second sentence.\n")
@@ -414,6 +512,53 @@ class BuildNoteEndToEndTests(unittest.TestCase):
                 section_type_arg=None, name_arg=None,
                 min_chars=50, max_chars=400, allowed_licences=allowed,
             )
+            self.assertEqual(note["section_type"], "boss")
+
+    def test_mariowiki_host_narrows_history_end_to_end(self):
+        """The full pipeline version of test_mariowiki_narrows_history_to_the_matching_game_
+        subsection: host and game_title come from build_note's own arguments (host derived
+        from the fetched source_url, never guessed), and the resulting note's card excludes
+        the comic-book cameo from a different History subsection."""
+        with tempfile.TemporaryDirectory() as tmp_str:
+            tmp = Path(tmp_str)
+            page = tmp / "army-dillo.txt"
+            page.write_text(
+                "# source: https://www.mariowiki.com/Army_Dillo\n"
+                "# site: Super Mario Wiki\n"
+                "# revision: 1 (2026-01-01T00:00:00Z)\n"
+                "# licence: (unused when a manifest sits beside it)\n"
+                "# read: 2026-09-17\n\n"
+                "== History\n"
+                "=== Donkey Kong 64\n"
+                "Army Dillo fights Donkey Kong in a jungle arena in Jungle Japes.\n"
+                "=== Uho'uho Daishizen Gag: Donkey Kong\n"
+                "Army Dillo appears in a comic book as a mecha built by the Kremlings.\n"
+                "== Gallery\n",
+                encoding="utf-8",
+            )
+            manifest = {
+                "site": {"sitename": "Super Mario Wiki"},
+                "pages": [{
+                    "requested": "Army Dillo", "title": "Army Dillo",
+                    "url": "https://www.mariowiki.com/Army_Dillo", "revid": 1,
+                    "timestamp": "2026-01-01T00:00:00Z",
+                    "categories": ["Donkey Kong 64 bosses"],
+                    "licence_text": "Attribution-ShareAlike 4.0 International",
+                    "licence_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+                    "read_on": "2026-09-17", "file": "army-dillo.txt",
+                }],
+            }
+            (tmp / "_manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+            allowed = m._load_allowed_licences()
+            note, sidecar, _ = m.build_note(
+                page_path=page, page_format="live", game_id=9,
+                section_type_arg=None, name_arg=None,
+                min_chars=10, max_chars=400, allowed_licences=allowed,
+                game_title="Donkey Kong 64",
+            )
+            self.assertIn("Jungle Japes", note["card"])
+            self.assertNotIn("comic book", note["card"])
+            self.assertEqual(sidecar["section_heading"], "Donkey Kong 64")
             self.assertEqual(note["section_type"], "boss")
 
     def test_licence_override_is_used_when_the_live_read_has_no_version(self):

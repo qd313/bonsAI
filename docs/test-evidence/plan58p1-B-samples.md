@@ -11,6 +11,12 @@ declared them, how the page was fetched, which section the reader picked and why
 section's raw text, the note the reader produced, its length, and anything the reader dropped
 or could not parse.
 
+**Second pass (also 2026-09-17, appended below the first pass's own sign-off): the finding
+below that only one of five wikis kept tactics under a heading the reader knew to look for
+led to a per-wiki heading preference, tried before the general list, plus a category-based
+guess for a note's kind. See "Second pass" near the end of this file for the twelve extra
+pages that proved it and two more real bugs it turned up.**
+
 ## Fetch outcomes, at a glance
 
 | Wiki | Page | Fetched how | Licence as declared | Section chosen | Note length |
@@ -294,6 +300,111 @@ between:
 None of this is a case for reverting "trim only" — the honesty problem plan 58 opens with
 (the model contradicting a note it was handed) does not reappear here, because nothing here
 was rewritten. It is a case for the Hollow Knight before/after comparison in Appendix C
-mattering more than a passing test suite: on this small sample, verbatim quality tracks
+mattering more than a passing test suite: on this small sample, verbatim quality tracked
 "does this wiki organise its pages the way our heading list expects" at least as much as it
+tracked writing quality — see the second pass below, which fixes exactly that.
+
+---
+
+## Second pass: a heading rule per wiki, before the ten games
+
+The finding above — only hollowknight.wiki keeps tactics under a heading the general list
+knows — was not a one-page fluke. Twelve more real pages (three per wiki that missed, one
+per wiki was not enough to be sure) confirmed a stable pattern per wiki, so the reader now
+tries an ordered, per-wiki heading list before its general one. The general list stays the
+fallback for a page that does not fit its own wiki's usual shape (a Mario Party board, a
+GTA vehicle). Three more changes came out of the same twelve pages: a note's kind (boss,
+enemy, item, area) is now read from the page's own category first, invisible formatting
+marks are trimmed from every unit, and the 880-character cap stayed exactly where it was —
+where good content did not fit, that is recorded below, not fixed by raising the cap.
+
+### The rule, per wiki
+
+| Host (from the page's own fetched address) | Tried before the general list | Grounded on |
+|---|---|---|
+| `gta.fandom.com` | "Mission" | Kingdom Come (pass 1) + 3 more below |
+| `www.mariowiki.com` | "History", narrowed to the subsection naming the game a note is for | Army Dillo (pass 1) + 3 more below |
+| `www.ssbwiki.com` | "Attributes", then "Techniques" | Mario (pass 1) + 3 more below |
+| `strategywiki.org` | the first heading that is not navigation or the "Stage" map key, else "Stage" | Air Man (pass 1) + 3 more below |
+
+A page's host is read from its own fetched `source_url` — never guessed, never taken from a
+filename. hollowknight.wiki gets no entry: its tactics heading was already on the general
+list (pass 1's one clean match), so nothing needed to change for it.
+
+### The twelve pages
+
+| Wiki | Page | Section chosen | Matched by | Note length | Served a player? |
+|---|---|---|---|---|---|
+| mariowiki.com | DK's Jungle Adventure (Mario Party 1 board) | Events | general list (no History on a board page) | 696 chars | Yes — the board's own rules (Whomps, Coin Stones, the Bowser path), read cleanly |
+| mariowiki.com | Ghost (Yoshi's Story) | Names in other languages | general list (page has no tactics content at all) | 224 chars | No — a translation table, not tactics; this page is too thin to note (see "Wiki quality is uneven" in the plan) |
+| mariowiki.com | Wizpig (Diddy Kong Racing) | History → "Diddy Kong Racing / Diddy Kong Racing DS" | per-wiki rule, narrowed | 735 chars | Yes — the whole amulet/race plot, with the Mario no Boken Land and 4koma comic cameos correctly left out |
+| ssbwiki.com | Pikachu (SSB) | Attributes | per-wiki rule | 837 chars | Half — genuinely useful (mobility, up tilt/up smash combo game) but assumes Smash vocabulary |
+| ssbwiki.com | Donkey Kong (SSB) | Attributes | per-wiki rule | 861 chars | Half — same shape: real strengths/weaknesses, jargon-heavy ("shield break combos", "meteor smashes") |
+| ssbwiki.com | Fox (SSB) | Attributes | per-wiki rule | 692 chars | Half — same shape again; reads as a matchup primer, not a direct answer |
+| gta.fandom.com | The Crook (GTA III mission) | Mission Objectives | per-wiki rule (substring on "mission") | 157 chars | Yes, though thin — two real objectives, short because the page itself is short |
+| gta.fandom.com | Sayonara Salvatore (GTA III mission) | Mission | per-wiki rule (exact) | 468 chars | Yes — the whole betrayal/assassination plot in one clean paragraph |
+| gta.fandom.com | Trashmaster (GTA III vehicle) | Trashmaster (the page's own infobox) | general list (no Mission heading on a vehicle page) | 618 chars | Half — accurate spec facts (games it appears in, body style, seats), not tactics; there is nothing to strategize about a garbage truck |
+| strategywiki.org | Mega Man 2 / Metal Man | Metal Man | per-wiki rule | 880 chars | Yes — full attack pattern and the exact punish window |
+| strategywiki.org | Mega Man 2 / Bubble Man | Bubble Man | per-wiki rule | 861 chars | Yes — same shape, equally complete |
+| strategywiki.org | Mega Man 2 / Wood Man | Wood Man | per-wiki rule | 841 chars | Yes — same shape again |
+
+Two pages proved the rule by not fitting it, exactly as intended: DK's Jungle Adventure has
+no "History" heading at all (Mario Party boards use "Events"/"Spaces" instead), and
+Trashmaster has no "Mission" heading (GTA vehicle pages use "Design"/"Performance"/"Variants"
+instead). Both fell through cleanly to the general list rather than the per-wiki rule
+grabbing content that was never there.
+
+### The same two pages from pass 1, re-read under the new rule
+
+- **strategywiki.org — Air Man**, re-read: the section chosen is now "Air Man" (822 chars,
+  full tornado-dodge attack pattern) instead of pass 1's "Stage" (617 chars, the lettered
+  map-key walkthrough with no map to show). This is the clearest single before/after in this
+  file — same page, same fetch, a materially better note once the rule stopped preferring
+  the wrong one of the page's only two headings.
+- **mariowiki.com — Army Dillo**, re-read with `--game-title "Donkey Kong 64"`: the printed
+  card is unchanged (854 characters both times, because the comic-book cameo sentences were
+  already past the character cap in pass 1's reading) but the section actually read shrank
+  from the whole "History" text to just the "Donkey Kong 64" subsection — confirmed by the
+  dropped-sentence count falling from 51 to 38. A shorter character cap, or a slightly longer
+  Army Dillo write-up on the wiki, would have shown the cameo leaking through in pass 1 and
+  not in this one; here the fix is real but the sample page happened not to need it yet.
+
+### What else this pass found
+
+- **A note's kind is read from the page's own category first.** Army Dillo's body words alone
+  guessed "mechanic" in pass 1 (there is no literal word "boss" naming the page, only
+  describing the fight) — wrong. Its own category, "Donkey Kong 64 bosses", now settles it to
+  "boss" before body words are even read. A live page's categories never show up in its
+  fetched text at all (MediaWiki puts them in a footer box the fetcher already treats as
+  furniture on purpose), so `fetch_wiki_live_pages.py` now asks the API for them directly. A
+  dump page still has them as `[[Category:...]]` wikitext, now both read for the guess and
+  stripped from the body (previously undiscovered: they would have rendered as stray
+  `Category:Bosses` text in a dump-sourced note — none of the pass-1 dump samples happened to
+  have one to expose this).
+- **Invisible formatting marks are trimmed.** Two of the pass-1 samples (False Knight, and
+  now Army Dillo's own page separately) carry left-to-right mark characters (U+200E) that are
+  invisible on screen but real characters, sitting at the very start of a printed note. They
+  are now trimmed from every unit (a sentence, a list item, a labelled line's label or value)
+  wherever they land.
+- **A near-miss, not fixed:** The Crook's page also carries a heading literally titled "You
+  shouldn't see this", holding a broken template's placeholder text ("Label", "Field", "Type:
+  MISSION"). It never won a note here only because "Mission Objectives" (a real heading, a
+  few lines later) matched the per-wiki rule first. Had this page had no "Mission" heading at
+  all, the general list's final fallback (first non-empty section, in document order) would
+  have surfaced the broken template text instead, since "You shouldn't see this" comes before
+  "Mission Objectives" in the page. Worth a maintainer decision later: either wiki-specific
+  junk-heading names to skip (mirroring strategywiki.org's own skip list), or a generic rule
+  against a heading whose own words look like an error message.
+- **A fetcher quirk found, not fixed (outside this pass's four items):**
+  `fetch_wiki_dump_pages.py`'s `manifest.json` is overwritten, not merged, on each run — the
+  live fetcher merges by title, the dump fetcher does not. Fetching Metal Man/Bubble Man/Wood
+  Man after Air Man dropped Air Man's own manifest entry, and the reader's fallback (guess the
+  title from the filename, leave `revision_id` blank) covered for it quietly rather than
+  failing loudly. Re-fetching all four titles together restored it for this file's numbers.
+  A maintainer doing this for real, one page at a time across many runs, would want the dump
+  fetcher to merge the way the live one already does.
+- **The 880-character cap was not touched, as instructed.** Metal Man's note above hits the
+  cap exactly (880) with four more verbatim, correct sentences left unused (visible in that
+  page's own dropped-notes list when the reader is run directly) — a longer cap would have
+  carried them, but that is a finding, not a change made here.
 tracks writing quality.

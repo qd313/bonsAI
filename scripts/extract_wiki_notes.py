@@ -82,6 +82,33 @@ SECTION_HEADING_PRIORITY = [
 # tactics, so a note built from it is weaker -- the reason is printed for a person to check.
 FALLBACK_SECTION_HEADING = "overview"
 
+# Per-wiki heading preferences, tried BEFORE the general list above. Keyed by the exact host
+# from the page's own fetched source_url (never guessed at, never a filename). Seeded from
+# five real pages per wiki -- see docs/test-evidence/plan58p1-B-samples.md for the pages that
+# grounded each one. Only one of the five sampled wikis (hollowknight.wiki) keeps tactics
+# under a heading already on the general list; the other four are why this table exists.
+HOST_HEADING_PREFERENCE: dict[str, list[str]] = {
+    # GTA Wiki mission pages describe the mission under "Mission"; "Walkthrough" exists on
+    # every mission page but is often empty (confirmed empty on three of four sampled).
+    "gta.fandom.com": ["mission"],
+    # Super Mario Wiki folds a boss fight into a chronological "History" section, often with
+    # one subsection per game it appeared in -- see _narrow_mariowiki_history below, which
+    # narrows to just the subsection naming the game a note is for.
+    "www.mariowiki.com": ["history"],
+    # SmashWiki keeps general playstyle under "Attributes" and named tricks under
+    # "Techniques" -- confirmed on four Smash 64 character pages.
+    "www.ssbwiki.com": ["attributes", "techniques"],
+}
+
+# strategywiki.org boss/stage subpages carry a "Stage" heading (the level walkthrough, often
+# keyed to lettered points on a map image the reader cannot show) and a heading named after
+# the boss or subject itself, which usually holds the actual fight strategy -- confirmed on
+# four Mega Man 2 boss pages (Air Man, Metal Man, Bubble Man, Wood Man). "Stage" is preferred
+# LAST here, the opposite of every other host, so it needs its own selector rather than a
+# plain keyword list.
+_STRATEGYWIKI_LOW_PRIORITY = {"stage"}
+_STRATEGYWIKI_SKIP = {"table of contents", "contents", "navigation", "see also", "external links"}
+
 # Guessing section_type (boss/enemy/area/item/mechanic/quest/dungeon -- the values already in
 # strategy_seed.json) from the page's own words. Always printed for a person to check; never
 # trusted silently. Checked in this order because "boss" pages often also say "enemy" in body
@@ -501,20 +528,87 @@ class SectionChoice:
     reason: str
 
 
-def select_section(headings: list[Heading], text: str) -> SectionChoice:
+def _narrow_mariowiki_history(
+    history: Heading, headings: list[Heading], text: str, game_title: str
+) -> SectionChoice | None:
+    """Super Mario Wiki often gives one boss/subject a "History" section with one subsection
+    per game it appeared in (e.g. Wizpig's "History" holds "Background", "Diddy Kong Racing /
+    Diddy Kong Racing DS", "Mario no Boken Land" and a comic-book cameo, all as its own
+    subsections). Narrows to just the subsection naming the game a note is being made for, so
+    a Donkey Kong 64 note does not carry a comic-book cameo from the same "History" section."""
+    game_lower = game_title.strip().lower()
+    for h in headings:
+        if (
+            h.level > history.level
+            and history.line_start < h.line_start < history.body_end
+            and game_lower in h.title.strip().lower()
+            and text[h.body_start : h.body_end].strip()
+        ):
+            return SectionChoice(
+                h, text[h.body_start : h.body_end],
+                f"www.mariowiki.com: narrowed 'History' to the {h.title!r} subsection matching {game_title!r}",
+            )
+    return None
+
+
+def _select_strategywiki_section(headings: list[Heading], text: str) -> SectionChoice | None:
+    def nonempty(h: Heading) -> bool:
+        return bool(text[h.body_start : h.body_end].strip())
+
+    for h in headings:
+        title = h.title.strip().lower()
+        if title not in _STRATEGYWIKI_LOW_PRIORITY and title not in _STRATEGYWIKI_SKIP and nonempty(h):
+            return SectionChoice(
+                h, text[h.body_start : h.body_end],
+                f"strategywiki.org: first heading that is not navigation or the Stage map key, {h.title!r}",
+            )
+    for h in headings:
+        if h.title.strip().lower() in _STRATEGYWIKI_LOW_PRIORITY and nonempty(h):
+            return SectionChoice(
+                h, text[h.body_start : h.body_end],
+                "strategywiki.org: only the 'Stage' map key had content",
+            )
+    return None
+
+
+def select_section(
+    headings: list[Heading], text: str, *, host: str = "", game_title: str = ""
+) -> SectionChoice:
     """A heading whose body is blank is skipped in favour of the next candidate -- some GTA
     Wiki mission pages carry a "Walkthrough" heading with nothing written under it (the real
     mission description sits under a different heading, "Mission", not on our list), and an
-    empty note would be worse than a lower-priority one that actually has words in it."""
+    empty note would be worse than a lower-priority one that actually has words in it.
+
+    `host` (the fetched page's own source_url host, never guessed) and `game_title` (an
+    argument the caller passes) unlock two per-wiki rules ahead of the general list below --
+    see HOST_HEADING_PREFERENCE's comment for what grounded each one."""
 
     def nonempty(h: Heading) -> bool:
         return bool(text[h.body_start : h.body_end].strip())
 
-    for keyword in SECTION_HEADING_PRIORITY:
+    if host == "strategywiki.org":
+        choice = _select_strategywiki_section(headings, text)
+        if choice:
+            return choice
+        # else: no heading at all had content -- fall through to the general chain, which
+        # ends in the same "every section is empty" / "no headings at all" outcomes.
+
+    if host == "www.mariowiki.com" and game_title:
+        history = next((h for h in headings if h.title.strip().lower() == "history"), None)
+        if history is not None:
+            narrowed = _narrow_mariowiki_history(history, headings, text, game_title)
+            if narrowed:
+                return narrowed
+            # else: "History" exists but no subsection names this game -- fall through, and
+            # the keyword loop below will still match "History" as a whole if nothing better
+            # turns up, exactly as it did before this rule existed.
+
+    keywords = HOST_HEADING_PREFERENCE.get(host, []) + SECTION_HEADING_PRIORITY
+    for keyword in keywords:
         for h in headings:
             if h.title.strip().lower() == keyword and nonempty(h):
                 return SectionChoice(h, text[h.body_start : h.body_end], f"heading matches {h.title!r} exactly")
-    for keyword in SECTION_HEADING_PRIORITY:
+    for keyword in keywords:
         for h in headings:
             if keyword in h.title.strip().lower() and nonempty(h):
                 return SectionChoice(h, text[h.body_start : h.body_end], f"heading {h.title!r} contains {keyword!r}")
@@ -758,11 +852,13 @@ def build_note(
     max_chars: int,
     allowed_licences: frozenset[str],
     licence_override: str | None = None,
+    game_title: str = "",
 ) -> tuple[dict, dict, list[str]]:
     if page_format == "live":
         meta, body = load_live_page(page_path)
     else:
         meta, body = load_dump_page(page_path)
+    host = urllib.parse.urlparse(meta.get("url", "")).netloc.lower()
 
     licence = canonical_licence(meta.get("licence_text", ""), meta.get("licence_url", ""))
     if licence is None and licence_override:
@@ -789,7 +885,7 @@ def build_note(
         )
 
     headings = extract_headings(body)
-    choice = select_section(headings, body)
+    choice = select_section(headings, body, host=host, game_title=game_title)
     section_body = choice.body
     units, dropped_notes = body_to_units(section_body)
     kept, length_note = trim_to_length(units, min_chars, max_chars)
@@ -846,7 +942,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--page", required=True, type=Path, help="the fetched page (.txt from the live fetcher, .wikitext from the dump fetcher)")
     parser.add_argument("--format", choices=["auto", "live", "dump"], default="auto")
     parser.add_argument("--game-id", required=True, type=int)
-    parser.add_argument("--section-type", default=None, help="skip the heading-based guess")
+    parser.add_argument(
+        "--game-title", default="", help="the game this note is for -- unlocks the "
+        "www.mariowiki.com rule that narrows a 'History' section to just the subsection "
+        "naming this game, instead of the whole section",
+    )
+    parser.add_argument("--section-type", default=None, help="skip the category/heading-based guess")
     parser.add_argument("--name", default=None, help="override the note's name (default: the page title)")
     parser.add_argument("--min-chars", type=int, default=400)
     parser.add_argument("--max-chars", type=int, default=880)
@@ -874,6 +975,7 @@ def main(argv: list[str] | None = None) -> int:
         max_chars=args.max_chars,
         allowed_licences=allowed,
         licence_override=args.source_license,
+        game_title=args.game_title,
     )
 
     print("=== NOTE RECORD (print only -- never written into data/kb/strategy_seed.json) ===")

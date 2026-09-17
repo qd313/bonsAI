@@ -364,19 +364,10 @@ class OllamaServiceTests(unittest.TestCase):
         mock_urlopen.side_effect = [first, second]
         deltas_seen: list[tuple[str, bool]] = []
 
-        out = post_ollama_chat(
-            "http://127.0.0.1:11434/api/chat",
-            "vision:test",
-            [{"role": "user", "content": "what should I do"}],
-            60,
-            [],
-            [],
-            [],
-            [],
-            MagicMock(),
+        out = self._post(
+            mock_urlopen,
             "strategy",
-            "5m",
-            cancel_requested=lambda: False,
+            question="what should I do",
             on_delta=lambda text, done, _thinking=None, **_kw: deltas_seen.append((text, done)),
         )
 
@@ -437,19 +428,11 @@ class OllamaServiceTests(unittest.TestCase):
         )
         deltas_seen: list[str] = []
 
-        out = post_ollama_chat(
-            "http://127.0.0.1:11434/api/chat",
-            "gemma4:e2b-it-qat",
-            [{"role": "user", "content": "how do i deal with the exploders"}],
-            60,
-            [],
-            [],
-            [],
-            [],
-            MagicMock(),
+        out = self._post(
+            mock_urlopen,
             "strategy",
-            "5m",
-            cancel_requested=lambda: False,
+            model="gemma4:e2b-it-qat",
+            question="how do i deal with the exploders",
             on_delta=lambda text, done, _thinking=None, **_kw: deltas_seen.append(text),
         )
 
@@ -648,12 +631,14 @@ class OllamaServiceTests(unittest.TestCase):
         *,
         think_effort: str = "off",
         model: str = "vision:test",
+        question: str = "q",
+        on_delta=None,
     ) -> dict:
         """post_ollama_chat with the boilerplate args this suite never varies."""
         return post_ollama_chat(
             "http://127.0.0.1:11434/api/chat",
             model,
-            [{"role": "user", "content": "q"}],
+            [{"role": "user", "content": question}],
             60,
             [],
             [],
@@ -663,7 +648,7 @@ class OllamaServiceTests(unittest.TestCase):
             ask_mode,
             "5m",
             cancel_requested=lambda: False,
-            on_delta=None,
+            on_delta=on_delta,
             think_effort=think_effort,
         )
 

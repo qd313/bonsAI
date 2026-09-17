@@ -42,7 +42,10 @@ export type ModalReturnFocusId =
   | "session-context-clear"
   /** Ollama tab's two "Set ... model try order..." openers (plan 55 bug B2). */
   | "ollama-text-try-order"
-  | "ollama-vision-try-order";
+  | "ollama-vision-try-order"
+  /** The Thinking row's one-time notice (plan 57 bug D): its own container, since any of the
+   *  row's four buttons can be the one that opened the popup. */
+  | "ollama-thinking-effort";
 
 const owners = new Map<ModalReturnFocusId, HTMLElement>();
 let pendingReturn: ModalReturnFocusId | null = null;

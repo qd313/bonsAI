@@ -28,12 +28,7 @@ import {
 
 export type OllamaThinkingEffortRowProps = {
   value: AskThinkEffortId;
-  /**
-   * `sourceEl` is the actual button DOM node the person just pressed -- handed along so a caller
-   * that needs to put the D-pad ring back on it later (the one-time Thinking notice) has a real
-   * element in hand rather than needing to search the page for it afterward.
-   */
-  onChange: (v: AskThinkEffortId, sourceEl: HTMLButtonElement) => void;
+  onChange: (v: AskThinkEffortId) => void;
   /** Host for the focus entry point, so neighbours can hand focus to the first button. */
   hostRef?: React.Ref<HTMLDivElement>;
   onMoveUp: () => boolean;
@@ -94,7 +89,7 @@ export function OllamaThinkingEffortRow({
           return (
             <Button
               key={`think-effort-${option}`}
-              onClick={(e: MouseEvent) => onChange(option, e.currentTarget as HTMLButtonElement)}
+              onClick={() => onChange(option)}
               style={{
                 flex: 1,
                 minHeight: 36,

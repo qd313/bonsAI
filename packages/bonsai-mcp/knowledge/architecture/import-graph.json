@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 412,
-  "edgeCount": 1051,
+  "edgeCount": 1055,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1213,6 +1213,7 @@
         "src/hooks/useReadAloud.ts",
         "src/hooks/useReplyFeedbackChips.ts",
         "src/hooks/useStrategyChecklistSession.ts",
+        "src/hooks/useThinkingNoticeGate.test.tsx",
         "src/index.tsx",
         "src/test-harness/rpcFixtures.ts",
         "src/utils/appDesktopLog.ts",
@@ -1694,7 +1695,9 @@
         "src/features/chat-slots/useChatSlotRenameModal.tsx",
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/modalReturnFocusRegistry.test.ts",
-        "src/hooks/useBonsaiPluginShell.ts"
+        "src/hooks/useBonsaiPluginShell.ts",
+        "src/hooks/useThinkingNoticeGate.test.tsx",
+        "src/hooks/useThinkingNoticeGate.tsx"
       ]
     },
     "src/features/plugin-shell/pluginStorage.ts": {
@@ -2479,17 +2482,21 @@
     "src/hooks/useThinkingNoticeGate.test.tsx": {
       "imports": [
         "src/data/askThinkEffort.ts",
+        "src/data/bonsaiSettingsSchema.ts",
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/hooks/useDisclaimerAndLocalRuntimeGates.tsx",
         "src/hooks/useThinkingNoticeGate.tsx",
-        "src/test-harness/fakeDeckyUi.tsx"
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/utils/bonsaiSessionSurvival.ts"
       ],
       "importedBy": []
     },
     "src/hooks/useThinkingNoticeGate.tsx": {
       "imports": [
         "src/data/askThinkEffort.ts",
+        "src/features/plugin-shell/modalReturnFocusRegistry.ts",
         "src/hooks/useDisclaimerAndLocalRuntimeGates.tsx",
-        "src/utils/uiDocument.ts"
+        "src/utils/bonsaiSessionSurvival.ts"
       ],
       "importedBy": [
         "src/components/OllamaTab.tsx",
@@ -3287,6 +3294,8 @@
         "src/hooks/useScreenshotBrowser.ts",
         "src/hooks/useStrategyChecklistSession.ts",
         "src/hooks/useSuggestedPromptChips.ts",
+        "src/hooks/useThinkingNoticeGate.test.tsx",
+        "src/hooks/useThinkingNoticeGate.tsx",
         "src/index.tsx",
         "src/types/askOrchestration.ts",
         "src/utils/bonsaiSessionSurvival.test.ts"
@@ -4291,7 +4300,6 @@
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/hooks/useMainTabAskBarFocus.test.ts",
         "src/hooks/useMainTabAskBarFocus.ts",
-        "src/hooks/useThinkingNoticeGate.tsx",
         "src/preview/replyLayoutReport.test.ts",
         "src/preview/replyLayoutReport.ts",
         "src/utils/answerBubbleElRegistry.test.ts",

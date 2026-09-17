@@ -173,12 +173,24 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
   const kbCancelBtnRef = useRef<HTMLButtonElement>(null);
   const connectionTestBtnRef = useRef<HTMLButtonElement>(null);
   const replyVerbosityThumbHostRef = useRef<HTMLDivElement>(null);
-  const thinkingEffortHostRef = useRef<HTMLDivElement>(null);
+  const thinkingEffortHostRef = useRef<HTMLDivElement | null>(null);
 
   const { requestThinkingEffortChange } = useThinkingNoticeGate(askThinkEffort, setAskThinkEffort, {
     onBeforeDeckyModal,
     onCompleteDeckyModalClose,
   });
+
+  // Registers the row's own container as the modal return-focus owner for its one-time notice
+  // (plan 57 bug D). A ref callback, not the ref object alone, because it has to re-register on
+  // every mount -- Decky remounts this whole screen when the notice popup closes, and a plain
+  // `useRef` object does not fire again on its own. The row is not a single button (it is four,
+  // and which one was pressed can change what is selected), so the registered owner is the row's
+  // container; `focusOwnerById` in modalReturnFocusRegistry.ts falls back to the first button
+  // inside a registered element that is not itself a button.
+  const setThinkingEffortHost = useCallback((el: HTMLDivElement | null) => {
+    thinkingEffortHostRef.current = el;
+    registerModalReturnFocusOwner("ollama-thinking-effort", el);
+  }, []);
 
   const focusOllamaKeepAliveThumb = useCallback((): boolean => {
     const host = ollamaKeepAliveThumbHostRef.current;
@@ -321,7 +333,7 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
             <OllamaThinkingEffortRow
               value={askThinkEffort}
               onChange={requestThinkingEffortChange}
-              hostRef={thinkingEffortHostRef}
+              hostRef={setThinkingEffortHost}
               onMoveUp={focusReplyVerbosityThumb}
               onMoveDown={focusLatencyWarningThumb}
             />

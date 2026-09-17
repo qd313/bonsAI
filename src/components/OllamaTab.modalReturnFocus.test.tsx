@@ -1,16 +1,22 @@
 /**
  * Title: Ollama tab modal return-focus wiring
- * Purpose: Pin that the two "Set ... model try order..." buttons arm and register themselves with
- *          the modal return-focus registry, the same way Settings -> Data's two confirm-modal
- *          openers already do.
+ * Purpose: Pin that the two "Set ... model try order..." buttons, and the Thinking row's own
+ *          one-time notice, arm and register themselves with the modal return-focus registry, the
+ *          same way Settings -> Data's two confirm-modal openers already do.
  * Used for: plan 55 bug B2 -- closing the try-order picker put the ring on the Ollama tab's outer
- *           frame instead of back on the button that opened it.
- * Solves: Neither button ever called `rememberModalReturnFocus` nor registered a ref with the
- *         registry, so there was nothing for the picker's already-correct close path to restore
- *         focus to.
+ *           frame instead of back on the button that opened it -- and the 2026-09-17 device
+ *           finding for the Thinking row's notice (docs/test-evidence/plan57-REASONING-07.json):
+ *           the same defect, one level up, in useThinkingNoticeGate.tsx -- it kept a direct
+ *           reference to the pressed button instead of registering with this registry, so the
+ *           reference was already detached by the time Decky's remount happened and the ring
+ *           landed on the tab strip.
+ * Solves: Neither try-order button ever called `rememberModalReturnFocus` nor registered a ref with
+ *         the registry, so there was nothing for the picker's already-correct close path to restore
+ *         focus to. The Thinking row's notice had the same gap.
  * Does not: Exercise the picker modal itself -- the test harness's `showModal` stub discards its
  *           argument rather than rendering it (src/test-harness/fakeDeckyUi.tsx). This only proves
- *           the wiring the fix depends on is in place.
+ *           the wiring the fix depends on is in place. What happens once "Show thinking" or "Keep
+ *           it off" is actually pressed is pinned in useThinkingNoticeGate.test.tsx, not here.
  */
 import { fireEvent, render } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -109,5 +115,26 @@ describe("OllamaTab modal return focus", () => {
 
     expect(visionFocus).toHaveBeenCalled();
     expect(textFocus).not.toHaveBeenCalled();
+  });
+
+  it("remembers ollama-thinking-effort when a Thinking button opens the one-time notice", () => {
+    // askThinkEffort defaults to "off" in buildProps, so any other choice opens the notice.
+    const { getByText } = render(<OllamaTab {...buildProps()} />);
+    fireEvent.click(getByText("Brief"));
+    expect(peekModalReturnFocus()).toBe("ollama-thinking-effort");
+  });
+
+  it("registers the Thinking row so the registry can focus it back", () => {
+    const { getByText } = render(<OllamaTab {...buildProps()} />);
+    const briefButton = getByText("Brief").closest("button") as HTMLButtonElement;
+    const offButton = getByText("Off").closest("button") as HTMLButtonElement;
+    // The row's container is what gets registered (any of its four buttons can be the one
+    // pressed), and the registry's own fallback focuses the first button inside it -- Off, here.
+    const focus = vi.spyOn(offButton, "focus");
+
+    fireEvent.click(briefButton);
+    restoreModalReturnFocus();
+
+    expect(focus).toHaveBeenCalled();
   });
 });

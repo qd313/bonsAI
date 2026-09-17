@@ -24,13 +24,35 @@
  * itself is saved -- see `askThinkEffort.ts` and the settings the Ollama tab
  * already owns. This file only decides whether to show the popup before a
  * change lands, and remembers that it has been shown.
+ *
+ * Two device bugs fixed here (measured 2026-09-17, docs/test-evidence/plan57-REASONING-07.json):
+ *
+ * (a) The D-pad ring used to be sent back with a plain `focusBackOnto(sourceEl)` -- a direct
+ *     reference to the pressed button, kept across the popup's lifetime. Decky remounts the
+ *     plugin's whole screen when this kind of popup closes (see modalReturnFocusRegistry.ts),
+ *     so that reference is a detached, unmounted node by the time the popup actually closes --
+ *     focusing it is a no-op, which is why the ring landed on the tab strip instead. Fixed by
+ *     using the same registry every other popup on this screen uses: `rememberModalReturnFocus`
+ *     before the popup opens, and a registered owner the registry can find again after the
+ *     remount.
+ * (b) Accepting used to apply the change with a plain `setAskThinkEffort(next)` and nothing
+ *     else. `onBeforeDeckyModal` (captureSessionBeforeModal) snapshots the whole session,
+ *     including every setting, right before the popup opens -- before the person has chosen
+ *     anything. Decky's remount restores settings from that snapshot in preference to a fresh
+ *     read from disk (see `takeRestoredSettingsSnapshot` in usePluginSettings.ts), so the
+ *     snapshot's still-Off value always won, no matter how fast the setting itself saved.
+ *     `useRoutingOrderModal.ts` hit the identical bug for the model try-order pickers (2026-09-06)
+ *     and fixed it by patching the pending snapshot right after applying the change, with
+ *     `patchPendingSessionSettingsSnapshot`; this file does the same thing for the level chosen
+ *     here.
  */
 import { useCallback, useEffect, useRef } from "react";
 import { showModal, ConfirmModal } from "@decky/ui";
 
-import { elementHasGamepadFocus } from "../utils/uiDocument";
 import type { AskThinkEffortId } from "../data/askThinkEffort";
 import { THINKING_NOTICE_STORAGE_KEY, type DeckyModalSurvivalHooks } from "./useDisclaimerAndLocalRuntimeGates";
+import { rememberModalReturnFocus } from "../features/plugin-shell/modalReturnFocusRegistry";
+import { patchPendingSessionSettingsSnapshot } from "../utils/bonsaiSessionSurvival";
 
 const THINKING_NOTICE_DESCRIPTION =
   "Thinking shows on screen as it happens and is not checked for spoilers. Show it?";
@@ -51,45 +73,14 @@ function markThinkingNoticeAccepted(): void {
   }
 }
 
-/**
- * Moves Steam's own D-pad ring back onto a known element once the popup closes, either way. A
- * plain `focus()` alone does not reliably move Steam's ring across a modal boundary (AGENTS.md,
- * the Decky focus graph section) -- this checks with `elementHasGamepadFocus` and, only if that
- * first try has not landed yet, retries across a couple more frames, the same idea
- * `modalReturnFocusRegistry.ts` uses for every other popup on this plugin. No page search here:
- * the element is the actual button the person pressed, handed straight through from the click that
- * opened this popup (`OllamaThinkingEffortRow`'s `onChange`), never looked up afterward.
- */
-function focusBackOnto(el: HTMLElement, retryDelaysMs: number[] = [120, 320]): void {
-  let index = 0;
-  const attempt = () => {
-    try {
-      el.focus({ preventScroll: true });
-    } catch {
-      try {
-        el.focus();
-      } catch {
-        /* ignore */
-      }
-    }
-    if (elementHasGamepadFocus(el)) return;
-    if (index >= retryDelaysMs.length) return;
-    const delay = retryDelaysMs[index];
-    index += 1;
-    window.setTimeout(attempt, delay);
-  };
-  attempt();
-}
-
 export type ThinkingNoticeGateApi = {
   /**
    * Call this instead of the settings setter directly. The first time this moves the level off
    * Off on this device, it shows the notice and only applies the change if the person presses
    * "Show thinking". Every other change -- Brief/Balanced/Deep between each other, or moving back
-   * to Off -- applies right away with no popup. `sourceEl` is the button that was pressed, so a
-   * closed popup can put the D-pad ring straight back on it.
+   * to Off -- applies right away with no popup.
    */
-  requestThinkingEffortChange: (next: AskThinkEffortId, sourceEl: HTMLButtonElement) => void;
+  requestThinkingEffortChange: (next: AskThinkEffortId) => void;
 };
 
 /**
@@ -97,8 +88,9 @@ export type ThinkingNoticeGateApi = {
  * lifecycle hooks (`onBeforeDeckyModal`, `onCompleteDeckyModalClose`) the Ollama tab already
  * threads through every other confirm box it opens.
  * Out: a change requester to use in place of the raw setter.
- * Can go wrong: nothing -- the button handed in at request time is always the real element the
- * person just pressed, so there is no "not registered yet" case to fall back from.
+ * Can go wrong: the return-focus registry entry ("ollama-thinking-effort") has to actually be
+ * registered by the row for the ring to come back -- if the row is not on screen by the time the
+ * popup closes, focus is simply left where it is, the same fallback every other registry entry has.
  */
 export function useThinkingNoticeGate(
   askThinkEffort: AskThinkEffortId,
@@ -111,12 +103,16 @@ export function useThinkingNoticeGate(
   }, [modalHooks]);
 
   const requestThinkingEffortChange = useCallback(
-    (next: AskThinkEffortId, sourceEl: HTMLButtonElement) => {
+    (next: AskThinkEffortId) => {
       if (askThinkEffort !== "off" || next === "off" || hasAcceptedThinkingNotice()) {
         setAskThinkEffort(next);
         return;
       }
       modalHooksRef.current?.onBeforeDeckyModal();
+      // Remembered before the popup opens, same as every other opener on this screen
+      // (modalReturnFocusRegistry.ts) -- `onCompleteDeckyModalClose` below reads this back once
+      // the remount has happened and the row exists again.
+      rememberModalReturnFocus("ollama-thinking-effort");
       const handle = showModal(
         <ConfirmModal
           strTitle="bonsAI - Thinking"
@@ -126,12 +122,17 @@ export function useThinkingNoticeGate(
           onOK={() => {
             markThinkingNoticeAccepted();
             setAskThinkEffort(next);
+            // `onBeforeDeckyModal` already snapshotted the whole session -- including Thinking
+            // still at Off -- before this popup ever opened. Decky's remount restores settings
+            // from that snapshot in preference to a fresh disk read, so without this patch the
+            // choice just made would be silently overwritten with the stale Off the moment the
+            // popup closes. Same defect and same fix `useRoutingOrderModal.ts` uses for the
+            // model try-order pickers.
+            patchPendingSessionSettingsSnapshot({ askThinkEffort: next });
             modalHooksRef.current?.onCompleteDeckyModalClose(() => handle.Close());
-            focusBackOnto(sourceEl);
           }}
           onCancel={() => {
             modalHooksRef.current?.onCompleteDeckyModalClose(() => handle.Close());
-            focusBackOnto(sourceEl);
           }}
         />
       );

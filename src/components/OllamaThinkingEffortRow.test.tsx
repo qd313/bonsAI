@@ -1,12 +1,12 @@
 /**
  * Title: Thinking effort row tests
  * Purpose: Pin that the row draws its four choices with the right labels and description text,
- *          and that pressing one calls `onChange` with both the choice and the actual button
- *          element that was pressed -- the piece the one-time Thinking notice (plan 57 step 2)
- *          needs to put the D-pad ring back where it was, with no page search.
+ *          and that pressing one calls `onChange` with the choice that was pressed.
  * Used for: plan 57 step 2 (lane B).
- * Solves: Nothing pinned that `onChange` receives a real button handle rather than just the
- *         chosen id, which is what lets the caller avoid searching the page for it afterward.
+ * Solves: Nothing pinned that pressing a button reports the right choice to the caller.
+ * Does not: Cover the D-pad ring returning to this row after its one-time Thinking notice closes
+ *           -- that goes through the real modal return-focus registry now, not a button handle
+ *           passed through `onChange`, and is pinned in useThinkingNoticeGate.test.tsx instead.
  */
 import { fireEvent, render } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
@@ -34,7 +34,7 @@ describe("OllamaThinkingEffortRow", () => {
     expect(getByText(ASK_THINK_EFFORT_DESCRIPTIONS.medium)).toBeTruthy();
   });
 
-  it("calls onChange with the choice and the actual button pressed", () => {
+  it("calls onChange with the choice that was pressed", () => {
     const onChange = vi.fn();
     const { getByText } = render(
       <OllamaThinkingEffortRow value="off" onChange={onChange} onMoveUp={() => true} onMoveDown={() => true} />
@@ -43,6 +43,6 @@ describe("OllamaThinkingEffortRow", () => {
 
     fireEvent.click(button);
 
-    expect(onChange).toHaveBeenCalledWith("medium", button);
+    expect(onChange).toHaveBeenCalledWith("medium");
   });
 });

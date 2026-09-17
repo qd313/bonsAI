@@ -39,6 +39,7 @@ import {
   TAB_BAR_REST_HEIGHT_PX,
   TAB_BAR_SHOULDER_MARK_PX,
   TAB_BAR_SLOT_W_PX,
+  TAB_BAR_STRIP_BG_HEX,
   TAB_BAR_STRIP_PAD_X_PX,
   TAB_BAR_STRIP_PAD_Y_PX,
   TAB_BAR_SWITCH_FADE_MS,
@@ -189,8 +190,8 @@ export function buildTabIndicatorBarSection(): string {
            the 10px of top/bottom padding); the 44px cells sit centred in it by align-items: center,
            about 5.5px of empty space above and below, exactly as the chosen mockup drew them (the
            board's own drawing was a 54px bar with a 43px content box; the cells themselves did not
-           change). TAB_BAR_STRIP_BG_HEX is not in constants.ts yet (Lane B's token, plan 59 W3) —
-           #141c24 is the same colour written as a literal; the landing reconciles the two. */
+           change). The bar colour is TAB_BAR_STRIP_BG_HEX, the same token the lifted accent in
+           characterUiAccent.ts is computed against, so the two cannot drift apart. */
         .bonsai-scope .bonsai-tab-bar__strip {
           position: absolute;
           top: 0;
@@ -204,7 +205,7 @@ export function buildTabIndicatorBarSection(): string {
           align-items: center;
           gap: ${uiScalePx(TAB_BAR_CELL_GAP_PX)};
           overflow: hidden;
-          background: #141c24; /* = TAB_BAR_STRIP_BG_HEX (Lane B's token); the landing reconciles */
+          background: ${TAB_BAR_STRIP_BG_HEX};
           border-bottom: 1px solid rgba(255, 255, 255, 0.08);
           box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
           opacity: 0;

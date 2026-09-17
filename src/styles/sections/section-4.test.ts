@@ -1,12 +1,13 @@
 /**
- * Title: Chip row "ran out of chips" edge cue — stylesheet checks
+ * Title: Chip row edge cue and the room under the chips — stylesheet checks
  * Purpose: Pin the two things a rendered test cannot: that the cue can actually beat the chip's
  *          own resting `box-shadow: ... !important` / `border: ... !important` rule (section-6.ts,
  *          plan 60 board B; the rest state gained a real gradient, hairline and soft shadow where
  *          it used to say `box-shadow: none`), and that reduced motion drops the ramp without
  *          touching any other control's transition.
  * Used for: The blocked-edge glow wired in MainTabPresetAnimatedChips.tsx / presetRowNav.ts
- *           (roadmap `[chips]` ★★, filed 2026-09-04).
+ *           (roadmap `[chips]` ★★, filed 2026-09-04), and the room under the chip row that plan 60
+ *           added so the chip's soft shadow is not cut off and the chips clear the question box.
  * Does not: Render anything or assert paint — jsdom has no layout/paint engine
  *           (design-language.md rule 6). These read the generated CSS text, the same approach
  *           presetChipFocusRing.test.ts uses for the same reason.
@@ -31,8 +32,16 @@ describe("chip row out-of-chips edge cue (section 4 CSS)", () => {
     );
     expect(match).toBeTruthy();
     const body = match![1]!;
-    expect(body).toMatch(/border-color:\s*rgba\(56,\s*189,\s*248,\s*0\.85\)\s*!important/);
-    expect(body).toMatch(/box-shadow:\s*0 0 8px 1px rgba\(56,\s*189,\s*248,\s*0\.45\)\s*!important/);
+    // One box-shadow list carrying all four effects at once. box-shadow replaces rather than adds,
+    // so anything missing here is erased for the length of the flash: the bright bar, the cyan
+    // glow under it, and the chip's own resting hairline and soft shadow all have to be present.
+    expect(body).toMatch(/inset 0 1px 0 rgba\(255,\s*255,\s*255,\s*0\.10\)/);
+    expect(body).toMatch(/inset 0 -2px 0 rgba\(150,\s*225,\s*255,\s*1\)/);
+    expect(body).toMatch(/0 3px 8px -2px rgba\(56,\s*189,\s*248,\s*0\.55\)/);
+    expect(body).toMatch(/0 2px 3px rgba\(0,\s*0,\s*0,\s*0\.4\)\s*!important/);
+    // The old cue recoloured the border, which was also the old focus marker; the cue now lives on
+    // the bar alone, so the rule must not touch the border at all.
+    expect(body).not.toMatch(/border-color:/);
     // A transition, not @keyframes -- see the comment above the rule for why a keyframe
     // animation cannot win against the !important reset.
     expect(body).toMatch(/transition:/);
@@ -59,7 +68,7 @@ describe("chip row out-of-chips edge cue (section 4 CSS)", () => {
   });
 
   it("keeps the CSS ramp shorter than the JS flash window it lives inside", () => {
-    const match = css.match(/transition:\s*border-color\s+(\d+)ms/);
+    const match = css.match(/transition:\s*box-shadow\s+(\d+)ms/);
     expect(match).toBeTruthy();
     const rampMs = Number(match![1]);
     expect(rampMs).toBeGreaterThan(0);

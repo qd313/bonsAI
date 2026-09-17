@@ -32,10 +32,11 @@
  * How it works: in file order —
  * 1. `buildGamepadFocusRingStylesheet()` — the shared white ring, grouped
  *    by which controls get it: menu items get a thinner ring drawn
- *    inside their own edge, most buttons get the fuller outer ring, and
- *    the preset carousel's "current chip" border is its own separate
- *    rule further down (it is a position marker, not a focus ring, and
- *    must never look like one).
+ *    inside their own edge, and most buttons get the fuller outer ring.
+ *    The suggestion chips are the one group that does not take it: since
+ *    2026-09-17 they show a lit bar along their own bottom edge instead,
+ *    drawn inside the chip where the row around them cannot cut it off
+ *    (plan 60). That bar lives in section-4.ts.
  * 2. `buildModalPortalStylesheet()` — joins the ring rules, the Pull
  *    Models table, and the rename-a-chat popup styling into one string
  *    for a Steam popup to carry with it.
@@ -67,6 +68,11 @@ export function buildGamepadFocusRingStylesheet(): string {
    * along — it only looked that way while no character accent was applied. Once character selection
    * started sticking (c9ad633) the ring turned yellow on device. Measured 2026-08-04: a focused
    * `.bonsai-preset-glass` chip computed `outline: rgba(241, 196, 15, 0.92) solid 2px`.
+   *
+   * The suggestion chips stopped taking this ring on 2026-09-17 (plan 60): the row around them has
+   * hidden anything drawn outside itself since 2026-09-01, and the ring is drawn 2 to 5px outside
+   * the chip, so nobody had actually seen it on a chip for over two weeks — a lit bar along the
+   * bottom edge of the chip, drawn inside it and so never cut off, took its place.
    *
    * The tab strip keeps its accent tint — see section-1.ts, where the same variables are correct.
    */
@@ -117,10 +123,6 @@ export function buildGamepadFocusRingStylesheet(): string {
         .bonsai-scope .bonsai-ai-char-grid-col button:focus-visible,
         .bonsai-scope button.bonsai-chat-secondary-btn.gpfocus,
         .bonsai-scope button.bonsai-chat-secondary-btn:focus-visible,
-        .bonsai-scope button.bonsai-preset-glass.gpfocus,
-        :root:not(:has(.gpfocus)) .bonsai-scope button.bonsai-preset-glass:focus-visible,
-        .bonsai-scope button.bonsai-preset-help-chip.gpfocus,
-        .bonsai-scope button.bonsai-preset-help-chip:focus-visible,
         .bonsai-scope .bonsai-askbar-merged .bonsai-ask-primary.gpfocus,
         .bonsai-scope .bonsai-askbar-merged .bonsai-ask-primary:focus-visible,
         .bonsai-scope .bonsai-askbar-target.gpfocus,
@@ -142,14 +144,6 @@ export function buildGamepadFocusRingStylesheet(): string {
         .bonsai-scope button.bonsai-pullmodels-refresh-btn.gpfocus,
         .bonsai-scope button.bonsai-pullmodels-refresh-btn:focus-visible {
           ${ring}
-        }
-        /* The blue "this is the current row" border, gated on the carousel actually owning Steam's
-           ring — see section-4.ts for why the gate exists and what the third selector is for. */
-        .bonsai-scope .bonsai-preset-carousel-focus-root.gpfocuswithin .bonsai-preset-carousel-slot--focus .bonsai-preset-glass,
-        .bonsai-scope .bonsai-preset-carousel-focus-root:has(.gpfocus) .bonsai-preset-carousel-slot--focus .bonsai-preset-glass,
-        :root:not(:has(.gpfocus)) .bonsai-scope .bonsai-preset-carousel-slot--focus .bonsai-preset-glass,
-        .bonsai-scope button.bonsai-preset-glass.gpfocus {
-          border-color: rgba(56, 189, 248, 0.72) !important;
         }
   `;
 }

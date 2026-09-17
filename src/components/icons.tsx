@@ -4,10 +4,11 @@
  * Purpose: Every small icon drawn anywhere in the plugin, gathered in one
  * file: the tab-title icons (a lock for Permissions, a gear for Settings, a
  * bonsai tree for Main, a bug for Developer, the Ollama mark, a lowercase
- * "i" for About), the thumbs-up/down and copy icons on a reply, and a
- * handful of smaller marks — a paperclip, a stop square, a back arrow, a
- * spinner, and so on. Each one is its own small component, and every one of
- * them accepts just a size in pixels.
+ * "i" for About), the plugin's own logo as an inline icon (the open tab
+ * strip's Main cell, plan 59), the thumbs-up/down and copy icons on a
+ * reply, and a handful of smaller marks — a paperclip, a stop square, a
+ * back arrow, a spinner, and so on. Each one is its own small component,
+ * and every one of them accepts just a size in pixels.
  *
  * Used for: Tab titles, the buttons under an AI reply, the screenshot
  * browser, and anywhere else in the plugin a small icon appears.
@@ -23,6 +24,7 @@
  */
 import React from "react";
 import { FiLock, FiSettings, FiThumbsDown, FiThumbsUp } from "react-icons/fi";
+import { BONSAI_LOGO_PATH } from "./bonsaiLogoPath";
 const IconShell: React.FC<{ size: number; children: React.ReactNode }> = ({ size, children }) => (
   <span
     style={{
@@ -97,6 +99,20 @@ export const BonsaiTreeTabIcon: React.FC<{ size?: number }> = ({ size = 14 }) =>
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+    </svg>
+  </IconShell>
+);
+
+/**
+ * The plugin's own logo as an inline icon, so it takes the colour around it (the roadmap's
+ * two-star tab-icon entry, closed by D109 item 1). The open strip's Main cell uses this; the Steam
+ * title (`DECKY_TAB_TITLES.main`) and Decky's own list icon (`BonsaiSvgIcon`) are left as they are
+ * on purpose (plan 59 § 3) — this is only for the strip.
+ */
+export const BonsaiLogoIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
+  <IconShell size={size}>
+    <svg width={size} height={size} viewBox="0 0 475 475" aria-hidden="true" style={{ display: "block" }}>
+      <path d={BONSAI_LOGO_PATH} fill="currentColor" fillRule="evenodd" />
     </svg>
   </IconShell>
 );

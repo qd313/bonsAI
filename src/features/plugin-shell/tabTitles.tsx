@@ -18,6 +18,7 @@ import React from "react";
 
 import {
   AboutTabTitleIcon,
+  BonsaiLogoIcon,
   BonsaiTreeTabIcon,
   BugIcon,
   GearIcon,
@@ -25,6 +26,8 @@ import {
   OllamaTabIcon,
 } from "../../components/icons";
 import {
+  TAB_BAR_CELL_BUG_ICON_PX,
+  TAB_BAR_CELL_ICON_PX,
   TAB_TITLE_DEBUG_TAB_ICON_PX,
   TAB_TITLE_ICON_PX,
   TAB_TITLE_MAIN_TAB_ICON_PX,
@@ -100,26 +103,24 @@ export function bonsaiTabStripLabel(id: BonsaiTabId): string {
 }
 
 /**
- * The icon each open-strip cell shows (plan 30 § 4.2): the same components Steam's titles use,
- * one size for the four ordinary tabs and a larger one for the tree and the bug, whose glyphs
- * are drawn lighter. Sized for the strip's 32px icon box rather than the 36px title cell.
+ * The icon each open-strip cell shows (plan 59 § 3): every tab the same 22px size, except the bug,
+ * whose artwork carries inner padding and is drawn at 26px so its footprint matches the rest. Main
+ * uses the plugin's own logo (plan 59 § 5) in place of the outline tree the title icon still uses.
  */
-const BONSAI_TAB_STRIP_ICON_PX = 24;
-const BONSAI_TAB_STRIP_LARGE_ICON_PX = 30;
 export function bonsaiTabStripIcon(id: BonsaiTabId): React.ReactElement {
   switch (id) {
     case "main":
-      return <BonsaiTreeTabIcon size={BONSAI_TAB_STRIP_LARGE_ICON_PX} />;
+      return <BonsaiLogoIcon size={TAB_BAR_CELL_ICON_PX} />;
     case "ollama":
-      return <OllamaTabIcon size={BONSAI_TAB_STRIP_ICON_PX} />;
+      return <OllamaTabIcon size={TAB_BAR_CELL_ICON_PX} />;
     case "settings":
-      return <GearIcon size={BONSAI_TAB_STRIP_ICON_PX} />;
+      return <GearIcon size={TAB_BAR_CELL_ICON_PX} />;
     case "permissions":
-      return <LockIcon size={BONSAI_TAB_STRIP_ICON_PX} />;
+      return <LockIcon size={TAB_BAR_CELL_ICON_PX} />;
     case "developer":
-      return <BugIcon size={BONSAI_TAB_STRIP_LARGE_ICON_PX} />;
+      return <BugIcon size={TAB_BAR_CELL_BUG_ICON_PX} />;
     case "about":
-      return <AboutTabTitleIcon size={BONSAI_TAB_STRIP_ICON_PX} />;
+      return <AboutTabTitleIcon size={TAB_BAR_CELL_ICON_PX} />;
   }
 }
 

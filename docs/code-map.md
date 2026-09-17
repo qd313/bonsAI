@@ -135,7 +135,8 @@ One entry per app file, grouped by folder: its Title, then the opening of its Pu
 - **StrategyChecklistPanel.tsx** (src/components/StrategyChecklistPanel.tsx) — *Strategy checklist panel*: Toggle list for per-game strategy guide checklist items during a live turn.
 - **StreamFenceWaitChip.tsx** (src/components/StreamFenceWaitChip.tsx) — *"Still writing…" chip*: A small pulsing status chip shown while an answer is still arriving and the AI is in the middle of something that should not be shown half-finished — a code block that has not been closed yet, or a spoiler-hidden section. […]
 - **VoiceInputSettingsSection.tsx** (src/components/VoiceInputSettingsSection.tsx) — *Voice input settings section*: The "Voice input" section on the Settings tab. Lets you choose which speech-to-text model powers the microphone button on the Ask bar (a faster, less accurate one, or a slower, more accurate one), shows whether the voice engine is installed and ready, and has a button to install…
-- **icons.tsx** (src/components/icons.tsx) — *The plugin's icon set*: Every small icon drawn anywhere in the plugin, gathered in one file: the tab-title icons (a lock for Permissions, a gear for Settings, a bonsai tree for Main, a bug for Developer, the Ollama mark, a lowercase i" for About), the thumbs-up/down and copy icons on a reply, and a…
+- **bonsaiLogoPath.ts** (src/components/bonsaiLogoPath.ts) — *The plugin's own logo, as one SVG path*: Holds the production logo's outline as a single string, split out of icons.tsx so that file stays readable next to its much smaller icons.
+- **icons.tsx** (src/components/icons.tsx) — *The plugin's icon set*: Every small icon drawn anywhere in the plugin, gathered in one file: the tab-title icons (a lock for Permissions, a gear for Settings, a bonsai tree for Main, a bug for Developer, the Ollama mark, a lowercase i" for About), the plugin's own logo as an inline icon (the open tab…
 
 ## src/components/deck
 

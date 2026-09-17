@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 412,
-  "edgeCount": 1056,
+  "fileCount": 413,
+  "edgeCount": 1057,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1047,6 +1047,12 @@
         "src/components/VoiceInputSettingsSection.test.tsx"
       ]
     },
+    "src/components/bonsaiLogoPath.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/components/icons.tsx"
+      ]
+    },
     "src/components/deck/DeckFocusSlider.test.ts": {
       "imports": [
         "src/components/deck/DeckFocusSlider.tsx"
@@ -1070,7 +1076,9 @@
       "importedBy": []
     },
     "src/components/icons.tsx": {
-      "imports": [],
+      "imports": [
+        "src/components/bonsaiLogoPath.ts"
+      ],
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx",
         "src/components/MainTabScreenshotBrowser.tsx",

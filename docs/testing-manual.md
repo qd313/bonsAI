@@ -706,16 +706,13 @@ Deck — the device is held by another session.** Replaces **TAB-BAR-07** (see t
 
 | Row | Scenario | Pass | Status |
 |---|---|---|---|
-| **TAB-STRIP-2A-01** | Geometry, six tabs | Strip 300 × 54 floating at the scope's top; six cell boxes within 1px of equal width (about 39); every icon box 22 tall with its top 6px below the cell top, same in all six; bar at rest still 300 × 20; body top unchanged from 2 September (87.95px) | ⏳ owed: built 2026-09-17, Deck run pending |
-| **TAB-STRIP-2A-02** | Geometry, five tabs | Same with Developer off; cells about 47 wide | ⏳ owed: built 2026-09-17, Deck run pending |
+| **TAB-STRIP-2A-01** | Geometry, six tabs | Strip 300 × 66 floating at the scope's top; six cell boxes within 1px of equal width (about 39); every icon box 22 tall with its top 6px below the cell top, same in all six; bar at rest still 300 × 20; body top unchanged from 2 September (87.95px) | ⏳ owed: built 2026-09-17, Deck run pending |
+| **TAB-STRIP-2A-02** | Geometry, five tabs | Same with Developer off; strip 300 × 66; cells about 47 wide | ⏳ owed: built 2026-09-17, Deck run pending |
 | **TAB-STRIP-2A-03** | By eye, the maintainer | The lit name readable at arm's length; the lit cell reads as a selection, not a warning; nothing clipped; in green (no character), gold (Ali G), purple (Shadowheart), grey (Astarion), pink (Fuu) | ⏳ owed: built 2026-09-17, Deck run pending |
 | **TAB-STRIP-2A-04** | Switch fade | Right ×3 from Main: the icon boxes' positions before and after each press are identical; only the fill and the name changed | ⏳ owed: built 2026-09-17, Deck run pending |
 | **TAB-STRIP-2A-05** | Pills hide, cells stay | Ring on the chat row: the pills are hidden, the six cell boxes have not moved | ⏳ owed: built 2026-09-17, Deck run pending |
 | **TAB-STRIP-2A-06** | UI scale 1.18 | Settings → UI scale → Apply: the strip comes back at the new scale, still floating, still six equal cells | ⏳ owed: built 2026-09-17, Deck run pending |
 | **TAB-STRIP-2A-07** | The dots covered (D109 item 3) | Every dot in the chat row's row of dots has its bottom edge above the strip's bottom edge, and the chat row's own bottom line is still below the strip — the maintainer chose a 66px strip on 2026-09-17 to cover the dots without covering the whole chat row | ⏳ owed: built 2026-09-17, Deck run pending |
-
-Rows 01 and 02 name a 54px strip because that is what plan 59 § 7 was written against; the strip
-itself is now built 66px tall (see the dated note under [plan 59 § 5](planning/59-tab-strip-redesign-build.md)) — check the strip's actual height on the Deck, not the 54 written here, and treat a mismatch as this row's own finding rather than a failure.
 
 ## Tier 3 — Heavy manual
 

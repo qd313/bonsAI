@@ -273,9 +273,12 @@ Design tokens: the tab bar rows replaced. Changelog. This plan's § 9 filled in.
 
 ## 7. Deck rows (owed until they run)
 
+**Heights below: 54 in the original plan; 66 since the maintainer's answer of 2026-09-17, see § 2
+note.**
+
 | Row | What | Passes when |
 |---|---|---|
-| **TAB-STRIP-2A-01** | Geometry, six tabs | Strip 300 × 54 floating at the scope's top; six cell boxes within 1px of equal width (about 39); every icon box 22 tall with its top 6px below the cell top, same in all six; bar at rest still 300 × 20; body top unchanged from 2 September (87.95px) |
+| **TAB-STRIP-2A-01** | Geometry, six tabs | Strip 300 × 66 floating at the scope's top; six cell boxes within 1px of equal width (about 39); every icon box 22 tall with its top 6px below the cell top, same in all six; bar at rest still 300 × 20; body top unchanged from 2 September (87.95px) |
 | **TAB-STRIP-2A-02** | Geometry, five tabs | Same with Developer off; cells about 47 wide |
 | **TAB-STRIP-2A-03** | By eye, the maintainer | The lit name readable at arm's length; the lit cell reads as a selection, not a warning; nothing clipped; in green (no character), gold (Ali G), purple (Shadowheart), grey (Astarion), pink (Fuu) |
 | **TAB-STRIP-2A-04** | Switch fade | Right ×3 from Main: the icon boxes' positions before and after each press are identical; only the fill and the name changed |

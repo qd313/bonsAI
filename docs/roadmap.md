@@ -615,7 +615,8 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   Closes the label-overflow bug. [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).
 - ★★★★ `[tabs]` **The tab bar collapses when not in use, and names the tab** — **VERIFY.** Shipped 2026-09-02 (plan 30 W0 to W6): a
   20px bar with the active tab's name at rest, opening to a strip that labels all six. Steam's header 81px to 20px. Rows 01 to 06,
-  09 and 10 pass; owed **TAB-BAR-07** (legibility by eye) and **08** (touch). Closes the "tab names never appear" bug and D44.
+  09 and 10 pass; owed **TAB-BAR-08** (touch). **TAB-BAR-07** (legibility by eye) was retired
+  2026-09-17, replaced by **TAB-STRIP-2A-03** (plan 59). Closes the "tab names never appear" bug and D44.
   [Plan](planning/30-collapsing-tab-bar.md).
 - ★★★★★ `[chat]` **Named chat slots** — **VERIFY.** Redesign v3 landed 2026-08-30; the layout inverts to slot row, transcript, presets,
   Ask bar. Most rows pass on device. Owed: **CHAT-SLOTS-V2-03, 04**, **V3-05a/b**, **06a/b/c**, **07**, **15d**.

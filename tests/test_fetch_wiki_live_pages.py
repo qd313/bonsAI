@@ -17,6 +17,7 @@ from __future__ import annotations
 import importlib.util
 import unittest
 from pathlib import Path
+from unittest import mock
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -79,6 +80,45 @@ class InfoboxMarkerTests(unittest.TestCase):
     def test_a_genuine_h3_heading_elsewhere_still_works(self):
         text = _render("<h3>Phase two</h3><p>Do the thing.</p>")
         self.assertIn("=== Phase two", text)
+
+
+class ResolvePageCategoriesTests(unittest.TestCase):
+    """scripts/extract_wiki_notes.py's guess_section_type prefers a page's own categories
+    over a guess from body words -- categories never appear in the rendered text (MediaWiki
+    puts them in the footer's "catlinks" box, which _SKIP_CLASS already drops), so
+    resolve_page has to ask the API for them directly."""
+
+    _CANNED_RESPONSE = {
+        "query": {
+            "pages": {
+                "1": {
+                    "title": "Army Dillo",
+                    "fullurl": "https://www.mariowiki.com/Army_Dillo",
+                    "revisions": [{"revid": 5409928, "timestamp": "2026-07-05T19:33:03Z"}],
+                    "categories": [
+                        {"title": "Category:Donkey Kong 64 bosses"},
+                        {"title": "Category:Armored Kremlings"},
+                    ],
+                }
+            }
+        }
+    }
+
+    def test_category_prefix_is_stripped(self):
+        with mock.patch.object(fetcher, "api_get", return_value=self._CANNED_RESPONSE):
+            page = fetcher.resolve_page("https://www.mariowiki.com/api.php", "Army Dillo")
+        self.assertEqual(page["categories"], ["Donkey Kong 64 bosses", "Armored Kremlings"])
+
+    def test_a_page_with_no_categories_gets_an_empty_list(self):
+        response = {
+            "query": {"pages": {"1": {
+                "title": "X", "fullurl": "https://example.com/X",
+                "revisions": [{"revid": 1, "timestamp": "2026-01-01T00:00:00Z"}],
+            }}}
+        }
+        with mock.patch.object(fetcher, "api_get", return_value=response):
+            page = fetcher.resolve_page("https://example.com/api.php", "X")
+        self.assertEqual(page["categories"], [])
 
 
 if __name__ == "__main__":

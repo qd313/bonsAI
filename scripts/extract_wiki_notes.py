@@ -95,6 +95,19 @@ _SECTION_TYPE_KEYWORDS: list[tuple[str, tuple[str, ...]]] = [
 ]
 DEFAULT_SECTION_TYPE = "mechanic"
 
+# Guessing section_type from the page's OWN category assignments (a live page's MediaWiki
+# categories, or a dump page's [[Category:...]] lines) -- tried before the body-word guess
+# above, since the page's own classification beats a guess from prose. There is no
+# "character" bucket in the five existing section_type values, so a character category maps
+# to "mechanic" for now (the same default the body-word guess already falls back to).
+_CATEGORY_TYPE_KEYWORDS: list[tuple[str, tuple[str, ...]]] = [
+    ("boss", ("boss",)),
+    ("enemy", ("enemy", "enemies")),
+    ("item", ("item", "weapon", "vehicle")),
+    ("area", ("level", "area", "stage", "track", "board", "course")),
+    ("mechanic", ("character",)),
+]
+
 
 def _load_allowed_licences() -> frozenset[str]:
     """Read the publish gate's own allow-list rather than copy it (rule 8's spirit: one
@@ -199,6 +212,7 @@ def load_live_page(page_path: Path) -> tuple[dict, str]:
             "url": entry.get("url", ""),
             "revid": entry.get("revid"),
             "timestamp": entry.get("timestamp", ""),
+            "categories": entry.get("categories") or [],
             "licence_text": entry.get("licence_text", ""),
             "licence_url": entry.get("licence_url", ""),
             "crawled_at": entry.get("read_on", ""),
@@ -278,6 +292,7 @@ def load_dump_page(page_path: Path) -> tuple[dict, str]:
         "url": url,
         "revid": entry.get("revision_id"),
         "timestamp": entry.get("timestamp", ""),
+        "categories": extract_wikitext_categories(raw),
         "licence_text": rights.get("text", ""),
         "licence_url": rights.get("url", "") or manifest.get("item_licenseurl", ""),
         "crawled_at": crawled_at,
@@ -299,6 +314,14 @@ _EXTERNAL_LINK_LABELLED_RE = re.compile(r"\[https?://\S+\s+([^\]]+)\]")
 _EXTERNAL_LINK_BARE_RE = re.compile(r"\[https?://\S+\]")
 _PIPED_LINK_RE = re.compile(r"\[\[([^\]|]*)\|([^\]]*)\]\]")
 _PLAIN_LINK_RE = re.compile(r"\[\[([^\]]*)\]\]")
+_CATEGORY_LINK_RE = re.compile(r"\[\[\s*category\s*:\s*([^\]|]+?)\s*(?:\|[^\]]*)?\]\]", re.I)
+
+
+def extract_wikitext_categories(raw: str) -> list[str]:
+    """[[Category:Bosses]] lines, read straight off the raw wikitext (before any stripping)
+    so guess_section_type can prefer the page's own classification over a guess from body
+    words -- the same job fetch_wiki_live_pages.py's categories query does for a live page."""
+    return [m.group(1).strip() for m in _CATEGORY_LINK_RE.finditer(raw)]
 
 
 def _strip_balanced(text: str, open_marker: str, close_marker: str, *, max_passes: int = 8) -> str:
@@ -412,6 +435,7 @@ def wikitext_to_plain(raw: str) -> str:
     text = _COMMENT_RE.sub("", raw)
     text = _REF_RE.sub("", text)
     text = _drop_file_links(text)
+    text = _CATEGORY_LINK_RE.sub("", text)
     text = _strip_balanced(text, "{{", "}}")
     text = _convert_wikitext_tables(text)
     text = _EXTERNAL_LINK_LABELLED_RE.sub(lambda m: m.group(1), text)
@@ -512,7 +536,17 @@ def select_section(headings: list[Heading], text: str) -> SectionChoice:
     return SectionChoice(None, text, "the page has no headings at all; used the whole page text -- check this by hand")
 
 
-def guess_section_type(page_title: str, headings: list[Heading]) -> str:
+def guess_section_type(
+    page_title: str, headings: list[Heading], categories: list[str] | None = None
+) -> str:
+    """The page's own categories win first -- a boss category beats a guess from body words
+    every time it's available. categories is None/empty for a wiki this reader hasn't been
+    taught to read categories from yet; the body-word guess below still runs for those."""
+    for category in categories or []:
+        category_lower = category.strip().lower()
+        for section_type, keywords in _CATEGORY_TYPE_KEYWORDS:
+            if any(keyword in category_lower for keyword in keywords):
+                return section_type
     haystack = " ".join([page_title] + [h.title for h in headings]).lower()
     for section_type, keywords in _SECTION_TYPE_KEYWORDS:
         if any(keyword in haystack for keyword in keywords):
@@ -773,9 +807,11 @@ def build_note(
         )
 
     card = render_card(kept)
-    section_type = section_type_arg or guess_section_type(meta.get("title", ""), headings)
+    categories = meta.get("categories") or []
+    section_type = section_type_arg or guess_section_type(meta.get("title", ""), headings, categories)
     if not section_type_arg:
-        print(f"[check] section_type guessed as {section_type!r} from the page's own headings -- confirm by hand", file=sys.stderr)
+        source = "the page's own categories" if categories else "the page's own headings"
+        print(f"[check] section_type guessed as {section_type!r} from {source} -- confirm by hand", file=sys.stderr)
 
     note = {
         "section_id": None,

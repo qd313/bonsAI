@@ -265,6 +265,17 @@ class WikitextToPlainTests(unittest.TestCase):
         self.assertIn("- First item", plain)
         self.assertIn("- Second item", plain)
 
+    def test_category_links_are_dropped_from_the_body(self):
+        """[[Category:...]] never appears in a live-fetched page (MediaWiki puts it in the
+        footer, which the live fetcher already skips) -- a dump page reads raw wikitext, so
+        without this it would render as stray "Category:Bosses" text in the body."""
+        raw = "Body text.\n[[Category:Bosses]]\n[[Category:Mega Man 2 enemies|Metal Man]]\nMore text.\n"
+        plain = m.wikitext_to_plain(raw)
+        self.assertNotIn("Category", plain)
+        self.assertNotIn("Bosses", plain)
+        self.assertIn("Body text.", plain)
+        self.assertIn("More text.", plain)
+
     def test_wikitext_table_converts_to_markers(self):
         raw = "{|\n! Attack\n! Damage\n|-\n| Jab\n| 3%\n|}\n"
         plain = m.wikitext_to_plain(raw)
@@ -278,6 +289,15 @@ class WikitextToPlainTests(unittest.TestCase):
         plain = m.wikitext_to_plain(raw)
         headings = m.extract_headings(plain)
         self.assertEqual([h.title for h in headings], ["Strategy"])
+
+
+class WikitextCategoryExtractionTests(unittest.TestCase):
+    def test_categories_are_read_from_raw_wikitext(self):
+        raw = "Some intro.\n[[Category:Bosses]]\n[[Category:Mega Man 2 enemies|Metal Man]]\n"
+        self.assertEqual(m.extract_wikitext_categories(raw), ["Bosses", "Mega Man 2 enemies"])
+
+    def test_no_categories_is_an_empty_list(self):
+        self.assertEqual(m.extract_wikitext_categories("Just some text, no categories.\n"), [])
 
 
 class LicenceTests(unittest.TestCase):
@@ -377,6 +397,24 @@ class BuildNoteEndToEndTests(unittest.TestCase):
             self.assertEqual(sidecar["section_heading"], "Strategy")
             self.assertEqual(sidecar["revision_id"], 12345)
             self.assertEqual(sidecar["char_count"], len(note["card"]))
+
+    def test_a_category_in_the_manifest_reaches_the_note_s_section_type(self):
+        """End-to-end version of GuessSectionTypeTests: a category recorded in the fetcher's
+        own manifest (fetch_wiki_live_pages.py's resolve_page now queries these) settles
+        section_type before body words are read."""
+        with tempfile.TemporaryDirectory() as tmp_str:
+            tmp = Path(tmp_str)
+            page_path = self._write_live_fixture(tmp)
+            manifest = json.loads((tmp / "_manifest.json").read_text(encoding="utf-8"))
+            manifest["pages"][0]["categories"] = ["Hollow Knight bosses"]
+            (tmp / "_manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+            allowed = m._load_allowed_licences()
+            note, _, _ = m.build_note(
+                page_path=page_path, page_format="live", game_id=1,
+                section_type_arg=None, name_arg=None,
+                min_chars=50, max_chars=400, allowed_licences=allowed,
+            )
+            self.assertEqual(note["section_type"], "boss")
 
     def test_licence_override_is_used_when_the_live_read_has_no_version(self):
         """Some Fandom wikis answer with a bare "CC-BY-SA" and no version (gta.fandom.com
@@ -498,6 +536,24 @@ class GuessSectionTypeTests(unittest.TestCase):
 
     def test_defaults_to_mechanic(self):
         self.assertEqual(m.guess_section_type("Round timer", []), "mechanic")
+
+    def test_a_boss_category_wins_over_a_body_word_guess(self):
+        """Real case: Army Dillo's own body words guessed "mechanic" (wrong -- it's a
+        boss). The page's own category should settle it before body words are even read."""
+        section_type = m.guess_section_type("Army Dillo", [], categories=["Donkey Kong 64 bosses"])
+        self.assertEqual(section_type, "boss")
+
+    def test_no_matching_category_falls_back_to_body_words(self):
+        section_type = m.guess_section_type("Some Boss", [], categories=["Trivia", "Stub articles"])
+        self.assertEqual(section_type, "boss")
+
+    def test_character_category_maps_to_mechanic(self):
+        """There is no "character" bucket among the five existing section_type values."""
+        section_type = m.guess_section_type("Mario", [], categories=["Playable characters"])
+        self.assertEqual(section_type, "mechanic")
+
+    def test_empty_categories_list_is_the_same_as_none(self):
+        self.assertEqual(m.guess_section_type("Some Boss", [], categories=[]), "boss")
 
 
 class MainCliTests(unittest.TestCase):

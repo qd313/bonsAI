@@ -168,15 +168,24 @@ def site_info(api: str) -> dict:
 
 
 def resolve_page(api: str, title: str) -> dict | None:
-    """Canonical title, full URL, latest revision id and date -- after redirects."""
+    """Canonical title, full URL, latest revision id, date and categories -- after redirects.
+
+    Categories never appear in the rendered text render_page() produces -- MediaWiki puts
+    them in the page footer's "catlinks" box, which _SKIP_CLASS already drops as furniture
+    on purpose. scripts/extract_wiki_notes.py reads a page's own categories (boss, enemy,
+    item, ...) to guess its section_type before falling back to guessing from body words, so
+    they have to come from here instead.
+    """
     data = api_get(
         api,
         {
             "action": "query",
-            "prop": "revisions|info",
+            "prop": "revisions|info|categories",
             "titles": title,
             "rvprop": "ids|timestamp",
             "inprop": "url",
+            "cllimit": "max",
+            "clshow": "!hidden",
             "redirects": "1",
         },
     )
@@ -185,11 +194,17 @@ def resolve_page(api: str, title: str) -> dict | None:
         if "missing" in page or "invalid" in page:
             return None
         rev = (page.get("revisions") or [{}])[0]
+        categories = [
+            c.get("title", "").split(":", 1)[-1]
+            for c in page.get("categories", [])
+            if c.get("title")
+        ]
         return {
             "title": page.get("title", title),
             "url": page.get("fullurl", ""),
             "revid": rev.get("revid"),
             "timestamp": rev.get("timestamp", ""),
+            "categories": categories,
         }
     return None
 
@@ -277,6 +292,7 @@ def main() -> int:
             "url": page["url"],
             "revid": page["revid"],
             "timestamp": page["timestamp"],
+            "categories": page.get("categories", []),
             "licence_text": info["licence_text"],
             "licence_url": info["licence_url"],
             "read_on": today,

@@ -873,6 +873,11 @@ async def run_game_ai_request(
             "spy_lying_active": spy_lying_active,
             "spy_lies": spy_lies,
             "transparency": transparency_snapshot_for_chat_slot(ollama_route_snapshot),
+            "model": ollama_result.get("model"),
+            "thinking_unsupported": bool(ollama_result.get("thinking_unsupported", False)),
+            "reasoning_text": str(ollama_result.get("reasoning_text") or ""),
+            "reasoning_seconds": ollama_result.get("reasoning_seconds"),
+            "reasoning_tokens": int(ollama_result.get("reasoning_tokens") or 0),
         }
     except Exception as exc:
         elapsed = round(time.time() - start, 1)

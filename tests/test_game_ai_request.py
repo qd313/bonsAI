@@ -189,6 +189,57 @@ class TdpBlockWiringTests(unittest.TestCase):
         )
 
 
+class ReasoningPassthroughWiringTests(unittest.TestCase):
+    """The finished status and the saved chat turn read reasoning_text, reasoning_seconds,
+    reasoning_tokens, model and thinking_unsupported off the dict run_game_ai_request returns
+    (main.py lines ~2426-2435). Those five keys have to actually be on that dict, not just on
+    the Ollama call's own result, or a person never sees the thinking they were shown live.
+    """
+
+    def _base_settings(self) -> dict:
+        return {
+            "latency_timeouts_custom_enabled": False,
+            "input_sanitizer_user_disabled": False,
+            "capabilities": {},
+        }
+
+    def test_thinking_reaches_the_returned_dict(self):
+        plugin = _FakePlugin(self._base_settings())
+        plugin._ollama_result = {
+            "success": True,
+            "response": "Watch the boss's tell before you commit to the dodge.",
+            "model": "gemma4:e2b-it-qat",
+            "thinking_unsupported": False,
+            "reasoning_text": "Think about the boss.\nHit the weak point.",
+            "reasoning_seconds": 41,
+            "reasoning_tokens": 380,
+        }
+
+        result = _run(plugin)
+
+        self.assertEqual(result.get("model"), "gemma4:e2b-it-qat")
+        self.assertEqual(result.get("thinking_unsupported"), False)
+        self.assertEqual(
+            result.get("reasoning_text"), "Think about the boss.\nHit the weak point."
+        )
+        self.assertEqual(result.get("reasoning_seconds"), 41)
+        self.assertEqual(result.get("reasoning_tokens"), 380)
+
+    def test_no_thinking_on_the_ollama_result_gives_the_no_thinking_shape(self):
+        plugin = _FakePlugin(self._base_settings())
+        plugin._ollama_result = {
+            "success": True,
+            "response": "This game runs fine at the default power settings.",
+            "model": "test-model",
+        }
+
+        result = _run(plugin)
+
+        self.assertEqual(result.get("reasoning_text"), "")
+        self.assertIsNone(result.get("reasoning_seconds"))
+        self.assertEqual(result.get("reasoning_tokens"), 0)
+
+
 class StrategySpoilerAskedEntityWiringTests(unittest.TestCase):
     """Plan 54 gap 2: the backend's own guess at the named thing must reach the result dict (so
     the screen can use it) and the prompt call (so a test can prove it is the same value the

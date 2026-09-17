@@ -232,6 +232,32 @@ describe("B while the block is open", () => {
   });
 });
 
+describe("a press of A on the line", () => {
+  /*
+   * A tap is `onClick` and a press of A is `onOKButton`, and both are checked because only one of
+   * them survives the test harness. `onActivate` is deliberately absent: Steam fires it for A as
+   * well, so wiring all three would open and close the block on one press — the same trap the Show
+   * details line documents.
+   */
+  it("is wired to the same toggle a tap uses, and to nothing else", () => {
+    const pressed: string[] = [];
+    const el = buildReasoningFoldRow({
+      turnId: "live",
+      open: false,
+      seconds: 41,
+      onToggle: () => pressed.push("toggle"),
+      onMoveUp: () => true,
+      onMoveDown: () => true,
+    });
+    const props = el.props as Record<string, unknown>;
+
+    expect(props.onActivate).toBeUndefined();
+    (props.onOKButton as () => void)();
+    (props.onClick as () => void)();
+    expect(pressed).toEqual(["toggle", "toggle"]);
+  });
+});
+
 describe("the controller's path through the line", () => {
   it("hands Up and Down to the turn's own neighbours", () => {
     const went: string[] = [];

@@ -167,12 +167,13 @@ describe("the space under the question while a thinking model works", () => {
     expect(container.querySelector(".bonsai-chat-thinking-line")).toBeNull();
   });
 
-  it("takes the block away the moment the answer starts", () => {
+  it("swaps the block for the fold line the moment the answer starts", () => {
     const props = baseProps({
       liveThinking: { summary: null, reasoning: { partial: "one. two. three.", seconds: 41 } },
     });
     const { container, rerender } = render(<MainTabChatTranscript {...props} />);
     expect(container.querySelector(".bonsai-chat-reasoning-live")).not.toBeNull();
+    expect(container.querySelector(".bonsai-chat-reasoning-fold")).toBeNull();
 
     rerender(
       <MainTabChatTranscript
@@ -183,6 +184,16 @@ describe("the space under the question while a thinking model works", () => {
     );
 
     expect(container.querySelector(".bonsai-chat-reasoning-live")).toBeNull();
+    /*
+     * The seconds come from the still-running question's own count, which the computer side stops
+     * the moment the answer starts — so the number does not creep up while the answer types itself
+     * out, and it already matches the one the finished answer will carry.
+     */
+    expect(
+      container
+        .querySelector(".bonsai-chat-reasoning-fold")
+        ?.querySelector(".bonsai-chat-details-divider-label")?.textContent,
+    ).toBe("Show reasoning · 41 s");
   });
 
   it("changes nothing with thinking off", () => {

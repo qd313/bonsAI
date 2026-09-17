@@ -49,6 +49,15 @@ def new_background_state() -> dict[str, Any]:
         "thinking_summary": None,
         "thinking_unsupported": False,
         "model": None,
+        # Plan 57: the model's own thinking. `reasoning_partial`/`reasoning_seconds` are read
+        # while an answer is pending (live, newest 600 characters); `reasoning_text` (capped at
+        # 6,000 characters) and `reasoning_tokens` (an estimate) join `reasoning_seconds` once the
+        # answer is done. All stay at their "nothing to show" default on a turn with no thinking
+        # -- thinking Off, or a model that cannot think.
+        "reasoning_partial": None,
+        "reasoning_seconds": None,
+        "reasoning_text": "",
+        "reasoning_tokens": 0,
         # Which named chat slot this request belongs to, so a poll can tell whether the
         # tokens it is about to paint are the slot the user is currently looking at.
         # It rides the state dict rather than being looked up per poll, because
@@ -145,4 +154,10 @@ def new_partial_stream_snapshot(request_id: Optional[int]) -> dict[str, Any]:
         "thinking_tone": "witty",
         "streaming": False,
         "last_flush_monotonic": 0.0,
+        # Plan 57: the model's own thinking, live. `reasoning_partial` is the newest 600
+        # characters of it so far (null before the first thinking chunk); `reasoning_seconds` is
+        # whole seconds since that first chunk, frozen the moment the first answer chunk arrives
+        # so it stops changing once the fold appears. Both stay null on a turn with no thinking.
+        "reasoning_partial": None,
+        "reasoning_seconds": None,
     }

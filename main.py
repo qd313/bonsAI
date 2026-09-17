@@ -99,6 +99,7 @@ from backend.services.ollama_service import (
 from backend.services.async_task_lifecycle import cancel_and_await
 from backend.services.background_request_state import (
     OMIT as _OMIT_SHORTCUT_SETUP_FIELD,
+    OMIT as _UNSET_REASONING_FIELD,
     completed_local_command_state,
     new_background_state,
     new_partial_stream_snapshot,
@@ -502,8 +503,18 @@ class Plugin:
         thinking_summary: Optional[str] = None,
         *,
         update_partial: bool = True,
+        reasoning_partial: Any = _UNSET_REASONING_FIELD,
+        reasoning_seconds: Any = _UNSET_REASONING_FIELD,
     ) -> None:
-        """Thread-safe partial assistant text for background status polling (executor thread)."""
+        """Thread-safe partial assistant text for background status polling (executor thread).
+
+        ``reasoning_partial`` / ``reasoning_seconds`` (plan 57) default to a sentinel meaning "the
+        caller has nothing to say about this" -- the composed-phrase phase updates
+        (``_publish_thinking_phase``) never pass them, and must not blank out real thinking text a
+        streaming delta already published. The streaming path (``_on_delta`` in
+        ``ollama_ask_service.py``) always passes both explicitly, even when still ``None`` because
+        no thinking chunk has arrived yet, which is a real value worth writing.
+        """
         with self._partial_response_lock:
             snap = self._partial_stream_snapshot
             if snap.get("request_id") != request_id:
@@ -516,6 +527,13 @@ class Plugin:
                 if thinking_summary != snap.get("thinking_summary"):
                     snap["thinking_summary"] = thinking_summary
                     snap["thinking_summary_monotonic"] = now
+            # Written before the ``update_partial`` / empty-text early-outs below: a thinking
+            # chunk must reach the poll even on a turn whose visible answer text is still empty
+            # (plan 54 lesson -- a field that only lands at completion is useless live).
+            if reasoning_partial is not _UNSET_REASONING_FIELD:
+                snap["reasoning_partial"] = reasoning_partial
+            if reasoning_seconds is not _UNSET_REASONING_FIELD:
+                snap["reasoning_seconds"] = reasoning_seconds
             if not update_partial:
                 if done:
                     snap["streaming"] = False
@@ -656,6 +674,10 @@ class Plugin:
         if out.get("status") == "pending" and rid is not None and snap.get("request_id") == rid:
             out["partial_response"] = snap.get("partial_response")
             out["streaming"] = bool(snap.get("streaming"))
+            # Plan 57: the model's own thinking, live -- null on a turn with no thinking (thinking
+            # Off, or a model that cannot think), the same as the snapshot's own default.
+            out["reasoning_partial"] = snap.get("reasoning_partial")
+            out["reasoning_seconds"] = snap.get("reasoning_seconds")
             if snap.get("asked_entity"):
                 out["strategy_spoiler_asked_entity"] = snap["asked_entity"]
             thinking = snap.get("thinking_summary")
@@ -683,6 +705,8 @@ class Plugin:
             out["partial_response"] = None
             out["streaming"] = False
             out["thinking_summary"] = None
+            out["reasoning_partial"] = None
+            out["reasoning_seconds"] = None
         return out
 
     def _desktop_app_log_level_allows(settings: dict, event_level: str) -> bool:

@@ -377,6 +377,83 @@ class BackgroundPartialStateTests(unittest.TestCase):
         merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
         self.assertNotIn("strategy_spoiler_asked_entity", merged)
 
+    def test_reasoning_reaches_a_pending_merge_before_any_answer_text(self) -> None:
+        """Plan 57: a thinking chunk must reach the poll even while the visible answer is empty.
+
+        This is the same lesson plan 54 needed a fourth commit for -- a field that only lands at
+        completion is useless for a live display. Passing "" as the visible text here matches what
+        a thinking-only delta actually looks like on the wire before any answer token exists.
+        """
+        self.plugin._background_state = {
+            "status": "pending",
+            "request_id": 50,
+            "response": "Thinking...",
+            "started_at": 0.0,
+        }
+        self.plugin._reset_partial_stream_snapshot(50)
+        self.plugin._update_partial_response(
+            50, "", False, reasoning_partial="Let me think about this…", reasoning_seconds=2
+        )
+        merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
+        self.assertEqual(merged.get("reasoning_partial"), "Let me think about this…")
+        self.assertEqual(merged.get("reasoning_seconds"), 2)
+        # The composed-phrase question text is still absent -- only the live thinking arrived.
+        self.assertIsNone(merged.get("partial_response"))
+
+    def test_reasoning_seconds_freezes_once_reported_frozen(self) -> None:
+        """The caller (ollama_service._publish_partial) works out the freeze; this just proves the
+        frozen number survives a later delta unchanged, the way the folded line needs it to.
+        """
+        self.plugin._background_state = {
+            "status": "pending",
+            "request_id": 51,
+            "response": "Thinking...",
+            "started_at": 0.0,
+        }
+        self.plugin._reset_partial_stream_snapshot(51)
+        self.plugin._update_partial_response(
+            51, "", False, reasoning_partial="thinking…", reasoning_seconds=3
+        )
+        self.plugin._update_partial_response(
+            51, "Here", False, reasoning_partial="thinking…", reasoning_seconds=3
+        )
+        merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
+        self.assertEqual(merged.get("reasoning_seconds"), 3)
+
+    def test_a_composed_phase_publish_does_not_blank_out_real_reasoning(self) -> None:
+        """`_publish_thinking_phase` (the "waking up" / "still thinking" phrases) never passes
+        reasoning kwargs at all -- it must not stomp reasoning a streaming delta already wrote.
+        """
+        self.plugin._background_state = {
+            "status": "pending",
+            "request_id": 52,
+            "response": "Thinking...",
+            "started_at": 0.0,
+        }
+        self.plugin._reset_partial_stream_snapshot(52)
+        self.plugin._update_partial_response(
+            52, "", False, reasoning_partial="Considering the boss's attacks…", reasoning_seconds=1
+        )
+        self.plugin._publish_thinking_phase(52, "Still thinking…")
+        with self.plugin._partial_response_lock:
+            snap = self.plugin._partial_stream_snapshot
+            self.assertEqual(snap.get("reasoning_partial"), "Considering the boss's attacks…")
+            self.assertEqual(snap.get("reasoning_seconds"), 1)
+
+    def test_reasoning_is_null_on_a_fresh_snapshot(self) -> None:
+        """Thinking Off, or a model that cannot think: nothing to show, not an empty string."""
+        self.plugin._background_state = {
+            "status": "pending",
+            "request_id": 53,
+            "response": "Thinking...",
+            "started_at": 0.0,
+        }
+        self.plugin._reset_partial_stream_snapshot(53)
+        self.plugin._update_partial_response(53, "An ordinary answer", False)
+        merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
+        self.assertIsNone(merged.get("reasoning_partial"))
+        self.assertIsNone(merged.get("reasoning_seconds"))
+
     def test_publish_asked_entity_empty_leaves_the_key_absent(self) -> None:
         self.plugin._background_state = {
             "status": "pending",

@@ -300,7 +300,14 @@ async def run_ask_ollama(
         stream_rid = token_stream_request_id
         announced_generating = False
 
-        def _on_delta(text: str, done: bool, thinking_summary: Optional[str] = None) -> None:
+        def _on_delta(
+            text: str,
+            done: bool,
+            thinking_summary: Optional[str] = None,
+            *,
+            reasoning_partial: Optional[str] = None,
+            reasoning_seconds: Optional[int] = None,
+        ) -> None:
             nonlocal announced_generating
             # First real token: the model is writing, not connecting. Publishing here is what
             # retires the "waking the model up" line, which otherwise stayed on screen for the
@@ -319,7 +326,16 @@ async def run_ask_ollama(
                     character_enabled=bool(settings.get("ai_character_enabled")),
                     character_preset_id=rp_meta.resolved_preset_id,
                 )
-            plugin_inst._update_partial_response(stream_rid, text, done, thinking_summary)
+            # Plan 57: the model's own thinking, kept in the same poll snapshot the screen already
+            # reads every second — so the live lines can move before any answer text exists.
+            plugin_inst._update_partial_response(
+                stream_rid,
+                text,
+                done,
+                thinking_summary,
+                reasoning_partial=reasoning_partial,
+                reasoning_seconds=reasoning_seconds,
+            )
 
         on_delta_cb = _on_delta
 

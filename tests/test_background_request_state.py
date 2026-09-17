@@ -16,7 +16,7 @@ from backend.services.background_request_state import (
     pending_background_state,
 )
 
-# The 22 keys the status poller and the frontend expect on every background state.
+# The 26 keys the status poller and the frontend expect on every background state.
 EXPECTED_KEYS = {
     "status",
     "request_id",
@@ -40,6 +40,12 @@ EXPECTED_KEYS = {
     "thinking_unsupported",
     "model",
     "chat_slot_id",
+    # Plan 57: the model's own thinking, live (`reasoning_partial`/`reasoning_seconds`) and once
+    # the answer is done (`reasoning_text`/`reasoning_seconds`/`reasoning_tokens`).
+    "reasoning_partial",
+    "reasoning_seconds",
+    "reasoning_text",
+    "reasoning_tokens",
 }
 
 
@@ -68,6 +74,10 @@ class TestBackgroundStateShape(unittest.TestCase):
         self.assertIs(state["streaming"], False)
         self.assertIsNone(state["thinking_summary"])
         self.assertIsNone(state["chat_slot_id"])
+        self.assertIsNone(state["reasoning_partial"])
+        self.assertIsNone(state["reasoning_seconds"])
+        self.assertEqual(state["reasoning_text"], "")
+        self.assertEqual(state["reasoning_tokens"], 0)
 
     def test_every_constructor_agrees_on_the_key_set(self):
         """The regression this module exists to prevent.
@@ -237,6 +247,9 @@ class TestPartialStreamSnapshot(unittest.TestCase):
                 "thinking_tone",
                 "streaming",
                 "last_flush_monotonic",
+                # Plan 57: the model's own thinking, live.
+                "reasoning_partial",
+                "reasoning_seconds",
             },
         )
         self.assertEqual(snap["request_id"], 5)
@@ -247,6 +260,8 @@ class TestPartialStreamSnapshot(unittest.TestCase):
         self.assertEqual(snap["thinking_tone"], "witty")
         self.assertIs(snap["streaming"], False)
         self.assertEqual(snap["last_flush_monotonic"], 0.0)
+        self.assertIsNone(snap["reasoning_partial"])
+        self.assertIsNone(snap["reasoning_seconds"])
 
     def test_cleared_form_is_the_same_shape_with_a_null_request_id(self):
         """The cleared snapshot used to be a second hand-written literal; it is now this call."""

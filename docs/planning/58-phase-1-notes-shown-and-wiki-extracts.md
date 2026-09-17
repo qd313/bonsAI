@@ -6,7 +6,9 @@ for a year and a half. Two of those lessons land squarely on this plugin, and th
 both fixed **before** the wave-four session runs. That session is now
 [58 phase 2](58-phase-2-kb-session-wave-four.md); it starts when this phase has landed.
 
-**Status: nothing started. Waiting on the answers in § 8, then on the word "go".**
+**Status: answers in on 2026-09-17, locked as D111 (see the end of § 8). Two items stay open there:
+the block's look waits on the drawings, and "trim only" stands unless the maintainer overturns it.
+The maintainer said to take as long as needed and that nothing else is on the Deck. Block 0 is next.**
 
 Read first: [CLAUDE.md](../../CLAUDE.md); the model table in [AGENTS.md](../../AGENTS.md) under "Which
 model does which work"; [lessons-learned.md](../lessons-learned.md), especially § 1 on shared checkouts
@@ -102,7 +104,11 @@ follow-ups, or run any of phase 2. It changes how notes are made and how one of 
   six blind search questions and its own answer-test rows already.
 - **Two wikis block automated reads.** Fandom refuses reads from inside the coding tool and answers
   a plain request from the maintainer's PC. The general walkthrough wiki at strategywiki.org refused
-  both today, from the tool and from the PC, behind a bot check. Its licence is unconfirmed here.
+  both today, from the tool and from the PC, behind a bot check. **Its licence is confirmed anyway:**
+  the maintainer read its page footer in a browser on 2026-09-17, and it reads "Content is available
+  under Creative Commons Attribution-ShareAlike 4.0 unless otherwise noted." That is share-alike 4.0,
+  usable, recorded as footer evidence with the date. Its pages will need an archive dump or a browser
+  read until the bot check lets a script through.
 - **The Deck state is phase 2's § 1.** The publish step for the corrected Hades note is still owed,
   and anything this phase writes needs the same step.
 - **The blind-question rule stands:** whoever makes a note may not write the question that tests it.
@@ -125,9 +131,10 @@ follow-ups, or run any of phase 2. It changes how notes are made and how one of 
 ## 4. Who does what
 
 **The one running the session: Opus 5 at extra-high effort. Lanes: Sonnet 5 at high effort, five at
-most at once.** Fable wrote this plan and is not needed again unless a call in § 8 comes back
-different from the recommendation. That matches the routing table: the block is two to three stars,
-the reader and the notes are three to four.
+most at once.** Fable wrote this plan. The routing table lets the session that planned six-star scope
+run the lanes it planned, so on 2026-09-17 the same Fable session at extra-high effort started block 0
+rather than handing off; if the maintainer prefers a fresh Opus session, the plan is written for one.
+The block is two to three stars, the reader and the notes are three to four.
 
 - **The session writes no plugin code.** It writes briefs, lands commits one at a time with the gates
   after each, runs the device checks, reads failures, hands the bookkeeper lists, builds the release,
@@ -202,8 +209,9 @@ there. It writes nothing into the library.
 **Lane C, in words.** For the games on the maintainer's own shelves and the most-played games on the
 Deck, which cleared source covers each, and which one licence check would cover the most games. The
 walkthrough wiki at strategywiki.org is named as the candidate that covers thousands of games, with
-its licence marked "unconfirmed, maintainer to read in a browser". Any wiki that refuses a read is
-written down as refusing, not guessed.
+its licence recorded as share-alike 4.0 from the footer the maintainer read on 2026-09-17, and a note
+that scripted reads are refused by a bot check, so the study says how its pages can be fetched: an
+archive dump, or a browser. Any other wiki that refuses a read is written down as refusing, not guessed.
 
 ### Wave 2 — after the maintainer approves lane B's sample
 
@@ -227,11 +235,12 @@ Each lane's commits are read as diffs, then taken onto the branch one at a time,
 five gates after every one. Lane D's notes land last, and the library is rebuilt and re-checked after
 them. One bookkeeper sweep per landing. Deploy after wave 1 has landed and after wave 2.
 
-### The release
+### The release, on disk only
 
-Build the library, run its own publish check, install it on the Deck from the plugin's own button, and
-ask one question per new game. **The push to the two public download hosts is the maintainer's to
-run.** The same step also unsticks the corrected Hades note that has waited since 15 September.
+Build the library, run its own publish check, install it on the Deck from a local folder through the
+plugin's own install path, and ask one question per new game. **Nothing is pushed to the public
+download hosts in this phase.** The maintainer said on 2026-09-17 that the publish call comes later and
+the work is to improve what is on disk. The corrected Hades note still waits on that same call.
 
 ## 6. The Deck work while lanes build
 
@@ -312,8 +321,36 @@ which goes on their own checklist.
 | 8 | **The publish step.** Will you run it, or authorise a session to? | The ten games and the Hades fix reach nobody without it. | Either is fine; say which so the plan does not assume. |
 | 9 | **How long, and is the Deck yours?** | The last three sessions ran a full day with the Deck held the whole time. | Say if another chat is driving it. |
 
+**Answered 2026-09-17, locked as D111.** The maintainer's own words are quoted where they gave them.
+
+1. **The block's look: not answered yet, by design.** The maintainer's reply was that they did not
+   know what was being asked, which is fair: the question cannot be answered without seeing the
+   block. Lane A draws it first, the maintainer picks a drawing, and that pick is added to D111.
+2. **Trim only: stands unless overturned.** The maintainer asked back whether this meant the AI may
+   not create facts, or whether it may riff off the notes. Both, in different places. In the reply,
+   the model still riffs off the notes it is given; that does not change. In the library, an AI may
+   never write a sentence into a wiki note. It may only cut. Trim only stands unless the maintainer
+   says otherwise before lane B is briefed.
+3. **Reopen the July lock: "Yes."** The catalog starts here.
+4. **The ten games: "Add them, but verification of their facts might need to come from the feedback
+   thumbs."** All ten are in. The maintainer does not expect to check each wiki note by hand; a
+   thumbs-down that stops a wrong note coming back is the check they have in mind. See § 9.
+5. **The walkthrough wiki's licence:** the maintainer read the footer on 2026-09-17: *"Content is
+   available under Creative Commons Attribution-ShareAlike 4.0 unless otherwise noted."* Usable.
+6. **Keep the 99 notes and 159 tips: "Yes."** Labelled as bonsAI's own notes with no source.
+7. **Read aloud: "Screen only."**
+8. **The publish step: "I'll decide that later, you just work on improving it on disk."** This phase
+   builds the library and installs it on the Deck from a local folder. Nothing is pushed.
+9. **Time and the Deck: "Take as long as you need, nothing else is going on."** No time limit; the
+   Deck is free.
+
 ## 9. Things to bring to your attention
 
+- **Checking wiki notes' facts is not a job the maintainer will do by hand.** Their answer on the ten
+  games was that verification might need to come from the feedback thumbs. A thumbs-down that stops a
+  wrong note coming back is the Phase 7 "demote" entry on the roadmap, about three days, and it is not
+  in this phase. It should be the next build after phase 1, before the catalog grows past what one
+  person can read.
 - **Verbatim notes may read worse than the rewrites.** Wiki prose is longer, less tidy and sometimes
   written for someone who already knows the game. The Hollow Knight numbers decide, not taste. If the
   verbatim set scores worse on the same questions, the reader still ships as the fetch-and-credit half

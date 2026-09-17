@@ -738,11 +738,9 @@ advice to wait for a gap is gone. Evidence `docs/test-evidence/plan48-R5-blackme
 
 ### Calls waiting on you
 
-- **58 phase 1, nine questions** ([§ 8](planning/58-phase-1-notes-shown-and-wiki-extracts.md)): the block's
-  shape after the mockups, trim-only wiki notes or a labelled summary line, reopening the July no-new-games
-  lock for ten games, the ten games themselves, the walkthrough wiki's licence read in a browser, keeping
-  the memory-written notes and tips, read-aloud of the block, the publish step, and the Deck window. Locks
-  as D111.
+- **58 phase 1, nine questions** ([§ 8](planning/58-phase-1-notes-shown-and-wiki-extracts.md)): answered
+  2026-09-17 and locked as D111. Two things are still open: the block's look waits on lane A's drawings,
+  and trim-only for wiki notes stands unless the maintainer overturns it.
 - **58 phase 2, seven questions** ([§ 8](planning/58-phase-2-kb-session-wave-four.md)): unchanged from the
   wave-four plan. Locks as D112, after phase 1.
 

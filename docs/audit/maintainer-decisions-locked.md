@@ -5719,3 +5719,39 @@ row. A focused chip shows only the thin blue border. So the ring rule stops targ
 would have peeked out as a white line), and the bottom bar becomes the chip's focus cue, as the
 design intended. White rings stay everywhere else. Both calls made by the one running the session
 under the maintainer's "build now"; either can be reversed from the device evening.
+
+### D111 — LOCKED 2026-09-17 (raised 2026-09-17) — 58 phase 1: the note's own words on screen, and wiki notes taken without rewriting — nine calls before the build
+
+Raised from [the phase 1 plan](../planning/58-phase-1-notes-shown-and-wiki-extracts.md), written the
+same day after a read of the knowledge base against the production RAG lessons. The maintainer
+answered all nine the same day; nothing is built.
+
+1. **The block's look: not answered yet, by design.** The maintainer's reply was "I don't even know
+   what you're asking", which is fair because the block has to be drawn before it can be chosen.
+   Lane A draws three versions at true size, the maintainer picks one, and the pick is added to this
+   decision then.
+2. **Trim only stands unless overturned.** The maintainer asked back: "Are you saying whether or not
+   the AI can create facts? Or are you saying that the AI can riff off of the notes that it
+   receives?" Both, in different places: in the reply the model still riffs off the notes it is
+   given, unchanged; in the library an AI may never write a sentence into a wiki note, it may only
+   cut. Trim only stands unless the maintainer says otherwise before lane B is briefed.
+3. **Reopen the July no-new-games lock: "Yes".** The catalog phase starts here.
+4. **The ten games (Mario Party 1, 2, 3, 6 and 7, Donkey Kong 64, Yoshi's Story, Diddy Kong Racing
+   from the Super Mario Wiki; the first Smash game from SmashWiki; GTA III from the GTA wiki): "Add
+   them, but verification of their facts might need to come from the feedback thumbs."** All ten are
+   in. The maintainer does not expect to check each wiki note by hand; a thumbs-down that stops a
+   wrong note coming back is the check they have in mind. That is the Phase 7 "demote" entry on the
+   roadmap, not in this phase, recommended as the next build after phase 1.
+5. **The walkthrough wiki at strategywiki.org:** the maintainer read its page footer in a browser on
+   2026-09-17: "Content is available under Creative Commons Attribution-ShareAlike 4.0 unless
+   otherwise noted." Share-alike 4.0, usable, recorded as footer evidence with the date; the
+   machine-readable licence field could not be read because scripted reads are refused by a bot
+   check.
+6. **Keep the 99 notes and 159 tips written from AI memory: "Yes".** They stay, labelled as bonsAI's
+   own notes with no source.
+7. **Read aloud: "Screen only".** The block is never read out.
+8. **The publish step: "I'll decide that later, you just work on improving it on disk."** Phase 1
+   builds the library and installs it on the Deck from a local folder; nothing is pushed to the
+   public download hosts; the publish call stays open, and the corrected Hades note waits on it.
+9. **Time and the Deck: "Take as long as you need, nothing else is going on."** No time limit; the
+   Deck is free.

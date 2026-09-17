@@ -171,6 +171,13 @@ starts work outside this.
   chat row visits Retry, the "…" question, Copy reply text and Read aloud under the New chat slot).
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a
   blanket rule was tried and reverted in favour of Steam's native outline.
+- ★★ `[focus]` **The Show details chip ladder is not a D-pad stop** — **OPEN, found 2026-09-17 while running
+  the reasoning display's Deck rows.** With Show details open, Right from Hide details stalls, Down skips
+  straight to the Session context strip, and Up from there lands back on Hide details — so no chip beyond
+  the first can ever be selected by a controller, only read on the page. This is not new: CONTEXT-LADDER-03's
+  2026-09-16 note already saw the ladder skipped, on an instant built-in reply; this run confirms the same gap
+  on a real model reply, with a thinking chip among the skipped chips. Evidence
+  `docs/test-evidence/plan57-REASONING-05.json`.
 - ★★ `[ollama]` `[layout]` **The AI models screen shows about two rows of the model list on the Deck's
   screen** — **OPEN, reported 2026-09-16 by the maintainer, cause read in the code, not yet changed.** The
   screen's body is capped at 520 pixels tall (or 72 percent of the screen when that is smaller;
@@ -628,8 +635,20 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   each of two thinking levels, so the fold does not show on a blank turn in this build. **Measured on the built-in screen,
   2026-09-17:** with the new fold row and the live thinking block both showing, about 61 pixels are left for the answer,
   down from the normal 94. **A bug found during that measurement is in Bugs, above:** pressing B while Show details is
-  open does not close it. Still owed on the Deck: rows **REASONING-01** to **REASONING-07**, the focus-graph checklist and
-  the free-play sweep. [Plan](planning/40-reasoning-display.md) · [Build plan](planning/57-reasoning-display-build.md).
+  open does not close it. **Six of the seven Deck rows passed 2026-09-17** (bundle `af52c0aa`), plus the
+  focus-graph checklist and the free-play sweep: **REASONING-01** through **04** and **06** all passed;
+  **REASONING-07** failed on that build (declining left the ring on the tab strip instead of the Thinking
+  row, and accepting the notice did not actually turn Thinking on until picked a second time) and was fixed
+  the same day, commit `d2096ee`. **REASONING-07 passed on the re-run, Deck 2026-09-17, bundle `b8d903d9`:**
+  declining now lands the ring back on the Off button inside the Thinking row and Thinking stays off;
+  accepting turns Thinking on in the same press, checked three ways, and Balanced/Deep never shows the
+  notice again. **The only thing still owed here is REASONING-05's body-text half:** its reasoning chip reads
+  correctly, but the whole Show details chip row cannot be reached by the D-pad, so the chip's own body can
+  only be read by a page read, not a controller — filed as its own Bugs entry, above; blocked on that bug.
+  Evidence `docs/test-evidence/plan57-REASONING-01.json` … `-07.json`,
+  `docs/test-evidence/plan57-REASONING-07-rerun.json`, `docs/test-evidence/plan57-REASONING-06a-rerun.json`,
+  `docs/test-evidence/plan57-FOCUS-GRAPH-01.json`, `docs/test-evidence/plan57-QA-FREE-PLAY-01.json`.
+  [Plan](planning/40-reasoning-display.md) · [Build plan](planning/57-reasoning-display-build.md).
 
 ---
 

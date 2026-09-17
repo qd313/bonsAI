@@ -294,6 +294,44 @@ Written as work lands.
   **Still owed on the Deck:** rows REASONING-01 to REASONING-07, the focus-graph checklist, and the
   free-play sweep.
 
+- **2026-09-17, later** — The Deck rows, the focus-graph checklist and the free-play sweep ran on the
+  built-in screen, bundle `af52c0aa`. Six of the seven REASONING rows passed: the live three lines
+  (01), the fold and its A/B handling with one extra Down press needed from the Retry icon (02), the
+  saved fold surviving a tab switch and a restart (03), Thinking Off showing today's phrases with
+  nothing added (04), and the one-time notice's normal path with the live lines unmasked in Strategy
+  mode (06). The pinned chip row turned out to be a single rotating slot rather than three chips
+  shown at once, so rows 01 and 04 swapped which frozen question they used, both through the same
+  pinned-chip code path. REASONING-05's chip reads correctly (level, seconds, token estimate) but the
+  whole Show details chip row cannot be reached by the D-pad at all, a pre-existing gap the
+  reasoning chip just made visible again — filed as its own roadmap bug, row stays owed for the
+  body-text half. REASONING-07 failed on this build: declining the notice left the ring on the tab
+  strip instead of the Thinking row, and accepting it did not actually turn Thinking on until a
+  second pick. **Fixed the same day, commit `d2096ee`** ("Fix the Thinking notice: ring lands back on
+  the row, and the chosen level actually sticks"): the notice returns focus through the shared modal
+  return-focus registry (a new id, `ollama-thinking-effort`) and patches the chosen level into the
+  pending settings snapshot, because the screen rebuild after any confirm box was restoring a
+  snapshot taken before the box opened — the same defect the model try-order pickers hit and fixed
+  earlier. A re-run of row 07 is owed. The focus-graph checklist and the free-play sweep both passed,
+  each with the same one-extra-Down note from the Retry icon, and free-play could not walk two of its
+  own legs on this build (LB/RB switches tabs here, not a carousel; the reply had already finished
+  before the walk started). Evidence `docs/test-evidence/plan57-REASONING-01.json` … `-07.json`,
+  `docs/test-evidence/plan57-FOCUS-GRAPH-01.json`, `docs/test-evidence/plan57-QA-FREE-PLAY-01.json`.
+
+- **2026-09-17, later still** — Row 07 re-run on the fixed build, bundle `b8d903d9` (commit
+  `d2096ee`), and it passed: declining closes the notice, the ring lands back on the Off button
+  inside the Thinking row rather than the tab strip, the row stays roughly where it was on screen
+  instead of the list snapping to the top, and Thinking stays off. Accepting on the next try turns
+  Thinking on in the same press — read Balanced right away, again about 3.6 seconds later, and again
+  after leaving to the Main tab and back — and Balanced/Deep afterwards never showed the notice
+  again, which also re-confirms row 06's own first half. One precondition was reset before the
+  re-run: the accepted-notice flag the first run had stored in the page's own browser storage was
+  removed first, so this run saw the notice fresh. REASONING-05's body-text half, blocked on the chip
+  ladder bug, is now the only thing still owed from these seven rows. Evidence
+  `docs/test-evidence/plan57-REASONING-07-rerun.json`, `docs/test-evidence/plan57-REASONING-06a-rerun.json`.
+  **One more sighting, unrelated, not yet a bug entry:** on the Main tab, with the highlight on the
+  row of saved chats, the shoulder button that switches tabs did nothing; moving the highlight down
+  one step first made it work.
+
 ---
 
 ## Appendix A — for the helpers, not for reading

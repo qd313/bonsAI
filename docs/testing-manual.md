@@ -117,6 +117,16 @@ visible, part above the top of the window and part under the dock — the same s
 older build already showed, so nothing landed this session made the Main tab worse. Evidence
 `docs/test-evidence/plan56-QA-FREE-PLAY-02.summary.json`.
 
+**Run 2026-09-17 on the built-in screen, bundle `af52c0aa` (plan 57, the reasoning display):** a full walk from
+the top of the chat down through the new reasoning fold row, the answer and the dock came back clean — no
+dead ends, no loops, every control reachable both ways. It re-found two already-known spots where part of a
+control is hidden behind a small icon (the question row behind the Retry icon, an answer section behind the
+copy icon), neither one new. Two legs of this row's own instructions could not be run: another carousel
+position (LB/RB), because this build ties LB/RB to switching the top-level tab strip, not a carousel; and the
+repeat once the reply finishes, because the reply used had already finished streaming before the walk began,
+so the streaming-to-finished transition itself was not walked. Evidence
+`docs/test-evidence/plan57-QA-FREE-PLAY-01.json`.
+
 A stop that is focused but not visible is a **FAIL of this row**, whatever the scripted rows say.
 This is the manual interim for the DPS visibility oracle + `deck_sweep`
 (decky-plugin-studio `docs/planning/06-visibility-oracle-and-free-play-sweep.md`); when that
@@ -137,7 +147,11 @@ Policy: `bonsai://policy/decky-ui-focus`. Patterns: `bonsai://architecture/focus
 
 References: `SettingsTabUiScaleSection.tsx`, `OllamaTab.tsx`, `PullModelsModal.tsx`. **The reasoning display's fold
 row** (`show-reasoning`, a new stop between Retry and the answer, plan 57) adds: `MainTabChatTranscript.tsx`,
-`replyStopRegistry.ts`, `liveTurnFocusGraph.ts`.
+`replyStopRegistry.ts`, `liveTurnFocusGraph.ts`. **PASS (Deck) 2026-09-17, bundle `af52c0aa`:** the fold row
+sits cleanly in the D-pad path — reachable from the question and the answer on both sides, always above the
+dock, and backing out with Up three times lands safely on the chat-slot row with no dead end. Reaching it
+going down from the Retry icon takes one extra press, since the question's own row is a stop in between —
+see REASONING-02. Evidence `docs/test-evidence/plan57-FOCUS-GRAPH-01.json`.
 
 ---
 
@@ -397,26 +411,66 @@ Tier 1 now starts at SMOKE-E; the ID stays so older links still resolve.
 - [x] **THINKING-SLOW-01** Black Mesa `362890`, cold model (first Ask after a reboot, or after `ollama stop`): the line must report **building context** and then **connecting/waking the model** before any answer text. The point is that the longest silence now says something — and says it encouragingly, not with a sigh — PASS (Deck) 2026-09-04: the slow-path blurbs appeared in order and cycled across 32 sampled phases.
 - [x] **THINKING-LIVE-01** During a long answer (Expert mode, or a 30s+ reply): the line **keeps moving** on an irregular beat (4–12s between changes, first change 7–13s in) and never sits on one string for the whole run. Three things should be visible over a long generation: the `connecting` line giving way to a *writing your answer* line once tokens start, then rotating duration lines that escalate in tone, and — if the model cooperates — its own `<bonsai-status>` text cutting in and resetting the cycle. **Fail conditions:** any line held for more than ~15s; a *regular* beat you can count along to (the whole point of the randomised window); a line predicting completion (*almost done*, *nearly there*); a line repeating itself back to back; half-written text — PASS (Deck) 2026-09-04: the line updated throughout a 212s reply, one writer, no interleaving. **Re-confirmed (Deck) 2026-09-17:** the line changed three times over about 7 seconds, no freeze, no repeat; the run was short enough that the 30-second slow-path wording was not produced. Evidence `docs/test-evidence/plan57-QA-THINKING-LIVE-01.json`.
 - [x] **THINKING-SPOILER-01** Strategy mode, masking on, a title with real spoilers: if the model names something spoilery in the thinking line it must render as blocks (`beat ████ ██████ dance`), never as plain words and never as literal `[[spoiler]]` markup. Watch for the failure direction too — a line that is *entirely* blocks means the model opened the marker and never closed it, which masks to end of line by design — PASS (Deck) 2026-09-04: the Red Dead ending question fenced — *Spoiler — tap to show / Hidden until you reveal (Strategy Guide).*
-- [ ] **REASONING-01** through **REASONING-07** — the reasoning display (plan 57 § 6). Frozen chips before
-  pinning: **how do i kill the big armoured bug boss** (Deep Rock Survivor; rows 01, 02, 05), **how does the
-  story end** (Red Dead Redemption 2; row 06), **what does the pickaxe do** (row 04). Deck results owed —
-  not run yet.
-  - [ ] **REASONING-01** Thinking Balanced, the default model, the frozen Deep Rock Survivor question — the
+- [ ] **REASONING-01** through **REASONING-07** — the reasoning display (plan 57 § 6), run on the Deck's
+  built-in screen 2026-09-17, bundle `af52c0aa`. Frozen chips before pinning: **how do i kill the big
+  armoured bug boss** (Deep Rock Survivor; rows 01, 02, 05), **how does the story end** (Red Dead Redemption
+  2; row 06), **what does the pickaxe do** (row 04). **Deviation found while running:** the Deck's chip row
+  is in single-chip mode, one rotating slot cycling among the three pinned questions, not three chips shown
+  side by side, and landing the exact frozen wording at the moment of a press proved costly. Rows 01 and 04
+  swapped their questions for this reason — 01 ran with "what does the pickaxe do", 04 with "how do i kill
+  the big armoured bug boss" — both sent through the same pinned-chip mechanism, testing the same code path.
+  Six of seven rows closed, and the seventh (07) passed on its re-run once its fix landed (commit
+  `d2096ee`); only 05 stays owed, for its body-text half. Evidence
+  `docs/test-evidence/plan57-REASONING-01.json` … `-07.json`,
+  `docs/test-evidence/plan57-REASONING-07-rerun.json`, `docs/test-evidence/plan57-REASONING-06a-rerun.json`.
+  - [x] **REASONING-01** Thinking Balanced, the default model, the frozen Deep Rock Survivor question — the
     space under the question changes to the model's own sentences within a few seconds, three lines at the
-    answer's own size, never more.
-  - [ ] **REASONING-02** When the answer starts, the space folds to one line with the seconds — Down from
+    answer's own size, never more. **PASS (Deck) 2026-09-17:** the live block appeared about 9 seconds after
+    send, three lines, the newest one marked, sitting above the dock. Ran with "what does the pickaxe do"
+    (see the deviation note above).
+  - [x] **REASONING-02** When the answer starts, the space folds to one line with the seconds — Down from
     the question reaches it and the ring is visible above the dock; A opens the block, A closes it; Down
-    from the fold enters the answer.
-  - [ ] **REASONING-03** Reopen the chat after switching tabs, and again after a plugin restart — the fold
-    is there, closed, and opens to the same text with the same seconds.
-  - [ ] **REASONING-04** Thinking Off, the frozen pickaxe question — today's phrases show, no fold, no chip.
+    from the fold enters the answer. **PASS (Deck) 2026-09-17:** the fold read "Show reasoning · 16 s"; A
+    opened the block and flipped the label, A closed it, and A then B also closed it with the ring still on
+    the row; Down entered the answer, Up returned. **One wrinkle:** from the Retry icon it takes two Down
+    presses to reach the fold, not one, because the question's own row is an extra stop in between; from the
+    question header it is one press.
+  - [x] **REASONING-03** Reopen the chat after switching tabs, and again after a plugin restart — the fold
+    is there, closed, and opens to the same text with the same seconds. **PASS (Deck) 2026-09-17:** after a
+    tab switch and a full plugin restart the fold was still there, closed, reading the same 16 seconds, and
+    opened to the exact same 1,861 characters.
+  - [x] **REASONING-04** Thinking Off, the frozen pickaxe question — today's phrases show, no fold, no chip.
+    **PASS (Deck) 2026-09-17:** Thinking Off showed only the ordinary waiting phrase, no live block, no
+    fold, and the details chips skipped the Thinking chip entirely. Ran with "how do i kill the big armoured
+    bug boss" (see the deviation note above).
   - [ ] **REASONING-05** Show details on a thinking turn — the chip reads the level, the seconds and the
-    token estimate, and its body says the count is an estimate.
-  - [ ] **REASONING-06** Red Dead Redemption 2, Strategy, the frozen ending question, the first time with
+    token estimate, and its body says the count is an estimate. **PARTIAL (Deck) 2026-09-17:** the chip read
+    "Thinking: Balanced · 16 s · ~465 tokens", the same seconds as the fold — but the whole details chip row
+    cannot be reached by the D-pad at all (Right from Hide details stalls, Down skips to Session context, Up
+    from Session context lands back on Hide details), so nobody using a controller can select this chip to
+    read its body; only a page read reached the text. Filed as its own Bugs entry, below. Stays owed for the
+    body-text half.
+  - [x] **REASONING-06** Red Dead Redemption 2, Strategy, the frozen ending question, the first time with
     thinking on — the one-time notice appears and asks to confirm; the live lines may name the ending; once
-    the answer starts, nothing of the reasoning shows outside the closed fold.
-  - [ ] **REASONING-07** Decline the notice — Thinking stays Off and nothing shows; accept it on a later try
-    and the level changes, with the notice never coming back.
+    the answer starts, nothing of the reasoning shows outside the closed fold. **PASS (Deck) 2026-09-17:**
+    after an earlier decline the notice returned; switching Balanced to Deep and back prompted nothing; a
+    bare ending question with no game running (a deviation from the row, which names Red Dead) showed the
+    model's own unmasked reasoning live while it thought, and nothing of it showed once the answer started
+    outside the closed fold.
+  - [x] **REASONING-07** Decline the notice — Thinking stays Off and nothing shows; accept it on a later try
+    and the level changes, with the notice never coming back. **FAIL on the first build, Deck 2026-09-17:**
+    declining kept Thinking off, but the ring landed on the tab strip at the top of the panel instead of the
+    Thinking row; accepting the notice closed the box and remembered it was answered, but did not actually
+    turn Thinking on — a second pick of Balanced then worked silently, with no further prompt. **Fixed the
+    same day, commit `d2096ee`:** the notice now returns focus through the shared modal return-focus
+    registry, and patches the chosen level into the pending settings snapshot instead of losing it to a
+    stale snapshot restored after the confirm box closes. **PASS on the re-run, Deck 2026-09-17, bundle
+    `b8d903d9`:** declining now closes the box, lands the ring back on the Off button inside the Thinking
+    row instead of the tab strip, and the row stays roughly where it was on screen rather than the list
+    snapping to the top; Thinking is still correctly off. Accepting on the next try turns Thinking on in the
+    same press — read Balanced right away, again about 3.6 seconds later, and again after leaving to the
+    Main tab and back; Balanced and Deep afterwards never showed the notice again. Evidence
+    `docs/test-evidence/plan57-REASONING-07-rerun.json`, `docs/test-evidence/plan57-REASONING-06a-rerun.json`.
 - [ ] **KB-FOCUS-01** Ollama KB Update/Remove: Left/Right between pair; both Up → KB toggle; both Down → Reply style; **equal row height** (Update not taller than Remove)
 - [ ] **KB-CANCEL-01** Ollama KB **while a download runs**: **Cancel** replaces Remove and is the row's only enabled stop (the primary reads *Downloading…* and is disabled). Down from **Use local knowledge base** → Cancel; Up from **Reply verbosity** → Cancel; **A** → *Cancelling…*, second press does nothing; row returns to Update/Download + Remove within a few seconds; status line reads *Download cancelled* in grey, **not** the raw backend error in red; a fresh download still starts afterwards
 - [ ] **OLLAMA-FOCUS-01** Ollama tab open (no prior Test): with Ollama reachable, primary button shows **Update AI & models** (quiet auto-probe)

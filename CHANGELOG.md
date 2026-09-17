@@ -149,7 +149,11 @@ All notable changes to this project are documented in this file.
   newest sentences show under your question; when the answer starts they fold to one line with the
   seconds; press it to read the whole thing; a Thinking chip in Show details; a one-time notice the first
   time Thinking is turned on. `ollama_service.py`, `OllamaThinkingEffortRow.tsx`, `MainTabChatTranscript.tsx`.
-  On-Deck rows owed: **REASONING-01** to **REASONING-07** in `docs/testing-manual.md`.
+  On-Deck rows owed: **REASONING-01** to **REASONING-07** in `docs/testing-manual.md`. **Found and fixed the
+  same day (commit `d2096ee`):** on the first build, declining the one-time Thinking notice left the ring on
+  the tab strip instead of back on the Thinking row, and accepting it closed the notice without actually
+  turning Thinking on until picked a second time. The notice now hands the ring back through the shared
+  return-focus registry and saves the chosen level into the settings snapshot correctly.
 - **A Clear button now sits on the Session context bar, and it means the same thing Clear cache in Settings
   already means:** with the bar showing under the chat, a small Clear appears at its right end; pressing it
   opens the same confirm box as Clear cache — "Start the next question fresh?" — and choosing it shows a

@@ -95,6 +95,7 @@ before it is not reliable enough on its own:
 """
 
 import json
+import math
 import os
 import re
 import shutil
@@ -157,6 +158,29 @@ OLLAMA_CHAT_READ_CHUNK = 4096
 # faster than this produces text nobody reads. The terminal parse is a separate call site and is
 # never throttled — the final answer must not depend on timing.
 OLLAMA_DELTA_PARSE_INTERVAL_S = 0.1
+
+# Plan 57: the back end now keeps what a thinking model thinks instead of throwing it away.
+# REASONING_LIVE_CHARS is how much of the thinking the live status line carries while the answer
+# is still pending (newest text only, so a long think does not balloon every poll).
+# REASONING_TEXT_CAP_CHARS is the most that gets saved once the answer is done (D108: big enough
+# to hold a whole Deep think in the common case). REASONING_CUT_NOTE is the one line stitched onto
+# the front when a think ran over the cap, so a reopened chat shows an honest "this was trimmed"
+# instead of text that just starts mid-sentence.
+REASONING_LIVE_CHARS = 600
+REASONING_TEXT_CAP_CHARS = 6000
+REASONING_CUT_NOTE = "(The start of this thinking was cut to fit.)\n"
+
+
+def cap_reasoning_text(full_text: str, cap: int = REASONING_TEXT_CAP_CHARS) -> str:
+    """Keep the END of a model's thinking when it runs past ``cap`` characters.
+
+    The start is what is missing when a think overruns 6,000 characters, not the end — the end is
+    the part closest to the answer, and the part most worth keeping. When trimmed, one line is
+    stitched onto the front saying so; that line does not count against the 6,000.
+    """
+    if len(full_text) <= cap:
+        return full_text
+    return REASONING_CUT_NOTE + full_text[-cap:]
 
 
 def _ollama_http_base_from_pc_ip_field(pc_ip: str) -> str:
@@ -774,12 +798,23 @@ def _stream_ollama_chat_once(
     *,
     raw_prefix: str = "",
     emit_done_delta: bool = True,
+    reasoning_prefix: str = "",
+    reasoning_first_ts: Optional[float] = None,
+    reasoning_frozen_seconds: Optional[float] = None,
 ) -> dict:
     """One streamed ``/api/chat`` POST. Returns raw/visible text; does not format the final reply.
 
     ``raw_prefix`` is prior soft-continue assistant raw. Partial parses extract status/fence
     over ``raw_prefix + this segment`` so leading spaces on a continue chunk are not stripped
     away from the stitch boundary.
+
+    ``reasoning_prefix`` / ``reasoning_first_ts`` / ``reasoning_frozen_seconds`` are the same idea
+    for the model's *thinking* text (plan 57): a soft continue keeps one thinking buffer and one
+    "first thinking chunk" clock across both requests, so the caller hands back in what it got out
+    last time. ``reasoning_first_ts`` is ``None`` until the first thinking chunk of the whole
+    exchange arrives. ``reasoning_frozen_seconds`` is ``None`` until the first answer chunk of the
+    whole exchange arrives, at which point it is set once and never changed again — a thinking
+    chunk that shows up after that does not move it.
     """
 
     def _should_cancel() -> bool:
@@ -848,6 +883,11 @@ def _stream_ollama_chat_once(
             try:
                 pending = b""
                 deltas: list[str] = []
+                # The model's own thinking text, kept in a buffer separate from the answer
+                # (``deltas``) so the two never get mixed up on the way to the screen.
+                thinking_deltas: list[str] = []
+                local_first_thinking_ts = reasoning_first_ts
+                local_frozen_seconds = reasoning_frozen_seconds
                 stream_err_txt: Optional[str] = None
                 done_flag = False
                 done_meta: dict = {}
@@ -860,10 +900,23 @@ def _stream_ollama_chat_once(
                         return
                     _thinking, _visible = extract_bonsai_status(raw_prefix + joined)
                     _visible = hide_incomplete_strategy_branch_fence(_visible)
-                    on_delta(_visible, False, _thinking)
+                    _reasoning_buf = reasoning_prefix + "".join(thinking_deltas)
+                    _reasoning_partial = _reasoning_buf[-REASONING_LIVE_CHARS:] if _reasoning_buf else None
+                    _reasoning_seconds: Optional[int] = None
+                    if local_frozen_seconds is not None:
+                        _reasoning_seconds = local_frozen_seconds
+                    elif local_first_thinking_ts is not None:
+                        _reasoning_seconds = int(time.monotonic() - local_first_thinking_ts)
+                    on_delta(
+                        _visible,
+                        False,
+                        _thinking,
+                        reasoning_partial=_reasoning_partial,
+                        reasoning_seconds=_reasoning_seconds,
+                    )
 
                 def _apply_stream_obj(jo: dict) -> None:
-                    nonlocal stream_err_txt, done_flag, last_delta_parse
+                    nonlocal stream_err_txt, done_flag, last_delta_parse, local_first_thinking_ts, local_frozen_seconds
                     err_any = jo.get("error")
                     if err_any is not None:
                         if isinstance(err_any, dict):
@@ -874,10 +927,26 @@ def _stream_ollama_chat_once(
                             stream_err_txt = str(err_any)
                     msg_blk = jo.get("message") if isinstance(jo.get("message"), dict) else {}
                     mc = msg_blk.get("content")
-                    if isinstance(mc, str) and mc:
+                    mt = msg_blk.get("thinking")
+                    got_content = isinstance(mc, str) and bool(mc)
+                    got_thinking = isinstance(mt, str) and bool(mt)
+                    if got_thinking:
+                        thinking_deltas.append(mt)
+                        if local_first_thinking_ts is None:
+                            local_first_thinking_ts = time.monotonic()
+                    if got_content:
                         deltas.append(mc)
-                        _now = time.monotonic() if on_delta else 0.0
-                        if on_delta and (_now - last_delta_parse) >= OLLAMA_DELTA_PARSE_INTERVAL_S:
+                        # First answer chunk of the whole exchange: freeze the "first thinking to
+                        # first answer" clock right here. A thinking chunk that arrives later is
+                        # still appended to the buffer, but this number does not move again — the
+                        # folded line's seconds must read the same the whole time the answer streams.
+                        if local_frozen_seconds is None and local_first_thinking_ts is not None:
+                            local_frozen_seconds = max(
+                                1, math.ceil(time.monotonic() - local_first_thinking_ts)
+                            )
+                    if (got_content or got_thinking) and on_delta:
+                        _now = time.monotonic()
+                        if (_now - last_delta_parse) >= OLLAMA_DELTA_PARSE_INTERVAL_S:
                             last_delta_parse = _now
                             try:
                                 _publish_partial("".join(deltas))
@@ -977,6 +1046,19 @@ def _stream_ollama_chat_once(
                     logger.warning("ask_ollama: %s", msg)
                     return {"success": False, "response": msg}
                 assistant_raw = "".join(deltas)
+                # Rule 7 (plan 57): the model spent its whole budget thinking and the stream ended
+                # with no answer at all. There is no first-answer-chunk to freeze the clock at, so
+                # it freezes here instead, at the end of the stream. A soft continue never reaches
+                # this branch with reasoning already frozen from an earlier segment and no content
+                # this segment — ``should_continue`` only fires when this segment's own text was
+                # non-empty, so "no answer yet" can only happen on the very first segment.
+                if (
+                    local_first_thinking_ts is not None
+                    and local_frozen_seconds is None
+                    and not assistant_raw.strip()
+                ):
+                    local_frozen_seconds = max(1, math.ceil(time.monotonic() - local_first_thinking_ts))
+                reasoning_buffer_out = reasoning_prefix + "".join(thinking_deltas)
                 thinking_summary, visible_full = extract_bonsai_status(raw_prefix + assistant_raw)
                 visible_full = hide_incomplete_strategy_branch_fence(visible_full or "")
                 # Permanent completion telemetry: done_reason=length with raw_len=0 means the
@@ -1013,6 +1095,11 @@ def _stream_ollama_chat_once(
                     "done_reason": done_meta.get("done_reason"),
                     "eval_count": done_meta.get("eval_count"),
                     "prompt_eval_count": done_meta.get("prompt_eval_count"),
+                    # Plan 57: this segment's thinking, handed back so a soft continue can carry it
+                    # (and the "first thinking chunk" clock) into the next request.
+                    "reasoning_buffer": reasoning_buffer_out,
+                    "reasoning_first_ts": local_first_thinking_ts,
+                    "reasoning_frozen_seconds": local_frozen_seconds,
                 }
             finally:
                 if on_http_response_done:
@@ -1123,6 +1210,12 @@ def post_ollama_chat(
     final_done_reason: Any = None
     thinking_fell_back = False
     thinking_retry_done = False
+    # Plan 57: the model's thinking, carried across a soft continue the same way the visible
+    # answer is (``stitched_raw_parts`` above) -- one buffer, one "first thinking chunk" clock,
+    # for the whole exchange even when it takes two requests.
+    reasoning_buffer_raw = ""
+    reasoning_first_ts: Optional[float] = None
+    reasoning_frozen_seconds: Optional[float] = None
 
     def _visible_from_raw(raw: str) -> tuple[Optional[str], str]:
         thinking, visible = extract_bonsai_status(raw)
@@ -1159,6 +1252,9 @@ def post_ollama_chat(
             on_delta,
             raw_prefix=raw_prefix,
             emit_done_delta=False,
+            reasoning_prefix=reasoning_buffer_raw,
+            reasoning_first_ts=reasoning_first_ts,
+            reasoning_frozen_seconds=reasoning_frozen_seconds,
         )
 
         if not result.get("success"):
@@ -1188,6 +1284,9 @@ def post_ollama_chat(
         if result.get("thinking_summary"):
             last_thinking = result.get("thinking_summary")
         final_done_reason = result.get("done_reason")
+        reasoning_buffer_raw = str(result.get("reasoning_buffer") or reasoning_buffer_raw)
+        reasoning_first_ts = result.get("reasoning_first_ts", reasoning_first_ts)
+        reasoning_frozen_seconds = result.get("reasoning_frozen_seconds", reasoning_frozen_seconds)
 
         if continue_count > 0 and not part_raw.strip():
             logger.info(
@@ -1333,6 +1432,12 @@ def post_ollama_chat(
         continue_count,
         final_done_reason,
     )
+    # Plan 57: "" / null / 0 when the model never thought (thinking Off, or a model that cannot
+    # think) -- ``reasoning_buffer_raw`` only ever gains text from a real ``message.thinking``
+    # chunk, so an empty buffer here means exactly that, not a bug.
+    reasoning_full_len = len(reasoning_buffer_raw)
+    reasoning_text = cap_reasoning_text(reasoning_buffer_raw) if reasoning_buffer_raw else ""
+    reasoning_tokens = (reasoning_full_len // 4) if reasoning_buffer_raw else 0
     return {
         "success": True,
         "response": text,
@@ -1353,4 +1458,11 @@ def post_ollama_chat(
             "think": budgets.get("think"),
             "think_effort": budgets.get("think_effort"),
         },
+        # Plan 57: the whole reasoning (capped at 6,000 characters, end kept), the whole seconds
+        # from the first thinking chunk to the first answer chunk (or to the end of the stream if
+        # the model never answered), and an estimate of its token count from the FULL, uncapped
+        # text. See ``cap_reasoning_text`` for the cap rule.
+        "reasoning_text": reasoning_text,
+        "reasoning_seconds": reasoning_frozen_seconds,
+        "reasoning_tokens": reasoning_tokens,
     }

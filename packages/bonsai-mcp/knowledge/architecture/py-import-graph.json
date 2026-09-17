@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
   "fileCount": 68,
-  "edgeCount": 158,
+  "edgeCount": 159,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -12,7 +12,6 @@
     "py_modules/backend/services/async_task_lifecycle.py",
     "py_modules/backend/services/background_request_state.py",
     "py_modules/backend/services/capabilities.py",
-    "py_modules/backend/services/chat_slot_service.py",
     "py_modules/backend/services/compat_topic_router.py",
     "py_modules/backend/services/desktop_note_service.py",
     "py_modules/backend/services/destructive_advice_guard.py",
@@ -69,15 +68,15 @@
       "count": 5
     },
     {
+      "path": "py_modules/backend/services/ollama_service.py",
+      "count": 5
+    },
+    {
       "path": "py_modules/backend/tls_ca_fallback.py",
       "count": 5
     },
     {
       "path": "py_modules/backend/services/ollama_catalog_service.py",
-      "count": 4
-    },
-    {
-      "path": "py_modules/backend/services/ollama_service.py",
       "count": 4
     },
     {
@@ -503,7 +502,9 @@
       ]
     },
     "py_modules/backend/services/chat_slot_service.py": {
-      "imports": [],
+      "imports": [
+        "py_modules/backend/services/ollama_service.py"
+      ],
       "importedBy": [
         "main.py"
       ]
@@ -764,6 +765,7 @@
       ],
       "importedBy": [
         "main.py",
+        "py_modules/backend/services/chat_slot_service.py",
         "py_modules/backend/services/game_ai_request.py",
         "py_modules/backend/services/ollama_ask_service.py",
         "py_modules/backend/services/ollama_connection_test.py"

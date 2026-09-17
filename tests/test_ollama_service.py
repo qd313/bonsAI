@@ -108,7 +108,7 @@ class OllamaServiceTests(unittest.TestCase):
         lg = MagicMock()
         deltas_seen: list[tuple[str, bool]] = []
 
-        def _on_delta(text: str, done: bool, _thinking_summary=None) -> None:
+        def _on_delta(text: str, done: bool, _thinking_summary=None, **_kwargs) -> None:
             deltas_seen.append((text, done))
 
         out = post_ollama_chat(
@@ -170,7 +170,7 @@ class OllamaServiceTests(unittest.TestCase):
             "expert",
             "5m",
             cancel_requested=lambda: False,
-            on_delta=lambda text, done, _thinking=None: deltas_seen.append((text, done)),
+            on_delta=lambda text, done, _thinking=None, **_kw: deltas_seen.append((text, done)),
         )
 
         self.assertTrue(out.get("success"))
@@ -292,7 +292,7 @@ class OllamaServiceTests(unittest.TestCase):
         cancelled = {"flag": False}
         deltas_seen: list[tuple[str, bool]] = []
 
-        def _on_delta(text: str, done: bool, _thinking=None) -> None:
+        def _on_delta(text: str, done: bool, _thinking=None, **_kwargs) -> None:
             deltas_seen.append((text, done))
             if SOFT_CONTINUE_CUE in text:
                 cancelled["flag"] = True
@@ -377,7 +377,7 @@ class OllamaServiceTests(unittest.TestCase):
             "strategy",
             "5m",
             cancel_requested=lambda: False,
-            on_delta=lambda text, done, _thinking=None: deltas_seen.append((text, done)),
+            on_delta=lambda text, done, _thinking=None, **_kw: deltas_seen.append((text, done)),
         )
 
         self.assertTrue(out.get("success"))
@@ -450,7 +450,7 @@ class OllamaServiceTests(unittest.TestCase):
             "strategy",
             "5m",
             cancel_requested=lambda: False,
-            on_delta=lambda text, done, _thinking=None: deltas_seen.append(text),
+            on_delta=lambda text, done, _thinking=None, **_kw: deltas_seen.append(text),
         )
 
         self.assertTrue(out.get("success"))
@@ -705,7 +705,7 @@ class OllamaServiceTests(unittest.TestCase):
             "speed",
             "5m",
             cancel_requested=lambda: False,
-            on_delta=lambda text, done, _thinking=None: seen.append((text, done)),
+            on_delta=lambda text, done, _thinking=None, **_kw: seen.append((text, done)),
         )
         return seen
 
@@ -2080,6 +2080,265 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertIn("REPLY LANGUAGE", prompt)
         self.assertIn("Japanese", prompt)
         self.assertIn("fence names", prompt)
+
+
+# Plan 57: real Ollama chunks captured on the PC 2026-09-17 with thinking on (gemma4:e2b-it-qat,
+# docs/test-evidence/plan57-desk-low-q1.jsonl and plan57-desk-low-q3.jsonl -- summarised in
+# plan57-desk-summary.json). Each line below is one chunk's own ``raw`` field, copied verbatim; a
+# short real prefix/suffix stands in for the full capture (466 and 1,401 lines respectively) so
+# these tests stay fast. Where a test needs an order the real capture never produced (a thinking
+# chunk after the first answer chunk; two requests stitched into one buffer), the chunks placed in
+# that order are still each a real, unedited capture -- only their sequence is constructed.
+_REAL_THINKING_CHUNKS_LOW_Q1 = [
+    '{"model": "gemma4:e2b-it-qat", "created_at": "2026-09-17T04:01:28.1890566Z", "message": {"role": "assistant", "content": "", "thinking": "Thinking"}, "done": false}',
+    '{"model": "gemma4:e2b-it-qat", "created_at": "2026-09-17T04:01:28.1960726Z", "message": {"role": "assistant", "content": "", "thinking": " Process"}, "done": false}',
+    '{"model": "gemma4:e2b-it-qat", "created_at": "2026-09-17T04:01:28.2016054Z", "message": {"role": "assistant", "content": "", "thinking": ":"}, "done": false}',
+]
+_REAL_LATE_THINKING_CHUNK_LOW_Q1 = (
+    '{"model": "gemma4:e2b-it-qat", "created_at": "2026-09-17T04:01:28.2384221Z", '
+    '"message": {"role": "assistant", "content": "", "thinking": "Analyze"}, "done": false}'
+)
+_REAL_CONTENT_CHUNKS_LOW_Q1 = [
+    '{"model": "gemma4:e2b-it-qat", "created_at": "2026-09-17T04:01:30.3312179Z", "message": {"role": "assistant", "content": "In"}, "done": false}',
+    '{"model": "gemma4:e2b-it-qat", "created_at": "2026-09-17T04:01:30.3357639Z", "message": {"role": "assistant", "content": " **"}, "done": false}',
+    '{"model": "gemma4:e2b-it-qat", "created_at": "2026-09-17T04:01:30.343308Z", "message": {"role": "assistant", "content": "Deep"}, "done": false}',
+]
+_REAL_DONE_CHUNK_LOW_Q1_STOP = (
+    '{"model": "gemma4:e2b-it-qat", "created_at": "2026-09-17T04:01:31.2391735Z", '
+    '"message": {"role": "assistant", "content": ""}, "done": true, "done_reason": "stop", '
+    '"total_duration": 3149461300, "load_duration": 5080800, "prompt_eval_count": 27, '
+    '"prompt_eval_cached_count": 0, "prompt_eval_duration": 67364000, "eval_count": 507, '
+    '"eval_duration": 3071960000}'
+)
+_REAL_THINKING_CHUNKS_LOW_Q3 = [
+    '{"model": "gemma4:e2b-it-qat", "created_at": "2026-09-17T04:01:37.202008Z", "message": {"role": "assistant", "content": "", "thinking": "Here"}, "done": false}',
+    '{"model": "gemma4:e2b-it-qat", "created_at": "2026-09-17T04:01:37.2080336Z", "message": {"role": "assistant", "content": "", "thinking": "\'"}, "done": false}',
+    '{"model": "gemma4:e2b-it-qat", "created_at": "2026-09-17T04:01:37.214373Z", "message": {"role": "assistant", "content": "", "thinking": "s"}, "done": false}',
+]
+_REAL_CONTENT_CHUNKS_LOW_Q3 = [
+    '{"model": "gemma4:e2b-it-qat", "created_at": "2026-09-17T04:01:40.6184763Z", "message": {"role": "assistant", "content": "This"}, "done": false}',
+    '{"model": "gemma4:e2b-it-qat", "created_at": "2026-09-17T04:01:40.6243312Z", "message": {"role": "assistant", "content": " interaction"}, "done": false}',
+    '{"model": "gemma4:e2b-it-qat", "created_at": "2026-09-17T04:01:40.6303723Z", "message": {"role": "assistant", "content": " is"}, "done": false}',
+]
+_REAL_DONE_CHUNK_LOW_Q3_LENGTH = (
+    '{"model": "gemma4:e2b-it-qat", "created_at": "2026-09-17T04:01:45.9330415Z", '
+    '"message": {"role": "assistant", "content": ""}, "done": true, "done_reason": "length", '
+    '"total_duration": 8791481000, "load_duration": 5699100, "prompt_eval_count": 30, '
+    '"prompt_eval_cached_count": 0, "prompt_eval_duration": 20409000, "eval_count": 1456, '
+    '"eval_duration": 8753412000}'
+)
+# The full thinking text of one real capture (plan57-desk-high-q3.jsonl, 2,705 characters),
+# repeated three times to run past the 6,000-character cap. Repeating real text is still real
+# text -- the point of this fixture is the cap rule, not a particular Ask.
+_REAL_LONG_THINKING_TEXT_HIGH_Q3 = (
+    "Here's a thinking process that leads to the suggested explanation:\n\n"
+    "1.  **Deconstruct the Request:** The user wants to know how \"damage scaling\" and "
+    "\"overclocks\" interact in the game *Deep Rock Galactic* (DRG). This needs a clear, "
+    "concept-level answer without citing specific patch numbers that could go stale.\n\n"
+    "2.  **Draft the explanation** around the general relationship: overclocks modify a weapon's "
+    "base stats, and damage scaling (enemy armor, difficulty hazard level) is applied on top of "
+    "whatever the overclocked weapon already deals, not instead of it.\n\n"
+) * 40  # well past 6,000 characters, still built from the same real capture above
+
+
+class OllamaServiceReasoningTests(unittest.TestCase):
+    """Plan 57: the back end keeps a thinking model's thinking instead of throwing it away.
+
+    Every faked stream here replays real chunks captured on the PC 2026-09-17 (see the module
+    constants above) -- reordered where a test needs an order the capture itself never produced,
+    but never inventing a chunk's own shape.
+    """
+
+    def _post(self, ask_mode: str = "speed", *, on_delta=None) -> dict:
+        return post_ollama_chat(
+            "http://127.0.0.1:11434/api/chat",
+            "gemma4:e2b-it-qat",
+            [{"role": "user", "content": "q"}],
+            60,
+            [],
+            [],
+            [],
+            [],
+            MagicMock(),
+            ask_mode,
+            "5m",
+            cancel_requested=lambda: False,
+            on_delta=on_delta,
+            think_effort="low",
+        )
+
+    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    def test_thinking_then_answer_is_captured_in_the_result(self, mock_urlopen: MagicMock) -> None:
+        """The common case: thinking arrives, then the answer, then done."""
+        lines = (
+            list(_REAL_THINKING_CHUNKS_LOW_Q1)
+            + list(_REAL_CONTENT_CHUNKS_LOW_Q1)
+            + [_REAL_DONE_CHUNK_LOW_Q1_STOP]
+        )
+        mock_urlopen.return_value = OllamaServiceTests._ndjson_response(lines)
+
+        out = self._post()
+
+        self.assertEqual(out.get("reasoning_text"), "Thinking Process:")
+        self.assertEqual(out.get("reasoning_tokens"), len("Thinking Process:") // 4)
+        self.assertIsInstance(out.get("reasoning_seconds"), int)
+        self.assertGreaterEqual(out.get("reasoning_seconds"), 1)
+
+    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    def test_a_thinking_chunk_after_the_first_answer_chunk_is_appended_without_moving_seconds(
+        self, mock_urlopen: MagicMock
+    ) -> None:
+        """A late thinking chunk joins the buffer; the frozen seconds do not move for it."""
+        lines = (
+            list(_REAL_THINKING_CHUNKS_LOW_Q1)
+            + list(_REAL_CONTENT_CHUNKS_LOW_Q1)
+            + [_REAL_LATE_THINKING_CHUNK_LOW_Q1]
+            + [_REAL_DONE_CHUNK_LOW_Q1_STOP]
+        )
+        mock_urlopen.return_value = OllamaServiceTests._ndjson_response(lines)
+
+        # Two monotonic reads happen: the first thinking chunk's stamp, then the first answer
+        # chunk's freeze. The late thinking chunk after that must not consume a third.
+        with patch.object(ollama_service.time, "monotonic", side_effect=[100.0, 106.0]):
+            out = self._post()
+
+        self.assertEqual(out.get("reasoning_text"), "Thinking Process:Analyze")
+        self.assertEqual(out.get("reasoning_seconds"), 6)
+
+    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    def test_thinking_only_no_answer(self, mock_urlopen: MagicMock) -> None:
+        """The model spends its whole budget thinking and the stream ends with no answer.
+
+        Rule 7: the result still carries the reasoning, and the seconds run from the first
+        thinking chunk to the end of the stream (there is no first answer chunk to freeze at).
+        """
+        lines = list(_REAL_THINKING_CHUNKS_LOW_Q1) + [_REAL_DONE_CHUNK_LOW_Q1_STOP]
+        mock_urlopen.return_value = OllamaServiceTests._ndjson_response(lines)
+
+        with patch.object(ollama_service.time, "monotonic", side_effect=[200.0, 207.5]):
+            out = self._post()
+
+        self.assertTrue(out.get("success"))
+        self.assertEqual(out.get("response"), "No response text.")
+        self.assertEqual(out.get("reasoning_text"), "Thinking Process:")
+        self.assertEqual(out.get("reasoning_seconds"), 8)
+
+    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    def test_no_thinking_at_all(self, mock_urlopen: MagicMock) -> None:
+        """Thinking Off, or a stream whose chunks never carry a ``thinking`` field at all."""
+        lines = list(_REAL_CONTENT_CHUNKS_LOW_Q1) + [_REAL_DONE_CHUNK_LOW_Q1_STOP]
+        mock_urlopen.return_value = OllamaServiceTests._ndjson_response(lines)
+
+        out = self._post()
+
+        self.assertEqual(out.get("reasoning_text"), "")
+        self.assertIsNone(out.get("reasoning_seconds"))
+        self.assertEqual(out.get("reasoning_tokens"), 0)
+
+    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    def test_pending_reasoning_partial_is_the_newest_600_characters(
+        self, mock_urlopen: MagicMock
+    ) -> None:
+        """The live line the screen polls carries only the newest 600 characters of the thinking
+        so far, not the whole (possibly still-growing) buffer -- checked against the real,
+        2,705-character capture from plan57-desk-high-q3.jsonl, past a single 600-character chunk.
+        """
+        long_thinking_chunk = json.dumps(
+            {
+                "model": "gemma4:e2b-it-qat",
+                "created_at": "2026-09-17T04:01:37.202008Z",
+                "message": {"role": "assistant", "content": "", "thinking": _REAL_LONG_THINKING_TEXT_HIGH_Q3[:2705]},
+                "done": False,
+            }
+        )
+        lines = [long_thinking_chunk, _REAL_DONE_CHUNK_LOW_Q1_STOP]
+        mock_urlopen.return_value = OllamaServiceTests._ndjson_response(lines)
+        seen: list[dict] = []
+
+        def _on_delta(text, done, _thinking=None, **kwargs):
+            seen.append(kwargs)
+
+        self._post(on_delta=_on_delta)
+
+        partials = [c for c in seen if c.get("reasoning_partial") is not None]
+        self.assertTrue(partials, "no reasoning_partial was ever published")
+        published = partials[0]["reasoning_partial"]
+        self.assertEqual(len(published), 600)
+        self.assertEqual(published, _REAL_LONG_THINKING_TEXT_HIGH_Q3[:2705][-600:])
+
+    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    def test_cut_off_stream_still_published_reasoning_before_failing(
+        self, mock_urlopen: MagicMock
+    ) -> None:
+        """The connection ends before Ollama's ``done: true`` line.
+
+        The whole Ask fails (matching the existing cut-off-stream contract), but the live line
+        the screen already polled must have carried the thinking that arrived before the cut --
+        plan 54's lesson that a field only written at completion is useless live.
+        """
+        lines = list(_REAL_THINKING_CHUNKS_LOW_Q1)  # no done:true line -- the connection just ends
+        mock_urlopen.return_value = OllamaServiceTests._ndjson_response(lines)
+        seen: list[dict] = []
+
+        def _on_delta(text, done, _thinking=None, **kwargs):
+            seen.append({"text": text, "done": done, **kwargs})
+
+        out = self._post(on_delta=_on_delta)
+
+        self.assertFalse(out.get("success"))
+        self.assertTrue(seen, "on_delta was never called before the stream was cut off")
+        self.assertEqual(seen[0]["reasoning_partial"], "Thinking")
+
+    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    def test_soft_continue_keeps_one_reasoning_buffer_and_one_clock(
+        self, mock_urlopen: MagicMock
+    ) -> None:
+        """Two requests, one thinking buffer, seconds counted from the first request's clock."""
+        first = OllamaServiceTests._ndjson_response(
+            list(_REAL_THINKING_CHUNKS_LOW_Q3)
+            + list(_REAL_CONTENT_CHUNKS_LOW_Q3)
+            + [_REAL_DONE_CHUNK_LOW_Q3_LENGTH]
+        )
+        second = OllamaServiceTests._ndjson_response(
+            list(_REAL_THINKING_CHUNKS_LOW_Q1)
+            + list(_REAL_CONTENT_CHUNKS_LOW_Q1)
+            + [_REAL_DONE_CHUNK_LOW_Q1_STOP]
+        )
+        mock_urlopen.side_effect = [first, second]
+
+        # Only the first request's first thinking chunk and first answer chunk read the clock --
+        # the second request's thinking arrives after reasoning is already frozen, so it is only
+        # ever appended (see the two tests above for that rule on its own).
+        with patch.object(ollama_service.time, "monotonic", side_effect=[300.0, 306.0]):
+            out = self._post(ask_mode="expert")
+
+        self.assertTrue(out.get("success"))
+        self.assertEqual(out.get("soft_continue_count"), 1)
+        self.assertEqual(out.get("reasoning_text"), "Here'sThinking Process:")
+        self.assertEqual(out.get("reasoning_seconds"), 6)
+
+    def test_cap_keeps_the_end_and_the_token_estimate_uses_the_full_length(self) -> None:
+        """The 6,000-character cap keeps the END of a long think and says so; the token estimate
+        is worked out from the full, uncapped text.
+        """
+        full_text = _REAL_LONG_THINKING_TEXT_HIGH_Q3
+        self.assertGreater(len(full_text), ollama_service.REASONING_TEXT_CAP_CHARS)
+
+        capped = ollama_service.cap_reasoning_text(full_text)
+
+        self.assertTrue(capped.startswith(ollama_service.REASONING_CUT_NOTE))
+        self.assertTrue(full_text.endswith(capped[len(ollama_service.REASONING_CUT_NOTE) :]))
+        self.assertEqual(
+            len(capped) - len(ollama_service.REASONING_CUT_NOTE),
+            ollama_service.REASONING_TEXT_CAP_CHARS,
+        )
+        # The estimate a real Ask would report uses the FULL text, not the capped one.
+        full_len_estimate = len(full_text) // 4
+        capped_len_estimate = len(capped) // 4
+        self.assertNotEqual(full_len_estimate, capped_len_estimate)
+
+    def test_short_text_is_not_touched_by_the_cap(self) -> None:
+        self.assertEqual(ollama_service.cap_reasoning_text("Short thought."), "Short thought.")
 
 
 if __name__ == "__main__":

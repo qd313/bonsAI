@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 407,
-  "edgeCount": 1031,
+  "fileCount": 409,
+  "edgeCount": 1035,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2076,6 +2076,7 @@
         "src/utils/inputTransparency.ts",
         "src/utils/localOnlyAskCommands.ts",
         "src/utils/presetCarouselInject.ts",
+        "src/utils/reasoningDisplay.ts",
         "src/utils/strategyChecklist.ts",
         "src/utils/strategyChecklistPersistence.ts",
         "src/utils/strategyGuideBranches.ts",
@@ -2972,6 +2973,7 @@
         "src/utils/archivedTurnTransparency.ts",
         "src/utils/bonsaiSessionSurvival.ts",
         "src/utils/chatSlotTurns.ts",
+        "src/utils/reasoningDisplay.ts",
         "src/utils/strategyChecklist.ts",
         "src/utils/strategyChecklistPersistence.ts",
         "src/utils/strategyGuideBranches.ts"
@@ -3384,7 +3386,8 @@
     "src/utils/chatSlotTurns.ts": {
       "imports": [
         "src/types/bonsaiUi.ts",
-        "src/utils/chatSlotsApi.ts"
+        "src/utils/chatSlotsApi.ts",
+        "src/utils/reasoningDisplay.ts"
       ],
       "importedBy": [
         "src/hooks/useChatSlots.ts",
@@ -3926,6 +3929,22 @@
       "importedBy": [
         "src/components/PullModelsModal.tsx",
         "src/utils/pullModelRecommendations.test.ts"
+      ]
+    },
+    "src/utils/reasoningDisplay.test.ts": {
+      "imports": [
+        "src/utils/reasoningDisplay.ts"
+      ],
+      "importedBy": []
+    },
+    "src/utils/reasoningDisplay.ts": {
+      "imports": [
+        "src/types/bonsaiUi.ts"
+      ],
+      "importedBy": [
+        "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/utils/chatSlotTurns.ts",
+        "src/utils/reasoningDisplay.test.ts"
       ]
     },
     "src/utils/redactThinkingBlurbSpoilers.test.ts": {

@@ -25,7 +25,12 @@
  * checking.
  */
 import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
-import type { AppliedResult, StrategyGuideBranchesPayload, StrategyChecklistPayload } from "./bonsaiUi";
+import type {
+  AppliedResult,
+  StrategyGuideBranchesPayload,
+  StrategyChecklistPayload,
+  TurnReasoning,
+} from "./bonsaiUi";
 
 /** Shortcut-setup keyword replies surface this so the UI can deep-link Controller settings. */
 type ShortcutSetupKind = "deck" | "stadia";
@@ -105,6 +110,28 @@ export type BackgroundRequestStatus = {
   /** Model that answered, used to warn about unsupported thinking once per model. */
   model?: string | null;
   /**
+   * While the answer is still being made: the newest 600 characters the model has thought so far,
+   * republished on every poll, and null until the first piece of thinking arrives. The screen
+   * shows its newest three sentences where the stock waiting phrase used to be.
+   *
+   * Absent on every build before thinking was kept, and on every Ask with thinking off — so the
+   * screen must treat "not there" as "show the old waiting phrase", which is what it does.
+   */
+  reasoning_partial?: string | null;
+  /**
+   * How long the model has been thinking, in whole seconds, counted from its first piece of
+   * thinking. It stops counting the moment the first piece of the answer arrives, so the number
+   * on the fold row does not creep up while the answer types itself out.
+   */
+  reasoning_seconds?: number | null;
+  /**
+   * On a finished answer: the whole thinking the computer side kept, "" when there was none. It
+   * may open with a line saying the start was cut to fit; that is the computer side's own line.
+   */
+  reasoning_text?: string | null;
+  /** On a finished answer: a rough count of the thinking, for the Show details chip only. */
+  reasoning_tokens?: number | null;
+  /**
    * Named chat slot this request belongs to, so a poll can tell whether the tokens it is about
    * to paint belong to the slot the user is looking at. Set at accept time and carried on the
    * state dict, so it is still present on the terminal poll — `_chat_slot_by_request` is popped
@@ -137,6 +164,40 @@ export type LastExchangeSnapshot = {
   appName?: string;
   /** The thing the backend worked out this question named (plan 54 gap 2). */
   askedEntity?: string;
+  /**
+   * What the model thought before writing this answer, when it thought at all. Carried here so the
+   * turn on screen keeps its fold row for the moment between the answer landing and the saved chat
+   * reloading with the same record on the turn itself.
+   */
+  reasoning?: TurnReasoning;
+};
+
+/**
+ * The thinking of the question being answered right now, as the screen holds it between polls.
+ *
+ * `partial` is the newest slice the computer side published, kept once it has arrived: a later
+ * poll that carries nothing must not blank the lines that are already on screen. `seconds` is what
+ * the fold row shows the moment the answer starts, before the finished status arrives with the
+ * same number.
+ */
+export type LiveReasoningSnapshot = {
+  partial: string;
+  seconds: number | null;
+};
+
+/**
+ * Everything the space under your question shows while the answer is being made, as one thing.
+ *
+ * Two facts, and only one of them is ever on screen at a time: the stock waiting phrase the
+ * computer side composes, and — on a model that thinks, once its first thought arrives — the
+ * model's own words. They are handed down together because they are alternatives for the same
+ * few lines of screen, and because the main screen's job is measured by how many separate things
+ * it passes to a tab (scripts/shell_seam.mjs): two related facts about one piece of screen belong
+ * in one parcel.
+ */
+export type LiveThinkingSnapshot = {
+  summary: string | null;
+  reasoning: LiveReasoningSnapshot | null;
 };
 
 export type ReplyFollowUpPending = {

@@ -111,6 +111,7 @@ import type {
   BackgroundRequestStatus,
   BackgroundStartResponse,
   LastExchangeSnapshot,
+  LiveReasoningSnapshot,
   PresetCarouselInjectPayload,
   ReplyFollowUpPending,
 } from "../types/backgroundAsk";
@@ -127,6 +128,7 @@ import { questionBypassesOllamaPcIpRequirement } from "../utils/localOnlyAskComm
 import { normalizePresetCarouselInject } from "../utils/presetCarouselInject";
 import type { InputTransparencyRpcResult, TransparencySnapshot } from "../utils/inputTransparency";
 import { THINKING_BLURB_PLACEHOLDER, sanitizeThinkingSummary } from "../utils/thinkingSummaryText";
+import { reasoningFromFinishedStatus } from "../utils/reasoningDisplay";
 import { isPendingPlaceholderResponse, isStopNoticeResponse } from "../utils/askThinkingPhases";
 import { useSmoothStreamReveal } from "./useSmoothStreamReveal";
 import {
@@ -479,6 +481,18 @@ export function useBonsaiAskOrchestration(
   const [lastRequestId, setLastRequestId] = useState<number | null>(
     () => survivalPeek?.lastRequestId ?? null
   );
+  /*
+   * The thinking of the question running right now.
+   *
+   * Restored from the note the panel leaves behind when it closes, so a panel closed mid-think and
+   * reopened still shows the lines rather than dropping back to the stock waiting phrase. It is
+   * written on EVERY poll, not only when the answer finishes: a per-turn fact that only reaches the
+   * screen at the end shows up on screen as a flicker at the end — plan 54 needed a whole extra
+   * commit for exactly that on the live answer bubble.
+   */
+  const [liveReasoning, setLiveReasoning] = useState<LiveReasoningSnapshot | null>(
+    () => survivalPeek?.liveReasoning ?? null
+  );
   const [isStreamingPreview, setIsStreamingPreview] = useState(false);
   const [isStreamSettling, setIsStreamSettling] = useState(false);
 
@@ -604,6 +618,7 @@ export function useBonsaiAskOrchestration(
           // question, partial and caret on its own — that is the restore-on-return behavior.
           setOllamaResponse("");
           setThinkingSummary(null);
+          setLiveReasoning(null);
           setIsStreamingPreview(false);
           setIsStreamSettling(false);
           setLastApplied(null);
@@ -640,6 +655,26 @@ export function useBonsaiAskOrchestration(
         } else {
           setThinkingSummary((prev) => prev || THINKING_BLURB_PLACEHOLDER);
         }
+        /*
+         * The model's own newest thinking, read on every poll beside the partial answer.
+         *
+         * A poll that carries nothing leaves what is already on screen alone. Two reasons: the
+         * computer side stops republishing the slice once the answer starts, and a poll can land
+         * before the first piece of thinking has been written. Blanking here would make the lines
+         * flash away and the fold row's seconds disappear the moment the answer began.
+         */
+        const polledReasoning =
+          typeof status.reasoning_partial === "string" ? status.reasoning_partial : "";
+        const polledReasoningSeconds =
+          typeof status.reasoning_seconds === "number" && Number.isFinite(status.reasoning_seconds)
+            ? status.reasoning_seconds
+            : null;
+        if (polledReasoning.trim() || polledReasoningSeconds !== null) {
+          setLiveReasoning((prev) => ({
+            partial: polledReasoning.trim() ? polledReasoning : prev?.partial ?? "",
+            seconds: polledReasoningSeconds ?? prev?.seconds ?? null,
+          }));
+        }
         const partialRaw =
           typeof status.partial_response === "string" ? status.partial_response : "";
         const streamingActive = status.streaming === true;
@@ -663,6 +698,8 @@ export function useBonsaiAskOrchestration(
       if (status.status === "cancelled") {
         stopRequestedRef.current = false;
         setThinkingSummary(null);
+        /* Stopped on purpose: the kept draft stays, the thinking lines go with the waiting phrase. */
+        setLiveReasoning(null);
         const partialKeep =
           typeof status.partial_response === "string" && status.partial_response.trim()
             ? stripSoftContinueCue(status.partial_response).trim()
@@ -702,6 +739,14 @@ export function useBonsaiAskOrchestration(
 
       if (status.status === "completed" || status.status === "failed") {
         const applied = status.applied ?? null;
+        /*
+         * The whole thinking, as the computer side kept it. From here on this is what the fold row
+         * and the block it opens read, so the newest-600-characters slice the poll was publishing
+         * is no longer needed — and an answer that came back with no thinking at all clears it,
+         * which is what keeps the row off a turn that has nothing behind it.
+         */
+        const finishedReasoning = reasoningFromFinishedStatus(status);
+        setLiveReasoning(null);
         const terminalText = buildResponseText(status.response ?? "No response text.", applied);
         setOllamaContext({
           app_id: appId,
@@ -803,6 +848,7 @@ export function useBonsaiAskOrchestration(
                 askMode: lastAskContextRef.current.askMode,
                 appName: status.app_name ?? "",
                 askedEntity: status.strategy_spoiler_asked_entity ?? "",
+                reasoning: finishedReasoning,
               });
             }
             lastStrategyAskQuestionRef.current = q;
@@ -897,6 +943,7 @@ export function useBonsaiAskOrchestration(
     a.onExternalFailure?.("background_poll", msg);
     setIsAsking(false);
     setThinkingSummary(null);
+    setLiveReasoning(null);
     setIsStreamingPreview(false);
     setIsStreamSettling(false);
     setOllamaResponse(`Error: ${msg}`);
@@ -1001,6 +1048,7 @@ export function useBonsaiAskOrchestration(
     setShowSlowWarning(false);
     setIsStreamingPreview(false);
     setThinkingSummary(null);
+    setLiveReasoning(null);
   }, [a, invalidateRequests, isAsking, syncOllamaContextFromRunningApp]);
 
   const onCancelAsk = useCallback(() => {
@@ -1033,6 +1081,7 @@ export function useBonsaiAskOrchestration(
     const keptDraft = Boolean(drafted) && !isPendingPlaceholderResponse(drafted);
     setIsAsking(false);
     setThinkingSummary(null);
+    setLiveReasoning(null);
     setIsStreamingPreview(false);
     setIsStreamSettling(false);
     setAskStopped(true);
@@ -1192,6 +1241,8 @@ export function useBonsaiAskOrchestration(
        * the backend's is per-plugin-lifetime, so the two never agreed on which one to pick.
        */
       setThinkingSummary(THINKING_BLURB_PLACEHOLDER);
+      /* A new question starts with no thinking of its own; the last one's lines must not linger. */
+      setLiveReasoning(null);
       setPresetCarouselInject(null);
       setStrategyGuideBranches(null);
       setModelPolicyDisclosure(null);
@@ -1546,6 +1597,8 @@ export function useBonsaiAskOrchestration(
     setShowSlowWarning(snap.showSlowWarning);
     setLastRequestId(snap.lastRequestId);
     setThinkingSummary(snap.thinkingSummary);
+    /* Closing the panel mid-think and opening it again keeps the model's own lines on screen. */
+    setLiveReasoning(snap.liveReasoning ?? null);
   }, [syncOllamaContextFromRunningApp]);
 
   const resetAskSessionSlice = useCallback(() => {
@@ -1557,6 +1610,7 @@ export function useBonsaiAskOrchestration(
     setIsStreamingPreview(false);
     setIsStreamSettling(false);
     setThinkingSummary(null);
+    setLiveReasoning(null);
     setOllamaResponse("");
     syncOllamaContextFromRunningApp();
     setLastApplied(null);
@@ -1613,6 +1667,7 @@ export function useBonsaiAskOrchestration(
     lastTransparency,
     setLastTransparency,
     thinkingSummary,
+    liveReasoning,
     lastRequestId,
     askThreadCollapsed,
     setAskThreadCollapsed,

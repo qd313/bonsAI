@@ -51,7 +51,7 @@ import type {
 } from "../types/bonsaiUi";
 import type { BonsaiSettingsSnapshotInput } from "../data/bonsaiSettingsSchema";
 import type { TransparencySnapshot } from "./inputTransparency";
-import type { LastExchangeSnapshot } from "../types/backgroundAsk";
+import type { LastExchangeSnapshot, LiveReasoningSnapshot } from "../types/backgroundAsk";
 import type { AskThreadExpandedTurnKey } from "../types/bonsaiUi";
 import { createTabLocalSurvival } from "./createTabLocalSurvival";
 
@@ -89,6 +89,13 @@ export type BonsaiSessionSurvivalSnapshot = {
   showSlowWarning: boolean;
   lastRequestId: number | null;
   thinkingSummary: string | null;
+  /**
+   * The model's own thinking for the question running right now: the newest slice it has written
+   * and how long it has been at it. Carried across the gap so a panel closed while the model is
+   * thinking and opened again still shows its lines, and one opened after the answer started still
+   * shows the fold row with the right number of seconds. Null when nothing is thinking.
+   */
+  liveReasoning: LiveReasoningSnapshot | null;
   /** Active chat slot id only — turns reload from disk. */
   activeSlotId: string | null;
 };

@@ -73,6 +73,20 @@ export type StrategyChecklistState = StrategyChecklistPayload & {
 };
 
 /**
+ * What a model that can think wrote to itself before it wrote the answer, kept with the turn.
+ *
+ * `text` is the whole thing the computer side kept, capped, and it may open with a line saying the
+ * start was cut to fit — that line is written by the computer side and is just text here.
+ * `seconds` is how long the thinking took, and can be missing on a turn saved by an older build.
+ * `tokens` is an estimate, shown on the Show details chip only, never on the fold row.
+ */
+export type TurnReasoning = {
+  text: string;
+  seconds: number | null;
+  tokens: number;
+};
+
+/**
  * One completed Ask round shown in the session thread.
  *
  * `transparency` is the full snapshot for a turn archived live this session, but a turn
@@ -114,6 +128,13 @@ export type AskThreadCollapsedTurn = {
   askedEntity?: string;
   /** True when the user consented to spoilers for this turn (unwrap all fences in history). */
   spoilerConsentEffective?: boolean;
+  /**
+   * What the model thought before it wrote this answer, when it thought at all. Missing on every
+   * turn saved before thinking was kept, on every turn answered with thinking off, and on any
+   * model that cannot think — so "missing" is the ordinary case, not a fault, and a turn without
+   * it draws exactly as it always did.
+   */
+  reasoning?: TurnReasoning;
 };
 
 /** Accordion key for the Ask transcript: archived turn id, live turn, or all collapsed. */

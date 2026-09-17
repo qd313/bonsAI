@@ -31,6 +31,16 @@
  */
 import type { AskThreadCollapsedTurn } from "../types/bonsaiUi";
 import type { ChatSlotTurn } from "./chatSlotsApi";
+import { normalizeTurnReasoning } from "./reasoningDisplay";
+
+/**
+ * A saved answer, plus the thinking record the computer side writes beside it.
+ *
+ * Read through this narrow view rather than declared on `ChatSlotTurn` itself: the saved-turn
+ * shape is owned elsewhere, and the record is checked field by field on the way in anyway, since
+ * an older saved chat has no such key at all.
+ */
+type SavedTurnWithReasoning = ChatSlotTurn & { reasoning?: unknown };
 
 export type CollapsedTurnsResult = {
   collapsed: AskThreadCollapsedTurn[];
@@ -98,6 +108,10 @@ export function turnsToCollapsedTurns(
         // Still hardcoded, and deliberately: spoiler consent is a live session decision, not
         // something the backend persists per turn. A restored turn re-fences by default.
         spoilerConsentEffective: false,
+        // What the model thought before this answer, when it was kept. Left off entirely for a
+        // turn saved before thinking existed, or one answered with thinking off — the reopened
+        // turn then draws exactly as it did before, with no fold row.
+        reasoning: normalizeTurnReasoning((turn as SavedTurnWithReasoning).reasoning),
       });
       pendingQ = null;
     }

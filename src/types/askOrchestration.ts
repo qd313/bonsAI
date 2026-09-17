@@ -33,7 +33,11 @@ import type { Dispatch, SetStateAction } from "react";
 import type { PresetPrompt } from "../data/presets";
 import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
 import type { ReplyMicroActionId } from "../data/replyMicroActions";
-import type { LastExchangeSnapshot, PresetCarouselInjectPayload } from "./backgroundAsk";
+import type {
+  LastExchangeSnapshot,
+  LiveReasoningSnapshot,
+  PresetCarouselInjectPayload,
+} from "./backgroundAsk";
 import type {
   AppliedResult,
   AskThreadCollapsedTurn,
@@ -76,6 +80,8 @@ export interface BonsaiAskOrchestration {
   lastTransparency: TransparencySnapshot | null;
   setLastTransparency: Dispatch<SetStateAction<TransparencySnapshot | null>>;
   thinkingSummary: string | null;
+  /** The model's own thinking on the question running right now, or null when none is. */
+  liveReasoning: LiveReasoningSnapshot | null;
   lastRequestId: number | null;
 
   // The thread above the live answer: older turns, which one is open.

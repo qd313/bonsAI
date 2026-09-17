@@ -62,6 +62,7 @@
     "[lastTransparency, setLastTransparency]:useState",
     "[thinkingSummary, setThinkingSummary]:useState",
     "[lastRequestId, setLastRequestId]:useState",
+    "[liveReasoning, setLiveReasoning]:useState",
     "[isStreamingPreview, setIsStreamingPreview]:useState",
     "[isStreamSettling, setIsStreamSettling]:useState",
     "streamPreviewActiveRef:useRef",

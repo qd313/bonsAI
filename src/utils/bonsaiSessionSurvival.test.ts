@@ -92,6 +92,7 @@ function minimalSnapshot(overrides: Partial<BonsaiSessionSurvivalSnapshot> = {})
     showSlowWarning: false,
     lastRequestId: 7,
     thinkingSummary: null,
+    liveReasoning: null,
     activeSlotId: null,
     ...overrides,
   };
@@ -110,6 +111,24 @@ describe("bonsaiSessionSurvival", () => {
     expect(peekBonsaiSessionPendingRestore()).toBeNull();
     expect(takeRestoredSettingsSnapshot()?.aiCharacterPresetId).toBe("coach");
     expect(takeRestoredSettingsSnapshot()).toBeNull();
+  });
+
+  /*
+   * Plan 57: closing the panel while the model is thinking and opening it again must bring back
+   * the model's own lines and the seconds so far, not drop to the stock waiting phrase.
+   */
+  it("keeps the model's own thinking across a panel close and reopen", () => {
+    clearBonsaiSessionSurvival();
+    captureBonsaiSessionForModal(
+      minimalSnapshot({ liveReasoning: { partial: "Flank the armour.", seconds: 12 } }),
+    );
+    expect(peekBonsaiSessionPendingRestore()?.liveReasoning).toEqual({
+      partial: "Flank the armour.",
+      seconds: 12,
+    });
+    const consumed = consumeBonsaiSessionAfterRemount();
+    expect(consumed?.liveReasoning).toEqual({ partial: "Flank the armour.", seconds: 12 });
+    finalizeSessionRestoreAfterRemount();
   });
 
   it("patchPendingSessionSurvival updates captured tab before remount restore", () => {

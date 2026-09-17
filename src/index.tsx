@@ -233,6 +233,7 @@ const Content: React.FC = () => {
       showSlowWarning: false,
       lastRequestId: null,
       thinkingSummary: null,
+      liveReasoning: null,
       activeSlotId: null,
     } as unknown as BonsaiSessionSurvivalSnapshot;
   });
@@ -546,6 +547,7 @@ const Content: React.FC = () => {
     elapsedSeconds,
     lastTransparency,
     thinkingSummary,
+    liveReasoning,
     lastRequestId,
     askThreadCollapsed,
     expandedTurnKey,
@@ -923,6 +925,7 @@ const Content: React.FC = () => {
     showSlowWarning,
     lastRequestId,
     thinkingSummary,
+    liveReasoning,
     activeSlotId: chatSlots.activeSlotId,
   });
 
@@ -1427,7 +1430,8 @@ const Content: React.FC = () => {
     streamDisplayText,
     askStopped,
     isForeignPendingAsk,
-    thinkingSummary,
+    /* The waiting phrase and the model's own thinking travel together — see LiveThinkingSnapshot. */
+    liveThinking: { summary: thinkingSummary, reasoning: liveReasoning },
     desktopAskVerboseLogging,
     lastRequestId,
     lastExchange,

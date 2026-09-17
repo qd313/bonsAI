@@ -192,4 +192,39 @@ describe("turnsToCollapsedTurns", () => {
     ]);
     expect(collapsed[0]?.askedEntity).toBeUndefined();
   });
+
+  // Plan 57: a reopened chat keeps the model's own thinking, so the fold row above the answer is
+  // still there and still opens to the same text with the same seconds.
+  it("carries the saved thinking onto the reopened turn", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "how do i kill the big armoured bug boss" },
+      {
+        id: "a1",
+        role: "assistant",
+        text: "answer",
+        reasoning: { text: "I weighed two routes.", seconds: 41, tokens: 380 },
+      } as never,
+    ]);
+    expect(collapsed[0]?.reasoning).toEqual({
+      text: "I weighed two routes.",
+      seconds: 41,
+      tokens: 380,
+    });
+  });
+
+  it("leaves a turn saved before thinking existed with no thinking on it", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "q" },
+      { id: "a1", role: "assistant", text: "answer" },
+    ]);
+    expect(collapsed[0]?.reasoning).toBeUndefined();
+  });
+
+  it("treats an empty saved think as no thinking, so no row appears with nothing behind it", () => {
+    const { collapsed } = turnsToCollapsedTurns([
+      { id: "u1", role: "user", text: "q" },
+      { id: "a1", role: "assistant", text: "answer", reasoning: { text: "", seconds: 2, tokens: 0 } } as never,
+    ]);
+    expect(collapsed[0]?.reasoning).toBeUndefined();
+  });
 });

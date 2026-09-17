@@ -238,7 +238,7 @@ export function useMainTabPayload({
     presetCarouselInject,
     isStreamingPreview,
     streamDisplayText,
-    thinkingSummary,
+    liveThinking,
     desktopAskVerboseLogging,
     lastRequestId,
     lastExchange,
@@ -359,7 +359,7 @@ export function useMainTabPayload({
         presetCarouselInject={presetCarouselInject}
         isStreamingPreview={isStreamingPreview}
         streamDisplayText={streamDisplayText}
-        thinkingSummary={thinkingSummary}
+        liveThinking={liveThinking}
         desktopAskVerboseLogging={desktopAskVerboseLogging}
         lastRequestId={lastRequestId}
         lastExchange={lastExchange}

@@ -109,6 +109,7 @@ function minimalSurvivalSnapshot(
     showSlowWarning: false,
     lastRequestId: null,
     thinkingSummary: null,
+    liveReasoning: null,
     activeSlotId: null,
     ...overrides,
   };
@@ -691,6 +692,128 @@ describe("useBonsaiAskOrchestration", () => {
 
       expect(result.current.ollamaContext?.app_name).toBe("Doom 64: Retribution");
       expect(result.current.ollamaContext?.asked_entity).toBe("Wheatley");
+      vi.useRealTimers();
+    });
+
+    /*
+     * Plan 57: the model's own newest thinking has to reach the screen on EVERY poll, not only
+     * when the answer finishes. A fact that only arrives at completion flickers into place at the
+     * end instead of filling the wait — plan 54 needed a whole extra commit for exactly that.
+     */
+    it("carries the model's newest thinking and its seconds on a poll that is still pending", async () => {
+      vi.useFakeTimers();
+      setRpcHandler("get_background_game_ai_status", () => ({
+        ...idleBackgroundStatusFixture(),
+        status: "pending",
+        question: "how do i kill the big armoured bug boss",
+        request_id: 12,
+        reasoning_partial: "The armour is on the front. So flank it.",
+        reasoning_seconds: 4,
+      }));
+
+      const { result } = renderHook(() => useBonsaiAskOrchestration(makeArgs()));
+
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(100);
+      });
+
+      expect(result.current.liveReasoning?.partial).toBe("The armour is on the front. So flank it.");
+      expect(result.current.liveReasoning?.seconds).toBe(4);
+      vi.useRealTimers();
+    });
+
+    it("keeps the lines already on screen when a later poll carries no thinking", async () => {
+      vi.useFakeTimers();
+      let polls = 0;
+      setRpcHandler("get_background_game_ai_status", () => {
+        polls += 1;
+        return {
+          ...idleBackgroundStatusFixture(),
+          status: "pending",
+          question: "q",
+          request_id: 13,
+          ...(polls < 2 ? { reasoning_partial: "First thought.", reasoning_seconds: 2 } : {}),
+        };
+      });
+
+      const { result } = renderHook(() => useBonsaiAskOrchestration(makeArgs()));
+
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(100);
+      });
+      expect(result.current.liveReasoning?.partial).toBe("First thought.");
+
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(5000);
+      });
+      expect(result.current.liveReasoning?.partial).toBe("First thought.");
+      expect(result.current.liveReasoning?.seconds).toBe(2);
+      vi.useRealTimers();
+    });
+
+    it("keeps the whole thinking with the finished answer and drops the live slice", async () => {
+      vi.useFakeTimers();
+      let polls = 0;
+      setRpcHandler("get_background_game_ai_status", () => {
+        polls += 1;
+        if (polls < 2) {
+          return {
+            ...idleBackgroundStatusFixture(),
+            status: "pending",
+            question: "how do i kill the big armoured bug boss",
+            request_id: 14,
+            reasoning_partial: "The armour is on the",
+            reasoning_seconds: 40,
+          };
+        }
+        return {
+          ...idleBackgroundStatusFixture(),
+          status: "completed",
+          question: "how do i kill the big armoured bug boss",
+          request_id: 14,
+          success: true,
+          response: "Flank it and shoot the back.",
+          reasoning_text: "The armour is on the front. So flank it.",
+          reasoning_seconds: 41,
+          reasoning_tokens: 380,
+        };
+      });
+
+      const { result } = renderHook(() => useBonsaiAskOrchestration(makeArgs()));
+
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(5000);
+      });
+
+      expect(result.current.lastExchange?.reasoning).toEqual({
+        text: "The armour is on the front. So flank it.",
+        seconds: 41,
+        tokens: 380,
+      });
+      expect(result.current.liveReasoning).toBeNull();
+      vi.useRealTimers();
+    });
+
+    it("keeps no thinking on an answer from a model that did not think", async () => {
+      vi.useFakeTimers();
+      setRpcHandler("get_background_game_ai_status", () => ({
+        ...idleBackgroundStatusFixture(),
+        status: "completed",
+        question: "where do i go",
+        request_id: 15,
+        success: true,
+        response: "Head north past the bridge.",
+      }));
+
+      const { result } = renderHook(() => useBonsaiAskOrchestration(makeArgs()));
+
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(100);
+      });
+
+      expect(result.current.ollamaResponse).toContain("Head north past the bridge.");
+      expect(result.current.lastExchange?.reasoning).toBeUndefined();
+      expect(result.current.liveReasoning).toBeNull();
       vi.useRealTimers();
     });
   });

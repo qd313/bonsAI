@@ -12,22 +12,22 @@
     },
     {
       "path": "src/index.tsx",
-      "lines": 1805,
+      "lines": 1809,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
-      "path": "py_modules/backend/services/ollama_prompts.py",
-      "lines": 1670,
+      "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
+      "lines": 1746,
       "role": ""
     },
     {
       "path": "src/hooks/useBonsaiAskOrchestration.ts",
-      "lines": 1654,
+      "lines": 1709,
       "role": ""
     },
     {
-      "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
-      "lines": 1623,
+      "path": "py_modules/backend/services/ollama_prompts.py",
+      "lines": 1670,
       "role": ""
     },
     {
@@ -52,7 +52,7 @@
     },
     {
       "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1451,
+      "lines": 1457,
       "role": ""
     },
     {

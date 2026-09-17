@@ -35,7 +35,7 @@ import type { TransparencySnapshot } from "../utils/inputTransparency";
 import type { AskModeId } from "../data/askMode";
 import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
 import type { AskThreadExpandedTurnKey } from "../types/bonsaiUi";
-import type { LastExchangeSnapshot } from "../types/backgroundAsk";
+import type { LastExchangeSnapshot, LiveThinkingSnapshot } from "../types/backgroundAsk";
 import type { ReplyMicroActionId } from "../data/replyMicroActions";
 import { MainTabPresetRow } from "./MainTabPresetRow";
 import { MainTabUnifiedAskBar } from "./MainTabUnifiedAskBar";
@@ -144,7 +144,8 @@ export type MainTabProps = {
   askStopped?: boolean;
   /** A pending Ask belongs to another chat slot: the ask bar shows busy, the transcript does not. */
   isForeignPendingAsk?: boolean;
-  thinkingSummary?: string | null;
+  /** What fills the space under your question while the answer is being made. */
+  liveThinking?: LiveThinkingSnapshot | null;
   desktopAskVerboseLogging?: boolean;
   lastRequestId?: number | null;
   lastExchange?: LastExchangeSnapshot | null;

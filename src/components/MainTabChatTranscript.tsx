@@ -114,7 +114,7 @@ import { ThinkingSpinnerIcon } from "./icons";
 import type { TransparencySnapshot } from "../utils/inputTransparency";
 import { useStreamScrollPin } from "../hooks/useStreamScrollPin";
 import type { AskModeId } from "../data/askMode";
-import type { LastExchangeSnapshot } from "../types/backgroundAsk";
+import type { LastExchangeSnapshot, LiveThinkingSnapshot } from "../types/backgroundAsk";
 import type { ReplyMicroActionId } from "../data/replyMicroActions";
 import {
   focusContextChipLadder,
@@ -175,7 +175,11 @@ export type MainTabChatTranscriptProps = {
   streamDisplayText?: string;
   /** Stop was pressed on this turn: show the Stopped notice beside whatever text was kept. */
   askStopped?: boolean;
-  thinkingSummary?: string | null;
+  /**
+  * What fills the space under your question while the answer is being made: the stock waiting
+  * phrase, and — on a model that thinks — the model's own newest words. See LiveThinkingSnapshot.
+  */
+  liveThinking?: LiveThinkingSnapshot | null;
   desktopAskVerboseLogging?: boolean;
   lastRequestId?: number | null;
   lastExchange?: LastExchangeSnapshot | null;
@@ -351,7 +355,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     isStreamingPreview = false,
     streamDisplayText = "",
     askStopped = false,
-    thinkingSummary = null,
+    liveThinking = null,
     desktopAskVerboseLogging = false,
     lastExchange = null,
     onRetryLastResponse,
@@ -487,6 +491,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
       liveSnapshot: transparencySnapshot,
     });
 
+  /* The stock waiting phrase. Unchanged behaviour; it just arrives in the same parcel now. */
+  const thinkingSummary = liveThinking?.summary ?? null;
   const liveQuestion = askThreadDisplayQuestion.trim();
   const liveResponseBody = isStreamingPreview ? streamDisplayText : ollamaResponse;
   const showLiveResponse =

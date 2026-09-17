@@ -141,6 +141,7 @@
     "src/utils/permissionJumpRegistry.test.ts",
     "src/utils/persistOllamaIp.test.ts",
     "src/utils/pullModelRecommendations.test.ts",
+    "src/utils/reasoningDisplay.test.ts",
     "src/utils/redactThinkingBlurbSpoilers.test.ts",
     "src/utils/replyStopRegistry.test.ts",
     "src/utils/runningGameCharacterSuggestions.test.ts",

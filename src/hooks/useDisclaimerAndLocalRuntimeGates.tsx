@@ -29,6 +29,8 @@ import { TIER1_ESSENTIALS_TAG } from "../data/deckEssentialsTags";
 
 const DISCLAIMER_STORAGE_KEY = "bonsai:disclaimer-accepted";
 const LOCAL_RUNTIME_BETA_DISMISSED_STORAGE_KEY = "bonsai:local-runtime-beta-dismissed-v1";
+/** The Thinking row's own one-time notice (plan 57 step 2) -- see useThinkingNoticeGate.tsx. */
+export const THINKING_NOTICE_STORAGE_KEY = "bonsai:thinking-notice-accepted-v1";
 const GITHUB_ISSUES_URL = "https://github.com/qd313/bonsAI/issues";
 
 export type DeckyModalSurvivalHooks = {

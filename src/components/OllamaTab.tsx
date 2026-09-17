@@ -47,6 +47,7 @@ import {
   registerModalReturnFocusOwner,
   rememberModalReturnFocus,
 } from "../features/plugin-shell/modalReturnFocusRegistry";
+import { useThinkingNoticeGate } from "../hooks/useThinkingNoticeGate";
 
 export type OllamaTabProps = {
   ollamaIp: string;
@@ -173,6 +174,11 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
   const connectionTestBtnRef = useRef<HTMLButtonElement>(null);
   const replyVerbosityThumbHostRef = useRef<HTMLDivElement>(null);
   const thinkingEffortHostRef = useRef<HTMLDivElement>(null);
+
+  const { requestThinkingEffortChange } = useThinkingNoticeGate(askThinkEffort, setAskThinkEffort, {
+    onBeforeDeckyModal,
+    onCompleteDeckyModalClose,
+  });
 
   const focusOllamaKeepAliveThumb = useCallback((): boolean => {
     const host = ollamaKeepAliveThumbHostRef.current;
@@ -314,7 +320,7 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
           <div className="bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
             <OllamaThinkingEffortRow
               value={askThinkEffort}
-              onChange={setAskThinkEffort}
+              onChange={requestThinkingEffortChange}
               hostRef={thinkingEffortHostRef}
               onMoveUp={focusReplyVerbosityThumb}
               onMoveDown={focusLatencyWarningThumb}

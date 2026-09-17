@@ -274,6 +274,25 @@ amber; any change to the prompts themselves.
 - 2026-09-16, later: the maintainer answered all six questions (§ 7, D110). The pressed state left
   the plan; the Tip dot and the extra pixel to the question box joined it. Still nothing built; the
   maintainer will run the build in a later session.
+- 2026-09-17: the maintainer said build now. **The § 4 measurement ran first** (evidence
+  `docs/test-evidence/plan60-measure-before.json`, two screenshots) and overturned two assumptions:
+  1. **There is no gap under the row today in three of the four animation modes.** The chip's
+     bottom edge and the question box's top edge are the same line (0 px), in decode, static and
+     carousel mode; only fade mode has the 12 px, as a margin on its own variant of the row. The
+     boards and the brief said 12 everywhere. The maintainer's Deck is in decode mode, which is why
+     they saw the chips touching the box. **Call made by the one running the session:** every mode
+     gets 8 px under the chips (5 for the shadow, 3 clear); fade mode keeps its 12 total. Rows 01
+     and 05 are where the maintainer says whether 8 is enough or the shadow needs to come down.
+  2. **Steam's white ring has never been visible on a chip since the row started clipping
+     (2026-09-01).** The ring is drawn 2 to 5 px outside the chip; the chip fills the row exactly;
+     the row hides everything outside itself. On the device a focused chip shows only the thin blue
+     border. So the "keep the white ring" half of D110 item 2 was keeping something nobody could
+     see, and adding room under the row for the shadow would let the ring's bottom edge peek out as a
+     white underline. **Call made:** the ring rule stops targeting the chips, the bottom bar becomes
+     the chip's focus cue (the design's intent), and the blue border goes. Recorded under D110.
+  Steps 1, 2 and 4 were handed to a Sonnet helper in its own copy of the repo
+  (`refactor/lane60-chips`, cut from e4abd75) while the measurement ran; steps 3 and 5 follow with
+  the numbers above.
 
 ---
 
@@ -294,14 +313,22 @@ today's values:
 `--bonsai-ui-accent-badge` = accent at alpha 0.8; `--bonsai-ui-accent-toned` = 0.7 × accent +
 0.3 × `#c4d3e2` per channel (gold `#f1c40f` → `#e4c94e`; green `#2e8753` → `#5b9e7e`).
 
-**Box-shadow lists per state** (order matters: first entry paints on top). The white ring values
-are the existing `ring` string in gamepadAndPullModels.ts and must stay byte-identical there.
+**Box-shadow lists per state** (order matters: first entry paints on top). **Revised 2026-09-17
+after the measurement (§ 10):** the white ring is not drawn on chips any more. Remove
+`button.bonsai-preset-glass.gpfocus`, the `:root:not(:has(.gpfocus)) … button.bonsai-preset-glass:focus-visible`
+arm, and the two `bonsai-preset-help-chip` arms from the `ring` selector list in
+gamepadAndPullModels.ts, and give those selectors `outline: none !important` in section-4.ts
+(Steam's default focus outline would otherwise reappear, clipped). The `ring` string itself stays
+byte-identical for every other control. Delete the blue `border-color` rule at the end of
+gamepadAndPullModels.ts and the one in section-4.ts; the bar rule below replaces both.
 
 | State | box-shadow | other |
 |---|---|---|
 | rest | `inset 0 1px 0 rgba(255,255,255,0.10), 0 2px 3px rgba(0,0,0,0.4)` | `background: linear-gradient(180deg, rgba(56,70,84,0.5) 0%, rgba(16,22,30,0.55) 100%)`; `border: 1px solid rgba(255,255,255,0.10)` |
-| current (gated) and `.gpfocus` | `0 0 0 2px rgba(255,255,255,0.92), 0 0 0 5px rgba(255,255,255,0.2), inset 0 1px 0 rgba(255,255,255,0.10), inset 0 -2px 0 rgba(56,189,248,0.85), 0 2px 3px rgba(0,0,0,0.4)` | outline as today; `border-color` stays the rest value (the blue border rules are removed); label `color: #dcebf8 !important` |
-| `.bonsai-preset-chip-blocked-edge` (always also focused) | `0 0 0 2px rgba(255,255,255,0.92), 0 0 0 5px rgba(255,255,255,0.2), inset 0 1px 0 rgba(255,255,255,0.10), inset 0 -2px 0 rgba(150,225,255,1), 0 3px 8px -2px rgba(56,189,248,0.55), 0 2px 3px rgba(0,0,0,0.4)` | transition on box-shadow as today (45 percent of the 320 ms window); reduced motion: `transition: none` on this selector only |
+| current (gated) and `.gpfocus` / `:focus-visible` | `inset 0 1px 0 rgba(255,255,255,0.10), inset 0 -2px 0 rgba(56,189,248,0.85), 0 2px 3px rgba(0,0,0,0.4)` | `outline: none`; `border-color` stays the rest value; label `.bonsai-preset-chip-label { color: #dcebf8 !important }` (the decode label keeps its toned colour: exclude `--decode`) |
+| `.bonsai-preset-chip-blocked-edge` | `inset 0 1px 0 rgba(255,255,255,0.10), inset 0 -2px 0 rgba(150,225,255,1), 0 3px 8px -2px rgba(56,189,248,0.55), 0 2px 3px rgba(0,0,0,0.4)` | transition on box-shadow as today (45 percent of the 320 ms window); reduced motion: `transition: none` on this selector only; no border-color change any more |
+
+The help chip and the agent chip are focused the same way (bar under their own colours).
 
 No pressed rule (D110, item 4): no `:active` styling, no pressed class. Leave `transform` alone; the
 inline style already carries the dimmed scale.
@@ -318,13 +345,13 @@ The current-chip gates stay exactly as they are (`.bonsai-preset-carousel-focus-
 list above. The `:root:not(:has(.gpfocus))` fallback has no white ring, so its list omits the two
 ring entries.
 
-Row-host room: `.bonsai-preset-row-host` gets `padding-bottom: 5px` and the outer gap under the row
-is set so chip-bottom to question-box-top is 13 px (D110 item 3; was 12) in every mode: the
-`--fade-anim` variant's `margin-bottom: 12px` becomes 8 px (8 + 5 = 13); the other modes get theirs
-from the dock column, which the § 4 measurement locates. The carousel viewport's `overflow: hidden`
-needs the same 5 px of bottom room or the shadow is clipped in carousel mode alone. If the shadow
-is shallowed on the device, the padding shrinks with it and the margin grows by the same, so 13
-holds.
+Row-host room (**revised 2026-09-17 after the measurement**: today the room under the chips is 0 px
+in decode, static and carousel mode and 12 in fade mode): `.bonsai-preset-row-host` gets
+`padding-bottom: 8px !important` in every mode (5 for the shadow, 3 clear); the `--fade-anim`
+variant's `margin-bottom: 12px` becomes `4px` so fade mode stays at 12 total. The carousel
+viewport's `overflow: hidden` clips the shadow in carousel mode alone, so
+`.bonsai-preset-carousel-viewport` gets `padding-bottom: 5px !important; margin-bottom: -5px !important`
+(net zero height). Tests pin the 8, the 4 and the 5/-5 pair.
 
 Gates: `npx tsc --noEmit`, `npm run build`, `npm test`. Do not run `pnpm install` in the worktree
 copy; the copy helper links `node_modules` to the shared checkout.

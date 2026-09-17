@@ -1,0 +1,43 @@
+{
+  "plan": "60",
+  "row": "plan 60 section 4 measurement, before any code",
+  "date": "2026-09-17",
+  "deck": {
+    "build_on_deck": "whatever was deployed before plan 60 (no chip CSS has changed since 2026-09-05); Steam Chrome/126.0.6478.183",
+    "state": "Main tab open, no game running, gold character (Ali G, accent #f1c40f), animation mode decode, one-chip setting on, pinned Test batch showing",
+    "dpr": 1.5,
+    "viewport_css_px": [854, 454]
+  },
+  "geometry_css_px": {
+    "row_host": { "x": 48, "y": 297.83, "w": 300, "h": 30, "overflow": "hidden", "padding_bottom": 0, "margin_bottom": 0 },
+    "chip": { "x": 48, "y": 297.83, "w": 300, "h": 30 },
+    "question_box": { "x": 48, "y": 327.83, "w": 300, "h": 69.33 },
+    "chip_bottom_to_box_top": 0,
+    "chip_bottom_to_host_bottom": 0,
+    "note": "In decode mode (and static and carousel, which share the plain row host) the row sits directly on the question box. The 12px under the row exists only in the fade animation mode, as a margin on the row host variant. The design boards and the brief assumed 12px in every mode; that assumption was wrong for three of the four modes."
+  },
+  "focused_chip_computed_styles": {
+    "outline": "rgba(255, 255, 255, 0.9) solid 2px",
+    "outline_offset": "2px",
+    "box_shadow": "rgba(255, 255, 255, 0.92) 0px 0px 0px 2px, rgba(255, 255, 255, 0.2) 0px 0px 0px 5px",
+    "border_color": "rgba(56, 189, 248, 0.72)",
+    "background": "rgba(18, 26, 34, 0.22)",
+    "label_color": "rgb(241, 196, 15)",
+    "what_a_person_sees": "Only the thin pale-blue border. Steam's white ring (outline and both box-shadow rings) is drawn 2 to 5px outside the chip, and the chip fills its row host exactly, so the host's overflow:hidden clips every part of the ring on all four sides. Screenshot DeckCapture_20260917_142335_auto.png shows a blue-outlined chip and no white ring.",
+    "elementFromPoint_just_outside_chip": {
+      "above": "the dock column (not the chip)",
+      "below": "bonsai-unified-input-text-row (the question box)",
+      "left": "Steam's Quick Access rail",
+      "right": "Steam's Quick Access chrome"
+    }
+  },
+  "screenshots": [
+    "screenshots/DeckCapture_20260917_142227_auto.png (ring on the tab bar, chip at rest)",
+    "screenshots/DeckCapture_20260917_142335_auto.png (ring on the chip: only the blue border shows)"
+  ],
+  "consequences_for_the_build": [
+    "Step 3: the row host has 0px of room below the chips in three of four modes, so the new shadow (5px below) would be fully clipped. Give the host padding-bottom in every mode; the carousel viewport needs the same room or a negative margin trick.",
+    "Step 5: the white ring has been invisible on chips since the row got overflow:hidden (2026-09-01). The bottom bar (inset, never clipped) becomes the chip's visible focus cue. Any bottom room added for the shadow would let the clipped ring's bottom edge peek out as a white underline, so the ring rule must stop targeting the chips rather than be merged with the bar.",
+    "The gap the maintainer asked for is real and is 0 today in their mode, not 12."
+  ]
+}

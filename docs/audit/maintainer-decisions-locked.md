@@ -5705,3 +5705,17 @@ all six the same day; nothing is built, and the build runs in a later session.
 
 6. **The decode-mode label is toned** with the same 70 percent accent, 30 percent label-colour mix
    as the `[beta]` tag.
+
+**Measured on the Deck 2026-09-17, before the build, and two of the calls above rest on a wrong
+premise** (evidence `docs/test-evidence/plan60-measure-before.json`; plan 60 § 10). First, the gap in
+item 3: in decode, static and carousel mode the chip row sits directly on the question box today,
+0 pixels, not 12; only fade mode has the 12. The maintainer's Deck is in decode mode, which is the
+gap they were seeing. The build gives every mode 8 pixels under the chips (5 taken by the shadow, 3
+clear) and leaves fade mode at its 12; the maintainer judges by eye on the device whether 8 reads
+as open. Second, the ring in item 2: Steam's white ring has not been visible on a chip since the row
+started clipping on 2026-09-01, because the ring is drawn outside the chip and the chip fills the
+row. A focused chip shows only the thin blue border. So the ring rule stops targeting the chips
+(it was drawing nothing a person could see, and with room added under the row its bottom edge
+would have peeked out as a white line), and the bottom bar becomes the chip's focus cue, as the
+design intended. White rings stay everywhere else. Both calls made by the one running the session
+under the maintainer's "build now"; either can be reversed from the device evening.

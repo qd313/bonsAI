@@ -145,6 +145,17 @@ All notable changes to this project are documented in this file.
 - **The line under the question box stops naming a game you have closed:** exit a game and it used to keep the old name, so a question that does not name its own game could pull in the wrong game's notes. **The cause first written down was wrong and the real one is worth knowing:** the ordinary keep-in-sync check does correct itself within about a second and a half; the hole was **reopening the panel** — after a popup, or leaving and coming back — which restored the remembered name without ever checking whether that game was still running. It now checks what is actually running at that moment. `useBonsaiAskOrchestration.ts`; 5 frontend tests. On-Deck **W2-R6**.
 
 ### Added
+- **A line under a finished Strategy or troubleshooting reply now shows the note it used, in the
+  note's own words:** when the reply leaned on one of bonsAI's own game notes or a shared Deck tip, a
+  one-line credit now appears underneath it, naming the note and where it came from — a named wiki,
+  the shared Deck tips, or "bonsAI's own notes, no source." Pressing it opens the note's own words,
+  kept as separate lines when the note itself was written that way; reopening a saved chat shows it
+  again; nothing appears when nothing was attached, and it is never read aloud. It starts closed
+  behind one switch. **Two pieces are coming in a follow-up:** the block should appear before the
+  model's first word rather than only once the reply finishes, and should sit inside the spoiler box
+  on a fenced reply rather than being hidden entirely. `game_ai_request.py`,
+  `background_request_state.py`, `MainTabChatTranscript.tsx`. On-Deck rows owed: **NOTES-BLOCK-01** to
+  **07** in `docs/testing-manual.md`.
 - **A line under your question shows the AI's own thinking while you wait:** while the AI thinks, its own
   newest sentences show under your question; when the answer starts they fold to one line with the
   seconds; press it to read the whole thing; a Thinking chip in Show details; a one-time notice the first

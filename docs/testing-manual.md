@@ -742,6 +742,31 @@ Deck — the device is held by another session.** Replaces **TAB-BAR-07** (see t
 | **TAB-STRIP-2A-06** | UI scale 1.18 | Settings → UI scale → Apply: the strip comes back at the new scale, still floating, still six equal cells | ⏳ owed: built 2026-09-17, Deck run pending |
 | **TAB-STRIP-2A-07** | The dots covered (D109 item 3) | Every dot in the chat row's row of dots has its bottom edge above the strip's bottom edge, and the chat row's own bottom line is still below the strip — the maintainer chose a 66px strip on 2026-09-17 to cover the dots without covering the whole chat row | ⏳ owed: built 2026-09-17, Deck run pending |
 
+### NOTES-BLOCK — The "From the notes" block (plan 58 phase 1)
+
+Plan [58 phase 1](planning/58-phase-1-notes-shown-and-wiki-extracts.md), decision D111. Landed
+2026-09-17 as two commits (`6dbf9c9` backend, `4c036f5` frontend; tip `8395841` on experimental). A
+line under a finished Strategy or troubleshooting reply that used a note or a shared tip names it and
+where it came from, and opens to show the note's own words. Starts closed behind one switch. **Two
+pieces are short of the plan, a follow-up in progress in the same lane:** the block should appear
+before the model's first word rather than only once the reply finishes (row 06), and should sit inside
+the spoiler box on a fenced reply rather than being hidden entirely (row 02). **None of the seven rows
+below have run on the Deck yet.** Every row that walks the D-pad onto the block's own header must check
+that the ring is actually visible on the header, its rectangle read against where the dock starts, not
+merely that the header has focus — the repo's own lesson from a control that passed a focus walk while
+sitting hidden behind the dock. Save each row's evidence to `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-0N.json`
+before writing the row.
+
+| Row | Scenario | Pass | Status |
+|---|---|---|---|
+| **NOTES-BLOCK-01** | Pikmin 2 running, Strategy mode. Ask whether there is a day limit. Once the reply finishes, walk Down onto the block's header (ring visible on the header, checked against the dock) and press A. | The header names the note and says where it came from; opened, it shows the note's own words, which say there is no day limit — whatever the reply itself said. | ⏳ owed. Evidence `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-01.json` |
+| **NOTES-BLOCK-02** | A story-protected game running, no spoiler opt-in given. Ask about a boss by role, not name. Once the reply completes and is fenced, look for the block inside the spoiler box, closed then opened. | The block sits inside the same spoiler box as the reply and is not readable until the box is opened. | ⏳ owed — depends on the follow-up in progress; today the block does not appear at all on a fenced reply. Evidence `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-02.json` |
+| **NOTES-BLOCK-03** | Nothing running. Ask a plain troubleshooting sentence that reaches a shared tip. Walk Down onto the block's header (ring visible on the header, checked against the dock) and press A. | The header names the tip and says it is from the shared Deck tips; opened, it shows the tip's own words, and any launch option or setting name in it matches the tip exactly. | ⏳ owed. Evidence `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-03.json` |
+| **NOTES-BLOCK-04** | A covered game running. Ask something the notes cannot answer. | No block appears anywhere under the reply; the honesty line about the model's own knowledge shows instead. The two never appear together on one reply. | ⏳ owed. Evidence `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-04.json` |
+| **NOTES-BLOCK-05** | Hades running. Ask about a boss. Walk Down onto the block's header (ring visible on the header, checked against the dock) and press A. | The header reads that this is bonsAI's own note, with no source. | ⏳ owed. Evidence `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-05.json` |
+| **NOTES-BLOCK-06** | Strategy question about a covered game. Press Ask and watch the screen from that press through the reply completing. | The block is on screen before the reply starts streaming its first word, not only after it completes. | ⏳ owed — depends on the follow-up in progress; today the block only appears once the reply finishes. Evidence `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-06.json` |
+| **NOTES-BLOCK-07** | Voice replies turned on. Ask a question that attaches a note or a tip and let it read itself aloud in full. Separately, walk Down onto the block's header (ring visible on the header, checked against the dock) and press A. | Whatever the answer says, the block's own words are never spoken by read aloud; the header still opens normally on its own press. | ⏳ owed. Evidence `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-07.json` |
+
 ## Tier 3 — Heavy manual
 
 | Block | Notes |

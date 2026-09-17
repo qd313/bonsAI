@@ -63,6 +63,7 @@ was meant to have an answer now has one.
 | 7 Sep | ★★ | Two bug fixes: raw computer text stopped appearing in a reply, and the panel stopped naming a game after you close it | An answer no longer ends with a line of code; the line under the question box catches up within a couple of seconds of exiting a game |
 | 7 Sep | ★★★ | Corpus release `2026.09.07` published (293 notes, 156 tips) | Nothing yet on the Deck — the release is live on both channels but the maintainer's device still runs the 6 September build |
 | 15 Sep | ★★ | The spoiler box now opens on a game known only by name and on a name-first boss question, and the prompt matches the risk chip for a game named in the question | Fewer harmless boss tips hidden behind a box, and no more chip saying low over a fenced answer |
+| 17 Sep | ★★ | The "From the notes" block, landed as two commits | A line under a finished Strategy or troubleshooting reply now names the note or tip it used and where it came from, and opens to show its own words; nothing shows when nothing was attached |
 
 Chip work that touches the knowledge base also shipped in this window: corpus chips no longer vanish
 after 21 seconds, the rotation no longer favours the top three, and the pinned test-chip batches exist
@@ -294,7 +295,8 @@ them straight; what remains is coverage, follow-up memory, and the things the te
    reading a wiki's own sentences into notes with no AI rewrite. Both phases are waiting on the
    maintainer's answers before either can start. Started 2026-09-17: the drawings, the blind questions
    and the source study have landed; the reader is still being built; the Deck is asleep, so the device
-   readings wait on the maintainer.
+   readings wait on the maintainer. The block itself has now landed too, its seven device rows are
+   owed, and the Hollow Knight comparison lane is running.
 2. **Wave three's own Deck evening is unfinished.** Three of its checks never ran, and two that did need
    redoing: follow-up questions now look up the right boss but the reply can still name a different one,
    and the new one-second speed check reports a healthy device while a real question runs over budget.

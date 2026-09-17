@@ -751,6 +751,12 @@ ones from this month are D81 to D88.
 
 ### Bugs
 
+- ★ `[KB]` **The credit line under a reply never names a note with no source page, or a shared tip** —
+  **OPEN, found 2026-09-17.** The list that credit line reads from quietly drops any note or tip that
+  has no source page, so a shared troubleshooting tip or a note written from the model's own memory has
+  never appeared in it. The new "From the notes" block works around this by reading the text the model
+  was sent instead, which does not have the same gap. The real fix belongs in the knowledge-base
+  service's own list of sources.
 - ★★ `[KB]` **Unrelated questions still get game cards stapled on** — **ACCEPTED 2026-08-27.** With a game running, *"thank
   you very much"* still attaches a card. Raising the keyword floor costs real matches, and the model mostly ignores an
   irrelevant card. [Detail](roadmap-details.md#ordinary-phrases-attach-game-cards).
@@ -847,6 +853,12 @@ ones from this month are D81 to D88.
   since gained a floor that can refuse a weak match, so there may be a way to show it now — nobody has checked.
   Same shape of problem as the "No tip for this" line in the Bugs list above; run both together next time. Row
   **W2-R5**.
+- ★★ `[KB]` **The note's own words under the reply** — **VERIFY, built 2026-09-17, closed by default
+  until the maintainer picks.** A line under a finished reply now names the note or tip it used and
+  where it came from, and opens to show its own words; nothing shows when nothing was attached, and it
+  is never read aloud. Two pieces are a follow-up in progress: it should appear before the model's
+  first word, and it should sit inside the spoiler box on a fenced reply instead of being hidden. Rows
+  **NOTES-BLOCK-01**–**07**, all owed, in [testing-manual.md](testing-manual.md).
 - ★★★ `[KB]` **DRG Survivor glossary terms** — **VERIFY, one touch tap owed.** Shipped 2026-08-28 and walked on device:
   underline, popup, D-pad reachability, B, one-press Up. Rows **DRG-GLOSSARY-01…04**.
   [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).
@@ -876,11 +888,6 @@ ones from this month are D81 to D88.
   Deck's model runs with a 4,096-token window and a Strategy question with cards already goes over it (now trimmed
   instead of dropped, see Done). Try 8,192 as a Developer experiment with a game running, recording memory and time to
   first token, before it becomes a setting. Agreed as "later, its own call". (D46)
-- ★★ `[KB]` **The note's own words under the reply** — **OPEN, drawings done 2026-09-17, pick owed.** Today the
-  model rewrites the note in its own words instead of showing it, keeping its facts 79.5 times in 100 and
-  contradicting it 9.3 times in 100. Four drawings of the block are done, at
-  [this page](planning/assets/58-phase-1-block-mockups.html), published for the maintainer; the helper recommends
-  starting closed, naming the note and its source in one line. The build waits on the pick. [Plan](planning/58-phase-1-notes-shown-and-wiki-extracts.md).
 - ★★★ `[KB]` **A troubleshooting question mostly never reaches the tips** — **OPEN, widened 2026-09-07.** Filed as
   "the tips don't use the words people type", which is true and is the smaller half. Measured 2026-09-07: **nine of ten
   ordinary problem sentences reach nothing at all** — *"my game keeps crashing"*, *"my game won't launch"*, *"black

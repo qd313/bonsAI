@@ -419,6 +419,16 @@ which goes on their own checklist.
   and the two answer rows, with the swap held in its own commit until the maintainer picks. The
   ten new games wait on the maintainer's yes or no per wiki. Lane A is building the block, closed
   by default behind one switch. The Deck still asleep after a 25-minute poll.
+- **2026-09-17, the block landed.** Two commits, 33 new tests: the attached notes ride with the
+  turn (the live snapshot, the finished result, the saved chat), and the transcript shows one
+  line under the reply naming the note and its source, opening to the note's own words, never
+  read aloud, nothing when nothing attached. Two pieces short of the plan, sent back to the same
+  lane with the extra files allowed: the block appears when the reply completes rather than
+  before the first word, and a fenced reply hides it entirely instead of holding it inside the
+  spoiler box. One gap found on the way, not fixed: the credit line's list silently drops every
+  note with no source page, so tips and the memory-written notes have never been credited; filed
+  as a bug. The focus checker's baseline gained two entries for the new control, matching a
+  pattern the reply's other stops already carry; the device walk is the proof, not the baseline.
 
 ---
 

@@ -89,6 +89,8 @@ export const BONSAI_CHAT_AI_BUBBLE_MAX_FRAC = 0.92;
 export const TAB_TITLE_MAIN_TAB_ICON_PX = 36;
 /** Debug tab — same outer cell as other tabs so LB/RB strip outlines match. */
 export const TAB_TITLE_DEBUG_TAB_ICON_PX = 36;
+/** the open strip's solid bar, plan 59 board 2a; the lifted accent is computed against it */
+export const TAB_BAR_STRIP_BG_HEX = "#141c24";
 /**
  * Plan 30 — the collapsing tab bar (docs/planning/30-collapsing-tab-bar.md § 4.8). CSS px before
  * `--bonsai-ui-scale`; every use goes through `uiScalePx()`. The two heights are the point of the

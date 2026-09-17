@@ -210,8 +210,10 @@ describe("MainTabPresetAnimatedChips memo gate", () => {
     expect(track!.style.getPropertyValue("--bonsai-preset-visible-slots")).toBe(String(PRESET_VISIBLE_SLOTS));
   });
 
-  /* The Tip badge exists to be seen at a glance (Phase 4 track 1); only the prompt text scrolls. */
-  it("keeps the Tip badge pinned outside the scrolling text", () => {
+  /* The Tip badge exists to be seen at a glance (Phase 4 track 1); only the prompt text scrolls.
+     Plan 60, board B (D110, item 1): the badge is a small dot now, not the word "Tip", found by
+     class or aria-label rather than by its old text. */
+  it("keeps the Tip badge pinned outside the scrolling text, as a dot with no text", () => {
     const { container } = render(
       <MainTabPresetAnimatedChips
         seeds={[{ ...seed("How do I beat Glyphid Dreadnought?"), ragTip: true }, seed("bravo"), seed("charlie")]}
@@ -221,9 +223,13 @@ describe("MainTabPresetAnimatedChips memo gate", () => {
     );
     const badge = container.querySelector(".bonsai-preset-chip-tip-badge");
     expect(badge).toBeTruthy();
+    expect(badge!.getAttribute("aria-label")).toBe("Tip");
+    expect(badge!.textContent).toBe("");
     expect(badge!.closest(".bonsai-preset-chip-text")).toBeNull();
     const text = container.querySelector(".bonsai-preset-chip-text--marquee");
     expect(text?.textContent).toBe("How do I beat Glyphid Dreadnought?");
+    // The dot sits before the scrolling text, not after it.
+    expect(badge!.compareDocumentPosition(text!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
   it("every prop in the props type is compared by presetChipsPropsEqual", () => {

@@ -20,7 +20,7 @@
  * for the typing field itself, or the icon row underneath it — see
  * section-8.ts.
  */
-import { BONSAI_CHAT_RESPONSE_STACK_MARGIN_TOP_PX, BONSAI_FOREST_GREEN } from "../../features/unified-input/constants";
+import { BONSAI_CHAT_RESPONSE_STACK_MARGIN_TOP_PX } from "../../features/unified-input/constants";
 import {
   PRESET_CHIP_BLOCKED_EDGE_FLASH_MS,
   PRESET_CHIP_GAP_PX,
@@ -192,9 +192,12 @@ export function buildSection4Section(): string {
           the blinking block caret straight into the label's textContent from a single shared
           requestAnimationFrame loop, so there is no CSS keyframe to gate here -- reduced motion is
           enforced entirely in JS (instant swap to the final prompt, no churn, no caret).
+          Plan 60, board B (D110, item 6): the resolving label is toned 70/30 toward the label
+          colour, the same mix as the \`[beta]\` tag, so it reads quieter than the full-strength
+          accent.
         */
         .bonsai-scope button.bonsai-preset-glass--decode .bonsai-preset-chip-label {
-          color: var(--bonsai-ui-accent-main, ${BONSAI_FOREST_GREEN}) !important;
+          color: var(--bonsai-ui-accent-toned, #5b9e7e) !important;
         }
 
         .bonsai-scope .bonsai-chat-response-stack {

@@ -97,7 +97,6 @@ import {
   startSlotRotation,
   type SlotRotation,
 } from "../features/preset-carousel/presetSlotRotation";
-import { BONSAI_FOREST_GREEN } from "../features/unified-input/constants";
 import { joinPresetWithRunningGame } from "../utils/joinPresetWithRunningGame";
 import { buildChipNavHandlers } from "../features/preset-carousel/presetRowNav";
 import { registerNavFocus, unregisterNavFocus, takeNavFocus, type NavRefHolder } from "../utils/navFocusRegistry";
@@ -300,17 +299,18 @@ function PresetChipLabel({ p, scroll }: { p: PresetPrompt; scroll: boolean }) {
       {p.ragTip ? (
         <span
           className="bonsai-preset-chip-tip-badge"
+          aria-label="Tip"
+          title="Tip"
           style={{
+            width: 7,
+            height: 7,
+            borderRadius: 2,
+            background: "var(--bonsai-ui-accent-badge, rgba(46, 135, 83, 0.8))",
             marginRight: 6,
-            fontSize: 9,
-            letterSpacing: "0.06em",
-            textTransform: "uppercase",
-            fontWeight: 700,
-            color: `var(--bonsai-ui-accent-main, ${BONSAI_FOREST_GREEN})`,
+            flex: "0 0 auto",
+            display: "inline-block",
           }}
-        >
-          Tip
-        </span>
+        />
       ) : null}
       <PresetChipText text={p.text} scroll={scroll} />
       {p.beta ? (
@@ -319,7 +319,7 @@ function PresetChipLabel({ p, scroll }: { p: PresetPrompt; scroll: boolean }) {
             marginLeft: 6,
             fontSize: 10,
             fontStyle: "italic",
-            color: `var(--bonsai-ui-accent-main, ${BONSAI_FOREST_GREEN})`,
+            color: "var(--bonsai-ui-accent-toned, #5b9e7e)",
             fontWeight: 600,
           }}
         >
@@ -613,7 +613,7 @@ function DecodePresetChipButton(props: {
               marginLeft: 6,
               fontSize: 10,
               fontStyle: "italic",
-              color: `var(--bonsai-ui-accent-main, ${BONSAI_FOREST_GREEN})`,
+              color: "var(--bonsai-ui-accent-toned, #5b9e7e)",
               fontWeight: 600,
             }}
           >

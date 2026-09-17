@@ -201,12 +201,14 @@ class ChatSlotServiceTests(unittest.TestCase):
         )
         assert saved is not None
         assistant_turn = saved["turns"][-1]
-        self.assertEqual(assistant_turn["transparency"], snapshot)
+        # kb_attached_notes (plan 58 phase 1) is a normalized field of its own, always present
+        # even when the caller's snapshot said nothing about it -- see the dedicated tests below.
+        self.assertEqual(assistant_turn["transparency"], {**snapshot, "kb_attached_notes": []})
 
         # Round-trips through disk unchanged.
         reloaded = load_slot(self.settings_dir, sid)
         assert reloaded is not None
-        self.assertEqual(reloaded["turns"][-1]["transparency"], snapshot)
+        self.assertEqual(reloaded["turns"][-1]["transparency"], {**snapshot, "kb_attached_notes": []})
 
     def test_transparency_with_no_chips_is_dropped(self):
         """A snapshot with an empty context_chips list is indistinguishable from no snapshot to
@@ -257,6 +259,107 @@ class ChatSlotServiceTests(unittest.TestCase):
         reloaded = load_slot(self.settings_dir, sid)
         assert reloaded is not None
         self.assertEqual(reloaded["turns"][-1]["reasoning"], assistant_turn["reasoning"])
+
+    def test_kb_attached_notes_persist_and_reload_byte_for_byte(self):
+        """Plan 58 phase 1: the "From the notes" block's own material rides the saved
+        transparency, so reopening a saved chat shows the same note again -- the same round trip
+        `test_assistant_turn_persists_transparency_snapshot` proves for the chip list above."""
+        slot = create_slot(self.settings_dir, first_question="is there a day limit")
+        sid = slot["id"]
+        note = {
+            "name": "Starting out in Pikmin 2",
+            "kind": "mechanic",
+            "card": "There is no day limit this time: the goal is ten thousand Pokos of treasure.",
+            "trust_tier": "wiki_verified",
+            "source_host": "www.pikminwiki.com",
+            "source_license": "CC-BY-SA-4.0",
+            "domain": "strategy",
+            "game_title": "Pikmin 2",
+        }
+        snapshot = {
+            "route": "ollama",
+            "success": True,
+            "context_chips": [{"id": "kb", "rank": 1, "label": "KB", "attached": True}],
+            "overflow_skips": [],
+            "kb_attached_notes": [note],
+        }
+        saved = append_turn(
+            self.settings_dir,
+            sid,
+            role="assistant",
+            text="Yes, Pikmin 2 keeps the day limit from the first game.",
+            request_id=1,
+            transparency=snapshot,
+        )
+        assert saved is not None
+        self.assertEqual(saved["turns"][-1]["transparency"]["kb_attached_notes"], [note])
+
+        reloaded = load_slot(self.settings_dir, sid)
+        assert reloaded is not None
+        self.assertEqual(reloaded["turns"][-1]["transparency"]["kb_attached_notes"], [note])
+
+    def test_kb_attached_notes_absent_from_the_caller_normalizes_to_an_empty_list(self):
+        slot = create_slot(self.settings_dir, label="no-notes")
+        sid = slot["id"]
+        saved = append_turn(
+            self.settings_dir,
+            sid,
+            role="assistant",
+            text="answer",
+            transparency={
+                "route": "ollama",
+                "success": True,
+                "context_chips": [{"id": "kb", "rank": 1, "label": "KB", "attached": False}],
+            },
+        )
+        assert saved is not None
+        self.assertEqual(saved["turns"][-1]["transparency"]["kb_attached_notes"], [])
+
+    def test_a_note_missing_its_own_words_is_dropped_not_stored_blank(self):
+        """A name with no card text is not something the block could ever show -- storing it
+        as a placeholder would just move the "what do I draw" question onto the screen code."""
+        slot = create_slot(self.settings_dir, label="bad-note")
+        sid = slot["id"]
+        saved = append_turn(
+            self.settings_dir,
+            sid,
+            role="assistant",
+            text="answer",
+            transparency={
+                "route": "ollama",
+                "success": True,
+                "context_chips": [{"id": "kb", "rank": 1, "label": "KB", "attached": True}],
+                "kb_attached_notes": [
+                    {"name": "", "card": "some text"},
+                    {"name": "A name", "card": "   "},
+                    {"name": "A real note", "card": "Real words."},
+                ],
+            },
+        )
+        assert saved is not None
+        notes = saved["turns"][-1]["transparency"]["kb_attached_notes"]
+        self.assertEqual([n["name"] for n in notes], ["A real note"])
+
+    def test_kb_attached_notes_are_capped_in_count(self):
+        slot = create_slot(self.settings_dir, label="many-notes")
+        sid = slot["id"]
+        many = [
+            {"name": f"Note {i}", "card": f"Text {i}"} for i in range(12)
+        ]
+        saved = append_turn(
+            self.settings_dir,
+            sid,
+            role="assistant",
+            text="answer",
+            transparency={
+                "route": "ollama",
+                "success": True,
+                "context_chips": [{"id": "kb", "rank": 1, "label": "KB", "attached": True}],
+                "kb_attached_notes": many,
+            },
+        )
+        assert saved is not None
+        self.assertEqual(len(saved["turns"][-1]["transparency"]["kb_attached_notes"]), 8)
 
     def test_a_turn_made_with_no_thinking_has_no_reasoning_key_at_all(self):
         """Not a key holding null -- the key is simply absent, the same rule

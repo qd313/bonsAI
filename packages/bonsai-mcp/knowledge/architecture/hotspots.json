@@ -76,6 +76,11 @@
       "role": ""
     },
     {
+      "path": "py_modules/backend/services/game_ai_request.py",
+      "lines": 1093,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/local_ollama_setup_service.py",
       "lines": 1007,
       "role": ""
@@ -88,11 +93,6 @@
     {
       "path": "py_modules/backend/services/transparency_service.py",
       "lines": 929,
-      "role": ""
-    },
-    {
-      "path": "py_modules/backend/services/game_ai_request.py",
-      "lines": 915,
       "role": ""
     },
     {
@@ -141,6 +141,11 @@
       "role": ""
     },
     {
+      "path": "py_modules/backend/services/chat_slot_service.py",
+      "lines": 619,
+      "role": ""
+    },
+    {
       "path": "src/styles/sections/gamepadAndPullModels.ts",
       "lines": 616,
       "role": ""
@@ -168,11 +173,6 @@
     {
       "path": "py_modules/backend/services/knowledge_base_schema.py",
       "lines": 573,
-      "role": ""
-    },
-    {
-      "path": "py_modules/backend/services/chat_slot_service.py",
-      "lines": 566,
       "role": ""
     },
     {

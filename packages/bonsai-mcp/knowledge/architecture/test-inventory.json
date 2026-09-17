@@ -196,6 +196,7 @@
     "tests/test_forget_game_ai_carried_context.py",
     "tests/test_game_ai_request.py",
     "tests/test_game_ai_request_followup_memory.py",
+    "tests/test_game_ai_request_kb_attached_notes.py",
     "tests/test_input_sanitizer_service.py",
     "tests/test_intent_pack_service.py",
     "tests/test_intent_pack_store_lock.py",

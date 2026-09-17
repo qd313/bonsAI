@@ -46,6 +46,8 @@ EXPECTED_KEYS = {
     "reasoning_seconds",
     "reasoning_text",
     "reasoning_tokens",
+    # Plan 58 phase 1: the notes the search attached to this turn, in their own words.
+    "kb_attached_notes",
 }
 
 
@@ -78,6 +80,7 @@ class TestBackgroundStateShape(unittest.TestCase):
         self.assertIsNone(state["reasoning_seconds"])
         self.assertEqual(state["reasoning_text"], "")
         self.assertEqual(state["reasoning_tokens"], 0)
+        self.assertEqual(state["kb_attached_notes"], [])
 
     def test_every_constructor_agrees_on_the_key_set(self):
         """The regression this module exists to prevent.
@@ -110,6 +113,12 @@ class TestBackgroundStateShape(unittest.TestCase):
         first = new_background_state()
         first["status"] = "mutated"
         self.assertEqual(new_background_state()["status"], "idle")
+
+    def test_kb_attached_notes_list_is_not_shared_between_calls(self):
+        """A caller appending to one state's list must not leak into the next state built."""
+        first = new_background_state()
+        first["kb_attached_notes"].append({"name": "Some note"})
+        self.assertEqual(new_background_state()["kb_attached_notes"], [])
 
 
 class TestPendingState(unittest.TestCase):
@@ -250,6 +259,8 @@ class TestPartialStreamSnapshot(unittest.TestCase):
                 # Plan 57: the model's own thinking, live.
                 "reasoning_partial",
                 "reasoning_seconds",
+                # Plan 58 phase 1: published before the model call, same reason as asked_entity.
+                "kb_attached_notes",
             },
         )
         self.assertEqual(snap["request_id"], 5)
@@ -262,6 +273,7 @@ class TestPartialStreamSnapshot(unittest.TestCase):
         self.assertEqual(snap["last_flush_monotonic"], 0.0)
         self.assertIsNone(snap["reasoning_partial"])
         self.assertIsNone(snap["reasoning_seconds"])
+        self.assertEqual(snap["kb_attached_notes"], [])
 
     def test_cleared_form_is_the_same_shape_with_a_null_request_id(self):
         """The cleared snapshot used to be a second hand-written literal; it is now this call."""

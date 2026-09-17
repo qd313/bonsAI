@@ -63,6 +63,11 @@ def new_background_state() -> dict[str, Any]:
         # It rides the state dict rather than being looked up per poll, because
         # `_chat_slot_by_request` is popped at terminal — before the frontend polls it.
         "chat_slot_id": None,
+        # Plan 58 phase 1: the notes the search actually attached to this turn, in each note's
+        # own words -- filled in by game_ai_request.py from what retrieval found, never from
+        # anything the model wrote. Empty on every turn with nothing attached. Defaulted here so
+        # a poll response always carries the key, matching the live snapshot's own field below.
+        "kb_attached_notes": [],
     }
 
 
@@ -160,4 +165,10 @@ def new_partial_stream_snapshot(request_id: Optional[int]) -> dict[str, Any]:
         # so it stops changing once the fold appears. Both stay null on a turn with no thinking.
         "reasoning_partial": None,
         "reasoning_seconds": None,
+        # Plan 58 phase 1: same idea as `asked_entity` above -- published before the model call
+        # runs so the "From the notes" block can render on the live streaming bubble from the
+        # first word, not only once the reply finishes. See game_ai_request.py's note on why the
+        # write happens directly on this snapshot rather than through a named Plugin method, and
+        # on the one line still needed in main.py's own merge step to carry this into a poll.
+        "kb_attached_notes": [],
     }

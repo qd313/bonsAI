@@ -163,7 +163,9 @@ class ChatSlotOwnershipTests(unittest.IsolatedAsyncioTestCase):
         assert loaded is not None
         assistant_turns = [t for t in loaded["turns"] if t.get("role") == "assistant"]
         self.assertEqual(len(assistant_turns), 1)
-        self.assertEqual(assistant_turns[0]["transparency"], snapshot)
+        # kb_attached_notes (plan 58 phase 1) is always present on a normalized transparency
+        # object, even when this snapshot said nothing about it.
+        self.assertEqual(assistant_turns[0]["transparency"], {**snapshot, "kb_attached_notes": []})
 
     async def test_both_turns_persist_the_ask_app_id(self) -> None:
         """Regression (DRG-GLOSSARY-01): the AppID the Ask ran under reached the log line and the

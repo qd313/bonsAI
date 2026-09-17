@@ -75,6 +75,19 @@ MAX_APP_NAME_LEN = 48
 # "Wheatley" or "Dreadnought Twins". Longer than a game name, since a card title can run longer,
 # but still bounded: this is a display fact, not a place to smuggle a long question in.
 MAX_ASKED_ENTITY_LEN = 120
+# Plan 58 phase 1: the "From the notes" block's own material -- the notes retrieval attached to
+# a turn, kept alongside its saved transparency so reopening the chat shows the same block again.
+# Bounds below mirror what the backend already caps a card at (retrieve_knowledge_context's own
+# per-mode byte budget is a few KB at most; MAX_KB_NOTE_CARD_LEN is generous headroom on top of
+# that, not a second place deciding how long a note may be).
+MAX_KB_ATTACHED_NOTES = 8
+MAX_KB_NOTE_NAME_LEN = 200
+MAX_KB_NOTE_KIND_LEN = 40
+MAX_KB_NOTE_CARD_LEN = 6_000
+MAX_KB_NOTE_TRUST_TIER_LEN = 40
+MAX_KB_NOTE_SOURCE_HOST_LEN = 120
+MAX_KB_NOTE_SOURCE_LICENSE_LEN = 60
+MAX_KB_NOTE_GAME_TITLE_LEN = 120
 SLOTS_SUBDIR = "chat_slots"
 
 
@@ -122,6 +135,39 @@ def _normalize_attachment_refs(raw: Any) -> list[dict[str, str]]:
     return out
 
 
+def _normalize_kb_attached_note(raw: Any) -> dict[str, Any] | None:
+    """One note for the "From the notes" block, sanitized. ``name`` and non-empty ``card`` are
+    both required -- a note with either missing is not something the block could ever show, so
+    it is dropped here rather than stored as a placeholder a reader has to guess the shape of."""
+    if not isinstance(raw, dict):
+        return None
+    name = str(raw.get("name") or "").strip()
+    card = str(raw.get("card") or "")
+    if not name or not card.strip():
+        return None
+    return {
+        "name": name[:MAX_KB_NOTE_NAME_LEN],
+        "kind": str(raw.get("kind") or "")[:MAX_KB_NOTE_KIND_LEN],
+        "card": card[:MAX_KB_NOTE_CARD_LEN],
+        "trust_tier": str(raw.get("trust_tier") or "")[:MAX_KB_NOTE_TRUST_TIER_LEN],
+        "source_host": str(raw.get("source_host") or "")[:MAX_KB_NOTE_SOURCE_HOST_LEN],
+        "source_license": str(raw.get("source_license") or "")[:MAX_KB_NOTE_SOURCE_LICENSE_LEN],
+        "domain": str(raw.get("domain") or "")[:20],
+        "game_title": str(raw.get("game_title") or "")[:MAX_KB_NOTE_GAME_TITLE_LEN],
+    }
+
+
+def _normalize_kb_attached_notes(raw: Any) -> list[dict[str, Any]]:
+    if not isinstance(raw, list):
+        return []
+    out: list[dict[str, Any]] = []
+    for item in raw[:MAX_KB_ATTACHED_NOTES]:
+        note = _normalize_kb_attached_note(item)
+        if note is not None:
+            out.append(note)
+    return out
+
+
 def _normalize_turn_transparency(raw: Any) -> dict[str, Any] | None:
     """Sanitize the trimmed snapshot ``transparency_snapshot_for_chat_slot`` hands us.
 
@@ -129,6 +175,12 @@ def _normalize_turn_transparency(raw: Any) -> dict[str, Any] | None:
     ``SessionContextStrip.tsx`` filters archived turns on (``t.transparency && chipsFromSnapshot(...)
     .length > 0``). A turn with no chips is treated the same as no snapshot at all, so a slot
     round-tripped through disk cannot resurrect an empty placeholder as a countable turn.
+
+    ``kb_attached_notes`` (plan 58 phase 1) rides here too, kept even on a turn whose own chips
+    list is empty for every OTHER reason but not for this one — in practice a turn with a note
+    attached always carries a kb chip as well (build_context_chips_manifest adds one whenever
+    kb_attached), so the two are not expected to disagree; if they ever do, the chip gate above
+    still wins and the whole transparency object is dropped, notes included.
     """
     if not isinstance(raw, dict):
         return None
@@ -140,6 +192,7 @@ def _normalize_turn_transparency(raw: Any) -> dict[str, Any] | None:
         "success": bool(raw.get("success")),
         "context_chips": chips,
         "overflow_skips": list(raw.get("overflow_skips") or []),
+        "kb_attached_notes": _normalize_kb_attached_notes(raw.get("kb_attached_notes")),
     }
 
 

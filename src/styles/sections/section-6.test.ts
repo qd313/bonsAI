@@ -54,3 +54,41 @@ describe("copy icon room reserved below a trailing code box (section 6 CSS)", ()
     );
   });
 });
+
+describe("suggestion chip surface at rest (section 6 CSS, plan 60 board B)", () => {
+  const css = buildSection6Section();
+
+  it("gives the base chip rule the top-lit gradient and the hairline-plus-shadow list", () => {
+    // Two rules share this selector text: the shared blur rule (`.bonsai-glass-panel,
+    // .bonsai-preset-glass { backdrop-filter... }`) comes first, then this chip's own rule with
+    // its background/border/box-shadow — take the second match, not the first.
+    const matches = [...css.matchAll(/\.bonsai-scope \.bonsai-preset-glass\s*\{([^}]*)\}/g)];
+    expect(matches.length).toBeGreaterThanOrEqual(2);
+    const body = matches[1]![1]!;
+    expect(body).toContain(
+      "background: linear-gradient(180deg, rgba(56, 70, 84, 0.5) 0%, rgba(16, 22, 30, 0.55) 100%) !important;",
+    );
+    expect(body).toContain("border: 1px solid rgba(255, 255, 255, 0.10) !important;");
+    expect(body).toMatch(/box-shadow:\s*\n\s*inset 0 1px 0 rgba\(255, 255, 255, 0\.10\),\s*\n\s*0 2px 3px rgba\(0, 0, 0, 0\.4\) !important;/);
+  });
+
+  it("keeps the help chip on its own colours and does not let it set box-shadow", () => {
+    const match = css.match(
+      /\.bonsai-scope button\.bonsai-preset-help-chip\.bonsai-preset-glass\s*\{([^}]*)\}/,
+    );
+    expect(match).toBeTruthy();
+    const body = match![1]!;
+    expect(body).toContain("background: linear-gradient(");
+    expect(body).not.toMatch(/box-shadow/);
+  });
+
+  it("keeps the agent chip on its own colours and does not let it set box-shadow", () => {
+    const match = css.match(
+      /\.bonsai-scope button\.bonsai-preset-glass\.bonsai-pyro-inject-chip\s*\{([^}]*)\}/,
+    );
+    expect(match).toBeTruthy();
+    const body = match![1]!;
+    expect(body).toContain("border: 2px solid rgba(255, 107, 53, 0.92) !important;");
+    expect(body).not.toMatch(/box-shadow/);
+  });
+});

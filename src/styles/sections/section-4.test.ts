@@ -1,9 +1,10 @@
 /**
  * Title: Chip row "ran out of chips" edge cue — stylesheet checks
- * Purpose: Pin the two things a rendered test cannot: that the cue can actually beat the
- *          `box-shadow: none !important` / `border: ... !important` reset every preset chip
- *          carries (section-6.ts), and that reduced motion drops the ramp without touching any
- *          other control's transition.
+ * Purpose: Pin the two things a rendered test cannot: that the cue can actually beat the chip's
+ *          own resting `box-shadow: ... !important` / `border: ... !important` rule (section-6.ts,
+ *          plan 60 board B; the rest state gained a real gradient, hairline and soft shadow where
+ *          it used to say `box-shadow: none`), and that reduced motion drops the ramp without
+ *          touching any other control's transition.
  * Used for: The blocked-edge glow wired in MainTabPresetAnimatedChips.tsx / presetRowNav.ts
  *           (roadmap `[chips]` ★★, filed 2026-09-04).
  * Does not: Render anything or assert paint — jsdom has no layout/paint engine
@@ -22,7 +23,7 @@ describe("chip row out-of-chips edge cue (section 4 CSS)", () => {
   const css = buildSection4Section();
 
   it("declares the cue on the real button class, !important, so it outranks the base reset", () => {
-    // section-6.ts's `.bonsai-preset-glass` sets `box-shadow: none !important` and
+    // section-6.ts's `.bonsai-preset-glass` sets its own resting `box-shadow: ... !important` and
     // `border: ... !important`; only a higher-specificity !important rule for the same
     // properties can still paint anything on the flagged chip.
     const match = css.match(

@@ -1,11 +1,14 @@
 /**
  * Title: How much the AI thinks before answering
  *
- * Purpose: A row in the Ollama tab lets the user choose how much hidden
- * reasoning the AI does before it writes a reply: Off, Brief, Balanced, or
- * Deep. More thinking can give a better answer to a hard question, but Deep
- * is noticeably slower on a Deck. This file holds the four choices, their
- * labels, and the one-line description shown under each.
+ * Purpose: A row in the Ollama tab lets the user choose how much reasoning
+ * the AI does before it writes a reply: Off, Brief, Balanced, or Deep. More
+ * thinking can give a better answer to a hard question, but Deep is
+ * noticeably slower on a Deck. Above Off, the reasoning itself shows on
+ * screen live as it happens (plan 57), behind a one-time notice the first
+ * time the row is moved off Off -- see `useThinkingNoticeGate.tsx`. This
+ * file holds the four choices, their labels, and the one-line description
+ * shown under each.
  *
  * Used for: the thinking-effort row in the Ollama tab, and the settings
  * clean-up file that reads a saved choice back.
@@ -43,7 +46,7 @@ export const ASK_THINK_EFFORT_LABELS: Record<AskThinkEffortId, string> = {
 
 export const ASK_THINK_EFFORT_DESCRIPTIONS: Record<AskThinkEffortId, string> = {
   off: "Answer straight away. Fastest.",
-  low: "A moment of hidden reasoning first.",
-  medium: "More reasoning on harder questions.",
-  high: "Most reasoning. Noticeably slower on a Deck.",
+  low: "A moment of reasoning first, shown on screen as it happens.",
+  medium: "More reasoning on harder questions, shown on screen as it happens.",
+  high: "Most reasoning, shown on screen as it happens. Noticeably slower on a Deck.",
 };

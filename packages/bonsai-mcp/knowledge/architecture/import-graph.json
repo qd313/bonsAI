@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 406,
-  "edgeCount": 1030,
+  "fileCount": 407,
+  "edgeCount": 1031,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1098,12 +1098,19 @@
         "src/types/backgroundAsk.ts"
       ]
     },
+    "src/data/askThinkEffort.test.ts": {
+      "imports": [
+        "src/data/askThinkEffort.ts"
+      ],
+      "importedBy": []
+    },
     "src/data/askThinkEffort.ts": {
       "imports": [],
       "importedBy": [
         "src/components/OllamaTab.tsx",
         "src/components/OllamaThinkingEffortRow.test.tsx",
         "src/components/OllamaThinkingEffortRow.tsx",
+        "src/data/askThinkEffort.test.ts",
         "src/data/bonsaiSettingsNormalizers.ts",
         "src/data/bonsaiSettingsSchema.ts",
         "src/hooks/useThinkingNoticeGate.test.tsx",

@@ -11,6 +11,11 @@
       "role": ""
     },
     {
+      "path": "src/components/MainTabChatTranscript.tsx",
+      "lines": 1928,
+      "role": ""
+    },
+    {
       "path": "src/index.tsx",
       "lines": 1809,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
@@ -28,11 +33,6 @@
     {
       "path": "py_modules/backend/services/ollama_prompts.py",
       "lines": 1670,
-      "role": ""
-    },
-    {
-      "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1620,
       "role": ""
     },
     {

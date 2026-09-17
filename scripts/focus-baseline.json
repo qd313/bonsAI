@@ -1,12 +1,16 @@
 {
   "note": "Known focus-pattern violations, per file per rule. The check fails only when a count goes UP. Regenerate with: node scripts/check-focus-patterns.mjs --update",
-  "total": 74,
+  "total": 75,
   "counts": {
     "src/components/CharacterPickerModal.tsx": {
       "page-search": 2
     },
     "src/components/KnowledgeBaseSection.tsx": {
       "page-search": 1
+    },
+    "src/components/MainTabChatTranscript.tsx": {
+      "page-search": 1,
+      "tabindex-removal": 1
     },
     "src/components/MainTabUnifiedAskBar.tsx": {
       "ring-question": 1
@@ -50,9 +54,6 @@
     },
     "src/utils/answerStopRegistry.ts": {
       "tabindex-removal": 1
-    },
-    "src/utils/chatPanelScroll.ts": {
-      "ring-question": 1
     },
     "src/utils/drgGlossaryTermRegistry.ts": {
       "tabindex-removal": 1

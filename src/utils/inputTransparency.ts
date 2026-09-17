@@ -24,6 +24,25 @@
  */
 import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
 
+/**
+ * One note the search actually attached to a turn, in its own words (plan 58 phase 1's "From the
+ * notes" block). Filled in purely from what retrieval found — `card` is never the model's own
+ * text. `source_host` is the raw credited host exactly as read (e.g. "hollowknight.wiki",
+ * "www.pikminwiki.com" with its "www." kept) so the screen side's own host-to-name map can look
+ * it up; empty when the note has no source at all (a maintainer-written note, or every shared
+ * troubleshooting tip). `domain` is "strategy" for a game note or "compat" for a shared tip.
+ */
+export type KbAttachedNote = {
+  name: string;
+  kind: string;
+  card: string;
+  trust_tier: string;
+  source_host: string;
+  source_license: string;
+  domain: string;
+  game_title: string;
+};
+
 /** One credit line: a licensed source, plus the cards from it that reached the model. */
 export type ContextChipAttribution = {
   source: string;
@@ -117,6 +136,9 @@ export type TransparencySnapshot = {
     kb_entity_match?: boolean;
     kb_section_types?: string[];
   };
+  /** Plan 58 phase 1: the notes behind the "From the notes" block. Empty on every turn with
+   *  nothing attached, absent only on a snapshot built before this field existed. */
+  kb_attached_notes?: KbAttachedNote[];
 };
 
 /**
@@ -130,7 +152,7 @@ export type TransparencySnapshot = {
  */
 export type ChatSlotTurnTransparency = Pick<
   TransparencySnapshot,
-  "route" | "success" | "context_chips" | "overflow_skips"
+  "route" | "success" | "context_chips" | "overflow_skips" | "kb_attached_notes"
 >;
 
 export type AskDiagnosticsSnapshot = {

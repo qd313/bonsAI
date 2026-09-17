@@ -165,6 +165,49 @@ Full patterns:
 - **Never mark Deck-facing work done without a D-pad row** in [docs/testing.md](docs/testing.md) or
   [docs/testing-manual.md](docs/testing-manual.md) for the new chain.
 
+### The "From the notes" block (plan 58 phase 1)
+
+A new stop under a reply that used a note or a shared troubleshooting tip
+(`MainTabChatTranscript.tsx`, `buildKbNotesBlockElement`), one per turn ("live" or an archived
+turn's own id). It sits after Show details / Read aloud in the walk, before whatever the utility
+row used to reach:
+
+```
+Show details / Read aloud (unchanged)
+   | Down
+"From the notes" block header   <- new stop, one per turn
+   | Down
+whatever Down from the utility row already reached (the chip ladder, a permission hint,
+the session context strip)
+```
+
+- **Up** hands the ring to Show details, falling back to the thumbs row when a turn has no Show
+  details line — the same fallback `ContextChipLadder`'s own `onMoveUpFromLadder` already uses.
+- **Down** with the block registered but nothing below it yet reuses exactly what
+  `onMoveDownFromUtility` used to call directly; the block is spliced in front of that existing
+  target, not a replacement for it.
+- **A** (`onOKButton`) or a tap (`onClick`) toggles the body open or closed. No `onActivate` —
+  Steam fires it for A too, and wiring both would toggle twice on one press, the same trap the
+  Show details line's own comment documents.
+- **The row never remounts when toggled.** Only its label and an optional plain `<div>` body
+  below it change, so there is nothing to hand the ring back to — unlike a spoiler fence's two
+  different elements swapping (`MainTabBonsaiAiMarkdownChunk.tsx`), or the reasoning fold this
+  mirrors (`buildReasoningFoldElement.tsx`).
+- **Registered in a local module-level map** (`kbNotesBlockEls` in `MainTabChatTranscript.tsx`),
+  not `replyStopRegistry.ts`'s `ReplyStopId` — that union is closed and this control's own lane
+  could not extend it. A plain `.focus()` is still correct here (not `navFocusRegistry.ts`'s
+  `takeNavFocus`): the row is a sibling of Show details and the other reply-row controls inside
+  the same turn container, and `replyStopRegistry.ts`'s own `focusRegisteredReplyStop` already
+  proves a bare `.focus()` carries Steam's ring correctly among exactly those siblings.
+- **Never shows on a reply still hidden behind its own spoiler cover.** The signal is the reply
+  text itself — masking on and a `bonsai-spoiler` fence present — because there is no prop this
+  lane's file list lets it read for "is that fence currently open." A correct answer would need
+  the fence's open state threaded out of `MainTabBonsaiAiMarkdownChunk.tsx`; until then the block
+  simply does not render on a fenced reply, which is safe (nothing shown) rather than a guess.
+- **Not yet backed by a device row.** `docs/testing.md` / `docs/testing-manual.md` still owe the
+  D-pad walk this section's own rule asks for — recorded here, not skipped silently, because the
+  bookkeeper owns those files, not this lane.
+
 ### A check backs three of these up
 
 `scripts/check-focus-patterns.mjs`, run as `pnpm test:focus` in the build checks, reads the actual

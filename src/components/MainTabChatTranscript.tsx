@@ -121,7 +121,7 @@ import {
   buildReasoningFoldRow,
   buildReasoningOpenBlock,
 } from "../utils/buildReasoningFoldElement";
-import { getUiDocument } from "../utils/uiDocument";
+import { elementHasFocus, elementHasGamepadFocus, getUiDocument } from "../utils/uiDocument";
 import { registerNavFocus, unregisterNavFocus, takeNavFocus, type NavRefHolder } from "../utils/navFocusRegistry";
 import { formatAppliedTuningBannerText } from "../utils/appliedTuningText";
 import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
@@ -138,7 +138,11 @@ import { buildAnswerCopyText } from "../utils/answerCopyText";
 import { buildThinkingBlurbTextElement } from "../utils/buildThinkingBlurbTextElement";
 import { buildTurnHeaderElement } from "../utils/buildTurnHeaderElement";
 import { buildCollapsedTurnTitle, buildExpandedTurnTitle } from "../utils/chatTurnTitle";
-import { isDeckDirectionLeftEvent } from "../utils/focusNavigation";
+import {
+  isDeckDirectionDownEvent,
+  isDeckDirectionLeftEvent,
+  isDeckDirectionUpEvent,
+} from "../utils/focusNavigation";
 import { ContextChipLadder } from "./ContextChipLadder";
 import { SessionContextStrip } from "./SessionContextStrip";
 import { transparencyUiAvailable } from "../utils/contextChipsFromSnapshot";
@@ -152,7 +156,11 @@ import type {
   StrategyChecklistState,
 } from "../types/bonsaiUi";
 import { ThinkingSpinnerIcon } from "./icons";
-import type { TransparencySnapshot } from "../utils/inputTransparency";
+import type {
+  ChatSlotTurnTransparency,
+  KbAttachedNote,
+  TransparencySnapshot,
+} from "../utils/inputTransparency";
 import { useStreamScrollPin } from "../hooks/useStreamScrollPin";
 import type { AskModeId } from "../data/askMode";
 import type { LastExchangeSnapshot, LiveThinkingSnapshot } from "../types/backgroundAsk";
@@ -185,6 +193,220 @@ import { useReadAloud } from "../hooks/useReadAloud";
 
 const BONSAI_CHAT_AI_MAX_WIDTH_CSS = `min(${Math.round(BONSAI_CHAT_AI_BUBBLE_MAX_FRAC * 100)}%, 100%)`;
 
+/*
+ * The "From the notes" block (plan 58 phase 1), under a reply that used a note from the
+ * knowledge base or a shared troubleshooting tip. The maintainer has not yet picked open or
+ * closed by default (the mockup page at docs/planning/assets/58-phase-1-block-mockups.html is
+ * what they are picking from) — this lane's own recommendation and the session's are both
+ * closed, so that is what ships behind this one constant. Flipping it to `true` is meant to be
+ * the entire change once an answer comes back.
+ */
+const KB_NOTES_BLOCK_OPEN_BY_DEFAULT = false;
+
+/**
+ * Everyday name for a host the library has already cleared a note from — the header's job is to
+ * turn the trust tier into words a reader does not have to decode. An unlisted host still reads
+ * as a source, just spelled out plainly, and this map growing is expected as the library covers
+ * more wikis (phase 1's own ten-game reopen adds several of these).
+ */
+const KB_NOTE_WIKI_HOST_NAMES: Record<string, string> = {
+  "hollowknight.wiki": "the Hollow Knight wiki",
+  "www.mariowiki.com": "the Super Mario Wiki",
+  "www.ssbwiki.com": "SmashWiki",
+  "gta.fandom.com": "the GTA wiki",
+  "fallout.fandom.com": "the Fallout wiki",
+  "left4dead.fandom.com": "the Left 4 Dead wiki",
+  "cyberpunk.fandom.com": "the Cyberpunk wiki",
+  "combineoverwiki.net": "the Half-Life wiki",
+  "doomwiki.org": "the Doom wiki",
+  "theportalwiki.com": "the Portal wiki",
+  "www.pikminwiki.com": "the Pikmin wiki",
+  "strategywiki.org": "StrategyWiki",
+};
+
+/** The header's source phrase — the trust tier turned into words, per Lane A's brief. */
+function kbNoteSourcePhrase(note: KbAttachedNote): string {
+  if (note.domain === "compat") return "From the shared Deck tips";
+  if (!note.source_host) return "From bonsAI's own notes, no source";
+  const known = KB_NOTE_WIKI_HOST_NAMES[note.source_host];
+  return known ? `From ${known}` : `From ${note.source_host}`;
+}
+
+/** The one-line label: the first note's name and source, plus a count of any others attached. */
+function kbNotesHeaderLabel(notes: KbAttachedNote[]): string {
+  const first = notes[0];
+  const name = first.name.trim() || "Note";
+  const extra = notes.length - 1;
+  const label = `${name} · ${kbNoteSourcePhrase(first)}`;
+  return extra > 0 ? `${label} (+${extra} more)` : label;
+}
+
+function kbAttachedNotesFrom(
+  transparency: TransparencySnapshot | ChatSlotTurnTransparency | null | undefined
+): KbAttachedNote[] {
+  return transparency?.kb_attached_notes ?? [];
+}
+
+/** A "Label: value" line (Summary / Weak points / Tips, or any wiki table row turned into one
+ *  line) keeps its label bolded and its own line — the labelled-lines drawing in the mockup. */
+const KB_NOTE_LABEL_LINE_RE = /^([A-Za-z][A-Za-z ]{0,30}):\s(.+)$/;
+
+function renderKbNoteCardLine(line: string, key: React.Key): React.ReactElement {
+  const m = KB_NOTE_LABEL_LINE_RE.exec(line);
+  if (!m) return <div key={key}>{line}</div>;
+  return (
+    <div key={key}>
+      <b style={{ color: "#dcc493", fontWeight: 700 }}>{m[1]}:</b>
+      {m[2] ? ` ${m[2]}` : ""}
+    </div>
+  );
+}
+
+const BONSAI_SPOILER_FENCE_MARKER = "```bonsai-spoiler";
+
+/**
+ * Whether this reply's own spoiler cover has to be closed before the block could safely show
+ * anything — a note's own words can be exactly the spoiler-relevant fact the fence exists to
+ * hide (Broken Vessel's card names the boss outright). The signal used is the reply text itself:
+ * masking is on and it contains a `bonsai-spoiler` fence, the same test
+ * MainTabBonsaiAiMarkdownChunk.tsx's own masking branch reads off the fenced language tag.
+ */
+function kbNotesBlockedBySpoiler(
+  answerText: string | null | undefined,
+  maskingEnabled: boolean | undefined
+): boolean {
+  if (maskingEnabled === false) return false;
+  return Boolean(answerText && answerText.includes(BONSAI_SPOILER_FENCE_MARKER));
+}
+
+/**
+ * Registry for the block's own header row, one per turn key ("live" or an archived turn id) —
+ * the same shape as replyStopRegistry.ts's `stops` map, kept local to this file because that
+ * file's `ReplyStopId` is a closed union this lane's file list cannot extend. A plain `.focus()`
+ * is the right tool here, not navFocusRegistry's `takeNavFocus`: this row is a sibling of Show
+ * details and the other reply-row controls inside the same turn container, and
+ * replyStopRegistry.ts's own `focusRegisteredReplyStop` already proves a bare `.focus()` carries
+ * Steam's ring correctly among exactly those siblings (AGENTS.md, "The Steam Deck focus graph").
+ */
+const kbNotesBlockEls = new Map<string, HTMLElement>();
+
+function registerKbNotesBlockEl(turnKey: string, el: HTMLElement | null): void {
+  if (el) kbNotesBlockEls.set(turnKey, el);
+  else kbNotesBlockEls.delete(turnKey);
+}
+
+function focusKbNotesBlock(turnKey: string): boolean {
+  const el = kbNotesBlockEls.get(turnKey);
+  if (!el) return false;
+  if (!el.hasAttribute("tabindex") && !el.matches?.("button, a, input, select, textarea")) {
+    el.setAttribute("tabindex", "-1");
+  }
+  try {
+    el.focus({ preventScroll: true });
+  } catch {
+    return false;
+  }
+  return elementHasFocus(el);
+}
+
+/**
+ * Builds the block's own row (always mounted while there is at least one attached note) and,
+ * only while open, the plain content below it. The row never remounts when toggled — only its
+ * label and the optional body change — so there is nothing to hand the D-pad ring back to the
+ * way BonsaiSpoilerFence has to when its own two different elements swap (MainTabBonsaiAiMarkdown
+ * Chunk.tsx); the same shape the reply row's own Show-reasoning fold already uses
+ * (buildReasoningFoldElement.tsx) for the same reason.
+ */
+function buildKbNotesBlockElement(args: {
+  turnKey: string;
+  notes: KbAttachedNote[];
+  open: boolean;
+  onToggle: () => void;
+  onMoveUp: () => boolean;
+  onMoveDown: () => boolean;
+}): React.ReactElement | null {
+  const { turnKey, notes, open, onToggle, onMoveUp, onMoveDown } = args;
+  if (!notes.length) return null;
+  const headerLabel = kbNotesHeaderLabel(notes);
+  return (
+    <Focusable
+      key={`kb-notes-block-${turnKey}`}
+      className="bonsai-kb-notes-block"
+      ref={(el: HTMLElement | null) => registerKbNotesBlockEl(turnKey, el)}
+      onOKButton={onToggle}
+      onClick={onToggle}
+      aria-expanded={open}
+      aria-label={open ? `${headerLabel}, hide` : `${headerLabel}, show`}
+      {...({
+        onMoveUp: () => onMoveUp(),
+        onMoveDown: () => onMoveDown(),
+        onButtonDown: (evt: unknown) => {
+          const el = kbNotesBlockEls.get(turnKey);
+          if (el && !elementHasGamepadFocus(el)) return false;
+          if (isDeckDirectionUpEvent(evt)) return onMoveUp();
+          if (isDeckDirectionDownEvent(evt)) return onMoveDown();
+          return false;
+        },
+      } as Record<string, unknown>)}
+      style={{
+        marginTop: 8,
+        width: "100%",
+        maxWidth: BONSAI_CHAT_AI_MAX_WIDTH_CSS,
+        boxSizing: "border-box",
+        borderRadius: 8,
+        border: "1px solid rgba(214, 174, 116, 0.4)",
+        background: "rgba(214, 174, 116, 0.07)",
+        cursor: "pointer",
+        outline: "none",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 8,
+          padding: "7px 10px",
+          fontSize: 11,
+          lineHeight: 1.35,
+        }}
+      >
+        <span style={{ minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          <b style={{ color: "#dcc493", fontWeight: 700 }}>{notes[0].name.trim() || "Note"}</b>{" "}
+          <span style={{ color: "#a8916a" }}>
+            {kbNoteSourcePhrase(notes[0])}
+            {notes.length > 1 ? ` (+${notes.length - 1} more)` : ""}
+          </span>
+        </span>
+        <span style={{ color: "#d6ae74", flex: "0 0 auto" }}>{open ? "▾" : "▸"}</span>
+      </div>
+      {open ? (
+        <div
+          style={{
+            padding: "0 10px 10px",
+            paddingTop: 8,
+            borderTop: "1px solid rgba(214, 174, 116, 0.22)",
+            color: "#d8cdb4",
+            fontSize: 11,
+            lineHeight: 1.45,
+          }}
+        >
+          {notes.map((note, i) => (
+            <div key={`${turnKey}-kb-note-${i}`} style={{ marginBottom: i === notes.length - 1 ? 0 : 10 }}>
+              {notes.length > 1 ? (
+                <div style={{ fontWeight: 700, color: "#dcc493", marginBottom: 3 }}>
+                  {note.name.trim() || "Note"} · {kbNoteSourcePhrase(note)}
+                </div>
+              ) : null}
+              {note.card.split("\n").map((line, li) => renderKbNoteCardLine(line, li))}
+            </div>
+          ))}
+        </div>
+      ) : null}
+    </Focusable>
+  );
+}
+
 export type MainTabChatTranscriptProps = {
   fullBleedRowStyle: React.CSSProperties;
   isAsking: boolean;
@@ -200,6 +422,21 @@ export type MainTabChatTranscriptProps = {
   onOpenDesktopNoteSave: () => void;
   desktopNoteSaveEnabled?: boolean;
   transparencySnapshot?: TransparencySnapshot | null;
+  /**
+   * The attached notes for the live turn while it is still streaming, read off the background
+   * poll status the same way `liveThinking` already is — plan 58 phase 1's own live-before-the-
+   * first-word case (the lesson the spoiler work paid for: a per-turn fact that only arrives
+   * with the finished reply flickers). `transparencySnapshot` above is a *post-completion* fetch
+   * (`get_input_transparency`, refreshed once an Ask finishes) and does not update mid-stream, so
+   * it cannot serve this by itself — this prop is what a live poll would carry instead. No
+   * caller supplies it yet: the backend's own write into the live snapshot
+   * (game_ai_request.py's `_publish_kb_attached_notes_live`) still needs one line added to
+   * main.py's `_merge_partial_into_background_status` before a poll actually carries a value
+   * here, and threading that value from the poll response into this prop is a payload-plumbing
+   * change in useMainTabPayload.tsx / MainTab.tsx, both outside this lane's file list. Once both
+   * land, wiring it in is passing the field through; nothing here needs to change again.
+   */
+  liveKbAttachedNotes?: KbAttachedNote[] | null;
   onRunOriginalAsk?: (rawQuestion: string) => void;
   strategyGuideBranches?: StrategyGuideBranchesPayload | null;
   onStrategyBranchPick?: (opt: { id: string; label: string }) => void;
@@ -384,6 +621,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     onOpenDesktopNoteSave,
     desktopNoteSaveEnabled = true,
     transparencySnapshot = null,
+    liveKbAttachedNotes = null,
     strategyGuideBranches = null,
     onStrategyBranchPick,
     strategyChecklist = null,
@@ -587,6 +825,21 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
   useEffect(() => {
     setReasoningOpenFor(null);
   }, [expandedTurnKey]);
+
+  /**
+   * Which turns have their "From the notes" block open, independent per turn (unlike the single
+   * reasoning fold above, several of these can reasonably be open at once while scrolling back
+   * through a chat). Starts empty on every mount, so a reopened saved chat and a fresh panel open
+   * both come back at KB_NOTES_BLOCK_OPEN_BY_DEFAULT for every turn.
+   */
+  const [kbNotesOpenByTurn, setKbNotesOpenByTurn] = useState<Record<string, boolean>>({});
+  const isKbNotesOpen = (turnKey: string) =>
+    kbNotesOpenByTurn[turnKey] ?? KB_NOTES_BLOCK_OPEN_BY_DEFAULT;
+  const toggleKbNotesOpen = (turnKey: string) =>
+    setKbNotesOpenByTurn((prev) => ({
+      ...prev,
+      [turnKey]: !(prev[turnKey] ?? KB_NOTES_BLOCK_OPEN_BY_DEFAULT),
+    }));
 
   /**
    * Feature: the Show reasoning line between a question and its answer.
@@ -1175,7 +1428,12 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   if (!showFeedbackHere && !transparencyAvailableHere && !readAloudAvailableHere) {
                     return null;
                   }
-                  return buildReplyActionsElement({
+                  const downPastUtilityRow = () =>
+                    focusDownFromReplyUtilityRowOrPermHint(queryTurnSlot(turn.id));
+                  const kbNotesHere = kbNotesBlockedBySpoiler(turn.answer, strategySpoilerMaskingEnabled)
+                    ? []
+                    : kbAttachedNotesFrom(archivedTransparencyFor(turn, turnIndex));
+                  const actionsEl = buildReplyActionsElement({
                     replyKey: turn.id,
                     rating: showFeedbackHere ? liveReplyFeedbackRating : null,
                     onRate: showFeedbackHere
@@ -1205,12 +1463,26 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                           turn.spoilerConsentEffective === true
                         )
                       : {}),
-                    /* Down must reach this turn's own ladder. Without a handler the Focusable
-                       falls through to the next focusable in document order — the session context
-                       strip — and the chips become unreachable from above. */
+                    /* Down must reach this turn's own ladder, then the "From the notes" block when
+                       one is attached, then whatever came after this row before either existed. */
                     onMoveDownFromUtility: () =>
-                      focusDownFromReplyUtilityRowOrPermHint(queryTurnSlot(turn.id)),
+                      focusKbNotesBlock(turn.id) || downPastUtilityRow(),
                   });
+                  return (
+                    <>
+                      {actionsEl}
+                      {buildKbNotesBlockElement({
+                        turnKey: turn.id,
+                        notes: kbNotesHere,
+                        open: isKbNotesOpen(turn.id),
+                        onToggle: () => toggleKbNotesOpen(turn.id),
+                        onMoveUp: () =>
+                          focusReplyShowDetails(queryTurnSlot(turn.id)) ||
+                          focusReplyUtilityRow(queryTurnSlot(turn.id)),
+                        onMoveDown: downPastUtilityRow,
+                      })}
+                    </>
+                  );
                 })()}
                 {transparencyDetailsOpen &&
                 transparencyUiAvailable(archivedTransparencyFor(turn, turnIndex)) ? (
@@ -1382,8 +1654,44 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                       )
                     : {}),
                   onMoveDownFromUtility: () =>
+                    focusKbNotesBlock("live") ||
                     focusDownFromReplyUtilityRowOrPermHint(queryLiveTurnSlot()),
                 })
+              : null}
+            {expandedTurnKey === "live"
+              ? (() => {
+                  /*
+                   * Unlike the row above, not gated on `!isAsking`: the whole point of publishing
+                   * this live (game_ai_request.py's `_publish_kb_attached_notes_live`) is showing
+                   * it before the reply finishes, not only once `buildReplyActionsElement` above
+                   * has something to show. `liveKbAttachedNotes` is what a live poll would carry
+                   * mid-stream; `transparencySnapshot` is the post-completion fetch used once the
+                   * turn is done (see that prop's own doc comment for the one thing still needed
+                   * before a poll actually reaches this).
+                   */
+                  const notes = isAsking
+                    ? liveKbAttachedNotes ?? []
+                    : kbAttachedNotesFrom(transparencySnapshot);
+                  const answerTextForFenceCheck = isAsking
+                    ? liveResponseBody
+                    : lastExchange?.answer ?? "";
+                  const kbNotesHere = kbNotesBlockedBySpoiler(
+                    answerTextForFenceCheck,
+                    strategySpoilerMaskingEnabled
+                  )
+                    ? []
+                    : notes;
+                  return buildKbNotesBlockElement({
+                    turnKey: "live",
+                    notes: kbNotesHere,
+                    open: isKbNotesOpen("live"),
+                    onToggle: () => toggleKbNotesOpen("live"),
+                    onMoveUp: () =>
+                      focusReplyShowDetails(queryLiveTurnSlot()) ||
+                      focusReplyUtilityRow(queryLiveTurnSlot()),
+                    onMoveDown: () => focusDownFromReplyUtilityRowOrPermHint(queryLiveTurnSlot()),
+                  });
+                })()
               : null}
             {renderInlineLadder ? (
               <div style={{ width: "100%", minWidth: 0, boxSizing: "border-box" }}>

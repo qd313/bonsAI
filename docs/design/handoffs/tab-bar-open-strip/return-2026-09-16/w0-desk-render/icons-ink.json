@@ -1,0 +1,50 @@
+{
+  "ink-main": {
+    "weightedInk": 720772.7,
+    "boxPixels": [
+      160,
+      160
+    ],
+    "ratioToGear": 1.719
+  },
+  "ink-ollama": {
+    "weightedInk": 374981.5,
+    "boxPixels": [
+      160,
+      160
+    ],
+    "ratioToGear": 0.894
+  },
+  "ink-settings": {
+    "weightedInk": 419216.2,
+    "boxPixels": [
+      160,
+      160
+    ],
+    "ratioToGear": 1.0
+  },
+  "ink-permissions": {
+    "weightedInk": 317995.2,
+    "boxPixels": [
+      160,
+      160
+    ],
+    "ratioToGear": 0.759
+  },
+  "ink-developer": {
+    "weightedInk": 346623.8,
+    "boxPixels": [
+      160,
+      160
+    ],
+    "ratioToGear": 0.827
+  },
+  "ink-about": {
+    "weightedInk": 180146.5,
+    "boxPixels": [
+      160,
+      160
+    ],
+    "ratioToGear": 0.43
+  }
+}

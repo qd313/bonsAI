@@ -429,6 +429,20 @@ which goes on their own checklist.
   note with no source page, so tips and the memory-written notes have never been credited; filed
   as a bug. The focus checker's baseline gained two entries for the new control, matching a
   pattern the reply's other stops already carry; the device walk is the proof, not the baseline.
+- **2026-09-17, Hollow Knight both ways: the verbatim notes lost, and the cause is named.** Nine
+  of the fourteen pages had a section worth swapping to; five did not (their content sits under
+  headings the reader does not know yet, or the page has none). On the six blind questions,
+  eight of the nine swaps moved nothing; the False Knight question went from the right note
+  first to out of the top three, and its answer row went from the two expected facts kept three
+  times in three to none in three. Both facts are on the page, in the section the reader chose,
+  past the 880-character cap: the section opens with the attack list and puts "how to beat it"
+  last, and the excerpt never says where the boss is, which the page's lead sentence and the
+  rewrite both do. Whole-library search: 84.0 to 83.3 in a hundred, inside noise. The swap is
+  held in its own commit off the branch; the report landed. The reader lane is on a third pass:
+  the page's lead sentence first, then the tactics sentences chosen by a visible word list and
+  kept in page order, the two heading misses fixed, captions and file links dropped. Same cap,
+  same trim-only law. Lane D re-measures after it lands. If it still loses, the rewrites stay
+  and the reader ships as the fetch-and-credit half, as § 9 said.
 
 ---
 

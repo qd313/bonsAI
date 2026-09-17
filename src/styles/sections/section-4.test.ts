@@ -142,3 +142,33 @@ describe("carousel track width reads the one-suggestion-chip override (section 4
     expect(flexMatch![1]).not.toMatch(/\d+px\s*\)\s*\/\s*\d/);
   });
 });
+
+describe("room under the suggestion chips (section 4 CSS)", () => {
+  const css = buildSection4Section();
+
+  // Measured on the Deck 2026-09-17 (docs/test-evidence/plan60-measure-before.json): the chips had
+  // no room under them at all in three of the four animation modes, so the chip's soft shadow was
+  // cut off and the chips touched the question box. These pin the numbers that fixed it, because
+  // nothing in jsdom can measure a shadow (design-language.md rule 6).
+
+  it("gives the row 8px under the chips: 5 for the shadow, 3 clear of the box below", () => {
+    const match = css.match(/\.bonsai-scope \.bonsai-preset-row-host\s*\{([^}]*)\}/);
+    expect(match).toBeTruthy();
+    expect(match![1]!).toMatch(/padding-bottom:\s*8px\s*!important/);
+  });
+
+  it("drops fade mode's own gap from 12 to 4, so fade mode still totals 12", () => {
+    const match = css.match(/\.bonsai-scope \.bonsai-preset-row-host--fade-anim\s*\{([^}]*)\}/);
+    expect(match).toBeTruthy();
+    expect(match![1]!).toMatch(/margin-bottom:\s*4px\s*!important/);
+    expect(match![1]!).not.toMatch(/margin-bottom:\s*12px/);
+  });
+
+  it("lets the shadow out of the carousel's own clipping box without changing its height", () => {
+    const match = css.match(/\.bonsai-scope \.bonsai-preset-carousel-viewport\s*\{([^}]*)\}/);
+    expect(match).toBeTruthy();
+    const body = match![1]!;
+    expect(body).toMatch(/padding-bottom:\s*5px\s*!important/);
+    expect(body).toMatch(/margin-bottom:\s*-5px\s*!important/);
+  });
+});

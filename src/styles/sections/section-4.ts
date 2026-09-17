@@ -109,6 +109,17 @@ export function buildSection4Section(): string {
           padding-right: 0 !important;
         }
 
+        /*
+          Room under the chips. Measured on the Deck 2026-09-17 (plan 60, evidence
+          docs/test-evidence/plan60-measure-before.json): there was no room at all — the chip's
+          bottom edge and the question box's top edge were the same line in decode, static and
+          carousel mode. Only fade mode had 12px, and that came from its own variant below. So the
+          chips sat right on top of the box, which is what the maintainer saw and asked to change.
+
+          This box hides anything outside itself, so with no room the chip's new soft shadow (plan
+          60, board B) was cut off completely and nothing under the chip was drawn. 8px: 5 for the
+          shadow to land in, 3 more so the chip is not touching the box below it.
+        */
         .bonsai-scope .bonsai-preset-row-host {
           min-width: 0 !important;
           overflow: hidden !important;
@@ -116,11 +127,15 @@ export function buildSection4Section(): string {
           gap: 8px !important;
           margin-top: 0 !important;
           padding-top: 0 !important;
+          padding-bottom: 8px !important;
         }
 
+        /* Fade mode already had 12px of its own under the row. The 8px above is now part of that,
+           so this drops from 12 to 4 and fade mode still ends up at the same 12 total it had
+           before — the chips just sit 8px higher inside it, with the shadow visible. */
         .bonsai-scope .bonsai-preset-row-host--fade-anim {
           gap: 3px !important;
-          margin-bottom: 12px !important;
+          margin-bottom: 4px !important;
           margin-top: 0 !important;
         }
 
@@ -234,10 +249,16 @@ export function buildSection4Section(): string {
           writes to --bonsai-preset-window-start: one step is (100% + gap) / N, which is exactly one
           chip plus one gap for any N. No pixel is ever measured.
         */
+        /* The viewport hides anything outside itself too, so in carousel mode it does its own
+           clipping of the chip's soft shadow even after the row above gained room. It gets the
+           5px the shadow needs and then takes the same 5px straight back off its height, so the
+           shadow is drawn but nothing on screen moves. */
         .bonsai-scope .bonsai-preset-carousel-viewport {
           width: 100% !important;
           min-width: 0 !important;
           overflow: hidden !important;
+          padding-bottom: 5px !important;
+          margin-bottom: -5px !important;
         }
         .bonsai-scope .bonsai-preset-carousel-track {
           display: flex !important;

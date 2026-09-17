@@ -205,6 +205,18 @@ All notable changes to this project are documented in this file.
 - **The knowledge-base search test gained a weight sweep, per-question detail, and a second right answer (no user-visible change):** it can now try nine different balances between word-matching search and meaning search in one run and print a table of how each did, without ever looking at the questions held back for the final check; every question's result now records the three notes each kind of search actually returned, in order, instead of only a percentage; and a question can list more than one acceptable note when more than one genuinely answers it. `scripts/eval_kb_embed_models.py`, `tests/test_eval_kb_arms.py`.
 
 ### Changed
+- **The tab strip that opens over the tab bar has been redrawn:** when you open it, the six tabs are
+  now six equal cells with one matching icon each; only the tab you are on shows its name, in
+  lowercase small capitals, in your accent colour; the highlighted cell is a soft rounded fill with
+  no hard box; the LB and RB hints are now small rounded pills, the same shape already used lower
+  down on the chat screen; and the bar itself is solid, with a soft shadow, instead of being
+  slightly see-through. The strip is also taller than before (66 pixels instead of 54) so it now
+  fully covers the row of dots on the chat screen that used to peek out underneath it. The Main
+  tab's icon is now the plugin's own logo. Opening, closing and every button that switches tabs
+  work exactly as before. `TabIndicatorBar.tsx`, `tabIndicatorBar.ts`, `tabTitles.tsx`, `icons.tsx`,
+  `characterUiAccent.ts`, `constants.ts`. Owed on the Deck: **TAB-STRIP-2A-01** through
+  **TAB-STRIP-2A-07** and the free-play sweep **QA-FREE-PLAY-01**, in `docs/testing.md` /
+  `docs/testing-manual.md` — not run yet, the device is held by another session.
 - **The Ollama tab's "Open AI models…" button is now "Manage AI models…":** the old wording read like a
   company's own models rather than the plugin's own screen. `OllamaTab.tsx`, `PullModelsModal.tsx`.
 - **A Strategy answer about a named thing gives its advice first, then the menu (behaviour change):** before, a reply like this opened with a short bit of orientation and then offered the same menu of what to do next; it now gives the note's own advice first and offers the menu after. Measured on 61 questions, three runs each, both shapes on the same build with the same checks: the answer keeps more of what its note said (76.6% to 79.5%), hides spoilers when it should far more often (77.8% to 88.9%), comes out clean on all three runs more often (60.7% to 67.2%), and is twelve words shorter (103 to 91) at the same speed. One thing got worse — replies that contradict their own note, 94.4% down to 90.7% — but that is one extra question, not a spread, and both failing questions are the Pikmin 2 day limit, already an open problem either way. The maintainer read these numbers and took the change. `ollama_prompts.py`. Row **KB-ANSWER-03** in `docs/testing.md`; a device read is still owed.

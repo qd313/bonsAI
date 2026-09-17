@@ -295,9 +295,6 @@ replace it with a specific issue when one exists.
   comedian's own persona. A written sweep, one line per character: who owns the character, whose voice it is, and whether a voice for
   it could be made as a type rather than a copy. Text roleplay sits on the first layer today; any voice would sit on all of them. No
   code; a document the legal check reads. [Memo](planning/42-read-aloud-feasibility.md).
-- ★★ `[ui]` **Replace the bonsAI tab icon with the redesign's** — **OPEN, folds into the tab strip redesign below.** The maintainer approved the new
-  strip's shape on 2026-09-16 (D109): the Main cell takes the plugin's real logo, tinted in the accent colour. This entry closes when plan 59's
-  build lands.
 - ★★ `[layout]` `[voice]` `[focus]` **Read aloud is a small speaker button on the Helpful row, not a second dividing
   line** — **OPEN, filed 2026-09-16 by the maintainer (D106).** Today: Read aloud is a full-width dividing line above Show
   details, the same shape as Show details, one row up, drawn by the reply-actions row builder
@@ -385,12 +382,6 @@ replace it with a specific issue when one exists.
   reply-style slider, off by default, capping a Speed answer at three lines. It overrides the slider and the character; destructive
   warnings and the depth phrases escape it. The real work is widening the branch picker (D40). **TERSE-01** passes at 8 of 10.
   [Detail](roadmap-details.md#terse-mode-speed-answers-in-three-lines).
-- ★★★ `[tabs]` `[ui]` **The open tab strip redrawn: six equal cells, one icon family, only the current tab named** — **OPEN, planned 2026-09-16,
-  design approved (D109).** Today, with the bar open: cells of different widths, four icon styles, a tiny capital name under every icon, a hard
-  accent box on the current tab, plain LB/RB text, and a see-through bar. After this build: six equal cells, every icon 22px in one family, only the
-  current tab's name under its icon in small capitals, a soft fill with no box, LB and RB as pills like the chat row's, a solid bar with a shadow.
-  The Main cell takes the plugin's own logo; the thin bar at rest and every behaviour stay the same. Owed on the Deck: **TAB-STRIP-2A-01** through
-  **TAB-STRIP-2A-07**. [Plan](planning/59-tab-strip-redesign-build.md) · [Design](design/handoffs/tab-bar-open-strip/return-2026-09-16/).
 - ★★★ `[ui]` **Adjustable text size in Settings** — **OPEN.** `uiScalePx()` already runs through the stylesheet; the work is exposing it,
   deciding what must not scale (icons, the 300px column), and paying the settings plumbing. [Detail](roadmap-details.md#adjustable-text-size-in-settings).
 - ★★★ `[ui]` **Search density** — **OPEN.** Tighter, more scannable results with highlighted match tokens.
@@ -600,6 +591,17 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   `Continuing…` cue never showed live or saved (01); stopping partway kept the partial text with a
   `Stopped — partial answer kept.` notice (03). Evidence `docs/test-evidence/plan57-QA-SOFT-PREDICT-01.json`,
   `docs/test-evidence/plan57-QA-SOFT-PREDICT-03.json`.
+- ★★★ `[tabs]` `[ui]` **The open tab strip redrawn: six equal cells, one icon family, only the current tab named** —
+  **VERIFY, landed 2026-09-17.** When the tab bar opens, the six tabs are now six equal cells with one matching
+  22px icon each; only the current tab shows its name, lowercase in small capitals, in the accent colour; the lit
+  cell is a soft rounded fill with no box; LB and RB are small pills; the bar is solid with a soft shadow. The
+  strip is taller than before (66px, was 54) so the chat row's row of dots no longer shows under it. The Main
+  cell now shows the plugin's own logo. The thin bar at rest and every behaviour are unchanged. Built in commits
+  `6821f20`, `ef4a851`, `18be399`, `0378024`, `044acab`, `a957165`. Closes the two-star "replace the bonsAI tab
+  icon" entry (D109 item 1: yes) and replaces row **TAB-BAR-07**, now covered by **TAB-STRIP-2A-03**. Owed on
+  the Deck, not yet run: **TAB-STRIP-2A-01** through **TAB-STRIP-2A-07**, and the free-play sweep
+  **QA-FREE-PLAY-01**. [Plan](planning/59-tab-strip-redesign-build.md) ·
+  [Design](design/handoffs/tab-bar-open-strip/return-2026-09-16/).
 - ★★★★ `[ollama]` **Speed-mode VRAM preload** — **VERIFY, the mechanism proved on the Deck 2026-09-05, the timing not.**
   A Developer switch, off by default, loads the model Ask will use into memory at start-up. **A bug was found and fixed on the
   device:** it warmed the first small model installed rather than the one Ask reaches for, which on this Deck were different, so it

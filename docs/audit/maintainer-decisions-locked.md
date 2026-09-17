@@ -5655,6 +5655,18 @@ None of these stops the build from starting. If unanswered, the build starts on 
 **Consequence.** Plan 59 § 4 records the answers; the roadmap gains the Features entry for the
 build; the two-star tab-icon entry folds into it. Nothing else in plan 59 changes.
 
+**Correction, 2026-09-17, to item 3: the open strip is built about 66 pixels tall, not 54 or 56.
+The 14 September Deck photo and the desk render both put the chat row's dots 6 to 10 pixels below a
+54 strip, so 56 would not have covered them. Shown a mockup of three heights drawn over that photo
+(54 as drawn, about 66 covering the dots, about 72 covering the whole chat row), the maintainer
+chose the middle one: cover the dots, leave the rest of the chat row. The exact number is confirmed
+on the Deck (plan 59 row 2A-07).**
+
+**Addition, 2026-09-17: for Astarion the lit colour is the designer's hand-picked lighter grey
+(#c3d0d1) rather than the rule's answer, by the maintainer's choice from a side-by-side mockup. The
+rule (lift toward white until the colour reads at 6:1 on the bar, else leave it) stays for every
+other character.**
+
 ### D110 — LOCKED 2026-09-16 (raised 2026-09-16) — The suggestion chips as real buttons (Claude Design board B): six calls before the build
 
 Raised from [plan 60](../planning/60-chip-button-restyle.md), the build plan for the design Claude

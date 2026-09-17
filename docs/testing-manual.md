@@ -127,6 +127,10 @@ repeat once the reply finishes, because the reply used had already finished stre
 so the streaming-to-finished transition itself was not walked. Evidence
 `docs/test-evidence/plan57-QA-FREE-PLAY-01.json`.
 
+**Owed for plan 59 (the open tab strip redesign, landed 2026-09-17):** every tab's strip layout
+changed, so this sweep must run again once the strip is on the Deck. Not run yet — the device is
+held by another session.
+
 A stop that is focused but not visible is a **FAIL of this row**, whatever the scripted rows say.
 This is the manual interim for the DPS visibility oracle + `deck_sweep`
 (decky-plugin-studio `docs/planning/06-visibility-oracle-and-free-play-sweep.md`); when that
@@ -682,7 +686,7 @@ under `docs/test-evidence/`; numbers in the plan's § 8.
 | **TAB-BAR-04** | Collapse | Down from the bar lands on the first control of each of the six tabs; Up from it returns to the bar; B inside a body lands on the bar | ✅ 2026-09-02 `docs/test-evidence/TAB-BAR-04-collapse-into-each-tab.json` (17/17), `docs/test-evidence/TAB-BAR-04b-b-from-body.json` |
 | **TAB-BAR-05** | No ghost stops | Free-play sweep top to bottom: `gpfocus` never names a hidden Steam tab element, every stop visible | ✅ 2026-09-02 `docs/test-evidence/TAB-BAR-05-sweep-main.json` — 23 stops, 0 focused-but-not-visible |
 | **TAB-BAR-06** | Slot-row takeover | While the slot row holds the ring the bar's LB/RB marks are hidden and the bar does not shift; they return when the ring leaves | ✅ 2026-09-02 `deck_readPage` around `docs/test-evidence/TAB-BAR-W3-slot-row-to-transcript.json` |
-| **TAB-BAR-07** | Legibility, by eye | Names on the open strip readable on the handheld at 8px caps; lit dash and name gold with Ali G / the TF2 Announcer, purple with Shadowheart, otherwise green; after a QAM close and reopen the bar shows the restored tab | ⏳ strip geometry measured (plan § 8); the by-eye half is the maintainer's: open bonsAI, press Down twice, look **Rig half PASS 2026-09-04:** all six names render in full (MAIN, OLLAMA, SETTINGS, PERMS, DEV, ABOUT), active gold, rest grey, nothing truncated — `screenshots/round31-tabstrip-names.png`. The arm's-length judgement is still the maintainer's. |
+| **TAB-BAR-07** | Legibility, by eye | Names on the open strip readable on the handheld at 8px caps; lit dash and name gold with Ali G / the TF2 Announcer, purple with Shadowheart, otherwise green; after a QAM close and reopen the bar shows the restored tab | ⏳ **Retired 2026-09-17, replaced by TAB-STRIP-2A-03** — plan 59 rebuilt the open strip's cells and type size, so this row's own geometry no longer describes what is on screen; the by-eye legibility check continues under the new row instead. Kept here for history only. Earlier record: strip geometry measured (plan § 8); the by-eye half is the maintainer's: open bonsAI, press Down twice, look **Rig half PASS 2026-09-04:** all six names render in full (MAIN, OLLAMA, SETTINGS, PERMS, DEV, ABOUT), active gold, rest grey, nothing truncated — `screenshots/round31-tabstrip-names.png`. The arm's-length judgement is still the maintainer's. |
 | **TAB-BAR-08** | Touch | Tap on the thin bar opens the strip; a tab tap switches and closes it; a tap outside closes it | ⏳ needs a finger on the screen — the rig cannot tap |
 | **TAB-BAR-09** | Modal return | After the character picker closes on a non-Main tab, the ring lands on the opener or on the bar, never nowhere (re-runs PICKER-FOCUS-01's three openers) | ✅ 2026-09-02 for the character picker, the models hub and the chat-slot rename — all return to the opener (`docs/test-evidence/TAB-BAR-09-*.json`); ⏳ the desktop-note opener needs the *Save files to Desktop* permission on · ⏳ 2026-09-03: the Clear cache confirmation is a fourth opener and its return lands on the hidden Settings tab button (roadmap Bugs, filed 2026-09-03) |
 | **TAB-BAR-10** | UI scale Apply | Settings → UI scale → Apply remounts the tabs subtree; the bar comes back thin, on the right tab, at the new scale | ✅ 2026-09-02 `docs/test-evidence/TAB-BAR-10-*.json` — thin, on Settings, scale 1, body root re-registered (Up from the top of Settings reaches the bar). The 4px gap under the bar was lost on remount, is now a stylesheet value, and survives an Apply (`docs/test-evidence/TAB-BAR-10-ui-scale-apply-2.json`, body top 24px after) |
@@ -692,6 +696,26 @@ under `docs/test-evidence/`; numbers in the plan's § 8.
 Also re-run because their landing spot changed: **DOC-SWEEP-01** (Settings Up → the bar now),
 **CHAT-SLOTS-V3-01** (the walk starts at the bar), **TAB-SWITCH-01** (the flicker fix must hold with
 the header hidden — `docs/test-evidence/TAB-BAR-W1a-*.json` show ten clean switches).
+
+### TAB-STRIP-2A — The open tab strip redesign (plan 59)
+
+Plan [59](planning/59-tab-strip-redesign-build.md), decision D109. Landed 2026-09-17 in commits
+`6821f20`, `ef4a851`, `18be399`, `0378024`, `044acab`, `a957165`. Six equal cells, one 22px icon
+family, only the current tab's name shown, a solid 66px bar with a shadow. **Not yet run on the
+Deck — the device is held by another session.** Replaces **TAB-BAR-07** (see that row above).
+
+| Row | Scenario | Pass | Status |
+|---|---|---|---|
+| **TAB-STRIP-2A-01** | Geometry, six tabs | Strip 300 × 54 floating at the scope's top; six cell boxes within 1px of equal width (about 39); every icon box 22 tall with its top 6px below the cell top, same in all six; bar at rest still 300 × 20; body top unchanged from 2 September (87.95px) | ⏳ owed: built 2026-09-17, Deck run pending |
+| **TAB-STRIP-2A-02** | Geometry, five tabs | Same with Developer off; cells about 47 wide | ⏳ owed: built 2026-09-17, Deck run pending |
+| **TAB-STRIP-2A-03** | By eye, the maintainer | The lit name readable at arm's length; the lit cell reads as a selection, not a warning; nothing clipped; in green (no character), gold (Ali G), purple (Shadowheart), grey (Astarion), pink (Fuu) | ⏳ owed: built 2026-09-17, Deck run pending |
+| **TAB-STRIP-2A-04** | Switch fade | Right ×3 from Main: the icon boxes' positions before and after each press are identical; only the fill and the name changed | ⏳ owed: built 2026-09-17, Deck run pending |
+| **TAB-STRIP-2A-05** | Pills hide, cells stay | Ring on the chat row: the pills are hidden, the six cell boxes have not moved | ⏳ owed: built 2026-09-17, Deck run pending |
+| **TAB-STRIP-2A-06** | UI scale 1.18 | Settings → UI scale → Apply: the strip comes back at the new scale, still floating, still six equal cells | ⏳ owed: built 2026-09-17, Deck run pending |
+| **TAB-STRIP-2A-07** | The dots covered (D109 item 3) | Every dot in the chat row's row of dots has its bottom edge above the strip's bottom edge, and the chat row's own bottom line is still below the strip — the maintainer chose a 66px strip on 2026-09-17 to cover the dots without covering the whole chat row | ⏳ owed: built 2026-09-17, Deck run pending |
+
+Rows 01 and 02 name a 54px strip because that is what plan 59 § 7 was written against; the strip
+itself is now built 66px tall (see the dated note under [plan 59 § 5](planning/59-tab-strip-redesign-build.md)) — check the strip's actual height on the Deck, not the 54 written here, and treat a mismatch as this row's own finding rather than a failure.
 
 ## Tier 3 — Heavy manual
 

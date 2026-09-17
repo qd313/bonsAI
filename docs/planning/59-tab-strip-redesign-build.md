@@ -86,6 +86,14 @@ after a stalled fade (the ghost fix of 15 September).
   real bar.
 - **The design names branch `main`;** the work happens on `experimental`, as everything does here.
 
+**Correction, 2026-09-17 (W0 desk render).** § 1 above calls the sliver "a sliver of the row's
+dots" and blames the 54px strip specifically. That premise was wrong: the W0 render and the
+14 September Deck photo both put the *whole* dots row 6 to 10px below the strip's edge, not a
+sliver of it, so going from 54 to 56 (§ 4 item 3's lean) would not have covered it — a bigger jump
+was always needed. Separately, the W0 render found the production logo at 22px reads **heavier**
+than the outline icons, not lighter (1.72× the gear's ink), so the design's own idea of cropping it
+to 150% to make it read lighter is withdrawn — nothing in this build crops or zooms the logo.
+
 ---
 
 ## 3. What gets built, and what does not
@@ -150,6 +158,12 @@ the dots peek out, because it must not look sloppy; plain capitals at 9.5px as t
 bigger than needed, just readable and neat. D109 is locked. The build runs on these; nothing is
 open.
 
+**Outcome, item 3 (2026-09-17):** built 66px tall, not 54 or 56 — see the correction under § 2 and
+the dated note under § 5. The exact number is confirmed on the Deck at row **TAB-STRIP-2A-07**.
+**Outcome, item 4:** small capitals were built as drawn (`font-variant: small-caps`); whether they
+read clearly enough on the Deck is row **TAB-STRIP-2A-03**'s call, not decided here — the plain-
+capitals fallback is one line to change if they do not.
+
 ---
 
 ## 5. Builder's calls (leans already taken; not for the maintainer)
@@ -184,6 +198,14 @@ open.
   and the ghost timer are not touched; their tripwire tests stay as they are.
 - **Small capitals** come from `font-variant: small-caps`, as drawn. The Deck decides (§ 4, item 4).
 
+**Built 2026-09-17.** The lift rule above became **6:1**, not the 4.5:1 first planned: at 4.5:1
+pink barely moved and grey did not move at all, while at 6:1 gold and green stay untouched, pink
+lands within 4 per channel of the designer's own colour, and grey is the one colour the rule still
+does not match. For Astarion, the lit colour is the designer's own hand-picked lighter grey
+(`#c3d0d1`) rather than the rule's answer, by the maintainer's choice from a side-by-side mockup on
+2026-09-17 — the rule (lift toward white until the colour reads at 6:1 on the bar, else leave it
+alone) stays for every other character.
+
 ---
 
 ## 6. Work items, in commit order
@@ -192,7 +214,7 @@ Each one its own commit, gates green in between (`python scripts/verify.py --qui
 `--full` before the landing). Helpers hand back code, tests and a short report; the bookkeeper does
 the documents.
 
-### W0 — Desk render. No plugin code.
+### W0 — Desk render. No plugin code. **Done, commit `6821f20`.**
 
 Draw the new strip from the real stylesheet values at true 300px width, the way the brief's own
 `TodayOpen.dc.html` did: five tabs and six, Main and Settings and Permissions lit, in green, gold,
@@ -202,7 +224,7 @@ logo at 22px reads the same weight as the gear and the lock; the lit name's over
 Save the render under the hand-off's returned folder. If anything disagrees with the board, the
 board wins unless the board is wrong on a fact from the code, in which case note it here.
 
-### W1 — Words and tokens. Pure additions and renames.
+### W1 — Words and tokens. Pure additions and renames. **Done, commit `18be399`.**
 
 - New tokens in the unified-input constants, replacing the strip's old ones: cell height 44, icon 22,
   bug icon 26 with its 2px pull, name 9.5, pill 9, strip padding 5 and 6, slot width 20, cell radius
@@ -212,21 +234,21 @@ board wins unless the board is wrong on a fact from the code, in which case note
   argument go.
 - Tests in `tabTitles.test.tsx` updated to the new rule.
 
-### W2 — The Main icon.
+### W2 — The Main icon. **Done, commit `0378024`.**
 
 - A new icon component in icons.tsx from the production logo's path, drawn in `currentColor`.
 - The strip icon function returns the six icons at their new sizes.
 - The icon-geometry test covers the new component. Nothing on screen changes yet except the strip's
   icon sizes, which W4 lays out.
 
-### W3 — The lifted accent variable.
+### W3 — The lifted accent variable. **Done, commit `ef4a851`.**
 
 - One new variable computed beside the others in the accent code, per § 5, with a unit test on the
   designer's four colours and on three dark presets.
 - The rest bar's lit dash and name switch to it in the same commit, so the thin bar's green does not
   drift from the strip's.
 
-### W4 — The strip itself. The one visible change.
+### W4 — The strip itself. The one visible change. **Done, commit `044acab`** (landing tidy `a957165`).
 
 - Markup: the pill spans in their fixed slots; the name in every cell, lit only on the active one;
   accessible labels; no short-form logic.
@@ -287,7 +309,8 @@ Re-run or retire: **TAB-BAR-07** (by eye) is replaced by 2A-03 and closes with i
 
 ## 9. Measurements
 
-Filled in as they land. Nothing here is predicted.
+**Filled after the Deck run (W5).** Nothing here is predicted; the device is held by another
+session as of 2026-09-17, so the table below is still the plan's placeholder, not a result.
 
 | What | Before (2 September, plan 30 § 8) | After W4 on the Deck |
 |---|---|---|

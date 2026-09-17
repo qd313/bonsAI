@@ -237,10 +237,17 @@ All from [unified-input/constants.ts](../src/features/unified-input/constants.ts
 | `BONSAI_PLUGIN_SIDE_PAD_PX` | 0 | Tab body horizontal inset (was 4 until 2026-08-15; rows read as short of the QAM edges on device) |
 | `TAB_TITLE_ICON_PX` / `..._TAB_CELL_PX` | 26 / 32 | LB/RB strip icon and its cell |
 | `TAB_STRIP_BODY_GAP_PX` | 4 | Gap under the LB/RB strip |
-| `TAB_BAR_REST_HEIGHT_PX` / `TAB_BAR_OPEN_HEIGHT_PX` | 20 / 54 | The collapsing tab bar (plan 30): thin at rest, the floating strip while the ring is on it |
+| `TAB_BAR_REST_HEIGHT_PX` / `TAB_BAR_OPEN_HEIGHT_PX` | 20 / 66 | The collapsing tab bar (plan 30): thin at rest. The open strip was raised from 54 to 66 by the maintainer on 2026-09-17 (plan 59), the middle of three heights drawn over a Deck photo, to cover the chat row's dots without covering the whole chat row |
 | `TAB_BAR_DASH_W_PX` / `TAB_BAR_DASH_H_PX` / `TAB_BAR_DASH_ACTIVE_EXTRA_H_PX` / `TAB_BAR_DASH_GAP_PX` | 14 / 3 / 2 / 4 | One dash per mounted tab; the active dash is taller |
-| `TAB_BAR_NAME_PX` / `TAB_BAR_LABEL_PX` / `TAB_BAR_SHOULDER_MARK_PX` | 11 / 8 / 9 | Active name at rest; names under the open strip's icons (device-settled, TAB-BAR-07); LB/RB marks |
-| `TAB_BAR_CELL_ICON_BOX_PX` / `TAB_BAR_CELL_PAD_X_PX` / `TAB_BAR_CELL_GAP_PX` | 32 / 3 / 2 | The open strip's cells, sized so six plus the two marks fit 300px with the short forms on |
+| `TAB_BAR_NAME_PX` / `TAB_BAR_SHOULDER_MARK_PX` | 11 / 9 | Active name at rest; the LB/RB marks' own text, inside the pill (plan 59) |
+| `TAB_BAR_CELL_HEIGHT_PX` / `TAB_BAR_CELL_ICON_PX` / `TAB_BAR_CELL_BUG_ICON_PX` | 44 / 22 / 26 | Plan 59: each open-strip cell's height, and the one icon size every cell draws at — the bug's own artwork needs 26 to read the same size as the rest at 22 |
+| `TAB_BAR_CELL_NAME_PX` / `TAB_BAR_CELL_RADIUS_PX` | 9.5 / 8 | Plan 59: the lit cell's name under its icon (small capitals as drawn; plain capitals at the same size is the fallback if small capitals read too small on the Deck) and the lit cell's rounded corners |
+| `TAB_BAR_STRIP_PAD_Y_PX` / `TAB_BAR_STRIP_PAD_X_PX` / `TAB_BAR_CELL_GAP_PX` | 5 / 6 / 2 | Plan 59: the open strip's own top/bottom and left/right padding, and the gap between cells |
+| `TAB_BAR_SLOT_W_PX` | 20 | Plan 59: the fixed width of the LB/RB slots, so the cells never move when the marks hide |
+| `TAB_BAR_PILL_PAD_Y_PX` / `TAB_BAR_PILL_PAD_X_PX` | 3 / 4 | Plan 59: the LB/RB pill's own padding, reusing the chat row's pill values |
+| `TAB_BAR_SWITCH_FADE_MS` | 120 | Plan 59: the tab-switch fade, on the lit cell's fill and the name's opacity and colour |
+| `TAB_BAR_STRIP_BG_HEX` | `#141c24` | Plan 59: the open strip's solid bar colour. The lit accent variable below is computed to read against this exact value |
+| `--bonsai-ui-tab-lit` (CSS var, computed in `characterUiAccent.ts`, `liftForBar()`) | computed | Plan 59: the strip's lit icon and name colour, and the rest bar's lit dash and name too, so the two never drift apart. The character's main colour lifted toward white only as far as needed to read at **6:1** contrast against the bar (`TAB_BAR_LIT_MIN_CONTRAST`); a colour already at 6:1 is left alone. Astarion's grey is hand-picked (`#c3d0d1`) instead of the rule's own answer, by the maintainer's choice from a side-by-side mockup on 2026-09-17 — every other character still follows the rule |
 | `BONSAI_CHAT_INPUT_TO_TRANSCRIPT_GAP_PX` | 12 | Ask bar → transcript |
 | `BONSAI_CHAT_AI_BUBBLE_MAX_FRAC` | 0.92 | AI bubble width as a fraction of the column |
 

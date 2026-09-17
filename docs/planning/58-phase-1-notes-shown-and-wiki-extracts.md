@@ -382,7 +382,13 @@ which goes on their own checklist.
 
 ## 10. Progress log
 
-Nothing has run. The first entry goes here when block 0 starts.
+- **2026-09-17, block 0 started.** Tree clean at `a66d019` on experimental (the answers commit). The
+  Python gate green on the docs; the other gates were not run for docs-only commits. Decision numbers
+  re-checked: D111 written, nothing else taken since. Three copies of the repo cut from `a66d019` for
+  lanes A, B and C, and all three started. **The Deck is asleep or off the network**: it did not
+  answer over the network, and one Steam-button press through the bridge board did not wake it. The
+  four block-0 readings, the backup and the deploy wait on the maintainer pressing the power button.
+  No lane needs the Deck, so the day carries on without it.
 
 ---
 

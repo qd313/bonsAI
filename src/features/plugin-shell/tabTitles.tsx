@@ -78,37 +78,24 @@ export const BONSAI_TAB_SHORT_NAMES: Readonly<Record<BonsaiTabId, string>> = {
   about: "About",
 };
 
-/** The caps label under each icon of the open strip. Same word as the short name, upper-cased once here. */
+/**
+ * The word shown under the lit icon on the open strip (plan 59 § 3 item 5). Lowercase, because the
+ * stylesheet draws it in small capitals; "perms" and "dev" are the standing words for Permissions
+ * and Developer at five tabs and at six (D109 item 2 — the full words would overhang their cell by
+ * about 10px each side, five times the design's own tolerance for "settings"). The thin bar at
+ * rest keeps the full names from `BONSAI_TAB_SHORT_NAMES`.
+ */
 export const BONSAI_TAB_STRIP_LABELS: Readonly<Record<BonsaiTabId, string>> = {
-  main: "MAIN",
-  ollama: "OLLAMA",
-  settings: "SETTINGS",
-  permissions: "PERMISSIONS",
-  developer: "DEVELOPER",
-  about: "ABOUT",
+  main: "main",
+  ollama: "ollama",
+  settings: "settings",
+  permissions: "perms",
+  developer: "dev",
+  about: "about",
 };
 
-/**
- * Short forms for the two labels that decide whether six cells fit 300px at 8px caps
- * (plan 30 § 4.2). Only these two exist, on purpose: shortening a label that fits would be a copy
- * change with no layout reason behind it. Whether they are used at all is settled on the device
- * (TAB-BAR-07) and applied through `bonsaiTabStripLabel`.
- */
-export const BONSAI_TAB_STRIP_SHORT_LABELS: Readonly<Partial<Record<BonsaiTabId, string>>> = {
-  permissions: "PERMS",
-  developer: "DEV",
-};
-
-/**
- * The label a strip cell shows. `useShortForms` is the static rule from plan 30 § 4.2 — with the
- * Developer tab mounted, the two long names use their short forms — decided from the mounted tab
- * list, never by measuring text at runtime (design-language Rule 4).
- */
-export function bonsaiTabStripLabel(id: BonsaiTabId, useShortForms: boolean): string {
-  if (useShortForms) {
-    const short = BONSAI_TAB_STRIP_SHORT_LABELS[id];
-    if (short) return short;
-  }
+/** The word a strip cell shows under its icon when it is the lit one. */
+export function bonsaiTabStripLabel(id: BonsaiTabId): string {
   return BONSAI_TAB_STRIP_LABELS[id];
 }
 

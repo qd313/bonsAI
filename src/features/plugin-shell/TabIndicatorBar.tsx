@@ -83,9 +83,9 @@ export type TabIndicatorBarProps = {
  * strip cell focusable on its own would conflict with how this component
  * reads open/closed state.
  *
- * 1. Works out which tab is current and its name, and whether the two
- *    tabs with longer names should show a shortened form instead (only
- *    once the Debug tab is also mounted, which leaves less room).
+ * 1. Works out which tab is current and its name for the thin bar; the
+ *    open strip's own per-cell word (plan 59) comes from a fixed table,
+ *    the same standing word whether five or six tabs are mounted.
  * 2. Tracks whether the floating strip is open, which can happen two
  *    ways that both count: the bar has the D-pad's focus, or someone
  *    tapped it open by hand. Either one is enough; both are watched
@@ -115,8 +115,6 @@ export type TabIndicatorBarProps = {
 export function TabIndicatorBar({ tabIds, currentTab, selectTab, exitDown }: TabIndicatorBarProps): React.ReactElement {
   const current = tabIds.find((id) => id === currentTab);
   const name = current ? BONSAI_TAB_SHORT_NAMES[current] : "";
-  /* The static rule of plan 30 § 4.2: with Developer mounted, the two long names use their short forms. */
-  const useShortForms = tabIds.includes("developer");
 
   /*
     Two ways to be open, no timer (plan 30 § 4.3). `focusOpen` is true exactly while the bar's
@@ -295,7 +293,7 @@ export function TabIndicatorBar({ tabIds, currentTab, selectTab, exitDown }: Tab
             <span className="bonsai-tab-bar__cell-icon" aria-hidden="true">
               {bonsaiTabStripIcon(id)}
             </span>
-            <span className="bonsai-tab-bar__cell-label">{bonsaiTabStripLabel(id, useShortForms)}</span>
+            <span className="bonsai-tab-bar__cell-label">{bonsaiTabStripLabel(id)}</span>
           </div>
         ))}
         <span className="bonsai-tab-bar__shoulder bonsai-tab-bar__shoulder--r" aria-hidden="true">

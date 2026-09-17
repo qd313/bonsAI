@@ -19,6 +19,20 @@ import { isPointerInsideTabBar, TabIndicatorBar } from "./TabIndicatorBar";
 import { ALL_BONSAI_TAB_IDS, type BonsaiTabId } from "./tabTitles";
 import { buildBonsaiScopeStylesheet } from "../../styles/bonsaiScopeStylesheet";
 import { rememberUiDocument, resetUiDocument } from "../../utils/uiDocument";
+import {
+  TAB_BAR_CELL_BUG_ICON_PX,
+  TAB_BAR_CELL_HEIGHT_PX,
+  TAB_BAR_CELL_ICON_PX,
+  TAB_BAR_CELL_ICON_TOP_PX,
+  TAB_BAR_CELL_NAME_PX,
+  TAB_BAR_CELL_RADIUS_PX,
+  TAB_BAR_PILL_PAD_X_PX,
+  TAB_BAR_PILL_PAD_Y_PX,
+  TAB_BAR_SLOT_W_PX,
+  TAB_BAR_STRIP_PAD_X_PX,
+  TAB_BAR_STRIP_PAD_Y_PX,
+  TAB_BAR_SWITCH_FADE_MS,
+} from "../unified-input/constants";
 
 const SIX = ALL_BONSAI_TAB_IDS;
 const FIVE: readonly BonsaiTabId[] = SIX.filter((id) => id !== "developer");
@@ -53,6 +67,23 @@ function hasHashedToken(selector: string): boolean {
   const runs = selector.match(/[A-Za-z0-9]{10,}/g) ?? [];
   return runs.some((run) => /\d/.test(run) && /[a-z]/.test(run) && /[A-Z]/.test(run));
 }
+
+describe("plan 59 — the open strip's new tokens, pinned before W4 wires them into the stylesheet", () => {
+  it("matches the values board 2a drew (docs/planning/59-tab-strip-redesign-build.md § 3)", () => {
+    expect(TAB_BAR_CELL_HEIGHT_PX).toBe(44);
+    expect(TAB_BAR_CELL_ICON_PX).toBe(22);
+    expect(TAB_BAR_CELL_BUG_ICON_PX).toBe(26);
+    expect(TAB_BAR_CELL_ICON_TOP_PX).toBe(6);
+    expect(TAB_BAR_CELL_NAME_PX).toBe(9.5);
+    expect(TAB_BAR_CELL_RADIUS_PX).toBe(8);
+    expect(TAB_BAR_STRIP_PAD_Y_PX).toBe(5);
+    expect(TAB_BAR_STRIP_PAD_X_PX).toBe(6);
+    expect(TAB_BAR_SLOT_W_PX).toBe(20);
+    expect(TAB_BAR_PILL_PAD_Y_PX).toBe(3);
+    expect(TAB_BAR_PILL_PAD_X_PX).toBe(4);
+    expect(TAB_BAR_SWITCH_FADE_MS).toBe(120);
+  });
+});
 
 describe("TabIndicatorBar at rest", () => {
   it("draws one dash per mounted tab, so the count follows the tab list rather than a constant", () => {
@@ -178,14 +209,14 @@ describe("the open strip (plan 30 W5)", () => {
     expect(container.querySelector(".bonsai-tab-bar__cell--active")?.getAttribute("data-bonsai-tab")).toBe("about");
   });
 
-  it("uses the short forms only while the Developer tab is mounted (the static rule of § 4.2)", () => {
+  it("shows the same lowercase words at five tabs and six (plan 59 — no more short-form switch)", () => {
     const six = render(bar({ tabIds: SIX, currentTab: "main" }));
     const sixLabels = Array.from(six.container.querySelectorAll(".bonsai-tab-bar__cell-label")).map((el) => el.textContent);
-    expect(sixLabels).toEqual(["MAIN", "OLLAMA", "SETTINGS", "PERMS", "DEV", "ABOUT"]);
+    expect(sixLabels).toEqual(["main", "ollama", "settings", "perms", "dev", "about"]);
     six.unmount();
     const five = render(bar({ tabIds: FIVE, currentTab: "main" }));
     const fiveLabels = Array.from(five.container.querySelectorAll(".bonsai-tab-bar__cell-label")).map((el) => el.textContent);
-    expect(fiveLabels).toEqual(["MAIN", "OLLAMA", "SETTINGS", "PERMISSIONS", "ABOUT"]);
+    expect(fiveLabels).toEqual(["main", "ollama", "settings", "perms", "about"]);
   });
 
   it("shows the strip while the bar holds the ring and hides it when the ring leaves", () => {

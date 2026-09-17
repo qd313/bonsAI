@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 412,
-  "edgeCount": 1055,
+  "edgeCount": 1056,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1648,6 +1648,7 @@
       "imports": [
         "src/features/plugin-shell/TabIndicatorBar.tsx",
         "src/features/plugin-shell/tabTitles.tsx",
+        "src/features/unified-input/constants.ts",
         "src/styles/bonsaiScopeStylesheet.ts",
         "src/utils/uiDocument.ts"
       ],
@@ -1995,6 +1996,7 @@
         "src/components/SettingsTab.tsx",
         "src/components/SettingsTabAccentIntensityMenuPopover.tsx",
         "src/data/characterUiAccent.ts",
+        "src/features/plugin-shell/TabIndicatorBar.test.tsx",
         "src/features/plugin-shell/tabTitles.tsx",
         "src/features/unified-input/useUnifiedInputSurface.ts",
         "src/hooks/useTabStripBodyOffset.ts",

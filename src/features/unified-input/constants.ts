@@ -113,10 +113,41 @@ export const TAB_BAR_SHOULDER_MARK_PX = 9;
 /**
  * The open strip's cells. Sized to fit six of them plus the two marks inside 300px with the short
  * forms on (plan 30 § 4.2): a 32px icon box, 3px cell padding, 2px between cells.
+ * `TAB_BAR_CELL_ICON_BOX_PX` and `TAB_BAR_CELL_PAD_X_PX` are read only by the pre-plan-59 cell
+ * rule in tabIndicatorBar.ts; they go when W4 stops reading them. `TAB_BAR_CELL_GAP_PX` (2) stays.
  */
 export const TAB_BAR_CELL_ICON_BOX_PX = 32;
 export const TAB_BAR_CELL_PAD_X_PX = 3;
 export const TAB_BAR_CELL_GAP_PX = 2;
+
+/**
+ * Plan 59 — the open tab strip redesign (docs/planning/59-tab-strip-redesign-build.md § 3, § 5):
+ * six equal-width cells, one matching icon each, only the lit cell's name shown under it.
+ */
+/** Plan 59: each cell's fixed height in the open strip. */
+export const TAB_BAR_CELL_HEIGHT_PX = 44;
+/** Plan 59: every icon in the strip is drawn at this size. */
+export const TAB_BAR_CELL_ICON_PX = 22;
+/** Plan 59: the bug's artwork carries inner padding; drawn at 26 in the 22px box it matches the others. */
+export const TAB_BAR_CELL_BUG_ICON_PX = 26;
+/** Plan 59: the icon's distance from the cell's top edge. */
+export const TAB_BAR_CELL_ICON_TOP_PX = 6;
+/** Plan 59: the lit cell's name, shown under its icon. */
+export const TAB_BAR_CELL_NAME_PX = 9.5;
+/** Plan 59: the lit cell's rounded corners. */
+export const TAB_BAR_CELL_RADIUS_PX = 8;
+/** Plan 59: the strip's own top/bottom padding. */
+export const TAB_BAR_STRIP_PAD_Y_PX = 5;
+/** Plan 59: the strip's own left/right padding. */
+export const TAB_BAR_STRIP_PAD_X_PX = 6;
+/** Plan 59: the fixed LB/RB slot width, so the cells never shift when the marks hide. */
+export const TAB_BAR_SLOT_W_PX = 20;
+/** Plan 59: the LB/RB pill's top/bottom padding. */
+export const TAB_BAR_PILL_PAD_Y_PX = 3;
+/** Plan 59: the LB/RB pill's left/right padding. */
+export const TAB_BAR_PILL_PAD_X_PX = 4;
+/** Plan 59: the tab-switch fade — the cell's fill and the name's opacity/colour. */
+export const TAB_BAR_SWITCH_FADE_MS = 120;
 
 /** Deck inline menu popovers (ask mode, attach, accent intensity). */
 export const DECK_MENU_GAP_PX = 6;

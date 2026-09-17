@@ -15,7 +15,6 @@ import {
   BONSAI_TAB_ACCESSIBLE_NAMES,
   BONSAI_TAB_SHORT_NAMES,
   BONSAI_TAB_STRIP_LABELS,
-  BONSAI_TAB_STRIP_SHORT_LABELS,
   DECKY_TAB_TITLES,
   bonsaiTabIconTitle,
   bonsaiTabStripLabel,
@@ -52,23 +51,20 @@ describe("collapsed tab bar names (plan 30)", () => {
     }
   });
 
-  it("says the same word on the thin bar and under the icon, so switching states never renames a tab", () => {
-    for (const id of ALL_BONSAI_TAB_IDS) {
-      expect(BONSAI_TAB_STRIP_LABELS[id]).toBe(BONSAI_TAB_SHORT_NAMES[id].toUpperCase());
+  it("says the rest-bar name in lowercase under the icon, for the four tabs with room to spell it out", () => {
+    for (const id of ["main", "ollama", "settings", "about"] as const) {
+      expect(BONSAI_TAB_STRIP_LABELS[id]).toBe(BONSAI_TAB_SHORT_NAMES[id].toLowerCase());
     }
   });
 
-  it("has short forms only for the two names that decide whether six cells fit", () => {
-    expect(Object.keys(BONSAI_TAB_STRIP_SHORT_LABELS).sort()).toEqual(["developer", "permissions"]);
-    for (const [id, short] of Object.entries(BONSAI_TAB_STRIP_SHORT_LABELS)) {
-      expect(short.length).toBeLessThan(BONSAI_TAB_STRIP_LABELS[id as keyof typeof BONSAI_TAB_STRIP_LABELS].length);
-    }
+  it("stands on 'perms' and 'dev' for Permissions and Developer, always (D109 item 2)", () => {
+    expect(BONSAI_TAB_STRIP_LABELS.permissions).toBe("perms");
+    expect(BONSAI_TAB_STRIP_LABELS.developer).toBe("dev");
   });
 
-  it("applies the short forms only when asked, and only where one exists", () => {
-    expect(bonsaiTabStripLabel("permissions", true)).toBe("PERMS");
-    expect(bonsaiTabStripLabel("developer", true)).toBe("DEV");
-    expect(bonsaiTabStripLabel("permissions", false)).toBe("PERMISSIONS");
-    expect(bonsaiTabStripLabel("main", true)).toBe("MAIN");
+  it("returns the strip word for a tab from one argument, with no five/six switch", () => {
+    expect(bonsaiTabStripLabel("permissions")).toBe("perms");
+    expect(bonsaiTabStripLabel("developer")).toBe("dev");
+    expect(bonsaiTabStripLabel("main")).toBe("main");
   });
 });

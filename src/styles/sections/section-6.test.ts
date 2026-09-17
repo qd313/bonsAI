@@ -82,13 +82,19 @@ describe("suggestion chip surface at rest (section 6 CSS, plan 60 board B)", () 
     expect(body).not.toMatch(/box-shadow/);
   });
 
-  it("keeps the agent chip on its own colours and does not let it set box-shadow", () => {
+  it("gives the agent chip the raised look and its own orange ring and glow, together", () => {
+    // box-shadow replaces the whole list rather than adding to it, so this chip cannot inherit the
+    // hairline and drop shadow from the rule above while also setting its own orange ring: all four
+    // have to be written out here, or whichever is missing is silently erased.
     const match = css.match(
       /\.bonsai-scope button\.bonsai-preset-glass\.bonsai-pyro-inject-chip\s*\{([^}]*)\}/,
     );
     expect(match).toBeTruthy();
     const body = match![1]!;
     expect(body).toContain("border: 2px solid rgba(255, 107, 53, 0.92) !important;");
-    expect(body).not.toMatch(/box-shadow/);
+    expect(body).toMatch(/inset 0 1px 0 rgba\(255, 255, 255, 0\.10\)/);
+    expect(body).toMatch(/0 0 0 1px rgba\(160, 45, 28, 0\.5\)/);
+    expect(body).toMatch(/0 0 12px rgba\(255, 85, 40, 0\.38\)/);
+    expect(body).toMatch(/0 2px 3px rgba\(0, 0, 0, 0\.4\) !important;/);
   });
 });

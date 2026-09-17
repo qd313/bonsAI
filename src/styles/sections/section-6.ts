@@ -155,8 +155,16 @@ export function buildSection6Section(): string {
           color: #dff5ea !important;
         }
 
+        /* The agent chip keeps its own orange ring and glow, and gains the raised look with them
+           (D110, item 5). The hairline and drop shadow from the rule above are written out again
+           here because box-shadow replaces the whole list rather than adding to it. */
         .bonsai-scope button.bonsai-preset-glass.bonsai-pyro-inject-chip {
           border: 2px solid rgba(255, 107, 53, 0.92) !important;
+          box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.10),
+            0 0 0 1px rgba(160, 45, 28, 0.5),
+            0 0 12px rgba(255, 85, 40, 0.38),
+            0 2px 3px rgba(0, 0, 0, 0.4) !important;
           background: rgba(38, 22, 18, 0.38) !important;
           color: #f0ddd6 !important;
         }

@@ -1,0 +1,58 @@
+{
+  "plan": "60",
+  "date": "2026-09-17",
+  "build": "experimental b3c0d52 (merge of refactor/lane60-chips, seven commits) deployed with deck_deploy; Steam Chrome/126.0.6478.183; no game running",
+  "desk_gates": "python scripts/verify.py --full PASS (81s); npx tsc --noEmit clean; npm test 160 files, 1460 tests, all green",
+  "rows": {
+    "CHIP-BUTTON-01 (rest look by eye)": {
+      "result": "SCREENSHOTS TAKEN, maintainer's eye owed",
+      "gold_decode_two_chips": "screenshots/DeckCapture_20260917_150755_auto.png",
+      "gold_decode_one_chip": "screenshots/DeckCapture_20260917_150413_auto.png",
+      "green_fade_two_chips": "screenshots/DeckCapture_20260917_150921_auto.png",
+      "measured": "chips 147x30, chip gap 6 (was 4), gradient rgba(56,70,84,.5)->rgba(16,22,30,.55), border rgba(255,255,255,.1), box-shadow 'inset 0 1px 0 rgba(255,255,255,.1), 0 2px 3px rgba(0,0,0,.4)' on every chip in decode and fade mode, green and gold"
+    },
+    "CHIP-BUTTON-02 (focused chip)": {
+      "result": "PASS (decode mode, one-chip and by the same rule set the plain .gpfocus arm)",
+      "computed_on_focused_chip": {
+        "outline": "none",
+        "box_shadow": "rgba(255,255,255,.1) 0 1px 0 inset, rgba(56,189,248,.85) 0 -2px 0 inset, rgba(0,0,0,.4) 0 2px 3px",
+        "border_color": "rgba(255,255,255,.1) (the blue border is gone)",
+        "label_color": "rgb(228,201,78) = toned gold; decode keeps its own colour, as designed"
+      },
+      "screenshot": "screenshots/DeckCapture_20260917_150449_auto.png (bar visible along the chip's bottom edge, no ring, no blue outline)",
+      "fade_mode": "not read on device: the chips crossfade every few seconds and are unfocusable while faded, so three D-pad attempts (Down from Session context twice, Up from the question box once) skipped the row. Pre-existing behaviour, not changed by this build; the same CSS arm was proven in decode mode."
+    },
+    "CHIP-BUTTON-03 (out of chips flash)": {
+      "result": "PASS",
+      "method": "a MutationObserver plus per-frame sampler installed by readPage on the focused chip, then a real LEFT press through the bridge at the only chip",
+      "observed": "blocked-edge class held for 260 ms (JS window 320 ms); box-shadow ramped through 10 distinct values to the peak 'inset 0 1px 0 rgba(255,255,255,.1), inset 0 -2px 0 rgb(150,225,255), 0 3px 8px -2px rgba(56,189,248,.55), 0 2px 3px rgba(0,0,0,.4)', held at peak 167 ms, then returned to the focused-chip list; chip stayed 300x30; ring stayed on the chip",
+      "note": "the specificity fix in 2b3d762 is what makes this paint at all; without it the focus-bar rule outranked the flash"
+    },
+    "CHIP-BUTTON-04 (A press)": {
+      "result": "PASS",
+      "observed": "A on the chip put 'what does the pickaxe do' in the question box; chip transform none, shadow unchanged (no pressed look, as decided); screenshot screenshots/DeckCapture_20260917_150702_auto.png"
+    },
+    "CHIP-BUTTON-05 (room under the row)": {
+      "result": "PASS",
+      "decode_static_carousel": "row host padding-bottom 8px; chip bottom to question box top 8 (was 0); question box did not move (top 327.83 before and after)",
+      "fade": "row host padding-bottom 8px + margin-bottom 4px; chip bottom to question box top 12 (unchanged total); the chips sit 8px higher inside the same space",
+      "shadow_clipping": "the 5px shadow now lies inside the host's own padding, so overflow:hidden no longer cuts it; by eye in the screenshots the chip reads as raised above the box"
+    },
+    "CHIP-BUTTON-06 (one chip, help chip, agent chip)": {
+      "result": "PARTIAL: one-chip full width PASS (300x30, same look); help chip and agent chip NOT SEEN on device (neither was on screen); covered by stylesheet tests only"
+    },
+    "CHIP-BUTTON-07 (reduced motion)": { "result": "NOT RUN (needs the Deck's reduced-motion setting)" },
+    "CHIP-BUTTON-08 (decode label toned)": {
+      "result": "PASS",
+      "observed": "decode-mode label colour rgb(228,201,78) = #e4c94e with the gold character; scope variables --bonsai-ui-accent-badge rgba(241,196,15,.8) and --bonsai-ui-accent-toned #e4c94e; with no character: rgba(46,135,83,.8) and #5b9e7e"
+    },
+    "CHIP-BUTTON-09 (Tip dot)": {
+      "result": "NOT SEEN on device: no covered game was running so no Tip chip appeared; the dot is covered by MainTabPresetAnimatedChips.test.tsx (dot with no text before the scrolling label)"
+    }
+  },
+  "settings_handling": "the Deck's settings.json was backed up to settings.json.bak-plan60 and locally; switched to two chips / no pinned batch (gold, decode) and then to the shipped defaults (green, fade) for the screenshots; restored afterwards and the plugin reloaded",
+  "seen_along_the_way": [
+    "In fade mode the D-pad skipped the chip row in both directions on four tries (Down from Session context landed on the question box three times; Up from the box landed on Session context once). A page read right after the fourth miss showed BOTH slots at opacity 0 with data-bonsai-preset-visible=false and a 2000ms opacity transition running, i.e. both chips fading out at the same moment, which makes both unfocusable (tabIndex -1) and the whole row invisible to the D-pad. Not caused by this build (CSS only; decode mode reached the row fine after the build). Worth a look next to the open 'chip row cannot be reached' entry: are both slots meant to fade out together?",
+    "Steam's white ring was never visible on chips before this build (clipped by the row); a focused chip showed only the blue border. See plan60-measure-before.json."
+  ]
+}

@@ -53,6 +53,17 @@ Declared as TypeScript constants in
 | `#e04a3a` family | `rgba(224,74,58,0.8)` border, `rgba(224,74,58,0.25)` glow | Border and glow around that same stop |
 | `#f28b7d` | `#f28b7d` | **Reserved, no consumer** — mock 5c's hover shade for the delete control; 5c's custom modal footer was dropped by board 8d |
 
+### Character accent scope variables (chips)
+
+Set on the scope in [characterUiAccent.ts](../src/data/characterUiAccent.ts), always — the default
+green applies even when no character is chosen, so nothing is ever unset. **Added 2026-09-17 (plan
+60, D110):**
+
+| Variable | Value | Used for |
+|---|---|---|
+| `--bonsai-ui-accent-badge` | The active accent at 80% alpha | The Tip dot on a suggestion chip |
+| `--bonsai-ui-accent-toned` | 70% accent mixed with 30% `#c4d3e2` (the label colour) | The `[beta]` tag and the decode-mode label on a chip; gold `#f1c40f` becomes `#e4c94e`, green `#2e8753` becomes `#5b9e7e` |
+
 ### Ask-mode accents
 
 Three modes, each driving six CSS variables on the input host
@@ -86,7 +97,7 @@ Recurring inline values across the section files: `#e8eef5` and `#d4dde6` for bo
 | Class | Background | Border | Notes |
 |---|---|---|---|
 | `.bonsai-glass-panel` | `rgba(18,26,34,0.25)` | `1px solid rgba(255,255,255,0.07)` | The default card ([section-6.ts:17](../src/styles/sections/section-6.ts)) |
-| `.bonsai-preset-glass` | `rgba(18,26,34,0.22)` | `1px solid rgba(255,255,255,0.07)` | Preset chips; `box-shadow: none`. Since 2026-09-01: **30px** tall, radius 4, `padding: 0 8px`, **two across** with a 4px gap (`presetRowLayout.ts`, decision D43), label scrolls through Steam's `Marquee` when it overflows ([section-4.ts](../src/styles/sections/section-4.ts)) |
+| `.bonsai-preset-glass` | `linear-gradient(180deg, rgba(56,70,84,0.5) 0%, rgba(16,22,30,0.55) 100%)` | `1px solid rgba(255,255,255,0.10)` | Preset chips. Since 2026-09-01: **30px** tall, radius 4, `padding: 0 8px`, label scrolls through Steam's `Marquee` when it overflows ([section-4.ts](../src/styles/sections/section-4.ts)). **Since 2026-09-17 (plan 60, D110):** the flat fill and 7% border became the gradient and 10% border above, with `box-shadow: inset 0 1px 0 rgba(255,255,255,0.10), 0 2px 3px rgba(0,0,0,0.4)` at rest (a top hairline plus a soft shadow beneath) in place of no shadow; the two chips are **147 wide** with a **6px gap** between them (was 148 and 4); the row host carries 8px of room below the chips (5 for the shadow, 3 clear) so the shadow is not cut off. The chip the D-pad is on adds `inset 0 -2px 0 rgba(56,189,248,0.85)` (a light bar along its bottom edge) to the rest shadow, and its label brightens to `#dcebf8`. Pressing past either end of the row still flashes, now as `inset 0 -2px 0 rgba(150,225,255,1), 0 3px 8px -2px rgba(56,189,248,0.55)` added to the rest shadow, for about a third of a second. **Steam's white focus ring no longer targets chips:** the row has clipped it, invisible, since 2026-09-01, so the rule was dropped and the bottom bar became the chip's only focus cue. |
 | Menu surface | `rgb(28,36,44)` | `1px solid rgba(255,255,255,0.08)` | Radius 6, `box-shadow: 0 8px 22px rgba(0,0,0,0.55)` |
 
 ### AI reply bubble
@@ -152,7 +163,9 @@ weight `700` when selected and `500` otherwise, colour `ASK_LABEL_COLOR`.
 White, always — not the character accent. Two variants, both in
 [gamepadAndPullModels.ts:16-26](../src/styles/sections/gamepadAndPullModels.ts):
 
-**Outer ring** (chips, ask primary, `.bonsai-askbar-target`):
+**Chips are now the exception: since 2026-09-17 (plan 60) the outer ring rule no longer targets them, because the row was clipping it invisible anyway, and a light bar along the chip's bottom edge is its focus cue instead.**
+
+**Outer ring** (ask primary, `.bonsai-askbar-target`, and everything else this list still covers):
 ```
 outline: 2px solid rgba(255,255,255,0.9); outline-offset: 2px;
 box-shadow: 0 0 0 2px rgba(255,255,255,0.92), 0 0 0 5px rgba(255,255,255,0.2);

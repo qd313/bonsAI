@@ -205,6 +205,17 @@ All notable changes to this project are documented in this file.
 - **The knowledge-base search test gained a weight sweep, per-question detail, and a second right answer (no user-visible change):** it can now try nine different balances between word-matching search and meaning search in one run and print a table of how each did, without ever looking at the questions held back for the final check; every question's result now records the three notes each kind of search actually returned, in order, instead of only a percentage; and a question can list more than one acceptable note when more than one genuinely answers it. `scripts/eval_kb_embed_models.py`, `tests/test_eval_kb_arms.py`.
 
 ### Changed
+- **The suggestion chips above the question box now look like real buttons:** each one has a soft
+  shadow beneath it and a thin light line along its top edge, so it reads as raised rather than flat;
+  the two chips sit a little further apart, and in most animation modes there is now some open space
+  between the chips and the question box below them, where before they touched. The word "Tip" is now
+  a small dot instead of a word, and the accent colour on the tags and on the resolving-text label is
+  quieter. The chip the controller is on now shows a light bar along its bottom edge instead of a
+  blue line. **The ring Steam draws around a focused control was invisible on chips ever since
+  2026-09-01 and is replaced by the bar** — the row's own edge was cutting the ring off, so nobody
+  could actually see it. `presetRowLayout.ts`, `section-4.ts`, `section-6.ts`,
+  `gamepadAndPullModels.ts`, `characterUiAccent.ts`, `MainTabPresetAnimatedChips.tsx`. On-Deck rows
+  **CHIP-BUTTON-01** to **09** in `docs/testing-manual.md`.
 - **The tab strip that opens over the tab bar has been redrawn:** when you open it, the six tabs are
   now six equal cells with one matching icon each; only the tab you are on shows its name, in
   lowercase small capitals, in your accent colour; the highlighted cell is a soft rounded fill with

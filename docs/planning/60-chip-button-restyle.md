@@ -5,8 +5,9 @@ Written 2026-09-16 by the planning session, before any code. This is the build p
 back from Claude Design on 2026-09-16 and turns them into the steps a build session runs. Nothing here
 is built. Plan numbers 58 and 59 belong to other sessions running at the same time; this one is 60.
 
-**Status: answers in, locked as D110 on 2026-09-16 (§ 7). Nothing built. The maintainer will run the
-build later; waiting on the word "go".**
+**Status: BUILT and landed 2026-09-17 (merge b3c0d52), checked on the Deck the same day (§ 10, last
+entry). Owed: the maintainer's eye on the screenshots, reduced motion, the Tip dot with a covered
+game running, and the help and agent chips on device.**
 
 Read first: [CLAUDE.md](../../CLAUDE.md); the model table in [AGENTS.md](../../AGENTS.md) under "Which
 model does which work"; [lessons-learned.md](../lessons-learned.md) § 3 (checking on the Deck) and
@@ -160,17 +161,22 @@ roadmap, the testing rows or the changelog.
 
 1. **The gap.** The chip gap constant goes from 4 to 6. The sideways carousel's slide distance and
    the label-room estimate both read that constant, so nothing else changes. A test pins the new
-   value.
+   value. **DONE** — landed in `b3c0d52`, gap measured 6px on the Deck (row 01).
 2. **The surface at rest.** The chip's base rule gets the gradient, the 10 percent outline, and the
    combined top hairline plus soft shadow beneath, in place of "no shadow". The help chip and the
    agent chip keep their own fill and outline rules and inherit the hairline and shadow. A
-   stylesheet text test pins the gradient and the shadow list.
+   stylesheet text test pins the gradient and the shadow list. **DONE** — landed in `b3c0d52`,
+   gradient and border confirmed by measurement (row 01); the help/agent chips' own look is
+   covered only by the stylesheet tests, not seen on device (row 06).
 3. **Room for the shadow, and the extra pixel to the box.** Per the § 4 measurement: the row
    container gets 5 pixels of inner room at the bottom so the shadow is not cut off, and the gap
    from the row to the question box ends up 13 pixels to the eye in every animation mode (was 12).
    A test pins the numbers. If on the device the shadow still makes the row look glued to the box,
    the shadow's depth comes down (the board's 2 pixels down and 3 of blur is the ceiling), and the
-   final numbers go in the progress log.
+   final numbers go in the progress log. **DONE, numbers revised (§ 10, 2026-09-17):** every mode
+   gets 8px under the chips (5 shadow, 3 clear), not 13 to the box — the § 4 measurement found the
+   gap was 0 in three of four modes, not 12. Row 05 passed the measurement; the maintainer's own
+   eye on whether 8 reads as open is still owed.
 4. **The accent toning and the dot.** The code that sets the character colours gains two values
    every screen can read: the accent at 80 percent, and the accent mixed 70/30 toward the label
    colour. Both are set even when no character is chosen, so the default green is toned the same
@@ -178,7 +184,8 @@ roadmap, the testing rows or the changelog.
    pixels before the label and pinned so it never scrolls with the text; the `[beta]` tag and the
    decode-mode label use the second. The Test badge stays the amber word. Tests check the gold mix
    comes out as `#e4c94e`, that the green default is set, and that the dot renders in place of the
-   word.
+   word. **DONE** — landed in `b3c0d52`, gold mix confirmed `#e4c94e` on device (row 08); the dot
+   itself was not seen on device, no covered game was running (row 09).
 5. **The states that share one property.** The chip's focused, current and out-of-chips rules are
    rewritten so each one lists every effect that should be visible at once, rather than replacing
    the list. The full lists are in Appendix A. The blue outline colour rules go away; the bar takes
@@ -186,10 +193,15 @@ roadmap, the testing rows or the changelog.
    no-ring fallback for desktop and touch). A test asserts the focused rule contains both the white
    ring values and the bar, which is the "two effects survive each other" guard in code. If the
    device shows the two cannot coexist, the fallback is the ring alone with no bar and no blue
-   outline (D110, item 2).
+   outline (D110, item 2). **DONE, changed from the plan (§ 10, 2026-09-17):** the ring was never
+   merged with the bar — the § 4 measurement found the ring already invisible on chips since
+   2026-09-01, so the ring rule was dropped from chips entirely rather than combined with the bar.
+   Confirmed on device: bar and label brighten with no ring and no blue outline (row 02); the
+   out-of-chips flash confirmed too, after a specificity fix the same day (row 03).
 6. **Docs and tests that pin today's look.** The design-tokens surfaces table, the two-across testing
    row's note about "4 pixel gap", the stylesheet test that pins the old out-of-chips glow, the
-   chip tests that look for the word "Tip", and the changelog. Bookkeeper.
+   chip tests that look for the word "Tip", and the changelog. Bookkeeper. **DONE** — this docs
+   sweep, 2026-09-17.
 
 ---
 
@@ -198,17 +210,17 @@ roadmap, the testing rows or the changelog.
 Rows for the testing documents, written once the build lands. Green and gold at least, per the brief;
 one pass with a grey character to see nothing falls apart.
 
-| Row | Do | Pass when |
-|---|---|---|
-| CHIP-BUTTON-01 | Open the main screen with chips showing, default character, then Ali G (gold). Screenshot the dock. | By your eye: the chips read as raised buttons, the two are visibly apart, the Tip dot and the `[beta]` tag are quieter than before. Nothing else in the dock moved. |
-| CHIP-BUTTON-02 | Put the D-pad on a chip in each of the four animation modes. Read the chip's computed box-shadow. | Steam's white ring is there, the top hairline is there, the bottom bar is there, all at once. The label is the brighter shade. No blue outline anywhere. If the bar cannot be seen under the ring, record it and fall back to the ring alone. |
-| CHIP-BUTTON-03 | Press Left at the first chip and Right at the last. | The bottom bar flashes brighter with a small glow for about a third of a second, then returns. Nothing moves. |
-| CHIP-BUTTON-04 | Press A on a chip; then touch one. | The words land in the question box. Nothing sinks or flips; no pressed look was built. |
-| CHIP-BUTTON-05 | Read the rectangles of the chip, its container and the question box; screenshot. | The shadow's bottom is not cut off; the distance from chip bottom to question box top is 13; by eye the row no longer touches the box. If the shadow still closes the gap, note the depth to try next. |
-| CHIP-BUTTON-06 | Turn on the one-chip setting; show the help chip; get an agent suggestion chip. | The full-width chip has the same raised look. The help and agent chips keep their colours and carry the hairline and shadow. |
-| CHIP-BUTTON-07 | Reduced motion on. Repeat 03. | The cue appears and clears with no ramp; nothing looks broken. |
-| CHIP-BUTTON-08 | Decode animation mode, gold character. | The resolving label is the toned gold, not the loud one. |
-| CHIP-BUTTON-09 | A game the notes cover (Half-Life 2), knowledge base on. | The Tip chip shows a small square dot in the character's colour before its label, not the word; the dot stays put while a long label scrolls. |
+| Row | Do | Pass when | Status |
+|---|---|---|---|
+| CHIP-BUTTON-01 | Open the main screen with chips showing, default character, then Ali G (gold). Screenshot the dock. | By your eye: the chips read as raised buttons, the two are visibly apart, the Tip dot and the `[beta]` tag are quieter than before. Nothing else in the dock moved. | **OWED** — screenshots taken 2026-09-17, the maintainer's own eye still needed |
+| CHIP-BUTTON-02 | Put the D-pad on a chip in each of the four animation modes. Read the chip's computed box-shadow. | Steam's white ring is there, the top hairline is there, the bottom bar is there, all at once. The label is the brighter shade. No blue outline anywhere. If the bar cannot be seen under the ring, record it and fall back to the ring alone. | **PASS** (Deck 2026-09-17, decode mode; the ring was dropped from chips per § 10, so this passed as bar + hairline + no ring, no blue outline; fade mode could not be reached — the chips fade too fast for the D-pad to land on one, pre-existing) |
+| CHIP-BUTTON-03 | Press Left at the first chip and Right at the last. | The bottom bar flashes brighter with a small glow for about a third of a second, then returns. Nothing moves. | **PASS** (Deck 2026-09-17) |
+| CHIP-BUTTON-04 | Press A on a chip; then touch one. | The words land in the question box. Nothing sinks or flips; no pressed look was built. | **PASS** (Deck 2026-09-17) |
+| CHIP-BUTTON-05 | Read the rectangles of the chip, its container and the question box; screenshot. | The shadow's bottom is not cut off; the distance from chip bottom to question box top is 13; by eye the row no longer touches the box. If the shadow still closes the gap, note the depth to try next. | **PARTIAL** — measured 8px, not 13, per the revised numbers in § 10; shadow not cut off, question box did not move; the maintainer's own eye on whether it reads open is still owed |
+| CHIP-BUTTON-06 | Turn on the one-chip setting; show the help chip; get an agent suggestion chip. | The full-width chip has the same raised look. The help and agent chips keep their colours and carry the hairline and shadow. | **PARTIAL** — one-chip PASS on the Deck 2026-09-17; the help chip and the agent chip were not on screen, so they are covered only by the stylesheet tests |
+| CHIP-BUTTON-07 | Reduced motion on. Repeat 03. | The cue appears and clears with no ramp; nothing looks broken. | **OWED** — needs the Deck's reduced-motion setting on |
+| CHIP-BUTTON-08 | Decode animation mode, gold character. | The resolving label is the toned gold, not the loud one. | **PASS** (Deck 2026-09-17) |
+| CHIP-BUTTON-09 | A game the notes cover (Half-Life 2), knowledge base on. | The Tip chip shows a small square dot in the character's colour before its label, not the word; the dot stays put while a long label scrolls. | **OWED** — no covered game was running |
 
 Rows 01 and 05 are judged by eye from a screenshot and a rectangle read; the rest are read from the
 page by the bridge.
@@ -293,6 +305,22 @@ amber; any change to the prompts themselves.
   Steps 1, 2 and 4 were handed to a Sonnet helper in its own copy of the repo
   (`refactor/lane60-chips`, cut from e4abd75) while the measurement ran; steps 3 and 5 follow with
   the numbers above.
+- 2026-09-17, later: **built and landed as merge `b3c0d52` into experimental (seven commits on
+  `refactor/lane60-chips`).** Two helpers built it: a Sonnet 5 high helper did steps 1, 2 and 4; an
+  Opus xhigh helper did step 5 (the focus-ring merge), restored the agent chip's orange glow, and
+  fixed a specificity bug that was stopping the out-of-chips flash from painting at all. Every gate
+  was green before landing: `npx tsc --noEmit` clean, `npm run build` clean, `npm test` at 1460
+  tests across 160 files, and the desk's own full check (`python scripts/verify.py --full`) passed
+  in 81 seconds. **Checked on the Deck the same day**, evidence
+  `docs/test-evidence/plan60-QA-chip-button.json`: rows 02, 03, 04, 05, 06 (the one-chip half) and
+  08 passed by measurement. Row 01 has its screenshots taken but still needs the maintainer's own
+  eye; row 05 also needs that eye on top of its passing measurement; row 06's help-chip and
+  agent-chip half was not seen because neither was on screen; row 07 (reduced motion) and row 09
+  (the Tip dot with a covered game) were not run — the first needs the Deck's reduced-motion setting
+  and the second needs a covered game running. The Deck's settings were backed up before this run
+  and fully restored afterwards. **Seen along the way, not part of this plan:** in fade mode the
+  D-pad skipped the chip row in both directions on three tries — the chips are unfocusable while
+  their slot is mid-fade; worth a look next to the open "chip row cannot be reached" entry.
 
 ---
 

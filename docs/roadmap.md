@@ -269,11 +269,6 @@ replace it with a specific issue when one exists.
   One check owed first: the question bubble turns its own outline off and gets no ring rule, so look on the Deck at what focus shows.
 - ★★ `[chat]` **First-run ghost "New chat" label at the create position** — **OPEN, parked by decision.** The create position is the
   literal `[+]`, re-confirmed on board 8f and again in the v3 rows. Reopen that decision before building it.
-- ★★ `[chips]` **Make the preset chips look more like chips** — **OPEN, asked for by the maintainer 2026-09-13.** Four
-  small changes, and all of them subtle — nothing that reads as a redesign: about half a pixel of space between the chip and
-  the text box beside it, so the two stop touching; the chip's surface shaded more like a raised button; the accent colour
-  toned down, because today it is too loud; and the label in italics, worth trying. The point is that a chip should read as a
-  pressable thing rather than part of the input. Drawn in a separate Claude Design session; the maintainer judges it by eye.
 - ★★ `[reply]` **Headline first: every answer opens with one line that stands alone** — **OPEN, filed 2026-09-08. Not yet
   (D99, 2026-09-12): it waits for its own go.** The model would be asked to start every answer with one short sentence that
   carries the point and gives nothing away, so the reply-ready popup, a spoken answer and any headset card always have a good
@@ -551,7 +546,9 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   being written (unit-tested, not reproducible by hand yet). Row **CLEAR-CACHE-01**. [Why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way).
 ### Features that need verification
 
-- ★★ `[chips]` **A glow when the chip row runs out of chips** — **VERIFY.** Built at the desk 2026-09-05 under D62 #3: press Left or Right past the first or last suggestion chip and that chip glows briefly, the way a phone lights up the end of a list. Nothing about the row’s existing edge behaviour changes. Reduced motion keeps the cue and drops the movement. **No measurement closes this one** — whether it reads as *end of list* rather than *error* is the maintainer’s call from a recording, and it is on their checklist.
+- ★★ `[chips]` **A glow when the chip row runs out of chips** — **VERIFY.** Built at the desk 2026-09-05 under D62 #3: press Left or Right past the first or last suggestion chip and that chip glows briefly, the way a phone lights up the end of a list. Nothing about the row’s existing edge behaviour changes. Reduced motion keeps the cue and drops the movement. **No measurement closes this one** — whether it reads as *end of list* rather than *error* is the maintainer’s call from a recording, and it is on their checklist. **Since 2026-09-17 (plan 60), the cue itself moved:** the chip's outline no longer changes, so the flash is now the light bar under the chip flaring brighter, measured on the Deck (row CHIP-BUTTON-03). The maintainer's own by-eye call on whether it reads as *end of list* still stands.
+
+- ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60 (D110).** Each chip now looks raised: a thin light line along its top edge and a soft shadow beneath it. The two chips sit 6 pixels apart instead of 4. In decode, static and carousel mode there is now 8 pixels of open space between the chips and the question box, where before they touched (fade mode was already open and keeps its own spacing). The word "Tip" became a small dot, the colour on the tags and on the resolving-text label is quieter, and the chip the controller is on now shows a light bar along its bottom edge instead of the old blue outline — a ring around the chip that nobody could actually see is gone too. Passed on the Deck by measurement: rows 02, 03, 04, 05 and 06 (the one-chip check), and 08. Still owed: the maintainer's own look at rows 01 and 05, from the three screenshots named in the evidence file; row 07 (reduced motion); row 09 (the Tip dot with a covered game running); and a look at the help and agent chips, which were not on screen during this run. Italics were tried earlier for the label and turned down. [Plan](planning/60-chip-button-restyle.md) · evidence `docs/test-evidence/plan60-QA-chip-button.json`.
 
 - ★ `[ollama]` **Pulled models join the model try order** — **MOSTLY VERIFIED on the Deck 2026-09-06, one case left.**
   A model pulled from the picker landed at the **bottom** of the text list, and showed up in the vision list because it can
@@ -612,7 +609,8 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 - ★★★★ `[chips]` **Preset row: two chips across, with scrolling labels** — **VERIFY.** Rebuilt 2026-09-01 under D43. Two 30px chips
   side by side, a long label scrolls through Steam's `Marquee`, the help chip owns the row until dismissed. The dock went 245 to
   161px. Rows 02 and 03 passed on device; owed **04** only (scroll feel by eye, decode churn, reduced motion); 01b passed 2026-09-03.
-  Closes the label-overflow bug. [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).
+  Closes the label-overflow bug. Since 2026-09-17 (plan 60), the two chips are 147 wide with a 6 pixel gap between them, not 148 and 4.
+  [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).
 - ★★★★ `[tabs]` **The tab bar collapses when not in use, and names the tab** — **VERIFY.** Shipped 2026-09-02 (plan 30 W0 to W6): a
   20px bar with the active tab's name at rest, opening to a strip that labels all six. Steam's header 81px to 20px. Rows 01 to 06,
   09 and 10 pass; owed **TAB-BAR-08** (touch). **TAB-BAR-07** (legibility by eye) was retired

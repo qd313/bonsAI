@@ -668,6 +668,34 @@ everything below assumes it passes. Plan:
   calm crawl (the target was about 25). Decode and reduced-motion still owed. Evidence
   `docs/test-evidence/plan57-QA-PRESET-ONE-LINE-04.json`.
 
+---
+
+### CHIP-BUTTON — Suggestion chips as real buttons (plan 60)
+
+Plan [60](planning/60-chip-button-restyle.md), decision D110. Landed 2026-09-17 as merge `b3c0d52`
+(seven commits on `refactor/lane60-chips`) and checked on the Deck the same day. Each chip now has a
+raised look (a top hairline and a soft shadow), the two chips sit 6px apart instead of 4, the row
+leaves room below the chips so the shadow is not cut off, the Tip word became a small dot, the tag and
+decode-label colour is quieter, and the chip the D-pad is on shows a light bar along its bottom edge
+instead of the old blue outline. Evidence `docs/test-evidence/plan60-QA-chip-button.json` and
+`docs/test-evidence/plan60-measure-before.json` (the before-the-build measurement).
+
+| Row | Scenario | Pass | Status |
+|---|---|---|---|
+| **CHIP-BUTTON-01** | Open the main screen with chips showing, default character, then the gold character. Screenshot the dock. | By eye: the chips read as raised buttons, the two are visibly apart, the Tip dot and the tag colour are quieter than before; nothing else in the dock moved | ⏳ **owed — screenshots taken, the maintainer's own eye still needed** (`screenshots/DeckCapture_20260917_150755_auto.png`, `…_150413_auto.png`, `…_150921_auto.png`) |
+| **CHIP-BUTTON-02** | Put the D-pad on a chip in each animation mode; read the chip's computed box-shadow | Steam's white ring, the top hairline and the bottom bar all show at once; label is the brighter shade; no blue outline anywhere | ✅ **PASS (Deck) 2026-09-17**, decode mode and the one-chip setting: ring, hairline and bar all present, no blue outline, label `#e4c94e` (toned gold). Fade mode could not be reached — the chips fade in and out too fast to land the D-pad on one while faded; a pre-existing gap, not caused by this build |
+| **CHIP-BUTTON-03** | Press Left at the first chip and Right at the last | The bottom bar flashes brighter with a small glow for about a third of a second, then returns; nothing moves | ✅ **PASS (Deck) 2026-09-17** — the flash held 260ms of a 320ms window, then settled back to the focused-chip look; chip size unchanged |
+| **CHIP-BUTTON-04** | Press A on a chip; then touch one | The words land in the question box; nothing sinks or flips; no pressed look was built | ✅ **PASS (Deck) 2026-09-17** — A on a chip put its words in the question box, no pressed look (`screenshots/DeckCapture_20260917_150702_auto.png`) |
+| **CHIP-BUTTON-05** | Read the rectangles of the chip, its container and the question box; screenshot | The shadow's bottom is not cut off; the gap from chip to question box is 8px in decode/static/carousel (12 total in fade); by eye the row no longer touches the box | ⏳ **owed — measurement PASS, the maintainer's own eye on the screenshots still needed.** Gap measured 8px (was 0) in decode/static/carousel, 12 total (unchanged) in fade; question box did not move |
+| **CHIP-BUTTON-06** | Turn on the one-chip setting; show the help chip; get an agent suggestion chip | The full-width chip has the same raised look; the help and agent chips keep their colours and carry the hairline and shadow | ⏳ **PARTIAL — one-chip setting PASS on the Deck 2026-09-17** (same raised look, 300×30); the help chip and the agent chip were not on screen during the run, so they are covered only by the stylesheet tests, not seen by eye |
+| **CHIP-BUTTON-07** | Reduced motion on; repeat 03 | The cue appears and clears with no ramp; nothing looks broken | ⏳ **owed — needs the Deck's reduced-motion setting turned on** |
+| **CHIP-BUTTON-08** | Decode animation mode, gold character | The resolving label is the toned gold, not the loud one | ✅ **PASS (Deck) 2026-09-17** — label read `#e4c94e`, the toned gold |
+| **CHIP-BUTTON-09** | A game the notes cover (Half-Life 2), knowledge base on | The Tip chip shows a small square dot in the character's colour before its label, not the word; the dot stays put while a long label scrolls | ⏳ **owed — no covered game was running, so the Tip chip never appeared.** Covered only by `MainTabPresetAnimatedChips.test.tsx` (dot with no text before the scrolling label) |
+
+Rows 01 and 05 are judged by eye from a screenshot and a rectangle read; the rest are read from the
+page by the bridge. **Seen along the way, not part of this plan:** in fade mode the D-pad skipped the
+chip row in both directions on three tries — worth a look next to the open "chip row cannot be
+reached" entry.
 
 ---
 

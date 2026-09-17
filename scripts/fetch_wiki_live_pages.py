@@ -23,6 +23,10 @@ Each page becomes <out>/<slug>.txt with a short provenance header, and <out>/_ma
 collects url / revid / revision date / licence for every page fetched. Pages that do not
 exist are listed at the end and in the manifest as missing; the exit code stays 0 so a
 batch with one bad title still yields the other pages.
+
+Table header cells and Fandom portable-infobox labels come through marked "!! ", and their
+data cells / values "|| " -- scripts/extract_wiki_notes.py reads those two markers to build a
+labelled "Label: value" line without guessing which cell was which.
 """
 
 from __future__ import annotations
@@ -56,6 +60,14 @@ _SKIP_CLASS = re.compile(
 _BLOCK_TAGS = {"p", "div", "section", "article", "aside", "br", "tr", "ul", "ol", "dl", "blockquote", "pre"}
 _HEADING = re.compile(r"h([1-6])")
 
+# scripts/extract_wiki_notes.py needs to tell a table's header cells from its data cells to
+# build a labelled "Label: value" line, and needs the same for Fandom's div-based portable
+# infobox (its facts are not a <table> at all -- see _INFOBOX_LABEL_CLASS below). Both kinds
+# of label get the same "!! " marker and both kinds of value get "|| ", mirroring wikitext's
+# own "!!" header / "||" data cell syntax so the marker means one thing everywhere in the text.
+_INFOBOX_LABEL_CLASS = re.compile(r"\bpi-data-label\b")
+_INFOBOX_VALUE_CLASS = re.compile(r"\bpi-data-value\b")
+
 
 class _TextExtractor(HTMLParser):
     """Rendered HTML -> plain text that keeps headings, list bullets and table rows."""
@@ -76,14 +88,26 @@ class _TextExtractor(HTMLParser):
             return
         if self._skip_depth:
             return
+        # Fandom's portable-infobox renders each fact's label as an <h3 class="pi-data-label">
+        # -- real heading level 3, styled as one. Treating it as a heading filled the section
+        # list with one fake entry per stat (Health, Damage, ...) ahead of the real "Strategy"
+        # heading, so it is read as a label instead whenever this class is present.
+        is_infobox_label = bool(_INFOBOX_LABEL_CLASS.search(cls))
+        is_infobox_value = bool(_INFOBOX_VALUE_CLASS.search(cls))
         m = _HEADING.fullmatch(tag)
-        if m:
+        if m and not is_infobox_label:
             self.out.append("\n\n" + "=" * int(m.group(1)) + " ")
             self._heading = tag
+        elif is_infobox_label:
+            self.out.append("\n!! ")
+        elif is_infobox_value:
+            self.out.append("\n|| ")
         elif tag == "li":
             self.out.append("\n- ")
-        elif tag in ("td", "th"):
-            self.out.append(" | ")
+        elif tag == "th":
+            self.out.append(" !! ")
+        elif tag == "td":
+            self.out.append(" || ")
         elif tag in _BLOCK_TAGS:
             self.out.append("\n")
 

@@ -1,0 +1,432 @@
+"""Title: Wiki note reader
+
+Purpose: Pin scripts/extract_wiki_notes.py's "trim only" guarantee (D111, plan 58 phase 1
+Section 8 item 2): an AI may never write a sentence into a wiki note, only cut. Covers
+section finding, table/infobox-to-labelled-line conversion, whole-sentence length trimming,
+the licence allow-list gate, and the verbatim guarantee itself.
+Used for: scripts/extract_wiki_notes.py.
+Solves: Every wiki note shipped before this phase was an AI rewrite, not the wiki's own
+words -- see docs/planning/58-phase-1-notes-shown-and-wiki-extracts.md Section 1. This is the
+test suite for the reader that replaces that rewrite step.
+Does not: Hit the network -- every fixture here is a short, hand-written page. The five real
+samples for the maintainer are generated separately and written to
+docs/test-evidence/plan58p1-B-samples.md, not exercised as an automated test.
+"""
+
+from __future__ import annotations
+
+import importlib.util
+import io
+import json
+import sys
+import tempfile
+import unittest
+from contextlib import redirect_stdout
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+
+
+def _load_module():
+    path = REPO_ROOT / "scripts" / "extract_wiki_notes.py"
+    spec = importlib.util.spec_from_file_location("extract_wiki_notes", path)
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    # dataclass, with `from __future__ import annotations` in the module under test, resolves
+    # its string annotations through sys.modules[cls.__module__] -- it must exist there before
+    # exec_module runs the class bodies, or Python 3.12 raises on the very first @dataclass.
+    sys.modules[spec.name] = mod
+    spec.loader.exec_module(mod)
+    return mod
+
+
+m = _load_module()
+
+
+class SelectSectionTests(unittest.TestCase):
+    def test_exact_heading_match_wins(self):
+        text = "== Overview\nLead text.\n== Strategy\nDo the thing.\n== Trivia\nFun fact.\n"
+        headings = m.extract_headings(text)
+        choice = m.select_section(headings, text)
+        self.assertEqual(choice.heading.title, "Strategy")
+        self.assertIn("Do the thing.", choice.body)
+        self.assertNotIn("Fun fact.", choice.body)
+
+    def test_substring_match_when_no_exact_heading(self):
+        text = "== Tips and tricks\nWatch the tell.\n== Trivia\nFun fact.\n"
+        headings = m.extract_headings(text)
+        choice = m.select_section(headings, text)
+        self.assertEqual(choice.heading.title, "Tips and tricks")
+        self.assertIn("tips", choice.reason)
+
+    def test_falls_back_to_overview(self):
+        text = "== Overview\nThe boss lives in the swamp.\n== Trivia\nFun fact.\n"
+        headings = m.extract_headings(text)
+        choice = m.select_section(headings, text)
+        self.assertEqual(choice.heading.title, "Overview")
+        self.assertIn("fallback", choice.reason)
+
+    def test_no_matching_heading_uses_first_section_and_says_so(self):
+        text = "== History\nIt was added in patch 1.\n== Trivia\nFun fact.\n"
+        headings = m.extract_headings(text)
+        choice = m.select_section(headings, text)
+        self.assertEqual(choice.heading.title, "History")
+        self.assertIn("check this by hand", choice.reason)
+
+    def test_no_headings_at_all_uses_whole_page(self):
+        text = "Just one paragraph, no headings anywhere.\n"
+        choice = m.select_section([], text)
+        self.assertIsNone(choice.heading)
+        self.assertEqual(choice.body, text)
+
+    def test_nested_subsection_stays_inside_the_parent(self):
+        text = "== Strategy\nPhase one text.\n=== Phase two\nPhase two text.\n== Trivia\nFun fact.\n"
+        headings = m.extract_headings(text)
+        choice = m.select_section(headings, text)
+        self.assertIn("Phase one text.", choice.body)
+        self.assertIn("Phase two text.", choice.body)
+        self.assertNotIn("Fun fact.", choice.body)
+
+
+class BodyToUnitsTests(unittest.TestCase):
+    def test_prose_splits_into_sentences_in_order(self):
+        units, dropped = m.body_to_units("First sentence. Second sentence.\n")
+        self.assertEqual([u.text for u in units], ["First sentence.", "Second sentence."])
+        self.assertEqual(dropped, [])
+
+    def test_two_column_no_header_table_becomes_a_labelled_line(self):
+        units, _ = m.body_to_units("!! Health\n|| 800\n")
+        self.assertEqual(len(units), 1)
+        self.assertEqual(units[0].kind, "label")
+        self.assertEqual(units[0].text, "Health: 800")
+        self.assertEqual(units[0].checks, ["Health", "800"])
+
+    def test_wide_table_zips_header_row_with_each_data_row(self):
+        body = "!! Move !! Damage\n|| Jab || 3%\n|| Kick || 6%\n"
+        units, _ = m.body_to_units(body)
+        self.assertEqual([u.text for u in units], ["Move: Jab", "Damage: 3%", "Move: Kick", "Damage: 6%"])
+
+    def test_two_bare_data_cells_with_no_header_read_as_label_value(self):
+        units, _ = m.body_to_units("|| Health || 800\n")
+        self.assertEqual(units[0].text, "Health: 800")
+
+    def test_list_items_stay_on_their_own_lines(self):
+        units, _ = m.body_to_units("- First tip.\n- Second tip.\n")
+        self.assertEqual([u.kind for u in units], ["list", "list"])
+        card = m.render_card(units)
+        self.assertEqual(card, "- First tip.\n- Second tip.")
+
+    def test_nested_heading_inside_the_section_is_dropped_and_named(self):
+        units, dropped = m.body_to_units("Lead in.\n== Sub heading\nMore text.\n")
+        self.assertEqual([u.text for u in units], ["Lead in.", "More text."])
+        self.assertTrue(any("Sub heading" in d for d in dropped))
+
+    def test_row_with_one_label_and_extra_values_is_named_as_a_limitation(self):
+        units, dropped = m.body_to_units("!! Move\n|| Jab || 3% || fast\n")
+        self.assertEqual(units[0].text, "Move: Jab")
+        self.assertTrue(any("one label" in d for d in dropped))
+
+
+class TrimToLengthTests(unittest.TestCase):
+    def test_stops_before_exceeding_the_cap(self):
+        units = [m.Unit("sentence", "Word.", ["Word."]) for _ in range(500)]
+        kept, note = m.trim_to_length(units, min_chars=10, max_chars=50)
+        self.assertLessEqual(len(m.render_card(kept)), 50)
+        self.assertLess(len(kept), len(units))
+
+    def test_a_single_oversized_unit_is_kept_whole_not_cut_mid_sentence(self):
+        long_sentence = "This sentence alone is written to run well past the usual cap. " * 5
+        units = [m.Unit("sentence", long_sentence.strip(), [long_sentence.strip()])]
+        kept, note = m.trim_to_length(units, min_chars=10, max_chars=50)
+        self.assertEqual(kept, units)
+        self.assertIn("over the 50 cap", note)
+
+    def test_short_section_is_used_whole_and_says_so(self):
+        units = [m.Unit("sentence", "Short.", ["Short."])]
+        kept, note = m.trim_to_length(units, min_chars=400, max_chars=880)
+        self.assertEqual(kept, units)
+        self.assertIn("short of the 400 aim", note)
+
+
+class VerifyVerbatimTests(unittest.TestCase):
+    """The guard, and the proof that it actually refuses (D111 item 2, rule 7)."""
+
+    def test_genuine_sentences_pass(self):
+        page = "Hornet strikes twice then leaps back to the edge of the arena."
+        units = [m.Unit("sentence", page, [page])]
+        ok, problems = m.verify_verbatim(units, page)
+        self.assertTrue(ok)
+        self.assertEqual(problems, [])
+
+    def test_refuses_a_rewritten_sentence(self):
+        """Prove the guard by breaking it: one unit is the page's real sentence, the second
+        is an AI-style paraphrase that was never on the page. The check must catch exactly
+        the rewritten one and must not silently pass the whole card."""
+        page_text = "Hornet strikes twice then leaps back to the edge of the arena."
+        units = [
+            m.Unit("sentence", "Hornet strikes twice then leaps back to the edge of the arena.",
+                   ["Hornet strikes twice then leaps back to the edge of the arena."]),
+            m.Unit("sentence", "She retreats to safety after each combo.",
+                   ["She retreats to safety after each combo."]),
+        ]
+        ok, problems = m.verify_verbatim(units, page_text)
+        self.assertFalse(ok)
+        self.assertEqual(problems, ["She retreats to safety after each combo."])
+
+    def test_label_and_value_are_checked_separately(self):
+        """A table's label and its value rarely sit next to each other in the source page --
+        they are separate cells. The two must each appear, but not necessarily adjacent."""
+        page = "The stat block lists Health somewhere and 800 somewhere else entirely."
+        units = [m.Unit("label", "Health: 800", ["Health", "800"])]
+        ok, problems = m.verify_verbatim(units, page)
+        self.assertTrue(ok)
+
+    def test_refuses_a_label_whose_value_never_appeared(self):
+        page = "The stat block lists Health but no number at all."
+        units = [m.Unit("label", "Health: 800", ["Health", "800"])]
+        ok, problems = m.verify_verbatim(units, page)
+        self.assertFalse(ok)
+        self.assertEqual(problems, ["800"])
+
+    def test_whitespace_only_is_ignored(self):
+        page = "Hornet   strikes\ntwice."
+        units = [m.Unit("sentence", "Hornet strikes twice.", ["Hornet strikes twice."])]
+        ok, _ = m.verify_verbatim(units, page)
+        self.assertTrue(ok)
+
+
+class WikitextToPlainTests(unittest.TestCase):
+    def test_template_and_ref_and_comment_are_stripped(self):
+        raw = "{{Infobox|x=1}}\nText<ref>cite</ref> stays.<!-- hidden --> \n"
+        plain = m.wikitext_to_plain(raw)
+        self.assertNotIn("Infobox", plain)
+        self.assertNotIn("cite", plain)
+        self.assertNotIn("hidden", plain)
+        self.assertIn("Text stays.", plain)
+
+    def test_piped_and_plain_links_resolve_to_their_label(self):
+        raw = "See [[Some Page|the page]] and [[Other Page]].\n"
+        plain = m.wikitext_to_plain(raw)
+        self.assertIn("See the page and Other Page.", plain)
+
+    def test_file_caption_is_dropped_entirely(self):
+        raw = "Body text.\n[[File:Thing.png|thumb|A [[caption]] with a link]]\nMore text.\n"
+        plain = m.wikitext_to_plain(raw)
+        self.assertNotIn("caption", plain)
+        self.assertIn("Body text.", plain)
+        self.assertIn("More text.", plain)
+
+    def test_bullet_list_becomes_dash_lines(self):
+        raw = "* First item\n* Second item\n"
+        plain = m.wikitext_to_plain(raw)
+        self.assertIn("- First item", plain)
+        self.assertIn("- Second item", plain)
+
+    def test_wikitext_table_converts_to_markers(self):
+        raw = "{|\n! Attack\n! Damage\n|-\n| Jab\n| 3%\n|}\n"
+        plain = m.wikitext_to_plain(raw)
+        self.assertIn("!! Attack", plain)
+        self.assertIn("!! Damage", plain)
+        self.assertIn("|| Jab", plain)
+        self.assertIn("|| 3%", plain)
+
+    def test_headings_survive_the_conversion(self):
+        raw = "== Strategy ==\nDo the thing.\n"
+        plain = m.wikitext_to_plain(raw)
+        headings = m.extract_headings(plain)
+        self.assertEqual([h.title for h in headings], ["Strategy"])
+
+
+class LicenceTests(unittest.TestCase):
+    def test_cc_by_sa_variants_by_url(self):
+        self.assertEqual(m.canonical_licence("", "https://creativecommons.org/licenses/by-sa/4.0/"), "CC-BY-SA-4.0")
+        self.assertEqual(m.canonical_licence("", "https://creativecommons.org/licenses/by-sa/3.0/"), "CC-BY-SA-3.0")
+        self.assertEqual(m.canonical_licence("", "https://creativecommons.org/licenses/by/4.0/"), "CC-BY-4.0")
+
+    def test_cc_by_sa_by_footer_text_when_no_url(self):
+        self.assertEqual(
+            m.canonical_licence("Content is available under Creative Commons Attribution-ShareAlike 4.0 unless otherwise noted.", ""),
+            "CC-BY-SA-4.0",
+        )
+
+    def test_unrecognised_licence_is_none(self):
+        self.assertIsNone(m.canonical_licence("All rights reserved.", ""))
+        self.assertIsNone(m.canonical_licence("", ""))
+
+    def test_noncommercial_is_not_mistaken_for_sharealike(self):
+        self.assertIsNone(
+            m.canonical_licence("Creative Commons Attribution-NonCommercial-ShareAlike 3.0 (Unported)",
+                                 "https://creativecommons.org/licenses/by-nc-sa/3.0/")
+        )
+
+    def test_allow_list_matches_publish_corpus(self):
+        allowed = m._load_allowed_licences()
+        self.assertIn("CC-BY-SA-3.0", allowed)
+        self.assertIn("CC-BY-SA-4.0", allowed)
+        self.assertIn("CC-BY-4.0", allowed)
+
+
+class BuildNoteEndToEndTests(unittest.TestCase):
+    """Exercises load_live_page / load_dump_page / build_note together against small
+    on-disk fixtures shaped like the real fetchers' own output."""
+
+    def _write_live_fixture(self, tmp: Path) -> Path:
+        page = tmp / "hornet.txt"
+        page.write_text(
+            "# source: https://hollowknight.wiki/w/Hornet\n"
+            "# site: Hollow Knight Wiki\n"
+            "# revision: 12345 (2026-09-01T00:00:00Z)\n"
+            "# licence: (unused when a manifest sits beside it) \n"
+            "# read: 2026-09-17\n\n"
+            "== Overview\nHornet is the guardian of Greenpath.\n\n"
+            "== Strategy\n"
+            "Hornet strikes twice then leaps back to the edge of the arena. "
+            "Watch for the thread trap she throws.\n"
+            "!! Health\n|| 800\n\n"
+            "== Trivia\nHornet reappears later in the game.\n",
+            encoding="utf-8",
+        )
+        manifest = {
+            "site": {"sitename": "Hollow Knight Wiki"},
+            "pages": [
+                {
+                    "requested": "Hornet",
+                    "title": "Hornet",
+                    "url": "https://hollowknight.wiki/w/Hornet",
+                    "revid": 12345,
+                    "timestamp": "2026-09-01T00:00:00Z",
+                    "licence_text": "Creative Commons Attribution-Share Alike 3.0 (Unported)",
+                    "licence_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+                    "read_on": "2026-09-17",
+                    "file": "hornet.txt",
+                }
+            ],
+        }
+        (tmp / "_manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+        return page
+
+    def test_live_fixture_produces_the_nine_fields(self):
+        with tempfile.TemporaryDirectory() as tmp_str:
+            tmp = Path(tmp_str)
+            page_path = self._write_live_fixture(tmp)
+            allowed = m._load_allowed_licences()
+            note, sidecar, dropped = m.build_note(
+                page_path=page_path,
+                page_format="live",
+                game_id=42,
+                section_type_arg=None,
+                name_arg=None,
+                min_chars=50,
+                max_chars=400,
+                allowed_licences=allowed,
+            )
+            self.assertEqual(set(note.keys()), set(m.NOTE_FIELDS))
+            self.assertIsNone(note["section_id"])
+            self.assertIsNone(note["source_version"])
+            self.assertEqual(note["game_id"], 42)
+            self.assertEqual(note["name"], "Hornet")
+            self.assertEqual(note["source_url"], "https://hollowknight.wiki/w/Hornet")
+            self.assertEqual(note["source_license"], "CC-BY-SA-3.0")
+            self.assertEqual(note["crawled_at"], "2026-09-17")
+            self.assertIn("Hornet strikes twice", note["card"])
+            self.assertNotIn("Hornet is the guardian of Greenpath.", note["card"])
+            self.assertNotIn("Hornet reappears later in the game.", note["card"])
+            self.assertEqual(sidecar["section_heading"], "Strategy")
+            self.assertEqual(sidecar["revision_id"], 12345)
+            self.assertEqual(sidecar["char_count"], len(note["card"]))
+
+    def test_disallowed_licence_refuses_and_prints_why(self):
+        with tempfile.TemporaryDirectory() as tmp_str:
+            tmp = Path(tmp_str)
+            page_path = self._write_live_fixture(tmp)
+            manifest = json.loads((tmp / "_manifest.json").read_text(encoding="utf-8"))
+            manifest["pages"][0]["licence_text"] = "GNU Free Documentation License"
+            manifest["pages"][0]["licence_url"] = "https://www.gnu.org/licenses/fdl-1.3.html"
+            (tmp / "_manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+            allowed = m._load_allowed_licences()
+            with self.assertRaises(SystemExit) as ctx:
+                m.build_note(
+                    page_path=page_path, page_format="live", game_id=1,
+                    section_type_arg=None, name_arg=None,
+                    min_chars=50, max_chars=400, allowed_licences=allowed,
+                )
+            self.assertIn("no recognised licence", str(ctx.exception))
+
+    def test_dump_fixture_reconstructs_the_url_and_uses_the_snapshot_date(self):
+        with tempfile.TemporaryDirectory() as tmp_str:
+            tmp = Path(tmp_str)
+            page_path = tmp / "Some_Boss.wikitext"
+            page_path.write_text(
+                "'''Some Boss''' lives in the swamp.\n\n"
+                "== Strategy ==\n"
+                "Approach from the left to avoid the first swing. "
+                "Jump the ground slam rather than block it.\n",
+                encoding="utf-8",
+            )
+            manifest = {
+                "dump": "dump-item",
+                "original_url": "https://example-wiki.fandom.com",
+                "publicdate": "2024-03-02T00:00:00Z",
+                "item_licenseurl": "https://creativecommons.org/licenses/by-sa/3.0/",
+                "siteinfo": {
+                    "rightsinfo": {
+                        "text": "Creative Commons Attribution-Share Alike 3.0 (Unported)",
+                        "url": "https://creativecommons.org/licenses/by-sa/3.0/",
+                    }
+                },
+                "pages": [{"title": "Some Boss", "file": "Some_Boss.wikitext", "revision_id": "999", "timestamp": "2024-03-01T00:00:00Z"}],
+            }
+            (tmp / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+            allowed = m._load_allowed_licences()
+            note, sidecar, _ = m.build_note(
+                page_path=page_path, page_format="dump", game_id=7,
+                section_type_arg="boss", name_arg=None,
+                min_chars=10, max_chars=400, allowed_licences=allowed,
+            )
+            self.assertEqual(note["source_url"], "https://example-wiki.fandom.com/wiki/Some_Boss")
+            self.assertEqual(note["crawled_at"], "2024-03-02")
+            self.assertEqual(note["section_type"], "boss")
+            self.assertEqual(sidecar["revision_id"], "999")
+
+
+class GuessSectionTypeTests(unittest.TestCase):
+    def test_boss_wins_when_the_word_boss_appears(self):
+        self.assertEqual(m.guess_section_type("Some Boss", []), "boss")
+
+    def test_defaults_to_mechanic(self):
+        self.assertEqual(m.guess_section_type("Round timer", []), "mechanic")
+
+
+class MainCliTests(unittest.TestCase):
+    def test_main_prints_a_note_and_writes_the_out_file(self):
+        with tempfile.TemporaryDirectory() as tmp_str:
+            tmp = Path(tmp_str)
+            page = tmp / "hornet.txt"
+            page.write_text(
+                "# source: https://hollowknight.wiki/w/Hornet\n"
+                "# site: Hollow Knight Wiki\n"
+                "# revision: 1 (2026-01-01T00:00:00Z)\n"
+                "# licence: Creative Commons Attribution-Share Alike 3.0 (Unported) https://creativecommons.org/licenses/by-sa/3.0/\n"
+                "# read: 2026-09-17\n\n"
+                "== Strategy\nHornet strikes twice then leaps back to the edge of the arena.\n",
+                encoding="utf-8",
+            )
+            out_path = tmp / "out.json"
+            buf = io.StringIO()
+            with redirect_stdout(buf):
+                rc = m.main([
+                    "--page", str(page), "--game-id", "3",
+                    "--min-chars", "10", "--max-chars", "200",
+                    "--out", str(out_path),
+                ])
+            self.assertEqual(rc, 0)
+            self.assertIn("NOTE RECORD", buf.getvalue())
+            payload = json.loads(out_path.read_text(encoding="utf-8"))
+            self.assertEqual(len(payload["notes"]), 1)
+            self.assertEqual(payload["notes"][0]["game_id"], 3)
+            # This file is a scratch file the test cleans up itself -- never the seed.
+            self.assertNotEqual(out_path, REPO_ROOT / "data" / "kb" / "strategy_seed.json")
+
+
+if __name__ == "__main__":
+    unittest.main()

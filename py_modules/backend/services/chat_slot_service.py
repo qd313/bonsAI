@@ -59,6 +59,8 @@ import time
 import uuid
 from typing import Any
 
+from backend.services.ollama_service import REASONING_CUT_NOTE, REASONING_TEXT_CAP_CHARS
+
 SCHEMA_VERSION = 1
 MAX_CHAT_SLOTS = 8
 MAX_TURNS_PER_SLOT = 200
@@ -141,6 +143,32 @@ def _normalize_turn_transparency(raw: Any) -> dict[str, Any] | None:
     }
 
 
+def _normalize_turn_reasoning(raw: Any) -> dict[str, Any] | None:
+    """Sanitize a turn's saved reasoning (plan 57): the model's thinking, its whole seconds and
+    a token estimate. Returns ``None`` on a turn with no thinking, so ``_normalize_turn`` leaves
+    the ``reasoning`` key off entirely rather than writing an empty placeholder -- the same rule
+    ``_normalize_turn_transparency`` already follows for an empty chip list.
+
+    ``text`` arrives already capped by ``ollama_service.cap_reasoning_text`` (end kept, one-line
+    cut note); the length check here is a safety net against a malformed slot file, not a second
+    place that decides what gets cut.
+    """
+    if not isinstance(raw, dict):
+        return None
+    text = str(raw.get("text") or "")
+    if not text.strip():
+        return None
+    def _num(value: Any, default: Any) -> Any:
+        return int(value) if isinstance(value, (int, float)) and not isinstance(value, bool) else default
+
+    max_len = REASONING_TEXT_CAP_CHARS + len(REASONING_CUT_NOTE)
+    return {
+        "text": text[:max_len],
+        "seconds": _num(raw.get("seconds"), None),
+        "tokens": _num(raw.get("tokens"), 0),
+    }
+
+
 def _normalize_turn(raw: Any) -> dict[str, Any] | None:
     if not isinstance(raw, dict):
         return None
@@ -153,7 +181,7 @@ def _normalize_turn(raw: Any) -> dict[str, Any] | None:
     turn_id = str(raw.get("id", "") or "").strip() or str(uuid.uuid4())
     rid = raw.get("request_id")
     request_id = int(rid) if isinstance(rid, (int, float)) and not isinstance(rid, bool) else None
-    return {
+    turn: dict[str, Any] = {
         "id": turn_id[:64],
         "role": role,
         "text": text[:MAX_TURN_TEXT_LEN],
@@ -187,6 +215,12 @@ def _normalize_turn(raw: Any) -> dict[str, Any] | None:
         "transparency": _normalize_turn_transparency(raw.get("transparency")),
         "created_at": int(raw.get("created_at") or time.time()),
     }
+    # Plan 57: only ever set on a turn that actually thought -- absent on every older turn and on
+    # a turn made with thinking Off, not a key holding ``None``.
+    reasoning = _normalize_turn_reasoning(raw.get("reasoning"))
+    if reasoning is not None:
+        turn["reasoning"] = reasoning
+    return turn
 
 
 def sanitize_slot(raw: Any) -> dict[str, Any] | None:
@@ -450,6 +484,7 @@ def append_turn(
     app_name: str = "",
     asked_entity: str = "",
     display_text: str = "",
+    reasoning: dict[str, Any] | None = None,
     label: str | None = None,
     logger: Any = None,
 ) -> dict[str, Any] | None:
@@ -468,6 +503,7 @@ def append_turn(
             "app_name": app_name,
             "asked_entity": asked_entity,
             "display_text": display_text,
+            "reasoning": reasoning,
             "created_at": int(time.time()),
         }
     )

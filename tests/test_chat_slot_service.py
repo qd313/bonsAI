@@ -232,6 +232,74 @@ class ChatSlotServiceTests(unittest.TestCase):
         assert saved is not None
         self.assertIsNone(saved["turns"][-1]["transparency"])
 
+    def test_assistant_turn_persists_reasoning(self):
+        """Plan 57: a turn made with thinking on keeps the text, its seconds and a token
+        estimate, and round-trips through disk unchanged, the same as the transparency snapshot
+        above.
+        """
+        slot = create_slot(self.settings_dir, first_question="how do i kill the boss")
+        sid = slot["id"]
+        saved = append_turn(
+            self.settings_dir,
+            sid,
+            role="assistant",
+            text="Stand behind it and swing.",
+            request_id=1,
+            reasoning={"text": "Thinking Process: the boss has a weak point.", "seconds": 41, "tokens": 380},
+        )
+        assert saved is not None
+        assistant_turn = saved["turns"][-1]
+        self.assertEqual(
+            assistant_turn["reasoning"],
+            {"text": "Thinking Process: the boss has a weak point.", "seconds": 41, "tokens": 380},
+        )
+
+        reloaded = load_slot(self.settings_dir, sid)
+        assert reloaded is not None
+        self.assertEqual(reloaded["turns"][-1]["reasoning"], assistant_turn["reasoning"])
+
+    def test_a_turn_made_with_no_thinking_has_no_reasoning_key_at_all(self):
+        """Not a key holding null -- the key is simply absent, the same rule
+        ``_normalize_turn_transparency`` already follows for a chip-less snapshot.
+        """
+        slot = create_slot(self.settings_dir, label="no-reasoning")
+        sid = slot["id"]
+        saved = append_turn(self.settings_dir, sid, role="assistant", text="answer")
+        assert saved is not None
+        self.assertNotIn("reasoning", saved["turns"][-1])
+
+    def test_an_explicit_none_reasoning_leaves_the_key_absent_too(self):
+        slot = create_slot(self.settings_dir, label="explicit-none")
+        sid = slot["id"]
+        saved = append_turn(
+            self.settings_dir, sid, role="assistant", text="answer", reasoning=None
+        )
+        assert saved is not None
+        self.assertNotIn("reasoning", saved["turns"][-1])
+
+    def test_an_older_turn_saved_before_reasoning_existed_loads_with_the_key_absent(self):
+        """A slot file written before plan 57 has no ``reasoning`` key on its old turns at all --
+        proven here by sanitizing a raw turn dict that never had the key, the same shape a file
+        from before this feature landed would hand back.
+        """
+        from backend.services.chat_slot_service import sanitize_slot
+
+        raw_slot = {
+            "id": "old-slot",
+            "label": "Old chat",
+            "turns": [
+                {
+                    "id": "t1",
+                    "role": "assistant",
+                    "text": "An answer from before thinking was ever kept.",
+                    "created_at": 1,
+                }
+            ],
+        }
+        sanitized = sanitize_slot(raw_slot)
+        assert sanitized is not None
+        self.assertNotIn("reasoning", sanitized["turns"][0])
+
     def test_slot_keeps_the_game_name_it_was_created_under(self):
         """The slot row shows the game above the conversation title, and nothing else records the
         NAME - ``origin_app_id`` cannot be shown to a reader, and resolving it needs the game to be

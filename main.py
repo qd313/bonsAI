@@ -1057,6 +1057,21 @@ class Plugin:
         async with self._chat_slots_store_lock:
             await asyncio.to_thread(_run)
 
+    @staticmethod
+    def _reasoning_payload_for_chat_slot(result: dict) -> Optional[dict]:
+        """Plan 57: the ``{text, seconds, tokens}`` shape a saved turn keeps, or ``None`` when the
+        Ask's result carried no thinking (thinking Off, or a model that cannot think) -- absent,
+        not an empty dict, so ``_normalize_turn`` leaves the ``reasoning`` key off the turn.
+        """
+        text = str(result.get("reasoning_text") or "")
+        if not text:
+            return None
+        return {
+            "text": text,
+            "seconds": result.get("reasoning_seconds"),
+            "tokens": int(result.get("reasoning_tokens") or 0),
+        }
+
     async def _chat_slots_record_assistant_turn(
         self,
         *,
@@ -1066,6 +1081,7 @@ class Plugin:
         app_id: str = "",
         app_name: str = "",
         asked_entity: str = "",
+        reasoning: Optional[dict] = None,
     ) -> None:
         sid = str(slot_id or "").strip()
         body = str(response_text or "").strip()
@@ -1083,6 +1099,7 @@ class Plugin:
                 app_id=app_id,
                 app_name=app_name,
                 asked_entity=asked_entity,
+                reasoning=reasoning,
                 logger=logger,
             )
 
@@ -2410,6 +2427,12 @@ class Plugin:
                 "model": result.get("model"),
                 "partial_response": None,
                 "streaming": False,
+                # Plan 57: the whole reasoning (capped, end kept), the whole seconds from the
+                # first thinking chunk to the first answer chunk, and a token estimate -- "" / null
+                # / 0 on a turn with no thinking, the same shape ``new_background_state`` defaults.
+                "reasoning_text": str(result.get("reasoning_text") or ""),
+                "reasoning_seconds": result.get("reasoning_seconds"),
+                "reasoning_tokens": int(result.get("reasoning_tokens") or 0),
             }
             self._clear_partial_stream_snapshot()
         slot_id = self._chat_slot_by_request.pop(request_id, None)
@@ -2429,6 +2452,7 @@ class Plugin:
                 app_id=app_id,
                 app_name=app_name,
                 asked_entity=result.get("strategy_spoiler_asked_entity") or "",
+                reasoning=None if cancelled_rq else self._reasoning_payload_for_chat_slot(result),
             )
         await self._maybe_app_log(
             "ask.background",

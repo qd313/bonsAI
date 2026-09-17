@@ -258,6 +258,27 @@ def kb_retrieval_detail_label(retrieval_method: str) -> str:
     return "Keyword search"
 
 
+# Plan 57: the same four words the Thinking row on the Ollama tab shows
+# (``src/data/askThinkEffort.ts`` on the screen side) -- kept here as a plain copy rather than an
+# import so this backend file does not reach into ``src/``. An effort key this map does not know
+# (or "off") falls back to "Thinking" in ``reasoning_chip_label`` below.
+REASONING_EFFORT_LEVEL_WORDS = {
+    "low": "Brief",
+    "medium": "Balanced",
+    "high": "Deep",
+}
+
+
+def reasoning_chip_label(*, effort_key: str, seconds: Any, tokens: Any) -> str:
+    """The Show details chip for a turn the model thought about: ``Thinking: Balanced · 41 s ·
+    ~380 tokens``. Only ever built when there is reasoning text to show; the caller checks that.
+    """
+    level = REASONING_EFFORT_LEVEL_WORDS.get(str(effort_key or "").strip().lower(), "Thinking")
+    seconds_num = int(seconds) if isinstance(seconds, (int, float)) and not isinstance(seconds, bool) else 0
+    tokens_num = int(tokens) if isinstance(tokens, (int, float)) and not isinstance(tokens, bool) else 0
+    return f"Thinking: {level} · {seconds_num} s · ~{tokens_num} tokens"
+
+
 def kb_coverage_chip_label(*, status: str, section_count: int = 0) -> str:
     """Short Show-details chip for offline corpus coverage (distinct from Ask-turn kb chip)."""
     if status == "kb_off":
@@ -635,6 +656,32 @@ def build_context_chips_manifest(
         )
         rank += 1
 
+    # Plan 57: the model's own thinking, if it thought at all. Nothing shown on a turn with
+    # thinking Off, or on a model that cannot think -- ``reasoning_text`` is "" in both cases.
+    reasoning_text = str(snapshot.get("reasoning_text") or "").strip()
+    if reasoning_text:
+        chips.append(
+            {
+                "id": "reasoning",
+                "rank": rank,
+                "label": reasoning_chip_label(
+                    effort_key=str(snapshot.get("reasoning_effort") or ""),
+                    seconds=snapshot.get("reasoning_seconds"),
+                    tokens=snapshot.get("reasoning_tokens"),
+                ),
+                "attached": True,
+                "tier_class": "",
+                "body": _chip_body(
+                    title="Reasoning",
+                    bullets=[
+                        "The token count is an estimate — Ollama's own count does not separate "
+                        "thinking from the answer.",
+                    ],
+                ),
+            }
+        )
+        rank += 1
+
     spoiler_signals = spoiler_risk_signals_from_snapshot(snapshot)
     assistant_for_tag = str(
         snapshot.get("assistant_raw") or snapshot.get("final_response") or ""
@@ -812,6 +859,15 @@ def build_ollama_route_snapshot(
         "response_verify": verify_result,
         "reply_verbosity": str(ollama_result.get("reply_verbosity") or "balanced"),
         "ask_mode": str(ollama_result.get("ask_mode") or "speed"),
+        # Plan 57: the model's own thinking for this turn. "" / null / 0 on a turn with no
+        # thinking (thinking Off, or a model that cannot think) -- the chip below is skipped
+        # entirely in that case.
+        "reasoning_text": str(ollama_result.get("reasoning_text") or ""),
+        "reasoning_seconds": ollama_result.get("reasoning_seconds"),
+        "reasoning_tokens": ollama_result.get("reasoning_tokens"),
+        "reasoning_effort": str(
+            (ollama_result.get("ask_budgets") or {}).get("think_effort") or ""
+        ),
         "spoiler_risk_signals": ollama_result.get("spoiler_risk_signals"),
         "spy_lying_active": bool(ollama_result.get("spy_lying_active")),
         "spy_lies": list(ollama_result.get("spy_lies") or []),

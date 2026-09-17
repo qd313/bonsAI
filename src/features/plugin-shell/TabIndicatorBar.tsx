@@ -5,9 +5,10 @@
  * top of the plugin: a small dash per tab with the current one lit, the
  * current tab's name written out beside them, and shoulder-button marks
  * at each end. While this bar has the D-pad's focus, it also opens a
- * fuller strip that floats over the panel showing every tab as an icon
- * and a label, so a person can see where each shoulder-button press
- * would take them before pressing it.
+ * fuller strip that floats over the panel showing every tab as an icon,
+ * with only the current tab's icon also carrying its name, so a person
+ * can see where each shoulder-button press would take them before
+ * pressing it.
  *
  * Used for: The plugin's main screen, drawn above the tab body, while
  * Steam's own original tab row is hidden.
@@ -110,7 +111,9 @@ export type TabIndicatorBarProps = {
  * 8. Draws the bar (shoulder marks, dashes, the current name) and, after
  *    it, the floating strip — always present in the markup so opening
  *    and closing is a fade rather than something mounting and
- *    unmounting, with the closed strip kept out of hit-testing.
+ *    unmounting, with the closed strip kept out of hit-testing. Every
+ *    cell always carries its name in the markup, faded out by CSS
+ *    (plan 59): only the current tab's is ever visible.
  */
 export function TabIndicatorBar({ tabIds, currentTab, selectTab, exitDown }: TabIndicatorBarProps): React.ReactElement {
   const current = tabIds.find((id) => id === currentTab);
@@ -278,14 +281,17 @@ export function TabIndicatorBar({ tabIds, currentTab, selectTab, exitDown }: Tab
         className={`bonsai-tab-bar__strip${open ? " bonsai-tab-bar__strip--open" : ""}`}
         aria-hidden={!open}
       >
-        <span className="bonsai-tab-bar__shoulder bonsai-tab-bar__shoulder--l" aria-hidden="true">
-          LB
+        <span className="bonsai-tab-bar__slot bonsai-tab-bar__slot--l">
+          <span className="bonsai-tab-bar__shoulder bonsai-tab-bar__pill" aria-hidden="true">
+            LB
+          </span>
         </span>
         {tabIds.map((id) => (
           <div
             key={id}
             role="button"
             tabIndex={-1}
+            aria-label={BONSAI_TAB_SHORT_NAMES[id]}
             className={`bonsai-tab-bar__cell${id === current ? " bonsai-tab-bar__cell--active" : ""}`}
             data-bonsai-tab={id}
             onClick={onCellClick(id)}
@@ -293,11 +299,15 @@ export function TabIndicatorBar({ tabIds, currentTab, selectTab, exitDown }: Tab
             <span className="bonsai-tab-bar__cell-icon" aria-hidden="true">
               {bonsaiTabStripIcon(id)}
             </span>
-            <span className="bonsai-tab-bar__cell-label">{bonsaiTabStripLabel(id)}</span>
+            <span className="bonsai-tab-bar__cell-name" aria-hidden="true">
+              {bonsaiTabStripLabel(id)}
+            </span>
           </div>
         ))}
-        <span className="bonsai-tab-bar__shoulder bonsai-tab-bar__shoulder--r" aria-hidden="true">
-          RB
+        <span className="bonsai-tab-bar__slot bonsai-tab-bar__slot--r">
+          <span className="bonsai-tab-bar__shoulder bonsai-tab-bar__pill" aria-hidden="true">
+            RB
+          </span>
         </span>
       </div>
     </Focusable>

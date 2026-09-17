@@ -97,8 +97,15 @@ export const TAB_BAR_STRIP_BG_HEX = "#141c24";
  * plan: Steam's strip cost 80.66px (measured 2026-09-02), the bar at rest costs 20.
  */
 export const TAB_BAR_REST_HEIGHT_PX = 20;
-/** The floating strip while the ring is on the bar. Floats over the panel; the wrapper stays 20px. */
-export const TAB_BAR_OPEN_HEIGHT_PX = 54;
+/**
+ * The floating strip while the ring is on the bar. Floats over the panel; the wrapper stays 20px.
+ * Raised from 54 to 66 by the maintainer on 2026-09-17, from a mockup of three heights drawn over
+ * the 14 September Deck photo: on that photo the chat row's dots sit 6 to 10px below a 54px strip
+ * and the row's bottom line about 15px below, so 66 covers the dots with 2px to spare and still
+ * leaves the row's own bottom line showing under the strip. The Deck evening (plan 59 row 2A-07)
+ * may move it by a pixel or two either way.
+ */
+export const TAB_BAR_OPEN_HEIGHT_PX = 66;
 export const TAB_BAR_DASH_W_PX = 14;
 export const TAB_BAR_DASH_H_PX = 3;
 /** The active dash is this much taller than the others. */
@@ -106,18 +113,9 @@ export const TAB_BAR_DASH_ACTIVE_EXTRA_H_PX = 2;
 export const TAB_BAR_DASH_GAP_PX = 4;
 /** The active tab's name beside the dashes — the size the chat-slot bumper pills already use. */
 export const TAB_BAR_NAME_PX = 11;
-/** Names under the icons of the open strip. Settled on the device (TAB-BAR-07); 8 is the starting value. */
-export const TAB_BAR_LABEL_PX = 8;
 /** The LB / RB marks at the ends of the bar. */
 export const TAB_BAR_SHOULDER_MARK_PX = 9;
-/**
- * The open strip's cells. Sized to fit six of them plus the two marks inside 300px with the short
- * forms on (plan 30 § 4.2): a 32px icon box, 3px cell padding, 2px between cells.
- * `TAB_BAR_CELL_ICON_BOX_PX` and `TAB_BAR_CELL_PAD_X_PX` are read only by the pre-plan-59 cell
- * rule in tabIndicatorBar.ts; they go when W4 stops reading them. `TAB_BAR_CELL_GAP_PX` (2) stays.
- */
-export const TAB_BAR_CELL_ICON_BOX_PX = 32;
-export const TAB_BAR_CELL_PAD_X_PX = 3;
+/** The gap between the open strip's cells (plan 59 § 3 item 1). */
 export const TAB_BAR_CELL_GAP_PX = 2;
 
 /**

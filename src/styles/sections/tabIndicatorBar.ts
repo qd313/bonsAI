@@ -9,8 +9,10 @@
  *
  *     at rest:        - - - -   ASK              LB  RB
  *     focused, open:  ┌─────────────────────────────────┐
- *                     │ [Ask] [Chats] [Settings] [...]   │
+ *                     │(LB) [i] [I] [i] [i] [i] [i] (RB) │
+ *                     │         settings                 │
  *                     └─────────────────────────────────┘
+ *     (six equal icon cells; only the current one, "I", also shows its name)
  *
  * Used for: Folded into the plugin's one combined stylesheet by
  * bonsaiScopeStylesheet.ts, alongside the other numbered section files.
@@ -21,17 +23,25 @@
  */
 import {
   TAB_BAR_CELL_GAP_PX,
-  TAB_BAR_CELL_ICON_BOX_PX,
-  TAB_BAR_CELL_PAD_X_PX,
+  TAB_BAR_CELL_HEIGHT_PX,
+  TAB_BAR_CELL_ICON_PX,
+  TAB_BAR_CELL_ICON_TOP_PX,
+  TAB_BAR_CELL_NAME_PX,
+  TAB_BAR_CELL_RADIUS_PX,
   TAB_BAR_DASH_ACTIVE_EXTRA_H_PX,
   TAB_BAR_DASH_GAP_PX,
   TAB_BAR_DASH_H_PX,
   TAB_BAR_DASH_W_PX,
-  TAB_BAR_LABEL_PX,
   TAB_BAR_NAME_PX,
   TAB_BAR_OPEN_HEIGHT_PX,
+  TAB_BAR_PILL_PAD_X_PX,
+  TAB_BAR_PILL_PAD_Y_PX,
   TAB_BAR_REST_HEIGHT_PX,
   TAB_BAR_SHOULDER_MARK_PX,
+  TAB_BAR_SLOT_W_PX,
+  TAB_BAR_STRIP_PAD_X_PX,
+  TAB_BAR_STRIP_PAD_Y_PX,
+  TAB_BAR_SWITCH_FADE_MS,
   TAB_STRIP_BODY_GAP_PX,
 } from "../../features/unified-input/constants";
 import { uiScalePx } from "./uiScalePx";
@@ -39,8 +49,12 @@ import { uiScalePx } from "./uiScalePx";
 /** The slot-row pill colour (section-6.ts), reused so the marks read as the same family of hint. */
 const MARK_COLOR = "rgba(168, 182, 198, 0.62)";
 const DASH_COLOR = "rgba(168, 182, 198, 0.35)";
-/** The same character accent the active icon used to take; the fallback is the forest green default. */
-const ACCENT = "var(--bonsai-ui-tab-focus-1, rgba(82, 216, 138, 0.92))";
+/**
+ * The lit tab's colour, on the thin bar's dash/name and the strip's lit cell alike (plan 59 W3's
+ * second half): the character's colour, lifted just enough to read on the dark bar, computed in
+ * characterUiAccent.ts. The fallback is the same hand-picked green the design asks for.
+ */
+const ACCENT = "var(--bonsai-ui-tab-lit, #52d88a)";
 
 /**
  * In: nothing — every value here is a fixed string or read from a CSS
@@ -68,10 +82,13 @@ const ACCENT = "var(--bonsai-ui-tab-focus-1, rgba(82, 216, 138, 0.92))";
  *    specificity carefully chosen to beat a conflicting reset elsewhere
  *    (explained inline) — without it the strip pushed the rest of the
  *    screen down instead of floating over it.
- * 7. Styles the open strip's look: fades in and out, and is not clickable
- *    or reachable by the D-pad while closed.
- * 8. Styles each tab cell inside the open strip (icon, label, and the
- *    highlighted look for whichever tab is current).
+ * 7. Styles the open strip's look (plan 59): a solid bar with a bottom
+ *    line and a soft shadow under it, fading in and out, and not
+ *    clickable or reachable by the D-pad while closed.
+ * 8. Styles the LB/RB pills in their fixed slots and each tab cell inside
+ *    the strip: one shared icon size and position in every cell, a soft
+ *    fill on whichever cell is current, and that cell's name fading in
+ *    under its icon while every other cell's stays hidden.
  * 9. Styles the current tab's name, shown at rest next to the dashes,
  *    capped to the same size as other small pill labels elsewhere in the
  *    plugin.
@@ -167,6 +184,13 @@ export function buildTabIndicatorBarSection(): string {
           left: 0 !important;
           right: 0 !important;
         }
+        /* Plan 59: a solid bar (no gradient) with a bottom line and a shadow instead of the old
+           translucent look. The content box works out to 55px (66 minus the 1px bottom line minus
+           the 10px of top/bottom padding); the 44px cells sit centred in it by align-items: center,
+           about 5.5px of empty space above and below, exactly as the chosen mockup drew them (the
+           board's own drawing was a 54px bar with a 43px content box; the cells themselves did not
+           change). TAB_BAR_STRIP_BG_HEX is not in constants.ts yet (Lane B's token, plan 59 W3) —
+           #141c24 is the same colour written as a literal; the landing reconciles the two. */
         .bonsai-scope .bonsai-tab-bar__strip {
           position: absolute;
           top: 0;
@@ -175,13 +199,14 @@ export function buildTabIndicatorBarSection(): string {
           z-index: 3;
           box-sizing: border-box;
           height: ${uiScalePx(TAB_BAR_OPEN_HEIGHT_PX)};
-          padding: 0 ${uiScalePx(6)};
+          padding: ${uiScalePx(TAB_BAR_STRIP_PAD_Y_PX)} ${uiScalePx(TAB_BAR_STRIP_PAD_X_PX)};
           display: flex;
           align-items: center;
           gap: ${uiScalePx(TAB_BAR_CELL_GAP_PX)};
           overflow: hidden;
-          background: linear-gradient(180deg, rgba(20, 28, 36, 0.98), rgba(12, 18, 24, 0.96));
-          border-bottom: 1px solid rgba(156, 231, 255, 0.18);
+          background: #141c24; /* = TAB_BAR_STRIP_BG_HEX (Lane B's token); the landing reconciles */
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
           opacity: 0;
           visibility: hidden;
           pointer-events: none;
@@ -193,55 +218,92 @@ export function buildTabIndicatorBarSection(): string {
           pointer-events: auto;
           transition: opacity 120ms ease-out;
         }
-        .bonsai-scope .bonsai-tab-bar__strip .bonsai-tab-bar__shoulder {
+        /* LB/RB sit in a fixed-width slot so the cells never shift when the pill hides (section
+           6.ts hides .bonsai-tab-bar__shoulder by visibility while the chat-slot row has the
+           ring; that class stays on the pill inside the slot so the same rule still reaches it). */
+        .bonsai-scope .bonsai-tab-bar__slot {
           flex: 0 0 auto;
+          width: ${uiScalePx(TAB_BAR_SLOT_W_PX)};
+          display: flex;
+          justify-content: center;
         }
-        .bonsai-scope .bonsai-tab-bar__strip .bonsai-tab-bar__shoulder--r {
-          margin-left: auto;
+        /* Reuses the chat-slot row's own bumper-pill values (section 6.ts) so the two hints read as
+           one family. Ordered after the plain .bonsai-tab-bar__shoulder rule above (same
+           specificity), so this rule's colour and letter-spacing win on the strip's own pills; the
+           thin bar's own LB/RB marks, which carry only the older class, are untouched. */
+        .bonsai-scope .bonsai-tab-bar__pill {
+          font-size: ${uiScalePx(TAB_BAR_SHOULDER_MARK_PX)};
+          font-weight: 700;
+          line-height: 1;
+          letter-spacing: 0;
+          padding: ${uiScalePx(TAB_BAR_PILL_PAD_Y_PX)} ${uiScalePx(TAB_BAR_PILL_PAD_X_PX)};
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.08);
+          color: #8fa8c4;
         }
         .bonsai-scope .bonsai-tab-bar__cell {
-          flex: 0 0 auto;
+          flex: 1 1 0;
+          min-width: 0;
           box-sizing: border-box;
+          height: ${uiScalePx(TAB_BAR_CELL_HEIGHT_PX)};
           display: flex;
           flex-direction: column;
           align-items: center;
-          justify-content: center;
-          gap: ${uiScalePx(1)};
-          min-width: ${uiScalePx(TAB_BAR_CELL_ICON_BOX_PX + 2 * TAB_BAR_CELL_PAD_X_PX)};
-          height: ${uiScalePx(TAB_BAR_OPEN_HEIGHT_PX - 6)};
-          padding: 0 ${uiScalePx(TAB_BAR_CELL_PAD_X_PX)};
-          border-radius: ${uiScalePx(6)};
+          justify-content: flex-start;
+          padding: ${uiScalePx(TAB_BAR_CELL_ICON_TOP_PX)} 0 0;
+          gap: ${uiScalePx(2)};
+          border-radius: ${uiScalePx(TAB_BAR_CELL_RADIUS_PX)};
+          background: transparent;
           color: rgba(168, 182, 198, 0.62);
           cursor: pointer;
+          transition: background-color ${TAB_BAR_SWITCH_FADE_MS}ms ease-out;
         }
-        /* Active cell: R5's own board 2b fill plus a 2px accent ring — our ring, not Steam's. */
+        /* Active cell: a soft fill only, no ring and no underline (plan 59 § 3 item 6). */
         .bonsai-scope .bonsai-tab-bar__cell--active {
-          background: rgba(255, 255, 255, 0.1);
-          box-shadow: 0 0 0 ${uiScalePx(2)} ${ACCENT};
-          color: var(--bonsai-ui-tab-active-icon, ${ACCENT});
+          background: rgba(255, 255, 255, 0.08);
+          color: ${ACCENT};
         }
         .bonsai-scope .bonsai-tab-bar__cell-icon {
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          width: ${uiScalePx(TAB_BAR_CELL_ICON_BOX_PX)};
-          height: ${uiScalePx(TAB_BAR_CELL_ICON_BOX_PX)};
+          width: ${uiScalePx(TAB_BAR_CELL_ICON_PX)};
+          height: ${uiScalePx(TAB_BAR_CELL_ICON_PX)};
+          overflow: visible; /* the bug's 26px shell, centred in this 22px box, overhangs 2px top and
+                                 bottom on purpose -- the board's "26 with -2px margins". */
           color: inherit;
         }
         .bonsai-scope .bonsai-tab-bar__cell-icon svg {
           display: block;
         }
-        .bonsai-scope .bonsai-tab-bar__cell-label {
-          font-size: ${uiScalePx(TAB_BAR_LABEL_PX)};
+        /* Present in every cell's markup, faded by opacity, never added or removed (plan 59 § 5):
+           the fade-out needs the old name still there, and the icon then sits at one height in
+           every cell with no per-cell measuring. May overhang its cell by a couple of pixels at six
+           tabs (design-language Rule 4 tolerance) -- no overflow clipping here on purpose. */
+        .bonsai-scope .bonsai-tab-bar__cell-name {
+          font-size: ${uiScalePx(TAB_BAR_CELL_NAME_PX)};
           line-height: 1;
           font-weight: 700;
-          letter-spacing: 0.06em;
-          text-transform: uppercase;
+          letter-spacing: 0;
+          /* Synthetic small caps (Steam's font likely has none of its own). D109 item 4's fallback,
+             if these read too small on the Deck, is to replace this one line with
+             text-transform: uppercase; at the same size -- decided by eye on the device. */
+          font-variant: small-caps;
           white-space: nowrap;
-          color: rgba(168, 182, 198, 0.5);
-        }
-        .bonsai-scope .bonsai-tab-bar__cell--active .bonsai-tab-bar__cell-label {
+          opacity: 0;
           color: ${ACCENT};
+          transition: opacity ${TAB_BAR_SWITCH_FADE_MS}ms ease-out, color ${TAB_BAR_SWITCH_FADE_MS}ms ease-out;
+        }
+        .bonsai-scope .bonsai-tab-bar__cell--active .bonsai-tab-bar__cell-name {
+          opacity: 1;
+        }
+        /* Reduced motion: a state change, not movement, for the switch fade above -- scoped to
+           these two selectors only, the same pattern as section-4.ts's own reduced-motion block. */
+        @media (prefers-reduced-motion: reduce) {
+          .bonsai-scope .bonsai-tab-bar__cell,
+          .bonsai-scope .bonsai-tab-bar__cell-name {
+            transition: none;
+          }
         }
         /* Caps at the size the slot-row bumper pills use; readable at rest is the whole requirement. */
         .bonsai-scope .bonsai-tab-bar__name {

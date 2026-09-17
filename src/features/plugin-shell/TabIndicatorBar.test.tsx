@@ -16,7 +16,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import React from "react";
 
 import { isPointerInsideTabBar, TabIndicatorBar } from "./TabIndicatorBar";
-import { ALL_BONSAI_TAB_IDS, type BonsaiTabId } from "./tabTitles";
+import { ALL_BONSAI_TAB_IDS, BONSAI_TAB_SHORT_NAMES, type BonsaiTabId } from "./tabTitles";
 import { buildBonsaiScopeStylesheet } from "../../styles/bonsaiScopeStylesheet";
 import { rememberUiDocument, resetUiDocument } from "../../utils/uiDocument";
 import {
@@ -129,10 +129,10 @@ describe("TabIndicatorBar at rest", () => {
 
   it("carries the LB and RB marks, present in the markup whether or not they are visible", () => {
     const { container } = render(bar({ tabIds: SIX, currentTab: "main" }));
-    // The thin bar's own marks; the open strip carries its own pair (W5), read separately below.
+    // The thin bar's own marks; the open strip carries its own pair (plan 59: inside fixed slots).
     const marks = Array.from(container.querySelectorAll(".bonsai-tab-bar > .bonsai-tab-bar__shoulder")).map((el) => el.textContent);
     expect(marks).toEqual(["LB", "RB"]);
-    const stripMarks = Array.from(container.querySelectorAll(".bonsai-tab-bar__strip > .bonsai-tab-bar__shoulder")).map((el) => el.textContent);
+    const stripMarks = Array.from(container.querySelectorAll(".bonsai-tab-bar__strip .bonsai-tab-bar__shoulder")).map((el) => el.textContent);
     expect(stripMarks).toEqual(["LB", "RB"]);
   });
 });
@@ -211,12 +211,52 @@ describe("the open strip (plan 30 W5)", () => {
 
   it("shows the same lowercase words at five tabs and six (plan 59 — no more short-form switch)", () => {
     const six = render(bar({ tabIds: SIX, currentTab: "main" }));
-    const sixLabels = Array.from(six.container.querySelectorAll(".bonsai-tab-bar__cell-label")).map((el) => el.textContent);
+    const sixLabels = Array.from(six.container.querySelectorAll(".bonsai-tab-bar__cell-name")).map((el) => el.textContent);
     expect(sixLabels).toEqual(["main", "ollama", "settings", "perms", "dev", "about"]);
     six.unmount();
     const five = render(bar({ tabIds: FIVE, currentTab: "main" }));
-    const fiveLabels = Array.from(five.container.querySelectorAll(".bonsai-tab-bar__cell-label")).map((el) => el.textContent);
+    const fiveLabels = Array.from(five.container.querySelectorAll(".bonsai-tab-bar__cell-name")).map((el) => el.textContent);
     expect(fiveLabels).toEqual(["main", "ollama", "settings", "perms", "about"]);
+  });
+
+  it("every cell carries its name in the markup always; a tab switch changes only which cell is active, never the words", () => {
+    const { container, rerender } = render(bar({ tabIds: SIX, currentTab: "main" }));
+    const namesBefore = Array.from(container.querySelectorAll(".bonsai-tab-bar__cell-name")).map((el) => el.textContent);
+    expect(namesBefore).toEqual(["main", "ollama", "settings", "perms", "dev", "about"]);
+    expect(container.querySelectorAll(".bonsai-tab-bar__cell-name")).toHaveLength(6);
+    expect(
+      container.querySelector(".bonsai-tab-bar__cell--active .bonsai-tab-bar__cell-name")?.textContent,
+    ).toBe("main");
+
+    rerender(bar({ tabIds: SIX, currentTab: "about" }));
+    const namesAfter = Array.from(container.querySelectorAll(".bonsai-tab-bar__cell-name")).map((el) => el.textContent);
+    expect(namesAfter).toEqual(namesBefore);
+    expect(container.querySelectorAll(".bonsai-tab-bar__cell-name")).toHaveLength(6);
+    expect(
+      container.querySelector(".bonsai-tab-bar__cell--active .bonsai-tab-bar__cell-name")?.textContent,
+    ).toBe("about");
+  });
+
+  it("gives every cell an accessible name equal to the tab's short name, since only the lit one shows text", () => {
+    const { container } = render(bar({ tabIds: SIX, currentTab: "main" }));
+    for (const id of SIX) {
+      const cell = container.querySelector(`.bonsai-tab-bar__cell[data-bonsai-tab="${id}"]`);
+      expect(cell?.getAttribute("aria-label")).toBe(BONSAI_TAB_SHORT_NAMES[id]);
+    }
+  });
+
+  it("puts LB and RB each in their own fixed-width slot, so the pill hiding never shifts a cell", () => {
+    const { container } = render(bar({ tabIds: SIX, currentTab: "main" }));
+    const slots = container.querySelectorAll(".bonsai-tab-bar__strip > .bonsai-tab-bar__slot");
+    expect(slots).toHaveLength(2);
+    for (const slot of Array.from(slots)) {
+      expect(slot.querySelector(".bonsai-tab-bar__shoulder")).not.toBeNull();
+    }
+    const slotRule = rulesOf(buildBonsaiScopeStylesheet()).find(
+      ([selector]) => selector === ".bonsai-scope .bonsai-tab-bar__slot",
+    );
+    expect(slotRule).toBeDefined();
+    expect(slotRule?.[1]).toMatch(/width:\s*\S/);
   });
 
   it("shows the strip while the bar holds the ring and hides it when the ring leaves", () => {
@@ -320,6 +360,50 @@ describe("the open strip (plan 30 W5)", () => {
       expect(strip.style.opacity).toBe("");
       expect(strip.classList.contains("bonsai-tab-bar__strip--open")).toBe(true);
     });
+  });
+});
+
+describe("the open strip's new look (plan 59 W4)", () => {
+  const rules = rulesOf(buildBonsaiScopeStylesheet());
+
+  it("fades the name in only on the active cell: opacity 0 at rest, opacity 1 when active", () => {
+    const nameRule = rules.find(([selector]) => selector === ".bonsai-scope .bonsai-tab-bar__cell-name");
+    expect(nameRule).toBeDefined();
+    expect(nameRule?.[1]).toMatch(/opacity:\s*0\b/);
+
+    const activeNameRule = rules.find(
+      ([selector]) => selector === ".bonsai-scope .bonsai-tab-bar__cell--active .bonsai-tab-bar__cell-name",
+    );
+    expect(activeNameRule).toBeDefined();
+    expect(activeNameRule?.[1]).toMatch(/opacity:\s*1\b/);
+  });
+
+  it("lights the active cell with a fill only -- no ring, no box-shadow", () => {
+    const activeCellRule = rules.find(([selector]) => selector === ".bonsai-scope .bonsai-tab-bar__cell--active");
+    expect(activeCellRule).toBeDefined();
+    expect(activeCellRule?.[1]).not.toMatch(/box-shadow/);
+  });
+
+  it("the strip is 66px tall and each cell is 44px tall, so the chosen height cannot drift silently", () => {
+    const stripRule = rules.find(([selector]) => selector === ".bonsai-scope .bonsai-tab-bar__strip");
+    expect(stripRule).toBeDefined();
+    expect(stripRule?.[1]).toMatch(/height:\s*calc\(66px \* var\(--bonsai-ui-scale, 1\)\)/);
+
+    const cellRule = rules.find(([selector]) => selector === ".bonsai-scope .bonsai-tab-bar__cell");
+    expect(cellRule).toBeDefined();
+    expect(cellRule?.[1]).toMatch(/height:\s*calc\(44px \* var\(--bonsai-ui-scale, 1\)\)/);
+  });
+
+  it("turns off the switch fade under reduced motion, for the cell and its name only", () => {
+    const css = buildBonsaiScopeStylesheet();
+    const reducedMotionBlock = css.match(/@media \(prefers-reduced-motion: reduce\) \{([\s\S]*?)\n {8}\}/g);
+    const hitsCellAndName = (reducedMotionBlock ?? []).some(
+      (block) =>
+        block.includes(".bonsai-tab-bar__cell") &&
+        block.includes(".bonsai-tab-bar__cell-name") &&
+        /transition:\s*none/.test(block),
+    );
+    expect(hitsCellAndName).toBe(true);
   });
 });
 

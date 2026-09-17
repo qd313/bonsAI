@@ -535,13 +535,23 @@ class Unit:
 _SENTENCE_SPLIT_RE = re.compile(r"(?<=[.!?])\s+")
 _MARKER_CELL_RE = re.compile(r"(!!|\|\|)\s*([^!|]*?)\s*(?=!!|\|\||$)")
 
+# Left-to-right/right-to-left marks and zero-width spaces/joiners, plus a stray byte-order
+# mark -- invisible on screen but real characters. Hollow Knight wiki's False Knight page
+# opens its "Behaviour and Tactics" section with two of these; trimmed here, at the edge of
+# every unit, rather than left to sit at the very start of a printed note.
+_INVISIBLE_MARKS_RE = re.compile(r"^[\s​-‏﻿]+|[\s​-‏﻿]+$")
+
+
+def _clean(s: str) -> str:
+    return _INVISIBLE_MARKS_RE.sub("", s)
+
 
 def _split_sentences(line: str) -> list[str]:
-    return [s for s in (part.strip() for part in _SENTENCE_SPLIT_RE.split(line)) if s]
+    return [s for s in (_clean(part) for part in _SENTENCE_SPLIT_RE.split(line)) if s]
 
 
 def _split_marked_cells(line: str) -> list[tuple[str, str]]:
-    return [(m.group(1), m.group(2).strip()) for m in _MARKER_CELL_RE.finditer(line) if m.group(2).strip()]
+    return [(m.group(1), _clean(m.group(2))) for m in _MARKER_CELL_RE.finditer(line) if _clean(m.group(2))]
 
 
 def body_to_units(body: str) -> tuple[list[Unit], list[str]]:
@@ -617,14 +627,14 @@ def body_to_units(body: str) -> tuple[list[Unit], list[str]]:
                 # cell -- the page already did the labelling, so keep it as-is.
                 solo_label_match = re.match(r"^([^:]{1,60}):\s+(.+)$", cells[0][1])
                 if solo_label_match:
-                    label, value = solo_label_match.group(1), solo_label_match.group(2)
+                    label, value = _clean(solo_label_match.group(1)), _clean(solo_label_match.group(2))
                     units.append(Unit("label", f"{label}: {value}", [label, value]))
                     continue
             dropped_notes.append(f"could not parse a marked table/infobox line: {line[:80]!r}")
             continue
         list_match = re.match(r"^-\s+(.*)$", line)
         if list_match:
-            item = list_match.group(1).strip()
+            item = _clean(list_match.group(1))
             if item:
                 # Its own line always, like a label -- several list items joined into one
                 # flowing sentence would no longer read as the page's own list.

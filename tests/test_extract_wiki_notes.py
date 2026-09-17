@@ -126,6 +126,22 @@ class BodyToUnitsTests(unittest.TestCase):
         card = m.render_card(units)
         self.assertEqual(card, "- First tip.\n- Second tip.")
 
+    def test_invisible_marks_are_trimmed_from_a_sentence(self):
+        """Real case from hollowknight.wiki's False Knight page: its "Behaviour and
+        Tactics" section opens with two left-to-right marks (U+200E) that are invisible on
+        screen but were landing at the very start of the printed note."""
+        units, _ = m.body_to_units("‎ ‎ Most attack names used by the wiki are non-canon.\n")
+        self.assertEqual(units[0].text, "Most attack names used by the wiki are non-canon.")
+
+    def test_invisible_marks_are_trimmed_from_a_list_item(self):
+        units, _ = m.body_to_units("- ‎Leap: jumps into the air.\n")
+        self.assertEqual(units[0].text, "- Leap: jumps into the air.")
+
+    def test_invisible_marks_are_trimmed_from_a_labelled_value(self):
+        units, _ = m.body_to_units("|| Description: ‎Falls back and lands.\n")
+        self.assertEqual(units[0].text, "Description: Falls back and lands.")
+        self.assertEqual(units[0].checks, ["Description", "Falls back and lands."])
+
     def test_nested_heading_inside_the_section_is_dropped_and_named(self):
         units, dropped = m.body_to_units("Lead in.\n== Sub heading\nMore text.\n")
         self.assertEqual([u.text for u in units], ["Lead in.", "More text."])

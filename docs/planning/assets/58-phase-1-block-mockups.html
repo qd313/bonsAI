@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Plan 58 phase 1: the "From the notes" block, drawn at true size</title>
+<style>
+  :root {
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #0b1015;
+    color: #d4dde6;
+    font-family: -apple-system, "Segoe UI", system-ui, Roboto, sans-serif;
+  }
+  body {
+    padding: 20px 12px 60px;
+  }
+  .page-head {
+    max-width: 620px;
+    margin: 0 auto 28px;
+  }
+  .page-head h1 {
+    font-size: 18px;
+    line-height: 1.35;
+    margin: 0 0 8px;
+    color: #e8eef5;
+  }
+  .page-head p {
+    font-size: 13px;
+    line-height: 1.55;
+    color: #a8b4c4;
+    margin: 0 0 10px;
+  }
+  .page-head .guess-note {
+    font-size: 11px;
+    color: #8fa8c4;
+    border-left: 2px solid rgba(255,255,255,0.15);
+    padding-left: 8px;
+  }
+
+  /* --- The legend box: the three header kinds, read at a glance --- */
+  .legend {
+    max-width: 620px;
+    margin: 0 auto 32px;
+    background: rgba(18, 26, 34, 0.55);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .legend h2 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: #9ce7ff;
+    margin: 0 0 8px;
+    text-transform: uppercase;
+  }
+  .legend-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #c8daf0;
+  }
+  .legend-row b { color: #d6ae74; font-weight: 700; }
+
+  /* --- Layout: every drawing stacked, each exactly 412px wide --- */
+  .drawing-block {
+    max-width: 620px;
+    margin: 0 auto 34px;
+  }
+  .caption {
+    font-size: 13px;
+    font-weight: 600;
+    color: #e8eef5;
+    margin: 0 0 4px;
+  }
+  .sub-caption {
+    font-size: 11px;
+    color: #8fa8c4;
+    margin: 0 0 10px;
+    line-height: 1.5;
+  }
+  .ruler-wrap {
+    width: 412px;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  .ruler {
+    width: 412px;
+    height: 14px;
+    position: relative;
+    margin-bottom: 4px;
+    border-bottom: 1px dashed rgba(255,255,255,0.25);
+  }
+  .ruler span {
+    position: absolute;
+    right: 0;
+    top: -2px;
+    font-size: 9px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.02em;
+  }
+
+  /* ============================================================
+     Everything below this line is copied from the plugin's own
+     stylesheet, section-6.ts, so the drawing is not an approximation.
+     Selectors are renamed .mock-scope instead of .bonsai-scope so this
+     page cannot collide with anything; values are unchanged.
+     ============================================================ */
+  .mock-scope {
+    width: 412px;
+    max-width: 100%;
+    background: #12161c; /* the QAM panel's own dark chrome behind the scope */
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 10px 4px 10px 4px;
+  }
+  .mock-chat-transcript {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 0 6px 0 4px;
+  }
+  .mock-turn-row {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Question bubble: section-6.ts .bonsai-chat-turn-row-header(--expanded) */
+  .mock-question {
+    display: block;
+    width: fit-content;
+    max-width: min(92%, 280px);
+    min-width: 0;
+    margin-left: auto;
+    margin-right: 0;
+    align-self: flex-end;
+    box-sizing: border-box;
+    text-align: right;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(120, 155, 198, 0.42);
+    background: linear-gradient(180deg, rgba(36, 52, 72, 0.82) 0%, rgba(24, 36, 52, 0.85) 100%);
+    color: #e8eef4;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  /* AI bubble: section-6.ts .bonsai-chat-ai-bubble.bonsai-glass-panel + -inner */
+  .mock-ai-bubble {
+    width: min(92%, 100%);
+    max-width: min(92%, 100%);
+    align-self: flex-start;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 1px solid rgba(46, 135, 83, 0.48);
+    background:
+      linear-gradient(0deg, rgba(130, 183, 152, 0.11), rgba(130, 183, 152, 0.11)),
+      linear-gradient(180deg, rgba(46, 135, 83, 0.12) 0%, rgba(18, 52, 34, 0.55) 100%);
+    color: #d4dde6;
+    overflow: hidden;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+  .mock-ai-bubble-inner {
+    padding: 8px 10px;
+    box-sizing: border-box;
+  }
+  .mock-ai-p {
+    margin: 0 0 0.5em 0;
+  }
+  .mock-ai-p:last-child { margin-bottom: 0; }
+
+  /* The spoiler cover and expanded panel: exact inline styles from
+     MainTabBonsaiAiMarkdownChunk.tsx's BonsaiSpoilerFence, copied verbatim. */
+  .mock-spoiler-closed {
+    margin: 8px 0;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(150, 187, 223, 0.45);
+    background: #0a0a0a; /* .bonsai-spoiler-reveal-target override, section-6.ts */
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .mock-spoiler-closed .title {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(160, 160, 160, 0.85); /* section-6.ts reveal-target > div:first-child override */
+    line-height: 1.35;
+  }
+  .mock-spoiler-closed .sub {
+    font-size: 11px;
+    color: rgba(190, 205, 220, 0.75);
+    margin-top: 4px;
+  }
+  .mock-spoiler-open {
+    margin: 8px 0;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(120, 160, 200, 0.35);
+    background: rgba(20, 36, 52, 0.42);
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .mock-spoiler-open .hide-btn {
+    margin-bottom: 8px;
+    font-size: 11px;
+    color: rgba(170, 200, 230, 0.85);
+    font-weight: 600;
+  }
+
+  /* --- The block itself: new for this page, built from the same
+     material language already in the file (attribution gold from
+     ContextChipLadder.tsx / contextChipsFromSnapshot.ts, the spoiler
+     cover's blue-grey frame, the chevron convention from
+     SessionContextStrip.tsx "▾"/"▸"). Nothing here exists in the
+     plugin yet; it is the option being proposed. --- */
+  .mock-block {
+    margin-top: 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(214, 174, 116, 0.4);
+    background: rgba(214, 174, 116, 0.07);
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 11px;
+  }
+  .mock-block-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 7px 10px;
+    cursor: pointer;
+  }
+  .mock-block-header-text {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .mock-block-header-text b {
+    color: #dcc493;
+    font-weight: 700;
+  }
+  .mock-block-header-text .src {
+    color: #a8916a;
+  }
+  .mock-block-chevron {
+    flex: 0 0 auto;
+    color: #d6ae74;
+    font-size: 11px;
+  }
+  .mock-block-body {
+    padding: 0 10px 10px;
+    color: #d8cdb4;
+    line-height: 1.45;
+    border-top: 1px solid rgba(214, 174, 116, 0.22);
+    padding-top: 8px;
+  }
+  .mock-block-body .line {
+    margin: 0 0 6px;
+  }
+  .mock-block-body .line:last-child { margin-bottom: 0; }
+  .mock-block-body .label { color: #dcc493; font-weight: 700; }
+
+  /* Focus ring, exactly design-tokens.md "Outer ring" (gamepadAndPullModels.ts) */
+  .mock-block-header.ring-on {
+    outline: 2px solid rgba(255, 255, 255, 0.9);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.92), 0 0 0 5px rgba(255, 255, 255, 0.2);
+    border-radius: 6px;
+  }
+
+  .row-pair {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  @media (min-width: 700px) {
+    .row-pair.side-by-side { flex-direction: row; }
+  }
+  .mini-note {
+    font-size: 11px;
+    color: #8fa8c4;
+    line-height: 1.5;
+    margin-top: 8px;
+  }
+  .option-note {
+    max-width: 620px;
+    margin: 0 auto 34px;
+    background: rgba(18, 26, 34, 0.4);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 12px;
+    line-height: 1.55;
+    color: #b8cce0;
+  }
+  .option-note h2 {
+    font-size: 12px;
+    color: #e8eef5;
+    margin: 0 0 6px;
+  }
+  hr.sep {
+    max-width: 620px;
+    margin: 30px auto;
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+</style>
+</head>
+<body>
+
+<div class="page-head">
+  <h1>Plan 58, phase 1: the "From the notes" block</h1>
+  <p>
+    This page draws the new block that would sit under a reply once bonsAI has used a note from
+    its library. Nothing here is built yet. Every drawing is sized to the transcript column
+    (412 pixels), uses the plugin's real colours, spacing and type, and quotes a real note's own
+    words from the library on disk. Pick which drawing looks right, or say what to change.
+  </p>
+  <p class="guess-note">
+    One thing could not be read from the code: the Deck's own text font. Steam ships a font this
+    page cannot load outside the plugin, so the type below uses the device's own system font at
+    the plugin's real sizes and weights instead. Everything else, colour, spacing, radius, border,
+    is copied from the stylesheet, not approximated.
+  </p>
+</div>
+
+<div class="legend">
+  <h2>The three header wordings used on this page</h2>
+  <div class="legend-row"><b>Starting out in Pikmin 2 &middot; From the Pikmin wiki</b></div>
+  <div class="legend-row"><b>Broken Vessel &middot; From the Hollow Knight wiki</b></div>
+  <div class="legend-row"><b>From the shared Deck tips</b></div>
+  <div class="legend-row"><b>Exploder &middot; From bonsAI's own notes, no source</b></div>
+</div>
+
+<!-- ============================================================
+     DRAWING 1: Pikmin 2, block CLOSED
+     ============================================================ -->
+<div class="drawing-block">
+  <p class="caption">1. Closed by default, before it is opened</p>
+  <p class="sub-caption">
+    A Strategy reply about Pikmin 2. The reply text below is wrong: it says there is a day
+    limit. The block underneath names the real note; opening it (drawing 2) shows the note says
+    the opposite.
+  </p>
+  <div class="ruler-wrap">
+    <div class="ruler"><span>412 px</span></div>
+    <div class="mock-scope">
+      <div class="mock-chat-transcript">
+        <div class="mock-turn-row">
+          <div class="mock-question">Is there a day limit in Pikmin 2?</div>
+          <div class="mock-ai-bubble">
+            <div class="mock-ai-bubble-inner">
+              <div class="mock-ai-p">
+                Yes, Pikmin 2 keeps the day limit from the first game. You've got a fixed number
+                of days to gather enough treasure, so plan your caves carefully and don't waste
+                daylight backtracking to the ship. Bring a mix of colours so hazards don't stall
+                you, and call every Pikmin back to an Onion before the sun goes down or you'll
+                lose them overnight.
+              </div>
+              <div class="mock-block">
+                <div class="mock-block-header">
+                  <span class="mock-block-header-text">
+                    <b>Starting out in Pikmin 2</b> <span class="src">&middot; From the Pikmin wiki</span>
+                  </span>
+                  <span class="mock-block-chevron">&#9656;</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     DRAWING 1b: the "no source" header, open, and the labelled-lines proof
+     ============================================================ -->
+<div class="drawing-block">
+  <p class="caption">1b. Beside drawing 1: the "no source" header, and a note that keeps its labels</p>
+  <p class="sub-caption">
+    A different real note, this one written by bonsAI with no wiki behind it (Deep Rock
+    Galactic: Survivor's "Exploder" enemy). Opened here so the same drawing also proves the
+    other thing today's block cannot do: a note written as labelled lines (Summary / Weak
+    points / Tips) keeps those labels as separate lines instead of running together.
+  </p>
+  <div class="ruler-wrap">
+    <div class="ruler"><span>412 px</span></div>
+    <div class="mock-scope">
+      <div class="mock-chat-transcript">
+        <div class="mock-turn-row">
+          <div class="mock-question">What's the deal with the ones that explode when they reach you?</div>
+          <div class="mock-ai-bubble">
+            <div class="mock-ai-bubble-inner">
+              <div class="mock-ai-p">
+                Those are Exploders. Keep your distance rather than standing still, since they
+                only hurt you by reaching you, and popping one early tends to clear the ones
+                walking up behind it too.
+              </div>
+              <div class="mock-block">
+                <div class="mock-block-header">
+                  <span class="mock-block-header-text">
+                    <b>Exploder</b> <span class="src">&middot; From bonsAI's own notes, no source</span>
+                  </span>
+                  <span class="mock-block-chevron">&#9662;</span>
+                </div>
+                <div class="mock-block-body">
+                  <div class="line"><span class="label">Summary:</span> Large orange glyphids that walk into you and detonate in a wide blast.</div>
+                  <div class="line"><span class="label">Weak points:</span> Fragile, and the blasts chain, so one popped early clears the group behind it.</div>
+                  <div class="line"><span class="label">Tips:</span> Weapons fire themselves, so it dies where you stand - keep distance and the blast lands in the swarm instead.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="mini-note">
+    The three lines above are the note's exact words from <code>data/kb/strategy_seed.json</code>
+    (section 120), including its own punctuation. Nothing was reworded for this page.
+  </p>
+</div>
+
+<!-- ============================================================
+     DRAWING 2: Pikmin 2, block OPEN
+     ============================================================ -->
+<div class="drawing-block">
+  <p class="caption">2. The same reply, block open</p>
+  <p class="sub-caption">
+    Same question, same wrong reply as drawing 1. Opening the block shows the note's own words,
+    which say the opposite of what the reply just said. That contrast, visible instead of
+    hidden, is the entire point of the block.
+  </p>
+  <div class="ruler-wrap">
+    <div class="ruler"><span>412 px</span></div>
+    <div class="mock-scope">
+      <div class="mock-chat-transcript">
+        <div class="mock-turn-row">
+          <div class="mock-question">Is there a day limit in Pikmin 2?</div>
+          <div class="mock-ai-bubble">
+            <div class="mock-ai-bubble-inner">
+              <div class="mock-ai-p">
+                Yes, Pikmin 2 keeps the day limit from the first game. You've got a fixed number
+                of days to gather enough treasure, so plan your caves carefully and don't waste
+                daylight backtracking to the ship. Bring a mix of colours so hazards don't stall
+                you, and call every Pikmin back to an Onion before the sun goes down or you'll
+                lose them overnight.
+              </div>
+              <div class="mock-block">
+                <div class="mock-block-header">
+                  <span class="mock-block-header-text">
+                    <b>Starting out in Pikmin 2</b> <span class="src">&middot; From the Pikmin wiki</span>
+                  </span>
+                  <span class="mock-block-chevron">&#9662;</span>
+                </div>
+                <div class="mock-block-body">
+                  <div class="line">
+                    There is no day limit this time: the goal is ten thousand Pokos of treasure
+                    to clear the company's debt, and treasures and enemy bodies both pay. Two
+                    captains share the work, and the button that used to pause now swaps between
+                    them, so one can carry while the other fights. The day still ends at sunset,
+                    and any Pikmin not with a captain or back at the Onion is eaten when the night
+                    creatures wake, so watch the sun and call everyone in early. The colours: red
+                    for fire and the hardest hitters, yellow thrown highest and safe from
+                    electricity, blue the only ones for water, purple heavy and strong, white
+                    fast, poison-proof and able to see treasure buried underground. Bulbmin, found
+                    only in certain caves, shrug off every hazard but cannot leave with you.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="mini-note">
+    The note text above is section 250, "Starting out in Pikmin 2", verbatim from
+    <code>data/kb/strategy_seed.json</code>.
+  </p>
+</div>
+
+<!-- ============================================================
+     DRAWING: focus ring check (pair-effects check)
+     ============================================================ -->
+<div class="drawing-block">
+  <p class="caption">Checked as a pair: the D-pad ring on the closed row</p>
+  <p class="sub-caption">
+    Two effects share one edge here: the block's own gold border, and Steam's white focus ring
+    when the D-pad lands on the row. This is the same ring rule already used on the Show
+    details / Read aloud rows (design-tokens.md, "Outer ring"), so it is expected to sit outside
+    the block's border rather than fight it. Drawn here to check that on paper before it is built.
+  </p>
+  <div class="ruler-wrap">
+    <div class="ruler"><span>412 px</span></div>
+    <div class="mock-scope">
+      <div class="mock-chat-transcript">
+        <div class="mock-block" style="margin-top:0;">
+          <div class="mock-block-header ring-on">
+            <span class="mock-block-header-text">
+              <b>Starting out in Pikmin 2</b> <span class="src">&middot; From the Pikmin wiki</span>
+            </span>
+            <span class="mock-block-chevron">&#9656;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="mini-note">
+    Renders clean: the ring sits 2px outside the block's own border with its own offset, the same
+    geometry the Show details row already uses. No visible fight between the two.
+  </p>
+</div>
+
+<hr class="sep" />
+
+<!-- ============================================================
+     DRAWING 3a/3b: fenced Hollow Knight boss reply
+     ============================================================ -->
+<div class="drawing-block">
+  <p class="caption">3. A fenced reply: the block inside the spoiler box, closed</p>
+  <p class="sub-caption">
+    Hollow Knight is story-protected and the player has not opted into spoilers, so the whole
+    reply, block included, is hidden behind the cover. The question named the boss by its role,
+    not its name.
+  </p>
+  <div class="ruler-wrap">
+    <div class="ruler"><span>412 px</span></div>
+    <div class="mock-scope">
+      <div class="mock-chat-transcript">
+        <div class="mock-turn-row">
+          <div class="mock-question">What should I know about the boss past the crystal spike area, the one that looks just like me?</div>
+          <div class="mock-ai-bubble">
+            <div class="mock-ai-bubble-inner">
+              <div class="mock-spoiler-closed">
+                <div class="title">Spoiler &mdash; tap to show</div>
+                <div class="sub">Hidden until you reveal (Strategy Guide).</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="drawing-block">
+  <p class="caption">3. The same fenced reply, opened</p>
+  <p class="sub-caption">
+    Revealing the spoiler shows the reply and the block together, inside the one box. The block
+    itself still starts closed, exactly as it would outside a spoiler.
+  </p>
+  <div class="ruler-wrap">
+    <div class="ruler"><span>412 px</span></div>
+    <div class="mock-scope">
+      <div class="mock-chat-transcript">
+        <div class="mock-turn-row">
+          <div class="mock-question">What should I know about the boss past the crystal spike area, the one that looks just like me?</div>
+          <div class="mock-ai-bubble">
+            <div class="mock-ai-bubble-inner">
+              <div class="mock-spoiler-open">
+                <div class="hide-btn">Spoiler &mdash; tap to hide</div>
+                <div class="mock-ai-p">
+                  That's Broken Vessel, deep in the Ancient Basin. It dashes with wide slashes,
+                  flails its nail overhead, and slams down to throw arcs of infection across the
+                  floor, so give yourself room. When its health drops it shakes out a cascade of
+                  blobs that covers nearly everywhere, and weak balloons drift in from the sides
+                  too. Heal when it staggers after a slam, head weighed down and shaking.
+                </div>
+                <div class="mock-block">
+                  <div class="mock-block-header">
+                    <span class="mock-block-header-text">
+                      <b>Broken Vessel</b> <span class="src">&middot; From the Hollow Knight wiki</span>
+                    </span>
+                    <span class="mock-block-chevron">&#9656;</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="mini-note">
+    Header uses the note's real source: <code>hollowknight.wiki</code>, CC-BY-SA-3.0
+    (section 186 in the seed file).
+  </p>
+</div>
+
+<hr class="sep" />
+
+<!-- ============================================================
+     DRAWING 4: troubleshooting tip
+     ============================================================ -->
+<div class="drawing-block">
+  <p class="caption">4. A troubleshooting reply, tip block open</p>
+  <p class="sub-caption">
+    Nothing running, a plain problem sentence. The tip's own words are shown, so a launch option
+    or setting name arrives exactly as written rather than however the model chose to phrase it.
+  </p>
+  <div class="ruler-wrap">
+    <div class="ruler"><span>412 px</span></div>
+    <div class="mock-scope">
+      <div class="mock-chat-transcript">
+        <div class="mock-turn-row">
+          <div class="mock-question">My game freezes for a few seconds right after I hit play. Is there a fix?</div>
+          <div class="mock-ai-bubble">
+            <div class="mock-ai-bubble-inner">
+              <div class="mock-ai-p">
+                That's usually Proton warming up caches on the first launch after an update. Give
+                it a minute before force-closing it, and if it keeps happening on every launch,
+                clearing the shader cache for the game often clears it up too.
+              </div>
+              <div class="mock-block">
+                <div class="mock-block-header">
+                  <span class="mock-block-header-text">
+                    <span class="src">From the shared Deck tips</span>
+                  </span>
+                  <span class="mock-block-chevron">&#9662;</span>
+                </div>
+                <div class="mock-block-body">
+                  <div class="line">
+                    Proton log: PROTON_LOG=1 %command% captures useful launch traces to
+                    ~/steam-*.log.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="mini-note">
+    Tip text is pattern 10 in <code>data/kb/compat_patterns.json</code>, verbatim, including the
+    launch-option string. Tips carry no per-item title in the data (only a shared topic tag like
+    "proton"), which is why this header has no name before the source, unlike drawings 1 to 3.
+  </p>
+</div>
+
+<hr class="sep" />
+
+<div class="option-note">
+  <h2>The third option: open only when short</h2>
+  <p>
+    The maintainer's question 1 named three shapes: closed by default, open by default, or open
+    only when the note is short. The first two are drawn above (1 and 2 are the same reply, closed
+    then open). The third looks identical to drawing 2 when it applies, the difference is only in
+    when it applies: the block would start open on its own for a short note like the Exploder tip
+    in drawing 1b (three lines), and start closed for a long one like the Pikmin note in drawing 2
+    (five sentences). No separate drawing is needed for this option since its open state is the
+    same box as drawing 2; only the rule for when it opens automatically differs.
+  </p>
+</div>
+
+<div class="option-note">
+  <h2>My own recommendation</h2>
+  <p>
+    Closed by default, one line, the note's name and its source in the header, exactly as drawn
+    in 1, 1b's closed cousin, 3a and 4's closed-row twin would look. The block is going to appear
+    on every Strategy and troubleshooting reply that used a note, and an answer bubble on a
+    412-pixel column is already tight; opening the note is one press away, and the header line
+    alone already tells the player a note was used and named where it came from. Reserve
+    open-by-default for a version of this page where the maintainer wants the note's words to be
+    unmissable even without a press, which trades a few lines of vertical room on every such
+    reply for that guarantee.
+  </p>
+</div>
+
+</body>
+</html>

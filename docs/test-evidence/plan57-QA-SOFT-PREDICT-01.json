@@ -1,0 +1,24 @@
+{
+  "rowId": "SOFT-PREDICT-01",
+  "rowText": {
+    "steps": "Ask something that needs a very long answer (60+ points), let it run to completion, check the finished text and the saved history for the word \"Continuing\".",
+    "expected": "No visible seam, and \"Continuing\" never appears in the final or saved text."
+  },
+  "source": "docs/testing-manual.md:412",
+  "time": "2026-09-17T (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0",
+  "reads": [
+    {
+      "question": "In Hades, give me a very long and detailed rundown of every boon god ... one paragraph per god.",
+      "replyLengthChars": 3690,
+      "responseChunkCount": 5,
+      "timeToFinishMs": 64241,
+      "containsContinuingInLiveText": false,
+      "note": "Not a 60-item bulleted list specifically, but a genuinely long, multi-section reply (about a minute to generate, 5 stitched chunks) that exercises the same continuing-segment path."
+    },
+    {"savedFileCheck": "grep for 'continuing' (case-insensitive) in the saved chat_slots JSON file on the Deck", "matches": 0}
+  ],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "The long, multi-part reply read cleanly start to finish with no visible seam, and searching the saved chat file on the Deck for the word 'Continuing' found zero matches."
+}

@@ -1,0 +1,25 @@
+{
+  "rowId": "PRESET-ONE-LINE-04",
+  "rowText": {
+    "steps": "Get a chip with a label longer than its 130px slot, measure the label's scroll speed against PRESET_MARQUEE_SPEED.",
+    "expected": "Matches the intended per-second rate; this is a numeric check, not a \"does it feel right\" judgement."
+  },
+  "source": "docs/testing.md:227",
+  "time": "2026-09-17T (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0",
+  "reads": [
+    {
+      "chipLabel": "how does the excursion funnel work in portal 2",
+      "sourceConstant": "PRESET_MARQUEE_SPEED = 25 (src/features/preset-carousel/presetRowLayout.ts:51)",
+      "measured": {
+        "oneCopyWidthPx": 287.01,
+        "cssDurationVar": "10.52s",
+        "computedSpeedPxPerSec": 27.3
+      },
+      "note": "The label scrolls two duplicate copies of the text side by side (a standard marquee loop); one copy's width divided by the CSS --duration variable gives the real on-screen speed."
+    }
+  ],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "The chip's label actually scrolls at about 27 pixels per second on screen, close to the calibrated 25 the code asks for -- a slow, readable crawl, not a fast or jerky one."
+}

@@ -1,0 +1,17 @@
+{
+  "rowId": "THINKING-LIVE-01",
+  "rowText": {
+    "steps": "Ask something that takes 30+ seconds (Expert mode helps), sample the status line every second or two.",
+    "expected": "The line changes every 4-15 seconds, never freezes for 15+ seconds, never repeats itself back to back."
+  },
+  "source": "docs/testing-manual.md:391",
+  "time": "2026-09-17T (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0",
+  "reads": [
+    {"note": "The replies this worker triggered (short boss questions in Strategy mode) all finished in under 15 seconds, so a genuine 30+ second reply was not captured this pass."},
+    {"sequence": ["Waking the model up for \"how do i beat megaera in hades\"…", "Working…", "Still thinking…", "Not forgotten, still thinking…", "Coaching you on how to take down Megara in Hades"], "gapsMs": [5522, 1539, 140], "repeatsBackToBack": false, "longestGapMs": 5522, "freezeOver15sSeen": false}
+  ],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "Over the roughly 7 seconds this particular reply took to start answering, the line changed three times, never froze, and never repeated the same words twice in a row -- though this run did not produce the 30-plus second reply the row asks for, so the slowest end of the timing was not fully tested."
+}

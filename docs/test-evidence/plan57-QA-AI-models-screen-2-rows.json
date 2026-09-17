@@ -1,0 +1,22 @@
+{
+  "rowId": "AI-models-screen-~2-rows (no formal row id)",
+  "rowText": {
+    "steps": "Open the AI models hub, read the popup's total height, the list area's height, and how many model rows are visible.",
+    "expected": "Confirms the ~520px cap and ~90px left for the list (previously measured, not yet fixed)."
+  },
+  "source": "docs/roadmap.md:163-172 (not in testing.md or testing-manual.md)",
+  "time": "2026-09-17T (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0",
+  "reads": [
+    {
+      "popupTotalHeightPx": 456.3,
+      "modelListVisibleAreaHeightPx": 114.3,
+      "modelListFullContentHeightPx": 216,
+      "rowsVisibleWithoutScrolling": 2,
+      "note": "Two installed models (gemma4:e2b-it-qat, qwen3.5:4b) are on the Browse & pull tab; the list's own scroll box is only 114px tall against 216px of row content, so only about two rows show before a person has to scroll."
+    }
+  ],
+  "screenshots": ["screenshots/DeckCapture_20260917_011252_auto.png"],
+  "verdict": "FAIL",
+  "verdictSentence": "The AI models list still only shows about two rows before you have to scroll -- the list's own box is 114px tall while everything above it (header, filters, search box) eats the rest of the roughly 456px popup -- so this is still cramped, not yet fixed."
+}

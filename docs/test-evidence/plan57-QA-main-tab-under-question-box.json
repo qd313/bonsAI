@@ -1,0 +1,26 @@
+{
+  "rowId": "main-tab-under-question-box (LEFT-HOLDS-01 / QA-FREE-PLAY-02, no clean row id)",
+  "rowText": {
+    "steps": "Reach a long reply's answer stop with Up from Read aloud, read how much of its rectangle is above the dock's top edge.",
+    "expected": "Earlier reads found only about a third visible, ~143px of chat shown total. Confirm on the current build (this is specifically a built-in-screen finding, so it is the right screen to test on)."
+  },
+  "source": "docs/roadmap.md:133-144 (not in testing.md or testing-manual.md; evidence docs/test-evidence/plan56-LEFT-HOLDS-01.summary.json, plan56-QA-FREE-PLAY-02.summary.json)",
+  "time": "2026-09-17T (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0",
+  "reads": [
+    {
+      "reply": "the long Hades boon-gods answer (5 sections, 3690 characters)",
+      "navigatedPath": "Read aloud -> Up -> Helpful -> Up -> the answer text",
+      "answerStopRect": {"x": 62.7, "y": 14.25, "w": 245.5, "h": 359.8},
+      "dockTopY": 297.2,
+      "visibleAboveDockPx": 282.9,
+      "pctVisible": 79
+    },
+    {
+      "note": "On a shorter, one-paragraph reply measured earlier in this same session, the answer stop was 87% visible above the dock (208.5 of 241px)."
+    }
+  ],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "On this build, about 79-87% of a reply's text sits above the sticky question box, not the roughly one-third that was measured before -- most of the answer is now visible without the dock covering it."
+}

@@ -1,0 +1,20 @@
+{
+  "rowId": "HADES-UNNAMED-01 (re-run, part of the STRAT-SPOIL-DRG-01 family)",
+  "rowText": {
+    "steps": "Ask 'what happens when i finally reach the surface in hades' again -- last run this got no fence when it should have one.",
+    "expected": "Should fence (mask as blocks), since no boss/ending is named directly."
+  },
+  "source": "docs/testing-manual.md:355-362",
+  "time": "2026-09-17T (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0",
+  "reads": [
+    {
+      "question": "what happens when i finally reach the surface in hades",
+      "reply": "Alright, listen up, you wanna know what happens when you finally hit the surface in Hades? It ain't like you just pull up and everything's done, mate. It's more like you just finished one big run, and now you gotta figure out how to keep stacking that Heat. The game ain't over; it's just getting weirder and harder. You gotta keep pushing those runs, 'cause that's where the real rewards are hiding. Think of it like this: you beat the first big boss, you get a little taste, but the real action starts when you decide to crank up that difficulty. You gotta embrace the madness. -- No close match in my notes, this answer leans on the model's own knowledge.",
+      "spoilerBlocksOnPage": 0
+    }
+  ],
+  "screenshots": [],
+  "verdict": "FAIL",
+  "verdictSentence": "Asked plainly again, this still comes back as ordinary, unmasked text with no spoiler blocks at all -- the same bug as last time, it still isn't fencing this ending question."
+}

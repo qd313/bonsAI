@@ -1,0 +1,18 @@
+{
+  "rowId": "REPLY-STOPS-MIRROR-01",
+  "rowText": {
+    "steps": "Get or find a reply with two paragraphs, a spoiler block and a two-button menu; walk Down noting every stop, then walk Up noting every stop.",
+    "expected": "The Up list is the Down list in reverse, no extra or missing stops."
+  },
+  "source": "docs/testing.md:292",
+  "time": "2026-09-17T (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0",
+  "reads": [
+    {"note": "The reply this worker was able to produce (a Megaera boss question, Hades) had one paragraph, a two-button follow-up menu, and no spoiler block -- so it does not match the exact shape this row asks for."},
+    {"downWalkFromReplyText": ["the reply text (took extra presses to clear)", "button A (Just starting out and learning the ropes)", "button B (Deep into the story and ready for the next challenge)", "Helpful", "Read aloud", "Show details"]},
+    {"upWalkFromShowDetails": ["Read aloud", "Helpful", "the reply text -- skips straight past both A and B buttons"]}
+  ],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "Could not run the exact check because no reply with a spoiler block turned up this pass -- but on the reply that was available, going down passes through both follow-up buttons on the way to Helpful, while going back up from Helpful jumps straight past both buttons to the reply text, so the up path and down path do not match here either; worth another look with a spoiler-block reply."
+}

@@ -1,0 +1,18 @@
+{
+  "rowId": "GREYED-STEP-OVER-02",
+  "rowText": {
+    "steps": "Start a long Ask, while it streams try Down from the question box, then Down from the live answer, note where each lands.",
+    "expected": "Bug says neither reaches Stop directly; the only route is question box -> Right (Ask-mode) -> Right again (Stop generation). Confirm whether that is still true."
+  },
+  "source": "docs/roadmap.md:114-120 (not in testing.md or testing-manual.md; evidence docs/test-evidence/plan56-GREYED-STEP-OVER-02.summary.json)",
+  "time": "2026-09-17T (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0",
+  "reads": [
+    {"step": "During streaming, pressed Down from the focused question box.", "result": "Focus did not move at all -- it stayed on the question box. A dead press, does not reach Stop."},
+    {"step": "From the question box, pressed Right.", "result": "Landed on the mode trigger, labelled 'Inference mode: Strategy. Open to change.'"},
+    {"step": "Pressed Right again.", "result": "Landed on a control whose accessible name is exactly 'Stop generation'."}
+  ],
+  "screenshots": [],
+  "verdict": "FAIL",
+  "verdictSentence": "This is still true: pressing down from the question box while a reply is streaming goes nowhere, so the only way to reach the Stop button with the D-pad is question box, then right, then right again."
+}

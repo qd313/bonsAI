@@ -1,0 +1,139 @@
+{
+  "title": "plan 57 section 3c: room left for the answer under a live block or a fold row, and whether the Show details ring is visible above the dock, on the Deck's built-in screen",
+  "measured": "2026-09-17 about 00:06-00:08 local, Deck built-in screen 1280x800 (Quick Access viewport 854x454 CSS px, plugin column 300px wide), Main tab, the two-turn Black Mesa Gonarch chat, no game running",
+  "screen": {
+    "innerWidth_css_px": 854,
+    "innerHeight_css_px": 454,
+    "note": "built-in screen only; external monitor unplugged for this run"
+  },
+  "static_rects_css_px": {
+    "transcript": {
+      "top": 154.33,
+      "bottom": 695.67,
+      "height": 541.33,
+      "note": "extends past the viewport; the transcript's own scrollTop/scrollHeight/clientHeight were all 541 (equal), so the transcript itself does not scroll -- a taller ancestor pane scrolls instead, same pattern as the plan 56 measurement"
+    },
+    "sticky_dock": {
+      "className": "bonsai-main-tab-dock",
+      "top": 297.17,
+      "bottom": 454.0,
+      "height": 156.83
+    },
+    "newest_turn": {
+      "row_header": { "top": 189.96, "bottom": 217.58, "height": 27.63 },
+      "ai_bubble": { "top": 223.58, "bottom": 622.33, "height": 398.75 },
+      "dividers": [
+        {
+          "text": "Read aloud",
+          "top_at_rest": 650.33,
+          "bottom_at_rest": 665.0,
+          "height": 14.67,
+          "marginTop": "4px",
+          "marginBottom": "2px",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "letterSpacing": "normal"
+        },
+        {
+          "text": "Show details ↓",
+          "top_at_rest": 679.0,
+          "bottom_at_rest": 693.67,
+          "height": 14.67,
+          "marginTop": "4px",
+          "marginBottom": "2px",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "letterSpacing": "normal",
+          "note": "top_at_rest/bottom_at_rest are before the transcript pane auto-scrolled during the focus walk; once focused it read at top 279, bottom 293.67 (see focus_walk)"
+        }
+      ],
+      "status_lines": []
+    }
+  },
+  "focus_walk": {
+    "target": "the newest turn's Show details / Hide details divider row",
+    "method": "deck_walkTo DOWN, 7 presses, matched \"Show details\"",
+    "reads": [
+      {
+        "step": "1 - ring lands on the row (before any press)",
+        "row_top": 279.0,
+        "row_bottom": 293.67,
+        "dock_top_same_moment": 297.17,
+        "visible_above_dock": true,
+        "verdict_basis": "row bottom 293.67 <= dock top 297.17",
+        "screenshot": "screenshots/DeckCapture_20260917_000625_auto.png"
+      },
+      {
+        "step": "2 - after pressing A",
+        "row_text": "Hide details ↑",
+        "chip_ladder_present": true,
+        "chip_ladder_top": 309.67,
+        "chip_ladder_bottom": 635.67,
+        "row_top": 279.0,
+        "row_bottom": 293.67,
+        "note": "the row itself did not move; a details ladder opened below it, mostly hidden under the sticky dock"
+      },
+      {
+        "step": "3 - after pressing B",
+        "row_text": "Hide details ↑",
+        "chip_ladder_still_present": true,
+        "row_top": 279.0,
+        "row_bottom": 293.67,
+        "ring_landed_on": "the plugin's own tab bar (opened up into its full row of tab icons), not back on the details row",
+        "screenshot": "screenshots/DeckCapture_20260917_000655_auto.png"
+      }
+    ],
+    "visible_above_dock_verdict": true,
+    "a_opened_details": true,
+    "b_closed_details_and_returned_ring": false,
+    "b_finding": "B did not close the details row. The ladder stayed open and the ring jumped away to the plugin's tab bar instead of staying on, or returning to, the details row."
+  },
+  "live_turn": {
+    "attempted": true,
+    "started_an_ask": false,
+    "what_happened": "The only chip under the dock with a bonsai-preset- class was 'How to use bonsAI'. Pressing A on it opened a full-screen quick-start help page, not a question preset -- it never filled the ask bar and no ask was sent, so there was no live status line or answer to measure.",
+    "recovery": "Pressed B to close the help page. The plugin panel returned with its two turns intact (turnSlotCount still 2), left settled.",
+    "thinking_line_rect": null,
+    "newest_turn_row_header_rect_at_live_moment": null,
+    "dock_top_at_live_moment": null,
+    "screenshot": null
+  },
+  "arithmetic": {
+    "note_measured_vs_computed": "transcript_top, dock_top, visible_chat_height_at_rest, and header_height are measured on the real device above. The two 'room left' lines and the line count are computed from those measured numbers plus the fixed sizes given in the question (50px live block, 4px live-block padding, 15px fold row with 4px above and 2px below, 16.8px per answer line) -- none of those fixed sizes were themselves measured on screen.",
+    "visible_chat_height_at_rest_px": {
+      "value": 142.83,
+      "formula": "dock_top (297.17) - transcript_top (154.33)",
+      "measured": true
+    },
+    "question_header_height_px": {
+      "value": 27.63,
+      "source": "measured newest turn's row-header rect",
+      "measured": true
+    },
+    "room_left_with_50px_live_block_px": {
+      "value": 61.21,
+      "formula": "142.83 (visible chat at rest) - 27.63 (question header) - 54 (50px live block + 4px padding)",
+      "measured": false
+    },
+    "room_left_with_15px_fold_row_px": {
+      "value": 94.21,
+      "formula": "142.83 (visible chat at rest) - 27.63 (question header) - 21 (15px fold row + 4px above + 2px below)",
+      "measured": false
+    },
+    "answer_lines_in_fold_row_case": {
+      "value": 5.61,
+      "formula": "94.21 / 16.8px per line",
+      "meaning": "5 full lines of an answer fit, with a little under a 6th line's worth of room left over",
+      "measured": false
+    }
+  },
+  "screenshots": [
+    "screenshots/DeckCapture_20260917_000625_auto.png",
+    "screenshots/DeckCapture_20260917_000655_auto.png",
+    "screenshots/DeckCapture_20260917_000821_auto.png"
+  ],
+  "problems": [
+    "Pressing B on the open details row did not close it and did not return the ring to the row -- it sent the ring to the plugin's tab bar instead, and the details stayed open.",
+    "The only preset-styled chip present was the quick-start help chip, not a question preset, so no live ask could be measured in this run."
+  ]
+}

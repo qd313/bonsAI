@@ -1,0 +1,20 @@
+{
+  "rowId": "REASONING-05",
+  "rowText": {
+    "steps": "Walk down to Show details, press A, read the chip ladder. Expect a chip 'Thinking: Balanced · N s · ~T tokens', same N as the fold. Select it (Left/Right), read its body: expect it says the token count is an estimate.",
+    "expected": "The chip exists with the right text, and its body explains the token count is an estimate."
+  },
+  "source": "brief-deck-reasoning-rows.md",
+  "time": "2026-09-17T02:07 (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0, hash af52c0aa",
+  "reads": [
+    {"note": "Show details opened; direct DOM read of the chip ladder found the third chip read exactly 'Thinking: Balanced · 16 s · ~465 tokens' -- same N=16s as the fold row on the same turn."},
+    {"note": "Tried to move the ring onto that chip to select it and read its body: pressing RIGHT from the 'Hide details' divider did not move the ring at all (3 presses, stalled)."},
+    {"note": "Pressing DOWN from 'Hide details' skipped straight over the whole chip ladder to 'Session context' -- confirmed by re-reading the DOM: the chip ladder container sits visually between those two rows (top 226.7, bottom 449.2, inside the visible pane) but is not a D-pad stop in either direction."},
+    {"note": "Pressed UP from 'Session context' as a second check: landed straight back on 'Hide details', confirming the ladder is skipped both ways, not a one-off miss."},
+    {"note": "Because the ladder itself never receives the ring, no chip beyond the first (default) one could be selected by a controller, so the specific 'token count is an estimate' body text for the Thinking chip could not be read through real navigation -- only confirmed by direct page read, which is not evidence a controller user could reach it."}
+  ],
+  "screenshots": ["screenshots/DeckCapture_20260917_020757_auto.png"],
+  "verdict": "PARTIAL",
+  "verdictSentence": "The reasoning-time chip is present with the right words -- Thinking: Balanced, the same seconds as the line above the answer, and a token estimate -- but the whole row of detail chips (this one included) cannot be reached with the D-pad at all, so no one using a controller can select this specific chip to read its explanation; this looks like an existing gap in that details row rather than something the reasoning feature introduced, since every chip in the row is equally unreachable."
+}

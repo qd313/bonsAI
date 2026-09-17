@@ -1,0 +1,19 @@
+{
+  "rowId": "SMOKE-F",
+  "rowText": {
+    "steps": "Send bonsai:disable-sanitize, bonsai:enable-sanitize, bonsai:shortcut-setup-deck, and bonsai:vac-check with Steam ban lookup off.",
+    "expected": "Each answers instantly with fixed text, no Ollama call."
+  },
+  "source": "docs/testing-manual.md:282-286",
+  "time": "2026-09-17T (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0",
+  "reads": [
+    {"command": "bonsai:vac-check (Steam ban lookup off)", "reply": "Enable Steam ban lookup in Permissions to use bonsai:vac-check.", "instant": true},
+    {"command": "bonsai:disable-sanitize", "reply": "Input sanitization is disabled for future asks. Send bonsai:enable-sanitize (exact line, Ask field) to turn it back on.", "instant": true},
+    {"command": "bonsai:enable-sanitize", "reply": "Input sanitization is enabled again for future asks. Send bonsai:disable-sanitize (exact line) to disable. See README for ...", "instant": true},
+    {"command": "bonsai:shortcut-setup-deck", "reply": "bonsAI cannot create Steam Input macros automatically (no supported API; your controller stays under your control). This message skips the model and p...", "instant": true}
+  ],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "Every one of the four commands answered right away with the same fixed wording each time, with no thinking delay, which is what a person would expect from a canned command rather than a real model answer. Sanitize was left back on and Steam ban lookup was turned back on afterwards, same as before this row started."
+}

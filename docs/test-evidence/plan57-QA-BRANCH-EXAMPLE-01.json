@@ -1,0 +1,24 @@
+{
+  "rowId": "BRANCH-EXAMPLE-01",
+  "rowText": {
+    "steps": "Ask a Strategy question about Portal 2 or Hades, read the follow-up menu's two choices.",
+    "expected": "Menu names that game's own places, no Half-Life 2 words."
+  },
+  "source": "docs/roadmap.md:766-778",
+  "time": "2026-09-17T (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0",
+  "reads": [
+    {
+      "question": "how do i beat megaera in hades",
+      "followUpMenu": {
+        "prompt": "Where are you at in Hades?",
+        "choiceA": "Just starting out and learning the ropes",
+        "choiceB": "Deep into the story and ready for the next challenge"
+      },
+      "mentionsHalfLife2": false
+    }
+  ],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "The follow-up menu correctly asks 'Where are you at in Hades?' with two Hades-appropriate choices, and does not mention Half-Life 2 anywhere."
+}

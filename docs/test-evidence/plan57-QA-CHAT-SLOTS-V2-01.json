@@ -1,0 +1,35 @@
+{
+  "rowId": "CHAT-SLOTS-V2-01",
+  "rowText": {
+    "steps": "From the tab strip, press Down into the slot row, press Down again.",
+    "expected": "Lands on the transcript (or the preset row if the chat is empty); Up retraces."
+  },
+  "source": "docs/testing-manual.md:422",
+  "time": "2026-09-17T (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0 (read from Quick Access panel labels)",
+  "reads": [
+    {
+      "step": "start: focus on Main tab bar",
+      "gpfocusLabel": "Main tab",
+      "gpfocusClasses": ["bonsai-tab-bar", "bonsai-tab-bar--open"]
+    },
+    {
+      "step": "press DOWN (1st)",
+      "moved": true,
+      "landedOn": "bonsai-chat-slot-row-focus (the chat slot row, showing [+] and the two open chat tabs)"
+    },
+    {
+      "step": "press DOWN (2nd)",
+      "moved": true,
+      "landedOn": "bonsai-chat-turn-row-header--history (transcript turn header, \"black mesa how do i tame a horse\")"
+    },
+    {
+      "step": "press UP (retrace 1)",
+      "moved": true,
+      "landedOn": "bonsai-chat-slot-row-focus (back to the slot row)"
+    }
+  ],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "Pressing down twice from the tab strip takes you to the slot row, then into the chat text below it, and pressing up once takes you straight back to the slot row, so the down and up path matches."
+}

@@ -1,0 +1,19 @@
+{
+  "rowId": "REASONING-07",
+  "rowText": {
+    "steps": "Decline half: move Thinking Off -> Balanced. Expect a confirm box reading exactly 'Thinking shows on screen as it happens and is not checked for spoilers. Show it?' with buttons 'Show thinking' and 'Keep it off'. Press 'Keep it off'. Expect the box closes, the ring is back on the Thinking row, Thinking still reads Off. Accept half: after the notice returns (REASONING-06), press 'Show thinking'. Expect the box closes, Balanced is selected, the ring is back on the row with no dead highlight.",
+    "expected": "Declining leaves Off in place and returns focus to the row; accepting selects Balanced and returns focus to the row."
+  },
+  "source": "brief-deck-reasoning-rows.md",
+  "time": "2026-09-17T01:49-01:53 (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0, hash af52c0aa",
+  "reads": [
+    {"note": "DECLINE: notice text matched exactly, confirmed by screenshot. Walked the ring to 'Keep it off' (it was not the default-focused button; 'Show thinking' was) and pressed A."},
+    {"note": "DECLINE result: box closed, Thinking still read Off (description text 'Answer straight away. Fastest.', Off chip kept the bright/selected styling) -- value correct. BUT the ring did NOT land back on the Thinking row: it landed on the OLLAMA tab strip cell at the top of the panel, and the whole pane scrolled back to the top. Confirmed by both a DOM read and a screenshot (the yellow tab-strip ring, not a ring on the Off/Balanced/Deep chips)."},
+    {"note": "ACCEPT (first attempt): notice reappeared (see REASONING-06). 'Show thinking' was the default-focused button this time; pressed A directly. Box closed. BUT reading the Thinking row immediately after, and again after a 5-second poll (9 reads over 5s), Thinking still read Off (description text and chip styling both still said Off) -- the value did not change on this press. The ring again landed on the OLLAMA tab strip, not the row."},
+    {"note": "Re-tested by re-selecting Balanced from Off a second time: this time NO notice appeared (it had already been permanently marked accepted by the first 'Show thinking' press, even though that press did not apply the value), and Balanced applied immediately, with the ring staying on the Balanced chip since no dialog interrupted."}
+  ],
+  "screenshots": ["screenshots/DeckCapture_20260917_015124_auto.png", "screenshots/DeckCapture_20260917_015156_auto.png"],
+  "verdict": "FAIL",
+  "verdictSentence": "Declining the notice correctly leaves Thinking off, but the ring lands on the tab strip at the top of the panel afterward, not back on the Thinking row as expected; accepting the notice for the first time is worse -- it closes the box and remembers that the notice was answered, but the very same press does not actually turn Thinking on, so a person who accepts once and does not double-check the row would believe Thinking is on when it is still off, and would need to select Balanced a second time (which then works, silently, with no further prompt) to actually get it turned on."
+}

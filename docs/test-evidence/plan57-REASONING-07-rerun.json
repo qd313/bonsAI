@@ -1,0 +1,35 @@
+{
+  "rowId": "REASONING-07",
+  "rerunOf": "docs/test-evidence/plan57-REASONING-07.json",
+  "rowText": {
+    "steps": "Decline half: move Thinking Off -> Balanced. Expect a confirm box reading exactly 'Thinking shows on screen as it happens and is not checked for spoilers. Show it?' with buttons 'Show thinking' and 'Keep it off'. Press 'Keep it off'. Expect the box closes, the ring is back on the Thinking row, Thinking still reads Off.",
+    "expected": "Declining leaves Off in place and returns focus to a control inside the Thinking row, with the row still visible in roughly the same place on screen (no scroll-to-top)."
+  },
+  "source": "brief-deck-reasoning-rows.md",
+  "time": "2026-09-17T09:58-09:59 (deck QA re-run, one driver)",
+  "buildOnDeck": "bonsAI, bundle hash b8d903d9ff40dc10bdb4dff880eca1bf59cc6e9249946a3672778d403aee3e9a (confirmed by sha256sum on the Deck against ~/homebrew/plugins/bonsAI/dist/index.js before the run)",
+  "preconditionReset": {
+    "what": "The only allowed reset before this run: cleared the page's stored 'notice already answered' flag, because the previous run had left it set to answered, which would have skipped the notice entirely and made this row untestable.",
+    "how": "Ran this in the plugin page: read and then removed the browser storage key bonsai:thinking-notice-accepted-v1.",
+    "result": { "hadBefore": "1", "afterRemoval": null }
+  },
+  "setupSteps": [
+    "Opened the plugin panel on the Deck (confirmed by its own marker element being present).",
+    "Switched to the OLLAMA tab.",
+    "Moved the ring to the Thinking row and pressed the Off choice to put Thinking into a known Off starting state (moving to Off does not show a notice).",
+    "Read the Thinking row's position on screen as a baseline before touching it: top 211px, bottom 307px (with the settings list scrolled down 889px, which is normal for this row's place in a long list)."
+  ],
+  "reads": [
+    {
+      "step": "Move Off -> Balanced",
+      "note": "Pressed the Balanced choice. The confirm box appeared. Its text read exactly 'Thinking shows on screen as it happens and is not checked for spoilers. Show it?' with two buttons, 'Show thinking' and 'Keep it off'. 'Show thinking' was the one already highlighted."
+    },
+    {
+      "step": "Decline",
+      "note": "Moved the highlight to 'Keep it off' and pressed it. The box closed. What a person would see afterward: the highlight ring is back on the Off choice inside the Thinking row (not on the tab bar at the top), and the Thinking row is still on screen close to where it was before -- the settings list was scrolled down 930px, about the same as the 889px baseline, not jumped back to the top. Thinking's own text under it still reads 'Answer straight away. Fastest.' and the Off button is shown as the selected one (bold text, bright outline). A screenshot was taken confirming this visually: screenshots/DeckCapture_20260917_095913_auto.png -- it shows the OLLAMA tab open, the Thinking row with 'Off' boxed in a focus ring, description 'Answer straight away. Fastest.', and Balanced/Brief/Deep dim and unselected."
+    }
+  ],
+  "screenshots": ["screenshots/DeckCapture_20260917_095913_auto.png"],
+  "verdict": "PASS",
+  "verdictSentence": "Declining the notice now works the way it should: the box closes, the highlight lands back on the Off button inside the Thinking row instead of jumping up to the tab bar, the row stays roughly where it was on screen instead of the list snapping back to the top, and Thinking is still correctly off."
+}

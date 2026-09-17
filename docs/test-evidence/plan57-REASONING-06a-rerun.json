@@ -1,0 +1,50 @@
+{
+  "rowId": "REASONING-06a",
+  "rerunOf": "docs/test-evidence/plan57-REASONING-07.json (accept half) and plan57-REASONING-06 (notice reappears after decline)",
+  "rowText": {
+    "steps": "After the notice returns following a decline (REASONING-06), move Thinking Off -> Balanced again, then press 'Show thinking'. Expect the box closes, Balanced is applied right away, and the ring is back on a control inside the Thinking row. Then move Balanced -> Deep and Deep -> Balanced and expect no notice either time. Leave Thinking at Balanced.",
+    "expected": "Accepting the notice for the first time actually turns Thinking on immediately -- not just remembers that the notice was answered -- and the choice sticks across a few seconds and across leaving and returning to the tab. Moving between the already-unlocked choices (Balanced/Deep) never shows the notice again."
+  },
+  "source": "brief-deck-reasoning-rows.md",
+  "time": "2026-09-17T09:59-10:01 (deck QA re-run, one driver)",
+  "buildOnDeck": "bonsAI, bundle hash b8d903d9ff40dc10bdb4dff880eca1bf59cc6e9249946a3672778d403aee3e9a (confirmed by sha256sum on the Deck against ~/homebrew/plugins/bonsAI/dist/index.js before the run)",
+  "preconditionReset": {
+    "what": "Same single reset as the REASONING-07 re-run in this session (shared setup): cleared the stored 'notice already answered' flag once, before either row, so the notice would still show. Not repeated for this row.",
+    "how": "Read and then removed the browser storage key bonsai:thinking-notice-accepted-v1.",
+    "result": { "hadBefore": "1", "afterRemoval": null }
+  },
+  "reads": [
+    {
+      "step": "Move Off -> Balanced (second time, notice should return)",
+      "note": "Pressed the Balanced choice again. The notice reappeared with the same exact text: 'Thinking shows on screen as it happens and is not checked for spoilers. Show it?' and the same two buttons. 'Show thinking' was already the highlighted one, so it was pressed directly with no extra move needed."
+    },
+    {
+      "step": "Accept",
+      "note": "Pressed 'Show thinking'. The box closed. Reading #1, taken immediately after: Balanced is shown as selected (bold text, bright outline) and its own description text 'More reasoning on harder questions, shown on screen as it happens.' is showing under Thinking -- the value changed on this same press, not on a later one. The highlight ring landed back on a control inside the Thinking row (the Off button), not on the tab bar."
+    },
+    {
+      "step": "Reading #2, about 3 seconds later",
+      "note": "Waited roughly 3.6 seconds, then read again. Still Balanced: same bold styling, same description text. The choice did not quietly revert."
+    },
+    {
+      "step": "Reading #3, after leaving and returning to the tab",
+      "note": "Switched to the Main tab, confirmed the tab bar showed MAIN, then switched back to OLLAMA. Still Balanced, same styling and description. A screenshot was taken here: screenshots/DeckCapture_20260917_100053_auto.png -- it shows the OLLAMA tab, the Thinking row with 'Balanced' bold in a dark selected box, description 'More reasoning on harder questions, shown on screen as it happens.', and Off/Brief/Deep dim."
+    },
+    {
+      "step": "Balanced -> Deep",
+      "note": "Moved the highlight to Deep and pressed it. No notice appeared (no focus jump into a dialog). Reading right after showed Deep selected (bold, bright outline) with its own description 'Most reasoning, shown on screen as it happens. Noticeably slower on a Deck.'."
+    },
+    {
+      "step": "Deep -> Balanced",
+      "note": "Moved the highlight back to Balanced and pressed it. Again no notice appeared. Reading right after showed Balanced selected again with its description back to 'More reasoning on harder questions, shown on screen as it happens.'. Thinking was left at Balanced as the last step, matching the instruction."
+    }
+  ],
+  "balancedReadings": [
+    { "when": "immediately after the accept press", "value": "Balanced" },
+    { "when": "about 3 seconds later", "value": "Balanced" },
+    { "when": "after switching to Main and back to Ollama", "value": "Balanced" }
+  ],
+  "screenshots": ["screenshots/DeckCapture_20260917_100053_auto.png"],
+  "verdict": "PASS",
+  "verdictSentence": "Accepting the notice for the first time now actually turns Thinking on in the same press -- checked right away, again a few seconds later, and again after leaving and coming back to the tab, it read Balanced every time -- and switching between Balanced and Deep afterward never shows the notice again, matching what a person would expect."
+}

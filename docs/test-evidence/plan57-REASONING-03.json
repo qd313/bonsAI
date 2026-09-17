@@ -1,0 +1,21 @@
+{
+  "rowId": "REASONING-03",
+  "rowText": {
+    "steps": "Switch to another tab and back to Main: fold row still there, closed, same text. Then deck_reloadPlugin, reopen with deck_openPlugin. Same chat reopens, fold row closed with same N; Down from Retry reaches it, A opens to the same text; compare block length and first 80 characters before and after.",
+    "expected": "Everything survives the restart identically."
+  },
+  "source": "brief-deck-reasoning-rows.md",
+  "time": "2026-09-17T02:05-02:07 (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0, hash af52c0aa",
+  "reads": [
+    {"note": "Before restart: block length 1861 characters, first 80: 'Thinking Process:\\n\\n1.  **Analyze the Request:** The user asked, \"what does the p'."},
+    {"note": "Switched Ollama tab -> Main tab: fold row still read 'Show reasoning · 16 s', closed (no block)."},
+    {"note": "deck_reloadPlugin: loader restarted and came back ready in 265ms."},
+    {"note": "deck_openPlugin failed once (CEF debugger ECONNRESET, an expected first-try miss right after a restart), failed a second time with the QAM chord landing over the Recent Games screen instead of opening a pane, then succeeded on the third call."},
+    {"note": "After reopening: same chat, Main tab, fold row read the same 'Show reasoning · 16 s', closed."},
+    {"note": "Retry, Down, Down reached the fold row again; A opened it: block length 1861 characters, first 80 chars identical to before the restart."}
+  ],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "After leaving the tab and coming back, and after a full plugin restart, the same chat reopened with the reasoning line reading the same time and opening to the exact same saved text -- length and wording both matched exactly; reopening the plugin panel needed a third try, one more than the brief expected, but that is a known quirk right after a restart, not a reasoning-feature problem."
+}

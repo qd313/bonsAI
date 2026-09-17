@@ -1,0 +1,16 @@
+{
+  "rowId": "kb-download-two-taps (no formal row id)",
+  "rowText": {
+    "steps": "With the plugin log on, press Download knowledge base once, read the log and the screen for the storage-choice popup (internal vs SD card), then press again.",
+    "expected": "Press one should open the storage popup; press two should start the download. Check whether press one actually does anything visible."
+  },
+  "source": "docs/roadmap.md:121-124 (not in testing.md or testing-manual.md)",
+  "time": "2026-09-17T (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0",
+  "reads": [
+    {"observed": "The knowledge base is already installed on this Deck (version 2026.09.08, on the SD card at /run/media/deck/3506ff22-6d61-4f9d-8241-01bce3a91c6c/.bonsai/rag). The Ollama tab shows 'Update knowledge base' and 'Remove' buttons, not a first-time 'Download knowledge base' button, so the two-tap storage-choice popup this row is about cannot be produced without removing the existing knowledge base first."}
+  ],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "This Deck already has the knowledge base installed, so there is no first-time Download button to test -- reproducing this row would mean removing the working knowledge base first, which this pass did not do since that is a destructive step outside a read-only QA run."
+}

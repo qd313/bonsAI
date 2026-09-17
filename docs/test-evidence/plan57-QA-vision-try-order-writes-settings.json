@@ -1,0 +1,18 @@
+{
+  "rowId": "vision-try-order-writes-settings (no formal row id)",
+  "rowText": {
+    "steps": "Open Ollama tab -> vision try-order picker, press Done immediately with no reorder, read the settings file before and after.",
+    "expected": "File should be unchanged if nothing moved; bug is that it gets rewritten anyway."
+  },
+  "source": "docs/roadmap.md:145-148 (not in testing.md or testing-manual.md)",
+  "time": "2026-09-17T (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0",
+  "reads": [
+    {"before": {"sha256": "4b78e3e64abb25d472c0cfd1594fb2910237856982f6807d7d278607ad138fd3", "mtimeEpoch": 1789621629}},
+    {"action": "Opened Settings > Set vision model try order..., only one model listed (gemma4:e2b-it-qat), moved the D-pad straight to Done without touching Up/Down, pressed A on Done."},
+    {"after": {"sha256": "88257d1f085fb999bc48ec52e72366c22ae1fab186e54a37f09fb7ab4fd7ac15", "mtimeEpoch": 1789621784}}
+  ],
+  "screenshots": ["screenshots/DeckCapture_20260917_010939_auto.png"],
+  "verdict": "FAIL",
+  "verdictSentence": "Pressing Done on the vision model order screen rewrote the settings file even though nothing was reordered -- the file's checksum and save time both changed -- so this still happens on the current build."
+}

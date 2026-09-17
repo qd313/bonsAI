@@ -1,0 +1,23 @@
+{
+  "rowId": "REASONING-02",
+  "rowText": {
+    "steps": "Once the answer starts, poll for .bonsai-chat-reasoning-fold. Wait for the answer to finish. Walk to Retry, press Down once for the fold row; press A to open/close; press A then B; press Down/Up around it.",
+    "expected": "Fold row reads 'Show reasoning · N s'; Down from Retry lands on it in one press; A opens the block and flips the text to 'Hide reasoning · N s'; A again closes it; A then B closes it and leaves the ring on the row; Down from the row enters the answer, not Retry, not the dock; Up returns to the row."
+  },
+  "source": "brief-deck-reasoning-rows.md",
+  "time": "2026-09-17T02:04 (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0, hash af52c0aa",
+  "deviation": "Down from the Retry corner icon needed TWO presses to reach the fold row, not one -- the first Down lands on the turn's question-row body (an intermediate expandable stop), and only the second Down reaches the fold row. Everything downstream of that matched the row's expectation exactly.",
+  "reads": [
+    {"note": "Fold row read 'Show reasoning · 16 s' once the answer started; live block was gone by then."},
+    {"note": "Ring landed on fold row after Retry, Down, Down; rect top 230, bottom 244.6; dock top 297.2 -- well above the dock."},
+    {"note": "A: block appeared, text 'Thinking Process: 1. Analyze the Request...'; fold row text flipped to 'Hide reasoning · 16 s' (same N)."},
+    {"note": "A again: block gone, fold row back to 'Show reasoning · 16 s'."},
+    {"note": "A (open) then B: block closed, ring stayed on the fold row (confirmed by class and text)."},
+    {"note": "Down from the row: ring entered the answer bubble (class bonsai-answer-stop), not Retry, not the dock."},
+    {"note": "Up from there: ring was back on the fold row."}
+  ],
+  "screenshots": ["screenshots/DeckCapture_20260917_020454_auto.png"],
+  "verdict": "PASS",
+  "verdictSentence": "The line above the answer opens and closes on A, closes and keeps the ring on B, and sits between the question and the answer exactly as designed and well clear of the bottom dock -- the only wrinkle is that reaching it from the Retry icon takes two Down presses rather than one, because the question's own row is an extra stop in between."
+}

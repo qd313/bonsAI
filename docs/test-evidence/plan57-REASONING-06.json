@@ -1,0 +1,20 @@
+{
+  "rowId": "REASONING-06",
+  "rowText": {
+    "steps": "First half: move Thinking Off -> Balanced again after a decline; expect the notice returns with the same text (nothing was stored from the decline). Then move Balanced -> Deep and back to Balanced: expect NO notice either time. Second half: with Thinking Balanced in Strategy mode, ask 'how does the story end' (no game running); expect the live lines show the model's own sentences unmasked, and once the answer starts nothing of the reasoning is visible outside the closed fold row.",
+    "expected": "The notice behaves as a true one-time gate, and reasoning content is masked from the closed state even when it is spoiler-shaped."
+  },
+  "source": "brief-deck-reasoning-rows.md",
+  "time": "2026-09-17T01:52 and 02:13 (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0, hash af52c0aa",
+  "reads": [
+    {"note": "First half: moved Off -> Balanced a second time (after the REASONING-07 decline). The notice reappeared with the exact same text: 'Thinking shows on screen as it happens and is not checked for spoilers. Show it?' -- confirms the decline stored nothing."},
+    {"note": "Moved Balanced -> Deep: no notice, applied immediately."},
+    {"note": "Moved Deep -> Balanced: no notice, applied immediately."},
+    {"note": "Second half: sent 'how does the story end' bare (no game running) in Strategy mode. Live block appeared ~3s later; its 3 lines included the model's own Strategy Spoiler Policy reasoning, unmasked, e.g. naming that it should avoid story endings in plain text."},
+    {"note": "Answer started ~2s later (fold row appeared reading 'Show reasoning · 14 s'); at that point .bonsai-chat-reasoning-live was gone and .bonsai-chat-reasoning-block did not exist (fold was closed) -- nothing of the reasoning text was visible outside the closed row."}
+  ],
+  "screenshots": ["screenshots/DeckCapture_20260917_021356_auto.png", "screenshots/DeckCapture_20260917_021411_auto.png"],
+  "verdict": "PASS",
+  "verdictSentence": "The one-time notice truly only interrupts the first time Thinking is turned on and remembers nothing on a decline, never appears again for Balanced/Deep swaps, and even on a spoiler-shaped question the model's live thinking is only ever visible while it is actually thinking or inside a row the person chose to open -- closing it hides everything."
+}

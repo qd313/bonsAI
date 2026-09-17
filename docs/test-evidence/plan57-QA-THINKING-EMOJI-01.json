@@ -1,0 +1,18 @@
+{
+  "rowId": "THINKING-EMOJI-01",
+  "rowText": {
+    "steps": "Start an Ask, read the italic status line while it changes.",
+    "expected": "Emoji (🙄 🌳 🔥) are never slanted; prose stays italic."
+  },
+  "source": "docs/testing.md:212",
+  "time": "2026-09-17T (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0",
+  "reads": [
+    {"note": "Checked the status line's DOM structure across several Asks. On every sample the icon/emoji sits in its own element separate from the sentence, and only the sentence's element carries italic styling (fontStyle: italic); the icon element consistently reports fontStyle: normal."},
+    {"sample": "\"how do i beat the bone hydra in hades\" is in good hands now…", "iconElement": "SPAN > svg (rotating spinner icon), fontStyle: normal", "textElement": "SPAN, fontStyle: italic"},
+    {"earlierSighting": "During one early Ask, a raw page read caught the status line showing only a single tree emoji with no sentence text next to it, confirming a plain emoji character is one of the possible status contents, not just the spinner icon."}
+  ],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "The icon or emoji always sits in its own separate piece of the status line that is not italic, while the sentence next to it is italic, so an emoji in that slot would stay upright the same way the spinner icon does."
+}

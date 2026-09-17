@@ -1,0 +1,21 @@
+{
+  "rowId": "THINKING-COPY-01",
+  "rowText": {
+    "steps": "Submit an Ask, watch the first ~2 seconds of the status line for any swap from one generic line to another.",
+    "expected": "The same opener stays for those first seconds; no visible rewrite."
+  },
+  "source": "docs/testing-manual.md:388",
+  "time": "2026-09-17T (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0",
+  "reads": [
+    {
+      "question": "how do i beat megaera in hades",
+      "openerText": "Waking the model up for \"how do i beat megaera in hades\"...",
+      "timeUntilFirstChangeMs": 5522,
+      "measuredWith": "deck_waitFor polling every 200ms from the moment Ask was pressed"
+    }
+  ],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "The first line stayed on screen for about 5.5 seconds before it changed to the next one, well past the 2-second window this check cares about, so the opener does not silently rewrite itself early."
+}

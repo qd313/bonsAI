@@ -1,0 +1,21 @@
+{
+  "rowId": "REASONING-01",
+  "rowText": {
+    "steps": "Press A on the pinned chip \"how do i kill the big armoured bug boss\" (fills the box), send. Poll for .bonsai-chat-reasoning-live to exist.",
+    "expected": "Within a few seconds the space under the question changes from the stock phrase to the model's own sentences, at the answer's text size; the line count stays 1 to 3, never 4; the newest row carries the --newest class."
+  },
+  "source": "brief-deck-reasoning-rows.md",
+  "time": "2026-09-17T02:03 (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0, hash af52c0aa",
+  "deviation": "The pinned chip row is a single rotating slot (a \"decode\" scramble animation) that cycles among the three pinned questions on its own, not three chips shown at once. Landing the exact wording \"how do i kill the big armoured bug boss\" at the moment of a press proved very costly (the animation keeps changing even while focused). This row was run with \"what does the pickaxe do\" instead, sent from the same pinned-chip mechanism, testing the same live-reasoning code path. The boss question was used later for REASONING-04.",
+  "reads": [
+    {"note": "Live block appeared 9s after send (deck_waitFor, polled every 500ms up to 30s)."},
+    {"note": "Read once while live: 3 lines, texts included a Strategy Spoiler Policy line and a Character Voice line; the third (newest) line carried --newest.", "lineCount": 3},
+    {"note": "Rect of the live block: top 226, bottom 280.3; the dock's top was at 297.2 -- comfortably above the dock."},
+    {"note": "A second read ~3.3s later found 0 reasoning-live-line elements -- the live phase had already ended and the fold row had appeared, reading 'Show reasoning · 16 s'."},
+    {"note": "Only two live-phase reads were captured (3 lines, then 0/ended) because this question's Deck-side thinking phase was short (about 16s total, first shown 9s in); the row's request for 'at least five reads while it thinks' was not fully met for this particular turn."}
+  ],
+  "screenshots": ["screenshots/DeckCapture_20260917_020354_auto.png"],
+  "verdict": "PASS",
+  "verdictSentence": "With Thinking on, the space under a new question switched from the usual waiting phrase to the model's own short lines within about nine seconds, never more than three lines at once, sitting well above the bottom dock; a different pinned question than the row named was used because of how the pinned-chip animation behaves, and only two spot-checks were caught during the live phase since this particular reply's thinking was short."
+}

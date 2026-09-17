@@ -1,0 +1,22 @@
+{
+  "rowId": "SOFT-PREDICT-03",
+  "rowText": {
+    "steps": "Start a long answer, press Stop right as a \"Continuing...\" cue window would appear, read the kept text and the notice.",
+    "expected": "Partial text is kept, \"Continuing\" does not appear in it, and a small \"Stopped -- partial answer kept.\" line shows."
+  },
+  "source": "docs/testing-manual.md:413",
+  "time": "2026-09-17T (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0",
+  "reads": [
+    {
+      "question": "Tell me an extremely long, very detailed step by step guide to every single weapon aspect in Hades...",
+      "stoppedVia": "question box -> Right (mode trigger) -> Right (Stop generation) -> A",
+      "keptTextLengthChars": 1727,
+      "containsContinuing": false,
+      "noticeText": "Stopped — partial answer kept."
+    }
+  ],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "Stopping the reply partway through kept the 1727 characters written so far, showed the exact 'Stopped -- partial answer kept.' line, and the word 'Continuing' does not appear anywhere in the kept text."
+}

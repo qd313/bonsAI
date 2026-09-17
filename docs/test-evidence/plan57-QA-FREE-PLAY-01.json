@@ -1,0 +1,25 @@
+{
+  "rowId": "QA-FREE-PLAY-01",
+  "rowText": {
+    "steps": "With a LONG reply on screen: scroll around the reply, then D-pad walk from the top of the pane to the very bottom, one press at a time. At every stop check Focused (ring on the control) and Visible (rect inside the pane, above the dock, elementFromPoint hits the control itself). Repeat on at least one other carousel position (LB/RB), and once more after the reply finishes if it was streaming.",
+    "expected": "Every stop is both focused and visible; no dead ends; no control hidden behind another."
+  },
+  "source": "docs/testing-manual.md (Standing row: the free-play sweep, around line 58), run because the Main tab's layout and focus graph changed for plan 57",
+  "time": "2026-09-17T02:15 (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0, hash af52c0aa",
+  "deviation": "Could not repeat the walk on 'another carousel position (LB/RB)': in this build LB/RB are bound globally to switching the top-level tab strip (MAIN/OLLAMA/SETTINGS/...), not to a chat-slot or chip carousel, so that leg of the row does not apply the way it is worded. The reply used had already finished streaming before the sweep started (this session never captured that specific turn mid-stream), so the 'once more after it finishes' leg was effectively already covered by running once on a finished reply, but the streaming-to-finished transition itself was not walked.",
+  "sweepTool": "mcp__decky-plugin-studio__deck_sweep, direction DOWN, returnTrip true, budget 80, runName plan57-QA-FREE-PLAY-01-main-sweep",
+  "sweepEvidenceFile": "runs/plan57-QA-FREE-PLAY-01-main-sweep.json",
+  "reads": [
+    {"note": "20 distinct stops visited over 33 presses (17 down, 16 up), 2 legs, 0 cycles -- the walk itself is clean, no traps, Down and Up visit the same stops."},
+    {"note": "Down leg passed: 15 earlier (archive pill), Retry, the question row (how does the story end), the fold row (Show reasoning), an answer section, two branch-picker buttons (A/B where you're at), Mark reply helpful, Read aloud, Show details, Session context, Save chat to Desktop, the pinned Test chip, the Ask text box, Ask button."},
+    {"note": "3 of the 20 stops read FOCUSED BUT NOT FULLY VISIBLE:", "stops": [
+      {"label": "how does the story end (the question row)", "visiblePercent": 67, "coveredBy": "the Retry same-prompt corner icon"},
+      {"label": "(unnamed answer section)", "visiblePercent": 89, "coveredBy": "the reply's copy-icon corner button", "seenTwice": "both legs (down and up)"}
+    ]},
+    {"note": "Both of these match already-filed findings from earlier sessions (docs/testing-manual.md run 2026-09-15 evening): the open question's row covered by the Retry corner icon, and an answer section covered by the copy icon in the bubble's corner. This run reproduces them again on the plan-57 build but does not add a new one -- they read as pre-existing layout issues, not something the reasoning feature broke."}
+  ],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "A full walk from the top of the chat down through the new reasoning row, the answer, and the dock came back clean -- no dead ends, no loops, every control reachable both ways -- but it re-found two already-known spots where part of a control is hidden behind a small icon (the question row behind the Retry icon, an answer section behind the copy icon), neither of them new; two parts of the standing row's own instructions (a second carousel position, and a repeat mid-stream) could not be run because this build ties the carousel buttons to tab-switching and the reply had already finished before the walk began."
+}

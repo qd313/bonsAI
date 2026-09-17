@@ -1,0 +1,22 @@
+{
+  "rowId": "REASONING-04",
+  "rowText": {
+    "steps": "Set Thinking to Off. Send the pinned chip \"what does the pickaxe do\". Expect today's stock phrase with the spinner and NEVER a live block; when the answer lands, no fold row and no reasoning block; Show details has no Thinking chip. Set Thinking back to Balanced.",
+    "expected": "Nothing about the reasoning feature appears anywhere on this turn."
+  },
+  "source": "brief-deck-reasoning-rows.md",
+  "time": "2026-09-17T02:08-02:12 (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0, hash af52c0aa",
+  "deviation": "Used the pinned chip \"how do i kill the big armoured bug boss\" for this turn instead of \"what does the pickaxe do\", swapped with REASONING-01 for the reason given there (the rotating pinned-chip animation).",
+  "reads": [
+    {"note": "Thinking set to Off (confirmed: description text read 'Answer straight away. Fastest.', Off chip carried the bright/selected styling)."},
+    {"note": "Sent the question; the stock spinner line (.bonsai-chat-thinking-line) appeared and stayed for the whole reply."},
+    {"note": "Polled repeatedly through the whole reply: .bonsai-chat-reasoning-live never once appeared."},
+    {"note": "After the reply finished: no .bonsai-chat-reasoning-fold, no .bonsai-chat-reasoning-block, no live block anywhere on the turn."},
+    {"note": "Opened Show details: 5 chips (KB, Reply style, Spoiler risk, Routed model, Developer details) -- no 'Thinking:' chip, confirmed both by reading the DOM and by a screenshot showing 'Chip 1 of 5'."},
+    {"note": "Set Thinking back to Balanced: no confirm notice appeared (consistent with the notice already being permanently accepted earlier in the session -- see REASONING-06/07); the Balanced chip's styling confirmed the change took."}
+  ],
+  "screenshots": ["screenshots/DeckCapture_20260917_021208_auto.png"],
+  "verdict": "PASS",
+  "verdictSentence": "With Thinking turned off, the turn showed only the ordinary waiting spinner the whole time, no reasoning line ever appeared, and the details chips for that turn skipped the Thinking chip entirely, with one fewer chip than a Thinking-on turn shows."
+}

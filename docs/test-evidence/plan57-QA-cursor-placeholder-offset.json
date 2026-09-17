@@ -1,0 +1,20 @@
+{
+  "rowId": "cursor-placeholder-offset (no formal row id)",
+  "rowText": {
+    "steps": "Focus the empty Ask field, read the placeholder layer's font/line-height and the real field's font/line-height.",
+    "expected": "Previously measured as 2px different (10px/12px vs 12px/14.4px font). Re-check whether that gap still exists on the current build."
+  },
+  "source": "docs/roadmap.md:74-80 (not in testing.md or testing-manual.md)",
+  "time": "2026-09-17T (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0",
+  "reads": [
+    {
+      "realInputField": {"fontSize": "12px", "lineHeight": "14.4px", "font": "12px / 14.4px \"Motiva Sans\", Helvetica, sans-serif"},
+      "placeholderLayer": {"fontSize": "10px", "lineHeight": "12px", "font": "italic 10px / 12px \"Motiva Sans\", Helvetica, sans-serif"},
+      "lineHeightGapPx": 2.4
+    }
+  ],
+  "screenshots": [],
+  "verdict": "FAIL",
+  "verdictSentence": "The placeholder text still sits in a smaller, italic font (10px) than the real typed text (12px), a 2.4px line-height gap that will still show the blinking cursor sitting slightly off from the placeholder wording -- this old bug has not been fixed."
+}

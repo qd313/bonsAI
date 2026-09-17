@@ -1,0 +1,20 @@
+{
+  "rowId": "QUESTION-COLLAPSE-RING-01 (no formal row id)",
+  "rowText": {
+    "steps": "With a reply open, focus the question row, read its on-screen rectangle against the Retry icon's rectangle.",
+    "expected": "Earlier reads found it 67-78% visible, covered by the corner icon both directions of the walk. Confirm the percentage on the current build."
+  },
+  "source": "docs/roadmap.md:125-132 (not in testing.md or testing-manual.md)",
+  "time": "2026-09-17T (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0 (read from Quick Access panel labels)",
+  "reads": [
+    {
+      "questionRowRect": {"x": 87.39, "y": 189.96, "w": 254.61, "h": 27.63},
+      "retryIconRect": {"x": 94.05, "y": 193.92, "w": 20, "h": 20},
+      "overlapAreaPct": "about 6% of the question row's box sits under the retry icon's box (the icon is 20px wide inside a 254px-wide row)"
+    }
+  ],
+  "screenshots": ["screenshots/DeckCapture_20260917_005353_auto.png"],
+  "verdict": "PASS",
+  "verdictSentence": "On this build the question text 'how do i beat the gonarch in black mesa' reads fully next to the retry icon in the screenshot -- the icon sits in its own small space on the left and only touches about 6% of the row's box, not the 67-78% covered that was measured before, so this looks fixed now."
+}

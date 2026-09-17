@@ -1,0 +1,20 @@
+{
+  "rowId": "up-from-retry (no formal row id)",
+  "rowText": {
+    "steps": "Get a stopped reply so Retry is a D-pad stop, focus Retry, press Up.",
+    "expected": "Should land back on the answer's last section; bug says it does not."
+  },
+  "source": "docs/roadmap.md:81-85 (not in testing.md or testing-manual.md)",
+  "time": "2026-09-17T (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0",
+  "reads": [
+    {
+      "setup": "Asked a long Hades weapons question, pressed Stop generation partway through (question box -> Right -> Right -> A), producing a genuinely stopped/partial reply with its own Retry icon.",
+      "focusedRetry": true,
+      "pressedUp": "landed on '12 earlier' (the collapsed-history pill above the question), not on the kept partial answer text"
+    }
+  ],
+  "screenshots": [],
+  "verdict": "FAIL",
+  "verdictSentence": "On a reply that was actually stopped partway through, pressing up from the Retry button skips past the kept answer text entirely and jumps to the collapsed 'earlier turns' pill above it -- the bug is still there."
+}

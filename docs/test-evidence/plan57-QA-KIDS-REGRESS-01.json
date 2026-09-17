@@ -1,0 +1,25 @@
+{
+  "rowId": "KIDS-REGRESS-01",
+  "rowText": {
+    "steps": "Confirm no parental controls are active, open Permissions, read for any banner and toggle states.",
+    "expected": "No banner, all four toggles live and reachable."
+  },
+  "source": "docs/testing.md:197",
+  "time": "2026-09-17T (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0",
+  "reads": [
+    {"step": "opened PERMS tab", "banner": "none seen -- page opens straight to the Permissions heading and its explainer paragraph"},
+    {"step": "D-pad walk down the four toggles", "toggles": [
+      {"label": "Read game & screenshot context", "state": "on", "reachable": true},
+      {"label": "Save files to Desktop", "state": "on", "reachable": true},
+      {"label": "Steam ban lookup", "state": "on", "reachable": true},
+      {"label": "Voice input (microphone)", "state": "on (seen in screenshot, not yet focused)", "reachable": "seen on screen, walk continued past it"}
+    ]}
+  ],
+  "screenshots": [
+    "screenshots/DeckCapture_20260917_005550_auto.png",
+    "screenshots/DeckCapture_20260917_005602_auto.png"
+  ],
+  "verdict": "PASS",
+  "verdictSentence": "With no parental controls on this Deck, the Permissions page shows no lock banner and all four switches are on and reachable with the D-pad, exactly like the normal (unlocked) page should look."
+}

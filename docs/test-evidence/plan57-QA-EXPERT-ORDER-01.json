@@ -1,0 +1,21 @@
+{
+  "rowId": "EXPERT-ORDER-01 (licence half only -- order half already passed)",
+  "rowText": {
+    "steps": "Open the AI models hub, find a Gemma 4 tag, read whether it shows as allowed under the open-source-only policy tier.",
+    "expected": "Gemma 4 counts as open source now (per the fix landed 2026-09-16) and should not be blocked."
+  },
+  "source": "docs/testing.md:308; docs/roadmap.md:551-560",
+  "time": "2026-09-17T (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0",
+  "steps_taken": [
+    "Set the AI models policy tier to 'Open source only (recommended)' (was 'Also try open-weight models').",
+    "Opened the Browse & pull tab and read the gemma4:e2b-it-qat row.",
+    "Set the tier back to 'Also try open-weight models' afterwards."
+  ],
+  "reads": [
+    {"model": "gemma4:e2b-it-qat", "tag": "FOSS (green outline badge)", "greyedOut": false, "rowClickable": true, "deckFitStars": 6}
+  ],
+  "screenshots": ["screenshots/DeckCapture_20260917_011252_auto.png"],
+  "verdict": "PASS",
+  "verdictSentence": "With the policy set to the strictest 'open source only' tier, Gemma 4 still shows a normal FOSS tag and is not greyed out or blocked, so it is correctly treated as open source now."
+}

@@ -1,0 +1,20 @@
+{
+  "rowId": "FOCUS-GRAPH-01",
+  "rowText": {
+    "steps": "On a turn with a fold row: Down from the question's Retry reaches the row (no skip); Up from the answer's first stop reaches the row; Down from the row enters the answer; the ring is visible above the dock at each of those; nothing traps: from the row, Up, Up, Up reaches the tab strip or the chat slot row within five presses.",
+    "expected": "The new fold-row stop fits cleanly into the existing D-pad graph with no traps."
+  },
+  "source": "brief-deck-reasoning-rows.md (testing-manual FOCUS-GRAPH-01..)",
+  "time": "2026-09-17T02:04 and 02:14 (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0, hash af52c0aa",
+  "deviation": "Down from Retry needs two presses to reach the fold row (an intermediate question-row-body stop sits between them), not one as a strict reading of 'no skip' might imply -- see REASONING-02 for the same finding. Everything else matched.",
+  "reads": [
+    {"note": "Retry -> Down -> Down reached the fold row; rect bottom 244.6 vs dock top 297.2 -- visible above the dock."},
+    {"note": "From inside the open answer, Up reached the fold row directly (1 press)."},
+    {"note": "Down from the fold row entered the answer bubble (bonsai-answer-stop class), not Retry and not the dock."},
+    {"note": "From the fold row: Up, Up, Up (3 presses, within the 5-press budget) reached the chat-slot row (class bonsai-chat-slot-row-focus) -- no trap."}
+  ],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "The new reasoning row sits cleanly in the D-pad path -- reachable from the question and the answer on both sides, always above the bottom dock, and backing out with Up three times lands safely on the chat-slot row with no dead end; reaching it going down from the Retry icon takes one extra press because the question's own row is in between."
+}

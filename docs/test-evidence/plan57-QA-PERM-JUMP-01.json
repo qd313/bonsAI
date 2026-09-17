@@ -1,0 +1,26 @@
+{
+  "rowId": "PERM-JUMP-01 / SMOKE-C",
+  "rowText": {
+    "steps": "Turn a capability off (e.g. Steam ban lookup), trigger the blocked action, press Open Permissions, read where the highlight lands, press Back.",
+    "expected": "Highlight lands on the exact toggle named (e.g. Steam ban lookup); Back returns to the prior tab. Known bug: it currently lands one row above."
+  },
+  "source": "docs/testing-manual.md:174-203; docs/roadmap.md:92-103",
+  "time": "2026-09-17T (deck QA worker session)",
+  "buildOnDeck": "bonsAI v0.5.0",
+  "steps_taken": [
+    "Turned Steam ban lookup off on the Permissions tab.",
+    "Typed 'bonsai:vac-check' into the Ask field (via the PC helper script, not thumb-typed) and pressed Ask.",
+    "Got the instant blocked-action reply: 'Enable Steam ban lookup in Permissions to use bonsai:vac-check.' with an Open Permissions button below it.",
+    "Pressed A on Open Permissions.",
+    "Read where the D-pad ring landed on the Permissions tab.",
+    "Pressed A on the button there to go back.",
+    "Restored Steam ban lookup to on afterwards."
+  ],
+  "reads": [
+    {"afterOpenPermissions": "tab switched to PERMS; the D-pad ring landed on a 'Back to Main' button at the very top of the tab, with the page scrolled to the top (first toggle, 'Read game & screenshot context', showing just below). No highlight, scroll, or ring reached the Steam ban lookup row itself -- there is no CSS highlight class anywhere on the page pointing at it either."},
+    {"pressedBackToMain": "returned to the MAIN tab, with the ring back on the same 'Open Permissions' button, and the vac-check reply still on screen."}
+  ],
+  "screenshots": ["screenshots/DeckCapture_20260917_010340_auto.png"],
+  "verdict": "FAIL",
+  "verdictSentence": "Pressing Open Permissions does not land the highlight on the Steam ban lookup switch, or even one row above it as the older bug said -- it opens the Permissions page scrolled to the very top with the ring on a 'Back to Main' button, so a person still has to scroll and find the switch themselves; the Back button itself does correctly return to the same spot on the Main tab."
+}

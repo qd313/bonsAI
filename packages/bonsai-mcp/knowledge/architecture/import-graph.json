@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 409,
-  "edgeCount": 1035,
+  "fileCount": 410,
+  "edgeCount": 1038,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -379,6 +379,13 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTabChatTranscript.reasoningLiveBlock.test.tsx": {
+      "imports": [
+        "src/components/MainTabChatTranscript.tsx",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabChatTranscript.replyBlock.test.tsx": {
       "imports": [
         "src/components/MainTabChatTranscript.tsx",
@@ -440,6 +447,7 @@
         "src/utils/liveTurnFocusGraph.ts",
         "src/utils/navFocusRegistry.ts",
         "src/utils/permissionDeepLink.ts",
+        "src/utils/reasoningDisplay.ts",
         "src/utils/troubleshootingAskHeuristic.ts",
         "src/utils/uiDocument.ts"
       ],
@@ -455,6 +463,7 @@
         "src/components/MainTabChatTranscript.permissionHintFocus.test.ts",
         "src/components/MainTabChatTranscript.questionFade.test.tsx",
         "src/components/MainTabChatTranscript.readAloud.test.tsx",
+        "src/components/MainTabChatTranscript.reasoningLiveBlock.test.tsx",
         "src/components/MainTabChatTranscript.replyBlock.test.tsx",
         "src/components/MainTabChatTranscript.stoppedNotice.test.tsx",
         "src/components/MainTabChatTranscript.strategyPanels.test.tsx",
@@ -2845,6 +2854,7 @@
         "src/components/MainTabChatTranscript.permissionHintFocus.test.ts",
         "src/components/MainTabChatTranscript.questionFade.test.tsx",
         "src/components/MainTabChatTranscript.readAloud.test.tsx",
+        "src/components/MainTabChatTranscript.reasoningLiveBlock.test.tsx",
         "src/components/MainTabChatTranscript.replyBlock.test.tsx",
         "src/components/MainTabChatTranscript.stoppedNotice.test.tsx",
         "src/components/MainTabChatTranscript.strategyPanels.test.tsx",
@@ -3942,6 +3952,7 @@
         "src/types/bonsaiUi.ts"
       ],
       "importedBy": [
+        "src/components/MainTabChatTranscript.tsx",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/utils/chatSlotTurns.ts",
         "src/utils/reasoningDisplay.test.ts"

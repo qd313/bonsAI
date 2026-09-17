@@ -20,6 +20,7 @@
     "src/components/MainTabChatTranscript.permissionHintFocus.test.ts",
     "src/components/MainTabChatTranscript.questionFade.test.tsx",
     "src/components/MainTabChatTranscript.readAloud.test.tsx",
+    "src/components/MainTabChatTranscript.reasoningLiveBlock.test.tsx",
     "src/components/MainTabChatTranscript.replyBlock.test.tsx",
     "src/components/MainTabChatTranscript.stoppedNotice.test.tsx",
     "src/components/MainTabChatTranscript.strategyPanels.test.tsx",

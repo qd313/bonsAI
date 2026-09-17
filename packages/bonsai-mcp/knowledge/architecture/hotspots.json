@@ -36,6 +36,16 @@
       "role": ""
     },
     {
+      "path": "src/styles/sections/section-6.ts",
+      "lines": 1517,
+      "role": ""
+    },
+    {
+      "path": "src/components/MainTabChatTranscript.tsx",
+      "lines": 1513,
+      "role": ""
+    },
+    {
       "path": "src/components/MainTabUnifiedAskBar.tsx",
       "lines": 1506,
       "role": ""
@@ -44,16 +54,6 @@
       "path": "py_modules/backend/services/ollama_service.py",
       "lines": 1469,
       "role": "Prompt build, Ollama HTTP, streaming"
-    },
-    {
-      "path": "src/styles/sections/section-6.ts",
-      "lines": 1463,
-      "role": ""
-    },
-    {
-      "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1457,
-      "role": ""
     },
     {
       "path": "py_modules/backend/services/voice_transcription_service.py",

@@ -904,6 +904,60 @@ export function buildSection6Section(): string {
           opacity: 0.45 !important;
           cursor: default !important;
         }
+        /*
+         * The model's own thinking while it works: three lines where the stock waiting phrase
+         * used to be (plan 57, the mockup's own sizes).
+         *
+         * Three rows of 16.8px, one line each, cut with an ellipsis rather than wrapping — the
+         * whole block is about 50px, the room three lines of an answer take, and a fourth line
+         * would push the answer off the bottom of the visible chat. The cut at one line each is
+         * why the no-wrap rule is here and not negotiable: the sentences are long.
+         *
+         * The left rule stays a raw 2px. It is a hairline, and hairlines do not follow the user's
+         * UI scale (design-tokens.md).
+         */
+        .bonsai-scope .bonsai-chat-reasoning-live {
+          display: flex !important;
+          flex-direction: column !important;
+          width: 100% !important;
+          box-sizing: border-box !important;
+          padding: ${uiScalePx(2)} ${uiScalePx(4)} ${uiScalePx(2)} ${uiScalePx(8)} !important;
+          border-left: 2px solid rgba(159, 183, 213, 0.55) !important;
+          margin-bottom: ${uiScalePx(8)} !important;
+          min-width: 0 !important;
+        }
+        .bonsai-scope .bonsai-chat-reasoning-live-line {
+          font-size: ${uiScalePx(12)} !important;
+          line-height: 1.4 !important;
+          color: #9fb7d5 !important;
+          overflow: hidden !important;
+          white-space: nowrap !important;
+          text-overflow: ellipsis !important;
+          min-width: 0 !important;
+        }
+        /* The newest line is the one being written, so it is the brighter of the three. */
+        .bonsai-scope .bonsai-chat-reasoning-live-line--newest {
+          color: #c9d6e4 !important;
+        }
+        /*
+         * The whole thinking, once the fold row above it has been opened. The answer chunk's own
+         * dark surface, so it reads as a quieter neighbour of the answer rather than a second
+         * answer. Line breaks are kept as the model wrote them, and nothing inside is masked.
+         */
+        .bonsai-scope .bonsai-chat-reasoning-block {
+          width: 100% !important;
+          box-sizing: border-box !important;
+          background: rgba(18, 26, 34, 0.28) !important;
+          border: 1px solid rgba(255, 255, 255, 0.08) !important;
+          border-radius: ${uiScalePx(6)} !important;
+          padding: ${uiScalePx(8)} !important;
+          margin-bottom: ${uiScalePx(6)} !important;
+          font-size: ${uiScalePx(11)} !important;
+          line-height: 1.4 !important;
+          color: #9fb7d5 !important;
+          white-space: pre-wrap !important;
+          overflow-wrap: anywhere !important;
+        }
         .bonsai-scope .bonsai-save-chat-desktop-row {
           margin-top: ${uiScalePx(BONSAI_CHAT_TRANSCRIPT_TO_SAVE_GAP_PX)} !important;
           width: 100% !important;

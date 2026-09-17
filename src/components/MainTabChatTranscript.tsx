@@ -81,6 +81,7 @@ import bonsaiLogo from "../assets/icons/bonsai-logo.svg";
 import {
   BONSAI_CHAT_AI_BUBBLE_MAX_FRAC,
 } from "../features/unified-input/constants";
+import { newestReasoningLines } from "../utils/reasoningDisplay";
 import { getUiDocument } from "../utils/uiDocument";
 import { registerNavFocus, unregisterNavFocus, takeNavFocus, type NavRefHolder } from "../utils/navFocusRegistry";
 import { formatAppliedTuningBannerText } from "../utils/appliedTuningText";
@@ -493,11 +494,30 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
 
   /* The stock waiting phrase. Unchanged behaviour; it just arrives in the same parcel now. */
   const thinkingSummary = liveThinking?.summary ?? null;
+  /*
+   * The model's own thinking on the question running right now.
+   *
+   * `hasLiveReasoning` stays true for the rest of the turn once the first thought has arrived —
+   * the slice is kept, not cleared, when the answer starts — which is what lets the stock waiting
+   * phrase step aside for good on a turn where the model really did think.
+   */
+  const liveReasoningPartial = liveThinking?.reasoning?.partial ?? "";
+  const hasLiveReasoning = liveReasoningPartial.trim().length > 0;
+  const liveReasoningLines = hasLiveReasoning ? newestReasoningLines(liveReasoningPartial) : [];
   const liveQuestion = askThreadDisplayQuestion.trim();
   const liveResponseBody = isStreamingPreview ? streamDisplayText : ollamaResponse;
   const showLiveResponse =
     Boolean(liveResponseBody.trim()) &&
     !(isAsking && !isStreamingPreview && isPendingPlaceholderResponse(liveResponseBody));
+  /*
+   * The three live lines show only while the wait is still a wait. The moment the first of the
+   * answer arrives the block goes, because the answer needs the room: with the question header
+   * and a 50px block at the top of the visible chat, about 61px are left for the answer, which is
+   * under four lines (measured on the built-in screen 2026-09-17,
+   * docs/test-evidence/plan57-M-fold-row-and-live-block.json).
+   */
+  const showLiveReasoningBlock =
+    expandedTurnKey === "live" && isAsking && hasLiveReasoning && !showLiveResponse;
   /*
    * The response alone is not enough to justify a live turn.
    *
@@ -613,7 +633,13 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
   */
   useStreamScrollPin(
     chatMainColumnRef,
-    isStreamingPreview ? streamDisplayText : ollamaResponse,
+    /*
+     * The model's own thinking joins the change key for the same reason the answer text is in it:
+     * while the three live lines are the only thing under the question, they are the only thing
+     * changing, and the follow has to re-measure as they do — the block is 50px where the stock
+     * waiting phrase was 21px, so the end of the transcript moves when it appears.
+     */
+    `${isStreamingPreview ? streamDisplayText : ollamaResponse}${liveReasoningPartial}`,
     isAsking || isStreamingPreview,
   );
 
@@ -1139,7 +1165,37 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
               onRetry: expandedTurnKey === "live" ? onRetryLastResponse : undefined,
               retryDisabled: isAsking,
             })}
-            {expandedTurnKey === "live" && isAsking && thinkingSummary ? (
+            {showLiveReasoningBlock ? (
+              /*
+               * The model's own newest sentences, where the stock waiting phrase would be.
+               *
+               * No spinner: the lines change by themselves, which is the only "still working"
+               * signal this needs, and the spinner's 14px would break the three-row height the
+               * block is sized to. Never more than three lines — `newestReasoningLines` caps it,
+               * and a test proves a ten-sentence slice still draws three.
+               */
+              <div className="bonsai-chat-reasoning-live" role="status" aria-live="polite">
+                {liveReasoningLines.map((line, index) => (
+                  <div
+                    key={`${index}-${line}`}
+                    className={`bonsai-chat-reasoning-live-line${
+                      index === liveReasoningLines.length - 1
+                        ? " bonsai-chat-reasoning-live-line--newest"
+                        : ""
+                    }`}
+                  >
+                    {line}
+                  </div>
+                ))}
+              </div>
+            ) : null}
+            {expandedTurnKey === "live" && isAsking && thinkingSummary && !hasLiveReasoning ? (
+              /*
+               * The stock waiting phrase, unchanged — and still the whole story with thinking
+               * off, on a model that cannot think, and in the seconds before the model's first
+               * thought arrives. It steps aside for good once that first thought has landed,
+               * because a composed stand-in above the model's own words is worse than nothing.
+               */
               <div
                 className="bonsai-chat-status-line bonsai-chat-thinking-line"
                 role="status"

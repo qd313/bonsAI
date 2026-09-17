@@ -48,6 +48,24 @@ describe("chip row out-of-chips edge cue (section 4 CSS)", () => {
     expect(css).not.toMatch(/@keyframes\s+bonsai-preset-chip-blocked-edge/);
   });
 
+  it("outranks the focus bar, which styles the very same chip at the very same moment", () => {
+    // The chip that flashes is always the chip the D-pad is on, so the focus rule above is
+    // targeting it too, and both insist on the same thing. The longer selector wins, so the flash
+    // has to name the whole path down to the chip or it never paints at all. Found by reading the
+    // rules, not on screen: every test here passed while the flash was invisible.
+    const strong =
+      ".bonsai-scope .bonsai-preset-carousel-focus-root .bonsai-preset-carousel-slot button.bonsai-preset-glass.bonsai-preset-chip-blocked-edge";
+    expect(css).toContain(strong);
+    // And it must sit below the focus rules: one focus arm is exactly as long, and a tie goes to
+    // whichever comes last.
+    expect(css.indexOf(strong)).toBeGreaterThan(
+      css.indexOf(".bonsai-scope button.bonsai-preset-glass.gpfocus"),
+    );
+    // Reduced motion carries the same pair of selectors, or it would silence nothing.
+    const reduced = css.slice(css.indexOf("@media (prefers-reduced-motion: reduce)"));
+    expect(reduced).toContain(strong);
+  });
+
   it("respects reduced motion: the ramp is dropped, and only for this one selector", () => {
     const reducedBlock = css.match(/@media \(prefers-reduced-motion: reduce\)\s*\{([\s\S]*)$/);
     expect(reducedBlock).toBeTruthy();

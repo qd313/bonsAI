@@ -51,6 +51,18 @@
  * than adding to it, so an effect left out is erased while that state
  * lasts — the "two effects on the same edge can cancel each other"
  * lesson in docs/lessons-learned.md.
+ *
+ * 3. Moving the flash onto the bar put the two rules in competition for
+ *    the first time, and the flash lost. The chip that flashes is always
+ *    the chip the D-pad is on, so the focus rule is styling it at the
+ *    same moment; both now set the same thing and insist on it, and a
+ *    longer selector wins. While the flash was a border colour and the
+ *    focus cue was a shadow, they never met. The flash rule therefore
+ *    names the whole path down to the chip — every chip sits in a slot
+ *    inside the focus root, so that reaches all of them — and keeps the
+ *    short form as a safety net. It must also stay below the focus rules
+ *    in this file: one of their arms is the same length, and in a tie the
+ *    later rule wins.
  */
 import { BONSAI_CHAT_RESPONSE_STACK_MARGIN_TOP_PX } from "../../features/unified-input/constants";
 import {
@@ -312,9 +324,9 @@ export function buildSection4Section(): string {
           Gate 1 and 2 say "the carousel owns Steam's ring": \`gpfocuswithin\` is what Steam stamps on
           the ancestor Focusable, and the \`:has(.gpfocus)\` arm covers it directly in case Steam
           stamps only the chip. Gate 3 keeps the marker on desktop, in the in-IDE preview and on
-          touch, where nothing owns a ring at all — the same fallback rule
-          \`elementHasGamepadFocus\` uses in uiDocument.ts. The last two arms cover the chips that
-          are not in a carousel at all (the fade, static and decode rows), which get the same bar.
+          touch, where nothing owns a ring — the fallback \`elementHasGamepadFocus\` uses in
+          uiDocument.ts. The last two arms light the rows whose slots carry no --focus marker at
+          all (fade, static and decode), which get the same bar.
 
           2026-09-17 (plan 60) changed what these gates draw, not when. See the file header,
           point 2: the blue line round the chip became a lit bar inside its bottom edge, and the
@@ -346,34 +358,34 @@ export function buildSection4Section(): string {
           onBlockedEdge, called only when the press was claimed-and-blocked, never when a pinned
           batch pulled a new entry in) so Steam's own idea of "past the end" -- the Quick Access
           rail -- never fires; the gap this closes is that the claimed-and-blocked press looked
-          identical on screen to a stall. usePresetRowNav (MainTabPresetAnimatedChips.tsx) flags
-          exactly the one chip that just claimed a blocked press with this class for
-          PRESET_CHIP_BLOCKED_EDGE_FLASH_MS, then clears it. Same cyan family as the gamepad-ring
-          and focus-bar glows elsewhere in this file and in gamepadAndPullModels.ts, so it reads as
-          "the plugin's own focus-adjacent accent", not a new colour.
+          identical on screen to a stall. usePresetRowNav (MainTabPresetAnimatedChips.tsx) flags the
+          one chip that claimed a blocked press with this class for
+          PRESET_CHIP_BLOCKED_EDGE_FLASH_MS, then clears it. Same cyan family as the other
+          focus-adjacent glows here and in gamepadAndPullModels.ts, so it is not a new colour.
 
-          Since 2026-09-17 (plan 60) this cue lives on the same bottom bar the focused chip already
-          shows: the bar flares brighter and grows a soft cyan glow under it for the flash, then
-          settles back. Before, it recoloured the border, which was the old focus marker — so "I
-          cannot go further" and "this is the chip you are on" looked like the same thing. All four
-          effects are repeated in one list because box-shadow replaces rather than adds (file
-          header). No transform and no width change, so the chip's own box never grows.
+          Since 2026-09-17 (plan 60) the cue lives on the same bottom bar the focused chip already
+          shows: the bar flares brighter with a soft cyan glow under it, then settles back. Before,
+          it recoloured the border, which was the old focus marker, so the flash and the focus cue
+          looked alike. All four effects are repeated in one list because box-shadow replaces rather
+          than adds. No transform and no width change, so the chip's own box never grows. The long
+          first arm is not decoration, and this rule must stay below the bar rules: file header,
+          points 2 and 3.
 
           A plain transition, not @keyframes: section-6.ts's base \`.bonsai-preset-glass\` rule sets
-          its own \`box-shadow: ... !important\`, and a running CSS animation cannot out-rank a static
-          !important declaration (only a transition can) -- so a keyframe-based glow here would
-          simply never paint. The transition lives only on this modifier rule, not on the bare
-          \`.bonsai-preset-glass\`, so removing the class also removes the transition and cannot
-          touch the unrelated dimmed/undimmed fade the carousel already runs inline.
+          its own \`box-shadow: ... !important\`, and an animation cannot out-rank a static !important
+          declaration (only a transition can). It lives on this modifier rule alone, so removing the
+          class removes the transition and cannot touch the carousel's own dimmed/undimmed fade.
         */
+        .bonsai-scope .bonsai-preset-carousel-focus-root .bonsai-preset-carousel-slot button.bonsai-preset-glass.bonsai-preset-chip-blocked-edge,
         .bonsai-scope button.bonsai-preset-glass.bonsai-preset-chip-blocked-edge {
           transition: box-shadow ${Math.round(PRESET_CHIP_BLOCKED_EDGE_FLASH_MS * 0.45)}ms ease-out;
           box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), inset 0 -2px 0 rgba(150, 225, 255, 1), 0 3px 8px -2px rgba(56, 189, 248, 0.55), 0 2px 3px rgba(0, 0, 0, 0.4) !important;
         }
         /* Reduced motion: no ramp, just the same glow held for the same window and then removed
-           by the JS timeout -- a state change, not movement. Scoped to this one selector so it
-           cannot silence any other control's transition. */
+           by the JS timeout -- a state change, not movement. Same two arms as above, scoped to the
+           flagged chip alone so it cannot silence any other control's transition. */
         @media (prefers-reduced-motion: reduce) {
+          .bonsai-scope .bonsai-preset-carousel-focus-root .bonsai-preset-carousel-slot button.bonsai-preset-glass.bonsai-preset-chip-blocked-edge,
           .bonsai-scope button.bonsai-preset-glass.bonsai-preset-chip-blocked-edge {
             transition: none !important;
           }

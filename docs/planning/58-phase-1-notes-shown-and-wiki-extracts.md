@@ -397,6 +397,19 @@ which goes on their own checklist.
   28 August 2025 (its own records agree with the maintainer's footer read); the Elder Scrolls wiki
   is share-alike 2.5, not 4.0 as an older note said; doomwiki.org now refuses scripted reads. Lane
   B, the reader, still running. The Deck still asleep. The maintainer's pick on the block is owed.
+- **2026-09-17, lane B landed, second pass started.** The reader, 86 tests including the one that
+  proves the "never rewrite" rule by feeding it a made-up sentence, and one sample page per wiki,
+  landed as three commits with the gates after each. What the sample showed: the tactics heading
+  the reader looks for exists on one wiki in five (Hollow Knight). The Super Mario Wiki keeps the
+  fight under "History", the GTA wiki under "Mission" with an empty "Walkthrough" above it,
+  SmashWiki under "Attributes", the walkthrough wiki under the stage name. The fallback took the
+  first section with words and said so; two of those notes read well, one (GTA) is only an info
+  box and would be a step back, two are in between. Two real bugs found and fixed by the sample
+  itself: an empty heading used to win, and a page from a saved copy got the wrong address. The
+  walkthrough wiki's saved copy from 28 August 2025 was read; its own records say share-alike 4.0.
+  Lane B is on a second pass: a per-wiki heading rule, the note's kind read from the page's own
+  categories, invisible marks trimmed, proven on twelve more pages. The sample page was rendered
+  and published for the maintainer's yes or no per wiki.
 
 ---
 

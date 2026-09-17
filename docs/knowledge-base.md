@@ -381,6 +381,10 @@ on device (**KB-SMOKE-01**).
 
 **Not** a thin redefinition of Phase 6 publish — Phase 6 ships the matured 11 first.
 
+The first study of sources that cover many games under one licence is at
+[kb-catalog-sources-2026-09.md](archive/research/kb-catalog-sources-2026-09.md) (2026-09-17), and the
+first step is planned as [58 phase 1](planning/58-phase-1-notes-shown-and-wiki-extracts.md).
+
 ### Transparency retrieval labels
 
 | User-facing (chip / Show details) | When |

@@ -723,7 +723,8 @@ evening ran the same evening, once the Deck was free.
    shows the note's own words under a reply instead of the model's rewrite of it, and reads a wiki's own
    sentences into notes with no AI rewrite, tried first against Hollow Knight and then on ten more games from
    sources already cleared. Nothing started; waiting on the maintainer's nine answers (locking as D111) and
-   the word "go".
+   the word "go". Started 2026-09-17: the drawings, the blind questions and the source study have landed; the
+   reader is still being built; the Deck is asleep, so the device readings wait on the maintainer.
 7. **Then wave four, now 58 phase 2** — writing more notes. [The plan for it](planning/58-phase-2-kb-session-wave-four.md)
    is the same plan as before, renamed, and runs once phase 1 has landed; its answers lock as D112.
 
@@ -875,11 +876,11 @@ ones from this month are D81 to D88.
   Deck's model runs with a 4,096-token window and a Strategy question with cards already goes over it (now trimmed
   instead of dropped, see Done). Try 8,192 as a Developer experiment with a game running, recording memory and time to
   first token, before it becomes a setting. Agreed as "later, its own call". (D46)
-- ★★ `[KB]` **The note's own words under the reply** — **OPEN, planned 2026-09-17 in 58 phase 1.** Today the model
-  rewrites the note in its own words instead of showing it, keeping its facts 79.5 times in 100 and contradicting
-  it 9.3 times in 100 — and the person never sees the note itself. The fix is a block under the reply, filled by
-  code from the note the search attached rather than anything the model wrote, sitting inside the same spoiler box
-  when the reply is fenced. Mockups come first. [Plan](planning/58-phase-1-notes-shown-and-wiki-extracts.md).
+- ★★ `[KB]` **The note's own words under the reply** — **OPEN, drawings done 2026-09-17, pick owed.** Today the
+  model rewrites the note in its own words instead of showing it, keeping its facts 79.5 times in 100 and
+  contradicting it 9.3 times in 100. Four drawings of the block are done, at
+  [this page](planning/assets/58-phase-1-block-mockups.html), published for the maintainer; the helper recommends
+  starting closed, naming the note and its source in one line. The build waits on the pick. [Plan](planning/58-phase-1-notes-shown-and-wiki-extracts.md).
 - ★★★ `[KB]` **A troubleshooting question mostly never reaches the tips** — **OPEN, widened 2026-09-07.** Filed as
   "the tips don't use the words people type", which is true and is the smaller half. Measured 2026-09-07: **nine of ten
   ordinary problem sentences reach nothing at all** — *"my game keeps crashing"*, *"my game won't launch"*, *"black
@@ -932,7 +933,9 @@ ones from this month are D81 to D88.
   licensing, a size budget, packs and the index. [knowledge-base.md](knowledge-base.md) § Phase 8. The first step is
   planned as [58 phase 1](planning/58-phase-1-notes-shown-and-wiki-extracts.md): a reader that takes a wiki's own
   sentences without rewriting them, ten games from sources already cleared, and a study of which sources cover many
-  games under one licence.
+  games under one licence. That [source study](archive/research/kb-catalog-sources-2026-09.md) landed 2026-09-17
+  and recommends the Super Mario Wiki first, the per-wiki Fandom check second, and the walkthrough wiki third
+  once its saved copy has been tried with the reader.
 
 ---
 

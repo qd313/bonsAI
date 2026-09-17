@@ -292,7 +292,9 @@ them straight; what remains is coverage, follow-up memory, and the things the te
 1. **Wave four now waits on [58 phase 1](58-phase-1-notes-shown-and-wiki-extracts.md).** Two fixes have
    to land first: showing a note's own words under a reply instead of the model's rewrite of it, and
    reading a wiki's own sentences into notes with no AI rewrite. Both phases are waiting on the
-   maintainer's answers before either can start.
+   maintainer's answers before either can start. Started 2026-09-17: the drawings, the blind questions
+   and the source study have landed; the reader is still being built; the Deck is asleep, so the device
+   readings wait on the maintainer.
 2. **Wave three's own Deck evening is unfinished.** Three of its checks never ran, and two that did need
    redoing: follow-up questions now look up the right boss but the reply can still name a different one,
    and the new one-second speed check reports a healthy device while a real question runs over budget.

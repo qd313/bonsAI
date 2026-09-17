@@ -180,6 +180,9 @@ for: the Hades Fandom wiki is NonCommercial, the Zelda wikis are GFDL, the Baldu
 | Detroit, Death Stranding, The Red Strings Club, It Takes Two | — | — | **No.** Story or co-op story |
 | CS2, TF2, PUBG, CS:S, Left 4 Dead, Golf With Your Friends | — | — | **Versus plan (17).** Note the hours: these five are most of what you play |
 
+*Correction 2026-09-17: UESP's own copyright page says share-alike 2.5, not 4.0; see the
+[source study](research/kb-catalog-sources-2026-09.md).*
+
 ## 6. The tranche, as picked by you on 2026-09-05
 
 From a recommended eight you dropped Palworld and Devil May Cry 3 and added Super Smash Bros. Melee,

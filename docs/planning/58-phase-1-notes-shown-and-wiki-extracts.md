@@ -389,6 +389,14 @@ which goes on their own checklist.
   answer over the network, and one Steam-button press through the bridge board did not wake it. The
   four block-0 readings, the backup and the deploy wait on the maintainer pressing the power button.
   No lane needs the Deck, so the day carries on without it.
+- **2026-09-17, wave 1, three landings.** Lane E was cut early, before any note existed, which is
+  the cleanest blind there is: 24 questions for Donkey Kong 64, Diddy Kong Racing and Yoshi's Story,
+  landed with the five gates. Lane A's drawing page landed and was published for the maintainer;
+  the helper recommends closed by default. Lane C's source study landed: the Super Mario Wiki
+  first, the per-wiki Fandom check second, the walkthrough wiki third from its saved copy of
+  28 August 2025 (its own records agree with the maintainer's footer read); the Elder Scrolls wiki
+  is share-alike 2.5, not 4.0 as an older note said; doomwiki.org now refuses scripted reads. Lane
+  B, the reader, still running. The Deck still asleep. The maintainer's pick on the block is owed.
 
 ---
 

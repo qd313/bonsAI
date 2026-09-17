@@ -3,322 +3,322 @@
     {
       "name": "load_settings",
       "domain": "settings",
-      "line": 852
+      "line": 860
     },
     {
       "name": "save_settings",
       "domain": "settings",
-      "line": 857
+      "line": 865
     },
     {
       "name": "clear_plugin_data",
       "domain": "settings",
-      "line": 906
+      "line": 914
     },
     {
       "name": "list_chat_slots",
       "domain": "chat_slots",
-      "line": 1109
+      "line": 1117
     },
     {
       "name": "get_chat_slot",
       "domain": "chat_slots",
-      "line": 1120
+      "line": 1128
     },
     {
       "name": "create_chat_slot",
       "domain": "chat_slots",
-      "line": 1136
+      "line": 1144
     },
     {
       "name": "delete_chat_slot",
       "domain": "chat_slots",
-      "line": 1159
+      "line": 1167
     },
     {
       "name": "rename_chat_slot",
       "domain": "chat_slots",
-      "line": 1174
+      "line": 1182
     },
     {
       "name": "get_strategy_checklist_session",
       "domain": "strategy",
-      "line": 1197
+      "line": 1205
     },
     {
       "name": "save_strategy_checklist_session",
       "domain": "strategy",
-      "line": 1212
+      "line": 1220
     },
     {
       "name": "clear_strategy_checklist_session",
       "domain": "strategy",
-      "line": 1241
+      "line": 1249
     },
     {
       "name": "get_intent_packs",
       "domain": "intent_packs",
-      "line": 1257
+      "line": 1265
     },
     {
       "name": "set_intent_pack_enabled",
       "domain": "intent_packs",
-      "line": 1266
+      "line": 1274
     },
     {
       "name": "set_kids_lock_state",
       "domain": "other",
-      "line": 1282
+      "line": 1290
     },
     {
       "name": "export_intent_pack",
       "domain": "intent_packs",
-      "line": 1287
+      "line": 1295
     },
     {
       "name": "import_intent_pack",
       "domain": "intent_packs",
-      "line": 1292
+      "line": 1300
     },
     {
       "name": "remove_intent_pack",
       "domain": "intent_packs",
-      "line": 1315
+      "line": 1323
     },
     {
       "name": "get_deck_ip",
       "domain": "capabilities",
-      "line": 1336
+      "line": 1344
     },
     {
       "name": "test_ollama_connection",
       "domain": "ollama",
-      "line": 1342
+      "line": 1350
     },
     {
       "name": "discover_mdns_ollama_hosts",
       "domain": "ollama",
-      "line": 1358
+      "line": 1366
     },
     {
       "name": "start_local_ollama_setup",
       "domain": "ollama",
-      "line": 1403
+      "line": 1411
     },
     {
       "name": "get_local_ollama_setup_status",
       "domain": "ollama",
-      "line": 1481
+      "line": 1489
     },
     {
       "name": "cancel_local_ollama_setup",
       "domain": "ollama",
-      "line": 1485
+      "line": 1493
     },
     {
       "name": "apply_ollama_local_autostart",
       "domain": "ollama",
-      "line": 1492
+      "line": 1500
     },
     {
       "name": "get_ollama_local_autostart_status",
       "domain": "ollama",
-      "line": 1503
+      "line": 1511
     },
     {
       "name": "get_rag_corpus_status",
       "domain": "rag",
-      "line": 1509
+      "line": 1517
     },
     {
       "name": "start_rag_corpus_download",
       "domain": "rag",
-      "line": 1516
+      "line": 1524
     },
     {
       "name": "cancel_rag_corpus_download",
       "domain": "rag",
-      "line": 1581
+      "line": 1589
     },
     {
       "name": "update_rag_corpus",
       "domain": "rag",
-      "line": 1594
+      "line": 1602
     },
     {
       "name": "remove_rag_corpus",
       "domain": "rag",
-      "line": 1610
+      "line": 1618
     },
     {
       "name": "install_rag_corpus_local",
       "domain": "rag",
-      "line": 1626
+      "line": 1634
     },
     {
       "name": "get_session_rag_chip_candidates",
       "domain": "other",
-      "line": 1634
+      "line": 1642
     },
     {
       "name": "pull_ollama_models",
       "domain": "ollama",
-      "line": 1775
+      "line": 1783
     },
     {
       "name": "merge_pulled_tags_into_routing_orders",
       "domain": "other",
-      "line": 1780
+      "line": 1788
     },
     {
       "name": "delete_ollama_model",
       "domain": "ollama",
-      "line": 1839
+      "line": 1847
     },
     {
       "name": "fetch_ollama_catalog_metadata",
       "domain": "ollama",
-      "line": 1874
+      "line": 1882
     },
     {
       "name": "fetch_pull_model_catalog",
       "domain": "ollama",
-      "line": 1891
+      "line": 1899
     },
     {
       "name": "list_recent_screenshots",
       "domain": "screenshots",
-      "line": 1927
+      "line": 1935
     },
     {
       "name": "append_desktop_debug_note",
       "domain": "debug",
-      "line": 1964
+      "line": 1972
     },
     {
       "name": "append_desktop_chat_event",
       "domain": "debug",
-      "line": 1992
+      "line": 2000
     },
     {
       "name": "append_app_log",
       "domain": "debug",
-      "line": 2025
+      "line": 2033
     },
     {
       "name": "get_input_transparency",
       "domain": "ask",
-      "line": 2187
+      "line": 2195
     },
     {
       "name": "get_reply_language_snapshot",
       "domain": "language",
-      "line": 2197
+      "line": 2205
     },
     {
       "name": "save_ask_feedback",
       "domain": "ask",
-      "line": 2202
+      "line": 2210
     },
     {
       "name": "read_host_clipboard_text",
       "domain": "capabilities",
-      "line": 2223
+      "line": 2231
     },
     {
       "name": "write_host_clipboard_text",
       "domain": "capabilities",
-      "line": 2229
+      "line": 2237
     },
     {
       "name": "take_steam_screenshot",
       "domain": "screenshots",
-      "line": 2236
+      "line": 2244
     },
     {
       "name": "ask_game_ai",
       "domain": "ask",
-      "line": 2308
+      "line": 2316
     },
     {
       "name": "start_background_game_ai",
       "domain": "ask",
-      "line": 2471
+      "line": 2479
     },
     {
       "name": "dbg_fe_log",
       "domain": "debug",
-      "line": 2705
+      "line": 2713
     },
     {
       "name": "get_background_game_ai_status",
       "domain": "ask",
-      "line": 2718
+      "line": 2726
     },
     {
       "name": "abort_background_game_ai",
       "domain": "ask",
-      "line": 2743
+      "line": 2751
     },
     {
       "name": "forget_game_ai_carried_context",
       "domain": "ask",
-      "line": 2803
+      "line": 2811
     },
     {
       "name": "forget_background_game_ai",
       "domain": "ask",
-      "line": 2862
+      "line": 2870
     },
     {
       "name": "ask_ollama",
       "domain": "ollama",
-      "line": 2969
+      "line": 2977
     },
     {
       "name": "get_voice_engine_status",
       "domain": "voice",
-      "line": 3040
+      "line": 3048
     },
     {
       "name": "install_voice_engine",
       "domain": "voice",
-      "line": 3048
+      "line": 3056
     },
     {
       "name": "get_voice_install_status",
       "domain": "voice",
-      "line": 3098
+      "line": 3106
     },
     {
       "name": "start_voice_transcription",
       "domain": "voice",
-      "line": 3102
+      "line": 3110
     },
     {
       "name": "stop_voice_transcription",
       "domain": "voice",
-      "line": 3161
+      "line": 3169
     },
     {
       "name": "get_voice_transcription_status",
       "domain": "voice",
-      "line": 3181
+      "line": 3189
     },
     {
       "name": "start_voice_read_aloud",
       "domain": "voice",
-      "line": 3204
+      "line": 3212
     },
     {
       "name": "stop_voice_read_aloud",
       "domain": "voice",
-      "line": 3214
+      "line": 3222
     },
     {
       "name": "get_voice_read_aloud_status",
       "domain": "voice",
-      "line": 3219
+      "line": 3227
     }
   ]
 }

@@ -31,6 +31,7 @@ import type {
   StrategyChecklistPayload,
   TurnReasoning,
 } from "./bonsaiUi";
+import type { KbAttachedNote } from "../utils/inputTransparency";
 
 /** Shortcut-setup keyword replies surface this so the UI can deep-link Controller settings. */
 type ShortcutSetupKind = "deck" | "stadia";
@@ -138,6 +139,14 @@ export type BackgroundRequestStatus = {
    * before then.
    */
   chat_slot_id?: string | null;
+  /**
+   * Plan 58 phase 1: the "From the notes" block's own material, published before the model call
+   * so the live streaming bubble can show it from the first word (game_ai_request.py's
+   * `_publish_kb_attached_notes_live`, carried into a poll by `_merge_partial_into_
+   * background_status`). Empty on a turn with nothing attached; absent on a build before this
+   * field existed.
+   */
+  kb_attached_notes?: KbAttachedNote[];
 };
 
 export type PresetCarouselInjectPayload = {

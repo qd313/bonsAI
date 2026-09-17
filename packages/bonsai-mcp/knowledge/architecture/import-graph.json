@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 414,
-  "edgeCount": 1060,
+  "edgeCount": 1061,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2968,7 +2968,8 @@
         "src/data/askMode.ts",
         "src/data/modelPolicy.ts",
         "src/data/replyMicroActions.ts",
-        "src/types/bonsaiUi.ts"
+        "src/types/bonsaiUi.ts",
+        "src/utils/inputTransparency.ts"
       ],
       "importedBy": [
         "src/components/MainTab.tsx",
@@ -3737,6 +3738,7 @@
         "src/components/SessionContextStrip.tsx",
         "src/hooks/useBonsaiAskOrchestration.ts",
         "src/types/askOrchestration.ts",
+        "src/types/backgroundAsk.ts",
         "src/types/bonsaiUi.ts",
         "src/utils/archivedTurnTransparency.test.ts",
         "src/utils/archivedTurnTransparency.ts",

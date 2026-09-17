@@ -27,6 +27,7 @@ if "decky" not in sys.modules:
     )
     sys.modules["decky"] = _decky
 
+from backend.services.game_ai_request import _publish_kb_attached_notes_live  # noqa: E402
 from main import Plugin  # noqa: E402
 
 
@@ -453,6 +454,56 @@ class BackgroundPartialStateTests(unittest.TestCase):
         merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
         self.assertIsNone(merged.get("reasoning_partial"))
         self.assertIsNone(merged.get("reasoning_seconds"))
+
+    def test_kb_attached_notes_reaches_a_pending_merge(self) -> None:
+        """Plan 58 phase 1: the "From the notes" block's own material must reach the live poll
+        before the reply finishes -- the same lesson plan 54 needed a fourth commit for, proven
+        above for the named-thing gap. `_publish_kb_attached_notes_live` is game_ai_request.py's
+        own write into this same snapshot; this is the one line in `_merge_partial_into_
+        background_status` that was missing to carry it out again."""
+        self.plugin._background_state = {
+            "status": "pending",
+            "request_id": 7,
+            "response": "Thinking...",
+            "started_at": 0.0,
+        }
+        self.plugin._reset_partial_stream_snapshot(7)
+        note = {"name": "Broken Vessel", "card": "The infected husk shaped like you."}
+        _publish_kb_attached_notes_live(self.plugin, 7, [note])
+        merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
+        self.assertEqual(merged.get("kb_attached_notes"), [note])
+
+    def test_kb_attached_notes_for_a_stale_request_id_is_ignored(self) -> None:
+        self.plugin._background_state = {
+            "status": "pending",
+            "request_id": 7,
+            "response": "Thinking...",
+            "started_at": 0.0,
+        }
+        self.plugin._reset_partial_stream_snapshot(7)
+        _publish_kb_attached_notes_live(self.plugin, 8, [{"name": "Wrong request"}])
+        merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
+        self.assertEqual(merged.get("kb_attached_notes"), [])
+
+    def test_kb_attached_notes_not_grafted_onto_a_completed_state(self) -> None:
+        self.plugin._background_state = {"status": "completed", "request_id": 7}
+        self.plugin._reset_partial_stream_snapshot(7)
+        _publish_kb_attached_notes_live(self.plugin, 7, [{"name": "Broken Vessel"}])
+        merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
+        # Not "pending", so the merge's else-branch runs and never touches this key -- whatever
+        # the completed state already carried survives untouched (here, nothing at all).
+        self.assertNotIn("kb_attached_notes", merged)
+
+    def test_kb_attached_notes_defaults_to_empty_list_on_a_fresh_snapshot(self) -> None:
+        self.plugin._background_state = {
+            "status": "pending",
+            "request_id": 53,
+            "response": "Thinking...",
+            "started_at": 0.0,
+        }
+        self.plugin._reset_partial_stream_snapshot(53)
+        merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
+        self.assertEqual(merged.get("kb_attached_notes"), [])
 
     def test_publish_asked_entity_empty_leaves_the_key_absent(self) -> None:
         self.plugin._background_state = {

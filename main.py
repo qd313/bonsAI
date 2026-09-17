@@ -680,6 +680,14 @@ class Plugin:
             out["reasoning_seconds"] = snap.get("reasoning_seconds")
             if snap.get("asked_entity"):
                 out["strategy_spoiler_asked_entity"] = snap["asked_entity"]
+            # Plan 58 phase 1: the "From the notes" block's own material, published into the live
+            # snapshot before the model call by game_ai_request.py's
+            # `_publish_kb_attached_notes_live` -- this is the one line that was missing to carry
+            # it from there into a poll response. Copied unconditionally, like `partial_response`
+            # above rather than guarded like `asked_entity`: a fresh turn's snapshot starts at
+            # `[]` (new_partial_stream_snapshot) and should read as "nothing attached yet", not
+            # keep whatever the previous turn showed.
+            out["kb_attached_notes"] = snap.get("kb_attached_notes") or []
             thinking = snap.get("thinking_summary")
             if isinstance(thinking, str) and thinking.strip():
                 # Escalate a line that has gone stale. Once the last prep phase publishes, nothing

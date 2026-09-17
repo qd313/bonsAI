@@ -47,7 +47,7 @@ import type {
   StrategyGuideBranchesPayload,
 } from "./bonsaiUi";
 import type { BonsaiSessionSurvivalSnapshot } from "../utils/bonsaiSessionSurvival";
-import type { TransparencySnapshot } from "../utils/inputTransparency";
+import type { KbAttachedNote, TransparencySnapshot } from "../utils/inputTransparency";
 
 /**
  * What the Ask hook returns, in the order the hook returns it.
@@ -82,6 +82,9 @@ export interface BonsaiAskOrchestration {
   thinkingSummary: string | null;
   /** The model's own thinking on the question running right now, or null when none is. */
   liveReasoning: LiveReasoningSnapshot | null;
+  /** Plan 58 phase 1: the "From the notes" block's own material for the live turn, read off
+   *  every poll — see MainTabChatTranscriptProps.liveKbAttachedNotes's own doc comment. */
+  kbAttachedNotes: KbAttachedNote[] | null;
   lastRequestId: number | null;
 
   // The thread above the live answer: older turns, which one is open.

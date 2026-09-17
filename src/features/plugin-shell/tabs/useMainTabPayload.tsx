@@ -239,6 +239,7 @@ export function useMainTabPayload({
     isStreamingPreview,
     streamDisplayText,
     liveThinking,
+    liveKbAttachedNotes,
     desktopAskVerboseLogging,
     lastRequestId,
     lastExchange,
@@ -360,6 +361,7 @@ export function useMainTabPayload({
         isStreamingPreview={isStreamingPreview}
         streamDisplayText={streamDisplayText}
         liveThinking={liveThinking}
+        liveKbAttachedNotes={liveKbAttachedNotes}
         desktopAskVerboseLogging={desktopAskVerboseLogging}
         lastRequestId={lastRequestId}
         lastExchange={lastExchange}
@@ -423,6 +425,12 @@ export function useMainTabPayload({
       mainTabAvatarBadgeLetter,
       aiCharacterDebugLineForMainTab,
       transparencySnapshot,
+      // Plan 58 phase 1. Note for a future reader: several existing props above this line
+      // (liveThinking, isStreamingPreview, streamDisplayText, lastRequestId,
+      // desktopAskVerboseLogging, strategySpoilerAutoRevealAfterConsent among them) are already
+      // missing from this hand-maintained list despite being destructured and rendered above —
+      // found while adding this one, left alone as pre-existing and out of scope here.
+      liveKbAttachedNotes,
       askMode,
       strategyGuideBranches,
       strategyChecklist,

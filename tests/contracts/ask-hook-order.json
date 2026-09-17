@@ -1,6 +1,6 @@
 {
-  "_note": "The order the Ask hook's hooks run in, with each extracted sub-hook spliced in where it is called. React matches hooks by position, so this order must not change when a block is lifted into a hook of its own. Recorded 2026-09-14, updated 2026-09-15. Asserted by tests/test_ask_hook_order.py.",
-  "recorded": "2026-09-15",
+  "_note": "The order the Ask hook's hooks run in, with each extracted sub-hook spliced in where it is called. React matches hooks by position, so this order must not change when a block is lifted into a hook of its own. Recorded 2026-09-14, updated 2026-09-15, updated 2026-09-17 for the new kbAttachedNotes useState (plan 58 phase 1, right after liveReasoning). Asserted by tests/test_ask_hook_order.py.",
+  "recorded": "2026-09-17",
   "extracted_sub_hooks": [
     {
       "name": "useSuggestedPromptChips",
@@ -11,7 +11,7 @@
       "file": "src/hooks/useReplyFeedbackChips.ts"
     }
   ],
-  "count": 78,
+  "count": 82,
   "order": [
     "{ strategyChecklist, setStrategyChecklist, strategyChecklistRef, hydrateStrategyChecklistFromDisk, trackedRunningAppId, }:useStrategyChecklistSession",
     "[ollamaResponse, setOllamaResponse]:useState",
@@ -63,6 +63,7 @@
     "[thinkingSummary, setThinkingSummary]:useState",
     "[lastRequestId, setLastRequestId]:useState",
     "[liveReasoning, setLiveReasoning]:useState",
+    "[kbAttachedNotes, setKbAttachedNotes]:useState",
     "[isStreamingPreview, setIsStreamingPreview]:useState",
     "[isStreamSettling, setIsStreamSettling]:useState",
     "streamPreviewActiveRef:useRef",

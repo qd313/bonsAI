@@ -722,6 +722,65 @@ describe("useBonsaiAskOrchestration", () => {
       vi.useRealTimers();
     });
 
+    /*
+     * Plan 58 phase 1: the "From the notes" block's own material has to reach the screen on
+     * every pending poll too, the same lesson the reasoning slice above already proves —
+     * otherwise the block only ever appears once the reply is finished, which is the flicker
+     * plan 54 needed a fourth commit to fix.
+     */
+    it("carries the attached notes on a poll that is still pending", async () => {
+      vi.useFakeTimers();
+      const note = {
+        name: "Starting out in Pikmin 2",
+        kind: "mechanic",
+        card: "There is no day limit this time.",
+        trust_tier: "wiki_verified",
+        source_host: "www.pikminwiki.com",
+        source_license: "CC-BY-SA-4.0",
+        domain: "strategy",
+        game_title: "Pikmin 2",
+      };
+      setRpcHandler("get_background_game_ai_status", () => ({
+        ...idleBackgroundStatusFixture(),
+        status: "pending",
+        question: "is there a day limit in pikmin 2",
+        request_id: 14,
+        kb_attached_notes: [note],
+      }));
+
+      const { result } = renderHook(() => useBonsaiAskOrchestration(makeArgs()));
+
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(100);
+      });
+
+      expect(result.current.kbAttachedNotes).toEqual([note]);
+      vi.useRealTimers();
+    });
+
+    it("reads an empty attached-notes list the same as a full one, not as 'nothing new'", async () => {
+      /* Unlike liveReasoning, which keeps the last value when a poll is silent about it,
+         kb_attached_notes is decided once per turn by retrieval and republished as-is on every
+         poll -- an empty array here is the current fact, not a gap to paper over. */
+      vi.useFakeTimers();
+      setRpcHandler("get_background_game_ai_status", () => ({
+        ...idleBackgroundStatusFixture(),
+        status: "pending",
+        question: "q",
+        request_id: 15,
+        kb_attached_notes: [],
+      }));
+
+      const { result } = renderHook(() => useBonsaiAskOrchestration(makeArgs()));
+
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(100);
+      });
+
+      expect(result.current.kbAttachedNotes).toEqual([]);
+      vi.useRealTimers();
+    });
+
     it("keeps the lines already on screen when a later poll carries no thinking", async () => {
       vi.useFakeTimers();
       let polls = 0;

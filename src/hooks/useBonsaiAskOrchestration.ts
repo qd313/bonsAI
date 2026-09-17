@@ -126,7 +126,11 @@ import type {
 import { hasResponseAutosaved, markResponseAutosaved } from "../utils/desktopChatAutosave";
 import { questionBypassesOllamaPcIpRequirement } from "../utils/localOnlyAskCommands";
 import { normalizePresetCarouselInject } from "../utils/presetCarouselInject";
-import type { InputTransparencyRpcResult, TransparencySnapshot } from "../utils/inputTransparency";
+import type {
+  InputTransparencyRpcResult,
+  KbAttachedNote,
+  TransparencySnapshot,
+} from "../utils/inputTransparency";
 import { THINKING_BLURB_PLACEHOLDER, sanitizeThinkingSummary } from "../utils/thinkingSummaryText";
 import { reasoningFromFinishedStatus } from "../utils/reasoningDisplay";
 import { isPendingPlaceholderResponse, isStopNoticeResponse } from "../utils/askThinkingPhases";
@@ -493,6 +497,15 @@ export function useBonsaiAskOrchestration(
   const [liveReasoning, setLiveReasoning] = useState<LiveReasoningSnapshot | null>(
     () => survivalPeek?.liveReasoning ?? null
   );
+  /**
+   * Plan 58 phase 1: the "From the notes" block's own material for the live turn, read off
+   * every "pending" poll the same reason `liveReasoning` above is -- a per-turn fact that only
+   * reaches the screen once the reply finishes shows up as a flicker at the end (plan 54's own
+   * lesson). Not carried in the session-survival snapshot: a panel closed mid-stream and
+   * reopened falls back to the stock waiting phrase the same as `thinkingSummary` does, not to a
+   * stale note list.
+   */
+  const [kbAttachedNotes, setKbAttachedNotes] = useState<KbAttachedNote[] | null>(null);
   const [isStreamingPreview, setIsStreamingPreview] = useState(false);
   const [isStreamSettling, setIsStreamSettling] = useState(false);
 
@@ -674,6 +687,16 @@ export function useBonsaiAskOrchestration(
             partial: polledReasoning.trim() ? polledReasoning : prev?.partial ?? "",
             seconds: polledReasoningSeconds ?? prev?.seconds ?? null,
           }));
+        }
+        /*
+         * Plan 58 phase 1: the "From the notes" block's own material, read on every poll the
+         * same way the reasoning slice above is. Unlike that slice this is not "keep the old
+         * value when a poll carries nothing new" -- retrieval decides this once per turn and the
+         * published value is stable for the rest of it, so an empty array here is itself the
+         * correct, current fact ("nothing attached this turn"), not a gap to paper over.
+         */
+        if (Array.isArray(status.kb_attached_notes)) {
+          setKbAttachedNotes(status.kb_attached_notes);
         }
         const partialRaw =
           typeof status.partial_response === "string" ? status.partial_response : "";
@@ -1668,6 +1691,7 @@ export function useBonsaiAskOrchestration(
     setLastTransparency,
     thinkingSummary,
     liveReasoning,
+    kbAttachedNotes,
     lastRequestId,
     askThreadCollapsed,
     setAskThreadCollapsed,

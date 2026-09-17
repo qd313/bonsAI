@@ -175,6 +175,30 @@ function rgba(rgb: Rgb, a: number): string {
   return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${a})`;
 }
 
+/** The suggestion chip label's own colour (`MainTabPresetAnimatedChips.tsx`), used as the "quiet"
+ * end of the accent-toning mix below. */
+const CHIP_LABEL_COLOR_HEX = "#c4d3e2";
+
+/** How much of the accent survives the tone-down; the rest is the label colour (D110, item 6). */
+const ACCENT_TONE_WEIGHT = 0.7;
+
+/**
+ * Blends a character accent toward another colour, per channel, at the given weight (0 = all
+ * `towardHex`, 1 = all `mainHex`). The one caller today is `toneAccentForChipTags` below; kept as
+ * its own function so that caller's intent (mix toward the chip label colour) reads clearly.
+ */
+function mixAccentToward(mainHex: string, towardHex: string, weight: number): string {
+  const a = hexToRgb(mainHex);
+  const b = hexToRgb(towardHex);
+  const mix = (av: number, bv: number) => Math.round(weight * av + (1 - weight) * bv);
+  return rgbToHex({ r: mix(a.r, b.r), g: mix(a.g, b.g), b: mix(a.b, b.b) });
+}
+
+/** The tone-down used for the `[beta]` tag and the decode-mode label. */
+export function toneAccentForChipTags(mainHex: string): string {
+  return mixAccentToward(mainHex, CHIP_LABEL_COLOR_HEX, ACCENT_TONE_WEIGHT);
+}
+
 /**
  * When non-null, character-derived accent is active — set on `.bonsai-scope` as CSS variables.
  */
@@ -215,15 +239,21 @@ function buildChatAiBubbleScopeVars(mainHex: string, subtleHex: string): CSSProp
 /**
  * Inline style object for the root `.bonsai-scope` when accent theming applies.
  * Tab strip / icon glow values mirror the default forest math using the accent main + dark companion.
- * Chat AI bubble vars are always set (catalog accent or forest fallback).
+ * Chat AI bubble vars are always set (catalog accent or forest fallback), and so are the two
+ * suggestion-chip tone variables below (plan 60, board B): the default green is toned the same way
+ * a catalog accent is, so a chip never falls back to an untoned colour.
  */
 export function buildBonsaiScopeAccentInlineStyle(accent: UiAccentPair | null): CSSProperties {
   const mainHex = accent?.main ?? BONSAI_UI_ACCENT_MAIN_FALLBACK;
   const subtleHex = accent?.subtle ?? deriveSubtleHexFromMain(mainHex);
   const chatVars = buildChatAiBubbleScopeVars(mainHex, subtleHex);
+  const chipToneVars: CSSProperties = {
+    ["--bonsai-ui-accent-badge" as string]: rgba(hexToRgb(mainHex), 0.8),
+    ["--bonsai-ui-accent-toned" as string]: toneAccentForChipTags(mainHex),
+  };
 
   if (!accent) {
-    return chatVars;
+    return { ...chatVars, ...chipToneVars };
   }
 
   const m = hexToRgb(accent.main);
@@ -231,6 +261,7 @@ export function buildBonsaiScopeAccentInlineStyle(accent: UiAccentPair | null): 
   const r = rgba;
   return {
     ...chatVars,
+    ...chipToneVars,
     ["--bonsai-ui-accent-main" as string]: accent.main,
     ["--bonsai-ui-accent-subtle" as string]: accent.subtle,
     ["--bonsai-ui-accent-muted" as string]: r(m, 0.88),

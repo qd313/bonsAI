@@ -19,8 +19,52 @@
  * Does not: Style the text actually typed into the box — see section-5.ts
  * for the typing field itself, or the icon row underneath it — see
  * section-8.ts.
+ *
+ * What changed on 2026-09-17 (plan 60), and why, since three rules below
+ * only make sense together:
+ *
+ * A measurement on the Deck (docs/test-evidence/plan60-measure-before.json)
+ * found two things nobody had realised.
+ *
+ * 1. The chips had no room under them at all — the bottom of a chip and
+ *    the top of the question box were the same line — in every animation
+ *    mode but fade. The design boards had assumed a gap everywhere. So
+ *    the chips looked crammed, and the soft shadow the chip gained in the
+ *    same plan could not be seen, because the row hides anything drawn
+ *    outside itself. The row now keeps 8px under the chips (5 for the
+ *    shadow, 3 clear); fade mode's own gap drops from 12 to 4 so its
+ *    total is unchanged; the sideways carousel takes 5px and gives the
+ *    same 5px back off its height, so the shadow shows and nothing moves.
+ *
+ * 2. Steam's white focus ring had never once been visible on a chip. It
+ *    is drawn 2 to 5px outside the button, the chip fills the row
+ *    exactly, and the row hides everything outside itself — so since
+ *    2026-09-01 a focused chip had shown only a thin blue line, which was
+ *    meant as a position marker, not a focus cue. The chips therefore
+ *    stopped taking that ring (gamepadAndPullModels.ts) and show a lit
+ *    bar along their own bottom edge instead, drawn inside the chip where
+ *    nothing can cut it off. The "ran out of chips" flash moved onto the
+ *    same bar, so the two cues are no longer the same shape.
+ *
+ * Both bar rules repeat the chip's resting hairline and drop shadow in
+ * their own list on purpose: box-shadow replaces the whole list rather
+ * than adding to it, so an effect left out is erased while that state
+ * lasts — the "two effects on the same edge can cancel each other"
+ * lesson in docs/lessons-learned.md.
+ *
+ * 3. Moving the flash onto the bar put the two rules in competition for
+ *    the first time, and the flash lost. The chip that flashes is always
+ *    the chip the D-pad is on, so the focus rule is styling it at the
+ *    same moment; both now set the same thing and insist on it, and a
+ *    longer selector wins. While the flash was a border colour and the
+ *    focus cue was a shadow, they never met. The flash rule therefore
+ *    names the whole path down to the chip — every chip sits in a slot
+ *    inside the focus root, so that reaches all of them — and keeps the
+ *    short form as a safety net. It must also stay below the focus rules
+ *    in this file: one of their arms is the same length, and in a tie the
+ *    later rule wins.
  */
-import { BONSAI_CHAT_RESPONSE_STACK_MARGIN_TOP_PX, BONSAI_FOREST_GREEN } from "../../features/unified-input/constants";
+import { BONSAI_CHAT_RESPONSE_STACK_MARGIN_TOP_PX } from "../../features/unified-input/constants";
 import {
   PRESET_CHIP_BLOCKED_EDGE_FLASH_MS,
   PRESET_CHIP_GAP_PX,
@@ -109,6 +153,9 @@ export function buildSection4Section(): string {
           padding-right: 0 !important;
         }
 
+        /* padding-bottom: 5px for the chip's soft shadow to land in, 3 more so the chip is not
+           touching the question box. Measured 2026-09-17: there was no room at all. See the file
+           header, point 1. */
         .bonsai-scope .bonsai-preset-row-host {
           min-width: 0 !important;
           overflow: hidden !important;
@@ -116,11 +163,13 @@ export function buildSection4Section(): string {
           gap: 8px !important;
           margin-top: 0 !important;
           padding-top: 0 !important;
+          padding-bottom: 8px !important;
         }
 
+        /* 12 - the 8 above = 4, so fade mode's total under the row is unchanged. */
         .bonsai-scope .bonsai-preset-row-host--fade-anim {
           gap: 3px !important;
-          margin-bottom: 12px !important;
+          margin-bottom: 4px !important;
           margin-top: 0 !important;
         }
 
@@ -192,9 +241,12 @@ export function buildSection4Section(): string {
           the blinking block caret straight into the label's textContent from a single shared
           requestAnimationFrame loop, so there is no CSS keyframe to gate here -- reduced motion is
           enforced entirely in JS (instant swap to the final prompt, no churn, no caret).
+          Plan 60, board B (D110, item 6): the resolving label is toned 70/30 toward the label
+          colour, the same mix as the \`[beta]\` tag, so it reads quieter than the full-strength
+          accent.
         */
         .bonsai-scope button.bonsai-preset-glass--decode .bonsai-preset-chip-label {
-          color: var(--bonsai-ui-accent-main, ${BONSAI_FOREST_GREEN}) !important;
+          color: var(--bonsai-ui-accent-toned, #5b9e7e) !important;
         }
 
         .bonsai-scope .bonsai-chat-response-stack {
@@ -231,10 +283,15 @@ export function buildSection4Section(): string {
           writes to --bonsai-preset-window-start: one step is (100% + gap) / N, which is exactly one
           chip plus one gap for any N. No pixel is ever measured.
         */
+        /* This viewport hides anything outside itself too, so it clips the shadow in carousel mode
+           even after the row above gained room: 5px given, the same 5px taken back off its height,
+           so the shadow shows and nothing on screen moves. */
         .bonsai-scope .bonsai-preset-carousel-viewport {
           width: 100% !important;
           min-width: 0 !important;
           overflow: hidden !important;
+          padding-bottom: 5px !important;
+          margin-bottom: -5px !important;
         }
         .bonsai-scope .bonsai-preset-carousel-track {
           display: flex !important;
@@ -258,21 +315,41 @@ export function buildSection4Section(): string {
           min-width: 0 !important;
         }
         /*
-          The blue border marks which chip the carousel considers current. It is NOT a focus ring
-          and must never look like one: ungated, it sat on a chip permanently, so with the D-pad up
-          on the tab strip the screen still showed a highlighted chip — the fake focus ring found on
-          device 2026-08-28, which fooled the maintainer and the QA rig at the same time.
+          The lit bar under the chip the D-pad is on. It marks which chip a press would act on, and
+          it must never appear on a chip the D-pad has left: ungated, the old version of this sat on
+          a chip permanently, so with the D-pad up on the tab strip the screen still showed a
+          highlighted chip — the fake focus ring found on device 2026-08-28, which fooled the
+          maintainer and the QA rig at once. The gates are unchanged and exist for that reason.
 
           Gate 1 and 2 say "the carousel owns Steam's ring": \`gpfocuswithin\` is what Steam stamps on
           the ancestor Focusable, and the \`:has(.gpfocus)\` arm covers it directly in case Steam
           stamps only the chip. Gate 3 keeps the marker on desktop, in the in-IDE preview and on
-          touch, where nothing owns a ring at all — the same fallback rule
-          \`elementHasGamepadFocus\` uses in uiDocument.ts.
+          touch, where nothing owns a ring — the fallback \`elementHasGamepadFocus\` uses in
+          uiDocument.ts. The last two arms light the rows whose slots carry no --focus marker at
+          all (fade, static and decode), which get the same bar.
+
+          2026-09-17 (plan 60) changed what these gates draw, not when. See the file header,
+          point 2: the blue line round the chip became a lit bar inside its bottom edge, and the
+          hairline and drop shadow are repeated in the list because box-shadow replaces rather than
+          adds. \`outline: none\` stops Steam's plain focus outline showing up clipped in its place.
         */
         .bonsai-scope .bonsai-preset-carousel-focus-root.gpfocuswithin .bonsai-preset-carousel-slot--focus .bonsai-preset-glass,
         .bonsai-scope .bonsai-preset-carousel-focus-root:has(.gpfocus) .bonsai-preset-carousel-slot--focus .bonsai-preset-glass,
-        :root:not(:has(.gpfocus)) .bonsai-scope .bonsai-preset-carousel-slot--focus .bonsai-preset-glass {
-          border-color: rgba(56, 189, 248, 0.45) !important;
+        :root:not(:has(.gpfocus)) .bonsai-scope .bonsai-preset-carousel-slot--focus .bonsai-preset-glass,
+        .bonsai-scope button.bonsai-preset-glass.gpfocus,
+        :root:not(:has(.gpfocus)) .bonsai-scope button.bonsai-preset-glass:focus-visible {
+          outline: none !important;
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), inset 0 -2px 0 rgba(56, 189, 248, 0.85), 0 2px 3px rgba(0, 0, 0, 0.4) !important;
+        }
+        /* The label brightens with the bar, so the whole chip reads as the live one — except the
+           decode label, which carries the character's own toned colour while its text is still
+           resolving. */
+        .bonsai-scope .bonsai-preset-carousel-focus-root.gpfocuswithin .bonsai-preset-carousel-slot--focus .bonsai-preset-glass:not(.bonsai-preset-glass--decode) .bonsai-preset-chip-label,
+        .bonsai-scope .bonsai-preset-carousel-focus-root:has(.gpfocus) .bonsai-preset-carousel-slot--focus .bonsai-preset-glass:not(.bonsai-preset-glass--decode) .bonsai-preset-chip-label,
+        :root:not(:has(.gpfocus)) .bonsai-scope .bonsai-preset-carousel-slot--focus .bonsai-preset-glass:not(.bonsai-preset-glass--decode) .bonsai-preset-chip-label,
+        .bonsai-scope button.bonsai-preset-glass.gpfocus:not(.bonsai-preset-glass--decode) .bonsai-preset-chip-label,
+        :root:not(:has(.gpfocus)) .bonsai-scope button.bonsai-preset-glass:focus-visible:not(.bonsai-preset-glass--decode) .bonsai-preset-chip-label {
+          color: #dcebf8 !important;
         }
 
         /*
@@ -281,33 +358,34 @@ export function buildSection4Section(): string {
           onBlockedEdge, called only when the press was claimed-and-blocked, never when a pinned
           batch pulled a new entry in) so Steam's own idea of "past the end" -- the Quick Access
           rail -- never fires; the gap this closes is that the claimed-and-blocked press looked
-          identical on screen to a stall. usePresetRowNav (MainTabPresetAnimatedChips.tsx) flags
-          exactly the one chip that just claimed a blocked press with this class for
-          PRESET_CHIP_BLOCKED_EDGE_FLASH_MS, then clears it. Same cyan family as the gamepad-ring
-          and current-chip-marker glows elsewhere in this file and in gamepadAndPullModels.ts, so
-          it reads as "the plugin's own focus-adjacent accent", not a new colour.
+          identical on screen to a stall. usePresetRowNav (MainTabPresetAnimatedChips.tsx) flags the
+          one chip that claimed a blocked press with this class for
+          PRESET_CHIP_BLOCKED_EDGE_FLASH_MS, then clears it. Same cyan family as the other
+          focus-adjacent glows here and in gamepadAndPullModels.ts, so it is not a new colour.
 
-          Border/box-shadow only, no transform and no width change, so the chip's own box never
-          grows -- and .bonsai-preset-row-host (above) clips overflow besides, so even the shadow's
-          blur cannot spill past the 300px column.
+          Since 2026-09-17 (plan 60) the cue lives on the same bottom bar the focused chip already
+          shows: the bar flares brighter with a soft cyan glow under it, then settles back. Before,
+          it recoloured the border, which was the old focus marker, so the flash and the focus cue
+          looked alike. All four effects are repeated in one list because box-shadow replaces rather
+          than adds. No transform and no width change, so the chip's own box never grows. The long
+          first arm is not decoration, and this rule must stay below the bar rules: file header,
+          points 2 and 3.
 
           A plain transition, not @keyframes: section-6.ts's base \`.bonsai-preset-glass\` rule sets
-          \`box-shadow: none !important\`, and a running CSS animation cannot out-rank a static
-          !important declaration (only a transition can) -- so a keyframe-based glow here would
-          simply never paint. The transition lives only on this modifier rule, not on the bare
-          \`.bonsai-preset-glass\`, so removing the class also removes the transition and cannot
-          touch the unrelated dimmed/undimmed fade the carousel already runs inline.
+          its own \`box-shadow: ... !important\`, and an animation cannot out-rank a static !important
+          declaration (only a transition can). It lives on this modifier rule alone, so removing the
+          class removes the transition and cannot touch the carousel's own dimmed/undimmed fade.
         */
+        .bonsai-scope .bonsai-preset-carousel-focus-root .bonsai-preset-carousel-slot button.bonsai-preset-glass.bonsai-preset-chip-blocked-edge,
         .bonsai-scope button.bonsai-preset-glass.bonsai-preset-chip-blocked-edge {
-          transition: border-color ${Math.round(PRESET_CHIP_BLOCKED_EDGE_FLASH_MS * 0.45)}ms ease-out,
-            box-shadow ${Math.round(PRESET_CHIP_BLOCKED_EDGE_FLASH_MS * 0.45)}ms ease-out;
-          border-color: rgba(56, 189, 248, 0.85) !important;
-          box-shadow: 0 0 8px 1px rgba(56, 189, 248, 0.45) !important;
+          transition: box-shadow ${Math.round(PRESET_CHIP_BLOCKED_EDGE_FLASH_MS * 0.45)}ms ease-out;
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), inset 0 -2px 0 rgba(150, 225, 255, 1), 0 3px 8px -2px rgba(56, 189, 248, 0.55), 0 2px 3px rgba(0, 0, 0, 0.4) !important;
         }
         /* Reduced motion: no ramp, just the same glow held for the same window and then removed
-           by the JS timeout -- a state change, not movement. Scoped to this one selector so it
-           cannot silence any other control's transition. */
+           by the JS timeout -- a state change, not movement. Same two arms as above, scoped to the
+           flagged chip alone so it cannot silence any other control's transition. */
         @media (prefers-reduced-motion: reduce) {
+          .bonsai-scope .bonsai-preset-carousel-focus-root .bonsai-preset-carousel-slot button.bonsai-preset-glass.bonsai-preset-chip-blocked-edge,
           .bonsai-scope button.bonsai-preset-glass.bonsai-preset-chip-blocked-edge {
             transition: none !important;
           }

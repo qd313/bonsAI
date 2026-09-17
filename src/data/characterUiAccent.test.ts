@@ -8,6 +8,7 @@ import {
   resolveUiAccentFromCharacterSettings,
   TAB_BAR_LIT_HAND_PICKED,
   TAB_BAR_LIT_MIN_CONTRAST,
+  toneAccentForChipTags,
 } from "./characterUiAccent";
 
 // The open strip's bar colour (TAB_BAR_STRIP_BG_HEX in unified-input/constants.ts), copied here so
@@ -119,6 +120,31 @@ describe("characterUiAccent", () => {
       string
     >;
     expect(style["--bonsai-chat-ai-bubble-wash"]).toBe("rgba(167, 133, 181, 0.11)");
+  });
+
+  describe("suggestion chip accent toning (plan 60, board B, D110 item 6)", () => {
+    it("toneAccentForChipTags mixes gold to the designer's exact value", () => {
+      expect(toneAccentForChipTags("#f1c40f")).toBe("#e4c94e");
+    });
+
+    it("toneAccentForChipTags mixes the default green to the designer's exact value", () => {
+      expect(toneAccentForChipTags("#2e8753")).toBe("#5b9e7e");
+    });
+
+    it("sets both new scope variables when a character accent is active", () => {
+      const style = buildBonsaiScopeAccentInlineStyle({ main: "#f1c40f", subtle: "#8c7409" }) as Record<
+        string,
+        string
+      >;
+      expect(style["--bonsai-ui-accent-badge"]).toBe("rgba(241, 196, 15, 0.8)");
+      expect(style["--bonsai-ui-accent-toned"]).toBe("#e4c94e");
+    });
+
+    it("sets both new scope variables toned from the default green when no character is chosen", () => {
+      const style = buildBonsaiScopeAccentInlineStyle(null) as Record<string, string>;
+      expect(style["--bonsai-ui-accent-badge"]).toBe("rgba(46, 135, 83, 0.8)");
+      expect(style["--bonsai-ui-accent-toned"]).toBe("#5b9e7e");
+    });
   });
 
   describe("liftForBar (the open strip's lit colour)", () => {

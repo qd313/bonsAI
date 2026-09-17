@@ -42,7 +42,7 @@
     },
     {
       "path": "src/styles/sections/section-6.ts",
-      "lines": 1517,
+      "lines": 1530,
       "role": ""
     },
     {
@@ -127,7 +127,7 @@
     },
     {
       "path": "src/components/MainTabPresetAnimatedChips.test.tsx",
-      "lines": 660,
+      "lines": 666,
       "role": ""
     },
     {
@@ -142,7 +142,7 @@
     },
     {
       "path": "src/styles/sections/gamepadAndPullModels.ts",
-      "lines": 622,
+      "lines": 616,
       "role": ""
     },
     {

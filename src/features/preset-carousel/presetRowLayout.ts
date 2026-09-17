@@ -31,8 +31,9 @@ export function effectivePresetVisibleSlots(singleChip: boolean): number {
 }
 /** Chip height, per the drawing (was 34 when the row was one chip). */
 export const PRESET_CHIP_HEIGHT_PX = 30;
-/** Space between the chips. Not in the drawing; measured after the first deploy. */
-export const PRESET_CHIP_GAP_PX = 4;
+/** Space between the chips. From the design boards of 2026-09-16 (plan 60, board B): widened from
+ * 4 so the two chips stop reading as one slab. */
+export const PRESET_CHIP_GAP_PX = 6;
 /** Set explicitly so the label room is known by construction rather than by Steam's button default. */
 export const PRESET_CHIP_SIDE_PADDING_PX = 8;
 

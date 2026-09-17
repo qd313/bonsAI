@@ -131,10 +131,18 @@ export function buildSection6Section(): string {
           }
         }
 
+        /* Plan 60, board B, 2026-09-17: the chip should read as a pressable thing, not a flat
+           label. A gradient (lighter at the top, darker at the bottom) plus a hairline on the top
+           edge and a soft shadow underneath give it the "raised button" cue the flat 22 percent
+           fill never had. The help chip and the agent chip below keep their own background and
+           border for their own colour, but neither sets box-shadow, so this rule's hairline and
+           shadow still reach them (D110, item 5) — they sit level with the other chips. */
         .bonsai-scope .bonsai-preset-glass {
-          background: rgba(18, 26, 34, 0.22) !important;
-          border: 1px solid rgba(255, 255, 255, 0.07) !important;
-          box-shadow: none !important;
+          background: linear-gradient(180deg, rgba(56, 70, 84, 0.5) 0%, rgba(16, 22, 30, 0.55) 100%) !important;
+          border: 1px solid rgba(255, 255, 255, 0.10) !important;
+          box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.10),
+            0 2px 3px rgba(0, 0, 0, 0.4) !important;
         }
 
         .bonsai-scope button.bonsai-preset-help-chip.bonsai-preset-glass {
@@ -147,11 +155,16 @@ export function buildSection6Section(): string {
           color: #dff5ea !important;
         }
 
+        /* The agent chip keeps its own orange ring and glow, and gains the raised look with them
+           (D110, item 5). The hairline and drop shadow from the rule above are written out again
+           here because box-shadow replaces the whole list rather than adding to it. */
         .bonsai-scope button.bonsai-preset-glass.bonsai-pyro-inject-chip {
           border: 2px solid rgba(255, 107, 53, 0.92) !important;
           box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.10),
             0 0 0 1px rgba(160, 45, 28, 0.5),
-            0 0 12px rgba(255, 85, 40, 0.38) !important;
+            0 0 12px rgba(255, 85, 40, 0.38),
+            0 2px 3px rgba(0, 0, 0, 0.4) !important;
           background: rgba(38, 22, 18, 0.38) !important;
           color: #f0ddd6 !important;
         }

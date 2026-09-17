@@ -1,11 +1,13 @@
 /**
- * Title: Chip row "ran out of chips" edge cue — stylesheet checks
- * Purpose: Pin the two things a rendered test cannot: that the cue can actually beat the
- *          `box-shadow: none !important` / `border: ... !important` reset every preset chip
- *          carries (section-6.ts), and that reduced motion drops the ramp without touching any
- *          other control's transition.
+ * Title: Chip row edge cue and the room under the chips — stylesheet checks
+ * Purpose: Pin the two things a rendered test cannot: that the cue can actually beat the chip's
+ *          own resting `box-shadow: ... !important` / `border: ... !important` rule (section-6.ts,
+ *          plan 60 board B; the rest state gained a real gradient, hairline and soft shadow where
+ *          it used to say `box-shadow: none`), and that reduced motion drops the ramp without
+ *          touching any other control's transition.
  * Used for: The blocked-edge glow wired in MainTabPresetAnimatedChips.tsx / presetRowNav.ts
- *           (roadmap `[chips]` ★★, filed 2026-09-04).
+ *           (roadmap `[chips]` ★★, filed 2026-09-04), and the room under the chip row that plan 60
+ *           added so the chip's soft shadow is not cut off and the chips clear the question box.
  * Does not: Render anything or assert paint — jsdom has no layout/paint engine
  *           (design-language.md rule 6). These read the generated CSS text, the same approach
  *           presetChipFocusRing.test.ts uses for the same reason.
@@ -22,7 +24,7 @@ describe("chip row out-of-chips edge cue (section 4 CSS)", () => {
   const css = buildSection4Section();
 
   it("declares the cue on the real button class, !important, so it outranks the base reset", () => {
-    // section-6.ts's `.bonsai-preset-glass` sets `box-shadow: none !important` and
+    // section-6.ts's `.bonsai-preset-glass` sets its own resting `box-shadow: ... !important` and
     // `border: ... !important`; only a higher-specificity !important rule for the same
     // properties can still paint anything on the flagged chip.
     const match = css.match(
@@ -30,12 +32,38 @@ describe("chip row out-of-chips edge cue (section 4 CSS)", () => {
     );
     expect(match).toBeTruthy();
     const body = match![1]!;
-    expect(body).toMatch(/border-color:\s*rgba\(56,\s*189,\s*248,\s*0\.85\)\s*!important/);
-    expect(body).toMatch(/box-shadow:\s*0 0 8px 1px rgba\(56,\s*189,\s*248,\s*0\.45\)\s*!important/);
+    // One box-shadow list carrying all four effects at once. box-shadow replaces rather than adds,
+    // so anything missing here is erased for the length of the flash: the bright bar, the cyan
+    // glow under it, and the chip's own resting hairline and soft shadow all have to be present.
+    expect(body).toMatch(/inset 0 1px 0 rgba\(255,\s*255,\s*255,\s*0\.10\)/);
+    expect(body).toMatch(/inset 0 -2px 0 rgba\(150,\s*225,\s*255,\s*1\)/);
+    expect(body).toMatch(/0 3px 8px -2px rgba\(56,\s*189,\s*248,\s*0\.55\)/);
+    expect(body).toMatch(/0 2px 3px rgba\(0,\s*0,\s*0,\s*0\.4\)\s*!important/);
+    // The old cue recoloured the border, which was also the old focus marker; the cue now lives on
+    // the bar alone, so the rule must not touch the border at all.
+    expect(body).not.toMatch(/border-color:/);
     // A transition, not @keyframes -- see the comment above the rule for why a keyframe
     // animation cannot win against the !important reset.
     expect(body).toMatch(/transition:/);
     expect(css).not.toMatch(/@keyframes\s+bonsai-preset-chip-blocked-edge/);
+  });
+
+  it("outranks the focus bar, which styles the very same chip at the very same moment", () => {
+    // The chip that flashes is always the chip the D-pad is on, so the focus rule above is
+    // targeting it too, and both insist on the same thing. The longer selector wins, so the flash
+    // has to name the whole path down to the chip or it never paints at all. Found by reading the
+    // rules, not on screen: every test here passed while the flash was invisible.
+    const strong =
+      ".bonsai-scope .bonsai-preset-carousel-focus-root .bonsai-preset-carousel-slot button.bonsai-preset-glass.bonsai-preset-chip-blocked-edge";
+    expect(css).toContain(strong);
+    // And it must sit below the focus rules: one focus arm is exactly as long, and a tie goes to
+    // whichever comes last.
+    expect(css.indexOf(strong)).toBeGreaterThan(
+      css.indexOf(".bonsai-scope button.bonsai-preset-glass.gpfocus"),
+    );
+    // Reduced motion carries the same pair of selectors, or it would silence nothing.
+    const reduced = css.slice(css.indexOf("@media (prefers-reduced-motion: reduce)"));
+    expect(reduced).toContain(strong);
   });
 
   it("respects reduced motion: the ramp is dropped, and only for this one selector", () => {
@@ -58,7 +86,7 @@ describe("chip row out-of-chips edge cue (section 4 CSS)", () => {
   });
 
   it("keeps the CSS ramp shorter than the JS flash window it lives inside", () => {
-    const match = css.match(/transition:\s*border-color\s+(\d+)ms/);
+    const match = css.match(/transition:\s*box-shadow\s+(\d+)ms/);
     expect(match).toBeTruthy();
     const rampMs = Number(match![1]);
     expect(rampMs).toBeGreaterThan(0);
@@ -139,5 +167,35 @@ describe("carousel track width reads the one-suggestion-chip override (section 4
     expect(flexMatch![1]).toContain("var(--bonsai-preset-visible-slots");
     // No pixel width is measured or hard-coded here (design-language rule 4).
     expect(flexMatch![1]).not.toMatch(/\d+px\s*\)\s*\/\s*\d/);
+  });
+});
+
+describe("room under the suggestion chips (section 4 CSS)", () => {
+  const css = buildSection4Section();
+
+  // Measured on the Deck 2026-09-17 (docs/test-evidence/plan60-measure-before.json): the chips had
+  // no room under them at all in three of the four animation modes, so the chip's soft shadow was
+  // cut off and the chips touched the question box. These pin the numbers that fixed it, because
+  // nothing in jsdom can measure a shadow (design-language.md rule 6).
+
+  it("gives the row 8px under the chips: 5 for the shadow, 3 clear of the box below", () => {
+    const match = css.match(/\.bonsai-scope \.bonsai-preset-row-host\s*\{([^}]*)\}/);
+    expect(match).toBeTruthy();
+    expect(match![1]!).toMatch(/padding-bottom:\s*8px\s*!important/);
+  });
+
+  it("drops fade mode's own gap from 12 to 4, so fade mode still totals 12", () => {
+    const match = css.match(/\.bonsai-scope \.bonsai-preset-row-host--fade-anim\s*\{([^}]*)\}/);
+    expect(match).toBeTruthy();
+    expect(match![1]!).toMatch(/margin-bottom:\s*4px\s*!important/);
+    expect(match![1]!).not.toMatch(/margin-bottom:\s*12px/);
+  });
+
+  it("lets the shadow out of the carousel's own clipping box without changing its height", () => {
+    const match = css.match(/\.bonsai-scope \.bonsai-preset-carousel-viewport\s*\{([^}]*)\}/);
+    expect(match).toBeTruthy();
+    const body = match![1]!;
+    expect(body).toMatch(/padding-bottom:\s*5px\s*!important/);
+    expect(body).toMatch(/margin-bottom:\s*-5px\s*!important/);
   });
 });

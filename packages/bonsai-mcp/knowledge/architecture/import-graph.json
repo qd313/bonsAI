@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 413,
-  "edgeCount": 1057,
+  "edgeCount": 1056,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -511,7 +511,6 @@
         "src/features/preset-carousel/presetRowLayout.ts",
         "src/features/preset-carousel/presetRowNav.ts",
         "src/features/preset-carousel/presetSlotRotation.ts",
-        "src/features/unified-input/constants.ts",
         "src/utils/joinPresetWithRunningGame.ts",
         "src/utils/navFocusRegistry.ts",
         "src/utils/uiDocument.ts"
@@ -1999,7 +1998,6 @@
         "src/components/MainTabAskModeMenuPopover.tsx",
         "src/components/MainTabAttachMenuPopover.tsx",
         "src/components/MainTabChatTranscript.tsx",
-        "src/components/MainTabPresetAnimatedChips.tsx",
         "src/components/MainTabUnifiedAskBar.tsx",
         "src/components/SettingsTab.tsx",
         "src/components/SettingsTabAccentIntensityMenuPopover.tsx",

@@ -79,6 +79,12 @@ def snapshot_licence(identifier: str, files: list[dict]) -> dict:
         "rightsinfo": query.get("rightsinfo", {}),
         "sitename": general.get("sitename", ""),
         "generator": general.get("generator", ""),
+        # scripts/extract_wiki_notes.py needs these to rebuild a page's own URL -- guessing
+        # "/wiki/Title" off the API path is wrong often enough to matter (hollowknight.wiki's
+        # own articlepath is "/w/$1", not "/wiki/$1"; strategywiki.org's api.php lives under
+        # "/w/api.php", which is not its article root either).
+        "server": general.get("server", ""),
+        "articlepath": general.get("articlepath", ""),
     }
 
 
@@ -171,6 +177,8 @@ def licence_from_archive(path: Path) -> dict:
         "rightsinfo": query.get("rightsinfo", {}),
         "sitename": general.get("sitename", ""),
         "generator": general.get("generator", ""),
+        "server": general.get("server", ""),
+        "articlepath": general.get("articlepath", ""),
         "source": f"{path.name}::{member}",
     }
 

@@ -221,6 +221,34 @@ def load_live_page(page_path: Path) -> tuple[dict, str]:
     return meta, body
 
 
+def _rebuild_page_url(manifest: dict, siteinfo: dict, title: str) -> str:
+    """A dump has no fullurl the way the live API hands one back, so this rebuilds it from
+    the wiki's own declared article path (fetch_wiki_dump_pages.py now records server and
+    articlepath from the snapshot's siteinfo). Guessing "/wiki/Title" off the dump's api.php
+    address is wrong often enough to matter: hollowknight.wiki's own articlepath is "/w/$1",
+    not "/wiki/$1", and strategywiki.org's api.php lives under "/w/api.php", not its root."""
+    # MediaWiki leaves "(" ")" and "/" unescaped in its own article URLs (real example:
+    # https://hollowknight.wiki/w/Hornet_(Hollow_Knight)) -- quoting them would build a
+    # URL nobody's server actually serves.
+    quoted_title = urllib.parse.quote(title.replace(" ", "_"), safe="()/")
+    server = str(siteinfo.get("server") or "")
+    articlepath = str(siteinfo.get("articlepath") or "")
+    if server and articlepath:
+        if server.startswith("//"):
+            server = "https:" + server
+        elif not server.startswith("http"):
+            server = "https://" + server
+        return server.rstrip("/") + articlepath.replace("$1", quoted_title)
+    # Older manifest with no server/articlepath recorded -- fall back to stripping a
+    # trailing api.php script path and guessing the common "/wiki/$1" convention.
+    original_url = re.sub(r"/(w/)?api\.php$", "", (manifest.get("original_url") or "")).rstrip("/")
+    if not original_url:
+        return ""
+    print("[warn] this dump's manifest has no recorded articlepath; guessed '/wiki/$1' -- "
+          "confirm the resulting source_url resolves", file=sys.stderr)
+    return f"{original_url}/wiki/{quoted_title}"
+
+
 def load_dump_page(page_path: Path) -> tuple[dict, str]:
     """Reads a .wikitext page written by fetch_wiki_dump_pages.py, plus its sibling
     manifest.json for the licence, revision and the snapshot's own capture date."""
@@ -236,8 +264,7 @@ def load_dump_page(page_path: Path) -> tuple[dict, str]:
     siteinfo = manifest.get("siteinfo") or {}
     rights = siteinfo.get("rightsinfo") or {}
     title = entry.get("title") or page_path.stem.replace("_", " ")
-    original_url = (manifest.get("original_url") or "").rstrip("/")
-    url = f"{original_url}/wiki/{urllib.parse.quote(title.replace(' ', '_'))}" if original_url else ""
+    url = _rebuild_page_url(manifest, siteinfo, title)
     # A dump is a snapshot from a past date, not read today -- crawled_at has to be that
     # date or every rebuild would relabel old wiki text as read today (docs/knowledge-base.md,
     # "Source attribution"). publicdate is the archive.org item's own capture date.
@@ -451,22 +478,36 @@ class SectionChoice:
 
 
 def select_section(headings: list[Heading], text: str) -> SectionChoice:
+    """A heading whose body is blank is skipped in favour of the next candidate -- some GTA
+    Wiki mission pages carry a "Walkthrough" heading with nothing written under it (the real
+    mission description sits under a different heading, "Mission", not on our list), and an
+    empty note would be worse than a lower-priority one that actually has words in it."""
+
+    def nonempty(h: Heading) -> bool:
+        return bool(text[h.body_start : h.body_end].strip())
+
     for keyword in SECTION_HEADING_PRIORITY:
         for h in headings:
-            if h.title.strip().lower() == keyword:
+            if h.title.strip().lower() == keyword and nonempty(h):
                 return SectionChoice(h, text[h.body_start : h.body_end], f"heading matches {h.title!r} exactly")
     for keyword in SECTION_HEADING_PRIORITY:
         for h in headings:
-            if keyword in h.title.strip().lower():
+            if keyword in h.title.strip().lower() and nonempty(h):
                 return SectionChoice(h, text[h.body_start : h.body_end], f"heading {h.title!r} contains {keyword!r}")
     for h in headings:
-        if h.title.strip().lower() == FALLBACK_SECTION_HEADING:
+        if h.title.strip().lower() == FALLBACK_SECTION_HEADING and nonempty(h):
             return SectionChoice(h, text[h.body_start : h.body_end], f"no tactics/use heading; used the {h.title!r} fallback")
+    for h in headings:
+        if nonempty(h):
+            return SectionChoice(
+                h, text[h.body_start : h.body_end],
+                f"no tactics/use/overview heading found; used the first non-empty section, {h.title!r} -- check this by hand",
+            )
     if headings:
         h = headings[0]
         return SectionChoice(
             h, text[h.body_start : h.body_end],
-            f"no tactics/use/overview heading found; used the first section, {h.title!r} -- check this by hand",
+            f"every section on the page is empty; used {h.title!r} anyway -- check this by hand",
         )
     return SectionChoice(None, text, "the page has no headings at all; used the whole page text -- check this by hand")
 
@@ -520,6 +561,10 @@ def body_to_units(body: str) -> tuple[list[Unit], list[str]]:
         if _HEADING_RE.match(line):
             dropped_notes.append(f"dropped a nested subheading: {line!r}")
             continue
+        if re.fullmatch(r"[!|\s]*", line) and re.search(r"[!|]", line):
+            # A blank table cell (Fandom's stat widgets render one per row, and an unused
+            # row is common) -- nothing to keep, nothing to report as dropped.
+            continue
         cells = _split_marked_cells(line)
         if cells:
             markers = {m for m, _ in cells}
@@ -566,6 +611,15 @@ def body_to_units(body: str) -> tuple[list[Unit], list[str]]:
                         "only the first got a matching label"
                     )
                 continue
+            if markers == {"||"} and len(cells) == 1:
+                # Some stat widgets (Hollow Knight wiki's "Combat Values" box) write the
+                # label into the cell's own text ("Hits: 11") rather than a separate header
+                # cell -- the page already did the labelling, so keep it as-is.
+                solo_label_match = re.match(r"^([^:]{1,60}):\s+(.+)$", cells[0][1])
+                if solo_label_match:
+                    label, value = solo_label_match.group(1), solo_label_match.group(2)
+                    units.append(Unit("label", f"{label}: {value}", [label, value]))
+                    continue
             dropped_notes.append(f"could not parse a marked table/infobox line: {line[:80]!r}")
             continue
         list_match = re.match(r"^-\s+(.*)$", line)
@@ -659,6 +713,7 @@ def build_note(
     min_chars: int,
     max_chars: int,
     allowed_licences: frozenset[str],
+    licence_override: str | None = None,
 ) -> tuple[dict, dict, list[str]]:
     if page_format == "live":
         meta, body = load_live_page(page_path)
@@ -666,6 +721,17 @@ def build_note(
         meta, body = load_dump_page(page_path)
 
     licence = canonical_licence(meta.get("licence_text", ""), meta.get("licence_url", ""))
+    if licence is None and licence_override:
+        # Some Fandom wikis' own API answers a bare "CC-BY-SA" with no version -- the same
+        # gap ATTR-5.2 exists for (docs/knowledge-base.md, "Source attribution": "Read the
+        # licence from the snapshot, not from the archive.org item"). Where the version was
+        # already established from other evidence (an archived siteinfo, or a footer read by
+        # hand -- see docs/archive/15-corpus-licensing-attribution-plan.md), pass it here
+        # rather than trusting today's live read to repeat it. Still checked against the
+        # allow-list below, so a wrong override cannot slip through.
+        licence = licence_override
+        print(f"[check] licence read from the live site had no version; used --source-license "
+              f"{licence!r} instead -- confirm this against the evidence the version came from", file=sys.stderr)
     if licence is None:
         raise SystemExit(
             f"refusing {page_path.name}: no recognised licence "
@@ -739,6 +805,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--min-chars", type=int, default=400)
     parser.add_argument("--max-chars", type=int, default=880)
     parser.add_argument("--out", type=Path, default=None, help="also write {notes, sidecars} JSON here (never the seed)")
+    parser.add_argument(
+        "--source-license", dest="source_license", default=None,
+        help="use this licence when the live site's own answer carries no version (e.g. a "
+        "bare 'CC-BY-SA') but the version was already established from other evidence -- "
+        "still checked against the publish allow-list, so a wrong value is still refused",
+    )
     args = parser.parse_args(argv)
 
     if hasattr(sys.stdout, "reconfigure"):
@@ -755,6 +827,7 @@ def main(argv: list[str] | None = None) -> int:
         min_chars=args.min_chars,
         max_chars=args.max_chars,
         allowed_licences=allowed,
+        licence_override=args.source_license,
     )
 
     print("=== NOTE RECORD (print only -- never written into data/kb/strategy_seed.json) ===")

@@ -73,6 +73,16 @@ class SelectSectionTests(unittest.TestCase):
         self.assertEqual(choice.heading.title, "History")
         self.assertIn("check this by hand", choice.reason)
 
+    def test_empty_exact_match_is_skipped_for_a_lower_priority_non_empty_section(self):
+        """Real case from gta.fandom.com: a mission page's "Walkthrough" heading exists but
+        has nothing written under it; the actual mission text sits under a heading not on
+        our priority list at all. An empty note would be worse than a real one."""
+        text = "== Mission\nDrive to the dock and blow up the boat.\n== Walkthrough\n"
+        headings = m.extract_headings(text)
+        choice = m.select_section(headings, text)
+        self.assertEqual(choice.heading.title, "Mission")
+        self.assertIn("Drive to the dock", choice.body)
+
     def test_no_headings_at_all_uses_whole_page(self):
         text = "Just one paragraph, no headings anywhere.\n"
         choice = m.select_section([], text)
@@ -125,6 +135,23 @@ class BodyToUnitsTests(unittest.TestCase):
         units, dropped = m.body_to_units("!! Move\n|| Jab || 3% || fast\n")
         self.assertEqual(units[0].text, "Move: Jab")
         self.assertTrue(any("one label" in d for d in dropped))
+
+    def test_bare_marker_line_with_no_text_is_skipped_quietly(self):
+        """A blank stat-widget row (Hollow Knight wiki's Combat Values box has these) is not
+        content and not a parsing failure -- it should vanish with no unit and no dropped note."""
+        units, dropped = m.body_to_units("|| Hits: 11\n||\n|| Combo: 6\n")
+        self.assertEqual([u.text for u in units], ["Hits: 11", "Combo: 6"])
+        self.assertEqual(dropped, [])
+
+    def test_a_cell_that_already_writes_its_own_label_is_read_as_is(self):
+        """Some stat widgets put "Label: value" inside one cell's own text rather than a
+        separate header cell -- the page did the labelling, so trust it rather than dropping
+        the line as unparseable."""
+        units, dropped = m.body_to_units("|| Description: Falls back and lands on his chest.\n")
+        self.assertEqual(len(units), 1)
+        self.assertEqual(units[0].kind, "label")
+        self.assertEqual(units[0].text, "Description: Falls back and lands on his chest.")
+        self.assertEqual(dropped, [])
 
 
 class TrimToLengthTests(unittest.TestCase):
@@ -335,6 +362,43 @@ class BuildNoteEndToEndTests(unittest.TestCase):
             self.assertEqual(sidecar["revision_id"], 12345)
             self.assertEqual(sidecar["char_count"], len(note["card"]))
 
+    def test_licence_override_is_used_when_the_live_read_has_no_version(self):
+        """Some Fandom wikis answer with a bare "CC-BY-SA" and no version (gta.fandom.com
+        does exactly this) even when the version was already established from other
+        evidence -- see docs/archive/15-corpus-licensing-attribution-plan.md."""
+        with tempfile.TemporaryDirectory() as tmp_str:
+            tmp = Path(tmp_str)
+            page_path = self._write_live_fixture(tmp)
+            manifest = json.loads((tmp / "_manifest.json").read_text(encoding="utf-8"))
+            manifest["pages"][0]["licence_text"] = "CC-BY-SA"
+            manifest["pages"][0]["licence_url"] = "https://www.fandom.com/licensing"
+            (tmp / "_manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+            allowed = m._load_allowed_licences()
+            note, _, _ = m.build_note(
+                page_path=page_path, page_format="live", game_id=1,
+                section_type_arg=None, name_arg=None,
+                min_chars=50, max_chars=400, allowed_licences=allowed,
+                licence_override="CC-BY-SA-3.0",
+            )
+            self.assertEqual(note["source_license"], "CC-BY-SA-3.0")
+
+    def test_licence_override_is_still_checked_against_the_allow_list(self):
+        with tempfile.TemporaryDirectory() as tmp_str:
+            tmp = Path(tmp_str)
+            page_path = self._write_live_fixture(tmp)
+            manifest = json.loads((tmp / "_manifest.json").read_text(encoding="utf-8"))
+            manifest["pages"][0]["licence_text"] = "CC-BY-SA"
+            manifest["pages"][0]["licence_url"] = "https://www.fandom.com/licensing"
+            (tmp / "_manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+            allowed = m._load_allowed_licences()
+            with self.assertRaises(SystemExit):
+                m.build_note(
+                    page_path=page_path, page_format="live", game_id=1,
+                    section_type_arg=None, name_arg=None,
+                    min_chars=50, max_chars=400, allowed_licences=allowed,
+                    licence_override="GFDL",
+                )
+
     def test_disallowed_licence_refuses_and_prints_why(self):
         with tempfile.TemporaryDirectory() as tmp_str:
             tmp = Path(tmp_str)
@@ -387,6 +451,29 @@ class BuildNoteEndToEndTests(unittest.TestCase):
             self.assertEqual(note["crawled_at"], "2024-03-02")
             self.assertEqual(note["section_type"], "boss")
             self.assertEqual(sidecar["revision_id"], "999")
+
+
+class RebuildPageUrlTests(unittest.TestCase):
+    """Real bug found while sampling strategywiki.org: its api.php lives under "/w/api.php",
+    which is not its article root, and guessing "/wiki/Title" off that address produced
+    "https://strategywiki.org/w/api.php/wiki/Mega_Man_2/Air_Man" -- not a real page."""
+
+    def test_uses_the_snapshot_s_own_server_and_articlepath(self):
+        siteinfo = {"server": "//strategywiki.org", "articlepath": "/wiki/$1"}
+        url = m._rebuild_page_url({}, siteinfo, "Mega Man 2/Air Man")
+        self.assertEqual(url, "https://strategywiki.org/wiki/Mega_Man_2/Air_Man")
+
+    def test_a_non_slash_wiki_articlepath_is_respected_too(self):
+        """hollowknight.wiki's own articlepath is "/w/$1", not "/wiki/$1" -- a hardcoded
+        guess would have been wrong for this wiki specifically."""
+        siteinfo = {"server": "https://hollowknight.wiki", "articlepath": "/w/$1"}
+        url = m._rebuild_page_url({}, siteinfo, "Hornet (Hollow Knight)")
+        self.assertEqual(url, "https://hollowknight.wiki/w/Hornet_(Hollow_Knight)")
+
+    def test_falls_back_to_stripping_api_php_when_no_articlepath_recorded(self):
+        manifest = {"original_url": "https://example-wiki.fandom.com/api.php"}
+        url = m._rebuild_page_url(manifest, {}, "Some Boss")
+        self.assertEqual(url, "https://example-wiki.fandom.com/wiki/Some_Boss")
 
 
 class GuessSectionTypeTests(unittest.TestCase):

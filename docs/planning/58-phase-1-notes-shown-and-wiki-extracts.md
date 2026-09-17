@@ -410,6 +410,15 @@ which goes on their own checklist.
   Lane B is on a second pass: a per-wiki heading rule, the note's kind read from the page's own
   categories, invisible marks trimmed, proven on twelve more pages. The sample page was rendered
   and published for the maintainer's yes or no per wiki.
+- **2026-09-17, second pass landed, comparison lane cut.** The reader now tries a heading rule per
+  wiki before the general list, reads a note's kind from the page's own categories, and trims
+  invisible marks; twelve more real pages read through it: nine good enough for a player, two
+  half (Smash jargon, a vehicle's fact box), one with nothing usable on the page (a Yoshi's Story
+  enemy). Landed as three commits with the gates. Lane D cut from that tip for the Hollow Knight
+  comparison only: the same fourteen notes made both ways, measured on the six blind questions
+  and the two answer rows, with the swap held in its own commit until the maintainer picks. The
+  ten new games wait on the maintainer's yes or no per wiki. Lane A is building the block, closed
+  by default behind one switch. The Deck still asleep after a 25-minute poll.
 
 ---
 

@@ -289,25 +289,31 @@ them straight; what remains is coverage, follow-up memory, and the things the te
 
 ## 6. What is blocking, in one list
 
-1. **Wave three's own Deck evening is unfinished.** Three of its checks never ran, and two that did need
+1. **Wave four now waits on [58 phase 1](58-phase-1-notes-shown-and-wiki-extracts.md).** Two fixes have
+   to land first: showing a note's own words under a reply instead of the model's rewrite of it, and
+   reading a wiki's own sentences into notes with no AI rewrite. Both phases are waiting on the
+   maintainer's answers before either can start.
+2. **Wave three's own Deck evening is unfinished.** Three of its checks never ran, and two that did need
    redoing: follow-up questions now look up the right boss but the reply can still name a different one,
    and the new one-second speed check reports a healthy device while a real question runs over budget.
    Nothing about either is decided until this is done. A call is waiting for the maintainer on how to
    finish the follow-up half. The per-question wait itself is now explained (section 3) — the Deck can
    only hold one model at a time — but why the note search has kept getting slower since August, week
    over week, is still unexplained.
-2. **Fallout: New Vegas is owned but not installed on the Deck**, so its cards cannot be judged in place
+3. **Fallout: New Vegas is owned but not installed on the Deck**, so its cards cannot be judged in place
    until it is. That is the only thing blocking the last wave-one device row.
-3. **The "no new titles" rule** for Phase 5 is reopened for one tranche only; the catalog stays its own
+4. **The "no new titles" rule** for Phase 5 is reopened for one tranche only; the catalog stays its own
    phase.
-4. **Any schema change is a release that stales every installed corpus.** Per-game tips, a new card
+5. **Any schema change is a release that stales every installed corpus.** Per-game tips, a new card
    kind and the style pass all want a rebuild; they should ride one release.
-5. **Card authors cannot write blind eval questions.** Content sessions and eval sessions must be
+6. **Card authors cannot write blind eval questions.** Content sessions and eval sessions must be
    separate people or separate sessions.
-6. **The model and the window.** A 2B model with 4,096 tokens: every extra instruction, card or turn
+7. **The model and the window.** A 2B model with 4,096 tokens: every extra instruction, card or turn
    of history competes for the same space. Raising the window is an experiment nobody has run.
-7. **Coverage and sourcing.** Thirteen titles, and new content must come from archive dumps with
-   per-card credit. There is no ingestion pipeline; every card so far was written or pasted by hand.
+8. **Coverage and sourcing.** Twenty-five titles, and new content must come from a cleared wiki with
+   per-card credit. There is no ingestion pipeline. Nothing in the library was written by a person:
+   194 notes are an AI helper's rewrite of a wiki page, 99 notes and all 159 tips are an AI's own
+   memory with no page behind them, and the maintainer checked them (counted 2026-09-17).
 
 ## 7. Added to the roadmap on 2026-09-05
 

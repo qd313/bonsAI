@@ -1,11 +1,19 @@
-# 58 — The knowledge-base session: wave four, with Deck checks running alongside
+# 58 phase 2 — The knowledge-base session: wave four, with Deck checks running alongside
 
 Written 2026-09-16, before any code was started, at the maintainer's request. They asked to pick the
 knowledge base back up, in the shape of [plan 56](56-feature-session-four.md): a plan first, work split
 across helpers running side by side, the Deck driven by the one running the session the whole time, and
 a list of questions only they can answer.
 
-**Status: nothing started. Waiting on the answers in § 8, then on the word "go".**
+**Status: nothing started. Runs after [58 phase 1](58-phase-1-notes-shown-and-wiki-extracts.md) has
+landed. Waiting on the answers in § 8, then on the word "go".**
+
+**Changed by phase 1 (2026-09-17).** This was plan 58 until the maintainer asked for two fixes to land
+first: the note's own words shown under the reply, placed by code, and notes taken from wikis without
+an AI rewrite. Those are phase 1. Four things here change because of it, and nothing else does: the
+answers in § 8 now lock as **D112**; block 0 re-reads § 1 from the device, because phase 1 changes the
+library and the reply; wave 2's note lanes use phase 1's reader instead of writing rewrites; and lane A
+carries one steer from the same read. The rest of this plan is as it was written on 2026-09-16.
 
 Read first: [CLAUDE.md](../../CLAUDE.md); the model table in [AGENTS.md](../../AGENTS.md) under "Which
 model does which work"; [lessons-learned.md](../lessons-learned.md), especially § 1 on shared checkouts
@@ -23,7 +31,8 @@ Anything this session finds that needs their eyes or their finger goes on it.
 
 - **The tree was clean** on the experimental branch at `04bfb6d` when this plan was started. While it was
   being written, another chat committed plan 57 (the reasoning display's build plan) and took decision
-  number **D108** for it (`9a46331`). So this plan is 58, and the answers to § 8 lock as **D109** —
+  number **D108** for it (`9a46331`). So this plan is 58 phase 2, and the answers to § 8 lock as **D112** — D109 and D110 went to the
+  tab strip and the chip restyle the same day, and D111 is phase 1's —
   check the decisions tail again before writing it, in case another number has gone since.
 - **The Deck was wiped at the end of the last session and the maintainer put it back together**: Ollama
   with the answering model and the note-searching model. Its Ollama was set up fresh today, which matters
@@ -170,7 +179,10 @@ instructions as well as into the search, so the reply is told which boss it is a
 runner-up note when the remembered subject already names one, so the wrong note is not in the prompt at
 all; (c) send the previous question and the trimmed previous answer, which is the original plan and the
 most expensive in a small window. Each is measured on the same questions, three runs, with the existing
-checks. The lane changes no shipped behaviour. **Its report is what goes to the maintainer.**
+checks. The lane changes no shipped behaviour. **Its report is what goes to the maintainer.** One steer
+from the read behind phase 1: of the three, only (b) removes the wrong evidence rather than asking the
+model to ignore it, and the production lesson that read came from predicts it closes more of the
+remaining third than (a) or (c). The table decides, not the prediction; if two tie, take (b).
 
 **Lane B, in words.** The comment in the start-up service already names the measurement. The work is:
 read what a real Deck is running, make the setup path write the same value, guard it so a device with
@@ -188,7 +200,7 @@ failure.
 
 | Lane | Work | Cut after |
 |---|---|---|
-| F — Notes, first half | The games you pick, written to the same nine-field shape as the last two waves | the games are chosen |
+| F — Notes, first half | The games you pick, made with phase 1's reader from cleared wiki pages, no AI rewrite; the nine-field shape is unchanged | the games are chosen |
 | G — Notes, second half | The other half of the games, a different helper from F | the same |
 | H — Blind questions | Questions for the new notes, written without reading them, by a helper that has not seen F or G | F and G are open, never after they land |
 | I — Follow-ups, built | The winner of lane A's table | your call on lane A's report lands |
@@ -268,7 +280,7 @@ needing a finger; anything needing your eyes.
     of device checks, by the bookkeeper, from a list — never left for the end.
 14. Nothing starts until the maintainer says "go".
 
-## 8. Questions for you — answers lock as D109
+## 8. Questions for you — answers lock as D112
 
 | # | Question | Why it matters | What I would do |
 |---|---|---|---|

@@ -719,9 +719,13 @@ evening ran the same evening, once the Deck was free.
    model, another sets it to two — and the Deck has been wiped and set up again since, so either could
    be active. Next: read what is actually running, make the two paths agree, and check memory with a
    game running.
-6. **Then wave four** — writing more notes. [The plan for it](planning/58-kb-session-wave-four.md) is
-   written, for helpers running side by side with device checks alongside, but nothing in it has
-   started or been decided — it is waiting on the maintainer's answers and their go-ahead.
+6. **Then 58 phase 1** — two fixes before wave four. [The plan](planning/58-phase-1-notes-shown-and-wiki-extracts.md)
+   shows the note's own words under a reply instead of the model's rewrite of it, and reads a wiki's own
+   sentences into notes with no AI rewrite, tried first against Hollow Knight and then on ten more games from
+   sources already cleared. Nothing started; waiting on the maintainer's nine answers (locking as D111) and
+   the word "go".
+7. **Then wave four, now 58 phase 2** — writing more notes. [The plan for it](planning/58-phase-2-kb-session-wave-four.md)
+   is the same plan as before, renamed, and runs once phase 1 has landed; its answers lock as D112.
 
 **Wave two's own evening ran 2026-09-07** and wave three ran the same day; the results and the bug write-ups are
 in [wave two's report](planning/47-kb-wave-two-session.md) § 8 and [wave three's](planning/48-kb-wave-three-session.md).
@@ -734,7 +738,15 @@ advice to wait for a gap is gone. Evidence `docs/test-evidence/plan48-R5-blackme
 
 ### Calls waiting on you
 
-**Nothing waiting.** A new call lands here, one line, with what it decides. Every call already made is
+- **58 phase 1, nine questions** ([§ 8](planning/58-phase-1-notes-shown-and-wiki-extracts.md)): the block's
+  shape after the mockups, trim-only wiki notes or a labelled summary line, reopening the July no-new-games
+  lock for ten games, the ten games themselves, the walkthrough wiki's licence read in a browser, keeping
+  the memory-written notes and tips, read-aloud of the block, the publish step, and the Deck window. Locks
+  as D111.
+- **58 phase 2, seven questions** ([§ 8](planning/58-phase-2-kb-session-wave-four.md)): unchanged from the
+  wave-four plan. Locks as D112, after phase 1.
+
+A new call lands here, one line, with what it decides. Every call already made is
 written up in full in [the locked decisions file](audit/maintainer-decisions-locked.md); the knowledge-base
 ones from this month are D81 to D88.
 
@@ -865,6 +877,11 @@ ones from this month are D81 to D88.
   Deck's model runs with a 4,096-token window and a Strategy question with cards already goes over it (now trimmed
   instead of dropped, see Done). Try 8,192 as a Developer experiment with a game running, recording memory and time to
   first token, before it becomes a setting. Agreed as "later, its own call". (D46)
+- ★★ `[KB]` **The note's own words under the reply** — **OPEN, planned 2026-09-17 in 58 phase 1.** Today the model
+  rewrites the note in its own words instead of showing it, keeping its facts 79.5 times in 100 and contradicting
+  it 9.3 times in 100 — and the person never sees the note itself. The fix is a block under the reply, filled by
+  code from the note the search attached rather than anything the model wrote, sitting inside the same spoiler box
+  when the reply is fenced. Mockups come first. [Plan](planning/58-phase-1-notes-shown-and-wiki-extracts.md).
 - ★★★ `[KB]` **A troubleshooting question mostly never reaches the tips** — **OPEN, widened 2026-09-07.** Filed as
   "the tips don't use the words people type", which is true and is the smaller half. Measured 2026-09-07: **nine of ten
   ordinary problem sentences reach nothing at all** — *"my game keeps crashing"*, *"my game won't launch"*, *"black
@@ -914,7 +931,10 @@ ones from this month are D81 to D88.
 - ★★★★★★ `[KB]` **RAG Phase 8: catalog corpus** — **OPEN, intent only.** The change that makes most people's games get
   notes instead of the model's memory: about the top 1000 Steam titles, the top 100 on Deck, and an emulated slice. Months:
   it cannot be hand-written (161 cards took six weeks), so it needs an ingestion pipeline from wiki dumps, per-source
-  licensing, a size budget, packs and the index. [knowledge-base.md](knowledge-base.md) § Phase 8.
+  licensing, a size budget, packs and the index. [knowledge-base.md](knowledge-base.md) § Phase 8. The first step is
+  planned as [58 phase 1](planning/58-phase-1-notes-shown-and-wiki-extracts.md): a reader that takes a wiki's own
+  sentences without rewriting them, ten games from sources already cleared, and a study of which sources cover many
+  games under one licence.
 
 ---
 

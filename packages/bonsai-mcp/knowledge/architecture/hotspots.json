@@ -31,6 +31,11 @@
       "role": ""
     },
     {
+      "path": "src/components/MainTabChatTranscript.tsx",
+      "lines": 1620,
+      "role": ""
+    },
+    {
       "path": "src/components/PullModelsModal.tsx",
       "lines": 1537,
       "role": ""
@@ -38,11 +43,6 @@
     {
       "path": "src/styles/sections/section-6.ts",
       "lines": 1517,
-      "role": ""
-    },
-    {
-      "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1513,
       "role": ""
     },
     {

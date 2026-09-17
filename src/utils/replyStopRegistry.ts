@@ -41,7 +41,14 @@
 
 import { elementHasFocus } from "./uiDocument";
 
-export type ReplyStopId = "helpful" | "not-really" | "retry" | "show-details" | "copy" | "read-aloud";
+export type ReplyStopId =
+  | "helpful"
+  | "not-really"
+  | "retry"
+  | "show-details"
+  | "show-reasoning"
+  | "copy"
+  | "read-aloud";
 
 /**
  * Reading order down the reply, top to bottom.
@@ -52,9 +59,16 @@ export type ReplyStopId = "helpful" | "not-really" | "retry" | "show-details" | 
  * `read-aloud` is a line of the same shape as `show-details`, sitting just above it (plan 42 step 3).
  * The order below is the order a person walks them, which is what the "which stop has focus?"
  * lookups want; it is not a claim about layout.
+ *
+ * `show-reasoning` is the one stop that is NOT below the answer: it is the Show reasoning line
+ * between the question and the answer, on a turn whose model thought first (plan 57). It sits
+ * between `retry` and `copy` because that is where a person meets it walking down — Retry is on
+ * the question above it, and Copy is in the answer below it. Only one turn is ever open at a
+ * time, so only one such row is ever mounted, which is what lets this single registry hold it.
  */
 export const REPLY_STOP_ORDER: readonly ReplyStopId[] = [
   "retry",
+  "show-reasoning",
   "copy",
   "helpful",
   "not-really",

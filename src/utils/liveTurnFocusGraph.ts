@@ -6,7 +6,7 @@
  * Does not: Register reply stop DOM nodes (see replyStopRegistry) or render turn UI.
  */
 
-import { focusRegisteredReplyStop } from "./replyStopRegistry";
+import { focusRegisteredReplyStop, type ReplyStopId } from "./replyStopRegistry";
 import { elementHasFocus, getUiDocument } from "./uiDocument";
 import { takeNavFocus } from "./navFocusRegistry";
 
@@ -154,7 +154,7 @@ function focusReplyThumbsRow(liveSlot: HTMLElement | null): boolean {
  */
 function focusReplyStop(
   _liveSlot: HTMLElement | null,
-  stop: "helpful" | "not-really" | "retry" | "show-details" | "copy" | "read-aloud",
+  stop: ReplyStopId,
 ): boolean {
   return focusRegisteredReplyStop(stop);
 }
@@ -178,6 +178,17 @@ export function focusReplyShowDetails(liveSlot: HTMLElement | null): boolean {
 /** The Read aloud / Stop line, one row above Show details (plan 42 step 3). */
 export function focusReplyReadAloud(liveSlot: HTMLElement | null): boolean {
   return focusReplyStop(liveSlot, "read-aloud");
+}
+
+/**
+ * The Show reasoning line between an open question and its answer (plan 57).
+ *
+ * Mounted only on a turn whose model thought before it answered, so this reports false on every
+ * ordinary turn and the caller carries on to whatever it would have done — which is how the
+ * question header's Down keeps working unchanged on a turn with no reasoning.
+ */
+export function focusReplyShowReasoning(liveSlot: HTMLElement | null): boolean {
+  return focusReplyStop(liveSlot, "show-reasoning");
 }
 
 function focusReplyCopy(liveSlot: HTMLElement | null): boolean {

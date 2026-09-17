@@ -32,6 +32,20 @@ describe("reply stop registry", () => {
     document.body.innerHTML = "";
   });
 
+  /*
+   * Plan 57: the Show reasoning line sits between the question and the answer, so a person walking
+   * down meets it after Retry and before the answer's own Copy. The order is what every "which
+   * stop has focus?" lookup scans, so the position matters, not just the presence.
+   */
+  it("walks Retry, then Show reasoning, then Copy", () => {
+    expect(REPLY_STOP_ORDER.indexOf("show-reasoning")).toBe(
+      REPLY_STOP_ORDER.indexOf("retry") + 1,
+    );
+    expect(REPLY_STOP_ORDER.indexOf("copy")).toBe(
+      REPLY_STOP_ORDER.indexOf("show-reasoning") + 1,
+    );
+  });
+
   it("focuses the registered button itself, not the row around it", () => {
     const { retry } = mountReplyRow();
     registerReplyStop("retry", retry);

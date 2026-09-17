@@ -74,6 +74,41 @@
  *   carry the gamepad ring across a container boundary — the same trap
  *   other files in this phase describe. focusChatPermissionHintRow() is how
  *   a caller reaches them.
+ *
+ * Focus graph — the Show reasoning row (plan 57, added 2026-09-17):
+ *
+ *   A new stop sits between an open question and its answer, on any turn
+ *   whose model thought before it answered. Written down here, in the
+ *   section's parent, before the control was built, because AGENTS.md
+ *   ("The Steam Deck focus graph") asks for exactly that.
+ *
+ *     question header (Retry, then the question text)
+ *        | Down
+ *     Show reasoning · 41 s          <- the new stop, id "show-reasoning"
+ *        | Down
+ *     the answer bubble's first stop
+ *
+ *   Down: the header's own Down tries the reasoning row first and enters the
+ *     answer only when there is no row (buildTurnHeaderElement.tsx). The row's
+ *     own Down enters the answer, the same call the header used to make.
+ *   Up: the row's Up hands the ring to Retry, and to the question header's own
+ *     row when this turn offers no Retry. Up out of the answer needs nothing
+ *     new — the answer's Up yields to Steam at its first section, and the row
+ *     is the nearest thing above it, so the walk up visits the same stops as
+ *     the walk down (REPLY-STOPS-MIRROR).
+ *   A: opens the block of reasoning below the row, or closes it, and flips the
+ *     row's own label between Show and Hide.
+ *   B, only while the block is open: closes it and leaves the ring on the row.
+ *     Attached as onCancelButton and only while open — measured on device
+ *     2026-08-28 (DrgGlossaryTermChip.tsx): onButtonDown receives B but
+ *     returning true does not stop Steam backing the ring out of the panel,
+ *     and the handler's mere presence eats B even when it does nothing, so an
+ *     always-on handler would leave B dead on a closed row.
+ *   Being visible, not just focused: nothing new. The Main tab column's own
+ *     focusin listener (useDockClearanceOnFocus) lifts whatever the ring lands
+ *     on clear of the dock, and a row of this exact shape was measured doing
+ *     that on the built-in screen on 2026-09-17 — the Show details row landed
+ *     at 279-294 with the dock starting at 297.
  */
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { PanelSectionRow, Button, Focusable } from "@decky/ui";
@@ -82,6 +117,10 @@ import {
   BONSAI_CHAT_AI_BUBBLE_MAX_FRAC,
 } from "../features/unified-input/constants";
 import { newestReasoningLines } from "../utils/reasoningDisplay";
+import {
+  buildReasoningFoldRow,
+  buildReasoningOpenBlock,
+} from "../utils/buildReasoningFoldElement";
 import { getUiDocument } from "../utils/uiDocument";
 import { registerNavFocus, unregisterNavFocus, takeNavFocus, type NavRefHolder } from "../utils/navFocusRegistry";
 import { formatAppliedTuningBannerText } from "../utils/appliedTuningText";
@@ -106,6 +145,7 @@ import { transparencyUiAvailable } from "../utils/contextChipsFromSnapshot";
 import type {
   AppliedResult,
   AskThreadCollapsedTurn,
+  TurnReasoning,
   AskThreadExpandedTurnKey,
   OllamaContextUi,
   StrategyGuideBranchesPayload,
@@ -120,6 +160,7 @@ import type { ReplyMicroActionId } from "../data/replyMicroActions";
 import {
   focusContextChipLadder,
   focusContextHint,
+  focusDeckOwner,
   focusReplyShowDetails,
   focusReplyUtilityRow,
   focusSessionContextStrip,
@@ -127,6 +168,8 @@ import {
   queryLiveTurnSlot,
   queryTurnSlot,
 } from "../utils/liveTurnFocusGraph";
+import { focusFirstAnswerChunk } from "../utils/answerBubbleNavigation";
+import { focusRegisteredReplyStop } from "../utils/replyStopRegistry";
 import { questionLooksLikeTroubleshootingAsk } from "../utils/troubleshootingAskHeuristic";
 import type { DrgGlossaryTerm } from "../data/drgGlossaryTerms";
 import {
@@ -518,6 +561,66 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
    */
   const showLiveReasoningBlock =
     expandedTurnKey === "live" && isAsking && hasLiveReasoning && !showLiveResponse;
+  /*
+   * The thinking the live turn's fold row opens.
+   *
+   * Once the answer has finished, the finished record wins: it is the whole thinking the computer
+   * side kept, where the live slice is only the newest 600 characters. Before that, the slice is
+   * all there is, and showing it is better than a row that opens on nothing.
+   */
+  const liveTurnReasoning: TurnReasoning | null =
+    lastExchange?.reasoning ??
+    (hasLiveReasoning
+      ? {
+          text: liveReasoningPartial,
+          seconds: liveThinking?.reasoning?.seconds ?? null,
+          tokens: 0,
+        }
+      : null);
+
+  /*
+   * Which turn's reasoning block is open, if any. Closed by default, always: this starts at null
+   * on every mount, so a reopened saved chat and a panel closed and opened again both come back
+   * closed, and changing which turn is open closes it too.
+   */
+  const [reasoningOpenFor, setReasoningOpenFor] = useState<string | null>(null);
+  useEffect(() => {
+    setReasoningOpenFor(null);
+  }, [expandedTurnKey]);
+
+  /**
+   * Feature: the Show reasoning line between a question and its answer.
+   * In: the turn and the thinking behind it. Out: the line, plus the block when it is open.
+   *
+   * What can go wrong: nothing, when there is no thinking — the caller passes null and gets null,
+   * which is what keeps the line off an ordinary turn and off an answer that came back empty.
+   */
+  const renderReasoningFold = (turnKey: string, reasoning: TurnReasoning | null | undefined) => {
+    if (!reasoning || !reasoning.text.trim()) return null;
+    const open = reasoningOpenFor === turnKey;
+    return (
+      <>
+        {buildReasoningFoldRow({
+          turnId: turnKey,
+          open,
+          seconds: reasoning.seconds,
+          onToggle: () => setReasoningOpenFor((prev) => (prev === turnKey ? null : turnKey)),
+          /*
+           * Up: Retry on the question above, and the question's own row when this turn has no
+           * Retry. Both are siblings inside this turn's own container, so a plain focus is the
+           * right move here (AGENTS.md, "The Steam Deck focus graph").
+           */
+          onMoveUp: () => {
+            if (focusRegisteredReplyStop("retry")) return true;
+            return focusDeckOwner(turnHeaderElRefs.current[turnKey] ?? null);
+          },
+          /* Down: into the answer, the same call the question's own Down used to make. */
+          onMoveDown: () => focusFirstAnswerChunk(turnKey),
+        })}
+        {open ? buildReasoningOpenBlock(turnKey, reasoning.text) : null}
+      </>
+    );
+  };
   /*
    * The response alone is not enough to justify a live turn.
    *
@@ -1022,6 +1125,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                     Stopped — partial answer kept.
                   </div>
                 ) : null}
+                {renderReasoningFold(turn.id, turn.reasoning)}
                 {renderAnswerBubble(
                   turn.answer,
                   false,
@@ -1231,6 +1335,9 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                 {showLiveResponse ? "Stopped — partial answer kept." : "Stopped."}
               </div>
             ) : null}
+            {expandedTurnKey === "live" && showLiveResponse
+              ? renderReasoningFold("live", liveTurnReasoning)
+              : null}
             {expandedTurnKey === "live" && showLiveResponse
               ? renderAnswerBubble(
                   liveResponseBody,

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 410,
-  "edgeCount": 1038,
+  "fileCount": 412,
+  "edgeCount": 1051,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -379,6 +379,15 @@
       ],
       "importedBy": []
     },
+    "src/components/MainTabChatTranscript.reasoningFold.test.tsx": {
+      "imports": [
+        "src/components/MainTabChatTranscript.tsx",
+        "src/test-harness/fakeDeckyUi.tsx",
+        "src/types/bonsaiUi.ts",
+        "src/utils/buildReasoningFoldElement.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/MainTabChatTranscript.reasoningLiveBlock.test.tsx": {
       "imports": [
         "src/components/MainTabChatTranscript.tsx",
@@ -430,12 +439,14 @@
         "src/hooks/useStreamScrollPin.ts",
         "src/types/backgroundAsk.ts",
         "src/types/bonsaiUi.ts",
+        "src/utils/answerBubbleNavigation.ts",
         "src/utils/answerCopyText.ts",
         "src/utils/answerReadableText.ts",
         "src/utils/appliedTuningText.ts",
         "src/utils/archivedTurnTransparency.ts",
         "src/utils/askThinkingPhases.ts",
         "src/utils/buildAnswerBubbleElement.tsx",
+        "src/utils/buildReasoningFoldElement.tsx",
         "src/utils/buildReplyActionsElement.tsx",
         "src/utils/buildThinkingBlurbTextElement.tsx",
         "src/utils/buildTurnHeaderElement.tsx",
@@ -448,6 +459,7 @@
         "src/utils/navFocusRegistry.ts",
         "src/utils/permissionDeepLink.ts",
         "src/utils/reasoningDisplay.ts",
+        "src/utils/replyStopRegistry.ts",
         "src/utils/troubleshootingAskHeuristic.ts",
         "src/utils/uiDocument.ts"
       ],
@@ -463,6 +475,7 @@
         "src/components/MainTabChatTranscript.permissionHintFocus.test.ts",
         "src/components/MainTabChatTranscript.questionFade.test.tsx",
         "src/components/MainTabChatTranscript.readAloud.test.tsx",
+        "src/components/MainTabChatTranscript.reasoningFold.test.tsx",
         "src/components/MainTabChatTranscript.reasoningLiveBlock.test.tsx",
         "src/components/MainTabChatTranscript.replyBlock.test.tsx",
         "src/components/MainTabChatTranscript.stoppedNotice.test.tsx",
@@ -2854,6 +2867,7 @@
         "src/components/MainTabChatTranscript.permissionHintFocus.test.ts",
         "src/components/MainTabChatTranscript.questionFade.test.tsx",
         "src/components/MainTabChatTranscript.readAloud.test.tsx",
+        "src/components/MainTabChatTranscript.reasoningFold.test.tsx",
         "src/components/MainTabChatTranscript.reasoningLiveBlock.test.tsx",
         "src/components/MainTabChatTranscript.replyBlock.test.tsx",
         "src/components/MainTabChatTranscript.stoppedNotice.test.tsx",
@@ -2962,6 +2976,7 @@
         "src/components/MainTabChatTranscript.emptySlotPreview.test.tsx",
         "src/components/MainTabChatTranscript.questionFade.test.tsx",
         "src/components/MainTabChatTranscript.readAloud.test.tsx",
+        "src/components/MainTabChatTranscript.reasoningFold.test.tsx",
         "src/components/MainTabChatTranscript.replyBlock.test.tsx",
         "src/components/MainTabChatTranscript.stoppedNotice.test.tsx",
         "src/components/MainTabChatTranscript.strategyPanels.test.tsx",
@@ -3038,6 +3053,7 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/components/MainTabChatTranscript.tsx",
         "src/utils/answerBubbleNavigation.test.ts",
         "src/utils/buildAnswerBubbleElement.tsx",
         "src/utils/buildReplyActionsElement.tsx",
@@ -3310,6 +3326,18 @@
         "src/utils/buildAnswerBubbleElement.test.tsx"
       ]
     },
+    "src/utils/buildReasoningFoldElement.tsx": {
+      "imports": [
+        "src/utils/focusNavigation.ts",
+        "src/utils/reasoningDisplay.ts",
+        "src/utils/replyStopRegistry.ts",
+        "src/utils/uiDocument.ts"
+      ],
+      "importedBy": [
+        "src/components/MainTabChatTranscript.reasoningFold.test.tsx",
+        "src/components/MainTabChatTranscript.tsx"
+      ]
+    },
     "src/utils/buildReplyActionsElement.test.tsx": {
       "imports": [
         "src/test-harness/fakeDeckyUi.tsx",
@@ -3353,7 +3381,8 @@
     "src/utils/buildTurnHeaderElement.test.tsx": {
       "imports": [
         "src/utils/answerBubbleNavigation.ts",
-        "src/utils/buildTurnHeaderElement.tsx"
+        "src/utils/buildTurnHeaderElement.tsx",
+        "src/utils/replyStopRegistry.ts"
       ],
       "importedBy": []
     },
@@ -3363,6 +3392,7 @@
         "src/components/icons.tsx",
         "src/utils/answerBubbleNavigation.ts",
         "src/utils/focusNavigation.ts",
+        "src/utils/liveTurnFocusGraph.ts",
         "src/utils/replyStopRegistry.ts"
       ],
       "importedBy": [
@@ -3634,6 +3664,7 @@
         "src/features/chat-slots/useChatSlotBumpers.ts",
         "src/features/plugin-shell/tabBarNav.ts",
         "src/utils/buildAnswerBubbleElement.tsx",
+        "src/utils/buildReasoningFoldElement.tsx",
         "src/utils/buildReplyActionsElement.tsx",
         "src/utils/buildTurnHeaderElement.tsx",
         "src/utils/deckSliderMath.ts",
@@ -3734,6 +3765,7 @@
         "src/components/StrategyChecklistPanel.tsx",
         "src/utils/buildAnswerBubbleElement.tsx",
         "src/utils/buildReplyActionsElement.tsx",
+        "src/utils/buildTurnHeaderElement.tsx",
         "src/utils/liveTurnFocusGraph.test.ts"
       ]
     },
@@ -3954,6 +3986,7 @@
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx",
         "src/hooks/useBonsaiAskOrchestration.ts",
+        "src/utils/buildReasoningFoldElement.tsx",
         "src/utils/chatSlotTurns.ts",
         "src/utils/reasoningDisplay.test.ts"
       ]
@@ -3983,10 +4016,13 @@
       ],
       "importedBy": [
         "src/components/BonsaiChatSecondaryButton.tsx",
+        "src/components/MainTabChatTranscript.tsx",
         "src/utils/buildAnswerBubbleElement.test.tsx",
         "src/utils/buildAnswerBubbleElement.tsx",
+        "src/utils/buildReasoningFoldElement.tsx",
         "src/utils/buildReplyActionsElement.test.tsx",
         "src/utils/buildReplyActionsElement.tsx",
+        "src/utils/buildTurnHeaderElement.test.tsx",
         "src/utils/buildTurnHeaderElement.tsx",
         "src/utils/liveTurnFocusGraph.test.ts",
         "src/utils/liveTurnFocusGraph.ts",
@@ -4265,6 +4301,7 @@
         "src/utils/answerStopRegistry.test.ts",
         "src/utils/answerStopRegistry.ts",
         "src/utils/buildAnswerBubbleElement.tsx",
+        "src/utils/buildReasoningFoldElement.tsx",
         "src/utils/buildReplyActionsElement.test.tsx",
         "src/utils/buildReplyActionsElement.tsx",
         "src/utils/drgGlossaryTermRegistry.ts",

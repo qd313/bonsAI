@@ -12,6 +12,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { buildTurnHeaderElement } from "./buildTurnHeaderElement";
 import { focusFirstAnswerChunk } from "./answerBubbleNavigation";
+import { registerReplyStop } from "./replyStopRegistry";
 
 vi.mock("./answerBubbleNavigation", () => ({
   focusFirstAnswerChunk: vi.fn(() => true),
@@ -228,5 +229,42 @@ describe("title overflow ref and class plumbing", () => {
     expect(String((titleSpanOf(short).props as Record<string, unknown>).className)).not.toContain(
       "bonsai-chat-turn-row-title--overflowing"
     );
+  });
+});
+
+/*
+ * Plan 57: on a turn where the model thought before it answered, a Show reasoning line sits
+ * between the question and the answer, so Down from the question has to stop there first. Every
+ * ordinary turn has no such line, and Down there must be exactly what it always was.
+ */
+describe("turn header D-pad Down with a Show reasoning line below it", () => {
+  beforeEach(() => {
+    registerReplyStop("show-reasoning", null);
+    mockedFocusFirstAnswerChunk.mockClear();
+    mockedFocusFirstAnswerChunk.mockReturnValue(true);
+  });
+
+  it("stops on the line when one is mounted, instead of entering the answer", () => {
+    const row = document.createElement("div");
+    row.className = "bonsai-chat-reasoning-fold";
+    row.tabIndex = -1;
+    document.body.appendChild(row);
+    registerReplyStop("show-reasoning", row);
+
+    const onMoveDown = headerProps(true).onMoveDown as () => boolean;
+
+    expect(onMoveDown()).toBe(true);
+    expect(document.activeElement).toBe(row);
+    expect(mockedFocusFirstAnswerChunk).not.toHaveBeenCalled();
+
+    registerReplyStop("show-reasoning", null);
+    row.remove();
+  });
+
+  it("enters the answer as before when no line is mounted", () => {
+    const onMoveDown = headerProps(true).onMoveDown as () => boolean;
+
+    expect(onMoveDown()).toBe(true);
+    expect(mockedFocusFirstAnswerChunk).toHaveBeenCalledWith("turn-1");
   });
 });

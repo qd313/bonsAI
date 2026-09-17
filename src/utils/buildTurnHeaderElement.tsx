@@ -18,6 +18,7 @@ import {
   isUpDeckButtonEvent,
 } from "./focusNavigation";
 import { focusRegisteredReplyStop } from "./replyStopRegistry";
+import { focusReplyShowReasoning } from "./liveTurnFocusGraph";
 
 export type BuildTurnHeaderElementArgs = {
   turnId: string;
@@ -99,8 +100,18 @@ export function buildTurnHeaderElement(args: BuildTurnHeaderElementArgs): React.
   /* Same per-render holder pattern the reply row uses — this is a plain function, no hooks. */
   const bodyEl: { current: HTMLElement | null } = { current: null };
 
+  /*
+   * Down goes to the Show reasoning line first, and into the answer only when there is no line.
+   *
+   * On a turn where the model thought before it answered, that line sits between this question and
+   * its answer, so it is the next thing down the screen. `focusRegisteredReplyStop` reports false
+   * when no such line is mounted, which is every ordinary turn — so Down there is exactly what it
+   * always was. The line's own Down then makes this same call into the answer. Written as a graph
+   * in the transcript's own header (AGENTS.md, "The Steam Deck focus graph").
+   */
   const focusAnswer = () => {
     if (!expanded) return false;
+    if (focusReplyShowReasoning(null)) return true;
     return focusFirstAnswerChunk(turnId);
   };
 

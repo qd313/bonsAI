@@ -6,6 +6,25 @@
 
 Headings group related work. Star counts match the historical list.
 
+### Expert offers the stronger Deck-run models first, and the licence list learns the Sept 2026 models (2026-09-17)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-17 once the Deck confirmed the licence half — copied line
+for line from this session's Verify entry, nothing reworded, with the confirmation added at the end._
+
+- ★★ `[ollama]` **Expert offers the stronger Deck-run models first, and the licence list learns the Sept 2026
+  models** — **VERIFY, landed 2026-09-16 (commits `0dbf25c`, `f812a9e`, `19e3396`).** In the download picker's
+  Expert (large) group the five stronger Deck models now come first in bake-off order: Gemma 4 12B, Qwen 3.5
+  9B, Granite 4.2 8B, Gemma 4 E4B, LFM 2.5. Gemma 4 and Granite now count as open source under the default
+  open-source-only setting, and LFM as open-weight. **The order half passed on the Deck 2026-09-16:** with
+  Essentials only off, the Expert (large) group read in the locked order, the five bake-off models first,
+  then the three older ones. Evidence `docs/test-evidence/plan56-EXPERT-ORDER-01.json`,
+  `docs/test-evidence/plan56-EXPERT-ORDER-01-essentials-off.json`. Row **EXPERT-ORDER-01**.
+  [Bake-off](../planning/41-deck-model-survey.md).
+
+  **The licence half passed on the Deck 2026-09-17:** in the AI models hub, a Gemma 4 tag reads as an allowed
+  open-source tag even at the strictest policy tier. With the order half already passed 2026-09-16, the whole
+  row is done. Evidence `docs/test-evidence/plan57-QA-EXPERT-ORDER-01.json`.
+
 ### Three voice fixes and the custom-model picker, closed by the wipe run (2026-09-16)
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-16 once the Deck's pre-authorised wipe (D105) confirmed

@@ -50,7 +50,7 @@ opens the whole thing; and the chat remembers it.
   this PC's copy of the Deck's model: 1,911 characters of thinking in 2.6 seconds for a Hades boss
   question. That capture proved the thinking field arrives and reads as sentences. The rest of the
   test (chunk order, size and speed per level, time to the first answer token) is still owed and is
-  step 0 below.
+  step 0 below. **Ran 2026-09-17, see § 10.**
 - **The PC's Ollama is version 0.33.3**, well past the version that first split thinking into its own
   field. The Deck's fresh install, when it happens, will be current too.
 
@@ -248,6 +248,51 @@ Written as work lands.
   Deck; the other five are D108, locked the same day: the one-line notice, declining keeps Off, no
   fold on an empty reply unless T5 shows empties are common, 6,000 characters kept, this plan
   before the session-context tab. T5 added to the desk test for that worry. Nothing built.
+- **2026-09-17** — Built and landed on `experimental`.
+
+  **The desk test (§ 3a) ran on the PC.** Nine streams, three questions at each of Brief, Balanced
+  and Deep, on the Deck's own default model. In every run the thinking finished arriving before the
+  first word of the answer showed up — nothing had to weave the two together. Thinking ran from about
+  1,370 to 2,705 characters at every level; the wait between the first thinking word and the first
+  answer word ran 2.1 to 4.1 seconds on this PC; no answer came back empty. One Brief-level, Expert
+  question hit the length cap and needed the soft-continue path to keep going. Evidence
+  `docs/test-evidence/plan57-desk-*.jsonl`, `docs/test-evidence/plan57-desk-summary.json`.
+
+  **T5, the empty-reply worry from D108 item 3, ran on the PC:** the existing answer test, 61 cases
+  times 3 samples, at Thinking Balanced and at Deep. Zero empty replies out of 183 tries at either
+  level. **So the fold does not show on a blank turn in this build — D108 item 3's option 1 stands,
+  decided.** Alongside it: Balanced got 132 of 171 facts right, 36 of 61 cases fully clean, in 9.8
+  minutes; Deep got 139 of 171 facts, 40 of 61 clean, in 10.4 minutes; both a little better than the
+  same test with thinking off on 2026-09-07 (123–136 of 171 facts, 37–41 of 61 clean, in 4–5 minutes)
+  — thinking costs time and buys a small accuracy gain. Reports
+  `docs/archive/research/kb-answer-eval-2026-09-17-plan57-t5-balanced.md`, `…-t5-deep.md`.
+
+  **The device measurement (§ 3c) ran on the built-in 1280x800 screen.** At rest the chat window is
+  143 pixels tall. With the ring on the newest turn's Show details row, that row sits fully above the
+  dock. With the question header and the new fold row at the top, about 94 pixels (five and a half
+  lines) are left for the answer; with the 50-pixel live thinking block showing instead, about 61
+  pixels are left. Evidence `docs/test-evidence/plan57-M-fold-row-and-live-block.json`.
+
+  **Three landings.** Lane A, the back end, keeps the model's thinking and carries it through:
+  commits `a4fbf81`, `0551307`, `ac8d7eb`, `1f879a5` (the last also puts it in Show details and the
+  saved chat). Lane B, the one-time notice and the Thinking row's help text: commits `ae26454`,
+  `57138ae`. Lane C, the live three lines, the fold row, the opened block, the stop and the
+  focus-graph entry, with two more tests: commits `4c014f0`, `81f5847`, `ba00dc0`, `c5b046d`. **A
+  follow-up commit, `fefca07`, passes the thinking through the request layer** — without it the
+  finished answer and the saved chat carried no reasoning at all.
+
+  **A trap found while landing:** inside a copy of the repo made by the copy helper, the refactor
+  ratchet's two copy-paste counts read 0, so a lane's own gate passed in its copy and the same commit
+  then failed the ratchet in the shared checkout. Found when a back-end lane's first commit landed and
+  the tests' copy-paste count went 2113 → 2123. Fixed with a follow-up commit sharing the test setup.
+
+  **A finding from the device measurement, filed as a bug on the roadmap:** pressing B while the Show
+  details panel is open does not close it; Steam's own Back instead moves the highlight up to the tab
+  row. The reply has no B handling for this panel today. Needs a decision on whether B should close
+  the panel or this is accepted as it is.
+
+  **Still owed on the Deck:** rows REASONING-01 to REASONING-07, the focus-graph checklist, and the
+  free-play sweep.
 
 ---
 

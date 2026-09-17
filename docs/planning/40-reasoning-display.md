@@ -206,3 +206,5 @@ Written as work lands.
   maintainer's call (D106): the first version builds with the plain fold; the voiced fold is its own
   optional entry; the second job waits. **The build plan is
   [plan 57](57-reasoning-display-build.md)**; § 6 here is superseded by it. Nothing built.
+- **2026-09-17** — Built and landed. See plan 57 § 10 for the desk test, the answer test, the device
+  measurement, the landings and what is still owed on the Deck.

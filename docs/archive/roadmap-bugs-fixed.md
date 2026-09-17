@@ -6,6 +6,29 @@ Strikeout titles match the original roadmap bug list. Items awaiting on-Deck QA 
 
 ---
 
+### On the Deck's built-in screen, the ring's own stop for a whole reply sits mostly under the question box (2026-09-17)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-17 once the Deck QA worker's re-measurement showed the
+gap closed — copied line for line from this session's Bugs entry, nothing reworded, with the confirmation
+added at the end._
+
+- ★ `[layout]` **On the Deck's built-in screen, the ring's own stop for a whole reply sits mostly under the
+  question box** — **OPEN, found 2026-09-16.** A long reply is one D-pad stop for its whole body on this
+  build; reaching it with Up from Read aloud shows only about a third of it, the rest hidden under the sticky
+  question box. The screen shows about 143 pixels of chat, far less than a typical reply, so most of any long
+  answer sits out of view however it is reached; not something this session built. Evidence
+  `docs/test-evidence/plan56-LEFT-HOLDS-01.summary.json`. **Related, seen 2026-09-16:** on this same screen, a
+  tall answer chunk swallows the first Up or Down press or two — Steam scrolls the chunk's own view before it
+  lets the ring leave — so those presses read as dead rather than moving the highlight. Not a trap, since the
+  next press does leave. Evidence `docs/test-evidence/plan56-QA-FREE-PLAY-02.summary.json`. **Not a bug,
+  settled 2026-09-16 (D106):** the Ask bar the maintainer saw cut off on 2026-09-15 was Steam keeping the
+  external monitor's size after the monitor was unplugged; a restart of Steam put it right; the session's own
+  measurement on a fresh open found nothing clipped.
+
+  **Passed on the Deck 2026-09-17:** about 79-87% of a reply now shows above the sticky question box, up from
+  about a third. No code change against this entry is on record; the built-in screen's own layout numbers
+  moved between measurements. Evidence `docs/test-evidence/plan57-QA-main-tab-under-question-box.json`.
+
 ### Three D-pad fixes from lane I, checked on the Deck (2026-09-16, morning)
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-16 once the Deck runs passed — copied line for line from

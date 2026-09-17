@@ -77,12 +77,16 @@ starts work outside this.
   Deck the same evening:** the placeholder is drawn in its own layer at a 10-pixel font with a 12-pixel line;
   the real text field underneath, whose caret is the cursor a person sees, uses a 12-pixel font with a
   14.4-pixel line — about 2 pixels taller — so the two can never line up while they are two different font
-  sizes. Evidence `docs/test-evidence/plan55-BUG-cursor-placeholder-offset.json`.
+  sizes. Evidence `docs/test-evidence/plan55-BUG-cursor-placeholder-offset.json`. **Confirmed on the
+  Deck 2026-09-17:** the placeholder is still drawn in a smaller, tilted font than the text you type, 2
+  to 3 pixels off from it. Evidence `docs/test-evidence/plan57-QA-cursor-placeholder-offset.json`.
 - ★ `[focus]` **Up from the Retry icon does not return to the answer** — **OPEN, read again 2026-09-16.**
   With the thumbs-up/thumbs-down row greyed on a stopped reply, Down from the answer now lands on Retry — but
   Up from Retry does not go back to the answer's last section the way it should. **Read again 2026-09-16:**
   the lane building the D-pad fixes nearby read this code and judged it stale rather than change anything, so
-  no fix landed. It stays open and awaits a device re-check to say whether it still happens.
+  no fix landed. It stays open and awaits a device re-check to say whether it still happens. **Confirmed on
+  the Deck 2026-09-17:** on a stopped reply, Up from Retry skips past the kept answer and jumps straight to
+  the earlier-turns pill instead. Evidence `docs/test-evidence/plan57-QA-up-from-retry.json`.
 - ★ `[focus]` **Down does not move the ring off an unrevealed spoiler block** — **OPEN, found 2026-09-04, did not reproduce
   2026-09-05.** With the ring on the hidden block, Down reported the press arriving and nothing moving. Retried today on a fresh
   Red Dead ending reply with a real hidden block on screen: **Down left it normally**, straight onto the branch picker's first
@@ -101,6 +105,9 @@ starts work outside this.
   `docs/test-evidence/plan56-PERM-JUMP-01.summary.json`. **Seen again 2026-09-16** on the Steam-settings card:
   pressing A on a row there also opens the right Steam page with the highlight one toggle above the row that
   was pressed, the same shape. Evidence `docs/test-evidence/plan56-SETTINGS-CARD-DPAD-01.summary.json`.
+  **Confirmed on the Deck 2026-09-17, worse than what this entry describes:** pressing Open Permissions now
+  opens the Permissions tab at the very top, on the Back to Main button, nowhere near the toggle it should
+  land on; Back to Main itself still works. Evidence `docs/test-evidence/plan57-QA-PERM-JUMP-01.json`.
 - ★ `[focus]` **With Show details open, the chip row cannot be reached by the D-pad** — **OPEN, measured
   2026-09-16 on build 0fbecb6 and again on build `ca12429`, so it is not something this session's own commits
   caused.** Open Show details on a reply and press Down to step into its chips and read one — the ring skips
@@ -117,11 +124,21 @@ starts work outside this.
   is the question box, then Right onto the Ask-mode button, then Right again onto Stop generation. Two long
   replies finished on their own before the ring reached the button by other routes. Not a trap, since Stop can
   still be reached — just not where a person would first look. Evidence
-  `docs/test-evidence/plan56-GREYED-STEP-OVER-02.summary.json`.
+  `docs/test-evidence/plan56-GREYED-STEP-OVER-02.summary.json`. **Confirmed on the Deck 2026-09-17:** Down
+  from the question box while a reply is streaming still goes nowhere; Stop generation is reached only by
+  Right, then Right again. Evidence `docs/test-evidence/plan57-QA-GREYED-STEP-OVER-02.json`.
+- ★ `[focus]` **Pressing B while the reasoning display's Show details panel is open does not close it** —
+  **OPEN, found 2026-09-17 by the automated rig, during the reasoning-display device measurement.** Steam's
+  own Back instead moves the highlight up to the tab row; the reply has no B handling for this panel today.
+  Needs a decision on whether B should close the panel, or this counts as accepted behaviour. Evidence
+  `docs/test-evidence/plan57-M-fold-row-and-live-block.json`.
 - ★ `[kb]` **Download knowledge base needed two taps; the first did nothing visible** — **OPEN, reported
   2026-09-16, not reproduced.** Read in the code (`src/components/KnowledgeBaseSection.tsx`,
   `openStoragePicker`): the first press should open the storage-choice popup (internal or SD card) before
   anything downloads, and the second tap is what ran the download. Needs a run with the plugin log on.
+  **Tried on the Deck 2026-09-17, blocked:** the knowledge base was already installed on that device, so
+  there is no first-time download button to press. Still owed, on a Deck without the knowledge base
+  installed. Evidence `docs/test-evidence/plan57-QA-kb-download-two-taps.json`.
 - ★ `[layout]` **An open question's row is only partly visible behind the Retry corner icon** — **OPEN,
   seen at every visit 2026-09-15 evening.** With the newest turn open, the ring on the question's inner row
   reads 67% visible, covered by the Retry same-prompt icon in the corner. Evidence
@@ -129,23 +146,17 @@ starts work outside this.
   `docs/test-evidence/plan55-DRG-01d-second-question-send.json` (step 1). **Seen again in the free-play sweep
   2026-09-15**, at 78% visible behind the same icon, in both directions of the walk — the plugin's own rule
   counts a focused-but-not-fully-visible stop as a failure regardless of the percentage. Evidence
-  `docs/test-evidence/plan55-QA-FREE-PLAY-01-main-long-reply.json`.
-- ★ `[layout]` **On the Deck's built-in screen, the ring's own stop for a whole reply sits mostly under the
-  question box** — **OPEN, found 2026-09-16.** A long reply is one D-pad stop for its whole body on this
-  build; reaching it with Up from Read aloud shows only about a third of it, the rest hidden under the sticky
-  question box. The screen shows about 143 pixels of chat, far less than a typical reply, so most of any long
-  answer sits out of view however it is reached; not something this session built. Evidence
-  `docs/test-evidence/plan56-LEFT-HOLDS-01.summary.json`. **Related, seen 2026-09-16:** on this same screen, a
-  tall answer chunk swallows the first Up or Down press or two — Steam scrolls the chunk's own view before it
-  lets the ring leave — so those presses read as dead rather than moving the highlight. Not a trap, since the
-  next press does leave. Evidence `docs/test-evidence/plan56-QA-FREE-PLAY-02.summary.json`. **Not a bug,
-  settled 2026-09-16 (D106):** the Ask bar the maintainer saw cut off on 2026-09-15 was Steam keeping the
-  external monitor's size after the monitor was unplugged; a restart of Steam put it right; the session's own
-  measurement on a fresh open found nothing clipped.
+  `docs/test-evidence/plan55-QA-FREE-PLAY-01-main-long-reply.json`. **Re-run on the Deck 2026-09-17: read
+  fully visible** — the newest question read in full beside the Retry icon, with no cropping. Evidence
+  `docs/test-evidence/plan57-QA-QUESTION-COLLAPSE-RING-01.json`. No code change is on record that would
+  explain the improvement, and it disagrees with the 67% and 78% readings above, so this stays open
+  rather than closed on one clean run — a maintainer call on whether to trust it.
 - ★ `[ollama]` **The vision try-order picker writes settings even when nothing changed** — **OPEN, found
   2026-09-16 during block 0 of session 56.** Opening the vision model try-order picker and pressing Done
   writes the picker's current order into the settings file, even when nobody moved anything. Restored by hand
-  at the end of the block; no evidence file yet.
+  at the end of the block; no evidence file yet. **Confirmed on the Deck 2026-09-17:** pressing Done rewrote
+  the settings file with nothing actually reordered. Evidence
+  `docs/test-evidence/plan57-QA-vision-try-order-writes-settings.json`.
 - ★ `[ui]` **A new setting can quietly stop working in one place, because the list of settings is written out by hand
   several times over** — **OPEN, found while explaining the code 2026-09-14.** The settings code repeats its fifty-odd
   setting names in several separate places in the same file. Miss one and nothing breaks visibly; that setting just stops
@@ -169,7 +180,9 @@ starts work outside this.
   430 of those, leaving roughly 90 pixels for rows. An external monitor taller than about 720 pixels gets the
   same 520 cap, so it looks the same there. The popup itself has room: on the Deck's screen it stands 640
   pixels tall. Fix with the filters rework below, or before it as a taller list. The maintainer's recording is
-  `recordings/DeckRecord_20260916_114238_game.mkv` on their own PC, not in this repo.
+  `recordings/DeckRecord_20260916_114238_game.mkv` on their own PC, not in this repo. **Confirmed on the Deck
+  2026-09-17:** still about two rows of models visible before scrolling. Evidence
+  `docs/test-evidence/plan57-QA-AI-models-screen-2-rows.json`.
 - ★★ `[ollama]` `[focus]` **A tap outside the AI models screen started the queued downloads and left the
   D-pad stuck in the Ollama tab** — **OPEN, reported 2026-09-16, not reproduced.** The maintainer did not
   press Done; they think they tapped outside the screen, and afterwards the models started downloading and
@@ -439,21 +452,6 @@ replace it with a specific issue when one exists.
   screen. [Plan](planning/49-steam-frame-features.md) · [PC setup](planning/50-steamvr-pc-setup.md) ·
   [The anti-cheat rule in full](planning/52-frame-features-second-look.md#4-the-floating-panel-and-anti-cheat) ·
   [Bench findings](planning/53-steamvr-bench-findings.md) · [The picture](planning/assets/53-panel-in-headset-2026-09-12.jpg).
-- ★★★★★ `[reply]` **Reasoning display** — **OPEN, ready to build, calls locked (D70, D71, D106).** The plugin asks a
-  thinking model to think and throws the thinking away; the line under your question shows a stock phrase for the whole wait.
-  Planned: three lines at the answer's size show the model's own newest sentences, fold to one line with the seconds when the
-  answer starts, open to the full text; Show details gets a thinking chip; and the thinking is also spent deciding what counts
-  as a spoiler for you. The Deck's default model can think. A test runs on the PC first, then the Deck. **Dropped from session
-  56 by the maintainer 2026-09-15 (D105): drawn first.** The three live lines, the plain folded line and the folded line in a
-  character's voice are drawn at true size on a mockup page at the end of [plan 56](planning/56-feature-session-four.md); every
-  build call stands, and nothing is built until the maintainer has looked. **Drawn at true size on the mockup
-  page** https://claude.ai/artifact/2De58qirE34754PEZVPmdb **(2026-09-16). The maintainer's call, 2026-09-16 (D106):** the
-  first version builds with the plain folded line, exactly the shape the 5 September calls describe — three live lines at
-  the answer's size while the model thinks, one folded line with the seconds once the answer starts, and a press on the
-  folded line opens the whole reasoning. The folded line in a character's own voice is split off into its own optional
-  entry, below, and is not built until this first version is in and looked at. The spoiler-verdict second job waits with
-  it, as before.
-  [Plan](planning/40-reasoning-display.md) · [Build plan](planning/57-reasoning-display-build.md).
 - ★★ `[reply]` **The folded reasoning line in the character's own voice** — **OPEN, optional, filed 2026-09-16 (D106).**
   Builds only after the reasoning display's first version has landed and been looked at. The mockup page showed the same
   folded line written by the model itself in three characters' voices: Ali G, "See the booyakasha · 41 s"; GLaDOS, "Expose
@@ -505,6 +503,9 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   strength of a file nobody can open, and whether they really passed is unknown. Nothing here says the plugin is broken; it says
   we do not know. Re-run all twelve together in the next automated testing session. Batch **QA-EVIDENCE-GAP-01**, listed with
   each row in [testing.md](testing.md). Until a run produces real evidence, treat all twelve as unknown rather than as a pass.
+- ★ `[QA]` **Seven rows named on this page have no steps written down anywhere** — follow-up found 2026-09-17: **TAB-BAR-GHOST-01**,
+  **DRG-GLOSSARY-01**, **02**, **03**, **04**, **KB-FOLLOWUP-01** and **KB-KILLSWITCH-01** are named in this file but neither
+  testing document says what to do for them yet. Not written up, not run.
 
 ### Bugs that need verification
 - ★ `[platform]` **Clear all plugin data left three things behind** — **VERIFY.** Found 2026-09-05 when the maintainer
@@ -523,7 +524,11 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 - ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **VERIFY, fixed
   2026-09-15.** Down and Up through a reply now stop at the same places in both directions. Row
   **REPLY-STOPS-MIRROR-01**: on a reply with two paragraphs, a spoiler block and a two-button menu, check the
-  Down stops and the Up stops are exact mirrors of each other.
+  Down stops and the Up stops are exact mirrors of each other. **Tried on the Deck 2026-09-17, blocked:** no
+  reply with a spoiler block turned up to run the row as written. On the reply that was available, a real
+  mismatch showed up on a different part of the reply than this row names: Down reached both buttons of a
+  follow-up branch menu, and Up skipped both on the way back up. Stays owed. Evidence
+  `docs/test-evidence/plan57-QA-REPLY-STOPS-MIRROR-01.json`.
 - ★ `[ollama]` **Mistyping one model name in a several-model download loses it without saying so** — **VERIFY,
   fixed 2026-09-15.** Downloading several models at once now says which name it could not find and still
   starts the good ones, instead of quietly dropping the bad one. Row **PULL-MISSING-NAME-01**: on the Ollama
@@ -548,16 +553,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   being written (unit-tested, not reproducible by hand yet). Row **CLEAR-CACHE-01**. [Why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way).
 ### Features that need verification
 
-- ★★ `[ollama]` **Expert offers the stronger Deck-run models first, and the licence list learns the Sept 2026
-  models** — **VERIFY, landed 2026-09-16 (commits `0dbf25c`, `f812a9e`, `19e3396`).** In the download picker's
-  Expert (large) group the five stronger Deck models now come first in bake-off order: Gemma 4 12B, Qwen 3.5
-  9B, Granite 4.2 8B, Gemma 4 E4B, LFM 2.5. Gemma 4 and Granite now count as open source under the default
-  open-source-only setting, and LFM as open-weight. **The order half passed on the Deck 2026-09-16:** with
-  Essentials only off, the Expert (large) group read in the locked order, the five bake-off models first,
-  then the three older ones. Evidence `docs/test-evidence/plan56-EXPERT-ORDER-01.json`,
-  `docs/test-evidence/plan56-EXPERT-ORDER-01-essentials-off.json`. **Still owed:** the licence half — in the
-  AI models hub, checking a Gemma 4 tag reads as allowed at the open-source-only tier — was not read this
-  pass. Row **EXPERT-ORDER-01**. [Bake-off](planning/41-deck-model-survey.md).
 - ★★ `[chips]` **A glow when the chip row runs out of chips** — **VERIFY.** Built at the desk 2026-09-05 under D62 #3: press Left or Right past the first or last suggestion chip and that chip glows briefly, the way a phone lights up the end of a list. Nothing about the row’s existing edge behaviour changes. Reduced motion keeps the cue and drops the movement. **No measurement closes this one** — whether it reads as *end of list* rather than *error* is the maintainer’s call from a recording, and it is on their checklist.
 
 - ★ `[ollama]` **Pulled models join the model try order** — **MOSTLY VERIFIED on the Deck 2026-09-06, one case left.**
@@ -575,15 +570,29 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   vertical-space goal; decide whether it shows always or only when the row has focus.
 - ★★ `[QA]` **Deferred manual QA** — **VERIFY.** Tier 0 smokes (SMOKE-A, C, F) then Tier 1 (SMOKE-E, H), and a broader prompt-testing
   pass. SMOKE-B was retired 2026-09-03 (D57 #6). Round in progress: [plan 31](planning/31-deck-verification-round.md).
+  **SMOKE-F re-confirmed on the Deck 2026-09-17:** all four built-in commands answered at once with the same
+  fixed wording seen before. Evidence `docs/test-evidence/plan57-QA-SMOKE-F.json`.
 - ★★ `[reply]` **Thinking line fixes from 2026-08-07/08** — **VERIFY.** Emoji upright, lazy status tag survives, no bare-emoji phase
   changes, one writer. Rows **THINKING-EMOJI-01**, **THINKING-SANITIZE-01**, **THINKING-EMOJI-CLUSTER-01**, **THINKING-COPY-01**,
   **THINKING-SLOW-01**, **THINKING-LIVE-01**, **THINKING-SPOILER-01**. [Log](planning/06-thinking-blurbs-review.md#10-implementation-log).
+  **Confirmed on the Deck 2026-09-17:** **THINKING-COPY-01** — the first status line held for about 5.5
+  seconds before changing. **THINKING-LIVE-01** — the status line changed three times over about 7 seconds,
+  with no freeze and no repeat; the 30-second slow-path wording was not produced (a short reply, so expected).
+  **THINKING-EMOJI-01** — the emoji sits upright in its own spot beside the tilted sentence. Evidence
+  `docs/test-evidence/plan57-QA-THINKING-COPY-01.json`, `docs/test-evidence/plan57-QA-THINKING-LIVE-01.json`,
+  `docs/test-evidence/plan57-QA-THINKING-EMOJI-01.json`.
 - ★★ `[reply]` **Token streaming Phase A/B** — **VERIFY.** Start stutter fixed, sections as D-pad stops, scroll follow. Rows
   **STREAM-REVEAL-01**, **STREAM-09**, **STREAM-FOLLOW-01**. [Review](planning/05-token-streaming-review.md).
 - ★★★ `[perms]` **Kids master lock** — **VERIFY.** Shipped 2026-08-09. Rows **KIDS-LOCK-01**, **KIDS-FOCUS-01**, **KIDS-REGRESS-01**
-  (and **KIDS-LOCK-02** with a child account). Live CEF Stage 0 confirmation still owed.
-- ★★★ `[reply]` **Soft reply-length cap and thinking budget** — **VERIFY.** Shipped 2026-08-10. Sub-check 02 verified; 01, 03 and 04
-  automated with a Deck confirm owed; 05 needs a real thinking model. [Why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way).
+  (and **KIDS-LOCK-02** with a child account). Live CEF Stage 0 confirmation still owed. **KIDS-REGRESS-01
+  re-confirmed on the Deck 2026-09-17:** no lock banner, all four Permissions switches on and reachable.
+  Evidence `docs/test-evidence/plan57-QA-KIDS-REGRESS-01.json`.
+- ★★★ `[reply]` **Soft reply-length cap and thinking budget** — **VERIFY.** Shipped 2026-08-10. Sub-check 02 verified; 04 automated
+  with a Deck confirm owed; 05 needs a real thinking model. [Why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way).
+  **01 and 03 confirmed on the Deck 2026-09-17:** a long five-part reply read with no seam and the
+  `Continuing…` cue never showed live or saved (01); stopping partway kept the partial text with a
+  `Stopped — partial answer kept.` notice (03). Evidence `docs/test-evidence/plan57-QA-SOFT-PREDICT-01.json`,
+  `docs/test-evidence/plan57-QA-SOFT-PREDICT-03.json`.
 - ★★★★ `[ollama]` **Speed-mode VRAM preload** — **VERIFY, the mechanism proved on the Deck 2026-09-05, the timing not.**
   A Developer switch, off by default, loads the model Ask will use into memory at start-up. **A bug was found and fixed on the
   device:** it warmed the first small model installed rather than the one Ask reaches for, which on this Deck were different, so it
@@ -600,10 +609,27 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   09 and 10 pass; owed **TAB-BAR-07** (legibility by eye) and **08** (touch). Closes the "tab names never appear" bug and D44.
   [Plan](planning/30-collapsing-tab-bar.md).
 - ★★★★★ `[chat]` **Named chat slots** — **VERIFY.** Redesign v3 landed 2026-08-30; the layout inverts to slot row, transcript, presets,
-  Ask bar. Most rows pass on device. Owed: **CHAT-SLOTS-V2-01, 03, 04**, **V3-05a/b**, **06a/b/c**, **07**, **15d**.
-  [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).
+  Ask bar. Most rows pass on device. Owed: **CHAT-SLOTS-V2-03, 04**, **V3-05a/b**, **06a/b/c**, **07**, **15d**.
+  [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02). **CHAT-SLOTS-V2-01 passed on the
+  Deck 2026-09-17:** Down twice from the tab strip reaches the chat text, and Up retraces the same path.
+  Evidence `docs/test-evidence/plan57-QA-CHAT-SLOTS-V2-01.json`.
 - ★★★★★ `[platform]` **Global quick-launch macro** — **VERIFY.** Guide-chord docs in [troubleshooting.md](troubleshooting.md) § 5; the
   checklist was never run on hardware.
+- ★★★★★ `[reply]` **Reasoning display** — **VERIFY, built 2026-09-17 (commits `a4fbf81`, `0551307`, `ac8d7eb`, `1f879a5`,
+  `ae26454`, `57138ae`, `4c014f0`, `81f5847`, `ba00dc0`, `c5b046d`, plus a follow-up commit `fefca07` passing the thinking
+  through the request layer).** While a thinking model works, the space under your question shows its own newest sentences;
+  when the answer starts that folds to one line with the seconds; a press opens the whole thing; Show details gets a thinking
+  chip; a one-time notice explains it the first time Thinking is turned on. Three landings did it: the back end keeps the
+  model's thinking and carries it through; a one-time notice and the Thinking row's help text explain the setting; the chat
+  shows the thinking live, then as the fold row, with the new stop wired in. Without the follow-up commit, the finished
+  answer and the saved chat carried no reasoning at all. **The desk test on the PC, 2026-09-17:** across nine streams at
+  three thinking levels, the model's own thinking always finished arriving before the first word of the answer, and no
+  answer came back empty. **The larger answer test (T5) on the PC, 2026-09-17:** zero empty replies out of 183 tries at
+  each of two thinking levels, so the fold does not show on a blank turn in this build. **Measured on the built-in screen,
+  2026-09-17:** with the new fold row and the live thinking block both showing, about 61 pixels are left for the answer,
+  down from the normal 94. **A bug found during that measurement is in Bugs, above:** pressing B while Show details is
+  open does not close it. Still owed on the Deck: rows **REASONING-01** to **REASONING-07**, the focus-graph checklist and
+  the free-play sweep. [Plan](planning/40-reasoning-display.md) · [Build plan](planning/57-reasoning-display-build.md).
 
 ---
 
@@ -775,7 +801,9 @@ ones from this month are D81 to D88.
   `screenshots/DeckCapture_20260915_204018_game.png`). **One clean sighting on the new build 2026-09-15**, a Deep
   Rock Galactic: Survivor question whose menu named its own classes with no Half-Life 2 words, evidence
   `docs/test-evidence/plan55-BRANCH-EXAMPLE-01.json` — the copying was intermittent before the fix, so more
-  sightings over the coming days are the real proof.
+  sightings over the coming days are the real proof. **A second clean sighting on the Deck 2026-09-17:** a
+  Hades question's follow-up menu named Hades' own places, no Half-Life 2 words. Evidence
+  `docs/test-evidence/plan57-QA-BRANCH-EXAMPLE-01.json`.
 - ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **VERIFY,
   landed 2026-09-15, four commits, unit-tested, Deck rows owed.** A game known only by name now opens its box;
   naming the boss first opens it on screen, in copied text and in read-aloud; a no-story game named in the question
@@ -894,6 +922,17 @@ Parked on purpose, not dropped. One line each, with what unshelves it; the full 
 
 Everything shipped since v0.4.9 (2026-07-08), one line each — moved out to its own file to keep this one small,
 copied line for line, nothing reworded: [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md).
+
+**Closed 2026-09-17 (Deck QA worker):**
+
+- ★★ `[ollama]` **Expert offers the stronger Deck-run models first, and the licence list learns the Sept 2026
+  models** — **DONE 2026-09-17.** Both halves now pass on the Deck: the bake-off order (2026-09-16) and the
+  Gemma 4 licence reading (2026-09-17). Row **EXPERT-ORDER-01**. [Full
+  detail](archive/roadmap-completed.md#expert-offers-the-stronger-deck-run-models-first-and-the-licence-list-learns-the-sept-2026-models).
+- ★ `[layout]` **A long reply used to sit almost entirely under the question box on the Deck's own screen** —
+  **DONE 2026-09-17.** About 79-87% of a reply now shows above the sticky question box, up from about a
+  third. [Full
+  detail](archive/roadmap-bugs-fixed.md#on-the-decks-built-in-screen-the-rings-own-stop-for-a-whole-reply-sits-mostly-under-the-question-box).
 
 **Closed 2026-09-16 (the maintainer's third round, D107):**
 

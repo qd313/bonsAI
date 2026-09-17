@@ -71,6 +71,14 @@ sequence, and two sessions running at once will both pick the same next number. 
 one, look at what is untracked as well as what is committed, and read the end of the decisions
 file. A collision means renaming a file that other documents already point at.
 
+**A worktree copy can pass a gate that the shared checkout then fails.** The refactor ratchet
+counts copy-pasted lines with `jscpd`, and inside a copy made by the copy helper both of its counts
+read zero — so a lane's own quick gate passed in its copy while the same commit then failed the
+ratchet once it reached the shared checkout. Found 2026-09-17 when a back-end lane's first commit
+landed and the tests' copy-paste count went from 2113 to 2123. The fix was a follow-up commit
+sharing the test setup; until the ratchet itself learns to find `jscpd` from inside a copy, expect
+this and read the ratchet in the shared checkout, not the copy.
+
 ---
 
 ## 2. Proving a change is really a change
@@ -211,6 +219,16 @@ in [design-tokens.md](design-tokens.md) and the rules in
 
 **Write scripts to a file and run them.** Inline scripts typed into the shell mangle backslashes
 and quotes. Write the script to a temporary folder, run it from there.
+
+**A heredoc can turn an escape into a real NUL byte.** A small Python edit script written through a
+Bash heredoc carried a doubled backslash meant for a six-character escape in the TypeScript source;
+the heredoc collapsed it and wrote one real NUL byte into the file instead. Git then treated the
+file as binary, stopped normalising its line endings, and the change showed up as a whole-file diff
+instead of a few lines — that is how it was caught. Nothing in the gates catches a NUL byte on its
+own. After any scripted edit, count NUL bytes in the file and check that `git ls-files --eol` still
+reads `i/lf`. One more trap in the same family: `git checkout <hash> -- .` stages whatever it
+writes, so fixing a file on disk afterwards still leaves the bad version sitting in the index until
+it is re-added.
 
 **Normalise line endings before an exact-match edit.** Files here can carry Windows line endings,
 and an exact-match edit or a "did my change survive" check will fail for that reason alone and

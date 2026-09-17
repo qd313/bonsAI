@@ -145,6 +145,11 @@ All notable changes to this project are documented in this file.
 - **The line under the question box stops naming a game you have closed:** exit a game and it used to keep the old name, so a question that does not name its own game could pull in the wrong game's notes. **The cause first written down was wrong and the real one is worth knowing:** the ordinary keep-in-sync check does correct itself within about a second and a half; the hole was **reopening the panel** — after a popup, or leaving and coming back — which restored the remembered name without ever checking whether that game was still running. It now checks what is actually running at that moment. `useBonsaiAskOrchestration.ts`; 5 frontend tests. On-Deck **W2-R6**.
 
 ### Added
+- **A line under your question shows the AI's own thinking while you wait:** while the AI thinks, its own
+  newest sentences show under your question; when the answer starts they fold to one line with the
+  seconds; press it to read the whole thing; a Thinking chip in Show details; a one-time notice the first
+  time Thinking is turned on. `ollama_service.py`, `OllamaThinkingEffortRow.tsx`, `MainTabChatTranscript.tsx`.
+  On-Deck rows owed: **REASONING-01** to **REASONING-07** in `docs/testing-manual.md`.
 - **A Clear button now sits on the Session context bar, and it means the same thing Clear cache in Settings
   already means:** with the bar showing under the chat, a small Clear appears at its right end; pressing it
   opens the same confirm box as Clear cache — "Start the next question fresh?" — and choosing it shows a

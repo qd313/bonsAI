@@ -896,10 +896,10 @@ ones from this month are D81 to D88.
   published, a choice on the SD-card location, since this local install put the library on internal
   storage. Evidence `docs/test-evidence/plan58p1-QA-TEN-GAMES-01.json`.
 - ★★ `[KB]` **The note's own words under the reply** — **VERIFY, re-run 2026-09-18.** Header,
-  open-scroll and live timing pass. Walking up from the session context strip still skips the block,
-  sent back to a lane. The tip and one game question in ten still arrived late, after the reply
-  finished, and the ladder walk was not run — both still owed. Rows **NOTES-BLOCK-01**–**07**,
-  **TEN-GAMES-01**, in [testing-manual.md](testing-manual.md).
+  open-scroll and live timing pass. The upward walk fix landed 2026-09-18 (40c23a6), device check
+  owed. The tip and one game question in ten still arrived late, after the reply finished, and the
+  ladder walk was not run — both still owed. Rows **NOTES-BLOCK-01**–**07**, **TEN-GAMES-01**, in
+  [testing-manual.md](testing-manual.md).
 - ★★★ `[KB]` **KB download Cancel** — **VERIFY, blocked.** Shipped 2026-08-05. The download finishes in about a second on
   device, so there is no window to press Cancel in. Needs a slower fixture or a throttle. Row **KB-CANCEL-01**.
 

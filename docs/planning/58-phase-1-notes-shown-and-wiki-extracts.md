@@ -569,6 +569,13 @@ which goes on their own checklist.
   chat keeps the session's ten questions and the copy is kept on this PC for the maintainer to
   decide. The Deck was handed back to the plan 61 session with the deployed commit and the library
   version stated.
+- **2026-09-18, the upward walk fixed on the branch.** The lane found the cause: its earlier fix
+  looked for the block under the name a reply carries only while it is still being written, so on
+  any finished reply it found nothing and fell through to Show details. Up from the session context
+  strip now asks which reply is open on screen and looks there; three tests. Landed with the gates
+  as 40c23a6. Not yet deployed or seen on the Deck: the maintainer was restarting Steam after a
+  black screen, so the deploy and the walk check go to the next Deck sitting. Phase 1 ends here;
+  what is owed is in the status line at the top.
 
 ---
 

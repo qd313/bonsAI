@@ -1,0 +1,29 @@
+{
+  "rowId": "NOTES-BLOCK-03",
+  "rowText": {
+    "steps": "Nothing running. 'My game will not launch on Proton, what should I check?' typed from the PC and VERIFIED (a plain freeze sentence had reached no tip on the build before, so this one names Proton), Down to 'ask', A through the bridge. The reply read off the page; the saved chat's record for the turn read over the network.",
+    "expected": "The block shows the tip's own words with the header 'From the shared Deck tips', and any launch option in it matches the tip exactly."
+  },
+  "source": "docs/testing-manual.md NOTES-BLOCK-03; docs/planning/58-phase-1-notes-shown-and-wiki-extracts.md § 6 row 3",
+  "time": "2026-09-18T04:41Z (Ask pressed); reply complete about 28 seconds later",
+  "buildOnDeck": "the tip deployed 2026-09-18 (6d5b83f plus generated files)",
+  "question": "My game will not launch on Proton, what should I check?",
+  "reply": "Alright, listen up, you got a problem with your game won't start on Proton? Don't panic, this ain't rocket science, but you gotta follow the script. First thing, you gotta check ProtonDB. That's where the community folks tell you if there's some known fix for that specific game. Then, if that ain't it, you gotta dig into the logs. You run that command, PROTON_LOG=1 %command%, and that spits out a file. That file is the secret sauce; it tells you exactly where the game is tripping up. If you're on a Windows setup, remember, Proton ain't the deal there; you gotta look at your native DirectX or Vulkan drivers. Keep it simple, check the DB, check the logs, and you'll be sorted.",
+  "savedTurn": {
+    "kb_attached_notes": [
+      { "kind": "tip", "domain": "compat", "name": "proton", "card": "Check ProtonDB for launch options and community fixes before forcing a Proton version.", "trust_tier": "fallback_no_source" },
+      { "kind": "tip", "domain": "compat", "name": "proton", "card": "On Windows Steam, Proton is not used; troubleshooting is native DirectX/Vulkan driver issues.", "trust_tier": "fallback_no_source" },
+      { "kind": "tip", "domain": "compat", "name": "proton", "card": "Proton log: PROTON_LOG=1 %command% captures useful launch traces to ~/steam-*.log.", "trust_tier": "fallback_no_source" }
+    ]
+  },
+  "reads": [
+    "THE BLOCK CAME LATE, NOT LIVE. At the moment the reply's action row appeared, no block existed under the reply. About a minute later, read again, the block was there: header 'proton · From the shared Deck tips (+2 more)'. The saved turn carries the three tips, and the reply used them (the ProtonDB advice, the log command word for word, the Windows line). So for a troubleshooting turn the block only arrives with the finished snapshot fetched after completion; the live path that shows a game note before the first word does not carry tips. Row 06 therefore holds for game notes and fails for tips. Sent back to the block's lane with this file.",
+    "The launch option in the reply, PROTON_LOG=1 %command%, matches the tip exactly, which is the fact the block was meant to guarantee; here the model happened to keep it.",
+    "The tip's header names the tip's topic word, 'proton', as the note name, since tips carry no title; the drawing had left the name out for tips. Either is honest; the topic word reads a little odd. Worth a call when the maintainer sees it.",
+    "MENU TEMPLATE LEAKED IN FULL. Under this reply, with no game known, the branch menu reads 'Where are you at in THIS GAME? A. <a place early in THIS game> B. <a place later in THIS game>': the model copied the instruction's own placeholder into a real menu. Same family as the copied Half-Life 2 example fixed on 15 September; this is the no-game case. Filed.",
+    "The plugin log holds no error lines around the turn."
+  ],
+  "screenshots": [],
+  "verdict": "PASS on the words, FAIL on timing",
+  "verdictSentence": "The tip block shows the three shared tips with the right header, but only after the reply completes; for tips the block is not live, and the no-game branch menu leaked its template."
+}

@@ -1,0 +1,18 @@
+{
+  "rowId": "NOTES-BLOCK-06",
+  "rowText": {
+    "steps": "Same question as NOTES-BLOCK-01. A poll on the page every 300 ms from the moment Ask was pressed, returning the first moment the block existed together with the length of the reply text at that moment.",
+    "expected": "The block is on screen before the reply starts streaming, not only when it completes."
+  },
+  "source": "docs/testing-manual.md NOTES-BLOCK-06; docs/planning/58-phase-1-notes-shown-and-wiki-extracts.md § 6 row 6",
+  "time": "2026-09-18T04:36:12Z (Ask pressed)",
+  "buildOnDeck": "the tip deployed 2026-09-18 (6d5b83f plus generated files)",
+  "reads": [
+    "First poll after the press (145 ms after the poll started, a few seconds after Ask): the block already existed with header 'Starting out in Pikmin 2 · From the Pikmin wiki (+2 more)', the reply text length was 0, and the reply's action row did not exist yet. The model's thinking fold then ran about 16 seconds before the first word.",
+    "When the reply completed about 15 seconds later the same header was still there, unchanged: no flicker, no re-mount, the handoff from the live snapshot to the finished one was invisible."
+  ],
+  "measurement": { "replyLengthWhenBlockFirstSeen": 0, "secondsFromAskToFirstWord": "about 16 (the reasoning fold's own reading)" },
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "The block was on screen with the reply still empty, before the model's first word, and did not change when the reply finished."
+}

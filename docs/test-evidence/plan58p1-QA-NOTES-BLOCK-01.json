@@ -1,0 +1,30 @@
+{
+  "rowId": "NOTES-BLOCK-01",
+  "rowText": {
+    "steps": "Nothing running (the note's game named in the question, which resolves the same notes). Strategy mode. 'Is there a day limit in Pikmin 2?' typed from the PC and VERIFIED, Down to 'ask', A through the bridge. After the reply: walk to the block's header with the D-pad, read the ring's rect, press A, read the body off the page, compare with the library file on the PC.",
+    "expected": "Under the reply, one line naming the note and its source; opening it shows the note's own words, which say there is no day limit, whatever the reply says."
+  },
+  "source": "docs/testing-manual.md NOTES-BLOCK-01; docs/planning/58-phase-1-notes-shown-and-wiki-extracts.md § 6 row 1",
+  "time": "2026-09-18T04:36:12Z (Ask pressed); reply complete about 15 seconds later; block opened 04:38Z",
+  "buildOnDeck": "the tip deployed 2026-09-18 (6d5b83f plus generated files); the block's four commits included",
+  "question": "Is there a day limit in Pikmin 2?",
+  "reply": "Listen up, mate! Nah, there ain't no fixed day limit in Pikmin 2, see? You ain't clockin' out for a set time. The whole game runs 'til the sun dips below the horizon. But here's the catch, you gotta watch the clock! If you leave your Pikmin out with the night critters when the sun goes down, they get eaten, yeah? You gotta keep 'em on the move, or they'll be gone!",
+  "block": {
+    "headerClosed": "Starting out in Pikmin 2 · From the Pikmin wiki (+2 more) ▸",
+    "ariaLabelClosed": "Starting out in Pikmin 2 · From the Pikmin wiki (+2 more), show",
+    "ariaLabelOpen": "Starting out in Pikmin 2 · From the Pikmin wiki (+2 more), hide",
+    "ringRectClosed": { "x": 52, "y": 173, "w": 267, "h": 30, "visiblePercent": 100, "dockTop": 454 },
+    "bodyNotes": ["Starting out in Pikmin 2 · From the Pikmin wiki", "Growing your Pikmin squad · From the Pikmin wiki", "Purple and White Pikmin · From the Pikmin wiki"],
+    "bodyMatchesLibrary": "yes, all three notes' text read off the page equals the library file's card text word for word (sections 250, 311, 252 in data/kb/strategy_seed.json), including 'There is no day limit this time'",
+    "openHeightPx": 971
+  },
+  "reads": [
+    "The block's words say 'There is no day limit this time' under a reply that, this run, agreed. On the run before the deploy the reply also agreed; the contradiction the PC answer test sees did not reproduce on the device today. The row's point still holds: the note's own words are on screen either way.",
+    "REACHABLE FROM ABOVE ONLY. Walking Down from Show details lands on the block header (ring visible, 100 percent, 30 px tall at y 173, far above the dock). Walking Up from the session context strip skips the block and lands on Show details, and walking Up from the question box skips every reply row. So a thumb coming up from the question box never meets the block. Filed as a focus follow-up for the block.",
+    "OPENING A TALL BLOCK LEAVES THE VIEW AT ITS BOTTOM. With three notes the open block is 971 px tall in a 366 px pane; after A the pane scrolled so the third note's end and the session strip were on screen and the header sat 768 px above the top. A person has to scroll up to read the first note. Filed as a small follow-up: keep the view at the block's header when it opens, or open only the first note.",
+    "The branch menu under the reply named the game's own notes ('Starting out in Pikmin 2', 'Growing your Pikmin squad'): one more clean BRANCH-EXAMPLE-01 sighting."
+  ],
+  "screenshots": ["screenshots/DeckCapture_20260918_003817_game.png"],
+  "verdict": "PASS with two follow-ups",
+  "verdictSentence": "The block shows the three attached Pikmin 2 notes word for word, with the day-limit sentence first, and the ring lands visibly on its header; it is reachable only walking down, and opening a three-note block scrolls the view to its bottom."
+}

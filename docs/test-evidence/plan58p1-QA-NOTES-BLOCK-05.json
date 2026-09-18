@@ -1,0 +1,26 @@
+{
+  "rowId": "NOTES-BLOCK-05",
+  "rowText": {
+    "steps": "Nothing running, Hades named in the question. Strategy mode. 'How do I beat the Bone Hydra in Hades?' typed from the PC and VERIFIED, Down to 'ask', A through the bridge. The block's header read off the page after the reply completed.",
+    "expected": "The block's header reads that this is bonsAI's own note with no source, since every Hades note was written from AI memory (the Hades wiki is NonCommercial and excluded)."
+  },
+  "source": "docs/testing-manual.md NOTES-BLOCK-05; docs/planning/58-phase-1-notes-shown-and-wiki-extracts.md § 6 row 5",
+  "time": "2026-09-18T04:39Z (Ask pressed); reply complete about 30 seconds later",
+  "buildOnDeck": "the tip deployed 2026-09-18 (6d5b83f plus generated files)",
+  "question": "How do I beat the Bone Hydra in Hades?",
+  "reply": "Alright, listen up. You wanna take that Bone Hydra down? You gotta keep your wits about you, see? Don't get caught flat-footed. When you see that big thing coming, you gotta move. Keep your distance, use your weapons smart, don't just swing wild. Focus on dodging those big attacks, and when you get a chance, hit it when it's open. It's all about patience, see? Don't rush it, or you'll end up looking like a rookie. But look, this is just the start. We gotta figure out where you are in the game before we can map out the next move. — No close match in my notes, this answer leans on the model's own knowledge.",
+  "block": {
+    "headerClosed": "Weapon choice · From bonsAI's own notes, no source (+2 more) ▸",
+    "ariaLabelClosed": "Weapon choice · From bonsAI's own notes, no source (+2 more), show",
+    "spoilerCover": false
+  },
+  "reads": [
+    "Header wording as designed for a note with no source page: 'From bonsAI's own notes, no source'.",
+    "Hades has no Bone Hydra note in the library (the same fact the lessons file records), so the search attached three thin Hades notes led by 'Weapon choice', the 'no close match' line fired correctly under the reply, and the reply itself is generic advice with no boss facts. The block and the thin-match line appear together, which is right: that line is about match quality, and the block shows what was attached so the person can see it is not about the Bone Hydra.",
+    "No spoiler cover: Hades protects its story, but the boss was named in the question, which unlocks its tactics, as the rules say.",
+    "HEADER CLIPPED. On screen the closed header reads 'Weapon choice From bonsAI's own notes, …': the long source phrase is cut with an ellipsis and the '(+2 more)' count is lost at the transcript's width. The wiki headers fit. Filed as a small wording-fit follow-up: shorten this source phrase (for example 'bonsAI's own note') or let the count survive the cut."
+  ],
+  "screenshots": ["screenshots/DeckCapture_20260918_004024_game.png"],
+  "verdict": "PASS",
+  "verdictSentence": "A Hades question's block reads 'From bonsAI's own notes, no source', and shows the three thin notes the search attached next to the honest 'no close match' line."
+}

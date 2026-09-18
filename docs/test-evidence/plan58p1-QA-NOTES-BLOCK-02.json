@@ -1,0 +1,23 @@
+{
+  "rowId": "NOTES-BLOCK-02",
+  "rowText": {
+    "steps": "Nothing running, Hades named in the question, no consent phrase anywhere in the chat (checked in the saved chat file). Strategy mode. 'How do I beat the boss at the end of the first area in Hades?' typed from the PC and VERIFIED, Down to 'ask', A through the bridge. The reply, the cover and the block read off the page after completion.",
+    "expected": "A fenced reply: the block absent while the spoiler cover is closed, present and closed once the cover is opened, with a note on whether it sits inside the spoiler's box or below it."
+  },
+  "source": "docs/testing-manual.md NOTES-BLOCK-02; docs/planning/58-phase-1-notes-shown-and-wiki-extracts.md § 6 row 2",
+  "time": "2026-09-18T04:47Z (Ask pressed); reply complete about 35 seconds later",
+  "buildOnDeck": "the tip deployed 2026-09-18 (6d5b83f plus generated files)",
+  "question": "How do I beat the boss at the end of the first area in Hades?",
+  "reply": "Alright, listen up, you want to know how to handle that final scrap in the Temple of Styx? This ain't no easy street fight, see? You gotta keep your eyes peeled and your feet moving. Now, the boss you're talking about, Theseus and Asterius, he ain't just one guy, he's a whole circus! The main trick here, mate, is figuring out who to deal with first. You gotta watch Asterius, that bull, 'cause he's got a big, slow charge coming. If you manage to sidestep that charge, he gets stuck for a minute, which gives you a chance to get your spear in. Then, you gotta watch Theseus … — No close match in my notes, this answer leans on the model's own knowledge.",
+  "block": { "present": true, "headerClosed": "Temple of Styx · From bonsAI's own notes, no source (+2 more)" },
+  "spoilerCover": false,
+  "reads": [
+    "NOT RUNNABLE: NO SPOILER BOX APPEARED. Hades protects its story, the boss was not named, no consent was ever given in this chat, and the reply named Theseus and Asterius with their tactics in plain text. The same happened on the Hollow Knight reading before the deploy (docs/test-evidence/plan58p1-M-hk-boss-before.json). Two games, two builds, the same shape: the game named in the question with nothing running, the boss withheld, no box. Filed as a spoiler bug against the plan 54 rows still marked owed (STRAT-SPOIL-NAME-01): on this evidence that row would fail.",
+    "WRONG BOSS. The first area's boss is Megaera; the reply answered about the Temple of Styx and Elysium's pair. The search attached three thin Hades notes led by 'Temple of Styx' (the block shows them), and the model followed the notes' subject rather than the question's. A wrong-subject case of the kind the roadmap already lists, seen from a new angle: the top attached note steered the answer to a different part of the game.",
+    "The block itself behaved: present, closed, with the no-source header, next to the 'no close match' line.",
+    "The row stays owed until a fenced reply can be produced; the Hades unnamed-boss row from plan 55 recorded one masked reply in three, so a re-run with Hades running may fence."
+  ],
+  "screenshots": [],
+  "verdict": "NOT RUNNABLE; one spoiler bug and one wrong-boss case recorded",
+  "verdictSentence": "No spoiler box appeared on a name-withheld Hades boss question, so the fenced case could not be checked; the reply also answered about the wrong boss, steered by the top attached note."
+}

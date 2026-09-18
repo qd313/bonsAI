@@ -487,6 +487,24 @@ which goes on their own checklist.
   time, which is phase 2's first reading answered early. The installed build is older than the
   tip, as expected; the four "before" readings run on it before anything is deployed. The
   Hollow Knight re-measure lane stalled once with no output for ten minutes and was resumed.
+- **2026-09-18, the three "before" readings, then the tip deployed and the block's rows.** Before:
+  Pikmin 2 attached three notes and the reply agreed with them; a Hollow Knight boss question by
+  name came back with no spoiler box and a "no close match" line under a reply that plainly used
+  the attached Broken Vessel note (the line judges only the first note); a plain freeze sentence
+  reached no tip. Then the tip deployed. The block's rows: **01 pass** (three Pikmin notes shown
+  word for word, the ring visibly on the header); **06 pass** for game notes (the block on screen
+  with the reply still empty, no flicker at the end); **05 pass** (the no-source header on a Hades
+  question); **03 pass on the words, fail on timing** (the tip block arrived only after the reply
+  finished, not live); **04 not runnable** (nothing found that attaches no note for a covered game,
+  the same wall as 7 September); **02 not runnable** (no spoiler box appeared, a second time); **07
+  not run** (needs ears). Found on the way: the block is reachable only walking down; a tall open
+  block leaves the view at its bottom; every header clips and loses its count; the no-game branch
+  menu leaks its template ("a place early in THIS game"); a name-withheld boss question on a
+  protected game, game named, nothing running, comes back unmasked on two games; the thin-match
+  line reads wrong next to a note the reply used; a Hades first-area question answered about the
+  wrong boss, steered by the top attached note. The block's lane has the four block fixes; the rest
+  go to the roadmap. The Deck's chat gained eight turns from these rows; the backup holds the
+  chat as it was, to be put back at the end of the device work.
 
 ---
 

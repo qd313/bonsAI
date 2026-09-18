@@ -1,0 +1,23 @@
+{
+  "rowId": "NOTES-BLOCK-04",
+  "rowText": {
+    "steps": "Nothing running, Pikmin 2 named in the question. Strategy mode. 'What is the weather like in Pikmin 2?' typed from the PC and VERIFIED, Down to 'ask', A through the bridge. The reply, the block and the honesty lines read off the page after completion.",
+    "expected": "Nothing attached: no block, the 'Not in my notes' line instead; the two never appear together."
+  },
+  "source": "docs/testing-manual.md NOTES-BLOCK-04; docs/planning/58-phase-1-notes-shown-and-wiki-extracts.md § 6 row 4",
+  "time": "2026-09-18T04:44Z (Ask pressed); reply complete about 20 seconds later",
+  "buildOnDeck": "the tip deployed 2026-09-18 (6d5b83f plus generated files)",
+  "question": "What is the weather like in Pikmin 2?",
+  "reply": "Alright, listen up, you wanna know the weather in Pikmin 2? It ain't like some fancy forecast you get on the telly. It's all about the sun, see? You gotta watch the clock. The day runs 'til sunset, and if you ain't got your Pikmin with a captain or back at the Onion before the night creatures wake up, you're toast. So, keep your eyes peeled for the sun, yeah? It's all about timing your moves so you don't get eaten when the dark hits. Simple as that. — No close match in my notes, this answer leans on the model's own knowledge.",
+  "block": { "present": true, "headerClosed": "Starting out in Pikmin 2 · From the Pikmin wiki (+2 more)" },
+  "lines": { "notInMyNotes": false, "noCloseMatch": true },
+  "reads": [
+    "COULD NOT PRODUCE THE EMPTY CASE. A covered game with a question no note answers still attached three notes, as every attempt since 7 September has; the 'Not in my notes' line has no question that can make it appear on this library, so the row's 'never together' check is not runnable. Same finding as row W2-R5 and the 'no tip for this' line. Recorded, not argued with.",
+    "What did happen is consistent: a thin match, the block showing the three notes attached, and the 'no close match' line under the reply.",
+    "THE THIN-MATCH LINE AGAIN READS WRONG TO A PERSON. The reply's facts (the day ends at sunset, Pikmin left out are eaten) are the attached 'Starting out in Pikmin 2' note's own facts, and the block right below shows them. The line says the answer leans on the model's own knowledge. By its rule (scores only) the line is right; to a reader holding the block open it is plainly wrong. Adds to the bug filed from the Hollow Knight reading: the line should say 'a thin match' rather than claim the note was not used, or look at whether the reply used the note."
+  ],
+  "screenshots": ["screenshots/DeckCapture_20260918_004439_game.png"],
+  "alsoSeen": "The closed header on screen reads 'Starting out in Pikmin 2 From the Pikmin w… ▸': even a wiki header clips mid-word and loses its '(+2 more)' count at this width. Sent to the block's lane with the no-source clipping.",
+  "verdict": "NOT RUNNABLE as written; the thin-match case recorded",
+  "verdictSentence": "No question found that attaches nothing for a covered game, so the empty case could not be shown; the thin-match case shows the block and a 'no close match' line together, and the line reads wrong next to a note the reply used."
+}

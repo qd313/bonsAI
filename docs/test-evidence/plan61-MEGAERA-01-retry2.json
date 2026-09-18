@@ -1,0 +1,22 @@
+{
+  "rowId": "MEGAERA-01",
+  "rowText": "With Hades running, ask \"How do I beat Megaera?\" and check the note attaches with no \"no close match\" line. A read-once check tonight, not expected to close (waiting on the maintainer's publish step).",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T11:57-12:18 (Deck clock)",
+  "setup": {
+    "game_running": "Hades (appid 1145360)",
+    "ask_mode": "strategy"
+  },
+  "steps": [
+    { "action": "One ask on this Deck tonight (a different question) worked cleanly through the pinned-chip route with no focus-trap trouble at all -- see plan61-HADES-UNNAMED-STREAM-01-retry2.json.", "observed": "Right after that successful send, the pinned test row correctly showed the next configured sentence ('what about theseus and asterius'), still labelled TEST." },
+    { "action": "Set the pinned test list to show \"How do I beat Megaera?\" next, then closed and reopened the panel (the recovery-ladder route) to bring it up.", "observed": "It worked once, immediately after that reopen, before any further navigation." },
+    { "action": "Walked down through the existing reply to reach the pinned chip (a long walk -- the previous reply has many stops), pausing along the way to read Show details.", "observed": "By the time the walk reached the chip position, it no longer showed the pinned sentence at all -- it showed an ordinary suggested question instead ('what's the efficiency sweet spot for this game?', later others), with no TEST label." },
+    { "action": "Tried repeatedly to get the pinned sentence to reappear: closing and reopening the panel several times, re-editing the pinned list (a single item, then the full three again), switching to a brand-new, genuinely empty chat, and turning on a setting named for exactly this purpose (dev_force_session_rag_chips).", "observed": "None of it brought the pinned TEST chip back. Every chat, old or brand new, showed an ordinary suggested question instead, for the rest of the time the panel stayed open tonight." },
+    { "action": "Never typed the sentence by hand (forbidden by the driver rules); never pressed A on anything unlabelled or risky. One accidental slip: while trying to get back to the Main tab, the ring drifted into a language-picker dropdown on the About tab and it opened. Nothing was selected -- B closed it, and the setting underneath (reply_language) was confirmed unchanged on disk." }
+  ],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "This question was never sent. The pinned-suggestion box worked once tonight, but partway through this attempt it stopped showing any of the pinned test sentences at all and started showing its own ordinary suggestions instead -- and nothing tried afterward brought the pinned sentence back for the rest of the session. Since typing a question by hand is not allowed, there was no way left to ask this exact question.",
+  "notes": "New finding for whoever looks at the pinned-question feature: the pinned test sentences seem to work reliably only right after the panel is freshly opened and only for a short window -- the very first pinned question sent tonight worked perfectly, and its list even correctly advanced to the next pinned sentence immediately afterward, still inside the same open panel. But once the panel was closed and reopened, or once a while was spent reading a reply's details before reaching the chip, the pinned sentence silently stopped showing at all, on every chat tried afterward (old chats and a brand-new one), for the rest of the time the panel stayed open. This is a different, apparently more permanent problem than the ask-box freeze the earlier trap files describe -- it never froze the D-pad, it just quietly showed the wrong question, which a driver who wasn't reading the box carefully first could easily miss and send the wrong sentence without noticing."
+}

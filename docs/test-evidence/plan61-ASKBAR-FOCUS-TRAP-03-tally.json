@@ -1,0 +1,32 @@
+{
+  "rowId": "ASKBAR-FOCUS-TRAP-03 (tally, flow D part 3 driver)",
+  "purpose": "Count how often the ask-box focus trap (chip fills box, Down does not reach Ask) showed up tonight while working through the Hades/Half-Life-2 knowledge-base rows, using the fixed workaround (chip -> Down -> check -> Ask, with the GUIDE+A / reopen recovery ladder if the ring does not move).",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T11:50-12:20 (Deck clock)",
+  "tally": {
+    "questions_attempted_to_send": 1,
+    "questions_actually_sent": 1,
+    "ask_box_freeze_occurrences": 0,
+    "recovery_ladder_invocations": 0
+  },
+  "detail": [
+    {
+      "attempt": 1,
+      "question": "how do i beat the boss at the end of the first area",
+      "game": "Hades",
+      "steps": "Press A on the pinned chip (box filled) -> Down (landed on the Ask input box, ring moved, verified) -> Down again (landed on the Ask button, ring moved, verified) -> confirmed the box still held the sentence -> A on Ask.",
+      "result": "Worked cleanly on the first try. The ring moved on both Down presses; no freeze, no disagreement between the visible ring and document.activeElement at any point.",
+      "plugin_log_nearest_lines": [
+        "[2026-09-18 11:55:07,390][INFO]: start_background_game_ai: RPC entry (arg type=dict)",
+        "[2026-09-18 11:55:07,398][INFO]: run_game_ai_request: host=127.0.0.1:11434 game='Hades' appid=1145360 question_len=51"
+      ]
+    }
+  ],
+  "related_but_different_sighting": {
+    "what": "While walking DOWN through that same finished reply afterward (not on the Ask box -- partway through the answer text itself), two Down presses in a row reported the ring had not moved, then a third Down press worked normally and the walk continued.",
+    "why_it_is_not_counted_above": "This did not happen on the Ask box and did not need the GUIDE+A recovery ladder -- it cleared on its own on the very next press, so it does not meet the trap's own definition (Down staying dead until the panel is closed and reopened). It is the same family of symptom the roadmap already tracks separately (the ring stalling partway through a reply), not the ask-box freeze this tally is counting.",
+    "plugin_log_nearest_lines": "No new log lines around this moment -- no question was being sent at the time, so the log had nothing to show either way."
+  },
+  "verdictSentence": "Tonight's one question that actually got sent went through cleanly on the very first try, with no sign of the ask-box freeze at all. The freeze itself was not reproduced this session. What did stop every later question from being asked was a different, newly found problem: the pinned suggestion box stopped offering any of the pinned test sentences partway through the session and never came back, which is written up in plan61-MEGAERA-01-retry2.json.",
+  "notes": "Because only one send was ever completed, this is a very small sample -- it shows the workaround CAN work perfectly, not that the freeze is fixed. The fix lane should not read a 0-for-1 trap count tonight as the bug being gone; the earlier files (plan61-ASKBAR-FOCUS-TRAP-02.json, plan61-focustrap-try6.json, plan61-MEGAERA-01.json/-retry.json) already show it reproducing on nearly every attempt earlier in the same night."
+}

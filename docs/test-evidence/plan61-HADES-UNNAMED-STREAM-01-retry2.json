@@ -1,0 +1,34 @@
+{
+  "rowId": "HADES-UNNAMED-STREAM-01",
+  "rowText": "A question that does not name a boss, streaming on -- the mid-stream mask chip should still appear for story-adjacent detail.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T11:55-11:57 (Deck clock)",
+  "setup": {
+    "game_running": "Hades (appid 1145360)",
+    "ask_mode": "strategy",
+    "chat": "a chat that had exactly one older turn in it before this ask (not the flow A chat; a driver judgement call explained in the report)",
+    "question": "how do i beat the boss at the end of the first area",
+    "chip_route": "pinned Test chip, filled the box, workaround steps below"
+  },
+  "steps": [
+    { "action": "Press A on the pinned Test chip", "observed": "Box filled with the exact sentence, confirmed by reading the input's value." },
+    { "action": "Press Down (workaround step 1)", "observed": "Ring moved cleanly onto the Ask input box. No trap." },
+    { "action": "Press Down again", "observed": "Ring moved cleanly onto the Ask button (ready state). No trap." },
+    { "action": "Confirmed the box still held the sentence, then pressed A on Ask", "observed": "Sent. The plugin log picked it up immediately (RPC entry, ask_ollama POST)." },
+    { "action": "Watched the reply stream from the first token to the end", "observed": "Thinking phase ran first (visible reasoning stream), then the visible answer streamed as plain text throughout. At no point did a mid-stream mask/spoiler chip, 'Spoiler hidden until complete' chip, or tap-to-reveal block appear. The word 'spoiler' appeared once inside the model's own raw thinking text (about wrapping content in a spoiler tag) but no such block was ever rendered on screen." }
+  ],
+  "plugin_log_lines": [
+    "[2026-09-18 11:55:07,390][INFO]: start_background_game_ai: RPC entry (arg type=dict)",
+    "[2026-09-18 11:55:07,398][INFO]: run_game_ai_request: host=127.0.0.1:11434 game='Hades' appid=1145360 question_len=51",
+    "[2026-09-18 11:55:08,148][INFO]: ask_strategy: branch fence requested in prompt=True (mode=strategy, app_id=1145360)",
+    "[2026-09-18 11:55:08,151][WARNING]: ask_ollama: clamping num_predict 2112 -> 1984 (visible floor 600, thinking budget 512 kept whole) so a ~2112-token prompt fits the 4096-token window model=gemma4:e2b-it-qat",
+    "[2026-09-18 11:56:01,626][INFO]: ask_ollama: stream done model=gemma4:e2b-it-qat done_reason=stop eval_count=975 prompt_eval=1646 raw_len=998 visible_len=691 num_predict=1984 think=True",
+    "[2026-09-18 11:56:01,626][INFO]: ask_ollama: strategy fences branch_marker=True branch_parsed=True branch_options=2 checklist_marker=False checklist_parsed=False",
+    "[2026-09-18 11:56:01,633][INFO]: run_game_ai_request: completed in 54.2s"
+  ],
+  "note_on_branch_marker": "branch_marker/branch_options in the log refer to the two-button follow-up menu ('A. Early in the game...' / 'B. Later in the game...') that the reply ends with, not to a spoiler fence. There is no separate spoiler/mask marker logged for this ask.",
+  "screenshots": ["screenshots/DeckCapture_20260918_115623_auto.png"],
+  "verdict": "FAIL",
+  "verdictSentence": "Asking about the first area's boss without naming it did not hide anything. The whole answer streamed in as plain, readable text from start to finish, with no moment where a spoiler warning or a tap-to-reveal box appeared.",
+  "notes": "This is a clean, real send with zero focus-trap trouble on either the Down press or the Ask press -- see the trap tally file. The workaround worked on the very first try here."
+}

@@ -1,0 +1,19 @@
+{
+  "rowId": "KB-KILLSWITCH-01 (Show details half)",
+  "rowText": "Hybrid retrieval switch off on the Developer tab, ask the Megaera question again, Show details must read 'Keyword search (hybrid disabled)' with no embed time; switch back on and read the key back.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T11:57-12:18 (Deck clock)",
+  "setup": {
+    "game_running": "Hades (appid 1145360)",
+    "rag_hybrid_retrieval_enabled_at_start": true
+  },
+  "steps": [
+    { "action": "Read Show details on the earlier unnamed-boss reply while the switch was still on (its normal state), as a baseline while already at that screen.", "observed": "Chip 1 of 7, 'Keyword + meaning', KB: 15 sections, Retrieval: Keyword + meaning, Trust tier: fallback_no_source, Embed: 736.24 ms, Re-rank: 4.32 ms. This confirms what the switch-on state looks like on this build, though it is not the Megaera question the row asks for." },
+    { "action": "Planned: flip the switch off, ask 'How do I beat Megaera?' again, read Show details, flip back on.", "observed": "Never reached -- the Megaera question could not be sent (see plan61-MEGAERA-01-retry2.json)." }
+  ],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "Could not run tonight's check: the Megaera question this row needs was never sent, so there was nothing to compare the switch's on and off wording against. The switch itself was never touched, so it is still on, exactly as found.",
+  "notes": "rag_hybrid_retrieval_enabled was read as true both before and after this attempt and was never changed -- confirmed on disk, no restore needed for this key. A prior run this session (plan61-KB-KILLSWITCH-01.json) already showed the on/off toggle itself works and restores cleanly; what remains owed is purely the wording comparison in Show details, which still needs a working send of the Megaera question."
+}

@@ -1,0 +1,13 @@
+{
+  "rowId": "KB-FLOOR-01 (retry2, on-topic half)",
+  "rowText": "With Half-Life 2 running, ask an ordinary Half-Life 2 question and confirm the knowledge-base chip attaches normally.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T12:18 (Deck clock)",
+  "setup": { "game_running": "none -- see notes" },
+  "steps": [],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "Not reached. Half-Life 2 could not be launched tonight (it had fallen off the Recent Games shelf the automatic launcher relies on), and the pinned-question box had already stopped offering sentences earlier in the session in any case. See plan61-W2-R5-hl2-retry2.json for the full account.",
+  "notes": "This on-topic half already PASSED twice before tonight (2026-09-15, and again earlier in this same session before the pinned-question problem set in); tonight's fresh-confirmation attempt on build 0589565 stays owed."
+}

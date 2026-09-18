@@ -1,0 +1,15 @@
+{
+  "rowId": "KB-FOLLOWUP-01 (draft)",
+  "rowText": "Ask a parent question that gets no close match (\"How do I beat Megaera?\"), then in the same chat ask a follow-up naming something new (\"what about theseus and asterius\"). Read Show details on the follow-up's reply; pass when the reply matches the follow-up's own note, and retrieval shows a fresh line, not a repeat of the parent's.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T11:57-12:18 (Deck clock)",
+  "setup": {
+    "game_running": "Hades (appid 1145360)"
+  },
+  "steps": [],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "Not reached. This needs the Megaera question sent first, and that never went through tonight -- see plan61-MEGAERA-01-retry2.json for the full account of why (the pinned-question box stopped offering that sentence partway through the session and never came back).",
+  "notes": "The follow-up sentence ('what about theseus and asterius') was never reached either, for the same reason."
+}

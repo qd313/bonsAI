@@ -89,6 +89,17 @@ starts work outside this.
   the chip, so the two checks that decide "is this a note chip" and "should the dot show" are not agreeing
   with each other. Row **CHIP-BUTTON-09**. Evidence `docs/test-evidence/plan61-CHIP-BUTTON-09.json` and its
   two screenshots.
+- ★ `[chips]` `[QA]` **The pinned test sentences stop showing after the first question** — **OPEN, found
+  2026-09-18.** After the first question sent from a pinned test sentence, the chip stops offering the pinned
+  sentences and shows the plugin's own everyday suggestions instead. Closing and reopening the panel,
+  saving the pinned list again, starting a brand new chat, and the Developer tab's force-test-chips switch
+  all failed to bring them back for the rest of the sitting. Seen with Hades running, build `0589565`. It
+  blocked **MEGAERA-01**, **KB-FOLLOWUP-01** and **KB-KILLSWITCH-01**'s Show details half, since no test
+  sentence may be typed by thumb. Earlier sessions already found a pinned batch shows only its first three
+  ([plan 31](planning/31-deck-verification-round.md)) and that the chip itself is a single rotating slot
+  (plan 57); this is a further narrowing. Evidence `docs/test-evidence/plan61-MEGAERA-01-retry2.json` (the
+  full account), `docs/test-evidence/plan61-KB-FOLLOWUP-01-retry2.json`,
+  `docs/test-evidence/plan61-KB-KILLSWITCH-01-retry2.json`.
 - ★ `[focus]` **Up from the Retry icon does not return to the answer** — **OPEN, read again 2026-09-16.**
   With the thumbs-up/thumbs-down row greyed on a stopped reply, Down from the answer now lands on Retry — but
   Up from Retry does not go back to the answer's last section the way it should. **Read again 2026-09-16:**
@@ -294,6 +305,9 @@ starts work outside this.
   Steam button, close the whole Quick Access Menu, and reopen it — going up and back down, or switching the
   panel's tabs, does not. Full run history and the exact steps:
   [detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
+  **One more try 2026-09-18, later in the same night:** with Hades still running, one question sent with the
+  usual workaround went through cleanly and did not trap — a sample of one, so the "nearly every send" reading
+  from earlier tonight still stands. Evidence `docs/test-evidence/plan61-ASKBAR-FOCUS-TRAP-03-tally.json`.
 - ★★★ `[reply]` **A name-withheld boss question on a story-protected game comes back with no spoiler box** —
   **OPEN, found 2026-09-18.** Nothing running, no consent phrase anywhere in the chat: asked about "the boss
   past the crystal spike area … the one that looks just like me" in Hollow Knight, the reply named Broken
@@ -301,6 +315,10 @@ starts work outside this.
   in Hades, the reply named Theseus and Asterius the same way. Two games, both builds, the same shape. The
   plan 54 rows still marked owed (STRAT-SPOIL-NAME-01) would fail on this evidence. Evidence
   `docs/test-evidence/plan58p1-M-hk-boss-before.json`, `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-02.json`.
+  **Seen again 2026-09-18 with Hades actually running and streaming on:** the same question, asked without
+  naming a boss, still came back in plain text with no cover at any point. So the game being detected and
+  running does not close the box either — this is not only a nothing-running gap. Evidence
+  `docs/test-evidence/plan61-HADES-UNNAMED-STREAM-01-retry2.json`, `docs/test-evidence/plan61-HADES-UNNAMED-01-retry2.json`.
 
 ---
 
@@ -866,6 +884,14 @@ ones from this month are D81 to D88.
   of them needed a question sent, and the Ask-box freeze above (the three-star focus entry) stopped every
   question from going out. Evidence `docs/test-evidence/plan61-KB-FOLLOWUP-01.json`,
   `docs/test-evidence/plan61-KB-TRANSPARENCY-01-retry.json`, `docs/test-evidence/plan61-KB-FLOOR-01-ontopic.json`.
+  **Tried again at 12:50: KB-TRANSPARENCY-01 and KB-FLOOR-01's on-topic half stayed blocked** — Half-Life 2
+  had dropped off the Recent Games row so it could not be launched, and the pinned test sentences below would
+  have stopped the question anyway. **KB-FOLLOWUP-01 and KB-KILLSWITCH-01's Show details half are now blocked
+  by that new pinned-chip problem instead of the earlier freeze:** the Megaera question they both depend on
+  could not be sent because the pinned test sentence stopped showing and no test sentence may be typed by
+  thumb. Evidence `docs/test-evidence/plan61-KB-TRANSPARENCY-01-retry2.json`,
+  `docs/test-evidence/plan61-KB-FLOOR-01-ontopic-retry2.json`, `docs/test-evidence/plan61-KB-FOLLOWUP-01-retry2.json`,
+  `docs/test-evidence/plan61-KB-KILLSWITCH-01-retry2.json`.
 - ★ `[KB]` **A Hades boss's note is spelled wrong, so spelling it right gets you told the plugin is guessing** —
   **VERIFY, fixed 2026-09-15, waiting on the maintainer to publish.** The note is titled Megaera now and the library
   was rebuilt and passed its own publish check, but pushing it to the two public download hosts was refused for the
@@ -875,7 +901,11 @@ ones from this month are D81 to D88.
   still installed today, that line still appears. Evidence `docs/test-evidence/plan55-HADES-NAMED-01.json`.
   **Tried 2026-09-18 with Hades running, blocked:** eight attempts to send the question all froze the
   highlighted control on the question box, so it was never sent. Evidence
-  `docs/test-evidence/plan61-MEGAERA-01.json`.
+  `docs/test-evidence/plan61-MEGAERA-01.json`. **Tried again 2026-09-18: still blocked, but not by the freeze
+  this time** — one question went through cleanly on the first try tonight, but the pinned test sentence for
+  this exact question then stopped showing and never came back for the rest of the sitting (the new
+  pinned-chip bug above), so this row has still never run on the corrected 2026.09.18 library. Evidence
+  `docs/test-evidence/plan61-MEGAERA-01-retry2.json`.
 - ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **VERIFY,
   landed 2026-09-15, four commits, unit-tested.** A game known only by name now opens its box; naming the boss
   first opens it on screen, in copied text and in read-aloud; a no-story game named in the question gets the same
@@ -889,11 +919,15 @@ ones from this month are D81 to D88.
   first. Evidence `docs/test-evidence/plan61-STRAT-SPOIL-NAME-01.json`. From the older **STRAT-SPOIL-DRG-01**
   block: **DRG-01b tried 2026-09-18 with Deep Rock Galactic: Survivor running, blocked** by the same Ask-box
   freeze as the three-star focus entry above (evidence `docs/test-evidence/plan61-DRG-01b.json`); **DRG-01c
-  not tried on purpose** (would mean removing the library, out of scope tonight); **HADES-UNNAMED-STREAM-01**
-  and **HADES-UNNAMED-01** (a fourth try) both **tried 2026-09-18 with Hades running and also blocked** by the
-  same freeze (evidence `docs/test-evidence/plan61-HADES-UNNAMED-STREAM-01.json`,
-  `docs/test-evidence/plan61-HADES-UNNAMED-01-try4.json`), on top of the mixed results already on record from
-  2026-09-15. [Plan 54](planning/54-spoiler-rules-gaps.md).
+  not tried on purpose** (would mean removing the library, out of scope tonight). **HADES-UNNAMED-STREAM-01
+  and HADES-UNNAMED-01 (a fourth try) were tried again 2026-09-18 with Hades running and both FAILED**, sent
+  cleanly this time with no focus trap at all: the reply came back in plain text with no spoiler box at any
+  point, either while streaming or once finished. Both rows now ride on the new three-star bug above (a
+  name-withheld boss question comes back with no cover), not on the Ask-box freeze. Evidence
+  `docs/test-evidence/plan61-HADES-UNNAMED-STREAM-01-retry2.json`,
+  `docs/test-evidence/plan61-HADES-UNNAMED-01-retry2.json`. **Still owed tonight:** STRAT-SPOIL-NAME-01 (Doom
+  64 cannot be launched), DRG-01b (stopped by the focus trap), DRG-01c (left out on purpose). [Plan
+  54](planning/54-spoiler-rules-gaps.md).
 - ★★ `[KB]` **"Not in my notes" line** — **VERIFY, built and shipped 2026-09-07, device check failed the same
   day.** The line itself is in the code, but on the Deck nothing could make it appear: ten questions asked first
   all attached a note, so the one question meant to show the line never got the chance. The note search has
@@ -901,7 +935,10 @@ ones from this month are D81 to D88.
   Same shape of problem as the "No tip for this" line in the Bugs list above; run both together next time. Row
   **W2-R5**. **Tried again 2026-09-18 with Half-Life 2 running, blocked:** the right question (one the notes
   genuinely do not cover) was ready to send, but the same Ask-box freeze as the three-star focus entry above
-  stopped it from going out. Evidence `docs/test-evidence/plan61-W2-R5-hl2-retry.json`.
+  stopped it from going out. Evidence `docs/test-evidence/plan61-W2-R5-hl2-retry.json`. **And again at
+  12:50, still blocked:** Half-Life 2 had dropped off the Recent Games row so the launcher refused to start
+  it, and the pinned test sentences had stopped showing by then anyway. Evidence
+  `docs/test-evidence/plan61-W2-R5-hl2-retry2.json`.
 - ★★ `[KB]` **Ten new games checked on the Deck, publish owed** — **VERIFY, ran 2026-09-18.** The
   2026.09.18 library was installed on the Deck straight from the plugin's own folder, not from the
   public download hosts. One question named each of the ten new games and all ten answered from that

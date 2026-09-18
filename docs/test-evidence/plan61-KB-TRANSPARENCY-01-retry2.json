@@ -1,0 +1,13 @@
+{
+  "rowId": "KB-TRANSPARENCY-01 (retry2, read against the log)",
+  "rowText": "Read the plugin log for the trust-tier line on a Half-Life 2 ask, against Show details.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T12:18 (Deck clock)",
+  "setup": { "game_running": "none -- see notes" },
+  "steps": [],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "Not reached, for the same reason as the other Half-Life 2 rows tonight: Half-Life 2 could not be launched, and the pinned-question box had already stopped working. See plan61-W2-R5-hl2-retry2.json.",
+  "notes": "One useful reading was taken tonight in Hades instead, for a different row: Show details on a completed reply read Trust tier: fallback_no_source, with no trust/tier text anywhere in the plugin's own log file -- that detail lives only in the reply's own data, shown on screen, matching what earlier attempts already found. The large-Proton-log starvation path this row also wants is still untried and still the harder part regardless."
+}

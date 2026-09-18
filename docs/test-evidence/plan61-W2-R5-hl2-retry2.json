@@ -1,0 +1,18 @@
+{
+  "rowId": "W2-R5 (retry2, on-game question the notes cannot answer)",
+  "rowText": "With Half-Life 2 running, ask an on-game question the notes cannot answer (\"what year did half-life 2 come out\"). Pass when the \"Not in my notes\" line appears once, worded exactly, and sits below the answer without breaking the D-pad walk.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T12:18 (Deck clock)",
+  "setup": {
+    "game_running": "none -- see notes"
+  },
+  "steps": [
+    { "action": "Exited Hades cleanly (rig's exit tool, Confirm pressed once, appid left RunningApps).", "observed": "Confirmed nothing running afterward." },
+    { "action": "Tried to launch Half-Life 2 (appid 220) with the rig's launch tool.", "observed": "Refused before pressing anything meaningful: Half-Life 2 is not on the Recent Games shelf right now (only Hades had been played this session before this point), and the launch tool only searches that shelf. The tool's own message: play it once by hand so it appears there." }
+  ],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "Could not even get Half-Life 2 running tonight -- the automatic launcher only looks at the Recent Games row, and Half-Life 2 had fallen off it after everything else played earlier in the session. On top of that, the pinned-question box that this row would have needed was no longer offering pinned sentences at all by this point (see plan61-MEGAERA-01-retry2.json) -- so even with Half-Life 2 running, this question could not have been sent by the sanctioned pinned-chip route.",
+  "notes": "Two separate blockers stacked: the game could not be launched, and the pinned-question mechanism had already stopped working earlier in this same session. Recommend someone play Half-Life 2 once by hand to put it back on the shelf, and separately look at why pinned test chips stop appearing after the first one or two sends."
+}

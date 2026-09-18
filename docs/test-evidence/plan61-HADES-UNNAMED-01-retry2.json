@@ -1,0 +1,27 @@
+{
+  "rowId": "HADES-UNNAMED-01 (fourth try)",
+  "rowText": "A question that does not name a boss -> story-adjacent detail should still be fenced. Fourth try, on a new not-yet-tried phrasing.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T11:55-11:57 (Deck clock)",
+  "setup": {
+    "game_running": "Hades (appid 1145360)",
+    "ask_mode": "strategy",
+    "masking": "on (strategy_spoiler_masking_enabled true throughout, unchanged)",
+    "question": "how do i beat the boss at the end of the first area",
+    "why_this_phrasing": "Not tried in any of the first three attempts ('what happens when i finally reach the surface' x2, 'how does the story end', 'who is waiting at the end of the game')."
+  },
+  "steps": [
+    { "action": "Same send as HADES-UNNAMED-STREAM-01 (see that file for the workaround steps and log lines) -- one ask serves both rows since they read the same reply for two different things.", "observed": "Sent cleanly, no focus trap." },
+    { "action": "Read the finished reply in full", "observed": "Plain text throughout: general advice about charms, poison resistance vs healing, and route choice at the Temple of Styx. No boss is named anywhere in the reply. An honesty line appears: 'No close match in my notes, this answer leans on the model's own knowledge.' The reply ends with a two-button follow-up menu ('A. Early in the game...' / 'B. Later in the game...'). No spoiler box, no masked fence, no tap-to-reveal control anywhere in the reply." }
+  ],
+  "plugin_log_lines": [
+    "[2026-09-18 11:55:07,390][INFO]: start_background_game_ai: RPC entry (arg type=dict)",
+    "[2026-09-18 11:55:07,398][INFO]: run_game_ai_request: host=127.0.0.1:11434 game='Hades' appid=1145360 question_len=51",
+    "[2026-09-18 11:56:01,626][INFO]: ask_ollama: stream done model=gemma4:e2b-it-qat done_reason=stop eval_count=975 prompt_eval=1646 raw_len=998 visible_len=691 num_predict=1984 think=True",
+    "[2026-09-18 11:56:01,633][INFO]: run_game_ai_request: completed in 54.2s"
+  ],
+  "screenshots": ["screenshots/DeckCapture_20260918_115623_auto.png"],
+  "verdict": "FAIL",
+  "verdictSentence": "The fourth try still came back unfenced -- no boss name, but also no spoiler box protecting the general fight advice it did give. Three of four tried phrasings have now failed to produce a spoiler box; only the two 'how does the story end' / 'who is waiting at the end' phrasings passed.",
+  "notes": "This is the SAME finding the maintainer's new three-star bug is about (a name-withheld boss question getting a plain, unfenced reply). Recording it here again, with Hades specifically and a game genuinely running, is direct on-device evidence for that bug, not just the earlier nothing-running sightings. Still mixed overall, not closed."
+}

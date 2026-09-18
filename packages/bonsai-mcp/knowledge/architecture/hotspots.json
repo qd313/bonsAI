@@ -12,7 +12,7 @@
     },
     {
       "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 2090,
+      "lines": 2095,
       "role": ""
     },
     {
@@ -27,7 +27,7 @@
     },
     {
       "path": "src/hooks/useBonsaiAskOrchestration.ts",
-      "lines": 1733,
+      "lines": 1736,
       "role": ""
     },
     {
@@ -117,7 +117,7 @@
     },
     {
       "path": "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
-      "lines": 722,
+      "lines": 787,
       "role": ""
     },
     {

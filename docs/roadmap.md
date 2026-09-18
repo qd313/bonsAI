@@ -761,6 +761,9 @@ evening ran the same evening, once the Deck was free.
    sources already cleared. Nothing started; waiting on the maintainer's nine answers (locking as D111) and
    the word "go". Started 2026-09-17: the drawings, the blind questions and the source study have landed; the
    reader is still being built; the Deck is asleep, so the device readings wait on the maintainer.
+   **Update 2026-09-18:** the phase's build and device work are done, except three follow-ups still
+   owed (walking up from the session context strip, the block arriving late on some turns, and the
+   ladder walk) and the maintainer's publish call; phase 2 can start.
 7. **Then wave four, now 58 phase 2** — writing more notes. [The plan for it](planning/58-phase-2-kb-session-wave-four.md)
    is the same plan as before, renamed, and runs once phase 1 has landed; its answers lock as D112.
 
@@ -886,15 +889,17 @@ ones from this month are D81 to D88.
   since gained a floor that can refuse a weak match, so there may be a way to show it now — nobody has checked.
   Same shape of problem as the "No tip for this" line in the Bugs list above; run both together next time. Row
   **W2-R5**.
-- ★★ `[KB]` **The note's own words under the reply** — **VERIFY, built 2026-09-17, closed by default until the maintainer
-  picks.** A line under a finished reply names the note or tip it used and shows its own words; nothing shows when nothing
-  was attached. Both follow-up pieces are landed: it appears before the model's first word, and on a fenced reply once the
-  spoiler opens. One visual gap is left for the Deck evening: it sits below the spoiler box, not inside it. Rows
-  **NOTES-BLOCK-01**–**07**, all owed, in [testing-manual.md](testing-manual.md). **Ran on the Deck 2026-09-18:** three
-  rows pass, one passes on the words but fails on timing (the tip block only arrives after the reply finishes), two are
-  not runnable yet, and one still needs the maintainer's own ears. Four fixes this run found are with the block's own
-  lane now: tips not arriving live, the block reachable only walking down to it, a tall block leaving the view at its
-  bottom, and every header clipping and losing its count.
+- ★★ `[KB]` **Ten new games checked on the Deck, publish owed** — **VERIFY, ran 2026-09-18.** The
+  2026.09.18 library was installed on the Deck straight from the plugin's own folder, not from the
+  public download hosts. One question named each of the ten new games and all ten answered from that
+  game's own notes, the right wiki named every time. Owed: the maintainer's publish call, then, once
+  published, a choice on the SD-card location, since this local install put the library on internal
+  storage. Evidence `docs/test-evidence/plan58p1-QA-TEN-GAMES-01.json`.
+- ★★ `[KB]` **The note's own words under the reply** — **VERIFY, re-run 2026-09-18.** Header,
+  open-scroll and live timing pass. Walking up from the session context strip still skips the block,
+  sent back to a lane. The tip and one game question in ten still arrived late, after the reply
+  finished, and the ladder walk was not run — both still owed. Rows **NOTES-BLOCK-01**–**07**,
+  **TEN-GAMES-01**, in [testing-manual.md](testing-manual.md).
 - ★★★ `[KB]` **KB download Cancel** — **VERIFY, blocked.** Shipped 2026-08-05. The download finishes in about a second on
   device, so there is no window to press Cancel in. Needs a slower fixture or a throttle. Row **KB-CANCEL-01**.
 

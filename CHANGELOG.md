@@ -155,7 +155,13 @@ All notable changes to this project are documented in this file.
   model's first word rather than only once the reply finishes, and on a fenced reply it now appears
   once the spoiler is opened, instead of being hidden entirely. `game_ai_request.py`,
   `background_request_state.py`, `MainTabChatTranscript.tsx`. On-Deck rows owed: **NOTES-BLOCK-01** to
-  **07** in `docs/testing-manual.md`.
+  **07** in `docs/testing-manual.md`. **Three more fixes, confirmed on the Deck 2026-09-18:** the
+  header is now two lines — the note's name and how many notes there are on the first, the source on
+  the second — and the count is never the part that gets cut short. Opening a tall block now keeps its
+  header in view instead of scrolling past it. The credit line for one of bonsAI's own notes with no
+  source now reads "From bonsAI's own note." Walking up from the hint rows above the question box now
+  reaches the block; walking up from the session context strip still skips over it, and that one is
+  still owed.
 - **A line under your question shows the AI's own thinking while you wait:** while the AI thinks, its own
   newest sentences show under your question; when the answer starts they fold to one line with the
   seconds; press it to read the whole thing; a Thinking chip in Show details; a one-time notice the first

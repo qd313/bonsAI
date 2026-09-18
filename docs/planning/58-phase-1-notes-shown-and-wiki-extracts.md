@@ -6,9 +6,13 @@ for a year and a half. Two of those lessons land squarely on this plugin, and th
 both fixed **before** the wave-four session runs. That session is now
 [58 phase 2](58-phase-2-kb-session-wave-four.md); it starts when this phase has landed.
 
-**Status: answers in on 2026-09-17, locked as D111 (see the end of § 8). Two items stay open there:
-the block's look waits on the drawings, and "trim only" stands unless the maintainer overturns it.
-The maintainer said to take as long as needed and that nothing else is on the Deck. Block 0 is next.**
+**Status, 2026-09-18: built, landed and checked on the Deck; three follow-ups and the publish call
+owed; phase 2 can start.** The block shipped (closed by default), ten games' notes were written from
+fetched pages after the maintainer chose rewording over word-for-word ("just reword"), the 2026.09.18
+library is installed on the maintainer's Deck from a local folder and not yet published, and ten of ten
+new-game questions answer from their own notes. Owed: the upward D-pad walk from the session strip
+(a lane is on it), the block arriving late on some turns, the ladder walk the plan 61 session asked
+for, the read-aloud row, and the maintainer's publish call. § 10 is the full log.
 
 Read first: [CLAUDE.md](../../CLAUDE.md); the model table in [AGENTS.md](../../AGENTS.md) under "Which
 model does which work"; [lessons-learned.md](../lessons-learned.md), especially § 1 on shared checkouts

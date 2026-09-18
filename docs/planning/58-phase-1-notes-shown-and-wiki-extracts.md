@@ -524,6 +524,15 @@ which goes on their own checklist.
   100 percent bonus game, the Kongs' guns, Yoshi's Story's good ending). Next: the library built
   with its publish check, the search test on the new rows, then the Deck for the local install and
   one question per new game.
+- **2026-09-18, the library built and measured.** Version 2026.09.18: 35 games, 372 notes, 159
+  tips, every one with its meaning index, passing the publish check. The search test on the whole
+  fixture, a new series now that 24 rows were added: the right note in the top three 85.3 times in
+  100 on the questions nobody tuned against (177 rows), against 84.0 before. On the 21 labelled
+  new questions for Donkey Kong 64, Diddy Kong Racing and Yoshi's Story: the right note first 16
+  times, in the top three 20 times. The one miss: "what do i do first in donkey kong 64" found
+  Dogadon and two other notes before "Starting out"; the three blanks stayed blank. The per-row
+  results are in the archive's research folder with the date. The Deck asked back from the other
+  session for the local install; nothing pushed to the public hosts, as the maintainer said.
 
 ---
 

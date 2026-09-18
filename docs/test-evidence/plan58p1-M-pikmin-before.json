@@ -1,0 +1,27 @@
+{
+  "rowId": "plan58p1-M-pikmin-before",
+  "rowText": {
+    "steps": "Nothing running. Plugin open on the Main tab, mode already Strategy (read off the mode control: 'Inference mode: Strategy. Open to change.'). Question typed from the PC with scripts/deck_send_ask.py and VERIFIED, then Down to the 'ask' button (14 presses from the tab bar) and A through the bridge board. Reply read off the page; Show details opened with A; the chip ladder's full text read off the page.",
+    "expected": "The 'before' for row NOTES-BLOCK-01: what a person sees today under a reply that used the Pikmin 2 day-limit note, on the build installed before the block landed. No block exists yet; the note's own words appear nowhere on screen."
+  },
+  "source": "docs/planning/58-phase-1-notes-shown-and-wiki-extracts.md Appendix B reading 1",
+  "time": "2026-09-18T04:17:59Z (Ask pressed); reply complete by 04:22Z",
+  "buildOnDeck": "the build installed before phase 1 (Deck hash 81e65a61cca4..., 190 files); local tip 623cba3 not yet deployed",
+  "library": "2026.09.08 on the SD card; knowledge base on; Ollama holds one model at a time",
+  "question": "Is there a day limit in Pikmin 2?",
+  "reply": "Listen up, mate! You wanna know if there's a clock ticking on your day in Pikmin 2? Nah, mate, there ain't no limit! You ain't got to worry about a strict time limit. The day just ends when the sun dips below the horizon. You gotta make sure all your Pikmin are either with a captain or back at the Onion before the night creatures roll in, or they'll get eaten! It's all about watching the sun, yeah?",
+  "reply_notes": "Character voice on (the maintainer's own setting). Reasoning fold shown: 'Show reasoning · 19 s'. Branch menu under the reply: 'Where are you at in Pikmin 2? A. Starting out in Pikmin 2 / B. Later in Pikmin 2'. The reply AGREES with the note this time (no day limit); the contradiction seen on the PC answer test did not reproduce on this run.",
+  "showDetails": {
+    "chips": "Chip 1 of 7: Keyword + meaning; KB: 12 sections; Reply style: balanced; Local knowledge base: pikminwiki.com · CC-BY-SA-4.0 · as of 2026-09-05 -> Pikmin 2 — Starting out in Pikmin 2; Pikmin 2 — Growing your Pikmin squad; Pikmin 2 — Purple and White Pikmin; Retrieval: Keyword + meaning; Trust tier: wiki_no_patch; text:pikmin 2; Embed: 704.13 ms; Re-rank: 33.22 ms",
+    "attachedNotes": ["Starting out in Pikmin 2", "Growing your Pikmin squad", "Purple and White Pikmin"],
+    "rememberedSubject": "Starting out in Pikmin 2 (the saved chat's asked_entity on the reply turn)"
+  },
+  "reads": [
+    "The chip ladder's Down entry skipped the open ladder again: Down from 'Hide details' landed on 'Session context (22 turns)', so the chips could not be cycled with the D-pad; their text was read off the page instead (runs/plan58p1-M-pikmin-before-chips.json). Same shape as the plan 56 finding.",
+    "The saved chat turn's transparency holds no knowledge-base fields on this build; the attached notes are only in the on-screen chip ladder and the remembered subject.",
+    "The meaning search took 704 ms on this question with nothing running, in the band phase 2 expects with one model held in memory."
+  ],
+  "screenshots": ["screenshots/DeckCapture_20260918_002634_game.png"],
+  "verdict": "recorded",
+  "verdictSentence": "Before the block: the reply used three Pikmin 2 notes and got the day limit right, and nothing on screen showed the note's own words; only Show details named the notes."
+}

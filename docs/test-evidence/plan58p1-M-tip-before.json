@@ -1,0 +1,25 @@
+{
+  "rowId": "plan58p1-M-tip-before",
+  "rowText": {
+    "steps": "Nothing running. Same chat. Mode left on Strategy (the troubleshooting path is chosen by the words, not the mode). Question typed from the PC and VERIFIED; Down to 'ask' and A through the bridge board. Reply read off the page; Show details opened; the chip ladder's text read off the page.",
+    "expected": "Reading 3 of Appendix B: a plain problem sentence, as the 'before' for row NOTES-BLOCK-03. Whether a tip attaches at all decides what the tip block could show."
+  },
+  "source": "docs/planning/58-phase-1-notes-shown-and-wiki-extracts.md Appendix B reading 3",
+  "time": "2026-09-18T04:32:09Z (Ask pressed); reply complete about 25 seconds later",
+  "buildOnDeck": "the build installed before phase 1 (Deck hash 81e65a61cca4..., 190 files)",
+  "question": "My game freezes for a few seconds right after I hit play. Is there a fix?",
+  "reply": "Alright, listen up. Freezing, eh? Sounds like the game is choke, man. It's like the engine stalls right when you try to get the show started. Before we go digging into the wires, you gotta check the basics. First off, make sure your game isn't hogging all the juice. Close all those background apps, you know? Anything running in the background is just taking up space, and that's what makes things stutter. Also, check if you got the latest update for the game itself. Sometimes the devs drop a patch that fixes that exact kind of hiccup. If that ain't the answer, we gotta figure out where you are in the game so I can give you the real scoop.",
+  "showDetails": {
+    "chips": "Chip 1 of 6: KB: no game running; Reply style: balanced; Thinking: Balanced · 18 s · ~504 tokens; Spoiler risk: med; Routed gemma4:e2b-it-qat; Developer details; Knowledge base coverage: No game is running, so there is nothing to look up.",
+    "attachedNotes": [],
+    "tipAttached": false
+  },
+  "findings": [
+    "NO TIP REACHED. The sentence names a symptom (freezes right after play) and nothing else, so neither the phrase gate (needs 'deck' or 'proton' or a preset phrase) nor the topic router fired, and the tip sheet was never searched. This is the open roadmap entry 'a troubleshooting question mostly never reaches the tips', seen again. No 'No tip for this' line either, because nothing was routed. For row NOTES-BLOCK-03 the question must name Proton or the Deck so a tip attaches.",
+    "The reply was treated as a Strategy question about an unknown game: it ends asking where the player is in the game, and the branch menu offers 'Early in the game' / 'Later in the game'. The menu's heading reads 'Where are you at in THIS GAME?', a placeholder that leaked into the wording when no game is known. Small wording bug, filed.",
+    "Spoiler risk read 'med' for a sentence with no game and no story in it."
+  ],
+  "screenshots": ["screenshots/DeckCapture_20260918_003334_game.png"],
+  "verdict": "recorded; one wording bug found",
+  "verdictSentence": "Before the block: a plain freeze question reached no tip, so the tip block would have had nothing to show; the menu heading leaked the words THIS GAME."
+}

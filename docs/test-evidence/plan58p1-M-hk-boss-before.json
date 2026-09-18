@@ -1,0 +1,26 @@
+{
+  "rowId": "plan58p1-M-hk-boss-before",
+  "rowText": {
+    "steps": "Nothing running. Same chat as the Pikmin reading (22 user turns before this one, none of them giving spoiler consent, checked in the saved chat file). Strategy mode. Question typed from the PC and VERIFIED; Down to 'ask' and A through the bridge board. Reply read off the page and off the saved chat; Show details opened; the chip ladder's text read off the page.",
+    "expected": "Readings 2 and 4 of Appendix B in one: a fenced boss question on a story-protected game, and a Hollow Knight boss question, as the 'before' for rows NOTES-BLOCK-02 and the maintainer's Hollow Knight read."
+  },
+  "source": "docs/planning/58-phase-1-notes-shown-and-wiki-extracts.md Appendix B readings 2 and 4",
+  "time": "2026-09-18T04:28:20Z (Ask pressed); reply complete by 04:29:25Z",
+  "buildOnDeck": "the build installed before phase 1 (Deck hash 81e65a61cca4..., 190 files)",
+  "question": "What should I know about the boss past the crystal spike area in Hollow Knight, the one that looks just like me?",
+  "reply": "Alright, listen up. You wanna know about that infected husk boss, the one that looks like you? Right, that Broken Vessel. It ain't just some weak little bug you gotta run into. This fella is tough. You gotta watch his moves. He dashes with those slashes that cover most of the arena, and he throws these big blobs when his health dips low. The key here is timing your moves. When he starts that big cascade of infection, you gotta use Desolate Dive to keep yourself safe while you deal with the damage. And when he gets staggered, that's your window. You gotta heal him up while he's shaky, head weighted down. Don't just swing wildly; you gotta be smart about when you hit and when you dodge. It's all about reading his rhythm, see? — No close match in my notes, this answer leans on the model's own knowledge.",
+  "showDetails": {
+    "chips": "Chip 1 of 7: Keyword + meaning; KB: 14 sections; Reply style: balanced; Local knowledge base: hollowknight.wiki · CC-BY-SA-3.0 · as of 2026-09-05 -> Hollow Knight — Starting out in Hollow Knight; Hollow Knight — Broken Vessel; Hollow Knight — Watcher Knights; Retrieval: Keyword + meaning; Trust tier: wiki_no_patch; text:hollow knight; Embed: 761.46 ms; Re-rank: 33.38 ms",
+    "attachedNotes": ["Starting out in Hollow Knight", "Broken Vessel", "Watcher Knights"],
+    "rememberedSubject": "Starting out in Hollow Knight"
+  },
+  "findings": [
+    "NO SPOILER BOX. Hollow Knight protects its story, the question named the game but not the boss, no consent phrase exists anywhere in this chat, and the reply named Broken Vessel and gave its tactics in plain text with no cover. Same family as the open Hades unnamed-boss rows (plan 55 and plan 57): a name-withheld boss question comes back unmasked. Here the game was named in the question with nothing running, which is the shape plan 54 said opens the box; it did not. Filed for the spoiler list, not this phase.",
+    "THE 'NO CLOSE MATCH' LINE MIS-FIRED. The reply's fight facts are the shipping Broken Vessel note's own phrases (dashes with wide slashes, big blobs when health dips low, the cascade of infection, staggered with head weighed down). The note was attached, second in the list. The line judges only the first note, 'Starting out in Hollow Knight', which was the thin match, so it told the person the answer leaned on the model's own knowledge when it was built on a note. Filed as a knowledge-base bug: the thin-match line should look at the best note attached, not the first.",
+    "The branch menu under the reply named the game's own places ('Exploring the Ancient Basin area'), no Half-Life 2 words: one more clean sighting for BRANCH-EXAMPLE-01.",
+    "Focus: walking UP from the question box skips every reply row (Clear, Retry, the earlier-chats row, the tab bar, the back button); the reply's rows are reached only walking DOWN. And the walker's own stall limit gave up on the long answer chunk (partly hidden, 22 percent visible) before five more Down presses moved on normally. Both recorded, neither this phase's."
+  ],
+  "screenshots": ["screenshots/DeckCapture_20260918_002943_game.png", "screenshots/DeckCapture_20260918_003116_game.png"],
+  "verdict": "recorded; two bugs found",
+  "verdictSentence": "Before the block: a name-withheld Hollow Knight boss question came back with no spoiler box and with a 'no close match' line under a reply that plainly used the attached Broken Vessel note."
+}

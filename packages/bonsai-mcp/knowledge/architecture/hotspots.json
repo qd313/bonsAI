@@ -12,7 +12,7 @@
     },
     {
       "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 2068,
+      "lines": 2090,
       "role": ""
     },
     {
@@ -116,6 +116,11 @@
       "role": ""
     },
     {
+      "path": "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
+      "lines": 722,
+      "role": ""
+    },
+    {
       "path": "src/components/SettingsTab.tsx",
       "lines": 707,
       "role": ""
@@ -123,11 +128,6 @@
     {
       "path": "src/hooks/usePluginSettings.ts",
       "lines": 691,
-      "role": ""
-    },
-    {
-      "path": "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
-      "lines": 669,
       "role": ""
     },
     {

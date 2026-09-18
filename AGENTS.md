@@ -191,9 +191,19 @@ the session context strip)
   session context strip, which landed straight back on Show details. Fixed by inserting
   `focusKbNotesBlock(turnKey)` (or, for the live turn, the shared `focusUpPastLiveKbNotesBlock()`)
   ahead of the existing fallback at every one of these call sites: the archived and live chip
-  ladder's own `onMoveUpFromLadder`, the troubleshooting and VAC-check permission-hint rows'
-  `onMoveUp`, and the session context strip's `onMoveUp`. Each mirrors the Down path exactly —
-  same target, opposite direction — rather than inventing a new route.
+  ladder's own `onMoveUpFromLadder`, and the troubleshooting and VAC-check permission-hint rows'
+  `onMoveUp`. Each mirrors the Down path exactly — same target, opposite direction — rather than
+  inventing a new route.
+- **The session context strip's own `onMoveUp` needed the turn key right, not just the check.**
+  A device rerun (0589565) found Up from that exact row — the collapsed "Session context (N
+  turns) ▸ / Clear" line, the control that sits directly under the block on any normal, already
+  completed reply — still skipping the block, because the first fix hardcoded the turn key
+  `"live"`. A finished reply is not "live" any more by the time a person is sitting on this
+  strip: the post-Ask slot reload moves `expandedTurnKey` onto the freshly archived turn's own
+  id, and the block re-mounts under that id, not `"live"`. `focusUpPastSessionContextStripKbNotesBlock`
+  reads whichever turn is actually expanded (`expandedTurnKey`) instead of assuming, so it finds
+  the block wherever it is actually mounted — live, the newest archived turn, or (harmlessly) an
+  older one expanded by hand.
 - **Not fixed, and out of scope for this control specifically:** walking Up from the question box
   skips every reply row, the block included — a pre-existing gap wider than this one control,
   filed separately by the same Deck row rather than folded into this fix.

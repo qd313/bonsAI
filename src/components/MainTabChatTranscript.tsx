@@ -362,6 +362,28 @@ export function focusUpPastLiveKbNotesBlock(): boolean {
 }
 
 /**
+ * Up from the session context strip's own header row — the collapsed "Session context (N
+ * turns) ▸ / Clear" line, the control that actually sits directly under the block on a normal,
+ * already-completed reply. Device rerun on 0589565 (NOTES-BLOCK-01): walking Up from this exact
+ * row still skipped the block and landed on Show details, because the fix above only ever
+ * checked the turn key "live" — but a completed reply is not "live" any more by the time a
+ * person is sitting on this strip. The post-Ask slot reload moves `expandedTurnKey` off "live"
+ * onto the freshly archived turn's own id (the block re-mounts under that id, not "live"), which
+ * is the ordinary state a finished conversation sits in, not an edge case. Reads whichever turn
+ * is actually expanded right now, so it finds the block wherever it is actually mounted — live,
+ * the newest archived turn, or (harmlessly) an older one a person expanded by hand, where
+ * `focusKbNotesBlock` simply reports nothing to find and this falls through exactly as before.
+ */
+export function focusUpPastSessionContextStripKbNotesBlock(
+  expandedTurnKey: string | null | undefined
+): boolean {
+  return (
+    focusKbNotesBlock(expandedTurnKey ?? "live") ||
+    focusUpFromBelowContextChipLadder(queryLiveTurnSlot())
+  );
+}
+
+/**
  * Builds the block's own row (always mounted while there is at least one attached note) and,
  * only while open, the plain content below it. The row never remounts when toggled — only its
  * label and the optional body change — so there is nothing to hand the D-pad ring back to the
@@ -2032,7 +2054,7 @@ questionLooksLikeTroubleshootingAsk(unifiedInput) ? (
     onHighlightClear={() => setSessionHighlightTurnId(null)}
     onMoveUp={() => {
       if (focusChatPermissionHintRow()) return true;
-      return focusUpPastLiveKbNotesBlock();
+      return focusUpPastSessionContextStripKbNotesBlock(expandedTurnKey);
     }}
     onBeforeDeckyModal={onBeforeNestedDeckyModal}
     onCompleteDeckyModalClose={onCompleteNestedDeckyModalClose}

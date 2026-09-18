@@ -19,6 +19,7 @@ import {
   MainTabChatTranscript,
   focusKbNotesBlock,
   focusUpPastLiveKbNotesBlock,
+  focusUpPastSessionContextStripKbNotesBlock,
 } from "./MainTabChatTranscript";
 import type { MainTabChatTranscriptProps } from "./MainTabChatTranscript";
 import { resetSpoilerFenceOpenCountForTests } from "./MainTabBonsaiAiMarkdownChunk";
@@ -664,5 +665,57 @@ describe("opening a tall block keeps the view at its header", () => {
     } finally {
       HTMLElement.prototype.scrollIntoView = realScrollIntoView;
     }
+  });
+});
+
+describe("Up from the session context strip's own header row", () => {
+  /*
+   * Device rerun on 0589565 (NOTES-BLOCK-01): the earlier fix only ever checked the turn key
+   * "live", but a normal, already-completed reply is not "live" any more by the time a person
+   * is sitting on the session context strip -- the post-Ask reload moves `expandedTurnKey` onto
+   * the freshly archived turn's own id, and the block re-mounts under THAT id. These tests use
+   * an archived turn ("t1"), not "live", to prove the strip's own Up now reads the turn that is
+   * actually expanded rather than a hardcoded key.
+   */
+  it("lands on the block when one exists for the turn actually expanded (a normal, completed reply)", () => {
+    const turn: AskThreadCollapsedTurn = {
+      id: "t1",
+      question: "is there a day limit in pikmin 2",
+      answer: "Yes, Pikmin 2 keeps the day limit from the first game.",
+      transparency: {
+        route: "ollama",
+        success: true,
+        context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+        overflow_skips: [],
+        kb_attached_notes: [note()],
+      },
+    };
+    const { container } = render(<MainTabChatTranscript {...archivedTurnProps(turn)} />);
+    expect(focusUpPastSessionContextStripKbNotesBlock("t1")).toBe(true);
+    expect(document.activeElement).toBe(block(container));
+  });
+
+  it("falls through cleanly (no throw, no block focused) when the expanded turn has no block", () => {
+    const turn: AskThreadCollapsedTurn = { id: "t1", question: "q", answer: "a" };
+    const { container } = render(<MainTabChatTranscript {...archivedTurnProps(turn)} />);
+    expect(block(container)).toBeNull();
+    expect(() => focusUpPastSessionContextStripKbNotesBlock("t1")).not.toThrow();
+  });
+
+  it("still reaches the live turn's block when the live turn is the one expanded (unarchived)", () => {
+    const { container } = render(
+      <MainTabChatTranscript
+        {...baseProps({
+          isAsking: false,
+          expandedTurnKey: "live",
+          askThreadDisplayQuestion: "q",
+          ollamaResponse: "a",
+          lastExchange: { question: "q", answer: "a" },
+          transparencySnapshot: fullTransparencySnapshot([note()]),
+        })}
+      />
+    );
+    expect(focusUpPastSessionContextStripKbNotesBlock("live")).toBe(true);
+    expect(document.activeElement).toBe(block(container));
   });
 });

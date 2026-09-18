@@ -446,6 +446,71 @@ describe("the live turn, before the reply is done", () => {
   });
 });
 
+describe("the gap between the reply finishing and the details fetch landing", () => {
+  it("keeps showing the live notes once the reply is done but the fetch has not landed yet", () => {
+    const { container } = render(
+      <MainTabChatTranscript
+        {...baseProps({
+          isAsking: false,
+          expandedTurnKey: "live",
+          askThreadDisplayQuestion: "is there a day limit in pikmin 2",
+          ollamaResponse: "Yes, Pikmin 2 keeps the day limit from the first game.",
+          lastExchange: {
+            question: "is there a day limit in pikmin 2",
+            answer: "Yes, Pikmin 2 keeps the day limit from the first game.",
+          },
+          liveKbAttachedNotes: [note()],
+          transparencySnapshot: null,
+        })}
+      />
+    );
+    expect(block(container)).not.toBeNull();
+    expect(block(container)?.textContent).toContain("Starting out in Pikmin 2");
+  });
+
+  it("defers to the fetched snapshot once it exists, even when it says nothing is attached", () => {
+    const { container } = render(
+      <MainTabChatTranscript
+        {...baseProps({
+          isAsking: false,
+          expandedTurnKey: "live",
+          askThreadDisplayQuestion: "is there a day limit in pikmin 2",
+          ollamaResponse: "Yes, Pikmin 2 keeps the day limit from the first game.",
+          lastExchange: {
+            question: "is there a day limit in pikmin 2",
+            answer: "Yes, Pikmin 2 keeps the day limit from the first game.",
+          },
+          liveKbAttachedNotes: [note()],
+          transparencySnapshot: {
+            route: "ollama",
+            raw_question: "",
+            sanitizer_action: "",
+            sanitizer_reason_codes: [],
+            text_after_sanitizer: "",
+            ollama_model: null,
+            system_prompt: null,
+            user_text_for_model: null,
+            user_image_count: 0,
+            attachment_paths: [],
+            assistant_raw: null,
+            assistant_after_attachment_format: null,
+            final_response: "",
+            applied: null,
+            success: true,
+            app_id: "",
+            app_name: "",
+            pc_ip: "",
+            error_message: "",
+            elapsed_seconds: 0,
+            kb_attached_notes: [],
+          },
+        })}
+      />
+    );
+    expect(block(container)).toBeNull();
+  });
+});
+
 function fullTransparencySnapshot(notes: KbAttachedNote[]): MainTabChatTranscriptProps["transparencySnapshot"] {
   return {
     route: "ollama",

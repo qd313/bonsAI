@@ -534,13 +534,12 @@ export type MainTabChatTranscriptProps = {
    * first-word case (the lesson the spoiler work paid for: a per-turn fact that only arrives
    * with the finished reply flickers). `transparencySnapshot` above is a *post-completion* fetch
    * (`get_input_transparency`, refreshed once an Ask finishes) and does not update mid-stream, so
-   * it cannot serve this by itself — this prop is what a live poll would carry instead. No
-   * caller supplies it yet: the backend's own write into the live snapshot
-   * (game_ai_request.py's `_publish_kb_attached_notes_live`) still needs one line added to
-   * main.py's `_merge_partial_into_background_status` before a poll actually carries a value
-   * here, and threading that value from the poll response into this prop is a payload-plumbing
-   * change in useMainTabPayload.tsx / MainTab.tsx, both outside this lane's file list. Once both
-   * land, wiring it in is passing the field through; nothing here needs to change again.
+   * it cannot serve this by itself — this prop is what a live poll would carry instead.
+   * `index.tsx` supplies it from the background poll status, and main.py's
+   * `_merge_partial_into_background_status` already copies the live snapshot's own note list
+   * onto it. It also does a second job once the reply finishes: the transcript below keeps using
+   * it as a fallback until `transparencySnapshot` actually lands, since that fetch is async and
+   * fires after completion (see the notes block's own comment where it reads this prop).
    */
   liveKbAttachedNotes?: KbAttachedNote[] | null;
   onRunOriginalAsk?: (rawQuestion: string) => void;
@@ -1822,12 +1821,18 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                    * it before the reply finishes, not only once `buildReplyActionsElement` above
                    * has something to show. `liveKbAttachedNotes` is what a live poll would carry
                    * mid-stream; `transparencySnapshot` is the post-completion fetch used once the
-                   * turn is done (see that prop's own doc comment for the one thing still needed
-                   * before a poll actually reaches this).
+                   * turn is done. That fetch runs asynchronously after the reply finishes, so
+                   * there is a real gap where `isAsking` has gone false but the fetch has not
+                   * landed yet — switching straight to `transparencySnapshot` in that gap makes
+                   * the block disappear and then reappear a moment later. Keep showing the live
+                   * notes through that gap, and only defer to the fetched snapshot once it exists
+                   * (an empty list counts as landed, so a genuinely note-free turn still clears).
                    */
                   const notes = isAsking
                     ? liveKbAttachedNotes ?? []
-                    : kbAttachedNotesFrom(transparencySnapshot);
+                    : transparencySnapshot
+                    ? kbAttachedNotesFrom(transparencySnapshot)
+                    : liveKbAttachedNotes ?? [];
                   const answerTextForFenceCheck = isAsking
                     ? liveResponseBody
                     : lastExchange?.answer ?? "";

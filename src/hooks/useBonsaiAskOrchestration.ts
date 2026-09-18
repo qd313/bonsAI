@@ -1271,6 +1271,9 @@ export function useBonsaiAskOrchestration(
       setModelPolicyDisclosure(null);
       setShortcutSetupVariant(null);
       setLastTransparency(null);
+      /* The transcript falls back to this once a reply finishes and the details fetch has not
+       * landed yet, so a new question must not start out showing the previous one's notes. */
+      setKbAttachedNotes(null);
     setIsStreamingPreview(false);
     setIsStreamSettling(false);
     setOllamaResponse("");

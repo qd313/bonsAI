@@ -49,6 +49,31 @@ several panel reopens.
 restart). All under `docs/test-evidence/`. Also `docs/test-evidence/round35-trap-*.json` and
 [plan 35](planning/35-bugfix-session.md) § 7.
 
+**Reproduced on demand 2026-09-15, which the entry had been waiting for.** It happened twice in one
+sitting, both times within seconds of starting a brand new, empty chat while the panel was showing a
+Session context row — that is, while the session still carried turns from another chat. Down, Left and
+Right all did nothing from the question box and only Up escaped; the character button, the mode chip and
+the Ask button were all on screen and none could be reached. Emptying the box first made no difference, so
+it is not the text. Restarting the plugin cleared it both times. Three walks in the same sitting where
+that row was absent, or the chat already had a reply in it, all reached the Ask button normally. That is
+five observations, not proof of a cause, but it is a recipe to try. Evidence
+`docs/test-evidence/plan48-BUG-ask-input-ring-trap-2026-09-15.json`.
+
+**Five more runs on 2026-09-15 evening, on build 1ac4d7a, and it did not come back once.** Run 1: a new chat
+started from a chat with eight turns while the Session context row showed. Run 2: the box filled from a chip
+press, then every direction. Run 3: a question asked first so the row carried a live turn, then a new chat.
+Run 4: the same, plus the box filled from a chip. Run 5: an empty new chat with the row still showing one
+turn, after the plugin was reopened with Hades running. Every Down, Left and Right from the box moved where
+it should, every time. Evidence
+`docs/test-evidence/plan55-trap-run1-walk-after-new-chat.json`,
+`docs/test-evidence/plan55-trap-run2-chip-fill-then-dpad.json`,
+`docs/test-evidence/plan55-trap-run3-new-chat-with-live-turn.json`,
+`docs/test-evidence/plan55-trap-run4-chip-fill-with-live-turn-row.json`,
+`docs/test-evidence/plan55-trap-run5-empty-chat-session-row-hades-running.json`.
+
+**One more clean run 2026-09-18, build `0589565`, on the same 2026-09-15 recipe:** Down reached Ask and Up
+climbed back out, no trap. Evidence `docs/test-evidence/plan61-focustrap-try1.json`.
+
 
 ## Ordinary phrases attach game cards
 
@@ -1172,6 +1197,43 @@ person's tier. The Deck's default Gemma 4 build can think, so this is not gated 
 - ★★★★ **Steam Input layout parse** (VDF → AI context)
   - **Goal:** Parse controller VDF configs for actionable control context.
   - **Not in scope:** editing/writing controller configs.
+
+## The eleven long files, left long on purpose
+
+Long version of the roadmap entry. Filed 2026-09-15 at the end of the clean-up's reshape phase; moved here for
+the full file list. Nothing a person using the plugin would notice — this is about what the code costs to work
+in, not what it does.
+
+The clean-up decided up front not to split the plugin's main screen file or the other big screen files this
+round: each is a day's careful work on code that draws things, and a mistake there is visible. This entry is
+the promise that they were left on purpose rather than missed, with today's sizes recorded so nobody has to
+measure again.
+
+**Screen side, seven files:**
+
+- The plugin's main file — 1,709 lines
+- The model download window — 1,385 lines
+- One style sheet — 1,344 lines
+- The where-the-AI-runs settings section — 1,310 lines
+- The animated chips row — 1,232 lines
+- The chat transcript — 1,221 lines
+- The Ask bar — 1,079 lines
+
+One more file, the emoticon list, is 1,023 lines but is just a list — splitting it would gain nothing, so it
+is not part of this plan.
+
+**Back-end side, four files** the clean-up's plan did not name, and which are worth their own decision before
+anyone starts:
+
+- The knowledge base service — 2,092 lines
+- The prompt builder — 1,571 lines
+- Voice transcription — 1,294 lines
+- The AI service — 1,270 lines
+
+**Two worked examples already exist** from this phase: the question chips and the reply rating both came out
+of the Ask file as their own pieces, each with a test written at the same time. The record of the order the
+hooks ran in is what made both moves safe. Do the rest one file at a time, the same way, each with its own
+Deck check. [Plan](archive/51-refactor-round-two.md).
 
 ## Controller macro test rig and live view
 

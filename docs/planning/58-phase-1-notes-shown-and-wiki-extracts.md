@@ -323,14 +323,18 @@ which goes on their own checklist.
 
 **Answered 2026-09-17, locked as D111.** The maintainer's own words are quoted where they gave them.
 
-1. **The block's look: not answered yet, by design.** The maintainer's reply was that they did not
-   know what was being asked, which is fair: the question cannot be answered without seeing the
-   block. Lane A draws it first, the maintainer picks a drawing, and that pick is added to D111.
-2. **Trim only: stands unless overturned.** The maintainer asked back whether this meant the AI may
-   not create facts, or whether it may riff off the notes. Both, in different places. In the reply,
-   the model still riffs off the notes it is given; that does not change. In the library, an AI may
-   never write a sentence into a wiki note. It may only cut. Trim only stands unless the maintainer
-   says otherwise before lane B is briefed.
+1. **The block's look: "closed", answered 2026-09-18 after the drawings.** The maintainer's first
+   reply was that they did not know what was being asked, which was fair before the block was
+   drawn. With the drawings in hand they chose closed by default, which is what was built.
+2. **Overturned on 2026-09-18: "just reword."** The maintainer asked back whether this meant the AI
+   may not create facts, or whether it may riff off the notes. After the Hollow Knight comparison
+   showed the word-for-word notes losing on the boss question, and a plain explanation of the trade
+   (word-for-word can be checked by a test but reads worse; rewording reads better but only a
+   person can check its facts), the maintainer chose rewording. So the ten games are written the
+   way the last two waves were: a helper reads the page the reader fetched and writes the note in
+   its own words, with the page, licence and day recorded. The reader stays as the tool that
+   fetches a page, records its credit and shows the writer the right section. The Hollow Knight
+   swap is dropped and its commit never lands.
 3. **Reopen the July lock: "Yes."** The catalog starts here.
 4. **The ten games: "Add them, but verification of their facts might need to come from the feedback
    thumbs."** All ten are in. The maintainer does not expect to check each wiki note by hand; a

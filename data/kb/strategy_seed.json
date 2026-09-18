@@ -373,6 +373,67 @@
         "board",
         "minigames"
       ]
+    },
+    {
+      "game_id": 31,
+      "app_id": null,
+      "igdb_id": "emudeck-dk64-n64",
+      "canonical_title": "Donkey Kong 64",
+      "edition": "N64",
+      "platform": "Nintendo 64",
+      "genres": [
+        "platformer",
+        "3d-platformer",
+        "collectathon"
+      ]
+    },
+    {
+      "game_id": 32,
+      "app_id": null,
+      "igdb_id": "emudeck-yoshistory-n64",
+      "canonical_title": "Yoshi's Story",
+      "edition": "N64",
+      "platform": "Nintendo 64",
+      "genres": [
+        "platformer"
+      ]
+    },
+    {
+      "game_id": 33,
+      "app_id": null,
+      "igdb_id": "emudeck-dkr-n64",
+      "canonical_title": "Diddy Kong Racing",
+      "edition": "N64",
+      "platform": "Nintendo 64",
+      "genres": [
+        "racing",
+        "kart"
+      ]
+    },
+    {
+      "game_id": 34,
+      "app_id": null,
+      "igdb_id": "emudeck-ssb64-n64",
+      "canonical_title": "Super Smash Bros.",
+      "edition": "N64",
+      "platform": "Nintendo 64",
+      "genres": [
+        "fighting",
+        "party",
+        "versus"
+      ]
+    },
+    {
+      "game_id": 35,
+      "app_id": "1546970",
+      "igdb_id": null,
+      "canonical_title": "Grand Theft Auto III - The Definitive Edition",
+      "edition": "DE",
+      "platform": "Steam",
+      "genres": [
+        "action-adventure",
+        "open-world"
+      ]
     }
   ],
   "aliases": [
@@ -695,6 +756,70 @@
     {
       "alias": "mario party 7",
       "game_id": 30
+    },
+    {
+      "alias": "donkey kong 64",
+      "game_id": 31
+    },
+    {
+      "alias": "dk64",
+      "game_id": 31
+    },
+    {
+      "alias": "yoshis story",
+      "game_id": 32
+    },
+    {
+      "alias": "yoshi story",
+      "game_id": 32
+    },
+    {
+      "alias": "diddy kong racing",
+      "game_id": 33
+    },
+    {
+      "alias": "dkr",
+      "game_id": 33
+    },
+    {
+      "alias": "super smash bros",
+      "game_id": 34
+    },
+    {
+      "alias": "smash 64",
+      "game_id": 34
+    },
+    {
+      "alias": "super smash bros 64",
+      "game_id": 34
+    },
+    {
+      "alias": "grand theft auto iii",
+      "game_id": 35
+    },
+    {
+      "alias": "grand theft auto 3",
+      "game_id": 35
+    },
+    {
+      "alias": "gta 3",
+      "game_id": 35
+    },
+    {
+      "alias": "gta3",
+      "game_id": 35
+    },
+    {
+      "alias": "gta iii",
+      "game_id": 35
+    },
+    {
+      "alias": "gta 3 definitive edition",
+      "game_id": 35
+    },
+    {
+      "alias": "gta iii definitive edition",
+      "game_id": 35
     }
   ],
   "sections": [
@@ -4270,6 +4395,424 @@
       "card": "Bowser's Enchanted Inferno! is Mario Party 7's final, unlockable board, and in Party Cruise it plays by the same simple buy-the-Star-then-it-moves rules as Grand Canal -- the challenge here isn't a special gimmick but reaching Bowser's home turf at all, since it only opens after clearing every other board in Solo Cruise and then a specific minigame against Bowser. Bowser Time still fills and triggers on this board like any other, so the usual periodic trouble keeps happening even on his own castle grounds. Players who unlock it treat it as a capstone board to practice the game's core loop on, rather than one with a mechanic unique to itself.",
       "source_url": "https://www.mariowiki.com/Mario_Party_7",
       "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 364,
+      "game_id": 31,
+      "section_type": "mechanic",
+      "name": "Starting out in Donkey Kong 64",
+      "card": "In Donkey Kong 64 you begin as Donkey Kong alone, exploring open levels in the style of Super Mario 64. The main goal in every level is collecting Golden Bananas; the other four Kongs (Diddy, Lanky, Tiny, Chunky) are locked up and join your roster one at a time as you free them. DK Isles is the hub between levels: a level's lobby sits behind a padlock that a Boss Key opens, and once inside, a gate called B. Locker still blocks entry unless you are carrying enough Golden Bananas for that level, with later levels asking for more. Each level also hides its own boss, reached only after feeding a trough called Troff 'n' Scoff enough bananas to raise a platform to the door.",
+      "source_url": "https://www.mariowiki.com/Donkey_Kong_64",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 365,
+      "game_id": 31,
+      "section_type": "mechanic",
+      "name": "Switching Kongs in Donkey Kong 64",
+      "card": "Only Donkey Kong is playable at the very start of Donkey Kong 64; the other four Kongs join the roster as you rescue them and become choices you can switch between mid-level. The switch happens at Tag Barrels, found scattered through every level and the hub. Jumping into one opens a character-select screen where you pick a different Kong, and using it also fully heals whoever you were playing, even if you pick the same one again. Every Kong keeps their own colour and their own moves, so which Kong a challenge needs usually depends on the ability, weapon or colour of collectible in front of you, not just preference.",
+      "source_url": "https://www.mariowiki.com/Tag_Barrel",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 366,
+      "game_id": 31,
+      "section_type": "item",
+      "name": "The five Kong colours in Donkey Kong 64",
+      "card": "Bananas, Banana Bunch Coins, Banana Medals and blueprints all come in five colours in Donkey Kong 64, one per Kong: yellow for Donkey Kong, red for Diddy Kong, blue for Lanky Kong, purple for Tiny Kong and green for Chunky Kong. A Kong can only pick up items in their own colour, so a yellow banana sitting in plain view still needs Donkey Kong specifically to grab it. Each level holds 500 bananas per colour, split into single bananas worth one and banana bunches worth five, so colour is the first thing worth checking when a level looks finished but a Kong's own banana count is still short.",
+      "source_url": "https://www.mariowiki.com/Banana",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 367,
+      "game_id": 31,
+      "section_type": "item",
+      "name": "Banana Bunch Coins in Donkey Kong 64",
+      "card": "Banana Bunch Coins are the currency each Kong earns and spends on their own upgrades: potions from Cranky's Lab, weapons from Funky's Store and instruments from Candy's Music Shop, with later levels offering more of each. Every Kong needs 21 of their own coloured coins to buy everything on offer, and there are 974 coins scattered through the game in total, far more than any Kong needs to spend. Leftover coins are not wasted: Donkey Kong's own coins can still be spent two at a time to keep playing the Donkey Kong arcade cabinet hidden in Frantic Factory, which is also how the Nintendo Coin needed for the last Boss Key is won.",
+      "source_url": "https://www.mariowiki.com/Banana_Coin",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 368,
+      "game_id": 31,
+      "section_type": "mechanic",
+      "name": "Jetpac and the arcade coins in Donkey Kong 64",
+      "card": "Two of Donkey Kong 64's required late-game items come from playing classic arcade games rather than collecting bananas. Bringing at least fifteen Banana Medals to Cranky's Lab unlocks a playable copy of Rare's own Jetpac; scoring 5,000 points drops the Rareware Coin. In Frantic Factory, a working Donkey Kong arcade cabinet needs to be beaten once for a Golden Banana, then beaten a second time, at higher difficulty, for the Nintendo Coin. Both coins are needed together to reach the final Boss Key in Hideout Helm, so full completion is as much about clearing these two arcade side-games as it is about visiting every corner of every level.",
+      "source_url": "https://www.mariowiki.com/Donkey_Kong_64",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 369,
+      "game_id": 31,
+      "section_type": "boss",
+      "name": "Army Dillo in Donkey Kong 64",
+      "card": "Army Dillo is Jungle Japes' boss and only Donkey Kong can fight it. It starts curled in its shell, popping out to fire four fireballs in a row before retreating; dodge those first, since it cannot be hurt while shooting. Once it finishes its volley and rolls around the arena in its shell, grab a nearby TNT Barrel and throw it at the exposed dillo the moment it stops to breathe fire again. Each solid hit launches it into the air and knocks a chunk off its shell in a shower of sparks; landing four of these hits in a row ends the fight. Watch for the shell rolling straight at Donkey Kong between volleys and jump clear rather than trying to throw a barrel while it charges.",
+      "source_url": "https://www.mariowiki.com/Army_Dillo",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 370,
+      "game_id": 31,
+      "section_type": "boss",
+      "name": "Dogadon in Donkey Kong 64",
+      "card": "Dogadon is Fungi Forest's boss, and the first fight is Diddy Kong's alone. Dogadon perches on one corner of a stone platform and spits fireballs across the arena in bursts, so it pays to keep moving rather than standing still. When Dogadon lands and pauses to douse the flames covering its body, that is the opening: throw a TNT Barrel at it before it moves on to the next corner. A hit that lands in time knocks it back and resets the pattern; missing the window lets it relocate and start spitting fireballs again, a little faster each round. The fight returns later in the same level as a rematch, fought instead by Chunky Kong.",
+      "source_url": "https://www.mariowiki.com/Dogadon",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 371,
+      "game_id": 31,
+      "section_type": "boss",
+      "name": "King K. Rool's final battle in Donkey Kong 64",
+      "card": "The last fight against King K. Rool is a five-round boxing match, one round per Kong, inside his crashed airship. Each Kong faces a different attack and needs a different answer: Donkey Kong dodges ground-pound shockwaves and punches K. Rool while he is distracted by the crowd; Diddy Kong shoots a hanging light fixture down onto him with a Popgun; Lanky Kong uses his stretchy arms to hit number buttons and lob a banana peel he then slips on; Tiny Kong shrinks down to shoot his shoe from the inside once a light fixture blinds him; Chunky Kong throws a switch to make him visible again and counters his charging uppercut. Each Kong needs four solid hits to clear their round and move the fight on.",
+      "source_url": "https://www.mariowiki.com/King_K._Rool",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 372,
+      "game_id": 31,
+      "section_type": "area",
+      "name": "Fungi Forest in Donkey Kong 64",
+      "card": "Fungi Forest is built around a giant Cuckoo Clock that swaps the whole level between day and night on demand, and a lot of the level only opens up in one setting or the other: certain paths, Golden Bananas and even some enemies only appear after dark, while others need daylight. Enemies also get noticeably more aggressive once night falls, so a spot that felt safe in daytime can turn dangerous after flipping the clock. The level also introduces blue Kong Switches, which need the Super Simian Slam potion from Cranky Kong before any Kong can use them, and Dogadon is fought here a second time, this time by Chunky Kong.",
+      "source_url": "https://www.mariowiki.com/Fungi_Forest",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 373,
+      "game_id": 32,
+      "section_type": "mechanic",
+      "name": "Starting out in Yoshi's Story",
+      "card": "Before each level in Yoshi's Story you pick one of six Baby Yoshis to play, and every level's goal is the same: eat exactly 30 fruits scattered around it to finish. Movement covers a jump that becomes a floaty flutter-jump if you hold the button, a tongue swallow that turns whatever you lick into an egg, and throwing that egg by aiming and releasing. A ground pound reveals items buried in the floor, and sniffing near a suspicious spot makes Yoshi wave or show a mark if something is hidden there. If your Yoshi is hit too many times it is carried off by Baby Bowser's Toadies, but a White Shy Guy carried to the level's end brings a lost Yoshi back.",
+      "source_url": "https://www.mariowiki.com/Yoshi%27s_Story",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 374,
+      "game_id": 32,
+      "section_type": "mechanic",
+      "name": "Fruit and the Smile Meter in Yoshi's Story",
+      "card": "Yoshi's health in Yoshi's Story is shown as a flower called the Smile Meter in the corner of the screen; its petals fall as a Yoshi takes damage and its face turns sad as it empties out. Every Yoshi has a favourite colour of fruit and Shy Guy, and eating or stomping one that matches heals more of the meter and scores more points than an off-colour one. Each playthrough also picks one random Lucky Fruit that fully heals whichever Yoshi eats it, whatever colour it is. A level does not end at a finish line: it ends as soon as the 30 fruits scattered around it have all been eaten, so it is possible to finish a level while parts of the map are still unexplored.",
+      "source_url": "https://www.mariowiki.com/Yoshi%27s_Story",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 375,
+      "game_id": 32,
+      "section_type": "item",
+      "name": "Hearts, melons and Yoshi's Mood",
+      "card": "Hearts in Yoshi's Story add up into a running score called Yoshi's Mood, tallied at the end of a level from fruit eaten, enemies beaten, coins collected, Special Hearts, melons, and the Baby Yoshis still with you. Most fruit earns one heart, doubling to two if you stomp or peg a matching-colour enemy with an egg instead of just touching it, but the melons hidden in a level are worth more than ordinary fruit: each melon is worth three hearts on the spot and adds a further hundred-heart bonus to the end-of-level tally, regardless of which Yoshi eats it. Chasing every melon in a level is one of the best ways to raise a high score in Trial Mode.",
+      "source_url": "https://www.mariowiki.com/Heart_(Yoshi%27s_Story)",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 376,
+      "game_id": 32,
+      "section_type": "mechanic",
+      "name": "Picking story pages and levels in Yoshi's Story",
+      "card": "Story Mode holds 24 levels split across four worlds of six pages, but only six levels are played in any one run: finishing a level jumps straight to the next world rather than offering the other three pages from the world just left. The first world lets you freely pick which of its four levels to start on, but from the second world onward the game itself decides which page unlocks next, based on how many Special Hearts were collected in the level just finished. That is why replaying what looks like the same page can lead somewhere different: it is really the previous level's Special Heart count choosing the next one, not the page itself.",
+      "source_url": "https://www.mariowiki.com/Yoshi%27s_Story",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 377,
+      "game_id": 32,
+      "section_type": "boss",
+      "name": "The Slug mini-boss in Yoshi's Story",
+      "card": "A giant, wide-eyed slug turns up as a mini-boss in a couple of Yoshi's Story levels, including the Jelly Pipe and a room in Magma Castle where two of them share the same fight. It crawls slowly along the walls and floor rather than attacking directly, so the fight is really about aim: throw Yoshi eggs so the explosion catches the slug near its eyes rather than its body, since that is the only spot that does damage. Three good hits finish one off for a prize. In Magma Castle a defeated slug does not respawn, so if eggs run out partway through, leaving the room to refill from a nearby Egg Block and returning is the way to finish the other one.",
+      "source_url": "https://www.mariowiki.com/Slug",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 378,
+      "game_id": 32,
+      "section_type": "boss",
+      "name": "Baby Bowser in Yoshi's Story",
+      "card": "The last fight in Yoshi's Story is in two parts, both against Baby Bowser. He first rides around on a pet, throwing bombs at the Yoshi fighting him; catching one and lobbing it back is what actually hurts him at this stage, not eggs. Once he is knocked down and the fight moves to the ground, he switches to shooting fireballs, throwing more bombs and stomping out shockwaves, and needs several more hits before giving up. He surrenders rather than being destroyed, handing back what he stole once beaten.",
+      "source_url": "https://www.mariowiki.com/Baby_Bowser",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 379,
+      "game_id": 32,
+      "section_type": "item",
+      "name": "The coloured Yoshis in Yoshi's Story",
+      "card": "The six starting Yoshi colours in Yoshi's Story each have their own favourite fruit and favourite Shy Guy colour, and eating or defeating a match heals more of the Smile Meter and scores more points than an off-colour one does; a melon heals the same generous amount no matter which Yoshi eats it. Beyond taste, colour also stands in for lives: losing one colour of Yoshi still leaves the others available to keep playing. Two extra colours are hidden rather than offered upfront: a Black Yoshi comes from a black-spotted Giant Egg hidden in the Bone Dragon Pit or Torrential Maze, and a White Yoshi from a white Giant Egg in The Tall Tower or Poochy and Nippy; both throw eggs with a bigger explosion than the others, but neither is available outside Story Mode.",
+      "source_url": "https://www.mariowiki.com/Yoshi%27s_Story",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 380,
+      "game_id": 33,
+      "section_type": "mechanic",
+      "name": "Starting out in Diddy Kong Racing",
+      "card": "Diddy Kong Racing gives you ten racers, eight available from the start, and three kinds of vehicle: a car for land, a hovercraft for water or land, and a plane for air, each with its own strengths and weaknesses that can also change depending on who is driving. In Adventure Mode you explore Timber's Island as a hub, finding Golden Balloons that open access to five worlds and the fight with Wizpig. Each of the first four worlds has four tracks, a trophy race and a boss you race rather than fight; the fifth is Wizpig's own world. You can change vehicles at any time by talking to Taj, found in the middle of the island hub.",
+      "source_url": "https://www.mariowiki.com/Diddy_Kong_Racing",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 381,
+      "game_id": 33,
+      "section_type": "item",
+      "name": "The Golden Balloons in Diddy Kong Racing",
+      "card": "Golden Balloons are Diddy Kong Racing's key collectible, working like Power Stars in Super Mario 64: each world and its tracks need a minimum number before they open up, with later worlds asking for more. There are 47 in total, most handed out by Taj for winning a standard race, clearing that track's Silver Coin Challenge, or beating him in one of his three vehicle challenges, with a handful more hidden around Timber's Island itself. A few of the hub's hidden balloons are easiest to reach with a plane, but every one of them can be collected using some vehicle without needing to wait for a later unlock.",
+      "source_url": "https://www.mariowiki.com/Golden_Balloon",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 382,
+      "game_id": 33,
+      "section_type": "mechanic",
+      "name": "Bananas and Zippers: gaining speed in Diddy Kong Racing",
+      "card": "Diddy Kong Racing gives you two ways to go faster mid-race rather than a slide-turning boost: bananas scattered on every track raise your top speed a little at a time until you are carrying ten of them, after which more bananas stop helping, and getting hit by a weapon knocks some of that stock away. Zippers built into the tracks give an instant burst of speed on top of that, one design for each vehicle type, and letting go of the accelerator just before hitting one makes the boost even stronger. Between topping up bananas and timing zippers well, both matter more to lap times than raw driving skill on most tracks.",
+      "source_url": "https://www.mariowiki.com/Diddy_Kong_Racing",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 383,
+      "game_id": 33,
+      "section_type": "mechanic",
+      "name": "The vehicles in Diddy Kong Racing",
+      "card": "Every character in Diddy Kong Racing has different stats in each of the three vehicles, so a racer who feels sluggish in a car can be one of the fastest in a hovercraft or plane, and tracks are built around all three rather than one default choice. Cars handle land circuits, hovercrafts cover water and can cut across some land routes too, and planes clear tracks built around flying over water, cliffs and gaps. Because a track can be raced in whichever vehicle it supports, checking which vehicle a struggling track allows, and which racer suits that vehicle best, is often a bigger help than practicing the same combination over and over.",
+      "source_url": "https://www.mariowiki.com/Diddy_Kong_Racing",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 384,
+      "game_id": 33,
+      "section_type": "boss",
+      "name": "The four world boss races in Diddy Kong Racing",
+      "card": "Each of Diddy Kong Racing's first four worlds ends in a boss you outrace rather than fight directly, and every one is raced twice: once to earn a piece of the Wizpig amulet, then again after finishing that world's Silver Coin Challenge. Tricky charges forward up a spiralling mountain in a car and can flatten you if you are in the way, with boulders added on the rematch. Bluey stampedes down an icy hovercraft slope, gaining snowballs as extra hazards the second time. Bubbler circles an island in a hovercraft throwing mines, then giant bubbles that can trap you. Smokey runs and flies through caves in a plane, spitting hot ash clouds that thicken on the rematch.",
+      "source_url": "https://www.mariowiki.com/Diddy_Kong_Racing",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 385,
+      "game_id": 33,
+      "section_type": "boss",
+      "name": "Wizpig in Diddy Kong Racing",
+      "card": "Wizpig is faced twice, and both fights are races rather than combat. Wizpig's First Strike happens on a stormy road back on Timber's Island once all four amulet pieces are collected: Wizpig runs the three laps on foot, and water covering the track makes the zippers scattered around it worth chasing down. Losing sends Wizpig home to Future Fun Land, reached once every trophy race has been won; the rematch, Wizpig Strikes Back, has him riding a giant rocket for three laps around his own kingdom while asteroids, laser blasts, enemy ships and arcs of electricity fill the course, so a clean line matters more than ever.",
+      "source_url": "https://www.mariowiki.com/Diddy_Kong_Racing",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 386,
+      "game_id": 33,
+      "section_type": "mechanic",
+      "name": "Unlocking Drumstick and T.T. in Diddy Kong Racing",
+      "card": "Diddy Kong Racing hides two more racers behind Adventure Mode goals rather than handing them over. T.T. is unlocked by beating his own ghost times in Time Trial mode on every course, which makes the ghost race worth chasing for more than bragging rights: without good enough times, T.T. never becomes playable. Drumstick is unlocked differently, by winning all four Grand Prix trophy races, which reveals a frog wearing a rooster crest somewhere on Timber's Island; running the frog over turns it back into Drumstick. Both unlocked racers keep their own distinct stats rather than being reskins of an existing one.",
+      "source_url": "https://www.mariowiki.com/Diddy_Kong_Racing",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 387,
+      "game_id": 33,
+      "section_type": "item",
+      "name": "Weapon Balloons in Diddy Kong Racing",
+      "card": "Weapon Balloons in Diddy Kong Racing hand out an item the moment they pop, and the colour of the balloon decides which one: different colours cover offense, defense and speed effects rather than one grab-bag pool. Popping several balloons of the same colour in a row upgrades that item through as many as three strength levels, so holding onto one colour is often worth more than grabbing whatever is closest. Popping a different colour balloon cancels whatever was building and starts the count over with the new item instead, so it pays to check colour before diving for the nearest balloon on the track.",
+      "source_url": "https://www.mariowiki.com/Diddy_Kong_Racing",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 388,
+      "game_id": 34,
+      "section_type": "mechanic",
+      "name": "Starting out in Super Smash Bros.",
+      "card": "Super Smash Bros. gives you twelve fighters to choose from, eight available right away: Mario, Yoshi, Donkey Kong, Link, Samus, Kirby, Fox and Pikachu, with Luigi, Jigglypuff, Captain Falcon and Ness unlocked through play. A match is not about draining a health bar; instead every hit adds to a damage percentage, and the more damage a fighter is carrying, the further a solid hit sends them flying. Knocking someone far enough off the stage past its edges counts the same as a win in most modes. Versus Mode can be played as a Stock match, where each fighter has a set number of lives, or a Time match, scored on how many knockouts you land within a limit.",
+      "source_url": "https://www.ssbwiki.com/Super_Smash_Bros.",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 389,
+      "game_id": 34,
+      "section_type": "mechanic",
+      "name": "Knocking opponents out in Super Smash Bros.",
+      "card": "A knockout in Super Smash Bros. happens when a fighter is launched past the edges of the stage, called the blast lines, rather than when a health bar reaches zero; the higher a fighter's damage percentage climbs, the less force it takes to send them that far. A knocked-out fighter reappears on a revival platform to keep fighting. In a Stock match, being knocked out costs one of your set lives, and running out ends your part in the match; in a Time match, a knockout instead adds a point for whoever landed the hit and takes one away from whoever was launched, with the highest score winning once time runs out.",
+      "source_url": "https://www.ssbwiki.com/KO",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 390,
+      "game_id": 34,
+      "section_type": "mechanic",
+      "name": "Mario in Super Smash Bros.",
+      "card": "Mario plays as the well-rounded, easy-to-learn fighter in Super Smash Bros.: his speed and jump are both a little below average, but he carries a solid mix of quick jabs for stringing hits together and heavier smash attacks for finishing a stock outright, backed by a Fireball he can toss to slow down anyone approaching from a distance. His downward-aimed aerial kick is useful both for racking up damage on a grounded opponent and for edging airborne opponents away from the stage. The tradeoff is reach: most of his attacks are short-ranged, so a fighter that can attack from further away can out-space him if he cannot close the distance first.",
+      "source_url": "https://www.ssbwiki.com/Mario_(SSB)",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 391,
+      "game_id": 34,
+      "section_type": "mechanic",
+      "name": "Pikachu in Super Smash Bros.",
+      "card": "Pikachu is small, light and fast in Super Smash Bros., with a top dash speed and jump among the best in the cast, and its light weight is offset by an unusually strong recovery move, Quick Attack, which can be aimed in almost any direction and used twice per airborne trip back to the stage. Its up smash and back throw both hit hard enough to end a stock outright, and its down special, Thunder, can combo straight out of an up smash for an early knockout when it lands. That light weight cuts both ways, though: Pikachu can also be launched and knocked out earlier than most of the cast if it is caught off guard.",
+      "source_url": "https://www.ssbwiki.com/Pikachu_(SSB)",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 392,
+      "game_id": 34,
+      "section_type": "mechanic",
+      "name": "Fox in Super Smash Bros.",
+      "card": "Fox is built entirely around speed in Super Smash Bros.: a fast dash, a fast fall and quick attacks let him string hits together and rack up damage faster than most of the cast, and his Blaster shot is a handy ranged tool for keeping an approaching opponent at arm's length or setting up a combo from a distance. His Reflector can also bounce projectiles back at whoever fired them. The tradeoff is recovery: his main way back to the stage, Fire Fox, travels in a straight, predictable line and needs a moment to charge before it fires, which makes him one of the easier fighters in the game to knock away from the stage for good.",
+      "source_url": "https://www.ssbwiki.com/Fox_(SSB)",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 393,
+      "game_id": 34,
+      "section_type": "item",
+      "name": "Items in Super Smash Bros.",
+      "card": "Items in Super Smash Bros. spawn at set points around a stage as a match goes on, and any fighter standing near one can pick it up by pressing the attack button; only one item can be carried at a time. A picked-up item can be swung, fired or thrown at an opponent, and if it is dropped or knocked loose, whoever grabs it next becomes its new owner, so a strong item is never safe just because you have it first. Some items are heavier than others and visibly slow a fighter down while carried, forcing a choice between keeping the item's advantage and staying quick enough to dodge. Leaving an item alone for too long makes it flash and then disappear.",
+      "source_url": "https://www.ssbwiki.com/Item",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 394,
+      "game_id": 34,
+      "section_type": "mechanic",
+      "name": "The 1P Game in Super Smash Bros.",
+      "card": "The 1P Game is the only single-player mode in Super Smash Bros., and it is a fixed run rather than a randomised one: every stage, opponent and order stays the same on every playthrough, ending in a fight against the game's boss, Master Hand. Along the way there are eleven regular stages against a growing roster of opponents, plus three optional bonus stages, one after every third fight, that swap combat for a timed challenge like smashing targets or stepping on marked platforms instead. Clearing a stage banks points toward a final score, and most fights carry their own bonus objectives, like knocking a foe out in a specific way, for extra points on top.",
+      "source_url": "https://www.ssbwiki.com/1P_Game",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 395,
+      "game_id": 35,
+      "section_type": "mechanic",
+      "name": "Starting out in Grand Theft Auto III - The Definitive Edition",
+      "card": "Grand Theft Auto III: The Definitive Edition drops you into Liberty City with no map marker telling you what to do next: money and better weapons mostly come from taking on jobs from characters scattered around the city or answering ringing payphones, rather than from a single storefront. The city itself opens up in stages rather than all at once, with new islands unlocking as you make progress, so early errands tend to stay close to wherever you started. Petty crime like reckless driving or a stray gunshot draws police attention quickly, so it is worth learning how the wanted system works before testing how far you can push it.",
+      "source_url": "https://gta.fandom.com/wiki/Grand_Theft_Auto_III",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 396,
+      "game_id": 35,
+      "section_type": "mechanic",
+      "name": "The mission structure in Grand Theft Auto III - The Definitive Edition",
+      "card": "Grand Theft Auto III: The Definitive Edition spreads its work across four kinds of missions rather than one job list: around fifty story missions taken in person from characters around the city, seventeen missions handed out over payphones instead of face to face, four off-road checkpoint courses, and four missions where you steer a remote-control car instead of walking around. Finishing a story mission is also how new parts of the city and new payphone jobs open up, so mission-givers and phones that look unavailable early on are usually just waiting on progress elsewhere rather than permanently missable.",
+      "source_url": "https://gta.fandom.com/wiki/Missions_in_GTA_III",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 397,
+      "game_id": 35,
+      "section_type": "mechanic",
+      "name": "The wanted level in Grand Theft Auto III - The Definitive Edition",
+      "card": "The wanted meter in Grand Theft Auto III: The Definitive Edition runs on a six-star scale, and it rises from things like shooting, running down pedestrians, ramming police cars, or so much as aiming a gun near an officer; a single star already brings a chase. Getting caught ends with a \"busted\" screen, any mission in progress failing, some cash taken as a fine, and your weapons confiscated. The meter clears on its own in a few ways: paying off a passing police bribe pickup, driving into a Pay 'n' Spray to change your car's colour, or simply finishing whatever mission you are on. Higher star levels only become available as you progress and unlock more of the city.",
+      "source_url": "https://gta.fandom.com/wiki/Wanted_Level_in_GTA_III",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 398,
+      "game_id": 35,
+      "section_type": "mechanic",
+      "name": "An early gang-war job in Grand Theft Auto III - The Definitive Edition",
+      "card": "One early job for a Liberty City crime family sends you after several rival gang leaders scattered around one district rather than a single target, with a couple of allies riding along to help even the odds. The first two targets are found out in the open, guarded by only a few soldiers each, and the fight is mostly about clearing the guards before they can surround you. The last target holes up inside a fenced-off factory, and getting to him means either driving a vehicle that can force the gates open or bringing something explosive, like a grenade or a molotov, to blow a way in instead of trying to find a door.",
+      "source_url": "https://gta.fandom.com/wiki/Triads_and_Tribulations",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 399,
+      "game_id": 35,
+      "section_type": "mechanic",
+      "name": "Side jobs and extra missions in Grand Theft Auto III - The Definitive Edition",
+      "card": "Beyond the story, Grand Theft Auto III: The Definitive Edition offers side jobs that never touch the plot at all. Off-road checkpoint courses task you with driving through a set number of gates scattered around a park, beach or car park before time runs out, purely against the clock. Remote-control missions hand you a toy car instead and ask you to total as many of one specific car model as you can find before time runs out. Vehicle-based side jobs like ferrying fares as a taxi driver, putting out fires as a firefighter, or answering emergencies as a paramedic run independently of the story and reward completing enough of them with a lasting bonus.",
+      "source_url": "https://gta.fandom.com/wiki/Missions_in_GTA_III",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 400,
+      "game_id": 35,
+      "section_type": "item",
+      "name": "Weapons in Grand Theft Auto III - The Definitive Edition",
+      "card": "Grand Theft Auto III: The Definitive Edition arms you with thirteen weapons split into a few clear categories: melee options limited to fists and a baseball bat, small firearms like a pistol and an Uzi, larger firearms including a shotgun, an AK-47, an M16 and a sniper rifle, and heavier or situational tools such as a flamethrower and a rocket launcher. Thrown weapons cover molotov cocktails and grenades for clearing a group or an entrenched target, and a detonator rounds out the special category for triggering explosives already planted. Which weapons are on hand at any moment depends entirely on what has been found or bought, since none of them are carried in from outside a mission.",
+      "source_url": "https://gta.fandom.com/wiki/Weapons_in_GTA_III",
+      "source_license": "CC-BY-SA-3.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 401,
+      "game_id": 35,
+      "section_type": "item",
+      "name": "Vehicles in Grand Theft Auto III - The Definitive Edition",
+      "card": "More than a hundred vehicles appear across Grand Theft Auto III: The Definitive Edition's version of Liberty City, split into loose families: sports cars built for speed, SUVs and off-road trucks for rough terrain, vans and industrial trucks for hauling, and ordinary four-door cars that make up most of the traffic. Any car on the street can be taken by carjacking whoever is driving it, so the fastest way to a better vehicle is usually just finding one already out on the road rather than waiting to buy one. A car's handling, top speed and toughness all vary with its type, so swapping vehicles between jobs is often worth it rather than sticking with whatever was grabbed first.",
+      "source_url": "https://gta.fandom.com/wiki/Vehicles_in_GTA_III",
+      "source_license": "CC-BY-SA-3.0",
       "source_version": null,
       "crawled_at": "2026-09-18"
     }

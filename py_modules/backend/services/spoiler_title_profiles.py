@@ -106,6 +106,11 @@ _LOW_NARRATIVE_TITLES = (
     # 2026-09-18: the five Mario Party emulated shortcuts (58 phase 1). Party rounds and
     # minigames are not a discovered story, so "mario party" covers all five by substring.
     "mario party",
+    # 58 phase 1 lane G (2026-09-18): three more emulated N64 shortcuts with no AppID, all
+    # light on plot the way their shelf-mates above are.
+    "donkey kong 64",
+    "yoshi's story",
+    "diddy kong racing",
 )
 
 _PROTECT_PROGRESSION_TITLES = (
@@ -134,6 +139,11 @@ _PROTECT_PROGRESSION_TITLES = (
     "paper mario",
     "thousand-year door",
     "new vegas",
+    # 58 phase 1 lane G (2026-09-18): GTA III - The Definitive Edition has a Steam AppID,
+    # but this title-name fallback is added to match its siblings above (San Andreas, IV, V),
+    # which all carry both an AppID entry and a name entry.
+    "grand theft auto iii",
+    "gta iii",
 )
 
 

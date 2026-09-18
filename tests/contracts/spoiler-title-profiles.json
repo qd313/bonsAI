@@ -190,6 +190,36 @@
       "app_id": "",
       "app_name": "Mario Party 6",
       "expected": "low_narrative"
+    },
+    {
+      "name": "58 phase 1 lane G: donkey kong 64 is low narrative by name",
+      "app_id": "",
+      "app_name": "Donkey Kong 64",
+      "expected": "low_narrative"
+    },
+    {
+      "name": "58 phase 1 lane G: yoshi's story is low narrative by name",
+      "app_id": "",
+      "app_name": "Yoshi's Story",
+      "expected": "low_narrative"
+    },
+    {
+      "name": "58 phase 1 lane G: diddy kong racing is low narrative by name",
+      "app_id": "",
+      "app_name": "Diddy Kong Racing",
+      "expected": "low_narrative"
+    },
+    {
+      "name": "58 phase 1 lane G: the 1999 smash bros shortcut is low narrative by name, like melee",
+      "app_id": "",
+      "app_name": "Super Smash Bros.",
+      "expected": "low_narrative"
+    },
+    {
+      "name": "58 phase 1 lane G: gta iii definitive edition protects progression by name like its siblings",
+      "app_id": "",
+      "app_name": "Grand Theft Auto III - The Definitive Edition",
+      "expected": "protect_progression"
     }
   ],
   "description": "Title-name resolution widened 2026-08-18 by D19: a title recognised from the question text has no AppID to look up, so the name tables must carry the same two profiles. Before that, only 'State of Emergency' resolved by name."

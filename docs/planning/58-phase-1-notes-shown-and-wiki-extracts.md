@@ -443,6 +443,16 @@ which goes on their own checklist.
   kept in page order, the two heading misses fixed, captions and file links dropped. Same cap,
   same trim-only law. Lane D re-measures after it lands. If it still loses, the rewrites stay
   and the reader ships as the fetch-and-credit half, as § 9 said.
+- **2026-09-17, the block's two follow-up pieces landed.** The attached notes now travel in the
+  same poll answer that already carries the named subject, so the line under the reply is on
+  screen before the model's first word, and the handoff to the finished reply is tested for no
+  flicker. On a fenced reply the block now appears only once the spoiler cover is open, driven by
+  a live count of open covers rather than a guess from the reply's text, and hides again when
+  the cover closes. One thing still short of drawing 3: the block sits in its usual place under
+  the reply, next to Show details, rather than drawn inside the spoiler's own box; that needs
+  the file that builds the bubble, which no lane has been given. Left for the Deck evening to
+  judge on screen before anyone spends more on it. The lane also had to reach three files past
+  its list to follow the poll field to the screen, and said so.
 
 ---
 

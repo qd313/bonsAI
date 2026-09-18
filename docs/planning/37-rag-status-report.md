@@ -294,9 +294,12 @@ them straight; what remains is coverage, follow-up memory, and the things the te
    to land first: showing a note's own words under a reply instead of the model's rewrite of it, and
    reading a wiki's own sentences into notes with no AI rewrite. Both phases are waiting on the
    maintainer's answers before either can start. Started 2026-09-17: the drawings, the blind questions
-   and the source study have landed; the reader is still being built; the Deck is asleep, so the device
+   and the source study have landed; the reader has landed and is on a third pass; the Deck is asleep, so the device
    readings wait on the maintainer. The block itself has now landed too, its seven device rows are
-   owed, and the Hollow Knight comparison lane is running.
+   owed, and the Hollow Knight comparison lane is running. The block's follow-up landed; the Hollow
+   Knight comparison found the verbatim notes lost on the boss question because the reader kept the
+   first sentences of a section rather than the tactics ones, and a third pass of the reader is in
+   progress.
 2. **Wave three's own Deck evening is unfinished.** Three of its checks never ran, and two that did need
    redoing: follow-up questions now look up the right boss but the reply can still name a different one,
    and the new one-second speed check reports a healthy device while a real question runs over budget.

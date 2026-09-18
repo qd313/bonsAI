@@ -151,9 +151,9 @@ All notable changes to this project are documented in this file.
   the shared Deck tips, or "bonsAI's own notes, no source." Pressing it opens the note's own words,
   kept as separate lines when the note itself was written that way; reopening a saved chat shows it
   again; nothing appears when nothing was attached, and it is never read aloud. It starts closed
-  behind one switch. **Two pieces are coming in a follow-up:** the block should appear before the
-  model's first word rather than only once the reply finishes, and should sit inside the spoiler box
-  on a fenced reply rather than being hidden entirely. `game_ai_request.py`,
+  behind one switch. **Two more pieces landed the same day:** the block now appears before the
+  model's first word rather than only once the reply finishes, and on a fenced reply it now appears
+  once the spoiler is opened, instead of being hidden entirely. `game_ai_request.py`,
   `background_request_state.py`, `MainTabChatTranscript.tsx`. On-Deck rows owed: **NOTES-BLOCK-01** to
   **07** in `docs/testing-manual.md`.
 - **A line under your question shows the AI's own thinking while you wait:** while the AI thinks, its own

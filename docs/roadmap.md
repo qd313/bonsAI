@@ -853,11 +853,10 @@ ones from this month are D81 to D88.
   since gained a floor that can refuse a weak match, so there may be a way to show it now — nobody has checked.
   Same shape of problem as the "No tip for this" line in the Bugs list above; run both together next time. Row
   **W2-R5**.
-- ★★ `[KB]` **The note's own words under the reply** — **VERIFY, built 2026-09-17, closed by default
-  until the maintainer picks.** A line under a finished reply now names the note or tip it used and
-  where it came from, and opens to show its own words; nothing shows when nothing was attached, and it
-  is never read aloud. Two pieces are a follow-up in progress: it should appear before the model's
-  first word, and it should sit inside the spoiler box on a fenced reply instead of being hidden. Rows
+- ★★ `[KB]` **The note's own words under the reply** — **VERIFY, built 2026-09-17, closed by default until the maintainer
+  picks.** A line under a finished reply names the note or tip it used and shows its own words; nothing shows when nothing
+  was attached. Both follow-up pieces are landed: it appears before the model's first word, and on a fenced reply once the
+  spoiler opens. One visual gap is left for the Deck evening: it sits below the spoiler box, not inside it. Rows
   **NOTES-BLOCK-01**–**07**, all owed, in [testing-manual.md](testing-manual.md).
 - ★★★ `[KB]` **DRG Survivor glossary terms** — **VERIFY, one touch tap owed.** Shipped 2026-08-28 and walked on device:
   underline, popup, D-pad reachability, B, one-press Up. Rows **DRG-GLOSSARY-01…04**.

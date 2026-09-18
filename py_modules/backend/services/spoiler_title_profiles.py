@@ -103,6 +103,9 @@ _LOW_NARRATIVE_TITLES = (
     "mario kart 64",
     "smash bros",
     "pikmin 2",
+    # 2026-09-18: the five Mario Party emulated shortcuts (58 phase 1). Party rounds and
+    # minigames are not a discovered story, so "mario party" covers all five by substring.
+    "mario party",
 )
 
 _PROTECT_PROGRESSION_TITLES = (

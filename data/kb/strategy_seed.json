@@ -308,6 +308,19 @@
         "party",
         "versus"
       ]
+    },
+    {
+      "game_id": 26,
+      "app_id": null,
+      "igdb_id": "emudeck-mp1-n64",
+      "canonical_title": "Mario Party",
+      "edition": "N64",
+      "platform": "Nintendo 64",
+      "genres": [
+        "party",
+        "board",
+        "minigames"
+      ]
     }
   ],
   "aliases": [
@@ -606,6 +619,14 @@
     {
       "alias": "melee",
       "game_id": 25
+    },
+    {
+      "alias": "mario party",
+      "game_id": 26
+    },
+    {
+      "alias": "mario party 1",
+      "game_id": 26
     }
   ],
   "sections": [
@@ -3732,6 +3753,116 @@
       "source_license": "CC-BY-SA-4.0",
       "source_version": null,
       "crawled_at": "2026-09-07"
+    },
+    {
+      "section_id": 314,
+      "game_id": 26,
+      "section_type": "mechanic",
+      "name": "Starting out in Mario Party",
+      "card": "Turns rotate: each player rolls a 1-10 Dice Block and moves that many spaces, landing on Blue spaces for 3 coins or Red for -3. Passing the Star Space lets you buy a Star for 20 coins if you have enough, and its location shifts to a new random spot each time someone buys one. After everyone moves, a roulette matches players up for that turn's minigame: land all on the same color and everyone plays a 4-player game together, split 2-2 for a team game, or 1 alone against 3 for the odd one out. A new player's biggest surprise is that minigames can take coins from the losers, not just award them to the winner. Games run 20, 35, or 50 turns, and at the end three Bonus Stars go out for the most coins won in minigames, the most coins held, and the most Happening Spaces landed on -- so a last-place player can still close the gap.",
+      "source_url": "https://www.mariowiki.com/Mario_Party",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 315,
+      "game_id": 26,
+      "section_type": "area",
+      "name": "DK's Jungle Adventure",
+      "card": "DK's Jungle Adventure is Mario Party's jungle board, built around three Whomps guarding the junctions who each charge 10 coins to let a player through, so early coins go toward paying tolls rather than buying a Star. Landing on a Happening Space sets a boulder rolling down the path near the start, chasing off anyone standing in its way -- worth watching before committing to a route. Bowser also wanders this board and, if you meet him, \"rewards\" you with a useless Golden Bowser Statue and takes 10 coins for the trouble. Because the Whomps sit on the main junctions, the fastest way to the Star is rarely the free one; budgeting coins for tolls early, rather than saving for a Star purchase, tends to pay off over a full game.",
+      "source_url": "https://www.mariowiki.com/Mario_Party",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 316,
+      "game_id": 26,
+      "section_type": "area",
+      "name": "Peach's Birthday Cake",
+      "card": "Peach's Birthday Cake is the smallest board in the original Mario Party, built around Goomba's Flower Lottery: pay 10 coins to plant a red, blue, yellow, or green seed, and the flower that grows either has a Toad face, which points you toward the Star, or a Bowser face, which sends you to buy one of Bowser's bogus items for 20 coins instead. Landing on a Happening Space lets you plant a pricier 30-coin Strawberry Seed that grows into a Piranha Plant; if another player holding Stars later lands on that same Happening Space, the plant steals a Star from them and hands it to whoever planted it. Because the board is small, turns move fast, so the lottery and the strawberry trap end up deciding most games rather than raw movement.",
+      "source_url": "https://www.mariowiki.com/Mario_Party",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 317,
+      "game_id": 26,
+      "section_type": "area",
+      "name": "Wario's Battle Canyon",
+      "card": "Wario's Battle Canyon splits into four canyon areas around a central Bowser zone, and players get around by being fired from cannons rather than walking, with a spinning wheel deciding which area you land in next. A Happening Space swaps the direction every cannon fires, which can undo careful planning in a moment. Reaching Bowser's area costs 10 coins paid to a Fly Guy in the northeast, and once there Bowser fires you to a random spot on the board instead of anywhere useful, so it's a detour to avoid unless you're chasing his area for another reason. Because cannon direction can flip at any time, treat this board's routes as unreliable rather than planning several turns ahead.",
+      "source_url": "https://www.mariowiki.com/Mario_Party",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 318,
+      "game_id": 26,
+      "section_type": "area",
+      "name": "Luigi's Engine Room",
+      "card": "Luigi's Engine Room is built around a network of red and blue doors that block or open different paths, switching automatically at the start of every turn, whenever someone lands on certain Happening Spaces, or when a player pays 20 coins to have a robot flip them early. Steam generators near the central engine can be triggered from Happening Spaces to blast a player up to a higher section of the board, often the fastest way past a blocked route. Every path on the board eventually funnels into Warp Pipes near the start, close to Boo, so getting stuck behind a wrong-color door usually costs a lap rather than the whole game. Watching which doors are open before committing to a path matters more here than on most other boards.",
+      "source_url": "https://www.mariowiki.com/Mario_Party",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 319,
+      "game_id": 26,
+      "section_type": "area",
+      "name": "Mario's Rainbow Castle",
+      "card": "Mario's Rainbow Castle is a sky board where the Star's location never changes -- it always sits on the main tower -- but every time someone buys a Star, the tower rotates to reveal Bowser instead, who charges 40 coins for a worthless Ztar that wastes coins without affecting anyone's Star count. Any player landing on a Happening Space can also spin the tower early, so the board can flip from Star to Bowser without warning. Because the Star's fixed position makes routing simple, the real skill on this board is timing your approach so you don't arrive right when Bowser is waiting instead.",
+      "source_url": "https://www.mariowiki.com/Mario_Party",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 320,
+      "game_id": 26,
+      "section_type": "area",
+      "name": "Bowser's Magma Mountain",
+      "card": "Bowser's Magma Mountain only opens up after every other board has been played once and costs 980 coins to unlock, so it's a late-game board rather than a starting one. Its gimmick is a series of stone heads offering 10-coin shortcuts: accept one and a roulette block decides whether you get the shortcut or are forced back onto the long path. A later purple stone head offers the same gamble for free, but choosing wrong there sends you straight to Bowser, who takes either 20 coins or a Star depending on the roll. Happening Spaces here turn every Blue Space into a Red Space until the board resets, so a run of good luck can turn bad in a single turn.",
+      "source_url": "https://www.mariowiki.com/Mario_Party",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 321,
+      "game_id": 26,
+      "section_type": "item",
+      "name": "The Mushroom Shop's turn-changing blocks",
+      "card": "Mario Party's Mushroom Shop sells one-time boosts rather than carried items: a 200-coin Plus Block or 100-coin Minus Block randomly adds or subtracts coins, a Speed Block only rolls 8 to 10 while a Slow Block only rolls 1 to 3, and a Warp Block swaps your position with another player outright. An Event Block instead summons Boo, Koopa Troopa, or Bowser at random. These are bought between games rather than found on the board, so they change your next game rather than the one in progress, and a new player is often surprised that buying one has no effect until the following round starts. The Lucky Box and Casino Box change how your saved coins behave between sessions rather than during a single board game.",
+      "source_url": "https://www.mariowiki.com/Mario_Party",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 322,
+      "game_id": 26,
+      "section_type": "mechanic",
+      "name": "Mini-Games and Bonus Stars in Mario Party",
+      "card": "Which kind of minigame you get depends on the color of space everyone lands on: all Blue or all Red spaces gives a 4-player free-for-all, a 2-2 split of colors gives a team game, and one player on the odd color out plays alone against the other three. A Happening Space's color is decided at random before the minigame is picked. Unusually for the series, Mario Party's own minigames can take coins away from the losing side as well as reward the winners, so a bad minigame can cost as much as a bad board turn. At the very end of a game, three Bonus Stars go out for the most coins earned specifically in minigames, the most coins held overall, and the most Happening Spaces landed on, which means a player who never bought a Star can still win outright if they lead in all three categories.",
+      "source_url": "https://www.mariowiki.com/Mario_Party",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 323,
+      "game_id": 26,
+      "section_type": "boss",
+      "name": "Eternal Star and the Baby Bowsers",
+      "card": "Eternal Star is a bonus board that only opens once you've collected 100 Stars and played every other board at least once, and its gimmick replaces the usual Star Space with seven Baby Bowsers stationed around the board. To take a Star from one, you pay 20 coins and then have to roll higher than the Baby Bowser's own Dice Block -- your roll is capped at 8 to 10, but the Baby Bowser can roll anything, so the odds favor the house. Losing the roll costs you a Star instead of granting one. At the center sits Bowser himself, who takes a Star (or 20 coins if you have none) from anyone who reaches him, sends them back to the start, and scrambles the board's warp routes. A Happening Space here sends everyone back to start too, though it leaves the warp routes as they were.",
+      "source_url": "https://www.mariowiki.com/Mario_Party",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
     }
   ],
   "genre_patterns": [

@@ -184,6 +184,12 @@
       "app_id": "",
       "app_name": "Hades",
       "expected": "protect_progression"
+    },
+    {
+      "name": "the five Mario Party shortcuts are low narrative by name (58 phase 1)",
+      "app_id": "",
+      "app_name": "Mario Party 6",
+      "expected": "low_narrative"
     }
   ],
   "description": "Title-name resolution widened 2026-08-18 by D19: a title recognised from the question text has no AppID to look up, so the name tables must carry the same two profiles. Before that, only 'State of Emergency' resolved by name."

@@ -505,6 +505,16 @@ which goes on their own checklist.
   wrong boss, steered by the top attached note. The block's lane has the four block fixes; the rest
   go to the roadmap. The Deck's chat gained eight turns from these rows; the backup holds the
   chat as it was, to be put back at the end of the device work.
+- **2026-09-18, the Deck handed over, the first note lane landed.** Another session, running the
+  maintainer's plan 61 verification, asked for the Deck; my device work was done for the moment, so
+  the keep-awake lease was released and the Deck handed over, to be asked back for the library
+  install and the block re-checks. Its docs commit swept two of this session's bookkeeper edits out
+  of the shared folder; the content was right and it was left alone, a second instance of the
+  staging lesson. One temporary read tunnel had leaked and was closed. Lane F landed: 41 notes for
+  the five Mario Party games, every one from a Super Mario Wiki page read that day, in the lane's
+  own words, plus "mario party" added to the low-story title list because a new game must carry a
+  spoiler rating. The library on the branch is now 30 games and 334 notes; lane G's five games and
+  the block's four fixes still in progress.
 
 ---
 

@@ -1,0 +1,20 @@
+{
+  "rowId": "PRESET-ONE-LINE-04",
+  "rowText": "Decode-mode churn half: with the knowledge base on and a covered game running, sample the frame rate the way PRESET-STREAM-ANIM-01 did (8s of requestAnimationFrame timestamps) with decode mode on so both chips churn and then scroll: expect a flat 60fps with no gap over ~50ms.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T10:05",
+  "setup": {
+    "game_running": "Half-Life 2 (appid 220)",
+    "use_local_knowledge_base": true,
+    "preset_chip_animation": "decode (unchanged from baseline)",
+    "note": "Speed-by-eye already PASSED 2026-09-17 (~27px/s); this row was owed the decode-mode timing sample."
+  },
+  "steps": [
+    { "action": "Sampled 480 requestAnimationFrame timestamps (about 8 seconds) on the panel while the preset chip carousel was on screen scrolling/churning in decode mode.", "measured": { "frameCount": 480, "avgFrameGapMs": 16.66, "maxFrameGapMs": 16.8, "framesOverFiftyMs": 0, "approxFps": 60.01 } }
+  ],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "The chip animation ran at a smooth, steady 60 frames a second for the full 8-second check, with no single frame taking longer than about 17 milliseconds -- no stutter or slow frame at all.",
+  "notes": "This closes the decode-mode half; the reduced-motion half stays on the maintainer's page per plan section 8 question 7 (the rig does not touch Steam's own accessibility settings)."
+}

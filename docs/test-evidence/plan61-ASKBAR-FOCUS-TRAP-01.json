@@ -1,0 +1,22 @@
+{
+  "rowId": "ASKBAR-FOCUS-TRAP-01 (new sighting, not a scheduled row)",
+  "rowText": "Sighted while trying to run W2-R5 and KB-FLOOR-01 on Half-Life 2: after filling the Ask box from a pinned chip, the D-pad cannot reach the Ask button.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T09:45-10:05",
+  "setup": {
+    "game_running": "Half-Life 2 (appid 220)",
+    "ask_mode": "strategy",
+    "trigger": "Pressed A on the Ask box once (this opened the on-screen keyboard by mistake -- the driver rules forbid typing, so B was pressed immediately to close it with no text entered). From then on, in this same chat, the problem below was reproducible."
+  },
+  "steps": [
+    { "action": "Select a pinned chip (A) so the Ask box fills with its text.", "observed": "Box fills correctly every time; the text is visible in the box." },
+    { "action": "Press Down from the filled Ask box, aiming for the Ask button below it.", "observed": "The ring does not move. Confirmed 5 separate times across 2 fresh reopens of the panel and one full close-and-reopen of the whole Quick Access Menu. A different signal (document.activeElement) reports having moved to the Ask button or the mode button, but the actual visible ring (Steam's own gamepad focus) stays on the input box -- these two disagree, and only the ring is what a person on the couch actually sees." },
+    { "action": "Press Right from the same spot.", "observed": "Same result: no movement of the visible ring." },
+    { "action": "Press Up from the same spot.", "observed": "This works every time -- the ring climbs back out to the chip row above." }
+  ],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "FAIL (new bug, not one of tonight's scheduled rows)",
+  "verdictSentence": "Once the Ask box has been filled from a suggested question, a person using only the D-pad cannot press Down or Right to reach the Ask button -- the highlighted control is stuck on the text box, and only Up gets them back out. The only way found tonight to send that question was not available with a controller alone.",
+  "notes": "First noticed right after the on-screen keyboard was opened and closed once on this box; it kept happening afterward in the same chat even after fully closing and reopening the plugin panel and the whole Quick Access Menu, so it is not just a one-off graphical glitch. It may clear on a full game change or Steam restart -- not confirmed either way tonight. This blocked two scheduled rows on Half-Life 2, W2-R5 and KB-FLOOR-01's on-topic half, which need a fresh question sent and answered; see their own evidence files for the blocked note. Recommend filing this as its own bug for a real fix rather than working around it, since a person who only has a controller would be stuck the same way."
+}

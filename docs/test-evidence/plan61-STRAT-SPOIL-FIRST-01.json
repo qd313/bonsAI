@@ -1,0 +1,25 @@
+{
+  "rowId": "STRAT-SPOIL-FIRST-01",
+  "rowText": "Name-first boss question. Portal 2 running, Strategy, masking on, streaming on. Ask 'wheatley fight'. Pass when Wheatley's tactics are plain text from the first streamed word with no mid-stream chip. Compare with 'how do I beat wheatley'. Then reopen the chat from the slot list: still plain.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T10:12-10:15",
+  "setup": {
+    "game_running": "Portal 2 (appid 620)",
+    "ask_mode": "strategy",
+    "masking": "on (strategy_spoiler_masking_enabled: true, unchanged)",
+    "question": "wheatley fight",
+    "note": "Portal 2 was confirmed installed and in Steam's own library tonight, resolving the 2026-09-15 vs SSH disagreement noted in the plan -- the SSH read was the correct one; Portal 2 launched normally."
+  },
+  "steps": [
+    { "action": "Pinned 'wheatley fight' as a chip, selected it, sent it.", "observed": "Reply streamed and finished (43.1s). No masked/spoiler chip appeared at any point; the whole answer, including specific boss tactics (bomb throws, portal placement, corrupted cores), rendered as plain text from the start. A 'Wheatley -- From the Portal wiki' card attached below the reply." },
+    { "action": "Closed and reopened the whole plugin panel, then re-read the same chat.", "observed": "The reply still reads as plain text, no box -- unchanged after the reopen." }
+  ],
+  "plugin_log_lines": [
+    "[2026-09-18 10:12:02,595][INFO]: run_game_ai_request: host=127.0.0.1:11434 game='Portal 2' appid=620 question_len=14",
+    "[2026-09-18 10:12:45,710][INFO]: run_game_ai_request: completed in 43.1s"
+  ],
+  "screenshots": ["c:\\Users\\still\\Documents\\BonsAI\\screenshots\\DeckCapture_20260918_101335_auto.png"],
+  "verdict": "PASS",
+  "verdictSentence": "Naming the boss up front worked as intended: the fight advice came back as plain, readable text right away, with no hidden or blurred box, and stayed that way after closing and reopening the chat.",
+  "notes": "The comparison ask ('how do I beat wheatley') was pinned and ready, but a separate, already-known problem (walking down into a finished reply loses the highlighted control partway through, filed 2026-09-18 09:45 in tonight's progress log) stopped the D-pad from reaching that second chip in time; only the first phrasing was confirmed. The row's main pass condition (plain text, no mid-stream chip, still plain after reopening) is fully met on the phrasing that was tested."
+}

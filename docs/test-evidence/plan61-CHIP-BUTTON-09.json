@@ -1,0 +1,38 @@
+{
+  "rowId": "CHIP-BUTTON-09",
+  "rowText": "A game the notes cover (Half-Life 2), knowledge base on | The Tip chip shows a small square dot in the character's colour before its label, not the word | previously owed -- no covered game was running, so the Tip chip never appeared.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T09:17-09:37",
+  "setup": {
+    "game_running": "Half-Life 2 (appid 220)",
+    "use_local_knowledge_base": true,
+    "ask_mode": "strategy",
+    "chat_used": "existing chat (2 turns, gonarch/black-mesa slot)",
+    "settings_changed_for_this_row": {
+      "dev_frozen_test_chips": { "from": ["how do i kill the big armoured bug boss", "how does the story end", "what does the pickaxe do"], "to_during_test": [] },
+      "dev_force_session_rag_chips": { "from": false, "to_during_test": true }
+    }
+  },
+  "steps": [
+    {
+      "action": "Opened plugin with Half-Life 2 running, knowledge base on, dev_frozen_test_chips cleared so the plugin's own chip choice shows instead of a frozen TEST batch.",
+      "observed": "Single preset chip carousel slot (preset_single_chip=true) rotated through several labels over the session: 'How do I find Ollama on my LAN?', then (after fully closing and reopening the Quick Access Menu with the GUIDE+A chord so the carousel re-fetched) 'How do I beat Strider?', 'Tips for Ravenholm in this game?', and 'Recommended controller layout?'."
+    },
+    {
+      "action": "Set dev_force_session_rag_chips=true (Developer-tab QA override, per src/hooks/useSuggestedPromptChips.ts) so a knowledge-base-sourced chip is guaranteed rather than left to the normal 30% roll, then fully closed and reopened the panel.",
+      "observed": "'How do I beat Strider?' and 'Tips for Ravenholm in this game?' both appeared -- both are genuine Half-Life 2 knowledge-base card titles (confirmed against docs/test-evidence's corpus manifest: 'Half-Life 2 -- Strider' under combineoverwiki.net; Ravenholm is the level the Strider/Antlion cards discuss), and neither string exists in src/data/presets.ts's static preset list, so these are real RAG-sourced chips, not the plugin's fixed defaults."
+    },
+    {
+      "action": "Read the DOM for '.bonsai-preset-chip-tip-badge' (the dot element MainTabPresetAnimatedChips.tsx renders only when a chip's ragTip flag is true) on every one of those chips.",
+      "observed": "No dot element was ever present -- '.bonsai-preset-chip-tip-badge' matched nothing for 'How do I beat Strider?', 'Tips for Ravenholm in this game?', or the generic chips. hasDotBadge was false in every read."
+    }
+  ],
+  "plugin_log_lines": [],
+  "screenshots": [
+    "c:\\Users\\still\\Documents\\BonsAI\\screenshots\\DeckCapture_20260918_093122_auto.png",
+    "c:\\Users\\still\\Documents\\BonsAI\\screenshots\\DeckCapture_20260918_093702_auto.png"
+  ],
+  "verdict": "FAIL",
+  "verdictSentence": "With Half-Life 2 running and the knowledge base on, the suggestion chip did show real Half-Life 2 tips (Strider, Ravenholm) once we forced the knowledge-base chip on, but the small coloured dot that is supposed to mark it as a tip never showed up next to the text -- so a person looking at the chip has no way to tell it came from the game's own notes.",
+  "notes": "Read src/components/MainTabPresetAnimatedChips.tsx: the dot only renders when a chip's ragTip flag is true, and src/features/preset-carousel/sessionRagComposer.ts only sets that flag when the backend's candidate carries domain==='strategy' (py_modules/backend/services/knowledge_base_service.py line ~2162 does send domain='strategy' for these). The chip text and the badge appear to be produced by two different, disconnected checks, and the badge one is not lighting up even when the chip is genuinely knowledge-base-sourced. This looks like a real, reproducible defect rather than a setup problem -- worth filing as its own small bug rather than leaving CHIP-BUTTON-09 simply 'owed'."
+}

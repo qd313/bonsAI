@@ -1,0 +1,11 @@
+{
+  "rowId": "W1-R1 (Corpus update through the plugin)",
+  "rowText": "Ollama tab -> Update knowledge base. The tab shows the new version (the release date); a game question's Show details names it; 266 cards reachable.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T09:15 (checked, not run)",
+  "setup": {},
+  "steps": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "Not attempted tonight on purpose. The library installed right now (dated 18 September) is the exact one this whole session is meant to be testing, and pressing Update knowledge base -- or Install seed knowledge base -- could replace it with something else. Neither button was touched.",
+  "notes": "Per this session's own instructions: the 2026.09.18 library on internal storage is the library under test, so this row stays blocked for tonight rather than risk it."
+}

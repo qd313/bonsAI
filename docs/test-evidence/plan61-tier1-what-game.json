@@ -1,0 +1,26 @@
+{
+  "rowId": "SMOKE-H-tier1-what-game",
+  "rowText": "Tier 1 extra: 'What game am I playing?' with the game focused.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T09:39-09:41",
+  "setup": {
+    "game_running": "Half-Life 2 (appid 220)",
+    "ask_mode": "strategy",
+    "use_local_knowledge_base": true,
+    "question_source": "pinned TEST chip (dev_frozen_test_chips), never typed"
+  },
+  "steps": [
+    { "press": "select pinned chip 'what game am i playing', A to fill box", "expected": "box fills with the sentence, not sent" },
+    { "press": "A on ask", "expected": "reply streams and names Half-Life 2" }
+  ],
+  "reply_text": "Listen up, mate! You're in Half-Life 2, yeah? It's a proper shooter, but you gotta keep your head on a swivel. The main thing you need to know right now is how to use that Gravity Gun. It ain't just for picking up stuff; it's your ticket to getting those enemies off their feet. Use it for secondary pulls and holds, and don't be shy with those explosive barrels-they hit hard! Now, where you at in this game? Where are you at in Half-Life 2? A. Early in the game, exploring City 1 B. Later in the game, tackling the major conflict",
+  "kb_card_attached": "Gravity Gun -- From the Half-Life wiki",
+  "plugin_log_lines": [
+    "[2026-09-18 09:39:49,252][INFO]: run_game_ai_request: host=127.0.0.1:11434 game='Half-Life 2' appid=220 question_len=22",
+    "[2026-09-18 09:40:39,136][INFO]: ask_ollama: stream done model=gemma4:e2b-it-qat done_reason=stop eval_count=604 prompt_eval=1530 raw_len=687 visible_len=410 num_predict=2112 think=True",
+    "[2026-09-18 09:40:39,157][INFO]: run_game_ai_request: completed in 49.9s"
+  ],
+  "screenshots": ["c:\\Users\\still\\Documents\\BonsAI\\screenshots\\DeckCapture_20260918_094123_auto.png"],
+  "verdict": "PASS",
+  "verdictSentence": "Asked with Half-Life 2 running and focused, the plugin correctly said which game it was and gave real Half-Life 2 advice (the Gravity Gun) with a note card attached from the wiki, taking about 50 seconds."
+}

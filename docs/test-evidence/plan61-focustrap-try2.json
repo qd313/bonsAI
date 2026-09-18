@@ -1,0 +1,20 @@
+{
+  "rowId": "focus-trap recipe, try 2 (after Half-Life 2 exit)",
+  "rowText": "Start a brand-new, empty chat while the panel is showing a Session context row from another chat, then press Down, Right, Left, Down, Up from the question box; a hit is Down/Right/Left/Down all failing to move and only Up escaping.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T10:15, just after exiting Half-Life 2",
+  "setup": {
+    "game_running": "none (just exited Half-Life 2)",
+    "prior_chat": "a chat with 3 turns, Session context showing"
+  },
+  "steps": [
+    { "action": "Moved to the new-chat [+] slot and pressed A quickly.", "observed": "A ghost reply appeared first (the earlier chat's finished answer showing under the new chat, with Retry/Helpful/Copy reachable) -- this is the already-proven 'new chat shows the previous reply' bug, not tested further per instructions to skip it." },
+    { "action": "Closed and reopened the panel to clear the ghost, confirming the new chat was then genuinely empty except a Session context (1 turn) row.", "observed": "Empty, as expected -- close/reopen is the known fix." },
+    { "action": "From the empty new chat, pressed Down three times in a row (Session context toggle -> the chip carousel).", "observed": "Every Down press moved the ring to the next real control (Save-chat-area was skipped since this is a fresh chat with no saved messages; landed cleanly on the pinned test chip). No trap this try." }
+  ],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "CLEAN",
+  "verdictSentence": "This try did not reproduce the focus trap -- Down kept moving the highlighted control every time in this brand-new chat. Along the way the already-known ghost-reply bug showed up again by itself (not deliberately tried), confirming it is still there.",
+  "notes": "A different, new focus problem was found tonight on Half-Life 2's Ask box after a chip was selected (Down and Right stopped moving the ring there, only Up worked) -- written up separately as plan61-ASKBAR-FOCUS-TRAP-01.json. That one is not this recipe's trap, but is the same family of D-pad-gets-stuck problem."
+}

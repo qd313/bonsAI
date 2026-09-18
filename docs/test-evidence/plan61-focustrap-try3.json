@@ -1,0 +1,19 @@
+{
+  "rowId": "focus-trap recipe, try 3 (with Hades running)",
+  "rowText": "Start a brand-new, empty chat while the panel is showing a Session context row from another chat, then walk Down/Right/Left/Down/Up from the question box; a hit is Down/Right/Left/Down all failing to move and only Up escaping.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T10:06, Hades running",
+  "setup": {
+    "game_running": "Hades (appid 1145360)",
+    "prior_chat": "a chat with turns, Session context showing"
+  },
+  "steps": [
+    { "action": "Moved to the [+] new-chat slot and pressed A.", "observed": "The ghost-reply bug showed again briefly (already proven, not re-tested on purpose) -- closed and reopened the panel to clear it, per its own known fix." },
+    { "action": "From the now-genuinely-empty new chat (Session context (1 turn) showing), walked Down three times toward the question area.", "observed": "Every Down press moved the highlighted control along normally -- no trap this try." }
+  ],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "CLEAN",
+  "verdictSentence": "This try did not reproduce the focus trap in Hades either -- Down kept moving normally through a brand-new chat.",
+  "notes": "The separate Ask-bar problem (Down/Right stuck after a chip fills the box) was confirmed again in this same Hades session -- see plan61-ASKBAR-FOCUS-TRAP-01.json. That is a different control (the Ask box, after a chip is chosen) than this recipe's question-box-in-a-new-chat test, so both are recorded separately."
+}

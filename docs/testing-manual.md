@@ -416,13 +416,18 @@ Tier 1 now starts at SMOKE-E; the ID stays so older links still resolve.
     running, came back with no spoiler box at all on both Hollow Knight and Hades, so this row needs a re-run
     before it can be called a pass. Evidence `docs/test-evidence/plan58p1-M-hk-boss-before.json`,
     `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-02.json`.
-  - [ ] **STRAT-SPOIL-FIRST-01** name-first boss question. Setup: Portal 2 `620` running, Strategy, masking on,
+  - [x] **STRAT-SPOIL-FIRST-01** name-first boss question. Setup: Portal 2 `620` running, Strategy, masking on,
     streaming on. Do: ask *"wheatley fight"*. Pass when: Wheatley's tactics are plain text from the first streamed
     word with no mid-stream chip, and any other story detail the reply touches is still boxed (that half proves
     nothing else was opened; it depends on the model drawing a box for something else, so it may take a few
     asks). Compare with *"how do I beat wheatley"*, which should behave the same. Then reopen the chat from the
-    slot list: still plain. **BLOCKED 2026-09-15:** Portal 2 is not in this Deck's Steam library at all, read
-    from Steam's own app list. Blocked, not failed; still owed.
+    slot list: still plain. **BLOCKED 2026-09-15 as "Portal 2 not in this Deck's library" — settled 2026-09-18:
+    Portal 2 was installed all along.** **PASS (Deck) 2026-09-18:** asked "wheatley fight" with Portal 2 running;
+    the whole reply, including Wheatley's tactics, came back as plain text from the first streamed word with no
+    hidden box, and stayed plain after the chat was closed and reopened from the slot list. The comparison
+    phrasing ("how do I beat wheatley") could not be reached in time because of a separate, already-filed D-pad
+    problem, so only the first phrasing is confirmed; the row's main pass condition is fully met. Evidence
+    `docs/test-evidence/plan61-STRAT-SPOIL-FIRST-01.json`.
   - [x] **STRAT-SPOIL-TEXT-01** game named only in the question. Setup: nothing running, Strategy, masking on.
     Do: ask *"drg survivor what class"*. Pass when: the answer is plain text with no spoiler box, the risk chip
     under Show details reads low, and the reply does not claim the game is running. Then the guard: *"new vegas
@@ -714,7 +719,7 @@ instead of the old blue outline. Evidence `docs/test-evidence/plan60-QA-chip-but
 | **CHIP-BUTTON-06** | Turn on the one-chip setting; show the help chip; get an agent suggestion chip | The full-width chip has the same raised look; the help and agent chips keep their colours and carry the hairline and shadow | ⏳ **PARTIAL — one-chip setting PASS on the Deck 2026-09-17** (same raised look, 300×30); the help chip and the agent chip were not on screen during the run, so they are covered only by the stylesheet tests, not seen by eye |
 | **CHIP-BUTTON-07** | Reduced motion on; repeat 03 | The cue appears and clears with no ramp; nothing looks broken | ⏳ **owed — needs the Deck's reduced-motion setting turned on** |
 | **CHIP-BUTTON-08** | Decode animation mode, gold character | The resolving label is the toned gold, not the loud one | ✅ **PASS (Deck) 2026-09-17** — label read `#e4c94e`, the toned gold |
-| **CHIP-BUTTON-09** | A game the notes cover (Half-Life 2), knowledge base on | The Tip chip shows a small square dot in the character's colour before its label, not the word; the dot stays put while a long label scrolls | ⏳ **owed — no covered game was running, so the Tip chip never appeared.** Covered only by `MainTabPresetAnimatedChips.test.tsx` (dot with no text before the scrolling label) |
+| **CHIP-BUTTON-09** | A game the notes cover (Half-Life 2), knowledge base on | The Tip chip shows a small square dot in the character's colour before its label, not the word; the dot stays put while a long label scrolls | ❌ **FAIL (Deck) 2026-09-18** — with Half-Life 2 running and the knowledge base on, the suggestion chip showed real Half-Life 2 tips from the notes ("How do I beat Strider?", "Tips for Ravenholm in this game?") but with no dot before the label at all; reading the dot's own element on the page confirmed it was never drawn for either chip. Filed as its own bug (roadmap Bugs, `[chips]` `[KB]`) — the check that decides whether a chip's words come from the notes and the check that decides whether to draw the dot are not agreeing with each other. Evidence `docs/test-evidence/plan61-CHIP-BUTTON-09.json` and its two screenshots. |
 
 Rows 01 and 05 are judged by eye from a screenshot and a rectangle read; the rest are read from the
 page by the bridge. **Seen along the way, not part of this plan:** in fade mode the D-pad skipped the

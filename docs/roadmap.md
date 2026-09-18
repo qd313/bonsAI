@@ -80,6 +80,15 @@ starts work outside this.
   sizes. Evidence `docs/test-evidence/plan55-BUG-cursor-placeholder-offset.json`. **Confirmed on the
   Deck 2026-09-17:** the placeholder is still drawn in a smaller, tilted font than the text you type, 2
   to 3 pixels off from it. Evidence `docs/test-evidence/plan57-QA-cursor-placeholder-offset.json`.
+- ★ `[chips]` `[KB]` **A suggestion chip pulled from the game's notes shows no Tip mark** — **OPEN, found
+  2026-09-18 on the Deck with Half-Life 2 running.** The knowledge base was on, and the suggestion chip
+  showed real tips straight from the game's own notes — but the small coloured dot that is supposed to mark
+  a chip as coming from the notes never appeared, so a person looking at the chip has no way to tell it is
+  a real tip and not a guess. The dot is only meant to light up when a chip is marked as coming from the
+  notes; these chips did carry real note content but arrived without that mark, or lost it on the way to
+  the chip, so the two checks that decide "is this a note chip" and "should the dot show" are not agreeing
+  with each other. Row **CHIP-BUTTON-09**. Evidence `docs/test-evidence/plan61-CHIP-BUTTON-09.json` and its
+  two screenshots.
 - ★ `[focus]` **Up from the Retry icon does not return to the answer** — **OPEN, read again 2026-09-16.**
   With the thumbs-up/thumbs-down row greyed on a stopped reply, Down from the answer now lands on Retry — but
   Up from Retry does not go back to the answer's last section the way it should. **Read again 2026-09-16:**
@@ -92,7 +101,9 @@ starts work outside this.
   Red Dead ending reply with a real hidden block on screen: **Down left it normally**, straight onto the branch picker's first
   button, and every stop on the walk was fully visible. So the hidden state does not trap on its own. Most likely the same
   underlying fault as the stuck panel below — both are a hop that dies only sometimes — and best closed with it rather than
-  chased separately. Evidence `docs/test-evidence/round35-spoiler-block-down-and-up.json`.
+  chased separately. Evidence `docs/test-evidence/round35-spoiler-block-down-and-up.json`. **Next thing to try
+  (2026-09-18):** the panel-trap entry below now has a known trigger, opening and closing Steam's own on-screen
+  keyboard on the question box — worth trying on this hidden-block case too.
 - ★ `[focus]` **The Open Permissions jump lands one toggle above the one it was asked for** — **OPEN,
   measured 2026-09-16 on build 0fbecb6.** The Open Permissions button under a blocked reply is a real
   D-pad stop now and A on it does reach the Permissions tab, but the highlight lands on "Save files to
@@ -197,7 +208,8 @@ starts work outside this.
   reply finishes in another chat, and the new chat shows that finished answer, with a placeholder standing in
   for the question and working Helpful, Not really and Read aloud buttons underneath it. Closing and
   reopening the panel clears it every time. Three hits tonight in all, two by accident and one on this
-  recipe. Evidence `docs/test-evidence/plan61-ghostreply-try1.json`.
+  recipe. Evidence `docs/test-evidence/plan61-ghostreply-try1.json`. **A fourth sighting 2026-09-18,** on its
+  own while a try at the panel-trap bug above was being set up, same shape as before. No new evidence file.
 - ★★ `[chat]` **A chat that is still writing does not look busy from another chat** — **OPEN, found
   2026-09-18.** While one chat is still writing and you switch to another chat, nothing tells you the first
   one is busy: its dot in the chat row looks like every idle chat's dot, with no hollow cyan ring and no spark
@@ -272,30 +284,19 @@ starts work outside this.
   permanently trapping control. **A fix landed 2026-09-05, but the entry stays here rather than in Verify**, because the
   fault never reproduced on demand, so nothing proved the fix against it. It closes only when the panel is driven hard
   over time and the state does not come back. The unrevealed-spoiler entry above is most likely the same fault and closes
-  with it. The mechanism, the signature to chase and every run:
+  with it. The mechanism, the signature to chase and every run, including how it was finally reproduced on
+  demand:
   [detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
-  **Reproduced on demand 2026-09-15, which this entry has been waiting for.** It happened twice in one
-  sitting, both times within seconds of starting a **brand new, empty chat while the panel was showing a
-  Session context row** — that is, while the session still carried turns from another chat. Down, Left and
-  Right all did nothing from the question box and only Up escaped; the character button, the mode chip and
-  the Ask button were all on screen and none could be reached. Emptying the box first made no difference, so
-  it is not the text. Restarting the plugin cleared it both times. Three walks in the same sitting where
-  that row was absent, or the chat already had a reply in it, all reached the Ask button normally. That is
-  five observations, not proof of a cause, but it is a recipe to try. Evidence
-  `docs/test-evidence/plan48-BUG-ask-input-ring-trap-2026-09-15.json`.
-  **Five more runs on 2026-09-15 evening, on build 1ac4d7a, and it did not come back once.** Run 1: a new chat
-  started from a chat with eight turns while the Session context row showed. Run 2: the box filled from a chip
-  press, then every direction. Run 3: a question asked first so the row carried a live turn, then a new chat.
-  Run 4: the same, plus the box filled from a chip. Run 5: an empty new chat with the row still showing one
-  turn, after the plugin was reopened with Hades running. Every Down, Left and Right from the box moved where
-  it should, every time. The entry stays **OPEN**. Evidence
-  `docs/test-evidence/plan55-trap-run1-walk-after-new-chat.json`,
-  `docs/test-evidence/plan55-trap-run2-chip-fill-then-dpad.json`,
-  `docs/test-evidence/plan55-trap-run3-new-chat-with-live-turn.json`,
-  `docs/test-evidence/plan55-trap-run4-chip-fill-with-live-turn-row.json`,
-  `docs/test-evidence/plan55-trap-run5-empty-chat-session-row-hades-running.json`. **One more clean run
-  2026-09-18, build `0589565`, on the same 2026-09-15 recipe:** Down reached Ask and Up climbed back out,
-  no trap. Evidence `docs/test-evidence/plan61-focustrap-try1.json`.
+  **The trigger is now known, found 2026-09-18 with a game running.** Pressing A on the question box opens
+  Steam's own on-screen keyboard; once B closes it, Down and Right out of the box stop working — the page's
+  own idea of what is focused moves on to the Ask button or the mode button, but the highlight ring a person
+  actually sees stays on the box, and only Up still gets out. It happened five times across two panel
+  reopens and one full close-and-reopen of the whole quick access menu on Half-Life 2, and again in a
+  brand-new chat with Hades running; by the time Portal 2 was running it had cleared on its own, with no
+  restart needed. Three tries of the 15 September new-chat recipe the same night came back clean, so
+  opening the keyboard, not starting a new chat, looks like the real trigger. Evidence
+  `docs/test-evidence/plan61-ASKBAR-FOCUS-TRAP-01.json` (the sighting), `docs/test-evidence/plan61-focustrap-try2.json`
+  and `-try3.json` (the clean tries).
 - ★★★ `[reply]` **A name-withheld boss question on a story-protected game comes back with no spoiler box** —
   **OPEN, found 2026-09-18.** Nothing running, no consent phrase anywhere in the chat: asked about "the boss
   past the crystal spike area … the one that looks just like me" in Hollow Knight, the reply named Broken
@@ -553,9 +554,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   strength of a file nobody can open, and whether they really passed is unknown. Nothing here says the plugin is broken; it says
   we do not know. Re-run all twelve together in the next automated testing session. Batch **QA-EVIDENCE-GAP-01**, listed with
   each row in [testing.md](testing.md). Until a run produces real evidence, treat all twelve as unknown rather than as a pass.
-- ★ `[QA]` **Three rows named on this page have no steps written down anywhere** — follow-up found 2026-09-17: **TAB-BAR-GHOST-01**,
-  **KB-FOLLOWUP-01** and **KB-KILLSWITCH-01** are named in this file but neither testing document says what to do for them
-  yet. Not written up, not run.
 
 ### Bugs that need verification
 - ★ `[platform]` **Clear all plugin data left three things behind** — **VERIFY.** Found 2026-09-05 when the maintainer
@@ -611,7 +609,7 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   [Why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way).
 ### Features that need verification
 
-- ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60 (D110).** Each chip now looks raised: a thin light line along its top edge and a soft shadow beneath it. The two chips sit 6 pixels apart instead of 4. In decode, static and carousel mode there is now 8 pixels of open space between the chips and the question box, where before they touched (fade mode was already open and keeps its own spacing). The word "Tip" became a small dot, the colour on the tags and on the resolving-text label is quieter, and the chip the controller is on now shows a light bar along its bottom edge instead of the old blue outline — a ring around the chip that nobody could actually see is gone too. Passed on the Deck by measurement: rows 02, 03, 04, 05 and 06 (the one-chip check), and 08. Still owed: the maintainer's own look at rows 01 and 05, from the three screenshots named in the evidence file; row 07 (reduced motion); row 09 (the Tip dot with a covered game running); and a look at the help and agent chips, which were not on screen during this run. Italics were tried earlier for the label and turned down. [Plan](planning/60-chip-button-restyle.md) · evidence `docs/test-evidence/plan60-QA-chip-button.json`.
+- ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60 (D110).** Each chip now looks raised: a thin light line along its top edge and a soft shadow beneath it. The two chips sit 6 pixels apart instead of 4. In decode, static and carousel mode there is now 8 pixels of open space between the chips and the question box, where before they touched (fade mode was already open and keeps its own spacing). The word "Tip" became a small dot, the colour on the tags and on the resolving-text label is quieter, and the chip the controller is on now shows a light bar along its bottom edge instead of the old blue outline — a ring around the chip that nobody could actually see is gone too. Passed on the Deck by measurement: rows 02, 03, 04, 05 and 06 (the one-chip check), and 08. **Row 09 failed on the Deck 2026-09-18** — a real knowledge-base chip showed with no Tip dot — and is filed as its own bug, below. Still owed: the maintainer's own look at rows 01 and 05, from the three screenshots named in the evidence file, and row 07 (reduced motion), both on the maintainer's own page; and a look at the help and agent chips, which were not on screen during this run. Italics were tried earlier for the label and turned down. [Plan](planning/60-chip-button-restyle.md) · evidence `docs/test-evidence/plan60-QA-chip-button.json`.
 
 - ★ `[ollama]` **Pulled models join the model try order** — **MOSTLY VERIFIED on the Deck 2026-09-06, one case left.**
   A model pulled from the picker landed at the **bottom** of the text list, and showed up in the vision list because it can
@@ -624,16 +622,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 - ★★ `[chat]` **The game a chat belongs to, above its title** — **VERIFY.** Shipped 2026-08-30 in quiet text above the slot title;
   only chats created after that date carry the name. Row **CHAT-SLOTS-V3-14c**. It costs a line of height, which cuts against the
   vertical-space goal; decide whether it shows always or only when the row has focus.
-- ★★ `[QA]` **Deferred manual QA** — **VERIFY.** SMOKE-A, SMOKE-F, SMOKE-E and SMOKE-H all pass on the Deck: SMOKE-A
-  2026-09-03; SMOKE-F re-confirmed 2026-09-17 (all four built-in commands answered with the same fixed wording,
-  evidence `docs/test-evidence/plan57-QA-SMOKE-F.json`); SMOKE-E's spoiler tap-to-reveal path 2026-09-04; SMOKE-H
-  2026-09-16. SMOKE-B was retired 2026-09-03 (D57 #6). Left: **SMOKE-C** is blocked by the Open Permissions jump bug,
-  above, not owed as a test of its own. **Two of the three Tier 1 extras passed on the Deck 2026-09-18:** the last
-  question and answer were still on screen after closing and reopening the panel, seen twice; and one Ask in Speed
-  and one in Expert both worked as expected. Evidence `docs/test-evidence/plan61-tier1-speed.json`,
-  `docs/test-evidence/plan61-tier1-expert.json`. Left: **"What game am I playing?"** with a game focused — needs a
-  game running, scheduled for the games block. Round in progress:
-  [plan 31](planning/31-deck-verification-round.md).
 - ★★ `[reply]` **Thinking line fixes from 2026-08-07/08** — **VERIFY.** Emoji upright, lazy status tag survives, no bare-emoji phase
   changes, one writer. Five of seven rows pass on the Deck: **THINKING-SLOW-01** and **THINKING-SPOILER-01** (2026-09-04);
   **THINKING-COPY-01**, **THINKING-LIVE-01** and **THINKING-EMOJI-01** (2026-09-17) — the first status line held about 5.5
@@ -676,14 +664,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   three-billion cap — which is what happens on this Deck, confirmed. **Still owed:** the timing comparison (**PRELOAD-01**), which
   needs a Deck whose Ask model is under the cap, and the memory-pressure case (**PRELOAD-02**). Open and untouched: whether the
   model survives the Deck sleeping.
-- ★★★★ `[chips]` **Preset row: two chips across, with scrolling labels** — **VERIFY.** Rebuilt 2026-09-01 under D43. Two 30px chips
-  side by side, a long label scrolls through Steam's `Marquee`, the help chip owns the row until dismissed. The dock went 245 to
-  161px. Rows 02 and 03 passed on device; 01b passed 2026-09-03. **Row 04's speed-by-eye half passed on the Deck 2026-09-17:**
-  the long label crawls at about 27 pixels a second, close to the intended 25. Evidence
-  `docs/test-evidence/plan57-QA-PRESET-ONE-LINE-04.json`. Left in row 04: the decode-mode churn check, reduced motion, and
-  the maintainer's own by-eye feel, already on their checklist. Closes the label-overflow bug. Since 2026-09-17 (plan 60),
-  the two chips are 147 wide with a 6 pixel gap between them, not 148 and 4.
-  [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).
 - ★★★★★ `[chat]` **Named chat slots** — **VERIFY.** Redesign v3 landed 2026-08-30; the layout inverts to slot row, transcript, presets,
   Ask bar. Most rows pass on device. **05b passed on the Deck 2026-09-18:** returning to the chat still writing
   showed the question and the partial text at once, nothing missing. Evidence
@@ -892,11 +872,14 @@ ones from this month are D81 to D88.
   landed 2026-09-15, four commits, unit-tested.** A game known only by name now opens its box; naming the boss
   first opens it on screen, in copied text and in read-aloud; a no-story game named in the question gets the same
   relaxed prompt its risk chip already assumed. **STRAT-SPOIL-TEXT-01 passed on the Deck 2026-09-15, both halves.**
-  Left: **STRAT-SPOIL-NAME-01** and **STRAT-SPOIL-FIRST-01**, both read as blocked on 2026-09-15 because Doom 64
-  and Portal 2 read as not installed — a library check on 2026-09-18 shows Doom 64: Retribution installed as an
-  emulated shortcut and Portal 2 installed, so both can now be run. From the older **STRAT-SPOIL-DRG-01** block:
-  **DRG-01b/c** (knowledge base off, corpus absent), **HADES-UNNAMED-STREAM-01**, and **HADES-UNNAMED-01** (mixed
-  results on 2026-09-15). [Plan 54](planning/54-spoiler-rules-gaps.md).
+  **STRAT-SPOIL-FIRST-01 passed on the Deck 2026-09-18:** naming Wheatley up front in Portal 2 kept the whole
+  answer in plain text from the first streamed word, with no hidden box, and it was still plain after closing
+  and reopening the chat; the old "Portal 2 not in the library" note is settled — it was installed all along.
+  Evidence `docs/test-evidence/plan61-STRAT-SPOIL-FIRST-01.json`. Left: **STRAT-SPOIL-NAME-01** (a library check
+  on 2026-09-18 shows Doom 64: Retribution installed as an emulated shortcut, so it can now be run), and from
+  the older **STRAT-SPOIL-DRG-01** block: **DRG-01b/c** (knowledge base off, corpus absent),
+  **HADES-UNNAMED-STREAM-01**, and **HADES-UNNAMED-01** (mixed results on 2026-09-15). [Plan
+  54](planning/54-spoiler-rules-gaps.md).
 - ★★ `[KB]` **"Not in my notes" line** — **VERIFY, built and shipped 2026-09-07, device check failed the same
   day.** The line itself is in the code, but on the Deck nothing could make it appear: ten questions asked first
   all attached a note, so the one question meant to show the line never got the chance. The note search has
@@ -1059,10 +1042,25 @@ copied line for line, nothing reworded: [archive/roadmap-done-v0.5.0.md](archive
   Ask works end to end, and the Ollama tab comes back clean after a wipe. The one piece left — the About tab's
   own walk down its four links — passed on the Deck 2026-09-18.
   [Full detail](archive/roadmap-completed.md#shell-state-and-tab-payload-extraction-refactor-step-8).
+- ★ `[QA]` **Three rows named on this page have no steps written down anywhere** — **DONE.** All three now
+  have somewhere to point to: **TAB-BAR-GHOST-01** turns out to have had a full row in the manual testing
+  document all along, under its own section; **KB-FOLLOWUP-01** and **KB-KILLSWITCH-01** had steps written
+  for them 2026-09-18 and landed as rows in the coverage table. Nothing shipped for this one, so there is no
+  code entry to archive.
 - ★ `[reply]` **Attaching a screenshot puts a line of technical text at the bottom of the answer** — **DONE,
   confirmed on the Deck 2026-09-18.** A screenshot was attached and asked about, and the reply ended with no
   bracketed debug line. Row **ATTACH-DEBUG-01**.
   [Full detail](archive/roadmap-bugs-fixed.md#attaching-a-screenshot-puts-a-line-of-technical-text-at-the-bottom-of-the-answer).
+- ★★★★ `[chips]` **Preset row: two chips across, with scrolling labels** — **DONE.** The decode-mode churn
+  check passed on the Deck 2026-09-18 — a flat 60 frames a second, no slow frames — the last thing the rig had
+  left to measure; the speed-by-eye half already passed 2026-09-17. What is left, reduced motion and the
+  maintainer's own feel for the speed, is on the maintainer's own page.
+  [Full detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).
+- ★★ `[QA]` **Deferred manual QA** — **DONE.** SMOKE-A, SMOKE-F, SMOKE-E and SMOKE-H all pass on the Deck, and
+  the three Tier 1 extras now all pass too — the last one, asking "What game am I playing?" with a game
+  running, passed 2026-09-18. SMOKE-B was retired 2026-09-03 (D57 #6). What is left, SMOKE-C, rides on the
+  still-open Open Permissions jump bug rather than being owed as a check of its own.
+  [Full detail](archive/roadmap-completed.md#deferred-manual-qa).
 
 **Closed 2026-09-17 (Deck QA worker):**
 

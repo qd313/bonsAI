@@ -1,0 +1,18 @@
+{
+  "rowId": "KB-VARIANT-01",
+  "rowText": "Point rag_corpus_path at a pre-bump corpus and confirm retrieval still attaches cards but Show details reads 'Keyword search (embed unavailable)'. Then rebuild and confirm it flips back to 'Keyword + meaning'.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T10:10",
+  "setup": {
+    "manifest_check": "Read both corpus manifests over SSH before touching any setting. Internal (current): /home/deck/.bonsai/rag/corpus-manifest.json, version 2026.09.18, published 2026-09-18T05:13:32Z. SD card (older, untouched): /run/media/deck/3506ff22-6d61-4f9d-8241-01bce3a91c6c/.bonsai/rag/corpus-manifest.json, version 2026.09.08, published 2026-09-08T02:26:28Z -- a genuine pre-bump corpus exists and is not blocked."
+  },
+  "steps": [
+    { "action": "A pre-bump corpus is available, so this row is not blocked by missing data.", "planned": "Point rag_corpus_path at the SD-card copy, ask a covered question, read Show details for 'Keyword search (embed unavailable)', then point it back and confirm it reads 'Keyword + meaning' again." },
+    { "action": "Did not change the setting", "reason": "Every step needs a fresh Ask sent and its Show details read afterward, and both of those are blocked in this chat right now by the Ask-bar and reply-panel focus problems written up separately. Changing rag_corpus_path without being able to complete the check and read the result back would leave the setting in an unconfirmed state, so it was left untouched (still /home/deck/.bonsai/rag, version 2026.09.18, read and confirmed unchanged)." }
+  ],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "A copy of the older knowledge base needed for this check does exist on the Deck's memory card, so this is not stuck on missing data -- it is stuck on the same D-pad problem stopping any new question from being sent in this chat tonight. Nothing was changed on the Deck for this check.",
+  "notes": "Not run 2026-09-15 either. Worth a clean re-try once the Ask-bar focus problem is fixed or a fresh chat/game clears it."
+}

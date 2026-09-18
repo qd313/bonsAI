@@ -88,6 +88,27 @@ line for line from this session's Verify entry, with the closing note added at t
   and the cue itself moved onto the light bar under the chip on 2026-09-17. Nothing measurable is left to check;
   the *end of list* taste call is the maintainer's, already on their own checklist.
 
+### Deferred manual QA (closed 2026-09-18)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-18 once the last owed check passed — copied line for line
+from this session's Verify entry, with the closing note added at the end._
+
+- ★★ `[QA]` **Deferred manual QA** — **VERIFY.** SMOKE-A, SMOKE-F, SMOKE-E and SMOKE-H all pass on the Deck: SMOKE-A
+  2026-09-03; SMOKE-F re-confirmed 2026-09-17 (all four built-in commands answered with the same fixed wording,
+  evidence `docs/test-evidence/plan57-QA-SMOKE-F.json`); SMOKE-E's spoiler tap-to-reveal path 2026-09-04; SMOKE-H
+  2026-09-16. SMOKE-B was retired 2026-09-03 (D57 #6). Left: **SMOKE-C** is blocked by the Open Permissions jump bug,
+  above, not owed as a test of its own. **Two of the three Tier 1 extras passed on the Deck 2026-09-18:** the last
+  question and answer were still on screen after closing and reopening the panel, seen twice; and one Ask in Speed
+  and one in Expert both worked as expected. Evidence `docs/test-evidence/plan61-tier1-speed.json`,
+  `docs/test-evidence/plan61-tier1-expert.json`. Left: **"What game am I playing?"** with a game focused — needs a
+  game running, scheduled for the games block. Round in progress:
+  [plan 31](planning/31-deck-verification-round.md).
+
+  **Closed 2026-09-18:** the third Tier 1 extra passed too — asked with Half-Life 2 running and focused, the
+  plugin named the game correctly and gave real Half-Life 2 advice with a note card attached. All three Tier 1
+  extras and SMOKE-A/E/F/H now pass. What's left, SMOKE-C, rides on the still-open Open Permissions jump bug
+  rather than being owed as a check of its own. Evidence `docs/test-evidence/plan61-tier1-what-game.json`.
+
 ### Expert offers the stronger Deck-run models first, and the licence list learns the Sept 2026 models (2026-09-17)
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-17 once the Deck confirmed the licence half — copied line
@@ -651,6 +672,16 @@ Shipped features moved out of the roadmap in the 2026-09-02 cleanup, verbatim. S
   on three chips being excluded and ping-ponged between the first two (`nextFrozenPresetAfter`). Free-play sweep run after deploy: 16
   presses from the panel top through the transcript, both trailing rows, all four carousel history rows and the Ask bar, every stop
   visible. Rows **PRESET-ONE-LINE-01a/b**.
+- ★★★★ **Preset row: two chips across, with scrolling labels — closed 2026-09-18.** Rebuilt 2026-09-01 under
+  D43, two 30px chips side by side with a scrolling label through Steam's own marquee text. Rows 02 and 03
+  passed on the Deck, row 01b passed 2026-09-03. Since 2026-09-17 (plan 60) the two chips sit 147 pixels wide
+  with a 6-pixel gap, not 148 and 4. **Row 04's speed-by-eye half passed on the Deck 2026-09-17:** the long
+  label crawls at about 27 pixels a second, close to the intended 25. Evidence
+  `docs/test-evidence/plan57-QA-PRESET-ONE-LINE-04.json`. **Row 04's decode-mode half passed on the Deck
+  2026-09-18:** the chip animation held a flat 60 frames a second for a full 8-second sample, with no frame
+  slower than about 17 milliseconds. Evidence `docs/test-evidence/plan61-PRESET-ONE-LINE-04-decode.json`.
+  Nothing measurable is left for the rig; reduced motion and the maintainer's own feel for the speed stay on
+  the maintainer's own page.
 - ★★★★ **The tab icon bar collapses when it is not in use**
   - **Goal:** The tab strip stops holding full height while nobody is using it, while still answering *which tab am I on?* at a glance —
     the sketch on the table is a thin bar of dashes showing your position in the carousel. Interacting with it opens the fuller strip.

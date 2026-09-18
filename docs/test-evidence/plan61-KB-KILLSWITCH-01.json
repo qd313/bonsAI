@@ -1,0 +1,22 @@
+{
+  "rowId": "KB-KILLSWITCH-01 (DRAFT, the hybrid kill-switch)",
+  "rowText": "With a covered game running, flip the Developer tab's Hybrid retrieval (meaning search) switch off then back on, reading rag_hybrid_retrieval_enabled on disk each time, and check Show details reads 'Keyword search' vs 'Keyword + meaning' before and after.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T10:06",
+  "setup": {
+    "game_running": "Hades (appid 1145360)",
+    "ask_mode": "strategy",
+    "use_local_knowledge_base": true
+  },
+  "steps": [
+    { "action": "Read rag_hybrid_retrieval_enabled over SSH before touching anything.", "observed": "True" },
+    { "action": "D-pad to Developer tab -> Hybrid retrieval (meaning search), pressed A.", "observed": "Switch flipped; rag_hybrid_retrieval_enabled read back as False immediately after, confirmed over SSH." },
+    { "action": "Pressed A again to flip it back.", "observed": "rag_hybrid_retrieval_enabled read back as True again, confirmed over SSH -- fully restored." },
+    { "action": "Planned: ask 'how do i beat theseus and asterius' with the switch off, then on, and compare Show details each time.", "observed": "BLOCKED -- could not send a new question in this chat; see docs/test-evidence/plan61-ASKBAR-FOCUS-TRAP-01.json. This problem is not tied to Half-Life 2 specifically: it was confirmed again here in Hades, in a brand-new chat, so it looks like a Deck-wide problem for the rest of tonight rather than one chat's problem." }
+  ],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "PARTIAL",
+  "verdictSentence": "The on/off switch itself works correctly and was put back exactly as found, confirmed by reading the settings file both times. What could not be checked tonight is whether turning it off actually changes the wording in Show details, because no new question could be sent to compare.",
+  "notes": "The setting is restored to its original value (True) and was read back to prove it."
+}

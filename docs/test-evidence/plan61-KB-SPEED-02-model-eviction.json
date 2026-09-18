@@ -1,0 +1,25 @@
+{
+  "rowId": "KB-SPEED-02 (model eviction on the Deck)",
+  "rowText": "The cause of the one-second wait: read what is in memory before, during and after an ask. The Deck has been wiped and set up again since 2026-09-12, so a fresh reading was worth taking.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T09:39-09:41",
+  "setup": {
+    "game_running": "Half-Life 2 (appid 220)",
+    "question": "what game am i playing",
+    "how_read": "ollama ps over SSH, read three times around one ask"
+  },
+  "readings": [
+    { "when": "before the ask (09:39:44)", "result": "gemma4:e2b-it-qat, 1.7 GB, 100% GPU, kept for 4 hours" },
+    { "when": "during the ask, while it was still streaming (~09:40:00)", "result": "nothing listed -- the model was not in memory at that moment" },
+    { "when": "after the ask finished (09:40:44)", "result": "gemma4:e2b-it-qat, 1.7 GB, 100% GPU, kept for 4 hours -- back in memory" }
+  ],
+  "plugin_log_lines": [
+    "[2026-09-18 09:39:49,252][INFO]: run_game_ai_request: host=127.0.0.1:11434 game='Half-Life 2' appid=220 question_len=22",
+    "[2026-09-18 09:40:39,136][INFO]: ask_ollama: stream done model=gemma4:e2b-it-qat done_reason=stop eval_count=604 prompt_eval=1530 raw_len=687 visible_len=410 num_predict=2112 think=True",
+    "[2026-09-18 09:40:39,157][INFO]: run_game_ai_request: completed in 49.9s"
+  ],
+  "screenshots": [],
+  "verdict": "CONFIRMED",
+  "verdictSentence": "Caught it happening: partway through answering, the one chat model this Deck uses actually disappeared from memory for a moment, then came back once the answer was done. That is the wait a person notices -- the model gets swapped out and back in during a single question, on this Deck as set up today.",
+  "notes": "Only one chat model is configured on this Deck (gemma4:e2b-it-qat, per settings.json's text/vision routing), so the eviction is not a hand-off to a second named model -- something else (most likely the note-search/embedding step) is briefly taking the GPU slot mid-answer and the chat model is reloaded afterward. Which exact settings this Deck runs for the hold-one-model-at-a-time behaviour was not changed, only read."
+}

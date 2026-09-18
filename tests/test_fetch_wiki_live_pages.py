@@ -82,6 +82,38 @@ class InfoboxMarkerTests(unittest.TestCase):
         self.assertIn("=== Phase two", text)
 
 
+class FigureIsFurnitureTests(unittest.TestCase):
+    """Real case from hollowknight.wiki's Charms page: a <figure typeof="mw:File/Thumb">
+    (modern MediaWiki's own markup, not the older class="thumb" _SKIP_CLASS already caught)
+    let an image caption and a video's fallback link leak into the middle of real sentences."""
+
+    def test_image_caption_is_dropped(self):
+        html = (
+            '<h2>Notches</h2>'
+            '<figure class="mw-halign-right" typeof="mw:File/Thumb">'
+            '<a href="/w/File:Charm_Notch.png"><img src="Charm_Notch.png" /></a>'
+            "<figcaption>Charm Notch icon</figcaption></figure>"
+            "<p>To equip Charms, Charm Notches are required.</p>"
+        )
+        text = _render(html)
+        self.assertNotIn("Charm Notch icon", text)
+        self.assertIn("To equip Charms, Charm Notches are required.", text)
+
+    def test_video_fallback_link_is_dropped(self):
+        html = (
+            "<h3>Overcharmed</h3>"
+            '<figure class="mw-halign-right" typeof="mw:File">'
+            '<video src="Overcharmed.webm">'
+            '<a href="https://hollowknight.wiki/w/File:Overcharmed.webm">'
+            "https://hollowknight.wiki/w/File:Overcharmed.webm</a>"
+            "</video><figcaption></figcaption></figure>"
+            "<p>If the Knight has free Notches, the Knight can equip more Charms than Notches allow.</p>"
+        )
+        text = _render(html)
+        self.assertNotIn("Overcharmed.webm", text)
+        self.assertIn("If the Knight has free Notches", text)
+
+
 class ResolvePageCategoriesTests(unittest.TestCase):
     """scripts/extract_wiki_notes.py's guess_section_type prefers a page's own categories
     over a guess from body words -- categories never appear in the rendered text (MediaWiki

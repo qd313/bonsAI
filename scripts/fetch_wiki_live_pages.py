@@ -81,7 +81,16 @@ class _TextExtractor(HTMLParser):
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         cls = " ".join(v or "" for k, v in attrs if k == "class")
-        skip = tag in ("script", "style", "noscript") or bool(_SKIP_CLASS.search(cls))
+        # A <figure> (typeof="mw:File" / "mw:File/Thumb") is always image or video furniture,
+        # never article prose -- but modern MediaWiki (1.41+) marks it with that `typeof`
+        # attribute, not a "thumb" class, so _SKIP_CLASS's class-only check missed it. Two
+        # real scraps this let through: an image's <figcaption> text ("Charm Notch icon") and
+        # a <video>'s browsers-without-video-support fallback link, a bare file URL, both
+        # glued into the middle of a real sentence on the Charms page.
+        skip = (
+            tag in ("script", "style", "noscript", "figure", "figcaption")
+            or bool(_SKIP_CLASS.search(cls))
+        )
         self._stack.append(skip)
         if skip:
             self._skip_depth += 1

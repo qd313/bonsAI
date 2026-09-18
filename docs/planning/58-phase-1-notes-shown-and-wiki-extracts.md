@@ -453,6 +453,17 @@ which goes on their own checklist.
   the file that builds the bubble, which no lane has been given. Left for the Deck evening to
   judge on screen before anyone spends more on it. The lane also had to reach three files past
   its list to follow the poll field to the screen, and said so.
+- **2026-09-17, the reader's third pass landed; a fourth, small one sent.** Notes now open with
+  the page's first sentence and keep the tactics sentences chosen by a visible word list, printed
+  in page order, same cap, same trim-only law; the two heading misses fixed; captions and file
+  links dropped. The mechanism is proven on a copy of the exact shape that lost. On the real
+  False Knight page the "head exposed" sentence still misses, because the page says "revealing
+  the head" and that word was not on the list, and the page has no lead sentence at all, its
+  location being only a fact-box line. Fourth pass, one commit: open with the page's fact-box
+  lines when there is no lead sentence, and add the reveal and timing word families as low-weight
+  signals. Both are general rules; the risk of fitting the reader to one holdout row is named
+  here on purpose, and the whole-library search number is the guard. Lane D re-measures from a
+  fresh copy of the repo once it lands. The Deck still not answering after three polls.
 
 ---
 

@@ -810,24 +810,99 @@ def render_card(units: list[Unit]) -> str:
     return "\n".join(lines)
 
 
-def trim_to_length(units: list[Unit], min_chars: int = 400, max_chars: int = 880) -> tuple[list[Unit], str | None]:
-    """Keeps whole units, front to back, stopping once the card would exceed max_chars.
-    A single unit longer than max_chars is still kept whole (D111 answer 2: "the reader
-    takes its first sentences and says so" -- never mid-sentence, even over the cap)."""
-    kept: list[Unit] = []
-    for u in units:
-        candidate = kept + [u]
-        if len(render_card(candidate)) > max_chars and kept:
-            break
-        kept.append(u)
-        if len(render_card(kept)) >= max_chars:
-            break
+# Tactic signal words/phrases a player acts on -- lane D's real finding was that the wiki's
+# own attack-description sentences sit ahead of its "how to beat it" sentences (False
+# Knight's page opens with the Leap/Charge/Slam attack list and only says "hit the exposed
+# head" and "jump the shockwave" much further down), so a fixed 880-character cut from the
+# top of the section lost both facts even though they were on the page. Scoring by these
+# words, instead of taking the first N sentences, keeps the sentences a player would act on
+# regardless of where they sit in the section. This list is deliberately visible and
+# commented rather than tuned in secret: it only changes which of the page's OWN sentences
+# survive the cut, never adds or changes a word (still checked by verify_verbatim after).
+TACTIC_SIGNAL_WORDS = [
+    "dodge", "jump over", "jump", "hit", "strike", "attack when", "avoid",
+    "wait until", "stay", "keep your distance", "bait", "punish", "heal when",
+    "stagger", "vulnerable", "opening", "weak point", "exposed", "use", "equip",
+    "before", "after", "then",
+]
+# Matched on a word boundary, not a bare substring -- "use" inside "used" or "cause", or
+# "then" inside "strengthen", would otherwise score plain description as if it were advice.
+# The exact real case this guards against: Hollow Knight wiki's "Most attack names used by
+# the wiki are non-canon" contains "used", which a substring check would wrongly credit.
+_TACTIC_SIGNAL_PATTERNS = [re.compile(r"\b" + re.escape(phrase) + r"\b") for phrase in TACTIC_SIGNAL_WORDS]
+
+
+def score_unit(unit: Unit, subject: str = "") -> int:
+    """One point per distinct tactic-signal phrase found in the unit's own text (a sentence
+    naming several, e.g. "dodge... then jump", scores higher than one that names one), plus
+    one for naming the note's own subject (the page's own title -- a sentence about what the
+    boss itself does outranks a side comment). A unit with none of the above is penalised, on
+    the theory that a sentence with no action word and no mention of the subject is pure
+    description ("Most attack names used by the wiki are non-canon") -- exactly the kind of
+    sentence that should lose to an action sentence when both cannot fit under the cap.
+    Applies the same way to a label/list unit as a sentence -- a labelled fact that happens to
+    read "Weak point: exposed head" should score like the tactic sentence it is; one that
+    reads "Health: 800" scoring low is the same call, not a special case."""
+    lower = unit.text.lower()
+    score = sum(1 for pattern in _TACTIC_SIGNAL_PATTERNS if pattern.search(lower))
+    if subject and re.search(r"\b" + re.escape(subject.strip().lower()) + r"\b", lower):
+        score += 1
+    if score == 0:
+        score -= 1
+    return score
+
+
+def _select_units_by_score(
+    units: list[Unit], min_chars: int, max_chars: int, *, subject: str = "", lead: Unit | None = None,
+) -> tuple[list[Unit], str | None, list[tuple[Unit, int, bool]]]:
+    """The reader's own selection, not the model's: `units` are scored by score_unit, taken
+    highest-scoring first, but EMITTED in the page's own order so the note still reads as
+    prose rather than a shuffled one (a stable sort on original position breaks ties and
+    fixes the final order). `lead` (from extract_lead_sentence) is always kept and never
+    scored -- it is the note's own opening line, not a competitor for the cap's space.
+    Returns (kept units in page order, a length note if the aim/cap was not hit cleanly, and
+    a (unit, score, was it kept) row per unit for a person to check with --explain)."""
+    lead_units = [lead] if lead else []
+    scored = [(score_unit(u, subject), i, u) for i, u in enumerate(units)]
+    order = sorted(scored, key=lambda row: (-row[0], row[1]))
+
+    def rendered_len(indices: set[int]) -> int:
+        return len(render_card(lead_units + [units[i] for i in sorted(indices)]))
+
+    kept_indices: set[int] = set()
+    for _score, i, _u in order:
+        if not kept_indices and not lead_units:
+            # Nothing kept anywhere and no lead line either -- the single highest-scoring
+            # unit is always taken whole, even over the cap (never cut mid-sentence).
+            kept_indices.add(i)
+            continue
+        if rendered_len(kept_indices | {i}) <= max_chars:
+            kept_indices.add(i)
+    if not kept_indices and lead_units and order:
+        # A lead line exists but even the best-scoring unit alone would overflow it -- still
+        # take that one whole, same never-cut-mid-sentence rule, rather than a note with no
+        # tactic content in it at all.
+        kept_indices.add(order[0][1])
+
+    kept = lead_units + [units[i] for i in sorted(kept_indices)]
     text = render_card(kept)
     note = None
     if len(text) < min_chars:
         note = f"the matching section is only {len(text)} characters, short of the {min_chars} aim; used all of it"
     elif len(text) > max_chars:
         note = f"the first unit alone is {len(text)} characters, over the {max_chars} cap; kept it whole rather than cut mid-sentence"
+    score_rows = [(u, s, i in kept_indices) for s, i, u in sorted(order, key=lambda row: row[1])]
+    return kept, note, score_rows
+
+
+def trim_to_length(
+    units: list[Unit], min_chars: int = 400, max_chars: int = 880, *, subject: str = "", lead: Unit | None = None,
+) -> tuple[list[Unit], str | None]:
+    """Public entry point -- see _select_units_by_score for the algorithm. Kept as a 2-tuple
+    return so every existing caller (and test) that only wants the kept units and the length
+    note is unaffected; a caller that also wants the per-unit score table (for --explain)
+    calls _select_units_by_score directly."""
+    kept, note, _rows = _select_units_by_score(units, min_chars, max_chars, subject=subject, lead=lead)
     return kept, note
 
 
@@ -871,6 +946,7 @@ def build_note(
     allowed_licences: frozenset[str],
     licence_override: str | None = None,
     game_title: str = "",
+    explain: bool = False,
 ) -> tuple[dict, dict, list[str]]:
     if page_format == "live":
         meta, body = load_live_page(page_path)
@@ -908,18 +984,27 @@ def build_note(
     units, dropped_notes = body_to_units(section_body)
 
     lead_unit = extract_lead_sentence(body, headings)
-    if lead_unit and lead_unit.text not in section_body:
-        # Skipped when the chosen section already contains the lead verbatim (the "no
-        # headings at all" and "every section is empty" fallbacks both read from the very
-        # start of the page) -- otherwise the note would open with the same sentence twice.
-        units = [lead_unit] + units
+    if lead_unit and lead_unit.text in section_body:
+        # The chosen section already contains the lead verbatim (the "no headings at all"
+        # and "every section is empty" fallbacks both read from the very start of the page)
+        # -- otherwise the note would open with the same sentence twice.
+        lead_unit = None
 
-    kept, length_note = trim_to_length(units, min_chars, max_chars)
+    subject = meta.get("title", "")
+    kept, length_note, score_rows = _select_units_by_score(
+        units, min_chars, max_chars, subject=subject, lead=lead_unit
+    )
     if length_note:
         dropped_notes.append(length_note)
-    dropped_units = units[len(kept) :]
+    dropped_units = [u for u, _score, was_kept in score_rows if not was_kept]
     if dropped_units:
-        dropped_notes.append(f"{len(dropped_units)} sentence(s)/line(s) after the cut were not used")
+        dropped_notes.append(f"{len(dropped_units)} sentence(s)/line(s) scored lower and did not fit under the cap")
+    if explain:
+        print("[explain] tactic-signal score per unit in the chosen section (kept marked *):", file=sys.stderr)
+        for u, score, was_kept in score_rows:
+            mark = "*" if was_kept else " "
+            preview = u.text if len(u.text) <= 70 else u.text[:67] + "..."
+            print(f"  {mark} {score:+d}  {preview!r}", file=sys.stderr)
 
     ok, problems = verify_verbatim(kept, body)
     if not ok:
@@ -984,6 +1069,11 @@ def main(argv: list[str] | None = None) -> int:
         "bare 'CC-BY-SA') but the version was already established from other evidence -- "
         "still checked against the publish allow-list, so a wrong value is still refused",
     )
+    parser.add_argument(
+        "--explain", action="store_true",
+        help="print the tactic-signal score for every unit in the chosen section, and "
+        "whether it was kept, so a person can see why the cut landed where it did",
+    )
     args = parser.parse_args(argv)
 
     if hasattr(sys.stdout, "reconfigure"):
@@ -1002,6 +1092,7 @@ def main(argv: list[str] | None = None) -> int:
         allowed_licences=allowed,
         licence_override=args.source_license,
         game_title=args.game_title,
+        explain=args.explain,
     )
 
     print("=== NOTE RECORD (print only -- never written into data/kb/strategy_seed.json) ===")

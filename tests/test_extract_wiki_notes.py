@@ -323,6 +323,73 @@ class TrimToLengthTests(unittest.TestCase):
         self.assertIn("short of the 400 aim", note)
 
 
+class ScoreUnitTests(unittest.TestCase):
+    """Third-pass work: lane D found the two facts an answer question needed ("hit the
+    exposed head", "jump the shockwave") were on the page, in the chosen section, but past
+    the 880-character cap, because the section opens with attack descriptions and puts the
+    "how to beat it" sentences last. Scoring lets those sentences win a place regardless of
+    where they sit in the section."""
+
+    def test_counts_each_matching_tactic_word(self):
+        unit = m.Unit("sentence", "Dodge the swipe, then jump over the shockwave.", [])
+        # "dodge", "jump over", "jump" (also matches inside "jump over"), and "then".
+        self.assertEqual(m.score_unit(unit), 4)
+
+    def test_naming_the_subject_adds_a_bonus(self):
+        with_name = m.Unit("sentence", "False Knight will hit you if you get too close.", [])
+        without_name = m.Unit("sentence", "It will hit you if you get too close.", [])
+        self.assertEqual(m.score_unit(with_name, subject="False Knight") - m.score_unit(without_name, subject="False Knight"), 1)
+
+    def test_pure_description_is_penalised(self):
+        description = m.Unit("sentence", "Most attack names used by the wiki are non-canon.", [])
+        self.assertLess(m.score_unit(description), 0)
+
+    def test_a_tactic_sentence_outscores_pure_description(self):
+        description = m.Unit("sentence", "False Knight possesses a variety of attacks.", [])
+        tactic = m.Unit("sentence", "Hit the exposed head while he is staggered.", [])
+        self.assertGreater(m.score_unit(tactic, subject="False Knight"), m.score_unit(description, subject="False Knight"))
+
+
+class SelectUnitsByScoreTests(unittest.TestCase):
+    def test_a_late_high_scoring_sentence_survives_a_tight_cap(self):
+        """The exact shape lane D found: attack descriptions first, the actionable "how to
+        beat it" sentence last, cap too tight for all of it."""
+        units = [
+            m.Unit("sentence", "The Knight leaps into the air before slamming down.", []),
+            m.Unit("sentence", "It then charges forward across the room.", []),
+            m.Unit("sentence", "Hit the exposed head once it is staggered.", []),
+        ]
+        kept, _note, rows = m._select_units_by_score(units, min_chars=10, max_chars=55)
+        self.assertIn(units[2], kept)
+
+    def test_kept_units_are_emitted_in_original_page_order_not_score_order(self):
+        units = [
+            m.Unit("sentence", "Hit the weak point when it is exposed.", []),  # scores high
+            m.Unit("sentence", "A short filler sentence.", []),  # scores low
+        ]
+        kept, _note, _rows = m._select_units_by_score(units, min_chars=10, max_chars=200)
+        self.assertEqual(kept, units)  # both fit; page order preserved regardless of score
+
+    def test_lead_is_always_first_and_never_competes_for_space(self):
+        lead = m.Unit("sentence", "The armoured maggot in the Forgotten Crossroads.", [])
+        units = [m.Unit("sentence", "Hit the exposed head.", [])]
+        kept, _note, rows = m._select_units_by_score(units, min_chars=10, max_chars=200, lead=lead)
+        self.assertEqual(kept[0], lead)
+        self.assertNotIn(lead, [u for u, _s, _k in rows])  # the lead never shows up as a scored row
+
+    def test_ties_preserve_page_order(self):
+        units = [m.Unit("sentence", f"Sentence {i}.", []) for i in range(5)]
+        kept, _note, _rows = m._select_units_by_score(units, min_chars=10, max_chars=1000)
+        self.assertEqual(kept, units)
+
+    def test_explain_rows_mark_every_unit_kept_or_not(self):
+        units = [m.Unit("sentence", "Word.", []) for _ in range(20)]
+        _kept, _note, rows = m._select_units_by_score(units, min_chars=10, max_chars=50)
+        self.assertEqual(len(rows), len(units))
+        self.assertTrue(any(kept for _u, _s, kept in rows))
+        self.assertTrue(any(not kept for _u, _s, kept in rows))
+
+
 class VerifyVerbatimTests(unittest.TestCase):
     """The guard, and the proof that it actually refuses (D111 item 2, rule 7)."""
 
@@ -570,6 +637,49 @@ class BuildNoteEndToEndTests(unittest.TestCase):
                 note["card"],
             )
             self.assertIn("He leaps and slams the ground", note["card"])
+
+    def test_a_late_tactic_sentence_survives_a_tight_cap_end_to_end(self):
+        """The exact shape of lane D's real loss: a "Behaviour and Tactics" section that
+        opens with attack descriptions and puts the "how to beat it" sentence last, cut by a
+        cap too tight for all of it. Under the old first-N-in-order trim this sentence would
+        never survive; scored selection keeps it regardless of where it sits."""
+        with tempfile.TemporaryDirectory() as tmp_str:
+            tmp = Path(tmp_str)
+            page = tmp / "false-knight.txt"
+            page.write_text(
+                "# source: https://hollowknight.wiki/w/False_Knight\n"
+                "# site: Hollow Knight Wiki\n"
+                "# revision: 1 (2026-01-01T00:00:00Z)\n"
+                "# licence: (unused when a manifest sits beside it)\n"
+                "# read: 2026-09-17\n\n"
+                "The armoured maggot in the Forgotten Crossroads is the first real fight.\n\n"
+                "== Behaviour and Tactics\n"
+                "The maggot leaps into the air and slams his mace into the ground. "
+                "It charges across the room toward you. "
+                "It rears back and swings its mace in a wide arc. "
+                "Hit the exposed head once it is staggered. "
+                "Jump over the shockwave rather than backing away from it.\n",
+                encoding="utf-8",
+            )
+            manifest = {
+                "pages": [{
+                    "requested": "False Knight", "title": "False Knight",
+                    "url": "https://hollowknight.wiki/w/False_Knight", "revid": 1,
+                    "timestamp": "2026-01-01T00:00:00Z",
+                    "licence_text": "Creative Commons Attribution-Share Alike 3.0 (Unported)",
+                    "licence_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+                    "read_on": "2026-09-17", "file": "false-knight.txt",
+                }],
+            }
+            (tmp / "_manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+            allowed = m._load_allowed_licences()
+            note, _, _ = m.build_note(
+                page_path=page, page_format="live", game_id=1,
+                section_type_arg=None, name_arg=None,
+                min_chars=10, max_chars=180, allowed_licences=allowed,
+            )
+            self.assertIn("Hit the exposed head", note["card"])
+            self.assertIn("Jump over the shockwave", note["card"])
 
     def test_a_category_in_the_manifest_reaches_the_note_s_section_type(self):
         """End-to-end version of GuessSectionTypeTests: a category recorded in the fetcher's

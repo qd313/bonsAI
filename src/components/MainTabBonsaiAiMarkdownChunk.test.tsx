@@ -1,7 +1,13 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
 
-import { MainTabBonsaiAiMarkdownChunk } from "./MainTabBonsaiAiMarkdownChunk";
+import { beforeEach } from "vitest";
+import {
+  MainTabBonsaiAiMarkdownChunk,
+  anySpoilerFenceOpen,
+  resetSpoilerFenceOpenCountForTests,
+  subscribeToSpoilerFenceOpenChange,
+} from "./MainTabBonsaiAiMarkdownChunk";
 import { DRG_SURVIVOR_APP_ID } from "../data/drgGlossaryTerms";
 
 /*
@@ -125,5 +131,77 @@ describe("MainTabBonsaiAiMarkdownChunk DRG Survivor glossary markup", () => {
     expect(container.querySelector(".bonsai-drg-glossary-term")?.textContent).toBe("kiting");
     // The masked spoiler body is not in the DOM at all yet, so "overclock" cannot appear twice.
     expect(container.querySelectorAll(".bonsai-drg-glossary-term")).toHaveLength(1);
+  });
+});
+
+/*
+ * Plan 58 phase 1: whether a spoiler fence is open has to be readable from outside this file —
+ * MainTabChatTranscript.tsx's "From the notes" block stays off a fenced reply until this reads
+ * true. See anySpoilerFenceOpen's own comment for why this is a plain module tally rather than a
+ * prop threaded down from buildAnswerBubbleElement.tsx.
+ */
+describe("the open-spoiler tally other files read", () => {
+  beforeEach(() => {
+    resetSpoilerFenceOpenCountForTests();
+  });
+
+  it("is false before anything is revealed", () => {
+    render(<MainTabBonsaiAiMarkdownChunk source={SPOILER_SOURCE} spoilerMaskingEnabled={true} />);
+    expect(anySpoilerFenceOpen()).toBe(false);
+  });
+
+  it("turns true once the fence is revealed, and false again once it is hidden", () => {
+    const { container } = render(
+      <MainTabBonsaiAiMarkdownChunk source={SPOILER_SOURCE} spoilerMaskingEnabled={true} />
+    );
+    fireEvent.click(container.querySelector(".bonsai-spoiler-reveal-target button")!);
+    expect(anySpoilerFenceOpen()).toBe(true);
+
+    fireEvent.click(container.querySelector(".bonsai-spoiler-expanded button")!);
+    expect(anySpoilerFenceOpen()).toBe(false);
+  });
+
+  it("turns false again once the revealed fence unmounts", () => {
+    const { container, unmount } = render(
+      <MainTabBonsaiAiMarkdownChunk source={SPOILER_SOURCE} spoilerMaskingEnabled={true} />
+    );
+    fireEvent.click(container.querySelector(".bonsai-spoiler-reveal-target button")!);
+    expect(anySpoilerFenceOpen()).toBe(true);
+    unmount();
+    expect(anySpoilerFenceOpen()).toBe(false);
+  });
+
+  it("notifies every subscriber on each open/close change", () => {
+    const { container } = render(
+      <MainTabBonsaiAiMarkdownChunk source={SPOILER_SOURCE} spoilerMaskingEnabled={true} />
+    );
+    const calls: boolean[] = [];
+    const unsubscribe = subscribeToSpoilerFenceOpenChange(() => calls.push(anySpoilerFenceOpen()));
+
+    fireEvent.click(container.querySelector(".bonsai-spoiler-reveal-target button")!);
+    fireEvent.click(container.querySelector(".bonsai-spoiler-expanded button")!);
+
+    expect(calls).toEqual([true, false]);
+    unsubscribe();
+  });
+
+  it("stays true while a second fence is still open after the first one closes", () => {
+    const twoFences =
+      "```bonsai-spoiler\nFirst secret.\n```\n\nBetween.\n\n```bonsai-spoiler\nSecond secret.\n```";
+    const { container } = render(
+      <MainTabBonsaiAiMarkdownChunk source={twoFences} spoilerMaskingEnabled={true} />
+    );
+    const revealButtons = container.querySelectorAll(".bonsai-spoiler-reveal-target button");
+    expect(revealButtons).toHaveLength(2);
+    fireEvent.click(revealButtons[0]);
+    fireEvent.click(revealButtons[1]);
+    expect(anySpoilerFenceOpen()).toBe(true);
+
+    fireEvent.click(container.querySelectorAll(".bonsai-spoiler-expanded button")[0]);
+    // One of the two is still open.
+    expect(anySpoilerFenceOpen()).toBe(true);
+
+    fireEvent.click(container.querySelectorAll(".bonsai-spoiler-expanded button")[0]);
+    expect(anySpoilerFenceOpen()).toBe(false);
   });
 });

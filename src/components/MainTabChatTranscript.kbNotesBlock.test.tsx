@@ -11,12 +11,13 @@
  *           the screen side is ready for it: given the same shape a poll would carry, the block
  *           renders before the reply is done.
  */
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
 import { vi } from "vitest";
 
 import { MainTabChatTranscript } from "./MainTabChatTranscript";
 import type { MainTabChatTranscriptProps } from "./MainTabChatTranscript";
+import { resetSpoilerFenceOpenCountForTests } from "./MainTabBonsaiAiMarkdownChunk";
 import type { AskThreadCollapsedTurn } from "../types/bonsaiUi";
 import type { KbAttachedNote } from "../utils/inputTransparency";
 
@@ -254,6 +255,10 @@ describe("several notes attached to one reply", () => {
 });
 
 describe("a fenced reply", () => {
+  beforeEach(() => {
+    resetSpoilerFenceOpenCountForTests();
+  });
+
   it("does not render the block while the reply's own spoiler cover has not been opened", () => {
     const turn: AskThreadCollapsedTurn = {
       id: "t1",
@@ -290,6 +295,60 @@ describe("a fenced reply", () => {
       <MainTabChatTranscript {...archivedTurnProps(turn, { strategySpoilerMaskingEnabled: false })} />
     );
     expect(block(container)).not.toBeNull();
+  });
+
+  it("shows the block, still closed itself, once the person opens the spoiler cover", () => {
+    const turn: AskThreadCollapsedTurn = {
+      id: "t1",
+      question: "what should i know about the boss that looks like me",
+      answer: "```bonsai-spoiler\nThat's Broken Vessel.\n```",
+      transparency: {
+        route: "ollama",
+        success: true,
+        context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+        overflow_skips: [],
+        kb_attached_notes: [note({ name: "Broken Vessel", source_host: "hollowknight.wiki", card: "The infected husk shaped like you." })],
+      },
+    };
+    const { container } = render(
+      <MainTabChatTranscript {...archivedTurnProps(turn, { strategySpoilerMaskingEnabled: true })} />
+    );
+    expect(block(container)).toBeNull();
+
+    const revealButton = container.querySelector(".bonsai-spoiler-reveal-target button");
+    expect(revealButton).not.toBeNull();
+    fireEvent.click(revealButton as HTMLElement);
+
+    // The block itself is closed by default (KB_NOTES_BLOCK_OPEN_BY_DEFAULT), same as any
+    // unfenced reply — only its *availability* depended on the cover.
+    expect(block(container)).not.toBeNull();
+    expect(block(container)?.textContent).toContain("Broken Vessel");
+    expect(block(container)?.textContent).not.toContain("The infected husk shaped like you.");
+  });
+
+  it("hides the block again if the person closes the spoiler cover back up", () => {
+    const turn: AskThreadCollapsedTurn = {
+      id: "t1",
+      question: "q",
+      answer: "```bonsai-spoiler\nThat's Broken Vessel.\n```",
+      transparency: {
+        route: "ollama",
+        success: true,
+        context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+        overflow_skips: [],
+        kb_attached_notes: [note({ name: "Broken Vessel", source_host: "hollowknight.wiki" })],
+      },
+    };
+    const { container } = render(
+      <MainTabChatTranscript {...archivedTurnProps(turn, { strategySpoilerMaskingEnabled: true })} />
+    );
+    fireEvent.click(container.querySelector(".bonsai-spoiler-reveal-target button") as HTMLElement);
+    expect(block(container)).not.toBeNull();
+
+    const hideButton = container.querySelector(".bonsai-spoiler-expanded button");
+    expect(hideButton).not.toBeNull();
+    fireEvent.click(hideButton as HTMLElement);
+    expect(block(container)).toBeNull();
   });
 });
 

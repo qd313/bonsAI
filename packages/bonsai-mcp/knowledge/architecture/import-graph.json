@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 414,
-  "edgeCount": 1061,
+  "edgeCount": 1063,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -294,6 +294,8 @@
       ],
       "importedBy": [
         "src/components/MainTabBonsaiAiMarkdownChunk.test.tsx",
+        "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
+        "src/components/MainTabChatTranscript.tsx",
         "src/utils/buildAnswerBubbleElement.tsx"
       ]
     },
@@ -345,6 +347,7 @@
     },
     "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx": {
       "imports": [
+        "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
         "src/components/MainTabChatTranscript.tsx",
         "src/test-harness/fakeDeckyUi.tsx",
         "src/types/bonsaiUi.ts",
@@ -434,6 +437,7 @@
       "imports": [
         "src/components/BonsaiChatSecondaryButton.tsx",
         "src/components/ContextChipLadder.tsx",
+        "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
         "src/components/PermissionDenyAction.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/components/StrategyChecklistPanel.tsx",

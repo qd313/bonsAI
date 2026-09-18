@@ -12,7 +12,7 @@
     },
     {
       "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1928,
+      "lines": 1953,
       "role": ""
     },
     {
@@ -176,6 +176,11 @@
       "role": ""
     },
     {
+      "path": "src/components/MainTabBonsaiAiMarkdownChunk.tsx",
+      "lines": 562,
+      "role": ""
+    },
+    {
       "path": "py_modules/backend/services/strategy_guide_parse.py",
       "lines": 550,
       "role": ""
@@ -193,11 +198,6 @@
     {
       "path": "src/data/bonsaiSettingsNormalizers.ts",
       "lines": 531,
-      "role": ""
-    },
-    {
-      "path": "src/components/CharacterPropGlyph.tsx",
-      "lines": 525,
       "role": ""
     }
   ]

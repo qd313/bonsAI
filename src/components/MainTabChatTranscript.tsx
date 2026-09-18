@@ -190,6 +190,10 @@ import {
 } from "../features/plugin-shell/modalReturnFocusRegistry";
 import { buildAnswerReadableText } from "../utils/answerReadableText";
 import { useReadAloud } from "../hooks/useReadAloud";
+import {
+  anySpoilerFenceOpen,
+  subscribeToSpoilerFenceOpenChange,
+} from "./MainTabBonsaiAiMarkdownChunk";
 
 const BONSAI_CHAT_AI_MAX_WIDTH_CSS = `min(${Math.round(BONSAI_CHAT_AI_BUBBLE_MAX_FRAC * 100)}%, 100%)`;
 
@@ -267,16 +271,25 @@ const BONSAI_SPOILER_FENCE_MARKER = "```bonsai-spoiler";
 /**
  * Whether this reply's own spoiler cover has to be closed before the block could safely show
  * anything — a note's own words can be exactly the spoiler-relevant fact the fence exists to
- * hide (Broken Vessel's card names the boss outright). The signal used is the reply text itself:
- * masking is on and it contains a `bonsai-spoiler` fence, the same test
- * MainTabBonsaiAiMarkdownChunk.tsx's own masking branch reads off the fenced language tag.
+ * hide (Broken Vessel's card names the boss outright). Blocked only while the reply actually has
+ * a `bonsai-spoiler` fence (masking on) AND that fence is not currently open — once the person
+ * reveals it, the block appears the same as any other reply's, in the block's own usual place
+ * under the reply, alongside Show details, rather than literally inside the fence's own drawn
+ * box: MainTabBonsaiAiMarkdownChunk.tsx's own spoiler cover is built and owned by a different
+ * file (buildAnswerBubbleElement.tsx) outside this change's file list, which nesting the block
+ * inside it would have required editing. `anySpoilerFenceOpen()` is a real, live answer, not a
+ * static guess from the text — see that function's own comment in
+ * MainTabBonsaiAiMarkdownChunk.tsx for why it is safe as a single flag rather than one tracked
+ * per turn.
  */
 function kbNotesBlockedBySpoiler(
   answerText: string | null | undefined,
   maskingEnabled: boolean | undefined
 ): boolean {
   if (maskingEnabled === false) return false;
-  return Boolean(answerText && answerText.includes(BONSAI_SPOILER_FENCE_MARKER));
+  const isFenced = Boolean(answerText && answerText.includes(BONSAI_SPOILER_FENCE_MARKER));
+  if (!isFenced) return false;
+  return !anySpoilerFenceOpen();
 }
 
 /**
@@ -840,6 +853,18 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
       ...prev,
       [turnKey]: !(prev[turnKey] ?? KB_NOTES_BLOCK_OPEN_BY_DEFAULT),
     }));
+
+  /*
+   * Plan 58 phase 1: re-render whenever a spoiler fence opens or closes anywhere, so
+   * kbNotesBlockedBySpoiler's read of anySpoilerFenceOpen() below is never stale. The count
+   * itself lives in MainTabBonsaiAiMarkdownChunk.tsx, several components away, and changing it
+   * does not by itself cause this component to re-render — this subscription is what does.
+   */
+  const [, forceSpoilerOpenRecheck] = useState(0);
+  useEffect(
+    () => subscribeToSpoilerFenceOpenChange(() => forceSpoilerOpenRecheck((n) => n + 1)),
+    []
+  );
 
   /**
    * Feature: the Show reasoning line between a question and its answer.

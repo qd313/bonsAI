@@ -65,6 +65,52 @@ import type { DrgGlossaryTerm } from "../data/drgGlossaryTerms";
 /** Per-mount counter for spoiler fence ids; only needs to be unique among mounted fences. */
 let spoilerFenceSeq = 0;
 
+/*
+ * Plan 58 phase 1: whether any `bonsai-spoiler` fence anywhere is currently revealed, for the
+ * "From the notes" block — that block must stay off a reply until its own spoiler cover (if it
+ * has one) has been opened, and MainTabChatTranscript.tsx is the file that draws it, several
+ * components away from this one's own open/closed state.
+ *
+ * A plain module count plus a subscriber list, not a prop threaded down: the caller that builds
+ * this component (buildAnswerBubbleElement.tsx) is outside this change's own file list, so a new
+ * prop could not reach here without editing a file this task was not given. A global count
+ * rather than one keyed per turn or per fence id is a deliberate simplification, safe today
+ * because only one turn's answer is ever mounted at a time — MainTabChatTranscript.tsx only
+ * renders a turn's answer body (and so only ever mounts this file's own spoiler fences) while
+ * that turn matches `expandedTurnKey`, so "any fence open, anywhere" and "any fence open, on the
+ * one turn currently on screen" are the same fact today. Revisit if that ever stops being true
+ * (e.g. more than one turn's answer rendered open at once).
+ *
+ * No DOM event is used to signal a change — `window`/`document` are not reliable across this
+ * plugin's own boundary (AGENTS.md, "The Steam Deck focus graph": plugin code and the panel it
+ * draws into can be different documents) — so this is a plain in-memory subscriber list instead.
+ */
+let openSpoilerFenceCount = 0;
+const spoilerOpenChangeListeners = new Set<() => void>();
+
+function notifySpoilerOpenChange(): void {
+  spoilerOpenChangeListeners.forEach((listener) => listener());
+}
+
+/** True while at least one spoiler fence anywhere is revealed. */
+export function anySpoilerFenceOpen(): boolean {
+  return openSpoilerFenceCount > 0;
+}
+
+/** Subscribe to every open/closed change. Returns the unsubscribe function. */
+export function subscribeToSpoilerFenceOpenChange(listener: () => void): () => void {
+  spoilerOpenChangeListeners.add(listener);
+  return () => {
+    spoilerOpenChangeListeners.delete(listener);
+  };
+}
+
+/** Test-only reset, the same shape spoilerFenceRegistry.ts's own resetSpoilerFenceRegistry is. */
+export function resetSpoilerFenceOpenCountForTests(): void {
+  openSpoilerFenceCount = 0;
+  spoilerOpenChangeListeners.clear();
+}
+
 export type MainTabBonsaiAiMarkdownChunkProps = {
   source: string;
   /** When false, ```bonsai-spoiler bodies render inline (no collapse). */
@@ -307,6 +353,22 @@ function BonsaiSpoilerFence(props: {
     () => () => registerSpoilerFence(fenceIdRef.current, null),
     [],
   );
+  /*
+   * Plan 58 phase 1: count this fence in the module-level open tally while it is revealed, so
+   * MainTabChatTranscript.tsx's "From the notes" block can tell whether it is safe to show — see
+   * openSpoilerFenceCount's own comment for why a global tally rather than a prop. Counts, not a
+   * single flag, because a reply can hold more than one fence: only when the LAST one closes
+   * should the tally read "none open" again.
+   */
+  useEffect(() => {
+    if (!open) return;
+    openSpoilerFenceCount += 1;
+    notifySpoilerOpenChange();
+    return () => {
+      openSpoilerFenceCount -= 1;
+      notifySpoilerOpenChange();
+    };
+  }, [open]);
 
   /** The masked fence's node and the expanded header's node, for handing the ring across a toggle. */
   const revealElRef = useRef<HTMLElement | null>(null);

@@ -199,11 +199,16 @@ the session context strip)
   `takeNavFocus`): the row is a sibling of Show details and the other reply-row controls inside
   the same turn container, and `replyStopRegistry.ts`'s own `focusRegisteredReplyStop` already
   proves a bare `.focus()` carries Steam's ring correctly among exactly those siblings.
-- **Never shows on a reply still hidden behind its own spoiler cover.** The signal is the reply
-  text itself — masking on and a `bonsai-spoiler` fence present — because there is no prop this
-  lane's file list lets it read for "is that fence currently open." A correct answer would need
-  the fence's open state threaded out of `MainTabBonsaiAiMarkdownChunk.tsx`; until then the block
-  simply does not render on a fenced reply, which is safe (nothing shown) rather than a guess.
+- **Never shows on a reply still hidden behind its own spoiler cover.** Gated on a real, live
+  answer: `MainTabBonsaiAiMarkdownChunk.tsx` keeps a module-level tally of every currently-open
+  `bonsai-spoiler` fence (`anySpoilerFenceOpen()`), and `MainTabChatTranscript.tsx` subscribes to
+  it (`subscribeToSpoilerFenceOpenChange`) so it re-checks the moment a fence opens or closes. A
+  plain module tally rather than a prop threaded down from `buildAnswerBubbleElement.tsx` (outside
+  this control's own file list) or a `takeNavFocus`-style registry — safe as a single flag today
+  because only one turn's answer is ever mounted at a time (`expandedTurnKey`), so "any fence open
+  anywhere" and "any fence open on the one turn on screen" are the same fact. The block itself
+  still renders in its own usual place after Show details, not literally nested inside the fence's
+  own drawn box — true containment would need `buildAnswerBubbleElement.tsx` too.
 - **Not yet backed by a device row.** `docs/testing.md` / `docs/testing-manual.md` still owe the
   D-pad walk this section's own rule asks for — recorded here, not skipped silently, because the
   bookkeeper owns those files, not this lane.

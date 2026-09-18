@@ -321,6 +321,19 @@
         "board",
         "minigames"
       ]
+    },
+    {
+      "game_id": 27,
+      "app_id": null,
+      "igdb_id": "emudeck-mp2-n64",
+      "canonical_title": "Mario Party 2",
+      "edition": "N64",
+      "platform": "Nintendo 64",
+      "genres": [
+        "party",
+        "board",
+        "minigames"
+      ]
     }
   ],
   "aliases": [
@@ -627,6 +640,10 @@
     {
       "alias": "mario party 1",
       "game_id": 26
+    },
+    {
+      "alias": "mario party 2",
+      "game_id": 27
     }
   ],
   "sections": [
@@ -3860,6 +3877,105 @@
       "name": "Eternal Star and the Baby Bowsers",
       "card": "Eternal Star is a bonus board that only opens once you've collected 100 Stars and played every other board at least once, and its gimmick replaces the usual Star Space with seven Baby Bowsers stationed around the board. To take a Star from one, you pay 20 coins and then have to roll higher than the Baby Bowser's own Dice Block -- your roll is capped at 8 to 10, but the Baby Bowser can roll anything, so the odds favor the house. Losing the roll costs you a Star instead of granting one. At the center sits Bowser himself, who takes a Star (or 20 coins if you have none) from anyone who reaches him, sends them back to the start, and scrambles the board's warp routes. A Happening Space here sends everyone back to start too, though it leaves the warp routes as they were.",
       "source_url": "https://www.mariowiki.com/Mario_Party",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 324,
+      "game_id": 27,
+      "section_type": "mechanic",
+      "name": "Starting out in Mario Party 2",
+      "card": "Mario Party 2 keeps the same turn structure as the original -- roll, move, land on a colored space, then play a minigame -- but adds real items for the first time: buy one from an Item Shop, win one from an Item Space's minigame, or hold a Dueling Glove to challenge another player directly for coins. Only one item can be held at a time, unlike later games, so a new player has to decide whether to use an item right away or hold it and risk losing the chance. Bowser Spaces now run a full roulette of bad outcomes rather than a single effect, and a Bank Space lets you deposit coins for another player to potentially collect if they land on it before you pass again. Every board dresses its cast in a costume matching its theme, purely cosmetic but a good sign of which board's rules apply.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_2",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 325,
+      "game_id": 27,
+      "section_type": "area",
+      "name": "Pirate Land",
+      "card": "Pirate Land, the first board, dresses players as pirate captains and uses dock Blue Spaces where a Sushi ferries you to another dock on the board, a fast way to skip ahead if the destination suits you. Happening Spaces trigger a cannon that fires a cannonball at whoever's standing there and sends them straight back to the start, so it's worth checking who's exposed before triggering one. A few shortcuts exist but are guarded by Thwomps who charge a toll starting at one coin, and the fee climbs by a coin every time the next player pays it, so the earliest player through a Thwomp gate always pays the least.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_2",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 326,
+      "game_id": 27,
+      "section_type": "area",
+      "name": "Western Land",
+      "card": "Western Land dresses the cast as cowboys and centers on Steamer, a train that loops the board's perimeter; paying five coins at a toll lets you ride it, and hitting a block afterward decides whether Steamer heads forward or backward. Steamer also moves on its own whenever anyone lands on a Happening Space, and anyone it hits gets sent back to the start, so riders and bystanders both need to track its direction. A milk shop run by Wiggler will, for 20 coins, throw a \"hootenanny\" that pulls every other character to the shop, which can be used to regroup opponents away from wherever you're headed.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_2",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 327,
+      "game_id": 27,
+      "section_type": "area",
+      "name": "Space Land",
+      "card": "Space Land dresses the cast as astronauts and is built around a Bowser-faced junction in the middle whose countdown ticks down every time someone passes it; when it hits zero, Bowser fires a laser down the board's diagonal path that strips all the coins from anyone caught in it. Happening Spaces send a Whomp or Thwomp chasing whoever landed there, sweeping up any other players in its path along the way. The Snifit Patrol can be paid five coins to set a speed trap that has the Whomp or Thwomp caught by Snifits instead, sending chased players even further away -- a way to turn the board's own hazard against someone else.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_2",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 328,
+      "game_id": 27,
+      "section_type": "area",
+      "name": "Mystery Land",
+      "card": "Mystery Land dresses players as archaeologists and splits the board into four islands that only connect through Happening Spaces, which carry whoever lands on them to the next island clockwise; paying a Bob-omb 10 coins offers a direct shortcut between the upper-left and lower-right islands instead of going the long way around. Shy Guy's Curse House lets a player pay five coins to curse an opponent so their next Dice Block only rolls one to three, a cheap way to slow down whoever's in the lead. Because movement between islands is otherwise limited to Happening Spaces, reaching the right island at the right time matters more here than raw dice luck.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_2",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 329,
+      "game_id": 27,
+      "section_type": "area",
+      "name": "Horror Land",
+      "card": "Horror Land introduces the series' day-and-night cycle: the board starts in daylight and switches every two turns, or whenever a Happening Space is landed on, and paying Kamek 10 coins at the Mystery Mansion flips it to night early. Night changes the map's dangers -- Mr. I charges five coins at night instead of ten during the day to teleport a player (and anyone else in the path) between opposite corners, and the Big Boo in the northeast only appears at night, charging triple the usual fee and stealing from every player at once rather than just one. Whomps here can be paid 10 coins to swap position and open their guarded path, but they stop moving entirely once night falls.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_2",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 330,
+      "game_id": 27,
+      "section_type": "item",
+      "name": "Items and the Item Shop in Mario Party 2",
+      "card": "Mario Party 2 introduced buyable items, sold at Item Shops that change their stock as the game goes on: a Mushroom (10 coins) lets you roll two Dice Blocks and add them together, a Skeleton Key auto-opens locked gates you'd otherwise be stuck behind, and a Dueling Glove (15 coins) summons a Goomba to referee a coin duel against an opponent of your choice. Only one item can be carried at a time. Rarer items only come from Item Mini-Games: a Boo Bell steals coins or a Star for a price, and a Bowser Suit lets you disguise as Bowser and rob 20 coins from anyone you pass. On Bowser Land specifically, a shop run by a Baby Bowser forces whoever passes it to buy an item of his choosing at a markup, unless you're already wearing a Bowser Suit, in which case he gives you a rare item for free.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_2",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 331,
+      "game_id": 27,
+      "section_type": "mechanic",
+      "name": "Battle, Item, and Duel Mini-Games",
+      "card": "Mario Party 2 adds three minigame types beyond the usual 4-player, 2-vs-2, and 1-vs-3 formats. Landing on a Battle Space summons Goomba, who collects a pot of 10 to 50 coins from every player and starts a Battle Mini-Game where first place takes 70% of the pot and second takes the rest, leaving third and fourth with nothing. Item Spaces trigger single-player Item Mini-Games that hand out an item on a win, but only if it isn't the last turn and you don't already hold one. Duel Mini-Games are triggered by using a Dueling Glove rather than by a space, letting a player challenge a specific opponent for a coin wager the two of them agree on beforehand.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_2",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 332,
+      "game_id": 27,
+      "section_type": "boss",
+      "name": "Bowser Land and the final showdown",
+      "card": "Bowser Land is Mario Party 2's sixth and final board, unlocked only once every other board has been played at least once, and it flips several of the game's normal rules: passing a bank space here gives you five coins that add to a running loan rather than taking coins away, and landing on that space later means paying the full loan back, losing a Star outright if you can't cover it and have none to spare. Its signature hazard is the Bowser Parade, which starts every five turns and costs two coins per space to anyone caught in its path before sweeping them back to the start; players can redirect the parade's route by paying a Baby Bowser to flip arrow tiles. Whoever places first on this board faces Bowser directly for the game's ending, a tactical coin-and-item board rather than a reflex test.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_2",
       "source_license": "CC-BY-SA-4.0",
       "source_version": null,
       "crawled_at": "2026-09-18"

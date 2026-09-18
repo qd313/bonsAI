@@ -174,9 +174,9 @@ row used to reach:
 
 ```
 Show details / Read aloud (unchanged)
-   | Down
+   | Down                              ^ Up
 "From the notes" block header   <- new stop, one per turn
-   | Down
+   | Down                              ^ Up
 whatever Down from the utility row already reached (the chip ladder, a permission hint,
 the session context strip)
 ```
@@ -186,6 +186,17 @@ the session context strip)
 - **Down** with the block registered but nothing below it yet reuses exactly what
   `onMoveDownFromUtility` used to call directly; the block is spliced in front of that existing
   target, not a replacement for it.
+- **Up from anything below the block also has to reach it** — first Deck rows (NOTES-BLOCK-01)
+  found the block reachable walking Down from Show details but skipped walking Up from the
+  session context strip, which landed straight back on Show details. Fixed by inserting
+  `focusKbNotesBlock(turnKey)` (or, for the live turn, the shared `focusUpPastLiveKbNotesBlock()`)
+  ahead of the existing fallback at every one of these call sites: the archived and live chip
+  ladder's own `onMoveUpFromLadder`, the troubleshooting and VAC-check permission-hint rows'
+  `onMoveUp`, and the session context strip's `onMoveUp`. Each mirrors the Down path exactly —
+  same target, opposite direction — rather than inventing a new route.
+- **Not fixed, and out of scope for this control specifically:** walking Up from the question box
+  skips every reply row, the block included — a pre-existing gap wider than this one control,
+  filed separately by the same Deck row rather than folded into this fix.
 - **A** (`onOKButton`) or a tap (`onClick`) toggles the body open or closed. No `onActivate` —
   Steam fires it for A too, and wiring both would toggle twice on one press, the same trap the
   Show details line's own comment documents.

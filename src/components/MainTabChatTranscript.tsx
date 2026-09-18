@@ -228,21 +228,49 @@ const KB_NOTE_WIKI_HOST_NAMES: Record<string, string> = {
   "strategywiki.org": "StrategyWiki",
 };
 
-/** The header's source phrase — the trust tier turned into words, per Lane A's brief. */
+/**
+ * The header's source phrase — the trust tier turned into words, per Lane A's brief.
+ *
+ * Kept short on purpose (plan 58 phase 1, first Deck rows): "bonsAI's own note" rather than
+ * "bonsAI's own notes, no source" — at 412 px the drawn header is only wide enough for the
+ * source phrase to lose its own tail to an ellipsis, not the note's name or the "(+N more)"
+ * count next to it (see buildKbNotesBlockElement's own layout comment for how that is kept
+ * true structurally, not just by shortening this one phrase).
+ */
 function kbNoteSourcePhrase(note: KbAttachedNote): string {
   if (note.domain === "compat") return "From the shared Deck tips";
-  if (!note.source_host) return "From bonsAI's own notes, no source";
+  if (!note.source_host) return "From bonsAI's own note";
   const known = KB_NOTE_WIKI_HOST_NAMES[note.source_host];
   return known ? `From ${known}` : `From ${note.source_host}`;
 }
 
-/** The one-line label: the first note's name and source, plus a count of any others attached. */
+/**
+ * Display name for a note's header. Capitalized: a shared tip's own "name" is a raw lowercase
+ * topic word ("proton") because compat_patterns.json rows carry no title at all, while every
+ * other note's name is already a proper title from the seed data. Capitalizing the first letter
+ * is display-only and never changes what the note itself says.
+ *
+ * Considered and rejected: replacing a tip's name with a flat "Deck tip" label. The header's own
+ * source phrase already reads "From the shared Deck tips" right next to it, so a "Deck tip" name
+ * would just repeat that word twice in one line; the topic word at least tells two different
+ * tips apart at a glance when more than one is attached.
+ */
+function kbNoteDisplayName(note: KbAttachedNote): string {
+  const raw = note.name.trim();
+  if (!raw) return "Note";
+  return raw.charAt(0).toUpperCase() + raw.slice(1);
+}
+
+/**
+ * The label read out to a screen reader — name, then the count, then the source, in that exact
+ * order, matching the drawn header (see buildKbNotesBlockElement). Nothing here is ever cut; the
+ * ellipsis on the drawn source phrase is a visual-only affordance.
+ */
 function kbNotesHeaderLabel(notes: KbAttachedNote[]): string {
   const first = notes[0];
-  const name = first.name.trim() || "Note";
   const extra = notes.length - 1;
-  const label = `${name} · ${kbNoteSourcePhrase(first)}`;
-  return extra > 0 ? `${label} (+${extra} more)` : label;
+  const countText = extra > 0 ? ` (+${extra} more)` : "";
+  return `${kbNoteDisplayName(first)}${countText} · ${kbNoteSourcePhrase(first)}`;
 }
 
 function kbAttachedNotesFrom(
@@ -308,7 +336,7 @@ function registerKbNotesBlockEl(turnKey: string, el: HTMLElement | null): void {
   else kbNotesBlockEls.delete(turnKey);
 }
 
-function focusKbNotesBlock(turnKey: string): boolean {
+export function focusKbNotesBlock(turnKey: string): boolean {
   const el = kbNotesBlockEls.get(turnKey);
   if (!el) return false;
   if (!el.hasAttribute("tabindex") && !el.matches?.("button, a, input, select, textarea")) {
@@ -320,6 +348,17 @@ function focusKbNotesBlock(turnKey: string): boolean {
     return false;
   }
   return elementHasFocus(el);
+}
+
+/**
+ * Up from any row below the live turn's own "From the notes" block (a permission-hint row, or
+ * the chip ladder's own fallback) — reach the block first, when one is mounted, before falling
+ * to whatever that row's own Up already reached. The mirror of the Down path already wired
+ * (`onMoveDownFromUtility` on the live reply-actions row reaches these same rows past the
+ * block); without this, walking Up from any of them landed past the block entirely.
+ */
+export function focusUpPastLiveKbNotesBlock(): boolean {
+  return focusKbNotesBlock("live") || focusUpFromBelowContextChipLadder(queryLiveTurnSlot());
 }
 
 /**
@@ -337,10 +376,12 @@ function buildKbNotesBlockElement(args: {
   onToggle: () => void;
   onMoveUp: () => boolean;
   onMoveDown: () => boolean;
+  headerRef: (el: HTMLElement | null) => void;
 }): React.ReactElement | null {
-  const { turnKey, notes, open, onToggle, onMoveUp, onMoveDown } = args;
+  const { turnKey, notes, open, onToggle, onMoveUp, onMoveDown, headerRef } = args;
   if (!notes.length) return null;
   const headerLabel = kbNotesHeaderLabel(notes);
+  const extra = notes.length - 1;
   return (
     <Focusable
       key={`kb-notes-block-${turnKey}`}
@@ -373,25 +414,55 @@ function buildKbNotesBlockElement(args: {
         outline: "none",
       }}
     >
+      {/*
+       * Two rows, not one (plan 58 phase 1, first Deck rows: NOTES-BLOCK-01/05). The name and the
+       * "(+N more)" count live in their own row, the count in its own flex-locked span so it can
+       * never be the part an ellipsis eats; the source phrase gets its own row below, and it alone
+       * is allowed to truncate. A single combined line could not guarantee that order at 412 px —
+       * whichever text came last inside one shared ellipsis span was the text that vanished, which
+       * on the Deck was sometimes the source's own tail and sometimes the count.
+       */}
       <div
+        ref={headerRef}
         style={{
           display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: 8,
+          flexDirection: "column",
+          gap: 2,
           padding: "7px 10px",
           fontSize: 11,
           lineHeight: 1.35,
         }}
       >
-        <span style={{ minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-          <b style={{ color: "#dcc493", fontWeight: 700 }}>{notes[0].name.trim() || "Note"}</b>{" "}
-          <span style={{ color: "#a8916a" }}>
-            {kbNoteSourcePhrase(notes[0])}
-            {notes.length > 1 ? ` (+${notes.length - 1} more)` : ""}
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ display: "flex", minWidth: 0, alignItems: "baseline", gap: 4, flex: "1 1 auto" }}>
+            <b
+              style={{
+                color: "#dcc493",
+                fontWeight: 700,
+                minWidth: 0,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {kbNoteDisplayName(notes[0])}
+            </b>
+            {extra > 0 ? (
+              <span style={{ color: "#a8916a", flex: "0 0 auto" }}>{`(+${extra} more)`}</span>
+            ) : null}
           </span>
-        </span>
-        <span style={{ color: "#d6ae74", flex: "0 0 auto" }}>{open ? "▾" : "▸"}</span>
+          <span style={{ color: "#d6ae74", flex: "0 0 auto" }}>{open ? "▾" : "▸"}</span>
+        </div>
+        <div
+          style={{
+            color: "#a8916a",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {kbNoteSourcePhrase(notes[0])}
+        </div>
       </div>
       {open ? (
         <div
@@ -408,7 +479,7 @@ function buildKbNotesBlockElement(args: {
             <div key={`${turnKey}-kb-note-${i}`} style={{ marginBottom: i === notes.length - 1 ? 0 : 10 }}>
               {notes.length > 1 ? (
                 <div style={{ fontWeight: 700, color: "#dcc493", marginBottom: 3 }}>
-                  {note.name.trim() || "Note"} · {kbNoteSourcePhrase(note)}
+                  {kbNoteDisplayName(note)} · {kbNoteSourcePhrase(note)}
                 </div>
               ) : null}
               {note.card.split("\n").map((line, li) => renderKbNoteCardLine(line, li))}
@@ -848,11 +919,42 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
   const [kbNotesOpenByTurn, setKbNotesOpenByTurn] = useState<Record<string, boolean>>({});
   const isKbNotesOpen = (turnKey: string) =>
     kbNotesOpenByTurn[turnKey] ?? KB_NOTES_BLOCK_OPEN_BY_DEFAULT;
+  /**
+   * The block's own header row, one per turn key — separate from `kbNotesBlockEls` (the whole
+   * Focusable, header plus body) because opening the block has to scroll to the HEADER alone,
+   * not to the block's own bottom edge. First Deck rows (NOTES-BLOCK-01): a three-note block
+   * opens to about 970 px in a 366 px pane, and the pane scrolled to follow the growing
+   * Focusable's own bottom edge, leaving the header 768 px above the top — a person had to
+   * scroll back up to read the very first note the press was meant to reveal.
+   */
+  const kbNotesHeaderElRefs = useRef<Record<string, HTMLElement | null>>({});
+  /** Set only on a closed-to-open toggle, read once by the effect below, then cleared — the
+   *  smallest signal that says "this one just opened, scroll its header into view." */
+  const justOpenedKbNotesTurnRef = useRef<string | null>(null);
   const toggleKbNotesOpen = (turnKey: string) =>
-    setKbNotesOpenByTurn((prev) => ({
-      ...prev,
-      [turnKey]: !(prev[turnKey] ?? KB_NOTES_BLOCK_OPEN_BY_DEFAULT),
-    }));
+    setKbNotesOpenByTurn((prev) => {
+      const wasOpen = prev[turnKey] ?? KB_NOTES_BLOCK_OPEN_BY_DEFAULT;
+      if (!wasOpen) justOpenedKbNotesTurnRef.current = turnKey;
+      return { ...prev, [turnKey]: !wasOpen };
+    });
+  /*
+   * Runs after every render (no dependency array — the ref, not a dependency, is what gates it)
+   * so it always sees the DOM the just-committed open state produced. `requestAnimationFrame`
+   * lets that paint settle first, the same reason `isStreamSettling` elsewhere in this file
+   * waits a frame — scrolling before layout has caught up would measure the block's old,
+   * still-closed height.
+   */
+  useEffect(() => {
+    const turnKey = justOpenedKbNotesTurnRef.current;
+    if (!turnKey) return;
+    justOpenedKbNotesTurnRef.current = null;
+    const header = kbNotesHeaderElRefs.current[turnKey];
+    if (!header) return;
+    const raf = requestAnimationFrame(() => {
+      header.scrollIntoView({ block: "start" });
+    });
+    return () => cancelAnimationFrame(raf);
+  });
 
   /*
    * Plan 58 phase 1: re-render whenever a spoiler fence opens or closes anywhere, so
@@ -1505,6 +1607,9 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                           focusReplyShowDetails(queryTurnSlot(turn.id)) ||
                           focusReplyUtilityRow(queryTurnSlot(turn.id)),
                         onMoveDown: downPastUtilityRow,
+                        headerRef: (el: HTMLElement | null) => {
+                          kbNotesHeaderElRefs.current[turn.id] = el;
+                        },
                       })}
                     </>
                   );
@@ -1515,7 +1620,11 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                     <ContextChipLadder
                       snapshot={archivedTransparencyFor(turn, turnIndex)}
                       collapsedHint={false}
+                      /* The ladder sits below the "From the notes" block when one is mounted
+                         (plan 58 phase 1) -- Up has to reach it before falling to Show details,
+                         mirroring the Down path that already reaches the ladder past the block. */
                       onMoveUpFromLadder={() =>
+                        focusKbNotesBlock(turn.id) ||
                         focusReplyShowDetails(queryTurnSlot(turn.id)) ||
                         focusReplyUtilityRow(queryTurnSlot(turn.id))
                       }
@@ -1715,6 +1824,9 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                       focusReplyShowDetails(queryLiveTurnSlot()) ||
                       focusReplyUtilityRow(queryLiveTurnSlot()),
                     onMoveDown: () => focusDownFromReplyUtilityRowOrPermHint(queryLiveTurnSlot()),
+                    headerRef: (el: HTMLElement | null) => {
+                      kbNotesHeaderElRefs.current.live = el;
+                    },
                   });
                 })()
               : null}
@@ -1723,7 +1835,10 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                 <ContextChipLadder
                   snapshot={transparencySnapshot}
                   collapsedHint={false}
+                  /* Same reason as the archived ladder above: the block, when mounted, sits
+                     between this ladder and Show details. */
                   onMoveUpFromLadder={() =>
+                    focusKbNotesBlock("live") ||
                     focusReplyShowDetails(queryLiveTurnSlot()) ||
                     focusReplyUtilityRow(queryLiveTurnSlot())
                   }
@@ -1796,7 +1911,7 @@ questionLooksLikeTroubleshootingAsk(unifiedInput) ? (
       flow-children="horizontal"
       {...({
         navRef: troubleshootHintNavRef,
-        onMoveUp: () => focusUpFromBelowContextChipLadder(queryLiveTurnSlot()),
+        onMoveUp: focusUpPastLiveKbNotesBlock,
         onMoveDown: () => focusSessionContextStrip(),
       } as Record<string, unknown>)}
     >
@@ -1852,7 +1967,7 @@ questionLooksLikeTroubleshootingAsk(unifiedInput) ? (
       flow-children="horizontal"
       {...({
         navRef: vacDenyRowNavRef,
-        onMoveUp: () => focusUpFromBelowContextChipLadder(queryLiveTurnSlot()),
+        onMoveUp: focusUpPastLiveKbNotesBlock,
         onMoveDown: () => focusSessionContextStrip(),
       } as Record<string, unknown>)}
     >
@@ -1917,7 +2032,7 @@ questionLooksLikeTroubleshootingAsk(unifiedInput) ? (
     onHighlightClear={() => setSessionHighlightTurnId(null)}
     onMoveUp={() => {
       if (focusChatPermissionHintRow()) return true;
-      return focusUpFromBelowContextChipLadder(queryLiveTurnSlot());
+      return focusUpPastLiveKbNotesBlock();
     }}
     onBeforeDeckyModal={onBeforeNestedDeckyModal}
     onCompleteDeckyModalClose={onCompleteNestedDeckyModalClose}

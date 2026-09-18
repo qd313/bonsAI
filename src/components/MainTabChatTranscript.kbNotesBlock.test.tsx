@@ -15,7 +15,11 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { render, fireEvent } from "@testing-library/react";
 import { vi } from "vitest";
 
-import { MainTabChatTranscript } from "./MainTabChatTranscript";
+import {
+  MainTabChatTranscript,
+  focusKbNotesBlock,
+  focusUpPastLiveKbNotesBlock,
+} from "./MainTabChatTranscript";
 import type { MainTabChatTranscriptProps } from "./MainTabChatTranscript";
 import { resetSpoilerFenceOpenCountForTests } from "./MainTabBonsaiAiMarkdownChunk";
 import type { AskThreadCollapsedTurn } from "../types/bonsaiUi";
@@ -182,7 +186,7 @@ describe("the header's three source wordings", () => {
 
   it("says there is no source when the note has none", () => {
     const { container } = withNote({ source_host: "", name: "Exploder", domain: "strategy" });
-    expect(block(container)?.textContent).toContain("From bonsAI's own notes, no source");
+    expect(block(container)?.textContent).toContain("From bonsAI's own note");
   });
 
   it("names a shared tip separately from a strategy note, even with no source_host", () => {
@@ -438,5 +442,227 @@ describe("the live turn, before the reply is done", () => {
       />
     );
     expect(block(container)?.textContent).toContain("Finished note");
+  });
+});
+
+function fullTransparencySnapshot(notes: KbAttachedNote[]): MainTabChatTranscriptProps["transparencySnapshot"] {
+  return {
+    route: "ollama",
+    raw_question: "",
+    sanitizer_action: "",
+    sanitizer_reason_codes: [],
+    text_after_sanitizer: "",
+    ollama_model: null,
+    system_prompt: null,
+    user_text_for_model: null,
+    user_image_count: 0,
+    attachment_paths: [],
+    assistant_raw: null,
+    assistant_after_attachment_format: null,
+    final_response: "",
+    applied: null,
+    success: true,
+    app_id: "",
+    app_name: "",
+    pc_ip: "",
+    error_message: "",
+    elapsed_seconds: 0,
+    kb_attached_notes: notes,
+  };
+}
+
+describe("the block is reachable as a real D-pad stop from both directions", () => {
+  it("Down: focusing the block by its registered turn key actually lands the DOM focus on it", () => {
+    const turn: AskThreadCollapsedTurn = {
+      id: "t1",
+      question: "q",
+      answer: "a",
+      transparency: {
+        route: "ollama",
+        success: true,
+        context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+        overflow_skips: [],
+        kb_attached_notes: [note()],
+      },
+    };
+    const { container } = render(<MainTabChatTranscript {...archivedTurnProps(turn)} />);
+    expect(focusKbNotesBlock("t1")).toBe(true);
+    expect(document.activeElement).toBe(block(container));
+  });
+
+  it("Up: the session context strip's own Up (and the rows below it) land on the live turn's block", () => {
+    const { container } = render(
+      <MainTabChatTranscript
+        {...baseProps({
+          isAsking: false,
+          expandedTurnKey: "live",
+          askThreadDisplayQuestion: "is there a day limit in pikmin 2",
+          ollamaResponse: "Yes, Pikmin 2 keeps the day limit from the first game.",
+          lastExchange: {
+            question: "is there a day limit in pikmin 2",
+            answer: "Yes, Pikmin 2 keeps the day limit from the first game.",
+          },
+          transparencySnapshot: fullTransparencySnapshot([note()]),
+        })}
+      />
+    );
+    expect(focusUpPastLiveKbNotesBlock()).toBe(true);
+    expect(document.activeElement).toBe(block(container));
+  });
+
+  it("Up: falls through cleanly (no throw, reports unhandled) when the live turn has no block", () => {
+    render(
+      <MainTabChatTranscript
+        {...baseProps({
+          isAsking: false,
+          expandedTurnKey: "live",
+          askThreadDisplayQuestion: "q",
+          ollamaResponse: "a",
+          lastExchange: { question: "q", answer: "a" },
+          transparencySnapshot: fullTransparencySnapshot([]),
+        })}
+      />
+    );
+    expect(() => focusUpPastLiveKbNotesBlock()).not.toThrow();
+  });
+});
+
+describe("the header's name, count and source never share one truncating span", () => {
+  /*
+   * First Deck rows (NOTES-BLOCK-01/05): on the real 412px column the count or the source's own
+   * tail could be the part an ellipsis ate, because both used to live in one shared span. These
+   * tests pin the DOM *structure* the fix relies on -- jsdom does no layout, so there is no
+   * ellipsis to observe directly, but a count that is not textContent of the same element as the
+   * source can never be cut by that element's own overflow rule.
+   */
+  function turnWith(notes: KbAttachedNote[]): AskThreadCollapsedTurn {
+    return {
+      id: "t1",
+      question: "q",
+      answer: "a",
+      transparency: {
+        route: "ollama",
+        success: true,
+        context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+        overflow_skips: [],
+        kb_attached_notes: notes,
+      },
+    };
+  }
+
+  it("keeps the count out of the source line's own element", () => {
+    const { container } = render(
+      <MainTabChatTranscript
+        {...archivedTurnProps(turnWith([note(), note({ name: "Other note" })]))}
+      />
+    );
+    const el = block(container) as HTMLElement;
+    // The count sits beside the name, not inside the line that carries the source phrase.
+    const sourceLine = Array.from(el.querySelectorAll("div")).find((d) =>
+      (d.textContent || "").startsWith("From ")
+    );
+    expect(sourceLine?.textContent).not.toContain("more)");
+    expect(el.textContent).toContain("(+1 more)");
+  });
+
+  it("reads name, then count, then source, in that order in the closed header's own text", () => {
+    const { container } = render(
+      <MainTabChatTranscript {...archivedTurnProps(turnWith([note(), note()]))} />
+    );
+    const text = block(container)?.textContent || "";
+    const nameAt = text.indexOf("Starting out in Pikmin 2");
+    const countAt = text.indexOf("(+1 more)");
+    const sourceAt = text.indexOf("From the Pikmin wiki");
+    expect(nameAt).toBeGreaterThanOrEqual(0);
+    expect(nameAt).toBeLessThan(countAt);
+    expect(countAt).toBeLessThan(sourceAt);
+  });
+
+  it("capitalizes a shared tip's own topic word instead of showing it lowercase", () => {
+    const { container } = render(
+      <MainTabChatTranscript
+        {...archivedTurnProps(turnWith([note({ domain: "compat", name: "proton", source_host: "" })]))}
+      />
+    );
+    expect(block(container)?.textContent).toContain("Proton");
+    expect(block(container)?.textContent).not.toContain("proton");
+  });
+});
+
+describe("opening a tall block keeps the view at its header", () => {
+  it("scrolls the header into view, not the whole block, on open", async () => {
+    const scrollIntoView = vi.fn();
+    const realScrollIntoView = HTMLElement.prototype.scrollIntoView;
+    HTMLElement.prototype.scrollIntoView = scrollIntoView;
+    try {
+      const turn: AskThreadCollapsedTurn = {
+        id: "t1",
+        question: "q",
+        answer: "a",
+        transparency: {
+          route: "ollama",
+          success: true,
+          context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+          overflow_skips: [],
+          kb_attached_notes: [note(), note({ name: "Second" }), note({ name: "Third" })],
+        },
+      };
+      const { container } = render(<MainTabChatTranscript {...archivedTurnProps(turn)} />);
+      fireEvent.click(block(container) as HTMLElement);
+
+      // The scroll is scheduled with requestAnimationFrame so it runs after the open body has
+      // actually been laid out; let one frame pass the same way the component does.
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+
+      /*
+       * Other features in this same file (useStreamScrollPin, useDockClearanceOnFocus,
+       * SessionContextStrip) call the real scrollIntoView too, each with its own arguments —
+       * patching the prototype globally catches all of them, so this test picks out only the
+       * call shape this fix makes: exactly `{ block: "start" }`, nothing else uses that shape.
+       */
+      const ownCalls = scrollIntoView.mock.calls
+        .map((args, i) => ({ args, target: scrollIntoView.mock.instances[i] as unknown as HTMLElement }))
+        .filter(({ args }) => args.length === 1 && args[0]?.block === "start" && !("behavior" in (args[0] as object)));
+      expect(ownCalls).toHaveLength(1);
+      // Called on the header row, not on the block's own outer element (which also contains the
+      // now-tall open body).
+      expect(ownCalls[0].target).not.toBe(block(container));
+      expect(ownCalls[0].target.textContent).toContain("Starting out in Pikmin 2");
+    } finally {
+      HTMLElement.prototype.scrollIntoView = realScrollIntoView;
+    }
+  });
+
+  it("does not scroll again when the block is only closed back up", async () => {
+    const scrollIntoView = vi.fn();
+    const realScrollIntoView = HTMLElement.prototype.scrollIntoView;
+    HTMLElement.prototype.scrollIntoView = scrollIntoView;
+    try {
+      const turn: AskThreadCollapsedTurn = {
+        id: "t1",
+        question: "q",
+        answer: "a",
+        transparency: {
+          route: "ollama",
+          success: true,
+          context_chips: [{ id: "kb", rank: 1, label: "KB", attached: true, tier_class: "", body: { title: "t", paths: [], bullets: [] } }],
+          overflow_skips: [],
+          kb_attached_notes: [note()],
+        },
+      };
+      const { container } = render(<MainTabChatTranscript {...archivedTurnProps(turn)} />);
+      fireEvent.click(block(container) as HTMLElement);
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      scrollIntoView.mockClear();
+
+      fireEvent.click(block(container) as HTMLElement);
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+      const ownCalls = scrollIntoView.mock.calls.filter(
+        (args) => args.length === 1 && args[0]?.block === "start" && !("behavior" in (args[0] as object))
+      );
+      expect(ownCalls).toHaveLength(0);
+    } finally {
+      HTMLElement.prototype.scrollIntoView = realScrollIntoView;
+    }
   });
 });

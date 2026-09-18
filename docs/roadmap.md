@@ -650,17 +650,22 @@ Same rules as the lists above: five lines an entry, stars ascending in each list
 then to [Done](#done-for-v050) in the same commit. The one difference is that the knowledge base keeps its bugs, its owed
 checks and its plans together here instead of spread over three lists.
 
-**Where things stand (2026-09-07, after wave three).** **293 notes over 25 games, plus 156 Deck tips.** Wave two
+**Where things stand (2026-09-18).** **372 notes over 35 games, plus 159 Deck tips.** Wave two
 added 27 notes and 32 tips. **Of the 72 questions a player might plainly ask about the twelve games added this
 month, 64 now have a note** — the other eight were written on purpose to have none, so every question that was
-meant to have an answer has one.
+meant to have an answer has one. Ten more games' notes landed 2026-09-18 — the five Mario Party games, Donkey
+Kong 64, Yoshi's Story, Diddy Kong Racing, Super Smash Bros. 1999 and Grand Theft Auto III: The Definitive
+Edition — written by two helpers in their own words from wiki pages read that same day, with the page, licence
+and day recorded on every note. The library was built as version 2026.09.18 with every note and tip indexed and
+its publish check passing, but it has not gone out to the public hosts yet.
 
-**Finding the right note.** On questions nobody tuned against, the search puts the right note in the top three
-**84 times in a hundred, up from 80**. Every one of the 21 notes written in wave two is found in the top three for
-its own question, and 12 come first. Across all 72 questions about the new games, **58 find their note in the top
-three where 38 did**. Two rows out of 413 got worse against 24 better. That 84-in-a-hundred count was
-measured before the search gained a floor that can refuse a weak match, and has not been measured
-again since — treat it as owed, not confirmed.
+**Finding the right note.** On the held-back questions nobody tuned against (177 rows), the search puts the
+right note in the top three **85.3 times in a hundred**. Every one of the 21 notes written in wave two is found
+in the top three for its own question, and 12 come first. Across all 72 questions about the new games, **58
+find their note in the top three where 38 did**. Two rows out of 413 got worse against 24 better. On the 21
+newly labelled questions for the games added this session, the right note came first 16 times and landed in
+the top three 20 times. This was measured 2026-09-18 on the floored search against the new, bigger library —
+a new series, started because rows were added, so it does not compare with any older count.
 
 **The answer the Deck's own model writes**, over 61 questions with the corrected checks: it keeps the note's facts
 **76.6 times in a hundred**, never contradicts its note **94.4**, attaches a note whenever one is due **100**,
@@ -925,7 +930,9 @@ ones from this month are D81 to D88.
   sentences without rewriting them, ten games from sources already cleared, and a study of which sources cover many
   games under one licence. That [source study](archive/research/kb-catalog-sources-2026-09.md) landed 2026-09-17
   and recommends the Super Mario Wiki first, the per-wiki Fandom check second, and the walkthrough wiki third
-  once its saved copy has been tried with the reader.
+  once its saved copy has been tried with the reader. The first ten games from those cleared sources landed
+  2026-09-18, written from the wiki pages fetched that day, taking the library to 35 games; landing them
+  reopened the July no-new-games lock, since the catalog phase starts here (D111).
 
 ---
 

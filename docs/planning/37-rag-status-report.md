@@ -18,12 +18,14 @@ stars is section 6, because what is in the way is not a job anyone can size.
 
 ## 1. The picture in one paragraph
 
-With one of the twenty-five covered games running, a Strategy or Expert question gets the best one to
-five notes from a library of **293 game notes** glued onto the instructions the AI reads, and a
-troubleshooting question gets tips from a sheet of **156 Deck tips**. On questions written without looking
-at the notes, the search puts the right note in its top three 84 times in a hundred — **that count was
-taken before this wave put a floor under the search and has not been measured again since, so it is
-owed.** Wave three also found that the two checks behind the answer numbers were themselves wrong, fixed
+With one of the thirty-five covered games running, a Strategy or Expert question gets the best one to
+five notes from a library of **372 game notes** glued onto the instructions the AI reads, and a
+troubleshooting question gets tips from a sheet of **159 Deck tips**. On the held-back questions nobody
+tuned against (177 rows), the search puts the right note in its top three **85.3 times in a hundred**,
+measured 2026-09-18 on the floored search against the new, bigger library — a new series, started because
+rows were added, so it does not compare with any older count. On the 21 newly labelled questions for the
+games added this session, the right note came first 16 times and landed in the top three 20 times. Wave
+three also found that the two checks behind the answer numbers were themselves wrong, fixed
 both, and took the numbers again on the shape that ships today — a Strategy answer about a named thing
 now gives the note's own advice first, then the same menu, instead of a short bit of orientation first.
 On that shape, the small model on the Deck keeps the notes' facts 79.5 times in a hundred and almost
@@ -96,9 +98,11 @@ questions are the same topic, the Pikmin 2 day limit, which was already wrong on
 maintainer read this table and took the change on 2026-09-07; it shipped the same evening. **Nobody has
 read it on the device yet.**
 
-**Search.** Right note in the top three, on questions nobody tuned against: still reads **84 in 100** —
-but that count was taken before this wave put a floor under the search, and has not been taken again
-since. It is owed, not confirmed.
+**Search.** Right note in the top three, on the held-back questions nobody tuned against (177 rows):
+**85.3 in 100**, measured 2026-09-18 on the floored search against the new, bigger library. This is a new
+series, started because rows were added, so it does not compare with any older reading. On the 21 newly
+labelled questions for the games added this session, the right note came first 16 times and landed in the
+top three 20 times.
 
 **Troubleshooting.** Of 24 plainly-worded problem sentences written by someone who had not seen the
 rules, 6 reached the tips before this wave's tip rewrite and 8 after. The tips themselves are much deeper
@@ -120,10 +124,11 @@ per-question wait, not the drift over weeks — a constant per-question reload d
 readings getting slower over time, so that part is still open, along with whether two models loaded together
 is fine with a heavy game running.
 
-**The library.** 293 notes over 25 games, 156 shared Deck tips, **every one of them indexed** — the build
+**The library.** 372 notes over 35 games, 159 shared Deck tips, **every one of them indexed** — the build
 now refuses to finish if any note or tip is missing its meaning index, where it used to only print a
-warning. Library version `2026.09.08` — the same 293 notes and 156 tips, plus a corrected Black Mesa
-note. 1.39 MB to download. Schema stays at 3, so nothing already installed goes stale.
+warning. Library version `2026.09.18` is built and checked against that guarantee, but has not been
+published yet; the release actually out on both hosts is still `2026.09.08`. Schema stays at 3, so nothing
+already installed goes stale.
 
 ## 4. What is open right now
 

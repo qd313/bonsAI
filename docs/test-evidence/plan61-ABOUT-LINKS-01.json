@@ -1,0 +1,41 @@
+{
+  "rowId": "ABOUT-LINKS-01",
+  "rowText": "All four About links were unreachable by D-pad. Hand-rolled Focusable + onMoveUp/onMoveDown wrappers returned true, so Steam skipped default navigation, while focus was moved with a plain DOM .focus() -- which does not transfer gamepad focus across nav containers... Now plain ButtonItem rows, matching DeveloperTab. On-Deck steps: open the About tab, press Down from the language dropdown through all four links in turn, then Up back to the top. Press A on one link and confirm it opens Steam's own browser (not a dead press). Also settles the last piece of SHELL-PAYLOAD-01 (the About tab's own detailed D-pad walk down its four links).",
+  "build": {
+    "plugin": "0.5.0",
+    "commit": "0589565",
+    "deployedAt": "2026-09-18T05:48:00-04:00 (by another session; not redeployed this flow)"
+  },
+  "deckTime": "2026-09-18T08:07:00-04:00",
+  "setup": {
+    "settings": {
+      "show_developer_tab": true,
+      "ui_scale_auto_enabled": true,
+      "ui_scale_manual_profile": "handheld",
+      "ai_character_enabled": true,
+      "ai_character_preset_id": "alig_ali_g"
+    },
+    "runningGame": null,
+    "chatUsed": "existing chat left from flow A"
+  },
+  "steps": [
+    { "press": "DOWN", "expected": "language dropdown", "landingLabelAndSelector": "BUTTON \"Follow system\"", "rect": {"x":64,"y":278,"w":268,"h":41}, "visibilityVerdict": "visible" },
+    { "press": "DOWN", "expected": "link 1", "landingLabelAndSelector": "BUTTON \"GitHub\"", "visibilityVerdict": "visible" },
+    { "press": "DOWN", "expected": "link 2", "landingLabelAndSelector": "BUTTON \"Built on Ollama!\"", "visibilityVerdict": "visible" },
+    { "press": "DOWN", "expected": "link 3", "landingLabelAndSelector": "BUTTON \"Bugs & Feature Requests\"", "visibilityVerdict": "visible" },
+    { "press": "DOWN", "expected": "link 4", "landingLabelAndSelector": "BUTTON \"Support my Steam Sale habit\"", "visibilityVerdict": "visible" },
+    { "press": "UP", "expected": "back to link 3", "landingLabelAndSelector": "BUTTON \"Bugs & Feature Requests\"", "visibilityVerdict": "visible" },
+    { "press": "UP", "expected": "back to link 2", "landingLabelAndSelector": "BUTTON \"Built on Ollama!\"", "visibilityVerdict": "visible" },
+    { "press": "UP", "expected": "back to link 1", "landingLabelAndSelector": "BUTTON \"GitHub\"", "visibilityVerdict": "visible" },
+    { "press": "UP", "expected": "back to language dropdown", "landingLabelAndSelector": "BUTTON \"Follow system\"", "visibilityVerdict": "visible" },
+    { "press": "UP", "expected": "back to the tab bar", "landingLabelAndSelector": "DIV \"About tab\"", "visibilityVerdict": "visible" },
+    { "press": "DOWN, DOWN (return to GitHub link)", "expected": "ring reads GitHub just before the A press", "landingLabelAndSelector": "BUTTON \"GitHub\"", "visibilityVerdict": "visible" },
+    { "press": "A on GitHub", "expected": "opens Steam's own browser", "landingLabelAndSelector": "Steam Big Picture Mode target, page https://github.com/qd313/bonsAI", "visibilityVerdict": "visible (browser page on screen)" },
+    { "press": "B", "expected": "return to the panel", "landingLabelAndSelector": "the whole Quick Access Menu closed, not just the browser -- ring landed on Steam's own Recent Games grid (Hades tile) behind it", "visibilityVerdict": "visible, but not inside the plugin panel" },
+    { "press": "(driver reopened the plugin, one extra step not requested by the row)", "expected": "back in the bonsAI panel", "landingLabelAndSelector": "DIV \"About tab\" inside .bonsai-scope -- the panel's own state (still on About, language dropdown scroll position) had not been lost", "visibilityVerdict": "visible" }
+  ],
+  "pluginLogLines": [],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "All four About links can now be reached with the D-pad going down and coming back up, fixing the old dead-end bug; pressing the button on the GitHub link correctly opened Steam's own web browser to the project's GitHub page. One thing to flag even though the row passed: pressing B to leave the browser closed the whole bonsAI panel instead of just going back to the About screen, so a person would need one extra press to reopen bonsAI -- the panel's own place (still on About) was remembered correctly once reopened."
+}

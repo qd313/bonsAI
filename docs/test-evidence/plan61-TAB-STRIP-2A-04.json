@@ -1,0 +1,86 @@
+{
+  "rowId": "TAB-STRIP-2A-04",
+  "rowText": "Switch fade — Right x3 from Main: the icon boxes' positions before and after each press are identical; only the fill and the name changed",
+  "build": {
+    "plugin": "0.5.0",
+    "commit": "0589565",
+    "deployedAt": "2026-09-18T05:48:00-04:00 (by another session; not redeployed this flow)"
+  },
+  "deckTime": "2026-09-18T08:04:00-04:00",
+  "setup": {
+    "settings": {
+      "show_developer_tab": true,
+      "ui_scale_auto_enabled": true,
+      "ui_scale_manual_profile": "handheld",
+      "ai_character_enabled": true,
+      "ai_character_preset_id": "alig_ali_g"
+    },
+    "runningGame": null,
+    "chatUsed": "existing chat left from flow A"
+  },
+  "steps": [
+    {
+      "press": "(start) ring on Main tab",
+      "expected": "active tab reads Main",
+      "landingLabelAndSelector": "cell-name = main, big name = Main",
+      "iconRects": [
+        {"x":84.5,"y":80.667,"w":22,"h":22},
+        {"x":125.5,"y":80.667,"w":22,"h":22},
+        {"x":166.5,"y":80.667,"w":22,"h":22},
+        {"x":207.5,"y":80.667,"w":22,"h":22},
+        {"x":248.5,"y":80.667,"w":22,"h":22},
+        {"x":289.5,"y":80.667,"w":22,"h":22}
+      ],
+      "visibilityVerdict": "visible"
+    },
+    {
+      "press": "RIGHT (1 of 3)",
+      "expected": "active tab moves to Ollama, icon boxes unchanged",
+      "landingLabelAndSelector": "cell-name = ollama, big name = Ollama",
+      "iconRects": [
+        {"x":84.5,"y":80.667,"w":22,"h":22},
+        {"x":125.5,"y":80.667,"w":22,"h":22},
+        {"x":166.5,"y":80.667,"w":22,"h":22},
+        {"x":207.5,"y":80.667,"w":22,"h":22},
+        {"x":248.5,"y":80.667,"w":22,"h":22},
+        {"x":289.5,"y":80.667,"w":22,"h":22}
+      ],
+      "iconsIdenticalToPrevious": true,
+      "visibilityVerdict": "visible"
+    },
+    {
+      "press": "RIGHT (2 of 3)",
+      "expected": "active tab moves to Settings, icon boxes unchanged",
+      "landingLabelAndSelector": "cell-name = settings, big name = Settings",
+      "iconRects": [
+        {"x":84.5,"y":80.667,"w":22,"h":22},
+        {"x":125.5,"y":80.667,"w":22,"h":22},
+        {"x":166.5,"y":80.667,"w":22,"h":22},
+        {"x":207.5,"y":80.667,"w":22,"h":22},
+        {"x":248.5,"y":80.667,"w":22,"h":22},
+        {"x":289.5,"y":80.667,"w":22,"h":22}
+      ],
+      "iconsIdenticalToPrevious": true,
+      "visibilityVerdict": "visible"
+    },
+    {
+      "press": "RIGHT (3 of 3)",
+      "expected": "active tab moves to Permissions, icon boxes unchanged",
+      "landingLabelAndSelector": "cell-name = perms, big name = Permissions",
+      "iconRects": [
+        {"x":84.5,"y":80.667,"w":22,"h":22},
+        {"x":125.5,"y":80.667,"w":22,"h":22},
+        {"x":166.5,"y":80.667,"w":22,"h":22},
+        {"x":207.5,"y":80.667,"w":22,"h":22},
+        {"x":248.5,"y":80.667,"w":22,"h":22},
+        {"x":289.5,"y":80.667,"w":22,"h":22}
+      ],
+      "iconsIdenticalToPrevious": true,
+      "visibilityVerdict": "visible"
+    }
+  ],
+  "pluginLogLines": [],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "Moving across three tabs with the right button, the six little tab icons never budged a pixel; only which one is lit up and its name changed."
+}

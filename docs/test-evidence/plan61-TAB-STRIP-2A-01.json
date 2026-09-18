@@ -1,0 +1,71 @@
+{
+  "rowId": "TAB-STRIP-2A-01",
+  "rowText": "Geometry, six tabs — Strip 300 x 66 floating at the scope's top; six cell boxes within 1px of equal width (about 39); every icon box 22 tall with its top 6px below the cell top, same in all six; bar at rest still 300 x 20; body top unchanged from 2 September (87.95px)",
+  "build": {
+    "plugin": "0.5.0",
+    "commit": "0589565",
+    "deployedAt": "2026-09-18T05:48:00-04:00 (by another session; not redeployed this flow)"
+  },
+  "deckTime": "2026-09-18T08:03:00-04:00",
+  "setup": {
+    "settings": {
+      "show_developer_tab": true,
+      "ui_scale_auto_enabled": true,
+      "ui_scale_manual_profile": "handheld",
+      "ai_character_enabled": true,
+      "ai_character_preset_id": "alig_ali_g"
+    },
+    "runningGame": null,
+    "chatUsed": "existing chat left from flow A (not created or altered by this row)"
+  },
+  "steps": [
+    {
+      "press": "none (ring placed on the Main tab bar cell via a walk)",
+      "expected": "the floating strip sits over the tab bar, six equal cells inside it",
+      "landingLabelAndSelector": "DIV \"Main tab\", .bonsai-tab-bar.bonsai-tab-bar--open",
+      "rect": { "x": 48, "y": 64, "w": 300, "h": 66 },
+      "visibilityVerdict": "visible"
+    }
+  ],
+  "measurements": {
+    "strip": { "selector": ".bonsai-tab-bar__strip", "rect": { "x": 48, "y": 64, "w": 300, "h": 66 }, "expected": "300 x 66", "verdict": "matches" },
+    "restingBar": { "selector": ".bonsai-tab-bar", "rect": { "x": 48, "y": 64, "w": 300, "h": 20 }, "expected": "300 x 20", "verdict": "matches" },
+    "cells": {
+      "selector": ".bonsai-tab-bar__cell",
+      "count": 6,
+      "widths": [39, 39, 39, 39, 39, 39],
+      "rectsLeftToRight": [
+        { "x": 76, "y": 74.667, "w": 39, "h": 44 },
+        { "x": 117, "y": 74.667, "w": 39, "h": 44 },
+        { "x": 158, "y": 74.667, "w": 39, "h": 44 },
+        { "x": 199, "y": 74.667, "w": 39, "h": 44 },
+        { "x": 240, "y": 74.667, "w": 39, "h": 44 },
+        { "x": 281, "y": 74.667, "w": 39, "h": 44 }
+      ],
+      "expected": "about 39, within 1px of each other",
+      "verdict": "matches (all exactly 39)"
+    },
+    "iconBoxes": {
+      "selector": ".bonsai-tab-bar__cell-icon",
+      "count": 6,
+      "height": 22,
+      "cellTopY": 74.667,
+      "iconTopY": 80.667,
+      "offsetFromCellTop": 6.0,
+      "note": "offset is exactly 6.0px on all six, same value on every cell",
+      "expected": "22 tall, top 6px below the cell top, same on all six",
+      "verdict": "matches"
+    },
+    "bodyTop": {
+      "selector": ".bonsai-main-tab-column",
+      "measured": 88.0,
+      "expected": 87.95,
+      "diff": 0.05,
+      "verdict": "matches within rounding (0.05px), effectively unchanged from 2 September"
+    }
+  },
+  "pluginLogLines": [],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "The six-tab strip and its cells, icons, resting bar and body top all measured exactly where the design calls for, and the tiny 0.05px gap on the body top is not something a person would ever notice."
+}

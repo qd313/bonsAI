@@ -1,0 +1,37 @@
+{
+  "rowId": "TAB-STRIP-2A-02",
+  "rowText": "Geometry, five tabs — Same with Developer off; strip 300 x 66; cells about 47 wide",
+  "build": {
+    "plugin": "0.5.0",
+    "commit": "0589565",
+    "deployedAt": "2026-09-18T05:48:00-04:00 (by another session; not redeployed this flow)"
+  },
+  "deckTime": "2026-09-18T08:12:00-04:00",
+  "setup": {
+    "settings": {
+      "show_developer_tab": false,
+      "note": "changed from true (found) to false for this row only, by pressing A on the Developer-tab-visibility switch on the Settings tab -- confirmed off by an SSH read of settings.json before measuring"
+    },
+    "runningGame": null,
+    "chatUsed": "existing chat left from flow A"
+  },
+  "steps": [
+    { "press": "A on the Show Developer tab switch (Settings tab)", "expected": "switch reads off, Developer tab removed from the strip", "landingLabelAndSelector": "toggle 'Show Developer tab'", "visibilityVerdict": "visible" },
+    { "press": "(SSH read) grep show_developer_tab settings.json", "expected": "false", "result": "\"show_developer_tab\": false" },
+    { "press": "walk UP to the tab bar", "expected": "strip now shows five cells (dev tab gone)", "landingLabelAndSelector": "DIV \"Settings tab\", .bonsai-tab-bar__strip", "visibilityVerdict": "visible" }
+  ],
+  "measurements": {
+    "strip": { "rect": { "x": 48, "y": 64, "w": 300, "h": 66 }, "expected": "300 x 66", "verdict": "matches" },
+    "cells": {
+      "count": 5,
+      "names": ["main", "ollama", "settings", "perms", "about"],
+      "width": 47.198,
+      "expected": "about 47",
+      "verdict": "matches"
+    }
+  },
+  "pluginLogLines": [],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "With the Developer tab switched off, the strip stayed the same 300 by 66 box but now shows five equal tabs about 47 pixels wide instead of six, exactly as designed."
+}

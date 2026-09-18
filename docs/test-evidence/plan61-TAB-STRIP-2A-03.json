@@ -1,0 +1,37 @@
+{
+  "rowId": "TAB-STRIP-2A-03",
+  "rowText": "By eye, the maintainer -- The lit name readable at arm's length; the lit cell reads as a selection, not a warning; nothing clipped; in green (no character), gold (Ali G), purple (Shadowheart), grey (Astarion), pink (Fuu)",
+  "build": {
+    "plugin": "0.5.0",
+    "commit": "0589565",
+    "deployedAt": "2026-09-18T05:48:00-04:00 (by another session; not redeployed this flow)"
+  },
+  "deckTime": "2026-09-18T08:10-08:14 -04:00",
+  "setup": {
+    "settings": {
+      "found": { "ai_character_enabled": true, "ai_character_preset_id": "alig_ali_g", "ai_character_random": false },
+      "note": "Ali G (gold) was already the found state, so it needed no change for its own capture. Each other colour was set by editing ai_character_preset_id (and, for green, ai_character_enabled) over SSH, then closing and reopening the plugin panel so the change was picked up, confirmed each time by the avatar-badge letter and the lit cell's colour before capturing.",
+      "developerTab": true,
+      "uiScale": "handheld 1.00x (restored from Group 3)"
+    },
+    "runningGame": null,
+    "chatUsed": "existing chat left from flow A"
+  },
+  "steps": [
+    { "press": "(no change needed) ring on Main tab bar", "expected": "gold lit MAIN cell, Ali G avatar badge", "screenshot": "screenshots/DeckCapture_20260918_081003_auto.png" },
+    { "press": "SSH: ai_character_enabled -> false; close+reopen panel; ring to Main tab bar", "expected": "green lit MAIN cell, no avatar badge", "screenshot": "screenshots/DeckCapture_20260918_081157_auto.png" },
+    { "press": "SSH: ai_character_enabled -> true, ai_character_preset_id -> bg3_shadowheart; close+reopen panel; ring to Main tab bar", "expected": "purple lit MAIN cell, S avatar badge", "screenshot": "screenshots/DeckCapture_20260918_081242_auto.png" },
+    { "press": "SSH: ai_character_preset_id -> bg3_astarion; close+reopen panel; ring to Main tab bar", "expected": "grey lit MAIN cell, A avatar badge", "screenshot": "screenshots/DeckCapture_20260918_081324_auto.png" },
+    { "press": "SSH: ai_character_preset_id -> sc_fuu; close+reopen panel; ring to Main tab bar", "expected": "pink lit MAIN cell, F avatar badge", "screenshot": "screenshots/DeckCapture_20260918_081408_auto.png" }
+  ],
+  "pluginLogLines": [],
+  "screenshots": [
+    "screenshots/DeckCapture_20260918_081003_auto.png",
+    "screenshots/DeckCapture_20260918_081157_auto.png",
+    "screenshots/DeckCapture_20260918_081242_auto.png",
+    "screenshots/DeckCapture_20260918_081324_auto.png",
+    "screenshots/DeckCapture_20260918_081408_auto.png"
+  ],
+  "verdict": "CAPTURED",
+  "verdictSentence": "Five screenshots taken, one per colour (green, gold, purple, grey, pink), each with the lit Main tab clearly in frame and the whole strip visible; the driver does not judge whether the colours read well, only captured them for the maintainer's own look."
+}

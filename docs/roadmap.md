@@ -170,6 +170,12 @@ starts work outside this.
   in THIS game>" — the instruction's own placeholder copied into a real menu. Same family as the copied
   Half-Life 2 example fixed 15 September. Evidence `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-03.json`,
   `docs/test-evidence/plan58p1-M-tip-before.json`.
+- ★ `[tabs]` `[layout]` **The row of small dots under the chat name still shows below the open tab strip** —
+  **OPEN, found 2026-09-18.** With the tab strip open, the strip's bottom edge sits at 130px while the row of
+  dots runs from about 133 to 137px (135 to 139px with the ring on the chat row instead of the tab bar) — every
+  dot sits fully below the strip, not covered by it. The chat row's own bottom line (142 to 146px) is correctly
+  below the strip. The maintainer chose a 66px strip on 2026-09-17 specifically to cover these dots; about 8 to
+  10 more pixels of strip, or moving the dots up, would do it. Evidence `docs/test-evidence/plan61-TAB-STRIP-2A-07.json`.
 - ★ `[ui]` **A new setting can quietly stop working in one place, because the list of settings is written out by hand
   several times over** — **OPEN, found while explaining the code 2026-09-14.** The settings code repeats its fifty-odd
   setting names in several separate places in the same file. Miss one and nothing breaks visibly; that setting just stops
@@ -594,12 +600,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   placement: with *Allow high-VRAM model fallbacks* on, a **large** pulled model is supposed to go to the **top** instead.
   That needs a large model on the device and the switch turned on. Row **ROUTING-MERGE-01**.
 
-- ★ `[platform]` **Shell state and tab payload extraction (refactor step 8)** — **VERIFY.** Smoke: six tabs render, one Ask
-  end to end, the Ollama tab after Clear all plugin data. Main, Ollama, Settings, Permissions and Developer were walked
-  2026-09-03. **The Ollama tab after a wipe passed on the Deck 2026-09-16:** the tab came back reading as a fresh,
-  unconfigured Deck, with nothing stale left over. Evidence `docs/test-evidence/plan56-WIPE-01.summary.json`. Left: the
-  About tab's own D-pad walk down its four links, row **ABOUT-LINKS-01** in [testing-manual.md](testing-manual.md).
-  Row **SHELL-PAYLOAD-01**.
 - ★ `[platform]` **VAC check (`bonsai:vac-check`) on-device QA** — **VERIFY.** Implementation complete; run **VAC-02…06** after Tier 0
   **SMOKE-F** passes.
 - ★★ `[chat]` **The game a chat belongs to, above its title** — **VERIFY.** Shipped 2026-08-30 in quiet text above the slot title;
@@ -643,17 +643,12 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   Evidence `docs/test-evidence/plan61-SOFT-PREDICT-04.json`.
   [Why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way).
 - ★★★ `[tabs]` `[ui]` **The open tab strip redrawn: six equal cells, one icon family, only the current tab named** —
-  **VERIFY, landed 2026-09-17.** When the tab bar opens, the six tabs are now six equal cells with one matching
-  22px icon each; only the current tab shows its name, lowercase in small capitals, in the accent colour; the lit
-  cell is a soft rounded fill with no box; LB and RB are small pills; the bar is solid with a soft shadow. The
-  strip is taller than before (66px, was 54) so the chat row's row of dots no longer shows under it. The Main
-  cell now shows the plugin's own logo. The thin bar at rest and every behaviour are unchanged. Built in commits
-  `6821f20`, `ef4a851`, `18be399`, `0378024`, `044acab`, `a957165`. Closes the two-star "replace the bonsAI tab
-  icon" entry (D109 item 1: yes) and replaces row **TAB-BAR-07**, now covered by **TAB-STRIP-2A-03**.
-  **QA-FREE-PLAY-01 ran once on this build 2026-09-18,** the after-finished half only: 33 stops walked both
-  ways, no cycle, no dead end, six stops only partly visible in the same already-known way. Evidence
-  `docs/test-evidence/plan61-QA-FREE-PLAY-01.json`. Owed on the Deck, not yet run: **TAB-STRIP-2A-01** through
-  **TAB-STRIP-2A-07**, and QA-FREE-PLAY-01's streaming-reply half. [Plan](planning/59-tab-strip-redesign-build.md) ·
+  **VERIFY, landed 2026-09-17.** Six equal cells with one 22px icon each, only the current tab named, in the
+  accent colour; the strip is taller (66px) so the chat row's row of dots no longer shows under it. Built in
+  commits `6821f20`, `ef4a851`, `18be399`, `0378024`, `044acab`, `a957165`. **Deck run 2026-09-18: rows 01, 02,
+  04, 05 and 06 all pass; 03 is captured and waits on the maintainer's own look; 07 failed and is filed as its
+  own Bugs entry, above.** The free-play sweep has run once (the after-finished half); the streaming half is
+  still owed. [Plan](planning/59-tab-strip-redesign-build.md) ·
   [Design](design/handoffs/tab-bar-open-strip/return-2026-09-16/).
 - ★★★★ `[ollama]` **Speed-mode VRAM preload** — **VERIFY, the mechanism proved on the Deck 2026-09-05, the timing not.**
   A Developer switch, off by default, loads the model Ask will use into memory at start-up. **A bug was found and fixed on the
@@ -1038,6 +1033,13 @@ copied line for line, nothing reworded: [archive/roadmap-done-v0.5.0.md](archive
   question (2026-09-17) both came back with the right game's own places, no Half-Life 2 words. Any recurrence is
   a new Bugs entry rather than reopening this one.
   [Full detail](archive/roadmap-bugs-fixed.md#the-follow-up-menu-offered-places-from-a-different-game-than-the-one-you-asked-about).
+
+**Closed 2026-09-18 (plan 61, flow B):**
+
+- ★ `[platform]` **Shell state and tab payload extraction (refactor step 8)** — **DONE.** Every tab renders, one
+  Ask works end to end, and the Ollama tab comes back clean after a wipe. The one piece left — the About tab's
+  own walk down its four links — passed on the Deck 2026-09-18.
+  [Full detail](archive/roadmap-completed.md#shell-state-and-tab-payload-extraction-refactor-step-8).
 
 **Closed 2026-09-17 (Deck QA worker):**
 

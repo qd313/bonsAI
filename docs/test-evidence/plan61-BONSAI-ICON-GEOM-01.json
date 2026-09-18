@@ -1,0 +1,27 @@
+{
+  "rowId": "BONSAI-ICON-GEOM-01",
+  "rowText": "Bonsai icon trunk/pot alignment -- On-Deck: compare tab strip icon (36px) and plugin-list icon (26px) against pre-fix screenshot; watch for whole glyph half-unit left and canopy ink asymmetry. Preview cannot reproduce panel scaling. Note found while compiling the brief: the same row already carries a 2026-09-04 device measurement marked PASS with the note 'Entry moved to Done', sitting inside a table still headed 'Open'.",
+  "build": {
+    "plugin": "0.5.0",
+    "commit": "0589565",
+    "deployedAt": "2026-09-18T05:48:00-04:00 (by another session; not redeployed this flow)"
+  },
+  "deckTime": "2026-09-18T08:15-08:18 -04:00",
+  "setup": {
+    "settings": "no changes needed; character left at the restored Ali G / gold state from Group 4",
+    "runningGame": null
+  },
+  "steps": [
+    { "press": "ring on Main tab bar", "expected": "tab strip icon in frame at its real rendered size", "screenshot": "screenshots/DeckCapture_20260918_081523_auto.png" },
+    { "press": "the panel's own back-arrow button (top-left, a real Focusable BUTTON.DialogButton at rect x64,y20,w40,h28 -- found by walking UP from the tab bar), then A", "expected": "leaves the bonsAI panel and returns to Decky's own list of installed plugins, each with its small icon", "screenshot": "screenshots/DeckCapture_20260918_081836_auto.png" }
+  ],
+  "measurement_note_for_the_maintainer": "The row asks to compare a 36px tab-strip icon and a 26px plugin-list icon. The tab-strip icon captured here is the CURRENT tab strip built in plan 59/60 (measured this flow, TAB-STRIP-2A-01): the icon box is 22px, not 36px. A 36px tab-strip icon does not exist in the build on the Deck tonight -- the row's own numbers appear to predate the six-cell tab-strip redesign. The plugin-list icon (Decky's own installed-plugins list, not part of the bonsai-scope panel) is the one shown in the second screenshot, next to the label 'bonsAI'.",
+  "contradiction_flagged_not_resolved": "This row already carries a 2026-09-04 device measurement marked PASS with the note 'Entry moved to Done' (canopy/stem/pot-rim pixel midpoints for both icons), but that measurement still sits inside a table headed 'Open' in the docs. The plan asked for this to be flagged to the session rather than resolved by the driver. Flagging it here as instructed.",
+  "pluginLogLines": [],
+  "screenshots": [
+    "screenshots/DeckCapture_20260918_081523_auto.png",
+    "screenshots/DeckCapture_20260918_081836_auto.png"
+  ],
+  "verdict": "CAPTURED",
+  "verdictSentence": "Two screenshots taken -- the tab strip's tree icon and the separate small tree icon in Decky's own plugin list -- for the maintainer to crop, enlarge and compare by eye; the driver does not judge alignment, and flags that the row's stated 36px tab-strip icon size does not match what is on the Deck tonight (22px), and that the row's own table still says 'Open' despite an already-recorded PASS."
+}

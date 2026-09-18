@@ -1013,3 +1013,21 @@ test.
 **Method note for a re-run:** the Show details ladder never prints the named entity, so this row cannot be
 read off the screen — the same limitation the card-count row hit. The naming half was read by calling the
 extractor on the deployed build over SSH; the screen shows only its consequence, the fence.
+
+## Moved from the roadmap 2026-09-18
+
+### Shell state and tab payload extraction (refactor step 8)
+
+★ `[platform]` **Shell state and tab payload extraction (refactor step 8)** — **VERIFY.** Smoke: six tabs
+render, one Ask end to end, the Ollama tab after Clear all plugin data. Main, Ollama, Settings, Permissions
+and Developer were walked 2026-09-03. The Ollama tab after a wipe passed on the Deck 2026-09-16: the tab came
+back reading as a fresh, unconfigured Deck, with nothing stale left over. Evidence
+`docs/test-evidence/plan56-WIPE-01.summary.json`. Row **SHELL-PAYLOAD-01**.
+
+- **Verified on the Deck 2026-09-18:** the About tab's own D-pad walk down its four links, row
+  **ABOUT-LINKS-01**, was the only piece left. Down from the language dropdown reached all four links in
+  order — GitHub, Built on Ollama!, Bugs & Feature Requests, PayPal — and Up walked back the same way;
+  pressing the button on the GitHub link opened Steam's own browser at the project's page. One thing worth
+  knowing: pressing the back button to leave that browser closed the whole plugin panel rather than only the
+  browser page, but reopening the panel landed back on the About tab with nothing lost. Evidence
+  `docs/test-evidence/plan61-ABOUT-LINKS-01.json`.

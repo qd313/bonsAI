@@ -1,0 +1,46 @@
+{
+  "rowId": "TAB-STRIP-2A-06",
+  "rowText": "UI scale 1.18 — Settings -> UI scale -> Apply: the strip comes back at the new scale, still floating, still six equal cells",
+  "build": {
+    "plugin": "0.5.0",
+    "commit": "0589565",
+    "deployedAt": "2026-09-18T05:48:00-04:00 (by another session; not redeployed this flow)"
+  },
+  "deckTime": "2026-09-18T08:18:00-04:00",
+  "setup": {
+    "settings": {
+      "found": { "ui_scale_auto_enabled": true, "ui_scale_manual_profile": "handheld" },
+      "changedTo": { "ui_scale_auto_enabled": false, "ui_scale_manual_profile": "couch" },
+      "note": "the Settings screen only offers three named stops (Handheld, Desktop, Couch); the codebase's own scale table (src/data/uiScaleProfile.ts) gives Couch a 1.18x multiplier, which is what the row's '1.18' means -- there is no separate typed-number field for scale"
+    },
+    "runningGame": null,
+    "chatUsed": "existing chat left from flow A"
+  },
+  "steps": [
+    { "press": "A on 'Adjust UI automatically' (turns it off)", "expected": "the manual Handheld/Desktop/Couch slider appears", "landingLabelAndSelector": "bonsai-ui-scale-slider-focus-bridge", "visibilityVerdict": "visible" },
+    { "press": "RIGHT, RIGHT", "expected": "slider moves from Handheld to Couch", "landingLabelAndSelector": "\"Profile: Couch\" (TV distance -- larger type, spacing, and focus targets.)", "visibilityVerdict": "visible" },
+    { "press": "A on Apply UI scale", "expected": "settings.json now reads ui_scale_auto_enabled: false, ui_scale_manual_profile: couch", "result": "confirmed by SSH read", "visibilityVerdict": "visible" }
+  ],
+  "measurements": {
+    "atHandheld_1_00x": { "strip": {"w": 300, "h": 66}, "bar": {"w": 300, "h": 20}, "cellWidth": 39 },
+    "atCouch_1_18x": {
+      "strip": { "x": 48, "y": 64, "w": 300, "h": 77.875 },
+      "bar": { "x": 48, "y": 64, "w": 300, "h": 23.594 },
+      "cellCount": 6,
+      "cellWidth": 37.031,
+      "cellWidthsAllEqual": true,
+      "stillFloatingAtSamePosition": true
+    },
+    "ratioCheck": {
+      "stripHeightExpected": 77.88,
+      "stripHeightMeasured": 77.875,
+      "barHeightExpected": 23.6,
+      "barHeightMeasured": 23.594,
+      "verdict": "matches the 1.18x multiplier to within rounding"
+    }
+  },
+  "pluginLogLines": [],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "Switching the size setting to the larger TV-distance option (1.18x) made the tab strip and its bar grow by the same ratio, still floating in the same spot with six equal-width tabs -- nothing broke or became uneven at the bigger size."
+}

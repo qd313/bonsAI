@@ -1,0 +1,55 @@
+{
+  "rowId": "TAB-STRIP-2A-07",
+  "rowText": "The dots covered (D109 item 3) — Every dot in the chat row's row of dots has its bottom edge above the strip's bottom edge, and the chat row's own bottom line is still below the strip — the maintainer chose a 66px strip on 2026-09-17 to cover the dots without covering the whole chat row",
+  "build": {
+    "plugin": "0.5.0",
+    "commit": "0589565",
+    "deployedAt": "2026-09-18T05:48:00-04:00 (by another session; not redeployed this flow)"
+  },
+  "deckTime": "2026-09-18T08:06:00-04:00",
+  "setup": {
+    "settings": {
+      "show_developer_tab": true,
+      "ui_scale_auto_enabled": true,
+      "ui_scale_manual_profile": "handheld",
+      "ai_character_enabled": true,
+      "ai_character_preset_id": "alig_ali_g"
+    },
+    "runningGame": null,
+    "chatUsed": "existing chat left from flow A"
+  },
+  "steps": [
+    {
+      "press": "reads taken with ring on the tab bar, then again with ring on the chat row (both give the same strip/dot geometry)",
+      "expected": "every dot's bottom edge sits above (smaller y than) the strip's bottom edge; the chat row's own bottom line sits below the strip",
+      "landingLabelAndSelector": ".bonsai-tab-bar__strip, .bonsai-chat-slot-dot (9 dots), .bonsai-chat-slot-row",
+      "rect": {
+        "stripBottom": 130,
+        "dotTop_ringOnTabBar": 132.667,
+        "dotBottom_ringOnTabBar": 136.667,
+        "dotTop_ringOnChatRow": 134.667,
+        "dotBottom_ringOnChatRow": 138.667,
+        "chatRowBottom_ringOnTabBar": 142.333,
+        "chatRowBottom_ringOnChatRow": 146.333
+      },
+      "visibilityVerdict": "visible (dots and chat row bottom line are both plainly on screen, not covered by anything)"
+    }
+  ],
+  "measurements": {
+    "stripBottomEdge": 130,
+    "dotBottomEdges": {
+      "ringOnTabBar": 136.667,
+      "ringOnChatRow": 138.667
+    },
+    "chatRowBottomLine": {
+      "ringOnTabBar": 142.333,
+      "ringOnChatRow": 146.333
+    },
+    "dotsAboveStripBottom": false,
+    "chatRowBottomBelowStrip": true
+  },
+  "pluginLogLines": [],
+  "screenshots": [],
+  "verdict": "FAIL",
+  "verdictSentence": "The row of small dots under the chat name sits about 7 to 9 pixels below where the tab strip ends, not above it, so a person can still see the dots poking out under the strip instead of the strip hiding them; the chat row's own bottom line is correctly below the strip, but the dots themselves are not covered."
+}

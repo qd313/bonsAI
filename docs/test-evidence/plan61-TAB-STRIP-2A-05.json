@@ -1,0 +1,60 @@
+{
+  "rowId": "TAB-STRIP-2A-05",
+  "rowText": "Pills hide, cells stay — Ring on the chat row: the pills are hidden, the six cell boxes have not moved",
+  "build": {
+    "plugin": "0.5.0",
+    "commit": "0589565",
+    "deployedAt": "2026-09-18T05:48:00-04:00 (by another session; not redeployed this flow)"
+  },
+  "deckTime": "2026-09-18T08:05:00-04:00",
+  "setup": {
+    "settings": {
+      "show_developer_tab": true,
+      "ui_scale_auto_enabled": true,
+      "ui_scale_manual_profile": "handheld",
+      "ai_character_enabled": true,
+      "ai_character_preset_id": "alig_ali_g"
+    },
+    "runningGame": null,
+    "chatUsed": "existing chat left from flow A"
+  },
+  "steps": [
+    {
+      "press": "(before) ring on Main tab bar",
+      "expected": "the two shoulder-hint pills show at each end of the strip",
+      "landingLabelAndSelector": "DIV \"Main tab\", .bonsai-tab-bar",
+      "pillsInDom": 2,
+      "pillsVisible": 2,
+      "cellRects": [
+        {"x":76,"y":74.667,"w":39,"h":44},
+        {"x":117,"y":74.667,"w":39,"h":44},
+        {"x":158,"y":74.667,"w":39,"h":44},
+        {"x":199,"y":74.667,"w":39,"h":44},
+        {"x":240,"y":74.667,"w":39,"h":44},
+        {"x":281,"y":74.667,"w":39,"h":44}
+      ],
+      "visibilityVerdict": "visible"
+    },
+    {
+      "press": "DOWN (ring moves onto the chat slot row)",
+      "expected": "pills hidden, six cell boxes have not moved",
+      "landingLabelAndSelector": "DIV (no visible text), .bonsai-chat-slot-row-focus",
+      "pillsInDom": 2,
+      "pillsVisible": 0,
+      "cellRects": [
+        {"x":76,"y":74.667,"w":39,"h":44},
+        {"x":117,"y":74.667,"w":39,"h":44},
+        {"x":158,"y":74.667,"w":39,"h":44},
+        {"x":199,"y":74.667,"w":39,"h":44},
+        {"x":240,"y":74.667,"w":39,"h":44},
+        {"x":281,"y":74.667,"w":39,"h":44}
+      ],
+      "cellRectsIdenticalToBefore": true,
+      "visibilityVerdict": "visible"
+    }
+  ],
+  "pluginLogLines": [],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "With the ring moved down onto the chat row, the two little hint pills at the ends of the tab strip disappeared and the six tab boxes stayed exactly where they were."
+}

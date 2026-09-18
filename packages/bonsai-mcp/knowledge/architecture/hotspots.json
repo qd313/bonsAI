@@ -12,7 +12,7 @@
     },
     {
       "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 1953,
+      "lines": 2068,
       "role": ""
     },
     {
@@ -126,6 +126,11 @@
       "role": ""
     },
     {
+      "path": "src/components/MainTabChatTranscript.kbNotesBlock.test.tsx",
+      "lines": 669,
+      "role": ""
+    },
+    {
       "path": "src/components/MainTabPresetAnimatedChips.test.tsx",
       "lines": 666,
       "role": ""
@@ -193,11 +198,6 @@
     {
       "path": "src/utils/answerBubbleNavigation.test.ts",
       "lines": 532,
-      "role": ""
-    },
-    {
-      "path": "src/data/bonsaiSettingsNormalizers.ts",
-      "lines": 531,
       "role": ""
     }
   ]

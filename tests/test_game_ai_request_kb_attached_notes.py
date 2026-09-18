@@ -345,6 +345,58 @@ class KbAttachedNotesWiringTests(unittest.TestCase):
 
     @patch("backend.services.game_ai_request.retrieve_knowledge_context")
     @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    def test_a_compat_turns_tips_reach_the_live_snapshot_before_ask_ollama_too(
+        self, mock_should, mock_retrieve
+    ):
+        """First Deck rows (NOTES-BLOCK-03): a troubleshooting turn's tips showed up only with
+        the finished snapshot, not live, and the report asked whether the live publish reaches
+        the compat route at all or whether the poll drops a 'tip'-kind note. Reproduced here with
+        the exact card shape the seed's shared tips actually have (kind "tip", domain "compat",
+        no source, name equal to a bare topic word) -- the write path is unchanged from the
+        strategy test above and is proven here to behave identically for compat: nothing in
+        `_publish_kb_attached_notes_live` or the parser reads or branches on domain or kind, so
+        neither hypothesis is a real code defect. See the report for what most likely explains
+        the device symptom instead (compat retrieval's own share of a short troubleshooting
+        reply's total time, and a poll cadence gap once the turn completes) and the one line in
+        main.py, outside every file list handed to this lane so far, that would close it for good.
+        """
+        tip_card = _card(
+            game_title="Shared troubleshooting",
+            section_type="tip",
+            name="proton",
+            card="Check ProtonDB for launch options and community fixes before forcing a Proton version.",
+            source_url="",
+            source_license="",
+            trust_tier="fallback_no_source",
+        )
+        mock_should.return_value = (True, "compat")
+        mock_retrieve.return_value = _attached_result(tip_card, domain="compat")
+        plugin = _FakePlugin(_settings())
+        plugin._ollama_result = _ok_result()
+
+        self.assertEqual(plugin._partial_stream_snapshot["kb_attached_notes"], [])
+
+        original_ask_ollama = plugin.ask_ollama
+
+        async def _ask_ollama_records_snapshot_state(*args, **kwargs):
+            plugin.call_order.append(
+                ("snapshot_at_ask_ollama_time", list(plugin._partial_stream_snapshot["kb_attached_notes"]))
+            )
+            return await original_ask_ollama(*args, **kwargs)
+
+        plugin.ask_ollama = _ask_ollama_records_snapshot_state
+
+        _run(plugin, question="my game will not launch on proton, what should i check?", ask_mode="speed")
+
+        snapshot_calls = [c for c in plugin.call_order if c[0] == "snapshot_at_ask_ollama_time"]
+        self.assertEqual(len(snapshot_calls), 1)
+        self.assertEqual(len(snapshot_calls[0][1]), 1)
+        self.assertEqual(snapshot_calls[0][1][0]["kind"], "tip")
+        self.assertEqual(snapshot_calls[0][1][0]["domain"], "compat")
+        self.assertEqual(snapshot_calls[0][1][0]["name"], "proton")
+
+    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
     def test_no_publish_when_nothing_attached(self, mock_should, mock_retrieve):
         mock_should.return_value = (True, "strategy")
         mock_retrieve.return_value = KnowledgeRetrievalResult(attached=False)

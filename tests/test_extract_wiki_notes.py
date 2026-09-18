@@ -195,6 +195,63 @@ class SelectSectionHostPreferenceTests(unittest.TestCase):
         choice = m.select_section(headings, text, host="some-other-wiki.example")
         self.assertEqual(choice.heading.title, "Strategy")
 
+    def test_area_features_is_on_the_general_list(self):
+        """Real case: hollowknight.wiki's Forgotten Crossroads page has no tactics heading
+        at all, but does have "Area Features"."""
+        text = "== Description\nA ruined district.\n== Area Features\nCornifer sells maps here.\n"
+        headings = m.extract_headings(text)
+        choice = m.select_section(headings, text)
+        self.assertEqual(choice.heading.title, "Area Features")
+
+
+class GroupSubjectFamilySectionTests(unittest.TestCase):
+    """Real case: hollowknight.wiki's Nail page has no "Strategy"/"Upgrades" heading -- its
+    content is split across one heading per upgrade tier. Picking just the first of these
+    (the reader's old behaviour) gave base-stat flavour text with no mention of upgrading."""
+
+    def test_a_run_of_headings_naming_the_page_s_subject_is_grouped(self):
+        text = (
+            "== Old Nail\nThe starting nail. 5 damage.\n"
+            "== Sharpened Nail\nThe first upgrade. 9 damage.\n"
+            "== Coiled Nail\nThe second upgrade. 13 damage.\n"
+            "== Charms\nSee also: Charms.\n"
+            "== Trivia\nAdded in the first release.\n"
+        )
+        headings = m.extract_headings(text)
+        choice = m.select_section(headings, text, page_title="Nail")
+        self.assertIsNone(choice.heading)
+        self.assertIn("The starting nail.", choice.body)
+        self.assertIn("The first upgrade.", choice.body)
+        self.assertIn("The second upgrade.", choice.body)
+        # "Charms" does not name the subject "Nail" -- the run stops there, same as the real
+        # page's own "Charms" cross-reference heading.
+        self.assertNotIn("See also: Charms.", choice.body)
+        self.assertNotIn("Added in the first release.", choice.body)
+        self.assertIn("Old Nail, Sharpened Nail, Coiled Nail", choice.reason)
+
+    def test_a_single_matching_heading_is_not_enough_to_group(self):
+        """One heading naming the subject is just an ordinary heading, not a family split
+        across several -- grouping only kicks in for a run of two or more."""
+        text = "== Old Nail\nThe starting nail.\n== Trivia\nAdded in the first release.\n"
+        headings = m.extract_headings(text)
+        choice = m.select_section(headings, text, page_title="Nail")
+        self.assertEqual(choice.heading.title, "Old Nail")
+
+    def test_a_page_with_no_top_level_heading_groups_its_subsections(self):
+        text = "=== Phase one\nDo the first thing.\n=== Phase two\nDo the second thing.\n"
+        headings = m.extract_headings(text)
+        choice = m.select_section(headings, text, page_title="Some Boss")
+        self.assertIsNone(choice.heading)
+        self.assertIn("Do the first thing.", choice.body)
+        self.assertIn("Do the second thing.", choice.body)
+        self.assertIn("no top-level heading", choice.reason)
+
+    def test_no_page_title_never_groups(self):
+        text = "== Old Nail\nThe starting nail.\n== Sharpened Nail\nThe first upgrade.\n"
+        headings = m.extract_headings(text)
+        choice = m.select_section(headings, text)  # page_title defaults to ""
+        self.assertEqual(choice.heading.title, "Old Nail")
+
 
 class BodyToUnitsTests(unittest.TestCase):
     def test_prose_splits_into_sentences_in_order(self):

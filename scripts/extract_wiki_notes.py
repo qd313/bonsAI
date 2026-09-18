@@ -77,6 +77,12 @@ SECTION_HEADING_PRIORITY = [
     "usage",
     "how to",
     "walkthrough",
+    # Lower priority than the tactics words above: an area page's "how to get through it"
+    # content sits under one of these on hollowknight.wiki (Forgotten Crossroads uses "Area
+    # Features") rather than any tactics word, per lane D's real finding.
+    "area features",
+    "features",
+    "layout",
 ]
 # Only used when nothing above appears. It is usually the page's lead description rather than
 # tactics, so a note built from it is weaker -- the reason is printed for a person to check.
@@ -571,8 +577,61 @@ def _select_strategywiki_section(headings: list[Heading], text: str) -> SectionC
     return None
 
 
+# Common wiki boilerplate, skipped when checking whether a page's own headings are really
+# "the same subject, split into pieces" rather than unrelated furniture.
+_FURNITURE_HEADING_WORDS = {
+    "trivia", "gallery", "references", "names in other languages", "music",
+    "quotes", "achievements", "location", "dialogue",
+}
+
+
+def _group_subject_family_section(headings: list[Heading], text: str, page_title: str) -> SectionChoice | None:
+    """Some pages split their real content across several headings instead of one. Hollow
+    Knight wiki's Nail page has no "Strategy" or "Upgrades" heading at all -- each upgrade
+    tier is its own heading ("Old Nail", "Sharpened Nail", "Channelled Nail", "Coiled Nail",
+    "Pure Nail", "Nail-bouncing"), and the reader's old behaviour of picking just the first of
+    these ("Old Nail" alone) gave base-stat flavour text that never mentions upgrading at all
+    (lane D's real finding). Two shapes trigger a combined section instead of picking one:
+      - a contiguous run, from the first non-furniture heading, where every heading names a
+        specific variant of the page's own subject (each contains the page's title as a
+        substring) -- stops at the first heading that does not (Nail's own "Charms" heading,
+        a cross-reference, correctly ends the run rather than joining it), or
+      - the page has no top-level heading at all -- every heading found is already a
+        subsection (level 3+) with nothing shallower to act as its parent, so "the parent" is
+        the whole set of them together.
+    The combined text is the matching headings' bodies, joined in page order."""
+    content = [h for h in headings if h.title.strip().lower() not in _FURNITURE_HEADING_WORDS]
+    if not content:
+        return None
+
+    title_lower = page_title.strip().lower()
+    run: list[Heading] = []
+    if title_lower:
+        for h in content:
+            if title_lower in h.title.strip().lower():
+                run.append(h)
+            else:
+                break
+
+    if len(run) >= 2:
+        reason_tail = f"grouped {len(run)} headings that are each a variant of {page_title!r}"
+    elif min(h.level for h in content) > 2:
+        run = content
+        reason_tail = f"page has no top-level heading; grouped its {len(run)} subsection(s)"
+    else:
+        return None
+
+    pieces = [text[h.body_start : h.body_end].strip() for h in run]
+    pieces = [p for p in pieces if p]
+    if not pieces:
+        return None
+    combined = "\n\n".join(pieces)
+    names = ", ".join(h.title for h in run)
+    return SectionChoice(None, combined, f"{reason_tail} into one section: {names}")
+
+
 def select_section(
-    headings: list[Heading], text: str, *, host: str = "", game_title: str = ""
+    headings: list[Heading], text: str, *, host: str = "", game_title: str = "", page_title: str = ""
 ) -> SectionChoice:
     """A heading whose body is blank is skipped in favour of the next candidate -- some GTA
     Wiki mission pages carry a "Walkthrough" heading with nothing written under it (the real
@@ -581,7 +640,9 @@ def select_section(
 
     `host` (the fetched page's own source_url host, never guessed) and `game_title` (an
     argument the caller passes) unlock two per-wiki rules ahead of the general list below --
-    see HOST_HEADING_PREFERENCE's comment for what grounded each one."""
+    see HOST_HEADING_PREFERENCE's comment for what grounded each one. `page_title` unlocks
+    _group_subject_family_section, tried after the general list and before the last-resort
+    "first non-empty section" fallback."""
 
     def nonempty(h: Heading) -> bool:
         return bool(text[h.body_start : h.body_end].strip())
@@ -615,6 +676,9 @@ def select_section(
     for h in headings:
         if h.title.strip().lower() == FALLBACK_SECTION_HEADING and nonempty(h):
             return SectionChoice(h, text[h.body_start : h.body_end], f"no tactics/use heading; used the {h.title!r} fallback")
+    family = _group_subject_family_section(headings, text, page_title)
+    if family:
+        return family
     for h in headings:
         if nonempty(h):
             return SectionChoice(
@@ -979,7 +1043,7 @@ def build_note(
         )
 
     headings = extract_headings(body)
-    choice = select_section(headings, body, host=host, game_title=game_title)
+    choice = select_section(headings, body, host=host, game_title=game_title, page_title=meta.get("title", ""))
     section_body = choice.body
     units, dropped_notes = body_to_units(section_body)
 

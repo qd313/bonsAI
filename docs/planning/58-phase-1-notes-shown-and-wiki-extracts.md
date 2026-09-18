@@ -464,6 +464,16 @@ which goes on their own checklist.
   signals. Both are general rules; the risk of fitting the reader to one holdout row is named
   here on purpose, and the whole-library search number is the guard. Lane D re-measures from a
   fresh copy of the repo once it lands. The Deck still not answering after three polls.
+- **2026-09-17, the fourth pass landed and tuning stops here.** The two general rules are in
+  with tests. On the real False Knight page they still do not reach: the location fact sits
+  inside an info box filed under a heading that repeats the page's own name, so there is
+  nothing before the first heading to read; and the "head exposed" sentence now scores above a
+  plain description but is still outscored by attack sentences that use more of the listed
+  words. The note also picked up a stray stat-box line ("Hits: -"). Four passes is the good
+  effort rule 11 asks for; no more tuning against one row. Lane D re-measures from a fresh copy
+  of the repo; if the verbatim set still loses, the rewrites stay and the reader ships as the
+  fetch-and-credit half, and the ten games are written the way the last two waves were, from
+  fetched pages, with the block showing their nature.
 
 ---
 

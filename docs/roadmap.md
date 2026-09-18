@@ -162,6 +162,11 @@ starts work outside this.
   at the end of the block; no evidence file yet. **Confirmed on the Deck 2026-09-17:** pressing Done rewrote
   the settings file with nothing actually reordered. Evidence
   `docs/test-evidence/plan57-QA-vision-try-order-writes-settings.json`.
+- ★ `[reply]` **The no-game branch menu leaks its template** — **OPEN, found 2026-09-18.** With no game known,
+  the menu under a reply read "Where are you at in THIS GAME? A. <a place early in THIS game> B. <a place later
+  in THIS game>" — the instruction's own placeholder copied into a real menu. Same family as the copied
+  Half-Life 2 example fixed 15 September. Evidence `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-03.json`,
+  `docs/test-evidence/plan58p1-M-tip-before.json`.
 - ★ `[ui]` **A new setting can quietly stop working in one place, because the list of settings is written out by hand
   several times over** — **OPEN, found while explaining the code 2026-09-14.** The settings code repeats its fifty-odd
   setting names in several separate places in the same file. Miss one and nothing breaks visibly; that setting just stops
@@ -247,6 +252,13 @@ starts work outside this.
   `docs/test-evidence/plan55-trap-run3-new-chat-with-live-turn.json`,
   `docs/test-evidence/plan55-trap-run4-chip-fill-with-live-turn-row.json`,
   `docs/test-evidence/plan55-trap-run5-empty-chat-session-row-hades-running.json`.
+- ★★★ `[reply]` **A name-withheld boss question on a story-protected game comes back with no spoiler box** —
+  **OPEN, found 2026-09-18.** Nothing running, no consent phrase anywhere in the chat: asked about "the boss
+  past the crystal spike area … the one that looks just like me" in Hollow Knight, the reply named Broken
+  Vessel and gave its tactics in plain text with no cover; asked about "the boss at the end of the first area"
+  in Hades, the reply named Theseus and Asterius the same way. Two games, both builds, the same shape. The
+  plan 54 rows still marked owed (STRAT-SPOIL-NAME-01) would fail on this evidence. Evidence
+  `docs/test-evidence/plan58p1-M-hk-boss-before.json`, `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-02.json`.
 
 ---
 
@@ -780,7 +792,16 @@ ones from this month are D81 to D88.
   the four now carry the new "no close match" line** (D88 above), so the answer no longer reads as grounded — but
   the wrong note is still attached and still shapes the reply. *"Where do i buy a house"* gets no line at all,
   because a word in it really does point at a card. Fixing the attachment itself, rather than labelling it, is
-  wave-four note-writing work.
+  wave-four note-writing work. **Found again 2026-09-18:** a Hades "boss at the end of the first area" question
+  attached "Temple of Styx" first and the reply answered about Theseus and Asterius instead of Megaera, steered
+  by the top note (`docs/test-evidence/plan58p1-QA-NOTES-BLOCK-02.json`).
+- ★★ `[KB]` **The "no close match" line reads wrong next to a note the reply used** — **OPEN, found 2026-09-18.**
+  The line judges only the first attached note's scores, so on a Hollow Knight boss question it said the answer
+  leaned on the model's own knowledge while the reply was actually built on the Broken Vessel note, attached
+  second; on a Pikmin 2 question it said the same thing under a reply built on the very note the block showed.
+  Either look at the best attached note, not just the first, or word the line as "a thin match" rather than a
+  claim the notes were not used. Evidence `docs/test-evidence/plan58p1-M-hk-boss-before.json`,
+  `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-04.json`.
 
 ### Deck check owed
 

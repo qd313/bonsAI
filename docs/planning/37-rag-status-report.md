@@ -299,7 +299,9 @@ them straight; what remains is coverage, follow-up memory, and the things the te
    owed, and the Hollow Knight comparison lane is running. The block's follow-up landed; the Hollow
    Knight comparison found the verbatim notes lost on the boss question because the reader kept the
    first sentences of a section rather than the tactics ones, and a third pass of the reader is in
-   progress.
+   progress. **The block's seven device rows ran on the Deck 2026-09-18:** three pass, one passes on
+   the words but fails on timing, two are not runnable yet, and one still needs the maintainer's own
+   ears. The ten-games note lanes are writing.
 2. **Wave three's own Deck evening is unfinished.** Three of its checks never ran, and two that did need
    redoing: follow-up questions now look up the right boss but the reply can still name a different one,
    and the new one-second speed check reports a healthy device while a real question runs over budget.

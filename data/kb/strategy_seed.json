@@ -334,6 +334,19 @@
         "board",
         "minigames"
       ]
+    },
+    {
+      "game_id": 28,
+      "app_id": null,
+      "igdb_id": "emudeck-mp3-n64",
+      "canonical_title": "Mario Party 3",
+      "edition": "N64",
+      "platform": "Nintendo 64",
+      "genres": [
+        "party",
+        "board",
+        "minigames"
+      ]
     }
   ],
   "aliases": [
@@ -644,6 +657,10 @@
     {
       "alias": "mario party 2",
       "game_id": 27
+    },
+    {
+      "alias": "mario party 3",
+      "game_id": 28
     }
   ],
   "sections": [
@@ -3976,6 +3993,72 @@
       "name": "Bowser Land and the final showdown",
       "card": "Bowser Land is Mario Party 2's sixth and final board, unlocked only once every other board has been played at least once, and it flips several of the game's normal rules: passing a bank space here gives you five coins that add to a running loan rather than taking coins away, and landing on that space later means paying the full loan back, losing a Star outright if you can't cover it and have none to spare. Its signature hazard is the Bowser Parade, which starts every five turns and costs two coins per space to anyone caught in its path before sweeping them back to the start; players can redirect the parade's route by paying a Baby Bowser to flip arrow tiles. Whoever places first on this board faces Bowser directly for the game's ending, a tactical coin-and-item board rather than a reflex test.",
       "source_url": "https://www.mariowiki.com/Mario_Party_2",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 333,
+      "game_id": 28,
+      "section_type": "mechanic",
+      "name": "Starting out in Mario Party 3",
+      "card": "Mario Party 3 keeps the roll-and-move loop from the earlier games but layers on real choices: you can now hold up to three items at once instead of just one, and computer players can be given a handicap to even out a mismatched group. Coins still come from Blue Spaces and go from Red ones, and Happening (\"?\") Spaces trigger board-specific events. The biggest change for a new player is Duel Mode, played on its own set of boards where two characters fight using partner characters instead of collecting Stars, and Story Mode, a single-player campaign that alternates between normal board games and duels on the way to a set of seven Star Stamps. Party Mode, the game's regular multiplayer format, plays like the earlier two games with these new options layered in.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_3",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 334,
+      "game_id": 28,
+      "section_type": "area",
+      "name": "Chilly Waters",
+      "card": "Chilly Waters is Mario Party 3's ice-themed board, needing 20 coins to buy each Star and centered on an icy five-way junction plus a running Action Time event: landing on a Happening Space in the leftmost column or top row (or paying Mr. Blizzard five coins when you pass him) starts a snowball rolling toward you, and a well-timed button press lets you jump it rather than get chased. If two players are both standing on the frozen lake when the ice cracks, both get swept to a space near the southeast corner and looped back toward the start, which can undo a lot of progress at once. Because the lake and the junction sit in the board's middle, most routes cross through this danger zone rather than around it.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_3",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 335,
+      "game_id": 28,
+      "section_type": "area",
+      "name": "Spiny Desert",
+      "card": "Spiny Desert is Mario Party 3's desert board, and its trick is that there are two Millennium Stars on the board at once -- one real, one a mirage -- with no way to tell them apart until you pass one and it either sells a Star for 20 coins or simply vanishes. Two quicksand pits sit in the upper and lower middle of the board; a Happening Space on either pit's edge pulls in everyone standing around it and spits them out at the other pit instead. A path guarded by two cacti forms the board's Action Time: a well-timed button press gets you past safely, while missing it sends you bouncing off in a random direction. Because the real Star is unmarked, routing here is closer to a guess than a plan.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_3",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 336,
+      "game_id": 28,
+      "section_type": "area",
+      "name": "Creepy Cavern",
+      "card": "Creepy Cavern is Mario Party 3's cave board, and its centerpiece is the Whomp King blocking the only path between the board's upper and lower halves; you can get him to turn around either by handing him a random item as you pass or by landing on a nearby Happening Space, so it's not guaranteed you'll have the right item in hand when you need it. Two horizontal railways can also spawn a minecart from a Happening Space that chases every player on that track to the far end, and paying a Thwomp five coins near the tracks lets you trigger a controlled ride to the other side instead of waiting to be caught. Because the Whomp King sits on the only central crossing, a board where he's turned the wrong way effectively cuts the map in half until someone clears him.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_3",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 337,
+      "game_id": 28,
+      "section_type": "mechanic",
+      "name": "Duel Boards and how they work",
+      "card": "Mario Party 3's Duel Boards, used in both Duel Mode and Story Mode, pit two players against each other using partner characters instead of racing for Stars. Each side starts with five heart segments and one partner, gaining a new partner (chosen semi-randomly, with a \"Lucky Roulette\" every third lap that slows the wheel down) whenever they pass their own start space. Partners attack automatically when a player passes or lands on the opponent's space, doing damage based on the gap between the attacker's power and the defender's stamina, and each partner also has to be paid a per-turn salary or it walks off the board. A mechanical toy called Belltop sits in the middle of every duel board and, once enough players have passed him, forces both sides into a Duel Mini-Game for double or triple the usual coin stakes.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_3",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 338,
+      "game_id": 28,
+      "section_type": "item",
+      "name": "Items and the Item Shop in Mario Party 3",
+      "card": "Party mode items in Mario Party 3 are sold by two different shopkeepers -- Toad offers helpful items like the Mushroom (roll two dice and add them, 5 coins) and Boo Repellent, while Baby Bowser sells disruptive ones like the Reverse Mushroom, which forces a chosen player's next move to go backward, and the Poison Mushroom, which limits their next roll to one through three. Both shops sell the Skeleton Key, which auto-opens locked gates and can be discarded voluntarily at the start of a turn if you don't need it. You can hold up to three items at once here, unlike the single-item limit in Mario Party 2, and rare items like the Barter Box (swap items with an opponent) or the Koopa Kard (claim an entire bank's savings on the spot) only turn up through Item Spaces, Hidden Blocks, or a purchased Item Bag rather than a normal shop visit.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_3",
       "source_license": "CC-BY-SA-4.0",
       "source_version": null,
       "crawled_at": "2026-09-18"

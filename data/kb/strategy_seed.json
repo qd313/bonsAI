@@ -360,6 +360,19 @@
         "board",
         "minigames"
       ]
+    },
+    {
+      "game_id": 30,
+      "app_id": null,
+      "igdb_id": "emudeck-mp7-gcn",
+      "canonical_title": "Mario Party 7",
+      "edition": "GCN",
+      "platform": "Nintendo GameCube",
+      "genres": [
+        "party",
+        "board",
+        "minigames"
+      ]
     }
   ],
   "aliases": [
@@ -678,6 +691,10 @@
     {
       "alias": "mario party 6",
       "game_id": 29
+    },
+    {
+      "alias": "mario party 7",
+      "game_id": 30
     }
   ],
   "sections": [
@@ -4164,6 +4181,94 @@
       "name": "Clockwork Castle, the final board",
       "card": "Clockwork Castle is Mario Party 6's final board, bought with 100 Stars from the Star Bank rather than unlocked through normal play, and it turns the day-and-night cycle into the whole challenge: by day, players chase Donkey Kong around the gear-covered board for a Star, and he always rolls and moves after everyone else has finished their turn, moving twice if he eats a banana along the way. By night, the goal flips to avoiding Bowser instead, who has reversed the board's direction and also moves twice if he breathes fire; getting caught by him costs a Star, or 20 coins if you're holding none. Because the chase-or-avoid goal swaps with the time of day, tracking the day/night meter matters as much as tracking your own position on the board.",
       "source_url": "https://www.mariowiki.com/Mario_Party_6",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 347,
+      "game_id": 30,
+      "section_type": "mechanic",
+      "name": "Starting out in Mario Party 7",
+      "card": "Mario Party 7 plays like the previous GameCube entries -- roll a Dice Block, move up to ten spaces, land on a Blue or Red space for a coin swing, then play whichever minigame the mix of spaces calls for -- but adds a Bowser Time gauge that fills a little every turn and triggers a board-specific bit of trouble from Bowser once it's full, roughly every five turns. Orbs return from Mario Party 6 with mostly the same roles, bought at Orb Shops or won from Green Spaces. The game supports up to eight players through a Tag Battle or 4-Team Battle mode, where teamed players move together on a single pair of Dice Blocks rather than taking separate turns, with the team's \"leader\" alternating each round to decide when to use Orbs or make event choices.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_7",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 348,
+      "game_id": 30,
+      "section_type": "area",
+      "name": "Grand Canal",
+      "card": "Grand Canal is Mario Party 7's opening board, and its Party Cruise rules are the simplest in the game: buy a Star for a flat 20 coins at whichever fixed spot it currently occupies, and once someone buys it, the Star Space relocates elsewhere on the board. Because several other boards borrow this same buy-it-then-it-moves pattern as their baseline, Grand Canal works as the board to learn the series' core Star-buying loop on before tackling a board with a more unusual gimmick layered on top.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_7",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 349,
+      "game_id": 30,
+      "section_type": "area",
+      "name": "Pagoda Peak",
+      "card": "Pagoda Peak sells its Star from Koopa Master at the top of the peak, starting at a price that climbs by ten coins every time someone buys, up to a cap of 40 coins -- so the first player to reach the top after a purchase always gets the cheapest price, and stalling near the bottom while prices reset is rarely worth the lost turns. The board also carries a Cannon Orb, unique to Pagoda Peak, that launches you straight to the upper part of the board, one of the few reliable ways to beat a rival to the peak when the price is still low.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_7",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 350,
+      "game_id": 30,
+      "section_type": "area",
+      "name": "Pyramid Park",
+      "card": "Pyramid Park's Stars don't sit on a Star Space at all -- they belong to whoever holds them, and the only way to take one is to pay for a ride on a Chain Chomp and steal it directly from an opponent. This makes the board far more aggressive than most: holding a lead in Stars means expecting to be hunted, and the board-specific Snack Orb, which blocks a Chain Chomp theft for three turns, is worth buying the moment you're ahead rather than waiting until a Chain Chomp is already bearing down on you.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_7",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 351,
+      "game_id": 30,
+      "section_type": "area",
+      "name": "Windmillville",
+      "card": "Windmillville replaces Star-buying with windmill-buying: red windmills are worth one Star, green ones two, and yellow ones three, and depositing coins into an unclaimed windmill makes it yours, along with the Stars it holds. An opponent can still take an already-claimed windmill away from you by depositing more coins than you did, so a windmill you own is never fully safe until the game ends. Because ownership can flip right up to the last turn, holding back coins to outbid a rival late is often stronger than claiming every windmill early.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_7",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 352,
+      "game_id": 30,
+      "section_type": "item",
+      "name": "Orbs in Mario Party 7",
+      "card": "Mario Party 7 keeps Mario Party 6's Orb system with several categories: green Self Orbs like the Mushroom (move with two Dice Blocks) affect only the user, yellow Thrown Orbs are set as traps that reward the owner if they land on their own trap or hurt whoever else does, and there are also Roadblock, Character, and other specialty Orbs layered on top. Several Orbs are tied to specific boards rather than sold everywhere -- the Lakitu Orb, which delivers a treasure chest, only appears on Neon Heights, and the Cannon Orb that launches you upward is exclusive to Pagoda Peak -- so scouting what's on sale for the board you're playing matters more than memorizing one universal shopping list.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_7",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 353,
+      "game_id": 30,
+      "section_type": "mechanic",
+      "name": "Mini-game types and Bowser Time",
+      "card": "As in earlier games, landing on matching or mismatched space colors decides whether you get a 4-player, 2-vs-2, or 1-vs-3 minigame, and winning most of them pays 10 coins. Duel Spaces, Donkey Kong Spaces, and Bowser Spaces each trigger their own dedicated minigame types instead, and Bowser Spaces and Donkey Kong Spaces both now come in single-player and multiplayer versions rather than just one. The Bowser Time gauge fills gradually over about five turns and then unleashes a board-specific event when it's full, separate from the Last Four Turns Event that overhauls the board's rules near the very end of a game -- so a new player should expect two distinct everything-changes moments rather than just one.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_7",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 354,
+      "game_id": 30,
+      "section_type": "boss",
+      "name": "Bowser's Enchanted Inferno!, the final board",
+      "card": "Bowser's Enchanted Inferno! is Mario Party 7's final, unlockable board, and in Party Cruise it plays by the same simple buy-the-Star-then-it-moves rules as Grand Canal -- the challenge here isn't a special gimmick but reaching Bowser's home turf at all, since it only opens after clearing every other board in Solo Cruise and then a specific minigame against Bowser. Bowser Time still fills and triggers on this board like any other, so the usual periodic trouble keeps happening even on his own castle grounds. Players who unlock it treat it as a capstone board to practice the game's core loop on, rather than one with a mechanic unique to itself.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_7",
       "source_license": "CC-BY-SA-4.0",
       "source_version": null,
       "crawled_at": "2026-09-18"

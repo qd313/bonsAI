@@ -533,6 +533,18 @@ which goes on their own checklist.
   Dogadon and two other notes before "Starting out"; the three blanks stayed blank. The per-row
   results are in the archive's research folder with the date. The Deck asked back from the other
   session for the local install; nothing pushed to the public hosts, as the maintainer said.
+- **2026-09-18, the block's fixes landed.** Three of the four: walking Up from the session strip
+  and the hint rows now lands on the block; opening a tall block keeps its header in view; the
+  header is two rows, the name and the count on the first (the count never cut), the source alone
+  on the second, and "From bonsAI's own notes, no source" shortened to "From bonsAI's own note".
+  A tip's name is its topic word capitalised ("Proton"), since the source row already says it is a
+  shared Deck tip. The fourth, tips not live, has no defect the lane could find by reading: a new
+  test proves a troubleshooting turn's tips reach the live snapshot before the model is called,
+  the same as a game note's. Its guess is timing, the tip search ending so close to the reply
+  that no poll lands between; a per-second watch on the Deck during a Proton question decides
+  it. Up from the question box still skips every reply row; that is the wider bug on the roadmap.
+  Next on the Deck, once it is back: deploy this tip, install the 2026.09.18 library from the
+  local folder, one question per new game, rows 01, 03 and 06 again with the watch.
 
 ---
 

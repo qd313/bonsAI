@@ -855,6 +855,30 @@ def extract_lead_sentence(text: str, headings: list[Heading]) -> Unit | None:
     return None
 
 
+# Preferred order for extract_lead_facts, when the info box carries more than one of these.
+# Not every page has all five; whichever are present sort first, in this order, ahead of any
+# other labelled fact from the same box.
+_LEAD_FACT_LABEL_PRIORITY = ["location", "area", "found in", "type", "game"]
+
+
+def extract_lead_facts(text: str, headings: list[Heading]) -> list[Unit]:
+    """Used only when extract_lead_sentence finds nothing -- some pages (Hollow Knight wiki's
+    boss pages, e.g. False Knight) carry the page's location and kind only as labelled
+    info-box facts, never as a prose sentence at all ("Location: Forgotten Crossroads"), so
+    "open with the first sentence" has nothing to open with. Reuses body_to_units's own
+    label parsing rather than a second implementation of it. Up to three lines, preferring
+    Location, Area, Found in, Type, Game in that order when present, else page order."""
+    lead_end = headings[0].line_start if headings else len(text)
+    lead_units, _ = body_to_units(text[:lead_end])
+    labels = [u for u in lead_units if u.kind == "label"]
+
+    def priority(u: Unit) -> int:
+        label = u.text.split(":", 1)[0].strip().lower()
+        return _LEAD_FACT_LABEL_PRIORITY.index(label) if label in _LEAD_FACT_LABEL_PRIORITY else len(_LEAD_FACT_LABEL_PRIORITY)
+
+    return sorted(labels, key=priority)[:3]
+
+
 def render_card(units: list[Unit]) -> str:
     lines: list[str] = []
     buffer: list[str] = []
@@ -895,11 +919,31 @@ TACTIC_SIGNAL_WORDS = [
 # the wiki are non-canon" contains "used", which a substring check would wrongly credit.
 _TACTIC_SIGNAL_PATTERNS = [re.compile(r"\b" + re.escape(phrase) + r"\b") for phrase in TACTIC_SIGNAL_WORDS]
 
+# Lower-weight synonyms for the same signal -- a general widening, not a fit to one page (the
+# whole-library search number lane D already tracks is the guard against over-fitting this).
+# Found because a real sentence used none of the exact words above at all: "he falls back and
+# lands on his chest, revealing the head of the Maggot" names the fight's whole punish window
+# without ever saying "exposed" or "weak point". These are worth at most ONE point combined
+# (not one each), so a sentence that only uses a common timing word ("once", "while") never
+# outranks a sentence carrying a real signal word from the list above.
+TACTIC_SIGNAL_WORDS_LOW_WEIGHT = [
+    # the "reveal" family -- a wiki's own way of saying a weak point opens up
+    "reveal", "reveals", "revealing", "revealed", "uncover", "exposes", "exposing",
+    "opens up", "becomes vulnerable", "can be hit", "can be damaged", "take damage",
+    "deals damage", "weak to",
+    # the timing family -- often paired with the moment a boss is open to a hit
+    "once", "while", "until", "during", "after it", "when it", "when he", "when she",
+]
+_TACTIC_SIGNAL_LOW_WEIGHT_PATTERNS = [
+    re.compile(r"\b" + re.escape(phrase) + r"\b") for phrase in TACTIC_SIGNAL_WORDS_LOW_WEIGHT
+]
+
 
 def score_unit(unit: Unit, subject: str = "") -> int:
     """One point per distinct tactic-signal phrase found in the unit's own text (a sentence
     naming several, e.g. "dodge... then jump", scores higher than one that names one), plus
-    one for naming the note's own subject (the page's own title -- a sentence about what the
+    up to one more for any low-weight synonym (see TACTIC_SIGNAL_WORDS_LOW_WEIGHT), plus one
+    for naming the note's own subject (the page's own title -- a sentence about what the
     boss itself does outranks a side comment). A unit with none of the above is penalised, on
     the theory that a sentence with no action word and no mention of the subject is pure
     description ("Most attack names used by the wiki are non-canon") -- exactly the kind of
@@ -909,6 +953,8 @@ def score_unit(unit: Unit, subject: str = "") -> int:
     reads "Health: 800" scoring low is the same call, not a special case."""
     lower = unit.text.lower()
     score = sum(1 for pattern in _TACTIC_SIGNAL_PATTERNS if pattern.search(lower))
+    if any(pattern.search(lower) for pattern in _TACTIC_SIGNAL_LOW_WEIGHT_PATTERNS):
+        score += 1
     if subject and re.search(r"\b" + re.escape(subject.strip().lower()) + r"\b", lower):
         score += 1
     if score == 0:
@@ -917,16 +963,24 @@ def score_unit(unit: Unit, subject: str = "") -> int:
 
 
 def _select_units_by_score(
-    units: list[Unit], min_chars: int, max_chars: int, *, subject: str = "", lead: Unit | None = None,
+    units: list[Unit], min_chars: int, max_chars: int, *,
+    subject: str = "", lead: Unit | list[Unit] | None = None,
 ) -> tuple[list[Unit], str | None, list[tuple[Unit, int, bool]]]:
     """The reader's own selection, not the model's: `units` are scored by score_unit, taken
     highest-scoring first, but EMITTED in the page's own order so the note still reads as
     prose rather than a shuffled one (a stable sort on original position breaks ties and
-    fixes the final order). `lead` (from extract_lead_sentence) is always kept and never
-    scored -- it is the note's own opening line, not a competitor for the cap's space.
+    fixes the final order). `lead` (from extract_lead_sentence, or extract_lead_facts when
+    there is no lead sentence) is always kept and never scored -- it is the note's own
+    opening, not a competitor for the cap's space. Accepts a single Unit or a list (up to
+    three info-box facts) so both callers can pass their own shape straight through.
     Returns (kept units in page order, a length note if the aim/cap was not hit cleanly, and
     a (unit, score, was it kept) row per unit for a person to check with --explain)."""
-    lead_units = [lead] if lead else []
+    if lead is None:
+        lead_units: list[Unit] = []
+    elif isinstance(lead, list):
+        lead_units = lead
+    else:
+        lead_units = [lead]
     scored = [(score_unit(u, subject), i, u) for i, u in enumerate(units)]
     order = sorted(scored, key=lambda row: (-row[0], row[1]))
 
@@ -1054,9 +1108,18 @@ def build_note(
         # -- otherwise the note would open with the same sentence twice.
         lead_unit = None
 
+    lead: Unit | list[Unit] | None = lead_unit
+    if lead_unit is None:
+        # No prose lead sentence exists at all -- some pages (False Knight) carry their
+        # location and kind only as info-box facts. Same duplicate guard as the sentence
+        # case: a fact already sitting in the chosen section is not repeated.
+        lead_facts = [u for u in extract_lead_facts(body, headings) if u.text not in section_body]
+        if lead_facts:
+            lead = lead_facts
+
     subject = meta.get("title", "")
     kept, length_note, score_rows = _select_units_by_score(
-        units, min_chars, max_chars, subject=subject, lead=lead_unit
+        units, min_chars, max_chars, subject=subject, lead=lead
     )
     if length_note:
         dropped_notes.append(length_note)

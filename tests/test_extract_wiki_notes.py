@@ -359,6 +359,29 @@ class ExtractLeadSentenceTests(unittest.TestCase):
         self.assertIsNone(m.extract_lead_sentence(text, headings))
 
 
+class ExtractLeadFactsTests(unittest.TestCase):
+    """Fourth-pass work: False Knight's own page never states its location or role as a
+    sentence at all -- only as info-box facts ("Location: Forgotten Crossroads"), so
+    extract_lead_sentence finds nothing and this is the fallback."""
+
+    def test_prefers_location_over_other_facts(self):
+        text = "!! Type\n|| Boss\n!! Location\n|| Forgotten Crossroads\n== Behaviour and Tactics\nHe leaps.\n"
+        headings = m.extract_headings(text)
+        facts = m.extract_lead_facts(text, headings)
+        self.assertEqual(facts[0].text, "Location: Forgotten Crossroads")
+
+    def test_takes_at_most_three(self):
+        text = "!! A\n|| 1\n!! B\n|| 2\n!! C\n|| 3\n!! D\n|| 4\n== Strategy\nDo it.\n"
+        headings = m.extract_headings(text)
+        facts = m.extract_lead_facts(text, headings)
+        self.assertEqual(len(facts), 3)
+
+    def test_no_facts_at_all_returns_an_empty_list(self):
+        text = "A plain sentence with no info box.\n== Strategy\nDo it.\n"
+        headings = m.extract_headings(text)
+        self.assertEqual(m.extract_lead_facts(text, headings), [])
+
+
 class TrimToLengthTests(unittest.TestCase):
     def test_stops_before_exceeding_the_cap(self):
         units = [m.Unit("sentence", "Word.", ["Word."]) for _ in range(500)]
@@ -405,6 +428,20 @@ class ScoreUnitTests(unittest.TestCase):
         description = m.Unit("sentence", "False Knight possesses a variety of attacks.", [])
         tactic = m.Unit("sentence", "Hit the exposed head while he is staggered.", [])
         self.assertGreater(m.score_unit(tactic, subject="False Knight"), m.score_unit(description, subject="False Knight"))
+
+    def test_the_reveal_synonym_scores_above_pure_description(self):
+        """Fourth-pass work: the exact real sentence that exposed the gap in the original
+        word list -- it uses none of those words, only "revealing"."""
+        reveal = m.Unit("sentence", "He falls back and lands on his chest, revealing the head.", [])
+        description = m.Unit("sentence", "False Knight was added in a later content patch.", [])
+        self.assertGreater(m.score_unit(reveal), m.score_unit(description))
+
+    def test_low_weight_words_are_worth_at_most_one_point_combined(self):
+        """Several low-weight matches in one sentence must not out-rank a single real signal
+        word -- that would defeat the point of calling them low-weight."""
+        many_low_weight = m.Unit("sentence", "Once, while he waits, until he moves, during the fight, he stands there.", [])
+        one_real_signal = m.Unit("sentence", "Dodge.", [])
+        self.assertLessEqual(m.score_unit(many_low_weight), m.score_unit(one_real_signal))
 
 
 class SelectUnitsByScoreTests(unittest.TestCase):
@@ -737,6 +774,43 @@ class BuildNoteEndToEndTests(unittest.TestCase):
             )
             self.assertIn("Hit the exposed head", note["card"])
             self.assertIn("Jump over the shockwave", note["card"])
+
+    def test_no_lead_sentence_opens_with_info_box_facts_instead(self):
+        """Fourth-pass work, the real False Knight shape: no prose lead paragraph exists at
+        all, only info-box facts, before the "Behaviour and Tactics" heading."""
+        with tempfile.TemporaryDirectory() as tmp_str:
+            tmp = Path(tmp_str)
+            page = tmp / "false-knight.txt"
+            page.write_text(
+                "# source: https://hollowknight.wiki/w/False_Knight\n"
+                "# site: Hollow Knight Wiki\n"
+                "# revision: 1 (2026-01-01T00:00:00Z)\n"
+                "# licence: (unused when a manifest sits beside it)\n"
+                "# read: 2026-09-17\n\n"
+                "!! Type\n|| Boss\n!! Location\n|| Forgotten Crossroads\n\n"
+                "== Behaviour and Tactics\n"
+                "He leaps and slams the ground with his mace.\n",
+                encoding="utf-8",
+            )
+            manifest = {
+                "pages": [{
+                    "requested": "False Knight", "title": "False Knight",
+                    "url": "https://hollowknight.wiki/w/False_Knight", "revid": 1,
+                    "timestamp": "2026-01-01T00:00:00Z",
+                    "licence_text": "Creative Commons Attribution-Share Alike 3.0 (Unported)",
+                    "licence_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+                    "read_on": "2026-09-17", "file": "false-knight.txt",
+                }],
+            }
+            (tmp / "_manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+            allowed = m._load_allowed_licences()
+            note, _, _ = m.build_note(
+                page_path=page, page_format="live", game_id=1,
+                section_type_arg=None, name_arg=None,
+                min_chars=10, max_chars=400, allowed_licences=allowed,
+            )
+            self.assertTrue(note["card"].startswith("Location: Forgotten Crossroads"), note["card"])
+            self.assertIn("He leaps and slams the ground", note["card"])
 
     def test_a_category_in_the_manifest_reaches_the_note_s_section_type(self):
         """End-to-end version of GuessSectionTypeTests: a category recorded in the fetcher's

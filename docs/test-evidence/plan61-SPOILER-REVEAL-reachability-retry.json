@@ -1,0 +1,25 @@
+{
+  "rowId": "SPOILER-REVEAL reachability (closed row SPOILER-DPAD-01)",
+  "rowText": "With a fenced reply on screen: ask -> question echo -> the fence takes the ring in three presses, then A reveals it (masked count 1 to 0).",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T (flow D part 2, games block)",
+  "setup": {
+    "game_running": "none -- could not launch",
+    "attempted": ["God of War (appid 1593500)", "Hollow Knight (appid 367520)"]
+  },
+  "steps": [
+    {
+      "action": "deck_launchGame appid 1593500 (God of War)",
+      "observed": "Refused before any A press -- not found on the Recent Games shelf after walking it to the end."
+    },
+    {
+      "action": "deck_launchGame appid 367520 (Hollow Knight, the named fallback)",
+      "observed": "Also refused -- not on the Recent Games shelf."
+    }
+  ],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "This check needs a spoiler box on screen from a story game, but neither God of War nor Hollow Knight could be started tonight -- neither is on the Deck's list of recently played games, which is the only list the launch tool can search. No reply was produced, so whether the reveal works could not be checked.",
+  "notes": "Same blocker as plan61-REPLY-STOPS-MIRROR-01-retry.json. See that file for the full launch attempts."
+}

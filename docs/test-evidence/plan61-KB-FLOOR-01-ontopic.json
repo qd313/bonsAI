@@ -1,0 +1,21 @@
+{
+  "rowId": "KB-FLOOR-01",
+  "rowText": "On-topic half: with a covered game running, an ordinary Ask should attach the knowledge-base card normally (not read as skipped).",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T09:50-10:05",
+  "setup": {
+    "game_running": "Half-Life 2 (appid 220)",
+    "use_local_knowledge_base": true,
+    "ask_mode": "strategy",
+    "chosen_question": "how do i beat the strider (a genuine Half-Life 2 note-backed suggestion the plugin itself offered as a chip)"
+  },
+  "steps": [
+    { "action": "Selected the chip; the Ask box filled with 'how do i beat the strider'.", "expected": "Send it and check Show details reads the knowledge base as attached, not skipped." },
+    { "action": "Tried to reach the Ask button with Down and Right from the filled box.", "observed": "Blocked -- see docs/test-evidence/plan61-ASKBAR-FOCUS-TRAP-01.json. The ring would not leave the text box, so the question was never sent." }
+  ],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "Could not run tonight: the on-topic question was ready in the Ask box, but the same Ask-bar focus problem stopped the controller from reaching Send.",
+  "notes": "Per the plan, the on-topic half already PASSED 2026-09-15 (docs/test-evidence/plan55-KB-FLOOR-01-ontopic.json); tonight's attempt was meant as a fresh confirmation on build 0589565, which is now owed rather than re-proven."
+}

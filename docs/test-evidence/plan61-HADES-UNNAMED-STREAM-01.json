@@ -1,0 +1,13 @@
+{
+  "rowId": "HADES-UNNAMED-STREAM-01",
+  "rowText": "A question that does not name a boss, streaming on -- the mid-stream mask chip should still appear for story-adjacent detail.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T10:05",
+  "setup": { "game_running": "Hades (appid 1145360)", "ask_mode": "strategy" },
+  "steps": [
+    { "action": "Needed a fresh unnamed-boss question sent and watched mid-stream.", "observed": "BLOCKED before it could start -- no question could be sent tonight; see docs/test-evidence/plan61-ASKBAR-FOCUS-TRAP-01.json." }
+  ],
+  "verdict": "BLOCKED",
+  "verdictSentence": "Not run tonight -- the Ask box could not be sent from, so streaming could not even begin.",
+  "notes": "Companion check for the R4 spoiler-relaxation fix; still not claimed on this Deck."
+}

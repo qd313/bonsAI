@@ -1,0 +1,21 @@
+{
+  "rowId": "focus-trap-hunt, try 5 (flow F, the 15 September recipe)",
+  "rowText": "Start a brand-new empty chat while the Session context row is showing turns from another chat, then press Down, Left and Right from the question box, and see whether the D-pad gets stuck.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T11:08 (Deck clock, right after exiting Sifu)",
+  "setup": {
+    "game_running": "none (just exited Sifu)",
+    "how_the_chat_was_made": "Moved the ring onto the chat-slot switcher row, used the shoulder button to select the '[+]' create-chat spot, pressed A on it."
+  },
+  "steps": [
+    { "action": "Create a new chat from the slot row", "observed": "A new, empty-looking chat slot named 'New chat' became active. The Session context row still read 'Session context (1 turn) ▸' -- a leftover count from the previous chat, matching the recipe's setup condition." },
+    { "action": "Press Down from the question box", "observed": "Moved cleanly onto the Ask button. No trap." },
+    { "action": "Back to the box (Up), press Left", "observed": "Did not move (there is nothing to its left in this row -- reads as the edge of the row, not a stuck ring)." },
+    { "action": "Press Right from the box", "observed": "Moved cleanly onto the next control in the row. No trap." }
+  ],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "PASS (did not reproduce this try)",
+  "verdictSentence": "This time, starting a new chat and pressing down, left and right from the question box did not freeze the highlighted control -- down and right both moved normally, and left simply had nothing next to it. The freeze did not show up on this attempt.",
+  "notes": "Worth flagging even though the trap itself did not appear: the new chat's reply area still showed the PREVIOUS chat's finished reply and its 'Show reasoning' line underneath 'New chat' in the slot label, before any question had been asked in the new chat. This looks like the already-known 'ghost reply in a new chat' bug (confirmed several times earlier tonight), not the focus-trap bug this try was hunting. Recorded here since it appeared during this exact recipe, but the ghost-reply bug already has its own confirmed sightings and is not re-filed as new."
+}

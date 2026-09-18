@@ -1,0 +1,31 @@
+{
+  "rowId": "KB-COVERAGE-01 negative cases + KB-COVERAGE-NOAPP-01 second half",
+  "rowText": "With an uncovered title running, ask any question and open Show details -- expect 'KB: none for this game'. Then turn the knowledge base off and ask again -- expect 'KB: off'.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T10:55-11:06 (Deck clock)",
+  "setup": {
+    "game_running": "Sifu (appid 2138710), standing in for Black Mesa",
+    "why_not_black_mesa": "Black Mesa (appid 362890) would not launch -- the launch tool refused before pressing anything because Black Mesa is not on the Deck's Recent Games row (only the row of recently played titles can be searched). This matches the same launcher refusal recorded earlier for this row. Sifu is the fallback the plan names, and is confirmed as a corpus-uncovered title (its question got no note card and 'KB: none for this game').",
+    "ask_mode": "strategy",
+    "chat": "carried over from the earlier Portal 2 section, not a fresh chat",
+    "question_used": "\"what does the pickaxe do\" -- a baseline pinned test chip. The row only needs 'any question'; the running game (Sifu) rather than the question's wording is what decides whether a note is found."
+  },
+  "steps": [
+    { "action": "Pin chip selected (A), question filled the box, sent (A on Ask, knowledge base ON)", "observed": "Reply came back as a generic, made-up answer about a pickaxe with no note card attached." },
+    { "action": "Open Show details", "observed": "Reads 'KB: none for this game', body line 'Retrieval: Keyword search', 'Trust tier: fallback_no_source'. No source card, matching a title the notes do not cover." },
+    { "action": "Turn the knowledge base off (use_local_knowledge_base set to false, read back to confirm)", "observed": "Confirmed false on disk before asking again." },
+    { "action": "Same question asked again (fresh chip selection, same text, KB off)", "observed": "Reply came back, generic again." },
+    { "action": "Open Show details on this second reply", "observed": "Reads 'KB: off' and the developer line 'Local knowledge base is disabled in Settings.' -- visibly different wording from the first reading." },
+    { "action": "Knowledge base turned back on (use_local_knowledge_base set to true), read back over SSH", "observed": "Confirmed true on disk." }
+  ],
+  "plugin_log_lines": [
+    "[2026-09-18 11:02:04,354][INFO]: run_game_ai_request: host=127.0.0.1:11434 game='Sifu' appid=2138710 question_len=24",
+    "[2026-09-18 11:02:49,679][INFO]: run_game_ai_request: completed in 45.3s",
+    "[2026-09-18 11:04:2x][INFO]: run_game_ai_request: host=127.0.0.1:11434 game='Sifu' appid=2138710 question_len=24 (KB off)",
+    "[2026-09-18 11:05:13,202][INFO]: run_game_ai_request: completed in 43.8s"
+  ],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "With an uncovered game running, the notes panel correctly says there is nothing for this game, and turning the knowledge base off shows a clearly different message saying it is switched off -- a person can tell the two apart.",
+  "notes": "Uses Sifu, not Black Mesa, because Black Mesa is not on the Deck's recently-played list and the launch tool cannot search the full library grid -- this is worth fixing for future automated runs, not a plugin bug. The W3-D corrected note ('black mesa how do i get across the electrified water') was not asked: the newly pinned chip did not take effect after only closing and reopening the plugin panel (the box kept filling with the old chip's text), and re-diagnosing that would have cost more device time than the row is worth tonight. Left owed. The 'What game am I playing?' Tier 1 extra for Black Mesa is not repeated here -- docs/test-evidence/plan61-tier1-what-game.json already recorded a PASS for it earlier tonight on Half-Life 2 (checked before starting this section, per the brief's instruction)."
+}

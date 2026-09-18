@@ -1,0 +1,25 @@
+{
+  "rowId": "REPLY-STOPS-MIRROR-01",
+  "rowText": "Down and Up through a reply visit the same stops. On a reply with two paragraphs, a spoiler block and a two-button menu, check the Down stops and the Up stops are exact mirrors of each other. Ask \"how do i beat the final boss\" with God of War (or Hollow Knight as fallback) running, Strategy mode, spoiler masking on, no consent words.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T (flow D part 2, games block)",
+  "setup": {
+    "game_running": "none -- could not launch",
+    "attempted": ["God of War (appid 1593500)", "Hollow Knight (appid 367520)"]
+  },
+  "steps": [
+    {
+      "action": "deck_launchGame appid 1593500 (God of War)",
+      "observed": "Refused before any A press. Not on the Recent Games shelf -- walked 20 RIGHT presses to the end of the shelf (\"View more in your Library\") without finding it. The launcher tool cannot reach the Library grid, only the Recent Games shelf."
+    },
+    {
+      "action": "deck_launchGame appid 367520 (Hollow Knight, the named fallback)",
+      "observed": "Also refused. Not on the Recent Games shelf either -- the shelf from Home showed only \"View more in your Library\" at that point (0 RIGHT presses available)."
+    }
+  ],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "Neither God of War nor its stand-in, Hollow Knight, could be started tonight -- neither one shows up on the Deck's Recent Games row, and the tool that starts games for this check can only pick from that row, not the full games list. No question was asked, so this check did not run either way.",
+  "notes": "Same blocker applies to the SPOILER-REVEAL reachability check in this same section -- see plan61-SPOILER-REVEAL-reachability-retry.json. To unblock, someone needs to open God of War or Hollow Knight by hand once so it lands on the Recent Games row, or the launch tool needs to learn to search the full Library grid, not just the row of recently played titles."
+}

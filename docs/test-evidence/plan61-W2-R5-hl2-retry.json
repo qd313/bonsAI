@@ -1,0 +1,18 @@
+{
+  "rowId": "W2-R5 (retry, on-game question the notes cannot answer)",
+  "rowText": "With Half-Life 2 running, ask an on-game question the notes cannot answer (\"what year did half-life 2 come out\"). Pass when the \"Not in my notes\" line appears once, worded exactly, and sits below the answer without breaking the D-pad walk.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T11:36-11:41 (Deck clock)",
+  "setup": {
+    "game_running": "Half-Life 2 (appid 220)",
+    "ask_mode": "strategy"
+  },
+  "steps": [
+    { "action": "Select the pinned chip \"what year did half-life 2 come out\" and try to reach the Ask button", "observed": "The highlighted control froze on the question box on the second press toward Ask -- the same freeze seen repeatedly tonight on Sifu, Deep Rock Galactic: Survivor and Hades. Down and Right both went dead; only Up escaped." }
+  ],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "This question was never sent -- reaching the Send button froze the highlighted control on the question box, the same freeze that blocked most of tonight's later rows. Whether the 'not in my notes' line appears could not be checked.",
+  "notes": "This is the ninth confirmed sighting of the ask-box freeze tonight (see plan61-ASKBAR-FOCUS-TRAP-02.json, plan61-focustrap-try6.json, plan61-MEGAERA-01-retry.json). By this point in the session it was failing on effectively every attempt, on every game tried, not just occasionally. Recommend re-running this row (and KB-FLOOR-01's on-topic half and KB-TRANSPARENCY-01, also owed from Half-Life 2 tonight) once the freeze itself is fixed."
+}

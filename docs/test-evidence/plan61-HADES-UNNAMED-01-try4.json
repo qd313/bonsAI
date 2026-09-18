@@ -1,0 +1,13 @@
+{
+  "rowId": "HADES-UNNAMED-01 (fourth try)",
+  "rowText": "A question that does not name a boss -> story-adjacent detail should still be fenced. Fourth try, on a new not-yet-tried phrasing.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T10:05",
+  "setup": { "game_running": "Hades (appid 1145360)", "ask_mode": "strategy", "masking": "on" },
+  "steps": [
+    { "action": "Planned a fourth, not-yet-tried unnamed-boss phrasing.", "observed": "BLOCKED -- no question could be sent tonight; see docs/test-evidence/plan61-ASKBAR-FOCUS-TRAP-01.json." }
+  ],
+  "verdict": "BLOCKED",
+  "verdictSentence": "The fourth try could not happen -- the Deck-wide Ask-box problem stopped any new question from going out.",
+  "notes": "Still mixed, not closed, from three earlier tries (2 pass, 1 fail on 'reach the surface' phrasings)."
+}

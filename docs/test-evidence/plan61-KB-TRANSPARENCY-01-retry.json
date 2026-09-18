@@ -1,0 +1,15 @@
+{
+  "rowId": "KB-TRANSPARENCY-01 (retry, read against the log)",
+  "rowText": "Read the plugin log for the trust-tier line on a Half-Life 2 ask, against Show details.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T11:36-11:41 (Deck clock)",
+  "setup": {
+    "game_running": "Half-Life 2 (appid 220)"
+  },
+  "steps": [],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "Not reached -- no question could be sent on Half-Life 2 tonight, so there was nothing new in the log or in Show details to compare; see plan61-W2-R5-hl2-retry.json for the attempt.",
+  "notes": "Blocked by the same ask-box freeze as the other Half-Life 2 rows tonight. Given the plan's own note that a large Proton log is the hard part to arrange anyway, this stays owed rather than partially attempted."
+}

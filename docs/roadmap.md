@@ -287,16 +287,13 @@ starts work outside this.
   with it. The mechanism, the signature to chase and every run, including how it was finally reproduced on
   demand:
   [detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
-  **The trigger is now known, found 2026-09-18 with a game running.** Pressing A on the question box opens
-  Steam's own on-screen keyboard; once B closes it, Down and Right out of the box stop working — the page's
-  own idea of what is focused moves on to the Ask button or the mode button, but the highlight ring a person
-  actually sees stays on the box, and only Up still gets out. It happened five times across two panel
-  reopens and one full close-and-reopen of the whole quick access menu on Half-Life 2, and again in a
-  brand-new chat with Hades running; by the time Portal 2 was running it had cleared on its own, with no
-  restart needed. Three tries of the 15 September new-chat recipe the same night came back clean, so
-  opening the keyboard, not starting a new chat, looks like the real trigger. Evidence
-  `docs/test-evidence/plan61-ASKBAR-FOCUS-TRAP-01.json` (the sighting), `docs/test-evidence/plan61-focustrap-try2.json`
-  and `-try3.json` (the clean tries).
+  **The trigger is now known, found 2026-09-18.** Pressing Ask can leave the highlight stuck on the question
+  box, unable to move down or right, even when the box itself was never pressed. **By the second half of
+  tonight's run, with a game still open, this was happening on almost every question sent, not just once in
+  a while** — raising how urgent this entry is. The only thing that reliably clears it: back out with the
+  Steam button, close the whole Quick Access Menu, and reopen it — going up and back down, or switching the
+  panel's tabs, does not. Full run history and the exact steps:
+  [detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
 - ★★★ `[reply]` **A name-withheld boss question on a story-protected game comes back with no spoiler box** —
   **OPEN, found 2026-09-18.** Nothing running, no consent phrase anywhere in the chat: asked about "the boss
   past the crystal spike area … the one that looks just like me" in Hollow Knight, the reply named Broken
@@ -576,7 +573,10 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   reply with a spoiler block turned up to run the row as written. On the reply that was available, a real
   mismatch showed up on a different part of the reply than this row names: Down reached both buttons of a
   follow-up branch menu, and Up skipped both on the way back up. Stays owed. Evidence
-  `docs/test-evidence/plan57-QA-REPLY-STOPS-MIRROR-01.json`.
+  `docs/test-evidence/plan57-QA-REPLY-STOPS-MIRROR-01.json`. **Tried again 2026-09-18: blocked** — neither God
+  of War nor Hollow Knight is on the Deck's Recent Games row, the only list the launch tool can search, so
+  neither would start; someone needs to play one of them once by hand first. Evidence
+  `docs/test-evidence/plan61-REPLY-STOPS-MIRROR-01-retry.json`.
 - ★ `[ollama]` **Mistyping one model name in a several-model download loses it without saying so** — **VERIFY,
   fixed 2026-09-15.** Downloading several models at once now says which name it could not find and still
   starts the good ones, instead of quietly dropping the bad one. Row **PULL-MISSING-NAME-01**: on the Ollama
@@ -861,6 +861,11 @@ ones from this month are D81 to D88.
   on 2026-08-27 in the "Unrelated questions still get game cards stapled on" entry above; the row and that entry now
   contradict each other, which is for the maintainer to settle by retiring or rewording one of them. Rows
   **KB-VARIANT-01**, **KB-FLOOR-01**, **KB-FOLLOWUP-01**, **KB-TRANSPARENCY-01**, **KB-KILLSWITCH-01**.
+  **Tried again 2026-09-18 with Hades and Half-Life 2 running: KB-FOLLOWUP-01 and KB-TRANSPARENCY-01 stayed
+  blocked, and KB-FLOOR-01's already-passed on-topic half could not be freshly confirmed either** — every one
+  of them needed a question sent, and the Ask-box freeze above (the three-star focus entry) stopped every
+  question from going out. Evidence `docs/test-evidence/plan61-KB-FOLLOWUP-01.json`,
+  `docs/test-evidence/plan61-KB-TRANSPARENCY-01-retry.json`, `docs/test-evidence/plan61-KB-FLOOR-01-ontopic.json`.
 - ★ `[KB]` **A Hades boss's note is spelled wrong, so spelling it right gets you told the plugin is guessing** —
   **VERIFY, fixed 2026-09-15, waiting on the maintainer to publish.** The note is titled Megaera now and the library
   was rebuilt and passed its own publish check, but pushing it to the two public download hosts was refused for the
@@ -868,6 +873,9 @@ ones from this month are D81 to D88.
   **MEGAERA-01**: once the point release is installed from the Ollama tab's Update knowledge base, with Hades
   running, ask "How do I beat Megaera?" and check the note attaches with no "no close match" line. On the library
   still installed today, that line still appears. Evidence `docs/test-evidence/plan55-HADES-NAMED-01.json`.
+  **Tried 2026-09-18 with Hades running, blocked:** eight attempts to send the question all froze the
+  highlighted control on the question box, so it was never sent. Evidence
+  `docs/test-evidence/plan61-MEGAERA-01.json`.
 - ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **VERIFY,
   landed 2026-09-15, four commits, unit-tested.** A game known only by name now opens its box; naming the boss
   first opens it on screen, in copied text and in read-aloud; a no-story game named in the question gets the same
@@ -875,17 +883,25 @@ ones from this month are D81 to D88.
   **STRAT-SPOIL-FIRST-01 passed on the Deck 2026-09-18:** naming Wheatley up front in Portal 2 kept the whole
   answer in plain text from the first streamed word, with no hidden box, and it was still plain after closing
   and reopening the chat; the old "Portal 2 not in the library" note is settled — it was installed all along.
-  Evidence `docs/test-evidence/plan61-STRAT-SPOIL-FIRST-01.json`. Left: **STRAT-SPOIL-NAME-01** (a library check
-  on 2026-09-18 shows Doom 64: Retribution installed as an emulated shortcut, so it can now be run), and from
-  the older **STRAT-SPOIL-DRG-01** block: **DRG-01b/c** (knowledge base off, corpus absent),
-  **HADES-UNNAMED-STREAM-01**, and **HADES-UNNAMED-01** (mixed results on 2026-09-15). [Plan
-  54](planning/54-spoiler-rules-gaps.md).
+  Evidence `docs/test-evidence/plan61-STRAT-SPOIL-FIRST-01.json`. **STRAT-SPOIL-NAME-01 tried 2026-09-18,
+  blocked:** Doom 64: Retribution is genuinely installed, but it is not on the Deck's Recent Games row, the
+  only list the launch tool can search, so it could not be started; someone needs to play it once by hand
+  first. Evidence `docs/test-evidence/plan61-STRAT-SPOIL-NAME-01.json`. From the older **STRAT-SPOIL-DRG-01**
+  block: **DRG-01b tried 2026-09-18 with Deep Rock Galactic: Survivor running, blocked** by the same Ask-box
+  freeze as the three-star focus entry above (evidence `docs/test-evidence/plan61-DRG-01b.json`); **DRG-01c
+  not tried on purpose** (would mean removing the library, out of scope tonight); **HADES-UNNAMED-STREAM-01**
+  and **HADES-UNNAMED-01** (a fourth try) both **tried 2026-09-18 with Hades running and also blocked** by the
+  same freeze (evidence `docs/test-evidence/plan61-HADES-UNNAMED-STREAM-01.json`,
+  `docs/test-evidence/plan61-HADES-UNNAMED-01-try4.json`), on top of the mixed results already on record from
+  2026-09-15. [Plan 54](planning/54-spoiler-rules-gaps.md).
 - ★★ `[KB]` **"Not in my notes" line** — **VERIFY, built and shipped 2026-09-07, device check failed the same
   day.** The line itself is in the code, but on the Deck nothing could make it appear: ten questions asked first
   all attached a note, so the one question meant to show the line never got the chance. The note search has
   since gained a floor that can refuse a weak match, so there may be a way to show it now — nobody has checked.
   Same shape of problem as the "No tip for this" line in the Bugs list above; run both together next time. Row
-  **W2-R5**.
+  **W2-R5**. **Tried again 2026-09-18 with Half-Life 2 running, blocked:** the right question (one the notes
+  genuinely do not cover) was ready to send, but the same Ask-box freeze as the three-star focus entry above
+  stopped it from going out. Evidence `docs/test-evidence/plan61-W2-R5-hl2-retry.json`.
 - ★★ `[KB]` **Ten new games checked on the Deck, publish owed** — **VERIFY, ran 2026-09-18.** The
   2026.09.18 library was installed on the Deck straight from the plugin's own folder, not from the
   public download hosts. One question named each of the ten new games and all ten answered from that

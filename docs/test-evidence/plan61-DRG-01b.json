@@ -1,0 +1,20 @@
+{
+  "rowId": "DRG-01b",
+  "rowText": "As DRG-01 with the knowledge base off: \"How do I beat Glyphid Dreadnought?\" (using the baseline pinned chip \"how do i kill the big armoured bug boss\"), no consent phrase, masking on -- expect boss tactics in plain text, no tap-to-reveal.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T11:12-11:33 (Deck clock)",
+  "setup": {
+    "game_running": "Deep Rock Galactic: Survivor (appid 2321470)",
+    "ask_mode": "strategy",
+    "use_local_knowledge_base": "set to false for this row, read back to confirm, then set back to true afterward",
+    "chat": "the same chat carried over from earlier in the session (a 'New chat' created during the focus-trap hunt, now several turns in)"
+  },
+  "steps": [
+    { "action": "Six separate attempts to select the pinned chip and press Down twice to reach the Ask button", "observed": "Five of the six attempts froze the highlighted control on the typing box after the second Down (the same trap filed as ASKBAR-FOCUS-TRAP-01/02, and again as plan61-focustrap-try6.json during this same row). Down and Right both went dead each time; only Up escaped. Closing the whole Quick Access menu and reopening cleared it each time, but the trap came straight back on the very next attempt to reach the Ask button." }
+  ],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "This question was never actually sent tonight -- every attempt to move from the question box down to the Send button froze the highlighted control on the box itself, and it kept happening again each time the menu was reopened to clear it. Whether the reply comes back as plain text with the knowledge base off could not be checked.",
+  "notes": "This is the single most important finding of tonight's Deep Rock Galactic section: the ask-box freeze that has shown up a few times elsewhere this session reproduced on nearly every attempt here (5 of 6 tries), not just occasionally. One of the six attempts opened Steam's own on-screen keyboard by accident when a press meant for the send button landed on the box instead (see plan61-focustrap-try6.json) -- no text was typed, and it was closed immediately. Recommend treating this as the top-priority version of the already-filed three-star bug: on this build, a person using only a controller has a real chance of getting stuck sending a question in Deep Rock Galactic specifically, not just as a rare fluke."
+}

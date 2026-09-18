@@ -1,0 +1,19 @@
+{
+  "rowId": "MEGAERA-01",
+  "rowText": "With Hades running, ask \"How do I beat Megaera?\" and check the note attaches with no \"no close match\" line. A read-once check tonight, not expected to close (waiting on the maintainer's publish step).",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T11:27-11:40 (Deck clock)",
+  "setup": {
+    "game_running": "Hades (appid 1145360)",
+    "ask_mode": "strategy",
+    "chat": "the same carried-over chat used all session (several turns in by this point)"
+  },
+  "steps": [
+    { "action": "Eight separate attempts across this section to select the pinned \"How do I beat Megaera?\" chip and reach the Ask button", "observed": "Every attempt froze the highlighted control on the question box on the second press toward Ask (Down and Right both went dead; only Up escaped). This included one attempt with a deliberate one-second pause inserted between the two presses, which made no difference." }
+  ],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "This question was never actually sent -- every attempt to reach the Send button after picking it from the suggestion list froze the highlighted control on the question box first. Whether Megaera's note still shows the old \"guessing\" line could not be checked tonight.",
+  "notes": "By this point in the session the ask-box freeze (already filed, see plan61-ASKBAR-FOCUS-TRAP-02.json and plan61-focustrap-try6.json) was reproducing on nearly every attempt, not occasionally -- eight tries here, zero successes. Reopening the whole Quick Access menu clears it once, but it comes back on the very next attempt to send anything. This is now the dominant blocker for the rest of tonight's Hades and Half-Life 2 rows; see plan61-wave-three-hades.json for the combined write-up covering KB-FOLLOWUP-01, HADES-UNNAMED-STREAM-01, HADES-UNNAMED-01 (try 4) and the W3-C batch, all blocked by the same freeze."
+}

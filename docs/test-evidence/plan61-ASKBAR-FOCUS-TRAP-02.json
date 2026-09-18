@@ -1,0 +1,52 @@
+{
+  "rowId": "ASKBAR-FOCUS-TRAP-02 (diagnostic, requested by the roadmap's three-star trap entry)",
+  "rowText": "The Ask-box focus trap reproduced again during flow D part 2. Follow the fixed recovery ladder, recording after each step whether Down from the box works again.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T10:40-11:00 (approx, Deck clock)",
+  "setup": {
+    "game_running": "Sifu (appid 2138710), standing in for Black Mesa (Black Mesa would not launch)",
+    "ask_mode": "strategy",
+    "chat": "the chat carried over from the Portal 2 section (existing turns, not a fresh chat)",
+    "how_it_appeared_this_time": "Not triggered by pressing A on the box (the new rule was followed throughout -- the box was never pressed directly). It appeared after selecting a pinned Test chip (filled the box with a pinned sentence) and then pressing A once on the Ask button itself. The first attempt at that A press came back as a tool-level timeout with no confirmation either way; a second, confirmed press followed about a second later. No reply was ever logged on the device for that ask (checked by tailing the plugin's own log file twice, about 100 seconds total, with no new entry), and the box went back to empty with the placeholder text showing. From that point on, the ring was stuck on the box: Down and Right did nothing, only Up worked -- the same shape as the first sighting, but reached by pressing Ask, not by pressing the box."
+  },
+  "capture_at_trap": {
+    "readFocus_gpfocus": "the raw Ask text input (DialogInput), label 'Describe the level, boss, or puzzle you're stuck on.', empty value",
+    "readFocus_activeElement_disagreement": "confirmed at least twice: once activeElement reported the Strategy mode button while the visible ring (gpfocus) stayed on the input; a moment later, after the chat-switch recovery step, activeElement and gpfocus briefly agreed on the input but Down still did not move the ring",
+    "readPage_check": "document.activeElement was a BUTTON, not the input, while the visible ring stayed on the input -- the same disagreement the first sighting described",
+    "down_press": "sent, acknowledged by the bridge, ring did not move (verified:false, 'focus did not change')",
+    "right_press": "sent, acknowledged by the bridge, ring did not move (verified:false, 'focus did not change')",
+    "up_press": "worked -- moved the ring back up to the pinned-chip row every time it was tried"
+  },
+  "recovery_ladder": [
+    {
+      "step": 1,
+      "action": "Up to the chip row, then Down back into the box",
+      "result": "Did not clear it. After landing back on the box, a further Down press still did not move the ring."
+    },
+    {
+      "step": 2,
+      "action": "Switch chat with the shoulder buttons and back (RB then LB, which in this panel cycle the Main/Ollama/Settings tabs -- the nearest thing to 'switch chat' reachable from a shoulder button here) and back to Main",
+      "result": "Partial: it brought document.activeElement and the visible ring back into agreement on the input box (agree:true, both on the same input), which they were not before this step. But a further Down press from the box still did not move the ring -- the trap itself was not cleared."
+    },
+    {
+      "step": 3,
+      "action": "Close and reopen the plugin panel (B to back out to Decky's own plugin list, then deck_openPlugin to re-enter bonsAI's panel)",
+      "result": "The panel reopened at the top (ring reset to the Main tab), which is progress, but walking Down from the top through the chat now stalled early -- five presses in a row with no movement partway through the existing reply ('wheatley fight'), with activeElement and the visible ring disagreeing again at that spot. This reads as a second, related symptom (the ring getting stuck partway through a reply, not just on the Ask box) rather than a clean fix. Not confirmed as the same bug or a different one; recorded as seen."
+    },
+    {
+      "step": 4,
+      "action": "Close and reopen the Quick Access Menu (GUIDE+A chord to close it, then deck_openPlugin to reopen bonsAI's panel from scratch)",
+      "result": "FIXED. Walking Down from the top of the panel reached the pinned chip cleanly in the same number of presses as before the trap (18), and from there Down moved twice, landing cleanly on the Ask input and then the Ask button -- both presses reported as moved. Down from the box works again."
+    },
+    {
+      "step": 5,
+      "action": "Exit the game",
+      "result": "Not tried -- step 4 already cleared the trap, so exiting the game was not needed to test this time. Left as the untried step for a future sighting where steps 1 to 4 do not work."
+    }
+  ],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "FAIL (bug confirmed a second time, now with a working recovery)",
+  "verdictSentence": "The same freeze happened again: after picking a suggested question and pressing Ask, the highlighted control got stuck on the typing box and the D-pad could no longer move down or right out of it, though pressing up still worked. This time, closing the Quick Access menu and reopening the plugin fixed it -- simply moving up and back down, or switching between the app's tabs, did not.",
+  "notes": "Two things worth flagging to whoever fixes this: (1) this sighting was NOT triggered by pressing A on the raw text box -- it happened after pressing the Ask button itself, and no request ever reached the plugin's own log, so the Ask press seems to have silently failed and left the input in a half-reset state. (2) reopening the plugin panel without also closing the whole Quick Access menu left a second, different-looking snag (the ring stalling partway through an old reply) -- closing the whole Quick Access menu and reopening was the step that actually worked. On a controller alone, a person stuck like this can back out to the Steam button, close the Quick Access menu, and reopen it, and that clears it."
+}

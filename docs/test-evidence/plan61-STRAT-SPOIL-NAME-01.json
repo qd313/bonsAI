@@ -1,0 +1,20 @@
+{
+  "rowId": "STRAT-SPOIL-NAME-01",
+  "rowText": "Game known only by name. Doom 64: Retribution (or another emulated no-story title) running as a non-Steam shortcut, Strategy mode, masking on, streaming on. Ask a boss question (\"how do I beat the mother demon\"). Pass when any spoiler box renders as plain text from the first streamed word, with no chip and no tap-to-reveal; stays plain across a second question and a chat-slot reopen.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T11:35 (Deck clock)",
+  "setup": {
+    "game_running": "none -- could not launch"
+  },
+  "steps": [
+    {
+      "action": "deck_launchGame name \"Doom 64: Retribution\"",
+      "observed": "The game IS in the Deck's library and installed -- confirmed directly by Steam's own app list, read fresh tonight. But it is not on the Recent Games shelf, and the launch tool can only search that shelf, not the full Library grid, so it refused before pressing anything (0 presses on the game itself)."
+    }
+  ],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "Doom 64: Retribution could not be started tonight -- it is genuinely on the Deck and installed, but it isn't in the row of recently played games, which is the only place the automated launcher can look. No question was asked.",
+  "notes": "This settles the plan's open question about the two disagreeing library reads: tonight's read agrees with the 2026-09-18 SSH read that said Doom 64 is installed, not the older 2026-09-15 reading that said it was missing. The blocker tonight is a different, narrower one -- the launch tool only searches the Recent Games shelf and cannot reach the full Library grid, so a title has to have been played recently (or by hand once) before this rig can start it. Recommend someone play Doom 64: Retribution once by hand so it lands on the shelf, or teach the launcher to search the full Library."
+}

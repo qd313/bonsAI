@@ -74,6 +74,40 @@ it should, every time. Evidence
 **One more clean run 2026-09-18, build `0589565`, on the same 2026-09-15 recipe:** Down reached Ask and Up
 climbed back out, no trap. Evidence `docs/test-evidence/plan61-focustrap-try1.json`.
 
+**Found again 2026-09-18 with a game running, and the trigger is now known.** Pressing A on the question box
+opens Steam's own on-screen keyboard; once B closes it, Down and Right out of the box stop moving the
+highlight -- the page's own idea of what is focused moves on to the Ask button or the mode button, but the
+ring a person actually sees stays on the box, and only Up still gets out. It happened five times across two
+panel reopens and one full close-and-reopen of the whole Quick Access Menu on Half-Life 2, and again in a
+brand-new chat with Hades running; by the time Portal 2 was running it had cleared on its own, with no
+restart needed. Three tries of the 15 September new-chat recipe the same night came back clean, so opening
+the keyboard, not starting a new chat, looks like the real trigger. Evidence
+`docs/test-evidence/plan61-ASKBAR-FOCUS-TRAP-01.json` (the sighting), `docs/test-evidence/plan61-focustrap-try2.json`
+and `-try3.json` (the clean tries).
+
+**A second sighting, later the same night, reached a different way, with a working fix found.** This time
+the question box itself was never pressed: a pinned suggestion filled the box, and the freeze appeared after
+pressing the Ask button itself -- the press left no line in the plugin's own log, and the box emptied back to
+its placeholder, as if the send had silently failed partway through. From there, Down and Right out of the
+box did nothing a person could see, while the browser's own idea of what was focused had already moved to a
+button; only Up worked. Four things were tried in order: going up to the chip row and back down did not
+clear it; switching the panel's tabs with the shoulder buttons brought the two focus readings back into
+agreement but Down was still dead; closing and reopening just the plugin panel left a different snag, the
+ring stalling partway through an old reply, instead of a clean fix; **closing the whole Quick Access Menu and
+reopening it did clear it**, restoring a normal walk from the top of the panel down through the chips to the
+question box and the Ask button. On a controller alone, a person stuck like this can press the Steam button,
+close the Quick Access Menu, and reopen it. Evidence `docs/test-evidence/plan61-ASKBAR-FOCUS-TRAP-02.json`.
+
+**Later still the same night, with a game running throughout, the freeze stopped being occasional.** Across
+the rest of the games block it reproduced on nearly every attempt to send a question, and reopening the whole
+Quick Access Menu cleared it only until the next question. This is why the roadmap entry now says the trap
+hits on most sends with a game running, not just sometimes. See the games-block write-up in plan 61's own log
+for the full count.
+
+**One more clean try 2026-09-18, after exiting Sifu, on the 15 September new-chat recipe:** Down and Right
+both moved cleanly out of the question box; Left simply had nothing next to it. No trap this time. Evidence
+`docs/test-evidence/plan61-focustrap-try5.json`.
+
 
 ## Ordinary phrases attach game cards
 

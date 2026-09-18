@@ -6,6 +6,88 @@
 
 Headings group related work. Star counts match the historical list.
 
+### Reasoning display (2026-09-17)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-18 once six of the seven Deck rows passed — copied line
+for line from this session's Verify entry, nothing reworded, with the closing note added at the end._
+
+- ★★★★★ `[reply]` **Reasoning display** — **VERIFY, built 2026-09-17 (commits `a4fbf81`, `0551307`, `ac8d7eb`, `1f879a5`,
+  `ae26454`, `57138ae`, `4c014f0`, `81f5847`, `ba00dc0`, `c5b046d`, plus a follow-up commit `fefca07` passing the thinking
+  through the request layer).** While a thinking model works, the space under your question shows its own newest sentences;
+  when the answer starts that folds to one line with the seconds; a press opens the whole thing; Show details gets a thinking
+  chip; a one-time notice explains it the first time Thinking is turned on. Three landings did it: the back end keeps the
+  model's thinking and carries it through; a one-time notice and the Thinking row's help text explain the setting; the chat
+  shows the thinking live, then as the fold row, with the new stop wired in. Without the follow-up commit, the finished
+  answer and the saved chat carried no reasoning at all. **The desk test on the PC, 2026-09-17:** across nine streams at
+  three thinking levels, the model's own thinking always finished arriving before the first word of the answer, and no
+  answer came back empty. **The larger answer test (T5) on the PC, 2026-09-17:** zero empty replies out of 183 tries at
+  each of two thinking levels, so the fold does not show on a blank turn in this build. **Measured on the built-in screen,
+  2026-09-17:** with the new fold row and the live thinking block both showing, about 61 pixels are left for the answer,
+  down from the normal 94. **A bug found during that measurement is in Bugs, above:** pressing B while Show details is
+  open does not close it. **Six of the seven Deck rows passed 2026-09-17** (bundle `af52c0aa`), plus the
+  focus-graph checklist and the free-play sweep: **REASONING-01** through **04** and **06** all passed;
+  **REASONING-07** failed on that build (declining left the ring on the tab strip instead of the Thinking
+  row, and accepting the notice did not actually turn Thinking on until picked a second time) and was fixed
+  the same day, commit `d2096ee`. **REASONING-07 passed on the re-run, Deck 2026-09-17, bundle `b8d903d9`:**
+  declining now lands the ring back on the Off button inside the Thinking row and Thinking stays off;
+  accepting turns Thinking on in the same press, checked three ways, and Balanced/Deep never shows the
+  notice again. **The only thing still owed here is REASONING-05's body-text half:** its reasoning chip reads
+  correctly, but the whole Show details chip row cannot be reached by the D-pad, so the chip's own body can
+  only be read by a page read, not a controller — filed as its own Bugs entry, above; blocked on that bug.
+  Evidence `docs/test-evidence/plan57-REASONING-01.json` … `-07.json`,
+  `docs/test-evidence/plan57-REASONING-07-rerun.json`, `docs/test-evidence/plan57-REASONING-06a-rerun.json`,
+  `docs/test-evidence/plan57-FOCUS-GRAPH-01.json`, `docs/test-evidence/plan57-QA-FREE-PLAY-01.json`.
+  [Plan](../planning/40-reasoning-display.md) · [Build plan](../planning/57-reasoning-display-build.md).
+
+  **Closed 2026-09-18:** six of the seven Deck rows pass, plus the focus-graph checklist and the free-play
+  sweep. The one piece left, REASONING-05's body-text half, is not a fresh owed check of its own — it rides
+  on the chip-ladder Bugs entry above ("The Show details chip ladder is not a D-pad stop") and will clear
+  when that bug does.
+
+### Token streaming Phase A/B (2026-09-04)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-18 once the rig's own checks passed — copied line for
+line from this session's Verify entry, with the Deck results added at the end._
+
+- ★★ `[reply]` **Token streaming Phase A/B** — **VERIFY.** Start stutter fixed, sections as D-pad stops, scroll follow. Rows
+  **STREAM-REVEAL-01**, **STREAM-09**, **STREAM-FOLLOW-01**. [Review](../planning/05-token-streaming-review.md).
+
+  **Passed on the Deck 2026-09-04, everything the rig can drive:** **STREAM-09** — three answer sections on one
+  reply each took the ring going Down in turn, no dead end (Up skipping them on the way back is a separate,
+  already-filed bug). **STREAM-FOLLOW-01, the D-pad half** — the transcript's scroll position tracked the
+  growing answer, holding a constant distance above the true bottom (the sticky Ask bar). **STREAM-REVEAL-01** —
+  text arrived steadily from 5.4 seconds in, in a smooth run of growing character counts with no freeze-then-dump.
+  The touch-drag half of STREAM-FOLLOW-01 needs a finger and stays on the maintainer's own checklist. Detail:
+  [testing-manual.md](../testing-manual.md), "Token streaming — D-pad chain" and "— scroll follow" rows.
+
+### The tab bar collapses when not in use, and names the tab (2026-09-02, closed 2026-09-18)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-18 once every rig-drivable row passed — copied line for
+line from this session's Verify entry, with the closing note added at the end._
+
+- ★★★★ `[tabs]` **The tab bar collapses when not in use, and names the tab** — **VERIFY.** Shipped 2026-09-02 (plan 30 W0 to W6): a
+  20px bar with the active tab's name at rest, opening to a strip that labels all six. Steam's header 81px to 20px. Rows 01 to 06,
+  09 and 10 pass; owed **TAB-BAR-08** (touch). **TAB-BAR-07** (legibility by eye) was retired
+  2026-09-17, replaced by **TAB-STRIP-2A-03** (plan 59). Closes the "tab names never appear" bug and D44.
+  [Plan](../planning/30-collapsing-tab-bar.md).
+
+  **Closed 2026-09-18:** **TAB-BAR-11**'s three rig-drivable remount paths all pass — the Clear cache modal
+  return and two QAM chord close/reopens (2026-09-04), then a full loader restart (2026-09-05). The one path
+  left, a real suspend and resume, needs a hand on the Deck's own power button and cannot be driven by the rig.
+  With that and **TAB-BAR-08** (touch) the only pieces left, and both needing a finger or a hand rather than a
+  script, this closes here; both stay on the maintainer's own checklist.
+
+### A glow when the chip row runs out of chips (2026-09-05, closed 2026-09-18)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-18 once the rig confirmed the cue fires correctly — copied
+line for line from this session's Verify entry, with the closing note added at the end._
+
+- ★★ `[chips]` **A glow when the chip row runs out of chips** — **VERIFY.** Built at the desk 2026-09-05 under D62 #3: press Left or Right past the first or last suggestion chip and that chip glows briefly, the way a phone lights up the end of a list. Nothing about the row's existing edge behaviour changes. Reduced motion keeps the cue and drops the movement. **No measurement closes this one** — whether it reads as *end of list* rather than *error* is the maintainer's call from a recording, and it is on their checklist. **Since 2026-09-17 (plan 60), the cue itself moved:** the chip's outline no longer changes, so the flash is now the light bar under the chip flaring brighter, measured on the Deck (row CHIP-BUTTON-03). The maintainer's own by-eye call on whether it reads as *end of list* still stands.
+
+  **Closed 2026-09-18:** the rig proved the cue fires on exactly the right presses, four of four, on 2026-09-05,
+  and the cue itself moved onto the light bar under the chip on 2026-09-17. Nothing measurable is left to check;
+  the *end of list* taste call is the maintainer's, already on their own checklist.
+
 ### Expert offers the stronger Deck-run models first, and the licence list learns the Sept 2026 models (2026-09-17)
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-17 once the Deck confirmed the licence half — copied line
@@ -718,6 +800,12 @@ Shipped features moved out of the roadmap in the 2026-09-02 cleanup, verbatim. S
   - Two curated terms, "kiting" and "overclock," both read undefined in the shipped DRG Survivor cards. A DRG Survivor reply that uses one renders it as a tappable inline chip; a floating tooltip (not inline-push) shows a short peek on focus alone, the full definition on A, and an **explain further** chip that auto-sends a new Ask turn. Frontend-only data (`src/data/drgGlossaryTerms.ts`) — no Python retrieval needed for a two-term DRG-only list; the model prompt separately gets a small clause telling it the terms are tap-to-define so it doesn't stop to explain them.
   - **Not in scope:** general jargon-detection across every game's KB content — DRG Survivor only, as planned.
   - The D-pad walk (peek → A → full → B/direction dismiss → explain-further sends) is owed on-device — see **DRG-GLOSSARY-01** in [testing.md](testing.md).
+
+**Closed 2026-09-18 (reconciliation before plan 61):** underline, popup, D-pad reachability, B and one-press Up
+all walked on device, closing the entry the roadmap carried as "one touch tap owed." The one touch tap left
+stays on the maintainer's own checklist. Note for whoever picks this up next: rows **DRG-GLOSSARY-01** through
+**04** have no steps written down in either testing document — the walk above happened, but nobody wrote the
+row.
 
 ### Decode preset chip animation
 

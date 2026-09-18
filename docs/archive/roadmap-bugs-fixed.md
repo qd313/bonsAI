@@ -6,6 +6,31 @@ Strikeout titles match the original roadmap bug list. Items awaiting on-Deck QA 
 
 ---
 
+### The follow-up menu offered places from a different game than the one you asked about (2026-09-15, closed 2026-09-18)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-18 once a second clean sighting confirmed the fix — copied
+line for line from this session's Verify entry, nothing reworded, with the closing note added at the end._
+
+- ★★ `[KB]` **The follow-up menu offered places from a different game than the one you asked about** — **VERIFY,
+  fixed 2026-09-15, one sighting confirmed clean on the Deck.** Two bug entries, one cause: the two choices under a
+  follow-up menu were word for word the worked example in the model's own instructions — Half-Life 2's train
+  station and Ravenholm — which then told the model never to copy them. It copied them anyway, on Portal 2 and
+  Hades questions among others. The example is now written so the model cannot copy it into a real answer, and a
+  menu that still carries the example's words is dropped. Row **BRANCH-EXAMPLE-01**: ask a Strategy question about
+  Portal 2 or Hades and check the menu under the answer names that game's own places. Last sighting before the
+  fix: a Half-Life 2 menu under a Hades answer with Hades running
+  (`docs/test-evidence/plan55-BUG-hl2-menu-hades-running.json`, screenshot
+  `screenshots/DeckCapture_20260915_204018_game.png`). **One clean sighting on the new build 2026-09-15**, a Deep
+  Rock Galactic: Survivor question whose menu named its own classes with no Half-Life 2 words, evidence
+  `docs/test-evidence/plan55-BRANCH-EXAMPLE-01.json` — the copying was intermittent before the fix, so more
+  sightings over the coming days are the real proof. **A second clean sighting on the Deck 2026-09-17:** a
+  Hades question's follow-up menu named Hades' own places, no Half-Life 2 words. Evidence
+  `docs/test-evidence/plan57-QA-BRANCH-EXAMPLE-01.json`.
+
+  **Closed 2026-09-18:** two clean sightings on two different days — Deep Rock Galactic: Survivor on 2026-09-15
+  and Hades on 2026-09-17 — is the real proof this fix asked for. Any recurrence is a new Bugs entry rather than
+  reopening this one.
+
 ### On the Deck's built-in screen, the ring's own stop for a whole reply sits mostly under the question box (2026-09-17)
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-17 once the Deck QA worker's re-measurement showed the

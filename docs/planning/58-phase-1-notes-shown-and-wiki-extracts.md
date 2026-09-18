@@ -474,6 +474,15 @@ which goes on their own checklist.
   of the repo; if the verbatim set still loses, the rewrites stay and the reader ships as the
   fetch-and-credit half, and the ten games are written the way the last two waves were, from
   fetched pages, with the block showing their nature.
+- **2026-09-18, the Deck woke.** Reachable at the start of the day; held awake for five hours by
+  a lease that changes nothing on the device. Backed up by hand over the network, because the
+  rig's snapshot tool failed twice with a buffer error on this PC: the plugin's settings folder
+  (83 MB, the saved chats inside it) and its data folder, 58 entries, checked readable, kept in
+  this session's scratch folder. Read off the device: the library is on the SD card at version
+  2026.09.08, the knowledge base is on, and the Deck's Ollama runs with one model in memory at a
+  time, which is phase 2's first reading answered early. The installed build is older than the
+  tip, as expected; the four "before" readings run on it before anything is deployed. The
+  Hollow Knight re-measure lane stalled once with no output for ten minutes and was resumed.
 
 ---
 

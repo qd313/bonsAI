@@ -268,6 +268,40 @@ class BodyToUnitsTests(unittest.TestCase):
         self.assertEqual(dropped, [])
 
 
+class ExtractLeadSentenceTests(unittest.TestCase):
+    """Third-pass work: lane D found that the shipping False Knight note wins a search
+    question the verbatim one loses, because the shipping note's first sentence names the
+    boss's location and role and the "Behaviour and Tactics" section never does -- that
+    framing lives only in the page's lead paragraph."""
+
+    def test_returns_the_first_sentence_of_the_lead(self):
+        text = (
+            "The armoured maggot in the Forgotten Crossroads is the first real boss fight. "
+            "He wields a mace.\n"
+            "== Behaviour and Tactics\nHe leaps and slams the ground.\n"
+        )
+        headings = m.extract_headings(text)
+        lead = m.extract_lead_sentence(text, headings)
+        self.assertEqual(lead.kind, "sentence")
+        self.assertEqual(lead.text, "The armoured maggot in the Forgotten Crossroads is the first real boss fight.")
+
+    def test_no_headings_reads_the_whole_page_as_the_lead(self):
+        text = "Just one sentence, no headings anywhere."
+        lead = m.extract_lead_sentence(text, [])
+        self.assertEqual(lead.text, "Just one sentence, no headings anywhere.")
+
+    def test_a_marked_infobox_line_before_the_first_sentence_is_skipped(self):
+        text = "!! Health\n|| 800\nThe boss is found in the swamp.\n== Strategy\nDodge left.\n"
+        headings = m.extract_headings(text)
+        lead = m.extract_lead_sentence(text, headings)
+        self.assertEqual(lead.text, "The boss is found in the swamp.")
+
+    def test_an_empty_lead_returns_none(self):
+        text = "== Strategy\nDodge left.\n"
+        headings = m.extract_headings(text)
+        self.assertIsNone(m.extract_lead_sentence(text, headings))
+
+
 class TrimToLengthTests(unittest.TestCase):
     def test_stops_before_exceeding_the_cap(self):
         units = [m.Unit("sentence", "Word.", ["Word."]) for _ in range(500)]
@@ -495,6 +529,47 @@ class BuildNoteEndToEndTests(unittest.TestCase):
             self.assertEqual(sidecar["section_heading"], "Strategy")
             self.assertEqual(sidecar["revision_id"], 12345)
             self.assertEqual(sidecar["char_count"], len(note["card"]))
+
+    def test_the_lead_sentence_opens_the_card(self):
+        """End-to-end version of ExtractLeadSentenceTests: a page whose lead paragraph
+        exists (unlike the shared _write_live_fixture, which starts straight at a heading)
+        opens its card with that lead sentence, verbatim, ahead of the section's own text."""
+        with tempfile.TemporaryDirectory() as tmp_str:
+            tmp = Path(tmp_str)
+            page = tmp / "false-knight.txt"
+            page.write_text(
+                "# source: https://hollowknight.wiki/w/False_Knight\n"
+                "# site: Hollow Knight Wiki\n"
+                "# revision: 1 (2026-01-01T00:00:00Z)\n"
+                "# licence: (unused when a manifest sits beside it)\n"
+                "# read: 2026-09-17\n\n"
+                "The armoured maggot in the Forgotten Crossroads is the first real fight.\n\n"
+                "== Behaviour and Tactics\n"
+                "He leaps and slams the ground with his mace.\n",
+                encoding="utf-8",
+            )
+            manifest = {
+                "pages": [{
+                    "requested": "False Knight", "title": "False Knight",
+                    "url": "https://hollowknight.wiki/w/False_Knight", "revid": 1,
+                    "timestamp": "2026-01-01T00:00:00Z",
+                    "licence_text": "Creative Commons Attribution-Share Alike 3.0 (Unported)",
+                    "licence_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+                    "read_on": "2026-09-17", "file": "false-knight.txt",
+                }],
+            }
+            (tmp / "_manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+            allowed = m._load_allowed_licences()
+            note, _, _ = m.build_note(
+                page_path=page, page_format="live", game_id=1,
+                section_type_arg=None, name_arg=None,
+                min_chars=10, max_chars=400, allowed_licences=allowed,
+            )
+            self.assertTrue(
+                note["card"].startswith("The armoured maggot in the Forgotten Crossroads is the first real fight."),
+                note["card"],
+            )
+            self.assertIn("He leaps and slams the ground", note["card"])
 
     def test_a_category_in_the_manifest_reaches_the_note_s_section_type(self):
         """End-to-end version of GuessSectionTypeTests: a category recorded in the fetcher's

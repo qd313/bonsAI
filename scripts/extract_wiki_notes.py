@@ -773,6 +773,24 @@ def body_to_units(body: str) -> tuple[list[Unit], list[str]]:
     return units, dropped_notes
 
 
+def extract_lead_sentence(text: str, headings: list[Heading]) -> Unit | None:
+    """The page's own lead paragraph -- everything before its first heading, after templates
+    and info boxes are already stripped -- usually says what the subject is and often where.
+    A section picked further down the page (like "Behaviour and Tactics") often does not
+    carry that framing at all: lane D's real finding was a search question built around a
+    boss's location and role ("the tough warrior guarding the crossroads") that the shipping
+    note answered because its first sentence names both, and the verbatim note lost because
+    its chosen section is a flat attack list with no framing sentence anywhere in it. Reusing
+    body_to_units keeps this consistent with the rest of the reader -- marked table/infobox
+    lines in the lead (an inline stat) are skipped, not returned as the "first sentence"."""
+    lead_end = headings[0].line_start if headings else len(text)
+    lead_units, _ = body_to_units(text[:lead_end])
+    for u in lead_units:
+        if u.kind == "sentence":
+            return u
+    return None
+
+
 def render_card(units: list[Unit]) -> str:
     lines: list[str] = []
     buffer: list[str] = []
@@ -888,6 +906,14 @@ def build_note(
     choice = select_section(headings, body, host=host, game_title=game_title)
     section_body = choice.body
     units, dropped_notes = body_to_units(section_body)
+
+    lead_unit = extract_lead_sentence(body, headings)
+    if lead_unit and lead_unit.text not in section_body:
+        # Skipped when the chosen section already contains the lead verbatim (the "no
+        # headings at all" and "every section is empty" fallbacks both read from the very
+        # start of the page) -- otherwise the note would open with the same sentence twice.
+        units = [lead_unit] + units
+
     kept, length_note = trim_to_length(units, min_chars, max_chars)
     if length_note:
         dropped_notes.append(length_note)

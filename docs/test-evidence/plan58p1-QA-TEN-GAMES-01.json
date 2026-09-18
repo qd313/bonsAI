@@ -1,0 +1,32 @@
+{
+  "rowId": "plan58p1-QA-TEN-GAMES-01",
+  "rowText": {
+    "steps": "Library 2026.09.18 installed on the Deck from the plugin's local seed folder through the Developer tab's 'Install seed knowledge base' button (files copied over SSH first; hashes matched). Nothing running; each question names its game. Strategy mode. Each question typed from the PC and VERIFIED, Down to 'ask' with an expect on the button, A, then the reply and the block's header read off the page when the reply's action row appeared.",
+    "expected": "One question per new game attaches that game's own notes, with the block naming the note and the wiki it came from."
+  },
+  "source": "docs/planning/58-phase-1-notes-shown-and-wiki-extracts.md § 5 'The release, on disk only' and § 6",
+  "time": "2026-09-18 05:50Z to 06:14Z",
+  "buildOnDeck": "the tip deployed 2026-09-18 05:48Z (0589565 on experimental: the block with its three screen fixes)",
+  "library": "2026.09.18 at /home/deck/.bonsai/rag (internal storage; the local install moved it off the SD card, where the 2026.09.08 copy still sits); settings keys changed by the install: rag_corpus_path and rag_corpus_version",
+  "questions": [
+    { "game": "Mario Party", "question": "How do I get a star in Mario Party?", "block": "Mini-Games and Bonus Stars in Mario Party (+2 more) · From the Super Mario Wiki", "expectedNoteFirst": false, "expectedNoteAttached": "yes ('Starting out in Mario Party' facts in the reply: 20 coins, the star moves)", "honestyLine": "none" },
+    { "game": "Mario Party 2", "question": "What do the items do in Mario Party 2?", "block": "Items and the Item Shop in Mario Party 2 (+2 more) · From the Super Mario Wiki", "expectedNoteFirst": true, "honestyLine": "none" },
+    { "game": "Mario Party 3", "question": "How do duel boards work in Mario Party 3?", "block": "Starting out in Mario Party 3 (+2 more) · From the Super Mario Wiki", "expectedNoteFirst": false, "expectedNoteAttached": "yes (the duel note's five heart segments and one partner are in the reply)", "honestyLine": "none" },
+    { "game": "Mario Party 6", "question": "What do orbs do in Mario Party 6?", "block": "Orbs in Mario Party 6 (+2 more) · From the Super Mario Wiki", "expectedNoteFirst": true, "honestyLine": "none" },
+    { "game": "Mario Party 7", "question": "How does Bowser Time work in Mario Party 7?", "block": "Starting out in Mario Party 7 (+2 more) · From the Super Mario Wiki", "expectedNoteFirst": false, "expectedNoteAttached": "yes (the Bowser Time gauge facts are in the reply)", "honestyLine": "none" },
+    { "game": "Donkey Kong 64", "question": "How do I switch Kongs in Donkey Kong 64?", "block": "Switching Kongs in Donkey Kong 64 (+2 more) · From the Super Mario Wiki", "expectedNoteFirst": true, "honestyLine": "none" },
+    { "game": "Yoshi's Story", "question": "How do I beat the slug boss in Yoshi's Story?", "block": "The Slug mini-boss in Yoshi's Story (+2 more) · From the Super Mario Wiki", "expectedNoteFirst": true, "honestyLine": "none", "spoilerCover": false },
+    { "game": "Diddy Kong Racing", "question": "How do I beat Wizpig in Diddy Kong Racing?", "block": "Wizpig in Diddy Kong Racing (+2 more) · From the Super Mario Wiki", "expectedNoteFirst": true, "honestyLine": "none" },
+    { "game": "Super Smash Bros.", "question": "How do I knock opponents out in Super Smash Bros 64?", "block": "Knocking opponents out in Super Smash Bros. (+2 more) · From SmashWiki", "expectedNoteFirst": true, "honestyLine": "none", "note": "the block was absent at the moment the reply's action row appeared and present when read again a few seconds later; the same late arrival seen on the tip row" },
+    { "game": "Grand Theft Auto III - The Definitive Edition", "question": "How do I lose the wanted level in GTA 3?", "block": "The wanted level in Grand Theft Auto III - The Definitive Edition (+2 more) · From the GTA wiki", "expectedNoteFirst": true, "honestyLine": "none", "note": "per-second timeline recorded: the block present from the first second, before any reply text, through to completion (see plan58p1-QA-NOTES-BLOCK-06.json)" }
+  ],
+  "reads": [
+    "Ten of ten questions attached the game's own notes and named the right wiki in the block's header, with no honesty line on any of them. The alias 'mario party' did not swallow the numbered games: each Mario Party question resolved to its own game.",
+    "The two-row header is on screen: the note's name and the count on the first row, the source alone on the second, the count never cut. Seen on every one of the ten and on the earlier Gonarch turn the other session had left.",
+    "One of ten game questions (Smash) showed the block only after completion, not live; the tip row earlier did the same. So the live path works most of the time (nine of ten here, with a full timeline on the tenth) and misses sometimes; the lane's timing guess fits a miss that happens near the end, but the Smash reply streamed for tens of seconds with no block, which does not. Left for the lane with the two examples.",
+    "The GTA III question resolved through the alias 'gta 3' to the Steam game with no game running, as the title ladder allows."
+  ],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "Every one of the ten new games answers from its own notes on the Deck, with the block naming the note and the wiki; one block arrived late instead of live."
+}

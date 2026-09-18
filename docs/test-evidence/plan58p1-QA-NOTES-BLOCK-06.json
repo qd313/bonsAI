@@ -12,7 +12,13 @@
     "When the reply completed about 15 seconds later the same header was still there, unchanged: no flicker, no re-mount, the handoff from the live snapshot to the finished one was invisible."
   ],
   "measurement": { "replyLengthWhenBlockFirstSeen": 0, "secondsFromAskToFirstWord": "about 16 (the reasoning fold's own reading)" },
+  "rerun_2026-09-18_after_the_fixes": {
+    "build": "0589565 deployed 05:48Z",
+    "question": "How do I lose the wanted level in GTA 3? (nothing running, library 2026.09.18)",
+    "timeline": "a poll every second from the press: the block present at every read from the first second, with no reply text for 25 seconds of thinking, then the reply growing from 81 to 1058 characters over 12 seconds, the block present throughout, and still there when the action row appeared",
+    "counterexample": "the Super Smash Bros. question a few minutes earlier: no block at the moment the action row appeared, block present a few seconds later; the tip row (NOTES-BLOCK-03) showed the same late arrival. So the live path holds on most turns and misses on some, both a game note and a tip; the lane has both examples"
+  },
   "screenshots": [],
-  "verdict": "PASS",
-  "verdictSentence": "The block was on screen with the reply still empty, before the model's first word, and did not change when the reply finished."
+  "verdict": "PASS with an intermittent miss recorded",
+  "verdictSentence": "The block is on screen before the model's first word and stays through the reply, proven by a per-second timeline; on one game question in ten and on the tip question it arrived only after the reply finished."
 }

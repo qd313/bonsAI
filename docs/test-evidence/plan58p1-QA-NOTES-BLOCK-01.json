@@ -24,7 +24,15 @@
     "OPENING A TALL BLOCK LEAVES THE VIEW AT ITS BOTTOM. With three notes the open block is 971 px tall in a 366 px pane; after A the pane scrolled so the third note's end and the session strip were on screen and the header sat 768 px above the top. A person has to scroll up to read the first note. Filed as a small follow-up: keep the view at the block's header when it opens, or open only the first note.",
     "The branch menu under the reply named the game's own notes ('Starting out in Pikmin 2', 'Growing your Pikmin squad'): one more clean BRANCH-EXAMPLE-01 sighting."
   ],
-  "screenshots": ["screenshots/DeckCapture_20260918_003817_game.png"],
-  "verdict": "PASS with two follow-ups",
+  "rerun_2026-09-18_after_the_fixes": {
+    "build": "0589565 deployed 05:48Z",
+    "turn": "How do I lose the wanted level in GTA 3? (nothing running, library 2026.09.18)",
+    "header": "two rows on screen: 'The wanted level in Grand Thef… (+2 more) ▸' then 'From the GTA wiki'; the count intact, the name takes the ellipsis; ring visible on the header, 47 px tall at y 156 (screenshots/DeckCapture_20260918_020300_game.png)",
+    "openScroll": "PASS: after A the header sat at the top of the pane (header top 204 in a pane from 88 to 454) with the three notes below, no scroll to the bottom",
+    "upWalk": "FAIL, unchanged: Up from the question box went to the test chip, then 'Session context', then straight to 'Show details', skipping the block again. The lane's fix wired Up from the earlier-chats strip and the hint rows, not from the session context strip that actually sits under the block. Sent back.",
+    "ladderWalk": "not run: the check the plan 61 session asked for (Down from Hide details with the ladder open) was cut short when the session stalled for several hours; owed"
+  },
+  "screenshots": ["screenshots/DeckCapture_20260918_003817_game.png", "screenshots/DeckCapture_20260918_020300_game.png"],
+  "verdict": "PASS with two follow-ups; on the re-run the header and the open scroll pass, the upward walk still fails",
   "verdictSentence": "The block shows the three attached Pikmin 2 notes word for word, with the day-limit sentence first, and the ring lands visibly on its header; it is reachable only walking down, and opening a three-note block scrolls the view to its bottom."
 }

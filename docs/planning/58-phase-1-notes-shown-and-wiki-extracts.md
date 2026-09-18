@@ -545,6 +545,26 @@ which goes on their own checklist.
   it. Up from the question box still skips every reply row; that is the wider bug on the roadmap.
   Next on the Deck, once it is back: deploy this tip, install the 2026.09.18 library from the
   local folder, one question per new game, rows 01, 03 and 06 again with the watch.
+- **2026-09-18, the Deck evening's second half, and a six-hour stall.** The Deck came back from
+  the plan 61 session at about 05:45. The tip deployed (0589565). The 2026.09.18 library was
+  copied into the plugin's local seed folder and installed from the Developer tab's button:
+  version and hash read back off the device; the install moved the library from the SD card to
+  internal storage and changed the path and version keys, and the 2026.09.08 copy still sits on
+  the card. **One question per new game: ten of ten** attached the game's own notes with the right
+  wiki in the block's header; eight had the expected note first, two had "Starting out" first with
+  it among the three; no honesty line on any. The Smash block arrived a moment after the reply
+  rather than before it, the second late arrival after the tip; the GTA III question gave a full
+  per-second timeline with the block present from the first second through 37 seconds of thinking
+  and streaming. The two-row header holds: the count survives, the name takes the cut. Opening a
+  three-note block keeps the header at the top of the pane. **The upward walk still skips the
+  block**: the fix wired the earlier-chats strip and the hint rows, not the session context strip
+  that sits under the block; sent back. The ladder walk the plan 61 session asked for was not run:
+  the session stalled from 02:03 to 07:50 on a service outage, mid-check. Nothing on the Deck was
+  harmed; Steam sat on its home screen with nothing running. Putting the maintainer's chat back
+  from the pre-session copy was refused by the safety check as an overwrite of their data, so the
+  chat keeps the session's ten questions and the copy is kept on this PC for the maintainer to
+  decide. The Deck was handed back to the plan 61 session with the deployed commit and the library
+  version stated.
 
 ---
 

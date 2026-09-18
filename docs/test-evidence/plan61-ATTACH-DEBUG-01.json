@@ -1,0 +1,14 @@
+{
+  "rowId": "ATTACH-DEBUG-01",
+  "rowText": "A screenshot Ask no longer ends with a debug line ... Fixed 2026-09-15 (plan 55, lane A). Ask with a screenshot attached and check the answer ends with no bracketed debug line. Not yet run on the Deck.",
+  "build": { "pluginVersion": "0.5.0", "commit": "6d5b83f" },
+  "deckTime": "2026-09-18 01:42",
+  "setup": { "settings": { "ask_mode": "strategy" }, "runningGame": null, "chatUsed": "slot 2bcec0ba" },
+  "steps": [
+    { "press": "D-pad walk looking for \"Attach screenshot to Ask\"", "expected": "reach the attach-screenshot control", "landing": "the walk stalled inside the reply body (a response chunk only 22% visible) before reaching it", "rect": null, "visibilityVerdict": "n/a" }
+  ],
+  "pluginLogLines": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "Ran out of time finding the attach-screenshot control from where the ring was; not run tonight. Still owed."
+}

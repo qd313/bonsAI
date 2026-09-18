@@ -1,0 +1,23 @@
+{
+  "rowId": "CONTEXT-LADDER-03-caseB",
+  "rowText": "Re-run 2026-09-16: no trap with Show details open, the walk escaped both ways. But on this instant built-in reply the two-chip ladder itself was skipped by Down -- not conclusive, since it never asks a model; re-check on a model reply before treating that half as settled. Do this on the long-reply chip's real model answer, open Show details on the reply (two ladders now mounted), go Down from the utility row and record whether Down reaches the ladder itself (not skip it), then continue Up to confirm it reaches Retry.",
+  "build": { "pluginVersion": "0.5.0", "commit": "6d5b83f" },
+  "deckTime": "2026-09-18 01:41-01:42",
+  "setup": {
+    "settings": { "ask_mode": "strategy", "ask_think_effort": "medium" },
+    "runningGame": null,
+    "chatUsed": "slot 2bcec0ba, a real model-generated reply with a two-button follow-up menu (\"A. Early in Hades...\" / \"B. Later in Hades...\")"
+  },
+  "steps": [
+    { "press": "A on Show details", "expected": "details expand, two chip ladders mounted", "landing": "\"Hide details↑\" shown", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "from Read aloud (utility row), DOWN, DOWN", "expected": "second Down reaches the two-button ladder itself", "landing": "Hide details -> Temple of Styx (a KB source note), never the ladder", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "DOWN once more from the KB note", "expected": "still expect to find the ladder somewhere below", "landing": "Session context toggle -- the ladder was never reached going down", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "UP from Session context toggle", "expected": "mirror of the Down path, reaching the ladder then Hide details", "landing": "jumped straight to Hide details, skipping both the KB note and the ladder", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "UP, UP", "expected": "continue up toward Retry", "landing": "Hide details -> Read aloud -> into the answer's own text (not yet at Retry)", "rect": null, "visibilityVerdict": "visible" }
+  ],
+  "pluginLogLines": [],
+  "screenshots": [],
+  "runSequenceEvidence": "runs/plan61-CONTEXT-LADDER-03-caseB.json",
+  "verdict": "FAIL",
+  "verdictSentence": "On a real model-written reply, not just the instant built-in one, Down from the utility row still skips straight over the two-button follow-up menu (it goes to the notes citation, then the session-context strip, never landing on the two buttons), and Up skips it the same way coming back -- so the ladder-skipping bug is confirmed on a genuine model answer, not just an artifact of instant replies."
+}

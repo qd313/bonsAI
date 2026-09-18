@@ -1,0 +1,20 @@
+{
+  "rowId": "CHAT-SLOTS-V3-06b",
+  "rowText": "(W16) A finishes while you are away: the ring turns solid green; returning to A clears it.",
+  "build": { "pluginVersion": "0.5.0", "commit": "6d5b83f" },
+  "deckTime": "2026-09-18 01:26",
+  "setup": {
+    "settings": { "ask_mode": "strategy", "ask_think_effort": "medium" },
+    "runningGame": null,
+    "chatUsed": "slot A = 7b51082d, finished generating (43.0s) while slot B was on screen"
+  },
+  "steps": [
+    { "press": "read A's dot again after the plugin log showed the ask had completed, while still on slot B", "expected": "A's dot turns solid green", "landing": "A's dot was unchanged from the idle style seen before completion: rgba(143,168,196,0.3) background, same as every other untouched chat", "rect": null, "visibilityVerdict": "visible, no completion treatment" }
+  ],
+  "pluginLogLines": [
+    "[2026-09-18 01:26:01,551] run_game_ai_request: completed in 43.0s"
+  ],
+  "screenshots": [],
+  "verdict": "FAIL",
+  "verdictSentence": "After slot A's answer finished while the driver was looking at slot B, A's dot never changed to a solid green -- it looked exactly the same as before and after, the same as any chat nothing is happening in."
+}

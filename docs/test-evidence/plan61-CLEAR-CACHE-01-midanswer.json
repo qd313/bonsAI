@@ -1,0 +1,24 @@
+{
+  "rowId": "CLEAR-CACHE-01-midanswer",
+  "rowText": "Still open — the mid-generation half. Clearing while a reply is still being written must stop the generation and leave the panel empty (not a \"Request cancelled.\" bubble). Not reproducible by hand, because gemma4:e2b-it-qat finishes in 6-32s while the D-pad walk from Ask to Clear cache takes 35-95s over the bridge. Retry with a slower model, or park the ring on the button first.",
+  "build": { "pluginVersion": "0.5.0", "commit": "6d5b83f" },
+  "deckTime": "2026-09-18 01:25-01:26",
+  "setup": {
+    "settings": { "ask_mode": "strategy", "ask_think_effort": "medium" },
+    "runningGame": null,
+    "chatUsed": "New chat slot (id 7b51082d), the continue-mid-menu (Hades) chip"
+  },
+  "steps": [
+    { "press": "walked to Settings tab, Clear cache... before pressing A on the reply's Ask button, then pressed Ask, then raced back to Clear cache and pressed A, then A on Clear", "expected": "generation stops mid-stream and panel returns empty with no bubble", "landing": "Clear session cache? confirm dialog, ring on Clear", "rect": "x123 y308 w290 h40", "visibilityVerdict": "visible" }
+  ],
+  "pluginLogLines": [
+    "[2026-09-18 01:25:19,325] ask_ollama: POST ... num_predict=1694 think=True",
+    "[2026-09-18 01:26:01,549] ask_game_ai: no TDP recommendation found in response",
+    "[2026-09-18 01:26:01,551] run_game_ai_request: completed in 43.0s",
+    "[2026-09-18 01:26:07,564] forget_game_ai_carried_context: forgot=[...] ",
+    "[2026-09-18 01:26:07,565] forget_background_game_ai: stored answer dropped (stopped=False)"
+  ],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "The walk from Ask to Clear cache took about 48 seconds and the answer had already finished on its own after 43 seconds, so Clear only threw away an answer that was already done (stopped=False in the log) rather than stopping one in progress; the panel did come back empty afterward, but that proves nothing about the true mid-generation case. Same reproducibility gap the row already names."
+}

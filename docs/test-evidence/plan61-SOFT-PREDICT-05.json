@@ -1,0 +1,22 @@
+{
+  "rowId": "SOFT-PREDICT-05",
+  "rowText": "A real thinking model (e.g. a qwen3 variant) at the default think: false: confirm a visible reply still comes back -- no empty-reply regression from the model spending the whole budget on hidden thinking. ADJUSTED per driver brief: no qwen3 variant is installed; run on gemma4:e2b-it-qat with Thinking Off (a real thinking-capable model) instead.",
+  "build": { "pluginVersion": "0.5.0", "commit": "6d5b83f" },
+  "deckTime": "2026-09-18 01:34-01:35",
+  "setup": {
+    "settings": { "ask_mode": "strategy", "ask_think_effort": "off (changed from medium via the Ollama tab's Thinking row)" },
+    "runningGame": null,
+    "chatUsed": "slot 2bcec0ba, the gonarch/black mesa chip"
+  },
+  "steps": [
+    { "press": "set Thinking to Off on the Ollama tab, then asked the gonarch chip", "expected": "a visible, non-empty reply comes back", "landing": "reply of 639 visible characters came back normally", "rect": null, "visibilityVerdict": "visible" }
+  ],
+  "pluginLogLines": [
+    "[2026-09-18 01:34:38,930] ask_ollama: POST ... think=False",
+    "[2026-09-18 01:34:59,772] ask_ollama: stream done ... eval_count=237",
+    "[2026-09-18 01:34:59,773] ask_ollama: OK model=gemma4:e2b-it-qat response_len=639 soft_continues=0 done_reason=stop"
+  ],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "Run against gemma4:e2b-it-qat instead of a qwen3 variant, since none is installed on this Deck (per the driver's standing adjustment) -- with Thinking switched off, the model still wrote a normal, visible reply. No empty-reply regression."
+}

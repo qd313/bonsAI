@@ -1,0 +1,21 @@
+{
+  "rowId": "SOFT-PREDICT-04",
+  "rowText": "Strategy mode, an answer long enough to continue mid-branch (opens a bonsai-strategy-branches fence before hitting the length wall): confirm no half-rendered fence or stray JSON appears at any point in the stream, including right at the continue boundary.",
+  "build": { "pluginVersion": "0.5.0", "commit": "6d5b83f" },
+  "deckTime": "2026-09-18 01:25-01:26",
+  "setup": {
+    "settings": { "ask_mode": "strategy", "ask_think_effort": "medium" },
+    "runningGame": null,
+    "chatUsed": "slot 7b51082d, the continue-mid-menu chip (\"give me a moment-by-moment walkthrough of every boss fight in hades from the first room to the end\")"
+  },
+  "steps": [
+    { "press": "asked the continue-mid-menu chip, let it run to completion", "expected": "the reply opens a bonsai-strategy-branches fence before the length wall and continues past it with no half-rendered fence or stray JSON", "landing": "the model declined the full moment-by-moment walkthrough on spoiler-safety grounds (\"we ain't doing the whole epic saga right now\"), a short 1414-character reply, soft_continues=0, no length wall reached, no branch fence opened", "rect": null, "visibilityVerdict": "n/a" }
+  ],
+  "pluginLogLines": [
+    "[2026-09-18 01:26:01,550] run_game_ai_request: destructive advice guard ran flagged=False signals=0 backup_mention=False",
+    "[2026-09-18 01:26:01,551] run_game_ai_request: completed in 43.0s"
+  ],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "The pinned question asks for a full moment-by-moment walkthrough of every Hades boss, but the model gave a short, spoiler-conscious refusal instead of the long answer this row needs, so the length wall and the continue boundary were never reached -- nothing to check for a broken fence yet."
+}

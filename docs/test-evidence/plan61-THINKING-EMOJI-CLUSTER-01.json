@@ -1,0 +1,18 @@
+{
+  "rowId": "THINKING-EMOJI-CLUSTER-01",
+  "rowText": "On-Deck: run several troubleshooting Asks that hit multiple prep phases (Proton logs -> KB -> screenshot) -- a bare emoji on one transition is intended copy; every transition in the same Ask being emoji is the bug.",
+  "build": { "pluginVersion": "0.5.0", "commit": "6d5b83f" },
+  "deckTime": "2026-09-18 01:16-01:38",
+  "setup": {
+    "settings": { "ask_mode": "strategy/speed/expert across the night", "ask_think_effort": "medium, then off" },
+    "runningGame": null,
+    "chatUsed": "New chat slot (7b51082d) and slot 2bcec0ba"
+  },
+  "steps": [
+    { "press": "watched the status line across every ask tonight", "expected": "no two emoji-only phases back to back in one ask", "landing": "no emoji-only status text seen at all this flow", "rect": null, "visibilityVerdict": "visible" }
+  ],
+  "pluginLogLines": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "None of tonight's questions were troubleshooting questions that walk through Proton logs, the knowledge base and a screenshot in one Ask, so the multi-phase status line this row needs never appeared; nothing to judge pass or fail on yet."
+}

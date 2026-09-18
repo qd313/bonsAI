@@ -1,0 +1,21 @@
+{
+  "rowId": "THINKING-SANITIZE-01",
+  "rowText": "On-Deck: run Asks until a model emits a bare <bonsai-status>Sure.</bonsai-status> (small models do this) -- the italic line must keep showing something, never disappear mid-Ask and leave a bare spinner.",
+  "build": { "pluginVersion": "0.5.0", "commit": "6d5b83f" },
+  "deckTime": "2026-09-18 01:16-01:38",
+  "setup": {
+    "settings": { "ask_mode": "strategy", "ask_think_effort": "medium (then off for group 2 ask)" },
+    "runningGame": null,
+    "chatUsed": "New chat slot (7b51082d) and slot 2bcec0ba"
+  },
+  "steps": [
+    { "press": "sampled the status line during the long battery-life ask", "expected": "a readable status line at every sample, never a bare/empty spinner", "landing": "status text read \"Thinking\" then reasoning prose (\"Since the user asked about performance/power, I need to address the power aspect...\")", "rect": null, "visibilityVerdict": "visible" }
+  ],
+  "pluginLogLines": [
+    "[2026-09-18 01:16:54,932] ask_ollama: POST ... think=True",
+    "[2026-09-18 01:17:49,684] ask_ollama: stream done ... eval_count=1325"
+  ],
+  "screenshots": [],
+  "verdict": "PARTIAL",
+  "verdictSentence": "Every time the status line was sampled it showed real words -- either \"Thinking\" or the model's own reasoning text -- never a blank line; no bare <bonsai-status>Sure.</bonsai-status> tag happened to show up on these particular questions, so the specific failure mode this row hunts for was not exercised tonight, only its opposite (a line that stayed readable) was confirmed."
+}

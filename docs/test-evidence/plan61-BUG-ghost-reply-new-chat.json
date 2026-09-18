@@ -1,0 +1,29 @@
+{
+  "rowId": "BUG-ghost-reply-new-chat",
+  "rowText": "Flow F bug hunt (unscheduled, caught by accident during flow A's chat creation): The ghost reply in a new chat -- with a reply on screen, move to the new-chat position and press A; read whether the new chat shows the earlier reply.",
+  "build": { "pluginVersion": "0.5.0", "commit": "6d5b83f" },
+  "deckTime": "2026-09-18 01:11:15 (the moment of creation, matching the recording filename DeckRecord_20260918_011115_auto.mkv), read within the next few seconds",
+  "chats": {
+    "oldChat": {
+      "id": "2bcec0ba-7a80-4a24-ba26-95255cdeb456",
+      "label": "how does the excursion funnel work in portal 2",
+      "note": "58-turn chat; the specific leaked turn was a later, unrelated question in the same chat (\"Where are you at in Hades?\"), not the chat's own title topic"
+    },
+    "newChat": {
+      "id": "7b51082d-864f-435f-b113-2a5fcf8b0d5b",
+      "label": "New chat",
+      "createdAt": 1789708303
+    }
+  },
+  "presses": [
+    "chat-slot row: pressed LB until the active-stop sat on the [+] (create) position",
+    "pressed A on [+] -- this created and switched to the new, empty chat (confirmed against the chat_slots file below)",
+    "pressed DOWN once, from the chat-slot row into the transcript pane"
+  ],
+  "whatTheTranscriptShowed": "Right after that DOWN press, deck_readFocus landed on a “Retry same prompt” button whose surrounding content was NOT empty: gpfocusWithin included a .bonsai-chat-turn-slot showing “…Show reasoning · 1 sAlright, listen up, you want to know how to handle that final scrap in the Temple of Styx? This ain't no easy street fight, see?…”. A follow-up deck_readPage query against .bonsai-chat-turn-slot confirmed the same text was still rendered a moment later: “…Show reasoning · 1 sAlright, listen up, you want to know how to handle that final scrap in the Temple of Styx? This ain't no easy street fight, see? You gotta keep your eyes peeled and your feet moving. Now, the boss you're talking about, Theseus and Asterius, he ain't just one guy, he's a whole circus!\\nThe main trick here, mate, is figuring out who to deal with first. You gotta watch Asterius, t…”. The panel also showed “Session context (1 turn) ▸” for the supposedly-empty new chat.",
+  "savedFileWasEmpty": "Read over SSH at the same time: ~/homebrew/settings/bonsAI/chat_slots/7b51082d-864f-435f-b113-2a5fcf8b0d5b.json had \"turns\": [] -- the new chat's own saved data held nothing. window.localStorage's bonsai:active-chat-slot correctly named the new chat's id (7b51082d...), so the app's own bookkeeping agreed the new, empty chat was active; only the on-screen transcript still showed the old chat's last turn.",
+  "clearedByReopen": "Closed the Quick Access Menu (GUIDE+A chord) and reopened the plugin panel. On the next read, the same new chat's transcript showed the correct empty-state placeholder (\"Ask anything — this slot keeps its own history.\") with no trace of the Temple of Styx / Theseus and Asterius text, and the chat-slot row's dots/labels matched a genuinely empty chat.",
+  "screenshots": [],
+  "verdict": "FAIL",
+  "verdictSentence": "Right after creating a brand-new chat, its on-screen transcript briefly kept showing the previous chat's last reply (a Hades boss answer) even though the new chat's own saved file was already empty and the app's active-chat pointer was already correct -- a stale render, not a data problem. A full close-and-reopen of the plugin panel cleared it. This matches the plan's own bug-hunt recipe for \"the ghost reply in a new chat\" and is offered as one more hit for that hunt, not a scored flow-A row."
+}

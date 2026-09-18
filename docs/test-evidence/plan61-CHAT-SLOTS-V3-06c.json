@@ -1,0 +1,12 @@
+{
+  "rowId": "CHAT-SLOTS-V3-06c",
+  "rowText": "(W16) QAM closed when the answer finishes: the reply-ready toast still appears (regression check on the completion watch). Close the QAM panel while slot A is still streaming and wait for it to finish off-screen; reopen and check the toast appeared.",
+  "build": { "pluginVersion": "0.5.0", "commit": "6d5b83f" },
+  "deckTime": "2026-09-18 01:38-01:42",
+  "setup": { "settings": {}, "runningGame": null, "chatUsed": "not attempted" },
+  "steps": [],
+  "pluginLogLines": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "This one was not run tonight -- the session's time went to the cache-clear timing race and the chat-slot dot checks instead. Still owed."
+}

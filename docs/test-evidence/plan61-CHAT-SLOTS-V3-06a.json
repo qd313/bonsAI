@@ -1,0 +1,18 @@
+{
+  "rowId": "CHAT-SLOTS-V3-06a",
+  "rowText": "(W16) While away from slot A: A's dot is a hollow cyan ring; if A is the visible ghost neighbour, a cyan spark sits at that row edge, outside the ghost's fade.",
+  "build": { "pluginVersion": "0.5.0", "commit": "6d5b83f" },
+  "deckTime": "2026-09-18 01:25",
+  "setup": {
+    "settings": { "ask_mode": "strategy", "ask_think_effort": "medium" },
+    "runningGame": null,
+    "chatUsed": "slot A = 7b51082d (generating), slot B = 2bcec0ba (active, A is its adjacent ghost neighbour)"
+  },
+  "steps": [
+    { "press": "read the chat-slot dot for slot A, and the ghost-prev element (A's title preview), while B was active and A was mid-generation", "expected": "A's dot is a hollow cyan ring, or a cyan spark at the ghost's row edge", "landing": "A's dot computed style: border rgb(150,150,150), background rgba(143,168,196,0.3) -- identical to every untouched, idle dot; the ghost-prev span for A carried no distinct class or spark, just the plain ghost styling", "rect": null, "visibilityVerdict": "visible, but with no distinguishing busy treatment" }
+  ],
+  "pluginLogLines": [],
+  "screenshots": [],
+  "verdict": "FAIL",
+  "verdictSentence": "While slot A was generating in the background and B was on screen, A's dot and its ghost preview looked exactly like every other idle chat -- no hollow cyan ring, no cyan spark. A person watching the strip would have no way to tell that slot A was still working."
+}

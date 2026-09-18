@@ -1,0 +1,14 @@
+{
+  "rowId": "question-row-retry-visibility-watch",
+  "rowText": "Not a scored row -- a watch. Read the question row's visibility on every walk tonight, at no extra device cost. Recommended answer if it reads fully visible every time: it may close.",
+  "build": { "pluginVersion": "0.5.0", "commit": "6d5b83f" },
+  "deckTime": "2026-09-18 01:20-01:42",
+  "setup": { "settings": {}, "runningGame": null, "chatUsed": "slots 7b51082d and 2bcec0ba" },
+  "steps": [
+    { "press": "read during every walk tonight", "expected": "watch only", "landing": "the question row (\"how do I beat the boss...\", \"how do i beat the gonarch...\") read fully visible at every stop it was seen", "rect": null, "visibilityVerdict": "visible every time seen" }
+  ],
+  "pluginLogLines": [],
+  "screenshots": [],
+  "verdict": "PARTIAL",
+  "verdictSentence": "Every time the question row came up in a walk tonight it was fully visible, but the sample is small (this flow's few walks, not the full night); recommend waiting for the rest of tonight's walks (flow B and D) before closing it."
+}

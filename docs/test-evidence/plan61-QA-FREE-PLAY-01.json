@@ -1,0 +1,19 @@
+{
+  "rowId": "QA-FREE-PLAY-01",
+  "rowText": "Emulate a user, not a test plan: with a LONG reply on screen -- 1. Scroll around the reply, then D-pad walk from the top of the pane to the very bottom, one press at a time. 2. At every stop, two checks: Focused and Visible (the focused rect sits inside the pane AND above the dock's top edge, and an elementFromPoint probe at the rect's centre hits the control itself). 3. Repeat the walk on at least one other carousel position, and once more after the reply finishes if it was streaming.",
+  "build": { "pluginVersion": "0.5.0", "commit": "6d5b83f" },
+  "deckTime": "2026-09-18 01:20-01:22",
+  "setup": {
+    "settings": { "ask_mode": "strategy", "ask_think_effort": "medium" },
+    "runningGame": null,
+    "chatUsed": "New chat slot (7b51082d), the finished battery-life reply"
+  },
+  "steps": [
+    { "press": "deck_sweep DOWN, budget 60, one extra lane, return trip, on the finished long reply", "expected": "every stop that has the ring is a stop a person could actually see", "landing": "33 controls visited over 4 legs before the budget ran out; 6 stops were focused but only partially visible (covered or clipped)", "rect": "varies per stop, see runs/plan61-QA-FREE-PLAY-01-finished.json", "visibilityVerdict": "partial (6 of 33 stops)" }
+  ],
+  "pluginLogLines": [],
+  "screenshots": ["screenshots\\DeckCapture_20260918_014348_auto.png"],
+  "sweepEvidence": "runs/plan61-QA-FREE-PLAY-01-finished.json",
+  "verdict": "FAIL",
+  "verdictSentence": "Walking down through the finished reply, 6 of the 33 stops the ring visited were places a person could not actually see -- covered by another button or clipped -- most often the row of chips near the reply and the row of icons just above the question box. The streaming-in-progress half of this walk was not captured this session (time went to the cache-clear timing check instead); only the after-it-finished walk is covered here. A lane switch by shoulder button in the middle of the sweep also changed the plugin's TAB instead of cycling a carousel position, which is worth a separate look."
+}

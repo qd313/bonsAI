@@ -1,0 +1,18 @@
+{
+  "rowId": "CHAT-SLOTS-V3-05b",
+  "rowText": "(W15) Return to A mid-stream: the question, the partial text and the caret are all back within one poll.",
+  "build": { "pluginVersion": "0.5.0", "commit": "6d5b83f" },
+  "deckTime": "2026-09-18 01:25",
+  "setup": {
+    "settings": { "ask_mode": "strategy", "ask_think_effort": "medium" },
+    "runningGame": null,
+    "chatUsed": "slot A = 7b51082d, still generating"
+  },
+  "steps": [
+    { "press": "LB back to slot A while it was still generating, then read immediately", "expected": "question, partial reply text and caret are all back within one poll", "landing": "the question text, \"Show reasoning\" and the partial answer prose (\"Right, listen up, you want the battery to last foreve...\") were all present in the very next read", "rect": null, "visibilityVerdict": "visible" }
+  ],
+  "pluginLogLines": [],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "Switching straight back to the streaming chat showed the question and the reply-so-far immediately -- nothing was blank or lagging behind."
+}

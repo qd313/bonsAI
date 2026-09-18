@@ -1,0 +1,22 @@
+{
+  "rowId": "tier1-expert",
+  "rowText": "Tier 1 extra: One Ask each in Speed and Expert (routing/disclosure differs). Persist last Q&A across plugin reopen rides along here.",
+  "build": { "pluginVersion": "0.5.0", "commit": "6d5b83f" },
+  "deckTime": "2026-09-18 01:37-01:38",
+  "setup": {
+    "settings": { "ask_mode": "expert (changed by editing settings.json over SSH, confirmed picked up on reopen)" },
+    "runningGame": null,
+    "chatUsed": "slot 2bcec0ba, the gonarch/black mesa chip"
+  },
+  "steps": [
+    { "press": "asked the chip in Expert mode", "expected": "a reply comes back, mode label reads Expert", "landing": "reply of 810 visible characters, num_predict=1200 (different budget from both Strategy and Speed), think=False", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "closed and reopened the panel", "expected": "the last question and answer are still there", "landing": "the question and its \"Gonarch\" note citation were both shown immediately on reopen, mode still read Expert", "rect": null, "visibilityVerdict": "visible" }
+  ],
+  "pluginLogLines": [
+    "[2026-09-18 01:38:21,263] ask_ollama: POST ... num_predict=1200 think=False",
+    "[2026-09-18 01:38:41,291] ask_ollama: stream done ... response_len=810"
+  ],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "One ask in Expert mode came back normally, with its own distinct token budget, and the question and answer were both still on screen after closing and reopening the panel. Ask mode was set back to Strategy afterward."
+}

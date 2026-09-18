@@ -1,0 +1,22 @@
+{
+  "rowId": "tier1-speed",
+  "rowText": "Tier 1 extra: One Ask each in Speed and Expert (routing/disclosure differs). Persist last Q&A across plugin reopen rides along here.",
+  "build": { "pluginVersion": "0.5.0", "commit": "6d5b83f" },
+  "deckTime": "2026-09-18 01:35-01:36",
+  "setup": {
+    "settings": { "ask_mode": "speed (changed by editing settings.json over SSH, confirmed picked up on reopen)" },
+    "runningGame": null,
+    "chatUsed": "slot 2bcec0ba, the gonarch/black mesa chip"
+  },
+  "steps": [
+    { "press": "asked the chip in Speed mode", "expected": "a reply comes back, mode label reads Speed", "landing": "reply of 1136 visible characters, num_predict=800 (smaller budget than Strategy), think=False", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "closed and reopened the panel", "expected": "the last question and answer are still there", "landing": "the question and its \"Adamant Rail\" note citation were both shown immediately on reopen, mode still read Speed", "rect": null, "visibilityVerdict": "visible" }
+  ],
+  "pluginLogLines": [
+    "[2026-09-18 01:36:31,476] ask_ollama: POST ... num_predict=800 think=False",
+    "[2026-09-18 01:36:47,301] ask_ollama: stream done ... response_len=1136"
+  ],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "One ask in Speed mode came back normally, with a smaller token budget than Strategy mode gets, and the question and answer were both still on screen after closing and reopening the panel."
+}

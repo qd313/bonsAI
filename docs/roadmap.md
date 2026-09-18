@@ -155,7 +155,10 @@ starts work outside this.
   fully visible** — the newest question read in full beside the Retry icon, with no cropping. Evidence
   `docs/test-evidence/plan57-QA-QUESTION-COLLAPSE-RING-01.json`. No code change is on record that would
   explain the improvement, and it disagrees with the 67% and 78% readings above, so this stays open
-  rather than closed on one clean run — a maintainer call on whether to trust it.
+  rather than closed on one clean run — a maintainer call on whether to trust it. **Read fully visible
+  again on 2026-09-18,** at every sighting across a handful of walks on build `6d5b83f`. Evidence
+  `docs/test-evidence/plan61-question-row-retry-visibility.json`. The maintainer's call above still
+  stands until the night's later walks are in.
 - ★ `[ollama]` **The vision try-order picker writes settings even when nothing changed** — **OPEN, found
   2026-09-16 during block 0 of session 56.** Opening the vision model try-order picker and pressing Done
   writes the picker's current order into the settings file, even when nobody moved anything. Restored by hand
@@ -178,7 +181,21 @@ starts work outside this.
   standing in for the question, its Helpful, Not really and Copy buttons all reachable, and a Session context
   row showing one turn. Closing the panel and reopening it left the new chat empty, the way a new chat should
   always start. Evidence `docs/test-evidence/plan55-trap-run3-new-chat-with-live-turn.json` (the walk from the
-  chat row visits Retry, the "…" question, Copy reply text and Read aloud under the New chat slot).
+  chat row visits Retry, the "…" question, Copy reply text and Read aloud under the New chat slot). **Seen
+  again 2026-09-18, 01:11, build `6d5b83f`:** the shoulder button to the new-chat position, then A, then one
+  Down into the transcript, and the empty new chat showed the older chat's Theseus-and-Asterius reply. The new
+  chat's own saved file already had no turns and already pointed at the new chat, so this is a stale drawing
+  on screen, not a data problem. Closing and reopening the panel cleared it. Reproduced twice now. Evidence
+  `docs/test-evidence/plan61-BUG-ghost-reply-new-chat.json`.
+- ★★ `[chat]` **A chat that is still writing does not look busy from another chat** — **OPEN, found
+  2026-09-18.** While one chat is still writing and you switch to another chat, nothing tells you the first
+  one is busy: its dot in the chat row looks like every idle chat's dot, with no hollow cyan ring and no spark
+  beside its ghost title; the other chat's own Ask button reads ready instead of busy; and when the first chat
+  finishes, its dot never turns green. Seen on three separate tries. The code already has both dot states and
+  the ask flow does mark a chat as generating and later clear it, so the state is not reaching the row on the
+  device — worth a closer look, not yet explained. Evidence
+  `docs/test-evidence/plan61-CHAT-SLOTS-V3-05a-busyhalf.json`, `docs/test-evidence/plan61-CHAT-SLOTS-V3-06a.json`,
+  `docs/test-evidence/plan61-CHAT-SLOTS-V3-06b.json`.
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a
   blanket rule was tried and reverted in favour of Steam's native outline.
 - ★★ `[focus]` **The Show details chip ladder is not a D-pad stop** — **OPEN, found 2026-09-17 while running
@@ -187,7 +204,11 @@ starts work outside this.
   the first can ever be selected by a controller, only read on the page. This is not new: CONTEXT-LADDER-03's
   2026-09-16 note already saw the ladder skipped, on an instant built-in reply; this run confirms the same gap
   on a real model reply, with a thinking chip among the skipped chips. Evidence
-  `docs/test-evidence/plan57-REASONING-05.json`.
+  `docs/test-evidence/plan57-REASONING-05.json`. **Seen again 2026-09-18, on a real model reply with a
+  two-button follow-up menu:** with Show details open, Down from Hide details now lands on the new "From the
+  notes" row, then the Session context strip, never on either menu button; Up from the strip jumps straight
+  back to Hide details, skipping the notes row and the menu too. The same skip now covers the follow-up menu
+  buttons, not just the chips. Evidence `docs/test-evidence/plan61-CONTEXT-LADDER-03-caseB.json`.
 - ★★ `[ollama]` `[layout]` **The AI models screen shows about two rows of the model list on the Deck's
   screen** — **OPEN, reported 2026-09-16 by the maintainer, cause read in the code, not yet changed.** The
   screen's body is capped at 520 pixels tall (or 72 percent of the screen when that is smaller;
@@ -543,7 +564,8 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 - ★ `[reply]` **Attaching a screenshot puts a line of technical text at the bottom of the answer** — **VERIFY,
   fixed 2026-09-15.** The line is gone from the reply; the counts it carried now go to the verbose log only.
   Row **ATTACH-DEBUG-01**: ask with a screenshot attached and check the answer ends with no bracketed debug
-  line.
+  line. **Tried on the Deck 2026-09-18:** the walk to the attach button stalled before a screenshot could be
+  attached, so this is still not run. Evidence `docs/test-evidence/plan61-ATTACH-DEBUG-01.json`.
 - ★★ `[focus]` **A checklist the model got wrong was left in the reply as raw JSON**, its own D-pad stop that did nothing — **VERIFY.**
   Fixed 2026-08-28: a rejected checklist block is dropped, as a rejected branch block already was. Owed: one sighting on device of a
   reply where it happens. Row **STRAT-CHECKLIST-JSON-01**.
@@ -556,7 +578,12 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 - ★★★ `[chat]` **Clear cache cleared the screen but not the session** — **VERIFY.** Fixed and confirmed 2026-08-27, and again on the
   Deck 2026-09-03. The orphan half is measured: the chat stays behind after a clear, so each clear-and-reask cycle leaves one more
   chat in the rotation — a follow-up, not a regression. Only the mid-generation half is still owed: clearing while a reply is still
-  being written (unit-tested, not reproducible by hand yet). Row **CLEAR-CACHE-01**. [Why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way).
+  being written (unit-tested, not reproducible by hand yet). Row **CLEAR-CACHE-01**. **Tried on the Deck
+  2026-09-18:** the D-pad walk from Ask to Clear cache took about 48 seconds and the reply finished in 43, so
+  Clear landed on an already-finished answer, not a mid-answer one. Next try: switch tabs with the shoulder
+  button and use a slower Deep-thinking question. Evidence
+  `docs/test-evidence/plan61-CLEAR-CACHE-01-midanswer.json`.
+  [Why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way).
 ### Features that need verification
 
 - ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60 (D110).** Each chip now looks raised: a thin light line along its top edge and a soft shadow beneath it. The two chips sit 6 pixels apart instead of 4. In decode, static and carousel mode there is now 8 pixels of open space between the chips and the question box, where before they touched (fade mode was already open and keeps its own spacing). The word "Tip" became a small dot, the colour on the tags and on the resolving-text label is quieter, and the chip the controller is on now shows a light bar along its bottom edge instead of the old blue outline — a ring around the chip that nobody could actually see is gone too. Passed on the Deck by measurement: rows 02, 03, 04, 05 and 06 (the one-chip check), and 08. Still owed: the maintainer's own look at rows 01 and 05, from the three screenshots named in the evidence file; row 07 (reduced motion); row 09 (the Tip dot with a covered game running); and a look at the help and agent chips, which were not on screen during this run. Italics were tried earlier for the label and turned down. [Plan](planning/60-chip-button-restyle.md) · evidence `docs/test-evidence/plan60-QA-chip-button.json`.
@@ -582,8 +609,11 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   2026-09-03; SMOKE-F re-confirmed 2026-09-17 (all four built-in commands answered with the same fixed wording,
   evidence `docs/test-evidence/plan57-QA-SMOKE-F.json`); SMOKE-E's spoiler tap-to-reveal path 2026-09-04; SMOKE-H
   2026-09-16. SMOKE-B was retired 2026-09-03 (D57 #6). Left: **SMOKE-C** is blocked by the Open Permissions jump bug,
-  above, not owed as a test of its own; and the three Tier 1 extras (a Q&A that survives a reopen, one Ask each in
-  Speed and Expert, and "What game am I playing?" with a game focused) are still owed. Round in progress:
+  above, not owed as a test of its own. **Two of the three Tier 1 extras passed on the Deck 2026-09-18:** the last
+  question and answer were still on screen after closing and reopening the panel, seen twice; and one Ask in Speed
+  and one in Expert both worked as expected. Evidence `docs/test-evidence/plan61-tier1-speed.json`,
+  `docs/test-evidence/plan61-tier1-expert.json`. Left: **"What game am I playing?"** with a game focused — needs a
+  game running, scheduled for the games block. Round in progress:
   [plan 31](planning/31-deck-verification-round.md).
 - ★★ `[reply]` **Thinking line fixes from 2026-08-07/08** — **VERIFY.** Emoji upright, lazy status tag survives, no bare-emoji phase
   changes, one writer. Five of seven rows pass on the Deck: **THINKING-SLOW-01** and **THINKING-SPOILER-01** (2026-09-04);
@@ -592,6 +622,10 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   upright beside the tilted sentence. Evidence `docs/test-evidence/plan57-QA-THINKING-COPY-01.json`,
   `docs/test-evidence/plan57-QA-THINKING-LIVE-01.json`, `docs/test-evidence/plan57-QA-THINKING-EMOJI-01.json`. Left:
   **THINKING-SANITIZE-01** and **THINKING-EMOJI-CLUSTER-01**, both automated only, never read on the device.
+  **Tried on the Deck 2026-09-18:** the status line always read as words, never a bare tag, across the night's
+  long answers, but the fault THINKING-SANITIZE-01 hunts did not happen, so it is not yet proven; no multi-step
+  troubleshooting question ran, so THINKING-EMOJI-CLUSTER-01's several-phase case never came up either. Evidence
+  `docs/test-evidence/plan61-THINKING-SANITIZE-01.json`, `docs/test-evidence/plan61-THINKING-EMOJI-CLUSTER-01.json`.
   [Log](planning/06-thinking-blurbs-review.md#10-implementation-log).
 - ★★★ `[perms]` **Kids master lock** — **VERIFY.** Shipped 2026-08-09. Rows **KIDS-LOCK-01**, **KIDS-FOCUS-01**, **KIDS-REGRESS-01**
   (and **KIDS-LOCK-02** with a child account). Live CEF Stage 0 confirmation still owed. **KIDS-REGRESS-01
@@ -601,8 +635,13 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   02's empty continue stops quietly (automated); **01 and 03 confirmed on the Deck 2026-09-17** — a long five-part reply
   read with no seam and the `Continuing…` cue never showed live or saved (01); stopping partway kept the partial text
   with a `Stopped — partial answer kept.` notice (03). Evidence `docs/test-evidence/plan57-QA-SOFT-PREDICT-01.json`,
-  `docs/test-evidence/plan57-QA-SOFT-PREDICT-03.json`. Left: **SOFT-PREDICT-04** (a continue mid-menu in Strategy) and
-  **SOFT-PREDICT-05** (a thinking model with thinking off). [Why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way).
+  `docs/test-evidence/plan57-QA-SOFT-PREDICT-03.json`. **SOFT-PREDICT-05 passed on the Deck 2026-09-18:** run on
+  gemma4:e2b-it-qat (the Deck's real thinking-capable model; no other thinking model is installed) with Thinking
+  Off, a full visible reply came back, no empty reply. Evidence `docs/test-evidence/plan61-SOFT-PREDICT-05.json`.
+  Left: **SOFT-PREDICT-04** (a continue mid-menu in Strategy) — **tried 2026-09-18, blocked:** the long Hades
+  walkthrough question came back as a short spoiler-careful refusal, so no reply reached the length wall.
+  Evidence `docs/test-evidence/plan61-SOFT-PREDICT-04.json`.
+  [Why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way).
 - ★★★ `[tabs]` `[ui]` **The open tab strip redrawn: six equal cells, one icon family, only the current tab named** —
   **VERIFY, landed 2026-09-17.** When the tab bar opens, the six tabs are now six equal cells with one matching
   22px icon each; only the current tab shows its name, lowercase in small capitals, in the accent colour; the lit
@@ -610,9 +649,11 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   strip is taller than before (66px, was 54) so the chat row's row of dots no longer shows under it. The Main
   cell now shows the plugin's own logo. The thin bar at rest and every behaviour are unchanged. Built in commits
   `6821f20`, `ef4a851`, `18be399`, `0378024`, `044acab`, `a957165`. Closes the two-star "replace the bonsAI tab
-  icon" entry (D109 item 1: yes) and replaces row **TAB-BAR-07**, now covered by **TAB-STRIP-2A-03**. Owed on
-  the Deck, not yet run: **TAB-STRIP-2A-01** through **TAB-STRIP-2A-07**, and the free-play sweep
-  **QA-FREE-PLAY-01**. [Plan](planning/59-tab-strip-redesign-build.md) ·
+  icon" entry (D109 item 1: yes) and replaces row **TAB-BAR-07**, now covered by **TAB-STRIP-2A-03**.
+  **QA-FREE-PLAY-01 ran once on this build 2026-09-18,** the after-finished half only: 33 stops walked both
+  ways, no cycle, no dead end, six stops only partly visible in the same already-known way. Evidence
+  `docs/test-evidence/plan61-QA-FREE-PLAY-01.json`. Owed on the Deck, not yet run: **TAB-STRIP-2A-01** through
+  **TAB-STRIP-2A-07**, and QA-FREE-PLAY-01's streaming-reply half. [Plan](planning/59-tab-strip-redesign-build.md) ·
   [Design](design/handoffs/tab-bar-open-strip/return-2026-09-16/).
 - ★★★★ `[ollama]` **Speed-mode VRAM preload** — **VERIFY, the mechanism proved on the Deck 2026-09-05, the timing not.**
   A Developer switch, off by default, loads the model Ask will use into memory at start-up. **A bug was found and fixed on the
@@ -630,8 +671,12 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   the two chips are 147 wide with a 6 pixel gap between them, not 148 and 4.
   [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).
 - ★★★★★ `[chat]` **Named chat slots** — **VERIFY.** Redesign v3 landed 2026-08-30; the layout inverts to slot row, transcript, presets,
-  Ask bar. Most rows pass on device. Owed: **V3-05a**'s ask-bar-reads-busy half, **05b**, **06a**, **06b**, **06c**, and
-  **15d** (a recording for the maintainer's own glance). [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).
+  Ask bar. Most rows pass on device. **05b passed on the Deck 2026-09-18:** returning to the chat still writing
+  showed the question and the partial text at once, nothing missing. Evidence
+  `docs/test-evidence/plan61-CHAT-SLOTS-V3-05b.json`. **05a's ask-bar-reads-busy half, 06a and 06b failed on the
+  Deck 2026-09-18** — see the new "chat that is still writing does not look busy" bug above. Owed: **06c** (not
+  attempted 2026-09-18) and **15d** (a recording made 2026-09-18 for the maintainer's own glance).
+  [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).
   **CHAT-SLOTS-V2-01 passed on the Deck 2026-09-17:** Down twice from the tab strip reaches the chat text, and Up retraces
   the same path. Evidence `docs/test-evidence/plan57-QA-CHAT-SLOTS-V2-01.json`.
 - ★★★★★ `[platform]` **Global quick-launch macro** — **VERIFY.** Guide-chord docs in [troubleshooting.md](troubleshooting.md) § 5; the

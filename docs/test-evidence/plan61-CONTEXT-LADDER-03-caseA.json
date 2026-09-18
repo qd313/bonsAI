@@ -1,0 +1,21 @@
+{
+  "rowId": "CONTEXT-LADDER-03-caseA",
+  "rowText": "D-pad: Down -> ladder focus (not session strip skip); Left/Right cycles chips; all chips visible when <=6; Up from first chip -> utility row; Down from last chip -> session strip; Developer details chip reachable. Case A is the strip trap: with Show details collapsed and Session context expanded, go Down into the strip, then hold Up -- the ring must climb out to the utility row (Retry, Helpful), not loop.",
+  "build": { "pluginVersion": "0.5.0", "commit": "6d5b83f" },
+  "deckTime": "2026-09-18 01:41",
+  "setup": {
+    "settings": { "ask_mode": "strategy", "ask_think_effort": "medium" },
+    "runningGame": null,
+    "chatUsed": "slot 2bcec0ba (how does the excursion funnel work in portal 2), reply about a Hades boss with Show details collapsed"
+  },
+  "steps": [
+    { "press": "A on Session context toggle", "expected": "strip expands", "landing": "Session context (29 turns) toggled from ▸ to ▾", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "DOWN into the strip", "expected": "ring lands inside the strip", "landing": "chip reading the slot's own title", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "UP, UP, UP", "expected": "ring climbs out to the utility row (Retry/Helpful), not a loop", "landing": "Session context toggle -> Show details -> Read aloud", "rect": null, "visibilityVerdict": "visible" }
+  ],
+  "pluginLogLines": [],
+  "screenshots": [],
+  "runSequenceEvidence": "runs/plan61-CONTEXT-LADDER-03-caseA.json",
+  "verdict": "PASS",
+  "verdictSentence": "Down into the strip and one Up went straight back to the strip's own toggle, but continuing Up moved on to Show details and then Read aloud instead of getting stuck -- the ring escaped the strip and reached the utility row area rather than looping forever."
+}

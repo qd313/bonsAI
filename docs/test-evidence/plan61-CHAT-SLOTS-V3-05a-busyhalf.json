@@ -1,0 +1,21 @@
+{
+  "rowId": "CHAT-SLOTS-V3-05a-busyhalf",
+  "rowText": "(W15) Ask in slot A, LB to slot B mid-stream: B shows B's own content (or the empty-slot preview) and zero of A's tokens; the ask bar still reads busy. The leak half already passed 2026-09-06; the ask-bar-reads-busy half was not re-run.",
+  "build": { "pluginVersion": "0.5.0", "commit": "6d5b83f" },
+  "deckTime": "2026-09-18 01:25",
+  "setup": {
+    "settings": { "ask_mode": "strategy", "ask_think_effort": "medium" },
+    "runningGame": null,
+    "chatUsed": "slot A = 7b51082d (streaming the Hades chip), slot B = 2bcec0ba (excursion funnel)"
+  },
+  "steps": [
+    { "press": "sent the ask in slot A, then RB/RB to slot B while A was still generating", "expected": "B shows only its own content, zero of A's tokens", "landing": "B's transcript showed its own prior reply, no trace of A's tokens", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "read B's Ask button while A was still generating", "expected": "the ask bar still reads busy", "landing": "B's Ask button read a plain, enabled \"ask\" (bonsai-ask-primary, no busy/disabled class, disabled:false); no busy indicator was found anywhere on the page at that moment", "rect": "x49 y400 w299 h36", "visibilityVerdict": "visible" }
+  ],
+  "pluginLogLines": [
+    "[2026-09-18 01:25:19,325] ask_ollama: POST ... (slot A generating)"
+  ],
+  "screenshots": [],
+  "verdict": "PARTIAL",
+  "verdictSentence": "The leak half held again: switching to slot B while slot A was still writing showed only B's own content, none of A's words. The busy half is ambiguous from what the driver could see: B's own Ask button looked perfectly normal and ready, not busy -- which is either the correct behaviour (B is not the one generating) or a miss if the row means the ask bar should visibly flag that something is generating elsewhere. No busy-looking element was found anywhere on the page while away from slot A."
+}

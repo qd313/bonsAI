@@ -515,6 +515,15 @@ which goes on their own checklist.
   own words, plus "mario party" added to the low-story title list because a new game must carry a
   spoiler rating. The library on the branch is now 30 games and 334 notes; lane G's five games and
   the block's four fixes still in progress.
+- **2026-09-18, the second note lane landed; the library is 35 games and 372 notes.** Lane G's
+  38 notes for Donkey Kong 64, Yoshi's Story, Diddy Kong Racing, the first Super Smash Bros. and
+  Grand Theft Auto III (Steam app 1546970), every one from a page read that day. Both lanes had
+  appended at the end of the same file, so the second landed as one merged commit, and both had
+  added their games to the spoiler-rating lists, which were merged by keeping both. The 24 blind
+  questions were then labelled by the session: 21 name a note, three stay blank on purpose (the
+  100 percent bonus game, the Kongs' guns, Yoshi's Story's good ending). Next: the library built
+  with its publish check, the search test on the new rows, then the Deck for the local install and
+  one question per new game.
 
 ---
 

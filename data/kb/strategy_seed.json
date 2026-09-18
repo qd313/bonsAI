@@ -347,6 +347,19 @@
         "board",
         "minigames"
       ]
+    },
+    {
+      "game_id": 29,
+      "app_id": null,
+      "igdb_id": "emudeck-mp6-gcn",
+      "canonical_title": "Mario Party 6",
+      "edition": "GCN",
+      "platform": "Nintendo GameCube",
+      "genres": [
+        "party",
+        "board",
+        "minigames"
+      ]
     }
   ],
   "aliases": [
@@ -661,6 +674,10 @@
     {
       "alias": "mario party 3",
       "game_id": 28
+    },
+    {
+      "alias": "mario party 6",
+      "game_id": 29
     }
   ],
   "sections": [
@@ -4059,6 +4076,94 @@
       "name": "Items and the Item Shop in Mario Party 3",
       "card": "Party mode items in Mario Party 3 are sold by two different shopkeepers -- Toad offers helpful items like the Mushroom (roll two dice and add them, 5 coins) and Boo Repellent, while Baby Bowser sells disruptive ones like the Reverse Mushroom, which forces a chosen player's next move to go backward, and the Poison Mushroom, which limits their next roll to one through three. Both shops sell the Skeleton Key, which auto-opens locked gates and can be discarded voluntarily at the start of a turn if you don't need it. You can hold up to three items at once here, unlike the single-item limit in Mario Party 2, and rare items like the Barter Box (swap items with an opponent) or the Koopa Kard (claim an entire bank's savings on the spot) only turn up through Item Spaces, Hidden Blocks, or a purchased Item Bag rather than a normal shop visit.",
       "source_url": "https://www.mariowiki.com/Mario_Party_3",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 339,
+      "game_id": 29,
+      "section_type": "mechanic",
+      "name": "Starting out in Mario Party 6",
+      "card": "Mario Party 6 keeps the same roll-and-move turns as earlier games but replaces carried items with Orbs, bought from Orb Huts, picked up on Orb Spaces, or won from \"?\" Spaces; a new player's biggest adjustment is that Orbs, not items, are now the thing worth saving coins for. A day-and-night cycle runs the whole game, switching every three turns and changing which characters host events: Donkey Kong Spaces during the day become Bowser Spaces at night, each running its own set of minigames and rewards. Landing on the same space as another player, or on a Duel Space, triggers a Duel Mini-Game with a bet of coins, a Star, or both riding on the result -- a bigger risk than the coin-only duels of earlier games.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_6",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 340,
+      "game_id": 29,
+      "section_type": "area",
+      "name": "Towering Treetop",
+      "card": "Towering Treetop is Mario Party 6's treehouse-themed board, and its main twist is that the Star Space itself moves to a new random spot every time someone buys a Star, so there's no fixed destination to plan a route toward the way there is on some other boards. The paths through the trees also change length depending on whether it's day or night, which can make a shortcut from an earlier turn disappear or reappear. Because the target keeps relocating, players tend to buy Orbs that speed up movement or warp them across the board rather than Orbs that only help with a single fixed route.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_6",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 341,
+      "game_id": 29,
+      "section_type": "area",
+      "name": "E. Gadd's Garage",
+      "card": "E. Gadd's Garage shares Towering Treetop's moving Star Space, but wraps it in Professor E. Gadd's workshop full of gadgets and machinery whose paths also shift between day and night. Because two of the board's defining features -- the relocating Star and the changing paths -- both depend on timing rather than positioning, a new player's instinct to head straight toward the Star works less well here than tracking which route is currently open and buying Orbs (like the board-specific Bullet Bill Orb, which lets you overtake an opponent and steal 20 coins) that fit whichever layout is active.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_6",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 342,
+      "game_id": 29,
+      "section_type": "area",
+      "name": "Snowflake Lake",
+      "card": "Snowflake Lake changes the whole goal: every player starts the board already holding five Stars, and the only way to get more is by riding a Chain Chomp to steal them from an opponent, rather than buying them from a Star Space at all. This flips the normal Mario Party incentive to avoid losing Stars into an incentive to actively hunt other players down, and a lead built early can evaporate in one Chain Chomp ride near the end. Because Snack Orbs exist elsewhere in the series specifically to block a Chain Chomp theft for a few turns, holding a defensive Orb matters more on this board than almost anywhere else.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_6",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 343,
+      "game_id": 29,
+      "section_type": "area",
+      "name": "Castaway Bay",
+      "card": "Castaway Bay is a mostly linear tropical board where the Star is purchased from Donkey Kong waiting at the far end, rather than from a fixed Star Space along the path. Bowser periodically swaps in for Donkey Kong at that same spot, and reaching him instead costs you a Star outright, or 20 coins if you don't have one to lose -- so timing your arrival, not just your speed, decides whether the trip pays off. Because the board is largely a single track rather than a branching map, positioning to arrive right after Bowser swaps back out for Donkey Kong is the board's main skill.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_6",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 344,
+      "game_id": 29,
+      "section_type": "item",
+      "name": "Orbs in Mario Party 6",
+      "card": "Orbs replace the carried items of the first three games and come in color-coded families: green Self Orbs like the Mushroom (move with two Dice Blocks, 5 coins) or Metal Mushroom (immune to rivals' traps) affect only the player who uses them, while red Orbs are set as traps on a space and trigger only when someone else passes or lands there, after which they vanish. A handful of Orbs are board-specific rather than universal -- the Flutter Orb, which flies you straight to the Star Space, is only sold on Towering Treetop and E. Gadd's Garage, and the Warp Pipe Orb only appears on three of the six boards -- so what's worth saving coins for changes depending on which board you're playing.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_6",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 345,
+      "game_id": 29,
+      "section_type": "mechanic",
+      "name": "Mini-game types and Mic Mode",
+      "card": "Which minigame plays depends on the color of space everyone landed on, same as earlier games, but Mario Party 6 adds Mic minigames that use the packaged GameCube microphone for voice commands, playable if the Mic setting is turned on. Battle minigames still happen at random with a shared coin pot, but here players vote for which minigame they want rather than leaving the choice to a roulette wheel. Duel minigames trigger from Duel Spaces or from two players landing on the same space during the last five turns, and DK or Bowser minigames only appear when a player lands on their respective board space, with the active host -- Donkey Kong by day, Bowser by night -- changing which of the two can trigger at all.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_6",
+      "source_license": "CC-BY-SA-4.0",
+      "source_version": null,
+      "crawled_at": "2026-09-18"
+    },
+    {
+      "section_id": 346,
+      "game_id": 29,
+      "section_type": "boss",
+      "name": "Clockwork Castle, the final board",
+      "card": "Clockwork Castle is Mario Party 6's final board, bought with 100 Stars from the Star Bank rather than unlocked through normal play, and it turns the day-and-night cycle into the whole challenge: by day, players chase Donkey Kong around the gear-covered board for a Star, and he always rolls and moves after everyone else has finished their turn, moving twice if he eats a banana along the way. By night, the goal flips to avoiding Bowser instead, who has reversed the board's direction and also moves twice if he breathes fire; getting caught by him costs a Star, or 20 coins if you're holding none. Because the chase-or-avoid goal swaps with the time of day, tracking the day/night meter matters as much as tracking your own position on the board.",
+      "source_url": "https://www.mariowiki.com/Mario_Party_6",
       "source_license": "CC-BY-SA-4.0",
       "source_version": null,
       "crawled_at": "2026-09-18"

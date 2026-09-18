@@ -1,0 +1,29 @@
+{
+  "rowId": "ATTACH-DEBUG-01",
+  "rowText": "A screenshot Ask no longer ends with a debug line. Fixed 2026-09-15 (plan 55, lane A). Ask with a screenshot attached and check the answer ends with no bracketed debug line. Not reached 2026-09-18 (the walk to the attach button stalled) -- this is the retry.",
+  "build": { "pluginVersion": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18 08:59-09:00",
+  "setup": {
+    "settings": { "ask_mode": "strategy", "ask_think_effort": "high" },
+    "runningGame": null,
+    "chatUsed": "slot 44f2ff8b (black mesa chat, in view at the time)",
+    "pinnedChip": "what is on my screen right now"
+  },
+  "steps": [
+    { "press": "LEFT from the question box", "expected": "reach the attach-screenshot control in the box's corner row", "landing": "aria-label read \"Attach screenshot to Ask\"", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "A on Attach screenshot to Ask", "expected": "attach the current screen, or open a picker", "landing": "a menu opened with two options: \"Close menu & take screenshot\" and \"Attach recent screenshot\" (the second only 33% visible on screen); chose \"Attach recent screenshot\" rather than taking a fresh live shot, to avoid closing the QAM mid-run", "rect": null, "visibilityVerdict": "partial (33%) on the second menu item" },
+    { "press": "A on \"Attach recent screenshot\"", "expected": "open the recent-screenshots picker", "landing": "a grid of screenshot thumbnails opened (Refresh screenshots control present)", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "A on a thumbnail (20260413171830_1.jpg)", "expected": "attach that screenshot to the ask", "landing": "attach labels now read \"Attached screenshot 20260413171830_1.jpg\" and \"Remove attachment\"; a 1-count badge showed on the attach corner", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "A on the pinned chip \"what is on my screen right now\"", "expected": "fill the question box without losing the attachment", "landing": "input value became \"what is on my screen right now\"; attachment labels unchanged, still attached", "rect": null, "visibilityVerdict": "n/a" },
+    { "press": "A on ask", "expected": "reply ends with no bracketed debug line", "landing": "reply about a shop screen (game context guessed from the attached screenshot), 500 visible characters, ends \"...when things get tough.\" followed by a normal follow-up menu (two lettered options) and the usual Helpful / Not really / Read aloud / Show details row -- no bracketed debug text anywhere in the turn", "rect": null, "visibilityVerdict": "visible" }
+  ],
+  "pluginLogLines": [
+    "[2026-09-18 08:59:33,959][INFO]: ask_ollama: url=http://127.0.0.1:11434/api/chat game='' appid= attachments=1 question_len=30",
+    "[2026-09-18 09:00:25,694][INFO]: ask_ollama: stream done model=gemma4:e2b-it-qat done_reason=stop eval_count=904 prompt_eval=2562 raw_len=860 visible_len=500 num_predict=1932 think=True",
+    "[2026-09-18 09:00:25,695][INFO]: ask_ollama: attachment warnings: Pillow is unavailable; sent original image bytes.",
+    "[2026-09-18 09:00:25,697][INFO]: run_game_ai_request: completed in 51.7s"
+  ],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "With a screenshot attached, the answer came back clean -- no bracketed debug text at the end -- though the log notes the image was sent at full size because the plugin's own image-resizing library (Pillow) is not installed, which is worth a separate look, not this row's job."
+}

@@ -1,0 +1,22 @@
+{
+  "rowId": "FOCUS-GRAPH-DEV-KB-01",
+  "rowText": "docs/testing.md, PR2 stage 6a: Plain Decky ToggleField in its own PanelSectionRow inside the existing Knowledge base (dev QA) section. Confirm on-Deck that D-pad Down from Install seed knowledge base reaches it and continues to the next section. Confirmed again on the Deck 2026-09-15 with real evidence saved. Flagged in the QA-EVIDENCE-GAP-01 table as 'not run 2026-09-16 -- still owed' even though a 2026-09-15 pass with a real evidence file already exists; re-run anyway per the plan.",
+  "build": { "pluginVersion": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18 09:03",
+  "setup": {
+    "settings": { "show_developer_tab": true },
+    "runningGame": null,
+    "tab": "Developer"
+  },
+  "steps": [
+    { "press": "DOWN from Install seed knowledge base", "expected": "reach Hybrid retrieval (meaning search)", "landing": "<DIV> \"Hybrid retrieval (meaning search)\" (the ring lands on the ToggleField's unlabelled inner div; label read from the ancestor row, not the focused node's own text)", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "DOWN again", "expected": "reach On-screen debug HUD (first control of Diagnostics)", "landing": "<DIV> \"On-screen debug HUD\"", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "UP (retrace)", "expected": "back to Hybrid retrieval (meaning search)", "landing": "<DIV> \"Hybrid retrieval (meaning search)\"", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "UP again (retrace)", "expected": "back to Install seed knowledge base", "landing": "<BUTTON> \"Install seed knowledge base\"", "rect": null, "visibilityVerdict": "visible" }
+  ],
+  "pluginLogLines": [],
+  "screenshots": [],
+  "evidenceFile": "runs/plan61-FOCUS-GRAPH-DEV-KB-01.json",
+  "verdict": "PASS",
+  "verdictSentence": "Walking down from the Install-seed-knowledge-base button reaches the Hybrid retrieval switch and then the on-screen debug HUD switch in order, and walking back up retraces the exact same path -- every stop was on screen the whole way, both directions."
+}

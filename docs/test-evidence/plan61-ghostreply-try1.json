@@ -1,0 +1,21 @@
+{
+  "rowId": "BUG-ghost-reply-new-chat",
+  "rowText": "docs/roadmap.md: 'A new chat shows the previous chat's last reply until the panel is reopened' (star 2, [chat]). With a reply still on screen in one chat, moving the chat row to the new-chat position and pressing A made the new chat, but the new chat then showed that earlier reply underneath it, with an ellipsis standing in for the question, its Helpful, Not really and Copy buttons all reachable, and a Session context row showing one turn. Closing the panel and reopening it left the new chat empty, the way a new chat should always start.",
+  "build": { "pluginVersion": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18 09:09",
+  "setup": {
+    "settings": { "ask_mode": "strategy" },
+    "runningGame": null,
+    "chatUsed": "the active chat before switching was 44f2ff8b (black mesa / gonarch), which had a finished reply about a screenshot's shop scene on screen; found while setting up the focus-trap recipe (recipe 1's own precondition, a chat with a live reply, is the same starting point this recipe needs)"
+  },
+  "steps": [
+    { "press": "Move the chat-slot carousel to the [+] (new-chat) position with LB, then A", "expected": "a brand-new, empty chat", "landing": "a new chat opened, but the transcript underneath it still showed the previous reply", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "Read the screen immediately (no further presses)", "expected": "empty transcript", "landing": "active chat slot title read \"New chat\"; the transcript showed a turn whose question was rendered as an ellipsis and whose reply began \"Alright, listen up, you want to know what's on the screen?...\" (the old black-mesa chat's answer, about a shop screen), with the normal Helpful / Not really / Read aloud / Show details row underneath, and a Session context (1 turn) strip", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "D-pad walk down through the ghosted turn", "expected": "the ghost content is genuinely reachable, not just a stray paint", "landing": "reached, in order: Retry same prompt, the ellipsis question, Show reasoning, Mark reply helpful, Read aloud, Show details, Session context, Save chat to Desktop -- all real, focusable, visible controls", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "Close the panel entirely (back to the Decky list) and reopen it", "expected": "the new chat is now genuinely empty", "landing": "confirmed: the New chat slot now shows the normal empty-slot placeholder, \"Ask anything -- this slot keeps its own history.\", no ghosted reply, no ellipsis question", "rect": null, "visibilityVerdict": "visible" }
+  ],
+  "pluginLogLines": [],
+  "screenshots": [],
+  "verdict": "HIT",
+  "verdictSentence": "The bug reproduced again: switching to a new chat right after a reply finished in another chat showed that old reply as if it belonged to the new, empty chat -- with a working Helpful/Not really/Read aloud row and a fake question mark in place of the real one -- until the panel was closed and reopened, which cleared it properly."
+}

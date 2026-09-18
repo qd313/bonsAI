@@ -6,6 +6,23 @@ Strikeout titles match the original roadmap bug list. Items awaiting on-Deck QA 
 
 ---
 
+### Attaching a screenshot puts a line of technical text at the bottom of the answer (2026-09-15, closed 2026-09-18)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-18 once the Deck confirmed the fix — copied line for line
+from this session's Verify entry, nothing reworded, with the closing note added at the end._
+
+- ★ `[reply]` **Attaching a screenshot puts a line of technical text at the bottom of the answer** — **VERIFY,
+  fixed 2026-09-15.** The line is gone from the reply; the counts it carried now go to the verbose log only.
+  Row **ATTACH-DEBUG-01**: ask with a screenshot attached and check the answer ends with no bracketed debug
+  line. **Tried on the Deck 2026-09-18:** the walk to the attach button stalled before a screenshot could be
+  attached, so this is still not run. Evidence `docs/test-evidence/plan61-ATTACH-DEBUG-01.json`. **Tried again
+  on the Deck 2026-09-18, PASS:** a screenshot was attached and asked about, and the reply ended with no
+  bracketed debug line. Evidence `docs/test-evidence/plan61-ATTACH-DEBUG-01-retry.json`.
+
+  **Closed 2026-09-18:** a clean pass on the Deck is what this row asked for. One side note for the
+  maintainer, not a bug filed tonight: the plugin's own log shows the picture went to the model at full size,
+  because the tool that shrinks pictures first is not installed on this Deck.
+
 ### The follow-up menu offered places from a different game than the one you asked about (2026-09-15, closed 2026-09-18)
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-18 once a second clean sighting confirmed the fix — copied

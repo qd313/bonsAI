@@ -1,0 +1,25 @@
+{
+  "rowId": "QA-FREE-PLAY-01",
+  "rowText": "Standing row (docs/testing-manual.md \"QA-FREE-PLAY-01\"): run after ANY change to the Main tab's layout, scrolling, focus graph, or the dock, before the change is called verified. Every stop must be focused AND visible; a section arriving mid-stream must not steal focus or leave a focused stop hidden. The streaming half (walk while the reply is still writing) has been owed since 2026-09-16 and was still owed after the 2026-09-18 01:05-01:55 run because the device time went to the cache-clear attempt instead.",
+  "build": { "pluginVersion": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18 08:43-08:44",
+  "setup": {
+    "settings": { "ask_mode": "strategy", "ask_think_effort": "high (raised from medium for this run)" },
+    "runningGame": null,
+    "chatUsed": "slot 7b51082d (the battery-life chat)",
+    "pinnedChip": "give me a very long, detailed guide to getting the most battery life out of my Steam Deck, covering every setting that matters, with a section for each setting and examples (the box truncates the stored chip at the 160-character sanitizer cap, so the sentence that was actually sent reads \"...with a section for each setting\", no \"and examples\")"
+  },
+  "steps": [
+    { "press": "A on the pinned chip, then A on ask", "expected": "reply starts streaming", "landing": "ask button greyed/disabled, reply streaming (log: POST 08:43:38, stream done 08:44:40, 62.0s total)", "rect": null, "visibilityVerdict": "n/a" },
+    { "press": "deck_sweep DOWN returnTrip:true from the top of the pane, started ~9s into the still-streaming reply", "expected": "every stop focused and visible, no dead ends", "landing": "8 distinct stops visited over 14 presses (2 legs); 6 of the 8 stops were FOCUSED BUT NOT VISIBLE (all offscreen except one 33% partial, covered by the ask box) because the transcript kept growing and auto-scrolling under the ring while the sweep walked; the DOWN leg also looped (Retry -> <div> -> \"Show reasoning · 19s\" -> <div> -> Retry, escaped:false) and stopped itself rather than reaching further into the still-arriving text", "rect": null, "visibilityVerdict": "6 of 8 stops NOT VISIBLE" }
+  ],
+  "pluginLogLines": [
+    "[2026-09-18 08:43:38,325][INFO]: ask_ollama: POST http://127.0.0.1:11434/api/chat model=gemma4:e2b-it-qat payload_bytes=8048 num_predict=1909 think=True",
+    "[2026-09-18 08:44:40,303][INFO]: ask_ollama: stream done model=gemma4:e2b-it-qat done_reason=stop eval_count=1299 prompt_eval=1719 raw_len=3170 visible_len=2820 num_predict=1909 think=True",
+    "[2026-09-18 08:44:40,323][INFO]: run_game_ai_request: completed in 62.0s"
+  ],
+  "screenshots": [],
+  "evidenceFile": "runs/plan61-QA-FREE-PLAY-01-streaming.json",
+  "verdict": "FAIL",
+  "verdictSentence": "While the answer was still being written, the D-pad ring got stuck focused on controls a person could not see on screen six times out of eight stops, because the growing reply pushed the page around faster than the ring could keep up; a person walking the pane with a controller while an answer streams would lose track of where they are."
+}

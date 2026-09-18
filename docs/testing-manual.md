@@ -139,7 +139,15 @@ half stays owed. The shoulder buttons switched the plugin's own tab during the s
 
 **Owed for plan 59 (the open tab strip redesign, landed 2026-09-17):** every tab's strip layout
 changed, so this sweep needed to run again once the strip was on the Deck. **Run once on the strip
-build 2026-09-18** (the after-finished half, see the run above); the streaming half is still owed.
+build 2026-09-18** (the after-finished half, see the run above); the streaming half ran later the same
+night and failed — see below.
+
+**Run 2026-09-18 on build `0589565`, the streaming half:** walking a reply with the D-pad while it was
+still being written lost the highlighted control — the view kept following the new text, and the
+highlighted control scrolled off screen with it. Six of the eight stops the ring visited were not
+visible, and the walk back down looped back on itself instead of reaching the bottom. This is no longer
+owed; it is failed, and a new bug now carries it. Evidence
+`docs/test-evidence/plan61-QA-FREE-PLAY-01-streaming.json`.
 
 A stop that is focused but not visible is a **FAIL of this row**, whatever the scripted rows say.
 This is the manual interim for the DPS visibility oracle + `deck_sweep`

@@ -1,0 +1,21 @@
+{
+  "rowId": "KB-AUTOSTART-01",
+  "rowText": "testing.md's closed row KB-AUTOSTART-01 (docs/archive/testing-closed-2026.md), flagged [no evidence -- re-run, batch QA-EVIDENCE-GAP-01]. Where: Ollama tab, under Run AI on this Deck. D-pad: reached in two presses from the top of the tab, fully on screen, ring lands on the switch itself. Do: press A with the AI already running, then again with nothing running. Pass when: with the AI running, the entry is written and switched on and nothing already answering is touched, and the line says the change takes effect next restart; with nothing running, it starts right away. Turning it off removes the entry and leaves anything running alone. The defect this row exists for: the first run wrote the entry but never switched it on, and reported success -- so it would not have started with the Deck. Check the start-at-login link exists on the device, not just the on-screen message.",
+  "build": { "pluginVersion": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18 09:03-09:04",
+  "setup": {
+    "settings": { "ollama_local_autostart": true },
+    "runningGame": null,
+    "tab": "Ollama",
+    "note": "Found already ON at the start (setting true, the systemd unit and its enabled symlink both present, Ollama itself already running as pid 89350) -- the opposite of the row's own assumed starting point (off, nothing running). The two presses were run in the order the switch was actually in, ending back in the same ON state it was found in."
+  },
+  "steps": [
+    { "press": "D-pad walk from the top of the Ollama tab", "expected": "reach the Start-the-AI-with-the-Deck switch in two presses, ring on the switch itself", "landing": "reached in exactly 2 presses (stop 1: Run AI on this Deck; stop 2: Start the AI with the Deck), aria-checked=true, matching the setting and the on-disk unit both already being on", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "A (first press, AI already running)", "expected": "toggles off since it was found on; check the on-disk link", "landing": "switch reads aria-checked=false; on-screen line changed to \"Off. Turn on 'Start the AI with the Deck' to add it.\"; over SSH, both the enabled symlink under default.target.wants/ and the unit file itself were gone", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "A (second press)", "expected": "toggles back on; check the link returns and nothing running was disturbed", "landing": "switch reads aria-checked=true again; on-screen line reads \"Set up and answering questions.\"; over SSH, the unit file and its enabled symlink both exist again (fresh timestamps), systemctl reports it enabled, and the running Ollama process kept the same process id (89350) throughout -- nothing already answering was touched", "rect": null, "visibilityVerdict": "visible" }
+  ],
+  "pluginLogLines": [],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "Turning the start-with-the-Deck switch off actually removed the real startup entry on the device, and turning it back on actually recreated it (not just the on-screen message) -- the original bug (a switch that said yes but never really turned itself on) does not reproduce here, and the already-running AI was left alone the whole time."
+}

@@ -1,0 +1,23 @@
+{
+  "rowId": "BUG-ask-input-ring-trap",
+  "rowText": "docs/roadmap.md: 'The panel can get into a state where pressing Down stops half way and the Ask button is out of reach' (star 3, [focus]). Recipe: a brand-new, empty chat started while the panel was showing a Session context row (turns carried from another chat); from the question box, Down, Right, Left, Down, Up. A hit is Down/Right/Left/Down all leaving the ring exactly where it was, with only Up escaping.",
+  "build": { "pluginVersion": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18 09:07",
+  "setup": {
+    "settings": { "ask_mode": "strategy" },
+    "runningGame": null,
+    "chatUsed": "a brand-new chat created from 44f2ff8b (black mesa / gonarch), with a Session context (1 turn) row showing -- this same setup also reproduced the ghost-reply bug (plan61-ghostreply-try1.json), so the new chat was not visually empty, but the row's own recipe only cares about the Session context row being present, which it was"
+  },
+  "steps": [
+    { "press": "DOWN from the question box", "expected": "reach a real control below it", "landing": "moved to the ask button", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "RIGHT", "expected": "either move sideways or correctly claim the press with no move (nothing to the side of Ask)", "landing": "did not move (still on ask) -- expected, matches the documented clean shape", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "LEFT", "expected": "same as RIGHT", "landing": "did not move (still on ask)", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "DOWN again", "expected": "correctly do nothing (nothing below Ask)", "landing": "did not move (still on ask)", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "UP", "expected": "climb back out", "landing": "moved to \"Attach screenshot to Ask\"", "rect": null, "visibilityVerdict": "visible" }
+  ],
+  "pluginLogLines": [],
+  "screenshots": [],
+  "evidenceFile": "runs/plan61-focustrap-try1.json",
+  "verdict": "CLEAN",
+  "verdictSentence": "This time Down from the question box actually reached the Ask button and could climb back out with Up -- the trap (Down going nowhere at all) did not show up. The entry stays open; this is one more clean run added to the count."
+}

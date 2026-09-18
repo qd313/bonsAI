@@ -192,7 +192,12 @@ starts work outside this.
   Down into the transcript, and the empty new chat showed the older chat's Theseus-and-Asterius reply. The new
   chat's own saved file already had no turns and already pointed at the new chat, so this is a stale drawing
   on screen, not a data problem. Closing and reopening the panel cleared it. Reproduced twice now. Evidence
-  `docs/test-evidence/plan61-BUG-ghost-reply-new-chat.json`.
+  `docs/test-evidence/plan61-BUG-ghost-reply-new-chat.json`. **A third sighting 2026-09-18 about 09:30, build
+  `0589565`, and now a recipe that brings it up on demand:** switch to a brand-new chat right after a
+  reply finishes in another chat, and the new chat shows that finished answer, with a placeholder standing in
+  for the question and working Helpful, Not really and Read aloud buttons underneath it. Closing and
+  reopening the panel clears it every time. Three hits tonight in all, two by accident and one on this
+  recipe. Evidence `docs/test-evidence/plan61-ghostreply-try1.json`.
 - ★★ `[chat]` **A chat that is still writing does not look busy from another chat** — **OPEN, found
   2026-09-18.** While one chat is still writing and you switch to another chat, nothing tells you the first
   one is busy: its dot in the chat row looks like every idle chat's dot, with no hollow cyan ring and no spark
@@ -215,6 +220,16 @@ starts work outside this.
   notes" row, then the Session context strip, never on either menu button; Up from the strip jumps straight
   back to Hide details, skipping the notes row and the menu too. The same skip now covers the follow-up menu
   buttons, not just the chips. Evidence `docs/test-evidence/plan61-CONTEXT-LADDER-03-caseB.json`.
+- ★★ `[focus]` `[reply]` **Walking a reply with the D-pad while it is still being written loses the
+  highlight** — **OPEN, found 2026-09-18.** Walking a reply with the D-pad while it is still being written
+  makes the view keep following the new text, and the highlighted control scrolls off screen with it: six of
+  the eight stops the ring visited were not visible (all but one fully off screen, the other one a third
+  hidden behind the question box), and walking back down looped back on itself instead of reaching the
+  bottom. Build `0589565`, a 62-second reply with thinking set to High, nothing running. The token-streaming
+  feature closed to Done earlier tonight on its 4 September checks, which measured the view following with
+  nobody touching the D-pad; this is the case those checks did not cover — walking with the D-pad while a
+  reply is still streaming in. Evidence `docs/test-evidence/plan61-QA-FREE-PLAY-01-streaming.json`,
+  `runs/plan61-QA-FREE-PLAY-01-streaming.json`.
 - ★★ `[ollama]` `[layout]` **The AI models screen shows about two rows of the model list on the Deck's
   screen** — **OPEN, reported 2026-09-16 by the maintainer, cause read in the code, not yet changed.** The
   screen's body is capped at 520 pixels tall (or 72 percent of the screen when that is smaller;
@@ -278,7 +293,9 @@ starts work outside this.
   `docs/test-evidence/plan55-trap-run2-chip-fill-then-dpad.json`,
   `docs/test-evidence/plan55-trap-run3-new-chat-with-live-turn.json`,
   `docs/test-evidence/plan55-trap-run4-chip-fill-with-live-turn-row.json`,
-  `docs/test-evidence/plan55-trap-run5-empty-chat-session-row-hades-running.json`.
+  `docs/test-evidence/plan55-trap-run5-empty-chat-session-row-hades-running.json`. **One more clean run
+  2026-09-18, build `0589565`, on the same 2026-09-15 recipe:** Down reached Ask and Up climbed back out,
+  no trap. Evidence `docs/test-evidence/plan61-focustrap-try1.json`.
 - ★★★ `[reply]` **A name-withheld boss question on a story-protected game comes back with no spoiler box** —
   **OPEN, found 2026-09-18.** Nothing running, no consent phrase anywhere in the chat: asked about "the boss
   past the crystal spike area … the one that looks just like me" in Hollow Knight, the reply named Broken
@@ -567,11 +584,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   starts the good ones, instead of quietly dropping the bad one. Row **PULL-MISSING-NAME-01**: on the Ollama
   tab's pull picker, choose two real models plus a name the registry lacks, press Pull selected, and check for
   a toast that says the download started and names the one it could not find.
-- ★ `[reply]` **Attaching a screenshot puts a line of technical text at the bottom of the answer** — **VERIFY,
-  fixed 2026-09-15.** The line is gone from the reply; the counts it carried now go to the verbose log only.
-  Row **ATTACH-DEBUG-01**: ask with a screenshot attached and check the answer ends with no bracketed debug
-  line. **Tried on the Deck 2026-09-18:** the walk to the attach button stalled before a screenshot could be
-  attached, so this is still not run. Evidence `docs/test-evidence/plan61-ATTACH-DEBUG-01.json`.
 - ★★ `[focus]` **A checklist the model got wrong was left in the reply as raw JSON**, its own D-pad stop that did nothing — **VERIFY.**
   Fixed 2026-08-28: a rejected checklist block is dropped, as a rejected branch block already was. Owed: one sighting on device of a
   reply where it happens. Row **STRAT-CHECKLIST-JSON-01**.
@@ -588,7 +600,14 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   2026-09-18:** the D-pad walk from Ask to Clear cache took about 48 seconds and the reply finished in 43, so
   Clear landed on an already-finished answer, not a mid-answer one. Next try: switch tabs with the shoulder
   button and use a slower Deep-thinking question. Evidence
-  `docs/test-evidence/plan61-CLEAR-CACHE-01-midanswer.json`.
+  `docs/test-evidence/plan61-CLEAR-CACHE-01-midanswer.json`. **Tried again on the Deck 2026-09-18, still
+  BLOCKED:** using the shoulder button to switch tabs got to Clear cache in 63 seconds, but the reply (a
+  slower, high-thinking question) had already finished at about 50 seconds, so Clear again landed on a
+  finished answer, not one still being written. Clear itself worked cleanly: an empty transcript, and a fresh
+  question started a clean session. Two tries tonight, both too slow to catch a reply mid-write. What is
+  needed next is a reply that takes longer than about 70 seconds — a running game, or the sixty-tip question
+  from SOFT-PREDICT-01 — or the maintainer's word to close this half as covered by its unit test instead.
+  Evidence `docs/test-evidence/plan61-CLEAR-CACHE-01-midanswer-retry.json`.
   [Why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way).
 ### Features that need verification
 
@@ -1034,12 +1053,16 @@ copied line for line, nothing reworded: [archive/roadmap-done-v0.5.0.md](archive
   a new Bugs entry rather than reopening this one.
   [Full detail](archive/roadmap-bugs-fixed.md#the-follow-up-menu-offered-places-from-a-different-game-than-the-one-you-asked-about).
 
-**Closed 2026-09-18 (plan 61, flow B):**
+**Closed 2026-09-18 (plan 61):**
 
 - ★ `[platform]` **Shell state and tab payload extraction (refactor step 8)** — **DONE.** Every tab renders, one
   Ask works end to end, and the Ollama tab comes back clean after a wipe. The one piece left — the About tab's
   own walk down its four links — passed on the Deck 2026-09-18.
   [Full detail](archive/roadmap-completed.md#shell-state-and-tab-payload-extraction-refactor-step-8).
+- ★ `[reply]` **Attaching a screenshot puts a line of technical text at the bottom of the answer** — **DONE,
+  confirmed on the Deck 2026-09-18.** A screenshot was attached and asked about, and the reply ended with no
+  bracketed debug line. Row **ATTACH-DEBUG-01**.
+  [Full detail](archive/roadmap-bugs-fixed.md#attaching-a-screenshot-puts-a-line-of-technical-text-at-the-bottom-of-the-answer).
 
 **Closed 2026-09-17 (Deck QA worker):**
 

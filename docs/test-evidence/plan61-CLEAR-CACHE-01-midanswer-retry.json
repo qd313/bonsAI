@@ -1,0 +1,40 @@
+{
+  "rowId": "CLEAR-CACHE-01",
+  "rowText": "docs/testing.md: 'Still open — the mid-generation half. Clearing while a reply is still being written must stop the generation and leave the panel empty (not a Request cancelled. bubble)... BLOCKED again 2026-09-18: the walk from Ask to Clear cache took about 48 seconds and the reply finished in 43... Next try: switch tabs with the shoulder button and use a slower Deep-thinking question.'",
+  "build": { "pluginVersion": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18 08:47-08:49",
+  "setup": {
+    "settings": { "ask_mode": "strategy", "ask_think_effort": "high (raised from medium for this run, on the maintainer's recipe)" },
+    "runningGame": null,
+    "chatUsed": "slot 7b51082d (the battery-life chat)",
+    "pinnedChip": "give me a very long, detailed guide to getting the most battery life out of my Steam Deck, covering every setting that matters, with a section for each setting and examples (sent text truncated to 160 chars by the chip sanitizer)"
+  },
+  "steps": [
+    { "press": "A on the pinned chip, A on ask", "expected": "reply starts streaming", "landing": "streaming started 08:47:59.288", "rect": null, "visibilityVerdict": "n/a" },
+    { "press": "RB, RB (Main -> Ollama -> Settings) immediately after Ask", "expected": "reach the Settings tab in two presses", "landing": "tab bar read \"Settings\" after two presses", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "D-pad walk to \"Clear cache...\"", "expected": "reach and read the button's own label before pressing", "landing": "label read as \"Clear cache...\" (a second button below it reads \"Clear all data...\", not touched)", "rect": {"x":48,"y":376,"w":146,"h":38}, "visibilityVerdict": "visible" },
+    { "press": "A on Clear cache...", "expected": "a confirm dialog opens", "landing": "a Steam confirm dialog opened in a different overlay (\"Clear session cache?\"), ring already on \"Clear\"", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "A to confirm Clear", "expected": "cache clears; check whether it landed before or after the reply finished", "landing": "confirm pressed at approximately 08:49:02 (about 63 seconds after Ask), after the reply had already finished at 08:48:49 (49.8 seconds) -- BLOCKED again, same as the previous try, just with a smaller margin (about 13.5s late instead of the earlier run's finish-before-clear gap)", "rect": null, "visibilityVerdict": "n/a" },
+    { "press": "LB, LB back to Main tab", "expected": "transcript is empty at the [+] position", "landing": "confirmed: active chat slot title reads \"[+]\", 0 turn elements in the transcript", "rect": null, "visibilityVerdict": "visible" },
+    { "press": "A on the same pinned chip again, A on ask (fresh ask after the clear)", "expected": "the new ask must not carry the old (cleared) session forward", "landing": "Session context read \"(1 turn)\" once the reply finished -- a clean, fresh session, not the old one", "rect": null, "visibilityVerdict": "visible" }
+  ],
+  "timings": {
+    "askSentAt": "2026-09-18 08:47:59.288",
+    "replyStreamDoneAt": "2026-09-18 08:48:49.049",
+    "replyDurationSeconds": 49.8,
+    "clearConfirmLandedAt": "2026-09-18 08:49:02.553",
+    "clearConfirmSecondsAfterAsk": 63.3,
+    "note": "The clear-cache log line (forget_background_game_ai) is timestamped after the reply's own completed log line, so the reply finished writing about 13.5 seconds before the clear was confirmed."
+  },
+  "pluginLogLines": [
+    "[2026-09-18 08:47:59,288][INFO]: start_background_game_ai: RPC entry (arg type=dict)",
+    "[2026-09-18 08:47:59,310][INFO]: ask_ollama: POST http://127.0.0.1:11434/api/chat model=gemma4:e2b-it-qat payload_bytes=8048 num_predict=1909 think=True",
+    "[2026-09-18 08:48:49,049][INFO]: ask_ollama: stream done model=gemma4:e2b-it-qat done_reason=stop eval_count=1487 prompt_eval=1719 raw_len=3878 visible_len=3776 num_predict=1909 think=True",
+    "[2026-09-18 08:48:49,054][INFO]: run_game_ai_request: completed in 49.8s",
+    "[2026-09-18 08:49:02,553][INFO]: forget_game_ai_carried_context: forgot=['followup_subject', 'strategy_checklist_whole_store'] (app_id=<unknown>)",
+    "[2026-09-18 08:49:02,554][INFO]: forget_background_game_ai: stored answer dropped (stopped=False)"
+  ],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "Even using the shoulder-button shortcut instead of the D-pad walk, reaching and confirming Clear cache still took about a minute -- long enough that the high-effort reply had already finished writing about 13 seconds earlier, so the mid-answer case still could not be tested; everything after the clear (empty transcript, a clean 1-turn session on the next ask) worked correctly."
+}

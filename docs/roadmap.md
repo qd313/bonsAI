@@ -166,21 +166,6 @@ starts work outside this.
   **Tried on the Deck 2026-09-17, blocked:** the knowledge base was already installed on that device, so
   there is no first-time download button to press. Still owed, on a Deck without the knowledge base
   installed. Evidence `docs/test-evidence/plan57-QA-kb-download-two-taps.json`.
-- ★ `[layout]` **An open question's row is only partly visible behind the Retry corner icon** — **OPEN,
-  seen at every visit 2026-09-15 evening.** With the newest turn open, the ring on the question's inner row
-  reads 67% visible, covered by the Retry same-prompt icon in the corner. Evidence
-  `docs/test-evidence/plan55-QUESTION-COLLAPSE-RING-01.json` (step 1),
-  `docs/test-evidence/plan55-DRG-01d-second-question-send.json` (step 1). **Seen again in the free-play sweep
-  2026-09-15**, at 78% visible behind the same icon, in both directions of the walk — the plugin's own rule
-  counts a focused-but-not-fully-visible stop as a failure regardless of the percentage. Evidence
-  `docs/test-evidence/plan55-QA-FREE-PLAY-01-main-long-reply.json`. **Re-run on the Deck 2026-09-17: read
-  fully visible** — the newest question read in full beside the Retry icon, with no cropping. Evidence
-  `docs/test-evidence/plan57-QA-QUESTION-COLLAPSE-RING-01.json`. No code change is on record that would
-  explain the improvement, and it disagrees with the 67% and 78% readings above, so this stays open
-  rather than closed on one clean run — a maintainer call on whether to trust it. **Read fully visible
-  again on 2026-09-18,** at every sighting across a handful of walks on build `6d5b83f`. Evidence
-  `docs/test-evidence/plan61-question-row-retry-visibility.json`. The maintainer's call above still
-  stands until the night's later walks are in.
 - ★ `[ollama]` **The vision try-order picker writes settings even when nothing changed** — **OPEN, found
   2026-09-16 during block 0 of session 56.** Opening the vision model try-order picker and pressing Done
   writes the picker's current order into the settings file, even when nobody moved anything. Restored by hand
@@ -351,6 +336,10 @@ replace it with a specific issue when one exists.
   One check owed first: the question bubble turns its own outline off and gets no ring rule, so look on the Deck at what focus shows.
 - ★★ `[chat]` **First-run ghost "New chat" label at the create position** — **OPEN, parked by decision.** The create position is the
   literal `[+]`, re-confirmed on board 8f and again in the v3 rows. Reopen that decision before building it.
+- ★★ `[chat]` **The game a chat belongs to, above its title** — **OPEN, the maintainer said yes 2026-09-19
+  (D113) to showing the game's name.** The name already shows in quiet text above the slot title for every
+  chat created after 2026-08-30. The variant where it only shows while the row has focus was never built.
+  Check row **CHAT-SLOTS-V3-14c** runs once the maintainer says the always-shown version is the final one.
 - ★★ `[reply]` **Headline first: every answer opens with one line that stands alone** — **OPEN, filed 2026-09-08. Not yet
   (D99, 2026-09-12): it waits for its own go.** The model would be asked to start every answer with one short sentence that
   carries the point and gives nothing away, so the reply-ready popup, a spoken answer and any headset card always have a good
@@ -576,19 +565,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   each row in [testing.md](testing.md). Until a run produces real evidence, treat all twelve as unknown rather than as a pass.
 
 ### Bugs that need verification
-- ★ `[platform]` **Clear all plugin data left three things behind** — **VERIFY.** Found 2026-09-05 when the maintainer
-  asked for the wipe to be best-effort. Three flags remembering that the plugin had already warned about a knowledge base problem
-  are spelled with an underscore where everything else uses a colon, and the wipe only looked for the colon. After wiping
-  everything the plugin still believed it had warned you, so it stayed quiet when it should have spoken up. Fixed to match the
-  bare word, which catches both spellings and clears the old ones off devices that already carry them. The New labels in the pull
-  picker go with it. Three tests. Row **CLEAR-ALL-PREFIX-01**. **Run on the Deck 2026-09-16, once the
-  maintainer's pre-authorised wipe (D105) went ahead:** every one of the eight plugin keys in the browser's own
-  storage was gone afterwards, the New labels among them — a clean pass for everything the wipe had to remove.
-  **The one thing this row was filed for stays unmeasured:** none of the three underscore-spelled flags this
-  fix targets happened to exist on the Deck at wipe time, so the run could not show whether they, specifically,
-  now go with the rest. Evidence `docs/test-evidence/plan56-WIPE-01.summary.json`. The same wipe also removed
-  the Deck's own local AI program and every model it had downloaded; a backup of settings and chats cannot
-  bring those back, and Ask on this Deck is down until "Run AI on this Deck" is switched back on.
 - ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **VERIFY, fixed
   2026-09-15.** Down and Up through a reply now stop at the same places in both directions. Row
   **REPLY-STOPS-MIRROR-01**: on a reply with two paragraphs, a spoiler block and a two-button menu, check the
@@ -599,15 +575,15 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   `docs/test-evidence/plan57-QA-REPLY-STOPS-MIRROR-01.json`. **Tried again 2026-09-18: blocked** — neither God
   of War nor Hollow Knight is on the Deck's Recent Games row, the only list the launch tool can search, so
   neither would start; someone needs to play one of them once by hand first. Evidence
-  `docs/test-evidence/plan61-REPLY-STOPS-MIRROR-01-retry.json`.
+  `docs/test-evidence/plan61-REPLY-STOPS-MIRROR-01-retry.json`. On 2026-09-19 the maintainer played God of
+  War and Hollow Knight once each, so both are on the Recent Games row again and this row can run in the
+  next Deck block.
 - ★ `[ollama]` **Mistyping one model name in a several-model download loses it without saying so** — **VERIFY,
   fixed 2026-09-15.** Downloading several models at once now says which name it could not find and still
   starts the good ones, instead of quietly dropping the bad one. Row **PULL-MISSING-NAME-01**: on the Ollama
   tab's pull picker, choose two real models plus a name the registry lacks, press Pull selected, and check for
-  a toast that says the download started and names the one it could not find.
-- ★★ `[focus]` **A checklist the model got wrong was left in the reply as raw JSON**, its own D-pad stop that did nothing — **VERIFY.**
-  Fixed 2026-08-28: a rejected checklist block is dropped, as a rejected branch block already was. Owed: one sighting on device of a
-  reply where it happens. Row **STRAT-CHECKLIST-JSON-01**.
+  a toast that says the download started and names the one it could not find. Model downloads were allowed
+  again by the maintainer on 2026-09-19 (D113), so this row is runnable in the next Deck block.
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —
   **VERIFY, landed 2026-09-15.** The tab bar's pop-up strip now always ends fully hidden a fraction of a second
   after it closes, even when its fade is stalled by a game running full screen, so no see-through copy of it
@@ -638,13 +614,12 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   A model pulled from the picker landed at the **bottom** of the text list, and showed up in the vision list because it can
   read pictures — while a text-only model and the embedding one stayed out of that list. What is still owed is the opposite
   placement: with *Allow high-VRAM model fallbacks* on, a **large** pulled model is supposed to go to the **top** instead.
-  That needs a large model on the device and the switch turned on. Row **ROUTING-MERGE-01**.
+  That needs a large model on the device and the switch turned on. Row **ROUTING-MERGE-01**. The maintainer's own words on
+  2026-09-19 (D113) were "try them in the order the user set." Model downloads are now allowed (D113), so the large-model
+  half of this row is runnable in the next Deck block.
 
 - ★ `[platform]` **VAC check (`bonsai:vac-check`) on-device QA** — **VERIFY.** Implementation complete; run **VAC-02…06** after Tier 0
   **SMOKE-F** passes.
-- ★★ `[chat]` **The game a chat belongs to, above its title** — **VERIFY.** Shipped 2026-08-30 in quiet text above the slot title;
-  only chats created after that date carry the name. Row **CHAT-SLOTS-V3-14c**. It costs a line of height, which cuts against the
-  vertical-space goal; decide whether it shows always or only when the row has focus.
 - ★★ `[reply]` **Thinking line fixes from 2026-08-07/08** — **VERIFY.** Emoji upright, lazy status tag survives, no bare-emoji phase
   changes, one writer. Five of seven rows pass on the Deck: **THINKING-SLOW-01** and **THINKING-SPOILER-01** (2026-09-04);
   **THINKING-COPY-01**, **THINKING-LIVE-01** and **THINKING-EMOJI-01** (2026-09-17) — the first status line held about 5.5
@@ -696,8 +671,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).
   **CHAT-SLOTS-V2-01 passed on the Deck 2026-09-17:** Down twice from the tab strip reaches the chat text, and Up retraces
   the same path. Evidence `docs/test-evidence/plan57-QA-CHAT-SLOTS-V2-01.json`.
-- ★★★★★ `[platform]` **Global quick-launch macro** — **VERIFY.** Guide-chord docs in [troubleshooting.md](troubleshooting.md) § 5; the
-  checklist was never run on hardware.
 
 ---
 
@@ -897,7 +870,8 @@ ones from this month are D81 to D88.
   could not be sent because the pinned test sentence stopped showing and no test sentence may be typed by
   thumb. Evidence `docs/test-evidence/plan61-KB-TRANSPARENCY-01-retry2.json`,
   `docs/test-evidence/plan61-KB-FLOOR-01-ontopic-retry2.json`, `docs/test-evidence/plan61-KB-FOLLOWUP-01-retry2.json`,
-  `docs/test-evidence/plan61-KB-KILLSWITCH-01-retry2.json`.
+  `docs/test-evidence/plan61-KB-KILLSWITCH-01-retry2.json`. On 2026-09-19 the maintainer played Half-Life 2
+  once more, so it is back on the Recent Games row and these rows can run in the next Deck block.
 - ★ `[KB]` **A Hades boss's note is spelled wrong, so spelling it right gets you told the plugin is guessing** —
   **VERIFY, fixed 2026-09-15, waiting on the maintainer to publish.** The note is titled Megaera now and the library
   was rebuilt and passed its own publish check, but pushing it to the two public download hosts was refused for the
@@ -932,8 +906,9 @@ ones from this month are D81 to D88.
   name-withheld boss question comes back with no cover), not on the Ask-box freeze. Evidence
   `docs/test-evidence/plan61-HADES-UNNAMED-STREAM-01-retry2.json`,
   `docs/test-evidence/plan61-HADES-UNNAMED-01-retry2.json`. **Still owed tonight:** STRAT-SPOIL-NAME-01 (Doom
-  64 cannot be launched), DRG-01b (stopped by the focus trap), DRG-01c (left out on purpose). [Plan
-  54](planning/54-spoiler-rules-gaps.md).
+  64 cannot be launched), DRG-01b (stopped by the focus trap), DRG-01c (left out on purpose). On 2026-09-19
+  the maintainer said Doom 64 is not readily available, so STRAT-SPOIL-NAME-01 stays blocked until it is.
+  [Plan 54](planning/54-spoiler-rules-gaps.md).
 - ★★ `[KB]` **"Not in my notes" line** — **VERIFY, built and shipped 2026-09-07, device check failed the same
   day.** The line itself is in the code, but on the Deck nothing could make it appear: ten questions asked first
   all attached a note, so the one question meant to show the line never got the chance. The note search has
@@ -944,7 +919,8 @@ ones from this month are D81 to D88.
   stopped it from going out. Evidence `docs/test-evidence/plan61-W2-R5-hl2-retry.json`. **And again at
   12:50, still blocked:** Half-Life 2 had dropped off the Recent Games row so the launcher refused to start
   it, and the pinned test sentences had stopped showing by then anyway. Evidence
-  `docs/test-evidence/plan61-W2-R5-hl2-retry2.json`.
+  `docs/test-evidence/plan61-W2-R5-hl2-retry2.json`. On 2026-09-19 the maintainer played Half-Life 2 once
+  more, so it is back on the Recent Games row and this row can run in the next Deck block.
 - ★★ `[KB]` **Ten new games checked on the Deck, publish owed** — **VERIFY, ran 2026-09-18.** The
   2026.09.18 library was installed on the Deck straight from the plugin's own folder, not from the
   public download hosts. One question named each of the ten new games and all ten answered from that
@@ -959,9 +935,6 @@ ones from this month are D81 to D88.
   value in the gap before a finished reply's own details land — the fix has landed on the branch,
   and a shared-tip question watched on the Deck 2026-09-19 showed no gap at all, closing the timing
   half too. Rows **NOTES-BLOCK-01**–**07**, **TEN-GAMES-01**, in [testing-manual.md](testing-manual.md).
-- ★★★ `[KB]` **KB download Cancel** — **VERIFY, blocked.** Shipped 2026-08-05. The download finishes in about a second on
-  device, so there is no window to press Cancel in. Needs a slower fixture or a throttle. Row **KB-CANCEL-01**.
-
 ### Next
 
 - ★ `[KB]` **Measure answers with the character voice on** — **OPEN, switch already built.** The answer test's voice
@@ -1054,12 +1027,16 @@ Parked on purpose, not dropped. One line each, with what unshelves it; the full 
   for anything. Unshelves when the preview loads the plugin on the maintainer's machine.
 - ★★ `[ui]` **Glance view: the answer alone, in big text** — shelved 2026-09-12: too much UI change, and not
   ready for it yet. Unshelves on the maintainer's word; the mockup is kept.
+- ★★★ `[KB]` **KB download Cancel, the Deck check** — shelved 2026-09-19 (D113). The download finishes in
+  about a second, too fast to press Cancel in. Unshelves when a throttle or a slower test copy exists.
 - ★★★ `[voice]` **Voices for the bundled characters** — shelved 2026-09-08 (D74). Unshelves after the
   character sweep, a legal check and the open licence call.
 - ★★★ `[voice]` **Trained voices for the bundled characters** — shelved with the clip route 2026-09-08 (D74).
   Same legal gate, plus the plugin hosting voice files for the first time.
 - ★★★★ `[voice]` **A voice for a custom character** — shelved with the bundled voices 2026-09-08 (D74). Same
   legal gate.
+- ★★★★★ `[platform]` **Global quick-launch macro** — shelved 2026-09-19 (D113), the maintainer said drop it.
+  Never run on hardware. Unshelves on the maintainer's word.
 
 ---
 
@@ -1069,6 +1046,20 @@ Parked on purpose, not dropped. One line each, with what unshelves it; the full 
 
 Everything shipped since v0.4.9 (2026-07-08), one line each — moved out to its own file to keep this one small,
 copied line for line, nothing reworded: [archive/roadmap-done-v0.5.0.md](archive/roadmap-done-v0.5.0.md).
+
+**Closed 2026-09-19 (D113, the maintainer's answers to plan 61):**
+
+- ★ `[layout]` **An open question's row is only partly visible behind the Retry corner icon** — **DONE,
+  closed by the maintainer 2026-09-19 (D113).** It read fully visible on the Deck on 2026-09-17 and at every
+  walk on 2026-09-18. [Full detail](archive/roadmap-bugs-fixed.md#an-open-questions-row-is-only-partly-visible-behind-the-retry-corner-icon).
+- ★ `[platform]` **Clear all plugin data left three things behind** — **DONE, closed 2026-09-19 (D113).** The
+  wipe itself was proven on the Deck on 2026-09-16. The three underscore-spelled flags this fix targets stay
+  proven only by their own tests; none of them has ever been seen going with the rest on a real device.
+  [Full detail](archive/roadmap-bugs-fixed.md#clear-all-plugin-data-left-three-things-behind).
+- ★★ `[focus]` **A checklist the model got wrong was left in the reply as raw JSON** — **DONE, closed 2026-09-19
+  (D113), unit-tested.** Watch note: if a raw, unparsed checklist is ever seen in a real reply on the Deck,
+  this reopens as a fresh bug rather than staying closed on the strength of the old fix.
+  [Full detail](archive/roadmap-bugs-fixed.md#a-checklist-the-model-got-wrong-was-left-in-the-reply-as-raw-json).
 
 **Closed 2026-09-18 (reconciliation before plan 61):**
 

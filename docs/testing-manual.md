@@ -507,7 +507,7 @@ Tier 1 now starts at SMOKE-E; the ID stays so older links still resolve.
     Main tab and back; Balanced and Deep afterwards never showed the notice again. Evidence
     `docs/test-evidence/plan57-REASONING-07-rerun.json`, `docs/test-evidence/plan57-REASONING-06a-rerun.json`.
 - [ ] **KB-FOCUS-01** Ollama KB Update/Remove: Left/Right between pair; both Up → KB toggle; both Down → Reply style; **equal row height** (Update not taller than Remove)
-- [ ] **KB-CANCEL-01** Ollama KB **while a download runs**: **Cancel** replaces Remove and is the row's only enabled stop (the primary reads *Downloading…* and is disabled). Down from **Use local knowledge base** → Cancel; Up from **Reply verbosity** → Cancel; **A** → *Cancelling…*, second press does nothing; row returns to Update/Download + Remove within a few seconds; status line reads *Download cancelled* in grey, **not** the raw backend error in red; a fresh download still starts afterwards
+- [ ] **KB-CANCEL-01** Ollama KB **while a download runs**: **Cancel** replaces Remove and is the row's only enabled stop (the primary reads *Downloading…* and is disabled). Down from **Use local knowledge base** → Cancel; Up from **Reply verbosity** → Cancel; **A** → *Cancelling…*, second press does nothing; row returns to Update/Download + Remove within a few seconds; status line reads *Download cancelled* in grey, **not** the raw backend error in red; a fresh download still starts afterwards **Shelved 2026-09-19 (D113):** the download finishes in about a second, so there is no window to press Cancel in; the check moves to the roadmap's Shelved list until a throttle or a slower test copy exists.
 - [ ] **OLLAMA-FOCUS-01** Ollama tab open (no prior Test): with Ollama reachable, primary button shows **Update AI & models** (quiet auto-probe)
 - [ ] **OLLAMA-FOCUS-02** Run AI on this Deck: D-pad vertical — toggle → Install/Update → Browse models → Install options… → Test connection → KB toggle
 - [ ] **OLLAMA-FOCUS-03** Up from Test connection lands on **Install options…** (or last Install-options submenu row when open)
@@ -606,7 +606,7 @@ everything below assumes it passes. Plan:
   2026-08-30** — the name is only stored at creation, so every existing slot reads empty. **FAILED on this build 2026-09-15:** a
   chat created with Hades running got no game name at all — most likely the same cause as the game-line bug above (the line
   under the question box still read "no active game detected" at the moment the chat was created). Evidence
-  `docs/test-evidence/plan55-CHAT-SLOTS-V3-14c.json`. Re-run after lane F's fix.
+  `docs/test-evidence/plan55-CHAT-SLOTS-V3-14c.json`. Re-run after lane F's fix. The maintainer said yes 2026-09-19 (D113) to showing the game's name above the title, so this is a feature check again, not a bug-verification row; it runs once the maintainer confirms the always-shown version, already shipped, is the final one.
 - [x] **CHAT-SLOTS-V3-14d** (the end of a long reply) After a long answer settles, its end is reachable and does not look cut off: text
   visibly fades under the chips rather than being sliced, and the pane brings the end into view. **Fade PASSES** (18px gradient above the
   dock, measured 2026-08-30). **Auto-scroll PASSES 2026-08-31** — the long proton Ask driven by bridge: tail in view every frame while
@@ -810,7 +810,7 @@ before writing the row.
 | **TDP boundary clamps** | 1W/3W/15W/20W + GPU-800 advisory (many preview PASS) |
 | **Background Ask full lifecycle** | Timeout, error, busy guard |
 | **Multi-game matrix** | Title-specific behavior |
-| **Guide-chord macro** | Power-user only — [troubleshooting.md](troubleshooting.md) §5; not casual priority |
+| **Guide-chord macro** | Power-user only — [troubleshooting.md](troubleshooting.md) §5; not casual priority. **Shelved 2026-09-19 (D113):** the maintainer said drop it; moved to the roadmap's Shelved list. |
 
 ---
 

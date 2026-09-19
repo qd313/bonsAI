@@ -6,6 +6,66 @@ Strikeout titles match the original roadmap bug list. Items awaiting on-Deck QA 
 
 ---
 
+## Moved from the roadmap 2026-09-19
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-19 once the maintainer's answers to plan 61 § 8
+question 13 (D113) closed them — copied line for line from this session's Bugs and Verify entries,
+nothing reworded, with the closing note added at the end of each._
+
+### An open question's row is only partly visible behind the Retry corner icon (closed 2026-09-19)
+
+- ★ `[layout]` **An open question's row is only partly visible behind the Retry corner icon** — **OPEN,
+  seen at every visit 2026-09-15 evening.** With the newest turn open, the ring on the question's inner row
+  reads 67% visible, covered by the Retry same-prompt icon in the corner. Evidence
+  `docs/test-evidence/plan55-QUESTION-COLLAPSE-RING-01.json` (step 1),
+  `docs/test-evidence/plan55-DRG-01d-second-question-send.json` (step 1). **Seen again in the free-play sweep
+  2026-09-15**, at 78% visible behind the same icon, in both directions of the walk — the plugin's own rule
+  counts a focused-but-not-fully-visible stop as a failure regardless of the percentage. Evidence
+  `docs/test-evidence/plan55-QA-FREE-PLAY-01-main-long-reply.json`. **Re-run on the Deck 2026-09-17: read
+  fully visible** — the newest question read in full beside the Retry icon, with no cropping. Evidence
+  `docs/test-evidence/plan57-QA-QUESTION-COLLAPSE-RING-01.json`. No code change is on record that would
+  explain the improvement, and it disagrees with the 67% and 78% readings above, so this stays open
+  rather than closed on one clean run — a maintainer call on whether to trust it. **Read fully visible
+  again on 2026-09-18,** at every sighting across a handful of walks on build `6d5b83f`. Evidence
+  `docs/test-evidence/plan61-question-row-retry-visibility.json`. The maintainer's call above still
+  stands until the night's later walks are in.
+
+  **Closed 2026-09-19 (D113):** the maintainer's call above is settled. The row read fully visible on
+  every walk recorded, on 2026-09-17 and again on 2026-09-18, so this closes rather than waiting on more
+  sightings.
+
+### Clear all plugin data left three things behind (closed 2026-09-19)
+
+- ★ `[platform]` **Clear all plugin data left three things behind** — **VERIFY.** Found 2026-09-05 when the maintainer
+  asked for the wipe to be best-effort. Three flags remembering that the plugin had already warned about a knowledge base problem
+  are spelled with an underscore where everything else uses a colon, and the wipe only looked for the colon. After wiping
+  everything the plugin still believed it had warned you, so it stayed quiet when it should have spoken up. Fixed to match the
+  bare word, which catches both spellings and clears the old ones off devices that already carry them. The New labels in the pull
+  picker go with it. Three tests. Row **CLEAR-ALL-PREFIX-01**. **Run on the Deck 2026-09-16, once the
+  maintainer's pre-authorised wipe (D105) went ahead:** every one of the eight plugin keys in the browser's own
+  storage was gone afterwards, the New labels among them — a clean pass for everything the wipe had to remove.
+  **The one thing this row was filed for stays unmeasured:** none of the three underscore-spelled flags this
+  fix targets happened to exist on the Deck at wipe time, so the run could not show whether they, specifically,
+  now go with the rest. Evidence `docs/test-evidence/plan56-WIPE-01.summary.json`. The same wipe also removed
+  the Deck's own local AI program and every model it had downloaded; a backup of settings and chats cannot
+  bring those back, and Ask on this Deck is down until "Run AI on this Deck" is switched back on.
+
+  **Closed 2026-09-19 (D113):** the maintainer chose to close this as proven by its tests, even though the
+  three underscore-spelled flags were never on the Deck to prove the fix against directly and stay proven by
+  their tests alone. If one of those flags is ever seen on a device again, note that it is there, wipe, then
+  confirm it is gone, rather than reopening this entry.
+
+### A checklist the model got wrong was left in the reply as raw JSON (closed 2026-09-19)
+
+- ★★ `[focus]` **A checklist the model got wrong was left in the reply as raw JSON**, its own D-pad stop that did nothing — **VERIFY.**
+  Fixed 2026-08-28: a rejected checklist block is dropped, as a rejected branch block already was. Owed: one sighting on device of a
+  reply where it happens. Row **STRAT-CHECKLIST-JSON-01**.
+
+  **Closed 2026-09-19 (D113):** closes as unit-tested, with a watch note — if a raw, unparsed checklist is
+  ever seen in a real reply on the Deck, that is a new bug to file, not a reopening of this one.
+
+---
+
 ### Attaching a screenshot puts a line of technical text at the bottom of the answer (2026-09-15, closed 2026-09-18)
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-18 once the Deck confirmed the fix — copied line for line

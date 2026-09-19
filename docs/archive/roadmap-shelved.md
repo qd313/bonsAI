@@ -23,6 +23,11 @@ Features at its star position and drop its line from the roadmap's Shelved list.
   folder, for when it comes back. [Plan](../planning/49-steam-frame-features.md) ·
   [Drawing](https://claude.ai/code/artifact/c48fb3e2-38ef-4c91-997c-c515353eec96).*
 
+- ★★★ `[KB]` `[shelved]` **KB download Cancel, the Deck check** *— **VERIFY, shelved 2026-09-19 (D113).** The
+  Cancel button itself is unchanged — the maintainer's word was to keep it. Shipped 2026-08-05. The download
+  finishes in about a second on device, too fast to ever press Cancel in, so the check has nothing to run
+  against today. Row **KB-CANCEL-01**. Unshelves when a throttle or a slower test copy exists.*
+
 - ★★★ `[voice]` `[shelved]` **Voices for the bundled characters** *— **OPEN, shelved 2026-09-08 (D74): possible, but a legal check first.** Each
   bundled character would get a voice invented once on the maintainer's PC with OmniVoice, shipped as a five to ten second clip and
   read on the device by a small copying model. Shelved because a voice is not covered by fair use, every character here is voiced by a
@@ -39,3 +44,8 @@ Features at its star position and drop its line from the roadmap's Shelved list.
   it. Needs OmniVoice on the device as an optional download of about one gigabyte, with the warning "minutes on a Steam Deck, seconds
   on a stronger machine"; no LAN server. Phase 0 is a half-day Deck test of the port. Waits on the same legal gate as the bundled
   voices. [Memo](../planning/42-read-aloud-feasibility.md).*
+
+- ★★★★★ `[platform]` `[shelved]` **Global quick-launch macro** *— **VERIFY, shelved 2026-09-19 (D113): the
+  maintainer said drop it.** Guide-chord docs live in [troubleshooting.md](../troubleshooting.md) § 5; the
+  checklist was never run on hardware. It never ran on real hardware and now never will. Unshelves only on
+  the maintainer's own word.*

@@ -5755,3 +5755,59 @@ answered all nine the same day; nothing is built.
    public download hosts; the publish call stays open, and the corrected Hades note waits on it.
 9. **Time and the Deck: "Take as long as you need, nothing else is going on."** No time limit; the
    Deck is free.
+
+### D113 — LOCKED 2026-09-19 (raised 2026-09-18) — Plan 61 automated verification session: the thirteen questions
+
+Raised from [the plan 61 session](../planning/61-automated-verification-session.md) § 8, written before the
+device work began. The maintainer answered all thirteen on 2026-09-19. D112 is left to the 58 phase 2 plan
+and is not written here.
+
+1. **The Deck handover while another session held it.** The recommended answer, (c) — message the other
+   session, let it take its four readings, then take the Deck and say so — is what happened.
+2. **Model pulls.** The recommended answer was yes to two small models under a gigabyte, no to a large one.
+   **Overturned 2026-09-19: "You can download models."** Pulls are allowed, the large one included.
+3. **The wipe (Clear all plugin data).** Recommended answer taken: not run tonight, the two rows that depend
+   on it stay owed.
+4. **Removing the knowledge base to hunt the two-taps download bug.** Recommended answer taken: no, stays
+   owed.
+5. **B while Show details is open.** Recommended answer taken: B should close the panel; this becomes a
+   small fix for a later lane, not a verification item.
+6. **The question row behind the Retry icon.** Recommended answer was yes, if it reads fully visible on
+   every walk. **Closed by the maintainer 2026-09-19.**
+7. **Reduced motion.** Recommended answer taken: stays on the maintainer's own page; the rig does not touch
+   Steam's own settings.
+8. **New pinned test sentences without waiting for a yes each time.** Recommended answer taken: yes, for
+   that one night only.
+9. **Launching and exiting the games one at a time, Deck on power.** Recommended answer taken: yes.
+10. **The relevance-floor row's off-topic half.** Recommended answer taken: reword the row to match what was
+    already accepted, rather than reopening the accepted entry.
+11. **Refreshing the maintainer's own page at the end.** Recommended answer taken: yes.
+12. **Which screen.** Recommended answer taken: the built-in screen.
+13. **Six entries one step from Done.** The maintainer answered in these exact words on 2026-09-19:
+    (a) Pulled models joining the try order: **"try them in the order the user set."**
+    (b) Clear all plugin data leaving three things behind: **"keep that current behavior."**
+    (c) The global quick-launch macro: **"drop it."**
+    (d) The game a chat belongs to, shown above its title: **"yes."**
+    (e) The Cancel button on a knowledge-base download: **"keep."**
+    (f) A checklist the model got wrong, left in a reply as raw text: **"keep."**
+
+What each answer does to the roadmap:
+
+- **(a)** stays in Verify. The large-model half of this row can now be run, since downloads are allowed
+  (question 2, overturned above). The maintainer's own words are quoted, not reinterpreted: this decision
+  does not settle what "the order the user set" means for the existing rule that a large pulled model jumps
+  to the top of the try order — that question is flagged back to the maintainer, unanswered.
+- **(b)** closes to Done. The wipe itself was proven on the Deck on 2026-09-16; the three underscore-spelled
+  flags this fix targets are proven only by their tests and have never been seen going with the rest on a
+  real device.
+- **(c)** moves to Shelved. Dropped on the maintainer's word, never run on real hardware. It comes back only
+  if the maintainer asks for it again.
+- **(d)** moves back to Features. The maintainer said yes to showing the game's name above a chat's title.
+  That name already shows for every chat made after 2026-08-30. The variant where it only shows while the
+  row has focus was never built, and this decision does not choose it — that stays open for a later build.
+- **(e)** the Cancel button itself stays as it is, on the maintainer's word. The Deck check for it moves to
+  Shelved: the download finishes in about a second, too fast to press Cancel in, so the check has nothing to
+  run against until a throttle or a slower test copy exists.
+- **(f)** closes to Done, as proven by its unit tests, with a watch note: if a raw, unparsed checklist is
+  ever seen in a real reply on the Deck, this reopens as a fresh bug rather than staying closed on the
+  strength of an old fix.

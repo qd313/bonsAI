@@ -249,6 +249,25 @@ changed.
 | 12 | **The screen.** The built-in screen, not a monitor? | **Built-in** |
 | 13 | **Six entries that are one step from Done, your call each:** (a) *Pulled models join the try order* — if question 2 says no large pull, close it and note the large-model case as untested? (b) *Clear all plugin data left three things behind* — the wipe removed every key that existed; the three flags this fix targets were not on the Deck to remove. Close as proven by its tests? (c) *Global quick-launch macro* — never run on hardware; shelve it? (d) *The game a chat belongs to* — the code for "show only when the row has focus" was never written, so it is a feature, not a check; move it back to Features? (e) *KB download Cancel* — no window to press it in without a throttle; shelve? (f) *A checklist the model got wrong* — only closes if the model misbehaves; close as unit-tested with a watch note? | **(a) yes if 2 is no, (b) yes, (c) shelve, (d) move back, (e) shelve, (f) close** |
 
+### Answered 2026-09-19
+
+The maintainer answered all thirteen, locked as D113. Questions 1, 3, 4, 5, 7, 8, 10, 11 and 12 ran on
+their recommended answers. Question 2 was overturned: **"You can download models"** — pulls are allowed,
+the large one included, so the no-large-pull default no longer holds. Question 6 was closed: **"Close the
+one row question bar."** The Sifu question from § 9 was not answered; it is dropped from every owed list,
+noted as "not answered, dropped." Also given the same day: God of War, Hollow Knight, Black Mesa and
+Half-Life 2 were each played once, so all four are back on the Recent Games row (Doom 64 is not readily
+available to the maintainer). Question 13's six entries, in the maintainer's own words:
+
+- (a) Pulled models joining the try order: **"try them in the order the user set."**
+- (b) Clear all plugin data leaving three things behind: **"keep that current behavior."**
+- (c) The global quick-launch macro: **"drop it."**
+- (d) The game a chat belongs to, shown above its title: **"yes."**
+- (e) The Cancel button on a knowledge-base download: **"keep."**
+- (f) A checklist the model got wrong, left in a reply as raw text: **"keep."**
+
+Full detail and what each answer does to the roadmap: [D113](../audit/maintainer-decisions-locked.md#d113--locked-2026-09-19-raised-2026-09-18--plan-61-automated-verification-session-the-thirteen-questions).
+
 ---
 
 ## 9. Things to know
@@ -410,6 +429,18 @@ Written as flows close. Nothing has run on the device yet.
   **Nothing left tonight can run without a fix:** every remaining row needs a question sent with a game
   running (the trap, the pinned chips) or a game the launcher cannot reach. Deck released at 13:05,
   nothing running, settings as found except the two library keys the other session changed on purpose.
+- **2026-09-19 — the maintainer's answers came in, locked as D113.** Model downloads are allowed after all
+  (question 2 overturned); the question row behind the Retry icon is closed (question 6); and the six
+  one-step-from-Done entries were each settled in the maintainer's own words. Three close to Done (the
+  question row, the wipe's three flags, the misread checklist); one moves to Shelved (the global
+  quick-launch macro); the knowledge-base download's Cancel check also moves to Shelved, with the button
+  itself unchanged; one moves back to Features (the game name above a chat's title). The bookkeeper carried
+  this into the roadmap, the two testing files and this plan as one commit. God of War, Hollow Knight,
+  Black Mesa and Half-Life 2 are each back on the Recent Games row after being played once, unblocking the
+  rows that needed them; Doom 64 is still not available. A follow-up Deck block is planned to run what this
+  unblocks: the reply-mirroring row, W2-R5, the on-topic relevance-floor half, the transparency and
+  follow-up checks, the Developer kill-switch's Show details half, both Hades boss checks, the Deep Rock
+  spoiler row, the mistyped-model-name row, and the large-model half of the pulled-models try-order row.
 
 ## 11. Where it ended, and what is left
 
@@ -432,7 +463,9 @@ clear (the reply finishes before the button is reached); the pre-bump corpus che
 update button (would replace the library under test); everything that needs a finger, a PIN, a key or the
 wipe (the maintainer's page).
 
-**Owed to the maintainer:** the answers to § 8 question 13; a yes or no on the question row beside the
-Retry icon (fully visible on every walk tonight); whether Sifu at 07:50 was them; the four games played
-once; the model pulls (never confirmed, so never run).
+**Owed to the maintainer (2026-09-19):** Doom 64, for whenever it is easy to get hold of; the checks that
+need a finger, a PIN, a key or the wipe, already sitting on the maintainer's own page; and one open
+question sent back to them — their answer on pulled models said to try them "in the order the user set,"
+but that does not say whether a large pulled model still jumps to the top of the try order on its own, or
+only takes whatever spot the user gave it in their own list.
 

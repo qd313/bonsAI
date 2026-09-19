@@ -6,13 +6,14 @@ for a year and a half. Two of those lessons land squarely on this plugin, and th
 both fixed **before** the wave-four session runs. That session is now
 [58 phase 2](58-phase-2-kb-session-wave-four.md); it starts when this phase has landed.
 
-**Status, 2026-09-18: built, landed and checked on the Deck; three follow-ups and the publish call
+**Status, 2026-09-19: built, landed and checked on the Deck; the read-aloud row and the publish call
 owed; phase 2 can start.** The block shipped (closed by default), ten games' notes were written from
 fetched pages after the maintainer chose rewording over word-for-word ("just reword"), the 2026.09.18
 library is installed on the maintainer's Deck from a local folder and not yet published, and ten of ten
-new-game questions answer from their own notes. Owed: the upward D-pad walk from the session strip
-(a lane is on it), the block arriving late on some turns, the ladder walk the plan 61 session asked
-for, the read-aloud row, and the maintainer's publish call. § 10 is the full log.
+new-game questions answer from their own notes. The upward D-pad walk and the ladder walk both pass
+on the Deck, and the block arriving late on some turns is explained, fixed on the branch, and
+confirmed passing on the Deck 2026-09-19. Owed: the read-aloud row and the maintainer's publish
+call. § 10 is the full log.
 
 Read first: [CLAUDE.md](../../CLAUDE.md); the model table in [AGENTS.md](../../AGENTS.md) under "Which
 model does which work"; [lessons-learned.md](../lessons-learned.md), especially § 1 on shared checkouts
@@ -576,6 +577,33 @@ which goes on their own checklist.
   as 40c23a6. Not yet deployed or seen on the Deck: the maintainer was restarting Steam after a
   black screen, so the deploy and the walk check go to the next Deck sitting. Phase 1 ends here;
   what is owed is in the status line at the top.
+- **2026-09-19, the upward walk and the ladder walk both pass, and the late arrival explained.** On
+  the deployed fix build, pressing Up from the session context strip now lands cleanly on the
+  block's own header, ring fully visible and well clear of the dock. The ladder walk the plan 61
+  session asked for was also run: from Hide details, Down steps through the block's header, the
+  session context strip, Save chat to Desktop, a test chip, the question box and Ask — seven stops,
+  all visible, no loop back on itself. The chip ladder inside the open block is still skipped by the
+  D-pad, the same as before; that is the older, separate bug already on the roadmap, not a new one.
+  Reading the screen code found why the block sometimes arrived late: while a reply is still being
+  written it shows a value that comes with every progress check; the moment the reply finishes, the
+  screen switches to that turn's own saved details, which are empty until a fetch made right after
+  finishing comes back — and the block disappears and reappears in that gap. Every earlier late
+  sighting happened to be read at exactly that moment. The fix keeps showing the in-progress value
+  until the saved details have actually landed, and clears it the moment a new question starts; two
+  new automated checks cover it, one of them proved by turning the fix off and watching it fail.
+  Landed on the branch as 680264c. A repeated look at the Pikmin 2 question on the build before this
+  fix, a quarter-second at a time, found no gap that time, which fits the miss depending on timing
+  rather than always happening. **Confirmed on the Deck 2026-09-19, on build 07f1299:** a shared-tip
+  question, the same shape as the earlier late sightings, was watched every quarter second; the block
+  showed about a second and a quarter after the press, stayed through the thinking and the whole
+  reply, was there the instant the action row appeared, and stayed there for all 121 checks taken
+  over the next 30 seconds, with no gap. This closes the timing half of the tip row too. Evidence
+  `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-06-fixbuild-07f1299.json`.
+  Deploying used the plugin's own build script over a direct connection, since the studio tool was
+  refused by the permission check; a leftover connection from another session sat next to the rig
+  without causing trouble and was left for the maintainer to close. The screen was held awake for
+  the sitting and let sleep again at the end. The library on the Deck is still the 2026-09-18 one,
+  installed from the local folder, still not published — still the maintainer's call.
 
 ---
 

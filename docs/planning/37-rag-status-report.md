@@ -309,10 +309,11 @@ them straight; what remains is coverage, follow-up memory, and the things the te
    first sentences of a section rather than the tactics ones, and a third pass of the reader is in
    progress. **The block's seven device rows ran on the Deck 2026-09-18:** three pass, one passes on
    the words but fails on timing, two are not runnable yet, and one still needs the maintainer's own
-   ears. The ten-games note lanes are writing. **Update 2026-09-18:** phase 1's device work is done,
-   except three follow-ups still owed — walking up from the session context strip still skips the
-   block, the block still arrives late on some turns, and the ladder walk was not run — plus the
-   maintainer's publish call on the library. Wave four (phase 2) can start.
+   ears. The ten-games note lanes are writing. **Update 2026-09-19:** phase 1's device work is done. The
+   upward walk and the ladder walk both now pass on the Deck, and the reason the block sometimes
+   arrived late is found, fixed on the branch, and confirmed passing on the Deck too; what is left
+   is the read-aloud row and the maintainer's publish call on the library. Wave four (phase 2) can
+   start.
 2. **Wave three's own Deck evening is unfinished.** Three of its checks never ran, and two that did need
    redoing: follow-up questions now look up the right boss but the reply can still name a different one,
    and the new one-second speed check reports a healthy device while a real question runs over budget.

@@ -243,6 +243,11 @@ starts work outside this.
   notes" row, then the Session context strip, never on either menu button; Up from the strip jumps straight
   back to Hide details, skipping the notes row and the menu too. The same skip now covers the follow-up menu
   buttons, not just the chips. Evidence `docs/test-evidence/plan61-CONTEXT-LADDER-03-caseB.json`.
+  **Seen again 2026-09-18, on the notes block's own ladder walk, on the build with the upward-walk fix:**
+  Down from Hide details now stops at the block's own header first, then the session context strip, Save
+  chat to Desktop, a test chip, the question box and Ask — seven visible stops with no loop — but the chip
+  ladder itself is still not among them; only the first chip can ever be read by a controller. Evidence
+  `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-01.json`, `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-01-ladder-walk-21b53b9.json`.
 - ★★ `[focus]` `[reply]` **Walking a reply with the D-pad while it is still being written loses the
   highlight** — **OPEN, found 2026-09-18.** Walking a reply with the D-pad while it is still being written
   makes the view keep following the new text, and the highlighted control scrolls off screen with it: six of
@@ -773,9 +778,10 @@ evening ran the same evening, once the Deck was free.
    sources already cleared. Nothing started; waiting on the maintainer's nine answers (locking as D111) and
    the word "go". Started 2026-09-17: the drawings, the blind questions and the source study have landed; the
    reader is still being built; the Deck is asleep, so the device readings wait on the maintainer.
-   **Update 2026-09-18:** the phase's build and device work are done, except three follow-ups still
-   owed (walking up from the session context strip, the block arriving late on some turns, and the
-   ladder walk) and the maintainer's publish call; phase 2 can start.
+   **Update 2026-09-19:** the upward walk and the ladder walk both now pass on the Deck, and the
+   reason the block sometimes arrived late is found, fixed on the branch, and confirmed passing on
+   the Deck too; what is left is the read-aloud row and the maintainer's publish call; phase 2 can
+   start.
 7. **Then wave four, now 58 phase 2** — writing more notes. [The plan for it](planning/58-phase-2-kb-session-wave-four.md)
    is the same plan as before, renamed, and runs once phase 1 has landed; its answers lock as D112.
 
@@ -945,11 +951,14 @@ ones from this month are D81 to D88.
   game's own notes, the right wiki named every time. Owed: the maintainer's publish call, then, once
   published, a choice on the SD-card location, since this local install put the library on internal
   storage. Evidence `docs/test-evidence/plan58p1-QA-TEN-GAMES-01.json`.
-- ★★ `[KB]` **The note's own words under the reply** — **VERIFY, re-run 2026-09-18.** Header,
-  open-scroll and live timing pass. The upward walk fix landed 2026-09-18 (40c23a6), device check
-  owed. The tip and one game question in ten still arrived late, after the reply finished, and the
-  ladder walk was not run — both still owed. Rows **NOTES-BLOCK-01**–**07**, **TEN-GAMES-01**, in
-  [testing-manual.md](testing-manual.md).
+- ★★ `[KB]` **The note's own words under the reply** — **VERIFY, third run 2026-09-19.** Header,
+  open-scroll and live timing pass. The upward walk now lands cleanly on the block's own header,
+  confirmed on the Deck, and the ladder walk asked for was also run and holds up — the only stop
+  still missing is the chip ladder inside the open block, already its own bug above, not new here.
+  Why the tip and one game question in ten arrived late is now explained — the block loses its live
+  value in the gap before a finished reply's own details land — the fix has landed on the branch,
+  and a shared-tip question watched on the Deck 2026-09-19 showed no gap at all, closing the timing
+  half too. Rows **NOTES-BLOCK-01**–**07**, **TEN-GAMES-01**, in [testing-manual.md](testing-manual.md).
 - ★★★ `[KB]` **KB download Cancel** — **VERIFY, blocked.** Shipped 2026-08-05. The download finishes in about a second on
   device, so there is no window to press Cancel in. Needs a slower fixture or a throttle. Row **KB-CANCEL-01**.
 

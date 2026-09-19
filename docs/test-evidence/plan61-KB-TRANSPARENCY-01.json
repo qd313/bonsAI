@@ -1,0 +1,21 @@
+{
+  "rowId": "KB-TRANSPARENCY-01",
+  "rowText": "Trust tier reports the lowest tier in a mixed block; over-budget blocks drop whole cards and keep the end sentinel; kb_attached is recorded after stacking so a block starved by a large Proton log reports attached=false. Needs a title that produces a large Proton log to reproduce the starvation path on-device.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T09:55-10:10",
+  "setup": {
+    "game_running": "Half-Life 2 (appid 220)",
+    "use_local_knowledge_base": true,
+    "existing_reply_used": "the completed 'what game am i playing' answer already on screen, which carries a 'Gravity Gun -- From the Half-Life wiki' card"
+  },
+  "steps": [
+    { "action": "Tried to re-open that reply's own 'Show details' panel to read the retrieval/trust-tier line, since a fresh ask was not available (see the Ask-bar focus problem, separate finding).", "observed": "Blocked -- expanding the turn's header worked once, but Down from inside the expanded turn then stopped moving the visible ring at the 'Show reasoning' row, on 4 separate tries. The same class of D-pad problem as the Ask-bar one, in the same chat." }
+  ],
+  "plugin_log_lines": [
+    "No 'trust'/'tier' text appears in the plugin's own log file -- that detail is only carried in the reply's own data and shown through Show details on screen, not written to the log."
+  ],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "Could not read the trust-tier line tonight: the D-pad would not move down into the reply's details panel in this chat. A large Proton log to trigger the starvation path was not attempted either, since the basic walk to Show details was already blocked.",
+  "notes": "Not run 2026-09-15 either (needed a title that produces a large Proton log); still a real check by the code, still owed."
+}

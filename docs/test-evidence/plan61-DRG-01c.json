@@ -1,0 +1,15 @@
+{
+  "rowId": "DRG-01c",
+  "rowText": "As DRG-01 with the corpus absent -- still plain text expected.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T11:33 (Deck clock)",
+  "setup": {
+    "game_running": "Deep Rock Galactic: Survivor (appid 2321470)"
+  },
+  "steps": [],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "This one was not attempted -- removing the notes library tonight is against the rules for this run (the maintainer said not to touch the wipe or the library), so there was no safe way to make the notes go away just for this check.",
+  "notes": "Matches the brief exactly: 'if the corpus cannot be removed without touching Ollama/wipe settings the maintainer already said no to, mark it blocked and say so.' Still owed, not failed. DRG-01b, which did not need the corpus removed, was attempted but blocked for a different reason -- see plan61-DRG-01b.json."
+}

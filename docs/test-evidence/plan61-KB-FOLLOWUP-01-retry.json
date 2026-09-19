@@ -1,0 +1,15 @@
+{
+  "rowId": "KB-FOLLOWUP-01 (draft)",
+  "rowText": "Ask a parent question that gets no close match (\"How do I beat Megaera?\"), then in the same chat ask a follow-up naming something new (\"what about theseus and asterius\"). Read Show details on the follow-up's reply; pass when the reply matches the follow-up's own note, and retrieval shows a fresh line, not a repeat of the parent's.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T11:27-11:40 (Deck clock)",
+  "setup": {
+    "game_running": "Hades (appid 1145360)"
+  },
+  "steps": [],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "Not reached -- this needs the Megaera question to be sent first, and that question never went through (see plan61-MEGAERA-01-retry.json). The follow-up was never asked either.",
+  "notes": "IMPORTANT DRIVER ERROR: this row already had a file from flow C of tonight's session (docs/test-evidence/plan61-KB-FOLLOWUP-01.json, the DRAFT row). This driver should have written this retry under a new -retry name from the start and left that file untouched, but instead overwrote plan61-KB-FOLLOWUP-01.json directly before realizing the mistake. The earlier content for that file is gone and could not be recovered; that file and this -retry file currently hold the same part-2 content. The maintainer should know the earlier KB-FOLLOWUP-01 file no longer exists on disk. Substance of the finding: blocked by the same ask-box freeze as MEGAERA-01. Both the parent question and the planned follow-up ('what about theseus and asterius') were left pinned and ready to use, but no press ever reached the Ask button cleanly enough to send either one."
+}

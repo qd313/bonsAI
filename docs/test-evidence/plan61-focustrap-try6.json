@@ -1,0 +1,25 @@
+{
+  "rowId": "ASKBAR-FOCUS-TRAP, sighting during DRG-01b (not a scheduled row, filed with the focus-trap hunt numbering)",
+  "rowText": "The same D-pad freeze the standing rule warns about (Down and Right dead from the question box after A opens the on-screen keyboard by mistake).",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T11:18-11:21 (Deck clock, Deep Rock Galactic: Survivor running)",
+  "setup": {
+    "game_running": "Deep Rock Galactic: Survivor (appid 2321470)",
+    "how_it_happened": "Selected a pinned Test chip so the Ask box filled with its text, then pressed Down aiming for the Ask button. The ring did not move past the box (the same trap seen twice earlier tonight). While it was stuck, and reading document.activeElement showed it had logically already reached the Ask button, one A press was sent to see whether the logical target (rather than the visible ring) would receive it. It did not reach Ask -- it landed on the box itself and opened Steam's on-screen keyboard, exactly the mistake the standing rule warns about. No text was typed. B closed the keyboard immediately."
+  },
+  "capture": {
+    "screenshot_keyboard_open": "screenshots/DeckCapture_20260918_111957_game.png",
+    "screenshot_after_B": "screenshots/DeckCapture_20260918_112014_game.png",
+    "box_text_after_closing_keyboard": "how do i kill the big armoured bug boss (unchanged -- nothing typed)",
+    "down_after_closing_keyboard": "still dead -- ring stayed on the box"
+  },
+  "recovery": "Closed the whole Quick Access menu (the GUIDE+A chord) and reopened the plugin fresh, the same fix that worked earlier tonight (plan61-ASKBAR-FOCUS-TRAP-02.json). This cleared it again, at the cost of losing the filled box (had to reselect the chip afterward).",
+  "plugin_log_lines": [],
+  "screenshots": [
+    "c:\\Users\\still\\Documents\\BonsAI\\screenshots\\DeckCapture_20260918_111957_game.png",
+    "c:\\Users\\still\\Documents\\BonsAI\\screenshots\\DeckCapture_20260918_112014_game.png"
+  ],
+  "verdict": "FAIL (same confirmed bug, third sighting tonight)",
+  "verdictSentence": "The freeze happened again on a third game tonight, and this sighting also shows exactly how the on-screen-keyboard mistake happens: even though the game's own internal focus tracker said the Ask button was selected, the highlighted control a person actually sees was still sitting on the typing box, so a press there opened the keyboard instead of sending the question. This is a real trap for a controller-only player, not just a display glitch -- the thing that decides what a button press does disagrees with the thing the ring shows.",
+  "notes": "Confirms the mechanism behind the very first sighting tonight (plan61-ASKBAR-FOCUS-TRAP-01.json): a person who trusts the highlighted box and presses A on it, thinking it might submit or that nothing is selected, gets the keyboard instead. The fix that worked twice now is the same: close the Quick Access menu fully and reopen it. Recommend treating this as the same three-star bug already on the roadmap, not three separate bugs."
+}

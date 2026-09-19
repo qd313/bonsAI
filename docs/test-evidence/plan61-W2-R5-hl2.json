@@ -1,0 +1,22 @@
+{
+  "rowId": "W2-R5",
+  "rowText": "The 'not in my notes' line: an on-game question the notes cannot answer, e.g. 'what year did half-life 2 come out', should show the line 'Not in my notes -- this answer is from the model's own knowledge.' below the answer, only on the first ask, without breaking the D-pad walk.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T09:50-10:05",
+  "setup": {
+    "game_running": "Half-Life 2 (appid 220)",
+    "use_local_knowledge_base": true,
+    "ask_mode": "strategy",
+    "chosen_question": "what year did half-life 2 come out",
+    "why_this_question": "Checked the corpus manifest first: Half-Life 2's notes cover Antlions, Combine soldiers, Gravity Gun, Hunter-Chopper, Pheropod, Ravenholm, the RPG, Sandtraps and Strider -- nothing about the release date -- so this question genuinely has no matching note."
+  },
+  "steps": [
+    { "action": "Pinned 'what year did half-life 2 come out' as a test chip and selected it; the Ask box filled correctly.", "expected": "Send it and read the reply for the honesty line." },
+    { "action": "Tried to reach the Ask button with Down and Right from the filled box.", "observed": "Blocked -- see docs/test-evidence/plan61-ASKBAR-FOCUS-TRAP-01.json. The ring would not leave the text box, so the question was never sent." }
+  ],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "Could not run this tonight: the right question was ready and waiting in the Ask box, but a focus problem on the Ask bar (written up separately) meant the controller could not reach the Ask button to send it.",
+  "notes": "This is a re-test of an already-filed bug (2026-09-07: the honesty line did not appear and the model gave a confident made-up weapons answer instead). Still owed a real run; not confirmed one way or the other tonight."
+}

@@ -1,0 +1,17 @@
+{
+  "rowId": "HADES-UNNAMED-STREAM-01, HADES-UNNAMED-01 (try 4), and the W3-C wave-three batch",
+  "rowText": "HADES-UNNAMED-STREAM-01: a question that does not name a boss, streaming on, expect the mid-stream mask chip to still appear. HADES-UNNAMED-01 try 4: a fourth, not-yet-tried unnamed-boss phrasing, expect a masked fence. W3-C batch: 'how do i beat megara in hades', 'what about her second phase', 'how do i beat the bone hydra in hades', 'what about its second phase', plus a KB-SPEED-01 speed reading piggybacked on any of these.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T11:27-11:45 (Deck clock)",
+  "setup": {
+    "game_running": "Hades (appid 1145360)"
+  },
+  "steps": [
+    { "action": "Multiple attempts to send any pinned question in this chat, across MEGAERA-01 and this batch", "observed": "The ask-box freeze (see plan61-MEGAERA-01-retry.json for the detailed attempt log) reproduced on every try. No question in this batch was ever successfully sent, so none of these rows could be exercised." }
+  ],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "None of these were checked -- the same freeze that stopped the Megaera question also stopped every other question tried on Hades tonight, so no reply ever came back to look at.",
+  "notes": "IMPORTANT DRIVER ERROR: this row name already had a file from flow C of tonight's session (docs/test-evidence/plan61-wave-three-hades.json, the KB-SPEED-01 reasoning writeup). This driver should have written this retry under a new -retry name from the start and left that file untouched, but instead overwrote plan61-wave-three-hades.json directly before realizing the mistake. The earlier content for that file is gone and could not be recovered; that file and this -retry file currently hold the same part-2 content. The maintainer should know the earlier wave-three-hades file no longer exists on disk. Substance of the finding: all rows in this file are blocked for the same single reason -- after selecting a suggested question, the highlighted control kept freezing on the question box before it could reach Send. Recommend re-running this whole batch once the freeze itself is fixed, rather than treating any of these as separately failing."
+}

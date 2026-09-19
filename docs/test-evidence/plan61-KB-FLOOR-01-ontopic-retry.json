@@ -1,0 +1,15 @@
+{
+  "rowId": "KB-FLOOR-01 (retry, on-topic half)",
+  "rowText": "With Half-Life 2 running, ask an ordinary Half-Life 2 question and confirm the knowledge-base chip attaches normally.",
+  "build": { "plugin_version": "0.5.0", "commit": "0589565" },
+  "deckTime": "2026-09-18T11:36-11:41 (Deck clock)",
+  "setup": {
+    "game_running": "Half-Life 2 (appid 220)"
+  },
+  "steps": [],
+  "plugin_log_lines": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "Not reached -- no question could be sent on Half-Life 2 tonight; see plan61-W2-R5-hl2-retry.json for the attempt.",
+  "notes": "This on-topic half already PASSED on 2026-09-15 (docs/test-evidence/plan55-KB-FLOOR-01-ontopic.json) and again earlier tonight before the ask-box freeze took over the session (docs/test-evidence/plan61-KB-FLOOR-01-ontopic.json, from earlier in flow D). This retry attempt is the same row, blocked by the same freeze documented in plan61-W2-R5-hl2-retry.json."
+}

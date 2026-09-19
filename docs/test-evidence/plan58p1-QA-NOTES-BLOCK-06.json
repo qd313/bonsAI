@@ -18,7 +18,15 @@
     "timeline": "a poll every second from the press: the block present at every read from the first second, with no reply text for 25 seconds of thinking, then the reply growing from 81 to 1058 characters over 12 seconds, the block present throughout, and still there when the action row appeared",
     "counterexample": "the Super Smash Bros. question a few minutes earlier: no block at the moment the action row appeared, block present a few seconds later; the tip row (NOTES-BLOCK-03) showed the same late arrival. So the live path holds on most turns and misses on some, both a game note and a tip; the lane has both examples"
   },
+  "rerun_2026-09-18_third_gap_watch_and_the_cause": {
+    "build": "21b53b9 (before the blink fix), library 2026.09.18, nothing running",
+    "question": "Is there a day limit in Pikmin 2?",
+    "timeline": "a poll every 250 ms from the press to the action row appearing: the block present at every read from the very first, zero reads without it, reply complete in about 25 seconds. No gap on this turn, which is what the earlier runs also saw on most turns.",
+    "cause": "found by reading the screen code, not on the device. While a reply streams, the block reads a live value that comes with every progress poll. The moment the reply finishes, the screen switches to the finished turn's details instead, and those are empty until a fetch fired after completion comes back. In that window the block unmounts, then mounts again when the fetch lands. Whether a person sees the gap depends only on how fast that fetch returns. Every 'late' read in the earlier runs (the Smash question, both tip runs) was taken at the moment the action row appeared, which is exactly this window, and each saw the block at the next read.",
+    "fix": "landed on the branch as 680264c: a finished reply keeps the live value until the details fetch has actually landed (an empty landed result still clears the block, so a note-free reply stays clean), and the live value is cleared the moment a new question starts. Two screen tests in the new 'gap between the reply finishing and the details fetch landing' group; the first was proved by reverting the fix and watching it fail. All gates green.",
+    "deviceCheckOfTheFix": "owed: the fix build had not been deployed when this was written; the check is one tip question and one game question with the 250 ms poll, reading at the exact moment the action row appears"
+  },
   "screenshots": [],
-  "verdict": "PASS with an intermittent miss recorded",
-  "verdictSentence": "The block is on screen before the model's first word and stays through the reply, proven by a per-second timeline; on one game question in ten and on the tip question it arrived only after the reply finished."
+  "verdict": "PASS; the intermittent miss is explained and fixed on the branch, with the device check of the fix owed",
+  "verdictSentence": "The block is on screen before the model's first word and stays through the reply, proven by per-second and quarter-second timelines; the moments it seemed to arrive late were the screen switching from the live value to the not-yet-fetched finished details at the instant the reply completed, now fixed so the live value holds until the fetch lands."
 }

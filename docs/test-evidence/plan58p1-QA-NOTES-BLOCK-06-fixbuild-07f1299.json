@@ -1,0 +1,45 @@
+{
+  "rowId": "NOTES-BLOCK-06 and the timing half of NOTES-BLOCK-03, on the build with the blink fix",
+  "rowText": {
+    "steps": "Nothing running, Strategy mode, library 2026.09.18. A watcher installed on the page samples every 250 ms: whether the newest turn has the notes block, the block's header, whether the reply's action row (Show details, Read aloud) exists, and whether the live reasoning fold is open. Then 'My game will not launch on Proton, what should I check?' typed from the PC and VERIFIED, Down to 'ask', A through the bridge (steam-routed). The watcher read back 30 seconds after the action row appeared.",
+    "expected": "The block is on screen before the reply's first word, and stays on screen at the moment the reply finishes and for every sample after, with no gap."
+  },
+  "source": "docs/testing-manual.md NOTES-BLOCK-06 and NOTES-BLOCK-03; docs/planning/58-phase-1-notes-shown-and-wiki-extracts.md § 10; the fix commit 680264c",
+  "time": "2026-09-19 about 17:28Z (Ask pressed); reply complete about 41 seconds later",
+  "buildOnDeck": "07f1299 (code tip 680264c, the blink fix, plus the other session's evidence files) and ea9b53c (evidence only), deployed 2026-09-19 13:18 EDT with the repo's own build script over SSH; the Deck had been rebooted 15 minutes earlier and the bridge board's cable had to be plugged back in first",
+  "question": "My game will not launch on Proton, what should I check?",
+  "block": {
+    "header": "Proton (+2 more) ▸ From the shared Deck tips",
+    "closedByDefault": true
+  },
+  "reply": "Alright, listen up, you got a problem with the game not wanna start on Proton? Don't sweat it, this ain't rocket science, just gotta check the right spots. First thing, you gotta hit ProtonDB. That's the community spot where folks tell you what's broken or what the fix is for that specific game. See if there's a known workaround or a specific Proton version they recommend. If that ain't the answer, you gotta dig into the logs. Run the command PROTON_LOG=1 %command% in your Steam launch options. [continues; about 1000 characters in all]",
+  "timeline": {
+    "samplesTotal": 305,
+    "spanSeconds": 76,
+    "intervalMs": 250,
+    "runs": [
+      { "fromS": 0.0, "toS": 4.75, "samples": 20, "state": "only the earlier Hades turn on screen, its own block present" },
+      { "fromS": 5.0, "toS": 6.0, "samples": 5, "state": "the new turn exists (the press has landed), no block yet, no reply text: the notes are still being looked up" },
+      { "fromS": 6.25, "toS": 20.5, "samples": 58, "state": "block present with header 'Proton (+2 more) · From the shared Deck tips'; no reasoning fold yet, no reply text" },
+      { "fromS": 20.75, "toS": 37.25, "samples": 67, "state": "live reasoning fold open; block present" },
+      { "fromS": 37.5, "toS": 45.75, "samples": 34, "state": "reply text streaming; block present" },
+      { "fromS": 46.0, "toS": 76.0, "samples": 121, "state": "action row present (Show details, Read aloud): the reply is finished; block present in this very sample and in all 121 samples over the following 30 seconds" }
+    ]
+  },
+  "measurement": {
+    "secondsFromPressToBlock": "about 1.25",
+    "secondsFromBlockToFirstReplyWord": "about 31",
+    "secondsFromBlockToActionRow": "about 40",
+    "samplesWithoutTheBlockAfterItFirstAppeared": 0,
+    "samplesAfterTheReplyFinished": 121
+  },
+  "reads": [
+    "The block was on screen about one and a quarter seconds after the press, fourteen seconds before the reasoning fold opened and about half a minute before the reply's first word. The one and a quarter seconds is the notes lookup itself, not the blink: the block cannot exist before the notes are chosen.",
+    "At the exact moment the action row appeared, which is where every earlier 'late' sighting was read, the block was present, and it stayed present in every quarter-second sample for the next 30 seconds. On the build before the fix this moment was where the block dropped out and came back a few seconds later. At 250 ms resolution there is no gap on the fix build.",
+    "This is a shared tip question, the same shape as the two NOTES-BLOCK-03 runs that saw the block arrive late, so it closes the timing half of that row too.",
+    "SIGHTING, not this row: the screenshot taken after the turn shows the Test chip under the question box reading 'how do i kill the big2|J`k' followed by a run of stray symbols, while the page's own text for that chip, read a minute later, was 'what does the pickaxe do' (its text element carries a scrolling-marquee style). So either the chip rotates its wording and the capture caught a torn frame, or the drawn text was briefly wrong. Never pressed. Passed to the plan 61 session, which owns the chip work, with the screenshot."
+  ],
+  "screenshots": ["screenshots/DeckCapture_20260919_132918_game.png"],
+  "verdict": "PASS",
+  "verdictSentence": "On the build with the blink fix the notes block appears about a second after the press, sits under the reply through the thinking and the whole answer, and is still there in every quarter-second sample as the reply finishes and for half a minute after: the late arrival is gone."
+}

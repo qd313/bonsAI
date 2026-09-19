@@ -24,6 +24,7 @@
     "The plugin log holds no error lines around the turn."
   ],
   "screenshots": [],
+  "rerun_2026-09-19_fix_build": "the timing half of this row is closed by the tip question run on 07f1299 (code tip 680264c, the blink fix): the block was on screen 1.25 s after the press and present in every 250 ms sample through the reply finishing and for 30 s after; the two late sightings on this row were reads taken at the instant the reply finished, when the screen switched to the not-yet-fetched finished details; see plan58p1-QA-NOTES-BLOCK-06-fixbuild-07f1299.json",
   "verdict": "PASS on the words, FAIL on timing",
   "verdictSentence": "The tip block shows the three shared tips with the right header, but only after the reply completes; for tips the block is not live, and the no-game branch menu leaked its template."
 }

@@ -1,0 +1,38 @@
+{
+  "rowId": "ROUTING-MERGE-01-bottom",
+  "rowText": "After the small models finish, read text_model_routing_order over SSH: the new model(s) should be AFTER gemma4:e2b-it-qat. Quote the list.",
+  "build": {
+    "plugin": "bonsAI v0.5.0",
+    "commit": "96538e1 (branch experimental, working tree at run time)"
+  },
+  "deckTime": "2026-09-19 14:16 (Deck local)",
+  "setup": {
+    "settingsBefore": {
+      "text_model_routing_order": ["gemma4:e2b-it-qat"],
+      "note": "set to this one-entry list in step 1 via the plugin's own try-order screen; the screen actually saved both installed models at the time (see plan61-day2 driver report), so the real starting value for this step was ['gemma4:e2b-it-qat', 'nomic-embed-text:latest']"
+    },
+    "runningGame": null,
+    "chatUsed": null
+  },
+  "steps": [
+    {
+      "press": "Ticked qwen2.5:1.5b in the pull picker, then pressed A on 'Pull selected (1) · 0.9 GB'",
+      "expected": "qwen2.5:1.5b downloads and is appended to the saved text try order after the models already in it",
+      "landingLabelAndSelector": "button.DialogButton.Primary 'Pull selected (1) · 0.9 GB'",
+      "rect": {"x": 123, "y": 402, "w": 290, "h": 40},
+      "visibilityVerdict": "visible",
+      "actualResult": "Download ran 14:15:37-14:16:03 (986 MB in about 26s, roughly 40-44 MB/s per the log's own speed readout). Dialog closed itself once the download finished."
+    },
+    {
+      "press": "Read text_model_routing_order over SSH after the download finished",
+      "expected": "gemma4:e2b-it-qat first, qwen2.5:1.5b appended at the end",
+      "actualResult": "text_model_routing_order = ['gemma4:e2b-it-qat', 'nomic-embed-text:latest', 'qwen2.5:1.5b']. gemma4:e2b-it-qat stayed first and qwen2.5:1.5b was appended at the very end, after nomic-embed-text:latest."
+    }
+  ],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "When a small model finished downloading, the app added it to the bottom of the list of models it tries first, exactly as it should for an ordinary-sized model.",
+  "notes": [
+    "gemma3:1b, which was downloaded earlier and unexpectedly (see plan61-PULL-MISSING-NAME-01.json), was NOT added anywhere in text_model_routing_order even though it is installed. That model's pull did not go through the normal Pull selected path, which may be why the merge-on-pull step never ran for it. Worth a look outside this row: an installed model that never made it into the try list is invisible at Ask time."
+  ]
+}

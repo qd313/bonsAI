@@ -243,6 +243,14 @@ starts work outside this.
   nobody touching the D-pad; this is the case those checks did not cover — walking with the D-pad while a
   reply is still streaming in. Evidence `docs/test-evidence/plan61-QA-FREE-PLAY-01-streaming.json`,
   `runs/plan61-QA-FREE-PLAY-01-streaming.json`.
+- ★★ `[ollama]` **The very first model ticked in a fresh download picker starts downloading right away, with
+  no chance to back out** — **OPEN, one sighting 2026-09-19, cause not looked at.** Opening the pull picker
+  fresh and ticking the first model in the list (`gemma3:1b`) started it downloading immediately, with no
+  separate press to confirm and no way to change your mind — one accidental tap on the wrong row starts
+  spending storage and data with nothing to undo it. Every later tick in the same picker session correctly
+  just queued the model until the Pull selected button was pressed, the way it should. The model that
+  downloaded this way also never joined the saved try order, even though it installed successfully. Evidence
+  `docs/test-evidence/plan61-PULL-MISSING-NAME-01.json`.
 - ★★ `[ollama]` `[layout]` **The AI models screen shows about two rows of the model list on the Deck's
   screen** — **OPEN, reported 2026-09-16 by the maintainer, cause read in the code, not yet changed.** The
   screen's body is capped at 520 pixels tall (or 72 percent of the screen when that is smaller;
@@ -583,7 +591,12 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   starts the good ones, instead of quietly dropping the bad one. Row **PULL-MISSING-NAME-01**: on the Ollama
   tab's pull picker, choose two real models plus a name the registry lacks, press Pull selected, and check for
   a toast that says the download started and names the one it could not find. Model downloads were allowed
-  again by the maintainer on 2026-09-19 (D113), so this row is runnable in the next Deck block.
+  again by the maintainer on 2026-09-19 (D113), so this row is runnable in the next Deck block. **Tried on
+  the Deck 2026-09-19: blocked.** Typing a made-up name needs Steam's on-screen keyboard, and this rig has
+  no way to see or check its key presses, so nothing was typed. One thing became clear from trying: the
+  picker's tick-boxes only ever offer real, known models — a made-up name can only be tried through the
+  picker's own custom-name field, a separate one-off box, not the list of ticks. Finishing this row needs a
+  person at the Deck to do the typing. Evidence `docs/test-evidence/plan61-PULL-MISSING-NAME-01.json`.
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —
   **VERIFY, landed 2026-09-15.** The tab bar's pop-up strip now always ends fully hidden a fraction of a second
   after it closes, even when its fade is stalled by a game running full screen, so no see-through copy of it
@@ -616,7 +629,12 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   placement: with *Allow high-VRAM model fallbacks* on, a **large** pulled model is supposed to go to the **top** instead.
   That needs a large model on the device and the switch turned on. Row **ROUTING-MERGE-01**. The maintainer's own words on
   2026-09-19 (D113) were "try them in the order the user set." Model downloads are now allowed (D113), so the large-model
-  half of this row is runnable in the next Deck block.
+  half of this row is runnable in the next Deck block. **Tried on the Deck 2026-09-19:** the bottom half passed again — a
+  small model finished downloading and landed at the end of the saved list, after the two models already there. The top
+  half is still not done, but the hold-up is no longer the download rule: it needs a person to type a large model's name
+  (for example `gemma3:27b`, about 17 GB) into the picker's custom-name field with *Allow high-VRAM model fallbacks* on,
+  using Steam's on-screen keyboard, and to remove that model again afterwards — a check only the maintainer can do at the
+  Deck. Evidence `docs/test-evidence/plan61-ROUTING-MERGE-01-bottom.json`, `docs/test-evidence/plan61-ROUTING-MERGE-01-top.json`.
 
 - ★ `[platform]` **VAC check (`bonsai:vac-check`) on-device QA** — **VERIFY.** Implementation complete; run **VAC-02…06** after Tier 0
   **SMOKE-F** passes.

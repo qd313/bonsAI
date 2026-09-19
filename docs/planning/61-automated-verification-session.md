@@ -441,6 +441,26 @@ Written as flows close. Nothing has run on the device yet.
   unblocks: the reply-mirroring row, W2-R5, the on-topic relevance-floor half, the transparency and
   follow-up checks, the Developer kill-switch's Show details half, both Hades boss checks, the Deep Rock
   spoiler row, the mistyped-model-name row, and the large-model half of the pulled-models try-order row.
+- **2026-09-19, later that day — the Ollama download block run (build `96538e1`).** Ticked qwen2.5:1.5b in
+  the pull picker and let it download; the saved text try order read back afterwards as `gemma4:e2b-it-qat,
+  nomic-embed-text:latest, qwen2.5:1.5b` — the bottom-of-list rule for an ordinary-sized model holds again.
+  The two rows that need a name typed by hand are both still blocked: the picker's custom-name field only
+  takes text through Steam's on-screen keyboard, and this rig can open and close that keyboard but cannot
+  see which key is under the ring or tell whether a letter landed, so nothing was typed blind. That blocks
+  both the made-up-name row and the large-model, top-of-list row (the catalog also has no model heavy enough
+  for that row on its own; the high-VRAM switch was never touched, off before and after). Three things worth
+  a look, none of them fixed tonight: ticking the very first model in a brand-new picker session
+  (`gemma3:1b`) started it downloading immediately with no confirm press, while every later tick that session
+  correctly waited for the Pull selected button — and that model never joined the saved try order even
+  though it installed; asking the try-order screen to add one model instead saved every installed model on
+  the device, not just the one added; and after the driver removed the downloaded models by hand outside the
+  plugin, the plugin kept listing a removed model in its saved order until the settings file itself was
+  cleared — expected, since the plugin only tidies its list from its own Remove button, but worth a line.
+  Clean-up left the Deck as it started: two models installed, the text order empty, the vision order holding
+  only `gemma4:e2b-it-qat`, and the high-VRAM switch off. Evidence
+  `docs/test-evidence/plan61-PULL-MISSING-NAME-01.json`,
+  `docs/test-evidence/plan61-ROUTING-MERGE-01-bottom.json`,
+  `docs/test-evidence/plan61-ROUTING-MERGE-01-top.json`.
 
 ## 11. Where it ended, and what is left
 
@@ -464,8 +484,10 @@ update button (would replace the library under test); everything that needs a fi
 wipe (the maintainer's page).
 
 **Owed to the maintainer (2026-09-19):** Doom 64, for whenever it is easy to get hold of; the checks that
-need a finger, a PIN, a key or the wipe, already sitting on the maintainer's own page; and one open
+need a finger, a PIN, a key or the wipe, already sitting on the maintainer's own page; one open
 question sent back to them — their answer on pulled models said to try them "in the order the user set,"
 but that does not say whether a large pulled model still jumps to the top of the try order on its own, or
-only takes whatever spot the user gave it in their own list.
+only takes whatever spot the user gave it in their own list; and typing a made-up model name and a heavy
+model's name into the download picker's own custom-name field, since both of those rows need a thumb on
+the on-screen keyboard, not this rig's tools.
 

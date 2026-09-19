@@ -1,0 +1,24 @@
+{
+  "rowId": "ROUTING-MERGE-01-top",
+  "rowText": "Turn ON 'Allow high-VRAM model fallbacks'. Type gemma3:27b into the custom field and press its Pull (about 17 GB). Watch the first two minutes of progress; if the projection is over 60 minutes, cancel and record BLOCKED with the measured speed. If it finishes, read text_model_routing_order: PASS if gemma3:27b is FIRST; FAIL if it is last or missing.",
+  "build": {
+    "plugin": "bonsAI v0.5.0",
+    "commit": "96538e1 (branch experimental, working tree at run time)"
+  },
+  "deckTime": "not run",
+  "setup": {
+    "settingsBefore": {
+      "model_allow_high_vram_fallbacks": false
+    },
+    "runningGame": null,
+    "chatUsed": null
+  },
+  "steps": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "Not run: naming a big model needs typing into the custom field, and typing on the Deck's on-screen keyboard cannot be seen or checked by this rig (same limit as PULL-MISSING-NAME-01), so the high-VRAM switch was never turned on and no download was started.",
+  "notes": [
+    "The catalog checkboxes never reached 15 GB in this build (largest seen was gemma4:latest at 8.9 GB), so this row cannot be done with checkboxes alone - it genuinely needs the custom text field.",
+    "model_allow_high_vram_fallbacks was left at its starting value, false, since it was never touched."
+  ]
+}

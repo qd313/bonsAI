@@ -1,0 +1,53 @@
+{
+  "rowId": "PULL-MISSING-NAME-01",
+  "rowText": "Open the pull picker. Tick gemma3:1b and qwen2.5:1.5b, and in the custom field type bonsai-nope:1b, then press Pull selected. Read what happens: does Pull selected include the custom field? PASS when a message says the download started AND names bonsai-nope:1b as not found. FAIL if the good one downloads with no word about the bad one, or if nothing downloads. Also try the custom field with bonsai-nope:1b alone and record the refusal wording.",
+  "build": {
+    "plugin": "bonsAI v0.5.0",
+    "commit": "96538e1 (branch experimental, working tree at run time)"
+  },
+  "deckTime": "2026-09-19 14:02-14:16 (Deck local, from plugin log timestamps)",
+  "setup": {
+    "settingsBefore": {
+      "text_model_routing_order": [],
+      "vision_model_routing_order": ["gemma4:e2b-it-qat"],
+      "model_allow_high_vram_fallbacks": false
+    },
+    "runningGame": null,
+    "chatUsed": null
+  },
+  "steps": [
+    {
+      "press": "A on \"Select gemma3:1b to pull\" in the pull picker, catalog filter set to All",
+      "expected": "gemma3:1b becomes ticked / queued for a later Pull selected press",
+      "landingLabelAndSelector": "button.bonsai-pullmodels-slot[aria-label='Select gemma3:1b to pull']",
+      "rect": {"x": 131, "y": 343, "w": 24, "h": 24},
+      "visibilityVerdict": "visible",
+      "actualResult": "UNEXPECTED: the model started downloading immediately, with no Pull selected press and no confirmation step. Plugin log: 'ollama pull gemma3:1b' at 14:02:47, 'success' at 14:03:07 (815 MB in ~20s, about 40 MB/s). ollama list confirmed it installed."
+    },
+    {
+      "press": "A on \"Select qwen2.5:1.5b to pull\" shortly after, while gemma3:1b's download was still in flight",
+      "expected": "qwen2.5:1.5b becomes ticked / queued",
+      "landingLabelAndSelector": "unknown - the list had reflowed after gemma3:1b was promoted to the installed section, so the control actually under the ring at press time could not be confirmed from the pre-press read",
+      "actualResult": "The dialog closed on its own right after (Installed: 3, matching only gemma3:1b). qwen2.5:1.5b was NOT selected or downloaded by this press. Re-opening the picker afterwards showed qwen2.5:1.5b still unticked."
+    },
+    {
+      "press": "Re-opened the pull picker, turned off the 'Essentials only' filter, ticked \"Select qwen2.5:1.5b to pull\" again on its own, then read the dialog header text without pressing anything else",
+      "expected": "confirm whether ticking alone starts a download or only queues it",
+      "landingLabelAndSelector": "button.bonsai-pullmodels-slot[aria-label='Select qwen2.5:1.5b to pull'] -> after press, header read 'Queue 1 · 0.9 GB'",
+      "visibilityVerdict": "visible",
+      "actualResult": "ollama list right after showed no qwen2.5:1.5b yet - ticking this time correctly just queued it, matching the brief's expected checkbox behaviour. The plugin log confirms the actual 'ollama pull qwen2.5:1.5b' only started after a later explicit press on 'Pull selected'."
+    },
+    {
+      "press": "Navigated to the custom model tag field ('Pull custom model tag' row) and pressed A to open the on-screen keyboard",
+      "expected": "type bonsai-nope:1b (and later gemma3:1b, bonsai-nope:1b combined) to test the not-found message",
+      "actualResult": "BLOCKED. The keyboard opened (confirmed: Steam Big Picture's DialogBody area shrank to make room, and body classes showed WindowFocus with a keyboard state), but it is a native overlay outside this rig's page reader: document.querySelector found only an empty, display:none placeholder div for it, no separate CDP target exists for it, and no key or highlighted-key state is exposed anywhere this rig can read. There is no way to see which key is under the ring, so there is no way to confirm any D-pad/A press actually types the intended character rather than a neighbouring one. Typing a 14-character tag blind, with zero verification per keystroke, was judged unsafe under the 'do not keep pressing if you cannot confirm it landed' rule, so no characters were entered. Backed out with B; the field was confirmed still empty afterwards and the D-pad still worked normally (no focus trap)."
+    }
+  ],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "Could not finish this check: typing the made-up model name needs the Steam on-screen keyboard, and this rig has no way to see or confirm its key presses, so no text was safely enterable.",
+  "notes": [
+    "Unplanned finding: selecting the very first catalog model in a fresh picker session (gemma3:1b) downloaded it immediately with no Pull selected press and no confirmation, unlike every later selection in the same session which correctly just queued. This put an extra model on the Deck that was not asked for at that point; it is covered by the planned cleanup list regardless.",
+    "The custom tag field and its Pull button are real and reachable by D-pad; only text entry into it is blocked by tooling, not by anything in the plugin itself."
+  ]
+}

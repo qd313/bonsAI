@@ -64,6 +64,32 @@ nothing reworded, with the closing note added at the end of each._
   **Closed 2026-09-19 (D113):** closes as unit-tested, with a watch note — if a raw, unparsed checklist is
   ever seen in a real reply on the Deck, that is a new bug to file, not a reopening of this one.
 
+### A Hades boss's note is spelled wrong, so spelling it right gets you told the plugin is guessing (closed 2026-09-19)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-19 once the Deck confirmed the fix on the corrected
+library — copied line for line from this session's Verify entry, nothing reworded, with the closing note
+added at the end._
+
+- ★ `[KB]` **A Hades boss's note is spelled wrong, so spelling it right gets you told the plugin is guessing** —
+  **VERIFY, fixed 2026-09-15, waiting on the maintainer to publish.** The note is titled Megaera now and the library
+  was rebuilt and passed its own publish check, but pushing it to the two public download hosts was refused for the
+  session by the tool's own permission, so the point release waits for the maintainer to run the publish step. Row
+  **MEGAERA-01**: once the point release is installed from the Ollama tab's Update knowledge base, with Hades
+  running, ask "How do I beat Megaera?" and check the note attaches with no "no close match" line. On the library
+  still installed today, that line still appears. Evidence `docs/test-evidence/plan55-HADES-NAMED-01.json`.
+  **Tried 2026-09-18 with Hades running, blocked:** eight attempts to send the question all froze the
+  highlighted control on the question box, so it was never sent. Evidence
+  `docs/test-evidence/plan61-MEGAERA-01.json`. **Tried again 2026-09-18: still blocked, but not by the freeze
+  this time** — one question went through cleanly on the first try tonight, but the pinned test sentence for
+  this exact question then stopped showing and never came back for the rest of the sitting (the new
+  pinned-chip bug above), so this row has still never run on the corrected 2026.09.18 library. Evidence
+  `docs/test-evidence/plan61-MEGAERA-01-retry2.json`.
+
+  **Closed 2026-09-19:** asked with Hades running, the correctly spelled question found her own note cleanly
+  on the Deck, on the 2026.09.18 library, with no "no close match" line. Evidence
+  `docs/test-evidence/plan61-MEGAERA-01-retry3.json`. The public publish of the library to the two download
+  hosts is still owed — see "Ten new games checked on the Deck, publish owed" on the roadmap, which stays.
+
 ---
 
 ### Attaching a screenshot puts a line of technical text at the bottom of the answer (2026-09-15, closed 2026-09-18)

@@ -1,0 +1,32 @@
+{
+  "rowId": "KB-TRANSPARENCY-01-retry3",
+  "rowText": "Open Show details and check the notes it names are the ones the plugin log says were sent to the model, riding along on the REPLY-STOPS-MIRROR-01 ask.",
+  "build": {
+    "commit": "07f1299",
+    "pluginVersion": "0.5.0"
+  },
+  "deckTime": "2026-09-19 14:40",
+  "setup": {
+    "game": "Hollow Knight (367520), running",
+    "askMode": "strategy",
+    "knowledgeBase": true,
+    "sentenceAsked": "what is waiting at the end of the game"
+  },
+  "steps": [
+    "Opened Show details on the reply to 'what is waiting at the end of the game'.",
+    "On screen it named three notes as used: 'Hollow Knight — Starting out in Hollow Knight', 'Hollow Knight — Mantis Lords', 'Hollow Knight — Movement abilities and where they are', with Retrieval: Keyword + meaning, Trust tier: wiki_no_patch, Embed: 803.89 ms, Re-rank: 4.87 ms.",
+    "Read the plugin's own newest log file for the matching request and it has no line at all describing which notes were searched or attached -- the only per-ask line is 'attachments=0', which the code (py_modules/backend/services/ollama_ask_service.py line 234) shows is a count of screenshot/file attachments on the ask, not knowledge-base notes. Checked the two services that build the on-screen retrieval summary (transparency_service.py, knowledge_base_service.py); neither one writes anything to the log at all."
+  ],
+  "pluginLogLines": [
+    "[2026-09-19 14:40:01,980][INFO]: run_game_ai_request: host=127.0.0.1:11434 game='Hollow Knight' appid=367520 question_len=38",
+    "[2026-09-19 14:40:02,811][INFO]: ask_ollama: url=http://127.0.0.1:11434/api/chat game='Hollow Knight' appid=367520 attachments=0 question_len=38",
+    "[2026-09-19 14:40:02,817][INFO]: ask_ollama: POST http://127.0.0.1:11434/api/chat model=gemma4:e2b-it-qat payload_bytes=9476 num_predict=1497 think=True"
+  ],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "This check can't be done the way it's written: the plugin's log file never writes down which notes it searched or attached, so there is nothing in the log to compare the on-screen note list against, either to confirm it or catch it out.",
+  "notes": [
+    "Correction from an earlier pass of this same evidence file written during this run: I first misread 'attachments=0' in the log as meaning zero knowledge-base notes were attached and called this a FAIL. Reading the actual code shows that field only counts screenshot/file attachments on the ask (unrelated to the knowledge base), and there is no other log line about retrieval at all, in this file or in the two services that build the Show-details summary. Correcting the verdict to BLOCKED rather than leaving a wrong FAIL on record.",
+    "Worth telling the maintainer plainly, regardless of this row's own verdict: right now there is no way to check the knowledge-base note list on screen against anything written down by the app itself. If the on-screen list were ever wrong, nothing in the log would catch it."
+  ]
+}

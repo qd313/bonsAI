@@ -1,0 +1,17 @@
+{
+  "rowId": "tier1-what-game-blackmesa",
+  "rowText": "Ask 'What game am I playing?' with Black Mesa running and focused; read the reply.",
+  "build": {"commit": "07f1299", "pluginVersion": "0.5.0"},
+  "deckTime": "2026-09-19 15:35",
+  "setup": {"game": "Black Mesa (362890)"},
+  "steps": [
+    "The pinned chip kept settling on a different one of the three sentences and would not hold on this one long enough to press A after several tries.",
+    "While chasing the right chip, the Deck stopped answering over the connection this session uses to read the screen and press buttons for the plugin's own panel. A screenshot taken outside that connection shows Black Mesa's own in-game menu on screen, not the Steam overlay, and several tries in a row to reopen the panel all failed the same way.",
+    "This matches the driver's stop rule for this run (the on-screen reading connection down for more than about two minutes), so this row -- and the rest of the Black Mesa block -- stopped here rather than continuing to press blind."
+  ],
+  "pluginLogLines": [],
+  "screenshots": ["screenshots\\DeckCapture_20260919_153449_auto.png"],
+  "verdict": "BLOCKED",
+  "verdictSentence": "Could not be run: the connection this session uses to see the screen and press buttons stopped answering partway through, with Black Mesa's own menu left on screen instead of the plugin panel.",
+  "notes": []
+}

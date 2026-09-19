@@ -1,0 +1,26 @@
+{
+  "rowId": "KB-FLOOR-01-ontopic-retry3",
+  "rowText": "Ask an ordinary Half-Life 2 question and confirm the KB chip attaches normally (on-topic half of KB-FLOOR-01, a fresh confirmation on tonight's build with the game actually running).",
+  "build": {"commit": "07f1299", "pluginVersion": "0.5.0"},
+  "deckTime": "2026-09-19 14:48",
+  "setup": {
+    "game": "Half-Life 2 (220), running",
+    "askMode": "strategy",
+    "knowledgeBase": true,
+    "sentenceAsked": "how do i beat the antlion guard"
+  },
+  "steps": [
+    "Sent the question from the Ask button.",
+    "Reply came back naming the correct trick (pheropod/bugbait) and showed a knowledge-base card: 'Pheropod (bugbait) (+2 more) - From the Half-Life wiki'.",
+    "Opened Show details: it lists three notes (Pheropod (bugbait), Sandtraps, Antlions) from combineoverwiki.net, Retrieval: Keyword + meaning, Trust tier: wiki_no_patch, Embed 804.13 ms, Re-rank 7.62 ms."
+  ],
+  "pluginLogLines": [
+    "[2026-09-19 14:48:32,045][INFO]: ask_ollama: url=http://127.0.0.1:11434/api/chat game='Half-Life 2' appid=220 attachments=0 question_len=31"
+  ],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "On an ordinary Half-Life 2 question the small knowledge-base card showed up under the reply the way it should, naming the right note and game, so the on-topic half of this check passes.",
+  "notes": [
+    "Correction: this file first noted an 'attachments=0 vs 3 notes shown' mismatch and called it a bug shared with KB-TRANSPARENCY-01-retry3. That was a misreading -- the log's 'attachments' field only counts screenshot/file attachments on the ask (see py_modules/backend/services/ollama_ask_service.py line 234), not knowledge-base notes, and it is 0 here simply because no screenshot was attached. There is no log line at all for which notes were searched or attached, so it cannot confirm or contradict the on-screen card. See KB-TRANSPARENCY-01-retry3 for that finding."
+  ]
+}

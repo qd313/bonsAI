@@ -1,0 +1,15 @@
+{
+  "rowId": "DRG-01b-retry",
+  "rowText": "As DRG-01 with the knowledge base off -- run only if Deep Rock Galactic: Survivor is still on the Recent Games row tonight.",
+  "build": {"commit": "07f1299", "pluginVersion": "0.5.0"},
+  "deckTime": "2026-09-19 15:00",
+  "setup": {},
+  "steps": [
+    "Checked the Recent Games shelf while launching Hades: it showed Half-Life 2, Hollow Knight, Black Mesa, God of War and Hades. Deep Rock Galactic: Survivor was not on it."
+  ],
+  "pluginLogLines": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "Deep Rock Galactic: Survivor is not on tonight's Recent Games row, and the row's own instructions say to run this only if it is, so this row is skipped rather than run.",
+  "notes": []
+}

@@ -1,0 +1,28 @@
+{
+  "rowId": "W2-R5-hl2-retry3",
+  "rowText": "Ask a Half-Life 2 question the notes cannot answer; the pass line reads exactly 'Not in my notes — this answer is from the model's own knowledge.' and sits below the answer without breaking the D-pad walk.",
+  "build": {"commit": "07f1299", "pluginVersion": "0.5.0"},
+  "deckTime": "2026-09-19 14:50",
+  "setup": {
+    "game": "Half-Life 2 (220), running",
+    "askMode": "strategy",
+    "knowledgeBase": true,
+    "sentenceAsked": "how do i tame a horse in half life 2"
+  },
+  "steps": [
+    "Sent the horse question, which the notes genuinely do not cover.",
+    "The reply included a line reading: '— No close match in my notes, this answer leans on the model's own knowledge.'",
+    "The reply ALSO showed a knowledge-base card underneath: 'Strider (+2 more) - From the Half-Life wiki'.",
+    "Opened Show details: it names three notes (Strider, Ravenholm, Hunter-Chopper (helicopter)), Retrieval: Keyword + meaning, Trust tier: wiki_no_patch, Embed: 28.55 ms, Re-rank: 2.46 ms."
+  ],
+  "pluginLogLines": [
+    "[2026-09-19 14:50:49,306][INFO]: ask_ollama: url=http://127.0.0.1:11434/api/chat game='Half-Life 2' appid=220 attachments=0 question_len=36"
+  ],
+  "screenshots": [],
+  "verdict": "PARTIAL",
+  "verdictSentence": "The 'not in my notes' warning does appear now, which is real progress from earlier runs where it never showed at all, but the wording is not exact ('No close match in my notes, this answer leans on the model's own knowledge' instead of 'Not in my notes — this answer is from the model's own knowledge'), and a knowledge-base card with three named notes shows underneath it at the same time, which contradicts the line's own claim that nothing close was found.",
+  "notes": [
+    "This is the opposite of the bug filed on 2026-09-07 (a confident made-up answer with no warning at all) -- now the warning shows, but the note card contradicts it by claiming three specific notes were used.",
+    "The plugin log has no line recording which notes were searched or attached (see KB-TRANSPARENCY-01-retry3), so it cannot settle which of the two things on screen -- the warning or the note card -- is telling the truth."
+  ]
+}

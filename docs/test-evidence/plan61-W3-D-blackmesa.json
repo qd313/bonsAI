@@ -1,0 +1,25 @@
+{
+  "rowId": "W3-D-blackmesa",
+  "rowText": "Ask 'black mesa how do i get across the electrified water' with Black Mesa running; open Show details; record which note attached and whether the reply used it.",
+  "build": {"commit": "07f1299", "pluginVersion": "0.5.0"},
+  "deckTime": "2026-09-19 15:22",
+  "setup": {
+    "game": "Black Mesa (362890), running",
+    "askMode": "strategy",
+    "knowledgeBase": true,
+    "sentenceAsked": "black mesa how do i get across the electrified water"
+  },
+  "steps": [
+    "Sent the question from the Ask button.",
+    "The reply gave a correct, specific answer: stand on crates/desks/pipes above the water, or find the breaker/wall switch to cut the power.",
+    "Opened Show details: the two named notes are 'Black Mesa — Starting out in Black Mesa' and 'Black Mesa — The opening tram ride and where it leads' -- both general intro notes, neither one about the electrified water puzzle.",
+    "Retrieval: Keyword + meaning, Trust tier: fallback_no_source, Embed 807.33 ms, Re-rank 6.79 ms."
+  ],
+  "pluginLogLines": [],
+  "screenshots": [],
+  "verdict": "PARTIAL",
+  "verdictSentence": "The answer itself was right and specific, but the note the game says it used has nothing to do with the electrified water puzzle -- it attached two general early-game notes instead, so the correct answer does not look like it actually came from the attached note.",
+  "notes": [
+    "This matches the concern the row was written to check: whether a corrected note is really the one behind the answer. Here it looks like the model answered correctly from its own general knowledge of Black Mesa, while the attached note was along for the ride rather than the source."
+  ]
+}

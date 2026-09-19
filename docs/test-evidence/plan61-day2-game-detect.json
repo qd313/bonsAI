@@ -1,0 +1,35 @@
+{
+  "rowId": "day2-game-detect",
+  "rowText": "After each launch, close the plugin panel and reopen it, then read the status line under the Ask button. It should name the running game, not say 'no active game detected'.",
+  "build": {"commit": "07f1299", "pluginVersion": "0.5.0"},
+  "entries": [
+    {
+      "game": "Hollow Knight",
+      "panelReopened": true,
+      "statusLine": "Context: active game Hollow Knight",
+      "pluginLogLine": null,
+      "note": "Correct on this run. The panel was closed by a QAM chord and reopened by deck_openPlugin (not a plain re-press of the panel button, but the same net effect) after the launch."
+    },
+    {
+      "game": "Half-Life 2",
+      "panelReopened": true,
+      "statusLine": "Context: active game Half-Life 2",
+      "pluginLogLine": null,
+      "note": "Correct on this run, same open/close pattern as Hollow Knight."
+    },
+    {
+      "game": "Hades",
+      "panelReopened": true,
+      "statusLine": "Context: active game Hades",
+      "pluginLogLine": null,
+      "note": "Correct on this run, same open/close pattern as the earlier two games."
+    },
+    {
+      "game": "Black Mesa",
+      "panelReopened": true,
+      "statusLine": "Context: active game Black Mesa",
+      "pluginLogLine": null,
+      "note": "Correct when read, shortly before the session lost its connection to the Deck's screen and buttons (see the driver's report)."
+    }
+  ]
+}

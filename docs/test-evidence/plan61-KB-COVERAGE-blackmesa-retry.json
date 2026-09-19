@@ -1,0 +1,15 @@
+{
+  "rowId": "KB-COVERAGE-blackmesa-retry",
+  "rowText": "Read Show details for the coverage line (KB: notes for this game / none for this game) with Black Mesa running.",
+  "build": {"commit": "07f1299", "pluginVersion": "0.5.0"},
+  "deckTime": "2026-09-19 15:35",
+  "setup": {"game": "Black Mesa (362890)"},
+  "steps": [
+    "Not reached before the run stopped -- see plan61-tier1-what-game-blackmesa.json for what happened. Black Mesa is a covered title in this library (the electrified-water ask earlier this same game session already showed a knowledge-base card attaching normally), so this reading would very likely have been a plain confirmation, not a new finding, but it was not actually taken."
+  ],
+  "pluginLogLines": [],
+  "screenshots": [],
+  "verdict": "BLOCKED",
+  "verdictSentence": "Not run: the session lost the connection it uses to see the screen and press buttons before reaching this row.",
+  "notes": []
+}

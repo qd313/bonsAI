@@ -1,0 +1,28 @@
+{
+  "rowId": "KB-KILLSWITCH-01-retry3",
+  "rowText": "Show details half only: Developer tab, switch Hybrid retrieval (meaning search) off, ask the bone hydra question, Show details must show the change (not a full knowledge-base-off reading); switch back on and read the setting back over SSH.",
+  "build": {"commit": "07f1299", "pluginVersion": "0.5.0"},
+  "deckTime": "2026-09-19 15:14",
+  "setup": {
+    "game": "Hades (1145360), running",
+    "askMode": "strategy",
+    "knowledgeBase": true,
+    "settingChanged": "rag_hybrid_retrieval_enabled (Developer tab, 'Hybrid retrieval (meaning search)')",
+    "sentenceAsked": "how do i beat the bone hydra in hades"
+  },
+  "steps": [
+    "On the Developer tab, turned off 'Hybrid retrieval (meaning search)' with A.",
+    "Read settings.json over SSH: rag_hybrid_retrieval_enabled = False, confirming the switch really flipped.",
+    "Asked the bone hydra question. The reply still gave real tactics and still attached a note: 'Heat and the Pact of Punishment - From bonsAI's own note'.",
+    "Opened Show details: chip reads 'Keyword search', body reads 'Retrieval: Keyword search (hybrid disabled)', no Embed time line printed (there was one when hybrid was on for the earlier Hades asks tonight).",
+    "Turned the switch back on with A, and read settings.json over SSH again: rag_hybrid_retrieval_enabled = True, confirmed restored."
+  ],
+  "pluginLogLines": [],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "With the meaning-search switch off, the screen correctly says it is using plain keyword search instead of keyword-plus-meaning, and the game still gets a real answer with a note attached -- turning the switch off changes how the note is found, not whether the player still gets one.",
+  "notes": [
+    "This is the hybrid-retrieval switch, not a whole-knowledge-base-off switch -- the day's brief called this 'the knowledge base was off', but what actually gets tested and shown on screen is the narrower 'hybrid disabled' wording. Recording it exactly as it reads on screen rather than the brief's looser phrasing.",
+    "Restored setting confirmed by direct read: rag_hybrid_retrieval_enabled is True again."
+  ]
+}

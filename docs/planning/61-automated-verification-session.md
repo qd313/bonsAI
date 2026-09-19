@@ -461,6 +461,42 @@ Written as flows close. Nothing has run on the device yet.
   `docs/test-evidence/plan61-PULL-MISSING-NAME-01.json`,
   `docs/test-evidence/plan61-ROUTING-MERGE-01-bottom.json`,
   `docs/test-evidence/plan61-ROUTING-MERGE-01-top.json`.
+- **2026-09-19, day 2 — the games block (build `07f1299` on the Deck; the repo tip during the run moved
+  from `96538e1` to `8b3388c`, a docs-only difference).** Hollow Knight, Half-Life 2, Hades and Black Mesa
+  were each launched and exited; the status line correctly named all four after every panel reopen, closing
+  yesterday's "no active game detected" sighting as a case of the panel opening before the game had
+  launched. **The first attempt sent no question at all:** every way of writing new pinned test sentences
+  onto the Deck's settings file was refused by this session's own permission rules before anything reached
+  the device — not a Deck problem, so nothing on the Deck was touched. **Fixed for the second attempt** by
+  reloading the plugin right after each settings edit, before sending anything; the likely cause and the
+  rule for future drivers are written into the pinned-chip entry on the roadmap. **Once questions could be
+  sent, the three-star focus trap did not bite once** across about ten questions on four games — the one
+  thing done differently tonight is the reload-after-every-edit habit, worth trying again before this bug
+  is called fixed. **Wins:** Megaera's spelling check finally passes clean on the corrected library, closed
+  to Done; the on-topic relevance-floor check and the Developer kill-switch's Show details wording both
+  pass. **Still open or worse than hoped:** the reply-mirroring fix did not hold on a fresh Hollow Knight
+  spoiler question (two new mismatches); the same kind of spoiler question came back WITH its cover this
+  time, a sighting only; the follow-up search now finds the right note but the written reply still asks
+  which boss is meant; the "not in my notes" line showed up for the first time but its wording is off and a
+  note card contradicts it; and a new finding on Black Mesa — a correct, specific answer came with two
+  unrelated early-game notes named underneath it, filed as its own bug. The knowledge-base log has no line
+  anywhere naming which notes were searched or attached, so the transparency check cannot be run as written
+  until that is added. Deep Rock Galactic: Survivor had fallen off the Recent Games row again, so its row
+  stayed blocked. **The run ended when the connection this session uses to read the Deck's screen and press
+  its buttons stopped answering for several minutes during Black Mesa,** leaving two rows unreached. Once
+  the session could see the screen again, Steam's own list of running apps said nothing was running while
+  Black Mesa was still alive at full CPU on its own main menu for 32 minutes; the session closed it over
+  SSH. Noted for the maintainer in [mcp-setup.md](../mcp-setup.md): the tool used to close a game trusts
+  Steam's running-apps list, which can read empty while the game process is still alive, and the
+  screen-reading connection can drop mid-run even while the SSH connection keeps working. Evidence
+  `docs/test-evidence/plan61-day2-games-BLOCKED-01.json`, `docs/test-evidence/plan61-day2-game-detect.json`,
+  `docs/test-evidence/plan61-REPLY-STOPS-MIRROR-01-retry2.json`,
+  `docs/test-evidence/plan61-KB-TRANSPARENCY-01-retry3.json`,
+  `docs/test-evidence/plan61-KB-FLOOR-01-ontopic-retry3.json`, `docs/test-evidence/plan61-W2-R5-hl2-retry3.json`,
+  `docs/test-evidence/plan61-MEGAERA-01-retry3.json`, `docs/test-evidence/plan61-KB-FOLLOWUP-01-retry3.json`,
+  `docs/test-evidence/plan61-KB-KILLSWITCH-01-retry3.json`, `docs/test-evidence/plan61-DRG-01b-retry.json`,
+  `docs/test-evidence/plan61-W3-D-blackmesa.json`, `docs/test-evidence/plan61-tier1-what-game-blackmesa.json`,
+  `docs/test-evidence/plan61-KB-COVERAGE-blackmesa-retry.json`.
 
 ## 11. Where it ended, and what is left
 
@@ -490,4 +526,12 @@ but that does not say whether a large pulled model still jumps to the top of the
 only takes whatever spot the user gave it in their own list; and typing a made-up model name and a heavy
 model's name into the download picker's own custom-name field, since both of those rows need a thumb on
 the on-screen keyboard, not this rig's tools.
+
+**Added 2026-09-19, day 2, after the games block:** Black Mesa's two unreached reads (what game is
+running, and the coverage line) — not failed, just never reached before the screen-reading connection
+dropped, and worth a quick retry; Deep Rock Galactic: Survivor's knowledge-base-off row, still blocked
+because the game keeps falling off the Recent Games row between sessions; the transparency check's log
+gap — it cannot be checked against anything until the plugin's log either gets turned on for an ask or
+gains a line naming which notes it attached; and the public publish of the corrected Hades library to the
+two download hosts, which is still the maintainer's own step.
 

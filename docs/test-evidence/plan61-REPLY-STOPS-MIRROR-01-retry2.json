@@ -1,0 +1,67 @@
+{
+  "rowId": "REPLY-STOPS-MIRROR-01-retry2",
+  "rowText": "Down and Up through a reply visit the same stops. On a reply with two paragraphs, a spoiler block and a two-button menu, check the Down stops and the Up stops are exact mirrors of each other. Ask 'how do i beat the broken vessel' in Strategy mode; if the reply lacks a spoiler block, try 'what is waiting at the end of the game'.",
+  "build": {
+    "commit": "07f1299",
+    "pluginVersion": "0.5.0"
+  },
+  "deckTime": "2026-09-19 ~14:45-14:55",
+  "setup": {
+    "game": "Hollow Knight (367520), actually launched",
+    "askMode": "strategy",
+    "spoilerMasking": true,
+    "sentenceAsked": "what is waiting at the end of the game",
+    "note": "The pinned single chip would not hold on 'how do i beat the broken vessel' long enough to press A (it kept rotating/settling on a different one of the three pinned sentences and stopped advancing while focused). Used the brief's own named fallback sentence for this row instead, which is itself the spoiler question."
+  },
+  "steps": [
+    {"walk": "DOWN, 18 presses from the top of the panel (the bonsAI logo button) through the whole reply to the chat input", "stops": [
+      "Main tab",
+      "chat slot ghost row (wheatley fight / how do i beat the boss at the end of the first area)",
+      "3 earlier",
+      "Retry same prompt",
+      "question echo text 'what is waiting at the end of the game' -- FOCUSED, only 67% visible, covered by the retry-corner button",
+      "Show reasoning - 16 s",
+      "unnamed container (entering the spoiler group)",
+      "Spoiler -- tap to show -- FOCUSED, only 89% visible, covered by the copy-corner button",
+      "Spoiler -- tap to show (a second landing on the same block, one press later, on an inner node)",
+      "Spoiler -- tap to show (a third press did not move at all)",
+      "A. Early in the game, exploring Dirtmouth",
+      "B. Later in the game, facing the final challenge",
+      "Mark reply helpful",
+      "Read aloud",
+      "Show details",
+      "Session context (4 turns)",
+      "wheatley fight",
+      "what does the pickaxe do"
+    ]},
+    {"walk": "UP, 18 presses from the chat input back to the top", "stops": [
+      "Attach screenshot to Ask",
+      "Choose AI character, A",
+      "Test chip (how do i beat the broken vessel)",
+      "what does the pickaxe do (chat slot, first landing)",
+      "what does the pickaxe do (chat slot, second landing)",
+      "wheatley fight",
+      "Session context (4 turns)",
+      "Show details",
+      "Read aloud",
+      "Mark reply helpful",
+      "Spoiler -- tap to show -- FOCUSED, only 89% visible, covered by the copy-corner button",
+      "unnamed container (the two-button menu group)",
+      "Show reasoning - 16 s",
+      "Retry same prompt",
+      "3 earlier",
+      "chat slot ghost row",
+      "Main tab",
+      "bonsAIv0.5.0 (logo button)"
+    ]}
+  ],
+  "pluginLogLines": "not pulled for this row (see KB-TRANSPARENCY-01-retry3 for the log lines on this same ask)",
+  "screenshots": [],
+  "verdict": "FAIL",
+  "verdictSentence": "Walking down through the reply and walking back up do not visit the same things in the same order: going down, a person passes an extra copy of the question text that is half hidden behind a button, and the tap-to-reveal spoiler box takes three presses to get past instead of one, so the down path and the up path do not match.",
+  "notes": [
+    "This ask used the fallback sentence ('what is waiting at the end of the game') because the single pinned-chip control settled on it and would not rotate back to 'how do i beat the broken vessel' after several tries; see the driver's report for the pinned-chip finding.",
+    "Two different controls in this reply were reachable by the D-pad but not fully visible (both partly covered by a small icon button in the corner): the repeated question text (67% visible) and the spoiler box itself (89% visible). Neither is a full failure of visibility but both are worth a look.",
+    "Sighting only, for the day's ghost-log: this reply DID come back with a proper tap-to-reveal spoiler box (not the 'no cover at all' bug seen yesterday on a similar name-withheld question)."
+  ]
+}

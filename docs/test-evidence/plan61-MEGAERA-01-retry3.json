@@ -1,0 +1,26 @@
+{
+  "rowId": "MEGAERA-01-retry3",
+  "rowText": "With Hades running, ask 'How do I beat Megaera?' and check Show details: PASS if the Megaera note attaches with no 'no close match' line; FAIL if the line still shows. Library on the Deck is 2026.09.18, which is supposed to carry the corrected spelling.",
+  "build": {"commit": "07f1299", "pluginVersion": "0.5.0"},
+  "deckTime": "2026-09-19 15:05",
+  "setup": {
+    "game": "Hades (1145360), running",
+    "askMode": "strategy",
+    "knowledgeBase": true,
+    "sentenceAsked": "How do I beat Megaera?"
+  },
+  "steps": [
+    "Sent the question from the Ask button.",
+    "The reply gave real Megaera tactics with no warning line at all -- no 'no close match' text anywhere.",
+    "The reply showed a knowledge-base card: 'Megaera (+2 more) - From bonsAI's own note'.",
+    "Opened Show details: Retrieval: Keyword + meaning, Trust tier: fallback_no_source, Embed 539.77 ms, Re-rank 3.94 ms, app_id 1145360."
+  ],
+  "pluginLogLines": [],
+  "screenshots": [],
+  "verdict": "PASS",
+  "verdictSentence": "Asking about Megaera by the correct spelling now finds her own note cleanly, with no warning that nothing close was found -- the spelling fix mentioned in the library notes for 2026-09-18 appears to have landed.",
+  "notes": [
+    "The plugin log for this ask carries no retrieval-specific line at all (see KB-TRANSPARENCY-01-retry3), so this verdict rests on what Show details shows on screen, not on a cross-check against the log.",
+    "Trust tier reads 'fallback_no_source', meaning this note has no source URL attached -- consistent with plan 55's note that these particular notes carry no source link."
+  ]
+}

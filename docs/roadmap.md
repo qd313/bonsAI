@@ -99,7 +99,15 @@ starts work outside this.
   ([plan 31](planning/31-deck-verification-round.md)) and that the chip itself is a single rotating slot
   (plan 57); this is a further narrowing. Evidence `docs/test-evidence/plan61-MEGAERA-01-retry2.json` (the
   full account), `docs/test-evidence/plan61-KB-FOLLOWUP-01-retry2.json`,
-  `docs/test-evidence/plan61-KB-KILLSWITCH-01-retry2.json`.
+  `docs/test-evidence/plan61-KB-KILLSWITCH-01-retry2.json`. **Likely cause found 2026-09-19, not yet
+  confirmed:** the plugin keeps its own copy of settings in memory and writes the whole copy back on its
+  next save, so an edit made straight to the settings file on disk gets overwritten again — a person
+  changing settings through the plugin's own screens would probably never hit this, so it may be a
+  test-rig problem rather than something a player would ever see. Working around it tonight took reloading
+  the plugin right after every edit to the settings file, before sending anything; even then, the list had
+  to be reordered and the plugin reloaded several times to get the wanted sentence to show first, and the
+  one visible chip stops cycling while the controller's highlight rests on it. Rule for drivers: reload the
+  plugin right after every edit to the settings file, before any question is sent.
 - ★ `[focus]` **Up from the Retry icon does not return to the answer** — **OPEN, read again 2026-09-16.**
   With the thumbs-up/thumbs-down row greyed on a stopped reply, Down from the answer now lands on Retry — but
   Up from Retry does not go back to the answer's last section the way it should. **Read again 2026-09-16:**
@@ -159,6 +167,11 @@ starts work outside this.
   rows — Show details, Read aloud, the thumbs and the notes block — are reached only by walking down onto them.
   Evidence `docs/test-evidence/plan58p1-M-hk-boss-before.json`,
   `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-01.json`.
+- ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **OPEN, fix did not hold
+  on the Deck 2026-09-19.** Going down passes an extra copy of the question text, half hidden behind a
+  button, that going up does not show. The tap-to-reveal spoiler box takes three presses to get past going
+  down but only one going up. Row **REPLY-STOPS-MIRROR-01**. Evidence
+  `docs/test-evidence/plan61-REPLY-STOPS-MIRROR-01-retry2.json`.
 - ★ `[kb]` **Download knowledge base needed two taps; the first did nothing visible** — **OPEN, reported
   2026-09-16, not reproduced.** Read in the code (`src/components/KnowledgeBaseSection.tsx`,
   `openStoragePicker`): the first press should open the storage-choice popup (internal or SD card) before
@@ -306,6 +319,10 @@ starts work outside this.
   **One more try 2026-09-18, later in the same night:** with Hades still running, one question sent with the
   usual workaround went through cleanly and did not trap — a sample of one, so the "nearly every send" reading
   from earlier tonight still stands. Evidence `docs/test-evidence/plan61-ASKBAR-FOCUS-TRAP-03-tally.json`.
+  **Not seen at all on 2026-09-19:** about ten questions were sent with Hollow Knight, Half-Life 2, Hades and
+  Black Mesa running in turn, and the trap never happened once. The one thing done differently from the
+  night before is that the plugin was reloaded after every settings edit tonight (see the pinned-chip entry
+  above), which is worth trying again before calling this closed.
 - ★★★ `[reply]` **A name-withheld boss question on a story-protected game comes back with no spoiler box** —
   **OPEN, found 2026-09-18.** Nothing running, no consent phrase anywhere in the chat: asked about "the boss
   past the crystal spike area … the one that looks just like me" in Hollow Knight, the reply named Broken
@@ -317,6 +334,9 @@ starts work outside this.
   naming a boss, still came back in plain text with no cover at any point. So the game being detected and
   running does not close the box either — this is not only a nothing-running gap. Evidence
   `docs/test-evidence/plan61-HADES-UNNAMED-STREAM-01-retry2.json`, `docs/test-evidence/plan61-HADES-UNNAMED-01-retry2.json`.
+  **Sighting, 2026-09-19, Hollow Knight:** the same kind of question ("what is waiting at the end of the
+  game") came back this time WITH its cover in place. Not closing this entry on one clean sighting, but
+  worth recording. Evidence `docs/test-evidence/plan61-REPLY-STOPS-MIRROR-01-retry2.json`.
 
 ---
 
@@ -573,19 +593,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   each row in [testing.md](testing.md). Until a run produces real evidence, treat all twelve as unknown rather than as a pass.
 
 ### Bugs that need verification
-- ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **VERIFY, fixed
-  2026-09-15.** Down and Up through a reply now stop at the same places in both directions. Row
-  **REPLY-STOPS-MIRROR-01**: on a reply with two paragraphs, a spoiler block and a two-button menu, check the
-  Down stops and the Up stops are exact mirrors of each other. **Tried on the Deck 2026-09-17, blocked:** no
-  reply with a spoiler block turned up to run the row as written. On the reply that was available, a real
-  mismatch showed up on a different part of the reply than this row names: Down reached both buttons of a
-  follow-up branch menu, and Up skipped both on the way back up. Stays owed. Evidence
-  `docs/test-evidence/plan57-QA-REPLY-STOPS-MIRROR-01.json`. **Tried again 2026-09-18: blocked** — neither God
-  of War nor Hollow Knight is on the Deck's Recent Games row, the only list the launch tool can search, so
-  neither would start; someone needs to play one of them once by hand first. Evidence
-  `docs/test-evidence/plan61-REPLY-STOPS-MIRROR-01-retry.json`. On 2026-09-19 the maintainer played God of
-  War and Hollow Knight once each, so both are on the Recent Games row again and this row can run in the
-  next Deck block.
 - ★ `[ollama]` **Mistyping one model name in a several-model download loses it without saying so** — **VERIFY,
   fixed 2026-09-15.** Downloading several models at once now says which name it could not find and still
   starts the good ones, instead of quietly dropping the bad one. Row **PULL-MISSING-NAME-01**: on the Ollama
@@ -841,7 +848,9 @@ ones from this month are D81 to D88.
   times in three, where it used to be wrong every time. The remaining third still names the rival boss. DOOM Eternal
   is wrong every time, and no amount of work on the search can close that one. This is the half the shipped fix did
   not cover, kept visible on purpose rather than archived with it. [Numbers](planning/48-kb-wave-three-session.md).
-  (D98)
+  (D98) **Sighting, 2026-09-19, Hades:** a different shape of the same family — a follow-up question about a
+  boss's second phase found the right boss's note again, but the written reply asked which boss was meant
+  instead of using her name. Evidence `docs/test-evidence/plan61-KB-FOLLOWUP-01-retry3.json`.
 - ★★ `[KB]` **The "No tip for this" line has no question that can make it appear** — **OPEN, measured off the
   device 2026-09-12.** Against the library that ships, on every sentence anyone has tried: the five hardest problem
   sentences still get a tip in every mode, meaning search on or off; the twelve junk phrases attach nothing, which
@@ -863,7 +872,16 @@ ones from this month are D81 to D88.
   second; on a Pikmin 2 question it said the same thing under a reply built on the very note the block showed.
   Either look at the best attached note, not just the first, or word the line as "a thin match" rather than a
   claim the notes were not used. Evidence `docs/test-evidence/plan58p1-M-hk-boss-before.json`,
-  `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-04.json`.
+  `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-04.json`. **Sighting, 2026-09-19, Half-Life 2:** a question the
+  notes genuinely do not cover got the warning line for the first time, but a note card naming three notes
+  showed underneath it at the same time, contradicting the line. Evidence
+  `docs/test-evidence/plan61-W2-R5-hl2-retry3.json`.
+- ★★ `[KB]` **Black Mesa's electrified-water question attaches two unrelated early-game notes instead of its
+  own** — **OPEN, found 2026-09-19.** Asking how to cross the electrified water gave the right, specific
+  answer, but the two notes Show details named as used were general early-game notes about starting out and
+  the opening tram ride — neither one is the electrified-water note, which does exist in the library. So a
+  person sees a correct answer with the wrong notes named underneath it, one run, one asking. Evidence
+  `docs/test-evidence/plan61-W3-D-blackmesa.json`.
 
 ### Deck check owed
 
@@ -890,20 +908,22 @@ ones from this month are D81 to D88.
   `docs/test-evidence/plan61-KB-FLOOR-01-ontopic-retry2.json`, `docs/test-evidence/plan61-KB-FOLLOWUP-01-retry2.json`,
   `docs/test-evidence/plan61-KB-KILLSWITCH-01-retry2.json`. On 2026-09-19 the maintainer played Half-Life 2
   once more, so it is back on the Recent Games row and these rows can run in the next Deck block.
-- ★ `[KB]` **A Hades boss's note is spelled wrong, so spelling it right gets you told the plugin is guessing** —
-  **VERIFY, fixed 2026-09-15, waiting on the maintainer to publish.** The note is titled Megaera now and the library
-  was rebuilt and passed its own publish check, but pushing it to the two public download hosts was refused for the
-  session by the tool's own permission, so the point release waits for the maintainer to run the publish step. Row
-  **MEGAERA-01**: once the point release is installed from the Ollama tab's Update knowledge base, with Hades
-  running, ask "How do I beat Megaera?" and check the note attaches with no "no close match" line. On the library
-  still installed today, that line still appears. Evidence `docs/test-evidence/plan55-HADES-NAMED-01.json`.
-  **Tried 2026-09-18 with Hades running, blocked:** eight attempts to send the question all froze the
-  highlighted control on the question box, so it was never sent. Evidence
-  `docs/test-evidence/plan61-MEGAERA-01.json`. **Tried again 2026-09-18: still blocked, but not by the freeze
-  this time** — one question went through cleanly on the first try tonight, but the pinned test sentence for
-  this exact question then stopped showing and never came back for the rest of the sitting (the new
-  pinned-chip bug above), so this row has still never run on the corrected 2026.09.18 library. Evidence
-  `docs/test-evidence/plan61-MEGAERA-01-retry2.json`.
+  **Run again 2026-09-19, this one still cannot close:** **KB-FLOOR-01's on-topic half passes** clean, a
+  Half-Life 2 question attached the right note as it should. **KB-KILLSWITCH-01's Show details half now
+  passes too** — with the meaning-search switch off, the screen correctly says it is using plain keyword
+  search and the game still gets an answer with a note attached; the switch was turned back on and
+  confirmed. **KB-FOLLOWUP-01 is a partial:** the follow-up search does find the right note again, but the
+  written reply asks which boss is meant instead of using the name it found — the search half passes, the
+  reply half does not. **KB-TRANSPARENCY-01 is blocked, not by the Deck this time but by the plugin itself:**
+  its log never records which notes were searched or attached, so there is nothing written down to check the
+  on-screen note list against. That gap needs either the plugin's own activity log switched on before a
+  question is asked, or a line added to the log naming which notes were attached — without one of those,
+  this check can never be run as written. **KB-VARIANT-01 is still blocked**, since running it would mean
+  replacing the very library under test. So this entry stays open: three of the five checks have real
+  answers now, one is blocked by a plugin gap rather than a Deck problem, and one still cannot be run at
+  all. Evidence `docs/test-evidence/plan61-KB-FLOOR-01-ontopic-retry3.json`,
+  `docs/test-evidence/plan61-KB-KILLSWITCH-01-retry3.json`, `docs/test-evidence/plan61-KB-FOLLOWUP-01-retry3.json`,
+  `docs/test-evidence/plan61-KB-TRANSPARENCY-01-retry3.json`.
 - ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **VERIFY,
   landed 2026-09-15, four commits, unit-tested.** A game known only by name now opens its box; naming the boss
   first opens it on screen, in copied text and in read-aloud; a no-story game named in the question gets the same
@@ -926,7 +946,9 @@ ones from this month are D81 to D88.
   `docs/test-evidence/plan61-HADES-UNNAMED-01-retry2.json`. **Still owed tonight:** STRAT-SPOIL-NAME-01 (Doom
   64 cannot be launched), DRG-01b (stopped by the focus trap), DRG-01c (left out on purpose). On 2026-09-19
   the maintainer said Doom 64 is not readily available, so STRAT-SPOIL-NAME-01 stays blocked until it is.
-  [Plan 54](planning/54-spoiler-rules-gaps.md).
+  [Plan 54](planning/54-spoiler-rules-gaps.md). **DRG-01b tried again 2026-09-19, still blocked:** Deep Rock
+  Galactic: Survivor had fallen off the Recent Games row again, so it could not be launched. Evidence
+  `docs/test-evidence/plan61-DRG-01b-retry.json`.
 - ★★ `[KB]` **"Not in my notes" line** — **VERIFY, built and shipped 2026-09-07, device check failed the same
   day.** The line itself is in the code, but on the Deck nothing could make it appear: ten questions asked first
   all attached a note, so the one question meant to show the line never got the chance. The note search has
@@ -939,6 +961,11 @@ ones from this month are D81 to D88.
   it, and the pinned test sentences had stopped showing by then anyway. Evidence
   `docs/test-evidence/plan61-W2-R5-hl2-retry2.json`. On 2026-09-19 the maintainer played Half-Life 2 once
   more, so it is back on the Recent Games row and this row can run in the next Deck block.
+  **Run again 2026-09-19, still owed:** the warning line finally showed up, for the first time, on a
+  Half-Life 2 question the notes genuinely do not cover — real progress. But its wording is not exactly what
+  was asked for, and a note card naming three notes appeared underneath it at the same time, which
+  contradicts the line's own claim that nothing close was found. See the "no close match" Bugs entry above
+  for that contradiction. Evidence `docs/test-evidence/plan61-W2-R5-hl2-retry3.json`.
 - ★★ `[KB]` **Ten new games checked on the Deck, publish owed** — **VERIFY, ran 2026-09-18.** The
   2026.09.18 library was installed on the Deck straight from the plugin's own folder, not from the
   public download hosts. One question named each of the ten new games and all ten answered from that
@@ -1078,6 +1105,13 @@ copied line for line, nothing reworded: [archive/roadmap-done-v0.5.0.md](archive
   (D113), unit-tested.** Watch note: if a raw, unparsed checklist is ever seen in a real reply on the Deck,
   this reopens as a fresh bug rather than staying closed on the strength of the old fix.
   [Full detail](archive/roadmap-bugs-fixed.md#a-checklist-the-model-got-wrong-was-left-in-the-reply-as-raw-json).
+
+**Closed 2026-09-19 (plan 61 day 2, games block):**
+
+- ★ `[KB]` **A Hades boss's note is spelled wrong, so spelling it right gets you told the plugin is guessing**
+  — **DONE, closed 2026-09-19.** Asking about Megaera by the correct spelling now finds her own note cleanly,
+  with no "guessing" line, confirmed on the Deck on the 2026.09.18 library.
+  [Full detail](archive/roadmap-bugs-fixed.md#a-hades-bosss-note-is-spelled-wrong-so-spelling-it-right-gets-you-told-the-plugin-is-guessing).
 
 **Closed 2026-09-18 (reconciliation before plan 61):**
 

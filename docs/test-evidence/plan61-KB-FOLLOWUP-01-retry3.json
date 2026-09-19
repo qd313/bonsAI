@@ -1,0 +1,27 @@
+{
+  "rowId": "KB-FOLLOWUP-01-retry3",
+  "rowText": "Straight after the Megaera question, ask 'what about her second phase' in the same chat; the follow-up should search with the user's words and still be about Megaera.",
+  "build": {"commit": "07f1299", "pluginVersion": "0.5.0"},
+  "deckTime": "2026-09-19 15:08",
+  "setup": {
+    "game": "Hades (1145360), running",
+    "askMode": "strategy",
+    "knowledgeBase": true,
+    "chat": "same chat as MEGAERA-01-retry3",
+    "sentenceAsked": "what about her second phase"
+  },
+  "steps": [
+    "Sent the follow-up straight after the Megaera question, in the same chat.",
+    "The written reply did NOT stay on Megaera: it told the player they hadn't said which boss they meant, and gave generic second-phase advice instead of anything specific to her.",
+    "Underneath, the knowledge-base card still names 'Megaera (+2 more) - From bonsAI's own note'.",
+    "Opened Show details: Embed 28.8 ms, Re-rank 6.26 ms -- different numbers from the parent question's (539.77 ms / 3.94 ms), so a fresh search really did run for this follow-up rather than reusing the parent's."
+  ],
+  "pluginLogLines": [],
+  "screenshots": [],
+  "verdict": "PARTIAL",
+  "verdictSentence": "The search side did its job -- a fresh search ran for the follow-up and still found the Megaera note -- but the written reply itself talks past that and asks the player which boss they mean instead of carrying Megaera over, so from what a player reads on screen, the follow-up does not read as being about Megaera.",
+  "notes": [
+    "This is a different shape of problem from the roadmap's known 'names the wrong boss one run in three' bug -- here the search stayed correct, but the wording ignored what the search found.",
+    "Same log gap as the other rows tonight: nothing in the plugin log records which note the follow-up search used, so this reading rests entirely on Show details."
+  ]
+}

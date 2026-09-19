@@ -170,7 +170,9 @@ All notable changes to this project are documented in this file.
   header in view instead of scrolling past it. The credit line for one of bonsAI's own notes with no
   source now reads "From bonsAI's own note." Walking up from the hint rows above the question box now
   reaches the block; walking up from the session context strip now reaches it too on a finished reply
-  (fixed 2026-09-18, commit `40c23a6`), with a device check still owed.
+  (fixed 2026-09-18, commit `40c23a6`). Confirmed on the Deck 2026-09-18: pressing Up from the
+  session context strip lands on the block's own header. Evidence
+  `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-01.json`.
 - **A line under your question shows the AI's own thinking while you wait:** while the AI thinks, its own
   newest sentences show under your question; when the answer starts they fold to one line with the
   seconds; press it to read the whole thing; a Thinking chip in Show details; a one-time notice the first

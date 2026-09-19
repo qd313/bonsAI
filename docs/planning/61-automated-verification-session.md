@@ -467,9 +467,13 @@ Written as flows close. Nothing has run on the device yet.
   yesterday's "no active game detected" sighting as a case of the panel opening before the game had
   launched. **The first attempt sent no question at all:** every way of writing new pinned test sentences
   onto the Deck's settings file was refused by this session's own permission rules before anything reached
-  the device — not a Deck problem, so nothing on the Deck was touched. **Fixed for the second attempt** by
-  reloading the plugin right after each settings edit, before sending anything; the likely cause and the
-  rule for future drivers are written into the pinned-chip entry on the roadmap. **Once questions could be
+  the device — not a Deck problem, so nothing on the Deck was touched. The cause was the shape of the
+  commands, not a missing permission: the project's rule allows commands that start with exactly
+  `ssh deck@192.168.86.52`, and every attempt had put connection options before the address. Written in the
+  plain form, the same edit went through at 13:55, and the driver rules now say so. **The second attempt**
+  also reloaded the plugin right after each settings edit, before sending anything, which is what kept the
+  pinned sentences from reverting; the likely cause and the rule for future drivers are written into the
+  pinned-chip entry on the roadmap. **Once questions could be
   sent, the three-star focus trap did not bite once** across about ten questions on four games — the one
   thing done differently tonight is the reload-after-every-edit habit, worth trying again before this bug
   is called fixed. **Wins:** Megaera's spelling check finally passes clean on the corrected library, closed

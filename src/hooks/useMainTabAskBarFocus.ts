@@ -219,16 +219,38 @@ export function useMainTabAskBarFocus(
         onMoveUp: () => focusFirstPresetChip(),
         onMoveLeft: () => focusAttachPaperclip(),
         onMoveDown: () => {
-          // The Ask button is greyed out while a question is in flight -- step over it rather
-          // than land the ring on a control that does nothing. Nothing else sits below it that
-          // this hook knows about, so the press holds the ring on the question box (returning
-          // `true` reports the press handled, so Steam does not go looking on its own).
-          if (isAskInFlight) return true;
+          /*
+           * The Ask button is greyed out while a question is in flight, so Down must not land the
+           * ring on it. This used to swallow the press instead, which meant Down did nothing at
+           * all for the whole time an answer took to arrive.
+           *
+           * Measured on the device 2026-09-20
+           * (runs/plan62-ASKBAR-FOCUS-TRAP-reproduced-after-send.json): press Ask, the ring lands
+           * on the emptied question box, and two Downs moved nothing. The moment the answer
+           * landed, Down worked again
+           * (runs/plan62-ASKBAR-FOCUS-TRAP-after-answer-finished.json). On a twenty-second answer
+           * a dead Down reads exactly like being stuck, and it is very likely part of why the
+           * "Down stops half way and the Ask button is out of reach" reports kept coming back --
+           * during that window there is no Ask button to reach, only a Stop.
+           *
+           * The old comment said nothing else sat below. Something does: the Stop button, which
+           * takes the microphone's place while asking, and which is the one control a person
+           * actually wants then -- the same reasoning that keeps Retry live on a stopped answer.
+           * So hand the ring to Stop, and only hold it still if even that is missing.
+           */
+          if (isAskInFlight) return focusMicOrStop() || true;
           return focusAskPrimary();
         },
         onMoveRight: () => focusAskModeButton(),
       }) as Record<string, unknown>,
-    [focusAskPrimary, focusAttachPaperclip, focusFirstPresetChip, focusAskModeButton, isAskInFlight],
+    [
+      focusAskPrimary,
+      focusAttachPaperclip,
+      focusFirstPresetChip,
+      focusAskModeButton,
+      focusMicOrStop,
+      isAskInFlight,
+    ],
   );
 
   const avatarDeckNavHandlers = useMemo(

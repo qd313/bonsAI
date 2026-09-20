@@ -206,6 +206,101 @@ function renderAskBarHandlers(host: HTMLDivElement, isAskInFlight: boolean) {
   );
 }
 
+/**
+ * The same state, but with the Stop button on the page -- which is what the real screen looks like
+ * while a question is in flight, because Stop takes the microphone's place in the row above-right.
+ * Swallowing Down left the press doing nothing for the whole time an answer took to arrive
+ * (measured on device 2026-09-20, runs/plan62-ASKBAR-FOCUS-TRAP-reproduced-after-send.json: two
+ * Downs moved nothing, and Down worked again the moment the answer landed). Stop is live, and it is
+ * the one control a person actually wants then, so Down goes there.
+ */
+function buildAskBarHostWithStop(): {
+  host: HTMLDivElement;
+  attachHost: HTMLDivElement;
+  askButton: HTMLButtonElement;
+  stopButton: HTMLButtonElement;
+} {
+  const host = document.createElement("div");
+  const askButton = document.createElement("button");
+  askButton.className = "bonsai-ask-primary";
+  host.appendChild(askButton);
+  const attachHost = document.createElement("div");
+  const stopButton = document.createElement("button");
+  stopButton.className = "bonsai-askbar-target bonsai-unified-input-corner-right";
+  stopButton.setAttribute("aria-label", "Stop generation");
+  attachHost.appendChild(stopButton);
+  document.body.appendChild(host);
+  document.body.appendChild(attachHost);
+  return { host, attachHost, askButton, stopButton };
+}
+
+function renderAskBarHandlersWithStop(
+  host: HTMLDivElement,
+  attachHost: HTMLDivElement,
+  isAskInFlight: boolean,
+) {
+  return renderHook(() =>
+    useMainTabAskBarFocus(
+      {
+        unifiedInputFieldLayerRef: { current: null },
+        attachActionHostRef: { current: attachHost },
+        askBarHostRef: { current: host },
+        presetCarouselHostRef: { current: null },
+      },
+      false,
+      isAskInFlight,
+    ),
+  );
+}
+
+describe("Down from the question box while a question is in flight reaches Stop", () => {
+  beforeEach(() => {
+    resetNavFocusRegistry();
+    resetUiDocument();
+  });
+
+  afterEach(() => {
+    document.body.innerHTML = "";
+    resetNavFocusRegistry();
+    resetUiDocument();
+  });
+
+  it("lands the ring on Stop rather than doing nothing", () => {
+    const { host, attachHost, askButton, stopButton } = buildAskBarHostWithStop();
+    const { result } = renderAskBarHandlersWithStop(host, attachHost, true);
+
+    const onMoveDown = result.current.unifiedInputDeckNavHandlers.onMoveDown as () => boolean;
+    const handled = onMoveDown();
+
+    expect(handled).toBe(true);
+    expect(document.activeElement).toBe(stopButton);
+    expect(document.activeElement).not.toBe(askButton);
+  });
+
+  it("still holds the ring still when there is no Stop button to reach either", () => {
+    const { host, askButton } = buildAskBarHost();
+    const { result } = renderAskBarHandlers(host, true);
+
+    const onMoveDown = result.current.unifiedInputDeckNavHandlers.onMoveDown as () => boolean;
+
+    // Reported handled, so Steam does not go looking on its own -- that is what lost the ring
+    // entirely on device before this edge existed at all.
+    expect(onMoveDown()).toBe(true);
+    expect(document.activeElement).not.toBe(askButton);
+  });
+
+  it("goes to the Ask button, not Stop, once the answer has landed", () => {
+    const { host, attachHost, askButton, stopButton } = buildAskBarHostWithStop();
+    const { result } = renderAskBarHandlersWithStop(host, attachHost, false);
+
+    const onMoveDown = result.current.unifiedInputDeckNavHandlers.onMoveDown as () => boolean;
+
+    expect(onMoveDown()).toBe(true);
+    expect(document.activeElement).toBe(askButton);
+    expect(document.activeElement).not.toBe(stopButton);
+  });
+});
+
 describe("Down from the question box while the Ask button is greyed", () => {
   beforeEach(() => {
     resetNavFocusRegistry();

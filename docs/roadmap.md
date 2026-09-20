@@ -639,13 +639,14 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   The name now shows only while the ring is on the row, with the empty line still held open so the row's
   height never changes. Built in the same commit: the chat's own name was sitting off the row's middle,
   because a small × for deleting the chat used to be part of what got centred; pinning the × to the
-  right-hand edge instead fixes that. **Measured on the Deck 2026-09-20, worse than the drawing said: the
-  name sat 24 pixels off centre, not 14, and this change cures about 14 of the 24.** The rest has a second,
-  still-open cause: the little chat previews either side are different widths (14 and 43 pixels measured),
-  which shifts the name by an amount that changes with the neighbours' names. **OPEN, waiting on the
-  maintainer's call between two fixes:** give those previews a fixed width, or centre the name against the
-  row's own fixed middle instead of against what sits either side of it. Row **CHAT-SLOTS-V3-14c**, not yet
-  run on the Deck. [Plan](planning/62-feature-session-five.md) ·
+  right-hand edge instead fixes that. **Measured on the Deck 2026-09-20: with the ring on the row the offset
+  is exactly 14 pixels and the × is the whole of it, because the chat previews either side are hidden while
+  the row is focused — so this change straightens that state completely, and that is the state the game name
+  shows in.** At rest the previews are back and the offset was 24 pixels, of which ~10 remains: they are
+  different widths (14 and 43 measured) and shift the name by an amount that changes with the neighbours'
+  names. Cosmetic and low priority now, since the game line is blank at rest, leaving only the dots to look
+  uneven against. An earlier note here claimed 24 was the figure to fix and asked for a decision; that read
+  the resting state and was withdrawn. Row **CHAT-SLOTS-V3-14c**, not yet run on the Deck. [Plan](planning/62-feature-session-five.md) ·
   [Board](https://claude.ai/artifact/31aLBi17SH7AydhYfGYjBq)
 
 - ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60 (D110).** Each chip now looks raised: a thin light line along its top edge and a soft shadow beneath it. The two chips sit 6 pixels apart instead of 4. In decode, static and carousel mode there is now 8 pixels of open space between the chips and the question box, where before they touched (fade mode was already open and keeps its own spacing). The word "Tip" became a small dot, the colour on the tags and on the resolving-text label is quieter, and the chip the controller is on now shows a light bar along its bottom edge instead of the old blue outline — a ring around the chip that nobody could actually see is gone too. Passed on the Deck by measurement: rows 02, 03, 04, 05 and 06 (the one-chip check), and 08. **Row 09 failed on the Deck 2026-09-18** — a real knowledge-base chip showed with no Tip dot — and is filed as its own bug, below. Still owed: the maintainer's own look at rows 01 and 05, from the three screenshots named in the evidence file, and row 07 (reduced motion), both on the maintainer's own page; and a look at the help and agent chips, which were not on screen during this run. Italics were tried earlier for the label and turned down. [Plan](planning/60-chip-button-restyle.md) · evidence `docs/test-evidence/plan60-QA-chip-button.json`.

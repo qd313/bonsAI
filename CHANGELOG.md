@@ -5,6 +5,22 @@ All notable changes to this project are documented in this file.
 ## [Unreleased]
 
 ### Fixed
+- **The AI models list can now use the room its own popup already gives it, instead of stopping
+  early:** the list capped itself at a fixed share of the screen no matter how much room was free
+  above it, which is why the same plugin showed about five rows on an external monitor and about
+  three on the Deck's own screen — not a difference in the list, a difference in screen. It now
+  fills the space its popup already has. Expected: about two more rows on an external monitor,
+  about three more on the Deck's own screen. `gamepadAndPullModels.ts`. On-Deck row owed:
+  **MODELS-LIST-CAP-01** in `docs/roadmap.md`, not yet checked — deploying to the Deck is currently
+  blocked (the plugin folder there is owned by root).
+- **A chat's own name now sits centred on its row, and the game it belongs to shows only while the
+  D-pad ring is on that row:** the chat's name used to sit off-centre because the small × that
+  deletes the chat was being centred along with it; the × now sits fixed at the right-hand edge
+  instead. Measured on the Deck: this cures about 14 pixels of the 24-pixel offset that was there.
+  The remaining ~10 pixels has a separate cause — the small game-chat previews either side are
+  different widths, which pushes the name by an amount that changes with their names — and is not
+  fixed yet. `ChatSlotRow.tsx`, `section-6.ts`. On-Deck row owed: **CHAT-SLOTS-V3-14c** in
+  `docs/roadmap.md`.
 - **The download picker's Expert (large) group now offers the strongest Deck models first, and the
   open-source list catches up to September's models:** the five models that beat the plugin's default on the
   bake-off now lead that group in that order — Gemma 4 12B, Qwen 3.5 9B, Granite 4.2 8B, Gemma 4 E4B, LFM
@@ -233,6 +249,15 @@ All notable changes to this project are documented in this file.
 - **The knowledge-base search test gained a weight sweep, per-question detail, and a second right answer (no user-visible change):** it can now try nine different balances between word-matching search and meaning search in one run and print a table of how each did, without ever looking at the questions held back for the final check; every question's result now records the three notes each kind of search actually returned, in order, instead of only a percentage; and a question can list more than one acceptable note when more than one genuinely answers it. `scripts/eval_kb_embed_models.py`, `tests/test_eval_kb_arms.py`.
 
 ### Changed
+- **Read aloud is now a small speaker next to Helpful / Not really, not its own full-width line:**
+  the speaker sits quiet at the right-hand end of that row until the D-pad ring reaches it, then
+  turns full strength, the same treatment as the microphone in the Ask box; it turns into a red stop
+  while the Deck is talking. It still appears on an older answer with no thumbs row, and the row
+  still lets Left/Right through to it when the thumbs are greyed out. Measured on the Deck before
+  the change: taking the old line out gives back 29 pixels on every finished answer.
+  `buildReplyActionsElement.tsx`, `icons.tsx`. On-Deck row owed: **READ-ALOUD-07** in
+  `docs/roadmap.md`; still owed by eye: how quiet the speaker looks at rest, and what it does on an
+  answer stopped part-way through.
 - **The suggestion chips above the question box now look like real buttons:** each one has a soft
   shadow beneath it and a thin light line along its top edge, so it reads as raised rather than flat;
   the two chips sit a little further apart, and in most animation modes there is now some open space

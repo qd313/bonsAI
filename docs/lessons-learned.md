@@ -213,6 +213,13 @@ cancel out. Render the pair and look at it before recommending it.
 in [design-tokens.md](design-tokens.md) and the rules in
 [design-language.md](design-language.md).
 
+**A height set as a percentage of the screen is not one fixed number.** The Deck's own screen and an
+external monitor are different heights, so the same percentage in the stylesheet turns into a
+different number of pixels on each, and a measurement taken on one screen proves nothing about the
+other. Found 2026-09-20 in the AI models list: 48 per cent of screen height came out as 400 pixels on
+a 1080p monitor and about 300 pixels on the Deck's own screen — the maintainer's own count and an
+earlier drawing were both right, they were just looking at two different screens.
+
 ---
 
 ## 6. Tooling traps on this machine

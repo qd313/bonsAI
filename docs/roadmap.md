@@ -273,27 +273,6 @@ starts work outside this.
   just queued the model until the Pull selected button was pressed, the way it should. The model that
   downloaded this way also never joined the saved try order, even though it installed successfully. Evidence
   `docs/test-evidence/plan61-PULL-MISSING-NAME-01.json`.
-- ★★ `[ollama]` `[layout]` **The AI models screen shows about two rows of the model list on the Deck's
-  screen** — **OPEN, reported 2026-09-16 by the maintainer, cause read in the code, not yet changed.** The
-  screen's body is capped at 520 pixels tall (or 72 percent of the screen when that is smaller;
-  `src/components/OllamaModelsHubModal.tsx`, the `maxHeight: "min(72vh, 520px)"` box), and the parts above the
-  list that never scroll away (the three section buttons, the counts line, the custom tag box, the Suggested
-  chips, two rows of filters, the column headers; all drawn by `src/components/PullModelsModal.tsx`) take about
-  430 of those, leaving roughly 90 pixels for rows. **Read again 2026-09-20: the list also sits inside a
-  second, tighter limit of its own — 48 percent of the screen height or 400 pixels, whichever is smaller —
-  so raising the outer one alone may change nothing. Taken into the plan 62 session 2026-09-20 as its own
-  item. Every room-buying change was drawn and measured at true width on the board and **all six were taken
-  2026-09-20** — biggest first: the list's own box allowed to be taller (unknown, measured first), the
-  suggested models off the top (~49 px), Advanced as a link beside the screen's name (~44 px), the type-a-name
-  box as one chip on the filter row (~32 px), the filter rows down to one line (~30 px), the counts line
-  shortened (~9 px). Five rows on the drawing become eleven. **But the drawing says today's screen should
-  already fit five, not two, so a limit somewhere is set wrong; that is measured first and may close this on
-  its own.** An external monitor taller than about 720 pixels gets the
-  same 520 cap, so it looks the same there. The popup itself has room: on the Deck's screen it stands 640
-  pixels tall. Fix with the filters rework below, or before it as a taller list. The maintainer's recording is
-  `recordings/DeckRecord_20260916_114238_game.mkv` on their own PC, not in this repo. **Confirmed on the Deck
-  2026-09-17:** still about two rows of models visible before scrolling. Evidence
-  `docs/test-evidence/plan57-QA-AI-models-screen-2-rows.json`.
 - ★★ `[ollama]` `[focus]` **A tap outside the AI models screen started the queued downloads and left the
   D-pad stuck in the Ollama tab** — **OPEN, reported 2026-09-16, not reproduced.** The maintainer did not
   press Done; they think they tapped outside the screen, and afterwards the models started downloading and
@@ -387,13 +366,6 @@ replace it with a specific issue when one exists.
   One check owed first: the question bubble turns its own outline off and gets no ring rule, so look on the Deck at what focus shows.
 - ★★ `[chat]` **First-run ghost "New chat" label at the create position** — **OPEN, parked by decision.** The create position is the
   literal `[+]`, re-confirmed on board 8f and again in the v3 rows. Reopen that decision before building it.
-- ★★ `[chat]` **The game a chat belongs to, above its title** — **OPEN, shape chosen 2026-09-20 from a
-  drawn board: the name shows only while the ring is on the row**, with the empty line still held open so
-  the row never changes height. **Found while drawing it:** the chat's name sits **14 pixels left** of the
-  game's name, because the small × that deletes a chat is inside the part being centred — the dots below
-  are out of line too. Straightened in the same work: the × comes out of the centring, costing about three
-  characters of the chat's name. **CHAT-SLOTS-V3-14c**.
-  [Plan](planning/62-feature-session-five.md) · [Board](https://claude.ai/artifact/31aLBi17SH7AydhYfGYjBq)
 - ★★ `[reply]` **Headline first: every answer opens with one line that stands alone** — **OPEN, filed 2026-09-08. Not yet
   (D99, 2026-09-12): it waits for its own go.** The model would be asked to start every answer with one short sentence that
   carries the point and gives nothing away, so the reply-ready popup, a spoken answer and any headset card always have a good
@@ -415,22 +387,6 @@ replace it with a specific issue when one exists.
   comedian's own persona. A written sweep, one line per character: who owns the character, whose voice it is, and whether a voice for
   it could be made as a type rather than a copy. Text roleplay sits on the first layer today; any voice would sit on all of them. No
   code; a document the legal check reads. [Memo](planning/42-read-aloud-feasibility.md).
-- ★★ `[layout]` `[voice]` `[focus]` **Read aloud is a small speaker button on the Helpful row, not a second dividing
-  line** — **OPEN, filed 2026-09-16 by the maintainer (D106); shape chosen 2026-09-20 from a drawn board —
-  the speaker sits at the right-hand end of the Helpful row, drawn as a bare glyph on nothing, the same
-  treatment as the microphone in the Ask box (no border, no fill, quiet at rest, full strength when the
-  ring lands), at 45 per cent at rest. [Plan](planning/62-feature-session-five.md) ·
-  [Board](https://claude.ai/artifact/31aLBi17SH7AydhYfGYjBq).** Today: Read aloud is a full-width dividing line above Show
-  details, the same shape as Show details, one row up, drawn by the reply-actions row builder
-  (`src/utils/buildReplyActionsElement.tsx`); its text flips to Stop while the Deck is talking
-  (`src/hooks/useReadAloud.ts`). Wanted: a small button with a speaker icon on the same row as Helpful and Not really (the
-  Feather icon set the plugin already uses, `react-icons/fi`, has a speaker, `FiVolume2`); the dividing line goes. What it
-  must keep: a real D-pad stop registered under the same name (`read-aloud` in `replyStopRegistry`) so the by-name jumps
-  still work; Left and Right along the row; the flip to Stop in the icon and the spoken label; and it must stay reachable
-  when the thumbs are greyed, because the greyed-thumbs step-over from lane I (commit `e41808d`) skips a greyed Helpful /
-  Not really row, and Read aloud on that row must still be a stop. What changes when it lands: Up from Show details lands
-  on that row; the MICRO-04 testing row's "today's stops" text and READ-ALOUD-02 need rewording; the mockup page drew Read
-  aloud as a line and would change too.
 - ★★ `[voice]` **Spoilers by voice** — **OPEN, filed 2026-09-08; Read answers aloud shipped 2026-09-12, still waits on Voice
   follow-ups.** When a spoken answer reaches a hidden spoiler it says "there is a spoiler here, say go on to hear it" and waits;
   "go on" unhides and reads it, anything else skips it. The block on screen unhides with the spoken one, so the two never
@@ -644,6 +600,17 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   picker's tick-boxes only ever offer real, known models — a made-up name can only be tried through the
   picker's own custom-name field, a separate one-off box, not the list of ticks. Finishing this row needs a
   person at the Deck to do the typing. Evidence `docs/test-evidence/plan61-PULL-MISSING-NAME-01.json`.
+- ★★ `[ollama]` `[layout]` **The AI models screen showed about two rows of the model list on the Deck's
+  screen** — **VERIFY, built 2026-09-20.** The named cause was wrong and is corrected here: the list's own
+  box was capped at 48 percent of the screen height or 400 pixels, whichever is smaller, and that share is
+  measured against whatever screen the Deck happens to be driving. On an external 1920x1080 monitor that
+  came to 400 pixels and about five rows; on the Deck's own 1280x800 screen it came to about 300 pixels and
+  about three, fewer once the filter chips wrap at the narrower width. The drawing and the maintainer's own
+  count were never in disagreement — they were looking at two different screens. **Fix:** the list now fills
+  the room its own popup body already has, instead of keeping that separate, smaller cap of its own; nothing
+  else about it changed. Expected: about two more rows on an external monitor, about three more on the
+  Deck's own screen. Row **MODELS-LIST-CAP-01**, not yet proved on the device — deploying to the Deck is
+  currently blocked because the plugin folder there is owned by root. [Plan](planning/62-feature-session-five.md).
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —
   **VERIFY, landed 2026-09-15.** The tab bar's pop-up strip now always ends fully hidden a fraction of a second
   after it closes, even when its fade is stalled by a game running full screen, so no see-through copy of it
@@ -668,7 +635,31 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   [Why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way).
 ### Features that need verification
 
+- ★★ `[chat]` **The game a chat belongs to, above its title** — **VERIFY, built 2026-09-20 (lane G).**
+  The name now shows only while the ring is on the row, with the empty line still held open so the row's
+  height never changes. Built in the same commit: the chat's own name was sitting off the row's middle,
+  because a small × for deleting the chat used to be part of what got centred; pinning the × to the
+  right-hand edge instead fixes that. **Measured on the Deck 2026-09-20, worse than the drawing said: the
+  name sat 24 pixels off centre, not 14, and this change cures about 14 of the 24.** The rest has a second,
+  still-open cause: the little chat previews either side are different widths (14 and 43 pixels measured),
+  which shifts the name by an amount that changes with the neighbours' names. **OPEN, waiting on the
+  maintainer's call between two fixes:** give those previews a fixed width, or centre the name against the
+  row's own fixed middle instead of against what sits either side of it. Row **CHAT-SLOTS-V3-14c**, not yet
+  run on the Deck. [Plan](planning/62-feature-session-five.md) ·
+  [Board](https://claude.ai/artifact/31aLBi17SH7AydhYfGYjBq)
+
 - ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60 (D110).** Each chip now looks raised: a thin light line along its top edge and a soft shadow beneath it. The two chips sit 6 pixels apart instead of 4. In decode, static and carousel mode there is now 8 pixels of open space between the chips and the question box, where before they touched (fade mode was already open and keeps its own spacing). The word "Tip" became a small dot, the colour on the tags and on the resolving-text label is quieter, and the chip the controller is on now shows a light bar along its bottom edge instead of the old blue outline — a ring around the chip that nobody could actually see is gone too. Passed on the Deck by measurement: rows 02, 03, 04, 05 and 06 (the one-chip check), and 08. **Row 09 failed on the Deck 2026-09-18** — a real knowledge-base chip showed with no Tip dot — and is filed as its own bug, below. Still owed: the maintainer's own look at rows 01 and 05, from the three screenshots named in the evidence file, and row 07 (reduced motion), both on the maintainer's own page; and a look at the help and agent chips, which were not on screen during this run. Italics were tried earlier for the label and turned down. [Plan](planning/60-chip-button-restyle.md) · evidence `docs/test-evidence/plan60-QA-chip-button.json`.
+
+- ★★ `[layout]` `[voice]` `[focus]` **Read aloud is a small speaker on the Helpful row, not a dividing
+  line** — **VERIFY, built 2026-09-20 (lane R).** The full-width Read aloud line is gone. A small speaker
+  sits at the right-hand end of the Helpful / Not really row instead, quiet until the ring reaches it then
+  full strength, the same treatment as the microphone in the Ask box, and it turns into a red stop while the
+  Deck is talking. It still shows up on an older answer with no thumbs row, and Left/Right on that row still
+  reach it once the thumbs are greyed out. **Measured on the Deck 2026-09-20, before the change:** taking
+  the line out gives back 29 pixels on every finished answer. Row **READ-ALOUD-07**, not yet run on the Deck
+  under this shape. Still owed on the device: a look by eye at how quiet the speaker sits at rest, and what
+  it does on an answer stopped part-way through. [Plan](planning/62-feature-session-five.md) ·
+  [Board](https://claude.ai/artifact/31aLBi17SH7AydhYfGYjBq)
 
 - ★ `[ollama]` **Pulled models join the model try order** — **MOSTLY VERIFIED on the Deck 2026-09-06, one case left.**
   A model pulled from the picker landed at the **bottom** of the text list, and showed up in the vision list because it can

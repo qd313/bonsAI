@@ -24,8 +24,8 @@
  *     ┌─ Pull models ──────────────────────────────────────────┐
  *     │ Installed N · X GB   Queue N · X GB   catalog/size src ↻ │
  *     │ Custom model tag [______________]  [Pull]                │
- *     │ Suggested    [chip] [chip] [chip] [chip]                 │
- *     │ Filters · N on — Open source only, Vision, Essentials…   │  <- one row, opens a panel
+ *     │ Filters · N on — Open source only, Vision, Essentials…   │  <- opens a panel that also
+ *     │                                                           │     holds the Suggested chips
  *     │ ┌ table ───────────────────────────────────────────┐     │
  *     │ │ Pull│Model      │Size│Date│Modes│Rating │Del      │     │
  *     │ │  ✔  │tag…       │2GB │'24 │chat │★★★☆☆  │  X      │     │
@@ -661,33 +661,15 @@ export function PullModelsModal(props: PullModelsModalProps) {
     []
   );
 
-  /**
-   * Opens the Filters panel and moves the ring straight into its first row — pressing OK on the
-   * Filters button should land you *inside* the panel, not merely reveal it (plan 62, § 3d: "the
-   * D-pad must get into the panel").
-   */
-  const openFiltersPanel = useCallback((): void => {
-    setFiltersOpen(true);
-    window.requestAnimationFrame(() => {
-      focusFilterPanelRow(0);
-    });
-  }, [focusFilterPanelRow]);
-
-  /** Closes the panel and returns the ring to the Filters button — the D-pad's way back out. */
-  const closeFiltersPanel = useCallback((): boolean => {
-    setFiltersOpen(false);
-    window.requestAnimationFrame(() => {
-      focusFiltersButton();
-    });
-    return true;
-  }, [focusFiltersButton]);
-
   // Opens straight into the Filters panel, ring on its first row -- the "Manage models" shortcut
   // that used to jump to the standalone Policy section now jumps here instead (initialFiltersOpen).
+  // openFiltersPanelEntry is defined further down (it depends on recommendedEntries, computed
+  // later) but a deferred effect body can reach it fine -- by the time this ever actually runs,
+  // after mount, the whole render below it has already executed.
   useEffect(() => {
     if (!initialFiltersOpen) return;
     const id = window.requestAnimationFrame(() => {
-      focusFilterPanelRow(0);
+      openFiltersPanelEntry();
     });
     return () => window.cancelAnimationFrame(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- run once, on mount, only
@@ -716,9 +698,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
     const list = recommendChipRefs.current.filter(Boolean) as HTMLElement[];
     if (!list.length) return false;
     const i = Math.max(0, Math.min(index, list.length - 1));
-    list[i]?.focus();
-    list[i]?.scrollIntoView({ block: "nearest", inline: "nearest" });
-    return true;
+    return focusAndReveal(list[i]);
   }, []);
 
   const focusCustomPullButton = useCallback((): boolean => {
@@ -808,6 +788,39 @@ export function PullModelsModal(props: PullModelsModalProps) {
     () => recommendPullModelsForGaps(installedTags, { fossOnly: false, limit: 4, catalog: mergedCatalog }),
     [installedTags, mergedCatalog]
   );
+
+  /**
+   * Where the ring lands the moment the Filters panel opens: the first Suggested chip if the
+   * screen has any right now (plan 62, § 3e #2 moved that block in here from the top of the
+   * screen), otherwise straight to the first tickable row. Deliberately a plain function, not a
+   * memoized callback -- it has to read the current recommendedEntries every time it runs, and
+   * recommendedEntries is computed after this point in the component, so an early useCallback
+   * here could only ever close over a stale first render's value.
+   */
+  function openFiltersPanelEntry(): boolean {
+    return recommendedEntries.length > 0 ? focusRecommendChip(0) : focusFilterPanelRow(0);
+  }
+
+  /**
+   * Opens the Filters panel and moves the ring straight into it — pressing OK on the Filters
+   * button should land you *inside* the panel, not merely reveal it (plan 62, § 3d: "the D-pad
+   * must get into the panel").
+   */
+  function openFiltersPanel(): void {
+    setFiltersOpen(true);
+    window.requestAnimationFrame(() => {
+      openFiltersPanelEntry();
+    });
+  }
+
+  /** Closes the panel and returns the ring to the Filters button — the D-pad's way back out. */
+  function closeFiltersPanel(): boolean {
+    setFiltersOpen(false);
+    window.requestAnimationFrame(() => {
+      focusFiltersButton();
+    });
+    return true;
+  }
 
   const completeNestedModalClose = useCallback(
     (close: () => void) => {
@@ -1504,7 +1517,11 @@ export function PullModelsModal(props: PullModelsModalProps) {
   function filterPanelRowNav(i: number) {
     return {
       onMoveUp: () => {
-        if (i === 0) return closeFiltersPanel();
+        if (i === 0) {
+          return recommendedEntries.length > 0
+            ? focusRecommendChip(recommendedEntries.length - 1)
+            : closeFiltersPanel();
+        }
         return focusFilterPanelRowSkipping(i - 1, -1) || closeFiltersPanel();
       },
       onMoveDown: () => focusFilterPanelRowSkipping(i + 1, 1) || focusFilterPanelClose(),
@@ -1563,8 +1580,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                 }}
                 aria-label="Pull custom model tag"
                 {...({
-                  onMoveDown: () =>
-                    (recommendedEntries.length > 0 ? focusRecommendChip(0) : focusFiltersButton()),
+                  onMoveDown: () => focusFiltersButton(),
                 } as unknown as Record<string, unknown>)}
               >
                 {customPullBusy ? "…" : "Pull"}
@@ -1576,33 +1592,6 @@ export function PullModelsModal(props: PullModelsModalProps) {
               </div>
             ) : null}
           </div>
-
-          {recommendedEntries.length > 0 ? (
-            <div className="bonsai-pullmodels-recommend">
-              <div className="bonsai-pullmodels-recommend-title">Suggested</div>
-              <Focusable flow-children="horizontal" className="bonsai-pullmodels-recommend-row">
-                {recommendedEntries.map((entry, chipIndex) => {
-                  const selected = selectedTags.has(entry.tag);
-                  return (
-                    <Button
-                      key={`rec-${entry.tag}`}
-                      ref={(el) => {
-                        recommendChipRefs.current[chipIndex] = el;
-                      }}
-                      className={`bonsai-pullmodels-chip${selected ? " bonsai-pullmodels-chip--active" : ""}`}
-                      onClick={(ev) => toggleSelected(entry, ev)}
-                      aria-label={selected ? `Remove ${entry.tag} from queue` : `Queue ${entry.tag}`}
-                      {...(chipIndex === 0
-                        ? ({ onMoveUp: () => focusCustomPullButton() } as unknown as Record<string, unknown>)
-                        : {})}
-                    >
-                      {entry.tag}
-                    </Button>
-                  );
-                })}
-              </Focusable>
-            </div>
-          ) : null}
 
           <div className="bonsai-pullmodels-filters">
             <Button
@@ -1618,9 +1607,9 @@ export function PullModelsModal(props: PullModelsModalProps) {
               aria-expanded={filtersOpen}
               aria-label={`Filters, ${activeFilterLabels.length} on: ${activeFilterLabels.join(", ")}`}
               {...({
-                onMoveUp: () => (recommendedEntries.length === 0 ? focusCustomPullButton() : false),
+                onMoveUp: () => focusCustomPullButton(),
                 onMoveDown: () =>
-                  filtersOpen ? focusFilterPanelRow(0) : focusRowCell(0, "select") || focusFooterPull(),
+                  filtersOpen ? openFiltersPanelEntry() : focusRowCell(0, "select") || focusFooterPull(),
               } as unknown as Record<string, unknown>)}
             >
               <span className="bonsai-pullmodels-filters-button-title">Filters · {activeFilterLabels.length} on</span>
@@ -1631,6 +1620,40 @@ export function PullModelsModal(props: PullModelsModalProps) {
           <div className="bonsai-pullmodels-list" aria-busy={loadingMeta}>
             {filtersOpen ? (
               <div className="bonsai-pullmodels-filterpanel" role="group" aria-label="Filters">
+                {recommendedEntries.length > 0 ? (
+                  <div className="bonsai-pullmodels-recommend">
+                    <div className="bonsai-pullmodels-recommend-title">Suggested</div>
+                    <Focusable flow-children="horizontal" className="bonsai-pullmodels-recommend-row">
+                      {recommendedEntries.map((entry, chipIndex) => {
+                        const selected = selectedTags.has(entry.tag);
+                        const isFirst = chipIndex === 0;
+                        const isLast = chipIndex === recommendedEntries.length - 1;
+                        return (
+                          <Button
+                            key={`rec-${entry.tag}`}
+                            ref={(el) => {
+                              recommendChipRefs.current[chipIndex] = el;
+                            }}
+                            className={`bonsai-pullmodels-chip${selected ? " bonsai-pullmodels-chip--active" : ""}`}
+                            onClick={(ev) => toggleSelected(entry, ev)}
+                            aria-label={selected ? `Remove ${entry.tag} from queue` : `Queue ${entry.tag}`}
+                            {...({
+                              onMoveUp: () => (isFirst ? closeFiltersPanel() : focusRecommendChip(chipIndex - 1)),
+                              onMoveDown: () => (isLast ? focusFilterPanelRow(0) : focusRecommendChip(chipIndex + 1)),
+                              onCancelButton: (e: unknown) => {
+                                closeFiltersPanel();
+                                (e as { preventDefault?: () => void })?.preventDefault?.();
+                                return true;
+                              },
+                            } as unknown as Record<string, unknown>)}
+                          >
+                            {entry.tag}
+                          </Button>
+                        );
+                      })}
+                    </Focusable>
+                  </div>
+                ) : null}
                 {FILTER_PANEL_ROWS.map((row, i) => {
                   const heading = filterPanelRowGroupHeading(row);
                   const prevHeading = i > 0 ? filterPanelRowGroupHeading(FILTER_PANEL_ROWS[i - 1]) : null;

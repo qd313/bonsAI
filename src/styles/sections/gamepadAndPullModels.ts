@@ -203,6 +203,9 @@ export function buildPullModelsStylesheet(): string {
           display: flex;
           flex-direction: column;
           gap: 6px;
+          /* Lives inside the Filters panel now (plan 62, § 3e #2) -- room before the Licence
+             heading right after it. */
+          margin-bottom: 8px;
         }
         .bonsai-scope .bonsai-pullmodels-recommend-title {
           font-size: 10px;

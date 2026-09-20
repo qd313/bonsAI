@@ -40,11 +40,23 @@ vi.mock("@decky/ui", async () => {
 });
 
 import { PullModelsModal } from "./PullModelsModal";
+import { setRpcHandler } from "../test-harness/fakeDeckyRpc";
 
 function renderModal(overrides: Partial<React.ComponentProps<typeof PullModelsModal>> = {}) {
   return render(
     <PullModelsModal activeRoutingTag={null} onCancel={() => {}} onPullAccepted={() => {}} embedded {...overrides} />
   );
+}
+
+/**
+ * qwen2.5vl:3b covers chat + vision + ocr + strategy all by itself -- installing it satisfies
+ * every coverage role recommendPullModelsForGaps checks, so the Suggested block that would
+ * otherwise be the panel's first thing renders empty. Used by the tests below that want to pin
+ * down the Licence row specifically as "the panel's first row," rather than whatever the default,
+ * suggestion-bearing render happens to put there first.
+ */
+function installSwissArmyModelSoNothingIsSuggested() {
+  setRpcHandler("test_ollama_connection", () => ({ reachable: true, models: ["qwen2.5vl:3b"] }));
 }
 
 /** Several renders can capture the same logical button more than once; the latest is the one
@@ -74,9 +86,16 @@ afterEach(() => {
 });
 
 describe("Filters panel — getting in", () => {
-  it("pressing the Filters button opens the panel and moves the ring to its first row", async () => {
+  it("pressing the Filters button opens the panel and moves the ring to its first row (the Licence group, nothing suggested)", async () => {
+    installSwissArmyModelSoNothingIsSuggested();
     const { container } = renderModal();
 
+    // Recognizing qwen2.5vl:3b as installed happens after an async connection-test RPC; open the
+    // panel only once that has actually landed, or recommendedEntries would still reflect the
+    // pre-install (everything is a gap) state and put a Suggested chip first instead.
+    await waitFor(() => {
+      expect(container.textContent).toContain("Installed 1 ·");
+    });
     openFilters();
 
     await waitFor(() => {
@@ -85,11 +104,30 @@ describe("Filters panel — getting in", () => {
       expect(document.activeElement).toBe(firstRow);
     });
   });
+
+  it("moves the ring to the first Suggested chip instead, when the screen has one to offer", async () => {
+    // Default render, nothing installed -- every coverage role is a gap, so recommendedEntries is
+    // non-empty and § 3e #2's move (Suggested lives inside the panel now) puts it first.
+    const { container } = renderModal();
+
+    openFilters();
+
+    await waitFor(() => {
+      const firstButton = container.querySelector(".bonsai-pullmodels-filterpanel button");
+      expect(firstButton).not.toBeNull();
+      expect(firstButton?.closest(".bonsai-pullmodels-recommend")).not.toBeNull();
+      expect(document.activeElement).toBe(firstButton);
+    });
+  });
 });
 
 describe("Filters panel — getting back out", () => {
   it("Up from the first row closes the panel and returns the ring to the Filters button", async () => {
+    installSwissArmyModelSoNothingIsSuggested();
     const { container } = renderModal();
+    await waitFor(() => {
+      expect(container.textContent).toContain("Installed 1 ·");
+    });
     openFilters();
     await waitFor(() => {
       expect(container.querySelector('[aria-label="Open source only (recommended)"]')).not.toBeNull();
@@ -97,6 +135,28 @@ describe("Filters panel — getting back out", () => {
 
     const firstRow = latestByAriaLabel("Open source only (recommended)");
     const handled = (firstRow!.onMoveUp as () => boolean)();
+    expect(handled).toBe(true);
+
+    await waitFor(() => {
+      expect(container.querySelector(".bonsai-pullmodels-filterpanel")).toBeNull();
+      expect(document.activeElement).toBe(container.querySelector(".bonsai-pullmodels-filters-button"));
+    });
+  });
+
+  it("Up from the first Suggested chip also closes the panel, when one is showing", async () => {
+    const { container } = renderModal();
+    openFilters();
+
+    let firstChipLabel = "";
+    await waitFor(() => {
+      const firstButton = container.querySelector(".bonsai-pullmodels-recommend button") as HTMLButtonElement;
+      expect(firstButton).not.toBeNull();
+      firstChipLabel = firstButton.getAttribute("aria-label") ?? "";
+      expect(firstChipLabel).not.toBe("");
+    });
+
+    const firstChip = latestByAriaLabel(firstChipLabel);
+    const handled = (firstChip!.onMoveUp as () => boolean)();
     expect(handled).toBe(true);
 
     await waitFor(() => {

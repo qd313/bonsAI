@@ -418,7 +418,20 @@ export const OllamaTab: React.FC<OllamaTabProps> = ({
               ) : null}
             </div>
             <Button
-              onClick={() => onOpenOllamaModelsHub({ initialSection: "policy" })}
+              /*
+               * Closing the models screen used to leave the ring on Steam's own Quick Access rail,
+               * outside the plugin, when it had been opened from here -- measured on the Deck
+               * 2026-09-20. Where AI runs' "Browse models..." button remembers itself before
+               * opening and gets the ring back; this one never did, so there was nothing to return
+               * to. Its own id, because the registry needs one per opener, not one per popup.
+               */
+              ref={(el) => {
+                registerModalReturnFocusOwner("ollama-models-hub-settings", el as HTMLElement | null);
+              }}
+              onClick={() => {
+                rememberModalReturnFocus("ollama-models-hub-settings");
+                onOpenOllamaModelsHub({ initialSection: "policy" });
+              }}
               style={{
                 ...SETTINGS_GLASS_BTN,
                 width: "100%",

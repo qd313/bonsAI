@@ -32,6 +32,16 @@ export type ModalReturnFocusId =
   | "desktop-note-save"
   | "character-picker-settings"
   | "ollama-models-hub"
+  /**
+   * The AI models screen has two openers and so needs two ids, exactly as the note above says.
+   * "ollama-models-hub" is Where AI runs' own "Browse models..." button; this one is the Ollama
+   * tab's "Manage AI models..." button further down the same tab. Measured on the Deck 2026-09-20:
+   * opening from that second button and closing with B left the ring on Steam's own Quick Access
+   * rail, outside the plugin altogether, because nothing had been remembered. A comment on the
+   * first button had already predicted this ("Wiring only that one is why the 2026-08-04 focus log
+   * showed armedId: null for this modal") -- it was right, and this is the other half.
+   */
+  | "ollama-models-hub-settings"
   | "chat-slot-rename"
   /** The collapsing tab bar (plan 30): where a picker's return lands when its opener is gone. */
   | "tab-bar"

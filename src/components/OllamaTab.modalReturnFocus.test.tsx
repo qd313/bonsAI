@@ -69,6 +69,50 @@ describe("OllamaTab modal return focus", () => {
     resetModalReturnFocusRegistry();
   });
 
+  /*
+   * Measured on the Deck 2026-09-20: opening the AI models screen from the Ollama tab's own
+   * "Manage AI models" button and closing it with B left the ring on Steam's Quick Access rail,
+   * outside the plugin entirely, because this opener never registered itself. Where AI runs'
+   * "Browse models" button does, and a comment there had already predicted this exact gap for the
+   * second entry point.
+   */
+  it("remembers ollama-models-hub-settings when Manage AI models is pressed", () => {
+    const { getByLabelText } = render(<OllamaTab {...buildProps()} />);
+    fireEvent.click(getByLabelText("Manage AI models"));
+    expect(peekModalReturnFocus()).toBe("ollama-models-hub-settings");
+  });
+
+  it("registers the Manage AI models button so the registry can focus it back", () => {
+    const { getByLabelText } = render(<OllamaTab {...buildProps()} />);
+    const button = getByLabelText("Manage AI models");
+    const focus = vi.spyOn(button, "focus");
+
+    fireEvent.click(button);
+    restoreModalReturnFocus();
+
+    expect(focus).toHaveBeenCalled();
+  });
+
+  it("still opens the models screen when Manage AI models is pressed", () => {
+    const onOpenOllamaModelsHub = vi.fn();
+    const { getByLabelText } = render(<OllamaTab {...buildProps({ onOpenOllamaModelsHub })} />);
+
+    fireEvent.click(getByLabelText("Manage AI models"));
+
+    expect(onOpenOllamaModelsHub).toHaveBeenCalledWith({ initialSection: "policy" });
+  });
+
+  /*
+   * The models screen has two openers, and the registry's own note says two openers need two ids.
+   * Sharing one would mean whichever button mounted last owned it, so closing would hand the ring
+   * to the wrong button.
+   */
+  it("does not reuse the Browse models button's id", () => {
+    const { getByLabelText } = render(<OllamaTab {...buildProps()} />);
+    fireEvent.click(getByLabelText("Manage AI models"));
+    expect(peekModalReturnFocus()).not.toBe("ollama-models-hub");
+  });
+
   it("remembers ollama-text-try-order when Set text model try order... is pressed", () => {
     const { getByText } = render(<OllamaTab {...buildProps()} />);
     fireEvent.click(getByText("Set text model try order…"));

@@ -26,6 +26,11 @@
       "role": ""
     },
     {
+      "path": "src/components/PullModelsModal.tsx",
+      "lines": 1741,
+      "role": ""
+    },
+    {
       "path": "src/hooks/useBonsaiAskOrchestration.ts",
       "lines": 1736,
       "role": ""
@@ -33,11 +38,6 @@
     {
       "path": "py_modules/backend/services/ollama_prompts.py",
       "lines": 1670,
-      "role": ""
-    },
-    {
-      "path": "src/components/PullModelsModal.tsx",
-      "lines": 1537,
       "role": ""
     },
     {
@@ -131,6 +131,11 @@
       "role": ""
     },
     {
+      "path": "src/styles/sections/gamepadAndPullModels.ts",
+      "lines": 690,
+      "role": ""
+    },
+    {
       "path": "src/components/MainTabPresetAnimatedChips.test.tsx",
       "lines": 666,
       "role": ""
@@ -148,11 +153,6 @@
     {
       "path": "py_modules/backend/services/chat_slot_service.py",
       "lines": 619,
-      "role": ""
-    },
-    {
-      "path": "src/styles/sections/gamepadAndPullModels.ts",
-      "lines": 616,
       "role": ""
     },
     {

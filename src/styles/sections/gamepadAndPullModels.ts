@@ -131,8 +131,6 @@ export function buildGamepadFocusRingStylesheet(): string {
         .bonsai-scope .bonsai-attachment-preview-target:focus-visible,
         .bonsai-scope .bonsai-attachment-remove-target.gpfocus,
         .bonsai-scope .bonsai-attachment-remove-target:focus-visible,
-        .bonsai-scope button.bonsai-model-policy-tier-btn.gpfocus,
-        .bonsai-scope button.bonsai-model-policy-tier-btn:focus-visible,
         .bonsai-scope button.bonsai-models-hub-chip.gpfocus,
         .bonsai-scope button.bonsai-models-hub-chip:focus-visible,
         .bonsai-scope button.bonsai-pullmodels-chip.gpfocus,
@@ -142,7 +140,13 @@ export function buildGamepadFocusRingStylesheet(): string {
         .bonsai-scope button.bonsai-pullmodels-delete-btn.gpfocus,
         .bonsai-scope button.bonsai-pullmodels-delete-btn:focus-visible,
         .bonsai-scope button.bonsai-pullmodels-refresh-btn.gpfocus,
-        .bonsai-scope button.bonsai-pullmodels-refresh-btn:focus-visible {
+        .bonsai-scope button.bonsai-pullmodels-refresh-btn:focus-visible,
+        .bonsai-scope button.bonsai-pullmodels-filters-button.gpfocus,
+        .bonsai-scope button.bonsai-pullmodels-filters-button:focus-visible,
+        .bonsai-scope button.bonsai-pullmodels-filterpanel-row.gpfocus,
+        .bonsai-scope button.bonsai-pullmodels-filterpanel-row:focus-visible,
+        .bonsai-scope button.bonsai-pullmodels-filterpanel-close.gpfocus,
+        .bonsai-scope button.bonsai-pullmodels-filterpanel-close:focus-visible {
           ${ring}
         }
   `;
@@ -274,10 +278,85 @@ export function buildPullModelsStylesheet(): string {
           flex-direction: column;
           gap: 6px;
         }
-        .bonsai-scope .bonsai-pullmodels-filter-chips {
+        /* The single "Filters · N on" row that replaced the old two rows of filter/toggle chips
+           (plan 62, § 3d) -- one focus stop that opens a panel of tickable rows over the list,
+           instead of a permanent bank of chips always taking up their own space. */
+        .bonsai-scope .bonsai-pullmodels-filters-button {
+          display: flex !important;
+          flex-direction: row !important;
+          align-items: baseline !important;
+          justify-content: flex-start !important;
+          gap: 6px !important;
+          width: 100% !important;
+          min-height: 26px !important;
+          padding: 4px 8px !important;
+          font-size: 10px !important;
+          border-radius: 4px !important;
+          border: 1px solid rgba(255,255,255,0.18) !important;
+          background: rgba(255,255,255,0.06) !important;
+          color: #dce8f4 !important;
+          text-align: left !important;
+        }
+        .bonsai-scope .bonsai-pullmodels-filters-button-title {
+          flex-shrink: 0;
+          font-weight: 700;
+          color: #9ce7ff;
+        }
+        .bonsai-scope .bonsai-pullmodels-filters-button-summary {
+          min-width: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          color: #9fb7d5;
+        }
+        .bonsai-scope .bonsai-pullmodels-filterpanel {
           display: flex;
-          flex-wrap: wrap;
-          gap: 6px;
+          flex-direction: column;
+          gap: 2px;
+          padding-bottom: 4px;
+        }
+        .bonsai-scope .bonsai-pullmodels-filterpanel-row {
+          display: flex !important;
+          flex-direction: row !important;
+          align-items: center !important;
+          justify-content: flex-start !important;
+          gap: 6px !important;
+          width: 100% !important;
+          min-height: 26px !important;
+          padding: 4px 8px !important;
+          margin-bottom: 2px !important;
+          font-size: 11px !important;
+          border-radius: 4px !important;
+          border: 1px solid rgba(255,255,255,0.12) !important;
+          background: rgba(255,255,255,0.03) !important;
+          color: #c5d4e3 !important;
+          text-align: left !important;
+        }
+        .bonsai-scope .bonsai-pullmodels-filterpanel-row--checked {
+          border-color: rgba(56,189,248,0.55) !important;
+          background: rgba(56,189,248,0.14) !important;
+          color: #e0f2fe !important;
+        }
+        .bonsai-scope .bonsai-pullmodels-filterpanel-row[disabled] {
+          opacity: 0.4 !important;
+        }
+        .bonsai-scope .bonsai-pullmodels-filterpanel-check {
+          flex-shrink: 0;
+          width: 12px;
+          display: inline-block;
+          color: var(--bonsai-pullmodels-accent);
+          font-weight: 700;
+        }
+        .bonsai-scope .bonsai-pullmodels-filterpanel-close {
+          width: 100% !important;
+          min-height: 26px !important;
+          margin-top: 4px !important;
+          font-size: 10px !important;
+          font-weight: 600 !important;
+          border-radius: 4px !important;
+          border: 1px solid rgba(255,255,255,0.14) !important;
+          background: rgba(255,255,255,0.04) !important;
+          color: #9fb7d5 !important;
         }
         .bonsai-scope .bonsai-pullmodels-chip {
           min-height: 24px !important;
@@ -309,11 +388,6 @@ export function buildPullModelsStylesheet(): string {
           padding: 2px 6px !important;
           min-height: 17px !important;
           line-height: 1.2 !important;
-        }
-        .bonsai-scope .bonsai-pullmodels-toggles {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 12px;
         }
         .bonsai-scope .bonsai-pullmodels-list {
           flex: 1 1 auto;

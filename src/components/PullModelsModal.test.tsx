@@ -45,12 +45,22 @@ function setInstalledModels(models: string[]) {
  * The picker defaults to "Essentials only", which shows just the three one-pull multimodal
  * presets (all "essentials"-group, all vision-capable). A "smallest"-group, text-only tag like
  * qwen2.5:1.5b or llama3.2:3b needs this off to appear as a catalog row at all.
+ *
+ * Essentials only lives inside the Filters panel now (plan 62, § 3d) rather than as its own
+ * always-visible chip, so this opens the panel first -- the button's own accessible name is the
+ * dynamic "Filters, N on: ..." summary, so it is found by its class instead.
  */
 function showAllGroups(container: HTMLElement) {
+  const filtersButton = container.querySelector(".bonsai-pullmodels-filters-button") as HTMLButtonElement;
+  fireEvent.click(filtersButton);
   const toggle = container.querySelector(
     '[aria-label="Essentials only — show Tier 1 and Tier 2 one-model presets"]'
   ) as HTMLButtonElement;
   fireEvent.click(toggle);
+  // The panel stays open until closed explicitly (it does not auto-close on a tick, so several
+  // filters can be set in one visit) -- close it so the table underneath is what these tests see.
+  const closeButton = container.querySelector(".bonsai-pullmodels-filterpanel-close") as HTMLButtonElement;
+  fireEvent.click(closeButton);
 }
 
 describe("isEmbeddingOnlyTag", () => {

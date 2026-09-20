@@ -73,16 +73,21 @@ export const PULL_MODEL_GROUP_ORDER: readonly PullModelGroup[] = [
   "specialist",
 ];
 
-export const PULL_MODEL_FILTER_OPTIONS = [
-  { id: "all", label: "All" },
+/**
+ * The four "matches an Ask mode" filters offered in the models screen's Filters panel (plan 62,
+ * § 3d). Replaces the old single-select filter row (all/speed/strategy/expert/vision/coding):
+ * "All" is gone because these are independent tickable rows now (ticking none shows every mode),
+ * and "Coding" was dropped on purpose — nothing in the catalog is coding-only and no Ask mode
+ * matches it. A model matches this group when it fits *any* ticked mode (OR, not AND).
+ */
+export const PULL_MODEL_MODE_FILTER_OPTIONS = [
   { id: "speed", label: "Speed" },
   { id: "strategy", label: "Strategy" },
   { id: "expert", label: "Expert" },
   { id: "vision", label: "Vision" },
-  { id: "coding", label: "Coding" },
 ] as const;
 
-export type PullModelFilterId = (typeof PULL_MODEL_FILTER_OPTIONS)[number]["id"];
+export type PullModelModeFilterId = (typeof PULL_MODEL_MODE_FILTER_OPTIONS)[number]["id"];
 
 /** Pull models table header — curated 1–6 ★ score for quality/fit on Steam Deck. */
 export const PULL_MODEL_RATING_COLUMN_LABEL = "Deck fit";

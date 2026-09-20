@@ -2,33 +2,38 @@
  * Title: The AI models screen
  *
  * Purpose: The full-screen popup for everything about which AI models this
- * plugin can use: choosing how open the model policy is, browsing and
- * downloading models, and a set of advanced routing switches. It opens with
- * one of three sections showing — Policy, Browse & pull, or Advanced — with
- * chips across the top to switch between them, and it keeps a change to any
- * of them as a draft until the person presses Done, at which point every
- * pending change is saved together.
+ * plugin can use: browsing and downloading models (with the model licence
+ * choice folded in as one of the Browse screen's own filters), plus a set
+ * of advanced routing switches reached from a small "Advanced" link. It
+ * keeps a change to either as a draft until the person presses Done, at
+ * which point every pending change is saved together.
  *
  * Used for: The Ollama tab's "Manage models" entry.
  *
- * Solves: Puts policy, the download catalog, and the advanced switches
- * behind one Done button instead of three separate popups each with their
- * own save step, so switching sections does not lose an unsaved change.
+ * Solves: Puts the licence choice, the download catalog, and the advanced
+ * switches behind one Done button instead of separate popups each with
+ * their own save step, so opening Advanced does not lose an unsaved pick.
  *
  * Does not: Install Ollama itself, or actually download a model — the
- * browse-and-pull section is a separate component (PullModelsModal) that
+ * browse-and-pull screen is a separate component (PullModelsModal) that
  * this file only hosts and asks to save on Done.
  *
- * Gotchas: While the Browse & pull section is open, the Done button's own
- * label and whether it can be pressed come from that section, not from this
- * file — PullModelsModal reports back what its own button should say and
- * whether it should be enabled, through onFooterStateChange, and this modal
- * just repaints its Done button to match.
+ * Gotchas:
+ * - While the Browse screen is open with nothing queued to pull, Done
+ *   means "save the licence pick and close", not "pull" — see handleDone.
+ *   PullModelsModal reports back through onFooterStateChange whether
+ *   something is actually queued (hasQueuedPull), and this file only lets
+ *   Done act as "Pull selected" once it is.
+ * - Until 2026-09-20 this screen had a third, separate "Policy" section
+ *   for the same three-tier choice the Browse screen's Licence filter
+ *   makes now (plan 62, § 3d) — that section and its own chip are gone;
+ *   the licence pick is one of the Filters panel's rows inside
+ *   PullModelsModal, wired here exactly the same draft-until-Done way.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button, ConfirmModal, Focusable } from "@decky/ui";
 import type { ModelPolicyTierId } from "../data/modelPolicy";
-import { ModelPolicyTierPanel, useModelPolicyTierDraft } from "./ModelPolicyTierPanel";
+import { useModelPolicyTierDraft } from "./ModelPolicyTierPanel";
 import {
   ModelRoutingAdvancedPanel,
   useModelRoutingAdvancedDraft,
@@ -56,18 +61,23 @@ export type OllamaModelsHubModalProps = {
   onClose: () => void;
 };
 
-const HUB_SECTIONS: { id: OllamaModelsHubSection; label: string }[] = [
-  { id: "policy", label: "Policy" },
+/**
+ * The two real sections left once Policy folded into Browse's own Filters panel. "policy" is
+ * still a value `initialSection` accepts (existing callers ask for it as a shortcut into the
+ * licence pick) — see the section-init logic below for how that maps onto "browse".
+ */
+const HUB_SECTIONS: { id: Exclude<OllamaModelsHubSection, "policy">; label: string }[] = [
   { id: "browse", label: "Browse & pull" },
   { id: "advanced", label: "Advanced" },
 ];
 
 /**
- * Unified fullscreen hub: policy tiers, browse/pull table, and advanced routing.
+ * Unified fullscreen hub: the browse/pull table (licence choice included, as a filter) and
+ * advanced routing.
  */
 export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
   const {
-    initialSection = "policy",
+    initialSection = "browse",
     activeRoutingTag,
     modelPolicyTier,
     modelPolicyNonFossUnlocked,
@@ -80,7 +90,12 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
     onClose,
   } = props;
 
-  const [section, setSection] = useState<OllamaModelsHubSection>(initialSection);
+  // "policy" used to be its own section; it is now the Filters panel's Licence group, inside
+  // Browse. A caller still asking for it lands on Browse with that panel already open.
+  const [section, setSection] = useState<Exclude<OllamaModelsHubSection, "policy">>(
+    initialSection === "policy" ? "browse" : initialSection
+  );
+  const openedOnLicenceShortcut = useRef(initialSection === "policy");
   const { draftTier, draftTierRef, setDraft } = useModelPolicyTierDraft(modelPolicyTier);
   const {
     draftNonFossUnlocked,
@@ -93,6 +108,7 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
     okText: "Pull selected",
     onOk: () => {},
     okDisabled: true,
+    hasQueuedPull: false,
   });
 
   const draftNonFossRef = useRef(modelPolicyNonFossUnlocked);
@@ -124,24 +140,33 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
     [onClose]
   );
 
+  /**
+   * Done always saves the licence + advanced draft first, then either closes (nothing queued to
+   * pull, or the Advanced screen) or hands off to PullModelsModal's own pull. Before the Filters
+   * panel folded Policy in, saving that draft only ever happened from the Policy or Advanced
+   * section's own Done press -- pressing Done while Browse had nothing queued left the tier
+   * change unsaved. Committing unconditionally here closes that gap along with the move.
+   */
   const handleDone = useCallback(() => {
-    if (section === "browse") {
-      browseFooter.onOk();
-      return;
-    }
     void commitPolicyAndAdvanced()
-      .then(() => handleHubClose("done"))
+      .then(() => {
+        if (section === "browse" && browseFooter.hasQueuedPull) {
+          browseFooter.onOk();
+          return;
+        }
+        handleHubClose("done");
+      })
       .catch((err) => {
         console.error("save_settings failed (AI models hub Done)", err);
       });
   }, [section, browseFooter, commitPolicyAndAdvanced, handleHubClose]);
 
-  const selectSection = useCallback((next: OllamaModelsHubSection, _source: string) => {
+  const selectSection = useCallback((next: Exclude<OllamaModelsHubSection, "policy">, _source: string) => {
     setSection(next);
   }, []);
 
-  const okButtonText = section === "browse" ? browseFooter.okText : "Done";
-  const okDisabled = section === "browse" ? browseFooter.okDisabled : false;
+  const okButtonText = section === "browse" && browseFooter.hasQueuedPull ? browseFooter.okText : "Done";
+  const okDisabled = section === "browse" && browseFooter.hasQueuedPull ? browseFooter.okDisabled : false;
 
   return (
     <ConfirmModal
@@ -197,19 +222,13 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
               );
             })}
           </Focusable>
-          {section === "policy" ? (
-            <ModelPolicyTierPanel
-              modelPolicyTier={modelPolicyTier}
-              modelPolicyNonFossUnlocked={draftNonFossUnlocked}
-              draftTier={draftTier}
-              onDraftTierChange={setDraft}
-            />
-          ) : null}
           {section === "browse" ? (
             <PullModelsModal
               embedded
               activeRoutingTag={activeRoutingTag}
               modelPolicyTier={draftTier}
+              modelPolicyNonFossUnlocked={draftNonFossUnlocked}
+              onSelectModelPolicyTier={setDraft}
               onApplyTier2Policy={async () => {
                 setDraft("open_weight");
                 await onApplyTier2MultimodalPolicy?.();
@@ -219,6 +238,7 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
               onCancel={() => handleHubClose("browseCancel")}
               onPullAccepted={() => handleHubClose("pullAccepted")}
               onFooterStateChange={handleBrowseFooterChange}
+              initialFiltersOpen={openedOnLicenceShortcut.current}
             />
           ) : null}
           {section === "advanced" ? (

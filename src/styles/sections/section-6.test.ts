@@ -55,6 +55,43 @@ describe("copy icon room reserved below a trailing code box (section 6 CSS)", ()
   });
 });
 
+describe("chat slot title centring (section 6 CSS, plan 62 3a)", () => {
+  // The chat's name used to sit 14px left of the game name above it and the dots below it,
+  // because the title row centred the name TOGETHER with the small delete x beside it, and the
+  // game name/dots centre on the whole row instead. jsdom has no layout engine (design-language.md
+  // rule 6, same reason section-4.test.ts and the copy-icon suite above read the CSS text rather
+  // than rendering), so this proves the fix structurally: the x is taken out of the flex group
+  // that gets centred, rather than checking a pixel offset the test runner cannot produce.
+  const css = buildSection6Section();
+
+  it("takes the delete x out of the centred flex flow and anchors it to the row's own edge", () => {
+    const match = css.match(/\.bonsai-scope \.bonsai-chat-slot-delete\s*\{([^}]*)\}/);
+    expect(match).toBeTruthy();
+    const body = match![1]!;
+    // position: absolute (not a flex child any more) removes it from the group that
+    // justify-content: center on .bonsai-chat-slot-title-row centres — that group is now only
+    // the title (and, unfocused, its ghost neighbours), so it centres on the row's true middle.
+    expect(body).toMatch(/position:\s*absolute;/);
+    expect(body).toMatch(/right:\s*0;/);
+    expect(body).not.toMatch(/flex:\s*0 0 auto;/);
+  });
+
+  it("gives the title row a positioned anchor for that absolute x", () => {
+    const match = css.match(/\.bonsai-scope \.bonsai-chat-slot-title-row\s*\{([^}]*)\}/);
+    expect(match).toBeTruthy();
+    expect(match![1]).toMatch(/position:\s*relative;/);
+  });
+
+  it("narrows the name's own width so a long one still ellipsizes before the x, not under it", () => {
+    // 28px is the delete box (22px) plus the 6px gap it used to sit in — the exact amount of
+    // room the x used to occupy inside the centred group, now reserved instead of shared with it.
+    const match = css.match(/\.bonsai-scope \.bonsai-chat-slot-title\s*\{([^}]*)\}/);
+    expect(match).toBeTruthy();
+    const body = match![1]!;
+    expect(body).toMatch(/max-width:\s*calc\(88% - calc\(28px/);
+  });
+});
+
 describe("suggestion chip surface at rest (section 6 CSS, plan 60 board B)", () => {
   const css = buildSection6Section();
 

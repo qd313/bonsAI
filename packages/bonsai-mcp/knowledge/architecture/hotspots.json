@@ -37,7 +37,7 @@
     },
     {
       "path": "src/styles/sections/section-6.ts",
-      "lines": 1561,
+      "lines": 1595,
       "role": ""
     },
     {
@@ -126,6 +126,11 @@
       "role": ""
     },
     {
+      "path": "src/utils/buildReplyActionsElement.test.tsx",
+      "lines": 704,
+      "role": ""
+    },
+    {
       "path": "src/hooks/usePluginSettings.ts",
       "lines": 691,
       "role": ""
@@ -133,6 +138,11 @@
     {
       "path": "src/components/MainTabPresetAnimatedChips.test.tsx",
       "lines": 666,
+      "role": ""
+    },
+    {
+      "path": "src/utils/buildReplyActionsElement.tsx",
+      "lines": 632,
       "role": ""
     },
     {
@@ -153,16 +163,6 @@
     {
       "path": "py_modules/backend/services/chat_slot_service.py",
       "lines": 619,
-      "role": ""
-    },
-    {
-      "path": "src/utils/buildReplyActionsElement.test.tsx",
-      "lines": 611,
-      "role": ""
-    },
-    {
-      "path": "src/utils/buildReplyActionsElement.tsx",
-      "lines": 608,
       "role": ""
     },
     {

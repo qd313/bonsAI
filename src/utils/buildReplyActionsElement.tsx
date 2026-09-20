@@ -2,20 +2,28 @@
  * Title: Reply actions row builder
  *
  * Purpose: Builds everything that can sit under one AI reply, below the
- * answer itself: the Helpful / Not really thumbs, the "what went wrong"
- * chips that appear once someone picks Not really, an optional Read aloud
- * line, and the Show details line. Not every reply shows all of them — one
- * still arriving, or one already rated, shows fewer.
+ * answer itself: the Helpful / Not really thumbs (with an optional Read
+ * aloud speaker at the row's right-hand end), the "what went wrong" chips
+ * that appear once someone picks Not really, and the Show details line. Not
+ * every reply shows all of them — one still arriving, or one already rated,
+ * shows fewer.
  *
  *     ┌─ reply actions ─────────────────────┐
- *     │   Helpful        Not really         │  <- thumbs
+ *     │   Helpful   Not really   (speaker)  │  <- thumbs + Read aloud
  *     │   (only once Not really is picked)  │
  *     │   [chip] [chip] [chip]              │  <- what went wrong
  *     │   [chip] [chip]                     │  <- too long / too short
  *     │   (chip error text, if a chip failed)│
- *     │  ──────── Read aloud ────────       │  <- optional
  *     │  ──────── Show details ↓ ───        │
  *     └───────────────────────────────────────┘
+ *
+ * Read aloud used to be its own full-width line, the same shape as Show
+ * details right below it — two lines that read as one control (plan 62
+ * section 3b). It is a bare glyph now, styled like the Ask bar's own
+ * microphone: no border, no fill, quiet until the D-pad ring lands on it. It
+ * still renders even when the thumbs do not — an older turn can offer Read
+ * aloud with no Helpful / Not really at all — in which case it is the only
+ * thing in that row, still pinned to the right-hand end.
  *
  * Used for: MainTabChatTranscript, once per reply, and the wider chat
  * screen's D-pad wiring that connects this row to the reply above it and
@@ -30,17 +38,22 @@
  *
  * How it works:
  * 1. Work out which pieces even show. Chips only appear once someone picks
- *    Not really; the Read aloud line only when a caller supplied a handler
- *    for it; the Show details line only when a caller supplied its toggle.
- *    If none of that applies and there is no rating yet either, the whole
- *    row renders nothing.
+ *    Not really; the Read aloud speaker only when a caller supplied a
+ *    handler for it (rendered inside the thumbs row, or alone in its place
+ *    when there are no thumbs); the Show details line only when a caller
+ *    supplied its toggle. If none of that applies and there is no rating yet
+ *    either, the whole row renders nothing.
  * 2. renderChipRow() draws one row of "what went wrong" chips from a list of
  *    chip ids, and is called twice — once for the three reasons about the
  *    answer itself, once for "too long" / "too short".
  * 3. Wire D-pad Up and Down between whichever pieces are showing, in the
  *    order drawn above — a piece that is missing is skipped, so its
- *    neighbours reach past it (thumbs down to Read aloud when there is no
- *    Show details line, and so on).
+ *    neighbours reach past it (thumbs/Read-aloud row down to Show details
+ *    when there are no chips, and so on). Left and Right inside the thumbs
+ *    row are Steam's own default sibling movement — Helpful, then Not
+ *    really, then the speaker, in that DOM order — except while the thumbs
+ *    are greyed and there is no speaker to reach, when the row swallows the
+ *    press instead of hopping between two dead buttons.
  * 4. Each row answers presses two ways — its own onMoveUp/onMoveDown, and a
  *    shared pressHandler() wired to onButtonDown — because Decky delivers a
  *    directional press through onButtonDown in practice, though onMoveUp and
@@ -62,7 +75,12 @@
 import React from "react";
 import { Focusable } from "@decky/ui";
 import { BonsaiChatSecondaryButton } from "../components/BonsaiChatSecondaryButton";
-import { ThumbDownOutlineIcon, ThumbUpOutlineIcon } from "../components/icons";
+import {
+  AskStopIcon,
+  ReadAloudSpeakerIcon,
+  ThumbDownOutlineIcon,
+  ThumbUpOutlineIcon,
+} from "../components/icons";
 import type { ReplyMicroActionId } from "../data/replyMicroActions";
 import { replyMicroActionById } from "../data/replyMicroActions";
 import {
@@ -121,9 +139,9 @@ export type BuildReplyActionsElementArgs = {
   onChip?: (chipId: ReplyMicroActionId) => void;
   askInFlight?: boolean;
   /**
-   * When set, a Read aloud / Stop line renders between the thumbs (or refinement chips, when
-   * shown) and the Show details line — same shape as Show details, one row up. `readAloudLabel`
-   * is the whole line's text ("Read aloud" or "Stop"); the caller decides which by tracking which
+   * When set, a bare speaker glyph renders at the right-hand end of the Helpful / Not really row
+   * (or alone, in the same spot, on a reply with no thumbs). `readAloudLabel` is its aria-label and
+   * decides which glyph it draws — "Read aloud" or "Stop" — the caller picks by tracking which
    * answer is currently speaking.
    */
   onReadAloudToggle?: () => void;
@@ -192,18 +210,20 @@ function renderChipRow(
  * as the button a person actually wants next.
  *
  * 1. Read the args apart and work out which optional pieces are showing:
- *    the chip rows, the Read aloud line, the Show details divider.
+ *    the thumbs, the Read aloud speaker, the chip rows, the Show details
+ *    divider.
  * 2. Work out whether feedback is currently allowed to be given at all
  *    (feedbackDisabled) and whether it has already been given (thumbsLocked).
  * 3. Build every D-pad hand-off this row can be asked for — moveUpFromReply,
  *    downFromThumbs, upIntoGlossaryChip, upFromRetry, upFromDivider,
- *    upFromReadAloud, downFromReadAloud, downFromDivider — each one trying
- *    its own neighbours first and falling back outward only once they all
- *    decline. See the file header's How it works for the order they chain in.
+ *    downFromDivider — each one trying its own neighbours first and falling
+ *    back outward only once they all decline. See the file header's How it
+ *    works for the order they chain in.
  * 4. If nothing would show at all, return null.
- * 5. Otherwise render the pieces top to bottom: thumbs, the chip rows and
- *    any chip error, the Read aloud line, then the Show details line —
- *    each wired to the hand-offs built in step 3.
+ * 5. Otherwise render the pieces top to bottom: thumbs (with the speaker at
+ *    the row's right-hand end, or alone if there are no thumbs), the chip
+ *    rows and any chip error, then the Show details line — each wired to the
+ *    hand-offs built in step 3.
  */
 export function buildReplyActionsElement(
   args: BuildReplyActionsElementArgs
@@ -230,6 +250,10 @@ export function buildReplyActionsElement(
 
   const showChipRows = Boolean(onChip) && rating === "down";
   const showReadAloudRow = Boolean(onReadAloudToggle);
+  const isReadAloudSpeaking = readAloudLabel === "Stop";
+  /* Helpful / Not really render only pre-rating or once rated down (a "rated up" reply shows the
+     "Saved on this Deck" label instead) — same condition the row used before Read aloud moved in. */
+  const showThumbs = showFeedback && (rating === null || rating === "down");
   /*
    * The row of buttons under a reply is gone (D76, D77): Show details became the line below,
    * Copy moved into the answer bubble's corner and Retry onto the question bubble's. What is left
@@ -314,7 +338,6 @@ export function buildReplyActionsElement(
    * render is the ref equivalent here — there are no hooks to use.
    */
   const thumbsRowEl: { current: HTMLElement | null } = { current: null };
-  const readAloudEl: { current: HTMLElement | null } = { current: null };
   const dividerEl: { current: HTMLElement | null } = { current: null };
   /*
    * Steam's nav node for the utility row. Thumbs and utility are separate navigation containers, so
@@ -358,8 +381,14 @@ export function buildReplyActionsElement(
    * row while it is greyed. Claiming the press (returning true) instead of yielding to Steam's own
    * horizontal flow keeps the ring from hopping onto — or between — two buttons that do nothing. A
    * live row is untouched: Steam's own Left/Right between Helpful and Not really is unchanged.
+   *
+   * The Read aloud speaker changes this once it shares the row (plan 62 section 3b): with the
+   * thumbs greyed, Right off Not really now has a genuinely live button to reach, so swallowing
+   * unconditionally would make the speaker unreachable by Left/Right — the exact risk this feature
+   * was flagged for. Swallow only when there is truly nowhere live to go: thumbs greyed AND no
+   * speaker in this row at all.
    */
-  const swallowThumbsSideways = () => thumbsDisabled;
+  const swallowThumbsSideways = () => thumbsDisabled && !showReadAloudRow;
 
   /*
    * Column-preserving vertical hops when thumbs sit directly above utility
@@ -376,12 +405,11 @@ export function buildReplyActionsElement(
    * Once focus is inside the row, a plain `focus()` moves between its two buttons (same container).
    */
   /*
-   * Below the thumbs sits Read aloud (when it renders) and then the Show details line — the
-   * button row that used to be here is gone.
+   * Below the thumbs (and the speaker riding along in the same row) sits the Show details line —
+   * the button row that used to be here, and the separate Read aloud line below it, are both gone.
    */
   const downFromThumbs = () => {
     if (showChipRows) return false;
-    if (showReadAloudRow && focusReplyReadAloud(liveSlot())) return true;
     if (showDetailsDivider && focusReplyShowDetails(liveSlot())) return true;
     return downFromDivider();
   };
@@ -423,26 +451,20 @@ export function buildReplyActionsElement(
     const slot = liveSlot();
     if (showChipRows && focusLastReplyChip(slot)) return true;
     if (focusReplyHelpful(slot)) return true;
-    /* No thumbs row at all (a restored answer, say) — same branch/checklist hand-off as
+    /* No live Helpful to land on (greyed and skipped — replyStopRegistry — or no thumbs row at
+       all), but the speaker is still there: Up from Show details lands on the row either way, now
+       that the separate Read aloud line is gone (plan 62 section 3b). */
+    if (showReadAloudRow && focusReplyReadAloud(slot)) return true;
+    /* No thumbs row and no speaker (a restored answer, say) — same branch/checklist hand-off as
        moveUpFromReply above, for the same reason. */
     if (hasStrategyChromeAboveReply(slot) && focusUpFromReplyActions(slot)) return true;
     if (upIntoGlossaryChip()) return true;
     return focusLastAnswerChunk(replyKey);
   };
 
-  /* Read aloud, when it renders, sits directly above Show details; otherwise Up goes to the thumbs. */
-  const upFromDivider = () => {
-    if (showReadAloudRow && focusReplyReadAloud(liveSlot())) return true;
-    return upFromRetry();
-  };
-
-  /* Read aloud's own Up/Down: same "up to thumbs" fallback as Show details used to use alone, and
-     down to Show details when it renders, else straight to whatever sits below the utility row. */
-  const upFromReadAloud = () => upFromRetry();
-  const downFromReadAloud = () => {
-    if (showDetailsDivider && focusReplyShowDetails(liveSlot())) return true;
-    return downFromDivider();
-  };
+  /* Up from Show details: straight to the thumbs/Read-aloud row above it (the separate Read aloud
+     line this used to check for first is gone — see upFromRetry). */
+  const upFromDivider = () => upFromRetry();
 
   if (!showFeedback && !showDetailsDivider && !showChipRows && !showReadAloudRow && rating === null) {
     return null;
@@ -462,9 +484,11 @@ export function buildReplyActionsElement(
           Saved on this Deck
         </span>
       ) : null}
-      {showFeedback && (rating === null || rating === "down") ? (
+      {showThumbs || showReadAloudRow ? (
         <>
-          <span className="bonsai-chat-feedback-row__label">Was this helpful?</span>
+          {showThumbs ? (
+            <span className="bonsai-chat-feedback-row__label">Was this helpful?</span>
+          ) : null}
           <Focusable
             className="bonsai-chat-reply-actions-row"
             flow-children="horizontal"
@@ -484,24 +508,50 @@ export function buildReplyActionsElement(
               },
             } as Record<string, unknown>)}
           >
-            <BonsaiChatSecondaryButton
-              disabled={feedbackDisabled || thumbsLocked}
-              onClick={() => onRate("up")}
-              aria-label="Mark reply helpful"
-              replyStop="helpful"
-            >
-              <ThumbUpOutlineIcon size={14} />
-              Helpful
-            </BonsaiChatSecondaryButton>
-            <BonsaiChatSecondaryButton
-              disabled={feedbackDisabled || thumbsLocked}
-              onClick={() => onRate("down")}
-              aria-label="Mark reply not helpful"
-              replyStop="not-really"
-            >
-              <ThumbDownOutlineIcon size={14} />
-              Not really
-            </BonsaiChatSecondaryButton>
+            {showThumbs ? (
+              <>
+                <BonsaiChatSecondaryButton
+                  disabled={feedbackDisabled || thumbsLocked}
+                  onClick={() => onRate("up")}
+                  aria-label="Mark reply helpful"
+                  replyStop="helpful"
+                >
+                  <ThumbUpOutlineIcon size={14} />
+                  Helpful
+                </BonsaiChatSecondaryButton>
+                <BonsaiChatSecondaryButton
+                  disabled={feedbackDisabled || thumbsLocked}
+                  onClick={() => onRate("down")}
+                  aria-label="Mark reply not helpful"
+                  replyStop="not-really"
+                >
+                  <ThumbDownOutlineIcon size={14} />
+                  Not really
+                </BonsaiChatSecondaryButton>
+              </>
+            ) : null}
+            {showReadAloudRow ? (
+              /*
+               * The Read aloud speaker (plan 62 section 3b) — a bare glyph at the row's right-hand
+               * end, never disabled, so it stays a real D-pad stop even while Helpful and Not
+               * really are greyed out on a reply stopped part-way through (see
+               * swallowThumbsSideways above for the Left/Right half of that).
+               */
+              <BonsaiChatSecondaryButton
+                onClick={onReadAloudToggle ?? (() => undefined)}
+                aria-label={readAloudLabel}
+                replyStop="read-aloud"
+                className={`bonsai-chat-read-aloud-btn${
+                  isReadAloudSpeaking ? " bonsai-chat-read-aloud-btn--speaking" : ""
+                }`}
+              >
+                {isReadAloudSpeaking ? (
+                  <AskStopIcon size={16} />
+                ) : (
+                  <ReadAloudSpeakerIcon size={16} />
+                )}
+              </BonsaiChatSecondaryButton>
+            ) : null}
           </Focusable>
         </>
       ) : null}
@@ -531,32 +581,6 @@ export function buildReplyActionsElement(
         >
           {chipError}
         </div>
-      ) : null}
-      {showReadAloudRow ? (
-        /*
-         * Read aloud / Stop, one line, same shape as Show details below it (plan 42 step 3). A
-         * line rather than a button because the answer bubble's own action row is gone (D76, D77)
-         * and this is the surviving shape a single reply-level control takes here.
-         */
-        <Focusable
-          className="bonsai-chat-details-divider"
-          ref={(el: HTMLElement | null) => {
-            readAloudEl.current = el;
-            registerReplyStop("read-aloud", el);
-          }}
-          onOKButton={onReadAloudToggle}
-          onClick={onReadAloudToggle}
-          aria-label={readAloudLabel}
-          {...({
-            onMoveUp: upFromReadAloud,
-            onMoveDown: downFromReadAloud,
-            onButtonDown: pressHandler(readAloudEl, downFromReadAloud, upFromReadAloud),
-          } as Record<string, unknown>)}
-        >
-          <span className="bonsai-chat-details-divider-rule" />
-          <span className="bonsai-chat-details-divider-label">{readAloudLabel}</span>
-          <span className="bonsai-chat-details-divider-rule" />
-        </Focusable>
       ) : null}
       {showDetailsDivider ? (
         /*

@@ -93,17 +93,20 @@ describe("a finished reply, all three changes together", () => {
 
   it("reads top to bottom: question, answer, Was this helpful?, Read aloud, then Show details", () => {
     const { container } = renderReply(SHORT_ANSWER, { transparencySnapshot: TRANSPARENCY });
+    /* Read aloud is a bare speaker glyph at the end of the Helpful / Not really row now (plan 62
+       section 3b), not a line of its own — the divider shape is Show details alone these days. */
     const lines = container.querySelectorAll(".bonsai-chat-details-divider");
-    /* Read aloud (plan 42 step 3a) now shares this line shape with Show details (D76); it renders
-       first, one row above. */
-    expect(lines.length).toBe(2);
-    expect(lines[0]!.textContent).toMatch(/Read aloud|Stop/);
-    expect(lines[1]!.textContent).toContain("Show details");
+    expect(lines.length).toBe(1);
+    expect(lines[0]!.textContent).toContain("Show details");
+    const speaker = container.querySelector(".bonsai-chat-read-aloud-btn");
+    expect(speaker).not.toBeNull();
+    expect(speaker!.getAttribute("aria-label")).toMatch(/Read aloud|Stop/);
 
     const order = [
       ".bonsai-chat-turn-row-header",
       ".bonsai-chat-ai-bubble",
       ".bonsai-chat-feedback-row__label",
+      ".bonsai-chat-read-aloud-btn",
       ".bonsai-chat-details-divider",
     ].map((sel) => {
       const el = container.querySelector(sel);

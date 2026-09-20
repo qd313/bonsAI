@@ -186,6 +186,27 @@ export const AskStopIcon: React.FC<{ size?: number }> = ({ size = 18 }) => (
   </IconShell>
 );
 
+/**
+ * The reply row's Read aloud control (plan 62 section 3b): a bare speaker glyph, no button chrome
+ * of its own — the surrounding button in buildReplyActionsElement.tsx supplies that, the same
+ * split the Ask bar's own mic (AskMicIcon) already uses. Swapped for AskStopIcon while an answer
+ * is being read.
+ */
+export const ReadAloudSpeakerIcon: React.FC<{ size?: number }> = ({ size = 16 }) => (
+  <IconShell size={size}>
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path
+        d="M4 9.6v4.8h3.15L12 18.4V5.6L7.15 9.6H4Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <path d="M15.6 9.3a4 4 0 0 1 0 5.4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M17.9 7a7.3 7.3 0 0 1 0 10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  </IconShell>
+);
+
 /** This back chevron is used in compact media browser/back controls. */
 export const BackChevronIcon: React.FC<{ size?: number }> = ({ size = 18 }) => (
   <IconShell size={size}>

@@ -1,0 +1,85 @@
+{
+  "ok": true,
+  "fidelity": "wire-sent",
+  "steps": [
+    {
+      "index": 1,
+      "label": "down from question box, answer finished",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\"",
+      "to": "<BUTTON> \"ask\"",
+      "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 957,
+      "diagnosis": "press routed, focus moved <INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\" -> <BUTTON> \"ask\""
+    },
+    {
+      "index": 2,
+      "label": "down again",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": false,
+      "matched": null,
+      "from": "<BUTTON> \"ask\"",
+      "to": "<BUTTON> \"ask\"",
+      "focusKey": "sel:div:nth-child(1) > div.Panel.Focusable:nth-child(1) > div._TabContentsScroll.Panel.Focusable:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(5) > div:nth-child(3) > div:nth-child(1) > div:nth-child(1) > div.Panel.Focusable:nth-child(1) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 1270,
+      "diagnosis": "press routed, focus did not move - still <BUTTON> \"ask\". either no handler is wired for this direction, or it ran and moved nothing"
+    }
+  ],
+  "ranSteps": 2,
+  "totalSteps": 2,
+  "passed": 2,
+  "failed": 0,
+  "visited": [
+    "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\"",
+    "<BUTTON> \"ask\""
+  ],
+  "cycle": null,
+  "neverReached": [],
+  "stopsFocusedButNotVisible": 0,
+  "notVisibleStops": [],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 4009,
+  "acquired": false,
+  "summary": "2/2 steps passed"
+}

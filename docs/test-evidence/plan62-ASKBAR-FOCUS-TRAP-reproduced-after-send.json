@@ -1,0 +1,197 @@
+{
+  "ok": true,
+  "fidelity": "wire-sent",
+  "steps": [
+    {
+      "index": 1,
+      "label": "down from question box, just after Ask",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": false,
+      "matched": null,
+      "from": "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\"",
+      "to": "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\"",
+      "focusKey": "sel:div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div._DialogLayout.Panel.Focusable:nth-child(2) > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 941,
+      "diagnosis": "press routed, focus did not move - still <INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\". either no handler is wired for this direction, or it ran and moved nothing"
+    },
+    {
+      "index": 2,
+      "label": "down again",
+      "press": [
+        "DOWN"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": false,
+      "matched": null,
+      "from": "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\"",
+      "to": "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\"",
+      "focusKey": "sel:div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div._DialogLayout.Panel.Focusable:nth-child(2) > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 923,
+      "diagnosis": "press routed, focus did not move - still <INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\". either no handler is wired for this direction, or it ran and moved nothing"
+    },
+    {
+      "index": 3,
+      "label": "right from question box",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\"",
+      "to": "<BUTTON> \"Inference mode: Strategy. Open to change.\"",
+      "focusKey": "sel:div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > div:nth-child(1) > button.Focusable:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 593,
+      "diagnosis": "press routed, focus moved <INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\" -> <BUTTON> \"Inference mode: Strategy. Open to change.\""
+    },
+    {
+      "index": 4,
+      "label": "right again",
+      "press": [
+        "RIGHT"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"Inference mode: Strategy. Open to change.\"",
+      "to": "<BUTTON> \"Stop generation\"",
+      "focusKey": "sel:div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div.Panel.Focusable:nth-child(1) > div.Panel.Focusable:nth-child(2) > button.Focusable:nth-child(2)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 593,
+      "diagnosis": "press routed, focus moved <BUTTON> \"Inference mode: Strategy. Open to change.\" -> <BUTTON> \"Stop generation\""
+    },
+    {
+      "index": 5,
+      "label": "up, the one direction that escaped before",
+      "press": [
+        "UP"
+      ],
+      "expect": null,
+      "ok": true,
+      "pass": true,
+      "moved": true,
+      "matched": null,
+      "from": "<BUTTON> \"Stop generation\"",
+      "to": "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\"",
+      "focusKey": "sel:div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div._DialogLayout.Panel.Focusable:nth-child(2) > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase:nth-child(1)",
+      "visibility": {
+        "verdict": "visible",
+        "visiblePercent": 100,
+        "coveredBy": null,
+        "clippedBy": null,
+        "points": {
+          "visible": 9,
+          "covered": 0,
+          "clipped": 0,
+          "offscreen": 0
+        }
+      },
+      "visible": true,
+      "settled": true,
+      "settleMs": 633,
+      "diagnosis": "press routed, focus moved <BUTTON> \"Stop generation\" -> <INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\""
+    }
+  ],
+  "ranSteps": 5,
+  "totalSteps": 5,
+  "passed": 5,
+  "failed": 0,
+  "visited": [
+    "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\"",
+    "<BUTTON> \"Inference mode: Strategy. Open to change.\"",
+    "<BUTTON> \"Stop generation\""
+  ],
+  "cycle": {
+    "key": "sel:div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(4) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div._DialogLayout.Panel.Focusable:nth-child(2) > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase:nth-child(1)",
+    "seenAt": [
+      0,
+      1,
+      2,
+      5
+    ],
+    "loop": [
+      "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\"",
+      "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\"",
+      "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\"",
+      "<BUTTON> \"Inference mode: Strategy. Open to change.\"",
+      "<BUTTON> \"Stop generation\"",
+      "<INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\""
+    ],
+    "escaped": false,
+    "stepsAfterLoop": 0
+  },
+  "neverReached": [],
+  "stopsFocusedButNotVisible": 0,
+  "notVisibleStops": [],
+  "stopped": false,
+  "evidenceFile": null,
+  "durationMs": 6542,
+  "acquired": false,
+  "summary": "5/5 steps passed; focus returned to <INPUT> in \"Describe the level, boss, or puzzle you're stuck on.|\" at steps 0 and 1 and 2 and 5 (the run ended there, so whether the ring could have escaped is untested)"
+}

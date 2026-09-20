@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { render } from "@testing-library/react";
+import { fireEvent, render } from "@testing-library/react";
 
 import { ChatSlotRow } from "./ChatSlotRow";
 import type { ChatSlotSummary } from "../../utils/chatSlotsApi";
@@ -42,7 +42,12 @@ function dotClasses(container: HTMLElement): string[] {
 }
 
 describe("ChatSlotRow game line", () => {
-  it("shows the game a slot was opened under, above the title", () => {
+  /*
+   * 2026-09-20: the line used to show the game the moment a slot had one stored, focused or not.
+   * Wanted instead: blank at rest, and only readable once the D-pad ring lands on the row - the
+   * line's box (min-height below) stays reserved either way, so the row's height never moves.
+   */
+  it("keeps the game name blank at rest and shows it once the ring is on the row", () => {
     const { container } = render(
       <ChatSlotRow
         summaries={[summary("a", "How do I parry?", "Elden Ring")]}
@@ -53,7 +58,18 @@ describe("ChatSlotRow game line", () => {
         onDeleteSlot={async () => true}
       />,
     );
+    const line = container.querySelector(".bonsai-chat-slot-game");
+    expect(line).not.toBeNull();
+    expect(line?.textContent).toBe("");
+
+    const focusTarget = container.querySelector(".bonsai-chat-slot-row-focus");
+    expect(focusTarget).not.toBeNull();
+    fireEvent.focus(focusTarget as HTMLElement);
+    expect(container.querySelector(".bonsai-chat-slot-game")).not.toBeNull();
     expect(container.querySelector(".bonsai-chat-slot-game")?.textContent).toBe("Elden Ring");
+
+    fireEvent.blur(focusTarget as HTMLElement);
+    expect(container.querySelector(".bonsai-chat-slot-game")?.textContent).toBe("");
   });
 
   /* Reserved even when empty: a line that comes and goes is the row-height complaint in another

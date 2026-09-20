@@ -1226,6 +1226,12 @@ export function buildSection6Section(): string {
 
           The row's vertical padding pays for it rather than the row growing: it was 12px top and
           bottom while focused, and that padding IS the whitespace the band was drawn on.
+
+          2026-09-20: the component itself now leaves this text blank except while the row is
+          focused (the same --focused signal this rule keys off), so the line is empty at rest for
+          every slot, not just ones with no stored game. The colours below still apply to whatever
+          text is there - the base rule is the quiet resting colour, kept in case the component ever
+          needs to show something else unfocused, and the focused rule is what a person actually sees.
         */
         .bonsai-scope .bonsai-chat-slot-game {
           min-height: ${uiScalePx(11)};

@@ -18,7 +18,7 @@
  */
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { act, render } from "@testing-library/react";
+import { act, fireEvent, render } from "@testing-library/react";
 
 const hoisted = vi.hoisted(() => ({
   pullModelsProps: null as Record<string, unknown> | null,
@@ -64,11 +64,24 @@ beforeEach(() => {
   hoisted.confirmModalProps = null;
 });
 
-describe("no standalone Policy section any more", () => {
-  it("the section row offers only Browse & pull and Advanced", () => {
+describe("no standalone Policy section, and no section-button row, any more", () => {
+  it("shows Browse & pull by default with a small Advanced link, not a row of section buttons", () => {
     const { container } = render(<OllamaModelsHubModal {...buildProps()} />);
-    const chipLabels = Array.from(container.querySelectorAll(".bonsai-models-hub-chip")).map((el) => el.textContent);
-    expect(chipLabels).toEqual(["Browse & pull", "Advanced"]);
+    expect(container.querySelector(".bonsai-models-hub-advanced-link")?.textContent).toBe("Advanced ›");
+    expect(container.querySelector('[data-testid="pull-models-modal-stub"]')).not.toBeNull();
+  });
+
+  it("the Advanced link swaps the screen to Advanced and back, in place of the old two-chip row", () => {
+    const { container } = render(<OllamaModelsHubModal {...buildProps()} />);
+    const link = container.querySelector(".bonsai-models-hub-advanced-link") as HTMLButtonElement;
+
+    fireEvent.click(link);
+    expect(container.querySelector('[data-testid="pull-models-modal-stub"]')).toBeNull();
+    expect(link.textContent).toBe("‹ Browse & pull");
+
+    fireEvent.click(link);
+    expect(container.querySelector('[data-testid="pull-models-modal-stub"]')).not.toBeNull();
+    expect(link.textContent).toBe("Advanced ›");
   });
 
   it('initialSection "policy" lands on Browse with the Filters panel already open, not a missing section', () => {

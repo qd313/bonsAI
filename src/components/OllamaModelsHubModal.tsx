@@ -29,9 +29,15 @@
  *   makes now (plan 62, § 3d) — that section and its own chip are gone;
  *   the licence pick is one of the Filters panel's rows inside
  *   PullModelsModal, wired here exactly the same draft-until-Done way.
+ * - The Browse/Advanced section-button row is gone too (plan 62, § 3e #3): with only two
+ *   sections left, and Policy no longer one of them, a whole row of buttons cost back the same
+ *   height dropping Policy alone would have saved (two buttons stretch to fill the row exactly
+ *   like three did). Advanced is now a small link at the top of the screen instead, wired with no
+ *   custom Up/Down of its own -- the row it replaces never had any either, so Steam's own spatial
+ *   nav already knows how to reach it and leave it.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Button, ConfirmModal, Focusable } from "@decky/ui";
+import { Button, ConfirmModal } from "@decky/ui";
 import type { ModelPolicyTierId } from "../data/modelPolicy";
 import { useModelPolicyTierDraft } from "./ModelPolicyTierPanel";
 import {
@@ -60,16 +66,6 @@ export type OllamaModelsHubModalProps = {
   onCompleteNestedDeckyModalClose?: (close: () => void) => void;
   onClose: () => void;
 };
-
-/**
- * The two real sections left once Policy folded into Browse's own Filters panel. "policy" is
- * still a value `initialSection` accepts (existing callers ask for it as a shortcut into the
- * licence pick) — see the section-init logic below for how that maps onto "browse".
- */
-const HUB_SECTIONS: { id: Exclude<OllamaModelsHubSection, "policy">; label: string }[] = [
-  { id: "browse", label: "Browse & pull" },
-  { id: "advanced", label: "Advanced" },
-];
 
 /**
  * Unified fullscreen hub: the browse/pull table (licence choice included, as a filter) and
@@ -161,8 +157,8 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
       });
   }, [section, browseFooter, commitPolicyAndAdvanced, handleHubClose]);
 
-  const selectSection = useCallback((next: Exclude<OllamaModelsHubSection, "policy">, _source: string) => {
-    setSection(next);
+  const toggleAdvanced = useCallback(() => {
+    setSection((current) => (current === "advanced" ? "browse" : "advanced"));
   }, []);
 
   const okButtonText = section === "browse" && browseFooter.hasQueuedPull ? browseFooter.okText : "Done";
@@ -185,43 +181,25 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
             paddingRight: 4,
           }}
         >
-          <Focusable flow-children="horizontal" style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-            {HUB_SECTIONS.map((chip) => {
-              const active = section === chip.id;
-              return (
-                <Button
-                  key={chip.id}
-                  className="bonsai-models-hub-chip"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    selectSection(chip.id, "click");
-                  }}
-                  {...({
-                    onOKButton: (evt: { stopPropagation: () => void }) => {
-                      evt.stopPropagation();
-                      selectSection(chip.id, "okButton");
-                    },
-                  } as Record<string, unknown>)}
-                  style={{
-                    flex: "1 1 auto",
-                    minHeight: 32,
-                    fontSize: 11,
-                    fontWeight: 600,
-                    borderRadius: 4,
-                    border: active ? "1px solid rgba(56,189,248,0.55)" : "1px solid rgba(255,255,255,0.12)",
-                    background: active
-                      ? "linear-gradient(180deg, rgba(56,189,248,0.22) 0%, rgba(14,116,144,0.35) 100%)"
-                      : "rgba(255,255,255,0.04)",
-                    color: active ? "#e0f2fe" : "#9fb0c0",
-                  }}
-                  aria-pressed={active}
-                >
-                  {chip.label}
-                </Button>
-              );
-            })}
-          </Focusable>
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              className="bonsai-models-hub-advanced-link"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleAdvanced();
+              }}
+              {...({
+                onOKButton: (evt: { stopPropagation: () => void }) => {
+                  evt.stopPropagation();
+                  toggleAdvanced();
+                },
+              } as Record<string, unknown>)}
+              aria-pressed={section === "advanced"}
+            >
+              {section === "advanced" ? "‹ Browse & pull" : "Advanced ›"}
+            </Button>
+          </div>
           {section === "browse" ? (
             <PullModelsModal
               embedded

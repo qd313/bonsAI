@@ -131,8 +131,8 @@ export function buildGamepadFocusRingStylesheet(): string {
         .bonsai-scope .bonsai-attachment-preview-target:focus-visible,
         .bonsai-scope .bonsai-attachment-remove-target.gpfocus,
         .bonsai-scope .bonsai-attachment-remove-target:focus-visible,
-        .bonsai-scope button.bonsai-models-hub-chip.gpfocus,
-        .bonsai-scope button.bonsai-models-hub-chip:focus-visible,
+        .bonsai-scope button.bonsai-models-hub-advanced-link.gpfocus,
+        .bonsai-scope button.bonsai-models-hub-advanced-link:focus-visible,
         .bonsai-scope button.bonsai-pullmodels-chip.gpfocus,
         .bonsai-scope button.bonsai-pullmodels-chip:focus-visible,
         .bonsai-scope button.bonsai-pullmodels-slot.gpfocus,
@@ -177,6 +177,25 @@ export function buildModalPortalStylesheet(): string {
  */
 export function buildPullModelsStylesheet(): string {
   return `
+        /* ==========================================================================
+           9b. AI MODELS HUB -- the small "Advanced" link (plan 62, § 3e #3)
+           ========================================================================== */
+        .bonsai-scope .bonsai-models-hub-advanced-link {
+          min-height: 22px !important;
+          padding: 2px 8px !important;
+          font-size: 10px !important;
+          font-weight: 600 !important;
+          border-radius: 4px !important;
+          border: 1px solid rgba(255,255,255,0.14) !important;
+          background: rgba(255,255,255,0.04) !important;
+          color: #9ce7ff !important;
+        }
+        .bonsai-scope .bonsai-models-hub-advanced-link[aria-pressed="true"] {
+          border-color: rgba(56,189,248,0.55) !important;
+          background: rgba(56,189,248,0.18) !important;
+          color: #e0f2fe !important;
+        }
+
         /* ==========================================================================
            10. PULL MODELS MODAL (table)
            ========================================================================== */

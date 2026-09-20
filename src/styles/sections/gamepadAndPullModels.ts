@@ -189,7 +189,17 @@ export function buildPullModelsStylesheet(): string {
           width: 100%;
           min-width: 0;
           max-width: 100%;
-          max-height: min(48vh, 400px);
+          /* Fill whatever the models popup's body gives us, instead of taking a share of the
+             whole screen. This was max-height: min(48vh, 400px), and 48vh is measured against
+             the screen the Deck happens to be driving: 400px on an external 1080p monitor, but
+             only ~300px on the Deck's own 1280x800 panel, which is where the "you only see two
+             models before you have to scroll" bug came from. Measured on the device 2026-09-20.
+             The body above us is already a capped flex column and the list below us already has
+             flex: 1 1 auto + min-height: 0 + overflow-y: auto, so filling the body keeps the
+             counts, the name box and the filters still while only the list scrolls. */
+          flex: 1 1 auto;
+          min-height: 0;
+          max-height: none;
           overflow: hidden;
           overflow-x: clip;
           text-align: left;

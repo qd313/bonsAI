@@ -1263,6 +1263,14 @@ export function buildSection6Section(): string {
             position. Measured on device 2026-08-30 - title row 23.56 with the x, 14.39 without.
           */
           min-height: ${uiScalePx(22)};
+          /*
+            Anchor for the delete box below (2026-09-20). The x used to be centred IN this same flex
+            row alongside the title, which dragged the title about 14px left of the game name above
+            it and the dots below it - both centred on the whole row, not on this smaller group. The
+            fix takes the x out of the group entirely; position:relative here is what lets it pin to
+            this row's own right edge instead of the row-inner's.
+          */
+          position: relative;
         }
         /*
           Sized for READING THE NAME, not for hierarchy. The 300px column leaves the focused row
@@ -1281,7 +1289,13 @@ export function buildSection6Section(): string {
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-          max-width: 88%;
+          /*
+            2026-09-20: 28px (the delete box's 22px plus its old 6px gap) comes off the cap below so
+            a long name still ends in an ellipsis before reaching the now-absolutely-positioned x
+            instead of running underneath it. Costs roughly three characters of name - accepted so
+            the name, the game line above it and the dots below all share the row's true centre.
+          */
+          max-width: calc(88% - ${uiScalePx(28)});
         }
         /*
           Ghost neighbours stand down while the row is focused, and the title takes their room.
@@ -1340,10 +1354,21 @@ export function buildSection6Section(): string {
             animation: none !important;
           }
         }
-        /* The quiet state carries the same 22x22 box and 1px transparent border as the
-           active stop, so activating the stop colours it in without nudging the row. */
+        /*
+          Taken out of the centred flex group on purpose (2026-09-20): the x used to sit as an
+          ordinary flex child beside the title, and centring that whole group (title + x, or with
+          the ghosts too) put the title about 14px left of the game name above it and the dots
+          below it, both of which centre on the whole row. Absolute + the title row's own
+          position:relative above pins the x to the row's true right-hand end instead, so it can
+          no longer pull the centred title, and the title's own max-width already leaves room for
+          it. The quiet state still carries the same 22x22 box and 1px transparent border as the
+          active stop, so activating the stop colours it in without nudging anything.
+        */
         .bonsai-scope .bonsai-chat-slot-delete {
-          flex: 0 0 auto;
+          position: absolute;
+          top: 50%;
+          right: 0;
+          transform: translateY(-50%);
           box-sizing: border-box;
           display: inline-flex;
           align-items: center;

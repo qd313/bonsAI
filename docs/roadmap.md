@@ -108,6 +108,12 @@ starts work outside this.
   to be reordered and the plugin reloaded several times to get the wanted sentence to show first, and the
   one visible chip stops cycling while the controller's highlight rests on it. Rule for drivers: reload the
   plugin right after every edit to the settings file, before any question is sent.
+- ★ `[chips]` **A preset chip's icon and its text are colored the same way** — **OPEN, reported by the
+  maintainer 2026-09-19.** Only the small square icon at the front of a preset chip should be in the accent
+  color; the words after it should stay the normal text color instead of matching the icon.
+- ★ `[chips]` **A preset chip has a bright blue underline that is too distracting** — **OPEN, reported by
+  the maintainer 2026-09-19.** The bright blue line under a preset chip draws the eye more than the chip
+  itself. It should be removed or toned down.
 - ★ `[focus]` **Up from the Retry icon does not return to the answer** — **OPEN, read again 2026-09-16.**
   With the thumbs-up/thumbs-down row greyed on a stopped reply, Down from the answer now lands on Retry — but
   Up from Retry does not go back to the answer's last section the way it should. **Read again 2026-09-16:**
@@ -201,6 +207,9 @@ starts work outside this.
   setting names in several separate places in the same file. Miss one and nothing breaks visibly; that setting just stops
   being saved or loaded in one situation while working fine everywhere else. It has already happened once, to four
   settings. Tracked as "places the settings field list is repeated", at 7 against a target of 1.
+- ★ `[ui]` **The Decky plugin icon does not match the tab bar's bonsai icon** — **OPEN, reported by the
+  maintainer 2026-09-19.** The bonsai icon Decky shows for the plugin, in its own plugin list, is a different
+  icon than the bonsai drawn on the tab bar inside the plugin itself. The two should be the same icon.
 - ★★ `[chat]` **A new chat shows the previous chat's last reply until the panel is reopened** — **OPEN, seen
   2026-09-15 evening.** With a reply still on screen in one chat, moving the chat row to the new-chat position
   and pressing A made the new chat, but the new chat then showed that earlier reply underneath it, with "…"

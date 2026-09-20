@@ -50,7 +50,7 @@ Checked 2026-09-20, nothing pressed.
 
 ---
 
-## 3. The four features
+## 3. The four features, and one bug
 
 Every one of these was drawn at true size and picked on 2026-09-20. The drawing board holds the
 options that were not picked, so the reasoning does not have to be repeated later.
@@ -148,6 +148,22 @@ with every filter as a tickable row, grouped under headings.
 **Dropped on purpose:** Coding, and "FOSS only" as a separate switch. FOSS only overlaps the licence
 filter, and keeping both would mean two controls that can disagree.
 
+### 3e. The bug: you see about two models before you have to scroll
+
+Two stars. Models, screen layout. **Added to the session 2026-09-20 at the maintainer's word** — it was
+going to ride along behind the filter rework, and now it is its own item with its own device row.
+
+Every change that could buy the list room is drawn on the board at true width, and **the board measures
+each one from its own drawing** rather than trusting arithmetic. **The maintainer picks which of the six
+land.** Lane M owns whichever are picked.
+
+**The drawing turned up something nobody had noticed, and it changes what this bug is.** Drawn at the
+sizes in the code, today's screen should show about **five** model rows. The maintainer counted **two**
+on the Deck on 17 September. Those two numbers disagree, which means **something else is squeezing the
+list and none of the six changes is certainly the fix.** Settling that is the first measurement of the
+session, before a brief is written. It may turn out that one limit is set wrong and the whole rework is
+unnecessary.
+
 **The maintainer's rule for this screen, given 2026-09-20: only change it if it buys room.** Ordering
 and tidiness are not worth a commit here. That rule throws two things off the earlier list and brings
 in two better versions of them.
@@ -235,8 +251,10 @@ The shape the maintainer asked for: **the lanes start and the device work starts
    write down every number it reports before anything changes** — it is red already, so this is the
    line every lane is measured against.
 2. **Measure three things on the Deck, because four briefs depend on them:**
-   - the models screen — how tall the popup really is, how much of it the screen uses, how much is
-     left for the list, and how tall one model row is. Everything in § 3d is read from code today.
+   - **the models screen, and this one decides whether § 3e is a rework or a one-line fix.** How tall
+     the popup really is, how much the screen uses, how much the list's own box allows, how much is left
+     for rows, and how tall one row is. **The drawn screen says five rows and the maintainer counted
+     two — find out which limit is actually biting before anything is built.**
    - the chat slot row — the 14-pixel offset between the game's name and the chat's name, so the fix
      is aimed at a measured number and not at arithmetic.
    - the row under an answer — how tall it is today with the Read aloud line on it, so the saving is
@@ -250,7 +268,7 @@ The shape the maintainer asked for: **the lanes start and the device work starts
 
 | Lane | Builds | Owns, in words |
 |---|---|---|
-| **M — Models screen** | § 3d in full: the Filters button and its panel, the six filters, the licence filter replacing the Policy section, and the three room-saving jobs | the models catalogue screen, the models hub screen, the policy tier panel, the filter data, and the models stylesheet |
+| **M — Models screen** | § 3d: the Filters button and its panel, the six filters, the licence filter replacing the Policy section. Then § 3e: whichever room-buying changes the maintainer picks — **but only after the session has measured why the list is smaller than the code says it should be** | the models catalogue screen, the models hub screen, the policy tier panel, the filter data, and the models stylesheet |
 | **R — Read aloud** | § 3b: the speaker on the Helpful row, the line removed, the D-pad wiring and the greyed-thumbs path | the reply actions builder, the read-aloud hook, the icon set, and the reply-actions block of the stylesheet |
 | **S — Session tab** | § 3c: the two tabs inside Show details, Clear at the end of the Session tab, the way out in all four directions | the session context strip, the chat transcript, the chip ladder, and the details-panel block of the stylesheet |
 | **G — Game name** | § 3a: the name showing only while the ring is on the row, and the × taken out of the centring | the chat slot row and the chat-slot block of the stylesheet |
@@ -373,6 +391,12 @@ same day. **Nothing about the four features is open now.**
 | 2 | How faint is the speaker at rest? | **45 per cent**, not the microphone's 15. Full strength when the ring lands on it. |
 | 3 | Keep two section buttons on the models screen, or move Advanced to the bottom? | **Move it out of the section row** — but as a small link in the title row, not a button at the bottom. A button at the bottom costs back what the row cost at the top. |
 | 4 | Is ordering worth a change on this screen? | **No. "I need to buy room. Don't change it if it doesn't give more space."** That rule now heads § 3d and threw two jobs off the list. |
+
+**One question still open.** Feature 7 on the board lists the six changes that buy the list room, each
+drawn at true width with its gain measured from the drawing. **Which of them go in?** Two cost a person
+something — the suggested models leave the screen, and typing a model name by hand takes one extra
+press. The rest cost nothing. And the first one on the list, raising the list's own height limit, costs
+nothing at all and may be worth more than the other five together.
 
 ---
 

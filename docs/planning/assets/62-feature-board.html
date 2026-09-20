@@ -465,6 +465,15 @@
   .mchip.tier { border-color: rgba(232,179,92,0.55); color: #f5d9a5; background: rgba(232,179,92,0.10); }
   .mchip.more { color: #7f8f9f; }
   .mtoggles { display: flex; flex-wrap: wrap; gap: 12px; }
+  .mrecommend { display: flex; flex-direction: column; gap: 6px; }
+  .mfilters2 { display: flex; flex-direction: column; gap: 6px; }
+  .mpullmodels-size-source { display: inline-flex; align-items: center; gap: 6px; }
+  .mrefresh {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 28px; min-height: 24px; padding: 2px 6px; font-size: 10px; font-weight: 700;
+    border: 1px solid rgba(255,255,255,0.18); border-radius: 4px;
+    background: rgba(255,255,255,0.06); color: #dce8f4;
+  }
   .mtable { display: flex; flex-direction: column; width: 100%; }
   .mrow {
     display: grid;
@@ -585,6 +594,72 @@
   .quieticon.ring { outline: 2px solid rgba(255,255,255,0.9); outline-offset: 2px; border-radius: 4px; opacity: 1; }
   .swatchrow { display: flex; gap: 10px; flex-wrap: wrap; }
 
+
+  /* --- added 20 Sep: the room-buying changes, each drawn at true size --- */
+  .roomrow {
+    border-top: 1px solid var(--rule);
+    padding-block: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .roomrow:first-of-type { border-top: none; padding-top: 4px; }
+  .roomhead { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+  .roomhead input { margin: 3px 0 0; accent-color: var(--mark); width: 16px; height: 16px; flex: 0 0 auto; }
+  .roomhead .rt { flex: 1 1 auto; min-width: 0; }
+  .roomhead .rt b { display: block; font-size: 14px; color: var(--ink-strong); font-weight: 600; }
+  .roomhead .rt small { display: block; color: var(--ink-dim); font-size: 12px; line-height: 1.45; margin-top: 2px; }
+  .roomhead .gain {
+    flex: 0 0 auto; font-family: var(--mono); font-size: 12px; font-weight: 600;
+    color: var(--gain); white-space: nowrap; font-variant-numeric: tabular-nums;
+    border: 1px solid rgba(111,207,151,0.35); border-radius: 3px; padding: 2px 7px;
+  }
+  .roomhead .gain.unknown { color: var(--cost); border-color: rgba(224,133,122,0.4); }
+  .roomhead input:checked ~ .rt b { color: var(--mark); }
+  .ba { display: flex; flex-direction: column; gap: 8px; }
+  .ba figcaption {
+    font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.07em;
+    text-transform: uppercase; color: var(--ink-dim); margin-bottom: 3px;
+  }
+  .stripframe {
+    width: 569px; flex: 0 0 auto;
+    font-family: -apple-system, "Segoe UI", system-ui, Roboto, sans-serif;
+    background: #0c1218; border: 1px solid rgba(255,255,255,0.10);
+    padding: 6px 14px; color: #dce8f4;
+  }
+  .stripframe.gone {
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-dim); font-family: var(--mono); font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase; border-style: dashed;
+  }
+  .titlelink { font-size: 10px; font-weight: 600; color: #9ce7ff; margin-left: 8px; }
+  .smalltagbtn {
+    min-height: 24px; line-height: 20px; padding: 2px 8px; font-size: 9px;
+    border-radius: 4px; border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.06); color: #dce8f4; width: fit-content;
+  }
+  .liveshell {
+    display: flex; flex-direction: column; gap: 6px;
+    height: 384px; overflow: hidden; transition: height .15s ease;
+  }
+  .liveshell.tall { height: 490px; }
+  .livelist { flex: 1 1 auto; min-height: 0; overflow: hidden; position: relative; }
+  .livelist::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 14px;
+    background: linear-gradient(180deg, transparent, #0c1218);
+  }
+  .rowmeter {
+    display: flex; flex-wrap: wrap; gap: 14px 30px; align-items: flex-end;
+    margin-top: 14px; padding: 14px; border-radius: 6px;
+    background: var(--bench-2); border: 1px solid var(--rule);
+  }
+  .rowmeter .n {
+    font-family: var(--mono); font-size: 34px; font-weight: 600; line-height: 1;
+    color: var(--mark); font-variant-numeric: tabular-nums;
+  }
+  .rowmeter .n.was { color: var(--ink-dim); font-size: 24px; }
+  .rowmeter .n.bad { color: var(--cost); }
+
   @media (prefers-reduced-motion: reduce) {
     * { animation: none !important; transition: none !important; }
   }
@@ -601,6 +676,7 @@
     <a href="#f4" data-slot="4">4 · models —</a>
     <a href="#f1align" data-slot="5">5 · centring —</a>
     <a href="#f2fade" data-slot="6">6 · speaker fade —</a>
+    <a href="#room" data-slot="7">7 · room changes —</a>
   </nav>
 </div>
 
@@ -1724,6 +1800,153 @@
   </div>
   </section>
 
+
+<!-- ================================================================= -->
+<!-- ROOM-BUYING CHANGES                                               -->
+<!-- ================================================================= -->
+<section class="feature" id="room">
+  <div class="eyebrow"><span class="num">Feature 7</span><span class="stars">★★</span><span>the two-row bug, and what actually fixes it</span></div>
+  <h2>Every change that buys room on the models screen</h2>
+  <p class="why"><b>The bug this is really about:</b> you see about two models before you have to
+  scroll. That is an open two-star bug, and it is now in the session rather than waiting for the filter
+  rework to carry it. Tick the changes you want in the plan — as many or as few as you like. The whole
+  screen at the bottom redraws as you tick and <b>counts the model rows for you</b>.</p>
+  <p class="why small">Every strip is drawn at 569 pixels wide, the real width measured on your Deck,
+  with the plugin's own sizes. <b>Every pixel figure on this page is measured by this page</b> from the
+  drawing beside it. I typed none of them, because I got two of them wrong by hand earlier today, and
+  measuring the drawing caught two more.</p>
+  <div class="decide">Your rule, applied: nothing is on this list unless it buys height.</div>
+
+  <div class="panel">
+
+    <div class="roomrow">
+      <label class="roomhead">
+        <input type="checkbox" data-group="room" data-opt="cap" value="Raise the list's own height limit (unknown until measured)">
+        <span class="rt"><b>Raise the list's own height limit</b>
+        <small>Nothing is redrawn and nothing moves — the box the list lives in is simply allowed to be
+        taller. It caps itself at 48 per cent of the screen height, or 400 pixels, whichever is smaller:
+        about <b>384 pixels</b> on your Deck. The popup around it has roughly <b>490</b> to give.
+        <b>The only change here that costs a person nothing whatsoever</b>, and possibly worth more than
+        the other five together.</small></span>
+        <span class="gain unknown">measure</span>
+      </label>
+      <p style="margin:0;font-size:12px;color:var(--ink-dim)">No strip to draw. Tick it and watch the
+      screen at the bottom grow.</p>
+    </div>
+
+    <div class="roomrow">
+      <label class="roomhead">
+        <input type="checkbox" data-group="room" data-opt="suggested" value="Suggested models off the top">
+        <span class="rt"><b>Suggested models off the top</b>
+        <small>A label and three chips, always above the list. They would move into the Filters panel,
+        or appear only when the list is empty. <b>Costs a person something:</b> the three suggestions
+        stop being what you see first.</small></span>
+        <span class="gain" data-gain="suggested" data-gap="6">—</span>
+      </label>
+      <div class="ba">
+        <figure><figcaption>today</figcaption><div class="stripframe"><div data-measure="sugg-a"><div class="mrecommend"><div class="seclabel">SUGGESTED</div><div class="mchips"><span class="mchip">qwen2.5:3b</span><span class="mchip">llama3.2:3b</span><span class="mchip">gemma2:2b</span></div></div></div></div></figure>
+        <figure><figcaption>after — the row is gone entirely</figcaption><div class="stripframe gone" style="height:30px">nothing here any more<span data-measure="sugg-b" style="display:block;height:0"></span></div></figure>
+      </div>
+    </div>
+
+    <div class="roomrow">
+      <label class="roomhead">
+        <input type="checkbox" data-group="room" data-opt="tag" value="Type-a-model-name moves onto the filter row as one chip">
+        <span class="rt"><b>"Type a model name" moves onto the filter row</b>
+        <small>Today it is a full-width text box and a Pull button with a row of its own. It becomes one
+        small chip on the filter row, which already exists, and opens the box when pressed. <b>Costs a
+        person one extra press.</b> Note this is <i>not</i> the same as moving the box below the list,
+        which buys nothing, and not the same as a small button on its own row, which saves only about two
+        pixels — the row is what costs, not the box.</small></span>
+        <span class="gain" data-gain="tag" data-gap="6">—</span>
+      </label>
+      <div class="ba">
+        <figure><figcaption>today — a row of its own</figcaption><div class="stripframe"><div data-measure="tag-a"><div class="mtagrow"><span class="mtagfield">Custom model tag, e.g. llama3.2:3b</span><span class="mchip">Pull</span></div></div></div></figure>
+        <figure><figcaption>after — one chip on a row that already exists</figcaption><div class="stripframe gone" style="height:30px">no row of its own<span data-measure="tag-b" style="display:block;height:0"></span></div></figure>
+      </div>
+    </div>
+
+    <div class="roomrow">
+      <label class="roomhead">
+        <input type="checkbox" data-group="room" data-opt="filters" value="Two rows of filter chips down to one line (the shape already picked)" checked>
+        <span class="rt"><b>Two rows of filter chips down to one line</b>
+        <small><b>The shape you already picked</b> — every filter behind one Filters line. Listed here so
+        you can see what it is worth beside the others. <b>Costs a person:</b> filters sit behind a press
+        instead of on screen.</small></span>
+        <span class="gain" data-gain="filters" data-gap="0">—</span>
+      </label>
+      <div class="ba">
+        <figure><figcaption>today — two rows</figcaption><div class="stripframe"><div data-measure="filt-a"><div class="mfilters2"><div class="mchips"><span class="mchip on">All</span><span class="mchip">Speed</span><span class="mchip">Strategy</span><span class="mchip">Expert</span><span class="mchip">Vision</span><span class="mchip">Coding</span></div><div class="mtoggles"><span class="mchip">Installed only</span><span class="mchip foss">FOSS only</span><span class="mchip">Essentials only</span><span class="mchip" data-opt-show="tag" hidden>+ Type a name</span></div></div></div></div></figure>
+        <figure><figcaption>after — one line</figcaption><div class="stripframe"><div data-measure="filt-b"><div class="mchips"><span class="mchip on">Filters · 2 on ▾</span><span class="mchip more">Open source only · Speed</span><span class="mchip" data-opt-show="tag" hidden>+ Type a name</span></div></div></div></figure>
+      </div>
+    </div>
+
+    <div class="roomrow">
+      <label class="roomhead">
+        <input type="checkbox" data-group="room" data-opt="advanced" value="Advanced as a link in the title row, section row gone">
+        <span class="rt"><b>Advanced as a link in the screen's title row</b>
+        <small>Once the licence choice becomes a filter, the section row holds only Browse and Advanced.
+        Advanced moves up beside the screen's name and the row goes. <b>Costs a person nothing</b> — but
+        only in this version. A button at the bottom instead costs back what the row cost at the top,
+        which is why that version is off the list.</small></span>
+        <span class="gain" data-gain="advanced" data-gap="12">—</span>
+      </label>
+      <div class="ba">
+        <figure><figcaption>today — a row of section buttons</figcaption><div class="stripframe"><div data-measure="adv-a"><div class="hubchips"><span class="hubchip on">Browse &amp; pull</span><span class="hubchip">Advanced</span></div></div></div></figure>
+        <figure><figcaption>after — a link beside the name, costing no new row</figcaption><div class="stripframe" style="padding:0"><div class="mtitle" style="padding:8px 14px 6px">AI models <span class="titlelink">Advanced ›</span></div><span data-measure="adv-b" style="display:block;height:0"></span></div></figure>
+      </div>
+    </div>
+
+    <div class="roomrow">
+      <label class="roomhead">
+        <input type="checkbox" data-group="room" data-opt="counts" value="Counts line shortened and its big refresh button shrunk">
+        <span class="rt"><b>The counts line shortened</b>
+        <small>What is installed, what is queued, where the catalogue came from. <b>Measuring this
+        corrected me:</b> at this width the text does not wrap — what makes the row tall is the
+        28-by-24 refresh button sitting in it. So the saving is smaller than I told you, and it comes
+        from shrinking that button, not from shortening words. <b>Costs a person nothing</b>, and it is
+        the smallest thing on this list.</small></span>
+        <span class="gain" data-gain="counts" data-gap="0">—</span>
+      </label>
+      <div class="ba">
+        <figure><figcaption>today</figcaption><div class="stripframe"><div data-measure="counts-a"><div class="mcounts"><span>Installed 3 · 7.4 GB</span><span>Queue 0 · 0 GB</span><span class="mpullmodels-size-source">Live catalog · Live sizes<span class="mrefresh">↻</span></span></div></div></div></figure>
+        <figure><figcaption>after — one short line, small refresh glyph</figcaption><div class="stripframe"><div data-measure="counts-b"><div class="mcounts" style="flex-wrap:nowrap"><span>Installed 3 · 7.4 GB · Queue 0 · Live catalog <span style="color:#9ce7ff">↻</span></span></div></div></div></figure>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="panel">
+    <h3>The whole screen, as you tick</h3>
+    <p>569 by 640 — the popup's real size on your Deck. The box the list lives in is drawn at the
+    <b>384 pixels</b> the code caps it to. The row count is measured from the space left over.</p>
+    <div class="scroller">
+      <div class="modalframe">
+        <div class="mtitle">AI models <span class="titlelink" data-opt-show="advanced" hidden>Advanced ›</span></div>
+        <div class="mbody">
+          <div data-opt-hide="advanced"><div class="hubchips"><span class="hubchip on">Browse &amp; pull</span><span class="hubchip">Advanced</span></div></div>
+          <div class="liveshell" id="liveShell">
+            <div data-opt-hide="counts"><div class="mcounts"><span>Installed 3 · 7.4 GB</span><span>Queue 0 · 0 GB</span><span class="mpullmodels-size-source">Live catalog · Live sizes<span class="mrefresh">↻</span></span></div></div>
+            <div data-opt-show="counts" hidden><div class="mcounts" style="flex-wrap:nowrap"><span>Installed 3 · 7.4 GB · Queue 0 · Live catalog <span style="color:#9ce7ff">↻</span></span></div></div>
+            <div data-opt-hide="tag"><div class="mtagrow"><span class="mtagfield">Custom model tag, e.g. llama3.2:3b</span><span class="mchip">Pull</span></div></div>
+            <div data-opt-hide="suggested"><div class="mrecommend"><div class="seclabel">SUGGESTED</div><div class="mchips"><span class="mchip">qwen2.5:3b</span><span class="mchip">llama3.2:3b</span><span class="mchip">gemma2:2b</span></div></div></div>
+            <div data-opt-hide="filters"><div class="mfilters2"><div class="mchips"><span class="mchip on">All</span><span class="mchip">Speed</span><span class="mchip">Strategy</span><span class="mchip">Expert</span><span class="mchip">Vision</span><span class="mchip">Coding</span></div><div class="mtoggles"><span class="mchip">Installed only</span><span class="mchip foss">FOSS only</span><span class="mchip">Essentials only</span><span class="mchip" data-opt-show="tag" hidden>+ Type a name</span></div></div></div>
+            <div data-opt-show="filters" hidden><div class="mchips"><span class="mchip on">Filters · 2 on ▾</span><span class="mchip more">Open source only · Speed</span><span class="mchip" data-opt-show="tag" hidden>+ Type a name</span></div></div>
+            <div class="livelist" id="liveList"><div class="mtable"><div class="mrow head"><span class="mcell c">Pull</span><span class="mcell">Model</span><span class="mcell">Size</span><span class="mcell">Date</span><span class="mcell">Modes</span><span class="mcell">Rating</span><span class="mcell"></span></div><div class="mrow data inst" data-measure="live-row"><span class="mcell c">★</span><span class="mcell">qwen2.5:3b<div class="mlicense">FOSS</div></span><span class="mcell">1.9 GB</span><span class="mcell">'24</span><span class="mcell">chat</span><span class="mcell">★★★★☆</span><span class="mcell c">X</span></div><div class="mrow data"><span class="mcell c">☆</span><span class="mcell">llama3.2:3b<div class="mlicense">open weight</div></span><span class="mcell">2.0 GB</span><span class="mcell">'24</span><span class="mcell">chat</span><span class="mcell">★★★☆☆</span><span class="mcell c"></span></div><div class="mrow data"><span class="mcell c">☆</span><span class="mcell">gemma2:2b<div class="mlicense">open weight</div></span><span class="mcell">1.6 GB</span><span class="mcell">'24</span><span class="mcell">chat</span><span class="mcell">★★★☆☆</span><span class="mcell c"></span></div><div class="mrow data"><span class="mcell c">☆</span><span class="mcell">qwen2.5vl:3b<div class="mlicense">open weight</div></span><span class="mcell">3.2 GB</span><span class="mcell">'25</span><span class="mcell">vision</span><span class="mcell">★★★☆☆</span><span class="mcell c"></span></div><div class="mrow data"><span class="mcell c">☆</span><span class="mcell">phi4-mini<div class="mlicense">open weight</div></span><span class="mcell">2.5 GB</span><span class="mcell">'25</span><span class="mcell">chat</span><span class="mcell">★★★☆☆</span><span class="mcell c"></span></div><div class="mrow data"><span class="mcell c">☆</span><span class="mcell">mistral:7b<div class="mlicense">open weight</div></span><span class="mcell">4.1 GB</span><span class="mcell">'24</span><span class="mcell">chat</span><span class="mcell">★★★★☆</span><span class="mcell c"></span></div><div class="mrow data"><span class="mcell c">☆</span><span class="mcell">granite3.1:2b<div class="mlicense">FOSS</div></span><span class="mcell">1.5 GB</span><span class="mcell">'25</span><span class="mcell">chat</span><span class="mcell">★★★☆☆</span><span class="mcell c"></span></div><div class="mrow data"><span class="mcell c">☆</span><span class="mcell">deepseek-r1:7b<div class="mlicense">open weight</div></span><span class="mcell">4.7 GB</span><span class="mcell">'25</span><span class="mcell">chat</span><span class="mcell">★★★★☆</span><span class="mcell c"></span></div><div class="mrow data"><span class="mcell c">☆</span><span class="mcell">smollm2:1.7b<div class="mlicense">FOSS</div></span><span class="mcell">1.1 GB</span><span class="mcell">'25</span><span class="mcell">chat</span><span class="mcell">★★☆☆☆</span><span class="mcell c"></span></div><div class="mrow data"><span class="mcell c">☆</span><span class="mcell">llava:7b<div class="mlicense">open weight</div></span><span class="mcell">4.7 GB</span><span class="mcell">'24</span><span class="mcell">vision</span><span class="mcell">★★★☆☆</span><span class="mcell c"></span></div><div class="mrow data"><span class="mcell c">☆</span><span class="mcell">olmo2:7b<div class="mlicense">FOSS</div></span><span class="mcell">4.5 GB</span><span class="mcell">'25</span><span class="mcell">chat</span><span class="mcell">★★★☆☆</span><span class="mcell c"></span></div><div class="mrow data"><span class="mcell c">☆</span><span class="mcell">qwen2.5:7b<div class="mlicense">FOSS</div></span><span class="mcell">4.7 GB</span><span class="mcell">'24</span><span class="mcell">chat</span><span class="mcell">★★★★★</span><span class="mcell c"></span></div></div></div>
+          </div>
+        </div>
+        <div class="mfoot"><span>Cancel</span><span>Pull selected</span></div>
+      </div>
+    </div>
+    <div class="rowmeter">
+      <div><div class="lbl">Nothing ticked</div><div class="n was" id="rowsBase">—</div><div class="lbl" style="margin:5px 0 0">model rows</div></div>
+      <div><div class="lbl">With your ticks</div><div class="n" id="rowsPick">—</div><div class="lbl" style="margin:5px 0 0">model rows</div></div>
+      <div><div class="lbl">What you counted on the Deck</div><div class="n bad">2</div><div class="lbl" style="margin:5px 0 0">model rows, 17 Sep</div></div>
+      <div style="flex:1 1 300px"><div class="lbl">Read this bit</div><p id="roomWork" style="margin:0;font-size:12.5px;color:var(--ink-dim);line-height:1.5"></p></div>
+    </div>
+  </div>
+</section>
+
 <!-- ================================================================= -->
 <section class="summary" id="picks">
   <h2>Your picks</h2>
@@ -1786,6 +2009,7 @@
     5: "Straightening the chat name",
     6: "How faint the speaker is at rest"
   };
+  var ROOM_LABEL = "Room-buying changes ticked for the plan";
   var SHORT = { 1: "game name", 2: "read aloud", 3: "session tab", 4: "models", 5: "centring", 6: "speaker fade" };
   var FREED = { A: 30, B: 30, C: 0 };
   var picks = { 1: null, 2: null, 3: null, 4: null, 5: null, 6: null };
@@ -1801,8 +2025,15 @@
   }
 
   function updateTally() {
+    var roomA = document.querySelector('#tally a[data-slot="7"]');
+    if (roomA) {
+      var n = readTicks("room").length;
+      roomA.textContent = "7 · room changes " + (n ? n : "—");
+      roomA.classList.toggle("done", n > 0);
+    }
     document.querySelectorAll("#tally a").forEach(function (a) {
       var slot = a.getAttribute("data-slot");
+      if (slot === "7") { return; }
       var v = picks[slot];
       a.textContent = slot + " · " + SHORT[slot] + " " + (v ? letterOf(v) : "—");
       a.classList.toggle("done", !!v);
@@ -1844,14 +2075,13 @@
     if (!f.length) { lines.push("  - none ticked"); }
     lines.push("");
     lines.push("Models screen rule: only change it if it buys room. Ordering changes are out.");
-    lines.push("Room-buying jobs, biggest first (all readings, measured on the Deck first):");
-    lines.push("  - the list's own height limit - unknown, possibly the biggest of all");
-    lines.push("  - suggested chips off the top - about 43 px");
-    lines.push("  - Advanced as a link in the title row, not a button at the bottom - about 38 px");
-    lines.push("  - type-a-model-name box behind a small button - about 32 px");
-    lines.push("  - two rows of filter chips to one line - about 30 px");
-    lines.push("  - counts line onto one line - about 14 px");
-    lines.push("  DROPPED as ordering only: tag box below the list, Advanced as a bottom button.");
+    var r = readTicks("room");
+    lines.push(ROOM_LABEL + " (" + r.length + "):");
+    r.forEach(function (x) { lines.push("  - " + x); });
+    if (!r.length) { lines.push("  - none ticked"); }
+    lines.push("Rows on the drawing with those ticks: " + (document.getElementById("rowsPick") || {textContent: "?"}).textContent
+      + " (nothing ticked: " + (document.getElementById("rowsBase") || {textContent: "?"}).textContent + ")");
+    lines.push("DROPPED as ordering only: tag box below the list, Advanced as a bottom button.");
     document.getElementById("picktext").value = lines.join("\n");
   }
 
@@ -1890,6 +2120,87 @@
     picks = { 1: null, 2: null, 3: null, 4: null, 5: null, 6: null };
     refresh();
   });
+
+
+  /* ---- feature 7: every gain measured from the drawing beside it -------
+     Each measured node is an inner wrapper with no padding of its own, so the strip
+     frame's padding never enters the difference. data-gap on the badge is the container
+     gap a vanishing child hands back: 6px inside the list's box, 12px in the screen body. */
+  [["suggested", "sugg-a", "sugg-b"],
+   ["tag", "tag-a", "tag-b"],
+   ["filters", "filt-a", "filt-b"],
+   ["advanced", "adv-a", "adv-b"],
+   ["counts", "counts-a", "counts-b"]].forEach(function (t) {
+    var before = heights[t[1]], after = heights[t[2]];
+    document.querySelectorAll('[data-gain="' + t[0] + '"]').forEach(function (el) {
+      if (before === undefined || after === undefined) { el.textContent = "?"; return; }
+      var gap = Number(el.getAttribute("data-gap")) || 0;
+      var d = before - after + (after === 0 ? gap : 0);
+      el.textContent = (d > 0 ? "+" : "") + d + " px";
+      if (d <= 4) { el.className = "gain unknown"; }
+    });
+  });
+
+  var shell = document.getElementById("liveShell");
+  var liveList = document.getElementById("liveList");
+
+  function countRows() {
+    if (!liveList) { return 0; }
+    var listH = liveList.getBoundingClientRect().height;
+    var rowH = heights["live-row"] || 36;
+    var headH = 26;
+    return Math.max(0, Math.floor((listH - headH) / rowH));
+  }
+
+  function applyRoom() {
+    if (!shell) { return; }
+    var on = {};
+    document.querySelectorAll('input[data-group="room"]').forEach(function (b) {
+      if (b.getAttribute("data-opt")) { on[b.getAttribute("data-opt")] = b.checked; }
+    });
+    document.querySelectorAll("[data-opt-hide]").forEach(function (el) {
+      el.hidden = !!on[el.getAttribute("data-opt-hide")];
+    });
+    document.querySelectorAll("[data-opt-show]").forEach(function (el) {
+      el.hidden = !on[el.getAttribute("data-opt-show")];
+    });
+    shell.classList.toggle("tall", !!on.cap);
+
+    var picked = countRows();
+    var work = document.getElementById("roomWork");
+    var pickEl = document.getElementById("rowsPick");
+    if (pickEl) { pickEl.textContent = String(picked); }
+    if (!work) { return; }
+    var base = Number(document.getElementById("rowsBase").textContent) || 0;
+    var msg = "";
+    if (base >= 4) {
+      msg = "Note the third number. The code says even today's screen should show about " + base
+        + " rows, and you counted 2 on the Deck. Those disagree, so something else is squeezing "
+        + "the list and none of these six changes is guaranteed to be the fix. That is the first "
+        + "thing measured in the session, before any of this is built.";
+    } else {
+      msg = "Ticking changes frees " + Math.max(0, picked - base) + " more rows on this drawing.";
+    }
+    work.textContent = msg;
+  }
+
+  document.querySelectorAll('input[data-group="room"]').forEach(function (b) {
+    b.addEventListener("change", function () { applyRoom(); refresh(); });
+  });
+
+  /* Base count with nothing ticked, before the picked state is applied. */
+  (function () {
+    var el = document.getElementById("rowsBase");
+    if (!el) { return; }
+    var wasChecked = [];
+    document.querySelectorAll('input[data-group="room"]').forEach(function (b) {
+      if (b.checked) { wasChecked.push(b); b.checked = false; }
+    });
+    applyRoom();
+    el.textContent = String(countRows());
+    wasChecked.forEach(function (b) { b.checked = true; });
+    applyRoom();
+  })();
 
   refresh();
 })();

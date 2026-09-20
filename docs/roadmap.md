@@ -473,11 +473,12 @@ replace it with a specific issue when one exists.
   Speed / Strategy / Expert, Vision, Installed only, Essentials only, and Recently added. Coding and the
   separate FOSS-only switch are dropped, the latter because licence covers it. Three more jobs ride along:
   let the screen use more of the popup it sits in, move the custom tag box to the bottom, and get the counts
-  line onto one line, and — once Policy is gone — move Advanced to a button at the bottom so the section
-  row goes entirely. **Two savings were claimed and withdrawn the same day:** dropping the Policy section
-  frees no height (the buttons stretch) and moving the tag box below the list frees none either (same
-  box). The filter rows are worth about 30 pixels; the rest is measured on the Deck before any build.
-  The two-row list bug above is closed by this.
+  line onto one line. **The maintainer's rule for this screen, 2026-09-20: only change it if it buys
+  room** — which threw out two claimed savings that turn out to be worth nothing (dropping the Policy
+  section, because the buttons stretch; moving the tag box below the list, same box) and replaced them
+  with versions that do: the tag box behind a small button, and Advanced as a link in the title row. The
+  list is also capped a second time by its own box, tighter than the screen's cap, and that may be the
+  real limit. Measured on the Deck before any build. The two-row list bug above is closed by this.
   [Plan](planning/62-feature-session-five.md) · [Board](https://claude.ai/artifact/31aLBi17SH7AydhYfGYjBq)
 - ★★★ `[platform]` **Trim the five documents that are still big** — **PARTIAL: one of five done 2026-09-15.**
   Nothing a person using the plugin would notice; this is about what every piece of work costs before it starts. Five files

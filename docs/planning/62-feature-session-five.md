@@ -148,14 +148,28 @@ with every filter as a tickable row, grouped under headings.
 **Dropped on purpose:** Coding, and "FOSS only" as a separate switch. FOSS only overlaps the licence
 filter, and keeping both would mean two controls that can disagree.
 
-**Four more jobs in the same piece of work**, all picked on the board:
+**The maintainer's rule for this screen, given 2026-09-20: only change it if it buys room.** Ordering
+and tidiness are not worth a commit here. That rule throws two things off the earlier list and brings
+in two better versions of them.
 
-- let the screen use more of the popup it sits in — it limits itself to 520 pixels tall and the popup
-  around it is 640;
-- move the "type any model name" box to the bottom of the screen;
-- get the counts line onto one line instead of two;
-- **once Policy is gone, move Advanced to a single button at the bottom and drop the section row
-  entirely.** Chosen 2026-09-20.
+**Every change that buys real room on this screen, biggest first.** Each figure is arithmetic from the
+sizes in the code, not a device measurement, so block 0 measures them all before a brief is written.
+
+| Change | Buys | What a person loses |
+|---|---|---|
+| **The list's own height limit** | **Unknown, possibly more than all the rest together** | Nothing. The list is capped a *second* time inside the cap the two-row bug names — 48 percent of the screen height, or 400 pixels, whichever is smaller. If that is the limit actually biting, raising it is the whole fix and the rest is decoration. **Measure this first.** |
+| Suggested chips off the top | about 43 | The three suggested models stop being on screen. They would move into the Filters panel, or appear only when the list is empty. |
+| Advanced out of the scrolling part of the screen | about 38 | Nothing, if it becomes a small link up in the screen's own title row. **As a button at the bottom it buys nothing, so that version is dropped.** |
+| The "type any model name" box behind a small button | about 32 | One press before you can type a name by hand. **Moving it below the list, as first drawn, buys nothing and is dropped.** |
+| Two rows of filter chips down to one line | about 30 | Filters past the right-hand edge are hidden until you walk to them. |
+| The counts line onto one line | about 14 | Nothing. |
+
+**Dropped by the rule:** moving the tag box below the list, and Advanced as a button at the bottom.
+Both were ordering, not room.
+
+**Two of these cost a person something** — the suggested models leaving the screen, and one extra press
+to type a model name by hand. Both are recommended because room is what was asked for, and both are
+easy to say no to.
 
 **Why this matters beyond tidiness:** you can see about two models before scrolling. That is an open
 two-star bug in its own right, and this work closes it.
@@ -357,7 +371,8 @@ same day. **Nothing about the four features is open now.**
 |---|---|---|
 | 1 | How should the chat's name be straightened? | **Take the × out of the centring.** Everything sits on the row's true middle; about three characters come off the chat name, and that cost is accepted. |
 | 2 | How faint is the speaker at rest? | **45 per cent**, not the microphone's 15. Full strength when the ring lands on it. |
-| 3 | Keep two section buttons on the models screen, or move Advanced to the bottom? | **Move it to the bottom and drop the section row entirely.** Another 44 pixels for the list. |
+| 3 | Keep two section buttons on the models screen, or move Advanced to the bottom? | **Move it out of the section row** — but as a small link in the title row, not a button at the bottom. A button at the bottom costs back what the row cost at the top. |
+| 4 | Is ordering worth a change on this screen? | **No. "I need to buy room. Don't change it if it doesn't give more space."** That rule now heads § 3d and threw two jobs off the list. |
 
 ---
 
@@ -375,6 +390,10 @@ same day. **Nothing about the four features is open now.**
 - **Two of the three Main-tab changes touch the same rows of the screen.** Two changes on the same
   edge can cancel each other out; the free-play sweep at the end, with all three present, is what
   catches that.
+- **The models screen's real limit may not be the one the open bug points at.** The list is capped
+  twice — once by the screen it sits in, and again, tighter, by its own box. If the inner one is what is
+  biting, every saving in § 3d is small change next to raising it. That is the first measurement of the
+  session, and it could turn a three-star rework into something much smaller.
 - **Two of my own figures on the models screen were wrong, in the hopeful direction, and I found it
   while drawing the finished screen rather than while building.** Dropping the Policy section and moving
   the tag box below the list both free nothing in height; § 3d has all four corrections. The shapes the

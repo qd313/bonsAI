@@ -644,7 +644,11 @@
 </div>
 
 <div class="panel" style="margin-top:16px;border-color:var(--cost)">
-  <h3 style="color:var(--cost)">Correction, same day — two of my numbers on feature 4 were wrong</h3>
+  <h3 style="color:var(--cost)">Correction, same day — and your rule for this screen</h3>
+  <p style="color:var(--ink-strong);font-size:14px;margin-bottom:14px;border-left:2px solid var(--mark);padding-left:10px">
+  <b>"I don't need the ordering fixed, I need to buy room. Don't change it if it doesn't give more
+  space."</b> That is now the rule for the models screen. Two jobs are off the list because of it, and
+  two better versions of them are on. The full list is further down.</p>
   <p>Everything on the models screen was read in the code rather than measured on the Deck, and I got
   two of them wrong in the same direction: too hopeful. Found while drawing the finished screen.</p>
   <p><b>Dropping the Policy section frees no height.</b> The three section buttons stretch to fill the
@@ -1660,25 +1664,62 @@
   </div>
 
   <div class="panel">
-    <h3>Other ways to get the list more room — and what each is really worth</h3>
-    <p>You ticked three of these. Two of them turn out to be worth nothing in height, which is my
-    mistake and not yours. They are all still listed, with what each one actually buys, so the choice
-    can be made again with better information. Nothing here changes a shape you picked.</p>
-    <div class="ticks" id="leverticks">
-      <label class="tick"><input type="checkbox" data-group="levers" data-px="0" value="Let the screen use more of the popup it sits in — value unknown until measured" checked><span>Let the screen use more of the popup it sits in <span class="px" style="color:var(--cost)">unknown</span><small>The screen limits itself to 520 pixels and the popup is 640. But the list sits inside a <b>second, tighter limit</b> of its own inside that, so raising the outer one may free nothing. First thing measured on the Deck.</small></span></label>
-      <label class="tick"><input type="checkbox" data-group="levers" data-px="43" value="Move the Suggested chips out of the way (about 43 px, the biggest real one)"><span>Move the Suggested chips out of the way <span class="px">about +43 px</span><small>A label and a row of three chips, always on screen above the list. <b>This is now the biggest real saving on the table</b> and you left it unticked. Worth reconsidering — see the question at the bottom.</small></span></label>
-      <label class="tick"><input type="checkbox" data-group="levers" data-px="14" value="Counts line onto one line (about 14 px)" checked><span>Counts line onto one line <span class="px">about +14 px</span><small>"Installed 3 · 7.4 GB · Queue 0" wraps to two lines at this width today. A real saving, and a small one.</small></span></label>
-      <label class="tick"><input type="checkbox" data-group="levers" data-px="0" value="Move the custom tag box to the bottom — order, not height" checked><span>Move the "type any model name" box to the bottom <span class="px" style="color:var(--ink-dim)">no height</span><small>It moves inside the same box the list lives in, so the list's share does not change. Still worth doing: the list becomes the first thing you see. Just not for room.</small></span></label>
-      <label class="tick"><input type="checkbox" data-group="levers" data-px="0" value="Advanced to a button at the bottom — order, not height" checked><span>Advanced to a button at the bottom <span class="px" style="color:var(--ink-dim)">no height</span><small>Your pick. The section row goes from the top, but the button reappears at the bottom and costs about the same. It <b>would</b> be worth about 38 pixels if Advanced left the scrolling part of the screen — a small link up in the title row instead of a button. Say if you want that version.</small></span></label>
+    <h3>Every change that buys real room, biggest first</h3>
+    <p>Your rule threw two jobs off the earlier list — moving the "type any model name" box below the
+    list, and Advanced as a button at the bottom. Both moved something inside the same box, so the list's
+    share never changed. Two better versions take their place. Every figure here is arithmetic from the
+    sizes in the code, not a measurement, so all of it gets measured on the Deck before anything is built.</p>
+    <div class="scroller">
+    <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:560px">
+      <thead>
+        <tr style="text-align:left;color:var(--mark);font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase">
+          <th style="padding:0 10px 8px 0;font-weight:600">Change</th>
+          <th style="padding:0 10px 8px 0;font-weight:600;white-space:nowrap">Buys</th>
+          <th style="padding:0 0 8px 0;font-weight:600">What a person loses</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-top:1px solid var(--rule)">
+          <td style="padding:10px 10px 10px 0;vertical-align:top"><b>The list's own height limit</b></td>
+          <td style="padding:10px 10px 10px 0;vertical-align:top;font-family:var(--mono);color:var(--mark);white-space:nowrap">unknown</td>
+          <td style="padding:10px 0;vertical-align:top;color:var(--ink-dim)">Nothing. The list is capped a <i>second</i> time inside the cap the two-row bug names — 48 per cent of the screen height, or 400 pixels, whichever is smaller. <b style="color:var(--ink)">If that is the limit actually biting, raising it is the whole fix and everything below is small change.</b> Measured first.</td>
+        </tr>
+        <tr style="border-top:1px solid var(--rule)">
+          <td style="padding:10px 10px 10px 0;vertical-align:top">Suggested chips off the top</td>
+          <td style="padding:10px 10px 10px 0;vertical-align:top;font-family:var(--mono);color:var(--gain);white-space:nowrap">~43 px</td>
+          <td style="padding:10px 0;vertical-align:top;color:var(--ink-dim)">The three suggested models stop being on screen. They would move into the Filters panel, or appear only when the list is empty.</td>
+        </tr>
+        <tr style="border-top:1px solid var(--rule)">
+          <td style="padding:10px 10px 10px 0;vertical-align:top">Advanced out of the scrolling part</td>
+          <td style="padding:10px 10px 10px 0;vertical-align:top;font-family:var(--mono);color:var(--gain);white-space:nowrap">~38 px</td>
+          <td style="padding:10px 0;vertical-align:top;color:var(--ink-dim)">Nothing, if it becomes a small link up in the screen's own title row. <b style="color:var(--ink)">As a button at the bottom it buys nothing, so that version is dropped.</b></td>
+        </tr>
+        <tr style="border-top:1px solid var(--rule)">
+          <td style="padding:10px 10px 10px 0;vertical-align:top">"Type any model name" behind a small button</td>
+          <td style="padding:10px 10px 10px 0;vertical-align:top;font-family:var(--mono);color:var(--gain);white-space:nowrap">~32 px</td>
+          <td style="padding:10px 0;vertical-align:top;color:var(--ink-dim)">One press before you can type a name by hand. <b style="color:var(--ink)">Moving it below the list, as first drawn, buys nothing and is dropped.</b></td>
+        </tr>
+        <tr style="border-top:1px solid var(--rule)">
+          <td style="padding:10px 10px 10px 0;vertical-align:top">Two rows of filter chips to one line</td>
+          <td style="padding:10px 10px 10px 0;vertical-align:top;font-family:var(--mono);color:var(--gain);white-space:nowrap">~30 px</td>
+          <td style="padding:10px 0;vertical-align:top;color:var(--ink-dim)">Filters past the right-hand edge are hidden until you walk to them. This is the shape you already picked.</td>
+        </tr>
+        <tr style="border-top:1px solid var(--rule)">
+          <td style="padding:10px 10px 10px 0;vertical-align:top">The counts line onto one line</td>
+          <td style="padding:10px 10px 10px 0;vertical-align:top;font-family:var(--mono);color:var(--gain);white-space:nowrap">~14 px</td>
+          <td style="padding:10px 0;vertical-align:top;color:var(--ink-dim)">Nothing.</td>
+        </tr>
+      </tbody>
+    </table>
     </div>
     <div class="meter" style="display:block">
       <div class="lbl">Where that leaves it</div>
-      <p style="margin:0;font-size:13px;line-height:1.55;max-width:70ch">The only figure I will stand
-      behind today is the filter rows: <b>about 30 pixels</b>. The counts line is a fair <b>14</b>. The
-      Suggested chips would be about <b>43</b> more if you want them moved. Everything else is either
-      worth nothing in height or cannot be known without the Deck. <b>How many model rows you end up
-      seeing is measured in the first block of the session, before any brief is written</b>, and the
-      plan says so. I would rather hand you a real number then than a hopeful one now.</p>
+      <p style="margin:0;font-size:13px;line-height:1.55;max-width:72ch">The five figures add up to about
+      <b>157 pixels</b> on top of the roughly 90 the list has today — call it <b>six or seven model rows
+      instead of two</b>, if the readings hold. <b>They are readings, not measurements</b>, and two
+      readings were already wrong today, so the real number comes off the Deck in the first block of the
+      session. Two of the five cost a person something: the suggested models leave the screen, and typing
+      a model name by hand takes one extra press. Both are easy to say no to.</p>
     </div>
   </div>
   </section>
@@ -1701,10 +1742,10 @@
   <ol>
     <li><b>All answered:</b> the Deck is free; the chat name is straightened by taking the × out of the
     centring; the speaker sits at 45 per cent at rest; Advanced moves to the bottom.</li>
-    <li><b>New, and the only thing still open: do you want the Suggested chips moved off the top?</b>
-    Now that two of my savings turned out to be worth nothing, this is the biggest real one left —
-    about 43 pixels, more than a whole model row. They could sit inside the Filters panel, or only
-    appear when the list is empty. You left it unticked when it looked like the smallest of four.</li>
+    <li><b>Two things to say no to if you want to.</b> Both buy room, so by your own rule they are in
+    unless you say otherwise: the <b>suggested models leave the screen</b> and move into the Filters
+    panel (about 43 pixels), and <b>typing a model name by hand takes one extra press</b> because the box
+    goes behind a small button (about 32 pixels).</li>
     <li><b>Standing:</b> every pixel figure on the models screen gets measured on the Deck in the first
     block of the session, before any brief is written. Two of them were wrong today, which is exactly
     why that step is first.</li>
@@ -1802,10 +1843,15 @@
     f.forEach(function (x) { lines.push("  - " + x); });
     if (!f.length) { lines.push("  - none ticked"); }
     lines.push("");
-    var l = readTicks("levers");
-    lines.push("Other room-saving jobs to do in the same work (" + l.length + "):");
-    l.forEach(function (x) { lines.push("  - " + x); });
-    if (!l.length) { lines.push("  - none ticked"); }
+    lines.push("Models screen rule: only change it if it buys room. Ordering changes are out.");
+    lines.push("Room-buying jobs, biggest first (all readings, measured on the Deck first):");
+    lines.push("  - the list's own height limit - unknown, possibly the biggest of all");
+    lines.push("  - suggested chips off the top - about 43 px");
+    lines.push("  - Advanced as a link in the title row, not a button at the bottom - about 38 px");
+    lines.push("  - type-a-model-name box behind a small button - about 32 px");
+    lines.push("  - two rows of filter chips to one line - about 30 px");
+    lines.push("  - counts line onto one line - about 14 px");
+    lines.push("  DROPPED as ordering only: tag box below the list, Advanced as a bottom button.");
     document.getElementById("picktext").value = lines.join("\n");
   }
 

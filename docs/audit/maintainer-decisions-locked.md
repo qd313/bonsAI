@@ -5834,7 +5834,9 @@ answered the three remaining calls the same day. Nothing was built first.
    wanted on a Deck. **"FOSS only" is dropped as a separate switch**, because the licence filter covers it
    and two controls that can disagree is worse than one.
 6. **Three more jobs in the same work:** let the screen use more of the popup it sits in, move the "type any
-   model name" box to the bottom, and get the counts line onto one line.
+   model name" box to the bottom, and get the counts line onto one line. **Amended the same day — see
+   call 10.** Two of these three turned out to buy no height at all, so the list was rebuilt around what
+   actually buys room.
 7. **The chat name sitting 14 pixels off-centre** — found while drawing feature 1, never reported before.
    Chosen: **take the × out of the centring**, so the game's name, the chat's name and the dots all sit on
    the row's true middle. The cost is accepted: about 28 pixels, roughly three characters, comes off the
@@ -5842,9 +5844,21 @@ answered the three remaining calls the same day. Nothing was built first.
 8. **How faint the speaker is at rest.** Chosen: **45 per cent**, not the microphone's 15. Quiet but
    findable, and still full strength the moment the ring lands on it. Worth one look by eye on the Deck once
    it is built, because screens lie about faint things.
-9. **The section buttons on the models screen, once Policy goes.** Chosen: **Advanced moves to a single
-   button at the bottom of the screen and the section row goes entirely**, which hands the model list
-   another 44 pixels.
+9. **The section buttons on the models screen, once Policy goes.** Chosen: **Advanced moves out of the
+   section row.** First given as a button at the bottom; **amended the same day** once it was clear that a
+   button at the bottom costs back what the row cost at the top. It becomes a small link in the screen's
+   own title row instead, out of the scrolling part of the screen, which is worth about 38 pixels.
+
+10. **The rule for the models screen, in the maintainer's own words:** *"I don't need the ordering fixed,
+    I need to buy room. Don't change it if it doesn't give more space."* Given 2026-09-20 after two claimed
+    savings were withdrawn. It heads that feature's section in the plan and settles the shape of the work:
+    ordering and tidiness are not worth a commit on this screen. Two jobs came off the list (the tag box
+    below the list, Advanced as a bottom button) and two better versions went on (the tag box behind a
+    small button, about 32 pixels; Advanced as a title-row link, about 38). **What the rule also surfaced:**
+    the model list is capped a second time by its own box — 48 percent of the screen height, or 400 pixels,
+    whichever is smaller — inside the cap the two-row bug names. If that inner one is the limit actually
+    biting, raising it is worth more than everything else on the list together, and it is the session's
+    first measurement.
 
 What these do to the roadmap: all four feature entries were reworded the same day with the chosen shape and
 a link to the board. Two new things were opened along the way — the chat name being off-centre, folded into

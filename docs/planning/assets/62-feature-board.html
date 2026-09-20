@@ -1,0 +1,1850 @@
+<title>bonsAI Option Board</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  /* ------------------------------------------------------------------
+     The page chrome. Deliberately one dark look: the plugin is dark, and
+     a light page would make every drawing lie about its contrast.
+     Amber is the page's own marker colour so it can never be mistaken
+     for the plugin's cyan focus ring inside a drawing.
+     ------------------------------------------------------------------ */
+  :root {
+    --ground:      #0d1114;
+    --bench:       #151b21;
+    --bench-2:     #1b232a;
+    --rule:        rgba(255,255,255,0.09);
+    --rule-strong: rgba(255,255,255,0.16);
+    --ink:         #c3cfdb;
+    --ink-strong:  #eef4f9;
+    --ink-dim:     #7f8f9f;
+    --mark:        #e8b35c;
+    --mark-wash:   rgba(232,179,92,0.10);
+    --gain:        #6fcf97;
+    --cost:        #e0857a;
+    --sans: "Archivo", "Segoe UI", system-ui, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.5;
+    padding-block: 0 72px;
+    padding-inline: 16px;
+  }
+
+  .wrap { max-width: 1180px; margin: 0 auto; }
+
+  /* --- sticky picks bar ------------------------------------------- */
+  .topbar {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 30;
+    margin-inline: -16px;
+    padding: 10px 16px;
+    background: rgba(13,17,20,0.94);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+  }
+  .topbar .brand {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mark);
+    margin-right: auto;
+  }
+  .tally { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tally a {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-decoration: none;
+    color: var(--ink-dim);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 3px 8px;
+    white-space: nowrap;
+  }
+  .tally a.done { color: var(--ground); background: var(--mark); border-color: var(--mark); font-weight: 600; }
+  .tally a:focus-visible { outline: 2px solid var(--mark); outline-offset: 2px; }
+
+  /* --- page head --------------------------------------------------- */
+  .head { padding-block: 34px 8px; max-width: 62ch; }
+  .head h1 {
+    font-size: clamp(26px, 5vw, 38px);
+    line-height: 1.1;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--ink-strong);
+    margin: 0 0 14px;
+    text-wrap: balance;
+  }
+  .head p { margin: 0 0 12px; }
+  .head p.lede { font-size: 16px; color: var(--ink-strong); }
+
+  .notes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    margin: 26px 0 8px;
+    overflow: hidden;
+  }
+  .notes div { background: var(--bench); padding: 12px 14px; }
+  .notes h3 {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mark);
+    margin: 0 0 6px;
+    font-weight: 600;
+  }
+  .notes p { margin: 0; font-size: 12.5px; line-height: 1.5; color: var(--ink-dim); }
+  .notes b { color: var(--ink); font-weight: 600; }
+
+  /* --- feature sections -------------------------------------------- */
+  section.feature { padding-block: 44px 8px; border-top: 1px solid var(--rule); margin-top: 40px; }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: baseline;
+    margin-bottom: 8px;
+  }
+  .eyebrow .num { color: var(--mark); font-weight: 600; }
+  .eyebrow .stars { color: var(--ink); letter-spacing: 0.15em; }
+  section.feature h2 {
+    font-size: clamp(21px, 3vw, 27px);
+    line-height: 1.2;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--ink-strong);
+    margin: 0 0 10px;
+    max-width: 24ch;
+    text-wrap: balance;
+  }
+  section.feature .why { max-width: 66ch; margin: 0 0 8px; color: var(--ink); }
+  section.feature .why.small { font-size: 12.5px; color: var(--ink-dim); }
+
+  .decide {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--mark);
+    border-left: 2px solid var(--mark);
+    padding: 2px 0 2px 10px;
+    margin: 18px 0 22px;
+    max-width: 66ch;
+  }
+
+  /* --- the bench: today + options ---------------------------------- */
+  .bench {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+    gap: 16px;
+    align-items: start;
+  }
+  .bench.wide { grid-template-columns: repeat(auto-fit, minmax(600px, 1fr)); }
+
+  .card {
+    background: var(--bench);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+  }
+  .card.today { background: transparent; border-style: dashed; }
+
+  .card-head { display: flex; align-items: baseline; gap: 10px; }
+  .card-head .letter {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ground);
+    background: var(--ink-dim);
+    border-radius: 3px;
+    padding: 1px 6px;
+    flex: 0 0 auto;
+  }
+  .card.today .card-head .letter { background: transparent; color: var(--ink-dim); border: 1px solid var(--rule-strong); padding: 0 5px; }
+  .card-head h3 { margin: 0; font-size: 15px; font-weight: 600; color: var(--ink-strong); line-height: 1.3; }
+
+  .pickable { cursor: pointer; display: block; position: relative; }
+  .pickable input { position: absolute; opacity: 0; pointer-events: none; }
+  .pickable .card { transition: border-color .12s ease, background .12s ease; }
+  .pickable:hover .card { border-color: var(--rule-strong); }
+  .pickable input:focus-visible + .card { outline: 2px solid var(--mark); outline-offset: 2px; }
+  .pickable input:checked + .card {
+    border-color: var(--mark);
+    background: linear-gradient(180deg, var(--mark-wash) 0%, var(--bench) 60%);
+    box-shadow: inset 3px 0 0 var(--mark);
+  }
+  .pickable input:checked + .card .letter { background: var(--mark); color: var(--ground); }
+  .picktag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    border: 1px dashed var(--rule-strong);
+    border-radius: 3px;
+    padding: 2px 7px;
+    margin-left: auto;
+    flex: 0 0 auto;
+    align-self: center;
+  }
+  .pickable input:checked + .card .picktag {
+    color: var(--ground); background: var(--mark); border: 1px solid var(--mark); font-weight: 600;
+  }
+  .pickable input:checked + .card .picktag::after { content: "ed"; }
+
+  .trade { display: flex; flex-direction: column; gap: 5px; font-size: 12.5px; line-height: 1.45; }
+  .trade p { margin: 0; display: flex; gap: 7px; }
+  .trade p::before { font-family: var(--mono); font-size: 11px; flex: 0 0 auto; padding-top: 1px; }
+  .trade .up::before    { content: "+"; color: var(--gain); }
+  .trade .down::before  { content: "−"; color: var(--cost); }
+  .trade .flat::before  { content: "="; color: var(--ink-dim); }
+  .trade .note::before  { content: "·"; color: var(--mark); }
+
+  .readout {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--ink-dim);
+    border-top: 1px solid var(--rule);
+    padding-top: 9px;
+    margin-top: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    font-variant-numeric: tabular-nums;
+  }
+  .readout b { color: var(--ink-strong); font-weight: 600; }
+  .readout .gain { color: var(--gain); }
+  .readout .cost { color: var(--cost); }
+
+  /* --- the drawing frames ------------------------------------------ */
+  .stage { display: flex; flex-direction: column; gap: 10px; }
+  .stage-row { display: flex; flex-wrap: wrap; gap: 14px; }
+  .shot { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+  .shot > figcaption {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+  }
+  figure { margin: 0; }
+
+  .scroller { overflow-x: auto; padding-bottom: 4px; }
+
+  /* The plugin's own column, at the width measured on the Deck. */
+  .qam {
+    font-family: -apple-system, "Segoe UI", system-ui, Roboto, sans-serif;
+    font-size: 12px;
+    line-height: 1.4;
+    color: #d4dde6;
+    background: #0f151c;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 3px;
+    flex: 0 0 auto;
+  }
+  .col300 { width: 300px; }
+  .qam .pad { padding: 8px; }
+
+  /* ===== plugin part 1: the chat slot row =========================== */
+  .slotrow { width: 100%; }
+  .slotrow-inner {
+    display: flex; align-items: center; gap: 8px;
+    padding: 5px 8px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .slotrow.on .slotrow-inner {
+    padding: 7px 8px;
+    background: linear-gradient(180deg, rgba(28,36,44,0.92), rgba(18,26,34,0.55));
+    border-top-color: rgba(156,231,255,0.22);
+    border-bottom-color: rgba(156,231,255,0.22);
+  }
+  .bpill {
+    flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center;
+    min-width: 34px; height: 26px; border-radius: 8px;
+    border: 1px solid rgba(156,231,255,0.75);
+    color: #9ce7ff; background: rgba(18,26,34,0.55);
+    box-shadow: 0 0 12px 1px rgba(156,231,255,0.25);
+    font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+  }
+  .slot-center { flex: 1 1 auto; min-width: 0; text-align: center; }
+  .slot-game {
+    min-height: 11px; font-size: 9px; font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase; line-height: 1.2; color: rgba(200,214,230,0.32);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%;
+  }
+  .slotrow.on .slot-game { color: rgba(156,231,255,0.45); }
+  .slot-title-row {
+    display: flex; align-items: center; justify-content: center;
+    gap: 6px; min-width: 0; min-height: 22px;
+  }
+  .slot-title {
+    font-weight: 700; font-size: 12px; line-height: 1.2;
+    color: rgba(200,214,230,0.72);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 88%;
+  }
+  .slotrow.on .slot-title { color: #f2f7fc; text-shadow: 0 0 16px rgba(156,231,255,0.3); }
+  .slot-prefix { color: rgba(156,231,255,0.5); font-weight: 600; font-size: 10px; letter-spacing: 0.04em; }
+  .slot-del {
+    flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; border-radius: 6px; border: 1px solid transparent;
+    font-size: 15px; font-weight: 700; line-height: 1;
+    color: rgba(168,182,198,0.55); opacity: 0.85;
+  }
+  .sghost {
+    flex: 0 1 auto; max-width: 15%; min-width: 0; font-size: 11px;
+    color: rgba(200,214,230,0.28); filter: blur(0.7px);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .sghost.prev { margin-left: 4px; text-align: left; mask-image: linear-gradient(90deg, transparent 0%, #000 55%); }
+  .sghost.next { margin-right: 4px; text-align: right; mask-image: linear-gradient(90deg, #000 45%, transparent 100%); }
+  .sdots { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 6px; }
+  .sdot { flex: 0 0 auto; width: 4px; height: 4px; border-radius: 50%; background: rgba(143,168,196,0.3); }
+  .sdot.act { background: rgba(200,214,230,0.5); }
+  .slotrow.on .sdot.act { background: #9ce7ff; }
+  .sdot.plus {
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 0; background: transparent; color: rgba(143,168,196,0.5);
+    font-size: 8px; font-weight: 700; line-height: 1;
+  }
+
+  /* ===== plugin part 2: an answer and the row under it ============== */
+  .bubble {
+    border-radius: 10px;
+    border: 1px solid rgba(46,135,83,0.48);
+    background:
+      linear-gradient(0deg, rgba(130,183,152,0.11), rgba(130,183,152,0.11)),
+      linear-gradient(180deg, rgba(46,135,83,0.12) 0%, rgba(18,52,34,0.55) 100%);
+    color: #d4dde6;
+    padding: 8px 10px;
+    font-size: 12px;
+    line-height: 1.4;
+    max-width: 92%;
+  }
+  .replyacts {
+    margin-top: 10px;
+    max-width: min(92%, 100%);
+    display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
+  }
+  .fblabel { font-size: 11px; color: #9fb7d5; line-height: 1.35; }
+  .actsrow { display: flex; flex-direction: row; flex-wrap: wrap; align-items: flex-start; gap: 8px; width: 100%; }
+  .actsrow.pin-right { flex-wrap: nowrap; }
+  .secbtn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    width: fit-content; min-height: 32px; padding: 6px 12px; border-radius: 8px;
+    font-size: 12px; font-weight: 600;
+    border: 1px solid rgba(110,150,200,0.38);
+    background: linear-gradient(180deg, rgba(26,42,62,0.82) 0%, rgba(18,28,42,0.88) 100%);
+    color: #c8daf0;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+    white-space: nowrap;
+  }
+  .secbtn.icon-only { padding: 6px 9px; gap: 0; }
+  .secbtn.dim { opacity: 0.45; }
+  .secbtn.talking { border-color: rgba(156,231,255,0.7); color: #e0f2fe; background: linear-gradient(180deg, rgba(20,60,82,0.9) 0%, rgba(14,36,54,0.92) 100%); }
+  .secbtn.ring { outline: 2px solid rgba(255,255,255,0.9); outline-offset: 2px; box-shadow: 0 0 0 2px rgba(255,255,255,0.92), 0 0 0 5px rgba(255,255,255,0.2); }
+  .push { margin-left: auto; }
+  .divider { display: flex; align-items: center; gap: 8px; width: 100%; margin: 4px 0 2px; }
+  .divider .drule { flex: 1; height: 1px; background: rgba(255,255,255,0.09); }
+  .divider .dlabel { font-size: 10px; font-weight: 600; letter-spacing: 0.04em; color: #9fb7d5; white-space: nowrap; padding: 0 2px; }
+
+  /* ===== plugin part 3: the session strip and the details panel ===== */
+  .sessionstrip {
+    margin-top: 12px; padding: 10px 12px; border-radius: 8px;
+    border: 1px solid rgba(100,140,180,0.35); background: rgba(12,18,28,0.65);
+    width: 100%; display: flex; align-items: center; gap: 8px;
+  }
+  .sessionstrip .st-title { flex: 1; min-width: 0; color: #b8cce0; font-size: 12px; font-weight: 700; text-align: left; }
+  .sessionstrip .st-clear { color: #8fa8c4; font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .detailpanel { width: 100%; }
+  .dtabs {
+    display: flex; align-items: center; gap: 6px;
+    border-bottom: 1px solid rgba(255,255,255,0.10);
+    padding-bottom: 6px; margin-bottom: 8px;
+  }
+  .dtab {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.04em;
+    padding: 4px 9px; border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.04); color: #9fb0c0;
+  }
+  .dtab.on { border-color: rgba(56,189,248,0.55); background: rgba(56,189,248,0.18); color: #e0f2fe; }
+  .dtab.ring { outline: 2px solid rgba(255,255,255,0.9); outline-offset: 2px; }
+  .chipcount { font-size: 10px; font-weight: 600; color: rgba(159,183,213,0.9); letter-spacing: 0.03em; margin-bottom: 6px; }
+  .chiprow { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+  .lchip {
+    font-size: 10px; padding: 4px 10px; border-radius: 999px;
+    border: 1px solid rgba(72,98,124,0.6); background: rgba(26,34,44,0.88);
+    color: #e2e8f0; white-space: nowrap;
+  }
+  .lchip.on { font-size: 11px; font-weight: 600; border-color: rgba(125,211,252,0.6); background: rgba(56,189,248,0.16); }
+  .lchip.fade { opacity: 0.55; }
+  .dbody { font-size: 11px; line-height: 1.45; color: #9fb7d5; }
+  .dbody .dt { font-size: 11px; font-weight: 700; color: #dce8f4; margin-bottom: 3px; }
+  .turnrow {
+    padding: 6px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.08);
+    font-size: 11px; color: #dce8f4; margin-bottom: 6px;
+  }
+  .turnrow.on { border-color: rgba(125,211,252,0.55); background: rgba(56,189,248,0.12); }
+  .clearline { display: flex; align-items: center; gap: 8px; margin-top: 8px; }
+  .clearbtn {
+    font-size: 11px; font-weight: 700; color: #8fa8c4;
+    border: 1px solid rgba(255,255,255,0.14); border-radius: 6px;
+    padding: 5px 10px; background: rgba(255,255,255,0.03); white-space: nowrap;
+  }
+  .clearbtn.wide { width: 100%; text-align: center; }
+  .clearbtn.mini { padding: 3px 8px; font-size: 10px; }
+
+  /* ===== plugin part 4: the AI models screen ======================== */
+  .modalframe {
+    width: 569px; flex: 0 0 auto;
+    font-family: -apple-system, "Segoe UI", system-ui, Roboto, sans-serif;
+    background: #0c1218; border: 1px solid rgba(255,255,255,0.10); border-radius: 6px;
+    color: #dce8f4; overflow: hidden;
+  }
+  .modalframe .mtitle {
+    font-size: 14px; font-weight: 700; color: #e8eef5;
+    padding: 12px 14px 8px; border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .mbody { padding: 10px 14px; display: flex; flex-direction: column; gap: 6px; }
+  .mfoot {
+    display: flex; justify-content: space-between; padding: 8px 14px 12px;
+    border-top: 1px solid rgba(255,255,255,0.07); font-size: 11px; color: #9fb0c0;
+  }
+  .hubchips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .hubchip {
+    flex: 1 1 auto; text-align: center; min-height: 32px; line-height: 32px;
+    font-size: 11px; font-weight: 600; border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.12); background: rgba(255,255,255,0.04); color: #9fb0c0;
+  }
+  .hubchip.on {
+    border-color: rgba(56,189,248,0.55); color: #e0f2fe;
+    background: linear-gradient(180deg, rgba(56,189,248,0.22) 0%, rgba(14,116,144,0.35) 100%);
+  }
+  .mcounts { display: flex; flex-wrap: wrap; gap: 8px 14px; font-size: 11px; color: #b8cce0; line-height: 1.35; }
+  .mtagrow { display: flex; align-items: center; gap: 6px; }
+  .mtagfield {
+    flex: 1 1 auto; min-width: 0; min-height: 26px; line-height: 24px;
+    border: 1px solid rgba(255,255,255,0.14); border-radius: 3px;
+    background: rgba(0,0,0,0.3); color: #7f8f9f; font-size: 11px; padding: 0 8px;
+  }
+  .seclabel { font-size: 10px; font-weight: 700; color: #9ce7ff; letter-spacing: 0.03em; }
+  .mchips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .mchips.strip { flex-wrap: nowrap; overflow: hidden; }
+  .mchip {
+    min-height: 24px; line-height: 20px; padding: 2px 8px; font-size: 9px;
+    border-radius: 4px; border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.06); color: #dce8f4; white-space: nowrap;
+  }
+  .mchip.on { border-color: rgba(56,189,248,0.55); background: rgba(56,189,248,0.18); color: #e0f2fe; }
+  .mchip.foss { border-color: rgba(74,222,128,0.45); color: #bbf7d0; }
+  .mchip.tier { border-color: rgba(232,179,92,0.55); color: #f5d9a5; background: rgba(232,179,92,0.10); }
+  .mchip.more { color: #7f8f9f; }
+  .mtoggles { display: flex; flex-wrap: wrap; gap: 12px; }
+  .mtable { display: flex; flex-direction: column; width: 100%; }
+  .mrow {
+    display: grid;
+    grid-template-columns: 28px minmax(5.5rem,1.4fr) minmax(42px,0.55fr) minmax(46px,0.62fr) minmax(0,1fr) minmax(52px,0.72fr) 28px;
+    gap: 6px; align-items: center; padding: 5px 6px;
+    border-bottom: 1px solid rgba(72,98,124,0.22); font-size: 10px; line-height: 1.3; color: #dce8f4;
+  }
+  .mrow.head {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+    color: #8fa8c4; background: rgba(8,14,22,0.96);
+    border-bottom: 1px solid rgba(72,98,124,0.45); padding-top: 5px; padding-bottom: 7px;
+  }
+  .mrow.data { background: rgba(12,20,30,0.55); }
+  .mrow.data:nth-of-type(even) { background: rgba(12,20,30,0.72); }
+  .mrow.inst { border-left: 2px solid rgba(156,231,255,0.45); }
+  .mcell { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mcell.c { text-align: center; }
+  .mlicense { font-size: 9px; color: #bbf7d0; }
+  .viewport { overflow: hidden; position: relative; border: 1px dashed rgba(232,179,92,0.4); }
+  .viewport::after {
+    content: attr(data-note);
+    position: absolute; right: 0; bottom: 0;
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.05em;
+    color: #0c1218; background: rgba(232,179,92,0.85); padding: 1px 6px;
+  }
+  .filterpanel {
+    border: 1px solid rgba(56,189,248,0.4); border-radius: 6px;
+    background: rgba(10,18,28,0.98); padding: 8px 10px;
+    display: flex; flex-direction: column; gap: 7px;
+  }
+  .fpgroup { display: flex; flex-direction: column; gap: 5px; }
+  .fprow { display: flex; align-items: center; gap: 7px; font-size: 11px; color: #dce8f4; }
+  .fpbox {
+    width: 13px; height: 13px; border-radius: 3px; flex: 0 0 auto;
+    border: 1px solid rgba(255,255,255,0.3); background: rgba(0,0,0,0.3);
+  }
+  .fpbox.on { background: rgba(56,189,248,0.7); border-color: rgba(56,189,248,0.9); }
+
+  /* --- tick lists (feature 4 levers) -------------------------------- */
+  .panel {
+    background: var(--bench); border: 1px solid var(--rule); border-radius: 6px;
+    padding: 16px; margin-top: 16px;
+  }
+  .panel > h3 {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--mark); margin: 0 0 4px; font-weight: 600;
+  }
+  .panel > p { margin: 0 0 14px; font-size: 12.5px; color: var(--ink-dim); max-width: 64ch; }
+  .ticks { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 8px 20px; }
+  .tick { display: flex; gap: 9px; align-items: flex-start; cursor: pointer; font-size: 13px; line-height: 1.4; }
+  .tick input { margin: 2px 0 0; accent-color: var(--mark); width: 15px; height: 15px; flex: 0 0 auto; }
+  .tick span small { display: block; color: var(--ink-dim); font-size: 11.5px; line-height: 1.4; }
+  .tick .px { font-family: var(--mono); color: var(--gain); font-size: 11.5px; }
+
+  .meter {
+    margin-top: 18px; padding: 14px; border-radius: 6px;
+    background: var(--bench-2); border: 1px solid var(--rule);
+    display: flex; flex-wrap: wrap; gap: 18px 34px; align-items: flex-end;
+  }
+  .meter .big {
+    font-family: var(--mono); font-size: 34px; font-weight: 600; line-height: 1;
+    color: var(--mark); font-variant-numeric: tabular-nums;
+  }
+  .meter .big.was { color: var(--ink-dim); font-size: 26px; }
+  .meter .lbl {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--ink-dim); margin-bottom: 5px;
+  }
+
+  /* --- the picks summary at the end -------------------------------- */
+  .summary { margin-top: 44px; border-top: 1px solid var(--rule); padding-top: 34px; }
+  .summary h2 { font-size: 22px; font-weight: 600; color: var(--ink-strong); margin: 0 0 10px; }
+  #picktext {
+    width: 100%; min-height: 200px; resize: vertical;
+    font-family: var(--mono); font-size: 12px; line-height: 1.6;
+    background: var(--bench); color: var(--ink);
+    border: 1px solid var(--rule); border-radius: 6px; padding: 14px;
+  }
+  .btnrow { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 10px; }
+  button.act {
+    font-family: var(--sans); font-size: 13px; font-weight: 600;
+    background: var(--mark); color: var(--ground);
+    border: 1px solid var(--mark); border-radius: 5px; padding: 8px 16px; cursor: pointer;
+  }
+  button.act.ghost { background: transparent; color: var(--ink); border-color: var(--rule-strong); }
+  button.act:focus-visible { outline: 2px solid var(--mark); outline-offset: 3px; }
+  #copystate { font-family: var(--mono); font-size: 11.5px; color: var(--gain); }
+
+  .asks { margin-top: 34px; }
+  .asks h2 { font-size: 22px; font-weight: 600; color: var(--ink-strong); margin: 0 0 12px; }
+  .asks ol { margin: 0; padding-left: 20px; max-width: 66ch; }
+  .asks li { margin-bottom: 10px; line-height: 1.5; }
+  .asks li b { color: var(--ink-strong); font-weight: 600; }
+
+  /* --- added after the maintainer's picks, 20 Sep --- */
+  .slotrow.guides .slot-center { position: relative; }
+  .slotrow.guides .slot-center::after {
+    content: ""; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px;
+    background: repeating-linear-gradient(180deg, rgba(232,179,92,0.95) 0 3px, transparent 3px 6px);
+    pointer-events: none;
+  }
+  .slotrow.fix-shift .slot-game { padding-right: 28px; }
+  .slotrow.fix-shift .sdots { padding-right: 28px; }
+  .slotrow.fix-abs .slot-title-row { position: relative; }
+  .slotrow.fix-abs .slot-del { position: absolute; right: 0; top: 50%; transform: translateY(-50%); }
+  .slotrow.fix-abs .slot-title { max-width: 76%; }
+
+  .quieticon {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 32px; width: 30px; padding: 0;
+    border: none; background: transparent; border-radius: 0;
+    color: #dbe6f3; flex: 0 0 auto;
+  }
+  .quieticon.o15 { opacity: 0.15; }
+  .quieticon.o45 { opacity: 0.45; }
+  .quieticon.full { opacity: 1; }
+  .quieticon.stop { color: #f87171; opacity: 0.95; }
+  .quieticon.ring { outline: 2px solid rgba(255,255,255,0.9); outline-offset: 2px; border-radius: 4px; opacity: 1; }
+  .swatchrow { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+
+<div class="wrap">
+
+<div class="topbar">
+  <span class="brand">bonsAI · option board · 20 Sep 2026</span>
+  <nav class="tally" id="tally" aria-label="Your picks so far">
+    <a href="#f1" data-slot="1">1 · game name —</a>
+    <a href="#f2" data-slot="2">2 · read aloud —</a>
+    <a href="#f3" data-slot="3">3 · session tab —</a>
+    <a href="#f4" data-slot="4">4 · models —</a>
+    <a href="#f1align" data-slot="5">5 · centring —</a>
+    <a href="#f2fade" data-slot="6">6 · speaker fade —</a>
+  </nav>
+</div>
+
+<header class="head">
+  <h1>Four changes, drawn at the size they will really be</h1>
+  <p class="lede">Pick one option for each. Everything here is drawn at the sizes measured on your
+  Deck, using the same colours, fonts and spacing the plugin itself uses, so what you see is close
+  to what will appear on the screen.</p>
+  <p>Click a card to choose it. Your four picks collect at the top of the page and in a box at the
+  bottom you can copy. Nothing here is built yet — this is the drawing stage.</p>
+</header>
+
+<div class="notes">
+  <div>
+    <h3>The chat column</h3>
+    <p>Drawn <b>300 pixels</b> wide — the real width measured on your Deck. On the Deck's own screen
+    the whole panel is <b>454 pixels</b> tall and the fixed rows eat 311 of them, so you see about
+    <b>143 pixels</b> of chat: roughly three lines.</p>
+  </div>
+  <div>
+    <h3>The AI models screen</h3>
+    <p>Drawn <b>569 pixels</b> wide and <b>640</b> tall — both measured on the Deck. The list today
+    gets about <b>90 pixels</b>, which is why you see two rows.</p>
+  </div>
+  <div>
+    <h3>Where the numbers come from</h3>
+    <p>Each card's height is <b>measured by this page</b> from the drawing beside it, not typed in.
+    The counts on the models screen are worked out from those measurements, so treat them as close,
+    not exact. Anything I only read in the code is marked <b>read, not measured</b>.</p>
+  </div>
+</div>
+
+<div class="panel" style="margin-top:24px;border-color:var(--mark)">
+  <h3>Updated 20 September, after your picks</h3>
+  <p style="margin-bottom:0">Your four choices are already ticked on the cards below. Two things
+  changed since you saw this. The speaker in feature 2 is redrawn as a quiet icon, the same
+  treatment as the microphone in the Ask box. And <b>the offset you spotted is real</b> — on the
+  Deck today the chat's name sits <b>14 pixels</b> to the left of the game's name, because the small
+  <b>×</b> that deletes a chat is inside the part being centred. There are two ways to straighten
+  it and they cost different things, so they are drawn at the end of feature 1 for you to pick.</p>
+</div>
+
+<div class="panel" style="margin-top:16px;border-color:var(--cost)">
+  <h3 style="color:var(--cost)">Correction, same day — two of my numbers on feature 4 were wrong</h3>
+  <p>Everything on the models screen was read in the code rather than measured on the Deck, and I got
+  two of them wrong in the same direction: too hopeful. Found while drawing the finished screen.</p>
+  <p><b>Dropping the Policy section frees no height.</b> The three section buttons stretch to fill the
+  row, so taking one away leaves two wider buttons and a row exactly as tall. My "frees about 86 px"
+  counted a row that does not shrink.</p>
+  <p><b>Moving the "type any model name" box below the list frees no height either.</b> It moves inside
+  the same box the list lives in, so the list's share is unchanged. What it buys is that the list is the
+  first thing you see, which is still worth having — just not in pixels.</p>
+  <p><b>And a third thing I cannot yet trust.</b> The list sits inside a <i>second</i>, tighter height
+  limit of its own, inside the one I pointed at. So letting the screen use more of the popup may free
+  nothing at all. Same for moving Advanced to the bottom: the button reappears at the bottom and costs
+  about what the row cost at the top, unless it leaves the scrolling part of the screen entirely.</p>
+  <p style="margin-bottom:0"><b>What stands, and what happens next.</b> All your picks stand — the
+  shapes were never the problem. The one figure I am still confident in is the filter rows: two rows of
+  chips plus their gap is 54 pixels, one line is 24, so the filter change itself frees about
+  <b>30 pixels</b>. Everything else gets measured on the Deck before a single brief is written, and the
+  numbers below are marked accordingly. There is one new question for you at the bottom.</p>
+</div>
+
+<!-- ================================================================= -->
+<!-- FEATURE 1                                                         -->
+<!-- ================================================================= -->
+<section class="feature" id="f1">
+  <div class="eyebrow"><span class="num">Feature 1</span><span class="stars">★★</span><span>chat list</span></div>
+  <h2>The game a chat belongs to, above its title</h2>
+  <p class="why">You said yes to showing the game's name on 19 September. The always-on version is
+  already in the plugin: a small uppercase line sits above the chat's name, and a blank line is held
+  open for chats saved before this was kept, so the row never jumps height. What was never built is
+  the version where the name only appears while the D-pad ring is on the row.</p>
+  <p class="why small">The row costs <b>11 pixels</b> for that line whether or not there is a name in
+  it. That is 11 pixels the chat bubbles do not get.</p>
+  <div class="decide">What to decide: is the name always there, only while you are on the row, or on
+  the title line so the band can go?</div>
+
+  <div class="bench">
+
+    <!-- today -->
+    <figure class="card today">
+      <div class="card-head"><span class="letter">now</span><h3>What is on your Deck today</h3></div>
+      <div class="stage">
+        <figure class="shot">
+          <figcaption>at rest · chat about Hades, Hades running</figcaption>
+          <div class="qam col300">
+            <div class="slotrow" data-measure="f1-today">
+              <div class="slotrow-inner">
+                <div class="slot-center">
+                  <div class="slot-game">HADES</div>
+                  <div class="slot-title-row">
+                    <span class="sghost prev">Rock and st</span>
+                    <span class="slot-title">Theseus and Asterius</span>
+                    <span class="slot-del">×</span>
+                    <span class="sghost next">Gels in Por</span>
+                  </div>
+                  <div class="sdots"><span class="sdot plus">+</span><span class="sdot act"></span><span class="sdot"></span><span class="sdot"></span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </figure>
+        <figure class="shot">
+          <figcaption>ring on the row · chat about a game you are not playing</figcaption>
+          <div class="qam col300">
+            <div class="slotrow on">
+              <div class="slotrow-inner">
+                <span class="bpill">LB</span>
+                <div class="slot-center">
+                  <div class="slot-game">DEEP ROCK GALACTIC</div>
+                  <div class="slot-title-row">
+                    <span class="slot-title">Which class for Haz 5 solo</span>
+                    <span class="slot-del">×</span>
+                  </div>
+                  <div class="sdots"><span class="sdot plus">+</span><span class="sdot"></span><span class="sdot act"></span><span class="sdot"></span></div>
+                </div>
+                <span class="bpill">RB</span>
+              </div>
+            </div>
+          </div>
+        </figure>
+      </div>
+      <div class="trade">
+        <p class="note">An older chat shows a blank line where the name would be, so the row stays the same height.</p>
+      </div>
+      <div class="readout">Row at rest <b data-h="f1-today"></b></div>
+    </figure>
+
+    <!-- option A -->
+    <label class="pickable">
+      <input type="radio" name="f1" data-feature="1" value="A — leave it as it is, the name is always shown">
+      <figure class="card">
+        <div class="card-head"><span class="letter">A</span><h3>Leave it as it is</h3><span class="picktag">Pick</span></div>
+        <div class="stage">
+          <figure class="shot">
+            <figcaption>at rest · the name is there whether or not you are on the row</figcaption>
+            <div class="qam col300">
+              <div class="slotrow" data-measure="f1-a">
+                <div class="slotrow-inner">
+                  <div class="slot-center">
+                    <div class="slot-game">HADES</div>
+                    <div class="slot-title-row">
+                      <span class="sghost prev">Rock and st</span>
+                      <span class="slot-title">Theseus and Asterius</span>
+                      <span class="slot-del">×</span>
+                      <span class="sghost next">Gels in Por</span>
+                    </div>
+                    <div class="sdots"><span class="sdot plus">+</span><span class="sdot act"></span><span class="sdot"></span><span class="sdot"></span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </figure>
+        </div>
+        <div class="trade">
+          <p class="up">Nothing to build. One check on the Deck and it is finished.</p>
+          <p class="up">You can tell at a glance which game a chat is about without touching anything.</p>
+          <p class="down">The line is on screen even when it is empty, and it costs 11 pixels of chat forever.</p>
+        </div>
+        <div class="readout">Row at rest <b data-h="f1-a"></b><span data-vs="f1-a|f1-today"></span></div>
+      </figure>
+    </label>
+
+    <!-- option B -->
+    <label class="pickable">
+      <input type="radio" name="f1" data-feature="1" value="B — only while the ring is on the row" checked>
+      <figure class="card">
+        <div class="card-head"><span class="letter">B</span><h3>Only while the ring is on the row</h3><span class="picktag">Pick</span></div>
+        <div class="stage">
+          <figure class="shot">
+            <figcaption>at rest · the line is held open but empty</figcaption>
+            <div class="qam col300">
+              <div class="slotrow" data-measure="f1-b">
+                <div class="slotrow-inner">
+                  <div class="slot-center">
+                    <div class="slot-game">&nbsp;</div>
+                    <div class="slot-title-row">
+                      <span class="sghost prev">Rock and st</span>
+                      <span class="slot-title">Theseus and Asterius</span>
+                      <span class="slot-del">×</span>
+                      <span class="sghost next">Gels in Por</span>
+                    </div>
+                    <div class="sdots"><span class="sdot plus">+</span><span class="sdot act"></span><span class="sdot"></span><span class="sdot"></span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </figure>
+          <figure class="shot">
+            <figcaption>ring on the row · the name appears</figcaption>
+            <div class="qam col300">
+              <div class="slotrow on">
+                <div class="slotrow-inner">
+                  <span class="bpill">LB</span>
+                  <div class="slot-center">
+                    <div class="slot-game">HADES</div>
+                    <div class="slot-title-row">
+                      <span class="slot-title">Theseus and Asterius</span>
+                      <span class="slot-del">×</span>
+                    </div>
+                    <div class="sdots"><span class="sdot plus">+</span><span class="sdot act"></span><span class="sdot"></span><span class="sdot"></span></div>
+                  </div>
+                  <span class="bpill">RB</span>
+                </div>
+              </div>
+            </div>
+          </figure>
+        </div>
+        <div class="trade">
+          <p class="up">The row is quieter when you are not using it. Less text competing with the chat.</p>
+          <p class="up">Row height never changes, because the empty line is still held open.</p>
+          <p class="down">You cannot see which game a chat belongs to while reading the chat itself.</p>
+          <p class="down">Small build: a new rule, a test, and one look on the Deck.</p>
+        </div>
+        <div class="readout">Row at rest <b data-h="f1-b"></b><span data-vs="f1-b|f1-today"></span></div>
+      </figure>
+    </label>
+
+    <!-- option C -->
+    <label class="pickable">
+      <input type="radio" name="f1" data-feature="1" value="C — on the title line, the band goes away">
+      <figure class="card">
+        <div class="card-head"><span class="letter">C</span><h3>On the title line, band goes</h3><span class="picktag">Pick</span></div>
+        <div class="stage">
+          <figure class="shot">
+            <figcaption>at rest · game name in front of the chat name</figcaption>
+            <div class="qam col300">
+              <div class="slotrow" data-measure="f1-c">
+                <div class="slotrow-inner">
+                  <div class="slot-center">
+                    <div class="slot-title-row">
+                      <span class="sghost prev">Rock and st</span>
+                      <span class="slot-title"><span class="slot-prefix">HADES</span> Theseus and As</span>
+                      <span class="slot-del">×</span>
+                      <span class="sghost next">Gels in Por</span>
+                    </div>
+                    <div class="sdots"><span class="sdot plus">+</span><span class="sdot act"></span><span class="sdot"></span><span class="sdot"></span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </figure>
+          <figure class="shot">
+            <figcaption>ring on the row · the ghosts step aside so more name fits</figcaption>
+            <div class="qam col300">
+              <div class="slotrow on">
+                <div class="slotrow-inner">
+                  <span class="bpill">LB</span>
+                  <div class="slot-center">
+                    <div class="slot-title-row">
+                      <span class="slot-title"><span class="slot-prefix">HADES</span> Theseus and Asterius</span>
+                      <span class="slot-del">×</span>
+                    </div>
+                    <div class="sdots"><span class="sdot plus">+</span><span class="sdot act"></span><span class="sdot"></span><span class="sdot"></span></div>
+                  </div>
+                  <span class="bpill">RB</span>
+                </div>
+              </div>
+            </div>
+          </figure>
+        </div>
+        <div class="trade">
+          <p class="up">Gives 11 pixels back to the chat — about one line in eight of what you can see.</p>
+          <p class="down">Eats the width you already said was too narrow for the chat's own name.</p>
+          <p class="down">A long game name plus a long chat name means you read neither.</p>
+        </div>
+        <div class="readout">Row at rest <b data-h="f1-c"></b><span data-vs="f1-c|f1-today"></span></div>
+      </figure>
+    </label>
+
+    <!-- option D -->
+    <label class="pickable">
+      <input type="radio" name="f1" data-feature="1" value="D — only when it is a different game from the one running">
+      <figure class="card">
+        <div class="card-head"><span class="letter">D</span><h3>Only when it is a different game</h3><span class="picktag">Pick</span></div>
+        <div class="stage">
+          <figure class="shot">
+            <figcaption>playing Hades, chat about Hades · no name, it would say nothing</figcaption>
+            <div class="qam col300">
+              <div class="slotrow" data-measure="f1-d">
+                <div class="slotrow-inner">
+                  <div class="slot-center">
+                    <div class="slot-game">&nbsp;</div>
+                    <div class="slot-title-row">
+                      <span class="sghost prev">Rock and st</span>
+                      <span class="slot-title">Theseus and Asterius</span>
+                      <span class="slot-del">×</span>
+                      <span class="sghost next">Gels in Por</span>
+                    </div>
+                    <div class="sdots"><span class="sdot plus">+</span><span class="sdot act"></span><span class="sdot"></span><span class="sdot"></span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </figure>
+          <figure class="shot">
+            <figcaption>playing Hades, chat about another game · the name shows</figcaption>
+            <div class="qam col300">
+              <div class="slotrow">
+                <div class="slotrow-inner">
+                  <div class="slot-center">
+                    <div class="slot-game">DEEP ROCK GALACTIC</div>
+                    <div class="slot-title-row">
+                      <span class="sghost prev">Theseus and</span>
+                      <span class="slot-title">Which class for Haz 5</span>
+                      <span class="slot-del">×</span>
+                      <span class="sghost next">Gels in Por</span>
+                    </div>
+                    <div class="sdots"><span class="sdot plus">+</span><span class="sdot"></span><span class="sdot act"></span><span class="sdot"></span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </figure>
+        </div>
+        <div class="trade">
+          <p class="up">The name only appears when it is telling you something you did not already know.</p>
+          <p class="up">Row height never changes — the empty line is still held open.</p>
+          <p class="down">Most of the time the line is blank, so you pay 11 pixels for nothing.</p>
+          <p class="down">Most to build of the four, and the hardest to check on the Deck.</p>
+        </div>
+        <div class="readout">Row at rest <b data-h="f1-d"></b><span data-vs="f1-d|f1-today"></span></div>
+      </figure>
+    </label>
+
+  </div>
+
+  <div class="panel" id="f1align" style="margin-top:24px">
+    <h3>Feature 5 · the offset you spotted</h3>
+    <p>You were right and it is not the drawing. The game's name is centred on the whole row. The
+    chat's name is centred on a group that also holds the small <b>×</b>, so it lands <b>14 pixels</b>
+    further left. The dots underneath are centred on the row as well, so the name is out of line with
+    those too. The amber dashed line below is the true middle of the row.</p>
+    <div class="bench">
+
+      <figure class="card today">
+        <div class="card-head"><span class="letter">now</span><h3>What it does today</h3></div>
+        <figure class="shot">
+          <figcaption>ring on the row · name 14 px left of the middle</figcaption>
+          <div class="qam col300">
+            <div class="slotrow on guides">
+              <div class="slotrow-inner">
+                <span class="bpill">LB</span>
+                <div class="slot-center">
+                  <div class="slot-game">HADES</div>
+                  <div class="slot-title-row">
+                    <span class="slot-title">Theseus and Asterius</span>
+                    <span class="slot-del">×</span>
+                  </div>
+                  <div class="sdots"><span class="sdot plus">+</span><span class="sdot act"></span><span class="sdot"></span><span class="sdot"></span></div>
+                </div>
+                <span class="bpill">RB</span>
+              </div>
+            </div>
+          </div>
+        </figure>
+        <div class="trade">
+          <p class="note">Three things on three lines, and only two of them agree on where the middle is.</p>
+        </div>
+      </figure>
+
+      <label class="pickable">
+        <input type="radio" name="f5" data-feature="5" value="A — move the game name and the dots to match the chat name (costs nothing)">
+        <figure class="card">
+          <div class="card-head"><span class="letter">A</span><h3>Move the other two to match</h3><span class="picktag">Pick</span></div>
+          <figure class="shot">
+            <figcaption>game name and dots shift 14 px left · all three agree</figcaption>
+            <div class="qam col300">
+              <div class="slotrow on guides fix-shift">
+                <div class="slotrow-inner">
+                  <span class="bpill">LB</span>
+                  <div class="slot-center">
+                    <div class="slot-game">HADES</div>
+                    <div class="slot-title-row">
+                      <span class="slot-title">Theseus and Asterius</span>
+                      <span class="slot-del">×</span>
+                    </div>
+                    <div class="sdots"><span class="sdot plus">+</span><span class="sdot act"></span><span class="sdot"></span><span class="sdot"></span></div>
+                  </div>
+                  <span class="bpill">RB</span>
+                </div>
+              </div>
+            </div>
+          </figure>
+          <div class="trade">
+            <p class="up">Costs the chat's name nothing. You keep every pixel of it, which you fought for once already.</p>
+            <p class="up">Two lines of styling. Smallest change of the two.</p>
+            <p class="down">The whole middle block sits 14 px left of the true middle of the row. Between two shoulder buttons that may read as slightly off.</p>
+          </div>
+        </figure>
+      </label>
+
+      <label class="pickable">
+        <input type="radio" name="f5" data-feature="5" value="B — take the × out of the centring (costs about 28 px of the chat name)" checked>
+        <figure class="card">
+          <div class="card-head"><span class="letter">B</span><h3>Take the × out of the centring</h3><span class="picktag">Pick</span></div>
+          <figure class="shot">
+            <figcaption>the × sits at the right edge · the name is truly centred</figcaption>
+            <div class="qam col300">
+              <div class="slotrow on guides fix-abs">
+                <div class="slotrow-inner">
+                  <span class="bpill">LB</span>
+                  <div class="slot-center">
+                    <div class="slot-game">HADES</div>
+                    <div class="slot-title-row">
+                      <span class="slot-title">Theseus and Asteri</span>
+                      <span class="slot-del">×</span>
+                    </div>
+                    <div class="sdots"><span class="sdot plus">+</span><span class="sdot act"></span><span class="sdot"></span><span class="sdot"></span></div>
+                  </div>
+                  <span class="bpill">RB</span>
+                </div>
+              </div>
+            </div>
+          </figure>
+          <div class="trade">
+            <p class="up">Everything lines up on the real middle of the row. Nothing has to be nudged to match anything else.</p>
+            <p class="up">The × always sits in the same place, whatever the name is, so your thumb learns it.</p>
+            <p class="down">Costs about 28 px of the chat's name so it cannot run under the ×. That is roughly three characters.</p>
+          </div>
+        </figure>
+      </label>
+
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================= -->
+<!-- FEATURE 2                                                         -->
+<!-- ================================================================= -->
+<section class="feature" id="f2">
+  <div class="eyebrow"><span class="num">Feature 2</span><span class="stars">★★</span><span>reading aloud · layout · D-pad</span></div>
+  <h2>Read aloud becomes a small speaker button</h2>
+  <p class="why">Today Read aloud is a full-width line across the answer, the same shape as Show
+  details sitting right below it — two lines that look like the same control. You asked for a small
+  speaker button on the same row as Helpful and Not really, and for the line to go.</p>
+  <p class="why small">Whatever we pick has to keep four things: the D-pad can still stop on it under
+  the same name, Left and Right move along the row, the icon and what it says flip to Stop while the
+  Deck is talking, and it stays reachable when the thumbs are greyed out — because on an answer you
+  stopped part-way, the D-pad steps over the greyed thumbs entirely.</p>
+  <div class="decide">What to decide: icon alone at the far right, icon with its word, or icon right
+  next to Not really.</div>
+
+  <div class="bench">
+
+    <figure class="card today">
+      <div class="card-head"><span class="letter">now</span><h3>What is on your Deck today</h3></div>
+      <div class="stage">
+        <figure class="shot">
+          <figcaption>a finished answer, ring not on the row</figcaption>
+          <div class="qam col300"><div class="pad">
+            <div class="bubble">Use the Cast to break his shield first, then keep moving — Asterius charges in a straight line.</div>
+            <div class="replyacts" data-measure="f2-today">
+              <span class="fblabel">Was this helpful?</span>
+              <div class="actsrow">
+                <span class="secbtn"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>Helpful</span>
+                <span class="secbtn"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"></path></svg>Not really</span>
+              </div>
+              <div class="divider"><span class="drule"></span><span class="dlabel">Read aloud</span><span class="drule"></span></div>
+              <div class="divider"><span class="drule"></span><span class="dlabel">Show details ↓</span><span class="drule"></span></div>
+            </div>
+          </div></div>
+        </figure>
+      </div>
+      <div class="trade">
+        <p class="note">Two identical lines stacked. The top one talks, the bottom one opens a panel — nothing on screen says which is which.</p>
+      </div>
+      <div class="readout">Everything under the answer <b data-h="f2-today"></b></div>
+    </figure>
+
+    <label class="pickable">
+      <input type="radio" name="f2" data-feature="2" value="A — speaker alone, pinned to the right end of the row" checked>
+      <figure class="card">
+        <div class="card-head"><span class="letter">A</span><h3>Speaker alone, pinned right</h3><span class="picktag">Pick</span></div>
+        <div class="stage">
+          <figure class="shot">
+            <figcaption>normal · a quiet glyph, no button around it</figcaption>
+            <div class="qam col300"><div class="pad">
+              <div class="replyacts" data-measure="f2-a">
+                <span class="fblabel">Was this helpful?</span>
+                <div class="actsrow pin-right">
+                  <span class="secbtn"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>Helpful</span>
+                  <span class="secbtn"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"></path></svg>Not really</span>
+                  <span class="quieticon o45 push" aria-label="Read aloud"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span>
+                </div>
+                <div class="divider"><span class="drule"></span><span class="dlabel">Show details ↓</span><span class="drule"></span></div>
+              </div>
+            </div></div>
+          </figure>
+          <div class="stage-row">
+            <figure class="shot">
+              <figcaption>ring lands on it · brightens, white ring</figcaption>
+              <div class="qam col300"><div class="pad">
+                <div class="actsrow pin-right">
+                  <span class="secbtn"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>Helpful</span>
+                  <span class="secbtn"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"></path></svg>Not really</span>
+                  <span class="quieticon push ring" aria-label="Read aloud"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span>
+                </div>
+              </div></div>
+            </figure>
+            <figure class="shot">
+              <figcaption>while the Deck is talking · flips to stop, goes red like the mic does</figcaption>
+              <div class="qam col300"><div class="pad">
+                <div class="actsrow pin-right">
+                  <span class="secbtn"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>Helpful</span>
+                  <span class="secbtn"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"></path></svg>Not really</span>
+                  <span class="quieticon stop push ring" aria-label="Stop"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" stroke="none"><rect x="6" y="6" width="12" height="12" rx="2"></rect></svg></span>
+                </div>
+              </div></div>
+            </figure>
+            <figure class="shot">
+              <figcaption>answer you stopped part-way · thumbs greyed, speaker still live</figcaption>
+              <div class="qam col300"><div class="pad">
+                <div class="actsrow pin-right">
+                  <span class="secbtn dim">Helpful</span>
+                  <span class="secbtn dim">Not really</span>
+                  <span class="quieticon push ring" aria-label="Read aloud"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span>
+                </div>
+              </div></div>
+            </figure>
+          </div>
+        </div>
+        <div class="trade">
+          <p class="up">Never moves. Your thumb and the D-pad always find it in the same place.</p>
+          <p class="up">Quiet at rest, the same treatment as the microphone in the Ask box: bare glyph, nothing drawn around it.</p>
+          <p class="up">Because it is not a button shape, it cannot be mistaken for a third thing to rate the answer with.</p>
+          <p class="down">An icon with no word — a first-time user has to press it to learn what it does.</p>
+          <p class="note">Left and Right: Helpful → Not really → speaker. Down goes to Show details. The touch target stays 32 px tall even though the glyph is 16.</p>
+        </div>
+        <div class="readout">Everything under the answer <b data-h="f2-a"></b><span data-vs="f2-a|f2-today"></span></div>
+      </figure>
+    </label>
+
+    <label class="pickable">
+      <input type="radio" name="f2" data-feature="2" value="B — speaker with the words Read aloud, third button in the row">
+      <figure class="card">
+        <div class="card-head"><span class="letter">B</span><h3>Speaker with its word</h3><span class="picktag">Pick</span></div>
+        <div class="stage">
+          <figure class="shot">
+            <figcaption>normal · three buttons do not fit on one line at 276 pixels</figcaption>
+            <div class="qam col300"><div class="pad">
+              <div class="replyacts" data-measure="f2-b">
+                <span class="fblabel">Was this helpful?</span>
+                <div class="actsrow">
+                  <span class="secbtn"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>Helpful</span>
+                  <span class="secbtn"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"></path></svg>Not really</span>
+                  <span class="secbtn"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>Read aloud</span>
+                </div>
+                <div class="divider"><span class="drule"></span><span class="dlabel">Show details ↓</span><span class="drule"></span></div>
+              </div>
+            </div></div>
+          </figure>
+          <figure class="shot">
+            <figcaption>the same button saying just "Aloud" · fits on one line</figcaption>
+            <div class="qam col300"><div class="pad">
+              <div class="actsrow">
+                <span class="secbtn"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>Helpful</span>
+                <span class="secbtn"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"></path></svg>Not really</span>
+                <span class="secbtn ring"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>Aloud</span>
+              </div>
+            </div></div>
+          </figure>
+        </div>
+        <div class="trade">
+          <p class="up">Nobody has to guess what it does.</p>
+          <p class="down">"Read aloud" spelled out wraps onto a second line, which costs more height than the line we are removing.</p>
+          <p class="note">One word — "Aloud" — fits. Say the word if you want that and I will draw it as the real one.</p>
+        </div>
+        <div class="readout">Everything under the answer <b data-h="f2-b"></b><span data-vs="f2-b|f2-today"></span></div>
+      </figure>
+    </label>
+
+    <label class="pickable">
+      <input type="radio" name="f2" data-feature="2" value="C — speaker alone, right next to Not really">
+      <figure class="card">
+        <div class="card-head"><span class="letter">C</span><h3>Speaker alone, next to Not really</h3><span class="picktag">Pick</span></div>
+        <div class="stage">
+          <figure class="shot">
+            <figcaption>normal</figcaption>
+            <div class="qam col300"><div class="pad">
+              <div class="replyacts" data-measure="f2-c">
+                <span class="fblabel">Was this helpful?</span>
+                <div class="actsrow">
+                  <span class="secbtn"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>Helpful</span>
+                  <span class="secbtn"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"></path></svg>Not really</span>
+                  <span class="secbtn icon-only" aria-label="Read aloud"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span>
+                </div>
+                <div class="divider"><span class="drule"></span><span class="dlabel">Show details ↓</span><span class="drule"></span></div>
+              </div>
+            </div></div>
+          </figure>
+          <figure class="shot">
+            <figcaption>after you rate it, the thumbs go and the speaker slides left</figcaption>
+            <div class="qam col300"><div class="pad">
+              <div class="actsrow">
+                <span class="secbtn icon-only ring" aria-label="Read aloud"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span>
+              </div>
+            </div></div>
+          </figure>
+        </div>
+        <div class="trade">
+          <p class="up">Same height saving as A, and the three controls read as one group.</p>
+          <p class="down">It moves. Once you rate an answer the thumbs are replaced by a line of text, and the speaker jumps to the left edge.</p>
+          <p class="down">Easier to press the wrong one with a thumb, since it sits right against Not really.</p>
+        </div>
+        <div class="readout">Everything under the answer <b data-h="f2-c"></b><span data-vs="f2-c|f2-today"></span></div>
+      </figure>
+    </label>
+
+  </div>
+
+  <div class="panel" id="f2fade" style="margin-top:24px">
+    <h3>Feature 6 · how quiet is quiet enough</h3>
+    <p>The microphone in the Ask box sits at <b>15 per cent</b> of full strength — very faint. That is
+    fine there, because the Ask box is where you already are. The speaker sits under an answer you may
+    be scrolling past, and if it is too faint nobody will ever find it. Both are drawn below on the
+    real background. Whichever you pick, it goes to full strength the moment the ring lands on it.</p>
+    <div class="bench">
+      <label class="pickable">
+        <input type="radio" name="f6" data-feature="6" value="A — 15 per cent, exactly like the microphone">
+        <figure class="card">
+          <div class="card-head"><span class="letter">A</span><h3>15 per cent, same as the mic</h3><span class="picktag">Pick</span></div>
+          <figure class="shot">
+            <figcaption>at rest</figcaption>
+            <div class="qam col300"><div class="pad">
+              <div class="actsrow pin-right">
+                <span class="secbtn"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>Helpful</span>
+                <span class="secbtn"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"></path></svg>Not really</span>
+                <span class="quieticon o15 push" aria-label="Read aloud"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span>
+              </div>
+            </div></div>
+          </figure>
+          <div class="trade">
+            <p class="up">Matches the microphone exactly. One number used in two places.</p>
+            <p class="up">Disappears completely while you read the answer.</p>
+            <p class="down">Easy to miss. On the Deck's screen in a bright room it may read as nothing at all.</p>
+          </div>
+        </figure>
+      </label>
+      <label class="pickable">
+        <input type="radio" name="f6" data-feature="6" value="B — 45 per cent, quiet but findable" checked>
+        <figure class="card">
+          <div class="card-head"><span class="letter">B</span><h3>45 per cent, quiet but findable</h3><span class="picktag">Pick</span></div>
+          <figure class="shot">
+            <figcaption>at rest</figcaption>
+            <div class="qam col300"><div class="pad">
+              <div class="actsrow pin-right">
+                <span class="secbtn"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg>Helpful</span>
+                <span class="secbtn"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"></path></svg>Not really</span>
+                <span class="quieticon o45 push" aria-label="Read aloud"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span>
+              </div>
+            </div></div>
+          </figure>
+          <div class="trade">
+            <p class="up">You can see it is there without looking for it, and it still does not shout.</p>
+            <p class="up">Closer to the other quiet corner icon in the Ask box, which sits at 50 per cent.</p>
+            <p class="down">Slightly louder than the microphone, so the two are not identical.</p>
+          </div>
+        </figure>
+      </label>
+    </div>
+    <p style="margin:14px 0 0;font-size:12.5px;color:var(--ink-dim)">Screens lie about faint things.
+    This one is worth settling by eye on the Deck rather than on a monitor, and that is a two-minute
+    check once it is built.</p>
+  </div>
+</section>
+
+<!-- ================================================================= -->
+<!-- FEATURE 3                                                         -->
+<!-- ================================================================= -->
+<section class="feature" id="f3">
+  <div class="eyebrow"><span class="num">Feature 3</span><span class="stars">★★★</span><span>layout</span></div>
+  <h2>Session context folds into Show details</h2>
+  <p class="why">You already chose the shape on 16 September: the opened Show details panel gets two
+  tabs at the top, <b>This answer</b> and <b>Session · 4</b>; Left and Right switch between them;
+  only the newest answer carries the Session tab, so it never repeats; the closed line still says
+  Show details. That means a settled answer costs one closed control instead of two.</p>
+  <p class="why small">One thing nobody drew: where the <b>Clear</b> button goes once the session bar
+  it used to live on is gone. That is all this feature is asking you.</p>
+  <div class="decide">What to decide: where Clear sits inside the Session tab.</div>
+
+  <div class="bench">
+
+    <figure class="card today">
+      <div class="card-head"><span class="letter">now</span><h3>What is on your Deck today</h3></div>
+      <div class="stage">
+        <figure class="shot">
+          <figcaption>two closed controls under one answer</figcaption>
+          <div class="qam col300"><div class="pad">
+            <div class="replyacts">
+              <div class="divider"><span class="drule"></span><span class="dlabel">Read aloud</span><span class="drule"></span></div>
+              <div class="divider"><span class="drule"></span><span class="dlabel">Show details ↓</span><span class="drule"></span></div>
+            </div>
+            <div data-measure="f3-today">
+              <div class="sessionstrip">
+                <span class="st-title">Session context (4 turns) ▸</span>
+                <span class="st-clear">Clear</span>
+              </div>
+            </div>
+          </div></div>
+        </figure>
+      </div>
+      <div class="trade">
+        <p class="note">The session bar is a whole second box with its own border, below everything else.</p>
+      </div>
+      <div class="readout">The session bar alone <b data-h="f3-today"></b></div>
+    </figure>
+
+    <label class="pickable">
+      <input type="radio" name="f3" data-feature="3" value="A — Clear at the end of the Session tab, full width" checked>
+      <figure class="card">
+        <div class="card-head"><span class="letter">A</span><h3>Clear at the end of the tab</h3><span class="picktag">Pick</span></div>
+        <div class="stage">
+          <figure class="shot">
+            <figcaption>Show details open, Session tab on</figcaption>
+            <div class="qam col300"><div class="pad">
+              <div class="replyacts">
+                <div class="divider"><span class="drule"></span><span class="dlabel">Hide details ↑</span><span class="drule"></span></div>
+                <div class="detailpanel" data-measure="f3-a">
+                  <div class="dtabs">
+                    <span class="dtab">This answer</span>
+                    <span class="dtab on ring">Session · 4</span>
+                  </div>
+                  <div class="turnrow on">How do I beat Theseus and Asterius</div>
+                  <div class="turnrow">Best boon for the Cast</div>
+                  <div class="chipcount">Chip 2 of 5</div>
+                  <div class="chiprow">
+                    <span class="lchip fade">Game: Hades</span>
+                    <span class="lchip on">Keyword + meaning</span>
+                    <span class="lchip fade">Notes: 9 sections</span>
+                  </div>
+                  <div class="dbody"><div class="dt">Keyword + meaning</div>Both ways of searching your notes ran, and their results were merged.</div>
+                  <div class="clearline"><span class="clearbtn wide">Clear session context</span></div>
+                </div>
+              </div>
+            </div></div>
+          </figure>
+        </div>
+        <div class="trade">
+          <p class="up">Out of the way. You reach it last, after reading everything, which suits a button that throws things away.</p>
+          <p class="up">Same as what the builder would do without being told, so no surprises.</p>
+          <p class="down">You have to step down past the whole list and all the chips to get to it.</p>
+        </div>
+        <div class="readout">Open panel <b data-h="f3-a"></b></div>
+      </figure>
+    </label>
+
+    <label class="pickable">
+      <input type="radio" name="f3" data-feature="3" value="B — Clear on the tab row, right of the two tabs">
+      <figure class="card">
+        <div class="card-head"><span class="letter">B</span><h3>Clear on the tab row</h3><span class="picktag">Pick</span></div>
+        <div class="stage">
+          <figure class="shot">
+            <figcaption>Session tab on · Clear appears at the end of the tab row</figcaption>
+            <div class="qam col300"><div class="pad">
+              <div class="replyacts">
+                <div class="divider"><span class="drule"></span><span class="dlabel">Hide details ↑</span><span class="drule"></span></div>
+                <div class="detailpanel" data-measure="f3-b">
+                  <div class="dtabs">
+                    <span class="dtab">This answer</span>
+                    <span class="dtab on ring">Session · 4</span>
+                    <span class="clearbtn mini push">Clear</span>
+                  </div>
+                  <div class="turnrow on">How do I beat Theseus and Asterius</div>
+                  <div class="turnrow">Best boon for the Cast</div>
+                  <div class="chipcount">Chip 2 of 5</div>
+                  <div class="chiprow">
+                    <span class="lchip fade">Game: Hades</span>
+                    <span class="lchip on">Keyword + meaning</span>
+                    <span class="lchip fade">Notes: 9 sections</span>
+                  </div>
+                  <div class="dbody"><div class="dt">Keyword + meaning</div>Both ways of searching your notes ran, and their results were merged.</div>
+                </div>
+              </div>
+            </div></div>
+          </figure>
+          <figure class="shot">
+            <figcaption>This answer tab on · Clear is not there, because it would clear the wrong thing</figcaption>
+            <div class="qam col300"><div class="pad">
+              <div class="dtabs">
+                <span class="dtab on ring">This answer</span>
+                <span class="dtab">Session · 4</span>
+              </div>
+            </div></div>
+          </figure>
+        </div>
+        <div class="trade">
+          <p class="up">One press away. Right from the Session tab and you are on it.</p>
+          <p class="up">Shortest panel of the three, because Clear does not take a row of its own.</p>
+          <p class="down">Clear appears and disappears as you switch tabs, which can look like a glitch.</p>
+          <p class="down">A throwaway button sits right where your thumb lands when switching tabs.</p>
+        </div>
+        <div class="readout">Open panel <b data-h="f3-b"></b></div>
+      </figure>
+    </label>
+
+    <label class="pickable">
+      <input type="radio" name="f3" data-feature="3" value="C — Clear at the top of the Session tab, beside the turn count">
+      <figure class="card">
+        <div class="card-head"><span class="letter">C</span><h3>Clear at the top of the tab</h3><span class="picktag">Pick</span></div>
+        <div class="stage">
+          <figure class="shot">
+            <figcaption>Session tab on · a heading line with Clear on the right</figcaption>
+            <div class="qam col300"><div class="pad">
+              <div class="replyacts">
+                <div class="divider"><span class="drule"></span><span class="dlabel">Hide details ↑</span><span class="drule"></span></div>
+                <div class="detailpanel" data-measure="f3-c">
+                  <div class="dtabs">
+                    <span class="dtab">This answer</span>
+                    <span class="dtab on ring">Session · 4</span>
+                  </div>
+                  <div class="clearline" style="margin-top:0;margin-bottom:8px;">
+                    <span class="chipcount" style="margin:0;flex:1;">4 turns in this chat</span>
+                    <span class="clearbtn mini">Clear</span>
+                  </div>
+                  <div class="turnrow on">How do I beat Theseus and Asterius</div>
+                  <div class="turnrow">Best boon for the Cast</div>
+                  <div class="chipcount">Chip 2 of 5</div>
+                  <div class="chiprow">
+                    <span class="lchip fade">Game: Hades</span>
+                    <span class="lchip on">Keyword + meaning</span>
+                    <span class="lchip fade">Notes: 9 sections</span>
+                  </div>
+                  <div class="dbody"><div class="dt">Keyword + meaning</div>Both ways of searching your notes ran, and their results were merged.</div>
+                </div>
+              </div>
+            </div></div>
+          </figure>
+        </div>
+        <div class="trade">
+          <p class="up">The heading line says how many turns there are, which the tab only hints at.</p>
+          <p class="up">Clear lives inside the tab it belongs to, and never moves.</p>
+          <p class="down">Costs a row of height that A and B do not.</p>
+          <p class="down">Clear is the first thing under the tabs, before you have read anything.</p>
+        </div>
+        <div class="readout">Open panel <b data-h="f3-c"></b></div>
+      </figure>
+    </label>
+
+  </div>
+</section>
+
+<!-- ================================================================= -->
+<!-- FEATURE 4                                                         -->
+<!-- ================================================================= -->
+<section class="feature" id="f4">
+  <div class="eyebrow"><span class="num">Feature 4</span><span class="stars">★★★</span><span>models · everything else on screen</span></div>
+  <h2>The AI models screen: tiers become a filter, filters reworked</h2>
+  <p class="why">Today the screen has three sections. The first, <b>Policy</b>, is three buttons that
+  choose which kinds of model bonsAI will fall back to. You asked for that choice to stop being its
+  own section and become one filter among the filters at the top of the list — and for the filters
+  themselves to be reworked.</p>
+  <p class="why small">The reason this matters beyond tidiness: the list gets about <b>90 pixels</b>
+  today, which is why you can only see two models before scrolling. Everything above the list eats
+  the rest.</p>
+  <div class="decide">Two things to decide: the shape of the filter area, and which filters you
+  actually want offered. Both are below.</div>
+
+  <div class="bench wide">
+
+    <figure class="card today">
+      <div class="card-head"><span class="letter">now</span><h3>What is on your Deck today</h3></div>
+      <div class="scroller">
+        <div class="modalframe">
+          <div class="mtitle">AI models</div>
+          <div class="mbody">
+            <div class="hubchips">
+              <span class="hubchip on">Policy</span><span class="hubchip">Browse &amp; pull</span><span class="hubchip">Advanced</span>
+            </div>
+            <div class="mcounts"><span>Installed 3 · 7.4 GB</span><span>Queue 0 · 0 GB</span><span>Live catalog · Live sizes ↻</span></div>
+            <div class="mtagrow"><span class="mtagfield">Custom model tag, e.g. llama3.2:3b</span><span class="mchip">Pull</span></div>
+            <div class="seclabel">SUGGESTED</div>
+            <div class="mchips"><span class="mchip">qwen2.5:3b</span><span class="mchip">llama3.2:3b</span><span class="mchip">gemma2:2b</span></div>
+            <div class="mchips"><span class="mchip on">All</span><span class="mchip">Speed</span><span class="mchip">Strategy</span><span class="mchip">Expert</span><span class="mchip">Vision</span><span class="mchip">Coding</span></div>
+            <div class="mtoggles"><span class="mchip">Installed only</span><span class="mchip foss">FOSS only</span><span class="mchip">Essentials only</span></div>
+            <div class="viewport" data-note="all the list gets" style="height:92px">
+              <div class="mtable">
+                <div class="mrow head"><span class="mcell c">Pull</span><span class="mcell">Model</span><span class="mcell">Size</span><span class="mcell">Date</span><span class="mcell">Modes</span><span class="mcell">Rating</span><span class="mcell"></span></div>
+                <div class="mrow data inst" data-measure="f4-row"><span class="mcell c">★</span><span class="mcell">qwen2.5:3b<div class="mlicense">FOSS</div></span><span class="mcell">1.9 GB</span><span class="mcell">'24</span><span class="mcell">chat</span><span class="mcell">★★★★☆</span><span class="mcell c">X</span></div>
+                <div class="mrow data"><span class="mcell c">☆</span><span class="mcell">llama3.2:3b<div class="mlicense">open weight</div></span><span class="mcell">2.0 GB</span><span class="mcell">'24</span><span class="mcell">chat</span><span class="mcell">★★★☆☆</span><span class="mcell c"></span></div>
+                <div class="mrow data"><span class="mcell c">☆</span><span class="mcell">gemma2:2b<div class="mlicense">open weight</div></span><span class="mcell">1.6 GB</span><span class="mcell">'24</span><span class="mcell">chat</span><span class="mcell">★★★☆☆</span><span class="mcell c"></span></div>
+              </div>
+            </div>
+          </div>
+          <div class="mfoot"><span>Cancel</span><span>Pull selected</span></div>
+        </div>
+      </div>
+      <div class="trade">
+        <p class="note">Read in the code, not measured: everything above the list takes about 430 of the 520 the screen allows itself, and the popup it sits in is 640 tall — so there is room going spare.</p>
+      </div>
+      <div class="readout">One model row <b data-h="f4-row"></b> · list gets <b>about 90 px</b> · that is <b>2 rows</b></div>
+    </figure>
+
+    <label class="pickable">
+      <input type="radio" name="f4" data-feature="4" value="A — one filter strip that scrolls sideways">
+      <figure class="card">
+        <div class="card-head"><span class="letter">A</span><h3>One filter strip that scrolls sideways</h3><span class="picktag">Pick</span></div>
+        <div class="scroller">
+          <div class="modalframe">
+            <div class="mtitle">AI models</div>
+            <div class="mbody">
+              <div class="hubchips">
+                <span class="hubchip on">Browse &amp; pull</span><span class="hubchip">Advanced</span>
+              </div>
+              <div class="mcounts"><span>Installed 3 · 7.4 GB</span><span>Queue 0 · 0 GB</span><span>Live catalog ↻</span></div>
+              <div class="mtagrow"><span class="mtagfield">Custom model tag, e.g. llama3.2:3b</span><span class="mchip">Pull</span></div>
+              <div class="mchips strip"><span class="mchip tier">Open source only ▸</span><span class="mchip on">All</span><span class="mchip">Speed</span><span class="mchip">Strategy</span><span class="mchip">Expert</span><span class="mchip">Vision</span><span class="mchip more">›</span></div>
+              <div class="viewport" data-note="+30 px from the filter rows" style="height:122px">
+                <div class="mtable">
+                  <div class="mrow head"><span class="mcell c">Pull</span><span class="mcell">Model</span><span class="mcell">Size</span><span class="mcell">Date</span><span class="mcell">Modes</span><span class="mcell">Rating</span><span class="mcell"></span></div>
+                  <div class="mrow data inst"><span class="mcell c">★</span><span class="mcell">qwen2.5:3b<div class="mlicense">FOSS</div></span><span class="mcell">1.9 GB</span><span class="mcell">'24</span><span class="mcell">chat</span><span class="mcell">★★★★☆</span><span class="mcell c">X</span></div>
+                  <div class="mrow data"><span class="mcell c">☆</span><span class="mcell">llama3.2:3b<div class="mlicense">open weight</div></span><span class="mcell">2.0 GB</span><span class="mcell">'24</span><span class="mcell">chat</span><span class="mcell">★★★☆☆</span><span class="mcell c"></span></div>
+                  <div class="mrow data"><span class="mcell c">☆</span><span class="mcell">gemma2:2b<div class="mlicense">open weight</div></span><span class="mcell">1.6 GB</span><span class="mcell">'24</span><span class="mcell">chat</span><span class="mcell">★★★☆☆</span><span class="mcell c"></span></div>
+                  <div class="mrow data"><span class="mcell c">☆</span><span class="mcell">qwen2.5vl:3b<div class="mlicense">open weight</div></span><span class="mcell">3.2 GB</span><span class="mcell">'25</span><span class="mcell">vision</span><span class="mcell">★★★☆☆</span><span class="mcell c"></span></div>
+                  <div class="mrow data"><span class="mcell c">☆</span><span class="mcell">phi4-mini<div class="mlicense">open weight</div></span><span class="mcell">2.5 GB</span><span class="mcell">'25</span><span class="mcell">chat</span><span class="mcell">★★★☆☆</span><span class="mcell c"></span></div>
+                </div>
+              </div>
+            </div>
+            <div class="mfoot"><span>Cancel</span><span>Pull selected</span></div>
+          </div>
+        </div>
+        <div class="trade">
+          <p class="up">Two rows of filters become one, which is about 30 pixels back — most of one model row.</p>
+          <p class="up">The licence choice reads as what it is — a filter — and it sits first, where it belongs.</p>
+          <p class="down">Filters past the right edge are hidden until you walk to them. You cannot see everything that is on at a glance.</p>
+          <p class="note">Left and Right walk the strip; it scrolls to keep the one you are on in view.</p>
+        </div>
+        <div class="readout">Frees <b class="gain">about 30 px</b> from the filter rows · everything else <b>measured on the Deck first</b></div>
+      </figure>
+    </label>
+
+    <label class="pickable">
+      <input type="radio" name="f4" data-feature="4" value="B — all filters behind one Filters button" checked>
+      <figure class="card">
+        <div class="card-head"><span class="letter">B</span><h3>All filters behind one button</h3><span class="picktag">Pick</span></div>
+        <div class="scroller">
+          <div class="modalframe">
+            <div class="mtitle">AI models</div>
+            <div class="mbody">
+              <div class="hubchips">
+                <span class="hubchip on">Browse &amp; pull</span><span class="hubchip">Advanced</span>
+              </div>
+              <div class="mcounts"><span>Installed 3 · 7.4 GB</span><span>Queue 0 · 0 GB</span><span>Live catalog ↻</span></div>
+              <div class="mtagrow"><span class="mtagfield">Custom model tag, e.g. llama3.2:3b</span><span class="mchip">Pull</span></div>
+              <div class="mchips"><span class="mchip on">Filters · 2 on ▾</span><span class="mchip more">Open source only · Speed</span></div>
+              <div class="viewport" data-note="+30 px from the filter rows" style="height:122px">
+                <div class="mtable">
+                  <div class="mrow head"><span class="mcell c">Pull</span><span class="mcell">Model</span><span class="mcell">Size</span><span class="mcell">Date</span><span class="mcell">Modes</span><span class="mcell">Rating</span><span class="mcell"></span></div>
+                  <div class="mrow data inst"><span class="mcell c">★</span><span class="mcell">qwen2.5:3b<div class="mlicense">FOSS</div></span><span class="mcell">1.9 GB</span><span class="mcell">'24</span><span class="mcell">chat</span><span class="mcell">★★★★☆</span><span class="mcell c">X</span></div>
+                  <div class="mrow data"><span class="mcell c">☆</span><span class="mcell">llama3.2:3b<div class="mlicense">open weight</div></span><span class="mcell">2.0 GB</span><span class="mcell">'24</span><span class="mcell">chat</span><span class="mcell">★★★☆☆</span><span class="mcell c"></span></div>
+                  <div class="mrow data"><span class="mcell c">☆</span><span class="mcell">gemma2:2b<div class="mlicense">open weight</div></span><span class="mcell">1.6 GB</span><span class="mcell">'24</span><span class="mcell">chat</span><span class="mcell">★★★☆☆</span><span class="mcell c"></span></div>
+                  <div class="mrow data"><span class="mcell c">☆</span><span class="mcell">qwen2.5vl:3b<div class="mlicense">open weight</div></span><span class="mcell">3.2 GB</span><span class="mcell">'25</span><span class="mcell">vision</span><span class="mcell">★★★☆☆</span><span class="mcell c"></span></div>
+                  <div class="mrow data"><span class="mcell c">☆</span><span class="mcell">phi4-mini<div class="mlicense">open weight</div></span><span class="mcell">2.5 GB</span><span class="mcell">'25</span><span class="mcell">chat</span><span class="mcell">★★★☆☆</span><span class="mcell c"></span></div>
+                </div>
+              </div>
+            </div>
+            <div class="mfoot"><span>Cancel</span><span>Pull selected</span></div>
+          </div>
+        </div>
+        <figure class="shot" style="margin-top:12px">
+          <figcaption>what opens when you press it</figcaption>
+          <div class="scroller"><div class="modalframe" style="width:300px">
+            <div class="mbody">
+              <div class="filterpanel">
+                <div class="fpgroup">
+                  <div class="seclabel">LICENCE</div>
+                  <div class="fprow"><span class="fpbox on"></span>Open source only</div>
+                  <div class="fprow"><span class="fpbox"></span>Also open weight</div>
+                  <div class="fprow"><span class="fpbox"></span>Anything installed</div>
+                </div>
+                <div class="fpgroup">
+                  <div class="seclabel">WHAT IT IS GOOD AT</div>
+                  <div class="fprow"><span class="fpbox on"></span>Speed</div>
+                  <div class="fprow"><span class="fpbox"></span>Strategy</div>
+                  <div class="fprow"><span class="fpbox"></span>Expert</div>
+                  <div class="fprow"><span class="fpbox"></span>Vision</div>
+                </div>
+                <div class="fpgroup">
+                  <div class="seclabel">NARROW IT DOWN</div>
+                  <div class="fprow"><span class="fpbox"></span>Installed only</div>
+                  <div class="fprow"><span class="fpbox"></span>Fits this Deck</div>
+                </div>
+              </div>
+            </div>
+          </div></div>
+        </figure>
+        <div class="trade">
+          <p class="up">Two rows of filters become one line, which is about 30 pixels back.</p>
+          <p class="up">Room for as many filters as you want, now and later, without costing the list a pixel.</p>
+          <p class="up">Grouped with headings, so it is obvious what each one does.</p>
+          <p class="up">The line beside the button always says what is on, in words.</p>
+          <p class="down">Every filter change is two presses instead of one: open, tick, close.</p>
+          <p class="down">A panel on top of a panel — one more place the D-pad has to climb out of.</p>
+        </div>
+        <div class="readout">Frees <b class="gain">about 30 px</b> from the filter rows · everything else <b>measured on the Deck first</b></div>
+      </figure>
+    </label>
+
+    <label class="pickable">
+      <input type="radio" name="f4" data-feature="4" value="C — two labelled rows: Show and Only">
+      <figure class="card">
+        <div class="card-head"><span class="letter">C</span><h3>Two labelled rows: Show and Only</h3><span class="picktag">Pick</span></div>
+        <div class="scroller">
+          <div class="modalframe">
+            <div class="mtitle">AI models</div>
+            <div class="mbody">
+              <div class="hubchips">
+                <span class="hubchip on">Browse &amp; pull</span><span class="hubchip">Advanced</span>
+              </div>
+              <div class="mcounts"><span>Installed 3 · 7.4 GB</span><span>Queue 0 · 0 GB</span><span>Live catalog ↻</span></div>
+              <div class="mtagrow"><span class="mtagfield">Custom model tag, e.g. llama3.2:3b</span><span class="mchip">Pull</span></div>
+              <div class="mchips"><span class="seclabel" style="width:40px;line-height:24px">SHOW</span><span class="mchip on">All</span><span class="mchip">Speed</span><span class="mchip">Strategy</span><span class="mchip">Expert</span><span class="mchip">Vision</span><span class="mchip">Coding</span></div>
+              <div class="mchips"><span class="seclabel" style="width:40px;line-height:24px">ONLY</span><span class="mchip tier">Open source ▸</span><span class="mchip">Installed</span><span class="mchip">Essentials</span><span class="mchip">Fits this Deck</span></div>
+              <div class="viewport" data-note="no change in height" style="height:92px">
+                <div class="mtable">
+                  <div class="mrow head"><span class="mcell c">Pull</span><span class="mcell">Model</span><span class="mcell">Size</span><span class="mcell">Date</span><span class="mcell">Modes</span><span class="mcell">Rating</span><span class="mcell"></span></div>
+                  <div class="mrow data inst"><span class="mcell c">★</span><span class="mcell">qwen2.5:3b<div class="mlicense">FOSS</div></span><span class="mcell">1.9 GB</span><span class="mcell">'24</span><span class="mcell">chat</span><span class="mcell">★★★★☆</span><span class="mcell c">X</span></div>
+                  <div class="mrow data"><span class="mcell c">☆</span><span class="mcell">llama3.2:3b<div class="mlicense">open weight</div></span><span class="mcell">2.0 GB</span><span class="mcell">'24</span><span class="mcell">chat</span><span class="mcell">★★★☆☆</span><span class="mcell c"></span></div>
+                  <div class="mrow data"><span class="mcell c">☆</span><span class="mcell">gemma2:2b<div class="mlicense">open weight</div></span><span class="mcell">1.6 GB</span><span class="mcell">'24</span><span class="mcell">chat</span><span class="mcell">★★★☆☆</span><span class="mcell c"></span></div>
+                  <div class="mrow data"><span class="mcell c">☆</span><span class="mcell">qwen2.5vl:3b<div class="mlicense">open weight</div></span><span class="mcell">3.2 GB</span><span class="mcell">'25</span><span class="mcell">vision</span><span class="mcell">★★★☆☆</span><span class="mcell c"></span></div>
+                </div>
+              </div>
+            </div>
+            <div class="mfoot"><span>Cancel</span><span>Pull selected</span></div>
+          </div>
+        </div>
+        <div class="trade">
+          <p class="up">Everything that is on is visible at once. No hunting, no hidden state.</p>
+          <p class="up">The two words say what each row does, which the current two rows never did.</p>
+          <p class="up">"FOSS only" stops existing as a separate switch — it is just the first licence choice, which removes a real overlap.</p>
+          <p class="down">Keeps two rows of filters, so unlike A and B it frees no height at all.</p>
+        </div>
+        <div class="readout">Frees <b>nothing in height</b> — it keeps two rows of filters</div>
+      </figure>
+    </label>
+
+  </div>
+
+  <div class="panel">
+    <h3>Which filters go up there</h3>
+    <p>You said you wanted to pick and choose what people can filter by. Tick the ones you want. The
+    last four do not exist yet and would each be a small piece of work on top.</p>
+    <div class="ticks" id="filterticks">
+      <label class="tick"><input type="checkbox" data-group="filters" value="Licence (the old Policy tiers, as one filter)" checked><span>Licence: open source / also open weight / anything installed<small>The three Policy buttons, moved here. This is the point of the whole change.</small></span></label>
+      <label class="tick"><input type="checkbox" data-group="filters" value="Speed / Strategy / Expert (what the model is good at)" checked><span>Speed, Strategy, Expert<small>Matches the three Ask modes, so it already means something to a user.</small></span></label>
+      <label class="tick"><input type="checkbox" data-group="filters" value="Vision" checked><span>Vision<small>Models that can read a screenshot.</small></span></label>
+      <label class="tick"><input type="checkbox" data-group="filters" value="Coding"><span>Coding<small>Rarely what someone wants on a Deck. Candidate to drop.</small></span></label>
+      <label class="tick"><input type="checkbox" data-group="filters" value="Installed only" checked><span>Installed only<small>What is already on this Deck.</small></span></label>
+      <label class="tick"><input type="checkbox" data-group="filters" value="Essentials only" checked><span>Essentials only<small>The short list of one-model presets.</small></span></label>
+      <label class="tick"><input type="checkbox" data-group="filters" value="FOSS only (kept as a separate switch)"><span>FOSS only, kept separate<small>Overlaps the licence filter. Leave unticked if licence covers it.</small></span></label>
+      <label class="tick"><input type="checkbox" data-group="filters" value="NEW — Fits this Deck (by free space)"><span>Fits this Deck <span class="px">new</span><small>Hides models bigger than the space you have left.</small></span></label>
+      <label class="tick"><input type="checkbox" data-group="filters" value="NEW — Under a size you choose"><span>Under 3 GB / 5 GB <span class="px">new</span><small>A size cut-off you set yourself.</small></span></label>
+      <label class="tick"><input type="checkbox" data-group="filters" value="NEW — Fast on this Deck (needs the speed readout feature)"><span>Fast on this Deck <span class="px">new</span><small>Needs the model speed readout built first, which is a separate item on the list.</small></span></label>
+      <label class="tick"><input type="checkbox" data-group="filters" value="NEW — Recently added to the catalogue" checked><span>Recently added <span class="px">new</span><small>The New badge already exists; this turns it into a filter.</small></span></label>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Other ways to get the list more room — and what each is really worth</h3>
+    <p>You ticked three of these. Two of them turn out to be worth nothing in height, which is my
+    mistake and not yours. They are all still listed, with what each one actually buys, so the choice
+    can be made again with better information. Nothing here changes a shape you picked.</p>
+    <div class="ticks" id="leverticks">
+      <label class="tick"><input type="checkbox" data-group="levers" data-px="0" value="Let the screen use more of the popup it sits in — value unknown until measured" checked><span>Let the screen use more of the popup it sits in <span class="px" style="color:var(--cost)">unknown</span><small>The screen limits itself to 520 pixels and the popup is 640. But the list sits inside a <b>second, tighter limit</b> of its own inside that, so raising the outer one may free nothing. First thing measured on the Deck.</small></span></label>
+      <label class="tick"><input type="checkbox" data-group="levers" data-px="43" value="Move the Suggested chips out of the way (about 43 px, the biggest real one)"><span>Move the Suggested chips out of the way <span class="px">about +43 px</span><small>A label and a row of three chips, always on screen above the list. <b>This is now the biggest real saving on the table</b> and you left it unticked. Worth reconsidering — see the question at the bottom.</small></span></label>
+      <label class="tick"><input type="checkbox" data-group="levers" data-px="14" value="Counts line onto one line (about 14 px)" checked><span>Counts line onto one line <span class="px">about +14 px</span><small>"Installed 3 · 7.4 GB · Queue 0" wraps to two lines at this width today. A real saving, and a small one.</small></span></label>
+      <label class="tick"><input type="checkbox" data-group="levers" data-px="0" value="Move the custom tag box to the bottom — order, not height" checked><span>Move the "type any model name" box to the bottom <span class="px" style="color:var(--ink-dim)">no height</span><small>It moves inside the same box the list lives in, so the list's share does not change. Still worth doing: the list becomes the first thing you see. Just not for room.</small></span></label>
+      <label class="tick"><input type="checkbox" data-group="levers" data-px="0" value="Advanced to a button at the bottom — order, not height" checked><span>Advanced to a button at the bottom <span class="px" style="color:var(--ink-dim)">no height</span><small>Your pick. The section row goes from the top, but the button reappears at the bottom and costs about the same. It <b>would</b> be worth about 38 pixels if Advanced left the scrolling part of the screen — a small link up in the title row instead of a button. Say if you want that version.</small></span></label>
+    </div>
+    <div class="meter" style="display:block">
+      <div class="lbl">Where that leaves it</div>
+      <p style="margin:0;font-size:13px;line-height:1.55;max-width:70ch">The only figure I will stand
+      behind today is the filter rows: <b>about 30 pixels</b>. The counts line is a fair <b>14</b>. The
+      Suggested chips would be about <b>43</b> more if you want them moved. Everything else is either
+      worth nothing in height or cannot be known without the Deck. <b>How many model rows you end up
+      seeing is measured in the first block of the session, before any brief is written</b>, and the
+      plan says so. I would rather hand you a real number then than a hopeful one now.</p>
+    </div>
+  </div>
+  </section>
+
+<!-- ================================================================= -->
+<section class="summary" id="picks">
+  <h2>Your picks</h2>
+  <p style="margin:0 0 12px;color:var(--ink-dim);max-width:64ch">Copy this and send it back, or just
+  tell me the letters. I will turn it into the build plan.</p>
+  <textarea id="picktext" readonly aria-label="Your picks as plain text"></textarea>
+  <div class="btnrow">
+    <button class="act" id="copybtn" type="button">Copy my picks</button>
+    <button class="act ghost" id="clearbtn" type="button">Start over</button>
+    <span id="copystate" role="status"></span>
+  </div>
+</section>
+
+<section class="asks">
+  <h2>One thing left, and one thing to know</h2>
+  <ol>
+    <li><b>All answered:</b> the Deck is free; the chat name is straightened by taking the × out of the
+    centring; the speaker sits at 45 per cent at rest; Advanced moves to the bottom.</li>
+    <li><b>New, and the only thing still open: do you want the Suggested chips moved off the top?</b>
+    Now that two of my savings turned out to be worth nothing, this is the biggest real one left —
+    about 43 pixels, more than a whole model row. They could sit inside the Filters panel, or only
+    appear when the list is empty. You left it unticked when it looked like the smallest of four.</li>
+    <li><b>Standing:</b> every pixel figure on the models screen gets measured on the Deck in the first
+    block of the session, before any brief is written. Two of them were wrong today, which is exactly
+    why that step is first.</li>
+  </ol>
+</section>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---- measure every drawing and print its real height ------------- */
+  var heights = {};
+  document.querySelectorAll("[data-measure]").forEach(function (el) {
+    heights[el.getAttribute("data-measure")] = Math.round(el.getBoundingClientRect().height);
+  });
+  document.querySelectorAll("[data-h]").forEach(function (out) {
+    var k = out.getAttribute("data-h");
+    out.textContent = (heights[k] !== undefined ? heights[k] : "?") + " px";
+  });
+  document.querySelectorAll("[data-vs]").forEach(function (out) {
+    var parts = out.getAttribute("data-vs").split("|");
+    var mine = heights[parts[0]], base = heights[parts[1]];
+    if (mine === undefined || base === undefined) { return; }
+    var d = mine - base;
+    if (d === 0) { out.textContent = "· same height as today"; out.className = ""; }
+    else if (d > 0) { out.textContent = "· " + d + " px taller"; out.className = "cost"; }
+    else { out.textContent = "· " + (-d) + " px shorter"; out.className = "gain"; }
+  });
+
+  /* ---- the four picks ---------------------------------------------- */
+  var NAMES = {
+    1: "Game name above the chat title",
+    2: "Read aloud as a speaker button",
+    3: "Where Clear sits in the Session tab",
+    4: "The AI models screen filters",
+    5: "Straightening the chat name",
+    6: "How faint the speaker is at rest"
+  };
+  var SHORT = { 1: "game name", 2: "read aloud", 3: "session tab", 4: "models", 5: "centring", 6: "speaker fade" };
+  var FREED = { A: 30, B: 30, C: 0 };
+  var picks = { 1: null, 2: null, 3: null, 4: null, 5: null, 6: null };
+
+  function letterOf(value) { return value ? value.charAt(0) : null; }
+
+  function readTicks(group) {
+    var out = [];
+    document.querySelectorAll('input[data-group="' + group + '"]').forEach(function (b) {
+      if (b.checked) { out.push(b.value); }
+    });
+    return out;
+  }
+
+  function updateTally() {
+    document.querySelectorAll("#tally a").forEach(function (a) {
+      var slot = a.getAttribute("data-slot");
+      var v = picks[slot];
+      a.textContent = slot + " · " + SHORT[slot] + " " + (v ? letterOf(v) : "—");
+      a.classList.toggle("done", !!v);
+    });
+  }
+
+  function updateMeter() {
+    var rowH = heights["f4-row"] || 36;
+    var base = 90;
+    var freed = 0;
+    var bits = [];
+    var shape = picks[4] ? letterOf(picks[4]) : null;
+    if (shape && FREED[shape]) {
+      freed += FREED[shape];
+      bits.push("filter shape " + shape + " frees about " + FREED[shape] + " px");
+    }
+    document.querySelectorAll('input[data-group="levers"]').forEach(function (b) {
+      if (b.checked) {
+        var px = Number(b.getAttribute("data-px")) || 0;
+        freed += px;
+        bits.push(b.value.toLowerCase() + " frees " + px + " px");
+      }
+    });
+    /* The row counter was removed: two of the savings it added up turned out to be worth
+       nothing in height, so a count here would be a guess dressed as a measurement. The real
+       number is taken on the Deck in the first block of the session. */
+    void rowH; void base; void freed; void bits;
+  }
+
+  function updateText() {
+    var lines = ["bonsAI option board - my picks - " + new Date().toISOString().slice(0, 10), ""];
+    [1, 2, 3, 4, 5, 6].forEach(function (n) {
+      lines.push(n + ". " + NAMES[n] + ": " + (picks[n] || "NOT PICKED YET"));
+    });
+    lines.push("");
+    var f = readTicks("filters");
+    lines.push("Filters to offer on the models screen (" + f.length + "):");
+    f.forEach(function (x) { lines.push("  - " + x); });
+    if (!f.length) { lines.push("  - none ticked"); }
+    lines.push("");
+    var l = readTicks("levers");
+    lines.push("Other room-saving jobs to do in the same work (" + l.length + "):");
+    l.forEach(function (x) { lines.push("  - " + x); });
+    if (!l.length) { lines.push("  - none ticked"); }
+    document.getElementById("picktext").value = lines.join("\n");
+  }
+
+  function refresh() { updateTally(); updateMeter(); updateText(); }
+
+  document.querySelectorAll('input[type="radio"][data-feature]').forEach(function (r) {
+    if (r.checked) { picks[r.getAttribute("data-feature")] = r.value; }
+    r.addEventListener("change", function () {
+      picks[r.getAttribute("data-feature")] = r.value;
+      refresh();
+    });
+  });
+  document.querySelectorAll('input[type="checkbox"][data-group]').forEach(function (c) {
+    c.addEventListener("change", refresh);
+  });
+
+  document.getElementById("copybtn").addEventListener("click", function () {
+    var ta = document.getElementById("picktext");
+    var state = document.getElementById("copystate");
+    var done = function (msg) { state.textContent = msg; setTimeout(function () { state.textContent = ""; }, 4000); };
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(ta.value).then(
+          function () { done("Copied."); },
+          function () { ta.select(); done("Press Ctrl+C to copy."); }
+        );
+        return;
+      }
+    } catch (e) { /* fall through */ }
+    ta.select();
+    done("Press Ctrl+C to copy.");
+  });
+
+  document.getElementById("clearbtn").addEventListener("click", function () {
+    document.querySelectorAll('input[type="radio"][data-feature]').forEach(function (r) { r.checked = false; });
+    picks = { 1: null, 2: null, 3: null, 4: null, 5: null, 6: null };
+    refresh();
+  });
+
+  refresh();
+})();
+</script>

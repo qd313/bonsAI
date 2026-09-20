@@ -5811,3 +5811,42 @@ What each answer does to the roadmap:
 - **(f)** closes to Done, as proven by its unit tests, with a watch note: if a raw, unparsed checklist is
   ever seen in a real reply on the Deck, this reopens as a fresh bug rather than staying closed on the
   strength of an old fix.
+
+### D114 — LOCKED 2026-09-20 (raised 2026-09-20) — Plan 62 feature session five: the nine calls off the drawing board
+
+Raised from [the drawing board](https://claude.ai/artifact/31aLBi17SH7AydhYfGYjBq), which drew all four
+features at the Deck's own sizes before anything was chosen, and from
+[the plan](../planning/62-feature-session-five.md) § 8. The maintainer picked four shapes on 2026-09-20 and
+answered the three remaining calls the same day. Nothing was built first.
+
+1. **The game a chat belongs to.** Chosen: **the name shows only while the ring is on the row.** The empty
+   line stays held open, so the row is the same height either way. This settles what D113 (d) left open.
+2. **Read aloud.** Chosen: **a small speaker at the right-hand end of the Helpful row, drawn as a bare glyph
+   on nothing** — no border, no fill — the same treatment as the microphone in the Ask box. The full-width
+   line goes.
+3. **Session context folding into Show details.** Chosen: **Clear sits at the end of the Session tab's body,
+   full width, with the same confirm box.** This was the last thing D106 left undrawn; nothing about that
+   feature is open now.
+4. **The AI models screen filters.** Chosen: **every filter goes behind one "Filters · N on" line** that
+   opens a panel over the list, grouped under headings.
+5. **Which filters are offered.** Six: licence (the old Policy tiers as one filter), Speed / Strategy /
+   Expert, Vision, Installed only, Essentials only, and Recently added. **Coding is dropped** as rarely
+   wanted on a Deck. **"FOSS only" is dropped as a separate switch**, because the licence filter covers it
+   and two controls that can disagree is worse than one.
+6. **Three more jobs in the same work:** let the screen use more of the popup it sits in, move the "type any
+   model name" box to the bottom, and get the counts line onto one line.
+7. **The chat name sitting 14 pixels off-centre** — found while drawing feature 1, never reported before.
+   Chosen: **take the × out of the centring**, so the game's name, the chat's name and the dots all sit on
+   the row's true middle. The cost is accepted: about 28 pixels, roughly three characters, comes off the
+   chat name so a long name cannot run under the ×.
+8. **How faint the speaker is at rest.** Chosen: **45 per cent**, not the microphone's 15. Quiet but
+   findable, and still full strength the moment the ring lands on it. Worth one look by eye on the Deck once
+   it is built, because screens lie about faint things.
+9. **The section buttons on the models screen, once Policy goes.** Chosen: **Advanced moves to a single
+   button at the bottom of the screen and the section row goes entirely**, which hands the model list
+   another 44 pixels.
+
+What these do to the roadmap: all four feature entries were reworded the same day with the chosen shape and
+a link to the board. Two new things were opened along the way — the chat name being off-centre, folded into
+feature 1 rather than filed on its own because the same lane is already in that file, and the check everyone
+runs before a commit being red on a clean tree, found while writing the plan.

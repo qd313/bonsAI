@@ -279,7 +279,9 @@ starts work outside this.
   `src/components/OllamaModelsHubModal.tsx`, the `maxHeight: "min(72vh, 520px)"` box), and the parts above the
   list that never scroll away (the three section buttons, the counts line, the custom tag box, the Suggested
   chips, two rows of filters, the column headers; all drawn by `src/components/PullModelsModal.tsx`) take about
-  430 of those, leaving roughly 90 pixels for rows. An external monitor taller than about 720 pixels gets the
+  430 of those, leaving roughly 90 pixels for rows. **Read again 2026-09-20: the list also sits inside a
+  second, tighter limit of its own — 48 percent of the screen height or 400 pixels, whichever is smaller —
+  so raising the outer one alone may change nothing.** An external monitor taller than about 720 pixels gets the
   same 520 cap, so it looks the same there. The popup itself has room: on the Deck's screen it stands 640
   pixels tall. Fix with the filters rework below, or before it as a taller list. The maintainer's recording is
   `recordings/DeckRecord_20260916_114238_game.mkv` on their own PC, not in this repo. **Confirmed on the Deck
@@ -298,6 +300,11 @@ starts work outside this.
   the ring to whichever opener was remembered last; (b) the last frame of the maintainer's recording shows the
   Pull selected button lit, at the popup's bottom edge, so a tap meant for outside may have landed on it and
   started the queued download. Needs a device reproduction with an empty queue, so nothing downloads.
+- ★★ `[platform]` `[QA]` **The check everyone runs before a commit has been failing on a clean tree since at
+  least 18 September** — **OPEN, found 2026-09-20.** Nothing a person using the plugin would notice. Seven
+  measured things sit worse than their best and three are past a hard limit: the roadmap is 121 KB against a
+  100 KB limit, the testing rows 177 against 165, and the neutral guide 27 against 24. That guide says every
+  check passes on a clean tree and any failure is a regression, so anyone starting work is told a wrong thing.
 - ★★ `[reply]` **Token streaming reveals text in bursts while a game is running** — **ACCEPTED 2026-09-04 (D58 #4).** Measured 2026-08-28 with
   a game running: tokens arrive in bursts, and during a burst the overlay drops to 47 fps; between bursts it is a flat 60. Delivery
   is bursty, painting is not slow. The game's own frame rate is unmeasured. Accepted as a nice-to-have; reopen only if the game's own frame rate is measured
@@ -373,10 +380,13 @@ replace it with a specific issue when one exists.
   One check owed first: the question bubble turns its own outline off and gets no ring rule, so look on the Deck at what focus shows.
 - ★★ `[chat]` **First-run ghost "New chat" label at the create position** — **OPEN, parked by decision.** The create position is the
   literal `[+]`, re-confirmed on board 8f and again in the v3 rows. Reopen that decision before building it.
-- ★★ `[chat]` **The game a chat belongs to, above its title** — **OPEN, the maintainer said yes 2026-09-19
-  (D113) to showing the game's name.** The name already shows in quiet text above the slot title for every
-  chat created after 2026-08-30. The variant where it only shows while the row has focus was never built.
-  Check row **CHAT-SLOTS-V3-14c** runs once the maintainer says the always-shown version is the final one.
+- ★★ `[chat]` **The game a chat belongs to, above its title** — **OPEN, shape chosen 2026-09-20 from a
+  drawn board: the name shows only while the ring is on the row**, with the empty line still held open so
+  the row never changes height. **Found while drawing it:** the chat's name sits **14 pixels left** of the
+  game's name, because the small × that deletes a chat is inside the part being centred — the dots below
+  are out of line too. Straightened in the same work: the × comes out of the centring, costing about three
+  characters of the chat's name. **CHAT-SLOTS-V3-14c**.
+  [Plan](planning/62-feature-session-five.md) · [Board](https://claude.ai/artifact/31aLBi17SH7AydhYfGYjBq)
 - ★★ `[reply]` **Headline first: every answer opens with one line that stands alone** — **OPEN, filed 2026-09-08. Not yet
   (D99, 2026-09-12): it waits for its own go.** The model would be asked to start every answer with one short sentence that
   carries the point and gives nothing away, so the reply-ready popup, a spoken answer and any headset card always have a good
@@ -399,7 +409,11 @@ replace it with a specific issue when one exists.
   it could be made as a type rather than a copy. Text roleplay sits on the first layer today; any voice would sit on all of them. No
   code; a document the legal check reads. [Memo](planning/42-read-aloud-feasibility.md).
 - ★★ `[layout]` `[voice]` `[focus]` **Read aloud is a small speaker button on the Helpful row, not a second dividing
-  line** — **OPEN, filed 2026-09-16 by the maintainer (D106).** Today: Read aloud is a full-width dividing line above Show
+  line** — **OPEN, filed 2026-09-16 by the maintainer (D106); shape chosen 2026-09-20 from a drawn board —
+  the speaker sits at the right-hand end of the Helpful row, drawn as a bare glyph on nothing, the same
+  treatment as the microphone in the Ask box (no border, no fill, quiet at rest, full strength when the
+  ring lands), at 45 per cent at rest. [Plan](planning/62-feature-session-five.md) ·
+  [Board](https://claude.ai/artifact/31aLBi17SH7AydhYfGYjBq).** Today: Read aloud is a full-width dividing line above Show
   details, the same shape as Show details, one row up, drawn by the reply-actions row builder
   (`src/utils/buildReplyActionsElement.tsx`); its text flips to Stop while the Deck is talking
   (`src/hooks/useReadAloud.ts`). Wanted: a small button with a speaker icon on the same row as Helpful and Not really (the
@@ -437,8 +451,9 @@ replace it with a specific issue when one exists.
   top, *This answer* and *Session · N*; Left and Right switch between them; the chip row and its body stay where they are;
   only the newest turn shows the Session tab, so it never repeats; the collapsed row still says *Show details*; Up from the
   tabs goes to Hide details and then Read aloud, Down goes into the chips, and B anywhere inside closes the panel. One
-  thing the page did not draw: where Clear sits inside the Session tab. The builder puts it at the end of that tab's body,
-  the same button and the same confirm box, unless the maintainer says otherwise.
+  last thing open — where Clear sits inside the Session tab — was **decided 2026-09-20: at the end of that
+  tab's body, full width, with the same confirm box.** Nothing about this feature is open now.
+  [Plan](planning/62-feature-session-five.md) · [Board](https://claude.ai/artifact/31aLBi17SH7AydhYfGYjBq) ·
   [Open questions](roadmap-details.md#session-context-folds-into-show-details).
 - ★★★ `[ollama]` **Dynamic keep-alive / smart unload** — **OPEN, research spike.** Hold models loaded, or unload when a game takes
   focus on the Deck APU? The spike decides go or no-go; no production unload before it.
@@ -453,9 +468,17 @@ replace it with a specific issue when one exists.
   of filter chips (All, Speed, Strategy, Expert, Vision, Coding; Installed only, FOSS only, Essentials only;
   `src/components/PullModelsModal.tsx`). Wanted: the tier choice stops being its own section and becomes a
   filter among the filters at the top of the list, and the filters themselves are reworked. The maintainer
-  wants a mockup page first, drawn at the Deck's own screen size like the plan 56 page, so they can pick and
-  choose what goes up there for people to filter by when they pull models. Not drawn yet. The two-row list bug
-  above is fixed with this or before it.
+  wanted a drawn page first; **it was drawn and picked 2026-09-20. Chosen: every filter goes behind one
+  "Filters · N on" line that opens a panel over the list.** Six filters offered — licence (the old tiers),
+  Speed / Strategy / Expert, Vision, Installed only, Essentials only, and Recently added. Coding and the
+  separate FOSS-only switch are dropped, the latter because licence covers it. Three more jobs ride along:
+  let the screen use more of the popup it sits in, move the custom tag box to the bottom, and get the counts
+  line onto one line, and — once Policy is gone — move Advanced to a button at the bottom so the section
+  row goes entirely. **Two savings were claimed and withdrawn the same day:** dropping the Policy section
+  frees no height (the buttons stretch) and moving the tag box below the list frees none either (same
+  box). The filter rows are worth about 30 pixels; the rest is measured on the Deck before any build.
+  The two-row list bug above is closed by this.
+  [Plan](planning/62-feature-session-five.md) · [Board](https://claude.ai/artifact/31aLBi17SH7AydhYfGYjBq)
 - ★★★ `[platform]` **Trim the five documents that are still big** — **PARTIAL: one of five done 2026-09-15.**
   Nothing a person using the plugin would notice; this is about what every piece of work costs before it starts. Five files
   carry a trim task at the top of each, with its own star rating, time and model. **This file is done (2026-09-14 and 15) — 100 KB to 83 KB,

@@ -153,61 +153,59 @@ filter, and keeping both would mean two controls that can disagree.
 Two stars. Models, screen layout. **Added to the session 2026-09-20 at the maintainer's word** — it was
 going to ride along behind the filter rework, and now it is its own item with its own device row.
 
-Every change that could buy the list room is drawn on the board at true width, and **the board measures
-each one from its own drawing** rather than trusting arithmetic. **The maintainer picks which of the six
-land.** Lane M owns whichever are picked.
+Every change that could buy the list room was drawn on the board at true width, and **the board
+measured each one from its own drawing** rather than trusting arithmetic. **The maintainer took all six
+on 2026-09-20.** In the order they are worth doing:
 
-**The drawing turned up something nobody had noticed, and it changes what this bug is.** Drawn at the
-sizes in the code, today's screen should show about **five** model rows. The maintainer counted **two**
-on the Deck on 17 September. Those two numbers disagree, which means **something else is squeezing the
-list and none of the six changes is certainly the fix.** Settling that is the first measurement of the
-session, before a brief is written. It may turn out that one limit is set wrong and the whole rework is
-unnecessary.
+| # | Change | Buys | What a person loses |
+|---|---|---|---|
+| 1 | **Let the list's own box be taller** | unknown — measured first | Nothing at all. It caps itself at 48 per cent of screen height, or 400 pixels, whichever is smaller: about 384 on the Deck. The popup has roughly 490 to give. |
+| 2 | Suggested models off the top, into the Filters panel | about 49 px | The three suggestions stop being what you see first. |
+| 3 | Advanced becomes a link beside the screen's name, section row goes | about 44 px | Nothing. |
+| 4 | "Type a model name" becomes one chip on the filter row | about 32 px | One extra press to type a name by hand. |
+| 5 | Two rows of filter chips down to one line | about 30 px | Filters sit behind a press. Already picked as § 3d's shape. |
+| 6 | Counts line shortened and its big refresh button shrunk | about 9 px | Nothing. The smallest item here. |
+
+On the drawing, all six together take the screen from **five model rows to eleven**.
+
+**The drawing turned up something nobody had noticed, and it changes how this starts.** Drawn at the
+sizes in the code, today's screen should already show about **five** rows. The maintainer counted **two**
+on the Deck on 17 September. Those disagree, so **something else is squeezing the list and none of the
+six is certainly the fix.**
+
+**So the first change is the session's own job, not a lane's.** Number 1 is a single value, it costs a
+person nothing, and it is the one the measurement points straight at. Block 0 measures which limit is
+biting; if it is that one, the session changes the value itself, rebuilds, deploys and re-counts the rows
+on the Deck. **This bug may close inside the first hour, before a lane has finished reading its brief.**
+If the measurement says the cause is something else entirely, that goes in the report and the roadmap and
+the remaining five are re-judged against the real number — never quietly dropped.
+
+Lane M owns numbers 2 to 6, and its brief carries the measured figures.
 
 **The maintainer's rule for this screen, given 2026-09-20: only change it if it buys room.** Ordering
-and tidiness are not worth a commit here. That rule throws two things off the earlier list and brings
-in two better versions of them.
+and tidiness are not worth a commit here.
 
-**Every change that buys real room on this screen, biggest first.** Each figure is arithmetic from the
-sizes in the code, not a device measurement, so block 0 measures them all before a brief is written.
+**Two things the rule threw off the list, and what replaced them:**
 
-| Change | Buys | What a person loses |
-|---|---|---|
-| **The list's own height limit** | **Unknown, possibly more than all the rest together** | Nothing. The list is capped a *second* time inside the cap the two-row bug names — 48 percent of the screen height, or 400 pixels, whichever is smaller. If that is the limit actually biting, raising it is the whole fix and the rest is decoration. **Measure this first.** |
-| Suggested chips off the top | about 43 | The three suggested models stop being on screen. They would move into the Filters panel, or appear only when the list is empty. |
-| Advanced out of the scrolling part of the screen | about 38 | Nothing, if it becomes a small link up in the screen's own title row. **As a button at the bottom it buys nothing, so that version is dropped.** |
-| The "type any model name" box behind a small button | about 32 | One press before you can type a name by hand. **Moving it below the list, as first drawn, buys nothing and is dropped.** |
-| Two rows of filter chips down to one line | about 30 | Filters past the right-hand edge are hidden until you walk to them. |
-| The counts line onto one line | about 14 | Nothing. |
+- Moving the "type a model name" box *below* the list frees nothing — it moves inside the same box the
+  list lives in, so the list's share does not change. Replaced by number 4 above, which removes its row
+  altogether. A small button on its own row would save only about two pixels, because the row is what
+  costs, not the box.
+- Advanced as a button at the *bottom* frees nothing — the button costs back about what the row cost at
+  the top. Replaced by number 3 above, which takes it out of the scrolling part of the screen entirely.
 
-**Dropped by the rule:** moving the tag box below the list, and Advanced as a button at the bottom.
-Both were ordering, not room.
+**Two more figures I got wrong by hand** — four in all, counting the two just above. All corrected before
+anything was built, and kept on the record because the habit matters more than the numbers:
 
-**Two of these cost a person something** — the suggested models leaving the screen, and one extra press
-to type a model name by hand. Both are recommended because room is what was asked for, and both are
-easy to say no to.
+- Dropping the Policy section frees no height. The three section buttons stretch to fill their row, so
+  taking one away leaves two wider buttons and a row of exactly the same height. That was a claimed 86.
+- The counts line's height comes from the 28-by-24 refresh button sitting in it, not from its text, and
+  the text does not wrap at this width. So it is worth about 9, not the 14 to 23 claimed from shortening
+  words.
 
-**Why this matters beyond tidiness:** you can see about two models before scrolling. That is an open
-two-star bug in its own right, and this work closes it.
-
-**Every pixel figure on this screen was read in the code, not measured on the Deck — and two of them
-were wrong.** Corrected the same day, before anything was built:
-
-- **Dropping the Policy section frees no height.** The three section buttons stretch to fill their
-  row, so taking one away leaves two wider buttons and a row exactly as tall.
-- **Moving the "type any model name" box below the list frees no height either.** It moves inside the
-  same box the list lives in, so the list's share does not change. It is still worth doing, because the
-  list becomes the first thing you see — just not for room.
-- **Two more that cannot be trusted yet.** The list sits inside a *second, tighter* height limit of its
-  own, inside the one the two-row bug points at, so letting the screen use more of the popup may free
-  nothing. And Advanced moving to the bottom reappears there at about the cost of the row it left,
-  unless it leaves the scrolling part of the screen — a small link in the title row would free about 38.
-- **The one figure that holds: the filter rows.** Two rows of chips plus their gap is 54 pixels and one
-  line is 24, so the filter change itself frees about **30 pixels**. The counts line is a fair 14. The
-  Suggested chips would be about 43 more, and the maintainer has been asked again about those.
-
-Block 0 measures all of it on the Deck before a brief is written. **No brief carries a pixel promise
-that has not been measured.**
+Every figure in the table at the top of this section was **measured by the board from its own drawing**,
+which is how the last two were caught. **Block 0 measures all of them again on the Deck, and no brief
+carries a pixel promise that has not been measured there.**
 
 ---
 
@@ -254,7 +252,10 @@ The shape the maintainer asked for: **the lanes start and the device work starts
    - **the models screen, and this one decides whether § 3e is a rework or a one-line fix.** How tall
      the popup really is, how much the screen uses, how much the list's own box allows, how much is left
      for rows, and how tall one row is. **The drawn screen says five rows and the maintainer counted
-     two — find out which limit is actually biting before anything is built.**
+     two — find out which limit is actually biting before anything is built.** If it is the list's own
+     box, change that value straight away, rebuild, deploy and re-count on the Deck: § 3e number 1 is a
+     single value, costs a person nothing, and may close the bug here in block 0. Write the new row count
+     down either way.
    - the chat slot row — the 14-pixel offset between the game's name and the chat's name, so the fix
      is aimed at a measured number and not at arithmetic.
    - the row under an answer — how tall it is today with the Read aloud line on it, so the saving is
@@ -268,7 +269,7 @@ The shape the maintainer asked for: **the lanes start and the device work starts
 
 | Lane | Builds | Owns, in words |
 |---|---|---|
-| **M — Models screen** | § 3d: the Filters button and its panel, the six filters, the licence filter replacing the Policy section. Then § 3e: whichever room-buying changes the maintainer picks — **but only after the session has measured why the list is smaller than the code says it should be** | the models catalogue screen, the models hub screen, the policy tier panel, the filter data, and the models stylesheet |
+| **M — Models screen** | § 3d: the Filters button and its panel, the six filters, the licence filter replacing the Policy section. Then § 3e numbers 2 to 6, with the measured figures in the brief. **Number 1 is not this lane's — the session does it in block 0** | the models catalogue screen, the models hub screen, the policy tier panel, the filter data, and the models stylesheet |
 | **R — Read aloud** | § 3b: the speaker on the Helpful row, the line removed, the D-pad wiring and the greyed-thumbs path | the reply actions builder, the read-aloud hook, the icon set, and the reply-actions block of the stylesheet |
 | **S — Session tab** | § 3c: the two tabs inside Show details, Clear at the end of the Session tab, the way out in all four directions | the session context strip, the chat transcript, the chip ladder, and the details-panel block of the stylesheet |
 | **G — Game name** | § 3a: the name showing only while the ring is on the row, and the × taken out of the centring | the chat slot row and the chat-slot block of the stylesheet |
@@ -390,13 +391,10 @@ same day. **Nothing about the four features is open now.**
 | 1 | How should the chat's name be straightened? | **Take the × out of the centring.** Everything sits on the row's true middle; about three characters come off the chat name, and that cost is accepted. |
 | 2 | How faint is the speaker at rest? | **45 per cent**, not the microphone's 15. Full strength when the ring lands on it. |
 | 3 | Keep two section buttons on the models screen, or move Advanced to the bottom? | **Move it out of the section row** — but as a small link in the title row, not a button at the bottom. A button at the bottom costs back what the row cost at the top. |
-| 4 | Is ordering worth a change on this screen? | **No. "I need to buy room. Don't change it if it doesn't give more space."** That rule now heads § 3d and threw two jobs off the list. |
+| 4 | Is ordering worth a change on this screen? | **No. "I need to buy room. Don't change it if it doesn't give more space."** That rule heads § 3d and threw two jobs off the list. |
+| 5 | Which of the six room-buying changes go in? | **All six**, 2026-09-20, including the two that cost a person something. Listed in § 3e in the order they are worth doing. |
 
-**One question still open.** Feature 7 on the board lists the six changes that buy the list room, each
-drawn at true width with its gain measured from the drawing. **Which of them go in?** Two cost a person
-something — the suggested models leave the screen, and typing a model name by hand takes one extra
-press. The rest cost nothing. And the first one on the list, raising the list's own height limit, costs
-nothing at all and may be worth more than the other five together.
+**Nothing is open.** Every shape and every call is settled. The session waits only on "go".
 
 ---
 
@@ -441,4 +439,4 @@ Filled in as the session runs.
 
 | When | What happened |
 |---|---|
-| 2026-09-20 | Plan written. Four features drawn at true size and picked; the three remaining calls answered the same day and written up as decision 114. Nothing about the four features is open. Nothing started — waiting on "go". |
+| 2026-09-20 | Plan written. Four features drawn at true size and picked. Every follow-up call answered the same day: the two fixes, the models-screen rule, and all six room-buying changes. Written up as decision 114. **Nothing is open.** Nothing started — waiting on "go". |

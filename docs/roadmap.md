@@ -282,9 +282,13 @@ starts work outside this.
   430 of those, leaving roughly 90 pixels for rows. **Read again 2026-09-20: the list also sits inside a
   second, tighter limit of its own — 48 percent of the screen height or 400 pixels, whichever is smaller —
   so raising the outer one alone may change nothing. Taken into the plan 62 session 2026-09-20 as its own
-  item, with every room-buying change drawn and measured at true width on the board; the maintainer picks
-  which land. Drawn at the sizes in the code this screen should show about five rows, not two, so a limit
-  somewhere is set wrong and that is measured before anything is built.** An external monitor taller than about 720 pixels gets the
+  item. Every room-buying change was drawn and measured at true width on the board and **all six were taken
+  2026-09-20** — biggest first: the list's own box allowed to be taller (unknown, measured first), the
+  suggested models off the top (~49 px), Advanced as a link beside the screen's name (~44 px), the type-a-name
+  box as one chip on the filter row (~32 px), the filter rows down to one line (~30 px), the counts line
+  shortened (~9 px). Five rows on the drawing become eleven. **But the drawing says today's screen should
+  already fit five, not two, so a limit somewhere is set wrong; that is measured first and may close this on
+  its own.** An external monitor taller than about 720 pixels gets the
   same 520 cap, so it looks the same there. The popup itself has room: on the Deck's screen it stands 640
   pixels tall. Fix with the filters rework below, or before it as a taller list. The maintainer's recording is
   `recordings/DeckRecord_20260916_114238_game.mkv` on their own PC, not in this repo. **Confirmed on the Deck

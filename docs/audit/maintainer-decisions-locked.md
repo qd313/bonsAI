@@ -5860,6 +5860,26 @@ answered the three remaining calls the same day. Nothing was built first.
     biting, raising it is worth more than everything else on the list together, and it is the session's
     first measurement.
 
+11. **Which room-buying changes go into the models screen.** The board drew all six at the real 569-pixel
+    width and measured each gain from its own drawing. **The maintainer took all six on 2026-09-20**, the
+    two that cost a person something included. In the order they are worth doing: let the list's own box be
+    taller (value unknown, measured first, costs nothing); the suggested models off the top (~49 px, they
+    move into the Filters panel); Advanced as a link beside the screen's name with the section row gone
+    (~44 px); "type a model name" as one chip on the filter row (~32 px, one extra press); two rows of
+    filter chips down to one line (~30 px, the shape already picked); the counts line shortened and its
+    28-by-24 refresh button shrunk (~9 px). All six together take the drawing from five rows to eleven.
+    **Two figures were corrected by measuring rather than by hand:** the counts line is worth about 9 rather
+    than 14 to 23, because its height comes from the refresh button and the text does not wrap at that
+    width; and a small "type a name" button on its own row saves only about 2, because the row is what
+    costs, not the box — hence the chip on a row that already exists.
+12. **What the drawing found, which outranks all of call 11.** At the sizes in the code today's screen
+    should already fit about **five** model rows; the maintainer counted **two** on the Deck on 2026-09-17.
+    Something else is squeezing the list, so none of the six is certainly the fix. **Change 1 therefore
+    becomes the session's own job in block 0 rather than a lane's:** measure which limit is biting, and if
+    it is the list's own box, change that one value, rebuild, deploy and re-count on the device. The bug
+    may close in the first hour. If the cause is something else, it goes in the report and the roadmap and
+    the other five are re-judged against the real number, never quietly dropped.
+
 What these do to the roadmap: all four feature entries were reworded the same day with the chosen shape and
 a link to the board. Two new things were opened along the way — the chat name being off-centre, folded into
 feature 1 rather than filed on its own because the same lane is already in that file, and the check everyone

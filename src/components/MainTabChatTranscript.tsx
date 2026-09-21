@@ -340,13 +340,20 @@ function kbNotesBlockedBySpoiler(
  */
 const kbNotesBlockEls = new Map<string, HTMLElement>();
 
-function registerKbNotesBlockEl(turnKey: string, el: HTMLElement | null): void {
-  if (el) kbNotesBlockEls.set(turnKey, el);
-  else kbNotesBlockEls.delete(turnKey);
-}
-
-export function focusKbNotesBlock(turnKey: string): boolean {
-  const el = kbNotesBlockEls.get(turnKey);
+/**
+ * The move itself, shared by every per-turn row registry in this file.
+ *
+ * In: one of those registries and the turn key to look up.
+ * Out: true only when Steam's ring actually landed on the row.
+ *
+ * The `tabindex` line ADDS focusability to a plain `div` that has none, which is the opposite of
+ * the bug the focus-pattern checker's "tabindex-removal" rule is named for — it never touches a
+ * row that already is a button, a link or a field, and it never takes focusability away. Written
+ * once here rather than per registry: copying it a second time for the details-tabs row is what
+ * pushed this repo's copy-pasted-lines count up by eleven on 2026-09-20.
+ */
+function focusPerTurnRow(registry: Map<string, HTMLElement>, turnKey: string): boolean {
+  const el = registry.get(turnKey);
   if (!el) return false;
   if (!el.hasAttribute("tabindex") && !el.matches?.("button, a, input, select, textarea")) {
     el.setAttribute("tabindex", "-1");
@@ -357,6 +364,15 @@ export function focusKbNotesBlock(turnKey: string): boolean {
     return false;
   }
   return elementHasFocus(el);
+}
+
+function registerKbNotesBlockEl(turnKey: string, el: HTMLElement | null): void {
+  if (el) kbNotesBlockEls.set(turnKey, el);
+  else kbNotesBlockEls.delete(turnKey);
+}
+
+export function focusKbNotesBlock(turnKey: string): boolean {
+  return focusPerTurnRow(kbNotesBlockEls, turnKey);
 }
 
 /**
@@ -376,17 +392,7 @@ function registerDetailsTabsRowEl(turnKey: string, el: HTMLElement | null): void
 }
 
 function focusDetailsTabsRow(turnKey: string): boolean {
-  const el = detailsTabsRowEls.get(turnKey);
-  if (!el) return false;
-  if (!el.hasAttribute("tabindex") && !el.matches?.("button, a, input, select, textarea")) {
-    el.setAttribute("tabindex", "-1");
-  }
-  try {
-    el.focus({ preventScroll: true });
-  } catch {
-    return false;
-  }
-  return elementHasFocus(el);
+  return focusPerTurnRow(detailsTabsRowEls, turnKey);
 }
 
 /**

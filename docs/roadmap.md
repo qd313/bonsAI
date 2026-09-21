@@ -442,6 +442,11 @@ replace it with a specific issue when one exists.
   give-up values per Ask mode. It was the sixth candidate in round 36 and was dropped on purpose, said in advance rather than
   discovered late: it is the largest of that set — the two existing values already run through sixteen files each and going per mode
   triples them — and the least of them for a person, since it changes when a warning appears rather than what the plugin can do.
+- ★★★ `[ollama]` **Room reserved for bonsAI, so a game cannot squeeze it out** — **OPEN, asked for 2026-09-20 off the back of
+  the token measurements.** With God of War running, the Deck had 206 MB free before the AI model loaded at all. It did still
+  load at every window size tried, and the window size cost nothing in frame rate — but that is the edge, and a heavier game or
+  a bigger model would meet it. Should bonsAI hold room in advance, or notice it is about to lose and say so plainly instead of
+  failing? The numbers are in the compact-a-chat note. Pairs with **Dynamic keep-alive / smart unload** above.
 - ★★★ `[platform]` **Trim the five documents that are still big** — **PARTIAL: one of five done 2026-09-15.**
   Nothing a person using the plugin would notice; this is about what every piece of work costs before it starts. Five files
   carry a trim task at the top of each, with its own star rating, time and model. **This file is done (2026-09-14 and 15) — 100 KB to 83 KB,
@@ -496,8 +501,8 @@ replace it with a specific issue when one exists.
 - ★★★★ `[ask]` **The chat sums itself up instead of being cleared** — **OPEN, measured on the Deck 2026-09-20; the
   plugin knows its real numbers now, one call owed.** A long chat is compacted into a short summary that goes into the next
   question, from a button in the Session tab. **One token over costs half the question, not the excess** — and Strategy and
-  Expert already do not fit. The summary written before each question costs ~14s every time; written just after an answer it
-  is nearly free — **maintainer's call**. [Detail](roadmap-details.md#the-chat-sums-itself-up-instead-of-being-cleared).
+  Expert already do not fit. Compacting costs a ~15s re-read on the turn it happens, so it fires at a threshold and never
+  every turn — as Claude Code does. [Detail](roadmap-details.md#the-chat-sums-itself-up-instead-of-being-cleared).
 - ★★★★ `[ollama]` **LAN custom model pull** — **OPEN.** Blocked until a mechanism is chosen (R1 to R4). Depends on **Custom model in
   the Pull Models picker**.
 - ★★★★ `[perms]` **Web permission** — **OPEN, discovery locked.** Opt-in live web answers; offline Ask and local KB when off. Kids

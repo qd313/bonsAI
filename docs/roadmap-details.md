@@ -426,22 +426,29 @@ price of carrying anything at all: **reading the question is the slow part, at r
 seconds for every 1,000 tokens.** A 500-token summary therefore costs about a second on every
 question that carries it — before the cost of writing it.
 
-**A call to revisit, with the numbers, as call 2 asked for.** The entry says the summary is
-written **right before the next question**. Measured on the Deck, that choice costs about
-**14 seconds on every single question**, and it is avoidable.
+**How often the summary is rewritten is what decides the cost (corrected 2026-09-20).** An earlier
+version of this note said that writing the summary right before the next question costs about 14
+seconds on every question. That was wrong, and the maintainer caught it: compacting happens when the
+chat outgrows the space, not every turn — the way Claude Code's own auto-compact works. The cost
+lands on the turn that compacts, and the turns in between are nearly free. Call 2 stands as written.
 
-The AI server remembers the work it did on the front of the last question and skips it when that
-part has not changed. With a long piece of session text at the front: the first question took
-15.3 seconds before the first word, and the next two took 1.1 and 0.8. Change one word of that
-text and the saving vanishes — three questions in a row took 15.3, 15.3 and 15.3.
+The numbers behind it, measured on the Deck. The AI server skips work it has already done on the
+front of a question, as long as that part has not changed. With a long piece of session text at the
+front and only the question itself changing: 15.3 seconds to the first word, then 1.1, then 0.8.
+Change one word of that front text and the saving vanishes — 15.3, 15.3, 15.3.
 
-Rewriting the summary right before each question changes that text every time, so every question
-pays full price. Writing it **just after an answer instead** — while the person is reading --
-leaves it unchanged when the next question goes out, and that question is nearly free. Same
-summary, same content, same place in the question; only the moment it is written moves. Two
-honest limits: the saving holds only while the model stays in memory (five minutes idle and it is
-paid again), and moving between chats loses it too. **This is the maintainer's call**; the numbers
-are here rather than a quiet change, as asked.
+Three things follow, and they are design rules rather than open questions:
+
+- **Rewrite the summary only at the threshold, never every turn.** A rewrite costs a full re-read of
+  everything in front of it — about 15 seconds on a chat this size — plus the cost of writing the
+  summary. Between rewrites, questions cost about a second.
+- **Nothing that changes every turn may sit in front of the summary.** The saving only holds while
+  the text ahead of the question is exactly what it was last time. A clock, a turn counter, or a set
+  of cards that comes back in a different order would destroy the saving for everything behind it,
+  including the summary. This is worth checking on the real prompt before any of it is built.
+- **Two honest limits.** The saving holds only while the model stays in memory (about five minutes
+  idle and it is paid again), and moving between chats loses it.
+
 
 **What the code said about today's behaviour, now checked rather than trusted (2026-09-20).** It was right about the
 shape and wrong about the severity. When a question plus its reply allowance will not fit, the plugin shrinks the

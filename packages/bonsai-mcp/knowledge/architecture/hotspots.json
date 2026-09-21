@@ -16,6 +16,11 @@
       "role": ""
     },
     {
+      "path": "src/components/PullModelsModal.tsx",
+      "lines": 1843,
+      "role": ""
+    },
+    {
       "path": "src/index.tsx",
       "lines": 1813,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
@@ -38,11 +43,6 @@
     {
       "path": "src/styles/sections/section-6.ts",
       "lines": 1637,
-      "role": ""
-    },
-    {
-      "path": "src/components/PullModelsModal.tsx",
-      "lines": 1537,
       "role": ""
     },
     {
@@ -121,6 +121,11 @@
       "role": ""
     },
     {
+      "path": "src/styles/sections/gamepadAndPullModels.ts",
+      "lines": 743,
+      "role": ""
+    },
+    {
       "path": "src/components/SettingsTab.tsx",
       "lines": 707,
       "role": ""
@@ -153,11 +158,6 @@
     {
       "path": "py_modules/backend/services/intent_pack_service.py",
       "lines": 630,
-      "role": ""
-    },
-    {
-      "path": "src/styles/sections/gamepadAndPullModels.ts",
-      "lines": 626,
       "role": ""
     },
     {

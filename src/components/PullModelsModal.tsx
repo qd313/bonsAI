@@ -24,9 +24,8 @@
  *     ┌─ Pull models ──────────────────────────────────────────┐
  *     │ Installed N · X GB   Queue N · X GB   catalog/size src ↻ │
  *     │ Custom model tag [______________]  [Pull]                │
- *     │ Suggested    [chip] [chip] [chip] [chip]                 │
- *     │ Filters:  [All] [Speed] [Vision] [Strategy] [Expert] …   │
- *     │           [Installed only] [FOSS only] [Essentials only] │
+ *     │ Filters · N on — Open source only, Vision, Essentials…   │  <- opens a panel that also
+ *     │                                                           │     holds the Suggested chips
  *     │ ┌ table ───────────────────────────────────────────┐     │
  *     │ │ Pull│Model      │Size│Date│Modes│Rating │Del      │     │
  *     │ │  ✔  │tag…       │2GB │'24 │chat │★★★☆☆  │  X      │     │
@@ -41,9 +40,13 @@
  *    catalog tag — all three in parallel, falling back to offline data on
  *    any failure.
  * 2. Tags are matched against the catalog (isTagInstalled(),
- *    isCatalogModelTagInList()) and filtered — by fossOnly, the active
- *    filter chip (entryMatchesFilter()), installedOnly, essentialsOnly —
- *    into the grouped, sectioned table built by tableSections.
+ *    isCatalogModelTagInList()) and filtered — by the licence tier
+ *    (entryMatchesLicenceTier(), the same three tiers the old Policy
+ *    section chose), the ticked Ask-mode filters (entryMatchesModeFilters()),
+ *    installedOnly, essentialsOnly, recentlyAddedOnly — into the grouped,
+ *    sectioned table built by tableSections. All six live behind the single
+ *    "Filters · N on" row, which opens a panel of tickable rows over the
+ *    table itself rather than a permanent row of chips (plan 62, § 3d).
  * 3. Pressing a row's star/checkmark either queues an uninstalled model
  *    with toggleSelected() (confirming first for a large "stretch"
  *    download, and for switching to Tier 2 if it is open-weight), or, for
@@ -86,9 +89,9 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, ty
 import { Button, ConfirmModal, Focusable, TextField, showModal } from "@decky/ui";
 import { toaster } from "@decky/api";
 import {
-  PULL_MODEL_FILTER_OPTIONS,
   PULL_MODEL_GROUP_LABELS,
   PULL_MODEL_GROUP_ORDER,
+  PULL_MODEL_MODE_FILTER_OPTIONS,
   PULL_MODEL_RATING_COLUMN_LABEL,
   bytesToGb,
   comparePullModelEntriesNewestFirst,
@@ -101,7 +104,7 @@ import {
   isDeckEssentialsPullModel,
   isEmbeddingOnlyTag,
   type PullModelEntry,
-  type PullModelFilterId,
+  type PullModelModeFilterId,
   type PullModelGroup,
 } from "../data/pullModelCatalog";
 import { isDeprioritizedOllamaTag } from "../data/deprioritizedModels";
@@ -109,7 +112,12 @@ import { OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP } from "../data/bonsaiSettingsSchema"
 import { PULL_MODEL_NEW_BADGE_STORAGE_KEY } from "../data/storageKeys";
 import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from "../utils/deckyCall";
 import type { ModelPolicyTierId } from "../data/modelPolicy";
-import { disclosureSummaryForSourceClass } from "../data/modelPolicy";
+import {
+  disclosureSummaryForSourceClass,
+  MODEL_POLICY_PERMISSIONS_INTRO,
+  MODEL_POLICY_TIER_IDS,
+  MODEL_POLICY_TIER_LABELS_PLAIN,
+} from "../data/modelPolicy";
 import { BonsaiModalScope } from "./BonsaiModalScope";
 import { recommendPullModelsForGaps } from "../utils/pullModelRecommendations";
 import { usePullModelCatalog } from "../hooks/usePullModelCatalog";
@@ -229,11 +237,19 @@ export type PullModelsFooterState = {
   okText: string;
   onOk: () => void;
   okDisabled: boolean;
+  /** True once at least one model is queued to pull — lets the hub know Done means "pull" here
+   *  rather than "save and close" (see OllamaModelsHubModal's handleDone). */
+  hasQueuedPull: boolean;
 };
 
 export type PullModelsModalProps = {
   activeRoutingTag: string | null;
   modelPolicyTier?: ModelPolicyTierId;
+  /** Gates the "Any installed model" licence row exactly like it gated the old Tier 3 button. */
+  modelPolicyNonFossUnlocked?: boolean;
+  /** Licence row picked directly in the Filters panel — a draft, saved the same way the three
+   *  Policy buttons were (see OllamaModelsHubModal's Done handling). */
+  onSelectModelPolicyTier?: (tier: ModelPolicyTierId) => void;
   onApplyTier2Policy?: () => void | Promise<void>;
   onBeforeNestedDeckyModal?: () => void;
   onCompleteNestedDeckyModalClose?: (close: () => void) => void;
@@ -242,6 +258,9 @@ export type PullModelsModalProps = {
   /** When true, render panel body only (for AI models hub). */
   embedded?: boolean;
   onFooterStateChange?: (state: PullModelsFooterState) => void;
+  /** Opens the Filters panel, ring inside it, the moment this screen mounts — used for the
+   *  "Manage models → Policy" shortcut now that Policy is a filter, not its own section. */
+  initialFiltersOpen?: boolean;
 };
 
 function normalizeInstalledSet(models: string[]): Set<string> {
@@ -270,16 +289,96 @@ function resolveRowSizeGb(entry: PullModelEntry, liveSizes: Record<string, numbe
   return entry.sizeGb;
 }
 
-function entryMatchesFilter(entry: PullModelEntry, filter: PullModelFilterId): boolean {
-  if (filter === "all") return true;
-  if (filter === "speed") return entry.tags.includes("chat");
-  if (filter === "vision") return entry.tags.includes("vision") || entry.tags.includes("ocr");
-  if (filter === "strategy") return entry.tags.includes("strategy");
-  if (filter === "expert") {
-    return entry.group === "stretch" || (entry.tags.includes("strategy") && entry.rating >= 5);
+function entryMatchesModeFilter(entry: PullModelEntry, mode: PullModelModeFilterId): boolean {
+  if (mode === "speed") return entry.tags.includes("chat");
+  if (mode === "strategy") return entry.tags.includes("strategy");
+  if (mode === "expert") return entry.group === "stretch" || (entry.tags.includes("strategy") && entry.rating >= 5);
+  return entry.tags.includes("vision") || entry.tags.includes("ocr");
+}
+
+/** No mode ticked shows everything; one or more ticked shows anything that fits *any* of them. */
+function entryMatchesModeFilters(entry: PullModelEntry, modes: ReadonlySet<PullModelModeFilterId>): boolean {
+  if (modes.size === 0) return true;
+  for (const mode of modes) {
+    if (entryMatchesModeFilter(entry, mode)) return true;
   }
-  if (filter === "coding") return entry.tags.includes("coding");
+  return false;
+}
+
+/**
+ * The Licence filter, replacing the old standalone Policy tier buttons (plan 62, § 3d) — it is
+ * the point of the change, so it filters the list exactly the way the three tiers read: Tier 1
+ * shows only FOSS tags, Tier 2 adds open-weight, Tier 3 ("Any installed model") holds nothing
+ * back. Each tier is a superset of the one before it.
+ */
+function entryMatchesLicenceTier(entry: PullModelEntry, tier: ModelPolicyTierId): boolean {
+  if (tier === "open_source_only") return entry.licenseClass === "foss";
+  if (tier === "open_weight") return entry.licenseClass === "foss" || entry.licenseClass === "open_weight";
   return true;
+}
+
+/**
+ * One row in the Filters panel (plan 62, § 3d) — the six filters, grouped under three headings.
+ * Licence is a three-way pick (like the old Policy buttons); the rest are independent toggles.
+ * A flat, ordered array rather than nested objects because every piece of D-pad wiring below
+ * (Up/Down between rows, and the panel's own entry/exit) walks it by a single row index.
+ */
+type FilterPanelRow =
+  | { kind: "licence"; tier: ModelPolicyTierId }
+  | { kind: "mode"; id: PullModelModeFilterId }
+  | { kind: "installedOnly" }
+  | { kind: "essentialsOnly" }
+  | { kind: "recentlyAdded" };
+
+const FILTER_PANEL_ROWS: readonly FilterPanelRow[] = [
+  ...MODEL_POLICY_TIER_IDS.map((tier): FilterPanelRow => ({ kind: "licence", tier })),
+  ...PULL_MODEL_MODE_FILTER_OPTIONS.map((opt): FilterPanelRow => ({ kind: "mode", id: opt.id })),
+  { kind: "installedOnly" },
+  { kind: "essentialsOnly" },
+  { kind: "recentlyAdded" },
+];
+
+function filterPanelRowKey(row: FilterPanelRow): string {
+  if (row.kind === "licence") return `licence-${row.tier}`;
+  if (row.kind === "mode") return `mode-${row.id}`;
+  return row.kind;
+}
+
+function filterPanelRowGroupHeading(row: FilterPanelRow): string {
+  if (row.kind === "licence") return "Licence";
+  if (row.kind === "mode") return "Matches Ask mode";
+  return "Show";
+}
+
+/**
+ * `.focus()` then `.scrollIntoView()` if the element actually has one — jsdom (this repo's unit
+ * test DOM) never implements scrollIntoView, so an unguarded call throws the moment a test drives
+ * a focus move through the Filters panel. A real Deck/desktop element always has the method; this
+ * only changes behaviour in the test environment that would otherwise crash.
+ */
+function focusAndReveal(el: HTMLElement | null | undefined): boolean {
+  if (!el) return false;
+  el.focus();
+  if (typeof el.scrollIntoView === "function") {
+    el.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }
+  return true;
+}
+
+function filterPanelRowLabel(row: FilterPanelRow): string {
+  if (row.kind === "licence") return MODEL_POLICY_TIER_LABELS_PLAIN[row.tier];
+  if (row.kind === "mode") {
+    return PULL_MODEL_MODE_FILTER_OPTIONS.find((opt) => opt.id === row.id)?.label ?? row.id;
+  }
+  if (row.kind === "installedOnly") return "Installed only";
+  if (row.kind === "essentialsOnly") return "Essentials only";
+  return "Recently added";
+}
+
+/** Same text as filterPanelRowLabel, except Essentials only keeps its longer spoken description. */
+function filterPanelRowAriaLabel(row: FilterPanelRow): string {
+  if (row.kind === "essentialsOnly") return "Essentials only — show Tier 1 and Tier 2 one-model presets";
+  return filterPanelRowLabel(row);
 }
 
 /**
@@ -305,6 +404,8 @@ export function PullModelsModal(props: PullModelsModalProps) {
   const {
     activeRoutingTag,
     modelPolicyTier = "open_source_only",
+    modelPolicyNonFossUnlocked = false,
+    onSelectModelPolicyTier,
     onApplyTier2Policy,
     onBeforeNestedDeckyModal,
     onCompleteNestedDeckyModalClose,
@@ -312,15 +413,17 @@ export function PullModelsModal(props: PullModelsModalProps) {
     onPullAccepted,
     embedded = false,
     onFooterStateChange,
+    initialFiltersOpen = false,
   } = props;
 
   const { mergedCatalog, catalogSource, refreshCatalog } = usePullModelCatalog();
   const [installedTags, setInstalledTags] = useState<Set<string>>(() => new Set());
   const [selectedTags, setSelectedTags] = useState<Set<string>>(() => new Set());
-  const [filterId, setFilterId] = useState<PullModelFilterId>("all");
-  const [fossOnly, setFossOnly] = useState(false);
+  const [modeFilters, setModeFilters] = useState<Set<PullModelModeFilterId>>(() => new Set());
   const [installedOnly, setInstalledOnly] = useState(false);
   const [essentialsOnly, setEssentialsOnly] = useState(true);
+  const [recentlyAddedOnly, setRecentlyAddedOnly] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(() => initialFiltersOpen);
   const [sizeSource, setSizeSource] = useState<"live" | "offline">("offline");
   const [liveSizeGbByTag, setLiveSizeGbByTag] = useState<Record<string, number>>({});
   const [loadingMeta, setLoadingMeta] = useState(true);
@@ -328,6 +431,9 @@ export function PullModelsModal(props: PullModelsModalProps) {
   const [pullBusy, setPullBusy] = useState(false);
   const [deleteBusyTag, setDeleteBusyTag] = useState<string | null>(null);
   const [customTagInput, setCustomTagInput] = useState("");
+  /** "Type a model name" collapses to one chip on the Filters row until pressed (plan 62, § 3e
+   *  #4) — its own permanent row is gone, so this is the one place that room used to cost. */
+  const [customTagEntryOpen, setCustomTagEntryOpen] = useState(false);
   const [customPullBusy, setCustomPullBusy] = useState(false);
   const [pinnedAskTag, setPinnedAskTag] = useState<string | null>(null);
   const [pinBusyTag, setPinBusyTag] = useState<string | null>(null);
@@ -335,15 +441,36 @@ export function PullModelsModal(props: PullModelsModalProps) {
   const stretchConfirmedRef = useRef<Set<string>>(new Set());
   const openWeightTierConfirmedRef = useRef<Set<string>>(new Set());
   const shellRef = useRef<HTMLDivElement | null>(null);
-  const filterChipRefs = useRef<(HTMLElement | null)[]>([]);
   const recommendChipRefs = useRef<(HTMLElement | null)[]>([]);
-  const customPullBtnRef = useRef<HTMLElement | null>(null);
-  const installedOnlyRef = useRef<HTMLElement | null>(null);
-  const fossOnlyRef = useRef<HTMLElement | null>(null);
-  const essentialsOnlyRef = useRef<HTMLElement | null>(null);
+  const customTagChipRef = useRef<HTMLElement | null>(null);
+  const customTagCloseBtnRef = useRef<HTMLElement | null>(null);
+  const filtersButtonRef = useRef<HTMLElement | null>(null);
+  const filterPanelRowRefs = useRef<(HTMLElement | null)[]>([]);
+  const filterPanelCloseBtnRef = useRef<HTMLElement | null>(null);
   const footerPullRef = useRef<HTMLElement | null>(null);
   const selectCellRefs = useRef<(HTMLElement | null)[]>([]);
   const deleteCellRefs = useRef<(HTMLElement | null)[]>([]);
+
+  /**
+   * Several places here (opening/closing the Filters panel, opening/closing the custom-tag
+   * field) schedule a `requestAnimationFrame` to move focus one tick after a state change, so
+   * the target actually exists in the DOM first. None of those are effects, so there is no
+   * natural cleanup slot to cancel them in -- and an uncancelled one firing after this screen has
+   * already unmounted would call `.focus()` on a stale ref. Guarded on this instead: the frame
+   * still fires, but does nothing once unmounted.
+   */
+  const mountedRef = useRef(true);
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+  function scheduleFocusFrame(fn: () => void): void {
+    window.requestAnimationFrame(() => {
+      if (mountedRef.current) fn();
+    });
+  }
 
   const refreshInstalledAndMeta = useCallback(
     async (forceCatalog = false) => {
@@ -444,14 +571,20 @@ export function PullModelsModal(props: PullModelsModalProps) {
     for (const t of installedTags) {
       if (!isCatalogModelTagInList(mergedCatalog, t)) out.push(t);
     }
-    out.sort((a, b) => a.localeCompare(b));
-    return out;
-  }, [installedTags, mergedCatalog]);
+    // Not in the curated catalog, so there is no license or mode data to check the Licence /
+    // Ask-mode filters against -- only "Recently added" (the New badge, tracked by tag alone)
+    // applies to this section, same as it always applied to these rows' own badge.
+    const filtered = recentlyAddedOnly
+      ? out.filter((t) => isRecentPullModelTag(pullRecord, t, Date.now()))
+      : out;
+    filtered.sort((a, b) => a.localeCompare(b));
+    return filtered;
+  }, [installedTags, mergedCatalog, recentlyAddedOnly, pullRecord]);
 
   const filteredCatalog = useMemo(() => {
     return mergedCatalog.filter((entry) => {
-      if (fossOnly && entry.licenseClass !== "foss") return false;
-      if (!entryMatchesFilter(entry, filterId)) return false;
+      if (!entryMatchesLicenceTier(entry, modelPolicyTier)) return false;
+      if (!entryMatchesModeFilters(entry, modeFilters)) return false;
       if (installedOnly && !isTagInstalled(entry.tag, installedTags)) return false;
       // Essentials only ON: show just the essentials group. OFF: show everything else,
       // stretch (Expert large) included -- it used to be dropped here too, through a
@@ -459,9 +592,22 @@ export function PullModelsModal(props: PullModelsModalProps) {
       // Expert group could never be shown at all (found while wiring its bake-off order,
       // docs/planning/41-deck-model-survey.md § 9, D73).
       if (essentialsOnly && !isDeckEssentialsPullModel(entry)) return false;
+      if (recentlyAddedOnly) {
+        const installed = isTagInstalled(entry.tag, installedTags);
+        if (!installed || !isRecentPullModelTag(pullRecord, entry.tag, Date.now())) return false;
+      }
       return true;
     });
-  }, [filterId, fossOnly, installedOnly, essentialsOnly, installedTags, mergedCatalog]);
+  }, [
+    modelPolicyTier,
+    modeFilters,
+    installedOnly,
+    essentialsOnly,
+    recentlyAddedOnly,
+    installedTags,
+    mergedCatalog,
+    pullRecord,
+  ]);
 
   const groupedCatalog = useMemo(() => {
     const map = new Map<PullModelGroup, PullModelEntry[]>();
@@ -527,19 +673,32 @@ export function PullModelsModal(props: PullModelsModalProps) {
     return sum;
   }, [selectedTags, mergedCatalog, liveSizeGbByTag]);
 
-  const focusInstalledOnlyToggle = useCallback((): boolean => {
-    installedOnlyRef.current?.focus();
-    return Boolean(installedOnlyRef.current);
+  const focusFiltersButton = useCallback((): boolean => focusAndReveal(filtersButtonRef.current), []);
+
+  const focusFilterPanelRow = useCallback((index: number): boolean => {
+    const list = filterPanelRowRefs.current;
+    if (!list.length) return false;
+    const i = Math.max(0, Math.min(index, list.length - 1));
+    return focusAndReveal(list[i]);
   }, []);
 
-  const focusFossOnlyToggle = useCallback((): boolean => {
-    fossOnlyRef.current?.focus();
-    return Boolean(fossOnlyRef.current);
-  }, []);
+  const focusFilterPanelClose = useCallback(
+    (): boolean => focusAndReveal(filterPanelCloseBtnRef.current),
+    []
+  );
 
-  const focusEssentialsOnlyToggle = useCallback((): boolean => {
-    essentialsOnlyRef.current?.focus();
-    return Boolean(essentialsOnlyRef.current);
+  // Opens straight into the Filters panel, ring on its first row -- the "Manage models" shortcut
+  // that used to jump to the standalone Policy section now jumps here instead (initialFiltersOpen).
+  // openFiltersPanelEntry is defined further down (it depends on recommendedEntries, computed
+  // later) but a deferred effect body can reach it fine -- by the time this ever actually runs,
+  // after mount, the whole render below it has already executed.
+  useEffect(() => {
+    if (!initialFiltersOpen) return;
+    const id = window.requestAnimationFrame(() => {
+      openFiltersPanelEntry();
+    });
+    return () => window.cancelAnimationFrame(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- run once, on mount, only
   }, []);
 
   const findModalFooterButton = useCallback((labelPrefix: string): HTMLElement | null => {
@@ -561,28 +720,22 @@ export function PullModelsModal(props: PullModelsModalProps) {
     return null;
   }, []);
 
-  const focusFilterChip = useCallback((index: number): boolean => {
-    const list = filterChipRefs.current.filter(Boolean) as HTMLElement[];
-    if (!list.length) return false;
-    const i = Math.max(0, Math.min(index, list.length - 1));
-    list[i]?.focus();
-    list[i]?.scrollIntoView({ block: "nearest", inline: "nearest" });
-    return true;
-  }, []);
-
   const focusRecommendChip = useCallback((index: number): boolean => {
     const list = recommendChipRefs.current.filter(Boolean) as HTMLElement[];
     if (!list.length) return false;
     const i = Math.max(0, Math.min(index, list.length - 1));
-    list[i]?.focus();
-    list[i]?.scrollIntoView({ block: "nearest", inline: "nearest" });
-    return true;
+    return focusAndReveal(list[i]);
   }, []);
 
-  const focusCustomPullButton = useCallback((): boolean => {
-    customPullBtnRef.current?.focus();
-    return Boolean(customPullBtnRef.current);
-  }, []);
+  const focusCustomTagChip = useCallback((): boolean => focusAndReveal(customTagChipRef.current), []);
+
+  /**
+   * Where the ring lands the moment the field opens. Not the Pull button: it starts disabled
+   * (nothing typed yet), and a disabled button refuses focus like any real one -- an early build
+   * of this tried that and the ring silently went nowhere. The close ("×") button is never
+   * disabled, so it is always a real place to land.
+   */
+  const focusCustomTagClose = useCallback((): boolean => focusAndReveal(customTagCloseBtnRef.current), []);
 
   const focusRowCell = useCallback((rowIndex: number, cell: "select" | "delete"): boolean => {
     if (!flatRows.length) return false;
@@ -637,20 +790,10 @@ export function PullModelsModal(props: PullModelsModalProps) {
       onMoveUp: () => {
         if (cell === "delete") {
           if (focusPrevRowSelect(rowIndex)) return true;
-          return (
-            focusEssentialsOnlyToggle() ||
-            focusFossOnlyToggle() ||
-            focusInstalledOnlyToggle() ||
-            focusFilterChip(PULL_MODEL_FILTER_OPTIONS.length - 1)
-          );
+          return focusFiltersButton();
         }
         if (focusPrevRowSelect(rowIndex)) return true;
-        return (
-          focusEssentialsOnlyToggle() ||
-          focusFossOnlyToggle() ||
-          focusInstalledOnlyToggle() ||
-          focusFilterChip(PULL_MODEL_FILTER_OPTIONS.length - 1)
-        );
+        return focusFiltersButton();
       },
       onMoveDown: () => {
         if (focusNextRowSelect(rowIndex)) return true;
@@ -666,23 +809,45 @@ export function PullModelsModal(props: PullModelsModalProps) {
         return false;
       },
     }),
-    [
-      flatRows.length,
-      focusEssentialsOnlyToggle,
-      focusFilterChip,
-      focusFossOnlyToggle,
-      focusFooterPull,
-      focusInstalledOnlyToggle,
-      focusNextRowSelect,
-      focusPrevRowSelect,
-      focusRowCell,
-    ]
+    [flatRows.length, focusFiltersButton, focusFooterPull, focusNextRowSelect, focusPrevRowSelect, focusRowCell]
   );
 
   const recommendedEntries = useMemo(
-    () => recommendPullModelsForGaps(installedTags, { fossOnly, limit: 4, catalog: mergedCatalog }),
-    [installedTags, fossOnly, mergedCatalog]
+    // Dropped fossOnly with the standalone toggle it belonged to (plan 62, § 3d) -- the Licence
+    // filter now covers the same ground for the table itself, and a suggestion is worth
+    // surfacing regardless of the current licence pick.
+    () => recommendPullModelsForGaps(installedTags, { fossOnly: false, limit: 4, catalog: mergedCatalog }),
+    [installedTags, mergedCatalog]
   );
+
+  /**
+   * Where the ring lands the moment the Filters panel opens: the first Suggested chip if the
+   * screen has any right now (plan 62, § 3e #2 moved that block in here from the top of the
+   * screen), otherwise straight to the first tickable row. Deliberately a plain function, not a
+   * memoized callback -- it has to read the current recommendedEntries every time it runs, and
+   * recommendedEntries is computed after this point in the component, so an early useCallback
+   * here could only ever close over a stale first render's value.
+   */
+  function openFiltersPanelEntry(): boolean {
+    return recommendedEntries.length > 0 ? focusRecommendChip(0) : focusFilterPanelRow(0);
+  }
+
+  /**
+   * Opens the Filters panel and moves the ring straight into it — pressing OK on the Filters
+   * button should land you *inside* the panel, not merely reveal it (plan 62, § 3d: "the D-pad
+   * must get into the panel").
+   */
+  function openFiltersPanel(): void {
+    setFiltersOpen(true);
+    scheduleFocusFrame(() => openFiltersPanelEntry());
+  }
+
+  /** Closes the panel and returns the ring to the Filters button — the D-pad's way back out. */
+  function closeFiltersPanel(): boolean {
+    setFiltersOpen(false);
+    scheduleFocusFrame(() => focusFiltersButton());
+    return true;
+  }
 
   const completeNestedModalClose = useCallback(
     (close: () => void) => {
@@ -1067,6 +1232,8 @@ export function PullModelsModal(props: PullModelsModalProps) {
           duration: 5000,
         });
         setCustomTagInput("");
+        setCustomTagEntryOpen(false);
+        scheduleFocusFrame(() => focusCustomTagChip());
         onPullAccepted();
       } else {
         toaster.toast({
@@ -1080,7 +1247,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
     } finally {
       setCustomPullBusy(false);
     }
-  }, [customTagInput, customPullBusy, pullBusy, onPullAccepted]);
+  }, [customTagInput, customPullBusy, pullBusy, onPullAccepted, focusCustomTagChip]);
 
   const bindSelectRef =
     (rowIndex: number): RefCallback<HTMLElement> =>
@@ -1302,7 +1469,6 @@ export function PullModelsModal(props: PullModelsModalProps) {
     selectedTags.size > 0
       ? `Pull selected (${selectedTags.size}) · ${formatSizeGb(selectedTotalGb)}`
       : "Pull selected";
-  const lastFilterIndex = PULL_MODEL_FILTER_OPTIONS.length - 1;
 
   useEffect(() => {
     if (!embedded || !onFooterStateChange) return;
@@ -1313,8 +1479,90 @@ export function PullModelsModal(props: PullModelsModalProps) {
         void onPullSelected();
       },
       okDisabled: selectedTags.size === 0 || pullBusy,
+      hasQueuedPull: selectedTags.size > 0,
     });
   }, [embedded, onFooterStateChange, strOKButtonText, selectedTags.size, pullBusy, onPullSelected]);
+
+  /**
+   * "Filters · N on" summary (plan 62, § 3d) — the Licence pick always counts (it is always one
+   * of three, never "off"), so N is never 0. Every other filter only appears once ticked.
+   */
+  const activeFilterLabels: string[] = [
+    MODEL_POLICY_TIER_LABELS_PLAIN[modelPolicyTier].replace(" (recommended)", ""),
+  ];
+  for (const opt of PULL_MODEL_MODE_FILTER_OPTIONS) {
+    if (modeFilters.has(opt.id)) activeFilterLabels.push(opt.label);
+  }
+  if (installedOnly) activeFilterLabels.push("Installed only");
+  if (essentialsOnly) activeFilterLabels.push("Essentials only");
+  if (recentlyAddedOnly) activeFilterLabels.push("Recently added");
+
+  function isFilterPanelRowChecked(row: FilterPanelRow): boolean {
+    if (row.kind === "licence") return modelPolicyTier === row.tier;
+    if (row.kind === "mode") return modeFilters.has(row.id);
+    if (row.kind === "installedOnly") return installedOnly;
+    if (row.kind === "essentialsOnly") return essentialsOnly;
+    return recentlyAddedOnly;
+  }
+
+  function isFilterPanelRowDisabled(row: FilterPanelRow): boolean {
+    return row.kind === "licence" && row.tier === "non_foss" && !modelPolicyNonFossUnlocked;
+  }
+
+  function selectFilterPanelRow(row: FilterPanelRow): void {
+    if (row.kind === "licence") {
+      onSelectModelPolicyTier?.(row.tier);
+      return;
+    }
+    if (row.kind === "mode") {
+      setModeFilters((prev) => {
+        const next = new Set(prev);
+        if (next.has(row.id)) next.delete(row.id);
+        else next.add(row.id);
+        return next;
+      });
+      return;
+    }
+    if (row.kind === "installedOnly") {
+      setInstalledOnly((v) => !v);
+      return;
+    }
+    if (row.kind === "essentialsOnly") {
+      setEssentialsOnly((v) => !v);
+      return;
+    }
+    setRecentlyAddedOnly((v) => !v);
+  }
+
+  /** Walks from `fromIndex` in `dir`, skipping the greyed-out Tier 3 row, and focuses the first
+   *  enabled row it finds. Mirrors the table's own focusNextRowSelect/focusPrevRowSelect. */
+  function focusFilterPanelRowSkipping(fromIndex: number, dir: 1 | -1): boolean {
+    for (let i = fromIndex; i >= 0 && i < FILTER_PANEL_ROWS.length; i += dir) {
+      if (!isFilterPanelRowDisabled(FILTER_PANEL_ROWS[i])) return focusFilterPanelRow(i);
+    }
+    return false;
+  }
+
+  function filterPanelRowNav(i: number) {
+    return {
+      onMoveUp: () => {
+        if (i === 0) {
+          return recommendedEntries.length > 0
+            ? focusRecommendChip(recommendedEntries.length - 1)
+            : closeFiltersPanel();
+        }
+        return focusFilterPanelRowSkipping(i - 1, -1) || closeFiltersPanel();
+      },
+      onMoveDown: () => focusFilterPanelRowSkipping(i + 1, 1) || focusFilterPanelClose(),
+      onMoveLeft: () => true,
+      onMoveRight: () => true,
+      onCancelButton: (e: unknown) => {
+        closeFiltersPanel();
+        (e as { preventDefault?: () => void })?.preventDefault?.();
+        return true;
+      },
+    };
+  }
 
   const panelBody = (
         <BonsaiModalScope shellRef={shellRef} className="bonsai-pullmodels-shell bonsai-prose">
@@ -1339,159 +1587,217 @@ export function PullModelsModal(props: PullModelsModalProps) {
             </span>
           </div>
 
-          <div className="bonsai-pullmodels-custom-tag">
-            <Focusable flow-children="horizontal" className="bonsai-pullmodels-custom-tag-row">
-              <TextField
-                label=""
-                value={customTagInput}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomTagInput(e.target.value)}
-                {...({ placeholder: "Custom model tag, e.g. llama3.2:3b" } as unknown as Record<string, unknown>)}
-                style={{ flex: "1 1 auto", minWidth: 0 }}
-              />
-              <Button
-                ref={(el) => {
-                  customPullBtnRef.current = el;
-                }}
-                className="bonsai-pullmodels-chip bonsai-pullmodels-custom-pull-btn"
-                disabled={!isPlausibleOllamaPullTag(customTagInput) || customPullBusy || pullBusy}
-                onClick={(ev) => {
-                  ev.stopPropagation();
-                  ev.preventDefault();
-                  void onPullCustomTag();
-                }}
-                aria-label="Pull custom model tag"
-                {...({
-                  onMoveDown: () =>
-                    (recommendedEntries.length > 0 ? focusRecommendChip(0) : focusFilterChip(0)),
-                } as unknown as Record<string, unknown>)}
-              >
-                {customPullBusy ? "…" : "Pull"}
-              </Button>
-            </Focusable>
-            {customTagInput.trim() && !isPlausibleOllamaPullTag(customTagInput) ? (
+          {/*
+            "Type a model name" used to be its own permanent row above Filters (a TextField, a
+            Pull button, and an occasional hint line). Plan 62, § 3e #4 folds it into one chip
+            that shares the Filters row instead -- its own row is gone, at the cost of one extra
+            press to reach it. Pressing the chip swaps this same row over to the field itself
+            (customTagEntryOpen); the row's height does not change either way, only its content.
+            Down from either version of this row reaches the same next stop below, since Filters'
+            own button is not always part of the DOM here to hop through.
+          */}
+          <div className="bonsai-pullmodels-filters">
+            {customTagEntryOpen ? (
+              <Focusable flow-children="horizontal" className="bonsai-pullmodels-custom-tag-row">
+                <TextField
+                  label=""
+                  value={customTagInput}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomTagInput(e.target.value)}
+                  {...({ placeholder: "Custom model tag, e.g. llama3.2:3b" } as unknown as Record<string, unknown>)}
+                  style={{ flex: "1 1 auto", minWidth: 0 }}
+                />
+                <Button
+                  className="bonsai-pullmodels-chip bonsai-pullmodels-custom-pull-btn"
+                  disabled={!isPlausibleOllamaPullTag(customTagInput) || customPullBusy || pullBusy}
+                  onClick={(ev) => {
+                    ev.stopPropagation();
+                    ev.preventDefault();
+                    void onPullCustomTag();
+                  }}
+                  aria-label="Pull custom model tag"
+                  {...({
+                    onMoveDown: () =>
+                      filtersOpen ? openFiltersPanelEntry() : focusRowCell(0, "select") || focusFooterPull(),
+                  } as unknown as Record<string, unknown>)}
+                >
+                  {customPullBusy ? "…" : "Pull"}
+                </Button>
+                <Button
+                  ref={(el) => {
+                    customTagCloseBtnRef.current = el;
+                  }}
+                  className="bonsai-pullmodels-chip bonsai-pullmodels-custom-tag-close"
+                  onClick={(ev) => {
+                    ev.stopPropagation();
+                    setCustomTagEntryOpen(false);
+                    setCustomTagInput("");
+                    scheduleFocusFrame(() => focusCustomTagChip());
+                  }}
+                  aria-label="Close typing a model name by hand"
+                  {...({
+                    onMoveDown: () =>
+                      filtersOpen ? openFiltersPanelEntry() : focusRowCell(0, "select") || focusFooterPull(),
+                  } as unknown as Record<string, unknown>)}
+                >
+                  ×
+                </Button>
+              </Focusable>
+            ) : (
+              <Focusable flow-children="horizontal" className="bonsai-pullmodels-filters-row">
+                <Button
+                  ref={(el) => {
+                    filtersButtonRef.current = el;
+                  }}
+                  className="bonsai-pullmodels-filters-button"
+                  onClick={(ev) => {
+                    ev.stopPropagation();
+                    if (filtersOpen) closeFiltersPanel();
+                    else openFiltersPanel();
+                  }}
+                  aria-expanded={filtersOpen}
+                  aria-label={`Filters, ${activeFilterLabels.length} on: ${activeFilterLabels.join(", ")}`}
+                  {...({
+                    onMoveDown: () =>
+                      filtersOpen ? openFiltersPanelEntry() : focusRowCell(0, "select") || focusFooterPull(),
+                  } as unknown as Record<string, unknown>)}
+                >
+                  <span className="bonsai-pullmodels-filters-button-title">
+                    Filters · {activeFilterLabels.length} on
+                  </span>
+                  <span className="bonsai-pullmodels-filters-button-summary">{activeFilterLabels.join(", ")}</span>
+                </Button>
+                <Button
+                  ref={(el) => {
+                    customTagChipRef.current = el;
+                  }}
+                  className="bonsai-pullmodels-chip bonsai-pullmodels-custom-tag-chip"
+                  onClick={(ev) => {
+                    ev.stopPropagation();
+                    setCustomTagEntryOpen(true);
+                    scheduleFocusFrame(() => focusCustomTagClose());
+                  }}
+                  aria-label="Type a model name by hand"
+                  {...({
+                    onMoveDown: () =>
+                      filtersOpen ? openFiltersPanelEntry() : focusRowCell(0, "select") || focusFooterPull(),
+                  } as unknown as Record<string, unknown>)}
+                >
+                  Type a name
+                </Button>
+              </Focusable>
+            )}
+            {customTagEntryOpen && customTagInput.trim() && !isPlausibleOllamaPullTag(customTagInput) ? (
               <div className="bonsai-pullmodels-custom-tag-hint">
                 Use lowercase letters, digits, . _ - and an optional :tag
               </div>
             ) : null}
           </div>
 
-          {recommendedEntries.length > 0 ? (
-            <div className="bonsai-pullmodels-recommend">
-              <div className="bonsai-pullmodels-recommend-title">Suggested</div>
-              <Focusable flow-children="horizontal" className="bonsai-pullmodels-recommend-row">
-                {recommendedEntries.map((entry, chipIndex) => {
-                  const selected = selectedTags.has(entry.tag);
+          <div className="bonsai-pullmodels-list" aria-busy={loadingMeta}>
+            {filtersOpen ? (
+              <div className="bonsai-pullmodels-filterpanel" role="group" aria-label="Filters">
+                {recommendedEntries.length > 0 ? (
+                  <div className="bonsai-pullmodels-recommend">
+                    <div className="bonsai-pullmodels-recommend-title">Suggested</div>
+                    <Focusable flow-children="horizontal" className="bonsai-pullmodels-recommend-row">
+                      {recommendedEntries.map((entry, chipIndex) => {
+                        const selected = selectedTags.has(entry.tag);
+                        const isFirst = chipIndex === 0;
+                        const isLast = chipIndex === recommendedEntries.length - 1;
+                        return (
+                          <Button
+                            key={`rec-${entry.tag}`}
+                            ref={(el) => {
+                              recommendChipRefs.current[chipIndex] = el;
+                            }}
+                            className={`bonsai-pullmodels-chip${selected ? " bonsai-pullmodels-chip--active" : ""}`}
+                            onClick={(ev) => toggleSelected(entry, ev)}
+                            aria-label={selected ? `Remove ${entry.tag} from queue` : `Queue ${entry.tag}`}
+                            {...({
+                              onMoveUp: () => (isFirst ? closeFiltersPanel() : focusRecommendChip(chipIndex - 1)),
+                              onMoveDown: () => (isLast ? focusFilterPanelRow(0) : focusRecommendChip(chipIndex + 1)),
+                              onCancelButton: (e: unknown) => {
+                                closeFiltersPanel();
+                                (e as { preventDefault?: () => void })?.preventDefault?.();
+                                return true;
+                              },
+                            } as unknown as Record<string, unknown>)}
+                          >
+                            {entry.tag}
+                          </Button>
+                        );
+                      })}
+                    </Focusable>
+                  </div>
+                ) : null}
+                {FILTER_PANEL_ROWS.map((row, i) => {
+                  const heading = filterPanelRowGroupHeading(row);
+                  const prevHeading = i > 0 ? filterPanelRowGroupHeading(FILTER_PANEL_ROWS[i - 1]) : null;
+                  const checked = isFilterPanelRowChecked(row);
+                  const disabled = isFilterPanelRowDisabled(row);
+                  const label = filterPanelRowLabel(row);
                   return (
-                    <Button
-                      key={`rec-${entry.tag}`}
-                      ref={(el) => {
-                        recommendChipRefs.current[chipIndex] = el;
-                      }}
-                      className={`bonsai-pullmodels-chip${selected ? " bonsai-pullmodels-chip--active" : ""}`}
-                      onClick={(ev) => toggleSelected(entry, ev)}
-                      aria-label={selected ? `Remove ${entry.tag} from queue` : `Queue ${entry.tag}`}
-                      {...(chipIndex === 0
-                        ? ({ onMoveUp: () => focusCustomPullButton() } as unknown as Record<string, unknown>)
-                        : {})}
-                    >
-                      {entry.tag}
-                    </Button>
+                    <div key={filterPanelRowKey(row)}>
+                      {heading !== prevHeading ? (
+                        <div className="bonsai-pullmodels-group-title">{heading}</div>
+                      ) : null}
+                      {heading !== prevHeading && row.kind === "licence" ? (
+                        <div className="bonsai-pullmodels-filterpanel-intro">{MODEL_POLICY_PERMISSIONS_INTRO}</div>
+                      ) : null}
+                      <Button
+                        ref={(el) => {
+                          filterPanelRowRefs.current[i] = el;
+                        }}
+                        focusable={!disabled}
+                        disabled={disabled}
+                        className={`bonsai-pullmodels-filterpanel-row${
+                          checked ? " bonsai-pullmodels-filterpanel-row--checked" : ""
+                        }`}
+                        onClick={(ev) => {
+                          ev.stopPropagation();
+                          if (!disabled) selectFilterPanelRow(row);
+                        }}
+                        aria-pressed={checked}
+                        aria-label={
+                          disabled
+                            ? `${filterPanelRowAriaLabel(row)} — enable Tier 3 unlock in Advanced first`
+                            : filterPanelRowAriaLabel(row)
+                        }
+                        {...(filterPanelRowNav(i) as unknown as Record<string, unknown>)}
+                      >
+                        <span className="bonsai-pullmodels-filterpanel-check" aria-hidden="true">
+                          {checked ? "✔" : ""}
+                        </span>
+                        <span>{label}</span>
+                      </Button>
+                    </div>
                   );
                 })}
-              </Focusable>
-            </div>
-          ) : null}
-
-          <div className="bonsai-pullmodels-filters">
-            <Focusable flow-children="horizontal" className="bonsai-pullmodels-filter-chips">
-              {PULL_MODEL_FILTER_OPTIONS.map((opt, chipIndex) => (
                 <Button
-                  key={opt.id}
                   ref={(el) => {
-                    filterChipRefs.current[chipIndex] = el;
+                    filterPanelCloseBtnRef.current = el;
                   }}
-                  className={`bonsai-pullmodels-chip${filterId === opt.id ? " bonsai-pullmodels-chip--active" : ""}`}
+                  className="bonsai-pullmodels-filterpanel-close"
                   onClick={(ev) => {
                     ev.stopPropagation();
-                    setFilterId(opt.id);
+                    closeFiltersPanel();
                   }}
                   {...({
-                    onMoveLeft: () => (chipIndex > 0 ? focusFilterChip(chipIndex - 1) : false),
-                    onMoveRight: () => (chipIndex < lastFilterIndex ? focusFilterChip(chipIndex + 1) : false),
-                    onMoveUp: () =>
-                      chipIndex === 0 && recommendedEntries.length === 0 ? focusCustomPullButton() : false,
-                    onMoveDown: () => focusInstalledOnlyToggle() || focusRowCell(0, "select") || focusFooterPull(),
+                    onMoveUp: () => focusFilterPanelRowSkipping(FILTER_PANEL_ROWS.length - 1, -1),
+                    onMoveDown: () => true,
+                    onMoveLeft: () => true,
+                    onMoveRight: () => true,
+                    onCancelButton: (e: unknown) => {
+                      closeFiltersPanel();
+                      (e as { preventDefault?: () => void })?.preventDefault?.();
+                      return true;
+                    },
                   } as unknown as Record<string, unknown>)}
                 >
-                  {opt.label}
+                  Close filters
                 </Button>
-              ))}
-            </Focusable>
-            <Focusable flow-children="horizontal" className="bonsai-pullmodels-toggles">
-              <Button
-                ref={(el) => {
-                  installedOnlyRef.current = el;
-                }}
-                className={`bonsai-pullmodels-chip${installedOnly ? " bonsai-pullmodels-chip--active" : ""}`}
-                onClick={(ev) => {
-                  ev.stopPropagation();
-                  setInstalledOnly((v) => !v);
-                }}
-                {...({
-                  onMoveUp: () => focusFilterChip(lastFilterIndex),
-                  onMoveRight: () => focusFossOnlyToggle(),
-                  onMoveDown: () =>
-                    focusRowCell(0, "select") || (selectedTags.size > 0 ? focusFooterPull() : false),
-                } as unknown as Record<string, unknown>)}
-                aria-pressed={installedOnly}
-              >
-                Installed only
-              </Button>
-              <Button
-                ref={(el) => {
-                  fossOnlyRef.current = el;
-                }}
-                className={`bonsai-pullmodels-chip bonsai-pullmodels-chip--foss${fossOnly ? " bonsai-pullmodels-chip--active" : ""}`}
-                onClick={(ev) => {
-                  ev.stopPropagation();
-                  setFossOnly((v) => !v);
-                }}
-                {...({
-                  onMoveLeft: () => focusInstalledOnlyToggle(),
-                  onMoveRight: () => focusEssentialsOnlyToggle(),
-                  onMoveUp: () => focusFilterChip(lastFilterIndex),
-                  onMoveDown: () =>
-                    focusRowCell(0, "select") || (selectedTags.size > 0 ? focusFooterPull() : false),
-                } as unknown as Record<string, unknown>)}
-                aria-pressed={fossOnly}
-              >
-                FOSS only
-              </Button>
-              <Button
-                ref={(el) => {
-                  essentialsOnlyRef.current = el;
-                }}
-                className={`bonsai-pullmodels-chip${essentialsOnly ? " bonsai-pullmodels-chip--active" : ""}`}
-                onClick={(ev) => {
-                  ev.stopPropagation();
-                  setEssentialsOnly((v) => !v);
-                }}
-                {...({
-                  onMoveLeft: () => focusFossOnlyToggle(),
-                  onMoveUp: () => focusFilterChip(lastFilterIndex),
-                  onMoveDown: () =>
-                    focusRowCell(0, "select") || (selectedTags.size > 0 ? focusFooterPull() : false),
-                } as unknown as Record<string, unknown>)}
-                aria-pressed={essentialsOnly}
-                aria-label="Essentials only — show Tier 1 and Tier 2 one-model presets"
-              >
-                Essentials only
-              </Button>
-            </Focusable>
-          </div>
-
-          <div className="bonsai-pullmodels-list" aria-busy={loadingMeta}>
-            {flatRows.length > 0 ? (
+              </div>
+            ) : flatRows.length > 0 ? (
               <div className="bonsai-pullmodels-table" role="table">
                 {renderTableHeader()}
                 <div role="rowgroup">

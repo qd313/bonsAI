@@ -2,33 +2,44 @@
  * Title: The AI models screen
  *
  * Purpose: The full-screen popup for everything about which AI models this
- * plugin can use: choosing how open the model policy is, browsing and
- * downloading models, and a set of advanced routing switches. It opens with
- * one of three sections showing — Policy, Browse & pull, or Advanced — with
- * chips across the top to switch between them, and it keeps a change to any
- * of them as a draft until the person presses Done, at which point every
- * pending change is saved together.
+ * plugin can use: browsing and downloading models (with the model licence
+ * choice folded in as one of the Browse screen's own filters), plus a set
+ * of advanced routing switches reached from a small "Advanced" link. It
+ * keeps a change to either as a draft until the person presses Done, at
+ * which point every pending change is saved together.
  *
  * Used for: The Ollama tab's "Manage models" entry.
  *
- * Solves: Puts policy, the download catalog, and the advanced switches
- * behind one Done button instead of three separate popups each with their
- * own save step, so switching sections does not lose an unsaved change.
+ * Solves: Puts the licence choice, the download catalog, and the advanced
+ * switches behind one Done button instead of separate popups each with
+ * their own save step, so opening Advanced does not lose an unsaved pick.
  *
  * Does not: Install Ollama itself, or actually download a model — the
- * browse-and-pull section is a separate component (PullModelsModal) that
+ * browse-and-pull screen is a separate component (PullModelsModal) that
  * this file only hosts and asks to save on Done.
  *
- * Gotchas: While the Browse & pull section is open, the Done button's own
- * label and whether it can be pressed come from that section, not from this
- * file — PullModelsModal reports back what its own button should say and
- * whether it should be enabled, through onFooterStateChange, and this modal
- * just repaints its Done button to match.
+ * Gotchas:
+ * - While the Browse screen is open with nothing queued to pull, Done
+ *   means "save the licence pick and close", not "pull" — see handleDone.
+ *   PullModelsModal reports back through onFooterStateChange whether
+ *   something is actually queued (hasQueuedPull), and this file only lets
+ *   Done act as "Pull selected" once it is.
+ * - Until 2026-09-20 this screen had a third, separate "Policy" section
+ *   for the same three-tier choice the Browse screen's Licence filter
+ *   makes now (plan 62, § 3d) — that section and its own chip are gone;
+ *   the licence pick is one of the Filters panel's rows inside
+ *   PullModelsModal, wired here exactly the same draft-until-Done way.
+ * - The Browse/Advanced section-button row is gone too (plan 62, § 3e #3): with only two
+ *   sections left, and Policy no longer one of them, a whole row of buttons cost back the same
+ *   height dropping Policy alone would have saved (two buttons stretch to fill the row exactly
+ *   like three did). Advanced is now a small link at the top of the screen instead, wired with no
+ *   custom Up/Down of its own -- the row it replaces never had any either, so Steam's own spatial
+ *   nav already knows how to reach it and leave it.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Button, ConfirmModal, Focusable } from "@decky/ui";
+import { Button, ConfirmModal } from "@decky/ui";
 import type { ModelPolicyTierId } from "../data/modelPolicy";
-import { ModelPolicyTierPanel, useModelPolicyTierDraft } from "./ModelPolicyTierPanel";
+import { useModelPolicyTierDraft } from "./ModelPolicyTierPanel";
 import {
   ModelRoutingAdvancedPanel,
   useModelRoutingAdvancedDraft,
@@ -56,18 +67,13 @@ export type OllamaModelsHubModalProps = {
   onClose: () => void;
 };
 
-const HUB_SECTIONS: { id: OllamaModelsHubSection; label: string }[] = [
-  { id: "policy", label: "Policy" },
-  { id: "browse", label: "Browse & pull" },
-  { id: "advanced", label: "Advanced" },
-];
-
 /**
- * Unified fullscreen hub: policy tiers, browse/pull table, and advanced routing.
+ * Unified fullscreen hub: the browse/pull table (licence choice included, as a filter) and
+ * advanced routing.
  */
 export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
   const {
-    initialSection = "policy",
+    initialSection = "browse",
     activeRoutingTag,
     modelPolicyTier,
     modelPolicyNonFossUnlocked,
@@ -80,7 +86,12 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
     onClose,
   } = props;
 
-  const [section, setSection] = useState<OllamaModelsHubSection>(initialSection);
+  // "policy" used to be its own section; it is now the Filters panel's Licence group, inside
+  // Browse. A caller still asking for it lands on Browse with that panel already open.
+  const [section, setSection] = useState<Exclude<OllamaModelsHubSection, "policy">>(
+    initialSection === "policy" ? "browse" : initialSection
+  );
+  const openedOnLicenceShortcut = useRef(initialSection === "policy");
   const { draftTier, draftTierRef, setDraft } = useModelPolicyTierDraft(modelPolicyTier);
   const {
     draftNonFossUnlocked,
@@ -93,6 +104,7 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
     okText: "Pull selected",
     onOk: () => {},
     okDisabled: true,
+    hasQueuedPull: false,
   });
 
   const draftNonFossRef = useRef(modelPolicyNonFossUnlocked);
@@ -124,24 +136,33 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
     [onClose]
   );
 
+  /**
+   * Done always saves the licence + advanced draft first, then either closes (nothing queued to
+   * pull, or the Advanced screen) or hands off to PullModelsModal's own pull. Before the Filters
+   * panel folded Policy in, saving that draft only ever happened from the Policy or Advanced
+   * section's own Done press -- pressing Done while Browse had nothing queued left the tier
+   * change unsaved. Committing unconditionally here closes that gap along with the move.
+   */
   const handleDone = useCallback(() => {
-    if (section === "browse") {
-      browseFooter.onOk();
-      return;
-    }
     void commitPolicyAndAdvanced()
-      .then(() => handleHubClose("done"))
+      .then(() => {
+        if (section === "browse" && browseFooter.hasQueuedPull) {
+          browseFooter.onOk();
+          return;
+        }
+        handleHubClose("done");
+      })
       .catch((err) => {
         console.error("save_settings failed (AI models hub Done)", err);
       });
   }, [section, browseFooter, commitPolicyAndAdvanced, handleHubClose]);
 
-  const selectSection = useCallback((next: OllamaModelsHubSection, _source: string) => {
-    setSection(next);
+  const toggleAdvanced = useCallback(() => {
+    setSection((current) => (current === "advanced" ? "browse" : "advanced"));
   }, []);
 
-  const okButtonText = section === "browse" ? browseFooter.okText : "Done";
-  const okDisabled = section === "browse" ? browseFooter.okDisabled : false;
+  const okButtonText = section === "browse" && browseFooter.hasQueuedPull ? browseFooter.okText : "Done";
+  const okDisabled = section === "browse" && browseFooter.hasQueuedPull ? browseFooter.okDisabled : false;
 
   return (
     <ConfirmModal
@@ -160,56 +181,32 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
             paddingRight: 4,
           }}
         >
-          <Focusable flow-children="horizontal" style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-            {HUB_SECTIONS.map((chip) => {
-              const active = section === chip.id;
-              return (
-                <Button
-                  key={chip.id}
-                  className="bonsai-models-hub-chip"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    selectSection(chip.id, "click");
-                  }}
-                  {...({
-                    onOKButton: (evt: { stopPropagation: () => void }) => {
-                      evt.stopPropagation();
-                      selectSection(chip.id, "okButton");
-                    },
-                  } as Record<string, unknown>)}
-                  style={{
-                    flex: "1 1 auto",
-                    minHeight: 32,
-                    fontSize: 11,
-                    fontWeight: 600,
-                    borderRadius: 4,
-                    border: active ? "1px solid rgba(56,189,248,0.55)" : "1px solid rgba(255,255,255,0.12)",
-                    background: active
-                      ? "linear-gradient(180deg, rgba(56,189,248,0.22) 0%, rgba(14,116,144,0.35) 100%)"
-                      : "rgba(255,255,255,0.04)",
-                    color: active ? "#e0f2fe" : "#9fb0c0",
-                  }}
-                  aria-pressed={active}
-                >
-                  {chip.label}
-                </Button>
-              );
-            })}
-          </Focusable>
-          {section === "policy" ? (
-            <ModelPolicyTierPanel
-              modelPolicyTier={modelPolicyTier}
-              modelPolicyNonFossUnlocked={draftNonFossUnlocked}
-              draftTier={draftTier}
-              onDraftTierChange={setDraft}
-            />
-          ) : null}
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              className="bonsai-models-hub-advanced-link"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleAdvanced();
+              }}
+              {...({
+                onOKButton: (evt: { stopPropagation: () => void }) => {
+                  evt.stopPropagation();
+                  toggleAdvanced();
+                },
+              } as Record<string, unknown>)}
+              aria-pressed={section === "advanced"}
+            >
+              {section === "advanced" ? "‹ Browse & pull" : "Advanced ›"}
+            </Button>
+          </div>
           {section === "browse" ? (
             <PullModelsModal
               embedded
               activeRoutingTag={activeRoutingTag}
               modelPolicyTier={draftTier}
+              modelPolicyNonFossUnlocked={draftNonFossUnlocked}
+              onSelectModelPolicyTier={setDraft}
               onApplyTier2Policy={async () => {
                 setDraft("open_weight");
                 await onApplyTier2MultimodalPolicy?.();
@@ -219,6 +216,7 @@ export function OllamaModelsHubModal(props: OllamaModelsHubModalProps) {
               onCancel={() => handleHubClose("browseCancel")}
               onPullAccepted={() => handleHubClose("pullAccepted")}
               onFooterStateChange={handleBrowseFooterChange}
+              initialFiltersOpen={openedOnLicenceShortcut.current}
             />
           ) : null}
           {section === "advanced" ? (

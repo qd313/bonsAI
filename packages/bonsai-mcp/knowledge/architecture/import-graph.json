@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 416,
-  "edgeCount": 1068,
+  "fileCount": 417,
+  "edgeCount": 1070,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -855,6 +855,13 @@
         "src/features/plugin-shell/usePluginHelpModal.tsx"
       ]
     },
+    "src/components/PullModelsModal.customTagChip.test.tsx": {
+      "imports": [
+        "src/components/PullModelsModal.tsx",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/PullModelsModal.filtersPanel.test.tsx": {
       "imports": [
         "src/components/PullModelsModal.tsx",
@@ -887,6 +894,7 @@
       ],
       "importedBy": [
         "src/components/OllamaModelsHubModal.tsx",
+        "src/components/PullModelsModal.customTagChip.test.tsx",
         "src/components/PullModelsModal.filtersPanel.test.tsx",
         "src/components/PullModelsModal.test.tsx"
       ]
@@ -2929,6 +2937,7 @@
         "src/components/MainTabUnifiedAskBar.test.tsx",
         "src/components/OllamaModelsHubModal.test.tsx",
         "src/components/PermissionDenyAction.test.tsx",
+        "src/components/PullModelsModal.customTagChip.test.tsx",
         "src/components/PullModelsModal.filtersPanel.test.tsx",
         "src/components/ReplyCopyButton.test.tsx",
         "src/components/SessionContextStrip.clearButton.test.tsx",

@@ -430,6 +430,9 @@ export function PullModelsModal(props: PullModelsModalProps) {
   const [pullBusy, setPullBusy] = useState(false);
   const [deleteBusyTag, setDeleteBusyTag] = useState<string | null>(null);
   const [customTagInput, setCustomTagInput] = useState("");
+  /** "Type a model name" collapses to one chip on the Filters row until pressed (plan 62, § 3e
+   *  #4) — its own permanent row is gone, so this is the one place that room used to cost. */
+  const [customTagEntryOpen, setCustomTagEntryOpen] = useState(false);
   const [customPullBusy, setCustomPullBusy] = useState(false);
   const [pinnedAskTag, setPinnedAskTag] = useState<string | null>(null);
   const [pinBusyTag, setPinBusyTag] = useState<string | null>(null);
@@ -438,7 +441,8 @@ export function PullModelsModal(props: PullModelsModalProps) {
   const openWeightTierConfirmedRef = useRef<Set<string>>(new Set());
   const shellRef = useRef<HTMLDivElement | null>(null);
   const recommendChipRefs = useRef<(HTMLElement | null)[]>([]);
-  const customPullBtnRef = useRef<HTMLElement | null>(null);
+  const customTagChipRef = useRef<HTMLElement | null>(null);
+  const customTagCloseBtnRef = useRef<HTMLElement | null>(null);
   const filtersButtonRef = useRef<HTMLElement | null>(null);
   const filterPanelRowRefs = useRef<(HTMLElement | null)[]>([]);
   const filterPanelCloseBtnRef = useRef<HTMLElement | null>(null);
@@ -701,10 +705,15 @@ export function PullModelsModal(props: PullModelsModalProps) {
     return focusAndReveal(list[i]);
   }, []);
 
-  const focusCustomPullButton = useCallback((): boolean => {
-    customPullBtnRef.current?.focus();
-    return Boolean(customPullBtnRef.current);
-  }, []);
+  const focusCustomTagChip = useCallback((): boolean => focusAndReveal(customTagChipRef.current), []);
+
+  /**
+   * Where the ring lands the moment the field opens. Not the Pull button: it starts disabled
+   * (nothing typed yet), and a disabled button refuses focus like any real one -- an early build
+   * of this tried that and the ring silently went nowhere. The close ("×") button is never
+   * disabled, so it is always a real place to land.
+   */
+  const focusCustomTagClose = useCallback((): boolean => focusAndReveal(customTagCloseBtnRef.current), []);
 
   const focusRowCell = useCallback((rowIndex: number, cell: "select" | "delete"): boolean => {
     if (!flatRows.length) return false;
@@ -1205,6 +1214,8 @@ export function PullModelsModal(props: PullModelsModalProps) {
           duration: 5000,
         });
         setCustomTagInput("");
+        setCustomTagEntryOpen(false);
+        window.requestAnimationFrame(() => focusCustomTagChip());
         onPullAccepted();
       } else {
         toaster.toast({
@@ -1218,7 +1229,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
     } finally {
       setCustomPullBusy(false);
     }
-  }, [customTagInput, customPullBusy, pullBusy, onPullAccepted]);
+  }, [customTagInput, customPullBusy, pullBusy, onPullAccepted, focusCustomTagChip]);
 
   const bindSelectRef =
     (rowIndex: number): RefCallback<HTMLElement> =>
@@ -1558,63 +1569,110 @@ export function PullModelsModal(props: PullModelsModalProps) {
             </span>
           </div>
 
-          <div className="bonsai-pullmodels-custom-tag">
-            <Focusable flow-children="horizontal" className="bonsai-pullmodels-custom-tag-row">
-              <TextField
-                label=""
-                value={customTagInput}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomTagInput(e.target.value)}
-                {...({ placeholder: "Custom model tag, e.g. llama3.2:3b" } as unknown as Record<string, unknown>)}
-                style={{ flex: "1 1 auto", minWidth: 0 }}
-              />
-              <Button
-                ref={(el) => {
-                  customPullBtnRef.current = el;
-                }}
-                className="bonsai-pullmodels-chip bonsai-pullmodels-custom-pull-btn"
-                disabled={!isPlausibleOllamaPullTag(customTagInput) || customPullBusy || pullBusy}
-                onClick={(ev) => {
-                  ev.stopPropagation();
-                  ev.preventDefault();
-                  void onPullCustomTag();
-                }}
-                aria-label="Pull custom model tag"
-                {...({
-                  onMoveDown: () => focusFiltersButton(),
-                } as unknown as Record<string, unknown>)}
-              >
-                {customPullBusy ? "…" : "Pull"}
-              </Button>
-            </Focusable>
-            {customTagInput.trim() && !isPlausibleOllamaPullTag(customTagInput) ? (
+          {/*
+            "Type a model name" used to be its own permanent row above Filters (a TextField, a
+            Pull button, and an occasional hint line). Plan 62, § 3e #4 folds it into one chip
+            that shares the Filters row instead -- its own row is gone, at the cost of one extra
+            press to reach it. Pressing the chip swaps this same row over to the field itself
+            (customTagEntryOpen); the row's height does not change either way, only its content.
+            Down from either version of this row reaches the same next stop below, since Filters'
+            own button is not always part of the DOM here to hop through.
+          */}
+          <div className="bonsai-pullmodels-filters">
+            {customTagEntryOpen ? (
+              <Focusable flow-children="horizontal" className="bonsai-pullmodels-custom-tag-row">
+                <TextField
+                  label=""
+                  value={customTagInput}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => setCustomTagInput(e.target.value)}
+                  {...({ placeholder: "Custom model tag, e.g. llama3.2:3b" } as unknown as Record<string, unknown>)}
+                  style={{ flex: "1 1 auto", minWidth: 0 }}
+                />
+                <Button
+                  className="bonsai-pullmodels-chip bonsai-pullmodels-custom-pull-btn"
+                  disabled={!isPlausibleOllamaPullTag(customTagInput) || customPullBusy || pullBusy}
+                  onClick={(ev) => {
+                    ev.stopPropagation();
+                    ev.preventDefault();
+                    void onPullCustomTag();
+                  }}
+                  aria-label="Pull custom model tag"
+                  {...({
+                    onMoveDown: () =>
+                      filtersOpen ? openFiltersPanelEntry() : focusRowCell(0, "select") || focusFooterPull(),
+                  } as unknown as Record<string, unknown>)}
+                >
+                  {customPullBusy ? "…" : "Pull"}
+                </Button>
+                <Button
+                  ref={(el) => {
+                    customTagCloseBtnRef.current = el;
+                  }}
+                  className="bonsai-pullmodels-chip bonsai-pullmodels-custom-tag-close"
+                  onClick={(ev) => {
+                    ev.stopPropagation();
+                    setCustomTagEntryOpen(false);
+                    setCustomTagInput("");
+                    window.requestAnimationFrame(() => focusCustomTagChip());
+                  }}
+                  aria-label="Close typing a model name by hand"
+                  {...({
+                    onMoveDown: () =>
+                      filtersOpen ? openFiltersPanelEntry() : focusRowCell(0, "select") || focusFooterPull(),
+                  } as unknown as Record<string, unknown>)}
+                >
+                  ×
+                </Button>
+              </Focusable>
+            ) : (
+              <Focusable flow-children="horizontal" className="bonsai-pullmodels-filters-row">
+                <Button
+                  ref={(el) => {
+                    filtersButtonRef.current = el;
+                  }}
+                  className="bonsai-pullmodels-filters-button"
+                  onClick={(ev) => {
+                    ev.stopPropagation();
+                    if (filtersOpen) closeFiltersPanel();
+                    else openFiltersPanel();
+                  }}
+                  aria-expanded={filtersOpen}
+                  aria-label={`Filters, ${activeFilterLabels.length} on: ${activeFilterLabels.join(", ")}`}
+                  {...({
+                    onMoveDown: () =>
+                      filtersOpen ? openFiltersPanelEntry() : focusRowCell(0, "select") || focusFooterPull(),
+                  } as unknown as Record<string, unknown>)}
+                >
+                  <span className="bonsai-pullmodels-filters-button-title">
+                    Filters · {activeFilterLabels.length} on
+                  </span>
+                  <span className="bonsai-pullmodels-filters-button-summary">{activeFilterLabels.join(", ")}</span>
+                </Button>
+                <Button
+                  ref={(el) => {
+                    customTagChipRef.current = el;
+                  }}
+                  className="bonsai-pullmodels-chip bonsai-pullmodels-custom-tag-chip"
+                  onClick={(ev) => {
+                    ev.stopPropagation();
+                    setCustomTagEntryOpen(true);
+                    window.requestAnimationFrame(() => focusCustomTagClose());
+                  }}
+                  aria-label="Type a model name by hand"
+                  {...({
+                    onMoveDown: () =>
+                      filtersOpen ? openFiltersPanelEntry() : focusRowCell(0, "select") || focusFooterPull(),
+                  } as unknown as Record<string, unknown>)}
+                >
+                  Type a name
+                </Button>
+              </Focusable>
+            )}
+            {customTagEntryOpen && customTagInput.trim() && !isPlausibleOllamaPullTag(customTagInput) ? (
               <div className="bonsai-pullmodels-custom-tag-hint">
                 Use lowercase letters, digits, . _ - and an optional :tag
               </div>
             ) : null}
-          </div>
-
-          <div className="bonsai-pullmodels-filters">
-            <Button
-              ref={(el) => {
-                filtersButtonRef.current = el;
-              }}
-              className="bonsai-pullmodels-filters-button"
-              onClick={(ev) => {
-                ev.stopPropagation();
-                if (filtersOpen) closeFiltersPanel();
-                else openFiltersPanel();
-              }}
-              aria-expanded={filtersOpen}
-              aria-label={`Filters, ${activeFilterLabels.length} on: ${activeFilterLabels.join(", ")}`}
-              {...({
-                onMoveUp: () => focusCustomPullButton(),
-                onMoveDown: () =>
-                  filtersOpen ? openFiltersPanelEntry() : focusRowCell(0, "select") || focusFooterPull(),
-              } as unknown as Record<string, unknown>)}
-            >
-              <span className="bonsai-pullmodels-filters-button-title">Filters · {activeFilterLabels.length} on</span>
-              <span className="bonsai-pullmodels-filters-button-summary">{activeFilterLabels.join(", ")}</span>
-            </Button>
           </div>
 
           <div className="bonsai-pullmodels-list" aria-busy={loadingMeta}>

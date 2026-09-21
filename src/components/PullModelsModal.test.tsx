@@ -150,6 +150,12 @@ describe("isRecentPullModelTag", () => {
 describe("PullModelsModal custom tag entry", () => {
   it("renders the custom tag field and starts the Pull button disabled with nothing typed", () => {
     const { container } = renderModal();
+    // "Type a model name" is a chip on the Filters row now (plan 62, § 3e #4) -- pressing it is
+    // what reveals the field and its Pull button, rather than either being shown by default.
+    const chip = container.querySelector('[aria-label="Type a model name by hand"]') as HTMLButtonElement;
+    expect(chip).not.toBeNull();
+    fireEvent.click(chip);
+
     const field = container.querySelector('[data-decky-ui="TextField"]');
     expect(field).not.toBeNull();
     const btn = container.querySelector('[aria-label="Pull custom model tag"]') as HTMLButtonElement;

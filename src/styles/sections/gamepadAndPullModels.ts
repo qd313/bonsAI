@@ -257,11 +257,6 @@ export function buildPullModelsStylesheet(): string {
           font-size: 10px !important;
           font-weight: 700 !important;
         }
-        .bonsai-scope .bonsai-pullmodels-custom-tag {
-          display: flex;
-          flex-direction: column;
-          gap: 3px;
-        }
         .bonsai-scope .bonsai-pullmodels-custom-tag-row {
           display: flex;
           flex-direction: row;
@@ -294,11 +289,21 @@ export function buildPullModelsStylesheet(): string {
           font-size: 9px;
           color: #6b7c90;
           line-height: 1.3;
+          margin-top: 3px;
         }
         .bonsai-scope .bonsai-pullmodels-filters {
           display: flex;
           flex-direction: column;
           gap: 6px;
+        }
+        /* Filters and "Type a name" share one row (plan 62, § 3e #4 folded the typed-tag entry's
+           own permanent row into a chip here) -- same row, whichever of the two Focusables below
+           is actually showing. */
+        .bonsai-scope .bonsai-pullmodels-filters-row {
+          display: flex;
+          flex-direction: row;
+          gap: 6px;
+          width: 100%;
         }
         /* The single "Filters · N on" row that replaced the old two rows of filter/toggle chips
            (plan 62, § 3d) -- one focus stop that opens a panel of tickable rows over the list,
@@ -309,7 +314,8 @@ export function buildPullModelsStylesheet(): string {
           align-items: baseline !important;
           justify-content: flex-start !important;
           gap: 6px !important;
-          width: 100% !important;
+          flex: 1 1 auto !important;
+          min-width: 0 !important;
           min-height: 26px !important;
           padding: 4px 8px !important;
           font-size: 10px !important;
@@ -318,6 +324,11 @@ export function buildPullModelsStylesheet(): string {
           background: rgba(255,255,255,0.06) !important;
           color: #dce8f4 !important;
           text-align: left !important;
+        }
+        .bonsai-scope .bonsai-pullmodels-custom-tag-chip,
+        .bonsai-scope .bonsai-pullmodels-custom-tag-close {
+          flex-shrink: 0 !important;
+          min-height: 26px !important;
         }
         .bonsai-scope .bonsai-pullmodels-filters-button-title {
           flex-shrink: 0;

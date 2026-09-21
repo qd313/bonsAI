@@ -16,6 +16,11 @@
       "role": ""
     },
     {
+      "path": "src/components/PullModelsModal.tsx",
+      "lines": 1822,
+      "role": ""
+    },
+    {
       "path": "src/index.tsx",
       "lines": 1813,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
@@ -23,11 +28,6 @@
     {
       "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
       "lines": 1805,
-      "role": ""
-    },
-    {
-      "path": "src/components/PullModelsModal.tsx",
-      "lines": 1764,
       "role": ""
     },
     {
@@ -122,7 +122,7 @@
     },
     {
       "path": "src/styles/sections/gamepadAndPullModels.ts",
-      "lines": 712,
+      "lines": 723,
       "role": ""
     },
     {

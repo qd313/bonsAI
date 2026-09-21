@@ -347,6 +347,13 @@ starts work outside this.
   it reproduces every time, unlike this one. Now fixed and moved to Verify as **ASKBAR-DOWN-TO-STOP-01**; it
   may well be part of what has been feeding these reports. But it is not this bug — today's runs saw no dead
   Left or Right, and nothing needed a full Quick Access Menu close to clear, so this entry stays open.
+- ★★★ `[ollama]` `[focus]` **The AI models screen closes instead of doing anything — A on almost any
+  control shuts it** — **OPEN, found on the Deck 2026-09-21, blocks the whole screen.** Pressing A on the
+  Filters button closes the screen and the filters never appear; pressing A on a model's tick box closes it
+  too, so nothing can be ticked to download. The Advanced link works, and it is the only control carrying an
+  explicit gamepad handler — 13 others have none, so their press falls through to the screen's own OK, which
+  closes it. Evidence `docs/test-evidence/plan62-MODELS-FILTERS-01-A-closes-screen.json`.
+
 - ★★★ `[reply]` **A name-withheld boss question on a story-protected game comes back with no spoiler box** —
   **OPEN, found 2026-09-18.** Nothing running, no consent phrase anywhere in the chat: asked about "the boss
   past the crystal spike area … the one that looks just like me" in Hollow Knight, the reply named Broken
@@ -717,8 +724,9 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   the Suggested-models chips moved into that same panel, Advanced is now a link instead of a row of
   buttons, typing a model name by hand is one chip instead of a permanent box, the two rows of chips
   became the one Filters line, and the small refresh button in the counts line is smaller. Row
-  **MODELS-FILTERS-01**, not yet run on the Deck — deploying to the Deck is currently blocked because
-  the plugin folder there is owned by root. [Plan](planning/62-feature-session-five.md) ·
+  **MODELS-FILTERS-01**, **run on the Deck 2026-09-21 and FAILED**: A on the Filters button closes the
+  whole screen and the filters never appear, so none of the rest could be checked — filed as its own
+  three-star bug above. [Plan](planning/62-feature-session-five.md) ·
   [Board](https://claude.ai/artifact/31aLBi17SH7AydhYfGYjBq)
 
 - ★ `[ollama]` **Pulled models join the model try order** — **MOSTLY VERIFIED on the Deck 2026-09-06, one case left.**

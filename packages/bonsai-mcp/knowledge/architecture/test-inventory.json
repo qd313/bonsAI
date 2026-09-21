@@ -239,6 +239,7 @@
     "tests/test_plugin_zip_corpus_guard.py",
     "tests/test_preload_ask_model_boot.py",
     "tests/test_probe_deck_kb_retrieval.py",
+    "tests/test_prompt_budget_service.py",
     "tests/test_proton_troubleshooting_logs.py",
     "tests/test_publish_corpus_embedding_guarantee.py",
     "tests/test_pull_model_catalog_merge.py",

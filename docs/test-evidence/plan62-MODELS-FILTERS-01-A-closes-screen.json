@@ -1,0 +1,68 @@
+{
+  "what": "First controller pass over the rebuilt AI models screen",
+  "when": "2026-09-21",
+  "verdict": "FAILED - the screen cannot be operated with a controller",
+  "where": {
+    "deck": "192.168.86.52",
+    "build": "the plan 62 build, deployed by the maintainer",
+    "build_confirmed_by": "the models list rule read off the running page shows this session's fix (fill the popup body, no screen-share cap), and the Filters row, the Advanced link and the by-hand name chip are all present",
+    "screen_in_use": "external 1920x1080 monitor, reported to the page as 1500x843 at 1.28 device pixels per drawing pixel",
+    "game_running": "none - the panel read 'Context: no active game detected' and no game process was running"
+  },
+  "how_the_screen_was_opened": "Ollama tab, then the Browse models button in Where AI runs. Two presses down from the Advanced link reaches the Filters button, so the Filters button itself is reachable.",
+  "the_failure": {
+    "what_a_person_would_see": "Pressing A on the Filters button closes the whole AI models screen. The filters never appear. Pressing A on a model's tick box also closes the whole screen, so no model can be ticked to download.",
+    "reproduced": {
+      "filters_button": "twice, closed both times",
+      "model_tick_box": "once, closed",
+      "advanced_link": "twice, worked correctly both times - the screen stayed open and switched to the Advanced view"
+    },
+    "readings_after_the_press": {
+      "buttons_left_in_the_popup_window": 0,
+      "models_list_present": false,
+      "where_the_highlight_went": "back to the Browse models button in the plugin panel, which is the normal path when the screen closes"
+    },
+    "so_it_closed_cleanly_rather_than_crashed": "The highlight returning to the button that opened it is the screen's own closing behaviour, so this is a close, not a crash."
+  },
+  "cause": {
+    "mechanism": "The screen is a confirm-style dialog whose OK action closes it. A press of A that no control claims reaches that OK, so the screen closes. The React-level stopPropagation these controls already call does not stop Steam's own gamepad press, which travels a different path.",
+    "the_proof_is_the_one_control_that_works": "The Advanced link is the only control on the screen that carries an explicit gamepad OK handler calling stopPropagation, and it is the only control that behaves correctly.",
+    "controls_missing_that_handler": [
+      "Filters",
+      "Type a model name by hand",
+      "Close typing a model name by hand",
+      "Pull custom model tag",
+      "Refresh model catalog",
+      "every cell in the model table, including each row's tick box and Remove from Deck"
+    ],
+    "count_of_buttons_with_no_gamepad_ok_handler": 13,
+    "count_with_one": 1
+  },
+  "row_count_measured_anyway": {
+    "note": "The row count this row also asks for was read before the failure was found, with the maintainer's own filters as they were set.",
+    "filters_on": ["Also try open-weight models", "Essentials only"],
+    "list_box_height": 217,
+    "content_height": 217,
+    "scrolling_needed": false,
+    "model_rows_shown": 4,
+    "rows": ["gemma4:e2b-it-qat", "qwen3.5:4b", "qwen2.5vl:3b", "nomic-embed-text:latest"],
+    "row_height": 35,
+    "header_row_height": 26,
+    "what_this_means": "With Essentials only switched on, the list is short enough that nothing needs scrolling at all, so the height is not what limits the count here - the filter is. The count with the full catalogue could not be measured, because turning Essentials only off needs the Filters panel, which is what cannot be opened.",
+    "the_height_cap_is_gone": "The list rule on the running build reads 'fill the popup body' with no screen-share cap, so this session's height fix is live on the device."
+  },
+  "not_reached_because_of_the_failure": [
+    "The full-catalogue row count.",
+    "Whether the D-pad can get back out of the Filters panel.",
+    "Whether each of the six filters changes the list.",
+    "Whether the licence filter does what the three old Policy buttons did.",
+    "Whether B closes the by-hand name box or the whole screen."
+  ],
+  "deck_left_as_found": {
+    "models_installed": 2,
+    "model_names": ["nomic-embed-text:latest", "gemma4:e2b-it-qat"],
+    "nothing_pulled_or_removed": true,
+    "ask_model_untouched": "A was never pressed on the 'Use for Ask' cell - the highlight was moved past it deliberately",
+    "settings_changed": "none"
+  }
+}

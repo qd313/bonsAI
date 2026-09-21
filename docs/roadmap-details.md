@@ -360,6 +360,29 @@ What happens today, so nobody re-measures it:
 So the honest framing of this entry: the plugin has no session memory to compact yet. The first half of the work is
 giving a chat a memory worth keeping; the second is keeping it small on its own.
 
+**The first half landed 2026-09-21.** A question now carries what the chat has already covered, and how much of it is
+carried is the plugin's decision rather than whatever happens to be on disk. Measured on the Deck with the same model and
+the same chat, one difference between the two runs: asked *"and what about the boots?"*, a question naming no game at
+all, it replied **"Please tell me which game you are referring to"** without the memory and **"You should keep the Iron
+Boots off during the fight in Ocarina of Time so you can move freely and effectively use your Longshot to yank the
+nucleus out of the water"** with it.
+
+Three things that only showed up by running it rather than reading it, all now fixed and each with a test:
+
+- **Carrying the conversation was not enough on its own.** With the turns plainly listed under a heading, the model still
+  asked which game — it could see the chat and did not know it was allowed to use it. The heading is an instruction now.
+- **The question being asked was already in the chat**, written when the Ask is accepted rather than after the answer, so
+  it came back as "You asked: …" immediately before the very same question. Any trailing question is dropped.
+- **A short chat asked for less room than its own heading needed** and came back empty with the room sitting unused.
+
+What the block costs is bounded by two things, not one: the room, and **how long a person waits**. Reading the question
+is the slow part, so the memory is held to what is worth waiting for rather than to what fits. And it sits at the **end**
+of what the AI is told, behind the rules and the cards, because the server skips re-reading the front of a question that
+has not changed and this block changes every turn.
+
+Still to build: the summing-up itself, for when a chat outgrows even that; Compact replacing Clear; and the spoiler
+chance rating.
+
 **Every call is in, 2026-09-20.** In the maintainer's own order:
 
 1. **The summary goes into the next question**, so the model answers with the chat behind it — not just a panel a person

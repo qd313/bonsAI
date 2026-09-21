@@ -514,11 +514,11 @@ replace it with a specific issue when one exists.
   **Save a report** inside it, and a typed command, write a read-only report of the setup to the Desktop: the former
   **Deck health snapshot**, folded in here. [Plan](planning/39-connection-doctor.md).
 - ★★★★ `[ask]` **Session context and user stash** — **OPEN.** Live session facts plus user-editable notes for Ask. No embeddings, no cloud.
-- ★★★★ `[ask]` **The chat sums itself up instead of being cleared** — **PARTIAL: the budget half landed 2026-09-21, the
-  summary itself is not built.** A long chat is compacted into a short summary that goes into the next question, from a button
-  in the Session tab. The room a summary needs now exists — the plugin asks for 16,384 tokens instead of taking 4,096, so
-  Strategy and Expert fit with space to spare. Compacting costs a ~15s re-read on the turn it happens, so it fires at a
-  threshold, never every turn. [Detail](roadmap-details.md#the-chat-sums-itself-up-instead-of-being-cleared).
+- ★★★★ `[ask]` **The chat sums itself up instead of being cleared** — **PARTIAL: a chat remembers itself now (2026-09-21);
+  the summing-up itself is not built.** Ask a follow-up that names nothing and the answer stays on the same game and subject.
+  How much of the chat is carried is the plugin's decision, with a floor the answer cannot lose, a ceiling thinking cannot
+  cross and a limit on how long you wait. Left to do: the short summary for when a chat outgrows that, Compact replacing
+  Clear, and the spoiler chance rating. [Detail](roadmap-details.md#the-chat-sums-itself-up-instead-of-being-cleared).
 - ★★★★ `[ollama]` **LAN custom model pull** — **OPEN.** Blocked until a mechanism is chosen (R1 to R4). Depends on **Custom model in
   the Pull Models picker**.
 - ★★★★ `[perms]` **Web permission** — **OPEN, discovery locked.** Opt-in live web answers; offline Ask and local KB when off. Kids
@@ -684,6 +684,12 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   Evidence `docs/test-evidence/plan61-CLEAR-CACHE-01-midanswer-retry.json`.
   [Why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way).
 ### Features that need verification
+
+- ★★★★ `[ask]` **A chat carries what it has already covered into the next question** — **VERIFY, built 2026-09-21.**
+  Until now a chat kept 200 questions and answers on disk and almost none of it reached the AI, so a follow-up meant saying
+  everything again. Measured on the Deck: *"and what about the boots?"* got **"please tell me which game you are referring
+  to"** before, and **"keep the Iron Boots off during the fight in Ocarina of Time…"** after. Anything the AI hid behind a
+  spoiler fence is stripped before a word is carried. Row **CHAT-MEMORY-01** is the on-screen half, not yet run.
 
 - ★★★★ `[ollama]` **The plugin owns its token numbers** — **VERIFY, built 2026-09-21.** It asks the AI server for room for
   16,384 tokens instead of accepting its default 4,096, works out question sizes from real counts instead of dividing

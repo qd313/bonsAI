@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 417,
-  "edgeCount": 1072,
+  "fileCount": 418,
+  "edgeCount": 1074,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2722,7 +2722,8 @@
       "importedBy": [
         "src/components/BonsaiModalScope.tsx",
         "src/components/BonsaiPluginShell.tsx",
-        "src/features/plugin-shell/TabIndicatorBar.test.tsx"
+        "src/features/plugin-shell/TabIndicatorBar.test.tsx",
+        "src/styles/sections/gamepadAndPullModels.test.ts"
       ]
     },
     "src/styles/presetChipFocusRing.test.ts": {
@@ -2738,13 +2739,21 @@
         "src/styles/sections/gamepadAndPullModels.ts"
       ]
     },
+    "src/styles/sections/gamepadAndPullModels.test.ts": {
+      "imports": [
+        "src/styles/bonsaiScopeStylesheet.ts",
+        "src/styles/sections/gamepadAndPullModels.ts"
+      ],
+      "importedBy": []
+    },
     "src/styles/sections/gamepadAndPullModels.ts": {
       "imports": [
         "src/styles/sections/chatSlotModal.ts"
       ],
       "importedBy": [
         "src/styles/bonsaiScopeStylesheet.ts",
-        "src/styles/presetChipFocusRing.test.ts"
+        "src/styles/presetChipFocusRing.test.ts",
+        "src/styles/sections/gamepadAndPullModels.test.ts"
       ]
     },
     "src/styles/sections/scopeBase.ts": {

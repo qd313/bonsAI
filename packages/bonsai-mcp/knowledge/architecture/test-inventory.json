@@ -105,6 +105,7 @@
     "src/index.test.tsx",
     "src/preview/replyLayoutReport.test.ts",
     "src/styles/presetChipFocusRing.test.ts",
+    "src/styles/sections/gamepadAndPullModels.test.ts",
     "src/styles/sections/section-4.test.ts",
     "src/styles/sections/section-6.test.ts",
     "src/test-harness/fakeDeckyRpc.test.ts",

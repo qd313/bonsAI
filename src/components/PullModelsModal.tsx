@@ -675,12 +675,25 @@ export function PullModelsModal(props: PullModelsModalProps) {
 
   const focusFiltersButton = useCallback((): boolean => focusAndReveal(filtersButtonRef.current), []);
 
-  const focusFilterPanelRow = useCallback((index: number): boolean => {
-    const list = filterPanelRowRefs.current;
-    if (!list.length) return false;
-    const i = Math.max(0, Math.min(index, list.length - 1));
-    return focusAndReveal(list[i]);
-  }, []);
+  /*
+   * Put the ring on one entry of a list of refs, clamping the index into range rather than failing
+   * on an off-by-one. Shared by the filter rows and the suggestion chips: both walk a ref list by
+   * index, and writing it twice was one of the copy-pasted blocks found on 2026-09-20.
+   */
+  const focusRefInList = useCallback(
+    (list: readonly (HTMLElement | null)[], index: number): boolean => {
+      const present = list.filter(Boolean) as HTMLElement[];
+      if (!present.length) return false;
+      const i = Math.max(0, Math.min(index, present.length - 1));
+      return focusAndReveal(present[i]);
+    },
+    []
+  );
+
+  const focusFilterPanelRow = useCallback(
+    (index: number): boolean => focusRefInList(filterPanelRowRefs.current, index),
+    [focusRefInList]
+  );
 
   const focusFilterPanelClose = useCallback(
     (): boolean => focusAndReveal(filterPanelCloseBtnRef.current),
@@ -720,12 +733,10 @@ export function PullModelsModal(props: PullModelsModalProps) {
     return null;
   }, []);
 
-  const focusRecommendChip = useCallback((index: number): boolean => {
-    const list = recommendChipRefs.current.filter(Boolean) as HTMLElement[];
-    if (!list.length) return false;
-    const i = Math.max(0, Math.min(index, list.length - 1));
-    return focusAndReveal(list[i]);
-  }, []);
+  const focusRecommendChip = useCallback(
+    (index: number): boolean => focusRefInList(recommendChipRefs.current, index),
+    [focusRefInList]
+  );
 
   const focusCustomTagChip = useCallback((): boolean => focusAndReveal(customTagChipRef.current), []);
 
@@ -848,6 +859,18 @@ export function PullModelsModal(props: PullModelsModalProps) {
     scheduleFocusFrame(() => focusFiltersButton());
     return true;
   }
+
+  /*
+   * B anywhere inside the Filters panel closes the panel, and stops there rather than letting Steam
+   * also back out of the whole models screen underneath it. Every control in the panel wants the
+   * identical handler, so it is written once: three verbatim copies of it is what pushed this repo's
+   * copy-pasted-lines count up by eight on 2026-09-20.
+   */
+  const cancelClosesFiltersPanel = (e: unknown): boolean => {
+    closeFiltersPanel();
+    (e as { preventDefault?: () => void })?.preventDefault?.();
+    return true;
+  };
 
   const completeNestedModalClose = useCallback(
     (close: () => void) => {
@@ -1556,11 +1579,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
       onMoveDown: () => focusFilterPanelRowSkipping(i + 1, 1) || focusFilterPanelClose(),
       onMoveLeft: () => true,
       onMoveRight: () => true,
-      onCancelButton: (e: unknown) => {
-        closeFiltersPanel();
-        (e as { preventDefault?: () => void })?.preventDefault?.();
-        return true;
-      },
+      onCancelButton: cancelClosesFiltersPanel,
     };
   }
 
@@ -1716,11 +1735,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                             {...({
                               onMoveUp: () => (isFirst ? closeFiltersPanel() : focusRecommendChip(chipIndex - 1)),
                               onMoveDown: () => (isLast ? focusFilterPanelRow(0) : focusRecommendChip(chipIndex + 1)),
-                              onCancelButton: (e: unknown) => {
-                                closeFiltersPanel();
-                                (e as { preventDefault?: () => void })?.preventDefault?.();
-                                return true;
-                              },
+                              onCancelButton: cancelClosesFiltersPanel,
                             } as unknown as Record<string, unknown>)}
                           >
                             {entry.tag}
@@ -1787,11 +1802,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                     onMoveDown: () => true,
                     onMoveLeft: () => true,
                     onMoveRight: () => true,
-                    onCancelButton: (e: unknown) => {
-                      closeFiltersPanel();
-                      (e as { preventDefault?: () => void })?.preventDefault?.();
-                      return true;
-                    },
+                    onCancelButton: cancelClosesFiltersPanel,
                   } as unknown as Record<string, unknown>)}
                 >
                   Close filters

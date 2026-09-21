@@ -653,6 +653,25 @@ class OllamaServiceTests(unittest.TestCase):
         )
 
     @staticmethod
+    def _json_response(payload: dict):
+        """Fake urlopen response for the plain GET endpoints (/api/ps, /api/tags)."""
+
+        class _Rsp:
+            def read(self, *_a):
+                return json.dumps(payload).encode("utf-8")
+
+            def close(self) -> None:
+                pass
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_):
+                pass
+
+        return _Rsp()
+
+    @staticmethod
     def _ndjson_response(lines: list[str]):
         """Fake urlopen response replaying NDJSON through the same chunked read the real one uses."""
         body = ("\n".join(lines) + "\n").encode("utf-8")
@@ -1525,6 +1544,133 @@ class OllamaServiceTests(unittest.TestCase):
         )
         self.assertIn("REPLY VERBOSITY", prompt)
         self.assertNotIn("bonsai-cite", prompt)
+
+    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    def test_choose_window_asks_the_server_for_room_instead_of_taking_its_default(
+        self, mock_urlopen: MagicMock
+    ) -> None:
+        """The Deck's server loads the model with 4,096 while the model itself holds 131,072.
+        With ``choose_window`` on, the plugin says how much room it needs on the wire.
+
+        Measured 2026-09-20: four times the room costs 0.6 GB of memory, nothing in answer speed
+        (21.7 tokens a second at every size, with a game running) and nothing in frame rate.
+        """
+        from backend.services.token_accounting_service import (
+            PREFERRED_WINDOW_TOKENS,
+            reset_token_accounting,
+        )
+
+        reset_token_accounting()
+        self.addCleanup(reset_token_accounting)
+
+        def _route(req, *_a, **_k):
+            url = req.full_url if hasattr(req, "full_url") else str(req)
+            if url.endswith("/api/ps"):
+                return self._json_response({"models": [{"name": "m:test", "context_length": 4096}]})
+            if url.endswith("/api/tags"):
+                return self._json_response(
+                    {"models": [{"name": "m:test", "details": {"context_length": 131072}}]}
+                )
+            return self._ndjson_response(
+                ['{"message":{"role":"assistant","content":"ok"},"done":true,"done_reason":"stop"}']
+            )
+
+        mock_urlopen.side_effect = _route
+        post_ollama_chat(
+            "http://127.0.0.1:11434/api/chat",
+            "m:test",
+            [{"role": "user", "content": "short question"}],
+            60,
+            [],
+            [],
+            [],
+            [],
+            MagicMock(),
+            "speed",
+            "5m",
+            cancel_requested=lambda: False,
+            choose_window=True,
+        )
+        chat_bodies = [
+            json.loads(c[0][0].data.decode("utf-8"))
+            for c in mock_urlopen.call_args_list
+            if getattr(c[0][0], "data", None)
+        ]
+        self.assertEqual(len(chat_bodies), 1)
+        self.assertEqual(chat_bodies[0]["options"]["num_ctx"], PREFERRED_WINDOW_TOKENS)
+
+    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    def test_without_choose_window_no_size_is_sent_at_all(self, mock_urlopen: MagicMock) -> None:
+        """Saying nothing leaves the server doing exactly what it would have done. Sending a
+        size at a server we have not looked at could reload its model for no reason."""
+        mock_urlopen.return_value = self._ndjson_response(
+            ['{"message":{"role":"assistant","content":"ok"},"done":true,"done_reason":"stop"}']
+        )
+        post_ollama_chat(
+            "http://127.0.0.1:11434/api/chat",
+            "m:test",
+            [{"role": "user", "content": "short question"}],
+            60,
+            [],
+            [],
+            [],
+            [],
+            MagicMock(),
+            "speed",
+            "5m",
+            cancel_requested=lambda: False,
+        )
+        body = json.loads(mock_urlopen.call_args[0][0].data.decode("utf-8"))
+        self.assertNotIn("num_ctx", body["options"])
+
+    @patch("backend.services.ollama_service.urllib.request.urlopen")
+    def test_a_soft_continue_asks_for_the_very_same_room(self, mock_urlopen: MagicMock) -> None:
+        """A DIFFERENT size makes the server reload the model -- measured 5.7 to 8.1 seconds idle
+        and 10 to 16 with a game running. A soft continue is a second request inside one answer,
+        so if it varied the size the person would wait through a reload mid-reply."""
+        from backend.services.token_accounting_service import reset_token_accounting
+
+        reset_token_accounting()
+        self.addCleanup(reset_token_accounting)
+        replies = [
+            ['{"message":{"role":"assistant","content":"part one"},"done":true,"done_reason":"length"}'],
+            ['{"message":{"role":"assistant","content":" part two"},"done":true,"done_reason":"stop"}'],
+        ]
+
+        def _route(req, *_a, **_k):
+            url = req.full_url if hasattr(req, "full_url") else str(req)
+            if url.endswith("/api/ps"):
+                return self._json_response({"models": [{"name": "m:test", "context_length": 4096}]})
+            if url.endswith("/api/tags"):
+                return self._json_response(
+                    {"models": [{"name": "m:test", "details": {"context_length": 131072}}]}
+                )
+            return self._ndjson_response(replies.pop(0) if replies else replies_last)
+
+        replies_last = ['{"message":{"role":"assistant","content":""},"done":true,"done_reason":"stop"}']
+        mock_urlopen.side_effect = _route
+        post_ollama_chat(
+            "http://127.0.0.1:11434/api/chat",
+            "m:test",
+            [{"role": "user", "content": "a question"}],
+            60,
+            [],
+            [],
+            [],
+            [],
+            MagicMock(),
+            "speed",
+            "5m",
+            cancel_requested=lambda: False,
+            choose_window=True,
+        )
+        sizes = [
+            json.loads(c[0][0].data.decode("utf-8"))["options"].get("num_ctx")
+            for c in mock_urlopen.call_args_list
+            if getattr(c[0][0], "data", None)
+        ]
+        self.assertGreaterEqual(len(sizes), 2)
+        self.assertEqual(len(set(sizes)), 1, f"the size changed between requests: {sizes}")
 
     def test_prompt_window_warning_fires_only_when_prompt_plus_reply_would_not_fit(self):
         """D46: the Deck runs a 4,096-token window and nothing sets num_ctx; an overlong prompt

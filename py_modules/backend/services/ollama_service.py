@@ -136,9 +136,11 @@ from backend.services.strategy_guide_parse import (
 )
 from backend.services.token_accounting_service import (
     FALLBACK_WINDOW_TOKENS,
+    choose_window_tokens,
     estimate_tokens_from_chars,
     known_window_tokens,
     note_real_counts,
+    note_window_granted,
     resolve_window_tokens,
     tokens_that_survive_overflow,
 )
@@ -837,6 +839,7 @@ def _stream_ollama_chat_once(
     *,
     raw_prefix: str = "",
     emit_done_delta: bool = True,
+    requested_window_tokens: int = 0,
     reasoning_prefix: str = "",
     reasoning_first_ts: Optional[float] = None,
     reasoning_frozen_seconds: Optional[float] = None,
@@ -873,9 +876,13 @@ def _stream_ollama_chat_once(
     ollama_base = ollama_base_from_chat_url(url)
     visible_num_predict = int(budgets.get("visible_num_predict") or num_predict)
     thinking_budget = int(budgets.get("thinking_budget") or 0)
-    window_tokens = known_window_tokens(ollama_base, model_name)
-    if estimate_prompt_tokens(messages, model_name) + num_predict > window_tokens:
-        window_tokens = resolve_window_tokens(ollama_base, model_name, logger=logger)
+    if requested_window_tokens > 0:
+        # The plugin chose this size for the session, so it is also what the budget works to.
+        window_tokens = requested_window_tokens
+    else:
+        window_tokens = known_window_tokens(ollama_base, model_name)
+        if estimate_prompt_tokens(messages, model_name) + num_predict > window_tokens:
+            window_tokens = resolve_window_tokens(ollama_base, model_name, logger=logger)
     # D46 follow-up: shrink the visible half of num_predict, never the thinking half, so a
     # prompt that would otherwise overflow the window sends a shorter reply instead of losing
     # its own start on the wire. A prompt that already fits gets num_predict back unchanged.
@@ -913,6 +920,13 @@ def _stream_ollama_chat_once(
             "temperature": 0.42 if ask_mode == "strategy" else 0.4,
         },
     }
+    if requested_window_tokens > 0:
+        # Say how much room this needs rather than accepting the server's default, which on the
+        # Deck is 4,096 against a model that can hold 131,072. The same number is sent on every
+        # request of the session on purpose: a DIFFERENT number makes the server reload the model,
+        # measured at 5.7 to 8.1 seconds idle and 10 to 16 with a game running, while repeating the
+        # same one costs nothing (measured 0.0 seconds, three times over).
+        body_dict["options"]["num_ctx"] = requested_window_tokens
     payload = json.dumps(body_dict).encode("utf-8")
     window_warning = prompt_window_warning(
         messages, num_predict, window_tokens=window_tokens, model_name=model_name
@@ -1244,6 +1258,7 @@ def post_ollama_chat(
     on_delta: Optional[Callable[..., None]] = None,
     *,
     think_effort: str = "off",
+    choose_window: bool = False,
 ) -> dict:
     """Execute an Ollama chat attempt with soft continue on ``done_reason=length``.
 
@@ -1259,6 +1274,20 @@ def post_ollama_chat(
     # this, every Ask on that model would burn a failed round trip re-learning the same fact.
     if not model_supports_thinking(model_name):
         think_effort = "off"
+    # How much room to ask for is a decision about the whole session, not about this question, so
+    # it is made here rather than inside the streaming call, and made once. ``choose_window`` is
+    # off unless a caller asks for it, which keeps the decision out of every test that only wants
+    # to exercise the streaming path. See choose_window_tokens for the three rules it follows.
+    requested_window_tokens = 0
+    if choose_window:
+        requested_window_tokens = choose_window_tokens(
+            ollama_base_from_chat_url(url), model_name, logger=logger
+        )
+        if requested_window_tokens > 0:
+            # What the server reports having loaded is exactly what was asked for -- measured on
+            # the Deck 2026-09-20, including when memory was short enough that part of the model
+            # spilled out of graphics memory. So this is a record of what happened, not a hope.
+            note_window_granted(ollama_base_from_chat_url(url), model_name, requested_window_tokens)
     budgets = resolve_ask_token_budgets(ask_mode, think_effort=think_effort)
     mode = str(budgets.get("ask_mode") or "speed")
     max_continues = int(budgets.get("max_continues") or 0)
@@ -1319,6 +1348,7 @@ def post_ollama_chat(
             on_delta,
             raw_prefix=raw_prefix,
             emit_done_delta=False,
+            requested_window_tokens=requested_window_tokens,
             reasoning_prefix=reasoning_buffer_raw,
             reasoning_first_ts=reasoning_first_ts,
             reasoning_frozen_seconds=reasoning_frozen_seconds,

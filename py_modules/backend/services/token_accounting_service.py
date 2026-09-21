@@ -51,6 +51,20 @@ from typing import Any, Optional
 # length, being wrong high loses half the question (see below).
 FALLBACK_WINDOW_TOKENS = 4096
 
+# How much room to ask the server for. Measured on the Deck 2026-09-20 and chosen by the
+# maintainer the same day: the model itself can hold 131,072, and asking for four times the
+# default costs 0.6 GB of memory and NOTHING else. Against a fixed graphics load the model parked
+# at 4,096 and at 16,384 scored 17,897 and 17,859 -- the same number twice -- and answers came out
+# at the same 21.7 tokens a second at every size with a game running.
+PREFERRED_WINDOW_TOKENS = 16384
+
+# Changing the size makes the server reload the model: measured 5.7 to 8.1 seconds on an idle
+# Deck, and 10 to 16 with a game running. Asking for the SAME size again costs nothing at all
+# (0.0 seconds, three times in a row). So the size is chosen once per model per plugin session and
+# never varies -- not per question, not per Ask mode, not per chat. Anything that varies it hands
+# every affected question a model reload.
+WINDOW_RELOAD_SECONDS_IDLE = 6
+
 # Measured on the Deck 2026-09-20. A question that does not fit is not trimmed to the edge of
 # the room: the server throws away everything but about HALF the room and answers from that.
 # Sending 4,220 tokens into a 4,096-token room delivered 2,051 of them; sending 19,620 into the
@@ -92,12 +106,14 @@ MIN_SAMPLE_TOKENS = 200
 # Tests MUST call reset_token_accounting() in setUp rather than depend on execution order.
 _WINDOW_BY_HOST_AND_MODEL: dict[tuple[str, str], int] = {}
 _CHAR_SAMPLES_BY_MODEL: dict[str, list[float]] = {}
+_ASKED_FOR_BY_HOST_AND_MODEL: dict[tuple[str, str], int] = {}
 
 
 def reset_token_accounting() -> None:
     """Test-only: forget every learned window and every learned character count."""
     _WINDOW_BY_HOST_AND_MODEL.clear()
     _CHAR_SAMPLES_BY_MODEL.clear()
+    _ASKED_FOR_BY_HOST_AND_MODEL.clear()
 
 
 def _read_loaded_windows(base_http: str, timeout_seconds: float = 4.0) -> dict[str, int]:
@@ -125,6 +141,20 @@ def _read_loaded_windows(base_http: str, timeout_seconds: float = 4.0) -> dict[s
         if name and isinstance(window, int) and window > 0:
             found[name] = window
     return found
+
+
+def window_is_known(base_http: str, model_name: str) -> bool:
+    """True only when a real answer has been read back from the server for this model.
+
+    The difference matters. ``known_window_tokens`` returns 4,096 both when the server really said
+    4,096 and when nothing is loaded and nothing could be asked, and those are not the same fact.
+    Treating the second as the first made a log line claim a model was "loaded with 4096" when
+    nothing was loaded at all, and would let the never-lower rule below fire on a number nobody
+    ever reported.
+    """
+    host = str(base_http or "").strip().rstrip("/")
+    model = str(model_name or "").strip()
+    return (host, model) in _WINDOW_BY_HOST_AND_MODEL
 
 
 def known_window_tokens(base_http: str, model_name: str) -> int:
@@ -182,6 +212,103 @@ def resolve_window_tokens(
             FALLBACK_WINDOW_TOKENS,
         )
     return int(window)
+
+
+def _read_model_limits(base_http: str, timeout_seconds: float = 4.0) -> dict[str, int]:
+    """Map model name to the most room that model can hold at all, from ``GET {base}/api/tags``.
+
+    This is the model's own ceiling, not what it is loaded with. Asking for more than a model can
+    hold is at best wasted memory, so the request is capped by it. Empty on any failure.
+    """
+    base = str(base_http or "").rstrip("/")
+    try:
+        req = urllib.request.Request(base + "/api/tags", method="GET")
+        with urllib.request.urlopen(req, timeout=timeout_seconds) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+    except Exception:
+        return {}
+    models = data.get("models") if isinstance(data, dict) else None
+    if not isinstance(models, list):
+        return {}
+    found: dict[str, int] = {}
+    for entry in models:
+        if not isinstance(entry, dict):
+            continue
+        name = str(entry.get("name") or entry.get("model") or "").strip()
+        details = entry.get("details") if isinstance(entry.get("details"), dict) else {}
+        ceiling = details.get("context_length")
+        if name and isinstance(ceiling, int) and ceiling > 0:
+            found[name] = ceiling
+    return found
+
+
+def choose_window_tokens(
+    base_http: str,
+    model_name: str,
+    *,
+    logger: Any = None,
+    timeout_seconds: float = 4.0,
+) -> int:
+    """How much room to ASK the server for, decided once per server and model per session.
+
+    The plugin picks the size rather than accepting whatever the server defaults to, because that
+    default is 4,096 on the Deck and the model can hold 131,072. Three rules, all from measurement:
+
+    * **Never lower than what it is already loaded with.** Someone whose server was set up to hold
+      more should not be cut down to suit the Deck.
+    * **Never more than the model itself can hold.**
+    * **Never changed once chosen.** Changing it reloads the model -- see
+      ``WINDOW_RELOAD_SECONDS_IDLE``.
+
+    Returns 0 when nothing is known and nothing can be asked, which means "say nothing and let the
+    server do what it would have done anyway".
+    """
+    host = str(base_http or "").strip().rstrip("/")
+    model = str(model_name or "").strip()
+    if not host or not model:
+        return 0
+    already = _ASKED_FOR_BY_HOST_AND_MODEL.get((host, model))
+    if already:
+        return already
+
+    resolve_window_tokens(host, model, timeout_seconds=timeout_seconds)
+    # Only a real reading counts here. A model that is not loaded yet reports nothing, and the
+    # fallback must not be mistaken for the server having said 4,096.
+    loaded_now = known_window_tokens(host, model) if window_is_known(host, model) else 0
+    ceilings = _read_model_limits(host, timeout_seconds)
+    ceiling = ceilings.get(model)
+    if not ceiling:
+        wanted_tag = model.split(":")[0]
+        for name, value in ceilings.items():
+            if name.split(":")[0] == wanted_tag:
+                ceiling = value
+                break
+
+    target = PREFERRED_WINDOW_TOKENS
+    if ceiling:
+        target = min(target, int(ceiling))
+    # Never take room away from a server that already gives more than this plugin would ask for.
+    target = max(target, int(loaded_now or 0))
+
+    _ASKED_FOR_BY_HOST_AND_MODEL[(host, model)] = target
+    if logger is not None:
+        logger.info(
+            "token_accounting: asking %s for room for %d tokens (%s, it can hold %s). Chosen once "
+            "for this session -- changing it would reload the model.",
+            model,
+            target,
+            f"it is loaded with {loaded_now}" if loaded_now else "it is not loaded yet",
+            ceiling or "an unknown amount",
+        )
+    return target
+
+
+def note_window_granted(base_http: str, model_name: str, window_tokens: int) -> None:
+    """Record what the server actually loaded the model with, which may not be what was asked."""
+    host = str(base_http or "").strip().rstrip("/")
+    model = str(model_name or "").strip()
+    if host and model and int(window_tokens or 0) > 0:
+        _WINDOW_BY_HOST_AND_MODEL[(host, model)] = int(window_tokens)
 
 
 def note_real_counts(

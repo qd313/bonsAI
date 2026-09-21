@@ -400,6 +400,10 @@ async def run_ask_ollama(
                         on_http_response_done=_on_http_response_done,
                         on_delta=on_delta_cb,
                         think_effort=str(settings.get("ask_think_effort") or "off"),
+                        # Let the plugin decide how much room the model gets, instead of taking
+                        # the server's default -- 4,096 on the Deck, against a model that can hold
+                        # 131,072. Decided once per model per session inside post_ollama_chat.
+                        choose_window=True,
                     ),
                 )
             finally:

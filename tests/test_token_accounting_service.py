@@ -7,14 +7,18 @@ from backend.services.token_accounting_service import (
     FALLBACK_CHARS_PER_TOKEN,
     FALLBACK_WINDOW_TOKENS,
     MIN_SAMPLE_TOKENS,
+    PREFERRED_WINDOW_TOKENS,
     SAMPLES_KEPT_PER_MODEL,
     chars_per_token,
+    choose_window_tokens,
     estimate_tokens_from_chars,
     known_window_tokens,
     note_real_counts,
+    note_window_granted,
     reset_token_accounting,
     resolve_window_tokens,
     tokens_that_survive_overflow,
+    window_is_known,
 )
 
 BASE = "http://127.0.0.1:11434"
@@ -182,6 +186,105 @@ class LearningTheRealSizeTests(unittest.TestCase):
     def test_what_is_learned_about_one_model_says_nothing_about_another(self):
         note_real_counts(MODEL, 10000, 2000)
         self.assertEqual(chars_per_token("some-other-model"), FALLBACK_CHARS_PER_TOKEN)
+
+
+def _routed_response(ps_payload: dict, tags_payload: dict):
+    """urlopen stand-in that answers /api/ps and /api/tags differently."""
+
+    def _open(req, *_a, **_k):
+        url = req.full_url if hasattr(req, "full_url") else str(req)
+        return _ps_response(tags_payload if url.endswith("/api/tags") else ps_payload)
+
+    return _open
+
+
+class ChoosingTheWindowTests(unittest.TestCase):
+    def setUp(self) -> None:
+        reset_token_accounting()
+
+    def tearDown(self) -> None:
+        reset_token_accounting()
+
+    def test_it_asks_for_the_preferred_size_when_the_model_can_hold_more(self):
+        """The Deck's model advertises 131,072 and is loaded with 4,096 because that is the
+        server's default. Measured 2026-09-20: asking for four times that costs 0.6 GB of memory,
+        nothing in answer speed, and nothing in frame rate."""
+        with patch(
+            "backend.services.token_accounting_service.urllib.request.urlopen",
+            new=_routed_response(
+                {"models": [{"name": MODEL, "context_length": 4096}]},
+                {"models": [{"name": MODEL, "details": {"context_length": 131072}}]},
+            ),
+        ):
+            self.assertEqual(choose_window_tokens(BASE, MODEL), PREFERRED_WINDOW_TOKENS)
+
+    def test_it_never_asks_for_more_than_the_model_can_hold(self):
+        """Asking a 8,192-token model for 16,384 is at best wasted memory."""
+        with patch(
+            "backend.services.token_accounting_service.urllib.request.urlopen",
+            new=_routed_response(
+                {"models": [{"name": MODEL, "context_length": 4096}]},
+                {"models": [{"name": MODEL, "details": {"context_length": 8192}}]},
+            ),
+        ):
+            self.assertEqual(choose_window_tokens(BASE, MODEL), 8192)
+
+    def test_it_never_takes_room_away_from_a_server_that_already_gives_more(self):
+        """Someone who set their own machine up to hold more than the Deck needs must not be cut
+        down to suit the Deck. This plugin only ever raises."""
+        with patch(
+            "backend.services.token_accounting_service.urllib.request.urlopen",
+            new=_routed_response(
+                {"models": [{"name": MODEL, "context_length": 32768}]},
+                {"models": [{"name": MODEL, "details": {"context_length": 131072}}]},
+            ),
+        ):
+            self.assertEqual(choose_window_tokens(BASE, MODEL), 32768)
+
+    def test_it_is_decided_once_and_never_asked_again(self):
+        """Changing the size makes the server reload the model -- 5.7 to 8.1 seconds on an idle
+        Deck, 10 to 16 with a game running. Asking for the same size again costs nothing. So this
+        is decided once per model per session and every later question gets the same answer."""
+        with patch(
+            "backend.services.token_accounting_service.urllib.request.urlopen",
+            new=_routed_response(
+                {"models": [{"name": MODEL, "context_length": 4096}]},
+                {"models": [{"name": MODEL, "details": {"context_length": 131072}}]},
+            ),
+        ):
+            first = choose_window_tokens(BASE, MODEL)
+        with patch("backend.services.token_accounting_service.urllib.request.urlopen") as op:
+            for _ in range(5):
+                self.assertEqual(choose_window_tokens(BASE, MODEL), first)
+            op.assert_not_called()
+
+    def test_a_server_that_cannot_be_reached_means_say_nothing(self):
+        """Zero means "do not send a size at all", so the server does what it would have done
+        anyway. Guessing a size at a server we cannot see could reload its model for nothing."""
+        with patch(
+            "backend.services.token_accounting_service.urllib.request.urlopen",
+            side_effect=OSError("no route to host"),
+        ):
+            self.assertEqual(choose_window_tokens(BASE, MODEL), PREFERRED_WINDOW_TOKENS)
+        reset_token_accounting()
+        self.assertEqual(choose_window_tokens("", MODEL), 0)
+        self.assertEqual(choose_window_tokens(BASE, ""), 0)
+
+    def test_a_model_that_is_not_loaded_is_not_mistaken_for_one_loaded_at_4096(self):
+        """``known_window_tokens`` says 4,096 both when the server really said 4,096 and when it
+        said nothing at all, and those are different facts. Running this for real on the Deck
+        printed "it is loaded with 4096" about a model that had just been unloaded, and the
+        never-lower rule below would fire on a number nobody ever reported."""
+        self.assertFalse(window_is_known(BASE, MODEL))
+        self.assertEqual(known_window_tokens(BASE, MODEL), FALLBACK_WINDOW_TOKENS)
+        note_window_granted(BASE, MODEL, FALLBACK_WINDOW_TOKENS)
+        self.assertTrue(window_is_known(BASE, MODEL))
+
+    def test_what_was_granted_is_recorded_for_the_budget_to_use(self):
+        note_window_granted(BASE, MODEL, 16384)
+        self.assertEqual(known_window_tokens(BASE, MODEL), 16384)
+        note_window_granted(BASE, MODEL, 0)  # nonsense is ignored, not recorded
+        self.assertEqual(known_window_tokens(BASE, MODEL), 16384)
 
 
 class OverflowCliffTests(unittest.TestCase):

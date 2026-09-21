@@ -442,11 +442,11 @@ replace it with a specific issue when one exists.
   give-up values per Ask mode. It was the sixth candidate in round 36 and was dropped on purpose, said in advance rather than
   discovered late: it is the largest of that set — the two existing values already run through sixteen files each and going per mode
   triples them — and the least of them for a person, since it changes when a warning appears rather than what the plugin can do.
-- ★★★ `[ollama]` **Room reserved for bonsAI, so a game cannot squeeze it out** — **OPEN, asked for 2026-09-20 off the back of
-  the token measurements.** With God of War running, the Deck had 206 MB free before the AI model loaded at all. It did still
-  load at every window size tried, and the window size cost nothing in frame rate — but that is the edge, and a heavier game or
-  a bigger model would meet it. Should bonsAI hold room in advance, or notice it is about to lose and say so plainly instead of
-  failing? The numbers are in the compact-a-chat note. Pairs with **Dynamic keep-alive / smart unload** above.
+- ★★★ `[ollama]` **What bonsAI costs a running game** — **OPEN, asked for 2026-09-20 and measured the same day.** Writing an
+  answer takes about a third of the frame rate: God of War ran 31 frames a second on its own, 20 while an answer was written,
+  and 31 again afterwards. It goes both ways — the answer itself drops to about a third of its usual speed. Memory is the other
+  half: with that game running the Deck had 206 MB spare before the model loaded. **Giving the model more room costs nothing in
+  frames**, so the real questions are what to reserve and whether to say plainly what a question costs. Pairs with keep-alive.
 - ★★★ `[platform]` **Trim the five documents that are still big** — **PARTIAL: one of five done 2026-09-15.**
   Nothing a person using the plugin would notice; this is about what every piece of work costs before it starts. Five files
   carry a trim task at the top of each, with its own star rating, time and model. **This file is done (2026-09-14 and 15) — 100 KB to 83 KB,

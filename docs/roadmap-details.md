@@ -390,6 +390,19 @@ allowed to make the Deck worse.
   it still loaded at every size — but that is the edge, and it is why more room is a decision to
   take on purpose rather than a default to change quietly. **Still to decide.**
 
+- **What more room costs a running game: nothing.** Measured two ways on 2026-09-20, because the
+  maintainer asked for the worst case rather than a guess. Against a fixed graphics load, the model
+  parked at 4,096 and at 16,384 scored 17,897 and 17,859 — the same number twice. So the size of the
+  room is free in frames, and only costs memory. **What is not free is answering at all.** God of War
+  ran **31** frames a second on its own, **20** while an answer was being written, and **31** again
+  once it finished: about a third of the frame rate, gone for exactly as long as the answer takes, and
+  fully returned afterwards. It runs both ways — the answer itself slowed from about 33 words-worth of
+  text a second on an idle Deck to 12.5 with the game running. None of this is new, and none of it is
+  caused by this feature; it is what asking costs today. It has its own roadmap entry now.
+  Two honest limits on the frame numbers: they were read off the game's own on-screen counter at its
+  menu rather than in play, and taking a screenshot itself loads the Deck — four in a row dragged the
+  reading down on their own, so every number quoted here came from a single isolated capture.
+
 - **What happens when a chat gets enormous: worse than losing the start. It falls off a cliff.**
   Going over does not trim to the edge. Sending 4,220 tokens into a 4,096-token space delivered
   2,051 of them. Sending 19,620 into the same space also delivered 2,051. One token too many

@@ -250,11 +250,15 @@ export function buildPullModelsStylesheet(): string {
           align-items: center;
           gap: 6px;
         }
+        /* The counts line's own height came from this button, not its text (plan 62, § 3e #6) --
+           the header row's 11px/1.35 text sits in about a 15px line box, and this button's old
+           24px min-height forced the whole row taller than the words in it ever needed. Shrunk
+           to match the text's own line box instead of an arbitrary icon-button size. */
         .bonsai-scope .bonsai-pullmodels-refresh-btn {
-          min-width: 28px !important;
-          min-height: 24px !important;
-          padding: 2px 6px !important;
-          font-size: 10px !important;
+          min-width: 20px !important;
+          min-height: 15px !important;
+          padding: 0 4px !important;
+          font-size: 9px !important;
           font-weight: 700 !important;
         }
         .bonsai-scope .bonsai-pullmodels-custom-tag-row {

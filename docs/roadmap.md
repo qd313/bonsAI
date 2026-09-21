@@ -286,6 +286,17 @@ starts work outside this.
   the ring to whichever opener was remembered last; (b) the last frame of the maintainer's recording shows the
   Pull selected button lit, at the popup's bottom edge, so a tap meant for outside may have landed on it and
   started the queued download. Needs a device reproduction with an empty queue, so nothing downloads.
+- ★★ `[ollama]` **The licence filter now hides models the old Policy buttons never did — needs the
+  maintainer's word** — **OPEN, found 2026-09-20, waiting on the maintainer to confirm this is what they
+  wanted.** On the default "open source only" choice, the AI models list now shows 17 of 26 models; 7
+  open-weight and 2 unknown-licence models are not shown at all until the filter is changed. Before this
+  landed, all 26 were always listed, and picking an open-weight one raised a box explaining its licence
+  that you could then accept — that box still works once the filter is relaxed. The brief for this change
+  did say the licence choice becomes one filter among filters, and that is the point of the change, so a
+  filter that filters is a fair reading of what was asked for, and it sits with the project's own leanings
+  toward open source. But a third of the catalogue changing what is visible, on the default setting, is
+  not a small detail, so this needs the maintainer's own word before it counts as settled.
+  [Plan](planning/62-feature-session-five.md)
 - ★★ `[platform]` `[QA]` **The check everyone runs before a commit has been failing on a clean tree since at
   least 18 September** — **OPEN, found 2026-09-20.** Nothing a person using the plugin would notice. Seven
   measured things sit worse than their best and three are past a hard limit: the roadmap is 121 KB against a
@@ -325,6 +336,11 @@ starts work outside this.
   Black Mesa running in turn, and the trap never happened once. The one thing done differently from the
   night before is that the plugin was reloaded after every settings edit tonight (see the pinned-chip entry
   above), which is worth trying again before calling this closed.
+  **A separate, smaller fault was found and fixed 2026-09-20** while chasing this very entry: pressing Ask
+  left Down doing nothing for as long as an answer was arriving, though Right kept working throughout — and
+  it reproduces every time, unlike this one. Now fixed and moved to Verify as **ASKBAR-DOWN-TO-STOP-01**; it
+  may well be part of what has been feeding these reports. But it is not this bug — today's runs saw no dead
+  Left or Right, and nothing needed a full Quick Access Menu close to clear, so this entry stays open.
 - ★★★ `[reply]` **A name-withheld boss question on a story-protected game comes back with no spoiler box** —
   **OPEN, found 2026-09-18.** Nothing running, no consent phrase anywhere in the chat: asked about "the boss
   past the crystal spike area … the one that looks just like me" in Hollow Knight, the reply named Broken
@@ -424,25 +440,6 @@ replace it with a specific issue when one exists.
   give-up values per Ask mode. It was the sixth candidate in round 36 and was dropped on purpose, said in advance rather than
   discovered late: it is the largest of that set — the two existing values already run through sixteen files each and going per mode
   triples them — and the least of them for a person, since it changes when a warning appears rather than what the plugin can do.
-- ★★★ `[ollama]` `[ui]` **Retire the policy tiers into the filters at the top of the AI models screen, and
-  rework the filters** — **OPEN, asked 2026-09-16 (D107), mockups first.** Today the screen has three sections
-  (Policy, Browse & pull, Advanced); the Policy section is three tier buttons (open-source only, open-weight,
-  any installed model; `src/components/ModelPolicyTierPanel.tsx`), and the Browse & pull section has two rows
-  of filter chips (All, Speed, Strategy, Expert, Vision, Coding; Installed only, FOSS only, Essentials only;
-  `src/components/PullModelsModal.tsx`). Wanted: the tier choice stops being its own section and becomes a
-  filter among the filters at the top of the list, and the filters themselves are reworked. The maintainer
-  wanted a drawn page first; **it was drawn and picked 2026-09-20. Chosen: every filter goes behind one
-  "Filters · N on" line that opens a panel over the list.** Six filters offered — licence (the old tiers),
-  Speed / Strategy / Expert, Vision, Installed only, Essentials only, and Recently added. Coding and the
-  separate FOSS-only switch are dropped, the latter because licence covers it. Three more jobs ride along:
-  let the screen use more of the popup it sits in, move the custom tag box to the bottom, and get the counts
-  line onto one line. **The maintainer's rule for this screen, 2026-09-20: only change it if it buys
-  room** — which threw out two claimed savings that turn out to be worth nothing (dropping the Policy
-  section, because the buttons stretch; moving the tag box below the list, same box) and replaced them
-  with versions that do: the tag box behind a small button, and Advanced as a link in the title row. The
-  list is also capped a second time by its own box, tighter than the screen's cap, and that may be the
-  real limit. Measured on the Deck before any build. The two-row list bug above is closed by this.
-  [Plan](planning/62-feature-session-five.md) · [Board](https://claude.ai/artifact/31aLBi17SH7AydhYfGYjBq)
 - ★★★ `[platform]` **Trim the five documents that are still big** — **PARTIAL: one of five done 2026-09-15.**
   Nothing a person using the plugin would notice; this is about what every piece of work costs before it starts. Five files
   carry a trim task at the top of each, with its own star rating, time and model. **This file is done (2026-09-14 and 15) — 100 KB to 83 KB,
@@ -589,6 +586,16 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   each row in [testing.md](testing.md). Until a run produces real evidence, treat all twelve as unknown rather than as a pass.
 
 ### Bugs that need verification
+- ★ `[ask]` `[focus]` **Down did nothing for the whole time an answer was arriving** — **VERIFY, fixed
+  2026-09-20.** Press Ask, and the D-pad ring lands on the question box, now emptied. Pressing Down did
+  nothing at all until the answer finished, though Right kept working the whole time, reaching the
+  Ask-mode button and then Stop. The Ask button greys out while a question is being answered, and Down was
+  written to do nothing in that window on the idea that nothing else was live — but the Stop button is
+  live then, and is exactly what a person wants to reach. Down now goes to Stop instead. Row
+  **ASKBAR-DOWN-TO-STOP-01**, not yet run on the Deck. Evidence
+  `docs/test-evidence/plan62-askbar-control-before-send.json`,
+  `docs/test-evidence/plan62-ASKBAR-FOCUS-TRAP-reproduced-after-send.json`,
+  `docs/test-evidence/plan62-ASKBAR-FOCUS-TRAP-after-answer-finished.json`.
 - ★ `[ollama]` **Mistyping one model name in a several-model download loses it without saying so** — **VERIFY,
   fixed 2026-09-15.** Downloading several models at once now says which name it could not find and still
   starts the good ones, instead of quietly dropping the bad one. Row **PULL-MISSING-NAME-01**: on the Ollama
@@ -600,6 +607,14 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   picker's tick-boxes only ever offer real, known models — a made-up name can only be tried through the
   picker's own custom-name field, a separate one-off box, not the list of ticks. Finishing this row needs a
   person at the Deck to do the typing. Evidence `docs/test-evidence/plan61-PULL-MISSING-NAME-01.json`.
+- ★★ `[ollama]` `[focus]` **Closing the AI models screen could leave the D-pad ring on Steam's own side
+  rail, outside the plugin** — **VERIFY, fixed 2026-09-20.** Found only when the screen was opened from
+  the Ollama tab's "Manage AI models…" button: closing it landed the ring on Steam's own Quick Access
+  rail rather than back on that button, and getting back into the plugin needed an unmarked first press
+  before the shoulder buttons worked again. The screen's other opener already remembered where to send the
+  ring back; this button now does too, with its own separate return id. Row **MODELS-HUB-RETURN-01**, not
+  yet run on the Deck — deploying to the Deck is currently blocked because the plugin folder there is
+  owned by root.
 - ★★ `[ollama]` `[layout]` **The AI models screen showed about two rows of the model list on the Deck's
   screen** — **VERIFY, built 2026-09-20.** The named cause was wrong and is corrected here: the list's own
   box was capped at 48 percent of the screen height or 400 pixels, whichever is smaller, and that share is
@@ -660,6 +675,18 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   the line out gives back 29 pixels on every finished answer. Row **READ-ALOUD-07**, not yet run on the Deck
   under this shape. Still owed on the device: a look by eye at how quiet the speaker sits at rest, and what
   it does on an answer stopped part-way through. [Plan](planning/62-feature-session-five.md) ·
+  [Board](https://claude.ai/artifact/31aLBi17SH7AydhYfGYjBq)
+
+- ★★★ `[ollama]` `[ui]` **Every filter on the AI models screen behind one Filters button, and five
+  changes that give the list more room** — **VERIFY, built 2026-09-20.** Plan 62, sections 3d and 3e.
+  The two rows of filter chips and the separate Policy section are gone. One line now reads "Filters ·
+  N on"; pressing it opens a panel listing six filters — licence (replacing the old Policy buttons),
+  Speed, Strategy, Expert, Vision, Installed only, Essentials only, and Recently added. Riding along:
+  the Suggested-models chips moved into that same panel, Advanced is now a link instead of a row of
+  buttons, typing a model name by hand is one chip instead of a permanent box, the two rows of chips
+  became the one Filters line, and the small refresh button in the counts line is smaller. Row
+  **MODELS-FILTERS-01**, not yet run on the Deck — deploying to the Deck is currently blocked because
+  the plugin folder there is owned by root. [Plan](planning/62-feature-session-five.md) ·
   [Board](https://claude.ai/artifact/31aLBi17SH7AydhYfGYjBq)
 
 - ★ `[ollama]` **Pulled models join the model try order** — **MOSTLY VERIFIED on the Deck 2026-09-06, one case left.**

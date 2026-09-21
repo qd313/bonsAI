@@ -5,6 +5,18 @@ All notable changes to this project are documented in this file.
 ## [Unreleased]
 
 ### Fixed
+- **Pressing Down right after asking a question used to do nothing until the answer arrived:** the
+  D-pad ring lands on the question box the moment you press Ask, and Down there was deliberately
+  swallowed while the Ask button sits greyed out — but the Stop button is live in that same window, and
+  is what a person actually wants to reach. Down now goes to Stop instead of sitting dead. Right worked
+  the whole time and is unaffected. `useMainTabAskBarFocus.ts`. On-Deck row owed:
+  **ASKBAR-DOWN-TO-STOP-01** in `docs/roadmap.md`.
+- **Closing the AI models screen no longer strands the ring on Steam's own side rail:** this only
+  happened when the screen was opened from the Ollama tab's "Manage AI models…" button — closing it
+  landed the D-pad ring outside the plugin entirely, on Steam's own Quick Access rail, so the next press
+  did not reach the plugin's tabs. The screen's other opener already remembered where to send the ring
+  back; this button now does too. `modalReturnFocusRegistry.ts`, `OllamaTab.tsx`. On-Deck row owed:
+  **MODELS-HUB-RETURN-01** in `docs/roadmap.md`.
 - **The AI models list can now use the room its own popup already gives it, instead of stopping
   early:** the list capped itself at a fixed share of the screen no matter how much room was free
   above it, which is why the same plugin showed about five rows on an external monitor and about
@@ -249,6 +261,26 @@ All notable changes to this project are documented in this file.
 - **The knowledge-base search test gained a weight sweep, per-question detail, and a second right answer (no user-visible change):** it can now try nine different balances between word-matching search and meaning search in one run and print a table of how each did, without ever looking at the questions held back for the final check; every question's result now records the three notes each kind of search actually returned, in order, instead of only a percentage; and a question can list more than one acceptable note when more than one genuinely answers it. `scripts/eval_kb_embed_models.py`, `tests/test_eval_kb_arms.py`.
 
 ### Changed
+- **A finished answer's Show details panel can now hold two tabs instead of a separate box below the
+  chat:** the "Session context (N turns)" box used to sit on its own, under a separate closed line.
+  Now, opening Show details on the newest answer shows two tabs, "This answer" and "Session," switched
+  with Left and Right. The chip row people already know stays exactly where it was, under "This
+  answer." Clear now sits at the end of the Session tab as a full-width button, instead of in that
+  box's own header. Up from either tab leaves to Hide details, Down enters whichever tab is open, and B
+  closes the whole panel from anywhere inside it. `MainTabChatTranscript.tsx`. On-Deck row owed: still
+  to be run, see `docs/planning/62-feature-session-five.md`.
+- **The AI models screen: every filter now sits behind one Filters button, and the screen frees up
+  room for more of the model list:** the two rows of filter chips and the separate Policy section are
+  gone. One line now reads "Filters · N on"; pressing it opens a panel listing licence (open source
+  only / also open weight / anything installed — this replaces the old Policy buttons and now actually
+  hides models the list shows, not just a warning box on pull), Speed, Strategy, Expert, Vision,
+  Installed only, Essentials only, and a new Recently added filter. Riding along: the Suggested-models
+  chips moved into that same panel, Advanced is now a link instead of a row of buttons, typing a model
+  name by hand is one chip instead of a permanent box, and the small refresh button in the counts line
+  is smaller. **Worth knowing:** on the default "open source only" setting the list now shows 17 of 26
+  models instead of all 26 — see the open item in `docs/roadmap.md` about whether that is wanted.
+  `PullModelsModal.tsx`, `OllamaModelsHubModal.tsx`, `ModelPolicyTierPanel.tsx`. On-Deck row owed:
+  **MODELS-FILTERS-01** in `docs/roadmap.md`.
 - **Read aloud is now a small speaker next to Helpful / Not really, not its own full-width line:**
   the speaker sits quiet at the right-hand end of that row until the D-pad ring reaches it, then
   turns full strength, the same treatment as the microphone in the Ask box; it turns into a red stop

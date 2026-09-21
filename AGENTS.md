@@ -164,6 +164,12 @@ Full patterns:
   as a regression.
 - **Never mark Deck-facing work done without a D-pad row** in [docs/testing.md](docs/testing.md) or
   [docs/testing-manual.md](docs/testing-manual.md) for the new chain.
+- **Plan 62, 2026-09-20 — three controls landed together, left to this note on purpose:** the AI models
+  screen's Filters button opens a panel of tickable rows (Down or B inside it, or Up from its first row,
+  closes it and returns to the Filters button); the newest answer's Show details gained a second tab,
+  Session (Left/Right switch tabs, Up leaves to Hide details, Down enters the open tab, B closes the whole
+  panel); Read aloud is now a small speaker on the Helpful/Not row, reached by Left/Right once the thumbs
+  are greyed out. None of the three has a device check yet — see [docs/testing.md](docs/testing.md).
 
 ### The "From the notes" block (plan 58 phase 1)
 

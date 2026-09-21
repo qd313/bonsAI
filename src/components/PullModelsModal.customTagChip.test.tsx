@@ -16,7 +16,13 @@
  */
 import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { fireEvent, render, waitFor } from "@testing-library/react";
+import { configure, fireEvent, render, waitFor } from "@testing-library/react";
+
+// See PullModelsModal.filtersPanel.test.tsx's own note on this: these assertions wait on a
+// requestAnimationFrame-scheduled focus move, and the default 1000ms waitFor window measured
+// flaky under the full related-test run (many jsdom environments sharing one worker), not because
+// the focus move itself was ever wrong.
+configure({ asyncUtilTimeout: 10000 });
 
 const hoisted = vi.hoisted(() => ({
   buttonProps: [] as Array<Record<string, unknown>>,

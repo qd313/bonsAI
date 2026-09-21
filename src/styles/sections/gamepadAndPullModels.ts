@@ -352,6 +352,12 @@ export function buildPullModelsStylesheet(): string {
           gap: 2px;
           padding-bottom: 4px;
         }
+        .bonsai-scope .bonsai-pullmodels-filterpanel-intro {
+          font-size: 9px;
+          color: #9fb7d5;
+          line-height: 1.4;
+          margin: 0 0 4px;
+        }
         .bonsai-scope .bonsai-pullmodels-filterpanel-row {
           display: flex !important;
           flex-direction: row !important;

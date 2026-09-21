@@ -114,6 +114,7 @@ import { callDeckyWithTimeout, DECKY_RPC_TIMEOUT_MS, formatDeckyRpcError } from 
 import type { ModelPolicyTierId } from "../data/modelPolicy";
 import {
   disclosureSummaryForSourceClass,
+  MODEL_POLICY_PERMISSIONS_INTRO,
   MODEL_POLICY_TIER_IDS,
   MODEL_POLICY_TIER_LABELS_PLAIN,
 } from "../data/modelPolicy";
@@ -449,6 +450,27 @@ export function PullModelsModal(props: PullModelsModalProps) {
   const footerPullRef = useRef<HTMLElement | null>(null);
   const selectCellRefs = useRef<(HTMLElement | null)[]>([]);
   const deleteCellRefs = useRef<(HTMLElement | null)[]>([]);
+
+  /**
+   * Several places here (opening/closing the Filters panel, opening/closing the custom-tag
+   * field) schedule a `requestAnimationFrame` to move focus one tick after a state change, so
+   * the target actually exists in the DOM first. None of those are effects, so there is no
+   * natural cleanup slot to cancel them in -- and an uncancelled one firing after this screen has
+   * already unmounted would call `.focus()` on a stale ref. Guarded on this instead: the frame
+   * still fires, but does nothing once unmounted.
+   */
+  const mountedRef = useRef(true);
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+    };
+  }, []);
+  function scheduleFocusFrame(fn: () => void): void {
+    window.requestAnimationFrame(() => {
+      if (mountedRef.current) fn();
+    });
+  }
 
   const refreshInstalledAndMeta = useCallback(
     async (forceCatalog = false) => {
@@ -817,17 +839,13 @@ export function PullModelsModal(props: PullModelsModalProps) {
    */
   function openFiltersPanel(): void {
     setFiltersOpen(true);
-    window.requestAnimationFrame(() => {
-      openFiltersPanelEntry();
-    });
+    scheduleFocusFrame(() => openFiltersPanelEntry());
   }
 
   /** Closes the panel and returns the ring to the Filters button — the D-pad's way back out. */
   function closeFiltersPanel(): boolean {
     setFiltersOpen(false);
-    window.requestAnimationFrame(() => {
-      focusFiltersButton();
-    });
+    scheduleFocusFrame(() => focusFiltersButton());
     return true;
   }
 
@@ -1215,7 +1233,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
         });
         setCustomTagInput("");
         setCustomTagEntryOpen(false);
-        window.requestAnimationFrame(() => focusCustomTagChip());
+        scheduleFocusFrame(() => focusCustomTagChip());
         onPullAccepted();
       } else {
         toaster.toast({
@@ -1613,7 +1631,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                     ev.stopPropagation();
                     setCustomTagEntryOpen(false);
                     setCustomTagInput("");
-                    window.requestAnimationFrame(() => focusCustomTagChip());
+                    scheduleFocusFrame(() => focusCustomTagChip());
                   }}
                   aria-label="Close typing a model name by hand"
                   {...({
@@ -1656,7 +1674,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                   onClick={(ev) => {
                     ev.stopPropagation();
                     setCustomTagEntryOpen(true);
-                    window.requestAnimationFrame(() => focusCustomTagClose());
+                    scheduleFocusFrame(() => focusCustomTagClose());
                   }}
                   aria-label="Type a model name by hand"
                   {...({
@@ -1722,6 +1740,9 @@ export function PullModelsModal(props: PullModelsModalProps) {
                     <div key={filterPanelRowKey(row)}>
                       {heading !== prevHeading ? (
                         <div className="bonsai-pullmodels-group-title">{heading}</div>
+                      ) : null}
+                      {heading !== prevHeading && row.kind === "licence" ? (
+                        <div className="bonsai-pullmodels-filterpanel-intro">{MODEL_POLICY_PERMISSIONS_INTRO}</div>
                       ) : null}
                       <Button
                         ref={(el) => {

@@ -16,7 +16,15 @@
  */
 import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { render, waitFor } from "@testing-library/react";
+import { configure, render, waitFor } from "@testing-library/react";
+
+// Every assertion here waits on a requestAnimationFrame-scheduled focus move landing. Vitest's
+// default 1000ms waitFor window is plenty in isolation, but this file's own scrollIntoView guard
+// (focusAndReveal, PullModelsModal.tsx) exists because jsdom has no real layout thread, and under
+// the full related-test run (many jsdom environments sharing one worker) that frame can land well
+// past 1000ms under load rather than because anything is actually broken -- widened, not removed,
+// per KnowledgeBaseSection.nomicPull.test.tsx's own precedent for the same class of flake.
+configure({ asyncUtilTimeout: 10000 });
 
 const hoisted = vi.hoisted(() => ({
   buttonProps: [] as Array<Record<string, unknown>>,

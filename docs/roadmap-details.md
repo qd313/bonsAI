@@ -341,6 +341,100 @@ to a floating strip of icons and names only while the D-pad ring is on it; Steam
 for LB/RB and the tab bodies; R5 reopened as **D44**, the ghost-stop finding is **D55**, the wrap
 correction **D56**.
 
+## The chat sums itself up instead of being cleared
+
+Asked for by the maintainer 2026-09-20. Two parts, and the second needs the first: **a chat keeps a short summary of what
+it has covered instead of losing that memory outright**, and **the plugin rewrites that summary on its own once the chat
+passes some size**, rather than waiting to be told.
+
+What happens today, so nobody re-measures it:
+
+- A chat slot saves the newest **200 turns** and drops anything older (`MAX_TURNS_PER_SLOT`). When a ninth chat is
+  started, the oldest chat is deleted whole.
+- Almost none of that reaches the model. A new question carries **the subject of a very recent Strategy or Expert
+  question**, and nothing else; tapping a refinement chip pastes **the previous question and answer** ahead of the new
+  message. There is no chat-wide memory at all.
+- **Clear**, at the end of the Session tab, forgets that carried subject and the checklist position for the running
+  game. It is the only control over this memory a person has, and all it can do is throw it away.
+
+So the honest framing of this entry: the plugin has no session memory to compact yet. The first half of the work is
+giving a chat a memory worth keeping; the second is keeping it small on its own.
+
+**Every call is in, 2026-09-20.** In the maintainer's own order:
+
+1. **The summary goes into the next question**, so the model answers with the chat behind it — not just a panel a person
+   reads. The useful shape, and the expensive one: it spends part of every reply's budget.
+2. **It is written right before the next question**, not while the person is idle, and the extra wait is measured rather
+   than guessed.
+3. **Compact replaces Clear.** The Session tab loses Clear entirely. The person ends up with three deliberate choices
+   in place of one blunt one: compact this chat, start a new chat (which begins with nothing carried over), or delete a
+   chat. Compacting helps a conversation; sometimes a fresh chat is the better move, and that is the person's call.
+   The job here is to offer the choice plainly instead of losing a conversation's memory with nobody choosing it.
+4. **The chat's spoiler standing carries forward with the summary** — see *Spoilers* below, which is the largest piece of
+   new thinking in this entry.
+5. **The summary shows inside the Session tab, under the Compact button.** Exact shape settled when it is built.
+
+**Nothing gets written until these are measured.** The maintainer set this list; the first three ask the same question of
+each machine bonsAI runs on — how much can the AI actually hold before a chat has to be squeezed?
+
+- **The Steam Deck.** What window the model really loads with there, whether it can be raised, and what raising it costs
+  in memory and speed on a machine sharing its memory with the game.
+- **A PC on the home network**, on the hardware this plugin assumes: under 24 GB of graphics memory, or under 64 GB of
+  ordinary memory.
+- **The Steam Frame.**
+- **What happens today when a chat gets enormous** — measured on a real long chat, not read off the code.
+- **What the summary costs**: how long the summary call alone takes, how much longer the answer takes from press to first
+  word, and how much of the reply budget the pasted summary eats. Deck's own screen, same model, same game running, one
+  short chat and one long one.
+- **Where the tokens go today**, on one real question in each Ask mode: how much is the rules and who the AI is, how much
+  is the game cards, how much is the chat, how much is thinking, how much is left for the answer. Without these five
+  numbers there is nothing to write a budget against.
+
+**What the code already says about the last two — a starting point to check, not to trust.** The Deck's model was measured
+in September loading with a 4,096-token window, and the plugin never asks for a bigger one. When a question plus its reply
+budget will not fit, the plugin shrinks the **visible reply** first, never the thinking budget, down to a floor of 600
+tokens. Past that floor it sends the request anyway, and Ollama keeps the **end** of the prompt and silently drops the
+**start** — the identity block, the rules and the cards. The person gets a confident answer with nothing behind it, and
+only the log says so. That is the ceiling the summary has to live under: every question carrying a summary spends part of
+that same window, so this feature can make the very failure it is meant to prevent if the summary is not kept small.
+
+**Spoilers, and the second rating.** Today there is one spoiler number per answer: a **risk** rating of low, medium or
+high, built from the game's own profile, the question, what the knowledge base returned and the model's own tag, with the
+model's tag counting for about 60%. It is worked out fresh for each answer and never looks at earlier turns. So the
+maintainer's read is right — there is one rating, and nothing that builds up over a chat. The new idea is a second number,
+**spoiler chance**, that does look back: if one of the last twenty turns already touched a boss, this chat is likelier to
+wander into spoilers than one that has not, and the summary carries that standing forward. One thing left to settle when
+it is built: what the look-back counts and how far back it reaches. The other is settled — the standing belongs to one
+chat and never follows a person into a new one, because a new chat starts with nothing carried over at all.
+Whatever writes the summary must also keep hidden things hidden. A summary that spells out a fenced spoiler and
+then pastes it into the next question is the worst failure this feature can have, and it needs its own check on the Deck.
+
+**The plugin owns the token budget, not the model (2026-09-20).** The maintainer's wider point, and the harder half of
+this entry: how many tokens a question spends, how much the summary costs, how much is dropped, and how the rest is split
+between what the AI is told, its thinking and its answer — all of that has to be the plugin's decision, and it has to hold
+on every machine bonsAI runs on.
+
+What exists today is real but partial, and worth knowing before calling it a free-for-all. Each Ask mode already caps how
+long the answer may run; thinking has its own separate budget, so turning thinking on cannot starve the answer; and when a
+request will not fit, the plugin shrinks the answer rather than the thinking. What is missing is the part that decides
+whether a person gets a good reply:
+
+- **The window is assumed, not asked for.** The plugin works to 4,096 tokens because that is what the Deck's model was
+  measured loading. A stronger PC on the home network holds far more and is treated as if it did not.
+- **Nothing counts what actually went out and came back.** The size of a question is estimated from its characters, and
+  nothing checks that estimate against what really happened afterwards.
+- **The rules, the game cards and the chat itself have no stated share.** They are whatever size they happen to be, and
+  the answer is squeezed to make room for them.
+- **Past the floor, the AI chooses what to lose, and it loses the start** — who it is and what it must not do — while the
+  plugin carries on as if nothing happened.
+
+The shape to build towards: one written budget per machine, a named share for every part, a real count checked against
+the estimate, and the plugin deciding what gets dropped — never the model, and never silently.
+
+Related: the four-star **Session context and user stash** entry in the roadmap's Features list is the other half of the
+same idea (live session facts plus notes the person can edit); if both are built, they should share one store rather
+than each keeping their own.
+
 ## Shipped, QA owed — why each was built this way
 
 Moved out of the roadmap's **Verify** section 2026-08-27. Each of these ships and works; what is

@@ -374,14 +374,13 @@ giving a chat a memory worth keeping; the second is keeping it small on its own.
    new thinking in this entry.
 5. **The summary shows inside the Session tab, under the Compact button.** Exact shape settled when it is built.
 
-**Nothing gets written until these are measured.** The maintainer set this list; the first three ask the same question of
-each machine bonsAI runs on — how much can the AI actually hold before a chat has to be squeezed?
+**Nothing gets written until these are measured, and they are measured on the Deck.** The target is a good experience on
+the weakest machine bonsAI will ever run on, and that is the Deck (maintainer, 2026-09-20). A PC on the home network and
+the Steam Frame both hold more; note what they hold when it is cheap to do so, but nothing is designed around them, and
+no choice here is allowed to make the Deck worse.
 
-- **The Steam Deck.** What window the model really loads with there, whether it can be raised, and what raising it costs
-  in memory and speed on a machine sharing its memory with the game.
-- **A PC on the home network**, on the hardware this plugin assumes: under 24 GB of graphics memory, or under 64 GB of
-  ordinary memory.
-- **The Steam Frame.**
+- **How much the Deck's own model really holds.** The window it loads with, whether it can be raised, and what raising
+  it costs in memory and speed on a machine sharing its memory with the game.
 - **What happens today when a chat gets enormous** — measured on a real long chat, not read off the code.
 - **What the summary costs**: how long the summary call alone takes, how much longer the answer takes from press to first
   word, and how much of the reply budget the pasted summary eats. Deck's own screen, same model, same game running, one
@@ -389,14 +388,22 @@ each machine bonsAI runs on — how much can the AI actually hold before a chat 
 - **Where the tokens go today**, on one real question in each Ask mode: how much is the rules and who the AI is, how much
   is the game cards, how much is the chat, how much is thinking, how much is left for the answer. Without these five
   numbers there is nothing to write a budget against.
+- **How many tokens went in and how many came out**, on every answer, kept rather than guessed at. **This one is nearly
+  free and was not known when this entry was written:** Ollama already hands back the real count of tokens in the
+  question and the real count in the answer, plus whether the answer stopped because it ran out of room, at the end of
+  every single reply. The plugin writes all three to the log and then throws them away — nothing else in the code reads
+  them. Keeping them turns every ordinary Ask into a measurement, and gives the plugin's own guess something to be
+  checked against.
 
-**What the code already says about the last two — a starting point to check, not to trust.** The Deck's model was measured
+**What the code already says about today's behaviour — a starting point to check, not to trust.** The Deck's model was measured
 in September loading with a 4,096-token window, and the plugin never asks for a bigger one. When a question plus its reply
 budget will not fit, the plugin shrinks the **visible reply** first, never the thinking budget, down to a floor of 600
 tokens. Past that floor it sends the request anyway, and Ollama keeps the **end** of the prompt and silently drops the
 **start** — the identity block, the rules and the cards. The person gets a confident answer with nothing behind it, and
 only the log says so. That is the ceiling the summary has to live under: every question carrying a summary spends part of
 that same window, so this feature can make the very failure it is meant to prevent if the summary is not kept small.
+Both halves of that behaviour are now ruled out by the maintainer: the answer is not the part that gets squeezed, and the
+plugin does not let the AI pick what to lose. See the shape below.
 
 **Spoilers, and the second rating.** Today there is one spoiler number per answer: a **risk** rating of low, medium or
 high, built from the game's own profile, the question, what the knowledge base returned and the model's own tag, with the
@@ -411,8 +418,8 @@ then pastes it into the next question is the worst failure this feature can have
 
 **The plugin owns the token budget, not the model (2026-09-20).** The maintainer's wider point, and the harder half of
 this entry: how many tokens a question spends, how much the summary costs, how much is dropped, and how the rest is split
-between what the AI is told, its thinking and its answer — all of that has to be the plugin's decision, and it has to hold
-on every machine bonsAI runs on.
+between what the AI is told, its thinking and its answer — all of that has to be the plugin's decision, not the model's,
+and the Deck is the machine it has to be right on.
 
 What exists today is real but partial, and worth knowing before calling it a free-for-all. Each Ask mode already caps how
 long the answer may run; thinking has its own separate budget, so turning thinking on cannot starve the answer; and when a
@@ -421,15 +428,29 @@ whether a person gets a good reply:
 
 - **The window is assumed, not asked for.** The plugin works to 4,096 tokens because that is what the Deck's model was
   measured loading. A stronger PC on the home network holds far more and is treated as if it did not.
-- **Nothing counts what actually went out and came back.** The size of a question is estimated from its characters, and
-  nothing checks that estimate against what really happened afterwards.
+- **The real counts arrive and are thrown away.** The plugin sizes a question by counting its characters and dividing.
+  The true count of what went in, what came out, and whether the answer stopped for lack of room comes back with every
+  single reply — straight into the log, read by nothing.
 - **The rules, the game cards and the chat itself have no stated share.** They are whatever size they happen to be, and
   the answer is squeezed to make room for them.
 - **Past the floor, the AI chooses what to lose, and it loses the start** — who it is and what it must not do — while the
   plugin carries on as if nothing happened.
 
-The shape to build towards: one written budget per machine, a named share for every part, a real count checked against
-the estimate, and the plugin deciding what gets dropped — never the model, and never silently.
+**The shape to build towards, set by the maintainer 2026-09-20.** Two things are ruled out. **Squeezing the answer to
+make room for everything else is not the answer** — a reply that needs to be thorough cannot be cut short because
+something unrelated grew. **Fixed hard limits per part are not the answer either** — 500 tokens for thinking, 500 for
+the answer, 500 for the game cards, forever, regardless of the question, wastes the window on an easy question and
+starves a hard one.
+
+What is wanted instead is flexible with guard rails:
+
+- Every part has a floor it is always guaranteed, so nothing can be starved out by something else growing.
+- Above those floors the remaining room is shared according to what the question actually needs.
+- Thinking has a ceiling it can never cross, so a runaway thinking budget can never eat the answer, the rules or the
+  chat. A person who turns thinking on is asking for reasoning headroom, not for their answer to disappear.
+- **Context is never lost by accident.** If something genuinely has to go, the plugin chooses what goes, and the person
+  is told. That is the whole point of this feature — or at least an honest attempt to make it better than today, where
+  the AI drops the start of the prompt and nobody finds out.
 
 Related: the four-star **Session context and user stash** entry in the roadmap's Features list is the other half of the
 same idea (live session facts plus notes the person can edit); if both are built, they should share one store rather

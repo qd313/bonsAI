@@ -484,8 +484,8 @@ replace it with a specific issue when one exists.
 - ★★★★ `[ask]` **The chat sums itself up instead of being cleared** — **OPEN, filed and scoped 2026-09-20; every call in,
   measurements owed before any code.** A long chat is compacted into a short summary that goes into the next question, from
   a button in the Session tab; a new chat still starts empty and deleting one still works, so the person picks. With it comes
-  the harder half: **the plugin owns the token budget, not the model** — a written share for the rules, the cards, the
-  summary, the thinking and the answer. **Measure first.** [Detail](roadmap-details.md#the-chat-sums-itself-up-instead-of-being-cleared).
+  the harder half: **the plugin owns the token budget, not the model** — a floor nothing can starve, a ceiling thinking
+  can never cross, and no answer cut short to make room. **Deck numbers first.** [Detail](roadmap-details.md#the-chat-sums-itself-up-instead-of-being-cleared).
 - ★★★★ `[ollama]` **LAN custom model pull** — **OPEN.** Blocked until a mechanism is chosen (R1 to R4). Depends on **Custom model in
   the Pull Models picker**.
 - ★★★★ `[perms]` **Web permission** — **OPEN, discovery locked.** Opt-in live web answers; offline Ask and local KB when off. Kids

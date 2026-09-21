@@ -461,3 +461,76 @@ class OllamaAskServiceTests(unittest.IsolatedAsyncioTestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ChatMemoryReachesTheModelTests(unittest.IsolatedAsyncioTestCase):
+    """Plan 63: a chat now carries what it has already covered into the next question.
+
+    Before this, a chat kept 200 questions and answers on disk and almost none of it ever reached
+    the model: a new question carried the subject of a very recent Strategy or Expert answer and
+    nothing else, so a follow-up meant repeating yourself.
+    """
+
+    async def _ask_with_chat(self, chat_turns):
+        from backend.services.token_accounting_service import reset_token_accounting
+
+        reset_token_accounting()
+        self.addCleanup(reset_token_accounting)
+        plugin = _FakePlugin(active_request_id=1)
+        sent: dict[str, Any] = {}
+
+        def _fake_post(url, model_name, messages, *a, **k):
+            sent["system"] = messages[0]["content"]
+            sent["user"] = messages[-1]["content"]
+            return {"success": True, "status": 200, "model": model_name, "response": "ok",
+                    "assistant_raw": "ok"}
+
+        with (
+            patch("backend.services.ollama_ask_service.list_installed_ollama_tags",
+                  return_value=["qwen2.5:3b"]),
+            patch("backend.services.ollama_ask_service.probe_ollama_http_ok", return_value=True),
+            patch("backend.services.screenshot_media.prepare_attachment_images",
+                  return_value=([], [], [])),
+            patch("backend.services.ollama_ask_service.post_ollama_chat", side_effect=_fake_post),
+        ):
+            await run_ask_ollama(
+                plugin, "and what about the boots?", "127.0.0.1:11434", "", "",
+                request_timeout_seconds=30, chat_turns=chat_turns,
+            )
+        return sent
+
+    async def test_what_the_chat_already_covered_is_sent_with_the_next_question(self):
+        sent = await self._ask_with_chat([
+            {"role": "user", "text": "how do i beat morpha"},
+            {"role": "assistant", "text": "Use the Longshot to pull the nucleus out of the water."},
+        ])
+        self.assertIn("how do i beat morpha", sent["system"])
+        self.assertIn("Longshot", sent["system"])
+
+    async def test_a_chat_with_nothing_in_it_adds_nothing_at_all(self):
+        """An Ask outside a saved chat, or the very first question in one, must send exactly what
+        it sent before this existed."""
+        sent = await self._ask_with_chat([])
+        self.assertEqual(sent["system"], "system prompt")
+
+    async def test_a_spoiler_from_an_earlier_answer_is_not_handed_back_to_the_model(self):
+        """The worst thing this feature could do. An answer that fenced something off did so
+        because the person had not asked to know it."""
+        sent = await self._ask_with_chat([
+            {"role": "user", "text": "how do i beat morpha"},
+            {"role": "assistant", "text":
+             "Use the Longshot.\n```bonsai-spoiler\nDark Link waits in the Water Temple.\n```"},
+        ])
+        self.assertIn("Longshot", sent["system"])
+        self.assertNotIn("Dark Link", sent["system"])
+        self.assertNotIn("bonsai-spoiler", sent["system"])
+
+    async def test_the_memory_sits_behind_everything_that_does_not_change(self):
+        """The server skips re-reading the front of a question when it has not changed, and this
+        block changes on every turn. Anything that changes every turn has to sit behind what does
+        not, or it spoils that saving for all of it."""
+        sent = await self._ask_with_chat([
+            {"role": "user", "text": "how do i beat morpha"},
+            {"role": "assistant", "text": "Use the Longshot."},
+        ])
+        self.assertTrue(sent["system"].startswith("system prompt"))

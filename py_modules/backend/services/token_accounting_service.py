@@ -169,6 +169,20 @@ def known_window_tokens(base_http: str, model_name: str) -> int:
     return _WINDOW_BY_HOST_AND_MODEL.get((host, model)) or FALLBACK_WINDOW_TOKENS
 
 
+def smallest_known_window_tokens(base_http: str) -> int:
+    """The least room any model on this server is known to have, or the 4,096 fallback.
+
+    For decisions that have to be made before it is known which model will answer -- how much of
+    a chat to carry, above all. Planning against the smallest known room means the plan is safe
+    whichever model the routing lands on. Nothing is asked over the network: on the first question
+    of a session nothing is known yet and the fallback stands, which only means a smaller memory
+    that question. From the second question on, the real figure is in hand.
+    """
+    host = str(base_http or "").strip().rstrip("/")
+    seen = [w for (h, _m), w in _WINDOW_BY_HOST_AND_MODEL.items() if h == host and w > 0]
+    return min(seen) if seen else FALLBACK_WINDOW_TOKENS
+
+
 def resolve_window_tokens(
     base_http: str,
     model_name: str,

@@ -2998,6 +2998,7 @@ class Plugin:
         token_stream_request_id: Optional[int] = None,
         strategy_checklist_state: Optional[dict] = None,
         preferred_model: Optional[str] = None,
+        chat_turns: Optional[list] = None,
     ):
         """Orchestrate attachment prep, prompt assembly, and model fallback request execution."""
         return await run_ask_ollama(
@@ -3023,7 +3024,32 @@ class Plugin:
             token_stream_request_id=token_stream_request_id,
             strategy_checklist_state=strategy_checklist_state,
             preferred_model=preferred_model,
+            chat_turns=chat_turns,
         )
+
+    def chat_turns_for_request(self, request_id: Any) -> list:
+        """The questions and answers already in the chat this request belongs to.
+
+        Empty when the Ask did not come from a saved chat, or when the chat cannot be read. A
+        chat that cannot be read is a chat with no memory, which is exactly how every Ask behaved
+        before this existed -- never a reason to fail the question.
+
+        The question being asked right now IS in here: it is written to the chat when the Ask is
+        accepted, before the answer starts. Whoever builds the memory drops that trailing turn --
+        see plan_and_build_chat_memory, which does exactly that and says why.
+        """
+        try:
+            if not isinstance(request_id, int):
+                return []
+            slot_id = str(self._chat_slot_by_request.get(request_id) or "").strip()
+            if not slot_id:
+                return []
+            slot = chat_load_slot(Plugin._chat_slots_settings_dir(), slot_id, logger=decky.logger)
+            turns = (slot or {}).get("turns")
+            return list(turns) if isinstance(turns, list) else []
+        except Exception:
+            decky.logger.exception("chat_turns_for_request: could not read the chat's own history")
+            return []
 
     async def _stop_voice_transcription_internal(self) -> None:
         async with self._voice_lock:

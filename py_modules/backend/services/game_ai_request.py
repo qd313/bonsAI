@@ -770,11 +770,21 @@ async def run_game_ai_request(
             title_profile=strategy_title_profile,
         )
 
+        # What this chat has already covered, so a follow-up does not have to repeat itself. The
+        # question being asked now is not in here: the user turn is written after the answer comes
+        # back. How much of it actually reaches the AI is decided by the budget, not here.
+        chat_turns = (
+            plugin.chat_turns_for_request(active_rid)
+            if hasattr(plugin, "chat_turns_for_request")
+            else []
+        )
+
         ollama_result = await plugin.ask_ollama(
             question_for_model,
             pc_ip,
             app_id,
             app_name,
+            chat_turns=chat_turns,
             request_timeout_seconds=request_timeout_seconds,
             attachments=atts,
             ask_mode=ask_mode,

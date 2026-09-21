@@ -74,6 +74,7 @@ from backend.services.model_policy import (
     filter_model_list,
 )
 from backend.services.ask_payload import sanitize_attachments
+from backend.services.chat_memory_service import plan_and_build_chat_memory
 from backend.services.ollama_service import post_ollama_chat
 from backend.services.settings_service import sanitize_ollama_keep_alive, sanitize_reply_verbosity
 from backend.services.reply_language_service import resolve_effective_reply_language
@@ -113,6 +114,7 @@ async def run_ask_ollama(
     token_stream_request_id: Optional[int] = None,
     strategy_checklist_state: Optional[dict] = None,
     preferred_model: Optional[str] = None,
+    chat_turns: Optional[list] = None,
 ) -> dict[str, Any]:
     """Orchestrate attachment prep, prompt assembly, and model fallback request execution."""
     plugin_inst = plugin
@@ -203,6 +205,39 @@ async def run_ask_ollama(
             preset_carousel_inject = {"text": tip}
     if roleplay:
         system_content = apply_roleplay_to_system_content(system_content, roleplay)
+    # What the chat has already covered goes in here, sized by the budget rather than by
+    # whatever happens to be on disk. It is placed at the END of what the AI is told, after the
+    # rules and after the game's cards, on purpose: the server skips re-reading any part of the
+    # front of a question that has not changed since last time, and this block changes on every
+    # turn. Anything that changes every turn has to sit behind everything that does not, or it
+    # spoils that saving for all of it (measured on the Deck 2026-09-20: 15.3 seconds to the
+    # first word with the front rewritten each turn, 1.1 and 0.8 with it left alone).
+    budget_plan, memory = plan_and_build_chat_memory(
+        system_content=system_content,
+        question=question,
+        chat_turns=chat_turns,
+        ask_mode=ask_mode,
+        think_effort=str(settings.get("ask_think_effort") or "off"),
+        base_http=normalize_ollama_base(pc_ip)[2],
+    )
+    if memory.text:
+        system_content = system_content + "\n\n" + memory.text
+    logger.info(
+        "ask_ollama: budget room=%d rules+cards=%d (attached %d chars) memory=%d thinking=%d answer=%d "
+        "(~%.1fs to the first word) carried=%d turns, left behind=%d, hidden notes removed=%d%s",
+        budget_plan.room_tokens,
+        budget_plan.rules_tokens,
+        len(proton_log_attachment or ""),
+        memory.tokens,
+        budget_plan.thinking_tokens,
+        budget_plan.answer_tokens,
+        budget_plan.seconds_to_first_word,
+        memory.turns_carried,
+        memory.turns_left_out,
+        memory.hidden_notes_removed,
+        ("; left out: " + ", ".join(budget_plan.left_out)) if budget_plan.left_out else "",
+    )
+
     user_message: dict = {"role": "user", "content": question}
     if prepared_images:
         user_message["images"] = [image["image_b64"] for image in prepared_images]

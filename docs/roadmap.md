@@ -424,16 +424,6 @@ replace it with a specific issue when one exists.
   rows, which is a design call for the maintainer, not a fix. External-monitor record:
   [planning/30-collapsing-tab-bar.md](planning/30-collapsing-tab-bar.md) § 8 ·
   [plan 56 block 0](planning/56-feature-session-four.md#block-0--hygiene-and-three-measurements-the-session-alone-about-forty-minutes).
-- ★★★ `[layout]` **Session context folds into Show details** — **OPEN, shape decided 2026-09-16 (D106): a tab within the
-  Show details panel, option B on the mockup page.** The **Session context (N turns)** bar stops being its own row, so a
-  settled answer costs one collapsed control instead of two. As drawn: the opened Show details panel gets two tabs at its
-  top, *This answer* and *Session · N*; Left and Right switch between them; the chip row and its body stay where they are;
-  only the newest turn shows the Session tab, so it never repeats; the collapsed row still says *Show details*; Up from the
-  tabs goes to Hide details and then Read aloud, Down goes into the chips, and B anywhere inside closes the panel. One
-  last thing open — where Clear sits inside the Session tab — was **decided 2026-09-20: at the end of that
-  tab's body, full width, with the same confirm box.** Nothing about this feature is open now.
-  [Plan](planning/62-feature-session-five.md) · [Board](https://claude.ai/artifact/31aLBi17SH7AydhYfGYjBq) ·
-  [Open questions](roadmap-details.md#session-context-folds-into-show-details).
 - ★★★ `[ollama]` **Dynamic keep-alive / smart unload** — **OPEN, research spike.** Hold models loaded, or unload when a game takes
   focus on the Deck APU? The spike decides go or no-go; no production unload before it.
 - ★★★ `[ollama]` **Per-mode latency timeouts** — **OPEN, weighed and deliberately not built 2026-09-05.** Separate warning and
@@ -649,6 +639,13 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   Evidence `docs/test-evidence/plan61-CLEAR-CACHE-01-midanswer-retry.json`.
   [Why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way).
 ### Features that need verification
+
+- ★★★ `[layout]` **Session context folds into Show details** — **VERIFY, built 2026-09-20 (lane S).** The separate
+  Session context bar is gone; the opened Show details panel now carries two tabs, *This answer* and *Session · N*, with
+  Left and Right between them, on the newest answer only. Clear sits at the end of the Session tab, full width, with the
+  same confirm box. The lane also fixed the chip list's own B handling, which used a method already measured on the device
+  as not reliably stopping Steam backing the ring out of the whole panel. Row **SESSION-TAB-01**, not yet run on the Deck:
+  the four ways out and B are each pinned by a test, none has been pressed. [Plan](planning/62-feature-session-five.md)
 
 - ★★ `[chat]` **The game a chat belongs to, above its title** — **VERIFY, built 2026-09-20 (lane G).**
   The name now shows only while the ring is on the row, with the empty line still held open so the row's

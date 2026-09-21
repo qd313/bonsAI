@@ -9,10 +9,43 @@
  * Does not: Drive the D-pad. The ladder is one Focusable and Steam's ring lands on the row, not
  *           on a chip -- that focus graph is unchanged here, by design (see roadmap entry).
  */
+import React from "react";
 import { render } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { ContextChipLadder } from "./ContextChipLadder";
 import type { ContextChip, TransparencySnapshot } from "../utils/inputTransparency";
+
+const hoisted = vi.hoisted(() => ({
+  focusableProps: [] as Array<Record<string, unknown>>,
+}));
+
+/*
+ * A local override of the global `@decky/ui` mock (src/test-harness/setup.ts), same technique
+ * SessionContextStrip.clearButton.test.tsx uses: wraps the real stub `Focusable` so its props
+ * (including `onCancelButton`, which the stub itself strips before it ever reaches the DOM) can be
+ * read back and invoked directly.
+ */
+vi.mock("@decky/ui", async () => {
+  const stubs = await import("../test-harness/fakeDeckyUi");
+  const RealFocusable = stubs.Focusable;
+  const CapturingFocusable = React.forwardRef<HTMLDivElement, Record<string, unknown>>(
+    function CapturingFocusable(props, ref) {
+      hoisted.focusableProps.push(props);
+      return <RealFocusable {...props} ref={ref} />;
+    }
+  );
+  return { ...stubs, Focusable: CapturingFocusable };
+});
+
+/*
+ * `hoisted.focusableProps` is append-only across every re-render in one test, so a plain `.find()`
+ * would read the FIRST capture rather than the current one. This mount only ever renders one
+ * `.bonsai-chip-ladder`, so the last match is always the live one.
+ */
+function latestLadderProps(): Record<string, unknown> | undefined {
+  const matches = hoisted.focusableProps.filter((p) => p.className === "bonsai-chip-ladder");
+  return matches[matches.length - 1];
+}
 
 function chip(overrides: Partial<ContextChip> = {}): ContextChip {
   return {
@@ -120,5 +153,46 @@ describe("ContextChipLadder active chip", () => {
     const only = [...borders][0]!;
     // Not green, orange, red or tan: the tier and credit colours are gone from the row.
     expect(only).not.toMatch(/74, 222, 128|251, 146, 60|248, 113, 113|214, 174, 116/);
+  });
+});
+
+/*
+ * Plan 62 3c pulled this collapse off `onButtonDown` and onto `onCancelButton`: measured on device
+ * 2026-08-28 elsewhere in this codebase (DrgGlossaryTermChip.tsx, buildReasoningFoldElement.tsx)
+ * that `onButtonDown` receives B but returning `true` from it does not stop Steam also backing the
+ * ring out of the panel, while `onCancelButton` + `preventDefault` genuinely consumes the press.
+ * This pins the wiring the same way those two files' own suites do: it cannot prove Steam's ring on
+ * a real Deck, only that the exact prop Steam invokes for B is present and calls the right thing.
+ */
+describe("B collapses the ladder", () => {
+  it("wires onCancelButton, not onButtonDown, and calls setExpandedBoth(false) plus preventDefault", () => {
+    const snapshot = { context_chips: [chip()] } as unknown as TransparencySnapshot;
+    render(<ContextChipLadder snapshot={snapshot} collapsedHint={false} />);
+
+    const ladderProps = latestLadderProps();
+    expect(ladderProps?.onCancelButton).toBeTypeOf("function");
+
+    const onCancelButton = ladderProps!.onCancelButton as (e: unknown) => void;
+    let prevented = false;
+    onCancelButton({ preventDefault: () => (prevented = true) });
+    expect(prevented).toBe(true);
+  });
+
+  it("tells a caller's onExpandChange, so a caller can close a bigger panel the ladder sits inside", () => {
+    const snapshot = { context_chips: [chip()] } as unknown as TransparencySnapshot;
+    const seen: boolean[] = [];
+    render(
+      <ContextChipLadder
+        snapshot={snapshot}
+        collapsedHint={false}
+        onExpandChange={(expanded) => seen.push(expanded)}
+      />
+    );
+
+    const ladderProps = latestLadderProps();
+    const onCancelButton = ladderProps!.onCancelButton as (e: unknown) => void;
+    onCancelButton({ preventDefault: () => {} });
+
+    expect(seen).toEqual([false]);
   });
 });

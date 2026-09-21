@@ -86,7 +86,25 @@ export function useUnifiedInputSurface(currentTab: string, unifiedInput: string)
      * which is what drifted the caret and typed-text overlay on a three-line question.
      */
     const fieldCw = fr && fr.width > 0 ? fr.width : 0;
-    const textWidth = Math.max(0, fieldCw > 0 ? fieldCw : hostW);
+    /*
+     * Never let the mirror end up wider than the box it is positioned inside.
+     *
+     * Measured on device 2026-09-20 while testing the plugin's own UI size setting at its "Couch"
+     * step: the typed-text mirror came out 298.44px wide inside a 274.46px box, so it hung 23px
+     * past the right edge of the plugin's 300px column and the end of a typed line sat outside the
+     * panel. The real field was fine at 274.46px. The bad width had been written during an earlier
+     * frame, before the avatar slot laid out, when the field briefly filled the whole 300px host —
+     * and nothing corrected it afterwards, because changing the size setting does not change the
+     * host's own width, so the size watcher this hook leans on never fires a second pass.
+     *
+     * Reproduced twice at that setting and never at the default one, where the extra reflow does
+     * not happen. Clamping fixes both that race and any later size change, and cannot cost
+     * accuracy: the field is `width: 100%` of this same box with border-box sizing (section-5.ts),
+     * so it can never legitimately be wider than the box, while a mirror sized from a stale wider
+     * value is exactly what drifts wrapping off the real field.
+     */
+    const containerW = cr.width > 0 ? cr.width : Number.POSITIVE_INFINITY;
+    const textWidth = Math.min(Math.max(0, fieldCw > 0 ? fieldCw : hostW), containerW);
     const overlayLeft = field && fr ? fr.left - cr.left : UNIFIED_TEXT_INSET_LEFT_PX;
     const overlayTop = field && fr ? fr.top - cr.top : UNIFIED_TEXT_INSET_TOP_PX;
     measure.style.left = `${overlayLeft}px`;

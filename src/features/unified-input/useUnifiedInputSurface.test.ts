@@ -152,4 +152,54 @@ describe("useUnifiedInputSurface wrap/font/width mirroring", () => {
     expect(layer.style.getPropertyValue("--bonsai-unified-field-overflow-wrap")).toBe(fieldStyle.overflowWrap);
     expect(layer.style.getPropertyValue("--bonsai-unified-field-width")).toBe("274.46px");
   });
+
+  /**
+   * Measured on device 2026-09-20, with the plugin's own UI size setting turned up to its "Couch"
+   * step: the typed-text mirror was 298.44px wide inside a 274.46px box, so it stuck 23px past the
+   * right edge of the plugin's 300px column and the end of a typed line sat outside the panel. The
+   * real field measured 274.46px at the time, so the mirror was not following it — the width had
+   * been written in an earlier frame, while the field still filled the whole host, and no later
+   * pass corrected it. Reproduced twice at that setting, never at the default one.
+   */
+  it("never writes a mirror wider than the box the mirror sits in", () => {
+    const host = document.createElement("div");
+    host.getBoundingClientRect = () => rect({ width: 300 }); // the whole plugin column
+    const layer = document.createElement("div");
+    // The box the overlay is positioned against, once the avatar slot beside it has laid out.
+    layer.getBoundingClientRect = () => rect({ width: 274.46 });
+    host.appendChild(layer);
+    const measure = document.createElement("div");
+    layer.appendChild(measure);
+    document.body.appendChild(host);
+
+    const { result } = renderHook(() => useUnifiedInputSurface("main", "a typed question"));
+    result.current.unifiedInputHostRef.current = host;
+    result.current.unifiedInputFieldLayerRef.current = layer;
+    result.current.unifiedInputMeasureRef.current = measure;
+
+    act(() => {
+      result.current.remeasureUnifiedInputSurface();
+    });
+
+    // Without the clamp this is the host's own 300px, which is what hung out of the panel.
+    expect(layer.style.getPropertyValue("--bonsai-unified-field-width")).toBe("274.46px");
+    expect(measure.style.width).toBe("274.46px");
+  });
+
+  it("still follows the real field exactly when the field fits its box", () => {
+    // The ordinary case, and the one the 2026-09-04 full-precision fix pinned: the clamp must not
+    // shave anything off a field that already fits, or the mirror wraps a line early again.
+    const { host, layer, measure } = makeSurface();
+    const { result } = renderHook(() => useUnifiedInputSurface("main", "a typed question"));
+    result.current.unifiedInputHostRef.current = host;
+    result.current.unifiedInputFieldLayerRef.current = layer;
+    result.current.unifiedInputMeasureRef.current = measure;
+
+    act(() => {
+      result.current.remeasureUnifiedInputSurface();
+    });
+
+    expect(layer.style.getPropertyValue("--bonsai-unified-field-width")).toBe("274.46px");
+    expect(measure.style.width).toBe("274.463px");
+  });
 });

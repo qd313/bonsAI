@@ -498,11 +498,11 @@ replace it with a specific issue when one exists.
   **Save a report** inside it, and a typed command, write a read-only report of the setup to the Desktop: the former
   **Deck health snapshot**, folded in here. [Plan](planning/39-connection-doctor.md).
 - ★★★★ `[ask]` **Session context and user stash** — **OPEN.** Live session facts plus user-editable notes for Ask. No embeddings, no cloud.
-- ★★★★ `[ask]` **The chat sums itself up instead of being cleared** — **OPEN, measured on the Deck 2026-09-20; the
-  plugin knows its real numbers now, one call owed.** A long chat is compacted into a short summary that goes into the next
-  question, from a button in the Session tab. **One token over costs half the question, not the excess** — and Strategy and
-  Expert already do not fit. Compacting costs a ~15s re-read on the turn it happens, so it fires at a threshold and never
-  every turn — as Claude Code does. [Detail](roadmap-details.md#the-chat-sums-itself-up-instead-of-being-cleared).
+- ★★★★ `[ask]` **The chat sums itself up instead of being cleared** — **PARTIAL: the budget half landed 2026-09-21, the
+  summary itself is not built.** A long chat is compacted into a short summary that goes into the next question, from a button
+  in the Session tab. The room a summary needs now exists — the plugin asks for 16,384 tokens instead of taking 4,096, so
+  Strategy and Expert fit with space to spare. Compacting costs a ~15s re-read on the turn it happens, so it fires at a
+  threshold, never every turn. [Detail](roadmap-details.md#the-chat-sums-itself-up-instead-of-being-cleared).
 - ★★★★ `[ollama]` **LAN custom model pull** — **OPEN.** Blocked until a mechanism is chosen (R1 to R4). Depends on **Custom model in
   the Pull Models picker**.
 - ★★★★ `[perms]` **Web permission** — **OPEN, discovery locked.** Opt-in live web answers; offline Ask and local KB when off. Kids
@@ -668,6 +668,12 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   Evidence `docs/test-evidence/plan61-CLEAR-CACHE-01-midanswer-retry.json`.
   [Why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way).
 ### Features that need verification
+
+- ★★★★ `[ollama]` **The plugin owns its token numbers** — **VERIFY, built 2026-09-21.** It asks the AI server for room for
+  16,384 tokens instead of accepting its default 4,096, works out question sizes from real counts instead of dividing
+  characters by 3.5, and keeps what actually went in and came out. **Two Ask modes stop being cut short:** Strategy and Expert
+  with the game's cards attached and thinking on had their answers trimmed to a 600-token floor, and now get their full 1,600
+  and 1,200. Proved through the deployed back end on the Deck; row **TOKEN-BUDGET-01** is the on-screen half, not yet run.
 
 - ★★★ `[layout]` **Session context folds into Show details** — **VERIFY, built 2026-09-20 (lane S).** The separate
   Session context bar is gone; the opened Show details panel now carries two tabs, *This answer* and *Session · N*, with

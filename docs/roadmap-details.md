@@ -421,8 +421,11 @@ allowed to make the Deck worse.
   | Strategy | 1,098 | 1,410 | 9 | 512 | 1,600 | 4,629 | **533 over** |
   | Expert | 566 | 2,337 | 9 | 512 | 1,200 | 4,624 | **528 over** |
 
-  So this feature cannot simply add a summary to the question. On two modes out of three there is
-  nothing left to add it to, and the room a summary needs has to be found before it is spent.
+  So this feature cannot simply add a summary to the question. On two modes out of three there was
+  nothing left to add it to. **That is the part now fixed (2026-09-21):** with the room raised to
+  16,384, the worst of those three comes to 4,629 of 16,384, so there is space for a summary rather
+  than a fight over what to drop. The table above is what the Deck's default gave; it is what a
+  machine that cannot be raised would still give, which is why the budget work still matters.
 
 - **How many tokens went in and how many came out: kept now, and the old guess was a fifth too
   big.** Counting characters and dividing by 3.5 made the plugin's own questions look 20% to 25%
@@ -495,10 +498,12 @@ long the answer may run; thinking has its own separate budget, so turning thinki
 request will not fit, the plugin shrinks the answer rather than the thinking. What is missing is the part that decides
 whether a person gets a good reply:
 
-- ~~**The window is assumed, not asked for.**~~ **Fixed 2026-09-20.** The plugin now asks the AI server how much room
-  the model was really loaded with, and only asks at the moment the answer would change what a person gets — on a
-  question that fits, nothing extra happens. It still does not *set* the room, so the 131,072 the Deck's model can hold
-  is out of reach until that decision is taken.
+- ~~**The window is assumed, not asked for.**~~ **Fixed 2026-09-21, and it now goes further than asking.** The plugin
+  *chooses* the room: it asks the server for 16,384 tokens rather than accepting its default 4,096, having measured that
+  four times the room costs 0.6 GB of memory and nothing in speed or frame rate. Three rules hold it: never lower than
+  what a server already gives, never more than the model can hold, and never changed once chosen — changing it reloads
+  the model. **Strategy and Expert stop being cut short**: both had their answers trimmed to a 600-token floor and now
+  get their full 1,600 and 1,200.
 - ~~**The real counts arrive and are thrown away.**~~ **Fixed 2026-09-20.** The true count of what went in, what came
   out, and the guess made before sending are all kept side by side, so the gap between them is visible rather than
   assumed. The plugin learns the real characters-per-token figure from them and corrects itself after one reply.

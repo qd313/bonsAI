@@ -134,6 +134,14 @@ from backend.services.strategy_guide_parse import (
     hide_incomplete_strategy_branch_fence,
     hide_incomplete_strategy_checklist_fence,
 )
+from backend.services.token_accounting_service import (
+    FALLBACK_WINDOW_TOKENS,
+    estimate_tokens_from_chars,
+    known_window_tokens,
+    note_real_counts,
+    resolve_window_tokens,
+    tokens_that_survive_overflow,
+)
 from backend.services.ollama_prompts import (
     append_deck_tdp_sysfs_grounding,
     build_system_prompt,
@@ -709,24 +717,51 @@ def _is_thinking_unsupported_error(status: Any, body: str) -> bool:
     return "not support" in text or "unsupported" in text or "does not accept" in text
 
 
-# Decision D46 (2026-09-01). Measured on the Deck: Ollama 0.32.15 loads gemma4:e2b-it-qat with
+# Decision D46 (2026-09-01). Measured on the Deck: Ollama loads gemma4:e2b-it-qat with
 # context_length 4096 and nothing here sets num_ctx. A prompt that does not fit is not rejected;
 # Ollama keeps the *end* and drops the *start*, which is the identity block, the rules and the
-# cards, and the user sees a confident answer with nothing behind it. This is the warning D46
-# asked for, in place of raising the window (a separate, measured call).
-ASSUMED_CONTEXT_WINDOW_TOKENS = 4096
-# Prose and log text on this model run about 3.5 characters per token; an estimate on the low
-# side of that keeps the warning honest rather than early.
-_PROMPT_CHARS_PER_TOKEN = 3.5
+# cards, and the user sees a confident answer with nothing behind it.
+#
+# Re-measured on the Deck 2026-09-20 on Ollama 0.34.1, and both halves are now worse than this
+# comment said. The 4,096 is only this server's default -- the model itself advertises 131,072,
+# and loading it with 16,384 cost 0.59 GB of memory and NOTHING in speed, with a game running.
+# And overflow is a cliff, not a slope: 4,220 tokens into a 4,096-token window delivered 2,051,
+# and so did 19,620. One token too many costs about half of everything sent.
+#
+# So the window is no longer assumed here. ``resolve_window_tokens`` asks the server what the
+# model is really loaded with; this name is kept only as the fallback for a server that cannot
+# be asked. See backend/services/token_accounting_service.py.
+ASSUMED_CONTEXT_WINDOW_TOKENS = FALLBACK_WINDOW_TOKENS
 
 
-def estimate_prompt_tokens(messages: list) -> int:
-    """Rough token count for the text of a chat request; images are not counted."""
+def ollama_base_from_chat_url(chat_url: str) -> str:
+    """Turn ``http://host:port/api/chat`` back into ``http://host:port``.
+
+    The streaming call is handed a finished chat address, but asking how much room a model was
+    loaded with is a different endpoint on the same server. Anything that is not the expected
+    shape comes back unchanged, and the caller falls back to the assumed window.
+    """
+    base = str(chat_url or "").strip()
+    suffix = "/api/chat"
+    if base.endswith(suffix):
+        return base[: -len(suffix)]
+    return base
+
+
+def estimate_prompt_tokens(messages: list, model_name: str = "") -> int:
+    """Rough token count for the text of a chat request; images are not counted.
+
+    The characters-per-token figure is learned from the real counts Ollama returns after every
+    reply (``note_real_counts``), because the fixed 3.5 this used to divide by made the plugin's
+    own prompts look about a quarter bigger than they are -- measured 4.30 to 4.48 characters
+    per token across the three Ask modes on the Deck, 2026-09-20. Over-counting is not free:
+    it is taken straight out of the visible reply by ``clamp_num_predict_to_window`` below.
+    """
     chars = 0
     for m in messages or []:
         if isinstance(m, dict):
             chars += len(str(m.get("content") or ""))
-    return int(chars / _PROMPT_CHARS_PER_TOKEN)
+    return estimate_tokens_from_chars(chars, model_name)
 
 
 def prompt_window_warning(
@@ -734,16 +769,19 @@ def prompt_window_warning(
     num_predict: int,
     *,
     window_tokens: int = ASSUMED_CONTEXT_WINDOW_TOKENS,
+    model_name: str = "",
 ) -> Optional[str]:
-    """One-line warning when prompt + reply budget would not fit the assumed window, else None."""
-    est = estimate_prompt_tokens(messages)
+    """One-line warning when prompt + reply budget would not fit the window, else None."""
+    est = estimate_prompt_tokens(messages, model_name)
     need = est + int(num_predict or 0)
     if need <= window_tokens:
         return None
+    survives = tokens_that_survive_overflow(window_tokens)
     return (
         f"ask_ollama: prompt ~{est} tokens + num_predict {int(num_predict or 0)} = {need} exceeds the "
-        f"assumed {window_tokens}-token window by ~{need - window_tokens}; Ollama keeps the end of the "
-        "prompt and drops its start silently (identity, rules, cards). Trim what is attached (D46)."
+        f"{window_tokens}-token window by ~{need - window_tokens}; Ollama does NOT trim to the edge -- "
+        f"measured on the Deck 2026-09-20, about {survives} tokens survive however far over this goes, "
+        "and the part lost is the START (identity, rules, cards). Trim what is attached (D46)."
     )
 
 
@@ -765,6 +803,7 @@ def clamp_num_predict_to_window(
     *,
     window_tokens: int = ASSUMED_CONTEXT_WINDOW_TOKENS,
     floor_visible: int = MIN_VISIBLE_NUM_PREDICT,
+    model_name: str = "",
 ) -> int:
     """Wire ``num_predict`` (visible + thinking) shrunk so the prompt fits, thinking left whole.
 
@@ -773,7 +812,7 @@ def clamp_num_predict_to_window(
     point the floor is sent anyway (a short reply beats a prompt that loses its start), and the
     caller's own ``prompt_window_warning`` still fires on the result.
     """
-    est = estimate_prompt_tokens(messages)
+    est = estimate_prompt_tokens(messages, model_name)
     total = int(visible_num_predict) + int(thinking_budget)
     if est + total <= window_tokens:
         return total
@@ -822,12 +861,31 @@ def _stream_ollama_chat_once(
 
     num_predict = int(budgets.get("num_predict") or 800)
     think_wire = budgets.get("think", False)
+    # The window is no longer assumed (2026-09-20). Ollama's default of 4,096 is not a property
+    # of the model or of the machine -- the Deck's own model advertises 131,072 -- so a server
+    # that has been given a bigger window was being treated as if it had not, and replies were
+    # trimmed to fit room that was never the real limit.
+    #
+    # Asking costs a round trip, so it is not done on the ordinary path. What is known already
+    # is used first; the server is only asked when that would mean shortening someone's reply.
+    # That is the one moment the answer can change what a person gets, and on a prompt that
+    # fits, nothing extra happens at all.
+    ollama_base = ollama_base_from_chat_url(url)
+    visible_num_predict = int(budgets.get("visible_num_predict") or num_predict)
+    thinking_budget = int(budgets.get("thinking_budget") or 0)
+    window_tokens = known_window_tokens(ollama_base, model_name)
+    if estimate_prompt_tokens(messages, model_name) + num_predict > window_tokens:
+        window_tokens = resolve_window_tokens(ollama_base, model_name, logger=logger)
     # D46 follow-up: shrink the visible half of num_predict, never the thinking half, so a
     # prompt that would otherwise overflow the window sends a shorter reply instead of losing
     # its own start on the wire. A prompt that already fits gets num_predict back unchanged.
-    visible_num_predict = int(budgets.get("visible_num_predict") or num_predict)
-    thinking_budget = int(budgets.get("thinking_budget") or 0)
-    clamped_num_predict = clamp_num_predict_to_window(messages, visible_num_predict, thinking_budget)
+    clamped_num_predict = clamp_num_predict_to_window(
+        messages,
+        visible_num_predict,
+        thinking_budget,
+        window_tokens=window_tokens,
+        model_name=model_name,
+    )
     if clamped_num_predict != num_predict:
         logger.warning(
             "ask_ollama: clamping num_predict %d -> %d (visible floor %d, thinking budget %d kept "
@@ -836,8 +894,8 @@ def _stream_ollama_chat_once(
             clamped_num_predict,
             MIN_VISIBLE_NUM_PREDICT,
             thinking_budget,
-            estimate_prompt_tokens(messages),
-            ASSUMED_CONTEXT_WINDOW_TOKENS,
+            estimate_prompt_tokens(messages, model_name),
+            window_tokens,
             model_name,
         )
     num_predict = clamped_num_predict
@@ -856,7 +914,9 @@ def _stream_ollama_chat_once(
         },
     }
     payload = json.dumps(body_dict).encode("utf-8")
-    window_warning = prompt_window_warning(messages, num_predict)
+    window_warning = prompt_window_warning(
+        messages, num_predict, window_tokens=window_tokens, model_name=model_name
+    )
     if window_warning:
         logger.warning(window_warning)
     logger.info(
@@ -1210,6 +1270,13 @@ def post_ollama_chat(
     final_done_reason: Any = None
     thinking_fell_back = False
     thinking_retry_done = False
+    # The real token counts, kept instead of thrown away (2026-09-20). Ollama returns the true
+    # size of what it read and what it wrote at the end of every reply; until now all three went
+    # to the log and nothing else. Summed across a soft continue, because two requests really did
+    # cost two prompt readings and the person waited for both.
+    tokens_in_total = 0
+    tokens_out_total = 0
+    first_segment_prompt_tokens: Optional[int] = None
     # Plan 57: the model's thinking, carried across a soft continue the same way the visible
     # answer is (``stitched_raw_parts`` above) -- one buffer, one "first thinking chunk" clock,
     # for the whole exchange even when it takes two requests.
@@ -1284,6 +1351,14 @@ def post_ollama_chat(
         if result.get("thinking_summary"):
             last_thinking = result.get("thinking_summary")
         final_done_reason = result.get("done_reason")
+        segment_in = result.get("prompt_eval_count")
+        segment_out = result.get("eval_count")
+        if isinstance(segment_in, int) and segment_in > 0:
+            tokens_in_total += segment_in
+            if first_segment_prompt_tokens is None:
+                first_segment_prompt_tokens = segment_in
+        if isinstance(segment_out, int) and segment_out > 0:
+            tokens_out_total += segment_out
         reasoning_buffer_raw = str(result.get("reasoning_buffer") or reasoning_buffer_raw)
         reasoning_first_ts = result.get("reasoning_first_ts", reasoning_first_ts)
         reasoning_frozen_seconds = result.get("reasoning_frozen_seconds", reasoning_frozen_seconds)
@@ -1425,12 +1500,37 @@ def post_ollama_chat(
     )
     if attachment_warnings:
         logger.info("ask_ollama: attachment warnings: %s", "; ".join(attachment_warnings))
+    # Learn the real characters-per-token figure from what actually went out. Only the FIRST
+    # segment is learned from: a soft continue re-sends the answer so far, so its prompt is a
+    # different shape and its characters are not the ones ``messages`` holds. A request carrying
+    # images is skipped inside note_real_counts, because image tokens have no characters behind
+    # them and one such sample would make every later question look far bigger than it is.
+    prompt_chars = sum(
+        len(str(m.get("content") or "")) for m in (messages or []) if isinstance(m, dict)
+    )
+    had_images = any(
+        isinstance(m, dict) and m.get("images") for m in (messages or [])
+    )
+    # Taken before the sample below is learned from, so the log line compares the guess this
+    # request was actually sized by against what really happened -- not against itself.
+    estimate_at_send_time = estimate_tokens_from_chars(prompt_chars, model_name)
+    note_real_counts(
+        model_name,
+        prompt_chars,
+        first_segment_prompt_tokens,
+        had_images=had_images,
+        logger=logger,
+    )
     logger.info(
-        "ask_ollama: OK model=%s response_len=%d soft_continues=%d done_reason=%s",
+        "ask_ollama: OK model=%s response_len=%d soft_continues=%d done_reason=%s "
+        "tokens_in=%d tokens_out=%d estimate_was=%d",
         model_name,
         len(text),
         continue_count,
         final_done_reason,
+        tokens_in_total,
+        tokens_out_total,
+        estimate_at_send_time,
     )
     # Plan 57: "" / null / 0 when the model never thought (thinking Off, or a model that cannot
     # think) -- ``reasoning_buffer_raw`` only ever gains text from a real ``message.thinking``
@@ -1448,6 +1548,17 @@ def post_ollama_chat(
         "strategy_checklist": strategy_checklist,
         "done_reason": final_done_reason,
         "soft_continue_count": continue_count,
+        # The real counts, for the first time (2026-09-20). ``tokens_in`` is what Ollama actually
+        # read, ``tokens_out`` what it actually wrote, both summed over a soft continue.
+        # ``tokens_in_estimated`` is what the plugin had guessed before sending, kept beside the
+        # truth so the gap between them is visible rather than assumed. All three are None-free
+        # integers; a server that reports nothing leaves them at 0.
+        "tokens_in": tokens_in_total,
+        "tokens_out": tokens_out_total,
+        "tokens_in_estimated": estimate_at_send_time,
+        "context_window_tokens": known_window_tokens(
+            ollama_base_from_chat_url(url), model_name
+        ),
         # True when this Ask asked for thinking and the model refused, so the UI can say so
         # once instead of leaving the setting looking silently broken.
         "thinking_unsupported": thinking_fell_back,

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 68,
-  "edgeCount": 159,
+  "fileCount": 69,
+  "edgeCount": 160,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -31,6 +31,7 @@
     "py_modules/backend/services/strategy_checklist_session_service.py",
     "py_modules/backend/services/strategy_guide_parse.py",
     "py_modules/backend/services/tdp_service.py",
+    "py_modules/backend/services/token_accounting_service.py",
     "py_modules/backend/tdp_intent.py",
     "py_modules/backend/tls_ca_fallback.py"
   ],
@@ -293,6 +294,10 @@
     },
     {
       "path": "py_modules/backend/services/steam_vac_service.py",
+      "count": 1
+    },
+    {
+      "path": "py_modules/backend/services/token_accounting_service.py",
       "count": 1
     },
     {
@@ -761,7 +766,8 @@
         "py_modules/backend/services/local_ollama_setup_service.py",
         "py_modules/backend/services/ollama_ask_budgets.py",
         "py_modules/backend/services/ollama_prompts.py",
-        "py_modules/backend/services/strategy_guide_parse.py"
+        "py_modules/backend/services/strategy_guide_parse.py",
+        "py_modules/backend/services/token_accounting_service.py"
       ],
       "importedBy": [
         "main.py",
@@ -929,6 +935,12 @@
         "main.py",
         "py_modules/backend/services/clipboard_service.py",
         "py_modules/backend/services/game_ai_request.py"
+      ]
+    },
+    "py_modules/backend/services/token_accounting_service.py": {
+      "imports": [],
+      "importedBy": [
+        "py_modules/backend/services/ollama_service.py"
       ]
     },
     "py_modules/backend/services/transparency_service.py": {

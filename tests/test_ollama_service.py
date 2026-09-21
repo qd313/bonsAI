@@ -1528,7 +1528,11 @@ class OllamaServiceTests(unittest.TestCase):
 
     def test_prompt_window_warning_fires_only_when_prompt_plus_reply_would_not_fit(self):
         """D46: the Deck runs a 4,096-token window and nothing sets num_ctx; an overlong prompt
-        loses its start silently. The POST site now logs a warning instead of saying nothing."""
+        loses its start silently. The POST site now logs a warning instead of saying nothing.
+
+        Re-measured on the Deck 2026-09-20: the loss is a cliff, not a slope. 4,220 tokens into a
+        4,096-token window delivered 2,051 of them, and so did 19,620. The warning has to say
+        that, because "over by ~124" reads like a small problem and it is not one."""
         from backend.services.ollama_service import (
             ASSUMED_CONTEXT_WINDOW_TOKENS,
             estimate_prompt_tokens,
@@ -1544,7 +1548,9 @@ class OllamaServiceTests(unittest.TestCase):
         warning = prompt_window_warning(huge, 800)
         self.assertIsNotNone(warning)
         self.assertIn(str(ASSUMED_CONTEXT_WINDOW_TOKENS), warning)
-        self.assertIn("drops its start", warning)
+        # Names the part that is lost, and how little survives however far over it goes.
+        self.assertIn("START", warning)
+        self.assertIn("2048 tokens survive", warning)
 
         # The reply budget counts too: a prompt that fits alone can still overflow with num_predict.
         edge = [{"role": "system", "content": "x" * int(3.5 * 3500)}]
@@ -1634,13 +1640,18 @@ class OllamaServiceTests(unittest.TestCase):
             think_effort="medium",
         )
         body = json.loads(mock_urlopen.call_args[0][0].data.decode("utf-8"))
-        self.assertEqual(body["options"]["num_predict"], 784 + 512)
+        # 783, not the 784 this asserted until 2026-09-20. The prompt is 9,801 characters -- the
+        # 9,800 of padding plus the one-character question -- which is 2,800.3 tokens. That used
+        # to be rounded DOWN to 2,800, which is the wrong direction next to a cliff: a token
+        # under-counted is a token over the edge, and going over costs half of everything sent.
+        # It is rounded up now, so one token comes off the visible reply instead.
+        self.assertEqual(body["options"]["num_predict"], 783 + 512)
         self.assertTrue(body["think"])
         clamp_lines = [c for c in logger.warning.call_args_list if "clamping num_predict" in str(c)]
         self.assertEqual(len(clamp_lines), 1)
         self.assertIn("2112", str(clamp_lines[0]))
-        self.assertIn(str(784 + 512), str(clamp_lines[0]))
-        window_lines = [c for c in logger.warning.call_args_list if "exceeds the assumed" in str(c)]
+        self.assertIn(str(783 + 512), str(clamp_lines[0]))
+        window_lines = [c for c in logger.warning.call_args_list if "exceeds the" in str(c)]
         self.assertEqual(window_lines, [])
 
     @patch("backend.services.ollama_service.urllib.request.urlopen")
@@ -1674,7 +1685,7 @@ class OllamaServiceTests(unittest.TestCase):
         self.assertEqual(body["options"]["num_predict"], 600 + 512)
         clamp_lines = [c for c in logger.warning.call_args_list if "clamping num_predict" in str(c)]
         self.assertEqual(len(clamp_lines), 1)
-        window_lines = [c for c in logger.warning.call_args_list if "exceeds the assumed" in str(c)]
+        window_lines = [c for c in logger.warning.call_args_list if "exceeds the" in str(c)]
         self.assertEqual(len(window_lines), 1)
 
     def test_user_consents_strategy_spoilers_phrases(self):

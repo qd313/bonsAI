@@ -46,14 +46,14 @@
       "role": ""
     },
     {
+      "path": "py_modules/backend/services/ollama_service.py",
+      "lines": 1580,
+      "role": "Prompt build, Ollama HTTP, streaming"
+    },
+    {
       "path": "src/components/MainTabUnifiedAskBar.tsx",
       "lines": 1506,
       "role": ""
-    },
-    {
-      "path": "py_modules/backend/services/ollama_service.py",
-      "lines": 1469,
-      "role": "Prompt build, Ollama HTTP, streaming"
     },
     {
       "path": "py_modules/backend/services/voice_transcription_service.py",

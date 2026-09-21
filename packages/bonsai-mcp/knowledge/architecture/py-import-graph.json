@@ -1,7 +1,7 @@
 {
   "note": "Generated. Python import edges among main.py and py_modules/backend/** resolved the way the Decky loader sees them (backend.* -> py_modules/backend/**; see scripts/py_import_graph.py). Standard-library and third-party imports are excluded.",
-  "fileCount": 70,
-  "edgeCount": 160,
+  "fileCount": 71,
+  "edgeCount": 164,
   "cycles": [],
   "leaves": [
     "py_modules/backend/__init__.py",
@@ -38,8 +38,7 @@
   ],
   "orphans": [
     "py_modules/backend/__init__.py",
-    "py_modules/backend/services/__init__.py",
-    "py_modules/backend/services/prompt_budget_service.py"
+    "py_modules/backend/services/__init__.py"
   ],
   "fanIn": [
     {
@@ -155,6 +154,10 @@
       "count": 2
     },
     {
+      "path": "py_modules/backend/services/ollama_ask_budgets.py",
+      "count": 2
+    },
+    {
       "path": "py_modules/backend/services/ollama_embed_service.py",
       "count": 2
     },
@@ -180,6 +183,10 @@
     },
     {
       "path": "py_modules/backend/services/strategy_guide_parse.py",
+      "count": 2
+    },
+    {
+      "path": "py_modules/backend/services/token_accounting_service.py",
       "count": 2
     },
     {
@@ -212,6 +219,10 @@
     },
     {
       "path": "py_modules/backend/services/background_request_state.py",
+      "count": 1
+    },
+    {
+      "path": "py_modules/backend/services/chat_memory_service.py",
       "count": 1
     },
     {
@@ -255,10 +266,6 @@
       "count": 1
     },
     {
-      "path": "py_modules/backend/services/ollama_ask_budgets.py",
-      "count": 1
-    },
-    {
       "path": "py_modules/backend/services/ollama_ask_service.py",
       "count": 1
     },
@@ -276,6 +283,10 @@
     },
     {
       "path": "py_modules/backend/services/plugin_data_reset.py",
+      "count": 1
+    },
+    {
+      "path": "py_modules/backend/services/prompt_budget_service.py",
       "count": 1
     },
     {
@@ -299,10 +310,6 @@
       "count": 1
     },
     {
-      "path": "py_modules/backend/services/token_accounting_service.py",
-      "count": 1
-    },
-    {
       "path": "py_modules/backend/services/voice_read_aloud_service.py",
       "count": 1
     },
@@ -316,10 +323,6 @@
     },
     {
       "path": "py_modules/backend/services/__init__.py",
-      "count": 0
-    },
-    {
-      "path": "py_modules/backend/services/prompt_budget_service.py",
       "count": 0
     }
   ],
@@ -512,6 +515,16 @@
         "py_modules/backend/services/settings_service.py"
       ]
     },
+    "py_modules/backend/services/chat_memory_service.py": {
+      "imports": [
+        "py_modules/backend/services/ollama_ask_budgets.py",
+        "py_modules/backend/services/prompt_budget_service.py",
+        "py_modules/backend/services/token_accounting_service.py"
+      ],
+      "importedBy": [
+        "py_modules/backend/services/ollama_ask_service.py"
+      ]
+    },
     "py_modules/backend/services/chat_slot_service.py": {
       "imports": [
         "py_modules/backend/services/ollama_service.py"
@@ -676,6 +689,7 @@
     "py_modules/backend/services/ollama_ask_budgets.py": {
       "imports": [],
       "importedBy": [
+        "py_modules/backend/services/chat_memory_service.py",
         "py_modules/backend/services/ollama_service.py"
       ]
     },
@@ -685,6 +699,7 @@
         "py_modules/backend/ollama_urls.py",
         "py_modules/backend/services/ai_character_service.py",
         "py_modules/backend/services/ask_payload.py",
+        "py_modules/backend/services/chat_memory_service.py",
         "py_modules/backend/services/local_ollama_setup_service.py",
         "py_modules/backend/services/model_policy.py",
         "py_modules/backend/services/ollama_service.py",
@@ -793,7 +808,9 @@
     },
     "py_modules/backend/services/prompt_budget_service.py": {
       "imports": [],
-      "importedBy": []
+      "importedBy": [
+        "py_modules/backend/services/chat_memory_service.py"
+      ]
     },
     "py_modules/backend/services/proton_troubleshooting_logs.py": {
       "imports": [],
@@ -950,6 +967,7 @@
     "py_modules/backend/services/token_accounting_service.py": {
       "imports": [],
       "importedBy": [
+        "py_modules/backend/services/chat_memory_service.py",
         "py_modules/backend/services/ollama_service.py"
       ]
     },

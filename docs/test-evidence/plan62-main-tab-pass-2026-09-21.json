@@ -1,0 +1,92 @@
+{
+  "what": "Controller pass over the three Main-tab features of plan 62",
+  "when": "2026-09-21",
+  "where": {
+    "deck": "192.168.86.52",
+    "build": "the plan 62 build, deployed by the maintainer",
+    "screen_in_use": "external 1920x1080 monitor, reported to the page as 1500x843 at 1.28 device pixels per drawing pixel",
+    "game_running": "none",
+    "ui_size_setting": "automatic, which resolves to the default size (multiplier 1)"
+  },
+  "passed": {
+    "the_chat_name_is_straight_now": {
+      "verdict": "PASS, measured",
+      "with_the_highlight_on_the_row": {
+        "row_spans": [48, 348],
+        "row_centre": 198,
+        "chat_name_spans": [156, 239],
+        "chat_name_centre": 197.5,
+        "off_centre_by": 0.5,
+        "was_before_the_fix": 14
+      },
+      "the_delete_cross_is_out_of_the_centred_group": {
+        "centred_group_spans": [100, 296],
+        "cross_spans": [274, 296],
+        "note": "The cross now sits at the right-hand end rather than being part of what gets centred, which is what the 14 pixels were."
+      },
+      "at_rest": {
+        "chat_name_centre": 187.8,
+        "off_centre_by": 10.2,
+        "note": "Matches the roughly 10 pixels predicted from the code the day before. The neighbour previews come back at rest and they are different widths. Cosmetic, and the game line is blank at rest anyway."
+      },
+      "the_blank_game_line_holds_its_space": {
+        "game_line_height_focused": 11,
+        "game_line_height_at_rest": 11,
+        "verdict": "PASS - the line is held open in both states, so the name appearing cannot change the height"
+      },
+      "could_not_check": "The game name actually appearing, because this chat has no game attached and no game was running. The line was present and empty in both states."
+    },
+    "read_aloud_is_a_quiet_speaker_at_the_end_of_the_row": {
+      "verdict": "PASS, measured",
+      "speaker": { "width": 30, "height": 32, "spans": [289, 319] },
+      "row_spans": [52, 319],
+      "sits_flush_with_the_row_end": true,
+      "opacity_at_rest": 0.45,
+      "the_plan_asked_for": "about 45 per cent at rest",
+      "renders_alone_when_there_is_no_thumbs_row": true,
+      "one_thing_that_does_not_match_the_description": "The feature was written up as 'the same treatment as the microphone in the Ask box', but the microphone read fully opaque at rest while the speaker reads 0.45. They are not the same at rest. Wording, not behaviour.",
+      "could_not_check": "What it does on an answer stopped part-way through, and the red stop state, because no answer was generated during this pass."
+    },
+    "the_details_panel_draws_both_tabs": {
+      "verdict": "PASS for drawing",
+      "show_details_opens_it": true,
+      "highlight_moves_to_hide_details_on_opening": true,
+      "tabs_found": ["This answer (active)", "Session · 11"],
+      "tabs_row_height": 28,
+      "the_two_tabs_are_not_separately_focusable": "Only the row is focusable, and Left and Right move between the tabs from there, which is the design."
+    }
+  },
+  "failed": {
+    "the_session_tab_cannot_be_reached_with_the_d_pad": {
+      "verdict": "FAIL",
+      "what_a_person_would_see": "The two tabs are drawn, but the highlight will not land on them, so the Session tab cannot be opened and the Clear button at the end of it cannot be reached.",
+      "walking_down_from_hide_details": ["Hide details", "the knowledge-base notes block", "the preset chip in the dock - the tabs row was stepped over"],
+      "walking_up_from_the_preset_chip": ["straight to the chat row at the very top - everything in between was stepped over"],
+      "two_things_behind_it": {
+        "nothing_reaches_the_row_from_above": "The function that puts the highlight on the tabs row is only ever called from below - from the chip ladder moving up, and from the session tab's first row moving up. Nothing calls it when moving down from Hide details or from the notes block, although the design note written above that code promises exactly that.",
+        "the_row_ends_up_behind_the_question_box": {
+          "dock_top": 600,
+          "tabs_row_spans": [766, 795],
+          "chip_ladder_spans": [803, 1100],
+          "note": "Once the transcript settles, both the tabs row and the panel's content sit below the dock top, so they are drawn off the visible area behind the question box, and walking down does not scroll to them. This is the hazard already recorded in this project's own notes: check a control's rectangle against the dock top, not just whether focus landed."
+        }
+      },
+      "earlier_in_the_same_pass": "Immediately after opening, the tabs row was at 527 with the dock top at 600, so it was visible then. The scroll position changed as the panel settled. Both readings are in this file rather than only the convenient one."
+    }
+  },
+  "one_more_measurement_worth_recording": {
+    "the_chat_row_grows_when_the_highlight_lands_on_it": {
+      "height_at_rest": 55,
+      "height_with_the_highlight": 59,
+      "difference": 4,
+      "note": "The feature's promise was that the game name appearing does not change the height, and that holds. This is separate: the focus styling itself adds 4 pixels, which nudges everything below it. Not filed as a bug - worth the maintainer's eye."
+    }
+  },
+  "deck_left_as_found": {
+    "settings_changed": "none",
+    "models_installed": 2,
+    "nothing_pulled_or_removed": true,
+    "ask_model_untouched": true,
+    "the_details_panel_was_left_open": "a per-answer view state, not a setting"
+  }
+}

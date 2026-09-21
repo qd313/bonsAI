@@ -2,7 +2,7 @@
   "hotspots": [
     {
       "path": "main.py",
-      "lines": 3238,
+      "lines": 3263,
       "role": "Decky RPC entrypoints and orchestration"
     },
     {
@@ -71,13 +71,13 @@
       "role": ""
     },
     {
-      "path": "src/data/characterPlaceholderEmoticonGrids.ts",
-      "lines": 1102,
+      "path": "py_modules/backend/services/game_ai_request.py",
+      "lines": 1103,
       "role": ""
     },
     {
-      "path": "py_modules/backend/services/game_ai_request.py",
-      "lines": 1093,
+      "path": "src/data/characterPlaceholderEmoticonGrids.ts",
+      "lines": 1102,
       "role": ""
     },
     {

@@ -347,6 +347,15 @@ starts work outside this.
   it reproduces every time, unlike this one. Now fixed and moved to Verify as **ASKBAR-DOWN-TO-STOP-01**; it
   may well be part of what has been feeding these reports. But it is not this bug — today's runs saw no dead
   Left or Right, and nothing needed a full Quick Access Menu close to clear, so this entry stays open.
+- ★★★ `[layout]` `[focus]` **The new Session tab cannot be reached with the D-pad** — **OPEN, found on
+  the Deck 2026-09-21.** Both tabs are drawn on the opened Show details panel, but the highlight will not land
+  on them: walking down from Hide details goes notes block, then straight out to the question box, stepping
+  over the tabs; walking back up skips them too. So the Session tab never opens and its Clear button cannot be
+  reached. Two causes, both measured: nothing puts the highlight on that row when moving **down** (only
+  upwards from the tab content below it, though the design note above the code promises the downward way too),
+  and once the panel settles the row sits below the question box's top edge, drawn off the visible area.
+  Evidence `docs/test-evidence/plan62-main-tab-pass-2026-09-21.json`.
+
 - ★★★ `[ollama]` `[focus]` **The AI models screen closes instead of doing anything — A on almost any
   control shuts it** — **OPEN, found on the Deck 2026-09-21, blocks the whole screen.** Pressing A on the
   Filters button closes the screen and the filters never appear; pressing A on a model's tick box closes it
@@ -686,8 +695,9 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   Session context bar is gone; the opened Show details panel now carries two tabs, *This answer* and *Session · N*, with
   Left and Right between them, on the newest answer only. Clear sits at the end of the Session tab, full width, with the
   same confirm box. The lane also fixed the chip list's own B handling, which used a method already measured on the device
-  as not reliably stopping Steam backing the ring out of the whole panel. Row **SESSION-TAB-01**, not yet run on the Deck:
-  the four ways out and B are each pinned by a test, none has been pressed. [Plan](planning/62-feature-session-five.md)
+  as not reliably stopping Steam backing the ring out of the whole panel. Row **SESSION-TAB-01**, **run on the Deck
+  2026-09-21 and FAILED**: both tabs are drawn, but the highlight never lands on them, so the Session tab
+  cannot be opened at all — filed as its own three-star bug above. [Plan](planning/62-feature-session-five.md)
 
 - ★★ `[chat]` **The game a chat belongs to, above its title** — **VERIFY, built 2026-09-20 (lane G).**
   The name now shows only while the ring is on the row, with the empty line still held open so the row's
@@ -700,7 +710,10 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   different widths (14 and 43 measured) and shift the name by an amount that changes with the neighbours'
   names. Cosmetic and low priority now, since the game line is blank at rest, leaving only the dots to look
   uneven against. An earlier note here claimed 24 was the figure to fix and asked for a decision; that read
-  the resting state and was withdrawn. Row **CHAT-SLOTS-V3-14c**, not yet run on the Deck. [Plan](planning/62-feature-session-five.md) ·
+  the resting state and was withdrawn. Row **CHAT-SLOTS-V3-14c**, **run on the Deck 2026-09-21 and PASSED**: with the highlight on the row the
+  name is half a pixel off the row's centre, the delete cross sits outside the centred group, and the blank
+  game line holds its 11 pixels in both states. Two notes: the row is 4 pixels taller while highlighted (55
+  to 59), and the game name itself could not be seen because this chat has no game attached. [Plan](planning/62-feature-session-five.md) ·
   [Board](https://claude.ai/artifact/31aLBi17SH7AydhYfGYjBq)
 
 - ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60 (D110).** Each chip now looks raised: a thin light line along its top edge and a soft shadow beneath it. The two chips sit 6 pixels apart instead of 4. In decode, static and carousel mode there is now 8 pixels of open space between the chips and the question box, where before they touched (fade mode was already open and keeps its own spacing). The word "Tip" became a small dot, the colour on the tags and on the resolving-text label is quieter, and the chip the controller is on now shows a light bar along its bottom edge instead of the old blue outline — a ring around the chip that nobody could actually see is gone too. Passed on the Deck by measurement: rows 02, 03, 04, 05 and 06 (the one-chip check), and 08. **Row 09 failed on the Deck 2026-09-18** — a real knowledge-base chip showed with no Tip dot — and is filed as its own bug, below. Still owed: the maintainer's own look at rows 01 and 05, from the three screenshots named in the evidence file, and row 07 (reduced motion), both on the maintainer's own page; and a look at the help and agent chips, which were not on screen during this run. Italics were tried earlier for the label and turned down. [Plan](planning/60-chip-button-restyle.md) · evidence `docs/test-evidence/plan60-QA-chip-button.json`.
@@ -711,9 +724,11 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   full strength, the same treatment as the microphone in the Ask box, and it turns into a red stop while the
   Deck is talking. It still shows up on an older answer with no thumbs row, and Left/Right on that row still
   reach it once the thumbs are greyed out. **Measured on the Deck 2026-09-20, before the change:** taking
-  the line out gives back 29 pixels on every finished answer. Row **READ-ALOUD-07**, not yet run on the Deck
-  under this shape. Still owed on the device: a look by eye at how quiet the speaker sits at rest, and what
-  it does on an answer stopped part-way through. [Plan](planning/62-feature-session-five.md) ·
+  the line out gives back 29 pixels on every finished answer. Row **READ-ALOUD-07**, **run on the Deck 2026-09-21 and PASSED** the two
+  things that were owed by eye, as numbers instead: the speaker is 30 by 32 sitting flush with the row's
+  right-hand end, and its opacity at rest is 0.45, which is the 45 per cent the plan asked for. Still owed:
+  what it does on an answer stopped part-way. The write-up's claim that it matches the Ask box microphone is
+  wrong — that microphone reads fully opaque at rest. [Plan](planning/62-feature-session-five.md) ·
   [Board](https://claude.ai/artifact/31aLBi17SH7AydhYfGYjBq)
 
 - ★★★ `[ollama]` `[ui]` **Every filter on the AI models screen behind one Filters button, and five

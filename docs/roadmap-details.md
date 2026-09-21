@@ -374,36 +374,85 @@ giving a chat a memory worth keeping; the second is keeping it small on its own.
    new thinking in this entry.
 5. **The summary shows inside the Session tab, under the Compact button.** Exact shape settled when it is built.
 
-**Nothing gets written until these are measured, and they are measured on the Deck.** The target is a good experience on
-the weakest machine bonsAI will ever run on, and that is the Deck (maintainer, 2026-09-20). A PC on the home network and
-the Steam Frame both hold more; note what they hold when it is cheap to do so, but nothing is designed around them, and
-no choice here is allowed to make the Deck worse.
+**Measured on the Deck 2026-09-20.** Four of the five are answered. Every number below came off
+the Deck itself, with its own model and its own AI server — which has moved on to Ollama 0.34.1
+since this was last looked at. The target was, and stays, a good experience on the weakest machine
+bonsAI will ever run on. A PC on the home network and the Steam Frame both hold more; note what
+they hold when it is cheap to do so, but nothing is designed around them, and no choice here is
+allowed to make the Deck worse.
 
-- **How much the Deck's own model really holds.** The window it loads with, whether it can be raised, and what raising
-  it costs in memory and speed on a machine sharing its memory with the game.
-- **What happens today when a chat gets enormous** — measured on a real long chat, not read off the code.
-- **What the summary costs**: how long the summary call alone takes, how much longer the answer takes from press to first
-  word, and how much of the reply budget the pasted summary eats. Deck's own screen, same model, same game running, one
-  short chat and one long one.
-- **Where the tokens go today**, on one real question in each Ask mode: how much is the rules and who the AI is, how much
-  is the game cards, how much is the chat, how much is thinking, how much is left for the answer. Without these five
-  numbers there is nothing to write a budget against.
-- **How many tokens went in and how many came out**, on every answer, kept rather than guessed at. **This one is nearly
-  free and was not known when this entry was written:** Ollama already hands back the real count of tokens in the
-  question and the real count in the answer, plus whether the answer stopped because it ran out of room, at the end of
-  every single reply. The plugin writes all three to the log and then throws them away — nothing else in the code reads
-  them. Keeping them turns every ordinary Ask into a measurement, and gives the plugin's own guess something to be
-  checked against.
+- **How much the Deck's model really holds: far more than anyone thought, and more room is free
+  in speed.** The model can hold 131,072 tokens. The 4,096 the plugin has been working to is the
+  AI server's own default setting, not a limit of the model or of the machine. More room costs
+  memory and nothing else: with a game running, answers came out at 21.7 tokens a second at
+  4,096, at 8,192, at 16,384 and at 32,768 alike. Doubling the room costs 0.3 GB, quadrupling it
+  0.6 GB. Under a heavy game the Deck had only 206 MB spare before the model loaded at all, and
+  it still loaded at every size — but that is the edge, and it is why more room is a decision to
+  take on purpose rather than a default to change quietly. **Still to decide.**
 
-**What the code already says about today's behaviour — a starting point to check, not to trust.** The Deck's model was measured
-in September loading with a 4,096-token window, and the plugin never asks for a bigger one. When a question plus its reply
-budget will not fit, the plugin shrinks the **visible reply** first, never the thinking budget, down to a floor of 600
-tokens. Past that floor it sends the request anyway, and Ollama keeps the **end** of the prompt and silently drops the
-**start** — the identity block, the rules and the cards. The person gets a confident answer with nothing behind it, and
-only the log says so. That is the ceiling the summary has to live under: every question carrying a summary spends part of
-that same window, so this feature can make the very failure it is meant to prevent if the summary is not kept small.
-Both halves of that behaviour are now ruled out by the maintainer: the answer is not the part that gets squeezed, and the
-plugin does not let the AI pick what to lose. See the shape below.
+- **What happens when a chat gets enormous: worse than losing the start. It falls off a cliff.**
+  Going over does not trim to the edge. Sending 4,220 tokens into a 4,096-token space delivered
+  2,051 of them. Sending 19,620 into the same space also delivered 2,051. One token too many
+  costs about **half of everything sent**, every time, however far over it goes — and the half
+  that goes is the beginning: who the AI is, the rules it must follow, and the game's cards.
+  Proved by hiding a pass phrase at the very start of a long question. At 4,096 the model could
+  not repeat it and answered with nonsense. At 16,384 it gave the phrase back word for word.
+
+- **Where the tokens go today: two of the three Ask modes already do not fit**, with no chat
+  memory in the question at all. One real question in each mode, the game's cards attached,
+  thinking on medium:
+
+  | Ask mode | who the AI is, and the rules | the game's cards | the question | thinking | the answer | total | against 4,096 |
+  |---|---|---|---|---|---|---|---|
+  | Speed | 566 | 475 | 9 | 512 | 800 | 2,362 | 1,734 spare |
+  | Strategy | 1,098 | 1,410 | 9 | 512 | 1,600 | 4,629 | **533 over** |
+  | Expert | 566 | 2,337 | 9 | 512 | 1,200 | 4,624 | **528 over** |
+
+  So this feature cannot simply add a summary to the question. On two modes out of three there is
+  nothing left to add it to, and the room a summary needs has to be found before it is spent.
+
+- **How many tokens went in and how many came out: kept now, and the old guess was a fifth too
+  big.** Counting characters and dividing by 3.5 made the plugin's own questions look 20% to 25%
+  bigger than they are; the real figure measured 4.32 characters per token. That over-count was
+  not harmless — the plugin pays for it by shortening the answer. On a Strategy question with
+  cards and thinking on, the answer's allowance was 600 tokens and should have been 851. The real
+  counts the AI server returns are now kept and learned from, so the guess corrects itself after
+  the first reply of a session. Landed 2026-09-20.
+
+**Still owed: what the summary costs.** How long writing it takes on its own, how much longer the
+whole answer takes from press to first word, and how much of the answer's allowance the summary
+eats. That one needs a summary to exist before it can be timed. What is already known is the
+price of carrying anything at all: **reading the question is the slow part, at roughly 1.7 to 2
+seconds for every 1,000 tokens.** A 500-token summary therefore costs about a second on every
+question that carries it — before the cost of writing it.
+
+**A call to revisit, with the numbers, as call 2 asked for.** The entry says the summary is
+written **right before the next question**. Measured on the Deck, that choice costs about
+**14 seconds on every single question**, and it is avoidable.
+
+The AI server remembers the work it did on the front of the last question and skips it when that
+part has not changed. With a long piece of session text at the front: the first question took
+15.3 seconds before the first word, and the next two took 1.1 and 0.8. Change one word of that
+text and the saving vanishes — three questions in a row took 15.3, 15.3 and 15.3.
+
+Rewriting the summary right before each question changes that text every time, so every question
+pays full price. Writing it **just after an answer instead** — while the person is reading --
+leaves it unchanged when the next question goes out, and that question is nearly free. Same
+summary, same content, same place in the question; only the moment it is written moves. Two
+honest limits: the saving holds only while the model stays in memory (five minutes idle and it is
+paid again), and moving between chats loses it too. **This is the maintainer's call**; the numbers
+are here rather than a quiet change, as asked.
+
+**What the code said about today's behaviour, now checked rather than trusted (2026-09-20).** It was right about the
+shape and wrong about the severity. When a question plus its reply allowance will not fit, the plugin shrinks the
+**visible reply** first, never the thinking allowance, down to a floor of 600 tokens. Past that floor it sends the
+request anyway, and the AI keeps the **end** and drops the **start** — who it is, the rules, the cards. The person gets a
+confident answer with nothing behind it, and only the log says so. All of that held up. What did not hold up is "drops
+the start": it does not drop the excess, it drops down to about half the space and stays there however far over the
+question goes. That is the ceiling the summary has to live under, and it is a harder ceiling than this entry assumed:
+every question carrying a summary spends part of the same space, so this feature can cause the very failure it exists to
+prevent if the summary is not kept small. Both halves are ruled out by the maintainer anyway: the answer is not the part
+that gets squeezed, and the plugin does not let the AI pick what to lose. See the shape below.
 
 **Spoilers, and the second rating.** Today there is one spoiler number per answer: a **risk** rating of low, medium or
 high, built from the game's own profile, the question, what the knowledge base returned and the model's own tag, with the
@@ -426,11 +475,13 @@ long the answer may run; thinking has its own separate budget, so turning thinki
 request will not fit, the plugin shrinks the answer rather than the thinking. What is missing is the part that decides
 whether a person gets a good reply:
 
-- **The window is assumed, not asked for.** The plugin works to 4,096 tokens because that is what the Deck's model was
-  measured loading. A stronger PC on the home network holds far more and is treated as if it did not.
-- **The real counts arrive and are thrown away.** The plugin sizes a question by counting its characters and dividing.
-  The true count of what went in, what came out, and whether the answer stopped for lack of room comes back with every
-  single reply — straight into the log, read by nothing.
+- ~~**The window is assumed, not asked for.**~~ **Fixed 2026-09-20.** The plugin now asks the AI server how much room
+  the model was really loaded with, and only asks at the moment the answer would change what a person gets — on a
+  question that fits, nothing extra happens. It still does not *set* the room, so the 131,072 the Deck's model can hold
+  is out of reach until that decision is taken.
+- ~~**The real counts arrive and are thrown away.**~~ **Fixed 2026-09-20.** The true count of what went in, what came
+  out, and the guess made before sending are all kept side by side, so the gap between them is visible rather than
+  assumed. The plugin learns the real characters-per-token figure from them and corrects itself after one reply.
 - **The rules, the game cards and the chat itself have no stated share.** They are whatever size they happen to be, and
   the answer is squeezed to make room for them.
 - **Past the floor, the AI chooses what to lose, and it loses the start** — who it is and what it must not do — while the

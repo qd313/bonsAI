@@ -493,11 +493,11 @@ replace it with a specific issue when one exists.
   **Save a report** inside it, and a typed command, write a read-only report of the setup to the Desktop: the former
   **Deck health snapshot**, folded in here. [Plan](planning/39-connection-doctor.md).
 - ★★★★ `[ask]` **Session context and user stash** — **OPEN.** Live session facts plus user-editable notes for Ask. No embeddings, no cloud.
-- ★★★★ `[ask]` **The chat sums itself up instead of being cleared** — **OPEN, filed and scoped 2026-09-20; every call in,
-  measurements owed before any code.** A long chat is compacted into a short summary that goes into the next question, from
-  a button in the Session tab; a new chat still starts empty and deleting one still works, so the person picks. With it comes
-  the harder half: **the plugin owns the token budget, not the model** — a floor nothing can starve, a ceiling thinking
-  can never cross, and no answer cut short to make room. **Deck numbers first.** [Detail](roadmap-details.md#the-chat-sums-itself-up-instead-of-being-cleared).
+- ★★★★ `[ask]` **The chat sums itself up instead of being cleared** — **OPEN, measured on the Deck 2026-09-20; the
+  plugin knows its real numbers now, one call owed.** A long chat is compacted into a short summary that goes into the next
+  question, from a button in the Session tab. **One token over costs half the question, not the excess** — and Strategy and
+  Expert already do not fit. The summary written before each question costs ~14s every time; written just after an answer it
+  is nearly free — **maintainer's call**. [Detail](roadmap-details.md#the-chat-sums-itself-up-instead-of-being-cleared).
 - ★★★★ `[ollama]` **LAN custom model pull** — **OPEN.** Blocked until a mechanism is chosen (R1 to R4). Depends on **Custom model in
   the Pull Models picker**.
 - ★★★★ `[perms]` **Web permission** — **OPEN, discovery locked.** Opt-in live web answers; offline Ask and local KB when off. Kids

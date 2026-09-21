@@ -185,6 +185,12 @@ starts work outside this.
   **Tried on the Deck 2026-09-17, blocked:** the knowledge base was already installed on that device, so
   there is no first-time download button to press. Still owed, on a Deck without the knowledge base
   installed. Evidence `docs/test-evidence/plan57-QA-kb-download-two-taps.json`.
+- ★ `[ollama]` `[focus]` **B while typing a model name by hand looks likely to back out of the whole AI
+  models screen** — **OPEN, found by reading the code 2026-09-20; one press on the Deck would settle it.**
+  Typing a name by hand opens a small box on the Filters row, and nothing on that box handles B, so B should
+  fall through and close the whole screen, losing what was typed. The Filters panel beside it carries exactly
+  that handler for exactly that reason, so the fix is one line. Steam's own keyboard may swallow B first.
+
 - ★ `[ollama]` **The vision try-order picker writes settings even when nothing changed** — **OPEN, found
   2026-09-16 during block 0 of session 56.** Opening the vision model try-order picker and pressing Done
   writes the picker's current order into the settings file, even when nobody moved anything. Restored by hand

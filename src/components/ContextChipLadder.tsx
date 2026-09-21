@@ -241,13 +241,23 @@ export function ContextChipLadder({
         onMoveUp: moveUp,
         onMoveDown: moveDown,
       })}
-      onButtonDown={(e) => {
-        if (e.detail.button === 2 || e.detail.button === 3) {
+      /*
+       * B collapses the ladder back to its own hint link. `onCancelButton` + `preventDefault`,
+       * not `onButtonDown` checking the button code: measured on device 2026-08-28
+       * (DrgGlossaryTermChip.tsx, buildReasoningFoldElement.tsx) that `onButtonDown` does receive
+       * B, but returning `true` from it does NOT stop Steam also backing the ring out of the
+       * panel — only `onCancelButton` genuinely consumes the press. Safe to attach
+       * unconditionally here (unlike those two examples' "only while open" gating): this whole
+       * Focusable only exists while the ladder itself is expanded — the collapsed hint above
+       * renders a different Focusable entirely — so there is no "closed" state of this same node
+       * where B ought to fall through instead.
+       */
+      {...({
+        onCancelButton: (e: unknown) => {
           setExpandedBoth(false);
-          return true;
-        }
-        return false;
-      }}
+          (e as { preventDefault?: () => void })?.preventDefault?.();
+        },
+      } as Record<string, unknown>)}
     >
       <div
         style={{

@@ -3,8 +3,8 @@
  *
  * Purpose: Everything below the Ask bar: the whole conversation in this chat
  * — the finished questions and answers from before, and the one being asked
- * right now or just finished — plus, underneath all of that, a short strip
- * listing every turn and a button to save the chat to the desktop.
+ * right now or just finished — plus, underneath all of that, a button to
+ * save the chat to the desktop.
  *
  *     (empty-state logo, only when this chat has nothing in it yet)
  *
@@ -17,12 +17,13 @@
  *        the answer
  *        (a Strategy Guide branch picker or checklist, if one applies)
  *        Helpful / Not really, chips, Read aloud, Show details
- *        context chips (Developer details, and so on)
+ *          (opened: This answer | Session · N tabs, then that tab's own
+ *           content — the chip ladder, or the session row list and Clear —
+ *           plan 62 3c. Only the newest answer ever carries the Session tab.)
  *
  *     (situational hints: no game detected, a troubleshooting-shaped
  *      question with game-reading off, a permission denial)
  *     (slow-answer and applied-tuning banners)
- *     Session context strip — one row per turn, tap one to inspect it
  *     [ Save chat to Desktop ]
  *
  * Used for: MainTab, filling the space above the dock that holds the
@@ -58,9 +59,11 @@
  *    detected, a troubleshooting-shaped question with game-reading
  *    permission off, a VAC-check permission denial), then the slow-answer
  *    and applied-tuning banners.
- * 6. Finally, the session context strip — one row per turn, letting a
- *    person jump straight to any of them — and, when this chat can be
- *    saved, the Save chat to Desktop button.
+ * 6. Finally, when this chat can be saved, the Save chat to Desktop button.
+ *    (The separate "Session context (N turns)" box that used to sit here is
+ *    gone — plan 62 3c folded its row list, chips and Clear into the newest
+ *    answer's own Show details panel as a second tab; see
+ *    `buildDetailsPanelElement`'s own doc comment for that focus graph.)
  *
  * Gotchas:
  * - There is deliberately no raw keyboard listener in this file for D-pad
@@ -141,10 +144,15 @@ import { buildCollapsedTurnTitle, buildExpandedTurnTitle } from "../utils/chatTu
 import {
   isDeckDirectionDownEvent,
   isDeckDirectionLeftEvent,
+  isDeckDirectionRightEvent,
   isDeckDirectionUpEvent,
 } from "../utils/focusNavigation";
 import { ContextChipLadder } from "./ContextChipLadder";
-import { SessionContextStrip } from "./SessionContextStrip";
+import {
+  SessionContextTabBody,
+  computeSessionContextRows,
+  type SessionContextTurn,
+} from "./SessionContextStrip";
 import { transparencyUiAvailable } from "../utils/contextChipsFromSnapshot";
 import type {
   AppliedResult,
@@ -157,6 +165,7 @@ import type {
 } from "../types/bonsaiUi";
 import { ThinkingSpinnerIcon } from "./icons";
 import type {
+  AskDiagnosticsSnapshot,
   ChatSlotTurnTransparency,
   KbAttachedNote,
   TransparencySnapshot,
@@ -351,6 +360,36 @@ export function focusKbNotesBlock(turnKey: string): boolean {
 }
 
 /**
+ * The newest turn's own "This answer / Session · N" tabs row (plan 62 3c), one per turn key —
+ * same shape as `kbNotesBlockEls` just above and for the same reason: this row is a sibling of
+ * Show details, the KB notes block and the ladder/session body inside one turn's own Focusable
+ * container, so a plain `.focus()` carries Steam's ring correctly between them without a registry
+ * hop (AGENTS.md, "The Steam Deck focus graph"). Only the newest turn ever mounts one, so at most
+ * one entry is ever live at a time in practice, but keyed by turn id anyway to match the pattern
+ * every other per-turn registry in this file already uses.
+ */
+const detailsTabsRowEls = new Map<string, HTMLElement>();
+
+function registerDetailsTabsRowEl(turnKey: string, el: HTMLElement | null): void {
+  if (el) detailsTabsRowEls.set(turnKey, el);
+  else detailsTabsRowEls.delete(turnKey);
+}
+
+function focusDetailsTabsRow(turnKey: string): boolean {
+  const el = detailsTabsRowEls.get(turnKey);
+  if (!el) return false;
+  if (!el.hasAttribute("tabindex") && !el.matches?.("button, a, input, select, textarea")) {
+    el.setAttribute("tabindex", "-1");
+  }
+  try {
+    el.focus({ preventScroll: true });
+  } catch {
+    return false;
+  }
+  return elementHasFocus(el);
+}
+
+/**
  * Up from any row below the live turn's own "From the notes" block (a permission-hint row, or
  * the chip ladder's own fallback) — reach the block first, when one is mounted, before falling
  * to whatever that row's own Up already reached. The mirror of the Down path already wired
@@ -373,6 +412,11 @@ export function focusUpPastLiveKbNotesBlock(): boolean {
  * is actually expanded right now, so it finds the block wherever it is actually mounted — live,
  * the newest archived turn, or (harmlessly) an older one a person expanded by hand, where
  * `focusKbNotesBlock` simply reports nothing to find and this falls through exactly as before.
+ *
+ * No caller left inside this file since plan 62 3c removed the standalone strip this was written
+ * for — kept, not deleted, because its own dedicated test still exercises it directly and nothing
+ * about the function itself is wrong; it is exactly as reusable for a future "Up past the block"
+ * caller as it always was.
  */
 export function focusUpPastSessionContextStripKbNotesBlock(
   expandedTurnKey: string | null | undefined
@@ -587,13 +631,13 @@ export type MainTabChatTranscriptProps = {
    */
   onAskOllama?: (overrideQuestion?: string, opts?: { threadQuestionDisplay?: string }) => void | Promise<void>;
   /**
-   * D105: wrap the Session context strip's own Clear confirm box, the same way Settings' two
-   * confirm boxes are wrapped -- opening any Decky modal remounts the plugin, and skipping these
-   * would let the remount undo whichever turn is expanded right now. Already part of MainTabProps
-   * (as `onBeforeNestedDeckyModal` / `onCompleteNestedDeckyModalClose`, the names the chat-slot
-   * rename modal already uses) and reaches this component via MainTab's plain `{...props}` spread,
-   * the same route `onAskOllama` documents above; only needs declaring here to type it and hand
-   * it on to the strip.
+   * D105, now the Session tab's own Clear confirm box (plan 62 3c folded the standalone strip's
+   * Clear into it): wrapped the same way Settings' two confirm boxes are -- opening any Decky
+   * modal remounts the plugin, and skipping these would let the remount undo whichever turn is
+   * expanded right now. Already part of MainTabProps (as `onBeforeNestedDeckyModal` /
+   * `onCompleteNestedDeckyModalClose`, the names the chat-slot rename modal already uses) and
+   * reaches this component via MainTab's plain `{...props}` spread, the same route `onAskOllama`
+   * documents above; only needs declaring here to type it and hand it on to `buildDetailsPanelElement`.
    */
   onBeforeNestedDeckyModal?: () => void;
   onCompleteNestedDeckyModalClose?: (close: () => void) => void;
@@ -685,6 +729,198 @@ export function firstArchivedHeaderMoveUp(turnIndex: number): (() => boolean) | 
   return turnIndex === 0 ? () => takeNavFocus("chat-slot-row") : undefined;
 }
 
+/**
+ * The panel a turn's "Show details" line opens (plan 62 3c). A plain function, not a component
+ * (like `buildKbNotesBlockElement` and `buildReplyActionsElement`, and for the same reason: a
+ * test can call it directly and read the returned element's own props, rather than rendering the
+ * whole transcript and hunting through a mocked `Focusable` tree for one row).
+ *
+ * Focus graph, written before the control exists per AGENTS.md ("The Steam Deck focus graph") and
+ * design-language.md Rule 8:
+ *
+ *   Hide details (the existing "show-details" reply stop, unchanged)
+ *      | Down                                          ^ Up
+ *   This answer | Session · N        <- new stop, only on the newest turn ("bonsai-details-tabs-row")
+ *      | Down                                          ^ Up
+ *   This answer tab: the existing chip ladder, exactly as before ("bonsai-chip-ladder")
+ *   Session tab: the turn row list, the active row's own chips, then Clear (SessionContextTabBody)
+ *
+ * - Only the newest turn (`isNewest`) ever renders the tabs row at all — an older, hand-expanded
+ *   turn keeps today's shape, a bare ladder with no tabs, exactly as `SessionContextStrip`'s own
+ *   file header already promises ("Older answers show the panel as it is today, with no tabs").
+ * - Left/Right switch tabs; Up leaves to Show details (via the existing KB-notes-block-then-
+ *   show-details chain every ladder already uses); Down enters whichever tab is active — the
+ *   ladder for "This answer", the first session row for "Session".
+ * - B, from anywhere inside either tab's content, closes the whole panel and hands the ring back
+ *   to the still-mounted Show details / Hide details line — not just the local re-collapse
+ *   `ContextChipLadder` does on its own B press, which is why both the tabs row's own
+ *   `onCancelButton` and the ladder's `onExpandChange` call the same `closePanel` below.
+ */
+function buildDetailsPanelElement(args: {
+  turnKey: string;
+  querySlot: () => HTMLElement | null;
+  snapshot: TransparencySnapshot | ChatSlotTurnTransparency | null;
+  devDiagnostics: AskDiagnosticsSnapshot | null;
+  isNewest: boolean;
+  detailsTab: "answer" | "session";
+  setDetailsTab: (tab: "answer" | "session") => void;
+  sessionLiveTurn: SessionContextTurn | null;
+  archivedTurns: AskThreadCollapsedTurn[];
+  sessionHighlightTurnId: string | null;
+  setSessionHighlightTurnId: (id: string | null) => void;
+  setTransparencyDetailsOpen: (open: boolean) => void;
+  onBeforeDeckyModal?: () => void;
+  onCompleteDeckyModalClose?: (close: () => void) => void;
+}): React.ReactElement {
+  const {
+    turnKey,
+    querySlot,
+    snapshot,
+    devDiagnostics,
+    isNewest,
+    detailsTab,
+    setDetailsTab,
+    sessionLiveTurn,
+    archivedTurns,
+    sessionHighlightTurnId,
+    setSessionHighlightTurnId,
+    setTransparencyDetailsOpen,
+    onBeforeDeckyModal,
+    onCompleteDeckyModalClose,
+  } = args;
+
+  const upPastPanel = () =>
+    focusKbNotesBlock(turnKey) ||
+    focusReplyShowDetails(querySlot()) ||
+    focusReplyUtilityRow(querySlot());
+
+  if (!isNewest) {
+    /*
+     * Unchanged: an older, hand-expanded turn keeps today's bare ladder, no tabs.
+     *
+     * `onMoveDownFromLadder` keeps the same shape it always had — try the standalone strip below —
+     * even though plan 62 3c removed that strip: `focusSessionContextStrip()` (liveTurnFocusGraph.ts,
+     * not owned by this lane) now safely reports false with nothing left to find, and Down past the
+     * last chip on an older turn falls through to Steam's own default nav, exactly as Down past
+     * anything else with nothing wired below it already does elsewhere in this file.
+     */
+    return (
+      <ContextChipLadder
+        snapshot={snapshot}
+        collapsedHint={false}
+        onMoveUpFromLadder={upPastPanel}
+        onMoveDownFromLadder={() => focusSessionContextStrip()}
+        devDiagnostics={devDiagnostics}
+      />
+    );
+  }
+
+  const sessionRowCount = computeSessionContextRows(sessionLiveTurn, archivedTurns).length;
+
+  const closePanel = () => {
+    setTransparencyDetailsOpen(false);
+    setSessionHighlightTurnId(null);
+    focusReplyShowDetails(querySlot());
+  };
+  const focusFirstTabContent = () =>
+    detailsTab === "answer"
+      ? focusContextChipLadder(querySlot())
+      : focusDeckOwner(querySlot()?.querySelector<HTMLElement>(".bonsai-details-session-row") ?? null);
+
+  return (
+    <>
+      <Focusable
+        className="bonsai-details-tabs-row"
+        flow-children="horizontal"
+        ref={(el: HTMLElement | null) => registerDetailsTabsRowEl(turnKey, el)}
+        {...({
+          onMoveUp: upPastPanel,
+          onMoveDown: focusFirstTabContent,
+          onMoveLeft: () => {
+            if (detailsTab !== "session") return false;
+            setDetailsTab("answer");
+            return true;
+          },
+          onMoveRight: () => {
+            if (detailsTab !== "answer") return false;
+            setDetailsTab("session");
+            return true;
+          },
+          onButtonDown: (evt: unknown) => {
+            if (isDeckDirectionUpEvent(evt)) return upPastPanel();
+            if (isDeckDirectionDownEvent(evt)) return focusFirstTabContent();
+            if (isDeckDirectionLeftEvent(evt) && detailsTab === "session") {
+              setDetailsTab("answer");
+              return true;
+            }
+            if (isDeckDirectionRightEvent(evt) && detailsTab === "answer") {
+              setDetailsTab("session");
+              return true;
+            }
+            return false;
+          },
+          /*
+           * B closes the whole panel. `onCancelButton` + `preventDefault`, not `onButtonDown`
+           * checking the button code: measured on device 2026-08-28 (DrgGlossaryTermChip.tsx,
+           * buildReasoningFoldElement.tsx) that `onButtonDown` does receive B, but returning
+           * `true` from it does NOT stop Steam also backing the ring out of the panel — only
+           * `onCancelButton` genuinely consumes the press. Safe to attach unconditionally: this
+           * row only exists while Show details is open, so there is no "closed" state of this
+           * same node where B ought to fall through instead.
+           */
+          onCancelButton: (evt: unknown) => {
+            closePanel();
+            (evt as { preventDefault?: () => void })?.preventDefault?.();
+          },
+        } as Record<string, unknown>)}
+        style={{ display: "flex", flexDirection: "row", width: "100%", gap: 4, marginTop: 8 }}
+      >
+        <span
+          className={`bonsai-details-tab${detailsTab === "answer" ? " bonsai-details-tab--active" : ""}`}
+          onClick={() => setDetailsTab("answer")}
+        >
+          This answer
+        </span>
+        <span
+          className={`bonsai-details-tab${detailsTab === "session" ? " bonsai-details-tab--active" : ""}`}
+          onClick={() => setDetailsTab("session")}
+        >
+          {`Session · ${sessionRowCount}`}
+        </span>
+      </Focusable>
+      {detailsTab === "answer" ? (
+        <ContextChipLadder
+          snapshot={snapshot}
+          collapsedHint={false}
+          onMoveUpFromLadder={() => focusDetailsTabsRow(turnKey) || upPastPanel()}
+          /*
+           * Same shape the pre-tabs ladder always had, kept for consistency with the older-turn
+           * branch above — see that branch's own comment for why calling the now-defunct
+           * `focusSessionContextStrip()` is harmless rather than stale: it safely reports false
+           * with the standalone strip gone (plan 62 3c), and Down falls through to Steam's default.
+           */
+          onMoveDownFromLadder={() => focusSessionContextStrip()}
+          devDiagnostics={devDiagnostics}
+          onExpandChange={(expanded) => {
+            if (!expanded) closePanel();
+          }}
+        />
+      ) : (
+        <SessionContextTabBody
+          liveTurn={sessionLiveTurn}
+          archivedTurns={archivedTurns}
+          highlightTurnId={sessionHighlightTurnId}
+          onHighlightClear={() => setSessionHighlightTurnId(null)}
+          onMoveUpFromFirstRow={() => focusDetailsTabsRow(turnKey) || upPastPanel()}
+          onRequestClose={closePanel}
+          onBeforeDeckyModal={onBeforeDeckyModal}
+          onCompleteDeckyModalClose={onCompleteDeckyModalClose}
+        />
+      )}
+    </>
+  );
+}
+
 /*
  * In: MainTabChatTranscriptProps — the live question and answer text (or the
  * streaming preview of it), the finished-turn history, which turn is
@@ -706,7 +942,7 @@ export function firstArchivedHeaderMoveUp(turnIndex: number): (() => boolean) | 
  *    just above this function.
  * 4. Fold in a Strategy Guide branch picker or checklist where one applies.
  * 5. Draw the situational hint rows and warning banners below the turns.
- * 6. Draw the session context strip and the Save chat to Desktop button.
+ * 6. Draw the Save chat to Desktop button.
  */
 export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
   const {
@@ -761,6 +997,14 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
 
   const [sessionHighlightTurnId, setSessionHighlightTurnId] = useState<string | null>(null);
   const [transparencyDetailsOpen, setTransparencyDetailsOpen] = useState(false);
+  /**
+   * Which tab is showing inside the newest answer's own Show details panel (plan 62 3c). Only the
+   * newest turn ever renders the tabs at all — see `renderDetailsPanel`'s `isNewest` — so this one
+   * piece of state is unambiguous the same way `transparencyDetailsOpen` already is for "which turn
+   * is expanded": only one turn is ever newest, the same reasoning `expandedTurnKey` itself rests
+   * on above.
+   */
+  const [detailsTab, setDetailsTab] = useState<"answer" | "session">("answer");
   const [troubleshootingPermHintDismissed, setTroubleshootingPermHintDismissed] = useState(false);
 
   /*
@@ -846,6 +1090,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
   useEffect(() => {
     setSessionHighlightTurnId(null);
     setTransparencyDetailsOpen(false);
+    setDetailsTab("answer");
   }, [
     transparencySnapshot?.raw_question,
     transparencySnapshot?.final_response,
@@ -1375,6 +1620,18 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     ? (transparencySnapshot?.ask_diagnostics ?? null)
     : null;
 
+  const sessionLiveTurnForTabs: SessionContextTurn | null =
+    showTransparencyUi && transparencySnapshot
+      ? {
+          id: "live",
+          label: (askThreadDisplayQuestion || lastExchange?.question || "Latest Ask")
+            .trim()
+            .slice(0, 48),
+          question: (askThreadDisplayQuestion || lastExchange?.question || "").trim(),
+          snapshot: transparencySnapshot,
+        }
+      : null;
+
   /*
    * "N earlier" collapses the older archived turns behind one pill, so a long slot opens on its
    * newest answer instead of a wall of headers.
@@ -1638,26 +1895,33 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                 {transparencyDetailsOpen &&
                 transparencyUiAvailable(archivedTransparencyFor(turn, turnIndex)) ? (
                   <div style={{ width: "100%", minWidth: 0, boxSizing: "border-box" }}>
-                    <ContextChipLadder
-                      snapshot={archivedTransparencyFor(turn, turnIndex)}
-                      collapsedHint={false}
-                      /* The ladder sits below the "From the notes" block when one is mounted
-                         (plan 58 phase 1) -- Up has to reach it before falling to Show details,
-                         mirroring the Down path that already reaches the ladder past the block. */
-                      onMoveUpFromLadder={() =>
-                        focusKbNotesBlock(turn.id) ||
-                        focusReplyShowDetails(queryTurnSlot(turn.id)) ||
-                        focusReplyUtilityRow(queryTurnSlot(turn.id))
-                      }
-                      onMoveDownFromLadder={() => focusSessionContextStrip()}
+                    {buildDetailsPanelElement({
+                      turnKey: turn.id,
+                      querySlot: () => queryTurnSlot(turn.id),
+                      snapshot: archivedTransparencyFor(turn, turnIndex),
                       /*
                        * Only the newest archived turn matches `transparencySnapshot` — the post-Ask
                        * slot reload expands that turn instead of "live" (useChatSlots.applySlotTranscript),
                        * so this is the common path a completed Ask's diagnostics need to stay reachable
                        * on. An older expanded turn never held the live ask_diagnostics to begin with.
                        */
-                      devDiagnostics={isNewestArchivedTurn ? devDiagnosticsForLiveSnapshot : null}
-                    />
+                      devDiagnostics: isNewestArchivedTurn ? devDiagnosticsForLiveSnapshot : null,
+                      /*
+                       * Plan 62 3c: only the newest answer ever carries the Session tab, so it never
+                       * repeats down the chat — an older turn a person hand-expands keeps today's
+                       * bare ladder, no tabs.
+                       */
+                      isNewest: isNewestArchivedTurn,
+                      detailsTab,
+                      setDetailsTab,
+                      sessionLiveTurn: sessionLiveTurnForTabs,
+                      archivedTurns: askThreadCollapsed,
+                      sessionHighlightTurnId,
+                      setSessionHighlightTurnId,
+                      setTransparencyDetailsOpen,
+                      onBeforeDeckyModal: onBeforeNestedDeckyModal,
+                      onCompleteDeckyModalClose: onCompleteNestedDeckyModalClose,
+                    })}
                   </div>
                 ) : null}
                 {/*
@@ -1859,19 +2123,23 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
               : null}
             {renderInlineLadder ? (
               <div style={{ width: "100%", minWidth: 0, boxSizing: "border-box" }}>
-                <ContextChipLadder
-                  snapshot={transparencySnapshot}
-                  collapsedHint={false}
-                  /* Same reason as the archived ladder above: the block, when mounted, sits
-                     between this ladder and Show details. */
-                  onMoveUpFromLadder={() =>
-                    focusKbNotesBlock("live") ||
-                    focusReplyShowDetails(queryLiveTurnSlot()) ||
-                    focusReplyUtilityRow(queryLiveTurnSlot())
-                  }
-                  onMoveDownFromLadder={() => focusSessionContextStrip()}
-                  devDiagnostics={devDiagnosticsForLiveSnapshot}
-                />
+                {buildDetailsPanelElement({
+                  turnKey: "live",
+                  querySlot: () => queryLiveTurnSlot(),
+                  snapshot: transparencySnapshot,
+                  devDiagnostics: devDiagnosticsForLiveSnapshot,
+                  // The live turn is always the newest answer while it is the one on screen.
+                  isNewest: true,
+                  detailsTab,
+                  setDetailsTab,
+                  sessionLiveTurn: sessionLiveTurnForTabs,
+                  archivedTurns: askThreadCollapsed,
+                  sessionHighlightTurnId,
+                  setSessionHighlightTurnId,
+                  setTransparencyDetailsOpen,
+                  onBeforeDeckyModal: onBeforeNestedDeckyModal,
+                  onCompleteDeckyModalClose: onCompleteNestedDeckyModalClose,
+                })}
               </div>
             ) : null}
             {expandedTurnKey === "live" && shortcutSetupVariant && onOpenControllerSettings ? (
@@ -2036,36 +2304,15 @@ questionLooksLikeTroubleshootingAsk(unifiedInput) ? (
  * (see devDiagnosticsForLiveSnapshot above) instead of a second adjacent disclosure control.
  */}
 {/*
- * Hidden at the [+] create position. The strip describes the ACTIVE slot, which cycling onto [+]
- * deliberately does not change — so it read "Session context (N turns)" on a screen whose whole
- * message is "this slot keeps its own history". Measured on device 2026-08-31; one of the two
- * things that made [+] and a real empty slot look like interchangeable "new chat screens".
+ * The separate "Session context (N turns) ▸" box that used to sit here is gone (plan 62 3c): its
+ * content — the turn list, the active row's chips, and Clear — folded into the newest answer's own
+ * Show details panel as a second tab ("Session · N"), reached by name via `buildDetailsPanelElement`
+ * above, not by document position. A settled answer now costs one closed control instead of two.
+ * `focusUpPastSessionContextStripKbNotesBlock` above is unchanged and still exported (its own test
+ * file exercises it directly) but has no caller left inside this file now that nothing renders
+ * where the strip used to sit — left as a working, tested utility rather than deleted, since
+ * deciding whether anything else should reach for it belongs to whoever reviews this next.
  */}
-{!showEmptySlotPreview && (
-<PanelSectionRow>
-  <SessionContextStrip
-    liveTurn={
-      showTransparencyUi && transparencySnapshot
-        ? {
-            id: "live",
-            label: (askThreadDisplayQuestion || lastExchange?.question || "Latest Ask").trim().slice(0, 48),
-            question: (askThreadDisplayQuestion || lastExchange?.question || "").trim(),
-            snapshot: transparencySnapshot,
-          }
-        : null
-    }
-    archivedTurns={askThreadCollapsed}
-    highlightTurnId={sessionHighlightTurnId ?? (transparencyDetailsOpen ? "live" : null)}
-    onHighlightClear={() => setSessionHighlightTurnId(null)}
-    onMoveUp={() => {
-      if (focusChatPermissionHintRow()) return true;
-      return focusUpPastSessionContextStripKbNotesBlock(expandedTurnKey);
-    }}
-    onBeforeDeckyModal={onBeforeNestedDeckyModal}
-    onCompleteDeckyModalClose={onCompleteNestedDeckyModalClose}
-  />
-</PanelSectionRow>
-)}
 {canSaveDesktopNote && !showEmptySlotPreview && (
   <PanelSectionRow>
     <div className="bonsai-save-chat-desktop-row">

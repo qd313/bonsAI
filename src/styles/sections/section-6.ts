@@ -1525,5 +1525,47 @@ export function buildSection6Section(): string {
           box-shadow: 0 0 6px rgba(74, 222, 128, 0.6);
         }
 
+        /*
+         * Plan 62 3c: the "This answer / Session · N" tabs at the top of the newest answer's own
+         * Show details panel. One real D-pad stop (the row itself), same as the chip ladder just
+         * below it — Left/Right pick a tab, they never become two separate Focusables.
+         *
+         * The focus ring goes on the row, in the standard white (design-tokens.md "Focus rings");
+         * which tab is selected is a separate, deliberately different cue (background fill, not a
+         * colour ring) so the two questions -- "where is the D-pad ring" and "which tab is picked"
+         * -- read as different facts, the same reasoning the chip ladder's own header comment gives
+         * for not reusing the real focus ring as its active-chip cue.
+         */
+        .bonsai-scope .bonsai-details-tabs-row {
+          outline: none;
+          border-radius: 6px;
+        }
+        .bonsai-scope .bonsai-details-tabs-row.gpfocus,
+        .bonsai-scope .bonsai-details-tabs-row:focus-visible {
+          outline: 2px solid rgba(255, 255, 255, 0.9) !important;
+          outline-offset: 2px !important;
+        }
+        .bonsai-scope .bonsai-details-tab {
+          flex: 1 1 0;
+          text-align: center;
+          padding: ${uiScalePx(6)} ${uiScalePx(4)};
+          border-radius: 6px;
+          font-size: ${uiScalePx(10)};
+          font-weight: 600;
+          letter-spacing: 0.03em;
+          color: #8fa8c4;
+          background: rgba(255, 255, 255, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          cursor: pointer;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .bonsai-scope .bonsai-details-tab--active {
+          color: #e2e8f0;
+          background: rgba(156, 231, 255, 0.14);
+          border-color: rgba(156, 231, 255, 0.4);
+        }
+
         `;
 }

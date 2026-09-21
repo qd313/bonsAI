@@ -40,6 +40,13 @@ export type ModalReturnFocusId =
   | "settings-clear-all-data"
   /** The Session context strip's own Clear button (plan 56 D105). */
   | "session-context-clear"
+  /**
+   * The Session tab's own Clear button, folded into a turn's Show details panel (plan 62 3c) —
+   * a distinct id from "session-context-clear" above (the still-present standalone strip) so the
+   * two do not fight over one registry entry while both can be on screen at once, before the
+   * standalone strip is removed.
+   */
+  | "session-tab-clear"
   /** Ollama tab's two "Set ... model try order..." openers (plan 55 bug B2). */
   | "ollama-text-try-order"
   | "ollama-vision-try-order"

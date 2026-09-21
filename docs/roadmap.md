@@ -356,6 +356,12 @@ starts work outside this.
   game") came back this time WITH its cover in place. Not closing this entry on one clean sighting, but
   worth recording. Evidence `docs/test-evidence/plan61-REPLY-STOPS-MIRROR-01-retry2.json`.
 
+- ★★★ `[ui]` **The UI size setting barely changes anything** — **OPEN, measured on the Deck 2026-09-20;
+  needs a decision before code.** At its biggest step the chat row grew 9 pixels, one thing was pushed out of the
+  panel, and nothing else moved — every font size and control came back identical. Only 139 of 490 fixed sizes
+  scale though the helper says all should, Handheld and Desktop both multiply by 1, and automatic mode can only
+  ever pick Handheld. Finish the wiring or cut the choices to what is real. Evidence `docs/test-evidence/plan62-UI-SIZE-outside-handheld.json`.
+
 ---
 
 
@@ -602,6 +608,13 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   picker's tick-boxes only ever offer real, known models — a made-up name can only be tried through the
   picker's own custom-name field, a separate one-off box, not the list of ticks. Finishing this row needs a
   person at the Deck to do the typing. Evidence `docs/test-evidence/plan61-PULL-MISSING-NAME-01.json`.
+
+- ★★ `[ask]` `[layout]` **Typed text ran off the right edge of the panel at the bigger UI size** — **VERIFY,
+  found and fixed on the Deck 2026-09-20.** The mirror drawing your typed question was 24 pixels wider than its own
+  box, so the end of a line sat 23 pixels outside the panel. Only at the biggest size; nothing overflowed at the
+  default. Its width had been written a frame too early and nothing re-measured, because the size change does not
+  change the column's width. Row **UI-SIZE-01**, not seen on the Deck — deploying is blocked. Evidence `docs/test-evidence/plan62-UI-SIZE-outside-handheld.json`.
+
 - ★★ `[ollama]` `[focus]` **Closing the AI models screen could leave the D-pad ring on Steam's own side
   rail, outside the plugin** — **VERIFY, fixed 2026-09-20.** Found only when the screen was opened from
   the Ollama tab's "Manage AI models…" button: closing it landed the ring on Steam's own Quick Access

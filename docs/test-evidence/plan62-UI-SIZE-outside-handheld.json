@@ -1,0 +1,91 @@
+{
+  "what": "The plugin's own UI size setting, tested outside its default step for the first time",
+  "why": "Every device test ever run has been at the default size, where the sizes that scale and the sizes that do not are the same number, so no test could have found a difference. The maintainer asked for the other steps to be tested.",
+  "when": "2026-09-20",
+  "where": {
+    "deck": "192.168.86.52",
+    "build_installed": "the build deployed 2026-09-19 (deploying is blocked: the plugin folder on the Deck is owned by root)",
+    "screen_in_use": "external 1920x1080 monitor, reported to the page as 1500x843 at 1.28 device pixels per drawing pixel",
+    "both_screens_connected": true,
+    "plugin_column": "300 x 741 drawing pixels"
+  },
+  "how_the_setting_was_changed": "The two size fields in the plugin's settings file on the Deck, then the Quick Access Menu closed and reopened with a real controller chord so the panel remounted and re-read them. The settings file was copied first and restored byte-for-byte afterwards, checked by reading it back off disk.",
+  "sizes": {
+    "handheld": 1,
+    "desktop": 1,
+    "couch": 1.18,
+    "note": "Handheld and Desktop multiply by the same 1, so only Couch changes anything. Immersive (1.22) is hidden."
+  },
+  "how_much_of_the_layout_scales": {
+    "measured_from": "the stylesheet source, comments stripped",
+    "sizes_that_grow_with_the_setting": 139,
+    "sizes_that_stay_fixed": 351,
+    "percent_that_grows": 28,
+    "the_helper_says": "every fixed size in the stylesheet is meant to pass through the scaling helper",
+    "worst_files": {
+      "gamepadAndPullModels.ts": "139 fixed, 0 scaled",
+      "section-8.ts": "26 fixed, 0 scaled",
+      "chatSlotModal.ts": "7 fixed, 0 scaled"
+    }
+  },
+  "measurements": {
+    "at_default_size": {
+      "scale_variable": "1",
+      "things_sticking_out_past_the_panel_edge": 0,
+      "ask_button": [298, 36, "13.3333px"],
+      "answer_bubble": [267, 349, "12px"],
+      "question_box": [274, 44, "16px"],
+      "typed_text_mirror": [274.45, 20, "12px"],
+      "corner_button": [20, 20],
+      "chat_row": [300, 55],
+      "paragraph": [238, 101, "12px"],
+      "notes_block": [267, 47],
+      "answer_block": [245, 101]
+    },
+    "at_couch_size": {
+      "scale_variable": "1.18",
+      "things_sticking_out_past_the_panel_edge": 1,
+      "ask_button": [298, 36, "13.3333px"],
+      "answer_bubble": [267, 349, "12px"],
+      "question_box": [274, 44, "16px"],
+      "typed_text_mirror": [298.44, 20, "12px"],
+      "corner_button": [20, 20],
+      "chat_row": [300, 64],
+      "paragraph": [238, 101, "12px"],
+      "notes_block": [267, 47],
+      "answer_block": [245, 101]
+    },
+    "what_actually_changed": [
+      "The chat row grew 9 pixels taller, 55 to 64. This one genuinely scales.",
+      "The typed-text mirror grew 24 pixels wider than the box it sits in, 274 to 298, and hung 23 pixels past the right edge of the panel.",
+      "Nothing else changed at all. Every font size stayed identical, and so did the ask button, the answer bubbles, the paragraphs, the notes block and the corner button."
+    ]
+  },
+  "the_one_fault_found": {
+    "what_a_person_would_see": "The end of a typed line sits outside the panel, past its right edge.",
+    "reproduced": "twice at the Couch size, never at the default size",
+    "the_numbers": {
+      "typed_text_mirror_width": 298.44,
+      "box_it_sits_in": 274.46,
+      "real_native_field": 274.46,
+      "whole_panel_column": 300,
+      "past_the_panel_edge": 23,
+      "stored_width_value": "298.44px",
+      "the_box_does_not_clip": "overflow was visible, so the text spills rather than being cut at the box"
+    },
+    "cause": "The mirror's width had been written in an earlier frame, before the avatar slot beside the field laid out, while the field still filled the whole 300-pixel host. Nothing corrected it afterwards, because changing the size setting does not change the host's own width, so the size watcher the code relies on never fires a second pass. The real field was the right size the whole time; the mirror simply stopped following it.",
+    "fixed_in": "ba3045b - the written width is clamped to the box the mirror is positioned inside",
+    "still_owed": "This was found on the Deck but the fix has not been seen there, because deploying is blocked."
+  },
+  "not_covered_here": [
+    "The pop-up windows, which open in a different window and were not walked at the bigger size.",
+    "Whether a person can reach and change the size setting with the D-pad - the setting was changed through its file, not through the slider.",
+    "The Deck's own screen. It was connected but Steam was drawing on the monitor all day."
+  ],
+  "deck_left_as_found": {
+    "settings_file": "restored byte-for-byte from the copy taken first, confirmed identical",
+    "size_setting": "automatic, handheld",
+    "scale_variable_read_back": "1",
+    "things_sticking_out_read_back": 0
+  }
+}

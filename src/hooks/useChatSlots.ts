@@ -135,9 +135,8 @@ export function useChatSlots({
       setAskThreadCollapsed(collapsed);
       setAskThreadDisplayQuestion(pendingQuestion ?? "");
       setExpandedTurnKey(pendingQuestion ? "live" : collapsed.length > 0 ? collapsed[collapsed.length - 1]!.id : "live");
-      resetLiveAskPresentation?.();
     },
-    [resetLiveAskPresentation, setAskThreadCollapsed, setAskThreadDisplayQuestion, setExpandedTurnKey],
+    [setAskThreadCollapsed, setAskThreadDisplayQuestion, setExpandedTurnKey],
   );
 
   const refreshSummaries = useCallback(async () => {
@@ -196,12 +195,21 @@ export function useChatSlots({
       const leavingId = activeSlotIdRef.current;
       const leavingTurnCount = activeSlotTurnCountRef.current;
       setActiveSlot(slotId);
+      /*
+       * Blank the live answer BEFORE the transcript round-trip below, not after: the fetch is
+       * async, and activeSlotId already says "the new chat" the instant setActiveSlot returns
+       * above. Waiting for the fetch to resolve left the OLD chat's finished reply on screen,
+       * wearing the new chat's identity, for the length of one RPC — the "ghost reply" bug
+       * (roadmap: "A new chat shows the previous chat's last reply until the panel is reopened").
+       * This never touches askThreadCollapsed/askThreadDisplayQuestion/expandedTurnKey — those
+       * still come from the branches below, once the real transcript (or "no chat") is known.
+       */
+      resetLiveAskPresentation?.();
       if (!slotId) {
         activeSlotTurnCountRef.current = -1;
         setAskThreadCollapsed([]);
         setAskThreadDisplayQuestion("");
         setExpandedTurnKey("live");
-        resetLiveAskPresentation?.();
       } else {
         const slot = await getChatSlot(slotId);
         if (slot) applySlotTranscript(slot.turns, slot.origin_app_id ?? "", slot.origin_app_name ?? "");

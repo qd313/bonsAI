@@ -573,6 +573,7 @@ const Content: React.FC = () => {
     onStrategyBranchPick,
     onStrategyChecklistToggle,
     resetAskSessionSlice,
+    resetLiveAskPresentation,
     setStrategyGuideBranches,
     reseedSuggestedPrompts,
     restoreSessionSnapshot,
@@ -631,6 +632,7 @@ const Content: React.FC = () => {
     setAskThreadCollapsed,
     setAskThreadDisplayQuestion,
     setExpandedTurnKey,
+    resetLiveAskPresentation,
     isSlotGenerating,
   });
   reloadSlotTranscriptRef.current = chatSlots.reloadActiveSlotTranscript;

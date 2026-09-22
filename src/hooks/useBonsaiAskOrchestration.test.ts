@@ -1008,6 +1008,112 @@ describe("useBonsaiAskOrchestration", () => {
     });
   });
 
+  /*
+   * Plan 63 bug 1: "A new chat shows the previous chat's last reply until the panel is reopened."
+   * useChatSlots.ts's selectSlot() calls resetLiveAskPresentation() the moment a different chat
+   * is picked, so this only has to prove the function's own two promises — it wipes what is on
+   * screen, and it never reaches for isAsking/invalidateRequests. This is the closest a test at
+   * this level can get to the actual repro (opening a new chat panel and looking at the screen);
+   * the ghost itself is only visible once useChatSlots.ts and MainTabChatTranscript.tsx are wired
+   * together, which is outside what one hook's unit test can drive.
+   */
+  describe("resetLiveAskPresentation (plan 63 bug 1, ghost reply)", () => {
+    it("blanks a finished reply's text and buttons-worth of state", async () => {
+      setRpcHandler("start_background_game_ai", () => ({
+        accepted: true,
+        status: "completed",
+        success: true,
+        response: "Head north past the bridge.",
+        request_id: 30,
+      }));
+
+      const { result } = renderHook(() => useBonsaiAskOrchestration(makeArgs()));
+
+      await act(async () => {
+        await result.current.onAskOllama("where do I go");
+      });
+
+      // Matches the bug report: a real answer with a real Q&A pair sitting on screen.
+      expect(result.current.ollamaResponse).toContain("Head north past the bridge.");
+      expect(result.current.lastExchange).not.toBeNull();
+
+      act(() => {
+        result.current.resetLiveAskPresentation();
+      });
+
+      expect(result.current.ollamaResponse).toBe("");
+      expect(result.current.lastExchange).toBeNull();
+    });
+
+    it("does not touch isAsking or invalidate the poll of a reply still being written", async () => {
+      vi.useFakeTimers();
+      setRpcHandler("start_background_game_ai", () => ({ accepted: true, status: "pending", request_id: 31 }));
+      // A flag, not a call counter: the hook's own mount-time restore effect also calls
+      // get_background_game_ai_status once, before onAskOllama ever runs, so counting calls made
+      // the test's own poll number depend on that unrelated call's timing. It sees "pending" too,
+      // but its stale sequence number means applying it is a no-op (isRequestActive gates it).
+      let finished = false;
+      setRpcHandler("get_background_game_ai_status", () =>
+        finished
+          ? {
+              ...idleBackgroundStatusFixture(),
+              status: "completed",
+              question: "where is the key",
+              request_id: 31,
+              success: true,
+              response: "Head past the bridge.",
+            }
+          : {
+              ...idleBackgroundStatusFixture(),
+              status: "pending",
+              question: "where is the key",
+              request_id: 31,
+              streaming: true,
+              partial_response: "Head past the",
+            },
+      );
+
+      const { result } = renderHook(() => useBonsaiAskOrchestration(makeArgs()));
+
+      let pending: Promise<void> | undefined;
+      act(() => {
+        pending = result.current.onAskOllama("where is the key");
+      });
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(100);
+      });
+      await act(async () => {
+        await pending;
+      });
+
+      // Still writing, with a real partial answer on screen — the "you switch away mid-stream"
+      // shape, not just the "already finished" one the test above covers.
+      expect(result.current.ollamaResponse).toContain("Head past the");
+      expect(result.current.isAsking).toBe(true);
+
+      act(() => {
+        result.current.resetLiveAskPresentation();
+      });
+
+      // The picture is gone...
+      expect(result.current.ollamaResponse).toBe("");
+      // ...but the request itself was left running. This is the guard named in the commit: had
+      // resetLiveAskPresentation called invalidateRequests() here, the poll's sequence number
+      // would already be stale and the assertions below would fail — the answer below proves the
+      // poll survived the reset, not just that the flag reads true a moment later.
+      expect(result.current.isAsking).toBe(true);
+
+      finished = true;
+      await act(async () => {
+        await vi.advanceTimersByTimeAsync(5000);
+      });
+
+      expect(result.current.ollamaResponse).toContain("Head past the bridge.");
+      expect(result.current.isAsking).toBe(false);
+      vi.useRealTimers();
+    });
+  });
+
   describe("session RAG preset chips", () => {
     const DREADNOUGHT = "How do I beat Glyphid Dreadnought?";
 

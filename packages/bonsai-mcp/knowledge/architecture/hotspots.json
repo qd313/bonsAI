@@ -16,23 +16,23 @@
       "role": ""
     },
     {
+      "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
+      "lines": 1911,
+      "role": ""
+    },
+    {
       "path": "src/components/PullModelsModal.tsx",
       "lines": 1854,
       "role": ""
     },
     {
       "path": "src/index.tsx",
-      "lines": 1812,
+      "lines": 1814,
       "role": "Plugin root: tabs, scoped CSS, RPC wiring, Settings"
     },
     {
-      "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
-      "lines": 1805,
-      "role": ""
-    },
-    {
       "path": "src/hooks/useBonsaiAskOrchestration.ts",
-      "lines": 1736,
+      "lines": 1778,
       "role": ""
     },
     {

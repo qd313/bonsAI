@@ -131,6 +131,8 @@ export interface BonsaiAskOrchestration {
   hydrateStrategyChecklistFromDisk: (appId: string) => Promise<void>;
   restoreSessionSnapshot: (snap: BonsaiSessionSurvivalSnapshot) => void;
   resetAskSessionSlice: () => void;
+  /** Blanks the live-answer view on a plain chat switch, without touching isAsking or the poll. */
+  resetLiveAskPresentation: () => void;
   setStrategyGuideBranches: Dispatch<SetStateAction<StrategyGuideBranchesPayload | null>>;
   setSuggestedPrompts: Dispatch<SetStateAction<PresetPrompt[]>>;
   reseedSuggestedPrompts: (

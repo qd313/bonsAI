@@ -1,0 +1,43 @@
+{
+  "rowId": "KB-TRANSPARENCY-01",
+  "rowText": "Does what the screen says was used match what the plugin really attached? Recorded as impossible every time it was attempted -- most recently 2026-09-19, where it was written down that the log 'never records which notes were searched or attached, so there is nothing written down to check the on-screen note list against'.",
+  "build": { "plugin": "0.5.0", "commit": "b91e9fe", "deployedAt": "2026-09-22T00:05:00-04:00" },
+  "deckTime": "2026-09-22T00:09:25-04:00",
+  "verdict": "RAN FOR THE FIRST TIME. The screen and the log agree.",
+
+  "whatMadeItPossible": "The lane that landed tonight added one line per question naming which notes were searched and which of those actually reached the model. Until then there was nothing to compare the screen against, which is exactly why every earlier attempt was recorded as blocked rather than failed.",
+
+  "setup": {
+    "game": "none running",
+    "askMode": "Strategy",
+    "knowledgeBase": "on, version 2026.09.18",
+    "logSettings": "Desktop activity log already at Verbose and filesystem writes already allowed on this Deck -- nothing was changed for this check",
+    "question": "in hollow knight how do i beat the broken vessel"
+  },
+
+  "whatTheLogSaid": {
+    "line": "2026-09-22T04:09:25Z [verbose] ask.kb_search knowledge-base search kb_domain=strategy app_name= searched_count=3 searched_notes=Hollow Knight - Broken Vessel; Hollow Knight - Starting out in Hollow Knight; Hollow Knight - Watcher Knights attached_count=3 attached_notes=Hollow Knight - Broken Vessel; Hollow Knight - Starting out in Hollow Knight; Hollow Knight - Watcher Knights starved_by_context_budget=false top_keyword_score=19.54 best_meaning_score=0.754",
+    "searched": 3,
+    "attached": 3,
+    "firstAttached": "Hollow Knight - Broken Vessel",
+    "droppedForSpace": false
+  },
+
+  "whatTheScreenSaid": {
+    "notesLine": "Broken Vessel (+2 more), From the Hollow Knight wiki",
+    "impliedCount": 3,
+    "namedNote": "Broken Vessel"
+  },
+
+  "comparison": {
+    "countsMatch": "yes -- three attached in the log, one named plus two more on screen",
+    "firstNameMatches": "yes -- Broken Vessel in both",
+    "nothingDroppedSilently": "yes -- the log says nothing was dropped for space, and the screen shows the same number that was attached"
+  },
+
+  "honestLimits": [
+    "Only the FIRST note's name is on screen until the block is opened; the other two are behind '(+2 more)'. So the comparison is on the count and the first name, not on all three names. Opening the block and reading all three is a better version of this check and is still owed.",
+    "One question, no game running. A question with a game running, and one where a note IS dropped for space, would both be worth running -- the second especially, since the log can now show that case and the screen's behaviour there has never been checked.",
+    "The log file is named by UTC date, so a late evening here writes into the next day's file. This run landed in the 22nd's file at 04:09 UTC while the Deck's own clock read the 22nd at 00:09."
+  ]
+}

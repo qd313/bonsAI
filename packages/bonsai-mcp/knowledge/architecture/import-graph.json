@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 419,
-  "edgeCount": 1076,
+  "fileCount": 423,
+  "edgeCount": 1082,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -688,6 +688,13 @@
         "src/components/OllamaModelsHubModal.tsx"
       ]
     },
+    "src/components/ModelRoutingOrderModal.doneNoop.test.tsx": {
+      "imports": [
+        "src/components/ModelRoutingOrderModal.tsx",
+        "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/ModelRoutingOrderModal.test.tsx": {
       "imports": [
         "src/components/ModelRoutingOrderModal.tsx",
@@ -707,6 +714,7 @@
         "src/utils/uiDocument.ts"
       ],
       "importedBy": [
+        "src/components/ModelRoutingOrderModal.doneNoop.test.tsx",
         "src/components/ModelRoutingOrderModal.test.tsx",
         "src/features/model-routing/useRoutingOrderModal.test.tsx",
         "src/features/model-routing/useRoutingOrderModal.ts"
@@ -870,6 +878,12 @@
         "src/features/plugin-shell/usePluginHelpModal.tsx"
       ]
     },
+    "src/components/PullModelsModal.customTagCancel.test.tsx": {
+      "imports": [
+        "src/components/PullModelsModal.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/PullModelsModal.customTagChip.test.tsx": {
       "imports": [
         "src/components/PullModelsModal.tsx",
@@ -882,6 +896,19 @@
         "src/components/PullModelsModal.tsx",
         "src/test-harness/fakeDeckyRpc.ts",
         "src/test-harness/fakeDeckyUi.tsx"
+      ],
+      "importedBy": []
+    },
+    "src/components/PullModelsModal.formSubmit.test.tsx": {
+      "imports": [
+        "src/components/PullModelsModal.tsx"
+      ],
+      "importedBy": []
+    },
+    "src/components/PullModelsModal.gamepadOK.test.tsx": {
+      "imports": [
+        "src/components/PullModelsModal.tsx",
+        "src/test-harness/fakeDeckyRpc.ts"
       ],
       "importedBy": []
     },
@@ -909,8 +936,11 @@
       ],
       "importedBy": [
         "src/components/OllamaModelsHubModal.tsx",
+        "src/components/PullModelsModal.customTagCancel.test.tsx",
         "src/components/PullModelsModal.customTagChip.test.tsx",
         "src/components/PullModelsModal.filtersPanel.test.tsx",
+        "src/components/PullModelsModal.formSubmit.test.tsx",
+        "src/components/PullModelsModal.gamepadOK.test.tsx",
         "src/components/PullModelsModal.test.tsx"
       ]
     },
@@ -2909,6 +2939,7 @@
         "src/components/MainTabPresetRow.test.tsx",
         "src/components/OllamaWhereAiRunsSection.test.tsx",
         "src/components/PullModelsModal.filtersPanel.test.tsx",
+        "src/components/PullModelsModal.gamepadOK.test.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/components/SessionContextStrip.test.tsx",
         "src/components/SettingsTab.mdns.test.ts",
@@ -2957,6 +2988,7 @@
         "src/components/MainTabUnifiedAskBar.settingsCardDpad.test.tsx",
         "src/components/MainTabUnifiedAskBar.settingsCardTapOutside.test.tsx",
         "src/components/MainTabUnifiedAskBar.test.tsx",
+        "src/components/ModelRoutingOrderModal.doneNoop.test.tsx",
         "src/components/OllamaModelsHubModal.test.tsx",
         "src/components/PermissionDenyAction.test.tsx",
         "src/components/PullModelsModal.customTagChip.test.tsx",

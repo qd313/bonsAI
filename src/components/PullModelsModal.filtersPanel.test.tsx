@@ -82,7 +82,14 @@ function latestByAriaLabel(label: string): Record<string, unknown> | undefined {
 function openFilters() {
   const filtersBtn = latestByClassName("bonsai-pullmodels-filters-button");
   expect(filtersBtn).toBeTruthy();
-  (filtersBtn!.onClick as (ev: { stopPropagation: () => void }) => void)({ stopPropagation: () => {} });
+  // preventDefault is required now, not optional: Decky's Button is a plain <button> with no
+  // `type` (a submit button by default) sitting inside Steam's own ConfirmModal form, so the real
+  // onClick calls it to stop an un-prevented click from also submitting that form (the same
+  // PICKER-REORDER-02 defect class ModelRoutingOrderModal.tsx already fixed once before).
+  (filtersBtn!.onClick as (ev: { stopPropagation: () => void; preventDefault: () => void }) => void)({
+    stopPropagation: () => {},
+    preventDefault: () => {},
+  });
 }
 
 beforeEach(() => {
@@ -208,7 +215,10 @@ describe("Filters panel — getting back out", () => {
     });
 
     const closeBtn = latestByClassName("bonsai-pullmodels-filterpanel-close");
-    (closeBtn!.onClick as (ev: { stopPropagation: () => void }) => void)({ stopPropagation: () => {} });
+    (closeBtn!.onClick as (ev: { stopPropagation: () => void; preventDefault: () => void }) => void)({
+      stopPropagation: () => {},
+      preventDefault: () => {},
+    });
 
     await waitFor(() => {
       expect(container.querySelector(".bonsai-pullmodels-filterpanel")).toBeNull();

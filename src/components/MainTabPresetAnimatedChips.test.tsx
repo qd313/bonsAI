@@ -115,6 +115,33 @@ describe("MainTabPresetAnimatedChips memo gate", () => {
     }
   });
 
+  /*
+   * CHIP-BUTTON-09, found on the Deck with Half-Life 2 running, 2026-09-18: the plugin's own
+   * check for "is this chip's text really from the game's notes" (sessionRagComposer.ts setting
+   * `ragTip: true` on a genuine knowledge-base candidate) and the check that decides "so draw the
+   * dot" had drifted apart in decode mode -- DecodePresetChipButton built its own label from
+   * scratch and simply never read `p.ragTip` at all, so a real note-sourced chip showed its words
+   * with no dot before them. Both label components now render the same PresetChipLeadingBadges
+   * function, so the two checks cannot drift apart again; this test is the pin.
+   */
+  it("badges a note-sourced (ragTip) chip in every animation mode, including decode", () => {
+    for (const mode of ["static", "fade", "carousel", "decode"] as const) {
+      const { container, unmount } = renderChips({
+        animationMode: mode,
+        seeds: [
+          { text: "How do I beat Strider?", category: "strategy", ragTip: true },
+          seed("bravo"),
+          seed("charlie"),
+        ],
+      });
+      expect(
+        container.querySelector(".bonsai-preset-chip-tip-badge"),
+        `${mode}: a note-sourced chip should carry the Tip dot`,
+      ).toBeTruthy();
+      unmount();
+    }
+  });
+
   /* Two chips side by side since 2026-09-01 (D43). The row was one chip for a day (2026-08-31)
      and three stacked rows before that. */
   it("renders PRESET_VISIBLE_SLOTS chips side by side in fade / static / decode", () => {

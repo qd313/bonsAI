@@ -872,6 +872,26 @@ export function PullModelsModal(props: PullModelsModalProps) {
     return true;
   };
 
+  /** Closes "Type a model name" without pulling anything, and returns the ring to its chip. */
+  function closeCustomTagEntry(): void {
+    setCustomTagEntryOpen(false);
+    setCustomTagInput("");
+    scheduleFocusFrame(() => focusCustomTagChip());
+  }
+
+  /*
+   * B while typing a model name by hand must back out of just this small field, the same reason
+   * cancelClosesFiltersPanel exists for the Filters panel above -- nothing in this row handled B
+   * before, so it fell through to the screen's own Cancel and closed the whole picker, losing
+   * whatever had been typed (found reading the code 2026-09-20; the Filters panel right next to
+   * it already carried exactly this handler for exactly this reason).
+   */
+  const cancelClosesCustomTagEntry = (e: unknown): boolean => {
+    closeCustomTagEntry();
+    (e as { preventDefault?: () => void })?.preventDefault?.();
+    return true;
+  };
+
   /**
    * A on any control on this screen must run that control's own action and stop there, the same
    * as its `onClick` already does for a mouse -- this screen is a confirm box with its own OK, and
@@ -1659,7 +1679,11 @@ export function PullModelsModal(props: PullModelsModalProps) {
           */}
           <div className="bonsai-pullmodels-filters">
             {customTagEntryOpen ? (
-              <Focusable flow-children="horizontal" className="bonsai-pullmodels-custom-tag-row">
+              <Focusable
+                flow-children="horizontal"
+                className="bonsai-pullmodels-custom-tag-row"
+                {...({ onCancelButton: cancelClosesCustomTagEntry } as unknown as Record<string, unknown>)}
+              >
                 <TextField
                   label=""
                   value={customTagInput}
@@ -1695,19 +1719,13 @@ export function PullModelsModal(props: PullModelsModalProps) {
                   className="bonsai-pullmodels-chip bonsai-pullmodels-custom-tag-close"
                   onClick={(ev) => {
                     ev.stopPropagation();
-                    setCustomTagEntryOpen(false);
-                    setCustomTagInput("");
-                    scheduleFocusFrame(() => focusCustomTagChip());
+                    closeCustomTagEntry();
                   }}
                   aria-label="Close typing a model name by hand"
                   {...({
                     onMoveDown: () =>
                       filtersOpen ? openFiltersPanelEntry() : focusRowCell(0, "select") || focusFooterPull(),
-                    onOKButton: okButtonRuns(() => {
-                      setCustomTagEntryOpen(false);
-                      setCustomTagInput("");
-                      scheduleFocusFrame(() => focusCustomTagChip());
-                    }),
+                    onOKButton: okButtonRuns(() => closeCustomTagEntry()),
                   } as unknown as Record<string, unknown>)}
                 >
                   ×

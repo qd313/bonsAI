@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 420,
-  "edgeCount": 1077,
+  "fileCount": 421,
+  "edgeCount": 1078,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -869,6 +869,12 @@
         "src/features/plugin-shell/usePluginHelpModal.tsx"
       ]
     },
+    "src/components/PullModelsModal.customTagCancel.test.tsx": {
+      "imports": [
+        "src/components/PullModelsModal.tsx"
+      ],
+      "importedBy": []
+    },
     "src/components/PullModelsModal.customTagChip.test.tsx": {
       "imports": [
         "src/components/PullModelsModal.tsx",
@@ -915,6 +921,7 @@
       ],
       "importedBy": [
         "src/components/OllamaModelsHubModal.tsx",
+        "src/components/PullModelsModal.customTagCancel.test.tsx",
         "src/components/PullModelsModal.customTagChip.test.tsx",
         "src/components/PullModelsModal.filtersPanel.test.tsx",
         "src/components/PullModelsModal.gamepadOK.test.tsx",

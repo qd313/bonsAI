@@ -45,6 +45,7 @@
     "src/components/PermissionDenyAction.test.tsx",
     "src/components/PermissionsTab.permissionRowNavRegistration.test.tsx",
     "src/components/PermissionsTab.test.tsx",
+    "src/components/PullModelsModal.customTagCancel.test.tsx",
     "src/components/PullModelsModal.customTagChip.test.tsx",
     "src/components/PullModelsModal.filtersPanel.test.tsx",
     "src/components/PullModelsModal.gamepadOK.test.tsx",

@@ -1,0 +1,24 @@
+{
+  "rowId": "BLACKMESA-WATER-NOTES-01",
+  "rowText": "Black Mesa's electrified-water question attaches two unrelated early-game notes instead of its own. Found 2026-09-19: the answer was right and specific, but the notes named under it were general early-game notes about starting out and the opening tram ride -- neither one the electrified-water note, which does exist in the library.",
+  "build": { "plugin": "0.5.0", "commit": "143fa95" },
+  "deckTime": "2026-09-22T01:30:00-04:00",
+  "setup": { "game": "none running", "askMode": "Strategy", "knowledgeBase": "on, version 2026.09.18" },
+
+  "measured": {
+    "question": "black mesa how do i get past the electrified water in the flooded section",
+    "notesNamedUnderTheAnswer": "Crossing the electrified waste pools (+2 more), from bonsAI's own note",
+    "answerOpening": "Right, listen up, mate! You wanna cross that electrified water? Don't be a mug and just stand there waiting for the current to stop.",
+    "timeToAnswer": "about 27 s"
+  },
+
+  "verdict": "DOES NOT REPRODUCE on this wording.",
+  "verdictSentence": "The note named first is the electrified-water note itself -- the exact note the bug said was missing.",
+
+  "honestLimit": "The wording is NOT identical to the one that failed on 2026-09-19. That question was about crossing the electrified water; this one says 'get past the electrified water in the flooded section'. The wording was changed on purpose, because an identical repeat is served from the answer cache and proves nothing (see docs/test-evidence/plan63-SPOILER-UNNAMED-BOSS.json). So this shows the right note CAN be found for this subject; it does not prove the original wording now finds it too. Someone re-running this should clear the cache and use the original words.",
+
+  "notChecked": [
+    "What the other two notes are -- only the first is named on the collapsed line",
+    "Whether the answer's advice is correct for Black Mesa"
+  ]
+}

@@ -1660,6 +1660,47 @@ export function useBonsaiAskOrchestration(
   }, [invalidateRequests, isAsking, syncOllamaContextFromRunningApp, resetReplyFeedback]);
 
   /*
+   * The narrower twin of resetAskSessionSlice, for switching to a different saved chat rather
+   * than a full detach (Clear cache / QAM restore). It blanks only the LIVE ANSWER a person can
+   * see under the question box — the just-finished reply's text, its Helpful/Not really/Read
+   * aloud buttons, its thinking fold, the Strategy Guide branch block — so a different chat never
+   * draws the one you just left. Roadmap: "A new chat shows the previous chat's last reply until
+   * the panel is reopened" — the new chat's own saved file was already empty and correct; nothing
+   * had ever cleared THIS state on a plain switch.
+   *
+   * Deliberately does NOT touch:
+   *  - isAsking / invalidateRequests(): a reply still being written in the chat you just left has
+   *    to keep going. Stopping it here would silence the busy dot on the slot row and throw away
+   *    a real, in-progress answer.
+   *  - askThreadCollapsed / askThreadDisplayQuestion / expandedTurnKey: useChatSlots.ts's own
+   *    selectSlot() sets these from the slot actually being switched to, right around this call —
+   *    overwriting them here would race that and could blank a chat that has real history.
+   *  - pendingArchiveTurnRef / pendingThreadQuestionDisplayRef: the turn a foreign in-flight
+   *    request is still assembling for the chat you left has to survive so it archives correctly
+   *    once that answer completes.
+   *  - the ask bar itself (unifiedInput, selectedIndex, selectedAttachment): switching chats is
+   *    not the same gesture as clearing the question box.
+   */
+  const resetLiveAskPresentation = useCallback(() => {
+    setOllamaResponse("");
+    setIsStreamingPreview(false);
+    setIsStreamSettling(false);
+    setThinkingSummary(null);
+    setLiveReasoning(null);
+    setAskStopped(false);
+    setLastApplied(null);
+    setLastExchange(null);
+    setElapsedSeconds(null);
+    setStrategyGuideBranches(null);
+    setStrategyChecklist(null);
+    setModelPolicyDisclosure(null);
+    setPresetCarouselInject(null);
+    setShortcutSetupVariant(null);
+    setLastTransparency(null);
+    resetReplyFeedback();
+  }, [resetReplyFeedback]);
+
+  /*
    * The read-side half of CHAT-SLOTS-V3-05a's fix: hide the branch block the instant its owning
    * slot and the slot on screen disagree, rather than trust every past and future write site to
    * have remembered to check. Missing ids (no chat-slots caller, or a legacy payload with no
@@ -1728,6 +1769,7 @@ export function useBonsaiAskOrchestration(
     hydrateStrategyChecklistFromDisk,
     restoreSessionSnapshot,
     resetAskSessionSlice,
+    resetLiveAskPresentation,
     setStrategyGuideBranches,
     setSuggestedPrompts,
     reseedSuggestedPrompts,

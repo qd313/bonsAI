@@ -94,6 +94,7 @@
     "onStrategyChecklistToggle:useCallback",
     "onRetryLastResponse:useCallback",
     "restoreSessionSnapshot:useCallback",
-    "resetAskSessionSlice:useCallback"
+    "resetAskSessionSlice:useCallback",
+    "resetLiveAskPresentation:useCallback"
   ]
 }

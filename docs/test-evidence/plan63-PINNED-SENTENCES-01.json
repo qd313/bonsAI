@@ -1,0 +1,35 @@
+{
+  "rowId": "PINNED-SENTENCES-01",
+  "rowText": "The pinned test sentences stop showing after the first question. Found 2026-09-18. After the first question sent from a pinned sentence, the chip switched to the plugin's own everyday suggestions and nothing brought the pinned ones back for the rest of the sitting. It blocked MEGAERA-01, KB-FOLLOWUP-01 and KB-KILLSWITCH-01's Show details half.",
+  "build": { "plugin": "0.5.0", "commit": "b385106", "deployedAt": "2026-09-22T00:13:00-04:00" },
+  "deckTime": "2026-09-22T01:20:00-04:00",
+  "setup": {
+    "pinnedList": [
+      "what game am i playing",
+      "how do i beat the gonarch in black mesa",
+      "black mesa how do i get across the electrified water"
+    ],
+    "note": "The maintainer's own pinned list, already on the Deck. Nothing about it was edited for this check."
+  },
+
+  "steps": [
+    { "n": 1, "action": "Four questions had already been sent this sitting by other means", "chipAfter": "still showing a pinned sentence, marked TEST" },
+    { "n": 2, "action": "Walk to the chip and press A", "result": "the chip put its sentence into the question box. It does not send by itself." },
+    { "n": 3, "action": "Down twice to the ask button, press A", "result": "the question was sent; the box cleared" },
+    { "n": 4, "action": "Wait for the answer, then read the chip", "result": "PASS -- the chip was still showing a pinned sentence, marked TEST, not one of the plugin's everyday suggestions" },
+    { "n": 5, "action": "Watch the chip for 24 seconds", "result": "PASS -- it rotated to a DIFFERENT pinned sentence. So the rotation is still reading the pinned list, not just holding one leftover." }
+  ],
+
+  "verdict": "DOES NOT REPRODUCE on this build.",
+  "verdictSentence": "A question was sent from a pinned chip -- the bug's exact trigger -- and afterwards the chip still offered pinned sentences and still cycled through the pinned list.",
+
+  "whatChangedTonight": "The settings lane fixed the plugin writing its whole in-memory copy of the settings back to disk after any small change, which could undo an edit made to the file directly. That was the likely cause recorded on 2026-09-19. The automatic save now sends only what actually changed.",
+
+  "honestLimits": [
+    "One sitting, one trigger. The original report says the chip failed for the REST of the sitting; this check covers one question and about half a minute afterwards, not a long session.",
+    "It is not proven that the settings fix is what cured it. What is proven is that the symptom is gone on a build that carries that fix.",
+    "The pinned list on the Deck was already correct when this check started, so the part of the original report about needing several reloads to get a wanted sentence to show first was not exercised."
+  ],
+
+  "whatThisUnblocks": "The three checks recorded as blocked by this -- MEGAERA-01, KB-FOLLOWUP-01, and KB-KILLSWITCH-01's Show details half. Note that they are also unblocked by the separate finding that a question can be sent without the pinned chips at all (docs/test-evidence/plan63-ASK-WITHOUT-PINNED-CHIPS.json)."
+}

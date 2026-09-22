@@ -95,7 +95,10 @@ describe("preset chip focus cue", () => {
     // "two effects on the same edge can cancel each other" lesson. This is the guard for that.
     const body = focusBarRuleBody();
     expect(body).toMatch(/inset 0 1px 0 rgba\(255,\s*255,\s*255,\s*0\.10\)/);
-    expect(body).toMatch(/inset 0 -2px 0 rgba\(56,\s*189,\s*248,\s*0\.85\)/);
+    // Toned from 0.85 to 0.55 (bug report, 2026-09-19: too bright, drew the eye more than the
+    // chip); still present, still visible -- this is the guard that catches it disappearing too.
+    expect(body).toMatch(/inset 0 -2px 0 rgba\(56,\s*189,\s*248,\s*0\.55\)/);
+    expect(body).not.toMatch(/rgba\(56,\s*189,\s*248,\s*0\.85\)/);
     expect(body).toMatch(/0 2px 3px rgba\(0,\s*0,\s*0,\s*0\.4\)\s*!important/);
     // The blue border that used to be the cue is gone from both stylesheets.
     expect(body).not.toMatch(/border-color:/);

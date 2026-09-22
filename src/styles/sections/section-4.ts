@@ -339,7 +339,7 @@ export function buildSection4Section(): string {
         .bonsai-scope button.bonsai-preset-glass.gpfocus,
         :root:not(:has(.gpfocus)) .bonsai-scope button.bonsai-preset-glass:focus-visible {
           outline: none !important;
-          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), inset 0 -2px 0 rgba(56, 189, 248, 0.85), 0 2px 3px rgba(0, 0, 0, 0.4) !important;
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), inset 0 -2px 0 rgba(56, 189, 248, 0.55), 0 2px 3px rgba(0, 0, 0, 0.4) !important; /* alpha toned 0.85->0.55, 2026-09-19, too bright */
         }
         /* The label brightens with the bar, so the whole chip reads as the live one. Decode used to
            be excluded here (its label owned its own colour); that rule is gone (bug fix

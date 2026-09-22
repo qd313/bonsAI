@@ -1875,9 +1875,12 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                         )
                       : {}),
                     /* Down must reach this turn's own ladder, then the "From the notes" block when
-                       one is attached, then whatever came after this row before either existed. */
+                       one is attached, then the details panel's own tabs row when the panel is open,
+                       then whatever came after this row before any of them existed. */
                     onMoveDownFromUtility: () =>
-                      focusKbNotesBlock(turn.id) || downPastUtilityRow(),
+                      focusKbNotesBlock(turn.id) ||
+                      focusDetailsTabsRow(turn.id) ||
+                      downPastUtilityRow(),
                   });
                   return (
                     <>
@@ -1890,7 +1893,8 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                         onMoveUp: () =>
                           focusReplyShowDetails(queryTurnSlot(turn.id)) ||
                           focusReplyUtilityRow(queryTurnSlot(turn.id)),
-                        onMoveDown: downPastUtilityRow,
+                        onMoveDown: () =>
+                          focusDetailsTabsRow(turn.id) || downPastUtilityRow(),
                         headerRef: (el: HTMLElement | null) => {
                           kbNotesHeaderElRefs.current[turn.id] = el;
                         },
@@ -2080,6 +2084,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                     : {}),
                   onMoveDownFromUtility: () =>
                     focusKbNotesBlock("live") ||
+                    focusDetailsTabsRow("live") ||
                     focusDownFromReplyUtilityRowOrPermHint(queryLiveTurnSlot()),
                 })
               : null}
@@ -2120,7 +2125,9 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                     onMoveUp: () =>
                       focusReplyShowDetails(queryLiveTurnSlot()) ||
                       focusReplyUtilityRow(queryLiveTurnSlot()),
-                    onMoveDown: () => focusDownFromReplyUtilityRowOrPermHint(queryLiveTurnSlot()),
+                    onMoveDown: () =>
+                      focusDetailsTabsRow("live") ||
+                      focusDownFromReplyUtilityRowOrPermHint(queryLiveTurnSlot()),
                     headerRef: (el: HTMLElement | null) => {
                       kbNotesHeaderElRefs.current.live = el;
                     },

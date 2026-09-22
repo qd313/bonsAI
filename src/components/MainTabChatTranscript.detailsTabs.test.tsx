@@ -184,6 +184,63 @@ describe("the This answer / Session tabs, on the newest answer", () => {
     expect(container.textContent).not.toContain("This answer");
   });
 
+  /*
+   * Roadmap: "The Session tab cannot be reached by the D-pad". Both tabs drew correctly on the
+   * Deck and Left/Right worked once the ring was on them, but nothing walking DOWN ever put the
+   * ring there: Down from Show details went straight past the tabs row into the chip ladder,
+   * because the four Down handlers below the reply row were written before the tabs row existed
+   * and were never taught about it. The Up direction already knew (`onMoveUpFromLadder` and
+   * `onMoveUpFromFirstRow` both call `focusDetailsTabsRow`), so the row was reachable only by
+   * walking past it and coming back -- which a person walking down the panel never does.
+   * Each assertion here is the mirror of an existing Up one: same target, opposite direction.
+   */
+  describe("Down reaches the tabs row", () => {
+    it("Down from Show details lands on the tabs row, not the chip ladder below it", () => {
+      const { container } = renderTranscript();
+      clickShowDetails(container);
+
+      const onMoveDown = latestPropsFor("bonsai-chat-details-divider")?.onMoveDown as
+        | (() => boolean)
+        | undefined;
+      expect(onMoveDown).toBeTypeOf("function");
+      act(() => {
+        expect(onMoveDown!()).toBe(true);
+      });
+
+      const tabsRow = container.querySelector(".bonsai-details-tabs-row");
+      expect(tabsRow).not.toBeNull();
+      expect(document.activeElement).toBe(tabsRow);
+    });
+
+    it("Down from the tabs row still enters the active tab, so the walk carries on", () => {
+      const { container } = renderTranscript();
+      clickShowDetails(container);
+
+      const onMoveDown = tabsRowProps()?.onMoveDown as (() => boolean) | undefined;
+      expect(onMoveDown).toBeTypeOf("function");
+      act(() => {
+        expect(onMoveDown!()).toBe(true);
+      });
+
+      expect(document.activeElement).not.toBe(container.querySelector(".bonsai-details-tabs-row"));
+    });
+
+    it("with the panel shut, Down from Show details skips the tabs row as before", () => {
+      const { container } = renderTranscript();
+
+      const onMoveDown = latestPropsFor("bonsai-chat-details-divider")?.onMoveDown as
+        | (() => boolean)
+        | undefined;
+      expect(onMoveDown).toBeTypeOf("function");
+      act(() => {
+        onMoveDown!();
+      });
+
+      // Nothing to land on: the row only exists while the panel is open.
+      expect(container.querySelector(".bonsai-details-tabs-row")).toBeNull();
+    });
+  });
+
   describe("Left and Right switch tabs", () => {
     it("Right moves onto Session, Left moves back onto This answer", () => {
       const { container } = renderTranscript();

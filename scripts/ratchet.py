@@ -81,7 +81,20 @@ EXCLUDED_DIR_NAMES = {"node_modules", "dist", ".git", "__pycache__"}
 
 # Never counted as duplication anywhere: installed packages, build output, old
 # copies of the repo, and archived write-ups.
-BASE_JSCPD_IGNORE = "**/node_modules/**,**/dist/**,**/.claude/worktrees/**,**/docs/archive/**"
+#
+# The old-copies pattern is left out when this script is ITSELF running inside one of
+# those copies. jscpd is handed absolute paths, so from inside
+# .claude/worktrees/<name> every single file matches "**/.claude/worktrees/**" -- it
+# then ignores everything it was asked to scan and reports a clean, believable
+# duplicated-lines figure of 0. Found 2026-09-21 by a lane that was measuring these
+# numbers from a worktree and got 0 where the real figure was 929. A number that
+# reads 0 because nothing was measured is worse than no number at all, so there is
+# also a scanned-nothing guard in _run_jscpd below.
+def _base_jscpd_ignore() -> str:
+    patterns = ["**/node_modules/**", "**/dist/**", "**/docs/archive/**"]
+    if ".claude/worktrees/" not in ROOT.as_posix() + "/":
+        patterns.insert(2, "**/.claude/worktrees/**")
+    return ",".join(patterns)
 
 # Backend methods that have no frontend caller ON PURPOSE. Without these the
 # "nothing calls this" number reads 3 when only one is a real finding.
@@ -306,7 +319,7 @@ def _run_jscpd(paths: list[Path], extra_ignore: str = "") -> tuple[Optional[int]
     existing = [str(p) for p in paths if p.exists()]
     if not existing:
         return None, "jscpd: none of the target paths exist"
-    ignore = BASE_JSCPD_IGNORE + ("," + extra_ignore if extra_ignore else "")
+    ignore = _base_jscpd_ignore() + ("," + extra_ignore if extra_ignore else "")
     with tempfile.TemporaryDirectory(prefix="bonsai-jscpd-") as tmp:
         try:
             proc = subprocess.run(
@@ -347,6 +360,15 @@ def _run_jscpd(paths: list[Path], extra_ignore: str = "") -> tuple[Optional[int]
         duplicated = total.get("duplicatedLines") if isinstance(total, dict) else None
         if not isinstance(duplicated, int):
             return None, "jscpd report did not have statistics.total.duplicatedLines"
+        # Scanned nothing? Then this is not a zero, it is a failure to measure. Without
+        # this guard the ignore-pattern trap above reports a perfect score instead of an
+        # error, and the check passes on a number nobody took.
+        scanned = total.get("sources") if isinstance(total, dict) else None
+        if isinstance(scanned, int) and scanned == 0:
+            return None, (
+                "jscpd scanned no files at all, so the 0 it reported is not a real figure "
+                "-- check the ignore patterns against the paths it was given"
+            )
         return duplicated, None
 
 

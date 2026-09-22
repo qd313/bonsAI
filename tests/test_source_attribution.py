@@ -162,10 +162,29 @@ class AttributionEntryTests(unittest.TestCase):
             [("theportalwiki.com", "CC-BY-4.0"), ("zelda.fandom.com", "GFDL")],
         )
 
-    def test_cards_without_a_url_credit_nobody(self):
+    def test_cards_without_a_url_are_named_with_no_source_page(self):
+        """Roadmap: "The credit line under a reply never names a note with no source page, or
+        a shared tip." Used to be `[]` -- the card was dropped rather than named. Now it is
+        named, just grouped under a label that credits no third party (there isn't one)."""
+        entries = build_attribution_entries(
+            [{"title": "seed card", "url": "", "license": MAINTAINER_LICENSE}]
+        )
+        self.assertEqual(len(entries), 1)
+        self.assertEqual(entries[0]["source"], "No source page")
+        self.assertEqual(entries[0]["license"], "")
+        self.assertEqual(entries[0]["cards"], ["seed card"])
+
+    def test_sourced_and_unsourced_cards_stay_in_separate_groups(self):
+        """A real wiki credit must never be diluted by a card with nothing to cite."""
+        entries = build_attribution_entries(
+            [
+                {"title": "OoT — King Dodongo", "url": "https://zelda.fandom.com/wiki/A", "license": "GFDL"},
+                {"title": "seed card", "url": "", "license": MAINTAINER_LICENSE},
+            ]
+        )
         self.assertEqual(
-            build_attribution_entries([{"title": "seed card", "url": "", "license": MAINTAINER_LICENSE}]),
-            [],
+            sorted((e["source"], e["cards"]) for e in entries),
+            [("No source page", ["seed card"]), ("zelda.fandom.com", ["OoT — King Dodongo"])],
         )
 
     def test_junk_input_is_ignored(self):
@@ -223,9 +242,18 @@ class AttributionReachesTheChipTests(unittest.TestCase):
         self.assertEqual(len(chip["body"]["attribution"]), 1)
         self.assertEqual(chip["body"]["attribution"][0]["source"], "zelda.fandom.com")
 
-    def test_no_licensed_source_means_no_attribution_key(self):
-        """Most turns are all-maintainer. The field is absent rather than an empty ornament."""
+    def test_an_all_maintainer_turn_still_names_its_card_with_no_source_page(self):
+        """Roadmap fix: a maintainer-authored card with no third party to name used to leave
+        `attribution` off the chip entirely, so it read exactly like nothing had attached. It
+        is now present, naming the card under "No source page" rather than a wiki."""
         chip = self._kb_chip([{"title": "seed", "url": "", "license": MAINTAINER_LICENSE}])
+        self.assertIn("attribution", chip["body"])
+        self.assertEqual(chip["body"]["attribution"][0]["source"], "No source page")
+        self.assertEqual(chip["body"]["attribution"][0]["cards"], ["seed"])
+
+    def test_no_sources_at_all_means_no_attribution_key(self):
+        """Nothing to name -- the field stays absent rather than an empty ornament."""
+        chip = self._kb_chip([])
         self.assertNotIn("attribution", chip["body"])
 
     def test_string_sources_still_render_as_paths(self):

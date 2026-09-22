@@ -99,14 +99,22 @@ class ParseKbAttachedNotesAgainstTheRealFormatterTests(unittest.TestCase):
         self.assertEqual(notes[0]["kind"], "mechanic")
 
     def test_a_note_with_no_source_carries_no_host_or_licence(self):
-        """The maintainer's own notes and every troubleshooting tip have no source_url, and
-        `_format_block`'s own `sources` list drops them -- this is exactly the case that list
-        cannot serve, which is why this parser exists instead of just reading `sources`."""
+        """The maintainer's own notes and every troubleshooting tip have no source_url.
+
+        `_format_block`'s `sources` list used to drop these cards entirely (the bug filed as
+        "The credit line under a reply never names a note with no source page, or a shared
+        tip"), which is why this parser reads the formatted text block directly rather than
+        `sources` alone. Now that `_format_block` names every attached card in `sources` too
+        (url/license left "" when there is nothing to cite), this parser's own result is
+        unchanged -- it already treated a missing title match as "no host, no licence", and an
+        entry with a blank url reads exactly the same way.
+        """
         card = _card(source_url="", source_license="", trust_tier="fallback_no_source")
         text_block, _trust, sources = _format_block(
             [card], fallback_text=None, domain="strategy", max_bytes=6_144
         )
-        self.assertEqual(sources, [], "sanity: a card with no source_url is not in `sources`")
+        self.assertEqual(len(sources), 1, "the card is named in `sources` now, just with no url")
+        self.assertEqual(sources[0]["url"], "")
         notes = _parse_kb_attached_notes(text_block, kb_domain="strategy", sources=sources)
         self.assertEqual(len(notes), 1)
         self.assertEqual(notes[0]["source_host"], "")

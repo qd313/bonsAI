@@ -1505,6 +1505,15 @@ def _format_block(
         trust = _lowest_trust_tier(kept)
         # Sources describe surviving cards only — a citation for text the model never saw is
         # worse than no citation.
+        #
+        # Every kept card gets an entry here, whether or not it has a source page -- `url` and
+        # `license` are simply "" for a maintainer-authored note or a shared troubleshooting
+        # tip. This used to be `if c.source_url`, which dropped those cards from this list
+        # entirely: the one place the credit line under a reply (build_attribution_entries,
+        # transparency_service.py) reads what actually attached, so a shared tip or a
+        # memory-written note had never once named itself there, even though it plainly shaped
+        # the reply. See docs/roadmap.md, "The credit line under a reply never names a note
+        # with no source page, or a shared tip."
         sources = [
             {
                 "title": f"{c.game_title} — {c.name}",
@@ -1516,7 +1525,6 @@ def _format_block(
                 "captured": str(c.crawled_at or ""),
             }
             for c in kept
-            if c.source_url
         ]
         if len(kept) < len(cards):
             lines.append(_omitted_note(len(cards) - len(kept)))

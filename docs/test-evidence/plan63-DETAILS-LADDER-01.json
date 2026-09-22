@@ -1,0 +1,65 @@
+{
+  "rowId": "DETAILS-LADDER-01",
+  "rowText": "With Show details open, the row of chips can be reached by the D-pad. Two roadmap entries describe the same fault: 'With Show details open, the chip row cannot be reached by the D-pad' and 'The Show details chip ladder is not a D-pad stop'. Four device runs had recorded it without finding the cause.",
+  "build": {
+    "plugin": "0.5.0",
+    "commitBefore": "29ca207",
+    "commitAfter": "3daa21e",
+    "deployedAt": "2026-09-21T21:30:00-04:00"
+  },
+  "deckTime": "2026-09-21T21:31:00-04:00",
+  "setup": {
+    "game": "none running",
+    "screen": "Main tab, existing Black Mesa Gonarch answer, chat slot 'wheatley fight'"
+  },
+  "beforeTheFix": {
+    "build": "29ca207",
+    "measured": "With the panel open on 'This answer', DOWN from the tabs row threw the ring out of the panel entirely and onto a suggestion chip in the dock.",
+    "ringLandedOn": ".bonsai-preset-glass, text 'TEST', rect 52,600 -- inside the dock",
+    "chipLadderAtTheTime": { "present": true, "rect": { "x": 52, "y": 449, "w": 290, "h": 298 } },
+    "cause": "focusContextChipLadder finds the ladder by class and hands it to focusDeckOwner. focusDeckOwner returns FALSE for it: the ladder root is a genuine .Panel.Focusable carrying no tabindex on device, with no natively focusable descendant to fall back to. That is the exact shape focusDeckOwner deliberately refuses to stamp, after a stamp of that kind dropped a permissions row out of Steam's navigation on 2026-09-04. The move was therefore reported unhandled and Steam's own navigation ran.",
+    "predictedInTheCode": "liveTurnFocusGraph.ts, focusDeckOwner's comment: 'What is UNKNOWN, not measured, is whether this file's other focusDeckOwner targets (.bonsai-context-hint, .bonsai-chip-ladder, a session-context row) are in that no-fallback shape on this same build.' Measured now: the chip ladder is."
+  },
+  "afterTheFix": {
+    "build": "3daa21e",
+    "steps": [
+      { "press": "A on Show details", "result": "panel opens, label becomes 'Hide details'", "visible": "100%" },
+      { "press": "DOWN", "result": "'From the notes' block", "visible": "100%" },
+      { "press": "DOWN", "result": "the tabs row, 'This answer / Session - 11'", "visible": "100%" },
+      { "press": "DOWN", "result": "PASS - the chip ladder itself holds the ring", "visible": "100%" }
+    ],
+    "focusedElement": {
+      "isTheLadder": true,
+      "className": "bonsai-chip-ladder Panel Focusable gpfocus gpfocuswithin",
+      "tabindex": "-1",
+      "rect": { "x": 52, "y": 303, "w": 290, "h": 298 },
+      "dockTop": 600,
+      "coveredByDockPx": 0,
+      "activeChip": "Keyword + meaning"
+    },
+    "note": "The ring carries the gpfocus marker, which is Steam's own, not just browser focus. The tabindex of -1 is stamped by the transcript's own per-turn focus helper on our own component root -- not the ancestor-climbing stamp that caused the 2026-09-04 damage."
+  },
+  "verdict": "PASS",
+  "alsoFoundDuringThisWalk": [
+    {
+      "id": "UP-FROM-ASKBAR-SKIPS-REPLY",
+      "what": "Walking UP from the question box area skips the whole reply. Measured: ask button -> Attach screenshot -> Choose AI character -> the suggestion chip -> the chat slot row. The question row, Show reasoning, every answer section, Read aloud and Show details were all skipped.",
+      "roadmap": "matches the existing entry 'Walking up from the question box skips every reply row' -- re-measured on build 3daa21e, still open"
+    },
+    {
+      "id": "DOWN-FROM-EARLIER-PILL-SKIPS-REPLY",
+      "what": "Walking DOWN from the chat slot row: chat slot row -> '10 earlier' pill -> straight to the 'From the notes' block, skipping the question row, Show reasoning, every answer section, Read aloud and Show details. Those same stops ARE reachable walking down from Retry, so the reply is walkable -- just not when entered from above.",
+      "roadmap": "NEW - not currently an entry"
+    },
+    {
+      "id": "QUESTION-ROW-COVERED-BY-RETRY-ICON",
+      "what": "The question row 'how do i beat the gonarch in black mesa' took the ring at only 67% visible, covered by the Retry corner icon.",
+      "roadmap": "REOPENS the entry closed on 2026-09-19 as 'reads fully visible on the Deck'"
+    },
+    {
+      "id": "ANSWER-SECTION-COVERED-BY-COPY-ICON",
+      "what": "An answer section took the ring at 89% visible, covered by the Copy corner icon.",
+      "roadmap": "NEW - same shape as the Retry one, different corner"
+    }
+  ]
+}

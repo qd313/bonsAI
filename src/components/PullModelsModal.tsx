@@ -963,8 +963,17 @@ export function PullModelsModal(props: PullModelsModalProps) {
   );
 
   const toggleSelected = useCallback(
-    (entry: PullModelEntry, ev?: { stopPropagation?: () => void }) => {
+    (entry: PullModelEntry, ev?: { stopPropagation?: () => void; preventDefault?: () => void }) => {
       ev?.stopPropagation?.();
+      // Decky's Button renders a plain <button> with no `type`, which defaults to "submit", and
+      // this screen always sits inside Steam's own ConfirmModal, which renders a real <form>. An
+      // un-prevented click here submits that form and takes the modal's own OK/Done/Pull-selected
+      // path instead of just toggling this one row -- the same mechanism already found and fixed
+      // once in this codebase (ModelRoutingOrderModal.tsx, PICKER-REORDER-02, 2026-09-04), and the
+      // likely cause of the very first model ticked in a fresh picker downloading immediately with
+      // no Pull selected press (one sighting 2026-09-19, docs/test-evidence/plan61-PULL-MISSING-
+      // NAME-01.json).
+      ev?.preventDefault?.();
       if (isTagInstalled(entry.tag, installedTags)) {
         toaster.toast({
           title: "Already installed",
@@ -1370,6 +1379,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
               aria-label={pinned ? `${entry.tag} is used for Ask` : `Use ${entry.tag} for Ask`}
               onClick={(ev) => {
                 ev.stopPropagation();
+                ev.preventDefault();
                 void pinModelForAsk(entry, entry.tag);
               }}
               {...({
@@ -1439,7 +1449,10 @@ export function PullModelsModal(props: PullModelsModalProps) {
                   ? "Switch Ask mode first to remove this model."
                   : "Remove from Deck"
               }
-              onClick={() => confirmDelete(entry.tag, sizeGb)}
+              onClick={(ev) => {
+                ev.preventDefault();
+                confirmDelete(entry.tag, sizeGb);
+              }}
               {...({
                 ...navDelete,
                 onOKButton: okButtonRuns(() => {
@@ -1488,6 +1501,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
             }
             onClick={(ev) => {
               ev.stopPropagation();
+              ev.preventDefault();
               if (embeddingOnly) return;
               void pinModelForAsk(null, tag);
             }}
@@ -1529,7 +1543,10 @@ export function PullModelsModal(props: PullModelsModalProps) {
                 ? "Switch Ask mode first to remove this model."
                 : "Remove from Deck"
             }
-            onClick={() => confirmDelete(tag, sizeGb)}
+            onClick={(ev) => {
+              ev.preventDefault();
+              confirmDelete(tag, sizeGb);
+            }}
             {...({
               ...navDelete,
               onOKButton: okButtonRuns(() => {
@@ -1654,6 +1671,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                 disabled={refreshingMeta || loadingMeta}
                 onClick={(ev) => {
                   ev.stopPropagation();
+                  ev.preventDefault();
                   void refreshInstalledAndMeta(true);
                 }}
                 aria-label="Refresh model catalog"
@@ -1719,6 +1737,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                   className="bonsai-pullmodels-chip bonsai-pullmodels-custom-tag-close"
                   onClick={(ev) => {
                     ev.stopPropagation();
+                    ev.preventDefault();
                     closeCustomTagEntry();
                   }}
                   aria-label="Close typing a model name by hand"
@@ -1740,6 +1759,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                   className="bonsai-pullmodels-filters-button"
                   onClick={(ev) => {
                     ev.stopPropagation();
+                    ev.preventDefault();
                     if (filtersOpen) closeFiltersPanel();
                     else openFiltersPanel();
                   }}
@@ -1766,6 +1786,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                   className="bonsai-pullmodels-chip bonsai-pullmodels-custom-tag-chip"
                   onClick={(ev) => {
                     ev.stopPropagation();
+                    ev.preventDefault();
                     setCustomTagEntryOpen(true);
                     scheduleFocusFrame(() => focusCustomTagClose());
                   }}
@@ -1849,6 +1870,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                         }`}
                         onClick={(ev) => {
                           ev.stopPropagation();
+                          ev.preventDefault();
                           if (!disabled) selectFilterPanelRow(row);
                         }}
                         aria-pressed={checked}
@@ -1879,6 +1901,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                   className="bonsai-pullmodels-filterpanel-close"
                   onClick={(ev) => {
                     ev.stopPropagation();
+                    ev.preventDefault();
                     closeFiltersPanel();
                   }}
                   {...({

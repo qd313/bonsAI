@@ -48,6 +48,7 @@
     "src/components/PullModelsModal.customTagCancel.test.tsx",
     "src/components/PullModelsModal.customTagChip.test.tsx",
     "src/components/PullModelsModal.filtersPanel.test.tsx",
+    "src/components/PullModelsModal.formSubmit.test.tsx",
     "src/components/PullModelsModal.gamepadOK.test.tsx",
     "src/components/PullModelsModal.test.tsx",
     "src/components/ReplyCopyButton.test.tsx",

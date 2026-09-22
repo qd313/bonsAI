@@ -136,6 +136,19 @@ passing while the control it landed on is hidden behind the dock at the bottom o
 the control's position against where the dock starts, not just whether it has focus. And script at
 least one pass that uses the panel normally, rather than only stepping control to control.
 
+**"Covered by a corner icon" is usually the check measuring a box, not a person seeing a problem.**
+The walk check decides whether a stop is visible by sampling points across its RECTANGLE. Two
+controls are built, on purpose, so their box overlaps a floating corner icon while their words keep
+clear of it: the question row behind Retry, and the last part of an answer behind Copy. Both reserve
+the corner with a floated spacer, after two rounds of the maintainer's own feedback in September. So
+both will read as "focused but not visible" on every walk, for ever, with nothing wrong. Measured
+2026-09-21: the question's first word starts six pixels past the Retry icon's edge, and the answer's
+last line clears the Copy icon with only its line spacing touching it. Two bug entries were filed on
+this and withdrawn the same night, and the question-row entry had already been opened and closed once
+before on the same reading. Before filing anything about either of these, ask the page where the TEXT
+is -- take the element's own text range rectangles and compare those against the icon -- rather than
+trusting the percentage. Evidence: `docs/test-evidence/plan63-CORNER-ICON-COVERAGE-01.json`.
+
 **Offer to pin the questions before asking anyone to type.** Typing a sentence on the on-screen
 keyboard with thumbs, once per case, invites a typo that silently changes what is being tested.
 There is a way to pin a batch of exact questions into the panel; use it. This is a standing

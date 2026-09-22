@@ -1,0 +1,42 @@
+{
+  "rowId": "CORNER-ICON-COVERAGE-01",
+  "rowText": "Two stops that the automated walk reports as 'focused but not visible', covered by a corner icon: the question row behind Retry (67%), and the last answer section behind Copy (89%). Filed as two new bugs on 2026-09-21; this check was run to find out what a person would actually see before any code was changed.",
+  "build": { "plugin": "0.5.0", "commit": "2ecd804" },
+  "deckTime": "2026-09-21T22:14:00-04:00",
+  "verdict": "NEITHER IS A DEFECT. Both are the walking tool measuring an element's rectangle rather than its words.",
+
+  "questionRowBehindRetry": {
+    "reportedBy": "deck_sweep: 67% visible, covered by button.bonsai-turn-retry-corner",
+    "measured": {
+      "retryIcon": { "x": 94, "right": 114, "y": 48, "bottom": 68 },
+      "questionRowBox": { "x": 98, "right": 331, "y": 51, "h": 14 },
+      "firstLineOfActualText": { "x": 120, "right": 331, "lines": 1 },
+      "headerClasses": "bonsai-chat-turn-row-header--history --expanded --with-retry",
+      "reservedSpacerWidth": "21.9971px, float left, applied"
+    },
+    "conclusion": "The words start at x 120. The icon ends at x 114. Six pixels of clear space. The element's BOX starts at 98 and so overlaps the icon, which is what the checker samples -- but no word is covered. The float that reserves that room is present and working exactly as its own comment describes.",
+    "actionTaken": "No code change. The bug entry filed earlier tonight is withdrawn as a false alarm.",
+    "history": "This same entry was closed on 2026-09-19 under D113 after reading fully visible on 17 and 18 September, then reopened tonight on this reading. It has now been opened and closed twice on the strength of a measurement that cannot see what it claims to."
+  },
+
+  "answerSectionBehindCopy": {
+    "reportedBy": "deck_sweep: 89% visible, covered by button.bonsai-reply-copy-corner",
+    "measured": {
+      "copyIcon": { "x": 292, "right": 312, "y": 430, "bottom": 450 },
+      "lastAnswerSectionBox": { "x": 63, "right": 308, "y": 332, "bottom": 445 },
+      "lastLineOfActualText": { "x": 70, "right": 297, "y": 417, "bottom": 432 },
+      "bubbleCarriesWithCopy": true,
+      "reservedSpacerOnTheLastParagraph": "content '', width 23.999px, float right, applied"
+    },
+    "conclusion": "The reserved spacer is applied to the last paragraph, as designed. The last line's words end at x 297 with 11 pixels of clear space to the section's own right edge at 308, which means the spacer dropped to a line of its own below the text -- the working case the stylesheet's comment describes. What remains is 5 pixels wide by 2 pixels tall, between the BOTTOM of the last line's line box (432) and the TOP of the icon (430). That is line leading, not ink: no letter reaches there.",
+    "actionTaken": "No code change. The bug entry filed earlier tonight is withdrawn as a false alarm.",
+    "honestLimit": "A model cannot judge pixels, and this repo's own rule says so. What is stated here is measured geometry: where the words end and where the icon begins. If the maintainer looks at this corner and sees a letter touching the icon, that is worth more than this measurement and the entry should come back."
+  },
+
+  "theRealFinding": {
+    "what": "The walking tool decides 'visible' by sampling nine points across an element's RECTANGLE. A control whose box legitimately overlaps a floating corner icon -- which is exactly how both of these are built, on purpose, after two rounds of maintainer feedback in September -- will read as FOCUSED BUT NOT VISIBLE on every walk, forever, even when every word is clear of the icon.",
+    "cost": "Two bug entries filed tonight, and the same question-row entry opened and closed twice already.",
+    "whatToDoInstead": "When a walk reports a stop covered by one of the two corner icons, measure where the text actually is before filing anything: take the element's own text range rects and compare those with the icon's rectangle. The two known cases are the question row behind Retry and the last answer section behind Copy.",
+    "notCovered": "The stylesheet's own comment records one case the reserved room does not handle: a table as the last thing in an answer. That has never been seen on the device and is not what was measured here."
+  }
+}

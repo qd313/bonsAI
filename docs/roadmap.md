@@ -131,17 +131,14 @@ starts work outside this.
   button, that going up does not show. The tap-to-reveal spoiler box takes three presses to get past going
   down but only one going up. Row **REPLY-STOPS-MIRROR-01**. Evidence
   `docs/test-evidence/plan61-REPLY-STOPS-MIRROR-01-retry2.json`.
-- ★ `[focus]` `[layout]` **A highlighted question row can sit two-thirds covered by the Retry corner icon** —
-  **OPEN, measured on the Deck 2026-09-21.** With the ring on the question row "how do i beat the gonarch in
-  black mesa", only 67% of it was visible; the rest sat behind the Retry corner icon. **This reopens an entry
-  closed 2026-09-19 under D113** ("An open question's row is only partly visible behind the Retry corner
-  icon"), which closed on the strength of reading fully visible on 17 and 18 September.
-  [Closed entry](archive/roadmap-bugs-fixed.md#an-open-questions-row-is-only-partly-visible-behind-the-retry-corner-icon).
-  Evidence `docs/test-evidence/plan63-DETAILS-LADDER-01.json`.
-- ★ `[focus]` `[layout]` **An answer section can take the highlight while the Copy corner icon covers part of
-  it** — **OPEN, measured on the Deck 2026-09-21.** Same shape as the Retry-icon row above, a different
-  corner: the ring landed on part of an answer with only 89% of it visible, the rest behind the Copy icon.
-  Evidence `docs/test-evidence/plan63-DETAILS-LADDER-01.json`.
+- ★ `[QA]` **The walk check calls a stop hidden when a corner icon merely overlaps its box** — **OPEN,
+  measured on the Deck 2026-09-21.** It judges a stop by sampling its rectangle, so the question row and the
+  last answer section always read part-hidden behind the Retry and Copy icons — though the words clear those
+  icons by design. Measured: the question's text starts 6px past the Retry icon's edge; the answer's last
+  line clears the Copy icon and only its line spacing touches it. Two entries were filed on this and withdrawn
+  the same night, and the question-row entry has now been opened and closed twice on it. Until the check reads
+  text rather than boxes, measure the text before filing. Evidence
+  `docs/test-evidence/plan63-CORNER-ICON-COVERAGE-01.json`.
 - ★ `[kb]` **Download knowledge base needed two taps; the first did nothing visible** — **OPEN, reported
   2026-09-16, not reproduced.** Read in the code (`src/components/KnowledgeBaseSection.tsx`,
   `openStoragePicker`): the first press should open the storage-choice popup (internal or SD card) before

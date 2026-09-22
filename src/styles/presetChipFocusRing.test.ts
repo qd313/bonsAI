@@ -106,17 +106,30 @@ describe("preset chip focus cue", () => {
     expect(focusBarRuleBody()).toMatch(/outline:\s*none\s*!important/);
   });
 
-  it("brightens the focused chip's label, except while the decode animation owns its colour", () => {
+  it("brightens the focused chip's label in every animation mode, decode included", () => {
+    // Decode used to be stepped around here (`:not(.bonsai-preset-glass--decode)`) because its
+    // label carried its own accent-toned colour. That rule is gone -- it tinted the resolved text
+    // and the Tip badge's words too, not just the still-churning ones, which is the bug fixed
+    // 2026-09-19 -- so a focused decode chip now brightens like every other mode, and this
+    // selector must never single decode back out.
     const labelSelectors = selectorsOf(buildSection4Section()).filter(
       (sel) => sel.includes("bonsai-preset-chip-label") && isGatedOnTheRing(sel),
     );
     expect(labelSelectors.length).toBeGreaterThan(0);
-    // Every one of them steps around the decode chip, whose label keeps the character's own toned
-    // colour while the text is still resolving (plan 60 step 4).
     for (const sel of labelSelectors) {
-      expect(sel).toContain(":not(.bonsai-preset-glass--decode)");
+      expect(sel).not.toContain("bonsai-preset-glass--decode");
     }
     expect(buildSection4Section()).toContain("color: #dcebf8 !important;");
+  });
+
+  it("no longer tints a decode chip's whole label with the accent colour", () => {
+    // The removed rule made a decode chip's words read in the same colour family as its Tip
+    // dot -- only the dot is meant to carry the accent (maintainer bug report, 2026-09-19).
+    // Checked as a selector, not a substring search, because the file header comment above the
+    // (now-removed) rule still names the variable in prose while explaining why it is gone.
+    const css = buildSection4Section();
+    expect(selectorsOf(css)).not.toContain(".bonsai-scope button.bonsai-preset-glass--decode .bonsai-preset-chip-label");
+    expect(css).not.toContain("color: var(--bonsai-ui-accent-toned");
   });
 
   it("still marks the current row for mouse, touch and the preview, where no ring exists", () => {

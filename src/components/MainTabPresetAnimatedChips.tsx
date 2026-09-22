@@ -578,6 +578,12 @@ function DecodePresetChipButton(props: {
         width: "100%",
         minHeight: PRESET_CHIP_HEIGHT_PX,
         fontSize: 12,
+        // Same normal chip-text colour PresetChipButton uses below (never the accent): the label
+        // used to be tinted `--bonsai-ui-accent-toned` by a CSS rule in section-4.ts, which made a
+        // decode chip's words read in the same colour family as its Tip dot -- the dot is the only
+        // thing meant to carry the accent (maintainer bug report, 2026-09-19). Set inline, not left
+        // to the Button's own default, so it reads the same as every other animation mode.
+        color: "#c4d3e2",
       }}
     >
       <span className="bonsai-preset-chip-label">

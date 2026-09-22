@@ -343,6 +343,29 @@ describe("MainTabPresetAnimatedChips decode mode", () => {
     });
   }
 
+  /*
+   * Maintainer bug report, 2026-09-19: "A preset chip's icon and its text are coloured the same
+   * way." section-4.ts used to give `.bonsai-preset-glass--decode .bonsai-preset-chip-label` a
+   * permanent `color: var(--bonsai-ui-accent-toned, #5b9e7e)`, which reached the Tip dot's own
+   * words too -- only the dot is meant to carry the accent colour. The stylesheet is a plain
+   * string in this test environment (no cascade), so this checks the one place decode's label
+   * colour can now come from: the Button's own inline style, set inline for the same reason
+   * PresetChipButton (fade/static/carousel) already sets it there.
+   */
+  it("gives a decode-mode chip's label the normal chip-text colour, not the accent", () => {
+    const { container } = render(
+      <MainTabPresetAnimatedChips
+        seeds={[{ ...seed("How do I beat Glyphid Dreadnought?"), ragTip: true }, seed("bravo"), seed("charlie")]}
+        setUnifiedInput={vi.fn()}
+        animationMode="decode"
+      />,
+    );
+    const button = container.querySelector(".bonsai-preset-glass--decode") as HTMLElement | null;
+    expect(button).toBeTruthy();
+    expect(button!.style.color).toBe("rgb(196, 211, 226)"); // #c4d3e2, jsdom's normalized form
+    expect(button!.style.color).not.toBe("");
+  });
+
   it("selecting a chip always submits the real prompt, never the on-screen partial", () => {
     // Clicked the instant it mounts, before any reveal timer has fired at all — the label is
     // still showing its pre-reveal placeholder. If onClick ever started reading the display

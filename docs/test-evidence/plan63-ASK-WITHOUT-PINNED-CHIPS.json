@@ -1,0 +1,37 @@
+{
+  "rowId": "ASK-WITHOUT-PINNED-CHIPS",
+  "rowText": "Can an exact question be put to the plugin on the Deck without the pinned test sentences and without anyone thumb-typing it? Several checks have been recorded as blocked for months on the answer being no.",
+  "build": { "plugin": "0.5.0", "commit": "54ce50a" },
+  "deckTime": "2026-09-22T00:40:00-04:00",
+  "verdict": "YES. Proved end to end.",
+
+  "whyItMatters": "The roadmap records at least five checks as blocked because no test sentence could be sent: MEGAERA-01, KB-FOLLOWUP-01, KB-KILLSWITCH-01's Show details half, KB-TRANSPARENCY-01 and KB-FLOOR-01's on-topic half. The stated reason each time was that the pinned test sentences had stopped working and no sentence may be typed by thumb. That reasoning skipped a path that already existed in this repo and works.",
+
+  "howItWasDone": [
+    "Open the plugin on the Main tab.",
+    "From the PC: ssh deck@<ip> 'python3 - --text \"<the exact question>\"' < scripts/deck_send_ask.py",
+    "The script writes the sentence into the Ask field through the real input path and reads it back, printing VERIFIED when the field holds exactly what was sent. It does NOT press Ask -- that stays a real controller press, so what is under test is still the real path.",
+    "Walk the controller down to the ask button and press A."
+  ],
+
+  "measured": {
+    "question": "what does the gravity gun do in half-life 2",
+    "scriptOutput": "VERIFIED - the field holds exactly what was sent",
+    "fieldRereadBeforePressingAsk": "what does the gravity gun do in half-life 2 -- unchanged by the 13 presses it took to walk to the ask button",
+    "askButtonState": "bonsai-ask-primary--ready",
+    "afterOneAPress": "the field cleared and the status line read: \"what does the gravity gun do in half-life 2\" is in good hands now...",
+    "timeToFinish": "28.3 seconds",
+    "answerOpening": "Right, listen up, you wanna know about that Gravity Gun in Half-Life 2? It ain't just some fancy toy, see. It's your main tool for manipulating stuff.",
+    "notesAttached": "Gravity Gun (+2 more), From the Half-Life wiki",
+    "answerSections": 1
+  },
+
+  "thingsWorthKnowing": [
+    "The flags must go INSIDE the quoted remote command. Outside it, a multi-word question silently keeps only its first word, and the script still prints VERIFIED for the truncated write. The script's own header records this, measured 2026-08-27.",
+    "An apostrophe in a question cannot survive the outer single quotes. Pass the sentence through a Python subprocess list, or choose a wording without one -- rewriting it silently changes what is being tested.",
+    "This does not replace the pinned test sentences for a person. It replaces the on-screen keyboard for a session driving the Deck.",
+    "One A press was enough here. The known 'first press after a reply lands does nothing' case did not apply, because the ring was placed by the walk rather than left unowned."
+  ],
+
+  "whatThisUnblocks": "Every check that was recorded as blocked on sending a question. They should be re-tried rather than left owed."
+}

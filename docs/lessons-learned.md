@@ -149,6 +149,19 @@ before on the same reading. Before filing anything about either of these, ask th
 is -- take the element's own text range rectangles and compare those against the icon -- rather than
 trusting the percentage. Evidence: `docs/test-evidence/plan63-CORNER-ICON-COVERAGE-01.json`.
 
+**A question can be put to the Deck without the pinned sentences and without thumb-typing.** Proved
+end to end 2026-09-22. `scripts/deck_send_ask.py` writes an exact sentence into the Ask field through
+the real input path, reads it back, and prints VERIFIED; the Ask press stays a real controller press,
+so the path under test is still the real one. It matters because at least five checks have sat
+recorded as blocked -- MEGAERA-01, KB-FOLLOWUP-01, KB-KILLSWITCH-01's Show details half,
+KB-TRANSPARENCY-01 and KB-FLOOR-01's on-topic half -- each saying no test sentence could be sent
+because the pinned chips had stopped working and nothing may be typed by thumb. That reasoning
+skipped a path this repo already had. Before recording a check as blocked on sending a question,
+try this. Two traps its own header records: the flags must sit INSIDE the quoted remote command, or
+a multi-word question silently keeps only its first word and the script still prints VERIFIED; and an
+apostrophe cannot survive the outer quotes. Evidence:
+`docs/test-evidence/plan63-ASK-WITHOUT-PINNED-CHIPS.json`.
+
 **Offer to pin the questions before asking anyone to type.** Typing a sentence on the on-screen
 keyboard with thumbs, once per case, invites a typo that silently changes what is being tested.
 There is a way to pin a batch of exact questions into the panel; use it. This is a standing

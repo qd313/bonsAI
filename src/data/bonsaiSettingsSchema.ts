@@ -38,14 +38,10 @@ import {
 import type { AskModeId } from "./askMode";
 import { DEFAULT_OLLAMA_KEEP_ALIVE, type OllamaKeepAliveDuration } from "./ollamaKeepAlive";
 import { DEFAULT_REPLY_VERBOSITY, type ReplyVerbosityId } from "./replyVerbosity";
-import {
-  ASK_THINK_EFFORT_IDS,
-  DEFAULT_ASK_THINK_EFFORT,
-  type AskThinkEffortId,
-} from "./askThinkEffort";
+import { type AskThinkEffortId } from "./askThinkEffort";
 import { type ReplyLanguageId } from "./replyLanguage";
 
-export { DEFAULT_REPLY_LANGUAGE, type ReplyLanguageId } from "./replyLanguage";
+export { type ReplyLanguageId } from "./replyLanguage";
 import {
   DEFAULT_MODEL_POLICY_TIER,
   type ModelPolicyTierId,
@@ -60,7 +56,6 @@ export type { AskThinkEffortId };
 export type { ModelPolicyTierId };
 export { DEFAULT_OLLAMA_KEEP_ALIVE };
 export { DEFAULT_REPLY_VERBOSITY };
-export { ASK_THINK_EFFORT_IDS, DEFAULT_ASK_THINK_EFFORT };
 export { DEFAULT_MODEL_POLICY_TIER };
 
 export type UnifiedInputPersistenceMode = "persist_all" | "persist_search_only" | "no_persist";
@@ -277,11 +272,6 @@ export const DEFAULT_VOICE_REPLY_MODE: VoiceReplyMode = "off";
 export const VOICE_REPLY_MODE_OPTIONS: VoiceReplyMode[] = ["off", "voice_only", "always"];
 export const SCREENSHOT_ATTACHMENT_PRESET_OPTIONS: ScreenshotAttachmentPreset[] = ["low", "mid", "max"];
 export const DEFAULT_SCREENSHOT_ATTACHMENT_PRESET: ScreenshotAttachmentPreset = "low";
-export const DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE = false;
-export const DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING = false;
-export const DEFAULT_SHOW_ONSCREEN_DEBUG_HUD = false;
-export const DEFAULT_DEV_FORCE_SESSION_RAG_CHIPS = false;
-export const DEFAULT_DEV_PRELOAD_ASK_MODEL = false;
 /** D15 option B, the locked decision — a fresh install resumes the tab you left. */
 export const DEFAULT_TAB_RESUME_MODE: TabResumeMode = "resume";
 export const TAB_RESUME_MODE_OPTIONS: TabResumeMode[] = ["always_main", "resume", "resume_recent"];
@@ -297,23 +287,12 @@ export const MAX_FROZEN_TEST_CHIPS = 12;
 export const FROZEN_TEST_CHIP_MAX_LEN = 160;
 export const DEFAULT_DESKTOP_APP_LOG_LEVEL: DesktopAppLogLevel = "off";
 export const DESKTOP_APP_LOG_LEVEL_OPTIONS: DesktopAppLogLevel[] = ["off", "default", "verbose"];
-export const DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED = true;
 export const DEFAULT_PRESET_CHIP_ANIMATION: PresetChipAnimation = "fade";
-/** D43 (2026-09-01): two chips is the shipped default; this setting overrides it to one. */
-export const DEFAULT_PRESET_SINGLE_CHIP = false;
 export const PRESET_CHIP_ANIMATION_OPTIONS: PresetChipAnimation[] = ["fade", "carousel", "static", "decode"];
-export const DEFAULT_INPUT_SANITIZER_USER_DISABLED = false;
-export const DEFAULT_SHOW_DEVELOPER_TAB = false;
-/** Persisted routing: off = LAN PC IP text field applies; when on, Ask uses localhost Ollama on the Deck only. */
-export const DEFAULT_OLLAMA_LOCAL_ON_DECK = false;
-/** Off by default (2026-09-12): changes how the Deck starts, so only an explicit opt-in turns it on. */
-export const DEFAULT_OLLAMA_LOCAL_AUTOSTART = false;
 /** Fixed host:port for on-device Ollama (matches `refactor_helpers.DEFAULT_OLLAMA_*`). */
 export const OLLAMA_LOCAL_ON_DECK_DEFAULT_PCIP = "127.0.0.1:11434";
-export const DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS = false;
 export const DEFAULT_ASK_MODE: AskModeId = "speed";
 export const DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED = true;
-export const DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT = false;
 /** Align with backend ``STEAM_WEB_API_KEY_MAX_LEN``. */
 export const STEAM_WEB_API_KEY_MAX_LEN = 128;
 
@@ -327,15 +306,7 @@ export const DEFAULT_CAPABILITIES: BonsaiCapabilities = {
 
 export const DEFAULT_VOICE_STT_MODEL: VoiceSttModelId = "tiny.en";
 export const VOICE_STT_MODEL_OPTIONS: VoiceSttModelId[] = ["tiny.en", "base.en"];
-export const DEFAULT_UI_SCALE_AUTO_ENABLED = true;
-export const DEFAULT_UI_SCALE_MANUAL_PROFILE: UiScaleProfileId = "handheld";
-export const DEFAULT_USE_LOCAL_KNOWLEDGE_BASE = false;
-export const DEFAULT_RAG_HYBRID_RETRIEVAL_ENABLED = true;
-export const DEFAULT_RAG_CORPUS_PATH = "";
-export const DEFAULT_RAG_CORPUS_VERSION = "";
 
-export const DEFAULT_AI_CHARACTER_ENABLED = false;
-export const DEFAULT_AI_CHARACTER_RANDOM = true;
 export const DEFAULT_AI_CHARACTER_PRESET_ID = "";
 export const DEFAULT_AI_CHARACTER_CUSTOM_TEXT = "";
 export { DEFAULT_AI_CHARACTER_ACCENT_INTENSITY };

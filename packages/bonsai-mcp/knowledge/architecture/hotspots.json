@@ -126,11 +126,6 @@
       "role": ""
     },
     {
-      "path": "src/hooks/usePluginSettings.ts",
-      "lines": 708,
-      "role": ""
-    },
-    {
       "path": "src/components/SettingsTab.tsx",
       "lines": 707,
       "role": ""
@@ -198,6 +193,11 @@
     {
       "path": "src/utils/answerBubbleNavigation.test.ts",
       "lines": 532,
+      "role": ""
+    },
+    {
+      "path": "src/data/bonsaiSettingsNormalizers.ts",
+      "lines": 531,
       "role": ""
     }
   ]

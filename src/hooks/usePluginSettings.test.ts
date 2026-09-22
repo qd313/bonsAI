@@ -1,5 +1,3 @@
-import { readFile } from "node:fs/promises";
-
 import { act, renderHook, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { call } from "@decky/api";
@@ -92,39 +90,84 @@ describe("usePluginSettings", () => {
   /*
    * D18, option A, locked 2026-08-27: a failed read shows defaults — all of them, no exceptions.
    *
-   * This reads the source rather than driving the hook, and that is deliberate. The reset only runs
-   * from the mount effect, whose deps are `[hydrateFromSettings]` and which is a `useCallback` with
-   * an empty dep list — so by the time the reset can fire, state is *already* sitting at its
-   * defaults and no behavioural assertion can tell a complete list from an incomplete one. The
-   * defect D18 named is not a wrong value, it is a **list that drifted**: four fields were missing
-   * from one of six hand-maintained copies of the same field list in this file.
-   *
-   * So the invariant is checked directly. Anything the hydrate path sets, the failure path must
-   * reset. When D14 collapses that duplication this test should be deleted along with it — a
-   * source-shape assertion earns its place only while the shape is the thing that can break.
+   * This used to read the hook's own source text and compare which `setXxx(...)` calls appeared
+   * in `hydrateFromSettings` versus the failed-load reset -- catching drift between six
+   * hand-written copies of the same ~48-field list. That shape is gone (D14): both paths now
+   * build one complete `BonsaiSettingsSnapshotInput` from `SETTINGS_FIELD_BACKEND_KEY` and call
+   * `setSettings` with it in a single line, so a field missing from one and not the other fails
+   * to *compile* (the table is typed `Record<keyof BonsaiSettingsSnapshotInput, ...>`), not just
+   * to test. This test checks the *behavior* the old one stood in for instead: a load failure
+   * must show the exact same values loading a genuinely empty settings object would show, for
+   * every field, not a mix of some fields defaulted and others stuck on whatever they last held.
    */
-  it("resets every field the successful-load path sets, so the two lists cannot drift", async () => {
-    // Not `import.meta.url` — under vitest's jsdom environment that is an http: URL, which
-    // `readFile` rejects. The suite always runs from the repo root.
-    const source = await readFile("src/hooks/usePluginSettings.ts", "utf8");
+  it("a failed load shows the exact same values as loading a genuinely empty settings object, for every field", async () => {
+    const settingsValuesOnly = (hookResult: Record<string, unknown>) => {
+      const out: Record<string, unknown> = {};
+      for (const [key, value] of Object.entries(hookResult)) {
+        if (typeof value === "function") continue; // the ~48 setSomething functions
+        if (key === "settingsLoaded") continue;
+        out[key] = value;
+      }
+      return out;
+    };
 
-    const hydrateStart = source.indexOf("const hydrateFromSettings");
-    expect(hydrateStart).toBeGreaterThan(-1);
-    const hydrateBody = source.slice(hydrateStart, source.indexOf("\n  }, []);", hydrateStart));
+    setRpcHandler("load_settings", () => ({}));
+    const { result: emptyLoadResult } = renderHook(() => usePluginSettings());
+    await waitFor(() => expect(emptyLoadResult.current.settingsLoaded).toBe(true));
 
-    const catchStart = source.indexOf("      .catch(() => {");
-    expect(catchStart).toBeGreaterThan(-1);
-    const catchBody = source.slice(catchStart, source.indexOf("\n      .finally(", catchStart));
+    setRpcHandler("load_settings", async () => {
+      throw new Error("disk read failed");
+    });
+    const { result: failedLoadResult } = renderHook(() => usePluginSettings());
+    await waitFor(() => expect(failedLoadResult.current.settingsLoaded).toBe(true));
 
-    const settersIn = (body: string) =>
-      new Set([...body.matchAll(/\bset([A-Z]\w*)\(/g)].map((m) => m[1]));
+    const emptyLoadValues = settingsValuesOnly(emptyLoadResult.current);
+    const failedLoadValues = settingsValuesOnly(failedLoadResult.current);
+    // Not vacuous: there really are ~48 fields being compared, not an empty object matching itself.
+    expect(Object.keys(failedLoadValues).length).toBeGreaterThan(30);
+    expect(failedLoadValues).toEqual(emptyLoadValues);
+  });
 
-    const hydrated = settersIn(hydrateBody);
-    const reset = settersIn(catchBody);
-    expect(hydrated.size).toBeGreaterThan(30);
+  /*
+   * Bug 2 (roadmap "A new setting can quietly stop working in one place"): a setting missing from
+   * `SETTINGS_FIELD_BACKEND_KEY` in usePluginSettings.ts no longer builds (TypeScript requires
+   * every key of `BonsaiSettingsSnapshotInput`), but this test catches it independently at
+   * runtime too -- deliberately not reusing that same table, so a mistake in the table itself
+   * cannot hide from both checks at once. It walks every key the wire shape (`BonsaiSettings`)
+   * declares, converts snake_case to camelCase with a plain regex, and confirms the hook's
+   * returned object actually has a value there after loading a fully custom settings object. A
+   * field the table forgets shows up as `undefined` here, not as a coincidental default.
+   */
+  it("every setting the backend can save shows up as a value on the hook's returned object", async () => {
+    const custom = defaultSettingsFixture();
+    // Distinctive, obviously-non-default markers for a few fields so a missing table entry shows
+    // up as `undefined` rather than coincidentally matching whatever the default already is.
+    custom.dev_frozen_test_chips = ["marker question one", "marker question two", "marker question three"];
+    custom.reply_language = "german";
+    custom.text_model_routing_order = ["qwen2.5:7b"];
 
-    const missingFromReset = [...hydrated].filter((name) => !reset.has(name)).sort();
-    expect(missingFromReset).toEqual([]);
+    const { result } = renderHook(() => usePluginSettings());
+    await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+
+    act(() => {
+      result.current.hydrateFromSettings(custom);
+    });
+
+    const wireKeys = Object.keys(custom);
+    // Not vacuous: there really are ~48 fields on the wire shape being walked here.
+    expect(wireKeys.length).toBeGreaterThan(30);
+    for (const wireKey of wireKeys) {
+      const camelKey = wireKey.replace(/_([a-z0-9])/g, (_match, c: string) => c.toUpperCase());
+      expect(
+        (result.current as Record<string, unknown>)[camelKey],
+        `expected a defined value for "${camelKey}" (from wire field "${wireKey}")`
+      ).not.toBeUndefined();
+    }
+    expect(result.current.devFrozenTestChips).toEqual([
+      "marker question one",
+      "marker question two",
+      "marker question three",
+    ]);
   });
 
   it("flushSettingsSnapshotNow persists the latest hydrated snapshot", async () => {

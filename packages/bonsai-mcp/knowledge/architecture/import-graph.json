@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 419,
-  "edgeCount": 1075,
+  "edgeCount": 1073,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -1149,8 +1149,7 @@
         "src/components/SettingsTabAccentIntensityMenuPopover.tsx",
         "src/data/bonsaiSettingsNormalizers.ts",
         "src/data/bonsaiSettingsSchema.ts",
-        "src/features/plugin-shell/tabs/useMainTabPayload.tsx",
-        "src/hooks/usePluginSettings.ts"
+        "src/features/plugin-shell/tabs/useMainTabPayload.tsx"
       ]
     },
     "src/data/askMode.ts": {
@@ -1383,7 +1382,6 @@
         "src/features/model-routing/useRoutingOrderModal.ts",
         "src/features/plugin-shell/useOllamaModelsHubModal.tsx",
         "src/hooks/useBonsaiAskOrchestration.ts",
-        "src/hooks/usePluginSettings.ts",
         "src/index.tsx",
         "src/types/askOrchestration.ts",
         "src/types/backgroundAsk.ts",
@@ -2327,10 +2325,8 @@
     },
     "src/hooks/usePluginSettings.ts": {
       "imports": [
-        "src/data/aiCharacterAccentIntensity.ts",
         "src/data/bonsaiSettingsNormalizers.ts",
         "src/data/bonsaiSettingsSchema.ts",
-        "src/data/modelPolicy.ts",
         "src/features/plugin-shell/pluginStorage.ts",
         "src/utils/bonsaiSessionSurvival.ts",
         "src/utils/deckyCall.ts",

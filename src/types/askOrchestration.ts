@@ -83,7 +83,7 @@ export interface BonsaiAskOrchestration {
   /** The model's own thinking on the question running right now, or null when none is. */
   liveReasoning: LiveReasoningSnapshot | null;
   /** Plan 58 phase 1: the "From the notes" block's own material for the live turn, read off
-   *  every poll — see MainTabChatTranscriptProps.liveKbAttachedNotes's own doc comment. */
+   *  every poll — see LiveThinkingSnapshot's own doc comment. */
   kbAttachedNotes: KbAttachedNote[] | null;
   lastRequestId: number | null;
 

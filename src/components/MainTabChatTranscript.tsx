@@ -578,20 +578,6 @@ export type MainTabChatTranscriptProps = {
   onOpenDesktopNoteSave: () => void;
   desktopNoteSaveEnabled?: boolean;
   transparencySnapshot?: TransparencySnapshot | null;
-  /**
-   * The attached notes for the live turn while it is still streaming, read off the background
-   * poll status the same way `liveThinking` already is — plan 58 phase 1's own live-before-the-
-   * first-word case (the lesson the spoiler work paid for: a per-turn fact that only arrives
-   * with the finished reply flickers). `transparencySnapshot` above is a *post-completion* fetch
-   * (`get_input_transparency`, refreshed once an Ask finishes) and does not update mid-stream, so
-   * it cannot serve this by itself — this prop is what a live poll would carry instead.
-   * `index.tsx` supplies it from the background poll status, and main.py's
-   * `_merge_partial_into_background_status` already copies the live snapshot's own note list
-   * onto it. It also does a second job once the reply finishes: the transcript below keeps using
-   * it as a fallback until `transparencySnapshot` actually lands, since that fetch is async and
-   * fires after completion (see the notes block's own comment where it reads this prop).
-   */
-  liveKbAttachedNotes?: KbAttachedNote[] | null;
   onRunOriginalAsk?: (rawQuestion: string) => void;
   strategyGuideBranches?: StrategyGuideBranchesPayload | null;
   onStrategyBranchPick?: (opt: { id: string; label: string }) => void;
@@ -613,7 +599,19 @@ export type MainTabChatTranscriptProps = {
   askStopped?: boolean;
   /**
   * What fills the space under your question while the answer is being made: the stock waiting
-  * phrase, and — on a model that thinks — the model's own newest words. See LiveThinkingSnapshot.
+  * phrase, and — on a model that thinks — the model's own newest words, plus (plan 58 phase 1)
+  * which knowledge-base notes are attached so far. See LiveThinkingSnapshot.
+  *
+  * The `kbAttachedNotes` field is read off the same background poll status, the same way the
+  * summary and reasoning fields already are — the live-before-the-first-word case (the lesson
+  * the spoiler work paid for: a per-turn fact that only arrives with the finished reply
+  * flickers). `transparencySnapshot` above is a *post-completion* fetch (`get_input_transparency`,
+  * refreshed once an Ask finishes) and does not update mid-stream, so it cannot serve this by
+  * itself. `index.tsx` supplies `liveThinking` from the background poll status, and main.py's
+  * `_merge_partial_into_background_status` already copies the live snapshot's own note list into
+  * it. `kbAttachedNotes` also does a second job once the reply finishes: the transcript below
+  * keeps using it as a fallback until `transparencySnapshot` actually lands, since that fetch is
+  * async and fires after completion (see the notes block's own comment where it reads this).
   */
   liveThinking?: LiveThinkingSnapshot | null;
   desktopAskVerboseLogging?: boolean;
@@ -968,7 +966,6 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
     onOpenDesktopNoteSave,
     desktopNoteSaveEnabled = true,
     transparencySnapshot = null,
-    liveKbAttachedNotes = null,
     strategyGuideBranches = null,
     onStrategyBranchPick,
     strategyChecklist = null,
@@ -2089,20 +2086,21 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                    * Unlike the row above, not gated on `!isAsking`: the whole point of publishing
                    * this live (game_ai_request.py's `_publish_kb_attached_notes_live`) is showing
                    * it before the reply finishes, not only once `buildReplyActionsElement` above
-                   * has something to show. `liveKbAttachedNotes` is what a live poll would carry
-                   * mid-stream; `transparencySnapshot` is the post-completion fetch used once the
-                   * turn is done. That fetch runs asynchronously after the reply finishes, so
-                   * there is a real gap where `isAsking` has gone false but the fetch has not
-                   * landed yet — switching straight to `transparencySnapshot` in that gap makes
-                   * the block disappear and then reappear a moment later. Keep showing the live
-                   * notes through that gap, and only defer to the fetched snapshot once it exists
-                   * (an empty list counts as landed, so a genuinely note-free turn still clears).
+                   * has something to show. `liveThinking?.kbAttachedNotes` is what a live poll
+                   * would carry mid-stream; `transparencySnapshot` is the post-completion fetch
+                   * used once the turn is done. That fetch runs asynchronously after the reply
+                   * finishes, so there is a real gap where `isAsking` has gone false but the
+                   * fetch has not landed yet — switching straight to `transparencySnapshot` in
+                   * that gap makes the block disappear and then reappear a moment later. Keep
+                   * showing the live notes through that gap, and only defer to the fetched
+                   * snapshot once it exists (an empty list counts as landed, so a genuinely
+                   * note-free turn still clears).
                    */
                   const notes = isAsking
-                    ? liveKbAttachedNotes ?? []
+                    ? liveThinking?.kbAttachedNotes ?? []
                     : transparencySnapshot
                     ? kbAttachedNotesFrom(transparencySnapshot)
-                    : liveKbAttachedNotes ?? [];
+                    : liveThinking?.kbAttachedNotes ?? [];
                   const answerTextForFenceCheck = isAsking
                     ? liveResponseBody
                     : lastExchange?.answer ?? "";

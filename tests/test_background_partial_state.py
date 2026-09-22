@@ -88,6 +88,32 @@ class BackgroundPartialStateTests(unittest.TestCase):
         self.assertTrue(merged.get("streaming"))
         self.assertEqual(merged.get("partial_response"), "Growing reply")
 
+    def test_merge_preserves_chat_slot_id_while_streaming(self) -> None:
+        """Plan 63 bug 2 ("a chat that is still writing does not look busy from another chat"):
+        the slot row's dot reads ``chat_slot_id`` off every poll, not just the terminal one. This
+        repo has already been bitten once by a per-turn fact that only reached the screen once an
+        answer completed (``kb_attached_notes``, plan 58 phase 1) because it lived only on the
+        partial-stream snapshot and nothing copied it across on a pending poll.
+
+        ``chat_slot_id`` does not have that shape: it is set on ``_background_state`` itself at
+        accept (main.py:2643, ``pending_background_state(chat_slot_id=...)``), and
+        ``_merge_partial_into_background_status`` starts from ``dict(state)`` and only overlays
+        partial-only fields — it never touches ``chat_slot_id`` either way. So it should already
+        ride every merged poll, pending or terminal, untouched. This locks that in.
+        """
+        self.plugin._background_state = {
+            "status": "pending",
+            "request_id": 13,
+            "response": "Thinking...",
+            "started_at": 0.0,
+            "chat_slot_id": "slot-a",
+        }
+        self.plugin._reset_partial_stream_snapshot(13)
+        self.plugin._update_partial_response(13, "Growing reply", False)
+        merged = self.plugin._merge_partial_into_background_status(self.plugin._background_state)
+        self.assertTrue(merged.get("streaming"))
+        self.assertEqual(merged.get("chat_slot_id"), "slot-a")
+
     def test_thinking_only_delta_without_partial(self) -> None:
         self.plugin._background_state = {
             "status": "pending",

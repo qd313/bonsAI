@@ -92,6 +92,17 @@ export type ContextChipLadderProps = {
    * verbose logging is on, matching the standalone "Show diagnostics" button's old gating exactly.
    */
   devDiagnostics?: AskDiagnosticsSnapshot | null;
+  /**
+   * The ladder's own root element, handed back to the caller so it can be registered and focused
+   * by name. Measured on the Deck 2026-09-21: Down from the details panel's tabs row called
+   * `focusContextChipLadder`, which finds this element by class and then `focusDeckOwner`s it --
+   * and that returns false here, because the root is a genuine `.Panel.Focusable` carrying no
+   * `tabindex` on device and holding no natively focusable descendant to fall back to. That is the
+   * exact trade-off `focusDeckOwner`'s own comment says is UNKNOWN for this target; it is now
+   * measured, and it is real. With the move reported as unhandled, Steam's default navigation ran
+   * and threw the ring out of the panel onto a preset chip in the dock.
+   */
+  rootRef?: (el: HTMLElement | null) => void;
 };
 
 /**
@@ -131,6 +142,7 @@ export function ContextChipLadder({
   onMoveUpFromLadder,
   onMoveDownFromLadder,
   devDiagnostics = null,
+  rootRef,
 }: ContextChipLadderProps) {
   const chips = chipsFromSnapshot(snapshot);
   const [expanded, setExpanded] = useState(!collapsedHint);
@@ -234,6 +246,7 @@ export function ContextChipLadder({
   return (
     <Focusable
       className="bonsai-chip-ladder"
+      ref={(el: HTMLElement | null) => rootRef?.(el)}
       style={{ marginTop: 8, width: "100%", maxWidth: "100%", minWidth: 0 }}
       {...deckNav({
         onMoveLeft: moveLeft,

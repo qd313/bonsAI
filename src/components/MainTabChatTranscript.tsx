@@ -396,6 +396,37 @@ function focusDetailsTabsRow(turnKey: string): boolean {
 }
 
 /**
+ * The chip ladder's own root, per turn, registered the same way the tabs row above is.
+ *
+ * Why a registry rather than the existing `focusContextChipLadder` page query: measured on the
+ * Deck 2026-09-21 (build 29ca207). With the details panel open on "This answer", Down from the
+ * tabs row called `focusContextChipLadder`, which finds `.bonsai-chip-ladder` by class and hands
+ * it to `focusDeckOwner`. That returns FALSE for this element. `focusDeckOwner` refuses to stamp a
+ * `tabindex` on a genuine `.Panel.Focusable` -- rightly, that stamp is what corrupted a permission
+ * row on 2026-09-04 -- and the ladder's root carries no `tabindex` on device and holds no natively
+ * focusable descendant to fall back to, so the plain `.focus()` does nothing and the move is
+ * reported as unhandled. Steam's own navigation then ran and threw the ring clean out of the panel
+ * onto a preset chip in the dock (measured: ring on `.bonsai-preset-glass`, "TEST", y 600, while
+ * the ladder sat unreached at y 449). `focusDeckOwner`'s own comment names this target as the
+ * UNKNOWN case of that trade-off; this is the measurement, and the answer is yes.
+ *
+ * `focusPerTurnRow` is the fix because it is the one already proven on this device, in this
+ * container, on the same night: the tabs row directly above is also a bare `.Panel.Focusable`, is
+ * focused through this same helper, and took the ring correctly. Stamping our own component's root
+ * is not the ancestor-climbing stamp that caused the 2026-09-04 damage.
+ */
+const chipLadderEls = new Map<string, HTMLElement>();
+
+function registerChipLadderEl(turnKey: string, el: HTMLElement | null): void {
+  if (el) chipLadderEls.set(turnKey, el);
+  else chipLadderEls.delete(turnKey);
+}
+
+function focusChipLadderRow(turnKey: string): boolean {
+  return focusPerTurnRow(chipLadderEls, turnKey);
+}
+
+/**
  * Up from any row below the live turn's own "From the notes" block (a permission-hint row, or
  * the chip ladder's own fallback) — reach the block first, when one is mounted, before falling
  * to whatever that row's own Up already reached. The mirror of the Down path already wired
@@ -814,6 +845,7 @@ function buildDetailsPanelElement(args: {
       <ContextChipLadder
         snapshot={snapshot}
         collapsedHint={false}
+        rootRef={(el) => registerChipLadderEl(turnKey, el)}
         onMoveUpFromLadder={upPastPanel}
         onMoveDownFromLadder={() => focusSessionContextStrip()}
         devDiagnostics={devDiagnostics}
@@ -830,7 +862,7 @@ function buildDetailsPanelElement(args: {
   };
   const focusFirstTabContent = () =>
     detailsTab === "answer"
-      ? focusContextChipLadder(querySlot())
+      ? focusChipLadderRow(turnKey) || focusContextChipLadder(querySlot())
       : focusDeckOwner(querySlot()?.querySelector<HTMLElement>(".bonsai-details-session-row") ?? null);
 
   return (
@@ -898,6 +930,7 @@ function buildDetailsPanelElement(args: {
         <ContextChipLadder
           snapshot={snapshot}
           collapsedHint={false}
+          rootRef={(el) => registerChipLadderEl(turnKey, el)}
           onMoveUpFromLadder={() => focusDetailsTabsRow(turnKey) || upPastPanel()}
           /*
            * Same shape the pre-tabs ladder always had, kept for consistency with the older-turn
@@ -1880,6 +1913,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                     onMoveDownFromUtility: () =>
                       focusKbNotesBlock(turn.id) ||
                       focusDetailsTabsRow(turn.id) ||
+                      focusChipLadderRow(turn.id) ||
                       downPastUtilityRow(),
                   });
                   return (
@@ -1894,7 +1928,9 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                           focusReplyShowDetails(queryTurnSlot(turn.id)) ||
                           focusReplyUtilityRow(queryTurnSlot(turn.id)),
                         onMoveDown: () =>
-                          focusDetailsTabsRow(turn.id) || downPastUtilityRow(),
+                          focusDetailsTabsRow(turn.id) ||
+                          focusChipLadderRow(turn.id) ||
+                          downPastUtilityRow(),
                         headerRef: (el: HTMLElement | null) => {
                           kbNotesHeaderElRefs.current[turn.id] = el;
                         },
@@ -2085,6 +2121,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                   onMoveDownFromUtility: () =>
                     focusKbNotesBlock("live") ||
                     focusDetailsTabsRow("live") ||
+                    focusChipLadderRow("live") ||
                     focusDownFromReplyUtilityRowOrPermHint(queryLiveTurnSlot()),
                 })
               : null}
@@ -2127,6 +2164,7 @@ export function MainTabChatTranscript(props: MainTabChatTranscriptProps) {
                       focusReplyUtilityRow(queryLiveTurnSlot()),
                     onMoveDown: () =>
                       focusDetailsTabsRow("live") ||
+                      focusChipLadderRow("live") ||
                       focusDownFromReplyUtilityRowOrPermHint(queryLiveTurnSlot()),
                     headerRef: (el: HTMLElement | null) => {
                       kbNotesHeaderElRefs.current.live = el;

@@ -241,6 +241,45 @@ describe("the This answer / Session tabs, on the newest answer", () => {
     });
   });
 
+  /*
+   * Roadmap: "With Show details open, the chip row cannot be reached by the D-pad" and "The Show
+   * details chip ladder is not a D-pad stop" -- two entries, one fault, measured on the Deck
+   * 2026-09-21 (build 29ca207). Down from the tabs row on "This answer" threw the ring clean out
+   * of the panel onto a preset chip in the dock, while the ladder sat unreached 150px above it.
+   *
+   * Cause: `focusContextChipLadder` finds the ladder by class and hands it to `focusDeckOwner`,
+   * which returns FALSE for it -- the ladder's root is a genuine `.Panel.Focusable` carrying no
+   * `tabindex` on device with no natively focusable descendant, the one shape `focusDeckOwner`
+   * deliberately refuses to stamp (see its own test, "reports false rather than stamp a bare
+   * Panel.Focusable leaf with no fallback"). With the move reported unhandled, Steam's own
+   * navigation ran.
+   *
+   * This test cannot reproduce that in jsdom: the test harness's Focusable stub renders a plain
+   * div carrying only our class, so `focusDeckOwner` treats it as ours, stamps a tabindex, and
+   * succeeds -- which is exactly why the existing "This answer: Down focuses the chip ladder" test
+   * passed all along while the device failed. So it removes the class the old path searched by.
+   * That leaves only the by-name route, which is the route the fix adds. Watched failing with
+   * `rootRef` taken off the ladder before being kept.
+   */
+  it("Down from the tabs row reaches the ladder by name, not by hunting for its class", () => {
+    const { container } = renderTranscript();
+    clickShowDetails(container);
+
+    const ladder = container.querySelector(".bonsai-chip-ladder") as HTMLElement;
+    expect(ladder).not.toBeNull();
+    // Stand in for the device shape: the by-class lookup can no longer find it.
+    ladder.classList.remove("bonsai-chip-ladder");
+    expect(container.querySelector(".bonsai-chip-ladder")).toBeNull();
+
+    const onMoveDown = tabsRowProps()?.onMoveDown as (() => boolean) | undefined;
+    expect(onMoveDown).toBeTypeOf("function");
+    act(() => {
+      expect(onMoveDown!()).toBe(true);
+    });
+
+    expect(document.activeElement).toBe(ladder);
+  });
+
   describe("Left and Right switch tabs", () => {
     it("Right moves onto Session, Left moves back onto This answer", () => {
       const { container } = renderTranscript();

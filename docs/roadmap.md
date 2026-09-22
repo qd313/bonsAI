@@ -452,7 +452,8 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   found and fixed on the Deck 2026-09-20.** The mirror drawing your typed question was 24 pixels wider than its own
   box, so the end of a line sat 23 pixels outside the panel. Only at the biggest size; nothing overflowed at the
   default. Its width had been written a frame too early and nothing re-measured, because the size change does not
-  change the column's width. Row **UI-SIZE-01**, not seen on the Deck — deploying is blocked. Evidence `docs/test-evidence/plan62-UI-SIZE-outside-handheld.json`.
+  change the column's width. Row **UI-SIZE-01**, not seen on the Deck — recorded as blocked by deploying,
+  **which was wrong: six deploys went through on 2026-09-21, so this is simply owed.** Evidence `docs/test-evidence/plan62-UI-SIZE-outside-handheld.json`.
 - ★★ `[chat]` **A new chat shows the previous chat's last reply until the panel is reopened** — **VERIFY,
   fixed in `163ff16`.** Row **CHAT-GHOST-REPLY-01**. Owed: switch to a brand-new chat right after a reply
   finishes elsewhere, four times over to match the four sightings, and see it blank from the first frame with
@@ -468,7 +469,8 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   or 400 pixels, measured against whatever screen the Deck is driving — an external monitor got about five
   rows, the Deck's own screen about three. **Fix:** the list now fills the room its popup body already has.
   Row **MODELS-LIST-CAP-01**, not yet proved on the device — deploying is currently blocked because the
-  plugin folder there is owned by root. [Detail](roadmap-details.md#the-ai-models-screen-showed-about-two-rows-of-the-model-list-on-the-decks-screen).
+  plugin folder there is owned by root — **wrong, and corrected 2026-09-22: deploying works, six went
+  through on 2026-09-21, so this is simply owed.** [Detail](roadmap-details.md#the-ai-models-screen-showed-about-two-rows-of-the-model-list-on-the-decks-screen).
 - ★★ `[ollama]` **The very first model ticked in a fresh download picker starts downloading right away** —
   **VERIFY, fixed in `ec4d007`.** The cause was bigger than the report: Decky's buttons render as form submit
   buttons and the screen sits inside Steam's own form, so any click that did not cancel its default action

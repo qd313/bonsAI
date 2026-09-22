@@ -2018,7 +2018,7 @@ worse answers with nothing on screen to say why.
   the room its own popup body already has, instead of keeping that separate, smaller cap of its own; nothing
   else about it changed. Expected: about two more rows on an external monitor, about three more on the
   Deck's own screen. Row **MODELS-LIST-CAP-01**, not yet proved on the device — deploying to the Deck is
-  currently blocked because the plugin folder there is owned by root. [Plan](planning/62-feature-session-five.md).
+  recorded as blocked because the plugin folder there is owned by root. **Corrected 2026-09-22: deploying is NOT blocked** and has not been all night — six deploys went through, each checked byte for byte on the Deck. The plugin folder IS owned by root, which is what people saw, but the Deck takes sudo without a password and the deploy script becomes root, wipes the folder and hands it back. [Plan](planning/62-feature-session-five.md).
 
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
 
@@ -2403,8 +2403,7 @@ worse answers with nothing on screen to say why.
   rail rather than back on that button, and getting back into the plugin needed an unmarked first press
   before the shoulder buttons worked again. The screen's other opener already remembered where to send the
   ring back; this button now does too, with its own separate return id. Row **MODELS-HUB-RETURN-01**, not
-  yet run on the Deck — deploying to the Deck is currently blocked because the plugin folder there is
-  owned by root.
+  yet run on the Deck — recorded as blocked because the plugin folder there is owned by root. **Corrected 2026-09-22: deploying is NOT blocked** and has not been all night — six deploys went through, each checked byte for byte on the Deck. The plugin folder IS owned by root, which is what people saw, but the Deck takes sudo without a password and the deploy script becomes root, wipes the folder and hands it back.
 
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
 

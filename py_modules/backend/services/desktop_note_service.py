@@ -146,6 +146,30 @@ def _is_path_under(parent_real: str, child_candidate: str) -> bool:
     return common == parent_real
 
 
+def _write_note_block_to_daily_file(notes_dir: str, stem: str, block: str) -> dict[str, Any]:
+    """Create notes_dir if needed, resolve ``<stem>.md`` safely inside it, and append block to it.
+
+    Shared tail for every "append a block of markdown to a note file" writer in this module --
+    append_markdown_note(), append_desktop_chat_event_sync() and
+    append_desktop_ask_transparency_sync() each build a different block and then do exactly
+    this. Raises ValueError if the resolved path would escape notes_dir (a symlinked notes_dir
+    or a hostile stem) -- one check now, instead of three copies of it that could drift apart.
+    """
+    os.makedirs(notes_dir, exist_ok=True)
+    notes_real = os.path.realpath(notes_dir)
+    target_path = os.path.normpath(os.path.join(notes_real, f"{stem}.md"))
+    if not _is_path_under(notes_real, target_path):
+        raise ValueError("Resolved path escapes the notes directory.")
+    target_real = os.path.realpath(target_path)
+    if not _is_path_under(notes_real, target_real):
+        raise ValueError("Resolved path escapes the notes directory.")
+
+    with open(target_path, "a", encoding="utf-8") as f:
+        f.write(block)
+
+    return {"ok": True, "path": target_path}
+
+
 def _utc_ts_z() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
 
@@ -261,15 +285,6 @@ def append_markdown_note(*, notes_dir: str, stem: str, question: str, response: 
         raise ValueError("Response text is required.")
 
     safe_stem = sanitize_note_stem(stem)
-    os.makedirs(notes_dir, exist_ok=True)
-    notes_real = os.path.realpath(notes_dir)
-    target_path = os.path.normpath(os.path.join(notes_real, f"{safe_stem}.md"))
-    if not _is_path_under(notes_real, target_path):
-        raise ValueError("Resolved path escapes the notes directory.")
-    target_real = os.path.realpath(target_path)
-    if not _is_path_under(notes_real, target_real):
-        raise ValueError("Resolved path escapes the notes directory.")
-
     ts = _utc_ts_z()
     block = (
         f"\n## {ts}\n\n"
@@ -279,11 +294,7 @@ def append_markdown_note(*, notes_dir: str, stem: str, question: str, response: 
         f"{r}\n\n"
         f"---\n"
     )
-
-    with open(target_path, "a", encoding="utf-8") as f:
-        f.write(block)
-
-    return {"ok": True, "path": target_path}
+    return _write_note_block_to_daily_file(notes_dir, safe_stem, block)
 
 
 def append_desktop_debug_note_sync(
@@ -374,19 +385,7 @@ def append_desktop_chat_event_sync(
                 f"---\n"
             )
 
-        os.makedirs(notes_dir, exist_ok=True)
-        notes_real = os.path.realpath(notes_dir)
-        target_path = os.path.normpath(os.path.join(notes_real, f"{stem}.md"))
-        if not _is_path_under(notes_real, target_path):
-            raise ValueError("Resolved path escapes the notes directory.")
-        target_real = os.path.realpath(target_path)
-        if not _is_path_under(notes_real, target_real):
-            raise ValueError("Resolved path escapes the notes directory.")
-
-        with open(target_path, "a", encoding="utf-8") as f:
-            f.write(block)
-
-        return {"ok": True, "path": target_path}
+        return _write_note_block_to_daily_file(notes_dir, stem, block)
     except (OSError, ValueError) as exc:
         return _desktop_write_failure_result(exc)
 
@@ -471,18 +470,6 @@ def append_desktop_ask_transparency_sync(home: str, snapshot: dict[str, Any]) ->
         parts.append(meta + "\n\n---\n")
         block = "".join(parts)
 
-        os.makedirs(notes_dir, exist_ok=True)
-        notes_real = os.path.realpath(notes_dir)
-        target_path = os.path.normpath(os.path.join(notes_real, f"{stem}.md"))
-        if not _is_path_under(notes_real, target_path):
-            raise ValueError("Resolved path escapes the notes directory.")
-        target_real = os.path.realpath(target_path)
-        if not _is_path_under(notes_real, target_real):
-            raise ValueError("Resolved path escapes the notes directory.")
-
-        with open(target_path, "a", encoding="utf-8") as f:
-            f.write(block)
-
-        return {"ok": True, "path": target_path}
+        return _write_note_block_to_daily_file(notes_dir, stem, block)
     except (OSError, ValueError) as exc:
         return _desktop_write_failure_result(exc)

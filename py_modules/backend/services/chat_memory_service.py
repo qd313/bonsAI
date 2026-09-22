@@ -242,3 +242,57 @@ def plan_and_build_chat_memory(
         memory_wanted=memory_wanted,
     )
     return plan, build_chat_memory(rows, plan.memory_tokens, model_name)
+
+
+def apply_chat_memory_to_prompt(
+    *,
+    system_content: str,
+    question: str,
+    chat_turns: Optional[list],
+    ask_mode: str,
+    think_effort: str,
+    base_http: str,
+    attached_chars: int,
+    logger: Any,
+    model_name: str = "",
+) -> str:
+    """Plan the chat-memory budget, build the memory block, append it, and log the outcome.
+
+    Wraps ``plan_and_build_chat_memory()`` for ``run_ask_ollama()``. The memory block is placed
+    at the END of what the AI is told, after the rules and after the game's cards, on purpose:
+    the server skips re-reading any part of the front of a question that has not changed since
+    last time, and this block changes on every turn. Anything that changes every turn has to sit
+    behind everything that does not, or it spoils that saving for all of it (measured on the Deck
+    2026-09-20: 15.3 seconds to the first word with the front rewritten each turn, 1.1 and 0.8
+    seconds with it left alone).
+
+    ``attached_chars`` and ``logger`` are passed in rather than looked up here, so this stays a
+    plain function of its arguments -- the caller already has both close at hand.
+    """
+    budget_plan, memory = plan_and_build_chat_memory(
+        system_content=system_content,
+        question=question,
+        chat_turns=chat_turns,
+        ask_mode=ask_mode,
+        think_effort=think_effort,
+        base_http=base_http,
+        model_name=model_name,
+    )
+    if memory.text:
+        system_content = system_content + "\n\n" + memory.text
+    logger.info(
+        "ask_ollama: budget room=%d rules+cards=%d (attached %d chars) memory=%d thinking=%d answer=%d "
+        "(~%.1fs to the first word) carried=%d turns, left behind=%d, hidden notes removed=%d%s",
+        budget_plan.room_tokens,
+        budget_plan.rules_tokens,
+        attached_chars,
+        memory.tokens,
+        budget_plan.thinking_tokens,
+        budget_plan.answer_tokens,
+        budget_plan.seconds_to_first_word,
+        memory.turns_carried,
+        memory.turns_left_out,
+        memory.hidden_notes_removed,
+        ("; left out: " + ", ".join(budget_plan.left_out)) if budget_plan.left_out else "",
+    )
+    return system_content

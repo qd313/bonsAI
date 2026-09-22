@@ -19,6 +19,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from rag_corpus_seed_fixtures import compat_payload as _compat_payload
+from rag_corpus_seed_fixtures import seed_payload as _seed_payload
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -29,48 +32,6 @@ def _load_module(filename: str, name: str):
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod
-
-
-def _seed_payload(section_count: int) -> dict:
-    return {
-        "games": [
-            {
-                "game_id": 1,
-                "app_id": "413150",
-                "canonical_title": "Test Game",
-                "platform": "PC",
-                "genres": ["action"],
-            }
-        ],
-        "aliases": [],
-        "sections": [
-            {
-                "section_id": i,
-                "game_id": 1,
-                "section_type": "boss",
-                "name": f"Section {i}",
-                "card": f"Card body {i}.",
-                "source_url": "",
-                "source_license": "bonsAI-maintainer",
-            }
-            for i in range(1, section_count + 1)
-        ],
-        "genre_patterns": [],
-    }
-
-
-def _compat_payload(pattern_count: int) -> list:
-    return [
-        {
-            "pattern_id": i,
-            "topic": "proton",
-            "platforms": ["deck"],
-            "card": f"Tip body {i}.",
-            "source_url": "",
-            "source_license": "bonsAI-maintainer",
-        }
-        for i in range(1, pattern_count + 1)
-    ]
 
 
 class PublishCorpusShortIndexTests(unittest.TestCase):

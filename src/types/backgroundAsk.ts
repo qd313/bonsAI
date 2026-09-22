@@ -197,16 +197,19 @@ export type LiveReasoningSnapshot = {
 /**
  * Everything the space under your question shows while the answer is being made, as one thing.
  *
- * Two facts, and only one of them is ever on screen at a time: the stock waiting phrase the
- * computer side composes, and — on a model that thinks, once its first thought arrives — the
- * model's own words. They are handed down together because they are alternatives for the same
- * few lines of screen, and because the main screen's job is measured by how many separate things
- * it passes to a tab (scripts/shell_seam.mjs): two related facts about one piece of screen belong
- * in one parcel.
+ * Three facts about the same still-streaming turn: the stock waiting phrase the computer side
+ * composes, and — on a model that thinks, once its first thought arrives — the model's own
+ * words, and (plan 58 phase 1) which knowledge-base notes are attached so far, read off the same
+ * background poll. `kbAttachedNotes` used to travel as its own separate prop
+ * (`liveKbAttachedNotes`); it was folded in here because it is the same kind of fact from the
+ * same poll as the other two, and because the main screen's job is measured by how many separate
+ * things it passes to a tab (scripts/shell_seam.mjs): related facts about one piece of screen
+ * belong in one parcel, not three.
  */
 export type LiveThinkingSnapshot = {
   summary: string | null;
   reasoning: LiveReasoningSnapshot | null;
+  kbAttachedNotes?: KbAttachedNote[] | null;
 };
 
 export type ReplyFollowUpPending = {

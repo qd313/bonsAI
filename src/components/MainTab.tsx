@@ -31,7 +31,7 @@ import type {
   StrategyGuideBranchesPayload,
   StrategyChecklistState,
 } from "../types/bonsaiUi";
-import type { KbAttachedNote, TransparencySnapshot } from "../utils/inputTransparency";
+import type { TransparencySnapshot } from "../utils/inputTransparency";
 import type { AskModeId } from "../data/askMode";
 import type { ModelPolicyDisclosurePayload } from "../data/modelPolicy";
 import type { AskThreadExpandedTurnKey } from "../types/bonsaiUi";
@@ -144,11 +144,9 @@ export type MainTabProps = {
   askStopped?: boolean;
   /** A pending Ask belongs to another chat slot: the ask bar shows busy, the transcript does not. */
   isForeignPendingAsk?: boolean;
-  /** What fills the space under your question while the answer is being made. */
+  /** What fills the space under your question while the answer is being made, including
+   *  (plan 58 phase 1) the "From the notes" block's own material — see LiveThinkingSnapshot. */
   liveThinking?: LiveThinkingSnapshot | null;
-  /** Plan 58 phase 1: the "From the notes" block's own material while the live turn still
-   *  streams — see MainTabChatTranscriptProps.liveKbAttachedNotes's own doc comment. */
-  liveKbAttachedNotes?: KbAttachedNote[] | null;
   desktopAskVerboseLogging?: boolean;
   lastRequestId?: number | null;
   lastExchange?: LastExchangeSnapshot | null;

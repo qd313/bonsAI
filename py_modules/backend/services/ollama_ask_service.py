@@ -23,11 +23,10 @@ How it works:
    model along with the question), then, if a character voice was chosen, append it with
    `apply_roleplay_to_system_content()`. For the Pyro easter egg specifically, there is a chance
    of also adding a short "try this next" suggestion via `pyro_manager_carousel_tip_addon()`.
-3. Make sure Ollama is actually reachable, then work out the list of models to try, in order:
-   `resolve_routing_order()` for the person's saved order, a policy/tier filter on top, then
-   `build_effective_models_to_try()` to cross-check the result against what Ollama actually has
-   installed right now. If nothing is left to try, a plain-language explanation is returned
-   instead of an error code.
+3. Make sure Ollama is actually reachable, then work out the list of models to try, in order,
+   with `resolve_ask_model_routing()`: the person's saved order, a policy/tier filter on top,
+   then a cross-check against what Ollama actually has installed right now. If nothing is left
+   to try, a plain-language explanation is returned instead of an error code.
 4. Walk the model list in order. For each model, call Ollama through `post_ollama_chat()` and
    wait for the reply (or the streamed words, if this question wants a live stream). Progress
    messages ("the AI is waking up", "trying the next model") are published as this goes, so the
@@ -71,19 +70,19 @@ from backend.services.local_ollama_setup_service import (
 from backend.services.model_policy import (
     disclosure_for_model,
     empty_filter_user_message,
-    filter_model_list,
 )
 from backend.services.ask_payload import sanitize_attachments
-from backend.services.chat_memory_service import plan_and_build_chat_memory
+from backend.services.chat_memory_service import apply_chat_memory_to_prompt
+from backend.services.ollama_ask_extras import (
+    build_ollama_request_extras,
+    resolve_ask_model_routing,
+)
 from backend.services.ollama_service import post_ollama_chat
 from backend.services.settings_service import sanitize_ollama_keep_alive, sanitize_reply_verbosity
 from backend.services.reply_language_service import resolve_effective_reply_language
 from backend.ollama_routing import (
-    build_effective_models_to_try,
-    filter_models_to_installed,
     is_ollama_model_missing_error,
     no_installed_routing_models_message,
-    resolve_routing_order,
 )
 from backend.ollama_urls import normalize_ollama_base
 
@@ -205,37 +204,18 @@ async def run_ask_ollama(
             preset_carousel_inject = {"text": tip}
     if roleplay:
         system_content = apply_roleplay_to_system_content(system_content, roleplay)
-    # What the chat has already covered goes in here, sized by the budget rather than by
-    # whatever happens to be on disk. It is placed at the END of what the AI is told, after the
-    # rules and after the game's cards, on purpose: the server skips re-reading any part of the
-    # front of a question that has not changed since last time, and this block changes on every
-    # turn. Anything that changes every turn has to sit behind everything that does not, or it
-    # spoils that saving for all of it (measured on the Deck 2026-09-20: 15.3 seconds to the
-    # first word with the front rewritten each turn, 1.1 and 0.8 with it left alone).
-    budget_plan, memory = plan_and_build_chat_memory(
+    # What the chat has already covered is appended here, sized by the budget rather than by
+    # whatever happens to be on disk -- see apply_chat_memory_to_prompt()'s own doc comment for
+    # why it goes at the END of what the AI is told.
+    system_content = apply_chat_memory_to_prompt(
         system_content=system_content,
         question=question,
         chat_turns=chat_turns,
         ask_mode=ask_mode,
         think_effort=str(settings.get("ask_think_effort") or "off"),
         base_http=normalize_ollama_base(pc_ip)[2],
-    )
-    if memory.text:
-        system_content = system_content + "\n\n" + memory.text
-    logger.info(
-        "ask_ollama: budget room=%d rules+cards=%d (attached %d chars) memory=%d thinking=%d answer=%d "
-        "(~%.1fs to the first word) carried=%d turns, left behind=%d, hidden notes removed=%d%s",
-        budget_plan.room_tokens,
-        budget_plan.rules_tokens,
-        len(proton_log_attachment or ""),
-        memory.tokens,
-        budget_plan.thinking_tokens,
-        budget_plan.answer_tokens,
-        budget_plan.seconds_to_first_word,
-        memory.turns_carried,
-        memory.turns_left_out,
-        memory.hidden_notes_removed,
-        ("; left out: " + ", ".join(budget_plan.left_out)) if budget_plan.left_out else "",
+        attached_chars=len(proton_log_attachment or ""),
+        logger=logger,
     )
 
     user_message: dict = {"role": "user", "content": question}
@@ -243,27 +223,19 @@ async def run_ask_ollama(
         user_message["images"] = [image["image_b64"] for image in prepared_images]
     messages = [{"role": "system", "content": system_content}, user_message]
 
-    proton_snap = proton_log_transparency if isinstance(proton_log_transparency, dict) else {}
-    proton_excerpt = proton_snap.get("proton_log_excerpt_attached") is True
-    proton_sources = proton_snap.get("proton_log_sources") if isinstance(proton_snap.get("proton_log_sources"), list) else []
-    proton_notes = str(proton_snap.get("proton_log_notes") or "")
-
-    ollama_extras = {
-        "system_prompt": system_content,
-        "user_text_for_model": question,
-        "user_image_count": len(prepared_images),
-        "attachment_paths": attachment_paths,
-        "proton_log_excerpt_attached": proton_excerpt,
-        "proton_log_sources": proton_sources,
-        "proton_log_notes": proton_notes,
-        "strategy_spoiler_consent_effective": bool(strategy_spoiler_consent)
-        if strategy_domain_guidance
-        else False,
-        "resolved_character_preset_id": rp_meta.resolved_preset_id,
-        "pyro_asshole_mode": pyro_asshole,
-        "reply_verbosity": reply_verbosity,
-        "reply_language": reply_language,
-    }
+    ollama_extras = build_ollama_request_extras(
+        system_content=system_content,
+        question=question,
+        prepared_image_count=len(prepared_images),
+        attachment_paths=attachment_paths,
+        proton_log_transparency=proton_log_transparency,
+        strategy_spoiler_consent=strategy_spoiler_consent,
+        strategy_domain_guidance=strategy_domain_guidance,
+        resolved_character_preset_id=rp_meta.resolved_preset_id,
+        pyro_asshole_mode=pyro_asshole,
+        reply_verbosity=reply_verbosity,
+        reply_language=reply_language,
+    )
 
     logger.info(
         "ask_ollama: url=%s game=%r appid=%s attachments=%d question_len=%d",
@@ -280,38 +252,22 @@ async def run_ask_ollama(
     if is_loopback_ollama_host(ollama_host) and not probe_ollama_http_ok(ollama_base):
         recover_loopback_ollama_listening(logger.info)
     installed_tags = list_installed_ollama_tags(ollama_base)
-    models_before_policy = resolve_routing_order(requires_vision, settings, installed_tags)
-    pin = str(preferred_model or "").strip()
-    if pin and pin in installed_tags:
-        models_before_policy = [pin] + [m for m in models_before_policy if m != pin]
-    policy_tier = str(settings.get("model_policy_tier") or "open_source_only")
-    non_foss_unlocked = settings.get("model_policy_non_foss_unlocked") is True
-    models_to_try = filter_model_list(models_before_policy, policy_tier, non_foss_unlocked)
-    models_after_policy = list(models_to_try)
-    models_to_try, routing_strategy = build_effective_models_to_try(
+    (
         models_to_try,
-        installed_tags,
-        user_chain_before_policy=models_before_policy,
+        models_after_policy,
+        routing_strategy,
+        policy_tier,
+        non_foss_unlocked,
+        ask_diagnostics,
+    ) = resolve_ask_model_routing(
+        requires_vision=requires_vision,
+        settings=settings,
+        installed_tags=installed_tags,
+        preferred_model=preferred_model,
+        attachment_warnings=attachment_warnings,
+        attachment_errors=attachment_errors,
+        prepared_image_count=len(prepared_images),
     )
-    if routing_strategy == "installed_host_fallback":
-        models_to_try = filter_model_list(models_to_try, policy_tier, non_foss_unlocked)
-    _, models_skipped_not_installed = filter_models_to_installed(models_after_policy, installed_tags)
-    ask_diagnostics: dict = {
-        "models_before_policy": list(models_before_policy),
-        "models_after_policy": models_after_policy,
-        "installed_tags": list(installed_tags),
-        "routing_strategy": routing_strategy,
-        "routing_skipped_not_installed": list(models_skipped_not_installed),
-        "policy_tier": policy_tier,
-        "policy_dropped_count": max(0, len(models_before_policy) - len(models_after_policy)),
-        "requires_vision": requires_vision,
-        "attachment_count": len(prepared_images),
-        "attachment_warnings": list(attachment_warnings),
-        "attachment_errors": list(attachment_errors),
-        "models_attempted": [],
-        "model_succeeded": None,
-        "elapsed_seconds": None,
-    }
     ollama_extras["ask_diagnostics"] = ask_diagnostics
     if not models_after_policy and not installed_tags:
         return {

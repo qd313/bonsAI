@@ -1431,11 +1431,10 @@ const Content: React.FC = () => {
     streamDisplayText,
     askStopped,
     isForeignPendingAsk,
-    /* The waiting phrase and the model's own thinking travel together — see LiveThinkingSnapshot. */
-    liveThinking: { summary: thinkingSummary, reasoning: liveReasoning },
-    /* Plan 58 phase 1: the "From the notes" block's own material while the live turn still
-       streams — see MainTabChatTranscriptProps.liveKbAttachedNotes's own doc comment. */
-    liveKbAttachedNotes: kbAttachedNotes,
+    /* The waiting phrase, the model's own thinking, and (plan 58 phase 1) the "From the notes"
+       block's own material all travel together while the live turn still streams — see
+       LiveThinkingSnapshot. */
+    liveThinking: { summary: thinkingSummary, reasoning: liveReasoning, kbAttachedNotes },
     desktopAskVerboseLogging,
     lastRequestId,
     lastExchange,

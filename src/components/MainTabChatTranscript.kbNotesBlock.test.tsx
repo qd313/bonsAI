@@ -7,7 +7,7 @@
  * Used for: MainTabChatTranscript.tsx.
  * Does not: Prove any of it on the device, or prove the live-before-completion wiring end to
  *           end — that still needs one line in main.py outside this lane's file list (see
- *           MainTabChatTranscriptProps.liveKbAttachedNotes's own doc comment). This file proves
+ *           MainTabChatTranscriptProps.liveThinking's own doc comment). This file proves
  *           the screen side is ready for it: given the same shape a poll would carry, the block
  *           renders before the reply is done.
  */
@@ -358,7 +358,7 @@ describe("a fenced reply", () => {
 });
 
 describe("the live turn, before the reply is done", () => {
-  it("shows the block from liveKbAttachedNotes while still asking, before transparencySnapshot exists", () => {
+  it("shows the block from liveThinking.kbAttachedNotes while still asking, before transparencySnapshot exists", () => {
     const { container } = render(
       <MainTabChatTranscript
         {...baseProps({
@@ -366,7 +366,7 @@ describe("the live turn, before the reply is done", () => {
           expandedTurnKey: "live",
           askThreadDisplayQuestion: "is there a day limit in pikmin 2",
           ollamaResponse: "Yes, Pikmin 2 keeps the day limit from the first game.",
-          liveKbAttachedNotes: [note()],
+          liveThinking: { summary: null, reasoning: null, kbAttachedNotes: [note()] },
           transparencySnapshot: null,
         })}
       />
@@ -383,7 +383,7 @@ describe("the live turn, before the reply is done", () => {
           expandedTurnKey: "live",
           askThreadDisplayQuestion: "is there a day limit in pikmin 2",
           ollamaResponse: "Yes, Pikmin 2 keeps the day limit from the first game.",
-          liveKbAttachedNotes: null,
+          liveThinking: { summary: null, reasoning: null, kbAttachedNotes: null },
         })}
       />
     );
@@ -398,7 +398,7 @@ describe("the live turn, before the reply is done", () => {
           expandedTurnKey: "live",
           askThreadDisplayQuestion: "is there a day limit in pikmin 2",
           ollamaResponse: "Yes, Pikmin 2 keeps the day limit from the first game.",
-          liveKbAttachedNotes: [note()],
+          liveThinking: { summary: null, reasoning: null, kbAttachedNotes: [note()] },
         })}
       />
     );
@@ -415,7 +415,7 @@ describe("the live turn, before the reply is done", () => {
             question: "is there a day limit in pikmin 2",
             answer: "Yes, Pikmin 2 keeps the day limit from the first game.",
           },
-          liveKbAttachedNotes: [note()],
+          liveThinking: { summary: null, reasoning: null, kbAttachedNotes: [note()] },
           transparencySnapshot: {
             route: "ollama",
             raw_question: "",
@@ -459,7 +459,7 @@ describe("the gap between the reply finishing and the details fetch landing", ()
             question: "is there a day limit in pikmin 2",
             answer: "Yes, Pikmin 2 keeps the day limit from the first game.",
           },
-          liveKbAttachedNotes: [note()],
+          liveThinking: { summary: null, reasoning: null, kbAttachedNotes: [note()] },
           transparencySnapshot: null,
         })}
       />
@@ -480,7 +480,7 @@ describe("the gap between the reply finishing and the details fetch landing", ()
             question: "is there a day limit in pikmin 2",
             answer: "Yes, Pikmin 2 keeps the day limit from the first game.",
           },
-          liveKbAttachedNotes: [note()],
+          liveThinking: { summary: null, reasoning: null, kbAttachedNotes: [note()] },
           transparencySnapshot: {
             route: "ollama",
             raw_question: "",

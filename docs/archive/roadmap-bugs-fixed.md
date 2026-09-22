@@ -133,6 +133,34 @@ this session's Bugs entries, nothing reworded, with the closing note added at th
   through to that OK. All thirteen now handle the press, sharing one helper. This also unblocks the filters
   feature shipped 2026-09-20, which had never once been usable.
 
+## Moved from the roadmap 2026-09-22
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-22 during plan 63's final bookkeeping pass — copied
+line for line from this session's Verify entry, nothing reworded, with the closing note added at the end._
+
+### The pinned test sentences stop showing after the first question (closed 2026-09-22)
+
+- ★ `[chips]` `[QA]` **The pinned test sentences stop showing after the first question** — **VERIFY, PARTLY
+  fixed in `3d721b6`.** This was filed as a test-rig problem, but it is not only that: the plugin kept its own
+  copy of every setting in memory and wrote the whole copy back after any small change, and the back end also
+  saves settings by itself during ordinary use — when a question matches a built-in command phrase, and when a
+  knowledge-base download finishes in the background. Either of those could silently undo a setting nobody
+  touched, so a real person could lose a setting they never changed. **That part is fixed:** the automatic save
+  now sends only what actually changed. **Still unknown:** whether the pinned-sentence chip itself still drops
+  back to everyday suggestions after one question — that lives in the chip-picking code, which this fix did
+  not touch. Row **PINNED-SENTENCES-01**. Owed: edit the settings file, reload the plugin once (both should be
+  left alone by it now), and if the chip still misbehaves, close and reopen the panel — the file is no longer
+  being damaged, so a reopen should bring the pinned sentences back.
+
+  **Closed 2026-09-22, does not reproduce on a build carrying the settings fix.** Evidence
+  `docs/test-evidence/plan63-PINNED-SENTENCES-01.json`. A question was sent from a pinned chip — the bug's
+  exact trigger — and the chip still offered pinned sentences afterwards: it read as marked TEST right after
+  the question was sent, and it rotated to a different pinned sentence within 24 seconds, so the rotation is
+  still reading the pinned list rather than holding one leftover. **Two limits carried forward, not settled by
+  this run:** it covers one sitting and one question, where the original report described the chip failing for
+  the rest of a sitting; and it is not proven that the settings fix is what actually cured it — what is proven
+  is that the symptom is gone on a build that carries that fix.
+
 ## Moved from the roadmap 2026-09-19
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-19 once the maintainer's answers to plan 61 § 8

@@ -272,8 +272,8 @@ Filled in as the session runs.
 | 0 — make it runnable | 2026-09-21 ~21:00 | 2026-09-21 ~22:00 | The three oversized documents were trimmed back under their limits, with the old detail moved to the archive files and linked, not deleted. The pre-commit check passes on a clean tree again. A deploy was proven end to end and the plugin log confirmed it came up on the Deck. |
 | 1 — wave one builds | | | Five lanes ran at once, each building the fixes it was handed inside its own copy of the code: the AI models screen, the preset chips, the settings plumbing, what the reply says, and chat slots. All five handed back finished work with the full gate green on their own copy. |
 | 2 — land wave one | | | Each of the five lanes was landed onto the working branch one at a time, and the full gate ran green after every single one. All five wave-one lanes are now merged in. |
-| 3 — first Deck pass | | | |
-| 4 — wave two builds | | | |
-| 5 — land wave two | | | |
-| 6 — the long Deck pass | | | |
+| 3 — first Deck pass | | | The AI models screen and the Session tab were checked on the Deck and both passed outright, going straight to Done. The chip ladder's Down-reaches-it half was confirmed too, but its own left/right claim, the Stop-button reach, the models screen's return-focus and list-height fixes, and the bigger-size panel overflow fix were not walked that pass and stayed owed. |
+| 4 — wave two builds | | | Three lanes built inside their own copies: the cursor, the dots and the plugin icon; the credit line, the warning line and the new transparency log line; and the UI size choices. The stretch focus fixes beyond the Session tab and the walk-up fix — the Retry return, the Permissions jump, and the streaming highlight — did not land and stayed open. |
+| 5 — land wave two | | | All three wave-two lanes landed onto the working branch one at a time, with the full gate green after every one. A fresh build reached the Deck the same night, carrying all three. |
+| 6 — the long Deck pass | | | This pass ran the checks the night's fixes had been waiting on: the pinned test sentences stopped reproducing, and the knowledge-base transparency check ran for the first time and passed, both closing out long-blocked rows. It also measured that the answer cache serves an identical question back in about a second regardless of the first run's real time, which means a repeated-question count taken before tonight cannot be trusted as a count of how often something happens. |
 | 7 — write it down | | | |

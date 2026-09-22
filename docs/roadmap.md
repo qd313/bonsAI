@@ -71,11 +71,6 @@ starts work outside this.
 ## Bugs
 
 
-- ★ `[ask]` **The blinking cursor in the question box does not line up with the placeholder text** — **OPEN,
-  reported by the maintainer 2026-09-15 evening, a recurring sight.** The cursor sits a few pixels up and to
-  the left of the greyed placeholder text. **Confirmed again on the Deck 2026-09-17:** still off by 2 to 3
-  pixels, because the placeholder and the real text use different-sized fonts, so they can never line up as
-  written today. [Detail](roadmap-details.md#the-blinking-cursor-in-the-question-box-does-not-line-up-with-the-placeholder-text).
 - ★ `[focus]` **Up from the Retry icon does not return to the answer** — **OPEN, read again 2026-09-16.**
   With the thumbs-up/thumbs-down row greyed on a stopped reply, Down from the answer now lands on Retry — but
   Up from Retry does not go back to the answer's last section the way it should. **Read again 2026-09-16:**
@@ -122,15 +117,6 @@ starts work outside this.
   **Tried on the Deck 2026-09-17, blocked:** the knowledge base was already installed on that device, so
   there is no first-time download button to press. Still owed, on a Deck without the knowledge base
   installed. Evidence `docs/test-evidence/plan57-QA-kb-download-two-taps.json`.
-- ★ `[tabs]` `[layout]` **The row of small dots under the chat name still shows below the open tab strip** —
-  **OPEN, found 2026-09-18.** With the tab strip open, the strip's bottom edge sits at 130px while the row of
-  dots runs from about 133 to 137px (135 to 139px with the ring on the chat row instead of the tab bar) — every
-  dot sits fully below the strip, not covered by it. The chat row's own bottom line (142 to 146px) is correctly
-  below the strip. The maintainer chose a 66px strip on 2026-09-17 specifically to cover these dots; about 8 to
-  10 more pixels of strip, or moving the dots up, would do it. Evidence `docs/test-evidence/plan61-TAB-STRIP-2A-07.json`.
-- ★ `[ui]` **The Decky plugin icon does not match the tab bar's bonsai icon** — **OPEN, reported by the
-  maintainer 2026-09-19.** The bonsai icon Decky shows for the plugin, in its own plugin list, is a different
-  icon than the bonsai drawn on the tab bar inside the plugin itself. The two should be the same icon.
 - ★★ `[chat]` **A chat that is still writing does not look busy from another chat** — **OPEN, found
   2026-09-18.** Switch away from a chat that is still writing and nothing says so: its dot looks idle, the
   other chat's Ask button reads ready, and the dot never turns green when it finishes. Seen on three separate
@@ -186,13 +172,11 @@ starts work outside this.
   shows the model's own instructions fitted its memory window with room to spare, and its own thinking even
   mentions wrapping the answer, yet the answer still came back with no cover. This bug now waits on the new
   knowledge-base entry below, agreed 2026-09-21: checking that a cover actually happened instead of trusting
-  the model to add one. [Detail](roadmap-details.md#a-name-withheld-boss-question-on-a-story-protected-game-comes-back-with-no-spoiler-box).
-
-- ★★★ `[ui]` **The UI size setting barely changes anything** — **OPEN, measured on the Deck 2026-09-20;
-  needs a decision before code.** At its biggest step the chat row grew 9 pixels, one thing was pushed out of the
-  panel, and nothing else moved — every font size and control came back identical. Only 139 of 490 fixed sizes
-  scale though the helper says all should, Handheld and Desktop both multiply by 1, and automatic mode can only
-  ever pick Handheld. Finish the wiring or cut the choices to what is real. Evidence `docs/test-evidence/plan62-UI-SIZE-outside-handheld.json`.
+  the model to add one. **Still reproduces 2026-09-22**, uncovered in the first sentence. **A measurement
+  warning, not a fix:** repeating the identical question came back cached, 1 second against the first
+  run's 27, word for word the same — a warning about the counts already here, not proof they are wrong,
+  since counting by repeating a question counts nothing. Evidence `docs/test-evidence/plan63-SPOILER-UNNAMED-BOSS.json`.
+  [Detail](roadmap-details.md#a-name-withheld-boss-question-on-a-story-protected-game-comes-back-with-no-spoiler-box).
 
 ---
 
@@ -404,23 +388,14 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   button was live and reachable by Right the whole time — the wrong control was made to swallow Down. Down
   now goes to Stop instead. Row **ASKBAR-DOWN-TO-STOP-01**, not yet run on the Deck.
   [Detail](roadmap-details.md#down-did-nothing-for-the-whole-time-an-answer-was-arriving).
+- ★ `[ask]` **The blinking cursor in the question box does not line up with the placeholder text** —
+  **VERIFY, fixed 2026-09-21 (plan 63, commit `ce7abfc`).** The hint text was drawn at 10 pixels while the
+  real cursor uses the box's own 12; the hint now matches. Owed: **the maintainer's own eye.**
 - ★ `[chips]` `[KB]` **A suggestion chip pulled from the game's notes shows no Tip mark** (row
   **CHIP-BUTTON-09**) — **VERIFY, fixed in `895cf0a`.** Two copies of the same markup had drifted apart; there
   is now one piece of code drawing both badges. Owed: with a covered game running and the knowledge base on,
   set the chip animation to the scrambling one and confirm the dot shows.
   [Detail](roadmap-details.md#a-suggestion-chip-pulled-from-the-games-notes-shows-no-tip-mark).
-- ★ `[chips]` `[QA]` **The pinned test sentences stop showing after the first question** — **VERIFY, PARTLY
-  fixed in `3d721b6`.** This was filed as a test-rig problem, but it is not only that: the plugin kept its own
-  copy of every setting in memory and wrote the whole copy back after any small change, and the back end also
-  saves settings by itself during ordinary use — when a question matches a built-in command phrase, and when a
-  knowledge-base download finishes in the background. Either of those could silently undo a setting nobody
-  touched, so a real person could lose a setting they never changed. **That part is fixed:** the automatic save
-  now sends only what actually changed. **Still unknown:** whether the pinned-sentence chip itself still drops
-  back to everyday suggestions after one question — that lives in the chip-picking code, which this fix did
-  not touch. Row **PINNED-SENTENCES-01**. Owed: edit the settings file, reload the plugin once (both should be
-  left alone by it now), and if the chip still misbehaves, close and reopen the panel — the file is no longer
-  being damaged, so a reopen should bring the pinned sentences back.
-  [Detail](roadmap-details.md#the-pinned-test-sentences-stop-showing-after-the-first-question).
 - ★ `[chips]` **A preset chip's icon and its text are coloured the same way** — **VERIFY, fixed in `895cf0a`.**
   The words on a chip now use the same plain colour every other chip style already used; the dot's own colour
   is unchanged. Row **CHIP-COLOR-BYEYE-01**. Owed: **a by-eye check by the maintainer** — a model cannot judge
@@ -447,6 +422,14 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 - ★ `[reply]` **The no-game branch menu leaks its template** — **VERIFY, fixed in `f11220d`.** Row
   **NOGAME-MENU-01**. Owed: with nothing running, ask a question in Strategy mode that never names a game, and
   confirm the menu either does not appear or names a real place — never the literal words THIS GAME.
+- ★ `[tabs]` `[layout]` **The row of small dots under the chat name still shows below the open tab strip** —
+  **VERIFY, fixed 2026-09-21 (plan 63, commit `ec70866`).** The dots moved up 10 pixels rather than the strip
+  growing, since the strip's height is room the maintainer asked to keep. Owed: **the maintainer's own eye**
+  — 10 pixels is a little more than the 7 to 9 needed, with only about 4 pixels of clear space under the
+  chat name above, so check the dots do not now crowd its letters.
+- ★ `[ui]` **The Decky plugin icon does not match the tab bar's bonsai icon** — **VERIFY, fixed 2026-09-21
+  (plan 63, commit `23c114a`).** Three separate bonsai drawings existed; the one Decky shows for the plugin
+  now uses the real logo, the same one the tab bar draws. Owed: a look at both side by side.
 
 - ★★ `[ask]` `[layout]` **Typed text ran off the right edge of the panel at the bigger UI size** — **VERIFY,
   found and fixed on the Deck 2026-09-20.** The mirror drawing your typed question was 24 pixels wider than its own
@@ -500,6 +483,11 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   (D115 #8): this mid-generation half now moves off this session's list and onto the maintainer's own
   checklist** — five device tries is enough, and every reply finished before the controller could walk
   there. The rest of this entry is unchanged. [Detail](roadmap-details.md#clear-cache-cleared-the-screen-but-not-the-session).
+- ★★★ `[ui]` **The UI size setting barely changes anything** — **VERIFY, fixed 2026-09-21 (plan 63, commit
+  `03bfc02`).** The Desktop stop is gone since it always drew the same as Handheld; an old saved Desktop
+  setting now loads as Handheld with no visible change. Automatic itself stays, on purpose. Owed: confirm
+  the slider snaps between exactly two stops and never shows Desktop.
+  [Detail](roadmap-details.md#the-ui-size-setting-barely-changes-anything).
 ### Features that need verification
 
 - ★★★★ `[ask]` **A chat carries what it has already covered into the next question** — **VERIFY, built 2026-09-21.**
@@ -690,6 +678,10 @@ advice to wait for a gap is gone. Evidence `docs/test-evidence/plan48-R5-blackme
   and trim-only for wiki notes stands unless the maintainer overturns it.
 - **58 phase 2, seven questions** ([§ 8](planning/58-phase-2-kb-session-wave-four.md)): unchanged from the
   wave-four plan. Locks as D112, after phase 1.
+- **KB-ATTRIB-01's negative case now contradicts itself.** That row requires NO credit block for a reply
+  built only on hand-written notes; the credit-line fix landed 2026-09-21 means such a reply now names the
+  note under "No source page" — the fix working, not a regression, but the row's own wording says the
+  opposite. Needs the maintainer to reword or retire it.
 
 A new call lands here, one line, with what it decides. Every call already made is
 written up in full in [the locked decisions file](audit/maintainer-decisions-locked.md); the knowledge-base
@@ -697,12 +689,10 @@ ones from this month are D81 to D88.
 
 ### Bugs
 
-- ★ `[KB]` **The credit line under a reply never names a note with no source page, or a shared tip** —
-  **OPEN, found 2026-09-17.** The list that credit line reads from quietly drops any note or tip that
-  has no source page, so a shared troubleshooting tip or a note written from the model's own memory has
-  never appeared in it. The new "From the notes" block works around this by reading the text the model
-  was sent instead, which does not have the same gap. The real fix belongs in the knowledge-base
-  service's own list of sources.
+- ★ `[KB]` **A shared troubleshooting tip that has a source page never gets it shown** — **OPEN, found
+  reading the code 2026-09-21 (plan 63, lane G).** Two pieces of code build a shared tip's own name
+  differently, so the two never match and its source page never reaches the credit line. Rarely bites
+  today, since almost no shared tips carry a source page. Not run on the Deck.
 - ★★ `[KB]` **Unrelated questions still get game cards stapled on** — **ACCEPTED 2026-08-27.** With a game running, *"thank
   you very much"* still attaches a card. Raising the keyword floor costs real matches, and the model mostly ignores an
   irrelevant card. [Detail](roadmap-details.md#ordinary-phrases-attach-game-cards).
@@ -741,26 +731,37 @@ ones from this month are D81 to D88.
   losing correct answers elsewhere. Three of the four now carry the "no close match" line, but the wrong
   note is still attached. **Found again 2026-09-18:** a Hades boss question attached the wrong area's note
   and the reply named the wrong bosses. [Detail](roadmap-details.md#four-questions-still-get-notes-about-the-wrong-subject).
-- ★★ `[KB]` **The "no close match" line reads wrong next to a note the reply used** — **OPEN, found
-  2026-09-18.** The line judges only the first attached note's score, so it can say the answer leaned on the
-  model's own knowledge while the reply was actually built on a note attached second, or the very note shown
-  underneath it. **Sighting, 2026-09-19, Half-Life 2:** a question the notes genuinely do not cover got the
-  warning line for the first time, but a note card naming three notes showed underneath it at the same time,
-  contradicting the line. [Detail](roadmap-details.md#the-no-close-match-line-reads-wrong-next-to-a-note-the-reply-used).
 - ★★ `[KB]` **Black Mesa's electrified-water question attaches two unrelated early-game notes instead of its
   own** — **OPEN, found 2026-09-19.** Asking how to cross the electrified water gave the right, specific
   answer, but the two notes Show details named as used were general early-game notes about starting out and
   the opening tram ride — neither one is the electrified-water note, which does exist in the library. So a
-  person sees a correct answer with the wrong notes named underneath it, one run, one asking. Evidence
-  `docs/test-evidence/plan61-W3-D-blackmesa.json`.
+  person sees a correct answer with the wrong notes named underneath it, one run, one asking. **Asked again
+  2026-09-22 with different wording on purpose** (a repeat is cached and proves nothing): this time the
+  electrified-water note itself came first. Shows the right note CAN be found, not that the original
+  wording now finds it. Stays open; next step is clearing the cache and asking the exact original words.
+  Evidence `docs/test-evidence/plan61-W3-D-blackmesa.json`, `docs/test-evidence/plan63-BLACKMESA-WATER-NOTES.json`.
 
 ### Deck check owed
 
 - ★ `[KB]` **Five checks from the August retrieval rework were never run on the Deck** — **VERIFY, or
   retire.** Covers the corpus format gate, the relevance floor, follow-ups, transparency, and the
-  Developer kill-switch. **As of the 2026-09-19 run:** three of the five checks now have real answers,
-  one is blocked because the plugin's log never records which notes were attached, and one cannot be
-  run without replacing the library it tests. [Detail](roadmap-details.md#five-checks-from-the-august-retrieval-rework-were-never-run-on-the-deck).
+  Developer kill-switch. **Update 2026-09-22:** four of the five now have real answers — the transparency
+  check joined them that night, once the log finally named the attached notes (see the row below). Only
+  the corpus-format check still cannot run, since that means replacing the library it tests.
+  [Detail](roadmap-details.md#five-checks-from-the-august-retrieval-rework-were-never-run-on-the-deck).
+- ★ `[KB]` **The credit line under a reply never names a note with no source page, or a shared tip** —
+  **VERIFY, fixed 2026-09-21 (plan 63, lane G, commit `81a86a4`).** Such notes were dropped before the
+  line was built; now grouped under "No source page" instead. Owed: a reply built on one of bonsAI's own
+  notes should now name it.
+- ★★ `[KB]` **The "no close match" line reads wrong next to a note the reply used** — **VERIFY, fixed
+  2026-09-21 (plan 63, lane G, commit `c25456c`).** It only ever read the first attached note's score; it
+  now reads the best across every attached note. Owed: a question shaped like the Hollow Knight sighting,
+  confirming the line does not appear under a reply that used a note attached second or later.
+  [Detail](roadmap-details.md#the-no-close-match-line-reads-wrong-next-to-a-note-the-reply-used).
+- ★★ `[KB]` **KB transparency matches what the model got** — **VERIFY, ran for the first time and passed,
+  2026-09-22,** once the answer-lines lane added the missing log line — recorded as impossible every
+  earlier time. Row **KB-TRANSPARENCY-01**, full run in [testing.md](testing.md). Owed: all three attached
+  names, not just the first; a question with a game running; and a case where a note IS dropped for space.
 - ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **VERIFY,
   landed 2026-09-15, four commits, unit-tested.** A game known only by name now opens its box, and naming the
   boss up front keeps the answer in plain text. **STRAT-SPOIL-TEXT-01 and STRAT-SPOIL-FIRST-01 passed on the
@@ -892,6 +893,14 @@ copied line for line, nothing reworded: [archive/roadmap-done-v0.5.0.md](archive
 
 Newest first. Everything closed from 2026-09-16 onward was moved into that file on 2026-09-21, copied
 line for line, nothing reworded, to keep this document under its size limit.
+
+**Closed 2026-09-22 (plan 63, verification pass):**
+
+- ★ `[chips]` `[QA]` **The pinned test sentences stop showing after the first question** — **DONE, fixed
+  and confirmed on the Deck 2026-09-22.** A question sent from a pinned chip — the bug's own trigger —
+  still left the chip offering pinned sentences afterwards. Covers one sitting, one question; not proven
+  the settings fix itself is the cure, only that the symptom is gone on a build carrying it.
+  [Full detail](archive/roadmap-bugs-fixed.md#the-pinned-test-sentences-stop-showing-after-the-first-question).
 
 **Closed 2026-09-21 (D115, the maintainer's answers before plan 63 started):**
 

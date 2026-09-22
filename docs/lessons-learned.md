@@ -162,6 +162,20 @@ a multi-word question silently keeps only its first word and the script still pr
 apostrophe cannot survive the outer quotes. Evidence:
 `docs/test-evidence/plan63-ASK-WITHOUT-PINNED-CHIPS.json`.
 
+**Repeating a question on the Deck measures nothing.** The answer cache serves an identical question
+back word for word, no new work done. Measured 2026-09-22: the same Hollow Knight question took 27
+seconds the first time and 1 second the second, and came back exactly the same both times. Any check
+that counts how often something happens — a spoiler cover missing, a wrong note attaching — must
+either vary the wording between tries or clear the cache first, or the count is really just one
+result read back several times. Evidence `docs/test-evidence/plan63-SPOILER-UNNAMED-BOSS.json`.
+
+**"Blocked" deserves one more look before it is written down.** Two checks recorded as impossible on
+this project were not: sending an exact question without the pinned chips (a script already in the
+repo did it), and comparing the screen against the log for which notes were used (the log just needed
+one more line). Both were settled in a single session once someone tried. Three more checks had been
+recorded as blocked by deploying being broken, which had actually been fixed for a full night before
+anyone re-checked the belief.
+
 **Offer to pin the questions before asking anyone to type.** Typing a sentence on the on-screen
 keyboard with thumbs, once per case, invites a typo that silently changes what is being tested.
 There is a way to pin a batch of exact questions into the panel; use it. This is a standing

@@ -2434,3 +2434,23 @@ worse answers with nothing on screen to say why.
   instead of using her name. Evidence `docs/test-evidence/plan61-KB-FOLLOWUP-01-retry3.json`.
 
 *Moved out of the roadmap on 2026-09-21, superseded by the current summary there.*
+
+
+## The UI size setting barely changes anything
+
+- ★★★ `[ui]` **The UI size setting barely changes anything** — **VERIFY, fixed 2026-09-21 (plan 63, commit
+  `03bfc02`).** The size slider had three stops — Handheld, Desktop, Couch — and Desktop drew exactly the
+  same size as Handheld, so moving the slider between those two changed nothing at all. That stop is gone;
+  two stops remain, and Couch is the one that visibly does something (about nine pixels taller chat rows).
+  Anyone whose saved setting says Desktop now opens on Handheld instead, with no visible change, since the
+  two were always the same size. The automatic option's own on-screen words were also wrong — it said it
+  picks the best size from your display, which it cannot, since the plugin always sits in Steam's narrow
+  side panel whatever screen is plugged in; it now says plainly that automatic can only apply Handheld.
+  **The automatic option itself was deliberately left in place:** removing it reaches about fifteen files,
+  including settings code another lane changed the same night — bigger than the maintainer's own words,
+  "cut the choices to what is real, not the full wiring job." Whether automatic should go too is still
+  theirs to say. The 351 sizes that still do not scale are untouched, as instructed. Owed on the Deck: open
+  Settings, turn automatic off, confirm the slider snaps between exactly two stops and never shows Desktop.
+  Evidence `docs/test-evidence/plan62-UI-SIZE-outside-handheld.json`.
+
+*Moved out of the roadmap on 2026-09-22, superseded by the current summary there.*

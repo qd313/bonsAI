@@ -126,6 +126,11 @@
       "role": ""
     },
     {
+      "path": "src/hooks/usePluginSettings.ts",
+      "lines": 708,
+      "role": ""
+    },
+    {
       "path": "src/components/SettingsTab.tsx",
       "lines": 707,
       "role": ""
@@ -133,11 +138,6 @@
     {
       "path": "src/utils/buildReplyActionsElement.test.tsx",
       "lines": 704,
-      "role": ""
-    },
-    {
-      "path": "src/hooks/usePluginSettings.ts",
-      "lines": 691,
       "role": ""
     },
     {

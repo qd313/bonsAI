@@ -142,4 +142,69 @@ describe("usePluginSettings", () => {
 
     expect(saved?.latency_warning_seconds).toBe(60);
   });
+
+  /*
+   * The pinned QA test chips bug (roadmap "The pinned test sentences stop showing after the
+   * first question"): the automatic background save used to send every one of the ~48 settings
+   * on every change, not just the one that changed. That is harmless when the plugin's own save
+   * is the only writer, but it is not: a QA batch written straight to settings.json, a corpus
+   * download finishing in the background, or the sanitizer keyword command's own save can all
+   * change a field on disk that this tab never touched. The very next autosave -- triggered by
+   * changing one unrelated setting -- then sent the plugin's stale belief about every other field
+   * and silently reverted that outside change. Sending only the fields that actually changed
+   * fixes this: an untouched field is simply absent from the payload, so the backend's own
+   * merge-with-fresh-disk-read (`save_settings` in main.py) leaves it alone.
+   */
+  it("the automatic background save sends only the field that changed, not the whole settings object", async () => {
+    const { result } = renderHook(() => usePluginSettings());
+    await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+
+    act(() => {
+      result.current.setLatencyWarningSeconds(99);
+    });
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 450));
+    });
+
+    const saveCalls = getRpcCallLog().filter((c) => c.method === "save_settings");
+    expect(saveCalls.length).toBeGreaterThan(0);
+    const lastPayload = saveCalls[saveCalls.length - 1].args[0] as Record<string, unknown>;
+    expect(lastPayload).toEqual({ latency_warning_seconds: 99 });
+  });
+
+  it("a field the rig hand-edits on disk survives the next unrelated autosave", async () => {
+    // A stand-in for settings.json being hand-edited underneath the running plugin -- the way a
+    // pinned QA batch is staged, since no test sentence may be typed by thumb on the Deck. The
+    // fake backend behaves like the real one: every save merges the incoming payload over a
+    // fresh read of "disk", never over what the frontend last believed.
+    let disk: Record<string, unknown> = { ...defaultSettingsFixture(), dev_frozen_test_chips: ["pinned question one", "pinned question two", "pinned question three"] };
+    setRpcHandler("load_settings", () => disk);
+    setRpcHandler("save_settings", (...args: unknown[]) => {
+      const payload = (args[0] as Record<string, unknown>) ?? {};
+      disk = { ...disk, ...payload };
+      return disk;
+    });
+
+    const { result } = renderHook(() => usePluginSettings());
+    await waitFor(() => expect(result.current.settingsLoaded).toBe(true));
+    expect(result.current.devFrozenTestChips).toEqual([
+      "pinned question one",
+      "pinned question two",
+      "pinned question three",
+    ]);
+
+    // Someone edits settings.json directly again, behind the running plugin's back, exactly the
+    // way the rig stages a fresh QA batch without a reload.
+    disk = { ...disk, dev_frozen_test_chips: ["a brand new pinned question"] };
+
+    // Something unrelated changes in the UI -- standing in for whatever a sent question touches.
+    act(() => {
+      result.current.setLatencyWarningSeconds(101);
+    });
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, 450));
+    });
+
+    expect(disk.dev_frozen_test_chips).toEqual(["a brand new pinned question"]);
+  });
 });

@@ -92,7 +92,7 @@ import {
 } from "../utils/bonsaiSessionSurvival";
 import { DEFAULT_AI_CHARACTER_ACCENT_INTENSITY, DEFAULT_AI_CHARACTER_CUSTOM_TEXT, DEFAULT_AI_CHARACTER_ENABLED, DEFAULT_AI_CHARACTER_PRESET_ID, DEFAULT_AI_CHARACTER_RANDOM, DEFAULT_ASK_MODE, DEFAULT_CAPABILITIES, DEFAULT_DESKTOP_ASK_VERBOSE_LOGGING, DEFAULT_DESKTOP_DEBUG_NOTE_AUTO_SAVE, DEFAULT_DESKTOP_APP_LOG_LEVEL, DEFAULT_INPUT_SANITIZER_USER_DISABLED, DEFAULT_LATENCY_WARNING_SECONDS, DEFAULT_MODEL_ALLOW_HIGH_VRAM_FALLBACKS, DEFAULT_MODEL_POLICY_TIER, DEFAULT_OLLAMA_KEEP_ALIVE, DEFAULT_REPLY_VERBOSITY, DEFAULT_ASK_THINK_EFFORT, type AskThinkEffortId, DEFAULT_REPLY_LANGUAGE, DEFAULT_OLLAMA_LOCAL_ON_DECK, DEFAULT_OLLAMA_LOCAL_AUTOSTART, DEFAULT_PRESET_CHIP_ANIMATION, DEFAULT_PRESET_CHIP_FADE_ANIMATION_ENABLED, DEFAULT_PRESET_SINGLE_CHIP, DEFAULT_REQUEST_TIMEOUT_SECONDS, DEFAULT_SCREENSHOT_ATTACHMENT_PRESET, DEFAULT_SHOW_DEVELOPER_TAB, DEFAULT_SHOW_ONSCREEN_DEBUG_HUD, DEFAULT_DEV_FORCE_SESSION_RAG_CHIPS, DEFAULT_DEV_PRELOAD_ASK_MODEL, DEFAULT_TAB_RESUME_MODE, type TabResumeMode, type NamedOllamaHost, DEFAULT_STRATEGY_SPOILER_MASKING_ENABLED, DEFAULT_STRATEGY_SPOILER_AUTO_REVEAL_AFTER_CONSENT, DEFAULT_UNIFIED_INPUT_PERSISTENCE_MODE, DEFAULT_VOICE_REPLY_MODE, DEFAULT_VOICE_STT_MODEL, type AskModeId, type BonsaiCapabilities, type BonsaiSettings, type BonsaiSettingsSnapshotInput, type DesktopAppLogLevel, type OllamaKeepAliveDuration, type ReplyVerbosityId, type ReplyLanguageId, type PresetChipAnimation, type ScreenshotAttachmentPreset, type UnifiedInputPersistenceMode, type VoiceReplyMode, type VoiceSttModelId, type UiScaleProfileId, DEFAULT_UI_SCALE_AUTO_ENABLED, DEFAULT_UI_SCALE_MANUAL_PROFILE, DEFAULT_USE_LOCAL_KNOWLEDGE_BASE, DEFAULT_RAG_HYBRID_RETRIEVAL_ENABLED, DEFAULT_RAG_CORPUS_PATH, DEFAULT_RAG_CORPUS_VERSION } from "../data/bonsaiSettingsSchema";
 import { normalizeLatencyWarningSeconds, normalizeRequestTimeoutSeconds, normalizeSettings } from "../data/bonsaiSettingsNormalizers";
-import { toBonsaiSettingsPayload } from "../utils/settingsPayload";
+import { diffBonsaiSettingsPayload, toBonsaiSettingsPayload } from "../utils/settingsPayload";
 import { saveTabResumeMode } from "../features/plugin-shell/pluginStorage";
 
 /**
@@ -271,6 +271,14 @@ export function usePluginSettings() {
   const [settingsPersistEnabled, setSettingsPersistEnabled] = useState(false);
 
   const settingsSnapshotForDebouncedSaveRef = useRef<BonsaiSettingsSnapshotInput>(defaultSettingsSnapshot());
+  /**
+   * What the plugin last confirmed is on disk -- set on every load and every save response.
+   * The automatic background save below diffs the live snapshot against this rather than
+   * sending the whole thing, so a field this ref doesn't know changed (a QA batch hand-written
+   * to settings.json, a background corpus download, ...) is left out of the payload and survives
+   * the backend's merge instead of being overwritten by a stale belief about it.
+   */
+  const settingsBaselineRef = useRef<BonsaiSettingsSnapshotInput>(defaultSettingsSnapshot());
   const settingsPersistEpochRef = useRef(0);
   const settingsSaveInFlightRef = useRef(0);
   const pluginDataClearSeenAtMountRef = useRef(getPluginDataClearedGeneration());
@@ -387,7 +395,9 @@ export function usePluginSettings() {
     setRagHybridRetrievalEnabled(normalized.rag_hybrid_retrieval_enabled);
     setRagCorpusPath(normalized.rag_corpus_path);
     setRagCorpusVersion(normalized.rag_corpus_version);
-    settingsSnapshotForDebouncedSaveRef.current = snapshotFromBonsaiSettings(normalized);
+    const snapshot = snapshotFromBonsaiSettings(normalized);
+    settingsSnapshotForDebouncedSaveRef.current = snapshot;
+    settingsBaselineRef.current = { ...snapshot };
     setSettingsPersistEnabled(true);
   }, []);
 
@@ -520,10 +530,17 @@ export function usePluginSettings() {
     const epochAtSchedule = settingsPersistEpochRef.current;
     const timer = setTimeout(() => {
       if (settingsPersistEpochRef.current !== epochAtSchedule) return;
+      const nextPayload = toBonsaiSettingsPayload(settingsSnapshotForDebouncedSaveRef.current);
+      const baselinePayload = toBonsaiSettingsPayload(settingsBaselineRef.current);
+      const patch = diffBonsaiSettingsPayload(baselinePayload, nextPayload);
+      // Nothing actually changed since the last confirmed disk state -- do not send an empty
+      // save, and do not let it reset the baseline to a possibly-stale round trip.
+      if (Object.keys(patch).length === 0) return;
       settingsSaveInFlightRef.current += 1;
-      callDeckyWithTimeout<[BonsaiSettings], BonsaiSettings>("save_settings", [
-        toBonsaiSettingsPayload(settingsSnapshotForDebouncedSaveRef.current),
-      ])
+      callDeckyWithTimeout<[Partial<BonsaiSettings>], BonsaiSettings>("save_settings", [patch])
+        .then((saved) => {
+          settingsBaselineRef.current = snapshotFromBonsaiSettings(normalizeSettings(saved));
+        })
         .catch((err) => {
           console.error("save_settings failed", err);
         })

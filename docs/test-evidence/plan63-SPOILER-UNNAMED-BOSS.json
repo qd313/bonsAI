@@ -1,0 +1,55 @@
+{
+  "rowId": "SPOILER-UNNAMED-BOSS-01",
+  "rowText": "A name-withheld boss question on a story-protected game comes back with no spoiler box. Open since 2026-09-18. The lane that investigated it on 2026-09-21 ruled out five causes and said the one thing a Deck run could settle is how often it actually happens.",
+  "build": { "plugin": "0.5.0", "commit": "5c0f5ec" },
+  "deckTime": "2026-09-22T00:50:00-04:00",
+  "setup": { "game": "none running", "askMode": "Strategy", "knowledgeBase": "on, version 2026.09.18" },
+  "howQuestionsWereSent": "scripts/deck_send_ask.py wrote each question exactly, then a real controller press on the ask button. See docs/test-evidence/plan63-ASK-WITHOUT-PINNED-CHIPS.json.",
+
+  "runs": [
+    {
+      "n": 1,
+      "game": "Hollow Knight",
+      "question": "what should i know about the boss past the crystal spike area in hollow knight, the one that looks just like me",
+      "timeToAnswer": "27 s",
+      "spoilerCovers": 0,
+      "bossNamedInPlainText": "Broken Vessel",
+      "verdict": "FAIL. The question deliberately withheld the name and the answer gave it away in the first sentence, uncovered.",
+      "alsoNoted": "The tactics given are not Hollow Knight's. The answer describes portals, bombs, conversion gel and paint -- Portal 2 mechanics. Separate from the spoiler question and not chased here."
+    },
+    {
+      "n": 2,
+      "game": "Hollow Knight",
+      "question": "the same words again, exactly",
+      "timeToAnswer": "1 s",
+      "spoilerCovers": 0,
+      "bossNamedInPlainText": "Broken Vessel",
+      "verdict": "NOT AN INDEPENDENT RUN -- see the finding below."
+    },
+    {
+      "n": 3,
+      "game": "Hades",
+      "question": "in hades, what should i know about the boss guarding the exit from the first region, the three-headed one",
+      "timeToAnswer": "about 20 s",
+      "spoilerCovers": 0,
+      "bossNamedInPlainText": "none -- the answer says 'that three-headed fella' throughout and never names Cerberus",
+      "verdict": "No spoiler was given, so no cover was needed. Not a failure of the cover. The advice was generic rather than this boss's own tactics, which is a different problem.",
+      "notesAttached": "Theseus and Asterius (+2 more), from bonsAI's own notes -- which is the wrong boss for this question"
+    }
+  ],
+
+  "theMainFinding": {
+    "what": "THE ANSWER CACHE MAKES REPEATS OF THE SAME QUESTION USELESS AS EVIDENCE.",
+    "measured": "The identical Hollow Knight question took 27 seconds the first time and 1 second the second, coming back word for word the same.",
+    "whyItMatters": "Counting how often this bug happens has been done by asking the same question again. Those counts are not what they look like: one failure served several times reads exactly like several failures. Any future attempt to measure how often the cover is missed must either vary the wording, clear the cache between runs, or both. This applies to the earlier records on this entry as well as to future ones.",
+    "notProven": "Whether the earlier counts on this entry were actually contaminated. The cache behaviour is measured; the effect on the old numbers is inferred and should be treated as a warning, not a correction."
+  },
+
+  "whatThisAddsToTheEntry": [
+    "The bug is still live on tonight's build: a name-withheld question named its boss in plain text with no cover.",
+    "It is not every question. A second game's name-withheld question did not name its boss at all.",
+    "The cache finding above means the intermittency may be less measurable than assumed, not that it is not real.",
+    "None of this changes the lane's conclusion that the real fix is a check that a cover which should have happened did happen. Nothing reads the reply back today."
+  ],
+  "verdict": "STILL OPEN, reproduced on this build"
+}

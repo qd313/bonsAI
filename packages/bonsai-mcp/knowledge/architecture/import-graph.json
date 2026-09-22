@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 418,
-  "edgeCount": 1074,
+  "fileCount": 419,
+  "edgeCount": 1075,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -106,7 +106,9 @@
       ]
     },
     "src/components/CharacterPropGlyph.tsx": {
-      "imports": [],
+      "imports": [
+        "src/data/characterPropGlyphAppearance.ts"
+      ],
       "importedBy": [
         "src/components/CharacterRoleplayEmoticon.tsx"
       ]
@@ -1297,6 +1299,12 @@
       "imports": [],
       "importedBy": [
         "src/components/CharacterRoleplayEmoticon.tsx"
+      ]
+    },
+    "src/data/characterPropGlyphAppearance.ts": {
+      "imports": [],
+      "importedBy": [
+        "src/components/CharacterPropGlyph.tsx"
       ]
     },
     "src/data/characterUiAccent.test.ts": {

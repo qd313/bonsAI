@@ -273,12 +273,18 @@ function PresetChipText({ text, scroll }: { text: string; scroll: boolean }) {
 }
 
 /**
- * Badges stay pinned at the left of the chip and only the prompt text scrolls: the Tip badge exists
- * to be seen at a glance (Phase 4 track 1), and a badge that scrolled away would defeat that.
+ * The Test and Tip badges, pinned before the prompt text -- shared by every animation mode's
+ * label so the two checks that decide "is this chip pinned/note-sourced" and "does its badge
+ * draw" can never drift apart again. Decode mode used to build its own label from scratch
+ * (DecodePresetChipButton) and carried the Test badge over but not this one: a real, note-sourced
+ * chip's `ragTip` flag was true, yet nothing in decode's JSX ever read it, so the dot never drew
+ * even though the chip's words really did come from the game's own notes (CHIP-BUTTON-09, found
+ * on the Deck with Half-Life 2 running, 2026-09-18). Both label components now render this same
+ * function instead of their own copy of the badge markup.
  */
-function PresetChipLabel({ p, scroll }: { p: PresetPrompt; scroll: boolean }) {
+function PresetChipLeadingBadges({ p }: { p: PresetPrompt }) {
   return (
-    <span className="bonsai-preset-chip-label">
+    <>
       {p.testChip ? (
         <span
           className="bonsai-preset-chip-test-badge"
@@ -313,6 +319,18 @@ function PresetChipLabel({ p, scroll }: { p: PresetPrompt; scroll: boolean }) {
           }}
         />
       ) : null}
+    </>
+  );
+}
+
+/**
+ * Badges stay pinned at the left of the chip and only the prompt text scrolls: the Tip badge exists
+ * to be seen at a glance (Phase 4 track 1), and a badge that scrolled away would defeat that.
+ */
+function PresetChipLabel({ p, scroll }: { p: PresetPrompt; scroll: boolean }) {
+  return (
+    <span className="bonsai-preset-chip-label">
+      <PresetChipLeadingBadges p={p} />
       <PresetChipText text={p.text} scroll={scroll} />
       {p.beta ? (
         <span
@@ -586,28 +604,21 @@ function DecodePresetChipButton(props: {
         width: "100%",
         minHeight: PRESET_CHIP_HEIGHT_PX,
         fontSize: 12,
+        // Same normal chip-text colour PresetChipButton uses below (never the accent): the label
+        // used to be tinted `--bonsai-ui-accent-toned` by a CSS rule in section-4.ts, which made a
+        // decode chip's words read in the same colour family as its Tip dot -- the dot is the only
+        // thing meant to carry the accent (maintainer bug report, 2026-09-19). Set inline, not left
+        // to the Button's own default, so it reads the same as every other animation mode.
+        color: "#c4d3e2",
       }}
     >
       <span className="bonsai-preset-chip-label">
-        {p.testChip ? (
-          // Same badge PresetChipLabel draws for every other animation mode (line ~284) --
-          // decode drew its own label from scratch and never carried this over, so a pinned
-          // QA batch showed no badge at all while the Deck's chip animation was set to decode
-          // (docs/test-evidence/plan47-frozen-chip-findings.json, finding_1).
-          <span
-            className="bonsai-preset-chip-test-badge"
-            style={{
-              marginRight: 6,
-              fontSize: 9,
-              letterSpacing: "0.06em",
-              textTransform: "uppercase",
-              fontWeight: 700,
-              color: "#f0b232",
-            }}
-          >
-            Test
-          </span>
-        ) : null}
+        {/* Shared with every other animation mode (PresetChipLeadingBadges, above) -- decode used
+            to draw its own copy of just the Test badge and never picked up the Tip one when it
+            was added later, which is exactly how CHIP-BUTTON-09 happened (a real, note-sourced
+            chip with ragTip=true whose dot never drew in decode mode). One function now, not two
+            copies that can go out of sync again. */}
+        <PresetChipLeadingBadges p={p} />
         {resolved ? (
           <PresetChipText text={p.text} scroll={scroll} />
         ) : (

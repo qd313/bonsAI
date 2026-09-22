@@ -241,13 +241,13 @@ export function buildSection4Section(): string {
           the blinking block caret straight into the label's textContent from a single shared
           requestAnimationFrame loop, so there is no CSS keyframe to gate here -- reduced motion is
           enforced entirely in JS (instant swap to the final prompt, no churn, no caret).
-          Plan 60, board B (D110, item 6): the resolving label is toned 70/30 toward the label
-          colour, the same mix as the \`[beta]\` tag, so it reads quieter than the full-strength
-          accent.
+          Plan 60, board B (D110, item 6) used to tint the whole label with
+          \`--bonsai-ui-accent-toned\` here, but the selector never said "still churning" -- it
+          stayed on the label whether resolved or not, so a decode chip's words read in the same
+          accent family as its Tip dot (maintainer bug report, 2026-09-19; only the dot should carry
+          that colour). Removed: DecodePresetChipButton now sets the label colour inline instead,
+          the same \`#c4d3e2\` every other mode already uses (PresetChipButton below).
         */
-        .bonsai-scope button.bonsai-preset-glass--decode .bonsai-preset-chip-label {
-          color: var(--bonsai-ui-accent-toned, #5b9e7e) !important;
-        }
 
         .bonsai-scope .bonsai-chat-response-stack {
           margin-top: ${uiScalePx(BONSAI_CHAT_RESPONSE_STACK_MARGIN_TOP_PX)} !important;
@@ -339,16 +339,16 @@ export function buildSection4Section(): string {
         .bonsai-scope button.bonsai-preset-glass.gpfocus,
         :root:not(:has(.gpfocus)) .bonsai-scope button.bonsai-preset-glass:focus-visible {
           outline: none !important;
-          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), inset 0 -2px 0 rgba(56, 189, 248, 0.85), 0 2px 3px rgba(0, 0, 0, 0.4) !important;
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), inset 0 -2px 0 rgba(56, 189, 248, 0.55), 0 2px 3px rgba(0, 0, 0, 0.4) !important; /* alpha toned 0.85->0.55, 2026-09-19, too bright */
         }
-        /* The label brightens with the bar, so the whole chip reads as the live one — except the
-           decode label, which carries the character's own toned colour while its text is still
-           resolving. */
-        .bonsai-scope .bonsai-preset-carousel-focus-root.gpfocuswithin .bonsai-preset-carousel-slot--focus .bonsai-preset-glass:not(.bonsai-preset-glass--decode) .bonsai-preset-chip-label,
-        .bonsai-scope .bonsai-preset-carousel-focus-root:has(.gpfocus) .bonsai-preset-carousel-slot--focus .bonsai-preset-glass:not(.bonsai-preset-glass--decode) .bonsai-preset-chip-label,
-        :root:not(:has(.gpfocus)) .bonsai-scope .bonsai-preset-carousel-slot--focus .bonsai-preset-glass:not(.bonsai-preset-glass--decode) .bonsai-preset-chip-label,
-        .bonsai-scope button.bonsai-preset-glass.gpfocus:not(.bonsai-preset-glass--decode) .bonsai-preset-chip-label,
-        :root:not(:has(.gpfocus)) .bonsai-scope button.bonsai-preset-glass:focus-visible:not(.bonsai-preset-glass--decode) .bonsai-preset-chip-label {
+        /* The label brightens with the bar, so the whole chip reads as the live one. Decode used to
+           be excluded here (its label owned its own colour); that rule is gone (bug fix
+           2026-09-19), so a focused decode chip now brightens like every other mode. */
+        .bonsai-scope .bonsai-preset-carousel-focus-root.gpfocuswithin .bonsai-preset-carousel-slot--focus .bonsai-preset-glass .bonsai-preset-chip-label,
+        .bonsai-scope .bonsai-preset-carousel-focus-root:has(.gpfocus) .bonsai-preset-carousel-slot--focus .bonsai-preset-glass .bonsai-preset-chip-label,
+        :root:not(:has(.gpfocus)) .bonsai-scope .bonsai-preset-carousel-slot--focus .bonsai-preset-glass .bonsai-preset-chip-label,
+        .bonsai-scope button.bonsai-preset-glass.gpfocus .bonsai-preset-chip-label,
+        :root:not(:has(.gpfocus)) .bonsai-scope button.bonsai-preset-glass:focus-visible .bonsai-preset-chip-label {
           color: #dcebf8 !important;
         }
 

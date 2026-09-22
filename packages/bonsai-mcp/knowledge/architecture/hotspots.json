@@ -67,7 +67,7 @@
     },
     {
       "path": "src/components/MainTabPresetAnimatedChips.tsx",
-      "lines": 1308,
+      "lines": 1319,
       "role": ""
     },
     {
@@ -121,6 +121,11 @@
       "role": ""
     },
     {
+      "path": "src/components/MainTabPresetAnimatedChips.test.tsx",
+      "lines": 745,
+      "role": ""
+    },
+    {
       "path": "src/styles/sections/gamepadAndPullModels.ts",
       "lines": 743,
       "role": ""
@@ -133,11 +138,6 @@
     {
       "path": "src/utils/buildReplyActionsElement.test.tsx",
       "lines": 704,
-      "role": ""
-    },
-    {
-      "path": "src/components/MainTabPresetAnimatedChips.test.tsx",
-      "lines": 695,
       "role": ""
     },
     {

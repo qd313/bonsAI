@@ -115,6 +115,33 @@ describe("MainTabPresetAnimatedChips memo gate", () => {
     }
   });
 
+  /*
+   * CHIP-BUTTON-09, found on the Deck with Half-Life 2 running, 2026-09-18: the plugin's own
+   * check for "is this chip's text really from the game's notes" (sessionRagComposer.ts setting
+   * `ragTip: true` on a genuine knowledge-base candidate) and the check that decides "so draw the
+   * dot" had drifted apart in decode mode -- DecodePresetChipButton built its own label from
+   * scratch and simply never read `p.ragTip` at all, so a real note-sourced chip showed its words
+   * with no dot before them. Both label components now render the same PresetChipLeadingBadges
+   * function, so the two checks cannot drift apart again; this test is the pin.
+   */
+  it("badges a note-sourced (ragTip) chip in every animation mode, including decode", () => {
+    for (const mode of ["static", "fade", "carousel", "decode"] as const) {
+      const { container, unmount } = renderChips({
+        animationMode: mode,
+        seeds: [
+          { text: "How do I beat Strider?", category: "strategy", ragTip: true },
+          seed("bravo"),
+          seed("charlie"),
+        ],
+      });
+      expect(
+        container.querySelector(".bonsai-preset-chip-tip-badge"),
+        `${mode}: a note-sourced chip should carry the Tip dot`,
+      ).toBeTruthy();
+      unmount();
+    }
+  });
+
   /* Two chips side by side since 2026-09-01 (D43). The row was one chip for a day (2026-08-31)
      and three stacked rows before that. */
   it("renders PRESET_VISIBLE_SLOTS chips side by side in fade / static / decode", () => {
@@ -342,6 +369,29 @@ describe("MainTabPresetAnimatedChips decode mode", () => {
       })),
     });
   }
+
+  /*
+   * Maintainer bug report, 2026-09-19: "A preset chip's icon and its text are coloured the same
+   * way." section-4.ts used to give `.bonsai-preset-glass--decode .bonsai-preset-chip-label` a
+   * permanent `color: var(--bonsai-ui-accent-toned, #5b9e7e)`, which reached the Tip dot's own
+   * words too -- only the dot is meant to carry the accent colour. The stylesheet is a plain
+   * string in this test environment (no cascade), so this checks the one place decode's label
+   * colour can now come from: the Button's own inline style, set inline for the same reason
+   * PresetChipButton (fade/static/carousel) already sets it there.
+   */
+  it("gives a decode-mode chip's label the normal chip-text colour, not the accent", () => {
+    const { container } = render(
+      <MainTabPresetAnimatedChips
+        seeds={[{ ...seed("How do I beat Glyphid Dreadnought?"), ragTip: true }, seed("bravo"), seed("charlie")]}
+        setUnifiedInput={vi.fn()}
+        animationMode="decode"
+      />,
+    );
+    const button = container.querySelector(".bonsai-preset-glass--decode") as HTMLElement | null;
+    expect(button).toBeTruthy();
+    expect(button!.style.color).toBe("rgb(196, 211, 226)"); // #c4d3e2, jsdom's normalized form
+    expect(button!.style.color).not.toBe("");
+  });
 
   it("selecting a chip always submits the real prompt, never the on-screen partial", () => {
     // Clicked the instant it mounts, before any reveal timer has fired at all — the label is

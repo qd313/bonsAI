@@ -8,7 +8,7 @@
   },
   "files_over_400_lines": {
     "label": "Files over 400 lines (app code, both sides)",
-    "best": 27,
+    "best": 26,
     "target": 30,
     "start_2026_09_09": 41,
     "direction": "lower_is_better",
@@ -34,7 +34,7 @@
   },
   "duplicate_lines_app": {
     "label": "Copy-pasted lines, app code",
-    "best": 919,
+    "best": 867,
     "target": 350,
     "start_2026_09_09": 717,
     "direction": "lower_is_better",
@@ -46,7 +46,7 @@
   },
   "duplicate_lines_be_tests": {
     "label": "Copy-pasted lines, back-end tests",
-    "best": 2113,
+    "best": 1801,
     "target": 700,
     "start_2026_09_09": 1372,
     "direction": "lower_is_better",
@@ -129,7 +129,7 @@
   },
   "settings_field_list_repeats": {
     "label": "Places the settings field list is repeated in the settings hook",
-    "best": 7,
+    "best": 0,
     "target": 1,
     "start_2026_09_09": 7,
     "direction": "lower_is_better",
@@ -148,7 +148,7 @@
   },
   "doc_size_kb_testing": {
     "label": "Living doc size: testing",
-    "best": 134.46,
+    "best": 114.05,
     "target": 60,
     "start_2026_09_09": 315,
     "direction": "lower_is_better",
@@ -160,7 +160,7 @@
   },
   "doc_size_kb_claude": {
     "label": "Living doc size: orientation (CLAUDE.md)",
-    "best": 3.02,
+    "best": 2.91,
     "target": 8,
     "start_2026_09_09": 13,
     "direction": "lower_is_better",

@@ -16,6 +16,7 @@
  */
 import { describe, expect, it } from "vitest";
 import { buildSection6Section } from "./section-6";
+import { UNIFIED_TEXT_FONT_PX } from "../../features/unified-input/constants";
 
 describe("copy icon room reserved below a trailing code box (section 6 CSS)", () => {
   const css = buildSection6Section();
@@ -52,6 +53,27 @@ describe("copy icon room reserved below a trailing code box (section 6 CSS)", ()
     expect(css).toMatch(
       /\.bonsai-scope \.bonsai-chat-ai-bubble--with-copy \.bonsai-answer-stop:last-child > \.bonsai-md-p:last-child::after/,
     );
+  });
+});
+
+describe("strategy placeholder font size matches the real caret (section 6 CSS, roadmap: blinking cursor does not line up with the placeholder)", () => {
+  // The strategy-mode placeholder span used to hard-code font-size: 10px while the blinking
+  // caret beside it (`.bonsai-unified-input-fake-caret--overlay`) inherits the overlay div's own
+  // 12px (UNIFIED_TEXT_FONT_PX, set inline in MainTabUnifiedAskBar.tsx), so the two could never
+  // line up. The fix makes the placeholder span read the same font size as the real typed text.
+  const css = buildSection6Section();
+
+  it("does not hard-code a smaller font size than the real text field's own", () => {
+    const match = css.match(/\.bonsai-scope \.bonsai-unified-input-strategy-placeholder\s*\{([^}]*)\}/);
+    expect(match).toBeTruthy();
+    const body = match![1]!;
+    expect(body).not.toMatch(/font-size:\s*10px/);
+  });
+
+  it("uses the same scaled font size constant as the real field's text (UNIFIED_TEXT_FONT_PX)", () => {
+    const match = css.match(/\.bonsai-scope \.bonsai-unified-input-strategy-placeholder\s*\{([^}]*)\}/);
+    const body = match![1]!;
+    expect(body).toMatch(new RegExp(`font-size:\\s*calc\\(${UNIFIED_TEXT_FONT_PX}px`));
   });
 });
 

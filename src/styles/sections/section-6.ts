@@ -44,7 +44,7 @@
  *    side, and the small dots marking every chat plus the one that
  *    creates a new one.
  */
-import { BONSAI_CHAT_INPUT_TO_TRANSCRIPT_GAP_PX, BONSAI_CHAT_TRANSCRIPT_TO_SAVE_GAP_PX } from "../../features/unified-input/constants";
+import { BONSAI_CHAT_INPUT_TO_TRANSCRIPT_GAP_PX, BONSAI_CHAT_TRANSCRIPT_TO_SAVE_GAP_PX, UNIFIED_TEXT_FONT_PX } from "../../features/unified-input/constants";
 import { uiScalePx } from "./uiScalePx";
 
 /**
@@ -169,9 +169,14 @@ export function buildSection6Section(): string {
           color: #f0ddd6 !important;
         }
 
+        /* Font size must match the real field's own text (UNIFIED_TEXT_FONT_PX, section-5.ts) --
+           roadmap: "The blinking cursor in the question box does not line up with the placeholder
+           text". This span used to hard-code 10px while the caret beside it inherits the overlay's
+           12px, so the placeholder was measurably smaller than the caret it sits next to and the
+           two could never line up. */
         .bonsai-scope .bonsai-unified-input-strategy-placeholder {
           font-style: italic;
-          font-size: 10px;
+          font-size: ${uiScalePx(UNIFIED_TEXT_FONT_PX)};
           opacity: 0.45;
         }
 

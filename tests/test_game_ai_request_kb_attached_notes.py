@@ -216,6 +216,9 @@ class _FakePlugin:
         self._partial_response_lock = threading.Lock()
         self._partial_stream_snapshot: dict = {"request_id": 99, "kb_attached_notes": []}
         self.call_order: list = []
+        # Recorder for the task 3 app-activity log line -- one entry per call, in order, so a
+        # test can check both that it fired and what it said.
+        self.app_log_calls: list[dict] = []
 
     async def load_settings(self):
         return self._settings
@@ -232,6 +235,11 @@ class _FakePlugin:
 
     async def _persist_input_transparency(self, payload):
         pass
+
+    async def _maybe_app_log(self, category, message, *, level="default", fields=None):
+        self.app_log_calls.append(
+            {"category": category, "message": message, "level": level, "fields": fields or {}}
+        )
 
 
 def _ok_result() -> dict:
@@ -430,6 +438,138 @@ class KbAttachedNotesWiringTests(unittest.TestCase):
         _run(plugin, ask_mode="strategy")
 
         self.assertEqual(plugin._partial_stream_snapshot["kb_attached_notes"], [])
+
+
+class KbSearchAppLogTests(unittest.TestCase):
+    """Task 3, plan 63 lane G: the app-activity log line naming what the knowledge-base search
+    found and what actually reached the model. Off by default (desktop_app_log_level starts
+    "off", and `Plugin._maybe_app_log` checks it before writing anything) -- these tests go
+    through the fake plugin's recorder instead of a real log file, so they check the call was
+    made and what it said, not the on-disk log format (that belongs to
+    desktop_note_service.py's own tests)."""
+
+    def _kb_log_calls(self, plugin) -> list[dict]:
+        return [c for c in plugin.app_log_calls if c["category"] == "ask.kb_search"]
+
+    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    def test_an_attached_note_is_named_as_both_searched_and_attached(self, mock_should, mock_retrieve):
+        mock_should.return_value = (True, "strategy")
+        mock_retrieve.return_value = _attached_result(_card())
+        plugin = _FakePlugin(_settings())
+        plugin._ollama_result = _ok_result()
+
+        _run(plugin, ask_mode="strategy", app_name="Hollow Knight")
+
+        calls = self._kb_log_calls(plugin)
+        self.assertEqual(len(calls), 1)
+        call = calls[0]
+        self.assertEqual(call["level"], "verbose")
+        fields = call["fields"]
+        self.assertEqual(fields["searched_count"], 1)
+        self.assertEqual(fields["searched_notes"], "Hollow Knight — Broken Vessel")
+        self.assertEqual(fields["attached_count"], 1)
+        self.assertEqual(fields["attached_notes"], "Hollow Knight — Broken Vessel")
+        self.assertEqual(fields["starved_by_context_budget"], False)
+
+    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    def test_nothing_found_still_logs_a_zero_zero_line(self, mock_should, mock_retrieve):
+        """A search that finds nothing is itself a fact worth recording -- confirming a screen
+        that reads "no notes for this game" really did run a search and really did find none,
+        not that the search never ran at all."""
+        mock_should.return_value = (True, "strategy")
+        mock_retrieve.return_value = KnowledgeRetrievalResult(attached=False)
+        plugin = _FakePlugin(_settings())
+        plugin._ollama_result = _ok_result()
+
+        _run(plugin, ask_mode="strategy")
+
+        calls = self._kb_log_calls(plugin)
+        self.assertEqual(len(calls), 1)
+        fields = calls[0]["fields"]
+        self.assertEqual(fields["searched_count"], 0)
+        self.assertEqual(fields["attached_count"], 0)
+
+    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    def test_a_card_dropped_by_the_context_budget_is_searched_but_not_attached(
+        self, mock_should, mock_retrieve
+    ):
+        """The exact gap this line exists to make visible: retrieval found and named a card
+        (searched_count 1), but the outer stacking budget dropped it before it ever reached the
+        model (attached_count 0, starved_by_context_budget True) -- see
+        test_a_card_dropped_by_the_context_budget_is_not_shown_as_attached above for the same
+        scenario checked from the "From the notes" block's own side."""
+        mock_should.return_value = (True, "strategy")
+        oversized_card = _card(card="y" * 200_000)
+        mock_retrieve.return_value = _attached_result(oversized_card, max_bytes=250_000)
+        plugin = _FakePlugin(_settings())
+        plugin._ollama_result = _ok_result()
+
+        _run(plugin, ask_mode="speed")
+
+        calls = self._kb_log_calls(plugin)
+        self.assertEqual(len(calls), 1)
+        fields = calls[0]["fields"]
+        self.assertEqual(fields["searched_count"], 1)
+        self.assertEqual(fields["attached_count"], 0)
+        self.assertEqual(fields["starved_by_context_budget"], True)
+
+    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    def test_no_search_this_turn_means_no_log_line(self, mock_should, mock_retrieve):
+        """Speed mode with nothing running never calls retrieval at all -- must not log a search
+        that never happened."""
+        mock_should.return_value = (False, "")
+        plugin = _FakePlugin(_settings())
+        plugin._ollama_result = _ok_result()
+
+        _run(plugin, ask_mode="speed")
+
+        self.assertEqual(self._kb_log_calls(plugin), [])
+        mock_retrieve.assert_not_called()
+
+    @patch("backend.services.game_ai_request.retrieve_knowledge_context")
+    @patch("backend.services.game_ai_request.should_retrieve_knowledge")
+    def test_a_plugin_double_with_no_app_log_method_is_not_broken(self, mock_should, mock_retrieve):
+        """`hasattr` guards the call the same way the `_publish_thinking_phase_key` calls above
+        it do, so a caller that never implements `_maybe_app_log` -- every other test double in
+        this test suite, built before this task added the method -- still runs the KB-attach
+        path without error."""
+
+        class _NoAppLogPlugin:
+            DEFAULT_REQUEST_TIMEOUT_SECONDS = 45
+
+            def __init__(self, settings: dict):
+                self._settings = settings
+                self._ollama_result: dict = _ok_result()
+                self._partial_response_lock = threading.Lock()
+                self._partial_stream_snapshot: dict = {"request_id": 99, "kb_attached_notes": []}
+
+            async def load_settings(self):
+                return self._settings
+
+            async def _try_handle_sanitizer_keyword_command(self, question, app_id):
+                return None
+
+            def _active_request_id(self):
+                return 99
+
+            async def ask_ollama(self, *args, **kwargs):
+                return self._ollama_result
+
+            async def _persist_input_transparency(self, payload):
+                pass
+
+        mock_should.return_value = (True, "strategy")
+        mock_retrieve.return_value = _attached_result(_card())
+        plugin = _NoAppLogPlugin(_settings())
+        self.assertFalse(hasattr(plugin, "_maybe_app_log"))
+
+        result = _run(plugin, ask_mode="strategy")
+
+        self.assertEqual(len(result["kb_attached_notes"]), 1)
 
 
 if __name__ == "__main__":

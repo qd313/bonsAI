@@ -872,6 +872,21 @@ export function PullModelsModal(props: PullModelsModalProps) {
     return true;
   };
 
+  /**
+   * A on any control on this screen must run that control's own action and stop there, the same
+   * as its `onClick` already does for a mouse -- this screen is a confirm box with its own OK, and
+   * Steam delivers A through `onOKButton`, never a DOM click, so a control with only `onClick`
+   * loses every A press straight to that OK, closing the whole screen instead of doing anything
+   * (found on the Deck 2026-09-21, docs/test-evidence/plan62-MODELS-FILTERS-01-A-closes-screen.json).
+   * Every one of the thirteen affected controls wants the identical two-line wrapper, so it is
+   * written once rather than inline at each -- the same call this file already made for
+   * `cancelClosesFiltersPanel` just above.
+   */
+  const okButtonRuns = (fn: () => void) => (evt: { stopPropagation: () => void }) => {
+    evt.stopPropagation();
+    fn();
+  };
+
   const completeNestedModalClose = useCallback(
     (close: () => void) => {
       if (onCompleteNestedDeckyModalClose) {
@@ -1337,7 +1352,10 @@ export function PullModelsModal(props: PullModelsModalProps) {
                 ev.stopPropagation();
                 void pinModelForAsk(entry, entry.tag);
               }}
-              {...(navSelect as Record<string, unknown>)}
+              {...({
+                ...navSelect,
+                onOKButton: okButtonRuns(() => void pinModelForAsk(entry, entry.tag)),
+              } as unknown as Record<string, unknown>)}
             >
               {pinned ? "★" : "☆"}
             </Button>
@@ -1348,7 +1366,10 @@ export function PullModelsModal(props: PullModelsModalProps) {
               className={`bonsai-pullmodels-slot${selected ? " bonsai-pullmodels-slot--selected" : ""}`}
               onClick={(ev) => toggleSelected(entry, ev)}
               aria-label={selected ? `Deselect ${entry.tag}` : `Select ${entry.tag} to pull`}
-              {...(navSelect as Record<string, unknown>)}
+              {...({
+                ...navSelect,
+                onOKButton: okButtonRuns(() => toggleSelected(entry)),
+              } as unknown as Record<string, unknown>)}
             >
               {selected ? "✔" : ""}
             </Button>
@@ -1399,7 +1420,12 @@ export function PullModelsModal(props: PullModelsModalProps) {
                   : "Remove from Deck"
               }
               onClick={() => confirmDelete(entry.tag, sizeGb)}
-              {...(navDelete as Record<string, unknown>)}
+              {...({
+                ...navDelete,
+                onOKButton: okButtonRuns(() => {
+                  if (!deleteDisabled) confirmDelete(entry.tag, sizeGb);
+                }),
+              } as unknown as Record<string, unknown>)}
             >
               X
             </Button>
@@ -1445,7 +1471,13 @@ export function PullModelsModal(props: PullModelsModalProps) {
               if (embeddingOnly) return;
               void pinModelForAsk(null, tag);
             }}
-            {...(rowNavHandlers(rowIndex, "select", true) as Record<string, unknown>)}
+            {...({
+              ...rowNavHandlers(rowIndex, "select", true),
+              onOKButton: okButtonRuns(() => {
+                if (embeddingOnly) return;
+                void pinModelForAsk(null, tag);
+              }),
+            } as unknown as Record<string, unknown>)}
           >
             {embeddingOnly ? "—" : pinned ? "★" : "☆"}
           </Button>
@@ -1478,7 +1510,12 @@ export function PullModelsModal(props: PullModelsModalProps) {
                 : "Remove from Deck"
             }
             onClick={() => confirmDelete(tag, sizeGb)}
-            {...(navDelete as Record<string, unknown>)}
+            {...({
+              ...navDelete,
+              onOKButton: okButtonRuns(() => {
+                if (!deleteDisabled) confirmDelete(tag, sizeGb);
+              }),
+            } as unknown as Record<string, unknown>)}
           >
             X
           </Button>
@@ -1600,6 +1637,11 @@ export function PullModelsModal(props: PullModelsModalProps) {
                   void refreshInstalledAndMeta(true);
                 }}
                 aria-label="Refresh model catalog"
+                {...({
+                  onOKButton: okButtonRuns(() => {
+                    if (!refreshingMeta && !loadingMeta) void refreshInstalledAndMeta(true);
+                  }),
+                } as unknown as Record<string, unknown>)}
               >
                 ↻
               </Button>
@@ -1637,6 +1679,11 @@ export function PullModelsModal(props: PullModelsModalProps) {
                   {...({
                     onMoveDown: () =>
                       filtersOpen ? openFiltersPanelEntry() : focusRowCell(0, "select") || focusFooterPull(),
+                    onOKButton: okButtonRuns(() => {
+                      if (isPlausibleOllamaPullTag(customTagInput) && !customPullBusy && !pullBusy) {
+                        void onPullCustomTag();
+                      }
+                    }),
                   } as unknown as Record<string, unknown>)}
                 >
                   {customPullBusy ? "…" : "Pull"}
@@ -1656,6 +1703,11 @@ export function PullModelsModal(props: PullModelsModalProps) {
                   {...({
                     onMoveDown: () =>
                       filtersOpen ? openFiltersPanelEntry() : focusRowCell(0, "select") || focusFooterPull(),
+                    onOKButton: okButtonRuns(() => {
+                      setCustomTagEntryOpen(false);
+                      setCustomTagInput("");
+                      scheduleFocusFrame(() => focusCustomTagChip());
+                    }),
                   } as unknown as Record<string, unknown>)}
                 >
                   ×
@@ -1678,6 +1730,10 @@ export function PullModelsModal(props: PullModelsModalProps) {
                   {...({
                     onMoveDown: () =>
                       filtersOpen ? openFiltersPanelEntry() : focusRowCell(0, "select") || focusFooterPull(),
+                    onOKButton: okButtonRuns(() => {
+                      if (filtersOpen) closeFiltersPanel();
+                      else openFiltersPanel();
+                    }),
                   } as unknown as Record<string, unknown>)}
                 >
                   <span className="bonsai-pullmodels-filters-button-title">
@@ -1699,6 +1755,10 @@ export function PullModelsModal(props: PullModelsModalProps) {
                   {...({
                     onMoveDown: () =>
                       filtersOpen ? openFiltersPanelEntry() : focusRowCell(0, "select") || focusFooterPull(),
+                    onOKButton: okButtonRuns(() => {
+                      setCustomTagEntryOpen(true);
+                      scheduleFocusFrame(() => focusCustomTagClose());
+                    }),
                   } as unknown as Record<string, unknown>)}
                 >
                   Type a name
@@ -1736,6 +1796,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                               onMoveUp: () => (isFirst ? closeFiltersPanel() : focusRecommendChip(chipIndex - 1)),
                               onMoveDown: () => (isLast ? focusFilterPanelRow(0) : focusRecommendChip(chipIndex + 1)),
                               onCancelButton: cancelClosesFiltersPanel,
+                              onOKButton: okButtonRuns(() => toggleSelected(entry)),
                             } as unknown as Record<string, unknown>)}
                           >
                             {entry.tag}
@@ -1778,7 +1839,12 @@ export function PullModelsModal(props: PullModelsModalProps) {
                             ? `${filterPanelRowAriaLabel(row)} — enable Tier 3 unlock in Advanced first`
                             : filterPanelRowAriaLabel(row)
                         }
-                        {...(filterPanelRowNav(i) as unknown as Record<string, unknown>)}
+                        {...({
+                          ...filterPanelRowNav(i),
+                          onOKButton: okButtonRuns(() => {
+                            if (!disabled) selectFilterPanelRow(row);
+                          }),
+                        } as unknown as Record<string, unknown>)}
                       >
                         <span className="bonsai-pullmodels-filterpanel-check" aria-hidden="true">
                           {checked ? "✔" : ""}
@@ -1803,6 +1869,7 @@ export function PullModelsModal(props: PullModelsModalProps) {
                     onMoveLeft: () => true,
                     onMoveRight: () => true,
                     onCancelButton: cancelClosesFiltersPanel,
+                    onOKButton: okButtonRuns(() => closeFiltersPanel()),
                   } as unknown as Record<string, unknown>)}
                 >
                   Close filters

@@ -47,6 +47,7 @@
     "src/components/PermissionsTab.test.tsx",
     "src/components/PullModelsModal.customTagChip.test.tsx",
     "src/components/PullModelsModal.filtersPanel.test.tsx",
+    "src/components/PullModelsModal.gamepadOK.test.tsx",
     "src/components/PullModelsModal.test.tsx",
     "src/components/ReplyCopyButton.test.tsx",
     "src/components/SessionContextStrip.test.tsx",

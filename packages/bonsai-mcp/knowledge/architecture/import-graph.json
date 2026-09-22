@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
-  "fileCount": 419,
-  "edgeCount": 1075,
+  "fileCount": 420,
+  "edgeCount": 1077,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -884,6 +884,13 @@
       ],
       "importedBy": []
     },
+    "src/components/PullModelsModal.gamepadOK.test.tsx": {
+      "imports": [
+        "src/components/PullModelsModal.tsx",
+        "src/test-harness/fakeDeckyRpc.ts"
+      ],
+      "importedBy": []
+    },
     "src/components/PullModelsModal.test.tsx": {
       "imports": [
         "src/components/PullModelsModal.tsx",
@@ -910,6 +917,7 @@
         "src/components/OllamaModelsHubModal.tsx",
         "src/components/PullModelsModal.customTagChip.test.tsx",
         "src/components/PullModelsModal.filtersPanel.test.tsx",
+        "src/components/PullModelsModal.gamepadOK.test.tsx",
         "src/components/PullModelsModal.test.tsx"
       ]
     },
@@ -2908,6 +2916,7 @@
         "src/components/MainTabPresetRow.test.tsx",
         "src/components/OllamaWhereAiRunsSection.test.tsx",
         "src/components/PullModelsModal.filtersPanel.test.tsx",
+        "src/components/PullModelsModal.gamepadOK.test.tsx",
         "src/components/PullModelsModal.test.tsx",
         "src/components/SessionContextStrip.test.tsx",
         "src/components/SettingsTab.mdns.test.ts",

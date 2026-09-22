@@ -1,0 +1,45 @@
+{
+  "rowId": "UP-INTO-REPLY-01",
+  "rowText": "Walking up from the bottom of the panel reaches the reply instead of jumping over it. Roadmap: 'Walking up from the question box skips every reply row'.",
+  "build": { "plugin": "0.5.0", "commitBefore": "3daa21e", "commitAfter": "2ecd804", "deployedAt": "2026-09-21T22:07:00-04:00" },
+  "deckTime": "2026-09-21T22:09:00-04:00",
+  "setup": { "game": "none running", "screen": "Main tab, existing Black Mesa Gonarch answer, chat slot 'wheatley fight'" },
+
+  "beforeTheFix": {
+    "build": "3daa21e",
+    "measuredBy": "deck_sweep DOWN then UP, evidence runs/sweep_20260921_220534.json",
+    "downLeg": [
+      "the tab bar", "the chat slot row", "the '10 earlier' pill", "Retry same prompt",
+      "the question row (67% visible)", "Show reasoning - 20 s",
+      "answer section 1", "answer section 2", "answer section 3 (89% visible)",
+      "Read aloud", "Show details", "the 'From the notes' block",
+      "the suggestion chip", "the question box", "ask"
+    ],
+    "upLeg": [
+      "ask", "Attach screenshot to Ask", "Choose AI character", "the suggestion chip",
+      "the chat slot row", "the tab bar", "the bonsAI version button"
+    ],
+    "verdict": "FAIL. Fourteen stops going down, six coming back up. Up from the suggestion chip went straight to the chat slot row, so nine stops -- the whole reply -- were reachable only by walking down onto them."
+  },
+
+  "afterTheFix": {
+    "build": "2ecd804",
+    "steps": [
+      { "press": "UP", "from": "ask", "to": "Attach screenshot to Ask", "visible": "100%" },
+      { "press": "UP", "from": "Attach screenshot to Ask", "to": "Choose AI character", "visible": "100%" },
+      { "press": "UP", "from": "Choose AI character", "to": "the suggestion chip", "visible": "100%" },
+      { "press": "UP", "from": "the suggestion chip", "to": "the 'From the notes' block, inside the reply", "visible": "100%", "verdict": "PASS -- before this it went to the chat slot row" }
+    ]
+  },
+  "verdict": "PASS",
+
+  "stillOwed": [
+    "A full down-then-up sweep on the fixed build, to see how much of the fourteen-versus-six gap is left. This check only proves the one press that was broken.",
+    "The same check with the details panel open, where the lowest stop is the chip ladder rather than the notes block."
+  ],
+
+  "alsoMeasured": {
+    "id": "REPLY-STOPS-MIRROR-01",
+    "note": "The before-the-fix sweep above IS the current measurement for the roadmap entry 'Walking down a reply and walking back up visit different stops'. Fourteen stops down, six up, on build 3daa21e. The entry's own description mentions an extra copy of the question text half hidden behind a button going down that does not appear going up -- that is the question row at index 4, measured 67% visible and covered by the Retry corner icon. So that entry and the two corner-icon entries filed tonight are the same fault seen from two sides."
+  }
+}

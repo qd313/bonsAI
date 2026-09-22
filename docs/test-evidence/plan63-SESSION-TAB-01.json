@@ -1,0 +1,90 @@
+{
+  "rowId": "SESSION-TAB-01",
+  "rowText": "Walking DOWN an open answer's details panel reaches the \"This answer | Session\" tabs row, and the Session tab can be opened and walked. Filed 2026-09-20 as unreachable: both tabs drew, Left/Right worked once the ring was on them, but nothing walking down ever put the ring there.",
+  "build": {
+    "plugin": "0.5.0",
+    "commit": "29ca207",
+    "deployedAt": "2026-09-21T21:22:00-04:00 (deployed by this flow, md5 of dist/index.js confirmed identical on the Deck)"
+  },
+  "deckTime": "2026-09-21T21:25:00-04:00",
+  "setup": {
+    "game": "none running",
+    "screen": "Main tab, an existing Black Mesa Gonarch answer already on screen in chat slot 'wheatley fight'",
+    "note": "No question was sent: an earlier answer was already in the transcript, so the pinned-test-sentence bug did not block this check."
+  },
+  "steps": [
+    {
+      "step": 1,
+      "action": "walkTo 'Show details', direction DOWN",
+      "result": "found after 8 presses",
+      "focus": ".bonsai-chat-details-divider",
+      "rect": { "x": 52, "y": 525, "w": 267, "h": 15 },
+      "visibility": "visible, 100%"
+    },
+    {
+      "step": 2,
+      "action": "A",
+      "result": "details panel opens"
+    },
+    {
+      "step": 3,
+      "action": "DOWN",
+      "result": "ring lands on the 'From the notes' block, which correctly sits between Show details and the tabs row",
+      "focus": ".bonsai-kb-notes-block",
+      "focusText": "Gonarch (+2 more) - From the Half-Life wiki",
+      "rect": { "x": 52, "y": 466, "w": 267, "h": 47 }
+    },
+    {
+      "step": 4,
+      "action": "DOWN",
+      "result": "PASS - ring lands on the tabs row. Before this fix the ring skipped it and went into the chip ladder below.",
+      "focus": ".bonsai-details-tabs-row",
+      "focusText": "This answer / Session - 11",
+      "rect": { "x": 52, "y": 527, "w": 290, "h": 28 },
+      "dockTop": 600,
+      "coveredByDockPx": 0,
+      "clearOfDockPx": 45
+    },
+    {
+      "step": 5,
+      "action": "RIGHT",
+      "result": "PASS - active tab becomes 'Session - 11', the session body appears with 11 rows",
+      "activeTab": "Session - 11",
+      "sessionBodyRect": { "x": 52, "y": 563, "w": 290, "h": 734 },
+      "rowCount": 11,
+      "firstRowText": "wheatley fight"
+    },
+    {
+      "step": 6,
+      "action": "DOWN",
+      "result": "PASS - ring enters the session list on its first row, fully visible",
+      "focus": ".bonsai-details-session-row",
+      "focusText": "wheatley fight",
+      "rect": { "x": 52, "y": 563, "w": 290, "h": 29 },
+      "dockTop": 600,
+      "coveredByDockPx": 0
+    },
+    {
+      "step": 7,
+      "action": "DOWN",
+      "result": "PASS - second row, pane scrolled to keep it clear of the dock",
+      "focus": ".bonsai-details-session-row (index 1)",
+      "focusText": "what does the pickaxe do",
+      "rect": { "x": 52, "y": 484, "w": 290, "h": 29 },
+      "dockTop": 600,
+      "coveredByDockPx": 0
+    }
+  ],
+  "verdict": "PASS",
+  "secondCauseNotReproduced": {
+    "claim": "Recorded 2026-09-20: 'the row sits below the question box's top edge, drawn off screen.'",
+    "measured": "Did NOT reproduce on this build. The tabs row measured 45px clear of the dock's top edge, and each session row walked into measured 0px covered.",
+    "likelyExplanation": "The row never took focus before, so the existing dock-clearance focus listener (useDockClearanceOnFocus) never ran for it. Now that DOWN lands on it, the existing lift handles it. No layout change was needed."
+  },
+  "notCovered": [
+    "Walking the full 11-row session list to its end",
+    "The Clear button below the list",
+    "Up back out of the list to the tabs row",
+    "B from inside the Session tab closing the whole panel"
+  ]
+}

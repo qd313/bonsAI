@@ -100,3 +100,30 @@ export function toBonsaiSettingsPayload(
   };
   return patch ? { ...base, ...patch } : base;
 }
+
+/**
+ * The fields in `next` that differ from `baseline`, keyed the way the backend expects.
+ *
+ * Used by the automatic background save in `usePluginSettings.ts`. Sending only what actually
+ * changed -- instead of a full copy of every setting on every save -- means a field this tab
+ * never touched (a QA batch written straight to settings.json, a knowledge-base download
+ * finishing in the background, a sanitizer command another Ask handled) survives the next
+ * autosave instead of being silently reverted by a stale belief about it. The backend's own
+ * `save_settings` already merges an incoming payload over a fresh read of disk, so leaving a
+ * field out of the payload is what tells it "leave this one alone."
+ *
+ * Iterates `Object.keys(next)` rather than a hand-written field list, so it cannot drift from
+ * `BonsaiSettings` the way the settings hook's own several hand-written lists can.
+ */
+export function diffBonsaiSettingsPayload(
+  baseline: BonsaiSettings,
+  next: BonsaiSettings,
+): Partial<BonsaiSettings> {
+  const patch: Record<string, unknown> = {};
+  (Object.keys(next) as (keyof BonsaiSettings)[]).forEach((key) => {
+    if (JSON.stringify(next[key]) !== JSON.stringify(baseline[key])) {
+      patch[key] = next[key];
+    }
+  });
+  return patch as Partial<BonsaiSettings>;
+}

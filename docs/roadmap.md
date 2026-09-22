@@ -538,9 +538,11 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 - ★★★ `[ollama]` `[ui]` **Every filter on the AI models screen behind one Filters button, and five
   changes that give the list more room** — **VERIFY, built 2026-09-20.** The two rows of filter chips and
   the separate Policy section are gone, replaced by one "Filters · N on" line that opens a panel with six
-  filters and the model-name search folded in. Row **MODELS-FILTERS-01**, **run on the Deck 2026-09-21 and
-  FAILED**: pressing A on the Filters button closes the whole screen and the filters never appear, so none
-  of the rest could be checked — filed as its own three-star bug above. [Detail](roadmap-details.md#every-filter-on-the-ai-models-screen-behind-one-filters-button-and-five-changes-that-give-the-list-more-room).
+  filters and the model-name search folded in. Row **MODELS-FILTERS-01**. It failed on the Deck on
+  2026-09-21 because A closed the whole screen; **that bug is fixed and proven the same night, so this
+  is checkable again** — the panel opens, closes and takes a choice with the screen staying put. What
+  this row still asks for is untouched: the model count at other filter settings, and whether each of
+  the six filters really changes the list. [Detail](roadmap-details.md#every-filter-on-the-ai-models-screen-behind-one-filters-button-and-five-changes-that-give-the-list-more-room).
 
 - ★ `[ollama]` **Pulled models join the model try order** — **MOSTLY VERIFIED on the Deck 2026-09-06, one
   case left.** A pulled model lands at the bottom of the text list and shows in the vision list if it can

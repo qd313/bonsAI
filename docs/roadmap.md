@@ -72,42 +72,21 @@ starts work outside this.
 
 
 - ★ `[ask]` **The blinking cursor in the question box does not line up with the placeholder text** — **OPEN,
-  reported by the maintainer 2026-09-15 evening, a recurring sight.** The cursor sits a few pixels up and a
-  little to the left of the greyed "Describe the level, boss, or puzzle you're stuck on." **Measured on the
-  Deck the same evening:** the placeholder is drawn in its own layer at a 10-pixel font with a 12-pixel line;
-  the real text field underneath, whose caret is the cursor a person sees, uses a 12-pixel font with a
-  14.4-pixel line — about 2 pixels taller — so the two can never line up while they are two different font
-  sizes. Evidence `docs/test-evidence/plan55-BUG-cursor-placeholder-offset.json`. **Confirmed on the
-  Deck 2026-09-17:** the placeholder is still drawn in a smaller, tilted font than the text you type, 2
-  to 3 pixels off from it. Evidence `docs/test-evidence/plan57-QA-cursor-placeholder-offset.json`.
+  reported by the maintainer 2026-09-15 evening, a recurring sight.** The cursor sits a few pixels up and to
+  the left of the greyed placeholder text. **Confirmed again on the Deck 2026-09-17:** still off by 2 to 3
+  pixels, because the placeholder and the real text use different-sized fonts, so they can never line up as
+  written today. [Detail](roadmap-details.md#the-blinking-cursor-in-the-question-box-does-not-line-up-with-the-placeholder-text).
 - ★ `[chips]` `[KB]` **A suggestion chip pulled from the game's notes shows no Tip mark** — **OPEN, found
-  2026-09-18 on the Deck with Half-Life 2 running.** The knowledge base was on, and the suggestion chip
-  showed real tips straight from the game's own notes — but the small coloured dot that is supposed to mark
-  a chip as coming from the notes never appeared, so a person looking at the chip has no way to tell it is
-  a real tip and not a guess. The dot is only meant to light up when a chip is marked as coming from the
-  notes; these chips did carry real note content but arrived without that mark, or lost it on the way to
-  the chip, so the two checks that decide "is this a note chip" and "should the dot show" are not agreeing
-  with each other. Row **CHIP-BUTTON-09**. Evidence `docs/test-evidence/plan61-CHIP-BUTTON-09.json` and its
-  two screenshots.
+  2026-09-18 on the Deck with Half-Life 2 running.** The suggestion chip showed a real tip from the game's
+  own notes, but the small coloured dot marking it as a note tip never appeared, so a person cannot tell a
+  real tip from a guess. The two checks that decide "is this a note chip" and "should the dot show" are not
+  agreeing with each other. Row **CHIP-BUTTON-09**. [Detail](roadmap-details.md#a-suggestion-chip-pulled-from-the-games-notes-shows-no-tip-mark).
 - ★ `[chips]` `[QA]` **The pinned test sentences stop showing after the first question** — **OPEN, found
-  2026-09-18.** After the first question sent from a pinned test sentence, the chip stops offering the pinned
-  sentences and shows the plugin's own everyday suggestions instead. Closing and reopening the panel,
-  saving the pinned list again, starting a brand new chat, and the Developer tab's force-test-chips switch
-  all failed to bring them back for the rest of the sitting. Seen with Hades running, build `0589565`. It
-  blocked **MEGAERA-01**, **KB-FOLLOWUP-01** and **KB-KILLSWITCH-01**'s Show details half, since no test
-  sentence may be typed by thumb. Earlier sessions already found a pinned batch shows only its first three
-  ([plan 31](planning/31-deck-verification-round.md)) and that the chip itself is a single rotating slot
-  (plan 57); this is a further narrowing. Evidence `docs/test-evidence/plan61-MEGAERA-01-retry2.json` (the
-  full account), `docs/test-evidence/plan61-KB-FOLLOWUP-01-retry2.json`,
-  `docs/test-evidence/plan61-KB-KILLSWITCH-01-retry2.json`. **Likely cause found 2026-09-19, not yet
-  confirmed:** the plugin keeps its own copy of settings in memory and writes the whole copy back on its
-  next save, so an edit made straight to the settings file on disk gets overwritten again — a person
-  changing settings through the plugin's own screens would probably never hit this, so it may be a
-  test-rig problem rather than something a player would ever see. Working around it tonight took reloading
-  the plugin right after every edit to the settings file, before sending anything; even then, the list had
-  to be reordered and the plugin reloaded several times to get the wanted sentence to show first, and the
-  one visible chip stops cycling while the controller's highlight rests on it. Rule for drivers: reload the
-  plugin right after every edit to the settings file, before any question is sent.
+  2026-09-18.** After the first question from a pinned test sentence, the chip switches to the plugin's own
+  everyday suggestions and nothing brings the pinned ones back for the rest of the sitting. It blocked
+  **MEGAERA-01**, **KB-FOLLOWUP-01** and **KB-KILLSWITCH-01**'s Show details half. **Likely cause found
+  2026-09-19, not confirmed:** the plugin overwrites an on-disk settings edit on its next save, which may be
+  a test-rig problem rather than something a player would see. [Detail](roadmap-details.md#the-pinned-test-sentences-stop-showing-after-the-first-question).
 - ★ `[chips]` **A preset chip's icon and its text are colored the same way** — **OPEN, reported by the
   maintainer 2026-09-19.** Only the small square icon at the front of a preset chip should be in the accent
   color; the words after it should stay the normal text color instead of matching the icon.
@@ -130,39 +109,21 @@ starts work outside this.
   (2026-09-18):** the panel-trap entry below now has a known trigger, opening and closing Steam's own on-screen
   keyboard on the question box — worth trying on this hidden-block case too.
 - ★ `[focus]` **The Open Permissions jump lands one toggle above the one it was asked for** — **OPEN,
-  measured 2026-09-16 on build 0fbecb6.** The Open Permissions button under a blocked reply is a real
-  D-pad stop now and A on it does reach the Permissions tab, but the highlight lands on "Save files to
-  Desktop", one row above the "Steam ban lookup" toggle it was supposed to land on. Evidence
-  `docs/test-evidence/plan56-PERM-JUMP-01-open-permissions.json` (the jump itself),
-  `docs/test-evidence/plan56-SMOKE-C-01-toggle-off.json`, `docs/test-evidence/plan56-SMOKE-C-02-toggle-back-on.json`
-  (the setup and restore steps around it). **The *Back to …* return half passed 2026-09-16:** pressing it on
-  the Permissions tab returns to the Main tab with the highlight back on the Open Permissions button that
-  started the jump. Evidence `docs/test-evidence/plan56-PERM-JUMP-01-back-to-main.json`,
-  `docs/test-evidence/plan56-PERM-JUMP-01.summary.json`. **Seen again 2026-09-16** on the Steam-settings card:
-  pressing A on a row there also opens the right Steam page with the highlight one toggle above the row that
-  was pressed, the same shape. Evidence `docs/test-evidence/plan56-SETTINGS-CARD-DPAD-01.summary.json`.
-  **Confirmed on the Deck 2026-09-17, worse than what this entry describes:** pressing Open Permissions now
-  opens the Permissions tab at the very top, on the Back to Main button, nowhere near the toggle it should
-  land on; Back to Main itself still works. Evidence `docs/test-evidence/plan57-QA-PERM-JUMP-01.json`.
+  measured 2026-09-16.** The Open Permissions button under a blocked reply is a real D-pad stop and does open
+  the Permissions tab, but the highlight lands on the wrong row. The Back to Main return itself works
+  correctly. **Confirmed on the Deck 2026-09-17, worse than first measured:** the jump now lands at the very
+  top of the tab, on the Back to Main button, nowhere near the toggle it should reach.
+  [Detail](roadmap-details.md#the-open-permissions-jump-lands-one-toggle-above-the-one-it-was-asked-for).
 - ★ `[focus]` **With Show details open, the chip row cannot be reached by the D-pad** — **OPEN, measured
-  2026-09-16 on build 0fbecb6 and again on build `ca12429`, so it is not something this session's own commits
-  caused.** Open Show details on a reply and press Down to step into its chips and read one — the ring skips
-  the whole chip row and lands on the Session context bar instead. Seen on an instant built-in reply and on a
-  real model reply with seven chips ("Chip 1 of 7" on screen); either way only the first chip can ever be
-  read, and only by starting there before opening anything else. It worked before: the closed
-  CONTEXT-LADDER-01…03 row (verified on the Deck 2026-09-05) had Down entering the chip row and Up walking
-  back out. Evidence `docs/test-evidence/plan56-BUG-chip-ladder-unreachable.json`,
-  `docs/test-evidence/plan56-CONTEXT-LADDER-03-caseB-details-open.json`,
-  `docs/test-evidence/plan56-SPY-REVEAL-01-ladder-walk.json`.
+  2026-09-16 on two separate builds.** Down from Show details skips the whole chip row and lands on the
+  Session context bar; only the first chip can ever be read. It worked before this regression — the closed
+  CONTEXT-LADDER-01… 03 check (verified on the Deck 2026-09-05) had Down entering the chip row and Up walking
+  back out. [Detail](roadmap-details.md#with-show-details-open-the-chip-row-cannot-be-reached-by-the-d-pad).
 - ★ `[focus]` **Reaching the Stop generation button by D-pad while a reply is streaming is hard to find** —
-  **OPEN, found 2026-09-16.** With a reply still being written, Down from the question box stalls (Ask is
-  disabled) and Down from the live streaming answer never reaches Stop generation either; the only route found
-  is the question box, then Right onto the Ask-mode button, then Right again onto Stop generation. Two long
-  replies finished on their own before the ring reached the button by other routes. Not a trap, since Stop can
-  still be reached — just not where a person would first look. Evidence
-  `docs/test-evidence/plan56-GREYED-STEP-OVER-02.summary.json`. **Confirmed on the Deck 2026-09-17:** Down
-  from the question box while a reply is streaming still goes nowhere; Stop generation is reached only by
-  Right, then Right again. Evidence `docs/test-evidence/plan57-QA-GREYED-STEP-OVER-02.json`.
+  **OPEN, found 2026-09-16.** While a reply is being written, Down from the question box or from the live
+  answer never reaches Stop generation; the only route is Right, then Right again from the Ask-mode button.
+  Not a trap, since Stop can still be reached — just not where a person would first look. **Confirmed on the
+  Deck 2026-09-17**, same route needed. [Detail](roadmap-details.md#reaching-the-stop-generation-button-by-d-pad-while-a-reply-is-streaming-is-hard-to-find).
 - ★ `[focus]` **Pressing B while the reasoning display's Show details panel is open does not close it** —
   **OPEN, found 2026-09-17 by the automated rig, during the reasoning-display device measurement.** Steam's
   own Back instead moves the highlight up to the tab row; the reply has no B handling for this panel today.
@@ -217,60 +178,29 @@ starts work outside this.
   maintainer 2026-09-19.** The bonsai icon Decky shows for the plugin, in its own plugin list, is a different
   icon than the bonsai drawn on the tab bar inside the plugin itself. The two should be the same icon.
 - ★★ `[chat]` **A new chat shows the previous chat's last reply until the panel is reopened** — **OPEN, seen
-  2026-09-15 evening.** With a reply still on screen in one chat, moving the chat row to the new-chat position
-  and pressing A made the new chat, but the new chat then showed that earlier reply underneath it, with "…"
-  standing in for the question, its Helpful, Not really and Copy buttons all reachable, and a Session context
-  row showing one turn. Closing the panel and reopening it left the new chat empty, the way a new chat should
-  always start. Evidence `docs/test-evidence/plan55-trap-run3-new-chat-with-live-turn.json` (the walk from the
-  chat row visits Retry, the "…" question, Copy reply text and Read aloud under the New chat slot). **Seen
-  again 2026-09-18, 01:11, build `6d5b83f`:** the shoulder button to the new-chat position, then A, then one
-  Down into the transcript, and the empty new chat showed the older chat's Theseus-and-Asterius reply. The new
-  chat's own saved file already had no turns and already pointed at the new chat, so this is a stale drawing
-  on screen, not a data problem. Closing and reopening the panel cleared it. Reproduced twice now. Evidence
-  `docs/test-evidence/plan61-BUG-ghost-reply-new-chat.json`. **A third sighting 2026-09-18 about 09:30, build
-  `0589565`, and now a recipe that brings it up on demand:** switch to a brand-new chat right after a
-  reply finishes in another chat, and the new chat shows that finished answer, with a placeholder standing in
-  for the question and working Helpful, Not really and Read aloud buttons underneath it. Closing and
-  reopening the panel clears it every time. Three hits tonight in all, two by accident and one on this
-  recipe. Evidence `docs/test-evidence/plan61-ghostreply-try1.json`. **A fourth sighting 2026-09-18,** on its
-  own while a try at the panel-trap bug above was being set up, same shape as before. No new evidence file.
+  2026-09-15 evening.** A new chat can open showing the previous chat's last reply still on screen, with its
+  buttons still reachable, even though the new chat's own saved file is empty and correct. Closing and
+  reopening the panel always clears it. **Reproducible on demand as of 2026-09-18** (switch to a brand-new
+  chat right after a reply finishes elsewhere); four sightings in all, newest evidence
+  `docs/test-evidence/plan61-ghostreply-try1.json`. [Detail](roadmap-details.md#a-new-chat-shows-the-previous-chats-last-reply-until-the-panel-is-reopened).
 - ★★ `[chat]` **A chat that is still writing does not look busy from another chat** — **OPEN, found
-  2026-09-18.** While one chat is still writing and you switch to another chat, nothing tells you the first
-  one is busy: its dot in the chat row looks like every idle chat's dot, with no hollow cyan ring and no spark
-  beside its ghost title; the other chat's own Ask button reads ready instead of busy; and when the first chat
-  finishes, its dot never turns green. Seen on three separate tries. The code already has both dot states and
-  the ask flow does mark a chat as generating and later clear it, so the state is not reaching the row on the
-  device — worth a closer look, not yet explained. Evidence
-  `docs/test-evidence/plan61-CHAT-SLOTS-V3-05a-busyhalf.json`, `docs/test-evidence/plan61-CHAT-SLOTS-V3-06a.json`,
-  `docs/test-evidence/plan61-CHAT-SLOTS-V3-06b.json`.
+  2026-09-18.** Switch away from a chat that is still writing and nothing says so: its dot looks idle, the
+  other chat's Ask button reads ready, and the dot never turns green when it finishes. Seen on three separate
+  tries. The code already tracks a generating state, so it is not reaching the row on the device — not yet
+  explained. [Detail](roadmap-details.md#a-chat-that-is-still-writing-does-not-look-busy-from-another-chat).
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a
   blanket rule was tried and reverted in favour of Steam's native outline.
-- ★★ `[focus]` **The Show details chip ladder is not a D-pad stop** — **OPEN, found 2026-09-17 while running
-  the reasoning display's Deck rows.** With Show details open, Right from Hide details stalls, Down skips
-  straight to the Session context strip, and Up from there lands back on Hide details — so no chip beyond
-  the first can ever be selected by a controller, only read on the page. This is not new: CONTEXT-LADDER-03's
-  2026-09-16 note already saw the ladder skipped, on an instant built-in reply; this run confirms the same gap
-  on a real model reply, with a thinking chip among the skipped chips. Evidence
-  `docs/test-evidence/plan57-REASONING-05.json`. **Seen again 2026-09-18, on a real model reply with a
-  two-button follow-up menu:** with Show details open, Down from Hide details now lands on the new "From the
-  notes" row, then the Session context strip, never on either menu button; Up from the strip jumps straight
-  back to Hide details, skipping the notes row and the menu too. The same skip now covers the follow-up menu
-  buttons, not just the chips. Evidence `docs/test-evidence/plan61-CONTEXT-LADDER-03-caseB.json`.
-  **Seen again 2026-09-18, on the notes block's own ladder walk, on the build with the upward-walk fix:**
-  Down from Hide details now stops at the block's own header first, then the session context strip, Save
-  chat to Desktop, a test chip, the question box and Ask — seven visible stops with no loop — but the chip
-  ladder itself is still not among them; only the first chip can ever be read by a controller. Evidence
-  `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-01.json`, `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-01-ladder-walk-21b53b9.json`.
+- ★★ `[focus]` **The Show details chip ladder is not a D-pad stop** — **OPEN, found 2026-09-17.** With Show
+  details open, no chip beyond the first can ever be selected by the D-pad, only read on the page; this
+  broke a walk that used to work. **Seen again 2026-09-18 on a reply with a notes block:** the walk down
+  from Hide details now stops at seven visible rows with no loop, but the chip ladder is still skipped every
+  time — only the first chip can ever be read. Evidence
+  `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-01-ladder-walk-21b53b9.json`. [Detail](roadmap-details.md#the-show-details-chip-ladder-is-not-a-d-pad-stop).
 - ★★ `[focus]` `[reply]` **Walking a reply with the D-pad while it is still being written loses the
-  highlight** — **OPEN, found 2026-09-18.** Walking a reply with the D-pad while it is still being written
-  makes the view keep following the new text, and the highlighted control scrolls off screen with it: six of
-  the eight stops the ring visited were not visible (all but one fully off screen, the other one a third
-  hidden behind the question box), and walking back down looped back on itself instead of reaching the
-  bottom. Build `0589565`, a 62-second reply with thinking set to High, nothing running. The token-streaming
-  feature closed to Done earlier tonight on its 4 September checks, which measured the view following with
-  nobody touching the D-pad; this is the case those checks did not cover — walking with the D-pad while a
-  reply is still streaming in. Evidence `docs/test-evidence/plan61-QA-FREE-PLAY-01-streaming.json`,
-  `runs/plan61-QA-FREE-PLAY-01-streaming.json`.
+  highlight** — **OPEN, found 2026-09-18.** The view keeps following new text as it streams in, and the
+  highlighted control scrolls off screen with it: six of eight stops on one walk were not visible, and
+  walking back down looped instead of reaching the bottom. Evidence
+  `docs/test-evidence/plan61-QA-FREE-PLAY-01-streaming.json`. [Detail](roadmap-details.md#walking-a-reply-with-the-d-pad-while-it-is-still-being-written-loses-the-highlight).
 - ★★ `[ollama]` **The very first model ticked in a fresh download picker starts downloading right away, with
   no chance to back out** — **OPEN, one sighting 2026-09-19, cause not looked at.** Opening the pull picker
   fresh and ticking the first model in the list (`gemma3:1b`) started it downloading immediately, with no
@@ -280,29 +210,17 @@ starts work outside this.
   downloaded this way also never joined the saved try order, even though it installed successfully. Evidence
   `docs/test-evidence/plan61-PULL-MISSING-NAME-01.json`.
 - ★★ `[ollama]` `[focus]` **A tap outside the AI models screen started the queued downloads and left the
-  D-pad stuck in the Ollama tab** — **OPEN, reported 2026-09-16, not reproduced.** The maintainer did not
-  press Done; they think they tapped outside the screen, and afterwards the models started downloading and
-  the D-pad could not move in the Ollama tab, as if the screen were still open. Two things read in the code,
-  neither proven on the device: (a) a tap outside closes the popup through Steam's own path, which never runs
-  the plugin's own close (`onClose` in `src/features/plugin-shell/useOllamaModelsHubModal.tsx` runs only from
-  the screen's own Done and Cancel), so the tab restore and the return of the ring to the opener in
-  `finalizeShowModalAndRestoreActiveTab` (`src/hooks/useBonsaiPluginShell.ts`) are skipped and nothing owns
-  the ring afterwards; the "Manage AI models…" button also never registers itself as the return-focus owner
-  the way the two try-order buttons beside it do (`rememberModalReturnFocus`), so even a clean close returns
-  the ring to whichever opener was remembered last; (b) the last frame of the maintainer's recording shows the
-  Pull selected button lit, at the popup's bottom edge, so a tap meant for outside may have landed on it and
-  started the queued download. Needs a device reproduction with an empty queue, so nothing downloads.
+  D-pad stuck in the Ollama tab** — **OPEN, reported 2026-09-16, not reproduced.** The maintainer thinks a
+  tap landed outside the screen instead of on Done; the queued models then started downloading and the
+  D-pad could not move in the Ollama tab, as if the screen were still open. Read in the code but not proven
+  on the device. Needs a reproduction with an empty download queue.
+  [Detail](roadmap-details.md#a-tap-outside-the-ai-models-screen-started-the-queued-downloads-and-left-the-d-pad-stuck-in-the-ollama-tab).
 - ★★ `[ollama]` **The licence filter now hides models the old Policy buttons never did — needs the
   maintainer's word** — **OPEN, found 2026-09-20, waiting on the maintainer to confirm this is what they
-  wanted.** On the default "open source only" choice, the AI models list now shows 17 of 26 models; 7
-  open-weight and 2 unknown-licence models are not shown at all until the filter is changed. Before this
-  landed, all 26 were always listed, and picking an open-weight one raised a box explaining its licence
-  that you could then accept — that box still works once the filter is relaxed. The brief for this change
-  did say the licence choice becomes one filter among filters, and that is the point of the change, so a
-  filter that filters is a fair reading of what was asked for, and it sits with the project's own leanings
-  toward open source. But a third of the catalogue changing what is visible, on the default setting, is
-  not a small detail, so this needs the maintainer's own word before it counts as settled.
-  [Plan](planning/62-feature-session-five.md)
+  wanted.** On the default "open source only" choice the AI models list now shows 17 of 26 models, where
+  before all 26 were always listed. A filter that filters is a fair reading of the brief, but a third of
+  the catalogue changing on the default setting needs the maintainer's own word before it counts as settled.
+  [Detail](roadmap-details.md#the-licence-filter-now-hides-models-the-old-policy-buttons-never-did).
 - ★★ `[platform]` `[QA]` **The check everyone runs before a commit has been failing on a clean tree since at
   least 18 September** — **OPEN, found 2026-09-20.** Nothing a person using the plugin would notice. Seven
   measured things sit worse than their best and three are past a hard limit: the roadmap is 121 KB against a
@@ -317,36 +235,14 @@ starts work outside this.
   speech model. If a second caller asks for it with a different model, it restarts to suit the second, and the first is
   never told — it simply finds the server gone. Only one thing uses it today, so nothing is broken now. It becomes real
   the moment a second listener is added, a wake word for example.
-- ★★★ `[focus]` **The panel can get into a state where pressing Down stops half way and the Ask button is out of reach** —
-  **OPEN, found 2026-09-05.** Down walked as far as the answer and stopped dead: ten presses, no movement, Left and Right
-  dead too, only Up escaping. The Ask button, the preset chips and the question box were all on screen below and none
-  could be reached. It happened on a chat with history and on a brand new empty one, in both Ask modes, so the mode is
-  not the cause. **Only a Decky loader restart clears it**, not a panel reopen — so this is stale navigation state, not a
-  permanently trapping control. **A fix landed 2026-09-05, but the entry stays here rather than in Verify**, because the
-  fault never reproduced on demand, so nothing proved the fix against it. It closes only when the panel is driven hard
-  over time and the state does not come back. The unrevealed-spoiler entry above is most likely the same fault and closes
-  with it. The mechanism, the signature to chase and every run, including how it was finally reproduced on
-  demand:
-  [detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
-  **The trigger is now known, found 2026-09-18.** Pressing Ask can leave the highlight stuck on the question
-  box, unable to move down or right, even when the box itself was never pressed. **By the second half of
-  tonight's run, with a game still open, this was happening on almost every question sent, not just once in
-  a while** — raising how urgent this entry is. The only thing that reliably clears it: back out with the
-  Steam button, close the whole Quick Access Menu, and reopen it — going up and back down, or switching the
-  panel's tabs, does not. Full run history and the exact steps:
-  [detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
-  **One more try 2026-09-18, later in the same night:** with Hades still running, one question sent with the
-  usual workaround went through cleanly and did not trap — a sample of one, so the "nearly every send" reading
-  from earlier tonight still stands. Evidence `docs/test-evidence/plan61-ASKBAR-FOCUS-TRAP-03-tally.json`.
-  **Not seen at all on 2026-09-19:** about ten questions were sent with Hollow Knight, Half-Life 2, Hades and
-  Black Mesa running in turn, and the trap never happened once. The one thing done differently from the
-  night before is that the plugin was reloaded after every settings edit tonight (see the pinned-chip entry
-  above), which is worth trying again before calling this closed.
-  **A separate, smaller fault was found and fixed 2026-09-20** while chasing this very entry: pressing Ask
-  left Down doing nothing for as long as an answer was arriving, though Right kept working throughout — and
-  it reproduces every time, unlike this one. Now fixed and moved to Verify as **ASKBAR-DOWN-TO-STOP-01**; it
-  may well be part of what has been feeding these reports. But it is not this bug — today's runs saw no dead
-  Left or Right, and nothing needed a full Quick Access Menu close to clear, so this entry stays open.
+- ★★★ `[focus]` **The panel can get into a state where pressing Down stops half way and the Ask button is
+  out of reach** — **OPEN, found 2026-09-05.** Down walks as far as the answer and stops dead, Left and
+  Right dead too; only a full loader restart clears it, not just reopening the panel. **Trigger found
+  2026-09-18:** pressing Ask can leave the highlight stuck on the question box, happening on almost every
+  question sent by night's end; only closing the whole Quick Access Menu and reopening it clears it. **Not
+  seen at all on 2026-09-19** across about ten questions in four games. A separate, related fault (Down
+  doing nothing while an answer arrives) was fixed 2026-09-20 and is now its own row, but this entry's own
+  symptoms were not seen that day, so it stays open. [Detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
 - ★★★ `[layout]` `[focus]` **The new Session tab cannot be reached with the D-pad** — **OPEN, found on
   the Deck 2026-09-21.** Both tabs are drawn on the opened Show details panel, but the highlight will not land
   on them: walking down from Hide details goes notes block, then straight out to the question box, stepping
@@ -364,19 +260,10 @@ starts work outside this.
   closes it. Evidence `docs/test-evidence/plan62-MODELS-FILTERS-01-A-closes-screen.json`.
 
 - ★★★ `[reply]` **A name-withheld boss question on a story-protected game comes back with no spoiler box** —
-  **OPEN, found 2026-09-18.** Nothing running, no consent phrase anywhere in the chat: asked about "the boss
-  past the crystal spike area … the one that looks just like me" in Hollow Knight, the reply named Broken
-  Vessel and gave its tactics in plain text with no cover; asked about "the boss at the end of the first area"
-  in Hades, the reply named Theseus and Asterius the same way. Two games, both builds, the same shape. The
-  plan 54 rows still marked owed (STRAT-SPOIL-NAME-01) would fail on this evidence. Evidence
-  `docs/test-evidence/plan58p1-M-hk-boss-before.json`, `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-02.json`.
-  **Seen again 2026-09-18 with Hades actually running and streaming on:** the same question, asked without
-  naming a boss, still came back in plain text with no cover at any point. So the game being detected and
-  running does not close the box either — this is not only a nothing-running gap. Evidence
-  `docs/test-evidence/plan61-HADES-UNNAMED-STREAM-01-retry2.json`, `docs/test-evidence/plan61-HADES-UNNAMED-01-retry2.json`.
-  **Sighting, 2026-09-19, Hollow Knight:** the same kind of question ("what is waiting at the end of the
-  game") came back this time WITH its cover in place. Not closing this entry on one clean sighting, but
-  worth recording. Evidence `docs/test-evidence/plan61-REPLY-STOPS-MIRROR-01-retry2.json`.
+  **OPEN, found 2026-09-18.** Asking about a boss without naming it, in Hollow Knight or Hades, got it named
+  and its tactics given in plain text with no cover — with nothing running, and with the game running and
+  streaming. **Sighting, 2026-09-19, Hollow Knight:** the same kind of question came back WITH its cover in
+  place — not closing the entry on one clean sighting, but worth recording. [Detail](roadmap-details.md#a-name-withheld-boss-question-on-a-story-protected-game-comes-back-with-no-spoiler-box).
 
 - ★★★ `[ui]` **The UI size setting barely changes anything** — **OPEN, measured on the Deck 2026-09-20;
   needs a decision before code.** At its biggest step the chat row grew 9 pixels, one thing was pushed out of the
@@ -410,17 +297,11 @@ replace it with a specific issue when one exists.
   One check owed first: the question bubble turns its own outline off and gets no ring rule, so look on the Deck at what focus shows.
 - ★★ `[chat]` **First-run ghost "New chat" label at the create position** — **OPEN, parked by decision.** The create position is the
   literal `[+]`, re-confirmed on board 8f and again in the v3 rows. Reopen that decision before building it.
-- ★★ `[reply]` **Headline first: every answer opens with one line that stands alone** — **OPEN, filed 2026-09-08. Not yet
-  (D99, 2026-09-12): it waits for its own go.** The model would be asked to start every answer with one short sentence that
-  carries the point and gives nothing away, so the reply-ready popup, a spoken answer and any headset card always have a good
-  first line to show. Sits beside Terse mode without replacing it. No headset or PC test needed.
-  **The count that decided it ran 2026-09-12:** 2 of 10 answers already opened with a sentence that stands alone, and 0 of 10
-  gave anything away. By the rule the maintainer locked (D97 call 4), that poor score means build it — then they read the
-  count and said not yet. **When the go comes, the first step is still to count the 2026-09-07 answer-first run the same
-  way**, because that run may already be the change. Stars stay at two. [Plan](planning/49-steam-frame-features.md) ·
-  [Second look § 2](planning/52-frame-features-second-look.md#2-headline-first-the-weakest-one-and-what-to-do-instead) ·
-  [Bench findings § 4](planning/53-steamvr-bench-findings.md#4-the-headline-first-count-run-the-same-morning) ·
-  [The count, sentence by sentence](planning/assets/53-headline-count-2026-09-12.md).
+- ★★ `[reply]` **Headline first: every answer opens with one line that stands alone** — **OPEN, filed
+  2026-09-08. Not yet (D99, 2026-09-12): it waits for its own go.** The model would open every answer with
+  one short sentence that carries the point and gives nothing away. **The 2026-09-12 count:** only 2 of 10
+  answers already opened that way and 0 of 10 gave anything away — by the maintainer's own rule that means
+  build it, but they read the count and said not yet. [Detail](roadmap-details.md#headline-first-every-answer-opens-with-one-line-that-stands-alone).
 - ★★ `[reply]` **The answer's first lines in the reply-ready toast** — **OPEN, planned 2026-09-05, calls locked (D63).** When an
   answer finishes while the menu is closed, the toast says only *Reply ready*. It would read *bonsAI* over the first lines of
   the answer, in every mode, for eight seconds, so a short answer is read without leaving the game; tap still opens the panel.
@@ -443,15 +324,11 @@ replace it with a specific issue when one exists.
   on, stop, next. One setting, off by default. The middle position of the Voice replies setting (D99) is the signal this
   hangs off: an answer to a spoken question is read out, then the mic reopens. [Plan](planning/49-steam-frame-features.md) ·
   [Second look § 3](planning/52-frame-features-second-look.md#3-voice-follow-ups-a-sound-a-short-listen-a-few-words).
-- ★★★ `[layout]` **Give the reclaimed height to the transcript** — **OPEN, measured 2026-09-16 on the Deck's built-in
-  screen, no single cause, not built in plan 56.** On the Deck's own 1280 by 800 screen the panel is 454 pixels tall, not
-  the 696 every earlier number assumed. There is no gap above the dock at all, because even a two-turn chat overflows the
-  panel by 321 pixels and scrolls under the dock: a person sees about 143 pixels of chat, roughly three lines. The fixed
-  rows take 311 of the 454 pixels before any chat: Steam's header (64), the tab bar plus its reserve (24), the chat slot
-  row (54), a 12-pixel gap, and the dock (157). Getting more chat on this screen means shrinking or hiding one of those
-  rows, which is a design call for the maintainer, not a fix. External-monitor record:
-  [planning/30-collapsing-tab-bar.md](planning/30-collapsing-tab-bar.md) § 8 ·
-  [plan 56 block 0](planning/56-feature-session-four.md#block-0--hygiene-and-three-measurements-the-session-alone-about-forty-minutes).
+- ★★★ `[layout]` **Give the reclaimed height to the transcript** — **OPEN, measured 2026-09-16 on the Deck's
+  built-in screen, no single cause, not built in plan 56.** The panel is only 454 pixels tall on the Deck's
+  own screen, not the 696 every earlier number assumed, so even a two-turn chat overflows it and a person
+  sees about three lines of chat. Fixed rows take 311 of the 454 pixels before any chat starts. Getting more
+  room means shrinking or hiding one of those rows — a design call for the maintainer. [Detail](roadmap-details.md#give-the-reclaimed-height-to-the-transcript).
 - ★★★ `[ollama]` **Dynamic keep-alive / smart unload** — **OPEN, research spike.** Hold models loaded, or unload when a game takes
   focus on the Deck APU? The spike decides go or no-go; no production unload before it.
 - ★★★ `[ollama]` **Per-mode latency timeouts** — **OPEN, weighed and deliberately not built 2026-09-05.** Separate warning and
@@ -548,19 +425,12 @@ replace it with a specific issue when one exists.
   the Deck sees as a real controller, a macro runner gated on real UI state, and one recording pipeline. Primitives land upstream in
   decky-plugin-studio. Next: spikes S1 to S3. [Plan](planning/19-controller-macro-test-rig.md), [program](planning/21-ai-owned-testing-program.md).
 - ★★★★★ `[platform]` **Steam Controller copilot (Ibex gen-2)** — **OPEN.** AI copy tuned to gen-2 hardware.
-- ★★★★★ `[platform]` **The floating panel inside SteamVR** — **OPEN, filed 2026-09-08; the first step is a ★★ test to find
-  out.** bonsAI's panel floating over any VR game, drawn by a small program on the PC that runs SteamVR, so it serves every
-  SteamVR headset and the Frame comes along. Not a Decky plugin. The in-game answer surface that is blocked on the Deck is open
-  here. **Locked rule (D97):** the panel goes only through SteamVR's own panel door and never touches the game itself — in file,
-  in memory or in input — because anything else risks an anti-cheat ban for someone playing online with bonsAI open. Best
-  effort: each game's anti-cheat sets its own policy, and the README will say so once the panel ships.
-  **Bench result, 2026-09-12: the panel works.** A panel showing a sample bonsAI answer appeared inside the headset view over a
-  running SteamVR scene, with no plugin code at all, drawn entirely through SteamVR's own door. The in-headset menu is confirmed
-  to be a web page, the same way the Deck's menu is. **Two things still unknown:** pointing at the panel, because the pretend
-  headset has no controllers and a real one is needed; and whether the small notification card SteamVR accepted actually drew on
-  screen. [Plan](planning/49-steam-frame-features.md) · [PC setup](planning/50-steamvr-pc-setup.md) ·
-  [The anti-cheat rule in full](planning/52-frame-features-second-look.md#4-the-floating-panel-and-anti-cheat) ·
-  [Bench findings](planning/53-steamvr-bench-findings.md) · [The picture](planning/assets/53-panel-in-headset-2026-09-12.jpg).
+- ★★★★★ `[platform]` **The floating panel inside SteamVR** — **OPEN, filed 2026-09-08; first step is a ★★
+  test to find out.** bonsAI's panel floating over any VR game, drawn by a small PC program, not a Decky
+  plugin. **Locked rule (D97):** it goes only through SteamVR's own panel door and never touches the game
+  itself, to avoid an anti-cheat ban. **Bench result, 2026-09-12: the panel works** — a sample answer
+  appeared inside the headset view with no plugin code at all. **Still unknown:** pointing at the panel
+  (needs a real headset) and whether the notification card SteamVR accepted actually drew on screen. [Detail](roadmap-details.md#the-floating-panel-inside-steamvr).
 - ★★ `[reply]` **The folded reasoning line in the character's own voice** — **OPEN, optional, filed 2026-09-16 (D106).**
   Builds only after the reasoning display's first version has landed and been looked at. The mockup page showed the same
   folded line written by the model itself in three characters' voices: Ali G, "See the booyakasha · 41 s"; GLaDOS, "Expose
@@ -574,20 +444,12 @@ replace it with a specific issue when one exists.
   [Feasibility](planning/12-deep-mod-ai-hints-feasibility.md).
 - ★★★★★★ `[platform]` **Native QAM shortcut tile** — **OPEN, upstream research.** A separate left-rail entry beneath the Decky icon.
   [Feasibility](planning/11-native-qam-tile-feasibility.md).
-- ★★★★★★ `[platform]` **One decision for three items: the SteamVR panel, leaving Decky, and reopening llama.cpp** —
-  **OPEN, filed 2026-09-08. Not yet (D99, 2026-09-12): nothing is built until the maintainer says.** The floating panel needs
-  bonsAI to run outside Decky, which is what the Native QAM shortcut tile research keeps circling, and any model on the Frame
-  itself runs through llama.cpp, not Ollama. Three entries, one question: **does bonsAI grow a second way to run.** Decide it
-  once. **The gap underneath it: there is no network door into bonsAI's Python side today**, so a panel on the PC would have a
-  screen and no brain.
-  **The price is now known, which is what D97 call 2 asked for.** The check ran 2026-09-12: the plugin's Python side started
-  outside Decky on the maintainer's Windows PC behind a fifty-line stand-in for Decky, nine calls the frontend normally makes
-  all came back with a working answer, and it reached Ollama on that PC. So "run the same Python side on the PC too" is a
-  priced decision rather than a guess. What is missing: a small starter program, a way for a panel to reach it on the same
-  machine, and PC-shaped answers for which game is running, the speaker, and the screenshot folder. llama.cpp stays closed.
-  [Plan](planning/49-steam-frame-features.md) ·
-  [Second look § 5](planning/52-frame-features-second-look.md#5-the-second-way-to-run-the-gap-plan-49-underplayed) ·
-  [Bench findings § 3](planning/53-steamvr-bench-findings.md#3-the-plugins-python-side-on-this-pc-it-runs).
+- ★★★★★★ `[platform]` **One decision for three items: the SteamVR panel, leaving Decky, and reopening
+  llama.cpp** — **OPEN, filed 2026-09-08. Not yet (D99, 2026-09-12): nothing built until the maintainer
+  says.** One question underneath all three: does bonsAI grow a second way to run — there is no network
+  door into its Python side today, so a panel on the PC would have a screen and no brain. **The price is
+  now known (2026-09-12):** the Python side ran outside Decky on a Windows PC and all nine calls it normally
+  makes came back working. Still missing: a starter program and a way for a panel to reach it. [Detail](roadmap-details.md#one-decision-for-three-items-the-steamvr-panel-leaving-decky-and-reopening-llamacpp).
 - ★★★★★★ `[platform]` **Remote Play diagnostics layer** — **OPEN.** Streamed-gameplay answers weight encode latency and host-vs-client
   fixes. Noted in [09-steam-frame-companion-feasibility.md](archive/09-steam-frame-companion-feasibility.md) § B8.
 - ★★★★★★ `[reply]` **In-game answer surface** — **OPEN, split 2026-09-05.** Read an answer without leaving the game. The full
@@ -615,26 +477,15 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 
 ### Bugs that need verification
 - ★ `[ask]` `[focus]` **Down did nothing for the whole time an answer was arriving** — **VERIFY, fixed
-  2026-09-20.** Press Ask, and the D-pad ring lands on the question box, now emptied. Pressing Down did
-  nothing at all until the answer finished, though Right kept working the whole time, reaching the
-  Ask-mode button and then Stop. The Ask button greys out while a question is being answered, and Down was
-  written to do nothing in that window on the idea that nothing else was live — but the Stop button is
-  live then, and is exactly what a person wants to reach. Down now goes to Stop instead. Row
-  **ASKBAR-DOWN-TO-STOP-01**, not yet run on the Deck. Evidence
-  `docs/test-evidence/plan62-askbar-control-before-send.json`,
-  `docs/test-evidence/plan62-ASKBAR-FOCUS-TRAP-reproduced-after-send.json`,
-  `docs/test-evidence/plan62-ASKBAR-FOCUS-TRAP-after-answer-finished.json`.
+  2026-09-20.** After pressing Ask, Down did nothing at all until the answer finished, even though the Stop
+  button was live and reachable by Right the whole time — the wrong control was made to swallow Down. Down
+  now goes to Stop instead. Row **ASKBAR-DOWN-TO-STOP-01**, not yet run on the Deck.
+  [Detail](roadmap-details.md#down-did-nothing-for-the-whole-time-an-answer-was-arriving).
 - ★ `[ollama]` **Mistyping one model name in a several-model download loses it without saying so** — **VERIFY,
   fixed 2026-09-15.** Downloading several models at once now says which name it could not find and still
-  starts the good ones, instead of quietly dropping the bad one. Row **PULL-MISSING-NAME-01**: on the Ollama
-  tab's pull picker, choose two real models plus a name the registry lacks, press Pull selected, and check for
-  a toast that says the download started and names the one it could not find. Model downloads were allowed
-  again by the maintainer on 2026-09-19 (D113), so this row is runnable in the next Deck block. **Tried on
-  the Deck 2026-09-19: blocked.** Typing a made-up name needs Steam's on-screen keyboard, and this rig has
-  no way to see or check its key presses, so nothing was typed. One thing became clear from trying: the
-  picker's tick-boxes only ever offer real, known models — a made-up name can only be tried through the
-  picker's own custom-name field, a separate one-off box, not the list of ticks. Finishing this row needs a
-  person at the Deck to do the typing. Evidence `docs/test-evidence/plan61-PULL-MISSING-NAME-01.json`.
+  starts the good ones. Row **PULL-MISSING-NAME-01**. **Tried on the Deck 2026-09-19: blocked** — a made-up
+  name needs Steam's on-screen keyboard, which this test rig cannot drive, so nothing could be typed;
+  finishing this row needs a person at the Deck. [Detail](roadmap-details.md#mistyping-one-model-name-in-a-several-model-download-loses-it-without-saying-so).
 
 - ★★ `[ask]` `[layout]` **Typed text ran off the right edge of the panel at the bigger UI size** — **VERIFY,
   found and fixed on the Deck 2026-09-20.** The mirror drawing your typed question was 24 pixels wider than its own
@@ -643,46 +494,28 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   change the column's width. Row **UI-SIZE-01**, not seen on the Deck — deploying is blocked. Evidence `docs/test-evidence/plan62-UI-SIZE-outside-handheld.json`.
 
 - ★★ `[ollama]` `[focus]` **Closing the AI models screen could leave the D-pad ring on Steam's own side
-  rail, outside the plugin** — **VERIFY, fixed 2026-09-20.** Found only when the screen was opened from
-  the Ollama tab's "Manage AI models…" button: closing it landed the ring on Steam's own Quick Access
-  rail rather than back on that button, and getting back into the plugin needed an unmarked first press
-  before the shoulder buttons worked again. The screen's other opener already remembered where to send the
-  ring back; this button now does too, with its own separate return id. Row **MODELS-HUB-RETURN-01**, not
-  yet run on the Deck — deploying to the Deck is currently blocked because the plugin folder there is
-  owned by root.
+  rail, outside the plugin** — **VERIFY, fixed 2026-09-20.** Found only when opened from the Ollama tab's
+  "Manage AI models…" button: closing it landed the ring on Steam's own Quick Access rail, needing an
+  unmarked extra press to get back in. It now remembers where to send the ring back, like the screen's
+  other opener already does. Row **MODELS-HUB-RETURN-01**, not yet run on the Deck. [Detail](roadmap-details.md#closing-the-ai-models-screen-could-leave-the-d-pad-ring-on-steams-own-side-rail-outside-the-plugin).
 - ★★ `[ollama]` `[layout]` **The AI models screen showed about two rows of the model list on the Deck's
-  screen** — **VERIFY, built 2026-09-20.** The named cause was wrong and is corrected here: the list's own
-  box was capped at 48 percent of the screen height or 400 pixels, whichever is smaller, and that share is
-  measured against whatever screen the Deck happens to be driving. On an external 1920x1080 monitor that
-  came to 400 pixels and about five rows; on the Deck's own 1280x800 screen it came to about 300 pixels and
-  about three, fewer once the filter chips wrap at the narrower width. The drawing and the maintainer's own
-  count were never in disagreement — they were looking at two different screens. **Fix:** the list now fills
-  the room its own popup body already has, instead of keeping that separate, smaller cap of its own; nothing
-  else about it changed. Expected: about two more rows on an external monitor, about three more on the
-  Deck's own screen. Row **MODELS-LIST-CAP-01**, not yet proved on the device — deploying to the Deck is
-  currently blocked because the plugin folder there is owned by root. [Plan](planning/62-feature-session-five.md).
+  screen** — **VERIFY, built 2026-09-20.** The real cause: the list's box was capped at 48% of screen height
+  or 400 pixels, measured against whatever screen the Deck is driving — an external monitor got about five
+  rows, the Deck's own screen about three. **Fix:** the list now fills the room its popup body already has.
+  Row **MODELS-LIST-CAP-01**, not yet proved on the device — deploying is currently blocked because the
+  plugin folder there is owned by root. [Detail](roadmap-details.md#the-ai-models-screen-showed-about-two-rows-of-the-model-list-on-the-decks-screen).
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —
   **VERIFY, landed 2026-09-15.** The tab bar's pop-up strip now always ends fully hidden a fraction of a second
   after it closes, even when its fade is stalled by a game running full screen, so no see-through copy of it
   can be left sitting over the suggestion chips. The exact reason the fade stalls could not be proven on the
   rig, which has no touch, so the fix force-finishes the close with a plain timer either way. Row
   **TAB-BAR-GHOST-01**, needs a finger, and it is on the maintainer's checklist.
-- ★★★ `[chat]` **Clear cache cleared the screen but not the session** — **VERIFY.** Fixed and confirmed 2026-08-27, and again on the
-  Deck 2026-09-03. The orphan half is measured: the chat stays behind after a clear, so each clear-and-reask cycle leaves one more
-  chat in the rotation — a follow-up, not a regression. Only the mid-generation half is still owed: clearing while a reply is still
-  being written (unit-tested, not reproducible by hand yet). Row **CLEAR-CACHE-01**. **Tried on the Deck
-  2026-09-18:** the D-pad walk from Ask to Clear cache took about 48 seconds and the reply finished in 43, so
-  Clear landed on an already-finished answer, not a mid-answer one. Next try: switch tabs with the shoulder
-  button and use a slower Deep-thinking question. Evidence
-  `docs/test-evidence/plan61-CLEAR-CACHE-01-midanswer.json`. **Tried again on the Deck 2026-09-18, still
-  BLOCKED:** using the shoulder button to switch tabs got to Clear cache in 63 seconds, but the reply (a
-  slower, high-thinking question) had already finished at about 50 seconds, so Clear again landed on a
-  finished answer, not one still being written. Clear itself worked cleanly: an empty transcript, and a fresh
-  question started a clean session. Two tries tonight, both too slow to catch a reply mid-write. What is
-  needed next is a reply that takes longer than about 70 seconds — a running game, or the sixty-tip question
-  from SOFT-PREDICT-01 — or the maintainer's word to close this half as covered by its unit test instead.
-  Evidence `docs/test-evidence/plan61-CLEAR-CACHE-01-midanswer-retry.json`.
-  [Why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way).
+- ★★★ `[chat]` **Clear cache cleared the screen but not the session** — **VERIFY.** Fixed and confirmed
+  2026-08-27 and 2026-09-03; the orphan-chat half is a measured follow-up, not a regression. Only the
+  mid-generation half is still owed: clearing while a reply is still being written. Row **CLEAR-CACHE-01**.
+  **Tried twice on the Deck 2026-09-18, both too slow:** Clear landed on an already-finished reply both
+  times; Clear itself worked cleanly. Needs a reply over about 70 seconds to catch it mid-write, or the
+  maintainer's word to call this covered by its unit test instead. [Detail](roadmap-details.md#clear-cache-cleared-the-screen-but-not-the-session).
 ### Features that need verification
 
 - ★★★★ `[ask]` **A chat carries what it has already covered into the next question** — **VERIFY, built 2026-09-21.**
@@ -705,101 +538,57 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   2026-09-21 and FAILED**: both tabs are drawn, but the highlight never lands on them, so the Session tab
   cannot be opened at all — filed as its own three-star bug above. [Plan](planning/62-feature-session-five.md)
 
-- ★★ `[chat]` **The game a chat belongs to, above its title** — **VERIFY, built 2026-09-20 (lane G).**
-  The name now shows only while the ring is on the row, with the empty line still held open so the row's
-  height never changes. Built in the same commit: the chat's own name was sitting off the row's middle,
-  because a small × for deleting the chat used to be part of what got centred; pinning the × to the
-  right-hand edge instead fixes that. **Measured on the Deck 2026-09-20: with the ring on the row the offset
-  is exactly 14 pixels and the × is the whole of it, because the chat previews either side are hidden while
-  the row is focused — so this change straightens that state completely, and that is the state the game name
-  shows in.** At rest the previews are back and the offset was 24 pixels, of which ~10 remains: they are
-  different widths (14 and 43 measured) and shift the name by an amount that changes with the neighbours'
-  names. Cosmetic and low priority now, since the game line is blank at rest, leaving only the dots to look
-  uneven against. An earlier note here claimed 24 was the figure to fix and asked for a decision; that read
-  the resting state and was withdrawn. Row **CHAT-SLOTS-V3-14c**, **run on the Deck 2026-09-21 and PASSED**: with the highlight on the row the
-  name is half a pixel off the row's centre, the delete cross sits outside the centred group, and the blank
-  game line holds its 11 pixels in both states. Two notes: the row is 4 pixels taller while highlighted (55
-  to 59), and the game name itself could not be seen because this chat has no game attached. [Plan](planning/62-feature-session-five.md) ·
-  [Board](https://claude.ai/artifact/31aLBi17SH7AydhYfGYjBq)
+- ★★ `[chat]` **The game a chat belongs to, above its title** — **VERIFY, built 2026-09-20 (lane G).** The
+  name shows only while the ring is on the row, with the row's height held steady either way; the chat's
+  delete cross, which used to pull the name off-centre, is now pinned to the right-hand edge. Row
+  **CHAT-SLOTS-V3-14c**, **run on the Deck 2026-09-21 and PASSED** — the layout holds up, though the game
+  name itself could not be seen since this test chat has no game attached. [Detail](roadmap-details.md#the-game-a-chat-belongs-to-above-its-title).
 
 - ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60 (D110).** Each chip now looks raised: a thin light line along its top edge and a soft shadow beneath it. The two chips sit 6 pixels apart instead of 4. In decode, static and carousel mode there is now 8 pixels of open space between the chips and the question box, where before they touched (fade mode was already open and keeps its own spacing). The word "Tip" became a small dot, the colour on the tags and on the resolving-text label is quieter, and the chip the controller is on now shows a light bar along its bottom edge instead of the old blue outline — a ring around the chip that nobody could actually see is gone too. Passed on the Deck by measurement: rows 02, 03, 04, 05 and 06 (the one-chip check), and 08. **Row 09 failed on the Deck 2026-09-18** — a real knowledge-base chip showed with no Tip dot — and is filed as its own bug, below. Still owed: the maintainer's own look at rows 01 and 05, from the three screenshots named in the evidence file, and row 07 (reduced motion), both on the maintainer's own page; and a look at the help and agent chips, which were not on screen during this run. Italics were tried earlier for the label and turned down. [Plan](planning/60-chip-button-restyle.md) · evidence `docs/test-evidence/plan60-QA-chip-button.json`.
 
 - ★★ `[layout]` `[voice]` `[focus]` **Read aloud is a small speaker on the Helpful row, not a dividing
-  line** — **VERIFY, built 2026-09-20 (lane R).** The full-width Read aloud line is gone. A small speaker
-  sits at the right-hand end of the Helpful / Not really row instead, quiet until the ring reaches it then
-  full strength, the same treatment as the microphone in the Ask box, and it turns into a red stop while the
-  Deck is talking. It still shows up on an older answer with no thumbs row, and Left/Right on that row still
-  reach it once the thumbs are greyed out. **Measured on the Deck 2026-09-20, before the change:** taking
-  the line out gives back 29 pixels on every finished answer. Row **READ-ALOUD-07**, **run on the Deck 2026-09-21 and PASSED** the two
-  things that were owed by eye, as numbers instead: the speaker is 30 by 32 sitting flush with the row's
-  right-hand end, and its opacity at rest is 0.45, which is the 45 per cent the plan asked for. Still owed:
-  what it does on an answer stopped part-way. The write-up's claim that it matches the Ask box microphone is
-  wrong — that microphone reads fully opaque at rest. [Plan](planning/62-feature-session-five.md) ·
-  [Board](https://claude.ai/artifact/31aLBi17SH7AydhYfGYjBq)
+  line** — **VERIFY, built 2026-09-20 (lane R).** A small speaker sits at the right end of the Helpful / Not
+  really row, quiet until the ring reaches it, turning into a red stop while the Deck is talking; removing
+  the old full-width line gives back 29 pixels on every finished answer. Row **READ-ALOUD-07**, **run on the
+  Deck 2026-09-21 and PASSED**: 30 by 32 pixels, flush with the row's right end, 45% opacity at rest, as
+  planned. Still owed: what it does on an answer stopped part-way. [Detail](roadmap-details.md#read-aloud-is-a-small-speaker-on-the-helpful-row-not-a-dividing-line).
 
 - ★★★ `[ollama]` `[ui]` **Every filter on the AI models screen behind one Filters button, and five
-  changes that give the list more room** — **VERIFY, built 2026-09-20.** Plan 62, sections 3d and 3e.
-  The two rows of filter chips and the separate Policy section are gone. One line now reads "Filters ·
-  N on"; pressing it opens a panel listing six filters — licence (replacing the old Policy buttons),
-  Speed, Strategy, Expert, Vision, Installed only, Essentials only, and Recently added. Riding along:
-  the Suggested-models chips moved into that same panel, Advanced is now a link instead of a row of
-  buttons, typing a model name by hand is one chip instead of a permanent box, the two rows of chips
-  became the one Filters line, and the small refresh button in the counts line is smaller. Row
-  **MODELS-FILTERS-01**, **run on the Deck 2026-09-21 and FAILED**: A on the Filters button closes the
-  whole screen and the filters never appear, so none of the rest could be checked — filed as its own
-  three-star bug above. [Plan](planning/62-feature-session-five.md) ·
-  [Board](https://claude.ai/artifact/31aLBi17SH7AydhYfGYjBq)
+  changes that give the list more room** — **VERIFY, built 2026-09-20.** The two rows of filter chips and
+  the separate Policy section are gone, replaced by one "Filters · N on" line that opens a panel with six
+  filters and the model-name search folded in. Row **MODELS-FILTERS-01**, **run on the Deck 2026-09-21 and
+  FAILED**: pressing A on the Filters button closes the whole screen and the filters never appear, so none
+  of the rest could be checked — filed as its own three-star bug above. [Detail](roadmap-details.md#every-filter-on-the-ai-models-screen-behind-one-filters-button-and-five-changes-that-give-the-list-more-room).
 
-- ★ `[ollama]` **Pulled models join the model try order** — **MOSTLY VERIFIED on the Deck 2026-09-06, one case left.**
-  A model pulled from the picker landed at the **bottom** of the text list, and showed up in the vision list because it can
-  read pictures — while a text-only model and the embedding one stayed out of that list. What is still owed is the opposite
-  placement: with *Allow high-VRAM model fallbacks* on, a **large** pulled model is supposed to go to the **top** instead.
-  That needs a large model on the device and the switch turned on. Row **ROUTING-MERGE-01**. The maintainer's own words on
-  2026-09-19 (D113) were "try them in the order the user set." Model downloads are now allowed (D113), so the large-model
-  half of this row is runnable in the next Deck block. **Tried on the Deck 2026-09-19:** the bottom half passed again — a
-  small model finished downloading and landed at the end of the saved list, after the two models already there. The top
-  half is still not done, but the hold-up is no longer the download rule: it needs a person to type a large model's name
-  (for example `gemma3:27b`, about 17 GB) into the picker's custom-name field with *Allow high-VRAM model fallbacks* on,
-  using Steam's on-screen keyboard, and to remove that model again afterwards — a check only the maintainer can do at the
-  Deck. Evidence `docs/test-evidence/plan61-ROUTING-MERGE-01-bottom.json`, `docs/test-evidence/plan61-ROUTING-MERGE-01-top.json`.
+- ★ `[ollama]` **Pulled models join the model try order** — **MOSTLY VERIFIED on the Deck 2026-09-06, one
+  case left.** A pulled model lands at the bottom of the text list and shows in the vision list if it can
+  read pictures. Still owed: with high-VRAM fallback on, a large pulled model should go to the top instead.
+  Row **ROUTING-MERGE-01**. **Tried on the Deck 2026-09-19:** the bottom half passed again; the top half
+  still needs a person at the Deck to type a large model's name by hand and remove it again afterwards.
+  [Detail](roadmap-details.md#pulled-models-join-the-model-try-order).
 
 - ★ `[platform]` **VAC check (`bonsai:vac-check`) on-device QA** — **VERIFY.** Implementation complete; run **VAC-02…06** after Tier 0
   **SMOKE-F** passes.
-- ★★ `[reply]` **Thinking line fixes from 2026-08-07/08** — **VERIFY.** Emoji upright, lazy status tag survives, no bare-emoji phase
-  changes, one writer. Five of seven rows pass on the Deck: **THINKING-SLOW-01** and **THINKING-SPOILER-01** (2026-09-04);
-  **THINKING-COPY-01**, **THINKING-LIVE-01** and **THINKING-EMOJI-01** (2026-09-17) — the first status line held about 5.5
-  seconds before changing, the line changed three times over about 7 seconds with no freeze or repeat, and the emoji sits
-  upright beside the tilted sentence. Evidence `docs/test-evidence/plan57-QA-THINKING-COPY-01.json`,
-  `docs/test-evidence/plan57-QA-THINKING-LIVE-01.json`, `docs/test-evidence/plan57-QA-THINKING-EMOJI-01.json`. Left:
-  **THINKING-SANITIZE-01** and **THINKING-EMOJI-CLUSTER-01**, both automated only, never read on the device.
-  **Tried on the Deck 2026-09-18:** the status line always read as words, never a bare tag, across the night's
-  long answers, but the fault THINKING-SANITIZE-01 hunts did not happen, so it is not yet proven; no multi-step
-  troubleshooting question ran, so THINKING-EMOJI-CLUSTER-01's several-phase case never came up either. Evidence
-  `docs/test-evidence/plan61-THINKING-SANITIZE-01.json`, `docs/test-evidence/plan61-THINKING-EMOJI-CLUSTER-01.json`.
-  [Log](planning/06-thinking-blurbs-review.md#10-implementation-log).
+- ★★ `[reply]` **Thinking line fixes from 2026-08-07/08** — **VERIFY.** Emoji upright, lazy status tag
+  survives, no bare-emoji phase changes, one writer. **Five of seven rows pass on the Deck**, the last three
+  confirmed 2026-09-17. Left: **THINKING-SANITIZE-01** and **THINKING-EMOJI-CLUSTER-01**, automated only,
+  never read on the device. **Tried on the Deck 2026-09-18:** the status line always read as words, but the
+  specific fault each row hunts never came up, so neither is proven either way.
+  [Detail](roadmap-details.md#thinking-line-fixes-from-2026-08-0708).
 - ★★★ `[perms]` **Kids master lock** — **VERIFY.** Shipped 2026-08-09. Rows **KIDS-LOCK-01**, **KIDS-FOCUS-01**, **KIDS-REGRESS-01**
   (and **KIDS-LOCK-02** with a child account). Live CEF Stage 0 confirmation still owed. **KIDS-REGRESS-01
   re-confirmed on the Deck 2026-09-17:** no lock banner, all four Permissions switches on and reachable.
   Evidence `docs/test-evidence/plan57-QA-KIDS-REGRESS-01.json`.
-- ★★★ `[reply]` **Soft reply-length cap and thinking budget** — **VERIFY.** Shipped 2026-08-10. **01, 02 and 03 all pass:**
-  02's empty continue stops quietly (automated); **01 and 03 confirmed on the Deck 2026-09-17** — a long five-part reply
-  read with no seam and the `Continuing…` cue never showed live or saved (01); stopping partway kept the partial text
-  with a `Stopped — partial answer kept.` notice (03). Evidence `docs/test-evidence/plan57-QA-SOFT-PREDICT-01.json`,
-  `docs/test-evidence/plan57-QA-SOFT-PREDICT-03.json`. **SOFT-PREDICT-05 passed on the Deck 2026-09-18:** run on
-  gemma4:e2b-it-qat (the Deck's real thinking-capable model; no other thinking model is installed) with Thinking
-  Off, a full visible reply came back, no empty reply. Evidence `docs/test-evidence/plan61-SOFT-PREDICT-05.json`.
-  Left: **SOFT-PREDICT-04** (a continue mid-menu in Strategy) — **tried 2026-09-18, blocked:** the long Hades
-  walkthrough question came back as a short spoiler-careful refusal, so no reply reached the length wall.
-  Evidence `docs/test-evidence/plan61-SOFT-PREDICT-04.json`.
-  [Why](roadmap-details.md#shipped-qa-owed--why-each-was-built-this-way).
-- ★★★ `[tabs]` `[ui]` **The open tab strip redrawn: six equal cells, one icon family, only the current tab named** —
-  **VERIFY, landed 2026-09-17.** Six equal cells with one 22px icon each, only the current tab named, in the
-  accent colour; the strip is taller (66px) so the chat row's row of dots no longer shows under it. Built in
-  commits `6821f20`, `ef4a851`, `18be399`, `0378024`, `044acab`, `a957165`. **Deck run 2026-09-18: rows 01, 02,
-  04, 05 and 06 all pass; 03 is captured and waits on the maintainer's own look; 07 failed and is filed as its
-  own Bugs entry, above.** The free-play sweep has run once (the after-finished half); the streaming half is
-  still owed. [Plan](planning/59-tab-strip-redesign-build.md) ·
-  [Design](design/handoffs/tab-bar-open-strip/return-2026-09-16/).
+- ★★★ `[reply]` **Soft reply-length cap and thinking budget** — **VERIFY.** Shipped 2026-08-10. **01, 02 and
+  03 all pass**, confirmed on the Deck 2026-09-17: a long reply read with no seam, and stopping partway kept
+  the partial text with a clear notice. **SOFT-PREDICT-05 passed 2026-09-18** with Thinking Off. Left:
+  **SOFT-PREDICT-04**, **tried 2026-09-18, blocked** — the test question came back as a short spoiler-careful
+  refusal, so no reply reached the length wall. [Detail](roadmap-details.md#soft-reply-length-cap-and-thinking-budget).
+- ★★★ `[tabs]` `[ui]` **The open tab strip redrawn: six equal cells, one icon family, only the current tab
+  named** — **VERIFY, landed 2026-09-17.** Six equal cells with one icon each, only the current tab named;
+  the strip is taller so the chat row's dots no longer show under it. **Deck run 2026-09-18:** rows 01, 02,
+  04, 05 and 06 pass; 03 waits on the maintainer's own look; 07 failed and is filed as its own bug above.
+  The free-play sweep's streaming half is still owed. [Detail](roadmap-details.md#the-open-tab-strip-redrawn-six-equal-cells-one-icon-family-only-the-current-tab-named).
 - ★★★★ `[ollama]` **Speed-mode VRAM preload** — **VERIFY, the mechanism proved on the Deck 2026-09-05, the timing not.**
   A Developer switch, off by default, loads the model Ask will use into memory at start-up. **A bug was found and fixed on the
   device:** it warmed the first small model installed rather than the one Ask reaches for, which on this Deck were different, so it
@@ -807,15 +596,11 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   three-billion cap — which is what happens on this Deck, confirmed. **Still owed:** the timing comparison (**PRELOAD-01**), which
   needs a Deck whose Ask model is under the cap, and the memory-pressure case (**PRELOAD-02**). Open and untouched: whether the
   model survives the Deck sleeping.
-- ★★★★★ `[chat]` **Named chat slots** — **VERIFY.** Redesign v3 landed 2026-08-30; the layout inverts to slot row, transcript, presets,
-  Ask bar. Most rows pass on device. **05b passed on the Deck 2026-09-18:** returning to the chat still writing
-  showed the question and the partial text at once, nothing missing. Evidence
-  `docs/test-evidence/plan61-CHAT-SLOTS-V3-05b.json`. **05a's ask-bar-reads-busy half, 06a and 06b failed on the
-  Deck 2026-09-18** — see the new "chat that is still writing does not look busy" bug above. Owed: **06c** (not
-  attempted 2026-09-18) and **15d** (a recording made 2026-09-18 for the maintainer's own glance).
-  [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02).
-  **CHAT-SLOTS-V2-01 passed on the Deck 2026-09-17:** Down twice from the tab strip reaches the chat text, and Up retraces
-  the same path. Evidence `docs/test-evidence/plan57-QA-CHAT-SLOTS-V2-01.json`.
+- ★★★★★ `[chat]` **Named chat slots** — **VERIFY.** Redesign v3 landed 2026-08-30; the layout inverts to slot row,
+  transcript, presets, Ask bar. Most rows pass on device. **As of 2026-09-18:** 05b passed (returning to a
+  still-writing chat shows the question and partial text together); 05a's busy-indicator half, 06a and 06b
+  failed (filed as its own bug above). Still owed: 06c and 15d.
+  [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02) · [More](roadmap-details.md#named-chat-slots).
 
 ---
 
@@ -935,26 +720,17 @@ ones from this month are D81 to D88.
 - ★★ `[KB]` **Unrelated questions still get game cards stapled on** — **ACCEPTED 2026-08-27.** With a game running, *"thank
   you very much"* still attaches a card. Raising the keyword floor costs real matches, and the model mostly ignores an
   irrelevant card. [Detail](roadmap-details.md#ordinary-phrases-attach-game-cards).
-- ★★ `[KB]` **A troubleshooting question that only describes the symptom reaches no tips** — **ACCEPTED, held back
-  2026-09-06, re-measured 2026-09-07 and still held (D52, D81).** The fix does reach further: with nothing running, all 24
-  fresh plainly-worded problem sentences get into the search, against 8 without it, and *"thank you very much"* still
-  attaches nothing. **But what comes back is wrong** — six measured examples, each attaching a tip about something else
-  entirely, such as the on-screen keyboard for *"game wont even open"*. A wrong tip is worse than none, which is the same
-  objection that held it the first time. **The cause is now clear, and it is the useful part.** The meaning search only
-  runs when nothing else finds anything, and that almost never happens: a plain word search across 156 tips nearly always
-  finds something by shared words, so it wins first with a poor match and the meaning search never gets a turn. **What is
-  missing is not a wider gate — it is a way to say "none of these tips fit."** Until there is one, opening the gate makes
-  things worse. The real fix is rewriting the tips, filed as its own entry below. All six wrong tips:
-  [detail](roadmap-details.md#a-troubleshooting-question-that-only-describes-the-symptom-reaches-no-tips).
+- ★★ `[KB]` **A troubleshooting question that only describes the symptom reaches no tips** — **ACCEPTED, held
+  back 2026-09-06, re-measured 2026-09-07 and still held (D52, D81).** With nothing running, all 24 fresh
+  plainly-worded problem sentences now reach the search, against 8 before — but what comes back is often
+  wrong, six measured examples attaching a tip about something else entirely. **The cause:** the meaning
+  search only runs when the plain word search finds nothing, which is almost never, so a poor match wins
+  first. The real fix is rewriting the tips, filed as its own entry below. [Detail](roadmap-details.md#a-troubleshooting-question-that-only-describes-the-symptom-reaches-no-tips).
 - ★★★ `[KB]` **Searching the notes by meaning costs about a second, every time, on the Deck** — **ACCEPTED
-  2026-09-06.** Repeated on the Deck: 1.10, 1.23 and 1.19 seconds across three questions in a row, the same band as
-  the first time this was measured. The maintainer looked at the number and said that is fine — about a second before
-  an answer that then takes tens of seconds to write out is not something a person would notice. **The one-second
-  target this was measured against is retired.** The related finding still stands: a repeat search is fast on a
-  PC (0.05 seconds) but not on the Deck, where the third question here was no faster than the first. **The cause
-  is now measured** — the two models pushing each other out of memory, see the step above — and removing it reads
-  as cheap; the acceptance above stands until the maintainer says otherwise. (D84) Evidence
-  `docs/test-evidence/round34-drg-q*.json`, `docs/test-evidence/plan46-R2-strategy-half.json`.
+  2026-09-06.** Repeated on the Deck: 1.10, 1.23 and 1.19 seconds across three questions in a row, the same
+  band as first measured — the maintainer said that is fine next to an answer that then takes tens of
+  seconds to write. **The cause is now measured:** the two models pushing each other out of memory, which
+  reads as cheap to fix; the acceptance stands until the maintainer says otherwise. (D84) [Detail](roadmap-details.md#searching-the-notes-by-meaning-costs-about-a-second-every-time-on-the-deck).
 - ★★★★ `[KB]` **What ships loses to its own meaning half on questions nobody tuned against** — **ACCEPTED, decided
   2026-09-06.** The weight sweep ran: leaning the search toward meaning gets the right note first about four to six
   points more often, but it also buries a brand-new note whose meaning index has not been built yet, which the current
@@ -963,39 +739,28 @@ ones from this month are D81 to D88.
   rule no longer holding — are not covered by that rule and still need answering if this is ever revisited. Weights
   stay even for now. (D68, D82) [Detail](roadmap-details.md#the-shipping-retrieval-arm-loses-to-the-vector-half-alone-on-rows-nobody-tuned-against).
 
-- ★★★ `[KB]` **A follow-up still names the wrong boss one run in three** — **OPEN, left behind when the follow-up
-  fix closed 2026-09-12.** Ask about a boss, then *"what about its second phase"*, and you now get the right boss two
-  times in three, where it used to be wrong every time. The remaining third still names the rival boss. DOOM Eternal
-  is wrong every time, and no amount of work on the search can close that one. This is the half the shipped fix did
-  not cover, kept visible on purpose rather than archived with it. [Numbers](planning/48-kb-wave-three-session.md).
-  (D98) **Sighting, 2026-09-19, Hades:** a different shape of the same family — a follow-up question about a
-  boss's second phase found the right boss's note again, but the written reply asked which boss was meant
-  instead of using her name. Evidence `docs/test-evidence/plan61-KB-FOLLOWUP-01-retry3.json`.
+- ★★★ `[KB]` **A follow-up still names the wrong boss one run in three** — **OPEN, left behind when the
+  follow-up fix closed 2026-09-12.** A follow-up now gets the right boss two times in three, where it used
+  to be wrong every time; DOOM Eternal is wrong every time and no amount of search work closes that one.
+  (D98) **Sighting, 2026-09-19, Hades:** the search found the right boss again, but the written reply asked
+  which boss was meant instead of using her name. [Detail](roadmap-details.md#a-follow-up-still-names-the-wrong-boss-one-run-in-three).
 - ★★ `[KB]` **The "No tip for this" line has no question that can make it appear** — **OPEN, measured off the
   device 2026-09-12.** Against the library that ships, on every sentence anyone has tried: the five hardest problem
   sentences still get a tip in every mode, meaning search on or off; the twelve junk phrases attach nothing, which
   routes nowhere, so no line. The floor this wave added changed nothing on the tip side — 14 right, 1 wrong, 2
   nothing, before and after. Either the floor bites on tips or the line is decoration.
-- ★★ `[KB]` **Four questions still get notes about the wrong subject** — **OPEN, three of the four now say so,
-  found 2026-09-07.** Asking Black Mesa how to tame a horse, asking Portal 2 where to buy a house, and asking about
-  a Hades boss that does not exist all still attach a note. The floor added this wave cannot catch these without
-  also throwing away twenty or more correct answers elsewhere in the library, so it was left as it is. **Three of
-  the four now carry the new "no close match" line** (D88 above), so the answer no longer reads as grounded — but
-  the wrong note is still attached and still shapes the reply. *"Where do i buy a house"* gets no line at all,
-  because a word in it really does point at a card. Fixing the attachment itself, rather than labelling it, is
-  wave-four note-writing work. **Found again 2026-09-18:** a Hades "boss at the end of the first area" question
-  attached "Temple of Styx" first and the reply answered about Theseus and Asterius instead of Megaera, steered
-  by the top note (`docs/test-evidence/plan58p1-QA-NOTES-BLOCK-02.json`).
-- ★★ `[KB]` **The "no close match" line reads wrong next to a note the reply used** — **OPEN, found 2026-09-18.**
-  The line judges only the first attached note's scores, so on a Hollow Knight boss question it said the answer
-  leaned on the model's own knowledge while the reply was actually built on the Broken Vessel note, attached
-  second; on a Pikmin 2 question it said the same thing under a reply built on the very note the block showed.
-  Either look at the best attached note, not just the first, or word the line as "a thin match" rather than a
-  claim the notes were not used. Evidence `docs/test-evidence/plan58p1-M-hk-boss-before.json`,
-  `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-04.json`. **Sighting, 2026-09-19, Half-Life 2:** a question the
-  notes genuinely do not cover got the warning line for the first time, but a note card naming three notes
-  showed underneath it at the same time, contradicting the line. Evidence
-  `docs/test-evidence/plan61-W2-R5-hl2-retry3.json`.
+- ★★ `[KB]` **Four questions still get notes about the wrong subject** — **OPEN, three of the four now say
+  so, found 2026-09-07.** Asking Black Mesa how to tame a horse, Portal 2 where to buy a house, and a
+  nonexistent Hades boss all still attach a note; the floor added this wave cannot catch these without
+  losing correct answers elsewhere. Three of the four now carry the "no close match" line, but the wrong
+  note is still attached. **Found again 2026-09-18:** a Hades boss question attached the wrong area's note
+  and the reply named the wrong bosses. [Detail](roadmap-details.md#four-questions-still-get-notes-about-the-wrong-subject).
+- ★★ `[KB]` **The "no close match" line reads wrong next to a note the reply used** — **OPEN, found
+  2026-09-18.** The line judges only the first attached note's score, so it can say the answer leaned on the
+  model's own knowledge while the reply was actually built on a note attached second, or the very note shown
+  underneath it. **Sighting, 2026-09-19, Half-Life 2:** a question the notes genuinely do not cover got the
+  warning line for the first time, but a note card naming three notes showed underneath it at the same time,
+  contradicting the line. [Detail](roadmap-details.md#the-no-close-match-line-reads-wrong-next-to-a-note-the-reply-used).
 - ★★ `[KB]` **Black Mesa's electrified-water question attaches two unrelated early-game notes instead of its
   own** — **OPEN, found 2026-09-19.** Asking how to cross the electrified water gave the right, specific
   answer, but the two notes Show details named as used were general early-game notes about starting out and
@@ -1005,101 +770,33 @@ ones from this month are D81 to D88.
 
 ### Deck check owed
 
-- ★ `[KB]` **Five checks from the August retrieval rework were never run on the Deck** — **VERIFY, or retire.** The corpus
-  format gate, the relevance floor, follow-ups searching the user's words, transparency matching what the model got, and
-  the Developer kill-switch. Either one evening with pinned test chips, or close them as superseded by the rows that
-  passed this week. **Run 2026-09-15: the relevance-floor row is really two checks bundled as one, and they point
-  opposite ways.** Its on-topic half is a real regression guard worth keeping. Its off-topic half — an unrelated
-  question should attach nothing — fails as written, but that failure is the behaviour the maintainer already accepted
-  on 2026-08-27 in the "Unrelated questions still get game cards stapled on" entry above; the row and that entry now
-  contradict each other, which is for the maintainer to settle by retiring or rewording one of them. Rows
-  **KB-VARIANT-01**, **KB-FLOOR-01**, **KB-FOLLOWUP-01**, **KB-TRANSPARENCY-01**, **KB-KILLSWITCH-01**.
-  **Tried again 2026-09-18 with Hades and Half-Life 2 running: KB-FOLLOWUP-01 and KB-TRANSPARENCY-01 stayed
-  blocked, and KB-FLOOR-01's already-passed on-topic half could not be freshly confirmed either** — every one
-  of them needed a question sent, and the Ask-box freeze above (the three-star focus entry) stopped every
-  question from going out. Evidence `docs/test-evidence/plan61-KB-FOLLOWUP-01.json`,
-  `docs/test-evidence/plan61-KB-TRANSPARENCY-01-retry.json`, `docs/test-evidence/plan61-KB-FLOOR-01-ontopic.json`.
-  **Tried again at 12:50: KB-TRANSPARENCY-01 and KB-FLOOR-01's on-topic half stayed blocked** — Half-Life 2
-  had dropped off the Recent Games row so it could not be launched, and the pinned test sentences below would
-  have stopped the question anyway. **KB-FOLLOWUP-01 and KB-KILLSWITCH-01's Show details half are now blocked
-  by that new pinned-chip problem instead of the earlier freeze:** the Megaera question they both depend on
-  could not be sent because the pinned test sentence stopped showing and no test sentence may be typed by
-  thumb. Evidence `docs/test-evidence/plan61-KB-TRANSPARENCY-01-retry2.json`,
-  `docs/test-evidence/plan61-KB-FLOOR-01-ontopic-retry2.json`, `docs/test-evidence/plan61-KB-FOLLOWUP-01-retry2.json`,
-  `docs/test-evidence/plan61-KB-KILLSWITCH-01-retry2.json`. On 2026-09-19 the maintainer played Half-Life 2
-  once more, so it is back on the Recent Games row and these rows can run in the next Deck block.
-  **Run again 2026-09-19, this one still cannot close:** **KB-FLOOR-01's on-topic half passes** clean, a
-  Half-Life 2 question attached the right note as it should. **KB-KILLSWITCH-01's Show details half now
-  passes too** — with the meaning-search switch off, the screen correctly says it is using plain keyword
-  search and the game still gets an answer with a note attached; the switch was turned back on and
-  confirmed. **KB-FOLLOWUP-01 is a partial:** the follow-up search does find the right note again, but the
-  written reply asks which boss is meant instead of using the name it found — the search half passes, the
-  reply half does not. **KB-TRANSPARENCY-01 is blocked, not by the Deck this time but by the plugin itself:**
-  its log never records which notes were searched or attached, so there is nothing written down to check the
-  on-screen note list against. That gap needs either the plugin's own activity log switched on before a
-  question is asked, or a line added to the log naming which notes were attached — without one of those,
-  this check can never be run as written. **KB-VARIANT-01 is still blocked**, since running it would mean
-  replacing the very library under test. So this entry stays open: three of the five checks have real
-  answers now, one is blocked by a plugin gap rather than a Deck problem, and one still cannot be run at
-  all. Evidence `docs/test-evidence/plan61-KB-FLOOR-01-ontopic-retry3.json`,
-  `docs/test-evidence/plan61-KB-KILLSWITCH-01-retry3.json`, `docs/test-evidence/plan61-KB-FOLLOWUP-01-retry3.json`,
-  `docs/test-evidence/plan61-KB-TRANSPARENCY-01-retry3.json`.
+- ★ `[KB]` **Five checks from the August retrieval rework were never run on the Deck** — **VERIFY, or
+  retire.** Covers the corpus format gate, the relevance floor, follow-ups, transparency, and the
+  Developer kill-switch. **As of the 2026-09-19 run:** three of the five checks now have real answers,
+  one is blocked because the plugin's log never records which notes were attached, and one cannot be
+  run without replacing the library it tests. [Detail](roadmap-details.md#five-checks-from-the-august-retrieval-rework-were-never-run-on-the-deck).
 - ★★ `[KB]` **Hidden spoiler box stays shut on games with no Steam ID and on name-first questions** — **VERIFY,
-  landed 2026-09-15, four commits, unit-tested.** A game known only by name now opens its box; naming the boss
-  first opens it on screen, in copied text and in read-aloud; a no-story game named in the question gets the same
-  relaxed prompt its risk chip already assumed. **STRAT-SPOIL-TEXT-01 passed on the Deck 2026-09-15, both halves.**
-  **STRAT-SPOIL-FIRST-01 passed on the Deck 2026-09-18:** naming Wheatley up front in Portal 2 kept the whole
-  answer in plain text from the first streamed word, with no hidden box, and it was still plain after closing
-  and reopening the chat; the old "Portal 2 not in the library" note is settled — it was installed all along.
-  Evidence `docs/test-evidence/plan61-STRAT-SPOIL-FIRST-01.json`. **STRAT-SPOIL-NAME-01 tried 2026-09-18,
-  blocked:** Doom 64: Retribution is genuinely installed, but it is not on the Deck's Recent Games row, the
-  only list the launch tool can search, so it could not be started; someone needs to play it once by hand
-  first. Evidence `docs/test-evidence/plan61-STRAT-SPOIL-NAME-01.json`. From the older **STRAT-SPOIL-DRG-01**
-  block: **DRG-01b tried 2026-09-18 with Deep Rock Galactic: Survivor running, blocked** by the same Ask-box
-  freeze as the three-star focus entry above (evidence `docs/test-evidence/plan61-DRG-01b.json`); **DRG-01c
-  not tried on purpose** (would mean removing the library, out of scope tonight). **HADES-UNNAMED-STREAM-01
-  and HADES-UNNAMED-01 (a fourth try) were tried again 2026-09-18 with Hades running and both FAILED**, sent
-  cleanly this time with no focus trap at all: the reply came back in plain text with no spoiler box at any
-  point, either while streaming or once finished. Both rows now ride on the new three-star bug above (a
-  name-withheld boss question comes back with no cover), not on the Ask-box freeze. Evidence
-  `docs/test-evidence/plan61-HADES-UNNAMED-STREAM-01-retry2.json`,
-  `docs/test-evidence/plan61-HADES-UNNAMED-01-retry2.json`. **Still owed tonight:** STRAT-SPOIL-NAME-01 (Doom
-  64 cannot be launched), DRG-01b (stopped by the focus trap), DRG-01c (left out on purpose). On 2026-09-19
-  the maintainer said Doom 64 is not readily available, so STRAT-SPOIL-NAME-01 stays blocked until it is.
-  [Plan 54](planning/54-spoiler-rules-gaps.md). **DRG-01b tried again 2026-09-19, still blocked:** Deep Rock
-  Galactic: Survivor had fallen off the Recent Games row again, so it could not be launched. Evidence
-  `docs/test-evidence/plan61-DRG-01b-retry.json`.
-- ★★ `[KB]` **"Not in my notes" line** — **VERIFY, built and shipped 2026-09-07, device check failed the same
-  day.** The line itself is in the code, but on the Deck nothing could make it appear: ten questions asked first
-  all attached a note, so the one question meant to show the line never got the chance. The note search has
-  since gained a floor that can refuse a weak match, so there may be a way to show it now — nobody has checked.
-  Same shape of problem as the "No tip for this" line in the Bugs list above; run both together next time. Row
-  **W2-R5**. **Tried again 2026-09-18 with Half-Life 2 running, blocked:** the right question (one the notes
-  genuinely do not cover) was ready to send, but the same Ask-box freeze as the three-star focus entry above
-  stopped it from going out. Evidence `docs/test-evidence/plan61-W2-R5-hl2-retry.json`. **And again at
-  12:50, still blocked:** Half-Life 2 had dropped off the Recent Games row so the launcher refused to start
-  it, and the pinned test sentences had stopped showing by then anyway. Evidence
-  `docs/test-evidence/plan61-W2-R5-hl2-retry2.json`. On 2026-09-19 the maintainer played Half-Life 2 once
-  more, so it is back on the Recent Games row and this row can run in the next Deck block.
-  **Run again 2026-09-19, still owed:** the warning line finally showed up, for the first time, on a
-  Half-Life 2 question the notes genuinely do not cover — real progress. But its wording is not exactly what
-  was asked for, and a note card naming three notes appeared underneath it at the same time, which
-  contradicts the line's own claim that nothing close was found. See the "no close match" Bugs entry above
-  for that contradiction. Evidence `docs/test-evidence/plan61-W2-R5-hl2-retry3.json`.
+  landed 2026-09-15, four commits, unit-tested.** A game known only by name now opens its box, and naming the
+  boss up front keeps the answer in plain text. **STRAT-SPOIL-TEXT-01 and STRAT-SPOIL-FIRST-01 passed on the
+  Deck**; two Hades rows failed on the name-withheld-boss bug above. **Still owed as of 2026-09-19:**
+  STRAT-SPOIL-NAME-01 and DRG-01b, both blocked because their games keep falling off the Recent Games list.
+  [Detail](roadmap-details.md#hidden-spoiler-box-stays-shut-on-games-with-no-steam-id-and-on-name-first-questions).
+- ★★ `[KB]` **"Not in my notes" line** — **VERIFY, built and shipped 2026-09-07, device check failed the
+  same day.** The line should show when a question the notes truly do not cover; for months nothing could
+  make it appear. **Shown for the first time on 2026-09-19**, on a Half-Life 2 question the notes do not
+  cover, but the wording is not quite right and a note card wrongly appeared under it at the same time
+  (see the "no close match" bug above). Row **W2-R5**. [Detail](roadmap-details.md#not-in-my-notes-line).
 - ★★ `[KB]` **Ten new games checked on the Deck, publish owed** — **VERIFY, ran 2026-09-18.** The
   2026.09.18 library was installed on the Deck straight from the plugin's own folder, not from the
   public download hosts. One question named each of the ten new games and all ten answered from that
   game's own notes, the right wiki named every time. Owed: the maintainer's publish call, then, once
   published, a choice on the SD-card location, since this local install put the library on internal
   storage. Evidence `docs/test-evidence/plan58p1-QA-TEN-GAMES-01.json`.
-- ★★ `[KB]` **The note's own words under the reply** — **VERIFY, third run 2026-09-19.** Header,
-  open-scroll and live timing pass. The upward walk now lands cleanly on the block's own header,
-  confirmed on the Deck, and the ladder walk asked for was also run and holds up — the only stop
-  still missing is the chip ladder inside the open block, already its own bug above, not new here.
-  Why the tip and one game question in ten arrived late is now explained — the block loses its live
-  value in the gap before a finished reply's own details land — the fix has landed on the branch,
-  and a shared-tip question watched on the Deck 2026-09-19 showed no gap at all, closing the timing
-  half too. Rows **NOTES-BLOCK-01**–**07**, **TEN-GAMES-01**, in [testing-manual.md](testing-manual.md).
+- ★★ `[KB]` **The note's own words under the reply** — **VERIFY, third run 2026-09-19.** Header, open-scroll
+  and live timing all pass; the upward walk lands cleanly on the block's header and the ladder walk holds up
+  — the only stop still missing is the chip ladder inside the open block, its own bug above. Why the tip and
+  one question in ten arrived late is now explained and fixed; a repeat check on the Deck 2026-09-19 showed
+  no gap at all. Rows **NOTES-BLOCK-01**–**07**, **TEN-GAMES-01**, in [testing-manual.md](testing-manual.md).
 ### Next
 
 - ★ `[KB]` **Measure answers with the character voice on** — **OPEN, switch already built.** The answer test's voice
@@ -1169,17 +866,11 @@ ones from this month are D81 to D88.
   is thousands of cards. The embedding-model pull is its own entry above. [knowledge-base.md](knowledge-base.md) § Phase 7.
 - ★★★★★ `[KB]` **Community tip contribution** — **OPEN, unblocked.** A reader turns a good reply into a proposed card with
   one press: **Suggest as a tip** writes a valid card to the Desktop plus a GitHub attach link. Three to five days.
-- ★★★★★★ `[KB]` **RAG Phase 8: catalog corpus** — **OPEN, intent only.** The change that makes most people's games get
-  notes instead of the model's memory: about the top 1000 Steam titles, the top 100 on Deck, and an emulated slice. Months:
-  it cannot be hand-written (161 cards took six weeks), so it needs an ingestion pipeline from wiki dumps, per-source
-  licensing, a size budget, packs and the index. [knowledge-base.md](knowledge-base.md) § Phase 8. The first step is
-  planned as [58 phase 1](planning/58-phase-1-notes-shown-and-wiki-extracts.md): a reader that takes a wiki's own
-  sentences without rewriting them, ten games from sources already cleared, and a study of which sources cover many
-  games under one licence. That [source study](archive/research/kb-catalog-sources-2026-09.md) landed 2026-09-17
-  and recommends the Super Mario Wiki first, the per-wiki Fandom check second, and the walkthrough wiki third
-  once its saved copy has been tried with the reader. The first ten games from those cleared sources landed
-  2026-09-18, written from the wiki pages fetched that day, taking the library to 35 games; landing them
-  reopened the July no-new-games lock, since the catalog phase starts here (D111).
+- ★★★★★★ `[KB]` **RAG Phase 8: catalog corpus** — **OPEN, intent only.** The change that gets most people's
+  games real notes instead of the model's memory: top 1000 Steam titles, top 100 on Deck, an emulated slice.
+  Months of work — needs a wiki-ingestion pipeline, licensing, a size budget, packs and an index. **As of
+  2026-09-18:** the source study is done, the first ten games are written from cleared wiki sources, the
+  library is at 35 games, and landing them reopened the no-new-games lock (D111). [Detail](roadmap-details.md#rag-phase-8-catalog-corpus).
 
 ---
 

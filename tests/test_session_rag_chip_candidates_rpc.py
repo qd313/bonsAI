@@ -3,30 +3,13 @@
 import json
 import os
 import sqlite3
-import sys
 import tempfile
-import types
 import unittest
 from unittest.mock import patch
 
-if "fcntl" not in sys.modules:
-    _fcntl = types.ModuleType("fcntl")
-    _fcntl.LOCK_EX = 2
-    _fcntl.LOCK_NB = 4
-    _fcntl.LOCK_UN = 8
-    _fcntl.flock = lambda *_a, **_k: False
-    sys.modules["fcntl"] = _fcntl
+from backend_module_stubs import install_fcntl_and_decky_stubs
 
-if "decky" not in sys.modules:
-    _decky = types.ModuleType("decky")
-    _decky.DECKY_PLUGIN_SETTINGS_DIR = "/tmp"
-    _decky.logger = types.SimpleNamespace(
-        info=lambda *a, **k: None,
-        warning=lambda *a, **k: None,
-        error=lambda *a, **k: None,
-        exception=lambda *a, **k: None,
-    )
-    sys.modules["decky"] = _decky
+install_fcntl_and_decky_stubs()
 
 import main  # noqa: E402
 from backend.services.knowledge_base_service import (  # noqa: E402

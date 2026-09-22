@@ -88,6 +88,51 @@ this session's Bugs entries, nothing reworded, with the closing note added at th
   **Closed 2026-09-21 (D115).** The maintainer answered: accepted as it is. Closed as accepted behaviour, no
   code.
 
+### Walking up from the question box skips every reply row (closed 2026-09-21)
+
+- ★ `[focus]` **Walking up from the question box skips every reply row** — **OPEN, found 2026-09-18.** Pressing
+  Up from the question box goes straight to Clear, Retry, the earlier-chats row and the tab bar; a reply's own
+  rows — Show details, Read aloud, the thumbs and the notes block — are reached only by walking down onto them.
+  **Re-measured on the Deck 2026-09-21, build `3daa21e`: still happens.** Measured path: the ask button, then
+  Attach screenshot, then Choose AI character, then the suggestion chip, then the chat slot row — the whole
+  reply skipped. Evidence `docs/test-evidence/plan58p1-M-hk-boss-before.json`,
+  `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-01.json`, `docs/test-evidence/plan63-DETAILS-LADDER-01.json`.
+
+  **Closed 2026-09-21, fixed and proven on the Deck.** Fixed in commit `2ecd804`. Evidence
+  `docs/test-evidence/plan63-UP-INTO-REPLY-01.json`. Up from a suggestion chip now lands on the answer above.
+  Measured before: fourteen stops going down, six coming back up. Cause was a leftover — Up aimed at the
+  session context strip, which plan 62 folded into the Show details panel and removed, so that attempt
+  silently failed on every press and the fallback to the chat row ran every time.
+
+### A new setting can quietly stop working in one place, because the list of settings is written out by hand several times over (closed 2026-09-21)
+
+- ★ `[ui]` **A new setting can quietly stop working in one place, because the list of settings is written out by hand
+  several times over** — **OPEN, found while explaining the code 2026-09-14.** The settings code repeats its fifty-odd
+  setting names in several separate places in the same file. Miss one and nothing breaks visibly; that setting just stops
+  being saved or loaded in one situation while working fine everywhere else. It has already happened once, to four
+  settings. Tracked as "places the settings field list is repeated", at 7 against a target of 1.
+
+  **Closed 2026-09-21, fixed in commit `3d721b6`.** The measured count went from 7 to 0, past its target of 1.
+  There is now one table naming each setting once and everything else is built from it; removing a setting
+  from that table stops the build compiling and fails two tests on their own. No Deck check applies — this is
+  a code-health entry, and the measurement plus the two deliberate break-and-watch runs are the proof.
+
+### The AI models screen closes instead of doing anything — A on almost any control shuts it (closed 2026-09-21)
+
+- ★★★ `[ollama]` `[focus]` **The AI models screen closes instead of doing anything — A on almost any
+  control shuts it** — **OPEN, found on the Deck 2026-09-21, blocks the whole screen.** Pressing A on the
+  Filters button closes the screen and the filters never appear; pressing A on a model's tick box closes it
+  too, so nothing can be ticked to download. The Advanced link works, and it is the only control carrying an
+  explicit gamepad handler — 13 others have none, so their press falls through to the screen's own OK, which
+  closes it. Evidence `docs/test-evidence/plan62-MODELS-FILTERS-01-A-closes-screen.json`.
+
+  **Closed 2026-09-21, fixed and proven on the Deck.** Fixed in commit `ec4d007`. Evidence
+  `docs/test-evidence/plan63-MODELS-FILTERS-01.json`. Six A presses on three different controls and the
+  screen stayed open every time. Cause: the screen is a confirm box with its own OK; thirteen controls
+  carried only a mouse-click handler, which does nothing to stop a controller's A press, so every press fell
+  through to that OK. All thirteen now handle the press, sharing one helper. This also unblocks the filters
+  feature shipped 2026-09-20, which had never once been usable.
+
 ## Moved from the roadmap 2026-09-19
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-19 once the maintainer's answers to plan 61 § 8

@@ -76,23 +76,6 @@ starts work outside this.
   the left of the greyed placeholder text. **Confirmed again on the Deck 2026-09-17:** still off by 2 to 3
   pixels, because the placeholder and the real text use different-sized fonts, so they can never line up as
   written today. [Detail](roadmap-details.md#the-blinking-cursor-in-the-question-box-does-not-line-up-with-the-placeholder-text).
-- ★ `[chips]` `[KB]` **A suggestion chip pulled from the game's notes shows no Tip mark** — **OPEN, found
-  2026-09-18 on the Deck with Half-Life 2 running.** The suggestion chip showed a real tip from the game's
-  own notes, but the small coloured dot marking it as a note tip never appeared, so a person cannot tell a
-  real tip from a guess. The two checks that decide "is this a note chip" and "should the dot show" are not
-  agreeing with each other. Row **CHIP-BUTTON-09**. [Detail](roadmap-details.md#a-suggestion-chip-pulled-from-the-games-notes-shows-no-tip-mark).
-- ★ `[chips]` `[QA]` **The pinned test sentences stop showing after the first question** — **OPEN, found
-  2026-09-18.** After the first question from a pinned test sentence, the chip switches to the plugin's own
-  everyday suggestions and nothing brings the pinned ones back for the rest of the sitting. It blocked
-  **MEGAERA-01**, **KB-FOLLOWUP-01** and **KB-KILLSWITCH-01**'s Show details half. **Likely cause found
-  2026-09-19, not confirmed:** the plugin overwrites an on-disk settings edit on its next save, which may be
-  a test-rig problem rather than something a player would see. [Detail](roadmap-details.md#the-pinned-test-sentences-stop-showing-after-the-first-question).
-- ★ `[chips]` **A preset chip's icon and its text are colored the same way** — **OPEN, reported by the
-  maintainer 2026-09-19.** Only the small square icon at the front of a preset chip should be in the accent
-  color; the words after it should stay the normal text color instead of matching the icon.
-- ★ `[chips]` **A preset chip has a bright blue underline that is too distracting** — **OPEN, reported by
-  the maintainer 2026-09-19.** The bright blue line under a preset chip draws the eye more than the chip
-  itself. It should be removed or toned down.
 - ★ `[focus]` **Up from the Retry icon does not return to the answer** — **OPEN, read again 2026-09-16.**
   With the thumbs-up/thumbs-down row greyed on a stopped reply, Down from the answer now lands on Retry — but
   Up from Retry does not go back to the answer's last section the way it should. **Read again 2026-09-16:**
@@ -119,13 +102,6 @@ starts work outside this.
   answer never reaches Stop generation; the only route is Right, then Right again from the Ask-mode button.
   Not a trap, since Stop can still be reached — just not where a person would first look. **Confirmed on the
   Deck 2026-09-17**, same route needed. [Detail](roadmap-details.md#reaching-the-stop-generation-button-by-d-pad-while-a-reply-is-streaming-is-hard-to-find).
-- ★ `[focus]` **Walking up from the question box skips every reply row** — **OPEN, found 2026-09-18.** Pressing
-  Up from the question box goes straight to Clear, Retry, the earlier-chats row and the tab bar; a reply's own
-  rows — Show details, Read aloud, the thumbs and the notes block — are reached only by walking down onto them.
-  **Re-measured on the Deck 2026-09-21, build `3daa21e`: still happens.** Measured path: the ask button, then
-  Attach screenshot, then Choose AI character, then the suggestion chip, then the chat slot row — the whole
-  reply skipped. Evidence `docs/test-evidence/plan58p1-M-hk-boss-before.json`,
-  `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-01.json`, `docs/test-evidence/plan63-DETAILS-LADDER-01.json`.
 - ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **OPEN, fix did not hold
   on the Deck 2026-09-19.** Going down passes an extra copy of the question text, half hidden behind a
   button, that going up does not show. The tap-to-reveal spoiler box takes three presses to get past going
@@ -146,48 +122,25 @@ starts work outside this.
   **Tried on the Deck 2026-09-17, blocked:** the knowledge base was already installed on that device, so
   there is no first-time download button to press. Still owed, on a Deck without the knowledge base
   installed. Evidence `docs/test-evidence/plan57-QA-kb-download-two-taps.json`.
-- ★ `[ollama]` `[focus]` **B while typing a model name by hand looks likely to back out of the whole AI
-  models screen** — **OPEN, found by reading the code 2026-09-20; one press on the Deck would settle it.**
-  Typing a name by hand opens a small box on the Filters row, and nothing on that box handles B, so B should
-  fall through and close the whole screen, losing what was typed. The Filters panel beside it carries exactly
-  that handler for exactly that reason, so the fix is one line. Steam's own keyboard may swallow B first.
-
-- ★ `[ollama]` **The vision try-order picker writes settings even when nothing changed** — **OPEN, found
-  2026-09-16 during block 0 of session 56.** Opening the vision model try-order picker and pressing Done
-  writes the picker's current order into the settings file, even when nobody moved anything. Restored by hand
-  at the end of the block; no evidence file yet. **Confirmed on the Deck 2026-09-17:** pressing Done rewrote
-  the settings file with nothing actually reordered. Evidence
-  `docs/test-evidence/plan57-QA-vision-try-order-writes-settings.json`.
-- ★ `[reply]` **The no-game branch menu leaks its template** — **OPEN, found 2026-09-18.** With no game known,
-  the menu under a reply read "Where are you at in THIS GAME? A. <a place early in THIS game> B. <a place later
-  in THIS game>" — the instruction's own placeholder copied into a real menu. Same family as the copied
-  Half-Life 2 example fixed 15 September. Evidence `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-03.json`,
-  `docs/test-evidence/plan58p1-M-tip-before.json`.
 - ★ `[tabs]` `[layout]` **The row of small dots under the chat name still shows below the open tab strip** —
   **OPEN, found 2026-09-18.** With the tab strip open, the strip's bottom edge sits at 130px while the row of
   dots runs from about 133 to 137px (135 to 139px with the ring on the chat row instead of the tab bar) — every
   dot sits fully below the strip, not covered by it. The chat row's own bottom line (142 to 146px) is correctly
   below the strip. The maintainer chose a 66px strip on 2026-09-17 specifically to cover these dots; about 8 to
   10 more pixels of strip, or moving the dots up, would do it. Evidence `docs/test-evidence/plan61-TAB-STRIP-2A-07.json`.
-- ★ `[ui]` **A new setting can quietly stop working in one place, because the list of settings is written out by hand
-  several times over** — **OPEN, found while explaining the code 2026-09-14.** The settings code repeats its fifty-odd
-  setting names in several separate places in the same file. Miss one and nothing breaks visibly; that setting just stops
-  being saved or loaded in one situation while working fine everywhere else. It has already happened once, to four
-  settings. Tracked as "places the settings field list is repeated", at 7 against a target of 1.
 - ★ `[ui]` **The Decky plugin icon does not match the tab bar's bonsai icon** — **OPEN, reported by the
   maintainer 2026-09-19.** The bonsai icon Decky shows for the plugin, in its own plugin list, is a different
   icon than the bonsai drawn on the tab bar inside the plugin itself. The two should be the same icon.
-- ★★ `[chat]` **A new chat shows the previous chat's last reply until the panel is reopened** — **OPEN, seen
-  2026-09-15 evening.** A new chat can open showing the previous chat's last reply still on screen, with its
-  buttons still reachable, even though the new chat's own saved file is empty and correct. Closing and
-  reopening the panel always clears it. **Reproducible on demand as of 2026-09-18** (switch to a brand-new
-  chat right after a reply finishes elsewhere); four sightings in all, newest evidence
-  `docs/test-evidence/plan61-ghostreply-try1.json`. [Detail](roadmap-details.md#a-new-chat-shows-the-previous-chats-last-reply-until-the-panel-is-reopened).
 - ★★ `[chat]` **A chat that is still writing does not look busy from another chat** — **OPEN, found
   2026-09-18.** Switch away from a chat that is still writing and nothing says so: its dot looks idle, the
   other chat's Ask button reads ready, and the dot never turns green when it finishes. Seen on three separate
   tries. The code already tracks a generating state, so it is not reaching the row on the device — not yet
-  explained. [Detail](roadmap-details.md#a-chat-that-is-still-writing-does-not-look-busy-from-another-chat).
+  explained. **Ruled out 2026-09-21:** the shape that has bitten this repo before — a per-turn fact reaching
+  the screen only once an answer completes, not during the half-written updates along the way — does not
+  apply here; the chat's own name rides every update, including the half-written ones, and there is now a
+  test proving it. Every step from the back end to the dot reads correctly in the code. What would settle it
+  is a log captured on the Deck while the fault is actually happening.
+  [Detail](roadmap-details.md#a-chat-that-is-still-writing-does-not-look-busy-from-another-chat).
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a
   blanket rule was tried and reverted in favour of Steam's native outline.
 - ★★ `[focus]` `[reply]` **Walking a reply with the D-pad while it is still being written loses the
@@ -201,14 +154,6 @@ starts work outside this.
   stops are reachable walking down from Retry, so the reply is walkable — just not entered from above. Close
   kin to **Walking down a reply and walking back up visit different stops** (row REPLY-STOPS-MIRROR-01),
   re-measured on this same build and still happening. Evidence `docs/test-evidence/plan63-DETAILS-LADDER-01.json`.
-- ★★ `[ollama]` **The very first model ticked in a fresh download picker starts downloading right away, with
-  no chance to back out** — **OPEN, one sighting 2026-09-19, cause not looked at.** Opening the pull picker
-  fresh and ticking the first model in the list (`gemma3:1b`) started it downloading immediately, with no
-  separate press to confirm and no way to change your mind — one accidental tap on the wrong row starts
-  spending storage and data with nothing to undo it. Every later tick in the same picker session correctly
-  just queued the model until the Pull selected button was pressed, the way it should. The model that
-  downloaded this way also never joined the saved try order, even though it installed successfully. Evidence
-  `docs/test-evidence/plan61-PULL-MISSING-NAME-01.json`.
 - ★★ `[ollama]` `[focus]` **A tap outside the AI models screen started the queued downloads and left the
   D-pad stuck in the Ollama tab** — **OPEN, reported 2026-09-16, not reproduced.** The maintainer thinks a
   tap landed outside the screen instead of on Done; the queued models then started downloading and the
@@ -232,18 +177,16 @@ starts work outside this.
   seen at all on 2026-09-19** across about ten questions in four games. A separate, related fault (Down
   doing nothing while an answer arrives) was fixed 2026-09-20 and is now its own row, but this entry's own
   symptoms were not seen that day, so it stays open. [Detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
-- ★★★ `[ollama]` `[focus]` **The AI models screen closes instead of doing anything — A on almost any
-  control shuts it** — **OPEN, found on the Deck 2026-09-21, blocks the whole screen.** Pressing A on the
-  Filters button closes the screen and the filters never appear; pressing A on a model's tick box closes it
-  too, so nothing can be ticked to download. The Advanced link works, and it is the only control carrying an
-  explicit gamepad handler — 13 others have none, so their press falls through to the screen's own OK, which
-  closes it. Evidence `docs/test-evidence/plan62-MODELS-FILTERS-01-A-closes-screen.json`.
-
 - ★★★ `[reply]` **A name-withheld boss question on a story-protected game comes back with no spoiler box** —
   **OPEN, found 2026-09-18.** Asking about a boss without naming it, in Hollow Knight or Hades, got it named
   and its tactics given in plain text with no cover — with nothing running, and with the game running and
   streaming. **Sighting, 2026-09-19, Hollow Knight:** the same kind of question came back WITH its cover in
-  place — not closing the entry on one clean sighting, but worth recording. [Detail](roadmap-details.md#a-name-withheld-boss-question-on-a-story-protected-game-comes-back-with-no-spoiler-box).
+  place — not closing the entry on one clean sighting, but worth recording. **Five possible causes ruled out
+  2026-09-21, each by its own measurement, including the most promising one:** a device log from 2026-09-18
+  shows the model's own instructions fitted its memory window with room to spare, and its own thinking even
+  mentions wrapping the answer, yet the answer still came back with no cover. This bug now waits on the new
+  knowledge-base entry below, agreed 2026-09-21: checking that a cover actually happened instead of trusting
+  the model to add one. [Detail](roadmap-details.md#a-name-withheld-boss-question-on-a-story-protected-game-comes-back-with-no-spoiler-box).
 
 - ★★★ `[ui]` **The UI size setting barely changes anything** — **OPEN, measured on the Deck 2026-09-20;
   needs a decision before code.** At its biggest step the chat row grew 9 pixels, one thing was pushed out of the
@@ -461,17 +404,59 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   button was live and reachable by Right the whole time — the wrong control was made to swallow Down. Down
   now goes to Stop instead. Row **ASKBAR-DOWN-TO-STOP-01**, not yet run on the Deck.
   [Detail](roadmap-details.md#down-did-nothing-for-the-whole-time-an-answer-was-arriving).
+- ★ `[chips]` `[KB]` **A suggestion chip pulled from the game's notes shows no Tip mark** (row
+  **CHIP-BUTTON-09**) — **VERIFY, fixed in `895cf0a`.** Two copies of the same markup had drifted apart; there
+  is now one piece of code drawing both badges. Owed: with a covered game running and the knowledge base on,
+  set the chip animation to the scrambling one and confirm the dot shows.
+  [Detail](roadmap-details.md#a-suggestion-chip-pulled-from-the-games-notes-shows-no-tip-mark).
+- ★ `[chips]` `[QA]` **The pinned test sentences stop showing after the first question** — **VERIFY, PARTLY
+  fixed in `3d721b6`.** This was filed as a test-rig problem, but it is not only that: the plugin kept its own
+  copy of every setting in memory and wrote the whole copy back after any small change, and the back end also
+  saves settings by itself during ordinary use — when a question matches a built-in command phrase, and when a
+  knowledge-base download finishes in the background. Either of those could silently undo a setting nobody
+  touched, so a real person could lose a setting they never changed. **That part is fixed:** the automatic save
+  now sends only what actually changed. **Still unknown:** whether the pinned-sentence chip itself still drops
+  back to everyday suggestions after one question — that lives in the chip-picking code, which this fix did
+  not touch. Row **PINNED-SENTENCES-01**. Owed: edit the settings file, reload the plugin once (both should be
+  left alone by it now), and if the chip still misbehaves, close and reopen the panel — the file is no longer
+  being damaged, so a reopen should bring the pinned sentences back.
+  [Detail](roadmap-details.md#the-pinned-test-sentences-stop-showing-after-the-first-question).
+- ★ `[chips]` **A preset chip's icon and its text are coloured the same way** — **VERIFY, fixed in `895cf0a`.**
+  The words on a chip now use the same plain colour every other chip style already used; the dot's own colour
+  is unchanged. Row **CHIP-COLOR-BYEYE-01**. Owed: **a by-eye check by the maintainer** — a model cannot judge
+  pixels.
+- ★ `[chips]` **A preset chip has a bright blue underline that is too distracting** — **VERIFY, fixed in
+  `895cf0a`.** The line's strength went from 0.85 down to 0.55, the resting strength every other highlighted
+  control already uses. Row **CHIP-UNDERLINE-BYEYE-01**. Owed: **a by-eye check by the maintainer.** This line
+  is the chip's only highlight cue left, since Steam's own white ring has been clipped off chips since
+  2026-09-01, so it must stay clearly visible, not just calmer.
+- ★ `[ollama]` `[focus]` **B while typing a model name by hand looks likely to back out of the whole AI models
+  screen** — **VERIFY, fixed in `ec4d007`.** Typing a name by hand opens a small box on the Filters row; that
+  box now handles B itself instead of letting the press fall through to the screen's own close. Row
+  **MODELS-TYPE-B-01**. Owed: on the Deck, open "Type a name", type something, press B — the little box should
+  close and clear while the models screen stays open. **Note: Steam's own on-screen keyboard may swallow B
+  before the plugin ever sees it, which only the Deck can settle.**
 - ★ `[ollama]` **Mistyping one model name in a several-model download loses it without saying so** — **VERIFY,
   fixed 2026-09-15.** Downloading several models at once now says which name it could not find and still
   starts the good ones. Row **PULL-MISSING-NAME-01**. **Tried on the Deck 2026-09-19: blocked** — a made-up
   name needs Steam's on-screen keyboard, which this test rig cannot drive, so nothing could be typed;
   finishing this row needs a person at the Deck. [Detail](roadmap-details.md#mistyping-one-model-name-in-a-several-model-download-loses-it-without-saying-so).
+- ★ `[ollama]` **The vision try-order picker writes settings even when nothing changed** — **VERIFY, fixed in
+  `ec4d007`.** Row **ROUTING-NOOP-SAVE-01**. Owed: open the picker, press Done without moving anything, and
+  confirm the settings file is untouched.
+- ★ `[reply]` **The no-game branch menu leaks its template** — **VERIFY, fixed in `f11220d`.** Row
+  **NOGAME-MENU-01**. Owed: with nothing running, ask a question in Strategy mode that never names a game, and
+  confirm the menu either does not appear or names a real place — never the literal words THIS GAME.
 
 - ★★ `[ask]` `[layout]` **Typed text ran off the right edge of the panel at the bigger UI size** — **VERIFY,
   found and fixed on the Deck 2026-09-20.** The mirror drawing your typed question was 24 pixels wider than its own
   box, so the end of a line sat 23 pixels outside the panel. Only at the biggest size; nothing overflowed at the
   default. Its width had been written a frame too early and nothing re-measured, because the size change does not
   change the column's width. Row **UI-SIZE-01**, not seen on the Deck — deploying is blocked. Evidence `docs/test-evidence/plan62-UI-SIZE-outside-handheld.json`.
+- ★★ `[chat]` **A new chat shows the previous chat's last reply until the panel is reopened** — **VERIFY,
+  fixed in `163ff16`.** Row **CHAT-GHOST-REPLY-01**. Owed: switch to a brand-new chat right after a reply
+  finishes elsewhere, four times over to match the four sightings, and see it blank from the first frame with
+  no reopen needed. [Detail](roadmap-details.md#a-new-chat-shows-the-previous-chats-last-reply-until-the-panel-is-reopened).
 
 - ★★ `[ollama]` `[focus]` **Closing the AI models screen could leave the D-pad ring on Steam's own side
   rail, outside the plugin** — **VERIFY, fixed 2026-09-20.** Found only when opened from the Ollama tab's
@@ -484,6 +469,14 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   rows, the Deck's own screen about three. **Fix:** the list now fills the room its popup body already has.
   Row **MODELS-LIST-CAP-01**, not yet proved on the device — deploying is currently blocked because the
   plugin folder there is owned by root. [Detail](roadmap-details.md#the-ai-models-screen-showed-about-two-rows-of-the-model-list-on-the-decks-screen).
+- ★★ `[ollama]` **The very first model ticked in a fresh download picker starts downloading right away** —
+  **VERIFY, fixed in `ec4d007`.** The cause was bigger than the report: Decky's buttons render as form submit
+  buttons and the screen sits inside Steam's own form, so any click that did not cancel its default action
+  submitted that form and took the screen's Done path — true of twelve of its thirteen controls. This exact
+  fault was found and fixed once before, in the try-order picker, on 2026-09-04. Row **PULL-FIRST-TICK-01**.
+  Owed: open the picker fresh, tick the very first model, confirm it only queues rather than starting. **Its
+  second half — a model pulled this way never joins the saved try order — is NOT fixed; that lives in the back
+  end.**
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —
   **VERIFY, landed 2026-09-15.** The tab bar's pop-up strip now always ends fully hidden a fraction of a second
   after it closes, even when its fade is stalled by a game running full screen, so no see-through copy of it
@@ -918,3 +911,18 @@ line for line, nothing reworded, to keep this document under its size limit.
   confirmed on the Deck 2026-09-21.** Walking down from Show details now reaches the tabs and opens the
   Session tab; its rows can be walked too. The entry's second recorded cause, the row sitting off screen, did
   not reproduce — it had simply never taken focus before. [Full detail](archive/roadmap-bugs-fixed.md#the-new-session-tab-cannot-be-reached-with-the-d-pad).
+
+**Closed 2026-09-21 (plan 63 wave one, fixed and proven on the Deck):**
+
+- ★ `[focus]` **Walking up from the question box skips every reply row** — **DONE, fixed and confirmed on
+  the Deck 2026-09-21.** Pressing Up from the question box now lands on the answer above instead of jumping
+  straight past the whole reply. [Full detail](archive/roadmap-bugs-fixed.md#walking-up-from-the-question-box-skips-every-reply-row).
+- ★ `[ui]` **A new setting can quietly stop working in one place, because the list of settings is written out
+  by hand several times over** — **DONE, fixed 2026-09-21.** Every setting is now named once, in one place,
+  instead of being copied out by hand in several spots where one copy could quietly go stale.
+  [Full detail](archive/roadmap-bugs-fixed.md#a-new-setting-can-quietly-stop-working-in-one-place-because-the-list-of-settings-is-written-out-by-hand-several-times-over).
+- ★★★ `[ollama]` `[focus]` **The AI models screen closes instead of doing anything — A on almost any control
+  shuts it** — **DONE, fixed and confirmed on the Deck 2026-09-21.** Pressing the controller's A button on a
+  control in the AI models screen now does what that control does, instead of closing the whole screen; this
+  also unblocks the new filters button, which had never once been usable.
+  [Full detail](archive/roadmap-bugs-fixed.md#the-ai-models-screen-closes-instead-of-doing-anything-a-on-almost-any-control-shuts-it).

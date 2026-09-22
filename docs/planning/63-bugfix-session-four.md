@@ -270,8 +270,8 @@ Filled in as the session runs.
 | Block | Started | Finished | What happened |
 |---|---|---|---|
 | 0 — make it runnable | 2026-09-21 ~21:00 | 2026-09-21 ~22:00 | The three oversized documents were trimmed back under their limits, with the old detail moved to the archive files and linked, not deleted. The pre-commit check passes on a clean tree again. A deploy was proven end to end and the plugin log confirmed it came up on the Deck. |
-| 1 — wave one builds | | | |
-| 2 — land wave one | | | |
+| 1 — wave one builds | | | Five lanes ran at once, each building the fixes it was handed inside its own copy of the code: the AI models screen, the preset chips, the settings plumbing, what the reply says, and chat slots. All five handed back finished work with the full gate green on their own copy. |
+| 2 — land wave one | | | Each of the five lanes was landed onto the working branch one at a time, and the full gate ran green after every single one. All five wave-one lanes are now merged in. |
 | 3 — first Deck pass | | | |
 | 4 — wave two builds | | | |
 | 5 — land wave two | | | |

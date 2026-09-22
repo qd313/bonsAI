@@ -6,6 +6,88 @@ Strikeout titles match the original roadmap bug list. Items awaiting on-Deck QA 
 
 ---
 
+## Moved from the roadmap 2026-09-21
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-21 during plan 63 block 0 — copied line for line from
+this session's Bugs entries, nothing reworded, with the closing note added at the end of each._
+
+### The new Session tab cannot be reached with the D-pad (closed 2026-09-21)
+
+- ★★★ `[layout]` `[focus]` **The new Session tab cannot be reached with the D-pad** — **OPEN, found on
+  the Deck 2026-09-21.** Both tabs are drawn on the opened Show details panel, but the highlight will not land
+  on them: walking down from Hide details goes notes block, then straight out to the question box, stepping
+  over the tabs; walking back up skips them too. So the Session tab never opens and its Clear button cannot be
+  reached. Two causes, both measured: nothing puts the highlight on that row when moving **down** (only
+  upwards from the tab content below it, though the design note above the code promises the downward way too),
+  and once the panel settles the row sits below the question box's top edge, drawn off the visible area.
+  Evidence `docs/test-evidence/plan62-main-tab-pass-2026-09-21.json`.
+
+  **Closed 2026-09-21, fixed and proven on the Deck the same night.** Fixed in commit `29ca207`. Evidence
+  `docs/test-evidence/plan63-SESSION-TAB-01.json`. Walking down from Show details now lands on the This
+  answer / Session tabs row, and the Session tab opens with its rows reachable. The cause: the four downward
+  focus handlers above the tabs row were written before that row existed and were never taught about it; the
+  upward handlers already knew about it. **The entry's second recorded cause did not reproduce:** the row
+  measured 45 pixels clear of the bottom bar, and each session row walked into measured nothing covered. The
+  likely reason is that the row had never taken focus before, so the existing lift that pushes a focused
+  control clear of the bar never ran for it.
+
+### With Show details open, the chip row cannot be reached by the D-pad (closed 2026-09-21)
+
+- ★ `[focus]` **With Show details open, the chip row cannot be reached by the D-pad** — **OPEN, measured
+  2026-09-16 on two separate builds.** Down from Show details skips the whole chip row and lands on the
+  Session context bar; only the first chip can ever be read. It worked before this regression — the closed
+  CONTEXT-LADDER-01… 03 check (verified on the Deck 2026-09-05) had Down entering the chip row and Up walking
+  back out. [Detail](roadmap-details.md#with-show-details-open-the-chip-row-cannot-be-reached-by-the-d-pad).
+
+  **Closed 2026-09-21, fixed and proven on the Deck.** Fixed in commit `3daa21e`. Evidence
+  `docs/test-evidence/plan63-DETAILS-LADDER-01.json`. With the panel open, Down now reaches the row of
+  chips. Before, that press threw the highlight out of the panel onto a suggestion chip in the bottom bar
+  while the chips sat 150 pixels above, untouched. Cause: the chips were reached by searching the page for
+  their class and then calling a shared focus helper that refuses to mark a genuine Steam control as
+  focusable — that stamp is what dropped a permissions row out of Steam's navigation on 4 September. The chip
+  row is exactly that kind of control, so the helper honestly reported it had moved nothing, and Steam's own
+  navigation took over. The helper's own comment had named this row as the case nobody had measured. The chip
+  row now hands back its own element and is focused by name, the same way the tabs row above it already was.
+
+### The check everyone runs before a commit has been failing on a clean tree since at least 18 September (closed 2026-09-21)
+
+- ★★ `[platform]` `[QA]` **The check everyone runs before a commit has been failing on a clean tree since at
+  least 18 September** — **OPEN, found 2026-09-20.** Nothing a person using the plugin would notice. Seven
+  measured things sit worse than their best and three are past a hard limit: the roadmap is 121 KB against a
+  100 KB limit, the testing rows 177 against 165, and the neutral guide 27 against 24. That guide says every
+  check passes on a clean tree and any failure is a regression, so anyone starting work is told a wrong thing.
+
+  **Closed 2026-09-21, fixed across commits `3b60dff`, `f9684e6`, `b389561`, `cc727dc` and `380bc09`.**
+  `python scripts/verify.py --quick` now reports PASS on a clean tree. The numbers: roadmap 131.4 KB down to
+  89.8 (limit 100); testing rows 190.2 down to 114.1 (limit 165); the guide 27.2 down to 22.6 (limit 24).
+  Nothing was deleted — it moved to the archive files and is linked. The four code numbers were fixed rather
+  than re-recorded: files over 400 lines 29 back to 27, things the main screen hands its tabs 216 back to
+  215, copy-pasted lines in the app 929 down to 913, copy-pasted lines in the back-end tests 2243 down to
+  1801.
+
+### The licence filter now hides models the old Policy buttons never did (closed 2026-09-21)
+
+- ★★ `[ollama]` **The licence filter now hides models the old Policy buttons never did — needs the
+  maintainer's word** — **OPEN, found 2026-09-20, waiting on the maintainer to confirm this is what they
+  wanted.** On the default "open source only" choice the AI models list now shows 17 of 26 models, where
+  before all 26 were always listed. A filter that filters is a fair reading of the brief, but a third of
+  the catalogue changing on the default setting needs the maintainer's own word before it counts as settled.
+  [Detail](roadmap-details.md#the-licence-filter-now-hides-models-the-old-policy-buttons-never-did).
+
+  **Closed 2026-09-21 (D115).** The maintainer answered: keep it, a filter should filter. It closes as
+  wanted behaviour, not as a fix. 17 of 26 models show on the default setting, by design.
+
+### Pressing B while the reasoning display's Show details panel is open does not close it (closed 2026-09-21)
+
+- ★ `[focus]` **Pressing B while the reasoning display's Show details panel is open does not close it** —
+  **OPEN, found 2026-09-17 by the automated rig, during the reasoning-display device measurement.** Steam's
+  own Back instead moves the highlight up to the tab row; the reply has no B handling for this panel today.
+  Needs a decision on whether B should close the panel, or this counts as accepted behaviour. Evidence
+  `docs/test-evidence/plan57-M-fold-row-and-live-block.json`.
+
+  **Closed 2026-09-21 (D115).** The maintainer answered: accepted as it is. Closed as accepted behaviour, no
+  code.
+
 ## Moved from the roadmap 2026-09-19
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-19 once the maintainer's answers to plan 61 § 8

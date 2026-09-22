@@ -114,31 +114,34 @@ starts work outside this.
   correctly. **Confirmed on the Deck 2026-09-17, worse than first measured:** the jump now lands at the very
   top of the tab, on the Back to Main button, nowhere near the toggle it should reach.
   [Detail](roadmap-details.md#the-open-permissions-jump-lands-one-toggle-above-the-one-it-was-asked-for).
-- ★ `[focus]` **With Show details open, the chip row cannot be reached by the D-pad** — **OPEN, measured
-  2026-09-16 on two separate builds.** Down from Show details skips the whole chip row and lands on the
-  Session context bar; only the first chip can ever be read. It worked before this regression — the closed
-  CONTEXT-LADDER-01… 03 check (verified on the Deck 2026-09-05) had Down entering the chip row and Up walking
-  back out. [Detail](roadmap-details.md#with-show-details-open-the-chip-row-cannot-be-reached-by-the-d-pad).
 - ★ `[focus]` **Reaching the Stop generation button by D-pad while a reply is streaming is hard to find** —
   **OPEN, found 2026-09-16.** While a reply is being written, Down from the question box or from the live
   answer never reaches Stop generation; the only route is Right, then Right again from the Ask-mode button.
   Not a trap, since Stop can still be reached — just not where a person would first look. **Confirmed on the
   Deck 2026-09-17**, same route needed. [Detail](roadmap-details.md#reaching-the-stop-generation-button-by-d-pad-while-a-reply-is-streaming-is-hard-to-find).
-- ★ `[focus]` **Pressing B while the reasoning display's Show details panel is open does not close it** —
-  **OPEN, found 2026-09-17 by the automated rig, during the reasoning-display device measurement.** Steam's
-  own Back instead moves the highlight up to the tab row; the reply has no B handling for this panel today.
-  Needs a decision on whether B should close the panel, or this counts as accepted behaviour. Evidence
-  `docs/test-evidence/plan57-M-fold-row-and-live-block.json`.
 - ★ `[focus]` **Walking up from the question box skips every reply row** — **OPEN, found 2026-09-18.** Pressing
   Up from the question box goes straight to Clear, Retry, the earlier-chats row and the tab bar; a reply's own
   rows — Show details, Read aloud, the thumbs and the notes block — are reached only by walking down onto them.
-  Evidence `docs/test-evidence/plan58p1-M-hk-boss-before.json`,
-  `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-01.json`.
+  **Re-measured on the Deck 2026-09-21, build `3daa21e`: still happens.** Measured path: the ask button, then
+  Attach screenshot, then Choose AI character, then the suggestion chip, then the chat slot row — the whole
+  reply skipped. Evidence `docs/test-evidence/plan58p1-M-hk-boss-before.json`,
+  `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-01.json`, `docs/test-evidence/plan63-DETAILS-LADDER-01.json`.
 - ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **OPEN, fix did not hold
   on the Deck 2026-09-19.** Going down passes an extra copy of the question text, half hidden behind a
   button, that going up does not show. The tap-to-reveal spoiler box takes three presses to get past going
   down but only one going up. Row **REPLY-STOPS-MIRROR-01**. Evidence
   `docs/test-evidence/plan61-REPLY-STOPS-MIRROR-01-retry2.json`.
+- ★ `[focus]` `[layout]` **A highlighted question row can sit two-thirds covered by the Retry corner icon** —
+  **OPEN, measured on the Deck 2026-09-21.** With the ring on the question row "how do i beat the gonarch in
+  black mesa", only 67% of it was visible; the rest sat behind the Retry corner icon. **This reopens an entry
+  closed 2026-09-19 under D113** ("An open question's row is only partly visible behind the Retry corner
+  icon"), which closed on the strength of reading fully visible on 17 and 18 September.
+  [Closed entry](archive/roadmap-bugs-fixed.md#an-open-questions-row-is-only-partly-visible-behind-the-retry-corner-icon).
+  Evidence `docs/test-evidence/plan63-DETAILS-LADDER-01.json`.
+- ★ `[focus]` `[layout]` **An answer section can take the highlight while the Copy corner icon covers part of
+  it** — **OPEN, measured on the Deck 2026-09-21.** Same shape as the Retry-icon row above, a different
+  corner: the ring landed on part of an answer with only 89% of it visible, the rest behind the Copy icon.
+  Evidence `docs/test-evidence/plan63-DETAILS-LADDER-01.json`.
 - ★ `[kb]` **Download knowledge base needed two taps; the first did nothing visible** — **OPEN, reported
   2026-09-16, not reproduced.** Read in the code (`src/components/KnowledgeBaseSection.tsx`,
   `openStoragePicker`): the first press should open the storage-choice popup (internal or SD card) before
@@ -190,17 +193,17 @@ starts work outside this.
   explained. [Detail](roadmap-details.md#a-chat-that-is-still-writing-does-not-look-busy-from-another-chat).
 - ★★ `[focus]` **Focus ring styling is inconsistent** between plugin controls and Steam's own — **PARTIAL.** Modal scoping shipped; a
   blanket rule was tried and reverted in favour of Steam's native outline.
-- ★★ `[focus]` **The Show details chip ladder is not a D-pad stop** — **OPEN, found 2026-09-17.** With Show
-  details open, no chip beyond the first can ever be selected by the D-pad, only read on the page; this
-  broke a walk that used to work. **Seen again 2026-09-18 on a reply with a notes block:** the walk down
-  from Hide details now stops at seven visible rows with no loop, but the chip ladder is still skipped every
-  time — only the first chip can ever be read. Evidence
-  `docs/test-evidence/plan58p1-QA-NOTES-BLOCK-01-ladder-walk-21b53b9.json`. [Detail](roadmap-details.md#the-show-details-chip-ladder-is-not-a-d-pad-stop).
 - ★★ `[focus]` `[reply]` **Walking a reply with the D-pad while it is still being written loses the
   highlight** — **OPEN, found 2026-09-18.** The view keeps following new text as it streams in, and the
   highlighted control scrolls off screen with it: six of eight stops on one walk were not visible, and
   walking back down looped instead of reaching the bottom. Evidence
   `docs/test-evidence/plan61-QA-FREE-PLAY-01-streaming.json`. [Detail](roadmap-details.md#walking-a-reply-with-the-d-pad-while-it-is-still-being-written-loses-the-highlight).
+- ★★ `[focus]` **Walking down from the chat row skips the whole answer** — **OPEN, measured on the Deck
+  2026-09-21.** Down from the chat slot row lands on the "10 earlier" pill, then jumps past the question, the
+  thinking line, every answer section, Read aloud and Show details, landing on the notes block. The same
+  stops are reachable walking down from Retry, so the reply is walkable — just not entered from above. Close
+  kin to **Walking down a reply and walking back up visit different stops** (row REPLY-STOPS-MIRROR-01),
+  re-measured on this same build and still happening. Evidence `docs/test-evidence/plan63-DETAILS-LADDER-01.json`.
 - ★★ `[ollama]` **The very first model ticked in a fresh download picker starts downloading right away, with
   no chance to back out** — **OPEN, one sighting 2026-09-19, cause not looked at.** Opening the pull picker
   fresh and ticking the first model in the list (`gemma3:1b`) started it downloading immediately, with no
@@ -215,17 +218,6 @@ starts work outside this.
   D-pad could not move in the Ollama tab, as if the screen were still open. Read in the code but not proven
   on the device. Needs a reproduction with an empty download queue.
   [Detail](roadmap-details.md#a-tap-outside-the-ai-models-screen-started-the-queued-downloads-and-left-the-d-pad-stuck-in-the-ollama-tab).
-- ★★ `[ollama]` **The licence filter now hides models the old Policy buttons never did — needs the
-  maintainer's word** — **OPEN, found 2026-09-20, waiting on the maintainer to confirm this is what they
-  wanted.** On the default "open source only" choice the AI models list now shows 17 of 26 models, where
-  before all 26 were always listed. A filter that filters is a fair reading of the brief, but a third of
-  the catalogue changing on the default setting needs the maintainer's own word before it counts as settled.
-  [Detail](roadmap-details.md#the-licence-filter-now-hides-models-the-old-policy-buttons-never-did).
-- ★★ `[platform]` `[QA]` **The check everyone runs before a commit has been failing on a clean tree since at
-  least 18 September** — **OPEN, found 2026-09-20.** Nothing a person using the plugin would notice. Seven
-  measured things sit worse than their best and three are past a hard limit: the roadmap is 121 KB against a
-  100 KB limit, the testing rows 177 against 165, and the neutral guide 27 against 24. That guide says every
-  check passes on a clean tree and any failure is a regression, so anyone starting work is told a wrong thing.
 - ★★ `[reply]` **Token streaming reveals text in bursts while a game is running** — **ACCEPTED 2026-09-04 (D58 #4).** Measured 2026-08-28 with
   a game running: tokens arrive in bursts, and during a burst the overlay drops to 47 fps; between bursts it is a flat 60. Delivery
   is bursty, painting is not slow. The game's own frame rate is unmeasured. Accepted as a nice-to-have; reopen only if the game's own frame rate is measured
@@ -243,15 +235,6 @@ starts work outside this.
   seen at all on 2026-09-19** across about ten questions in four games. A separate, related fault (Down
   doing nothing while an answer arrives) was fixed 2026-09-20 and is now its own row, but this entry's own
   symptoms were not seen that day, so it stays open. [Detail](roadmap-details.md#the-panel-stops-half-way-down-and-the-ask-button-is-out-of-reach).
-- ★★★ `[layout]` `[focus]` **The new Session tab cannot be reached with the D-pad** — **OPEN, found on
-  the Deck 2026-09-21.** Both tabs are drawn on the opened Show details panel, but the highlight will not land
-  on them: walking down from Hide details goes notes block, then straight out to the question box, stepping
-  over the tabs; walking back up skips them too. So the Session tab never opens and its Clear button cannot be
-  reached. Two causes, both measured: nothing puts the highlight on that row when moving **down** (only
-  upwards from the tab content below it, though the design note above the code promises the downward way too),
-  and once the panel settles the row sits below the question box's top edge, drawn off the visible area.
-  Evidence `docs/test-evidence/plan62-main-tab-pass-2026-09-21.json`.
-
 - ★★★ `[ollama]` `[focus]` **The AI models screen closes instead of doing anything — A on almost any
   control shuts it** — **OPEN, found on the Deck 2026-09-21, blocks the whole screen.** Pressing A on the
   Filters button closes the screen and the filters never appear; pressing A on a model's tick box closes it
@@ -510,12 +493,21 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   can be left sitting over the suggestion chips. The exact reason the fade stalls could not be proven on the
   rig, which has no touch, so the fix force-finishes the close with a plain timer either way. Row
   **TAB-BAR-GHOST-01**, needs a finger, and it is on the maintainer's checklist.
+- ★★ `[focus]` **The Show details chip ladder is not a D-pad stop** — **VERIFY, fixed 2026-09-21** by the
+  same fix that let Down reach the chip row (commit `3daa21e`). With the panel open, the row of chips now
+  takes the highlight. **Still owed:** this entry's own, narrower claim — that no chip beyond the first can
+  be selected, only read — was not tested on the Deck. Walk left and right across the chips with the panel
+  open and confirm the active chip changes. Evidence `docs/test-evidence/plan63-DETAILS-LADDER-01.json`.
+  [Detail](roadmap-details.md#the-show-details-chip-ladder-is-not-a-d-pad-stop).
 - ★★★ `[chat]` **Clear cache cleared the screen but not the session** — **VERIFY.** Fixed and confirmed
   2026-08-27 and 2026-09-03; the orphan-chat half is a measured follow-up, not a regression. Only the
   mid-generation half is still owed: clearing while a reply is still being written. Row **CLEAR-CACHE-01**.
   **Tried twice on the Deck 2026-09-18, both too slow:** Clear landed on an already-finished reply both
   times; Clear itself worked cleanly. Needs a reply over about 70 seconds to catch it mid-write, or the
-  maintainer's word to call this covered by its unit test instead. [Detail](roadmap-details.md#clear-cache-cleared-the-screen-but-not-the-session).
+  maintainer's word to call this covered by its unit test instead. **Per the maintainer's answer 2026-09-21
+  (D115 #8): this mid-generation half now moves off this session's list and onto the maintainer's own
+  checklist** — five device tries is enough, and every reply finished before the controller could walk
+  there. The rest of this entry is unchanged. [Detail](roadmap-details.md#clear-cache-cleared-the-screen-but-not-the-session).
 ### Features that need verification
 
 - ★★★★ `[ask]` **A chat carries what it has already covered into the next question** — **VERIFY, built 2026-09-21.**
@@ -905,3 +897,26 @@ copied line for line, nothing reworded: [archive/roadmap-done-v0.5.0.md](archive
 
 Newest first. Everything closed from 2026-09-16 onward was moved into that file on 2026-09-21, copied
 line for line, nothing reworded, to keep this document under its size limit.
+
+**Closed 2026-09-21 (D115, the maintainer's answers before plan 63 started):**
+
+- ★ `[focus]` **Pressing B while the reasoning display's Show details panel is open does not close it** —
+  **DONE, closed 2026-09-21 (D115).** The maintainer's word: accepted as it is. No code changed.
+  [Full detail](archive/roadmap-bugs-fixed.md#pressing-b-while-the-reasoning-displays-show-details-panel-is-open-does-not-close-it).
+- ★★ `[ollama]` **The licence filter now hides models the old Policy buttons never did** — **DONE, closed
+  2026-09-21 (D115).** The maintainer's word: keep it, a filter should filter. 17 of 26 models show on the
+  default setting, by design. [Full detail](archive/roadmap-bugs-fixed.md#the-licence-filter-now-hides-models-the-old-policy-buttons-never-did).
+
+**Closed 2026-09-21 (plan 63 block 0, fixed and proven on the Deck):**
+
+- ★ `[focus]` **With Show details open, the chip row cannot be reached by the D-pad** — **DONE, fixed and
+  confirmed on the Deck 2026-09-21.** Down from Show details now reaches the row of chips instead of jumping
+  past it into the bottom bar. [Full detail](archive/roadmap-bugs-fixed.md#with-show-details-open-the-chip-row-cannot-be-reached-by-the-d-pad).
+- ★★ `[platform]` `[QA]` **The check everyone runs before a commit has been failing on a clean tree since at
+  least 18 September** — **DONE, fixed 2026-09-21.** The check now passes on a clean tree again. Nothing was
+  deleted to get there — the oversized documents were trimmed and their old detail moved to the archive
+  files, linked rather than lost. [Full detail](archive/roadmap-bugs-fixed.md#the-check-everyone-runs-before-a-commit-has-been-failing-on-a-clean-tree-since-at-least-18-september).
+- ★★★ `[layout]` `[focus]` **The new Session tab cannot be reached with the D-pad** — **DONE, fixed and
+  confirmed on the Deck 2026-09-21.** Walking down from Show details now reaches the tabs and opens the
+  Session tab; its rows can be walked too. The entry's second recorded cause, the row sitting off screen, did
+  not reproduce — it had simply never taken focus before. [Full detail](archive/roadmap-bugs-fixed.md#the-new-session-tab-cannot-be-reached-with-the-d-pad).

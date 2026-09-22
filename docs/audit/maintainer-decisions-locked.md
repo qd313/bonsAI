@@ -5884,3 +5884,35 @@ What these do to the roadmap: all four feature entries were reworded the same da
 a link to the board. Two new things were opened along the way — the chat name being off-centre, folded into
 feature 1 rather than filed on its own because the same lane is already in that file, and the check everyone
 runs before a commit being red on a clean tree, found while writing the plan.
+
+### D115 — LOCKED 2026-09-21 (raised 2026-09-21) — Plan 63 bug-fixing session: the ten calls before block 0
+
+Raised from [the plan 63 session](../planning/63-bugfix-session-four.md) § 2, written before the session
+began. The maintainer answered all ten on 2026-09-21.
+
+1. **The failing pre-commit check.** Trim the three documents back under their limits. Not a new baseline,
+   not raised limits.
+2. **The seven focus bugs that share one file.** The session does them itself, in order. No lane, even with
+   measurements in hand.
+3. **What may happen on the Deck unattended.** Deploy builds, launch and quit games, change settings and put
+   them back, download models. The 17 GB model still needs a separate ask.
+4. **How deep into the knowledge-base bugs.** Code-shaped ones only. The note-rewriting ones wait for a
+   notes session.
+5. **The licence filter hiding 9 of 26 models.** Keep it — a filter should filter. The entry closes.
+6. **The UI size setting.** Cut the choices to what is real. Not the full wiring job.
+7. **B on the open details panel.** Accepted as it is. The entry closes as accepted behaviour, no code.
+8. **Clearing the cache mid-answer.** Goes on the maintainer's own checklist. Five device tries is enough.
+9. **The stuck-panel bug.** Watch for it across the night, do not chase it. Count presses; silence across a
+   few hundred is the evidence.
+10. **The roughly thirty old working copies.** Clear the finished ones, keep any holding work that never
+    landed.
+
+What these answers do to the roadmap:
+
+- **(5)** closes to Done. The AI models list showing 17 of 26 models on the default setting is the intended
+  shape, not a bug; nothing changes in code.
+- **(7)** closes to Done as accepted behaviour. Pressing B on the open Show details panel stays as it is; no
+  code follows.
+- **(8)** the mid-generation half of "Clear cache cleared the screen but not the session" moves off this
+  session's Verify list and onto the maintainer's own checklist. It stays recorded in Verify with a note;
+  the rest of that entry is unchanged.

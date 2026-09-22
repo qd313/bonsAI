@@ -276,6 +276,17 @@ export function ModelRoutingOrderModal({
       strOKButtonText="Done"
       strCancelButtonText="Cancel"
       onOK={() => {
+        // Pressing Done without ever touching a row's Up/Down still rewrote the settings file --
+        // measured on the Deck 2026-09-17 (docs/test-evidence/plan57-QA-vision-try-order-writes-
+        // settings.json): the file's checksum and save time both changed with only one model
+        // listed and nothing pressed but Done. onSave used to run unconditionally here; now it
+        // only runs when the order actually differs from what the picker opened with.
+        const changed =
+          order.length !== initial.length || order.some((tag, i) => tag !== initial[i]);
+        if (!changed) {
+          onClose();
+          return;
+        }
         void Promise.resolve(onSave(order)).then(() => onClose());
       }}
       onCancel={onClose}

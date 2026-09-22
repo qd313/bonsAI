@@ -206,6 +206,72 @@ export function focusReplyUtilityRow(liveSlot: HTMLElement | null): boolean {
   return focusReplyCopy(liveSlot);
 }
 
+/**
+ * Focus one of OUR OWN bare `.Panel.Focusable` rows, the ones this plugin renders itself.
+ *
+ * `focusDeckOwner` above deliberately will not do this, and it is right not to: it climbs to the
+ * nearest `.Panel.Focusable` ancestor, which is often one of Steam's, and stamping a `tabindex` on
+ * one of those is what dropped a permission row out of Steam's navigation on 2026-09-04. But our
+ * own rows -- the chip ladder, the details tabs row, the "From the notes" block -- carry no
+ * `tabindex` on device either and hold nothing natively focusable inside them, so `focusDeckOwner`
+ * honestly reports false for them and the caller's move dies. Measured on the Deck 2026-09-21: the
+ * chip ladder was in exactly that state and Up/Down past it walked out of the plugin entirely.
+ *
+ * The distinction that makes this safe is ownership, not shape. This only ever touches an element
+ * whose own class list says it is ours, never an ancestor, and never Steam's. It is the same thing
+ * the transcript's own per-turn helper does, which is measured carrying Steam's ring correctly.
+ */
+export function focusOwnBonsaiRow(el: HTMLElement | null | undefined): boolean {
+  if (!el) return false;
+  const ours = Array.from(el.classList).some((c) => c.startsWith("bonsai-"));
+  if (!ours) return false;
+  if (!el.hasAttribute("tabindex") && !el.matches?.("button, a, input, select, textarea")) {
+    el.setAttribute("tabindex", "-1");
+  }
+  try {
+    el.focus({ preventScroll: true });
+  } catch {
+    return false;
+  }
+  return elementHasFocus(el);
+}
+
+/**
+ * The lowest stop inside the newest reply on screen -- what Up from the dock should reach.
+ *
+ * Roadmap: "Walking up from the question box skips every reply row". Measured on the Deck
+ * 2026-09-21: Up from the suggestion chip went straight to the chat slot row, stepping over the
+ * question row, the thinking line, every answer section, Read aloud, Show details and the notes
+ * block. The cause is a leftover, not a missing handler. The chips' own `exitUp` aimed at the
+ * session context strip, which WAS the last stop above the dock -- until plan 62 3c folded that
+ * strip into the Show details panel as a tab and removed it. With nothing registered under that
+ * name any more, `takeNavFocus` correctly reported false every time and the fallback to the chat
+ * slot row ran on every press, which is the whole bug.
+ *
+ * Tried in bottom-up order, so Up lands on the nearest thing above the dock rather than the top of
+ * the reply: the open details panel's own content first (the chip ladder for "This answer", the
+ * session list for "Session"), then the tabs row itself, then the notes block, then the Show
+ * details line, then the reply's utility row. Each one reports false when it is not mounted, so a
+ * closed panel, a reply with no notes and an empty chat all fall through cleanly.
+ */
+export function focusBottomOfNewestReply(): boolean {
+  const doc = getUiDocument();
+  const slots = doc.querySelectorAll<HTMLElement>(".bonsai-chat-turn-slot");
+  const slot = slots.length > 0 ? slots[slots.length - 1] : null;
+  if (!slot) return false;
+  const bottomUp = [
+    ".bonsai-details-session-body",
+    ".bonsai-chip-ladder",
+    ".bonsai-details-tabs-row",
+    ".bonsai-kb-notes-block",
+  ];
+  for (const selector of bottomUp) {
+    if (focusOwnBonsaiRow(slot.querySelector<HTMLElement>(selector))) return true;
+  }
+  if (focusReplyShowDetails(slot)) return true;
+  return focusReplyUtilityRow(slot);
+}
+
 export function focusLastReplyChip(liveSlot: HTMLElement | null): boolean {
   const reply = liveSlot?.querySelector(".bonsai-chat-reply-actions");
   if (!reply) return false;

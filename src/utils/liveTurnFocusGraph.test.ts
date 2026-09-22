@@ -2,7 +2,9 @@ import { describe, expect, it } from "vitest";
 
 import {
   focusAnyContextChipLadder,
+  focusBottomOfNewestReply,
   focusDeckOwner,
+  focusOwnBonsaiRow,
   focusDownFromLiveAnswerBubble,
   focusDownFromReplyUtilityRow,
   focusLastSessionContextRow,
@@ -379,5 +381,96 @@ describe("liveTurnFocusGraph", () => {
     const slot = queryLiveTurnSlot(document.body);
     expect(focusDownFromLiveAnswerBubble(slot)).toBe(true);
     expect(document.activeElement?.id).toBe("stop-show-details");
+  });
+
+  /*
+   * Roadmap: "Walking up from the question box skips every reply row", measured on the Deck
+   * 2026-09-21. The cause was a leftover: the suggestion chips' own Up aimed at the session context
+   * strip, which was the last stop above the dock until plan 62 3c folded it into the Show details
+   * panel as a tab and removed it. Nothing has registered under that name since, so Up fell through
+   * to the chat slot row on every press and stepped over the whole reply.
+   *
+   * These pin the replacement. `focusOwnBonsaiRow` is the piece that makes it possible at all: the
+   * rows it has to reach are bare `.Panel.Focusable` elements carrying no tabindex on device, which
+   * `focusDeckOwner` deliberately refuses to touch (see its own tests above) -- rightly, because
+   * stamping one of Steam's own is what broke a permission row on 2026-09-04. The distinction is
+   * ownership, so that is what the first two tests check.
+   */
+  describe("reaching the bottom of the newest reply, for Up out of the dock", () => {
+    it("focusOwnBonsaiRow focuses one of our own bare Focusables, which focusDeckOwner will not", () => {
+      mountLiveTurn(`
+        <div class="bonsai-chip-ladder Panel Focusable"></div>
+      `);
+      const ladder = document.querySelector(".bonsai-chip-ladder") as HTMLElement;
+
+      // The shape measured on the Deck: ours, a genuine Focusable, no tabindex, nothing
+      // natively focusable inside it. focusDeckOwner honestly reports it moved nothing.
+      expect(focusDeckOwner(ladder)).toBe(false);
+
+      expect(focusOwnBonsaiRow(ladder)).toBe(true);
+      expect(document.activeElement).toBe(ladder);
+      expect(ladder.getAttribute("tabindex")).toBe("-1");
+    });
+
+    it("focusOwnBonsaiRow refuses anything that is not ours, so Steam's own rows are never stamped", () => {
+      mountLiveTurn(`
+        <div class="SomeSteamClass Panel Focusable"></div>
+      `);
+      const steamRow = document.querySelector(".SomeSteamClass") as HTMLElement;
+      expect(focusOwnBonsaiRow(steamRow)).toBe(false);
+      expect(steamRow.hasAttribute("tabindex")).toBe(false);
+    });
+
+    it("lands on the details panel's own content when the panel is open -- the lowest stop there is", () => {
+      mountLiveTurn(`
+        <div class="bonsai-chat-turn-slot">
+          <div class="bonsai-kb-notes-block Panel Focusable"></div>
+          <div class="bonsai-details-tabs-row Panel Focusable"></div>
+          <div class="bonsai-chip-ladder Panel Focusable"></div>
+        </div>
+      `);
+      expect(focusBottomOfNewestReply()).toBe(true);
+      expect((document.activeElement as HTMLElement)?.className).toContain("bonsai-chip-ladder");
+    });
+
+    it("falls back up the reply when the panel is shut: the notes block, then Show details", () => {
+      resetReplyStops();
+      mountLiveTurn(`
+        <div class="bonsai-chat-turn-slot">
+          <div class="bonsai-kb-notes-block Panel Focusable"></div>
+        </div>
+      `);
+      expect(focusBottomOfNewestReply()).toBe(true);
+      expect((document.activeElement as HTMLElement)?.className).toContain("bonsai-kb-notes-block");
+
+      resetReplyStops();
+      mountLiveTurn(`<div class="bonsai-chat-turn-slot"></div>`);
+      const showDetails = document.createElement("button");
+      showDetails.id = "stop-show-details";
+      (document.querySelector(".bonsai-chat-turn-slot") as HTMLElement).appendChild(showDetails);
+      registerReplyStop("show-details", showDetails);
+      expect(focusBottomOfNewestReply()).toBe(true);
+      expect(document.activeElement?.id).toBe("stop-show-details");
+    });
+
+    it("reports false with no reply on screen at all, so the chat slot row still gets the press", () => {
+      resetReplyStops();
+      mountLiveTurn(`<div class="bonsai-main-tab-dock"></div>`);
+      expect(focusBottomOfNewestReply()).toBe(false);
+    });
+
+    it("uses the NEWEST turn when several are on screen, not the first one it finds", () => {
+      resetReplyStops();
+      mountLiveTurn(`
+        <div class="bonsai-chat-turn-slot">
+          <div class="bonsai-kb-notes-block Panel Focusable" id="older"></div>
+        </div>
+        <div class="bonsai-chat-turn-slot">
+          <div class="bonsai-kb-notes-block Panel Focusable" id="newest"></div>
+        </div>
+      `);
+      expect(focusBottomOfNewestReply()).toBe(true);
+      expect(document.activeElement?.id).toBe("newest");
+    });
   });
 });

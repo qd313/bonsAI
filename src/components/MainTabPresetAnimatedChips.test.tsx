@@ -519,6 +519,9 @@ describe("MainTabPresetAnimatedChips askRestartToken (D58 #3: an Ask restarts th
 describe("usePresetRowNav exitUp (D58 #2: Up leaves the row at once)", () => {
   afterEach(() => {
     resetNavFocusRegistry();
+    // These tests put a real reply in the document, so clear it: a slot left behind would make
+    // the "no reply on screen" cases pass for the wrong reason.
+    document.body.innerHTML = "";
   });
 
   function upHandler() {
@@ -531,31 +534,57 @@ describe("usePresetRowNav exitUp (D58 #2: Up leaves the row at once)", () => {
     expect(upHandler()()).toBe(false);
   });
 
-  it("hands off to the session context strip when a reply is on screen", () => {
-    registerNavFocus("session-context-strip", { current: { TakeFocus: () => true } });
-    expect(upHandler()()).toBe(true);
-  });
+  /*
+   * These three used to be written against the session context strip, and they are the reason the
+   * bug below survived on the device for three days while every test stayed green.
+   *
+   * Roadmap: "Walking up from the question box skips every reply row", measured on the Deck
+   * 2026-09-21 -- Up from a suggestion chip went straight to the chat slot row, stepping over the
+   * question row, the thinking line, every answer section, Read aloud, Show details and the notes
+   * block. The cause was a leftover: `exitUp` aimed at the session context strip, which really was
+   * the last stop above the dock until plan 62 3c folded it into the Show details panel as a tab
+   * and removed it. Nothing has registered under that name since.
+   *
+   * The old tests registered that name THEMSELVES, by hand, and then checked it was reached. So
+   * they proved the handler could reach a target the real screen no longer mounts -- passing on a
+   * shape the system stopped emitting. Rewritten to put a real reply in the document and require
+   * the handler to land inside it, which is the thing a person actually does.
+   */
+  function mountReplyWithNotesBlock() {
+    const slot = document.createElement("div");
+    slot.className = "bonsai-chat-turn-slot";
+    const notes = document.createElement("div");
+    notes.className = "bonsai-kb-notes-block Panel Focusable";
+    notes.id = "notes-block";
+    slot.appendChild(notes);
+    document.body.appendChild(slot);
+    return notes;
+  }
 
-  it("falls back to the always-mounted chat slot row when there is no strip (an empty chat)", () => {
-    registerNavFocus("chat-slot-row", { current: { TakeFocus: () => true } });
-    expect(upHandler()()).toBe(true);
-  });
-
-  it("tries the strip first even when both are registered", () => {
-    const strip = vi.fn(() => true);
+  it("lands inside the reply on screen, not on the chat slot row above it", () => {
+    const notes = mountReplyWithNotesBlock();
     const slotRow = vi.fn(() => true);
-    registerNavFocus("session-context-strip", { current: { TakeFocus: strip } });
     registerNavFocus("chat-slot-row", { current: { TakeFocus: slotRow } });
 
     expect(upHandler()()).toBe(true);
-    expect(strip).toHaveBeenCalledTimes(1);
+    expect(document.activeElement).toBe(notes);
     expect(slotRow).not.toHaveBeenCalled();
   });
 
-  it("falls all the way through when the strip is registered but declines the move", () => {
-    registerNavFocus("session-context-strip", { current: { TakeFocus: () => false } });
+  it("falls back to the always-mounted chat slot row when there is no reply (an empty chat)", () => {
     registerNavFocus("chat-slot-row", { current: { TakeFocus: () => true } });
     expect(upHandler()()).toBe(true);
+  });
+
+  it("falls through to the chat slot row when a reply is on screen but offers no stop", () => {
+    const slot = document.createElement("div");
+    slot.className = "bonsai-chat-turn-slot";
+    document.body.appendChild(slot);
+    const slotRow = vi.fn(() => true);
+    registerNavFocus("chat-slot-row", { current: { TakeFocus: slotRow } });
+
+    expect(upHandler()()).toBe(true);
+    expect(slotRow).toHaveBeenCalledTimes(1);
   });
 });
 

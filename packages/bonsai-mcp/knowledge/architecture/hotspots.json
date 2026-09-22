@@ -67,7 +67,7 @@
     },
     {
       "path": "src/components/MainTabPresetAnimatedChips.tsx",
-      "lines": 1300,
+      "lines": 1308,
       "role": ""
     },
     {
@@ -136,13 +136,13 @@
       "role": ""
     },
     {
-      "path": "src/hooks/usePluginSettings.ts",
-      "lines": 691,
+      "path": "src/components/MainTabPresetAnimatedChips.test.tsx",
+      "lines": 695,
       "role": ""
     },
     {
-      "path": "src/components/MainTabPresetAnimatedChips.test.tsx",
-      "lines": 666,
+      "path": "src/hooks/usePluginSettings.ts",
+      "lines": 691,
       "role": ""
     },
     {

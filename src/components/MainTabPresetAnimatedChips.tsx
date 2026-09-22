@@ -100,6 +100,7 @@ import {
 import { joinPresetWithRunningGame } from "../utils/joinPresetWithRunningGame";
 import { buildChipNavHandlers } from "../features/preset-carousel/presetRowNav";
 import { registerNavFocus, unregisterNavFocus, takeNavFocus, type NavRefHolder } from "../utils/navFocusRegistry";
+import { focusBottomOfNewestReply } from "../utils/liveTurnFocusGraph";
 import { elementHasFocus } from "../utils/uiDocument";
 
 /*
@@ -508,14 +509,21 @@ export function usePresetRowNav(
         count,
         focusChip,
         exitDown: () => exitDown?.() === true,
-        // The session strip is the last stop above the dock whenever a reply is on screen; with
-        // nothing registered (an empty chat), fall back to the always-mounted chat slot row
-        // (ChatSlotRow.tsx) rather than let Steam's own navigation take over. D58 #2, measured
+        // The lowest stop of the newest reply is what sits above the dock whenever a reply is on
+        // screen; with no reply at all (an empty chat), fall back to the always-mounted chat slot
+        // row (ChatSlotRow.tsx) rather than let Steam's own navigation take over. D58 #2, measured
         // 2026-09-03: leaving that unclaimed made Steam's own multi-step fallback walk one chip
         // to the left per Up press -- four wasted presses before a fifth finally reached the slot
         // row (runs/PRESET-ROW-up-from-chips-probe.json). Trying both here, in order, claims the
         // move on the first press instead.
-        exitUp: () => takeNavFocus("session-context-strip") || takeNavFocus("chat-slot-row"),
+        //
+        // This used to aim at the session context strip, which really was the last stop above the
+        // dock -- until plan 62 3c folded that strip into the Show details panel as a tab and
+        // removed it. Nothing has been registered under that name since, so the first half always
+        // reported false and every Up press fell through to the chat slot row, stepping over the
+        // whole reply. Measured on the Deck 2026-09-21, roadmap: "Walking up from the question box
+        // skips every reply row".
+        exitUp: () => focusBottomOfNewestReply() || takeNavFocus("chat-slot-row"),
         advanceAtEnd,
         onBlockedEdge: () => flagBlockedEdge(index),
       }) as unknown as Record<string, unknown>,

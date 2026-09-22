@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 419,
-  "edgeCount": 1075,
+  "edgeCount": 1076,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -540,6 +540,7 @@
         "src/features/preset-carousel/presetRowNav.ts",
         "src/features/preset-carousel/presetSlotRotation.ts",
         "src/utils/joinPresetWithRunningGame.ts",
+        "src/utils/liveTurnFocusGraph.ts",
         "src/utils/navFocusRegistry.ts",
         "src/utils/uiDocument.ts"
       ],
@@ -3847,6 +3848,7 @@
       ],
       "importedBy": [
         "src/components/MainTabChatTranscript.tsx",
+        "src/components/MainTabPresetAnimatedChips.tsx",
         "src/components/SessionContextStrip.tsx",
         "src/components/StrategyChecklistPanel.tsx",
         "src/utils/buildAnswerBubbleElement.tsx",

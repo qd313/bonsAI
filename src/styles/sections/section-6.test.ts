@@ -77,6 +77,27 @@ describe("strategy placeholder font size matches the real caret (section 6 CSS, 
   });
 });
 
+describe("chat slot dots row sits under the open tab strip (section 6 CSS, roadmap: the row of small dots under the chat name still shows below the open tab strip)", () => {
+  // Measured on the Deck 2026-09-18 (docs/test-evidence/plan61-TAB-STRIP-2A-07.json): the open
+  // strip's bottom edge sits at 130px, but the dots' own bottom edge sat at 136.667-138.667px --
+  // 7 to 9px below the strip, poking out under it. The strip was already raised to 66px on
+  // 2026-09-17 specifically to cover this, and the roadmap's Features list asks changes here to
+  // spend as little vertical room as possible, so the fix moves the dots up (10px) instead of
+  // growing the strip again.
+  const css = buildSection6Section();
+
+  it("moves the dots row up instead of leaving it below the row above it", () => {
+    const match = css.match(/\.bonsai-scope \.bonsai-chat-slot-dots\s*\{([^}]*)\}/);
+    expect(match).toBeTruthy();
+    const body = match![1]!;
+    const marginMatch = body.match(/margin-top:\s*calc\((-?\d+(?:\.\d+)?)px/);
+    expect(marginMatch).toBeTruthy();
+    // Was +6px (dots sat 6px below the title row). Needed at least ~9px more of upward
+    // movement to clear the measured 7-9px overshoot below the strip -- -4px is a 10px move.
+    expect(Number(marginMatch![1])).toBeLessThanOrEqual(-4);
+  });
+});
+
 describe("chat slot title centring (section 6 CSS, plan 62 3a)", () => {
   // The chat's name used to sit 14px left of the game name above it and the dots below it,
   // because the title row centred the name TOGETHER with the small delete x beside it, and the

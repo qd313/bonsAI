@@ -1491,7 +1491,17 @@ export function buildSection6Section(): string {
           justify-content: center;
           gap: ${uiScalePx(6)};
           gap: round(${uiScalePx(6)}, 1px);
-          margin-top: ${uiScalePx(6)};
+          /*
+            Raised from 6px to -4px (roadmap: "The row of small dots under the chat name still
+            shows below the open tab strip"). Measured on the Deck 2026-09-18
+            (docs/test-evidence/plan61-TAB-STRIP-2A-07.json): the open strip's bottom edge sits at
+            130px, but the dots' own bottom edge sat at 136.667-138.667px, 7-9px below it, so the
+            66px strip (chosen 2026-09-17 to cover exactly this) did not reach them. Moving the
+            dots up 10px instead of growing the strip further keeps the strip's height, which the
+            roadmap's Features list asks every change here to spend as little of as possible
+            (vertical room for the chat bubbles below).
+          */
+          margin-top: ${uiScalePx(-4)};
         }
         .bonsai-scope .bonsai-chat-slot-dot {
           /*

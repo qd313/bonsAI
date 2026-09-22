@@ -461,8 +461,9 @@ class KnowledgeRetrievalResult:
     #
     # `best_meaning` is the strongest cosine in the whole candidate pool -- the same number the
     # meaning floor judges, so "did it attach" and "how good was it" cannot drift apart.
-    # `top_card_keyword_score` is the winning card's own BM25 score, which is 0.0 when the
-    # keyword half never ranked that card and only the meaning half found it.
+    # `top_card_keyword_score` is the strongest BM25 score among every card that attached this
+    # turn (see `_attached_keyword_score`), which is 0.0 only when none of them were ever
+    # ranked by the keyword half and every one was found by meaning alone.
     #
     # **Both are absent, not low, whenever there was nothing to measure**: Speed mode, no embed
     # model reachable, a corpus baked without vectors, and an empty candidate pool all end here
@@ -915,6 +916,24 @@ def _best_meaning_score(
     if not vectors_by_id:
         return None
     return max(_dot_similarity(query_vector, vec) for vec in vectors_by_id.values())
+
+
+def _attached_keyword_score(cards: list[KnowledgeCard]) -> float:
+    """Strongest keyword score among every card that attached this turn.
+
+    Was ``cards[0].bm25_score`` -- only the single highest-fused card's own score -- which let
+    ``should_show_no_close_match_notice`` print its warning under a reply the model plainly
+    built on a note attached second or third, whenever the fusion winner itself had no keyword
+    support. Sighted on a Hollow Knight boss question, 2026-09-18: fusion put "Starting out in
+    Hollow Knight" first (meaning-only, no keyword hit), while the reply's fight tactics came
+    straight from "Broken Vessel", attached second with a real keyword hit that this function
+    would have caught. See docs/roadmap-details.md, "The 'no close match' line reads wrong next
+    to a note the reply used".
+
+    0.0 (same as before) when ``cards`` is empty -- the fallback-card path, where nothing
+    attached and there is no keyword score to report.
+    """
+    return max((card.bm25_score for card in cards), default=0.0)
 
 
 def _question_without_game_name(question: str, game_name: str) -> str:
@@ -1486,6 +1505,15 @@ def _format_block(
         trust = _lowest_trust_tier(kept)
         # Sources describe surviving cards only — a citation for text the model never saw is
         # worse than no citation.
+        #
+        # Every kept card gets an entry here, whether or not it has a source page -- `url` and
+        # `license` are simply "" for a maintainer-authored note or a shared troubleshooting
+        # tip. This used to be `if c.source_url`, which dropped those cards from this list
+        # entirely: the one place the credit line under a reply (build_attribution_entries,
+        # transparency_service.py) reads what actually attached, so a shared tip or a
+        # memory-written note had never once named itself there, even though it plainly shaped
+        # the reply. See docs/roadmap.md, "The credit line under a reply never names a note
+        # with no source page, or a shared tip."
         sources = [
             {
                 "title": f"{c.game_title} — {c.name}",
@@ -1497,7 +1525,6 @@ def _format_block(
                 "captured": str(c.crawled_at or ""),
             }
             for c in kept
-            if c.source_url
         ]
         if len(kept) < len(cards):
             lines.append(_omitted_note(len(cards) - len(kept)))
@@ -1875,9 +1902,9 @@ def retrieve_knowledge_context(
             retrieval_method=retrieval_method,
             best_meaning=best_meaning,
             best_meaning_without_game_name=best_meaning_without_game_name,
-            # cards[0] is the winning card after fusion. Empty only on the fallback-card path,
-            # where there is no winning card and so no keyword score to report.
-            top_card_keyword_score=cards[0].bm25_score if cards else 0.0,
+            # The best keyword score among every card that attached, not just cards[0] (the
+            # fusion winner) -- see _attached_keyword_score for why that distinction matters.
+            top_card_keyword_score=_attached_keyword_score(cards),
             timing_ms={
                 "resolve_ms": resolve_ms,
                 "fts_ms": fts_ms,

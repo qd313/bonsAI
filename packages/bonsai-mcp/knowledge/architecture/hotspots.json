@@ -12,7 +12,7 @@
     },
     {
       "path": "py_modules/backend/services/knowledge_base_service.py",
-      "lines": 2257,
+      "lines": 2284,
       "role": ""
     },
     {
@@ -72,7 +72,7 @@
     },
     {
       "path": "py_modules/backend/services/game_ai_request.py",
-      "lines": 1103,
+      "lines": 1158,
       "role": ""
     },
     {
@@ -92,7 +92,7 @@
     },
     {
       "path": "py_modules/backend/services/transparency_service.py",
-      "lines": 929,
+      "lines": 946,
       "role": ""
     },
     {

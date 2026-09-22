@@ -273,6 +273,42 @@ def _parse_kb_attached_notes(
     return notes
 
 
+def _kb_search_log_fields(
+    kb_result: Any, *, kb_domain: str, app_name: str, kb_survived: bool, starved: bool
+) -> dict[str, Any]:
+    """Fields for the app-activity log line naming what the knowledge-base search found this
+    turn and what actually reached the model.
+
+    Why this exists (D-lane 63 G, task 3): the check that compares what Show details SAYS
+    attached against what retrieval really decided has never once been runnable, because
+    nothing in the log recorded either half. ``kb_result.sources`` is retrieval's own decision
+    of what to format (searched, and named); ``kb_survived`` is whether that same set stayed in
+    the prompt once the outer proton-log/knowledge-base budget in `stack_context_blocks` ran --
+    the "starved" case this turn's own comment above describes. When starved, the search still
+    found something (`searched_count` > 0) but nothing reached the model (`attached_count` 0),
+    which is exactly the gap a screen-vs-log comparison needs to be able to see.
+
+    Names, not just counts -- `searched_notes` / `attached_notes` are "; "-joined titles in the
+    same `"{game_title} — {name}"` shape `_format_block` builds them in, so a name here can be
+    matched by eye against a card shown on screen. `top_keyword_score` / `best_meaning_score`
+    are the same two aggregate numbers Show details itself reads (`kb_top_card_keyword_score`,
+    `kb_best_meaning`) -- the turn's best score, not one per card; a full per-card breakdown
+    would need new fields on `KnowledgeRetrievalResult` this task did not build.
+    """
+    titles = [str(source.get("title") or "") for source in (kb_result.sources or [])]
+    return {
+        "kb_domain": kb_domain,
+        "app_name": app_name,
+        "searched_count": len(titles),
+        "searched_notes": "; ".join(titles),
+        "attached_count": len(titles) if kb_survived else 0,
+        "attached_notes": "; ".join(titles) if kb_survived else "",
+        "starved_by_context_budget": starved,
+        "top_keyword_score": kb_result.top_card_keyword_score,
+        "best_meaning_score": kb_result.best_meaning,
+    }
+
+
 def _publish_kb_attached_notes_live(
     plugin: Any, request_id: Optional[int], notes: list[dict[str, Any]]
 ) -> None:
@@ -668,6 +704,25 @@ async def run_game_ai_request(
                 top_card_keyword_score=kb_result.top_card_keyword_score,
                 best_meaning_without_game_name=kb_result.best_meaning_without_game_name,
             )
+            # Off by default (Settings -> Advanced -> App activity logging to Desktop, level
+            # Verbose) -- this line only lands in ~/Desktop/bonsAI_logs/bonsai-app-*.log once
+            # that is turned on and filesystem writes are allowed. See _kb_search_log_fields
+            # for why it exists and what each field means. `hasattr` guards the same way the
+            # `_publish_thinking_phase_key` calls above do, since not every caller of this
+            # function (the test doubles in tests/test_game_ai_request*.py) is the real Plugin.
+            if hasattr(plugin, "_maybe_app_log"):
+                await plugin._maybe_app_log(
+                    "ask.kb_search",
+                    "knowledge-base search",
+                    level="verbose",
+                    fields=_kb_search_log_fields(
+                        kb_result,
+                        kb_domain=kb_domain,
+                        app_name=app_name,
+                        kb_survived=kb_survived,
+                        starved=starved,
+                    ),
+                )
 
         # Plan 58 phase 1: the "From the notes" block's own material -- the notes that actually
         # reached the model, in their own words, from what retrieval attached and nowhere else.

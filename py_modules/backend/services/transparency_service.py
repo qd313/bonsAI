@@ -425,6 +425,16 @@ def _captured_date(value: Any) -> str:
     return match.group(1) if match else ""
 
 
+# A card `build_attribution_entries` groups with no source page to credit -- a shared
+# troubleshooting tip, or a note written from bonsAI's own memory with no wiki behind it.
+# These used to be dropped from the credit line entirely (`if not url: continue`), so the one
+# line under a reply that says what it was built on never once named them, even on a reply
+# that plainly used one. See docs/roadmap.md, "The credit line under a reply never names a
+# note with no source page, or a shared tip." Kept in its own group, separate from any real
+# wiki: a citation for an actual third party must never be diluted by one with nothing to cite.
+_NO_SOURCE_LABEL = "No source page"
+
+
 def build_attribution_entries(sources: Any) -> list[dict[str, Any]]:
     """Group per-card sources into one credit line per (source, licence).
 
@@ -432,25 +442,32 @@ def build_attribution_entries(sources: Any) -> list[dict[str, Any]]:
     reads as noise and gets skipped -- the opposite of crediting anyone. Grouping keeps the
     card titles, so the per-work part of a ShareAlike attribution survives.
 
-    Cards with no ``source_url`` are skipped rather than credited to nobody: those are
-    maintainer-authored and have no third party to name.
+    A card with no ``source_url`` -- a shared troubleshooting tip, or a note written from
+    bonsAI's own memory -- is grouped under ``_NO_SOURCE_LABEL`` rather than skipped: it still
+    named the notes that shaped the reply, it just cannot credit a third party for them (see
+    ``_NO_SOURCE_LABEL`` above for why this used to drop them instead).
     """
     grouped: dict[tuple[str, str], dict[str, Any]] = {}
     for item in sources or []:
         if not isinstance(item, dict):
             continue
-        url = str(item.get("url") or "").strip()
-        if not url:
-            continue
-        source = source_display_name(url)
-        if not source:
-            continue
-        key = (source, str(item.get("license") or "").strip())
-        entry = grouped.setdefault(
-            key, {"source": source, "license": key[1], "url": url, "cards": [], "captured": ""}
-        )
         title = str(item.get("title") or "").strip()
-        if title and title not in entry["cards"]:
+        if not title:
+            continue
+        url = str(item.get("url") or "").strip()
+        if url:
+            source = source_display_name(url)
+            if not source:
+                continue
+            license_value = str(item.get("license") or "").strip()
+        else:
+            source = _NO_SOURCE_LABEL
+            license_value = ""
+        key = (source, license_value)
+        entry = grouped.setdefault(
+            key, {"source": source, "license": license_value, "url": url, "cards": [], "captured": ""}
+        )
+        if title not in entry["cards"]:
             entry["cards"].append(title)
         captured = _captured_date(item.get("captured"))
         # Cards grouped under one wiki can come from different snapshots. Show the oldest --

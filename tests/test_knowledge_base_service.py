@@ -20,6 +20,7 @@ from backend.services.knowledge_base_service import (
     _trust_tier_for_row,
     EmbeddingDimensionMismatch,
     KnowledgeCard,
+    _attached_keyword_score,
     _best_meaning_score,
     _question_without_game_name,
     close_connection,
@@ -1671,6 +1672,25 @@ class KnowledgeBaseServiceTests(unittest.TestCase):
     vectors = {1: [1.0, 0.0], 2: [0.0, 1.0], 3: [0.6, 0.8]}
     self.assertAlmostEqual(_best_meaning_score(vectors, [1.0, 0.0]), 1.0)
     self.assertIsNone(_best_meaning_score({}, [1.0, 0.0]))
+
+  def test_attached_keyword_score_reads_the_best_attached_card_not_just_the_first(self):
+    """Roadmap: "The 'no close match' line reads wrong next to a note the reply used."
+
+    Hollow Knight boss question, 2026-09-18: fusion put "Starting out in Hollow Knight" first
+    with no keyword support at all, while the reply was built on "Broken Vessel", attached
+    second with a real keyword hit. Reading only cards[0].bm25_score missed that second card
+    entirely and printed "no close match" under a reply that plainly used a note. The strongest
+    score among every attached card is what the check needs instead.
+    """
+    thin_first = self._tiered_card(1, "Starting out in Hollow Knight", "wiki_no_patch")
+    thin_first.bm25_score = 0.0
+    real_second = self._tiered_card(2, "Broken Vessel", "wiki_no_patch")
+    real_second.bm25_score = 4.7
+    self.assertEqual(_attached_keyword_score([thin_first, real_second]), 4.7)
+    # Order does not matter -- the strongest score wins regardless of fusion position.
+    self.assertEqual(_attached_keyword_score([real_second, thin_first]), 4.7)
+    # Empty pool (the fallback-card path): 0.0, same as before this fix.
+    self.assertEqual(_attached_keyword_score([]), 0.0)
 
   def test_question_without_game_name_drops_both_words_of_a_two_word_title(self):
     """HONESTY-TEXT-GAME-01, part two: "Black Mesa" strips both "black" and "mesa", leaving

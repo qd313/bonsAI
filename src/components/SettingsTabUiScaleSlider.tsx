@@ -1,6 +1,7 @@
 /**
  * Title: UI scale slider
- * Purpose: Three-stop Deck slider for Handheld / Desktop / Couch manual UI scale profiles.
+ * Purpose: Two-stop Deck slider for Handheld / Couch manual UI scale profiles (Desktop was cut
+ * 2026-09-21 — it multiplied by the same 1 as Handheld, so it was a choice that did nothing).
  * Used for: SettingsTabUiScaleSection manual profile control with parent thumb ref wiring.
  * Solves: Discrete profile snapping with label and description chips below the track.
  * Does not: Apply CSS variables at runtime — parent onApply commits through UiScaleContext bridge.
@@ -30,7 +31,7 @@ export type SettingsTabUiScaleSliderProps = {
   thumbEditingExternal?: boolean;
 };
 
-/** Three-stop snap slider: Handheld · Desktop · Couch. */
+/** Two-stop snap slider: Handheld · Couch. */
 export function SettingsTabUiScaleSlider(props: SettingsTabUiScaleSliderProps) {
   const { value, onChange, thumbHostRef, onMoveUp, onMoveDown, thumbFocusedExternal, thumbEditingExternal } =
     props;

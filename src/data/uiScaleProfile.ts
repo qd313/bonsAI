@@ -7,12 +7,17 @@
  */
 import type React from "react";
 
-/** User-visible UI scale profiles (Immersive is dev-only until Steam Frame ships). */
+/**
+ * User-visible UI scale profiles. Immersive is dev-only until Steam Frame ships. Desktop is kept
+ * only so an old saved settings file still parses — `normalizeUiScaleProfileId` redirects it to
+ * Handheld and nothing in the running plugin can select or display it any more. Measured
+ * 2026-09-20 (docs/test-evidence/plan62-UI-SIZE-outside-handheld.json): Desktop and Handheld both
+ * multiplied by the same 1, so keeping it as a separate choice offered nothing a person could see.
+ */
 export type UiScaleProfileId = "handheld" | "desktop" | "couch" | "immersive";
-/** Profiles exposed in Settings manual slider (v1). */
-export const UI_SCALE_MANUAL_PROFILE_IDS: Exclude<UiScaleProfileId, "immersive">[] = [
+/** Profiles exposed in Settings manual slider (v1): Handheld and Couch are the only two that scale differently. */
+export const UI_SCALE_MANUAL_PROFILE_IDS: Exclude<UiScaleProfileId, "immersive" | "desktop">[] = [
   "handheld",
-  "desktop",
   "couch",
 ];
 
@@ -28,6 +33,9 @@ export const HANDHELD_VIEWPORT_MAX_PX = 600;
 /** Dev-only: expose Immersive profile in classifier (Steam Frame proxy). */
 export const SHOW_IMMERSIVE_UI_SCALE = false;
 
+// "desktop" stays in both maps only because `UiScaleProfileId` still needs a label to satisfy the
+// Record type for old saved values before they reach normalizeUiScaleProfileId. Nothing in the
+// running plugin looks either entry up any more — see the type's own comment above.
 export const UI_SCALE_PROFILE_LABEL: Record<UiScaleProfileId, string> = {
   handheld: "Handheld",
   desktop: "Desktop",
@@ -102,13 +110,22 @@ export function classifyUiScaleProfile(input: ClassifyUiScaleInput): UiScaleProf
   if (viewportWidthPx >= EXTERNAL_COUCH_VIEWPORT_MIN_PX) {
     return "couch";
   }
-  return "desktop";
+  // Used to return "desktop" here. Desktop multiplied by the same 1 as Handheld (measured
+  // 2026-09-20), so an external-but-narrow reading is just as well served by Handheld, and this
+  // stops the retired "Desktop" label from ever appearing again.
+  return "handheld";
 }
 
 export function normalizeUiScaleProfileId(value: unknown): UiScaleProfileId {
   const t = typeof value === "string" ? value.trim().toLowerCase() : "";
   if (t === "desktop" || t === "couch" || t === "immersive" || t === "handheld") {
     if (t === "immersive" && !SHOW_IMMERSIVE_UI_SCALE) {
+      return "handheld";
+    }
+    // Desktop is a retired choice: it multiplied by the same 1 as Handheld, so anyone whose saved
+    // settings still say "desktop" gets the identical scale under the Handheld name instead of an
+    // option that no longer appears anywhere in the UI.
+    if (t === "desktop") {
       return "handheld";
     }
     return t;

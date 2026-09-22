@@ -78,7 +78,13 @@ describe("uiScaleProfile", () => {
     ).toBe("couch");
   });
 
-  it("classifyUiScaleProfile: auto external narrow -> desktop", () => {
+  /**
+   * Desktop was cut 2026-09-21 (docs/roadmap.md, "The UI size setting barely changes anything"):
+   * measured on the Deck 2026-09-20, Desktop and Handheld both multiplied by the same 1, so an
+   * external-but-narrow auto reading is now just as well served by Handheld. This used to expect
+   * "desktop" — pin the new value so a future edit cannot bring the dead choice back silently.
+   */
+  it("classifyUiScaleProfile: auto external narrow -> handheld (desktop retired)", () => {
     expect(
       classifyUiScaleProfile({
         autoEnabled: true,
@@ -87,17 +93,27 @@ describe("uiScaleProfile", () => {
         screenWidthPx: 1920,
         screenHeightPx: 1080,
       }),
-    ).toBe("desktop");
+    ).toBe("handheld");
   });
 
   it("normalizeUiScaleProfileId falls back to handheld", () => {
     expect(normalizeUiScaleProfileId("bogus")).toBe("handheld");
-    expect(normalizeUiScaleProfileId("desktop")).toBe("desktop");
   });
 
-  it("manualUiScaleProfileAtIndex snaps to three stops", () => {
+  /**
+   * A settings file saved before 2026-09-21 can still say "desktop". Nobody should end up with a
+   * broken or empty UI-scale setting because of that: it must load as Handheld, and Handheld's own
+   * scale must still be the same 1x Desktop always was, so nothing changes for that person.
+   */
+  it("normalizeUiScaleProfileId redirects a legacy 'desktop' save to handheld, same scale as before", () => {
+    expect(normalizeUiScaleProfileId("desktop")).toBe("handheld");
+    expect(profileScaleMultiplier(normalizeUiScaleProfileId("desktop"))).toBe(1);
+  });
+
+  it("manualUiScaleProfileAtIndex snaps to the two real stops", () => {
     expect(manualUiScaleProfileAtIndex(0)).toBe("handheld");
-    expect(manualUiScaleProfileAtIndex(1)).toBe("desktop");
+    expect(manualUiScaleProfileAtIndex(1)).toBe("couch");
+    // Out-of-range indexes clamp rather than picking the retired Desktop stop.
     expect(manualUiScaleProfileAtIndex(2)).toBe("couch");
   });
 

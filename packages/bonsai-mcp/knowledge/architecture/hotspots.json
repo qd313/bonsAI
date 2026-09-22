@@ -191,13 +191,13 @@
       "role": ""
     },
     {
-      "path": "src/utils/answerBubbleNavigation.test.ts",
-      "lines": 532,
+      "path": "src/utils/settingsContracts.test.ts",
+      "lines": 535,
       "role": ""
     },
     {
-      "path": "src/data/bonsaiSettingsNormalizers.ts",
-      "lines": 531,
+      "path": "src/utils/answerBubbleNavigation.test.ts",
+      "lines": 532,
       "role": ""
     }
   ]

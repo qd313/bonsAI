@@ -35,6 +35,17 @@ describe("settings contracts", () => {
     expect(manual.ui_scale_manual_profile).toBe("couch");
   });
 
+  /**
+   * Desktop was cut from the UI-scale picker 2026-09-21 (it multiplied by the same 1 as Handheld,
+   * so it was a choice that changed nothing). Someone whose settings.json still says "desktop" from
+   * before that must still load cleanly, through the same normalizeSettings() path the real loader
+   * uses, not a broken or empty setting.
+   */
+  it("normalizeSettings: a settings file saved with the retired 'desktop' UI scale still loads", () => {
+    const loaded = normalizeSettings({ ui_scale_manual_profile: "desktop" });
+    expect(loaded.ui_scale_manual_profile).toBe("handheld");
+  });
+
   it("normalizes latency warning to configured bounds and step", () => {
     expect(normalizeLatencyWarningSeconds(2)).toBe(5);
     expect(normalizeLatencyWarningSeconds(299)).toBe(300);

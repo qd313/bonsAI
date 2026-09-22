@@ -82,6 +82,36 @@ class DropBranchMenuCopyingTheWorkedExampleTests(unittest.TestCase):
     def test_no_branches_block_passes_through(self):
         self.assertIsNone(drop_branch_menu_copying_the_worked_example(None, "Hades"))
 
+    def test_a_menu_carrying_the_no_game_placeholder_is_dropped(self):
+        """Roadmap: "The no-game branch menu leaks its template" (found 2026-09-18).
+
+        With no game known, the reply's menu came back reading exactly the prompt's
+        own placeholder text (py_modules/backend/services/ollama_prompts.py lines
+        1513-1515: '"question":"Where are you at in <THIS GAME>?"', options
+        '"<a place early in THIS game>"' / '"<a place later in THIS game>"') --
+        the same real text captured in
+        docs/test-evidence/plan58p1-QA-NOTES-BLOCK-03.json.
+        """
+        menu = self._menu(
+            "Where are you at in THIS GAME?",
+            "<a place early in THIS game>",
+            "<a place later in THIS game>",
+        )
+        self.assertIsNone(drop_branch_menu_copying_the_worked_example(menu, ""))
+
+    def test_a_menu_whose_heading_alone_keeps_the_placeholder_is_dropped(self):
+        """docs/test-evidence/plan58p1-M-tip-before.json: the options were real-looking
+
+        ("Early in the game" / "Later in the game") but the heading still read
+        'Where are you at in THIS GAME?' -- the heading alone must be enough to drop it.
+        """
+        menu = self._menu(
+            "Where are you at in THIS GAME?",
+            "Early in the game",
+            "Later in the game",
+        )
+        self.assertIsNone(drop_branch_menu_copying_the_worked_example(menu, ""))
+
 
 if __name__ == "__main__":
     unittest.main()

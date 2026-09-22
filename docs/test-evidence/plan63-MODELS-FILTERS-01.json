@@ -1,0 +1,43 @@
+{
+  "rowId": "MODELS-FILTERS-01",
+  "rowText": "The AI models screen closes instead of doing anything: A on almost any control shuts it. Found on the Deck 2026-09-21, blocked the whole screen and meant the filters feature shipped 2026-09-20 had never once been usable.",
+  "build": { "plugin": "0.5.0", "commit": "71aa45d", "deployedAt": "2026-09-22T00:13:00-04:00" },
+  "deckTime": "2026-09-22T00:15:00-04:00",
+  "setup": {
+    "game": "none running",
+    "screen": "Ollama tab, Manage AI models, opened with the filters panel already showing",
+    "note": "The panel state and the filter choices were read before anything was pressed, and put back at the end."
+  },
+  "stateBefore": {
+    "filtersOn": ["Also try open-weight models", "Essentials only"],
+    "filtersPanel": "open"
+  },
+  "steps": [
+    { "n": 1, "action": "A on the Manage AI models button", "result": "the models screen opens", "screenStillOpen": true },
+    { "n": 2, "action": "A on the filter row 'Open source only (recommended)'", "result": "PASS - the choice changed from off to on and the screen stayed open. Before tonight this press closed the whole screen.", "screenStillOpen": true, "ringStayedOn": "the same row" },
+    { "n": 3, "action": "A on the same row again", "result": "no change - see the finding below", "screenStillOpen": true },
+    { "n": 4, "action": "Down, then A on 'Also try open-weight models'", "result": "PASS - the original choice is selected again, screen open", "screenStillOpen": true },
+    { "n": 5, "action": "Up twice to the Filters button, A", "result": "PASS - screen open, ring stayed on Filters", "screenStillOpen": true },
+    { "n": 6, "action": "A on Filters again", "result": "PASS - the filter panel closed (ten rows down to none), screen still open, ring still on Filters", "screenStillOpen": true, "filterPanelRows": 0 },
+    { "n": 7, "action": "A on Filters once more", "result": "panel reopened, leaving the screen as it was found" }
+  ],
+  "verdict": "PASS",
+  "verdictSentence": "Six A presses on the models screen, on three different controls, and the screen never closed once. Before tonight the first press on any of them closed it.",
+  "stateAfter": {
+    "filtersOn": ["Also try open-weight models", "Essentials only"],
+    "filtersPanel": "open",
+    "matchesBefore": true
+  },
+  "alsoFound": {
+    "id": "LICENCE-FILTER-IS-A-CHOICE-NOT-A-TOGGLE",
+    "what": "The three licence rows -- 'Open source only', 'Also try open-weight models', 'Any installed model' -- are one three-way choice, not three independent switches. Pressing A on a row selects it; pressing A on the same row again does NOT turn it back off. To undo, move to the row you had before and press A there.",
+    "whyItMatters": "Anyone restoring settings after a check will get it wrong if they assume pressing A twice undoes it. Measured here: the first press moved the choice from 'Also try open-weight' to 'Open source only', and a second press on the same row left it there.",
+    "isItABug": "No. That is how a choice of one out of three should behave. Written down because it is not obvious from the screen and it caught this run."
+  },
+  "notCovered": [
+    "A on a model's tick box -- the catalog list showed no rows with the current filters, so no tick box was on screen to press",
+    "B while typing a model name by hand -- needs the on-screen keyboard",
+    "Ticking the first model in a fresh list, which needs a catalog row",
+    "The try-order picker writing settings on an unchanged Done"
+  ]
+}

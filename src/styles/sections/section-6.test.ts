@@ -16,6 +16,7 @@
  */
 import { describe, expect, it } from "vitest";
 import { buildSection6Section } from "./section-6";
+import { UNIFIED_TEXT_FONT_PX } from "../../features/unified-input/constants";
 
 describe("copy icon room reserved below a trailing code box (section 6 CSS)", () => {
   const css = buildSection6Section();
@@ -52,6 +53,48 @@ describe("copy icon room reserved below a trailing code box (section 6 CSS)", ()
     expect(css).toMatch(
       /\.bonsai-scope \.bonsai-chat-ai-bubble--with-copy \.bonsai-answer-stop:last-child > \.bonsai-md-p:last-child::after/,
     );
+  });
+});
+
+describe("strategy placeholder font size matches the real caret (section 6 CSS, roadmap: blinking cursor does not line up with the placeholder)", () => {
+  // The strategy-mode placeholder span used to hard-code font-size: 10px while the blinking
+  // caret beside it (`.bonsai-unified-input-fake-caret--overlay`) inherits the overlay div's own
+  // 12px (UNIFIED_TEXT_FONT_PX, set inline in MainTabUnifiedAskBar.tsx), so the two could never
+  // line up. The fix makes the placeholder span read the same font size as the real typed text.
+  const css = buildSection6Section();
+
+  it("does not hard-code a smaller font size than the real text field's own", () => {
+    const match = css.match(/\.bonsai-scope \.bonsai-unified-input-strategy-placeholder\s*\{([^}]*)\}/);
+    expect(match).toBeTruthy();
+    const body = match![1]!;
+    expect(body).not.toMatch(/font-size:\s*10px/);
+  });
+
+  it("uses the same scaled font size constant as the real field's text (UNIFIED_TEXT_FONT_PX)", () => {
+    const match = css.match(/\.bonsai-scope \.bonsai-unified-input-strategy-placeholder\s*\{([^}]*)\}/);
+    const body = match![1]!;
+    expect(body).toMatch(new RegExp(`font-size:\\s*calc\\(${UNIFIED_TEXT_FONT_PX}px`));
+  });
+});
+
+describe("chat slot dots row sits under the open tab strip (section 6 CSS, roadmap: the row of small dots under the chat name still shows below the open tab strip)", () => {
+  // Measured on the Deck 2026-09-18 (docs/test-evidence/plan61-TAB-STRIP-2A-07.json): the open
+  // strip's bottom edge sits at 130px, but the dots' own bottom edge sat at 136.667-138.667px --
+  // 7 to 9px below the strip, poking out under it. The strip was already raised to 66px on
+  // 2026-09-17 specifically to cover this, and the roadmap's Features list asks changes here to
+  // spend as little vertical room as possible, so the fix moves the dots up (10px) instead of
+  // growing the strip again.
+  const css = buildSection6Section();
+
+  it("moves the dots row up instead of leaving it below the row above it", () => {
+    const match = css.match(/\.bonsai-scope \.bonsai-chat-slot-dots\s*\{([^}]*)\}/);
+    expect(match).toBeTruthy();
+    const body = match![1]!;
+    const marginMatch = body.match(/margin-top:\s*calc\((-?\d+(?:\.\d+)?)px/);
+    expect(marginMatch).toBeTruthy();
+    // Was +6px (dots sat 6px below the title row). Needed at least ~9px more of upward
+    // movement to clear the measured 7-9px overshoot below the strip -- -4px is a 10px move.
+    expect(Number(marginMatch![1])).toBeLessThanOrEqual(-4);
   });
 });
 

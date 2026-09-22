@@ -44,7 +44,7 @@
  *    side, and the small dots marking every chat plus the one that
  *    creates a new one.
  */
-import { BONSAI_CHAT_INPUT_TO_TRANSCRIPT_GAP_PX, BONSAI_CHAT_TRANSCRIPT_TO_SAVE_GAP_PX } from "../../features/unified-input/constants";
+import { BONSAI_CHAT_INPUT_TO_TRANSCRIPT_GAP_PX, BONSAI_CHAT_TRANSCRIPT_TO_SAVE_GAP_PX, UNIFIED_TEXT_FONT_PX } from "../../features/unified-input/constants";
 import { uiScalePx } from "./uiScalePx";
 
 /**
@@ -169,9 +169,14 @@ export function buildSection6Section(): string {
           color: #f0ddd6 !important;
         }
 
+        /* Font size must match the real field's own text (UNIFIED_TEXT_FONT_PX, section-5.ts) --
+           roadmap: "The blinking cursor in the question box does not line up with the placeholder
+           text". This span used to hard-code 10px while the caret beside it inherits the overlay's
+           12px, so the placeholder was measurably smaller than the caret it sits next to and the
+           two could never line up. */
         .bonsai-scope .bonsai-unified-input-strategy-placeholder {
           font-style: italic;
-          font-size: 10px;
+          font-size: ${uiScalePx(UNIFIED_TEXT_FONT_PX)};
           opacity: 0.45;
         }
 
@@ -1486,7 +1491,17 @@ export function buildSection6Section(): string {
           justify-content: center;
           gap: ${uiScalePx(6)};
           gap: round(${uiScalePx(6)}, 1px);
-          margin-top: ${uiScalePx(6)};
+          /*
+            Raised from 6px to -4px (roadmap: "The row of small dots under the chat name still
+            shows below the open tab strip"). Measured on the Deck 2026-09-18
+            (docs/test-evidence/plan61-TAB-STRIP-2A-07.json): the open strip's bottom edge sits at
+            130px, but the dots' own bottom edge sat at 136.667-138.667px, 7-9px below it, so the
+            66px strip (chosen 2026-09-17 to cover exactly this) did not reach them. Moving the
+            dots up 10px instead of growing the strip further keeps the strip's height, which the
+            roadmap's Features list asks every change here to spend as little of as possible
+            (vertical room for the chat bubbles below).
+          */
+          margin-top: ${uiScalePx(-4)};
         }
         .bonsai-scope .bonsai-chat-slot-dot {
           /*

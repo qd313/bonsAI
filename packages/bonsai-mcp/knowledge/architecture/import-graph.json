@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 423,
-  "edgeCount": 1080,
+  "edgeCount": 1081,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2089,6 +2089,7 @@
         "src/styles/sections/section-3.ts",
         "src/styles/sections/section-4.ts",
         "src/styles/sections/section-5.ts",
+        "src/styles/sections/section-6.test.ts",
         "src/styles/sections/section-6.ts",
         "src/styles/sections/section-8.ts",
         "src/styles/sections/tabIndicatorBar.ts",
@@ -2853,6 +2854,7 @@
     },
     "src/styles/sections/section-6.test.ts": {
       "imports": [
+        "src/features/unified-input/constants.ts",
         "src/styles/sections/section-6.ts"
       ],
       "importedBy": []

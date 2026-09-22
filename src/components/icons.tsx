@@ -105,9 +105,13 @@ export const BonsaiTreeTabIcon: React.FC<{ size?: number }> = ({ size = 14 }) =>
 
 /**
  * The plugin's own logo as an inline icon, so it takes the colour around it (the roadmap's
- * two-star tab-icon entry, closed by D109 item 1). The open strip's Main cell uses this; the Steam
- * title (`DECKY_TAB_TITLES.main`) and Decky's own list icon (`BonsaiSvgIcon`) are left as they are
- * on purpose (plan 59 § 3) — this is only for the strip.
+ * two-star tab-icon entry, closed by D109 item 1). The open strip's Main cell uses this. The
+ * Steam-level tab title (`DECKY_TAB_TITLES.main`, `BonsaiTreeTabIcon`) is still its own separate
+ * stroke-only drawing (plan 59 § 3) — that one sits in Steam's own header, outside the plugin.
+ * Decky's own plugin-list icon (`BonsaiSvgIcon`, below) used to be a third drawing too, until the
+ * roadmap's "The Decky plugin icon does not match the tab bar's bonsai icon" (reported
+ * 2026-09-19): it now renders this same path, so what a person sees picking bonsAI in Decky's
+ * list is the same drawing they see on the tab bar once it opens.
  */
 export const BonsaiLogoIcon: React.FC<{ size?: number }> = ({ size = 14 }) => (
   <IconShell size={size}>
@@ -336,23 +340,15 @@ export const ImageAttachmentIcon: React.FC<{ size?: number }> = ({ size = 14 }) 
   </IconShell>
 );
 /**
- * This plugin-list icon uses a resilient vector fallback that obeys Decky font-size scaling.
- * Keeping it independent from the large inline path reduces index.tsx payload and parsing overhead.
+ * The icon Decky shows for bonsAI in its own plugin list (definePlugin's `icon:` prop, index.tsx).
+ * Used to draw a smaller, separate canopy+pot outline of its own; roadmap: "The Decky plugin icon
+ * does not match the tab bar's bonsai icon" (reported 2026-09-19). Now the same path, viewBox and
+ * fill rule as `BonsaiLogoIcon` above (the open strip's Main cell) so the two read as one drawing.
  */
 export const BonsaiSvgIcon: React.FC<{ size?: number }> = ({ size = 24 }) => {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path
-        d="M12 6c-1.8 0-3.3 1.2-3.7 2.8A3.2 3.2 0 0 0 5.5 12c0 1.8 1.4 3.2 3.2 3.2c1.2 0 2.2-.5 2.9-1.4c.5.9 1.5 1.4 2.7 1.4c1.8 0 3.2-1.4 3.2-3.2c0-1.6-1.2-3-2.7-3.2A3.8 3.8 0 0 0 12 6Z"
-        fill="currentColor"
-      />
-      <path
-        d="M11.5 14.5v3.2m-4.8 0h9.6l-1.1 2.3H7.8l-1.1-2.3Z"
-        stroke="currentColor"
-        strokeWidth="1.2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg width={size} height={size} viewBox="0 0 475 475" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d={BONSAI_LOGO_PATH} fill="currentColor" fillRule="evenodd" />
     </svg>
   );
 };

@@ -2,12 +2,15 @@
  * Title: UI scale settings section
  *
  * Purpose: The "UI scale" section on the Settings tab. Auto is on by
- * default and quietly picks Handheld, Desktop, or Couch sizing based on
- * your screen; turning it off reveals a slider so you can pick one of four
- * sizes yourself, plus a button to jump back to automatic. Nothing takes
- * effect until you press Apply. This file also serves as the reference
- * example for how a slider row should hand the D-pad to its neighbours in
- * this plugin — other sections copy its shape.
+ * default and picks Handheld sizing (that is all it can ever pick — see
+ * uiScaleProfile's own notes); turning it off reveals a slider so you can
+ * pick Handheld or Couch yourself, plus a button to jump back to
+ * automatic. Desktop used to be a third choice here but multiplied by the
+ * same 1 as Handheld (measured 2026-09-20), so it was cut rather than
+ * left on screen doing nothing. Nothing takes effect until you press
+ * Apply. This file also serves as the reference example for how a slider
+ * row should hand the D-pad to its neighbours in this plugin — other
+ * sections copy its shape.
  *
  * Used for: SettingsTab.
  *
@@ -209,17 +212,16 @@ export const SettingsTabUiScaleSection: React.FC<SettingsTabUiScaleSectionProps>
         <div className="bonsai-prose-host bonsai-settings-bleed" style={{ width: "100%", maxWidth: "100%", minWidth: 0 }}>
           <div style={{ color: "#d9d9d9", fontWeight: 600, fontSize: 13, marginBottom: 4 }}>UI scale</div>
           <div className="bonsai-prose" style={{ fontSize: 11, color: "#9fb7d5", marginBottom: 8, lineHeight: 1.35 }}>
-            Adapts bonsAI to your screen — handheld, desk monitor, or TV. Active:{" "}
+            Two real sizes: Handheld for the Deck's own screen, Couch for TV distance. Active:{" "}
             <span style={{ color: "#9ce7ff", fontWeight: 600 }}>
               {UI_SCALE_PROFILE_LABEL[appliedProfileId]} ({profileScaleMultiplier(appliedProfileId).toFixed(2)}×)
             </span>
-            . Handheld and Desktop share the same scale (1.00×); Couch is larger for TV distance. Also check Steam
-            Settings → Accessibility → UI Scale.
+            . Also check Steam Settings → Accessibility → UI Scale.
           </div>
           <div ref={autoToggleHostRef}>
             <ToggleField
               label="Adjust UI automatically"
-              description="Pick the best profile from your display and QAM size."
+              description="Applies Handheld sizing on its own — this panel is always narrow, so automatic never picks Couch."
               checked={pendingAuto}
               onChange={setPendingAuto}
               {...({

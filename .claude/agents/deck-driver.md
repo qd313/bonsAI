@@ -61,8 +61,10 @@ save evidence, and report. The checkout path, the scratch folder and the runbook
     them up, but start a new chat only when the runbook says to.
 12. **"Blocked" needs one real try first.** Before writing that something cannot be done, try it once, and
     say exactly what stopped it.
-13. **Keep the Deck awake:** the rig's keep-awake lock always lasts 30 minutes whatever you ask for. Take it
-    at the start and renew it every 25 minutes or so. A left-stick click also resets the sleep timer and
+13. **Keep the Deck awake:** take the rig's keep-awake lock at the start with `ttlMinutes: 480` and read the
+    `expiresAt` it returns. Since 2026-09-23 it really holds for the length asked (it used to stop at 30
+    minutes); if it ever comes back shorter, renew before it runs out. The dimmed screensaver can still
+    come on while the lock holds and freezes panel animations: a left-stick click wakes the screen and
     moves nothing.
 14. **Games:** the rig can only launch games shown on the Recent Games row. After launching a game, reload
     the plugin so it learns the game is running. After exiting, confirm over SSH that the game's process

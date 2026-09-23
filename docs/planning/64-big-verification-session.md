@@ -358,4 +358,30 @@ These are on the maintainer's page, or go there in flow H, and are not scheduled
 
 ## 14. Progress log
 
-Written as flows close. Nothing has run yet.
+Written as flows close. Status page for the maintainer's phone:
+[bonsAI Deck Run](https://claude.ai/artifact/P1A3aEw4gVcLGrYwghZozT).
+
+### Flow 0 — setup, 2026-09-23 16:30 to 16:55 (Deck time), roadmap commit `ac547e9`
+
+- **Backup:** the settings file, the eight saved chats and the checklist state, copied to
+  `~/bonsai-backup-plan64.tgz` and `settings.json.bak-plan64` on the Deck, and into this session's scratch
+  folder on the PC. Read back and readable.
+- **Deploy:** the tip (7e55d69; no code change since b91e9fe) built and installed; both files'
+  fingerprints match; the plugin log says it loaded with no errors. Opening the plugin worked first time.
+  Evidence `docs/test-evidence/plan64-FLOW0-setup.json`.
+- **The Deck:** its own screen, 1280×800. All six games the plan needs are in the first seven places on
+  the Recent Games row. The SD card is in, 1.2 TB free. Only the "Hades" chat has a game attached to the
+  whole chat. Eight of eight chat slots are full, so the first new chat drops the oldest Portal 2 chat.
+- **The keep-awake lock now holds for the length asked.** Taken for 480 minutes and read back as 8 hours
+  (`sleep 28800`). § 5's "always 30 minutes" is out of date; the driver file is corrected.
+- **Found: an idle AI model stuck half-unloaded for 36 hours.** Ollama listed the answer model as
+  "Stopping..." with 2.2 GB of graphics memory still held. Its keep-alive ran out at about 04:10 on
+  2026-09-22, and nothing was logged after the last answer at 00:10, so the Deck most likely slept in
+  between. A 20-second test question was answered in 8.4 seconds: Ollama killed the stuck helper and loaded a fresh one,
+  leaving one copy in memory. So it does not block answers, but it held memory a running game could have used
+  for a day and a half. Recorded as a sighting for the open question of what happens to a loaded model
+  when the Deck sleeps; Ollama's behaviour, not bonsAI's.
+- **The bookkeeper's clean-up** (§ 1) and **D116** landed in `ac547e9`. One judgement call: the August
+  retrieval-checks entry stays open, since two of its four other checks are only half passed.
+- **Another chat is working in this checkout** on plan 65 (bonsAI's own Quick Access Menu icon), with
+  uncommitted roadmap lines and a staged file move of its own. This session's commits leave both out.

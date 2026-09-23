@@ -1,0 +1,144 @@
+{
+  "row": "plan64 flow 0 - Deck setup (no checks)",
+  "build_commit": "7e55d69180a6d33255cd0ed4369972e67ead9144",
+  "code_commit_note": "no code changes between b91e9fe and 7e55d69 (docs only); no uncommitted code in the checkout",
+  "deck_time_start": "2026-09-23T16:39:12-04:00",
+  "deck_time_end": "2026-09-23T16:42:30-04:00",
+  "driver": "deck-driver (Opus), the only driver on the Deck",
+  "setup": {
+    "backup": "already taken by the session before this flow (~/bonsai-backup-plan64.tgz and settings.json.bak-plan64 on the Deck; scratch backup/ on the PC); not redone",
+    "rig": {
+      "deck_reachable": true,
+      "bridge_port_open": true,
+      "bridge_port": "COM7",
+      "stop_switch": "off (automation armed, never stopped)",
+      "live_tunnels_from_other_sessions": 0,
+      "registered_tunnels": "2, both dead (alive:false), left from 2026-09-20",
+      "checkReady": "noForeignCdpTunnel pass, awake pass, buildMatches pass (161 files) - before the deploy"
+    },
+    "keep_awake": {
+      "taken_at": "2026-09-23T16:39:11-04:00",
+      "expires_at": "2026-09-23T17:09:11-04:00",
+      "verified": "systemd-inhibit block lock seen, pid 70303"
+    },
+    "screen": {
+      "live_screen": "the Deck's own screen",
+      "big_picture_window_css": [854, 534],
+      "screen_css": [853, 533],
+      "device_pixel_ratio": 1.5,
+      "physical_pixels": [1280, 800],
+      "quick_access_page_css": [854, 454]
+    }
+  },
+  "pressed": [
+    "deck_deploy (remote): built and copied dist, main.py, plugin.json, package.json, assets, py_modules, defaults, bin; loader active after 310 ms",
+    "deck_openPlugin: QAM chord x1, rail D-pad x4, enter Decky pane x1, list D-pad x1, A x1 on 'bonsAI' - opened on the FIRST try (no failure this time); the QAM chord also woke the screensaver"
+  ],
+  "seen": {
+    "deploy": {
+      "local_dist_index_js_built": "2026-09-23 16:39:45 -0400",
+      "sha256_dist_index_js_local": "34479fe956236cace09d6bbe0f92ecd293b9488995e52ac04b98faf362bd2eda",
+      "sha256_dist_index_js_deck": "34479fe956236cace09d6bbe0f92ecd293b9488995e52ac04b98faf362bd2eda",
+      "sha256_main_py_local": "f930c7648253106c6be8da431f7152e20fb31620a39671923f5ac42c149c4061",
+      "sha256_main_py_deck": "f930c7648253106c6be8da431f7152e20fb31620a39671923f5ac42c149c4061",
+      "fingerprints_match": true,
+      "plugin_loader_service": "active",
+      "plugin_log": "~/homebrew/logs/bonsAI/2026-09-23 16.40.02.log: '[2026-09-23 16:40:02,337][INFO]: bonsAI plugin loaded!' - 0 lines matching traceback/importerror/modulenotfound/error; previous log ends with a clean unload at 16:39:52",
+      "deck_readPluginLog_note": "the rig's log reader (loader journal) returned no entries; the plugin's own log file was read over SSH instead"
+    },
+    "panel_as_found": {
+      "open_before_flow": false,
+      "open_after_openPlugin": true,
+      "tab": "MAIN (first of six tab dots selected)",
+      "chat_on_screen": "wheatley fight",
+      "context_line": "Context: no active game detected",
+      "focus_ring": "not on any control (gpfocus not found) - the first D-pad press will place it",
+      "on_screen_extras": "a Decky toast 'Updates available for 1 plugin!' covered the bottom of the panel at capture time; the pinned chip above the question box read 'TEST how do i beat the gonarch in black mesa'",
+      "screenshot": "plan64-FLOW0-setup.png"
+    },
+    "recent_games_row": {
+      "source": "the home page's Recent Games shelf, tile images read in order, names from Steam's app list; nothing pressed",
+      "steam_route": "/library/home",
+      "running_apps": [],
+      "game_processes_over_ssh": 0,
+      "order": [
+        {"pos": 1, "name": "Deep Rock Galactic: Survivor", "appid": 2321470, "installed": true, "last_played_utc": "2026-09-23T20:19"},
+        {"pos": 2, "name": "God of War", "appid": 1593500, "installed": true, "last_played_utc": "2026-09-21T03:54"},
+        {"pos": 3, "name": "Left 4 Dead 2", "appid": 550, "installed": true},
+        {"pos": 4, "name": "Black Mesa", "appid": 362890, "installed": true},
+        {"pos": 5, "name": "Hades", "appid": 1145360, "installed": true},
+        {"pos": 6, "name": "Half-Life 2", "appid": 220, "installed": true},
+        {"pos": 7, "name": "Hollow Knight", "appid": 367520, "installed": true},
+        {"pos": 8, "name": "Sifu", "appid": 2138710, "installed": true},
+        {"pos": 9, "name": "Portal 2", "appid": 620, "installed": true},
+        {"pos": 10, "name": "Fallout 4", "appid": 377160, "installed": true},
+        {"pos": 11, "name": "Baldur's Gate 3", "appid": 1086940, "installed": true},
+        {"pos": 12, "name": "Cyberpunk 2077", "appid": 1091500, "installed": true},
+        {"pos": 13, "name": "Marvel's Spider-Man Remastered", "appid": 1817070, "installed": true},
+        {"pos": 14, "name": "Team Fortress 2", "appid": 440, "installed": false},
+        {"pos": 15, "name": "Wreckfest", "appid": 228380, "installed": true},
+        {"pos": 16, "name": "Dead Space", "appid": 1693980, "installed": true},
+        {"pos": 17, "name": "Grand Theft Auto: San Andreas - The Definitive Edition", "appid": 1547000, "installed": true}
+      ],
+      "six_session_games_on_row": {
+        "Half-Life 2": 6, "Hollow Knight": 7, "God of War": 2, "Black Mesa": 4, "Hades": 5, "Deep Rock Galactic: Survivor": 1
+      },
+      "note": "Deep Rock Galactic: Survivor was last played 16:19 local today, 20 minutes before this flow; it is not running now"
+    },
+    "saved_chats": {
+      "source": "~/homebrew/settings/bonsAI/chat_slots/index.json and each slot file, read only",
+      "count": 8,
+      "turn_count_note": "the stored count includes both questions and answers, so questions = half",
+      "chats": [
+        {"order": 1, "title": "wheatley fight", "chat_game": null, "entries": 36, "questions": 18, "turns_tagged_with_a_game": {"Hades": 6, "Sifu": 4, "Half-Life 2": 4, "Portal 2": 2, "Hollow Knight": 2, "Black Mesa": 2}, "updated": "2026-09-22T00:10", "open_on_screen": true},
+        {"order": 2, "title": "how do i beat the boss at the end of the first area", "chat_game": null, "entries": 4, "questions": 2, "turns_tagged_with_a_game": {"Hades": 2}, "updated": "2026-09-19T13:28"},
+        {"order": 3, "title": "Hades", "chat_game": "Hades (1145360)", "entries": 2, "questions": 1, "turns_tagged_with_a_game": {}, "updated": "2026-09-18T12:32"},
+        {"order": 4, "title": "how do i beat the gonarch in black mesa", "chat_game": null, "entries": 6, "questions": 3, "turns_tagged_with_a_game": {"Half-Life 2": 2}, "updated": "2026-09-18T09:40"},
+        {"order": 5, "title": "give me a very long, detailed guide to getting the most battery life ...", "chat_game": null, "entries": 8, "questions": 4, "turns_tagged_with_a_game": {}, "updated": "2026-09-18T08:48"},
+        {"order": 6, "title": "how does the excursion funnel work in portal 2", "chat_game": null, "entries": 84, "questions": 42, "turns_tagged_with_a_game": {"Hades": 20, "Deep Rock Galactic: Survivor": 6}, "updated": "2026-09-18T02:01"},
+        {"order": 7, "title": "black mesa how do i tame a horse", "chat_game": null, "entries": 32, "questions": 16, "turns_tagged_with_a_game": {}, "updated": "2026-09-17T02:14"},
+        {"order": 8, "title": "how does the excursion funnel work in portal 2", "chat_game": null, "entries": 24, "questions": 12, "turns_tagged_with_a_game": {}, "updated": "2026-09-16T09:44"}
+      ],
+      "chats_with_a_game_attached_to_the_whole_chat": ["Hades (2 entries)"],
+      "full_slots": "8 of 8 - a new chat would drop the oldest (the 24-entry Portal 2 chat from 2026-09-16)"
+    },
+    "ollama": {
+      "binary": "/home/deck/.local/bin/ollama (not a systemd unit; runs as pid 1772, started 2026-09-20 16:59)",
+      "version": "0.34.1",
+      "env": "OLLAMA_VULKAN=1, OLLAMA_IGPU_ENABLE=1, OLLAMA_FLASH_ATTENTION=0, OLLAMA_NUM_PARALLEL=1, OLLAMA_MAX_LOADED_MODELS=2",
+      "installed_models": [
+        {"name": "gemma4:e2b-it-qat", "size": "4.3 GB", "modified": "7 days ago"},
+        {"name": "nomic-embed-text:latest", "size": "274 MB", "modified": "7 days ago"}
+      ],
+      "loaded_now": {
+        "name": "gemma4:e2b-it-qat",
+        "memory": "2.2 GB, 100% GPU",
+        "context": 16384,
+        "until": "Stopping...",
+        "expires_at": "2026-09-22T04:10:05-04:00",
+        "note": "its unload time passed about 36.5 hours ago and it still shows as stopping - read twice, 16:41 and 16:42"
+      },
+      "settings_read_only": {
+        "vision_model_routing_order": ["gemma4:e2b-it-qat"],
+        "text_model_routing_order": [],
+        "model_policy_tier": "open_weight"
+      }
+    },
+    "knowledge_base": {
+      "in_use_path_from_settings": "/home/deck/.bonsai/rag",
+      "settings_rag_corpus_version": "2026.09.18",
+      "home_copy": {"files": ["ATTRIBUTIONS.md 23055 B", "corpus-manifest.json 25917 B", "corpus.db 2732032 B"], "dated": "2026-09-18 01:50", "manifest_version": "2026.09.18", "embeddings_populated": true, "embedding_model": "nomic-embed-text", "sections_embedded": "372 of 372"},
+      "sd_card_copy": {"path": "<sd card>/.bonsai/rag", "files": ["ATTRIBUTIONS.md 18475 B", "corpus-manifest.json 21021 B", "corpus.db 2289664 B"], "dated": "2026-09-16 11:47", "note": "older copy, not the one settings point at"}
+    },
+    "sd_card": {
+      "mounted": true,
+      "device": "/dev/mmcblk0p1",
+      "mount": "/run/media/deck/3506ff22-6d61-4f9d-8241-01bce3a91c6c",
+      "size": "1.9T", "used": "736G", "free": "1.2T", "use_pct": "40%"
+    },
+    "internal_disk": {"home_free": "732G of 1.9T", "root_free": "779M of 5.0G (83% used)"}
+  },
+  "settings_changed": "none",
+  "left_as": "Deck's own screen, bonsAI open on the Main tab with the 'wheatley fight' chat, no game running, keep-awake held until 17:09",
+  "verdict": "SETUP DONE - deploy verified (both fingerprints match, plugin loaded clean), all six session games on the Recent Games row; one surprise: Ollama shows the answer model stuck 'Stopping...' 36 hours past its unload time"
+}

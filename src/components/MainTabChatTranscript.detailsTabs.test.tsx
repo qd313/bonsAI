@@ -423,4 +423,40 @@ describe("the This answer / Session tabs, on the newest answer", () => {
       expect(document.activeElement).toBe(divider);
     });
   });
+
+  /*
+   * Plan 64 bug E, second half. Opening the Session tab's Clear confirm box (or any nested Decky
+   * modal) remounts the whole plugin -- documented at the top of this component's own gotchas and
+   * at useBonsaiPluginShell.ts's `__bonsaiTabRestoreAfterModal`. That remount used to leave
+   * `transparencyDetailsOpen` and `detailsTab` at their React defaults on the way back (closed,
+   * "This answer") instead of where the person actually was. On device this meant: the panel was
+   * gone, and the Clear button the return-focus registry was aiming for was never rendered, so
+   * cancelling threw the ring out to the tab bar instead of back onto Clear.
+   */
+  describe("the panel survives a nested Decky modal (plan 64 bug E)", () => {
+    it("reopens on the Session tab, panel open, after a nested modal remounts the plugin", () => {
+      const onBeforeNestedDeckyModal = vi.fn();
+      const { container, unmount, getByText } = renderTranscript({ onBeforeNestedDeckyModal });
+      clickShowDetails(container);
+      act(() => {
+        (tabsRowProps()?.onMoveRight as () => boolean)();
+      });
+      expect(activeTabText(container)).toBe("Session · 1");
+      expect(container.querySelector(".bonsai-details-session-body")).not.toBeNull();
+
+      // Opening Clear's confirm box: calls the caller's onBeforeNestedDeckyModal, same as any
+      // nested Decky modal, right before the remount it causes.
+      fireEvent.click(getByText("Clear"));
+      expect(onBeforeNestedDeckyModal).toHaveBeenCalledTimes(1);
+
+      // The remount itself: torn down and rendered fresh with the same props, exactly what
+      // index.tsx's Content tree does when a Decky modal opens and closes.
+      unmount();
+      const { container: container2 } = renderTranscript({ onBeforeNestedDeckyModal });
+
+      // No click here -- this is what came back on its own after the remount.
+      expect(container2.querySelector(".bonsai-details-session-body")).not.toBeNull();
+      expect(activeTabText(container2)).toBe("Session · 1");
+    });
+  });
 });

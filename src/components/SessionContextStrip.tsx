@@ -136,6 +136,15 @@ function buildOpenClearConfirm(
         strTitle="Start the next question fresh?"
         strDescription="The plugin forgets the subject of your last strategy question and the checklist position for the running game. Your chat and this bar stay as they are."
         strOKButtonText="Clear"
+        /*
+         * Plan 64 bug E, first half: this box used to open with the ring on the destructive
+         * "Clear" button instead of the safe "Cancel" -- the same shape ChatSlotRow.tsx's own
+         * "Delete chat slot?" confirm already avoids with this same prop. `bDestructiveWarning`
+         * is Steam's own supported way to ask for that (it is also what styles the OK button as
+         * a warning); this box asks for something forgotten, not deleted outright, but the same
+         * "the safe choice is where the ring starts" rule the task named applies here too.
+         */
+        bDestructiveWarning
         onOK={() => {
           // Fire-and-forget, same shape as forget_background_game_ai in index.tsx's
           // resetPluginSession: the toast below is the actual promise made to the person, and

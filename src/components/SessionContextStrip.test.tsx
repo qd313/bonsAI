@@ -158,6 +158,20 @@ describe("SessionContextTabBody -- Clear button", () => {
     expect(focus).toHaveBeenCalled();
   });
 
+  /*
+   * Plan 64 bug E, first half: the box used to open with the ring on the destructive "Clear"
+   * button instead of the safe "Cancel". `bDestructiveWarning` is Steam's own supported way to
+   * ask for the ring to start on Cancel (ChatSlotRow.tsx's "Delete chat slot?" box already relies
+   * on it the same way) -- this only proves the prop reaches the real component; what it actually
+   * does with the gamepad ring is Steam's own code, checked on the Deck.
+   */
+  it("opens with bDestructiveWarning, so the ring starts on the safe Cancel button", () => {
+    const { getByText } = render(<SessionContextTabBody archivedTurns={[ARCHIVED_TURN]} />);
+    fireEvent.click(getByText("Clear"));
+
+    expect((hoisted.modal?.props as Record<string, unknown>).bDestructiveWarning).toBe(true);
+  });
+
   it("calls onBeforeDeckyModal before opening", () => {
     const onBeforeDeckyModal = vi.fn();
     const { getByText } = render(

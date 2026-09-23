@@ -443,6 +443,12 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   starts the good ones. Row **PULL-MISSING-NAME-01**. **Tried on the Deck 2026-09-19: blocked** — a made-up
   name needs Steam's on-screen keyboard, which this test rig cannot drive, so nothing could be typed;
   finishing this row needs a person at the Deck. [Detail](roadmap-details.md#mistyping-one-model-name-in-a-several-model-download-loses-it-without-saying-so).
+- ★ `[ollama]` **Typing a model name that does not exist said "Pull started" and nothing else** —
+  **VERIFY, fixed in `97e7d9e`.** Found 2026-09-23 reading the code during plan 64. The AI models
+  screen's typed-name box never checked a hand-typed name against the model registry before
+  pulling, so a typo looked like a successful download that simply never finished. It now says the
+  name could not be found instead. Owed: on the Deck, type a made-up name in the AI models screen's
+  typed box, press Pull, and see "Could not find" with the name, nothing downloading.
 - ★ `[reply]` **The no-game branch menu leaks its template** — **VERIFY, fixed in `f11220d`.** Row
   **NOGAME-MENU-01**. Owed: with nothing running, ask a question in Strategy mode that never names a game, and
   confirm the menu either does not appear or names a real place — never the literal words THIS GAME.

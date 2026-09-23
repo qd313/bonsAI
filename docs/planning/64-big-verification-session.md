@@ -385,3 +385,37 @@ Written as flows close. Status page for the maintainer's phone:
   retrieval-checks entry stays open, since two of its four other checks are only half passed.
 - **Another chat is working in this checkout** on plan 65 (bonsAI's own Quick Access Menu icon), with
   uncommitted roadmap lines and a staged file move of its own. This session's commits leave both out.
+
+### Flow A — fixes the Deck had never seen, 2026-09-23 16:51 to 17:55 (Deck time)
+
+Two driver runs; roadmap commits `9a672a4` and `1691403`.
+
+- **Closed on the Deck (12):** the Show details chip ladder walks Left and Right; the AI models
+  filters each change the list where tonight's catalogue allows; ticking the first model only queues
+  it; the vision try-order picker leaves settings untouched on an unchanged Done; the cursor and the
+  hint text are both 12 px; the Decky plugin icon matches the tab bar's; closing the AI models screen
+  returns the ring to its opener with B and with Done; typing a model name then B closes and clears
+  the box with the screen still open; typed text at the bigger size stays inside the panel (the
+  23 px overhang is gone); the UI size slider has exactly two stops and never says Desktop; and the
+  walk down from the chat row no longer skips the answer.
+- **Failed (1):** the dots under the chat name touch its letters (0.2 px). A call for the maintainer.
+- **Still open, re-measured:** walking down and up still differ, at the question row and in the dock.
+- **New bugs (6):** Done unreachable by D-pad on the AI models screen (fixed `11029d5`, proved);
+  Done below the visible edge with the long list (fixed `d7f611a` from a full measurement: the body cap
+  is now the page height less 270 px); the chip ladder's own counter off screen at chip 1; a sliver of
+  the answer under the Context line; nothing holding the ring after Apply UI scale; and the half of the
+  first-tick bug that was never fixed (a pulled model never joins the try order) split into its own entry.
+- **Fixed away from the Deck:** a shared tip's source page reaches its credit (`4ce37bc`); walking a
+  streaming answer keeps the highlight on screen (`7b9447e`, Deck check in flow B); both ways of
+  starting Ollama keep two models loaded (`fae4a53`, the live service read as 2).
+- **Blocked:** Claude Code's automatic permission check refused the driver's SSH edit of the Deck's
+  settings file ("Modify Shared Resources"). That stopped the old saved Desktop value (covered by its
+  unit test), the timed Open Permissions measurement, and VAC-03 to 06 (the maintainer said yes to the
+  key; it never went in). The end-of-session chat restore needs the same kind of write. Put to the
+  maintainer; not worked around.
+- **Tooling:** the typing script for the model-name box searched the wrong page (the AI models screen
+  draws in Steam's main window); fixed in scratch. Replaying saved checks refused after every deploy;
+  the Decky Plugin Studio session fixed it upstream (556ffcb in its repo) and found the replay had been
+  running the presses and discarding the result. Checks saved tonight need re-saving once.
+- **Test run note:** the Filters-panel "getting in" test times out under a full parallel run now and
+  then (passes alone in half a second); not caused by tonight's change, logged in `11029d5`.

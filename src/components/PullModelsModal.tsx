@@ -808,8 +808,17 @@ export function PullModelsModal(props: PullModelsModalProps) {
       },
       onMoveDown: () => {
         if (focusNextRowSelect(rowIndex)) return true;
-        if (focusFooterPull()) return true;
-        return true;
+        /*
+         * The last row hands Down back to Steam, which carries the ring out of this panel to the
+         * dialog's own footer (Done, or Pull selected once something is queued), as in any Decky
+         * dialog. This used to look the footer up by the label "Pull selected", focus it with a
+         * plain DOM focus, and swallow the press either way. Inside the AI models hub that button
+         * reads "Done" until something is queued, so nothing was found and Down went nowhere; a
+         * plain focus() does not carry the ring into another container in any case (measured
+         * 2026-09-04). On the Deck 2026-09-23 (plan64-MODELS-HUB-RETURN-01.json) Down stopped on
+         * the last model row with Done fully on screen below it.
+         */
+        return false;
       },
       onMoveRight: () => {
         if (cell === "select" && installed) return focusRowCell(rowIndex, "delete");

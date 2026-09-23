@@ -136,6 +136,22 @@ describe("Filters panel — getting in", () => {
   });
 });
 
+describe("the model list's last row", () => {
+  it("hands Down back to Steam so the ring can reach the dialog's Done / Pull selected footer", async () => {
+    const { container } = renderModal();
+    let labels: string[] = [];
+    await waitFor(() => {
+      labels = Array.from(container.querySelectorAll(".bonsai-pullmodels-slot")).map(
+        (el) => el.getAttribute("aria-label") ?? ""
+      );
+      expect(labels.length).toBeGreaterThan(1);
+    });
+
+    const lastRow = latestByAriaLabel(labels[labels.length - 1]);
+    expect((lastRow!.onMoveDown as () => boolean)()).toBe(false);
+  });
+});
+
 describe("Filters panel — getting back out", () => {
   it("Up from the first row closes the panel and returns the ring to the Filters button", async () => {
     installSwissArmyModelSoNothingIsSuggested();

@@ -1,0 +1,23 @@
+{
+  "row": "plan64 flow A row 9 - ROUTING-NOOP-SAVE-01 (opening the vision model try-order picker and pressing Done without changing anything leaves the settings file byte-for-byte the same)",
+  "build_commit": "06c7553 (checkout HEAD); deployed build from flow 0 (dist/index.js sha256 34479fe9...)",
+  "deck_time": "2026-09-23T17:18:00-04:00 to 17:18:40-04:00",
+  "screen": {"live_screen": "the Deck's own screen", "quick_access_page_css": [854, 454]},
+  "setup": {
+    "start": "Ollama tab. The runbook says to close the AI models screen with Done first; Done cannot be reached with the D-pad on that screen (see plan64-MODELS-HUB-RETURN-01.json), so it was closed with B instead. With the Filters panel already closed, one B closed the screen and the ring landed on 'Manage AI models' (rect x 64 y 277 w 268 h 44) - a free re-check of row 4's B half."
+  },
+  "pressed": [
+    "PC: ssh deck@192.168.86.52 'sha256sum ~/homebrew/settings/bonsAI/settings.json'",
+    "DOWN x2 to 'Set vision model try order', A",
+    "picker opened with the ring on 'Move gemma4:e2b-it-qat up' (not pressed); DOWN x2 past 'Reset to defaults' (not pressed) to 'Done', A",
+    "PC: same sha256sum 3 s later"
+  ],
+  "seen": {
+    "picker": "title 'Vision model try order'; one installed model listed (gemma4:e2b-it-qat) with Up and Down buttons; 'Reset to defaults'; Done and Cancel",
+    "hash_before": "213df3408ccc7c60016efd5936a4dcff692154582f633ae1d08d7c5b93217a9f",
+    "hash_after": "213df3408ccc7c60016efd5936a4dcff692154582f633ae1d08d7c5b93217a9f",
+    "file_modified_time_before_and_after": "2026-09-21 23:07:30 -0400 (unchanged), size 2081 bytes both times",
+    "ring_after_done": "back on 'Set vision model try order' on the Ollama tab"
+  },
+  "verdict": "PASS - the two hashes match exactly and the file was not rewritten at all."
+}

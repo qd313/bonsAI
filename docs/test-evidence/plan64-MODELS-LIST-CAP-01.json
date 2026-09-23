@@ -1,0 +1,23 @@
+{
+  "row": "plan64 flow A row 5 - MODELS-LIST-CAP-01 (how tall the model list may grow on the Deck's own screen)",
+  "build_commit": "06c7553 (checkout HEAD); deployed build from flow 0 (dist/index.js sha256 34479fe9...)",
+  "deck_time": "2026-09-23T17:04:25-04:00",
+  "screen": {"live_screen": "the Deck's own screen (not a monitor)", "big_picture_window_css": [854, 534], "device_pixel_ratio": 1.5, "physical_pixels": [1280, 800]},
+  "setup": {
+    "filter_state_measured_under": "Filters panel closed; 2 filters on: 'Also try open-weight models' (licence choice) and 'Essentials only'. Speed, Strategy, Expert, Vision, Installed only, Recently added all off.",
+    "note": "The screen had been opened for row 4; 'Close filters' had been pressed to reach the list. Nothing else changed."
+  },
+  "pressed": ["none for this row (page read and screenshot only)"],
+  "seen": {
+    "rows_listed": ["gemma4:e2b-it-qat (installed)", "qwen3.5:4b", "qwen2.5vl:3b", "nomic-embed-text:latest (installed, 'Other installed')"],
+    "rows_visible_unscrolled": 4,
+    "rows_total": 4,
+    "list_box_bonsai_pullmodels_shell": {"height_px": 271, "scrollHeight_px": 271, "clientHeight_px": 271, "max_height": "none", "top_y": 104.7, "bottom_y": 375.7},
+    "popup_body": {"computed_max_height_px": 384.48, "actual_height_px": 305, "scrollHeight_px": 305, "top_y": 70.7, "bottom_y": 375.7},
+    "cap_on_this_screen": "min(72vh, 520px) works out to 384.48 px here (72% of the 534 px window), not 520 px as the runbook says",
+    "header_band_above_list_px": 34,
+    "screenshot": "plan64-MODELS-LIST-CAP-01.png"
+  },
+  "comparison": "plan62-MODELS-FILTERS-01-A-closes-screen.json read 4 rows in a 217 px box under 'Essentials only'. Today: 4 rows in a 271 px box under 'Essentials only' plus 'Also try open-weight'.",
+  "verdict": "UNCLEAR - all 4 rows show and nothing scrolls, so the list is shorter than the space it is allowed; the cap was never reached and this filter state cannot show whether the list would grow past about 300 px. The list did not stop short of its own content (271 of 271 px shown). The runbook's 520 px figure does not apply on this screen: the limit here is 384 px."
+}

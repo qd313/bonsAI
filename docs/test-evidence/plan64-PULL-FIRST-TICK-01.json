@@ -1,0 +1,33 @@
+{
+  "row": "plan64 flow A row 7 - PULL-FIRST-TICK-01 (ticking a model in the AI models list only queues it; no download starts)",
+  "build_commit": "06c7553 (checkout HEAD); deployed build from flow 0 (dist/index.js sha256 34479fe9...)",
+  "deck_time": "2026-09-23T17:15:40-04:00 to 17:16:45-04:00",
+  "screen": {"live_screen": "the Deck's own screen", "big_picture_window_css": [854, 534]},
+  "setup": {
+    "filters": "2 on: Also try open-weight models, Essentials only (restored after row 6); Filters panel closed",
+    "list": ["gemma4:e2b-it-qat (installed; its first-column control is a star, 'Use gemma4:e2b-it-qat for Ask', not a tick box)", "qwen3.5:4b (tick box)", "qwen2.5vl:3b (tick box)", "nomic-embed-text:latest (installed)"],
+    "deviation_from_runbook": "The very first row is an installed model whose first-column control is 'Use for Ask' (a star). A there would change which model Ask uses, so it was not pressed. The first row that has a tick box, qwen3.5:4b, was used instead. The owner should decide whether that is the row this check meant.",
+    "before": {"footer": ["Done", "Cancel"], "summary": "Queue 0 · < 0.1 GB", "ollama_partial_downloads_on_deck": 0, "ollama_models_folder_MB": 4398}
+  },
+  "pressed": [
+    "readFocus: ring on the Filters button",
+    "DOWN: ring on 'Use gemma4:e2b-it-qat for Ask' (checked, not pressed)",
+    "DOWN: ring on 'Select qwen3.5:4b to pull' (unticked)",
+    "A once on that tick box",
+    "A once more on it to untick (step 5)"
+  ],
+  "seen": {
+    "after_tick": {
+      "row": "tick shown (✔), control relabelled 'Deselect qwen3.5:4b', ring stayed on it",
+      "summary_line": "Queue 1 · 3.2 GB",
+      "footer": "'Done' became 'Pull selected (1) · 3.2 GB'; 'Cancel' unchanged",
+      "progress_bars_on_screen": 0,
+      "words_download_or_pulling_on_screen": false,
+      "ollama_partial_downloads_on_deck_2s_later": 0,
+      "ollama_models_folder_MB_2s_later": 4398,
+      "screenshot": "plan64-PULL-FIRST-TICK-01.png"
+    },
+    "after_untick": {"selected_rows": 0, "summary_line": "Queue 0 · < 0.1 GB", "footer": ["Done", "Cancel"], "ring": "'Select qwen3.5:4b to pull'"}
+  },
+  "verdict": "PASS on the first row that has a tick box: the tick only queued the model (Queue 1 · 3.2 GB, footer 'Pull selected (1)'), nothing started downloading on screen or on disk. Untick put everything back. Note: the literal first row (installed gemma4, a 'Use for Ask' star) was not pressed; the owner may call this UNCLEAR if the check meant that row."
+}

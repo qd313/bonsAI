@@ -6,6 +6,33 @@
 
 Headings group related work. Star counts match the historical list.
 
+### Every filter on the AI models screen behind one Filters button, and five changes that give the list more room (closed 2026-09-23)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-23 during plan 64's flow A part 1 bookkeeping pass —
+copied line for line from this session's Verify entry, nothing reworded, with the closing note added at the
+end._
+
+- ★★★ `[ollama]` `[ui]` **Every filter on the AI models screen behind one Filters button, and five
+  changes that give the list more room** — **VERIFY, built 2026-09-20.** The two rows of filter chips and
+  the separate Policy section are gone, replaced by one "Filters · N on" line that opens a panel with six
+  filters and the model-name search folded in. Row **MODELS-FILTERS-01**. It failed on the Deck on
+  2026-09-21 because A closed the whole screen; **that bug is fixed and proven the same night, so this
+  is checkable again** — the panel opens, closes and takes a choice with the screen staying put. What
+  this row still asks for is untouched: the model count at other filter settings, and whether each of
+  the six filters really changes the list.
+
+  **Closed 2026-09-23 for what the row asks, confirmed on the Deck.** Installed only took the model count
+  from 4 to 1, Essentials only off took it from 4 to 25, and Recently added took it to 0 — all three changed
+  the list as expected. Speed, Strategy, Expert, Vision and Open source only could not change tonight's list
+  because all three essential models are open source, carry every tag and are rated six stars; "Any
+  installed" stays greyed out until it is unlocked, as designed — neither is a bug. One behaviour change,
+  not filed as a bug: pressing A on the "Filters · N on" button while the panel is open now moves the ring
+  into the panel instead of closing it, where it closed the panel on 2026-09-22; "Close filters" and Up
+  still close it. Evidence `docs/test-evidence/plan64-MODELS-FILTERS-01.json` (+ `.png`). **The "more room"
+  half of this entry's own title is not covered here** — it is tracked under **MODELS-LIST-CAP-01** and a
+  new "Done falls below the visible edge" bug, both still open in [Verify](../roadmap.md#verify) and
+  [Bugs](../roadmap.md#bugs).
+
 ### Reasoning display (2026-09-17)
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-18 once six of the seven Deck rows passed — copied line

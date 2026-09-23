@@ -161,6 +161,92 @@ line for line from this session's Verify entry, nothing reworded, with the closi
   the rest of a sitting; and it is not proven that the settings fix is what actually cured it — what is proven
   is that the symptom is gone on a build that carries that fix.
 
+## Moved from the roadmap 2026-09-23
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-23 during plan 64's flow A part 1 bookkeeping pass —
+copied line for line from this session's Verify or Bugs entry, nothing reworded, with the closing note added
+at the end of each._
+
+### The Show details chip ladder is not a D-pad stop (closed 2026-09-23)
+
+- ★★ `[focus]` **The Show details chip ladder is not a D-pad stop** — **VERIFY, fixed 2026-09-21** by the
+  same fix that let Down reach the chip row (commit `3daa21e`). With the panel open, the row of chips now
+  takes the highlight. **Still owed:** this entry's own, narrower claim — that no chip beyond the first can
+  be selected, only read — was not tested on the Deck. Walk left and right across the chips with the panel
+  open and confirm the active chip changes. Evidence `docs/test-evidence/plan63-DETAILS-LADDER-01.json`.
+
+  **Closed 2026-09-23, confirmed on the Deck.** With the panel open, every Left and Right press changed the
+  lit chip, 12 of 12 (chip 1 to 7 and back), and the ring never left the ladder. Evidence
+  `docs/test-evidence/plan64-DETAILS-LADDER-01.json` (+ `.png`), saved replay check
+  `checks/plan64-DETAILS-LADDER-01.json`. **A new, narrower bug was found in the same pass:** entering the
+  ladder at its first chip leaves the chip row and its "Chip 1 of 7" counter above the visible area — filed
+  separately in Bugs.
+
+### Walking down from the chat row skips the whole answer (closed 2026-09-23)
+
+- ★★ `[focus]` **Walking down from the chat row skips the whole answer** — **OPEN, measured on the Deck
+  2026-09-21.** Down from the chat slot row lands on the "10 earlier" pill, then jumps past the question, the
+  thinking line, every answer section, Read aloud and Show details, landing on the notes block. The same
+  stops are reachable walking down from Retry, so the reply is walkable — just not entered from above. Close
+  kin to **Walking down a reply and walking back up visit different stops** (row REPLY-STOPS-MIRROR-01),
+  re-measured on this same build and still happening. Evidence `docs/test-evidence/plan63-DETAILS-LADDER-01.json`.
+
+  **Closed 2026-09-23, no longer reproduces.** Measured on the Deck with the details panel both closed and
+  open: Down from the "17 earlier" pill now goes to Retry, the question row, Show reasoning, the answer, Read
+  aloud, Show details — every stop, in order. Evidence
+  `docs/test-evidence/plan64-REPLY-STOPS-MIRROR-01.json`. Most likely fixed by the Up-into-reply work of
+  2026-09-21; no specific commit is claimed for this fix.
+
+### The blinking cursor in the question box does not line up with the placeholder text (closed 2026-09-23)
+
+- ★ `[ask]` **The blinking cursor in the question box does not line up with the placeholder text** —
+  **VERIFY, fixed 2026-09-21 (plan 63, commit `ce7abfc`).** The hint text was drawn at 10 pixels while the
+  real cursor uses the box's own 12; the hint now matches. Owed: **the maintainer's own eye.**
+
+  **Closed 2026-09-23, measured fixed on the Deck.** The placeholder text reads 12 pixels and the caret reads
+  12 pixels, so the old 10-vs-12 mismatch is gone. Evidence `docs/test-evidence/plan64-BYEYE-01.json`,
+  screenshots `plan64-BYEYE-01-askbar-caret.png`, `plan64-BYEYE-01-askbar-ring-on-box.png`. The maintainer's
+  own glance is still welcome, from those screenshots.
+
+### The Decky plugin icon does not match the tab bar's bonsai icon (closed 2026-09-23)
+
+- ★ `[ui]` **The Decky plugin icon does not match the tab bar's bonsai icon** — **VERIFY, fixed 2026-09-21
+  (plan 63, commit `23c114a`).** Three separate bonsai drawings existed; the one Decky shows for the plugin
+  now uses the real logo, the same one the tab bar draws. Owed: a look at both side by side.
+
+  **Closed 2026-09-23, confirmed on the Deck.** Decky's own plugin list and the tab strip show the same
+  bonsai drawing, at 26 and 22 pixels. Screenshots `docs/test-evidence/plan64-BYEYE-01-decky-list-icon.png`,
+  `plan64-BYEYE-01-tab-strip-icon.png`. Steam's own side rail shows no bonsAI icon at all; Decky's list is
+  where the plugin icon actually appears.
+
+### The very first model ticked in a fresh download picker starts downloading right away (closed 2026-09-23)
+
+- ★★ `[ollama]` **The very first model ticked in a fresh download picker starts downloading right away** —
+  **VERIFY, fixed in `ec4d007`.** The cause was bigger than the report: Decky's buttons render as form submit
+  buttons and the screen sits inside Steam's own form, so any click that did not cancel its default action
+  submitted that form and took the screen's Done path — true of twelve of its thirteen controls. This exact
+  fault was found and fixed once before, in the try-order picker, on 2026-09-04. Row **PULL-FIRST-TICK-01**.
+  Owed: open the picker fresh, tick the very first model, confirm it only queues rather than starting. **Its
+  second half — a model pulled this way never joins the saved try order — is NOT fixed; that lives in the back
+  end.**
+
+  **Closed 2026-09-23 for the part that was fixed, confirmed on the Deck.** Ticking the first tickable model
+  (the literal first row is the installed model, which carries a "Use for Ask" star instead of a tick) only
+  queued it — "Queue 1 · 3.2 GB", footer "Pull selected (1)" — nothing downloaded, and Ollama's own folder was
+  unchanged. Evidence `docs/test-evidence/plan64-PULL-FIRST-TICK-01.json` (+ `.png`). **The second half is
+  not fixed** — a model pulled this way still never joins the saved try order — and stays open as its own,
+  smaller bug entry.
+
+### The vision try-order picker writes settings even when nothing changed (closed 2026-09-23)
+
+- ★ `[ollama]` **The vision try-order picker writes settings even when nothing changed** — **VERIFY, fixed in
+  `ec4d007`.** Row **ROUTING-NOOP-SAVE-01**. Owed: open the picker, press Done without moving anything, and
+  confirm the settings file is untouched.
+
+  **Closed 2026-09-23, confirmed on the Deck.** The settings file's hash was identical before and after
+  pressing Done with nothing moved, and the file's saved date did not change. Evidence
+  `docs/test-evidence/plan64-ROUTING-NOOP-SAVE-01.json`.
+
 ## Moved from the roadmap 2026-09-19
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-19 once the maintainer's answers to plan 61 § 8

@@ -1,0 +1,34 @@
+{
+  "row": "plan64 flow A row 4 - MODELS-HUB-RETURN-01 (where the ring lands after closing the AI models screen with B, and with Done)",
+  "build_commit": "06c7553 (checkout HEAD); deployed build from flow 0 (dist/index.js sha256 34479fe9...)",
+  "deck_time": "2026-09-23T17:01:50-04:00 to 17:04:30-04:00",
+  "screen": {"live_screen": "the Deck's own screen", "quick_access_page_css": [854, 454], "big_picture_window_css": [854, 534], "device_pixel_ratio": 1.5},
+  "setup": {"tab": "Ollama (RB from Main)", "manage_button_on_screen": "yes, 'Manage AI models… — Also try open-weight models' found in the page before pressing"},
+  "pressed": [
+    "readFocus before anything: ring on the tab bar ('Ollama tab'), nothing else held it",
+    "walk DOWN 13 presses to 'Manage AI models', A",
+    "B, readFocus at once",
+    "B again (the runbook's route tried once more), readFocus",
+    "RB (shoulder) to test tab switching, read tab; LB back",
+    "A on 'Manage AI models' (the ring was still on it after LB)",
+    "walk DOWN looking for Done: stopped on 'Close filters' after 12 presses",
+    "A on 'Close filters' (to leave the Filters panel), walk DOWN looking for Done: stopped on the last model row after 7 presses"
+  ],
+  "seen": {
+    "open": "AI models screen opened with the Filters panel already showing ('Filters · 2 on: Also try open-weight models, Essentials only'); ring landed on the filter row 'Open source only (recommended)'",
+    "first_B": "closed only the Filters panel, not the screen. Ring on the 'Filters · 2 on' button inside the AI models screen, 100% visible. The runbook expected the screen to close here.",
+    "second_B": "closed the screen. Ring back on 'Manage AI models' on the Ollama tab, 100% visible, rect x 64 y 285 w 268 h 44. Not on Steam's side rail.",
+    "shoulder_after_B": "RB switched to the Settings tab at once ('Settings tab'); LB came back to Ollama with the ring still on 'Manage AI models'",
+    "done_route": {
+      "filters_open": "DOWN from the top filter row goes through all filter rows and stops on 'Close filters' (12 presses, 3 of them not moving). Done is never reached.",
+      "filters_closed": "DOWN goes Filters button -> gemma4 row -> qwen3.5:4b row -> qwen2.5vl:3b row -> nomic-embed-text row and stops there (7 presses). Done is never reached, though it is drawn on screen just below (Done button rect x 123 y 402 w 290 h 40, fully inside the 534 px window).",
+      "done_pressed": false
+    }
+  },
+  "saved_check": "none (the runbook saves only when both closes pass)",
+  "verdict": {
+    "B_close": "PASS after two presses: the first B closes the Filters panel, the second closes the screen and the ring lands back on 'Manage AI models'; the next shoulder press switches tabs.",
+    "Done_close": "COULD NOT RUN: the D-pad cannot reach the Done button. Going down stops on 'Close filters' with the Filters panel open, and on the last model row with it closed. Not pressed any other way.",
+    "overall": "UNCLEAR - B half passes (with an extra B the runbook did not predict); Done half could not be reached"
+  }
+}

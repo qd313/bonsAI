@@ -1,0 +1,62 @@
+{
+  "row": "plan64 flow A row 1 - DETAILS-LADDER-01 re-check (Show details chip ladder, Left/Right)",
+  "build_commit": "06c7553 (checkout HEAD); deployed build is the flow 0 build 7e55d69, dist/index.js sha256 34479fe9...; code unchanged between them per flow 0",
+  "deck_time": "2026-09-23T16:51:02-04:00 to 16:53:42-04:00",
+  "screen": {
+    "live_screen": "the Deck's own screen",
+    "quick_access_page_css": [854, 454],
+    "screenshot_pixels": [1280, 800]
+  },
+  "setup": {
+    "tab": "Main",
+    "chat": "wheatley fight (the active saved chat; the newest turn in it is 'in hollow knight how do i beat the broken vessel', a finished two-paragraph answer of 821 characters; the Black Mesa Gonarch text on screen is the pinned 'Test' chip above the question box, not the last answer)",
+    "turns_in_chat": "18 (pill reads '17 earlier')",
+    "game_running": false,
+    "answer_finished": true,
+    "screensaver": "was up at start; one left-stick click cleared it",
+    "decky_toast": "not present"
+  },
+  "pressed": [
+    "L3 x1 (wake)",
+    "deck_walkTo DOWN 'Show details': Main tab -> chat row -> '17 earlier' -> Retry -> question row -> 'Show reasoning' -> answer section; the answer section held the ring for 3 presses while the pane scrolled (walkTo called it a stall)",
+    "deck_walkTo DOWN again: answer section -> Read aloud -> Show details (2 presses)",
+    "A on Show details",
+    "DOWN x4: Hide details -> notes block -> 'This answer / Session · 18' tabs row -> chip ladder (the 4th press landed on the ladder; by the read after it the ladder said 'Chip 2 of 7')",
+    "RIGHT x5, LEFT x6, reading the ladder after each",
+    "deck_saveCheck replayed RIGHT x6 then LEFT x6 from chip 1"
+  ],
+  "seen": {
+    "show_details_A": "label flipped from 'Show details ↓' to 'Hide details ↑'; ring stayed on it",
+    "ladder_focus": "gpfocus element has class bonsai-chip-ladder (the ladder box itself holds the ring; chips are marked with bonsai-chip-ladder-chip--active)",
+    "right_walk": [
+      {"after": "start", "counter": "Chip 2 of 7", "active": "KB: 14 sections"},
+      {"after": "RIGHT", "counter": "Chip 3 of 7", "active": "Reply style: balanced"},
+      {"after": "RIGHT", "counter": "Chip 4 of 7", "active": "Thinking: Balanced · 21 s · ~612 tokens"},
+      {"after": "RIGHT", "counter": "Chip 5 of 7", "active": "Spoiler risk: med"},
+      {"after": "RIGHT", "counter": "Chip 6 of 7", "active": "Routed gemma4:e2b-it-qat"},
+      {"after": "RIGHT", "counter": "Chip 7 of 7", "active": "Developer details"}
+    ],
+    "left_walk": [
+      {"after": "LEFT", "counter": "Chip 6 of 7", "active": "Routed gemma4:e2b-it-qat"},
+      {"after": "LEFT", "counter": "Chip 5 of 7", "active": "Spoiler risk: med"},
+      {"after": "LEFT", "counter": "Chip 4 of 7", "active": "Thinking: Balanced · 21 s · ~612 tokens"},
+      {"after": "LEFT", "counter": "Chip 3 of 7", "active": "Reply style: balanced"},
+      {"after": "LEFT", "counter": "Chip 2 of 7", "active": "KB: 14 sections"},
+      {"after": "LEFT", "counter": "Chip 1 of 7", "active": "Keyword + meaning"}
+    ],
+    "ring_left_ladder": false,
+    "saved_check_replay": "12 of 12 steps kept the ring on .bonsai-chip-ladder",
+    "visibility_of_ladder_box_in_replay_percent": {
+      "chip2": 100, "chip3": 100, "chip4": 100, "chip5": 67, "chip6": 100, "chip7": "33 (partly covered by the pinned 'Test' chip above the question box)",
+      "back_chip6": 100, "back_chip5": 67, "back_chip4": 100, "back_chip3": 100, "back_chip2": 100, "back_chip1": 67
+    },
+    "chip1_visibility_detail": {
+      "note": "At chip 1 the chip's detail (knowledge base source list) makes the ladder 316 px tall and the pane scrolls to its bottom. The chip row and the 'Chip 1 of 7' counter are then above the visible pane: pane top 88, counter at y -27 to -13, chips at y -7 to 48. A person sees the detail text but not which chip is lit.",
+      "pane_scrollTop": 856,
+      "pane_scrollHeight": 1222,
+      "screenshot": "plan64-DETAILS-LADDER-01.png (taken at chip 1)"
+    }
+  },
+  "saved_check": "checks/plan64-DETAILS-LADDER-01.json (note: it can only assert the ring stays on the ladder; it cannot see which chip is lit)",
+  "verdict": "PASS on the runbook's rule: every Right and Left press changed the lit chip (12 of 12) and the ring never left the ladder. Extra finding for the owner: at chips 1, 5 and 7 the ladder is only partly on screen, and at chip 1 the row of chips itself is scrolled out of view."
+}

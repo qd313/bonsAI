@@ -1,0 +1,31 @@
+{
+  "row": "plan64 flow A row 8 steps 1-4 - MODELS-TYPE-B-01 (B on the 'Type a name' box closes and clears just that box, not the AI models screen); also whether deck_set_input.py can type into it (flow E depends on this). Step 5 deferred to flow E, not done.",
+  "build_commit": "06c7553 (checkout HEAD); deployed build from flow 0 (dist/index.js sha256 34479fe9...)",
+  "deck_time": "2026-09-23T17:17:00-04:00 to 17:19:00-04:00",
+  "screen": {"live_screen": "the Deck's own screen", "big_picture_window_css": [854, 534]},
+  "setup": {"screen": "AI models, Filters panel closed, filters 2 on (Also try open-weight, Essentials only), nothing ticked"},
+  "pressed": [
+    "UP, UP to the Filters button, RIGHT to 'Type a model name by hand' (each landing checked)",
+    "A on the 'Type a name' chip",
+    "PC side: ssh deck@192.168.86.52 'python3 - --text \"zzz-plan64-test-tag\"' < deck_set_input.py (from the scratch folder)",
+    "PC side: the same with --read",
+    "LEFT from the Pull button onto the text field (no A)",
+    "B"
+  ],
+  "seen": {
+    "step1_chip_A": "the row swapped as expected: a text field (placeholder 'Custom model tag, e.g. llama3.2:3b', empty), a 'Pull' button (greyed out, 'Pull custom model tag') and a close button ('Close typing a model name by hand'). The ring landed on the Pull button, not the field.",
+    "step2_script": {
+      "printed_VERIFIED": false,
+      "output_text_write": "custom-tag row not found - press the \"Type a name\" chip on the AI models screen first (exit code 1)",
+      "output_read": "the same message (exit code 1)",
+      "why": "The script only looks inside the Quick Access menu's page. The AI models screen is drawn in a different page, 'Steam Big Picture Mode'. Read directly: the box's row (.bonsai-pullmodels-custom-tag-row) with its input IS present in the Big Picture page and is NOT present in the Quick Access page. So the script cannot reach this box as written."
+    },
+    "step3_field_text": "empty (value '') - nothing was typed",
+    "step4_B": {
+      "ring_before_B": "on the text field (INPUT, 100% visible)",
+      "after_B": "the small box closed; the 'Type a name' chip is back and holds the ring; the AI models screen stayed open",
+      "cleared": "not provable - the field was already empty because the script could not type"
+    }
+  },
+  "verdict": "UNCLEAR - B closes only the small box and leaves the AI models screen open (that half passes), but 'clears the typed name' could not be tested because deck_set_input.py did not print VERIFIED: it looks for the box in the Quick Access page while the box lives in the Big Picture page. Flow E's typing step will hit the same wall."
+}

@@ -1,0 +1,48 @@
+{
+  "row": "plan64 flow A row 6 - MODELS-FILTERS-01 (each filter on the AI models screen changes the list, the D-pad can leave and re-enter the Filters panel, filters restored)",
+  "build_commit": "06c7553 (checkout HEAD); deployed build from flow 0 (dist/index.js sha256 34479fe9...)",
+  "deck_time": "2026-09-23T17:05:00-04:00 to 17:15:30-04:00",
+  "screen": {"live_screen": "the Deck's own screen", "big_picture_window_css": [854, 534]},
+  "setup": {
+    "filters_as_found": "2 on: 'Also try open-weight models' (licence) and 'Essentials only'. All others off. 'Any installed model' is greyed out ('enable Tier 3 unlock in Advanced first'). Matches plan63-MODELS-FILTERS-01.json.",
+    "count_method": "There is no model-count line on this screen, and the model list is hidden while the Filters panel is open. So each count is the number of model rows in the list after closing the panel with 'Close filters'. The summary line 'Installed N · size' is noted where it changed.",
+    "method": "each filter tested on its own from the starting state: turned on, panel closed, rows counted, panel reopened, turned back off (licence: moved back to 'Also try open-weight' and pressed A there). Every press used a scripted walk that checked the ring's landing before the next press."
+  },
+  "pressed": [
+    "A on the Filters button to open the panel",
+    "licence: A on 'Open source only', walk to Close filters, A, count; A on Filters, Down to 'Also try open-weight', A",
+    "for Speed, Strategy, Expert, Vision, Installed only, Essentials only (turned off), Recently added: Down to the row, A, Down to Close filters, A, count; A on Filters, Down to the row, A to put it back",
+    "step 3: Up from inside the panel to the Filters button, A; Up again, A (second try); then Down to Close filters, A"
+  ],
+  "seen": {
+    "baseline_rows": 4,
+    "baseline_list": ["gemma4:e2b-it-qat (installed)", "qwen3.5:4b", "qwen2.5vl:3b", "nomic-embed-text:latest (installed, Other installed)"],
+    "per_filter": [
+      {"filter": "Open source only (licence)", "rows_before": 4, "rows_after": 4, "changed": false, "why_it_cannot_change": "all three rows in the essentials list are open source (FOSS badge), and the 'Other installed' row is not checked against licence by design (code comment in the list builder)"},
+      {"filter": "Any installed model (licence)", "rows_before": 4, "rows_after": "not tested", "changed": null, "why_it_cannot_change": "the row is disabled until 'Tier 3 unlock' is turned on in Advanced; the D-pad skips it"},
+      {"filter": "Speed", "rows_before": 4, "rows_after": 4, "changed": false, "why_it_cannot_change": "Speed keeps any model tagged chat; all three essentials are tagged Chat · Vision · Ocr · Strategy"},
+      {"filter": "Strategy", "rows_before": 4, "rows_after": 4, "changed": false, "why_it_cannot_change": "all three essentials are tagged Strategy"},
+      {"filter": "Expert", "rows_before": 4, "rows_after": 4, "changed": false, "why_it_cannot_change": "Expert keeps strategy models rated 5 stars or more; all three essentials are strategy models rated 6 stars"},
+      {"filter": "Vision", "rows_before": 4, "rows_after": 4, "changed": false, "why_it_cannot_change": "all three essentials are tagged Vision and Ocr"},
+      {"filter": "Installed only", "rows_before": 4, "rows_after": 1, "changed": true, "note": "only gemma4:e2b-it-qat left; the Other-installed section is hidden while this is on"},
+      {"filter": "Essentials only (turned OFF)", "rows_before": 4, "rows_after": 25, "changed": true, "note": "24 catalog rows plus nomic-embed-text; screenshot plan64-MODELS-FILTERS-01-essentials-off.png"},
+      {"filter": "Recently added", "rows_before": 4, "rows_after": 0, "changed": true, "note": "'No models match the current filters.'; summary line read 'Installed 1 · 4.0 GB' while on"}
+    ],
+    "step_3_leave_and_return": {
+      "leave": "Up from the top filter row lands on the Filters button (works). 'Close filters' at the bottom of the panel also closes it and puts the ring on the Filters button (works, used 9 times).",
+      "A_on_Filters_with_panel_open": "does NOT close the panel. Twice (runbook route tried once more) the press moved the ring into the panel onto 'Open source only' and the panel stayed open (10 filter rows, 0 model rows). plan63-MODELS-FILTERS-01.json step 6 recorded this press closing the panel.",
+      "A_on_Filters_with_panel_closed": "opens the panel; the ring sometimes stays on the Filters button and sometimes lands on 'Open source only' (both seen tonight)"
+    },
+    "list_height_with_25_rows (extra, for row 5)": {
+      "popup_body_px": 384.48, "popup_body_max_px": 384.48, "list_box_px": 350, "inner_list_scroll": {"scrollHeight": 1022, "clientHeight": 296},
+      "rows_fully_on_screen": "about 7 in the screenshot (the list had scrolled 132 px on its own, so one row shows faintly behind the sticky column header)",
+      "done_button": "pushed below the dialog's visible area (Done at y 538-578, dialog visible to y 492) while 25 rows show"
+    },
+    "restored": {
+      "filters_after": "2 on: Also try open-weight models, Essentials only (read from the Filters button label)",
+      "rows_after": 4,
+      "panel_after": "closed (so row 7 can use the list)"
+    }
+  },
+  "verdict": "PASS on the per-filter rule: 3 filters change the list (Installed only 4 to 1, Essentials only off 4 to 25, Recently added 4 to 0); the other 5 cannot change it with tonight's catalog, for the reasons listed; 'Any installed' cannot be picked. FAIL on step 3: A on the Filters button no longer closes an open Filters panel (it moves the ring into the panel instead), unlike the 2026-09-22 reading. Leaving by Up and closing by 'Close filters' both work. All filters restored."
+}

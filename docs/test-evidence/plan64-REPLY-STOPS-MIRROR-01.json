@@ -1,0 +1,100 @@
+{
+  "row": "plan64 flow A row 2 - REPLY-STOPS-MIRROR-01 (fresh measurement of the D-pad stops between the tab bar and the Ask button, both directions, details panel closed and open)",
+  "build_commit": "06c7553 (checkout HEAD); deployed build from flow 0 (dist/index.js sha256 34479fe9...)",
+  "deck_time": "2026-09-23T16:54:30-04:00 to 17:01:00-04:00 (approx, Deck clock)",
+  "screen": {"live_screen": "the Deck's own screen", "quick_access_page_css": [854, 454]},
+  "setup": {
+    "tab": "Main",
+    "chat": "wheatley fight; newest turn 'in hollow knight how do i beat the broken vessel', finished; pill reads '17 earlier'; pinned chip above the question box 'Test / how do i beat the gonarch in black mesa'",
+    "question_box": "empty (placeholder showing)",
+    "no_question_sent": true
+  },
+  "pressed": [
+    "(a) walk to Hide details, A (panel closed), walk UP to the tab bar, deck_sweep DOWN with return trip UP (stall limit 4). Raw file runs/plan64-REPLY-STOPS-MIRROR-01-a-closed.json",
+    "answer-section line check: walk to Show reasoning, DOWN once, read the answer's own text lines",
+    "(b) walk to Show details, A (panel open), walk UP to the tab bar, deck_sweep DOWN. It stopped on the chip ladder because Up/Down on the ladder step between chips instead of moving the ring (confirmed by hand: at chip 1, UP left to the tabs row; DOWN from the tabs row landed on chip 1; the next DOWN went to chip 2). So: DOWN x5 by hand to chip 7, deck_sweep DOWN on to Ask; deck_sweep UP from Ask (landed on the ladder at chip 7, three UPs stepped it to chip 4), UP x3 by hand to chip 1, deck_sweep UP on to the top. Raw files runs/plan64-REPLY-STOPS-MIRROR-01-b-open.json, -b-open-down-part2.json, -b-open-up-part1.json, -b-open-up-part2.json",
+    "DOWN once from Decky's back arrow to the tab bar after each UP leg (the UP legs overshoot the tab bar by one stop onto Decky's back arrow; nothing was pressed there)"
+  ],
+  "seen": {
+    "a_closed_down": [
+      {"stop": "Main tab (tab bar)", "visible_percent": 100},
+      {"stop": "chat row: wheatley fight", "visible_percent": 100},
+      {"stop": "17 earlier", "visible_percent": 100},
+      {"stop": "Retry same prompt", "visible_percent": 100},
+      {"stop": "question row: in hollow knight how do i beat the broken vessel", "visible_percent": 78, "note": "known false alarm: covered only by the Retry icon"},
+      {"stop": "Show reasoning · 21 s", "visible_percent": 100},
+      {"stop": "answer section (the only one; 22 text lines, 359 px tall)", "visible_percent": 33, "note": "covered by the question box, not the Copy icon, so not the known false alarm. The section is taller than the space above the ask dock. Line check on first landing: 12 of 22 text lines fully visible (visible band y 88 to 290, the pinned chip starts at 290). Further DOWN presses scroll through it before moving on (2 to 3 extra presses)"},
+      {"stop": "Read aloud", "visible_percent": 100},
+      {"stop": "Show details", "visible_percent": 100},
+      {"stop": "notes block: Broken Vessel (+2 more) · From the Hollow Knight wiki", "visible_percent": 100},
+      {"stop": "pinned chip: Test / how do i beat the gonarch in black mesa", "visible_percent": 100},
+      {"stop": "question box (placeholder)", "visible_percent": 100},
+      {"stop": "ask", "visible_percent": 100}
+    ],
+    "a_closed_up": [
+      {"stop": "ask", "visible_percent": 100},
+      {"stop": "Attach screenshot to Ask", "visible_percent": 100},
+      {"stop": "Choose AI character, A", "visible_percent": 100},
+      {"stop": "pinned chip: Test / how do i beat the gonarch in black mesa", "visible_percent": 100},
+      {"stop": "notes block", "visible_percent": 100},
+      {"stop": "Show details", "visible_percent": 100},
+      {"stop": "Read aloud", "visible_percent": 100},
+      {"stop": "answer section", "visible_percent": 33},
+      {"stop": "Show reasoning · 21 s", "visible_percent": 100},
+      {"stop": "Retry same prompt", "visible_percent": 100},
+      {"stop": "17 earlier", "visible_percent": 100},
+      {"stop": "chat row: wheatley fight", "visible_percent": 100},
+      {"stop": "Main tab (tab bar)", "visible_percent": 100},
+      {"stop": "(one more UP) Decky's back arrow beside the bonsAI title", "visible_percent": 100, "note": "outside the measured range"}
+    ],
+    "b_open_down": [
+      {"stop": "Main tab (tab bar)", "visible_percent": 100},
+      {"stop": "chat row: wheatley fight", "visible_percent": 100},
+      {"stop": "17 earlier", "visible_percent": 100},
+      {"stop": "Retry same prompt", "visible_percent": 100},
+      {"stop": "question row", "visible_percent": 78, "note": "known false alarm (Retry icon)"},
+      {"stop": "Show reasoning · 21 s", "visible_percent": 100},
+      {"stop": "answer section", "visible_percent": 33},
+      {"stop": "Read aloud", "visible_percent": 100},
+      {"stop": "Hide details", "visible_percent": 100},
+      {"stop": "notes block", "visible_percent": 100},
+      {"stop": "tabs row: This answer / Session · 18", "visible_percent": 100},
+      {"stop": "chip ladder (DOWN steps chip 1 to 7 while the ring stays: 7 presses)", "visible_percent": "67 at chip 1, 100 at chips 2-4 and 6, 67 at chip 5, 33 at chip 7 (partly under the pinned chip)"},
+      {"stop": "pinned chip: Test", "visible_percent": 100},
+      {"stop": "question box (placeholder)", "visible_percent": 100},
+      {"stop": "ask", "visible_percent": 100}
+    ],
+    "b_open_up": [
+      {"stop": "ask", "visible_percent": 100},
+      {"stop": "Attach screenshot to Ask", "visible_percent": 100},
+      {"stop": "Choose AI character, A", "visible_percent": 100},
+      {"stop": "pinned chip: Test", "visible_percent": 100},
+      {"stop": "chip ladder (lands on chip 7; UP steps 7 to 1 while the ring stays: 7 presses)", "visible_percent": "67 on landing, 67 at chip 1"},
+      {"stop": "tabs row: This answer / Session · 18", "visible_percent": 100},
+      {"stop": "notes block", "visible_percent": 100},
+      {"stop": "Hide details", "visible_percent": 100},
+      {"stop": "Read aloud", "visible_percent": 100},
+      {"stop": "answer section", "visible_percent": 33},
+      {"stop": "Show reasoning · 21 s", "visible_percent": 100},
+      {"stop": "Retry same prompt", "visible_percent": 100},
+      {"stop": "17 earlier", "visible_percent": 100},
+      {"stop": "chat row: wheatley fight", "visible_percent": 100},
+      {"stop": "Main tab (tab bar)", "visible_percent": 100},
+      {"stop": "(one more UP) Decky's back arrow", "visible_percent": 100, "note": "outside the measured range"}
+    ],
+    "where_the_lists_differ": {
+      "same_in_a_and_b": true,
+      "only_going_down": [
+        "question row 'in hollow knight how do i beat the broken vessel' (DOWN: Retry -> question row -> Show reasoning; UP: Show reasoning -> Retry, skipping it)",
+        "question box (DOWN: pinned chip -> question box -> ask; UP never lands on the question box)"
+      ],
+      "only_going_up": [
+        "Attach screenshot to Ask (UP: ask -> Attach screenshot)",
+        "Choose AI character, A (UP: Attach screenshot -> Choose AI character -> pinned chip)"
+      ]
+    },
+    "pill_down_question": "DOWN from the '17 earlier' pill goes to Retry, then through the question row, Show reasoning, the answer, Read aloud and Show details before the notes block. It does not skip the reply on this build, with the panel closed or open.",
+    "chip_ladder_vertical": "With the details panel open, Up and Down on the chip ladder step between chips rather than leaving it. A person going down must pass through all 7 chips (7 presses) to reach the pinned chip; going up, 7 presses to reach the tabs row."
+  },
+  "verdict": "FAIL on this row's rule: the stops are not the same both ways, for (a) and for (b). Going down includes the question row and the question box; going up includes Attach screenshot and Choose AI character instead. The reply is not skipped from the '17 earlier' pill in either state."
+}

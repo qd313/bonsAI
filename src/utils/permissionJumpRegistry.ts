@@ -21,9 +21,10 @@
  *   - Landing the highlight on the right Permissions row uses the same `navFocusRegistry.ts`
  *     trick used elsewhere on this screen for moving between separate areas (see that file for
  *     why a plain `.focus()` does not do this) — the target row registers itself there, and this
- *     file's `restorePermissionJumpFocusWithRetry()` waits for that registration, trying again up
- *     to three more times over the following third of a second in case the row has not
- *     registered yet the instant the tab renders.
+ *     file's `restorePermissionJumpFocusWithRetry()` takes the ring three times over the following
+ *     third of a second — in case the row has not registered yet the instant the tab renders, and
+ *     because the tab's own first button takes the ring back about 22ms after the first claim
+ *     (timed on the Deck 2026-09-23).
  *   - The earlier version of that retry step (`focusOwnerById`) reported success the moment any
  *     element under the target row was found, whether or not the controller's highlight had
  *     actually moved there — and it kept trying further elements even after one attempt had
@@ -123,15 +124,18 @@ function focusOwnerById(id: PermissionFocusTargetId): boolean {
 }
 
 /**
- * Focus the armed Permissions row once mounted, retrying at `delaysMs` while it is not yet claimed.
- * Consumes the pending focus target either way once an attempt succeeds or the schedule runs out.
+ * Focus the armed Permissions row once mounted, at every one of `delaysMs`, and report once the
+ * schedule has run out: whether any attempt claimed the ring, and how many attempts ran. Consumes
+ * the pending focus target at the end either way.
  *
- * Retries purely on `focusOwnerById`'s honest result now, rather than stopping at the first attempt
- * once some registered element merely existed — that gate always passed on the very first (0ms)
- * attempt in practice, since React attaches refs before running effects, so with the old
- * unconditional-`true` `focusOwnerById` the schedule below never actually got a second attempt. A
- * row's nav node can still lag a frame or two behind its DOM mount (Steam populates `navRef.current`
- * on its own timeline), which is exactly what the later delays are for.
+ * Every attempt runs, including after one succeeds. A claim does not stay claimed: timed on the
+ * Deck 2026-09-23 (plan 64, PERM-JUMP-01), the 0ms attempt put the ring on the armed switch and the
+ * tab's own first button, "Back to Main", took it about 22ms later — and the schedule, which
+ * stopped at the first success, never took it back. Re-taking a ring the row already holds changes
+ * nothing, so the later attempts cost nothing when the first one stuck. The one thing they could
+ * undo is a person's own press inside the first third of a second on a tab they have only just
+ * seen, which is not a real case. A row's nav node can also lag a frame or two behind its DOM
+ * mount (Steam populates `navRef.current` on its own timeline), which the later delays cover too.
  */
 export function restorePermissionJumpFocusWithRetry(
   onResult?: (claimed: boolean, attempts: number) => void,
@@ -143,13 +147,14 @@ export function restorePermissionJumpFocusWithRetry(
     return;
   }
   let index = 0;
+  let claimedOnce = false;
   const attempt = () => {
     if (pendingFocusTarget !== id) return;
-    const claimed = focusOwnerById(id);
+    claimedOnce = focusOwnerById(id) || claimedOnce;
     index += 1;
-    if (claimed || index >= delaysMs.length) {
+    if (index >= delaysMs.length) {
       pendingFocusTarget = null;
-      onResult?.(claimed, index);
+      onResult?.(claimedOnce, index);
       return;
     }
     window.setTimeout(attempt, delaysMs[index]);

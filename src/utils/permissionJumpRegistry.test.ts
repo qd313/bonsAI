@@ -129,6 +129,29 @@ describe("permissionJumpRegistry", () => {
     await vi.runAllTimersAsync();
 
     expect(claimed).toBe(true);
-    expect(attempts).toBe(2);
+    // The whole schedule runs now, success or not — see the next test for why.
+    expect(attempts).toBe(3);
+  });
+
+  /*
+   * Timed on the Deck 2026-09-23 (plan 64, PERM-JUMP-01): the 0ms attempt put the ring on the armed
+   * switch, the tab's own first button ("Back to Main") took it about 22ms later, and a schedule
+   * that stopped at its first success never took it back.
+   */
+  it("keeps re-taking the ring at the later delays after a first success, since the tab can steal it", async () => {
+    vi.useFakeTimers();
+    const claims = fakeNavHolder(true);
+    registerPermissionRowNavFocus("game_context_read", claims);
+    armPermissionJump("main", "game_context_read");
+
+    restorePermissionJumpFocusWithRetry();
+    await vi.advanceTimersByTimeAsync(0);
+    expect(claims.current.TakeFocus).toHaveBeenCalledTimes(1);
+    // Still armed between attempts, so the later ones run.
+    expect(peekPermissionJumpFocusTarget()).toBe("game_context_read");
+
+    await vi.runAllTimersAsync();
+    expect(claims.current.TakeFocus).toHaveBeenCalledTimes(3);
+    expect(peekPermissionJumpFocusTarget()).toBeNull();
   });
 });

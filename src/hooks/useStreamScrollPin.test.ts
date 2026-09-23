@@ -178,6 +178,42 @@ describe("stream scroll follow", () => {
   });
 
   /*
+   * Walking the reply with the D-pad while it is written. A step near the end takes no pin (it is
+   * inside the slack), so without this the follow scrolled the ring's own control off screen —
+   * six of eight stops on the Deck, 2026-09-18.
+   */
+  it("holds still while the gamepad ring is on something inside the transcript", () => {
+    const t = makeTranscript({ contentBottom: 400 });
+    const { rerender } = mount(t);
+    act(() => rerender({ text: "first" }));
+    expect(t.scrollTop).toBe(150);
+
+    const control = document.createElement("div");
+    control.className = "gpfocus";
+    t.anchor.appendChild(control);
+    t.grow(120);
+    act(() => rerender({ text: "first second" }));
+    expect(t.scrollTop).toBe(150);
+
+    control.className = "";
+    t.grow(60);
+    act(() => rerender({ text: "first second third" }));
+    expect(t.scrollTop).toBe(330);
+  });
+
+  it("keeps following while the ring is on the dock, outside the transcript", () => {
+    const t = makeTranscript({ contentBottom: 400 });
+    const dockButton = document.createElement("div");
+    dockButton.className = "gpfocus";
+    t.scroll.appendChild(dockButton);
+    const { rerender } = mount(t);
+
+    act(() => rerender({ text: "first tokens" }));
+
+    expect(t.scrollTop).toBe(150);
+  });
+
+  /*
    * 48px of slack, so nudging the view slightly off the bottom — or a D-pad step that lands just
    * short of it — still counts as watching the answer rather than reading back.
    */

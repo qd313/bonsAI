@@ -53,6 +53,24 @@ function visibleBottom(scroll: HTMLElement): number {
   return Math.min(paneBottom, dock.getBoundingClientRect().top);
 }
 
+/** Steam puts this class on the one element holding the gamepad ring. */
+const RING_SELECTOR = ".gpfocus";
+
+/**
+ * Whether the gamepad ring is on something inside the transcript — the person is walking the
+ * reply with the D-pad while it is still being written.
+ *
+ * Following the tail then scrolls the very control they are on out of sight, and the D-pad's own
+ * scrolls rarely take a pin, because a step near the end leaves the tail inside the slack. Measured
+ * on device 2026-09-18 (plan61-QA-FREE-PLAY-01-streaming.json): six of eight stops on a walk during
+ * a streaming answer were focused but off screen. The ring and not `document.activeElement`,
+ * because the two disagree on the Deck and the ring is what a person sees. The dock and the chat
+ * slot row sit outside the anchor, so a ring on Ask or Stop still lets the follow run.
+ */
+function ringIsInTranscript(anchor: HTMLElement): boolean {
+  return anchor.querySelector(RING_SELECTOR) !== null;
+}
+
 /**
  * Whether the user is still looking at the end of the transcript.
  *
@@ -84,7 +102,8 @@ function transcriptTailIsInView(anchor: HTMLElement, scroll: HTMLElement): boole
  * Both halves are driven by the same scroll listener, so touch and D-pad behave identically: the
  * D-pad's own panel steps set `scrollTop`, which fires `scroll` like a swipe does. Stepping down
  * through the answer therefore pins, and stepping to the bottom resumes the follow, without the
- * navigation code knowing this hook exists.
+ * navigation code knowing this hook exists. A step that lands near the end takes no pin, though,
+ * so the follow also holds while the gamepad ring is inside the transcript (ringIsInTranscript).
  */
 export function useStreamScrollPin(
   anchorRef: RefObject<HTMLElement | null>,
@@ -205,6 +224,9 @@ export function useStreamScrollPin(
            "do not scroll". */
         return;
       }
+      /* Only while streaming: the delivery passes after an Ask exist to undo the slot rebuild's
+         jump back to the top, which would otherwise strand the ring's own control there too. */
+      if (enabled && ringIsInTranscript(anchor)) return;
 
       const overshoot = tailBelowFold();
       if (overshoot <= 0) return;

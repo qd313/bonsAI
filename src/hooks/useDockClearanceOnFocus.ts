@@ -60,8 +60,20 @@ export function liftAboveDock(el: HTMLElement): boolean {
   const rect = el.getBoundingClientRect();
   if (rect.bottom <= dockTop + 1) return false;
 
-  el.style.scrollMarginBottom = `${Math.ceil(covered) + CLEARANCE_PAD_PX}px`;
-  el.scrollIntoView({ block: "end", behavior: "auto" });
+  /*
+   * A section taller than the readable band cannot clear the dock and keep its start. When its
+   * first line is on screen, `block: "end"` would trade that line for its last ones: on the Deck
+   * 2026-09-23 (plan 64), Down onto two long answer sections (308 and 375px) showed only their
+   * ends, the opening lines above the pane. Such a section skips straight to the capped step
+   * below, which lifts it only until its top meets the pane's. One whose start is already off the
+   * top (Up from below) still aligns its end, as before.
+   */
+  const readableBand = dockTop - paneRect.top - CLEARANCE_PAD_PX;
+  const keepsItsStart = rect.bottom - rect.top > readableBand && rect.top >= paneRect.top - 1;
+  if (!keepsItsStart) {
+    el.style.scrollMarginBottom = `${Math.ceil(covered) + CLEARANCE_PAD_PX}px`;
+    el.scrollIntoView({ block: "end", behavior: "auto" });
+  }
 
   /*
    * Measure again, and finish the job by hand if scrollIntoView left the element covered.

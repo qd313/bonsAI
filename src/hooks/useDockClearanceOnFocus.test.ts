@@ -138,6 +138,27 @@ describe("liftAboveDock", () => {
     expect(scrollTop).toBe(30);
   });
 
+  /*
+   * Plan 64, on the Deck 2026-09-23: Down onto long answer sections (308 and 375px, taller than
+   * the band above the dock) showed only their ends. On the device scrollIntoView end-aligns such a
+   * section and takes its opening lines off the top, so it must not be asked to at all.
+   */
+  it("keeps a tall element's first line on screen: no end-aligning scroll when its top shows", () => {
+    const t = makePane();
+    const el = t.focusEl(120, 500); // 380 tall; the band above the dock is 364
+
+    expect(liftAboveDock(el)).toBe(true);
+    expect(el.scrollIntoView).not.toHaveBeenCalled();
+  });
+
+  it("still end-aligns a tall element whose start is already above the pane (arriving from below)", () => {
+    const t = makePane();
+    const el = t.focusEl(-150, 450);
+
+    expect(liftAboveDock(el)).toBe(true);
+    expect(el.scrollIntoView).toHaveBeenCalledWith({ block: "end", behavior: "auto" });
+  });
+
   it("does nothing outside a scroll pane", () => {
     const orphan = document.createElement("div");
     orphan.scrollIntoView = vi.fn();

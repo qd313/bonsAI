@@ -1296,31 +1296,6 @@ export function PullModelsModal(props: PullModelsModalProps) {
     if (!tag || !isPlausibleOllamaPullTag(tag) || customPullBusy || pullBusy) return;
     setCustomPullBusy(true);
     try {
-      // A typed name that only *looks* plausible (isPlausibleOllamaPullTag is just a shape check)
-      // used to go straight to pull_ollama_models and say "Pull started" even for a name that does
-      // not exist -- run the same live-registry check onPullSelected already runs before its own
-      // pull, so a typo is caught and named here instead. A failed or thrown check must not block
-      // a pull that would otherwise work, same as onPullSelected.
-      let unavailable: string[] = [];
-      try {
-        const meta = await callDeckyWithTimeout<[string[]], CatalogMetadataResponse>(
-          "fetch_ollama_catalog_metadata",
-          [[tag]],
-          DECKY_RPC_TIMEOUT_MS
-        );
-        unavailable = findUnavailableRegistryTags([tag], meta);
-      } catch {
-        unavailable = [];
-      }
-      if (unavailable.length > 0) {
-        toaster.toast({
-          title: "Could not find",
-          body: tag,
-          duration: 6000,
-        });
-        return;
-      }
-
       const res = await callDeckyWithTimeout<[string[]], { accepted?: boolean; reason?: string }>(
         "pull_ollama_models",
         [[tag]],

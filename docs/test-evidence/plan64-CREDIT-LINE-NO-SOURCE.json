@@ -1,0 +1,31 @@
+{
+ "row": "Flow C row 1 - credit line naming a note with no source page (commit 81a86a4)",
+ "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+ "deck_time": "2026-09-23 18:42-18:44 EDT",
+ "screen": "Deck's own screen (QAM window 854x454)",
+ "setup": "Main tab, chat 'wheatley fight', Strategy, knowledge base on, activity log verbose, nothing running. The flow's opening session clear was NOT done: Claude Code's permission check refused the step; the replay guard was used instead.",
+ "question": "How do I beat the Bone Hydra in Hades? (deck_send_ask.py VERIFIED, whole text)",
+ "pressed": [
+  "Down walk to Ask, A at 18:42:21",
+  "waited for the end",
+  "Up x2 from the question box to the notes block header (ring on it, y 204-251, above the chip row at y 290)",
+  "A on the header"
+ ],
+ "seen": {
+  "time_ask_to_finish_s": 54.0,
+  "replay_guard": "not a replay (54 s)",
+  "reply_start": "Right, listen up, mate! You wanna know how to take down this Bone Hydra? ... (general advice, no Bone Hydra specifics)",
+  "honesty_line_under_reply": "— No close match in my notes, this answer leans on the model's own knowledge.",
+  "header_closed": "Weapon choice (+2 more) ▸ / From bonsAI's own note   (aria-label: 'Weapon choice (+2 more) · From bonsAI's own note, show')",
+  "header_open": "Weapon choice (+2 more) ▾ / From bonsAI's own note",
+  "notes_named_in_open_block": [
+   "Weapon choice · From bonsAI's own note",
+   "Theseus and Asterius · From bonsAI's own note",
+   "Heat and the Pact of Punishment · From bonsAI's own note"
+  ],
+  "log_ask_kb_search": "2026-09-23T22:42:20Z kb_domain=strategy searched_count=3 attached_count=3 attached_notes=Hades — Weapon choice; Hades — Theseus and Asterius; Hades — Heat and the Pact of Punishment starved_by_context_budget=false top_keyword_score=3.82 best_meaning_score=0.64",
+  "wording_note": "The on-screen words are \"From bonsAI's own note\" - the words 'no source' and a 'No source page' group heading do not appear."
+ },
+ "screenshot": "plan64-CREDIT-LINE-NO-SOURCE.png (block open, ring on its header)",
+ "verdict": "PASS on the fix's point: hand-written notes with no source page are now named under the header, each tagged 'From bonsAI's own note', instead of being dropped. Wording differs from the runbook's guess ('From bonsAI's own notes, no source'); the owner may want to confirm the exact wording is what was intended."
+}

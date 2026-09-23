@@ -1,0 +1,28 @@
+{
+  "row": "NOTES-BLOCK - the chip ladder inside the open 'From the notes' block",
+  "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+  "deck_time": "2026-09-23 18:09-18:11 EDT",
+  "screen": "Deck's own screen (QAM window 854x454)",
+  "setup": "Main tab, chat 'wheatley fight', Strategy, nothing running",
+  "question": "my game keeps crashing whenever i open the settings menu what should i check (deck_send_ask.py VERIFIED, whole text)",
+  "pressed": [
+    "walk Down to Ask, A; reply finished after 51 s",
+    "walk Up 2 (box, chip) to the notes header",
+    "A on the header",
+    "Down, then Up"
+  ],
+  "seen": {
+    "header_before_opening": {"label": "Crash (+2 more) - From the shared Deck tips, show", "box": [52, 204, 267, 47], "visible_pct": 100},
+    "after_A": {
+      "label": "Crash (+2 more) - From the shared Deck tips, hide",
+      "block_box": [52, 204, 267, 238],
+      "words_shown": "three shared tips, each titled 'Crash - From the shared Deck tips': check free storage space; verify the game's files; disable Steam overlay and third-party overlays",
+      "chip_ladder_inside_block": "none drawn - no chip or ladder element, and no control that can take the ring, inside the open block",
+      "on_screen": "right after opening, the view did not move: only the header and the first tip's title show, the rest of the open block sits under the suggestion chip and question box (see screenshot); a readFocus-style check put the header at 33% visible, covered by the dock"
+    },
+    "Down_from_open_header": "'Save chat to Desktop' (100% visible) - past the three tips",
+    "Up_back": "the header again, 67% visible, clipped at the top of the scroll area"
+  },
+  "screenshot": "plan64-NOTES-BLOCK-LADDER.png (block just opened)",
+  "verdict": "UNCLEAR - there is no chip ladder inside the open block for this reply (a shared-tips block with three tips), so the question 'can the D-pad reach the ladder' cannot be asked of it. Down skips the tips and goes to 'Save chat to Desktop'. Side finding: opening the block does not scroll it into view, so most of its words stay behind the chip and question box."
+}

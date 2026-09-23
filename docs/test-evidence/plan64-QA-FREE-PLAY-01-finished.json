@@ -1,0 +1,521 @@
+{
+ "row": "QA-FREE-PLAY-01 finished half",
+ "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+ "screen": "Deck's own screen (QAM window 854x454; the panel's scrolling area is y 88-454, with the ask bar, box and chip over its lower part)",
+ "deck_time": "2026-09-23 18:00-18:01 EDT",
+ "setup": "Same finished reply (3 answer sections: 308, 375 and 50 px tall). Ring walked Up to 'Main tab' first.",
+ "pressed": "deck_sweep Down then Up, stall limit 4 (runs/plan64-QA-FREE-PLAY-01-finished.json)",
+ "stops": [
+  {
+   "n": 0,
+   "leg": "start",
+   "label": "Main tab",
+   "rect": {
+    "x": 48,
+    "y": 64,
+    "w": 300,
+    "h": 20
+   },
+   "scrollTop": null,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 1,
+   "leg": "DOWN",
+   "label": "LB[+]wheatley fight\u00c3\u2014how do i beat the boss at the end of the first area+RB",
+   "rect": {
+    "x": 48,
+    "y": 88,
+    "w": 300,
+    "h": 48
+   },
+   "scrollTop": 0,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 2,
+   "leg": "DOWN",
+   "label": "21 earlier",
+   "rect": {
+    "x": 52,
+    "y": 146,
+    "w": 290,
+    "h": 22
+   },
+   "scrollTop": 0,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 3,
+   "leg": "DOWN",
+   "label": "Retry same prompt",
+   "rect": {
+    "x": 82,
+    "y": 243,
+    "w": 20,
+    "h": 20
+   },
+   "scrollTop": 0,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 4,
+   "leg": "DOWN",
+   "label": "(unnamed: div.Panel.Focusable:nth-child(2))",
+   "rect": {
+    "x": 86,
+    "y": 189,
+    "w": 245,
+    "h": 71
+   },
+   "scrollTop": 0,
+   "visible_pct": 89,
+   "covered_by": "div.bonsai-turn-retry-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.Focusable",
+   "clipped_by": null
+  },
+  {
+   "n": 5,
+   "leg": "DOWN",
+   "label": "Show reasoning \u00c2\u00b7 27 s",
+   "rect": {
+    "x": 52,
+    "y": 188,
+    "w": 290,
+    "h": 15
+   },
+   "scrollTop": 89,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 6,
+   "leg": "DOWN",
+   "label": "(unnamed: div.Panel.Focusable:nth-child(1))",
+   "rect": {
+    "x": 63,
+    "y": -106,
+    "w": 245,
+    "h": 308
+   },
+   "scrollTop": 414,
+   "visible_pct": 33,
+   "covered_by": null,
+   "clipped_by": "div"
+  },
+  {
+   "n": 7,
+   "leg": "DOWN",
+   "label": "(unnamed: div.Panel.Focusable:nth-child(2))",
+   "rect": {
+    "x": 63,
+    "y": -52,
+    "w": 245,
+    "h": 375
+   },
+   "scrollTop": 669,
+   "visible_pct": 33,
+   "covered_by": "div.bonsai-preset-carousel-slot > button.bonsai-preset-glass.Focusable > span.bonsai-preset-chip-label > div.bonsai-preset-chip-text",
+   "clipped_by": null
+  },
+  {
+   "n": 8,
+   "leg": "DOWN",
+   "label": "(unnamed: div.Panel.Focusable:nth-child(3))",
+   "rect": {
+    "x": 63,
+    "y": 239,
+    "w": 245,
+    "h": 50
+   },
+   "scrollTop": 753,
+   "visible_pct": 89,
+   "covered_by": "div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable",
+   "clipped_by": null
+  },
+  {
+   "n": 9,
+   "leg": "DOWN",
+   "label": "A. Just starting out and figuring out the basics",
+   "rect": {
+    "x": 65,
+    "y": 155,
+    "w": 265,
+    "h": 48
+   },
+   "scrollTop": 967,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 10,
+   "leg": "DOWN",
+   "label": "B. Deep into the run and trying to survive the later stages",
+   "rect": {
+    "x": 65,
+    "y": 211,
+    "w": 265,
+    "h": 48
+   },
+   "scrollTop": 967,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 11,
+   "leg": "DOWN",
+   "label": "Mark reply helpful",
+   "rect": {
+    "x": 52,
+    "y": 171,
+    "w": 89,
+    "h": 32
+   },
+   "scrollTop": 1113,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 12,
+   "leg": "DOWN",
+   "label": "Show details",
+   "rect": {
+    "x": 52,
+    "y": 215,
+    "w": 267,
+    "h": 15
+   },
+   "scrollTop": 1113,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 13,
+   "leg": "DOWN",
+   "label": "Upgrades and overclocks (+2 more) \u00c2\u00b7 From bonsAI's own note, show",
+   "rect": {
+    "x": 52,
+    "y": 174,
+    "w": 267,
+    "h": 47
+   },
+   "scrollTop": 1185,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 14,
+   "leg": "DOWN",
+   "label": "Save chat to Desktop",
+   "rect": {
+    "x": 48,
+    "y": 251,
+    "w": 300,
+    "h": 38
+   },
+   "scrollTop": 1185,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 15,
+   "leg": "DOWN",
+   "label": "Testhow do i beat the gonarch in black mesa",
+   "rect": {
+    "x": 48,
+    "y": 290,
+    "w": 300,
+    "h": 30
+   },
+   "scrollTop": 1185,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 16,
+   "leg": "DOWN",
+   "label": "Describe the level, boss, or puzzle you're stuck on.|",
+   "rect": {
+    "x": 73,
+    "y": 329,
+    "w": 275,
+    "h": 44
+   },
+   "scrollTop": 1185,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 17,
+   "leg": "DOWN",
+   "label": "ask",
+   "rect": {
+    "x": 49,
+    "y": 400,
+    "w": 299,
+    "h": 36
+   },
+   "scrollTop": 1185,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 18,
+   "leg": "UP",
+   "label": "Voice input",
+   "rect": {
+    "x": 327,
+    "y": 377,
+    "w": 20,
+    "h": 20
+   },
+   "scrollTop": 1185,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 19,
+   "leg": "UP",
+   "label": "Describe the level, boss, or puzzle you're stuck on.|",
+   "rect": {
+    "x": 73,
+    "y": 329,
+    "w": 275,
+    "h": 44
+   },
+   "scrollTop": 1185,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 20,
+   "leg": "UP",
+   "label": "Testhow do i beat the gonarch in black mesa",
+   "rect": {
+    "x": 48,
+    "y": 290,
+    "w": 300,
+    "h": 30
+   },
+   "scrollTop": 1185,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 21,
+   "leg": "UP",
+   "label": "Upgrades and overclocks (+2 more) \u00c2\u00b7 From bonsAI's own note, show",
+   "rect": {
+    "x": 52,
+    "y": 204,
+    "w": 267,
+    "h": 47
+   },
+   "scrollTop": 1155,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 22,
+   "leg": "UP",
+   "label": "Show details",
+   "rect": {
+    "x": 52,
+    "y": 204,
+    "w": 267,
+    "h": 15
+   },
+   "scrollTop": 1124,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 23,
+   "leg": "UP",
+   "label": "Mark reply helpful",
+   "rect": {
+    "x": 52,
+    "y": 171,
+    "w": 89,
+    "h": 32
+   },
+   "scrollTop": 1113,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 24,
+   "leg": "UP",
+   "label": "(unnamed: div.Panel.Focusable:nth-child(3))",
+   "rect": {
+    "x": 63,
+    "y": 233,
+    "w": 245,
+    "h": 50
+   },
+   "scrollTop": 759,
+   "visible_pct": 89,
+   "covered_by": "div.bonsai-reply-copy-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-reply-copy-corner.Focusable",
+   "clipped_by": null
+  },
+  {
+   "n": 25,
+   "leg": "UP",
+   "label": "(unnamed: div.Panel.Focusable:nth-child(2))",
+   "rect": {
+    "x": 63,
+    "y": -52,
+    "w": 245,
+    "h": 375
+   },
+   "scrollTop": 669,
+   "visible_pct": 33,
+   "covered_by": "div.bonsai-preset-carousel-slot > button.bonsai-preset-glass.Focusable > span.bonsai-preset-chip-label > div.bonsai-preset-chip-text",
+   "clipped_by": null
+  },
+  {
+   "n": 26,
+   "leg": "UP",
+   "label": "(unnamed: div.Panel.Focusable:nth-child(1))",
+   "rect": {
+    "x": 63,
+    "y": -106,
+    "w": 245,
+    "h": 308
+   },
+   "scrollTop": 414,
+   "visible_pct": 33,
+   "covered_by": null,
+   "clipped_by": "div"
+  },
+  {
+   "n": 27,
+   "leg": "UP",
+   "label": "Show reasoning \u00c2\u00b7 27 s",
+   "rect": {
+    "x": 52,
+    "y": 188,
+    "w": 290,
+    "h": 15
+   },
+   "scrollTop": 89,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 28,
+   "leg": "UP",
+   "label": "Retry same prompt",
+   "rect": {
+    "x": 82,
+    "y": 204,
+    "w": 20,
+    "h": 20
+   },
+   "scrollTop": 39,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 29,
+   "leg": "UP",
+   "label": "21 earlier",
+   "rect": {
+    "x": 52,
+    "y": 146,
+    "w": 290,
+    "h": 22
+   },
+   "scrollTop": 0,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 30,
+   "leg": "UP",
+   "label": "LB[+]wheatley fight\u00c3\u2014how do i beat the boss at the end of the first area+RB",
+   "rect": {
+    "x": 48,
+    "y": 88,
+    "w": 300,
+    "h": 48
+   },
+   "scrollTop": 0,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 31,
+   "leg": "UP",
+   "label": "Main tab",
+   "rect": {
+    "x": 48,
+    "y": 64,
+    "w": 300,
+    "h": 20
+   },
+   "scrollTop": null,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 32,
+   "leg": "UP",
+   "label": "bonsAIv0.5.0",
+   "rect": {
+    "x": 64,
+    "y": 20,
+    "w": 40,
+    "h": 28
+   },
+   "scrollTop": null,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  }
+ ],
+ "seen": {
+  "stops_visited": 20,
+  "presses": 47,
+  "loop": false,
+  "down_and_up_same_stops_reversed": "yes, except the bottom: Down ends on Ask, Up from Ask goes to Voice input and then the box",
+  "known_false_alarms": {
+   "question_row_behind_Retry": "89%",
+   "last_answer_section_behind_Copy": "89% both ways"
+  },
+  "other_not_fully_visible": [
+   "answer section 1 (308 px tall): 33% visible both ways, box y -106 to 202 - the view shows its lower end, its first ~190 px sit above the view",
+   "answer section 2 (375 px tall, taller than the space between the chat row and the chip): 33% visible both ways, box y -52 to 323, lower part under the suggestion chip"
+  ],
+  "shoulder_lane_repeat": "skipped as the runbook allows: the shoulder buttons change the open chat on the chat row and the plugin tab elsewhere"
+ },
+ "verdict": "UNCLEAR - no loop and Down/Up mirror each other, but two answer sections that are taller than the visible area are only 33% visible when the ring is on them. These are not the two known false alarms. Earlier clean runs had shorter answers, so this may be a limit of tall sections rather than a new fault; the owner decides."
+}

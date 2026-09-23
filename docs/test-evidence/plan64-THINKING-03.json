@@ -1,0 +1,79 @@
+{
+ "row": "THINKING-SANITIZE-01 and THINKING-EMOJI-CLUSTER-01, Ask 3 of 5",
+ "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+ "deck_time": "2026-09-23 18:04-18:05 EDT",
+ "screen": "Deck's own screen",
+ "setup": "Main tab, chat 'wheatley fight', Strategy, nothing running",
+ "question": "how do i free up storage space when my sd card is almost full (deck_send_ask.py VERIFIED, whole text)",
+ "pressed": "recorder --arm, walk to Ask, A, wait for the end, recorder --stop",
+ "recorder_log": [
+  {
+   "ms": 0,
+   "kind": "initial",
+   "present": false,
+   "empty": false,
+   "text": null
+  },
+  {
+   "ms": 8412,
+   "kind": "mutation",
+   "present": true,
+   "empty": false,
+   "text": "Thinking…"
+  },
+  {
+   "ms": 8463,
+   "kind": "mutation",
+   "present": true,
+   "empty": false,
+   "text": "Map in my head for \"how do i free up storage space when my sd card is almos…\"…"
+  },
+  {
+   "ms": 8490,
+   "kind": "mutation",
+   "present": true,
+   "empty": false,
+   "text": "Checking offline cards for \"how do i free up storage space when my sd card is almos…\"."
+  },
+  {
+   "ms": 9783,
+   "kind": "mutation",
+   "present": true,
+   "empty": false,
+   "text": "\"how do i free up storage space when my sd card is almos…\" is in good hands now…"
+  },
+  {
+   "ms": 18549,
+   "kind": "mutation",
+   "present": true,
+   "empty": false,
+   "text": "Still chewing on it…"
+  },
+  {
+   "ms": 20917,
+   "kind": "mutation",
+   "present": false,
+   "empty": false,
+   "text": null
+  }
+ ],
+ "seen": {
+  "line_first_shown_ms": 8412,
+  "line_gone_ms": 20917,
+  "blank_or_missing_while_in_use": 0,
+  "distinct_texts": [
+   "\"how do i free up storage space when my sd card is almos…\" is in good hands now…",
+   "Checking offline cards for \"how do i free up storage space when my sd card is almos…\".",
+   "Map in my head for \"how do i free up storage space when my sd card is almos…\"…",
+   "Still chewing on it…",
+   "Thinking…"
+  ],
+  "texts_with_letters": 5,
+  "emoji_only_texts": [],
+  "what_replaced_the_line": "live reasoning box present (1 line), no answer text yet, Stop present"
+ },
+ "verdict": {
+  "THINKING-SANITIZE-01": "PASS",
+  "THINKING-EMOJI-CLUSTER-01": "PASS"
+ }
+}

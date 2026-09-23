@@ -1,0 +1,22 @@
+{
+ "row": "SOFT-PREDICT-04",
+ "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+ "screen": "Deck's own screen (QAM window 854x454; the panel's scrolling area is y 88-454, with the ask bar, box and chip over its lower part)",
+ "deck_time": "2026-09-23 17:58-17:59 EDT",
+ "setup": "Main tab, chat 'wheatley fight', Strategy, nothing running. Question sent once (deck_send_ask.py VERIFIED, whole text): explain the complete weapon upgrade priority order and resource gathering strategy for surviving as long as possible in deep rock galactic survivor including how to handle every enemy type that appears",
+ "pressed": [
+  "walk Down to Ask, A"
+ ],
+ "seen": {
+  "plugin_log": "17:58:05 POST num_predict=2112 think=True; 17:59:07 stream done done_reason=stop eval_count=1117 visible_len=1687; OK response_len=1687 soft_continues=0",
+  "reply_length_chars": 1687,
+  "soft_continue_happened": false,
+  "finished_text_checked": "whole turn text, 2181 characters with the question and buttons",
+  "bonsai_strategy_branches_fence_or_backticks": false,
+  "stray_json": false,
+  "curly_braces": 0,
+  "ending": "a clean two-choice menu: 'Where are you at in Deep Rock Galactic: Survivor? A. Just starting out... B. Deep into the run...'",
+  "notes_block": "'Upgrades and overclocks (+2 more) - From bonsAI's own note' shown under the reply"
+ },
+ "verdict": "UNCLEAR - the finished text is clean, but the reply stopped by itself at 1117 tokens (the cap on this build reads 2112, not 1600), so no continuation happened and the join this row is about was never tested"
+}

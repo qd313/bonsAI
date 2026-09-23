@@ -321,6 +321,74 @@ at the end of each._
   by a written test that pins the same result — `src/data/uiScaleProfile.test.ts`, the test
   "normalizeUiScaleProfileId redirects a legacy 'desktop' save to handheld, same scale as before".
 
+_The five entries below were moved out of [roadmap.md](../roadmap.md) on 2026-09-23 during plan 64's flow B
+bookkeeping pass — copied line for line from this session's Verify or Bugs entry, nothing reworded, with the
+closing note added at the end of each._
+
+### The AI models screen's Done and Cancel button could fall off the bottom of a long model list, and the list itself did not use all the room it had (closed 2026-09-23)
+
+- ★★ `[ollama]` `[layout]` **The AI models list fills the room its popup body has, not a separate smaller
+  cap of its own** — **VERIFY, unclear on the Deck 2026-09-23.** Under the default filters, all 4 rows show
+  with nothing to scroll, so the taller cap was never actually reached. With the long list showing (25 rows),
+  about 7 rows were visible at once, but Done and Cancel then sat below the visible edge of the screen — a
+  second, kin bug, also closed below. Row **MODELS-LIST-CAP-01**. Evidence
+  `docs/test-evidence/plan64-MODELS-LIST-CAP-01.json` (+ `.png`), then
+  `docs/test-evidence/plan64-MODELS-LIST-CAP-01-try2.json` once the cap was re-set.
+
+  **Closed 2026-09-23, confirmed on the Deck with a third run (try3).** With the Filters panel open and all
+  25 models showing: the title sits at 90 to 118 pixels down the screen and Done/Cancel at 418 to 458, both
+  fully inside the visible 40-to-492 area; the scrolling list itself is capped at 264 pixels, showing three
+  model rows at once. One oddity worth a line for the maintainer: the first A press on the Filters button did
+  nothing, and the second closed the panel. Evidence `docs/test-evidence/plan64-MODELS-LIST-CAP-01-try3.json`
+  and two screenshots.
+
+### Down from the question box while a reply is arriving used to do nothing, and Stop was hard to find by D-pad (closed 2026-09-23)
+
+- ★ `[ask]` `[focus]` **Down did nothing for the whole time an answer was arriving** — **VERIFY, fixed
+  2026-09-20.** After pressing Ask, Down did nothing at all until the answer finished, even though the Stop
+  button was live and reachable by Right the whole time. Down now goes to Stop instead. Row
+  **ASKBAR-DOWN-TO-STOP-01**. A twin bug, also closed below, said the same route was hard to find by D-pad.
+
+  **Closed 2026-09-23, confirmed on the Deck.** While a reply was arriving, Down from the emptied question
+  box landed on Stop; Right, Right also did. After the reply finished, the same presses went back to Ask and
+  the voice button, as before. By-eye note left for the maintainer: in the screenshot the Stop icon looks
+  grey rather than red, and its ring touches the panel's right edge (x 347 against a 348-pixel panel).
+  Evidence `docs/test-evidence/plan64-ASKBAR-DOWN-TO-STOP-01.json` (+ `.png`).
+
+### Up from the Retry icon does not return to the answer (closed 2026-09-23)
+
+- ★ `[focus]` **Up from the Retry icon does not return to the answer** — **OPEN, confirmed on the Deck
+  2026-09-17:** on a stopped reply, Up from Retry skipped past the kept answer and jumped straight to the
+  earlier-turns pill instead of the answer's last section.
+
+  **Closed 2026-09-23 as no longer applying.** Retry now sits above the answer, because the layout around it
+  changed since this bug was filed. Measured on the Deck: Up from Retry now lands on the "19 earlier" button,
+  and Down from there comes back to Retry — the two moves mirror each other, which is what this row always
+  asked for.
+
+### The no-game branch menu leaks its template (closed 2026-09-23)
+
+- ★ `[reply]` **The no-game branch menu leaks its template** — **VERIFY, fixed in `f11220d`.** Row
+  **NOGAME-MENU-01**. Owed: with nothing running, ask a question in Strategy mode that never names a game,
+  and confirm the menu either does not appear or names a real place — never the literal words THIS GAME.
+
+  **Closed 2026-09-23, confirmed on the Deck.** A Strategy question that never named a game got a real
+  two-choice menu ("Exploring the starting area…", "Focusing on early combat…"); the literal words "THIS
+  GAME" appear nowhere. One thing worth knowing: the two choices name kinds of start, not a real place.
+  Evidence `docs/test-evidence/plan64-NOGAME-MENU-01.json` (+ `.png`).
+
+### A new chat shows the previous chat's last reply until the panel is reopened (closed 2026-09-23)
+
+- ★★ `[chat]` **A new chat shows the previous chat's last reply until the panel is reopened** — **VERIFY,
+  fixed in `163ff16`.** Row **CHAT-GHOST-REPLY-01**. Owed: switch to a brand-new chat right after a reply
+  finishes elsewhere, four times over to match the four sightings, and see it blank from the first frame with
+  no reopen needed.
+
+  **Closed 2026-09-23, confirmed on the Deck.** All four new chats were empty from the first change logged
+  after switching. **A related, new bug was found in the same pass:** a brand-new chat can briefly show the
+  *previous* chat's question (not its reply) for about 40 seconds — filed separately in Bugs, with a fix
+  already being built this session. Evidence `docs/test-evidence/plan64-CHAT-GHOST-REPLY-01.json`.
+
 ## Moved from the roadmap 2026-09-19
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-19 once the maintainer's answers to plan 61 § 8

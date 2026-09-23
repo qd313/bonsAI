@@ -1,0 +1,110 @@
+{
+ "row": "PERM-JUMP-01 - timed measurement of the Open Permissions jump (flow A row 12)",
+ "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+ "deck_time": "2026-09-23 18:36-18:40 EDT",
+ "screen": "Deck's own screen (QAM window 854x454)",
+ "setup": "Main tab, chat 'wheatley fight', Strategy, nothing running. Permission switched off through the Permissions tab's 'Read game & screenshot context' switch (A), not the file.",
+ "settings_read": {
+  "before": {
+   "capabilities.media_library_access": true,
+   "capabilities.steam_logs_read": true
+  },
+  "after_switch_off": {
+   "capabilities.media_library_access": false,
+   "capabilities.steam_logs_read": false
+  },
+  "after_restore": {
+   "capabilities.media_library_access": true,
+   "capabilities.steam_logs_read": true
+  }
+ },
+ "pressed": [
+  "Permissions tab: switch read aria-checked=true, A -> both keys false over SSH",
+  "tab bar LB x3 -> Main tab",
+  "deck_send_ask.py --text 'why is my game crashing on the deck after the latest update' (VERIFIED, whole text); Ask not pressed",
+  "hint row appeared: 'Troubleshooting Ask detected. Enable Read game & screenshot context in Permissions to auto-attach Proton logs and screenshots (never turned on automatically).' with Open Permissions and Dismiss, below the last reply's Show details (row top at y 778 before scrolling)",
+  "Down walk: Main tab, 29 earlier, Retry, question row, Show reasoning, the last answer section (tall, 392 px; took several Down presses while the view scrolled it), Read aloud, Show details, Open Permissions (y 240, 34 px tall, fully inside the visible area)",
+  "recorder --arm, A on Open Permissions",
+  "three focus reads after A, then recorder --stop",
+  "A on Back to Main",
+  "deck_send_ask.py --clear then --read (empty)",
+  "Up to tab bar, RB x3 to Permissions, Down to the switch (aria-checked=false), A -> both keys true over SSH"
+ ],
+ "seen": {
+  "focus_reads_after_A": [
+   {
+    "approx_after_A": "about 0.3 s (first read the tools allow)",
+    "tab": "Permissions tab",
+    "ring_on": "Back to Main",
+    "rect_y": 88,
+    "rect_h": 34
+   },
+   {
+    "approx_after_A": "about 3.5 s",
+    "tab": "Permissions tab",
+    "ring_on": "Back to Main"
+   },
+   {
+    "approx_after_A": "about 7.5 s",
+    "tab": "Permissions tab",
+    "ring_on": "Back to Main"
+   }
+  ],
+  "note_on_read_timing": "each read takes a few seconds through the tool, so the planned 1 s read landed at about 3.5 s; the recorder log below covers the gap at millisecond resolution",
+  "recorder_summary": "At 2736 ms after arming, browser focus and the ring landed on the 'Read game & screenshot context' switch (data perm game_context_read, y 270). 12 ms later (2758 ms) browser focus moved to 'Back to Main' (y 118), and the ring followed at 2760 ms. Nothing else changed in the remaining 11.4 s of recording: the ring was never put back on the switch.",
+  "answer_to_the_question": "The ring DOES reach the switch, then is moved away to Back to Main about 22 ms later, and none of the later tries (120 ms, 320 ms) bring it back.",
+  "back_to_main_landing": "Main tab, ring on Open Permissions (y 240) - as expected",
+  "recorder_log": {
+   "armed": true,
+   "nowMs": 14155,
+   "log": [
+    {
+     "ms": 2736,
+     "kind": "focusin",
+     "el": {
+      "tag": "div",
+      "cls": "_9Ql-oVe_j8E-vsDdyVdWo  Focusable",
+      "text": "",
+      "perm": "game_context_read",
+      "y": 270
+     }
+    },
+    {
+     "ms": 2746,
+     "kind": "ring",
+     "el": {
+      "tag": "div",
+      "cls": "_9Ql-oVe_j8E-vsDdyVdWo  Focusable gpfocus gpfocuswithin",
+      "text": "",
+      "perm": "game_context_read",
+      "y": 270
+     }
+    },
+    {
+     "ms": 2758,
+     "kind": "focusin",
+     "el": {
+      "tag": "button",
+      "cls": "cXzBZxhPBl7fZs9LODEnc Focusable",
+      "text": "Back to Main",
+      "perm": null,
+      "y": 118
+     }
+    },
+    {
+     "ms": 2760,
+     "kind": "ring",
+     "el": {
+      "tag": "button",
+      "cls": "cXzBZxhPBl7fZs9LODEnc Focusable gpfocus gpfocuswithin",
+      "text": "Back to Main",
+      "perm": null,
+      "y": 118
+     }
+    }
+   ],
+   "stopped": true
+  }
+ },
+ "verdict": "MEASURED (row asked for measurement, not pass/fail). Landing: Back to Main, not the switch - same as 2026-09-17. The ring reaches the switch first and is pulled off it 22 ms later. Back to Main returned the ring to Open Permissions as expected."
+}

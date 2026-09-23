@@ -1,0 +1,18 @@
+{
+  "row": "SESSION-TAB-01 - Session tab inside Show details (steps from docs/testing.md)",
+  "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+  "deck_time": "2026-09-23 18:11-18:14 EDT",
+  "screen": "Deck's own screen (QAM window 854x454)",
+  "setup": "Main tab, chat 'wheatley fight', finished answer already on screen (the NOTES-BLOCK row's reply); no new chat, no new question",
+  "steps": {
+    "1_show_details": "A on Show details -> label became 'Hide details', ring stayed on it, 100% visible",
+    "2_walk_down": "Down -> notes block header (33% visible the first time, the open block pushed it up); Down -> tabs row 'This answer / Session - 27', 100% visible",
+    "3_right_left": "Right -> 'Session - 27' becomes the active tab and the Session body with the Clear button appears; Left -> 'This answer' active again, Clear gone; Right again -> Session active",
+    "4_rows": "Down 27 times: every one of the 27 rows took the ring, every stop 100% visible, list scrolled to keep each clear of the dock (runs/plan64-SESSION-TAB-01-rows.json). Rows go from 'wheatley fight' to 'my game keeps crashing whenever i open the setti...'",
+    "5_clear_and_cancel": "Down 28 -> 'Clear' (100% visible). Down once more -> 'Save chat to Desktop' (a chip ladder 'Chip 1 of 7' sits in the Session body but is not a stop). Up -> Clear, A -> confirm box 'Start the next question fresh?' with 'Clear' (ring starts on it) and 'Cancel'. B -> box closed. Plugin log shows no clear action.",
+    "after_cancel": "the ring did NOT come back into the row list: it landed on the tab bar ('Main tab'), and the Show details panel and the notes block were both closed again",
+    "6_B_from_a_row": "second try from a fresh opening: A on Show details, Down, Down, Right, Down (row 'wheatley fight'), Down (row 'what does the pickaxe do'), B -> whole panel closed, ring on 'Show details', 100% visible (runs/plan64-SESSION-TAB-01-B-close.json, saved as checks/plan64-SESSION-TAB-01-B-close.json)"
+  },
+  "screenshot": "plan64-SESSION-TAB-01-confirm.png (confirm box open, ring on Clear)",
+  "verdict": "PASS on steps 1-6 as written (tabs reachable, Left/Right switch them, all 27 rows and Clear reachable and visible, the confirm box opens and B cancels it without clearing, B from a row closes the whole panel onto Show details). UNCLEAR on one detail: after cancelling the confirm box the ring went to the tab bar with the panel closed, not back into the row list as step 6 assumed, so step 6 had to be run from a fresh opening. The confirm box also opens with the ring on the destructive 'Clear' button, not on Cancel."
+}

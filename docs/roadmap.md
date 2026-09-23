@@ -71,13 +71,6 @@ starts work outside this.
 ## Bugs
 
 
-- ★ `[focus]` **Up from the Retry icon does not return to the answer** — **OPEN, read again 2026-09-16.**
-  With the thumbs-up/thumbs-down row greyed on a stopped reply, Down from the answer now lands on Retry — but
-  Up from Retry does not go back to the answer's last section the way it should. **Read again 2026-09-16:**
-  the lane building the D-pad fixes nearby read this code and judged it stale rather than change anything, so
-  no fix landed. It stays open and awaits a device re-check to say whether it still happens. **Confirmed on
-  the Deck 2026-09-17:** on a stopped reply, Up from Retry skips past the kept answer and jumps straight to
-  the earlier-turns pill instead. Evidence `docs/test-evidence/plan57-QA-up-from-retry.json`.
 - ★ `[focus]` **Down does not move the ring off an unrevealed spoiler block** — **OPEN, found 2026-09-04, did not reproduce
   2026-09-05.** With the ring on the hidden block, Down reported the press arriving and nothing moving. Retried today on a fresh
   Red Dead ending reply with a real hidden block on screen: **Down left it normally**, straight onto the branch picker's first
@@ -93,14 +86,10 @@ starts work outside this.
   top of the tab, on the Back to Main button, nowhere near the toggle it should reach. **A timed measurement
   was set up 2026-09-23** to record every focus and highlight change as it happens, which would show exactly
   where the jump goes wrong; it could not run, because it needs to switch a permission off first and Claude
-  Code's own automatic permission check refused that edit. Still owed.
+  Code's own automatic permission check refused that edit. **The maintainer allowed the session to make
+  settings-file edits on the Deck itself, 2026-09-23**, between Deck runs, so that block no longer applies —
+  the measurement itself has not yet been re-tried. Still owed.
   [Detail](roadmap-details.md#the-open-permissions-jump-lands-one-toggle-above-the-one-it-was-asked-for).
-- ★ `[focus]` **Reaching the Stop generation button by D-pad while a reply is streaming is hard to find** —
-  **OPEN, found 2026-09-16.** While a reply is being written, Down from the question box or from the live
-  answer never reaches Stop generation; the only route is Right, then Right again from the Ask-mode button.
-  Not a trap, since Stop can still be reached — just not where a person would first look. **Confirmed on the
-  Deck 2026-09-17**, same route needed. Likely closed by the Down-goes-to-Stop fix, the entry under Verify
-  named **ASKBAR-DOWN-TO-STOP-01**; plan 64 checks both with one walk. [Detail](roadmap-details.md#reaching-the-stop-generation-button-by-d-pad-while-a-reply-is-streaming-is-hard-to-find).
 - ★ `[focus]` **Walking down a reply and walking back up visit different stops** — **OPEN, re-measured on
   the Deck 2026-09-23.** With the details panel both closed and open, going down visits the question row and
   the question box, but going up skips both and stops instead on Attach screenshot and Choose AI character;
@@ -111,6 +100,16 @@ starts work outside this.
   its "Chip 1 of 7" counter above the visible area** — **OPEN, found on the Deck 2026-09-23.** Measured only
   67% of the chip row visible at chip 1, 67% at chip 5, and 33% at chip 7 — at chip 1 a person cannot see
   which chip is lit. Evidence `docs/test-evidence/plan64-DETAILS-LADDER-01.json` (+ `.png`).
+- ★ `[focus]` `[layout]` **Walking onto an answer section taller than the view shows its end, not its
+  start** — **OPEN, found on the Deck 2026-09-23.** Two answer sections, 308 and 375 pixels tall, were only
+  33% visible whichever way the D-pad walk reached them, and the view showed the lower end of the first one,
+  so its opening lines sat above the screen. Earlier, shorter answers on the same kind of walk read clean.
+  Evidence `docs/test-evidence/plan64-QA-FREE-PLAY-01-finished.json`.
+- ★ `[focus]` **The Session tab's Clear box opens with the ring on Clear, and cancelling it throws the ring
+  out of the panel** — **OPEN, found on the Deck 2026-09-23; a fix is being built in this session.** The
+  confirm box ("Start the next question fresh?") opens with the ring on the destructive Clear button rather
+  than Cancel; after cancelling, the ring lands on the tab bar with the whole details panel closed, instead
+  of back on the row list. Evidence `docs/test-evidence/plan64-SESSION-TAB-01.json`.
 - ★ `[QA]` **The walk check calls a stop hidden when a corner icon merely overlaps its box** — **OPEN,
   measured on the Deck 2026-09-21.** It judges a stop by sampling its rectangle, so the question row and the
   last answer section always read part-hidden behind the Retry and Copy icons — though the words clear those
@@ -145,6 +144,12 @@ starts work outside this.
   found on the Deck 2026-09-23.** The button takes the press, but nothing after it takes the ring: the next
   press only brings the ring back into view rather than moving anywhere, so a shoulder press right after does
   not switch tabs the way it should. Evidence `docs/test-evidence/plan64-UI-SIZE-01.json`.
+- ★★ `[chat]` **A brand-new chat shows the previous chat's question for about 40 seconds** — **OPEN, found
+  on the Deck 2026-09-23; a fix is being built in this session.** Open an empty new chat and ask its first
+  question: within about 70 milliseconds the previous chat's last question appears above the new one, stays
+  35 to 41 seconds, and vanishes when the new chat's title changes. Seen 3 times out of 3. The saved chat
+  files themselves are not affected. Screenshot
+  `docs/test-evidence/plan64-CHAT-GHOST-REPLY-01-leftover-question.png`.
 - ★★ `[chat]` **A chat that is still writing does not look busy from another chat** — **OPEN, found
   2026-09-18.** Switch away from a chat that is still writing and nothing says so: its dot looks idle, the
   other chat's Ask button reads ready, and the dot never turns green when it finishes. Seen on three separate
@@ -161,19 +166,23 @@ starts work outside this.
   highlight** — **OPEN, found 2026-09-18.** The view keeps following new text as it streams in, and the
   highlighted control scrolls off screen with it: six of eight stops on one walk were not visible, and
   walking back down looped instead of reaching the bottom. Evidence
-  `docs/test-evidence/plan61-QA-FREE-PLAY-01-streaming.json`. [Detail](roadmap-details.md#walking-a-reply-with-the-d-pad-while-it-is-still-being-written-loses-the-highlight).
+  `docs/test-evidence/plan61-QA-FREE-PLAY-01-streaming.json`. **A fix landed 2026-09-23 (`7b9447e`); its
+  first Deck try was inconclusive** — one stop only, still visible, before the reply finished; see the
+  standing free-play row in [testing-manual.md](testing-manual.md#standing-row-the-free-play-sweep).
+  **Sighting, 2026-09-23:** on one walk while an Ask was running, Up skipped over the chat row entirely.
+  Evidence `docs/test-evidence/plan64-QA-FREE-PLAY-01-streaming.json`.
+  [Detail](roadmap-details.md#walking-a-reply-with-the-d-pad-while-it-is-still-being-written-loses-the-highlight).
 - ★★ `[ollama]` `[focus]` **A tap outside the AI models screen started the queued downloads and left the
   D-pad stuck in the Ollama tab** — **OPEN, reported 2026-09-16, not reproduced.** The maintainer thinks a
   tap landed outside the screen instead of on Done; the queued models then started downloading and the
   D-pad could not move in the Ollama tab, as if the screen were still open. Read in the code but not proven
   on the device. Needs a reproduction with an empty download queue.
   [Detail](roadmap-details.md#a-tap-outside-the-ai-models-screen-started-the-queued-downloads-and-left-the-d-pad-stuck-in-the-ollama-tab).
-- ★★ `[ollama]` `[layout]` **With the long model list showing, Done falls below the visible edge of the AI
-  models screen** — **OPEN, found on the Deck 2026-09-23.** With Essentials only switched off and 25 rows
-  showing, Done sits from about 538 to 578 pixels down the screen while the dialog itself is only visible to
-  about 492 — the list's own box fills its full 384-pixel cap, leaving no room for the dialog's title and
-  buttons. A measurement of the whole dialog is underway to set the right cap. Kin to row **MODELS-LIST-CAP-01**
-  in [Verify](#verify). Evidence `docs/test-evidence/plan64-MODELS-FILTERS-01.json`.
+- ★★ `[ollama]` **Attaching a screenshot crashed the model once** — **OPEN, found on the Deck 2026-09-23,
+  needs a second try.** A 2.6 MB screenshot attached to a question; after 14 seconds the reply said "Ollama
+  returned an incomplete stream". The Deck's own system log shows the model's process crashed with a
+  graphics-chip error ("ErrorDeviceLost") and wrote a crash dump. Ollama recovered on its own and later
+  questions worked. Seen once. Evidence `docs/test-evidence/plan64-THINKING-05.json`.
 - ★★ `[reply]` **Token streaming reveals text in bursts while a game is running** — **ACCEPTED 2026-09-04 (D58 #4).** Measured 2026-08-28 with
   a game running: tokens arrive in bursts, and during a burst the overlay drops to 47 fps; between bursts it is a flat 60. Delivery
   is bursty, painting is not slow. The game's own frame rate is unmeasured. Accepted as a nice-to-have; reopen only if the game's own frame rate is measured
@@ -418,11 +427,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   [testing.md](testing.md#qa-evidence-gap-01--twelve-checks-whose-evidence-was-never-saved) already says this row by row.
 
 ### Bugs that need verification
-- ★ `[ask]` `[focus]` **Down did nothing for the whole time an answer was arriving** — **VERIFY, fixed
-  2026-09-20.** After pressing Ask, Down did nothing at all until the answer finished, even though the Stop
-  button was live and reachable by Right the whole time — the wrong control was made to swallow Down. Down
-  now goes to Stop instead. Row **ASKBAR-DOWN-TO-STOP-01**, not yet run on the Deck.
-  [Detail](roadmap-details.md#down-did-nothing-for-the-whole-time-an-answer-was-arriving).
 - ★ `[chips]` `[KB]` **A suggestion chip pulled from the game's notes shows no Tip mark** (row
   **CHIP-BUTTON-09**) — **VERIFY, fixed in `895cf0a`.** Two copies of the same markup had drifted apart; there
   is now one piece of code drawing both badges. Owed: with a covered game running and the knowledge base on,
@@ -443,32 +447,6 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   starts the good ones. Row **PULL-MISSING-NAME-01**. **Tried on the Deck 2026-09-19: blocked** — a made-up
   name needs Steam's on-screen keyboard, which this test rig cannot drive, so nothing could be typed;
   finishing this row needs a person at the Deck. [Detail](roadmap-details.md#mistyping-one-model-name-in-a-several-model-download-loses-it-without-saying-so).
-- ★ `[reply]` **The no-game branch menu leaks its template** — **VERIFY, fixed in `f11220d`.** Row
-  **NOGAME-MENU-01**. Owed: with nothing running, ask a question in Strategy mode that never names a game, and
-  confirm the menu either does not appear or names a real place — never the literal words THIS GAME.
-- ★★ `[chat]` **A new chat shows the previous chat's last reply until the panel is reopened** — **VERIFY,
-  fixed in `163ff16`.** Row **CHAT-GHOST-REPLY-01**. Owed: switch to a brand-new chat right after a reply
-  finishes elsewhere, four times over to match the four sightings, and see it blank from the first frame with
-  no reopen needed. [Detail](roadmap-details.md#a-new-chat-shows-the-previous-chats-last-reply-until-the-panel-is-reopened).
-
-- ★★ `[ollama]` `[layout]` **The AI models screen showed about two rows of the model list on the Deck's
-  screen** — **VERIFY, unclear on the Deck 2026-09-23.** Under the default filters, all 4 rows show in a
-  271-pixel box with nothing to scroll, so the taller cap was never actually reached. The screen's real cap
-  measures 384 pixels, not the 520 assumed earlier. With the long list showing (25 rows), about 7 rows are
-  now visible at once, against about 2 before this fix — better, but see the entry right below, found on this
-  same long list. **The cap was re-set the same night from a full measurement of the dialog; the re-check on
-  that new cap is running now.** Row **MODELS-LIST-CAP-01**. Evidence
-  `docs/test-evidence/plan64-MODELS-LIST-CAP-01.json` (+ `.png`).
-- ★★ `[ollama]` `[layout]` **With the long model list showing, Done falls below the visible edge of the AI
-  models screen** — **VERIFY, fixed in `d7f611a`.** The measurement behind the fix: the visible area runs
-  from about 40 to 492 pixels down the screen; the dialog's title, padding, gaps and its 56-pixel footer use
-  156 of that, and the dialog sits 24 pixels below the top bar, so the scrolling list can be at most 272
-  pixels tall — the old cap gave it 384 pixels and pushed Done about 46 pixels past the bottom edge. The
-  list's cap is now the screen's own height minus 270 pixels (264 pixels on the Deck's screen), so about four
-  models now show at once on the Deck's own screen instead of about seven, but Done and Cancel stay on
-  screen. The same cause also put the dialog's own title above the top of the screen when the Filters panel
-  was open. Deck re-check running. Evidence `docs/test-evidence/plan64-MODELS-LIST-CAP-01-try2.json` (+ two
-  screenshots).
 - ★★ `[tabs]` **A faded ghost of the tab bar is left drawn over the chip row after touching the screen** —
   **VERIFY, landed 2026-09-15.** The tab bar's pop-up strip now always ends fully hidden a fraction of a second
   after it closes, even when its fade is stalled by a game running full screen, so no see-through copy of it
@@ -498,29 +476,7 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   with the game's cards attached and thinking on had their answers trimmed to a 600-token floor, and now get their full 1,600
   and 1,200. Proved through the deployed back end on the Deck; row **TOKEN-BUDGET-01** is the on-screen half, not yet run.
 
-- ★★★ `[layout]` **Session context folds into Show details** — **VERIFY, built 2026-09-20 (lane S).** The separate
-  Session context bar is gone; the opened Show details panel now carries two tabs, *This answer* and *Session · N*, with
-  Left and Right between them, on the newest answer only. Clear sits at the end of the Session tab, full width, with the
-  same confirm box. The lane also fixed the chip list's own B handling, which used a method already measured on the device
-  as not reliably stopping Steam backing the ring out of the whole panel. The cause of that first run's
-  failure — the highlight never landing on the two tabs — was fixed and proved on the Deck 2026-09-21; it
-  sits in Done as "The new Session tab cannot be reached with the D-pad". Row **SESSION-TAB-01** itself
-  still owes a fresh run, scheduled in plan 64. [Plan](planning/62-feature-session-five.md)
-
-- ★★ `[chat]` **The game a chat belongs to, above its title** — **VERIFY, built 2026-09-20 (lane G).** The
-  name shows only while the ring is on the row, with the row's height held steady either way; the chat's
-  delete cross, which used to pull the name off-centre, is now pinned to the right-hand edge. Row
-  **CHAT-SLOTS-V3-14c**, **run on the Deck 2026-09-21 and PASSED** — the layout holds up, though the game
-  name itself could not be seen since this test chat has no game attached. [Detail](roadmap-details.md#the-game-a-chat-belongs-to-above-its-title).
-
 - ★★ `[chips]` **Make the preset chips look more like chips** — **VERIFY, shipped 2026-09-17 under plan 60 (D110).** Each chip now looks raised: a thin light line along its top edge and a soft shadow beneath it. The two chips sit 6 pixels apart instead of 4. In decode, static and carousel mode there is now 8 pixels of open space between the chips and the question box, where before they touched (fade mode was already open and keeps its own spacing). The word "Tip" became a small dot, the colour on the tags and on the resolving-text label is quieter, and the chip the controller is on now shows a light bar along its bottom edge instead of the old blue outline — a ring around the chip that nobody could actually see is gone too. Passed on the Deck by measurement: rows 02, 03, 04, 05 and 06 (the one-chip check), and 08. **Row 09 failed on the Deck 2026-09-18** — a real knowledge-base chip showed with no Tip dot — and is filed as its own bug, below. Still owed: the maintainer's own look at rows 01 and 05, from the three screenshots named in the evidence file, and row 07 (reduced motion), both on the maintainer's own page; and a look at the help and agent chips, which were not on screen during this run. Italics were tried earlier for the label and turned down. [Plan](planning/60-chip-button-restyle.md) · evidence `docs/test-evidence/plan60-QA-chip-button.json`.
-
-- ★★ `[layout]` `[voice]` `[focus]` **Read aloud is a small speaker on the Helpful row, not a dividing
-  line** — **VERIFY, built 2026-09-20 (lane R).** A small speaker sits at the right end of the Helpful / Not
-  really row, quiet until the ring reaches it, turning into a red stop while the Deck is talking; removing
-  the old full-width line gives back 29 pixels on every finished answer. Row **READ-ALOUD-07**, **run on the
-  Deck 2026-09-21 and PASSED**: 30 by 32 pixels, flush with the row's right end, 45% opacity at rest, as
-  planned. Still owed: what it does on an answer stopped part-way. [Detail](roadmap-details.md#read-aloud-is-a-small-speaker-on-the-helpful-row-not-a-dividing-line).
 
 - ★ `[ollama]` **Pulled models join the model try order** — **MOSTLY VERIFIED on the Deck 2026-09-06, one
   case left.** A pulled model lands at the bottom of the text list and shows in the vision list if it can
@@ -535,14 +491,20 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   the maintainer's own Steam Web API key typed into the plugin, so they stay on the maintainer's own list. **The
   maintainer said yes on 2026-09-23** to running these with the Steam key already stored on the PC; the run was
   stopped before the key was typed in, because Claude Code's own automatic permission check refused the edit
-  needed to set it up. The key was never put on the Deck. Still waiting on the maintainer.
+  needed to set it up. The key was never put on the Deck. **The maintainer has since allowed the session to
+  make settings-file edits on the Deck itself, 2026-09-23**, so this block no longer applies; the key still has
+  not been typed in. Still waiting.
 - ★★ `[reply]` **Thinking line fixes from 2026-08-07/08** — **VERIFY.** Emoji upright, lazy status tag
   survives, no bare-emoji phase changes, one writer. **Five of seven rows pass on the Deck**, the last three
   confirmed 2026-09-17. Left: **THINKING-SANITIZE-01** and **THINKING-EMOJI-CLUSTER-01**, automated only,
   never read on the device. **Tried on the Deck 2026-09-18:** the status line always read as words, but the
   specific fault each row hunts never came up, so neither is proven either way. Per D116 #6, these two rows
   close after five clean tries on the Deck, each worded differently, since the unit tests cover the fix.
-  [Detail](roadmap-details.md#thinking-line-fixes-from-2026-08-0708).
+  **Four of the five clean tries are done, 2026-09-23:** across four differently-worded questions the status
+  line never went blank before live reasoning or the answer took over, it always read as worded phases, and
+  the tree emoji showed at most once per question. **The fifth try does not count:** it carried a screenshot
+  attachment and the model crashed partway (see the new bug about a screenshot crashing the model), so it is
+  not a clean try. One more owed. [Detail](roadmap-details.md#thinking-line-fixes-from-2026-08-0708).
 - ★★★ `[perms]` **Kids master lock** — **VERIFY.** Shipped 2026-08-09. Rows **KIDS-LOCK-01**, **KIDS-FOCUS-01**, **KIDS-REGRESS-01**
   (and **KIDS-LOCK-02** with a child account). Live CEF Stage 0 confirmation still owed. **KIDS-REGRESS-01
   re-confirmed on the Deck 2026-09-17:** no lock banner, all four Permissions switches on and reachable.
@@ -551,7 +513,10 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
   03 all pass**, confirmed on the Deck 2026-09-17: a long reply read with no seam, and stopping partway kept
   the partial text with a clear notice. **SOFT-PREDICT-05 passed 2026-09-18** with Thinking Off. Left:
   **SOFT-PREDICT-04**, **tried 2026-09-18, blocked** — the test question came back as a short spoiler-careful
-  refusal, so no reply reached the length wall. [Detail](roadmap-details.md#soft-reply-length-cap-and-thinking-budget).
+  refusal, so no reply reached the length wall. **Tried again 2026-09-23, still unclear:** the finished text
+  was clean, no half-drawn menu block and no stray JSON, but the reply stopped on its own at 1,117 tokens
+  against a 2,112-token limit, so it never had to continue and the row's own join point never happened.
+  [Detail](roadmap-details.md#soft-reply-length-cap-and-thinking-budget).
 - ★★★ `[tabs]` `[ui]` **The open tab strip redrawn: six equal cells, one icon family, only the current tab
   named** — **VERIFY, landed 2026-09-17.** Six equal cells with one icon each, only the current tab named;
   the strip is taller so the chat row's dots no longer show under it. **Deck run 2026-09-18:** rows 01, 02,
@@ -568,8 +533,14 @@ Fixed, unit-tested and shipped, but not yet confirmed on the Deck. Owed QA row n
 - ★★★★★ `[chat]` **Named chat slots** — **VERIFY.** Redesign v3 landed 2026-08-30; the layout inverts to slot row,
   transcript, presets, Ask bar. Most rows pass on device. **As of 2026-09-18:** 05b passed (returning to a
   still-writing chat shows the question and partial text together); 05a's busy-indicator half, 06a and 06b
-  failed (filed as its own bug above). Still owed: 06c and 15d.
-  [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02) · [More](roadmap-details.md#named-chat-slots).
+  failed (filed as its own bug above). **15d passed on the Deck 2026-09-23:** a fresh chat's title changed
+  from "New chat" to the question 35 seconds after Ask, with the panel staying open and no reload — though the
+  chat row was scrolled out of view at that exact moment, so nobody would actually have seen it change.
+  **06c FAILED on the Deck 2026-09-23:** closing the Quick Access Menu (by the rig's GUIDE+A chord) while the
+  answer was still arriving, then watching Steam's own toast window every 200 milliseconds for 150 seconds
+  after the reply finished — no "Reply ready" notice ever showed, and reopening the panel showed none either.
+  The rig has not yet proven its own toast-reading can see a toast at all, so the next run adds a control
+  question before re-testing this row. [Detail](archive/roadmap-completed.md#moved-from-the-roadmap-2026-09-02) · [More](roadmap-details.md#named-chat-slots).
 
 ---
 
@@ -591,7 +562,8 @@ meant to have an answer has one. Ten more games' notes landed 2026-09-18 — the
 Kong 64, Yoshi's Story, Diddy Kong Racing, Super Smash Bros. 1999 and Grand Theft Auto III: The Definitive
 Edition — written by two helpers in their own words from wiki pages read that same day, with the page, licence
 and day recorded on every note. The library was built as version 2026.09.18 with every note and tip indexed and
-its publish check passing, but it has not gone out to the public hosts yet.
+its publish check passing. **Published 2026-09-23:** both Hugging Face and the GitHub release now serve
+2026.09.18, read back after publishing to confirm it.
 
 **Finding the right note.** On the held-back questions nobody tuned against (177 rows), the search puts the
 right note in the top three **85.3 times in a hundred**. Every one of the 21 notes written in wave two is found
@@ -684,6 +656,11 @@ ones from this month are D81 to D88.
   reading the code 2026-09-21 (plan 63, lane G).** Two pieces of code build a shared tip's own name
   differently, so the two never match and its source page never reaches the credit line. Rarely bites
   today, since almost no shared tips carry a source page. Not run on the Deck.
+- ★ `[KB]` `[layout]` **Opening the "From the notes" block does not scroll it into view** — **OPEN, found on
+  the Deck 2026-09-23.** Most of its words stay behind the chip and the question box; the header measured
+  33% visible once opened. Found while trying to check whether the chip ladder inside the open block can be
+  reached by D-pad — this reply's block held three shared Deck tips and no chip ladder at all, so that
+  question is still unanswered. Evidence `docs/test-evidence/plan64-NOTES-BLOCK-LADDER.json` (+ `.png`).
 - ★★ `[KB]` **Unrelated questions still get game cards stapled on** — **ACCEPTED 2026-08-27.** With a game running, *"thank
   you very much"* still attaches a card. Raising the keyword floor costs real matches, and the model mostly ignores an
   irrelevant card. [Detail](roadmap-details.md#ordinary-phrases-attach-game-cards).
@@ -771,7 +748,10 @@ ones from this month are D81 to D88.
   2026.09.18 library was installed on the Deck straight from the plugin's own folder, not from the
   public download hosts. One question named each of the ten new games and all ten answered from that
   game's own notes, the right wiki named every time. Per D116 #4 and #10, the maintainer said yes to
-  publishing and the library goes on the SD card; both are scheduled in plan 64. Evidence
+  publishing and the library goes on the SD card. **The library itself was published to Hugging Face and
+  the GitHub release 2026-09-23** — both hosts read back as serving 2026.09.18. Still owed: pressing the
+  Update knowledge base button on the Deck so it pulls from those public hosts, and moving the library onto
+  the SD card; both scheduled for later in plan 64. Evidence
   `docs/test-evidence/plan58p1-QA-TEN-GAMES-01.json`.
 - ★★ `[KB]` **The note's own words under the reply** — **VERIFY, third run 2026-09-19.** Header, open-scroll
   and live timing all pass; the upward walk lands cleanly on the block's header and the ladder walk holds up
@@ -941,6 +921,32 @@ line for line, nothing reworded, to keep this document under its size limit.
   as Handheld — could not run on the Deck tonight, because Claude Code's own automatic permission check
   refused the edit needed to set that up; it is covered instead by a written test that pins the same result.
   [Full detail](archive/roadmap-bugs-fixed.md#the-ui-size-setting-barely-changes-anything).
+
+**Closed 2026-09-23 (plan 64, flow B, proven on the Deck):**
+
+- ★★ `[ollama]` `[layout]` **The AI models list could push Done and Cancel off screen, and did not use all
+  the room it had** — **DONE, confirmed on the Deck 2026-09-23:** Done and Cancel now stay fully on screen
+  with all 25 models listed, three rows showing at a time. [Full detail](archive/roadmap-bugs-fixed.md#the-ai-models-screens-done-and-cancel-button-could-fall-off-the-bottom-of-a-long-model-list-and-the-list-itself-did-not-use-all-the-room-it-had).
+- ★ `[ask]` `[focus]` **Down from the question box while a reply is arriving did nothing, and Stop was hard
+  to find by D-pad** — **DONE, confirmed on the Deck 2026-09-23:** Down, and Right-Right, both reach Stop
+  while a reply arrives; normal after it finishes. [Full detail](archive/roadmap-bugs-fixed.md#down-from-the-question-box-while-a-reply-is-arriving-used-to-do-nothing-and-stop-was-hard-to-find-by-d-pad).
+- ★ `[focus]` **Up from the Retry icon does not return to the answer** — **DONE, closed 2026-09-23 as no
+  longer applying:** Retry now sits above the answer since the layout changed; Up/Down there now mirror each
+  other. [Full detail](archive/roadmap-bugs-fixed.md#up-from-the-retry-icon-does-not-return-to-the-answer).
+- ★ `[reply]` **The no-game branch menu leaks its template** — **DONE, confirmed on the Deck 2026-09-23:** a
+  no-game Strategy question got a real two-choice menu; the literal words "THIS GAME" never appear. [Full detail](archive/roadmap-bugs-fixed.md#the-no-game-branch-menu-leaks-its-template).
+- ★★ `[chat]` **A new chat shows the previous chat's last reply until the panel is reopened** — **DONE,
+  confirmed on the Deck 2026-09-23:** all four new chats stayed empty from the first frame. A related bug
+  was found the same night, filed separately in Bugs: a new chat can briefly show the previous chat's
+  question instead. [Full detail](archive/roadmap-bugs-fixed.md#a-new-chat-shows-the-previous-chats-last-reply-until-the-panel-is-reopened).
+- ★★ `[chat]` **The game a chat belongs to, above its title** — **DONE, confirmed on the Deck 2026-09-23:**
+  the game's name shows above the title with the ring on it, gone on a chat with no game. [Full detail](archive/roadmap-completed.md#the-game-a-chat-belongs-to-above-its-title).
+- ★★ `[layout]` `[voice]` `[focus]` **Read aloud is a small speaker on the Helpful row, not a dividing
+  line** — **DONE, confirmed on the Deck 2026-09-23 for a stopped reply:** the speaker reads the kept
+  partial answer aloud and stops it again on a second press. [Full detail](archive/roadmap-completed.md#read-aloud-is-a-small-speaker-on-the-helpful-row-not-a-dividing-line).
+- ★★★ `[layout]` **Session context folds into Show details** — **DONE for steps 1 to 6, confirmed on the
+  Deck 2026-09-23:** both tabs, all 27 session rows and Clear all take the ring, fully visible. **Two new
+  focus bugs split out, filed separately in Bugs:** the confirm box's default and its Cancel path. [Full detail](archive/roadmap-completed.md#session-context-folds-into-show-details).
 
 **Closed 2026-09-22 (plan 63, verification pass):**
 

@@ -1,7 +1,6 @@
 # Plan 64 — The big verification session
 
-**Status:** written 2026-09-23, before anything ran. All ten questions in § 10 answered the same day, and
-everything in § 11 done. Waiting only on the word "go".
+**Status:** RUNNING since "go" on 2026-09-23. Flows 0, A and B done; the progress log is § 14.
 **Purpose:** one long run on the Deck, mostly without the maintainer, that works through the roadmap's
 Verify list and the knowledge base's owed checks. The roadmap is updated after every block, so it is never
 behind the device. Bugs found along the way are written down and, where the effort is reasonable, fixed.
@@ -419,3 +418,41 @@ Two driver runs; roadmap commits `9a672a4` and `1691403`.
   running the presses and discarding the result. Checks saved tonight need re-saving once.
 - **Test run note:** the Filters-panel "getting in" test times out under a full parallel run now and
   then (passes alone in half a second); not caused by tonight's change, logged in `11029d5`.
+
+### Flow B — one reply being written, 2026-09-23 17:45 to 18:29 (Deck time), build d7f611a, the Deck's own screen (853×533)
+
+- **Closed on the Deck (7):** Down from the emptied question box, and Right-Right, both reach Stop while a
+  reply is arriving, and go back to Ask/voice once it finishes — this also closes the "hard to find" bug,
+  same route, one walk; the AI models screen's Done/Cancel now stay fully on screen with the long list, the
+  list itself capped at 264 px, three rows showing; the no-game branch menu shows a real two-choice menu,
+  never the literal words THIS GAME; a new chat stays empty right after another chat's reply finishes, four
+  times over; the game's name shows above a chat's title with a game actually attached, row held steady at
+  48 px; the small speaker on the Helpful row reads and stops a stopped reply's kept partial text; and the
+  Session tab's steps 1–6 all pass (both tabs, all 27 rows, Clear's confirm box).
+- **Closed as no longer applying (1):** Up from the Retry icon now mirrors Down from the "N earlier" button,
+  since Retry moved above the answer in an earlier layout change — the old expectation is gone.
+- **Still unclear, tried again (2):** a long Strategy answer stopped itself at 1,117 of a 2,112-token limit,
+  so the continue-boundary this row checks never happened; the free-play sweep's streaming half saw one
+  answer section, 33% visible, before the reply finished 13 seconds in — one stop cannot judge the fix.
+- **Failed, re-check owed (1):** the "Reply ready" toast never appeared after closing the Quick Access Menu
+  mid-answer; the rig has not yet proven its own toast-reading can see a toast at all, so the next run adds
+  a control before trying again.
+- **Four of five clean tries done (1):** the two thinking-line rows that close after five differently-worded
+  clean tries (D116 #6) — Asks 1 to 4 were clean; Ask 5 carried a screenshot and does not count, since the
+  model crashed partway through it (see the new bug below).
+- **New bugs (5):** a brand-new chat can briefly show the *previous* chat's question for about 40 seconds (a
+  fix is being built this session); walking onto an answer section taller than the view shows its end, not
+  its start; attaching a screenshot crashed the model once (a graphics-chip crash, Ollama recovered on its
+  own); opening the "From the notes" block does not scroll it into view; and the Session tab's Clear confirm
+  box starts with the ring on Clear and cancelling it throws the ring out to the tab bar (a fix is being
+  built this session). The chip ladder inside an open notes block could not be checked either way — tonight's
+  block had no ladder in it.
+- **A fix built and reverted the same hour:** a typed-model-name "bug" fix was committed and undone
+  (`97e7d9e`, `864c4f8`, undone in `2468390`) — the back end already refused made-up model names with a
+  clearer message; the session had read only the screen side.
+- **Published:** the 2026.09.18 knowledge-base library, to both Hugging Face and the GitHub release —
+  read back afterward to confirm both hosts serve it. Pressing the Update button on the Deck itself, and
+  moving the library onto the SD card, are still owed, scheduled for later in this plan.
+- **The maintainer's yes, recorded:** settings-file edits on the Deck are now allowed for this session to
+  make itself, between Deck runs, as of 2026-09-23 — the roadmap rows that were blocked by Claude Code's own
+  permission check note this, though none of the blocked checks themselves were re-tried tonight.

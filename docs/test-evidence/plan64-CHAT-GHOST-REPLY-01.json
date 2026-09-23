@@ -1,0 +1,31 @@
+{
+  "row": "CHAT-GHOST-REPLY-01 (four tries)",
+  "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+  "deck_time": "2026-09-23 18:19-18:29 EDT",
+  "screen": "Deck's own screen (QAM window 854x454)",
+  "setup": "Main tab, Strategy, nothing running. A page watcher (a MutationObserver on the panel, read-only, installed through deck_readPage and removed at the end) logged the chat title, the number of turns and answer bubbles, and the last turn's first words on every change, so 'blank from the first frame' is the first logged state after the switch.",
+  "how_a_new_chat_is_opened": "ring on the chat row, LB from the first chat moves to the '[+]' slot, which shows an empty chat ('Ask anything - this slot keeps its own history'). It is saved as a chat only when its first question is asked (title 'New chat', then the question).",
+  "tries": [
+    {"try": 1, "question_in_previous_chat": "what is the best strategy for the first boss fight if i have never played before (asked in 'wheatley fight')",
+     "delay_reply_end_to_switch": "about 2 min (the recording tool blocked the next press for 90 s, so this was not 'immediately')",
+     "first_state_after_switch": {"title": "[+]", "turns": 0, "answer_bubbles": 0}, "blank": true},
+    {"try": 2, "question_in_previous_chat": "what upgrades should i buy first with limited currency (asked in the try-1 chat)",
+     "delay_reply_end_to_switch": "about 4 s", "first_state_after_switch": {"title": "[+]", "turns": 0, "answer_bubbles": 0}, "blank": true},
+    {"try": 3, "question_in_previous_chat": "is it better to explore everything or rush the main objective (asked in the '[+]' slot from try 2, which became a new chat)",
+     "delay_reply_end_to_switch": "about 7 s", "first_state_after_switch": {"title": "[+]", "turns": 0, "answer_bubbles": 0}, "blank": true},
+    {"try": 4, "question_in_previous_chat": "what is the safest way to approach a group of enemies at once (asked in the '[+]' slot from try 3)",
+     "delay_reply_end_to_switch": "about 7 s", "first_state_after_switch": {"title": "[+]", "turns": 0, "answer_bubbles": 0}, "blank": true}
+  ],
+  "new_finding_leftover_question": {
+    "what_a_person_sees": "The empty chat really is empty when opened. But the moment its first question is asked, the previous chat's last question appears above the new question, as a collapsed question row with no answer, and stays there while the new reply is written. It disappears when the reply finishes and the title changes from 'New chat' to the question.",
+    "seen_three_times": [
+      "try-1 chat: at Ask 'New chat' turns 0 -> 2 within 60 ms; back to 1 turn when the title changed about 35 s later",
+      "try-3 chat: turns 0 -> 2 within 74 ms of Ask; the extra turn read 'what upgrades should i buy first with limited currency' (the previous chat's question); back to 1 turn at the title change 41 s later",
+      "try-4 chat: turns 0 -> 2 within 59 ms; the extra row read 'is it better to explore everything or rush the main objecti...'; back to 1 turn at the title change 40 s later"
+    ],
+    "saved_files": "not affected: each new chat's saved file holds only its own question and answer (2 entries)",
+    "screenshot": "plan64-CHAT-GHOST-REPLY-01-leftover-question.png (try-3 chat while answering: 'what upgrades should i buy first with limited...' above 'is it better to explore everything or rush the main objective')"
+  },
+  "side_note": "While an Ask is running, walking Up from the question box skipped the chat row in one walk (question -> 'Main tab'); in later walks the chat row was reachable. Not investigated further.",
+  "verdict": "PASS for the row as written - all four new chats were blank from the first logged state, with no reply carried over. Try 1 was not 'immediately' after the reply (about 2 min). New finding for the owner: the previous chat's last question shows up in the new chat while its first answer is being written."
+}

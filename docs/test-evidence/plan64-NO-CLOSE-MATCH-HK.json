@@ -1,0 +1,31 @@
+{
+ "row": "Flow C row 2 - the 'no close match' line, Hollow Knight shape (commit c25456c)",
+ "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+ "deck_time": "2026-09-23 18:44-18:47 EDT",
+ "screen": "Deck's own screen (QAM window 854x454)",
+ "setup": "Main tab, chat 'wheatley fight', Strategy, knowledge base on, nothing running. Session not cleared (permission check refused it).",
+ "question": "What should I know about the boss past the crystal spike area in Hollow Knight, the one that looks just like me? (deck_send_ask.py VERIFIED, whole text)",
+ "pressed": [
+  "Down x4 (Save chat, chip, box, Ask), A on Ask",
+  "wait for end",
+  "Up x3 to Show details, A"
+ ],
+ "seen": {
+  "time_ask_to_finish_s": 52.2,
+  "replay_guard": "not a replay",
+  "reply_on_broken_vessel": "yes - names 'the Broken Vessel', mentions 'big slashes and those blobs', 'when it gets low on health', 'when it staggers - when it shakes and looks all woozy - that's your chance', Longnail / Mark of Pride, Desolate Dive",
+  "no_close_match_line_present": true,
+  "no_close_match_line_text": "— No close match in my notes, this answer leans on the model's own knowledge.",
+  "notes_block_header": "Starting out in Hollow Knight (+2 more) · From the Hollow Knight wiki",
+  "show_details_notes_in_order": [
+   "Hollow Knight — Starting out in Hollow Knight",
+   "Hollow Knight — Broken Vessel",
+   "Hollow Knight — Watcher Knights"
+  ],
+  "broken_vessel_position": 2,
+  "show_details_other": "Retrieval: Keyword + meaning; KB: 14 sections; hollowknight.wiki CC-BY-SA-3.0 as of 2026-09-05; Embed 23.09 ms; Re-rank 24.1 ms",
+  "log_ask_kb_search": "2026-09-23T22:44:57Z searched/attached: Starting out in Hollow Knight; Broken Vessel; Watcher Knights; starved_by_context_budget=false top_keyword_score=24.76 best_meaning_score=0.655",
+  "earlier_run_for_contrast": "2026-09-22T04:09:25Z the same question attached Broken Vessel FIRST (best_meaning_score 0.754)"
+ },
+ "verdict": "FAIL - the 'No close match in my notes' line still appears under a reply built on the Broken Vessel note, which was attached second. Exactly the shape the fix was meant to cure."
+}

@@ -1,0 +1,24 @@
+{
+  "row": "CHAT-SLOTS-V3-06c - the reply-ready toast survives closing the Quick Access Menu",
+  "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+  "deck_time": "2026-09-23 18:14-18:18 EDT",
+  "screen": "Deck's own screen",
+  "setup": "Main tab, chat 'wheatley fight', Strategy, nothing running",
+  "question": "what is the fastest way to level up early without wasting resources (deck_send_ask.py VERIFIED, whole text)",
+  "pressed": [
+    "walk Down to Ask, A",
+    "waited until the new answer showed its first words (75 characters on screen, Stop present, about 37 s after Ask)",
+    "closed the whole Quick Access Menu with the rig's chord: hold GUIDE, tap A (deck_pressChord) - the same toggle deck_openPlugin uses",
+    "watched Steam's toast window (target notificationtoasts_uid2) every 200 ms for 150 s for 'Reply ready', 'went wrong' or 'failed'",
+    "reopened with deck_openPlugin (opened first try, bonsAI already on its Main tab) and read the toast window and took a screenshot at once"
+  ],
+  "seen": {
+    "reply_finished": "plugin log 18:15:37 'run_game_ai_request: completed in 54.4s' (1396 visible characters), about 30 s after the menu was closed",
+    "toast_window_during_150_s": "empty every time (438 reads); no 'Reply ready' text",
+    "screenshot_while_closed": "18:18:06, Steam home, no toast (taken late; the toast lasts 4 s by the code)",
+    "after_reopen": "toast window empty; no 'Reply ready' anywhere in the Quick Access page, the Big Picture page or the shared page; the answer itself is in the chat",
+    "code_note": "bonsaiReplyReadyToast.ts shows the toast when the reply finishes while the reply surface is not visible, for 4 s - not when the menu is reopened, which is what the runbook step 4 expected"
+  },
+  "screenshot": "plan64-CHAT-SLOTS-V3-06c-reopen.png (reopened, answer present, no toast)",
+  "verdict": "FAIL - no 'Reply ready' toast was seen, either when the reply finished with the menu closed or on reopening. Caveat: this was watched by reading Steam's toast window, not by eye."
+}

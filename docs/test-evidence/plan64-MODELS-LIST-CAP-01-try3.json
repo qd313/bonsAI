@@ -1,0 +1,51 @@
+{
+  "row": "MODELS-LIST-CAP-01 (third try, re-check of fix d7f611a)",
+  "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+  "deploy_check": {
+    "dist_index_js_sha256_pc_and_deck": "0c011a64f9971580a3d3a7f96b312386b46815b5304bda64508b80568213d878",
+    "main_py_sha256_pc_and_deck": "f930c7648253106c6be8da431f7152e20fb31620a39671923f5ac42c149c4061",
+    "match": true,
+    "plugin_log": "2026-09-23 17:45:48 'bonsAI plugin loaded!' only, no errors",
+    "open_plugin": "opened at the first try"
+  },
+  "deck_time": "2026-09-23 17:47-17:49 EDT",
+  "screen": "Deck's own screen: screen 853x533; Steam Big Picture window 854x534; QAM window 854x454",
+  "visible_area": "y 40 (under the top status bar) to y 492 (above the footer bar); the modal overlay box itself is y 40 to 492",
+  "setup": "Ollama tab -> Manage AI models... ; dialog opened with the Filters panel showing, filters 'Also try open-weight models, Essentials only'",
+  "pressed": [
+    "walk Down 13 to 'Manage AI models', A",
+    "walk Down 7 to 'Essentials only', A (turned off)",
+    "walk Up 8 to Filters button, A (did nothing: panel stayed open, aria-expanded true), A again (panel closed)",
+    "measure long list",
+    "A on Filters (panel opened, ring went to first row), walk Down 7 to Essentials only, A (back on)",
+    "B (closed the Filters panel, ring on Filters button), B (closed the dialog, back on Ollama tab)"
+  ],
+  "seen": {
+    "state_1_filters_panel_open_essentials_on": {
+      "title_AI_models": {"y": 90, "bottom": 118},
+      "done": {"x": 123, "y": 418, "w": 290, "h": 40, "bottom": 458},
+      "cancel": {"x": 441, "y": 418, "w": 290, "h": 40, "bottom": 458},
+      "scroll_cap_box": {"y": 128, "h": 264, "bottom": 392, "computed_max_height": "264px", "css": "max-height: min(-270px + 100vh, 520px)"},
+      "inner_list_box": {"y": 217, "h": 175, "scrollHeight": 429}
+    },
+    "state_2_panel_closed_essentials_off_long_list": {
+      "title_AI_models": {"y": 90, "bottom": 118},
+      "done": {"y": 418, "bottom": 458},
+      "cancel": {"y": 418, "bottom": 458},
+      "scroll_cap_box": {"y": 128, "h": 264, "bottom": 392, "computed_max_height": "264px"},
+      "inner_list_box": {"y": 217, "h": 175, "bottom": 392, "scrollHeight": 1022},
+      "model_rows_in_list": 25,
+      "model_rows_fully_shown_at_once": 3,
+      "rows_shown": ["gemma4:e2b-it-qat (installed)", "qwen3.5:4b", "qwen2.5vl:3b"],
+      "also_shown": "column header row and the 'Deck essentials' heading above the rows, 'More models' heading below"
+    },
+    "restored": "Filters button reads 'Filters, 2 on: Also try open-weight models, Essentials only'; Manage AI models button on the Ollama tab reads 'Manage AI models... - Also try open-weight models' both before and after",
+    "side_notes": [
+      "The whole modal overlay has scrollHeight 468 against clientHeight 452 (16 px of overflow), scrollTop stayed 0; nothing was cut off on screen.",
+      "The first A on the Filters button (after walking Up to it) did not close the panel; the second did.",
+      "Header line changed from 'Installed 2 - 4.3 GB ... Offline sizes' to 'Installed 2 - 4.0 GB ... Live sizes' once the live catalog loaded."
+    ]
+  },
+  "screenshots": ["plan64-MODELS-LIST-CAP-01-try3.png (panel open)", "plan64-MODELS-LIST-CAP-01-try3-long-list.png (long list)"],
+  "verdict": "PASS - title, Done and Cancel fully inside y 40-492 in both states; 3 model rows show at once with the long list"
+}

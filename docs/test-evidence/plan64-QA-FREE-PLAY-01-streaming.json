@@ -1,0 +1,126 @@
+{
+ "row": "QA-FREE-PLAY-01 streaming half (first Deck test of fix 7b9447e)",
+ "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+ "screen": "Deck's own screen (QAM window 854x454; the panel's scrolling area is y 88-454, with the ask bar, box and chip over its lower part)",
+ "deck_time": "2026-09-23 17:58-17:59 EDT",
+ "setup": "Same Ask as SOFT-PREDICT-04. After pressing Ask the ring was walked Up to the tab bar ('Main tab') while the model was still thinking; the sweep started when the new answer had 85 characters on screen (about 32 s after Ask).",
+ "pressed": "deck_sweep Down from the tab bar, one press at a time, stall limit 4, no return trip (runs/plan64-QA-FREE-PLAY-01-streaming.json)",
+ "stops": [
+  {
+   "n": 0,
+   "leg": "start",
+   "label": "Main tab",
+   "rect": {
+    "x": 48,
+    "y": 64,
+    "w": 300,
+    "h": 20
+   },
+   "scrollTop": null,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 1,
+   "leg": "DOWN",
+   "label": "LB[+]wheatley fight\u00c3\u2014how do i beat the boss at the end of the first area+RB",
+   "rect": {
+    "x": 48,
+    "y": 88,
+    "w": 300,
+    "h": 48
+   },
+   "scrollTop": 0,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 2,
+   "leg": "DOWN",
+   "label": "21 earlier",
+   "rect": {
+    "x": 52,
+    "y": 146,
+    "w": 290,
+    "h": 22
+   },
+   "scrollTop": 0,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 3,
+   "leg": "DOWN",
+   "label": "Retry same prompt",
+   "rect": {
+    "x": 82,
+    "y": 243,
+    "w": 20,
+    "h": 20
+   },
+   "scrollTop": 0,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 4,
+   "leg": "DOWN",
+   "label": "(unnamed: div.Panel.Focusable:nth-child(2))",
+   "rect": {
+    "x": 86,
+    "y": 189,
+    "w": 245,
+    "h": 71
+   },
+   "scrollTop": 0,
+   "visible_pct": 89,
+   "covered_by": "div.bonsai-turn-retry-corner-slot.Panel.Focusable > button.bonsai-chat-secondary-btn.bonsai-turn-retry-corner.Disabled",
+   "clipped_by": null
+  },
+  {
+   "n": 5,
+   "leg": "DOWN",
+   "label": "Show reasoning \u00c2\u00b7 1 s",
+   "rect": {
+    "x": 52,
+    "y": 188,
+    "w": 290,
+    "h": 15
+   },
+   "scrollTop": 89,
+   "visible_pct": 100,
+   "covered_by": null,
+   "clipped_by": null
+  },
+  {
+   "n": 6,
+   "leg": "DOWN",
+   "label": "(unnamed: div.Panel.Focusable:nth-child(1))",
+   "rect": {
+    "x": 63,
+    "y": -92,
+    "w": 245,
+    "h": 465
+   },
+   "scrollTop": 400,
+   "visible_pct": 33,
+   "covered_by": "div.bonsai-unified-input-text-row > div.bonsai-unified-input-text-box > div.Panel.Focusable > input.DialogInput.DialogInputPlaceholder.DialogTextInputBase",
+   "clipped_by": null
+  }
+ ],
+ "seen": {
+  "stops_recorded": 7,
+  "presses": 10,
+  "loop": false,
+  "stop_4": "question row, 89% visible, covered only by the Retry icon (known false alarm)",
+  "stop_6": "first answer section while being written: box y -92, 465 px tall (taller than the 366 px scroll area), 33% visible - top part above the view, bottom part under the question box",
+  "end": "the walk ended after 4 presses that did not move the ring off stop 6. A read right after showed the reply had already finished (1687 characters, 3 sections) and nothing held the ring - a finished Ask lets go of the ring. So the reply was only being written for about the first 13 s of the walk.",
+  "view_following_text": "not measurable this time: scrollTop was 0 up to the question, 89 at 'Show reasoning', 400 on the answer section; the reply finished before a second reading on the same stop could be taken",
+  "reached_Ask_while_streaming": false
+ },
+ "verdict": "UNCLEAR - no loop this time (the old walk looped), and every stop before the answer was fully visible, but the one answer stop reached while text was arriving was only 33% visible and the reply finished before the walk got further. One stop is not enough to say the fix works or not."
+}

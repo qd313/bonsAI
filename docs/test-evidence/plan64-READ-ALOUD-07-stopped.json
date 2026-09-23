@@ -1,0 +1,23 @@
+{
+  "row": "READ-ALOUD-07 (stopped reply) plus the Up-from-Retry measurement",
+  "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+  "deck_time": "2026-09-23 17:53-17:57 EDT",
+  "screen": "Deck's own screen (QAM window 854x454)",
+  "setup": "Main tab, chat 'wheatley fight', Strategy, nothing running. Question (deck_send_ask.py, VERIFIED, whole text): 'best way to clear the whole floor of enemies before moving to the next room without wasting any special ammo'",
+  "pressed_and_seen": [
+    {"press": "Down (Voice input -> Ask), A on Ask, Down (box -> Stop generation)", "seen": "ring on Stop generation"},
+    {"wait": "about 29 s until the new answer had 213 characters on screen", "press": "A on Stop generation"},
+    {"seen_after_stop": "'Stopped - partial answer kept.' under the question; answer kept at 585 characters / 108 words, ending mid-sentence ('Are they fast and jumpy? You'); 'Mark reply helpful' and 'Mark reply not helpful' carry the disabled state; 'Retry same prompt' is live; ring went to Voice input"},
+    {"press": "walk Up 4 (Voice input, box, chip, Show details) to 'Read aloud'", "seen": "speaker takes the ring, box 289,228 30x32, 100% visible"},
+    {"press": "A on speaker", "seen": "label becomes 'Stop', class --speaking, colour rgb(248,113,113) (red); over SSH a pw-play process was playing bonsai_read_aloud_*.wav; three spoken pieces made so far (3.2 s, 4.2 s, 5.1 s), all from the kept partial answer, which is the only answer text there is"},
+    {"press": "A on speaker about 16 s later, partway through", "seen": "label back to 'Read aloud', colour rgb(200,218,240); no pw-play process left"},
+    {"up_from_retry": {
+      "route_note": "The runbook said walk Down to Retry. From the speaker, Down goes Show details -> chip -> box -> Ask and never meets Retry (Retry is now a corner icon on the question bubble, above the answer). Walked Up instead: Ask -> Voice input -> box -> chip -> Show details -> Read aloud -> Retry (9 presses).",
+      "press_Up_on_Retry": "ring lands on the '19 earlier' button (the older-turns button above the question), 100% visible",
+      "press_Down_from_19_earlier": "back on Retry - a true mirror",
+      "press_Down_from_Retry": "the question row (unnamed div), 89% visible, covered only by the Retry icon - the known false alarm"
+    }}
+  ],
+  "screenshot": "plan64-READ-ALOUD-07-stopped.png (stopped reply, greyed buttons, speaker at the right of the row)",
+  "verdict": "PASS for READ-ALOUD-07 (stopped case): speaker reachable, starts on the kept partial text, flips to the red Stop shape, stops and flips back on a second A. Up-from-Retry is a measurement, not pass/fail: Up lands on '19 earlier', and Down from there comes back to Retry."
+}

@@ -215,6 +215,12 @@ All notable changes to this project are documented in this file.
 - **The line under the question box stops naming a game you have closed:** exit a game and it used to keep the old name, so a question that does not name its own game could pull in the wrong game's notes. **The cause first written down was wrong and the real one is worth knowing:** the ordinary keep-in-sync check does correct itself within about a second and a half; the hole was **reopening the panel** — after a popup, or leaving and coming back — which restored the remembered name without ever checking whether that game was still running. It now checks what is actually running at that moment. `useBonsaiAskOrchestration.ts`; 5 frontend tests. On-Deck **W2-R6**.
 
 ### Added
+- **Knowledge base release `2026.09.18` published (372 notes across 35 games, 159 Deck tips):** ten more
+  games get real notes instead of the model's memory — the five Mario Party games, Donkey Kong 64, Yoshi's
+  Story, Diddy Kong Racing, Super Smash Bros. 1999 and Grand Theft Auto III: The Definitive Edition. Live in
+  both places it publishes to, Hugging Face and the GitHub release, read back over the wire afterwards to
+  confirm both serve this version. Pressing Update on the Deck itself, so an installed library actually
+  pulls it, is still owed. On-Deck row **W1-R1** in `docs/testing.md`.
 - **A line under a finished Strategy or troubleshooting reply now shows the note it used, in the
   note's own words:** when the reply leaned on one of bonsAI's own game notes or a shared Deck tip, a
   one-line credit now appears underneath it, naming the note and where it came from — a named wiki,

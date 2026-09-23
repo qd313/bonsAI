@@ -1,0 +1,76 @@
+{
+ "row": "THINKING-SANITIZE-01 and THINKING-EMOJI-CLUSTER-01, Ask 5 of 5",
+ "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+ "deck_time": "2026-09-23 18:07-18:08 EDT",
+ "screen": "Deck's own screen",
+ "setup": "Main tab, chat 'wheatley fight', Strategy, nothing running; a recent screenshot attached first (Attach -> 'Attach recent screenshot' -> 20260627-165914.png, 2.6 MB)",
+ "question": "what should i do if my save file did not sync to the cloud after closing a game (deck_send_ask.py VERIFIED, whole text)",
+ "pressed": "recorder --arm, walk to Ask, A, wait for the end, recorder --stop",
+ "recorder_log": [
+  {
+   "ms": 0,
+   "kind": "initial",
+   "present": false,
+   "empty": false,
+   "text": null
+  },
+  {
+   "ms": 6709,
+   "kind": "mutation",
+   "present": true,
+   "empty": false,
+   "text": "Thinking…"
+  },
+  {
+   "ms": 6780,
+   "kind": "mutation",
+   "present": true,
+   "empty": false,
+   "text": "🌳"
+  },
+  {
+   "ms": 6809,
+   "kind": "mutation",
+   "present": true,
+   "empty": false,
+   "text": "Waking the model up for \"what should i do if my save file did not sync to the cl…\"…"
+  },
+  {
+   "ms": 17767,
+   "kind": "mutation",
+   "present": true,
+   "empty": false,
+   "text": "Working…"
+  },
+  {
+   "ms": 21420,
+   "kind": "mutation",
+   "present": false,
+   "empty": false,
+   "text": null
+  }
+ ],
+ "seen": {
+  "line_first_shown_ms": 6709,
+  "line_gone_ms": 21420,
+  "blank_or_missing_while_in_use": 0,
+  "distinct_texts": [
+   "Thinking…",
+   "Waking the model up for \"what should i do if my save file did not sync to the cl…\"…",
+   "Working…",
+   "🌳"
+  ],
+  "texts_with_letters": 3,
+  "emoji_only_texts": [
+   "🌳"
+  ],
+  "what_replaced_the_line": "no live reasoning; the Ask had already ended with an error: 'Ollama returned an incomplete stream for model gemma4:e2b-it-qat (no completion marker and no assistant text)'",
+  "ask_outcome": "Failed after 14 s. Plugin log: payload_bytes=3667715, then 'Ollama returned an incomplete stream'. System journal 18:08:16: llama-server crashed, 'vk::Queue::submit: ErrorDeviceLost' (the graphics chip reset), core dump written; Ollama started a new llama-server afterwards.",
+  "prep_phases": "The several prep phases the row hoped for (Proton logs, knowledge base, screenshot) did not show; the phases were 'Thinking...', a tree emoji, 'Waking the model up for ...', 'Working...'."
+ },
+ "verdict": {
+  "THINKING-SANITIZE-01": "PASS",
+  "THINKING-EMOJI-CLUSTER-01": "PASS",
+  "note": "The status line itself was clean, but the Ask crashed the model, so this is not a clean try for closing the rows. Not retried, to avoid a second graphics crash; the owner decides."
+ }
+}

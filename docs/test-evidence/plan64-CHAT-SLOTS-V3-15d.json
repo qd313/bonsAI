@@ -1,0 +1,22 @@
+{
+  "row": "CHAT-SLOTS-V3-15d - a new chat's title changes in place to its first question",
+  "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+  "deck_time": "2026-09-23 18:22-18:24 EDT",
+  "screen": "Deck's own screen",
+  "setup": "The '[+]' empty chat opened in CHAT-GHOST-REPLY-01 try 1. Page watcher running (see that file).",
+  "question": "how do i unlock the next area after finishing the tutorial (deck_send_ask.py VERIFIED, whole text)",
+  "pressed": ["walk Down 3 to Ask, A", "then deck_record 100 s (the tool records for its full length before the next action)"],
+  "seen": {
+    "title_log_ms_from_watcher_start": [
+      {"ms": 136399, "title": "[+]", "turns": 0},
+      {"ms": 136435, "title": "New chat", "turns": 0, "note": "Ask pressed"},
+      {"ms": 136495, "title": "New chat", "turns": 2, "note": "the previous chat's question also shows - see CHAT-GHOST-REPLY-01"},
+      {"ms": 171148, "title": "how do i unlock the next area after finishing the tutorial", "turns": 1, "note": "reply saved; title changed in place 34.7 s after Ask"}
+    ],
+    "panel_did_not_close_or_reload": "the watcher, attached to the panel's root element before the Ask, kept receiving changes through the title change, so the panel was not replaced",
+    "recording": "80.8 s long; a strip of frames from 28 s to 42 s shows no blank or closed frame around the moment the reply finished",
+    "on_screen_caveat": "at the moment the title changed, the view had scrolled down to the end of the reply, so the chat row with the title was above the visible area; a person watching would not have seen the title change without scrolling up"
+  },
+  "files": ["plan64-CHAT-SLOTS-V3-15d.mkv (recording)", "plan64-CHAT-SLOTS-V3-15d-frames.png (frames 28-42 s, two per second)"],
+  "verdict": "PASS on what the page did - the title went from 'New chat' to the question in place, with no panel close or reload. Caveat for the owner: the title row was scrolled out of view when it changed, so this was confirmed by reading the page, not by eye."
+}

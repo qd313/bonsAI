@@ -1,0 +1,24 @@
+{
+  "row": "ASKBAR-DOWN-TO-STOP-01, plus the one-star 'Stop is hard to find' bug",
+  "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+  "deck_time": "2026-09-23 17:51-17:53 EDT",
+  "screen": "Deck's own screen (QAM window 854x454, panel x 48-348)",
+  "setup": "Main tab, chat 'wheatley fight', empty question box, Strategy mode, nothing running. Question put in with deck_send_ask.py (VERIFIED, whole text read back): 'walk me through every step needed to clear this area safely from start to finish'",
+  "pressed_and_seen": [
+    {"press": "A on Ask", "ring_after": "the question box (INPUT, box 73,329 275x44), box now empty; Ask greyed (class Disabled); corner button reads 'Stop generation'", "reply_state": "status line '\"walk me through...\" is in good hands now...', no answer text yet"},
+    {"press": "Down from the box", "ring_after": "Stop generation button, box 327,377 20x20, inside the panel", "reply_state": "still working (Ask disabled, status line showing)"},
+    {"press": "Up", "ring_after": "question box", "reply_state": "status line 'Working...'"},
+    {"press": "Right", "ring_after": "Ask-mode button 'Inference mode: Strategy', box 265,377 55x20"},
+    {"press": "Right", "ring_after": "Stop generation, box 327,377 20x20", "reply_state": "live reasoning lines being shown, Stop still present"},
+    {"reply_finished": "about 4 s after the last press; Stop turned back into 'Voice input' in the same corner and the ring stayed on it"},
+    {"after_finish": "Up from Voice input -> box; Down from box -> Ask (live, no Disabled class); Up from box, Right -> Ask-mode, Right -> Voice input"}
+  ],
+  "reply": "330 characters; asked which game, since none is running",
+  "side_notes": [
+    "Left from the Ask-mode button goes to 'Attach screenshot to Ask', not back to the box.",
+    "Up from Ask goes to Voice input (the last-used place in the row), not the box.",
+    "In the screenshot the focus ring on the Stop icon runs to the panel's right edge (icon right edge x 347, panel edge 348); the icon itself is fully visible. The icon looks grey in the screenshot rather than red."
+  ],
+  "screenshot": "plan64-ASKBAR-DOWN-TO-STOP-01.png (ring on Stop while the reply was arriving)",
+  "verdict": "PASS for both rows - Down from the emptied box reaches Stop while the reply is arriving; Right, Right from the box also reaches Stop; after the reply both routes go back to their ordinary places"
+}

@@ -1,0 +1,65 @@
+{
+ "row": "THINKING-SANITIZE-01 and THINKING-EMOJI-CLUSTER-01, Ask 1 of 5",
+ "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+ "deck_time": "2026-09-23 18:02-18:03 EDT",
+ "screen": "Deck's own screen",
+ "setup": "Main tab, chat 'wheatley fight', Strategy, nothing running",
+ "question": "why does my controller stop responding sometimes while playing on the deck (deck_send_ask.py VERIFIED, whole text)",
+ "pressed": "recorder --arm, walk to Ask, A, wait for the end, recorder --stop",
+ "recorder_log": [
+  {
+   "ms": 0,
+   "kind": "initial",
+   "present": false,
+   "empty": false,
+   "text": null
+  },
+  {
+   "ms": 23438,
+   "kind": "mutation",
+   "present": true,
+   "empty": false,
+   "text": "Thinking…"
+  },
+  {
+   "ms": 23487,
+   "kind": "mutation",
+   "present": true,
+   "empty": false,
+   "text": "🌳"
+  },
+  {
+   "ms": 32117,
+   "kind": "mutation",
+   "present": true,
+   "empty": false,
+   "text": "Working…"
+  },
+  {
+   "ms": 36901,
+   "kind": "mutation",
+   "present": false,
+   "empty": false,
+   "text": null
+  }
+ ],
+ "seen": {
+  "line_first_shown_ms": 23438,
+  "line_gone_ms": 36901,
+  "blank_or_missing_while_in_use": 0,
+  "distinct_texts": [
+   "Thinking…",
+   "Working…",
+   "🌳"
+  ],
+  "texts_with_letters": 2,
+  "emoji_only_texts": [
+   "🌳"
+  ],
+  "what_replaced_the_line": "not checked on this Ask (the check was added from Ask 2 on); the reply finished about 31 s after the line went away, which fits live reasoning taking over, but that is not measured"
+ },
+ "verdict": {
+  "THINKING-SANITIZE-01": "PASS",
+  "THINKING-EMOJI-CLUSTER-01": "PASS"
+ }
+}

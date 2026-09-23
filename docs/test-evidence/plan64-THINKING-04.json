@@ -1,0 +1,71 @@
+{
+ "row": "THINKING-SANITIZE-01 and THINKING-EMOJI-CLUSTER-01, Ask 4 of 5",
+ "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+ "deck_time": "2026-09-23 18:05-18:06 EDT",
+ "screen": "Deck's own screen",
+ "setup": "Main tab, chat 'wheatley fight', Strategy, nothing running",
+ "question": "why is the frame rate unstable when i turn on the performance overlay (deck_send_ask.py VERIFIED, whole text)",
+ "pressed": "recorder --arm, walk to Ask, A, wait for the end, recorder --stop",
+ "recorder_log": [
+  {
+   "ms": 0,
+   "kind": "initial",
+   "present": false,
+   "empty": false,
+   "text": null
+  },
+  {
+   "ms": 8703,
+   "kind": "mutation",
+   "present": true,
+   "empty": false,
+   "text": "Thinking…"
+  },
+  {
+   "ms": 8753,
+   "kind": "mutation",
+   "present": true,
+   "empty": false,
+   "text": "Benchmarking my patience with \"why is the frame rate unstable when i turn on the perfo…\"…"
+  },
+  {
+   "ms": 8777,
+   "kind": "mutation",
+   "present": true,
+   "empty": false,
+   "text": "\"why is the frame rate unstable when i turn on the perfo…\" is in good hands now…"
+  },
+  {
+   "ms": 16210,
+   "kind": "mutation",
+   "present": true,
+   "empty": false,
+   "text": "Still thinking…"
+  },
+  {
+   "ms": 21166,
+   "kind": "mutation",
+   "present": false,
+   "empty": false,
+   "text": null
+  }
+ ],
+ "seen": {
+  "line_first_shown_ms": 8703,
+  "line_gone_ms": 21166,
+  "blank_or_missing_while_in_use": 0,
+  "distinct_texts": [
+   "\"why is the frame rate unstable when i turn on the perfo…\" is in good hands now…",
+   "Benchmarking my patience with \"why is the frame rate unstable when i turn on the perfo…\"…",
+   "Still thinking…",
+   "Thinking…"
+  ],
+  "texts_with_letters": 4,
+  "emoji_only_texts": [],
+  "what_replaced_the_line": "live reasoning box present (1 line), no answer text yet, Stop present"
+ },
+ "verdict": {
+  "THINKING-SANITIZE-01": "PASS",
+  "THINKING-EMOJI-CLUSTER-01": "PASS"
+ }
+}

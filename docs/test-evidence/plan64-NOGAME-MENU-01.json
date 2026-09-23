@@ -1,0 +1,22 @@
+{
+  "row": "NOGAME-MENU-01",
+  "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+  "deck_time": "2026-09-23 17:56-17:57 EDT",
+  "screen": "Deck's own screen (QAM window 854x454)",
+  "setup": "Main tab, chat 'wheatley fight', Strategy (confirmed by the send script and the mode button), nothing running ('Context: no active game detected')",
+  "question": "what should i focus on first when starting a brand new playthrough with limited resources (deck_send_ask.py VERIFIED, whole text)",
+  "pressed": ["walk Down 9 from the question row to Ask", "A on Ask"],
+  "seen": {
+    "reply_time_s": 53,
+    "reasoning": "Show reasoning - 22 s",
+    "reply_length_chars": 1257,
+    "branch_menu_shown": true,
+    "menu_text": "What kind of challenge are you facing first in this new game? / A. Exploring the starting area and learning the map / B. Focusing on early combat and fighting the first tough enemies",
+    "literal_THIS_GAME_anywhere_on_page": false,
+    "stray_fence_or_json": false,
+    "note": "The menu names two kinds of start, not a real place; it says 'this new game' in lower case in its question line only.",
+    "also_seen": "A full-width 'Save chat to Desktop' button appeared above the suggestion chip after this reply finished (box 48,251 300x38 at that scroll position)."
+  },
+  "screenshot": "plan64-NOGAME-MENU-01.png",
+  "verdict": "PASS on the row's fail test - a menu appeared and the literal 'THIS GAME' is nowhere on the page. The owner may want to judge whether two generic choices count as 'names a real place'."
+}

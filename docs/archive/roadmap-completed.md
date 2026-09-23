@@ -33,6 +33,61 @@ end._
   new "Done falls below the visible edge" bug, both still open in [Verify](../roadmap.md#verify) and
   [Bugs](../roadmap.md#bugs).
 
+  **Update, closed 2026-09-23 in a later pass the same night:** the "more room" half is now also confirmed
+  on the Deck — see "The AI models screen's Done and Cancel button could fall off the bottom of a long model
+  list, and the list itself did not use all the room it had" in [roadmap-bugs-fixed.md](roadmap-bugs-fixed.md).
+
+### The game a chat belongs to, above its title (closed 2026-09-23)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-23 during plan 64's flow B bookkeeping pass — copied
+line for line from this session's Verify entry, nothing reworded, with the closing note added at the end._
+
+- ★★ `[chat]` **The game a chat belongs to, above its title** — **VERIFY, built 2026-09-20 (lane G).** The
+  name shows only while the ring is on the row, with the row's height held steady either way; the chat's
+  delete cross, which used to pull the name off-centre, is now pinned to the right-hand edge. Row
+  **CHAT-SLOTS-V3-14c**, run on the Deck 2026-09-21 and passed, though the game name itself could not be
+  seen since that test chat had no game attached.
+
+  **Closed 2026-09-23, confirmed on the Deck with a game actually attached.** "HADES" showed above the
+  Hades chat's title with the ring on it, and was gone on a chat with no game attached; the row held its
+  height at 48 pixels throughout. Evidence `docs/test-evidence/plan64-CHAT-SLOTS-V3-14c.json` (+ `.png`),
+  saved replay check `checks/plan64-CHAT-SLOTS-V3-14c.json`.
+
+### Read aloud is a small speaker on the Helpful row, not a dividing line (closed 2026-09-23)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-23 during plan 64's flow B bookkeeping pass — copied
+line for line from this session's Verify entry, nothing reworded, with the closing note added at the end._
+
+- ★★ `[layout]` `[voice]` `[focus]` **Read aloud is a small speaker on the Helpful row, not a dividing
+  line** — **VERIFY, built 2026-09-20 (lane R).** A small speaker sits at the right end of the Helpful / Not
+  really row, quiet until the ring reaches it, turning into a red stop while the Deck is talking; removing
+  the old full-width line gives back 29 pixels on every finished answer. Row **READ-ALOUD-07**, run on the
+  Deck 2026-09-21 and passed for a finished reply. Still owed: what it does on an answer stopped part-way.
+
+  **Closed 2026-09-23, confirmed on the Deck for a stopped reply.** Stopped at 213 characters with the
+  "Stopped — partial answer kept" notice shown, Helpful/Not really greyed and Retry live, the speaker button
+  took the ring, and A read the kept 585-character partial answer aloud (icon red, reading "Stop"); a second
+  A stopped it. Evidence `docs/test-evidence/plan64-READ-ALOUD-07-stopped.json` (+ `.png`).
+
+### Session context folds into Show details (closed 2026-09-23)
+
+_Moved out of [roadmap.md](../roadmap.md) on 2026-09-23 during plan 64's flow B bookkeeping pass — copied
+line for line from this session's Verify entry, nothing reworded, with the closing note added at the end._
+
+- ★★★ `[layout]` **Session context folds into Show details** — **VERIFY, built 2026-09-20 (lane S).** The
+  separate Session context bar is gone; the opened Show details panel now carries two tabs, *This answer*
+  and *Session · N*, with Left and Right between them, on the newest answer only. Clear sits at the end of
+  the Session tab, full width, with the same confirm box. Row **SESSION-TAB-01** itself still owed a fresh
+  run.
+
+  **Closed 2026-09-23 for steps 1 to 6, confirmed on the Deck.** Both tabs are reachable and Left/Right
+  switch them; all 27 session rows and the Clear button take the ring, 100% visible; Clear's confirm box
+  opens. **Two new focus bugs were found in the same pass, filed separately in Bugs, with a fix already being
+  built this session:** the confirm box opens with the ring on the destructive Clear button rather than
+  Cancel, and cancelling it puts the ring on the tab bar with the whole details panel closed rather than
+  back on the row list. Evidence `docs/test-evidence/plan64-SESSION-TAB-01.json` + screenshot, saved check
+  `checks/plan64-SESSION-TAB-01-B-close.json`.
+
 ### Reasoning display (2026-09-17)
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-18 once six of the seven Deck rows passed — copied line

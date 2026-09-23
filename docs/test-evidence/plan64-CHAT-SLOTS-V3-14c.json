@@ -1,0 +1,19 @@
+{
+  "row": "CHAT-SLOTS-V3-14c - the game's name above a chat's title",
+  "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+  "deck_time": "2026-09-23 17:50-17:51 EDT",
+  "screen": "Deck's own screen (screen 853x533, QAM window 854x454)",
+  "setup": "Main tab, ring on the chat row, active chat 'wheatley fight', no game running. Saved chats in order: wheatley fight; how do i beat the boss at the end of the first area; Hades (game Hades); how do i beat the gonarch in black mesa; battery-life guide; excursion funnel (84 turns); black mesa how do i tame a horse; excursion funnel (24 turns)",
+  "pressed": ["RB (to 'how do i beat the boss...')", "RB (to 'Hades')", "RB (to 'how do i beat the gonarch in black mesa')", "LB x3 (back to 'wheatley fight')", "then the saved check replayed RB, RB, LB, LB once more"],
+  "note_on_route": "The runbook said Left/Right; the owner's task said the shoulder buttons move between chats. Shoulders were used. Each shoulder press also switches the open chat (the conversation below changes), which the runbook said is fine.",
+  "seen": {
+    "wheatley_fight_no_game": {"row_height_px": 48.33, "game_line_text": "", "game_line_box": [99, 96, 197, 11]},
+    "boss_first_area_no_game": {"row_height_px": 48, "game_line_text": ""},
+    "Hades": {"row_height_px": 48, "game_line_text": "Hades", "shown_on_screen_as": "HADES in small capitals above the title 'Hades'", "game_line_box": [99, 96, 197, 11], "title_box": [180, 110, 36, 14]},
+    "gonarch_neighbour_no_game": {"row_height_px": 48, "game_line_text": "", "title_box": [125, 110, 146, 14]},
+    "back_on": "wheatley fight"
+  },
+  "screenshot": "plan64-CHAT-SLOTS-V3-14c.png (ring on the Hades chat)",
+  "saved_check": "checks/plan64-CHAT-SLOTS-V3-14c.json",
+  "verdict": "PASS - 'Hades' shows above the title with the ring on that chat; it goes away on the neighbour with no game; the row stays 48 px in every case"
+}

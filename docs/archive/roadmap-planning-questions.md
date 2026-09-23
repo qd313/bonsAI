@@ -18,7 +18,7 @@ Prepared prompts for a future AI planning session. Each section has a short summ
 | 8 | Kids master lock feasibility | [08-kids-master-lock-feasibility.md](08-kids-master-lock-feasibility.md) → ship plan [14-kids-master-lock-implementation-plan.md](14-kids-master-lock-implementation-plan.md) |
 | 9 | Steam Frame companion UX feasibility | [09-steam-frame-companion-feasibility.md](09-steam-frame-companion-feasibility.md) |
 | 10 | Wake-word listening feasibility and cost | [10-wake-word-listening-feasibility.md](../planning/10-wake-word-listening-feasibility.md) |
-| 11 | Native QAM shortcut tile / decouple from Decky | [11-native-qam-tile-feasibility.md](../planning/11-native-qam-tile-feasibility.md) |
+| 11 | Native QAM shortcut tile / decouple from Decky | [11-native-qam-tile-feasibility.md](11-native-qam-tile-feasibility.md) |
 | 12 | Deep mod AI hints feasibility | [12-deep-mod-ai-hints-feasibility.md](../planning/12-deep-mod-ai-hints-feasibility.md) |
 | 13 | ~~Feature ideas for roadmap.md (star-rated)~~ *(partial — 4 of 9 stubs added to roadmap; 2 shipped in code)* | [13-roadmap-feature-ideas.md](13-roadmap-feature-ideas.md) · results [roadmap-completed.md](../archive/roadmap-completed.md) · commits `ab90b30`, `b5093d2`, `3ecd9d0`, `60b6d14` |
 

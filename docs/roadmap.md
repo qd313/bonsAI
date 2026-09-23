@@ -248,6 +248,11 @@ replace it with a specific issue when one exists.
   and 31 again afterwards. It goes both ways — the answer itself drops to about a third of its usual speed. Memory is the other
   half: with that game running the Deck had 206 MB spare before the model loaded. **Giving the model more room costs nothing in
   frames**, so the real questions are what to reserve and whether to say plainly what a question costs. Pairs with keep-alive.
+- ★★★ `[platform]` **bonsAI's own icon in the Quick Access Menu** — **OPEN, re-planned 2026-09-23, was ★★★★★★.** The
+  free plugin Quick Tab already pins any Decky plugin as its own menu icon, so the wait on Decky's team is over. Left for
+  bonsAI: a Deck test, then small fixes. Read from the code, not yet seen: in its own tab the reply-ready notice pops up
+  while you are looking at the answer, and tapping it opens Decky instead. Questions answered; the Deck test is next.
+  [Plan 66](planning/66-quick-tab-own-menu-icon.md).
 - ★★★ `[platform]` **Trim the five documents that are still big** — **PARTIAL: one of five done 2026-09-15.**
   Nothing a person using the plugin would notice; this is about what every piece of work costs before it starts. Five files
   carry a trim task at the top of each, with its own star rating, time and model. **This file is done (2026-09-14 and 15) — 100 KB to 83 KB,
@@ -350,8 +355,6 @@ replace it with a specific issue when one exists.
   [Feasibility](planning/10-wake-word-listening-feasibility.md).
 - ★★★★★★ `[platform]` **Deep mod AI hints** — **OPEN.** Detect mod frameworks and files; mod-aware guidance.
   [Feasibility](planning/12-deep-mod-ai-hints-feasibility.md).
-- ★★★★★★ `[platform]` **Native QAM shortcut tile** — **OPEN, upstream research.** A separate left-rail entry beneath the Decky icon.
-  [Feasibility](planning/11-native-qam-tile-feasibility.md).
 - ★★★★★★ `[platform]` **One decision for three items: the SteamVR panel, leaving Decky, and reopening
   llama.cpp** — **OPEN, filed 2026-09-08. Not yet (D99, 2026-09-12): nothing built until the maintainer
   says.** One question underneath all three: does bonsAI grow a second way to run — there is no network

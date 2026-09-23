@@ -1,5 +1,9 @@
 # 11 — Native QAM shortcut tile + Decky decoupling — feasibility (2026-08-04)
 
+> **Replaced 2026-09-23 by [plan 66](../planning/66-quick-tab-own-menu-icon.md).** A separate plugin, Quick Tab, now
+> gives any Decky plugin its own menu icon, so the "blocked on Decky's team" verdict below no longer holds. Kept for its
+> section on running bonsAI outside Decky, which the roadmap's "one decision for three items" entry still leans on.
+
 **Status:** Research only (2026-08-04). **No implementation, no fork, no install-doc change.**
 **Roadmap item:** ★★★★★★ **Native QAM shortcut tile** ([roadmap.md](../roadmap.md) → Planned, "under Decky; upstream research").
 **Related:** [troubleshooting.md](../troubleshooting.md) §5 (Guide-chord macro, `bonsai:shortcut-setup-deck`).

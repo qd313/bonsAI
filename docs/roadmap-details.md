@@ -1569,10 +1569,13 @@ Deck check. [Plan](archive/51-refactor-round-two.md).
   - **Reframed 2026-09-08:** the same surface is open in a headset, because SteamVR lets a separate program on the PC draw a panel over
     any game. The headset shapes (a notification card, a wrist panel, a note pinned in space, the full floating panel) are planned in
     [49-steam-frame-features.md](planning/49-steam-frame-features.md).
-- ★★★★★★ **Native QAM shortcut tile** (under Decky; upstream research)
+- ★★★ **bonsAI's own icon in the Quick Access Menu** (was ★★★★★★ "Native QAM shortcut tile")
   - **GitHub:** [bonsAI Issues](https://github.com/qd313/bonsAI/issues) — issue TBD.
-  - **Goal:** Separate QAM left-rail entry beneath Decky Loader icon.
-  - **Feasibility:** [11-native-qam-tile-feasibility.md](planning/11-native-qam-tile-feasibility.md).
+  - **Goal:** bonsAI on its own icon in the menu, two stops instead of three.
+  - **Re-planned 2026-09-23:** the separate free plugin [Quick Tab](https://github.com/moi952/decky-quick-tab) already
+    does the pinning. bonsAI's share is a Deck test and a few fixes. [Plan 66](planning/66-quick-tab-own-menu-icon.md).
+  - **Old study:** [archive/11-native-qam-tile-feasibility.md](archive/11-native-qam-tile-feasibility.md), kept for its
+    section on running bonsAI outside Decky.
 - ★★★★★★ **Remote Play diagnostics layer** (streaming host/client)
   - **GitHub:** [bonsAI Issues](https://github.com/qd313/bonsAI/issues) — issue TBD.
   - **Goal:** Streamed gameplay answers weight encode latency and host-vs-client fixes.
@@ -1601,7 +1604,7 @@ Deck check. [Plan](archive/51-refactor-round-two.md).
 - **Preset carousel (shipped)** → **Preset chip expansion**; **Session RAG preset chips** (shipped).
 - **RAG / offline KB** → Phase 2–3 shipped → **retrieval quality remediation** (PR1/PR2 closed 2026-08-09; vector recall pass 2026-08-18) → Phase 4–8 Backlog; **KB visual maps** separate; **Spoiler constitution** runtime encoding shipped 2026-08-07; **Spoiler confidence chip** → fencing + unfenced feedback.
 - **Web permission** → citations / allowlist / freshness chip.
-- **Native QAM shortcut tile** → shorter path than Guide-chord macro docs ([troubleshooting.md](troubleshooting.md) §5).
+- **bonsAI's own icon in the Quick Access Menu** (through Quick Tab) → shorter path than Guide-chord macro docs ([troubleshooting.md](troubleshooting.md) §5).
 - **Steam Input jump Phase 1 (shipped)** → **Steam Input layout parse**.
 - **Offline intent packs (quiet)** → **Intent packs later review**.
 - **Deck health snapshot** ↔ **Connection doctor** — one probe stack, two presentations; decide before building either.
@@ -1973,7 +1976,7 @@ worse answers with nothing on screen to say why.
 
 - ★★★★★★ `[platform]` **One decision for three items: the SteamVR panel, leaving Decky, and reopening llama.cpp** —
   **OPEN, filed 2026-09-08. Not yet (D99, 2026-09-12): nothing is built until the maintainer says.** The floating panel needs
-  bonsAI to run outside Decky, which is what the Native QAM shortcut tile research keeps circling, and any model on the Frame
+  bonsAI to run outside Decky, which the old menu-icon study (archive, plan 11) kept circling, and any model on the Frame
   itself runs through llama.cpp, not Ollama. Three entries, one question: **does bonsAI grow a second way to run.** Decide it
   once. **The gap underneath it: there is no network door into bonsAI's Python side today**, so a panel on the PC would have a
   screen and no brain.

@@ -368,6 +368,29 @@ describe("post-answer delivery", () => {
     expect(t.scrollTop).toBe(150);
   });
 
+  /*
+   * On the Deck 2026-09-23 (plan 64): Down 0.8s after an answer finished put the ring on "40
+   * earlier", and the 900ms delivery pass then scrolled to the end of the answer, leaving the ring
+   * 656px above the pane.
+   */
+  it("brings the ring's own control back, not the answer's end, when the ring is in the transcript", () => {
+    vi.useFakeTimers();
+    const t = makeTranscript({ contentBottom: 400 });
+    const { rerender } = mountAsk(t);
+
+    act(() => rerender({ text: "final answer text", on: false }));
+    // The rebuild lands the pane at the top, and the person walks onto a control up there.
+    act(() => t.userScrollTo(0));
+    const control = document.createElement("div");
+    control.className = "gpfocus";
+    control.scrollIntoView = vi.fn();
+    t.anchor.appendChild(control);
+    act(() => vi.advanceTimersByTime(1000));
+
+    expect(t.scrollTop).toBe(0);
+    expect(control.scrollIntoView).toHaveBeenCalledWith({ block: "nearest", behavior: "auto" });
+  });
+
   it("stops delivering once the window has passed", () => {
     vi.useFakeTimers();
     const t = makeTranscript({ contentBottom: 400 });

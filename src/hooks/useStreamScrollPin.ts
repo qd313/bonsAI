@@ -10,6 +10,7 @@
  */
 import { useEffect, useLayoutEffect, useRef, type RefObject } from "react";
 import { findTabContentsScroll } from "../utils/chatPanelScroll";
+import { liftAboveDock } from "./useDockClearanceOnFocus";
 
 /** How far the end of the transcript may sit below the fold and still count as "being watched". */
 const FOLLOW_SLACK_PX = 48;
@@ -67,8 +68,8 @@ const RING_SELECTOR = ".gpfocus";
  * because the two disagree on the Deck and the ring is what a person sees. The dock and the chat
  * slot row sit outside the anchor, so a ring on Ask or Stop still lets the follow run.
  */
-function ringIsInTranscript(anchor: HTMLElement): boolean {
-  return anchor.querySelector(RING_SELECTOR) !== null;
+function ringInTranscript(anchor: HTMLElement): HTMLElement | null {
+  return anchor.querySelector<HTMLElement>(RING_SELECTOR);
 }
 
 /**
@@ -103,7 +104,7 @@ function transcriptTailIsInView(anchor: HTMLElement, scroll: HTMLElement): boole
  * D-pad's own panel steps set `scrollTop`, which fires `scroll` like a swipe does. Stepping down
  * through the answer therefore pins, and stepping to the bottom resumes the follow, without the
  * navigation code knowing this hook exists. A step that lands near the end takes no pin, though,
- * so the follow also holds while the gamepad ring is inside the transcript (ringIsInTranscript).
+ * so the follow also holds while the gamepad ring is inside the transcript (ringInTranscript).
  */
 export function useStreamScrollPin(
   anchorRef: RefObject<HTMLElement | null>,
@@ -224,9 +225,23 @@ export function useStreamScrollPin(
            "do not scroll". */
         return;
       }
-      /* Only while streaming: the delivery passes after an Ask exist to undo the slot rebuild's
-         jump back to the top, which would otherwise strand the ring's own control there too. */
-      if (enabled && ringIsInTranscript(anchor)) return;
+      const ring = ringInTranscript(anchor);
+      if (ring) {
+        if (enabled) return;
+        /*
+         * A delivery pass with the ring inside the transcript brings the ring's own control back,
+         * not the answer's end. The passes exist to undo the slot rebuild's jump to the top, and
+         * for a person walking the reply that jump strands the control they are on. Delivering the
+         * tail instead threw it off screen: on the Deck 2026-09-23 (plan 64), Down 0.8s after an
+         * answer finished put the ring on "40 earlier" and the 900ms pass then scrolled to the end
+         * of the answer, leaving the ring 656px above the pane. "nearest" leaves a control that is
+         * already in view where it is; the lift takes it out from behind the dock.
+         */
+        ring.scrollIntoView({ block: "nearest", behavior: "auto" });
+        liftAboveDock(ring);
+        selfWroteTopRef.current = scroll.scrollTop;
+        return;
+      }
 
       const overshoot = tailBelowFold();
       if (overshoot <= 0) return;

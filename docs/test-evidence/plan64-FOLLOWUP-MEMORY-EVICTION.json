@@ -1,0 +1,58 @@
+{
+ "row": "Flow C row 6 - follow-up memory re-run, and which model stays loaded",
+ "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+ "deck_time": "2026-09-23 18:52-18:57 EDT",
+ "screen": "Deck's own screen (QAM window 854x454)",
+ "setup": "Main tab, chat 'wheatley fight', Strategy, knowledge base on, nothing running. Session not cleared (permission check refused it).",
+ "settings_readings": {
+  "running_process_env": "OLLAMA_MAX_LOADED_MODELS=2 (pid 1772, /home/deck/.local/bin/ollama serve)",
+  "autostart_unit_file": "exists at ~/.config/systemd/user/bonsai-ollama-autostart.service; Environment OLLAMA_MAX_LOADED_MODELS=2 (also OLLAMA_VULKAN=1, OLLAMA_IGPU_ENABLE=1, OLLAMA_FLASH_ATTENTION=0, OLLAMA_NUM_PARALLEL=1); enabled, active",
+  "ollama_tab_start_the_ai_with_the_deck": "on (aria-checked=true)",
+  "agree": true
+ },
+ "ollama_path": "~/.local/bin/ollama (plain 'ollama' is not on the PATH)",
+ "ollama_ps": {
+  "before_18_52_59": {
+   "gemma4:e2b-it-qat": "2.2 GB, 100% GPU, context 16384, until 4 hours from now",
+   "nomic-embed-text:latest": "488 MB, 100% GPU, context 2048, until 3 minutes from now"
+  },
+  "during_q1_18_53_59": {
+   "gemma4:e2b-it-qat": "2.2 GB, 100% GPU, context 16384, until 4 hours from now",
+   "nomic-embed-text:latest": "488 MB, 100% GPU, context 2048, until 4 minutes from now"
+  },
+  "after_q2_18_55_12": {
+   "gemma4:e2b-it-qat": "2.2 GB, 100% GPU, context 16384, until 4 hours from now",
+   "nomic-embed-text:latest": "488 MB, 100% GPU, context 2048, until 3 minutes from now"
+  },
+  "after_q3_18_56_41": {
+   "gemma4:e2b-it-qat": "2.2 GB, 100% GPU, context 16384, until 4 hours from now",
+   "nomic-embed-text:latest": "488 MB, 100% GPU, context 2048, until About a minute from now"
+  }
+ },
+ "questions": [
+  {
+   "text": "how do i beat megara in hades",
+   "time_s": 42.4,
+   "kb_search": "2026-09-23T22:53:19Z attached: Hades — Megaera; Hades — Theseus and Asterius; Hades — Heat and the Pact of Punishment",
+   "notes_block": "Megaera (+2 more) · From bonsAI's own note",
+   "reply": "learn her dash patterns, punish recovery windows, mirror and trap boons to burst her phases"
+  },
+  {
+   "text": "what about her second phase",
+   "time_s": 46.7,
+   "kb_search": "none logged for this turn (newest line still 22:53:19); Ollama journal shows no /api/embed call between 18:54:01 and 18:55:07",
+   "show_details": "KB: no game running / Knowledge base coverage: No game is running, so there is nothing to look up.",
+   "notes_block": "none",
+   "reply": "knew 'her' was Megaera and talked about her second phase, but only generic advice (keep your distance, don't rush, wait for windows) plus a hidden spoiler block"
+  },
+  {
+   "text": "what weapon works best against her",
+   "time_s": 44.2,
+   "kb_search": "none logged; no /api/embed call",
+   "reply": "deflection: 'I ain't got no idea who you're talkin' about without a name ... Which game are you playing and who is her' with choices Hades / Hollow Knight / Another game"
+  }
+ ],
+ "ollama_journal": "no model load, unload or eviction lines between 18:52:50 and 18:56:41; /api/chat took 42.30 s, 46.68 s, 44.13 s; the only /api/embed calls were at 18:53:19 (17.2 ms and 16.2 ms, i.e. the embedding model was already warm)",
+ "verdict_followup_memory": "FAIL - the follow-up reply is about her second phase but is generic, and Show details says no search ran for it ('No game is running, so there is nothing to look up'). The third question lost track of who 'her' was entirely.",
+ "verdict_model_eviction": "PASS for the setting-2 case - both the answering model and the embedding model stayed loaded across all four reads, with no load or unload in Ollama's journal. Caveat: questions 2 and 3 never called the embedding model, so the 'no reload gap between questions 2 and 3' could not be timed; the only embed calls (question 1) took 16-17 ms, i.e. warm."
+}

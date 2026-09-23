@@ -1,0 +1,92 @@
+{
+ "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+ "screen": "Deck's own screen (QAM window 854x454; visible transcript area y 88-290, chip row from y 290)",
+ "setup": "Main tab, chat 'wheatley fight', Strategy, nothing running, nothing attached",
+ "question": "give me a complete walkthrough of every chapter of half life 2 with three detailed paragraphs of tips for each chapter (deck_send_ask.py VERIFIED, whole text)",
+ "row": "QA-FREE-PLAY-01 streaming half, try 2 (flow C row 8)",
+ "deck_time": "2026-09-23 18:59-19:01 EDT",
+ "pressed": [
+  "Ask at about 18:59:34",
+  "Up x6 to the tab bar while the model thought",
+  "waited for the first answer words (19:00:20.8, 46 characters)",
+  "Down, then two readings 1 s apart",
+  "Down, then two readings 1 s apart",
+  "afterwards (not streaming): Up, Down, two readings 1 s apart"
+ ],
+ "stops": [
+  {
+   "stop": 1,
+   "element": "chat row (wheatley fight)",
+   "read_a": {
+    "time": "19:00:28.25",
+    "y": 88,
+    "h": 48,
+    "visible_pct": 100,
+    "scrollTop": 0,
+    "answer_chars": 667,
+    "streaming": true
+   },
+   "read_b": {
+    "time": "19:00:29.33",
+    "y": 88,
+    "h": 48,
+    "visible_pct": 100,
+    "scrollTop": 0,
+    "answer_chars": 773,
+    "streaming": true
+   },
+   "view_stayed_still": true
+  },
+  {
+   "stop": 2,
+   "element": "'40 earlier' pill",
+   "read_a": {
+    "time": "19:00:36.51",
+    "y": -656,
+    "h": 22,
+    "visible_pct": 0,
+    "scrollTop": 803,
+    "answer_chars": 1278,
+    "streaming": false
+   },
+   "read_b": {
+    "time": "19:00:37.51",
+    "y": -656,
+    "h": 22,
+    "visible_pct": 0,
+    "scrollTop": 803,
+    "answer_chars": 1278,
+    "streaming": false
+   },
+   "note": "the answer had finished at 19:00:35.1; this press landed about 19:00:35.9. The ring was on '40 earlier' but the view had jumped to the end of the answer, leaving the ring 656 px above the visible area."
+  },
+  {
+   "stop": "control, after the finish",
+   "element": "'40 earlier' pill again (Up to chat row, Down)",
+   "read_a": {
+    "y": 146,
+    "h": 22,
+    "scrollTop": 0
+   },
+   "read_b": {
+    "y": 146,
+    "h": 22,
+    "scrollTop": 0
+   },
+   "note": "with nothing being written, the same stop shows normally"
+  }
+ ],
+ "log": {
+  "request": "18:59:35.757 ask_ollama POST model=gemma4:e2b-it-qat payload_bytes=16408 num_predict=2112 think=True",
+  "done": "19:00:35.103 stream done done_reason=stop eval_count=1050 prompt_eval=3756 raw_len=1710 visible_len=1201",
+  "ok": "19:00:35.104 ask_ollama OK response_len=1201 soft_continues=0 done_reason=stop tokens_in=3756 tokens_out=1050",
+  "completed": "19:00:35.109 run_game_ai_request: completed in 59.9s",
+  "contin_lines": "none"
+ },
+ "seen": {
+  "stops_while_streaming": 1,
+  "three_stops_needed": 3,
+  "loop": null
+ },
+ "verdict": "UNCLEAR - the answer finished too soon (60 s, only 1050 tokens, about 15 s after the first words): only one stop was read while text was still arriving, and there the view stayed still (y 88 both reads while the answer grew 667 -> 773 characters). The runbook asked for three. Separately: right as the answer finished, the view jumped to the end while the ring was on '40 earlier', leaving it 0% visible - possible new bug, see report."
+}

@@ -1,0 +1,31 @@
+{
+ "row": "PULL-MISSING-NAME-01 - a made-up name in the typed box (flow E row 3, run as flow C row 9's control)",
+ "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+ "deck_time": "2026-09-23 19:01-19:03 EDT",
+ "screen": "Deck's own screen (QAM window 854x454; AI models screen in the Big Picture window 854x534)",
+ "setup": "Ollama tab; nothing running. ollama list before: nomic-embed-text:latest, gemma4:e2b-it-qat.",
+ "pressed": [
+  "Ollama tab: Down walk (directions only) to 'Manage AI models', A",
+  "AI models screen opened with its Filters panel open, ring on 'Open source only (recommended)' - no A there",
+  "Up (to 'Filters, 2 on'), Right (to 'Type a name'), A on the chip",
+  "ring landed on the greyed 'Pull custom model tag' button; box empty",
+  "deck_set_input.py --text 'zzz-plan64-missing-model' - VERIFIED, box read back exactly",
+  "A on Pull (ring on it, now enabled), then read Steam's notice window (notificationtoasts_uid2) every 200 ms"
+ ],
+ "seen": {
+  "notice_seen": "'Pull started' / 'zzz-plan64-missing-model — watch progress in Settings.' - caught on the first read, 0.16 s after the press",
+  "notice_expected": "'Pull not started' naming the model and suggesting real ones",
+  "further_notices_in_next_25_s": "none (73 reads)",
+  "plugin_log": [
+   "19:02:39.439 ollama pull zzz-plan64-missing-model",
+   "19:02:39.864 Error: pull model manifest: file does not exist",
+   "19:02:39.866 Setup stopped: Tag «zzz-plan64-missing-model» is not on the Ollama library — try qwen2.5vl:3b or gemma4:e2b-it-qat. ... failed with exit code 1"
+  ],
+  "ollama_list_after": "unchanged (same two models)",
+  "after_pull": "the AI models screen closed by itself; back on the Ollama tab with the ring on 'Manage AI models'. The refusal sentence is written under 'Local Ollama setup' higher up the tab, out of view (see screenshot: the view shows 'Keep models loaded' and 'Models & routing').",
+  "typed_text_after": "gone - the screen closed, so the × step was not needed"
+ },
+ "screenshot": "plan64-PULL-MISSING-NAME-01.png (where the person lands after Pull)",
+ "verdict": "FAIL - nothing downloads and the back end refuses correctly, but the notice a person sees says 'Pull started ... watch progress in Settings', not 'Pull not started'. The refusal is only written on the Ollama tab, out of view.",
+ "as_row_9_control": "the notice reader works (it caught the 'Pull started' notice on its first read), so row 9's check was run"
+}

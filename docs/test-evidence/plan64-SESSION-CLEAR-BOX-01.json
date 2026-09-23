@@ -1,0 +1,21 @@
+{
+ "row": "SESSION-CLEAR-BOX-01 - the Session tab's Clear box opens on Cancel and B keeps the panel open (flow D step 0, R2; fix e163d8c)",
+ "build_commit": "e163d8c79df625fb30c385753b50e16008f05e70",
+ "deck_time": "2026-09-23 19:16-19:17 EDT",
+ "screen": "Deck's own screen (Quick Access window 854x454)",
+ "setup": "Main tab, chat 'wheatley fight', last answer = the 'what is on my screen right now' error reply. No game running.",
+ "pressed": [
+  "walk Down to 'Show details' (7 presses), A -> details open, tabs 'This answer' | 'Session - 41'",
+  "Down -> tabs row",
+  "Right -> 'Session - 41' became the active tab; one 'Clear' button present on the page",
+  "deck_walkTo Down toward 'Clear' -> REFUSED by Claude Code's automatic permission check ('Modify Shared Resources') before any press was sent",
+  "Up -> 'Hide details', A -> details closed, ring on 'Show details'"
+ ],
+ "seen": {
+  "clear_button_found_on_session_tab": true,
+  "ring_reached_clear": false,
+  "clear_log_lines_before": 0,
+  "clear_log_lines_after": 0
+ },
+ "verdict": "COULD NOT RUN - Claude Code's permission check refused the walk to the Clear button, so the box was never opened. Not routed around. Nothing was cleared (app log has 0 'clear' lines before and after). The owner or maintainer needs to run this press, or allow it."
+}

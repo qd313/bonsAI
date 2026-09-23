@@ -1,0 +1,64 @@
+{
+ "row": "THINKING-SANITIZE-01 and THINKING-EMOJI-CLUSTER-01, the fifth clean try (flow C row 7), no attachment",
+ "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+ "deck_time": "2026-09-23 18:57-18:58 EDT",
+ "screen": "Deck's own screen (QAM window 854x454)",
+ "setup": "Main tab, chat 'wheatley fight', Strategy, nothing running, nothing attached",
+ "question": "what should i spend my first upgrade points on in a new roguelike run (deck_send_ask.py VERIFIED, whole text)",
+ "pressed": "recorder --arm, Down to Ask, A, wait for the end, recorder --stop",
+ "recorder_log": [
+  {
+   "ms": 0,
+   "kind": "initial",
+   "present": false,
+   "empty": false,
+   "text": null
+  },
+  {
+   "ms": 7545,
+   "kind": "mutation",
+   "present": true,
+   "empty": false,
+   "text": "Thinking…"
+  },
+  {
+   "ms": 7600,
+   "kind": "mutation",
+   "present": true,
+   "empty": false,
+   "text": "Boss? What boss? Just \"what should i spend my first upgrade points on in a new…\"."
+  },
+  {
+   "ms": 7625,
+   "kind": "mutation",
+   "present": true,
+   "empty": false,
+   "text": "Handed \"what should i spend my first upgrade points on in a new…\" over — this is the slow bit, not a crash."
+  },
+  {
+   "ms": 20054,
+   "kind": "mutation",
+   "present": false,
+   "empty": false,
+   "text": null
+  }
+ ],
+ "seen": {
+  "time_ask_to_finish_s": 51.3,
+  "line_first_shown_ms": 7545,
+  "line_gone_ms": 20054,
+  "blank_or_missing_while_in_use": 0,
+  "distinct_texts": [
+   "Thinking…",
+   "Boss? What boss? Just \"what should i spend my first upgrade points on in a new…\".",
+   "Handed \"what should i spend my first upgrade points on in a new…\" over — this is the slow bit, not a crash."
+  ],
+  "texts_with_letters": 3,
+  "emoji_only_texts": [],
+  "what_replaced_the_line": "not read at that moment; the finished turn shows 'Show reasoning · 23 s', so live reasoning ran after the line went away (inferred, not watched)"
+ },
+ "verdict": {
+  "THINKING-SANITIZE-01": "PASS - the line was never blank; it was present with words from 7.5 s until it went away at 20.1 s (caveat: what took its place was inferred from the 23 s reasoning fold, not watched live)",
+  "THINKING-EMOJI-CLUSTER-01": "PASS - all three phase lines have words, none emoji-only"
+ }
+}

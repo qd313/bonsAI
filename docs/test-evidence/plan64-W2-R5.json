@@ -1,0 +1,36 @@
+{
+ "row": "Flow C row 3 - W2-R5 'Not in my notes'",
+ "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+ "deck_time": "2026-09-23 18:46-18:48 EDT",
+ "screen": "Deck's own screen (QAM window 854x454)",
+ "setup": "Main tab, chat 'wheatley fight', Strategy, knowledge base on, nothing running. Session not cleared (permission check refused it).",
+ "question": "what year did half-life 2 come out (deck_send_ask.py VERIFIED, whole text)",
+ "pressed": [
+  "walk to Ask (through the open Show details chip ladder of the previous reply, then Save chat, chip, box, Ask), A",
+  "wait for end",
+  "Up x6 to this reply's Retry",
+  "Down x7 (saved as checks/plan64-W2-R5-down-walk.json)"
+ ],
+ "seen": {
+  "time_ask_to_finish_s": 33.1,
+  "replay_guard": "not a replay",
+  "reply": "Alright, listen up, mate! You wanna know when that Half-Life 2 movie dropped? ... That game came out in '04. ...",
+  "honesty_line_element_text": "Not in my notes — this answer is from the model's own knowledge.",
+  "honesty_line_as_drawn": "'—' then the italic line above (the leading dash is a separate mark, as with the 'No close match' line)",
+  "note_cards_on_this_reply": 0,
+  "notes_blocks_on_this_reply": 0,
+  "log_ask_kb_search": "2026-09-23T22:46:59Z searched_count=0 attached_count=0 top_keyword_score=0.0 best_meaning_score=0.439",
+  "down_walk": [
+   "Retry same prompt",
+   "question row (67% visible, behind Retry - known false alarm)",
+   "Show reasoning · 18 s",
+   "answer section (89% visible, behind Copy - known false alarm)",
+   "Mark reply helpful",
+   "Show details",
+   "Save chat to Desktop",
+   "chip"
+  ],
+  "down_walk_loop": null
+ },
+ "verdict": "PASS - the line's words are exactly right, no note card on the reply, and the Down walk through it is unbroken."
+}

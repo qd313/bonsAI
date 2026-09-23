@@ -1,6 +1,7 @@
 # Plan 64 — The big verification session
 
-**Status:** RUNNING since "go" on 2026-09-23. Flows 0, A and B done; the progress log is § 14.
+**Status:** RUNNING since "go" on 2026-09-23. Flows 0, A and B done; flow C mostly done, a few rows deferred
+to flow D; the progress log is § 14.
 **Purpose:** one long run on the Deck, mostly without the maintainer, that works through the roadmap's
 Verify list and the knowledge base's owed checks. The roadmap is updated after every block, so it is never
 behind the device. Bugs found along the way are written down and, where the effort is reasonable, fixed.
@@ -447,12 +448,52 @@ Two driver runs; roadmap commits `9a672a4` and `1691403`.
   box starts with the ring on Clear and cancelling it throws the ring out to the tab bar (a fix is being
   built this session). The chip ladder inside an open notes block could not be checked either way — tonight's
   block had no ladder in it.
-- **A fix built and reverted the same hour:** a typed-model-name "bug" fix was committed and undone
-  (`97e7d9e`, `864c4f8`, undone in `2468390`) — the back end already refused made-up model names with a
-  clearer message; the session had read only the screen side.
+- **A fix built and reverted the same hour, corrected 2026-09-23 in flow C:** a typed-model-name "bug" fix
+  was committed and undone (`97e7d9e`, `864c4f8`, undone in `2468390`). **The revert itself still stands** —
+  that screen-side fix used the same broken check and would not have caught the real bug either. **But the
+  stated reason for reverting was wrong.** It said the back end already refused made-up names with a clearer
+  message; flow C typed a made-up name on the Deck and found the opposite — the toast a person actually sees
+  says "Pull started," not that the name was refused, because the back end's own name check treats a single
+  made-up name as "could not reach the library" rather than "not found." Filed as a real bug, fix in
+  progress. Evidence `docs/test-evidence/plan64-PULL-MISSING-NAME-01.json`.
 - **Published:** the 2026.09.18 knowledge-base library, to both Hugging Face and the GitHub release —
   read back afterward to confirm both hosts serve it. Pressing the Update button on the Deck itself, and
   moving the library onto the SD card, are still owed, scheduled for later in this plan.
 - **The maintainer's yes, recorded:** settings-file edits on the Deck are now allowed for this session to
   make itself, between Deck runs, as of 2026-09-23 — the roadmap rows that were blocked by Claude Code's own
   permission check note this, though none of the blocked checks themselves were re-tried tonight.
+
+### Flow A row 12, and flow C — knowledge-base checks and Deck settings, 2026-09-23 18:36 to 19:07 (Deck time), build d7f611a, chat "wheatley fight"
+
+- **Flow A row 12 (PERM-JUMP-01), run tonight:** the Open Permissions jump was timed to the millisecond.
+  The ring does reach the "Read game & screenshot context" switch, 2,736 ms after the button press — then
+  22 ms later it is pulled away to Back to Main, and nothing brings it back in the next 11 seconds. Still
+  lands wrong, same as 2026-09-17; the session is working on a fix. Evidence
+  `docs/test-evidence/plan64-PERM-JUMP-01.json`.
+- **Flow C's own opening step, the one-time session clear, could not run:** Claude Code's own permission
+  check refused the step once the "Clear session cache?" box was open; the driver pressed Cancel, nothing
+  was cleared, and every row after it ran against the existing chat with the replay guard covering repeats.
+- **Closed on the Deck (5):** the credit line for a hand-written note with no source page now names it; the
+  "Not in my notes" line reads exactly right with no note card riding along; both of the last two
+  thinking-line rows passed their fifth clean try; and (recorded under flow B above once corrected) the
+  typed-model-name fix's revert still stands, for a different reason than first written down.
+- **Still open, measured further (3):** the "no close match" line still shows next to a note that was
+  actually used, this time on a Hollow Knight reply where the right note was ranked second — the fix from
+  21 September does not reach this shape. Black Mesa's electrified-water question now attaches its own note
+  and the answer is built on it, better than 19 September, but two generic notes still outrank it and the
+  header still names the wrong one. A follow-up with nothing running knew who "her" meant but lost the
+  actual search — one question later it lost the subject entirely.
+- **Answered (1):** which of the two "how many models stay loaded" settings the Deck is really running —
+  all three readings (the live process, the auto-start file, the Ollama tab's own switch) now agree on two,
+  and both stayed loaded through the whole follow-up-memory test.
+- **New bugs (2, plus one already covered above):** the view jumps to the end of an answer right as it
+  finishes, stranding the ring off screen; and Show details' own chip ladder hides under the question box —
+  the maintainer's proposed cure is a new Features entry, the chip and the Show details line trading places
+  while scrolling.
+- **Could not run, deferred to a later flow (3):** a note dropped for space, since nothing running means no
+  Proton log competes for room; the "Reply ready" toast check, since the rig has no Quick Access button and
+  its one working chord was already ruled out; and the screenshot-crash retry with a smaller picture.
+- **Confirmed, not closed (1):** the screenshot crash happens again, 2 of 2 tries now, the same way each
+  time.
+- **Tooling:** every question sent by the exact-words script, none replayed from cache (all timed over 5
+  seconds); the notice-reading tool proved itself mid-flow by catching an unrelated toast on its first read.

@@ -1,7 +1,7 @@
 {
   "note": "Generated. Relative TS/TSX imports under src/ only; external packages and non-TS assets are excluded. Python is not covered.",
   "fileCount": 423,
-  "edgeCount": 1081,
+  "edgeCount": 1082,
   "cycles": [],
   "orphans": [],
   "unresolved": [
@@ -2274,7 +2274,8 @@
       ],
       "importedBy": [
         "src/components/MainTab.tsx",
-        "src/hooks/useDockClearanceOnFocus.test.ts"
+        "src/hooks/useDockClearanceOnFocus.test.ts",
+        "src/hooks/useStreamScrollPin.ts"
       ]
     },
     "src/hooks/useIntentPacks.ts": {
@@ -2535,6 +2536,7 @@
     },
     "src/hooks/useStreamScrollPin.ts": {
       "imports": [
+        "src/hooks/useDockClearanceOnFocus.ts",
         "src/utils/chatPanelScroll.ts"
       ],
       "importedBy": [

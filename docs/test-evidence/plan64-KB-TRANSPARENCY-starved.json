@@ -1,0 +1,20 @@
+{
+ "row": "Flow C row 4(b) - KB-TRANSPARENCY-01, a note dropped for space (starved_by_context_budget)",
+ "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+ "deck_time": "2026-09-23 18:50-18:51 EDT",
+ "screen": "Deck's own screen (QAM window 854x454)",
+ "setup": "Main tab, chat 'wheatley fight', Strategy, knowledge base on, Read game & screenshot context ON (both keys true), nothing running.",
+ "question": "half life 2 keeps crashing with a long error in the proton log right after i load ravenholm, what should i check (deck_send_ask.py VERIFIED, whole text)",
+ "pressed": [
+  "Down x4 to Ask, A",
+  "wait for end"
+ ],
+ "seen": {
+  "time_ask_to_finish_s": 44.6,
+  "log_line": "2026-09-23T22:50:00Z ask.kb_search kb_domain=compat searched_count=3 searched_notes=Shared troubleshooting — proton; Shared troubleshooting — crash; Shared troubleshooting — proton attached_count=3 attached_notes=(same) starved_by_context_budget=false top_keyword_score=10.02 best_meaning_score=0.622",
+  "proton_log_fetched": "no sign of it: no Proton-log line in the app log or the plugin log for this ask",
+  "screen_notes_header": "Proton (+2 more) · From the shared Deck tips",
+  "reply_summary": "general Proton advice (switch Proton version, try Experimental, check ProtonDB, adjust settings); no Half-Life 2 notes attached - the question was routed to troubleshooting, not Half-Life 2"
+ },
+ "verdict": "COULD NOT REPRODUCE - one real try; starved_by_context_budget stayed false. With nothing running, no Proton log is fetched, so nothing competes for space. Recommend moving this half to flow D, where a running game can produce a real Proton log."
+}

@@ -391,6 +391,57 @@ closing note added at the end of each._
   *previous* chat's question (not its reply) for about 40 seconds — filed separately in Bugs, with a fix
   already being built this session. Evidence `docs/test-evidence/plan64-CHAT-GHOST-REPLY-01.json`.
 
+_The three entries below were moved out of [roadmap.md](../roadmap.md) on 2026-09-23 during plan 64's flow
+C bookkeeping pass — copied line for line from this session's Verify entry, nothing reworded, with the
+closing note added at the end of each._
+
+### The credit line under a reply never names a note with no source page, or a shared tip (closed 2026-09-23)
+
+- ★ `[KB]` **The credit line under a reply never names a note with no source page, or a shared tip** —
+  **VERIFY, fixed 2026-09-21 (plan 63, lane G, commit `81a86a4`).** Such notes were dropped before the
+  line was built; now grouped under "No source page" instead. Owed: a reply built on one of bonsAI's own
+  notes should now name it.
+
+  **Closed 2026-09-23, confirmed on the Deck.** Under a Hades reply about the Bone Hydra, the open notes
+  block named each of bonsAI's own hand-written notes — "Weapon choice · From bonsAI's own note", "Theseus
+  and Asterius · From bonsAI's own note", "Heat and the Pact of Punishment · From bonsAI's own note" — and
+  the words "no source" appear nowhere on the header. The exact wording differs from the runbook's guess
+  ("From bonsAI's own notes, no source"); worth the maintainer's own confirmation that "From bonsAI's own
+  note" is the wording wanted. **Still not seen:** commit `4ce37bc`'s own change, a shared tip's source page
+  reaching the credit line, since no shipped tip carries a source page yet. Evidence
+  `docs/test-evidence/plan64-CREDIT-LINE-NO-SOURCE.json` (+ `.png`).
+
+### "Not in my notes" line (closed 2026-09-23)
+
+- ★★ `[KB]` **"Not in my notes" line** — **VERIFY, built and shipped 2026-09-07, device check failed the
+  same day.** The line should show when a question the notes truly do not cover; for months nothing could
+  make it appear. **Shown for the first time on 2026-09-19**, on a Half-Life 2 question the notes do not
+  cover, but the wording is not quite right and a note card wrongly appeared under it at the same time. Row
+  **W2-R5**.
+
+  **Closed 2026-09-23, confirmed on the Deck.** Asking what year Half-Life 2 came out (a question the notes
+  do not cover) got the line reading exactly "Not in my notes — this answer is from the model's own
+  knowledge.", with no note card and no notes block anywhere on the reply; the log shows 0 notes searched
+  and 0 attached. The Down walk through the whole reply is unbroken, no loop, with only the two long-known
+  corner-icon false alarms (the question row behind Retry, an answer section behind Copy). Evidence
+  `docs/test-evidence/plan64-W2-R5.json`, saved check `checks/plan64-W2-R5-down-walk.json`.
+
+### Thinking line fixes from 2026-08-07/08 (closed 2026-09-23)
+
+- ★★ `[reply]` **Thinking line fixes from 2026-08-07/08** — **VERIFY.** Emoji upright, lazy status tag
+  survives, no bare-emoji phase changes, one writer. Five of seven rows passed on the Deck by 2026-09-17.
+  Left: **THINKING-SANITIZE-01** and **THINKING-EMOJI-CLUSTER-01**, which close after five clean,
+  differently-worded tries on the Deck (D116 #6), since the unit tests already cover the fix. Four of five
+  clean tries were done by 2026-09-23, the fifth spoiled by an unrelated model crash on a screenshot
+  attachment.
+
+  **Closed 2026-09-23, confirmed on the Deck with the fifth clean try.** A fresh, differently-worded
+  question with no attachment: the status line showed words from 7.5 seconds after the press until live
+  reasoning took over at 20.1 seconds, never blank at any point; all three phase lines it passed through had
+  words, none emoji-only. Five of five clean tries now pass for both rows, so all seven rows this entry
+  covers are done. Evidence `docs/test-evidence/plan64-THINKING-06.json` (with `-01.json` through `-04.json`
+  from the earlier four clean tries).
+
 ## Moved from the roadmap 2026-09-19
 
 _Moved out of [roadmap.md](../roadmap.md) on 2026-09-19 once the maintainer's answers to plan 61 § 8

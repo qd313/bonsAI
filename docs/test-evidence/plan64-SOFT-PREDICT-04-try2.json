@@ -1,0 +1,27 @@
+{
+ "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+ "screen": "Deck's own screen (QAM window 854x454; visible transcript area y 88-290, chip row from y 290)",
+ "setup": "Main tab, chat 'wheatley fight', Strategy, nothing running, nothing attached",
+ "question": "give me a complete walkthrough of every chapter of half life 2 with three detailed paragraphs of tips for each chapter (deck_send_ask.py VERIFIED, whole text)",
+ "row": "SOFT-PREDICT-04, try 2 (flow C row 8)",
+ "deck_time": "2026-09-23 18:59-19:01 EDT",
+ "pressed": [
+  "Ask",
+  "waited for the end",
+  "read the plugin log for this request"
+ ],
+ "log": {
+  "request": "18:59:35.757 ask_ollama POST model=gemma4:e2b-it-qat payload_bytes=16408 num_predict=2112 think=True",
+  "done": "19:00:35.103 stream done done_reason=stop eval_count=1050 prompt_eval=3756 raw_len=1710 visible_len=1201",
+  "ok": "19:00:35.104 ask_ollama OK response_len=1201 soft_continues=0 done_reason=stop tokens_in=3756 tokens_out=1050",
+  "completed": "19:00:35.109 run_game_ai_request: completed in 59.9s",
+  "contin_lines": "none"
+ },
+ "seen": {
+  "tokens_out": 1050,
+  "limit": 2112,
+  "continuation": false,
+  "answer_visible_chars": 1201
+ },
+ "verdict": "UNCLEAR - no continuation happened again: the model stopped on its own (done_reason=stop) at 1050 tokens, under the 2112 limit; nothing to judge at a join."
+}

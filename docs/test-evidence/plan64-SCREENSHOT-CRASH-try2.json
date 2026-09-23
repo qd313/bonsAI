@@ -1,0 +1,80 @@
+{
+ "row": "Attaching a screenshot: a second try at the crash (flow C row 10)",
+ "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+ "deck_time": "2026-09-23 19:04-19:07 EDT",
+ "screen": "Deck's own screen (QAM window 854x454)",
+ "setup": "Main tab, chat 'wheatley fight', Strategy, nothing running",
+ "attachment": {
+  "file": "/home/deck/.local/share/Steam/userdata/23333482/760/remote/9499488/screenshots/20260627-165914.png",
+  "size_bytes": 2738515,
+  "picker_label": "Size: 2.6 MB",
+  "choice_note": "the runbook says 'the most recent screenshot, the same way flow B row 5 did'. The newest in the picker is 20260712-001253.jpg (177 KB); flow B attached 20260627-165914.png (2.6 MB). I attached flow B's file, since this row is a re-try of that crash."
+ },
+ "question": "what is on my screen right now (deck_send_ask.py VERIFIED, whole text)",
+ "pressed": [
+  "Up from Ask to 'Attach screenshot to Ask', A",
+  "menu: Down to 'Attach recent screenshot', A",
+  "picker grid: Down, Up, Right to 20260627-165914.png, A -> 'Attached screenshot 20260627-165914.png'",
+  "Down to Ask, A at about 19:06:02"
+ ],
+ "seen": {
+  "model": "gemma4:e2b-it-qat (named in the error and in the log)",
+  "payload_bytes": 3667775,
+  "time_to_error_s": 13.6,
+  "on_screen": "Ollama returned an incomplete stream for model 'gemma4:e2b-it-qat' (no completion marker and no assistant text).",
+  "plugin_log": [
+   "19:06:02.517 ask_ollama POST model=gemma4:e2b-it-qat payload_bytes=3667775 num_predict=2112 think=True",
+   "19:06:16.112 WARNING ask_ollama: Ollama returned an incomplete stream ... (no completion marker and no assistant text)",
+   "19:06:16.114 run_game_ai_request: completed in 13.6s"
+  ],
+  "ollama_journal_key_lines": [
+   "19:06:16 terminate called after throwing an instance of 'vk::DeviceLostError'",
+   "19:06:16 what(): vk::Queue::submit: ErrorDeviceLost",
+   "19:06:20 level=ERROR msg=\"llama-server terminated\" error=\"signal: aborted (core dumped)\""
+  ],
+  "ollama_journal_tail_40": [
+   "                                                   #3  0x00007fd76b6a4d1e pthread_cond_wait (libc.so.6 + 0x94d1e)",
+   "                                                   #4  0x00007fd76b8afae8 _Z19__gthread_cond_waitP14pthread_cond_tP15pthread_mutex_t (libstdc++.so.6 + 0xafae8)",
+   "                                                   #5  0x00007fd76c9fefe1 _ZN7httplib10ThreadPool6workerEb (libllama-server-impl.so + 0x1fefe1)",
+   "                                                   #6  0x00007fd76b8e51a4 execute_native_thread_routine (libstdc++.so.6 + 0xe51a4)",
+   "                                                   #7  0x00007fd76b6a57eb n/a (libc.so.6 + 0x957eb)",
+   "                                                   #8  0x00007fd76b72920c n/a (libc.so.6 + 0x11920c)",
+   "                                                   ",
+   "                                                   Stack trace of thread 84505:",
+   "                                                   #0  0x00007fd76b6ade22 n/a (libc.so.6 + 0x9de22)",
+   "                                                   #1  0x00007fd76b6a1fda n/a (libc.so.6 + 0x91fda)",
+   "                                                   #2  0x00007fd76b6a264c n/a (libc.so.6 + 0x9264c)",
+   "                                                   #3  0x00007fd76b6a4d1e pthread_cond_wait (libc.so.6 + 0x94d1e)",
+   "                                                   #4  0x00007fd76b8afae8 _Z19__gthread_cond_waitP14pthread_cond_tP15pthread_mutex_t (libstdc++.so.6 + 0xafae8)",
+   "                                                   #5  0x00007fd76c9fefe1 _ZN7httplib10ThreadPool6workerEb (libllama-server-impl.so + 0x1fefe1)",
+   "                                                   #6  0x00007fd76b8e51a4 execute_native_thread_routine (libstdc++.so.6 + 0xe51a4)",
+   "                                                   #7  0x00007fd76b6a57eb n/a (libc.so.6 + 0x957eb)",
+   "                                                   #8  0x00007fd76b72920c n/a (libc.so.6 + 0x11920c)",
+   "                                                   ",
+   "                                                   Stack trace of thread 84500:",
+   "                                                   #0  0x00007fd76b6ade22 n/a (libc.so.6 + 0x9de22)",
+   "                                                   #1  0x00007fd76b6a1fda n/a (libc.so.6 + 0x91fda)",
+   "                                                   #2  0x00007fd76b6a264c n/a (libc.so.6 + 0x9264c)",
+   "                                                   #3  0x00007fd76b6a4d1e pthread_cond_wait (libc.so.6 + 0x94d1e)",
+   "                                                   #4  0x00007fd76b8afae8 _Z19__gthread_cond_waitP14pthread_cond_tP15pthread_mutex_t (libstdc++.so.6 + 0xafae8)",
+   "                                                   #5  0x00007fd76c9fefe1 _ZN7httplib10ThreadPool6workerEb (libllama-server-impl.so + 0x1fefe1)",
+   "                                                   #6  0x00007fd76b8e51a4 execute_native_thread_routine (libstdc++.so.6 + 0xe51a4)",
+   "                                                   #7  0x00007fd76b6a57eb n/a (libc.so.6 + 0x957eb)",
+   "                                                   #8  0x00007fd76b72920c n/a (libc.so.6 + 0x11920c)",
+   "                                                   ",
+   "                                                   Stack trace of thread 84512:",
+   "                                                   #0  0x00007fd76b6ade22 n/a (libc.so.6 + 0x9de22)",
+   "                                                   #1  0x00007fd76b6a1fda n/a (libc.so.6 + 0x91fda)",
+   "                                                   #2  0x00007fd76b6a264c n/a (libc.so.6 + 0x9264c)",
+   "                                                   #3  0x00007fd76b6a4d1e pthread_cond_wait (libc.so.6 + 0x94d1e)",
+   "                                                   #4  0x00007fd76a4947db n/a (libggml-cpu-haswell.so + 0x1a7db)",
+   "                                                   #5  0x00007fd76b6a57eb n/a (libc.so.6 + 0x957eb)",
+   "                                                   #6  0x00007fd76b72920c n/a (libc.so.6 + 0x11920c)",
+   "                                                   ELF object binary architecture: AMD x86-64",
+   "Sep 23 19:06:26 steamdeck ollama[1772]: [GIN] 2026/09/23 - 19:06:26 | 200 |     727.557µs |       127.0.0.1 | HEAD     \"/\"",
+   "Sep 23 19:06:26 steamdeck ollama[1772]: [GIN] 2026/09/23 - 19:06:26 | 200 |      44.801µs |       127.0.0.1 | GET      \"/api/ps\""
+  ],
+  "recovery": "19:06:26 'ollama ps' answered (gemma4:e2b-it-qat listed), service active"
+ },
+ "verdict": "MEASURED - it crashed again, the same way as flow B: the graphics chip was lost (ErrorDeviceLost) 14 s in, the model server dumped core, and the screen showed the 'incomplete stream' error. Ollama was answering again 10 s later."
+}

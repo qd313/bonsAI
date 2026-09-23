@@ -7,7 +7,7 @@
     },
     {
       "path": "src/components/MainTabChatTranscript.tsx",
-      "lines": 2391,
+      "lines": 2444,
       "role": ""
     },
     {
@@ -16,13 +16,13 @@
       "role": ""
     },
     {
-      "path": "src/components/PullModelsModal.tsx",
-      "lines": 1971,
+      "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
+      "lines": 2008,
       "role": ""
     },
     {
-      "path": "src/hooks/useBonsaiAskOrchestration.test.ts",
-      "lines": 1911,
+      "path": "src/components/PullModelsModal.tsx",
+      "lines": 1971,
       "role": ""
     },
     {
@@ -32,7 +32,7 @@
     },
     {
       "path": "src/hooks/useBonsaiAskOrchestration.ts",
-      "lines": 1778,
+      "lines": 1803,
       "role": ""
     },
     {

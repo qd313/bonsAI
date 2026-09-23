@@ -1,0 +1,21 @@
+{
+ "row": "CHAT-SLOTS-V3-06c - the 'Reply ready' notice, with a control first (flow C row 9), try 2",
+ "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+ "deck_time": "2026-09-23 19:01-19:05 EDT",
+ "screen": "Deck's own screen (QAM window 854x454)",
+ "setup": "Main tab, chat 'wheatley fight', Strategy, nothing running",
+ "control": {
+  "what": "flow E row 3 run as written (evidence plan64-PULL-MISSING-NAME-01.json)",
+  "reader_method": "deck_waitFor on the notificationtoasts_uid2 page, reading document.body.innerText every 200 ms (same window as plan64-CHAT-SLOTS-V3-06c.json)",
+  "result": "the reader caught a notice on its first read, 0.16 s after the press: 'Pull started / zzz-plan64-missing-model — watch progress in Settings.' The expected 'Pull not started' notice never came (the app did not raise it - that is flow E row 3's own FAIL), but the reader is shown to work."
+ },
+ "check": {
+  "pressed": [
+   "Main tab reached with LB; ring on the chat row",
+   "tried deck_pressButton ['QAM'] once, before putting in the question"
+  ],
+  "seen": "refused by the rig: 'Unknown button(s): QAM. Known: UP, DOWN, LEFT, RIGHT, A, B, X, Y, LB, RB, SELECT, START, GUIDE, L3, R3.' The rig has no Quick Access (…) button, and the runbook rules out the GUIDE+A chord flow B used.",
+  "question_asked": "no - the fresh question was not sent, since the menu could not be closed the way the runbook asks"
+ },
+ "verdict": "COULD NOT RUN (the check) - the runbook's way of closing the menu does not exist on the rig. Control: the notice reader works. Owner to say which close method to use (GUIDE+A chord, B presses, or something else)."
+}

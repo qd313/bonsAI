@@ -1,0 +1,27 @@
+{
+ "row": "Flow C row 4(a) - KB-TRANSPARENCY-01, all three attached names",
+ "build_commit": "d7f611a36cf8d4b6173da62850445acce7b1b26a",
+ "deck_time": "2026-09-23 18:48-18:50 EDT",
+ "screen": "Deck's own screen (QAM window 854x454)",
+ "setup": "Main tab, chat 'wheatley fight', Strategy, knowledge base on, activity log verbose, nothing running. Session not cleared (permission check refused it).",
+ "question": "in hollow knight how do i beat the broken vessel (deck_send_ask.py VERIFIED, whole text)",
+ "pressed": [
+  "Down x2 to Ask, A",
+  "wait for end",
+  "Up x2 to the notes block header (y 204-251, 100% visible), A to open"
+ ],
+ "seen": {
+  "time_ask_to_finish_s": 48.0,
+  "replay_guard": "not a replay",
+  "log_line": "2026-09-23T22:48:34Z [verbose] ask.kb_search kb_domain=strategy searched_count=3 searched_notes=Hollow Knight — Broken Vessel; Hollow Knight — Starting out in Hollow Knight; Hollow Knight — Watcher Knights attached_count=3 attached_notes=Hollow Knight — Broken Vessel; Hollow Knight — Starting out in Hollow Knight; Hollow Knight — Watcher Knights starved_by_context_budget=false",
+  "screen_header_closed": "Broken Vessel (+2 more) · From the Hollow Knight wiki",
+  "screen_names_open": [
+   "Broken Vessel · From the Hollow Knight wiki",
+   "Starting out in Hollow Knight · From the Hollow Knight wiki",
+   "Watcher Knights · From the Hollow Knight wiki"
+  ],
+  "order_matches": true,
+  "no_close_match_line": "absent on this reply (Broken Vessel attached first)"
+ },
+ "verdict": "PASS - all three names on screen match all three in the log, same order."
+}
